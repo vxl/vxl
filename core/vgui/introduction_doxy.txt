@@ -6,7 +6,7 @@
 * once that will produce a simple user-interface on many platforms (UNIX, 
 * Linux and Windows)
 * 
-* For every supported GUI toolkit (eg. MFC, Qt, GTK), vgui provides a
+* For every supported GUI toolkit (eg. MFC, Qt, GTK), VGUI provides a
 * vgui_adaptor (eg. vgui_mfc_adaptor, vgui_qt_adaptor, vgui_gtk_adaptor)
 * that provides an interface to an OpenGL rendering area.  This adaptor
 * is plugged into a GUI and produces a rectangular area on which OpenGL
@@ -15,22 +15,22 @@
 * 
 * Some of the most useful tableaux are:
 * - vgui_image_tableau : loads and displays an image.
-* - vgui_easy2D : displays two-dimensional geometric objects.
+* - vgui_easy2D_tableau : displays two-dimensional geometric objects.
 * - vgui_text_tableau : displays text
-* - vgui_viewer2D : functions to view 2D objects (eg, zoom, drag, center).
-* - vgui_composite : holds many children all of whom receive events.
+* - vgui_viewer2D_tableau : functions to view 2D objects (zoom, drag, center).
+* - vgui_composite_tableau : holds many children all of whom receive events.
 * - vgui_deck_tableau : holds many child tableaux but only one receives events.
-* - vgui_polytab : renders its children in sub-rectangles of its viewport.
+* - vgui_poly_tableau : renders its children in sub-rectangles of its viewport.
 * - vgui_grid_tableau : renders its child tableaux as a rectangular grid.
-* - vgui_rubberbander : rubberband 2D objects.
-* - vgui_enhance : magnify/display another tableau around the mouse pointer.
+* - vgui_rubberband_tableau : rubberband 2D objects.
+* - vgui_enhance_tableau : magnify/display another tableau around mouse pointer.
 * - vgui_roi_tableau : makes a ROI of an image act like a whole image.
-* - vgui_easy3D : displays 3D geometric objects.
-* - vgui_viewer3D : functions to view 3D objects (rotate, zoom, etc).
+* - vgui_easy3D_tableau : displays 3D geometric objects.
+* - vgui_viewer3D_tableau : functions to view 3D objects (rotate, zoom, etc).
 * - vgui_vrml_tableau : displays VRML.
-* - vgui_blackbox : records and plays back events.
+* - vgui_blackbox_tableau : records and plays back events.
 * - vgui_debug_tableau : prints events then forwards them to a child tableau.
-* - vgui_shell_tableau : to go at the top of one's tableau hierachy (contains vgui_clear_tableau, vgui_quit_tableau and vgui_tview_launcher).
+* - vgui_shell_tableau : to go at the top of one's tableau hierachy (contains vgui_clear_tableau, vgui_quit_tableau and vgui_tview_launcher_tableau).
 *
 * You can write your GUI in, for example, MFC and use 
 * vgui_adaptor/vgui_tableau to produce an OpenGL area.  In fact, this is 
