@@ -2,7 +2,6 @@
 #include "vsol_triangle_3d.h"
 //:
 // \file
-
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vsol/vsol_point_3d.h>
@@ -99,10 +98,8 @@ bool vsol_triangle_3d::operator==(vsol_polygon_3d const& other) const
 bool vsol_triangle_3d::operator==(vsol_spatial_object_3d const& obj) const
 {
   return
-   obj.spatial_type() == vsol_spatial_object_3d::REGION &&
-   ((vsol_region_3d const&)obj).region_type() == vsol_region_3d::POLYGON
-  ? *this == (vsol_polygon_3d const&) (vsol_region_3d const&) obj
-  : false;
+    obj.cast_to_region() && obj.cast_to_region()->cast_to_polygon() &&
+    *this == *obj.cast_to_region()->cast_to_polygon();
 }
 
 //***************************************************************************

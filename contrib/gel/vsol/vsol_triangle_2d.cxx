@@ -2,10 +2,6 @@
 #include "vsol_triangle_2d.h"
 //:
 // \file
-
-//*****************************************************************************
-// External declarations for implementation
-//*****************************************************************************
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsol/vsol_point_2d.h>
 #include <vcl_iostream.h>
@@ -114,10 +110,8 @@ bool vsol_triangle_2d::operator==(const vsol_polygon_2d &other) const
 bool vsol_triangle_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
   return
-   obj.spatial_type() == vsol_spatial_object_2d::REGION &&
-   ((vsol_region_2d const&)obj).region_type() == vsol_region_2d::POLYGON
-  ? *this == (vsol_polygon_2d const&) (vsol_region_2d const&) obj
-  : false;
+    obj.cast_to_region() && obj.cast_to_region()->cast_to_polygon() &&
+    *this == *obj.cast_to_region()->cast_to_polygon();
 }
 
 //***************************************************************************

@@ -2,7 +2,6 @@
 #include "vsol_point_3d.h"
 //:
 // \file
-
 #include <vgl/vgl_distance.h>
 
 //***************************************************************************
@@ -41,10 +40,7 @@ bool vsol_point_3d::operator==(vsol_point_3d const& other) const
 
 bool vsol_point_3d::operator==(vsol_spatial_object_3d const& obj) const
 {
-  return
-   obj.spatial_type() == vsol_spatial_object_3d::POINT
-  ? operator==((vsol_point_3d const&)obj)
-  : false;
+  return obj.cast_to_point() && *this == *obj.cast_to_point();
 }
 
 //***************************************************************************

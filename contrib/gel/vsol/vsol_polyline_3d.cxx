@@ -3,13 +3,8 @@
 #include "vsol_polyline_3d.h"
 //:
 // \file
-
 #include <vsol/vsol_point_3d.h>
 #include <vcl_iostream.h>
-
-//*****************************************************************************
-// External declarations for implementation
-//*****************************************************************************
 #include <vcl_cassert.h>
 
 //***************************************************************************
@@ -31,7 +26,7 @@ vsol_polyline_3d::vsol_polyline_3d()
 //: Constructor from a vcl_vector of points
 //---------------------------------------------------------------------------
 
-vsol_polyline_3d::vsol_polyline_3d(const vcl_vector<vsol_point_3d_sptr> &new_vertices)
+vsol_polyline_3d::vsol_polyline_3d(vcl_vector<vsol_point_3d_sptr> const& new_vertices)
   : vsol_curve_3d()
 {
   storage_=new vcl_vector<vsol_point_3d_sptr>(new_vertices);
@@ -45,10 +40,11 @@ vsol_polyline_3d::vsol_polyline_3d(const vcl_vector<vsol_point_3d_sptr> &new_ver
   p0_ = (*storage_)[0];
   p1_ = (*storage_)[n-1];
 }
+
 //---------------------------------------------------------------------------
 // Copy constructor
 //---------------------------------------------------------------------------
-vsol_polyline_3d::vsol_polyline_3d(const vsol_polyline_3d &other)
+vsol_polyline_3d::vsol_polyline_3d(vsol_polyline_3d const& other)
   : vsol_curve_3d(other)
 {
   storage_=new vcl_vector<vsol_point_3d_sptr>(*other.storage_);
@@ -70,7 +66,7 @@ vsol_polyline_3d::~vsol_polyline_3d()
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_3d* vsol_polyline_3d::clone(void) const
+vsol_spatial_object_3d* vsol_polyline_3d::clone() const
 {
   return new vsol_polyline_3d(*this);
 }
@@ -78,22 +74,6 @@ vsol_spatial_object_3d* vsol_polyline_3d::clone(void) const
 //***************************************************************************
 // Access
 //***************************************************************************
-
-//---------------------------------------------------------------------------
-//: Return the first point of `this'
-//---------------------------------------------------------------------------
-vsol_point_3d_sptr vsol_polyline_3d::p0(void) const
-{
-  return p0_;
-}
-
-//---------------------------------------------------------------------------
-//: Return the last point of `this'
-//---------------------------------------------------------------------------
-vsol_point_3d_sptr vsol_polyline_3d::p1(void) const
-{
-  return p1_;
-}
 
 //---------------------------------------------------------------------------
 //: Return vertex `i'
@@ -114,7 +94,7 @@ vsol_point_3d_sptr vsol_polyline_3d::vertex(const int i) const
 //---------------------------------------------------------------------------
 //: Has `this' the same points than `other' in the same order ?
 //---------------------------------------------------------------------------
-bool vsol_polyline_3d::operator==(const vsol_polyline_3d &other) const
+bool vsol_polyline_3d::operator==(vsol_polyline_3d const& other) const
 {
   if (this==&other)
     return true;
@@ -136,13 +116,11 @@ bool vsol_polyline_3d::operator==(const vsol_polyline_3d &other) const
 
 //: spatial object equality
 
-bool vsol_polyline_3d::operator==(const vsol_spatial_object_3d& obj) const
+bool vsol_polyline_3d::operator==(vsol_spatial_object_3d const& obj) const
 {
   return
-   obj.spatial_type() == vsol_spatial_object_3d::CURVE &&
-   ((vsol_curve_3d const&)obj).curve_type() == vsol_curve_3d::POLYLINE
-  ? *this == (vsol_polyline_3d const&) (vsol_polyline_3d const&) obj
-  : false;
+    obj.cast_to_curve() && obj.cast_to_curve()->cast_to_polyline() &&
+    *this == *obj.cast_to_curve()->cast_to_polyline();
 }
 
 //***************************************************************************
@@ -150,28 +128,21 @@ bool vsol_polyline_3d::operator==(const vsol_spatial_object_3d& obj) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-//: Return the real type of a conic. It is a CURVE
-//---------------------------------------------------------------------------
-vsol_spatial_object_3d::vsol_spatial_object_3d_type
-vsol_polyline_3d::spatial_type(void) const
-{
-  return CURVE;
-}
-
-//---------------------------------------------------------------------------
 //: Return the length of `this'
 //---------------------------------------------------------------------------
-double vsol_polyline_3d::length(void) const
+double vsol_polyline_3d::length() const
 {
-  assert(false); // TO DO
-  return -1;
+  double l = 0.0;
+  for (unsigned int i=0;i+1<storage_->size();++i)
+    l += ::length(vgl_vector_3d<double>((*storage_)[i+1]->x(),(*storage_)[i+1]->y(),(*storage_)[i+1]->z())
+                 -vgl_vector_3d<double>((*storage_)[i]->x(),(*storage_)[i]->y(),(*storage_)[i]->z()));
+  return l;
 }
-
 
 //---------------------------------------------------------------------------
 //: Compute the bounding box of `this'
 //---------------------------------------------------------------------------
-void vsol_polyline_3d::compute_bounding_box(void) const
+void vsol_polyline_3d::compute_bounding_box() const
 {
   set_bounding_box((*storage_)[0]->x(), (*storage_)[0]->y(), (*storage_)[0]->z());
   for (unsigned int i=1;i<storage_->size();++i)
@@ -186,7 +157,7 @@ void vsol_polyline_3d::compute_bounding_box(void) const
 //: Set the first point of the curve
 // Require: in(new_p0)
 //---------------------------------------------------------------------------
-void vsol_polyline_3d::set_p0(const vsol_point_3d_sptr &new_p0)
+void vsol_polyline_3d::set_p0(vsol_point_3d_sptr const& new_p0)
 {
   p0_=new_p0;
   storage_->push_back(p0_);
@@ -196,7 +167,7 @@ void vsol_polyline_3d::set_p0(const vsol_point_3d_sptr &new_p0)
 //: Set the last point of the curve
 // Require: in(new_p1)
 //---------------------------------------------------------------------------
-void vsol_polyline_3d::set_p1(const vsol_point_3d_sptr &new_p1)
+void vsol_polyline_3d::set_p1(vsol_point_3d_sptr const& new_p1)
 {
   p1_=new_p1;
   storage_->push_back(p0_);
@@ -205,7 +176,7 @@ void vsol_polyline_3d::set_p1(const vsol_point_3d_sptr &new_p1)
 //---------------------------------------------------------------------------
 //: Add another point to the curve
 //---------------------------------------------------------------------------
-void vsol_polyline_3d::add_vertex(const vsol_point_3d_sptr &new_p)
+void vsol_polyline_3d::add_vertex(vsol_point_3d_sptr const& new_p)
 {
   storage_->push_back(new_p);
 }

@@ -2,17 +2,12 @@
 #include "vsol_digital_curve_2d.h"
 //:
 // \file
-
 #include <vsol/vsol_point_2d.h>
 #include <vcl_iostream.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_closest_point.h>
 #include <vsl/vsl_vector_io.h>
 #include <vcl_cmath.h>
-
-//*****************************************************************************
-// External declarations for implementation
-//*****************************************************************************
 #include <vcl_cassert.h>
 
 //***************************************************************************
@@ -156,10 +151,8 @@ bool vsol_digital_curve_2d::operator==(const vsol_digital_curve_2d &other) const
 bool vsol_digital_curve_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
   return
-   obj.spatial_type() == vsol_spatial_object_2d::CURVE &&
-   ((vsol_curve_2d const&)obj).curve_type() == vsol_curve_2d::DIGITAL_CURVE
-  ? *this == (vsol_digital_curve_2d const&) (vsol_digital_curve_2d const&) obj
-  : false;
+    obj.cast_to_curve() && obj.cast_to_curve()->cast_to_digital_curve() &&
+    *this == *obj.cast_to_curve()->cast_to_digital_curve();
 }
 
 //***************************************************************************

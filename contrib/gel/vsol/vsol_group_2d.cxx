@@ -2,13 +2,10 @@
 #include "vsol_group_2d.h"
 //:
 // \file
-
-//*****************************************************************************
-// External declarations for implementation
-//*****************************************************************************
 #include <vcl_cassert.h>
 #include <vsl/vsl_string_io.h>
 #include <vsl/vsl_vector_io.h>
+
 //***************************************************************************
 // Initialization
 //***************************************************************************
@@ -189,9 +186,7 @@ bool vsol_group_2d::operator==(const vsol_group_2d &other) const
 
 bool vsol_group_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
-  if (obj.spatial_type()!=vsol_spatial_object_2d::SPATIALGROUP)
-    return false;
-  return *this == (vsol_group_2d const&)obj;
+  return obj.cast_to_group() && *this == *obj.cast_to_group();
 }
 
 //----------------------------------------------------------------

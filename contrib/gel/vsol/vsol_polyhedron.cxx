@@ -2,7 +2,6 @@
 #include "vsol_polyhedron.h"
 //:
 // \file
-
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vsl/vsl_vector_io.h>
@@ -68,10 +67,8 @@ bool vsol_polyhedron::operator==(vsol_polyhedron const &other) const
 bool vsol_polyhedron::operator==(vsol_spatial_object_3d const& obj) const
 {
   return
-   obj.spatial_type() == vsol_spatial_object_3d::VOLUME &&
-   ((vsol_volume_3d const&)obj).volume_type() == vsol_volume_3d::POLYHEDRON
-  ? *this == (vsol_polyhedron const&) (vsol_volume_3d const&) obj
-  : false;
+    obj.cast_to_volume() && obj.cast_to_volume()->cast_to_polyhedron() &&
+    *this == *obj.cast_to_volume()->cast_to_polyhedron();
 }
 
 //---------------------------------------------------------------------------

@@ -4,10 +4,6 @@
 // \file
 #include <vsl/vsl_vector_io.h>
 #include <vcl_iostream.h>
-
-//*****************************************************************************
-// External declarations for implementation
-//*****************************************************************************
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vsol/vsol_point_2d.h>
@@ -146,10 +142,8 @@ bool vsol_polygon_2d::operator==(const vsol_polygon_2d &other) const
 bool vsol_polygon_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
   return
-   obj.spatial_type() == vsol_spatial_object_2d::REGION &&
-   ((vsol_region_2d const&)obj).region_type() == vsol_region_2d::POLYGON
-  ? *this == (vsol_polygon_2d const&) (vsol_region_2d const&) obj
-  : false;
+    obj.cast_to_region() && obj.cast_to_region()->cast_to_polygon() &&
+    *this == *obj.cast_to_region()->cast_to_polygon();
 }
 
 

@@ -2,10 +2,6 @@
 #include "vsol_point_2d.h"
 //:
 // \file
-
-//*****************************************************************************
-// External declarations for implementation
-//*****************************************************************************
 #include <vgl/vgl_distance.h>
 
 //***************************************************************************
@@ -44,10 +40,7 @@ bool vsol_point_2d::operator==(const vsol_point_2d &other) const
 
 bool vsol_point_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
-  return
-   obj.spatial_type() == vsol_spatial_object_2d::POINT
-   ? operator== ((vsol_point_2d const&)obj)
-   : false;
+  return obj.cast_to_point() && *this == *obj.cast_to_point();
 }
 
 //***************************************************************************

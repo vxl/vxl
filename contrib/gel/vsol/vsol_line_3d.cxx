@@ -2,7 +2,6 @@
 #include "vsol_line_3d.h"
 //:
 // \file
-
 #include <vcl_cassert.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsol/vsol_point_3d.h>
@@ -25,35 +24,10 @@ vsol_line_3d::vsol_line_3d(vgl_vector_3d<double> const& new_direction,
 }
 
 //---------------------------------------------------------------------------
-//: Constructor from two vsol_point_3d (end points)
-//---------------------------------------------------------------------------
-vsol_line_3d::vsol_line_3d(vsol_point_3d_sptr const& new_p0,
-                           vsol_point_3d_sptr const& new_p1)
-: p0_(new_p0), p1_(new_p1)
-{
-}
-
-//---------------------------------------------------------------------------
-//: Copy constructor
-// Description: no duplication of the points
-//---------------------------------------------------------------------------
-vsol_line_3d::vsol_line_3d(vsol_line_3d const& other)
-: vsol_curve_3d(other), p0_(other.p0_), p1_(other.p1_)
-{
-}
-
-//---------------------------------------------------------------------------
-// Destructor
-//---------------------------------------------------------------------------
-vsol_line_3d::~vsol_line_3d()
-{
-}
-
-//---------------------------------------------------------------------------
 //: Clone `this': creation of a new object and initialization
 //  See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_3d* vsol_line_3d::clone(void) const
+vsol_spatial_object_3d* vsol_line_3d::clone() const
 {
   return new vsol_line_3d(*this);
 }
@@ -65,7 +39,7 @@ vsol_spatial_object_3d* vsol_line_3d::clone(void) const
 //---------------------------------------------------------------------------
 //: Middle point of the straight line segment
 //---------------------------------------------------------------------------
-vsol_point_3d_sptr vsol_line_3d::middle(void) const
+vsol_point_3d_sptr vsol_line_3d::middle() const
 {
   return p0_->middle(*p1_);
 }
@@ -73,25 +47,9 @@ vsol_point_3d_sptr vsol_line_3d::middle(void) const
 //---------------------------------------------------------------------------
 //: direction of the straight line segment.
 //---------------------------------------------------------------------------
-vgl_vector_3d<double> vsol_line_3d::direction(void) const
+vgl_vector_3d<double> vsol_line_3d::direction() const
 {
   return p0_->to_vector(*p1_);
-}
-
-//---------------------------------------------------------------------------
-//: First point of the straight line segment
-//---------------------------------------------------------------------------
-vsol_point_3d_sptr vsol_line_3d::p0(void) const
-{
-  return p0_;
-}
-
-//---------------------------------------------------------------------------
-//: Last point of the straight line segment
-//---------------------------------------------------------------------------
-vsol_point_3d_sptr vsol_line_3d::p1(void) const
-{
-  return p1_;
 }
 
 //***************************************************************************
@@ -117,10 +75,8 @@ bool vsol_line_3d::operator==(vsol_line_3d const& other) const
 bool vsol_line_3d::operator==(vsol_spatial_object_3d const& obj) const
 {
   return
-   obj.spatial_type() == vsol_spatial_object_3d::CURVE &&
-   ((vsol_curve_3d const&)obj).curve_type() == vsol_curve_3d::LINE
-  ? operator== ((vsol_line_3d const&)(vsol_curve_3d const&)obj)
-  : false;
+    obj.cast_to_curve() && obj.cast_to_curve()->cast_to_line() &&
+    *this == *obj.cast_to_curve()->cast_to_line();
 }
 
 //***************************************************************************
@@ -128,18 +84,9 @@ bool vsol_line_3d::operator==(vsol_spatial_object_3d const& obj) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-//: Return the real type of a line. It is a CURVE
-//---------------------------------------------------------------------------
-vsol_spatial_object_3d::vsol_spatial_object_3d_type
-vsol_line_3d::spatial_type(void) const
-{
-  return CURVE;
-}
-
-//---------------------------------------------------------------------------
 //: Compute the bounding box of `this'
 //---------------------------------------------------------------------------
-void vsol_line_3d::compute_bounding_box(void) const
+void vsol_line_3d::compute_bounding_box() const
 {
   set_bounding_box(   p0_->x(),p0_->y(),p0_->z());
   add_to_bounding_box(p1_->x(),p1_->y(),p1_->z());
@@ -148,7 +95,7 @@ void vsol_line_3d::compute_bounding_box(void) const
 //---------------------------------------------------------------------------
 //: Return the length of `this'
 //---------------------------------------------------------------------------
-double vsol_line_3d::length(void) const
+double vsol_line_3d::length() const
 {
   return p0_->distance(p1_);
 }

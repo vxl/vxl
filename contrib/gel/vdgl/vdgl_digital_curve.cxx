@@ -4,7 +4,6 @@
 #endif
 //:
 // \file
-
 #include "vdgl_digital_curve.h"
 #include <vcl_cassert.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
@@ -169,11 +168,9 @@ bool vdgl_digital_curve::operator==(const vdgl_digital_curve &other) const
 
 bool vdgl_digital_curve::operator==(const vsol_spatial_object_2d& obj) const
 {
-  if (!(obj.spatial_type() == vsol_spatial_object_2d::CURVE))
-    return false;
-  if (!(((vsol_curve_2d const&)obj).curve_type() == vsol_curve_2d::DIGITAL_CURVE))
-    return false;
-  return *this == (vdgl_digital_curve const&)(vsol_curve_2d const&)obj;
+  return
+    obj.cast_to_curve() && obj.cast_to_curve()->cast_to_vdgl_digital_curve() &&
+    *this == *obj.cast_to_curve()->cast_to_vdgl_digital_curve();
 }
 
 //----------------------------------------------------------------

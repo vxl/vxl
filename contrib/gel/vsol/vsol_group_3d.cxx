@@ -2,7 +2,6 @@
 #include "vsol_group_3d.h"
 //:
 // \file
-
 #include <vcl_cassert.h>
 #include <vsl/vsl_string_io.h>
 #include <vsl/vsl_vector_io.h>
@@ -15,6 +14,7 @@
 //: Default Constructor: with no child
 //---------------------------------------------------------------------------
 vsol_group_3d::vsol_group_3d(void)
+  : vsol_spatial_object_3d()
 {
   storage_=new vcl_vector<vsol_spatial_object_3d_sptr>();
 }
@@ -181,9 +181,7 @@ bool vsol_group_3d::operator==(vsol_group_3d const& other) const
 
 bool vsol_group_3d::operator==(vsol_spatial_object_3d const& obj) const
 {
-  if (obj.spatial_type()!=vsol_spatial_object_3d::SPATIALGROUP)
-    return false;
-  return *this == (vsol_group_3d const&)obj;
+  return obj.cast_to_group() && *this == *obj.cast_to_group();
 }
 
 //----------------------------------------------------------------
