@@ -5,11 +5,11 @@
 // \file
 // \author Ian Scott (Manchester) April 2001
 // \brief Byte-swapping, arbitrary length integer conversion, and explicit I/O
-// Include this file if you wish to do do binary IO for large numbers of
+// Include this file if you wish to do binary IO for large numbers of
 // multi-byte fundamental types (short, int, long, float, double) at the same
 // time, or if you want to perform integer IO using fixed size encoding.
 //
-// If you wnat to read or write a large number of floating points, then;
+// If you want to read or write a large number of floating points, then;
 // \verbatim
 // Floats and doubles need byte swapped, and this can be done in situ.
 // Shorts, ints and longs need converted to/from the arbitrary length format.
@@ -38,6 +38,9 @@
 // Both VXL_LITTLE_ENDIAN && VXL_BIG_ENDIAN should be defined
 // One should equal 1 and the other equal 0;
 #if VXL_LITTLE_ENDIAN == VXL_BIG_ENDIAN
+  extern "There is a problem with the ENDIAN indication macros.";
+#endif
+#if VXL_LITTLE_ENDIAN+VXL_BIG_ENDIAN != 1
   extern "There is a problem with the ENDIAN indication macros.";
 #endif
 
