@@ -27,7 +27,7 @@ vil_image_view<T> vil1_to_vil_image_view(const vil1_memory_image_of<T> &vil1_im)
   if (vil1_im.planes() == 1)
     planestep = vil1_im.cols()* vil1_im.rows();
   else
-    planestep = &((vil1_memory_image_of<T>((vil1_im.get_plane(1)))).operator()(0,0)) - tl;
+    planestep = &((vil1_memory_image_of<T>(vil1_im.get_plane(1)))(0,0)) - tl;
 
   return vil_image_view<T>(tl,
                            vil1_im.cols(), vil1_im.rows(), vil1_im.planes(),
