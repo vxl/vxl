@@ -1,5 +1,6 @@
 USES += contrib/brl contrib/brl/bseg
-USE_MPEG2 := 1
+TRY_AVI := 1
+TRY_MPEG2 := 1
 include ${IUELOCALROOT}/core/vidl_vil1/config.mk
 include ${IUELOCALROOT}/core/vil1/config.mk
 include ${IUELOCALROOT}/core/vul/config.mk
