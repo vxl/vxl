@@ -36,7 +36,6 @@ static void send_ushort(vil_stream* data, vxl_uint_16 s);
 static void send_long(vil_stream* data, vxl_sint_32 s);
 static void expandrow(unsigned char *optr, unsigned char *iptr, int z);
 
-
 char const* vil_iris_format_tag = "iris";
 
 vil_image_resource_sptr vil_iris_file_format::make_input_image(vil_stream* is)
@@ -86,7 +85,7 @@ char const* vil_iris_file_format::tag() const
 /////////////////////////////////////////////////////////////////////////////
 
 vil_iris_generic_image::vil_iris_generic_image(vil_stream* is, char* imagename):
-  is_(is), starttab_(0), lengthtab_(0)
+  starttab_(0), lengthtab_(0), is_(is)
 {
   is_->ref();
   read_header();
@@ -107,10 +106,10 @@ char const* vil_iris_generic_image::file_format() const
 vil_iris_generic_image::vil_iris_generic_image(vil_stream* is,
                                                unsigned int ni, unsigned int nj, unsigned int nplanes,
                                                vil_pixel_format format)
-  : is_(is), magic_(474), ni_(ni), nj_(nj), nplanes_(nplanes), format_(format),
-    pixmin_(0), pixmax_(vil_pixel_format_sizeof_components(format)==1 ? 255 : 65535),
-    storage_(0), dimension_(nplanes_==1 ? 2 : 3), colormap_(0),
-    starttab_(0), lengthtab_(0)
+  : starttab_(0), lengthtab_(0), is_(is), magic_(474), ni_(ni), nj_(nj),
+    nplanes_(nplanes), format_(format), pixmin_(0),
+    pixmax_(vil_pixel_format_sizeof_components(format)==1 ? 255 : 65535),
+    storage_(0), dimension_(nplanes_==1 ? 2 : 3), colormap_(0)
 {
   is_->ref();
 
@@ -118,7 +117,7 @@ vil_iris_generic_image::vil_iris_generic_image(vil_stream* is,
   {
     vcl_strcpy(imagename_, "written by vil_iris_generic_image");
 
-    if (nplanes_ != 1 && nplanes_ != 3 && nplanes_ != 4) 
+    if (nplanes_ != 1 && nplanes_ != 3 && nplanes_ != 4)
       vcl_cerr << __FILE__ ": Cannot write iris image, can only do grayscale or RGB(A)\n";
     write_header();
   }
@@ -136,7 +135,7 @@ bool vil_iris_generic_image::read_header()
 {
   is_->seek(0L);
 
-  magic_     = get_short(is_, 0);
+  magic_ = get_short(is_, 0);
   if (magic_ != 474)
   {
     vcl_cerr << __FILE__ ": This is not an Iris RGB file: magic number is incorrect: "
@@ -144,7 +143,7 @@ bool vil_iris_generic_image::read_header()
     return false;
   }
 
-  storage_   = get_char(is_);
+  storage_ = get_char(is_);
   if (storage_ != 0 && storage_ != 1)
   {
     vcl_cerr << __FILE__ ": This is not an Iris RGB file: storage must be RLE or VERBATIM\n";
