@@ -13,6 +13,7 @@
 //
 // \verbatim
 // Modifications
+//  Peter Vanroose, Jul 10 2001: Deprecated get_*() in favour of *(), and explicit casts
 //  Peter Vanroose, Feb 28 2000: lots of minor corrections
 //  NPC (Manchester) 14/03/2001: Tidied up the documentation + added binary_io
 // \endverbatim
@@ -81,11 +82,7 @@ public:
   }
   // default destructor:
   inline ~vgl_box_3d() {}
-#endif
-
-  // Operators----------------------------------------------------------------
   // Default assignment operator:
-#if 0
   inline vgl_box_3d& operator=(vgl_box_3d const& that){
     this->min_pos_[0] = that.min_pos_[0]; this->max_pos_[0] = that.max_pos_[0];
     this->min_pos_[1] = that.min_pos_[1]; this->max_pos_[1] = that.max_pos_[1];
@@ -96,39 +93,70 @@ public:
 
   // Data Access---------------------------------------------------------------
 
-  //: Width (x)
+  // ---START DEPRECATED BLOCK---
+
+  //: \deprecated Use width()
   inline Type get_width() const { return max_pos_[0]-min_pos_[0]; }
-  //: Height (y)
+  //: \deprecated Use height()
   inline Type get_height()const { return max_pos_[1]-min_pos_[1]; }
-  //: Depth (z)
+  //: \deprecated Use depth()
   inline Type get_depth() const { return max_pos_[2]-min_pos_[2]; }
 
-  //: min x
+  //: \deprecated Use min_x()
   inline Type get_min_x() const { return min_pos_[0]; }
-  //: min y
+  //: \deprecated Use min_y()
   inline Type get_min_y() const { return min_pos_[1]; }
-  //: min z
+  //: \deprecated Use min_z()
   inline Type get_min_z() const { return min_pos_[2]; }
-  //vgl_point_3d<Type> get_min_point() const;
 
-  //: max x
+  //: \deprecated Use max_x()
   inline Type get_max_x() const { return max_pos_[0]; }
-  //: max y
+  //: \deprecated Use max_y()
   inline Type get_max_y() const { return max_pos_[1]; }
-  //: max z
+  //: \deprecated Use max_z()
   inline Type get_max_z() const { return max_pos_[2]; }
 
-  //vgl_point_3d<Type> get_max_point() const;
+  //: \deprecated Use centroid_x()
+  inline Type get_centroid_x() const { return Type(0.5*(min_pos_[0]+max_pos_[0])); }
+  //: \deprecated Use centroid_y()
+  inline Type get_centroid_y() const { return Type(0.5*(min_pos_[1]+max_pos_[1])); }
+  //: \deprecated Use centroid_z()
+  inline Type get_centroid_z() const { return Type(0.5*(min_pos_[2]+max_pos_[2])); }
+
+  // ---END DEPRECATED BLOCK---
+
+  //: Width (x)
+  inline Type width() const { return max_pos_[0]-min_pos_[0]; }
+  //: Height (y)
+  inline Type height()const { return max_pos_[1]-min_pos_[1]; }
+  //: Depth (z)
+  inline Type depth() const { return max_pos_[2]-min_pos_[2]; }
+
+  //: min x
+  inline Type min_x() const { return min_pos_[0]; }
+  //: min y
+  inline Type min_y() const { return min_pos_[1]; }
+  //: min z
+  inline Type min_z() const { return min_pos_[2]; }
+
+  //: max x
+  inline Type max_x() const { return max_pos_[0]; }
+  //: max y
+  inline Type max_y() const { return max_pos_[1]; }
+  //: max z
+  inline Type max_z() const { return max_pos_[2]; }
 
   //: Get x component of centroid
-  inline Type get_centroid_x() const { return 0.5*(min_pos_[0]+max_pos_[0]); }
+  inline Type centroid_x() const { return Type(0.5*(min_pos_[0]+max_pos_[0])); }
   //: Get y component of centroid
-  inline Type get_centroid_y() const { return 0.5*(min_pos_[1]+max_pos_[1]); }
+  inline Type centroid_y() const { return Type(0.5*(min_pos_[1]+max_pos_[1])); }
   //: Get z component of centroid
-  inline Type get_centroid_z() const { return 0.5*(min_pos_[2]+max_pos_[2]); }
+  inline Type centroid_z() const { return Type(0.5*(min_pos_[2]+max_pos_[2])); }
 
 #if 0
-  vgl_point_3d<Type> get_centroid_point() const;
+  vgl_point_3d<Type> centroid_point() const;
+  vgl_point_3d<Type> min_point() const;
+  vgl_point_3d<Type> max_point() const;
 #endif
 
   // Data Control--------------------------------------------------------------

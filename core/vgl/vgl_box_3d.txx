@@ -51,26 +51,26 @@ template <class Type>
 vgl_box_3d<Type>::vgl_box_3d(const Type centroid[3],
                              Type width, Type height, Type depth)
 {
-  min_pos_[0]=centroid[0]-0.5*width;
-  min_pos_[1]=centroid[1]-0.5*height;
-  min_pos_[2]=centroid[2]-0.5*height;
+  min_pos_[0] = Type(centroid[0]-0.5*width);
+  min_pos_[1] = Type(centroid[1]-0.5*height);
+  min_pos_[2] = Type(centroid[2]-0.5*height);
 
-  max_pos_[0]=centroid[0]+0.5*width;
-  max_pos_[1]=centroid[1]+0.5*height;
-  max_pos_[2]=centroid[2]+0.5*depth;
+  max_pos_[0] = Type(centroid[0]+0.5*width);
+  max_pos_[1] = Type(centroid[1]+0.5*height);
+  max_pos_[2] = Type(centroid[2]+0.5*depth);
 }
 
 template <class Type>
 vgl_box_3d<Type>::vgl_box_3d(vgl_point_3d<Type> const& centroid,
                              Type width, Type height, Type depth)
 {
-  min_pos_[0]=centroid.x()-0.5*width;
-  min_pos_[1]=centroid.y()-0.5*height;
-  max_pos_[1]=centroid.z()-0.5*depth;
+  min_pos_[0] = Type(centroid.x()-0.5*width);
+  min_pos_[1] = Type(centroid.y()-0.5*height);
+  max_pos_[1] = Type(centroid.z()-0.5*depth);
 
-  max_pos_[0]=centroid.x()+0.5*width;
-  max_pos_[1]=centroid.y()+0.5*height;
-  max_pos_[1]=centroid.z()+0.5*depth;
+  max_pos_[0] = Type(centroid.x()+0.5*width);
+  max_pos_[1] = Type(centroid.y()+0.5*height);
+  max_pos_[1] = Type(centroid.z()+0.5*depth);
 }
 
 template <class Type>
@@ -101,24 +101,24 @@ template <class Type>
 void vgl_box_3d<Type>::set_width(const Type width)
 {
   Type x = get_centroid_x();
-  min_pos_[0] = x-0.5*width;
-  max_pos_[0] = x+0.5*width;
+  min_pos_[0] = Type(x-0.5*width);
+  max_pos_[0] = Type(x+0.5*width);
 }
 
 template <class Type>
 void vgl_box_3d<Type>::set_height(const Type height)
 {
   Type y = get_centroid_y();
-  min_pos_[1] = y-0.5*height;
-  max_pos_[1] = y+0.5*height;
+  min_pos_[1] = Type(y-0.5*height);
+  max_pos_[1] = Type(y+0.5*height);
 }
 
 template <class Type>
 void vgl_box_3d<Type>::set_depth(const Type depth)
 {
   Type z = get_centroid_z();
-  min_pos_[2] = z-0.5*depth;
-  max_pos_[2] = z+0.5*depth;
+  min_pos_[2] = Type(z-0.5*depth);
+  max_pos_[2] = Type(z+0.5*depth);
 }
 
 template <class Type>
