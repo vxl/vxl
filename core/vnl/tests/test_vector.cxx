@@ -454,7 +454,7 @@ void vnl_vector_test_conversion() {
 #endif
 }
 
-#define TIMING 0
+#define TIMING 1
 
 #if TIMING
 #include <vul/vul_timer.h>
@@ -469,10 +469,10 @@ void vnl_vector_test_two_nrm2_timing(unsigned size, unsigned long num)
   for (unsigned i = 0; i <num;i++)
     c+= vnl_c_vector<double>::two_nrm2(a.begin(), size);
   double time = t.real();
-  vcl_cout <<" Time for finding the two_nrm2 of " << size <<
-    "-D vectors " << num << "times  = " << time / 1000.0 << "s." << vcl_endl;
-
+  vcl_cout <<" Time for finding the two_nrm2 of " << size
+           <<"-D vectors " << num << "times  = " << time / 1000.0 << "s.\n";
 }
+
 void vnl_vector_test_euclid_dist_sq_timing(unsigned size, unsigned long num)
 {
   vnl_vector<double> a(size);
@@ -488,9 +488,8 @@ void vnl_vector_test_euclid_dist_sq_timing(unsigned size, unsigned long num)
   for (unsigned i = 0; i <num;i++)
     c+= vnl_c_vector<double>::euclid_dist_sq(a.begin(), b.begin(), size);
   double time = t.real();
-  vcl_cout <<" Time for finding the euclid_dist_sq of " << size <<
-    "-D vectors " << num << "times  = " << time / 1000.0 << "s." << vcl_endl;
-
+  vcl_cout <<" Time for finding the euclid_dist_sq of " << size
+           <<"-D vectors " << num << "times  = " << time / 1000.0 << "s.\n";
 }
 
 void vnl_vector_test_timing()
