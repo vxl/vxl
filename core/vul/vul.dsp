@@ -180,6 +180,11 @@ SOURCE=.\vul_timestamp.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vul_tmpnam.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\vul_trace.cxx
 
 # End Source File
