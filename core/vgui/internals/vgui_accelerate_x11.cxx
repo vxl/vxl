@@ -75,10 +75,10 @@ const int number_of_accelerated_formats = sizeof(gl_to_hermes_formats) / sizeof(
 
 vgui_accelerate_x11::vgui_accelerate_x11()
 {
-  vcl_cerr << "Initializing Mesa/X11 accelerator\n";
+  //vcl_cerr << __FILE__ ": Initializing Mesa/X11 accelerator\n";
 
 #ifdef HAS_HERMES
-  vcl_cerr << "Initializing Hermes\n";
+  //vcl_cerr << __FILE__ ": Initializing Hermes\n";
   Hermes_Init();
   hermes_clearer = Hermes_ClearerInstance();
   hermes_converter = Hermes_ConverterInstance(HERMES_CONVERT_NORMAL);
@@ -90,7 +90,7 @@ vgui_accelerate_x11::vgui_accelerate_x11()
 
 vgui_accelerate_x11::~vgui_accelerate_x11()
 {
-  vcl_cerr << "Destroying Mesa/X11 accelerator\n";
+  //vcl_cerr << __FILE__ ": Destroying Mesa/X11 accelerator\n";
 
   delete[] aux_buffer;
 
