@@ -244,7 +244,7 @@ draw_points(vcl_vector<vsol_point_2d_sptr> const& points, float r, float g, floa
 }
 
 void segv_segmentation_manager::draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions,
-					     bool verts
+					     bool verts)
 {
   for (vcl_vector<vtol_intensity_face_sptr>::iterator rit = regions.begin();
        rit != regions.end(); rit++)
