@@ -1,6 +1,7 @@
 #include <rrel/rrel_cauchy_obj.h>
 #include <rrel/rrel_estimation_problem.h>
 #include <rrel/rrel_homography2d_est.h>
+#include <rrel/rrel_homography2d_est_aff.h>
 #include <rrel/rrel_shift2d_est.h>
 #include <rrel/rrel_irls.h>
 #include <rrel/rrel_linear_regression.h>
