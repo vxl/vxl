@@ -58,7 +58,28 @@ void dot_product(const vcl_vector<vnl_vector<T> > &s1, const vcl_vector<vnl_vect
         <<"ns  +/-"<<stats((unsigned)(nstests*0.75))-stats((unsigned)(nstests*0.25))<<"ns\n"<<vcl_endl;
 }
 template <class T>
-void mat_x_vec(const vnl_matrix<T> &s1, const vcl_vector<vnl_vector<T> > &s2, 
+void mat_x_vec(const vnl_matrix<T> &s1, const vcl_vector<vnl_vector<T> > &s2,
+                   vcl_vector<vnl_vector<T> > & d, int n_loops)
+{
+  vnl_vector<double> stats(nstests);
+  for (unsigned st=0;st<nstests;++st)
+  {
+    vcl_clock_t t0=vcl_clock();
+    for (int l=0;l<n_loops;++l)
+    {
+      for (unsigned i=1;i<d.size();++i)
+        d[i] = s1 * s2[i];
+    }
+    vcl_clock_t t1=vcl_clock();
+    stats[st] = (1e6*((double(t1)-double(t0)))/((double)n_loops*(double)CLOCKS_PER_SEC));
+  }
+  vcl_sort(stats.begin(), stats.end());
+  vcl_cout<<"  Mean: "<<stats.mean()
+        <<"us  +/-"<<stats((unsigned)(nstests*0.75))-stats((unsigned)(nstests*0.25))<<"us\n"<<vcl_endl;
+}
+
+template <class T>
+void vec_x_mat(const vcl_vector<vnl_vector<T> > &s2, const vnl_matrix<T> &s1,
                    vcl_vector<vnl_vector<T> > & d, int n_loops)
 {
   vnl_vector<double> stats(nstests);
@@ -106,16 +127,22 @@ void run_for_size(unsigned nv, unsigned nm, T dummy, char * type)
   dot_product(va,vb,na,n_loops);
   vcl_cout<<"Matrix x Vector multiplication  ";
   mat_x_vec(ma,vb,vc,n_loops/nm+1);
+  vcl_cout<<"Vector x Matrix multiplication  ";
+  vec_x_mat(vb,ma,vc,n_loops/nm+1);
 }
 
 int main(int argc, char *argv[])
 {
   vnl_sample_reseed(12354);
   run_for_size(20, 20, double(), "double");
-  run_for_size(20, 20, float(), "float");
+//  run_for_size(20, 20, float(), "float");
   run_for_size(300, 300, double(), "double");
-  run_for_size(300, 300, float(), "float");
+//  run_for_size(300, 300, float(), "float");
+  run_for_size(100, 10000, double(), "double");
+//  run_for_size(100, 10000, float(), "float");
+  run_for_size(10000, 100, double(), "double");
+//  run_for_size(10000, 100, float(), "float");
   run_for_size(100, 30000, double(), "double");
-  run_for_size(100, 30000, float(), "float");
+//  run_for_size(100, 30000, float(), "float");
   return 0;
 }
