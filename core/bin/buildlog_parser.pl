@@ -369,7 +369,7 @@ for( $i=0; $i<= $#roots; $i++)
     XMLruntestgroup( $roots[$i]);
   }
 
-EndFrost();
+#EndFrost();
 
 #print webify_string("hello\nthis is \"a\" test")."\n";
 
