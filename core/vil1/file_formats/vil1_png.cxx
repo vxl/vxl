@@ -17,6 +17,8 @@
 #include <png.h>
 #include <vcl_cstdlib.h> // for vcl_exit()
 
+#include <vxl_config.h>
+
 // Constants
 #define SIG_CHECK_SIZE 4
 
@@ -173,27 +175,28 @@ struct vil_png_structures {
       return (ok = problem("couldn't allocate space for image"));
 
     int linesize;
-    if (info_ptr->bit_depth == 16)
+    if (png_get_bit_depth( png_ptr, info_ptr ) == 16)
       linesize = 2 * info_ptr->width;
     else
       linesize = info_ptr->width;
 
-    if (info_ptr->color_type == PNG_COLOR_TYPE_GRAY_ALPHA)
+    if (png_get_color_type( png_ptr, info_ptr ) == PNG_COLOR_TYPE_GRAY_ALPHA)
       linesize *= 2;
     else
-      if (info_ptr->color_type == PNG_COLOR_TYPE_RGB)
+      if (png_get_color_type( png_ptr, info_ptr ) == PNG_COLOR_TYPE_RGB)
         linesize *= 3;
       else
-        if (info_ptr->color_type == PNG_COLOR_TYPE_RGB_ALPHA)
+        if (png_get_color_type( png_ptr, info_ptr ) == PNG_COLOR_TYPE_RGB_ALPHA)
           linesize *= 4;
 
+    unsigned int height = png_get_image_height(png_ptr,info_ptr);
     // Alloc the whole thing at once
-    rows[0] = new png_byte[linesize * info_ptr->height];
+    rows[0] = new png_byte[linesize * height];
     if (!rows[0])
       return (ok = problem("couldn't allocate space for image"));
 
     // Re-point rows.
-    for (unsigned int y = 1 ; y < info_ptr->height ; ++y)
+    for (unsigned int y = 1 ; y < height ; ++y)
       rows[y] = rows[0] + y * linesize;
 
     return true;
@@ -301,7 +304,7 @@ bool vil_png_generic_image::read_header()
   png_set_sig_bytes (p->png_ptr, SIG_CHECK_SIZE);
   png_read_info (p->png_ptr, p->info_ptr);
 
-  if (p->info_ptr->bit_depth < 8)
+  if (png_get_bit_depth( p->png_ptr, p->info_ptr ) < 8)
     png_set_packing (p->png_ptr);
 
 #if 0
@@ -312,12 +315,18 @@ bool vil_png_generic_image::read_header()
 
   p->channels = png_get_channels(p->png_ptr, p->info_ptr);
 
-  this->width_ = p->info_ptr->width;
-  this->height_ = p->info_ptr->height;
-  this->components_ = p->channels;
-  this->bits_per_component_ = p->info_ptr->bit_depth;
+#if VXL_LITTLE_ENDIAN
+  // PNG stores data MSB
+  if( png_get_bit_depth( p->png_ptr, p->info_ptr ) > 8 )
+    png_set_swap( p->png_ptr );
+#endif
 
-  if (p->info_ptr->valid & PNG_INFO_sBIT) problem("LAZY AWF! PNG_INFO_sBIT");
+  this->width_ = png_get_image_width( p->png_ptr, p->info_ptr );
+  this->height_ = png_get_image_height( p->png_ptr, p->info_ptr );
+  this->components_ = png_get_channels( p->png_ptr, p->info_ptr );
+  this->bits_per_component_ = png_get_bit_depth( p->png_ptr, p->info_ptr );
+
+  if (png_get_valid( p->png_ptr, p->info_ptr, PNG_INFO_sBIT )) problem("LAZY AWF! PNG_INFO_sBIT");
 
   // if (p->info_ptr->valid & PNG_INFO_bKGD) problem("LAZY AWF! PNG_INFO_bKGD");
   png_setjmp_off();
@@ -346,6 +355,12 @@ bool vil_png_generic_image::write_header()
 
   png_write_info(p->png_ptr, p->info_ptr);
 
+#if VXL_LITTLE_ENDIAN
+  // PNG stores data MSB
+  if( bits_per_component_ > 8 )
+    png_set_swap( p->png_ptr );
+#endif
+
   // Make memory image
   p->channels = components_;
   p->alloc_image();
@@ -364,16 +379,16 @@ bool vil_png_generic_image::get_section(void* buf, int x0, int y0, int xs, int y
   png_byte** rows = p->get_rows();
   if (!rows) return 0;
 
-  int bytes_per_pixel = p->info_ptr->bit_depth * p->channels / 8;
+  int bytes_per_pixel = png_get_bit_depth(p->png_ptr,p->info_ptr) * p->channels / 8;
   int bytes_per_row_dst = xs*bytes_per_pixel;
-  if ((unsigned int)xs == p->info_ptr->width) {
+  if ((unsigned int)xs == png_get_image_width(p->png_ptr, p->info_ptr)) {
     assert(x0 == 0);
     vcl_memcpy(buf, rows[y0], ys * bytes_per_row_dst);
   }
   else {
     png_byte* dst = (png_byte*)buf;
     for(int y = 0; y < ys; ++y, dst += bytes_per_row_dst)
-      vcl_memcpy(dst, &rows[y0+y][x0], xs);
+      vcl_memcpy(dst, &rows[y0+y][x0*bytes_per_pixel], xs*bytes_per_pixel);
   }
 
   return true;
@@ -389,16 +404,16 @@ bool vil_png_generic_image::put_section(void const* buf, int x0, int y0, int xs,
   png_byte** rows = p->get_rows();
   if (!rows) return false;
 
-  int bytes_per_pixel  = p->info_ptr->bit_depth*p->channels / 8;
+  int bytes_per_pixel = png_get_bit_depth(p->png_ptr,p->info_ptr) * p->channels / 8;
   int bytes_per_row_dst = xs*bytes_per_pixel;
-  if ((unsigned int)xs == p->info_ptr->width) {
+  if ((unsigned int)xs == png_get_image_width(p->png_ptr, p->info_ptr)) {
     assert(x0 == 0);
     vcl_memcpy(rows[y0], buf, ys * bytes_per_row_dst);
   }
   else {
     png_byte* dst = (png_byte*)buf;
     for(int y = 0; y < ys; ++y, dst += bytes_per_row_dst)
-      vcl_memcpy(&rows[y0+y][x0], dst, xs);
+      vcl_memcpy(&rows[y0+y][x0*bytes_per_pixel], dst, xs*bytes_per_pixel);
   }
 
   return true;
