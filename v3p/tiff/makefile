@@ -51,84 +51,98 @@ SOURCES += tif_warning.c
 SOURCES += tif_write.c
 SOURCES += tif_zip.c
 
+ifeq ($(OS),win32)
+SOURCES += tif_win32.c
+USE_WINAPI := 1
+else
+SOURCES += tif_unix.c
+endif
+
+
 DOCFILES = tiff
 
 APP_CFLAGS += -DHAVE_IEEEFP=1
 
-ifeq ($(OS),irix)
+
+####### MAKE SURE THESE STAY IN CORRESPONDENCE WITH config/identify_os.mk #####
+
+ifeq ($(OS),irix5)
 APP_CFLAGS += -DJPEG_SUPPORT \
     -DMMAP_SUPPORT -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1 -DUSE_CONST=1 -ansi
-SOURCES += tif_unix.c
 endif
 
 ifeq ($(OS),irix6)
 APP_CFLAGS += -DJPEG_SUPPORT \
 #    -DMMAP_SUPPORT -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1 -DUSE_CONST=1 -ansi
-SOURCES += tif_unix.c
 endif
 
 
 ifeq ($(OS),sunos4)
 APP_CFLAGS += -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1
-SOURCES += tif_unix.c
 endif
 
 ifeq ($(OS),aix)
 APP_CFLAGS += -DJPEG_SUPPORT \
     -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1 -DUSE_CONST=1
-SOURCES += tif_unix.c
 endif
 
 ifeq ($(OS),solaris)
 APP_CFLAGS +=  -DJPEG_SUPPORT \
     -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1 -DUSE_CONST=1 -DSYSV
-SOURCES += tif_unix.c
 endif
 
 ifeq ($(OS),win32)
 APP_CFLAGS +=  -DJPEG_SUPPORT \
     -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1 -DUSE_CONST=1 -DWIN32
-SOURCES += tif_win32.c
 USE_WINAPI := 1
 endif
 
-ifeq ($(OS),hp)
+ifeq ($(OS),hpux10.20)
 APP_CFLAGS += -DUSE_VARARGS=1 -DUSE_PROTOTYPES=0
-SOURCES += tif_unix.c
 endif
 
 ifeq ($(OS),hpux)
 APP_CFLAGS += -DUSE_VARARGS=1 -DUSE_PROTOTYPES=0
-SOURCES += tif_unix.c
 endif
 
 ifeq ($(OS),ultrix)
 APP_CFLAGS += -DUSE_VARARGS=1 -DUSE_PROTOTYPES=0
-SOURCES += tif_unix.c
 endif
 
 ifeq ($(OS),next)
 APP_CFLAGS += -DJPEG_SUPPORT \
     -DUSE_VARARGS=1 -DUSE_PROTOTYPES=0
-SOURCES += tif_unix.c
 endif
 
 ifeq ($(OS), apollo)
 APP_CFLAGS += -DUSE_VARARGS=1 -DUSE_PROTOTYPES=0 -A nansi
-SOURCES += tif_unix.c
 endif
 
 ifeq ($(OS), linux)
 APP_CFLAGS += -DJPEG_SUPPORT \
     -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1 -DUSE_CONST=1
-SOURCES += tif_unix.c
 endif
 
 ifeq ($(OS), freebsd)
 APP_CFLAGS += -DJPEG_SUPPORT \
     -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1 -DUSE_CONST=1
-SOURCES += tif_unix.c
 endif
+
+ifeq ($(OS),alpha4)
+APP_CFLAGS +=  -DJPEG_SUPPORT \
+    -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1 -DUSE_CONST=1
+endif
+
+ifeq ($(OS),alpha3.0)
+APP_CFLAGS +=  -DJPEG_SUPPORT \
+    -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1 -DUSE_CONST=1
+endif
+
+ifeq ($(OS),alpha3.2)
+APP_CFLAGS +=  -DJPEG_SUPPORT \
+    -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1 -DUSE_CONST=1
+endif
+
 
 IULIBS += -lJPEG
 
