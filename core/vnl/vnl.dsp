@@ -269,10 +269,6 @@ SOURCE=.\vnl_alloc.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vnl_binary.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=.\vnl_block.cxx
 # End Source File
 # Begin Source File

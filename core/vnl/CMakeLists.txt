@@ -25,7 +25,7 @@ vnl_matlab_filewrite
 vnl_matops
 vnl_real_polynomial
 vnl_real_npolynomial
-vnl_binary
+#vnl_binary # deprecated: use vsl instead
 vnl_fastops
 vnl_linear_operators_3
 vnl_numeric_limits
