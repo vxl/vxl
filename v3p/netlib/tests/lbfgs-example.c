@@ -26,7 +26,7 @@ Extern struct {
 /*                          JORGE NOCEDAL */
 /*                        *** July 1990 *** */
 
-/* Main program */ MAIN__()
+/* Main program */ int main()
 {
     /* System generated locals */
     integer i__1;
@@ -98,6 +98,8 @@ L20:
 L50:
     lbp1f_("f = %g\n", &f, 7L);
     lbp1d_("iterations = %d\n", &icall, 16L);
-} /* MAIN__ */
 
-/* Main program alias */ int sdrive_ () { MAIN__ (); }
+    return 0;
+} /* main */
+
+/* Main program alias */ int sdrive_ () { return main (); }

@@ -609,7 +609,7 @@ L900:
 /*     ------------- */
 /*     Main program. */
 /*     ------------- */
-/* Main program */ MAIN__()
+/* Main program */ main()
 {
     /* Builtin functions */
     /* Subroutine */ int s_stop();
@@ -632,5 +632,24 @@ L900:
     test_(&c__80, &c__40, &c__4, &c__4, &damp2);
     s_stop("", 0L);
 /*     End of main program for testing LSQR */
-} /* MAIN__ */
+} /* main */
 
+#include <stdio.h>
+
+integer s_wsfe() {return 0;}
+integer do_fio(integer* fp, char* buf, integer len)
+{
+  int i;
+  FILE* f = fdopen(*fp, "w");
+  if (len==sizeof(integer))
+    return fprintf(f, "%d\n", *((integer*)buf));
+  else if (len==sizeof(doublereal))
+    return fprintf(f, "%g\n", *((doublereal*)buf));
+  else {
+    for (i=0; i<len; ++i) fputc(buf[i], f);
+    fputc('\n', f);
+    return len;
+  }
+}
+integer e_wsfe() {return 0;}
+int s_stop() {return 0;}
