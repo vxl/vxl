@@ -8,5 +8,6 @@
 #include <vimt3d/vimt3d_slice.h>
 #include <vimt3d/vimt3d_transform_3d.h>
 #include <vimt3d/vimt3d_trilin_interp.h>
+#include <vimt3d/vimt3d_reconstruct_from_grid.h>
 
 int main() { return 0; }
