@@ -116,9 +116,10 @@ void vgl_homg_operators_2d<Type>::unitize(vgl_homg_point_2d<Type>& a)
   double y = a.y();
   double z = a.w();
 
-  double norm = vnl_math_sqr (vnl_math_sqr(x) + 
-                              vnl_math_sqr(y) + 
-                              vnl_math_sqr(z));
+  //double norm = vnl_math_sqr (vnl_math_sqr(x) + 
+  //                            vnl_math_sqr(y) + 
+  //                            vnl_math_sqr(z));
+  double norm = vcl_sqrt (x*x + y*y + z*z);
   
   if (norm == 0.0) {
     cerr << "vgl_homg_operators_2d<Type>::unitize() -- Zero length vector\n";
@@ -189,7 +190,7 @@ double vgl_homg_operators_2d<Type>::perp_dist_squared (const vgl_homg_point_2d<T
 template <class Type>
 double vgl_homg_operators_2d<Type>::line_angle(const vgl_homg_line_2d<Type>& line)
 {
-  return atan2 (line.b(), line.a());
+  return vcl_atan2 (line.b(), line.a());
 }
 
 //-----------------------------------------------------------------------------
