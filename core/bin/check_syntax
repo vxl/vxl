@@ -110,7 +110,7 @@ foreach $f (@FILES)
   &msg(1, "has vcl_endl following a string: consider replacing by \\n\"")
     if ($printed && $file =~ m!\"\s*\<\<\s*vcl_endl\b!);
   &msg(1, "consider joining consecutive \"\<\<\" output lines for $2")
-    if ($printed && $file =~ m![{;:](\s*//.*\n)?\s*(\S+)\s*\<\<[^;]+\;\s*\2\s*\<\<!);
+    if ($printed && $file =~ m![{;:](\s*//.*\n)?\s*([a-zA-Z]\S*)\s*\<\<[^;]+\;\s*\2\s*\<\<!);
   &msg(1, "consider joining consecutive strings in output for $1")
     if ($printed && $file =~ m!(\S+)\s*\<\<[^;]*(..)\"\s*\<\<\s*\"! && $2 ne "\\n" && $2 ne " -");
   &msg(1, "consider replacing \"$2\" by \'$2\' in output for $1")
@@ -492,7 +492,7 @@ foreach $f (@FILES)
     if ($file =~ m/(\$RCSfile|\$(Author|Revision|Date): .* \$)/);
   #typos
   &msg(1, "probably a mistyping: $1")
-    if ($file =~ m/\b(accom[^mp]\S*|accp\S+|accura[^ct]\S*|adaptati[^no]\S*|[a-z]*(sss|ettt)[a-z]*|alement|alife|anj\b|appi\S+|arang\S+|arbitar\S+|aready|argree|argume[^n]\S*|assemb[^l]\S*|assignement|authentification|auxil[^i]\S*|auxiliar\b|ayn\S+|azimutha|bandwith|begining|blted|bondar\S*|borgefor\b|chac\S*|changeb\S*|cic[^ae]\S*|cir[^c][a-z]+|coeffic[^i]\S*|coefi[a-z]+|coli[a-z]{4,}|colum[^n]|columnn[^u]|coma\S*|comparis[^o]\S*|compatibil[^i]\S*|compilant|condt\S+|conju[^gnr]\S*|(con|de)stuct\S*|(con|de)truct\S*|containins|continou\S*|contrain\S+|contor|continguous|controled|coordi[^n]\S*|cores\S+|corr[a-dfghj-np-tv-z][a-z]+\b|decend\S*|(de)?compos[^aei]\S*|defau[^l]\S*|dependan\S*|dependen[^ct]\S*|desct\S*|despatch|difu[a-z]+|digtial|dimensi[^o]\S*|dimensionn\S*|distingish|documen[^t-]\S*|doen|effic[^ai]\S*|eigenval[a-rtv-z]\S*|elm[ei]\S+|encapsu[^l]\S*|encounterd|enquiries|epipl\S+|eq[a-tv-z][a-z]{5,}|esti[^m]\S*|Eucl[^i]\S*|Euclidi\S*|expalin|expri\S*|exr[a-z]{3,}|filname|fomat|fractino|frequence|functo[^r]|funct[^io]\S*|graid\S*|hasnt|heir\S+|hiera[^r]\S*|hight|highligh[^t]\S*|(non)?homege\S*|(non)?homog[a-df-qs-z]\S*|(non)?homogeni[^sz]\S*|(non)?homogen[^ei]\S*|identia\S*|implemen[^t]\S*|implementat[^i]\S*|incredibably|indentic\S*|independant|indicies|inheranc\S*|inhert\S*|initi[^a][a-z]*|initialli\S+|interat\S*|inte[^glmnrs]\S*|inti[^m][a-z]*|judicous|lable|lenth|likely[a-z]\S*|lik[^aei]\S*|magnit[^u]\S*|maint[^ae]\S*|matricies|maxiu\S*|maximu[^m]|measur[^ei]\S*|mili[^t]\S*|minmu\S*|minimia\S*|minina\S*|miscel[^l]\S*|necc\S*|neces[^s]\S*|objects\'s|obje[^c]\S*|occur[a-qt-z]\S*|octo[^b]\s*|oor|openned|orienta[^lt]\S*|ouput|outputing|parallal|parameteric|paramete[^r]\S*|paramt\S*|parap[^h]\S*|parbol|perf[^eiou]\S*|perim[a-df-z]\S*|polyon|posi[^tx]\S*|posti[^n]\S*|pote[^n]\S*|precee\S*|prefered|progam\S*|protocal|receip[^t]|(re)?determing|refern|regu[^l]\S*|rep[eo]n[a-z]{4,}|represe[^n]\S*|reps[a-z]{2,}|retrei\S*|rre[a-z]*q\S*|samp[a-km-rt-z][a-z]*|seciton|seting|severl\S*|simulat[^eio]\S*|singlt\S*|singlet[^o]\S*|staig\S*|subsit\S*|substra\S*|succes[^s]\S*|supres\S*|supp[^elor]\S*|syme\S*|symmet[^r]\S*|syte\S*|tableaus|tablea[^nu]\S*|tableu|talbeau|tech[a-mo-z]\S*|tesselat\S*|thse|togg[^l]\S*|toler[^a]\S*|tran[a-prt-z]\S*|transf[^eiou ]\S*|traver[^s]\S*|unec\S+|utilitit[^iy]|valu[^ae]\S*|verf\S*|verson|verticies|vertexes|vlo\S*|whan|wether|whou\S*|wil\b|wrapi\S*|writted|yei\S*)/i
+    if ($file =~ m/\b(accom[^mp]\S*|accp\S+|accura[^ct]\S*|adaptati[^no]\S*|[a-z]*(sss|ettt)[a-z]*|alement|alife|anj\b|appi\S+|arang\S+|arbitar\S+|aready|argree|argume[^n]\S*|assemb[^l]\S*|assignement|authentification|auxil[^i]\S*|auxiliar\b|ayn\S+|azimutha|bandwith|begining|blted|bondar\S*|borgefor\b|chac\S*|changeb\S*|cic[^ae]\S*|cirl[a-z]+|cir[^c]\S[a-z]+|coeffic[^i]\S*|coefi[a-z]+|coli[a-z]{4,}|colum[^n]|columnn[^u]|coma\S*|comparis[^o]\S*|compatibil[^i]\S*|compilant|condt\S+|conju[^gnr]\S*|(con|de)stuct\S*|(con|de)truct\S*|containins|continou\S*|contrain\S+|contor|continguous|controled|coordi[^n]\S*|cores\S+|corr[a-dfghj-np-tv-z][a-z]+\b|decend\S*|(de)?compos[^aei]\S*|defau[^l]\S*|dependan\S*|dependen[^ct]\S*|desct\S*|despatch|difu[a-z]+|digtial|dimensi[^o]\S*|dimensionn\S*|distingish|documen[^t-]\S*|doen|effic[^ai]\S*|eigenval[a-rtv-z]\S*|elm[ei]\S+|encapsu[^l]\S*|encounterd|enquiries|epipl\S+|eq[a-tv-z][a-z]{5,}|esti[^m]\S*|Eucl[^i]\S*|Euclidi\S*|expalin|expri\S*|exr[a-z]{3,}|filname|fomat|fractino|frequence|functo[^r]|funct[^io]\S*|graid\S*|hasnt|heir\S+|hiera[^r]\S*|hight|highligh[^t]\S*|(non)?homege\S*|(non)?homog[a-df-qs-z]\S*|(non)?homogeni[^sz]\S*|(non)?homogen[^ei]\S*|identia\S*|implemen[^t]\S*|implementat[^i]\S*|incredibably|indentic\S*|independant|indicies|inheranc\S*|inhert\S*|initi[^a][a-z]*|initialli\S+|interat\S*|inte[^glmnrs]\S*|inti[^m][a-z]*|judicous|lable|lenth|likely[a-z]\S*|lik[^aei]\S*|magnit[^u]\S*|maint[^ae]\S*|matricies|maxiu\S*|maximu[^m]|measur[^ei]\S*|mili[^t]\S*|minmu\S*|minimia\S*|minina\S*|miscel[^l]\S*|necc\S*|neces[^s]\S*|objects\'s|obje[^c]\S*|occur[a-qt-z]\S*|octo[^b]\s*|oor|openned|orienta[^lt]\S*|ouput|outputing|parallal|parameteric|paramete[^r]\S*|paramt\S*|parap[^h]\S*|parbol|perf[^eiou]\S*|perim[a-df-z]\S*|polyon|posi[^tx]\S*|posti[^n]\S*|pote[^n]\S*|precee\S*|prefered|progam\S*|protocal|receip[^t]|(re)?determing|refern|regu[^l]\S*|rep[eo]n[a-z]{4,}|represe[^n]\S*|reps[a-z]{2,}|retrei\S*|rre[a-z]*q\S*|samp[a-km-rt-z][a-z]*|seciton|seting|severl\S*|simulat[^eio]\S*|singlt\S*|singlet[^o]\S*|staig\S*|subsit\S*|substra\S*|succes[^s]\S*|supres\S*|supp[^elor]\S*|syme\S*|symmet[^r]\S*|syte\S*|tableaus|tablea[^nu]\S*|tableu|talbeau|tech[a-mo-z]\S*|tesselat\S*|thse|togg[^l]\S*|toler[^a]\S*|tran[a-prt-z]\S*|transf[^eiou ]\S*|traver[^s]\S*|unec\S+|utilitit[^iy]|valu[^ae]\S*|verf\S*|verson|verticies|vertexes|vlo\S*|whan|wether|whou\S*|wil\b|wrapi\S*|writted|yei\S*)/i
         && $1 ne "IntInfo" && $1 ne "InitInstance" && $1 ne "sss" && $1 ne "ttt" && $1 !~ m/^(.*GlassSel.*)$/);
 
 # 9. spurious #pragma interface or #pragma implementation
@@ -748,11 +748,11 @@ foreach $f (@FILES)
   &msg(1, "Replace \"$1 (1)\" by \"$1 (true)\"")
     if ($printed && $cpp_file && $file =~ m/\b(if|while)\s*\(\s*1\s*\)/);
   $f_=$fl;
-  while ($printed && $f_ =~ s!\n([^()\'\";\n]*\( *)((\([^();\n]*\))*[^();\n]+(\([^();\n]*\)[^();\n]*)*)\n( +)!\n$5!)
+  while ($printed && $f_ =~ s!\n([^()\'\";\n]*\( *)((\([^();\n]*\))*[^();\n]+(\([^();\n]*\)[^();\n]*)*)\n( +)([+-] *)!\n$5$6!)
   {
-    $line="$1$2"; $first=$2; $post="$5"; $pre="$1"; $pre =~ s/./ /g;
+    $line="$1$2"; $first=$2; $post="$5"; $ppost="$6"; $pre="$1"; $pre =~ s/./ /g; $ppost =~ s/./ /g;
     &msg(1, "incorrect indentation in line following \"$line\"")
-      unless ($pre eq $post || $line =~ m/_INSTANTIATE_/ || $line =~ m/\<\</ || $first eq "//");
+      unless ($pre eq $post || $pre eq $post.$ppost || $line =~ m/_INSTANTIATE_/ || $line =~ m/\<\</ || $first eq "//");
   }
   $f_=$fl; $f_ =~ s/\"[^\n\"]*\"/Q/g; $f_ =~ s/\'\\?.\'/Q/g; $f_ =~ s/\<\</\007/g;
   while ($printed && $f_ =~ s/\n([^\007;{}\#\n]*)(\007[^;\n]*)\n( +)\007/\n$3\007/)
@@ -774,7 +774,7 @@ foreach $f (@FILES)
   &msg(1, "No empty line between two function bodies")
     if ($printed && $file =~ m/\n};? *\n([a-zA-Z]+)/ && $1 ne "typedef");
   &msg(1, "Consider placing opening brace of function body on new line")
-    if ($printed && $file =~ m/\n([a-zA-Z]\S*).* (\S+) *\{ *\n/ && $1 ne "extern" && $2 ne "=");
+    if ($printed && $file =~ m/\n([a-zA-Z]\S*).* (\S+) *\{ *\n/ && $1 ne "extern" && $1 ne "struct" && $2 ne "=");
   &msg(1, "$1 not followed by space")
     if ($printed && $file =~ m/\b(for|if|while|switch)\(/);
   &msg(1, "return value in brackets")
