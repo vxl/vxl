@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_load.cxx
+// This is oxl/vgui/vgui_loader_tableau.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -6,19 +6,19 @@
 // \file
 // \author Geoffrey Cross, Oxford RRG
 // \date   03 Nov 99
-// \brief  See vgui_load.h for a description of this file.
+// \brief  See vgui_loader_tableau.h for a description of this file.
 
-#include "vgui_load.h"
+#include "vgui_loader_tableau.h"
 #include <vcl_iostream.h>
 #include <vnl/vnl_matrix.h>
 #include <vgui/vgui_gl.h>
 
-vcl_string vgui_load::type_name() const {
-  return "vgui_load";
+vcl_string vgui_loader_tableau::type_name() const {
+  return "vgui_loader_tableau";
 }
 
 // Default ctor
-vgui_load::vgui_load( vgui_tableau_sptr const&child)
+vgui_loader_tableau::vgui_loader_tableau( vgui_tableau_sptr const&child)
   : vgui_wrapper_tableau( child),
     projectionmatrixloaded( false),
     modelviewmatrixloaded( false)
@@ -27,29 +27,29 @@ vgui_load::vgui_load( vgui_tableau_sptr const&child)
 {
 }
 
-void vgui_load::set_projection( vnl_matrix<double> const &m)
+void vgui_loader_tableau::set_projection( vnl_matrix<double> const &m)
 {
   projectionmatrixloaded= true;
   m.transpose().copy_out(projectionmatrixt);
 }
 
-void vgui_load::unset_projection()
+void vgui_loader_tableau::unset_projection()
 {
   projectionmatrixloaded= false;
 }
 
-void vgui_load::set_modelview( vnl_matrix<double> const &m)
+void vgui_loader_tableau::set_modelview( vnl_matrix<double> const &m)
 {
   modelviewmatrixloaded= true;
   m.transpose().copy_out(modelviewmatrixt);
 }
 
-void vgui_load::unset_modelview()
+void vgui_loader_tableau::unset_modelview()
 {
   modelviewmatrixloaded= false;
 }
 
-bool vgui_load::handle( vgui_event const &e)
+bool vgui_loader_tableau::handle( vgui_event const &e)
 {
   if (projectionmatrixloaded)
     {
@@ -63,26 +63,12 @@ bool vgui_load::handle( vgui_event const &e)
       glLoadMatrixd( modelviewmatrixt );
     }
 
-#if 0
-  if (child) {
-    vcl_cerr << "child = " << child << vcl_endl;
-
-    bool (vgui_tableau::*method)(vgui_event const &);
-    method = &vgui_tableau::handle;
-    vcl_cerr << "method = " << method << vcl_endl;
-
-    return (child->*method)(e);
-  }
-  else
-    return false;
-#else
   return child && child->handle(e);
-#endif
 }
 
 //--------------------------------------------------------------------------------
 
-void vgui_load::set_identity()
+void vgui_loader_tableau::set_identity()
 {
   vnl_matrix<double> I(4,4);
   I.set_identity();
@@ -90,7 +76,7 @@ void vgui_load::set_identity()
   set_modelview(I);
 }
 
-void vgui_load::set_ortho(float x1,float y1,float z1, float x2,float y2,float z2)
+void vgui_loader_tableau::set_ortho(float x1,float y1,float z1, float x2,float y2,float z2)
 {
   if (x1==x2 || y1==y2 || z1==z2)
     vcl_cerr << __FILE__ " warning in set_ortho() : volume has no extent\n";
@@ -106,7 +92,7 @@ void vgui_load::set_ortho(float x1,float y1,float z1, float x2,float y2,float z2
   set_modelview(M);
 }
 
-void vgui_load::set_ortho(float x1, float y1, float x2, float y2)
+void vgui_loader_tableau::set_ortho(float x1, float y1, float x2, float y2)
 {
   set_ortho(x1,y1, -1, x2,y2, +1);
 }

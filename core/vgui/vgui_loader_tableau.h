@@ -1,6 +1,6 @@
-// This is oxl/vgui/vgui_load.h
-#ifndef vgui_load_h_
-#define vgui_load_h_
+// This is oxl/vgui/vgui_loader_tableau.h
+#ifndef vgui_loader_tableau_h_
+#define vgui_loader_tableau_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -10,37 +10,38 @@
 // \date   03 Nov 99
 // \brief  Tableau where the user can set the projection and modelview matrices.
 //
-//  Contains classes:  vgui_load   vgui_load_new
+//  Contains classes:  vgui_loader_tableau   vgui_loader_tableau_new
 //
 // \verbatim
 //  Modifications:
-//    03-Nov-1999 Geoff Initial version.
-//    04-Jan-2000 fsm@robots. added set_ortho(), thereby obsoleting 
-//                            view_section and view_volume.
-//    05-Jan-2000 fsm@robots. added set_identity(), thereby obsoleting
-//                            reset_matrix_state.
-//    14-Aug-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
+//   03-Nov-1999 Geoff Initial version.
+//   04-Jan-2000 fsm@robots. added set_ortho(), thereby obsoleting 
+//                           view_section and view_volume.
+//   05-Jan-2000 fsm@robots. added set_identity(), thereby obsoleting
+//                           reset_matrix_state.
+//   14-Aug-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
+//   01-OCT-2002 K.Y.McGaul - Moved vgui_load to vgui_loader_tableau. 
 // \endverbatim
 
 template <class T> class vnl_matrix;
-#include <vgui/vgui_load_sptr.h>
+#include <vgui/vgui_loader_tableau_sptr.h>
 #include <vgui/vgui_wrapper_tableau.h>
 
 //: Tableau where the user can set the projection and modelview matrices.
 //
-//  Class vgui_load is a tableau which (optionally) loads given values
+//  Class vgui_loader_tableau is a tableau which (optionally) loads given values
 //  for the projection and modelview matrices before passing control to
 //  its child. This is typically used to initialize GL before rendering a
 //  scene.
-class vgui_load : public vgui_wrapper_tableau
+class vgui_loader_tableau : public vgui_wrapper_tableau
 {
  public:
 
-  //: Constructor - don't use this, use vgui_load_new.
+  //: Constructor - don't use this, use vgui_loader_tableau_new.
   //  Takes the single child tableau as a parameter.
-  vgui_load(vgui_tableau_sptr const& child);
+  vgui_loader_tableau(vgui_tableau_sptr const& child);
 
-  //: Returns the type of this tableau ('vgui_load').
+  //: Returns the type of this tableau ('vgui_loader_tableau').
   vcl_string type_name() const;
 
   //: Set the projection matrix to the given matrix.
@@ -78,8 +79,8 @@ class vgui_load : public vgui_wrapper_tableau
   void set_image(unsigned w, unsigned h) { set_ortho(0, h, w, 0); }
 
  protected:
-  //: Destructor - called by vgui_load_sptr.
-  ~vgui_load() { }
+  //: Destructor - called by vgui_loader_tableau_sptr.
+  ~vgui_loader_tableau() { }
 
   bool handle( vgui_event const &e);
 
@@ -93,13 +94,13 @@ class vgui_load : public vgui_wrapper_tableau
   double modelviewmatrixt[16];
 };
 
-//: Create a smart-pointer to a vgui_load tableau.
-struct vgui_load_new : public vgui_load_sptr
+//: Create a smart-pointer to a vgui_loader_tableau tableau.
+struct vgui_loader_tableau_new : public vgui_loader_tableau_sptr
 {
-  typedef vgui_load_sptr base;
+  typedef vgui_loader_tableau_sptr base;
 
   //: Constructor - takes the single child tableau as a parameter.
-  vgui_load_new(vgui_tableau_sptr const& child) : base(new vgui_load(child)) { }
+  vgui_loader_tableau_new(vgui_tableau_sptr const& child) : base(new vgui_loader_tableau(child)) { }
 };
 
-#endif // vgui_load_h_
+#endif // vgui_loader_tableau_h_
