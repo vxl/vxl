@@ -260,9 +260,8 @@ vidl_mpegcodec::get_section(int position,
                             int height) const
 {
   assert(inited == true);
-
-  int h = this->height();
-  int w = this->width();
+  assert(x0+width  <= this->width());
+  assert(y0+height <= this->height());
 
   //CASE 1:
   //if a frame is requested that is prior to what is
@@ -274,8 +273,8 @@ vidl_mpegcodec::get_section(int position,
     req.position = position;
     req.x0 = x0;
     req.y0 = y0;
-    req.w = w;
-    req.h = h;
+    req.w = width;
+    req.h = height;
     req.done = false;
     decoder_->execute(&req);
     buffers_->reset();
@@ -293,8 +292,8 @@ vidl_mpegcodec::get_section(int position,
     req.position = position;
     req.x0 = x0;
     req.y0 = y0;
-    req.w = w;
-    req.h = h;
+    req.w = width;
+    req.h = height;
     req.done = false;
     decoder_->execute(&req);
   }
@@ -308,8 +307,8 @@ vidl_mpegcodec::get_section(int position,
       req.position = position;
       req.x0 = x0;
       req.y0 = y0;
-      req.w = w;
-      req.h = h;
+      req.w = width;
+      req.h = height;
       req.done = false;
 
       //grab a couple of times. why? because from experiment, this seems
@@ -321,7 +320,7 @@ vidl_mpegcodec::get_section(int position,
   }
 
   unsigned char * buf = buffers_->get_buff(position);
-  vcl_memcpy(ib,(void *) buf,((this->get_bytes_pixel())*w*h));
+  vcl_memcpy(ib,(void *) buf,((this->get_bytes_pixel())*width*height));
 
   return true;
 }
