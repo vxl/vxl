@@ -20,11 +20,10 @@ class rgrl_invariant
   : public rgrl_object
 {
  public:
-
-  rgrl_invariant();
+  rgrl_invariant() {}
 
   //:
-  virtual ~rgrl_invariant(){ }
+  virtual ~rgrl_invariant() {}
 
   //: Estimate the xform mapping \a from to the current feature
   virtual bool estimate(rgrl_invariant_sptr         from,
@@ -32,17 +31,17 @@ class rgrl_invariant
                         rgrl_scale_sptr&            scale ) = 0;
 
   //: Returns the vector of invariants normalized by scale
-  virtual const vnl_vector<double>& cartesian_invariants() const;
+  virtual const vnl_vector<double>& cartesian_invariants() const { return zero_vec; }
 
   //: Returns the vector of invariants normalized by scale
-  virtual const vnl_vector<double>& angular_invariants() const;
+  virtual const vnl_vector<double>& angular_invariants() const { return zero_vec; }
 
 
   //: Return the ROI associated with the feature
   virtual rgrl_mask_box region() const;
 
   //: Return true if the feature has an initial ROI
-  virtual bool has_region() const;
+  virtual bool has_region() const { return false; }
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_invariant, rgrl_object );
@@ -53,7 +52,7 @@ class rgrl_invariant
 
  private:
   // a 0-length dummy vector
-  vnl_vector<double> zero_vec;
+  static vnl_vector<double> zero_vec;
 };
 
 #endif // rgrl_invariant_h_
