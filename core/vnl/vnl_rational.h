@@ -378,7 +378,7 @@ inline long floor (vnl_rational const& r) { return r.floor(); }
 inline long ceil (vnl_rational const& r) { return r.ceil(); }
 inline long round (vnl_rational const& r) { return r.round(); }
 
-#if defined(VCL_SGI_CC_720) || defined(VCL_SUNPRO_CC)
+#if defined(VCL_SUNPRO_CC)
 inline vnl_rational vcl_abs (vnl_rational const& x) { return x.abs(); }
 #else
 namespace std {
@@ -443,9 +443,9 @@ VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<vcl_complex<vnl_rational> > {
 public:
   //: Additive identity
-  static const vcl_complex<vnl_rational> zero; // = 0L
+  static const vcl_complex<vnl_rational> zero; // = vcl_complex<vnl_rational>(0L,0L)
   //: Multiplicative identity
-  static const vcl_complex<vnl_rational> one; // = 1L
+  static const vcl_complex<vnl_rational> one; // = vcl_complex<vnl_rational>(1L,0L)
   //: Return value of abs()
   typedef vnl_rational abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
