@@ -1,4 +1,4 @@
-// This is core/vgl/pop_homography_2d.h
+// This is gel/pop/pop_homography_2d.h
 #ifndef pop_homography_2d_h_
 #define pop_homography_2d_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -7,7 +7,6 @@
 //:
 // \file
 // \brief this is a vertex/coordinate system in a coordinate system graph
-//
 //
 // \author
 //            Peter Tu April 2003
@@ -28,7 +27,7 @@
 
 
 //: A parameter that can be optimized
-class pop_homography_2d:public pop_transform
+class pop_homography_2d : public pop_transform
 {
  public:
   //: constructor
@@ -36,22 +35,21 @@ class pop_homography_2d:public pop_transform
   // |p1 p2 p3|
   // |p3 p4 p5|
   // |p6 p7 p8|
-  // 
+  //
   pop_homography_2d(vcl_vector<pop_parameter*> params,
-	    pop_vertex *cs1, pop_vertex *cs2);
-  
+                    pop_vertex *cs1, pop_vertex *cs2);
+
   //: destructor
   ~pop_homography_2d();
-  
+
   //: transform a geometric object
   virtual pop_geometric_object* transform(pop_geometric_object *obj);
-  
+
   //: update the transform based on the parameters
   virtual void update();
-  
+
  private:
   vgl_h_matrix_2d<double> trans_;
-    
 };
 
 #endif // pop_homography_2d_h_

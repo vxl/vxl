@@ -1,4 +1,4 @@
-// This is core/vgl/pop_geometric_cost_function.h
+// This is gel/pop/pop_geometric_cost_function.h
 #ifndef pop_geometric_cost_function_h_
 #define pop_geometric_cost_function_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -7,7 +7,6 @@
 //:
 // \file
 // \brief compute cost between an observable and an observation
-//
 //
 // \author
 //            Peter Tu April 2003
@@ -27,22 +26,21 @@ class pop_geometric_cost_function
  public:
   //: constructor
   pop_geometric_cost_function(pop_geometric_object *observable,
-			      pop_geometric_object *observation);
-  
+                              pop_geometric_object *observation);
+
   //: destructor
   ~pop_geometric_cost_function();
-  
+
   //: this is the cost between two objects
 
   double cost();
- 
+
  private:
-  // the observable 
+  // the observable
   pop_geometric_object *observable_;
-  
+
   // the observation
-  pop_geometric_object *observation_; 
-      
+  pop_geometric_object *observation_;
 };
 
 #endif // pop_geometric_cost_function_h_
