@@ -460,7 +460,7 @@ void QvTexture2Transform::build (QvState*)
   const point2D* trans = (const point2D*) translation.value;
    conceptually trans is a vector2D, but ge3d only defines point2D
   vector3D scale;
-  init3D (scale, scaleFactor.value[0], scaleFactor.value[1], 1.0);
+  init3D (scale, scaleFactor.value[0], scaleFactor.value[1], 1.f);
   const point2D* centr = (const point2D*) center.value;
 
    read transformations bottom to top (see also QvTransform::build)
@@ -819,7 +819,7 @@ void QvAsciiText::build (QvState*)
     // default hspc: 0.5
 
     init3D (*roworig, - halign * rowwidth, - i * 10 * vspc, 0);  // lower left
-    init3D (*rowmax, (1.0 - halign) * rowwidth, roworig->y + 7, 0);  // upper right
+    init3D (*rowmax, (1 - halign) * rowwidth, roworig->y + 7, 0);  // upper right
     // 7 means using 70 % of baseline distance (10) as bounding box
     extendBoundingbox (*roworig, *rowmax, omin_, omax_);
   }
