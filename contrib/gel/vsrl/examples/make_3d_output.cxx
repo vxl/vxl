@@ -12,7 +12,7 @@
 
 int main(int argc, char ** argv)
 {
-  if (argc < 2) {
+  if (argc < 4) {
     vcl_cout << "make_3d_output im1 im2 disp_image 3d_outfile (params.dat) (transform.dat)\n";
     return 0;
   }
