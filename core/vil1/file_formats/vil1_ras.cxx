@@ -139,7 +139,7 @@ vil_ras_generic_image::vil_ras_generic_image(vil_stream* vs, int planes,
                                              int height,
                                              int components,
                                              int bits_per_component,
-                                             vil_component_format format):
+                                             vil_component_format /*format*/):
   vs_(vs)
 {
   vs_->ref();
@@ -242,7 +242,7 @@ bool vil_ras_generic_image::read_header()
   if ( map_length_ ) {
     assert( map_length_ % 3 == 0 );
     col_map_ = new vxl_uint_8[ map_length_ ];
-    vs_->read( col_map_, map_length_ );
+    vs_->read( col_map_, (vil_streampos)map_length_ );
   } else {
     col_map_ = 0;
   }
