@@ -1,30 +1,19 @@
-#ifndef _BaseTriTensorCompute_h
-#define _BaseTriTensorCompute_h
+#ifndef BaseTriTensorCompute_h_
+#define BaseTriTensorCompute_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-//--------------------------------------------------------------
+//:
+// \file
 //
-// .NAME BaseTriTensorCompute
-// .LIBRARY MViewCompute
-// .HEADER MultiView package
-// .INCLUDE mvl/TriTensorCompute.h
-// .FILE TriTensorCompute.cxx
-//
-// .SECTION Description
 // A class to generate a Trifocal Tensor from point/line segment matched triplets,
 // with separate functions for the linear/non-linear computations.
 // Linear computation uses RANSAC and is robust to the presence of
 // incorrect matches.
 //
-// .SECTION Author
+// \author
 //             Paul Beardsley, 29.03.96
 //             Oxford University, UK
-//
-// .SECTION Modifications
-//   <none yet>
-//
 //---------------------------------------------------------------------------
 
 #include <vcl_list.h>
@@ -45,9 +34,9 @@ public:
 
   // Data Access-----------------------------------------------------------
 
-  void add_matches (vcl_listP<HomgMatchLineSeg2D2D2D*> *match_list);
+  void add_matches (vcl_list<HomgMatchLineSeg2D2D2D*> *match_list);
 
-  void add_matches (vcl_listP<HomgMatchPoint2D2D2D*> *match_list);
+  void add_matches (vcl_list<HomgMatchPoint2D2D2D*> *match_list);
 
   void clear_matches_line (void);
   void clear_matches_point (void);
@@ -58,10 +47,10 @@ protected:
   // Data Members----------------------------------------------------------
 
   // the matched points.
-  vcl_listP<HomgMatchPoint2D2D2D*> *_matchpoint_list_ptr;
+  vcl_list<HomgMatchPoint2D2D2D*> *_matchpoint_list_ptr;
 
   // the matched line segments.
-  vcl_listP<HomgMatchLineSeg2D2D2D*> *_matchlineseg_list_ptr;
+  vcl_list<HomgMatchLineSeg2D2D2D*> *_matchlineseg_list_ptr;
 };
 
-#endif // _BaseTriTensorCompute_h
+#endif // BaseTriTensorCompute_h_
