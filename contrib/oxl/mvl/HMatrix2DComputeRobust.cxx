@@ -3,6 +3,7 @@
 
 #include "HMatrix2DComputeRobust.h"
 #include <vcl_cassert.h>
+#include <vcl_iostream.h>
 #include <vcl_cmath.h>
 #include <mvl/Probability.h>
 #include <mvl/AffineMetric.h>
@@ -35,7 +36,7 @@ HMatrix2D HMatrix2DComputeRobust::compute(vcl_vector<HomgPoint2D>& points1, vcl_
   vcl_vector<int> ind1(count), ind2(count);
   for (int i = 0; i < count; i++)  ind1[i] = ind2[i] = i;
   matches.set(inliers, ind1, ind2);
-  
+
   HMatrix2D H;
   if (compute(matches, &H))
     return H;
@@ -57,7 +58,7 @@ HMatrix2D HMatrix2DComputeRobust::compute(vcl_vector<vgl_homg_point_2d<double> >
   vcl_vector<int> ind1(count), ind2(count);
   for (int i = 0; i < count; i++)  ind1[i] = ind2[i] = i;
   matches.set(inliers, ind1, ind2);
-  
+
   HMatrix2D H;
   if (compute(matches, &H))
     return H;

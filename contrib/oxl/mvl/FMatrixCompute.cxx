@@ -9,6 +9,7 @@
 #include <mvl/PairMatchSetCorner.h>
 #include <mvl/HomgInterestPointSet.h>
 #include <vcl_cassert.h>
+#include <vcl_iostream.h>
 
 //---------------------------------------------------------------
 //

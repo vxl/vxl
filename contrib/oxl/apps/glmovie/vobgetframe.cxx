@@ -1,6 +1,6 @@
 // This is oxl/apps/glmovie/vobgetframe.cxx
 
-#include <vcl_compiler.h>
+#include <vcl_iostream.h>
 
 #include <vil1/vil1_save.h>
 

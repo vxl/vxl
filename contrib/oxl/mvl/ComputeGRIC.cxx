@@ -1,8 +1,9 @@
 #include "ComputeGRIC.h"
 #include <mvl/FMatrixComputeMLESAC.h>
 #include <mvl/HMatrix2DComputeMLESAC.h>
-#include <vcl_cmath.h>
 #include <mvl/HomgInterestPointSet.h>
+#include <vcl_cmath.h>
+#include <vcl_iostream.h>
 
 ComputeGRIC::ComputeGRIC(double std) : std_(std) {}
 
@@ -38,15 +39,15 @@ bool ComputeGRIC::compute(PairMatchSetCorner* matches) {
   int inf = 0, inh = 0;
   double stdf = 0.0, stdh = 0.0;
   int n = 0;
-  for(unsigned int i = 0; i < inliersF_.size(); i++) {
+  for (unsigned int i = 0; i < inliersF_.size(); i++) {
     n++;
-    if(inliersF_[i]) {
+    if (inliersF_[i]) {
       inf++;
       stdf += residualsF_[i];
     }
   }
-  for(unsigned int i = 0; i < inliersH_.size(); i++) {
-    if(inliersH_[i]) {
+  for (unsigned int i = 0; i < inliersH_.size(); i++) {
+    if (inliersH_[i]) {
       inh++;
       stdh += residualsH_[i];
     }
@@ -61,9 +62,9 @@ bool ComputeGRIC::compute(PairMatchSetCorner* matches) {
   double l1 = vcl_log(4.0), l2 = vcl_log(4.0*n), l3 = 2.0;
   double GRICF = 0.0;
   double thresh = l3*(r - df);
-  for(unsigned int i = 0; i < residualsF_.size(); i++) {
+  for (unsigned int i = 0; i < residualsF_.size(); i++) {
     double t = residualsF_[i] / std_;
-    if(t < thresh)
+    if (t < thresh)
       GRICF += t;
     else
       GRICF += thresh;
@@ -72,9 +73,9 @@ bool ComputeGRIC::compute(PairMatchSetCorner* matches) {
   vcl_cerr << "GRICF : " << GRICF << vcl_endl;
   double GRICH = 0.0;
   thresh = l3*(r - dh);
-  for(unsigned int i = 0; i < residualsH_.size(); i++) {
+  for (unsigned int i = 0; i < residualsH_.size(); i++) {
     double t = residualsH_[i] / std_;
-    if(t < thresh)
+    if (t < thresh)
       GRICH += t;
     else
       GRICH += thresh;
@@ -83,7 +84,7 @@ bool ComputeGRIC::compute(PairMatchSetCorner* matches) {
   vcl_cerr << "GRICH : " << GRICH << vcl_endl;
 
   // Determine the winner
-  if(GRICH < GRICF) {
+  if (GRICH < GRICF) {
     degenerate_ = true;
     return false;
   } else {

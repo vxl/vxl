@@ -9,6 +9,7 @@
 #include <mvl/PairSetCorner.h>
 #include <mvl/FMatrixPlanar.h>
 #include <mvl/FMPlanarNonLinFun.h>
+#include <vcl_iostream.h>
 
 //: Constructor.
 // The parameter outlier_threshold is not currently used, but

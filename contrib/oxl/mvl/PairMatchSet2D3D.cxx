@@ -7,6 +7,7 @@
 #include <mvl/HomgInterestPointSet.h>
 #include <mvl/PairMatchSetCorner.h>
 #include <mvl/ProjStructure.h>
+#include <vcl_iostream.h>
 
 // Default ctor
 PairMatchSet2D3D::PairMatchSet2D3D()

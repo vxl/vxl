@@ -10,6 +10,7 @@
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
 #include <vcl_vector.h>
+#include <vcl_iostream.h>
 #include <mvl/HomgInterestPointSet.h>
 
 //: Constructor

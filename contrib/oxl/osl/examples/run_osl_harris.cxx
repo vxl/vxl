@@ -4,6 +4,7 @@
 #endif
 
 #include <vcl_string.h>
+#include <vcl_iostream.h>
 #include <vul/vul_arg.h>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_load.h>

@@ -5,9 +5,7 @@
 // \brief Load a vrml file, overlay 3d and view
 // \author awf@robots.ox.ac.uk, Nov 2000
 
-#if 0 // #ifdef VCL_WIN32
-# include <vgui/impl/mfc/vgui_mfc_app_init.h>
-#endif
+#include <vcl_iostream.h>
 
 // vgui basics:
 #include <vgui/vgui.h>

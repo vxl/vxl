@@ -1,6 +1,7 @@
 #include <testlib/testlib_test.h>
 #include <vcl_queue.h>
 #include <vcl_vector.h>
+#include <vcl_iostream.h>
 #include <vgl/vgl_point_2d.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <brip/brip_region_pixel.h>

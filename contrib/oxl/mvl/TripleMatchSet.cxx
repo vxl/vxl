@@ -6,6 +6,7 @@
 // \file
 
 #include <vcl_cstdlib.h> // for vcl_abort()
+#include <vcl_iostream.h>
 #include <vnl/vnl_matrix.h>
 #include "TripleMatchSet.h"
 #include <mvl/PairMatchSet.h>
@@ -65,9 +66,9 @@ void TripleMatchSet::set_from_pairwise_matches(const PairMatchSet& matches12,
 void TripleMatchSet::write_ascii(vcl_ostream & s) const
 {
   for (iterator match = begin(); match; ++match) {
-    s << match.get_i1() << "\t";
-    s << match.get_i2() << "\t";
-    s << match.get_i3() << "\n";
+    s << match.get_i1() << '\t'
+      << match.get_i2() << '\t'
+      << match.get_i3() << '\n';
   }
 }
 
