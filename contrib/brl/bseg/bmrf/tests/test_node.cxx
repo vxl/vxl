@@ -9,9 +9,9 @@
 //: Test the node class
 void test_node()
 {
-  bmrf_node_sptr node_1 = new bmrf_node(1, 0.5);
-  bmrf_node_sptr node_2 = new bmrf_node(2, 0.7);
-  bmrf_node_sptr node_3 = new bmrf_node(2, 0.2);
+  bmrf_node_sptr node_1 = new bmrf_node(NULL, 1, 0.5);
+  bmrf_node_sptr node_2 = new bmrf_node(NULL, 2, 0.7);
+  bmrf_node_sptr node_3 = new bmrf_node(NULL, 2, 0.2);
 
   TEST("Testing add_neighbor()",
        node_1->add_neighbor(node_2.ptr(), bmrf_node::TIME) &&
