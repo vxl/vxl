@@ -27,6 +27,7 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl_complex_fwd.h>
+#include <vxl_config.h> // for type vxl_uint_64
 
 // this is an empty class template.
 // only the specializations make sense.
@@ -245,7 +246,7 @@ class vnl_numeric_traits<long>
   //: Return value of abs()
   typedef unsigned long abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
-  typedef long long double_t;
+  typedef vxl_sint_64 double_t;
   //: Name of type which results from multiplying this type with a double
   typedef double real_t;
 };
@@ -266,7 +267,7 @@ class vnl_numeric_traits<unsigned long>
   //: Return value of abs()
   typedef unsigned long abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
-  typedef unsigned long long double_t;
+  typedef vxl_uint_64 double_t;
   //: Name of type which results from multiplying this type with a double
   typedef double real_t;
 };
