@@ -77,6 +77,9 @@ struct vul_file
 
   //: Return basename
   static vcl_string basename(char const* filename, char const* suffix = 0);
+  static vcl_string basename(vcl_string const& filename, char const* suffix = 0) {
+    return basename(filename.c_str() );
+  }
 
   //: Strips away directory of the filename
   static vcl_string strip_directory(char const* filename);
