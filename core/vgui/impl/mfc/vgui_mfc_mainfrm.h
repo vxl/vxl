@@ -44,6 +44,9 @@ public:
 protected:
   vgui_mfc_statusbar *statusbar;
 
+  // /*manually added by awf*/
+  afx_msg void OnClose();
+
   // -- Called when the window is created
   afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
   // -- Called when a vertical scroll bar sends a signal

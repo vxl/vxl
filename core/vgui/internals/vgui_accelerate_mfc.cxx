@@ -1,11 +1,17 @@
 #ifdef WIN32
-#include <vgui/impl/mfc/stdafx.h>
-extern CDC *global;
-#include "vgui_accelerate_mfc.h"
+
+#include <vcl_cassert.h>
 #include <vcl_iostream.h>
 
+#include <vgui/impl/mfc/stdafx.h>
+#include "vgui_accelerate_mfc.h"
 #include <vgui/vgui_projection_inspector.h>
 #include <vgui/vgui_gl.h>
+
+
+extern CDC *vgui_mfc_adaptor_global_dc;
+
+
 // -- Used to overcome switching to GL_BACK when
 // acceleration is on. Note that there is nothing wrong with glDrawBuffer(GL_BACK)
 // when we have a single buffer, as it will just get ignored. However,
@@ -15,7 +21,7 @@ extern CDC *global;
 void mb_glDrawBufferWrapper(GLuint buffer)
 {
   if(buffer == GL_BACK && (vgui_accelerate::vgui_mfc_acceleration ||
-    (vgui_accelerate::vgui_mfc_ogl_acceleration)))
+                           vgui_accelerate::vgui_mfc_ogl_acceleration))
     return;
   glDrawBuffer(buffer);
 }
@@ -24,16 +30,14 @@ void mb_glDrawBufferWrapper(GLuint buffer)
 
 vgui_accelerate_mfc::vgui_accelerate_mfc()
 {
-  vcl_cerr << "Initializing Windows/MFC acceleration..." << vcl_endl;
-  image_width_ = 512;
-  image_height_ = 512;
+  //  vcl_cerr << "Initializing Windows/MFC acceleration..." << vcl_endl;
   BytesPerPixel = 0;
 }
 
 
 vgui_accelerate_mfc::~vgui_accelerate_mfc()
 {
-  vcl_cerr << "vgui_accelerate_mfc::~vgui_accelerate_mfc()" << vcl_endl;
+  //  vcl_cerr << "vgui_accelerate_mfc::~vgui_accelerate_mfc()" << vcl_endl;
 }
 
 bool vgui_accelerate_mfc::vgui_glClear(GLbitfield mask)
@@ -41,27 +45,160 @@ bool vgui_accelerate_mfc::vgui_glClear(GLbitfield mask)
   glClear(mask);
   return true;
 }
+
+bool vgui_accelerate_mfc::vgui_choose_cache_format( GLenum* format, GLenum* type)
+{
+  static int bits_per_pixel;
+  static int ncolors;
+  static int bytes_per_pixel= -1;
+  static GLenum g_format;
+  static GLenum g_type;
+  if (bytes_per_pixel == -1) {
+    HDC hdc = AfxGetApp()->GetMainWnd()->GetDC()->GetSafeHdc();
+    bits_per_pixel = GetDeviceCaps(hdc,BITSPIXEL);
+    ncolors = GetDeviceCaps(hdc,NUMCOLORS);
+    bytes_per_pixel = bits_per_pixel/8;
+    vcl_cerr << "vgui_accelerate_mfc: bits = " << bits_per_pixel << ", ncolors = " << ncolors << vcl_endl;
+   
+    // Make a bitmap from the screen, and examine it to determine
+    // screen format.
+    CBitmap mfcbitmap;
+    CDC mem_dc;
+    mem_dc.CreateCompatibleDC(vgui_mfc_adaptor_global_dc);
+    mfcbitmap.CreateCompatibleBitmap(vgui_mfc_adaptor_global_dc, 1, 1);
+    BITMAP bitmap;
+    assert(mfcbitmap.GetBitmap(&bitmap));
+    
+    if (bits_per_pixel == 16) {
+      g_format = GL_RGB;
+      g_type = GL_UNSIGNED_SHORT_5_5_5_1;
+    } else if (bits_per_pixel == 24) {
+      g_format = GL_BGR;
+      g_type = GL_UNSIGNED_BYTE;
+    } else {
+      g_format = GL_RGB;
+      g_type = GL_UNSIGNED_BYTE;
+      vgui_mfc_acceleration = false;
+    }
+  }
+  *format = g_format;
+  *type = g_type;
+  return true;
+}
+
 bool vgui_accelerate_mfc::vgui_glDrawPixels( GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid *pixels )
 {
   if(vgui_accelerate::vgui_mfc_acceleration)
   {
-    static int bpp = GetDeviceCaps(AfxGetApp()->GetMainWnd()->GetDC()->GetSafeHdc(),BITSPIXEL)/8;
-    CBitmap bitmap;
-    CDC mem_dc;
-    mem_dc.CreateCompatibleDC(global);
-    bitmap.CreateCompatibleBitmap(global,image_width_,image_height_);
-    bitmap.SetBitmapBits(image_width_*image_height_*bpp,pixels);
-    CBitmap *oldb = mem_dc.SelectObject(&bitmap);
+    //vcl_cerr << "glDrawPixels(" << width<< ", " << height << "...)\n";
     // Obtain the relative position and scaling of the image
     float scaleX,scaleY,offsetX,offsetY;
     vgui_projection_inspector().compute_as_2d_affine(width,height,&offsetX,&offsetY,&scaleX,&scaleY);
-    int x = int(offsetX);
-    int y = int(offsetY);
+
+    // Get pixelStore details too....
+    int unpack_alignment;
+    int unpack_row_length;
+    int unpack_skip_pixels;
+    int unpack_skip_rows;
+    float zoom_x, zoom_y;
+    float raster_pos[4];
+    {
+      glGetIntegerv(GL_UNPACK_ALIGNMENT,   &unpack_alignment);        // use byte alignment for now.            
+      glGetIntegerv(GL_UNPACK_ROW_LENGTH,  &unpack_row_length);	      // size of image rows. (w)
+      glGetIntegerv(GL_UNPACK_SKIP_PIXELS, &unpack_skip_pixels);      // number of pixels to skip on the left. (i_x0)
+      glGetIntegerv(GL_UNPACK_SKIP_ROWS,   &unpack_skip_rows);	      // number of pixels to skip at the bottom.
+
+      glGetFloatv(GL_ZOOM_X, &zoom_x);
+      glGetFloatv(GL_ZOOM_X, &zoom_y);
+
+  //    vcl_cerr << "zoom = (" << zoom_x << "," << zoom_y << ")\n";
+
+      glGetFloatv(GL_CURRENT_RASTER_POSITION, raster_pos);
+
+      // assumptions for vgui, cos I haven't implemented a full gldrawpixels - awf
+      //assert(zoom_x == 1);
+      //assert(zoom_y == 1);
+      assert(unpack_alignment == 1);
+    }
+    //vcl_cerr << "skip = (" << unpack_skip_pixels << "," << unpack_skip_rows << ") ";
+    //vcl_cerr << "rowlen = " << unpack_row_length << "\n";
+
+    // Make windows bitmap from "pixels"
+    HDC hdc = AfxGetApp()->GetMainWnd()->GetDC()->GetSafeHdc();
+    static int bits_per_pixel;
+    static int ncolors;
+    static int bytes_per_pixel= -1;
+    if (bytes_per_pixel == -1) {
+      bits_per_pixel = GetDeviceCaps(hdc,BITSPIXEL);
+      ncolors = GetDeviceCaps(hdc,NUMCOLORS);
+      bytes_per_pixel = bits_per_pixel/8;
+      vcl_cerr << "vgui_accelerate_mfc: bits = " << bits_per_pixel << ", ncolors = " << ncolors << vcl_endl;
+    }
+    CBitmap bitmap;
+    CDC mem_dc;
+    mem_dc.CreateCompatibleDC(vgui_mfc_adaptor_global_dc);
+    int b_w = unpack_row_length;
+    int b_h = height + unpack_skip_rows;
+    bitmap.CreateCompatibleBitmap(vgui_mfc_adaptor_global_dc,b_w, b_h);
+    if ((bytes_per_pixel == 3 && format == GL_BGR && type == GL_UNSIGNED_BYTE) || 
+        (bytes_per_pixel == 2 && format == GL_RGB && type == GL_UNSIGNED_SHORT_5_6_5) ||
+        (bytes_per_pixel == 2 && format == GL_RGB && type == GL_UNSIGNED_SHORT_5_5_5_1)) {
+      // These formats are exact matches -- just copy the bits
+      bitmap.SetBitmapBits(b_w*b_h*bytes_per_pixel,pixels);
+    } else {
+      // Need to convert -- this should not happen, but indicates a bug in choose_cache_format above.
+      vcl_cerr << "vgui_accelerate: bad format. Try running --with-no-mfc-acceleration\n";
+      
+      struct {
+        BITMAPINFOHEADER bmiHeader; 
+        DWORD     bmiColors[3]; 
+      } binfo;
+      assert(sizeof binfo.bmiColors[0] == 4);
+      binfo.bmiHeader.biSize		= sizeof binfo.bmiHeader;
+      binfo.bmiHeader.biWidth		= b_w;
+      binfo.bmiHeader.biHeight		= -b_h;
+      binfo.bmiHeader.biPlanes		= 1;
+      if        (format == GL_RGBA && type == GL_UNSIGNED_BYTE) {
+        binfo.bmiHeader.biBitCount	= 32;
+        binfo.bmiHeader.biCompression	= BI_RGB;
+      } else if (format == GL_RGB && type == GL_UNSIGNED_BYTE) {
+        binfo.bmiHeader.biBitCount	= 24;
+        binfo.bmiHeader.biCompression	= BI_RGB;
+      } else if (format == GL_RGB && type == GL_UNSIGNED_SHORT_5_6_5) {
+        binfo.bmiHeader.biBitCount	= 16;
+        binfo.bmiHeader.biCompression	= BI_RGB;
+      } else if (format == GL_RGB && type == GL_UNSIGNED_SHORT_5_5_5_1) {
+        binfo.bmiHeader.biBitCount	= 16;
+        binfo.bmiHeader.biCompression	= BI_BITFIELDS;
+        binfo.bmiColors[0] = 0x001fu;
+        binfo.bmiColors[1] = 0x03e0u;
+        binfo.bmiColors[2] = 0x7c00u;
+      } else {
+        vcl_cerr << "vgui_accelerate: unsupported format. Try running --with-no-mfc-acceleration\n";
+      }
+      binfo.bmiHeader.biSizeImage	= 0;
+      binfo.bmiHeader.biXPelsPerMeter	= 0;
+      binfo.bmiHeader.biYPelsPerMeter	= 0;
+      binfo.bmiHeader.biClrUsed		= 0;
+      binfo.bmiHeader.biClrImportant	= 0;
+
+      //::SetDIBits(vgui_mfc_adaptor_global_dc->GetSafeHdc(), bitmap, 0, b_h, pixels, &binfo, DIB_RGB_COLORS);
+      int n = ::SetDIBits(hdc, bitmap, 0, b_h, pixels, (BITMAPINFO*)&binfo, DIB_RGB_COLORS);
+    }
+    
+    CBitmap *oldb = mem_dc.SelectObject(&bitmap);
+
+    //vcl_cerr << "rasterpos = ("<<raster_pos[0]<<","<<raster_pos[1]<<","<<raster_pos[2]<<","<<raster_pos[3]<<")\n";
+    //vcl_cerr << "OFFSET = ("<<offsetX<<","<<offsetY<<")\n";
+
+    // Do all math in bottom-up gl coords.
+    int x = int(raster_pos[0]);
+    int y = int(raster_pos[1]);
     int x_crop = 0;
     int y_crop = 0;
-    int width_crop = image_width_;
-    int height_crop = image_height_;
-    //::BitBlt(global->GetSafeHdc(),0,0,width,height,mem_dc.GetSafeHdc(),0,0,SRCCOPY);
+    int width_crop = width;
+    int height_crop = height;
+
     int vp[4];
     glGetIntegerv(GL_VIEWPORT,vp);
     y = vp[3]-y;
@@ -78,8 +215,17 @@ bool vgui_accelerate_mfc::vgui_glDrawPixels( GLsizei width, GLsizei height, GLen
       height_crop-=y_crop;
       y = 0;
     }
-    mem_dc.SetMapMode(global->GetMapMode());
-    global->StretchBlt(x,y,width_crop*scaleX,height_crop*scaleY,&mem_dc,x_crop,y_crop,width_crop,height_crop,SRCCOPY);
+    //vcl_cerr << "mapmode = " << vgui_mfc_adaptor_global_dc->GetMapMode() << vcl_endl;
+    mem_dc.SetMapMode(vgui_mfc_adaptor_global_dc->GetMapMode());
+
+    //glDrawPixels(width, height, format, type, pixels);
+    //vgui_mfc_adaptor_global_dc->Rectangle(x,y,x + width_crop*scaleX, y + height_crop*scaleY);
+
+    if (1)
+    vgui_mfc_adaptor_global_dc->StretchBlt(x,y,width_crop*scaleX,height_crop*scaleY,// dest
+		       &mem_dc, // src
+		       x_crop+unpack_skip_pixels,y_crop+unpack_skip_rows,width_crop,height_crop, // src
+		       SRCCOPY);
     mem_dc.SelectObject(oldb);
   }
   else 
