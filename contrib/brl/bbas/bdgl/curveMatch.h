@@ -15,6 +15,7 @@
 #define SUCCESS 1
 #define FAILURE 0
 
+inline
 double curveMatch(double &euc_dist,                        //!< out
                   vcl_vector<vcl_pair<double,double> > v1, //!< in
                   vcl_vector<vcl_pair<double,double> > v2, //!< in
