@@ -1,9 +1,16 @@
-# ./v3p/png/CMakeLists.txt
+# v3p/png/CMakeLists.txt
+
+# Do nothing here, unless there is no native PNG
+INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindNativePNG.cmake)
+IF(NOT HAS_NATIVE_PNG)
 
 ADD_LIBRARY( png png_sources )
 
 SOURCE_FILES( png_sources
-  png.c
+  pngasmrd.h
+  pngconf.h
+
+  png.c png.h
   pngset.c
   pngget.c
   pngrutil.c
@@ -36,3 +43,5 @@ IF (CYGWIN)
 ENDIF (CYGWIN)
 
 INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindZLIB.cmake )
+
+ENDIF(NOT HAS_NATIVE_PNG)

@@ -1,14 +1,27 @@
-# ./v3p/jpeg/CMakeLists.txt
+# v3p/jpeg/CMakeLists.txt
+
+# Do nothing here, unless there is no native JPEG
+INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindNativeJPEG.cmake)
+IF(NOT HAS_NATIVE_JPEG)
 
 ADD_LIBRARY( jpeg jpeg_sources )
 
 SOURCE_FILES( jpeg_sources
+  jconfig.h
+  jdct.h
+  jinclude.h
+  jmemsys.h
+  jmorecfg.h
+  jpegint.h
+  jpeglib.h
+  jversion.h
+
   jcapimin.c
   jcapistd.c
   jccoefct.c
   jccolor.c
   jcdctmgr.c
-  jchuff.c
+  jchuff.c jchuff.h
   jcinit.c
   jcmainct.c
   jcmarker.c
@@ -26,7 +39,7 @@ SOURCE_FILES( jpeg_sources
   jdcoefct.c
   jdcolor.c
   jddctmgr.c
-  jdhuff.c
+  jdhuff.c jdhuff.h
   jdinput.c
   jdmainct.c
   jdmarker.c
@@ -36,7 +49,7 @@ SOURCE_FILES( jpeg_sources
   jdpostct.c
   jdsample.c
   jdtrans.c
-  jerror.c
+  jerror.c jerror.h
   jfdctflt.c
   jfdctfst.c
   jfdctint.c
@@ -56,3 +69,5 @@ IF (WIN32)
     INCLUDE(${allvxl_SOURCE_DIR}/v3p/jpeg/CMakeListsHeaders.txt)
   ENDIF (NOT CYGWIN)
 ENDIF(WIN32)
+
+ENDIF(NOT HAS_NATIVE_JPEG)

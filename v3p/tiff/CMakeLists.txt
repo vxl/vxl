@@ -1,19 +1,37 @@
-# ./v3p/tiff/CMakeLists.txt
+# v3p/tiff/CMakeLists.txt
+
+# Do nothing here, unless there is no native TIFF
+INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindNativeTIFF.cmake)
+IF(NOT HAS_NATIVE_TIFF)
 
 ADD_LIBRARY( tiff tiff_sources )
 
 SOURCE_FILES( tiff_sources
+  format.h
+  machdep.h
+  port.h
+  prototypes.h
+  t4.h
+  tiff.h
+  tiffcomp.h
+  tiffcompat.h
+  tiffconf.h
+  tiffio.h
+  tiffiop.h
+  uvcode.h
+  version.h
+
   tif_aux.c
   tif_close.c
   tif_codec.c
   tif_compress.c
-  tif_dir.c
+  tif_dir.c tif_dir.h
   tif_dirinfo.c
   tif_dirread.c
   tif_dirwrite.c
   tif_dumpmode.c
   tif_error.c
-  tif_fax3.c
+  tif_fax3.c tif_fax3.h
   tif_fax3sm.c
   tif_flush.c
   tif_getimage.c
@@ -24,7 +42,7 @@ SOURCE_FILES( tiff_sources
   tif_open.c
   tif_packbits.c
   tif_pixarlog.c
-  tif_predict.c
+  tif_predict.c tif_predict.h
   tif_print.c
   tif_read.c
   tif_strip.c
@@ -54,3 +72,5 @@ IF (WIN32)
     INCLUDE(${allvxl_SOURCE_DIR}/v3p/tiff/CMakeListsHeaders.txt)
   ENDIF (NOT CYGWIN)
 ENDIF(WIN32)
+
+ENDIF(NOT HAS_NATIVE_TIFF)
