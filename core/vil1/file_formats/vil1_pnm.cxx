@@ -222,7 +222,8 @@ bool vil_pnm_generic_image::write_header()
   return true;
 }
 
-bool operator>>(vil_stream& vs, int& a) {
+bool operator>>(vil_stream& vs, int& a) 
+{
   char c; vs.read(&c,1);
   while (c == '#' || c == ' ' || c == '\t' || c == '\n') {
     if (c == '#') while (c != '\n') { vs.read(&c,1); continue; }
