@@ -38,7 +38,8 @@ class HomgPoint2D : public Homg2D
   }
 
   // Operations------------------------------------------------------------
-  bool check_infinity(double tol = infinitesimal_tol) const;
+  bool check_infinity(double tol = 1e-12) const;
+  inline bool ideal(double tol = 1e-12) const { return check_infinity(tol); }
   bool get_nonhomogeneous(double& px, double& py) const;
   vnl_double_2 get_double2() const;
   inline vnl_double_2 get_nonhomogeneous() const { return get_double2(); }
