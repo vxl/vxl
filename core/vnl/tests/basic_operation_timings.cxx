@@ -141,9 +141,9 @@ void run_for_size(unsigned m, unsigned n, T /*dummy*/, const char * type, const 
     x[k].set_size(n);
     z[k].set_size(m);
     y[k].set_size(m);
-    vnl_sample_uniform(x[k].begin(), x[k].end(), -10000,10000);
-    vnl_sample_uniform(y[k].begin(), y[k].end(), -10000,10000);
-    vnl_sample_uniform(z[k].begin(), z[k].end(), -10000,10000);
+    vnl_sample_uniform(x[k].begin(), x[k].end(), -10000,10000, T());
+    vnl_sample_uniform(y[k].begin(), y[k].end(), -10000,10000, T());
+    vnl_sample_uniform(z[k].begin(), z[k].end(), -10000,10000, T());
   }
   vnl_sample_uniform(A.begin(), A.end(), -10000,10000);
 
