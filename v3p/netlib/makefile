@@ -3,7 +3,7 @@
 
 USES = 
 
-LIB := netlib
+LIBRARY := netlib
 VERSION := 1.0
 
 APP_CFLAGS = -O2
