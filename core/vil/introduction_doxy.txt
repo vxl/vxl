@@ -155,6 +155,10 @@ vil2_image_view<vxl_byte> filtered_image = vil2_transpose(tmp_image2);
 * - vil2_flip_ud       : View which reflects along j (ie j -> nj-1-j up/down)
 * - vil2_view_as_planes: View rgb<T> data as planes of T
 * - vil2_view_as_rgb   : View plane data as rgb<T> pixels
+* - vil2_crop          : View a window into an image
+* - vil2_decimate      : View a trivially subsampled image
+* - vil2_plane         : View a single plane of an image
+* - vil2_clamp         : View a image whose pixels are clamped to given range
 *
 * \subsection view_ops Operations on Views
 * Useful simple operations on views include
@@ -165,22 +169,22 @@ vil2_image_view<vxl_byte> filtered_image = vil2_transpose(tmp_image2);
 *
 * \section image_src Image resources
 * The vil2_image_resource class is an abstract base class for image data, views
-* of which can be obtained (or changed) with the get_view()/put_view() functions.
-* The types of derived classes are
-* - Representing an image in a file: e.g. vil2_pnm_image, vil2_jpeg_image
-* - vil2_memory_image: Representing an image in memory (essentially a wrapper around a view)
-* - Representing a filtered version of an image in a file (without loading in memory):
-*   - vil2_clamp_image_resource    : behaves like a clamped version of its input
-*   - vil2_crop_image_resource     : behaves like a cropped version of its input
-*   - vil2_flip_lr_image_resource  : behaves like a mirrored version of its input
-*   - vil2_flip_ud_image_resource  : behaves like a mirrored version of its input
-*   - vil2_transpose_image_resource: behaves like a mirrored version of its input
-*   - vil2_plane_image_resource    : views at a single plane of an image
+* of which can be obtained (or changed) with the get_view()/put_view() functions. You
+* cannot directly construct one of these vil2_image_resource classes. Instead you use a
+* helper function, which will return a smart pointer - expect to see lots of vil2_image_resource_sptr
+* objects.
+* The types of derived classes, and means of creating them are
+* - Representing an image in a file: e.g. vil2_pnm_image, vil2_jpeg_image. These are
+*   created using vil2_load_image_data(), and vil2_new_image_resource()
+* - vil2_memory_image: Representing an image in memory (essentially a wrapper around a view.)
+*   This is created using vil2_new_image_resource().
+* - Representing a filtered version of an image in a file (without loading in memory): e.g.
+*   vil2_crop_image_resource adn vil2_decimate_image_resource. These are created using the 
+*   equivalent functions: vil2_crop(), vil2_decimate(), etc.
 * - Representing the outcome of an image processing algorithm (see next section)
-*   e.g. vil2_algo_convolve_1d_resource
+*   e.g. vil2_algo_convolve_1d_resource. These are creates using the equivalent functions
+*   vil2_algo_convolve_1d().
 *
-* Most instances of vil2_image_resource objects will be through smart pointers.
-* So expect to see lots of references to vil2_image_resource_sptr types.
 * vil2_image_resource objects in most cases only deal with scalar-type pixels.
 * Of course once you get a view of real image data in memory, you can easily
 * convert a multi-planar view into a multi-component view.

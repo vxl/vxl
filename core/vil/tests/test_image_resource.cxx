@@ -94,18 +94,16 @@ void test_image_resource_1()
   TEST("x == flip_lr(flip_ud(flip_lr(flip_ud(x)))) D",
        vil2_image_view_deep_equality(view1, view2), true);
 
-  vil2_image_resource_sptr dec = vil2_decimate(mem, 2, 3);
+  vil2_image_resource_sptr dec = vil2_decimate(flip4, 2, 3);
   view1 = dec->get_view(0,dec->ni(),0,dec->nj());
   TEST("vil2_decimate get_view", view1, true);
   TEST("vil2_decimate get_view sizes", view1.ni() == 5 && view1.nj() == 2, true);
   TEST("vil2_decimate get_view pixels", view1(0,1) == 20.0f && view1(1,1) == 10.0f && view1(1,0) == 0.0f, true);
-  view2 = mem->get_copy_view(0,10,0,8);
+  view2 = flip4->get_copy_view(0,10,0,8);
   view1(0,1) = 30.0f;
   TEST("vil2_decimate put_view", dec->put_view(view1, 0, 0), true);
-  view1 = mem->get_copy_view(0,10,0,8);
+  view1 = flip4->get_copy_view(0,10,0,8);
   view2(0,3) = 30.0f;
-  vil2_print_all(vcl_cout, view1);
-  vil2_print_all(vcl_cout, view2);
   TEST("vil2_decimate put_view pixels",
     vil2_image_view_deep_equality(view1, view2), true);
 }
