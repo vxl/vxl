@@ -25,7 +25,7 @@ inline void vsl_b_write(vsl_b_ostream &os, const vil2_image_view<T>& image)
   {
     vsl_b_write(os, image.memory_chunk());
 
-    int offset = (image.top_left_ptr()-(const T*)image.memory_chunk()->data());
+    long offset = (image.top_left_ptr()-(const T*)image.memory_chunk()->data());
     vsl_b_write(os, offset);
   }
 }
@@ -40,7 +40,7 @@ inline void vsl_b_read(vsl_b_istream &is, vil2_image_view<T>& image)
   unsigned ni,nj,np;
   int istep,jstep,pstep;
   vil2_memory_chunk_sptr chunk;
-  int offset;
+  long offset;
 
   short w;
   vsl_b_read(is, w);
