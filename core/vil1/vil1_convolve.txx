@@ -6,6 +6,7 @@
   fsm@robots.ox.ac.uk
 */
 #include "vil_convolve.h"
+#include <vcl_iostream.h>
 
 template <class pixel_type, class float_type>
 void
