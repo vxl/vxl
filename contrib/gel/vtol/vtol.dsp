@@ -363,6 +363,16 @@ SOURCE=.\vtol_zero_chain.cxx
 SOURCE=.\vtol_cycle_processor.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\../vdgl/vdgl_intensity_face.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vbl_smart_ptr+vdgl_intensity_face-.cxx
+
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -519,6 +529,16 @@ SOURCE=.\vtol_zero_chain_sptr.h
 # Begin Source File
 
 SOURCE=.\vtol_cycle_processor.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\../vdgl/vdgl_intensity_face.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\../vdgl/vdgl_intensity_face_sptr.h
 
 # End Source File
 # End Group
