@@ -19,6 +19,7 @@
 #include <vcl_iosfwd.h>
 #include <vgl/vgl_fwd.h> // declare vgl_homg_point_2d and vgl_line_2d
 #include <vgl/vgl_vector_2d.h>
+#include <vcl_vector.h>
 
 //: Represents a cartesian 2D point
 template <class Type>
@@ -30,48 +31,48 @@ public:
 
   // Constructors/Initializers/Destructor------------------------------------
 
-  //: Construct from homogeneous point
-  vgl_point_2d (vgl_homg_point_2d<Type> const& p);
+  //: Default constructor
+  vgl_point_2d () {}
 
-  //: Construct a vgl_point_2d from two Types.
+  //: Construct from two Types.
   vgl_point_2d (Type px, Type py) : x_(px), y_(py) {}
 
   //: Construct from 2-array.
   vgl_point_2d (Type const v[2]) : x_(v[0]), y_(v[1]) {}
 
+  //: Construct from homogeneous point
+  vgl_point_2d (vgl_homg_point_2d<Type> const& p);
+
   //: Construct from 2 lines (intersection).
   vgl_point_2d (vgl_line_2d<Type> const& l1,
                 vgl_line_2d<Type> const& l2);
 
-  //: Default constructor
-  vgl_point_2d () {}
-
 #if 0 // The compiler defaults for these are doing what they should do:
+  //: Copy constructor
+  vgl_point_2d(vgl_point_2d<Type> const& p) : x_(p.x()), y_(p.y()) {}
   //: Destructor
   ~vgl_point_2d () {}
-  //: Copy constructor
-  vgl_point_2d (vgl_point_2d<Type> const& p) x_(p.x()), y_(p.y()) {}
 #endif
 
   //: Assignment
-  inline vgl_point_2d<Type>& operator=(const vgl_point_2d<Type>& that){
+  inline vgl_point_2d<Type>& operator=(const vgl_point_2d<Type>& that) {
     x_ = that.x(); y_ = that.y(); return *this;
   }
 
-  // the == operator
+  //: Test for equality
   inline bool operator==(const vgl_point_2d<Type> &p) const {
     return this==&p || (x_==p.x() && y_==p.y());
   }
-  inline bool operator!=(const vgl_point_2d<Type> &other) const { return ! operator==(other); }
+  inline bool operator!=(const vgl_point_2d<Type> &p) const { return !operator==(p); }
 
   // Data Access-------------------------------------------------------------
 
   inline Type x() const {return x_;}
   inline Type y() const {return y_;}
 
-  //: Set x,y.
+  //: Set x and y
   inline void set (Type px, Type py){ x_ = px; y_ = py; }
-  //: Set x,y.
+  //: Set x and y
   inline void set (Type const p[2]) { x_ = p[0]; y_ = p[1]; }
   inline void set_x (Type px) { x_ = px; }
   inline void set_y (Type py) { y_ = py; }
@@ -88,11 +89,11 @@ private:
 
 //: Write "<vgl_point_2d x,y>" to stream
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream&, vgl_point_2d<Type> const& p);
+vcl_ostream&  operator<<(vcl_ostream& s, vgl_point_2d<Type> const& p);
 
 //: Read x y from stream
 template <class Type>
-vcl_istream&  operator>>(vcl_istream&, vgl_point_2d<Type>& p);
+vcl_istream&  operator>>(vcl_istream& s, vgl_point_2d<Type>& p);
 
 //  +-+-+ point_2d arithmetic +-+-+
 
@@ -156,27 +157,6 @@ inline double ratio(vgl_point_2d<Type> const& p1,
   return (p3-p1)/(p2-p1);
 }
 
-
-//: Return the point at the mean of three given points.
-template <class Type>
-inline vgl_point_2d<Type> mean(vgl_point_2d<Type> const& p1,
-                               vgl_point_2d<Type> const& p2,
-                               vgl_point_2d<Type> const& p3) {
-  return vgl_point_2d<Type>((p1.x() + p2.x() + p3.x())/3.0 ,
-                            (p1.y() + p2.y() + p3.y())/3.0 );
-}
-
-//: Return the point at the mean of four given points.
-template <class Type>
-inline vgl_point_2d<Type> mean(vgl_point_2d<Type> const& p1,
-                               vgl_point_2d<Type> const& p2,
-                               vgl_point_2d<Type> const& p3,
-                               vgl_point_2d<Type> const& p4) {
-  return vgl_point_2d<Type>((p1.x() + p2.x() + p3.x() + p4.x())/4.0 ,
-                            (p1.y() + p2.y() + p3.y() + p4.y())/4.0 );
-}
-
-
 //: Return the point at a given ratio wrt two other points.
 //  By default, the mid point (ratio=0.5) is returned.
 //  Note that the third argument is Type, not double, so the midpoint of e.g.
@@ -188,5 +168,46 @@ inline vgl_point_2d<Type> midpoint(vgl_point_2d<Type> const& p1,
                                    Type f = 0.5) {
   return p1 + f*(p2-p1);
 }
+
+
+//: Return the point at the centre of gravity of two given points.
+// Identical to midpoint(p1,p2).
+template <class Type>
+inline vgl_point_2d<Type> centre(vgl_point_2d<Type> const& p1,
+                                 vgl_point_2d<Type> const& p2) {
+  return vgl_point_2d<Type>((p1.x() + p2.x() + p3.x())/2 ,
+                            (p1.y() + p2.y() + p3.y())/2 );
+}
+
+//: Return the point at the centre of gravity of three given points.
+template <class Type>
+inline vgl_point_2d<Type> centre(vgl_point_2d<Type> const& p1,
+                                 vgl_point_2d<Type> const& p2,
+                                 vgl_point_2d<Type> const& p3) {
+  return vgl_point_2d<Type>((p1.x() + p2.x() + p3.x())/3 ,
+                            (p1.y() + p2.y() + p3.y())/3 );
+}
+
+//: Return the point at the centre of gravity of four given points.
+template <class Type>
+inline vgl_point_2d<Type> centre(vgl_point_2d<Type> const& p1,
+                                 vgl_point_2d<Type> const& p2,
+                                 vgl_point_2d<Type> const& p3,
+                                 vgl_point_2d<Type> const& p4) {
+  return vgl_point_2d<Type>((p1.x() + p2.x() + p3.x() + p4.x())/4 ,
+                            (p1.y() + p2.y() + p3.y() + p4.y())/4 );
+}
+
+//: Return the point at the centre of gravity of a set of given points.
+// Beware of possible rounding errors when Type is e.g. int.
+template <class Type>
+inline vgl_point_2d<Type> centre(vcl_vector<vgl_point_2d<Type> > const& v) {
+  int n=v.size();
+  assert(n>0); // it is *not* correct to return the point (0,0) when n==0.
+  Type x = 0, y = 0;
+  for (int i=0; i<n; ++i) x+=v[i].x(), y+=v[i].y();
+  return vgl_point_2d<Type>(x/n,y/n);
+}
+
 
 #endif // vgl_point_2d_h
