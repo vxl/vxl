@@ -193,6 +193,8 @@ double bmrf_epi_seg::s(double alpha)
                                   seg_[i]->s(), alpha);
     return s;
   }
+  // execution should never reach this point
+  assert(false);
   return 0;
 }
 
@@ -218,6 +220,8 @@ double bmrf_epi_seg::tan_ang(double alpha)
                                    seg_[i]->tan_ang(), alpha);
     return ta;
   }
+  // execution should never reach this point
+  assert(false);
   return 0;
 }
 
@@ -242,6 +246,9 @@ double bmrf_epi_seg::left_ds(double alpha)
 {
   assert(alpha >= this->min_alpha() && alpha <= this->max_alpha());
   double last_a = this->min_alpha();
+  if(alpha < int_alpha_.front())
+    return left_ds_.front();
+
   int n = int_alpha_.size();
   for (int i = 0; i<n; i++)
   {
@@ -258,8 +265,8 @@ double bmrf_epi_seg::left_ds(double alpha)
                                     left_ds_[i], alpha);
     return lds;
   }
-
-  return -1;
+  
+  return left_ds_.back();
 }
 
 
@@ -268,6 +275,9 @@ double bmrf_epi_seg::left_int(double alpha)
 {
   assert(alpha >= this->min_alpha() && alpha <= this->max_alpha());
   double last_a = this->min_alpha();
+  if(alpha < int_alpha_.front())
+    return left_int_.front();
+
   int n = int_alpha_.size();
   for (int i = 0; i<n; i++)
   {
@@ -285,7 +295,7 @@ double bmrf_epi_seg::left_int(double alpha)
     return li;
   }
 
-  return -1;
+  return left_int_.back();
 }
 
 //Linearly interpolate left interval length
@@ -293,6 +303,9 @@ double bmrf_epi_seg::right_ds(double alpha)
 {
   assert(alpha >= this->min_alpha() && alpha <= this->max_alpha());
   double last_a = this->min_alpha();
+  if(alpha < int_alpha_.front())
+    return right_ds_.front();
+
   int n = int_alpha_.size();
   for (int i = 0; i<n; i++)
   {
@@ -310,7 +323,7 @@ double bmrf_epi_seg::right_ds(double alpha)
     return rds;
   }
 
-  return -1;
+  return right_ds_.back();
 }
 
 //Linearly interpolate right intensity
@@ -318,6 +331,9 @@ double bmrf_epi_seg::right_int(double alpha)
 {
   assert(alpha >= this->min_alpha() && alpha <= this->max_alpha());
   double last_a = this->min_alpha();
+  if(alpha < int_alpha_.front())
+    return right_int_.front();
+
   int n = int_alpha_.size();
   for (int i = 0; i<n; i++)
   {
@@ -334,7 +350,8 @@ double bmrf_epi_seg::right_int(double alpha)
                                    right_int_[i], alpha);
     return ri;
   }
-  return -1;
+
+  return right_int_.back();
 }
 
 
