@@ -29,23 +29,36 @@ class mbl_table
   // \param delim The delimiter character.
   mbl_table(const char delim);
 
+
   //: Get the column of data corresponding to a particular heading.
   // \param header String identifying the desired column.
   // \return true if there is a column with the specified heading.
   // \retval column A vector containing the values of the requested column.
   bool get_column(const vcl_string& header,
                   vcl_vector<double>& column) const;
+  
+
+  //: Add a column of data with its own heading.
+  // \param header String identifying the column.
+  // \param column A vector containing the values of the column.
+  // \return true If the column was added.
+  bool add_column(const vcl_string& header,
+                  const vcl_vector<double>& column);
+  
 
   //: Load this table's data from specified text stream.
   // Any existing data is lost.
   // \return true if table was read successfully from the stream.
   bool read(vcl_istream& is);
 
+
   //! Save this table's data to specified text stream.
   void write(vcl_ostream& os) const;
 
+
   //: Is another table identical to this one?
   bool operator==(const mbl_table& rhs) const;
+
 
  protected:
 

@@ -44,6 +44,36 @@ bool mbl_table::get_column(const vcl_string& header,
 }
 
 
+
+//==================================================================================
+//: Add a column of data with its own heading.
+// \param header String identifying the column.
+// \param column A vector containing the values of the column.
+// \return true If the column was added.
+//==================================================================================
+bool mbl_table::add_column(const vcl_string& header,
+                           const vcl_vector<double>& column)
+{
+  // Check whether there is already a column with this heading
+  
+  if (header_to_column_index_.find(header) != header_to_column_index_.end())
+  {
+    column_headers_.push_back(header);
+    columns_.push_back(column);
+    header_to_column_index_[header] = columns_.size();
+    return true;
+  }
+  else
+  {
+    vcl_cerr << "ERROR: mbl_table::add_column(): a column with header "
+      << header << " already exists.\n"
+      << "Column not added."
+      << vcl_endl;
+    return false;
+  }
+}
+
+
 //==================================================================================
 //! Load this table's data from specified text stream.
 //! Any existing data is lost.
