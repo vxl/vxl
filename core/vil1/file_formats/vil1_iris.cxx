@@ -82,7 +82,7 @@ char const* vil1_iris_file_format::tag() const
 /////////////////////////////////////////////////////////////////////////////
 
 vil1_iris_generic_image::vil1_iris_generic_image(vil1_stream* is, char* imagename):
-  is_(is)
+  starttab_(0), lengthtab_(0), is_(is)
 {
   is_->ref();
   read_header();
@@ -111,7 +111,7 @@ vil1_iris_generic_image::vil1_iris_generic_image(vil1_stream* is, int planes,
                                                  int components,
                                                  int bits_per_component,
                                                  vil1_component_format /*format*/):
-  is_(is)
+  starttab_(0), lengthtab_(0), is_(is)
 {
   is_->ref();
 
