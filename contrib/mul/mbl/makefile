@@ -51,6 +51,7 @@ MANPAGE_SOURCES += mbl_file_data_collector.txx
 MANPAGE_SOURCES += mbl_file_data_wrapper.txx
 MANPAGE_SOURCES += mbl_combination.h
 MANPAGE_SOURCES += mbl_ar_process.txx
+MANPAGE_SOURCES += mbl_jarque_bera.h
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
