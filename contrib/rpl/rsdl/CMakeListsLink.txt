@@ -1,4 +1,3 @@
-
 LINK_LIBRARIES( rsdl )
 
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/CMakeListsLink.txt )
