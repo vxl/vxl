@@ -1,18 +1,27 @@
 # oxl/vgui/CMakeLists.txt
 
 INCLUDE(${MODULE_PATH}/FindOpenGL.cmake)
-INCLUDE(${MODULE_PATH}/FindGLUT.cmake)
-INCLUDE(${MODULE_PATH}/FindX11.cmake)
-# Qv needed by vrml only
-INCLUDE(${MODULE_PATH}/FindQv.cmake)
 
 # Build here only if OpenGL is available:
 IF (HAS_OPENGL)
-# vgui_text needs glut. fsm.
-IF (HAS_GLUT)
+
+INCLUDE(${MODULE_PATH}/FindX11.cmake)
+# Qv needed by vrml only
+INCLUDE(${MODULE_PATH}/FindQv.cmake)
+# glut optionally used by vgui_text and by the glut toolkit
+# implementation
+INCLUDE(${MODULE_PATH}/FindGLUT.cmake)
+
+# The following are for the optional toolkit
+# implementations
+INCLUDE(${MODULE_PATH}/FindQt.cmake)
+INCLUDE(${MODULE_PATH}/FindGTK.cmake)
+INCLUDE(${MODULE_PATH}/FindFltk.cmake)
 
 INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_PATH})
-INCLUDE_DIRECTORIES(${GLUT_INCLUDE_PATH})
+IF( HAS_GLUT )
+  INCLUDE_DIRECTORIES(${GLUT_INCLUDE_PATH})
+ENDIF( HAS_GLUT )
 
 SET(vgui_sources
   vgui_fwd.h
@@ -232,8 +241,6 @@ ENDIF (HAS_GLUT)
 # Qt
 ##################################################
 
-INCLUDE(${MODULE_PATH}/FindQt.cmake)
-
 IF (HAS_QT)
 
   OPTION(VGUI_USE_QT "Should Qt support be compiled into vgui?" YES)
@@ -363,8 +370,6 @@ ENDIF (HAS_GLX)
 # GTK
 ##################################################
 
-INCLUDE(${MODULE_PATH}/FindGTK.cmake)
-
 IF (HAS_GTK)
 
   OPTION(VGUI_USE_GTK "Should GTK support be compiled into vgui?" YES)
@@ -458,8 +463,6 @@ ENDIF (HAS_MOTIF)
 ##################################################
 # FLTK
 ##################################################
-
-INCLUDE(${MODULE_PATH}/FindFltk.cmake)
 
 IF (HAS_FLTK)
 
@@ -563,5 +566,4 @@ IF (BUILD_TESTING)
   SUBDIRS(tests)
 ENDIF (BUILD_TESTING)
 
-ENDIF (HAS_GLUT)
 ENDIF (HAS_OPENGL)
