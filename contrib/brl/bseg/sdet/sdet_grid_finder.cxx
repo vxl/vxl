@@ -793,7 +793,7 @@ compute_homography_linear_chamfer(vgl_h_matrix_2d<double> & H)
           double length = l0->length();
           length_sum += length;
           weights.push_back(length);
-          vgl_homg_line_2d<double> & homgl = l0->vgl_hline_2d();
+          vgl_homg_line_2d<double> homgl = l0->vgl_hline_2d();
           homgl.normalize();
           //          vcl_cout << homgl << "\n";
           lines_image.push_back(homgl);
@@ -818,7 +818,7 @@ compute_homography_linear_chamfer(vgl_h_matrix_2d<double> & H)
           double length = l90->length();
           length_sum += length;
           weights.push_back(length);
-          vgl_homg_line_2d<double> & homgl = l90->vgl_hline_2d();
+          vgl_homg_line_2d<double>  homgl = l90->vgl_hline_2d();
           homgl.normalize();
           // vcl_cout << homgl << "\n";
           lines_image.push_back(homgl);
