@@ -663,7 +663,7 @@ void strk_tracking_face_2d::transform(double tx, double ty, double theta, double
     this->set_Y(float(xp*s + yp*c + yo + ty));
   }
 
-  // tranform gradient vectors by theta
+  // transform gradient vectors by theta
   if (gradient_info_ ) {
     this->transform_gradients(theta);
   }
@@ -733,8 +733,7 @@ compute_intensity_mutual_information(vil1_memory_image_of<float> const& image)
     image_hist.upcount(Ii, 1.0f);//JLM
     joint_hist.upcount(Im, 1.0f, Ii, 1.0f); //JLM
 #ifdef DEBUG
-    vcl_cout << "(" << x << " " << y << "):[" << Im << " " 
-             << Ii << "]\n" << vcl_flush;
+    vcl_cout << '(' << x << ' ' << y << "):[" << Im << ' ' << Ii << ']' << vcl_endl;
 #endif
     n++;
   }
@@ -772,7 +771,7 @@ compute_intensity_mutual_information(vil1_memory_image_of<float> const& image)
   float mi = float(model_intensity_entropy_) + enti - jent;
 #ifdef DEBUG
   vcl_cout << "Entropies:(M,I,J, MI)=(" << model_intensity_entropy_ << ' '
-           << enti << ' ' << jent << ' ' << mi <<")\n";
+           << enti << ' ' << jent << ' ' << mi <<')' << vcl_endl;
 #endif
   return mi;
 }
@@ -848,7 +847,7 @@ compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
   float mi = float(model_gradient_dir_entropy_) + enti - jent;
 #ifdef DEBUG
   vcl_cout << "Dir Entropies:(M,I,J, MI)=(" << model_gradient_dir_entropy_ << ' '
-           << enti << ' ' << jent << ' ' << mi <<")\n";
+           << enti << ' ' << jent << ' ' << mi << ')' << vcl_endl;
 #endif
   return mi;
 }
