@@ -12,7 +12,7 @@
 //   bool get_property(char const *tag, void *property_value = 0) const;
 // \endcode
 // which allow format extensions to be added without cluttering the
-// interface to vil_image. The idea is that properties can be
+// interface to vil2_image_view. The idea is that properties can be
 // identified by a "tag" (some name or other textual description)
 // through which clients can obtain or manipulate extra properties.
 //

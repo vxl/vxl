@@ -16,7 +16,7 @@
 #include <vil2/vil2_smart_ptr.h>
 
 //: An abstract base class of smart pointers to actual image data in memory.
-// If you want an actual image, try instantiating vil_image_view<T>.
+// If you want an actual image, try instantiating vil2_image_view<T>.
 
 class vil2_image_view_base
 {
