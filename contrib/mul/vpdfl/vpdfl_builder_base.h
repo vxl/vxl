@@ -1,5 +1,5 @@
-#ifndef vpdfl_pdf_builder_base_h
-#define vpdfl_pdf_builder_base_h
+#ifndef vpdfl_builder_base_h
+#define vpdfl_builder_base_h
 #ifdef __GNUC__
 #pragma interface
 #endif
@@ -13,9 +13,9 @@
 
 #include <vcl_vector.h>
 #include <vcl_string.h>
-#include<vnl/vnl_vector.h>
+#include <vnl/vnl_vector.h>
 #include <vsl/vsl_binary_io.h>
-#include<mbl/mbl_data_wrapper.h>
+#include <mbl/mbl_data_wrapper.h>
 
 //=======================================================================
 
@@ -30,14 +30,14 @@ class vpdfl_pdf_base;
 // by builder, for efficiency when used in mixture models.
 // (During building they'd have to be recreated at every
 // iteration, which is expensive).
-class vpdfl_pdf_builder_base {
+class vpdfl_builder_base {
 
 public:
     //: Dflt ctor
-  vpdfl_pdf_builder_base();
+  vpdfl_builder_base();
 
     //: Destructor
-  virtual ~vpdfl_pdf_builder_base();
+  virtual ~vpdfl_builder_base();
 
     //: Create empty model
   virtual vpdfl_pdf_base* new_model() = 0;
@@ -71,7 +71,7 @@ public:
   virtual vcl_string is_a() const = 0;
 
     //: Create a copy on the heap and return base class pointer
-  virtual vpdfl_pdf_builder_base* clone() const = 0;
+  virtual vpdfl_builder_base* clone() const = 0;
 
     //: Print class to os
   virtual void print_summary(vcl_ostream& os) const = 0;
@@ -96,21 +96,21 @@ public:
   //  an instance of each derived class that might be
   //  found.  This function gives the model class to
   //  the appropriate loader.
-void vsl_add_to_binary_loader(const vpdfl_pdf_builder_base& b);
+void vsl_add_to_binary_loader(const vpdfl_builder_base& b);
 
   //: Binary file stream output operator for class reference
-void vsl_b_write(vsl_b_ostream& bfs, const vpdfl_pdf_builder_base& b);
+void vsl_b_write(vsl_b_ostream& bfs, const vpdfl_builder_base& b);
 
   //: Binary file stream output operator for pointer to class
-void vsl_b_write(vsl_b_ostream& bfs, const vpdfl_pdf_builder_base* b);
+void vsl_b_write(vsl_b_ostream& bfs, const vpdfl_builder_base* b);
 
   //: Binary file stream input operator for class reference
-void vsl_b_read(vsl_b_istream& bfs, vpdfl_pdf_builder_base& b);
+void vsl_b_read(vsl_b_istream& bfs, vpdfl_builder_base& b);
 
   //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_pdf_builder_base& b);
+void vsl_print_summary(vcl_ostream& os,const vpdfl_builder_base& b);
 
   //: Stream output operator for class pointer
-vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_pdf_builder_base* b);
+void vsl_print_summary(vcl_ostream& os,const vpdfl_builder_base* b);
 
-#endif // vpdfl_pdf_builder_base_h
+#endif // vpdfl_builder_base_h

@@ -14,11 +14,10 @@
 #include <vcl_string.h>
 #include <vsl/vsl_indent.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
+#include <vpdfl/vpdfl_axis_gaussian_sampler.h>
+#include <vpdfl/vpdfl_sampler_base.h>
 #include <vpdfl/vpdfl_prob_chi2.h>
-#include <mbl/mbl_mz_random.h>
 
-  // Use by ::sample
-static mbl_mz_random mz_random(123456);
 
 //=======================================================================
 // Dflt ctor
@@ -70,13 +69,13 @@ void vpdfl_axis_gaussian::set(const vnl_vector<double>& m,
 // ====================================================================
 
   // Probability densities:
-double vpdfl_axis_gaussian::log_p(const vnl_vector<double>& x)
+double vpdfl_axis_gaussian::log_p(const vnl_vector<double>& x) const
 {
   int n = x.size();
 #ifndef NDEBUG
   if (n!=n_dims())
   {
-    vcl_cerr<<"vpdfl_axis_gaussian::log_p: Target vector has "
+    vcl_cerr<<"ERROR: vpdfl_axis_gaussian::log_p: Target vector has "
       <<n<<" dimensions, not the required "<<n_dims()<<vcl_endl;
     vcl_abort();
   }
@@ -93,12 +92,12 @@ double vpdfl_axis_gaussian::log_p(const vnl_vector<double>& x)
     sum+=(dx*dx)/v_data[i];
   }
 
-  return logk() - 0.5*sum;
+  return log_k() - 0.5*sum;
 }
 
 void vpdfl_axis_gaussian::gradient(vnl_vector<double>& g,
                                    const vnl_vector<double>& x,
-                                   double& p)
+                                   double& p) const
 {
   int n = n_dims();
   assert(x.size() == n);
@@ -119,45 +118,32 @@ void vpdfl_axis_gaussian::gradient(vnl_vector<double>& g,
     g_data[i]= -dx/v_data[i];
   }
 
-  p = exp(logk() - 0.5*sum);
+  p = exp(log_k() - 0.5*sum);
 
   g*=p;
 }
 
 // ====================================================================
 
-  // For generating plausible examples:
-void vpdfl_axis_gaussian::sample(vnl_vector<double>& x)
+vpdfl_sampler_base* vpdfl_axis_gaussian::new_sampler() const
 {
-  const double *s = sd().data_block();
-  const double *m = mean().data_block();
-  int n = n_dims();
-
-  if (x.size()!=n) x.resize(n);
-
-  double* x_data = x.data_block();
-  for (int i=0;i<n;++i)
-    x_data[i] = m[i] + s[i]*mz_random.normal();
-}
-
-  //: Reseeds the static random number generator (one per derived class)
-void vpdfl_axis_gaussian::reseed(unsigned long seed)
-{
-  mz_random.reseed(seed);
+	vpdfl_axis_gaussian_sampler *i = new vpdfl_axis_gaussian_sampler;
+	i->set_model(*this);
+	return i;
 }
 
 
 
-double vpdfl_axis_gaussian::log_prob_thresh(double pass_proportion)
+double vpdfl_axis_gaussian::log_prob_thresh(double pass_proportion) const
 {
   // The mahalanobis distance of n-D gaussian is distributed as Chi^2(n),
   // by definition, Chi^2 is the sum of independedent Normal RVs.
-  return logk() - 0.5 * vpdfl_chi2_for_cum_prob (pass_proportion, n_dims());
+  return log_k() - 0.5 * vpdfl_chi2_for_cum_prob (pass_proportion, n_dims());
 }
 
 
 
-void vpdfl_axis_gaussian::nearest_plausible(vnl_vector<double>& x, double log_p_min)
+void vpdfl_axis_gaussian::nearest_plausible(vnl_vector<double>& x, double log_p_min) const
 {
   const double *s = sd_.data_block();
   const double *m = mean().data_block();

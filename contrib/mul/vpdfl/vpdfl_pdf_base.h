@@ -16,6 +16,8 @@
 
 //=======================================================================
 
+class vpdfl_sampler_base;
+
 //: Base class for Multi-Variate Probability Density Function classes.
 // Functions are available to test the plausibility of a vector or
 // set of parameters, to modify a set of parameters so it is plausible
@@ -55,24 +57,22 @@ public:
   virtual const vnl_vector<double>& peak(int) const { return mean_; }
 
     //: Log of probability density at x
-  virtual double log_p(const vnl_vector<double>& x)=0;
+  virtual double log_p(const vnl_vector<double>& x) const =0;
 
     //: Probability density at x
-  virtual double operator()(const vnl_vector<double>& x);
+  virtual double operator()(const vnl_vector<double>& x) const;
 
     //: Gradient and value of PDF at x
     //  Computes gradient of PDF at x, and returns the prob at x in p
   virtual void gradient(vnl_vector<double>& g,
-                        const vnl_vector<double>& x, double& p)=0;
+                        const vnl_vector<double>& x, double& p) const =0;
 
-    //: Draw random sample from distribution
-  virtual void sample(vnl_vector<double>& x)=0;
-
-    //: Reseeds the static random number generator (one per derived class).
-  virtual void reseed(unsigned long)=0;
+    //: Create a sampler object on the heap
+    // Caller is responsible for deletion.
+  virtual vpdfl_sampler_base* new_sampler()const=0 ;
 
     //: Compute threshold for PDF to pass a given proportion
-  virtual double log_prob_thresh(double pass_proportion) =0;
+  virtual double log_prob_thresh(double pass_proportion)const =0;
 
     //: Compute nearest point to x which has a density above a threshold
     //  If log_p(x)>log_p_min then x unchanged.  Otherwise x is moved
@@ -80,7 +80,7 @@ public:
     //!in:  x: Original point
     //!in:  log_p_min: log_e(p_thresh)
     //!out: x: Modified point
-  virtual void nearest_plausible(vnl_vector<double>& x, double log_p_min) =0;
+  virtual void nearest_plausible(vnl_vector<double>& x, double log_p_min)const =0;
 
 
   //========= methods which do not change state (const) ==========//
@@ -137,9 +137,9 @@ void vsl_b_write(vsl_b_ostream& bfs, const vpdfl_pdf_base* b);
 void vsl_b_read(vsl_b_istream& bfs, vpdfl_pdf_base& b);
 
   //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_pdf_base& b);
+void vsl_print_summary(vcl_ostream& os,const vpdfl_pdf_base& b);
 
   //: Stream output operator for class pointer
-vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_pdf_base* b);
+void vsl_print_summary(vcl_ostream& os,const vpdfl_pdf_base* b);
 
 #endif // vpdfl_pdf_base_h

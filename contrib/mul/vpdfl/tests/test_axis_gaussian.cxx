@@ -6,8 +6,16 @@
 #include <vnl/vnl_test.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <vpdfl/vpdfl_axis_gaussian_builder.h>
+#include <vpdfl/vpdfl_axis_gaussian_sampler.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vsl/vsl_binary_loader.h>
+
+//:
+// \file
+// \author Tim Cootes
+// \brief test vpdfl_axis_gaussian, building, sampling, saving, etc.
+
+
 
 void test_axis_gaussian()
 {
@@ -35,8 +43,11 @@ void test_axis_gaussian()
   // Generate lots of samples
   int n = 5000;
   vcl_vector<vnl_vector<double> > samples(n);
+
+  vpdfl_axis_gaussian_sampler sampler;
+  sampler.set_model(gauss0);
   for (int i=0;i<n;++i)
-    gauss0.sample(samples[i]);
+    sampler.sample(samples[i]);
 
   mbl_data_array_wrapper<vnl_vector<double> > sample_wrapper(&samples[0],n);
 
@@ -46,8 +57,8 @@ void test_axis_gaussian()
 
   builder0.build(gauss1,sample_wrapper);
 
-  vcl_cout<<"Original Model: "<<gauss0<<vcl_endl;
-  vcl_cout<<"Rebuild  Model: "<<gauss1<<vcl_endl;
+  vcl_cout<<"Original Model: "; vsl_print_summary(vcl_cout, gauss0); vcl_cout<<vcl_endl;
+  vcl_cout<<"Rebuild  Model: "; vsl_print_summary(vcl_cout, gauss1); vcl_cout<<vcl_endl;
   vcl_cout<<"  Mean: "; vsl_print_summary(vcl_cout,gauss1.mean()); vcl_cout<<vcl_endl;
 
   TEST("mean of built model",(gauss0.mean()-gauss1.mean()).squared_magnitude()<0.1,true);
@@ -57,7 +68,7 @@ void test_axis_gaussian()
   vsl_add_to_binary_loader(vpdfl_axis_gaussian());
   vsl_add_to_binary_loader(vpdfl_axis_gaussian_builder());
   vpdfl_pdf_base            *base_pdf_ptr_out = &gauss0;
-  vpdfl_pdf_builder_base *base_builder_ptr_out = &builder0;
+  vpdfl_builder_base *base_builder_ptr_out = &builder0;
 
   vsl_b_ofstream bfs_out("test_axis_gaussian.bvl.tmp");
   TEST ("Created test_axis_gaussian.bvl.tmp for writing",
@@ -71,7 +82,7 @@ void test_axis_gaussian()
   vpdfl_axis_gaussian_builder builder0_in;
   vpdfl_axis_gaussian gauss0_in;
   vpdfl_pdf_base            *base_pdf_ptr_in  = 0;
-  vpdfl_pdf_builder_base *base_builder_ptr_in  = 0;
+  vpdfl_builder_base *base_builder_ptr_in  = 0;
 
   vsl_b_ifstream bfs_in("test_axis_gaussian.bvl.tmp");
   TEST ("Opened test_axis_gaussian.bvl.tmp for reading",
@@ -83,10 +94,10 @@ void test_axis_gaussian()
   bfs_in.close();
 
   vcl_cout<<"Loaded: "<<vcl_endl;
-  vcl_cout<<"Model: "<<gauss0_in<<vcl_endl;
-  vcl_cout<<"Builder: "<<builder0_in<<vcl_endl;
-  vcl_cout<<"Model   (by base ptr): "<<base_pdf_ptr_in<<vcl_endl;
-  vcl_cout<<"Builder (by base ptr): "<<base_builder_ptr_in<<vcl_endl;
+  vcl_cout<<"Model: "; vsl_print_summary(vcl_cout, gauss0_in); vcl_cout<<vcl_endl;
+  vcl_cout<<"Builder: "; vsl_print_summary(vcl_cout, builder0_in); vcl_cout<<vcl_endl;
+  vcl_cout<<"Model   (by base ptr): "; vsl_print_summary(vcl_cout, base_pdf_ptr_in); vcl_cout<<vcl_endl;
+  vcl_cout<<"Builder (by base ptr): "; vsl_print_summary(vcl_cout, base_builder_ptr_in); vcl_cout<<vcl_endl;
 
   TEST("mean of loaded model",
        (gauss0.mean()-gauss0_in.mean()).squared_magnitude()<1e-8,true);

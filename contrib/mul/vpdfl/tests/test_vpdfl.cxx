@@ -5,6 +5,7 @@
 #define TESTMAIN(x)
 
 
+//#include <vpdfl/tests/test_gaussian.cxx>
 #include <vpdfl/tests/test_axis_gaussian.cxx>
 
 #undef TESTMAIN
@@ -14,6 +15,7 @@
 void run_test_vpdfl()
 {
   test_axis_gaussian();
+//  test_gaussian();
 }
 
 

@@ -10,7 +10,7 @@
 
 
 #include <vcl_cassert.h>
-#include <vpdfl/vpdfl_pdf_builder_base.h>
+#include <vpdfl/vpdfl_builder_base.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 
@@ -20,7 +20,7 @@
 // Dflt ctor
 //=======================================================================
 
-vpdfl_pdf_builder_base::vpdfl_pdf_builder_base()
+vpdfl_builder_base::vpdfl_builder_base()
 {
 }
 
@@ -28,7 +28,7 @@ vpdfl_pdf_builder_base::vpdfl_pdf_builder_base()
 // Destructor
 //=======================================================================
 
-vpdfl_pdf_builder_base::~vpdfl_pdf_builder_base()
+vpdfl_builder_base::~vpdfl_builder_base()
 {
 }
 
@@ -36,7 +36,7 @@ vpdfl_pdf_builder_base::~vpdfl_pdf_builder_base()
 // Method: version_no
 //=======================================================================
 
-short vpdfl_pdf_builder_base::version_no() const
+short vpdfl_builder_base::version_no() const
 {
   return 1;
 }
@@ -45,25 +45,25 @@ short vpdfl_pdf_builder_base::version_no() const
 // Method: vxl_add_to_binary_loader
 //=======================================================================
 
-void vsl_add_to_binary_loader(const vpdfl_pdf_builder_base& b)
+void vsl_add_to_binary_loader(const vpdfl_builder_base& b)
 {
-  vsl_binary_loader<vpdfl_pdf_builder_base>::instance().add(b);
+  vsl_binary_loader<vpdfl_builder_base>::instance().add(b);
 }
 
 //=======================================================================
 // Method: is_a
 //=======================================================================
 
-vcl_string vpdfl_pdf_builder_base::is_a() const
+vcl_string vpdfl_builder_base::is_a() const
 {
-  return vcl_string("vpdfl_pdf_builder_base");
+  return vcl_string("vpdfl_builder_base");
 }
 
 //=======================================================================
 // Associated function: operator<<
 //=======================================================================
 
-void vsl_b_write(vsl_b_ostream& bfs, const vpdfl_pdf_builder_base* b)
+void vsl_b_write(vsl_b_ostream& bfs, const vpdfl_builder_base* b)
 {
   if (b)
   {
@@ -78,7 +78,7 @@ void vsl_b_write(vsl_b_ostream& bfs, const vpdfl_pdf_builder_base* b)
 // Associated function: operator<<
 //=======================================================================
 
-void vsl_b_write(vsl_b_ostream& bfs, const vpdfl_pdf_builder_base& b)
+void vsl_b_write(vsl_b_ostream& bfs, const vpdfl_builder_base& b)
 {
   b.b_write(bfs);
 }
@@ -87,32 +87,24 @@ void vsl_b_write(vsl_b_ostream& bfs, const vpdfl_pdf_builder_base& b)
 // Associated function: operator>>
 //=======================================================================
 
-void vsl_b_read(vsl_b_istream& bfs, vpdfl_pdf_builder_base& b)
+void vsl_b_read(vsl_b_istream& bfs, vpdfl_builder_base& b)
 {
   b.b_read(bfs);
 }
 
-//=======================================================================
-// Associated function: operator<<
-//=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_pdf_builder_base& b)
+void vsl_print_summary(vcl_ostream& os,const vpdfl_builder_base& b)
 {
   os << b.is_a() << ": ";
   vsl_inc_indent(os);
   b.print_summary(os);
   vsl_dec_indent(os);
-  return os;
 }
 
-//=======================================================================
-// Associated function: operator<<
-//=======================================================================
-
-vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_pdf_builder_base* b)
+void vsl_print_summary(vcl_ostream& os,const vpdfl_builder_base* b)
 {
   if (b)
-    return os << *b;
+    vsl_print_summary(os, *b);
   else
-    return os << "No vpdfl_pdf_builder_base defined.";
+    os << "No vpdfl_builder_base defined.";
 }

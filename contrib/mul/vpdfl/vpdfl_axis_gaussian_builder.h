@@ -10,14 +10,14 @@
 // \date 12-Apr-2001
 // \brief Class to build vpdfl_axis_gaussian objects
 
-#include <vpdfl/vpdfl_pdf_builder_base.h>
+#include <vpdfl/vpdfl_builder_base.h>
 
 //=======================================================================
 
 class vpdfl_axis_gaussian;
 
 //: Class to build vpdfl_axis_gaussian objects
-class vpdfl_axis_gaussian_builder : public vpdfl_pdf_builder_base {
+class vpdfl_axis_gaussian_builder : public vpdfl_builder_base {
 private:
   double min_var_;
 
@@ -61,7 +61,7 @@ public:
   virtual vcl_string is_a() const;
 
     //: Create a copy on the heap and return base class pointer
-  virtual vpdfl_pdf_builder_base* clone() const;
+  virtual vpdfl_builder_base* clone() const;
 
     //: Print class to os
   virtual void print_summary(vcl_ostream& os) const;

@@ -206,7 +206,7 @@ short vpdfl_axis_gaussian_builder::version_no() const
 // Method: clone
 //=======================================================================
 
-vpdfl_pdf_builder_base* vpdfl_axis_gaussian_builder::clone() const
+vpdfl_builder_base* vpdfl_axis_gaussian_builder::clone() const
 {
   return new vpdfl_axis_gaussian_builder(*this);
 }

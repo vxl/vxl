@@ -33,7 +33,7 @@ vpdfl_pdf_base::~vpdfl_pdf_base()
 //=======================================================================
 //: Probability density at x
 //=======================================================================
-double vpdfl_pdf_base::operator()(const vnl_vector<double>& x)
+double vpdfl_pdf_base::operator()(const vnl_vector<double>& x) const
 {
   return exp(log_p(x));
 }
@@ -143,29 +143,21 @@ void vsl_b_read(vsl_b_istream& bfs, vpdfl_pdf_base& b)
     b.b_read(bfs);
 }
 
-//=======================================================================
-// Associated function: operator<<
-//=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_pdf_base& b)
+void vsl_print_summary(vcl_ostream& os,const vpdfl_pdf_base& b)
 {
   os << b.is_a() << ": ";
   vsl_inc_indent(os);
   b.print_summary(os);
   vsl_dec_indent(os);
-  return os;
 }
 
-//=======================================================================
-// Associated function: operator<<
-//=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_pdf_base* b)
+void vsl_print_summary(vcl_ostream& os,const vpdfl_pdf_base* b)
 {
   if (b)
-  return os << *b;
+    vsl_print_summary(os, *b);
   else
-  return os << "No vpdfl_pdf_base defined.";
+    os << "No vpdfl_pdf_base defined.";
 }
 
-//==================< end of vpdfl_pdf_base.cxx >====================
