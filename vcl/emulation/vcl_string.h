@@ -58,7 +58,7 @@
 
 // Make shorter name for vcl_basic_string if STL is using short names
 # if defined ( __STL_USE_ABBREVS )
-#  define vcl_basic_string vcl_bS
+#  define vcl_basic_string bS
 # endif
 
 #define EOS 0

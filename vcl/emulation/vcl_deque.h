@@ -57,8 +57,8 @@
 #include "vcl_alloc.h"
 
 # if defined ( __STL_USE_ABBREVS )
-#  define __deque_iterator         vcl_dQIt
-#  define __deque_const_iterator   vcl_dQcIt
+#  define __deque_iterator         dQIt
+#  define __deque_const_iterator   dQcIt
 # endif
 
 inline vcl_size_t __deque_buf_size(vcl_size_t sz)

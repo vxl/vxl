@@ -84,12 +84,12 @@ iterators invalidated are those referring to the deleted node.
 
 # if defined ( __STL_USE_ABBREVS )
 // ugliness is intentional - to reduce conflicts possibility
-#  define __rb_tree_node_base       vcl_rbTNB
-#  define __rb_tree_node            vcl_rbTN
-#  define __rb_tree_base_iterator   vcl_rbTBIt
-#  define __rb_tree_iterator        vcl_rbTIt
-#  define __rb_tree_const_iterator  vcl_rbTcIt
-#  define __rb_tree_base            vcl_rbTB
+#  define __rb_tree_node_base       rbTNB
+#  define __rb_tree_node            rbTN
+#  define __rb_tree_base_iterator   rbTBIt
+#  define __rb_tree_iterator        rbTIt
+#  define __rb_tree_const_iterator  rbTcIt
+#  define __rb_tree_base            rbTB
 # endif
 
 typedef bool __rb_tree_color_type;
@@ -598,10 +598,10 @@ public:
   typedef rb_tree_node* link_type;
   typedef __rb_tree_iterator<value_type> iterator;
   typedef __rb_tree_const_iterator<value_type> const_iterator;
-  typedef reverse_bidirectional_iterator<iterator, value_type, reference,
-                                         difference_type> reverse_iterator;
-  typedef reverse_bidirectional_iterator<const_iterator, value_type,
-                                         const_reference, difference_type>
+  typedef vcl_reverse_bidirectional_iterator<iterator, value_type, reference,
+                                             difference_type> reverse_iterator;
+  typedef vcl_reverse_bidirectional_iterator<const_iterator, value_type,
+                                             const_reference, difference_type>
       const_reverse_iterator;
   typedef Key key_type;
 protected:

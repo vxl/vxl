@@ -43,21 +43,22 @@
 
 #if defined ( __STL_USE_ABBREVS )
 // ugliness is intentional - to reduce conflicts
-# define vcl_input_iterator_tag             vcl_InItT
-# define vcl_output_iterator_tag            vcl_OuItT
-# define vcl_bidirectional_iterator_tag     vcl_BdItT
-# define vcl_random_access_iterator_tag     vcl_RaItT
-# define vcl_input_iterator                 vcl_InIt
-# define vcl_output_iterator                vcl_OuIt
-# define vcl_bidirectional_iterator         vcl_BdIt
-# define vcl_random_access_iterator         vcl_RaIt
-# define vcl_reverse_bidirectional_iterator vcl_rBdIt
-# define vcl_reverse_iterator               vcl_rIt
-# define vcl_back_insert_iterator           vcl_bIIt
-# define vcl_front_insert_iterator          vcl_fIIt
-# define vcl_raw_storage_iterator           vcl_rSIt
-# define vcl_istream_iterator               vcl_iSIt
-# define vcl_ostream_iterator               vcl_oSIt
+# define vcl_input_iterator_tag             InItT
+# define vcl_output_iterator_tag            OuItT
+# define vcl_bidirectional_iterator_tag     BdItT
+# define vcl_random_access_iterator_tag     RaItT
+# define vcl_forward_iterator               FwIt
+# define vcl_input_iterator                 InIt
+# define vcl_output_iterator                OuIt
+# define vcl_bidirectional_iterator         BdIt
+# define vcl_random_access_iterator         RaIt
+# define vcl_reverse_bidirectional_iterator rBdIt
+# define vcl_reverse_iterator               rIt
+# define vcl_back_insert_iterator           bIIt
+# define vcl_front_insert_iterator          fIIt
+# define vcl_raw_storage_iterator           rSIt
+# define vcl_istream_iterator               iSIt
+# define vcl_ostream_iterator               oSIt
 #endif
 
 struct vcl_input_iterator_tag {};
@@ -66,38 +67,38 @@ struct vcl_forward_iterator_tag {};
 struct vcl_bidirectional_iterator_tag { vcl_bidirectional_iterator_tag() {} };
 struct vcl_random_access_iterator_tag {};
 
-template <class T, class Distance> struct input_iterator {};
-struct output_iterator {};
-template <class T, class Distance> struct forward_iterator {};
-template <class T, class Distance> struct bidirectional_iterator {};
-template <class T, class Distance> struct random_access_iterator {};
+template <class T, class Distance> struct vcl_input_iterator {};
+struct vcl_output_iterator {};
+template <class T, class Distance> struct vcl_forward_iterator {};
+template <class T, class Distance> struct vcl_bidirectional_iterator {};
+template <class T, class Distance> struct vcl_random_access_iterator {};
 
 template <class T, class Distance>
 inline vcl_input_iterator_tag
-iterator_category(const input_iterator<T, Distance>&) {
+iterator_category(const vcl_input_iterator<T, Distance>&) {
     return vcl_input_iterator_tag();
 }
 
 inline vcl_output_iterator_tag
-iterator_category(const output_iterator&) {
+iterator_category(const vcl_output_iterator&) {
     return vcl_output_iterator_tag();
 }
 
 template <class T, class Distance>
 inline vcl_forward_iterator_tag
-iterator_category(const forward_iterator<T, Distance>&) {
+iterator_category(const vcl_forward_iterator<T, Distance>&) {
     return vcl_forward_iterator_tag();
 }
 
 template <class T, class Distance>
 inline vcl_bidirectional_iterator_tag
-iterator_category(const bidirectional_iterator<T, Distance>&) {
+iterator_category(const vcl_bidirectional_iterator<T, Distance>&) {
     return vcl_bidirectional_iterator_tag();
 }
 
 template <class T, class Distance>
 inline vcl_random_access_iterator_tag
-iterator_category(const random_access_iterator<T, Distance>&) {
+iterator_category(const vcl_random_access_iterator<T, Distance>&) {
     return vcl_random_access_iterator_tag();
 }
 
@@ -109,25 +110,25 @@ iterator_category(const T*) {
 
 template <class T, class Distance>
 inline T*
-value_type(const input_iterator<T, Distance>&) {
+value_type(const vcl_input_iterator<T, Distance>&) {
     return (T*)(0);
 }
 
 template <class T, class Distance>
 inline T*
-value_type(const forward_iterator<T, Distance>&) {
+value_type(const vcl_forward_iterator<T, Distance>&) {
     return (T*)(0);
 }
 
 template <class T, class Distance>
 inline T*
-value_type(const bidirectional_iterator<T, Distance>&) {
+value_type(const vcl_bidirectional_iterator<T, Distance>&) {
     return (T*)(0);
 }
 
 template <class T, class Distance>
 inline T*
-value_type(const random_access_iterator<T, Distance>&) {
+value_type(const vcl_random_access_iterator<T, Distance>&) {
     return (T*)(0);
 }
 
@@ -137,25 +138,25 @@ value_type(const T*) { return (T*)(0); }
 
 template <class T, class Distance>
 inline Distance*
-distance_type(const input_iterator<T, Distance>&) {
+distance_type(const vcl_input_iterator<T, Distance>&) {
     return (Distance*)(0);
 }
 
 template <class T, class Distance>
 inline Distance*
-distance_type(const forward_iterator<T, Distance>&) {
+distance_type(const vcl_forward_iterator<T, Distance>&) {
     return (Distance*)(0);
 }
 
 template <class T, class Distance>
 inline Distance*
-distance_type(const bidirectional_iterator<T, Distance>&) {
+distance_type(const vcl_bidirectional_iterator<T, Distance>&) {
     return (Distance*)(0);
 }
 
 template <class T, class Distance>
 inline Distance*
-distance_type(const random_access_iterator<T, Distance>&) {
+distance_type(const vcl_random_access_iterator<T, Distance>&) {
     return (Distance*)(0);
 }
 
@@ -255,23 +256,23 @@ inline vcl_insert_iterator<Container> vcl_inserter(Container& x, Iterator i) {
 }
 
 // Forward declarations
-template <class BidirectionalIterator, class T, class Reference, class Distance> class reverse_bidirectional_iterator;
+template <class BidirectionalIterator, class T, class Reference, class Distance> class vcl_reverse_bidirectional_iterator;
 template <class BidirectionalIterator, class T, class Reference, class Distance> IUEi_STL_INLINE bool operator==(
-    const reverse_bidirectional_iterator<BidirectionalIterator, T, Reference, Distance>& x,
-    const reverse_bidirectional_iterator<BidirectionalIterator, T, Reference, Distance>& y);
+    const vcl_reverse_bidirectional_iterator<BidirectionalIterator, T, Reference, Distance>& x,
+    const vcl_reverse_bidirectional_iterator<BidirectionalIterator, T, Reference, Distance>& y);
 
 template <class BidirectionalIterator, class T,
           VCL_DFL_TMPL_PARAM_STLDECL(Reference, T& ),
           VCL_DFL_TYPE_PARAM_STLDECL(Distance, vcl_ptrdiff_t)>
-class reverse_bidirectional_iterator {
-    typedef reverse_bidirectional_iterator<BidirectionalIterator, T, Reference,
+class vcl_reverse_bidirectional_iterator {
+    typedef vcl_reverse_bidirectional_iterator<BidirectionalIterator, T, Reference,
                                            Distance> self;
     friend bool operator== VCL_NULL_TMPL_ARGS (const self& x, const self& y);
 protected:
     BidirectionalIterator current;
 public:
-    reverse_bidirectional_iterator() {}
-    reverse_bidirectional_iterator(const BidirectionalIterator&x): current(x) {}
+    vcl_reverse_bidirectional_iterator() {}
+    vcl_reverse_bidirectional_iterator(const BidirectionalIterator&x): current(x) {}
     BidirectionalIterator base() { return current; }
     Reference operator*() const {
         BidirectionalIterator tmp = current;
@@ -300,29 +301,29 @@ public:
 
 template <class BidirectionalIterator, class T, class Reference, class Distance>
 inline vcl_bidirectional_iterator_tag
-iterator_category(const reverse_bidirectional_iterator<BidirectionalIterator, T,
+iterator_category(const vcl_reverse_bidirectional_iterator<BidirectionalIterator, T,
                   Reference, Distance>&) {
     return vcl_bidirectional_iterator_tag();
 }
 
 template <class BidirectionalIterator, class T, class Reference, class Distance>
 inline T*
-value_type(const reverse_bidirectional_iterator<BidirectionalIterator, T,
+value_type(const vcl_reverse_bidirectional_iterator<BidirectionalIterator, T,
            Reference, Distance>&) {
     return (T*) 0;
 }
 
 template <class BidirectionalIterator, class T, class Reference, class Distance>
 inline Distance*
-distance_type(const reverse_bidirectional_iterator<BidirectionalIterator, T,
+distance_type(const vcl_reverse_bidirectional_iterator<BidirectionalIterator, T,
                                                   Reference, Distance>&) {
   return (Distance*) 0;
 }
 
 template <class BidirectionalIterator, class T, class Reference, class Distance>
 inline bool operator==(
-    const reverse_bidirectional_iterator<BidirectionalIterator, T, Reference, Distance>& x,
-    const reverse_bidirectional_iterator<BidirectionalIterator, T, Reference, Distance>& y) {
+    const vcl_reverse_bidirectional_iterator<BidirectionalIterator, T, Reference, Distance>& x,
+    const vcl_reverse_bidirectional_iterator<BidirectionalIterator, T, Reference, Distance>& y) {
     return x.current == y.current;
 }
 
@@ -450,22 +451,22 @@ operator+(Distance n,
 
 
 template <class ForwardIterator, class T>
-class raw_storage_iterator {
+class vcl_raw_storage_iterator {
 protected:
     ForwardIterator iter;
 public:
-    explicit raw_storage_iterator(const ForwardIterator& x) : iter(x) {}
-    raw_storage_iterator<ForwardIterator, T>& operator*() { return *this; }
-    raw_storage_iterator<ForwardIterator, T>& operator=(const T& element) {
+    explicit vcl_raw_storage_iterator(const ForwardIterator& x) : iter(x) {}
+    vcl_raw_storage_iterator<ForwardIterator, T>& operator*() { return *this; }
+    vcl_raw_storage_iterator<ForwardIterator, T>& operator=(const T& element) {
         construct(&*iter, element);
         return *this;
     }
-    raw_storage_iterator<ForwardIterator, T>& operator++() {
+    vcl_raw_storage_iterator<ForwardIterator, T>& operator++() {
         ++iter;
         return *this;
     }
-    raw_storage_iterator<ForwardIterator, T> operator++(int) {
-        raw_storage_iterator<ForwardIterator, T> tmp = *this;
+    vcl_raw_storage_iterator<ForwardIterator, T> operator++(int) {
+        vcl_raw_storage_iterator<ForwardIterator, T> tmp = *this;
         ++iter;
         return tmp;
     }
@@ -473,7 +474,7 @@ public:
 
 template <class ForwardIterator, class T>
 inline vcl_output_iterator_tag
-iterator_category(const raw_storage_iterator<ForwardIterator, T>&)
+iterator_category(const vcl_raw_storage_iterator<ForwardIterator, T>&)
 {
     return vcl_output_iterator_tag();
 }

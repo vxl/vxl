@@ -43,7 +43,7 @@
 // Make shorter name for basic_string if STL is using short names
 # if defined ( __STL_USE_ABBREVS )
 #  undef  vcl_char_traits
-#  define vcl_char_traits vcl_sCt
+#  define vcl_char_traits sCt
 # endif
 
 extern "C++" {

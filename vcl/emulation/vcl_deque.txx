@@ -20,8 +20,8 @@ template struct __deque_iterator<T >;\
 template struct __deque_const_iterator<T >;\
 __DEQUE_INSTANTIATE(T);\
 template class __deque_base<T , vcl_alloc >;\
-template class reverse_bidirectional_iterator<__deque_iterator<T >, T , T  &, vcl_ptrdiff_t>;\
-template class reverse_bidirectional_iterator<__deque_const_iterator<T >, T , T  const &, vcl_ptrdiff_t>;\
+template class vcl_reverse_bidirectional_iterator<__deque_iterator<T >, T , T  &, vcl_ptrdiff_t>;\
+template class vcl_reverse_bidirectional_iterator<__deque_const_iterator<T >, T , T  const &, vcl_ptrdiff_t>;\
 /* VCL_FILL_INSTANTIATE(vcl_deque<T >::iterator, T); */\
 VCL_ITER_RA_INSTANTIATE(__deque_iterator<T >);\
 VCL_ITER_RA_INSTANTIATE(__deque_const_iterator<T >)

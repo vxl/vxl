@@ -59,8 +59,8 @@
 #include "vcl_alloc.h"
 
 # if defined ( __STL_USE_ABBREVS )
-#  define __list_iterator         vcl_LIt
-#  define __list_const_iterator   vcl_LcIt
+#  define __list_iterator         LIt
+#  define __list_const_iterator   LcIt
 # endif
 
 template <class T> struct __list_iterator;
@@ -272,13 +272,13 @@ public:
     typedef list_node* link_type;
     typedef vcl_size_t size_type;
     typedef vcl_ptrdiff_t difference_type;
-    typedef __list_iterator<T>             iterator;
-    typedef __list_const_iterator<T>       const_iterator;
-    typedef reverse_bidirectional_iterator<const_iterator, value_type,
-                                           const_reference, difference_type>
+    typedef __list_iterator<T>                 iterator;
+    typedef __list_const_iterator<T>           const_iterator;
+    typedef vcl_reverse_bidirectional_iterator<const_iterator, value_type,
+                                               const_reference, difference_type>
         const_reverse_iterator;
-    typedef reverse_bidirectional_iterator<iterator, value_type, reference,
-                                           difference_type>
+    typedef vcl_reverse_bidirectional_iterator<iterator, value_type, reference,
+                                               difference_type>
         reverse_iterator;
 
 protected:

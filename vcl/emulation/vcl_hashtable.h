@@ -69,11 +69,11 @@
 #include <vcl_memory.h>
 
 #if defined ( __STL_USE_ABBREVS )
-# define vcl_hashtable_iterator         vcl_hTIt
-# define vcl_hashtable_const_iterator   vcl_hTcIt
-# define vcl_hashtable_node             vcl_hTN
-# define vcl_hashtable_base             vcl_hTB
-# define vcl_hashtable                  vcl_hT
+# define vcl_hashtable_iterator         hTIt
+# define vcl_hashtable_const_iterator   hTcIt
+# define vcl_hashtable_node             hTN
+# define vcl_hashtable_base             hTB
+# define vcl_hashtable                  hT
 #endif
 
 #if defined(VCL_EMULATION_STLCONF_H_INCLUDED)

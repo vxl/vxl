@@ -23,55 +23,58 @@
 #include "vcl_alloc.h"
 
 // from vcl_deque.h:
-# define __deque_iterator         vcl_dQIt
-# define __deque_const_iterator   vcl_dQcIt
+# define __deque_iterator         dQIt
+# define __deque_const_iterator   dQcIt
 
 // from vcl_hashtable.h:
-# define __hashtable_iterator         vcl_hTIt
-# define __hashtable_const_iterator   vcl_hTcIt
-# define __hashtable_node             vcl_hTN
-# define __hashtable_base             vcl_hTB
-# define vcl_hashtable                vcl_hT
+# define __hashtable_iterator         hTIt
+# define __hashtable_const_iterator   hTcIt
+# define __hashtable_node             hTN
+# define __hashtable_base             hTB
+# define vcl_hashtable                hT
 
 // from iterator.h:
 // ugliness is intentional - to reduce conflicts
-# define vcl_input_iterator_tag             vcl_InItT
-# define vcl_output_iterator_tag            vcl_OuItT
-# define vcl_bidirectional_iterator_tag     vcl_BdItT
-# define vcl_random_access_iterator_tag     vcl_RaItT
-# define vcl_input_iterator                 vcl_InIt
-# define vcl_output_iterator                vcl_OuIt
-# define vcl_bidirectional_iterator         vcl_BdIt
-# define vcl_random_access_iterator         vcl_RaIt
-# define vcl_reverse_bidirectional_iterator vcl_rBdIt
-# define vcl_reverse_iterator               vcl_rIt
-# define vcl_back_insert_iterator           vcl_bIIt
-# define vcl_front_insert_iterator          vcl_fIIt
-# define vcl_raw_storage_iterator           vcl_rSIt
-# define vcl_istream_iterator               vcl_iSIt
-# define vcl_ostream_iterator               vcl_oSIt
+# define vcl_input_iterator_tag             InItT
+# define vcl_output_iterator_tag            OuItT
+# define vcl_bidirectional_iterator_tag     BdItT
+# define vcl_random_access_iterator_tag     RaItT
+# define vcl_forward_iterator               FwIt
+# define vcl_input_iterator                 InIt
+# define vcl_output_iterator                OuIt
+# define vcl_bidirectional_iterator         BdIt
+# define vcl_random_access_iterator         RaIt
+# define vcl_reverse_bidirectional_iterator rBdIt
+# define vcl_reverse_iterator               rIt
+# define vcl_back_insert_iterator           bIIt
+# define vcl_front_insert_iterator          fIIt
+# define vcl_raw_storage_iterator           rSIt
+# define vcl_istream_iterator               iSIt
+# define vcl_ostream_iterator               oSIt
 
 // from vcl_list.h:
-# define __list_iterator         vcl_LIt
-# define __list_const_iterator   vcl_LcIt
+# define __list_iterator         LIt
+# define __list_const_iterator   LcIt
 
+#if 0
 // from pthreah_alloc.h:
-# define __pthread_alloc_template   vcl_pTHr_Al
+# define __pthread_alloc_template   pTHr_Al
+#endif
 
 // from vcl_tree.h:
 // ugliness is intentional - to reduce conflicts possibility
-# define __rb_tree_node_base       vcl_rbTNB
-# define __rb_tree_node            vcl_rbTN
-# define __rb_tree_base_iterator   vcl_rbTBIt
-# define __rb_tree_iterator        vcl_rbTIt
-# define __rb_tree_const_iterator  vcl_rbTcIt
-# define __rb_tree_base            vcl_rbTB
+# define __rb_tree_node_base       rbTNB
+# define __rb_tree_node            rbTN
+# define __rb_tree_base_iterator   rbTBIt
+# define __rb_tree_iterator        rbTIt
+# define __rb_tree_const_iterator  rbTcIt
+# define __rb_tree_base            rbTB
 
 // from vcl_string.h:
 # undef  vcl_char_traits
-# define vcl_char_traits vcl_sCt
+# define vcl_char_traits sCt
 # undef  vcl_basic_string
-# define vcl_basic_string vcl_bS
+# define vcl_basic_string bS
 
 #endif //__STL_USE_ABBREVS
 
