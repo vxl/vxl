@@ -189,7 +189,7 @@ vidl_codec_sptr vidl_image_list_codec::load(const vcl_vector<vcl_string> &fnames
   return this;
 }
 
-//: Supposed to check the validity of this codec for a special filname.
+//: Supposed to check the validity of this codec for a special filename.
 // Not so well implemented for this codec.
 // This could check if the filename is a valid image type
 // by probing all the image types.
