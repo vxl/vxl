@@ -296,8 +296,6 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
       }
       return st;
     }
-    vcl_cerr << "Warning: called start but no valid sections defined. Returning 0\n";
-    return 0;
   } else {
     // should we consider insecp????
     if(secp()){ // ok have a valid section
@@ -320,10 +318,8 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
       if(ROA()) st = vcl_min(end,vcl_max(st,ROA()->curr_sec_start(axis)+ibs));
       return st;
     }
-    vcl_cerr << "Warning: called start but no valid sections defined. Returning 0\n";
-    return 0;
   }
-  //else // error
+  // error if reaching this point:
   vcl_cerr << "Warning: called start but no valid sections defined. Returning 0\n";
   return 0;
 }
@@ -361,8 +357,6 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
         if(inROA()) st = vcl_min(end,vcl_max(st,inROA()->curr_sec_start(axis)+ibs));
       return end;
     }
-    vcl_cerr << "Warning: called stop but no valid sections defined. Returning 0\n";
-    return 0;
   } else {
     if(secp()){ // ok have a valid section
       int ibs = image_border_size();
@@ -381,10 +375,8 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
       if(ROA()) st = vcl_min(end,vcl_max(st,ROA()->curr_sec_start(axis)+ibs));
       return end;
     }
-    vcl_cerr << "Warning: called stop but no valid sections defined. Returning 0\n";
-    return 0;
   }
-  //else // error
+  // error if reaching this point:
   vcl_cerr << "Warning: called stop but no valid sections defined. Returning 0\n";
   return 0;
 }
