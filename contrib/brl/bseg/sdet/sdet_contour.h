@@ -239,7 +239,7 @@ protected:
   float minStrength;  // hysteresis or noise threshold
   int minLength;      // number of pixels in shortest chain
   float minJump;      // change in strength at junction
-  int max_gap;        // largest gap to span
+  float max_gap;      // largest gap to span
   int maxSpiral;      // number of spiral search for max_gap
   vbl_array_2d<vtol_edge_2d_sptr> *edgeMap;
   vbl_array_2d<vtol_vertex_2d_sptr> *vertexMap; // map pixel to junction/chain
