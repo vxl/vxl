@@ -9,31 +9,75 @@
 #define VXL_LITTLE_ENDIAN @VXL_LITTLE_ENDIAN@
 #define VXL_BIG_ENDIAN    @VXL_BIG_ENDIAN@
 
-/* typedefs won't work here, because on systems where there are */
-/* no 64bit integers we have to #define vxl_int_64 to `void' in */
-/* order to catch illegitimate uses. */
-#define vxl_int_8  @VXL_INT_8@
-#define vxl_int_16 @VXL_INT_16@
-#define vxl_int_32 @VXL_INT_32@
-#define vxl_int_64 @VXL_INT_64@
+/* we can't just use typedefs, because on systems where there are   */
+/* no 64bit integers we have to #define vxl_int_64 to `void' in     */
+/* order to catch illegitimate uses. However, typedefs are superior */
+/* to #defines, especially for the two keyword types, so we use     */
+/* typedefs for the valid cases.                                    */
+#if @VXL_HAS_INT_8@
+  typedef          @VXL_INT_8@  vxl_int_8;
+  typedef   signed @VXL_INT_8@  vxl_sint_8;
+  typedef unsigned @VXL_INT_8@  vxl_uint_8;
+#else
+# define vxl_int_8   void
+# define vxl_sint_8  void
+# define vxl_uint_8  void
+#endif
 
-/* signed versions. */
-#define vxl_sint_8  signed @VXL_INT_8@
-#define vxl_sint_16 signed @VXL_INT_16@
-#define vxl_sint_32 signed @VXL_INT_32@
-#define vxl_sint_64 signed @VXL_INT_64@
+#if @VXL_HAS_INT_16@
+  typedef          @VXL_INT_16@ vxl_int_16;
+  typedef   signed @VXL_INT_16@ vxl_sint_16;
+  typedef unsigned @VXL_INT_16@ vxl_uint_16;
+#else
+# define vxl_int_16  void
+# define vxl_sint_16 void
+# define vxl_uint_16 void
+#endif
 
-/* unsigned versions. */
-#define vxl_uint_8  unsigned @VXL_INT_8@
-#define vxl_uint_16 unsigned @VXL_INT_16@
-#define vxl_uint_32 unsigned @VXL_INT_32@
-#define vxl_uint_64 unsigned @VXL_INT_64@
+#if @VXL_HAS_INT_32@
+  typedef          @VXL_INT_32@ vxl_int_32;
+  typedef   signed @VXL_INT_32@ vxl_sint_32;
+  typedef unsigned @VXL_INT_32@ vxl_uint_32;
+#else
+# define vxl_int_32  void
+# define vxl_sint_32 void
+# define vxl_uint_32 void
+#endif
 
-/* IEEE floating point types. */
-#define vxl_ieee_32  @VXL_IEEE_32@
-#define vxl_ieee_64  @VXL_IEEE_64@
-/*#define vxl_ieee_96  @VXL_IEEE_96@*/
-/*#define vxl_ieee_128 @VXL_IEEE_128@*/
+#if @VXL_HAS_INT_64@
+  typedef          @VXL_INT_64@ vxl_int_64;
+  typedef   signed @VXL_INT_64@ vxl_sint_64;
+  typedef unsigned @VXL_INT_64@ vxl_uint_64;
+#else
+# define vxl_int_64  void
+# define vxl_sint_64 void
+# define vxl_uint_64 void
+#endif
+
+#if @VXL_HAS_IEEE_32@
+  typedef @VXL_IEEE_32@ vxl_ieee_32;
+#else
+# define vxl_ieee_32 void
+#endif
+
+#if @VXL_HAS_IEEE_64@
+  typedef @VXL_IEEE_64@ vxl_ieee_64;
+#else
+# define vxl_ieee_64 void
+#endif
+
+#if @VXL_HAS_IEEE_96@
+  typedef @VXL_IEEE_96@ vxl_ieee_96;
+#else
+# define vxl_ieee_96 void
+#endif
+
+#if @VXL_HAS_IEEE_128@
+  typedef @VXL_IEEE_128@ vxl_ieee_128;
+#else
+# define vxl_ieee_128 void
+#endif
+
 
 /* -------------------- operating system services */
 

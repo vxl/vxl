@@ -1418,22 +1418,23 @@ cat > check_vxl_words.cc <<EOF
 #define QUOTE 34
 
 #define macro(NAME, n, cand, cnd2) \
-  printf(#NAME "=%c" "void" "%c;\n", QUOTE, QUOTE); \
   if (CHAR_BIT==8 && sizeof(cand)==n) \
-    printf(#NAME "=%c" #cand "%c;\n", QUOTE, QUOTE); \
-  if (CHAR_BIT==8 && sizeof(cnd2)==n) \
-    printf(#NAME "=%c" #cnd2 "%c;\n", QUOTE, QUOTE); \
-  printf("export " #NAME ";\n")
+    printf("VXL_" #NAME "=%c" #cand "%c;\nVXL_HAS_" #NAME "=%c1%c;\n" , QUOTE, QUOTE, QUOTE, QUOTE); \
+  else if (CHAR_BIT==8 && sizeof(cnd2)==n) \
+    printf("VXL_" #NAME "=%c" #cnd2 "%c;\nVXL_HAS_" #NAME "=%c1%c;\n" , QUOTE, QUOTE, QUOTE, QUOTE); \
+  else \
+    printf("VXL_" #NAME "=%c" "void" "%c;\nVXL_HAS_" #NAME "=%c0%c;\n" , QUOTE, QUOTE, QUOTE, QUOTE); \
+  printf("export VXL_" #NAME ";\nexport VXL_HAS_" #NAME ";\n" )
 
 int main(int, char **) {
-  macro(VXL_INT_8, 1, char, short);
-  macro(VXL_INT_16, 2, short, int);
-  macro(VXL_INT_32, 4, long, int);
-  macro(VXL_INT_64, 8, long long, long);
-  macro(VXL_IEEE_32, 4, double, float);
-  macro(VXL_IEEE_64, 8, long double, double);
-//  macro(VXL_IEEE_96, 12, long double);  // x86
-//  macro(VXL_IEEE_128, 16, long double); // sparc, mips
+  macro(INT_8, 1, char, short);
+  macro(INT_16, 2, short, int);
+  macro(INT_32, 4, long, int);
+  macro(INT_64, 8, long long, long);
+  macro(IEEE_32, 4, double, float);
+  macro(IEEE_64, 8, long double, double);
+  macro(IEEE_96, 12, long double, double);  // x86
+  macro(IEEE_128, 16, long double, double); // sparc, mips
   return 0;
 }
 EOF
