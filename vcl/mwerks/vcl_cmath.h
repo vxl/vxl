@@ -38,9 +38,9 @@ inline long double vcl_log10(long double x) { return ::log10(x); }
 
 #undef  vcl_pow
 #define vcl_pow vcl_pow
-inline float vcl_pow(float x) { return ::pow(x); }
-inline double vcl_pow(double x) { return ::pow(x); }
-inline long double vcl_pow(long double x) { return ::pow(x); }
+inline float vcl_pow(float x, float y) { return ::pow(x, y); }
+inline double vcl_pow(double x, double y) { return ::pow(x, y); }
+inline long double vcl_pow(long double x, long double y) { return ::pow(x, y); }
 
 #undef  vcl_cos
 #define vcl_cos vcl_cos
