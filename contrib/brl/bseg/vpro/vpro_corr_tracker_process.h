@@ -1,4 +1,4 @@
-// This is brl/vpro/vpro_corr_tracker_process.h
+// This is brl/bseg/vpro/vpro_corr_tracker_process.h
 #ifndef vpro_corr_tracker_process_h_
 #define vpro_corr_tracker_process_h_
 //----------------------------------------------------------------------------
@@ -13,7 +13,6 @@
 //   J.L. Mundy August 21, 2002    Initial version.
 // \endverbatim
 //---------------------------------------------------------------------------
-#include <vcl_string.h>
 #include <sdet/sdet_tracker_params.h>
 #include <sdet/sdet_tracker.h>
 #include <vpro/vpro_video_process.h>
@@ -34,6 +33,5 @@ class vpro_corr_tracker_process : public vpro_video_process
   bool first_frame_;
   sdet_tracker tracker_;
 };
-
 
 #endif // vpro_corr_tracker_process_h_
