@@ -24,6 +24,8 @@ void vgui_grid_tableau::init(unsigned initial_cols, unsigned initial_rows)
   INCREMENT_COLS = 50;
   INCREMENT_ROWS = 50;
 
+  grid_size_changeable = true;
+
 //if (debug) cerr << "init: intialising grid with "<< initial_cols << " columns and "
 //                << initial_rows << " rows" << endl;
   nb_cols = initial_cols;
@@ -163,6 +165,10 @@ void vgui_grid_tableau::add_next(vgui_tableau_ref const& tab)
   // fsm: this flag should control how events are handled, not whether a client
   // can change the layout of the grid tableau.
   //if (uses_plus_minus_events == true)
+ 
+  // kym: only because you gave it that funny name!!!  I'm putting this back in here 
+  // (with its original name) because I think it is needed. Events are handled seperately
+  if (grid_size_changeable == true)
   {
     // If we have got here then there are no free spaces in the grid.
     if (debug) vcl_cerr << "add_next: current grid is full, adding another column" << vcl_endl;
@@ -578,6 +584,7 @@ void vgui_grid_tableau::deselect_current()
 //------------------------------------------------------------------------------
 bool vgui_grid_tableau::handle(const vgui_event &e) 
 {
+  //vcl_cout << "KYM grid handle, e =" << e << vcl_endl;
   if (cond_row_add(e))
   {
     add_row();
