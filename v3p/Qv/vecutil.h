@@ -52,12 +52,15 @@
 // QV_PI defined in Qv_pi.h now. It's not specific to windows.
 #  define ARRAYconst  /* gorasche: causes problems with MSC */
 #else
-#  ifndef __FreeBSD__
+#  if !defined(__FreeBSD__) && !defined(__CYGWIN__)
 #    include <values.h>
 #  endif
 #  ifndef MAXFLOAT
 #    include <vcl_cmath.h>
 #  endif
+#  ifndef MAXFLOAT
+#    define MAXFLOAT 3.40282346638528860e+38F
+#  endif 
 #  ifdef SUN5
 #    define ARRAYconst  /**/
 #  else
