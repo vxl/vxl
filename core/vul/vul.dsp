@@ -195,11 +195,6 @@ SOURCE=.\vul_user_info.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vul_root_dir.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vul_url.cxx
 
 # End Source File
@@ -254,11 +249,6 @@ SOURCE=.\vul_redirector.h
 # Begin Source File
 
 SOURCE=.\vul_reg_exp.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vul_root_dir.h
 
 # End Source File
 # Begin Source File
