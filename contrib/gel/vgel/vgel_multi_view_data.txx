@@ -1,8 +1,5 @@
 #include <vgel/vgel_multi_view_data.h>
 
-#include <vtol/vtol_vertex_2d.h>
-#include <vtol/vtol_edge_2d.h>
-
 template <class T>
 vgel_multi_view_data<T>::vgel_multi_view_data():
 _nbviews(0)
@@ -227,6 +224,3 @@ vcl_ostream& vgel_multi_view_data<T>::print(vcl_ostream& str)
   return str;
 }
 
-//vgel_multi_view_data+vtol_vertex_2d_sptr
-template class vgel_multi_view_data<vtol_vertex_2d_sptr>;
-template class vgel_multi_view_data<vtol_edge_2d_sptr>;
