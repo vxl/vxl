@@ -143,7 +143,7 @@ public:
   //  REQUIRE: other.ptr()!=0 and other.ptr()!=this
   //---------------------------------------------------------------------------
 
-  virtual vtol_edge *new_edge(vtol_vertex &other);
+  virtual vtol_edge_sptr new_edge(vtol_vertex &other);
 
 
   double distance_from(const vnl_double_2 &);

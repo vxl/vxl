@@ -174,7 +174,7 @@ void vtol_vertex_2d::describe(vcl_ostream &strm,
 //  Otherwise it just returns the existing edge.
 // Require: other.ptr()!=0 and other.ptr()!=this
 //-----------------------------------------------------------------------------
-vtol_edge *vtol_vertex_2d::new_edge(vtol_vertex &other)
+vtol_edge_sptr vtol_vertex_2d::new_edge(vtol_vertex &other)
 {
   vtol_vertex_2d *other2d = other.cast_to_vertex_2d();
   assert(other2d!=0);
@@ -184,7 +184,7 @@ vtol_edge *vtol_vertex_2d::new_edge(vtol_vertex &other)
   assert(&other != this);
 
   // awf: load vrml speed up by factor of 2 using this loop.
-  vtol_edge *result = 0;
+  vtol_edge_sptr result = 0;
 
   // Scan Zero Chains
   bool found = false;
@@ -192,15 +192,14 @@ vtol_edge *vtol_vertex_2d::new_edge(vtol_vertex &other)
   for (zp=superiors_.begin();zp!=superiors_.end()&&!found;++zp)
     {
       // Scan superiors of ZChain (i.e. edges)
-      const topology_list *sups=(*zp)->superiors();
-      topology_list::const_iterator ep;
+      const vcl_list<vtol_topology_object*> *sups=(*zp)->superiors_list();
+      vcl_list<vtol_topology_object*>::const_iterator ep;
       for (ep=sups->begin();ep!=sups->end()&&!found;++ep)
         {
-          vtol_edge *e=(*ep)->cast_to_edge();
+          vtol_edge_sptr e=(*ep)->cast_to_edge();
           if (e->v1()==&other||e->v2()==&other)
             { result=e; found = true; }
         }
-      delete sups;
     }
   if (!result)
     result= static_cast<vtol_edge*>(new vtol_edge_2d(*this,*other2d));

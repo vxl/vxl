@@ -86,7 +86,7 @@ vtol_block::vtol_block(const vtol_block &other)
       vtol_edge_sptr e = *ei;
 
       newedges[j]=newverts[e->v1()->get_id()]->cast_to_vertex()->new_edge(
-                                *(newverts[e->v2()->get_id()]->cast_to_vertex()));
+                                *(newverts[e->v2()->get_id()]->cast_to_vertex()))->cast_to_topology_object();
 
       e->set_id(j);
     }
