@@ -1,25 +1,31 @@
-
+#include <vcl/vcl_iostream.h>
+#include <vcl/vcl_cmath.h> // for sqrt()
 #include <vcl/vcl_vector.h>
 #include <vbl/vbl_timer.h>
 
 double vnl_fastops_dot(const double* a, const double* b, int n);
 
 #ifdef OPTIMIZED
-int optimized = 1;
+#undef OPTIMIZED
+#define OPTIMIZED 1
 #else
-int optimized = 0;
+#define OPTIMIZED 0
+#endif
+#ifndef METHOD
+#define METHOD 4
 #endif
 
 main()
 {
-  vcl_vector<double> x(10000);
-  for(int i = 0; i < 10000; ++i)
-    x[i] = sqrt(i);
+  vcl_vector<double> x(1000000), y(1000000);
+  for(int i = 0; i < 1000000; ++i)
+    x[i] = y[i] = 1.0/sqrt(i+1);
   
   vbl_timer t;
-  for(int n = 0; n < 2000; ++n)
-    vnl_fastops_dot(x.begin(),x.begin(),x.size());
-  cerr << "Method = " << METHOD << ", OPTIMIZE = " << optimized << ", ";
+  for(int n = 0; n < 20; ++n)
+    vnl_fastops_dot(x.begin(),y.begin(),x.size());
+  cerr << "Method = " << METHOD << ", Optimized = " << OPTIMIZED << ", "
+       << "Result = " << vnl_fastops_dot(x.begin(),y.begin(),x.size()) << ", ";
   t.print(cerr);
 }
 
@@ -38,6 +44,10 @@ double vnl_fastops_dot(const double* a, const double* b, int n)
 #if METHOD == 3
   while(n--)
     accum += a[n] * b[n];
+#endif
+#if METHOD == 4
+  for(int k = n-1; k >= 0; --k)
+    accum += a[k] * b[k];
 #endif
   return accum;
 }
