@@ -308,6 +308,7 @@ class vcl_numeric_limits<unsigned long>
   static const vcl_float_round_style round_style VCL_STATIC_CONST_INIT_INT_DECL(vcl_round_toward_zero);
 };
 
+
 VCL_DEFINE_SPECIALIZATION
 class vcl_numeric_limits<unsigned short >
 {
@@ -343,6 +344,7 @@ class vcl_numeric_limits<unsigned short >
   static const vcl_float_round_style round_style VCL_STATIC_CONST_INIT_INT_DECL(vcl_round_toward_zero);
 };
 
+
 VCL_DEFINE_SPECIALIZATION
 class vcl_numeric_limits<short >
 {
@@ -377,6 +379,7 @@ class vcl_numeric_limits<short >
   static const bool tinyness_before VCL_STATIC_CONST_INIT_INT_DECL(false);
   static const vcl_float_round_style round_style VCL_STATIC_CONST_INIT_INT_DECL(vcl_round_toward_zero);
 };
+
 
 VCL_DEFINE_SPECIALIZATION
 class vcl_numeric_limits<signed char >
@@ -450,7 +453,6 @@ class vcl_numeric_limits<unsigned char >
 };
 
 
-
 // IEEE 754 single precision
 VCL_DEFINE_SPECIALIZATION
 class vcl_numeric_limits<float>
@@ -486,6 +488,7 @@ class vcl_numeric_limits<float>
   static const bool tinyness_before VCL_STATIC_CONST_INIT_INT_DECL(true);
   static const vcl_float_round_style round_style VCL_STATIC_CONST_INIT_INT_DECL(vcl_round_to_nearest);
 };
+
 
 // IEEE 754 double precision with denorm
 VCL_DEFINE_SPECIALIZATION
@@ -523,6 +526,7 @@ class vcl_numeric_limits<double>
   static const vcl_float_round_style round_style VCL_STATIC_CONST_INIT_INT_DECL(vcl_round_to_nearest);
 };
 
+
 VCL_DEFINE_SPECIALIZATION
 class vcl_numeric_limits<long double>
 {
@@ -558,4 +562,4 @@ class vcl_numeric_limits<long double>
   static const vcl_float_round_style round_style VCL_STATIC_CONST_INIT_INT_DECL(vcl_round_to_nearest);
 };
 
-#endif // emulation_vcl_numeric_limits_h_
+#endif // emulation_vcl_limits_h_
