@@ -13,6 +13,7 @@
 #include <vgl/vgl_polygon_scan_iterator.h>
 #include <vcl_cmath.h> // for log(), exp() ..
 //#define DEBUG
+
 static double strk_gaussian(const double x, const double sigma)
 {
   double x_on_sigma = x / sigma;
@@ -42,6 +43,7 @@ static void strk_1d_gaussian_kernel(const double sigma,
   for (int i= 0; i <= 2*radius; ++i)
     kernel[i] /= sum;                           // normalize by integral
 }
+
 // convolve a 1-d array with a Gaussian kernel.  Handle the borders by
 // setting the kernel to zero outside the data array.  Adjust the output
 // to obtain unit norm, i.e, normalize by the sum of the weights.
@@ -91,6 +93,7 @@ static void strk_1d_gaussian(const double sigma,
     out_buf[i]=sum/ker_sum;
   }
 }
+
 //convolve a 2-d array with a Gaussian kernel.  Since the Gaussian is
 //separable, first convolve along cols and then along rows
 static void strk_2d_gaussian(const double sigma,
@@ -171,6 +174,7 @@ T strk_hist<T>::p(unsigned int bin) const
   else
     return counts_[bin]/area_;
 }
+
 template <class T>
 T strk_hist<T>::area() const
 {
@@ -680,17 +684,16 @@ void strk_tracking_face_2d::transform_gradients(double theta)
 
   // step through points in face
   int i=0;
-  for (this->reset(); this->next();)
+  for (this->reset(); this->next(); ++i)
   {
     float Ix0 = Ix_[i];
     float Iy0 = Iy_[i];
-    Ix_[i] = (float) Ix0*c - Iy0*s;
-    Iy_[i] = (float) Ix0*s + Iy0*c;
+    Ix_[i] = float(Ix0*c - Iy0*s);
+    Iy_[i] = float(Ix0*s + Iy0*c);
     float ang = float(deg_rad*vcl_atan2(Iy_[i],Ix_[i]))+180.f;
     float mag = vcl_abs(Ix_[i])+vcl_abs(Iy_[i]);
     if (mag>min_gradient_)
       model_gradient_dir_hist.upcount(ang, mag);
-    i++;
   }
 
   //apply parzen window to histogram
@@ -715,9 +718,7 @@ compute_intensity_mutual_information(vil1_memory_image_of<float> const& image)
     return 0;
 
   int width = image.width(), height = image.height();
-  //  strk_histf<float> image_hist;//JLM
   strk_hist<float> image_hist(255, 16);
-  // strk_joint_histf<float> joint_hist;//JLM
   strk_joint_hist<float> joint_hist(255, 16);
   int npix = intf_->Npix();
   if (!npix)
@@ -934,9 +935,6 @@ compute_mutual_information(vil1_memory_image_of<float> const& image,
 
   return true;
 }
-#if 0
-template class strk_histf<float>;
-template class strk_joint_histf<float>;
-#endif
+
 template class strk_hist<float>;
 template class strk_joint_hist<float>;
