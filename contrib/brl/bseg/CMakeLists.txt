@@ -11,4 +11,4 @@ SUBDIRS(segv)
 
 # segmentation test executables
 SUBDIRS(sbin)
-ENDIF(HAD_XERCES)
+ENDIF(HAS_XERCES)
