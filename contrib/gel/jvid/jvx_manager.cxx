@@ -14,7 +14,7 @@
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_macro.h>
-#include <vgui/vgui_utils.h>
+//#include <vgui/vgui_utils.h>
 #include <vgui/vgui_easy2D.h>
 #include <vgui/vgui_rubberbander.h>
 #include <vgui/vgui_composite.h>
