@@ -14,7 +14,7 @@
 
 //---------------------------------------------------------------------------
 //: Are `x' and `y' almost equal ?
-//  the comparison uses an adaptative epsilon
+//  the comparison uses an adaptive epsilon
 //---------------------------------------------------------------------------
 inline static bool are_equal(double x, double y)
 {
