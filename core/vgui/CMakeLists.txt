@@ -146,7 +146,7 @@ ENDIF (HAS_X11)
 
 IF (HAS_GLUT)
   INCLUDE_DIRECTORIES(${GLUT_INCLUDE_PATH})
-  SOURCE_FILES(vgui_sources vgui_sources
+  SOURCE_FILES(vgui_sources
    vgui_glut.cxx vgui_glut.h
   )
 ENDIF (HAS_GLUT)
