@@ -7,7 +7,7 @@
 // \date  25-Feb-2003
 // \brief Load a block of text from a file.
 
-#include <vcl_iosfwd.h>
+#include <vcl_istream.h>
 #include <vcl_string.h>
 
 //: Read a block of text from a stream.

@@ -14,12 +14,13 @@
 #include <vcl_cassert.h>
 #include <vcl_cstddef.h> // for size_t
 #include <vcl_cstring.h> // for memcpy()
-#include <mbl/mbl_matxvec.h>
 #include <vsl/vsl_indent.h>
+#include <vsl/vsl_vector_io.h>
+#include <vsl/vsl_binary_io.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/io/vnl_io_vector.h>
-#include <vsl/vsl_vector_io.h>
+#include <mbl/mbl_matxvec.h>
 
 //=======================================================================
 
