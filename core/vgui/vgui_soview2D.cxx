@@ -7,12 +7,10 @@
 // \date   24 Mar 99
 // \brief  See vgui_soview2D.h for a description of this file.
 
-
 #include "vgui_soview2D.h"
 
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
-#include <vcl_cstdlib.h>
 
 #include <vgl/vgl_distance.h>
 #include <vnl/vnl_math.h>
@@ -21,9 +19,6 @@
 #include <vgui/vgui_style.h>
 #include <vgui/vgui_projection_inspector.h>
 #include <vgui/internals/vgui_draw_line.h>
-#include <vil1/vil1_memory_image_of.h>
-#include <vil1/vil1_save.h>
-#include <vil1/vil1_rgb.h>
 
 vgui_soview2D::vgui_soview2D() {}
 
@@ -32,7 +27,7 @@ vgui_soview2D::vgui_soview2D() {}
 vcl_ostream& vgui_soview2D_point::print(vcl_ostream& s) const
 {
   s << "[vgui_soview2D_point " << x << "," << y << " ";
-  s << " "; return vgui_soview2D::print(s) << "]";
+  return vgui_soview2D::print(s) << "]";
 }
 
 void vgui_soview2D_point::draw() const
@@ -483,10 +478,12 @@ void vgui_soview2D_image::draw() const
   glRasterPos2i(x_,y_);
   glDrawPixels(width_,height_,img_format_,img_type_,img_);
   glFlush();
-  //vil1_memory_image_of< vil1_rgb< unsigned char > > test;
-  //test.resize(width_,height_);
-  //test.put_section(img_,0,0,width_,height_);
-  //vil1_save(test,"shouldwork.jpg","jpeg");
+#if 0
+  vil1_memory_image_of< vil1_rgb< unsigned char > > test;
+  test.resize(width_,height_);
+  test.put_section(img_,0,0,width_,height_);
+  vil1_save(test,"shouldwork.jpg","jpeg");
+#endif // 0
 }
 
 vcl_ostream& vgui_soview2D_image::print(vcl_ostream&s) const { return s << "[a image. FIXME]"; }
@@ -512,4 +509,3 @@ void vgui_soview2D_image::translate(float tx, float ty)
     x_ += tx;
     y_ += ty;
 }
-
