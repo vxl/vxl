@@ -72,18 +72,6 @@ foreach $f (@FILES)
     $printed = 1;
   }
 
-# 5. //: inside a comment block, or \file not after //:
-  $file =~ s!//\s*[-=_]{40,}\n!!g;
-  if ($file =~ m!\n\s*//[ :][^\n]*\n *//:!) {
-    print "$f\t\# contains //: inside a comment block\n";
-    $printed = 1;
-  }
-  if ($file =~ m!\n\s*//[^:][^\n]*\n *// *\\file\b! ||
-      $file =~ m!\n\s*[^\s/][^\n]*\n *// *\\file\b!) {
-    print "$f\t\# \\file is not preceeded by //:\n";
-    $printed = 1;
-  }
-
 # 5. Quick consistency check of Doxygen structured comments
   if ($file =~ m!\n\s*//:! && $file !~ m!\n\s*//:(\s*\n\s*//)?\s*\\file\b! &&
                               $file !~ m!^\s*//:(\s*\n\s*//)?\s*\\file\b!) {
@@ -98,6 +86,18 @@ foreach $f (@FILES)
   }
   elsif ($file =~ m!\n\s*//(:|\s*\\brief\b)([^\n]{40,}\b(and|if|but|since|that|,))\n *//!i) {
     print "$f\t\# brief comment possibly continued on next line: \"$2\\n$3 ...\"\n";
+    $printed = 1;
+  }
+
+# 6. //: inside a comment block, or \file not after //:
+  if ($file =~ m!\n\s*//[^:][^\n]*\n *// *\\file\b! ||
+      $file =~ m!\n\s*[^\s/][^\n]*\n *// *\\file\b!) {
+    print "$f\t\# \\file is not preceeded by //:\n";
+    $printed = 1;
+  }
+  $file =~ s!//\s*[-=_]{40,}\n!//\n!g;
+  if ($file =~ m!\n\s*//[ :][^\n]*\n *//:!) {
+    print "$f\t\# contains //: inside a comment block\n";
     $printed = 1;
   }
 
@@ -116,6 +116,7 @@ foreach $f (@FILES)
       $f !~ m/\bv3p\/(netlib|[jm]peg|tiff|png|zlib|Qv)\// &&
       $f !~ m/\bfile_formats\/vil_viff(header|_support)/ &&
       $f !~ m/\bvgui\/internals\/trackball/ &&
+      $f !~ m/\bvxl\/vgl\/internals\/gpc.h$/ &&
       $f !~ m/\bgel\/vgel\/kl\/.*\.h$/ &&
       $f !~ m/\bvcl\/vcl_c/ &&
       $f !~ m/\bvcl\/emulation\// &&
@@ -264,7 +265,7 @@ foreach $f (@FILES)
         $f !~ m/\bvcl(\/[^\/]+)?\/vcl_(cmath|complex|cstdlib)\./ &&
         $f !~ m/\bvnl\/vnl_complex_ops\.txx$/ &&
         "$f.$wd" !~ m/\/emulation\/[^\/]*-stlconf\.h\.f?printf$/ &&
-        "$f.$wd" !~ m/_rational\.(h|cxx)\.sqrt$/ &&
+        "$f.$wd" !~ m/vnl_(rational|bignum)\.(h|cxx)\.sqrt$/ &&
         "$f.$wd" !~ m/\bvul\/vul_timer\.(h|cxx)\.real$/ &&
         "$f.$wd" !~ m/\bvnl\/vnl_quaternion\.h\.real$/ &&
         "$f.$wd" !~ m/\bvnl\/tests\/test_complex\.cxx\.acos$/ &&
@@ -408,17 +409,24 @@ foreach $f (@FILES)
     }
   }
 
-# 15. Multiple empty lines, empty line before } or after {
+# 15. Multiple empty lines, empty line before } or after {, return (...),
+#   if/for/while without space, variable name starting with underscore
 #   (mentioned only if something else is already printed, or is -f given)
-  if ($printed && $file =~ m/\n\n\n\n/) {
-    print "$f\t\# contains multiple (>2) empty lines\n";
-  }
+  print "$f\t\# contains multiple (>2) empty lines\n"
+    if ($printed && $file =~ m/\n\n\n\n/);
   print "$f\t\# has lines ending in spaces\n"
     if ($printed && $has_end_spaces);
   print "$f\t\# has empty lines before closing brace\n"
     if ($printed && $file =~ m/\n\n[ \t]*\};*\s*\n/);
   print "$f\t\# has empty lines after opening brace\n"
     if ($printed && $file =~ m/\n[ \t]*\{\s*\n\n/);
+  print "$f\t\# $1 not followed by space\n"
+    if ($printed && $file =~ m/\b(for|if|while)\(/);
+  print "$f\t\# return value in brackets\n"
+    if ($printed && $file =~ m/\breturn\s*\([^;()]*(\([^;()]*\)[^;()]*)*\)\s*;/);
+  $file =~ s/^\#[^\n]*//g; $file =~ s/\n\#[^\n]*//g;
+  print "$f\t\# $1 starts with underscore\n"
+    if ($printed && $file =~ m/[^#]\b(_[a-z][a-zA-Z0-9_]*)/);
 
 # 16. no end-of-line at end-of-file
   $file =~ s/[^\n]*\n//g;
