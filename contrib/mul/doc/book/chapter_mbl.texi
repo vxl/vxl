@@ -19,7 +19,7 @@ STL input iterator.
 
 @subsection Data Wrappers.
 
-When reading data from an @codembl_data_wrapper}, you do not need to know which polymorphic
+When reading data from an @code{mbl_data_wrapper}, you do not need to know which polymorphic
 concrete type is being used. This way a client can pass you data from any source.
 Reading data from an @code{mbl_data_wrapper} is straight forward.
 @example
@@ -192,7 +192,7 @@ Perform various linear algebra operations.
 
 @item mbl_print.h
 Commands that debuggers can run easily on demand. Include this file
-in you application, and you call these functions from a debugger to
+in your application, and you call these functions from a debugger to
 display common containers.
 @end table
 
@@ -209,5 +209,9 @@ to save  that state to a @code{vsl_b_istream}.
 
 @subsection Move contents to VXL
 With a bit more development some of this code could be usefully moved into @VXL .
-e.g. @code{mbl_chord} -> @code{vil_chord}. @code{mbl_gamma.h} -> @code{vnl_gamma.h},
-@code{mbl_priority_bounded_queue.h} -> @code{vbl_priority_bounded_queue}, etc.
+e.g. @example
+mbl_chord -> vil_chord,
+mbl_gamma.h -> vnl_gamma.h,
+mbl_priority_bounded_queue.h -> vbl_priority_bounded_queue,
+etc.
+@end example

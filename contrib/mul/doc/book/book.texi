@@ -145,12 +145,13 @@ Copyright @copyright{} 2001 Victoria University of Manchester
 @menu
 * Introduction::
 * mbl::
+* mil::
 * vpdfl::
 * Conclusion::
-* Concept Index::
+* Index::
 @end menu
 
-@node    Introduction, eg, Top, Top
+@node    Introduction, mbl, Top, Top
 @comment node-name, next,           previous, up
 @chapter Introduction
 @cindex Introduction
@@ -237,14 +238,7 @@ Design goals:
 @end itemize
 
 @comment ------------------------------------------------------------------
-@node    eg, mbl, Introduction, Top
-@comment node-name, next, previous,     up
-@chapter mul example programs
-
-Someone should put some examples in here!
-
-@comment ------------------------------------------------------------------
-@node    mbl, mil, eg, Top
+@node    mbl, mil, Introduction, Top
 @comment node-name, next, previous,     up
 @chapter mbl: Manchester basics library.
 @cindex mbl
@@ -276,7 +270,7 @@ Someone should put some examples in here!
 
 
 @comment ------------------------------------------------------------------
-@node    Conclusion, Concept Index, vpdfl, Top
+@node    Conclusion, Index, vpdfl, Top
 @comment node-name, next,    previous, up
 @chapter Conclusion
 
@@ -285,7 +279,7 @@ Someone should put some examples in here!
 @appendix  Filenames and structure
 The directory structure of mul is below
 @example
-  $IUEROOT/vcl
+  $VXLROOT/vcl
           /vxl
           /mul
               /mbl
@@ -305,9 +299,9 @@ include avoiding being forced to use member functions with additional
 template parameters, confusion for users.
 
 @comment ------------------------------------------------------------------
-@node    Concept Index,  , Conclusion, Top
+@node    Index,  , Conclusion, Top
 @c        node-name,    next, previous,        up
-@unnumbered Concept Index
+@unnumbered Index
 
 @printindex cp
 
