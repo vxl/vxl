@@ -15,9 +15,8 @@ SOURCE_FILES(vidl_sources
 AUX_SOURCE_DIRECTORY(Templates vidl_sources)
 
 IF(WIN32)
-  SOURCE_FILES(vidl_sources vidl_avicodec.cxx)
-
   IF (NOT CYGWIN)
+    SOURCE_FILES(vidl_sources vidl_avicodec.cxx)
     INCLUDE(${allvxl_SOURCE_DIR}/vxl/vidl/CMakeListsHeaders.txt)
   ENDIF (NOT CYGWIN)
 ENDIF(WIN32)
