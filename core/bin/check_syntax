@@ -26,7 +26,7 @@ $full = "";
 $emacs = "";
 $vim = "";
 
-while (defined($ARGV[0]) && $ARGV[0] =~ m/^-/)
+while (defined($ARGV[0]) && $ARGV[0] =~ m!^-!)
 {
   $_ = shift(@ARGV);
   if (m/^-f$/) { $full = 1; }
@@ -89,22 +89,22 @@ foreach $f (@FILES)
   study $file;
 
 # 1. abnormal characters (tabs, ascii < 32, etc.)
-  $file =~ s/\347/c/g; # treat ç as normal character
+  $file =~ s!\347!c!g; # treat ç as normal character
   $file =~ s!(\"http:)//!$1\\\\!g; # do not treat "http://" as a comment delimiter
   &msg(1, "contains tabs")
-    if ($file =~ m/\t/ && $file !~ m/\basm\s*\(\"\t/);
+    if ($file =~ m!\t! && $file !~ m!\basm\s*\(\"\t!);
   &msg(1, "contains carriage returns (ascii 13)")
-    if ($file =~ m/\r/ && $f !~ m/\.ds[pw]$/);
+    if ($file =~ m!\r! && $f !~ m!\.ds[pw]$!);
   &msg(1, "contains non-standard ascii characters")
-    if ($file =~ m/[\000-\010\013\014\016-\037\177-\277\320\327\336\360\367\376]/);
+    if ($file =~ m![\000-\010\013\014\016-\037\177-\277\320\327\336\360\367\376]!);
 
 # 2. spaces (more than 1) at end of line
-  $has_end_spaces = ($file =~ m/  +\n/);
+  $has_end_spaces = ($file =~ m!  +\n!);
 
 # 3. Lines longer than 132 characters, continuation ostream, single-char strings
-  if ($file =~ m/.{133,}/ && $f !~ m/\.dsp$/)
+  if ($file =~ m!.{133,}! && $f !~ m!\.dsp$!)
   {
-    $tmp=$file; $tmp =~ s/.{133,}[^\000]*//; $tmp =~ s/[^\n]*//g; $tmp=length($tmp)+1;
+    $tmp=$file; $tmp =~ s!.{133,}[^\000]*!!; $tmp =~ s![^\n]*!!g; $tmp=length($tmp)+1;
     &msg($tmp, "has lines of more than 132 characters");
   }
   &msg(1, "has vcl_endl following a string: consider replacing by \\n\"")
@@ -121,7 +121,7 @@ foreach $f (@FILES)
 # 4. Consecutive comment blocks, separated by blank lines
   if ($file =~ m!\n\s*//:.*\n( *// .*\n)*\s*\n\s*// !)
   {
-    $tmp=$file; $tmp =~ s!\n\s*//:.*\n( *// .*\n)*\s*\n\s*[^\000]*!!; $tmp =~ s/[^\n]*//g; $tmp=length($tmp)+2;
+    $tmp=$file; $tmp =~ s!\n\s*//:.*\n( *// .*\n)*\s*\n\s*[^\000]*!!; $tmp =~ s![^\n]*!!g; $tmp=length($tmp)+2;
     &msg($tmp, "contains comment blocks separated by a blank line; consider joining");
   }
 
@@ -134,15 +134,15 @@ foreach $f (@FILES)
   if ($file =~ m!\n\s*//(:|\s*\\brief\b)[ \t]*(.{40,})\n *// *([a-z].*)!)
   {
     $first=$2; $second=$3;
-    unless ($first =~ m/[.?!]$/ || $second =~ m/^v[bcginpsu]l_/)
+    unless ($first =~ m/[.?!]$/ || $second =~ m!^v[bcginpsu]l_!)
     {
-      $tmp=$file; $tmp =~ s!\n\s*//(:|\s*\\brief\b)[ \t]*(.{40,})\n *//[^\000]*!!; $tmp =~ s/[^\n]*//g; $tmp=length($tmp)+2;
+      $tmp=$file; $tmp =~ s!\n\s*//(:|\s*\\brief\b)[ \t]*(.{40,})\n *//[^\000]*!!; $tmp =~ s![^\n]*!!g; $tmp=length($tmp)+2;
       &msg($tmp, "brief comment possibly continued on next line");
     }
   }
   elsif ($file =~ m!\n\s*//(:|\s*\\brief\b)(.{40,}\b(and|if|but|since|that|,))\s*\n *// *(.+)!i)
   {
-    $tmp=$file; $tmp =~ s!\n\s*//(:|\s*\\brief\b)(.{40,}\b(and|if|but|since|that|,))\s*\n *// *(.+)[^\000]*!!i; $tmp =~ s/[^\n]*//g; $tmp=length($tmp)+2;
+    $tmp=$file; $tmp =~ s!\n\s*//(:|\s*\\brief\b)(.{40,}\b(and|if|but|since|that|,))\s*\n *// *(.+)[^\000]*!!i; $tmp =~ s![^\n]*!!g; $tmp=length($tmp)+2;
     &msg($tmp, "brief comment possibly continued on next line");
   }
 
@@ -152,9 +152,9 @@ foreach $f (@FILES)
 #   Missing includes is currently only vcl_cassert.h and vcl_iostream.h
   $fl = $file; $fl =~ s!//.*!!g;
   $includes = "\004\n$fl\003";
-  $includes =~ s/\n\s*\#\s*include\s\<([^>]+)\>.*/\003$1\004/g;
-  $includes =~ s/^[^\003]*\003/\003/; $includes =~ s/\004[^\004]*$/\004/;
-  $includes =~ s/\004[^\003]*\003/\n/g; $includes =~ s/[\004\003]//g;
+  $includes =~ s!\n\s*\#\s*include\s\<([^>]+)\>.*!\003$1\004!g;
+  $includes =~ s!^[^\003]*\003!\003!; $includes =~ s!\004[^\004]*$!\004!;
+  $includes =~ s!\004[^\003]*\003!\n!g; $includes =~ s![\004\003]!!g;
   @includes = sort(split('\n', $includes));
   $jj = ""; $found_cassert = ""; $found_iostream = "";
   foreach $j (@includes)
@@ -164,7 +164,7 @@ foreach $f (@FILES)
     $found_iostream = 1 if ($j =~ m!^vcl_((i|o|io|f)stream|iosfwd|streambuf)\.h! || $j eq "vsl/vsl_binary_io.h");
     &msg(1, "invalid #include <$j>")
       unless ($j =~ m!\.(h|H|hxx|hpp|txx)$! || $f =~ m!/vcl/|/cmake/config/! || $j eq "std/complext.cc");
-    next unless ($j =~ m/\.h$/i);
+    next unless ($j =~ m!\.h$!i);
     next if ($f =~ m!(v.l)/tests/(\1_)?test_(includes?|all)\.cxx$! && $j =~ m!^$1(/algo)?/$1_!);
     next if ($f =~ m!vnl/algo/Templates/vcl_vector\+vnl_amoeba_SimplexCorner-\.cxx$! && $j eq "vnl/algo/vnl_amoeba.h");
     next if ($f =~ m!vnl/vnl_math\.cxx$! && $j eq "math.h");
@@ -183,8 +183,8 @@ foreach $f (@FILES)
          "$f-$j" !~ m!\bv3p/png/tests/pngtest\.c\-time\.h$! &&
           $j !~ m!^(stdlib|varargs|sys/types|stdio|windows|GL/glu?t?)\.h$!);
     $jj = $j; $i = $j;
-    next unless ($i =~ s!^(v[bginpsu]l|vil1|vgui|vidl|vidl_vil1|vtol|vsol|vdgl|vipl/vipl_with_[a-z_]+|vipl|vepl2?|mbl|pdf1d|vpdfl|mil|mil3d|vimt|vimt3d|gevd|bsol|btol|bugl|bvnl|bvgl|bgui|bdgl|rrel|rsdl|rgrl)/(file_formats/|algo/|io/|internals/|filter/|section/|vrml/|impl/(X|glut|gtk|mfc)/|)(.*)\.h!$4! || $i =~ s/^(v[cx]l_[a-z]+)\.h$/$1/);
-    next if ($f . " " . $j =~ m/(.*)\.h \1_sptr\.h/);
+    next unless ($i =~ s!^(v[bginpsu]l|vil1|vgui|vidl|vidl_vil1|vtol|vsol|vdgl|vipl/vipl_with_[a-z_]+|vipl|vepl2?|mbl|pdf1d|vpdfl|mil|mil3d|vimt|vimt3d|gevd|bsol|btol|bugl|bvnl|bvgl|bgui|bdgl|rrel|rsdl|rgrl)/(file_formats/|algo/|io/|internals/|filter/|section/|vrml/|impl/(X|glut|gtk|mfc)/|)(.*)\.h!$4! || $i =~ s!^(v[cx]l_[a-z]+)\.h$!$1!);
+    next if ($f . " " . $j =~ m!(.*)\.h \1_sptr\.h!);
     next if ($j eq "vcl_compiler.h" || $j eq "vcl_new.h");
     next if ($j eq "vcl_cstdio.h" && $f =~ m!/StdAfx\.h$!);
     next if ($j eq "vcl_cmath.h" && $f =~ m!\bvcl/(vcl_cfloat|win32-vc60/vcl_complex)\.h$!);
@@ -201,8 +201,8 @@ foreach $f (@FILES)
     next if ($i eq "vcl_string" && $f =~ m!vgui/impl/gtk/(vgui_gtk_adaptor\.h|Templates/vcl_vector\+GtkWidget\~-\.cxx)$!);
     next if ($j eq "vsol/vsol_line_2d.h" && $f =~ m!bbas/bgui/bgui_vsol_soview2D\.cxx$!);
     $ii = $i;
-    $i =~ s/^([vb]gui.*)/$1\(\|_sptr\|_new\)/;
-    $i =~ s/^(v(so|to|dg|cs)l.*)/$1\(\|_sptr\)/ unless ($f =~ m/\.h$/);
+    $i =~ s!^([vb]gui.*)!$1\(\|_sptr\|_new\)!;
+    $i =~ s!^(v(so|to|dg|cs)l.*)!$1\(\|_sptr\)! unless ($f =~ m!\.h$!);
     # VCL
     if ($j eq "vcl_algorithm.h") { $i="vcl_(adjacent_find|and|binary|binary_search|copy|copy_|count|count_if|equal|equal_range|fill|fill_n|find|find_end|find_first_of|find_if|for_each|generate|generate_n|generators_|heap|includes|inplace_merge|iter_swap|lexicographical_compare|lower_bound|make_heap|max|min|max_element|merge|merge_|min_element|mismatch|next_permutation|nth_element|partial_sort|partial_sort_copy|partition|stable_partition|partitions_|pop_heap|prev_permutation|push_heap|random_shuffle|remove|remove_copy|remove_copy_if|remove_if|replace|replace_copy|replace_copy_if|replace_if|reverse|reverse_copy|rotate|rotate_copy|search|search_n|set_difference|set_intersection|set_symmetric_difference|set_union|sort|sort_|sort_heap|stable_sort|swap|swap_|swap_ranges|transform|unique|unique_copy|upper_bound)"; }
     elsif ($j eq "vxl_config.h") { $i="VXL_[A-Z_0-9]+|vxl_([su]\?(int|ieee)_(8|16|32|64)|s\?byte)"; }
@@ -502,7 +502,7 @@ foreach $f (@FILES)
     if ($file =~ m!\n\s*//[ :].*\n *//:!);
 
 # 8. Comments: long /* ... */ and old-style // -- docs; RCS indications; mistypings
-  $file =~ s/ +\n/\n/g;
+  $file =~ s! +\n!\n!g;
   $file =~ s!/\*!\001!g; $file =~ s!/\001!//\*!g;
   $file =~ s!\*/!\002!g;
   $file =~ s!(\"[^\001\n\"]{0,15})\001([^\001\n\"]{0,15}\")!$1/\*$2!g;
@@ -518,46 +518,46 @@ foreach $f (@FILES)
         $f !~ m!\bvul/tests/test_file_iterator\.cxx$! && $file =~ m!\001[^\001\002]{111,}\002!);
   if ($file =~ m!\n\s*//\s*vcl_c(out|err)\s*\<\<.*(\n\s*//.*){5,}! && $file !~ m!//\s*\\code!)
   {
-    $tmp=$file; $tmp =~ s!\n\s*//\s*vcl_c(out|err)\s*\<\<.*(\n\s*//.*){5,}[^\000]*!!; $tmp =~ s/[^\n]*//g; $tmp=length($tmp)+2;
+    $tmp=$file; $tmp =~ s!\n\s*//\s*vcl_c(out|err)\s*\<\<.*(\n\s*//.*){5,}[^\000]*!!; $tmp =~ s![^\n]*!!g; $tmp=length($tmp)+2;
     &msg($tmp, "consider commenting out code sections with #if 0 or #ifdef DEBUG");
   }
   # RCS indications
   &msg(1, "contains RCS indication $1")
-    if ($file =~ m/(\$RCSfile|\$(Author|Revision|Date): .* \$)/);
+    if ($file =~ m!(\$RCSfile|\$(Author|Revision|Date): .* \$)!);
   #typos
   &msg(1, "probably a mistyping: $1")
-    if ($file =~ m/\b(accom[^mp]\S*|accp\S+|accura[^ct]\S*|adaptati[^no]\S*|[a-z]*(sss|ettt)[a-z]*|alement|alife|anj\b|appi\S+|arang\S+|arbitar\S+|aready|argree|argume[^n]\S*|assemb[^l]\S*|assignement|authentification|auxil[^i]\S*|auxiliar\b|ayn\S+|azimutha|bandwith|begining|blted|bondar\S*|borgefor\b|chac\S*|changeb\S*|cic[^ae]\S*|cirl[a-z]+|cir[^c]\S[a-z]+|coeffic[^i]\S*|coefi[a-z]+|coli[a-z]{4,}|colum[^n]|columnn[^u]|coma\S*|comparis[^o]\S*|compatibil[^i]\S*|compilant|condt\S+|conju[^gnr]\S*|(con|de)stuct\S*|(con|de)truct\S*|containins|continou\S*|contrain\S+|contor|continguous|controled|coordi[^n]\S*|cores\S+|corr[a-dfghj-np-tv-z][a-z]+\b|decend\S*|(de)?compos[^aei]\S*|defau[^l]\S*|dependan\S*|dependen[^ct]\S*|desct\S*|despatch|difu[a-z]+|digtial|dimensi[^o]\S*|dimensionn\S*|distingish|documen[^t-]\S*|doen|effic[^ai]\S*|eigenval[a-rtv-z]\S*|elm[ei]\S+|encapsu[^l]\S*|encounterd|enquiries|epipl\S+|eq[a-tv-z][a-z]{5,}|esti[^m]\S*|Eucl[^i]\S*|Euclidi\S*|expalin|expri\S*|exr[a-z]{3,}|filname|fomat|fractino|frequence|functo[^r]|funct[^io]\S*|graid\S*|hasnt|heir\S+|hiera[^r]\S*|hight|highligh[^t]\S*|(non)?homege\S*|(non)?homog[a-df-qs-z]\S*|(non)?homogeni[^sz]\S*|(non)?homogen[^ei]\S*|identia\S*|implemen[^t]\S*|implementat[^i]\S*|incredibably|indentic\S*|independant|indicies|inheranc\S*|inhert\S*|initi[^a][a-z]*|initialli\S+|interat\S*|inte[^glmnrs]\S*|inti[^m][a-z]*|judicous|lable|lenth|likely[a-z]\S*|lik[^aei]\S*|magnit[^u]\S*|maint[^ae]\S*|matricies|maxiu\S*|maximu[^m]|measur[^ei]\S*|mili[^t]\S*|minmu\S*|minimia\S*|minina\S*|miscel[^l]\S*|necc\S*|neces[^s]\S*|objects\'s|obje[^c]\S*|occur[a-qt-z]\S*|octo[^b]\s*|oor|openned|orienta[^lt]\S*|ouput|outputing|parallal|parameteric|paramete[^r]\S*|paramt\S*|parap[^h]\S*|parbol|perf[^eiou]\S*|perim[a-df-z]\S*|polyon|posi[^tx]\S*|posti[^n]\S*|pote[^n]\S*|precee\S*|prefered|progam\S*|protocal|receip[^t]|(re)?determing|refern|regu[^l]\S*|rep[eo]n[a-z]{4,}|represe[^n]\S*|reps[a-z]{2,}|retrei\S*|rre[a-z]*q\S*|samp[a-km-rt-z][a-z]*|seciton|seting|severl\S*|simulat[^eio]\S*|singlt\S*|singlet[^o]\S*|staig\S*|subsit\S*|substra\S*|succes[^s]\S*|supres\S*|supp[^elor]\S*|syme\S*|symmet[^r]\S*|syte\S*|tableaus|tablea[^nu]\S*|tableu|talbeau|tech[a-mo-z]\S*|tesselat\S*|thse|togg[^l]\S*|toler[^a]\S*|tran[a-prt-z]\S*|transf[^eiou ]\S*|traver[^s]\S*|unec\S+|utilitit[^iy]|valu[^ae]\S*|verf\S*|verson|verticies|vertexes|vlo\S*|whan|wether|whou\S*|wil\b|wrapi\S*|writted|yei\S*)/i
-        && $1 ne "IntInfo" && $1 ne "InitInstance" && $1 ne "sss" && $1 ne "ttt" && $1 !~ m/^(.*GlassSel.*)$/);
+    if ($file =~ m!\b(accom[^mp]\S*|accp\S+|accura[^ct]\S*|adaptati[^no]\S*|[a-z]*(sss|ettt)[a-z]*|alement|alife|anj\b|appi\S+|arang\S+|arbitar\S+|aready|argree|argume[^n]\S*|assemb[^l]\S*|assignement|authentification|auxil[^i]\S*|auxiliar\b|ayn\S+|azimutha|bandwith|begining|blted|bondar\S*|borgefor\b|chac\S*|changeb\S*|cic[^ae]\S*|cirl[a-z]+|cir[^c]\S[a-z]+|coeffic[^i]\S*|coefi[a-z]+|coli[a-z]{4,}|colum[^n]|columnn[^u]|coma\S*|comparis[^o]\S*|compatibil[^i]\S*|compilant|condt\S+|conju[^gnr]\S*|(con|de)stuct\S*|(con|de)truct\S*|containins|continou\S*|contrain\S+|contor|continguous|controled|coordi[^n]\S*|cores\S+|corr[a-dfghj-np-tv-z][a-z]+\b|decend\S*|(de)?compos[^aei]\S*|defau[^l]\S*|dependan\S*|dependen[^ct]\S*|desct\S*|despatch|difu[a-z]+|digtial|dimensi[^o]\S*|dimensionn\S*|distingish|documen[^t-]\S*|doen|effic[^ai]\S*|eigenval[a-rtv-z]\S*|elm[ei]\S+|encapsu[^l]\S*|encounterd|enquiries|epipl\S+|eq[a-tv-z][a-z]{5,}|esti[^m]\S*|Eucl[^i]\S*|Euclidi\S*|expalin|expri\S*|exr[a-z]{3,}|filname|fomat|fractino|frequence|functo[^r]|funct[^io]\S*|graid\S*|hasnt|heigth|heir\S+|hiera[^r]\S*|hight|highligh[^t]\S*|(non)?homege\S*|(non)?homog[a-df-qs-z]\S*|(non)?homogeni[^sz]\S*|(non)?homogen[^ei]\S*|identia\S*|implemen[^t]\S*|implementat[^i]\S*|incredibably|indentic\S*|independant|indicies|inheranc\S*|inhert\S*|initi[^a][a-z]*|initialli\S+|interat\S*|inte[^glmnrs]\S*|inti[^m][a-z]*|judicous|kernal|lable|lenth|likely[a-z]\S*|lik[^aei]\S*|magnit[^u]\S*|maint[^ae]\S*|matricies|maxiu\S*|maximu[^m]|measur[^ei]\S*|mili[^t]\S*|minmu\S*|minimia\S*|minina\S*|miscel[^l]\S*|necc\S*|neces[^s]\S*|objects\'s|obje[^c]\S*|occur[a-qt-z]\S*|octo[^b]\s*|oor|openned|orienta[^lt]\S*|ouput|outputing|parallal|parameteric|paramete[^r]\S*|paramt\S*|parap[^h]\S*|parbol|perf[^eiou]\S*|perim[a-df-z]\S*|polyon|posi[^tx]\S*|posti[^n]\S*|pote[^n]\S*|precee\S*|prefered|progam\S*|protocal|receip[^t]|(re)?determing|refern|regu[^l]\S*|rep[eo]n[a-z]{4,}|represe[^n]\S*|reps[a-z]{2,}|retrei\S*|rre[a-z]*q\S*|samp[a-km-rt-z][a-z]*|seciton|seting|severl\S*|simulat[^eio]\S*|singlt\S*|singlet[^o]\S*|staig\S*|subsit\S*|substra\S*|succes[^s]\S*|supres\S*|supp[^elor]\S*|syme\S*|symmet[^r]\S*|syte\S*|tableaus|tablea[^nu]\S*|tableu|talbeau|tech[a-mo-z]\S*|teh|tesselat\S*|thse|togg[^l]\S*|toler[^a]\S*|tran[a-prt-z]\S*|transf[^eiou ]\S*|traver[^s]\S*|unec\S+|utilitit[^iy]|valu[^ae]\S*|verf\S*|verson|verticies|vertexes|vlo\S*|whan|wether|whou\S*|wil\b|wrapi\S*|writted|yei\S*)!i
+        && $1 ne "IntInfo" && $1 ne "InitInstance" && $1 ne "sss" && $1 ne "ttt" && $1 !~ m!^(.*GlassSel.*)$!);
 
 # 9. spurious #pragma interface or #pragma implementation
   &msg(1, "contains $1 without #ifdef VCL_NEEDS_PRAGMA_INTERFACE")
-    if ($file !~ m/\#ifdef VCL_NEEDS_PRAGMA_INTERFACE\n(\#pragma (interface|implementation)).*\n#endif\n/ &&
-        $file =~ m/(\#\s*pragma\s+(interface|implementation))\b/);
+    if ($file !~ m!\#ifdef VCL_NEEDS_PRAGMA_INTERFACE\n(\#pragma (interface|implementation)).*\n\#endif\n! &&
+        $file =~ m!(\#\s*pragma\s+(interface|implementation))\b!);
 
 # Now remove comments and string constants before checking further:
   $file_s = "\n" . $file;
   # continuation lines:
-  $file_s =~ s/\\\n//g;
-  $file_s =~ s/\n\#if\s+0\s*\n.*?\n\#endif\s*\n/\n/g;
+  $file_s =~ s!\\\n!!g;
+  $file_s =~ s!\n\#if\s+0\s*\n.*?\n\#endif\s*\n!\n!g;
   # remove string constants, incl. multiline string constants with "correct syntax":
-  $file_s =~ s/\'\"\'//g;
-  $file_s =~ s/([^\\])(\\\")+/$1/g;
-  $file_s =~ s/\".*?\"/\003/g;
+  $file_s =~ s!\'\"\'!!g;
+  $file_s =~ s!([^\\])(\\\")+!$1!g;
+  $file_s =~ s!\".*?\"!\003!g;
   # replace :: by \005 and -> by \006 (useful later)
-  $file_s =~ s/::/\005/g;
-  $file_s =~ s/->/\006/g;
+  $file_s =~ s!::!\005!g;
+  $file_s =~ s!->!\006!g;
   # remove // comments
   $file_s =~ s!//.*\n!\n!g;
   # remove /* ... */ comments
   $file_s =~ s!(\001|/\*)[^\001\002]*\002!!g;
 # &msg(1, "contains nested comments")
-#   if ($file_s =~ m/[\001\002]/);
+#   if ($file_s =~ m![\001\002]!);
 
 # 10. Multi-line string constant
   &msg(1, "contains multi-line string constant")
-    if ($file_s =~ m/\"/);
+    if ($file_s =~ m!\"!);
 # 11. Inclusion guard and file name
-  if ($file_s =~ m/^\s*\#ifndef\s+(\S+)\s*\n\#define\s+\1\s*(\s.*)?\n/)
+  if ($file_s =~ m!^\s*\#ifndef\s+(\S+)\s*\n\#define\s+\1\s*(\s.*)?\n!)
   {
     $guard = $1;
     if (defined($inclusion_guards{"$guard"}))
@@ -575,17 +575,17 @@ foreach $f (@FILES)
   else
   {
     &msg(1, "has no (valid) inclusion guard")
-      unless (! $cpp_file || $f !~ m/\.(txx|h)$/ ||
-              $f =~ m!vcl/vcl_typeinfo\.h$! ||
-              $f =~ m!copyright\.h$! ||
-              $f =~ m!/resource\.h$!i ||
-              $file_s eq "\n");
+      if ($cpp_file && $f =~ m!\.(txx|h)$! &&
+          $f !~ m!vcl/vcl_typeinfo\.h$! &&
+          $f !~ m!copyright\.h$! &&
+          $f !~ m!/resource\.h$!i &&
+          $file_s ne "\n");
   }
 
   if ($file =~ m!//\s*This\s+is\s+([^\s]+)\n!)
   {
     $filename = $1; $pwd = `pwd`; chop($pwd);
-    $file_ = $f; $file_ = "$pwd/$f" unless $f =~ m+^/+;
+    $file_ = $f; $file_ = "$pwd/$f" unless $f =~ m!^/!;
     while ($file_ =~ m!/\.\./!) { $file_ =~ s![^/]+/\.\./!!g; }
     while ($file_ =~ m!/\./!) { $file_ =~ s!/\./!/!g; }
     $file_ =~ s!^.*/(config|vcl|v3p|core|contrib)/!$1/!; $file_ =~ s!^contrib/!!;
@@ -596,53 +596,54 @@ foreach $f (@FILES)
 # 12. Constant pi written as 3.1415...
   &msg(1, "should maybe use vnl_math::pi instead of $1")
     if ($f !~ m!\b(v[cuib]l|v3p)/! && $f !~ m!\bcore/vnl/vnl_math\.! &&
-        $cpp_file && $file_s =~ m/\b(3\.14159\d*)/);
+        $cpp_file && $file_s =~ m!\b(3\.14159\d*)!);
 
 # 13. Instantiation macro stuff
   &msg(1, "definition of $1 ends with ;")
-    if ($file_s =~ m/\#define\s+(\S*INSTANTIATE[^\s\(\)]*).+;\s*\n/);
+    if ($file_s =~ m!\#define\s+(\S*INSTANTIATE[^\s\(\)]*).+;\s*\n!);
   &msg(1, "definition of $1 does not start with a space")
-    if ($file_s =~ m/\#define\s+(\S*INSTANTIATE[^\s\(\)]*)\s*\([^)]*\)\S/);
+    if ($file_s =~ m!\#define\s+(\S*INSTANTIATE[^\s\(\)]*)\s*\([^)]*\)\S!);
   &msg(1, "definition of $1 has no space before > in $2")
-    if ($file_s =~ m/\#define\s+(\S*INSTANTIATE[^\s\(\)]*).+(\<[^<>\n]*[A-Za-z_][A-Za-z_0-9]*\>)/ && $2 ne "<float>" && $2 ne "<double>");
+    if ($file_s =~ m!\#define\s+(\S*INSTANTIATE[^\s\(\)]*).+(\<[^<>\n]*[A-Za-z_][A-Za-z_0-9]*\>)! && $2 ne "<float>" && $2 ne "<double>");
 # Presence of VCL_*_INSTANTIATE in *.cxx files outside Templates directories
   &msg(1, "$1 may only be used in Templates subdirectories")
     if ($f !~ m!/Templates/! &&
         $f !~ m!vcl/tests/test_rel_ops\.cxx$! &&
         $f !~ m!core/vsl/tests/test_polymorphic_io\.cxx$! &&
         $f !~ m!core/vbl/tests/vbl_test_classes\.cxx$! &&
+        $f !~ m!core/vbl/examples/vbl_smart_ptr_example\.cxx$! &&
         $f !~ m!oxl/ogui/examples/awf/glmovie\.cxx$! &&
         $f !~ m!oxl/apps/glmovie/glmovie.cxx$! &&
-        $file_s =~ m+\n\s*(VCL_[_A-Z]*INSTANTIATE[_A-Z]*)+ &&
+        $file_s =~ m!\n\s*(VCL_[_A-Z]*INSTANTIATE[_A-Z]*)! &&
         "$1" ne "VCL_INSTANTIATE_INLINE");
 # Check correct file name of *.cxx files in Templates directories
-  $file_s =~ s/VCL_DO_NOT_INSTANTIATE/VCL_do_not_INSTANTIATE/g;
+  $file_s =~ s!VCL_DO_NOT_INSTANTIATE!VCL_do_not_INSTANTIATE!g;
   if ($f =~ m!/Templates/! &&
       $f !~ m!vcl/Templates/(complex|string)-instances\.cxx$! &&
       $f !~ m!core/vnl/algo/Templates/fsm_pack\.cxx$! &&
       $f !~ m!core/vbl/examples/Templates/smartptr-instances\.cxx$! &&
       $f !~ m!core/vnl/Templates/vnl_matrix_fixed_pairwise_ops\.cxx$! &&
-      $file_s =~ m/\b([_A-Z0-9]*)_INSTANTIATE\s*\((.*)\)/)
+      $file_s =~ m!\b([_A-Z0-9]*)_INSTANTIATE\s*\((.*)\)!)
   {
     $class=$1; $class =~ tr/A-Z/a-z/; $class="$class<$2>";
-    $class =~ s/\bvcl_(swap|containable)\s*\</vcl_algorithm\</g;
-    $class =~ s/\bvcl_sort\s*\<[^,]+\,/vcl_algorithm\</g;
-    $class =~ s/\bvcl_find(_if)?\s*\<\s*vcl_(vector|list)\s*\<([^\005]+)\005\s*(const_)?iterator.+/vcl_algorithm\<$3/g;
-    while ($file_s =~ s/\btypedef\s+([^;]*)\s(\S+)\s*\;//)
-    { $A=$1; $B=$2; $B =~ s!([][{}()|*+/\\])!\\$1!g; $class =~ s/\b$B\b/$A/g; }
-#   $class =~ s/\bconst\b//g;
-    $class =~ s/\s//g;
-    $class =~ s/\bconstchar/const_char/g; $class =~ s/(\w)const([^r])/$1_const$2/g;
-    $class =~ s/\,vcl_less\<[^<>]+\<[^<>]+\>[^<>]*\>//g;
-    $class =~ s/\,vcl_less\<[^<>]+\>//g;
-    $class =~ s/\,(.*)_sptr\,\1\005compare//g;
-    $class =~ s/(vbl_io_sparse_array)_base\</$1\</g;
-    $class =~ s/\005/+-/g; $class =~ tr/<,*>/+.~-/; # \005 is ::
-    $class_q = $class; $class_q =~ s/([.+~-])/\\$1/g;
-    $class =~ s/unsigned/u/g; $class =~ s/signed/s/g; $class =~ s/longd/long_d/g;
-    $class =~ s/vxl_(s?byte|u?int)/$1/g;
-    $class_r = $class; $class_r =~ s/([.+~-])/\\$1/g;
-    $class_s = $class_q; $class_s =~ s/signed/signed_/g; $class_s =~ s/long/long_/g;
+    $class =~ s!\bvcl_(swap|containable)\s*\<!vcl_algorithm\<!g;
+    $class =~ s!\bvcl_sort\s*\<[^,]+\,!vcl_algorithm\<!g;
+    $class =~ s!\bvcl_find(_if)?\s*\<\s*vcl_(vector|list)\s*\<([^\005]+)\005\s*(const_)?iterator.+!vcl_algorithm\<$3!g;
+    while ($file_s =~ s!\btypedef\s+([^;]*)\s(\S+)\s*\;!!)
+    { $A=$1; $B=$2; $B =~ s!([][{}()|*+/\\])!\\$1!g; $class =~ s!\b$B\b!$A!g; }
+#   $class =~ s!\bconst\b!!g;
+    $class =~ s!\s!!g;
+    $class =~ s!\bconstchar!const_char!g; $class =~ s!(\w)const([^r])!$1_const$2!g;
+    $class =~ s!\,vcl_less\<[^<>]+\<[^<>]+\>[^<>]*\>!!g;
+    $class =~ s!\,vcl_less\<[^<>]+\>!!g;
+    $class =~ s!\,(.*)_sptr\,\1\005compare!!g;
+    $class =~ s!(vbl_io_sparse_array)_base\<!$1\<!g;
+    $class =~ s!\005!+-!g; $class =~ tr/<,*>/+.~-/; # \005 is ::
+    $class_q = $class; $class_q =~ s!([.+~-])!\\$1!g;
+    $class =~ s!unsigned!u!g; $class =~ s!signed!s!g; $class =~ s!longd!long_d!g;
+    $class =~ s!vxl_(s?byte|u?int)!$1!g;
+    $class_r = $class; $class_r =~ s!([.+~-])!\\$1!g;
+    $class_s = $class_q; $class_s =~ s!signed!signed_!g; $class_s =~ s!long!long_!g;
     &msg(1, "should be renamed to $class.cxx")
       if ($f !~ m!/$class_q\.(cxx|cc|C)$! &&
           $f !~ m!/$class_r\.(cxx|cc|C)$! &&
@@ -652,7 +653,7 @@ foreach $f (@FILES)
 # 14. Missing vcl_
   foreach $wd (split(' ',"abort exit"))
   {
-    if ($cpp_file && $file_s =~ m/\b$wd\s*(\s*)\(/)
+    if ($cpp_file && $file_s =~ m!\b$wd\s*(\s*)\(!)
     {
       &msg(1, "$wd$1() must be vcl_$wd()")
         unless ($f =~ m!/cmake/config/vxl_platform_tests\.cxx$!);
@@ -693,13 +694,13 @@ foreach $f (@FILES)
   foreach $wd (split(' ',"basefield floatfield adjustfield fmtflags seekdir"))
   {
     &msg(1, "$wd must be vcl_ios_$wd")
-      if ($cpp_file && $file_s =~ m/[^ .]\s*\b$wd\b\s*[^ (]/);
+      if ($cpp_file && $file_s =~ m![^ .]\s*\b$wd\b\s*[^ (]!);
   }
   foreach $wd (split(' ',"beg cur end"))
   {
     &msg(1, "$wd must be vcl_ios_$wd")
       if ($cpp_file &&
-          ($wd !~ m!end! || 
+          ($wd !~ m!end! ||
            ($f !~ m!\boxp/oxp_mpeg_codec\.cxx$! &&
             $f !~ m!\bvil3d_slice_list\.cxx$! &&
             $f !~ m!\b(rrel/rrel_util|rsdl/rsdl_borgefors)\.txx$! ) ) &&
@@ -708,9 +709,9 @@ foreach $f (@FILES)
   foreach $wd (split(' ',"boolalpha noboolalpha showbase noshowbase showpoint noshowpoint showpos noshowpos skipws noskipws uppercase nouppercase"))
   {
     &msg(1, "$wd must be vcl_ios_$wd")
-      if ($cpp_file && $file_s =~ m/[^ .]\s*\b$wd\b\s*[^ (]/);
+      if ($cpp_file && $file_s =~ m![^ .]\s*\b$wd\b\s*[^ (]!);
     &msg(1, "$wd() must be vcl_$wd()")
-      if ($cpp_file && $file_s =~ m/\b$wd\s*\(/);
+      if ($cpp_file && $file_s =~ m!\b$wd\s*\(!);
   }
   foreach $wd (split(' ',"internal left right"))
   {
@@ -752,16 +753,16 @@ foreach $f (@FILES)
           ($f !~ m!\bvpdfl/vpdfl_pc_gaussian_builder\.! || $wd !~ m!^fixed$!) &&
           $file_s =~ m!\b$wd\s*[|),]!);
     &msg(1, "vcl_ios_$wd must be used together with vcl_ios_floatfield")
-      if ($cpp_file && $file_s =~ m/\bvcl_ios_$wd\s*[^ ,]/ &&
+      if ($cpp_file && $file_s =~ m!\bvcl_ios_$wd\s*[^ ,]! &&
           ($f !~ m!\bvpdfl/vpdfl_pc_gaussian_builder\.! || $wd !~ m!^fixed$!) &&
           $file_s !~ m!(vcl_resetiosflags|\.\s*unsetf)\s*\((vcl_ios_(scientific|fixed)\s*\|\s*)*vcl_ios_$wd\s*(\|\s*vcl_ios_(scientific|fixed)\s*)*\)!);
     &msg(1, "$wd() must be vcl_$wd()")
-      if ($cpp_file && $file_s =~ m/\b$wd\s*\(/);
+      if ($cpp_file && $file_s =~ m!\b$wd\s*\(!);
   }
   foreach $wd (split(' ',"size_t ptrdiff_t clock_t time_t"))
   {
     &msg(1, "$wd must be vcl_$wd")
-      if ($cpp_file && $file_s =~ m/\b$wd\b/);
+      if ($cpp_file && $file_s =~ m!\b$wd\b!);
   }
   foreach $wd (split(' ',"iterator_traits back_insert_iterator front_insert_iterator insert_iterator input_iterator_tag output_iterator_tag forward_iterator_tag bidirectional_iterator_tag random_access_iterator_tag"))
   {
@@ -773,59 +774,59 @@ foreach $f (@FILES)
 #   if/for/while without space, variable name starting with underscore
 #   (mentioned only if something else is already printed, or when -f given)
   &msg(1, "contains multiple (>2) empty lines")
-    if ($printed && $file =~ m/\n\n\n\n/);
+    if ($printed && $file =~ m!\n\n\n\n!);
   &msg(1, "has lines ending in spaces")
     if ($printed && $has_end_spaces);
   &msg(1, "has empty lines before closing brace")
-    if ($printed && $file =~ m/\n\n[ \t]*\};*\s*\n/);
+    if ($printed && $file =~ m!\n\n[ \t]*\};*\s*\n!);
   &msg(1, "has empty lines after opening brace")
-    if ($printed && $file =~ m/\n[ \t]*\{\s*\n\n/);
+    if ($printed && $file =~ m!\n[ \t]*\{\s*\n\n!);
   &msg(1, "has empty lines after function header")
-    if ($printed && $file =~ m/\n[ \t]*\n\{/);
+    if ($printed && $file =~ m!\n[ \t]*\n\{!);
   &msg(1, "Replace \"$1 (0)\" by \"$1 (false)\"")
-    if ($printed && $cpp_file && $file =~ m/\b(if|while)\s*\(\s*0\s*\)/);
+    if ($printed && $cpp_file && $file =~ m!\b(if|while)\s*\(\s*0\s*\)!);
   &msg(1, "Replace \"$1 (1)\" by \"$1 (true)\"")
-    if ($printed && $cpp_file && $file =~ m/\b(if|while)\s*\(\s*1\s*\)/);
+    if ($printed && $cpp_file && $file =~ m!\b(if|while)\s*\(\s*1\s*\)!);
   $f_=$fl;
   while ($printed && $f_ =~ s!\n([^()\'\";\n]*\( *)((\([^();\n]*\))*[^();\n]+(\([^();\n]*\)[^();\n]*)*)\n( +)([+-] *)!\n$5$6!)
   {
-    $line="$1$2"; $first=$2; $post="$5"; $ppost="$6"; $pre="$1"; $pre =~ s/./ /g; $ppost =~ s/./ /g;
+    $line="$1$2"; $first=$2; $post="$5"; $ppost="$6"; $pre="$1"; $pre =~ s!.! !g; $ppost =~ s!.! !g;
     &msg(1, "incorrect indentation in line following \"$line\"")
-      unless ($pre eq $post || $pre eq $post.$ppost || $line =~ m/_INSTANTIATE_/ || $line =~ m/\<\</ || $first eq "//");
+      unless ($pre eq $post || $pre eq $post.$ppost || $line =~ m!_INSTANTIATE_! || $line =~ m!\<\<! || $first eq "//");
   }
-  $f_=$fl; $f_ =~ s/\"[^\n\"]*\"/Q/g; $f_ =~ s/\'\\?.\'/Q/g; $f_ =~ s/\<\</\007/g;
-  while ($printed && $f_ =~ s/\n([^\007;{}\#\n]*)(\007[^;\n]*)\n( +)\007/\n$3\007/)
+  $f_=$fl; $f_ =~ s!\"[^\n\"]*\"!Q!g; $f_ =~ s!\'\\?.\'!Q!g; $f_ =~ s!\<\<!\007!g;
+  while ($printed && $f_ =~ s!\n([^\007;{}\#\n]*)(\007[^;\n]*)\n( +)\007!\n$3\007!)
   {
-    $line="$1$2"; $pre="$1"; $post="$3"; next if ($pre =~ m/^\s*$/);
-    $line =~ s/\007/\<\</g; $pre =~ s/./ /g;
+    $line="$1$2"; $pre="$1"; $post="$3"; next if ($pre =~ m!^\s*$!);
+    $line =~ s!\007!\<\<!g; $pre =~ s!.! !g;
     &msg(1, "incorrect indentation in line following \"$line\"")
       unless ($pre eq $post);
   }
   if ($printed && $file =~ m!\n( *)(\S+).*\n(\1 +)\{ *\n\3 ! && $2 !~ m!\#(if|ifdef|else|endif)!) {
-    $tmp=$file; $tmp =~ s/\n( *)\S.*\n(\1 +)\{ *\n\2 [^\000]*//; $tmp =~ s/[^\n]*//g; $tmp=length($tmp)+3;
+    $tmp=$file; $tmp =~ s!\n( *)\S.*\n(\1 +)\{ *\n\2 [^\000]*!!; $tmp =~ s![^\n]*!!g; $tmp=length($tmp)+3;
     &msg($tmp, "excess indentation in code block around line $tmp");
   }
   undef $f_;
   &msg(1, "$1 not preceded by space")
-    if ($printed && $file =~ m/\n(public|private|protected)\s*\:/);
+    if ($printed && $file =~ m!\n(public|private|protected)\s*\:!);
   &msg(1, "$1 preceded by more than one space")
-    if ($printed && $file =~ m/  (public|private|protected)\s*\:/);
+    if ($printed && $file =~ m!  (public|private|protected)\s*\:!);
   &msg(1, "No empty line between two function bodies")
-    if ($printed && $file =~ m/\n};? *\n([a-zA-Z]+)/ && $1 ne "typedef");
+    if ($printed && $file =~ m!\n};? *\n([a-zA-Z]+)! && $1 ne "typedef");
   &msg(1, "Consider placing opening brace of function body on new line")
-    if ($printed && $file =~ m/\n([a-zA-Z]\S*).* (\S+) *\{ *\n/ && $1 ne "extern" && $1 ne "struct" && $2 ne "=");
+    if ($printed && $file =~ m!\n([a-zA-Z]\S*).* (\S+) *\{ *\n! && $1 ne "extern" && $1 ne "struct" && $2 ne "=");
   &msg(1, "$1 not followed by space")
-    if ($printed && $file =~ m/\b(for|if|while|switch)\(/);
+    if ($printed && $file =~ m!\b(for|if|while|switch)\(!);
   &msg(1, "return value in brackets")
-    if ($printed && $file =~ m/\breturn\s*\([^;()]*(\([^;()]*\)[^;()]*)*\)\s*;/);
+    if ($printed && $file =~ m!\breturn\s*\([^;()]*(\([^;()]*\)[^;()]*)*\)\s*;!);
   &msg(1, "delete value in brackets")
-    if ($printed && $file =~ m/\n [^\n]*\bdelete\s*\([^;()]*(\([^;()]*\)[^;()]*)*\)\s*;/);
-  $file =~ s/^\#.*//g; $file =~ s/\n\#.*//g;
+    if ($printed && $file =~ m!\n [^\n]*\bdelete\s*\([^;()]*(\([^;()]*\)[^;()]*)*\)\s*;!);
+  $file =~ s!^\#.*!!g; $file =~ s!\n\#.*!!g;
   &msg(1, "$2 starts with underscore")
-    if ($cpp_file && $printed && $file_s =~ m/([^\"\# ] *\b|^)(_[a-z][a-zA-Z0-9_]*)(.)/ && "$2$3" ne "_fmemset(" && "$2$3" ne "_declspec(");
+    if ($cpp_file && $printed && $file_s =~ m!([^\"\# ] *\b|^)(_[a-z][a-zA-Z0-9_]*)(.)! && "$2$3" ne "_fmemset(" && "$2$3" ne "_declspec(");
 
 # 16. no end-of-line at end-of-file
-  $file =~ s/.*\n//g;
+  $file =~ s!.*\n!!g;
   &msg(1, "has no final end-of-line")
     unless ($file eq "");
 }
