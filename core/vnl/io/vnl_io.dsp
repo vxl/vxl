@@ -207,46 +207,6 @@ SOURCE=.\vnl_io_matrix.txx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_io_matrix_fixed+double.2.2-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vnl_io_matrix_fixed+double.2.3-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vnl_io_matrix_fixed+double.2.6-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vnl_io_matrix_fixed+double.3.12-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vnl_io_matrix_fixed+double.3.3-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vnl_io_matrix_fixed+double.3.4-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vnl_io_matrix_fixed+double.4.3-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vnl_io_matrix_fixed+double.4.4-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vnl_io_matrix_fixed+float.3.3-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_io_matrix_fixed.txx
-# End Source File
-# Begin Source File
-
 SOURCE=.\vnl_io_nonlinear_minimizer.cxx
 # End Source File
 # Begin Source File
@@ -308,14 +268,6 @@ SOURCE=".\Templates\vnl_io_vector+ulong-.cxx"
 # Begin Source File
 
 SOURCE=.\vnl_io_vector.txx
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_io_vector_fixed.txx
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates\vnl_io_vector_fixed_instances.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
