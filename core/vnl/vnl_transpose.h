@@ -30,7 +30,7 @@
 //    At that stage, the user may choose to implement the particular operation
 //    or use vnl_transpose::asMatrix() to clear the warning.
 //
-//    NOTE: This is a reference class, so should be shorted-lived than the
+//    NOTE: This is a reference class, so should be shorter-lived than the
 //    matrix to which it refers.
 
 class vnl_transpose {
