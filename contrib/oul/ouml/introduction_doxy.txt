@@ -1,0 +1,4 @@
+// The following text is included in the main documentation page by doxygen
+/*! \mainpage geml : Miscellaneous things including eigenfaces,
+ *                   image_database and polygon mesh.
+*/
