@@ -56,7 +56,6 @@ SOURCE_FILES( vil_sources
   vil_stream_fstream.h
   vil_stream_section.h
   vil_stream_url.h
-  vil_test.h
   vil_warp.h
   file_formats/vil_bmp.h
   file_formats/vil_bmp_core_header.h
