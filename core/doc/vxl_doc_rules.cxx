@@ -15,3 +15,9 @@ my_class::my_class()
 {
   // This class does absolutely nothing
 }
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+class some_weird_class_I_do_not_want_docuemented
+{
+};
+#endif // DOXYGEN_SHOULD_SKIP_THIS
