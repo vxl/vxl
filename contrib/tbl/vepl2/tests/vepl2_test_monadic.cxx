@@ -1,5 +1,5 @@
 // This is tbl/vepl2/tests/vepl2_test_monadic.cxx
-
+#include "test_driver.h"
 //:
 // \file
 //  Test of the vepl2_monadic_xxx functions.
@@ -10,9 +10,9 @@
 #include <vepl2/vepl2_monadic.h>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
-#include "test_driver.h"
 
-int vepl2_test_monadic() {
+int vepl2_test_monadic()
+{
   vcl_cout << "Starting vepl2_monadic tests\n";
   vcl_cout << "Creating test and output images ...";
   vil2_image_view_base_sptr byte_img = CreateTest8bitImage(32,32),  byte_ori = CreateTest8bitImage(32,32);
@@ -26,7 +26,7 @@ int vepl2_test_monadic() {
   ONE_TEST(vepl2_monadic_abs,byte_img,byte_ori,unsigned char,0,m+"_abs_byte",args);
   ONE_TEST(vepl2_monadic_abs,shrt_img,shrt_ori,unsigned short,0,m+"_abs_short",args);
   ONE_TEST(vepl2_monadic_abs,flot_img,flot_ori,float,276,m+"_abs_float",args);
-  ONE_TEST(vepl2_monadic_abs,colr_img,colr_ori,vil2_rgb,0,m+"_abs_colour",args);
+  ONE_TEST(vepl2_monadic_abs,colr_img,colr_ori,vil2_rgb<unsigned char>,0,m+"_abs_colour",args);
 
   ONE_TEST(vepl2_monadic_sqr,byte_img,byte_ori,unsigned char,82410,m+"_sqr_byte",args);
   ONE_TEST(vepl2_monadic_sqr,shrt_img,shrt_ori,unsigned short,21755370,m+"_sqr_short",args);
