@@ -20,6 +20,7 @@ SOURCES += mbl_read_double.cxx
 SOURCES += mbl_read_int.cxx
 
 # Additional files to document:
+MANPAGE_SOURCES += mbl_data_array_ptr_wrapper.txx
 MANPAGE_SOURCES += mbl_data_array_wrapper.txx
 MANPAGE_SOURCES += mbl_data_collector.txx
 MANPAGE_SOURCES += mbl_data_collector_list.txx
@@ -31,6 +32,7 @@ MANPAGE_SOURCES += mbl_index_sort.h
 MANPAGE_SOURCES += mbl_lru_cache.h
 MANPAGE_SOURCES += mbl_print.h
 MANPAGE_SOURCES += mbl_priority_bounded_queue.h
+MANPAGE_SOURCES += mbl_stl.h
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
