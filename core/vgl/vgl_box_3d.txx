@@ -201,6 +201,7 @@ vcl_istream&  operator>>(vcl_istream& is,  vgl_box_3d<Type>& p) {
   return p.read(is);
 }
 
+#undef VGL_BOX_3D_INSTANTIATE
 #define VGL_BOX_3D_INSTANTIATE(Type) \
 template class vgl_box_3d<Type >;\
 template vcl_ostream& operator<<(vcl_ostream& s, vgl_box_3d<Type > const& p);\

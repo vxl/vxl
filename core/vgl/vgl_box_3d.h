@@ -199,4 +199,6 @@ vcl_ostream&  operator<<(vcl_ostream& s, vgl_box_3d<Type> const& p);
 template <class Type>
 vcl_istream&  operator>>(vcl_istream& is,  vgl_box_3d<Type>& p);
 
+#define VGL_BOX_3D_INSTANTIATE(T) extern "please include vgl/vgl_box_3d.txx first"
+
 #endif // vgl_box_3d_h

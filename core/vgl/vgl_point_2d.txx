@@ -40,6 +40,7 @@ vcl_istream&  operator>>(vcl_istream& is,  vgl_point_2d<Type>& p) {
   Type x, y; is >> x >> y; p.set(x,y); return is;
 }
 
+#undef VGL_POINT_2D_INSTANTIATE
 #define VGL_POINT_2D_INSTANTIATE(T) \
 template class vgl_point_2d<T >; \
 template vcl_ostream& operator<<(vcl_ostream&, const vgl_point_2d<T >&); \

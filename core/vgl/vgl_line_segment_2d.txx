@@ -44,6 +44,7 @@ bool vgl_line_segment_2d<Type>::operator==(vgl_line_segment_2d<Type> const& othe
           && this->get_point2() == other.get_point2());
 }
 
+#undef VGL_LINE_SEGMENT_2D_INSTANTIATE
 #define VGL_LINE_SEGMENT_2D_INSTANTIATE(Type) \
 template class vgl_line_segment_2d<Type >;\
 template vcl_istream& operator>>(vcl_istream&, vgl_line_segment_2d<Type >&);\

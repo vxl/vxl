@@ -40,6 +40,7 @@ vcl_istream& operator>>(vcl_istream& s, vgl_homg_point_2d<Type>& p)
   return s;
 }
 
+#undef VGL_HOMG_POINT_2D_INSTANTIATE
 #define VGL_HOMG_POINT_2D_INSTANTIATE(T) \
 template class vgl_homg_point_2d<T >; \
 template vcl_ostream& operator<<(vcl_ostream&, vgl_homg_point_2d<T >const&); \

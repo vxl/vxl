@@ -208,6 +208,6 @@ vcl_istream&  operator>>(vcl_istream& is,  vgl_box_2d<Type>& p);
 template <class Type>
 vgl_box_2d<Type> intersect(vgl_box_2d<Type> const& in1, vgl_box_2d<Type> const& in2);
 
-#define VGL_BOX_2D_INSTANTIATE(T) extern "Include vgl_box_2d.txx"
+#define VGL_BOX_2D_INSTANTIATE(T) extern "please include vgl/vgl_box_2d.txx first"
 
 #endif // vgl_box_2d_h

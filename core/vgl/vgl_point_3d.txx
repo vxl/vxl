@@ -42,6 +42,7 @@ vcl_istream&  operator>>(vcl_istream& is,  vgl_point_3d<Type>& p) {
   Type x, y, z; is >> x >> y >> z; p.set(x,y,z); return is;
 }
 
+#undef VGL_POINT_3D_INSTANTIATE
 #define VGL_POINT_3D_INSTANTIATE(T) \
 template class vgl_point_3d<T >; \
 template vcl_ostream& operator<<(vcl_ostream&, const vgl_point_3d<T >&); \
