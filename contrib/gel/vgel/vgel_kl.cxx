@@ -246,8 +246,6 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil_image &image)
                << vil_print(vil_pixel_format(image)) << vcl_endl;
       return NULL;
   }
-
-  return NULL;
 }
 
 void vgel_kl::set_tracking_context( KLT_TrackingContext tc)
