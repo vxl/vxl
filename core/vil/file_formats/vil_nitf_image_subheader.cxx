@@ -17,6 +17,9 @@
 #include "vil_nitf_util.h"
 #include "vil_nitf_version.h"
 
+static int debug_level = 0 ;
+
+
 vil_nitf_image_subheader::vil_nitf_image_subheader()
     : IID (ID), IDATIM_ (DT), ITITLE (TITLE),
       ISCLAS (CLAS), ISCODE (CODE), ISCTLH (CTLH),
@@ -909,11 +912,15 @@ bool vil_nitf_image_subheader::get_rational_camera_data(
       switch (RPC_TYPE) {
       case RPC00A:
         NITF_index = NITF_index_RPC00A;
-        vcl_cout << "Switching to RPC00A mode\n";
+        if (debug_level > 1) {
+          vcl_cout << "Switching to RPC00A mode\n";
+        }
         break;
       case RPC00B:
         NITF_index = NITF_index_RPC00B;
-        vcl_cout << "Switching to RPC00B mode\n";
+        if (debug_level > 1) {
+          vcl_cout << "Switching to RPC00B mode\n";
+	}
         break;
       case UNDEFINED:
       default:
@@ -994,8 +1001,10 @@ bool vil_nitf_image_subheader::get_rational_camera_data(
       ul_line  = int ((FI_ROW_11 + 0.5) - 1.0);
       ul_sample = int ((FI_COL_11 + 0.5) - 1.0);
 
-      vcl_cout << "ICHIPB Present - offsetting Rational Camera by ("
-               << ul_sample << ' ' << ul_line << ")\n";
+      if (debug_level > 1) {
+        vcl_cout << "ICHIPB Present - offsetting Rational Camera by ("
+                 << ul_sample << ' ' << ul_line << ")\n";
+      }
   }
   // Use this to rescale the image
   double scale = 1 / scale_factor;
@@ -1006,12 +1015,15 @@ bool vil_nitf_image_subheader::get_rational_camera_data(
   rescalel[O_OFFSET] = -scale * ul_line;
 
   // Display camera data - debugging output
-  vcl_cout << vcl_endl;
-  display_camera_attributes (method_name);  //
-  vcl_cout << vcl_endl;
+  if (debug_level > 1) {
+    vcl_cout << vcl_endl;
+    display_camera_attributes (method_name);
+    vcl_cout << vcl_endl;
+  }
 
   // IF WE GOT HERE, EVERYTHING SET OK.
   return true;
+
 }  // end method get_rational_camera_data
 
 ////////////////////////////////////////////////////////
@@ -1115,6 +1127,7 @@ void vil_nitf_image_subheader::display_camera_attributes (vcl_string caller) con
              << "SAMP_OFF = " << this->SAMP_OFF << vcl_endl
 
              << "##### end RPC camera data #####\n";
+
 }  // end method display_camera_attributes
 
 ////////////////////////////////////////////////////////////////////////
@@ -1176,6 +1189,9 @@ void vil_nitf_image_subheader::display_size_attributes (vcl_string caller) const
              << "ABPP (actual bits per pixel per band) = "
              << this->ABPP << vcl_endl;
 
+    vcl_cout << "PJUST (justification for ABPP) = " << this->PJUST << vcl_endl
+             << "PVTYPE = " << this->PVTYPE_ << vcl_endl;
+
     unsigned int bytes_per_pixel = NBPP / 8;
     if ((NBPP % 8) != 0) {
         vcl_cerr << "WARNING: NBBP is not a multiple of 8.\n";
@@ -1223,17 +1239,13 @@ void vil_nitf_image_subheader::display_size_attributes (vcl_string caller) const
         }
     }
 
-    vcl_cout << "PJUST (justification for ABPP) = " << this->PJUST << vcl_endl
-             << "PVTYPE = " << this->PVTYPE_ << vcl_endl;
 }  // end method display_size_attributes
-
-// FIGURE OUT HOW TO PASS vcl_out.
 //void vil_nitf_image_subheader::display_attributes (vcl_ostream out) const
 void vil_nitf_image_subheader::display_attributes (vcl_string caller) const
 {
     static vcl_string method_name = "vil_nitf_image_subheader::display_attributes: ";
 
-    vcl_cout << method_name;
+    vcl_cout << "\n##### " << method_name;
     if (caller.length() > 0) {
       vcl_cout << " from " << caller;
     }
@@ -1251,4 +1263,7 @@ void vil_nitf_image_subheader::display_attributes (vcl_string caller) const
              << "IC (compression code) = " << this->IC << vcl_endl
 
              << "ICORDS = " << this->ICORDS << vcl_endl;
+
+    vcl_cout << "##### exit " << method_name;
+
 }  // end method display_attributes
