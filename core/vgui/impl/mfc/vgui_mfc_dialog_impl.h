@@ -23,7 +23,7 @@
 class CFont;
 
 #include <vgui/internals/vgui_dialog_impl.h>
-#include "stdafx.h"
+#include "StdAfx.h"
 #define MAX_ITEMS 255
 // MFC documentation says that our IDs should be in the range 0x8000-0xDFF
 #define ID_BROWSE_FILES 0x8000  // Assume that there won't be more than 100 browser buttons

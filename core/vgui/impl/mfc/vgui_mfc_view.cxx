@@ -4,7 +4,7 @@
 //:
 //  \file
 
-#include "stdafx.h"
+#include "StdAfx.h"
 //#include "vgui_mfc_app.h"
 
 #include "vgui_mfc_view.h"

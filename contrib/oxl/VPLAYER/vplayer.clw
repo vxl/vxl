@@ -4,7 +4,7 @@
 Version=1
 LastClass=
 LastTemplate=CDialog
-NewFileInclude1=#include "stdafx.h"
+NewFileInclude1=#include "StdAfx.h"
 NewFileInclude2=#include "vplayer.h"
 LastPage=0
 

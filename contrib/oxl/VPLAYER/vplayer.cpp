@@ -1,7 +1,7 @@
 // vplayer.cpp : Defines the entry point for the console application.
 //
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "vplayer.h"
 
 #ifdef _DEBUG

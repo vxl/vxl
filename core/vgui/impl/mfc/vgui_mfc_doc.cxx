@@ -11,7 +11,7 @@
 // \date   27 July 2000
 //
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "vgui_mfc.h"
 
 #include "vgui_mfc_doc.h"

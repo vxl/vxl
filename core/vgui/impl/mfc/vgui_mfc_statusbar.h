@@ -20,7 +20,7 @@
 #include <vcl_iosfwd.h>
 #include <vgui/vgui_statusbuf.h>
 #include <vgui/vgui_statusbar.h>
-#include "stdafx.h"
+#include "StdAfx.h"
 
 //: Status bar for the main window of the application.
 class vgui_mfc_statusbar : public vgui_statusbar {

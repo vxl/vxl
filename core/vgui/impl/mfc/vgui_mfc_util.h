@@ -19,7 +19,7 @@
 
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_menu.h>
-#include "stdafx.h"
+#include "StdAfx.h"
 class GdkEvent;
 class GdkEventKey;
 class GtkWidget;
