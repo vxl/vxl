@@ -18,6 +18,7 @@ SOURCES += mbl_screen_counter.cxx
 SOURCES += mbl_rbf_network.cxx
 SOURCES += mbl_read_double.cxx
 SOURCES += mbl_read_int.cxx
+SOURCES += mbl_read_str.cxx
 SOURCES += mbl_arb_length_int.cxx
 
 # Additional files to document:
