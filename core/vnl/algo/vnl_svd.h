@@ -57,7 +57,6 @@
 //
 
 #include <vnl/vnl_numeric_traits.h>
-#include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_diag_matrix.h>
@@ -69,18 +68,10 @@ template <class T> vcl_ostream& operator<<(vcl_ostream&, vnl_svd<T> const& svd);
 
 template <class T>
 class vnl_svd {
-  // fsm : For an svd of vnl_complex<T>, the singular values are of type T, not
-  // vnl_complex<T> (here T must be of real type : float,double or long double).
-  // Must use 'typename' here for gcc 2.7.2.3 :
+public:
+  // The singular values of a matrix of complex<T> are of type T, not complex<T>.
   typedef typename vnl_numeric_traits<T>::abs_t singval_t;
 
-  // fsm : this is needed to return values of type singval_t, which is
-  // from the traits class. gcc can only do that if the method is inline.
-  // see determinant_magnitude() below.
-  singval_t temp_value_for_gcc_hack;
-  void            determinant_magnitude_aux () const;
-
-public:
 // -- @{
 // Construct an vnl_svd<T> object from $m \times n$ matrix $M$.  The 
 // vnl_svd<T> object contains matrices $U, W, V$ such that $U W V^\top = M$.
@@ -104,9 +95,8 @@ public:
   int             singularities () const { return W_.n() - rank(); }
   int             rank () const { return rank_; }
   singval_t       well_condition () const { return sigma_min()/sigma_max(); }
-  singval_t       determinant_magnitude () const 
-    { determinant_magnitude_aux(); return temp_value_for_gcc_hack; }
-  singval_t       norm() const { return vnl_math_abs(sigma_max()); }
+  singval_t       determinant_magnitude () const;
+  singval_t       norm() const;
 
 // -- Return the matrix U and the (i,j)th entry (to avoid svd.U()(i,j); ).
   vnl_matrix<T>      & U()       { return U_; }
