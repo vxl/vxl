@@ -180,6 +180,9 @@ SOURCE=.\Templates/mbl_data_array_wrapper+vcl_vector+vbl_triple+double.int.int--
 SOURCE=.\Templates/mbl_data_collector_list+vcl_vector+vbl_triple+double.int.int---.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/mbl_ar_process+double-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\mbl_data_collector_base.cxx
 # End Source File
 # Begin Source File
@@ -373,6 +376,12 @@ SOURCE=.\mbl_file_data_wrapper.txx
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_combination.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_ar_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_ar_process.txx
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
