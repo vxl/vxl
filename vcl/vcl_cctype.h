@@ -52,9 +52,19 @@
 # define vcl_isupper isupper
 #endif
 
+#ifdef toupper
+# undef  vcl_toupper
+# define vcl_toupper toupper
+#endif
+
 #ifdef islower
 # undef  vcl_islower
 # define vcl_islower islower
+#endif
+
+#ifdef tolower
+# undef  vcl_tolower
+# define vcl_tolower tolower
 #endif
 
 #ifdef isalpha
