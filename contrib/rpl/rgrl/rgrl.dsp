@@ -348,6 +348,27 @@ SOURCE=.\Templates/vbl_smart_ptr+rgrl_view-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+rgrl_weighter-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/rgrl_matcher_pseudo+vxl_byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/rgrl_matcher_pseudo+vxl_uint_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/rgrl_matcher_pseudo_3d+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/rgrl_matcher_pseudo_3d+vxl_byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/rgrl_matcher_pseudo_3d+vxl_sint_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/rgrl_matcher_pseudo_int_3d+vxl_sint_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+rgrl_evaluator-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\rgrl_est_homography2d.cxx
 # End Source File
 # Begin Source File
@@ -355,6 +376,22 @@ SOURCE=.\rgrl_trans_homography2d.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\rgrl_est_homo2d_lm.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_evaluator_ssd.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_feature_face_region.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_feature_point_region.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_feature_region.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_feature_trace_region.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -631,9 +668,47 @@ SOURCE=.\rgrl_est_homography2d.h
 # Begin Source File
 SOURCE=.\rgrl_trans_homography2d.h
 # End Source File
-# End Source File
 # Begin Source File
 SOURCE=.\rgrl_est_homo2d_lm.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_evaluator_ssd.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_feature_face_region.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_feature_point_region.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_feature_region.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_feature_trace_region.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_evaluator.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_evaluator_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_matcher_pseudo.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_matcher_pseudo.txx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_matcher_pseudo_3d.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_matcher_pseudo_3d.txx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_matcher_pseudo_int_3d.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_matcher_pseudo_int_3d.txx
 # End Source File
 # End Group
 # End Target
