@@ -1,6 +1,5 @@
-#ifndef rgrl_feature_h_
-#define rgrl_feature_h_
-
+#ifndef rgrl_fwd_h_
+#define rgrl_fwd_h_
 //:
 // \file
 // \brief for forward delarations
