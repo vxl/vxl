@@ -35,10 +35,10 @@ public:
   virtual ~vnl_linear_system();
 
   //: Compute A*x,  putting result in y
-  virtual void multiply(vnl_vector<double> const& x, vnl_vector<double> &y) const = 0;
+  virtual void multiply(vnl_vector<double> const& x, vnl_vector<double>& y) const = 0;
 
   //: Compute A_transpose * y, putting result in x
-  virtual void transpose_multiply(vnl_vector<double> const& y, vnl_vector<double> &x) const = 0;
+  virtual void transpose_multiply(vnl_vector<double> const& y, vnl_vector<double>& x) const = 0;
 
   //; Put the right-hand side of the system Ax = b into b
   virtual void get_rhs(vnl_vector<double>& b) const = 0;
@@ -48,7 +48,7 @@ public:
   // Common choices are Jacobi (1/diag(A'A)), Gauss-Seidel,
   // and incomplete LU or Cholesky decompositions.
   // The default implementation applies the identity.
-  virtual void apply_preconditioner(vnl_vector<double> const& x, vnl_vector<double> & px) const;
+  virtual void apply_preconditioner(vnl_vector<double> const& x, vnl_vector<double>& px) const;
 
   //: Return the number of unknowns
   int get_number_of_unknowns() const { return p_; }
