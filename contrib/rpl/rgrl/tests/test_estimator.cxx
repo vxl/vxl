@@ -97,6 +97,16 @@ random_1d_normal_error( )
   return v;
 }
 
+vnl_vector<double>
+inhomo( vnl_vector<double> p )
+{
+  assert( p.size()  );
+  const unsigned last = p.size()-1;
+  vnl_vector<double> q( p.size() -1 );
+  for( unsigned int i=0; i<p.size()-1; ++i )
+    q[i] = p[i]/p[last];
+  return q;
+}
 
 // This computes the weighted least squares one dimension at a time.
 void
@@ -1572,7 +1582,7 @@ void test_homography2d()
   }
 }
 
-void test_homography2d_sym()
+void test_homography2d_lm()
 {
   vnl_matrix<double> H(3,3,0.0), est_H(3,3,0.0);
   vnl_matrix<double> cofact;
@@ -1651,11 +1661,7 @@ void test_homography2d_sym()
   H(2,0) = 0.5; H(2,1) = -2;
   H /= H.array_two_norm();
   
-  for (int i=0;i<3;i++)
-    for (int j=0;j<3;j++)
-      true_param[i*3+j] = H(i,j);
-  true_param /= true_param.two_norm();
-  vcl_cout<<"Original H = "<<true_param<<vcl_endl;
+  vcl_cout<<"Original H = \n"<< H <<vcl_endl;
 
   {
     // generate the corresponding points
@@ -1673,7 +1679,8 @@ void test_homography2d_sym()
                                  new rgrl_feature_point(d2_q[i]) );
     }
     rgrl_estimator_sptr estimator = new rgrl_est_homo2d_lm();
-
+    //estimator->set_debug_flag(5);
+    
     {
       vnl_matrix<double> perturbed_H( H );
       perturbed_H( 0, 0 ) += 1;
@@ -1686,6 +1693,12 @@ void test_homography2d_sym()
   
       vcl_cout<<"Estimated H = "<<est_H<<vcl_endl;
       TEST_NEAR("[Fixed error in (0,0)] Estimation of Projective xform", (est_H-H).array_two_norm(), 0.0, tol);
+      
+      // test on transfer error
+      vnl_vector<double> pt(2);
+      vnl_matrix<double> trans_error = est->transfer_error_covar( inhomo(p[2]) );
+      vcl_cout << "transfer error at this point:" << trans_error << vcl_endl;
+      
     }
     // error STD = 0.5
     {
@@ -1744,6 +1757,197 @@ void test_homography2d_sym()
   }
 }
 
+inline
+void 
+inhomo_map( vnl_vector<double>& mapped, vnl_matrix<double> const& H, vnl_vector<double> const& p )
+{
+  static vnl_vector<double> homo(3, 1.0), homo_mapped(3);
+  homo[0]=p[0];
+  homo[1]=p[1];
+  homo_mapped = H*homo;
+  
+  // division
+  mapped[0] = homo_mapped[0]/homo_mapped[2];
+  mapped[1] = homo_mapped[1]/homo_mapped[2];
+}
+
+void 
+test_homography2d_points_on_circle()
+{
+  vnl_matrix<double> H(3,3, vnl_matrix_identity);
+  const double tol = 1e-8;
+
+  // Test projective transform
+  H(0,2) = -4;
+  H(1,2) = 2;
+  H(2,2) = 1;
+  H(0,0) = 2*vcl_cos(vnl_math::pi/3);
+  //H(1,0) = -H(0,1);
+  H(0,1) = -5; H(1,1) = -1.5;
+  H(2,0) = 0.5; H(2,1) = -2;
+   H /= H.array_two_norm();
+  
+  vcl_cout<<"Original H = \n"<< H <<vcl_endl;
+  
+  vcl_vector< vnl_vector<double> > p, q;
+  
+  
+  vnl_vector<double> pt(2), mapped(2);
+  const double c = 20;
+  bool xform_is_good=true;
+
+  for( int num=12; num<200; num+=4 ) {
+
+    //reset points
+    p.clear();
+    q.clear();
+    // create points on a circle
+    for( int i=0; i<num; ++i ) {
+      const double angle = double(i)/double(num)*2*vnl_math::pi;
+      pt[0] = c*vcl_cos(angle);
+      pt[1] = c*vcl_sin(angle);
+      p.push_back(pt);
+      // Map point
+      inhomo_map( mapped, H, pt );
+      q.push_back(mapped);
+    }
+    
+    // create match set
+    rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id());
+
+    for (unsigned i=0; i < num; ++i) {
+      ms->add_feature_and_match( new rgrl_feature_point(p[i]), 0,
+                                 new rgrl_feature_point(q[i]) );
+    }
+    rgrl_estimator_sptr estimator = new rgrl_est_homo2d_lm();
+    // estimator->set_debug_flag(5);
+
+    // error STD = 1
+    {
+      vnl_matrix<double> perturbed_H( H ), est_H;
+      const double err_std = 3;
+      for( unsigned i=0; i<3; ++i )
+        for( unsigned j=0; j<3; ++j )
+          perturbed_H( 0, 0 ) += random.drand32()*err_std;
+      rgrl_transformation_sptr init_trans = new rgrl_trans_homography2d( perturbed_H );
+
+      //estimate
+      rgrl_transformation_sptr est = estimator->estimate( ms, *init_trans);
+      rgrl_trans_homography2d* homo_est = rgrl_cast<rgrl_trans_homography2d*>(est.as_pointer());
+      est_H = homo_est->H();
+      est_H /= est_H.array_two_norm();
+      if ( est_H(0,0) < 0 ) est_H *= -1;
+  
+      // vcl_cout<<"Estimated H = "<<est_H<<vcl_endl;
+      xform_is_good &= (est_H-H).array_two_norm() < tol;
+    }
+  }
+  TEST("Estimation of Projective xform", xform_is_good, true);
+
+}
+
+void 
+test_homography2d_points_on_circle_w_noise( double noise_level, double tol_xform, double tol_trans_error )
+{
+  vnl_matrix<double> H(3,3, vnl_matrix_identity);
+
+  // Test projective transform
+  //H(0,2) = -4;
+  //H(1,2) = 2;
+  //H(2,2) = 1;
+  H(0,0) = 1.5; //2*vcl_cos(vnl_math::pi/3);
+  //H(1,0) = -H(0,1);
+  //H(0,1) = -5; 
+  H(1,1) = 1.5;
+  //H(2,0) = 0.5; H(2,1) = -2;
+  H /= H.array_two_norm();
+  
+  vcl_cout<<"Original H = \n"<< H <<vcl_endl;
+  
+  vcl_vector< vnl_vector<double> > p, q;
+  
+  
+  vnl_vector<double> pt(2), mapped(2);
+  const double c = 20;
+  bool cov_is_good = true;
+  bool homography_is_good = true;
+  for( int num=12; num<200; num+=4 ) {
+
+    vcl_cout << "using # of " << num << " correspondences" << vcl_endl;
+    //reset points
+    p.clear();
+    q.clear();
+
+    // create points on a circle
+    for( int i=0; i<num; ++i ) {
+
+      const double angle = double(i)/double(num)*2*vnl_math::pi;
+      pt[0] = c*vcl_cos(angle);
+      pt[1] = c*vcl_sin(angle);
+      p.push_back(pt);
+      
+      // Map point
+      inhomo_map( mapped, H, pt );
+      
+      // add noise
+      mapped[0] += noise_level * random.normal();
+      mapped[1] += noise_level * random.normal();
+      q.push_back(mapped);
+    }
+    
+    // create match set
+    rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id());
+
+    for (unsigned i=0; i < num; ++i) {
+      ms->add_feature_and_match( new rgrl_feature_point(p[i]), 0,
+                                 new rgrl_feature_point(q[i]) );
+    }
+    rgrl_estimator_sptr estimator = new rgrl_est_homo2d_lm();
+
+    // error STD = 3
+    {
+      vnl_matrix<double> perturbed_H( H ), est_H;
+      vnl_matrix<double> iid_cov(2,2,vnl_matrix_identity);
+      const double err_std = 3;
+      for( unsigned i=0; i<3; ++i )
+        for( unsigned j=0; j<3; ++j )
+          perturbed_H( 0, 0 ) += random.drand32()*err_std;
+      rgrl_transformation_sptr init_trans = new rgrl_trans_homography2d( perturbed_H );
+      
+      // estimate
+      rgrl_transformation_sptr est = estimator->estimate( ms, *init_trans);
+      rgrl_trans_homography2d* homo_est = rgrl_cast<rgrl_trans_homography2d*>(est.as_pointer());
+      est_H = homo_est->H();
+      est_H /= est_H.array_two_norm();
+      if ( est_H(0,0) < 0 ) est_H *= -1;
+      
+      // check homography transform
+      homography_is_good &= (est_H-H).array_two_norm() < tol_xform;
+      
+      // test on transfer error on 4 cannonical directions
+      vnl_matrix<double> trans_error;
+      double ratio;
+      
+      trans_error = est->transfer_error_covar( p[0] );
+      ratio = trans_error(0,0);  // this constant shall be the same
+      cov_is_good &= (ratio*iid_cov-trans_error).array_two_norm() < tol_trans_error;
+
+      trans_error = est->transfer_error_covar( p[num/4] );
+      cov_is_good &= (ratio*iid_cov-trans_error).array_two_norm() < tol_trans_error;
+
+      trans_error = est->transfer_error_covar( p[num/2] );
+      cov_is_good &= (ratio*iid_cov-trans_error).array_two_norm() < tol_trans_error;
+
+      trans_error = est->transfer_error_covar( p[num*3/4] );
+      cov_is_good &= (ratio*iid_cov-trans_error).array_two_norm() < tol_trans_error;
+    }
+  }
+
+  TEST("[i.i.d error in coordinates] Estimation of Projective xform", homography_is_good, true );
+  TEST("transfer error shall be i.i.d", cov_is_good, true );
+
+}
+
 
 } // end anonymous namespace
 
@@ -1762,7 +1966,9 @@ MAIN( test_estimator )
   test_est_reduced_quad2d();
   test_est_rigid();
   test_homography2d();
-  test_homography2d_sym();
-
+  test_homography2d_lm();
+  test_homography2d_points_on_circle();
+  test_homography2d_points_on_circle_w_noise( 0.0, 1e-13, 1e-9  );
+  test_homography2d_points_on_circle_w_noise( 0.1, 0.1, 0.005);
   SUMMARY();
 }
