@@ -122,10 +122,10 @@ sub run_test
   close(RESFILE);
 
     print SUMMARYFILE "<td align=center>";
-    print_link($n_ok,$test_path);
+    print_link($n_ok,$test_name);
     print SUMMARYFILE "</td>";
     print SUMMARYFILE "<td align=center>";
-    print_link($nt,$test_path);
+    print_link($nt,$test_name);
     print SUMMARYFILE "</td>";
     print SUMMARYFILE "</tr>\n";
 
