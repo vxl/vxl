@@ -1,13 +1,13 @@
-// This is mul/vil2/vil2_view_as.h
+// This is core/vil2/vil2_view_as.h
 #ifndef vil2_view_as_h_
 #define vil2_view_as_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Various view conversion functions.
+//
 // vil2_image_view<T>::operator=() can automatically perform these
 // conversions for you.
 // \author Tim Cootes, Ian Scott - Manchester
@@ -16,8 +16,7 @@
 #include <vil2/vil2_rgb.h>
 #include <vil2/vil2_rgba.h>
 
-
-//: Return a 3-plane view of an RGB image (or a 4-plane view if RGBA)
+//: Return a 3-plane view of an RGB image (or a 4-plane view if RGBA).
 // \return an empty view if it can't do the conversion.
 //  O(1).
 // \relates vil2_image_view

@@ -3,8 +3,7 @@
 //--------------------------------------------------------------------------------
 //:
 // \file
-// \brief menus
-//   the basic setup for menus 
+// \brief the basic setup for menus
 // \author
 //   J.L. Mundy
 //
@@ -23,6 +22,7 @@ class basic_menus
   static void load_image_callback();
   static vgui_menu get_menu();
  private:
-  basic_menus(){};
+  basic_menus() {}
 };
+
 #endif // basic_menus_h_

@@ -1,13 +1,14 @@
-// This is vxl/vil/vil_resample_image.h
+// This is core/vil/vil_resample_image.h
 #ifndef vil_resample_image_h_
 #define vil_resample_image_h_
 //:
 // \file
 // \brief Adaptor which produces an image by resampling
+//
 // This class is best accessed through the external function vil_resample().
 // \verbatim
-// Modifications
-//  29 Aug. 2002 - Peter Vanroose - made sure that src pixel region is not empty
+//  Modifications
+//   29 Aug. 2002 - Peter Vanroose - made sure that src pixel region is not empty
 // \endverbatim
 
 class vil_image;
