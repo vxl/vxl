@@ -86,8 +86,11 @@ double vil2_bicub_interp_raw(double x, double y, const T* data,
 
 #define vil2_I(dx,dy) (pix1[(dx)*xstep+(dy)*ystep])
 
-    if (normy == 0)
-        return 0.5 * (s0*vil2_I(-1,+0) + s1*vil2_I(+0,+0) + s2*vil2_I(+1,+0) + s3*vil2_I(+2,+0));
+    if (normy == 0) {
+        double val = s0*vil2_I(-1,+0) + s1*vil2_I(+0,+0) + s2*vil2_I(+1,+0) + s3*vil2_I(+2,+0);
+        val *= 0.5;
+        return val;
+    }
 
     double t0 = ((2-normy)*normy-1)*normy;
     double t1 = (3*normy-5)*normy*normy+2;
@@ -95,8 +98,11 @@ double vil2_bicub_interp_raw(double x, double y, const T* data,
     double t3 = (normy-1)*normy*normy;
 
     // inefficiency: if normx is 0, then the s's were computed for nothing
-    if (normx == 0)
-        return 0.5 * (t0*vil2_I(+0,-1) + t1*vil2_I(+0,+0) + t2*vil2_I(+0,+1) + t3*vil2_I(+0,+2));
+    if (normx == 0) {
+        double val = t0*vil2_I(+0,-1) + t1*vil2_I(+0,+0) + t2*vil2_I(+0,+1) + t3*vil2_I(+0,+2);
+        val *= 0.5;
+        return val;
+    }
 
     double xi0 = s0*vil2_I(-1,-1) + s1*vil2_I(+0,-1) + s2*vil2_I(+1,-1) + s3*vil2_I(+2,-1);
     double xi1 = s0*vil2_I(-1,+0) + s1*vil2_I(+0,+0) + s2*vil2_I(+1,+0) + s3*vil2_I(+2,+0);
