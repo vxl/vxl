@@ -146,7 +146,7 @@ rsdl_borgefors<T>::initialize(iterator_type  begin, iterator_type end)
     data_.push_back(i);
   }
 
-  // 1. Resize distance_map_ and index_map_ to accomodate the data and
+  // 1. Resize distance_map_ and index_map_ to accommodate the data and
   //    initialize the maps
   distance_map_.resize(size_y_ , size_x_ );
   index_map_.resize(size_y_ , size_x_ );
