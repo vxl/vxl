@@ -14,7 +14,7 @@
 /* to #defines, especially for the two keyword types, so we use     */
 /* typedefs for the valid cases.                                    */
 #define VXL_HAS_INT_8 1
-#define VXL_INT_8 char
+#define VXL_INT_8_STRING "char"
 #if 1
   typedef          char  vxl_int_8;
   typedef   signed char  vxl_sint_8;
@@ -26,7 +26,7 @@
 #endif
 
 #define VXL_HAS_INT_16 1
-#define VXL_INT_16 short
+#define VXL_INT_16_STRING "short"
 #if 1
   typedef          short vxl_int_16;
   typedef   signed short vxl_sint_16;
@@ -38,7 +38,7 @@
 #endif
 
 #define VXL_HAS_INT_32 1
-#define VXL_INT_32 int
+#define VXL_INT_32_STRING "int"
 #if 1
   typedef          int vxl_int_32;
   typedef   signed int vxl_sint_32;
@@ -50,7 +50,7 @@
 #endif
 
 #define VXL_HAS_INT_64 0
-#define VXL_INT_64 void
+#define VXL_INT_64_STRING "void"
 #if 0
   typedef          void vxl_int_64;
   typedef   signed void vxl_sint_64;
@@ -62,7 +62,7 @@
 #endif
 
 #define VXL_HAS_IEEE_32 1
-#define VXL_IEEE_32 float
+#define VXL_IEEE_32_STRING "float"
 #if 1
   typedef float vxl_ieee_32;
 #else
@@ -70,7 +70,7 @@
 #endif
 
 #define VXL_HAS_IEEE_64 1
-#define VXL_IEEE_64 double
+#define VXL_IEEE_64_STRING "double"
 #if 1
   typedef double vxl_ieee_64;
 #else
@@ -78,7 +78,7 @@
 #endif
 
 #define VXL_HAS_IEEE_96 0
-#define VXL_IEEE_96 void
+#define VXL_IEEE_96_STRING "void"
 #if 0
   typedef void vxl_ieee_96;
 #else
@@ -86,7 +86,7 @@
 #endif
 
 #define VXL_HAS_IEEE_128 0
-#define VXL_IEEE_96 void
+#define VXL_IEEE_128_STRING "void"
 #if 0
   typedef void vxl_ieee_128;
 #else
