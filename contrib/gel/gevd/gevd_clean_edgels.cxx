@@ -190,7 +190,7 @@ bool gevd_clean_edgels::edge_exists(vtol_vertex_2d_sptr v1, vtol_vertex_2d_sptr 
 }
 
 
-//: Remove edges which are aready connected to the given vertex.
+//: Remove edges which are already connected to the given vertex.
 void gevd_clean_edgels::remove_connected_edges(vtol_vertex_2d* v, vcl_vector<vtol_edge_2d_sptr >& edges)
 {
   vcl_vector<vtol_edge_2d_sptr > tmp;
@@ -613,7 +613,7 @@ void gevd_clean_edgels::FixDefficientEdgels()
 
 
 //:
-//    The VD edgedetector produces wild jaggies in the contor
+//    The VD edgedetector produces wild jaggies in the contour
 //    from time to time.  This function "smooths' the digital
 //    chains by removing sharp adjacent excursions.
 void gevd_clean_edgels::RemoveJaggies()
