@@ -1,10 +1,15 @@
+#ifdef __GNUC__
+#pragma implementation
+#endif
+
+// This is vxl_doc_rules.cxx
 
 #include "vxl_doc_rules.h"
 
-//: Be careful: the first line is not visible in Doxygen because the .h file specified a brief description 
-// Here the long description of the method is written
-// The brief one is in the .h file, explicitely specified with
-// the "brief" command
+//: By all means replicate the documentation from the .h file here 
+// But it seems the doxygen does not reliably pick up documentation in
+// the .cxx file whereas we haven't had a problem with it picking it up
+// from the .h file.
 my_class::my_class()
 {
   // This class does absolutely nothing

@@ -1,27 +1,29 @@
 #ifndef vxl_doc_rules_h_
 #define vxl_doc_rules_h_
-//-----------------------------------------------------------------------------
-//
-// everything after '-' in the next line is the 'brief' documentation in Doxygen
-// .NAME	vxl_doc_rules - Example file of how documentation should look
-// .LIBRARY	vxl_doc (not used by Doxygen)
-// .HEADER	vxl Package (not used by Doxygen)
-// .INCLUDE	doc/vxl_doc_rules.h (not used by Doxygen)
-// .FILE	vxl_doc_rules.cxx (not used by Doxygen)
-//
-// .SECTION Description
+#ifdef __GNUC__
+#pragma interface
+#endif
+
+// This is vxl_doc_rules.h
+//            (The above line indicates the file name
+//             the \file command below tells Doxygen which
+//             file the comments correspond to, so should
+//             be left blank in general to minimise the
+//             risks of mistakes)
+//             Don't forget to leave an empty line after this one.
+
+//:
+// \file
+// \brief give a brief description of the file.
+// \author Whoever, (erehwon) 01/01/01
+// \author Someone else
 // Here you can write the long description of what's in this file
 // Doxygen will add this to the extended documentation of the file
 //
-// .SECTION Author
-//     Maarten Vergauwen
-//     Dave Cooper
-//     Maybe some other authors
-//
-// .SECTION Modifications:
-//     No modifications yet
-//------------------------------------------------------------------------
-
+// \verbatim
+// Modifications
+// IMS (Manchester) 14/03/2001: Tidied up the documentation
+// \endverbatim
 
 //: Brief description of the class
 // The long description starts here
@@ -34,7 +36,17 @@
 class my_class {
 public:
 
-  //: \brief Brief description, the long one is in the .cxx file
+  //: Brief description don't forget the colon
+  // Do not leave any blank lines with out the //, or doxygen
+  // will think you have ended the documentation comment, and
+  // started an ordinary code comment.
+  //
+  // If you want to start a new parapraph, put it a line with just //
+  //
+  // If you want to do some special stuff such as formulas, have
+  // a look at the doxygen documentation http://www.stack.nl/~dimitri/doxygen/
+  // Be careful, doxygen is not very tolerant: make sure you test build the
+  // documentation after using any of the advanced stuff.
   my_class();
 
   //: Brief description of the enum.
