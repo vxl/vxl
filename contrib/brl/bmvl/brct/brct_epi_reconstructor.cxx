@@ -140,7 +140,7 @@ void brct_epi_reconstructor::init_state_3d_estimation()
   //
 
   // point matcher using epipolar geometry
-  int c = tracks_.size();
+  unsigned int c = tracks_.size();
   joe_observes_.resize(c);
   grad_angles_.resize(c);
   vnl_double_3x3 Sigma3d;
@@ -149,7 +149,7 @@ void brct_epi_reconstructor::init_state_3d_estimation()
   Sigma3d.set_identity();
   vcl_cout<<Sigma3d<<'\n';
   int k = 0;
-  for (int t =0; t<c; t++)
+  for (unsigned int t =0; t<c; ++t)
   {
     vcl_vector<bugl_normal_point_3d_sptr> pts_3d;
     vcl_vector<bugl_gaussian_point_2d<double> > tracked_points0;
@@ -355,8 +355,8 @@ void brct_epi_reconstructor::update_observes(const vnl_double_3x4 &P, int iframe
   vnl_double_2x2 sigma;
   sigma.set_identity();
 
-  int c = tracks_.size();
-  for (int t=0; t<c; t++)
+  unsigned int c = tracks_.size();
+  for (unsigned int t=0; t<c; ++t)
   {
     int frag_size = curve_3d_.get_fragment_size(t);
     for (int i=0; i<frag_size; i++)
@@ -390,18 +390,18 @@ bool brct_epi_reconstructor::match_point(vdgl_digital_curve_sptr const& dc,
 //Joe version using epipolar line
 void brct_epi_reconstructor::update_observes_joe(int iframe)
 {
-  int c = tracks_.size();
-  for (int t=0; t<c; t++)
+  unsigned int c = tracks_.size();
+  for (unsigned int t=0; t<c; ++t)
   {
     //get the tracked curve in the current frame
     vdgl_digital_curve_sptr dci = tracks_[t][iframe];
     //get the corresponding points from frame 0
     vcl_vector<bugl_gaussian_point_2d<double> > pts0 =
       joe_observes_[t][0];
-    int npts = pts0.size();
+    unsigned int npts = pts0.size();
     //vector for current track and frame
     vcl_vector<bugl_gaussian_point_2d<double> > cur_frame(npts);
-    for (int i = 0; i<npts; i++)
+    for (unsigned int i = 0; i<npts; ++i)
     {
 #if 0 //JLM Debug
       if (i>0)
@@ -429,10 +429,10 @@ vcl_vector<bugl_gaussian_point_2d<double> >
 brct_epi_reconstructor::get_cur_joe_observes(int frame)
 {
   vcl_vector<bugl_gaussian_point_2d<double> > pts(num_points_);
-  int c = tracks_.size();
-  int ip = 0;
-  for (int t = 0; t<c; t++)
-    for (int i = 0; i<joe_observes_[t][frame].size(); i++, ip++)
+  unsigned int c = tracks_.size();
+  unsigned int ip = 0;
+  for (unsigned int t = 0; t<c; ++t)
+    for (unsigned int i = 0; i<joe_observes_[t][frame].size(); ++i, ++ip)
       pts[ip] = joe_observes_[t][frame][i];
   return pts;
 }
@@ -454,12 +454,11 @@ void brct_epi_reconstructor::write_results(const char* fname)
 
   // only write frame 0
   int frame = 0;
-  int c = tracks_.size();
-  int ip = 0;
-  for (int t = 0; t<c; t++)
+  unsigned int c = tracks_.size();
+  for (unsigned int t = 0; t<c; ++t)
   {
     out<<"[ curve "<< t <<' '<< joe_observes_[t][frame].size()<<" ]\n";
-    for (int i = 0; i<joe_observes_[t][frame].size(); i++)
+    for (unsigned int i = 0; i<joe_observes_[t][frame].size(); ++i)
     {
       out<< joe_observes_[t][frame][i].x()<< ' '
          << joe_observes_[t][frame][i].y()<< ' '
@@ -471,19 +470,19 @@ void brct_epi_reconstructor::write_results(const char* fname)
 
 void brct_epi_reconstructor::print_motion_array()
 {
-  int n_frames = tracks_[0].size();
+  unsigned int n_frames = tracks_[0].size();
   if (!n_frames||!num_points_)
     return;
-  for (int i = 2; i<n_frames-1; i++)
+  for (unsigned int i = 2; i+1<n_frames; ++i)
     update_observes_joe(i);
   vnl_matrix<double> H(n_frames, num_points_);
   vcl_vector<bugl_gaussian_point_2d<double> > temp_0, temp_i, temp_i1;
   temp_0 = get_cur_joe_observes(0);
-  for (int i = 0; i<n_frames-1; i++)
+  for (unsigned int i = 0; i+1<n_frames; ++i)
   {
     temp_i = get_cur_joe_observes(i);
     temp_i1 = get_cur_joe_observes(i+1);
-    for (int j = 0; j<temp_0.size(); j++)
+    for (unsigned int j = 0; j<temp_0.size(); ++j)
       {
         bugl_gaussian_point_2d<double>& gp_0 = temp_0[j], gp_i = temp_i[j],
           gp_i1 = temp_i1[j];
@@ -510,8 +509,8 @@ void brct_epi_reconstructor::update_confidence()
     cams[i] = get_projective_matrix(motions_[(cur_pos_-i)%memory_size_]);
 
   double normalization_factor = 0;
-  int c = tracks_.size();
-  for (int t=0; t<c; t++)
+  unsigned int c = tracks_.size();
+  for (unsigned int t=0; t<c; ++t)
   {
     int frag_size = curve_3d_.get_fragment_size(t);
     for (int i=0; i<frag_size; i++)
@@ -583,8 +582,8 @@ void brct_epi_reconstructor::inc()
   // get these best matching edgels
   vcl_vector<bugl_gaussian_point_2d<double> > & cur_measures = observes_[cur_pos_%queue_size_];
 
-  //int c = tracks_.size();
-  //for (int t = 0; t < c; t ++)
+  //unsigned int c = tracks_.size();
+  //for (unsigned int t = 0; t < c; ++t)
   //compare the matched points with the projected 3-d points
   //in order to correct the Kalman parameters
   for (int i=0; i<num_points_; i++)
@@ -747,12 +746,12 @@ void brct_epi_reconstructor::inc()
   //point using the predicted camera for the current view
   vcl_vector<vnl_double_3x4> Ps(memory_size_);
   vcl_vector<vnl_double_2> pts(memory_size_);
-  int c = tracks_.size();
+  unsigned int c = tracks_.size();
   int ipt = 0;
-  for (int t =0; t<c; t++)
+  for (unsigned int t=0; t<c; ++t)
   {
-    int n = joe_observes_[t][0].size();
-    for (int ip = 0; ip<n; ip++, ipt++)
+    unsigned int n = joe_observes_[t][0].size();
+    for (unsigned int ip = 0; ip<n; ++ip, ++ipt)
     {
       for (int j =0; j<memory_size_; j++)
         if (joe_observes_[t][j][ip].exists()){
@@ -1024,13 +1023,14 @@ vcl_vector<vgl_point_2d<double> > brct_epi_reconstructor::get_next_observes()
 {
   vcl_vector<vgl_point_2d<double> > pts(num_points_);
 
-  int c = tracks_.size();
-  for (int t=0; t<c; t++){
+  unsigned int c = tracks_.size();
+  for (unsigned int t=0; t<c; ++t)
+  {
     vdgl_digital_curve_sptr dc = tracks_[t][(cur_pos_+1)%queue_size_];
     vdgl_interpolator_sptr interp = dc->get_interpolator();
     vdgl_edgel_chain_sptr  ec = interp->get_edgel_chain();
-    int size = ec->size();
-    for (int i=0; i<size; i++)
+    unsigned int size = ec->size();
+    for (unsigned int i=0; i<size; ++i)
     {
       double s = double(i) / double(size);
       pts.push_back(vgl_point_2d<double> (dc->get_x(s), dc->get_y(s)));
@@ -1044,14 +1044,15 @@ vcl_vector<vgl_point_2d<double> > brct_epi_reconstructor::get_cur_observes()
 {
   vcl_vector<vgl_point_2d<double> > pts;
 
-  int c = tracks_.size();
+  unsigned int c = tracks_.size();
 
-  for (int t=0; t<c; t++){
+  for (unsigned int t=0; t<c; ++t)
+  {
     vdgl_digital_curve_sptr dc = tracks_[t][cur_pos_];
     vdgl_interpolator_sptr interp = dc->get_interpolator();
     vdgl_edgel_chain_sptr  ec = interp->get_edgel_chain();
-    int size = ec->size();
-    for (int i=0; i<size; i++)
+    unsigned int size = ec->size();
+    for (unsigned int i=0; i<size; ++i)
     {
       double s = double(i) / double(size);
       pts.push_back(vgl_point_2d<double>(dc->get_x(s), dc->get_y(s)));
@@ -1065,9 +1066,9 @@ vcl_vector<vgl_point_2d<double> > brct_epi_reconstructor::get_joe_cur_observes()
   vcl_vector<bugl_gaussian_point_2d<double> > pts =
     this->get_cur_joe_observes(cur_pos_);
 
-  int Np = pts.size();
+  unsigned int Np = pts.size();
   vcl_vector<vgl_point_2d<double> > res;
-  for (int i=0; i<Np; i++)
+  for (unsigned int i=0; i<Np; ++i)
     res.push_back(vgl_point_2d<double>(pts[i].x(), pts[i].y()));
   return res;
 }
@@ -1079,9 +1080,9 @@ vcl_vector<vgl_point_2d<double> > brct_epi_reconstructor::get_joe_pre_observes()
   vcl_vector<bugl_gaussian_point_2d<double> > pts =
     this->get_cur_joe_observes(cur_pos_-1);
 
-  int Np = pts.size();
+  unsigned int Np = pts.size();
   vcl_vector<vgl_point_2d<double> > res;
-  for (int i=0; i<Np; i++)
+  for (unsigned int i=0; i<Np; ++i)
     res.push_back(vgl_point_2d<double>(pts[i].x(), pts[i].y()));
   return res;
 }
@@ -1091,9 +1092,9 @@ vcl_vector<vgl_point_2d<double> > brct_epi_reconstructor::get_joe_next_observes(
   vcl_vector<bugl_gaussian_point_2d<double> > pts =
     this->get_cur_joe_observes(cur_pos_+1);
 
-  int Np = pts.size();
+  unsigned int Np = pts.size();
   vcl_vector<vgl_point_2d<double> > res;
-  for (int i=0; i<Np; i++)
+  for (unsigned int i=0; i<Np; ++i)
     res.push_back(vgl_point_2d<double>(pts[i].x(), pts[i].y()));
   return res;
 }
@@ -1104,15 +1105,15 @@ vcl_vector<vgl_point_2d<double> > brct_epi_reconstructor::get_pre_observes()
   assert(cur_pos_ > 0);
   vcl_vector<vgl_point_2d<double> > pts;
 
-  int c = tracks_.size();
+  unsigned int c = tracks_.size();
 
-  for (int t = 0; t<c; t++)
+  for (unsigned int t = 0; t<c; ++t)
   {
     vdgl_digital_curve_sptr dc = tracks_[t][(cur_pos_-1)%queue_size_];
     vdgl_interpolator_sptr interp = dc->get_interpolator();
     vdgl_edgel_chain_sptr  ec = interp->get_edgel_chain();
-    int size = ec->size();
-    for (int i=0; i<size; i++)
+    unsigned int size = ec->size();
+    for (unsigned int i=0; i<size; ++i)
     {
       double s = double(i) / double(size);
       pts.push_back(vgl_point_2d<double> (dc->get_x(s), dc->get_y(s)));
@@ -1244,10 +1245,10 @@ vnl_matrix_fixed<double, 6, 6> brct_epi_reconstructor::get_transit_matrix(int i,
 
 void brct_epi_reconstructor::print_track(const int track_index, const int frame)
 {
-  if (track_index>=tracks_.size())
+  if ((unsigned int)track_index>=tracks_.size())
     return;
   vcl_vector<vdgl_digital_curve_sptr> track = tracks_[track_index];
-  if (frame>=track.size())
+  if ((unsigned int)frame>=track.size())
     return;
   for (vcl_vector<vdgl_digital_curve_sptr>::iterator cit = track.begin();
        cit != track.end(); cit++)
