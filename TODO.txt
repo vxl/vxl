@@ -153,3 +153,48 @@ possibly a remove and add, which we should avoid.  This could be done
 at the same time as any other direct repository modification.
 
 ############################################################################
+
+* vnl_math.cxx and vnl_math_is* functions
+
+Brad King: There are several ways that compilers provide isnan, isinf,
+and isfinite tests.  The C99 standard defines "isnan", "isinf", and
+"isfinite" as macros that work with float, double, and long double.
+
+BSD 4.3 (and many conforming platforms) define
+  int isinf(double value);
+  int isnan(double value);
+  int finite(double value);
+in math.h.  Many platforms also provide
+  int isinff(float value);
+  int isnanf(float value);
+  int finitef(float value);
+and
+  int isinfl(long double value);
+  int isnanl(long double value);
+  int finitel(long double value);
+
+However, no set of these works everywhere, and some implementations
+have bugs.  Alternatively one can implement these functions by hand.
+Currently there is a hand-written implementation that works in most
+cases, but not all.  As hardware improves and long double gets bigger,
+the implementation is working on fewer and fewer platforms.
+
+For long double, the sign bit is not always the most significant bit
+due to aligned sizes (see below).  It is possible to detect the
+location of the sign exponent bits by bitwise XORing the
+representation of '1.0' and '-1.0'.  The lowest order bit of the
+exponent portion can be detected by bitwise XORing the representation
+of '1.0' and '0.5'.  Unfortunately the assumption of IEEE conformance
+for long double cannot be made.  The representation on Intel
+platforms, for example, has the following problems:
+
+  sizeof(long double) == 10  when compiling with Borland
+  sizeof(long double) == 12  when compiling with GCC
+
+The 12-byte version is the aligned size, but the number is really only
+10 bytes long.  It is a direct copy of the 80-bit floating point
+representation from the Intel FPU's registers.  The implicit '1' bit
+is represented explicitly as the MSB of the fraction component, and
+thus is not IEEE conforming.
+
+############################################################################
