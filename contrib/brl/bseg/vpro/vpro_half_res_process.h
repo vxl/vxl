@@ -1,6 +1,6 @@
-// This is brl/bseg/vpro/vpro_capture_process.h
-#ifndef vpro_capture_process_h_
-#define vpro_capture_process_h_
+// This is brl/bseg/vpro/vpro_half_res_process.h
+#ifndef vpro_half_res_process_h_
+#define vpro_half_res_process_h_
 //--------------------------------------------------------------------------------
 //:
 // \file
