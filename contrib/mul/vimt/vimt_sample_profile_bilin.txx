@@ -1,7 +1,8 @@
 // This is mul/vimt/vimt_sample_profile_bilin.txx
 #ifndef vimt_sample_profile_bilin_txx_
 #define vimt_sample_profile_bilin_txx_
-//: \file
+//:
+//  \file
 //  \brief Profile sampling functions for 2D images
 //  \author Tim Cootes
 
@@ -58,8 +59,8 @@ void vimt_sample_profile_bilin(vnl_vector<vecType>& vec,
 
   // Otherwise do more fiddly projective calculations
 
-  int xstep = image.image().xstep();
-  int ystep = image.image().ystep();
+  int istep = image.image().istep();
+  int jstep = image.image().jstep();
   int pstep = image.image().planestep();
   const imType* plane0 = image.image().top_left_ptr();
   vgl_point_2d<double> im_p, p=p0;
@@ -72,7 +73,7 @@ void vimt_sample_profile_bilin(vnl_vector<vecType>& vec,
       for (int i=0;i<n;++i,p+=u)
       {
         im_p = w2i(p);
-        v[i] = vil2_bilin_interp(im_p.x(),im_p.y(),plane0,xstep,ystep);
+        v[i] = vil2_bilin_interp(im_p.x(),im_p.y(),plane0,istep,jstep);
       }
     }
     else
@@ -81,7 +82,7 @@ void vimt_sample_profile_bilin(vnl_vector<vecType>& vec,
       {
         im_p = w2i(p);
         for (int j=0;j<np;++j,++v)
-          *v = vil2_bilin_interp(im_p.x(),im_p.y(),plane0+j*pstep,xstep,ystep);
+          *v = vil2_bilin_interp(im_p.x(),im_p.y(),plane0+j*pstep,istep,jstep);
       }
     }
   }
@@ -95,7 +96,7 @@ void vimt_sample_profile_bilin(vnl_vector<vecType>& vec,
       for (int i=0;i<n;++i,p+=u)
       {
         im_p = w2i(p);
-        v[i] = vil2_safe_bilin_interp(im_p.x(),im_p.y(),plane0,ni,nj,xstep,ystep);
+        v[i] = vil2_safe_bilin_interp(im_p.x(),im_p.y(),plane0,ni,nj,istep,jstep);
       }
     }
     else
@@ -104,7 +105,7 @@ void vimt_sample_profile_bilin(vnl_vector<vecType>& vec,
       {
         im_p = w2i(p);
         for (int j=0;j<np;++j,++v)
-          *v = vil2_safe_bilin_interp(im_p.x(),im_p.y(),plane0+j*pstep,ni,nj,xstep,ystep);
+          *v = vil2_safe_bilin_interp(im_p.x(),im_p.y(),plane0+j*pstep,ni,nj,istep,jstep);
       }
     }
   }
