@@ -10,11 +10,6 @@ LIBRARY := vnl
 VERSION := 1.0
 DEFINES += -DBUILDING_VNL_DLL
 
-ifeq (1,$(strip $(GNU_LIBSTDCXX_V3)))
-# optimization breaks linux <stdlib.h>
-optimize := 
-endif
-
 # template sources
 MANPAGE_SOURCES += vnl_c_vector.txx
 MANPAGE_SOURCES += vnl_vector.txx

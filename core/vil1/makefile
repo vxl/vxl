@@ -102,11 +102,6 @@ ifeq ($(OS),Linux2)
   optimize := -O3 -ffast-math -fstrict-aliasing -march=pentiumpro
 endif
 
-ifeq (1,$(strip $(GNU_LIBSTDCXX_V3)))
-# optimization breaks linux <stdlib.h>
-optimize := 
-endif
-
 # turn on optimization for the convolution code
 FLAGS_Templates/vil_convolve_1d.cxx := $(optimize)
 FLAGS_Templates/vil_convolve_simple+byte.byte.int.int-.cxx := $(optimize)
