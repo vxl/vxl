@@ -18,13 +18,7 @@
 * - vimt_gaussian_pyramid_builder_2d
 * - vimt_gaussian_pyramid_builder_2d_general
 *
-* \subsection Interp Interpolation
-* Interpolation functions include
-* - vimt_bilin_interp_2d (Fast interpolation with no checks on image size - seg fault if outside)
-* - vimt_safe_bilin_interp_2d (Check inside image, if not, return zero)
-* - vimt_safe_extend_bilin_interp_2d (Bilinear, if outside return value at nearest edge pixel)
-*
 * \subsection Sampling Sampling
-* Profiles can be sampled using vimt_sample_profile_2d
+* Profiles can be sampled using vimt_sample_profile_bilin
 *
 */
