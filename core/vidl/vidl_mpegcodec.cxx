@@ -1,10 +1,11 @@
+// This is vxl/vidl/vidl_mpegcodec.cxx
 #include "vidl_mpegcodec.h"
 #include "vidl_yuv_2_rgb.h"
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdio.h>
-#include <vcl_algorithm.h>
 #include <vcl_cassert.h>
+#include <vcl_cstdlib.h> // for vcl_strtol()
 #include <vul/vul_file.h>
 #include <vil/vil_image.h>
 #include <vil/vil_memory_image_of.h>
@@ -33,30 +34,30 @@ static void internal_draw_frame (vidl_mpegcodec_data * instance,
   int c = 0;
   int w = instance->width;
 
+
   int roix = p->x0;
   int roiy = p->y0;
-  int roixend = roix + p->w;
+  int roiw = p->w;
+  int roih = p->h;
+//int roixend = roix + p->w;
+  int wh = w>>1;
 
   if (instance->output_format == vidl_mpegcodec_data::GREY)
     {
-      int roiyend = roiy+p->h;
-
       // Recover in gray
-      for (int i=roiy; i<(roiyend); ++i)
-        for (int j=roix; j<(roixend); ++j, ++c)
+      for (int i=roiy; i<(roiy+roih); ++i)
+        for (int j=roix; j<(roix+roiw); ++j, ++c)
           buf[c]= Y[i*p->w+j];
     }
   else
     {
-      int roiyend = w*(roiy+p->h);
-
       // Recover in RGB
-      for (int i=roiy; i<(roiyend); i+=w)
-        for (int j=roix; j<(roixend); ++j, c+=3)
+      for (int i=roiy; i<(roiy+roih); ++i)
+        for (int j=roix; j<(roix+roiw); ++j, c+=3)
           {
-            int arg = (i>>2)+(j>>1);
+            int arg = (i>>1)*(wh)+(j>>1);
             // this is assuming the chroma channels are half-size in each direction.
-            vidl_yuv_2_rgb(Y[i+j],
+            vidl_yuv_2_rgb(Y[i*w+j],
                            U[arg],
                            V[arg],
                            &(buf[c]));
@@ -301,36 +302,6 @@ vidl_mpegcodec::set_pid(vcl_string pid)
   decoder_->demux_pid_ = vcl_strtol(pid.c_str(),0,16);
 }
 
-#if 0
-vil_image *
-vidl_mpegcodec::get_image(int frame_position,
-                      int x0,
-                      int y0,
-                      int width,
-                      int height)
-{
-  vil_image * frame = 0;
-
-  int indy = width * height * this->get_bytes_pixel();
-  unsigned char ib[indy];
-  this->get_section(frame_position,(void*)ib,x0,y0,width,height);
-
-  if (decoder_->get_format() == vidl_mpegcodec_data::GREY)
-    frame = new vil_memory_image_of<unsigned char >(&ib[0],this->width(),this->height());
-  else
-    {
-      int w = this->width();
-      int h = this->height();
-      vil_rgb_byte bites[w*h];
-      int c=0;
-      for (int i=0; i<(w*h); i++,c+=3)
-        bites[i] = vil_rgb_byte(ib[c],ib[c+1],ib[c+2]);
-      frame = new vil_memory_image_of<vil_rgb_byte >(&bites[0],w,h);
-    }
-  return frame;
-}
-#endif
-
 //called by load method
 //assumed the helper is already instantiated
 bool
@@ -380,7 +351,7 @@ vidl_mpegcodec::init()
   this->set_height(h);
   if (decoder_->get_format() == vidl_mpegcodec_data::RGB)
     b=24;
-  else if (decoder_->get_format() == vidl_mpegcodec_data::GREY)
+  else // if (decoder_->get_format() == vidl_mpegcodec_data::GREY)
     b=8;
   set_bits_pixel(b);
 
@@ -402,3 +373,36 @@ vidl_mpegcodec::init()
   inited = true;
   return true;
 }
+
+//here for reference.
+//this actually describes how to get a 
+//a vil_image from these char * buffers.
+#if 0
+vil_image *
+vidl_mpegcodec::get_image(int frame_position,
+                      int x0,
+                      int y0,
+                      int width,
+                      int height)
+{
+  vil_image * frame = 0;
+
+  int indy = width * height * this->get_bytes_pixel();
+  unsigned char ib[indy];
+  this->get_section(frame_position,(void*)ib,x0,y0,width,height);
+
+  if (decoder_->get_format() == vidl_mpegcodec_data::GREY)
+    frame = new vil_memory_image_of<unsigned char >(&ib[0],this->width(),this->height());
+  else
+    {
+      int w = this->width();
+      int h = this->height();
+      vil_rgb_byte bites[w*h];
+      int c=0;
+      for (int i=0; i<(w*h); i++,c+=3)
+        bites[i] = vil_rgb_byte(ib[c],ib[c+1],ib[c+2]);
+      frame = new vil_memory_image_of<vil_rgb_byte >(&bites[0],w,h);
+    }
+  return frame;
+}
+#endif

@@ -1,15 +1,14 @@
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // \author Tim Cootes
 // \brief Get yes or no response from keyboard
 
+#include "mbl_read_yes.h"
 #include <vcl_iostream.h>
 #include <vcl_cstdio.h>
-#include <mbl/mbl_read_yes.h>
 
 bool mbl_read_yes()
 {

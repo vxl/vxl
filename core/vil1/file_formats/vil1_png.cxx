@@ -19,7 +19,7 @@
 
 #include <png.h>
 #if (PNG_LIBPNG_VER_MAJOR == 0)
-extern "You need a later libpng. You should rerun CMake, after setting NATIVE_PNG_LIBRARY and NATIVE_PNG_INCLUDE_PATH to Ignore"
+extern "You need a later libpng. You should rerun CMake, after setting VXL_FORCE_V3P_PNG to ON."
 #endif
 #include <vcl_cstdlib.h> // for vcl_exit()
 

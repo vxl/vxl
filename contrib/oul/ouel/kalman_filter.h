@@ -10,39 +10,39 @@
 #ifndef OTAGO_kalman_filter__h_INCLUDED
 #define OTAGO_kalman_filter__h_INCLUDED 1
 
-#include <vnl/vnl_matrix.h>
-
 //----------------------------------------------------------------------
 //:
 // \file
 // \brief The Kalman filter class
-// \verbatim
 //
 // Implementation of a linear Kalman filter. We want to estimate the
 // value of a time-varying signal from a measurement and predict the
 // next value of the signal.
 //
 // The relationship between signal and measurement is:
+// \verbatim
 // z(k)        =  H(k)    *    x(k)     +    v(k)
 // measurement    relation     signal        noise
 //                matrix
+// \endverbatim
 //
 // The relationship between signals at different times is:
+// \verbatim
 // x(k+1)      =  A(k)    *    x(k)   +   B(k)   *   u(k)   +   w(k)
 // signal         relation     signal     control    control    noise
 //                matrix                  matrix     signal
 // \endverbatim
 //
-// \verbatim
 // Typical usage:
 //
 // \status Completed
 // \author Brendan McCane
 //----------------------------------------------------------------------
 
+#include <vnl/vnl_matrix.h>
+
 class KalmanFilter
 {
-private:
   // The number of dimensions in signal (ns)
   unsigned int num_signal_dimensions;
 
@@ -55,7 +55,7 @@ private:
   // The relation between one signal and the next (ns*ns)
   vnl_matrix<double> A;
 
-    // The relation between measurement and signal (nm*ns)
+  // The relation between measurement and signal (nm*ns)
   vnl_matrix<double> H;
 
   // The control input relation  (nc*ns)
