@@ -193,9 +193,11 @@ delimiting which types is transforms should be supported.
 
 - Which indexing scheme
 
-It was decided that i,j,plane should be used for 2D images and
-i,j,k,plane should be used for 3D images.  These variable names will
-be used in the function declarations.
+It was decided that the parameter and example index variable names
+should be i,j,p for 2D images and i,j,k,p should be used for 3D images.
+These variable names will
+be used in the function declarations. The size functions were
+agreed to be ni, nj, nplanes.
 
 - Which index type
 
@@ -339,27 +341,32 @@ would know about this.
 
 6. MUL Upgrades
 
-Ian Scott discussed mul code that other may be interested in and that
+Ian Scott discussed mul code that others may be interested in and that
 may be ready for promotion to vxl top-level libraries.
 
 mul/mil is being converted and integrated into vil2.
 
-If anything from mul is promoted into vxl, then mul/mbl will have to
-be promoted because it is heavily used.
-
-vpdfl is a standard representation for PDFs used by mul code.  There
-is consensus that vpdfl should go into vxl.  There was a discussion of
-where the many vpdfl-vnl templates should go.  If both libraries are
+If anything from mul is promoted into vxl, then the polymorphic non-templated
+iterators in mul/mbl will have to be promoted (probably to vbl) because it
+is heavily used.  There was a discussion of where the many vbl-vnl
+templates should go. If both libraries are
 at the top-level, then neither can hold the shared templates because
-no interdependency is allowed at the top-level.
+no interdependency is allowed at the top-level. A separate Templates
+directory most likely.
 
-vpdfl is used by clsfy, which can produce many types of classifiers,
-including a state vector machine.
+vpdfl is a standard representation for PDFs used by Manchester code.
+There is consensus that vpdfl should be merged with pdf1d and
+go into vxl after someone else trys using it a bit. The use of
+the builder-model-instance pattern was ascribed to Manchester's use
+of/belief in the "high object style"
+
+Also available is clsfy, which can produce many types of classifiers,
+including a support vector machine, and adaboost.
 
 Ian also suggests promoting mbl_mz_random.
 
 It was agreed that mbl_erf and mbl_gamma should be promoted to
-somewhere in vxl.
+somewhere in vnl.
 
 ----------------------------------------------------------------------------
 
@@ -384,7 +391,8 @@ outliers and should be removed.
 8. Image Processing
 
 There was a discussion of vipl.  There is a concern that some people
-are afraid of the profuse templates.
+are afraid of the profuse templates. Ian said he found it relatively
+easy to extend and use, but that it leaked memory.
 
 The group viewed the vipl and vepl interfaces in Doxygen.  AWF
 commented that the vepl examples look great.
