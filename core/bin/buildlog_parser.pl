@@ -31,7 +31,7 @@ use FrostAPI;
 #   if so, we output to a tmpfile first, then compress it, MIME it and then output it
 #   otherwise we just output it to STDOUT
 $tmpfilename1= "/tmp/buildlog_parser_${$}_1.tmp";
-$tmpfilename2= "/tmp/buildlog_parser_${$}_2.tmp";
+$tmpfilename2= "/tmp/buildlog_parser_${$}_2.tmp.gz";
 
 if ( -f "/bin/compress" )
   {
@@ -46,6 +46,11 @@ if ( -f "/usr/local/bin/gzip" )
 if ( -f "/bin/gzip" )
   {
     $compress= "/bin/gzip -c $tmpfilename1 > $tmpfilename2";
+  }
+
+if ( -f "/freeware/bin/gnu-tools/gzip" )
+  {
+    $compress= "/freeware/bin/gnu-tools/gzip -c -n -q -9 $tmpfilename1 > $tmpfilename2";
   }
 
 if ( -f "/tmp/iup_opt/bin/gzip" )
@@ -309,8 +314,8 @@ for $build ( keys %allbuilds )
 ($ds, $Ms, $ys, $hs,$ms,$ss)= UnixDate( ParseDate( $starttime), "%d", "%m", "%y", "%H", "%M", "%S");
 ($de, $Me, $ye, $he,$me,$se)= UnixDate( ParseDate( $endtime)  , "%d", "%m", "%y", "%H", "%M", "%S");
 
-#print "Start time = $starttime\n";
-#print "End time   = $endtime\n";
+#print STDERR "Start time = $starttime\n";
+#print STDERR "End time   = $endtime\n";
 
 $as= timelocal( $ss, $ms, $hs, $ds, $Ms, $ys);
 $ae= timelocal( $se, $me, $he, $de, $Me, $ye);
@@ -338,7 +343,7 @@ FrostAPI::RunMeasurement( "Warnings", $totwarnings);
 FrostAPI::RunMeasurement( "FileCount", $totfiles);
 FrostAPI::RunMeasurement( "TimeStarted", $totstarttime);
 FrostAPI::RunMeasurement( "TimeElapsed", $tottime);
-FrostAPI::RunMeasurementBase64( "BuildLog", $fullbuildlog);
+FrostAPI::RunMeasurement( "BuildLog", $fullbuildlog);
 
 if( $toterrors>0)
   {
