@@ -55,7 +55,7 @@ vil_nitf_message_header_v20::vil_nitf_message_header_v20(const vil_nitf_message_
 vil_nitf_message_header_v20::vil_nitf_message_header_v20(vil_nitf_message_header_v20 const& h)
  : vil_nitf_message_header(h)
 {
-    setVersion(vil_nitf_version_v20::GetVersion());
+    setVersion(vil_nitf_version_v20::get_version_str());
     FilledCopy(MDT, GetVersion20Date());
 }
 
@@ -675,7 +675,7 @@ unsigned long vil_nitf_message_header_v20::GetHeaderLength() const
 
 void vil_nitf_message_header_v20::Init()
 {
-    setVersion(vil_nitf_version_v20::GetVersion());
+    setVersion(vil_nitf_version_v20::get_version_str());
 
     char initstr[80];                   // Will be filled with spaces.
 
