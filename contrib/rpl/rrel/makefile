@@ -21,6 +21,7 @@ SOURCES += rrel_ransac_obj.cxx
 SOURCES += rrel_trunc_quad_obj.cxx
 SOURCES += rrel_tukey_obj.cxx
 SOURCES += rrel_kernel_density_obj.cxx
+SOURCES += rrel_shift2d_est.cxx
 MANPAGE_SOURCES += rrel_objective.h
 MANPAGE_SOURCES += rrel_util.txx
 MANPAGE_SOURCES += rrel_wls_obj.h

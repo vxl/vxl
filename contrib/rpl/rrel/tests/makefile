@@ -17,6 +17,7 @@ TESTS += test_ran_sam_search.cxx
 TESTS += test_ransac_obj.cxx
 TESTS += test_robust_util.cxx
 TESTS += test_similarity_from_matches.cxx
+TESTS += test_shift2d_est.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
