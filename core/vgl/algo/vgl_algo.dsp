@@ -129,6 +129,49 @@ SOURCE=.\vgl_algo.cxx
 
 # End Source File
 # End Group
+# Begin Group "Header Files"
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\vgl_homg_operators_1d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_homg_operators_1d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_homg_operators_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_homg_operators_2d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_homg_operators_3d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_homg_operators_3d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_rtree.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_rtree.txx
+
+# End Source File
+# End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
