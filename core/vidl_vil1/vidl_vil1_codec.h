@@ -21,8 +21,9 @@ class vidl_vil1_mpegcodec;
 class vidl_vil1_avicodec;
 
 //: Base for video coder/decoder
-//   A vidl_vil1_codec is a pure virtual class defining the codecs of video
+//   A vidl_vil1_codec is a pure virtual class defining the codecs of video.
 //   See also vidl_vil1_io and vidl_vil1_image_list_codec and vidl_vil1_avicodec
+//   See also vidl_codec for use with vil instead of vil1.
 class vidl_vil1_codec :  public vbl_ref_count
 {
   vidl_vil1_codec(vidl_vil1_codec const&) : vbl_ref_count() {}
@@ -65,21 +66,19 @@ class vidl_vil1_codec :  public vbl_ref_count
   inline int  get_bits_pixel() const { return B; }
   inline int  get_bytes_pixel()const { return (B+7)/8; }
 
-  virtual bool get_section(
-        int position,
-        void* ib,
-        int x0,
-        int y0,
-        int width,
-        int heigth) const = 0;
+  virtual bool get_section(int position,
+                           void* ib,
+                           int x0,
+                           int y0,
+                           int width,
+                           int height) const = 0;
 
-  virtual int put_section(
-        int position,
-        void* ib,
-        int x0,
-        int y0,
-        int xs,
-        int ys) = 0;
+  virtual int put_section(int position,
+                          void* ib,
+                          int x0,
+                          int y0,
+                          int xs,
+                          int ys) = 0;
 
   virtual const char* type() = 0;
 
@@ -96,7 +95,7 @@ class vidl_vil1_codec :  public vbl_ref_count
 
   //: Perform any operations required to close down the codec.
   // This will typically be called just before program exit.
-  virtual void close() {};
+  virtual void close() {}
 
  private:
 

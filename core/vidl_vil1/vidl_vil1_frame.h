@@ -29,8 +29,7 @@ class vidl_vil1_frame : public vbl_ref_count
   ~vidl_vil1_frame();
 
   vil1_image get_image();
-  virtual bool get_section(
-                void* ib, int x0, int y0, int width, int heigth) const;
+  virtual bool get_section(void*ib, int x0,int y0, int width,int height) const;
 
   vidl_vil1_codec_sptr get_codec() {return coder_;}
 
