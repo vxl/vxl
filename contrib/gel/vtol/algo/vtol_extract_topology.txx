@@ -749,6 +749,7 @@ compute_faces( vcl_vector< region_type_sptr > const& chains,
   }
 }
 
+#if 0
 // ---------------------------------------------------------------------------
 //                                                                  constructor
 
@@ -878,7 +879,7 @@ print( vcl_ostream& ostr, unsigned indent ) const
     ostr << '\n';
   }
 }
-
+#endif 
 // ---------------------------------------------------------------------------
 //                                                                   add faces
 

@@ -216,24 +216,106 @@ class vtol_extract_topology
     //
     vcl_vector<chain_tree_node*> children;
     
-    chain_tree_node( region_type_sptr region );
-    ~chain_tree_node();
+    chain_tree_node( region_type_sptr in_region ): region( in_region ) 
+    { /* empty ctor */ }
+    ~chain_tree_node() {
+      vcl_vector<chain_tree_node*>::iterator itr = children.begin();
+      for ( ; itr != children.end(); ++itr ) {
+        delete *itr;
+      }
+    }
     
     // Add a new region below this node. Prerequiste: the new region is
     // contained within this chain.
     //
     void
-    add( region_type_sptr new_region );
+    add( region_type_sptr new_region )
+    {
+      vcl_vector<chain_tree_node*>::iterator itr;
+      
+      // First, determine if it should go further down the tree. If so,
+      // add it to the appropriate child and exit immediately.
+      //
+      for ( itr = children.begin(); itr != children.end(); ++itr ) {
+        if ( vtol_extract_topology<LABEL_TYPE>::contains( (*itr)->region, new_region ) ) {
+          (*itr)->add( new_region );
+          return;
+        }
+      }
+      
+      // It belongs at this level. Create a new node for it, and find out
+      // if this new node swallows up any of the existing children. Then
+      // add the new node as a child of this.
+      //
+      chain_tree_node* new_node = new chain_tree_node( new_region );
+      itr = children.begin();
+      while ( itr != children.end() ) {
+        if ( contains( new_region, (*itr)->region ) ) {
+          new_node->children.push_back( *itr );
+          this->children.erase( itr );
+        } else {
+          ++itr;
+        }
+      }
+      this->children.push_back( new_node );
+    }
 
 
     
     // Create a face from the regions at this node and its children.
     //
     vtol_intensity_face_sptr
-    make_face( finder_type* find, data_image_type const* img ) const;
+    make_face( finder_type* find, data_image_type const* img ) const
+    {
+      vcl_vector< vtol_one_chain_sptr > face_chains;
+      face_chains.push_back( region->make_one_chain() );
+      for ( unsigned i = 0; i < children.size(); ++i ) {
+        face_chains.push_back( children[i]->region->make_one_chain() );
+      }
+      if ( find ) {
+        assert( img );
+        
+        vcl_vector<unsigned> ri, rj;
+        find->same_int_region( region->i, region->j, ri, rj );
+        assert( ri.size() == rj.size() && !ri.empty() );
+        
+        vcl_vector<float> x, y;
+        vcl_vector<unsigned short> intensity;
+        for ( unsigned c = 0; c < ri.size(); ++c ) {
+          x.push_back( static_cast<float>(ri[c]) );
+          y.push_back( static_cast<float>(rj[c]) );
+          intensity.push_back( (*img)( ri[c], rj[c] ) );
+        }
+        vdgl_digital_region r( x.size(), &x[0], &y[0], &intensity[0]  );
+        return new vtol_intensity_face( &face_chains, r );
+      } else {
+        // create a face without a digital geometry
+        vcl_clog << "Creating region with NO pixels"  << vcl_endl;
+        return new vtol_intensity_face( face_chains );
+      }
+    }
+
     
     void
-    print( vcl_ostream& ostr, unsigned indent ) const;
+    print( vcl_ostream& ostr, unsigned indent ) const
+    {
+      for ( unsigned i = 0; i < indent; ++i ) {
+        ostr << ' ';
+      }
+      ostr << '['<<children.size()<<']';
+      if ( ! children.empty() ) {
+        ostr << "___\n";
+        for ( unsigned i = 0; i < indent; ++i ) {
+          ostr << ' ';
+        }
+        ostr << "      \\\n";
+        for ( unsigned i = 0; i < children.size(); ++i ) {
+          children[i]->print( ostr, indent+7 );
+        }
+      } else {
+        ostr << '\n';
+      }
+    }
   };
 
 
