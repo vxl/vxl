@@ -261,7 +261,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vsl_harris"=.\VSL\EXAMPLES\vsl_harris.dsp - Package Owner=<4>
+Project: "vsl_harris"=.\vsl\examples\vsl_harris.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
