@@ -4,7 +4,7 @@ SET(mfc_example_sources
  example_mfc.cpp     example_mfc.h    example_mfc.rc
  example_mfcView.cpp example_mfcView.h
  example_mfcDoc.cpp  example_mfcDoc.h
- StdAfx.cpp
+ StdAfx.cpp          StdAfx.h
  MainFrm.cpp         MainFrm.h
 )
 
