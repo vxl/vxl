@@ -32,7 +32,7 @@ struct brct_error_index
   ~brct_error_index(){};
   int i(){return i_;}
   double error(){return e_;}
-  private:
+ private:
   int i_;
   double e_;
 };
@@ -69,7 +69,7 @@ class brct_algos
                               const vnl_double_3& trans,
                               vcl_vector<vnl_double_2> & pts_2d,
                               vcl_vector<vnl_double_3> & pts_3d,
-							  double fraction = 0.1);
+                              double fraction = 0.1);
 
   //: find camera translation from matched 2-d/3-d points
   static bool camera_translation(const vnl_double_3x3& K,
@@ -84,20 +84,19 @@ class brct_algos
                                         vnl_double_3& trans);
 
   //: compute camera translation using epipolar geometry
-static void camera_translation(vnl_double_3x3 const & K,
-                               vnl_double_2 const& image_epipole,
-                               vcl_vector<vnl_double_2> const& points_0,
-                               vcl_vector<vnl_double_2> const& points_1,
-                               vcl_vector<vnl_double_2> const& points,
-                               vnl_double_3& T);
+  static void camera_translation(vnl_double_3x3 const & K,
+                                 vnl_double_2 const& image_epipole,
+                                 vcl_vector<vnl_double_2> const& points_0,
+                                 vcl_vector<vnl_double_2> const& points_1,
+                                 vcl_vector<vnl_double_2> const& points,
+                                 vnl_double_3& T);
 
-static double motion_constant(vnl_double_2 const& image_epipole,
-                              int i,
-                              vnl_double_2& p_i, 
-                              vnl_double_2& p_i1); 
-                               
-static void print_motion_array(vnl_matrix<double>& H);
+  static double motion_constant(vnl_double_2 const& image_epipole,
+                                int i,
+                                vnl_double_2& p_i,
+                                vnl_double_2& p_i1);
 
+  static void print_motion_array(vnl_matrix<double>& H);
 };
 
 
