@@ -34,7 +34,7 @@ bool vil_save(vil_image const& i, vil_stream* os, char const* file_format VCL_DE
   vil_image out = vil_new(os, i.width(), i.height(), i, file_format);
   
   if (!out) {
-    cerr << "vil_save: Cannot save to type [" << file_format << "]\n";
+    vcl_cerr << "vil_save: Cannot save to type [" << file_format << "]\n";
     return false;
   }
 
@@ -52,7 +52,7 @@ bool vil_save(vil_image const& i, char const* filename)
   char const *dot = strrchr(filename, '.');
   if (!dot) {
     // filename doesn't end in ".anything"
-    cerr << __FILE__ ": assuming pnm format" << endl;
+    vcl_cerr << __FILE__ ": assuming pnm format" << vcl_endl;
     file_format = "pnm";
   }
   else {
@@ -65,8 +65,11 @@ bool vil_save(vil_image const& i, char const* filename)
     macro(jpg, jpeg);
     macro(tif, tiff);
 #undef macro
-    else
-      file_format = dot+1; // hope it works.
+    else {
+      //file_format = dot+1; // hope it works.
+      vcl_cerr << __FILE__ ": assuming pnm format" << vcl_endl;
+      file_format = "pnm";
+    }
   }
 
   return vil_save(i, filename, file_format);
