@@ -88,24 +88,28 @@ void mil_gaussian_pyramid_builder_2d<T>::gaussReduce(mil_image_2d_of<T>& dest_im
 	int ny = src_im.ny();
 	int n_planes = src_im.nPlanes();
 
+	// Output image size
+	int nx2 = (nx+1)/2;
+	int ny2 = (ny+1)/2;
+
 	if (dest_im.nPlanes()!=n_planes)
 		dest_im.setNPlanes(n_planes);
-	dest_im.resize((nx+1)/2,(ny+1)/2);
+	dest_im.resize(nx2,ny2);
 
-    if (work_im_.nx()<(nx+1)/2 || work_im_.ny()<ny)
-	     work_im_.resize((nx+1)/2,ny);
+    if (work_im_.nx()<nx2 || work_im_.ny()<ny)
+	     work_im_.resize(nx2,ny);
 
 		// Reduce plane-by-plane
 	for (int i=0;i<n_planes;++i)
 	{
 	  // Smooth and subsample in x, result in work_im
       mil_gauss_reduce_2d(work_im_.plane(0),work_im_.xstep(),work_im_.ystep(),
-                      src_im.plane(i),src_im.nx(),src_im.ny(),
+                      src_im.plane(i),nx,ny,
 					  src_im.xstep(),src_im.ystep());
 
       // Smooth and subsample in y (by implicitly transposing)
       mil_gauss_reduce_2d(dest_im.plane(i),dest_im.ystep(),dest_im.xstep(),
-                      work_im_.plane(0),work_im_.ny(),work_im_.nx(),
+                      work_im_.plane(0),ny,nx2,
 					  work_im_.ystep(),work_im_.xstep());
 
 

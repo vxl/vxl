@@ -19,8 +19,8 @@ void test_gauss_reduce_2d_byte(int nx)
 
   mil_image_2d_of<vil_byte> image0;
   image0.resize(nx,3);
-  mil_image_2d_of<vil_byte> reduced;
-  reduced.resize((nx+1)/2,3);
+  mil_image_2d_of<vil_byte> reduced_x;
+  reduced_x.resize((nx+1)/2,3);
 
   for (int y=0;y<image0.ny();++y)
      for (int x=0;x<image0.nx();++x)
@@ -28,17 +28,17 @@ void test_gauss_reduce_2d_byte(int nx)
 	   image0(x,y) = x+y*10;
 	 }
 
-  mil_gauss_reduce_2d(reduced.plane(0),reduced.xstep(),reduced.ystep(),
+  mil_gauss_reduce_2d(reduced_x.plane(0),reduced_x.xstep(),reduced_x.ystep(),
                     image0.plane(0),image0.nx(),image0.ny(),
 					  image0.xstep(),image0.ystep());
 
   vcl_cout<<"Original: "; image0.print_all(vcl_cout);
-  vcl_cout<<"Reduced : "; reduced.print_all(vcl_cout);
+  vcl_cout<<"reduced_x : "; reduced_x.print_all(vcl_cout);
 
-  TEST("First element",reduced(0,1)==image0(0,1),true);
-  TEST("Next element",reduced(1,1)==image0(2,1),true);
+  TEST("First element",reduced_x(0,1)==image0(0,1),true);
+  TEST("Next element",reduced_x(1,1)==image0(2,1),true);
   int L = (nx-1)/2;
-  TEST("Last element",reduced(L,1)==image0(2*L,1),true);
+  TEST("Last element",reduced_x(L,1)==image0(2*L,1),true);
 
 
   mil_image_2d_of<vil_byte> test2;
@@ -49,6 +49,29 @@ void test_gauss_reduce_2d_byte(int nx)
 					  image0.xstep(),image0.ystep());
   TEST("No overrun",test2(L+1,1)==222,true);
 
+
+  // Test it can be used to smooth in y by swapping ordinates
+  mil_image_2d_of<vil_byte> image1;
+  image1.resize(3,nx);
+  mil_image_2d_of<vil_byte> reduced_y;
+  reduced_y.resize(3,(nx+1)/2);
+
+  for (int y=0;y<image1.ny();++y)
+     for (int x=0;x<image1.nx();++x)
+	 {
+	   image1(x,y) = x+y*10;
+	 }
+
+  mil_gauss_reduce_2d(reduced_y.plane(0),reduced_y.ystep(),reduced_y.xstep(),
+                    image1.plane(0),image1.ny(),image1.nx(),
+					  image1.ystep(),image1.xstep());
+
+  vcl_cout<<"Original: "; image1.print_all(vcl_cout);
+  vcl_cout<<"reduced_y : "; reduced_y.print_all(vcl_cout);
+
+  TEST("First element",reduced_y(1,0)==image1(1,0),true);
+  TEST("Next element",reduced_y(1,1)==image1(1,2),true);
+  TEST("Last element",reduced_y(1,L)==image1(1,2*L),true); 
 }
 
 void test_gauss_reduce_2d_float(int nx)
@@ -59,8 +82,8 @@ void test_gauss_reduce_2d_float(int nx)
 
   mil_image_2d_of<float> image0;
   image0.resize(nx,3);
-  mil_image_2d_of<float> reduced;
-  reduced.resize((nx+1)/2,3);
+  mil_image_2d_of<float> reduced_x;
+  reduced_x.resize((nx+1)/2,3);
 
   for (int y=0;y<image0.ny();++y)
      for (int x=0;x<image0.nx();++x)
@@ -68,17 +91,17 @@ void test_gauss_reduce_2d_float(int nx)
 	   image0(x,y) = x+y*10;
 	 }
 
-  mil_gauss_reduce_2d(reduced.plane(0),reduced.xstep(),reduced.ystep(),
+  mil_gauss_reduce_2d(reduced_x.plane(0),reduced_x.xstep(),reduced_x.ystep(),
                     image0.plane(0),image0.nx(),image0.ny(),
 					  image0.xstep(),image0.ystep());
 
   vcl_cout<<"Original: "; image0.print_all(vcl_cout);
-  vcl_cout<<"Reduced : "; reduced.print_all(vcl_cout);
+  vcl_cout<<"reduced_x : "; reduced_x.print_all(vcl_cout);
 
-  TEST("First element",fabs(reduced(0,1)-image0(0,1))<1e-6,true);
-  TEST("Next element",fabs(reduced(1,1)-image0(2,1))<1e-6,true);
+  TEST("First element",fabs(reduced_x(0,1)-image0(0,1))<1e-6,true);
+  TEST("Next element",fabs(reduced_x(1,1)-image0(2,1))<1e-6,true);
   int L = (nx-1)/2;
-  TEST("Last element",fabs(reduced(L,1)-image0(2*L,1))<1e-6,true);
+  TEST("Last element",fabs(reduced_x(L,1)-image0(2*L,1))<1e-6,true);
 
 
   mil_image_2d_of<float> test2;
