@@ -292,6 +292,11 @@ SOURCES += i_dnnt.c
 # The "Triangle" program of Jonathan Richard Shewchuk
 SOURCES += triangle.c
 
+# numeric integration
+SOURCES += trapezod.c
+SOURCES += simpson.c
+SOURCES += adaquad.c
+
 MANPAGE_SOURCES += f2c.h
 MANPAGE_SOURCES += netlib.h
 

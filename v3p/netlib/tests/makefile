@@ -5,6 +5,7 @@ TESTS += lbfgs-example.c
 TESTS += lsqr-test.c
 TESTS += slamch-test.c
 TESTS += tricall.c
+TESTS += integral-test.c
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
