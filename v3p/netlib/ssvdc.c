@@ -250,7 +250,7 @@ L20:
 /*              apply the transformation. */
 
 	    i__3 = *n - l + 1;
-	    t = -(doublereal)sdot_(&i__3, &x[l + l * x_dim1], &c__1, &x[l + j 
+	    t = -sdot_(&i__3, &x[l + l * x_dim1], &c__1, &x[l + j 
 		    * x_dim1], &c__1) / x[l + l * x_dim1];
 	    i__3 = *n - l + 1;
 	    saxpy_(&i__3, &t, &x[l + l * x_dim1], &c__1, &x[l + j * x_dim1], &
@@ -397,7 +397,7 @@ L200:
 	i__2 = ncu;
 	for (j = lp1; j <= i__2; ++j) {
 	    i__3 = *n - l + 1;
-	    t = -(doublereal)sdot_(&i__3, &u[l + l * u_dim1], &c__1, &u[l + j 
+	    t = -sdot_(&i__3, &u[l + l * u_dim1], &c__1, &u[l + j 
 		    * u_dim1], &c__1) / u[l + l * u_dim1];
 	    i__3 = *n - l + 1;
 	    saxpy_(&i__3, &t, &u[l + l * u_dim1], &c__1, &u[l + j * u_dim1], &
@@ -451,7 +451,7 @@ L300:
 	i__2 = *p;
 	for (j = lp1; j <= i__2; ++j) {
 	    i__3 = *p - l;
-	    t = -(doublereal)sdot_(&i__3, &v[lp1 + l * v_dim1], &c__1, &v[lp1 
+	    t = -sdot_(&i__3, &v[lp1 + l * v_dim1], &c__1, &v[lp1 
 		    + j * v_dim1], &c__1) / v[lp1 + l * v_dim1];
 	    i__3 = *p - l;
 	    saxpy_(&i__3, &t, &v[lp1 + l * v_dim1], &c__1, &v[lp1 + j * 

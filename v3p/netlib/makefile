@@ -17,7 +17,6 @@ SOURCES += s_cmp.c
 SOURCES += d_lg10.c
 SOURCES += s_cat.c
 SOURCES += s_copy.c
-SOURCES += pow_di.c
 SOURCES += d_sign.c
 SOURCES += d_cnjg.c
 SOURCES += d_imag.c
@@ -26,6 +25,10 @@ SOURCES += z_abs.c
 SOURCES += cabs.c
 SOURCES += sig_die.c
 SOURCES += r_sign.c
+
+SOURCES += pow_ii.c
+SOURCES += pow_ri.c
+SOURCES += pow_di.c
 
 # BLAS 
 SOURCES += daxpy.c
@@ -37,6 +40,8 @@ SOURCES += drotg.c
 SOURCES += dscal.c
 SOURCES += dasum.c
 SOURCES += dswap.c
+SOURCES += dgemv.c
+SOURCES += dger.c
 
 SOURCES += saxpy.c
 SOURCES += scopy.c
@@ -47,6 +52,8 @@ SOURCES += srotg.c
 SOURCES += sscal.c
 SOURCES += sasum.c
 SOURCES += sswap.c
+SOURCES += sgemv.c
+SOURCES += sger.c
 
 # LINPACK 
 SOURCES += dsvdc.c
@@ -58,6 +65,8 @@ SOURCES += dpofa.c
 SOURCES += dpoco.c
 SOURCES += dposl.c
 SOURCES += dpodi.c
+SOURCES += isamax.c
+SOURCES += idamax.c
 
 # EISPACK 
 SOURCES += rsg.c
@@ -93,7 +102,6 @@ SOURCES += dgpfa5f.c
 SOURCES += gpfa.c  
 SOURCES += gpfa3f.c 
 SOURCES += setgpfa.c
-SOURCES += pow_ii.c
 
 # from DATAPAC
 SOURCES += camsun.c
@@ -101,12 +109,66 @@ SOURCES += camsun.c
 # from LASO2
 SOURCES += dnlaso.c
 
+# from LAPACK
+SOURCES += xerbla.c
+SOURCES += lsame.c
+SOURCES += dlamch.c
+SOURCES += slamch.c
+
+SOURCES += dgeqpf.c
+SOURCES += dgeqr2.c
+SOURCES += dgerq2.c
+SOURCES += dggsvd.c
+SOURCES += dggsvp.c
+SOURCES += dlacpy.c
+SOURCES += dlags2.c
+SOURCES += dlange.c
+SOURCES += dlapll.c
+SOURCES += dlapmt.c
+SOURCES += dlapy2.c
+SOURCES += dlarf.c
+SOURCES += dlarfg.c
+SOURCES += dlartg.c
+SOURCES += dlas2.c
+SOURCES += dlaset.c
+SOURCES += dlassq.c
+SOURCES += dlasv2.c
+SOURCES += dorg2r.c
+SOURCES += dorm2r.c
+SOURCES += dormr2.c
+SOURCES += dtgsja.c
+SOURCES += sggsvd.c
+SOURCES += sgeqpf.c
+SOURCES += sgeqr2.c
+SOURCES += sgerq2.c
+SOURCES += sggsvp.c
+SOURCES += slacpy.c
+SOURCES += slags2.c
+SOURCES += slange.c
+SOURCES += slapll.c
+SOURCES += slapmt.c
+SOURCES += slapy2.c
+SOURCES += slarf.c
+SOURCES += slarfg.c
+SOURCES += slartg.c
+SOURCES += slas2.c
+SOURCES += slaset.c
+SOURCES += slassq.c
+SOURCES += slasv2.c
+SOURCES += sorg2r.c
+SOURCES += sorm2r.c
+SOURCES += sormr2.c
+SOURCES += stgsja.c
+
 ##########################################
 include $(SYS_IUPACKAGES)/config/top.mk
 ##########################################
 
 ifneq ($(OS),win32)
-ifneq ($(OS),hpux10.20)
+  debug := 
   APP_CFLAGS = $(optimize)
 endif
+
+ifeq ($(OS),solaris)
+  pic := $(PIC)
 endif
