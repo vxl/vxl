@@ -9,6 +9,9 @@ MANPAGE_SOURCES += bgrl_vertex_sptr.h
 SOURCES += bgrl_edge.cxx
 MANPAGE_SOURCES += bgrl_edge_sptr.h
 SOURCES += bgrl_graph.cxx
+SOURCES += bgrl_search_func.cxx
+MANPAGE_SOURCES += bgrl_search_func_sptr.h
+
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
