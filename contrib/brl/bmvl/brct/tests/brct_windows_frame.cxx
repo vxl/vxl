@@ -15,6 +15,7 @@
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 #include "brct_menus.h"
+
 //static live_video_manager instance
 brct_windows_frame *brct_windows_frame::instance_ = 0;
 
@@ -34,8 +35,7 @@ brct_windows_frame *brct_windows_frame::instance()
 //==================================================================
 //: constructors/destructor
 //==================================================================
-brct_windows_frame::
-brct_windows_frame() : vgui_wrapper_tableau()
+brct_windows_frame::brct_windows_frame() : vgui_wrapper_tableau()
 {
 }
 
@@ -122,7 +122,8 @@ void brct_windows_frame::add_curve2d(vcl_vector<vgl_point_2d<double> > &pts)
   assert(size > 1);
   curves_2d_.resize(size-1);
   instance_->tab_2d_->set_foreground(1, 1, 1);
-  for (int i=0; i<size-1; i++) {
+  for (int i=0; i<size-1; i++)
+  {
     vgl_point_2d<double>& s = pts[i];
     vgl_point_2d<double>& e = pts[i+1];
     vgui_soview2D_lineseg* l = instance_->tab_2d_->add_line(s.x(), s.y(), e.x(), e.y());
@@ -145,7 +146,8 @@ void brct_windows_frame::add_curve3d(vcl_vector<vgl_point_3d<double> >& pts)
   assert(size > 1);
   curves_3d_.resize(size-1);
   instance_->tab_3d_->set_foreground(1, 1, 1);
-  for (int i=0; i<size-1; i++) {
+  for (int i=0; i<size-1; i++)
+  {
     vgl_point_3d<double>& s = pts[i];
     vgl_point_3d<double>& e = pts[i+1];
     vgui_lineseg3D* l = instance_->tab_3d_->add_line(s.x(), s.y(), s.z(), e.x(), e.y(), e.z());
@@ -157,15 +159,13 @@ void brct_windows_frame::add_curve3d(vcl_vector<vgl_point_3d<double> >& pts)
 void brct_windows_frame::remove_debug_info()
 {
   int size = predicted_curves_2d_.size();
-  for(int i=0; i<size; i++){
+  for (int i=0; i<size; i++)
     instance_->tab_2d_->remove(predicted_curves_2d_[i]);
-  }
   predicted_curves_2d_.size();
 
   size = debug_curves_2d_.size();
-  for(int i=0; i<size; i++){
+  for (int i=0; i<size; i++)
     instance_->tab_2d_->remove(debug_curves_2d_[i]);
-  }
   predicted_curves_2d_.size();
 
   this->post_redraw();
@@ -174,16 +174,14 @@ void brct_windows_frame::remove_debug_info()
 void brct_windows_frame::remove_curve3d()
 {
   int size = curves_3d_.size();
-  for(int i=0; i<size; i++){
+  for (int i=0; i<size; i++)
     instance_->tab_3d_->remove(curves_3d_[i]);
-  }
   curves_3d_.clear();
   this->post_redraw();
 }
 
 void brct_windows_frame::init_kalman()
 {
-
   vcl_vector<vgl_point_2d<double> > c2d;
 
   if (kalman_ == 0)
@@ -204,7 +202,7 @@ void brct_windows_frame::init_kalman()
 
   // add the curve in the second view
   c2d = kalman_->get_cur_observes();
-  add_curve2d(c2d); 
+  add_curve2d(c2d);
 }
 
 void brct_windows_frame::go()
@@ -215,7 +213,7 @@ void brct_windows_frame::go()
   // add current data
   vcl_vector<vgl_point_2d<double> > c2d = kalman_->get_cur_observes();
   add_curve2d(c2d);
-  
+
   //add 3D resoult
   vcl_vector<vgl_point_3d<double> > c3d = kalman_->get_local_pts();
   add_curve3d(c3d);
@@ -225,16 +223,12 @@ void brct_windows_frame::go()
 void brct_windows_frame::show_predicted_curve()
 {
   vnl_matrix<double> pts = kalman_->get_predicted_curve();
-  vcl_vector<vgl_point_2d<double> > curve;
-
   int num_points = pts.columns();
-  curve.resize(num_points);
+  vcl_vector<vgl_point_2d<double> > curve(num_points);
 
-  for (int i=0; i<num_points; i++) {
-    vgl_point_2d<double> pt(pts[0][i], pts[1][i]);
-    curve[i]=pt;
-  }
-  
+  for (int i=0; i<num_points; i++)
+    curve[i]= vgl_point_2d<double>(pts[0][i], pts[1][i]);
+
   add_predicted_curve2d(curve);
   //add_curve2d(curve);
   this->post_redraw();
@@ -269,7 +263,6 @@ void brct_windows_frame::add_next_observes(vcl_vector<vgl_point_2d<double> > &pt
   }
 
   instance_->post_redraw();
-
 }
 
 void brct_windows_frame::show_next_observes()
@@ -280,9 +273,7 @@ void brct_windows_frame::show_next_observes()
 
 void brct_windows_frame::show_back_projection()
 {
-
   vcl_vector<vgl_point_2d<double> > c2d = kalman_->get_back_projection();
-
 
   int size = c2d.size();
   assert(size > 1);
@@ -295,5 +286,4 @@ void brct_windows_frame::show_back_projection()
   }
 
   instance_->post_redraw();
-  
 }

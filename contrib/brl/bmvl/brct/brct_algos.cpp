@@ -3,8 +3,8 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "brct_algos.h"
-#include <vnl/algo/vnl_qr.h>
 #include <vnl/algo/vnl_svd.h>
+#include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_4.h>
 #include <vnl/vnl_double_4x4.h>
 #include <vgl/vgl_homg_point_3d.h>
@@ -41,23 +41,14 @@ vgl_point_3d<double> brct_algos::triangulate_3d_point(const vgl_point_2d<double>
 
   vnl_svd<double> svd_solver(A);
   vnl_double_4 p = svd_solver.nullvector();
-  vgl_homg_point_3d<double> X(p[0], p[1], p[2], p[3]);
-
-  return X;
+  return vgl_homg_point_3d<double>(p[0],p[1],p[2],p[3]);
 }
 
 vgl_point_2d<double> brct_algos::projection_3d_point(const vgl_point_3d<double> & x, const vnl_double_3x4& P)
 {
-  vnl_double_4 X;
-  X[0] = x.x();
-  X[1] = x.y();
-  X[2] = x.z();
-  X[3] = 1;
-
+  vnl_double_4 X(x.x(),x.y(),x.z(),1.0);
   vnl_double_3 t = P*X;
-  vgl_homg_point_2d<double> u(t[0], t[1], t[2]);
-
-  return u;
+  return vgl_homg_point_2d<double>(t[0],t[1],t[2]);
 }
 
 vgl_point_3d<double> brct_algos::bundle_reconstruct_3d_point(vcl_vector<vnl_double_2> &pts, vcl_vector<vnl_double_3x4> &Ps)
@@ -67,17 +58,14 @@ vgl_point_3d<double> brct_algos::bundle_reconstruct_3d_point(vcl_vector<vnl_doub
 
   vnl_matrix<double> A(2*nviews, 4, 0.0);
 
-  for(int v = 0; v<nviews; v++){
-    for (int i=0; i<4; i++){
-      A[2*v][i] = pts[v][0]*Ps[v][2][i] - Ps[v][0][i];
+  for (int v = 0; v<nviews; v++)
+    for (int i=0; i<4; i++) {
+      A[2*v  ][i] = pts[v][0]*Ps[v][2][i] - Ps[v][0][i];
       A[2*v+1][i] = pts[v][1]*Ps[v][2][i] - Ps[v][1][i];
     }
-  }
   vnl_svd<double> svd_solver(A);
   vnl_double_4 p = svd_solver.nullvector();
-  vgl_homg_point_3d<double> X(p[0], p[1], p[2], p[3]);
-
-  return X;
+  return vgl_homg_point_3d<double>(p[0],p[1],p[2],p[3]);
 }
 
 vsol_box_3d_sptr brct_algos::get_bounding_box(vcl_vector<vgl_point_3d<double> > &pts_3d)
@@ -96,6 +84,7 @@ vsol_box_3d_sptr brct_algos::get_bounding_box(vcl_vector<vgl_point_3d<double> > 
 
 void brct_algos::add_box_vrml(double xmin, double ymin, double zmin, double xmax, double ymax, double zmax)
 {
+  vcl_cerr << "brct_algos::add_box_vrml() NYI\n"; // TODO
 }
 
 vgl_point_2d<double> brct_algos::closest_point(vdgl_digital_curve_sptr dc, vgl_point_2d<double> pt)
