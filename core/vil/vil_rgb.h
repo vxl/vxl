@@ -164,6 +164,13 @@ bool vil2_rgb<T>::operator== (vil2_rgb<T> const& o) const
 
 template <class T>
 inline
+bool operator!= (vil2_rgb<T> const& a, vil2_rgb<T> const& b) 
+{
+  return !(a==b);
+}
+
+template <class T>
+inline
 vil2_rgb<T> average(vil2_rgb<T> const& a, vil2_rgb<T> const& b)
 {
   return vil2_rgb<T>((a.r + b.r)/2, (a.g + b.g)/2, (a.b + b.b)/2);

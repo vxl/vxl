@@ -9,6 +9,7 @@
 #include "vil2_gauss_reduce.h"
 #include <vcl_cassert.h>
 #include <vil2/vil2_bilin_interp.h>
+#include <vil2/vil2_plane.h>
 
 //: Smooth and subsample src_im to produce dest_im
 //  Applies filter in x and y, then samples every other pixel.
@@ -227,7 +228,7 @@ void vil2_gauss_reduce_general(const vil2_image_view<T>& src,
 
   // Reduce plane-by-plane
   for (unsigned p=0;p<src.nplanes();++p)
-    vil2_gauss_reduce_general_plane(src, dest, worka, workb, params);
+    vil2_gauss_reduce_general_plane(vil2_plane(src,p), vil2_plane(dest,p), worka, workb, params);
 #if 0
   vsl_indent_inc(vcl_cout);
   vcl_cout << vsl_indent() << "Work image B\n";
