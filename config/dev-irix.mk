@@ -196,7 +196,7 @@ IUE_PASS_TO_LINKER := -Wl,
 
 ### --> Please document below any warning which you turn off here!
 ifeq ($(ABI),new)
-  wall := -fullwarn -woff 1007,1188,1209,1257,1314,1355,1373,1375,1498,1506,1682,1201,1468,1555,3201,3150,1234,1174,1681#,1116
+  wall := -fullwarn -woff 1007,1188,1209,1257,1314,1355,1373,1375,1498,1506,1201,1468,1555,3201,3150,1234,1174#,1681,1682,1116
 else
   wall := -fullwarn -woff 3108,3672,3937,3577,3209,3461#,3161
 endif
