@@ -34,4 +34,4 @@ ADD_TEST(vtol_test_timing          vtol_test_all vtol_test_timing)
 ADD_TEST(vtol_extract_topology     vtol_test_all test_extract_topology)
 
 ADD_EXECUTABLE( vtol_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( vtol_test_include vtol )
+TARGET_LINK_LIBRARIES( vtol_test_include vtol_algo vtol )
