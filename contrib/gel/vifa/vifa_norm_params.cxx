@@ -20,10 +20,10 @@ vifa_norm_params(float  IntLow,
   plow(ProbLow),
   ihigh(IntHigh),
   phigh(ProbHigh),
-  imin_(0.0),
-  imax_(0.0),
-  slope_(0.0),
-  b_(0.0)
+  imin_(0.0f),
+  imax_(0.0f),
+  slope_(0.0f),
+  b_(0.0f)
 {
   calculate_clip_points();
 }
@@ -51,10 +51,10 @@ normalize(float raw_intensity)
     return raw_intensity;
 
   if (raw_intensity <= imin_)
-    return 0.0;
+    return 0.0f;
 
   if (raw_intensity >= imax_)
-    return 1.0;
+    return 1.0f;
 
   return raw_intensity * slope_ + b_;
 }
@@ -66,7 +66,7 @@ get_norm_bounds(vil_image_view_base*  img,
                 float&                normal_low,
                 float&                normal_high)
 {
-  if (img && ((low_bound_pcent != 0.0) || (high_bound_pcent != 0.0)))
+  if (img && ((low_bound_pcent != 0.0f) || (high_bound_pcent != 0.0f)))
   {
 #ifdef ROI_SUPPORTED
     RectROI*  roi = img->GetROI();  // save the old ROI
@@ -92,9 +92,9 @@ get_norm_bounds(vil_image_view_base*  img,
     img->SetROI(temp_roi);
 #endif  // ROI_SUPPORTED
 
-    vifa_image_histogram  hist(img, 0.50);
-    normal_low = hist.LowClipVal(0.01 * low_bound_pcent);
-    normal_high = hist.HighClipVal(0.01 * high_bound_pcent);
+    vifa_image_histogram  hist(img, 0.5f);
+    normal_low = hist.LowClipVal(0.01f * low_bound_pcent);
+    normal_high = hist.HighClipVal(0.01f * high_bound_pcent);
 
 #ifdef ROI_SUPPORTED
     // Restore the original ROI
@@ -122,8 +122,8 @@ print_info(void)
 void vifa_norm_params::
 calculate_clip_points(void)
 {
-  imin_ = 0.0;
-  imax_ = 0.0;
+  imin_ = 0.0f;
+  imax_ = 0.0f;
 
   float int_range = ihigh - ilow;
   if (int_range < 1e-4)
@@ -140,8 +140,8 @@ calculate_clip_points(void)
 
   // solve for x when y=0, y=1
 
-  imin_ = (0.0 - b_) / slope_;
-  imax_ = (1.0 - b_) / slope_;
+  imin_ = (0.0f - b_) / slope_;
+  imax_ = (1.0f - b_) / slope_;
 
   //  vcl_cout << "slope: " << slope_ << " b: " << b_ << " imin: " << imin_
   //           << " imax " << imax_ << vcl_endl;

@@ -81,12 +81,12 @@ vifa_parallel(iface_list&      faces,
 
             if (dc)
             {
-              double  l = dc->length();
+              float l = dc->length();
 
               for (int i = 0; i < l; i++)
               {
                 // Use parametric index representation (0 -- 1)
-                double  theta = dc->get_theta(i / l);
+                float theta = dc->get_theta(i / l);
 
 //                vcl_cout << "raw theta: " << theta;
 
