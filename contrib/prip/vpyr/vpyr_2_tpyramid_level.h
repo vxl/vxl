@@ -21,14 +21,35 @@
 template <class level_type_>
 class vpyr_2_tpyramid ;
 
+// Visual Studio 6 has trouble with expanding templated base classes
+// to the true (and unique) types. As a workaround, we need a helper
+// class.
+
+#ifdef VCL_VC60
+template<class N>
+struct helperN : public vmap_ptr_sequence< typename N::base_type >
+{
+  typedef typename N::base_type base_type;
+  helperN()
+  {
+  };
+
+  helperN(const vmap_ptr_sequence<base_type> & arg )
+    : vmap_ptr_sequence<base_type>( arg )
+  {
+  }
+};
+#define SEQUENCE_OF_BASE(T) helperN< T >
+#else
+#define SEQUENCE_OF_BASE(T) vmap_ptr_sequence< typename T :: base_type >
+#endif
+
 //:
 template <class V, class E, class F, class D>
 class vpyr_2_tpyramid_level: public vpyr_2_pyramid_level<D>,
-                             public vmap_ptr_sequence< typename V::base_type >
-#ifndef VCL_VC60 // TODO - VC60 thinks that the next 2 are identical to the above
-                            ,public vmap_ptr_sequence< typename E::base_type >
-                            ,public vmap_ptr_sequence< typename F::base_type >
-#endif
+                             public SEQUENCE_OF_BASE(V),
+                             public SEQUENCE_OF_BASE(E),
+                             public SEQUENCE_OF_BASE(F)
 {
  public:
 
@@ -58,7 +79,7 @@ class vpyr_2_tpyramid_level: public vpyr_2_pyramid_level<D>,
   typedef typename Base_::const_dart_sequence_iterator const_dart_sequence_iterator ;
 
   //:
-  typedef vmap_ptr_sequence< typename V::base_type > vertex_sequence ;
+  typedef SEQUENCE_OF_BASE(V) vertex_sequence ;
   //:
   typedef typename vertex_sequence::iterator vertex_sequence_iterator;
   //:
@@ -67,7 +88,7 @@ class vpyr_2_tpyramid_level: public vpyr_2_pyramid_level<D>,
   typedef typename vertex_sequence::pointer vertex_pointer ;
 
   //:
-  typedef vmap_ptr_sequence< typename E::base_type > edge_sequence ;
+  typedef SEQUENCE_OF_BASE(E) edge_sequence ;
   //:
   typedef typename edge_sequence::iterator edge_sequence_iterator;
   //:
@@ -76,7 +97,7 @@ class vpyr_2_tpyramid_level: public vpyr_2_pyramid_level<D>,
   typedef typename edge_sequence::pointer edge_pointer ;
 
   //:
-  typedef vmap_ptr_sequence< typename F::base_type > face_sequence ;
+  typedef SEQUENCE_OF_BASE(F) face_sequence ;
   //:
   typedef typename face_sequence::iterator face_sequence_iterator;
   //:
@@ -587,6 +608,9 @@ class vpyr_2_tpyramid_level: public vpyr_2_pyramid_level<D>,
     return face_sequence::get_pointer(arg) ;
   }
 };
+
+// From VC6 workaround above.
+#undef SEQUENCE_OF_BASE
 
 #include "vpyr_2_tpyramid_level.txx"
 
