@@ -22,6 +22,7 @@
 //     LSB (Manchester) 23/3/01 Documentation tidied
 //     Peter Vanroose   14/7/01 vnl_rational added
 //     Peter Vanroose   14/10/01 vnl_rational moved to vnl_rational.h
+//     AWF 250202 Add const T specializations for the basic types.
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -84,6 +85,10 @@ public:
 };
 
 VCL_DEFINE_SPECIALIZATION
+class vnl_numeric_traits<char const> : public vnl_numeric_traits<char> {
+};
+
+VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<unsigned char> {
 public:
   //: Additive identity
@@ -96,6 +101,10 @@ public:
   typedef unsigned short double_t;
   //: Name of type which results from multiplying this type with a double
   typedef double real_t;
+};
+
+VCL_DEFINE_SPECIALIZATION
+class vnl_numeric_traits<unsigned char const> : public vnl_numeric_traits<unsigned char> {
 };
 
 VCL_DEFINE_SPECIALIZATION
@@ -114,6 +123,10 @@ public:
 };
 
 VCL_DEFINE_SPECIALIZATION
+class vnl_numeric_traits<signed char const> : public vnl_numeric_traits<signed char> {
+};
+
+VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<unsigned short> {
 public:
   //: Additive identity
@@ -126,6 +139,10 @@ public:
   typedef unsigned int double_t;
   //: Name of type which results from multiplying this type with a double
   typedef double real_t;
+};
+
+VCL_DEFINE_SPECIALIZATION
+class vnl_numeric_traits<unsigned short const> : public vnl_numeric_traits<unsigned short> {
 };
 
 VCL_DEFINE_SPECIALIZATION
@@ -144,6 +161,10 @@ public:
 };
 
 VCL_DEFINE_SPECIALIZATION
+class vnl_numeric_traits<signed short const> : public vnl_numeric_traits<signed short> {
+};
+
+VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<unsigned int> {
 public:
   //: Additive identity
@@ -156,6 +177,10 @@ public:
   typedef unsigned int double_t;
   //: Name of type which results from multiplying this type with a double
   typedef double real_t;
+};
+
+VCL_DEFINE_SPECIALIZATION
+class vnl_numeric_traits<unsigned int const> : public vnl_numeric_traits<unsigned int> {
 };
 
 VCL_DEFINE_SPECIALIZATION
@@ -174,6 +199,10 @@ public:
 };
 
 VCL_DEFINE_SPECIALIZATION
+class vnl_numeric_traits<signed int const> : public vnl_numeric_traits<signed int> {
+};
+
+VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<signed long> {
 public:
   //: Additive identity
@@ -186,6 +215,10 @@ public:
   typedef signed long double_t;
   //: Name of type which results from multiplying this type with a double
   typedef double real_t;
+};
+
+VCL_DEFINE_SPECIALIZATION
+class vnl_numeric_traits<signed long const> : public vnl_numeric_traits<signed long > {
 };
 
 VCL_DEFINE_SPECIALIZATION
@@ -204,6 +237,10 @@ public:
 };
 
 VCL_DEFINE_SPECIALIZATION
+class vnl_numeric_traits<unsigned long const> : public vnl_numeric_traits<unsigned long> {
+};
+
+VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<float> {
 public:
   //: Additive identity
@@ -216,6 +253,10 @@ public:
   typedef double double_t;
   //: Name of type which results from multiplying this type with a double
   typedef double real_t;
+};
+
+VCL_DEFINE_SPECIALIZATION
+class vnl_numeric_traits<float const> : public vnl_numeric_traits<float> {
 };
 
 VCL_DEFINE_SPECIALIZATION
@@ -234,6 +275,10 @@ public:
 };
 
 VCL_DEFINE_SPECIALIZATION
+class vnl_numeric_traits<double const> : public vnl_numeric_traits<double> {
+};
+
+VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<long double> {
 public:
   //: Additive identity
@@ -246,6 +291,10 @@ public:
   typedef long double double_t; // ahem
   //: Name of type which results from multiplying this type with a double
   typedef long double real_t;
+};
+
+VCL_DEFINE_SPECIALIZATION
+class vnl_numeric_traits<long double const> : public vnl_numeric_traits<long double> {
 };
 
 VCL_DEFINE_SPECIALIZATION
@@ -264,6 +313,10 @@ public:
 };
 
 VCL_DEFINE_SPECIALIZATION
+class vnl_numeric_traits<vcl_complex<float> const> : public vnl_numeric_traits<vcl_complex<float> > {
+};
+
+VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits< vcl_complex<double> > {
 public:
   //: Additive identity
@@ -279,6 +332,10 @@ public:
 };
 
 VCL_DEFINE_SPECIALIZATION
+class vnl_numeric_traits<vcl_complex<double> const> : public vnl_numeric_traits<vcl_complex<double> > {
+};
+
+VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits< vcl_complex<long double> > {
 public:
   //: Additive identity
@@ -291,6 +348,10 @@ public:
   typedef vcl_complex<vnl_numeric_traits<long double>::double_t> double_t;
   //: Name of type which results from multiplying this type with a double
   typedef vcl_complex<long double> real_t;
+};
+
+VCL_DEFINE_SPECIALIZATION
+class vnl_numeric_traits<vcl_complex<long double> const> : public vnl_numeric_traits<vcl_complex<long double> > {
 };
 
 #endif // vnl_numeric_traits_h_
