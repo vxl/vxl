@@ -29,8 +29,8 @@ void test_file_data_wrapper()
   vcl_string path= "test_file_data_wrapper.bvl.tmp";
 
   mbl_file_data_collector< vnl_vector<double> > collector(path);
-  collector.record(v1);
-  collector.record(v2);
+  collector.record(v1.as_vector());
+  collector.record(v2.as_vector());
 
   // read in data using mbl_file_data_wrapper
   mbl_data_wrapper<vnl_vector<double> >& wrapper =collector.data_wrapper();
@@ -66,7 +66,7 @@ void test_file_data_wrapper()
 
   // record more data then get new wrapper
   // can't really have more than one wrapper, so just get reference to old one!
-  collector.record(v3);
+  collector.record(v3.as_vector());
   mbl_data_wrapper<vnl_vector<double> >& wrapper3 =collector.data_wrapper();
   vcl_cout<<"wrapper3.size()= "<<wrapper3.size()<<vcl_endl;
   TEST("wrapper3 should still be same size, even though data file extended",
