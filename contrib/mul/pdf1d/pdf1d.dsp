@@ -105,7 +105,7 @@ SOURCE=.\Templates/mbl_cloneable_ptr+pdf1d_builder-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/mbl_cloneable_ptr+pdf1d_pwd-.cxx
+SOURCE=.\Templates/mbl_cloneable_ptr+pdf1d_pdf-.cxx
 
 # End Source File
 # Begin Source File
