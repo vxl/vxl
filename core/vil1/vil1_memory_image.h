@@ -53,6 +53,11 @@ public:
   vil_memory_image(void *buf, int w, int h, int components, int bits_per_component, vil_component_format);
   vil_memory_image(void *buf, int w, int h, vil_pixel_format_t );
 
+  // these duplicate the signatures in the base class, but are inlined, so
+  // much faster. the base class methods incur a virtual function call.
+  int width () const { return width_ ; }
+  int height() const { return height_; }
+
   void assert_size(int width, int height) const;
 
   //: Reset this class's member variables from the image implementation
