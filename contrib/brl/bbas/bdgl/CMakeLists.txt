@@ -12,7 +12,7 @@ SET(bdgl_sources
     bdgl_curve_tracking.cxx          bdgl_curve_tracking.h
     bdgl_curve_matching.cxx          bdgl_curve_matching.h
     bdgl_curve_clustering.cxx        bdgl_curve_clustering.h
-#   bdgl_curve_matcher.cxx           bdgl_curve_matcher.h
+    bdgl_curve_matcher.cxx           bdgl_curve_matcher.h
     bdgl_curve_region.cxx            bdgl_curve_region.h
     bdgl_curve_tracker.cxx           bdgl_curve_tracker.h
     curve.cxx                        curve.h
