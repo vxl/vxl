@@ -13,8 +13,8 @@
 // .NAME        vnl_c_vector - Math on blocks of memory
 // .LIBRARY     vnl
 // .HEADER	Numerics Package
-// .INCLUDE     vnl/c_vector.h
-// .FILE        vnl/c_vector.ccxx
+// .INCLUDE     vnl/vnl_c_vector.h
+// .FILE        vnl_c_vector.txx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 12 Feb 98
 //
