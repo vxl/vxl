@@ -19,7 +19,6 @@
 
 #include <vnl/vnl_double_3x4.h>
 #include <vcl_vector.h>
-#include <vcl_cassert.h>
 
 // a structure used to store the lens distortion parameters
 // It provide facility for set it on and off.
@@ -31,7 +30,7 @@ class LensModel
   bool bFlags_[7]; // to show which distortion is used
  public:
   LensModel() {
-    for (int i=0; i<7; i++){
+    for (int i=0; i<7; i++) {
       kc_[i] = 0;
       bFlags_[i] = false;
     }
@@ -48,20 +47,16 @@ class LensModel
 // it store the lens model and intrisic parameter of camera
 class Camera
 {
- private:
   vnl_double_3x4 k_;
   LensModel lm_;
  public:
   vnl_double_3x4 getIntrisicMatrix(){ return k_;}
   void setLensModel(vcl_vector<bool> flags);
 
-  int setIntrisicMatrix(vnl_double_3x4 k) {
-    assert(k.rows()==3 && k.cols()==4);
-    k_ = k;
-  }
+  void setIntrisicMatrix(vnl_double_3x4 k) {k_ = k;}
 
   Camera();
-  ~Camera(){};
+  ~Camera(){}
 };
 
 #endif // bcam_CAMERA_H__
