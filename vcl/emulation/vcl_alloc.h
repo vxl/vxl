@@ -22,13 +22,8 @@
  * purpose.  It is provided "as is" without express or implied warranty.
  *
  */
-
 #ifndef vcl_emulation_alloc_h
 #define vcl_emulation_alloc_h
-
-#include "vcl_stlconf.h"
-#include <vcl_cstdlib.h>
-
 //:
 // \file
 // \brief This implements some standard node allocators
@@ -44,14 +39,14 @@
 //   180598 AWF Indented ifdefs properly. Very important task that.
 // \endverbatim
 
+#include "vcl_stlconf.h"
 
 #ifndef __ALLOC
 #   define __ALLOC vcl_alloc
 #endif
 
-#include <vcl_cstddef.h>
 //#include <vcl_cstdlib.h>
-//#include "vcl_string.h"
+#include <vcl_cstddef.h>
 #include <vcl_cstring.h>
 #include <vcl_cassert.h>
 
