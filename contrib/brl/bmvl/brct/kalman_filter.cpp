@@ -117,6 +117,11 @@ void kalman_filter::init_state_vector()
 
   vnl_double_3x4 P1 = M_in_*E1, P2 = M_in_*E2;
 
+  // save the motion
+  vnl_double_3 C0;
+  C0[0]=C0[1]=C0[2]=0.0;
+  motions_[0] = C0;
+  motions_[1] = T;
 
   // compute epipole from velocity
   vnl_double_3 e = M_in_*T;
@@ -202,10 +207,6 @@ void kalman_filter::init_state_vector()
 
 
   num_points_ = pts_3d.size();
-
-  // save the motion
-  motions_[0] = P1;
-  motions_[1] = P2;
 
   // get observes
   vnl_matrix<double> t0(2, num_points_);
@@ -307,7 +308,7 @@ void kalman_filter::prediction()
   // TODO
 }
 
-vnl_double_3x4 kalman_filter::get_projective_matrix(vnl_vector_fixed<double,6>& v )
+vnl_double_3x4 kalman_filter::get_projective_matrix(vnl_double_3& v )
 {
   vnl_double_3x4 M_ex;
 
@@ -351,16 +352,16 @@ void kalman_filter::set_H_matrix(vnl_double_3x4 &P, vnl_double_3 &X)
 vnl_double_2 kalman_filter::projection(const vnl_double_3x4 &P, const vnl_double_3 &X)
 {
     vnl_double_2 z;
+    double t1 = 0;
+    for (int k=0; k<3; k++)
+      t1 += P[2][k]*X[k];
+    t1 += P[2][3];
+
     for (int i=0; i<2; i++) {
       double t0 =0;
       for (int k=0; k<3; k++)
         t0 += P[i][k]*X[k];
       t0 += P[i][3];
-
-      double t1 = 0;
-      for (int k=0; k<3; k++)
-        t1 += P[3][k]*X[k];
-      t1 += P[3][3];
 
       z[i] = t0/t1;
     }
@@ -397,7 +398,13 @@ void kalman_filter::inc()
   //
   X_pred_ = A_*X_;
 
-  vnl_double_3x4 P = get_projective_matrix(X_pred_);
+  vnl_double_3 v;
+  v[0] = X_pred_[3];
+  v[1] = X_pred_[4];
+  v[2] = X_pred_[5];
+  
+  v = get_next_motion(v);
+  vnl_double_3x4 P = get_projective_matrix(v);
   update_observes(P, cur_pos_+1);
 
   // adjustion
@@ -416,20 +423,23 @@ void kalman_filter::inc()
 
     vnl_double_2 z;
 
-    for (int j=0; i<2; i++)
+    for (int j=0; j<2; j++)
       z[j] = cur_measures[j][i];
 
     vnl_double_2 z_pred = projection(P,X);
-
     adjust_state_vector(z_pred, z, prob_[i]);
+
   }
 
+  v[0] = X_pred_[0] - X_[0];
+  v[1] = X_pred_[1] - X_[1];
+  v[2] = X_pred_[2] - X_[2];
+
   cur_pos_ = (cur_pos_+1) % queue_size_;
+  motions_[cur_pos_+1] = get_next_motion(v);
 
   // store the history
   X_ = X_pred_;
-
-  motions_[cur_pos_] = get_projective_matrix(X_);
 
   if (memory_size_ < queue_size_)
     memory_size_++;
@@ -450,7 +460,8 @@ void kalman_filter::inc()
       pt[0] = observes_[j][0][j];
       pt[1] = observes_[j][1][j];
       pts.push_back(pt);
-      Ps.push_back(motions_[j]);
+      vnl_double_3x4 P = get_projective_matrix(motions_[j]);
+      Ps.push_back(P);
     }
 
     vnl_double_3 X3d = brct_algos::bundle_reconstruct_3d_point(pts, Ps);
@@ -479,7 +490,7 @@ void kalman_filter::inc()
 
 void kalman_filter::adjust_state_vector(vnl_double_2 const& pred, vnl_double_2 const& meas, double confidence)
 {
-  X_pred_ += K_*(meas - pred);
+  X_pred_ += K_*(meas - pred)*confidence;
 }
 
 void kalman_filter::read_data(char *fname)
@@ -538,7 +549,7 @@ void kalman_filter::read_data(char *fname)
 
 void kalman_filter::init_velocity()
 {
-  vcl_list<vgl_homg_line_2d<double> > lines;
+  vcl_vector<vgl_homg_line_2d<double> > lines;
 
 #if 0
   vnl_matrix<double> &img0 = observes_[0], &img1 = observes_[1];
@@ -630,4 +641,9 @@ vcl_vector<vgl_point_2d<double> > kalman_filter::get_pre_observes()
     pts[i].set(dc->get_x(s), dc->get_y(s));
   }
   return pts;
+}
+
+vnl_double_3 kalman_filter::get_next_motion(vnl_double_3 v)
+{
+  return motions_[cur_pos_]+v;
 }

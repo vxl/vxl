@@ -28,6 +28,7 @@ class kalman_filter
   //: initialize the kalman filter with
   //virtual kalman_state inc(double dt);
  public:
+	vnl_double_3 get_next_motion(vnl_double_3 v);
   vcl_vector<vgl_point_2d<double> > get_pre_observes();
   vcl_vector<vgl_point_2d<double> > get_cur_observes();
   void read_data(char* fname);
@@ -56,7 +57,7 @@ class kalman_filter
   void set_H_matrix(vnl_double_3x4 &P, vnl_double_3 &X);
 
   //: computer projective matrix from predicted position
-  vnl_double_3x4 get_projective_matrix(vnl_vector_fixed<double,6> &v);
+  vnl_double_3x4 get_projective_matrix(vnl_double_3 &v);
 
   void init_covariant_matrix();
   void init_cam_intrinsic();
@@ -76,7 +77,7 @@ class kalman_filter
   //: each element of the vector represents a projection of the same 3D curves.
   vcl_vector<vdgl_digital_curve_sptr> curves_;
 
-  vcl_vector<vnl_double_3x4> motions_;
+  vcl_vector<vnl_double_3> motions_;
   //: current frame position in history pool
   int cur_pos_;
   int queue_size_;

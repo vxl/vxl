@@ -68,7 +68,7 @@ vnl_double_3 brct_algos::bundle_reconstruct_3d_point(vcl_vector<vnl_double_2> &p
 
   vnl_double_3 X;
 
-  vnl_matrix<double> A(3*nviews, 4, 0.0);
+  vnl_matrix<double> A(3*nviews, 3+nviews, 0.0);
   vnl_vector<double> b(3*nviews, 0.0);
 
   for (int i=0; i<nviews; i++){
@@ -80,10 +80,11 @@ vnl_double_3 brct_algos::bundle_reconstruct_3d_point(vcl_vector<vnl_double_2> &p
       A[pos+1][j] = P[1][j];
       A[pos+2][j] = P[2][j];
 
-      b[pos] = P[0][3];
-      b[pos+1] = P[1][3];
-      b[pos+2] = P[2][3];
     }
+
+    b[pos] = P[0][3];
+    b[pos+1] = P[1][3];
+    b[pos+2] = P[2][3];
 
     A[pos][i+3] = -pt[0];
     A[pos+1][i+3] = -pt[1];
