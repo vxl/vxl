@@ -1,23 +1,22 @@
 //:
 // \file
 //  This example program shows a typical use of a morphological function on
-//  a colour image.  The input image (argv[1]) must be 24 bit (colour), and in
+//  a grey image.  The input image (argv[1]) must be 8 bit (grey), and in
 //  that case is dilated (circular kernel, default 3+3 cross) to argv[2]
-//  which is always a PPM file image.
-//  Note that this requires the function max(rgbcell,rgbcell) which is provided
-//  here (giving the pixel with the highest R value).
+//  which is always a PGM file image.
+//
+//  Note that this cannot work with colour images unless a function
+//  max(rgbcell,rgbcell) is provided.
 //
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   15 May 2001, from vipl/examples
 //
-#include <vil/vil_rgb.h>
 #include <vil/vil_pixel.h>
 #include <vil/vil_memory_image_of.h>
 
 #include <vepl/vepl_dilate_disk.h>
 
 typedef unsigned char ubyte;
-typedef vil_rgb<ubyte> rgbcell;
 
 // for I/O:
 #include <vil/vil_load.h>
