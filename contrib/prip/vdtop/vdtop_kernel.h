@@ -42,11 +42,12 @@ void vdtop_kernel(vil_image_view<T> & img, TPredicate & pred)
   included.fill(FALSE_PIXEL) ;
   vdtop_set_image_border(included,1, BORDER_PIXEL) ;
 
-  vcl_vector< typename vil_image_view<T>::iterator > current, next ;
+  typedef typename vil_image_view<T>::iterator It;
+  vcl_vector<It> current, next ;
 
   vil_image_view<vxl_byte>::iterator ii=included.begin();
 
-  for (typename vil_image_view<T>::iterator i = img.begin() ; i!=img.end(); ++i, ++ii)
+  for (It i = img.begin() ; i!=img.end(); ++i, ++ii)
   {
     if (*ii==FALSE_PIXEL)
     {
@@ -82,7 +83,7 @@ void vdtop_kernel(vil_image_view<T> & img, TPredicate & pred)
       }
       current.pop_back() ;
     }
-    for (typename vcl_vector< typename vil_image_view<T>::iterator >::iterator i=next.begin() ; i!=next.end(); ++i)
+    for (typename vcl_vector<It>::iterator i=next.begin() ; i!=next.end(); ++i)
     {
       *(included.top_left_ptr()+(*i-img.top_left_ptr()))=FALSE_PIXEL;
     }
