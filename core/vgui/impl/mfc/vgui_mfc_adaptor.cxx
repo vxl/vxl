@@ -11,7 +11,6 @@
 //     06-AUG-2002 K.Y.McGaul - Changed key returned by CTRL events.
 // \endverbatim
 
-#include <vcl_cmath.h>
 #include <vcl_iostream.h>
 #include <vcl_cstring.h>
 
@@ -232,15 +231,13 @@ int vgui_mfc_adaptor::OnCreate(LPCREATESTRUCT lpCreateStruct)
     return FALSE;
   }
 
-  if ( 0 == (m_hRC =
-    ::wglCreateContext( m_pDC->GetSafeHdc() ) ) )
+  if ( 0 == (m_hRC = ::wglCreateContext( m_pDC->GetSafeHdc() ) ) )
   {
     ::AfxMessageBox("wglCreateContext failed.");
     return FALSE;
   }
 
-  if ( FALSE ==
-    ::wglMakeCurrent( m_pDC->GetSafeHdc(), m_hRC ) )
+  if ( FALSE == ::wglMakeCurrent( m_pDC->GetSafeHdc(), m_hRC ) )
   {
     ::AfxMessageBox("wglMakeCurrent failed.");
     return FALSE;
