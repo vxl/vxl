@@ -7,8 +7,6 @@
 #include <brip/brip_vil1_float_ops.h>
 #include <vpro/vpro_half_res_process.h>
 
-
-
 vpro_half_res_process::vpro_half_res_process(vcl_string const& video_file)
 {
   video_file_ = video_file;
@@ -21,34 +19,35 @@ vpro_half_res_process::~vpro_half_res_process()
 bool vpro_half_res_process::execute()
 {
   if (this->get_N_input_images()!=1)
-    {
-      vcl_cout << "In vpro_half_res_process::execute() -"
-               << " not exactly one input image \n";
-    return false;
-    }
+  {
+    vcl_cout << "In vpro_half_res_process::execute() -"
+             << " not exactly one input image\n";
+  return false;
+  }
   vil1_image img = vpro_video_process::get_input_image(0);
   this->clear_input();
   if (img.components()==1)
-    {
-      vil1_memory_image_of<float> fimg = 
-        brip_vil1_float_ops::convert_to_float(img);
-      vil1_memory_image_of<float> half = 
-        brip_vil1_float_ops::half_resolution(fimg);
-      vil1_memory_image_of<unsigned char> chalf = 
-        brip_vil1_float_ops::convert_to_byte(half);
-      out_frames_.push_back(chalf);
-      return true;
-    }
-  if(img.components()==3)
-    {
-      vil1_memory_image_of<vil1_rgb<unsigned char> > cimg(img);
-	  vil1_memory_image_of<vil1_rgb<unsigned char> > cimg_half = 
-        brip_vil1_float_ops::half_resolution(cimg);
-      out_frames_.push_back(cimg_half);
-      return true;
-    }
+  {
+    vil1_memory_image_of<float> fimg = 
+      brip_vil1_float_ops::convert_to_float(img);
+    vil1_memory_image_of<float> half = 
+      brip_vil1_float_ops::half_resolution(fimg);
+    vil1_memory_image_of<unsigned char> chalf = 
+      brip_vil1_float_ops::convert_to_byte(half);
+    out_frames_.push_back(chalf);
+    return true;
+  }
+  if (img.components()==3)
+  {
+    vil1_memory_image_of<vil1_rgb<unsigned char> > cimg(img);
+    vil1_memory_image_of<vil1_rgb<unsigned char> > cimg_half = 
+    brip_vil1_float_ops::half_resolution(cimg);
+    out_frames_.push_back(cimg_half);
+    return true;
+  }
   return false;
 }
+
 bool vpro_half_res_process::finish()
 {
   if (!out_frames_.size())
