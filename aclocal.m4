@@ -307,10 +307,13 @@ AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 VCL_COMPILE_CXX
 AC_TRY_COMPILE([
+class A { public: void f() {} };
 void fn() {
   for (int i=0; i<100; ++i) {}
   for (long i=0; i<1000; ++i) {}
-  double i = 3.141;
+  for (double i = 3.141; i<100.0; i += 1.0) {}
+  // VC7 only raises warnings for previous tests
+  A i; i.f();
 }
 ],,[VCL_FOR_SCOPE_HACK=0;AC_MSG_RESULT(yes)],[VCL_FOR_SCOPE_HACK=1;AC_MSG_RESULT(no)])
 export VCL_FOR_SCOPE_HACK
