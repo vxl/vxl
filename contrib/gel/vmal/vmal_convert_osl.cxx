@@ -24,7 +24,7 @@ vtol_edge_2d_sptr convert_edge_2d(osl_edge & in,vsol_curve_2d::vsol_curve_2d_typ
     float *y=in.GetY();
     vcl_vector<vtol_vertex_sptr> new_vertices;
 
-    for (int i=0;i<in.size();i++)
+    for (unsigned int i=0; i<in.size(); ++i)
       new_vertices.push_back(new vtol_vertex_2d(x[i],y[i]));
     out=new vtol_edge_2d(new vtol_zero_chain(new_vertices));
   }
