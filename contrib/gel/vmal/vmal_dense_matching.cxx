@@ -1,6 +1,6 @@
 #include "vmal_dense_matching.h"
 #include <vtol/vtol_edge_2d.h>
-#include <vmal/vmal_convert.h>
+#include <vmal/vmal_convert_vtol.h>
 #include <vmal/vmal_operators.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_int_3.h>
@@ -166,6 +166,7 @@ void vmal_dense_matching::refine_lines_using_H(vmal_multi_view_data_edge_sptr mv
         vnl_double_3 inter1q;
 
         if (vmal_operators::project_point(h_lines1_p,lines1_p[i],lines1_q[i],inter1p))
+        {
           if (vmal_operators::project_point(h_lines1_q,lines1_p[i],lines1_q[i],inter1q))
           {
             //Case 1
@@ -178,7 +179,10 @@ void vmal_dense_matching::refine_lines_using_H(vmal_multi_view_data_edge_sptr mv
             vmal_operators::project_point(h_lines0_p,lines0_p[i],lines0_q[i],pt0p);
             pt1q=inter1q;
           }
-        else if (vmal_operators::project_point(h_lines1_q,lines1_p[i],lines1_q[i],inter1q))
+        }
+        else
+        {
+          if (vmal_operators::project_point(h_lines1_q,lines1_p[i],lines1_q[i],inter1q))
           {
             //Case 3
             pt1p=inter1p;

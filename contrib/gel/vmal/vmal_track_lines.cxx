@@ -11,7 +11,7 @@
 #include <vmal/vmal_lines_correlation.h>
 #include <vmal/vmal_refine_lines.h>
 #include <vmal/vmal_operators.h>
-#include <vmal/vmal_convert.h>
+#include <vmal/vmal_convert_vtol.h>
 
 #define PI vnl_math::pi
 

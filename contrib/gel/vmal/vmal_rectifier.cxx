@@ -3,7 +3,7 @@
 //:
 // \file
 
-#include <vmal/vmal_convert.h>
+#include <vmal/vmal_convert_vtol.h>
 #include <vcl_cmath.h> // atan2()
 #include <vbl/vbl_bounding_box.h>
 #include <vnl/algo/vnl_svd.h>
