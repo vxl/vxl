@@ -1188,6 +1188,116 @@ SOURCE=.\vnl_transpose.cxx
 SOURCE=.\vnl_unary_function.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vcl_algorithm+vnl_bignum-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vcl_complex+vnl_bignum-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vcl_vector+vnl_bignum-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vcl_vector+vnl_bignum~-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_c_vector+vcl_complex+vnl_bignum--.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_c_vector+vnl_bignum-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_det+vnl_bignum-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_diag_matrix+vnl_bignum-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_matrix+vcl_complex+vnl_bignum--.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_matrix+vnl_bignum-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_matrix_fixed+vnl_bignum.3.3-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_matrix_fixed_ref+vnl_bignum.3.3-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_matrix_ref+vnl_bignum-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_sparse_matrix+vnl_bignum-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_vector+vcl_complex+vnl_bignum--.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_vector+vnl_bignum-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_vector_fixed+vnl_bignum.1-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_vector_fixed+vnl_bignum.2-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_vector_fixed+vnl_bignum.3-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_vector_fixed_ref+vnl_bignum.1-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_vector_fixed_ref+vnl_bignum.2-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vnl_vector_fixed_ref+vnl_bignum.3-.cxx
+
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -1724,6 +1834,11 @@ SOURCE=.\vnl_tag.h
 # Begin Source File
 
 SOURCE=.\vnl_vector_dereference.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_finite_field_number.h
 
 # End Source File
 # Begin Source File
