@@ -51,17 +51,11 @@
 //-----------------------------------------------------------------------------
 class xcv_tableau : public vgui_grid_tableau
 {
-public:
-
-  //xcv_tableau(int nb_images) : vgui_grid_tableau(nb_images, 1) { }
-  xcv_tableau(int rows, int cols) : vgui_grid_tableau(cols, rows) { }
-
-  ~xcv_tableau() {}
-
-  bool handle(const vgui_event& e)
-  {
-    return vgui_grid_tableau::handle(e);
-  }
+ public:
+  //xcv_tableau(int nb_images) : vgui_grid_tableau(nb_images, 1) {}
+  xcv_tableau(int rows, int cols) : vgui_grid_tableau(cols, rows) {}
+ ~xcv_tableau() {}
+  bool handle(const vgui_event& e) { return vgui_grid_tableau::handle(e); }
 };
 
 xcv_tableau* xcv_tab;
@@ -243,7 +237,7 @@ vgui_rubberband_tableau_sptr get_rubberbander_at(unsigned col, unsigned row)
       return tab;
   }
   vgui_macro_warning << "Unable to get rubberbander tableau at (" << col
-    <<", "<<row<<")"<<vcl_endl;
+                     <<", "<<row<<")\n";
   return vgui_rubberband_tableau_sptr();
 }
 
@@ -262,8 +256,7 @@ vgui_easy2D_tableau_sptr get_easy2D_at(unsigned col, unsigned row)
     if (tab)
       return tab;
   }
-  vgui_macro_warning << "Unable to get easy2D at (" << col << ", " << row
-    << ")" << vcl_endl;
+  vgui_macro_warning << "Unable to get easy2D at ("<< col<< ", "<< row << ")\n";
   return vgui_easy2D_tableau_sptr();
 }
 
@@ -282,8 +275,7 @@ vgui_composite_tableau_sptr get_composite_at(unsigned col, unsigned row)
     if (tab)
       return tab;
   }
-  vgui_macro_warning << "Unable to get composite at (" << col << ", "
-    << row << ")" << vcl_endl;
+  vgui_macro_warning << "Unable to get composite at ("<<col<<", "<<row<< ")\n";
   return vgui_composite_tableau_sptr();
 }
 
@@ -303,7 +295,7 @@ vgui_viewer2D_tableau_sptr get_viewer2D_at(unsigned col, unsigned row)
       return view;
   }
   vgui_macro_warning << "Unable to get viewer2D tableau at (" << col
-    << ", " << row << ")" << vcl_endl;
+                     << ", " << row << ")\n";
   return vgui_viewer2D_tableau_sptr();
 }
 
@@ -333,7 +325,7 @@ xcv_image_tableau_sptr get_image_tableau_at(unsigned col, unsigned row)
       return tt;
   }
   vgui_macro_warning << "Unable to get xcv_image_tableau at (" << col << ", "
-    << row << ")" << vcl_endl;
+                     << row << ")\n";
   return xcv_image_tableau_sptr();
 }
 
@@ -353,7 +345,7 @@ xcv_picker_tableau_sptr get_picker_tableau_at(unsigned col, unsigned row)
       return tt;
   }
   vgui_macro_warning << "Unable to get xcv_picker_tableau at (" << col << ", "
-    << row << ")" << vcl_endl;
+                     << row << ")\n";
   return xcv_picker_tableau_sptr();
 }
 
@@ -369,8 +361,7 @@ bool get_image_at(vil1_image* img, unsigned col, unsigned row)
     *img = img_tab->get_image();
     return true;
   }
-  vgui_macro_warning << "Unable to get image at (" << col << ", " << row
-    << ")" << vcl_endl;
+  vgui_macro_warning << "Unable to get image at ("<< col <<", "<< row << ")\n";
   return false;
 }
 
@@ -409,7 +400,7 @@ void add_image(vil1_image& img)
 }
 
 //-----------------------------------------------------------------------------
-//: Removes the image at the given posistion from the display.
+//: Removes the image at the given position from the display.
 //-----------------------------------------------------------------------------
 void remove_image_at(unsigned col, unsigned row)
 {
@@ -612,8 +603,8 @@ int main(int argc, char** argv)
   if (window_height <= MENUBAR_HEIGHT)
     window_height = 512;
 
-  vcl_cerr << "window_width  = " << window_width << vcl_endl;
-  vcl_cerr << "window_height = " << window_height << vcl_endl;
+  vcl_cerr << "window_width  = " << window_width << vcl_endl
+           << "window_height = " << window_height << vcl_endl;
 
   // Create a window, add the tableau and show it on screen:
   vgui_window *win = vgui::produce_window(window_width, window_height,
