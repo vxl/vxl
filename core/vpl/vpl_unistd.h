@@ -25,11 +25,11 @@
 
 #include <vxl_config.h>        // must be first!!
 #include <vcl/vcl_compiler.h>
+#include <vcl/vcl_cstddef.h> // size_t
+typedef vcl_size_t vpl_size_t;
+#include <vcl/vcl_cstdlib.h>
 #include <vcl/vcl_sys/types.h>
 
-// size_t
-#include <vcl/vcl_cstdlib.h>
-typedef vcl_size_t vpl_size_t;
 
 // fixme this needs configging
 #ifndef _MSC_VER
