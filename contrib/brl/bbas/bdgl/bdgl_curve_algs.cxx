@@ -667,19 +667,9 @@ int bdgl_curve_algs::add_straight_edgels(vdgl_edgel_chain_sptr const& ec,
                                          const double xe, const double ye,
                                          bool debug)
 {
-  if (!ec)
-  {
-    vcl_cout << "In bdgl_curve_algs::add_straight_edgels - null edgel chain\n";
-    return 0;
-  }
-
+  assert (ec);
+  assert (ec->size() > 0);
   int Npix = 0, last = ec->size()-1;
-  if (last<0)
-  {
-    vcl_cout << "In bdgl_curve_algs::add_straight_edgels - chain with 0 edgels with target ("
-             << xe << ' ' << ye << ")\n";
-    return 0;
-  }
 
   float xs = float((*ec)[last].x()), ys = float((*ec)[last].y());
   bool first = true, init = true, done = false;
