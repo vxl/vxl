@@ -36,11 +36,13 @@
 
 #include <vgl/vgl_fwd.h>
 #include <vgl/algo/vgl_algo_fwd.h>
+#include <vgl/algo/vgl_p_matrix.h>
 
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgLineSeg2D.h>
 #include <mvl/HomgPoint2D.h>
 
+#include <mvl/PMatrix.h>
 class HMatrix2D;
 class FMatrix;
 class PMatrix;
@@ -182,7 +184,12 @@ class TriTensor
   void compute_P_matrices(PMatrix* P2, PMatrix* P3) const {
     compute_P_matrices(vnl_double_3(1,1,1), 1, 1, P2, P3);
   }
-
+  void compute_P_matrices(vgl_p_matrix<double> &P2, vgl_p_matrix<double> &P3) const {
+    PMatrix Ptemp2, Ptemp3;
+    compute_P_matrices(vnl_double_3(1,1,1), 1, 1, &Ptemp2, &Ptemp3);
+    P2.set(Ptemp2.get_matrix());
+    P3.set(Ptemp3.get_matrix());
+  }
   void compute_caches();
   void clear_caches();
 
