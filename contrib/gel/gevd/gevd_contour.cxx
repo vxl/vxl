@@ -266,7 +266,7 @@ next_pixel(int& i, int& j, const vbl_array_2d<vtol_vertex_2d_sptr>& vertexMap)
 //:
 // Trace and collect pixels on thin contours, stronger pixels first,
 // and favoring 4-connected over 8-connected. Thinning is not used,
-// and so will avoid errors because of square grid tesselation.
+// and so will avoid errors because of square grid tessellation.
 // A chain can not cross itself. It can only touch itself or another
 // chain, in which case a junction will be found later.
 // The pixels of a chain include the 2 end points.
@@ -1189,8 +1189,7 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
     }
   }
 #if 0
-  vcl_cout << "Merge and delete " << dendpt
-           << " end points and " << dchain << " edges\n";
+  vcl_cout << "Merge and delete " << dendpt << " end points and " << dchain << " edges\n";
 #endif
   if (dchain)                   // eliminate holes in global arrays
     LookupTableCompress(edges);
@@ -1215,8 +1214,7 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
     }
   }
 #if 0
-  vcl_cout << "Create " << ncycle
-           << " virtual end points for isolated cycles.\n";
+  vcl_cout << "Create " << ncycle << " virtual end points for isolated cycles.\n";
 #endif
 #ifdef DEBUG
   if (talkative)
@@ -1226,7 +1224,7 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
 }
 
 
-//: Insert subpixel accurary into the pixels on the edges/vertices.
+//: Insert subpixel accuracy into the pixels on the edges/vertices.
 // Truncating float locations with int(xy) should map to the original
 // pixel locations. No interpolation is done at junctions of 3 or more
 // contours, so a junction can have location error up to 1-2 pixel,
@@ -1243,7 +1241,7 @@ gevd_contour::SubPixelAccuracy(vcl_vector<vtol_edge_2d_sptr>& edges,
   if (talkative)
     vcl_cout << "Insert subpixel accuracy into edges/vertices";
 
-  // 1. Subpixel accurary for end points
+  // 1. Subpixel accuracy for end points
   for ( unsigned int i=0; i< vertices.size(); i++)
   {
     vtol_vertex_2d_sptr  vert = vertices[i];
@@ -1252,7 +1250,7 @@ gevd_contour::SubPixelAccuracy(vcl_vector<vtol_edge_2d_sptr>& edges,
     vert->set_y(y + floatPixel(locationy, x, y));
   }
 
-  // 2. Subpixel accurary for chain pixels
+  // 2. Subpixel accuracy for chain pixels
   for ( unsigned int i=0; i< edges.size(); i++)
   {
     vtol_edge_2d_sptr edge = edges[i];
@@ -1650,7 +1648,7 @@ EqualizeElements(double* elmts, int n, double v1, double v2)
 //:
 // Make the spacing of the chain pixels nearly equal by
 // smoothing their locations with the average filter  [1 0 1]/2.
-// This will reduce square grid tesselation artifacts, and
+// This will reduce square grid tessellation artifacts, and
 // lead to more accurate estimation of the tangent direction,
 // and local curvature angle, from finite differences in location.
 // It is also useful to avoid weight artifacts in curve fitting
