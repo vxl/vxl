@@ -44,7 +44,7 @@ bool vgl_polygon_test_inside(T const *xs, T const *ys, unsigned n, T x, T y)
       ++crossings;
   
   // inside iff there was an odd number of crossings.
-  return crossings % 2;
+  return crossings % 2 != 0;
 }
 
 //--------------------------------------------------------------------------------
