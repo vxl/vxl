@@ -170,8 +170,8 @@ void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
       for (unsigned p=0;p<n_planes;++p)
         for (unsigned j=0;j<nj;++j)
         {
-          dest_im(0,j,p) = k0*src_im(0,j,p) + k1*src_im(1,j,p);
-          dest_im(1,j,p) = k1*src_im(0,j,p) + k0*src_im(1,j,p);
+          work(0,j,p) = l_round(k0*src_im(0,j,p) + k1*src_im(1,j,p), destT());
+          work(1,j,p) = l_round(k1*src_im(0,j,p) + k0*src_im(1,j,p), destT());
         }
     }
     else if (ni==3)
@@ -183,9 +183,9 @@ void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
       for (unsigned p=0;p<n_planes;++p)
         for (unsigned j=0;j<nj;++j)
         {
-          dest_im(0,j,p) = ke0*src_im(0,j,p) + ke1*src_im(1,j,p);
-          dest_im(1,j,p) = k1 *src_im(0,j,p) + k0 *src_im(1,j,p) + k1 *src_im(2,j,p);
-          dest_im(2,j,p) =                     ke1*src_im(1,j,p) + ke0*src_im(2,j,p);
+          work(0,j,p) = l_round(ke0*src_im(0,j,p) + ke1*src_im(1,j,p)                    , destT());
+          work(1,j,p) = l_round(k1 *src_im(0,j,p) + k0 *src_im(1,j,p) + k1 *src_im(2,j,p), destT());
+          work(2,j,p) = l_round(                    ke1*src_im(1,j,p) + ke0*src_im(2,j,p), destT());
         }
     }
     else if (ni==4)
@@ -200,10 +200,10 @@ void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
       for (unsigned p=0;p<n_planes;++p)
         for (unsigned j=0;j<nj;++j)
         {
-          dest_im(0,j,p) = ke0 *src_im(0,j,p) + ke1*src_im(1,j,p) + ke2*src_im(2,j,p);
-          dest_im(1,j,p) = kpn1*src_im(0,j,p) + kp0*src_im(1,j,p) + kp1*src_im(2,j,p) + kp2 *src_im(3,j,p);
-          dest_im(2,j,p) = kp2 *src_im(0,j,p) + kp1*src_im(1,j,p) + kp0*src_im(2,j,p) + kpn1*src_im(3,j,p);
-          dest_im(3,j,p) =                      ke2*src_im(1,j,p) + ke1*src_im(2,j,p) + ke0 *src_im(3,j,p);
+          work(0,j,p) = l_round(ke0 *src_im(0,j,p) + ke1*src_im(1,j,p) + ke2*src_im(2,j,p)                     , destT());
+          work(1,j,p) = l_round(kpn1*src_im(0,j,p) + kp0*src_im(1,j,p) + kp1*src_im(2,j,p) + kp2 *src_im(3,j,p), destT());
+          work(2,j,p) = l_round(kp2 *src_im(0,j,p) + kp1*src_im(1,j,p) + kp0*src_im(2,j,p) + kpn1*src_im(3,j,p), destT());
+          work(3,j,p) = l_round(                     ke2*src_im(1,j,p) + ke1*src_im(2,j,p) + ke0 *src_im(3,j,p), destT());
         }
     }
     else if (ni>4)
@@ -221,8 +221,8 @@ void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
       for (unsigned p=0;p<n_planes;++p)
         for (unsigned i=0;i<ni;++i)
         {
-          dest_im(i,0,p) = k0 * src_im(i,0,p) + k1 * src_im(i,1,p);
-          dest_im(i,1,p) = k1 * src_im(i,0,p) + k0 * src_im(i,1,p);
+          dest_im(i,0,p) = l_round(k0 * work(i,0,p) + k1 * work(i,1,p), destT());
+          dest_im(i,1,p) = l_round(k1 * work(i,0,p) + k0 * work(i,1,p), destT());
         }
     }
     else if (nj==3)
@@ -234,9 +234,9 @@ void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
       for (unsigned p=0;p<n_planes;++p)
         for (unsigned i=0;i<ni;++i)
         {
-          dest_im(i,0,p) = ke0*src_im(i,0,p) + ke1*src_im(i,1,p);
-          dest_im(i,1,p) = k1 *src_im(i,0,p) + k0 *src_im(i,1,p) + k1 *src_im(i,2,p);
-          dest_im(i,2,p) =                     ke1*src_im(i,1,p) + ke0*src_im(i,2,p);
+          dest_im(i,0,p) = l_round(ke0*work(i,0,p) + ke1*work(i,1,p)                  , destT());
+          dest_im(i,1,p) = l_round(k1 *work(i,0,p) + k0 *work(i,1,p) + k1 *work(i,2,p), destT());
+          dest_im(i,2,p) = l_round(                  ke1*work(i,1,p) + ke0*work(i,2,p), destT());
     
         }
     }
@@ -252,10 +252,10 @@ void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
       for (unsigned p=0;p<n_planes;++p)
         for (unsigned i=0;i<ni;++i)
         {
-          dest_im(i,0,p) = ke0 *src_im(i,0,p) + ke1*src_im(i,1,p) + ke2*src_im(i,2,p);
-          dest_im(i,1,p) = kpn1*src_im(i,0,p) + kp0*src_im(i,1,p) + kp1*src_im(i,2,p) + kp2 *src_im(i,3,p);
-          dest_im(i,2,p) = kp2 *src_im(i,0,p) + kp1*src_im(i,1,p) + kp0*src_im(i,2,p) + kpn1*src_im(i,3,p);
-          dest_im(i,3,p) =                      ke2*src_im(i,1,p) + ke1*src_im(i,2,p) + ke0 *src_im(i,3,p);
+          dest_im(i,0,p) = l_round(ke0 *work(i,0,p) + ke1*work(i,1,p) + ke2*work(i,2,p)                   , destT());
+          dest_im(i,1,p) = l_round(kpn1*work(i,0,p) + kp0*work(i,1,p) + kp1*work(i,2,p) + kp2 *work(i,3,p), destT());
+          dest_im(i,2,p) = l_round(kp2 *work(i,0,p) + kp1*work(i,1,p) + kp0*work(i,2,p) + kpn1*work(i,3,p), destT());
+          dest_im(i,3,p) = l_round(                   ke2*work(i,1,p) + ke1*work(i,2,p) + ke0 *work(i,3,p), destT());
         }
     }
     else if (nj>4)
