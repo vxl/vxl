@@ -35,8 +35,9 @@ rgrl_trans_homography2d( vnl_matrix<double> const& H,
 
 rgrl_trans_homography2d::
 rgrl_trans_homography2d( vnl_matrix<double> const& H )
-  :  H_( H ),
-     from_centre_( 0.0, 0.0 )
+  : H_( H ),
+    from_centre_( 0.0, 0.0 ),
+    to_centre_( 0.0, 0.0 )
 {}
 
 rgrl_trans_homography2d::
@@ -80,12 +81,14 @@ uncenter_H_matrix( ) const
   vnl_matrix_fixed<double, 3, 3> H;
   
   // uncenter To image
-  vnl_matrix_fixed<double, 3, 3> to_inv(vnl_matrix_identity);
+  vnl_matrix_fixed<double, 3, 3> to_inv;
+  to_inv.set_identity();
   to_inv(0,2) = to_centre_[0];
   to_inv(1,2) = to_centre_[1];
   
   // uncenter From image
-  vnl_matrix_fixed<double, 3, 3> from_matrix(vnl_matrix_identity);
+  vnl_matrix_fixed<double, 3, 3> from_matrix;
+  from_matrix.set_identity();
   from_matrix(0,2) = -from_centre_[0];
   from_matrix(1,2) = -from_centre_[1];
   
@@ -114,11 +117,13 @@ transfer_error_covar( vnl_vector<double> const& from_loc  ) const
   jf(0,0) = jf(1,3) = jf(2,6) = from_homo[0]; // x
   jf(0,1) = jf(1,4) = jf(2,7) = from_homo[1]; // y
   jf(0,2) = jf(1,5) = jf(2,8) = 1.0;
+
   // derivatives w.r.t division
   jg(0,0) = 1.0/mapped_homo[2];
   jg(0,2) = -mapped_homo[0]/vnl_math_sqr(mapped_homo[2]);
   jg(1,1) = 1.0/mapped_homo[2];
   jg(1,2) = -mapped_homo[1]/vnl_math_sqr(mapped_homo[2]);
+
   // since Jab_g(f(p)) = Jac_g * Jac_f
   jac = jg * jf;
 
