@@ -24,7 +24,7 @@ extern vcl_vector<vgui_easy2D_sptr> get_easy2D_list();
 //-----------------------------------------------------------------------------
 //: Draw a point onto the currently selected tableau.
 //-----------------------------------------------------------------------------
-void vplayer_geometry::create_point(const void*)
+void vplayer_geometry::create_point()
 {
   unsigned col, row;
   get_current(&col, &row);
@@ -36,7 +36,7 @@ void vplayer_geometry::create_point(const void*)
 //-----------------------------------------------------------------------------
 //: Rubberband a line on the currently selected tableau.
 //-----------------------------------------------------------------------------
-void vplayer_geometry::create_line(const void*)
+void vplayer_geometry::create_line()
 {
   unsigned col, row;
   get_current(&col, &row);
@@ -48,7 +48,7 @@ void vplayer_geometry::create_line(const void*)
 //-----------------------------------------------------------------------------
 //: Rubberband a circle on the currently selected tableau.
 //-----------------------------------------------------------------------------
-void vplayer_geometry::create_circle(const void*)
+void vplayer_geometry::create_circle()
 {
   unsigned col, row;
   get_current(&col, &row);
@@ -60,7 +60,7 @@ void vplayer_geometry::create_circle(const void*)
 //-----------------------------------------------------------------------------
 //: Rubberband a polygon on the currently selected tableau.
 //-----------------------------------------------------------------------------
-void vplayer_geometry::create_polygon(const void*)
+void vplayer_geometry::create_polygon()
 {
   unsigned col, row;
   get_current(&col, &row);
@@ -68,10 +68,11 @@ void vplayer_geometry::create_polygon(const void*)
   if (rubber)
     rubber->rubberband_polygon();
 }
+
 //-----------------------------------------------------------------------------
 //: Rubberband a linestrip on the currently selected tableau.
 //-----------------------------------------------------------------------------
-void vplayer_geometry::create_linestrip(const void*)
+void vplayer_geometry::create_linestrip()
 {
   unsigned col, row;
   get_current(&col, &row);
@@ -79,10 +80,11 @@ void vplayer_geometry::create_linestrip(const void*)
   if (rubber)
     rubber->rubberband_linestrip();
 }
+
 //-----------------------------------------------------------------------------
 //: Rubberband infinite line on the currently selected tableau.
 //-----------------------------------------------------------------------------
-void vplayer_geometry::create_infinite_line(const void*)
+void vplayer_geometry::create_infinite_line()
 {
   unsigned col, row;
   get_current(&col, &row);
@@ -90,10 +92,11 @@ void vplayer_geometry::create_infinite_line(const void*)
   if (rubber)
     rubber->rubberband_infinite_line();
 }
+
 //-----------------------------------------------------------------------------
 //: Change the color of all the selected geometric objects.
 //-----------------------------------------------------------------------------
-void vplayer_geometry::change_sel_color(const void*)
+void vplayer_geometry::change_sel_color()
 {
   static vcl_string  color_value = "yellow";
   vgui_dialog color_dl("Colour of selected objects");
@@ -115,10 +118,11 @@ void vplayer_geometry::change_sel_color(const void*)
     easy_list[i]->deselect_all();
   }
 }
+
 //-----------------------------------------------------------------------------
 //: Change the radius of all the selected points.
 //-----------------------------------------------------------------------------
-void vplayer_geometry::change_sel_radius(const void*)
+void vplayer_geometry::change_sel_radius()
 {
   static float point_radius = 1;
   vgui_dialog radius_dl("Point radius");
@@ -144,7 +148,7 @@ void vplayer_geometry::change_sel_radius(const void*)
 //: Change the line widths of all the selected geometric objects
 // (that aren't points).
 //-----------------------------------------------------------------------------
-void vplayer_geometry::change_sel_width(const void*)
+void vplayer_geometry::change_sel_width()
 {
   static float line_width = 1.0;
   vgui_dialog width_dl("Line width");
@@ -169,7 +173,7 @@ void vplayer_geometry::change_sel_width(const void*)
 //-----------------------------------------------------------------------------
 //: Delete all the selected geometric objects.
 //-----------------------------------------------------------------------------
-void vplayer_geometry::delete_sel_objs(const void*)
+void vplayer_geometry::delete_sel_objs()
 {
   vgui_dialog del_dl("WARNING");
   del_dl.message("");
@@ -187,10 +191,11 @@ void vplayer_geometry::delete_sel_objs(const void*)
       easy_list[i]->remove((vgui_soview*)(*j));
   }
 }
+
 //-----------------------------------------------------------------------------
 //: Delete all geometric objects.
 //-----------------------------------------------------------------------------
-void vplayer_geometry::delete_all(const void*)
+void vplayer_geometry::delete_all()
 {
   unsigned col, row;
   get_current(&col, &row);
@@ -219,7 +224,7 @@ void vplayer_geometry::delete_all(const void*)
 //-----------------------------------------------------------------------------
 //: Delete all points
 //-----------------------------------------------------------------------------
-void vplayer_geometry::delete_points(const void *)
+void vplayer_geometry::delete_points()
 {
   unsigned col, row;
   get_current(&col, &row);
@@ -239,14 +244,15 @@ void vplayer_geometry::delete_points(const void *)
   vcl_vector<vgui_soview*> all_objs = easy_tab->get_all();
   for (vcl_vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); i++)
   {
-    if((*i)->type_name() == "vgui_soview2D_point")
+    if ((*i)->type_name() == "vgui_soview2D_point")
         easy_tab->remove((vgui_soview*)(*i));
   }
 }
+
 //-----------------------------------------------------------------------------
 //: Delete all lines
 //-----------------------------------------------------------------------------
-void vplayer_geometry::delete_lines(const void *)
+void vplayer_geometry::delete_lines()
 {
   unsigned col, row;
   get_current(&col, &row);
@@ -266,14 +272,15 @@ void vplayer_geometry::delete_lines(const void *)
   vcl_vector<vgui_soview*> all_objs = easy_tab->get_all();
   for (vcl_vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); i++)
   {
-    if((*i)->type_name() == "vgui_soview2D_lineseg")
+    if ((*i)->type_name() == "vgui_soview2D_lineseg")
         easy_tab->remove((vgui_soview*)(*i));
   }
 }
+
 //-----------------------------------------------------------------------------
 //: Delete all infinite lines
 //-----------------------------------------------------------------------------
-void vplayer_geometry::delete_inf_lines(const void *)
+void vplayer_geometry::delete_inf_lines()
 {
   unsigned col, row;
   get_current(&col, &row);
@@ -293,14 +300,15 @@ void vplayer_geometry::delete_inf_lines(const void *)
   vcl_vector<vgui_soview*> all_objs = easy_tab->get_all();
   for (vcl_vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); i++)
   {
-    if((*i)->type_name() == "vgui_soview2D_infinite_line")
+    if ((*i)->type_name() == "vgui_soview2D_infinite_line")
         easy_tab->remove((vgui_soview*)(*i));
   }
 }
+
 //-----------------------------------------------------------------------------
 //: Delete all circles
 //-----------------------------------------------------------------------------
-void vplayer_geometry::delete_circles(const void *)
+void vplayer_geometry::delete_circles()
 {
   unsigned col, row;
   get_current(&col, &row);
@@ -320,14 +328,15 @@ void vplayer_geometry::delete_circles(const void *)
   vcl_vector<vgui_soview*> all_objs = easy_tab->get_all();
   for (vcl_vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); i++)
   {
-    if((*i)->type_name() == "vgui_soview2D_circle")
+    if ((*i)->type_name() == "vgui_soview2D_circle")
         easy_tab->remove((vgui_soview*)(*i));
   }
 }
+
 //-----------------------------------------------------------------------------
 //: Delete all linestrips
 //-----------------------------------------------------------------------------
-void vplayer_geometry::delete_linestrips(const void *)
+void vplayer_geometry::delete_linestrips()
 {
   unsigned col, row;
   get_current(&col, &row);
@@ -347,7 +356,7 @@ void vplayer_geometry::delete_linestrips(const void *)
   vcl_vector<vgui_soview*> all_objs = easy_tab->get_all();
   for (vcl_vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); i++)
   {
-    if((*i)->type_name() == "vgui_soview2D_linestrips")
+    if ((*i)->type_name() == "vgui_soview2D_linestrips")
         easy_tab->remove((vgui_soview*)(*i));
   }
 }
@@ -357,7 +366,7 @@ void vplayer_geometry::delete_linestrips(const void *)
 //   Note, this will apply to geometric objects created in the future, not
 //   to geometric objects already on the tableau.
 //-----------------------------------------------------------------------------
-void vplayer_geometry::change_default_color(const void*)
+void vplayer_geometry::change_default_color()
 {
   static vcl_string  color_value = "yellow";
   vgui_dialog color_dl("Default colour");
@@ -378,7 +387,7 @@ void vplayer_geometry::change_default_color(const void*)
 //   Note, this will apply to points created in the future, not to points
 //   already on the tableau.
 //-----------------------------------------------------------------------------
-void vplayer_geometry::change_default_radius(const void*)
+void vplayer_geometry::change_default_radius()
 {
   static int point_radius = 1;
   vgui_dialog radius_dl("Default point radius");
@@ -398,7 +407,7 @@ void vplayer_geometry::change_default_radius(const void*)
 //   Note, this will apply to geometric objects created in the future, not
 //   to geometric objects already on the tableau.
 //-----------------------------------------------------------------------------
-void vplayer_geometry::change_default_width(const void*)
+void vplayer_geometry::change_default_width()
 {
   static int line_width = 1;
   vgui_dialog width_dl("Default line width");
@@ -410,6 +419,7 @@ void vplayer_geometry::change_default_width(const void*)
   for (unsigned i=0; i<easy_list.size(); i++)
     easy_list[i]->set_line_width(line_width);
 }
+
 //-----------------------------------------------------------------------------
 //: Write coordinates into a file
 //-----------------------------------------------------------------------------
@@ -450,11 +460,11 @@ void vplayer_geometry::save(const char *object_type,const char *dialog_name)
         vgui_soview2D_lineseg* line = (vgui_soview2D_lineseg*)sv;
         fs<<line->x0<<" "<<line->y0<<" "<<line->x1<<" "<<line->y1<<vcl_endl;
       }
-      else if(sv->type_name() == "vgui_soview2D_linestrip" && sv->type_name() == object_type)
+      else if (sv->type_name() == "vgui_soview2D_linestrip" && sv->type_name() == object_type)
       {
         vgui_soview2D_linestrip *linestrip = (vgui_soview2D_linestrip *)sv;
         fs<<linestrip->n<<vcl_endl;
-        for(int ii = 1; ii<linestrip->n; ++ii)
+        for (int ii = 1; ii<linestrip->n; ++ii)
         {
           fs<<linestrip->x[ii-1]<<" "<<linestrip->y[ii-1]<<" "<<linestrip->x[ii]<<" "<<linestrip->y[ii]<<vcl_endl;
         }
@@ -463,22 +473,27 @@ void vplayer_geometry::save(const char *object_type,const char *dialog_name)
   }
   fs.close();
 }
-void vplayer_geometry::save_circles(const void *)
+
+void vplayer_geometry::save_circles()
 {
   save("vgui_soview2D_circle","Save circles");
 }
-void vplayer_geometry::save_points(const void *)
+
+void vplayer_geometry::save_points()
 {
   save("vgui_soview2D_point","Save points");
 }
-void vplayer_geometry::save_lines(const void *)
+
+void vplayer_geometry::save_lines()
 {
   save("vgui_soview2D_lineseg","Save lines");
 }
-void vplayer_geometry::save_linestrips(const void *)
+
+void vplayer_geometry::save_linestrips()
 {
   save("vgui_soview2D_linestrip","Save linestrip");
 }
+
 //-----------------------------------------------------------------------------
 //: Load coordinates from a file
 //-----------------------------------------------------------------------------
@@ -495,7 +510,7 @@ void vplayer_geometry::load(const char *object_type,const char *dialog_name)
   if (load_dl.ask())
   {
     fs.open(filename.c_str());
-    while(!fs.eof())
+    while (!fs.eof())
     {
       if (vcl_string(object_type) == "vgui_soview2D_point")
       {
@@ -516,11 +531,11 @@ void vplayer_geometry::load(const char *object_type,const char *dialog_name)
         fs>>x0>>y0>>x1>>y1;
         easy_tab->add_line(x0,y0,x1,y1);
       }
-      else if(vcl_string(object_type) == "vgui_soview2D_linestrip")
+      else if (vcl_string(object_type) == "vgui_soview2D_linestrip")
       {
         int n;
         fs>>n;
-        for(int i = 1; i<n; i++)
+        for (int i = 1; i<n; i++)
         {
           float x0,y0,x1,y1;
           fs>>x0>>y0>>x1>>y1;
@@ -531,19 +546,23 @@ void vplayer_geometry::load(const char *object_type,const char *dialog_name)
   }
   fs.close();
 }
-void vplayer_geometry::load_circles(const void *)
+
+void vplayer_geometry::load_circles()
 {
   load("vgui_soview2D_circle","Load circles");
 }
-void vplayer_geometry::load_points(const void *)
+
+void vplayer_geometry::load_points()
 {
   load("vgui_soview2D_point","Load points");
 }
-void vplayer_geometry::load_lines(const void *)
+
+void vplayer_geometry::load_lines()
 {
   load("vgui_soview2D_lineseg","Load lines");
 }
-void vplayer_geometry::load_linestrips(const void *)
+
+void vplayer_geometry::load_linestrips()
 {
   load("vgui_soview2D_linestrip","Load linestrip");
 }
@@ -551,7 +570,7 @@ void vplayer_geometry::load_linestrips(const void *)
 //-----------------------------------------------------------------------------
 //: Create a menu containing all the functions in this file.
 //-----------------------------------------------------------------------------
-void vplayer_geometry::create_box(const void *)
+void vplayer_geometry::create_box()
 {
 unsigned col, row;
   get_current(&col, &row);
@@ -559,6 +578,7 @@ unsigned col, row;
   if (rubber)
     rubber->rubberband_box();
 }
+
 vgui_menu vplayer_geometry::create_geometry_menu()
 {
   vgui_menu obj_menu;
@@ -598,8 +618,8 @@ vgui_menu vplayer_geometry::create_geometry_menu()
   geom_menu.add("Load points",load_points);
   geom_menu.add("Load lines",load_lines);
   geom_menu.add("Load circles",load_circles);
+  geom_menu.add("Load linestrips",load_linestrips);
   geom_menu.separator();
-  geom_menu.add("Save linestrips",save_linestrips);
   geom_menu.add("Save points",save_points);
   geom_menu.add("Save lines",save_lines);
   geom_menu.add("Save circles",save_circles);

@@ -35,10 +35,11 @@ extern vidl_movie::frame_iterator pframe;
 extern vcl_vector<vgui_easy2D_sptr> tableaux_;
 int frame_num = 2;
 long delta_t = 30;
-void vplayer_video::play_video(const void *)
+
+void vplayer_video::play_video()
 {
   the_adaptor = vgui_adaptor::current;
-   if(!playing)
+   if (!playing)
    {
      unsigned col,row;
      get_current(&col,&row);
@@ -46,7 +47,7 @@ void vplayer_video::play_video(const void *)
      playing = true;
      vcl_vector<vgui_easy2D_sptr>::iterator it = tableaux_.begin();
      vul_timer t;
-     while(playing)
+     while (playing)
      {
        if (pframe == my_movie->last())
        {
@@ -63,27 +64,29 @@ void vplayer_video::play_video(const void *)
        (*it)->post_redraw();
        frame_num%=my_movie->length();
        vgui::out<<"\nFrame: "<<frame_num++;
-       while(t.all()<delta_t);
+       while (t.all()<delta_t);
        DRAW();
        t.mark();
        vgui::run_till_idle();
      }
    }
 }
-void vplayer_video::stop_video(const void *)
+
+void vplayer_video::stop_video()
 {
   playing = false;
 }
-void vplayer_video::go_to_frame(const void *)
+
+void vplayer_video::go_to_frame()
 {
   vgui_dialog dl("Go to frame");
   dl.field("Frame ", frame_num);
-  if(!dl.ask())
+  if (!dl.ask())
     return;
   unsigned col,row;
   get_current(&col,&row);
   vgui_rubberbander_sptr r= get_rubberbander_at(col,row);
-  if(frame_num<my_movie->length())
+  if (frame_num<my_movie->length())
   {
     pframe = my_movie->get_frame(frame_num);
     //: Make sure we remove the previous client from memory. Otherwise we have MLK
@@ -95,13 +98,14 @@ void vplayer_video::go_to_frame(const void *)
     playing = false;
   }
 }
-void vplayer_video::next_frame(const void *)
+
+void vplayer_video::next_frame()
 {
     unsigned col,row;
     get_current(&col,&row);
     vgui_rubberbander_sptr r= get_rubberbander_at(col,row);
 
-    if(!playing)
+    if (!playing)
     {
       if (pframe == my_movie->last())
         pframe = my_movie->first();
@@ -117,20 +121,21 @@ void vplayer_video::next_frame(const void *)
       DRAW();
     }
 }
-void vplayer_video::prev_frame(const void *)
+
+void vplayer_video::prev_frame()
 {
   unsigned col,row;
   get_current(&col,&row);
   vgui_rubberbander_sptr r= get_rubberbander_at(col,row);
 
-  if(!playing)
+  if (!playing)
   {
     if (pframe == my_movie->first())
       pframe = my_movie->last();
       else
         --pframe;
       frame_num--;
-      if(frame_num<0)
+      if (frame_num<0)
          frame_num = my_movie->length()-1;
       //: Make sure we remove the previous client from memory. Otherwise we have MLK
       delete r->get_client();
@@ -140,15 +145,17 @@ void vplayer_video::prev_frame(const void *)
       DRAW();
     }
 }
-void vplayer_video::set_speed(const void *)
+
+void vplayer_video::set_speed()
 {
   vgui_dialog dl("Frame speed");
   static long fr = long(1000.0/double(delta_t));
   dl.field("Frame rate in fps: ", fr);
-  if(!dl.ask())
+  if (!dl.ask())
     return;
   delta_t = long(1000.0/double(fr));
 }
+
 vgui_menu vplayer_video::create_video_menu()
 {
   vgui_menu video_menu;

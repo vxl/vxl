@@ -81,6 +81,9 @@ public:
   //       function is correct, or the function pointer
   //       will get cast to bool and the menu item
   //       treated as a toggle button.
+  //     ESPECIALLY: REMOVE DUMMY "const void *" ARGUMENT !  (PVr, Apr.2002)
+  //      --> look for VC++ warning C4305:
+  //      'argument' : truncation from 'void (__cdecl *)(const void *)' to 'bool'
 
   // command
   void add(vcl_string const &,
