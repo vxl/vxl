@@ -87,6 +87,12 @@ sub update_library
 
   chdir $vxlsrc || die "Unable to chdir to $vxlsrc\n";
 
+	if (! -e $library)
+	{
+	  # library may be recently added, try to update it
+		xec("cvs -z3 up -d $library");
+	}
+
   # If the package doesn't exist, we might have to check it
   # out of the repository.  However, we'd need to know the
   # correct path to the repository for this, which isn't
@@ -96,9 +102,10 @@ sub update_library
   if (! -e $library)
   {
     if ($cvsup ne "true")
-	{
-	  die "$vxlsrc/$package/$library does not exist.\n";
-	}
+    {
+		  chdir "
+		  die "$vxlsrc/$package/$library does not exist.\n";
+	  }
 
     # Check the library out of cvs
     $cmd="cvs -z3 co $library\n";
