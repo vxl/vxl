@@ -1,6 +1,6 @@
-LIBRARY(netlib)
+ADD_LIBRARY(netlib netlib_sources)
 
-SOURCE_FILES(
+SOURCE_FILES( netlib_sources
 c_sqrt  
 z_sqrt  
 cdabs 

@@ -16,9 +16,10 @@ vil
 vil_file_formats
 vnl
 vnl_algo
+vgl
 )
 
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vxl)
 
-SUBDIRS(vpl vnl vil vbl)
+SUBDIRS(vbl vpl vil vnl vgl)
 
