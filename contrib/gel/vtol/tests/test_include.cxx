@@ -33,6 +33,5 @@
 #include <vtol/vtol_zero_chain_sptr.h>
 
 #include <vtol/algo/vtol_extract_topology.h>
-#include <vtol/algo/vtol_extract_topology_internals.h>
 
 int main() { return 0; }

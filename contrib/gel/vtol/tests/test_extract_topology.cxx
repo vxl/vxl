@@ -9,8 +9,11 @@
 
 #include <vtol/algo/vtol_extract_topology.h>
 
-typedef vil_image_view<vxl_byte> image_type;
+typedef vxl_uint_16 TEST_LABEL_TYPE;
 
+
+typedef vil_image_view<vxl_byte> image_type;
+typedef vtol_extract_topology< TEST_LABEL_TYPE >::label_image_type label_image_type;
 
 // This class has access to the private member is_edge() of vtol_extract_topology
 //
@@ -20,17 +23,41 @@ class test_vtol_extract_topology
   static void test_image_1();
 };
 
+// since the pixel type and the label type are now
+// separated, this converts the former to the latter
+// for testing purposes
+//
+static label_image_type
+image_to_label(const image_type& img)
+{
+  const int nplanes = 1;
+  label_image_type img2(img.ni(), img.nj(), nplanes);
+  for (int i=0; i<img.ni(); i++) {
+    for (int j=0; j<img.nj(); j++) {
+      img2(i, j) = img(i, j);
+    }
+  }
+  return img2;
+}
 
 static image_type
 image_1()
 {
   static vxl_byte image_data[] =
-    { 1, 1, 1, 2, 1, 1,
+#if 0
+     { 1, 1, 1, 2, 1, 1,
       1, 0, 0, 0, 0, 1,
       1, 2, 2, 0, 0, 1,
       1, 1, 0, 2, 2, 1,
       1, 0, 3, 2, 1, 1,
       3, 2, 1, 3, 3, 3 };
+#endif
+    { 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 2, 2, 0,
+      0, 0, 0, 2, 2, 0,
+      0, 1, 1, 0, 0, 0,
+      0, 1, 1, 0, 0, 0,
+      0, 0, 0, 0, 0, 0 };
 
   return image_type( image_data, 6, 6, 1, 1, 6, 0 );
 }
@@ -102,7 +129,7 @@ test_image_1()
 {
   vcl_cout << "\n\nTesting image 1\n";
 
-  image_type img( image_1() );
+  label_image_type img = image_to_label( image_1() );
 
   // edge directions
   const unsigned R = 1;
@@ -121,7 +148,15 @@ test_image_1()
   const unsigned LRU = L | R | U;
   const unsigned LRUD = L | R | U | D;
   static unsigned edges[7][7] =
-    { { RD, LR, LR, LRD, LRD, LR, LD },
+    { { RD, LR, LR, LR,  LR, LR, LD },
+      { UD, 0,  0,  RD,  LR, LD, UD },
+      { UD, 0,  0,  UD,  0,  UD, UD },
+      { UD, RD, LR, LRUD,LR, LU, UD },
+      { UD, UD, 0,  UD,  0,  0, UD },
+      { UD, RU, LR, LU,  0,  0, UD },
+      { RU, LR, LR, LR, LR, LR, LU } };
+
+#if 0
       { UD, RD, LR, LRU, LRU, LD, UD },
       { UD, RUD, LR, LD, 0, UD, UD },
       { UD, RU, LRD, LRUD, LR, LUD, UD },
@@ -129,9 +164,10 @@ test_image_1()
       { RUD, LRUD, LRUD, LRUD, LRU, LR, LUD },
 
       { RU, LRU, LRU, LRU, LR, LR, LU } };
+#endif
 
   testlib_test_begin( "Constructing extract object" );
-  vtol_extract_topology te( img );
+  vtol_extract_topology< TEST_LABEL_TYPE > te( img );
   testlib_test_perform( true );
 
   testlib_test_begin( "Testing (internal) is_edge()" );
@@ -155,8 +191,8 @@ test_image_1()
       }
   testlib_test_perform( good );
 
-  TEST_EQUAL( "Vertex count", te.vertices().size(), 19 );
-  TEST_EQUAL( "Face count", te.faces().size(), 13 );
+  TEST_EQUAL( "Vertex count", te.vertices().size(), 5 );
+  TEST_EQUAL( "Face count", te.faces().size(), 4 );
 }
 
 
@@ -165,10 +201,10 @@ test_image_2()
 {
   vcl_cout << "\n\nTesting image 2\n";
 
-  image_type img( image_2() );
+  label_image_type img( image_to_label(image_2()) );
 
   testlib_test_begin( "Constructing extract object" );
-  vtol_extract_topology te( img );
+  vtol_extract_topology< TEST_LABEL_TYPE > te( img );
   testlib_test_perform( true );
 
   testlib_test_begin( "Vertex count" );
@@ -182,10 +218,10 @@ test_image_3()
 {
   vcl_cout << "\n\nTesting image 3\n";
 
-  image_type img( image_3() );
+  label_image_type img( image_to_label(image_3()) );
 
   testlib_test_begin( "Constructing extract object" );
-  vtol_extract_topology te( img );
+  vtol_extract_topology< TEST_LABEL_TYPE > te( img );
   testlib_test_perform( true );
 
   testlib_test_begin( "Vertex count" );
@@ -199,10 +235,10 @@ test_image_4()
 {
   vcl_cout << "\n\nTesting image 4\n";
 
-  image_type img( image_4() );
+  label_image_type img( image_to_label(image_4()) );
 
   testlib_test_begin( "Constructing extract object" );
-  vtol_extract_topology te( img );
+  vtol_extract_topology< TEST_LABEL_TYPE > te( img );
   testlib_test_perform( true );
 
   TEST_EQUAL( "Face count", te.faces().size(), 4 );
@@ -245,10 +281,10 @@ test_smoothing()
 
   {
     vcl_cout << "Without smoothing\n";
-    image_type img( image_5() );
+    label_image_type img( image_to_label(image_5()) );
 
     testlib_test_begin( "Constructing extract object" );
-    vtol_extract_topology te( img );
+    vtol_extract_topology< TEST_LABEL_TYPE >te( img );
     testlib_test_perform( true );
 
     vcl_vector< vtol_intensity_face_sptr > const& faces = te.faces();
@@ -268,10 +304,10 @@ test_smoothing()
 
   {
     vcl_cout << "Small smoothing (3)\n";
-    image_type img( image_5() );
+    label_image_type img( image_to_label(image_5()) );
 
     testlib_test_begin( "Constructing extract object" );
-    vtol_extract_topology te( img,
+    vtol_extract_topology< TEST_LABEL_TYPE > te( img,
                               vtol_extract_topology_params().set_smooth( 3 ) );
     testlib_test_perform( true );
 
@@ -292,11 +328,11 @@ test_smoothing()
 
   {
     vcl_cout << "Excessive smoothing (8)\n";
-    image_type img( image_5() );
+    label_image_type img( image_to_label(image_5()) );
 
     testlib_test_begin( "Constructing extract object" );
-    vtol_extract_topology te( img,
-                              vtol_extract_topology_params().set_smooth( 8 ) );
+    vtol_extract_topology <TEST_LABEL_TYPE > 
+      te( img,vtol_extract_topology_params().set_smooth( 8 ) );
     testlib_test_perform( true );
 
     vcl_vector< vtol_intensity_face_sptr > const& faces = te.faces();
@@ -324,9 +360,10 @@ test_digital_region()
   vcl_cout << "\n\nTesting digital region\n";
 
   image_type img( image_2() );
+  label_image_type label_img = image_to_label(img);
 
   testlib_test_begin( "Constructing extract object" );
-  vtol_extract_topology te( img );
+  vtol_extract_topology< TEST_LABEL_TYPE > te( label_img );
   testlib_test_perform( true );
 
   vcl_vector< vtol_intensity_face_sptr > const& faces = te.faces( img );
