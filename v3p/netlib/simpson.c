@@ -17,12 +17,12 @@
 /*     M: number of intervals. Notice, the subintervals used is 2M */
 /*     Srule: output parameter to store simpson rule result */
 /* Subroutine */
-int simpru_(E_fp f, real *a, real *b, integer *m, real *srule)
+int simpru_(E_fp f, doublereal *a, doublereal *b, integer *m, doublereal *srule)
 {
     /* Local variables */
-    static real h__;
+    static doublereal h__;
     static integer k;
-    static real x, sum, sumodd, sumeven;
+    static doublereal x, sum, sumodd, sumeven;
 
     h__ = (*b - *a) / (*m << 1);
     sumeven = 0.f;
@@ -41,12 +41,12 @@ int simpru_(E_fp f, real *a, real *b, integer *m, real *srule)
 } /* simpru_ */
 
 /* Subroutine */
-int xsimpru_(E_fp f, real *a, real *b, integer *m, real *srule)
+int xsimpru_(E_fp f, doublereal *a, doublereal *b, integer *m, doublereal *srule)
 {
     /* Local variables */
-    static real h__;
+    static doublereal h__;
     static integer k;
-    static real x, sum, sumodd, sumeven;
+    static doublereal x, sum, sumodd, sumeven;
 
 /*     This subroutine uses labeled DO loop(s). */
     h__ = (*b - *a) / (*m << 1);

@@ -1,9 +1,9 @@
 /* adaquad.f -- translated by f2c (version 20020621). */
 #include "f2c.h"
 extern /* Subroutine */
-int srule_(E_fp, real *, real *, real *, real *);
+int srule_(E_fp, doublereal *, doublereal *, doublereal *, doublereal *);
 extern /* Subroutine */
-int refine_(U_fp, integer *, real *, integer *, integer *);
+int refine_(U_fp, integer *, doublereal *, integer *, integer *);
 
 /*     NUMERICAL METHODS: FORTRAN Programs, (c) John H. Mathews 1994 */
 /*     To accompany the text: */
@@ -15,13 +15,13 @@ int refine_(U_fp, integer *, real *, integer *, integer *);
 /*     Section 7.4, Adaptive Quadrature, Page 389 */
 
 /* Subroutine */
-int adaptquad_(E_fp f, real *a, real *b, real *tol, real *srmat, real *integral,
-               real *errbdd, integer *m, integer *state)
+int adaptquad_(E_fp f, doublereal *a, doublereal *b, doublereal *tol, doublereal *srmat, 
+    doublereal *integral, doublereal *errbdd, integer *m, integer *state)
 {
     /* Local variables */
     static integer j, k, n, iterating;
-    static real sum1, sum2;
-    static real srvec[11];
+    static doublereal sum1, sum2;
+    static doublereal srvec[11];
 
     /* Function Body */
     iterating = 0;
@@ -49,18 +49,18 @@ int adaptquad_(E_fp f, real *a, real *b, real *tol, real *srmat, real *integral,
 } /* adaptquad_ */
 
 /* Subroutine */
-int refine_(U_fp f, integer *p, real *srmat, integer *m, integer *state)
+int refine_(U_fp f, integer *p, doublereal *srmat, integer *m, integer *state)
 {
     /* System generated locals */
     integer pm1;
 
     /* Local variables */
-    static real a, b, c__;
+    static doublereal a, b, c__;
     static integer j, k;
     static integer iterating;
-    static real err, tol, tol2;
-    static real check;
-    static real sr0vec[11], sr1vec[11], sr2vec[11];
+    static doublereal err, tol, tol2;
+    static doublereal check;
+    static doublereal sr0vec[11], sr1vec[11], sr2vec[11];
 
     /* Function Body */
     iterating = 0;
@@ -115,9 +115,9 @@ int refine_(U_fp f, integer *p, real *srmat, integer *m, integer *state)
 } /* refine_ */
 
 /* Subroutine */
-int srule_(E_fp f, real *a, real *b, real *tol0, real *srvec)
+int srule_(E_fp f, doublereal *a, doublereal *b, doublereal *tol0, doublereal *srvec)
 {
-    static real c__, h__, s, s2, fa, fb, fc, err, tol1, check;
+    static doublereal c__, h__, s, s2, fa, fb, fc, err, tol1, check;
 
     /* Function Body */
     h__ = (*b - *a) / 2;

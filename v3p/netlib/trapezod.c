@@ -11,12 +11,13 @@
 /*     Section 7.2, Composite Trapezoidal and Simpson's Rule, Page 365 */
 
 /* Subroutine */
-int trapru_(E_fp f, real *a, real *b, integer *m, real *trule)
+int trapru_(E_fp f, doublereal *a, doublereal *b, integer *m, doublereal *trule)
 {
     /* Local variables */
-    static real h__;
+    static doublereal h__;
     static integer k;
-    static real x, sum;
+    static doublereal x;
+    static doublereal sum;
 
     h__ = (*b - *a) / *m;
     sum = 0.f;
@@ -30,12 +31,12 @@ int trapru_(E_fp f, real *a, real *b, integer *m, real *trule)
 } /* trapru_ */
 
 /* Subroutine */
-int xtrapru_(E_fp f, real *a, real *b, integer *m, real *trule)
+int xtrapru_(E_fp f, doublereal *a, doublereal *b, integer *m, doublereal *trule)
 {
     /* Local variables */
-    static real h__;
+    static doublereal h__;
     static integer k;
-    static real x, sum;
+    static doublereal x, sum;
 
 /*     This subroutine uses labeled DO loop(s). */
     h__ = (*b - *a) / *m;
