@@ -1,14 +1,13 @@
 #ifndef vpl_unistd_h_
 #define vpl_unistd_h_
-// .NAME vpl_unistd
-// .INCLUDE vpl/vpl_unistd.h
-// .FILE vpl_unistd.cxx
-// @author fsm@robots.ox.ac.uk
-//
-// .SECTION Description
-//
+
+//:
+// \file 
+// \brief Tries to include <unistd.h> properly.
+// \author fsm@robots.ox.ac.uk
 // What vpl_unistd.h is meant to do is to include <unistd.h> properly
 // on systems that have it. Eg. :
+// \verbatim
 // 1. On some UNIX systems, usleep() is not declared in
 //    unistd although the man pages say it is. So we declare it
 //    but don't provide a new definition.
@@ -18,10 +17,16 @@
 // 3. On windows, unlink() is called _unlink(), buth with
 //    vpl_unistd.h it's called vpl_unlink() on both UNIX and
 //    windows.
-
+// \endverbatim
 // This list is from
 // http://www.opengroup.org/onlinepubs/007908799/xsh/unistd.h.html
 // and includes also the functions declared in posix sys/stat.h
+//
+// Modifications
+// \verbatim
+// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// \endverbatim
+
 
 #include <vxl_config.h>        // must be first!!
 #include <vcl_compiler.h>

@@ -1,29 +1,21 @@
 #ifndef VCSL_DIMENSION_H
 #define VCSL_DIMENSION_H
-//*****************************************************************************
-//
-// .NAME vcsl_dimension - Abstract dimension
-// .LIBRARY vcsl
-// .HEADER  vxl Package
-// .INCLUDE vcsl/vcsl_dimension.h
-// .FILE    vcsl/vcsl_dimension.cxx
-//
-// .SECTION Description
-// A dimension is a type of quantity to be measured
-//
-// .SECTION Author
-// François BERTEL
-//
-// .SECTION Modifications
+
+//:
+// \file 
+// \author François BERTEL
+// Modifications
+// \verbatim
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
-//*****************************************************************************
+// \endverbatim
 
 #include <vcsl/vcsl_dimension_sptr.h>
 
 #include <vbl/vbl_ref_count.h>
 
 #include <vcsl/vcsl_unit_sptr.h>
-
+//: Abstract dimension
+// A dimension is a type of quantity to be measured
 class vcsl_dimension
   : public vbl_ref_count
 {

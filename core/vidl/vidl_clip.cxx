@@ -13,7 +13,7 @@
 //------------------------------------------------------------------------
 // CONSTRUCTOR(S) AND DESTRUCTOR
 
-// -- Constructor. Takes a vidl_codec, start, end and increment
+//: Constructor. Takes a vidl_codec, start, end and increment
 // frames are optional
 vidl_clip::vidl_clip(
         vidl_codec_sptr codec,
@@ -29,7 +29,7 @@ vidl_clip::vidl_clip(
   init(start, end, increment);
 }
 
-// -- Constructor. Create a clip from a vector of
+//: Constructor. Create a clip from a vector of
 // images. Start, end and increment frames are optional
 vidl_clip::vidl_clip(
         vcl_vector<vil_image> &images,
@@ -54,7 +54,7 @@ vidl_clip::vidl_clip(
   init(start, end, increment);
 }
 
-// -- Constructor. Create a clip from a list of
+//: Constructor. Create a clip from a list of
 // images. Start, end and increment frames are optional
 vidl_clip::vidl_clip(
         vcl_list<vil_image> &images,
@@ -79,7 +79,7 @@ vidl_clip::vidl_clip(
   init(start, end, increment);
 }
 
-// -- Initialization of the clip. Protected.
+//: Initialization of the clip. Protected.
 void vidl_clip::init(int start, int end, int increment)
 {
   // Initialize startframe_, endframe_ and increment_ in the vidl_clip
@@ -111,14 +111,14 @@ void vidl_clip::init(int start, int end, int increment)
 }
 
 
-// -- Destructor
+//: Destructor
 vidl_clip::~vidl_clip()
 {
 
 }
 
 
-// -- Get the frame numbered n inside the range
+//: Get the frame numbered n inside the range
 // defined by startframe, endframe and increment.
 // So, the returned frame is startframe_+n*increment_
 vidl_frame_sptr vidl_clip::get_frame(int n)
@@ -134,21 +134,21 @@ vidl_frame_sptr vidl_clip::get_frame(int n)
   return frames_[startframe_+n*increment_];
 }
 
-// -- Return the number of frames
+//: Return the number of frames
 int vidl_clip::length()
 {
   return ((endframe_-startframe_)/increment_ + 1);
 }
 
-// -- Return the horizontal size of the frames in the clip
+//: Return the horizontal size of the frames in the clip
 int vidl_clip::width() const
 { return coder_->width(); }
 
-// -- Return the vertical size of the frames in the clip
+//: Return the vertical size of the frames in the clip
 int vidl_clip::height() const
 { return coder_->height(); }
 
-// -- Return the codec.
+//: Return the codec.
 vidl_codec_sptr vidl_clip::get_codec()
 { return coder_; }
 

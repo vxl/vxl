@@ -1,22 +1,14 @@
 #ifndef VCSL_CYLINDRICAL_TO_CARTESIAN_3D_H
 #define VCSL_CYLINDRICAL_TO_CARTESIAN_3D_H
-//*****************************************************************************
-//
-// .NAME vcsl_cylindrical_to_cartesian_3d
-// .LIBRARY vcsl
-// .HEADER  vxl Package
-// .INCLUDE vcsl/vcsl_cylindrical_to_cartesian_3d.h
-// .FILE    vcsl/vcsl_cylindrical_to_cartesian_3d.cxx
-//
-// .SECTION Description
-// Convert 3D cartesian coordinates to cylindrical coordinates
-//
-// .SECTION Author
-// François BERTEL
-//
-// .SECTION Modifications
-// 2000/08/08 François BERTEL Creation.
-//*****************************************************************************
+
+//:
+// \file 
+// \author François BERTEL
+// Modifications
+// \verbatim
+// 2000/06/28 François BERTEL Creation. Adapted from IUE
+// \endverbatim
+
 
 #include <vcsl/vcsl_cylindrical_to_cartesian_3d_sptr.h>
 
@@ -24,7 +16,7 @@
 // External declarations
 //*****************************************************************************
 #include <vcsl/vcsl_spatial_transformation.h>
-
+//: Convert 3D cartesian coordinates to cylindrical coordinates
 class vcsl_cylindrical_to_cartesian_3d
   : public vcsl_spatial_transformation
 {

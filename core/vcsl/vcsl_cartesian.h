@@ -1,23 +1,13 @@
 #ifndef VCSL_CARTESIAN_H
 #define VCSL_CARTESIAN_H
-//*****************************************************************************
-//
-// .NAME vcsl_cartesian - Cartesian coordinate system
-// .LIBRARY vcsl
-// .HEADER  vxl Package
-// .INCLUDE vcsl/vcsl_cartesian.h
-// .FILE    vcsl/vcsl_cartesian.cxx
-//
-// .SECTION Description
-// The axes of a cartesian coordinate system are orthogonal and normally right
-// handed. This is not necessarily a spatial coordinate system.
-//
-// .SECTION Author
-// François BERTEL
-//
-// .SECTION Modifications
+//:
+// \file 
+// \brief Descibes vcsl_cartesian - Cartesian coordinate system
+// \author François BERTEL
+// Modifications
+// \verbatim
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
-//*****************************************************************************
+// \endverbatim
 
 #include <vcsl/vcsl_cartesian_sptr.h>
 
@@ -26,6 +16,9 @@
 //*****************************************************************************
 #include <vcsl/vcsl_coordinate_system.h>
 
+//: Cartesian coordinate system
+// The axes of a cartesian coordinate system are orthogonal and normally right
+// handed. This is not necessarily a spatial coordinate system.
 class vcsl_cartesian
   : public vcsl_coordinate_system
 {

@@ -1,26 +1,23 @@
 #ifndef vnl_fft_prime_factors_h_
 #define vnl_fft_prime_factors_h_
-// -*- c++ -*-
 
-// .NAME    vnl_fft_prime_factors
-// .LIBRARY vnl-algo
-// .HEADER  vxl Package
-// .INCLUDE vnl/algo/vnl_fft_prime_factors.h
-// .FILE    vnl_fft_prime_factors.cxx
-//
-// .SECTION Description
-// Helper class which hold prime factor information used
-// by the vnl_fft_xd<> FFT routines.
+//:
+// \file 
+// \author Veit U.B. Schenk, Oxford RRG, 19 Mar 98
+// Modifications
+// \verbatim
+// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// \endverbatim
+
+
+#include <vnl/algo/vnl_fft.h>
+
+//: Holds prime factor information .
+// Helper class  used by the vnl_fft_xd<> FFT routines
 //
 // Given an integer N of the form
 //   N = (2**P)(3**Q)(5**R)
 // split N into its primefactors (2, 3, 5)
-//
-// .SECTION Author
-//  Veit U.B. Schenk, Oxford RRG, 19 Mar 98
-
-#include <vnl/algo/vnl_fft.h>
-
 export template <class T>
 struct vnl_fft_prime_factors
 {

@@ -1,23 +1,14 @@
 #ifndef VCSL_UNIT_H
 #define VCSL_UNIT_H
-//*****************************************************************************
-//
-// .NAME vcsl_unit - Abstract unit associated to a dimension
-// .LIBRARY vcsl
-// .HEADER  vxl Package
-// .INCLUDE vcsl/vcsl_unit.h
-// .FILE    vcsl/vcsl_unit.cxx
-//
-// .SECTION Description
-// A unit specifies how the quantity is measured--effectively, it specifies
-// what is amount is to be defined as 1
-//
-// .SECTION Author
-// François BERTEL
-//
-// .SECTION Modifications
+
+//:
+// \file 
+// \author François BERTEL
+// Modifications
+// \verbatim
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
-//*****************************************************************************
+// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// \endverbatim
 
 #include <vcsl/vcsl_unit_sptr.h>
 
@@ -33,6 +24,9 @@ class vcsl_temperature_unit;
 class vcsl_time_unit;
 class vcsl_velocity_unit;
 
+//: Abstract unit associated to a dimension
+// A unit specifies how the quantity is measured--effectively, it specifies
+// what is amount is to be defined as 1
 class vcsl_unit
   : public vbl_ref_count
 {

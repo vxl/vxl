@@ -1,19 +1,14 @@
 #ifndef VCSL_SPATIAL_H
 #define VCSL_SPATIAL_H
-//*****************************************************************************
-//
-// .NAME vcsl_spatial - A spatial coordinate system
-// .LIBRARY vcsl
-// .HEADER  vxl Package
-// .INCLUDE vcsl/vcsl_spatial.h
-// .FILE    vcsl/vcsl_spatial.cxx
-//
-// .SECTION Author
-// François BERTEL
-//
-// .SECTION Modifications
+
+//:
+// \file 
+// \author François BERTEL
+// Modifications
+// \verbatim
 // 2000/07/10 François BERTEL Creation
-//*****************************************************************************
+// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// \endverbatim
 
 #include <vcsl/vcsl_spatial_sptr.h>
 
@@ -32,6 +27,7 @@ class vcsl_cartesian_3d;
 class vcsl_cylindrical;
 class vcsl_spherical;
 
+//: A spatial coordinate system
 class vcsl_spatial
   :public vcsl_coordinate_system
 {

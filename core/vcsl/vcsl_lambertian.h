@@ -1,24 +1,14 @@
 #ifndef VCSL_LAMBERTIAN_H
 #define VCSL_LAMBERTIAN_H
-//*****************************************************************************
-//
-// .NAME vcsl_lambertian - Lambert Conformal Conic Projection
-// .LIBRARY vcsl
-// .HEADER  vxl Package
-// .INCLUDE vcsl/vcsl_lambertian.h
-// .FILE    vcsl/vcsl_lambertian.cxx
-//
-// .SECTION Description
-// Coordinate system in which shapes are preserved while scale is nonuniform.
-// Coordinates are specified in terms of x, y, and z, where z is the altitude
-// above the surface of the reference ellipsoid (or sphere).
-//
-// .SECTION Author
-// François BERTEL
-//
-// .SECTION Modifications
+
+//:
+// \file 
+// \author François BERTEL
+// Modifications
+// \verbatim
 // 2000/06/30 François BERTEL Creation. Adapted from IUE
-//*****************************************************************************
+// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// \endverbatim
 
 #include <vcsl/vcsl_lambertian_sptr.h>
 
@@ -26,7 +16,10 @@
 // External declarations for values
 //*****************************************************************************
 #include <vcsl/vcsl_geographic.h>
-
+//: Lambert Conformal Conic Projection
+// Coordinate system in which shapes are preserved while scale is nonuniform.
+// Coordinates are specified in terms of x, y, and z, where z is the altitude
+// above the surface of the reference ellipsoid (or sphere).
 class vcsl_lambertian
   : public vcsl_geographic
 {

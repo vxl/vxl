@@ -1,14 +1,20 @@
 #ifndef VCSL_SPHEROID_H
 #define VCSL_SPHEROID_H
-//*****************************************************************************
-//
-// .NAME vcsl_spheroid - Reference sphere or ellipse for a geographic
-//                       coordinate system
-// .LIBRARY vcsl
-// .HEADER  vxl Package
-// .INCLUDE vcsl/vcsl_spheroid.h
-// .FILE    vcsl/vcsl_spheroid.cxx
-//
+
+//:
+// \file 
+// \author François BERTEL
+// Modifications
+// \verbatim
+// 2000/06/28 François BERTEL Creation. Adapted from IUE
+// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// \endverbatim
+
+#include <vcsl/vcsl_spheroid_sptr.h>
+
+#include <vbl/vbl_ref_count.h>
+
+//: Reference sphere or ellipse for a geographic coordinate system
 // The default value for a reference ellipsoid is the Clarke 1866 model, but
 // this class contains a constructor that allows reference spheroids to be
 // constructed with values for several different standard models. See the book
@@ -16,18 +22,6 @@
 // "Map Projections Used by the U.S. Geological Survey," Geological Survey
 // Bulletin 1532, U.S. Government Printing Office, Washington, 1982.) for
 // further detail on most of these coordinate systems.
-//
-// .SECTION Author
-// François BERTEL
-//
-// .SECTION Modifications
-// 2000/06/28 François BERTEL Creation. Adapted from IUE
-//*****************************************************************************
-
-#include <vcsl/vcsl_spheroid_sptr.h>
-
-#include <vbl/vbl_ref_count.h>
-
 class vcsl_spheroid
   :public vbl_ref_count
 {

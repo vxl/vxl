@@ -16,7 +16,7 @@
 #include <vcsl/vcsl_graph.h>
 
 //-----------------------------------------------------------------------------
-// -- Entry point of the test program
+//: Entry point of the test program
 //-----------------------------------------------------------------------------
 int main(int argc,
          char *argv[])

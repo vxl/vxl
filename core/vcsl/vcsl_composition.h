@@ -1,23 +1,15 @@
 #ifndef VCSL_COMPOSITION_H
 #define VCSL_COMPOSITION_H
-//*****************************************************************************
-//
-// .NAME vcsl_composition - Composition of transformations
-// .LIBRARY vcsl
-// .HEADER  vxl Package
-// .INCLUDE vcsl/vcsl_composition.h
-// .FILE    vcsl/vcsl_composition.cxx
-//
-// .SECTION Description
-// This transformation handles a composition of transformations, that is,
-// at a given time, all the transformations are applied on a given point
-//
-// .SECTION Author
-// François BERTEL
-//
-// .SECTION Modifications
-// 2000/08/08 François BERTEL Creation.
-//*****************************************************************************
+
+//:
+// \file 
+// \brief Descibes vcsl_composition - Composition of transformations
+// \author François BERTEL
+// Modifications
+// \verbatim
+// 2000/06/28 François BERTEL Creation. Adapted from IUE
+// \endverbatim
+
 
 #include <vcsl/vcsl_composition_sptr.h>
 
@@ -27,6 +19,9 @@
 #include <vcsl/vcsl_spatial_transformation.h>
 #include <vcl_vector.h>
 
+//: Composition of transformations
+// This transformation handles a composition of transformations, that is,
+// at a given time, all the transformations are applied on a given point
 class vcsl_composition
   :public vcsl_spatial_transformation
 {

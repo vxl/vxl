@@ -1,30 +1,15 @@
 #ifndef vidl_movie_h
 #define vidl_movie_h
-//-----------------------------------------------------------------------------
-//
-// .NAME vidl_movie - Video movie
-// .LIBRARY vidl
-// .HEADER vxl package
-// .INCLUDE vidl/vidl_movie.h
-// .FILE vidl_movie.cxx
-// .EXAMPLE vidl_test.cxx
-//
-// .SECTION Description
-//   A vidl_movie is a movie sequence
-//   It is basically a list of clips
-//
-// .SECTION See also
-//   vidl_frame
-//   vidl_clip
-//
-// .SECTION Author
-//   Nicolas Dano, march 1999
-//
-// .SECTION Modifications
-//   Julien ESTEVE, May 2000
-//   Ported from TargetJr
-//
-//-----------------------------------------------------------------------------
+
+//:
+// \file 
+// \author Nicolas Dano, september 1999
+// Modifications
+// \verbatim
+// Julien ESTEVE, June 2000
+//     Ported from TargetJr
+// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// \endverbatim
 
 
 #include <vbl/vbl_ref_count.h>
@@ -34,7 +19,10 @@
 #include <vidl/vidl_clip.h>
 #include <vil/vil_image.h>
 #include <vcl_list.h>
-
+//: Video movie
+//   A vidl_movie is a movie sequence
+//   It is basically a list of clips.
+// See also vidl_frame and vidl_clip.
 class vidl_movie : public vbl_ref_count
 {
   // PUBLIC INTERFACE

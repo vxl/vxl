@@ -1,30 +1,20 @@
 #ifndef vidl_avicodec_h
 #define vidl_avicodec_h
-//-----------------------------------------------------------------------------
-//
-// .NAME vidl_avicodec
-// .LIBRARY vidl
-// .HEADER vidl package
-// .INCLUDE vidl/vidl_avicodec.h
-// .FILE vidl_avicodec.cxx
-//
-// .SECTION Description
-//    Allows user to load Microsoft AVI movie files as vxl video.
-//    (Works only if compiled with a microsoft compiler)
-//
-// .SECTION See also
-//   vidl_codec
-//
-// .SECTION Author
-//   Andy Molnar, october 1998
-//
-// .SECTION Modifications
-//   Nicolas Dano, september 1999
+
+//:
+// \file 
+// \author Andy Molnar
+// \date October 1998
+// Modifications
+// \verbatim
+// Nicolas Dano, september 1999
 //     - Transformed the basic AVI image reading into AVI Video
 //     - Added the possibility to save video in AVI format
-//   Julien ESTEVE, June 2000
+// Julien ESTEVE, June 2000
 //     Ported from TargetJr
-//-----------------------------------------------------------------------------
+// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// \endverbatim
+
 
 #include <vidl/vidl_avicodec_sptr.h>
 #include <vbl/vbl_ref_count.h>
@@ -36,7 +26,9 @@
 #include <vidl/vidl_frame_sptr.h>
 
 
-//=============================================================================
+//: Allows user to load Microsoft AVI movie files as vxl video.
+// (Works only if compiled with a microsoft compiler)
+// See also vidl_codec
 class vidl_avicodec : public vidl_codec
 {
 public:

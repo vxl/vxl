@@ -1,35 +1,24 @@
 #ifndef vidl_frame_as_image_h
 #define vidl_frame_as_image_h
-//-----------------------------------------------------------------------------
-//
-// .NAME vidl_frame_as_image - see a frame as an image
-// .LIBRARY vidl
-// .HEADER vxl package
-// .INCLUDE vidl/vidl_frame_as_image.h
-// .FILE vidl_frame_as_image.cxx
-//
-// .SECTION Description
-//   This is a convenient container to be able to make easily
-//   an image from a frame.
-//
-// .SECTION See also
-//   vidl_frame
-//
-// .SECTION Author
-//   Nicolas Dano, september 1999
-//
-// .SECTION Modifications
-//   Julien ESTEVE, june 2000
-//   Ported from TargetJr
-//
-//-----------------------------------------------------------------------------
+
+//:
+// \file 
+// \author Nicolas Dano, september 1999
+// Modifications
+// \verbatim
+// Julien ESTEVE, June 2000
+//     Ported from TargetJr
+// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// \endverbatim
 
 
 #include <vil/vil_image_impl.h>
 #include <vidl/vidl_frame_as_image_sptr.h>
 #include <vidl/vidl_frame_sptr.h>
 #include <vidl/vidl_frame.h>
-
+//: see a frame as an image
+//   This is a convenient container to be able to make easily
+//   an image from a frame.
 class vidl_frame_as_image : public vil_image_impl
 {
    public:

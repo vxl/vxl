@@ -1,20 +1,15 @@
 #ifndef VCSL_SPHERICAL_H
 #define VCSL_SPHERICAL_H
-//*****************************************************************************
-//
-// .NAME vcsl_spherical - 3D coordinate system specified by distance rho,
-//                          angle theta and phi.
-// .LIBRARY vcsl
-// .HEADER  vxl Package
-// .INCLUDE vcsl/vcsl_spherical.h
-// .FILE    vcsl/vcsl_spherical.cxx
-//
-// .SECTION Author
-// François BERTEL
-//
-// .SECTION Modifications
+
+//:
+// \file 
+// \author François BERTEL
+// Modifications
+// \verbatim
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
-//*****************************************************************************
+// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// \endverbatim
+
 
 #include <vcsl/vcsl_spherical_sptr.h>
 
@@ -22,7 +17,7 @@
 // External declarations for values
 //*****************************************************************************
 #include <vcsl/vcsl_spatial.h>
-
+//: 3D coordinate system specified by distance rho, angle theta and phi.
 class vcsl_spherical
   : public vcsl_spatial
 {

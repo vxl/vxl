@@ -4,12 +4,14 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_gen
-// .INCLUDE vil/file_formats/vil_gen.h
-// .FILE file_formats/vil_gen.cxx
-// .SECTION Author
-//    awf@robots.ox.ac.uk
-// Created: 16 Feb 00
+
+//:
+// \file 
+// \author awf@robots.ox.ac.uk 16 Feb 00
+// Modifications
+// \verbatim
+// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// \endverbatim
 
 #include <vcl_string.h>
 #include <vil/vil_file_format.h>

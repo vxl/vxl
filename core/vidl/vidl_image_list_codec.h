@@ -1,27 +1,15 @@
 #ifndef vidl_image_list_codec_h
 #define vidl_image_list_codec_h
-//-----------------------------------------------------------------------------
-//
-// .NAME vidl_image_list_codec - coder/decoder for a list of images
-// .LIBRARY vidl
-// .HEADER vxl package
-// .INCLUDE vidl/vidl_image_list_codec.h
-// .FILE vidl_image_list_codec.cxx
-//
-// .SECTION Description
-//   A vidl_image_list_codec is the video I/O access for list of images.
-//
-// .SECTION See also
-//   vidl_codec
-//
-// .SECTION Author
-//   Nicolas Dano, September 1999
-//
-// .SECTION Modifications
-//   Julien ESTEVE, June 2000
-//   Ported from TargetJr
-//
-//-----------------------------------------------------------------------------
+
+//:
+// \file 
+// \author Nicolas Dano, september 1999
+// Modifications
+// \verbatim
+// Julien ESTEVE, June 2000
+//     Ported from TargetJr
+// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// \endverbatim
 
 
 #include <vcl_string.h>
@@ -31,7 +19,8 @@
 #include <vil/vil_image.h>
 #include <vcl_list.h>
 #include <vcl_vector.h>
-
+//: Coder/decoder for a list of images
+//   A vidl_image_list_codec is the video I/O access for list of images.
 class vidl_image_list_codec :  public vidl_codec
 {
   // PUBLIC INTERFACE----------------------------------------------------------

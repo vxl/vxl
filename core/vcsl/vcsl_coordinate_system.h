@@ -1,23 +1,13 @@
 #ifndef VCSL_COORDINATE_SYSTEM_H
 #define VCSL_COORDINATE_SYSTEM_H
-//*****************************************************************************
-//
-// .NAME vcsl_coordinate_system - Abstract coordinate system
-// .LIBRARY vcsl
-// .HEADER  vxl Package
-// .INCLUDE vcsl/vcsl_coordinate_system.h
-// .FILE    vcsl/vcsl_coordinate_system.cxx
-//
-// .SECTION Description
-// A coordinate system is just a list of axes. Each concrete coordinate system
-// has to inherit from this class
-//
-// .SECTION Author
-// François BERTEL
-//
-// .SECTION Modifications
+
+//:
+// \file 
+// \author François BERTEL
+// Modifications
+// \verbatim
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
-//*****************************************************************************
+// \endverbatim
 
 #include <vcsl/vcsl_coordinate_system_sptr.h>
 
@@ -33,6 +23,7 @@
 // Because VXL does not use dynamic_cast<> :-(
 class vcsl_spatial;
 
+//: Abstract coordinate system
 class vcsl_coordinate_system
   : public vbl_ref_count
 {

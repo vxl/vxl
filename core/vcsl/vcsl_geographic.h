@@ -1,27 +1,15 @@
 #ifndef VCSL_GEOGRAPHIC_H
 #define VCSL_GEOGRAPHIC_H
-//*****************************************************************************
-//
-// .NAME vcsl_geographic - Represent a location relative to the earth
-// .LIBRARY vcsl
-// .HEADER  vxl Package
-// .INCLUDE vcsl/vcsl_geographic.h
-// .FILE    vcsl/vcsl_geographic.cxx
-//
-// .SECTION Description
-// 3D coordinate system that is intended to represent a location relative to
-// the earth, although its use is not restricted to earthbound coordinate
-// systems. See the book "Map Projections Used by the U.S. Geological Survey"
-// (Snyder, John P., "Map Projections Used by the U.S. Geological Survey,"
-// Geological Survey Bulletin 1532, U.S. Government Printing Office,
-// Washington, 1982.) for further detail on most of these coordinate systems.
-//
-// .SECTION Author
-// François BERTEL
-//
-// .SECTION Modifications
+
+//:
+// \file 
+// \author François BERTEL
+// Modifications
+// \verbatim
 // 2000/06/29 François BERTEL Creation. Adapted from IUE
-//*****************************************************************************
+// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// \endverbatim
+
 
 #include <vcsl/vcsl_geographic_sptr.h>
 
@@ -30,7 +18,13 @@
 //*****************************************************************************
 #include <vcsl/vcsl_spatial.h>
 #include <vcsl/vcsl_spheroid_sptr.h>
-
+//: Represent a location relative to the earth
+// 3D coordinate system that is intended to represent a location relative to
+// the earth, although its use is not restricted to earthbound coordinate
+// systems. See the book "Map Projections Used by the U.S. Geological Survey"
+// (Snyder, John P., "Map Projections Used by the U.S. Geological Survey,"
+// Geological Survey Bulletin 1532, U.S. Government Printing Office,
+// Washington, 1982.) for further detail on most of these coordinate systems.
 class vcsl_geographic
   :public vcsl_spatial
 {

@@ -12,59 +12,6 @@
 // \brief Templated rtree class and associated classes and functions
 
 
-//
-// .SECTION Description
-// Templated rtree class. The rtree is templated over the element
-// type V, the type B of the bounding region used (e.g.
-// axis-aligned bounding boxes are common but there are other
-// possibilities such as boxes which are axis-aligned ones or even
-// bounding ellipsoids) and a type C which is used as a namespace
-// for some functionality needed by the rtree.
-//
-// The rtree is a container of Vs which may contain multiple
-// copies of the same element. The container for client use is
-// called vgl_rtree<V, B, C> and is defined at the bottom of the
-// file.
-//
-// Note that the iterators are bidirectional but only forward
-// advancement has been implement so far (it's tedious work).
-// Moreover, beware that changing an element through an iterator
-// will not update the rtree, so may lead to the data structure
-// being corrupted.
-//
-// V : element type
-// B : bounds type
-// C : mystery type
-//
-// The C-device makes it possible to have an rtree of Vs using Bs
-// without having to modify the class definitions of V or B. It
-// may be better to have C's signatures non-static and store a C
-// on every tree node, but I don't know about this.
-//
-// It is assumed that the cost of copying (e.g. by assignment) Vs
-// and Bs is not too high. In any case, I suggest you inline and
-// optimize heavily when compiling this source file.
-//
-// V must have the following signatures:
-//   V::V();
-//   V::V(V const &);
-//   V::operator==(V const &) or operator==(V const &, V const &);
-//
-// B must have the following signatures :
-//   B::B();
-//   B::B(const &);
-//   B::operator==(V const &) or operator==(B const &, B const &);
-//
-// C must have the following (static method) signatures :
-//   void  C::init  (B &, V const &);
-//   void  C::update(B &, V const &);
-//   void  C::update(B &, B const &);
-//   bool  C::meet  (B const &, V const &) const;
-//   bool  C::meet  (B const &, B const &) const;
-//   float C::volume(B const &) const;
-//
-// The volume() method is used by the rtree to make decisions
-// about where to put new elements.
 
 
 //--------------------------------------------------------------------------------

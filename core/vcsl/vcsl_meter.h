@@ -1,24 +1,20 @@
 #ifndef VCSL_METER_H
 #define VCSL_METER_H
-//*****************************************************************************
-//
-// .NAME vcsl_meter - Standard unit associated to the length dimension
-// .LIBRARY vcsl
-// .HEADER  vxl Package
-// .INCLUDE vcsl/vcsl_meter.h
-// .FILE    vcsl/vcsl_meter.cxx
-//
-// .SECTION Author
-// François BERTEL
-//
-// .SECTION Modifications
+
+//:
+// \file 
+// \author François BERTEL
+// Modifications
+// \verbatim
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
-//*****************************************************************************
+// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// \endverbatim
+
 
 #include <vcsl/vcsl_meter_sptr.h>
 
 #include <vcsl/vcsl_length_unit.h>
-
+//: Standard unit associated to the length dimension
 class vcsl_meter
   : public vcsl_length_unit
 {

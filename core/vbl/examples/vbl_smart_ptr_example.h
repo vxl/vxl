@@ -1,19 +1,17 @@
 #ifndef vbl_smart_ptr_example_h_
 #define vbl_smart_ptr_example_h_
-// .LIBRARY vbl-examples
 
 #include <vcl_iostream.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 
-// Here is an example of how to make a smart pointer class.
-// A smart pointer can be made from any class that defines the methods ref()
-// and unref(), e.g., because it is derived from vbl_ref_count.
-
 // The code parts below are normally put into several files, as indicated by
 // the "start of" and "end of" lines.  Here, for this example, everything is
 // put in a single file, which is a perfectly valid (but less standard) way.
 
+//: An example of how to make a smart pointer class.
+// A smart pointer can be made from any class that defines the methods ref()
+// and unref(), e.g., because it is derived from vbl_ref_count.
 class example_sp : public vbl_ref_count {
 public:
   example_sp() { vcl_cout << "example_sp constructor, refcount=" 

@@ -1,21 +1,13 @@
 #ifndef VCSL_AXIS_H
 #define VCSL_AXIS_H
-//*****************************************************************************
-//
-// .NAME vcsl_axis - Axis descriptor: a dimension, a unit, a label
-// .LIBRARY vcsl
-// .HEADER  vxl Package
-// .INCLUDE vcsl/vcsl_axis.h
-// .FILE    vcsl/vcsl_axis.cxx
-//
-// .SECTION Description
-//
-// .SECTION Author
-// François BERTEL
-//
-// .SECTION Modifications
+//:
+// \file 
+// \brief Descibes vcsl_axis - Axis descriptor: a dimension, a unit, a label
+// \author François BERTEL
+// Modifications
+// \verbatim
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
-//*****************************************************************************
+// \endverbatim
 
 #include <vcl_string.h>
 #include <vcsl/vcsl_axis_sptr.h>
@@ -27,6 +19,7 @@
 #include <vcsl/vcsl_dimension_sptr.h>
 #include <vcsl/vcsl_unit_sptr.h>
 
+//: Axis descriptor: a dimension, a unit, a label
 class vcsl_axis
   : public vbl_ref_count
 {

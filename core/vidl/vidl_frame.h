@@ -1,34 +1,22 @@
 #ifndef vidl_frame_h
 #define vidl_frame_h
-//-----------------------------------------------------------------------------
-//
-// .NAME vidl_frame - basic element of a sequence
-// .LIBRARY vidl
-// .HEADER vxl package
-// .INCLUDE vidl/vidl_frame.h
-// .FILE vidl_frame.cxx
-//
-// .SECTION Description
-//   A vidl_frame is a single element of a Video Sequence.
-//
-// .SECTION See also
-//   vidl_clip
-//   vidl_movie
-//
-// .SECTION Author
-//   Nicolas Dano, march 1999
-//
-// .SECTION Modifications
-//   Julien Esteve, May 2000
-//   Ported from TargetJr
-//
-//-----------------------------------------------------------------------------
+
+//:
+// \file 
+// \author Nicolas Dano, march 1999
+// Modifications
+// \verbatim
+// Julien Esteve, May 2000 Ported from TargetJr
+// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// \endverbatim
+
 
 #include <vbl/vbl_ref_count.h>
 #include <vil/vil_image.h>
 #include <vidl/vidl_frame_sptr.h>
 #include <vidl/vidl_codec.h>
 
+//: A single frame of a Video Sequence.
 class vidl_frame : public vbl_ref_count
    {
    // PUBLIC INTERFACE

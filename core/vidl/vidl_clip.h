@@ -1,33 +1,15 @@
 #ifndef vidl_clip_h
 #define vidl_clip_h
-//-----------------------------------------------------------------------------
-//
-// .NAME vidl_clip - sequence of frames, element of a movie
-// .LIBRARY vidl
-// .HEADER vxl package
-// .INCLUDE vidl/vidl_clip.h
-// .FILE vidl_clip.cxx
-//
-// .SECTION Description
-//   A clip is a set of frames, it is part of a Movie.
-//   It has the notion of starting frame, ending frame
-//   and increment, so that when we iterate through the
-//   sequence, it will iterate only through the frames
-//   of interest.
-//
-// .SECTION See also
-//   vidl_frame
-//   vidl_movie
-//
-// .SECTION Author
-//    Nicolas Dano, march 1999
-//
-// .SECTION Modifications
-//   Julien Esteve, May 2000
-//   Ported from TargetJr
-//
-//-----------------------------------------------------------------------------
 
+//:
+// \file 
+// \author Nicolas Dano, september 1999
+// Modifications
+// \verbatim
+// Julien ESTEVE, June 2000
+//     Ported from TargetJr
+// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// \endverbatim
 
 #include <vbl/vbl_ref_count.h>
 #include <vidl/vidl_clip_sptr.h>
@@ -37,6 +19,15 @@
 
 #include <vcl_vector.h>
 #include <vcl_list.h>
+
+//: Sequence of frames, element of a movie
+//   A clip is a set of frames, it is part of a Movie.
+//   It has the notion of starting frame, ending frame
+//   and increment, so that when we iterate through the
+//   sequence, it will iterate only through the frames
+//   of interest.
+//
+//   See also vidl_frame and vidl_movie.
 
 class vidl_clip : public vbl_ref_count
 {

@@ -1,28 +1,15 @@
 #ifndef vidl_codec_h
 #define vidl_codec_h
-//-----------------------------------------------------------------------------
-//
-// .NAME vidl_codec - Base for video coder/decoder
-// .LIBRARY vidl
-// .HEADER vxl package
-// .INCLUDE vidl/vidl_codec.h
-//
-// .SECTION Description
-//   A vidl_codec is a pure virtual class defining the codecs of video
-//
-// .SECTION See also
-//   vidl_io
-//   vidl_image_list_codec
-//   vidl_avicodec
-//
-// .SECTION Author
-//   Nicolas Dano, September 1999
-//
-// .SECTION Modifications
-//   Julien Esteve, May 2000
-//   Ported from TargetJr
-//
-//-----------------------------------------------------------------------------
+//:
+// \file 
+// \author Nicolas Dano, september 1999
+// Modifications
+// \verbatim
+// Julien ESTEVE, June 2000
+//     Ported from TargetJr
+// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// \endverbatim
+
 
 
 #include <vcl_string.h>
@@ -32,7 +19,9 @@
 class vidl_movie;
 class vidl_image_list_codec;
 
-
+//: Base for video coder/decoder
+//   A vidl_codec is a pure virtual class defining the codecs of video
+//   See also vidl_io and vidl_image_list_codec and vidl_avicodec
 class vidl_codec :  public vbl_ref_count
 {
 public:

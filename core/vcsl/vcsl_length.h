@@ -1,24 +1,20 @@
 #ifndef VCSL_LENGTH_H
 #define VCSL_LENGTH_H
-//*****************************************************************************
-//
-// .NAME vcsl_length - Length dimension
-// .LIBRARY vcsl
-// .HEADER  vxl Package
-// .INCLUDE vcsl/vcsl_length.h
-// .FILE    vcsl/vcsl_length.cxx
-//
-// .SECTION Author
-// François BERTEL
-//
-// .SECTION Modifications
+
+//:
+// \file 
+// \author François BERTEL
+// Modifications
+// \verbatim
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
-//*****************************************************************************
+// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// \endverbatim
+
 
 #include <vcsl/vcsl_length_sptr.h>
 
 #include <vcsl/vcsl_dimension.h>
-
+//: Length dimension
 class vcsl_length
   : public vcsl_dimension
 {

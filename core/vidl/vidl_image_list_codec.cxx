@@ -23,7 +23,7 @@ char *vidl_image_list_codec::default_initialization_image_type_ = "TIFFImage";
 // CONSTRUCTOR(S) AND DESTRUCTOR
 
 
-// -- Constructor, from a list of images
+//: Constructor, from a list of images
 vidl_image_list_codec::vidl_image_list_codec(vcl_list<vil_image>& images)
 {
   // Set the image type to the default value
@@ -36,7 +36,7 @@ vidl_image_list_codec::vidl_image_list_codec(vcl_list<vil_image>& images)
     vcl_cerr << "Failed to initialize the ImageList Codec." << vcl_endl;
 }
 
-// -- Constructor, from a vector of images
+//: Constructor, from a vector of images
 vidl_image_list_codec::vidl_image_list_codec(vcl_vector<vil_image>& images)
 {
   // Set the image type to the default value
@@ -49,7 +49,7 @@ vidl_image_list_codec::vidl_image_list_codec(vcl_vector<vil_image>& images)
     vcl_cerr << "Failed to initialize the ImageList Codec." << vcl_endl;
 }
 
-// -- Basic constructor, Should not be called unless
+//: Basic constructor, Should not be called unless
 // we initialize the codec by some ways
 vidl_image_list_codec::vidl_image_list_codec()
 {
@@ -61,13 +61,13 @@ vidl_image_list_codec::vidl_image_list_codec()
   // creates an instance of this class in bad shape
 }
 
-// -- Destructor
+//: Destructor
 vidl_image_list_codec::~vidl_image_list_codec()
 {
 
 }
 
-// -- Initialize
+//: Initialize
 bool vidl_image_list_codec::init()
 {
   if (images_.empty())
@@ -89,20 +89,20 @@ bool vidl_image_list_codec::init()
 }
 
 
-// -- get a section of pixels in function of the frame number, position and size
+//: get a section of pixels in function of the frame number, position and size
 bool vidl_image_list_codec::get_section(int position, void* ib, int x0, int y0, int w, int h) const
 {
   return images_[position].get_section(ib, x0, y0, w, h);
 }
 
-// -- Put a section of pixels in function of the frame number, position and size
+//: Put a section of pixels in function of the frame number, position and size
 int vidl_image_list_codec::put_section(int position, void* ib, int x0, int y0, int w, int h)
 {
   vcl_cerr << "vidl_image_list_codec::put_section not implemented" << vcl_endl;
   return 0;
 }
 
-// -- load from a file name
+//: load from a file name
 vidl_codec_sptr vidl_image_list_codec::load(const char* fname, char mode)
 {
   // will try and load as many images as possible starting with
@@ -130,7 +130,7 @@ vidl_codec_sptr vidl_image_list_codec::load(const char* fname, char mode)
   return this;
 }
 
-// -- load a 'movie' from a list of filenames, return a codec
+//: load a 'movie' from a list of filenames, return a codec
 vidl_codec_sptr vidl_image_list_codec::load(const vcl_list<vcl_string> &fnames, char mode)
 {
   // Makes sure image loaders are registered
@@ -159,7 +159,7 @@ vidl_codec_sptr vidl_image_list_codec::load(const vcl_list<vcl_string> &fnames, 
   return this;
 }
 
-// -- load a 'movie' from a vector of filenames, return a codec
+//: load a 'movie' from a vector of filenames, return a codec
 vidl_codec_sptr vidl_image_list_codec::load(const vcl_vector<vcl_string> &fnames, char mode)
 {
   // Make sure image loaders are registered
@@ -187,7 +187,7 @@ vidl_codec_sptr vidl_image_list_codec::load(const vcl_vector<vcl_string> &fnames
   return this;
 }
 
-// -- supposed to check the validity of this codec for a special
+//: supposed to check the validity of this codec for a special
 // filname. Not so well implemented for this codec
 // This could check if the filename is a valid image type
 // by probing all the image types.
@@ -196,7 +196,7 @@ bool vidl_image_list_codec::probe(const char* fname)
   return false;
 }
 
-// -- save the given video as a set of images of the default set type
+//: save the given video as a set of images of the default set type
 bool vidl_image_list_codec::save(vidl_movie* movie, const char* fname)
 {
   if (!default_image_type_)
@@ -208,7 +208,7 @@ bool vidl_image_list_codec::save(vidl_movie* movie, const char* fname)
   return save(movie, fname, default_image_type_);
 }
 
-// -- save the given video as a set of images of the type given
+//: save the given video as a set of images of the type given
 bool vidl_image_list_codec::save(
         vidl_movie* movie,
         const char* fname,

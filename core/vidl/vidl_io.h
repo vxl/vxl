@@ -1,30 +1,16 @@
 #ifndef vidl_io_h
 #define vidl_io_h
-//-----------------------------------------------------------------------------
-//
-// .NAME vidl_io - Video Input / Output
-// .LIBRARY vidl
-// .HEADER vxl package
-// .INCLUDE vidl/vidl_io.h
-// .FILE vidl_io.cxx
-//
-// .SECTION Description
-//   vidl_io takes care of Input / Output of videos
-//   It reads video in from filenames and creates
-//   movies or clips. It saves videos into specific
-//   codecs
-//
-// .SECTION See also
-//   vidl_codec
-//
-// .SECTION Author
-//   Nicolas Dano, september 1999
-//
-// .SECTION Modifications
-//   Julien Esteve, May 2000
-//    Ported from TargetJr
-//
-//-----------------------------------------------------------------------------
+
+//:
+// \file 
+// \author Nicolas Dano, september 1999
+// Modifications
+// \verbatim
+// Julien ESTEVE, June 2000
+//     Ported from TargetJr
+// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// \endverbatim
+
 
 #include <vcl_string.h>
 #include <vbl/vbl_ref_count.h>
@@ -36,7 +22,11 @@
 
 class vidl_movie;
 class vidl_codec;
-
+//: Video Input / Output
+//   vidl_io takes care of Input / Output of videos
+//   It reads video in from filenames and creates
+//   movies or clips. It saves videos into specific
+//   codecs
 class vidl_io //: public vbl_ref_count
 {
   // PUBLIC INTERFACE----------------------------------------------------------

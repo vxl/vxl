@@ -1,21 +1,15 @@
 #ifndef VCSL_TRANSLATION_H
 #define VCSL_TRANSLATION_H
-//*****************************************************************************
-//
-// .NAME vcsl_translation - Translation transformation
-// .LIBRARY vcsl
-// .HEADER  vxl Package
-// .INCLUDE vcsl/vcsl_translation.h
-// .FILE    vcsl/vcsl_translation.cxx
-//
-// .SECTION Description 
-//
-// .SECTION Author
-// François BERTEL
-//
-// .SECTION Modifications
-// 2000/08/04 François BERTEL Creation.
-//*****************************************************************************
+
+//:
+// \file 
+// \author François BERTEL
+// Modifications
+// \verbatim
+// 2000/06/28 François BERTEL Creation. Adapted from IUE
+// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// \endverbatim
+
 
 #include <vcsl/vcsl_translation_sptr.h>
 
@@ -23,7 +17,7 @@
 
 #include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
-
+//: Translation transformation
 class vcsl_translation
   :public vcsl_spatial_transformation
 {

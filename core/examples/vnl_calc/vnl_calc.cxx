@@ -1,18 +1,22 @@
-//-*- c++ -*-------------------------------------------------------------------
-//
-// .NAME vnl_calc - Simple command-line matrix calculator
-//
-// .SECTION Description
+
+//:
+// \file 
+// \brief vnl_calc - Simple command-line matrix calculator
+// \author Andrew W. Fitzgibbon, Oxford RRG 23 Jan 99
 // Use matcalc to perform simple calculations on the command line.
 // It is reverse-polish notation, and matrices are loaded from files.
 // e.g.
+// \verbatim
 // % vnl-calc 1 2 +
+// \endverbatim
 // prints 3
+// \endverbatim
 //
-// \@author Andrew W. Fitzgibbon, Oxford RRG
-// Created: 23 Jan 99
-//
-//-----------------------------------------------------------------------------
+// Modifications
+// \verbatim
+// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// \endverbatim
+
 
 #include <vcl_string.h>
 #include <vcl_fstream.h>

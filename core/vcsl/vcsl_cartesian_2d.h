@@ -1,19 +1,13 @@
 #ifndef VCSL_CARTESIAN_2D_H
 #define VCSL_CARTESIAN_2D_H
-//*****************************************************************************
-//
-// .NAME vcsl_cartesian_2d - 2D Cartesian coordinate system
-// .LIBRARY vcsl
-// .HEADER  vxl Package
-// .INCLUDE vcsl/vcsl_cartesian_2d.h
-// .FILE    vcsl/vcsl_cartesian_2d.cxx
-//
-// .SECTION Author
-// François BERTEL
-//
-// .SECTION Modifications
+//:
+// \file 
+// \brief Descibes vcsl_cartesian_2d - 2D Cartesian coordinate system
+// \author François BERTEL
+// Modifications
+// \verbatim
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
-//*****************************************************************************
+// \endverbatim
 
 #include <vcsl/vcsl_cartesian_2d_sptr.h>
 
@@ -22,6 +16,7 @@
 //*****************************************************************************
 #include <vcsl/vcsl_spatial.h>
 
+//: 2D Cartesian coordinate system
 class vcsl_cartesian_2d
   : public vcsl_spatial
 {

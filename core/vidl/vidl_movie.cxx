@@ -12,10 +12,10 @@
 //------------------------------------------------------------------------
 // CONSTRUCTOR(S) AND DESTRUCTOR
 
-// -- Constructor
+//: Constructor
 vidl_movie::vidl_movie() {}
 
-// -- Constructor, build a movie with the single given clip
+//: Constructor, build a movie with the single given clip
 vidl_movie::vidl_movie(vidl_clip_sptr clip)
 {
   // Check validity of initialisation
@@ -25,13 +25,13 @@ vidl_movie::vidl_movie(vidl_clip_sptr clip)
   add_clip(clip);
 }
 
-// -- destructor
+//: destructor
 vidl_movie::~vidl_movie()
 {
 
 }
 
-// -- Get the frame numbered n (frames are numbered from 0 to total-1)
+//: Get the frame numbered n (frames are numbered from 0 to total-1)
 vidl_frame_sptr vidl_movie::get_frame(int n)
 {
   vidl_frame_sptr ret_frame = NULL;
@@ -51,14 +51,14 @@ vidl_frame_sptr vidl_movie::get_frame(int n)
   
 }
 
-// -- Add a clip at the end of the movie
+//: Add a clip at the end of the movie
 void vidl_movie::add_clip(vidl_clip_sptr clip)
 {
   clip_.push_back(clip);
 }
 
 
-// -- Give back the number of frames of the movie
+//: Give back the number of frames of the movie
 int vidl_movie::length() const
 {
   int number = 0; 
@@ -68,7 +68,7 @@ int vidl_movie::length() const
   return number;
 }
 
-// -- Return the horizontal size of the frames in the movie
+//: Return the horizontal size of the frames in the movie
 // Check that all the movies do have the same size, output
 // an error if not
 int vidl_movie::width() const
@@ -92,7 +92,7 @@ int vidl_movie::width() const
 
 }
 
-// -- Return the vertical size of the frames in the movie
+//: Return the vertical size of the frames in the movie
 // Check that all the movies do have the same size, output
 // an error if not
 int vidl_movie::height() const

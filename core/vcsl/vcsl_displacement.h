@@ -1,29 +1,22 @@
 #ifndef VCSL_DISPLACEMENT_H
 #define VCSL_DISPLACEMENT_H
-//*****************************************************************************
-//
-// .NAME vcsl_displacement - Affine rotation
-// .LIBRARY vcsl
-// .HEADER  vxl Package
-// .INCLUDE vcsl/vcsl_displacement.h
-// .FILE    vcsl/vcsl_displacement.cxx
-//
-// .SECTION Description
-// A displacement rotates a point with a given angle around an axis defined by
-// a point and a unit vector
-//
-// .SECTION Author
-// François BERTEL
-//
-// .SECTION Modifications
-// 2000/08/06 François BERTEL Creation.
-//*****************************************************************************
+
+//:
+// \file 
+// \author François BERTEL
+// Modifications
+// \verbatim
+// 2000/06/28 François BERTEL Creation. Adapted from IUE
+// \endverbatim
+
 
 #include <vcsl/vcsl_displacement_sptr.h>
 #include <vcsl/vcsl_rotation.h>
 
 #include <vnl/vnl_quaternion.h>
-
+//: Affine rotation
+// A displacement rotates a point with a given angle around an axis defined by
+// a point and a unit vector
 class vcsl_displacement
   :public vcsl_rotation
 {

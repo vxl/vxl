@@ -243,7 +243,7 @@ static void test1(void)
 }
 
 //-----------------------------------------------------------------------------
-// -- Entry point of the test program
+//: Entry point of the test program
 //-----------------------------------------------------------------------------
 int main(int argc,
          char *argv[])

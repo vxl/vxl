@@ -1,24 +1,20 @@
 #ifndef VCSL_LENGTH_UNIT_H
 #define VCSL_LENGTH_UNIT_H
-//*****************************************************************************
-//
-// .NAME vcsl_length_unit - Abstract unit associated to the length dimension
-// .LIBRARY vcsl
-// .HEADER  vxl Package
-// .INCLUDE vcsl/vcsl_length_unit.h
-// .FILE    vcsl/vcsl_length_unit.cxx
-//
-// .SECTION Author
-// François BERTEL
-//
-// .SECTION Modifications
+
+//:
+// \file 
+// \author François BERTEL
+// Modifications
+// \verbatim
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
-//*****************************************************************************
+// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// \endverbatim
+
 
 #include <vcsl/vcsl_length_unit_sptr.h>
 
 #include <vcsl/vcsl_unit.h>
- 
+//: Abstract unit associated to the length dimension
 class vcsl_length_unit
   : public vcsl_unit
 {

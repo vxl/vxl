@@ -1,32 +1,25 @@
 #ifndef VCSL_GRAPH_H
 #define VCSL_GRAPH_H
-//*****************************************************************************
-//
-// .NAME vcsl_graph - Spatial coordinate system graph
-// .LIBRARY vcsl
-// .HEADER  vxl Package
-// .INCLUDE vcsl/vcsl_graph.h
-// .FILE    vcsl/vcsl_graph.cxx
-//
-// .SECTION Description
-//
-// Graph where nodes are spatial coordinate systems and arrows are
-// transformations. Only the nodes are in the graph class. The transformations
-// are in the spatial coordinates systems
-//
-// .SECTION Author
-// François BERTEL
-//
-// .SECTION Modifications
+
+//:
+// \file 
+// \author François BERTEL
+// Modifications
+// \verbatim
 // 2000/08/01 François BERTEL Creation.
-//*****************************************************************************
+// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// \endverbatim
+
 
 #include <vcsl/vcsl_graph_sptr.h>
 
 #include <vbl/vbl_ref_count.h>
 #include <vcl_vector.h>
 #include <vcsl/vcsl_spatial_sptr.h>
-
+//: Spatial coordinate system graph
+// Graph where nodes are spatial coordinate systems and arrows are
+// transformations. Only the nodes are in the graph class. The transformations
+// are in the spatial coordinates systems
 class vcsl_graph
   :public vbl_ref_count
 {

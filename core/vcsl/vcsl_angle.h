@@ -1,24 +1,22 @@
 #ifndef VCSL_ANGLE_H
 #define VCSL_ANGLE_H
-//*****************************************************************************
-//
-// .NAME vcsl_angle - Angle dimension
-// .LIBRARY vcsl
-// .HEADER  vxl Package
-// .INCLUDE vcsl/vcsl_angle.h
-// .FILE    vcsl/vcsl_angle.cxx
-//
-// .SECTION Author
-// François BERTEL
-//
-// .SECTION Modifications
+
+
+
+//:
+// \file 
+// \brief Descibes vcsl_angle - Angle dimension.
+// \author François BERTEL
+// Modifications
+// \verbatim
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
-//*****************************************************************************
+// \endverbatim
 
 #include <vcsl/vcsl_angle_sptr.h>
 
 #include <vcsl/vcsl_dimension.h>
 
+//: Angle dimension
 class vcsl_angle
   : public vcsl_dimension
 {

@@ -1,22 +1,14 @@
 #ifndef VCSL_SPATIAL_TRANSFORMATION_H
 #define VCSL_SPATIAL_TRANSFORMATION_H
-//*****************************************************************************
-//
-// .NAME vcsl_spatial_transformation - Transformation between 2 spatial
-//                                     coordinate systems
-// .LIBRARY vcsl
-// .HEADER  vxl Package
-// .INCLUDE vcsl/vcsl_spatial_transformation.h
-// .FILE    vcsl/vcsl_spatial_transformation.cxx
-//
-// .SECTION Description 
-// A spatial transformation can be static or dynamic
-// .SECTION Author
-// François BERTEL
-//
-// .SECTION Modifications
-// 2000/07/19 François BERTEL Creation.
-//*****************************************************************************
+
+//:
+// \file 
+// \author François BERTEL
+// Modifications
+// \verbatim
+// 2000/06/28 François BERTEL Creation. Adapted from IUE
+// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// \endverbatim
 
 #include <vcsl/vcsl_spatial_transformation_sptr.h>
 
@@ -34,7 +26,8 @@ enum vcsl_interpolator
   vcsl_cubic,
   vcsl_spline
 };
-
+//: Transformation between 2 spatial coordinate systems
+// A spatial transformation can be static or dynamic
 class vcsl_spatial_transformation
   : public vbl_ref_count
 {

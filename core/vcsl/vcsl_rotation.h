@@ -1,29 +1,25 @@
 #ifndef VCSL_ROTATION_H
 #define VCSL_ROTATION_H
-//*****************************************************************************
-//
-// .NAME vcsl_rotation - Rotation transformation
-// .LIBRARY vcsl
-// .HEADER  vxl Package
-// .INCLUDE vcsl/vcsl_rotation.h
-// .FILE    vcsl/vcsl_rotation.cxx
-//
-// .SECTION Description 
-// A rotation rotate a point around an axis passing through the origin
-// For a more general rotation (affine rotation or displacement), see
-// a vcsl_displacement
-// .SECTION Author
-// François BERTEL
-//
-// .SECTION Modifications
-// 2000/08/04 François BERTEL Creation.
-//*****************************************************************************
+
+//:
+// \file 
+// \author François BERTEL
+// Modifications
+// \verbatim
+// 2000/06/28 François BERTEL Creation. Adapted from IUE
+// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// \endverbatim
+
 
 #include <vcsl/vcsl_rotation_sptr.h>
 
 #include <vcsl/vcsl_spatial_transformation.h>
 #include <vnl/vnl_quaternion.h>
 
+//: Rotation transformation
+// A rotation rotate a point around an axis passing through the origin
+// For a more general rotation (affine rotation or displacement), see
+// a vcsl_displacement
 class vcsl_rotation
   : public vcsl_spatial_transformation
 {

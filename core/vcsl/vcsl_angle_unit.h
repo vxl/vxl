@@ -1,24 +1,18 @@
 #ifndef VCSL_ANGLE_UNIT_H
 #define VCSL_ANGLE_UNIT_H
-//*****************************************************************************
-//
-// .NAME vcsl_angle_unit - Abstract unit associated to the angle dimension
-// .LIBRARY vcsl
-// .HEADER  vxl Package
-// .INCLUDE vcsl/vcsl_angle_unit.h
-// .FILE    vcsl/vcsl_angle_unit.cxx
-//
-// .SECTION Author
-// François BERTEL
-//
-// .SECTION Modifications
+//:
+// \file 
+// \brief Descibes vcsl_angle_unit - Abstract unit associated to the angle dimension.
+// \author François BERTEL
+// Modifications
+// \verbatim
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
-//*****************************************************************************
+// \endverbatim
 
 #include <vcsl/vcsl_angle_unit_sptr.h>
-
 #include <vcsl/vcsl_unit.h>
- 
+
+//: Abstract unit associated to the angle dimension
 class vcsl_angle_unit
   : public vcsl_unit
 {

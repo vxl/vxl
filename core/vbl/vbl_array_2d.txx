@@ -42,7 +42,7 @@ vbl_array_2d<T>& vbl_array_2d<T>::operator=(vbl_array_2d<T> const& that)
   return *this;
 }
 
-// -- equality
+//: equality
 template <class T>
 bool vbl_array_2d<T>::operator==(vbl_array_2d<T> const& that) const {
   if (num_rows_ != that.num_rows_ || num_cols_ != that.num_cols_)

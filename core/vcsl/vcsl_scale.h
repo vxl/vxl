@@ -1,26 +1,20 @@
 #ifndef VCSL_SCALE_H
 #define VCSL_SCALE_H
-//*****************************************************************************
-//
-// .NAME vcsl_scale - Scale transformation
-// .LIBRARY vcsl
-// .HEADER  vxl Package
-// .INCLUDE vcsl/vcsl_scale.h
-// .FILE    vcsl/vcsl_scale.cxx
-//
-// .SECTION Description 
-//
-// .SECTION Author
-// François BERTEL
-//
-// .SECTION Modifications
+
+//:
+// \file 
+// \author François BERTEL
+// Modifications
+// \verbatim
 // 2000/07/19 François BERTEL Creation.
-//*****************************************************************************
+// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// \endverbatim
+
 
 #include <vcsl/vcsl_scale_sptr.h>
 
 #include <vcsl/vcsl_spatial_transformation.h>
-
+//: Scale transformation
 class vcsl_scale
   : public vcsl_spatial_transformation
 {
