@@ -41,7 +41,8 @@ static void test_robust_util()
   int num = 10;
   int dof = 1;
   double corr_wgted_scale = vcl_sqrt( sum_wr / ( sum_w * (num-dof) / num ) );
-  double est_wgted_scale = rrel_util_weighted_scale( (double*)rs_arr, rs_arr+10, (double*)wgt_arr, dof, (double*)0 );
+  // this template function is fully specified to help the Borland compiler
+  double est_wgted_scale = rrel_util_weighted_scale<double *>( (double*)rs_arr, rs_arr+10, (double*)wgt_arr, dof);
   TEST_NEAR("rrel_util_weighted_scale", corr_wgted_scale, est_wgted_scale, 1e-6);
 
   //
