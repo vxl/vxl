@@ -22,7 +22,7 @@
 #if defined(HAS_MPEG2) || defined(VCL_WIN32)
 #include <vidl/vidl_mpegcodec.h>
 #endif
-#ifdef VCL_WIN32
+#ifdef HAS_AVI
 #include <vidl/vidl_avicodec.h>
 #endif
 
@@ -190,7 +190,7 @@ main (int argc, char **argv)
   vidl_io::register_codec (new vidl_mpegcodec);
   V1( "registered MPEG2 codec" );
 #endif
-#ifdef VCL_WIN32
+#ifdef HAS_AVI
   vidl_io::register_codec (new vidl_avicodec);
   V1( "registered AVI codec" );
 #endif

@@ -1,7 +1,7 @@
 //:
 // \file
 
-#include "vidl_avicodec.h"
+#include "vidl_win_avicodec.h"
 #include <vidl/vidl_frame.h>
 #include <vidl/vidl_movie.h>
 
@@ -54,7 +54,7 @@ bool vidl_avicodec::read_header()
 
   //Read in Width
   set_width(avi_file_info_.dwWidth);
-  if (avi_stream_info_.rcFrame.right != avi_file_info_.dwWidth+avi_stream_info_.rcFrame.left)
+  if ((int)avi_stream_info_.rcFrame.right != avi_file_info_.dwWidth+avi_stream_info_.rcFrame.left)
   {
     vcl_cerr << "vidl_avicodec::read_header width size screwed up\n"
              <<   "          size of avi file : " << avi_file_info_.dwWidth
@@ -65,7 +65,7 @@ bool vidl_avicodec::read_header()
 
   //Read in Height
   set_height(avi_file_info_.dwHeight);
-  if (avi_stream_info_.rcFrame.bottom != avi_file_info_.dwHeight+avi_stream_info_.rcFrame.top)
+  if ((int)avi_stream_info_.rcFrame.bottom != avi_file_info_.dwHeight+avi_stream_info_.rcFrame.top)
   {
     vcl_cerr << "vidl_avicodec::read_header Height size screwed up\n"
              <<   "          size of avi file : " << avi_file_info_.dwHeight
@@ -206,6 +206,7 @@ bool vidl_avicodec::probe(const char* fname)
   return false;
 }
 
+
 //: Returns a clone of 'this' into which the given avi file is loaded.
 //  This function creates a clone of 'this' (in order to allow
 //  loading multiple avi videos at once) and loads the avi
@@ -213,14 +214,16 @@ bool vidl_avicodec::probe(const char* fname)
 //  by this function.
 vidl_codec_sptr vidl_avicodec::load(const char* fname, char mode)
 {
-  vidl_avicodec *cloned_avi_codec=new vidl_avicodec;
+  vidl_avicodec *cloned_avi_codec = new vidl_avicodec;
 
-  if (!cloned_avi_codec->load_avi(fname,mode)) return NULL;
+  if (!cloned_avi_codec->load_avi(fname,mode)){
+    delete cloned_avi_codec;
+    return NULL;
+  }
 
-  vidl_codec_sptr codec(cloned_avi_codec);
-
-  return codec;
+  return vidl_codec_sptr(cloned_avi_codec);
 }
+
 
 bool vidl_avicodec::load_avi(const char* fname, char mode)
 {
