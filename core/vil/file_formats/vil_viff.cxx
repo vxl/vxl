@@ -299,8 +299,13 @@ bool vil_viff_image::put_view(vil_image_view_base const& buf, unsigned int x0, u
     vcl_cerr << "ERROR: " << __FILE__ << ":\n view does not fit\n";
     return false;
   }
+#ifdef DEBUG
+  vcl_cerr<<"vil_viff_image::put_view() : buf="
+          <<buf.ni()<<'x'<<buf.nj()<<'x'<< buf.nplanes()<<'p'
+          <<" at ("<<x0<<','<<y0<<")\n";
+#endif
   const unsigned char* ob = static_cast<vil_image_view<unsigned char> const&>(buf).top_left_ptr();
-  unsigned int pix_size = vil_pixel_format_sizeof_components(format_);
+  unsigned int pix_size = 8*vil_pixel_format_sizeof_components(format_);
   if (format_==VIL_PIXEL_FORMAT_BOOL) pix_size = 1;
   if (format_==VIL_PIXEL_FORMAT_BOOL && x0%8 != 0)
     vcl_cerr << "vil_viff_image::put_view(): Warning: x0 should be a multiple of 8 for this type of image\n";
@@ -312,7 +317,14 @@ bool vil_viff_image::put_view(vil_image_view_base const& buf, unsigned int x0, u
         is_->seek(start_of_data_ + p*nj_*((ni_*pix_size+7)/8)
                                  + y*((ni_*pix_size+7)/8)
                                  + x0*pix_size/8);
-        is_->write(ob, rowsize);
+        if ((vil_streampos)rowsize != is_->write(ob, rowsize))
+          vcl_cerr << "WARNING: " << __FILE__ << ":\n"
+                   << " could not write "<<rowsize<<" EC bytes to stream;\n"
+                   << " p="<<p<<", y="<<y<<'\n';
+#ifdef DEBUG
+        else
+          vcl_cerr << "written "<<rowsize<<" EC bytes to stream; p="<<p<<", y="<<y<<'\n';
+#endif
         ob += rowsize;
       }
   else {
@@ -323,7 +335,14 @@ bool vil_viff_image::put_view(vil_image_view_base const& buf, unsigned int x0, u
         for (unsigned int i=0; i<rowsize; i+=pix_size/8)
           swap(tempbuf+i,pix_size/8);
         is_->seek(start_of_data_ + p*ni_*nj_*pix_size/8 + pix_size*(y*ni_+x0)/8);
-        is_->write(tempbuf, rowsize);
+        if ((vil_streampos)rowsize != is_->write(tempbuf, rowsize))
+          vcl_cerr << "WARNING: " << __FILE__ << ":\n"
+                   << " could not write "<<rowsize<<" NEC bytes to stream;\n"
+                   << " p="<<p<<", y="<<y<<'\n';
+#ifdef DEBUG
+        else
+          vcl_cerr << "written "<<rowsize<<" NEC bytes to stream; p="<<p<<", y="<<y<<'\n';
+#endif
         ob += rowsize;
       }
     delete[] tempbuf;
