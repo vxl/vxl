@@ -154,6 +154,9 @@ SOURCE=.\test_sym_matrix.cxx
 SOURCE=.\test_transpose.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_fastops.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_vector.cxx
 # End Source File
 # Begin Source File
