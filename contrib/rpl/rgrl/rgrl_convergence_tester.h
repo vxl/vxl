@@ -81,18 +81,21 @@ class rgrl_convergence_tester
   //: verify the final alignment
   virtual
   rgrl_converge_status_sptr 
-  verify( rgrl_view                        const& current_view,
+  verify( rgrl_transformation_sptr         const& xform_estimate,
           rgrl_set_of<rgrl_match_set_sptr> const& current_match_sets,
           rgrl_set_of<rgrl_scale_sptr>     const& current_scales )const;
 
   rgrl_converge_status_sptr 
-  verify( rgrl_view           const& current_view,
-          rgrl_match_set_sptr const& current_match_sets,
-          rgrl_scale_sptr     const& current_scales )const;
+  verify( rgrl_transformation_sptr    const& xform_estimate,
+          rgrl_match_set_sptr         const& current_match_sets,
+          rgrl_scale_sptr             const& current_scales )const;
 
   //: set relative tolerance on convergence
   void set_rel_tol( double rel_tol ) 
   { rel_tol_thres_ = rel_tol; }
+  
+  double rel_tol() const 
+  { return rel_tol_thres_; }
   
   // Defines type-related functions
   rgrl_type_macro( rgrl_convergence_tester, rgrl_object );
