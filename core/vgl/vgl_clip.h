@@ -4,7 +4,6 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
@@ -60,8 +59,8 @@ vgl_line_segment_2d<double> vgl_clip_line_to_box(vgl_line_2d<double> const& l,
 }
 
 //: Clip a polygon against another polygon.
-// The two polygons \param poly1 and \param poly2 are combined with each other.
-// The operation (intersection, union, etc) is given by \param op.
+// The two polygons poly1 and poly2 are combined with each other.
+// The operation (intersection, union, etc) is given by parameter op.
 vgl_polygon
 vgl_clip( const vgl_polygon& poly1, const vgl_polygon& poly2,
           vgl_clip_type op = vgl_clip_type_intersect );
