@@ -48,7 +48,6 @@ SOURCES += vgui_pixel.cxx
 FLAGS_vgui_pixel.cxx := $(optimize)
 SOURCES += vgui_section_render.cxx
 SOURCES += vgui_section_buffer.cxx
-SOURCES += vgui_section_buffer_of.cxx
 SOURCES += vgui_texture_hacks.cxx
 SOURCES += vgui_cache_wizard.cxx
 SOURCES += vgui_image_renderer.cxx
@@ -141,11 +140,10 @@ SOURCES += vgui_statusbuf.cxx
 SOURCES += vgui_statusbar.cxx
 
 # vil2 support
-SOURCES += vgui_vil_section_buffer.cxx
-MANPAGE_SOURCES += vgui_vil_image_renderer.txx
+SOURCES += vgui_vil_image_renderer.cxx
 MANPAGE_SOURCES += vgui_vil_image_tableau.txx
 MANPAGE_SOURCES += vgui_vil_image_tableau_sptr.h
-MANPAGE_SOURCES += vgui_vil_section_buffer_apply.txx
+SOURCES += internals/vgui_generic_vil_image_view.cxx
 
 # internals
 SOURCES += internals/vgui_invert_homg4x4.cxx
