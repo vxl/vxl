@@ -28,9 +28,9 @@ template <class T>
 class vbl_sparse_array {
 public:
   typedef vcl_map<unsigned, T, vcl_less<unsigned> 
-#ifdef VCL_SUNPRO_CC
-  , vcl_allocator<vcl_pair<unsigned const, T> >
-#endif
+  //#ifdef VCL_SUNPRO_CC
+  //  , vcl_allocator<vcl_pair<unsigned const, T> >
+  //#endif
   > Map;
 
   typedef typename Map::const_iterator const_iterator;
