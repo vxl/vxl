@@ -17,14 +17,14 @@ void mil_algo_exp_filter_1d(float* dest, int dstep,
 //  Symmetric exponential filter of the form exp(c*|x|) applied. c=log(k)
 //  Uses fast recursive implementation.
 void mil_algo_exp_filter_1d(float* dest, int dstep,
-                            float* src, int sstep,
+                            const float* src, int sstep,
               int n, double k);
 
 //: Apply exponential filter to 1D data
 //  Apply filter to n values src[i*sstep] to produce output dest[i*dstep]
 //  Symmetric exponential filter of the form exp(c*|x|) applied. c=log(k)
 //  Uses fast recursive implementation.
-void mil_algo_exp_filter_1d(const unsigned char* dest, int dstep,
+void mil_algo_exp_filter_1d(unsigned char* dest, int dstep,
                             const unsigned char* src, int sstep,
               int n, double k);
 #endif
