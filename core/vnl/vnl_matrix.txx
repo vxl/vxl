@@ -814,7 +814,7 @@ void vnl_matrix<T>::normalize_rows()
       real_t scale = real_t(1)/vcl_sqrt((real_t)norm);
       for (unsigned int j = 0; j < this->num_cols; j++) {
         // FIXME need correct rounding here
-        // There is no *standard* no operator*(complex<float>, double).
+        // There is e.g. no *standard* operator*=(complex<float>, double), hence the T() cast.
         this->data[i][j] *= T(scale);
       }
     }
@@ -837,7 +837,7 @@ void vnl_matrix<T>::normalize_columns()
       real_t scale = real_t(1)/vcl_sqrt((real_t)norm);
       for (unsigned int i = 0; i < this->num_rows; i++) {
         // FIXME need correct rounding here
-        // There is no *standard* no operator*(complex<float>, double).
+        // There is e.g. no *standard* operator*=(complex<float>, double), hence the T() cast.
         this->data[i][j] *= T(scale);
       }
     }
