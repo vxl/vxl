@@ -93,8 +93,8 @@ struct vgui_parent_child_link
   //: Make this parent_child_link equal to the given one.
   vgui_parent_child_link &operator=(vgui_parent_child_link const &);
 
-  //: Returns true if the this parent_child_link is the same as the given link.
-  //  Slots are equal if they have the same implementation. Merely having
+  //: Returns true if this parent_child_link is the same as the given link.
+  //  Links are equal if they have the same implementation. Merely having
   //  the same parent and child does not imply equality.
   bool operator==(vgui_parent_child_link const &s) const { return pimpl == s.pimpl; }
 
