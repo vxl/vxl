@@ -88,10 +88,26 @@ class vnl_vector
 
   //: Creates a vector of specified length and initialize first n elements with values. O(n).
   vnl_vector (unsigned len, int n, T const values[]);
- private: // deprecated!
+
+#if 0 // deprecated
   //: Creates a vector of length 3 and initializes with the arguments, x,y,z.
   vnl_vector (T const&, T const&, T const&);
- public:
+#endif
+  //: Creates a vector of length 2 and initializes with the arguments, px,py.
+  //  Requires that len==2.
+  //  Consider using vnl_vector_fixed<T,2> instead!
+  vnl_vector (unsigned len, T const& px, T const& py);
+
+  //: Creates a vector of length 3 and initializes with the arguments, px,py,pz.
+  //  Requires that len==3.
+  //  Consider using vnl_vector_fixed<T,3> instead!
+  vnl_vector (unsigned len, T const& px, T const& py, T const& pz);
+
+  //: Creates a vector of length 4 and initializes with the arguments.
+  //  Requires that len==4.
+  //  Consider using vnl_vector_fixed<T,4> instead!
+  vnl_vector (unsigned len, T const& px, T const& py, T const& pz, T const& pw);
+
   //: Create n element vector and copy data from data_block
   vnl_vector (T const* data_block,unsigned int n);
 

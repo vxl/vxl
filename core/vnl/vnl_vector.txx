@@ -36,6 +36,7 @@
 #include "vnl_vector.h"
 
 #include <vcl_cstdlib.h> // abort()
+#include <vcl_cassert.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
@@ -92,15 +93,40 @@ vnl_vector<T>::vnl_vector (unsigned len, int n, T const values[])
   }
 }
 
-//: Creates a vector of length 3 and initializes with the arguments, x,y,z.
+//: Creates a vector of length 2 and initializes with the arguments, px,py.
 
 template<class T>
-vnl_vector<T>::vnl_vector (T const& px, T const& py, T const& pz)
+vnl_vector<T>::vnl_vector (unsigned len, T const& px, T const& py)
 {
+  assert(len==2);
+  vnl_vector_alloc_blah(2);
+  this->data[0] = px;
+  this->data[1] = py;
+}
+
+//: Creates a vector of length 3 and initializes with the arguments, px,py,pz.
+
+template<class T>
+vnl_vector<T>::vnl_vector (unsigned len, T const& px, T const& py, T const& pz)
+{
+  assert(len==3);
   vnl_vector_alloc_blah(3);
   this->data[0] = px;
   this->data[1] = py;
   this->data[2] = pz;
+}
+
+//: Creates a vector of length 4 and initializes with the arguments.
+
+template<class T>
+vnl_vector<T>::vnl_vector (unsigned len, T const& px, T const& py, T const& pz, T const& pw)
+{
+  assert(len==4);
+  vnl_vector_alloc_blah(4);
+  this->data[0] = px;
+  this->data[1] = py;
+  this->data[2] = pz;
+  this->data[3] = pw;
 }
 
 #if 0 // commented out
