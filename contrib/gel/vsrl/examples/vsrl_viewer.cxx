@@ -4,8 +4,8 @@
 #include <vgui/vgui_command.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/internals/vgui_accelerate.h>
-#include "vsrl/vsrl_menus.h"
-#include "vsrl/vsrl_manager.h"
+#include <vsrl/vsrl_menus.h>
+#include <vsrl/vsrl_manager.h>
 
 int main (int &argc, char **argv)
 {
