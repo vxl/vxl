@@ -73,3 +73,8 @@ gel gevd gevd_ build
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl rpl RPI libraries
 rpl rrel rrel_ build
 rpl rsdl rsdl_ build
+
+package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl brl Brown University libraries
+brl vvid vvid_ build
+
+
