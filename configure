@@ -13021,7 +13021,7 @@ int main(int, char **) {
   macro(VXL_INT_16, 2, short, int);
   macro(VXL_INT_32, 4, long, int);
   macro(VXL_INT_64, 8, long long, long);
-  macro(VXL_IEEE_32, 4, float);
+  macro(VXL_IEEE_32, 4, double, float);
   macro(VXL_IEEE_64, 8, long double, double);
 //  macro(VXL_IEEE_96, 12, long double);  // x86
 //  macro(VXL_IEEE_128, 16, long double); // sparc, mips
