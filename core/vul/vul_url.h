@@ -20,7 +20,7 @@
 
 //: Functions to test and open streams via a URL
 // Currently supports file and HTTP only.
-// HTTP support includes basic authentification, using the normal
+// HTTP support includes basic authentication, using the normal
 // HTTP URL scheme, e.g. \c http://user4:mypassword@webserverthingy.org/file.txt
 class vul_url
 {

@@ -67,7 +67,7 @@ vcl_istream * vul_http_open(char const *url)
   else
     path = "";
 
-  //authentification
+  //authentication
   for (unsigned int i=0; i<host.size(); ++i)
     if (host[i] == '@') {
       auth = vcl_string(host.c_str(), host.c_str()+i);
@@ -271,7 +271,7 @@ bool vul_http_exists(char const *url)
   else
     path = "";
 
-  //authentification
+  //authentication
   for (unsigned int i=0; i<host.size(); ++i)
     if (host[i] == '@') {
       auth = vcl_string(host.c_str(), host.c_str()+i);
