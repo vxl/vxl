@@ -101,7 +101,7 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
 
   case RREL_MUSE_TRIMMED:
     {
-    vcl_cout << "\nRREL_MUSE_TRIMMED\n";
+    // vcl_cout << "\nRREL_MUSE_TRIMMED\n";
     double sum_residuals=0;
     double best_sum = 0;
     int prev_k = 0;
@@ -126,8 +126,8 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
       objective = sk * table_->standard_dev_kth(k, num_residuals) /
         table_->expected_kth(k, num_residuals);
 
-      vcl_cout << "k = " << k << ", sk = " << sk
-               << ", objective = " << objective << "\n";
+      // vcl_cout << "k = " << k << ", sk = " << sk
+      //          << ", objective = " << objective << "\n";
 
       if ( at_start || objective < best_objective ) {
         at_start = false;
@@ -142,14 +142,14 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
     //  Refine the scale estimate
     if ( ! use_sk_refine_ ) {
       sigma_est = best_sk;
-      vcl_cout << "No sk refinement\n";
+      // vcl_cout << "No sk refinement\n";
     }
     else {
-      vcl_cout << "sk refinement\n";
+      // vcl_cout << "sk refinement\n";
       unsigned int new_n = best_k;
       while( new_n<num_residuals && abs_residuals[new_n] < 2.5*best_sk )
         ++new_n;
-      vcl_cout << "New n = " << new_n << "\n";
+      // vcl_cout << "New n = " << new_n << "\n";
       sigma_est = best_sum / table_ -> muset_divisor(best_k, new_n);
     }
     break;
@@ -157,7 +157,7 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
 
   case RREL_MUSE_TRIMMED_SQUARE:
     {
-    vcl_cout << "\nRREL_MUSE_TRIMMED_SQUARE\n";
+    // vcl_cout << "\nRREL_MUSE_TRIMMED_SQUARE\n";
     double sum_sq_residuals=0;
     double best_sum_sq = 0;
     int prev_k = 0;
@@ -183,8 +183,8 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
       objective = sk * table_->standard_dev_kth(k, num_residuals) /
         table_->expected_kth(k, num_residuals);
 
-      vcl_cout << "k = " << k << ", sk = " << sk
-               << ", objective = " << objective << "\n";
+      // vcl_cout << "k = " << k << ", sk = " << sk
+      //          << ", objective = " << objective << "\n";
 
       if ( at_start || objective < best_objective ) {
         at_start = false;
@@ -199,14 +199,14 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
     //  Refine the scale estimate
     if ( ! use_sk_refine_ ) {
       sigma_est = best_sk;
-      vcl_cout << "No sk refinement\n";
+      // vcl_cout << "No sk refinement\n";
     }
     else {
-      vcl_cout << "sk refinement\n";
+      // vcl_cout << "sk refinement\n";
       unsigned int new_n = best_k;
       while( new_n<num_residuals && abs_residuals[new_n] < 2.5*best_sk )
         ++new_n;
-      vcl_cout << "New n = " << new_n << "\n";
+      // vcl_cout << "New n = " << new_n << "\n";
       sigma_est = vcl_sqrt( best_sum_sq 
                             / table_->muset_sq_divisor(best_k, new_n) );
     }
@@ -215,7 +215,7 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
 
   case RREL_MUSE_QUANTILE:
     {
-    vcl_cout << "\nRREL_MUSE_QUANTILE\n";
+    // vcl_cout << "\nRREL_MUSE_QUANTILE\n";
     for ( double frac=min_frac_; frac<=max_frac_+0.00001; frac+=frac_inc_ ) {
       unsigned int k = vnl_math_rnd( frac*num_residuals );
       if ( k < 0 ) k=1;
@@ -232,8 +232,8 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
       objective = sk * table_->standard_dev_kth(k, num_residuals) /
         table_->expected_kth(k, num_residuals);
 
-      vcl_cout << "k = " << k << ", sk = " << sk
-               << ", objective = " << objective << "\n";
+      // vcl_cout << "k = " << k << ", sk = " << sk
+      //          << ", objective = " << objective << "\n";
 
       if ( at_start || objective < best_objective ) {
         best_objective = objective;
@@ -246,14 +246,14 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
     //  Refine the scale estimate
     if ( ! use_sk_refine_ ) {
       sigma_est = best_sk;
-      vcl_cout << "No sk refinement\n";
+      // vcl_cout << "No sk refinement\n";
     }
     else {
-      vcl_cout << "sk refinement\n";
+      // vcl_cout << "sk refinement\n";
       unsigned int new_n = best_k;
       while( new_n<num_residuals && abs_residuals[new_n] < 2.5*best_sk )
         ++new_n;
-      vcl_cout << "New n = " << new_n << "\n";
+      // vcl_cout << "New n = " << new_n << "\n";
       sigma_est = abs_residuals[ best_k ] / table_->expected_kth(best_k, new_n);
     }
     break;
