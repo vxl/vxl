@@ -286,6 +286,9 @@ SOURCES += dtrmv.c
 SOURCES += dtrsv.c
 SOURCES += i_dnnt.c
 
+# The "Triangle" program of Jonathan Richard Shewchuk
+SOURCES += triangle.c
+
 MANPAGE_SOURCES += f2c.h
 MANPAGE_SOURCES += netlib.h
 
@@ -294,7 +297,7 @@ include ${IUEROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
-SUBDIRS += tests
+SUBDIRS += tests examples
 endif
 
 ######################################
