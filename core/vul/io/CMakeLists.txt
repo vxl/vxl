@@ -10,7 +10,6 @@ SOURCE_FILES(vul_io_sources
 vul_io_user_info
 )
 
-
-#IF( BUILD_TESTS)
-#  SUBDIRS(tests)
-#ENDIF( BUILD_TESTS)
+IF( BUILD_TESTS)
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTS)
