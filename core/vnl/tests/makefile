@@ -34,8 +34,9 @@ TESTS += test_levenberg_marquardt.cxx
 TESTS += $(wildcard test_tensor.cxx)
 TESTS += test_minimizers.cxx
 TESTS += test_rational.cxx
+TESTS += test_convolve.cxx
 
-IULIBS += -lvnl-algo -lvnl -lvpl # vpl_unlink used in test_matlab
+IULIBS += -lvnl-algo -lvnl -lvpl -lvul # vpl_unlink used in test_matlab; vul_timer used
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
