@@ -51,8 +51,10 @@ vil_image vil_convolve_separable(vil_image const & in,
 
   vil_memory_image_of<float_type> tmp(in.width(), in.height());
 
+#if 0
   // Make the output image, on disk if necessary
-//  vil_image out = vil_new(in.width(), in.height(), in);
+  vil_image out = vil_new(in.width(), in.height(), in);
+#endif
 
   // Make memory image for output, don't read the pixels.
   vil_memory_image_of<float_type> outbuf(in.width(), in.height());
@@ -60,10 +62,12 @@ vil_image vil_convolve_separable(vil_image const & in,
   // convolve
   vil_convolve_separable(kernel, N, inbuf, tmp, outbuf);
 
+#if 0
   // Put outbuf into output image if necessary
-//    if (!out.get_property("memory"))
-//      out.put_section(outbuf.get_buffer(), 0,0, out.width(), out.height());
-//    return out;
+  if (!out.get_property("memory"))
+    out.put_section(outbuf.get_buffer(), 0,0, out.width(), out.height());
+  return out;
+#endif
    return outbuf;
 }
 

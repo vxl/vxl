@@ -66,7 +66,9 @@ vil_stream_url::vil_stream_url(char const *url)
     vcl_cerr << __FILE__ ": failed to create socket." << vcl_endl;
     return;
   }
-  //vcl_cerr << __FILE__ ": tcp_sockect = " << tcp_socket << vcl_endl;
+#ifdef DEBUG
+  vcl_cerr << __FILE__ ": tcp_sockect = " << tcp_socket << vcl_endl;
+#endif
 
   // get network address of server.
   hostent *hp = gethostbyname(host.c_str());

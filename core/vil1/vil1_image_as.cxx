@@ -47,8 +47,10 @@ struct vil_image_as_impl : vil_image_impl, vil_memory_image_of_format<T>
   vil_component_format component_format() const { return format::component_format; }
   vil_image get_plane(int i) const { assert(i==0); return const_cast<vil_image_as_impl*>(this); }
 
-  //char const* file_format() const { return 0; }
-  //bool get_property(char const* tag, void* property_value_out = 0) const { return false; }
+#if 0
+  char const* file_format() const { return 0; }
+  bool get_property(char const* tag, void* property_value_out = 0) const { return false; }
+#endif
 
   // There is no default implementation of this method. It must be
   // specialized by hand for each T.

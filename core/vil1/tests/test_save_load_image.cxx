@@ -18,7 +18,9 @@
 #define DEBUG 0
 #define LEAVE_IMAGES_BEHIND 0
 
-//#define ww cout << "reached " __FILE__ ":" << __LINE__ << endl
+#if 0
+#define ww cout << "reached " __FILE__ ":" << __LINE__ << endl
+#endif
 
 //: Test to see if all the pixels in two images are equal
 bool test_image_equal(char const* type_name,
@@ -115,7 +117,7 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
                          bool exact = true) // require read back image identical
 {
   // Step 1) Write the image out to disk
-
+  //
   // create a file name
   vcl_string fname(tmpnam(0));
   fname += ".";

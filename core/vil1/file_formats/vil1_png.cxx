@@ -2,6 +2,8 @@
 #pragma implementation
 #endif
 
+// http://www.mirror.ac.uk/sites/ftp.cdrom.com/pub/png/libpng.html
+
 #include "vil_png.h"
 
 #include <vcl_cassert.h>
@@ -14,8 +16,6 @@
 
 #include <png.h>
 #include <vcl_cstdlib.h> // for vcl_exit()
-
-// http://www.mirror.ac.uk/sites/ftp.cdrom.com/pub/png/libpng.html
 
 // Constants
 #define SIG_CHECK_SIZE 4
@@ -112,7 +112,7 @@ static void pngtopnm_error_handler (png_structp png_ptr, png_const_charp msg)
   if (!jmpbuf_ok) {
     // Someone called the error handler when the setjmp was wrong
     vcl_cerr << "vil_png: jmpbuf is pretty far from ok.  returning\n";
-    // abort();
+    // vcl_abort();
     return;
   }
 
@@ -304,12 +304,11 @@ bool vil_png_generic_image::read_header()
   if (p->info_ptr->bit_depth < 8)
     png_set_packing (p->png_ptr);
 
-  // int maxval;
-  // if (p->info_ptr->color_type == PNG_COLOR_TYPE_PALETTE) {
-  //   maxval = 255;
-  // } else {
-  //   maxval = (1l << p->info_ptr->bit_depth) - 1;
-  // }
+#if 0
+ int maxval;
+ if (p->info_ptr->color_type == PNG_COLOR_TYPE_PALETTE) { maxval = 255; }
+ else { maxval = (1l << p->info_ptr->bit_depth) - 1; }
+#endif
 
   p->channels = png_get_channels(p->png_ptr, p->info_ptr);
 
