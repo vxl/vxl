@@ -1,6 +1,7 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
+#include <vcl_vector.h>
 
 #include <vnl/vnl_test.h>
 #include <mil/algo/mil_algo_exp_filter_1d.h>
