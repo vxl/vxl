@@ -5,9 +5,6 @@
 
 #undef BUGL_UNCERTAINTY_POINT_3D_INSTANTIATE
 #define BUGL_UNCERTAINTY_POINT_3D_INSTANTIATE(T) \
-template class bugl_uncertainty_point_3d<T> ; 
-
-
+template class bugl_uncertainty_point_3d<T >
 
 #endif
-
