@@ -18,6 +18,7 @@ exec perl -w -x $0 ${1+"$@"}
 use Cwd;
 use Getopt::Std;
 use File::Copy;
+use File::Path;
 
 my $havepnmutils;
 
@@ -55,7 +56,7 @@ sub update_book
   if (! -e $bookdir)
   {
     print "gen_books.pl: Creating $bookdir\n";
-    mkdir $bookdir,0777 || die "gen_books.pl: Can't create directory $bookdir\n";
+    mkpath ($bookdir,1,0777);
       $buildit="true";
   }
 
