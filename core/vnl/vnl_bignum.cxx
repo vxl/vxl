@@ -9,6 +9,7 @@
 #include <vcl_algorithm.h> // for vcl_copy
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
+#include <vcl_iostream.h>
 #include <vnl/vnl_math.h> // for vnl_math_isfinite(double)
 
 typedef unsigned short Counter;

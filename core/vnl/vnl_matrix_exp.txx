@@ -6,6 +6,9 @@
 */
 #include "vnl_matrix_exp.h"
 #include <vcl_cassert.h>
+#ifdef DEBUG
+#include <vcl_iostream.h>
+#endif
 
 template <class T>
 bool vnl_matrix_exp(vnl_matrix<T> const &X, vnl_matrix<T> &expX, double max_err)
@@ -15,7 +18,9 @@ bool vnl_matrix_exp(vnl_matrix<T> const &X, vnl_matrix<T> &expX, double max_err)
   expX.assert_size(N, N);
 
   double norm_X = X.operator_inf_norm();
-  //vcl_cerr << "norm_X = " << norm_X << vcl_endl;
+#ifdef DEBUG
+  vcl_cerr << "norm_X = " << norm_X << vcl_endl;
+#endif
 
   // exponential series
   expX.set_identity();

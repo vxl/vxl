@@ -11,6 +11,7 @@
 
 #include "vnl_file_matrix.h"
 #include <vcl_fstream.h>
+#include <vcl_iostream.h>
 #include <vcl_cstring.h> // for strcmp()
 
 //: Load matrix from filename.

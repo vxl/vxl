@@ -8,6 +8,7 @@
 #include "vnl_matlab_filewrite.h"
 
 #include <vcl_sstream.h>
+#include <vcl_iostream.h>
 #include <vcl_complex.h>
 
 #include <vnl/vnl_vector.h>
