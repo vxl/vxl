@@ -12,7 +12,7 @@ const int default_tab = 2;
 
 typedef vcl_pair<int,int> indent_data_type;
 
-typedef vcl_map<void*, indent_data_type> maps2i_type;
+typedef vcl_map<void*, indent_data_type, vcl_less<void*> > maps2i_type;
 
 //: Global record of tab information for streams
 //  Allows data to persist beyond the lifetime of the indent object itself,
@@ -72,6 +72,4 @@ vcl_ostream& operator<<(vcl_ostream& os, const vsl_indent& indent)
   return os;
 }
 
-// Explicit instantiation of map
-VCL_MAP_INSTANTIATE(void*, indent_data_type, vcl_less<void* > );
-
+// removed explicit instantiation of map<void*, pair<int, int> > -- fsm.
