@@ -35,9 +35,6 @@ public:
   //: Default constructor (Line 1.y==0, the X axis)
   inline vgl_homg_line_2d () : a_(0), b_(1), c_(0) {}
 
-  // Default copy constructor
-  inline vgl_homg_line_2d (const vgl_homg_line_2d<Type>& l) : a_(l.a()), b_(l.c()), c_(l.c()) {}
-
   //: Construct from three Types.
   //  The three given numbers should not be all 0
   inline vgl_homg_line_2d (Type a, Type b, Type c) : a_(a), b_(b), c_(c) {assert(a||b||c);}
@@ -53,7 +50,10 @@ public:
   //  The two points must be distinct!
   vgl_homg_line_2d (vgl_homg_point_2d<Type> const& p1, vgl_homg_point_2d<Type> const& p2);
 
-#if 0
+#if 0 // The defaults for these, as provided by the compiler, are all right:
+  // Default copy constructor
+  inline vgl_homg_line_2d (const vgl_homg_line_2d<Type>& l) : a_(l.a()), b_(l.b()), c_(l.c()) {}
+
   // Default destructor
   inline ~vgl_homg_line_2d () {}
 
