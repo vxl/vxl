@@ -18,7 +18,7 @@ application such a popup image displayer.
 
 This chapter is concerned with basic vgui programming and does not 
 consider the issues associated with adapting vgui to a new window system and gui toolkit. The examples are demonstrated using the mfc implementation of 
-@code{vgui}.@sp 1
+@code{vgui}.
 
 @endchapsummary
 
@@ -26,7 +26,7 @@ consider the issues associated with adapting vgui to a new window system and gui
 A simple example will be useful to illustrate some of the basics of vgui.
 The appearance of an image displayer is shown in Figure 1.
 @figure
-@image{images/image-tableau-with-status,,3in}
+@image{./images/image-tableau-with-status,,3in}
 @caption{1}
 A @code{vgui} image display application. 
 @endcaption
@@ -84,7 +84,7 @@ used by default. Currently @code{vgui} supports the following toolkits:
 @item Gnu Toolkit (Gtk) - http://www.gtk.org
 @item Microsoft Foundation Classes (MFC) - http://msdn.microsoft.com/library
 @end itemize
-@sp 1
+
 @item @code{vgui_image_tableau_new image(argv[1])}:
 The @code{vgui_image_tableau} is a very basic tableau that mainly handles the
 display of pixels on the screen and can provide properties of the image
@@ -122,7 +122,7 @@ vgui_image_tableau_sptr image = vgui_image_tableau_new(img1);
 //change the image to img2.
 image->set_image(img2);
 @end example
-@sp 1
+
 @item @code{vgui_viewer2D_tableau_new viewer(image)}:  
 Next, the @code{vgui_image_tableau}, @code{image}, is added to a 
 @code{vgui_viewer2D_tableau}.  The viewer is responsible for
@@ -135,7 +135,7 @@ vgui_viewer2D_tableau_sptr viewer = vgui_viewer2D_tableau_new(image);
 @end example
 The viewer responds to a variety of events such as key presses, mouse 
 motion and mouse clicks. See @ref{events}. The current implementation has the following 
-menu of event processing:@sp 1
+menu of event processing:
 @multitable @columnfractions 0.5 0.5
 @item (CTRL + left mouse) @tab @code{zoom in}
 @item (CTRL + middle mouse)@tab @code{pan}
@@ -148,7 +148,7 @@ menu of event processing:@sp 1
 @item ('z') @tab @code{toggle zoom type}
 @item ('d') @tab @code{sweep zoom}
 @end multitable
-@sp 1
+
 Run the @code{basic01_display_image} example and try the various event
 actions. Note that, on windows, a middle mouse is often hard to come
 by since the middle mouse button does not produce a middle mouse button
@@ -174,7 +174,7 @@ complex tableau configurations. If the mouse is clicked above a node in
 the graph, information about the tableau will be streamed to cout.
 
 @figure
-@image{images/tableau-hierarchy-annotated,,3in}
+@image{./images/tableau-hierarchy-annotated,,3in}
 @caption{2}
 The nested tableaux form a tree structure.  This structure can be
 displayed by the @code{vgui_tview_launcher_tableau} which is part of
@@ -256,7 +256,7 @@ int main(int argc, char **argv)
 @end cartouche
 @end example
 @figure
-@image{images/multiple-panes,,2.5in}
+@image{./images/multiple-panes,,2.5in}
 @caption{3}
 The @code{vgui_grid_tableau} supports the display of multiple panes.
 @endcaption
@@ -281,7 +281,7 @@ An application can then use these selections to operate on the desired pane.
 For example, if a user wants to load and image from a file into a particular pane, they would click on the desired pane and then push the load-image menu. The menu callback routine would use the last_selected_position method to identify the appropriate @code{vgui_image_tableau}.
 @subsection The Deck 
 @figure
-@image{images/deck-tableau,,3in}
+@image{./images/deck-tableau,,3in}
 @caption{4}
 The @code{vgui_deck_tableau} supports the display of a stack of child tableaux.
 A typical application is to be able to page through a sequence of images. 
@@ -339,7 +339,7 @@ events, which advance or backup the deck sequence.
 @section Displaying Geometry
 @subsection Displaying 2-d Features
 @figure
-@image{images/display-2d-annotated,,3in}
+@image{./images/display-2d-annotated,,3in}
 @caption{5}
 Geometry overlayed an the image is shown on the right.  The tableau graph for this example is shown on the left.
 @endcaption
@@ -351,7 +351,7 @@ segment, and its @emph{view} which is the manner in which it is
 rendered on the screen. Indeed, one can have many different views for
 a given object. The same line can be displayed with
 different line widths or colors, or even in an entirely different form
-such as a point in an image of Hough space, @math{(\rho, \theta)}.
+such as a point in an image of Hough space, (rho, theta).
 Note, this subject-view approach is perversely called document-view in MFC. 
 
 The following example illustrates the ability of vgui to display
@@ -426,9 +426,9 @@ vgui_soview2D_lineseg* add_line(float x0, float y0, float x1, float y1)
 vgui_soview2D_infinite_line* add_infinite_line(float a, float b, float c)
 @end example
 
-The point is defined by its location.  The line segment is specified by the endpoints. The infinite line is specified by its line coefficients: @sp 1
-@ @ @ @ @ @ @math {ax + by +c = 0}
-@sp 1
+The point is defined by its location.  The line segment is specified by the endpoints. The infinite line is specified by its line coefficients: 
+@ @ @ @ @ @ ax + by +c = 0.
+
 The appearance (or @emph{style}) of the display is controlled by the following style specifiers:
 @example
 void set_foreground(float r, float g, float b)
@@ -442,7 +442,7 @@ the @code{set_foreground}, @code{set_line_width}, and @code{set_point_radius}
 commands is assigned according to their specification until a new style command is issued.
 
 @figure
-@image{images/soview-hierarchy,,3in}
+@image{./images/soview-hierarchy,,3in}
 @caption{6}
 The hierarchy for 2-d soviews. @code{vgui} also has some support for 3-d rendering.
 @endcaption
@@ -536,7 +536,7 @@ This example introduces several new coding aspects to discuss.
 The tight loop between mouse tracking and drawing requires a means for rendering the feature as its parameters are continuously adjusted by the mouse. The application could use OpenGL commands directly, but it is much simpler to use the drawing commands provided by the @code{vgui_easy2D_tableau} that was decribed earlier. See @ref{easy2D}.
 
 In order to link the rubberbanding and the drawing it is necessary to
-specify a class called the @code{vgui_rubber_band_client}. The client is assumed to be capable of drawing all the shapes that can be rubberbanded by the rubberband tableau.  A sub-class called @code{vgui_rubberband_easy2D_client} is defined in the @code{vgui_rubberband_tableau.h} header file and handles all the currently rubberbandable shapes.@sp 1
+specify a class called the @code{vgui_rubber_band_client}. The client is assumed to be capable of drawing all the shapes that can be rubberbanded by the rubberband tableau.  A sub-class called @code{vgui_rubberband_easy2D_client} is defined in the @code{vgui_rubberband_tableau.h} header file and handles all the currently rubberbandable shapes.
 @item @code{vgui_composite_tableau_new comp(easy, rubber)}:
 The rubberband tableau and its drawing client are included together in a composite tableau which forms the complete rubberband drawing capability.
 @end itemize
@@ -547,7 +547,7 @@ does provide a ``trackball'' mode of interaction in viewing the 3-d
 geometry. An example of the @code{vgui} 3-d display is shown in Figure
 7.
 @figure
-@image{images/threeD-example,,3in}
+@image{./images/threeD-example,,3in}
 @caption{7} vgui's 3-d display.
 @endcaption
 @endfigure
@@ -610,7 +610,7 @@ int main(int argc, char ** argv)
 @end example
 The appearance of this program is shown in Figure 8.
 @figure
-@image{images/menu-example,,3in}
+@image{./images/menu-example,,3in}
 @caption{8}
 A @code{vgui} example involving menus.  The menu bar on the top has
 sub-menus as indicated in the figure. In the example, all the menu
@@ -638,7 +638,7 @@ function @code{dummy()} is called by pressing the key combination,
 The appearance of a @code{vgui} pop-up menu is shown in Figure 9.  A pop-up 
 menu is launched by pressing the right mouse button over the active application,window. Typically the role of the pop-up menu is to present operations that are relevant to the context present when the right button is pressed.  For example, if we are displaying an image, there would be image display or image processing operations presented in the menu.  Another mode might dominate when the tableau contains only geometric features. In that case, the menu items might present geometric operations such as translation or rotation.
 @figure
-@image{images/popupmenu-example,,3in}
+@image{./images/popupmenu-example,,3in}
 @caption{9}
 A @code{vgui} pop-up menu example. The menu shown was launched by pressing the right mouse key.  A pop-up menu can have sub-menus, as shown in the figure.
 @endcaption
@@ -718,7 +718,7 @@ In this case the widow is created before the display is launched. In
 the previous examples, the window was created at the time of launch
 using the @code{vgui::run(..)} command.  Here the window is initialized 
 to size 512x512 display resolution elements.
-@sp 1
+
 @item @code{win->get_adaptor()->include_in_popup(create_menus())}:
 This line introduces the class, @code{vgui_adaptor}.  The idea of the
 adaptor is to provide a uniform interface for events across all
@@ -758,7 +758,7 @@ order to read data such as image. These functions are satisfied by the
 @emph{dialog menu}. An example of a dialog is shown in Figure 10, which
 corresponds to @code{vgui/examples/basic07_dialog.cxx}.
 @figure
-@image{images/dialog-example,,4in}
+@image{./images/dialog-example,,4in}
 @caption{10} The dialog menu appears when a menu item is pressed that
 calls a function containing a dialog.  The dialog displays names and
 values as well as boolean check boxes. The state of the boxes and
@@ -866,25 +866,25 @@ It is desirable to have the values in the dialog persist from one
 invocation to the next. This persistence is enabled through the use of
 static variables.  Also note that the indexing of the choices starts
 at 1, i.e., ``fltk'' is the first element of the choice list. The
-appearance of the choice sub dialog is shown in Figure 11 a).@sp 1
+appearance of the choice sub dialog is shown in Figure 11 a).
 @item @code{mydialog.inline_file("file browser", regexp, file_value)}:
 This file browser dialog element is used extensively in applications.
 The interface is:
 @code{void inline_file(const char* label,vcl_string& regexp,vcl_string& filepath)}
-@sp 1
+
 The argument @code{label} is the displayed name of the dialog slot
 attached to the file browser. The string @code{regexp} defines a
 filter on the file extensions so that only a class of files will
 appear in the browser. For example, if only jpeg images are to
 be selected the argument assignment would be, @code{static vcl_string
 regexp = "*.jpg"}.  The third argument is the result and returns
-the path to the selected file. @sp 1
+the path to the selected file. 
 
 @item @code{if (mydialog.ask())}:
 This function pops up the dialog and waits for the @code{ok} or
 @code{cancel} button to be pushed. If @code{ok} is pushed then the
 function returns @emph{true}, and the dialog values can be processed
-by the users application.@sp 1
+by the users application.
 
 @item @code{mydialog.inline_tableau(viewer, 512, 512)}:
 Dialogs can contain an embedded hierarchy of tableaux. In this example
@@ -894,12 +894,12 @@ dialog as shown in Figure 12.  Any tableau can be inserted, such as
 display geometric objects.
 @end itemize
 @figure
-@image{images/choice-color,,4in}
+@image{./images/choice-color,,4in}
 @caption{11} a) The choice option enables a selection from a set of alternative values.  b) The color option enables a selection from a pallet of colors.
 @endcaption
 @endfigure
 @figure
-@image{images/dialog2-example,,2in}
+@image{./images/dialog2-example,,2in}
 @caption{12} Dialogs can also contain embedded images or geometric figures.
 @endcaption
 @endfigure
@@ -979,7 +979,7 @@ creating a new tableau, which is a subclass of an existing tableau.
 @itemize
 @item @code{struct example_tableau : public vgui_image_tableau}:
 The new tableau is a child of the @code{vgui_imge_tableau}. The tableau is 
-being defined as a @code{struct}, however it could also be a class.  @sp 1
+being defined as a @code{struct}, however it could also be a class.  
 
 @item @code{struct example_tableau_new : public vgui_image_tableau_sptr}:
 VXL makes use of smart pointers extensively to prevent memory leaks.
@@ -996,14 +996,14 @@ virtual method, @emph{handle}, which is called as events are passed
 down the tableau hierarchy. The event is initially captured by the
 @code{vgu_adaptor} which then passes it to its base tableau. If there
 is no handle method defined for a tableau, then the event is processed
-by its parents.@sp 1
+by its parents.
 
 @item @code{return vgui_image_tableau::handle(e)}:
 After a particular handle method has processed an event it, can mark
 it as used (@emph{true}) or unused (@emph{false}). If an event is
 considered used by a tableau then it is eliminated and not presented
 to any other tableau.  If the event is unused, then it is further dispatched
-to child tableaux or returned to the parent.@sp 1
+to child tableaux or returned to the parent.
 
 @item @code{if (e.type == vgui_BUTTON_DOWN..)}:
 @code{vgui} represents a spectrum of event types, which are summarized at this point for convenient reference. 
@@ -1073,7 +1073,7 @@ This event is caused by issuing a vgui_adaptor::post_destroy() command. The purp
 @subsection @code{vgui} Buttons, Keys and Modifiers
 The following table defines the @code{vgui} enum symbols for buttons, keys
 and modifers:
-@sp 1
+
 @multitable @columnfractions 0.5 0.5
 @item ===== Buttons ===== @tab @ 
 @item @code{vgui_LEFT} @tab left mouse button
@@ -1112,7 +1112,7 @@ and modifers:
 @item @code{vgui_META} @tab  0x4 
 @item @code{vgui_ALT} @tab 0x8
 @end multitable
-@sp 1
+
 When a key press event is dispatched it carries information that
 specifies the key and modifier structure. This code fragment
 illustrates the use of modified keys:
@@ -1136,7 +1136,7 @@ a @code{vgui_event} is always lower case. This eliminates the
 ambiguity that might arise in the use of the SHIFT key and upper case
 vs lower case characters.  The following table will illustrate the
 effect of various modifier combinations.
-@sp 1
+
 @multitable @columnfractions 0.25 0.25 0.25 0.25
 @item key press @tab modifier @tab key @tab ascii character
 @item =======  @tab ======= @tab ======= @tab ======= 
@@ -1146,7 +1146,7 @@ effect of various modifier combinations.
 @item @code{/} @tab @code{vgui_NULL} @tab @samp{/} @tab @samp{/}
 @item @code{?} @tab @code{vgui_SHIFT} @tab @samp{/} @tab @samp{?}
 @end multitable
-@sp 1
+
 If one wants to work directly with the actual ascii character pressed, then 
 use @code{e.ascii_char}.
 @subsection Event Condition
@@ -1457,17 +1457,14 @@ Several new features have been included in the construction of this window:
 @section Summary of @code{vgui} Tableaux
 The following is a summary of the tableau defined in @code{vgui}. 
 @multitable @columnfractions 0.33 0.67
-@item @code{active_tableau}  @tab 
-This tableau (or rather a tableau derived from it) can appear visible
-or invisible, and active or inactive by calling @code{toggle_active} and @code{toggle_visible}.
+
+@item @code{active_tableau} @tab This tableau (or rather a tableau
+derived from it) can appear visible or invisible, and active or
+inactive by calling @code{toggle_active} and @code{toggle_visible}.
 
 @item @code{blackbox_tableau} @tab A tableau for event record and playback.
 
-@item @code{blender_tableau} @tab To use this tableau make a
-@code{vgui_image_tableau} containing one of the images to blend and a
-@code{vgui_blender_tableau} containing the other. Put them both in a
-@code{vgui_composite_tableau}.  Set alpha to be less than one to see
-the blended image.
+@item @code{blender_tableau} @tab To use this tableau make a @code{vgui_image_tableau} containing one of the images to blend and a @code{vgui_blender_tableau} containing the other. Put them both in a @code{vgui_composite_tableau}.  Set alpha to be less than one to see the blended image.
 
 @item @code{clear_tableau} @tab A tableau that performs OpenGL clearing upon
 receipt of a @code{vgui_DRAW} event. It has no child tableau.
@@ -1478,19 +1475,13 @@ the current context.  Events reaching the @code{vgui_composite_tableau} are
 passed on to each child in turn, till it is handled, so that child 0,
 the first added, is the "top" tableau.
 
-@item @code{deck_tableau} @tab For holding an ordered collection of child tableaux, only one of which is passed all events that the @code{vgui_deck_tableau}
-receives. The effect is a flick-book of tableaux where the currently
-active tableau can be changed using PageUp and PageDown
+@item @code{deck_tableau} @tab For holding an ordered collection of child tableaux, only one of which is passed all events that the @code{vgui_deck_tableau} receives. The effect is a flick-book of tableaux where the currently active tableau can be changed using PageUp and PageDown
 
 @item @code{displaylist2D_tableau} @tab Display of two-dimensional geometric objects - a builder tableau usually sub-classed.
 
 @item @code{displaylist3D_tableau} @tab Display of three-dimensional geometric objects -  a builder tableau usually sub-classed.
 
-@item @code{drag_tableau} @tab A drag event occurs when the user moves the
-mouse with one of the mouse buttons pressed down.  In @code{vgui} there is no
-@code{vgui_DRAG} event (there is only @code{vgui_MOTION} for when the mouse is
-moving).  So if you want to capture drag events you may find this
-tableau handy.
+@item @code{drag_tableau} @tab A drag event occurs when the user moves the mouse with one of the mouse buttons pressed down.  In @code{vgui} there is no @code{vgui_DRAG} event (there is only @code{vgui_MOTION} for when the mouse is moving).  So if you want to capture drag events you may find this tableau handy.
   
 
 @item @code{easy2D_tableau} @tab Easy interface for displaying
