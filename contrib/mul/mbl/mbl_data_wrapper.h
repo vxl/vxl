@@ -38,35 +38,34 @@
 template<class T>
 class mbl_data_wrapper {
 public:
-	//: Default constructor
-	mbl_data_wrapper();
+  //: Default constructor
+  mbl_data_wrapper();
 
-	//: Default destructor
-	virtual ~mbl_data_wrapper();
+  //: Default destructor
+  virtual ~mbl_data_wrapper();
 
-	//: Number of objects available
-	virtual int size() const = 0;
+  //: Number of objects available
+  virtual int size() const = 0;
 
-	//: Reset so that current() returns first object
-	virtual void reset() = 0;
+  //: Reset so that current() returns first object
+  virtual void reset() = 0;
 
-	//: Return current object
-	virtual const T& current() = 0;
+  //: Return current object
+  virtual const T& current() = 0;
 
-	//: Move to next object, returning true if is valid
-	virtual bool next() = 0;
+  //: Move to next object, returning true if is valid
+  virtual bool next() = 0;
 
-		//: Return current index
-		//  First example has index 0
-	virtual int index() const =0;
+  //: Return current index
+  //  First example has index 0
+  virtual int index() const =0;
 
-		//: Move to element n
-		//  First example has index 0
-	virtual void set_index(int n);
+  //: Move to element n
+  //  First example has index 0
+  virtual void set_index(int n);
 
-		//: Create copy on heap and return base pointer
-	virtual mbl_data_wrapper< T >* clone() const = 0;
-
+  //: Create copy on heap and return base pointer
+  virtual mbl_data_wrapper< T >* clone() const = 0;
 };
 
 #endif // mbl_data_wrapper_h

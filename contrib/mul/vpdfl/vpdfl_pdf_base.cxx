@@ -35,7 +35,7 @@ vpdfl_pdf_base::~vpdfl_pdf_base()
 //=======================================================================
 double vpdfl_pdf_base::operator()(const vnl_vector<double>& x)
 {
-	return exp(log_p(x));
+  return exp(log_p(x));
 }
 
 //=======================================================================
@@ -44,18 +44,18 @@ double vpdfl_pdf_base::operator()(const vnl_vector<double>& x)
 
 short vpdfl_pdf_base::version_no() const
 {
-	return 1;
+  return 1;
 }
 
 //=======================================================================
 // Declaration
 //=======================================================================
 
-	// For load/save by pointer
+  // For load/save by pointer
 vsl_binary_loader<vpdfl_pdf_base>*
-		vsl_binary_loader<vpdfl_pdf_base>::instance_ = NULL;
+    vsl_binary_loader<vpdfl_pdf_base>::instance_ = NULL;
 
-	// for is_a method
+  // for is_a method
 vcl_string vpdfl_pdf_base::class_name_ = "vpdfl_pdf_base";
 
 //=======================================================================
@@ -64,7 +64,7 @@ vcl_string vpdfl_pdf_base::class_name_ = "vpdfl_pdf_base";
 
 void vxl_add_to_binary_loader(const vpdfl_pdf_base& b)
 {
-	vsl_binary_loader<vpdfl_pdf_base>::instance().add(b);
+  vsl_binary_loader<vpdfl_pdf_base>::instance().add(b);
 }
 
 //=======================================================================
@@ -73,70 +73,70 @@ void vxl_add_to_binary_loader(const vpdfl_pdf_base& b)
 
 vcl_string vpdfl_pdf_base::is_a() const
 {
-	return class_name_;
+  return class_name_;
 }
 
 //=======================================================================
 // Method: print
 //=======================================================================
 
-	// required if data is present in this base class
+  // required if data is present in this base class
 void vpdfl_pdf_base::print_summary(ostream& os) const
 {
-	os << vsl_indent() << "N. Dims : "<< mean_.size();
+  os << vsl_indent() << "N. Dims : "<< mean_.size();
 }
 
 //=======================================================================
 // Method: save
 //=======================================================================
 
-	// required if data is present in this base class
+  // required if data is present in this base class
 void vpdfl_pdf_base::b_write(vsl_b_ostream& bfs) const
 {
-	vsl_b_write(bfs, version_no());
-	vsl_b_write(bfs, mean_);
-	vsl_b_write(bfs, var_);
+  vsl_b_write(bfs, version_no());
+  vsl_b_write(bfs, mean_);
+  vsl_b_write(bfs, var_);
 }
 
 //=======================================================================
 // Method: load
 //=======================================================================
 
-	// required if data is present in this base class
+  // required if data is present in this base class
 void vpdfl_pdf_base::b_read(vsl_b_istream& bfs)
 {
-	short version;
-	vsl_b_read(bfs,version);
-	switch (version)
-	{
-		case (1):
-			vsl_b_read(bfs,mean_);
-			vsl_b_read(bfs,var_);
-			break;
-		default:
-			cerr << "vpdfl_pdf_base::b_read() ";
-			cerr << "Unexpected version number " << version << endl;
-			abort();
-	}
+  short version;
+  vsl_b_read(bfs,version);
+  switch (version)
+  {
+    case (1):
+      vsl_b_read(bfs,mean_);
+      vsl_b_read(bfs,var_);
+      break;
+    default:
+      cerr << "vpdfl_pdf_base::b_read() ";
+      cerr << "Unexpected version number " << version << endl;
+      abort();
+  }
 }
 
 //=======================================================================
-// Associated function: operator<< 
+// Associated function: operator<<
 //=======================================================================
 
 void vsl_b_write(vsl_b_ostream& bfs, const vpdfl_pdf_base* b)
 {
-    if (b)
-	{
-		vsl_b_write(bfs, b->is_a());
-		b->b_write(bfs);
-    }
-    else	
-		vsl_b_write(bfs, vcl_string("VSL_NULL_PTR"));
+  if (b)
+  {
+    vsl_b_write(bfs, b->is_a());
+    b->b_write(bfs);
+  }
+  else
+    vsl_b_write(bfs, vcl_string("VSL_NULL_PTR"));
 }
 
 //=======================================================================
-// Associated function: operator<< 
+// Associated function: operator<<
 //=======================================================================
 
 void vsl_b_write(vsl_b_ostream& bfs, const vpdfl_pdf_base& b)
@@ -145,7 +145,7 @@ void vsl_b_write(vsl_b_ostream& bfs, const vpdfl_pdf_base& b)
 }
 
 //=======================================================================
-// Associated function: operator>> 
+// Associated function: operator>>
 //=======================================================================
 
 void vsl_b_read(vsl_b_istream& bfs, vpdfl_pdf_base& b)
@@ -154,28 +154,28 @@ void vsl_b_read(vsl_b_istream& bfs, vpdfl_pdf_base& b)
 }
 
 //=======================================================================
-// Associated function: operator<< 
+// Associated function: operator<<
 //=======================================================================
 
 ostream& operator<<(ostream& os,const vpdfl_pdf_base& b)
 {
-	os << b.is_a() << ": ";
-	vsl_inc_indent(os);
-	b.print_summary(os);
-	vsl_dec_indent(os);
-	return os;
+  os << b.is_a() << ": ";
+  vsl_inc_indent(os);
+  b.print_summary(os);
+  vsl_dec_indent(os);
+  return os;
 }
 
 //=======================================================================
-// Associated function: operator<< 
+// Associated function: operator<<
 //=======================================================================
 
 ostream& operator<<(ostream& os,const vpdfl_pdf_base* b)
 {
-    if (b)	
-		return os << *b;
-    else			
-		return os << "No vpdfl_pdf_base defined.";
+  if (b)
+  return os << *b;
+  else
+  return os << "No vpdfl_pdf_base defined.";
 }
 
 //==================< end of vpdfl_pdf_base.cxx >====================
