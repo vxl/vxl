@@ -54,6 +54,7 @@ $(RESULTS) : %.out : %.exe
  endif
 	-$(from) $(PARAMS_$(basename $(@F))) > $@~
 	mv $@~ $@
+	@-$(IUE_PERL) $(sys_or_iu_Scripts)/Perl/unify_pointer_names $@
 	-$(SUMMARIZE) $@ || true
 else
 $(RESULTS) : %.out : $(patsubst %,$(RELOBJDIR)$/%.exe,$(basename $(TESTMAIN)))
@@ -62,6 +63,7 @@ $(RESULTS) : %.out : $(patsubst %,$(RELOBJDIR)$/%.exe,$(basename $(TESTMAIN)))
  endif
 	-$(from) $(basename $(@F)) $(PARAMS_$(basename $(@F))) > $@~
 	mv $@~ $@
+	@-$(IUE_PERL) $(sys_or_iu_Scripts)/Perl/unify_pointer_names $@
 	-$(SUMMARIZE) $@ || true
 endif
 ifdef CLEAN
