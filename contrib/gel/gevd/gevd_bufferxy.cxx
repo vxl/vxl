@@ -36,9 +36,6 @@
 #include <vcl_cstring.h>
 
 #include "gevd_bufferxy.h"
-//#include <vcl_memory.h> // For memcpy()
-//#include <vcl_iostream.h>/
-//#include <vcl_fstream.h>
 #include <vcl_cstdio.h> // For sscanf()
 
 #include <vcl_compiler.h>

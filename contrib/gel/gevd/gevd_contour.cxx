@@ -53,6 +53,8 @@
 #include <vcl_vector.h>
 #include <vcl_algorithm.h> // for vcl_max()
 
+#include "gevd_contour.h"
+
 #include <vil/vil_byte.h>
 #include <vnl/vnl_math.h>     // for sqrt(2)
 
@@ -63,7 +65,6 @@
 #include <vdgl/vdgl_interpolator_linear.h>
 
 #include "gevd_float_operators.h"
-#include "gevd_contour.h"
 #include "gevd_pixel.h"
 
 const int INVALID = -1;
@@ -103,8 +104,8 @@ const int RJS[] = { 0, 1, 0,-1, // rotate CW, increasing radius
                     2, 3, 3, 2,-2,-3,-3,-2,
                     0, 4, 0,-4};
 const int RNS[] = { 4, 8, 12, 20, 24, 28, 36, 44, 48}; // at distinct r
-const float RGS[] = { 1, 1.414213, 2, 2.236067, 2.828427, // values of gap
-                      3, 3.162277, 3.605551, 4};
+const float RGS[] = { 1.f, 1.414213f, 2.f, 2.236067f, 2.828427f, // values of gap
+                      3.f, 3.162277f, 3.605551f, 4.f};
 
 // - win32 - moved to here for MSVC++
 const int MINLENGTH = 3;        // minimum number of pixels for a chain

@@ -90,17 +90,17 @@ bool gevd_detector_params::SanityCheck()
     {
       junctionp = true;
       contourFactor = noise_multiplier;
-      junctionFactor = .5*noise_multiplier;
-      maxGap = 4;
-      minJump = .1;
+      junctionFactor = .5f*noise_multiplier;
+      maxGap = 4.f;
+      minJump = .1f;
     }
   if (aggressive_junction_closure == 0)
     {
       junctionp = true;
       contourFactor = noise_multiplier;
-      junctionFactor = 1.5*noise_multiplier;
-      maxGap = 2.2;
-      minJump = 1.0;
+      junctionFactor = 1.5f*noise_multiplier;
+      maxGap = 2.2f;
+      minJump = 1.0f;
     }
 
   vcl_strstream msg;
@@ -108,19 +108,19 @@ bool gevd_detector_params::SanityCheck()
   if (smooth <= 0)      // Standard deviation of the smoothing kernel
   {
     msg<< "ERROR: Value of gaussian smoothing sigma is too low <=0" << vcl_ends;
-    smooth = 1.0;
+    smooth = 1.0f;
     valid = false;
   }
   if (noise_weight < 0 || noise_weight > 1.0)   // Noise weighting factor
   {
     msg << "ERROR: Value of noise weight must be [0 1.0]" << vcl_ends;
-    noise_weight = .5;
+    noise_weight = .5f;
     valid = false;
   }
   if (noise_multiplier <= 0)    // The over all noise scale factor
   {
     msg << "ERROR: Value of noise scale factor is too low <=" << vcl_ends;
-    noise_multiplier = 1.0;
+    noise_multiplier = 1.0f;
     valid = false;
   }
 
@@ -134,36 +134,36 @@ bool gevd_detector_params::SanityCheck()
   if (maxGap <= 0)      // Chain gaps to jump
   {
     msg << "ERROR: Value of maximum gap is too low <0" << vcl_ends;
-    maxGap = 2.2;
+    maxGap = 2.2f;
     valid = false;
   }
 
   if (minJump <= 0)     // Jump to close a junction
   {
     msg << "ERROR: Value of min jump junction is too low <0" << vcl_ends;
-    maxGap = 1.0;
+    maxGap = 1.0f;
     valid = false;
   }
 
   if (contourFactor <= 0)       // Threshold in following a contour
   {
     msg << "ERROR: Value of contour factor is too low <0" << vcl_ends;
-    contourFactor = 1.0;
+    contourFactor = 1.0f;
     valid = false;
   }
 
   if (junctionFactor<= 0)       // Threshold in following a junction
   {
     msg << "ERROR: Value of junction factor is too low <0" << vcl_ends;
-    maxGap = 1.5;
+    maxGap = 1.5f;
     valid = false;
   }
-  if(corner_angle < 5.0)
+  if(corner_angle < 5.0f)
     {
       msg << "ERROR: Value of corner angle is too low <5" << vcl_ends;
     }
 
-  if(separation < 1.0)
+  if(separation < 1.0f)
     {
       msg << "ERROR: Value of corner separation is too low <1" << vcl_ends;
     }
