@@ -1394,14 +1394,9 @@ Each one is written using only the public access functions of the class.
 For instance, @code{vgl_point_2d} has binary IO as follows:
 
 @example
+// This is vxl/vgl/io/vgl_io_point_2d.h
 #ifndef vgl_io_point_2d_h_
 #define vgl_io_point_2d_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
-// This is vxl/vgl/io/vgl_io_point_2d.h
-
 //:
 // \file
 // \author Tim Cootes
@@ -1496,13 +1491,10 @@ Here are some examples:
 Here is an example of a @file{BaseClassIO.h}
 
 @example
+// This is BaseClass.h
 #ifndef BaseClassIO_h_
 #define BaseClassIO_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 
-// This is BaseClass.h
 #include <vsl/vsl_binary_io.h>
 
 // Predeclare classes
@@ -1570,17 +1562,14 @@ void vsl_print_summary(vcl_ostream& os,const BaseClass & b);
 For a BaseClass, one creates @file{BaseClassIO.cxx} as follows
 
 @example
-#ifdef __GNUC__
-#pragma implementation
-#endif
-
 // This is BaseClassIO.cxx
-#include <BaseClass.h>
-#include <BaseClassIO.h>
-#include <vsl/vsl_clipon_binary_loader.txx>
 //:
 // \file
 // \author Tim Cootes
+
+#include <BaseClass.h>
+#include <BaseClassIO.h>
+#include <vsl/vsl_clipon_binary_loader.txx>
 
 //: Constructor
 BaseClassIO()::BaseClassIO()
@@ -1708,14 +1697,9 @@ VSL_CLIPON_BINARY_LOADER_INSTANTIATE(BaseClass, BaseClassIO);
 For a DerivedClass, one creates DerivedClassIO header as follows
 
 @example
+// This is DerivedClassIO.h
 #ifndef DerivedClassIO_h_
 #define DerivedClassIO_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
-// This is DerivedClassIO.h
-
 //:
 // \file
 // \author Tim Cootes
@@ -1770,10 +1754,6 @@ void vsl_print_summary(vcl_ostream& os, const DerivedClass & b);
 For a DerivedClass, one creates @file{DerivedClassIO.cxx} as follows
 
 @example
-#ifdef __GNUC__
-#pragma implementation
-#endif
-
 // This is DerivedClassIO.cxx
 
 #include <DerivedClass.h>
