@@ -19,24 +19,24 @@ vsol_spatial_object_2d_sptr vdgl_digital_curve::clone(void) const
 
 double vdgl_digital_curve::get_x( const double s) const
 {
-  double i= interpolator_->get_edgel_chain()->size();
-  double index= s* (i-1);
+  int i= interpolator_->get_edgel_chain()->size() - 1;
+  double index= (s<0) ? 0.0 : (s>=1) ? i : s*i;
 
   return interpolator_->get_x(index);
 }
 
 double vdgl_digital_curve::get_y( const double s) const
 {
-  double i= interpolator_->get_edgel_chain()->size();
-  double index= s* (i-1);
+  int i= interpolator_->get_edgel_chain()->size() - 1;
+  double index= (s<0) ? 0.0 : (s>=1) ? i : s*i;
 
   return interpolator_->get_y(index);
 }
 
 double vdgl_digital_curve::get_theta( const double s) const
 {
-  double i= interpolator_->get_edgel_chain()->size();
-  double index= s* (i-1);
+  int i= interpolator_->get_edgel_chain()->size() - 1;
+  double index= (s<0) ? 0.0 : (s>=1) ? i : s*i;
 
   return interpolator_->get_theta(index);
 }
