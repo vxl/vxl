@@ -1,11 +1,12 @@
+// This is vxl/vnl/vnl_gamma.cxx
+#include "vnl_gamma.h"
 //:
 //  \file
 //  \brief Complete and incomplete gamma function approximations
 //  \author Tim Cootes
 
-#include <vnl/vnl_gamma.h>
 #include <vcl_iostream.h>
-#include <vcl_cstdlib.h> // vcl_abort()
+#include <vcl_cassert.h>
 
 //: Approximate gamma function
 //  Uses 6 parameter Lanczos approximation as described by Viktor Toth
@@ -36,36 +37,28 @@ static double vnl_gamma_series(double a, double x)
   {
     double a_i=a;
     double term_i=1.0/a;
-	double sum = term_i;
+    double sum = term_i;
     for (int i=1;i<=MAX_ITS;++i)
     {
       a_i+=1;
       term_i *= x/a_i;
       sum += term_i;
       if (vcl_fabs(term_i) < vcl_fabs(sum)*MaxRelError)
-      {
         return sum*vcl_exp(-x+a*vcl_log(x)-vnl_log_gamma(a));
-      }
     }
-    vcl_cerr<<"vnl_gamma_series : Failed to converge."<<vcl_endl;
+    vcl_cerr<<"vnl_gamma_series : Failed to converge in "<<MAX_ITS<<" steps\n";
     vcl_cerr<<"a = "<<a<<"   x= "<<x<<vcl_endl;
-    vcl_cerr<<"Returning best guess."<<vcl_endl;
-    // vcl_abort();
+    vcl_cerr<<"Returning best guess.\n";
+    return sum*vcl_exp(-x+a*vcl_log(x)-vnl_log_gamma(a));
   }
-  else
-  {
-    if (x < 0.0)
-    {
-      vcl_cerr<<"vnl_gamma_series : x less than 0"<<vcl_endl;
-      vcl_abort();
-    }
-  }
+  else if (x < 0.0)
+    assert(!"vnl_gamma_series : x less than 0");
 
   return 0.0;
 }
 
-// Incomplete gamma using continued fraction representation
-// Use Lentz's algorithm (Num.Rec.p171)
+//: Incomplete gamma using continued fraction representation
+// Use Lentz's algorithm
 // Continued fraction with terms a_i/b_i
 // a_i = i*(a-i), b_i = (x+a-2i)
 static double vnl_gamma_cont_frac(double a, double x)
@@ -86,24 +79,20 @@ static double vnl_gamma_cont_frac(double a, double x)
     double delta=d*c;
     cf *= delta;
     if (vcl_fabs(delta-1.0) < MaxRelError)
-	  return vcl_exp(-x+a*vcl_log(x)-vnl_log_gamma(a))*cf;
+      return vcl_exp(-x+a*vcl_log(x)-vnl_log_gamma(a))*cf;
   }
 
-  vcl_cerr<<"vnl_gamma_cont_frac : Failed to converge. a="<<a<<" x="<<x<<vcl_endl;
-  return 1.0; // Arbitrary
+  vcl_cerr<<"vnl_gamma_cont_frac : Failed to converge in "<<MAX_ITS<<" steps\n";
+  vcl_cerr<<"a = "<<a<<"   x= "<<x<<vcl_endl;
+  return vcl_exp(-x+a*vcl_log(x)-vnl_log_gamma(a))*cf;
 }
 
 double vnl_gamma_p(double a, double x)
 {
-#ifndef NDEBUG
-  if ((x < 0.0) || (a <= 0.0))
-  {
-    vcl_cerr<<"vnl_gamma_p : Invalid arguments."<<vcl_endl;
-    vcl_abort();
-  }
-#endif
+  if (x < 0.0 || a <= 0.0)
+    assert(!"vnl_gamma_p : Invalid arguments.");
 
-  if (x < (a+1.0))
+  if (x < a+1.0)
     return vnl_gamma_series(a,x); // Use series representation
   else
     return 1.0 - vnl_gamma_cont_frac(a,x); // Use continued fraction representation
@@ -111,15 +100,10 @@ double vnl_gamma_p(double a, double x)
 
 double vnl_gamma_q(double a, double x)
 {
-#ifndef NDEBUG
-  if ((x < 0.0) || (a <= 0.0))
-  {
-    vcl_cerr<<"vnl_gamma_q : Invalid arguments."<<vcl_endl;
-    vcl_abort();
-  }
-#endif
+  if (x < 0.0 || a <= 0.0)
+    assert(!"vnl_gamma_q : Invalid arguments.");
 
-  if (x < (a+1.0))
+  if (x < a+1.0)
     return 1.0-vnl_gamma_series(a,x); // Use series representation
   else
     return vnl_gamma_cont_frac(a,x); // Use continued fraction representation

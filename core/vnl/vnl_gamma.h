@@ -1,13 +1,12 @@
 // This is vxl/vnl/vnl_gamma.h
 #ifndef vnl_gamma_h_
 #define vnl_gamma_h_
-
-#include <vcl_cmath.h>
-
 //:
 //  \file
 //  \brief Complete and incomplete gamma function approximations
 //  \author Tim Cootes
+
+#include <vcl_cmath.h>
 
 //: Approximate log of gamma function
 //  Uses 6 parameter Lanczos approximation as described by Toth
@@ -19,7 +18,7 @@ double vnl_log_gamma(double x);
 //  Uses 6 parameter Lanczos approximation as described by Toth
 //  (http://www.rskey.org/gamma.htm)
 //  Accurate to about one part in 3e-11.
-double vnl_gamma(double x) { return vcl_exp(vnl_log_gamma(x)); }
+inline double vnl_gamma(double x) { return vcl_exp(vnl_log_gamma(x)); }
 
 //: Normalised Incomplete gamma function, P(a,x)
 // $P(a,x)=\frac{1}{\Gamma(a)}\int_0^x e^{-t}t^{a-1}dt
@@ -42,10 +41,9 @@ inline double vnl_erf(double x)
 // degrees of freedom is less than the value chi2
 // \param n_dof  Number of degrees of freedom
 // \param chi2  Value of chi-squared
-double vnl_cum_prob_chi2(int n_dof, double chi2)
+inline double vnl_cum_prob_chi2(int n_dof, double chi2)
 {
-  return vnl_gamma_p((double) n_dof/2.0 , chi2/2.0 );
+  return vnl_gamma_p( n_dof*0.5 , chi2*0.5 );
 }
 
-
-#endif
+#endif // vnl_gamma_h_
