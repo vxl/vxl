@@ -28,12 +28,11 @@ SOURCES += file_formats/vil_mit.cxx
 SOURCES += file_formats/vil_viff.cxx
 SOURCES += file_formats/vil_viff_support.c
 MANPAGE_SOURCES += file_formats/vil_viffheader.h
-SOURCES += file_formats/vil_dicom.cxx
-SOURCES += file_formats/vil_dicom_header.cxx
 ifeq ($(HAS_DCMTK),1)
 USE_DCMTK := 1
-SOURCES += file_formats/vil_dicom2.cxx
-SOURCES += file_formats/vil_dicom2_stream.cxx
+SOURCES += file_formats/vil_dicom.cxx
+SOURCES += file_formats/vil_dicom_header.cxx
+SOURCES += file_formats/vil_dicom_stream.cxx
 endif
 ifeq ($(HAS_PNG),1)
 USE_PNG := 1
