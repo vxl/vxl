@@ -58,7 +58,7 @@ void ImageWarp<PixelType>::gapfill(vil1_memory_image_of<PixelType>& out, int nga
   // Fill gaps
   int minnz = 4;
   while (ngaps > 0) {
-    while (1) {
+    while (true) {
       vcl_cerr << "Gapfilling " << ngaps << " pixels\n";
       int old_ngaps = ngaps;
       for (int oy = 0; oy < h; ++oy)
@@ -74,7 +74,6 @@ void ImageWarp<PixelType>::gapfill(vil1_memory_image_of<PixelType>& out, int nga
           }
       if (ngaps == old_ngaps)
         break;
-      old_ngaps = ngaps;
     }
     --minnz;
   }
@@ -86,12 +85,12 @@ void ImageWarp<PixelType>::warp(Mapping_2d_2d& map,
                                 vil1_memory_image_of<PixelType>& out)
 {
   // out.Clear();
-//abort(); // is not defined without #include <vcl_cstdlib.h>
   int w = in.width();
   int h = in.height();
-  int ngaps = 0;
+//int ngaps = 0;
   for (int iy = 0; iy < h; ++iy)
-    for (int ix = 0; ix < w; ++ix) {
+    for (int ix = 0; ix < w; ++ix)
+    {
       // *** Correct (ix, iy) to (ox,oy)
 
       // rdc correct
@@ -104,10 +103,10 @@ void ImageWarp<PixelType>::warp(Mapping_2d_2d& map,
 
       if (out.in_range(ox, oy))
         out(ox, oy) = in(ix,iy);
-      else
-        ++ngaps;
+//    else
+//      ++ngaps;
     }
-  // return ngaps;
+//return ngaps;
 }
 
 template <class PixelType>
