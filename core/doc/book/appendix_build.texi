@@ -306,7 +306,7 @@ ENDIF(VXL_FOUND)
 
 # Remember that all CMake variables defining the VXL configuration
 # begin with "VXL_".  If you want to use VGUI in a client project you
-# chould use something like this.
+# should use something like this.
 
 IF( VXL_VGUI_FOUND )
   INCLUDE_DIRECTORIES( $@{VXL_VGUI_INCLUDE_DIR@} )
@@ -328,6 +328,11 @@ IF( VXL_MPEG2_FOUND )
   )
   TARGET_LINK_LIBRARIES( foo $@{VXL_MPEG2_LIBRARIES@} )
 ENDIF( VXL_MPEG2_FOUND )
+
+# In the file @file{UseVXL.cmake} in the VXL build directory you will
+# see the xxx_FOUND, xxx_INCLUDE_DIR, and xxx_LIBRARIES variables set
+# for all optional portions of VXL and all 3rd party libraries used by
+# VXL.
 
 @end example
 
