@@ -20,6 +20,7 @@ void vnl_matlab_print_scalar(T v, \
 // Even with a function template we would have to
 // forward declare all the specializations anyway.
 vnl_matlab_print_scalar_declare(int);
+vnl_matlab_print_scalar_declare(unsigned int);
 vnl_matlab_print_scalar_declare(float);
 vnl_matlab_print_scalar_declare(double);
 vnl_matlab_print_scalar_declare(long double);

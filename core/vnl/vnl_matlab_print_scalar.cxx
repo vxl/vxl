@@ -14,6 +14,13 @@ void vnl_matlab_print_scalar(int v,
   vcl_sprintf(buf, "%4d ", v);
 }
 
+void vnl_matlab_print_scalar(unsigned v,
+                             char *buf,
+                             vnl_matlab_print_format)
+{
+  vcl_sprintf(buf, "%4u ", v);
+}
+
 void vnl_matlab_print_scalar(float v,
                              char *buf,
                              vnl_matlab_print_format format)
