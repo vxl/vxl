@@ -27,6 +27,8 @@ ADD_EXECUTABLE( vil2_test_driver
   test_greyscale_erode.cxx
   test_median.cxx
 )
+
+
 TARGET_LINK_LIBRARIES( vil2_test_driver vil2_algo vil2 vpl vul testlib vcl )
 
 
@@ -53,4 +55,9 @@ ADD_TEST( test_binary_erode                 vil2_test_driver test_binary_erode )
 ADD_TEST( test_greyscale_dilate             vil2_test_driver test_greyscale_dilate )
 ADD_TEST( test_greyscale_erode              vil2_test_driver test_greyscale_erode )
 ADD_TEST( test_median                       vil2_test_driver test_median )
+
+
+# To run timing tests
+ADD_EXECUTABLE( vil2_test_access_timings vil2_test_access_timings.cxx)
+TARGET_LINK_LIBRARIES( vil2_test_access_timings vil2_algo vil2 vpl vul mbl testlib vcl )
 
