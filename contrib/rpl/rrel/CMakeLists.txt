@@ -3,7 +3,6 @@
 SET(rrel_sources
  rrel_mlesac_obj.cxx            rrel_mlesac_obj.h
  rrel_ransac_obj.cxx            rrel_ransac_obj.h
- rrel_ransac_obj_smooth_cost.cxx rrel_ransac_obj_smooth_cost.h
  rrel_lms_obj.cxx               rrel_lms_obj.h
  rrel_lts_obj.cxx               rrel_lts_obj.h
  rrel_muset_obj.cxx             rrel_muset_obj.h
