@@ -16,6 +16,7 @@ ADD_EXECUTABLE( rrel_test_all
 
   # The tests
   test_homography2d_est.cxx
+  test_shift2d_est.cxx
   test_irls.cxx
   test_linear_reg.cxx
   test_lms_lts.cxx
@@ -29,6 +30,7 @@ ADD_EXECUTABLE( rrel_test_all
 TARGET_LINK_LIBRARIES( rrel_test_all rrel testlib )
 
 ADD_TEST( rrel_test_homography2d_est         rrel_test_all test_homography2d_est )
+ADD_TEST( rrel_test_shift2d_est              rrel_test_all test_shift2d_est )
 ADD_TEST( rrel_test_irls                     rrel_test_all test_irls )
 ADD_TEST( rrel_test_linear_reg               rrel_test_all test_linear_reg )
 ADD_TEST( rrel_test_lms_lts                  rrel_test_all test_lms_lts )

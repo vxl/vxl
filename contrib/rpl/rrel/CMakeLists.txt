@@ -19,6 +19,7 @@ SET(rrel_sources
  rrel_linear_regression.cxx     rrel_linear_regression.h
  rrel_orthogonal_regression.cxx rrel_orthogonal_regression.h
  rrel_homography2d_est.cxx      rrel_homography2d_est.h
+ rrel_shift2d_est.cxx           rrel_shift2d_est.h
 
  rrel_irls.cxx                  rrel_irls.h
  rrel_ran_sam_search.cxx        rrel_ran_sam_search.h
