@@ -232,23 +232,23 @@ rrel_homography2d_est :: normalize( const vcl_vector< vnl_vector<double> >& pts,
   unsigned int i;
 
   for ( i=0; i<pts.size(); ++i ) {
-    center.x() += wgts[i] * pts[i][0] / pts[i][2];
-    center.y() += wgts[i] * pts[i][1] / pts[i][2];
+    center[0] += wgts[i] * pts[i][0] / pts[i][2];
+    center[1] += wgts[i] * pts[i][1] / pts[i][2];
     sum_wgt += wgts[i];
   }
   center /= sum_wgt;
 
   double avg_distance = 0;
   for ( i=0; i<pts.size(); ++i ) {
-    avg_distance += wgts[i] * vcl_sqrt( vnl_math_sqr( pts[i][0] / pts[i][2] - center.x() ) +
-                                        vnl_math_sqr( pts[i][1] / pts[i][2] - center.y() ) );
+    avg_distance += wgts[i] * vcl_sqrt( vnl_math_sqr( pts[i][0] / pts[i][2] - center[0] ) +
+                                        vnl_math_sqr( pts[i][1] / pts[i][2] - center[1] ) );
   }
   avg_distance /= sum_wgt;
 
   norm_matrix( 0, 0 ) = 1.0 / avg_distance;
-  norm_matrix( 0, 2 ) = -center.x() / avg_distance;
+  norm_matrix( 0, 2 ) = -center[0] / avg_distance;
   norm_matrix( 1, 1 ) = 1.0 / avg_distance;
-  norm_matrix( 1, 2 ) = -center.y() / avg_distance;
+  norm_matrix( 1, 2 ) = -center[1] / avg_distance;
   norm_matrix( 2, 2 ) = 1.0;
 
   for ( i=0; i<pts.size(); ++i )
