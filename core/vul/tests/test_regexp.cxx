@@ -85,7 +85,8 @@ void test_regexp()
 
   vcl_cout << "\n\tTESTS FOR compile AND find WITH VARIOUS REGULAR EXPRESSIONS.\n";
 
-//: A regular expression allows a programmer to specify complex patterns that
+//:
+// A regular expression allows a programmer to specify complex patterns that
 // can be searched for and matched against the character string of a std::string
 // object.  In its simplest case, a regular expression is a sequence of
 // characters with which you can search for exact character matches. That is
