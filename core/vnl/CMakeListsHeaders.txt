@@ -66,6 +66,7 @@ SOURCE_FILES( vnl_sources
   vnl_operators.h
   vnl_quaternion.h
   vnl_rational.h
+  vnl_random.h
   vnl_real.h
   vnl_real_npolynomial.h
   vnl_real_polynomial.h
