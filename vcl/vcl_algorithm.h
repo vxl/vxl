@@ -8,13 +8,14 @@
 # undef vcl_algorithm_h_STD
 
 // -------------------- gcc with old library
-#elif (defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)) || defined(VCL_SGI_CC_720)
+#elif (defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3))
 # include <algo.h>
 # define vcl_algorithm_h_STD ::
 
 // -------------------- iso
 #else
 # include "iso/vcl_algorithm.h"
+# define vcl_algorithm_h_STD std::
 #endif
 
 
