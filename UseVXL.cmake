@@ -1,47 +1,46 @@
-# If this is not the vxl tree, load the cache entries from the vxl
-# tree
+# If this is not the vxl tree, load the cache entries from the vxl tree
 IF( NOT BUILDING_IN_VXL_TREE )
 
   IF( VXL_BINARY_PATH )
     IF (EXISTS ${VXL_BINARY_PATH}/CMakeCache.txt)
-    LOAD_CACHE( ${VXL_BINARY_PATH}
-      EXCLUDE
-        BUILD_CONVERSIONS
-        BUILD_TBL
-        BUILD_MUL
-        BUILD_OXL
-        BUILD_GEL
-        BUILD_RPL
-        BUILD_TESTING
-        BUILD_EXAMPLES
-        BUILD_SHARED_LIBS
-        LIBRARY_OUTPUT_PATH
-        EXECUTABLE_OUTPUT_PATH
-        CMAKE_INSTALL_PREFIX
-        WARN_DEPRECATED
-        WARN_DEPRECATED_ONCE
-        WARN_DEPRECATED_ABORT
-        MAKECOMMAND
-        SITE
-        BUILDNAME
-        DART_ROOT
-        DROP_SITE
-        DROP_LOCATION
-        DROP_SITE_USER
-        DROP_SITE_PASSWORD
-        TRIGGER_SITE
-        NIGHTLY_START_TIME
-        DROP_METHOD
-        CMAKE_C_FLAGS
-        CMAKE_CXX_FLAGS
-      INCLUDE_INTERNALS
-        vxl_SOURCE_DIR
-        vxl_BINARY_DIR
-    )
-    LINK_DIRECTORIES( ${VXL_LIBRARY_PATH} )
+      LOAD_CACHE( ${VXL_BINARY_PATH}
+        EXCLUDE
+          BUILD_CONVERSIONS
+          BUILD_TBL
+          BUILD_MUL
+          BUILD_OXL
+          BUILD_GEL
+          BUILD_RPL
+          BUILD_TESTING
+          BUILD_EXAMPLES
+          BUILD_SHARED_LIBS
+          LIBRARY_OUTPUT_PATH
+          EXECUTABLE_OUTPUT_PATH
+          CMAKE_INSTALL_PREFIX
+          WARN_DEPRECATED
+          WARN_DEPRECATED_ONCE
+          WARN_DEPRECATED_ABORT
+          MAKECOMMAND
+          SITE
+          BUILDNAME
+          DART_ROOT
+          DROP_SITE
+          DROP_LOCATION
+          DROP_SITE_USER
+          DROP_SITE_PASSWORD
+          TRIGGER_SITE
+          NIGHTLY_START_TIME
+          DROP_METHOD
+          CMAKE_C_FLAGS
+          CMAKE_CXX_FLAGS
+        INCLUDE_INTERNALS
+          vxl_SOURCE_DIR
+          vxl_BINARY_DIR
+      )
+      LINK_DIRECTORIES( ${VXL_LIBRARY_PATH} )
     ELSE (EXISTS ${VXL_BINARY_PATH}/CMakeCache.txt)
-     
-    MESSAGE( SEND_ERROR "*******\n UseVXL.cmake requires the variable VXL_BINARY_PATH\n to point to the vxl binary directory and to be right\n (i.e. the file ${VXL_BINARY_PATH}/CMakeCache.txt must exist)" )
+
+      MESSAGE( SEND_ERROR "*******\n UseVXL.cmake requires the variable VXL_BINARY_PATH\n to point to the vxl binary directory and to be right\n (i.e. the file ${VXL_BINARY_PATH}/CMakeCache.txt must exist)" )
     ENDIF (EXISTS ${VXL_BINARY_PATH}/CMakeCache.txt)
   ELSE( VXL_BINARY_PATH )
     MESSAGE( SEND_ERROR "UseVXL.cmake requires the variable VXL_BINARY_PATH to point to the vxl binary directory" )
@@ -64,6 +63,11 @@ SET( SOLARIS 0 )
 IF( CMAKE_SYSTEM MATCHES "SunOS.*" )
   SET( SOLARIS 1 )
 ENDIF( CMAKE_SYSTEM MATCHES "SunOS.*" )
+
+# if this is a dashboard build
+IF( DART_ROOT )
+  ADD_DEFINITIONS( -DDART_BUILD )
+ENDIF( DART_ROOT)
 
 # Some people may want to build the test cases even though they aren't
 # using Dart.
@@ -101,8 +105,6 @@ IF(WARN_DEPRECATED)
   ENDIF(WARN_DEPRECATED_ABORT)
 ENDIF(WARN_DEPRECATED)
 
-
-
 # For out of place builds, the configure generated headers are in the
 # binary directory
 INCLUDE_DIRECTORIES(${vxl_BINARY_DIR}/vcl
@@ -112,6 +114,6 @@ INCLUDE_DIRECTORIES(${vxl_SOURCE_DIR}/vcl)
 
 IF(WIN32)
   IF(NOT CYGWIN)
-    INCLUDE_DIRECTORIES(${vxl_SOURCE_DIR}/vcl/config.win32) 
+    INCLUDE_DIRECTORIES(${vxl_SOURCE_DIR}/vcl/config.win32)
   ENDIF(NOT CYGWIN)
 ENDIF(WIN32)
