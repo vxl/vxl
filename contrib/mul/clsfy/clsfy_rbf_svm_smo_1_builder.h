@@ -25,15 +25,6 @@ class clsfy_rbf_svm_smo_1_builder : public clsfy_builder_base
   //: Width of Gaussian function
   double rbf_width_;
 
-  //: Reorder the vectors in a classifier to make it more efficient
-  // The members of outputs() should be 0 or 1.
-  // The default value of ratioNumberPos2NegSamples will be 
-  // the ratio of number of positive samples to negative samples found in the training set
-  void find_efficient_sv_ordering(
-    clsfy_classifier_base& classifier,
-    mbl_data_wrapper<vnl_vector<double> >& inputs,
-    const vcl_vector<unsigned> &outputs) const;
-
 public:
 
   //: Dflt ctor
