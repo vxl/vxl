@@ -436,13 +436,7 @@ vcl_ostream& operator<< (vcl_ostream& os, vnl_matrix<T> const& m) {
   for (unsigned int i = 0; i < m.rows(); ++i) {        // For each row
     for (unsigned int j = 0; j < m.columns(); ++j) {   // For each column
       // Output data element
-      if (vnl_matrix<T>::print_format_set()) {
-        char buf[1024];
-        vcl_sprintf(buf, vnl_matrix<T>::get_print_format(), m(i, j));
-        os << buf << " ";
-      }
-      else
-        os << m(i, j) << " ";
+      os << m(i, j) << " ";
     }
     os << vcl_endl;
   }
@@ -1209,34 +1203,6 @@ vnl_matrix<T> vnl_matrix<T>::read(vcl_istream& s)
 }
 
 template <class T>
-void vnl_matrix<T>::set_print_format(char const* x)
-{
-  delete [] print_format;
-  print_format = vcl_strcpy(new char[strlen(x)+1], x);
-}
-
-template <class T>
-void vnl_matrix<T>::reset_print_format()
-{
-  delete [] print_format;
-  print_format = 0;
-}
-
-template <class T>
-const char* vnl_matrix<T>::get_print_format()
-{
-  if (print_format == 0)
-    set_print_format("%g ");
-  return print_format;
-}
-
-template <class T>
-bool vnl_matrix<T>::print_format_set()
-{
-  return (print_format != 0);
-}
-
-template <class T>
 void vnl_matrix<T>::swap(vnl_matrix<T> &that)
 {
   vcl_swap(this->num_rows, that.num_rows);
@@ -1460,18 +1426,10 @@ void vnl_matrix<T>::inplace_transpose()
   }
 }
 
-
-#if VCL_CAN_DO_STATIC_TEMPLATE_MEMBER
-template <class T>
-char * vnl_matrix<T>::print_format = 0;
-#endif
-
 //--------------------------------------------------------------------------------
 
 #define VNL_MATRIX_INSTANTIATE(T) \
-VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(char * vnl_matrix<T >::print_format = 0); \
 template class vnl_matrix<T >; \
-VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(vnl_matrix<T >::print_format); \
 template vnl_matrix<T > operator-(T const &, vnl_matrix<T > const &); \
 VCL_INSTANTIATE_INLINE(vnl_matrix<T > operator+(T const &, vnl_matrix<T > const &)); \
 VCL_INSTANTIATE_INLINE(vnl_matrix<T > operator*(T const &, vnl_matrix<T > const &)); \

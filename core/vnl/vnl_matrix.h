@@ -437,18 +437,6 @@ public:
     // determining file size if the input matrix has zero size.
   bool read_ascii(vcl_istream& s);
 
-  //: Reset current print formatting
-  static void set_print_format(char const* c);
-
-  //: Remove current print format
-  static void reset_print_format();
-
-  //: Get current print formatting
-  static const char* get_print_format();
-
-  //: Return true if a format for printing defined
-  static bool print_format_set();
-
   //--------------------------------------------------------------------------------
 
   //: Access the contiguous block storing the elements in the matrix row-wise. O(1).
@@ -510,9 +498,6 @@ protected:
   unsigned num_rows;   // Number of rows
   unsigned num_cols;   // Number of columns
   T** data;            // Pointer to the vnl_matrix
-
-  //: Holds the format for printf-style output
-  static char* print_format;
 
   //: Delete data
   void destroy();
