@@ -10,7 +10,6 @@
 #include <vsl/vsl_binary_explicit_io.h>
 
 
-
 // IMS Hack: MSVC6.0 has the annoying habit of occasionally forgetting that inline implies static.
 #ifdef VCL_VC60
 #define VCL_VC60_STATIC static
@@ -19,9 +18,8 @@
 #endif
 
 
-
 inline void vsl_block_binary_read_confirm_specialisation(vsl_b_istream &is,
-  bool specialised)
+                                                         bool specialised)
 {
   if (!is) return;
   bool b;
@@ -30,22 +28,15 @@ inline void vsl_block_binary_read_confirm_specialisation(vsl_b_istream &is,
   {
     vcl_cerr << "I/O ERROR: vsl_block_binary_read()";
     if (specialised)
-    {
-      vcl_cerr << "\n           Data was saved using unspecialised slow form and"
-               << " is being loaded\n           using specialised fast form.\n"
-               << vcl_endl;
-    }
+      vcl_cerr << "\n           Data was saved using unspecialised slow form and "
+               << "is being loaded\n           using specialised fast form.\n\n"
     else
-    {
       vcl_cerr << "\n           Data was saved using specialised fast form and "
-               << "is being loaded\n           using unspecialised slow form.\n"
-               << vcl_endl;
-    }
+               << "is being loaded\n           using unspecialised slow form.\n\n"
 
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
   }
 }
-
 
 
 //: Write a block of values to a vsl_b_ostream, potetially very efficiently for fundamental types.
@@ -489,8 +480,6 @@ inline void vsl_block_binary_read(vsl_b_istream &is, vcl_size_t* begin, unsigned
 }
 
 #endif // 0
-
-
 
 
 //: Write a block of values to a vsl_b_ostream
