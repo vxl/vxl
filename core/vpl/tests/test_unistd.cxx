@@ -1,6 +1,7 @@
 #include <vcl_fstream.h>
 
 #include <vpl/vpl_unistd.h>
+#include <sys/types.h>
 
 #define Assert(x) do { if (x) vcl_cout << "test PASSED\n"; else vcl_cout << "test FAILED [" #x "]\n"; } while (0)
 
