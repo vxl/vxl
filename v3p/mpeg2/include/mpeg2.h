@@ -31,7 +31,7 @@ typedef struct mpeg2dec_s {
 
     /* this is where we keep the state of the decoder */
     struct picture_s * picture;
-    
+
     uint32_t shift;
     int is_display_initialized;
     int is_sequence_needed;
@@ -59,18 +59,15 @@ typedef struct mpeg2dec_s {
 } mpeg2dec_t ;
 
 
-
-
-
 /* initialize mpegdec with a opaque user pointer */
 void mpeg2_init (mpeg2dec_t * mpeg2dec, uint32_t mm_accel,
-		 vo_instance_t * output);
+                 vo_instance_t * output);
 
 /* destroy everything which was allocated, shutdown the output */
 void mpeg2_close (mpeg2dec_t * mpeg2dec);
 
 int mpeg2_decode_data (mpeg2dec_t * mpeg2dec,
-		       uint8_t * data_start, uint8_t * data_end);
+                       uint8_t * data_start, uint8_t * data_end);
 
 void mpeg2_pts (mpeg2dec_t * mpeg2dec, uint32_t pts);
 

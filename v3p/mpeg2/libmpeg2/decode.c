@@ -24,7 +24,7 @@
 #include "config.h"
 
 #include <stdio.h>
-#include <string.h>	/* memcpy/memset, try to remove */
+#include <string.h>     /* memcpy/memset, try to remove */
 #include <stdlib.h>
 #include <inttypes.h>
 
@@ -43,15 +43,15 @@ void * memalign (size_t align, size_t size);
 #define BUFFER_SIZE (1194 * 1024)
 
 void mpeg2_init (mpeg2dec_t * mpeg2dec, uint32_t mm_accel,
-		 vo_instance_t * output)
+                 vo_instance_t * output)
 {
     static int do_init = 1;
 
     if (do_init) {
-	do_init = 0;
-	mpeg2_cpu_state_init (mm_accel);
-	mpeg2_idct_init (mm_accel);
-	mpeg2_mc_init (mm_accel);
+        do_init = 0;
+        mpeg2_cpu_state_init (mm_accel);
+        mpeg2_idct_init (mm_accel);
+        mpeg2_mc_init (mm_accel);
     }
 
     mpeg2dec->chunk_buffer = memalign (16, BUFFER_SIZE + 4);
@@ -73,14 +73,14 @@ void mpeg2_init (mpeg2dec_t * mpeg2dec, uint32_t mm_accel,
 }
 
 static inline int parse_chunk (mpeg2dec_t * mpeg2dec, int code,
-			       uint8_t * buffer)
+                               uint8_t * buffer)
 {
     picture_t * picture;
     int is_frame_done;
 
     /* wait for sequence_header_code */
     if (mpeg2dec->is_sequence_needed && (code != 0xb3))
-	return 0;
+        return 0;
 
     mpeg2_stats (code, buffer);
 
@@ -88,109 +88,109 @@ static inline int parse_chunk (mpeg2dec_t * mpeg2dec, int code,
     is_frame_done = 0;
 
     if (mpeg2dec->in_slice && ((!code) || (code >= 0xb0))) {
-	mpeg2dec->in_slice = 0;
+        mpeg2dec->in_slice = 0;
 
-	if (((picture->picture_structure == FRAME_PICTURE) ||
-	     (picture->second_field)) &&
-	    (!(mpeg2dec->drop_frame))) {
-	    is_frame_done = 1;
-	    vo_draw ((picture->picture_coding_type == B_TYPE) ?
-		     picture->current_frame :
-		     picture->forward_reference_frame);
-	}
+        if (((picture->picture_structure == FRAME_PICTURE) ||
+             (picture->second_field)) &&
+            (!(mpeg2dec->drop_frame))) {
+            is_frame_done = 1;
+            vo_draw ((picture->picture_coding_type == B_TYPE) ?
+                     picture->current_frame :
+                     picture->forward_reference_frame);
+        }
     }
 
     switch (code) {
-    case 0x00:	/* picture_start_code */
-	if (mpeg2_header_picture (picture, buffer)) {
-	    fprintf (stderr, "bad picture header\n");
-	    exit (1);
-	}
-	mpeg2dec->drop_frame =
-	    mpeg2dec->drop_flag && (picture->picture_coding_type == B_TYPE);
-	break;
+    case 0x00:  /* picture_start_code */
+        if (mpeg2_header_picture (picture, buffer)) {
+            fprintf (stderr, "bad picture header\n");
+            exit (1);
+        }
+        mpeg2dec->drop_frame =
+            mpeg2dec->drop_flag && (picture->picture_coding_type == B_TYPE);
+        break;
 
-    case 0xb3:	/* sequence_header_code */
-	if (mpeg2_header_sequence (picture, buffer)) {
-	    fprintf (stderr, "bad sequence header\n");
-	    exit (1);
-	}
-	if (mpeg2dec->is_sequence_needed) {
-	    mpeg2dec->is_sequence_needed = 0;
-	    if (vo_setup (mpeg2dec->output, picture->coded_picture_width,
-			  picture->coded_picture_height)) {
-		fprintf (stderr, "display setup failed\n");
-		exit (1);
-	    }
-	    picture->forward_reference_frame =
-		vo_get_frame (mpeg2dec->output,
-			      VO_PREDICTION_FLAG | VO_BOTH_FIELDS);
-	    picture->backward_reference_frame =
-		vo_get_frame (mpeg2dec->output,
-			      VO_PREDICTION_FLAG | VO_BOTH_FIELDS);
-	}
-	mpeg2dec->frame_rate_code = picture->frame_rate_code;	/* FIXME */
-	break;
+    case 0xb3:  /* sequence_header_code */
+        if (mpeg2_header_sequence (picture, buffer)) {
+            fprintf (stderr, "bad sequence header\n");
+            exit (1);
+        }
+        if (mpeg2dec->is_sequence_needed) {
+            mpeg2dec->is_sequence_needed = 0;
+            if (vo_setup (mpeg2dec->output, picture->coded_picture_width,
+                          picture->coded_picture_height)) {
+                fprintf (stderr, "display setup failed\n");
+                exit (1);
+            }
+            picture->forward_reference_frame =
+                vo_get_frame (mpeg2dec->output,
+                              VO_PREDICTION_FLAG | VO_BOTH_FIELDS);
+            picture->backward_reference_frame =
+                vo_get_frame (mpeg2dec->output,
+                              VO_PREDICTION_FLAG | VO_BOTH_FIELDS);
+        }
+        mpeg2dec->frame_rate_code = picture->frame_rate_code;   /* FIXME */
+        break;
 
-    case 0xb5:	/* extension_start_code */
-	if (mpeg2_header_extension (picture, buffer)) {
-	    fprintf (stderr, "bad extension\n");
-	    exit (1);
-	}
-	break;
+    case 0xb5:  /* extension_start_code */
+        if (mpeg2_header_extension (picture, buffer)) {
+            fprintf (stderr, "bad extension\n");
+            exit (1);
+        }
+        break;
 
     default:
-	if (code >= 0xb9)
-	    fprintf (stderr, "stream not demultiplexed ?\n");
+        if (code >= 0xb9)
+            fprintf (stderr, "stream not demultiplexed ?\n");
 
-	if (code >= 0xb0)
-	    break;
+        if (code >= 0xb0)
+            break;
 
-	if (!(mpeg2dec->in_slice)) {
-	    mpeg2dec->in_slice = 1;
+        if (!(mpeg2dec->in_slice)) {
+            mpeg2dec->in_slice = 1;
 
-	    if (picture->second_field)
-		vo_field (picture->current_frame, picture->picture_structure);
-	    else {
-		vo_frame_t * frame;
+            if (picture->second_field)
+                vo_field (picture->current_frame, picture->picture_structure);
+            else {
+                vo_frame_t * frame;
 
-		if (picture->picture_coding_type == B_TYPE)
-		    picture->current_frame =
-			vo_get_frame (mpeg2dec->output,
-				      picture->picture_structure);
-		else {
-		    picture->current_frame =
-			vo_get_frame (mpeg2dec->output,
-				      (VO_PREDICTION_FLAG |
-				       picture->picture_structure));
-		    picture->forward_reference_frame =
-			picture->backward_reference_frame;
-		    picture->backward_reference_frame = picture->current_frame;
-		}
+                if (picture->picture_coding_type == B_TYPE)
+                    picture->current_frame =
+                        vo_get_frame (mpeg2dec->output,
+                                      picture->picture_structure);
+                else {
+                    picture->current_frame =
+                        vo_get_frame (mpeg2dec->output,
+                                      (VO_PREDICTION_FLAG |
+                                       picture->picture_structure));
+                    picture->forward_reference_frame =
+                        picture->backward_reference_frame;
+                    picture->backward_reference_frame = picture->current_frame;
+                }
 
-		/* hopefully vektor will be happy */
-		frame = picture->current_frame;
-		frame->aspect_ratio = picture->aspect_ratio_information;
-		frame->frame_rate_code = picture->frame_rate_code;
-		frame->bitrate = picture->bitrate;
-		frame->progressive_sequence = picture->progressive_sequence;
-		frame->progressive_frame = picture->progressive_frame;
-		frame->top_field_first = picture->top_field_first;
-		frame->repeat_first_field = picture->repeat_first_field;
-		frame->picture_coding_type = picture->picture_coding_type;
-		frame->pts = mpeg2dec->pts;
-	    }
-	}
+                /* hopefully vektor will be happy */
+                frame = picture->current_frame;
+                frame->aspect_ratio = picture->aspect_ratio_information;
+                frame->frame_rate_code = picture->frame_rate_code;
+                frame->bitrate = picture->bitrate;
+                frame->progressive_sequence = picture->progressive_sequence;
+                frame->progressive_frame = picture->progressive_frame;
+                frame->top_field_first = picture->top_field_first;
+                frame->repeat_first_field = picture->repeat_first_field;
+                frame->picture_coding_type = picture->picture_coding_type;
+                frame->pts = mpeg2dec->pts;
+            }
+        }
 
-	if (!(mpeg2dec->drop_frame))
-	    mpeg2_slice (picture, code, buffer);
+        if (!(mpeg2dec->drop_frame))
+            mpeg2_slice (picture, code, buffer);
     }
 
     return is_frame_done;
 }
 
 static inline uint8_t * copy_chunk (mpeg2dec_t * mpeg2dec,
-				    uint8_t * current, uint8_t * end)
+                                    uint8_t * current, uint8_t * end)
 {
     uint32_t shift;
     uint8_t * chunk_ptr;
@@ -201,26 +201,26 @@ static inline uint8_t * copy_chunk (mpeg2dec_t * mpeg2dec,
     chunk_ptr = mpeg2dec->chunk_ptr;
     limit = current + (mpeg2dec->chunk_buffer + BUFFER_SIZE - chunk_ptr);
     if (limit > end)
-	limit = end;
+        limit = end;
 
     do {
-	byte = *current++;
-	if (shift == 0x00000100)
-	    goto startcode;
-	shift = (shift | byte) << 8;
-	*chunk_ptr++ = byte;
+        byte = *current++;
+        if (shift == 0x00000100)
+            goto startcode;
+        shift = (shift | byte) << 8;
+        *chunk_ptr++ = byte;
     } while (current < limit);
 
     mpeg2dec->bytes_since_pts += chunk_ptr - mpeg2dec->chunk_ptr;
     mpeg2dec->shift = shift;
     if (current == end) {
-	mpeg2dec->chunk_ptr = chunk_ptr;
-	return NULL;
+        mpeg2dec->chunk_ptr = chunk_ptr;
+        return NULL;
     } else {
-	/* we filled the chunk buffer without finding a start code */
-	mpeg2dec->chunk_ptr = mpeg2dec->chunk_buffer;
-	mpeg2dec->code = 0xb4;	/* sequence_error_code */
-	return current;
+        /* we filled the chunk buffer without finding a start code */
+        mpeg2dec->chunk_ptr = mpeg2dec->chunk_buffer;
+        mpeg2dec->code = 0xb4;  /* sequence_error_code */
+        return current;
     }
 
 startcode:
@@ -229,16 +229,16 @@ startcode:
     mpeg2dec->shift = 0xffffff00;
     mpeg2dec->code = byte;
     if (!byte) {
-	if (!mpeg2dec->num_pts)
-	    mpeg2dec->pts = 0;	/* none */
-	else if (mpeg2dec->bytes_since_pts >= 4) {
-	    mpeg2dec->num_pts = 0;
-	    mpeg2dec->pts = mpeg2dec->pts_current;
-	} else if (mpeg2dec->num_pts > 1) {
-	    mpeg2dec->num_pts = 1;
-	    mpeg2dec->pts = mpeg2dec->pts_previous;
-	} else
-	    mpeg2dec->pts = 0;	/* none */
+        if (!mpeg2dec->num_pts)
+            mpeg2dec->pts = 0;  /* none */
+        else if (mpeg2dec->bytes_since_pts >= 4) {
+            mpeg2dec->num_pts = 0;
+            mpeg2dec->pts = mpeg2dec->pts_current;
+        } else if (mpeg2dec->num_pts > 1) {
+            mpeg2dec->num_pts = 1;
+            mpeg2dec->pts = mpeg2dec->pts_previous;
+        } else
+            mpeg2dec->pts = 0;  /* none */
     }
     return current;
 }
@@ -251,11 +251,11 @@ int mpeg2_decode_data (mpeg2dec_t * mpeg2dec, uint8_t * current, uint8_t * end)
     ret = 0;
 
     while (current != end) {
-	code = mpeg2dec->code;
-	current = copy_chunk (mpeg2dec, current, end);
-	if (current == NULL)
-	    return ret;
-	ret += parse_chunk (mpeg2dec, code, mpeg2dec->chunk_buffer);
+        code = mpeg2dec->code;
+        current = copy_chunk (mpeg2dec, current, end);
+        if (current == NULL)
+            return ret;
+        ret += parse_chunk (mpeg2dec, code, mpeg2dec->chunk_buffer);
     }
     return ret;
 }
@@ -275,7 +275,7 @@ void mpeg2_close (mpeg2dec_t * mpeg2dec)
     mpeg2_decode_data (mpeg2dec, finalizer, finalizer+4);
 
     if (! (mpeg2dec->is_sequence_needed))
-	vo_draw (mpeg2dec->picture->backward_reference_frame);
+        vo_draw (mpeg2dec->picture->backward_reference_frame);
 
     free (mpeg2dec->chunk_buffer);
     free (mpeg2dec->picture);

@@ -86,9 +86,9 @@ static void inline idct_row (int16_t * block)
 
     /* shortcut */
     if (! (x1 | x2 | x3 | x4 | x5 | x6 | x7 )) {
-	block[0] = block[1] = block[2] = block[3] = block[4] =
-	    block[5] = block[6] = block[7] = block[0]<<3;
-	return;
+        block[0] = block[1] = block[2] = block[3] = block[4] =
+            block[5] = block[6] = block[7] = block[0]<<3;
+        return;
     }
 
     x0 = (block[0] << 11) + 128; /* for proper rounding in the fourth stage */
@@ -156,9 +156,9 @@ static void inline idct_col (int16_t *block)
 
 #if 0
     if (! (x1 | x2 | x3 | x4 | x5 | x6 | x7 )) {
-	block[8*0] = block[8*1] = block[8*2] = block[8*3] = block[8*4] =
-	    block[8*5] = block[8*6] = block[8*7] = (block[8*0] + 32) >> 6;
-	return;
+        block[8*0] = block[8*1] = block[8*2] = block[8*3] = block[8*4] =
+            block[8*5] = block[8*6] = block[8*7] = (block[8*0] + 32) >> 6;
+        return;
     }
 #endif
 
@@ -207,24 +207,24 @@ static void mpeg2_idct_copy_c (int16_t * block, uint8_t * dest, int stride)
     int i;
 
     for (i = 0; i < 8; i++)
-	idct_row (block + 8 * i);
+        idct_row (block + 8 * i);
 
     for (i = 0; i < 8; i++)
-	idct_col (block + i);
+        idct_col (block + i);
 
     i = 8;
     do {
-	dest[0] = CLIP (block[0]);
-	dest[1] = CLIP (block[1]);
-	dest[2] = CLIP (block[2]);
-	dest[3] = CLIP (block[3]);
-	dest[4] = CLIP (block[4]);
-	dest[5] = CLIP (block[5]);
-	dest[6] = CLIP (block[6]);
-	dest[7] = CLIP (block[7]);
+        dest[0] = CLIP (block[0]);
+        dest[1] = CLIP (block[1]);
+        dest[2] = CLIP (block[2]);
+        dest[3] = CLIP (block[3]);
+        dest[4] = CLIP (block[4]);
+        dest[5] = CLIP (block[5]);
+        dest[6] = CLIP (block[6]);
+        dest[7] = CLIP (block[7]);
 
-	dest += stride;
-	block += 8;
+        dest += stride;
+        block += 8;
     } while (--i);
 }
 
@@ -233,24 +233,24 @@ static void mpeg2_idct_add_c (int16_t * block, uint8_t * dest, int stride)
     int i;
 
     for (i = 0; i < 8; i++)
-	idct_row (block + 8 * i);
+        idct_row (block + 8 * i);
 
     for (i = 0; i < 8; i++)
-	idct_col (block + i);
+        idct_col (block + i);
 
     i = 8;
     do {
-	dest[0] = CLIP (block[0] + dest[0]);
-	dest[1] = CLIP (block[1] + dest[1]);
-	dest[2] = CLIP (block[2] + dest[2]);
-	dest[3] = CLIP (block[3] + dest[3]);
-	dest[4] = CLIP (block[4] + dest[4]);
-	dest[5] = CLIP (block[5] + dest[5]);
-	dest[6] = CLIP (block[6] + dest[6]);
-	dest[7] = CLIP (block[7] + dest[7]);
+        dest[0] = CLIP (block[0] + dest[0]);
+        dest[1] = CLIP (block[1] + dest[1]);
+        dest[2] = CLIP (block[2] + dest[2]);
+        dest[3] = CLIP (block[3] + dest[3]);
+        dest[4] = CLIP (block[4] + dest[4]);
+        dest[5] = CLIP (block[5] + dest[5]);
+        dest[6] = CLIP (block[6] + dest[6]);
+        dest[7] = CLIP (block[7] + dest[7]);
 
-	dest += stride;
-	block += 8;
+        dest += stride;
+        block += 8;
     } while (--i);
 }
 
@@ -258,48 +258,48 @@ void mpeg2_idct_init (uint32_t mm_accel)
 {
 #ifdef ARCH_X86
     if (mm_accel & MM_ACCEL_X86_MMXEXT) {
-	fprintf (stderr, "Using MMXEXT for IDCT transform\n");
-	mpeg2_idct_copy = mpeg2_idct_copy_mmxext;
-	mpeg2_idct_add = mpeg2_idct_add_mmxext;
-	mpeg2_idct_mmx_init ();
+        fprintf (stderr, "Using MMXEXT for IDCT transform\n");
+        mpeg2_idct_copy = mpeg2_idct_copy_mmxext;
+        mpeg2_idct_add = mpeg2_idct_add_mmxext;
+        mpeg2_idct_mmx_init ();
     } else if (mm_accel & MM_ACCEL_X86_MMX) {
-	fprintf (stderr, "Using MMX for IDCT transform\n");
-	mpeg2_idct_copy = mpeg2_idct_copy_mmx;
-	mpeg2_idct_add = mpeg2_idct_add_mmx;
-	mpeg2_idct_mmx_init ();
+        fprintf (stderr, "Using MMX for IDCT transform\n");
+        mpeg2_idct_copy = mpeg2_idct_copy_mmx;
+        mpeg2_idct_add = mpeg2_idct_add_mmx;
+        mpeg2_idct_mmx_init ();
     } else
 #endif
 #ifdef ARCH_PPC
     if (mm_accel & MM_ACCEL_PPC_ALTIVEC) {
-	fprintf (stderr, "Using altivec for IDCT transform\n");
-	mpeg2_idct_copy = mpeg2_idct_copy_altivec;
-	mpeg2_idct_add = mpeg2_idct_add_altivec;
-	mpeg2_idct_altivec_init ();
+        fprintf (stderr, "Using altivec for IDCT transform\n");
+        mpeg2_idct_copy = mpeg2_idct_copy_altivec;
+        mpeg2_idct_add = mpeg2_idct_add_altivec;
+        mpeg2_idct_altivec_init ();
     } else
 #endif
 #ifdef LIBMPEG2_MLIB
     if (mm_accel & MM_ACCEL_MLIB) {
-	char * env_var;
+        char * env_var;
 
-	env_var = getenv ("MLIB_NON_IEEE");
+        env_var = getenv ("MLIB_NON_IEEE");
 
-	if (env_var == NULL) {
-	    fprintf (stderr, "Using mlib for IDCT transform\n");
-	    mpeg2_idct_add = mpeg2_idct_add_mlib;
-	} else {
-	    fprintf (stderr, "Using non-IEEE mlib for IDCT transform\n");
-	    mpeg2_idct_add = mpeg2_idct_add_mlib_non_ieee;
-	}
-	mpeg2_idct_copy = mpeg2_idct_copy_mlib_non_ieee;
+        if (env_var == NULL) {
+            fprintf (stderr, "Using mlib for IDCT transform\n");
+            mpeg2_idct_add = mpeg2_idct_add_mlib;
+        } else {
+            fprintf (stderr, "Using non-IEEE mlib for IDCT transform\n");
+            mpeg2_idct_add = mpeg2_idct_add_mlib_non_ieee;
+        }
+        mpeg2_idct_copy = mpeg2_idct_copy_mlib_non_ieee;
     } else
 #endif
     {
-	int i;
+        int i;
 
-	fprintf (stderr, "No accelerated IDCT transform found\n");
-	mpeg2_idct_copy = mpeg2_idct_copy_c;
-	mpeg2_idct_add = mpeg2_idct_add_c;
-	for (i = -384; i < 640; i++)
-	    clip_lut[i+384] = (i < 0) ? 0 : ((i > 255) ? 255 : i);
+        fprintf (stderr, "No accelerated IDCT transform found\n");
+        mpeg2_idct_copy = mpeg2_idct_copy_c;
+        mpeg2_idct_add = mpeg2_idct_add_c;
+        for (i = -384; i < 640; i++)
+            clip_lut[i+384] = (i < 0) ? 0 : ((i > 255) ? 255 : i);
     }
 }

@@ -47,59 +47,59 @@ static void state_restore_mmx (cpu_state_t * state)
 static void state_save_altivec (cpu_state_t * state)
 {
     asm ("						\n"
-	"	li		%r9,  16		\n"
-	"	stvx		%v20, 0,    %r3		\n"
-	"	li		%r11, 32		\n"
-	"	stvx		%v21, %r9,  %r3		\n"
-	"	li		%r9,  48		\n"
-	"	stvx		%v22, %r11, %r3		\n"
-	"	li		%r11, 64		\n"
-	"	stvx		%v23, %r9,  %r3		\n"
-	"	li		%r9,  80		\n"
-	"	stvx		%v24, %r11, %r3		\n"
-	"	li		%r11, 96		\n"
-	"	stvx		%v25, %r9,  %r3		\n"
-	"	li		%r9,  112		\n"
-	"	stvx		%v26, %r11, %r3		\n"
-	"	li		%r11, 128		\n"
-	"	stvx		%v27, %r9,  %r3		\n"
-	"	li		%r9,  144		\n"
-	"	stvx		%v28, %r11, %r3		\n"
-	"	li		%r11, 160		\n"
-	"	stvx		%v29, %r9,  %r3		\n"
-	"	li		%r9,  176		\n"
-	"	stvx		%v30, %r11, %r3		\n"
-	"	stvx		%v31, %r9,  %r3		\n"
-	 );
+         "	li		%r9,  16		\n"
+         "	stvx		%v20, 0,    %r3		\n"
+         "	li		%r11, 32		\n"
+         "	stvx		%v21, %r9,  %r3		\n"
+         "	li		%r9,  48		\n"
+         "	stvx		%v22, %r11, %r3		\n"
+         "	li		%r11, 64		\n"
+         "	stvx		%v23, %r9,  %r3		\n"
+         "	li		%r9,  80		\n"
+         "	stvx		%v24, %r11, %r3		\n"
+         "	li		%r11, 96		\n"
+         "	stvx		%v25, %r9,  %r3		\n"
+         "	li		%r9,  112		\n"
+         "	stvx		%v26, %r11, %r3		\n"
+         "	li		%r11, 128		\n"
+         "	stvx		%v27, %r9,  %r3		\n"
+         "	li		%r9,  144		\n"
+         "	stvx		%v28, %r11, %r3		\n"
+         "	li		%r11, 160		\n"
+         "	stvx		%v29, %r9,  %r3		\n"
+         "	li		%r9,  176		\n"
+         "	stvx		%v30, %r11, %r3		\n"
+         "	stvx		%v31, %r9,  %r3		\n"
+        );
 }
 
 static void state_restore_altivec (cpu_state_t * state)
 {
     asm ("						\n"
-	"	li		%r9,  16		\n"
-	"	lvx		%v20, 0,    %r3		\n"
-	"	li		%r11, 32		\n"
-	"	lvx		%v21, %r9,  %r3		\n"
-	"	li		%r9,  48		\n"
-	"	lvx		%v22, %r11, %r3		\n"
-	"	li		%r11, 64		\n"
-	"	lvx		%v23, %r9,  %r3		\n"
-	"	li		%r9,  80		\n"
-	"	lvx		%v24, %r11, %r3		\n"
-	"	li		%r11, 96		\n"
-	"	lvx		%v25, %r9,  %r3		\n"
-	"	li		%r9,  112		\n"
-	"	lvx		%v26, %r11, %r3		\n"
-	"	li		%r11, 128		\n"
-	"	lvx		%v27, %r9,  %r3		\n"
-	"	li		%r9,  144		\n"
-	"	lvx		%v28, %r11, %r3		\n"
-	"	li		%r11, 160		\n"
-	"	lvx		%v29, %r9,  %r3		\n"
-	"	li		%r9,  176		\n"
-	"	lvx		%v30, %r11, %r3		\n"
-	"	lvx		%v31, %r9,  %r3		\n"
-	 );
+         "	li		%r9,  16		\n"
+         "	lvx		%v20, 0,    %r3		\n"
+         "	li		%r11, 32		\n"
+         "	lvx		%v21, %r9,  %r3		\n"
+         "	li		%r9,  48		\n"
+         "	lvx		%v22, %r11, %r3		\n"
+         "	li		%r11, 64		\n"
+         "	lvx		%v23, %r9,  %r3		\n"
+         "	li		%r9,  80		\n"
+         "	lvx		%v24, %r11, %r3		\n"
+         "	li		%r11, 96		\n"
+         "	lvx		%v25, %r9,  %r3		\n"
+         "	li		%r9,  112		\n"
+         "	lvx		%v26, %r11, %r3		\n"
+         "	li		%r11, 128		\n"
+         "	lvx		%v27, %r9,  %r3		\n"
+         "	li		%r9,  144		\n"
+         "	lvx		%v28, %r11, %r3		\n"
+         "	li		%r11, 160		\n"
+         "	lvx		%v29, %r9,  %r3		\n"
+         "	li		%r9,  176		\n"
+         "	lvx		%v30, %r11, %r3		\n"
+         "	lvx		%v31, %r9,  %r3		\n"
+        );
 }
 #endif
 
@@ -107,13 +107,13 @@ void mpeg2_cpu_state_init (uint32_t mm_accel)
 {
 #ifdef ARCH_X86
     if (mm_accel & MM_ACCEL_X86_MMX) {
-	mpeg2_cpu_state_restore = state_restore_mmx;
+        mpeg2_cpu_state_restore = state_restore_mmx;
     }
 #endif
 #ifdef ARCH_PPC
     if (mm_accel & MM_ACCEL_PPC_ALTIVEC) {
-	mpeg2_cpu_state_save = state_save_altivec;
-	mpeg2_cpu_state_restore = state_restore_altivec;
+        mpeg2_cpu_state_save = state_save_altivec;
+        mpeg2_cpu_state_restore = state_restore_altivec;
     }
 #endif
 }

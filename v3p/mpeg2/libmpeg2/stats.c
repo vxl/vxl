@@ -36,28 +36,28 @@ static int debug_level = -1;
 static int debug_is_on (void)
 {
     char * env_var;
-	
-    if (debug_level < 0) {
-	env_var = getenv ("MPEG2_DEBUG");
 
-	if (env_var)
-	    debug_level = 1;
-	else
-	    debug_level = 0;
+    if (debug_level < 0) {
+        env_var = getenv ("MPEG2_DEBUG");
+
+        if (env_var)
+            debug_level = 1;
+        else
+            debug_level = 0;
     }
-	
+
     return debug_level;
 }
 
 static void stats_picture (uint8_t * buffer)
 {
     static char * picture_coding_type_str [8] = {
-	"Invalid picture type",
-	"I-type",
-	"P-type",
-	"B-type",
-	"D (very bad)",
-	"Invalid","Invalid","Invalid"
+        "Invalid picture type",
+        "I-type",
+        "P-type",
+        "B-type",
+        "D (very bad)",
+        "Invalid","Invalid","Invalid"
     };
 
     int picture_coding_type;
@@ -67,11 +67,11 @@ static void stats_picture (uint8_t * buffer)
     temporal_reference = (buffer[0] << 2) | (buffer[1] >> 6);
     picture_coding_type = (buffer [1] >> 3) & 7;
     vbv_delay = ((buffer[1] << 13) | (buffer[2] << 5) |
-		 (buffer[3] >> 3)) & 0xffff;
+                 (buffer[3] >> 3)) & 0xffff;
 
     fprintf (stderr, " (picture) %s temporal_reference %d, vbv_delay %d\n",
-	     picture_coding_type_str [picture_coding_type],
-	     temporal_reference, vbv_delay);
+             picture_coding_type_str [picture_coding_type],
+             temporal_reference, vbv_delay);
 }
 
 static void stats_user_data (uint8_t * buffer)
@@ -82,23 +82,23 @@ static void stats_user_data (uint8_t * buffer)
 static void stats_sequence (uint8_t * buffer)
 {
     static char * aspect_ratio_information_str[8] = {
-	"Invalid Aspect Ratio",
-	"1:1",
-	"4:3",
-	"16:9",
-	"2.21:1",
-	"Invalid Aspect Ratio",
-	"Invalid Aspect Ratio",
-	"Invalid Aspect Ratio"
+        "Invalid Aspect Ratio",
+        "1:1",
+        "4:3",
+        "16:9",
+        "2.21:1",
+        "Invalid Aspect Ratio",
+        "Invalid Aspect Ratio",
+        "Invalid Aspect Ratio"
     };
     static char * frame_rate_str[16] = {
-	"Invalid frame_rate_code",
-	"23.976", "24", "25" , "29.97",
-	"30" , "50", "59.94", "60" ,
-	"Invalid frame_rate_code", "Invalid frame_rate_code",
-	"Invalid frame_rate_code", "Invalid frame_rate_code",
-	"Invalid frame_rate_code", "Invalid frame_rate_code",
-	"Invalid frame_rate_code"
+        "Invalid frame_rate_code",
+        "23.976", "24", "25" , "29.97",
+        "30" , "50", "59.94", "60" ,
+        "Invalid frame_rate_code", "Invalid frame_rate_code",
+        "Invalid frame_rate_code", "Invalid frame_rate_code",
+        "Invalid frame_rate_code", "Invalid frame_rate_code",
+        "Invalid frame_rate_code"
     };
 
     int horizontal_size;
@@ -121,18 +121,18 @@ static void stats_sequence (uint8_t * buffer)
     constrained_parameters_flag = buffer[7] & 4;
     load_intra_quantizer_matrix = buffer[7] & 2;
     if (load_intra_quantizer_matrix)
-	buffer += 64;
+        buffer += 64;
     load_non_intra_quantizer_matrix = buffer[7] & 1;
 
     fprintf (stderr, " (seq) %dx%d %s, %s fps, %5.0f kbps, VBV %d kB%s%s%s\n",
-	     horizontal_size, vertical_size,
-	     aspect_ratio_information_str [aspect_ratio_information],
-	     frame_rate_str [frame_rate_code],
-	     bit_rate_value * 400.0 / 1000.0,
-	     2 * vbv_buffer_size_value,
-	     constrained_parameters_flag ? " , CP":"",
-	     load_intra_quantizer_matrix ? " , Custom Intra Matrix":"",
-	     load_non_intra_quantizer_matrix ? " , Custom Non-Intra Matrix":"");
+             horizontal_size, vertical_size,
+             aspect_ratio_information_str [aspect_ratio_information],
+             frame_rate_str [frame_rate_code],
+             bit_rate_value * 400.0 / 1000.0,
+             2 * vbv_buffer_size_value,
+             constrained_parameters_flag ? " , CP":"",
+             load_intra_quantizer_matrix ? " , Custom Intra Matrix":"",
+             load_non_intra_quantizer_matrix ? " , Custom Non-Intra Matrix":"");
 }
 
 static void stats_sequence_error (uint8_t * buffer)
@@ -148,8 +148,8 @@ static void stats_sequence_end (uint8_t * buffer)
 static void stats_group (uint8_t * buffer)
 {
     fprintf (stderr, " (group)%s%s\n",
-	     (buffer[4] & 0x40) ? " closed_gop" : "",
-	     (buffer[4] & 0x20) ? " broken_link" : "");
+             (buffer[4] & 0x40) ? " closed_gop" : "",
+             (buffer[4] & 0x20) ? " broken_link" : "");
 }
 
 static void stats_slice (int code, uint8_t * buffer)
@@ -160,10 +160,10 @@ static void stats_slice (int code, uint8_t * buffer)
 static void stats_sequence_extension (uint8_t * buffer)
 {
     static char * chroma_format_str[4] = {
-	"Invalid Chroma Format",
-	"4:2:0 Chroma",
-	"4:2:2 Chroma",
-	"4:4:4 Chroma"
+        "Invalid Chroma Format",
+        "4:2:0 Chroma",
+        "4:2:2 Chroma",
+        "4:4:4 Chroma"
     };
 
     int progressive_sequence;
@@ -173,7 +173,7 @@ static void stats_sequence_extension (uint8_t * buffer)
     chroma_format = (buffer[1] >> 1) & 3;
 
     fprintf (stderr, " (seq_ext) progressive_sequence %d, %s\n",
-	     progressive_sequence, chroma_format_str [chroma_format]);
+             progressive_sequence, chroma_format_str [chroma_format]);
 }
 
 static void stats_sequence_display_extension (uint8_t * buffer)
@@ -205,10 +205,10 @@ static void stats_picture_display_extension (uint8_t * buffer)
 static void stats_picture_coding_extension (uint8_t * buffer)
 {
     static char * picture_structure_str[4] = {
-	"Invalid Picture Structure",
-	"Top field",
-	"Bottom field",
-	"Frame Picture"
+        "Invalid Picture Structure",
+        "Top field",
+        "Bottom field",
+        "Frame Picture"
     };
 
     int f_code[2][2];
@@ -239,79 +239,79 @@ static void stats_picture_coding_extension (uint8_t * buffer)
     progressive_frame = buffer[4] >> 7;
 
     fprintf (stderr,
-	     " (pic_ext) %s\n", picture_structure_str [picture_structure]);
+             " (pic_ext) %s\n", picture_structure_str [picture_structure]);
     fprintf (stderr,
-	     " (pic_ext) forward horizontal f_code % d, forward vertical f_code % d\n",
-	     f_code[0][0], f_code[0][1]);
+             " (pic_ext) forward horizontal f_code % d, forward vertical f_code % d\n",
+             f_code[0][0], f_code[0][1]);
     fprintf (stderr,
-	     " (pic_ext) backward horizontal f_code % d, backward vertical f_code % d\n", 
-	     f_code[1][0], f_code[1][1]);
+             " (pic_ext) backward horizontal f_code % d, backward vertical f_code % d\n", 
+             f_code[1][0], f_code[1][1]);
     fprintf (stderr,
-	     " (pic_ext) intra_dc_precision %d, top_field_first %d, frame_pred_frame_dct %d\n",
-	     intra_dc_precision, top_field_first, frame_pred_frame_dct);
+             " (pic_ext) intra_dc_precision %d, top_field_first %d, frame_pred_frame_dct %d\n",
+             intra_dc_precision, top_field_first, frame_pred_frame_dct);
     fprintf (stderr,
-	     " (pic_ext) concealment_motion_vectors %d, q_scale_type %d, intra_vlc_format %d\n",
-	     concealment_motion_vectors, q_scale_type, intra_vlc_format);
+             " (pic_ext) concealment_motion_vectors %d, q_scale_type %d, intra_vlc_format %d\n",
+             concealment_motion_vectors, q_scale_type, intra_vlc_format);
     fprintf (stderr,
-	     " (pic_ext) alternate_scan %d, repeat_first_field %d, progressive_frame %d\n",
-	     alternate_scan, repeat_first_field, progressive_frame);
+             " (pic_ext) alternate_scan %d, repeat_first_field %d, progressive_frame %d\n",
+             alternate_scan, repeat_first_field, progressive_frame);
 }
 
 void mpeg2_stats (int code, uint8_t * buffer)
 {
     if (! (debug_is_on ()))
-	return;
+        return;
 
     switch (code) {
     case 0x00:
-	stats_picture (buffer);
-	break;
+        stats_picture (buffer);
+        break;
     case 0xb2:
-	stats_user_data (buffer);
-	break;
+        stats_user_data (buffer);
+        break;
     case 0xb3:
-	stats_sequence (buffer);
-	break;
+        stats_sequence (buffer);
+        break;
     case 0xb4:
-	stats_sequence_error (buffer);
-	break;
+        stats_sequence_error (buffer);
+        break;
     case 0xb5:
-	switch (buffer[0] >> 4) {
-	case 1:
-	    stats_sequence_extension (buffer);
-	    break;
-	case 2:
-	    stats_sequence_display_extension (buffer);
-	    break;
-	case 3:
-	    stats_quant_matrix_extension (buffer);
-	    break;
-	case 4:
-	    stats_copyright_extension (buffer);
-	    break;
-	case 5:
-	    stats_sequence_scalable_extension (buffer);
-	    break;
-	case 7:
-	    stats_picture_display_extension (buffer);
-	    break;
-	case 8:
-	    stats_picture_coding_extension (buffer);
-	    break;
-	default:
-	    fprintf (stderr, " (unknown extension %#x)\n", buffer[0] >> 4);
-	}
-	break;
+        switch (buffer[0] >> 4) {
+        case 1:
+            stats_sequence_extension (buffer);
+            break;
+        case 2:
+            stats_sequence_display_extension (buffer);
+            break;
+        case 3:
+            stats_quant_matrix_extension (buffer);
+            break;
+        case 4:
+            stats_copyright_extension (buffer);
+            break;
+        case 5:
+            stats_sequence_scalable_extension (buffer);
+            break;
+        case 7:
+            stats_picture_display_extension (buffer);
+            break;
+        case 8:
+            stats_picture_coding_extension (buffer);
+            break;
+        default:
+            fprintf (stderr, " (unknown extension %#x)\n", buffer[0] >> 4);
+        }
+        break;
     case 0xb7:
-	stats_sequence_end (buffer);
-	break;
+        stats_sequence_end (buffer);
+        break;
     case 0xb8:
-	stats_group (buffer);
-	break;
+        stats_group (buffer);
+        break;
     default:
-	if (code < 0xb0)
-	    stats_slice (code, buffer);
-	else
-	    fprintf (stderr, " (unknown start code %#02x)\n", code);
+        if (code < 0xb0)
+            stats_slice (code, buffer);
+        else
+            fprintf (stderr, " (unknown start code %#02x)\n", code);
     }
 }

@@ -35,31 +35,31 @@ void mpeg2_mc_init (uint32_t mm_accel)
 {
 #ifdef ARCH_X86
     if (mm_accel & MM_ACCEL_X86_MMXEXT) {
-	fprintf (stderr, "Using MMXEXT for motion compensation\n");
-	mpeg2_mc = mpeg2_mc_mmxext;
+        fprintf (stderr, "Using MMXEXT for motion compensation\n");
+        mpeg2_mc = mpeg2_mc_mmxext;
     } else if (mm_accel & MM_ACCEL_X86_3DNOW) {
-	fprintf (stderr, "Using 3DNOW for motion compensation\n");
-	mpeg2_mc = mpeg2_mc_3dnow;
+        fprintf (stderr, "Using 3DNOW for motion compensation\n");
+        mpeg2_mc = mpeg2_mc_3dnow;
     } else if (mm_accel & MM_ACCEL_X86_MMX) {
-	fprintf (stderr, "Using MMX for motion compensation\n");
-	mpeg2_mc = mpeg2_mc_mmx;
+        fprintf (stderr, "Using MMX for motion compensation\n");
+        mpeg2_mc = mpeg2_mc_mmx;
     } else
 #endif
 #ifdef ARCH_PPC
     if (mm_accel & MM_ACCEL_PPC_ALTIVEC) {
-	fprintf (stderr, "Using altivec for motion compensation\n");
-	mpeg2_mc = mpeg2_mc_altivec;
+        fprintf (stderr, "Using altivec for motion compensation\n");
+        mpeg2_mc = mpeg2_mc_altivec;
     } else
 #endif
 #ifdef LIBMPEG2_MLIB
     if (mm_accel & MM_ACCEL_MLIB) {
-	fprintf (stderr, "Using mlib for motion compensation\n");
-	mpeg2_mc = mpeg2_mc_mlib;
+        fprintf (stderr, "Using mlib for motion compensation\n");
+        mpeg2_mc = mpeg2_mc_mlib;
     } else
 #endif
     {
-	fprintf (stderr, "No accelerated motion compensation found\n");
-	mpeg2_mc = mpeg2_mc_c;
+        fprintf (stderr, "No accelerated motion compensation found\n");
+        mpeg2_mc = mpeg2_mc_c;
     }
 }
 
@@ -70,53 +70,53 @@ void mpeg2_mc_init (uint32_t mm_accel)
 #define predict_x(i) (avg2 (ref[i], ref[i+1]))
 #define predict_y(i) (avg2 (ref[i], (ref+stride)[i]))
 #define predict_xy(i) (avg4 (ref[i], ref[i+1], \
-			     (ref+stride)[i], (ref+stride)[i+1]))
+                             (ref+stride)[i], (ref+stride)[i+1]))
 
 #define put(predictor,i) dest[i] = predictor (i)
 #define avg(predictor,i) dest[i] = avg2 (predictor (i), dest[i])
 
 /* mc function template */
 
-#define MC_FUNC(op,xy)							\
-static void MC_##op##_##xy##_16_c (uint8_t * dest, uint8_t * ref,	\
-				 int stride, int height)		\
-{									\
-    do {								\
-	op (predict_##xy, 0);						\
-	op (predict_##xy, 1);						\
-	op (predict_##xy, 2);						\
-	op (predict_##xy, 3);						\
-	op (predict_##xy, 4);						\
-	op (predict_##xy, 5);						\
-	op (predict_##xy, 6);						\
-	op (predict_##xy, 7);						\
-	op (predict_##xy, 8);						\
-	op (predict_##xy, 9);						\
-	op (predict_##xy, 10);						\
-	op (predict_##xy, 11);						\
-	op (predict_##xy, 12);						\
-	op (predict_##xy, 13);						\
-	op (predict_##xy, 14);						\
-	op (predict_##xy, 15);						\
-	ref += stride;							\
-	dest += stride;							\
-    } while (--height);							\
-}									\
-static void MC_##op##_##xy##_8_c (uint8_t * dest, uint8_t * ref,	\
-				int stride, int height)			\
-{									\
-    do {								\
-	op (predict_##xy, 0);						\
-	op (predict_##xy, 1);						\
-	op (predict_##xy, 2);						\
-	op (predict_##xy, 3);						\
-	op (predict_##xy, 4);						\
-	op (predict_##xy, 5);						\
-	op (predict_##xy, 6);						\
-	op (predict_##xy, 7);						\
-	ref += stride;							\
-	dest += stride;							\
-    } while (--height);							\
+#define MC_FUNC(op,xy)                                                  \
+static void MC_##op##_##xy##_16_c (uint8_t * dest, uint8_t * ref,       \
+                                   int stride, int height)              \
+{                                                                       \
+    do {                                                                \
+        op (predict_##xy, 0);                                           \
+        op (predict_##xy, 1);                                           \
+        op (predict_##xy, 2);                                           \
+        op (predict_##xy, 3);                                           \
+        op (predict_##xy, 4);                                           \
+        op (predict_##xy, 5);                                           \
+        op (predict_##xy, 6);                                           \
+        op (predict_##xy, 7);                                           \
+        op (predict_##xy, 8);                                           \
+        op (predict_##xy, 9);                                           \
+        op (predict_##xy, 10);                                          \
+        op (predict_##xy, 11);                                          \
+        op (predict_##xy, 12);                                          \
+        op (predict_##xy, 13);                                          \
+        op (predict_##xy, 14);                                          \
+        op (predict_##xy, 15);                                          \
+        ref += stride;                                                  \
+        dest += stride;                                                 \
+    } while (--height);                                                 \
+}                                                                       \
+static void MC_##op##_##xy##_8_c (uint8_t * dest, uint8_t * ref,        \
+                                  int stride, int height)               \
+{                                                                       \
+    do {                                                                \
+        op (predict_##xy, 0);                                           \
+        op (predict_##xy, 1);                                           \
+        op (predict_##xy, 2);                                           \
+        op (predict_##xy, 3);                                           \
+        op (predict_##xy, 4);                                           \
+        op (predict_##xy, 5);                                           \
+        op (predict_##xy, 6);                                           \
+        op (predict_##xy, 7);                                           \
+        ref += stride;                                                  \
+        dest += stride;                                                 \
+    } while (--height);                                                 \
 }
 
 /* definitions of the actual mc functions */

@@ -39,7 +39,7 @@ void mpeg2_idct_add_mlib (int16_t * block, uint8_t * dest, int stride)
 }
 
 void mpeg2_idct_copy_mlib_non_ieee (int16_t * block, uint8_t * dest,
-				    int stride)
+                                    int stride)
 {
     mlib_VideoIDCT8x8_U8_S16 (dest, block, stride);
 }
