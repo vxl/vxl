@@ -72,7 +72,7 @@ bool operator<(vnl_matrix<T> const& lhs, vnl_matrix<T> const& rhs)
 template<class T, unsigned int n>
 bool operator<(vnl_vector_fixed<T,n> const& lhs, vnl_vector_fixed<T,n> const& rhs)
 {
-	return lhs.as_ref() < rhs.as_ref();
+  return lhs.as_ref() < rhs.as_ref();
 }
 
 
@@ -83,7 +83,7 @@ bool operator<(vnl_vector_fixed<T,n> const& lhs, vnl_vector_fixed<T,n> const& rh
 template<class T, unsigned int n, unsigned int m>
 bool operator<(vnl_matrix_fixed<T,n,m> const& lhs, vnl_matrix_fixed<T,n,m> const& rhs)
 {
-	return lhs.as_ref() < rhs.as_ref();
+  return lhs.as_ref() < rhs.as_ref();
 }
 
 #endif // vnl_operators_h_
