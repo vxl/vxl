@@ -8,18 +8,18 @@ int testRNPolyRoots() {
   // Intersection of two unit circles, centered in (0,0) and in (1,0):
 
   vnl_vector<double> f1(3);    f1(0) = 1;   f1(1) = 1;    f1(2) = -1;
-  vnl_matrix<int> p1(3,2,0.0); p1(0,0) = 2; p1(1,1) = 2;
+  vnl_matrix<int> p1(3,2, 0); p1(0,0) = 2; p1(1,1) = 2;
   vnl_real_npolynomial poly1(f1,p1); vcl_cout << poly1; // X^2 +Y^2 -1
   
   vnl_vector<double> f2(2);    f2(0) = 1;   f2(1) = -1;
-  vnl_matrix<int> p2(2,2,0.0); p2(0,0) = 1;
+  vnl_matrix<int> p2(2,2, 0); p2(0,0) = 1;
   vnl_real_npolynomial monom1(f2,p2); vcl_cout << monom1; // X-1
 
   vnl_real_npolynomial poly2 = monom1 * monom1; // (X-1)^2
   poly2 = poly2 - 1;
   
   vnl_vector<double> f3(1);    f3(0) = 1;
-  vnl_matrix<int> p3(1,2,0.0); p3(0,1) = 2;
+  vnl_matrix<int> p3(1,2, 0); p3(0,1) = 2;
   vnl_real_npolynomial monom3(f3,p3); // Y^2
 
   poly2 = poly2 + monom3; vcl_cout << poly2; // (X-1)^2 +Y^2 -1 = X^2 -2X +Y^2
