@@ -140,7 +140,7 @@ double HomgOperator2D::distance(const HomgLineSeg2D& ls, const HomgLineSeg2D& ll
   double dist2 = ls.get_point2().get_x()/ls.get_point2().get_w() * lll.get_x() +
     ls.get_point2().get_y()/ls.get_point2().get_w() * lll.get_y() +  lll.get_w();
 
-  //  cout << "dist 1 is " <<dist1 << " dist 2 is " <<dist2 << endl;
+  //  vcl_cout << "dist 1 is " <<dist1 << " dist 2 is " <<dist2 << vcl_endl;
 
   double dist = (vcl_fabs(dist1) + vcl_fabs(dist2))/2;
 

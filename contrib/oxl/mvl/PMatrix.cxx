@@ -200,7 +200,7 @@ bool PMatrix::read_ascii(vcl_istream& f)
   clear_svd();
 
   if (!ok(f)) {
-    //    cerr << "PMatrix::read_ascii: Failed to load P matrix" << endl;
+    //    vcl_cerr << "PMatrix::read_ascii: Failed to load P matrix" << vcl_endl;
     return false;
   }
 
@@ -511,7 +511,7 @@ bool
 PMatrix::looks_conditioned()
 {
   double cond = svd()->W(0) / svd()->W(2);
-  // cerr << "PMatrix::looks_conditioned: cond = " << cond << endl;
+  // vcl_cerr << "PMatrix::looks_conditioned: cond = " << cond << vcl_endl;
   return cond < 100;
 }
 

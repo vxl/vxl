@@ -56,9 +56,9 @@ void SequenceFileName::init(char const* s, int start_frame, int step, char const
       if (!vul_file::exists(dir.c_str())) {
         vcl_cerr << "SequenceFileName: ** Image directory [" << dir << "] does not exist" << vcl_endl;
         return;
-        // cerr << "SequenceFileName: ** Making directory " << dir << endl;
+        // vcl_cerr << "SequenceFileName: ** Making directory " << dir << vcl_endl;
         // if (!vul_file::make_directory(dir.c_str())) {
-        //   cerr << "SequenceFileName: ** Could not mkdir " << dir << endl;
+        //   vcl_cerr << "SequenceFileName: ** Could not mkdir " << dir << vcl_endl;
         //   abort();
         // }
       } else

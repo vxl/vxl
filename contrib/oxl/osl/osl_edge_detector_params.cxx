@@ -39,19 +39,19 @@ bool osl_edge_detector_params::SanityCheck()
 
   if (_sigma <= 0)  // Standard deviation of the smoothing kernel
   {
-    msg << "ERROR: Value of gaussian smoothing sigma is too low <=0" << ends;
+    msg << "ERROR: Value of gaussian smoothing sigma is too low <=0" << vcl_ends;
     valid = false;
   }
 
   if (_low <= 0)    // Noise weighting factor
   {
-    msg << "ERROR: Value of noise weight must be >0" << ends;
+    msg << "ERROR: Value of noise weight must be >0" << vcl_ends;
     valid = false;
   }
 
   if (_gauss_tail <= 0) // Cutoff for gaussian kernel radius
   {
-    msg << "ERROR: Value of gauss tail fraction is too low <= 0" << ends;
+    msg << "ERROR: Value of gauss tail fraction is too low <= 0" << vcl_ends;
     valid = false;
   }
   _error_msg = msg.str();

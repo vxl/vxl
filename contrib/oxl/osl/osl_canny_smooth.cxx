@@ -21,7 +21,7 @@
 //   for (unsigned i=0; i<h; ++i)
 //     for (unsigned j=0; j<w; ++j)
 //       debug[i][j] = (unsigned char) image_out[i][j];
-//   cerr << "save to " << file << endl;
+//   vcl_cerr << "save to " << file << vcl_endl;
 //   vil_save(debug, file, "png");
 // }
 

@@ -371,7 +371,7 @@ void xcv_multiview::display_corner_matches()
   //PairMatchSetCorner* corner_matches = mgr->get_corner_matches();
   //if (corner_matches == NULL)
   //{
-  //  cerr << "No corner matches exist between these two views." << endl;
+  //  vcl_cerr << "No corner matches exist between these two views." << vcl_endl;
   //  return;
   //}
 

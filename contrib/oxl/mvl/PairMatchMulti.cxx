@@ -150,7 +150,7 @@ bool PairMatchMulti::read_ascii(vcl_istream& s)
   }
   assert(count() == n);
 
-  // cerr << "PairMatchMulti load: read " << count() << " matches\n";
+  // vcl_cerr << "PairMatchMulti load: read " << count() << " matches\n";
 
   return true;
 }

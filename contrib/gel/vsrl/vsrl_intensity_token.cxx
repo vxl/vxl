@@ -55,7 +55,7 @@ double vsrl_intensity_token::cost(vsrl_token *tok)
         // we should be able to perform an efficient lookup
         image_cost= (1.0 - _image_correlation->get_correlation(x1,y1,(x2-x1)));
         if(image_cost <0.0){
-          // cout << "Warning we have a strange correlation function" << endl;
+          // vcl_cout << "Warning we have a strange correlation function" << vcl_endl;
           image_cost=1.0;
         }
 

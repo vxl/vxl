@@ -246,7 +246,7 @@ void osl_canny_rothwell::Non_maximal_supression() {
         default:
           vcl_abort();
           //h1 = h2 = 0.0;  // Dummy values
-          //cerr << "*** ERROR ON SWITCH IN NMS ***\n";
+          //vcl_cerr << "*** ERROR ON SWITCH IN NMS ***\n";
         }
 
         // If the edge is greater than h1 and h2 we are at a peak,
@@ -278,7 +278,7 @@ void osl_canny_rothwell::Non_maximal_supression() {
           default:
             vcl_abort();
             //newx = newy = 0.0; // Dummy values
-            //cerr << "*** ERROR ON SWITCH IN NMS ***\n";
+            //vcl_cerr << "*** ERROR ON SWITCH IN NMS ***\n";
           }
 
           // Now store the edge data, re-use _dx[][] and _dy[][]
@@ -401,7 +401,7 @@ void osl_canny_rothwell::Final_hysteresis(vcl_list<osl_edge*> *edges) {
       // Check that we have at least two endpoints to
       // the list, otherwise go to next loop
       if ( xcoords.size() < 2 )
-        // cerr << "short list found in Final_follow\n";
+        // vcl_cerr << "short list found in Final_follow\n";
         continue;
 
       // count the number of non-dummy edgels

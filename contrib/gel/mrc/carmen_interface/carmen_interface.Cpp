@@ -100,7 +100,7 @@ bool carmen_interface::add_full_correspondence(int view_no, int point_id,
                                               default_3d_point_sdev, FIX);
   if(!stat)
     {
-      cerr << _carmen->geterror() << endl;
+      vcl_cerr << _carmen->geterror() << vcl_endl;
       return stat;
     }
 
@@ -108,14 +108,14 @@ bool carmen_interface::add_full_correspondence(int view_no, int point_id,
                                               default_3d_point_sdev, FIX);
   if(!stat)
     {
-      cerr << _carmen->geterror() << endl;
+      vcl_cerr << _carmen->geterror() << vcl_endl;
       return stat;
     }
   stat = (bool)_carmen->set_primary_parameter(point_id, "Z", z,
                                               default_3d_point_sdev, FIX);
   if(!stat)
     {
-      cerr << _carmen->geterror() << endl;
+      vcl_cerr << _carmen->geterror() << vcl_endl;
       return stat;
     }
   //define the corresponding 2d secondary
@@ -123,7 +123,7 @@ bool carmen_interface::add_full_correspondence(int view_no, int point_id,
                                        default_2d_point_sdev);
   if(!stat)
     {
-      cerr << _carmen->geterror() << endl;
+      vcl_cerr << _carmen->geterror() << vcl_endl;
       return stat;
     }
   return stat;

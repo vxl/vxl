@@ -97,7 +97,7 @@ bool vgui_shell_tableau::handle(vgui_event const &e) {
 
     for (unsigned i=0; i<children.size(); ++i) {
       //PM.restore();
-      //cerr << "DRAW";
+      //vcl_cerr << "DRAW";
       if (active[i] && children[i])
         if ( !children[i]->handle(e) )
           retv=false;
@@ -108,7 +108,7 @@ bool vgui_shell_tableau::handle(vgui_event const &e) {
   // "normal" event : pass it on till handled.
   for (unsigned i=0; i<children.size(); ++i) {
     //PM.restore();
-    //cerr << "EVEM";
+    //vcl_cerr << "EVEM";
     if (active[i] && children[i])
       if ( children[i]->handle(e) )
         return true;

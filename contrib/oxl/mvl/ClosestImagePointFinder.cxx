@@ -22,7 +22,7 @@ public:
 
 vcl_multimap_double_int::iterator vcl_multimap_double_int::insert(double key, int value)
 {
-  //cerr << " ins \t" << value << "\t" << key << endl;
+  //vcl_cerr << " ins \t" << value << "\t" << key << vcl_endl;
   return base::insert(vcl_pair<const double, int>(key, value));
 }
 
@@ -61,10 +61,10 @@ void ClosestImagePointFinder::get_all_within_search_region(vgl_box_2d<double> co
   vcl_multimap_double_int::iterator potential = y2i_->lower_bound(disparity_bounds.get_min_y());
   vcl_multimap_double_int::iterator end =       y2i_->upper_bound(disparity_bounds.get_max_y() + 1);
 
-  //cerr << "map:";
+  //vcl_cerr << "map:";
   //for (vcl_multimap_double_int::iterator p = y2i_->begin(); p != y2i_->end(); ++p)
-  //  cerr << " "<< (*p).second << "[" << (*p).first << "]";
-  //cerr << endl;
+  //  vcl_cerr << " "<< (*p).second << "[" << (*p).first << "]";
+  //vcl_cerr << vcl_endl;
 
   out->erase(out->begin(), out->end());
   for (; potential != end; ++potential) {

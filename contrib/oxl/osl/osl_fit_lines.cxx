@@ -129,7 +129,7 @@ void osl_fit_lines::simple_fit_to_list(vcl_list<osl_edge *> *myedges,
 void osl_fit_lines::incremental_fit_to_list(vcl_list<osl_edge *> *myedges,
                                             vcl_list<osl_edge *> *outedges)
 {
-  //  cout << "Fitting lines to Edge(s), threshold = " << _threshold << endl;
+  //  vcl_cout << "Fitting lines to Edge(s), threshold = " << _threshold << vcl_endl;
   int edge_no = 0;
   int vertex_no = 1000;
   // Take each Edge in turn and attempt to fit
@@ -258,7 +258,7 @@ void osl_fit_lines::incremental_fit_to_list(vcl_list<osl_edge *> *myedges,
 // between this and SquareIncrementalFit is very small.
 void osl_fit_lines::MeanIncrementalFit(vcl_list<osl_edgel_chain*> *_curves, osl_edge *edge)
 {
-  //cerr << "MeanIncrementalFit()" << endl;
+  //vcl_cerr << "MeanIncrementalFit()" << vcl_endl;
   float new_cost, new_est_cost;
   // Get the digital curve
   osl_edgel_chain *dc = edge;//->GetCurve()->CastToDigitalCurve();
@@ -425,7 +425,7 @@ void osl_fit_lines::MeanIncrementalFit(vcl_list<osl_edgel_chain*> *_curves, osl_
 // fitting.
 void osl_fit_lines::SquareIncrementalFit(vcl_list<osl_edgel_chain*> *_curves, osl_edge *edge)
 {
-  //cerr << "SquareIncrementalFit()" << endl;
+  //vcl_cerr << "SquareIncrementalFit()" << vcl_endl;
 
   // Get the digital curve
   osl_edgel_chain *dc = edge;//->GetCurve()->CastToDigitalCurve();

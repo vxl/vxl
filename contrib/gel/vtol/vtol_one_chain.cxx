@@ -965,6 +965,6 @@ void vtol_one_chain::deep_remove( vcl_vector< vtol_topology_object * > & removed
   _directions.clear();
   removed.push_back( this );
 
-  // cout << "            Exiting vtol_one_chain::DeepDeleteInferiors\n";
+  // vcl_cout << "            Exiting vtol_one_chain::DeepDeleteInferiors\n";
 }
 #endif

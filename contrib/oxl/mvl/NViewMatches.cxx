@@ -228,7 +228,7 @@ int NViewMatches::incorporate(const NViewMatch& newtrack)
   }
 
 //  if (nmatches > 1) {
-//    cerr << "NViewMatches::incorporate(): " << nmatches << " consistent matches merged" << endl;
+//    vcl_cerr << "NViewMatches::incorporate(): " << nmatches << " consistent matches merged" << vcl_endl;
 //  }
 
   return merged - begin();

@@ -176,7 +176,7 @@ vipl_section_descriptor< DataType >* vipl_section_descriptor< DataType > ::virtu
   rtn->put_i_curr_sec_start(i_curr_sec_start());
   rtn->put_i_curr_sec_end(i_curr_sec_end());
   rtn->put_i_curr_sec_size(i_curr_sec_size());
-  // cerr << "Warning: called possibly method virtual_copy\n";
+  // vcl_cerr << "Warning: called possibly method virtual_copy\n";
   return rtn;
 }
 

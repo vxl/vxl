@@ -37,11 +37,11 @@ int vgui_statusbuf::overflow(int ch)
 //int vgui_statusbuf::xsputn(char* text, int n)
 // streamsize vgui_statusbuf::xsputn(char* text, streamsize n)
 // { 
-//   cerr << "xsputn " << text << " " << n << endl;
+//   vcl_cerr << "xsputn " << text << " " << n << vcl_endl;
 //   return sync() == EOF ? 0 : status->write(text, n);
 // }
 
 // streamsize vgui_statusbuf::xsputn(const char* text, streamsize n) {
-//   cerr << "xsputn const " << text << " " << n << endl;
+//   vcl_cerr << "xsputn const " << text << " " << n << vcl_endl;
 //   return sync() == EOF ? 0 : status->write(text, n);
 // }

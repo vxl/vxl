@@ -390,7 +390,7 @@ vgui_soview* vgui_displaybase::contains_hit(vcl_vector<unsigned> names)
   {
     // get id of soview
     unsigned soview_id = (*i)->get_id();
-    //cerr << "vgui_displaybase::contains_hit soview_id" << soview_id << endl;
+    //vcl_cerr << "vgui_displaybase::contains_hit soview_id" << soview_id << vcl_endl;
 
     vcl_vector<unsigned>::iterator ni = vcl_find(names.begin(), names.end(), soview_id);
     if (ni != names.end())

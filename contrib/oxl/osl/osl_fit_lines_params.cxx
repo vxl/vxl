@@ -24,17 +24,17 @@ bool osl_fit_lines_params::SanityCheck() {
   bool valid = true;
 
   if (_min_fit_length < 3) {
-    msg << "ERROR: Min fit length too short < 3" << ends;
+    msg << "ERROR: Min fit length too short < 3" << vcl_ends;
     valid = false;
   }
 
   if (_threshold > 1.0) {
-    msg << "ERROR: Fit error is quit large" << ends;
+    msg << "ERROR: Fit error is quit large" << vcl_ends;
     valid = false;
   }
 
   if (_theta > 15) {
-    msg << "ERROR: Value of angle tolerance is too large >15" << ends;
+    msg << "ERROR: Value of angle tolerance is too large >15" << vcl_ends;
     valid = false;
   }
   SetErrorMsg(msg.str());

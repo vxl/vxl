@@ -365,7 +365,7 @@ operator>> (vcl_istream &is, vcl_basic_string <charT, traits> &s)
           if (ch == EOF)
             {
 #ifdef __GNUC__
-              is.setstate (ios::eofbit);
+              is.setstate (vcl_ios::eofbit);
 #endif
               break;
             }
@@ -388,7 +388,7 @@ operator>> (vcl_istream &is, vcl_basic_string <charT, traits> &s)
 #endif
 #ifdef __GNUC__
   if (s.length () == 0)
-    is.setstate (ios::failbit);
+    is.setstate (vcl_ios::failbit);
 #endif
 
   return is;
@@ -410,8 +410,8 @@ getline (vcl_istream &is, vcl_basic_string <charT, traits>& s, charT delim)
           if (ch == EOF)
             {
               is.setstate (count == 0
-                           ? (ios::failbit|ios::eofbit)
-                           : ios::eofbit);
+                           ? (vcl_ios::failbit|vcl_ios::eofbit)
+                           : vcl_ios::eofbit);
               break;
             }
 
@@ -424,7 +424,7 @@ getline (vcl_istream &is, vcl_basic_string <charT, traits>& s, charT delim)
 
           if (s.length () == s.npos - 1)
             {
-              is.setstate (ios::failbit);
+              is.setstate (vcl_ios::failbit);
               break;
             }
         }

@@ -117,7 +117,7 @@ private:
 // index i1.  Example usage: to print all matches for "target"
 // <verb>
 //   for(PairMatchMultiIterator p = mm.get_match_12(target); !p.done(); p.next())
-//     cout << p.get_i1() << " " << p.get_i2() << endl;
+//     vcl_cout << p.get_i1() << " " << p.get_i2() << vcl_endl;
 // </verb>
 // Complexity is O(log n).
 inline PairMatchMultiIterator PairMatchMulti::get_match_12(int i1)

@@ -597,7 +597,7 @@ void osl_canny_ox::FollowerOX(vcl_list<osl_edge*> *edges) {
 
       int count=xcoords.size();
       if (count < _min_length_OX || count < 1)
-        // cerr << "short list found in Final_followOX\n";
+        // vcl_cerr << "short list found in Final_followOX\n";
         continue;
 
       // Create an osl_edgel_chain and add to the list
@@ -634,7 +634,7 @@ void osl_canny_ox::FollowerOX(vcl_list<osl_edge*> *edges) {
       if ( (dc->size()==2) &&
            (dc->GetX(0)==dc->GetX(1)) &&
            (dc->GetY(0)==dc->GetY(1)) ) {
-        //cerr << "trivial edgechain" << endl;
+        //vcl_cerr << "trivial edgechain" << vcl_endl;
         delete dc;
         dc = 0;
         continue;
@@ -688,13 +688,13 @@ void osl_canny_ox::FollowerOX(vcl_list<osl_edge*> *edges) {
         //dc->SetStart(dc->GetX(0), dc->GetY(0));
         //dc->SetEnd(dc->GetX(dc->size()-1),dc->GetY(dc->size()-1));
 
-        //cerr << __FILE__ ": push" << endl;
+        //vcl_cerr << __FILE__ ": push" << vcl_endl;
         edges->push_front(new osl_edge(*dc, v1, v2));
         delete dc;
       }
     }
   }
-  //cerr << "edges->size() : " << edges->size() << endl;
+  //vcl_cerr << "edges->size() : " << edges->size() << vcl_endl;
 }
 
 

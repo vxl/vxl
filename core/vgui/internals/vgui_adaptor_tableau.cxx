@@ -17,7 +17,7 @@ vgui_adaptor_tableau::vgui_adaptor_tableau(vgui_adaptor *a)
   : adaptor(a)
   , slot(this, 0)
 {
-  //cerr << "foo_slot = " << slot << endl;
+  //vcl_cerr << "foo_slot = " << slot << vcl_endl;
 }
 
 vgui_adaptor_tableau::~vgui_adaptor_tableau() 

@@ -255,9 +255,9 @@ bool vgui_viewer2D::mouse_down(int x, int y, vgui_button button, vgui_modifier m
       zoom_x = x;
       zoom_y = y;
       sweep_zooming = true;
-      //cerr << "copy_back_to_front..." << flush;
+      //vcl_cerr << "copy_back_to_front..." << flush;
       vgui_utils::copy_back_to_front();
-      //cerr << "done" << endl;
+      //vcl_cerr << "done" << vcl_endl;
 
       return true;
     }
@@ -297,13 +297,13 @@ bool vgui_viewer2D::mouse_drag(int x, int y,  vgui_button /*button*/, vgui_modif
     // and (c) remember where the mouse pointer was (in new_x, new_y).
     vgui_matrix_state gl_state;
 
-    //cerr << "begin_sw_overlay..." << flush;
+    //vcl_cerr << "begin_sw_overlay..." << flush;
     vgui_utils::begin_sw_overlay();
-    //cerr << "done" << endl;
+    //vcl_cerr << "done" << vcl_endl;
 
-    //cerr << "copy_back_to_front..." << flush;
+    //vcl_cerr << "copy_back_to_front..." << flush;
     vgui_utils::copy_back_to_front();
-    //cerr << "done" << endl;
+    //vcl_cerr << "done" << vcl_endl;
 
     // set projection*modelview matrices to render in **viewport** coordinates :
     GLdouble vp[4];

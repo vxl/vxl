@@ -35,8 +35,8 @@ void vgui_grid_tableau::init(unsigned initial_cols, unsigned initial_rows)
 
   grid_size_changeable = true;
 
-//if (debug) cerr << "init: intialising grid with "<< initial_cols << " columns and "
-//                << initial_rows << " rows" << endl;
+//if (debug) vcl_cerr << "init: intialising grid with "<< initial_cols << " columns and "
+//                << initial_rows << " rows" << vcl_endl;
   nb_cols = initial_cols;
   nb_rows = initial_rows;
   max_cols = initial_cols + INCREMENT_COLS;
@@ -166,7 +166,7 @@ void vgui_grid_tableau::add_next(vgui_tableau_sptr const& tab)
          grid_pos(i,j).handle = this->add(tab, get_x(i), get_y(j), get_w(), get_h());
          grid_pos(i,j).tab_pos = tabs.size() - 1;
          grid_pos(i,j).is_default = false;
-//       if (debug) cerr << "add_next: adding tableau to col = "<< i <<", row = "<< j << endl;
+//       if (debug) vcl_cerr << "add_next: adding tableau to col = "<< i <<", row = "<< j << vcl_endl;
          return;
        }
     }
@@ -190,7 +190,7 @@ void vgui_grid_tableau::add_next(vgui_tableau_sptr const& tab)
     grid_pos(col_pos, row_pos).tab_pos = tabs.size() - 1;
     grid_pos(col_pos, row_pos).is_default = false;
 //  if (debug)
-//    cerr << "add_next: adding tableau to col = "<< col_pos <<", row = "<< row_pos << endl;
+//    vcl_cerr << "add_next: adding tableau to col = "<< col_pos <<", row = "<< row_pos << vcl_endl;
   }
 }
 
@@ -206,7 +206,7 @@ void vgui_grid_tableau::add_at(vgui_tableau_sptr const& tab, unsigned col_pos, u
   if (col_pos < nb_cols && row_pos < nb_rows)
   {
 //  if (debug)
-//    cerr << "add_at: adding tableau at col = "<< col_pos <<", row = "<< row_pos << endl;
+//    vcl_cerr << "add_at: adding tableau at col = "<< col_pos <<", row = "<< row_pos << vcl_endl;
     tabs.push_back(tab);
     this->remove(grid_pos(col_pos, row_pos).handle);
     grid_pos(col_pos, row_pos).handle = this->add(tab, get_x(col_pos), get_y(row_pos), get_w(), get_h());
@@ -228,7 +228,7 @@ void vgui_grid_tableau::add_at(vgui_tableau_sptr const& tab, unsigned col_pos, u
 void vgui_grid_tableau::remove_at(unsigned col_pos, unsigned row_pos)
 {
 //if (debug)
-//  cerr << "remove_at: removing tableau at col = " << col_pos << ", row = " << row_pos << endl;
+//  vcl_cerr << "remove_at: removing tableau at col = " << col_pos << ", row = " << row_pos << vcl_endl;
 
   if (col_pos < nb_cols && row_pos < nb_rows)
   {
@@ -366,7 +366,7 @@ vcl_vector<int>* row_pos, vcl_vector<int>* times)
 //------------------------------------------------------------------------------
 // void vgui_grid_tableau::set_uses_plus_minus_events(bool c)
 // {
-// //if (debug && c == false) cerr << "set_uses_plus_minus_events: set to false" << endl;
+// //if (debug && c == false) vcl_cerr << "set_uses_plus_minus_events: set to false" << vcl_endl;
 //   uses_plus_minus_events = c;
 // }
 
@@ -379,7 +379,7 @@ vcl_vector<int>* row_pos, vcl_vector<int>* times)
 //------------------------------------------------------------------------------
 // void vgui_grid_tableau::set_uses_paging_events(bool u)
 // {
-// //if (debug && u == false) cerr << "set_uses_paging_events: set to false" << endl;
+// //if (debug && u == false) vcl_cerr << "set_uses_paging_events: set to false" << vcl_endl;
 //   uses_paging_events = u;
 // }
 
@@ -398,7 +398,7 @@ vcl_vector<int>* row_pos, vcl_vector<int>* times)
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::layout_grid()
 {
-//if (debug) cerr << "layout_grid: redrawing grid keeping current row and column positions" << endl;
+//if (debug) vcl_cerr << "layout_grid: redrawing grid keeping current row and column positions" << vcl_endl;
   for (unsigned i = 0; i < nb_cols; i++)
   {
     for (unsigned j = 0; j < nb_rows; j++)
@@ -414,7 +414,7 @@ void vgui_grid_tableau::layout_grid()
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::layout_grid2()
 {
-//if (debug) cerr << "layout_grid2: redrawing grid without gaps" << endl;
+//if (debug) vcl_cerr << "layout_grid2: redrawing grid without gaps" << vcl_endl;
   unsigned grid_col = 0;
   unsigned grid_row = 0;
   for (unsigned j = 0; j < nb_rows; j++)
@@ -443,7 +443,7 @@ void vgui_grid_tableau::layout_grid2()
 void vgui_grid_tableau::add_column()
 {
   nb_cols++;
-//if (debug) cerr << "add_column: number of columns is now " << nb_cols << endl;
+//if (debug) vcl_cerr << "add_column: number of columns is now " << nb_cols << vcl_endl;
 
   if (nb_cols > max_cols)
   {
@@ -468,7 +468,7 @@ void vgui_grid_tableau::remove_column()
       this->remove(grid_pos(nb_cols-1, j).handle);
     }
     nb_cols--;
-//  if (debug) cerr << "remove_column: number of columns is now " << nb_cols << endl;
+//  if (debug) vcl_cerr << "remove_column: number of columns is now " << nb_cols << vcl_endl;
     layout_grid();
   }
 }
@@ -479,7 +479,7 @@ void vgui_grid_tableau::remove_column()
 void vgui_grid_tableau::add_row()
 {
   nb_rows++;
-//if (debug) cerr << "add_row: number of rows is now " << nb_rows << endl;
+//if (debug) vcl_cerr << "add_row: number of rows is now " << nb_rows << vcl_endl;
   if (nb_rows > max_rows)
   {
     // Increase size of max_rows - FIXME
@@ -503,7 +503,7 @@ void vgui_grid_tableau::remove_row()
       this->remove(grid_pos(i, nb_rows-1).handle);
     }
     nb_rows--;
-//  if (debug) cerr << "remove_row: number of rows is now " << nb_rows << endl;
+//  if (debug) vcl_cerr << "remove_row: number of rows is now " << nb_rows << vcl_endl;
     layout_grid();
   }
 }

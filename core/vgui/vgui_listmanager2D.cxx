@@ -256,7 +256,7 @@ bool vgui_listmanager2D::motion(int x, int y) {
 
 
   if (closest_so) {
-    //cerr << "highlighting : " << closest_id << endl;
+    //vcl_cerr << "highlighting : " << closest_id << vcl_endl;
     vgui_soview* so = closest_so;
     vgui_style* style = so->get_style();
     glPointSize(style->point_size);

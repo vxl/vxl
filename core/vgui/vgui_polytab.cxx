@@ -237,7 +237,7 @@ void vgui_polytab_base::set_current(GLint const vp[4], int index) {
   }
 
   // switch :
-  //cerr << "switch from " << current << " to " << index << endl;
+  //vcl_cerr << "switch from " << current << " to " << index << vcl_endl;
   current = index;
 
   // send enter event to new current subtableau :

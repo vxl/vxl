@@ -36,11 +36,11 @@ vgui_message::vgui_message()
 //   void update(const vgui_message &m) {
 //     if (m.user == sender::begin) {
 //       vcl_string *s = static_cast<vcl_string*>(m.data);
-//       cerr << "begin : " << *s << endl;
+//       vcl_cerr << "begin : " << *s << vcl_endl;
 //     }
 //     else if (m.user == sender::end) {
 //       sender *s = static_cast<sender*>(m.from);
-//       cerr << "end" << endl;
+//       vcl_cerr << "end" << vcl_endl;
 //     }
 //     else {
 //       // dunno

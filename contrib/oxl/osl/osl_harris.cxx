@@ -61,7 +61,7 @@ void osl_harris::compute_gradients(vil_image const &image)
   if (params_.verbose) {
     vcl_cerr << " gradient" << vcl_flush << vcl_endl;
     //    for(int i = 0; i < 10; ++i)
-    //      cerr << i << ": " << (int)image_buf(i,i+4) << endl;
+    //      vcl_cerr << i << ": " << (int)image_buf(i,i+4) << vcl_endl;
   }
 
   // trim the window
@@ -128,7 +128,7 @@ void osl_harris::compute_cornerness()
   if (params_.verbose) {
     vcl_cerr << "------\n";
     //    for(int i = 0; i < 10; ++i)
-    //      cerr << i << ": " << (float)image_cornerness_buf(i,i+4) << endl;
+    //      vcl_cerr << i << ": " << (float)image_cornerness_buf(i,i+4) << vcl_endl;
   }
 
   if (params_.verbose)

@@ -27,9 +27,9 @@ vgui_glut::~vgui_glut()
 
 void vgui_glut::init(int &argc, char **argv)
 {
-//   cerr << __FILE__ " init() :" << endl;
+//   vcl_cerr << __FILE__ " init() :" << vcl_endl;
 //   for (unsigned i=0; i<argc; ++i)
-//     cerr << i << ' ' << (void*)argv[i] << flush << ' ' << argv[i] << endl;
+//     vcl_cerr << i << ' ' << (void*)argv[i] << flush << ' ' << argv[i] << vcl_endl;
   glutInit(&argc, argv);
 }
 

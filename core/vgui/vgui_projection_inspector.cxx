@@ -197,7 +197,7 @@ void vgui_projection_inspector::inspect()
   //
   else {
     diagonal_scale_3d = false;
-    // cerr << "T = " << endl << T << endl;
+    // vcl_cerr << "T = " << vcl_endl << T << vcl_endl;
   }
 }
 

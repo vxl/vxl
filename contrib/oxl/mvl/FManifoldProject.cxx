@@ -62,14 +62,14 @@ void FManifoldProject::set_F(const FMatrix& Fobj)
   // Compute eig(A) to translate and rotate the quadric
   vnl_symmetric_eigensystem<double>  eig(A_);
 
-  //cerr << vnl_svd<double>(F_);
+  //vcl_cerr << vnl_svd<double>(F_);
   //MATLABPRINT(F_);
   //MATLABPRINT(eig.D);
 
   // If all eigs are 0, had an affine F
   _affine_F = eig.D(3,3) < 1e-6;
   if (_affine_F) {
-    ///cerr << "FManifoldProject: Affine F = " << F_ << endl;
+    ///vcl_cerr << "FManifoldProject: Affine F = " << F_ << vcl_endl;
     double s = 1.0 / b.magnitude();
     t_ = b * s;
     d_[0] = c * s;

@@ -60,7 +60,7 @@ bool vgui_displaylist2D::handle(const vgui_event& e) {
 
     if (highlighted) {
 
-      //cerr << "unhighlighting : " << highlighted << endl;
+      //vcl_cerr << "unhighlighting : " << highlighted << vcl_endl;
       vgui_soview* so = vgui_soview::id_to_object(highlighted);
       vgui_style* style = so->get_style();
       glPointSize(style->point_size);
@@ -131,7 +131,7 @@ unsigned vgui_displaylist2D::find_closest(float x, float y, vcl_vector<unsigned>
     vgui_soview2D* so = static_cast<vgui_soview2D*>(vgui_soview::id_to_object(*h_iter));
 
     float dist = so->distance_squared(x,y);
-    //cerr << " distance to " << (void*)so << " = " << dist << endl;
+    //vcl_cerr << " distance to " << (void*)so << " = " << dist << vcl_endl;
 
     if (closest_dist==-1 || dist<closest_dist) {
       closest_dist = dist;
@@ -165,12 +165,12 @@ bool vgui_displaylist2D::motion(int x, int y) {
   unsigned highlighted = this->get_highlighted();
 
   if (highlighted) {
-    //cerr << "unhighlighting : " << highlighted << endl;
+    //vcl_cerr << "unhighlighting : " << highlighted << vcl_endl;
     vgui_soview* so = vgui_soview::id_to_object(highlighted);
     vgui_style* style = so->get_style();
     glPointSize(style->point_size);
     glLineWidth(style->line_width);
-    //    vgui::out << endl << *so;
+    //    vgui::out << vcl_endl << *so;
     if (this->is_selected(highlighted))
       glColor3f(1.0, 0.0, 0.0);
     else {
@@ -185,7 +185,7 @@ bool vgui_displaylist2D::motion(int x, int y) {
 
 
   if (closest_id) {
-    //cerr << "highlighting : " << closest_id << endl;
+    //vcl_cerr << "highlighting : " << closest_id << vcl_endl;
 
     vgui_soview* so = vgui_soview::id_to_object(closest_id);
     vgui_style* style = so->get_style();
@@ -193,10 +193,10 @@ bool vgui_displaylist2D::motion(int x, int y) {
     glLineWidth(style->line_width);
     glColor3f(0.0,0.0,1.0);
     so->draw();
-    //    vgui::out<<endl<<*so;
+    //    vgui::out<<vcl_endl<<*so;
   }
   //  else
-  //    vgui::out<<endl;
+  //    vgui::out<<vcl_endl;
   vgui_utils::end_sw_overlay();
   this->highlight(closest_id);
 
@@ -212,7 +212,7 @@ bool vgui_displaylist2D::mouse_down(int x, int y, vgui_button button, vgui_modif
 
   // selecting
   if (button == vgui_LEFT && modifier == 0) {
-//  if (debug) cerr << vul_sprintf("selecting at %f %f", x, y) << endl;
+//  if (debug) vcl_cerr << vul_sprintf("selecting at %f %f", x, y) << vcl_endl;
 
     vcl_vector<unsigned> hits;
     get_hits(x,y,hits);
@@ -231,14 +231,14 @@ bool vgui_displaylist2D::mouse_down(int x, int y, vgui_button button, vgui_modif
   else if (button == vgui_MIDDLE) {
 
     if (modifier & vgui_SHIFT) {
-//    if (debug) cerr << "deselecting all" << endl;
+//    if (debug) vcl_cerr << "deselecting all" << vcl_endl;
       this->deselect_all();
       this->post_redraw();
       posted_redraw_ = true;
       return false;
     }
 
-//  if (debug) cerr << vul_sprintf("deselecting at %f %f", x, y) << endl;
+//  if (debug) vcl_cerr << vul_sprintf("deselecting at %f %f", x, y) << vcl_endl;
 
     vcl_vector<unsigned> hits;
     get_hits(x,y,hits);

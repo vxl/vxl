@@ -67,7 +67,7 @@ vcl_ostream& vgui_soview2D_lineseg::print(vcl_ostream& s) const {
 }
 
 void vgui_soview2D_lineseg::draw() {
-  //cerr << "line id : " << id << endl;
+  //vcl_cerr << "line id : " << id << vcl_endl;
 
   //glLineWidth(style->line_width);
   glBegin(GL_LINES);

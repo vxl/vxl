@@ -616,7 +616,7 @@ void TriTensor::get_constraint_lines_image3(const HomgPoint2D& p1, const HomgPoi
   double y2 = p2.get_y();
   double z2 = p2.get_w();
 
-  // cout << "CLINES = [" << x1 << " " << y1 << " " << z1 << "; " << x2 << " " << y2 << " " << z2 << "];\n";
+  // vcl_cout << "CLINES = [" << x1 << " " << y1 << " " << z1 << "; " << x2 << " " << y2 << " " << z2 << "];\n";
 
   lines->resize(0);
 

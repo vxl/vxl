@@ -204,7 +204,7 @@ bool vgui_viewer3D::handle(const vgui_event& e)
 
     if (spin_data->viewer == this) {
 
-      //cerr << "spinning" << endl;
+      //vcl_cerr << "spinning" << vcl_endl;
       vcl_cerr << "-";
       if (debug) {
         vcl_cerr << vul_sprintf("spin_data->delta_r %f %f %f %f",

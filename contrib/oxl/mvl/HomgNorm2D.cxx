@@ -32,7 +32,7 @@ void HomgNorm2D::normalize(const vcl_vector<HomgPoint2D>& points)
   _normalized.resize(points.size());
 
   //for(unsigned i = 0; i < points.size(); ++i)
-  // cout << points[i].get_vector() << endl;
+  // vcl_cout << points[i].get_vector() << vcl_endl;
 
   double cx, cy;
   centre(points, _normalized, &cx, &cy);
@@ -48,7 +48,7 @@ void HomgNorm2D::normalize(const vcl_vector<HomgPoint2D>& points)
 
   SimilarityMetric::set_center_and_scale(cx, cy, 1/diameter);
 
-  //cout << "NORM = " << _norm_matrix << endl;
+  //vcl_cout << "NORM = " << _norm_matrix << vcl_endl;
   if (paranoid) {
     SimilarityMetric::scale_matrices(1/diameter);
     for(unsigned i = 0; i < points.size(); ++i) {

@@ -86,8 +86,8 @@ void osl_edge_detector::detect_edges(vil_image const &image,
   _xstart = 0;
   _ystart = 0;
 
-  //cerr << "_xstart = " << _xstart << " _ystart = " << _ystart << endl;
-  //cerr << "_xsize = " << _xsize << " _ysize = " << _ysize << endl;
+  //vcl_cerr << "_xstart = " << _xstart << " _ystart = " << _ystart << vcl_endl;
+  //vcl_cerr << "_xsize = " << _xsize << " _ysize = " << _ysize << vcl_endl;
 
   _dx = Make_float_image(_xsize,_ysize);
   _dy = Make_float_image(_xsize,_ysize);
@@ -230,7 +230,7 @@ void osl_edge_detector::Sub_pixel_interpolation() {
         default:
           vcl_abort();
           //h1 = h2 = 0.0;  // Dummy values;
-          //cerr << "*** ERROR ON SWITCH IN NMS ***\n";
+          //vcl_cerr << "*** ERROR ON SWITCH IN NMS ***\n";
         }
 
         // Do subpixel interpolation by fitting a parabola
@@ -260,7 +260,7 @@ void osl_edge_detector::Sub_pixel_interpolation() {
         default:
           vcl_abort();
           //dnewx = dnewy = 0.0; // Dummy values
-          //cerr << "*** ERROR ON SWITCH IN NMS ***\n";
+          //vcl_cerr << "*** ERROR ON SWITCH IN NMS ***\n";
         }
 
         // Now store the edge data, re-use _dx[][] and _dy[][]
@@ -644,7 +644,7 @@ void osl_edge_detector::Follow_curves(vcl_list<osl_edge*> *edges)
       // Check that we have at least two endpoints to
       // the list, otherwise go to next loop
       if ( xcoords.size() < 2 )
-        // cerr << "short list found in Final_follow\n";
+        // vcl_cerr << "short list found in Final_follow\n";
         continue;
 
       int count=0; // isn't this just "count = grad.size()" ?

@@ -139,7 +139,7 @@ void vgui_menu::add(vcl_string const &n,
   vgui_menu_item i;
   i.name = n;
   i.cmnd = new vgui_command_toggle(initial);
-  //cerr << "new toggle : " << (void*) i.cmnd.as_pointer() << endl;
+  //vcl_cerr << "new toggle : " << (void*) i.cmnd.as_pointer() << vcl_endl;
   i.short_cut.key = key;
   i.short_cut.mod = modifiers;
   i.is_toggle = true;

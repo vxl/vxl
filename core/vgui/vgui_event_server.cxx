@@ -36,7 +36,7 @@ public:
 bool vgui_event_server_interpose_tableau::handle(const vgui_event& event) {
 
 //if (debug)
-//  cerr << "vgui_event_server::handle type " << event.type << endl;
+//  vcl_cerr << "vgui_event_server::handle type " << event.type << vcl_endl;
 
   // Pass draw events down -- we're just grabbing the interactions
   if (event.type == vgui_DRAW) {
@@ -62,7 +62,7 @@ vgui_event_server::vgui_event_server(vgui_tableau_sptr const& t):
   grabber_reference_ = grabber_;
 
 //if (debug)
-//  cerr << "vgui_event_server::hooking up " << endl;
+//  vcl_cerr << "vgui_event_server::hooking up " << vcl_endl;
 
   // link up grabber
   vgui_slot::replace_child_everywhere(t, grabber_);
@@ -77,7 +77,7 @@ vgui_event_server::~vgui_event_server()
   vgui_slot::replace_child_everywhere(grabber_, grabber_->child);
 
 //if (debug)
-//  cerr << "vgui_event_server::unhooking" << endl;
+//  vcl_cerr << "vgui_event_server::unhooking" << vcl_endl;
 }
 
 void vgui_event_server::reset() {
@@ -88,7 +88,7 @@ bool vgui_event_server::next() {
   while (!use_event_) {
     vgui::run_one_event();
   }
-  //  cerr << "vgui_event_server return\n";
+  //  vcl_cerr << "vgui_event_server return\n";
 
   return true;
 }

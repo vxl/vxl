@@ -431,7 +431,7 @@ bool vgui_accelerate_x11::vgui_copy_back_to_aux ()
       XMesaGetBackBuffer(mesabuf, &p_dummy, &backbuffer);
       int blit_size = backbuffer->bytes_per_line * backbuffer->height;
       // resize the aux_buffer if necessary
-      //      cerr << blit_size << endl;
+      //      vcl_cerr << blit_size << vcl_endl;
       if (blit_size != aux_buffer_size) {
         delete[] aux_buffer;
         aux_buffer = new char[blit_size];

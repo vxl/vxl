@@ -252,13 +252,13 @@ bool HomgInterestPointSet::read(const char* filename, vil_image const& src, cons
 #if 1
   vcl_cerr << "HomgInterestPointSet::read() not implemented in any sense of the word\n";
 #else
-  //cerr << "HomgInterestPointSet: Computing mean intensities\n";
+  //vcl_cerr << "HomgInterestPointSet: Computing mean intensities\n";
   vil_memory_image_of<unsigned char> imbuf(src);
   for (unsigned i=0; i< size(); i++) {
     ImageWindowOps winops(imbuf, get_int(i), 3);
     (*_data)[i]._mean_intensity = winops.mean_intensity();
     if ((*_data)[i]._mean_intensity == 0.0F) {
-      //cerr << " note " << i << " had mi of 0\n";
+      //vcl_cerr << " note " << i << " had mi of 0\n";
       (*_data)[i]._mean_intensity = 1e6;
     }
   }

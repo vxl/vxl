@@ -2,7 +2,7 @@
 
 vsol_box_2d::vsol_box_2d()
 {
-  // cout << "making a boxology object" << endl;
+  // vcl_cout << "making a boxology object" << vcl_endl;
 }
 
 vsol_box_2d::vsol_box_2d(vsol_box_2d const &b){
@@ -10,7 +10,7 @@ vsol_box_2d::vsol_box_2d(vsol_box_2d const &b){
 }
 vsol_box_2d::~vsol_box_2d()
 {
-  // cout << "deleting a boxology object" << endl;
+  // vcl_cout << "deleting a boxology object" << vcl_endl;
   
 }
 

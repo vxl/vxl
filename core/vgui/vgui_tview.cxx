@@ -243,7 +243,7 @@ void vgui_tview::add_icons(vcl_vector<vgui_tview::icon>* icons, vgui_tableau_spt
 }
 
 vgui_tableau_sptr vgui_tview::find_closest_icon(vcl_vector<vgui_tview::icon> const& icons, float ix, float iy) {
-  //cerr << "number of icons " << icons.size() << endl;
+  //vcl_cerr << "number of icons " << icons.size() << vcl_endl;
 
   float closest_dist /*quell SunPro warning*/= -1;
   vgui_tableau_sptr closest;
@@ -323,10 +323,10 @@ bool vgui_tview::handle(const vgui_event& e) {
     vgui_tableau_sptr t = find_closest_icon(icons, ix, iy);
     active_icon = t;
 
-    //cerr << "icon is " << (void*) t << endl;
+    //vcl_cerr << "icon is " << (void*) t << vcl_endl;
     if (t) {
       vcl_cerr << "---------" << vcl_endl;
-      //cerr << "| type : " << strip_preceeding_numerals(typeid(*t).name()) << endl;
+      //vcl_cerr << "| type : " << strip_preceeding_numerals(typeid(*t).name()) << vcl_endl;
       vcl_cerr << "| type_name   : " << t->type_name() << vcl_endl;
       vcl_cerr << "| file_name   : " << t->file_name() << vcl_endl;
       vcl_cerr << "| pretty_name : " << t->pretty_name() << vcl_endl;

@@ -29,7 +29,7 @@ public:
     {
       assert(N == z1.size());
       assert(N == z2.size());
-      //      cout << "N=" << N << endl;
+      //      vcl_cout << "N=" << N << vcl_endl;
     }
   ~XXX() { N=0; }
 
@@ -43,7 +43,7 @@ public:
 #endif
       f=vcl_cout.flags();
 #endif
-    vcl_cout.flags(vcl_ios::fixed | vcl_ios::showpos);
+    vcl_cout.flags(vcl_fixed | vcl_showpos);
     double z,y;
     for (unsigned i=0;i<N;i++) {
       z=z1[i];
@@ -118,10 +118,10 @@ HMatrix1DComputeOptimize1::compute_cool_homg(const vcl_vector<HomgPoint1D>&p1,
     if (!p2[i].get_nonhomogeneous(z2[i])) return false;
   }
 
-//  cout << "z1  = " << z1 << endl;
-//  cout << "z2  = " << z2 << endl;
-//  cout << "M   = " << M << endl;
-//  cout << "Mz1 = " << Mz1 << endl;
+//  vcl_cout << "z1  = " << z1 << vcl_endl;
+//  vcl_cout << "z2  = " << z2 << vcl_endl;
+//  vcl_cout << "M   = " << M << vcl_endl;
+//  vcl_cout << "Mz1 = " << Mz1 << vcl_endl;
 
   HMatrix1D K;
   foo(z1,z2,K);

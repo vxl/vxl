@@ -98,8 +98,8 @@ vcl_vector<gst_polygon_2d_sptr> gst_make_polygons_2d_unoriented( const vcl_vecto
       bool closed= false;
       gst_polygon_2d_sptr thispoly= new gst_polygon_2d;
 
-//       cerr << "Starting face by adding edge" << endl;
-//       cerr << *edges[i] << endl;
+//       vcl_cerr << "Starting face by adding edge" << vcl_endl;
+//       vcl_cerr << *edges[i] << vcl_endl;
       thispoly->add( edges[i]);
 
       if( !used[i])
@@ -125,8 +125,8 @@ vcl_vector<gst_polygon_2d_sptr> gst_make_polygons_2d_unoriented( const vcl_vecto
             {
               if(( edges[j]->get_start().ptr()== end.ptr()) && ( !used[j]))
                 {
-//                cerr << "Found unflip-necessary edge..." << endl;
-//                cerr << *edges[j] << endl;
+//                vcl_cerr << "Found unflip-necessary edge..." << vcl_endl;
+//                vcl_cerr << *edges[j] << vcl_endl;
 
                   thispoly->add( edges[j]);
                   added= true;
@@ -144,12 +144,12 @@ vcl_vector<gst_polygon_2d_sptr> gst_make_polygons_2d_unoriented( const vcl_vecto
                 }
               else if(( edges[j]->get_end().ptr()== end.ptr()) && ( !used[j]))
                 {
-//                cerr << "Found flip-necessary edge..." << endl;
-//                cerr << *edges[j] << " -- ";
+//                vcl_cerr << "Found flip-necessary edge..." << vcl_endl;
+//                vcl_cerr << *edges[j] << " -- ";
 
                   edges[j]->flip();
 
-//                cerr << *edges[j] << endl;
+//                vcl_cerr << *edges[j] << vcl_endl;
 
                   thispoly->add( edges[j]);
                   added= true;
@@ -178,8 +178,8 @@ vcl_vector<gst_polygon_2d_sptr> gst_make_polygons_2d_unoriented( const vcl_vecto
 //   for( int i=0; i< polygons.size(); i++)
 //     {
 //       gst_polygon_2d *p= polygons[i].ptr();
-//       cerr << "Polygon " << i << endl;
-//       cerr << *p << endl;
+//       vcl_cerr << "Polygon " << i << vcl_endl;
+//       vcl_cerr << *p << vcl_endl;
 //     }
 
   return polygons;

@@ -96,7 +96,7 @@ static vgui_glut_menu_hack::per_window_record * get_current_record()
     records.push_back( (vgui_glut_menu_hack::per_window_record*)0 ); // gcc 2.7 needs this cast
   
   if (records[win] == 0) {
-    //cerr << __FILE__ " : create record for window " << win << endl;
+    //vcl_cerr << __FILE__ " : create record for window " << win << vcl_endl;
     records[win] = new vgui_glut_menu_hack::per_window_record;
   }
   
@@ -142,7 +142,7 @@ bool vgui_glut_menu_hack::mouse(int button, int state, int x, int y)
   
   active = true;
   glut_button = button;
-  //cerr << "active" << endl;
+  //vcl_cerr << "active" << vcl_endl;
   
   // attach the required button to the menu
   {
@@ -189,7 +189,7 @@ void vgui_glut_menu_hack::menustatus(int status,int /*x*/,int /*y*/)
 {
   if (active  &&  status == GLUT_MENU_NOT_IN_USE) {
     glutDetachMenu(glut_button);
-    //cerr << "purged" << endl;
+    //vcl_cerr << "purged" << vcl_endl;
     active = false;
   }
 }
@@ -205,7 +205,7 @@ void vgui_glut_menu_hack::bind  (int button, int mods, int menu_id)
     per_window_record *rec = get_current_record();
     if (!rec)
       return;
-    //cerr << "bind : " << glutGetWindow() << " " <<  button << " " << mods << " " << menu_id <<  endl;
+    //vcl_cerr << "bind : " << glutGetWindow() << " " <<  button << " " << mods << " " << menu_id <<  vcl_endl;
     rec->entries[index].menu_id = menu_id;
   }
 }

@@ -12,34 +12,34 @@
 #include <vgui/vgui_glut.h>
 
 vgui_glut_popup_impl::vgui_glut_popup_impl() {
-  //cerr << "popup_impl ctor" << endl;
+  //vcl_cerr << "popup_impl ctor" << vcl_endl;
   int old_id = glutGetMenu();
   menu_id = glutCreateMenu(command_func);
-  //cerr << "created menu_id = " << menu_id << endl;
+  //vcl_cerr << "created menu_id = " << menu_id << vcl_endl;
 
-  //vgui_macro_warning << "before" << endl;
+  //vgui_macro_warning << "before" << vcl_endl;
   if (old_id)
     glutSetMenu(old_id);
-  //vgui_macro_warning << "after" << endl;
+  //vgui_macro_warning << "after" << vcl_endl;
 }
 
 
 void vgui_glut_popup_impl::clear() {
-  //cerr << "popup_impl::clear()" << endl;
+  //vcl_cerr << "popup_impl::clear()" << vcl_endl;
   int old_id = glutGetMenu();
   glutSetMenu(menu_id);
 
   //
   unsigned n = glutGet(GLenum(GLUT_MENU_NUM_ITEMS));
-  //cerr << "removing " << n << " items in menu" << endl;
+  //vcl_cerr << "removing " << n << " items in menu" << vcl_endl;
   for (int i=n; i>=1; --i)
     glutRemoveMenuItem(i);
 
   //
-  //vgui_macro_warning << "before" << endl;
+  //vgui_macro_warning << "before" << vcl_endl;
   if (old_id)
     glutSetMenu(old_id);
-  //vgui_macro_warning << "after" << endl;
+  //vgui_macro_warning << "after" << vcl_endl;
 
   //
   for (unsigned i=0; i<subs.size(); ++i)
@@ -49,7 +49,7 @@ void vgui_glut_popup_impl::clear() {
 
 
 vgui_glut_popup_impl::~vgui_glut_popup_impl() {
-  //cerr << "popup_impl dtor" << endl;
+  //vcl_cerr << "popup_impl dtor" << vcl_endl;
   clear();
   glutDestroyMenu( menu_id );
   menu_id = 0;
@@ -62,15 +62,15 @@ void vgui_glut_popup_impl::build(vgui_menu const &m) {
   // given menu stay alive while the popup menu is active :
   tmp_menu = m;
 
-  //cerr << "popup_impl::build : m = " << endl << m << endl;
+  //vcl_cerr << "popup_impl::build : m = " << vcl_endl << m << vcl_endl;
   this->build_internal(m);
 }
 
 void vgui_glut_popup_impl::build_internal(vgui_menu const &m) {
   int old_id = glutGetMenu();
-  //vgui_macro_warning << "before" << endl;
+  //vgui_macro_warning << "before" << vcl_endl;
   glutSetMenu(menu_id);
-  //vgui_macro_warning << "after" << endl;
+  //vgui_macro_warning << "after" << vcl_endl;
 
   for (unsigned i=0; i<m.size(); ++i) {
     if (m[i].is_command())
@@ -103,10 +103,10 @@ void vgui_glut_popup_impl::build_internal(vgui_menu const &m) {
     }
   }
 
-  //vgui_macro_warning << "before" << endl;
+  //vgui_macro_warning << "before" << vcl_endl;
   if (old_id)
     glutSetMenu(old_id); // restore
-  //vgui_macro_warning << "after" << endl;
+  //vgui_macro_warning << "after" << vcl_endl;
 }
 
 // When a menu item is selected, glut may have upset its internal

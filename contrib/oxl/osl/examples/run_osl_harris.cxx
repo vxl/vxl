@@ -24,7 +24,7 @@ int main(int argc,char **argv)
   // load image
   vil_image I;
   if (infile() == "-") {
-    //cerr << "reading image from stdin" << endl;
+    //vcl_cerr << "reading image from stdin" << vcl_endl;
     //I = vil_load(cin);
     vcl_cerr << "cannot read from stdin yet" << vcl_endl;
     return 1;

@@ -416,8 +416,8 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
         yloc.push_back(y);
       }
   const int length = ndir.size();
-//   cout << "% end pts = "     // trace allocated size
-//        << length*100 / float((xmax/kmax)*(ymax/kmax)) << endl;
+//   vcl_cout << "% end pts = "     // trace allocated size
+//            << length*100 / float((xmax/kmax)*(ymax/kmax)) << endl;
   if (!length) return 0;        // no end points exist
 
   // 2. Extend from end points until they touch other contours
@@ -463,8 +463,8 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
         } else                  // no further extension found
           ndir[i] = 0;
       }
-//     cout << "Touch " << ntouch << " contours." << endl;
-//     cout << "Will extend " << nextension << " contours." << endl;
+//     vcl_cout << "Touch " << ntouch << " contours." << vcl_endl;
+//     vcl_cout << "Will extend " << nextension << " contours." << vcl_endl;
     njunction += ntouch;
     if (!nextension) break;     // all either junction or termination
   }
@@ -481,13 +481,14 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
       junctiony[j] = yloc[i];
       j++;
     }
-//   cout << "Find " << length << " end points, and "
-//        << njunction << " junctions." << endl;
-  //  cout << "Recover " << 100.0*njunction/length
-  //       << "% end points as junctions > "
-  //       << threshold << ", in "
-  //       << t.real() << " msecs." << endl;
-
+#if 0
+  vcl_cout << "Find " << length << " end points, and "
+           << njunction << " junctions." << vcl_endl
+           << "Recover " << 100.0*njunction/length
+           << "% end points as junctions > "
+           << threshold << ", in "
+           << t.real() << " msecs." << vcl_endl;
+#endif
   return njunction;
 }
 

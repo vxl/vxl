@@ -96,7 +96,7 @@ gevd_bufferxy::gevd_bufferxy(gevd_bufferxy const& buf) : gevd_memory_mixin(buf)
 void gevd_bufferxy::dump(const char* filename)
 {
 #ifdef VCL_WIN32
-  vcl_ofstream f(filename,ios::out|ios::binary);
+  vcl_ofstream f(filename,vcl_ios_out|vcl_ios_binary);
 #else
   vcl_ofstream f(filename);
 #endif
@@ -114,7 +114,7 @@ void gevd_bufferxy::dump(const char* filename)
 static int read_from_file(const char* filename)
 {
 #ifdef VCL_WIN32
-  vcl_ifstream f(filename,ios::in|ios::binary|ios::nocreate);
+  vcl_ifstream f(filename,vcl_ios_in|vcl_ios_binary|vcl_ios::nocreate);
 #else
   vcl_ifstream f(filename);
 #endif
@@ -140,7 +140,7 @@ gevd_bufferxy::gevd_bufferxy(const char* filename) : gevd_memory_mixin(read_from
 {
   if (gevd_memory_mixin::GetSize() > 0) {
 #ifdef VCL_WIN32
-    vcl_ifstream f(filename,ios::in|ios::binary|ios::nocreate);
+    vcl_ifstream f(filename,vcl_ios_in|vcl_ios_binary|vcl_ios::nocreate);
 #else
     vcl_ifstream f(filename);
 #endif

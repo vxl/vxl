@@ -42,7 +42,7 @@ template < class DataType >
 {
   if (ref_container()) FILTER_IMPTR_DEC_REFCOUNT(ref_container());
   if (ref_real_descriptor()) FILTER_IMPTR_DEC_REFCOUNT(ref_real_descriptor());
-  //cerr << "Warning: called unimplemented destructor\n";
+  //vcl_cerr << "Warning: called unimplemented destructor\n";
 }
 
 template < class DataType >

@@ -87,7 +87,7 @@ bool vgui_displaylist3D::mouse_down(int x, int y, vgui_button button, vgui_modif
 
   // selecting
   if (button == vgui_LEFT) {
-//  if (debug) cerr << vul_sprintf("selecting at %f %f", x, y) << endl;
+//  if (debug) vcl_cerr << vul_sprintf("selecting at %f %f", x, y) << vcl_endl;
 
     vcl_vector<unsigned> hits;
     get_hits(x,y,hits);
@@ -108,13 +108,13 @@ bool vgui_displaylist3D::mouse_down(int x, int y, vgui_button button, vgui_modif
   else if (button == vgui_MIDDLE) {
 
     if (modifier & vgui_SHIFT) {
-//    if (debug) cerr << "deselecting all" << endl;
+//    if (debug) vcl_cerr << "deselecting all" << vcl_endl;
       this->deselect_all();
       this->post_redraw();
       return false;
     }
 
-//  if (debug) cerr << vul_sprintf("deselecting at %f %f", x, y) << endl;
+//  if (debug) vcl_cerr << vul_sprintf("deselecting at %f %f", x, y) << vcl_endl;
 
     vcl_vector<unsigned> hits;
     get_hits(x,y,hits);
