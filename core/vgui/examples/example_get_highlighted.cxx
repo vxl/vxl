@@ -15,7 +15,6 @@
 #include <vgui/vgui_viewer2D_tableau.h> 
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_clear_tableau.h>
-#include <vgui/vgui_linker_hack.h>
 #include <vgui/vgui_soview2D.h>
 
 struct my_tab : public vgui_easy2D_tableau
