@@ -17,7 +17,6 @@ TESTS += test_functions.cxx
 TESTS += test_numeric_limits.cxx
 TESTS += test_rpoly_roots.cxx
 TESTS += test_cpoly_roots.cxx
-TESTS += test_resize.cxx
 TESTS += test_complex.cxx
 TESTS += test_determinant.cxx
 TESTS += test_qr.cxx
