@@ -86,6 +86,13 @@ class vgui
   //: Initialize the selected toolkit passing it the given command line.
   static void init(int &argc, char **argv);
 
+  //: Uninitialize any previously initialized toolkit.
+  //
+  // This will be called before application exit; the user normally
+  // need not call this.
+  //
+  static void uninit();
+
   // Factory methods
   //----------------
 

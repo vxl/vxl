@@ -15,6 +15,7 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 #include "vgui_mfc.h"
+
 #include <vgui/vgui_adaptor.h>
 #include "vgui_mfc_window.h"
 #include "vgui_mfc_dialog_impl.h"
@@ -29,6 +30,8 @@
 #ifndef _AFX_NO_AFXCMN_SUPPORT
 #include <afxcmn.h>         // MFC support for Windows Common Controls
 #endif // _AFX_NO_AFXCMN_SUPPORT
+
+#include "vgui_mfc_app.h"
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
@@ -48,6 +51,7 @@ vgui_mfc* vgui_mfc::instance() {
 //---------------------------------------------------------------------------------
 //: Default constructor
 vgui_mfc::vgui_mfc()
+  : theApp_( 0 )
 {
   utils = vgui_mfc_utils::instance();
 }
@@ -69,6 +73,15 @@ vcl_string vgui_mfc::name() const { return "mfc"; }
 void vgui_mfc::init(int &argc, char **argv) {
   if (debug) vcl_cerr << "vgui_mfc::init()\n";
 
+  // If we are here, then we aren't trying to use vgui in an MFC
+  // framework. That is, there shouldn't be another CWinApp
+  // somewhere. So, create the vgui one.
+  if( AfxGetApp() ) {
+    vcl_cerr << "vgui_mfc::init(): another CWinApp object exists!\n";
+  } else {
+    theApp_ = new vgui_mfc_app;
+  }
+
   //: Initialise MFC foundation classes
   if (!AfxWinInit(::GetModuleHandle(NULL), NULL, ::GetCommandLine(), SW_SHOW))
   {
@@ -77,6 +90,11 @@ void vgui_mfc::init(int &argc, char **argv) {
     assert(0);
   }
   AfxGetApp()->InitInstance();
+}
+
+void vgui_mfc::uninit() {
+  delete theApp_;
+  theApp_ = 0;
 }
 
 

@@ -89,8 +89,3 @@ int vgui_register_all_implementations()
 
   return 0;
 }
-
-#ifdef VGUI_USE_MFC
-# include <vgui/impl/mfc/vgui_mfc_app_init.h>
-vgui_mfc_app_init theAppinit;
-#endif

@@ -34,6 +34,16 @@ bool vgui_emulate_overlays = false;
 bool vgui_glerrors_are_bad = false;
 bool vgui_mfc_use_bitmap = true;
 
+
+// make sure that vgui::uninit is called before the application exits.
+struct vgui_uninit_caller
+{
+  ~vgui_uninit_caller() {
+    vgui::uninit();
+  }
+};
+vgui_uninit_caller vgui_the_uniniter_caller_;
+
 //----------------------------------------------------------------------------
 //: Remove an argument from a command line argument vec*tor :
 static void vgui_remove_arg(unsigned index, int &argc, char **argv)
@@ -184,6 +194,18 @@ void vgui::init(int &argc, char **argv)
   // print a message prior to initializing the toolkit.
   vcl_cerr << "vgui : initialize \'" << instance_->name() << "\'\n";
   instance_->init(argc, argv);
+}
+
+
+void vgui::uninit()
+{
+  vcl_cout << "vgui::uninit called" << vcl_endl;
+  // make sure uninit does something only once
+  static uninit_called = false;
+  if( !uninit_called && init_called && instance_ ) {
+    instance_->uninit();
+  }
+  uninit_called = true;
 }
 
 //----------------------------------------------------------------------------

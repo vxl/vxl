@@ -34,6 +34,7 @@ class vgui_toolkit
   virtual ~vgui_toolkit();
 
   virtual void init(int &, char **);
+  virtual void uninit();
   virtual vcl_string name() const =0;
 
   virtual vgui_window* produce_window(int width, int height,

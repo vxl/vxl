@@ -23,6 +23,7 @@
 class vgui_mfc_adaptor;
 class vgui_mfc_window;
 class vgui_mfc_utils;
+class vgui_mfc_app;
 
 //: The MFC (Microsoft Foundation Classes) implementation of vgui_toolkit.
 //
@@ -56,7 +57,9 @@ class vgui_mfc : public vgui_toolkit
   vgui_mfc();
   ~vgui_mfc();
   void init(int &, char **);
+  void uninit();
   static vgui_mfc* instance_;
+  vgui_mfc_app* theApp_;
   vcl_vector<vgui_window*> windows_to_delete;
 };
 

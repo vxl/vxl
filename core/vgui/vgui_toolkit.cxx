@@ -121,3 +121,7 @@ void vgui_toolkit::add_event(vgui_event const&)
 {
   vgui_macro_warning << "no implementation of add_event supplied\n";
 }
+
+void vgui_toolkit::uninit()
+{
+}
