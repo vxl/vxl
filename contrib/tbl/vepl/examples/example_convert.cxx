@@ -24,7 +24,8 @@ typedef unsigned char ubyte;
 typedef vil_rgb<ubyte> rgbcell;
 
 int
-main(int argc, char** argv) {
+main(int argc, char** argv)
+{
   if (argc < 3) { vcl_cerr << "Syntax: example_convert file_in file_out\n"; return 1; }
 
   // The input image:
@@ -42,8 +43,7 @@ main(int argc, char** argv) {
     vil_save(out_grey, argv[2], "pnm");
     vcl_cout << "vepl_convert()ed grey image to PGM image " << argv[2] << vcl_endl;
   } else if (in.planes() == 1 && in.components() == 3) { // colour (RGB)
-    rgbcell dummy = rgbcell();
-    vepl_convert(in,dummy);
+    vepl_convert(in,rgbcell());
     vil_save(out_rgb, argv[2], "pnm");
     vcl_cout << "vepl_convert()ed RGB image to PPM image " << argv[2] << vcl_endl;
   }
