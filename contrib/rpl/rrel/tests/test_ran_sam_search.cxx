@@ -48,6 +48,7 @@ static void test_ran_sam_search()
   vcl_vector< vnl_vector<double> > pts(num_pts);
   vcl_vector< double > error(num_pts);
 
+  vnl_double_3& a = true_params;
   double x = 1.0, y=-0.5; error[0]=-0.001;
   double z= a[0] + a[1]*x + a[2]*y + error[0];
   pts[0]=vnl_double_3(x,y,z).as_vector();
