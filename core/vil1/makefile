@@ -57,7 +57,6 @@ SOURCES += vil_load.cxx
 SOURCES += vil_save.cxx
 SOURCES += vil_copy.cxx
 SOURCES += vil_crop.cxx
-SOURCES += vil_convolve.cxx
 
 # Utilities
 SOURCES += vil_rgb_byte.cxx
