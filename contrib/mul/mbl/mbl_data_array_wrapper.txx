@@ -15,7 +15,7 @@ mbl_data_array_wrapper<T>::mbl_data_array_wrapper()
 
 //: Constructor
 template<class T>
-mbl_data_array_wrapper<T>::mbl_data_array_wrapper(const T* data, unsigned n)
+mbl_data_array_wrapper<T>::mbl_data_array_wrapper(const T* data, unsigned long n)
 {
   set(data,n);
 }
@@ -38,7 +38,7 @@ mbl_data_array_wrapper<T>::mbl_data_array_wrapper(const vcl_vector<T > &data)
 
 //: Initialise to return elements from data[i]
 template<class T>
-void mbl_data_array_wrapper<T>::set(const T* data, unsigned  n)
+void mbl_data_array_wrapper<T>::set(const T* data, unsigned long n)
 {
   assert (n != ((unsigned)-1)); // a common mistake
   data_    = data;
@@ -54,7 +54,7 @@ mbl_data_array_wrapper<T>::~mbl_data_array_wrapper()
 
 //: Number of objects available
 template<class T>
-unsigned mbl_data_array_wrapper<T>::size() const
+unsigned long mbl_data_array_wrapper<T>::size() const
 {
   return n_;
 }
@@ -83,7 +83,7 @@ bool mbl_data_array_wrapper<T>::next()
 
 //: Return current index
 template<class T>
-unsigned mbl_data_array_wrapper<T>::index() const
+unsigned long mbl_data_array_wrapper<T>::index() const
 {
   return index_;
 }
@@ -99,7 +99,7 @@ mbl_data_wrapper< T >* mbl_data_array_wrapper<T>::clone() const
 //: Move to element n
 //  First example has index 0
 template<class T>
-void mbl_data_array_wrapper<T>::set_index(unsigned n)
+void mbl_data_array_wrapper<T>::set_index(unsigned long n)
 {
   assert(n != ((unsigned)-1));
   if (n>=size())

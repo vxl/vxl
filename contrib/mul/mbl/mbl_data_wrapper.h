@@ -47,7 +47,7 @@ public:
   virtual ~mbl_data_wrapper();
 
   //: Number of objects available
-  virtual unsigned size() const = 0;
+  virtual unsigned long size() const = 0;
 
   //: Reset so that current() returns first object
   virtual void reset() = 0;
@@ -60,13 +60,16 @@ public:
 
   //: Return current index
   //  First example has index 0
-  virtual unsigned index() const =0;
+  virtual unsigned long index() const =0;
 
   //: Move to element n
   //  First example has index 0
-  virtual void set_index(unsigned n);
+  virtual void set_index(unsigned long n);
 
   //: Create copy on heap and return base pointer
+  // This will create an idependent iterator on the underlying data.
+  // The original data is not copied.
+  // Be careful of destriction of underlying data.
   virtual mbl_data_wrapper< T >* clone() const = 0;
 
   //: Name of the class

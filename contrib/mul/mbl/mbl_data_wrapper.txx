@@ -20,7 +20,7 @@ mbl_data_wrapper<T>::~mbl_data_wrapper()
 //: Move to element n
 //  First example has index 0
 template<class T>
-void mbl_data_wrapper<T>::set_index(unsigned n)
+void mbl_data_wrapper<T>::set_index(unsigned long n)
 {
   if ((n>=size()))
   {

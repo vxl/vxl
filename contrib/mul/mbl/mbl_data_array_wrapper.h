@@ -17,8 +17,8 @@ template<class T>
 class mbl_data_array_wrapper : public mbl_data_wrapper<T> {
 private:
   const T* data_;
-  unsigned n_;
-  unsigned index_;
+  unsigned long n_;
+  unsigned long index_;
 public:
   //: Default constructor
   mbl_data_array_wrapper();
@@ -26,7 +26,7 @@ public:
   //: Constructor
   // Sets up object to return n examples beginning at data[0].
   // The data must be kept in scope, this does not take a copy.
-  mbl_data_array_wrapper(const T* data, unsigned n);
+  mbl_data_array_wrapper(const T* data, unsigned long n);
 
   //: Constructor
   // Sets up object to wrap a vcl_vector.
@@ -36,13 +36,13 @@ public:
   //: Initialise to return elements from data[i]
   // Sets up object to return n examples beginning at data[0].
   // The data must be kept in scope, this does not take a copy.
-  void set(const T* data, unsigned n);
+  void set(const T* data, unsigned long n);
 
   //: Default destructor
   virtual ~mbl_data_array_wrapper();
 
   //: Number of objects available
-  virtual unsigned size() const;
+  virtual unsigned long size() const;
 
   //: Return pointer to start of data array
   const T* data() const { return data_; }
@@ -58,11 +58,11 @@ public:
 
   //: Return current index
   //  First example has index 0
-  virtual unsigned index() const;
+  virtual unsigned long index() const;
 
   //: Move to element n
   //  First example has index 0
-  virtual void set_index(unsigned n);
+  virtual void set_index(unsigned long n);
 
   //: Create copy on heap and return base pointer
   virtual mbl_data_wrapper< T >* clone() const;
