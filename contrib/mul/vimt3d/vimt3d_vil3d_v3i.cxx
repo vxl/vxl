@@ -227,12 +227,12 @@ bool vimt3d_vil3d_v3i_image::set_voxel_size(float si, float sj, float sk)
 {
   const vimt3d_transform_3d &tr = im_->world2im();
 
-// Try to adjust pixel size without modifying rest of transform  
+// Try to adjust pixel size without modifying rest of transform
   vgl_vector_3d<double> w111 = tr(1.0, 1.0, 1.0) - tr.origin();
 
   vimt3d_transform_3d zoom;
   zoom.set_zoom_only (w111.x()/si, w111.y()/sj, w111.z()/sk, 0.0, 0.0, 0.0);
-  
+
   im_->set_world2im(tr*zoom);
   return true;
 }
@@ -326,7 +326,7 @@ macro(VIL_PIXEL_FORMAT_FLOAT , float )
 
 //: Set the contents of the volume.
 bool vimt3d_vil3d_v3i_image::put_view(const vil3d_image_view_base& vv,
-                                unsigned i0, unsigned j0, unsigned k0)
+                                      unsigned i0, unsigned j0, unsigned k0)
 {
   if (!view_fits(vv, i0, j0, k0))
   {
@@ -347,22 +347,21 @@ bool vimt3d_vil3d_v3i_image::put_view(const vil3d_image_view_base& vv,
   {
 #define macro( F , T ) \
    case  F : \
-    vil3d_copy_to_window(static_cast<const vil3d_image_view<T>&>(vv), \
-      static_cast<vimt3d_image_3d_of<T>&>(*im_).image(), i0, j0, k0); \
+    vil3d_copy_to_window(static_cast<vil3d_image_view<T >const&>(vv), \
+                         static_cast<vimt3d_image_3d_of<T >&>(*im_).image(), \
+                         i0, j0, k0); \
     return true;
-macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
-//macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
-//macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-//macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
-macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-//macro(VIL_PIXEL_FORMAT_BOOL , bool )
-macro(VIL_PIXEL_FORMAT_FLOAT , float )
-//macro(VIL_PIXEL_FORMAT_DOUBLE , double )
-#undef macro
 
-   default:
-    return false;
+    macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
+//  macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+//  macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+//  macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+    macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+    macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+//  macro(VIL_PIXEL_FORMAT_BOOL , bool )
+    macro(VIL_PIXEL_FORMAT_FLOAT , float )
+//  macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+#undef macro
   }
 
   return false;
