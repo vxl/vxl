@@ -106,6 +106,30 @@ for (int i=0;i<nplanes;++i)
 * Note that if the resize does not change the image size, then nothing is done and the view
 * remains unchanged.
 *
+* Notice that one can obtain a transposed view of an image simply by swapping nx-ny and
+* xstep-ystep.  This is particularly useful when implementing decomposable filters, as
+* one need only write it for one direction, then can apply it to the original image and
+* its transpose.
+* \verbatim
+vil2_image_view<vil2_byte> src_image;
+vil2_load(src_image,"image_file.jpg");
+vil2_image_view<vil2_byte> tmp_image1,tmp_image2;
+vil2_filter_rows(tmp_image,src_image);  // Apply filter to rows of src_image
+vil2_filter_rows(tmp_image2,tmp_image.tranpose());  // Apply filter to cols of tmp_image
+vil2_image_view<vil2_byte> filtered_image = tmp_image2.transpose();
+// Note that vil2_filter_rows(filtered_image.transpose(),tmp_image.tranpose())
+// would only work correctly if filtered_image was already the correct size.
+// If it isn't, then the view created by filtered_image.transpose() would be resized,
+// and disconnected from filtered_image itself, which would remain unchanged.
+\endverbatim
+*
+* \section Image sources
+* The vil2_image_data class is an abstract base class for image data, views of which can be
+* obtained (or changed) with the get_view()/set_view() functions.
+* The two main derived classes are
+* - vil2_file_image: Representing an image in a file
+* - vil2_memory_image: Representing an image in memory (essentially a wrapper around a view)
+*
 * \subsection cav_user CAVEAT User
-* vil2 is a proposal. It may replace vil in part. 
+* vil2 is a proposal. It may replace vil in part.
 */
