@@ -1,6 +1,6 @@
 # oxl/xcv/CMakeLists.txt
 
-INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
+INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
 
 IF (HAS_VGUI)
 
