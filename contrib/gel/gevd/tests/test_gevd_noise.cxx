@@ -22,7 +22,11 @@ test_gevd_noise()
   for (int i=0; i<size; ++i) data[i]=(float)vnl_sample_uniform(0,2);
   gevd_noise noise_estim(data,size);
   float sensor_noise, texture_noise;
-  noise_estim.EstimateSensorTexture(sensor_noise, texture_noise);
+  if (!noise_estim.EstimateSensorTexture(sensor_noise, texture_noise))
+  {
+    TEST("gevd_noise::EstimateSensorTexture()", true, false);
+    return;
+  }
   vcl_cout << "sensor_noise = " << sensor_noise
            << ", texture_noise = " << texture_noise << vcl_endl;
   TEST("sensor  noise cannot be negative", sensor_noise >= 0, true);
