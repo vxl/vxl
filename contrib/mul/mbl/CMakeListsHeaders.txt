@@ -29,7 +29,7 @@ SOURCE_FILES(mbl_sources
   mbl_read_str.h
   mbl_lru_cache.h
   mbl_stl.h
-# mbl_arb_length_int.h
+# mbl_arb_length_int.h (deprecated)
   mbl_thin_plate_spline_2d.h
 
   mbl_selected_data_wrapper.txx
