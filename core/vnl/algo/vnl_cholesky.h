@@ -23,7 +23,11 @@
 //  use that to solve linear systems, compute determinants and inverses.
 //  The cholesky decomposition decomposes symmetric A = L*L.transpose()
 //  where L is lower triangular
-
+//
+//  To check that the decomposition can be used safely for solving a linear
+//  equation it is wise to construct with mode==estimate_condition and
+//  check that rcond()>sqrt(machine precision).  If this is not the case
+//  it might be a good idea to use vnl_svd instead.
 class vnl_cholesky {
 public:
   //: Modes of computation.  See constructor for details.
@@ -62,8 +66,10 @@ public:
   //: A Success/failure flag
   int rank_deficiency() const { return num_dims_rank_def_; }
 
-  //: Return reciprocal condition number.  Not calculated unless Operaton mode
-  // at construction was estimate_condition.
+  //: Return reciprocal condition number (smallest/largest singular values)
+  // As long as rcond()>sqrt(precision) the decomposition can be used for
+  // solving equations safely.
+  // Not calculated unless Operaton mode at construction was estimate_condition.
   double rcond() const { return rcond_; }
 
   //: Return computed nullvector. Not calculated unless Operaton mode
