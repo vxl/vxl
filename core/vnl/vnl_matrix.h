@@ -212,9 +212,8 @@ class vnl_matrix
   void set(T const *d) { copy_in(d); }
 
   //: Fill the given array with this matrix.
-  // We assume that p points to
-  // a contiguous rows*cols array, stored rowwise.
-  // No bounds checking on the array
+  // We assume that p points to a contiguous rows*cols array, stored rowwise.
+  // No bounds checking on the array.
   void copy_out(T *) const;
 
 
@@ -310,23 +309,22 @@ class vnl_matrix
   //: Set the i-th row
   void set_row(unsigned i, vnl_vector<T> const&);
 
-  //: Extract a sub-matrix of size rows x cols, starting at (top,left)
-  //  Thus it contains elements  [top,top+rows-1][left,left+cols-1]
-  vnl_matrix<T> extract(unsigned rows,  unsigned cols,
+  //: Extract a sub-matrix of size r x c, starting at (top,left)
+  //  Thus it contains elements  [top,top+r-1][left,left+c-1]
+  vnl_matrix<T> extract(unsigned r, unsigned c,
                         unsigned top=0, unsigned left=0) const;
 
   //: Get a vector equal to the given row
-  vnl_vector<T> get_row(unsigned row) const;
+  vnl_vector<T> get_row(unsigned r) const;
 
   //: Get a vector equal to the given column
-  vnl_vector<T> get_column(unsigned col) const;
+  vnl_vector<T> get_column(unsigned c) const;
 
   //: Get n rows beginning at rowstart
   vnl_matrix<T> get_n_rows(unsigned rowstart, unsigned n) const;
 
   //: Get n columns beginning at colstart
   vnl_matrix<T> get_n_columns(unsigned colstart, unsigned n) const;
-
 
   // mutators
 
@@ -426,10 +424,10 @@ class vnl_matrix
 
   //: abort if size is not as expected
   // This function does or tests nothing if NDEBUG is defined
-  void assert_size(unsigned rows, unsigned cols) const
+  void assert_size(unsigned r, unsigned c) const
   {
 #ifndef NDEBUG
-    assert_size_internal(rows, cols);
+    assert_size_internal(r, c);
 #endif
   }
   //: abort if matrix contains any INFs or NANs.
@@ -526,7 +524,7 @@ class vnl_matrix
   char vnl_matrix_own_data;
 #endif
 
-  void assert_size_internal(unsigned rows, unsigned cols) const;
+  void assert_size_internal(unsigned r, unsigned c) const;
   void assert_finite_internal() const;
 
   //: Delete data

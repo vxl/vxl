@@ -49,21 +49,21 @@
 //
 // causes an internal compiler error. It turns out that if the new
 // template parameter "o" comes _first_, then all is okay. Now, we
-// can't change the signature of vnl_matrix_fixed to <unsigned cols,
-// unsigned rows, type>, so we use a "hidden" helper matrix. Except
+// can't change the signature of vnl_matrix_fixed to <unsigned num_cols,
+// unsigned num_rows, type>, so we use a "hidden" helper matrix. Except
 // that user defined conversion operators and conversion constructors
 // are not called for templated functions. So we have to use a helper
 // base class. The base class is empty, which means that there is no
 // loss in space or time efficiency. Finally, we have:
 //
-//   template <unsigned cols, unsigned rows, class T>
+//   template <unsigned num_cols, unsigned num_rows, class T>
 //   class fake_base { };
 //
-//   template <class T, unsigned rows, unsigned cols>
-//   class matrix : public fake_base<cols,rows,T>
+//   template <class T, unsigned num_rows, unsigned num_cols>
+//   class matrix : public fake_base<num_cols,num_rows,T>
 //   {
 //      template <unsigned o>
-//      matrix<T,rows,o>  operator*( fake_base<o,cols,T> );
+//      matrix<T,num_rows,o>  operator*( fake_base<o,num_cols,T> );
 //   };
 //
 // Notice how "o" is first in the list of template parameters. Since
@@ -83,7 +83,7 @@ template <class T, unsigned M, unsigned N, unsigned O>
 inline
 vnl_matrix_fixed<T, M, O> vnl_matrix_fixed_mat_mat_mult(const vnl_matrix_fixed<T, M, N>& a, const vnl_matrix_fixed<T, N, O>& b);
 #ifdef VCL_VC60
-template <unsigned cols, unsigned rows, class T>
+template <unsigned num_cols, unsigned num_rows, class T>
 class vnl_matrix_fixed_fake_base
 {
 };
@@ -174,19 +174,19 @@ class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
 // Basic 2D-Array functionality-------------------------------------------
 
   //: Return number of rows
-  unsigned rows ()    const { return num_rows; }
+  unsigned rows()    const { return num_rows; }
 
   //: Return number of columns
   // A synonym for cols()
-  unsigned columns ()  const { return num_cols; }
+  unsigned columns()  const { return num_cols; }
 
   //: Return number of columns
   // A synonym for columns()
-  unsigned cols ()    const { return num_cols; }
+  unsigned cols()    const { return num_cols; }
 
   //: Return number of elements
   // This equals rows() * cols()
-  unsigned size ()    const { return num_rows*num_cols; }
+  unsigned size()    const { return num_rows*num_cols; }
 
   //: set element
   void put (unsigned r, unsigned c, T const& v) { (*this)(r,c) = v; }
@@ -380,9 +380,9 @@ class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
   //: Set the i-th row
   void set_row   (unsigned i, vnl_vector<T> const&);
 
-  //: Extract a sub-matrix of size rows x cols, starting at (top,left)
-  //  Thus it contains elements  [top,top+rows-1][left,left+cols-1]
-  vnl_matrix<T> extract (unsigned rows,  unsigned cols,
+  //: Extract a sub-matrix of size r x c, starting at (top,left)
+  //  Thus it contains elements  [top,top+r-1][left,left+c-1]
+  vnl_matrix<T> extract (unsigned r,  unsigned c,
                          unsigned top=0, unsigned left=0) const;
 
   //: Get a vector equal to the given row
@@ -491,10 +491,10 @@ class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
 
   //: abort if size is not as expected
   // This function does or tests nothing if NDEBUG is defined
-  void assert_size(unsigned rows, unsigned cols) const
+  void assert_size(unsigned nr_rows, unsigned nr_cols) const
   {
 #ifndef NDEBUG
-    assert_size_internal(rows, cols);
+    assert_size_internal(nr_rows, nr_cols);
 #endif
   }
   //: abort if matrix contains any INFs or NANs.
