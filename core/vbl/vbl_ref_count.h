@@ -15,6 +15,8 @@ class vbl_ref_count
   int ref_count_;
  public:
   vbl_ref_count() : ref_count_(0) { }
+  // Copying an object should not copy the ref count.
+  vbl_ref_count(vbl_ref_count const&) : ref_count_(0) { }
   virtual ~vbl_ref_count() {}
   void ref() { ++ref_count_; }
   void unref() { if (--ref_count_ <= 0) delete this; }
