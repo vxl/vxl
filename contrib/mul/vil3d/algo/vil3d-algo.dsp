@@ -125,6 +125,9 @@ SOURCE=.\Templates/vil3d_threshold+float-.cxx
 # Begin Source File
 SOURCE=.\Templates/vil3d_threshold+int-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_grad_1x3+int_32.float-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
