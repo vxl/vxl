@@ -30,18 +30,30 @@ void vsl_b_read(vsl_b_istream &is, vbl_sparse_array_base<T, Index> & p)
   short v;
   vsl_b_read(is, v);
 
-  vcl_pair<Index, T> value;
-  unsigned size;
   switch(v)
   {
-  case 1:
+  case 1: {
+    unsigned size;
     vsl_b_read(is, size);
+    
+#ifdef VCL_SUNPRO_CC_50
+    // SunPro 5.0 (CC -g -c) generates wrong code (duplicate symbols).
+    Index value_first;
+    T     value_second;
+    for(unsigned i=0; i<size; i++){
+      vsl_b_read(is, value_first);
+      vsl_b_read(is, value_second);
+      p(value_first) = value_second;
+    }
+#else
+    vcl_pair<Index, T> value;
     for(unsigned i=0; i<size; i++){
       vsl_b_read(is, value);
       p(value.first)=value.second;
     }
-    break;
-
+#endif
+  } break;
+  
   default:
     vcl_cerr << "vsl_b_read() Unknown version number "<< v << vcl_endl;
     vcl_abort();
