@@ -25,6 +25,9 @@ void test_inverse() {
 
   {
     vnl_double_2x2 id2; id2.set_identity();
+    vnl_double_2x2 id2i = vnl_inverse(id2);
+    TEST("2x2 vnl_inverse of Id", id2i, id2);
+
     double M2[4];
     for (int i=0; i<4; ++i) M2[i] = vnl_sample_uniform(-1.0,1.0);
     vnl_double_2x2 m2(M2);
@@ -37,6 +40,9 @@ void test_inverse() {
 
   {
     vnl_double_3x3 id3; id3.set_identity();
+    vnl_double_3x3 id3i = vnl_inverse(id3);
+    TEST("3x3 vnl_inverse of Id", id3i, id3);
+
     double M3[9] = {
       0.45646766516834,   0.44470336435319,   0.92181297074480,
       0.01850364324822,   0.61543234810009,   0.73820724581067,
@@ -64,6 +70,9 @@ void test_inverse() {
 
   {
     vnl_double_4x4 id4; id4.set_identity();
+    vnl_double_4x4 id4i = vnl_inverse(id4);
+    TEST("4x4 vnl_inverse of Id", id4i, id4);
+
     double M4[16] = {
       0.40570621306210,   0.89364953091353,   0.00986130066092,   0.60379247919382,
       0.93546969910761,   0.05789130478427,   0.13889088195695,   0.27218792496996,
