@@ -284,14 +284,6 @@ class vnl_vector_fixed
   // explicit as_ref() method instead.
   operator const vnl_vector_ref<T>() const { return vnl_vector_ref<T>( n, const_cast<T*>(data_) ); }
 
-#if 0 // Commented out  -  compile errors with gcc - PVr
-  //----------------------------------------------------------------------
-  // Conversion to vnl_vector_fixed_ref. Similar to above
-
-  vnl_vector_fixed_ref<T,n> as_fixed_ref() { return vnl_vector_fixed_ref<T,n>( data_block() ); }
-
-  const vnl_vector_fixed_ref<T,n> as_fixed_ref() const { return vnl_vector_fixed_ref<T,n>( const_cast<T*>(data_block()) ); }
-#endif
   //----------------------------------------------------------------------
 
   //: Type defs for iterators
