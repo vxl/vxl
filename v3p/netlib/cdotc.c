@@ -40,7 +40,7 @@ integer *incy;
     ctemp.r = (float)0., ctemp.i = (float)0.;
      ret_val->r = (float)0.,  ret_val->i = (float)0.;
     if (*n <= 0) {
-	return ;
+	return 0;
     }
     if (*incx == 1 && *incy == 1) {
 	goto L20;
@@ -70,7 +70,7 @@ integer *incy;
 /* L10: */
     }
      ret_val->r = ctemp.r,  ret_val->i = ctemp.i;
-    return ;
+    return 0;
 
 /*        code for both increments equal to 1 */
 
@@ -86,6 +86,6 @@ L20:
 /* L30: */
     }
      ret_val->r = ctemp.r,  ret_val->i = ctemp.i;
-    return ;
+    return 0;
 } /* cdotc_ */
 
