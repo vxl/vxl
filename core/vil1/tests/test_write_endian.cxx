@@ -1,6 +1,7 @@
 /*
   fsm@robots.ox.ac.uk
 */
+#include <vcl/vcl_unistd.h>
 #include <vil/vil_16bit.h>
 #include <vil/vil_stream_fstream.h>
 
@@ -30,6 +31,9 @@ int main(int, char **)
   s->read(bytes, 4);
 
   s->unref();
+
+  // clean up.
+  vcl_unlink(file);
 
   // check
   if (bytes[0] == 0x02 &&

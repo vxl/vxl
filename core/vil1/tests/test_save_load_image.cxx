@@ -11,21 +11,6 @@
 #include <vil/vil_save.h>
 #include <vil/vil_memory_image_of.h>
 
-#include <vil/file_formats/vil_iris.h>
-#ifdef HAS_JPEG
-#include <vil/file_formats/vil_jpeg.h>
-#endif
-#ifdef HAS_PNG
-#include <vil/file_formats/vil_png.h>
-#endif
-#ifdef HAS_TIFF
-#include <vil/file_formats/vil_tiff.h>
-#endif
-#include <vil/file_formats/vil_pnm.h>
-#include <vil/file_formats/vil_viff.h>
-#include <vil/file_formats/vil_bmp.h>
-#include <vil/file_formats/vil_mit.h>
-
 #define DEBUG 1
 #define LEAVE_IMAGES_BEHIND 0
 
