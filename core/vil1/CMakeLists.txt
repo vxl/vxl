@@ -50,7 +50,6 @@ SET( vil1_sources
   # Wrapper classes for vil/vil1 conversion
   vil1_vil.h
 
-
   # file format readers/writers (see below for conditional ones)
   file_formats/vil1_gen.cxx                  file_formats/vil1_gen.h
   file_formats/vil1_pnm.cxx                  file_formats/vil1_pnm.h
@@ -98,13 +97,28 @@ SET( vil1_sources
   vil1_ip_traits.h
 )
 
+# Some versions of Solaris (at least 5.8) has a brain-dead mechanism
+# for implementing DNS services, where the user of a library that uses
+# gethostbyname should link to -lnsl *before* linking to the
+# library. This creates a kind of "pre-dependency" that the CMake
+# dependency analysis is not equipped to handle. We cope by isolating
+# the offending code into its own library vil1_network (under Solaris
+# only, of course). We can then control the dependencies of vil1 to
+# link nsl before this vil1_network.
+#
 SET( vil1_network_sources
    # load image from URL
   vil1_stream_url.cxx                        vil1_stream_url.h
 )
 
+# vil1_stream_url not working on Apple MacOSX
 IF(NOT APPLE)
-  SET (vil1_sources ${vil1_sources} ${vil1_network_sources} )
+# vil1_stream_url in separate library on Solaris
+  IF(SOLARIS)
+    ADD_LIBRARY(vil1_network ${vil1_network_sources})
+  ELSE(SOLARIS)
+    SET(vil1_sources ${vil1_sources} ${vil1_network_sources})
+  ENDIF(SOLARIS)
 ENDIF(NOT APPLE)
 
 # vil1_file_formats.cxx uses -DTIFF, etc, so we need to do this here.
@@ -116,7 +130,7 @@ IF(PNG_FOUND)
   INCLUDE_DIRECTORIES( ${PNG_INCLUDE_DIR})
   ADD_DEFINITIONS( ${PNG_DEFINITIONS}  -DHAS_PNG )
   SET( vil1_sources ${vil1_sources}
-    file_formats/vil1_png.cxx                   file_formats/vil1_png.h
+       file_formats/vil1_png.cxx             file_formats/vil1_png.h
   )
 ENDIF(PNG_FOUND)
 
@@ -137,7 +151,7 @@ IF(TIFF_FOUND)
   INCLUDE_DIRECTORIES( ${TIFF_INCLUDE_DIR} )
   ADD_DEFINITIONS( ${TIFF_DEFINITIONS} -DHAS_TIFF )
   SET( vil1_sources ${vil1_sources}
-    file_formats/vil1_tiff.cxx                  file_formats/vil1_tiff.h
+       file_formats/vil1_tiff.cxx            file_formats/vil1_tiff.h
   )
 ENDIF(TIFF_FOUND)
 
@@ -149,8 +163,25 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(vil1 ${vil1_sources})
 
+IF(JPEG_FOUND)
+  TARGET_LINK_LIBRARIES( vil1 ${JPEG_LIBRARIES} )
+ENDIF(JPEG_FOUND)
+IF(TIFF_FOUND)
+  TARGET_LINK_LIBRARIES( vil1 ${TIFF_LIBRARIES} )
+ENDIF(TIFF_FOUND)
+IF(PNG_FOUND)
+  TARGET_LINK_LIBRARIES( vil1 ${PNG_LIBRARIES} )
+ENDIF(PNG_FOUND)
 
 TARGET_LINK_LIBRARIES( vil1 vcl )
+
+IF(NOT UNIX)
+  TARGET_LINK_LIBRARIES( vil1 ws2_32.lib )
+ENDIF(NOT UNIX)
+
+IF(SOLARIS)
+  TARGET_LINK_LIBRARIES( vil1 nsl vil1_network socket )
+ENDIF(SOLARIS)
 
 
 SUBDIRS(io)
