@@ -19,9 +19,18 @@
 #include <vil1/vil1_load.h>
 #include <vil1/vil1_save.h>
 #include <vcl_iostream.h>
+#include <vil1/vil1_rgb.h>
+#include <vil1/vil1_memory_image_of.txx>
 
 #include <vxl_config.h> // for vxl_byte
-typedef vil1_rgb<vxl_byte> rgbcell;
+class rgbcell: public vil1_rgb<vxl_byte>
+{
+public:
+  rgbcell() {};
+  rgbcell(double x): vil1_rgb<vxl_byte>(vxl_byte(x)) {}
+};
+
+VIL1_MEMORY_IMAGE_OF_INSTANTIATE(vil1_rgb<double>);
 
 int
 main(int argc, char** argv)
