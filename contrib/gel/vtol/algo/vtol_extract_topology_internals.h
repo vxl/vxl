@@ -1,12 +1,11 @@
 #ifndef vtol_extract_topology_internals_h_
 #define vtol_extract_topology_internals_h_
-
 //:
 // \file
 // \author Amitha Perera
 // \date   Dec 2003
-
-// See the comments in vtol_extract_topology.cxx:47 on why this file exists.
+//
+// See the comments in vtol_extract_topology.cxx:43 on why this file exists.
 
 #include <vbl/vbl_ref_count.h>
 
