@@ -124,10 +124,10 @@ static void test_vector_3d()
   TEST("ratio", (-v*3.5)/v, -3.5);
   APPROX("ratio", v1/v, 1.852071);
 
-  TEST("normalized", length(v1)*normalized(v1), v1);
+  APPROX("normalized", length(length(v1)*normalized(v1) -v1), 0.0);
   v0=v1;
   normalize(v1);
-  TEST("normalize", length(v0)*v1, v0);
+  APPROX("normalize", length(length(v0)*v1 - v0), 0.0);
 
   TEST("orthogonal", orthogonal(v,vgl_vector_3d<float>()), true); // orthogonal to (0,0)
   TEST("!orthogonal", orthogonal(v,v1,0.1), false); // even not with tolorance
