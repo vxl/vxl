@@ -2,22 +2,22 @@
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
 
-// You just cannot declare builtins.. 
-// extern "C" void abort() { vcl_cout << "abort()\n"; vcl_exit(1); }
-
 int main()
 {
-  int result;
+  int result = 0;
+#if VCL_HAS_EXCEPTIONS
   vcl_try {
     vcl_throw "\"const char* exception\"";
   }
   vcl_catch (const char* e) {
-    vcl_cout << "caught " << e << ". Good." << vcl_endl;
-    result = 0;
+    vcl_cout << "caught " << e << ". Good.\n";
   }
   vcl_catch_all {
-    vcl_cout << "caught nuffink. Bad. " << vcl_endl;
+    vcl_cout << "caught nuffink. Bad.\n";
     result = 1;
   }
+#else
+  vcl_cout << "this compiler does not support exception handling\n";
+#endif
   return result;
 }
