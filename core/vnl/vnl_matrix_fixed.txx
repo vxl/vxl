@@ -641,32 +641,32 @@ template <class T, unsigned nrows, unsigned ncols>
 typename vnl_matrix_fixed<T,nrows,ncols>::abs_t
 vnl_matrix_fixed<T,nrows,ncols>::operator_one_norm() const
 {
-  abs_t max = 0;
+  abs_t m(0);
   for (unsigned int j=0; j<ncols; ++j)
   {
-    abs_t tmp = 0;
+    abs_t t(0);
     for (unsigned int i=0; i<nrows; ++i)
-      tmp += vnl_math_abs( (*this)(i,j) );
-    if (tmp > max)
-      max = tmp;
+      t += vnl_math_abs( (*this)(i,j) );
+    if (t > m)
+      m = t;
   }
-  return max;
+  return m;
 }
 
 template <class T, unsigned nrows, unsigned ncols>
 typename vnl_matrix_fixed<T,nrows,ncols>::abs_t
 vnl_matrix_fixed<T,nrows,ncols>::operator_inf_norm() const
 {
-  abs_t max(0);
+  abs_t m(0);
   for (unsigned int i=0; i<nrows; ++i)
   {
-    abs_t tmp(0);
+    abs_t t(0);
     for (unsigned int j=0; j<ncols; ++j)
-      tmp += vnl_math_abs( (*this)(i,j) );
-    if (tmp > max)
-      max = tmp;
+      t += vnl_math_abs( (*this)(i,j) );
+    if (t > m)
+      m = t;
   }
-  return max;
+  return m;
 }
 
 //: Transpose square matrix M in place.
