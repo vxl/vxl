@@ -25,5 +25,5 @@ AUX_SOURCE_DIRECTORY(Templates vpro_sources)
 
 ADD_LIBRARY(vpro ${vpro_sources})
 
-TARGET_LINK_LIBRARIES(vpro sdet brip bsol btol bdgl gevd vdgl vtol vsol vil vgl_algo vnl vul vbl)
+TARGET_LINK_LIBRARIES(vpro sdet brip bdgl vdgl vtol vsol vidl vil1 vul vbl)
 
