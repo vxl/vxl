@@ -1,49 +1,28 @@
-
-// Load a vrml file, overlay 3d and view
-// awf@robots.ox.ac.uk, Nov 2000
+//:
+// \file
+// \brief Load a vrml file, overlay 3d and view
+// \author awf@robots.ox.ac.uk, Nov 2000
 
 #include <vcl_cmath.h>
 #include <vcl_fstream.h>
-
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/algo/vnl_scatter_3x3.h>
-#include <vnl/algo/vnl_symmetric_eigensystem.h>
-
-#include <vil/vil_image.h>
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_load.h>
-#include <vil/vil_rgb_byte.h>
-
-#include <vgl/vgl_polygon_scan_iterator.h>
-#include <vgl/vgl_point_2d.h>
 
 // vgui basics:
 #include <vgui/vgui.h>
 // tableaux:
 #include <vgui/vgui_easy3D.h>
-#include <vgui/vgui_easy2D.h>
-#include <vgui/vgui_rubberbander.h>
 #include <vgui/vgui_viewer3D.h>
-#include <vgui/vgui_viewer2D.h>
 #include <vgui/vgui_composite.h>
 #include <vgui/vgui_deck_tableau.h>
-#include <vgui/vgui_text.h>
-#include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_image_blender.h>
+#include <vgui/vgui_text_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
-#include <vgui/vgui_projection_inspector.h>
 #include <vgui/vrml/vgui_vrml_tableau.h>
 // extras:
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_dialog.h>
-#include <vgui/vgui_error_dialog.h>
 
-# include <vgui/vgui_linker_hack.h>
-
-#ifdef VCL_WIN32
-# include <vgui/impl/mfc/vgui_mfc_app_init.h>
-#endif
+//#ifdef VCL_WIN32
+//# include <vgui/impl/mfc/vgui_mfc_app_init.h>
+//#endif
 
 vgui_deck_tableau_sptr thedeck;
 vcl_vector<vgui_vrml_tableau_sptr> thevrmls;
@@ -79,7 +58,7 @@ vgui_tableau_sptr make_3d_tableau(char const* filename)
 
   // Composite the easy and vrml
 
-  vgui_text_new text;
+  vgui_text_tableau_new text;
   text->add(-.8f,-.8f, filename);
 
   vgui_composite_new c(vrml, text);
