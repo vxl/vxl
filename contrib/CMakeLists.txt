@@ -1,4 +1,5 @@
 # This is contrib/CMakeLists.txt
+# Dependencies: mul --> (rpl,tbl);  oxl --> gel --> brl;  (gel,oxl) --> conversions
 
 IF( EXISTS ${vxl_SOURCE_DIR}/contrib/conversions/CMakeLists.txt )
   OPTION(BUILD_CONVERSIONS "Build the Conversions Examples?" YES)
@@ -33,13 +34,17 @@ IF( EXISTS ${vxl_SOURCE_DIR}/contrib/tbl/CMakeLists.txt )
 ENDIF( EXISTS ${vxl_SOURCE_DIR}/contrib/tbl/CMakeLists.txt )
 
 
-IF(BUILD_GEL)
-  SUBDIRS(gel)
-ENDIF(BUILD_GEL)
-
 IF(BUILD_MUL)
   SUBDIRS(mul)
 ENDIF(BUILD_MUL)
+
+IF(BUILD_RPL)
+  SUBDIRS(rpl)
+ENDIF(BUILD_RPL)
+
+IF(BUILD_TBL)
+  SUBDIRS(tbl)
+ENDIF(BUILD_TBL)
 
 IF(BUILD_OUL)
   SUBDIRS(oul)
@@ -49,17 +54,13 @@ IF(BUILD_OXL)
   SUBDIRS(oxl)
 ENDIF(BUILD_OXL)
 
+IF(BUILD_GEL)
+  SUBDIRS(gel)
+ENDIF(BUILD_GEL)
+
 IF(BUILD_BRL)
   SUBDIRS(brl)
 ENDIF(BUILD_BRL)
-
-IF(BUILD_RPL)
-  SUBDIRS(rpl)
-ENDIF(BUILD_RPL)
-
-IF(BUILD_TBL)
-  SUBDIRS(tbl)
-ENDIF(BUILD_TBL)
 
 IF(BUILD_CONVERSIONS)
   SUBDIRS(conversions)
