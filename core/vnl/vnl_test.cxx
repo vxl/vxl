@@ -12,18 +12,17 @@
 // Created: LGO 11/27/89 -- Initial design
 //
 
-#include <vcl/vcl_cstdio.h>
+#include "vnl_test.h"
+#include <vcl/vcl_cmath.h>
+#include <vcl/vcl_cstdlib.h>
 #include <vcl/vcl_iostream.h>
-
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_test.h>
 
 static int num_test;
 static int tests_passed;
 static int tests_failed;
 static const char* test_name;
 
-void vnl_test_start(const char* name = NULL) {
+void vnl_test_start(const char* name = 0) {
   num_test = 0;
   tests_passed = 0;
   tests_failed = 0;
@@ -82,5 +81,5 @@ void vnl_test_assert(const vcl_string& msg, bool expr)
 void vnl_test_assert_near(const vcl_string& msg, double expr, double target, double tol)
 {
   vcl_cout << msg << " should be " << target << ", is " << expr << ", ";
-  vnl_test_perform(fabs(expr - target) < tol);
+  vnl_test_perform(vcl_abs(expr - target) < tol);
 }

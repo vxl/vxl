@@ -39,11 +39,11 @@ double vnl_sample_normal(double mean, double sigma)
   double u     = vnl_sample_uniform(0, 1);
   double theta = vnl_sample_uniform(0, 2*3.1415926);
   
-  double r = sqrt(-2*log(u));
+  double r = vcl_sqrt(-2*vcl_log(u));
   
-  double x = r * cos(theta);
+  double x = r * vcl_cos(theta);
 #ifdef fred
-  double y = r * sin(theta);
+  double y = r * vcl_sin(theta);
 #endif
   
   return mean + sigma * x;
