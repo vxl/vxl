@@ -25,6 +25,7 @@ SET( rgrl_sources
   rgrl_feature_region.h                rgrl_feature_region.cxx
   rgrl_feature_trace_region.h          rgrl_feature_trace_region.cxx
   rgrl_feature_face_region.h           rgrl_feature_face_region.cxx
+  rgrl_feature_reader.h                rgrl_feature_reader.cxx
 
   rgrl_feature_set.h                   rgrl_feature_set.cxx          
   rgrl_feature_set_sptr.h

@@ -7,6 +7,7 @@
 #include <rgrl/rgrl_util.h>
 #include <rgrl/rgrl_cast.h>
 
+
 rgrl_feature_face_pt ::
 rgrl_feature_face_pt( vnl_vector< double > const& location,
                       vnl_vector< double > const& normal )
@@ -142,4 +143,77 @@ absolute_signature_weight( rgrl_feature_sptr other ) const
   }
 
   return  dir_wgt* scale_wgt;
+}
+
+//: write out feature
+void
+rgrl_feature_face_pt::
+write( vcl_ostream& os ) const
+{
+  // tag
+  os << "FACE" << vcl_endl;
+  
+  // dim
+  os << location_.size() << vcl_endl;
+  
+  // atributes
+  os << location_ << '    ' << scale_ << "\n"
+     << normal_ << "\n" 
+     << error_proj_ << vcl_endl;
+}
+
+//: read in feature
+bool 
+rgrl_feature_face_pt::
+read( vcl_istream& is, bool skip_tag )
+{
+  if( !skip_tag ) {
+
+    // skip empty lines
+    rgrl_util_skip_empty_lines( is );
+    
+    vcl_string str;
+    vcl_getline( is, str );
+    
+    // The token should appear at the beginning of line
+    if ( str.find( "FACE" ) != 0 ) {
+      WarningMacro( "The tag is not FACE. reading is aborted.\n" );
+      return false;
+    }
+  }
+
+  // get dim
+  int dim=-1;
+  is >> dim;
+  
+  if( !is || dim<=0 ) 
+    return false;    // cannot get dimension
+    
+  // get location
+  location_.set_size( dim );
+  is >> location_;
+  if( !is )
+    return false;   // cannot read location
+    
+  // get scale
+  is >> scale_; 
+  if( !is )
+    return false;   // cannot read scale
+
+  // get normal
+  normal_.set_size( dim );
+  is >> normal_;
+  if( !is ) 
+    return false; 
+    
+  // get error projector
+  error_proj_.set_size( dim, dim );
+  is >> error_proj_;
+  if( !is ) 
+    return false; 
+  
+  //reset flag
+  subspace_cached_ = false;
+  
+  return true;
 }

@@ -17,6 +17,14 @@ class rgrl_feature_face_pt
   rgrl_feature_face_pt( vnl_vector< double > const& location,
                         vnl_vector< double > const& normal );
 
+  //: read in feature
+  virtual 
+  bool read( vcl_istream& is, bool skip_tag=false );
+  
+  //: write out feature
+  virtual
+  void write( vcl_ostream& os ) const;
+
   virtual vnl_vector<double> const& location() const;
 
   //: Provide the scale level at which this feature is detected
@@ -51,6 +59,10 @@ class rgrl_feature_face_pt
   // Create an uninitialized face_pt of dimension dim
   //
   rgrl_feature_face_pt( );
+  
+  // to be able to use the protected constructor
+  friend rgrl_feature_sptr
+         rgrl_feature_reader( vcl_istream& is );
   
   //: Apply transformation to the scale property
   virtual double  

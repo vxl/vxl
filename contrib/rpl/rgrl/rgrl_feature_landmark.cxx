@@ -2,9 +2,10 @@
 // \author Amitha Perera
 // \date Feb 2002
 
-#include "rgrl_feature_landmark.h"
-#include "rgrl_transformation.h"
-#include "rgrl_cast.h"
+#include <rgrl/rgrl_feature_landmark.h>
+#include <rgrl/rgrl_transformation.h>
+#include <rgrl/rgrl_cast.h>
+#include <rgrl/rgrl_util.h>
 
 #include <vnl/vnl_math.h>
 #include <vcl_cassert.h>
@@ -28,6 +29,11 @@ rgrl_feature_landmark( rgrl_feature_landmark const& other )
     location_( other.location_ ),
     error_proj_( other.error_proj_ ),
     outgoing_directions_( other.outgoing_directions_ )
+{
+}
+
+rgrl_feature_landmark::
+rgrl_feature_landmark( )
 {
 }
 
@@ -125,4 +131,81 @@ max_similarity(const vcl_vector<vnl_vector<double> >& u,
     }
   }
   return max ;
+}
+
+//: write out feature
+void
+rgrl_feature_landmark::
+write( vcl_ostream& os ) const
+{
+  // tag
+  os << "LANDMARK" << vcl_endl;
+  
+  // dim
+  os << location_.size() << vcl_endl;
+  
+  // atributes
+  os << location_ << "\n"
+     << error_proj_ << "\n"
+     << outgoing_directions_.size() << "\n";
+  for( unsigned i=0; i<outgoing_directions_.size(); ++i )
+    os << outgoing_directions_[i] << "\n";
+  os << vcl_endl;
+  
+}
+
+//: read in feature
+bool 
+rgrl_feature_landmark::
+read( vcl_istream& is, bool skip_tag )
+{
+  if( !skip_tag ) {
+
+    // skip empty lines
+    rgrl_util_skip_empty_lines( is );
+    
+    vcl_string str;
+    vcl_getline( is, str );
+    
+    // The token should appear at the beginning of line
+    if ( str.find( "LANDMARK" ) != 0 ) {
+      WarningMacro( "The tag is not LANDMARK. reading is aborted.\n" );
+      return false;
+    }
+  }   
+
+  // get dim
+  int dim=-1;
+  is >> dim;
+  if( !is || dim<=0 ) 
+    return false;    // cannot get dimension
+    
+  // get location
+  location_.set_size( dim );
+  is >> location_;
+  if( !is )
+    return false;   // cannot read location
+    
+  // get error projector
+  error_proj_.set_size( dim, dim );
+  is >> error_proj_;
+  if( !is )
+    return false; 
+
+  // get outgoing directions
+  int num=-1;
+  is >> num;
+  if( !is || num<=0 )
+    return false;
+   
+  outgoing_directions_.reserve( num ); 
+  vnl_vector<double> one( dim );
+  for(unsigned i=0; i<num; ++i) {
+    is >> one;
+    if( !is )
+      return false;
+    outgoing_directions_.push_back( one );
+  }
+     
+  return true;
 }

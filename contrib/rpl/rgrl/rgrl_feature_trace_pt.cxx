@@ -10,15 +10,24 @@
 
 #include <vcl_cassert.h>
 
+rgrl_feature_trace_pt ::
+rgrl_feature_trace_pt()
+  : scale_(0), 
+    subspace_cached_( false ),
+    length_( 0 ), radius_( 0 )
+{
+  
+}
+
 rgrl_feature_trace_pt::
 rgrl_feature_trace_pt( vnl_vector<double> const& loc,
                        vnl_vector<double> const& tangent )
   : location_( loc ),
     tangent_( tangent ),
     error_proj_( loc.size(), loc.size(), vnl_matrix_identity ),
+    scale_( 0 ),
     subspace_cached_(false),
-    length_( 0 ), radius_( 0 ),
-    scale_( 0 )
+    length_( 0 ), radius_( 0 )
 {
   tangent_.normalize();
   error_proj_ -= outer_product( tangent_, tangent_ );
@@ -32,22 +41,14 @@ rgrl_feature_trace_pt( vnl_vector<double> const& loc,
   : location_( loc ),
     tangent_( tangent ),
     error_proj_( loc.size(), loc.size(), vnl_matrix_identity ),
+    scale_( 0 ),
     subspace_cached_(false),
-    length_( length ), radius_( radius ),
-    scale_( 0 )
+    length_( length ), radius_( radius )
 {
   tangent_.normalize();
   error_proj_ -= outer_product( tangent_, tangent_ );
 }
 
-
-rgrl_feature_trace_pt::
-rgrl_feature_trace_pt( )
-  : subspace_cached_(false),
-    length_( 0 ), radius_( 0 ),
-    scale_( 0 )
-{
-}
 
 
 unsigned int
@@ -158,4 +159,76 @@ boundary_points(vnl_vector<double> const& in_direction) const
   bdy_feature_points.push_back(bd_pt);
 
   return bdy_feature_points;
+}
+//: write out feature
+void
+rgrl_feature_trace_pt::
+write( vcl_ostream& os ) const
+{
+  // tag
+  os << "TRACE" << vcl_endl;
+  
+  // dim
+  os << location_.size() << vcl_endl;
+  
+  // atributes
+  os << location_ << '    ' << scale_ << "\n"
+     << tangent_ << "\n" 
+     << error_proj_ << vcl_endl;
+}
+
+//: read in feature
+bool 
+rgrl_feature_trace_pt::
+read( vcl_istream& is, bool skip_tag )
+{
+  if( !skip_tag ) {
+
+    // skip empty lines
+    rgrl_util_skip_empty_lines( is );
+    
+    vcl_string str;
+    vcl_getline( is, str );
+    
+    // The token should appear at the beginning of line
+    if ( str.find( "TRACE" ) != 0 ) {
+      WarningMacro( "The tag is not TRACE. reading is aborted.\n" );
+      return false;
+    }
+  }
+
+  // get dim
+  int dim=-1;
+  is >> dim;
+  
+  if( !is || dim<=0 ) 
+    return false;    // cannot get dimension
+    
+  // get location
+  location_.set_size( dim );
+  is >> location_;
+  if( !is )
+    return false;   // cannot read location
+    
+  // get scale
+  is >> scale_; 
+  if( !is )
+    return false;   // cannot read scale
+
+  // get tangent
+  tangent_.set_size( dim );
+  is >> tangent_;
+  if( !is ) 
+    return false; 
+    
+  // get error projector
+  error_proj_.set_size( dim, dim );
+  is >> error_proj_;
+  if( !is ) 
+    return false; 
+  
+  //reset flag
+  subspace_cached_ = false;
+  
+  return true;
 }

@@ -20,6 +20,11 @@ class rgrl_feature_trace_pt
   typedef vcl_vector<rgrl_feature_sptr >  feature_vector;
 
  public:
+  //: Constructor
+  //  should not be used by anything other than the reader.
+  //  use the other constructors insead.
+  // rgrl_feature_trace_pt();
+
   //:  Constructor to initialize feature_trace_pt location.
   rgrl_feature_trace_pt( vnl_vector<double> const& loc,
                          vnl_vector<double> const& tangent );
@@ -29,6 +34,14 @@ class rgrl_feature_trace_pt
                          vnl_vector<double> const& tangent,
                          double                    length,
                          double                    radius );
+
+  //: read in feature
+  virtual 
+  bool read( vcl_istream& is, bool skip_tag=false );
+  
+  //: write out feature
+  virtual
+  void write( vcl_ostream& os ) const;
 
   virtual vnl_vector<double> const&
   location() const;
@@ -90,9 +103,15 @@ class rgrl_feature_trace_pt
   //
   rgrl_feature_trace_pt();
 
+  // to be able to use the protected constructor
+  friend rgrl_feature_sptr
+         rgrl_feature_reader( vcl_istream& is );
+
   vnl_vector<double> location_;
   vnl_vector<double> tangent_;
   vnl_matrix<double> error_proj_;
+  // scale level at which this feture is detected
+  double scale_;
  private:
 
   //: The basis for the subspace of vectors normal to the tangent direction.
@@ -109,9 +128,6 @@ class rgrl_feature_trace_pt
 
   double length_;
   double radius_;
-  
-  // scale level at which this feture is detected
-  double scale_;
 };
 
 #endif

@@ -16,8 +16,17 @@ class rgrl_feature_point
   : public rgrl_feature
 {
  public:
+  
   //:
   rgrl_feature_point( vnl_vector<double> const& loc );
+
+  //: read in feature
+  virtual 
+  bool read( vcl_istream& is, bool skip_tag=false );
+  
+  //: write out feature
+  virtual
+  void write( vcl_ostream& os ) const;
 
   vnl_vector<double> const&
   location() const;
@@ -52,7 +61,11 @@ class rgrl_feature_point
   // Create an uninitialized feature with enough space to store a dim
   // dimensional feature.
   //
-  rgrl_feature_point( unsigned dim );
+  rgrl_feature_point( unsigned dim=0 );
+
+  // to be able to use the protected constructor
+  friend rgrl_feature_sptr
+         rgrl_feature_reader( vcl_istream& is );
 
   //: Apply transformation to the scale property
   virtual double  

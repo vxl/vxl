@@ -28,6 +28,14 @@ class rgrl_feature_landmark
   rgrl_feature_landmark( vnl_vector<double> const& loc,
                          vcl_vector< vnl_vector<double> > const& outgoing_directions );
 
+  //: read in feature
+  virtual 
+  bool read( vcl_istream& is, bool skip_tag=false );
+  
+  //: write out feature
+  virtual
+  void write( vcl_ostream& os ) const;
+
   vnl_vector<double> const&
   location() const;
 
@@ -46,9 +54,16 @@ class rgrl_feature_landmark
   //
   double absolute_signature_weight( rgrl_feature_sptr other ) const;
 
- private:
+ protected:
   rgrl_feature_landmark( rgrl_feature_landmark const& other );
 
+  //: uninitialized constructor
+  rgrl_feature_landmark();
+  
+  // to be able to use the protected constructor
+  friend rgrl_feature_sptr
+         rgrl_feature_reader( vcl_istream& is );
+ 
   // disabled, not implemented
   rgrl_feature_landmark& operator=( rgrl_feature_landmark const& );
 

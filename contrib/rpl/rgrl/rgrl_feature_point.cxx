@@ -6,6 +6,7 @@
 #include <rgrl/rgrl_feature_point.h>
 #include <rgrl/rgrl_cast.h>
 #include <rgrl/rgrl_transformation.h>
+#include <rgrl/rgrl_util.h>
 
 #include <vcl_cassert.h>
 
@@ -110,7 +111,7 @@ transform_scale( rgrl_transformation const& xform ) const
 
 //:  Compute the signature weight between two features.
 double
-rgrl_feature_point ::
+rgrl_feature_point::
 absolute_signature_weight( rgrl_feature_sptr other ) const
 {
   //if other is invalid
@@ -130,4 +131,62 @@ absolute_signature_weight( rgrl_feature_sptr other ) const
   }
 
   return  scale_wgt;
+}
+
+//: write out feature
+void
+rgrl_feature_point::
+write( vcl_ostream& os ) const
+{
+  // tag
+  os << "POINT" << vcl_endl;
+  
+  // dim
+  os << location_.size() << vcl_endl;
+  
+  // atributes
+  os << location_ << '    ' << scale_ << vcl_endl;
+}
+
+//: read in feature
+bool 
+rgrl_feature_point::
+read( vcl_istream& is, bool skip_tag )
+{
+  if( !skip_tag ) {
+
+    // skip empty lines
+    rgrl_util_skip_empty_lines( is );
+    
+    vcl_string str;
+    vcl_getline( is, str );
+    
+    // The token should appear at the beginning of line
+    if ( str.find( "POINT" ) != 0 ) {
+      WarningMacro( "The tag is not POINT. reading is aborted.\n" );
+      return false;
+    }
+  }   
+
+  // get dim
+  int dim=-1;
+  is >> dim;
+  
+  if( !is || dim<=0 ) 
+    return false;    // cannot get dimension
+    
+  // get location
+  location_.set_size( dim );
+  is >> location_;
+  
+  if( !is )
+    return false;   // cannot read location
+    
+  // get scale
+  is >> scale_; 
+  
+  if( !is )
+    return false;   // cannot read scale
+    
+  return true;
 }

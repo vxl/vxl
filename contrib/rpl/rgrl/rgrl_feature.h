@@ -12,6 +12,7 @@
 
 #include "rgrl_feature_sptr.h"
 #include "rgrl_object.h"
+#include <vcl_iosfwd.h>
 
 class rgrl_transformation;
 
@@ -40,6 +41,14 @@ class rgrl_feature
   //: Set the scale level at which this feature is detected
   virtual 
   void set_scale( double scale ); 
+  
+  //: read in feature
+  virtual 
+  bool read( vcl_istream& is, bool skip_tag=false ) = 0;
+  
+  //: write out feature
+  virtual
+  void write( vcl_ostream& os ) const = 0;
   
   //:  Projects the error to the normal space of the underlying surface.
   //
@@ -115,6 +124,10 @@ class rgrl_feature
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_feature, rgrl_object );
+
+ protected:
+  friend rgrl_feature_sptr
+         rgrl_feature_reader( vcl_istream& is );
 
  private:
   // disabled
