@@ -1,12 +1,7 @@
 #include <vcl_iostream.h>
-#include <vcl_cassert.h>
-
 #include <vil/vil_image_view.h>
-
 #include <testlib/testlib_test.h>
-
 #include <vxl_config.h>
-
 #include <vtol/algo/vtol_extract_topology.h>
 
 typedef vil_image_view<vxl_byte> image_type;
@@ -16,7 +11,7 @@ typedef vil_image_view<vxl_byte> image_type;
 //
 class test_vtol_extract_topology
 {
-public:
+ public:
   static void test_image_1();
 };
 
@@ -85,7 +80,7 @@ void
 test_vtol_extract_topology::
 test_image_1( )
 {
-  vcl_cout << "\n\nTesting image 1" << vcl_endl;
+  vcl_cout << "\n\nTesting image 1\n";
 
   image_type img( image_1() );
 
@@ -121,17 +116,17 @@ test_image_1( )
 
   testlib_test_begin( "Testing (internal) is_edge()" );
   bool good = true;
-  for( unsigned i = 0; i < 7; ++i ) {
-    for( unsigned j = 0; j < 7; ++j ) {
-      for( unsigned dir = 0; dir < 4; ++dir ) {
+  for ( unsigned i = 0; i < 7; ++i ) {
+    for ( unsigned j = 0; j < 7; ++j ) {
+      for ( unsigned dir = 0; dir < 4; ++dir ) {
         unsigned d = 1 << dir;
-        if( (edges[j][i] & d) != 0 ) {
-          if( ! te.is_edge( i, j, dir ) ) {
+        if ( (edges[j][i] & d) != 0 ) {
+          if ( ! te.is_edge( i, j, dir ) ) {
             good = false;
             vcl_cout << "["<<edges[j][i]<<"] ("<<i<<","<<j<<", d="<<dir<<")  should be a boundary edge\n";
           }
         } else {
-          if( te.is_edge( i, j, dir ) ) {
+          if ( te.is_edge( i, j, dir ) ) {
             good = false;
             vcl_cout << "["<<edges[j][i]<<"] ("<<i<<","<<j<<", d="<<dir<<")  should not be a boundary edge\n";
           }
@@ -149,7 +144,7 @@ test_image_1( )
 static void
 test_image_2( )
 {
-  vcl_cout << "\n\nTesting image 2" << vcl_endl;
+  vcl_cout << "\n\nTesting image 2\n";
 
   image_type img( image_2() );
 
@@ -166,7 +161,7 @@ test_image_2( )
 static void
 test_image_3( )
 {
-  vcl_cout << "\n\nTesting image 3" << vcl_endl;
+  vcl_cout << "\n\nTesting image 3\n";
 
   image_type img( image_3() );
 
@@ -182,7 +177,7 @@ test_image_3( )
 static void
 test_image_4( )
 {
-  vcl_cout << "\n\nTesting image 4" << vcl_endl;
+  vcl_cout << "\n\nTesting image 4\n";
 
   image_type img( image_4() );
 
