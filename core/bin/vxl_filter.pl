@@ -765,6 +765,9 @@ sub process_lines {
       s/\bvnl_matlab_Format/vnl_matlab_print_format/g;
       s/\bvnl_matlab_fmt_/vnl_matlab_print_format_/g;
 
+      # CoolVector constructor with 3 arguments
+      s/\bCoolVector(\s*\<[^>]+\>\s*[a-zA-Z_][a-zA-Z0-9_]*\s*\()([^,]+,[^,]+,[^,;]+\)\s*\;)/vnl_vector$1 3, $2/g;
+
       # classes and functions
       s/\bCPolyRoots\b/vnl_cpoly_roots/g;
       s/\bIUE_c_vector\b/vnl_c_vector/g;
@@ -874,10 +877,11 @@ sub process_lines {
       #awf s/\bresize\b/vnl_resize/g;
       s/(\.|\->)maxVal\b/$1max_value/g;
       s!\bCoolQuaternion<!vnl_quaternion<!g;
+      s!\bsquared_distance_[23]d\b!vnl_vector_ssd!g;
 
       # test names
-      s/Numerics_Test_AssertNear/vnl_test_assert_near/g;
-      s/Numerics_Test_Assert/vnl_test_assert/g;
+      s/Numerics_Test_AssertNear/testlib_test_assert_near/g;
+      s/Numerics_Test_Assert/testlib_test_assert/g;
     }
 
     #---------------------------------------- vgl
