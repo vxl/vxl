@@ -24,8 +24,8 @@ template <class Type>
 double vgl_homg_operators_3d<Type>::angle_between_oriented_lines (const vgl_homg_line_3d& l1,
                                                                   const vgl_homg_line_3d& l2)
 {
-  vgl_homg_point_3d<Type> const& dir1 = l1.get_point_infinite();
-  vgl_homg_point_3d<Type> const& dir2 = l2.get_point_infinite();
+  vgl_homg_point_3d<Type> const& dir1 = l1.point_infinite();
+  vgl_homg_point_3d<Type> const& dir2 = l2.point_infinite();
   double n = dir1.x()*dir1.x()+dir1.y()*dir1.y()+dir1.z()*dir1.z();
   n       *= dir2.x()*dir2.x()+dir2.y()*dir2.y()+dir2.z()*dir2.z();
   // dot product of unit direction vectors:
@@ -82,8 +82,8 @@ vgl_homg_point_3d<Type> vgl_homg_operators_3d<Type>::intersect_line_and_plane (
 
   // TODO should have methods for DoubleVector from a point
 
-  const vnl_vector<Type> x1 = get_vector(line.get_point_finite());
-  const vnl_vector<Type> x2 = get_vector(line.get_point_infinite());
+  const vnl_vector<Type> x1 = get_vector(line.point_finite());
+  const vnl_vector<Type> x2 = get_vector(line.point_infinite());
   const vnl_vector<Type>  p = get_vector(plane);
 
   // FIXME: this works for double and smaller, but not complex. it might happen.
@@ -102,7 +102,7 @@ vgl_homg_point_3d<Type> vgl_homg_operators_3d<Type>::intersect_line_and_plane (
 
 //-----------------------------------------------------------------------------
 //
-// - Compute the intersection point of the lines, or the mid-point
+// Compute the intersection point of the lines, or the mid-point
 // of the common perpendicular if the lines are skew
 //
 #if 0 // linker error better than run-time error.
@@ -168,11 +168,11 @@ vgl_homg_point_3d<Type>
 vgl_homg_operators_3d<Type>::perp_projection (const vgl_homg_line_3d& l,
                                               const vgl_homg_point_3d<Type>& p)
 {
-  vgl_homg_point_3d<Type> const& q = l.get_point_finite();
+  vgl_homg_point_3d<Type> const& q = l.point_finite();
   Type a[3]  = { q.x()/q.w(), q.y()/q.w(), q.z()/q.w() };
   Type b[3]  = { p.x()/p.w()-a[0], p.y()/p.w()-a[1], p.z()/p.w()-a[2] };
 
-  vgl_homg_point_3d<Type> const& i = l.get_point_infinite();
+  vgl_homg_point_3d<Type> const& i = l.point_infinite();
   Type dp = i.x()*i.x()+i.y()*i.y()+i.z()*i.z();
   dp = (b[0]*i.x() + b[1]*i.y() + b[2]*i.z()) / dp;
 
@@ -324,24 +324,6 @@ vgl_homg_operators_3d<Type>::intersection_point (const vcl_vector<vgl_homg_plane
   return vgl_homg_point_3d<Type>(svd.nullvector().begin());
 }
 
-//-----------------------------------------------------------------------------
-//: Calculates the crossratio of four collinear points p1, p2, p3 and p4.
-// This number is projectively invariant, and it is the coordinate of p4
-// in the reference frame where p2 is the origin (coordinate 0), p3 is
-// the unity (coordinate 1) and p1 is the point at infinity.
-// This cross ratio is often denoted as ((p1, p2; p3, p4)) (which also
-// equals ((p3, p4; p1, p2)) or ((p2, p1; p4, p3)) or ((p4, p3; p2, p1)) )
-// and is calculated as
-//                      p1 - p3   p2 - p3      (p1-p3)(p2-p4)
-//                      ------- : --------  =  --------------
-//                      p1 - p4   p2 - p4      (p1-p4)(p2-p3)
-//
-// In principle, any single nonhomogeneous coordinate from the four points
-// can be used as parameters for CrossRatio (but of course the same for all
-// points). The most reliable answer will be obtained when the coordinate with
-// the largest spacing is used, i.e., the one with smallest slope.
-//
-
 
 template <class Type>
 vnl_vector<Type> vgl_homg_operators_3d<Type>::get_vector(vgl_homg_point_3d<Type> const& p)
@@ -372,10 +354,10 @@ vnl_vector<Type> vgl_homg_operators_3d<Type>::get_vector(vgl_homg_plane_3d<Type>
 }
 
 template <class Type>
-double vgl_homg_operators_3d<Type>::CrossRatio(const vgl_homg_point_3d<Type>& a,
-                                               const vgl_homg_point_3d<Type>& b,
-                                               const vgl_homg_point_3d<Type>& c,
-                                               const vgl_homg_point_3d<Type>& d)
+double vgl_homg_operators_3d<Type>::cross_ratio(const vgl_homg_point_3d<Type>& a,
+                                                const vgl_homg_point_3d<Type>& b,
+                                                const vgl_homg_point_3d<Type>& c,
+                                                const vgl_homg_point_3d<Type>& d)
 {
   double x1 = a.x(), y1 = a.y(), z1 = a.z(), w1 = a.w();
   double x2 = b.x(), y2 = b.y(), z2 = b.z(), w2 = b.w();
@@ -391,7 +373,7 @@ double vgl_homg_operators_3d<Type>::CrossRatio(const vgl_homg_point_3d<Type>& a,
              (y>z)        ? (y1*w4-y4*w1)*(y2*w3-y3*w2) :
                             (z1*w4-z4*w1)*(z2*w3-z3*w2);
   if (n == 0 && m == 0)
-    vcl_cerr << "CrossRatio not defined: three of the given points coincide\n";
+    vcl_cerr << "cross ratio not defined: three of the given points coincide\n";
   return n/m;
 }
 
