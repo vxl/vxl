@@ -201,6 +201,12 @@ SOURCE=.\Templates/vcl_vector+vcl_vector+vsol_line_2d_sptr--.cxx
 SOURCE=.\Templates/vcl_vector+vsol_line_2d_sptr-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+vsol_polyline_2d-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+vsol_polyhedron-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vsol_box_2d.cxx
 # End Source File
 # Begin Source File
@@ -274,9 +280,6 @@ SOURCE=.\vsol_triangle_3d.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vsol_volume_3d.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+vsol_polyline_2d-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vsol_polyline_2d.cxx
