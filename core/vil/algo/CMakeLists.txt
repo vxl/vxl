@@ -18,6 +18,7 @@ SET( vil2_algo_sources
                                vil2_convolve_1d.h
                                vil2_convolve_2d.h
                                vil2_correlate_1d.h
+                               vil2_correlate_2d.h
                                vil2_exp_filter_1d.h
                                vil2_normalised_correlation_2d.h
                                vil2_exp_grad_filter_1d.h

@@ -1,15 +1,13 @@
-// This is mul/vil2/tests/test_algo_convolve_2d.cxx
+// This is mul/vil2/tests/test_algo_correlate_2d.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
-#include <vil2/algo/vil2_convolve_2d.h>
-#include <vil2/vil2_print.h>
+#include <vil2/algo/vil2_correlate_2d.h>
 
-
-void test_algo_convolve_2d_byte()
+void test_algo_correlate_2d_byte()
 {
   vcl_cout << "*******************************\n"
-           << " Testing vil2_algo_convolve_2d\n"
+           << " Testing vil2_algo_correlate_2d\n"
            << "*******************************\n";
 
   unsigned n=10, m=5;
@@ -28,7 +26,7 @@ void test_algo_convolve_2d_byte()
 
   vil2_image_view<double> dest_im;
 
-  vil2_convolve_2d(src_im,dest_im,kernel1,double());
+  vil2_correlate_2d(src_im,dest_im,kernel1,double());
 
   vcl_cout<<"Kernel - single row of ones\n";
   TEST("Destination size",dest_im.ni(),1+n-m);
@@ -43,7 +41,7 @@ void test_algo_convolve_2d_byte()
     for (unsigned int i=0;i<kernel2.ni();++i)
       kernel2(i,j) = 1.0f;
 
-  vil2_convolve_2d(src_im,dest_im,kernel2,double());
+  vil2_correlate_2d(src_im,dest_im,kernel2,double());
 
   TEST("Destination size",dest_im.ni(),1+n-m);
   TEST("Destination size",dest_im.nj(),1+n-3);
@@ -57,23 +55,22 @@ void test_algo_convolve_2d_byte()
   for (unsigned int j=0;j<kernel3.nj();++j)
     for (unsigned int i=0;i<kernel3.ni();++i)
       kernel3(i,j) = 1.0f+j;
-    vil2_print_all(vcl_cout, kernel3);
 
-  vil2_convolve_2d(src_im,dest_im,kernel3,double());
+  vil2_correlate_2d(src_im,dest_im,kernel3,double());
 
   TEST("Destination size",dest_im.ni(),1+n-m);
   TEST("Destination size",dest_im.nj(),1+n-3);
 
-  TEST_NEAR("dest_im(0,0)",dest_im(0,0),0.5*m*(m+1)*6 +  4*m*n,1e-6);
-  TEST_NEAR("dest_im(1,0)",dest_im(1,0),0.5*m*(m+3)*6 +  4*m*n,1e-6);
-  TEST_NEAR("dest_im(0,1)",dest_im(0,1),0.5*m*(m+1)*6 + 10*m*n,1e-6);
+  TEST_NEAR("dest_im(0,0)",dest_im(0,0),0.5*m*(m+1)*6 +  8*m*n,1e-6);
+  TEST_NEAR("dest_im(1,0)",dest_im(1,0),0.5*m*(m+3)*6 +  8*m*n,1e-6);
+  TEST_NEAR("dest_im(0,1)",dest_im(0,1),0.5*m*(m+1)*6 + 14*m*n,1e-6);
 }
 
-MAIN( test_algo_convolve_2d )
+MAIN( test_algo_correlate_2d )
 {
-  START( "vil2_algo_convolve_2d" );
+  START( "vil2_algo_correlate_2d" );
 
-  test_algo_convolve_2d_byte();
+  test_algo_correlate_2d_byte();
 
   SUMMARY();
 }

@@ -6,8 +6,8 @@
 //  \brief 1D Convolution with cunning boundary options
 //  \author Tim Cootes, Ian Scott (based on work by fsm)
 // Note. The convolution operation is defined by
-//    (f*g)(x) = \int f(x-y) g(y) dy,
-// i.e. the kernel is reflected before the integration is performed.
+//    $(f*g)(x) = \int f(x-y) g(y) dy$
+// i.e. the kernel g is reflected before the integration is performed.
 // If you don't want this to happen, the behaviour you want is not
 // called "convolution". So don't break the convolution routines in
 // that particular way.

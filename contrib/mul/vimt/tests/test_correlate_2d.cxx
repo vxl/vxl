@@ -1,13 +1,13 @@
-// This is mul/vimt/tests/test_convolve_2d.cxx
+// This is mul/vimt/tests/test_correlate_2d.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vimt/algo/vimt_find_peaks.h>
-#include <vimt/algo/vimt_convolve_2d.h>
+#include <vimt/algo/vimt_correlate_2d.h>
 #include <vimt/vimt_resample_bilin.h>
 
-void test_convolve_2d_byte()
+void test_correlate_2d_byte()
 {
   vimt_image_2d_of<vxl_byte> image0;
   vimt_image_2d_of<float> fit_image,sample_im;
@@ -20,7 +20,7 @@ void test_convolve_2d_byte()
   kernel(1,1)=8.0;
   vgl_point_2d<double> kernel_ref_pt(1,1);
 
-  vimt_convolve_2d(image0,fit_image,kernel,kernel_ref_pt,float());
+  vimt_correlate_2d(image0,fit_image,kernel,kernel_ref_pt,float());
 
   TEST("Fits width",fit_image.image().ni(),8);
   TEST("Fits height",fit_image.image().nj(),8);
@@ -40,7 +40,7 @@ void test_convolve_2d_byte()
   sample_im.print_all(vcl_cout);
 #endif
 
-  vimt_convolve_2d(sample_im,fit_image,kernel,kernel_ref_pt,float());
+  vimt_correlate_2d(sample_im,fit_image,kernel,kernel_ref_pt,float());
 
 #ifdef DEBUG
   fit_image.print_all(vcl_cout);
@@ -58,9 +58,9 @@ void test_convolve_2d_byte()
   }
 }
 
-MAIN( test_convolve_2d )
+MAIN( test_correlate_2d )
 {
-  START( "vimt_convolve_2d" );
-  test_convolve_2d_byte();
+  START( "vimt_correlate_2d" );
+  test_correlate_2d_byte();
   SUMMARY();
 }

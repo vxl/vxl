@@ -2,21 +2,23 @@
 // \file
 // \brief Example of applying convolutions at arbitrary orientations
 // \author Tim Cootes - Manchester
+// Actually, we are going to use correlation, which is similar to convolution,
+// but does not reverse the kernel.
 
 #include <vxl_config.h> // for vxl_byte
 #include <vcl_iostream.h>
 #include <vimt/algo/vimt_find_peaks.h>
-#include <vimt/algo/vimt_convolve_2d.h>
+#include <vimt/algo/vimt_correlate_2d.h>
 #include <vimt/vimt_resample_bilin.h>
 
 int main(int argc, char** argv)
 {
   vcl_cout<<"Generate an image"<<vcl_endl;
   vcl_cout<<"Sample a region from this at an angle (using vimt_resample_bilin)"<<vcl_endl;
-  vcl_cout<<"Convolve the sampled region with a small filter (using vimt_convolve_2d)"<<vcl_endl;
-  vcl_cout<<"Locate the peaks in the correllation results (using vimt_find_peaks)"<<vcl_endl;
+  vcl_cout<<"Correlate the sampled region with a small filter (using vimt_correlate_2d)"<<vcl_endl;
+  vcl_cout<<"Locate the peaks in the correlation results (using vimt_find_peaks)"<<vcl_endl;
   vcl_cout<<"Because of the cunning way transformations are kept up to date, "<<vcl_endl;
-  vcl_cout<<"the resulting peak points give the position of the rotated convolution kernel"<<vcl_endl;
+  vcl_cout<<"the resulting peak points give the position of the rotated correlation kernel"<<vcl_endl;
   vcl_cout<<"in the original image"<<vcl_endl;
 
   vimt_image_2d_of<vxl_byte> image0;
@@ -41,7 +43,7 @@ int main(int argc, char** argv)
   vcl_cout<<"Result of resampling a region from an image: "<<vcl_endl;
   sample_im.print_all(vcl_cout);
 
-  vimt_convolve_2d(sample_im,fit_image,kernel,kernel_ref_pt,float());
+  vimt_correlate_2d(sample_im,fit_image,kernel,kernel_ref_pt,float());
 
   vcl_cout<<"Kernel response image: "<<vcl_endl;
   fit_image.print_all(vcl_cout);

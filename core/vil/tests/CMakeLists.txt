@@ -18,6 +18,7 @@ ADD_EXECUTABLE( vil2_test_driver
   test_algo_convolve_1d.cxx
   test_algo_correlate_1d.cxx
   test_algo_convolve_2d.cxx
+  test_algo_correlate_2d.cxx
   test_algo_exp_filter_1d.cxx
   test_algo_gauss_filter.cxx
   test_algo_exp_grad_filter_1d.cxx
@@ -52,6 +53,7 @@ ADD_TEST( vil2_test_algo_gauss_filter vil2_test_driver test_algo_gauss_filter)
 ADD_TEST( vil2_test_algo_convolve_1d  vil2_test_driver test_algo_convolve_1d)
 ADD_TEST( vil2_test_algo_correlate_1d vil2_test_driver test_algo_correlate_1d)
 ADD_TEST( vil2_test_algo_convolve_2d  vil2_test_driver test_algo_convolve_2d)
+ADD_TEST( vil2_test_algo_correlate_2d vil2_test_driver test_algo_correlate_2d)
 ADD_TEST( vil2_test_algo_exp_filter_1d      vil2_test_driver test_algo_exp_filter_1d)
 ADD_TEST( vil2_test_algo_exp_grad_filter_1d vil2_test_driver test_algo_exp_grad_filter_1d)
 ADD_TEST( vil2_test_image_view_maths  vil2_test_driver test_image_view_maths)
