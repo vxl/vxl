@@ -109,7 +109,7 @@ void vil1_convolve_1d_x(vil1_convolve_signal_1d<I1 const> const &kernel,
       if (zero)
         value2d(output, x, y) = AC(0);
       else if (wt)
-        value2d(output, x, y) = ac * total_weight / wt;
+        value2d(output, x, y) = O(ac * total_weight / wt);
     }
   }
 }
