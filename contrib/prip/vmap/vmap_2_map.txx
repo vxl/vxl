@@ -3,6 +3,7 @@
 #define vmap_2_map_txx_
 
 #include "vmap_2_map.h"
+#include <vcl_iostream.h>
 
 template <class D>
 vmap_2_map<D>::vmap_2_map(self_type const& m) : dart_sequence(m)
@@ -134,7 +135,7 @@ void vmap_2_map<D>::unchecked_removal(dart_iterator & arg)
   dart_type* d = &*arg,
            * sd= vmap_2_map_sigma(d),
            * a = vmap_2_map_alpha(d),
-           * sa= vmap_2_map_sigma(aa) ;
+           * sa= vmap_2_map_sigma(a) ;
 
   if (sd != d || sa != a) // ! Pendant edges
   {
@@ -168,7 +169,7 @@ void vmap_2_map<D>::unchecked_contraction(dart_iterator & arg)
   dart_type* d = &*arg,
            * sd= vmap_2_map_sigma(d),
            * a = vmap_2_map_alpha(d),
-           * sa= vmap_2_map_sigma(aa) ;
+           * sa= vmap_2_map_sigma(a) ;
 
   if (sa != d || sa != a) // ! Loop
   {
@@ -207,7 +208,7 @@ void vmap_2_map<D>::suppress_from_sequence(dart_type * d)
   delete_dart(d);
   get_dart_pointer.pop_back();
 #endif // 0
-  destroyLastDart() ;
+  this->destroyLastDart() ;
 }
 
 template <class D>
@@ -253,7 +254,7 @@ void vmap_2_map<D>::contraction(contraction_kernel const& arg_kernel)
     delete_dart(get_dart_pointer.last()) ;
     get_dart_pointer.pop_back() ;
 #endif // 0
-    destroyLastDart() ;
+    this->destroyLastDart() ;
   }
 }
 
@@ -300,7 +301,7 @@ void vmap_2_map<D>::removal(removal_kernel const& arg_kernel)
     delete_dart(get_dart_pointer.last()) ;
     get_dart_pointer.pop_back() ;
 #endif // 0
-    destroyLastDart() ;
+    this->destroyLastDart() ;
   }
 }
 
