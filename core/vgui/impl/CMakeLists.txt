@@ -6,11 +6,16 @@ IF(HAS_GLUT)
   SUBDIRS(glut)
 ENDIF(HAS_GLUT)
 
+INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindQt.cmake)
+
+IF(HAS_QT)
+  SUBDIRS(qt)
+ENDIF(HAS_QT)
+
 IF(WIN32)
   SUBDIRS(mfc)
-ELSE(WIN32)
 
-  INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindGTK.cmake)
+ELSE(WIN32)
 
   IF(HAS_X11)
     SUBDIRS(X)
@@ -20,13 +25,11 @@ ELSE(WIN32)
     SUBDIRS(glX)
   ENDIF(HAS_GLX)
 
+  INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindGTK.cmake)
+
   IF(HAS_GTK)
     SUBDIRS(gtk)
   ENDIF(HAS_GTK)
-
-  IF(HAS_QT)
-    SUBDIRS(qt)
-  ENDIF(HAS_QT)
 
   IF(HAS_SDL)
     SUBDIRS(SDL)

@@ -10,6 +10,12 @@ IF(HAS_GLUT)
   INCLUDE(${allvxl_SOURCE_DIR}/oxl/vgui/impl/glut/CMakeListsLink.txt)
 ENDIF(HAS_GLUT)
 
+INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindQt.cmake)
+
+IF(HAS_QT)
+  INCLUDE(${allvxl_SOURCE_DIR}/oxl/vgui/impl/qt/CMakeListsLink.txt)
+ENDIF(HAS_QT)
+
 IF(WIN32)
   INCLUDE(${allvxl_SOURCE_DIR}/oxl/vgui/impl/mfc/CMakeListsLink.txt)
 ELSE(WIN32)

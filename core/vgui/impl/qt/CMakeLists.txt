@@ -1,6 +1,6 @@
 # ./oxl/vgui/impl/qt/CMakeLists.txt
 
-ADD_LIBRARY(vgui_qt vgui_qt_sources)
+ADD_LIBRARY(vgui_qt vgui_qt_sources vgui_qt_moc_files)
 
 SOURCE_FILES(vgui_qt_sources
   vgui_qt.cxx
@@ -10,11 +10,16 @@ SOURCE_FILES(vgui_qt_sources
   vgui_qt_statusbar.cxx
   vgui_qt_dialog_impl.cxx
   vgui_qt_menu.cxx
-  vgui_qt_adaptor_mocced.cxx
-  vgui_qt_menu_mocced.cxx
-  vgui_qt_dialog_impl_mocced.cxx
-  vgui_qt_statusbar_mocced.cxx
 )
+
+SOURCE_FILES(vgui_qt_moc_classes
+  vgui_qt_adaptor.h
+  vgui_qt_dialog_impl.h
+  vgui_qt_menu.h
+  vgui_qt_statusbar.h
+)
+
+QT_WRAP_CPP(vgui_qt vgui_qt_moc_files vgui_qt_moc_classes)
 
 IF (WIN32)
   IF (NOT CYGWIN)
