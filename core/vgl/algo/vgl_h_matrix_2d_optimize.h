@@ -29,41 +29,43 @@ class projection_lsqf : public vnl_least_squares_function
   unsigned n_;
   vcl_vector<vgl_homg_point_2d<double> > from_points_;
   vcl_vector<vgl_point_2d<double> > to_points_;
+
  public:
-  projection_lsqf(vcl_vector<vgl_homg_point_2d<double> > const& from_points, 
+  projection_lsqf(vcl_vector<vgl_homg_point_2d<double> > const& from_points,
                   vcl_vector<vgl_homg_point_2d<double> > const& to_points)
-    :vnl_least_squares_function(9, 2*from_points.size(), no_gradient)
-    
+  : vnl_least_squares_function(9, 2*from_points.size(), no_gradient)
+  {
+    n_ = from_points.size();
+    assert(n_==to_points.size());
+    for (unsigned i = 0; i<n_; ++i)
     {
-      n_ = from_points.size();
-      assert(n_==to_points.size());
-      for(unsigned i = 0; i<n_; ++i)
-        {
-          from_points_.push_back(from_points[i]);
-          to_points_.push_back(to_points[i]);
-        }
+      from_points_.push_back(from_points[i]);
+      to_points_.push_back(to_points[i]);
     }
-  ~projection_lsqf() { }
-  //compute the projection error given a set of h parameters
-  // the residuals required by f are the Euclidian x and y coordinate
-  // differences between the projected from points and the 
-  // corresponding to points. 
-  void f(const vnl_vector<double>& hv, vnl_vector<double>& proj_err) 
+  }
+
+  ~projection_lsqf() {}
+
+  //: compute the projection error given a set of h parameters.
+  // The residuals required by f are the Euclidean x and y coordinate
+  // differences between the projected from points and the
+  // corresponding to points.
+  void f(const vnl_vector<double>& hv, vnl_vector<double>& proj_err)
+  {
+    assert(hv.size()==9);
+    assert(proj_err.size()==2*n_);
+    // project and compute residual
+    vgl_h_matrix_2d<double> h(hv.data_block());
+    unsigned k = 0;
+    for (unsigned i = 0; i<n_; ++i, k+=2)
     {
-      assert(hv.size()==9);
-      assert(proj_err.size()==2*n_);
-      // project and compute residual
-      vgl_h_matrix_2d<double> h(hv.data_block());
-      unsigned k = 0;
-      for(unsigned i = 0; i<n_; ++i, k+=2)
-        {
-          vgl_homg_point_2d<double> to_proj = h(from_points_[i]);
-          vgl_point_2d<double> p_proj(to_proj);
-          double xp = to_points_[i].x(), yp = to_points_[i].y();
-          double xproj = p_proj.x(), yproj = p_proj.y();
-          proj_err[k]=(xp-xproj);  proj_err[k+1]=(yp-yproj);
-        }
+      vgl_homg_point_2d<double> to_proj = h(from_points_[i]);
+      vgl_point_2d<double> p_proj(to_proj);
+      double xp = to_points_[i].x(), yp = to_points_[i].y();
+      double xproj = p_proj.x(), yproj = p_proj.y();
+      proj_err[k]=(xp-xproj);  proj_err[k+1]=(yp-yproj);
     }
+  }
 };
 
 
@@ -84,7 +86,7 @@ class vgl_h_matrix_2d_optimize
 
   //: Termination tolerance on change in the solution
   void set_htol(const double htol){htol_ = htol;}
-  
+
   //: Termination tolerance on the sum of squared projection errors
   // The optimization is done in a normalized coordinate frame with
   // unity point domain radius.
