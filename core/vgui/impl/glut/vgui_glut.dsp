@@ -101,7 +101,7 @@ SOURCE=.\Templates\vcl_vector+vgui_glut_menu_hack+-per_window_record~-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_glut.cxx
+SOURCE=.\vgui_glut_impl.cxx
 # End Source File
 # Begin Source File
 
@@ -133,7 +133,7 @@ SOURCE=.\menu_hack.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_glut.h
+SOURCE=.\vgui_glut_impl.h
 # End Source File
 # Begin Source File
 
