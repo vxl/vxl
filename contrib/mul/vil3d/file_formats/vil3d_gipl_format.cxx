@@ -631,7 +631,7 @@ bool vil3d_gipl_image::put_view(const vil3d_image_view_base& view,
     return false;
   }
 
-  const vil3d_image_view<bool>* bool_im=0;
+//const vil3d_image_view<bool>* bool_im=0;
   const vil3d_image_view<vxl_sbyte>* sbyte_im=0;
   const vil3d_image_view<vxl_byte>* byte_im=0;
   const vil3d_image_view<vxl_uint_16>* uint_16_im=0;
@@ -643,9 +643,10 @@ bool vil3d_gipl_image::put_view(const vil3d_image_view_base& view,
 
   unsigned bytes_per_pixel=0;
 
-  if (view.pixel_format() == VIL_PIXEL_FORMAT_BOOL)
-    bool_im = &static_cast<const vil3d_image_view<bool>& >(view);
-  else if (view.pixel_format() == VIL_PIXEL_FORMAT_SBYTE)
+//if (view.pixel_format() == VIL_PIXEL_FORMAT_BOOL)
+//  bool_im = &static_cast<const vil3d_image_view<bool>& >(view);
+//else
+  if (view.pixel_format() == VIL_PIXEL_FORMAT_SBYTE)
   {
     sbyte_im = &static_cast<const vil3d_image_view<vxl_sbyte>& >(view);
     bytes_per_pixel=sizeof(vxl_sbyte);
