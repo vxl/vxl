@@ -41,6 +41,7 @@ TESTS += test_algo_correlate_2d.cxx
 TESTS += test_algo_threshold.cxx
 TESTS += test_deep_copy_3_plane.cxx
 TESTS += test_algo_grid_merge.cxx
+TESTS += test_algo_find_4con_boundary.cxx
 
 #MINI_PROG_SOURCES += vil2_mil_gauss_general_timings.cxx
 #MINI_PROG_SOURCES += vil2_vil_compare_access_timings.cxx
