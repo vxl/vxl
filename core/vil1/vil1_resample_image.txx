@@ -49,7 +49,7 @@ bool vil_resample_image(vil_image const &base, unsigned new_width, unsigned new_
           ++ count;
         }
       }
-      accum /= count;
+      if (count) accum /= count;
       buf[u + w*v] = T(accum);
     }
   }
