@@ -14,8 +14,6 @@
 #include <vil/vil_image_view.h>
 
 #include <vtol/vtol_vertex_2d_sptr.h>
-#include <vtol/vtol_one_chain_sptr.h>
-#include <vtol/vtol_edge_2d_sptr.h>
 #include <vtol/vtol_intensity_face_sptr.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
 
@@ -41,12 +39,12 @@ class test_vtol_extract_topology;
 //
 class vtol_extract_topology
 {
-public: // public types
+ public: // public types
 
   //: Input image type
   typedef vil_image_view< vxl_byte > label_image_type;
 
-public: // public methods
+ public: // public methods
 
   //: Prepare to extract the topology from \a image.
   vtol_extract_topology( label_image_type const& image );
@@ -61,12 +59,12 @@ public: // public methods
   vcl_vector< vtol_intensity_face_sptr >
   faces() const;
 
-private:   // internal classes and constants
+ private:   // internal classes and constants
 
-  //: Image of indicies into the vertex node list
+  //: Image of indices into the vertex node list
   typedef vil_image_view< unsigned > index_image_type;
 
-public:
+ public:
   // These types are implementation details, and should be private to
   // the class. However, there are some issues with creating smart
   // pointers to private classes. Until I have it figured out, I'm
@@ -84,7 +82,7 @@ public:
 
   typedef vbl_smart_ptr< region_type > region_type_sptr;
 
-private:
+ private:
 
   //: A node in the graph of vertices.
   //
@@ -132,7 +130,7 @@ private:
   // For VC6, to give access to the constants
   friend struct vertex_node;
 
-private: // internal methods
+ private: // internal methods
 
   // Allow the test harness to call on the "internal" member functions
   // for through testing.
@@ -265,7 +263,7 @@ private: // internal methods
   compute_faces( vcl_vector< region_type_sptr > const& chains,
                  vcl_vector< vtol_intensity_face_sptr >& faces ) const;
 
-private: // internal data
+ private: // internal data
 
   //: The input label image
   label_image_type const& img_;
@@ -278,7 +276,6 @@ private: // internal data
 
   //: Quick conversion from vertex coordinates to vertex node indices
   index_image_type index_img_;
-
 };
 
 #endif // vtol_extract_topology_h_
