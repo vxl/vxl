@@ -4,25 +4,14 @@
 #pragma interface
 #endif
 //
-// .NAME    LineSegSet - Undocumented class FIXME
-// .LIBRARY MViewBasics
-// .HEADER  MultiView package
-// .INCLUDE mvl/LineSegSet.h
-// .FILE    LineSegSet.cxx
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 19 Sep 96
-//
-// .SECTION Modifications:
-//     <none yet>
 //
 //-----------------------------------------------------------------------------
 
-////////////////#include <cool/decls.h>
-#include <vcl_vector.h>
 #include <vcl_vector.h>
 #include <mvl/HomgLineSeg2D.h>
 #include <mvl/HomgMetric.h>
-////////////////#include <Geometry/IUPoint.h>
 
 class ImageMetric;
 
