@@ -1,6 +1,6 @@
 USES += vxl
 USES += mul
-IULIBS := -lvpdfl -lmbl -lvnl-io -lvnl -lvsl
+IULIBS := -lvpdfl -lmbl -lvnl-io -lvnl-algo -lnetlib -lvnl -lvsl
 
 
 TESTS += test_vpdfl.cxx
