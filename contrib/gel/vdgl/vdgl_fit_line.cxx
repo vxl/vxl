@@ -2,14 +2,12 @@
 #pragma implementation
 #endif
 
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_matrix.h> // for IUE_matrix<TYPE>
-#include <vnl/vnl_vector.h> // for IUE_vector<TYPE>
+#include "vdgl_fit_line.h"
+#include <vnl/vnl_vector.h>
 #include <vsol/vsol_point_2d.h>
-#include  <vsol/vsol_line_2d.h>
+#include <vsol/vsol_line_2d.h>
 #include <vdgl/vdgl_edgel.h>
 #include <vdgl/vdgl_edgel_chain.h>
-#include "vdgl_fit_line.h"
 
 
 // This function fits a line to the points in the edgel_chain  in the least-squares sense.

@@ -2,13 +2,12 @@
 #pragma implementation
 #endif
 
-#include <vnl/vnl_math.h>
+#include "vdgl_interpolator_cubic.h"
+#include <vcl_cmath.h> // for sqrt()
 #include <vnl/vnl_matrix.h>
-
 #include <vdgl/vdgl_edgel.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vnl/algo/vnl_svd.h>
-#include "vdgl_interpolator_cubic.h"
 
 
 vdgl_interpolator_cubic::vdgl_interpolator_cubic( vdgl_edgel_chain_sptr chain)
@@ -158,7 +157,7 @@ double vdgl_interpolator_cubic::get_curvature( const double index)
 
   double t2 = 3 * P(0,0) * x_new * x_new + 2 * P(0,1) * x_new + P(0,2);
   double t3 = 1 + t2 * t2;
-  double curvature = t2/vcl_pow(t3,1.5) ;
+  double curvature = t2/t3/vcl_sqrt(t3);
 
  return(curvature);
 }
