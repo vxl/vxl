@@ -192,7 +192,7 @@ To sample along a profile (points p+i.u, where i=[0..n-1]) use
 	vgl_point_2d<double> p;
 	vgl_vector_2d<double> u;
 
-  mil_sample_profile_2d(vec,p,u,n,image);
+  mil_sample_profile_2d(vec,image,p,u,n);
 @end smallexample
 
 Here p and u are in world co-ordinates.  The image.world2im()
