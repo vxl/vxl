@@ -21,7 +21,7 @@ void vnl_cpoly_roots::compute(vnl_vector<vnl_double_complex> const &a) {
 			      false);// the eigenvalues.
   
   //
-  solns = eig.W;
+  solns = eig.W_;
 }
 
 //--------------------------------------------------------------------------------

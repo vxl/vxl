@@ -50,16 +50,16 @@ void test_complex_eigensystem()
   for (unsigned i=0;i<N;i++) {
     //cerr << "i=" << i << endl;
     //
-    vnl_double_complex w = eig.W[i];
+    vnl_double_complex w = eig.W_[i];
     vnl_vector<vnl_double_complex> err;
     //cerr << "  w = " << w << endl;
     //
-    vnl_vector<vnl_double_complex> l(eig.L.get_row(i));
+    vnl_vector<vnl_double_complex> l(eig.L_.get_row(i));
     err = (l*A - l*w);
     //cerr << "  " << err << endl;
     Assert("  Left  eigenvalue", err.magnitude() < 1e-10);
     //
-    vnl_vector<vnl_double_complex> r(eig.R.get_row(i));
+    vnl_vector<vnl_double_complex> r(eig.R_.get_row(i));
     err = (A*r - w*r);
     //cerr << "  " << err << endl;
     Assert("  Right eigenvalue", err.magnitude() < 1e-10);
