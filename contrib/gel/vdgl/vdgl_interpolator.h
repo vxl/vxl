@@ -12,12 +12,9 @@
 #include <vdgl/vdgl_interpolator_sptr.h>
 #include <vul/vul_timestamp.h>
 #include <vbl/vbl_ref_count.h>
-#include <vgl/vgl_distance.h>
 #include <vsol/vsol_point_2d.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
-#include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
-#include <vgl/vgl_distance.h>
 
 class vdgl_interpolator : public vul_timestamp,
                           public vbl_ref_count

@@ -25,7 +25,6 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vnl/vnl_matrix.h>
-#include <vgl/vgl_point_2d.h>
 #include <vsol/vsol_region_2d.h>
 
 class vdgl_digital_region : public vsol_region_2d

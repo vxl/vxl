@@ -3,7 +3,6 @@
 
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
-#include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_matrix.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_digital_region.h>

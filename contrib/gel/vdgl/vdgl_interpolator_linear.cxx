@@ -5,7 +5,6 @@
 #include <vnl/vnl_math.h>
 #include <vdgl/vdgl_edgel.h>
 #include <vdgl/vdgl_edgel_chain.h>
-#include <vnl/algo/vnl_svd.h>
 #include "vdgl_interpolator_linear.h"
 #include <vcl_cassert.h>
 
@@ -24,7 +23,7 @@ vsol_point_2d_sptr vdgl_interpolator_linear::closest_point_on_curve ( vsol_point
 {
   double min_distance = 1e6;
   int index = -1;
-  for( int i=0; i< chain_->size(); i++)
+  for ( int i=0; i< chain_->size(); i++)
   {
     vgl_point_2d<double> curve_point = chain_->edgel(i).get_pt();
     double d = p->distance ( vsol_point_2d ( curve_point ) );
