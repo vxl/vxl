@@ -44,25 +44,42 @@ class vipl_section_descriptor_2d : public vipl_section_descriptor< DataType > {
   vipl_section_descriptor_2d(); //low_level c++ constructor
   //user accessed low_level c++ copy constructor
   vipl_section_descriptor_2d(const vipl_section_descriptor_2d< DataType > &);
-  // This method takes in an argument called axis (i.e. 0 means the ``x'' axis, 1 means ``y'' axis) etc...
-  // and returns an integer which describes the start coordinate value for ``x'' (or ``y'' etc..)
-  // with respect to the ``image'' coordinate system
+  //: This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
+  // 1 means ``y'' axis) etc... and returns an integer which describes the start
+  // coordinate value for ``x'' (or ``y'' etc..) with respect to the ``image''
+  // coordinate system.
   virtual int curr_sec_start( int axis) const;
-  // This method takes in an argument called axis (i.e. 0 means the ``x'' axis, 1 means ``y'' axis) etc... and returns an integer which describes the end coordinate value for ``x'' (or ``y'' etc..) with respect to the ``image'' coordinate system
+  //: This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
+  // 1 means ``y'' axis) etc... and returns an integer which describes the end
+  // coordinate value for ``x'' (or ``y'' etc..) with respect to the ``image''
+  // coordinate system.
   virtual int curr_sec_end( int axis) const;
-  // This method takes in an argument called axis (i.e. 0 means the ``x'' axis, 1 means ``y'' axis) etc... and returns an integer which describes the size of the axis (end minus start) for ``x'' (or ``y'' etc..) with respect to the ``image'' coordinate system
+  //: This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
+  // 1 means ``y'' axis) etc... and returns an integer which describes the size
+  // of the axis (end minus start) for ``x'' (or ``y'' etc..) with respect to
+  // the ``image'' coordinate system.
   virtual int curr_sec_size( int axis) const;
-  // This method takes in an argument called axis (i.e. 0 means the ``x'' axis, 1 means ``y'' axis) etc... and returns an integer which describes the offset of the next (i.e. associated with the higher coordinate value) data item along the axis.
+  //: This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
+  // 1 means ``y'' axis) etc... and returns an integer which describes the
+  // offset of the next (i.e. associated with the higher coordinate value) data
+  // item along the axis.
   virtual int data_offsets( int axis) const;
-  // Returns a referable pointer to the first data item in the current section. If the value returned is null, then the address is not available to the filter
+  //: Returns a referable pointer to the first data item in the current section.
+  // If the value returned is null, then the address is not available to the
+  // filter.
   virtual DataType* data_ptr();
-  // Returns a const pointer to the first data item in the current section. If the value returned is null, then the address is not available to the filter
+  //: Returns a const pointer to the first data item in the current section.
+  // If the value returned is null, then the address is not available to the
+  // filter.
   virtual const DataType* data_ptr() const;
-  // Returns a writable pointer to the ``real'' section descriptor. If this method is called on a concrete instance, it should return 0. 
+  //: Returns a writable pointer to the ``real'' section descriptor.
+  // If this method is called on a concrete instance, it should return 0.
   virtual vipl_section_descriptor< DataType >* inner_descriptor();
-  // Returns a const pointer to the ``real'' section descriptor. If this method is called on a concrete instance, it should return 0. 
+  //: Returns a const pointer to the ``real'' section descriptor. If this method
+  // is called on a concrete instance, it should return 0.
   virtual const vipl_section_descriptor< DataType >* inner_descriptor() const;
-  // Makes a new correct copy. It's just a bit more tricky because descriptors have pointers to its ``real instance.''
+  //: Makes a new correct copy. It's just a bit more tricky because descriptors
+  // have pointers to its ``real instance.''
  protected:
   virtual vipl_section_descriptor< DataType >* virtual_copy() const;
  public:
@@ -88,4 +105,5 @@ class vipl_section_descriptor_2d : public vipl_section_descriptor< DataType > {
   public: vcl_vector< int > & ref_i_curr_sec_size() { return hsi_curr_sec_size; }
   public: void put_i_curr_sec_size( vcl_vector< int > const & v) { hsi_curr_sec_size = v; }
 }; // end of class definition
+
 #endif // vipl_section_descriptor_2d_h_

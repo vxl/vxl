@@ -94,23 +94,30 @@ public: bool checkrange() const { return checkrange_; }
 // -+-+- constructors/destructors: -+-+-
 public:
   inline vipl_histogram(DataIn si=1, DataIn shi=0, DataOut so=1)
-           : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), scalein_(si), shiftin_(shi), scaleout_(so), indexout_(0), checkrange_(0)
-{
+           : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>()
+           , scalein_(si)
+           , shiftin_(shi)
+           , scaleout_(so)
+           , indexout_(0)
+           , checkrange_(0)
+      {
         put_is_input_driven(true); // get sections from input
-}
+      }
 
   inline vipl_histogram(vipl_histogram const& A)
-           : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A), scalein_(A.scalein()), shiftin_(A.shiftin()), scaleout_(A.scaleout()), indexout_(A.indexout_), checkrange_(A.checkrange_)
-{
+           : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A)
+           , scalein_(A.scalein())
+           , shiftin_(A.shiftin())
+           , scaleout_(A.scaleout())
+           , indexout_(A.indexout_)
+           , checkrange_(A.checkrange_)
+      {
         put_is_input_driven(true); // get sections from input
-}
+      }
   inline ~vipl_histogram() {}
 
 // -+-+- required method for filters: -+-+-
   bool section_applyop();
-
 };
 
-
 #endif // vipl_histogram_h_
-

@@ -1,8 +1,8 @@
 #include <vil/vil_image.h>
 
 #define FILTER_IMPTR_DEC_REFCOUNT(v) ((v)=0)
-#define FILTER_IMPTR_INC_REFCOUNT(v) 
-#define FILTER_KERNPTR_DEC_REFCOUNT(v) 
+#define FILTER_IMPTR_INC_REFCOUNT(v)
+#define FILTER_KERNPTR_DEC_REFCOUNT(v)
 
 // this must be here for filter-2d to work
 #include <vipl/section/vipl_section_container.h>
@@ -10,14 +10,15 @@
 vipl_section_container<unsigned short>*
 vipl_filterable_section_container_generator(const vil_image& im, unsigned short*)
 {
-  vipl_section_container<unsigned short> *rtn = new vipl_section_container<unsigned short>((vipl_section_container<unsigned short>*)0);
+  vipl_section_container<unsigned short> *rtn =
+    new vipl_section_container<unsigned short>((vipl_section_container<unsigned short>*)0);
   rtn->put_imgptr((void*) &im);
   rtn->ref_imgsz()[0] = im.width();
   rtn->ref_imgsz()[1] = im.height();
-  
+
   rtn->ref_secsz()[0] = im.width();  // should actually be block_width for block-buffered images
   rtn->ref_secsz()[1] = im.height(); // should actually be block_height for block-buffered images
- 
+
   return rtn;
 }
 
