@@ -17,7 +17,7 @@
 #include <vil/vil_stream_core.h>
 #include <vcl_fstream.h>
 
-#if defined(unix)
+#if defined(unix) || defined(__unix)
 
 # include <unistd.h>       // read(), write(), close()
 # include <netdb.h>        // gethostbyname(), sockaddr_in()
