@@ -36,23 +36,21 @@
 //
 //</file>
 
-
-
 #ifndef harmony_scene_vecutil_h
 #define harmony_scene_vecutil_h
-
 
 #include "vectors.h"
 
 #include <vcl_ostream.h>
 
-#ifdef WIN32
-#  include <float.h>
+#include <vcl_compiler.h>
+#ifdef VCL_WIN32
+#  include <vcl_cfloat.h>
 #  ifndef MAXFLOAT
 #    define MAXFLOAT FLT_MAX
 #  endif
 #  ifndef M_PI
-#    define M_PI  3.14159265358979323846  /* contained in no header file? */
+#    define M_PI  3.14159265358979323846  // contained in no iso standard header file
 #  endif
 #  define ARRAYconst  /* gorasche: causes problems with MSC */
 #else
