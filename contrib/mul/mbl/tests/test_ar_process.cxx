@@ -117,7 +117,7 @@ void test_ar_process()
            << "\n||dm||="<<dm.inf_norm()<<"\n||ds||="<<ds.inf_norm()<<'\n';
 #endif
   TEST("Similar mean for burg algorithm",dm.inf_norm()<0.1,true);
-  TEST("Similar covariance matrix for burg algorithm",
+  TEST("Similar variances on each axis for burg algorithm",
        ds.inf_norm()<0.4,true);
 
   arp.learn(vlist);
