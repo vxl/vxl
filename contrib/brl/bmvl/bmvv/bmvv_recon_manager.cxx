@@ -1232,17 +1232,16 @@ void bmvv_recon_manager::display_dense_match()
   if (print_corr)
   {
     static double x0 = 100;
-    static double y0 = 200;
     vgui_dialog corr_dlg("Print Corr");
     corr_dlg.field("Xlocation", x0);
     if (!corr_dlg.ask())
       return;
     vcl_vector<int> xpos;
     vcl_vector<double> corr;
-    dr.get_correlation(x0, raster, xpos, corr);
+    dr.get_correlation(int(x0), raster, xpos, corr);
     vcl_cout << "Correlation\n";
-    int n = xpos.size();
-    for (int i = 0; i<n; ++i)
+    unsigned int n = xpos.size();
+    for (unsigned int i = 0; i<n; ++i)
       vcl_cout << xpos[i] << '\t' << corr[i] << '\n';
     vcl_cout << vcl_flush;
   }
@@ -1345,7 +1344,7 @@ void bmvv_recon_manager::show_world_homography()
   Mm = Ms*M;
   Hm = vgl_h_matrix_2d<double>(Mm);
   vcl_cout << "Back-projected and scaled world points\n";
-  for (int i = 0; i<world_points.size(); i++)
+  for (unsigned int i = 0; i<world_points.size(); i++)
   {
     vgl_point_2d<double>pi = image_points[i];
     vgl_homg_point_2d<double> hpi(pi.x(), pi.y()), hpw;
@@ -1384,7 +1383,7 @@ void bmvv_recon_manager::show_world_homography()
 
   vgui_style_sptr r_style = vgui_style::new_style(1.0, 0.0, 0.0, 5, 0);
   vgui_style_sptr g_style = vgui_style::new_style(0.0, 1.0, 0.0, 5, 0);
-  for (int i = 0; i<world_points.size(); i++)
+  for (unsigned int i = 0; i<world_points.size(); i++)
   {
     vgl_point_2d<double> ip = image_points[i];
     vgl_point_2d<double> pip = proj_image_points[i];
