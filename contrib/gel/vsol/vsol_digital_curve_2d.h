@@ -213,10 +213,13 @@ void vsl_b_write(vsl_b_ostream &os, const vsol_digital_curve_2d* p);
 //: Binary load vsol_digital_curve_2d* from stream.
 void vsl_b_read(vsl_b_istream &is, vsol_digital_curve_2d* &p);
 
+//: Return the floating point index of the point on the curve nearest to \p point
+double closest_index(const vgl_point_2d<double>& point,
+                     const vsol_digital_curve_2d_sptr& curve);
 
-//: Split the input curve into two pieces near \p point
-bool split(const vgl_point_2d<double>& point,
-           const vsol_digital_curve_2d_sptr& input,
+//: Split the input curve into two pieces at the floating point index
+bool split(const vsol_digital_curve_2d_sptr& input,
+           double index,
            vsol_digital_curve_2d_sptr& output1,
            vsol_digital_curve_2d_sptr& output2);
 

@@ -67,8 +67,10 @@ void test_vsol_digital_curve_2d()
   vcl_cout << "digital curve: " << *dc << vcl_endl;
   vsol_digital_curve_2d_sptr curve1, curve2;
   // Split the curve at a segment
-  bool split_test = split(vgl_point_2d<double>(1.5,3.0), dc, curve1, curve2);
-  TEST("split curve at (1.5,3.0)", split_test && curve1 && curve2, true);
+  double index = closest_index(vgl_point_2d<double>(1.5,3.0),dc);
+  TEST("closest_index at (1.5,3.0)", index, 1.5);
+  bool split_test = split(dc, 1.5, curve1, curve2);
+  TEST("split curve at 1.5", split_test && curve1 && curve2, true);
   TEST("split result 1", curve1->point(2)->get_p() == vgl_point_2d<double>(1.75,2.75)
                          && curve1->size() == 3, true);
   TEST("split result 2", curve2->point(0)->get_p() == vgl_point_2d<double>(1.75,2.75)
@@ -77,8 +79,10 @@ void test_vsol_digital_curve_2d()
   vcl_cout << "curve 2: " << *curve2 << vcl_endl;
 
   // Split the curve at a point
-  split_test = split(vgl_point_2d<double>(5.0,2.0), dc, curve1, curve2);
-  TEST("split curve at (5.0,2.0)", split_test && curve1 && curve2, true);
+  index = closest_index(vgl_point_2d<double>(5.0,2.0),dc);
+  TEST("closest_index at (5.0,2.0)", index, 3.0);
+  split_test = split(dc, 3.0, curve1, curve2);
+  TEST("split curve at 3.0", split_test && curve1 && curve2, true);
   TEST("split result 1", curve1->point(3)->get_p() == vgl_point_2d<double>(4.5,3.0)
                          && curve1->size() == 4, true);
   TEST("split result 2", curve2->point(0)->get_p() == vgl_point_2d<double>(4.5,3.0)
@@ -87,10 +91,14 @@ void test_vsol_digital_curve_2d()
   vcl_cout << "curve 2: " << *curve2 << vcl_endl;
 
   // Split curve at its end points (this should fail)
-  split_test = split(vgl_point_2d<double>(7.0,5.0), dc, curve1, curve2);
-  TEST("split curve at (7.0,5.0)", split_test, false);
-  split_test = split(vgl_point_2d<double>(0.0,-1.0), dc, curve1, curve2);
-  TEST("split curve at (0.0,-1.0)", split_test, false);
+  index = closest_index(vgl_point_2d<double>(7.0,5.0),dc);
+  TEST("closest_index at (7.0,5.0)", index, 4.0);
+  split_test = split(dc, 4.0, curve1, curve2);
+  TEST("split curve at 4.0 (end)", split_test, false);
+  index = closest_index(vgl_point_2d<double>(0.0,-1.0),dc);
+  TEST("closest_index at (0.0,-1.0)", index, 0.0);
+  split_test = split(dc, 0.0, curve1, curve2);
+  TEST("split curve at 0.0 (start)", split_test, false);
 
 }
 

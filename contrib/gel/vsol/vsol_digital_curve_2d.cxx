@@ -278,6 +278,11 @@ bool vsol_digital_curve_2d::is_class(const vcl_string& cls) const
 }
 
 
+//----------------------------------------------------------------
+// ================  External Methods ========================
+//----------------------------------------------------------------
+
+
 //: Binary save vsol_digital_curve_2d to stream.
 void
 vsl_b_write(vsl_b_ostream &os, const vsol_digital_curve_2d* p)
@@ -317,50 +322,60 @@ void vsol_digital_curve_2d::describe(vcl_ostream &strm, int blanking) const
 }
 
 
-//----------------------------------------------------------------
-// ================  External Methods ========================
-//----------------------------------------------------------------
-
-//: Split the input curve into two pieces near \p point
-bool split(const vgl_point_2d<double>& pt,
-           const vsol_digital_curve_2d_sptr &input,
-           vsol_digital_curve_2d_sptr &output1,
-           vsol_digital_curve_2d_sptr &output2)
+//: Return the floating point index of the point on the curve nearest to \p point
+double closest_index(const vgl_point_2d<double>& pt,
+                     const vsol_digital_curve_2d_sptr& curve)
 {
   int index = 0;
-  const int n = input->size();
-  double x1=input->point(0)->x(),  y1=input->point(0)->y(),
-         x2=input->point(1)->x(),  y2=input->point(1)->y();
+  const int n = curve->size();
+  double x1=curve->point(0)->x(),  y1=curve->point(0)->y(),
+         x2=curve->point(1)->x(),  y2=curve->point(1)->y();
   double d = vgl_distance2_to_linesegment(x1,y1,x2,y2,pt.x(),pt.y());
   
+  // find the closest line segment of on the curve
   for (int i=1; i<n-1; ++i) {
-    x1=input->point(i)->x();   y1=input->point(i)->y(),
-    x2=input->point(i+1)->x(); y2=input->point(i+1)->y();
+    x1=curve->point(i)->x();   y1=curve->point(i)->y(),
+    x2=curve->point(i+1)->x(); y2=curve->point(i+1)->y();
+    
+    // skip duplicate points
+    if(x1 == x2 && y1 == y2)
+      continue;
 
     double e = vgl_distance2_to_linesegment(x1,y1,x2,y2,pt.x(),pt.y());
     if (e < d) { d=e; index = i;}
   }
 
-  vgl_vector_2d<double> v1 = input->point(index+1)->get_p() - input->point(index)->get_p();
-  vgl_vector_2d<double> v2 = pt - input->point(index)->get_p();
+  // find the closest point on the closest line segment
+  vgl_vector_2d<double> v1 = curve->point(index+1)->get_p() - curve->point(index)->get_p();
+  vgl_vector_2d<double> v2 = pt - curve->point(index)->get_p();
+  // project the point onto the line segment
   double fraction = dot_product(normalized(v1),v2) / v1.length();
   if(fraction < 0.0) fraction = 0.0;
   if(fraction > 1.0) fraction = 1.0;
 
-  double d_ind = (double)index + fraction;
+  return (double)index + fraction;
+}
 
-  if( d_ind <= 0.0 || d_ind >= double(n-1))
+
+//: Split the input curve into two pieces at the floating point index
+bool split(const vsol_digital_curve_2d_sptr &input,
+           double index,
+           vsol_digital_curve_2d_sptr &output1,
+           vsol_digital_curve_2d_sptr &output2)
+{
+  const int n = input->size();
+  if( index <= 0.0 || index >= double(n-1))
     return false;
 
   vcl_vector<vsol_point_2d_sptr> vec1, vec2;
-  vgl_point_2d<double> break_point = input->interp(d_ind);
+  vgl_point_2d<double> break_point = input->interp(index);
   vec2.push_back(new vsol_point_2d(break_point));
   for (int i=0; i<n; ++i) {
-    if( double(i) < d_ind )
+    if( double(i) < index )
       vec1.push_back(input->point(i));
-    if( double(i) > d_ind )
+    if( double(i) > index )
       vec2.push_back(input->point(i));
-    // if d_ind == i then ignore this point
+    // if index == i then ignore this point
   }
   vec1.push_back(new vsol_point_2d(break_point));
 
