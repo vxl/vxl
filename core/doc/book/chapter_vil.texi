@@ -276,6 +276,7 @@ dealing with the arbitrary and complex hassles of image IO.
 @subsection Using @code{vil_memory_image} to ignore pixel type.
 @cindex pixel-type, ignoring
 @cindex vil_memory_image
+@anchor{vil_memory_image}
 
 As explained above, you should be using @code{vil_image_view<T>} to
 actually manipulate your pixels. However, in some parts of your
@@ -473,6 +474,53 @@ between vil1 and vil types at runtime, then take a look at @code{<vil1/vil1_vil.
 which has a function for converting between @code{vil1_memory_image_of} and @code{vil_image_view}, and
 a class that wraps a @code{vil1_image}, and exports a @code{vil_image_resource} interface.
 
+
+
+@section Frequently Asked Questions
+@cindex Frequently Asked Questions
+@cindex FAQ
+
+
+@table @asis
+@item Question 1
+
+@quotation
+I'm trying to load a DICOM image, but it doesn't work. @code{vil_load.cxx}
+prints an error message that mentions lots of image type but not @code{.dcm}.
+What's wrong?
+@end quotation
+
+The DICOM loader in VXL is not built by default,
+because it is large and only medical image people want it.
+
+You will need to rerun CMake and find Cache value called
+VXL_BUILD_DICOM. Turn it on, and rebuild --- it won't need to rebuild
+everything.
+
+@item Question 2
+
+@quotation
+I'm having problems trying to use vil_image_view_base_sptr to process a
+loaded image without worrying about what type the pixels are.
+@end quotation
+
+The designers of vil recommend against using @code{vil_image_view_base_sptr}
+explicitly --- it is unlikely to behave the way any user might want or
+expect. vil never processes pixels independently of their type, and
+@code{vil_image_view_base_sptr} is just a smart polymorphic pointer to a
+concrete @code{vil_image_view<T>} with some actual pixel type @code{T}.
+If you want to convert a loaded image into pixels of a particular type,
+use one of the @code{vil_convert} functions
+
+@example
+  vil_image_view<vxl_byte> view =
+    vil_convert_stretch_range (vxl_byte(), vil_load(my_filename));
+@end example
+
+If you want to store an image in memory without worrying about its pixel
+type, @code{@xref{vil_memory_image}.}
+
+@end table
 
 @section Optimising Image Processing Algorithms (Advanced Topic)
 

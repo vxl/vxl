@@ -5,8 +5,9 @@ tell your compiler and linker the following:
 
 @itemize @bullet
 @item
-For the include directories, you will need to use @code{$VXLSRC/vcl}
-and @code{$VXLSRC/core}. If you are using one of the contributed non-core
+For the include directories, you will need to use @code{$VXLSRC/vcl},
+@code{$VXLSRC/core}, @code{$VXLBIN/vcl} and @code{$VXLBIN/core}.
+If you are using one of the contributed non-core
 libraries, e.g. the spatial objects library @code{vsol} in
 @code{contrib/gel}, then you need to add the relevant contrib directory,
 e.g. @code{$VXLSRC/contrib/gel}.
@@ -24,6 +25,13 @@ libraries you explicitly use. e.g. if your code has a @code{#include
 added as the linker complains they are missing. VXL's simple naming scheme
 should make it very easy to identify the missing library from the error
 message.
+
+@item
+You may also need to link against some extra system libraries, e.g. On
+Unix, VXL can use libm (for maths stuff), libpng, libjpeg, libtiff (for
+image loading), libnsl (for Solaris sockets.) On Windows you may need to
+link against ws2_32.dll (for sockets stuff.)
+
 @end itemize
 
 @anchor{CMake}
@@ -34,7 +42,9 @@ message.
 If keeping track of include directories, etc. is too much hassle, or if you
 are building a project to run on multiple platforms, then we suggest using
 the CMake system to build your project. CMake automatically communicates the
-necessary settings between VXL and your project.
+necessary settings between VXL and your project. If you are unable to get your
+non-CMake Makefile of project file to work properly, then please try CMake --- it
+will likely solve your problem for you.
 
 
 VXL uses the CMake configuration system to generate Makefiles (for GNU
@@ -545,9 +555,11 @@ they may not be quite as up to date. They are tucked away in the
 @item Question 1
 
 @quotation
-I have successfully built VXL under MS Visual Studio, and am now trying to build a simple
-program that uses the libraries. The Linker complains that there are multiple definitions
-(error @code{LNK2005}) of several things from the C++ Standard Library. What is going wrong?
+I have successfully built VXL under MS Visual Studio, and am now
+trying to build a simple program that uses the libraries. The Linker
+complains that there are multiple definitions (error @code{LNK2005}) of
+several things from the C++ Standard Library, or locally defined symbols
+being imported (error @code{LNK4049}). What is going wrong?
 @end quotation
 
 These kinds of errors often indicate that you are linking against
