@@ -141,6 +141,9 @@ SOURCE=.\segv_vil_menus.h
 SOURCE=.\segv_vil_segmentation_manager.h
 # End Source File
 # Begin Source File
+SOURCE=.\dll.h
+# End Source File
+# Begin Source File
 SOURCE=.\vil_dll.h
 # End Source File
 # End Group
