@@ -22,6 +22,11 @@ protected:
   unsigned ny_;
   unsigned nplanes_;
 
+  vil2_image_view_base(unsigned nx, unsigned ny, unsigned nplanes):
+  nx_(nx), ny_(ny), nplanes_(nplanes) {}
+
+  vil2_image_view_base(): nx_(0), ny_(0), nplanes_(0) {}
+
 public:
 
   //: Width
