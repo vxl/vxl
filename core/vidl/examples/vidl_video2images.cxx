@@ -103,6 +103,30 @@ static const char * help_text[] = {
 0
 };
 
+#if defined(HAS_MPEG2) || defined(VCL_WIN32)
+
+static bool callback_greyscale = false;
+static bool callback_demux_video = false;
+static vcl_string callback_pid = "0x0000";
+static int callback_numframes = -1;
+
+// This callback is needed to provide info necessary to initialize the
+// MPEG2 codec.  Normally, this would be done by reading the header,
+// but that is not implemented yet.
+static void
+load_mpegcodec_callback (vidl_codec * vc)
+{
+  vidl_mpegcodec * mpegcodec = vc->castto_vidl_mpegcodec();
+  if ( ! mpegcodec) return;
+  mpegcodec->set_grey_scale (callback_greyscale);
+  if (callback_demux_video) mpegcodec->set_demux_video();
+  mpegcodec->set_pid (callback_pid.c_str());
+  mpegcodec->set_number_frames (callback_numframes);
+  mpegcodec->init();
+}
+
+#endif
+
 int
 main (int argc, char **argv)
 {
@@ -118,12 +142,28 @@ main (int argc, char **argv)
   vul_arg<vcl_list<int> > frames
       ("-f", "indices of frames to convert");
 
+#if defined(HAS_MPEG2) || defined(VCL_WIN32)
+  vul_arg<bool> greyscale
+      ("-greyscale", "is the video greyscale (MPEG2 only)?", false);
+  vul_arg<bool> demux_video
+      ("-demux_video", "should the video be demuxed (MPEG2 only)?", false);
+  vul_arg<const char *> pid
+      ("-pid", "the video PID (MPEG2 only)", "0x0000");
+#endif
+
   vul_arg_parse( argc, argv);
 
   if (argc > 1) vcl_exit (1);
   if (help()) print_help_exit (help_text);
 
   CHECKE( ivfn(), "specify input video file with option -i" );
+
+#if defined(HAS_MPEG2) || defined(VCL_WIN32)
+  callback_greyscale = greyscale();
+  callback_demux_video = demux_video();
+  callback_pid = pid();
+  callback_numframes = -1;
+#endif
 
 // windows does not seem to get the -DHAS_MPEG2 option from CMake
 #if defined(HAS_MPEG2) || defined(VCL_WIN32)
@@ -133,6 +173,10 @@ main (int argc, char **argv)
 #if defined(VCL_WIN32)
   vidl_io::register_codec (new vidl_avicodec);
   V1( "registered AVI codec" );
+#endif
+
+#if defined(HAS_MPEG2) || defined(VCL_WIN32)
+  vidl_io::load_mpegcodec_callback = &load_mpegcodec_callback;
 #endif
 
   vidl_movie_sptr movie = vidl_io::load_movie (ivfn());
