@@ -2,13 +2,14 @@
 
 SET(vimt_sources
   vimt_image.cxx vimt_image.h
-	vimt_transform_2d.cxx vimt_transform_2d.h
-	vimt_image_2d.h
-	vimt_image_2d_of.cxx vimt_image_2d_of.txx vimt_image_2d_of.h
-	vimt_image_pyramid.cxx vimt_image_pyramid.txx vimt_image_pyramid.h
-	vimt_image_pyramid_builder.cxx vimt_image_pyramid_builder.h
+  vimt_transform_2d.cxx vimt_transform_2d.h
+  vimt_image_2d.h
+  vimt_image_2d_of.cxx vimt_image_2d_of.txx vimt_image_2d_of.h
+  vimt_image_pyramid.cxx vimt_image_pyramid.txx vimt_image_pyramid.h
+  vimt_image_pyramid_builder.cxx vimt_image_pyramid_builder.h
   vimt_gaussian_pyramid_builder_2d.cxx vimt_gaussian_pyramid_builder_2d.h
-	vimt_gaussian_pyramid_builder_2d.txx
+  vimt_gaussian_pyramid_builder_2d.txx
+  vimt_sample_profile_bilin.txx vimt_sample_profile_bilin.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vimt_sources)
