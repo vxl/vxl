@@ -141,6 +141,9 @@ SOURCE=.\Templates/vil2_image_view+vcl_complex+double--.cxx
 SOURCE=.\Templates/vil2_image_view+vcl_complex+float--.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil2_smart_ptr+vil2_stream-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vil2_crop.cxx
 # End Source File
 # Begin Source File
@@ -384,10 +387,10 @@ SOURCE=.\vil2_open.cxx
 SOURCE=.\vil2_stream.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_stream_16bit.cxx
+SOURCE=.\vil2_stream_read.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_stream_32bit.cxx
+SOURCE=.\vil2_stream_write.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_stream_core.cxx
@@ -612,10 +615,10 @@ SOURCE=.\vil2_rgba.txx
 SOURCE=.\vil2_stream.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_stream_16bit.h
+SOURCE=.\vil2_stream_read.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_stream_32bit.h
+SOURCE=.\vil2_stream_write.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_stream_core.h
