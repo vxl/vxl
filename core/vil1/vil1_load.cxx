@@ -81,12 +81,12 @@ vil_image vil_load_raw(char const* filename)
       // Make an in-core stream...
       vil_stream_core *cis = new vil_stream_core();
       cis->ref();
-      cis->m_transfer((char*)filename, 0, l+1, false/*write*/); /* const violation */
+      cis->write(filename, l+1);
       is = cis;
     }
 
     // maybe it's a URL?
-    if (l > 4 && vcl_strncmp(filename, "http://", 7) == 0) {
+    else if (l > 7 && vcl_strncmp(filename, "http://", 7) == 0) {
       is->unref();
       is = new vil_stream_url(filename);
       is->ref();
