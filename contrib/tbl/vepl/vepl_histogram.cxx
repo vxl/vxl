@@ -1,4 +1,5 @@
 #include <vcl_iostream.h>
+#include <vipl/accessors/vipl_accessors_vcl_vector.h>
 #include <vipl/accessors/vipl_accessors_vil_image.h>
 #include <vepl/vepl_histogram.h>
 #include <vipl/vipl_histogram.h>
