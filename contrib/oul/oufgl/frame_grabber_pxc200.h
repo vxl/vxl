@@ -10,6 +10,7 @@
 // Reproduction rights limited as described in the COPYRIGHT file.
 //----------------------------------------------------------------------
 
+#include <vcl_cstdio.h>
 #include <vil/vil_memory_image.h>
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_rgb.h>
