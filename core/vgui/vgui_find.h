@@ -1,21 +1,19 @@
-// This is ./oxl/vgui/vgui_find.h
-
-//:
-// \file
-// \author  fsm@robots.ox.ac.uk
-
+// This is oxl/vgui/vgui_find.h
 #ifndef vgui_find_h_
 #define vgui_find_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+// \file
+// \author  fsm@robots.ox.ac.uk
 
 #include <vcl_string.h>
 #include <vgui/vgui_tableau_sptr.h>
 
 //: Search for a tableau by type in the hierarchy.
-//  If \param direction_down is true, it will search below \param
-//  start. Otherwise, it will search above \param start. Returns a
+//  If direction_down is true, it will search below param
+//  start. Otherwise, it will search above param start. Returns a
 //  null pointer if a matching tableau is not found.
 vgui_tableau_sptr vgui_find_by_type_name(vgui_tableau_sptr const& start, vcl_string const &tn, bool direction_down);
 
@@ -35,8 +33,8 @@ vgui_tableau_sptr vgui_find_above_by_type_name(vgui_tableau_sptr const& start, v
 
 
 //: Search for a tableau by name in the hierarchy.
-//  If \param direction_down is true, it will search below \param
-//  start. Otherwise, it will search above \param start. Returns a
+//  If direction_down is true, it will search below param
+//  start. Otherwise, it will search above param start. Returns a
 //  null pointer if a matching tableau is not found.
 vgui_tableau_sptr vgui_find_by_name(vgui_tableau_sptr const& start, vcl_string const &name, bool direction_down);
 
