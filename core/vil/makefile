@@ -65,6 +65,7 @@ MANPAGE_SOURCES += vil_rotate.txx
 
 SOURCES += vil_load.cxx
 SOURCES += vil_save.cxx
+SOURCES += vil_copy.cxx
 MANPAGE_SOURCES += vil_copy.txx
 SOURCES += vil_new.cxx
 SOURCES += vil_print.cxx
