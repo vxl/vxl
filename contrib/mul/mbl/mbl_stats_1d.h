@@ -54,7 +54,7 @@ public:
   double mean() const ;
 
 
-    //: Mean of current observations
+    //: Standard deviation of current observations
   double sd() const;
     //: Standard error (sd of estimate of mean) of current observations
   double stdError() const;
