@@ -1,7 +1,8 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
+#include <f2c.h>
+#include <netlib.h>
 #include <math.h>
 
 /* extern "C" */
-double pow_dd(double x, double y) { return pow(x, y); }
+double pow_dd(const double *x, const double *y) {
+  return pow(*x, *y);
+}
