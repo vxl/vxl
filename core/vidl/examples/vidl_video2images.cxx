@@ -11,7 +11,6 @@
 #include <vul/vul_arg.h>
 #include <vul/vul_sprintf.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
 #include <vxl_config.h>
 #include <vil/vil_rgb.h>

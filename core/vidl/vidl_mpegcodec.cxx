@@ -8,7 +8,6 @@
 #include <vcl_cstdlib.h> // for vcl_strtol()
 #include <vul/vul_file.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_image_view.h>
 #include <vil/vil_rgb.h>
 
 extern "C" {
@@ -156,7 +155,7 @@ static void vil_im_draw_frame (vo_frame_t * frame)
   if (!p)
   {
     vcl_cerr << "vidl_mpegcodec. vil_im_draw_frame."
-             << "decode request was never set\n";
+             << " decode request was never set\n";
     return;
   }
 
@@ -441,7 +440,8 @@ vidl_mpegcodec::get_image(int frame_position,
 
   int indy = width * height * this->get_bytes_pixel();
   unsigned char ib[indy];
-  this->get_view( /* Fix params : remove first (becomes return value) and interchange third and fourth */ : frame_position,(void*)ib,x0,y0,width,height);
+  this->get_view( // Fix params : remove first (becomes return value) and interchange third and fourth
+                 frame_position,(void*)ib,x0,y0,width,height);
 
   if (decoder_->get_format() == vidl_mpegcodec_data::GREY)
     frame = new vil_image_view<unsigned char >(&ib[0],this->ni(),this->nj());
