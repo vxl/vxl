@@ -12,7 +12,7 @@ inline vil_image Image_to_vil(Image const* im)
   // First try to load directly from file.  This will give wrong results
   // when im was copied into memory from a file image and then modified.
   const char* name = im->GetName();
-  if (name)
+  if (name && *name)
   {
     vil_image imo = vil_load(name);
     if (imo) return imo;
