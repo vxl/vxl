@@ -53,10 +53,10 @@ unsigned long mbl_data_collector_merge_all(mbl_data_collector<T> &dest,
 {
   long n0 = src0.size();
   long n1 = src1.size();
+
 // Deal with special cases
 
-
-  if (n0 == 0) 
+  if (n0 == 0)
   {
     if (order)
     {
@@ -75,7 +75,6 @@ unsigned long mbl_data_collector_merge_all(mbl_data_collector<T> &dest,
     return mbl_data_collector_copy_all(dest, src0);
   }
 
-  
   if (order)
   {
     order->clear();
@@ -110,12 +109,12 @@ unsigned long mbl_data_collector_merge_all(mbl_data_collector<T> &dest,
 }
 
 #define MBL_DATA_COLLECTOR_INSTANTIATE(T) \
-template class mbl_data_collector< T >; \
+template class mbl_data_collector<T >; \
 template unsigned long mbl_data_collector_copy_all(mbl_data_collector<T > &dest, \
                                     mbl_data_wrapper<T > &src);\
 template unsigned long mbl_data_collector_merge_all(mbl_data_collector<T > &dest,\
                                     mbl_data_wrapper<T > &src1,\
                                     mbl_data_wrapper<T > &src2,\
-                                    vcl_vector<unsigned> *order);
+                                    vcl_vector<unsigned > *order)
 
 #endif // mbl_data_collector_txx_
