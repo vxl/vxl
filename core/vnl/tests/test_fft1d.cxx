@@ -9,7 +9,8 @@
 //
 
 //-----------------------------------------------------------------------------
-#include <vcl_cstdlib.h> // for abort
+#include <vcl_cstdlib.h> // for vcl_abort
+#include <vcl_cmath.h> // for vcl_fabs
 #include <vcl_iostream.h>
 #include <vcl_complex.h>
 
@@ -39,7 +40,7 @@ void test_fft1d () {
   vnl_fftxd_prime_factors<fsm_real> oPFx (ciArraySizeX);
   if (!oPFx) {
     vcl_cerr << "cannot decompose X-size " << ciArraySizeX << ")into the form (2^P)(3^Q)(5^R)\n";
-    abort();
+    vcl_abort();
   }
 
   // create a number of arrays for testing the different constructors
@@ -101,8 +102,8 @@ void test_fft1d () {
 
   // the whole thing backwards
   //==========================
-  vnl_vector<fsm_real> fBackRealMat = real(VCL_OVERLOAD_CAST(vnl_vector<vcl_complex<fsm_real> >&, oFFTSimple));
-  vnl_vector<fsm_real> fBackImagMat = imag(VCL_OVERLOAD_CAST(vnl_vector<vcl_complex<fsm_real> >&, oFFTSimple));
+  vnl_vector<fsm_real> fBackRealMat = vcl_real(VCL_OVERLOAD_CAST(vnl_vector<vcl_complex<fsm_real> >&, oFFTSimple));
+  vnl_vector<fsm_real> fBackImagMat = vcl_imag(VCL_OVERLOAD_CAST(vnl_vector<vcl_complex<fsm_real> >&, oFFTSimple));
   fsm_real *realBackArray = fBackRealMat.data_block ();
   fsm_real *imagBackArray = fBackImagMat.data_block ();
   vcl_complex<fsm_real> *complBackArray = oFFTSimple.data_block ();
@@ -140,8 +141,8 @@ void test_fft1d () {
   {
     for (int iC = 0;iC < ciArraySizeX;iC ++) {
       // divide by ciArraySizeX (since by def fft(a) == n*....)
-      fRealError += fabs(oFFTBackSimpleComplex(iC).real ()/ciArraySizeX-iC);
-      fImagError += fabs(oFFTBackSimpleComplex(iC).imag ()/ciArraySizeX);
+      fRealError += vcl_fabs(vcl_real(oFFTBackSimpleComplex(iC))/ciArraySizeX-iC);
+      fImagError += vcl_fabs(vcl_imag(oFFTBackSimpleComplex(iC))/ciArraySizeX);
     }
   }
 

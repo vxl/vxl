@@ -3,7 +3,7 @@
 // \brief test program for 2D FFT routines.
 // \author Veit U.B. Schenk, Oxford RRG.
 // \date 20 Mar 1998
-// Creates 2D arrays and matrices, computes forward fft, then backward fft 
+// Creates 2D arrays and matrices, computes forward fft, then backward fft
 // for all (where applicable) constructors of the class
 // and computes differences between input and output.
 //
@@ -77,11 +77,11 @@ void test_fft2d () {
 
   if (!prx) {
     vcl_cerr << "cannot decompose X-size " << fsm_rows << ")into the form (2^P)(3^Q)(5^R)\n";
-    abort();
+    vcl_abort();
   }
   if (!pry) {
     vcl_cerr << "cannot decompose Y-size (" << fsm_cols << ") into the form (2^P)(3^Q)(5^R)\n";
-    abort();
+    vcl_abort();
   }
 
   // create arrays for testing the different constructors

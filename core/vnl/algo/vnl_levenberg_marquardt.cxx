@@ -60,7 +60,7 @@ public:
   vnl_levenberg_marquardt_Activate(vnl_levenberg_marquardt* minimizer) {
     if (current) {
       vcl_cerr << "vnl_levenberg_marquardt: ERROR: Nested minimizations not supported.\n";
-      abort();
+      vcl_abort();
       // Ask awf to fix this if you need to run one minimization inside another.
       // Or just make "current" a stack.
       // Actually....  I think it might be a lot harder than that, the statics in the fortran.
@@ -378,7 +378,6 @@ void vnl_levenberg_marquardt::diagnose_outcome(vcl_ostream& s) const
 
 vnl_matrix<double> const& vnl_levenberg_marquardt::get_JtJ()
 {
-
   if (!set_covariance_) {
     vcl_cerr << __FILE__ ": get_covariance() not implemented yet\n";
     set_covariance_ = true;

@@ -29,7 +29,7 @@ vnl_cholesky::vnl_cholesky(vnl_matrix<double> const & M, Operation mode):
   unsigned n = M.columns();
   assert(n == M.rows());
   num_dims_rank_def_ = -1;
-  if (fabs(M(0,n-1) - M(n-1,0)) > 1e-8) {
+  if (vcl_fabs(M(0,n-1) - M(n-1,0)) > 1e-8) {
     vcl_cerr << "vnl_cholesky: WARNING: unsymmetric: " << M << vcl_endl;
   }
 
@@ -86,7 +86,7 @@ vnl_matrix<double> vnl_cholesky::inverse() const
   for(unsigned i = 0; i < n; ++i)
     for(unsigned j = i+1; j < n; ++j)
       I(i,j) = I(j,i);
-  
+
   return I;
 }
 
@@ -105,7 +105,7 @@ vnl_matrix<double> vnl_cholesky::lower_triangle() const
   }
   return L;
 }
-  
+
 
 //: Return upper-triangular factor.
 vnl_matrix<double> vnl_cholesky::upper_triangle() const
@@ -122,4 +122,4 @@ vnl_matrix<double> vnl_cholesky::upper_triangle() const
   }
   return U;
 }
-  
+

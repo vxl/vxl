@@ -57,22 +57,22 @@ double vnl_brent::minimize_given_bounds(double ax, double bx, double cx,
   fw=fv=fx=p->f(x);
   for (iter=1;iter<=ITMAX;iter++) {
     xm=0.5*(a+b);
-    tol1=tol*fabs(x)+ZEPS;
+    tol1=tol*vcl_fabs(x)+ZEPS;
     tol2=2.0*(tol1);
-    if (fabs(x-xm) <= (tol2-0.5*(b-a))) {
+    if (vcl_fabs(x-xm) <= (tol2-0.5*(b-a))) {
       *xmin=x;
       return fx;
     }
-    if (fabs(e) > tol1) {
+    if (vcl_fabs(e) > tol1) {
       r=(x-w)*(fx-fv);
       q=(x-v)*(fx-fw);
       p1=(x-v)*q-(x-w)*r;
       q=2.0*(q-r);
       if (q > 0.0) p1 = -p1;
-      q=fabs(q);
+      q=vcl_fabs(q);
       etemp=e;
       e=d; // Warning: The variable d has not yet been assigned a value.
-      if (fabs(p1) >= fabs(0.5*q*etemp) || p1 <= q*(a-x) || p1 >= q*(b-x))
+      if (vcl_fabs(p1) >= vcl_fabs(0.5*q*etemp) || p1 <= q*(a-x) || p1 >= q*(b-x))
         d=CGOLD*(e=(x >= xm ? a-x : b-x));
       else {
         d=p1/q;
@@ -83,7 +83,7 @@ double vnl_brent::minimize_given_bounds(double ax, double bx, double cx,
     } else {
       d=CGOLD*(e=(x >= xm ? a-x : b-x));
     }
-    u=(fabs(d) >= tol1 ? x+d : x + tol1 * vnl_math_sgn(d));
+    u=(vcl_fabs(d) >= tol1 ? x+d : x + tol1 * vnl_math_sgn(d));
     fu= p->f(u);
     if (fu <= fx) {
       if (u >= x) a=x; else b=x;

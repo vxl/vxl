@@ -5,11 +5,11 @@
 #include <vnl/vnl_matrix.h>
 
 bool float_fuzz_equal (const float& d1, const float& d2) {
-  return ((fabs(d1 - d2) < 1.0e-5) ? true : false);
+  return ((vcl_fabs(d1 - d2) < 1.0e-5) ? true : false);
 }
 
 bool double_fuzz_equal (const double& d1, const double& d2) {
-  return ((fabs(d1 - d2) < 1.0e-6) ? true : false);
+  return ((vcl_fabs(d1 - d2) < 1.0e-6) ? true : false);
 }
 
 void test_int () {
@@ -354,7 +354,7 @@ void test_float () {
 }
 
 bool float_fuzz_equal2 (const float& d1, const float& d2) {
-  return ((fabs(d1 - d2) < 1.0e-4) ? true : false);
+  return ((vcl_fabs(d1 - d2) < 1.0e-4) ? true : false);
 }
 
 

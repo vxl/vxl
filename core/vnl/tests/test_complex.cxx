@@ -46,7 +46,7 @@ void test_complex() {
 
     double norma=0;
     for (unsigned n=0; n<a.size(); ++n)
-      norma += a[n].real()*a[n].real() + a[n].imag()*a[n].imag();
+      norma += vcl_real(a[n])*vcl_real(a[n]) + vcl_imag(a[n])*vcl_imag(a[n]);
     norma = vcl_sqrt(norma);
     vnl_test_assert("correct magnitude", vcl_abs(norma-a.magnitude())<1e-12 );
   }

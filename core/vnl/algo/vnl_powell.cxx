@@ -92,13 +92,13 @@ vnl_powell::minimize(vnl_vector<double>& p)
       f1d.uninit(xx, p);
       // Now p is minimizer along xi
 
-      if (fabs(fptt-fret) > del) {
-        del = fabs(fptt-fret);
+      if (vcl_fabs(fptt-fret) > del) {
+        del = vcl_fabs(fptt-fret);
         ibig = i;
       }
     }
 
-    if (2.0*fabs(fp-fret) <= ftol*(fabs(fp)+fabs(fret))) {
+    if (2.0*vcl_fabs(fp-fret) <= ftol*(vcl_fabs(fp)+vcl_fabs(fret))) {
       MATLABPRINT(xi);
       return CONVERGED_FTOL;
     }

@@ -11,7 +11,7 @@ void testvnl_sample()
   unsigned const N = 100000;
   double mu = 1.552;
   double sigma = 3.729;
-  
+
   double X[N];
   for (unsigned i=0; i<N; ++i)
     X[i] = vnl_sample_normal(mu, sigma);
@@ -29,7 +29,7 @@ void testvnl_sample()
   double sigma_bar = 0;
   for (unsigned i=0; i<N; ++i)
     sigma_bar += vnl_math_sqr(X[i] - X_bar);
-  sigma_bar = sqrt(sigma_bar / (N-1));
+  sigma_bar = vcl_sqrt(sigma_bar / (N-1));
   vcl_cout << "actual standard deviation : " << sigma << vcl_endl;
   vcl_cout << "sample standard deviation : " << sigma_bar << vcl_endl;
   TEST("sample stddev", sigma_bar-sigma < 0.1 && sigma-sigma_bar < 0.1, true);

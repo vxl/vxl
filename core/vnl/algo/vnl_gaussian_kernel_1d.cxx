@@ -11,6 +11,7 @@
 
 #include "vnl_gaussian_kernel_1d.h"
 #include <vcl_cmath.h>
+#include <vnl/vnl_math.h>
 
 // G(x) = 1/(sigma * sqrt(2*pi)) * exp(-0.5 * (x/sigma)^2)
 // x(g) = sigma * sqrt(-2 * log(g * sigma * sqrt(2*pi) ) )
@@ -19,7 +20,7 @@
 static inline
 double compute_width(double sigma, double cutoff)
 {
-  return sigma * vcl_sqrt(-2 * vcl_log(cutoff * sigma * vcl_sqrt(2*3.14159)));
+  return sigma * vcl_sqrt(-2 * vcl_log(cutoff * sigma * vcl_sqrt(2*vnl_math::pi)));
 }
 
 //: Construct a sampled 1D gaussian of standard deviation sigma.

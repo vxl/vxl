@@ -373,13 +373,10 @@ static int linnr(int len,vnl_rnpoly_solve_cmplx dhx[M][M],
 
 // -----------------------  XNORM  --------------------
 //: Finds the unit normal of a vector v
-#ifdef VCL_SUNPRO_CC_50
-using std::fabs; // FIXME
-#endif
 static double xnorm(int n, vnl_rnpoly_solve_cmplx v[])
 {
   double txnorm=0.0;
-  for (int j=n-1;j>=0; --j) txnorm += fabs(v[j].R) + fabs(v[j].C);
+  for (int j=n-1;j>=0; --j) txnorm += vcl_fabs(v[j].R) + vcl_fabs(v[j].C);
   return txnorm;
 }
 

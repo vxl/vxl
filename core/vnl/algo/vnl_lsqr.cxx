@@ -37,7 +37,7 @@ public:
   vnl_lsqr_Activate(vnl_lsqr* minimizer) {
     if (current) {
       vcl_cerr << "vnl_lsqr: ERROR: Nested minimizations not supported.\n";
-      abort();
+      vcl_abort();
       // This is a copy of what goes on in LevenbergMarquardt, so if awf decides to
       // fix that one, then maybe he could do the same here...
     }
@@ -80,7 +80,6 @@ int vnl_lsqr::aprod_(int* mode, int* m, int* n, double* x, double* y, int* leniw
 
 int vnl_lsqr::minimize(vnl_vector<double>& result)
 {
-
   int m = ls_->get_number_of_residuals();
   int n = ls_->get_number_of_unknowns();
   double damp = 0;
@@ -150,15 +149,15 @@ void vnl_lsqr::translate_return_code(vcl_ostream& os, int rc)
        "sufficiently accurate, given the value of ATOL.",
    "An estimate of cond(Abar) has exceeded CONLIM.  "
        "The system A*x = b appears to be ill-conditioned.  "
-       "Otherwise, there could be an error in subroutine APROD.",   
+       "Otherwise, there could be an error in subroutine APROD.",
    "The equations A*x = b are probably compatible.  "
        "Norm(A*x - b) is as small as seems reasonable on this machine.",
    "The system A*x = b is probably not compatible.  A least-squares "
        "solution has been obtained that is as accurate as seems "
-       "reasonable on this machine.",   
+       "reasonable on this machine.",
    "Cond(Abar) seems to be so large that there is no point in doing further "
        "iterations, given the precision of this machine. "
-       "There could be an error in subroutine APROD.",  
+       "There could be an error in subroutine APROD.",
    "The iteration limit ITNLIM was reached."
   };
 
@@ -166,5 +165,4 @@ void vnl_lsqr::translate_return_code(vcl_ostream& os, int rc)
     (rc < 0 || rc > 7) os << __FILE__ " : Illegal return code : " << rc << vcl_endl;
   else
     os << __FILE__ " : " << vnl_lsqr_reasons[rc] << vcl_endl;
-
 }

@@ -1,5 +1,5 @@
 #include <vcl_iostream.h>
-#include <vcl_cmath.h> // for sqrt()
+#include <vcl_cmath.h> // for vcl_sqrt()
 #include <vcl_vector.h>
 #include <vbl/vbl_timer.h>
 
@@ -19,15 +19,15 @@ int main()
 {
   vcl_vector<double> x(1000000), y(1000000);
   for(int i = 0; i < 1000000; ++i)
-    x[i] = y[i] = 1.0/sqrt(double(i+1));
-  
+    x[i] = y[i] = 1.0/vcl_sqrt(double(i+1));
+
   vbl_timer t;
   for(int n = 0; n < 20; ++n)
     vnl_fastops_dot(&x[0], &y[0], x.size());
   vcl_cerr << "Method = " << METHOD << ", Optimized = " << OPTIMIZED << ", "
        << "Result = " << vnl_fastops_dot(&x[0], &y[0], x.size()) << ", ";
   t.print(vcl_cerr);
-  
+
   return 0;
 }
 

@@ -77,7 +77,7 @@ int doTest1()
 
 int doTest2()
 {
-  clock_t t = clock();
+  vcl_clock_t t = clock();
   for (unsigned int n = 1000; n<4000; n+=1000) {
     vnl_sparse_matrix<double> m1(n,n);
     for (unsigned i=0; i<n; i++) {
@@ -94,7 +94,7 @@ int doTest2()
     vnl_sparse_matrix<double> prod;
     m1.mult(m2,prod);
 
-    clock_t tn = clock();
+    vcl_clock_t tn = clock();
     vcl_cout << n << " " << tn - t << vcl_endl;
     t = tn;
   }

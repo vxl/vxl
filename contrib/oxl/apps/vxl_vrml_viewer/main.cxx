@@ -19,11 +19,11 @@
 #include <vgl/vgl_point_2d.h>
 
 // vgui basics:
-#include <vgui/vgui.h> 
+#include <vgui/vgui.h>
 // tableaux:
-#include <vgui/vgui_easy3D.h> 
-#include <vgui/vgui_easy2D.h> 
-#include <vgui/vgui_rubberbander.h> 
+#include <vgui/vgui_easy3D.h>
+#include <vgui/vgui_easy2D.h>
+#include <vgui/vgui_rubberbander.h>
 #include <vgui/vgui_viewer3D.h>
 #include <vgui/vgui_viewer2D.h>
 #include <vgui/vgui_composite.h>
@@ -54,29 +54,29 @@ vgui_tableau_ref make_3d_tableau(char const* filename)
 {
   vgui_vrml_tableau_new vrml(filename, true);
 
-  // Create a easy3D tableau: 
+  // Create a easy3D tableau:
   vgui_easy3D_new list3D;
 
-  list3D->set_point_radius(1); 
-  // Add a point at the origin 
+  list3D->set_point_radius(1);
+  // Add a point at the origin
   list3D->set_foreground(1,1,1);
   list3D->add_point(0,0,0);
 
-  // Add a line in the xaxis: 
-  list3D->set_foreground(1,1,0); 
-  list3D->add_line(1,0,0, 4,0,0); 
+  // Add a line in the xaxis:
+  list3D->set_foreground(1,1,0);
+  list3D->add_line(1,0,0, 4,0,0);
   list3D->add_point(5,0,0);
 
-  // Add a line in the yaxis: 
-  list3D->set_foreground(0,1,0); 
-  list3D->add_line(0,1,0, 0,4,0); 
+  // Add a line in the yaxis:
+  list3D->set_foreground(0,1,0);
+  list3D->add_line(0,1,0, 0,4,0);
   list3D->add_point(0,5,0);
 
-  // Add a line in the zaxis: 
-  list3D->set_foreground(0,0,1); 
-  list3D->add_line(0,0,1, 0,0,4); 
+  // Add a line in the zaxis:
+  list3D->set_foreground(0,0,1);
+  list3D->add_line(0,0,1, 0,0,4);
   list3D->add_point(0,0,5);
-  list3D->set_point_radius(1); 
+  list3D->set_point_radius(1);
 
   // Composite the easy and vrml
 
@@ -84,7 +84,7 @@ vgui_tableau_ref make_3d_tableau(char const* filename)
   text->add(0,0, filename);
 
   vgui_composite_new c(vrml, text);
-  
+
   thevrmls.push_back(vrml);
 
   return c;
@@ -114,7 +114,7 @@ bool set_style(int i)
     return true;
   }
 
-  cerr << "unknown style " << i << "\n";
+  vcl_cerr << "unknown style " << i << vcl_endl;
   return false;
 }
 
@@ -147,8 +147,8 @@ vgui_menu make_menubar()
 
 
 int main(int argc, char **argv)
-{ 
-  vgui::init(argc, argv); 
+{
+  vgui::init(argc, argv);
 
   vgui_deck_new deck;
   thedeck = deck;

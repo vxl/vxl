@@ -146,7 +146,7 @@ private:
 
   // Disallow assignment.
   vnl_svd(vnl_svd<T> const &) { }
-  void operator=(vnl_svd<T> const &) { }
+  vnl_svd<T>& operator=(vnl_svd<T> const &) { return *this; }
 };
 
 template <class T>

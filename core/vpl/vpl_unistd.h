@@ -2,7 +2,7 @@
 #define vpl_unistd_h_
 
 //:
-// \file 
+// \file
 // \brief Tries to include <unistd.h> properly.
 // \author fsm@robots.ox.ac.uk
 // What vpl_unistd.h is meant to do is to include <unistd.h> properly
@@ -30,8 +30,7 @@
 
 #include <vxl_config.h>        // must be first!!
 #include <vcl_compiler.h>
-#include <vcl_cstddef.h> // size_t
-typedef vcl_size_t vpl_size_t;
+#include <vcl_cstddef.h> // vcl_size_t
 #include <vcl_cstdlib.h>
 #include <vcl_sys/types.h>
 
@@ -43,7 +42,7 @@ typedef uid_t       vpl_uid_t;
 typedef gid_t       vpl_gid_t;
 typedef pid_t       vpl_pid_t;
 #else
-typedef size_t      vpl_ssize_t;
+typedef vcl_size_t  vpl_ssize_t;
 typedef int         vpl_uid_t;
 typedef int         vpl_gid_t;
 typedef int         vpl_pid_t;
@@ -91,7 +90,7 @@ int             vpl_brk(void *);
 int             vpl_chdir(const char *);
 int             vpl_chown(const char *, vpl_uid_t, vpl_gid_t);
 int             vpl_close(int);
-vpl_size_t      vpl_confstr(int, char *, vpl_size_t);
+vcl_size_t      vpl_confstr(int, char *, vcl_size_t);
 char           *vpl_crypt(const char *, const char *);
 char           *vpl_ctermid(char *);
 int             vpl_dup(int);
@@ -110,14 +109,14 @@ vpl_pid_t       vpl_fork(void);
 long int        vpl_fpathconf(int, int);
 int             vpl_fsync(int);
 int             vpl_ftruncate(int, vpl_off_t);
-char           *vpl_getcwd(char *, vpl_size_t);
+char           *vpl_getcwd(char *, vcl_size_t);
 vpl_gid_t       vpl_getegid(void);
 vpl_uid_t       vpl_geteuid(void);
 vpl_gid_t       vpl_getgid(void);
 int             vpl_getgroups(int, vpl_gid_t []);
 long            vpl_gethostid(void);
 char           *vpl_getlogin(void);
-int             vpl_getlogin_r(char *, vpl_size_t);
+int             vpl_getlogin_r(char *, vcl_size_t);
 int             vpl_getopt(int, char * const [], const char *);
 vpl_pid_t       vpl_getpgid(vpl_pid_t);
 vpl_pid_t       vpl_getpgrp(void);
@@ -135,11 +134,11 @@ int             vpl_nice(int);
 long int        vpl_pathconf(const char *, int);
 int             vpl_pause(void);
 int             vpl_pipe(int [2]);
-vpl_ssize_t     vpl_pread(int, void *, vpl_size_t, vpl_off_t);
+vpl_ssize_t     vpl_pread(int, void *, vcl_size_t, vpl_off_t);
 int             vpl_pthread_atfork(void (*)(void), void (*)(void), void(*)(void));
-vpl_ssize_t     vpl_pwrite(int, const void *, vpl_size_t, vpl_off_t);
-vpl_ssize_t     vpl_read(int, void *, vpl_size_t);
-int             vpl_readlink(const char *, char *, vpl_size_t);
+vpl_ssize_t     vpl_pwrite(int, const void *, vcl_size_t, vpl_off_t);
+vpl_ssize_t     vpl_read(int, void *, vcl_size_t);
+int             vpl_readlink(const char *, char *, vcl_size_t);
 int             vpl_rmdir(const char *);
 void           *vpl_sbrk(vpl_intptr_t);
 int             vpl_setgid(vpl_gid_t);
@@ -158,11 +157,11 @@ vpl_pid_t       vpl_tcgetpgrp(int);
 int             vpl_tcsetpgrp(int, vpl_pid_t);
 int             vpl_truncate(const char *, vpl_off_t);
 char           *vpl_ttyname(int);
-int             vpl_ttyname_r(int, char *, vpl_size_t);
+int             vpl_ttyname_r(int, char *, vcl_size_t);
 vpl_useconds_t  vpl_ualarm(vpl_useconds_t, vpl_useconds_t);
 int             vpl_unlink(const char *);
 int             vpl_usleep(vpl_useconds_t);
 vpl_pid_t       vpl_vfork(void);
-vpl_ssize_t     vpl_write(int, const void *, vpl_size_t);
+vpl_ssize_t     vpl_write(int, const void *, vcl_size_t);
 
 #endif // vpl_unistd_h_

@@ -24,7 +24,7 @@
 vnl_rpoly_roots::vnl_rpoly_roots(const vnl_vector<double>& a)
   : coeffs_(a), r_(coeffs_.size()-1), i_(coeffs_.size()-1)
 {
-  // fsm : if the coefficients are NaNs then rpoly_ gets stuck in an 
+  // fsm : if the coefficients are NaNs then rpoly_ gets stuck in an
   // infinite loop. of course, the caller shouldn't pass in NaNs, but
   // it would be nice to get an error message instead of hanging.
   bool has_nans=false;
@@ -36,7 +36,7 @@ vnl_rpoly_roots::vnl_rpoly_roots(const vnl_vector<double>& a)
     vcl_cerr << __FILE__ " these coefficients are invalid :" << vcl_endl;
     for (unsigned i=0;i<a.size();i++)
       vcl_cerr << i << ' ' << a(i) << vcl_endl;
-    abort();
+    vcl_abort();
   }
 
   compute();
@@ -83,7 +83,7 @@ bool vnl_rpoly_roots::compute()
     num_roots_found_ = n;
     return true;
   }
-  
+
   num_roots_found_ = n;
 
   if (coeffs_[0] == 0.0)

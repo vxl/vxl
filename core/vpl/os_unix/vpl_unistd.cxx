@@ -146,7 +146,7 @@ PASSTHRU(int, brk, (void *  a0), (a0));
 PASSTHRU(int, chdir, (const char * s), (s));
 PASSTHRU(int, chown, (const char *  a0,vpl_uid_t  a1,vpl_gid_t  a2), (a0, a1, a2));
 PASSTHRU(int, close, (int  a0), (a0));
-UNIMP(vpl_size_t, confstr, (int /*a0*/,char* /*a1*/,vpl_size_t /*a2*/), (a0, a1, a2), 0);
+UNIMP(vcl_size_t, confstr, (int /*a0*/,char* /*a1*/,vcl_size_t /*a2*/), (a0, a1, a2), 0);
 UNIMP(char           *, crypt, (const char* /*a0*/,const char* /*a1*/), (a0, a1), 0);
 PASSTHRU(char           *, ctermid, (char *  a0), (a0));
 PASSTHRU(int, dup, (int  a0), (a0));
@@ -187,14 +187,14 @@ PASSTHRU(vpl_pid_t, fork, (), ());
 PASSTHRU(long int, fpathconf, (  int  a0,  int  a1  ), (a0, a1));
 PASSTHRU(int, fsync, (int  a0), (a0));
 PASSTHRU(int, ftruncate, (  int  a0,  vpl_off_t  a1  ), (a0, a1));
-PASSTHRU(char           *, getcwd, (char *  a0,vpl_size_t  a1), (a0, a1));
+PASSTHRU(char           *, getcwd, (char *  a0,vcl_size_t  a1), (a0, a1));
 PASSTHRU(vpl_gid_t, getegid, (void), ());
 PASSTHRU(vpl_uid_t, geteuid, (void), ());
 PASSTHRU(vpl_gid_t, getgid, (void), ());
 PASSTHRU(int, getgroups, (  int  a0,  vpl_gid_t a1[]  ), (a0, a1));
 //PASSTHRU(long, gethostid, (void), ());
 PASSTHRU(char *, getlogin, (void), ());
-// PASSTHRU(int, getlogin_r, (   char *  a0,   vpl_size_t  a1   ), (a0, a1));
+// PASSTHRU(int, getlogin_r, (   char *  a0,   vcl_size_t  a1   ), (a0, a1));
 // PASSTHRU(int, getopt, (int  a0,char * const a1[],const char *  a2), (a0, a1, a2));
 PASSTHRU(vpl_pid_t, getpgid, (vpl_pid_t  a0), (a0));
 PASSTHRU(vpl_pid_t, getpgrp, (void), ());
@@ -223,10 +223,10 @@ PASSTHRU(int, pipe, (int a0[2]), (a0));
 // them using tell and seek. it won't work for multithreaded programs,
 // where we should lock the fd.
 #if VXL_UNISTD_HAS_PREAD
-extern "C" ssize_t pread (int, void*, vpl_size_t, vpl_off_t) VPL_THROW(());
-PASSTHRU(vpl_ssize_t, pread,(int a0,void* a1,vpl_size_t a2,vpl_off_t a3), (a0, a1, a2, a3));
+extern "C" ssize_t pread (int, void*, vcl_size_t, vpl_off_t) VPL_THROW(());
+PASSTHRU(vpl_ssize_t, pread,(int a0,void* a1,vcl_size_t a2,vpl_off_t a3), (a0, a1, a2, a3));
 #else
-vpl_ssize_t vpl_pread(int fd, void       *buf, vpl_size_t nbyte, vpl_off_t offset) {
+vpl_ssize_t vpl_pread(int fd, void       *buf, vcl_size_t nbyte, vpl_off_t offset) {
   // should lock fd here (if multithreaded).
   vpl_off_t orig = vpl_tell(fd);               // get current file position
   vpl_lseek(fd, offset, SEEK_SET);             // seek to requested position
@@ -237,10 +237,10 @@ vpl_ssize_t vpl_pread(int fd, void       *buf, vpl_size_t nbyte, vpl_off_t offse
 }
 #endif
 #if VXL_UNISTD_HAS_PWRITE
-extern "C" ssize_t pwrite (int, void const*, vpl_size_t, vpl_off_t) VPL_THROW(());
-PASSTHRU(vpl_ssize_t, pwrite, (int  a0,void const * a1,vpl_size_t a2,vpl_off_t a3), (a0, a1, a2, a3));
+extern "C" ssize_t pwrite (int, void const*, vcl_size_t, vpl_off_t) VPL_THROW(());
+PASSTHRU(vpl_ssize_t, pwrite, (int  a0,void const * a1,vcl_size_t a2,vpl_off_t a3), (a0, a1, a2, a3));
 #else
-vpl_ssize_t vpl_pwrite(int fd, void const *buf, vpl_size_t nbyte, vpl_off_t offset) {
+vpl_ssize_t vpl_pwrite(int fd, void const *buf, vcl_size_t nbyte, vpl_off_t offset) {
   // should lock fd here (if multithreaded).
   vpl_off_t orig = vpl_tell(fd);               // get current file position
   vpl_lseek(fd, offset, SEEK_SET);             // seek to requested position
@@ -252,8 +252,8 @@ vpl_ssize_t vpl_pwrite(int fd, void const *buf, vpl_size_t nbyte, vpl_off_t offs
 #endif
 
 // PASSTHRU(int, pthread_atfork, (void (*a0)(void), void (*a1)(void), void (*a2)(void)), (a0, a1, a2));
-PASSTHRU(vpl_ssize_t, read, (int  a0,void *  a1,vpl_size_t  a2), (a0, a1, a2));
-PASSTHRU(int, readlink, ( const char *  a0, char *  a1, vpl_size_t  a2 ), (a0, a1, a2));
+PASSTHRU(vpl_ssize_t, read, (int  a0,void *  a1,vcl_size_t  a2), (a0, a1, a2));
+PASSTHRU(int, readlink, ( const char *  a0, char *  a1, vcl_size_t  a2 ), (a0, a1, a2));
 PASSTHRU(int, rmdir, (const char * s), (s));
 PASSTHRU(void           *, sbrk, (vpl_intptr_t  a0), (a0));
 PASSTHRU(int, setgid, (vpl_gid_t  a0), (a0));
@@ -276,7 +276,7 @@ PASSTHRU(vpl_pid_t, tcgetpgrp, (  int  a0  ), (a0));
 PASSTHRU(int, tcsetpgrp, (  int  a0,  vpl_pid_t  a1  ), (a0, a1));
 PASSTHRU(int, truncate, ( const char *  a0, vpl_off_t  a1 ), (a0, a1));
 PASSTHRU(char           *, ttyname, (int  a0), (a0));
-// PASSTHRU(int, ttyname_r, (  int  a0,  char *  a1,  vpl_size_t  a2  ), (a0, a1, a2));
+// PASSTHRU(int, ttyname_r, (  int  a0,  char *  a1,  vcl_size_t  a2  ), (a0, a1, a2));
 
 #if VXL_UNISTD_HAS_UALARM
 PASSTHRU(vpl_useconds_t, ualarm, (vpl_useconds_t  a0,vpl_useconds_t  a1), (a0, a1));
@@ -314,4 +314,4 @@ vpl_pid_t vpl_vfork(void) { return fork(); }
 PASSTHRU(vpl_pid_t, vfork, (void), ());
 #endif
 
-PASSTHRU(vpl_ssize_t, write, (int  a0,const void *  a1,vpl_size_t  a2), (a0, a1, a2));
+PASSTHRU(vpl_ssize_t, write, (int  a0,const void *  a1,vcl_size_t  a2), (a0, a1, a2));
