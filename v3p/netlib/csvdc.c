@@ -45,7 +45,7 @@ integer *job, *info;
     static complex r, t;
     static real scale;
     extern /* Subroutine */ int cscal_();
-    extern /* Complex */ int cdotc_();
+    extern /* Complex */ void cdotc_();
     static real shift;
     extern /* Subroutine */ int cswap_();
     static integer maxit;

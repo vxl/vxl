@@ -75,7 +75,7 @@ integer *iflag;
     static logical finish;
     static doublereal yy;
     static integer maxfev;
-    extern /* Subroutine */ int lb1_();
+    extern /* Subroutine */ void lb1_();
     static integer npt;
     static doublereal stp, stp1;
 
