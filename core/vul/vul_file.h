@@ -64,6 +64,9 @@ struct vul_file
 
   //: Return extension (including the '.').
   static vcl_string extension(char const* filename);
+  static vcl_string extension(vcl_string const& filename) {
+    return extension( filename.c_str() );
+  }
 
   //: Return basename
   static vcl_string basename(char const* filename, char const* suffix = 0);
