@@ -273,7 +273,7 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &M, T s, vnl_tag_add)
 {
   vnl_matrix_alloc_blah(M.num_rows, M.num_cols);
 
-  int n = M.num_cols * M.num_cols;
+  int n = M.num_rows * M.num_cols;
   T const *m = M.data[0];
   T *dst = this->data[0];
 
@@ -1103,9 +1103,10 @@ bool vnl_matrix<T>::read_ascii(istream& s)
   readfloat:
     T val;
     s >> val;
+    if (!s.fail())
+      first_row_vals.push_back(val);
     if (s.eof())
       goto loademup;
-    first_row_vals.push_back(val);
   }
  loademup:
   int colz = first_row_vals.size();
@@ -1142,7 +1143,7 @@ bool vnl_matrix<T>::read_ascii(istream& s)
 	return false;
       }
       s >> row[k];
-      if (!s.good()) {
+      if (s.fail()) {
 	vcl_cerr << "vnl_matrix<T>::read_ascii: Error, row " << row_vals.size() << " failed on column " << k << vcl_endl;
 	return false;
       }
