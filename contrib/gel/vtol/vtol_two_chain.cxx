@@ -1,4 +1,3 @@
-
 // 05/13/98  RIH replaced append by insert_after to avoid n^2 behavior
 
 #include <vcl_vector.h>
@@ -27,7 +26,7 @@ vtol_two_chain::vtol_two_chain(void)
 }
 
 //---------------------------------------------------------------------------
-// -- Constructor
+//: Constructor
 //---------------------------------------------------------------------------
 vtol_two_chain::vtol_two_chain(int num_faces)
 {
@@ -35,12 +34,11 @@ vtol_two_chain::vtol_two_chain(int num_faces)
 }
 
 //---------------------------------------------------------------------------
-// -- Constructor
+//: Constructor
 //---------------------------------------------------------------------------
 vtol_two_chain::vtol_two_chain(face_list &faces,
                                      bool new_is_cycle)
 {
-
   face_list::iterator i;
   for (i=faces.begin(); i!=faces.end();++i)
     {
@@ -52,7 +50,7 @@ vtol_two_chain::vtol_two_chain(face_list &faces,
 }
 
 //---------------------------------------------------------------------------
-// -- Constructor
+//: Constructor
 //---------------------------------------------------------------------------
 vtol_two_chain::vtol_two_chain(face_list &faces,
                                      vcl_vector<signed char> &dirs,
@@ -124,7 +122,6 @@ vtol_two_chain::vtol_two_chain(vtol_two_chain const &other)
       newedges[j]= newverts[e->v1()->get_id()]->cast_to_vertex()->new_edge(*(newverts[e->v2()->get_id()]->cast_to_vertex()));
 
       e->set_id(j);
-
     }
 
   vcl_vector<signed char> &dirs=fl->_directions;
@@ -204,7 +201,7 @@ vtol_two_chain::~vtol_two_chain()
 }
 
 //---------------------------------------------------------------------------
-// -- Clone `this': creation of a new object and initialization
+//: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_3d_sptr vtol_two_chain::clone(void) const
@@ -213,7 +210,7 @@ vsol_spatial_object_3d_sptr vtol_two_chain::clone(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Shallow copy with no links
+//: Shallow copy with no links
 //---------------------------------------------------------------------------
 vtol_topology_object *
 vtol_two_chain::shallow_copy_with_no_links(void) const
@@ -229,7 +226,7 @@ vtol_two_chain::shallow_copy_with_no_links(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the topology type
+//: Return the topology type
 //---------------------------------------------------------------------------
 vtol_two_chain::vtol_topology_object_type
 vtol_two_chain::topology_type(void) const
@@ -241,7 +238,7 @@ vtol_two_chain::topology_type(void) const
 //   Editing Functions
 //***************************************************************************
 
-// -- add the superiors from the parent
+//: add the superiors from the parent
 
 void vtol_two_chain::add_superiors_from_parent(vcl_vector<vtol_topology_object_sptr> &sups)
 {
@@ -320,7 +317,7 @@ vtol_two_chain::break_into_connected_components( vcl_vector<vtol_topology_object
   return false; // TO DO
 }
 
-#if 0 // TO DO
+#if 0 // TODO
 bool
 vtol_two_chain::break_into_connected_components( vcl_vector<vtol_topology_object*> & components )
 {
@@ -416,7 +413,6 @@ void vtol_two_chain::add_face(vtol_face &new_face,
 
 void vtol_two_chain::remove_face(vtol_face &doomed_face)
 {
-
   topology_list::const_iterator i;
   vtol_topology_object_sptr t;
   t=&doomed_face;
@@ -450,7 +446,7 @@ void vtol_two_chain::remove_block(vtol_block &doomed_block)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is a two_chain, 0 otherwise
+//: Return `this' if `this' is a two_chain, 0 otherwise
 //---------------------------------------------------------------------------
 const vtol_two_chain *
 vtol_two_chain::cast_to_two_chain(void) const
@@ -459,7 +455,7 @@ vtol_two_chain::cast_to_two_chain(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is a two_chain, 0 otherwise
+//: Return `this' if `this' is a two_chain, 0 otherwise
 //---------------------------------------------------------------------------
 vtol_two_chain *vtol_two_chain::cast_to_two_chain(void)
 {
@@ -471,7 +467,7 @@ vtol_two_chain *vtol_two_chain::cast_to_two_chain(void)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Is `inferior' type valid for `this' ?
+//: Is `inferior' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_two_chain::valid_inferior_type(vtol_topology_object const &inferior) const
@@ -480,7 +476,7 @@ vtol_two_chain::valid_inferior_type(vtol_topology_object const &inferior) const
 }
 
 //---------------------------------------------------------------------------
-// -- Is `superior' type valid for `this' ?
+//: Is `superior' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_two_chain::valid_superior_type(vtol_topology_object const &superior) const
@@ -489,7 +485,7 @@ vtol_two_chain::valid_superior_type(vtol_topology_object const &superior) const
 }
 
 //---------------------------------------------------------------------------
-// -- Is `chain_inf_sup' type valid for `this' ?
+//: Is `chain_inf_sup' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_two_chain::valid_chain_type(const vtol_chain &chain_inf_sup) const
@@ -501,7 +497,7 @@ vtol_two_chain::valid_chain_type(const vtol_chain &chain_inf_sup) const
 //    Accessor Functions
 //***************************************************************************
 
-// -- outside boundary vertices
+//: outside boundary vertices
 
 vertex_list *vtol_two_chain::outside_boundary_vertices(void)
 {
@@ -525,7 +521,7 @@ vtol_two_chain::outside_boundary_compute_vertices(void)
   SEL_INF(vtol_vertex,compute_vertices);
 }
 
-// -- list of vertices
+//: list of vertices
 
 vcl_vector<vtol_vertex *> *vtol_two_chain::compute_vertices(void)
 {
@@ -538,7 +534,7 @@ vcl_vector<vtol_vertex *> *vtol_two_chain::compute_vertices(void)
   SUBCHAIN_INF(verts,vtol_two_chain,vtol_vertex,compute_vertices);
 }
 
-// -- outside boundary zero chains
+//: outside boundary zero chains
 
 zero_chain_list *vtol_two_chain::outside_boundary_zero_chains(void)
 {
@@ -558,21 +554,19 @@ zero_chain_list *vtol_two_chain::outside_boundary_zero_chains(void)
 
 vcl_vector<vtol_zero_chain*> *vtol_two_chain::outside_boundary_compute_zero_chains(void)
 {
-
   SEL_INF(vtol_zero_chain,compute_zero_chains);
 }
 
-// --list of zero chains
+//: list of zero chains
 vcl_vector<vtol_zero_chain*> *vtol_two_chain::compute_zero_chains(void)
 {
   vcl_vector<vtol_zero_chain*> *zchs;
   zchs=outside_boundary_compute_zero_chains();
 
-
   SUBCHAIN_INF(zchs,vtol_two_chain,vtol_zero_chain,compute_zero_chains);
 }
 
-// -- outside boundary edges
+//: outside boundary edges
 edge_list *vtol_two_chain::outside_boundary_edges(void)
 {
   edge_list *new_ref_list = new edge_list();
@@ -588,14 +582,13 @@ edge_list *vtol_two_chain::outside_boundary_edges(void)
   return new_ref_list;
 }
 
-// -- outside boundary edges
+//: outside boundary edges
 vcl_vector<vtol_edge*> *vtol_two_chain::outside_boundary_compute_edges(void)
 {
-
   SEL_INF(vtol_edge,compute_edges);
 }
 
-// -- list of edges
+//: list of edges
 vcl_vector<vtol_edge*> *vtol_two_chain::compute_edges(void)
 {
   vcl_vector<vtol_edge*> *edgs;
@@ -604,7 +597,7 @@ vcl_vector<vtol_edge*> *vtol_two_chain::compute_edges(void)
   SUBCHAIN_INF(edgs, vtol_two_chain, vtol_edge, compute_edges);
 }
 
-// -- outside one chains
+//: outside one chains
 one_chain_list *vtol_two_chain::outside_boundary_one_chains(void)
 {
   vcl_vector<vtol_one_chain*>* ptr_list= outside_boundary_compute_one_chains();
@@ -622,7 +615,7 @@ vcl_vector<vtol_one_chain*> *vtol_two_chain::outside_boundary_compute_one_chains
 {
  SEL_INF(vtol_one_chain,compute_one_chains);
 }
-// -- one chains
+//: one chains
 vcl_vector<vtol_one_chain*> *vtol_two_chain::compute_one_chains(void)
 {
   vcl_vector<vtol_one_chain*> *onechs;
@@ -630,7 +623,7 @@ vcl_vector<vtol_one_chain*> *vtol_two_chain::compute_one_chains(void)
   SUBCHAIN_INF(onechs, vtol_two_chain, vtol_one_chain, compute_one_chains);
 }
 
-// -- outside faces
+//: outside faces
 face_list *vtol_two_chain::outside_boundary_faces(void)
 {
   vcl_vector<vtol_face*>* ptr_list= outside_boundary_compute_faces();
@@ -650,7 +643,7 @@ vcl_vector<vtol_face*> *vtol_two_chain::outside_boundary_compute_faces(void)
  COPY_INF(vtol_face);
 }
 
-// -- faces
+//: faces
 vcl_vector<vtol_face*> *vtol_two_chain::compute_faces(void)
 {
   vcl_vector<vtol_face*> *facs;
@@ -658,7 +651,7 @@ vcl_vector<vtol_face*> *vtol_two_chain::compute_faces(void)
   SUBCHAIN_INF(facs, vtol_two_chain, vtol_face, compute_faces);
 }
 
-// -- list of blocks
+//: list of blocks
 vcl_vector<vtol_block*> *vtol_two_chain::compute_blocks(void)
 {
   vcl_vector<vtol_block*>*result;
@@ -687,10 +680,9 @@ vcl_vector<vtol_block*> *vtol_two_chain::compute_blocks(void)
     {
      SEL_SUP(vtol_block,compute_blocks);
     }
-
 }
 
-// -- list of two chains
+//: list of two chains
 
 vcl_vector<vtol_two_chain*> *vtol_two_chain::compute_two_chains(void)
 {
@@ -751,19 +743,16 @@ vcl_vector<vtol_two_chain*>  *vtol_two_chain::outside_boundary_compute_two_chain
 //     Operator Functions
 //***************************************************************************
 
-// -- equality operator
+//: equality operator
 
 bool vtol_two_chain::operator==(const vtol_two_chain &other) const
 {
-
   if(this==&other){
     return true;
   }
 
-
   if(_inferiors.size()!=other._inferiors.size())
     return false;
-
 
   topology_list::const_iterator ti1,ti2;
   for(ti1=other._inferiors.begin(),ti2=_inferiors.begin();
@@ -778,8 +767,6 @@ bool vtol_two_chain::operator==(const vtol_two_chain &other) const
 
   // check out the directions
 
-
-
   vcl_vector<signed char>::const_iterator d1;
   vcl_vector<signed char>::const_iterator d2;
 
@@ -789,8 +776,6 @@ bool vtol_two_chain::operator==(const vtol_two_chain &other) const
   for(d1=dir1->begin(), d2=dir2->begin(); d1 != dir1->end(); ++d1, ++d2)
     if (!(*d1 == *d2))
       return false;
-
-
 
 
   const chain_list &righth=_chain_inferiors;
@@ -808,11 +793,10 @@ bool vtol_two_chain::operator==(const vtol_two_chain &other) const
     if( !(*(*hi1) == *(*hi2)))
       return false;
 
-
   return true;
 }
 
-// -- spatial object equality
+//: spatial object equality
 
 bool vtol_two_chain::operator==(vsol_spatial_object_3d const& obj) const
 {
@@ -827,7 +811,7 @@ bool vtol_two_chain::operator==(vsol_spatial_object_3d const& obj) const
 //    Utility Functions
 //***************************************************************************
 
-// -- correct the chain directions
+//: correct the chain directions
 void vtol_two_chain::correct_chain_directions(void)
 {
   vcl_cerr << "vtol_two_chain::correct_chain_directions() not yet implemented\n";

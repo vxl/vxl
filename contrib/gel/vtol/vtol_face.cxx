@@ -14,7 +14,6 @@
 //---------------------------------------------------------------------------
 vtol_face::vtol_face(void)
 {
-
 }
 
 //---------------------------------------------------------------------------
@@ -68,7 +67,7 @@ vtol_face::valid_superior_type(const vtol_topology_object &superior) const
 }
 
 
-// --
+//:
 //  Constructor for a planar vtol_face from an ordered list of vertices.
 // edges are constructed by connecting vtol_vertex[i] to
 // vtol_vertex[(i+1)mod L]. L is the length of the vertex list, verts, and
@@ -85,7 +84,7 @@ vtol_face::topology_type(void) const
   return FACE;
 }
 
-// --
+//:
 // Returns an ordered list of vertices of the outside boundary of the
 // face.  All vertices on any holes of the face are *not* included.
 // This vertex list is ordered such that a positive normal is
@@ -105,38 +104,34 @@ vertex_list *vtol_face::outside_boundary_vertices(void)
   delete ptr_list;
 
   return new_ref_list;
-
 }
 
 vcl_vector<vtol_vertex*> *vtol_face::outside_boundary_compute_vertices(void)
 {
-
   OUTSIDE_BOUNDARY(vtol_vertex,vtol_one_chain,compute_vertices);
 }
 
-// --
+//:
 // Returns a vtol_vertex list of all the vertices on the face.
 // If the face does not have any holes, this vertex list is ordered
 // in the direction of a positive normal using the Right Hand rule.
 
 vcl_vector<vtol_vertex*> *vtol_face::compute_vertices(void)
 {
-
   SEL_INF(vtol_vertex,compute_vertices);
 }
 
-// --
+//:
 // Returns a list of the zero_chains on the outside boundary of the face.
 // All zero_chains on any hole boundaries of the face are *not* included.
 
 vcl_vector<vtol_zero_chain*> *vtol_face::outside_boundary_compute_zero_chains(void)
 {
-
   OUTSIDE_BOUNDARY(vtol_zero_chain, vtol_one_chain,compute_zero_chains);
 }
 
 
-// --
+//:
 // Returns a list of the zero_chains on the outside boundary of the face.
 // All zero_chains on any hole boundaries of the face are *not* included.
 
@@ -160,17 +155,15 @@ zero_chain_list *vtol_face::outside_boundary_zero_chains(void)
 
 vcl_vector<vtol_zero_chain*> *vtol_face::compute_zero_chains(void)
 {
-
   SEL_INF(vtol_zero_chain,compute_zero_chains);
 }
 
-// --
+//:
 // Returns a list of edges that make up the outside boundary of the
 // face. All edges on any hole boundaries are *not* included.
 
 vcl_vector<vtol_edge*> *vtol_face::outside_boundary_compute_edges(void)
 {
-
   OUTSIDE_BOUNDARY(vtol_edge,vtol_one_chain, compute_edges);
 }
 
@@ -178,7 +171,6 @@ vcl_vector<vtol_edge*> *vtol_face::outside_boundary_compute_edges(void)
 
 edge_list *vtol_face::outside_boundary_edges(void)
 {
-
   edge_list *new_ref_list = new edge_list();
   vcl_vector<vtol_edge*>* ptr_list = this->outside_boundary_compute_edges();
   // copy the lists
@@ -195,7 +187,6 @@ edge_list *vtol_face::outside_boundary_edges(void)
 //: Returns a list of edges on the face.
 vcl_vector<vtol_edge*> *vtol_face::compute_edges(void)
 {
-
   SEL_INF(vtol_edge,compute_edges);
 }
 
@@ -217,7 +208,6 @@ one_chain_list *vtol_face::outside_boundary_one_chains(void)
 
 vcl_vector<vtol_one_chain*> *vtol_face::outside_boundary_compute_one_chains(void)
 {
-
   COPY_INF(vtol_one_chain);
 }
 
@@ -226,24 +216,21 @@ vcl_vector<vtol_one_chain*> *vtol_face::outside_boundary_compute_one_chains(void
 
 vcl_vector<vtol_one_chain*> *vtol_face::compute_one_chains(void)
 {
-
   SEL_INF(vtol_one_chain,compute_one_chains);
 }
 
-// --
+//:
 // Returns a list of that has itself as the only element.  This method
 // is needed for traversing the model hierarchy consistently.
 
 vcl_vector<vtol_face*>  *vtol_face::compute_faces(void)
 {
-
   LIST_SELF(vtol_face);
 }
 
 //: Returns a list of all the two_chains which contain the vtol_face.
 vcl_vector<vtol_two_chain*>  *vtol_face::compute_two_chains(void)
 {
-
   SEL_SUP(vtol_two_chain,compute_two_chains);
 }
 
@@ -251,7 +238,6 @@ vcl_vector<vtol_two_chain*>  *vtol_face::compute_two_chains(void)
 
 vcl_vector<vtol_block*> *vtol_face::compute_blocks(void)
 {
-
   SEL_SUP(vtol_block,compute_blocks);
 }
 
@@ -279,7 +265,7 @@ bool vtol_face::shares_edge_with(vtol_face &f)
   return result;
 }
 
-// --
+//:
 // Links new_vtol_one_chain as an inferior of the vtol_face and returns True if
 // successful. This method will be replacing all calls to add_edge_lop()o.
 
@@ -296,21 +282,19 @@ void vtol_face::add_one_chain(vtol_one_chain &new_vtol_one_chain)
 
 bool vtol_face::operator==(const vtol_face &other) const
 {
-
   if (this==&other) return true;
-
 
   if(!compare_geometry(other)){
     return false;
   }
 
-
-  //if ( (_surface.ptr()&&other._surface.ptr()==0)
-  //   ||(other._surface.ptr()&&_surface.ptr()!=0))
-  //  return false;
-  //if(_surface.ptr() && *_surface!=*(other._surface))
-  //  return false;
-
+#if 0
+  if ( (_surface.ptr()&&other._surface.ptr()==0)
+     ||(other._surface.ptr()&&_surface.ptr()!=0))
+    return false;
+  if(_surface.ptr() && *_surface!=*(other._surface))
+    return false;
+#endif
 
   if (numinf()!=other.numinf())
     return false;
@@ -432,7 +416,8 @@ void vtol_face::reverse_normal(void)
 //
 void vtol_face::compute_bounding_box()
 {
-  /* todo
+  // TODO
+#if 0
   if(_surface && _surface->GetGeometryType() != GeometryObject::IMPLICITPLANE)
      {
       // Get bounds from surface.
@@ -451,12 +436,12 @@ void vtol_face::compute_bounding_box()
      }
   else  // Just use the generic method computing bounds from vertices
     this->vtol_topology_object::ComputeBoundingBox();
-  */
+#endif
   vtol_topology_object::compute_bounding_box();
 }
 
 
-// --
+//:
 //  This method describes the data members of the vtol_face including the
 // Inferiors.  The blanking argument is used to indent the output in
 // a clear fashion.
@@ -475,7 +460,7 @@ void vtol_face::describe(vcl_ostream &strm,
     }
 }
 
-// --
+//:
 // This method prints out a simple text representation for the vtol_face which
 // includes its address in memory.
 void vtol_face::print(vcl_ostream &strm) const

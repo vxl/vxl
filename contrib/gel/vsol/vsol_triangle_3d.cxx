@@ -12,7 +12,7 @@
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Constructor from its 3 vertices
+//: Constructor from its 3 vertices
 //---------------------------------------------------------------------------
 vsol_triangle_3d::vsol_triangle_3d(const vsol_point_3d_sptr &new_p0,
                                    const vsol_point_3d_sptr &new_p1,
@@ -25,7 +25,7 @@ vsol_triangle_3d::vsol_triangle_3d(const vsol_point_3d_sptr &new_p0,
 }
 
 //---------------------------------------------------------------------------
-// -- Copy constructor
+//: Copy constructor
 //---------------------------------------------------------------------------
 vsol_triangle_3d::vsol_triangle_3d(const vsol_triangle_3d &other)
   : vsol_polygon_3d(other)
@@ -33,14 +33,14 @@ vsol_triangle_3d::vsol_triangle_3d(const vsol_triangle_3d &other)
 }
 
 //---------------------------------------------------------------------------
-// -- Destructor
+//: Destructor
 //---------------------------------------------------------------------------
 vsol_triangle_3d::~vsol_triangle_3d()
 {
 }
 
 //---------------------------------------------------------------------------
-// -- Clone `this': creation of a new object and initialization
+//: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_3d_sptr vsol_triangle_3d::clone(void) const
@@ -53,7 +53,7 @@ vsol_spatial_object_3d_sptr vsol_triangle_3d::clone(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Return the first vertex
+//: Return the first vertex
 //---------------------------------------------------------------------------
 vsol_point_3d_sptr vsol_triangle_3d::p0(void) const
 {
@@ -61,7 +61,7 @@ vsol_point_3d_sptr vsol_triangle_3d::p0(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the second vertex
+//: Return the second vertex
 //---------------------------------------------------------------------------
 vsol_point_3d_sptr vsol_triangle_3d::p1(void) const
 {
@@ -69,7 +69,7 @@ vsol_point_3d_sptr vsol_triangle_3d::p1(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the last vertex
+//: Return the last vertex
 //---------------------------------------------------------------------------
 vsol_point_3d_sptr vsol_triangle_3d::p2(void) const
 {
@@ -81,7 +81,7 @@ vsol_point_3d_sptr vsol_triangle_3d::p2(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Has `this' the same points than `other' in the same order ?
+//: Has `this' the same points than `other' in the same order ?
 //---------------------------------------------------------------------------
 bool vsol_triangle_3d::operator==(const vsol_triangle_3d &other) const
 {
@@ -93,7 +93,7 @@ bool vsol_triangle_3d::operator==(const vsol_polygon_3d &other) const
   return vsol_polygon_3d::operator==(other);
 }
 
-// -- spatial object equality
+//: spatial object equality
 
 bool vsol_triangle_3d::operator==(const vsol_spatial_object_3d& obj) const
 {
@@ -109,7 +109,7 @@ bool vsol_triangle_3d::operator==(const vsol_spatial_object_3d& obj) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Return the area of `this'
+//: Return the area of `this'
 //---------------------------------------------------------------------------
 double vsol_triangle_3d::area(void) const
 {
@@ -137,7 +137,7 @@ double vsol_triangle_3d::area(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Set the first vertex
+//: Set the first vertex
 //---------------------------------------------------------------------------
 void vsol_triangle_3d::set_p0(const vsol_point_3d_sptr &new_p0)
 {
@@ -145,7 +145,7 @@ void vsol_triangle_3d::set_p0(const vsol_point_3d_sptr &new_p0)
 }
 
 //---------------------------------------------------------------------------
-// -- Set the second vertex
+//: Set the second vertex
 //---------------------------------------------------------------------------
 void vsol_triangle_3d::set_p1(const vsol_point_3d_sptr &new_p1)
 {
@@ -153,7 +153,7 @@ void vsol_triangle_3d::set_p1(const vsol_point_3d_sptr &new_p1)
 }
 
 //---------------------------------------------------------------------------
-// -- Set the last vertex
+//: Set the last vertex
 //---------------------------------------------------------------------------
 void vsol_triangle_3d::set_p2(const vsol_point_3d_sptr &new_p2)
 {
@@ -165,7 +165,7 @@ void vsol_triangle_3d::set_p2(const vsol_point_3d_sptr &new_p2)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Is `p' in `this' ?
+//: Is `p' in `this' ?
 //---------------------------------------------------------------------------
 bool vsol_triangle_3d::in(const vsol_point_3d_sptr &p) const
 {
@@ -175,7 +175,7 @@ bool vsol_triangle_3d::in(const vsol_point_3d_sptr &p) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the unit normal vector at point `p'.
+//: Return the unit normal vector at point `p'.
 // Description: Has to be deleted manually. Depends on the vertices order.
 // If some vertices are aligned, the normal is the null vector.
 // Require: in(p)

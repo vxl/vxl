@@ -12,14 +12,13 @@
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Constructor from cartesian coordinates `new_x', `new_y' and `new_z'
+//: Constructor from cartesian coordinates `new_x', `new_y' and `new_z'
 //---------------------------------------------------------------------------
 vsol_point_3d::vsol_point_3d(const double new_x,
                              const double new_y,
                              const double new_z)
 {
   p_=new vgl_point_3d<double>(new_x,new_y,new_z);
-
 }
 
 //---------------------------------------------------------------------------
@@ -39,7 +38,7 @@ vsol_point_3d::~vsol_point_3d()
 }
 
 //---------------------------------------------------------------------------
-// -- Clone `this': creation of a new object and initialization
+//: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_3d_sptr vsol_point_3d::clone(void) const
@@ -52,7 +51,7 @@ vsol_spatial_object_3d_sptr vsol_point_3d::clone(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Return the abscissa
+//: Return the abscissa
 //---------------------------------------------------------------------------
 double vsol_point_3d::x(void) const
 {
@@ -60,7 +59,7 @@ double vsol_point_3d::x(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the ordinate
+//: Return the ordinate
 //---------------------------------------------------------------------------
 double vsol_point_3d::y(void) const
 {
@@ -68,7 +67,7 @@ double vsol_point_3d::y(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the ordinate
+//: Return the ordinate
 //---------------------------------------------------------------------------
 double vsol_point_3d::z(void) const
 {
@@ -80,7 +79,7 @@ double vsol_point_3d::z(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Has `this' the same coordinates than `other' ?
+//: Has `this' the same coordinates than `other' ?
 //---------------------------------------------------------------------------
 bool vsol_point_3d::operator==(const vsol_point_3d &other) const
 {
@@ -92,7 +91,7 @@ bool vsol_point_3d::operator==(const vsol_point_3d &other) const
   return result;
 }
 
-// -- spatial object equality
+//: spatial object equality
 
 bool vsol_point_3d::operator==(const vsol_spatial_object_3d& obj) const
 {
@@ -104,7 +103,7 @@ bool vsol_point_3d::operator==(const vsol_spatial_object_3d& obj) const
 
 #if 0 // function commented dout
 //---------------------------------------------------------------------------
-// -- Has `this' not the same coordinates than `other' ?
+//: Has `this' not the same coordinates than `other' ?
 //---------------------------------------------------------------------------
 bool vsol_point_3d::operator!=(const vsol_point_3d &other) const
 {
@@ -117,7 +116,7 @@ bool vsol_point_3d::operator!=(const vsol_point_3d &other) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Return the real type of a point. It is a POINT
+//: Return the real type of a point. It is a POINT
 //---------------------------------------------------------------------------
 enum  vsol_spatial_object_3d::vsol_spatial_object_3d_type
 vsol_point_3d::spatial_type(void) const
@@ -126,7 +125,7 @@ vsol_point_3d::spatial_type(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Compute the bounding box of `this'
+//: Compute the bounding box of `this'
 //---------------------------------------------------------------------------
 void vsol_point_3d::compute_bounding_box(void)
 {
@@ -145,7 +144,7 @@ void vsol_point_3d::compute_bounding_box(void)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Set the abscissa
+//: Set the abscissa
 //---------------------------------------------------------------------------
 void vsol_point_3d::set_x(const double new_x)
 {
@@ -153,7 +152,7 @@ void vsol_point_3d::set_x(const double new_x)
 }
 
 //---------------------------------------------------------------------------
-// -- Set the ordinate
+//: Set the ordinate
 //---------------------------------------------------------------------------
 void vsol_point_3d::set_y(const double new_y)
 {
@@ -161,13 +160,11 @@ void vsol_point_3d::set_y(const double new_y)
 }
 
 //---------------------------------------------------------------------------
-// -- Set the ordinate
+//: Set the ordinate
 //---------------------------------------------------------------------------
 void vsol_point_3d::set_z(const double new_z)
 {
-
   p_->set_z(new_z);
-
 }
 
 //***************************************************************************
@@ -175,7 +172,7 @@ void vsol_point_3d::set_z(const double new_z)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Return the distance (N2) between `this' and `other'
+//: Return the distance (N2) between `this' and `other'
 //---------------------------------------------------------------------------
 double vsol_point_3d::distance(const vsol_point_3d &other) const
 {
@@ -188,11 +185,10 @@ double vsol_point_3d::distance(vsol_point_3d_sptr other) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the middle point between `this' and `other'
+//: Return the middle point between `this' and `other'
 //---------------------------------------------------------------------------
 vsol_point_3d_sptr vsol_point_3d::middle(const vsol_point_3d &other) const
 {
-
   vsol_point_3d_sptr result=new vsol_point_3d(*this);
   (*(result->p_))=(*(result->p_)) + (*(other.p_));
   result->set_x(result->x()/2);
@@ -203,18 +199,17 @@ vsol_point_3d_sptr vsol_point_3d::middle(const vsol_point_3d &other) const
 }
 
 //---------------------------------------------------------------------------
-// -- Add `v' to `this'
+//: Add `v' to `this'
 //---------------------------------------------------------------------------
 void vsol_point_3d::add_vector(const vnl_double_3 &v)
 {
   p_->set_x(p_->x() + v[0]);
   p_->set_y(p_->y() + v[1]);
   p_->set_z(p_->z() + v[2]);
-
 }
 
 //---------------------------------------------------------------------------
-// -- Add `v' and `this'
+//: Add `v' and `this'
 //---------------------------------------------------------------------------
 vsol_point_3d_sptr
 vsol_point_3d::plus_vector(const vnl_double_3 &v) const
@@ -225,13 +220,12 @@ vsol_point_3d::plus_vector(const vnl_double_3 &v) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the vector `this',`other'. Has to be deleted manually
+//: Return the vector `this',`other'. Has to be deleted manually
 //---------------------------------------------------------------------------
 vnl_double_3 *
 vsol_point_3d::to_vector(const vsol_point_3d &other) const
 {
   vnl_double_3 *result = new vnl_double_3;
-
 
   (*result)(0)=other.x() - x();
   (*result)(1)=other.y() - y();

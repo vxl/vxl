@@ -12,7 +12,7 @@
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Constructor from its 3 vertices
+//: Constructor from its 3 vertices
 //---------------------------------------------------------------------------
 vsol_triangle_2d::vsol_triangle_2d(const vsol_point_2d_sptr &new_p0,
                                    const vsol_point_2d_sptr &new_p1,
@@ -40,7 +40,7 @@ vsol_triangle_2d::~vsol_triangle_2d()
 }
 
 //---------------------------------------------------------------------------
-// -- Clone `this': creation of a new object and initialization
+//: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_2d_sptr vsol_triangle_2d::clone(void) const
@@ -53,7 +53,7 @@ vsol_spatial_object_2d_sptr vsol_triangle_2d::clone(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Return the first vertex
+//: Return the first vertex
 //---------------------------------------------------------------------------
 vsol_point_2d_sptr vsol_triangle_2d::p0(void) const
 {
@@ -61,7 +61,7 @@ vsol_point_2d_sptr vsol_triangle_2d::p0(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the second vertex
+//: Return the second vertex
 //---------------------------------------------------------------------------
 vsol_point_2d_sptr vsol_triangle_2d::p1(void) const
 {
@@ -69,7 +69,7 @@ vsol_point_2d_sptr vsol_triangle_2d::p1(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the last vertex
+//: Return the last vertex
 //---------------------------------------------------------------------------
 vsol_point_2d_sptr vsol_triangle_2d::p2(void) const
 {
@@ -81,7 +81,7 @@ vsol_point_2d_sptr vsol_triangle_2d::p2(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Has `this' the same points than `other' in the same order ?
+//: Has `this' the same points than `other' in the same order ?
 //---------------------------------------------------------------------------
 bool vsol_triangle_2d::operator==(const vsol_triangle_2d &other) const
 {
@@ -93,7 +93,7 @@ bool vsol_triangle_2d::operator==(const vsol_polygon_2d &other) const
   return vsol_polygon_2d::operator==(other);
 }
 
-// -- spatial object equality
+//: spatial object equality
 
 bool vsol_triangle_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
@@ -109,7 +109,7 @@ bool vsol_triangle_2d::operator==(const vsol_spatial_object_2d& obj) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Return the area of `this'
+//: Return the area of `this'
 //---------------------------------------------------------------------------
 double vsol_triangle_2d::area(void) const
 {
@@ -128,7 +128,7 @@ double vsol_triangle_2d::area(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Set the first vertex
+//: Set the first vertex
 //---------------------------------------------------------------------------
 void vsol_triangle_2d::set_p0(const vsol_point_2d_sptr &new_p0)
 {
@@ -136,7 +136,7 @@ void vsol_triangle_2d::set_p0(const vsol_point_2d_sptr &new_p0)
 }
 
 //---------------------------------------------------------------------------
-// -- Set the second vertex
+//: Set the second vertex
 //---------------------------------------------------------------------------
 void vsol_triangle_2d::set_p1(const vsol_point_2d_sptr &new_p1)
 {
@@ -144,7 +144,7 @@ void vsol_triangle_2d::set_p1(const vsol_point_2d_sptr &new_p1)
 }
 
 //---------------------------------------------------------------------------
-// -- Set the last vertex
+//: Set the last vertex
 //---------------------------------------------------------------------------
 void vsol_triangle_2d::set_p2(const vsol_point_2d_sptr &new_p2)
 {

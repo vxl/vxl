@@ -13,7 +13,7 @@
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Constructor from 3 points.
+//: Constructor from 3 points.
 // Description: `new_p0' is the origin of the rectangle. `new_p1' defines
 //              the abscissa axis and the width. `new_p2' defines the
 //              ordinate axis and the height.
@@ -47,7 +47,7 @@ vsol_rectangle_3d::~vsol_rectangle_3d()
 }
 
 //---------------------------------------------------------------------------
-// -- Clone `this': creation of a new object and initialization
+//: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_3d_sptr vsol_rectangle_3d::clone(void) const
@@ -60,7 +60,7 @@ vsol_spatial_object_3d_sptr vsol_rectangle_3d::clone(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Return the first vertex
+//: Return the first vertex
 //---------------------------------------------------------------------------
 vsol_point_3d_sptr vsol_rectangle_3d::p0(void) const
 {
@@ -68,7 +68,7 @@ vsol_point_3d_sptr vsol_rectangle_3d::p0(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the second vertex
+//: Return the second vertex
 //---------------------------------------------------------------------------
 vsol_point_3d_sptr vsol_rectangle_3d::p1(void) const
 {
@@ -76,7 +76,7 @@ vsol_point_3d_sptr vsol_rectangle_3d::p1(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the third vertex
+//: Return the third vertex
 //---------------------------------------------------------------------------
 vsol_point_3d_sptr vsol_rectangle_3d::p2(void) const
 {
@@ -84,7 +84,7 @@ vsol_point_3d_sptr vsol_rectangle_3d::p2(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the last vertex
+//: Return the last vertex
 //---------------------------------------------------------------------------
 vsol_point_3d_sptr vsol_rectangle_3d::p3(void) const
 {
@@ -104,7 +104,7 @@ vsol_point_3d_sptr vsol_rectangle_3d::p3(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Has `this' the same points than `other' in the same order ?
+//: Has `this' the same points than `other' in the same order ?
 //---------------------------------------------------------------------------
 bool vsol_rectangle_3d::operator==(const vsol_rectangle_3d &other) const
 {
@@ -116,7 +116,7 @@ bool vsol_rectangle_3d::operator==(const vsol_polygon_3d &other) const
   return vsol_polygon_3d::operator==(other);
 }
 
-// -- spatial object equality
+//: spatial object equality
 
 bool vsol_rectangle_3d::operator==(const vsol_spatial_object_3d& obj) const
 {
@@ -132,7 +132,7 @@ bool vsol_rectangle_3d::operator==(const vsol_spatial_object_3d& obj) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Compute the bounding box of `this'
+//: Compute the bounding box of `this'
 //---------------------------------------------------------------------------
 void vsol_rectangle_3d::compute_bounding_box(void)
 {
@@ -205,7 +205,7 @@ void vsol_rectangle_3d::compute_bounding_box(void)
 }
 
 //---------------------------------------------------------------------------
-// -- Return the width
+//: Return the width
 //---------------------------------------------------------------------------
 double vsol_rectangle_3d::width(void) const
 {
@@ -213,7 +213,7 @@ double vsol_rectangle_3d::width(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the height
+//: Return the height
 //---------------------------------------------------------------------------
 double vsol_rectangle_3d::height(void) const
 {
@@ -221,7 +221,7 @@ double vsol_rectangle_3d::height(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the area of `this'
+//: Return the area of `this'
 //---------------------------------------------------------------------------
 double vsol_rectangle_3d::area(void) const
 {
@@ -231,7 +231,7 @@ double vsol_rectangle_3d::area(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Are `new_vertices' valid to build a rectangle ?
+//: Are `new_vertices' valid to build a rectangle ?
 //---------------------------------------------------------------------------
 bool vsol_rectangle_3d::valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_vertices) const
 {
@@ -248,7 +248,7 @@ bool vsol_rectangle_3d::valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Is `p' in `this' ?
+//: Is `p' in `this' ?
 //---------------------------------------------------------------------------
 bool vsol_rectangle_3d::in(const vsol_point_3d_sptr &p) const
 {
@@ -258,7 +258,7 @@ bool vsol_rectangle_3d::in(const vsol_point_3d_sptr &p) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the unit normal vector at point `p'. Have to be deleted manually
+//: Return the unit normal vector at point `p'. Have to be deleted manually
 // Require: in(p)
 //---------------------------------------------------------------------------
 vnl_vector_fixed<double,3> *

@@ -12,7 +12,7 @@
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Constructor from a vcl_vector (not a geometric vector but a list of points)
+//: Constructor from a vcl_vector (not a geometric vector but a list of points)
 // Require: new_vertices.size()>=3 and valid_vertices(new_vertices)
 //---------------------------------------------------------------------------
 vsol_polyhedron::vsol_polyhedron(vsol_point_list_3d const& new_vertices)
@@ -38,7 +38,7 @@ vsol_polyhedron::vsol_polyhedron(vsol_polyhedron const &other)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Has `this' the same points than `other' in the same order ?
+//: Has `this' the same points than `other' in the same order ?
 //---------------------------------------------------------------------------
 bool vsol_polyhedron::operator==(vsol_polyhedron const &other) const
 {
@@ -61,7 +61,7 @@ bool vsol_polyhedron::operator==(vsol_polyhedron const &other) const
   return true;
 }
 
-// -- spatial object equality
+//: spatial object equality
 
 bool vsol_polyhedron::operator==(const vsol_spatial_object_3d& obj) const
 {
@@ -73,7 +73,7 @@ bool vsol_polyhedron::operator==(const vsol_spatial_object_3d& obj) const
 }
 
 //---------------------------------------------------------------------------
-// -- Compute the bounding box of `this'
+//: Compute the bounding box of `this'
 //---------------------------------------------------------------------------
 vsol_box_3d_sptr vsol_polyhedron::compute_bounding_box(void) const
 {
@@ -108,7 +108,7 @@ vsol_box_3d_sptr vsol_polyhedron::compute_bounding_box(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the volume of `this'
+//: Return the volume of `this'
 //---------------------------------------------------------------------------
 double vsol_polyhedron::volume(void) const
 {
@@ -118,7 +118,7 @@ double vsol_polyhedron::volume(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Is `this' convex ?
+//: Is `this' convex ?
 //---------------------------------------------------------------------------
 bool vsol_polyhedron::is_convex(void) const
 {
@@ -142,7 +142,7 @@ bool vsol_polyhedron::is_convex(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Is `p' in `this' ?
+//: Is `p' in `this' ?
 //---------------------------------------------------------------------------
 bool vsol_polyhedron::in(vsol_point_3d const& p) const
 {

@@ -10,14 +10,14 @@
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Default constructor. Empty zero-chain
+//: Default constructor. Empty zero-chain
 //---------------------------------------------------------------------------
 vtol_zero_chain::vtol_zero_chain(void)
 {
 }
 
 //---------------------------------------------------------------------------
-// -- Constructor from two vertices (to make an edge creation easier)
+//: Constructor from two vertices (to make an edge creation easier)
 // Require: v1.ptr()!=0 and v2.ptr()!=0 and v1.ptr()!=v2.ptr()
 //---------------------------------------------------------------------------
 vtol_zero_chain::vtol_zero_chain(vtol_vertex &v1,
@@ -28,17 +28,13 @@ vtol_zero_chain::vtol_zero_chain(vtol_vertex &v1,
   //assert(v2.ptr()!=0);
   assert(&v1!=&v2);
 
-
   link_inferior(v1);
 
-
   link_inferior(v2);
-
-
 }
 
 //---------------------------------------------------------------------------
-// -- Constructor from an array of vertices
+//: Constructor from an array of vertices
 // Require: new_vertices.size()>0
 //---------------------------------------------------------------------------
 vtol_zero_chain::vtol_zero_chain(const vcl_vector<vtol_vertex_sptr> &new_vertices)
@@ -52,20 +48,16 @@ vtol_zero_chain::vtol_zero_chain(const vcl_vector<vtol_vertex_sptr> &new_vertice
 }
 
 //---------------------------------------------------------------------------
-// -- Copy constructor. Copy the vertices and the links
+//: Copy constructor. Copy the vertices and the links
 //---------------------------------------------------------------------------
 vtol_zero_chain::vtol_zero_chain(const vtol_zero_chain &other)
 {
   vtol_vertex_sptr new_vertex;
   vcl_vector<vtol_topology_object_sptr>::const_iterator i;
 
-
   for(i=other.inferiors()->begin();i!=other.inferiors()->end();++i)
     {
-
-
       new_vertex = (*i)->clone()->cast_to_topology_object()->cast_to_vertex();
-
 
       // new_vertex=(vtol_vertex *)((*i)->clone().ptr());
       link_inferior(*new_vertex);
@@ -81,7 +73,7 @@ vtol_zero_chain::~vtol_zero_chain()
 }
 
 //---------------------------------------------------------------------------
-// -- Clone `this': creation of a new object and initialization
+//: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_3d_sptr vtol_zero_chain::clone(void) const
@@ -90,7 +82,7 @@ vsol_spatial_object_3d_sptr vtol_zero_chain::clone(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the topology type
+//: Return the topology type
 //---------------------------------------------------------------------------
 vtol_zero_chain::vtol_topology_object_type
 vtol_zero_chain::topology_type(void) const
@@ -99,7 +91,7 @@ vtol_zero_chain::topology_type(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the first vertex of `this'. If it does not exist, return 0
+//: Return the first vertex of `this'. If it does not exist, return 0
 //---------------------------------------------------------------------------
 vtol_vertex_sptr vtol_zero_chain::v0(void) const
 {
@@ -114,7 +106,7 @@ vtol_vertex_sptr vtol_zero_chain::v0(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is a zero_chain, 0 otherwise
+//: Return `this' if `this' is a zero_chain, 0 otherwise
 //---------------------------------------------------------------------------
 const vtol_zero_chain *
 vtol_zero_chain::cast_to_zero_chain(void) const
@@ -123,7 +115,7 @@ vtol_zero_chain::cast_to_zero_chain(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is a zero_chain, 0 otherwise
+//: Return `this' if `this' is a zero_chain, 0 otherwise
 //---------------------------------------------------------------------------
 vtol_zero_chain *vtol_zero_chain::cast_to_zero_chain(void)
 {
@@ -135,7 +127,7 @@ vtol_zero_chain *vtol_zero_chain::cast_to_zero_chain(void)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Is `inferior' type valid for `this' ?
+//: Is `inferior' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_zero_chain::valid_inferior_type(const vtol_topology_object &inferior) const
@@ -144,7 +136,7 @@ vtol_zero_chain::valid_inferior_type(const vtol_topology_object &inferior) const
 }
 
 //---------------------------------------------------------------------------
-// -- Is `superior' type valid for `this' ?
+//: Is `superior' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_zero_chain::valid_superior_type(const vtol_topology_object &superior) const
@@ -153,57 +145,53 @@ vtol_zero_chain::valid_superior_type(const vtol_topology_object &superior) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the length of the zero-chain
+//: Return the length of the zero-chain
 //---------------------------------------------------------------------------
 int vtol_zero_chain::length(void) const
 {
  return numinf();
 }
 
-// -- get list of vertices
+//: get list of vertices
 vcl_vector<vtol_vertex*>* vtol_zero_chain::compute_vertices(void)
 {
   COPY_INF(vtol_vertex);
 }
 
-// -- get list of zero chains
+//: get list of zero chains
 vcl_vector<vtol_zero_chain*>* vtol_zero_chain::compute_zero_chains(void)
 {
-
   LIST_SELF(vtol_zero_chain);
 }
 
-// -- get list of edges
+//: get list of edges
 vcl_vector<vtol_edge*>* vtol_zero_chain::compute_edges(void)
 {
   SEL_SUP(vtol_edge,compute_edges);
 }
 
-// -- get list of one chains
+//: get list of one chains
 
 vcl_vector<vtol_one_chain*>* vtol_zero_chain::compute_one_chains(void)
 {
-
   SEL_SUP(vtol_one_chain, compute_one_chains);
 }
 
-// -- get list of faces
+//: get list of faces
 
 vcl_vector<vtol_face*> *vtol_zero_chain::compute_faces(void)
 {
-
   SEL_SUP(vtol_face, compute_faces);
 }
 
-// -- get list of two chain
+//: get list of two chain
 
 vcl_vector<vtol_two_chain*>* vtol_zero_chain::compute_two_chains(void)
 {
-
   SEL_SUP(vtol_two_chain, compute_two_chains);
 }
 
-// -- get list of blocks
+//: get list of blocks
 vcl_vector<vtol_block*>* vtol_zero_chain::compute_blocks(void)
 {
    SEL_SUP(vtol_block, compute_blocks);
@@ -244,7 +232,7 @@ bool vtol_zero_chain::operator==(const vtol_zero_chain &other) const
 }
 
 
-// -- spatial object equality
+//: spatial object equality
 
 bool vtol_zero_chain::operator==(const vsol_spatial_object_3d& obj) const
 {
@@ -258,7 +246,7 @@ bool vtol_zero_chain::operator==(const vsol_spatial_object_3d& obj) const
 
 /*******  Print Methods   *************/
 
-// -- print the object
+//: print the object
 
 void vtol_zero_chain::print(vcl_ostream &strm) const
 {

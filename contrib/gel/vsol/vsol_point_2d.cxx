@@ -11,7 +11,7 @@
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Constructor from cartesian coordinates `new_x' and `new_y'
+//: Constructor from cartesian coordinates `new_x' and `new_y'
 //---------------------------------------------------------------------------
 vsol_point_2d::vsol_point_2d(const double new_x,
                              const double new_y)
@@ -36,7 +36,7 @@ vsol_point_2d::~vsol_point_2d()
 }
 
 //---------------------------------------------------------------------------
-// -- Clone `this': creation of a new object and initialization
+//: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_2d_sptr vsol_point_2d::clone(void) const
@@ -49,7 +49,7 @@ vsol_spatial_object_2d_sptr vsol_point_2d::clone(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Return the abscissa
+//: Return the abscissa
 //---------------------------------------------------------------------------
 double vsol_point_2d::x(void) const
 {
@@ -57,7 +57,7 @@ double vsol_point_2d::x(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the ordinate
+//: Return the ordinate
 //---------------------------------------------------------------------------
 double vsol_point_2d::y(void) const
 {
@@ -69,7 +69,7 @@ double vsol_point_2d::y(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Has `this' the same coordinates than `other' ?
+//: Has `this' the same coordinates than `other' ?
 //---------------------------------------------------------------------------
 bool vsol_point_2d::operator==(const vsol_point_2d &other) const
 {
@@ -81,7 +81,7 @@ bool vsol_point_2d::operator==(const vsol_point_2d &other) const
   return result;
 }
 
-// -- spatial object equality
+//: spatial object equality
 
 bool vsol_point_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
@@ -93,7 +93,7 @@ bool vsol_point_2d::operator==(const vsol_spatial_object_2d& obj) const
 
 #if 0 // this function commented out
 //---------------------------------------------------------------------------
-// -- Has `this' not the same coordinates than `other' ?
+//: Has `this' not the same coordinates than `other' ?
 //---------------------------------------------------------------------------
 bool vsol_point_2d::operator!=(const vsol_point_2d &other) const
 {
@@ -106,7 +106,7 @@ bool vsol_point_2d::operator!=(const vsol_point_2d &other) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Return the real type of a point. It is a POINT
+//: Return the real type of a point. It is a POINT
 //---------------------------------------------------------------------------
 vsol_spatial_object_2d::vsol_spatial_object_2d_type
 vsol_point_2d::spatial_type(void) const
@@ -115,7 +115,7 @@ vsol_point_2d::spatial_type(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Compute the bounding box of `this'
+//: Compute the bounding box of `this'
 //---------------------------------------------------------------------------
 void vsol_point_2d::compute_bounding_box(void)
 {
@@ -132,16 +132,15 @@ void vsol_point_2d::compute_bounding_box(void)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Set the abscissa
+//: Set the abscissa
 //---------------------------------------------------------------------------
 void vsol_point_2d::set_x(const double new_x)
 {
-
   p_->set_x(new_x);
 }
 
 //---------------------------------------------------------------------------
-// -- Set the ordinate
+//: Set the ordinate
 //---------------------------------------------------------------------------
 void vsol_point_2d::set_y(const double new_y)
 {
@@ -153,7 +152,7 @@ void vsol_point_2d::set_y(const double new_y)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Return the distance (N2) between `this' and `other'
+//: Return the distance (N2) between `this' and `other'
 //---------------------------------------------------------------------------
 double vsol_point_2d::distance(const vsol_point_2d &other) const
 {
@@ -166,7 +165,7 @@ double vsol_point_2d::distance(vsol_point_2d_sptr other) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the middle point between `this' and `other'
+//: Return the middle point between `this' and `other'
 //---------------------------------------------------------------------------
 vsol_point_2d_sptr vsol_point_2d::middle(const vsol_point_2d &other) const
 {
@@ -179,18 +178,16 @@ vsol_point_2d_sptr vsol_point_2d::middle(const vsol_point_2d &other) const
 }
 
 //---------------------------------------------------------------------------
-// -- Add `v' to `this'
+//: Add `v' to `this'
 //---------------------------------------------------------------------------
 void vsol_point_2d::add_vector(const vnl_double_2 &v)
 {
-
   p_->set_x(p_->x() + v[0]);
   p_->set_y(p_->y() + v[1]);
-
 }
 
 //---------------------------------------------------------------------------
-// -- Add `v' and `this'
+//: Add `v' and `this'
 //---------------------------------------------------------------------------
 vsol_point_2d_sptr
 vsol_point_2d::plus_vector(const vnl_double_2 &v) const
@@ -201,7 +198,7 @@ vsol_point_2d::plus_vector(const vnl_double_2 &v) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the vector `this',`other'. Has to be deleted manually
+//: Return the vector `this',`other'. Has to be deleted manually
 //---------------------------------------------------------------------------
 vnl_double_2 *
 vsol_point_2d::to_vector(const vsol_point_2d &other) const
@@ -210,7 +207,6 @@ vsol_point_2d::to_vector(const vsol_point_2d &other) const
 
   (*result)(0)=other.x() - x();
   (*result)(1)=other.y() - y();
-
 
   return result;
 }

@@ -12,7 +12,7 @@
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Constructor from the direction and the middle point
+//: Constructor from the direction and the middle point
 //---------------------------------------------------------------------------
 vsol_line_2d::vsol_line_2d(const vnl_vector_fixed<double,2> &new_direction,
                            const vsol_point_2d_sptr &new_middle)
@@ -22,7 +22,7 @@ vsol_line_2d::vsol_line_2d(const vnl_vector_fixed<double,2> &new_direction,
 }
 
 //---------------------------------------------------------------------------
-// -- Constructor
+//: Constructor
 //---------------------------------------------------------------------------
 vsol_line_2d::vsol_line_2d(const vsol_point_2d_sptr &new_p0,
                            const vsol_point_2d_sptr &new_p1)
@@ -32,7 +32,7 @@ vsol_line_2d::vsol_line_2d(const vsol_point_2d_sptr &new_p0,
 }
 
 //---------------------------------------------------------------------------
-// -- Copy constructor
+//: Copy constructor
 // Description: no duplication of the points
 //---------------------------------------------------------------------------
 vsol_line_2d::vsol_line_2d(const vsol_line_2d &other)
@@ -42,14 +42,14 @@ vsol_line_2d::vsol_line_2d(const vsol_line_2d &other)
 }
 
 //---------------------------------------------------------------------------
-// -- Destructor
+//: Destructor
 //---------------------------------------------------------------------------
 vsol_line_2d::~vsol_line_2d()
 {
 }
 
 //---------------------------------------------------------------------------
-// -- Clone `this': creation of a new object and initialization
+//: Clone `this': creation of a new object and initialization
 //       See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_2d_sptr vsol_line_2d::clone(void) const
@@ -62,7 +62,7 @@ vsol_spatial_object_2d_sptr vsol_line_2d::clone(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Middle point of the straight line segment
+//: Middle point of the straight line segment
 //---------------------------------------------------------------------------
 vsol_point_2d_sptr vsol_line_2d::middle(void) const
 {
@@ -70,7 +70,7 @@ vsol_point_2d_sptr vsol_line_2d::middle(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- direction of the straight line segment. Has to be deleted manually
+//: direction of the straight line segment. Has to be deleted manually
 //---------------------------------------------------------------------------
 vnl_vector_fixed<double,2> *vsol_line_2d::direction(void) const
 {
@@ -82,7 +82,7 @@ vnl_vector_fixed<double,2> *vsol_line_2d::direction(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- First point of the straight line segment
+//: First point of the straight line segment
 //---------------------------------------------------------------------------
 vsol_point_2d_sptr vsol_line_2d::p0(void) const
 {
@@ -90,7 +90,7 @@ vsol_point_2d_sptr vsol_line_2d::p0(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Last point of the straight line segment
+//: Last point of the straight line segment
 //---------------------------------------------------------------------------
 vsol_point_2d_sptr vsol_line_2d::p1(void) const
 {
@@ -102,7 +102,7 @@ vsol_point_2d_sptr vsol_line_2d::p1(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Has `this' the same points than `other' ?
+//: Has `this' the same points than `other' ?
 //---------------------------------------------------------------------------
 bool vsol_line_2d::operator==(const vsol_line_2d &other) const
 {
@@ -115,7 +115,7 @@ bool vsol_line_2d::operator==(const vsol_line_2d &other) const
   return result;
 }
 
-// -- spatial object equality
+//: spatial object equality
 
 bool vsol_line_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
@@ -127,7 +127,7 @@ bool vsol_line_2d::operator==(const vsol_spatial_object_2d& obj) const
 }
 
 //---------------------------------------------------------------------------
-// -- Has `this' not the same points than `other' ?
+//: Has `this' not the same points than `other' ?
 //---------------------------------------------------------------------------
 bool vsol_line_2d::operator!=(const vsol_line_2d &other) const
 {
@@ -139,7 +139,7 @@ bool vsol_line_2d::operator!=(const vsol_line_2d &other) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Return the real type of a line. It is a CURVE
+//: Return the real type of a line. It is a CURVE
 //---------------------------------------------------------------------------
 vsol_spatial_object_2d::vsol_spatial_object_2d_type
 vsol_line_2d::spatial_type(void) const
@@ -148,7 +148,7 @@ vsol_line_2d::spatial_type(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Compute the bounding box of `this'
+//: Compute the bounding box of `this'
 //---------------------------------------------------------------------------
 void vsol_line_2d::compute_bounding_box(void)
 {
@@ -180,7 +180,7 @@ void vsol_line_2d::compute_bounding_box(void)
 }
 
 //---------------------------------------------------------------------------
-// -- Return the length of `this'
+//: Return the length of `this'
 //---------------------------------------------------------------------------
 double vsol_line_2d::length(void) const
 {
@@ -192,7 +192,7 @@ double vsol_line_2d::length(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Set the first point of the straight line segment
+//: Set the first point of the straight line segment
 //---------------------------------------------------------------------------
 void vsol_line_2d::set_p0(const vsol_point_2d_sptr &new_p0)
 {
@@ -200,7 +200,7 @@ void vsol_line_2d::set_p0(const vsol_point_2d_sptr &new_p0)
 }
 
 //---------------------------------------------------------------------------
-// -- Set the last point of the straight line segment
+//: Set the last point of the straight line segment
 //---------------------------------------------------------------------------
 void vsol_line_2d::set_p1(const vsol_point_2d_sptr &new_p1)
 {
@@ -208,7 +208,7 @@ void vsol_line_2d::set_p1(const vsol_point_2d_sptr &new_p1)
 }
 
 //---------------------------------------------------------------------------
-// -- Set the length of `this'. Doesn't change middle point and orientation.
+//: Set the length of `this'. Doesn't change middle point and orientation.
 //    If p0 and p1 are equal then the direction is set to (1,0)
 // Require: new_length>=0
 //---------------------------------------------------------------------------
@@ -241,7 +241,7 @@ void vsol_line_2d::set_length(const double new_length)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Is `p' in `this' ?
+//: Is `p' in `this' ?
 //---------------------------------------------------------------------------
 bool vsol_line_2d::in(const vsol_point_2d_sptr &p) const
 {
@@ -264,7 +264,7 @@ bool vsol_line_2d::in(const vsol_point_2d_sptr &p) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the tangent to `this' at `p'.  Has to be deleted manually
+//: Return the tangent to `this' at `p'.  Has to be deleted manually
 // Require: in(p)
 //---------------------------------------------------------------------------
 vgl_homg_line_2d<double> *

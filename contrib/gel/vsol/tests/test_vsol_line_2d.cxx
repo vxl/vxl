@@ -14,7 +14,7 @@
 #include <vsol/vsol_line_2d.h>
 #include <vsol/vsol_point_2d.h>
 //-----------------------------------------------------------------------------
-// -- Entry point of the test program
+//: Entry point of the test program
 //-----------------------------------------------------------------------------
 int main(int argc,
          char *argv[])

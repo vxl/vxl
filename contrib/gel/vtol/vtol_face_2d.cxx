@@ -20,13 +20,13 @@ vtol_face_2d::vtol_face_2d(void)
 {
 }
 
-// --
-// This is the Copy Constructor for vtol_face_2d. It performs a deep copy of
-// all vtol_face_2d inferior one_chains.
-
 //---------------------------------------------------------------------------
 // Copy constructor
 //---------------------------------------------------------------------------
+//:
+// This is the Copy Constructor for vtol_face_2d. It performs a deep copy of
+// all vtol_face_2d inferior one_chains.
+
 vtol_face_2d::vtol_face_2d(const vtol_face_2d &other)
   : _surface(0)
 {
@@ -89,7 +89,6 @@ vtol_face_2d::vtol_face_2d(const vtol_face_2d &other)
 //---------------------------------------------------------------------------
 vtol_face_2d::~vtol_face_2d()
 {
-
 }
 
 //---------------------------------------------------------------------------
@@ -164,7 +163,7 @@ vtol_face *vtol_face_2d::shallow_copy_with_no_links(void) const
   return result;
 }
 
-// --
+//:
 //  Constructor for a planar vtol_face_2d from an ordered list of vertices.
 // edges are constructed by connecting vtol_vertex_2d[i] to
 // vtol_vertex_2d[(i+1)mod L]. L is the length of the vertex list, verts, and
@@ -231,7 +230,7 @@ vtol_face_2d::vtol_face_2d(vertex_list &verts)
   link_inferior(*eloop);
 }
 
-// --
+//:
 // Constructor for a Planar face from a list of one_chains.  This
 // method assumes that the first vtol_one_chain on the list is the outside
 // boundary vtol_one_chain.  The remaining one_chains are holes boundaries
@@ -299,7 +298,7 @@ vtol_face_2d::vtol_face_2d (vsol_region_2d &facesurf)
 {
   set_surface(&facesurf);
 
-  // not much, but at least its a start...
+  // not much, but at least it's a start...
 }
 
 
@@ -334,7 +333,6 @@ bool vtol_face_2d::operator==(const vtol_face_2d &other) const
       ti1!=_inferiors.end();
       ++ti1,++ti2)
     {
-
       if (!(*(*ti1)== *(*ti2)))
         return false;
     }
@@ -354,7 +352,7 @@ bool vtol_face_2d::operator==(const vsol_spatial_object_3d& obj) const
 }
 
 
-// --
+//:
 //  This method describes the data members of the vtol_face_2d including the
 // Inferiors.  The blanking argument is used to indent the output in
 // a clear fashion.
@@ -373,7 +371,7 @@ void vtol_face_2d::describe(vcl_ostream &strm,
     }
 }
 
-// --
+//:
 // This method prints out a simple text representation for the vtol_face_2d which
 // includes its address in memory.
 void vtol_face_2d::print(vcl_ostream &strm) const

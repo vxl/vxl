@@ -3,7 +3,7 @@
 #include <vtol/vtol_topology_object.h>
 
 
-// -- Note if you really want a tagged union...this is it...
+//: Note if you really want a tagged union...this is it...
 // otherwise you can call remove_duplicates and get the
 // same result....pav
 
@@ -28,7 +28,6 @@ void tagged_union(vcl_vector<vsol_spatial_object_3d*>* topolist)
       }
   (*topolist)=temp;
 }
-
 
 
 void tagged_union(vcl_list<vtol_topology_object_sptr> *topolist)

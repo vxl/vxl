@@ -49,7 +49,7 @@ vtol_edge_2d::vtol_edge_2d(vtol_vertex_2d &new_v1,
 // Copy constructor
 //---------------------------------------------------------------------------
 
-// --
+//:
 // Copy constructor for an vtol_edge_2d. This methods performs a deep copy of
 // the elements of the old vtol_edge_2d, olde, and sets the corresponding member
 // data of the new vtol_edge_2d.
@@ -94,7 +94,7 @@ vtol_edge_2d::vtol_edge_2d(const vtol_edge_2d &other)
 //: Constructor from a zero-chain.
 //---------------------------------------------------------------------------
 
-// --
+//:
 // Constructor for an vtol_edge_2d. If the vtol_zero_chain has two vertices , then the
 // first and last vertices of the vtol_zero_chain are used for endpoints and
 // an ImplicitLine is assumed to be the curve.  Otherwise, the all data
@@ -118,7 +118,7 @@ vtol_edge_2d::vtol_edge_2d(vtol_zero_chain &new_zero_chain)
   touch();
 }
 
-// --
+//:
 // Constructor for an vtol_edge_2d. The list of zero_chains, newchains, is
 // assumed to be ordered along an edge. This method assigns the first
 // vertex in the chain list to _v1, and assigns the last vertex in the
@@ -139,7 +139,7 @@ vtol_edge_2d::vtol_edge_2d(zero_chain_list &newchains)
   _curve=0;
 }
 
-// --
+//:
 // Constructor for a Linear vtol_edge_2d.  The coordinates, (x1, y1, z1),
 // determine vtol_vertex_2d, _v1.  The coordinates, (x2, y2, z2), determine _v2.
 // If curve is NULL, an ImplicitLine is generated for the vtol_edge_2d.
@@ -166,7 +166,7 @@ vtol_edge_2d::vtol_edge_2d(double x1,
   link_inferior(*inf);
 }
 
-// --
+//:
 // Constructor for an vtol_edge_2d from a Curve. If edgecurve is of ImplicitLine
 // type, vertex locations for endpoints, _v1 and _v2, are computed from
 // the ImplicitLine parameters.  If edgecurve is of any other type, _v1
@@ -241,11 +241,10 @@ vtol_edge_2d * vtol_edge_2d::cast_to_edge_2d(void)
   return this;
 }
 
-/*
- ******************************************************
- *
- *    Operators
- */
+// ******************************************************
+//
+//    Operators
+//
 
 // operators
 
@@ -281,19 +280,17 @@ bool vtol_edge_2d::operator==(const vsol_spatial_object_3d& obj) const
   : false;
 }
 
-/*
- ******************************************************
- *
- *    Inferior/Superior Accessor Functions
- */
+// ******************************************************
+//
+//    Inferior/Superior Accessor Functions
+//
 
-/*
- ******************************************************
- *
- *    I/O methods
- */
+// ******************************************************
+//
+//    I/O methods
+//
 
-// --
+//:
 // This method outputs all edge information to the ostream, strm.  It
 // indents various levels of output by the number given in blanking.
 void vtol_edge_2d::describe(vcl_ostream &strm,
@@ -315,7 +312,7 @@ void vtol_edge_2d::describe(vcl_ostream &strm,
   }
 }
 
-// --
+//:
 // This method outputs a brief vtol_edge_2d info with vtol_edge_2d object address.
 void vtol_edge_2d::print(vcl_ostream &strm) const
 {

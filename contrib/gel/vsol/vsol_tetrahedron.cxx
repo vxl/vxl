@@ -12,7 +12,7 @@
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Constructor from its 3 vertices
+//: Constructor from its 3 vertices
 //---------------------------------------------------------------------------
 vsol_tetrahedron::vsol_tetrahedron(const vsol_point_3d_sptr &new_p0,
                                    const vsol_point_3d_sptr &new_p1,
@@ -39,7 +39,7 @@ vsol_tetrahedron::vsol_tetrahedron(const vsol_tetrahedron &other)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Return the first vertex
+//: Return the first vertex
 //---------------------------------------------------------------------------
 vsol_point_3d_sptr vsol_tetrahedron::p0(void) const
 {
@@ -47,7 +47,7 @@ vsol_point_3d_sptr vsol_tetrahedron::p0(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the second vertex
+//: Return the second vertex
 //---------------------------------------------------------------------------
 vsol_point_3d_sptr vsol_tetrahedron::p1(void) const
 {
@@ -55,7 +55,7 @@ vsol_point_3d_sptr vsol_tetrahedron::p1(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the third vertex
+//: Return the third vertex
 //---------------------------------------------------------------------------
 vsol_point_3d_sptr vsol_tetrahedron::p2(void) const
 {
@@ -63,7 +63,7 @@ vsol_point_3d_sptr vsol_tetrahedron::p2(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the last vertex
+//: Return the last vertex
 //---------------------------------------------------------------------------
 vsol_point_3d_sptr vsol_tetrahedron::p3(void) const
 {
@@ -75,7 +75,7 @@ vsol_point_3d_sptr vsol_tetrahedron::p3(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Has `this' the same points than `other' in the same order ?
+//: Has `this' the same points than `other' in the same order ?
 //---------------------------------------------------------------------------
 bool vsol_tetrahedron::operator==(const vsol_tetrahedron &other) const
 {
@@ -87,7 +87,7 @@ bool vsol_tetrahedron::operator==(const vsol_polyhedron &other) const
   return vsol_polyhedron::operator==(other);
 }
 
-// -- spatial object equality
+//: spatial object equality
 
 bool vsol_tetrahedron::operator==(const vsol_spatial_object_3d& obj) const
 {
@@ -103,7 +103,7 @@ bool vsol_tetrahedron::operator==(const vsol_spatial_object_3d& obj) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Return the volume of `this'
+//: Return the volume of `this'
 //---------------------------------------------------------------------------
 double vsol_tetrahedron::volume(void) const
 {
@@ -125,7 +125,7 @@ double vsol_tetrahedron::volume(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Set the first vertex
+//: Set the first vertex
 //---------------------------------------------------------------------------
 void vsol_tetrahedron::set_p0(vsol_point_3d_sptr new_p0)
 {
@@ -134,7 +134,7 @@ void vsol_tetrahedron::set_p0(vsol_point_3d_sptr new_p0)
 }
 
 //---------------------------------------------------------------------------
-// -- Set the second vertex
+//: Set the second vertex
 //---------------------------------------------------------------------------
 void vsol_tetrahedron::set_p1(vsol_point_3d_sptr new_p1)
 {
@@ -143,7 +143,7 @@ void vsol_tetrahedron::set_p1(vsol_point_3d_sptr new_p1)
 }
 
 //---------------------------------------------------------------------------
-// -- Set the third vertex
+//: Set the third vertex
 //---------------------------------------------------------------------------
 void vsol_tetrahedron::set_p2(vsol_point_3d_sptr new_p2)
 {
@@ -152,7 +152,7 @@ void vsol_tetrahedron::set_p2(vsol_point_3d_sptr new_p2)
 }
 
 //---------------------------------------------------------------------------
-// -- Set the last vertex
+//: Set the last vertex
 //---------------------------------------------------------------------------
 void vsol_tetrahedron::set_p3(vsol_point_3d_sptr new_p3)
 {
@@ -165,7 +165,7 @@ void vsol_tetrahedron::set_p3(vsol_point_3d_sptr new_p3)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Is `p' in `this' ?
+//: Is `p' in `this' ?
 //---------------------------------------------------------------------------
 bool vsol_tetrahedron::in(vsol_point_3d const& p) const
 {

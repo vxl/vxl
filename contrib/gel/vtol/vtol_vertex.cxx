@@ -22,7 +22,7 @@ vtol_vertex::vtol_vertex(void)
 
 
 //---------------------------------------------------------------------------
-// -- Copy constructor. Copy the point but not the links
+//: Copy constructor. Copy the point but not the links
 //---------------------------------------------------------------------------
 //vtol_vertex::vtol_vertex(const vtol_vertex &other)
 //{
@@ -40,7 +40,7 @@ vtol_vertex::~vtol_vertex()
 }
 
 //---------------------------------------------------------------------------
-// -- Clone `this': creation of a new object and initialization
+//: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
 // vsol_spatial_object_3d_sptr vtol_vertex::clone(void) const
@@ -55,7 +55,7 @@ vtol_vertex::~vtol_vertex()
  */
 
 //---------------------------------------------------------------------------
-// -- Return the topology type
+//: Return the topology type
 //---------------------------------------------------------------------------
 vtol_vertex::vtol_topology_object_type
 vtol_vertex::topology_type(void) const
@@ -63,44 +63,44 @@ vtol_vertex::topology_type(void) const
   return VERTEX;
 }
 
-// -- Returns a list of Vertices which only contains a pointer to itself.
+//: Returns a list of Vertices which only contains a pointer to itself.
 vcl_vector<vtol_vertex*> *vtol_vertex::compute_vertices(void)
 {
   LIST_SELF(vtol_vertex);
 }
 
-// -- Returns a list of ZeroChains that contain the vertex. This is the vertex superiors list.
+//: Returns a list of ZeroChains that contain the vertex. This is the vertex superiors list.
 vcl_vector<vtol_zero_chain*>* vtol_vertex::compute_zero_chains(void)
 {
   SEL_SUP(vtol_zero_chain,compute_zero_chains);
 }
 
 
-// -- Returns a list of Edges which contain the vertex.
+//: Returns a list of Edges which contain the vertex.
  vcl_vector<vtol_edge*>* vtol_vertex::compute_edges(void)
 {
   SEL_SUP(vtol_edge,compute_edges);
 }
 
-// -- Returns a list of OneChains which contain the vertex.
+//: Returns a list of OneChains which contain the vertex.
 vcl_vector<vtol_one_chain*>* vtol_vertex::compute_one_chains(void)
 {
   SEL_SUP(vtol_one_chain,compute_one_chains);
 }
 
-// -- Returns a list of Faces which contain the vertex.
+//: Returns a list of Faces which contain the vertex.
  vcl_vector<vtol_face*>* vtol_vertex::compute_faces(void)
 {
   SEL_SUP(vtol_face,compute_faces);
 }
 
-// -- Returns a list of TwoChains which contain the vertex.
+//: Returns a list of TwoChains which contain the vertex.
   vcl_vector<vtol_two_chain*>* vtol_vertex::compute_two_chains(void)
 {
   SEL_SUP(vtol_two_chain,compute_two_chains);
 }
 
-// -- Returns a list of Blocks which contain the vertex.
+//: Returns a list of Blocks which contain the vertex.
 vcl_vector<vtol_block*>* vtol_vertex::compute_blocks(void)
 {
   SEL_SUP(vtol_block,compute_blocks);
@@ -112,7 +112,7 @@ vcl_vector<vtol_block*>* vtol_vertex::compute_blocks(void)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is a vertex, 0 otherwise
+//: Return `this' if `this' is a vertex, 0 otherwise
 //---------------------------------------------------------------------------
 const vtol_vertex *vtol_vertex::cast_to_vertex(void) const
 {
@@ -120,7 +120,7 @@ const vtol_vertex *vtol_vertex::cast_to_vertex(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is a vertex, 0 otherwise
+//: Return `this' if `this' is a vertex, 0 otherwise
 //---------------------------------------------------------------------------
 vtol_vertex *vtol_vertex::cast_to_vertex(void)
 {
@@ -132,7 +132,7 @@ vtol_vertex *vtol_vertex::cast_to_vertex(void)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Is `inferior' type valid for `this' ?
+//: Is `inferior' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_vertex::valid_inferior_type(const vtol_topology_object &inferior) const
@@ -141,7 +141,7 @@ vtol_vertex::valid_inferior_type(const vtol_topology_object &inferior) const
 }
 
 //---------------------------------------------------------------------------
-// -- Is `superior' type valid for `this' ?
+//: Is `superior' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_vertex::valid_superior_type(const vtol_topology_object &superior) const
@@ -154,7 +154,7 @@ vtol_vertex::valid_superior_type(const vtol_topology_object &superior) const
  *
  *    Print Functions
  */
-// -- This method outputs a simple text representation of the vertex including its address in memory.
+//: This method outputs a simple text representation of the vertex including its address in memory.
 void vtol_vertex::print(vcl_ostream &strm) const
 {
   strm<< "<vtol_vertex " << (void *)this<<"> with id ";
@@ -162,7 +162,7 @@ void vtol_vertex::print(vcl_ostream &strm) const
 }
 
 
-// -- This method outputs a detailed description of the vertex including the inferiors and superiors.
+//: This method outputs a detailed description of the vertex including the inferiors and superiors.
 void vtol_vertex::describe(vcl_ostream &strm,
                               int blanking) const
 {
@@ -179,7 +179,7 @@ void vtol_vertex::describe(vcl_ostream &strm,
  *    Implementor Functions
  */
 //-----------------------------------------------------------------------------
-// -- Is `this' connected with `v2' ?
+//: Is `this' connected with `v2' ?
 //    ie has a superior of `this' `v2' as inferior ?
 //-----------------------------------------------------------------------------
 bool vtol_vertex::is_connected(const vtol_vertex &v2)
@@ -197,7 +197,7 @@ bool vtol_vertex::is_connected(const vtol_vertex &v2)
 }
 
 
-// -- This method returns true if the Edge, edg, is on the superior list of the vertex.
+//: This method returns true if the Edge, edg, is on the superior list of the vertex.
 bool vtol_vertex::is_endpoint(const vtol_edge &edg)
 {
   vtol_edge_sptr e=(vtol_edge*)(&edg);
@@ -208,7 +208,7 @@ bool vtol_vertex::is_endpoint(const vtol_edge &edg)
 }
 
 //---------------------------------------------------------------------------
-// -- Assignment of `this' with `other' (copy the point not the links)
+//: Assignment of `this' with `other' (copy the point not the links)
 //---------------------------------------------------------------------------
 vtol_vertex &vtol_vertex::operator=(const vtol_vertex &other)
 {
@@ -223,7 +223,7 @@ vtol_vertex &vtol_vertex::operator=(const vtol_vertex &other)
   return *this;
 }
 
-// -- spatial object equality
+//: spatial object equality
 
 bool vtol_vertex::operator==(const vsol_spatial_object_3d& obj) const
 {
@@ -236,7 +236,7 @@ bool vtol_vertex::operator==(const vsol_spatial_object_3d& obj) const
 
 
 //---------------------------------------------------------------------------
-// -- Is `this' has the same coordinates for its point than `other' ?
+//: Is `this' has the same coordinates for its point than `other' ?
 //---------------------------------------------------------------------------
 bool vtol_vertex::operator== (const vtol_vertex &other) const
 {
@@ -249,15 +249,14 @@ bool vtol_vertex::operator== (const vtol_vertex &other) const
   return result;
 }
 
-/*
- ******************************************************
- *
- *    Functions
- */
+// ******************************************************
+//
+//    Functions
+//
 
 //
 //-----------------------------------------------------------------------------
-// --
+//:
 // Determine which other vertices share edges with this. Add any of these which
 // are not in the list to it, and recursively call ExploreVertex on them. The
 // method is intended to recover all of the vertices in a single topological

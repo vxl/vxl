@@ -60,7 +60,7 @@ void f(const vsol_conic_2d::vsol_conic_type &t)
 }
 
 //-----------------------------------------------------------------------------
-// -- Entry point of the test program
+//: Entry point of the test program
 //-----------------------------------------------------------------------------
 int main(int argc,
          char *argv[])

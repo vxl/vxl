@@ -11,7 +11,7 @@
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Constructor from coefficient of the cartesian equation
+//: Constructor from coefficient of the cartesian equation
 // Description: `new_a'x^2+`new_b'xy+`new_c'y^2+`new_d'x+`new_e'y+`new_f'
 //---------------------------------------------------------------------------
 vsol_conic_2d::vsol_conic_2d(double new_a,
@@ -40,7 +40,7 @@ vsol_conic_2d::~vsol_conic_2d()
 }
 
 //---------------------------------------------------------------------------
-// -- Clone `this': creation of a new object and initialization
+//: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_2d_sptr vsol_conic_2d::clone(void) const
@@ -53,7 +53,7 @@ vsol_spatial_object_2d_sptr vsol_conic_2d::clone(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Return the first point of `this'
+//: Return the first point of `this'
 //---------------------------------------------------------------------------
 vsol_point_2d_sptr vsol_conic_2d::p0(void) const
 {
@@ -61,7 +61,7 @@ vsol_point_2d_sptr vsol_conic_2d::p0(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the last point of `this'
+//: Return the last point of `this'
 //---------------------------------------------------------------------------
 vsol_point_2d_sptr vsol_conic_2d::p1(void) const
 {
@@ -73,7 +73,7 @@ vsol_point_2d_sptr vsol_conic_2d::p1(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Has `this' the same coefficients than `other' ?
+//: Has `this' the same coefficients than `other' ?
 //---------------------------------------------------------------------------
 bool vsol_conic_2d::operator==(const vsol_conic_2d &other) const
 {
@@ -98,7 +98,7 @@ bool vsol_conic_2d::operator==(const vsol_conic_2d &other) const
     &&are_equal(e_*lambda,other.e_)&&are_equal(f_*lambda,other.f_);
 }
 
-// -- spatial object equality
+//: spatial object equality
 
 bool vsol_conic_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
@@ -110,7 +110,7 @@ bool vsol_conic_2d::operator==(const vsol_spatial_object_2d& obj) const
 }
 
 //---------------------------------------------------------------------------
-// -- Has `this' not the same coefficients than `other' ?
+//: Has `this' not the same coefficients than `other' ?
 //---------------------------------------------------------------------------
 bool vsol_conic_2d::operator!=(const vsol_conic_2d &other) const
 {
@@ -122,7 +122,7 @@ bool vsol_conic_2d::operator!=(const vsol_conic_2d &other) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Return the real type of a conic. It is a CURVE
+//: Return the real type of a conic. It is a CURVE
 //---------------------------------------------------------------------------
 vsol_spatial_object_2d::vsol_spatial_object_2d_type
 vsol_conic_2d::spatial_type(void) const
@@ -131,7 +131,7 @@ vsol_conic_2d::spatial_type(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Find the real type of the conic from its coefficients
+//: Find the real type of the conic from its coefficients
 //---------------------------------------------------------------------------
 vsol_conic_2d::vsol_conic_type vsol_conic_2d::real_type(void) const
 {
@@ -199,7 +199,7 @@ vsol_conic_2d::vsol_conic_type vsol_conic_2d::real_type(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Is `this' an real ellipse ?
+//: Is `this' an real ellipse ?
 //---------------------------------------------------------------------------
 bool vsol_conic_2d::is_real_ellipse(void) const
 {
@@ -211,7 +211,7 @@ bool vsol_conic_2d::is_real_ellipse(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Is `this' a real circle ?
+//: Is `this' a real circle ?
 //---------------------------------------------------------------------------
 bool vsol_conic_2d::is_real_circle(void) const
 {
@@ -219,7 +219,7 @@ bool vsol_conic_2d::is_real_circle(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Is `this' a complex ellipse ?
+//: Is `this' a complex ellipse ?
 //---------------------------------------------------------------------------
 bool vsol_conic_2d::is_complex_ellipse(void) const
 {
@@ -231,7 +231,7 @@ bool vsol_conic_2d::is_complex_ellipse(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Is `this' a complex circle ?
+//: Is `this' a complex circle ?
 //---------------------------------------------------------------------------
 bool vsol_conic_2d::is_complex_circle(void) const
 {
@@ -239,7 +239,7 @@ bool vsol_conic_2d::is_complex_circle(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Is `this' a parabola ?
+//: Is `this' a parabola ?
 //---------------------------------------------------------------------------
 bool vsol_conic_2d::is_parabola(void) const
 {
@@ -247,7 +247,7 @@ bool vsol_conic_2d::is_parabola(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Is `this' a hyperbola ?
+//: Is `this' a hyperbola ?
 //---------------------------------------------------------------------------
 bool vsol_conic_2d::is_hyperbola(void) const
 {
@@ -255,7 +255,7 @@ bool vsol_conic_2d::is_hyperbola(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Is `this' an real intersecting lines ?
+//: Is `this' an real intersecting lines ?
 //---------------------------------------------------------------------------
 bool vsol_conic_2d::is_real_intersecting_lines(void) const
 {
@@ -263,7 +263,7 @@ bool vsol_conic_2d::is_real_intersecting_lines(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Is `this' an complex intersecting lines ?
+//: Is `this' an complex intersecting lines ?
 //---------------------------------------------------------------------------
 bool vsol_conic_2d::is_complex_intersecting_lines(void) const
 {
@@ -271,7 +271,7 @@ bool vsol_conic_2d::is_complex_intersecting_lines(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Is `this' an coincident lines ?
+//: Is `this' an coincident lines ?
 //---------------------------------------------------------------------------
 bool vsol_conic_2d::is_coincident_lines(void) const
 {
@@ -279,7 +279,7 @@ bool vsol_conic_2d::is_coincident_lines(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return 3 ellipse parameters: centre (`cx',`cy'),
+//: Return 3 ellipse parameters: centre (`cx',`cy'),
 //                                 orientation `phi',
 //                                 size (`width',`height')
 // Require: is_real_ellipse()
@@ -331,7 +331,7 @@ void vsol_conic_2d::ellipse_parameters(double &cx,
 }
 
 //---------------------------------------------------------------------------
-// -- Return 2 parabola parameters: top (`cx',`cy'),
+//: Return 2 parabola parameters: top (`cx',`cy'),
 //                                  orientation (`cosphi',`sinphi')
 // Require: is_parabola()
 //---------------------------------------------------------------------------
@@ -356,7 +356,7 @@ void vsol_conic_2d::parabola_parameters(double &cx,
 }
 
 //---------------------------------------------------------------------------
-// -- Return the length of `this'
+//: Return the length of `this'
 //---------------------------------------------------------------------------
 double vsol_conic_2d::length(void) const
 {
@@ -365,7 +365,7 @@ double vsol_conic_2d::length(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the matrix associated to the coefficients. Has to be deleted manually
+//: Return the matrix associated to the coefficients. Has to be deleted manually
 //---------------------------------------------------------------------------
 vnl_double_3x3 *vsol_conic_2d::matrix(void) const
 {
@@ -394,7 +394,7 @@ vnl_double_3x3 *vsol_conic_2d::matrix(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Set the first point of the curve
+//: Set the first point of the curve
 // Require: in(new_p0)
 //---------------------------------------------------------------------------
 void vsol_conic_2d::set_p0(const vsol_point_2d_sptr &new_p0)
@@ -406,7 +406,7 @@ void vsol_conic_2d::set_p0(const vsol_point_2d_sptr &new_p0)
 }
 
 //---------------------------------------------------------------------------
-// -- Set the last point of the curve
+//: Set the last point of the curve
 // Require: in(new_p1)
 //---------------------------------------------------------------------------
 void vsol_conic_2d::set_p1(const vsol_point_2d_sptr &new_p1)
@@ -422,7 +422,7 @@ void vsol_conic_2d::set_p1(const vsol_point_2d_sptr &new_p1)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Is `p' in `this' ? (ie `p' verifies the equation)
+//: Is `p' in `this' ? (ie `p' verifies the equation)
 //---------------------------------------------------------------------------
 bool vsol_conic_2d::in(const vsol_point_2d_sptr &p) const
 {

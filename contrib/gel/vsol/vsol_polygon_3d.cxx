@@ -12,7 +12,7 @@
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Constructor from a vcl_vector (not a geometric vector but a list of points)
+//: Constructor from a vcl_vector (not a geometric vector but a list of points)
 // Require: new_vertices.size()>=3 and valid_vertices(new_vertices)
 //---------------------------------------------------------------------------
 vsol_polygon_3d::vsol_polygon_3d(const vcl_vector<vsol_point_3d_sptr> &new_vertices)
@@ -45,7 +45,7 @@ vsol_polygon_3d::~vsol_polygon_3d()
 }
 
 //---------------------------------------------------------------------------
-// -- Clone `this': creation of a new object and initialization
+//: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_3d_sptr vsol_polygon_3d::clone(void) const
@@ -58,7 +58,7 @@ vsol_spatial_object_3d_sptr vsol_polygon_3d::clone(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Return vertex `i'
+//: Return vertex `i'
 // Require: valid_index(i)
 //---------------------------------------------------------------------------
 vsol_point_3d_sptr vsol_polygon_3d::vertex(const int i) const
@@ -74,7 +74,7 @@ vsol_point_3d_sptr vsol_polygon_3d::vertex(const int i) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Has `this' the same points than `other' in the same order ?
+//: Has `this' the same points than `other' in the same order ?
 //---------------------------------------------------------------------------
 bool vsol_polygon_3d::operator==(const vsol_polygon_3d &other) const
 {
@@ -110,7 +110,7 @@ bool vsol_polygon_3d::operator==(const vsol_polygon_3d &other) const
   return result;
 }
 
-// -- spatial object equality
+//: spatial object equality
 
 bool vsol_polygon_3d::operator==(const vsol_spatial_object_3d& obj) const
 {
@@ -122,7 +122,7 @@ bool vsol_polygon_3d::operator==(const vsol_spatial_object_3d& obj) const
 }
 
 //---------------------------------------------------------------------------
-// -- Has `this' not the same points than `other' in the same order ?
+//: Has `this' not the same points than `other' in the same order ?
 //---------------------------------------------------------------------------
 bool vsol_polygon_3d::operator!=(const vsol_polygon_3d &other) const
 {
@@ -130,7 +130,7 @@ bool vsol_polygon_3d::operator!=(const vsol_polygon_3d &other) const
 }
 
 //---------------------------------------------------------------------------
-// -- Compute the bounding box of `this'
+//: Compute the bounding box of `this'
 //---------------------------------------------------------------------------
 void vsol_polygon_3d::compute_bounding_box(void)
 {
@@ -170,7 +170,7 @@ void vsol_polygon_3d::compute_bounding_box(void)
 }
 
 //---------------------------------------------------------------------------
-// -- Return the number of vertices
+//: Return the number of vertices
 //---------------------------------------------------------------------------
 int vsol_polygon_3d::size(void) const
 {
@@ -178,7 +178,7 @@ int vsol_polygon_3d::size(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the area of `this'
+//: Return the area of `this'
 //---------------------------------------------------------------------------
 double vsol_polygon_3d::area(void) const
 {
@@ -188,7 +188,7 @@ double vsol_polygon_3d::area(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Is `this' convex ?
+//: Is `this' convex ?
 //---------------------------------------------------------------------------
 bool vsol_polygon_3d::is_convex(void) const
 {
@@ -228,7 +228,7 @@ bool vsol_polygon_3d::is_convex(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Is `i' a valid index for the list of vertices ?
+//: Is `i' a valid index for the list of vertices ?
 //---------------------------------------------------------------------------
 bool vsol_polygon_3d::valid_index(const int i) const
 {
@@ -236,7 +236,7 @@ bool vsol_polygon_3d::valid_index(const int i) const
 }
 
 //---------------------------------------------------------------------------
-// -- Are `new_vertices' valid vertices ? That is are all vertices in the
+//: Are `new_vertices' valid vertices ? That is are all vertices in the
 //    same plane ?
 //---------------------------------------------------------------------------
 bool vsol_polygon_3d::valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_vertices) const
@@ -281,7 +281,7 @@ bool vsol_polygon_3d::valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_ve
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Is `p' in `this' ?
+//: Is `p' in `this' ?
 //---------------------------------------------------------------------------
 bool vsol_polygon_3d::in(const vsol_point_3d_sptr &p) const
 {
@@ -291,7 +291,7 @@ bool vsol_polygon_3d::in(const vsol_point_3d_sptr &p) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the unit normal vector at point `p'. Have to be deleted manually
+//: Return the unit normal vector at point `p'. Have to be deleted manually
 // Require: in(p)
 //---------------------------------------------------------------------------
 vnl_vector_fixed<double,3> *
@@ -327,7 +327,7 @@ vsol_polygon_3d::normal_at_point(const vsol_point_3d_sptr &p) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Default constructor. Do nothing. Just to enable inherance.
+//: Default constructor. Do nothing. Just to enable inherance.
 //---------------------------------------------------------------------------
 vsol_polygon_3d::vsol_polygon_3d(void)
 {

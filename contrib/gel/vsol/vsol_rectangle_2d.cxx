@@ -12,7 +12,7 @@
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Constructor from 3 points.
+//: Constructor from 3 points.
 // Description: `new_p0' is the origin of the rectangle. `new_p1' defines
 //              the abscissa axis and the width. `new_p2' defines the
 //              ordinate axis and the height.
@@ -46,7 +46,7 @@ vsol_rectangle_2d::~vsol_rectangle_2d()
 }
 
 //---------------------------------------------------------------------------
-// -- Clone `this': creation of a new object and initialization
+//: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_2d_sptr vsol_rectangle_2d::clone(void) const
@@ -59,7 +59,7 @@ vsol_spatial_object_2d_sptr vsol_rectangle_2d::clone(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Return the first vertex
+//: Return the first vertex
 //---------------------------------------------------------------------------
 vsol_point_2d_sptr vsol_rectangle_2d::p0(void) const
 {
@@ -67,7 +67,7 @@ vsol_point_2d_sptr vsol_rectangle_2d::p0(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the second vertex
+//: Return the second vertex
 //---------------------------------------------------------------------------
 vsol_point_2d_sptr vsol_rectangle_2d::p1(void) const
 {
@@ -75,7 +75,7 @@ vsol_point_2d_sptr vsol_rectangle_2d::p1(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the third vertex
+//: Return the third vertex
 //---------------------------------------------------------------------------
 vsol_point_2d_sptr vsol_rectangle_2d::p2(void) const
 {
@@ -83,7 +83,7 @@ vsol_point_2d_sptr vsol_rectangle_2d::p2(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the last vertex
+//: Return the last vertex
 //---------------------------------------------------------------------------
 vsol_point_2d_sptr vsol_rectangle_2d::p3(void) const
 {
@@ -103,7 +103,7 @@ vsol_point_2d_sptr vsol_rectangle_2d::p3(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Has `this' the same points than `other' in the same order ?
+//: Has `this' the same points than `other' in the same order ?
 //---------------------------------------------------------------------------
 bool vsol_rectangle_2d::operator==(const vsol_rectangle_2d &other) const
 {
@@ -115,7 +115,7 @@ bool vsol_rectangle_2d::operator==(const vsol_polygon_2d &other) const
   return vsol_polygon_2d::operator==(other);
 }
 
-// -- spatial object equality
+//: spatial object equality
 
 bool vsol_rectangle_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
@@ -131,7 +131,7 @@ bool vsol_rectangle_2d::operator==(const vsol_spatial_object_2d& obj) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Compute the bounding box of `this'
+//: Compute the bounding box of `this'
 //---------------------------------------------------------------------------
 void vsol_rectangle_2d::compute_bounding_box(void)
 {
@@ -182,11 +182,10 @@ void vsol_rectangle_2d::compute_bounding_box(void)
   _bounding_box->set_max_x(xmax);
   _bounding_box->set_min_y(ymin);
   _bounding_box->set_max_y(ymax);
-
 }
 
 //---------------------------------------------------------------------------
-// -- Return the width
+//: Return the width
 //---------------------------------------------------------------------------
 double vsol_rectangle_2d::width(void) const
 {
@@ -194,7 +193,7 @@ double vsol_rectangle_2d::width(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the height
+//: Return the height
 //---------------------------------------------------------------------------
 double vsol_rectangle_2d::height(void) const
 {
@@ -202,7 +201,7 @@ double vsol_rectangle_2d::height(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the area of `this'
+//: Return the area of `this'
 //---------------------------------------------------------------------------
 double vsol_rectangle_2d::area(void) const
 {
@@ -212,7 +211,7 @@ double vsol_rectangle_2d::area(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Are `new_vertices' valid to build a rectangle ?
+//: Are `new_vertices' valid to build a rectangle ?
 //---------------------------------------------------------------------------
 bool vsol_rectangle_2d::valid_vertices(const vcl_vector<vsol_point_2d_sptr> new_vertices) const
 {

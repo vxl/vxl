@@ -11,7 +11,7 @@
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Constructor from a vcl_vector (not a geometric vector but a list of points)
+//: Constructor from a vcl_vector (not a geometric vector but a list of points)
 // Require: new_vertices.size()>=3
 //---------------------------------------------------------------------------
 vsol_polygon_2d::vsol_polygon_2d(const vcl_vector<vsol_point_2d_sptr> &new_vertices)
@@ -43,7 +43,7 @@ vsol_polygon_2d::~vsol_polygon_2d()
 }
 
 //---------------------------------------------------------------------------
-// -- Clone `this': creation of a new object and initialization
+//: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_2d_sptr vsol_polygon_2d::clone(void) const
@@ -56,7 +56,7 @@ vsol_spatial_object_2d_sptr vsol_polygon_2d::clone(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Return vertex `i'
+//: Return vertex `i'
 // Require: valid_index(i)
 //---------------------------------------------------------------------------
 vsol_point_2d_sptr vsol_polygon_2d::vertex(const int i) const
@@ -72,7 +72,7 @@ vsol_point_2d_sptr vsol_polygon_2d::vertex(const int i) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Has `this' the same points than `other' in the same order ?
+//: Has `this' the same points than `other' in the same order ?
 //---------------------------------------------------------------------------
 bool vsol_polygon_2d::operator==(const vsol_polygon_2d &other) const
 {
@@ -107,7 +107,7 @@ bool vsol_polygon_2d::operator==(const vsol_polygon_2d &other) const
   return result;
 }
 
-// -- spatial object equality
+//: spatial object equality
 
 bool vsol_polygon_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
@@ -120,7 +120,7 @@ bool vsol_polygon_2d::operator==(const vsol_spatial_object_2d& obj) const
 
 
 //---------------------------------------------------------------------------
-// -- Has `this' the same points than `other' in the same order ?
+//: Has `this' the same points than `other' in the same order ?
 //---------------------------------------------------------------------------
 bool vsol_polygon_2d::operator!=(const vsol_polygon_2d &other) const
 {
@@ -128,7 +128,7 @@ bool vsol_polygon_2d::operator!=(const vsol_polygon_2d &other) const
 }
 
 //---------------------------------------------------------------------------
-// -- Compute the bounding box of `this'
+//: Compute the bounding box of `this'
 //---------------------------------------------------------------------------
 void vsol_polygon_2d::compute_bounding_box(void)
 {
@@ -160,7 +160,7 @@ void vsol_polygon_2d::compute_bounding_box(void)
 }
 
 //---------------------------------------------------------------------------
-// -- Return the number of vertices
+//: Return the number of vertices
 //---------------------------------------------------------------------------
 int vsol_polygon_2d::size(void) const
 {
@@ -168,7 +168,7 @@ int vsol_polygon_2d::size(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the area of `this'
+//: Return the area of `this'
 //---------------------------------------------------------------------------
 double vsol_polygon_2d::area(void) const
 {
@@ -177,7 +177,7 @@ double vsol_polygon_2d::area(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Is `this' convex ?
+//: Is `this' convex ?
 //---------------------------------------------------------------------------
 bool vsol_polygon_2d::is_convex(void) const
 {
@@ -252,7 +252,7 @@ bool vsol_polygon_2d::is_convex(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Is `i' a valid index for the list of vertices ?
+//: Is `i' a valid index for the list of vertices ?
 //---------------------------------------------------------------------------
 bool vsol_polygon_2d::valid_index(const int i) const
 {
@@ -264,7 +264,7 @@ bool vsol_polygon_2d::valid_index(const int i) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Default constructor. Do nothing. Just to enable inherance.
+//: Default constructor. Do nothing. Just to enable inherance.
 //---------------------------------------------------------------------------
 vsol_polygon_2d::vsol_polygon_2d(void)
 {

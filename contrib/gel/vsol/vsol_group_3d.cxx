@@ -11,7 +11,7 @@
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Default Constructor: with no child
+//: Default Constructor: with no child
 //---------------------------------------------------------------------------
 vsol_group_3d::vsol_group_3d(void)
 {
@@ -19,7 +19,7 @@ vsol_group_3d::vsol_group_3d(void)
 }
 
 //---------------------------------------------------------------------------
-// -- Copy constructor.
+//: Copy constructor.
 // Description: The objects of the group are not duplicated
 //---------------------------------------------------------------------------
 vsol_group_3d::vsol_group_3d(const vsol_group_3d &other)
@@ -28,7 +28,7 @@ vsol_group_3d::vsol_group_3d(const vsol_group_3d &other)
 }
 
 //---------------------------------------------------------------------------
-// -- Destructor
+//: Destructor
 // Description: The objects of the group are not deleted
 //---------------------------------------------------------------------------
 vsol_group_3d::~vsol_group_3d()
@@ -37,7 +37,7 @@ vsol_group_3d::~vsol_group_3d()
 }
 
 //---------------------------------------------------------------------------
-// -- Clone `this': creation of a new object and initialization
+//: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_3d_sptr vsol_group_3d::clone(void) const
@@ -50,7 +50,7 @@ vsol_spatial_object_3d_sptr vsol_group_3d::clone(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Return the object `i'
+//: Return the object `i'
 // Require: i>=0 and i<size()
 //---------------------------------------------------------------------------
 vsol_spatial_object_3d_sptr vsol_group_3d::object(const int i) const
@@ -72,7 +72,7 @@ vsol_spatial_object_3d_sptr vsol_group_3d::object(const int i) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Return the real type of a group. It is a SPATIALGROUP
+//: Return the real type of a group. It is a SPATIALGROUP
 //---------------------------------------------------------------------------
 enum  vsol_spatial_object_3d::vsol_spatial_object_3d_type
 vsol_group_3d::spatial_type(void) const
@@ -81,7 +81,7 @@ vsol_group_3d::spatial_type(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Compute the bounding box of `this'
+//: Compute the bounding box of `this'
 // Require: size()>0
 //---------------------------------------------------------------------------
 void vsol_group_3d::compute_bounding_box(void)
@@ -139,7 +139,7 @@ void vsol_group_3d::compute_bounding_box(void)
 }
 
 //---------------------------------------------------------------------------
-// -- Return the number of direct children of the group
+//: Return the number of direct children of the group
 //---------------------------------------------------------------------------
 int vsol_group_3d::size(void) const
 {
@@ -147,7 +147,7 @@ int vsol_group_3d::size(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return the number of objects of the group
+//: Return the number of objects of the group
 //---------------------------------------------------------------------------
 int vsol_group_3d::deep_size(void) const
 {
@@ -174,7 +174,7 @@ int vsol_group_3d::deep_size(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Add an object `new_object'to `this'
+//: Add an object `new_object'to `this'
 // Require: !is_child(new_object)
 //---------------------------------------------------------------------------
 void vsol_group_3d::add_object(const vsol_spatial_object_3d_sptr &new_object)
@@ -190,7 +190,7 @@ void vsol_group_3d::add_object(const vsol_spatial_object_3d_sptr &new_object)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Remove object `i' of `this' (not delete it)
+//: Remove object `i' of `this' (not delete it)
 // Require: i>=0 and i<size()
 //---------------------------------------------------------------------------
 void vsol_group_3d::remove_object(const int i)
@@ -208,7 +208,7 @@ void vsol_group_3d::remove_object(const int i)
 }
 
 //---------------------------------------------------------------------------
-// -- Is `new_object' a child (direct or not) of `this' ?
+//: Is `new_object' a child (direct or not) of `this' ?
 //---------------------------------------------------------------------------
 bool
 vsol_group_3d::is_child(const vsol_spatial_object_3d_sptr &new_object) const
@@ -234,7 +234,7 @@ vsol_group_3d::is_child(const vsol_spatial_object_3d_sptr &new_object) const
 }
 
 //---------------------------------------------------------------------------
-// -- The same behavior than dynamic_cast<>. Needed because VXL is not compiled with -frtti :-(
+//: The same behavior than dynamic_cast<>. Needed because VXL is not compiled with -frtti :-(
 //---------------------------------------------------------------------------
 const vsol_group_3d *vsol_group_3d::cast_to_group(void) const
 {

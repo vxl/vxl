@@ -21,7 +21,7 @@ vtol_block::vtol_block(void)
 }
 
 //---------------------------------------------------------------------------
-// -- Constructor from a two-chain (inferior)
+//: Constructor from a two-chain (inferior)
 //---------------------------------------------------------------------------
 vtol_block::vtol_block(vtol_two_chain &faceloop)
 {
@@ -29,7 +29,7 @@ vtol_block::vtol_block(vtol_two_chain &faceloop)
 }
 
 //---------------------------------------------------------------------------
-// -- Constructor from a list of two-chains. The first two-chain is the
+//: Constructor from a list of two-chains. The first two-chain is the
 //    outside boundary. The remaining two-chains are considered holes
 //    inside the the outside volume.
 //---------------------------------------------------------------------------
@@ -51,7 +51,7 @@ vtol_block::vtol_block(two_chain_list &faceloops)
 }
 
 //---------------------------------------------------------------------------
-// -- Constructor from a list of faces
+//: Constructor from a list of faces
 //---------------------------------------------------------------------------
 vtol_block::vtol_block(face_list &new_face_list)
 {
@@ -61,7 +61,7 @@ vtol_block::vtol_block(face_list &new_face_list)
 }
 
 //---------------------------------------------------------------------------
-// -- Copy constructor. Deep copy.
+//: Copy constructor. Deep copy.
 //---------------------------------------------------------------------------
 vtol_block::vtol_block(const vtol_block &other)
 {
@@ -106,7 +106,6 @@ vtol_block::vtol_block(const vtol_block &other)
     }
   delete edgs;
   delete verts;
-
 }
 
 //---------------------------------------------------------------------------
@@ -118,7 +117,7 @@ vtol_block::~vtol_block()
 }
 
 //---------------------------------------------------------------------------
-// -- Clone `this': creation of a new object and initialization
+//: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_3d_sptr vtol_block::clone(void) const
@@ -126,14 +125,13 @@ vsol_spatial_object_3d_sptr vtol_block::clone(void) const
   return new vtol_block(*this);
 }
 
-/*
- ******************************************************
- *
- *    Accessor Functions
- */
+// ******************************************************
+//
+//    Accessor Functions
+//
 
 //---------------------------------------------------------------------------
-// -- Return the topology type
+//: Return the topology type
 //---------------------------------------------------------------------------
 vtol_block::vtol_topology_object_type
 vtol_block::topology_type(void) const
@@ -146,7 +144,7 @@ vtol_block::topology_type(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is a block, 0 otherwise
+//: Return `this' if `this' is a block, 0 otherwise
 //---------------------------------------------------------------------------
 const vtol_block *vtol_block::cast_to_block(void) const
 {
@@ -154,7 +152,7 @@ const vtol_block *vtol_block::cast_to_block(void) const
 }
 
 //---------------------------------------------------------------------------
-// -- Return `this' if `this' is a block, 0 otherwise
+//: Return `this' if `this' is a block, 0 otherwise
 //---------------------------------------------------------------------------
 vtol_block *vtol_block::cast_to_block(void)
 {
@@ -166,7 +164,7 @@ vtol_block *vtol_block::cast_to_block(void)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// -- Is `inferior' type valid for `this' ?
+//: Is `inferior' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_block::valid_inferior_type(const vtol_topology_object &inferior) const
@@ -175,7 +173,7 @@ vtol_block::valid_inferior_type(const vtol_topology_object &inferior) const
 }
 
 //---------------------------------------------------------------------------
-// -- Is `superior' type valid for `this' ?
+//: Is `superior' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_block::valid_superior_type(const vtol_topology_object &superior)
@@ -184,7 +182,7 @@ const
   return false;
 }
 
-// -- outside boundary vertices
+//: outside boundary vertices
 
 vertex_list *vtol_block::outside_boundary_vertices(void)
 {
@@ -208,14 +206,14 @@ vcl_vector<vtol_vertex *> *vtol_block::outside_boundary_compute_vertices(void)
   OUTSIDE_BOUNDARY(vtol_vertex, vtol_two_chain, compute_vertices);
 }
 
-// -- get vertex list
+//: get vertex list
 
 vcl_vector<vtol_vertex *> *vtol_block::compute_vertices(void)
 {
   SEL_INF(vtol_vertex,compute_vertices);
 }
 
-// -- get outside boundary zero chains
+//: get outside boundary zero chains
 
 zero_chain_list *vtol_block::outside_boundary_zero_chains(void)
 {
@@ -238,17 +236,17 @@ vcl_vector<vtol_zero_chain *> *
 vtol_block::outside_boundary_compute_zero_chains(void)
 {
   OUTSIDE_BOUNDARY(vtol_zero_chain,vtol_two_chain,
-                      compute_zero_chains);
+                   compute_zero_chains);
 }
 
-// -- get zero chains
+//: get zero chains
 
 vcl_vector<vtol_zero_chain *> *vtol_block::compute_zero_chains(void)
 {
  SEL_INF(vtol_zero_chain,compute_zero_chains);
 }
 
-// -- outside boundary edges
+//: outside boundary edges
 
 edge_list *vtol_block::outside_boundary_edges(void)
 {
@@ -267,20 +265,20 @@ edge_list *vtol_block::outside_boundary_edges(void)
   return result;
 }
 
-// -- outside boundary edges
+//: outside boundary edges
 
 vcl_vector<vtol_edge *> *vtol_block::outside_boundary_compute_edges(void)
 {
  OUTSIDE_BOUNDARY(vtol_edge,vtol_two_chain,compute_edges);
 }
 
-// -- get edges
+//: get edges
 vcl_vector<vtol_edge *> *vtol_block::compute_edges(void)
 {
   SEL_INF(vtol_edge,compute_edges);
 }
 
-// -- get outside boundary one chains
+//: get outside boundary one chains
 
 one_chain_list *vtol_block::outside_boundary_one_chains(void)
 {
@@ -296,7 +294,7 @@ one_chain_list *vtol_block::outside_boundary_one_chains(void)
   return result;
 }
 
-// -- get outside boundary one chains
+//: get outside boundary one chains
 
 vcl_vector<vtol_one_chain *> *
 vtol_block::outside_boundary_compute_one_chains(void)
@@ -304,13 +302,13 @@ vtol_block::outside_boundary_compute_one_chains(void)
   OUTSIDE_BOUNDARY(vtol_one_chain,vtol_two_chain,compute_one_chains);
 }
 
-// -- get the one chains
+//: get the one chains
 vcl_vector<vtol_one_chain *> *vtol_block::compute_one_chains(void)
 {
   SEL_INF(vtol_one_chain,compute_one_chains);
 }
 
-// -- get the outside boundary faces
+//: get the outside boundary faces
 
 face_list *vtol_block::outside_boundary_faces(void)
 {
@@ -326,20 +324,20 @@ face_list *vtol_block::outside_boundary_faces(void)
   return result;
 }
 
-// -- get the outside boundary faces
+//: get the outside boundary faces
 
 vcl_vector<vtol_face *> *vtol_block::outside_boundary_compute_faces(void)
 {
   OUTSIDE_BOUNDARY(vtol_face,vtol_two_chain,compute_faces);
 }
 
-// -- get the faces
+//: get the faces
 vcl_vector<vtol_face *> *vtol_block::compute_faces(void)
 {
   SEL_INF(vtol_face,compute_faces);
 }
 
-// -- get the outside boundary two chains
+//: get the outside boundary two chains
 
 two_chain_list *vtol_block::outside_boundary_two_chains(void)
 {
@@ -355,7 +353,7 @@ two_chain_list *vtol_block::outside_boundary_two_chains(void)
   return result;
 }
 
-// -- get the outside boundary two chains
+//: get the outside boundary two chains
 
 vcl_vector<vtol_two_chain *> *
 vtol_block::outside_boundary_compute_two_chains(void)
@@ -363,25 +361,24 @@ vtol_block::outside_boundary_compute_two_chains(void)
   OUTSIDE_BOUNDARY(vtol_two_chain,vtol_two_chain,compute_two_chains);
 }
 
-// -- get the two chains
+//: get the two chains
 
 vcl_vector<vtol_two_chain *> *vtol_block::compute_two_chains(void)
 {
   SEL_INF(vtol_two_chain,compute_two_chains);
 }
 
-// -- get blocks
+//: get blocks
 vcl_vector<vtol_block *> *vtol_block::compute_blocks(void)
 {
   LIST_SELF(vtol_block);
 }
 
 
-/*
- ******************************************************
- *
- *    Operators Functions
- */
+// ******************************************************
+//
+//    Operators Functions
+//
 
 // This is hardly an equality test...but we`ll leave it for now....pav
 // June 1992.
@@ -402,7 +399,6 @@ bool vtol_block::operator==(const vtol_block &other) const
     return false;
   else
     {
-
       for(bi1=_inferiors.begin(),bi2=other._inferiors.begin();
           bi1!=_inferiors.end();
           ++bi1,++bi2)
@@ -416,11 +412,10 @@ bool vtol_block::operator==(const vtol_block &other) const
         }
     }
 
-
   return true;
 }
 
-// -- spatial object equality
+//: spatial object equality
 
 bool vtol_block::operator==(const vsol_spatial_object_3d& obj) const
 {
@@ -431,7 +426,7 @@ bool vtol_block::operator==(const vsol_spatial_object_3d& obj) const
   : false;
 }
 
-// -- get a hole cycle
+//: get a hole cycle
 two_chain_list *vtol_block::hole_cycles(void) const
 {
   two_chain_list *result;
@@ -454,7 +449,7 @@ two_chain_list *vtol_block::hole_cycles(void) const
 }
 
 
-// --add a hole cycle
+//: add a hole cycle
 
 bool vtol_block::add_hole_cycle(vtol_two_chain &new_hole)
 {
@@ -464,14 +459,13 @@ bool vtol_block::add_hole_cycle(vtol_two_chain &new_hole)
   return true;
 }
 
-/*
- ******************************************************
- *
- *    Print Functions
- */
+// ******************************************************
+//
+//    Print Functions
+//
 
 
-// -- print data
+//: print data
 
 void vtol_block::print(vcl_ostream &strm) const
 {
