@@ -352,14 +352,14 @@ AC_LANG_CPLUSPLUS
 VCL_COMPILE_CXX
 
 AC_TRY_COMPILE([
-#include <cmath>
+#include <complex>
 #include <vector>
-#include <iostream>
+#include <string>
 void function() {
-  std::vector<double> flaz;
-  flaz.push_back(std::sqrt(2.0));
-  flaz.push_back(std::fabs(1.0f));
-  std::cerr << "hello, std::world" << std::endl;
+  std::vector<std::complex<double> > flaz;
+  flaz.push_back(std::sqrt(std::complex<double>(2.0)));
+  flaz.push_back(std::abs(std::complex<double>(0.0,1.0)));
+  std::string s = "hallo\n";
 }
 ],,ac_cxx_allows_namespace_std=yes,ac_cxx_allows_namespace_std=no)
 AC_LANG_RESTORE
