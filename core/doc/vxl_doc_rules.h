@@ -75,7 +75,7 @@ class my_class
   // will think you have ended the documentation comment, and
   // started an ordinary code comment.
   //
-  // If you want to start a new parapraph, put a line with just //
+  // If you want to start a new paragraph, put a line with just //
   //
   // If you want to do some special stuff such as formulas, have
   // a look at the doxygen documentation http://www.stack.nl/~dimitri/doxygen/
