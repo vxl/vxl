@@ -28,7 +28,7 @@ else {
     print STDERR "IUEROOT is not defined, and no command line arguments were given\n";
     exit 0;
   }
-  $FILES = `find $IUEROOT/config $IUEROOT/vcl $IUEROOT/v3p $IUEROOT/vxl $IUEROOT/mul $IUEROOT/oxl $IUEROOT/gel $IUEROOT/tbl $IUEROOT/conversions -type f \\\( -name \\\*.cxx -o -name \\\*.txx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h \\\) -print|grep -v /gel/v.ol\\.new/`;
+  $FILES = `find $IUEROOT/config $IUEROOT/vcl $IUEROOT/v3p $IUEROOT/vxl $IUEROOT/mul $IUEROOT/oxl $IUEROOT/gel $IUEROOT/tbl $IUEROOT/conversions $IUEROOT/rpl -type f \\\( -name \\\*.cxx -o -name \\\*.txx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h \\\) -print|grep -v /gel/v.ol\\.new/`;
   @FILES = split(' ', $FILES);
 }
 
@@ -245,6 +245,7 @@ foreach $f (@FILES)
         $f !~ m/\bv3p\/(netlib|tiff|png)\// && $f !~ m/\bv3p\/Qv\/vectors\.h$/ &&
         $f !~ m/\.c$/ &&
         $f !~ m/\bvnl\/vnl_complex_ops\.txx$/ &&
+        "$f.$wd" !~ m/_rational\.(h|cxx)\.sqrt$/ &&
         "$f.$wd" !~ m/\bvul\/vul_timer\.(h|cxx)\.real$/ &&
         "$f.$wd" !~ m/\bvnl\/vnl_quaternion\.h\.real$/ &&
         "$f.$wd" !~ m/\bvnl\/(vnl_rational\.h|tests\/test_rational\.cxx)\.(abs|ceil|floor)$/ &&
