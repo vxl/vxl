@@ -46,6 +46,31 @@ vnl_bignum::vnl_bignum (long l) {
   }
 }
 
+//: Creates a vnl_bignum from an integer.
+
+vnl_bignum::vnl_bignum (int l) {
+  if (l >= 0)                   // Get correct sign
+    this->sign = 1;
+  else {
+    l = -l;                     // Get absolute value of l
+    this->sign = -1;
+  }
+  Data buf[sizeof(l)];          // Temp buffer to store l in
+  Counter i = 0;                // buffer index
+  while (l) {                   // While more bits in l
+    assert(i < sizeof(l));      // no more buffer space
+    buf[i] = Data(l);           // Peel off lower order bits
+    l >>= 16;   // Shift next bits into place
+    i++;
+  }
+  this->data = ((this->count = i) > 0 ? new Data[i] : 0); // Allocate permanent data
+
+  i = 0;
+  while (i < this->count) {     // Save buffer into perm. data
+    this->data[i] = buf[i];
+    i++;
+  }
+}
 
 //: Creates a vnl_bignum from a double floating point number.
 
@@ -78,6 +103,7 @@ vnl_bignum::vnl_bignum (double d) {
   }
   delete [] buf;                        // Deallocate buffer
 }
+
 
 static bool is_decimal(const char *s)
 {

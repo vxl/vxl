@@ -131,6 +131,7 @@ class vnl_bignum {
 public:
   vnl_bignum();                        // Void constructor
   vnl_bignum(long);                    // Long constructor
+  vnl_bignum(int);                     // Int constructor
   vnl_bignum(double);                  // Double constructor
   vnl_bignum(vnl_bignum const&);       // Copy constructor
   vnl_bignum(const char*);             // String constructor
