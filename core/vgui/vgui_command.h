@@ -51,7 +51,16 @@ struct vgui_command_toggle : vgui_command
 //
 // vgui_command_simple is a convenient way to build vgui_commands from 
 // object/method pairs where the method is of the form 
-// void receiver::method(void);
+// void receiver::method();
+// So, if you have 
+//    class myclass { 
+//      void do_thing();
+//    };
+//    myclass* my_app;
+// You can make a command such as 
+//    vgui_command_simple<myclass>(my_app, myclass::do_thing);
+//  and pass it to a menu.
+//
 template <class receiver>
 class vgui_command_simple : public vgui_command {
 public:

@@ -59,7 +59,7 @@
  * simple example, though, so that is left as an Exercise for the
  * Programmer.
  */
-#define TRACKBALLSIZE  (0.8)
+#define TRACKBALLSIZE  ((float)0.8)
 
 /*
  * Local function prototypes (not defined in trackball.h)

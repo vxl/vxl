@@ -73,10 +73,14 @@ vgui_window *vgui_glut::produce_window(int width, int height,
 //    vgui_glut::run()
 //    ...
 //     internal_run_till_idle();
-//     ** setjmp()s **
-//     ...
-//      glutMainLoop()
-//      ...
+//     goto next_statement;// this is what setjmp() effectively does
+//  longjmp_target: // When the idle callback is called, it will longjmp to here.
+//     goto idle;
+//  next_statement:
+//     glutMainLoop()
+//     exit(); // [gets here only on close of window.]
+//
+//  idle:
 //       [user code]
 //       ...
 
@@ -101,7 +105,7 @@ static void internal_run_till_idle()
   
   // record current state/accept control after longjmp().
   int t = vcl_setjmp(internal_buf);
-  
+longjmp_target:  
   // if we got back control after a longjmp(), restore
   // the previous jmp_buf and return to the caller now.
   if (t != 0) {
@@ -109,7 +113,7 @@ static void internal_run_till_idle()
     vcl_memcpy(&internal_buf, &saved_buf, sizeof internal_buf);
     return;
   }
-  
+next_statement:
   // set idle function.
   glutIdleFunc(internal_longjmp_idler);
   

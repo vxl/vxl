@@ -95,8 +95,8 @@ vidfmt::vidfmt()
     bpp = dib_hdr->biBitCount;
     if (debug) vbl_printf(vcl_cerr, "Current video mode is %lu-bit; ", dib_hdr->biBitCount);
 
-    if (BI_BITFIELDS == dib_hdr->biCompression)
-    {
+    switch(dib_hdr->biCompression) {
+    case BI_BITFIELDS: {
         DWORD * fields = (DWORD*) ((char*)dib_hdr + dib_hdr->biSize);
         if (debug) printf("masks [%08x %08x %08x] ", fields[0], fields[1], fields[2]);
         switch (fields[0])
@@ -125,8 +125,16 @@ vidfmt::vidfmt()
             vbl_printf(vcl_cerr, "vgui_accelerate_mfc:    (Unknown pixel alignment %x:%x:%x)\n", 
                 fields[0], fields[1], fields[2] );
         }
+        break;
     }
-
+    case BI_RGB: {
+        gl_type = GL_UNSIGNED_BYTE;
+        gl_format = GL_BGR;
+        break;
+    }
+    default:
+      abort();
+    }
     if (debug) printf("\n");
 
     // awf: OK, the above doesn't work on my win2k laptop.
@@ -298,14 +306,18 @@ bool vgui_accelerate_mfc::vgui_glDrawPixels( GLsizei width, GLsizei height, GLen
     int b_w = unpack_row_length;
     int b_h = height + unpack_skip_rows;
     bitmap.CreateCompatibleBitmap(vgui_mfc_adaptor_global_dc,b_w, b_h);
-    if ((bytes_per_pixel == 3 && format == GL_BGR && type == GL_UNSIGNED_BYTE) || 
-        (bytes_per_pixel == 2 && format == GL_RGB && type == GL_UNSIGNED_SHORT_5_6_5) ||
-        (bytes_per_pixel == 2 && format == GL_RGB && type == GL_UNSIGNED_SHORT_5_5_5_1)) {
+    GLenum g_format, g_type;
+    vgui_choose_cache_format(&g_format, &g_type);
+    if (format==g_format && type==g_type) {
       // These formats are exact matches -- just copy the bits
       bitmap.SetBitmapBits(b_w*b_h*bytes_per_pixel,pixels);
     } else {
       // Need to convert -- this should not happen, but indicates a bug in choose_cache_format above.
-      vcl_cerr << "vgui_accelerate: bad format. Try running --with-no-mfc-acceleration\n";
+      vcl_cerr << "vgui_accelerate: bad format("<<
+        bytes_per_pixel<<","<<
+        format<<","<<
+        type<<")"<<
+        ". Try running --with-no-mfc-accel\n";
       
       struct {
         BITMAPINFOHEADER bmiHeader; 
