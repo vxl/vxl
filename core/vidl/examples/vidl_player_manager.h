@@ -9,11 +9,9 @@
 //
 //----------------------------------------------------------------------------
 
-#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_image_tableau_sptr.h>
 #include <vgui/vgui_viewer2D_tableau_sptr.h>
-#include <vgui/vgui_dialog.h>
 #include <vgui/vgui_window.h>
 #include <vidl/vidl_movie.h>
 

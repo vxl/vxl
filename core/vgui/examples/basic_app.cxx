@@ -1,9 +1,6 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_window.h>
-#include <vgui/vgui_command.h>
-#include <vgui/vgui_shell_tableau.h>
-#include <vgui/internals/vgui_accelerate.h>
 #include "basic_menus.h"
 #include "basic_manager.h"
 

@@ -2,7 +2,6 @@
 #include "basic_manager.h"
 #include <vgui/vgui.h>
 #include <vgui/vgui_key.h>
-#include <vgui/vgui_modifier.h>
 #include <vgui/vgui_menu.h>
 
 //Static munu callback functions

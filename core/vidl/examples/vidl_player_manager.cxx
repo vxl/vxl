@@ -9,8 +9,8 @@
 #include <vil/vil_image_view_base.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_error_dialog.h>
-#include <vgui/vgui_tableau.h>
 #include <vgui/vgui_dialog.h>
+#include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 

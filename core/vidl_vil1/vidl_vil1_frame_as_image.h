@@ -13,8 +13,8 @@
 
 #include <vil1/vil1_image_impl.h>
 #include <vidl_vil1/vidl_vil1_frame_as_image_sptr.h>
-#include <vidl_vil1/vidl_vil1_frame_sptr.h>
 #include <vidl_vil1/vidl_vil1_frame.h>
+
 //: see a frame as an image
 //   This is a convenient container to be able to make easily
 //   an image from a frame.

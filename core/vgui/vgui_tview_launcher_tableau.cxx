@@ -18,7 +18,6 @@
 #include "vgui_tview_launcher_tableau.h"
 #include <vcl_iostream.h>
 #include <vgui/vgui.h>
-#include <vgui/vgui_window.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_tview_tableau.h>
@@ -27,7 +26,8 @@
 vgui_tview_launcher_tableau::vgui_tview_launcher_tableau()
   : c_graph(vgui_key('g'), vgui_SHIFT) { }
 
-vcl_string vgui_tview_launcher_tableau::type_name() const {
+vcl_string vgui_tview_launcher_tableau::type_name() const
+{
   return "vgui_tview_launcher_tableau";
 }
 
@@ -44,17 +44,20 @@ bool vgui_tview_launcher_tableau::handle(const vgui_event& e)
   return false;
 }
 
-static void launch(const void* t) {
+static void launch(const void* t)
+{
   // a static_cast may not cast away const.
   void *Pv = const_cast<void*>(t);
   static_cast<vgui_tview_launcher_tableau*>(Pv)->go(vgui_adaptor::current);
 }
 
-void vgui_tview_launcher_tableau::get_popup(const vgui_popup_params& /*params*/, vgui_menu &m) {
+void vgui_tview_launcher_tableau::get_popup(const vgui_popup_params& /*params*/, vgui_menu &m)
+{
   m.add("View tableau hierarchy", launch, this);
 }
 
-void vgui_tview_launcher_tableau::go(vgui_adaptor* a) {
+void vgui_tview_launcher_tableau::go(vgui_adaptor* a)
+{
   if (!a) {
     vcl_cerr << __FILE__ ": a = 0\n";
     return;

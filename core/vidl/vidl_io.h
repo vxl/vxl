@@ -16,13 +16,12 @@
 #include <vcl_string.h>
 #include <vidl/vidl_clip_sptr.h>
 #include <vidl/vidl_movie_sptr.h>
-#include <vidl/vidl_codec_sptr.h>
 #include <vcl_vector.h>
 #include <vcl_list.h>
 #include "dll.h"
-
 class vidl_movie;
 class vidl_codec;
+
 //: Video Input / Output
 //   vidl_io takes care of Input / Output of videos
 //   It reads video in from filenames and creates

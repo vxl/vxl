@@ -6,16 +6,16 @@
 // \author Nicolas Dano, september 1999
 //
 // \verbatim
-//   Modifications
-//    Julien ESTEVE, June 2000 -   Ported from TargetJr
-//    10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
-//    10/7/2003 Matt Leotta (Brown) Converted vil1 to vil
+//  Modifications
+//   Julien ESTEVE, June 2000 -   Ported from TargetJr
+//   10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
+//   10/7/2003 Matt Leotta (Brown) Converted vil1 to vil
 // \endverbatim
 
 #include <vbl/vbl_ref_count.h>
 #include <vidl/vidl_movie_sptr.h>
-#include <vidl/vidl_frame_sptr.h>
-#include <vidl/vidl_clip.h>
+#include <vidl/vidl_frame.h>
+#include <vidl/vidl_clip_sptr.h>
 #include <vil/vil_image_view_base.h>
 #include <vcl_list.h>
 

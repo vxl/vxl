@@ -11,8 +11,6 @@
 #include <avm_default.h>
 #include <avm_fourcc.h>
 
-#include <vidl/vidl_frame.h>
-#include <vidl/vidl_movie.h>
 #include <vil/vil_image_view.h>
 #include <vul/vul_file.h>
 

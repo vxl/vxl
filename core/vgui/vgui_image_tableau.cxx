@@ -21,7 +21,6 @@
 #include <vgui/vgui_image_renderer.h>
 #include <vgui/vgui_vil_image_renderer.h>
 #include <vgui/vgui_event.h>
-#include <vgui/vgui_matrix_state.h>
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>
 

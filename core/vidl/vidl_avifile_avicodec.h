@@ -12,7 +12,6 @@
 
 #include <avifile/avifile.h>
 #include <vidl/vidl_codec.h>
-#include <vidl/vidl_frame_sptr.h>
 
 //: Allows user to load an AVI video with avifile
 // See also vidl_codec

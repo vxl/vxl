@@ -19,7 +19,6 @@
 #include <vgui/vgui_matrix_state.h>
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_popup_params.h>
-#include <vgui/internals/vgui_accelerate.h>
 #include <vgui/internals/vgui_adaptor_tableau.h>
 
 

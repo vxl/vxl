@@ -15,9 +15,7 @@
 // \endverbatim
 
 #include <vgui/vgui_gl.h>
-#include <vgui/vgui_macro.h>
 #include <vgui/vgui_section_buffer.h>
-#include <vgui/vgui_projection_inspector.h>
 
 //-----------------------------------------------------------------------------
 //: Constructor - create an empty image renderer.

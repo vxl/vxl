@@ -20,7 +20,6 @@
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_popup_params.h>
 #include <vgui/vgui_macro.h>
-#include <vgui/internals/vgui_accelerate.h>
 #include <vgui/impl/mfc/vgui_mfc_utils.h>
 #include <vgui/impl/mfc/vgui_mfc_mainfrm.h>
 
@@ -308,7 +307,7 @@ void vgui_mfc_adaptor::create_bitmap( int cx, int cy,
   bih.biBitCount = 24;
   bih.biCompression = BI_RGB;
 
-  if( !pDC ){
+  if ( !pDC ){
     pDC = new CDC();
     pDC->CreateCompatibleDC(NULL);
   }

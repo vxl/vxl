@@ -18,7 +18,6 @@
 #include <vgui/vgui_gl.h>
 #include <vgui/internals/vgui_dialog_field.h>
 #include <vgui/internals/vgui_simple_field.h>
-#include <vgui/internals/vgui_string_field.h>
 #include <gtk/gtkfilesel.h>
 
 #include "vgui_gtk2_adaptor.h"

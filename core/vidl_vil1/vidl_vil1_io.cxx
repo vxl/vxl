@@ -7,18 +7,6 @@
 #include <vidl_vil1/vidl_vil1_clip.h>
 #include <vidl_vil1/vidl_vil1_image_list_codec.h>
 
-#ifdef VCL_WIN32
-# include <vidl_vil1/vidl_vil1_avicodec.h>
-#endif
-
-#if 0 // TODO
-#include <Basics/stat.h>
-#include <Basics/dir.h>
-#include <Basics/stringarray.h>
-#include <Basics/IUPath.h>
-#include <Basics/IUFilename.h>
-#endif
-
 #include <vul/vul_file.h>
 #include <vul/vul_sequence_filename_map.h>
 #include <vul/vul_file_iterator.h>
@@ -53,19 +41,6 @@ static vidl_vil1_clip_sptr load_from_directory(char const* fname)
   // Call load_images and return the result
   return vidl_vil1_io::load_images(filenames, 'r');
 }
-
-#if 0
-// Constructor does nothing.
-vidl_vil1_io::vidl_vil1_io()
-{
-}
-
-// Destructor does nothing.
-vidl_vil1_io::~vidl_vil1_io()
-{
-}
-#endif
-
 
 //-----------------------------------------------------------------------------
 
@@ -290,8 +265,10 @@ bool vidl_vil1_io::save(vidl_vil1_movie* movie, const char* fname, const char* t
 
   while ((i != supported_types_.end()) && (vcl_strcmp((*i)->type(), type)))
   {
-    // const char* debug = (*i)->type();
-    // vcl_cout << "debug : " << debug << " type : " << type << vcl_endl;
+#ifdef DEBUG
+    const char* debug = (*i)->type();
+    vcl_cout << "debug : " << debug << " type : " << type << vcl_endl;
+#endif
     ++i;
   }
 

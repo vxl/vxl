@@ -4,8 +4,6 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_window.h>
-#include <vgui/vgui_command.h>
-#include <vgui/vgui_image_tableau.h>
 #include <vidl/vidl_io.h>
 
 int main(int argc, char** argv)

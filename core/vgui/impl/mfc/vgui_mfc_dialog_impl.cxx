@@ -19,7 +19,6 @@
 
 #include <vgui/internals/vgui_dialog_field.h>
 #include <vgui/internals/vgui_simple_field.h>
-#include <vgui/internals/vgui_string_field.h>
 #include <vgui/impl/mfc/vgui_mfc_adaptor.h>
 #include <winuser.h>
 

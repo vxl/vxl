@@ -3,7 +3,7 @@
 //:
 // \file
 
-#include <vidl_vil1/vidl_vil1_codec.h>
+#include <vidl_vil1/vidl_vil1_codec_sptr.h>
 #include <vidl_vil1/vidl_vil1_frame_as_image.h>
 #include <vil1/vil1_image.h>
 

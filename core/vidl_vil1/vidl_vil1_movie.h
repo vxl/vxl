@@ -13,7 +13,7 @@
 #include <vbl/vbl_ref_count.h>
 #include <vidl_vil1/vidl_vil1_movie_sptr.h>
 #include <vidl_vil1/vidl_vil1_frame_sptr.h>
-#include <vidl_vil1/vidl_vil1_clip.h>
+#include <vidl_vil1/vidl_vil1_clip_sptr.h>
 #include <vil1/vil1_image.h>
 #include <vcl_list.h>
 

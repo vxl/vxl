@@ -7,18 +7,6 @@
 #include <vidl/vidl_clip.h>
 #include <vidl/vidl_image_list_codec.h>
 
-#ifdef HAS_AVI
-# include <vidl/vidl_avicodec.h>
-#endif
-
-#if 0 // TODO
-#include <Basics/stat.h>
-#include <Basics/dir.h>
-#include <Basics/stringarray.h>
-#include <Basics/IUPath.h>
-#include <Basics/IUFilename.h>
-#endif
-
 #include <vul/vul_file.h>
 #include <vul/vul_sequence_filename_map.h>
 #include <vul/vul_file_iterator.h>
@@ -270,8 +258,10 @@ bool vidl_io::save(vidl_movie_sptr movie, const char* fname, const char* type)
   vidl_codec_sptr* i = vidl_codec::all_codecs();
   while ((*i) && (vcl_strcmp((*i)->type(), type)))
   {
-    // const char* debug = (*i)->type();
-    // vcl_cout << "debug : " << debug << " type : " << type << vcl_endl;
+#ifdef DEBUG
+    const char* debug = (*i)->type();
+    vcl_cout << "debug : " << debug << " type : " << type << vcl_endl;
+#endif
     ++i;
   }
 

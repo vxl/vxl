@@ -20,7 +20,6 @@
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_style.h>
-#include <vgui/vgui_projection_inspector.h>
 #include <vgui/vgui_section_buffer.h>
 #include <vgui/internals/vgui_draw_line.h>
 

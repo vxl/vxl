@@ -3,8 +3,8 @@
 #include "vidl_player_manager.h"
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vgui/vgui.h>
+#include <vgui/vgui_dialog.h>
 #include <vgui/vgui_key.h>
-#include <vgui/vgui_modifier.h>
 #include <vgui/vgui_menu.h>
 
 #ifdef HAS_MPEG2

@@ -6,7 +6,7 @@
 
 #include <vcl_iostream.h>
 
-#include <vidl/vidl_codec.h>
+#include <vidl/vidl_codec_sptr.h>
 #include <vidl/vidl_image_list_codec.h>
 #include <vidl/vidl_frame.h>
 

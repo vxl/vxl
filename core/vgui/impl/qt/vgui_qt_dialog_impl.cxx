@@ -4,9 +4,8 @@
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 
-#include <vgui/internals/vgui_dialog_field.h>
+#include <vgui/internals/vgui_dialog_impl.h>
 #include <vgui/internals/vgui_simple_field.h>
-#include <vgui/internals/vgui_string_field.h>
 
 #include <qpushbutton.h>
 #include <qlabel.h>
