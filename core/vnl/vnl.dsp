@@ -1273,6 +1273,11 @@ SOURCE=.\Templates/vnl_vector_fixed_ref+vnl_bignum.3-.cxx
 SOURCE=.\Templates/vnl_matlab_print+uint-.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\vnl_gamma.cxx
+
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -1809,6 +1814,11 @@ SOURCE=.\vnl_imag.h
 # Begin Source File
 
 SOURCE=.\vnl_real.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_gamma.h
 
 # End Source File
 # End Group

@@ -210,6 +210,9 @@ SOURCE=.\test_transpose.cxx
 # Begin Source File
 SOURCE=.\test_vector.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_gamma.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
