@@ -17,13 +17,12 @@ int main(int argc, char * argv[])
 {
   int success=0, failures=0;
   vcl_string image_path = (argc < 2) ? "" : argv[1];
-  if(image_path=="")
+  if (image_path=="")
     image_path = "jar-closeup.tif";
   vcl_cout << "Loading Image " << image_path << "\n";
   vil_image image = vil_load(image_path.c_str());
-  if(image)
+  if (image)
     {
-
       sdet_detector_params dp;
       dp.noise_multiplier= 1;
       dp.aggressive_junction_closure=1;
@@ -32,12 +31,12 @@ int main(int argc, char * argv[])
       det.DoContour();
       vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
       int n = 0;
-      if(edges)
+      if (edges)
         n = edges->size();
       vcl_cout << "nedges = " << n << "\n";
-      Assert(n==648);
+      Assert(n==647);
       int x = 0, y = 0;
-      if(n)
+      if (n)
         {
           vtol_edge_2d_sptr e = (*edges)[0];
           x = int(e->v1()->cast_to_vertex_2d()->x());

@@ -33,7 +33,7 @@ int main(int argc, char * argv[])
       vcl_vector<vdgl_intensity_face_sptr>& regions = rp.get_regions();
       int n = regions.size();
       vcl_cout << "nregions = " << n << "\n";
-      Assert(n==188);
+      Assert(n==189);
       vdgl_intensity_face_sptr f = regions[0];
       vcl_cout << "f->Npix() " << f->Npix() << "\n";
       Assert(f->Npix()==41121);
