@@ -23,7 +23,7 @@ else {
     print STDERR "IUEROOT is not defined, and no command line arguments were given\n";
     exit 0;
   }
-  $DIRS = `find \$IUEROOT/vcl \$IUEROOT/v3p \$IUEROOT/core \$IUEROOT/contrib -type d -print`;
+  $DIRS = `find \$IUEROOT/vcl \$IUEROOT/v3p \$IUEROOT/core \$IUEROOT/contrib  -type d \\\( -name xerces-c-src\\\* -prune -o -print \\\)`;
   @DIRS = grep {!/(\/CVS|\.new(\/\S+)?|awfmfc|vgui_example_mfc)$/} sort split ' ', $DIRS;
 }
 
@@ -247,13 +247,17 @@ foreach $dir (@DIRS)
   }
   while ($cmakefile =~ s/\bADD_EXECUTABLE\s*\(\s*(\S+)((\s+[^\s()]+)+)\s*\)//) {
     $name = "$1"; $x = "$2"; $x =~ s/\$\{(\S+)\}/$1/g;
-    if ($x =~ m/_sources$/) {
+    if ($x =~ m/^\s*\S+_sources$/) {
       $names{$name} = $source_files[0] if (defined($source_files[0]));
       next;
     }
     $names{$name} = "$x";
     foreach $y (split /\s+/, "$x") {
       next if ($y eq "");
+      if ($y =~ m/_sources$/) {
+        $names{$name} = $source_files[0] if (defined($source_files[0]));
+        next;
+      }
       if ( $y =~ m/\.h(\.in)?$/) { push @hsource_files, "$y"; }
       elsif ( $y =~ m/\.rc$/) { push @hsource_files, "$y"; }
       elsif ( $y =~ m/\.txx$/) { push @hsource_files, "$y"; }
