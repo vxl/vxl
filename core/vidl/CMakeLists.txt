@@ -37,6 +37,7 @@ IF (NOT AVIFILE_FOUND)
   ENDIF(AVIFILE_FOUND)
 ENDIF (NOT AVIFILE_FOUND)
 
+SET(AVI_FOUND "NO")
 IF (AVIFILE_FOUND)
   SET(vidl_sources ${vidl_sources}
       vidl_avicodec.h
@@ -49,6 +50,7 @@ ELSE (AVIFILE_FOUND)
   IF (WIN32)
     IF( NOT CYGWIN )
       SET(vidl_sources ${vidl_sources}
+          vidl_avicodec.h
           vidl_win_avicodec.h vidl_win_avicodec.cxx
          )
 
@@ -56,12 +58,11 @@ ELSE (AVIFILE_FOUND)
       # installed correctly.  Make sure the ilink32.cfg file
       # lists the directory containing the library in the -L option.
       # For example: -L"c:\Borland\BCC55\Lib";"c:\Borland\BCC55\Lib\PSDK"
-      SET(AVI_LIBRARIES "vfw32 gdi32")
+      SET(AVI_LIBRARIES vfw32 gdi32)
       SET(AVI_FOUND "YES")
       ADD_DEFINITIONS( -DHAS_AVI )
     ENDIF( NOT CYGWIN )
   ENDIF (WIN32)
-  SET(AVI_LIBRARIES "")
 ENDIF (AVIFILE_FOUND)
 
 
