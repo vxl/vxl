@@ -1,3 +1,5 @@
+//:
+// \file
 #include <vpro/vpro_capture_process.h>
 #include <vvid/cmu_1394_camera.h>
 
@@ -11,6 +13,7 @@ cmu_1394_camera::cmu_1394_camera()
    image_valid_ = false;
    current_ = -1;
 }
+
 cmu_1394_camera::~cmu_1394_camera()
 {
   if (camera_present_)
@@ -29,72 +32,74 @@ cmu_1394_camera::cmu_1394_camera(int node, const cmu_1394_camera_params& cp)
   image_valid_ = false;
    current_ = -1;
 }
+
 void cmu_1394_camera::print_control(C1394CameraControl const& c)
 {
-  vcl_cout << "Feature Information \n";
+  vcl_cout << "Feature Information\n";
 
-  if(c.m_present)
+  if (c.m_present)
     vcl_cout << "Feature Present true\n";
   else
     vcl_cout << "Feature Present false\n";
 
-  if(c.m_onePush)
+  if (c.m_onePush)
     vcl_cout << "One Push true\n";
   else
     vcl_cout << "One Push false\n";
 
-  if(c.m_readout)
+  if (c.m_readout)
     vcl_cout << "Readout true\n";
   else
     vcl_cout << "Readout false\n";
 
-  if(c.m_onoff)
+  if (c.m_onoff)
     vcl_cout << "On-Off  true\n";
   else
     vcl_cout << "On-Off false\n";
 
-  if(c.m_auto)
+  if (c.m_auto)
     vcl_cout << "Auto  true\n";
   else
     vcl_cout << "Auto false\n";
 
-  if(c.m_manual)
+  if (c.m_manual)
     vcl_cout << "Manual  true\n";
   else
     vcl_cout << "Manual false\n";
 
-  vcl_cout <<"Min Value " << c.m_min;
-  vcl_cout <<"Max Value " << c.m_max;
-}  
+  vcl_cout <<"Min Value " << c.m_min
+           <<"Max Value " << c.m_max;
+}
 
 void cmu_1394_camera::print_status(C1394CameraControl const& c)
 {
-  vcl_cout << " Status \n";
+  vcl_cout << " Status\n";
 
-  if(c.m_statusOnePush)
+  if (c.m_statusOnePush)
     vcl_cout << "OnePush  true | ";
   else
     vcl_cout << "OnePush false | ";
 
-  if(c.m_statusOnOff)
+  if (c.m_statusOnOff)
     vcl_cout << "On-Off  true | ";
   else
     vcl_cout << "On-Off false | ";
 
-  if(c.m_statusAutoManual)
+  if (c.m_statusAutoManual)
     vcl_cout << "AutoMan  true\n";
   else
     vcl_cout << "AutoMan false\n";
 
-  vcl_cout << "Value 1 " << c.m_value1 << "\n";
-  vcl_cout << "Value 2 " << c.m_value2 << "\n";
-}  
+  vcl_cout << "Value 1 " << c.m_value1 << '\n'
+           << "Value 2 " << c.m_value2 << '\n';
+}
+
 //----------------------------------------------------------------
 // : update video configuration to current setting
 //
 void cmu_1394_camera::update_video_configuration()
 {
-  if(current_<0||!format_.size())
+  if (current_<0||!format_.size())
     return;
   video_format_ = format_[current_];
   video_mode_ = mode_[current_];
@@ -111,28 +116,29 @@ void cmu_1394_camera::update_video_configuration()
 void cmu_1394_camera::validate_default_configuration()
 {
   int n = format_.size();
-  if(!n)
+  if (!n)
     {
       vcl_cout << "In cmu_1394_camera::validate_configuration() -"
                << " no capabilities (shouldn't happen)\n";
       return;
     }
   bool valid = false;
-  for(int i = 0; i<n&&!valid; i++)
+  for (int i = 0; i<n&&!valid; i++)
     {
-      if(video_format_==format_[i]&&
-         video_mode_ == mode_[i]&&
-         frame_rate_ == rate_[i])
+      if (video_format_==format_[i]&&
+          video_mode_ == mode_[i]&&
+          frame_rate_ == rate_[i])
         {
           current_ = i;
           valid = true;
-        }  
+        }
     }
-  if(valid)
+  if (valid)
     return;
-  if(current_<0)
+  if (current_<0)
     current_ = 0;
 }
+
 void cmu_1394_camera::update_settings()
 {
    if (!camera_present_)
@@ -140,7 +146,7 @@ void cmu_1394_camera::update_settings()
    this->update_video_configuration();
    cmu_1394_camera_params::constrain();
   //Shutter control
-  if(!auto_exposure_)
+  if (!auto_exposure_)
     {
       C1394Camera::m_controlAutoExposure.TurnOn(false);
       C1394Camera::m_controlShutter.TurnOn(true);
@@ -150,7 +156,7 @@ void cmu_1394_camera::update_settings()
       C1394Camera::m_controlAutoExposure.TurnOn(true);
       C1394Camera::m_controlShutter.TurnOn(false);
     }
-  if(!auto_gain_)
+  if (!auto_gain_)
     {
       C1394Camera::m_controlGain.SetAutoMode(false);
       C1394Camera::m_controlGain.TurnOn(true);
@@ -160,12 +166,12 @@ void cmu_1394_camera::update_settings()
   C1394Camera::SetVideoFrameRate(frame_rate_);
   C1394Camera::SetShutter(shutter_);
   C1394Camera::SetBrightness(brightness_);
-  if(auto_exposure_)
+  if (auto_exposure_)
     C1394Camera::SetAutoExposure(exposure_);
-  if(!auto_gain_)
-    C1394Camera::SetGain(gain_);    
+  if (!auto_gain_)
+    C1394Camera::SetGain(gain_);
 }
-//
+
 //-----------------------------------------------------------------
 //: find the standard 1394 capabilities of this camera
 //
@@ -175,10 +181,10 @@ void cmu_1394_camera::init_capabilities()
   mode_.clear();
   rate_.clear();
   capability_desc_.clear();
-  for(int i = 0; i<3; i++)
-    for(int j = 0; j<6; j++)
-      for(int k = 0; k<6; k++)
-        if((*this).m_videoFlags[i][j][k])
+  for (int i = 0; i<3; i++)
+    for (int j = 0; j<6; j++)
+      for (int k = 0; k<6; k++)
+        if ((*this).m_videoFlags[i][j][k])
           {
             vcl_string temp = this->video_configuration(i,j);
             temp += " Fr/Sec(";
@@ -255,14 +261,14 @@ bool cmu_1394_camera::start()
  {
    if (capture_)
      {
-       if(C1394Camera::StartImageCapture())
+       if (C1394Camera::StartImageCapture())
        {
          vcl_cout<< "In cmu_1394_camera::start() - Problem Starting Capture\n";
          return false;
        }
      }
    else
-    if(C1394Camera::StartImageAcquisition())
+    if (C1394Camera::StartImageAcquisition())
        {
          vcl_cout<< "In cmu_1394_camera::start() - Problem Starting Aquisition\n";
          return false;
@@ -314,6 +320,7 @@ bool cmu_1394_camera::get_frame()
     else
       return false;
 }
+
 void cmu_1394_camera::start_capture(vcl_string const & video_file_name)
 {
   vp_ = new vpro_capture_process(video_file_name);
@@ -376,11 +383,11 @@ get_rgb_image(vil1_memory_image_of< vil1_rgb<unsigned char> >& im,
     temp.resize(C1394Camera::m_width, C1394Camera::m_height);
     C1394Camera::getRGB((unsigned char*)temp.get_buffer());
     //cache the frame for live video capture
-    if(file_capture_)
+    if (file_capture_)
        {
         vp_->clear_input();
         vp_->add_input_image(temp);
-        if(!vp_->execute())
+        if (!vp_->execute())
           {
             vcl_cout << "In cmu_1394_camera::get_rbg_image(..) - capture failed\n";
             file_capture_ = false;
@@ -397,9 +404,10 @@ get_rgb_image(vil1_memory_image_of< vil1_rgb<unsigned char> >& im,
     return false;
   }
 }
+
 bool cmu_1394_camera::stop_capture()
 {
-  if(!file_capture_||!vp_)
+  if (!file_capture_||!vp_)
     return false;
   file_capture_ = false;
   return vp_->finish();
@@ -407,15 +415,15 @@ bool cmu_1394_camera::stop_capture()
 
 vcl_ostream& operator << (vcl_ostream& os, const cmu_1394_camera& cp)
 {
-  os << "camera_vendor: " << (char*)cp.m_nameVendor << "\n";
-  os << "camera_model: " << (char*)cp.m_nameModel << "\n";
-  os << "width: " << cp.m_width << "\n";
-  os << "height " << cp.m_height << "\n";
-  os << "supported capabilities " << "\n";
-  for(vcl_vector<vcl_string>::const_iterator cit = cp.capability_desc_.begin();
-      cit != cp.capability_desc_.end(); cit++)
-    os << (*cit) << "\n";
-  os << "link_checked: " << cp.m_linkChecked << "\n";
-  os << "camera_initialized: " << cp.m_cameraInitialized << "\n";
+  os << "camera_vendor: " << (char*)cp.m_nameVendor << '\n'
+     << "camera_model: " << (char*)cp.m_nameModel << '\n'
+     << "width: " << cp.m_width << '\n'
+     << "height " << cp.m_height << '\n'
+     << "supported capabilities\n";
+  for (vcl_vector<vcl_string>::const_iterator cit = cp.capability_desc_.begin();
+       cit != cp.capability_desc_.end(); cit++)
+    os << "  " << (*cit) << '\n';
+  os << "link_checked: " << cp.m_linkChecked << '\n'
+     << "camera_initialized: " << cp.m_cameraInitialized << '\n';
   return os;
 }
