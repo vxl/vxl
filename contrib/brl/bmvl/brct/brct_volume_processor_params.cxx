@@ -13,7 +13,7 @@
 //
 
 brct_volume_processor_params::
-brct_volume_processor_params(const brct_volume_processor_params& vp)
+brct_volume_processor_params(brct_volume_processor_params& vp)
 {
   InitParams(vp.xmin_,
              vp.xmax_,

@@ -323,8 +323,8 @@ overlapping_projections(vcl_vector<vgl_h_matrix_2d<double> > const& homgs,
       vgl_h_matrix_2d<double> H = homgs[cam];
       vgl_h_matrix_2d<double> Hinv = H.get_inverse();
       vgl_h_matrix_2d<double> Hinvt = translate_h(Hinv, tx, ty);
-      vcl_vector<vsol_point_2d_sptr>& hc = harris_corners_[cam];
-      vcl_vector<vsol_point_2d_sptr>& pcs = 
+      vcl_vector<vsol_point_2d_sptr> hc = harris_corners_[cam];
+      vcl_vector<vsol_point_2d_sptr> pcs = 
         this->project_corners(Hinvt, hc);
       corners.push_back(pcs);
     }
@@ -635,7 +635,7 @@ harris_depth_match(vcl_vector<vsol_point_3d_sptr>& points_3d,
         }
 
       //back project the matched corners (cam 1) onto the world x-y-z plane
-      vcl_vector<vsol_point_2d_sptr>& trans_pts = 
+      vcl_vector<vsol_point_2d_sptr> trans_pts = 
         this->project_corners(homgs[1], matched_corners);
       //convert to 3-d points
       for(vcl_vector<vsol_point_2d_sptr>::iterator pit = trans_pts.begin();
@@ -668,7 +668,7 @@ bool brct_plane_sweeper::compute_harris()
       hd.clear();
       hd.set_image(images_[cam]);
       hd.extract_corners();
-      vcl_vector<vsol_point_2d_sptr>& points = hd.get_points();
+      vcl_vector<vsol_point_2d_sptr> points = hd.get_points();
       harris_corners_[cam]=points;
     }
   harris_valid_ = true;
@@ -708,7 +708,7 @@ correlate_corners(vcl_vector<vil1_memory_image_of<float> > const& imgs,
   vcl_vector<vsol_point_2d_sptr> const& pts0 = corners[0],
     pts1 = corners[1];
   //for marking
-  vcl_vector<vsol_point_2d_sptr>& h1 = harris_corners_[1];
+  vcl_vector<vsol_point_2d_sptr> h1 = harris_corners_[1];
   //set the image 0 point_index array at Harris corner locations
   for(vcl_vector<vsol_point_2d_sptr>::const_iterator pit = pts0.begin();
       pit != pts0.end(); pit++)
@@ -946,8 +946,8 @@ match_harris_corners(const int from_cam, const double z,
   orig_to_points.clear();
   float rad = point_radius_;
   int to_cam = 1-from_cam;
-  vcl_vector<vsol_point_2d_sptr>& harris_from = harris_corners_[from_cam];
-  vcl_vector<vsol_point_2d_sptr>& to_points = harris_corners_[to_cam];
+  vcl_vector<vsol_point_2d_sptr> harris_from = harris_corners_[from_cam];
+  vcl_vector<vsol_point_2d_sptr> to_points = harris_corners_[to_cam];
   vcl_vector<vsol_point_2d_sptr> mapped_to_points;
   if(!this->map_points(from_cam, z, harris_from, mapped_to_points))
     return false;
@@ -970,9 +970,9 @@ bool brct_plane_sweeper::harris_sweep(const int from_cam)
   if(!harris_valid_)
     return false;
   this->init_harris_match(from_cam);
-  vcl_vector<vsol_point_2d_sptr>& harris_from = harris_corners_[from_cam];
+  vcl_vector<vsol_point_2d_sptr> harris_from = harris_corners_[from_cam];
   to_cam_ = 1-from_cam;
-  vil1_memory_image_of<float>& orig_to_image = smooth_images_[to_cam_];
+  vil1_memory_image_of<float> orig_to_image = smooth_images_[to_cam_];
   int n_matched = 0;
   int nh = harris_from.size();
   //mark the harris corners in the from_cam that are matched

@@ -37,7 +37,6 @@ class brct_volume_processor : public brct_volume_processor_params
   bool write_changed_volumes_vrml(vcl_string const&  filename);
  protected:
   //local utility functions
-  brct_volume_processor();//not allowed
 
   //flags
 

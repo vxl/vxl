@@ -40,7 +40,7 @@ brct_plane_sweeper_params(const float zmin,
                           const float corr_thresh,
                           const float corr_sigma,
                           const float  intensity_thresh,
-                          sdet_harris_detector_params& hdp
+                          const sdet_harris_detector_params& hdp
                           )
 {
   InitParams( zmin, zmax, nz, point_radius, corr_radius, corr_min, corr_max,
@@ -57,7 +57,7 @@ void brct_plane_sweeper_params::InitParams(float zmin,
                                            float corr_thresh,
                                            float corr_sigma,
                                            float  intensity_thresh,
-                                           sdet_harris_detector_params& hdp
+                                           const sdet_harris_detector_params& hdp
                                            )
 
 {

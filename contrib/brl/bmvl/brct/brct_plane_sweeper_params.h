@@ -28,7 +28,7 @@ class brct_plane_sweeper_params : public gevd_param_mixin
                             const float corr_thresh = 0.25,
                             const float corr_sigma = 1.0,
                             const float  intensity_thresh = 25.0,
-                            sdet_harris_detector_params& hdp =
+                            const sdet_harris_detector_params& hdp =
                             sdet_harris_detector_params()
                             );
 
@@ -49,7 +49,7 @@ class brct_plane_sweeper_params : public gevd_param_mixin
                   float corr_thresh,
                   float corr_sigma,
                   float  intensity_thresh,
-                  sdet_harris_detector_params& hdp
+                  const sdet_harris_detector_params& hdp
                   );
  public:
   //
