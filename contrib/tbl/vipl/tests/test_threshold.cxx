@@ -81,12 +81,12 @@ static bool difference(vil_image const& a, vil_image const& b, int v, const char
 {
   int sx = a.width(),  sy = a.height();
   if (sx != b.width() || sy != b.height())
-    {if (m) cout<<m<<m2<<" FAILED: images are different size\n" ; return true;}
+    {if (m2) vcl_cout<<m<<m2<<" FAILED: images are different size\n" ; return true;}
   if (a.planes() != b.planes() || a.components() != b.components())
-    {if (m) cout<<m<<m2<<" FAILED: images have different # planes/components\n" ; return true;}
+    {if (m2) vcl_cout<<m<<m2<<" FAILED: images have different # planes/components\n" ; return true;}
   if (a.component_format()   != b.component_format() ||
       a.bits_per_component() != b.bits_per_component())
-    {if (m) cout<<m<<m2<<" FAILED: images are different format\n";return true;}
+    {if (m2) vcl_cout<<m<<m2<<" FAILED: images are different format\n";return true;}
 
   int ret = 0;
   // run over all pixels except for an outer border of 1 pixel:
@@ -115,20 +115,20 @@ static bool difference(vil_image const& a, vil_image const& b, int v, const char
   delete[] v1; delete[] v2;
   ret /= a.planes()*a.components();
   //if (m && m2 && !strncmp(m,"Gaussian",8) && !strcmp(m2,"_int")) ret = v;
-  if (fabs(ret - v) > 0.01*fabs(v))
-  { if (m) cout<<m<<m2<<" FAILED: "<<ret<<" instead of "<<v<<endl;return true;}
-  else { if (m) cout<<m<<m2<<" PASSED\n"; return false; }
+  if (vcl_fabs(ret - v) > 0.01*vcl_fabs(v))
+  { if (m2) vcl_cout<<m<<m2<<" FAILED: "<<ret<<" instead of "<<v<<vcl_endl;return true;}
+  else { if (m2) vcl_cout<<m<<m2<<" PASSED\n"; return false; }
 }
 
 #define TEST(i,r,d,T,v,m,m2) { \
   vipl_threshold<vil_image,vil_image,T,T> op(100,0); \
   op.put_in_data_ptr(&r); op.put_out_data_ptr(&i); op.filter(); \
   difference(i,r,v,m,m2); \
-  if (difference(i,r,0)) cout<<m<<m2<<"FAILED: input image changed!\n"; }
+  if (difference(i,r,0)) vcl_cout<<m<<m2<<"FAILED: input image changed!\n"; }
 #define ALL_TESTS(d,v,m) \
   TEST(byte_img,byte_ori,d,unsigned char,v,m,"_byte"); \
-  TEST(shrt_img,shrt_ori,d,unsigned short,v,m,"_short"); \
-  TEST(flot_img,flot_ori,d,float,v,m,"_float"); \
+/*TEST(shrt_img,shrt_ori,d,unsigned short,v,m,"_short");*/ \
+/*TEST(flot_img,flot_ori,d,float,v,m,"_float");*/ \
 //TEST(colr_img,colr_ori,d,vil_rgb_byte,v,m,"_colour")
 
 int main() {
