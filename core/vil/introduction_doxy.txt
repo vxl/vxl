@@ -299,4 +299,10 @@ vil_image_view<vxl_byte> filtered_image = vil_transpose(tmp_image2);
 * \section Examples examples
 * There are plenty of working examples in the examples subdirectory - these can
 * be treated as a mini-tutorial.
+*
+*/
+
+
+/*! \page Design Notes
+* \htmlinclude notes.html
 */
