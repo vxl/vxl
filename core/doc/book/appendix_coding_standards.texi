@@ -44,6 +44,13 @@ to minimise confusing and help avoid potential problems.
 @item Each class, file, function and member variable should have a one
   line Doxygen description (brief line) in addition to the optional long
   description. See @code{core/doc/vxl_doc_rules.*} for further information.
+  Each library should have a file in its directory called
+  @code{introduction_doxy.txt}, containing at least the following:
+  @example
+/*! \mainpage wibble: Succinct Description of wibble.
+*/
+  @end example
+
 
 @item Private member variables should have a underscore as a suffix,
     e.g. @code{value_}. (An underscore as a prefix @code{_value} is not
@@ -66,10 +73,9 @@ to minimise confusing and help avoid potential problems.
      void x(T val) { x_ = val; }  // WRONG!
 @end example
 
-@item Forward declarations for a class in a library @code{val} should be forward
-  declared in @code{val_fwd.h} at the top level of the library. All classes
-  may not be in there; only those someone feels like forward declaring
-  (because it is difficult, etc.).
+@item Any forward declarations in a library @code{val} should
+  be consolidated in @code{val_fwd.h} at the top level of the library.
+  However, there is no requirement to provide forward declarations.
 
 @item A file may have more than one class, provided they "belong". The
   goal of the filename=class name is to make it easy to find
@@ -119,6 +125,9 @@ library your code might neatly fit into. Whole libraries should be added to
 a subdirectory of the contrib directory. @xref{struct_other_packages,
 ,@code{vxl/contrib}}. Get yourself an account on SourceForge, and we'll give
 you commit rights.
+
+If you have already developed your code in a CVS repository, we can arrange
+for your RCS files to get added directly to the repository.
 
 It isn't expected that your code meet the Style Guide or Coding Standards on
 its first commit to the repository. But you will have to put some effort
