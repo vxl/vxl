@@ -1,3 +1,3 @@
-#include <oxp/ImageWarp.cxx>
+#include <oxp/ImageWarp.txx>
 
 template class ImageWarp<unsigned char>;

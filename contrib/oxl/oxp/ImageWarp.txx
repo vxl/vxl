@@ -144,8 +144,8 @@ void ImageWarp<PixelType>::warp_inverse(Mapping_2d_2d& map, const vil_memory_ima
       double ixd, iyd;
       map.inverse_map(double(ox + out_offset_x), double(oy + out_offset_y), &ixd, &iyd);
 
-      switch (1) { 
-      case 1: {
+//    switch (1) { 
+//    case 1: {
 	// nearest neigbour
 	int ix = vnl_math_rnd(ixd);
 	int iy = vnl_math_rnd(iyd);
@@ -153,19 +153,17 @@ void ImageWarp<PixelType>::warp_inverse(Mapping_2d_2d& map, const vil_memory_ima
 	  out(ox, oy) = in(ix,iy);
 	else
 	  out(ox, oy) = vnl_numeric_traits<PixelType>::zero;
-	break;
-      } 
-      case 2: {
-	// bilinear
-//abort(); // is not defined without #include <vcl/vcl_cstdlib.h>
-	// out(ox, oy) = vbl_clamp(in.bilinear(ixd, iyd), (PixelType*)0);
-	break;
-      } 
-      case 3: {
-//abort(); // is not defined without #include <vcl/vcl_cstdlib.h>
-	// out(ox, oy) = clamp(in.bicubic(ixd, iyd), (PixelType*)0);
-	break;
-      }
-      }
+//	break;
+//    } 
+//    case 2: {
+//	// bilinear
+//	out(ox, oy) = vbl_clamp(in.bilinear(ixd, iyd), (PixelType*)0);
+//	break;
+//      } 
+//    case 3: {
+//	out(ox, oy) = clamp(in.bicubic(ixd, iyd), (PixelType*)0);
+//	break;
+//    }
+//    }
     }
 }
