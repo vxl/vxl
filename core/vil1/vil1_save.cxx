@@ -95,7 +95,9 @@ void vil_save_rgb_template(T const* p, int w, int h, vcl_string const& fn)
   unsigned char* o = (unsigned char*)out.get_buffer();
   T const* p_end = p + w*h*3;
   while (p != p_end)
-    *o++ = *p++; // FIXME - possible loss of data! (e.g. clipping)
+    // possible loss of data! (e.g. clipping)
+    // agap: but it's okay because the input values are in 0..255
+    *o++ = (unsigned char)(*p++);
   vil_save(out, fn.c_str());
 }
 
@@ -107,7 +109,9 @@ void vil_save_gray_template(T const* p, int w, int h, vcl_string const& fn)
   unsigned char* o = out.get_buffer();
   T const* p_end = p + w*h;
   while (p != p_end)
-    *o++ = *p++; // FIXME - possible loss of data! (e.g. clipping)
+    // possible loss of data! (e.g. clipping)
+    // agap: but it's okay because the input values are in 0..255
+    *o++ = (unsigned char)(*p++);
   vil_save(out, fn.c_str());
 }
 
