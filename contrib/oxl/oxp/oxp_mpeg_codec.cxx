@@ -631,7 +631,7 @@ static int demux(oxp_mpeg_codec_data* impl, unsigned char const *buf, unsigned c
   //     of data before the next header.
   //
   // NEEDBYTES makes sure we have the requested number of bytes for a
-  // header. If we dont, it copies what we have into head_buf and returns,
+  // header. If we don't, it copies what we have into head_buf and returns,
   // so that when we come back with more data we finish decoding this header.
   //
   // DONEBYTES updates "buf" to point after the header we just parsed.
