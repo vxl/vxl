@@ -1,6 +1,5 @@
-// -*- c++ -*-
-#ifndef vcl_gcc295_v3_vector_txx_
-#define vcl_gcc295_v3_vector_txx_
+#ifndef vcl_gcc_libstdcxx_v3_vector_txx_
+#define vcl_gcc_libstdcxx_v3_vector_txx_
 
 #include <vcl_vector.h>
 
