@@ -19,6 +19,7 @@ TESTS += test_spline.cxx
 TESTS += test_trans_reader.cxx
 PARAMS_test_trans_reader := affine_xform.txt
 TESTS += test_transformation.cxx
+TESTS += test_feature_region.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

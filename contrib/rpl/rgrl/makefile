@@ -114,6 +114,21 @@ MANPAGE_SOURCES += rgrl_view_sptr.h
 MANPAGE_SOURCES += rgrl_macros.h
 MANPAGE_SOURCES += rgrl_copyright.h
 
+SOURCES += rgrl_evaluator_ssd.cxx
+SOURCES += rgrl_feature_face_region.cxx
+SOURCES += rgrl_feature_point_region.cxx
+SOURCES += rgrl_feature_region.cxx
+SOURCES += rgrl_feature_trace_region.cxx
+
+MANPAGE_SOURCES += rgrl_evaluator.h
+MANPAGE_SOURCES += rgrl_evaluator_sptr.h
+MANPAGE_SOURCES += rgrl_matcher_pseudo.h
+MANPAGE_SOURCES += rgrl_matcher_pseudo.txx
+MANPAGE_SOURCES += rgrl_matcher_pseudo_3d.h
+MANPAGE_SOURCES += rgrl_matcher_pseudo_3d.txx
+MANPAGE_SOURCES += rgrl_matcher_pseudo_int_3d.h
+MANPAGE_SOURCES += rgrl_matcher_pseudo_int_3d.txx
+
 #######################################
 include ${IUEROOT}/config/top-params.mk
 #######################################

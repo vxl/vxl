@@ -1,5 +1,6 @@
 USES += contrib/rpl core
 include ../config.mk
+include $(IUEROOT)/core/vil/algo/config.mk
 include $(IUEROOT)/core/testlib/config.mk
 
 TESTS += registration1.cxx
@@ -21,6 +22,10 @@ TESTS += registration_range_data_blackbox.cxx
 PARAMS_registration_range_data_blackbox := dragonStandRight_0_normals.txt
 TESTS += estimate_normals_3d.cxx
 PARAMS_estimate_normals_3d := IMG0002.pgm.txt IMG0002.pgm.out.txt
+TESTS += match_2d.cxx
+PARAMS_match_2d := 1 sigcube1_face_features.txt sigcube1.png sigcube2.png -init init_xform_flipped_y.txt -model affine
+TESTS += match_2d_multi.cxx
+PARAMS_match_2d_multi := 1 sigcube1_face_features.txt sigcube1.png sigcube2.png -init init_xform_flipped_y.txt -model affine
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
