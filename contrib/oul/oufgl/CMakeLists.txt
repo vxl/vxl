@@ -3,6 +3,7 @@
 SET(oufgl_sources
   asyncio.h                 asyncio.cxx
   frame_grabber_pxc200.h    frame_grabber_pxc200.cxx
+  frame_grabber_v4l.h    frame_grabber_v4l.cxx
 
   bt848.h
   bt848-addons.h
@@ -12,4 +13,6 @@ SET(oufgl_sources
 )
 
 ADD_LIBRARY(oufgl ${oufgl_sources})
-TARGET_LINK_LIBRARIES( oufgl vil1 )
+TARGET_LINK_LIBRARIES( oufgl vil1 rt)
+
+SUBDIRS(examples)

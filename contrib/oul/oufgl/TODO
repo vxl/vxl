@@ -1,0 +1,12 @@
+TODO for oufgl
+--------------
+
+In no particular order:
+
+- add support for video-for-windows stuff
+- fix up asynchronous stuff for v4l
+- add colour capture to v4l (actually this should be fairly easy)
+- convert over to vil from vil1
+- perhaps add new controllers into the top level directory such as
+pan/tilt/zoom etc.
+- add more control in for different colour spaces etc
