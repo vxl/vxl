@@ -135,7 +135,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
         // store this product to save computation
         DtB = D.transpose() * B;
-        XtWX += wgt * DtB * D;
+        XtWX += (DtB * D) * wgt;
 
         // add w*XtBq to XtWy
         DtBq = DtB * to_pt;

@@ -127,7 +127,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
         Dt(0,1) = from_pt[1]; Dt(1,1) =  from_pt[0]; Dt(3,1) = 1;
         
         DtB = Dt * B;
-        XtWX += wgt * DtB * D;
+        XtWX += (DtB * D) * wgt;
 
         // add w*DtBq to XtWy
         // DtBq = to_pt.pre_multiply( DtB );
