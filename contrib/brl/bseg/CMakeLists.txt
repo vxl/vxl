@@ -14,6 +14,9 @@ SUBDIRS(vpro)
 # tracking
 SUBDIRS(strk)
 
+# markov random fields
+SUBDIRS(bmrf)
+
 # misc 
 #SUBDIRS(bcons)
 
