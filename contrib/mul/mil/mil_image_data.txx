@@ -1,11 +1,11 @@
+// This is mul/mil/mil_image_data.txx
 #ifndef mil_image_data_txx_
 #define mil_image_data_txx_
-
 //: \file
 //  \brief Ref. counted block of data on the heap
 //  \author Tim Cootes
 
-#include <mil/mil_image_data.h>
+#include "mil_image_data.h"
 #include <vsl/vsl_binary_io.h>
 #include <vcl_iostream.h>
 #include <vcl_cstring.h>
@@ -37,7 +37,7 @@ template<class T>
 mil_image_data<T>& mil_image_data<T>::operator=(const mil_image_data& d)
 {
   if (this==&d) return *this;
-  
+
   resize(d.size());
   vcl_memcpy(data_,d.data_,size_*sizeof(T));
   return *this;
@@ -110,8 +110,8 @@ void mil_image_data<T>::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
   vsl_b_write(bfs,size_);
-  if (size_);
-  vsl_b_write_block(bfs,data_,size_);
+  if (size_)
+    vsl_b_write_block(bfs,data_,size_);
 }
 
 //: Load class from binary stream
@@ -128,8 +128,8 @@ void mil_image_data<T>::b_read(vsl_b_istream& bfs)
   case (1):
     vsl_b_read(bfs,n);
     resize(n);
-    if (n);
-    vsl_b_read_block(bfs,data_,size_);
+    if (n)
+      vsl_b_read_block(bfs,data_,n);
     break;
   default:
     vcl_cerr << "I/O ERROR: mil_image_data<T>::b_read(vsl_b_istream&) \n";
