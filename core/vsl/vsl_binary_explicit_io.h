@@ -1,4 +1,4 @@
-// This is ./vxl/vsl/vsl_binary_explicit_io.h
+// This is vxl/vsl/vsl_binary_explicit_io.h
 #ifndef vsl_binary_explicit_io_h_
 #define vsl_binary_explicit_io_h_
 //:
@@ -52,7 +52,9 @@
 // Apply this function to your floating-point data to convert from system
 // format to I/O format. Apply the same function to do the reverse conversion.
 //
+// \param ptr   The buffer to be byte-swapped.
 // \param nbyte The length of the fundamental type, e.g. sizeof(float).
+// \param nelem The number of elements in the buffer (default: 1).
 //
 // The standard I/O format is little-endian. The code assumes that
 // your system's floats and doubles are stored in memory in either
@@ -168,8 +170,9 @@ inline unsigned long vsl_convert_to_arbitrary_length(const unsigned long* ints,
 //: Decode a buffer of arbitrary length integers
 // Converts from the integers from the arbitrary length format into
 // an array of normal longs.
-// \param count Number of integers expected. Cannot be zero.
-// \param ints should point to a buffer at least as long as count.
+// \param buffer The buffer to be converted.
+// \param count  Number of integers expected. Cannot be zero.
+// \param ints   should point to a buffer at least as long as count.
 // \return the number of bytes used, or zero on error.
 inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
   unsigned long *ints, unsigned long count = 1)
@@ -240,8 +243,9 @@ inline unsigned long vsl_convert_to_arbitrary_length(const signed long* ints,
 //: Decode a buffer of arbitrary length integers
 // Converts from the integers from the arbitrary length format into
 // an array of normal longs.
-// \param count Number of integers expected. Cannot be zero.
-// \param ints should point to a buffer at least as long as count.
+// \param buffer The buffer to be converted.
+// \param count  Number of integers expected. Cannot be zero.
+// \param ints   should point to a buffer at least as long as count.
 // \return the number of bytes used, or zero on error.
 inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
   signed long *ints, unsigned long count = 1)
@@ -318,8 +322,9 @@ inline unsigned long vsl_convert_to_arbitrary_length(const unsigned int* ints,
 //: Decode a buffer of arbitrary length integers
 // Converts from the integers from the arbitrary length format into
 // an array of normal ints.
-// \param count Number of integers expected. Cannot be zero.
-// \param ints should point to a buffer at least as long as count.
+// \param buffer The buffer to be converted.
+// \param count  Number of integers expected. Cannot be zero.
+// \param ints   should point to a buffer at least as long as count.
 // \return the number of bytes used, or zero on error.
 inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
   unsigned int *ints, unsigned long count = 1)
@@ -392,8 +397,9 @@ inline unsigned long vsl_convert_to_arbitrary_length(const signed int* ints,
 //: Decode a buffer of arbitrary length integers
 // Converts from the integers from the arbitrary length format into
 // an array of normal ints.
-// \param count Number of integers expected. Cannot be zero.
-// \param ints should point to a buffer at least as long as count.
+// \param buffer The buffer to be converted.
+// \param count  Number of integers expected. Cannot be zero.
+// \param ints   should point to a buffer at least as long as count.
 // \return the number of bytes used, or zero on error.
 inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
   signed int *ints, unsigned long count = 1)
@@ -471,8 +477,9 @@ inline unsigned long vsl_convert_to_arbitrary_length(const unsigned short* ints,
 //: Decode a buffer of arbitrary length integers
 // Converts from the integers from the arbitrary length format into
 // an array of normal ints.
-// \param count Number of integers expected. Cannot be zero.
-// \param ints should point to a buffer at least as long as count.
+// \param buffer The buffer to be converted.
+// \param count  Number of integers expected. Cannot be zero.
+// \param ints   should point to a buffer at least as long as count.
 // \return the number of bytes used, or zero on error.
 inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
 unsigned short *ints, unsigned long count = 1)
@@ -545,8 +552,9 @@ inline unsigned long vsl_convert_to_arbitrary_length(const signed short* ints,
 //: Decode a buffer of arbitrary length integers
 // Converts from the integers from the arbitrary length format into
 // an array of normal ints.
-// \param count Number of integers expected. Cannot be zero.
-// \param ints should point to a buffer at least as long as count.
+// \param buffer The buffer to be converted.
+// \param count  Number of integers expected. Cannot be zero.
+// \param ints   should point to a buffer at least as long as count.
 // \return the number of bytes used, or zero on error.
 inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buffer,
   signed short *ints, unsigned long count = 1)
