@@ -6,7 +6,7 @@
 // \author fsm
 // \brief  Tableau to go at the top of one's tableau hierarchy.
 //
-//  Contains classes:  vgui_shell_tableau  vgui_shell_tableau_new
+//  Contains classes:  vgui_shell_tableau  vgui_shell_tableau_new  vgui_shell_tableau_bindings
 //
 // \verbatim
 //  Modifications
