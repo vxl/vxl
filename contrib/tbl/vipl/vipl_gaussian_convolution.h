@@ -89,4 +89,8 @@ public:
   bool postop();
 };
 
+#ifdef INSTANTIATE_TEMPLATES
+#include "vipl_gaussian_convolution.txx"
+#endif
+
 #endif // vipl_gaussian_convolution_h_

@@ -120,4 +120,8 @@ public:
   bool section_applyop();
 };
 
+#ifdef INSTANTIATE_TEMPLATES
+#include "vipl_histogram.txx"
+#endif
+
 #endif // vipl_histogram_h_

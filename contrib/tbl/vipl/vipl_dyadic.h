@@ -53,8 +53,10 @@ public:
 
 // -+-+- required method for filters: -+-+-
   bool section_applyop();
-
 };
 
+#ifdef INSTANTIATE_TEMPLATES
+#include "vipl_dyadic.txx"
+#endif
 
 #endif // vipl_dyadic_h_

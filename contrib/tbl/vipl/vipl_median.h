@@ -68,8 +68,10 @@ public:
 // -+-+- optional method for filters, compute mask only once in preop, free in postop: -+-+-
   bool preop();
   bool postop();
-
 };
 
+#ifdef INSTANTIATE_TEMPLATES
+#include "vipl_median.txx"
+#endif
 
 #endif // vipl_median_h_

@@ -68,8 +68,10 @@ public:
 // -+-+- optional method for filters, compute mask only once in preop, free in postop: -+-+-
   bool preop();
   bool postop();
-
 };
 
+#ifdef INSTANTIATE_TEMPLATES
+#include "vipl_erode_disk.txx"
+#endif
 
 #endif // vipl_erode_disk_h_

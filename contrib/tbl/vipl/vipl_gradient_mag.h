@@ -47,8 +47,10 @@ public:
 
 // -+-+- required method for filters: -+-+-
   bool section_applyop();
-
 };
 
+#ifdef INSTANTIATE_TEMPLATES
+#include "vipl_gradient_mag.txx"
+#endif
 
 #endif // vipl_gradient_mag_h_

@@ -53,8 +53,10 @@ public:
 
 // -+-+- required method for filters: -+-+-
   bool section_applyop();
-
 };
 
+#ifdef INSTANTIATE_TEMPLATES
+#include "vipl_monadic.txx"
+#endif
 
 #endif // vipl_monadic_h_

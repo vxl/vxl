@@ -46,8 +46,10 @@ public:
 
 // -+-+- required method for filters: -+-+-
   bool section_applyop();
-
 };
 
+#ifdef INSTANTIATE_TEMPLATES
+#include "vipl_gradient_dir.txx"
+#endif
 
 #endif // vipl_gradient_dir_h_

@@ -79,8 +79,10 @@ public:
 
 // -+-+- required method for filters: -+-+-
   bool section_applyop();
-
 };
 
+#ifdef INSTANTIATE_TEMPLATES
+#include "vipl_add_random_noise.txx"
+#endif
 
 #endif // vipl_add_random_noise_h_

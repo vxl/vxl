@@ -61,8 +61,10 @@ public:
 
   // -+-+- required method for filters: -+-+-
   bool section_applyop();
-
 };
 
+#ifdef INSTANTIATE_TEMPLATES
+#include "vipl_moment.txx"
+#endif
 
 #endif // vipl_moment_h_

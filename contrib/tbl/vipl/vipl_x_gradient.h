@@ -52,8 +52,10 @@ public:
 
 // -+-+- required method for filters: -+-+-
   bool section_applyop();
-
 };
 
+#ifdef INSTANTIATE_TEMPLATES
+#include "vipl_x_gradient.txx"
+#endif
 
 #endif // vipl_x_gradient_h_

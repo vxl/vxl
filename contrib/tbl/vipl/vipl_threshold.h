@@ -72,8 +72,10 @@ public:
 
 // -+-+- required method for filters: -+-+-
   bool section_applyop();
-
 };
 
+#ifdef INSTANTIATE_TEMPLATES
+#include "vipl_threshold.txx"
+#endif
 
 #endif // vipl_threshold_h_

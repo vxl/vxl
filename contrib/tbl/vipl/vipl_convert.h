@@ -40,8 +40,10 @@ public:
 
 // -+-+- required method for filters: -+-+-
   bool section_applyop();
-
 };
 
+#ifdef INSTANTIATE_TEMPLATES
+#include "vipl_convert.txx"
+#endif
 
 #endif // vipl_convert_h_

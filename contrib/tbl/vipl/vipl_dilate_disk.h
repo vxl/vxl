@@ -71,7 +71,10 @@ public:
 // -+-+- optional method for filters, compute mask only once in preop, free in postop: -+-+-
   bool preop();
   bool postop();
-
 };
+
+#ifdef INSTANTIATE_TEMPLATES
+#include "vipl_dilate_disk.txx"
+#endif
 
 #endif // vipl_dilate_disk_h_
