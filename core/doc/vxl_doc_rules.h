@@ -4,10 +4,9 @@
 #pragma interface
 #endif
 
-//            (This is an example of how to code document your    ) 
+//            (This is an example of how to code document your    )
 //            ( file. Comments with brackets, like this one,      )
-//            ( should be read but not copied into your file.     )                       
-
+//            ( should be read but not copied into your file.     )
 
 //            (The style used here is specific to VXL             )
 //            ( It is based on doxygen, with modifications.       )
@@ -23,9 +22,7 @@
 //            (A simple perl script converts this notation        )
 //            ( to full doxygen format on the fly.                )
 
-
-
-// This is vxl_doc_rules.h 
+// This is vxl_doc_rules.h
 
 //            (The above line indicates the file name             )
 //            ( the \file command below tells Doxygen which       )
@@ -56,16 +53,20 @@
 // Everything between these tags is not formatted but kept "as is".
 // This is similar to the \verbatim command in LaTeX.
 // \endverbatim
+// For a list of items, you do not need verbatim:
+// - first item
+// - second item
 // The long description ends here
+
 class my_class {
 public:
 
-  //: Brief description of method don't forget the colon
-  // Do not leave any blank lines with out the //, or doxygen
+  //: Brief description of method. Don't forget the colon
+  // Do not leave any blank lines without the //, or doxygen
   // will think you have ended the documentation comment, and
   // started an ordinary code comment.
   //
-  // If you want to start a new parapraph, put it a line with just //
+  // If you want to start a new parapraph, put a line with just //
   //
   // If you want to do some special stuff such as formulas, have
   // a look at the doxygen documentation http://www.stack.nl/~dimitri/doxygen/
@@ -80,7 +81,6 @@ public:
     VXL_COMPLEX,    /*!< This works for Doxygen only */
     VXL_DOUBLE      /*!< Remark the needed '<' for this ! */
   };
-
 };
 
 #endif // vxl_doc_rules_h_
