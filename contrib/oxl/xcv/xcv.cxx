@@ -412,7 +412,10 @@ void xcv_window_size_traditional(int rows, int cols,
                                  unsigned *window_w, unsigned *window_h,
                                  double *viewer_scale)
 {
-  assert(rows > 0 && cols > 0);
+  // kym - don't add the assert below - it OK for xcv to
+  // start empty (eg. to load images from the menu bar):
+  // assert(rows > 0 && cols > 0);
+
   assert(window_w && window_h && viewer_scale);
   *window_w = 0;
   *window_h = 0;
