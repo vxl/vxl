@@ -88,7 +88,7 @@ int main(int argc,
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Test set_beat() and beat() of vcsl_transformation..."<< vcl_flush;
-  assert(scale->beat()==&tr0_beat);
+  assert(scale->beat()==tr0_beat);
   vcl_cout<<"passed"<<vcl_endl;
 
   vcl_cout<<"Creation of scale_values..."<< vcl_flush;
@@ -107,7 +107,7 @@ int main(int argc,
 
   vcl_cout<<"Test set_scale() and scale() of vcsl_scale...";
   vcl_cout<< vcl_flush;
-  assert(scale->scale()==&scale_values);
+  assert(scale->scale()==scale_values);
   vcl_cout<<"passed"<<vcl_endl;
 
   vcl_cout<<"Creation of scale_interpolators..."<< vcl_flush;
@@ -124,7 +124,7 @@ int main(int argc,
 
   vcl_cout<<"Test set_interpolators() and interpolators() of ";
   vcl_cout<<"vcsl_scale..."<< vcl_flush;
-  assert(scale->interpolators()==&scale_interpolators);
+  assert(scale->interpolators()==scale_interpolators);
   vcl_cout<<"passed"<<vcl_endl;
 
   vcl_cout<<"Creation of motion..."<< vcl_flush;

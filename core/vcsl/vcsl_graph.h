@@ -1,5 +1,8 @@
 #ifndef vcsl_graph_h
 #define vcsl_graph_h
+#ifdef __GNUC__
+#pragma interface
+#endif
 
 //:
 // \file
@@ -7,7 +10,8 @@
 // Modifications
 // \verbatim
 // 2000/08/01 François BERTEL Creation.
-// 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
+// 2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
+// 2002/01/28 Peter Vanroose - vcl_vector member vertices_ changed to non-ptr
 // \endverbatim
 
 
@@ -29,10 +33,10 @@ public:
   //***************************************************************************
 
   //: Default constructor
-  explicit vcsl_graph(void);
+  explicit vcsl_graph(void) {}
 
   //: Destructor
-  virtual ~vcsl_graph();
+  virtual ~vcsl_graph() {}
 
   //***************************************************************************
   // Measurement
@@ -49,7 +53,7 @@ public:
   virtual bool has(const vcsl_spatial_sptr &cs) const;
 
   //: Is `index' valid in the list of the spatial coordinate systems ?
-  virtual bool valid_index(const int index) const;
+  virtual bool valid_index(int index) const;
 
   //***************************************************************************
   // Access
@@ -57,7 +61,7 @@ public:
 
   //: Spatial coordinate system number `index'
   //  REQUIRE: valid_index(index)
-  virtual vcsl_spatial_sptr item(const int index) const;
+  virtual vcsl_spatial_sptr item(int index) const;
 
   //: Add `cs' in `this'
   //  REQUIRE: !has(cs)
@@ -78,7 +82,7 @@ public:
 protected:
 
   //: Vertices of the graph: all the spatial coordinate systems
-  vcl_vector<vcsl_spatial_sptr> *vertices_;
+  vcl_vector<vcsl_spatial_sptr> vertices_;
 };
 
 #endif // vcsl_graph_h

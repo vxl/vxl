@@ -1,5 +1,8 @@
 #ifndef vcsl_perspective_h
 #define vcsl_perspective_h
+#ifdef __GNUC__
+#pragma interface
+#endif
 
 //:
 // \file
@@ -9,6 +12,7 @@
 // 2000/08/23 François BERTEL Creation.
 // 2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
 // 2002/01/22 Peter Vanroose - return type of execute() and inverse() changed to non-ptr
+// 2002/01/28 Peter Vanroose - vcl_vector member focal_ changed to non-ptr
 // \endverbatim
 
 
@@ -29,10 +33,10 @@ public:
   //***************************************************************************
 
   //: Default constructor.
-  explicit vcsl_perspective(void);
+  explicit vcsl_perspective(void) {}
 
   //: Destructor
-  virtual ~vcsl_perspective();
+  virtual ~vcsl_perspective() {}
 
   //***************************************************************************
   // Status report
@@ -40,7 +44,7 @@ public:
 
   //: Is `this' invertible at time `time'? Never !
   //  REQUIRE: valid_time(time)
-  virtual bool is_invertible(const double time) const;
+  virtual bool is_invertible(double time) const;
 
   //: Is `this' correctly set ?
   virtual bool is_valid(void) const;
@@ -50,13 +54,13 @@ public:
   //***************************************************************************
 
   //: Set the focal in meters of a static perspective projection
-  virtual void set_static(const double new_focal);
+  void set_static(double new_focal);
 
   //: Set the focal variation along the time in meters
-  virtual void set_focal(list_of_scalars &new_focal);
+  virtual void set_focal(list_of_scalars const& new_focal);
 
   //: Return the focal variation along the time in meters
-  virtual list_of_scalars *focal(void) const;
+  virtual list_of_scalars focal(void) const { return focal_; }
 
   //***************************************************************************
   // Basic operations
@@ -66,22 +70,22 @@ public:
   //  REQUIRE: is_valid()
   //  REQUIRE: v.size()==3
   virtual vnl_vector<double> execute(const vnl_vector<double> &v,
-                                     const double time) const;
+                                     double time) const;
 
   //: Image of `v' by the inverse of `this'
   //  REQUIRE: is_valid()
   //  REQUIRE: is_invertible(time) and v.size()==2
   //  The first pre-condition is never true. You can not use this method
   virtual vnl_vector<double> inverse(const vnl_vector<double> &v,
-                                     const double time) const;
+                                     double time) const;
 
 protected:
 
   //: Compute the parameter at time `time'
-  virtual double focal_value(const double time) const;
+  virtual double focal_value(double time) const;
 
   //: Angle variation along the time
-  list_of_scalars *focal_;
+  list_of_scalars focal_;
 };
 
 #endif // vcsl_perspective_h

@@ -1,5 +1,8 @@
 #ifndef vcsl_matrix_h
 #define vcsl_matrix_h
+#ifdef __GNUC__
+#pragma interface
+#endif
 
 //:
 // \file
@@ -8,6 +11,7 @@
 // \verbatim
 // 2000/07/19 François BERTEL Creation.
 // 2002/01/22 Peter Vanroose - return type of execute() and inverse() changed to non-ptr
+// 2002/01/28 Peter Vanroose - vcl_vector member matrix_ changed to non-ptr
 // \endverbatim
 
 #include <vcsl/vcsl_matrix_param.h>
@@ -25,7 +29,7 @@ class vcsl_matrix
 public:
 #if 0
   //: Direction vector variation along the time
-  vcl_vector<vnl_vector<double> *> *_vector;
+  vcl_vector<vnl_vector<double> *> _vector;
 #endif
 
   //***************************************************************************
@@ -33,10 +37,10 @@ public:
   //***************************************************************************
 
   //: Default constructor
-  explicit vcsl_matrix(void);
+  explicit vcsl_matrix(void) {}
 
   //: Destructor
-  virtual ~vcsl_matrix();
+  virtual ~vcsl_matrix() {}
 
   //***************************************************************************
   // Status report
@@ -44,7 +48,7 @@ public:
 
   //: Is `this' invertible at time `time'?
   //  REQUIRE: valid_time(time)
-  virtual bool is_invertible(const double time) const;
+  virtual bool is_invertible(double time) const;
 
   //: Is `this' correctly set ?
   virtual bool is_valid(void) const;
@@ -54,27 +58,26 @@ public:
   //***************************************************************************
 
   //: Set the parameters of a static translation
-  virtual void set_static( vcsl_matrix_param_sptr new_matrix);
+  void set_static( vcsl_matrix_param_sptr new_matrix);
 
   //: Set the direction vector variation along the time
-  virtual void set_matrix(list_of_vcsl_matrix_param_sptr &new_matrix);
+  virtual void set_matrix(list_of_vcsl_matrix_param_sptr const& new_matrix);
 
-
-  virtual list_of_vcsl_matrix_param_sptr *matrix_list(void) const;
+  virtual list_of_vcsl_matrix_param_sptr matrix_list(void) const { return matrix_; }
 
   virtual vnl_vector<double> execute(const vnl_vector<double> &v,
-                                     const double time) const;
+                                     double time) const;
 
   virtual vnl_vector<double> inverse(const vnl_vector<double> &v,
-                                     const double time) const;
+                                     double time) const;
 
 protected:
 
   vnl_matrix<double> param_to_matrix( vcsl_matrix_param_sptr from,bool type ) const;
 
-  vnl_matrix<double> matrix_value(const double time, bool type) const;
+  vnl_matrix<double> matrix_value(double time, bool type) const;
 
-  list_of_vcsl_matrix_param_sptr *matrix_;
+  list_of_vcsl_matrix_param_sptr matrix_;
 };
 
 #endif // vcsl_matrix_h

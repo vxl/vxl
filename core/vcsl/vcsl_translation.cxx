@@ -1,23 +1,7 @@
+#ifdef __GNUC__
+#pragma implementation
+#endif
 #include <vcsl/vcsl_translation.h>
-
-//***************************************************************************
-// Constructors/Destructor
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-// Default constructor
-//---------------------------------------------------------------------------
-vcsl_translation::vcsl_translation(void)
-{
-  vector_=0;
-}
-
-//---------------------------------------------------------------------------
-// Destructor
-//---------------------------------------------------------------------------
-vcsl_translation::~vcsl_translation()
-{
-}
 
 //***************************************************************************
 // Status report
@@ -27,7 +11,7 @@ vcsl_translation::~vcsl_translation()
 // Is `this' invertible at time `time'?
 // REQUIRE: valid_time(time)
 //---------------------------------------------------------------------------
-bool vcsl_translation::is_invertible(const double time) const
+bool vcsl_translation::is_invertible(double time) const
 {
   // require
   assert(valid_time(time));
@@ -40,44 +24,29 @@ bool vcsl_translation::is_invertible(const double time) const
 //---------------------------------------------------------------------------
 bool vcsl_translation::is_valid(void) const
 {
-  return (vector_!=0)&&(((beat_==0)&&(interpolator_==0)&&(vector_->size()==1))
-                        ||
-                        ((beat_!=0)&&(interpolator_!=0)
-                         &&(beat_->size()==(interpolator_->size()+1))
-                         &&(beat_->size()==vector_->size())));
+  return (beat_.size()==0&&vector_.size()==1) ||
+         (beat_.size()==interpolator_.size()+1&&beat_.size()==vector_.size());
 }
 
 //***************************************************************************
 // Transformation parameters
 //***************************************************************************
+
 //---------------------------------------------------------------------------
 // Set the parameters of a static translation
 //---------------------------------------------------------------------------
-void vcsl_translation::set_static(vnl_vector<double> &new_vector)
+void vcsl_translation::set_static(vnl_vector<double> const& new_vector)
 {
-  if(vector_==0||vector_->size()!=1)
-    vector_=new list_of_vectors(1);
-  (*vector_)[0]=&new_vector;
-  beat_=0;
-  interpolator_=0;
+  vector_.clear(); vector_.push_back(new_vector);
+  vcsl_spatial_transformation::set_static();
 }
 
 //---------------------------------------------------------------------------
-// Set the direction vector variation along the time
+//: Set the direction vector variation along the time
 //---------------------------------------------------------------------------
-void vcsl_translation::set_vector(list_of_vectors &new_vector)
+void vcsl_translation::set_vector(list_of_vectors const& new_vector)
 {
-  if(vector_!=0&&vector_->size()==1)
-    delete vector_;
-  vector_=&new_vector;
-}
-
-//---------------------------------------------------------------------------
-// Return the angle variation along the time
-//---------------------------------------------------------------------------
-list_of_vectors *vcsl_translation::vector(void) const
-{
-  return vector_;
+  vector_=new_vector;
 }
 
 //***************************************************************************
@@ -89,7 +58,7 @@ list_of_vectors *vcsl_translation::vector(void) const
 // REQUIRE: is_valid()
 //---------------------------------------------------------------------------
 vnl_vector<double> vcsl_translation::execute(const vnl_vector<double> &v,
-                                             const double time) const
+                                             double time) const
 {
   // require
   assert(is_valid());
@@ -108,7 +77,7 @@ vnl_vector<double> vcsl_translation::execute(const vnl_vector<double> &v,
 // REQUIRE: is_invertible(time)
 //---------------------------------------------------------------------------
 vnl_vector<double> vcsl_translation::inverse(const vnl_vector<double> &v,
-                                             const double time) const
+                                             double time) const
 {
   // require
   assert(is_valid());
@@ -125,17 +94,17 @@ vnl_vector<double> vcsl_translation::inverse(const vnl_vector<double> &v,
 //---------------------------------------------------------------------------
 // Compute the value of the parameter at time `time'
 //---------------------------------------------------------------------------
-vnl_vector<double> vcsl_translation::vector_value(const double time) const
+vnl_vector<double> vcsl_translation::vector_value(double time) const
 {
-  if(beat_==0) // static
-    return *((*vector_)[0]);
+  if(beat_.size()==0) // static
+    return vector_[0];
   else
     {
       int i=matching_interval(time);
-      switch((*interpolator_)[i])
+      switch(interpolator_[i])
         {
         case vcsl_linear:
-          return lvi(*(*vector_)[i],*(*vector_)[i+1],i,time);
+          return lvi(vector_[i],vector_[i+1],i,time);
         case vcsl_cubic:
           assert(false); // Not yet implemented
           break;

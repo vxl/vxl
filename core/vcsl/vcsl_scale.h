@@ -1,5 +1,8 @@
 #ifndef vcsl_scale_h
 #define vcsl_scale_h
+#ifdef __GNUC__
+#pragma interface
+#endif
 
 //:
 // \file
@@ -9,6 +12,7 @@
 // 2000/07/19 François BERTEL Creation.
 // 2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
 // 2002/01/22 Peter Vanroose - return type of execute() and inverse() changed to non-ptr
+// 2002/01/28 Peter Vanroose - vcl_vector member scale_ changed to non-ptr
 // \endverbatim
 
 
@@ -25,10 +29,10 @@ public:
   //***************************************************************************
 
   //: Default constructor
-  explicit vcsl_scale(void);
+  explicit vcsl_scale(void) {}
 
   //: Destructor
-  virtual ~vcsl_scale();
+  virtual ~vcsl_scale() {}
 
   //***************************************************************************
   // Status report
@@ -36,7 +40,7 @@ public:
 
   //: Is `this' invertible at time `time'?
   //  REQUIRE: valid_time(time)
-  virtual bool is_invertible(const double time) const;
+  virtual bool is_invertible(double time) const;
 
   //: Is `this' correctly set ?
   virtual bool is_valid(void) const;
@@ -46,13 +50,13 @@ public:
   //***************************************************************************
 
   //: Set the scale value of a static scale
-  virtual void set_static(const double new_scale);
+  void set_static(double new_scale);
 
   //: Set the scale variation along the time
-  virtual void set_scale(vcl_vector<double> &new_scale);
+  virtual void set_scale(vcl_vector<double> const& new_scale);
 
   //: Return the scale variation along the time
-  virtual vcl_vector<double> *scale(void) const;
+  virtual vcl_vector<double> scale(void) const { return scale_; }
 
   //***************************************************************************
   // Basic operations
@@ -61,21 +65,21 @@ public:
   //: Image of `v' by `this'
   //  REQUIRE: is_valid()
   virtual vnl_vector<double> execute(const vnl_vector<double> &v,
-                                     const double time) const;
+                                     double time) const;
 
   //: Image of `v' by the inverse of `this'
   //  REQUIRE: is_valid()
   //  REQUIRE: is_invertible(time)
   virtual vnl_vector<double> inverse(const vnl_vector<double> &v,
-                                     const double time) const;
+                                     double time) const;
 
 protected:
 
   //: Compute the value of the parameter at time `time'
-  virtual double scale_value(const double time) const;
+  virtual double scale_value(double time) const;
 
   //: Scale variation along the time
-  vcl_vector<double> *scale_;
+  vcl_vector<double> scale_;
 };
 
 #endif // vcsl_scale_h

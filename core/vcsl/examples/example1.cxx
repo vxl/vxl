@@ -92,8 +92,8 @@ int main(int argc,
   vcl_cout<<"done"<<vcl_endl;
   vcl_cout<<"Initialization of the static translation with v0..."<< vcl_flush;
   static_t->set_static(v0);
-  assert(static_t->vector()->size()==1);
-  assert((*(static_t->vector()))[0]==&v0);
+  assert(static_t->vector().size()==1);
+  assert(static_t->vector()[0]==v0);
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Linking cs0 and acs with the static translation..."<< vcl_flush;
@@ -120,7 +120,7 @@ int main(int argc,
 
   vcl_cout<<"Initialization of the dynamic translation with t_beat..."<< vcl_flush;
   dynamic_t->set_beat(t_beat);
-  assert(dynamic_t->beat()==&t_beat);
+  assert(dynamic_t->beat()==t_beat);
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Creation of v_null..."<< vcl_flush;
@@ -137,17 +137,17 @@ int main(int argc,
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Creation of t_vectors..."<< vcl_flush;
-  vcl_vector<vnl_vector<double> *> t_vectors;
+  vcl_vector<vnl_vector<double> > t_vectors;
   vcl_cout<<"done"<<vcl_endl;
   vcl_cout<<"Initialization of t_vectors with v_null and v0..."<< vcl_flush;
-  t_vectors.push_back(&v_null);
-  t_vectors.push_back(&v0);
+  t_vectors.push_back(v_null);
+  t_vectors.push_back(v0);
   assert(t_vectors.size()==2);
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Initialization of the dynamic translation with t_vectors..."<< vcl_flush;
   dynamic_t->set_vector(t_vectors);
-  assert(dynamic_t->vector()==&t_vectors);
+  assert(dynamic_t->vector()==t_vectors);
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Creation of t_inter..."<< vcl_flush;
@@ -161,7 +161,7 @@ int main(int argc,
 
   vcl_cout<<"Initialization of the dynamic translation with t_inter..."<< vcl_flush;
   dynamic_t->set_interpolators(t_inter);
-  assert(dynamic_t->interpolators()==&t_inter);
+  assert(dynamic_t->interpolators()==t_inter);
   vcl_cout<<"done"<<vcl_endl;
 
   // 2. displacement
@@ -182,11 +182,11 @@ int main(int argc,
   vcl_cout<<"done"<<vcl_endl;
   vcl_cout<<"Initialization of the dynamic displacement with d_beat..."<< vcl_flush;
   dynamic_d->set_beat(d_beat);
-  assert(dynamic_d->beat()==&d_beat);
+  assert(dynamic_d->beat()==d_beat);
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Creation of d_points..."<< vcl_flush;
-  vcl_vector<vnl_vector<double>*> d_points;
+  vcl_vector<vnl_vector<double> > d_points;
   vcl_cout<<"done"<<vcl_endl;
   vcl_cout<<"Creation of point..."<< vcl_flush;
   vnl_vector<double> point(3);
@@ -200,18 +200,18 @@ int main(int argc,
   assert(point.get(2)==0);
   vcl_cout<<"done"<<vcl_endl;
   vcl_cout<<"Initialization of the d_points with point..."<< vcl_flush;
-  d_points.push_back(&point);
-  d_points.push_back(&point);
-  d_points.push_back(&point);
+  d_points.push_back(point);
+  d_points.push_back(point);
+  d_points.push_back(point);
   assert(d_points.size()==3);
   vcl_cout<<"done"<<vcl_endl;
   vcl_cout<<"Initialization of the dynamic displacement with d_points..."<< vcl_flush;
   dynamic_d->set_point(d_points);
-  assert(dynamic_d->point()==&d_points);
+  assert(dynamic_d->point()==d_points);
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Creation of d_axes..."<< vcl_flush;
-  vcl_vector<vnl_vector<double>*> d_axes;
+  vcl_vector<vnl_vector<double> > d_axes;
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Creation of axis..."<< vcl_flush;
@@ -226,14 +226,14 @@ int main(int argc,
   assert(axis.get(2)==1);
   vcl_cout<<"done"<<vcl_endl;
   vcl_cout<<"Initialization of the d_axes with axis..."<< vcl_flush;
-  d_axes.push_back(&axis);
-  d_axes.push_back(&axis);
-  d_axes.push_back(&axis);
+  d_axes.push_back(axis);
+  d_axes.push_back(axis);
+  d_axes.push_back(axis);
   assert(d_axes.size()==3);
   vcl_cout<<"done"<<vcl_endl;
   vcl_cout<<"Initialization of the dynamic displacement with d_axes..."<< vcl_flush;
   dynamic_d->set_axis(d_axes);
-  assert(dynamic_d->axis()==&d_axes);
+  assert(dynamic_d->axis()==d_axes);
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Creation of d_angles..."<< vcl_flush;
@@ -248,7 +248,7 @@ int main(int argc,
   vcl_cout<<"done"<<vcl_endl;
   vcl_cout<<"Initialization of the dynamic displacement with d_angles..."<< vcl_flush;
   dynamic_d->set_angle(d_angles);
-  assert(dynamic_d->angle()==&d_angles);
+  assert(dynamic_d->angle()==d_angles);
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Creation of d_inter..."<< vcl_flush;
@@ -263,7 +263,7 @@ int main(int argc,
 
   vcl_cout<<"Initialization of the dynamic displacement with d_inter..."<< vcl_flush;
   dynamic_d->set_interpolators(d_inter);
-  assert(dynamic_d->interpolators()==&d_inter);
+  assert(dynamic_d->interpolators()==d_inter);
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Creation of motion..."<< vcl_flush;
@@ -277,7 +277,7 @@ int main(int argc,
 
   vcl_cout<<"Linking lcs and the motion..."<< vcl_flush;
   lcs->set_motion(motion);
-  assert(lcs->motion()==&motion);
+  assert(lcs->motion()==motion);
   vcl_cout<<"done1"<<vcl_endl;
 
   vcl_cout<<"Creation of l_parents..."<< vcl_flush;
@@ -292,7 +292,7 @@ int main(int argc,
 
   vcl_cout<<"Initialization of lcs with l_parents..."<< vcl_flush;
   lcs->set_parent(l_parents);
-  assert(lcs->parent()==&l_parents);
+  assert(lcs->parent()==l_parents);
   vcl_cout<<"done"<<vcl_endl;
 
   vcl_cout<<"Creation of l_beat..."<< vcl_flush;
@@ -308,7 +308,7 @@ int main(int argc,
 
   vcl_cout<<"Initialization of lcs with l_beat..."<< vcl_flush;
   lcs->set_beat(l_beat);
-  assert(lcs->beat()==&l_beat);
+  assert(lcs->beat()==l_beat);
   vcl_cout<<"done"<<vcl_endl;
 
   // Main query

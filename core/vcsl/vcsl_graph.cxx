@@ -1,28 +1,11 @@
+#ifdef __GNUC__
+#pragma implementation
+#endif
 #include <vcsl/vcsl_graph.h>
 
 #include <vcl_cassert.h>
 
 #include <vcsl/vcsl_spatial.h>
-
-//***************************************************************************
-// Constructors/Destructor
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-// Default constructor
-//---------------------------------------------------------------------------
-vcsl_graph::vcsl_graph(void)
-{
-  vertices_=new vcl_vector<vcsl_spatial_sptr>;
-}
-
-//---------------------------------------------------------------------------
-// Destructor
-//---------------------------------------------------------------------------
-vcsl_graph::~vcsl_graph()
-{
-  delete vertices_;
-}
 
 //***************************************************************************
 // Measurement
@@ -33,7 +16,7 @@ vcsl_graph::~vcsl_graph()
 //---------------------------------------------------------------------------
 int vcsl_graph::count(void) const
 {
-  return vertices_->size();
+  return vertices_.size();
 }
 
 //***************************************************************************
@@ -50,7 +33,7 @@ bool vcsl_graph::has(const vcsl_spatial_sptr &cs) const
   vcl_vector<vcsl_spatial_sptr>::const_iterator i;
 
   result=false;
-  for(i=vertices_->begin();i!=vertices_->end()&&!result;++i)
+  for(i=vertices_.begin();i!=vertices_.end()&&!result;++i)
     result=(*i)==cs;
 
   return result;
@@ -59,7 +42,7 @@ bool vcsl_graph::has(const vcsl_spatial_sptr &cs) const
 //---------------------------------------------------------------------------
 // Is `index' valid in the list of the spatial coordinate systems ?
 //---------------------------------------------------------------------------
-bool vcsl_graph::valid_index(const int index) const
+bool vcsl_graph::valid_index(int index) const
 {
   return (index>=0)&&(index<count());
 }
@@ -72,12 +55,12 @@ bool vcsl_graph::valid_index(const int index) const
 // Spatial coordinate system number `index'
 // REQUIRE: valid_index(index)
 //---------------------------------------------------------------------------
-vcsl_spatial_sptr vcsl_graph::item(const int index) const
+vcsl_spatial_sptr vcsl_graph::item(int index) const
 {
   // require
   assert(valid_index(index));
 
-  return (*vertices_)[index];
+  return vertices_[index];
 }
 
 //---------------------------------------------------------------------------
@@ -89,7 +72,7 @@ void vcsl_graph::put(const vcsl_spatial_sptr &cs)
   // require
   assert(!has(cs));
 
-  vertices_->push_back(cs);
+  vertices_.push_back(cs);
 }
 
 //---------------------------------------------------------------------------
@@ -103,9 +86,9 @@ void vcsl_graph::remove(const vcsl_spatial_sptr &cs)
 
   vcl_vector<vcsl_spatial_sptr>::iterator i;
 
-  for(i=vertices_->begin(); i!=vertices_->end()&&((*i)!=cs); ++i)
+  for(i=vertices_.begin(); i!=vertices_.end()&&((*i)!=cs); ++i)
     ;
-  vertices_->erase(i);
+  vertices_.erase(i);
 }
 
 //***************************************************************************
@@ -116,8 +99,8 @@ void vcsl_graph::remove(const vcsl_spatial_sptr &cs)
 // Used by the search path algorithm
 void vcsl_graph::init_vertices(void) const
 {
-  vcl_vector<vcsl_spatial_sptr>::iterator i;
+  vcl_vector<vcsl_spatial_sptr>::const_iterator i;
 
-  for(i=vertices_->begin();i!=vertices_->end();++i)
+  for(i=vertices_.begin();i!=vertices_.end();++i)
     (*i)->set_reached(false);
 }

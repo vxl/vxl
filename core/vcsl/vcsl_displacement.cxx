@@ -1,23 +1,7 @@
+#ifdef __GNUC__
+#pragma implementation
+#endif
 #include <vcsl/vcsl_displacement.h>
-
-//***************************************************************************
-// Constructors/Destructor
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-// Default constructor
-//---------------------------------------------------------------------------
-vcsl_displacement::vcsl_displacement(void)
-{
-  point_=0;
-}
-
-//---------------------------------------------------------------------------
-// Destructor
-//---------------------------------------------------------------------------
-vcsl_displacement::~vcsl_displacement()
-{
-}
 
 //***************************************************************************
 // Status report
@@ -28,19 +12,17 @@ vcsl_displacement::~vcsl_displacement()
 //---------------------------------------------------------------------------
 bool vcsl_displacement::is_valid(void) const
 {
-  return (point_!=0)&&(axis_!=0)&&(angle_!=0)
-    &&(
-       ((beat_==0)&&(interpolator_==0)&&(point_->size()==1)&&
-        (axis_->size()==1)&&(angle_->size()==1)
+  return 
+       ((beat_.size()==0)&&(interpolator_.size()==0)&&(point_.size()==1)&&
+        (axis_.size()==1)&&(angle_.size()==1)
         )
        ||
        (
-        (beat_!=0)&&(interpolator_!=0)
-        &&(beat_->size()==(interpolator_->size()+1))
-        &&(beat_->size()==point_->size())
-        &&(beat_->size()==axis_->size())
-        &&(beat_->size()==angle_->size())
-        ));
+        (beat_.size()==interpolator_.size()+1)
+        &&(beat_.size()==point_.size())
+        &&(beat_.size()==axis_.size())
+        &&(beat_.size()==angle_.size())
+        );
 }
 
 //***************************************************************************
@@ -50,31 +32,18 @@ bool vcsl_displacement::is_valid(void) const
 //---------------------------------------------------------------------------
 // Set the point for a static displacement
 //---------------------------------------------------------------------------
-void vcsl_displacement::set_static_point(vnl_vector<double> &new_point)
+void vcsl_displacement::set_static_point(vnl_vector<double> const& new_point)
 {
-  if (point_==0||point_->size()!=1)
-    point_=new list_of_vectors(1);
-  (*point_)[0]=&new_point;
-  beat_=0;
-  interpolator_=0;
+  point_.clear(); point_.push_back(new_point);
+  vcsl_spatial_transformation::set_static();
 }
 
 //---------------------------------------------------------------------------
 // Set the variation of the point of the axis along the time
 //---------------------------------------------------------------------------
-void vcsl_displacement::set_point(list_of_vectors &new_point)
+void vcsl_displacement::set_point(list_of_vectors const& new_point)
 {
-  if (point_!=0&&point_->size()==1)
-    delete point_;
-  point_=&new_point;
-}
-
-//---------------------------------------------------------------------------
-// Return the variation of the point of the axis along the time
-//---------------------------------------------------------------------------
-list_of_vectors *vcsl_displacement::point(void) const
-{
-  return point_;
+  point_=new_point;
 }
 
 //***************************************************************************
@@ -86,7 +55,7 @@ list_of_vectors *vcsl_displacement::point(void) const
 // REQUIRE: is_valid()
 //---------------------------------------------------------------------------
 vnl_vector<double> vcsl_displacement::execute(const vnl_vector<double> &v,
-                                              const double time) const
+                                              double time) const
 {
   // require
   assert(is_valid());
@@ -125,7 +94,7 @@ vnl_vector<double> vcsl_displacement::execute(const vnl_vector<double> &v,
 // REQUIRE: is_invertible(time)
 //---------------------------------------------------------------------------
 vnl_vector<double> vcsl_displacement::inverse(const vnl_vector<double> &v,
-                                              const double time) const
+                                              double time) const
 {
   // require
   assert(is_valid());
@@ -162,17 +131,17 @@ vnl_vector<double> vcsl_displacement::inverse(const vnl_vector<double> &v,
 //---------------------------------------------------------------------------
 // Compute the value of the vector at time `time'
 //---------------------------------------------------------------------------
-vnl_vector<double> vcsl_displacement::vector_value(const double time) const
+vnl_vector<double> vcsl_displacement::vector_value(double time) const
 {
-  if (beat_==0) // static
-    return *((*point_)[0]);
+  if (beat_.size()==0) // static
+    return point_[0];
   else
     {
       int i=matching_interval(time);
-      switch((*interpolator_)[i])
+      switch(interpolator_[i])
         {
         case vcsl_linear:
-          return lvi(*(*point_)[i],*(*point_)[i+1],i,time);
+          return lvi(point_[i],point_[i+1],i,time);
         case vcsl_cubic:
           assert(false); // Not yet implemented
           break;
@@ -186,3 +155,4 @@ vnl_vector<double> vcsl_displacement::vector_value(const double time) const
     }
   return vnl_vector<double>(); // never reached
 }
+

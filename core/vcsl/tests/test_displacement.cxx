@@ -48,20 +48,20 @@ int main(int argc,
   v0.put(0,0); v1.put(0,0); v2.put(0,0);
   v0.put(1,0); v1.put(1,0); v2.put(1,1);
   v0.put(2,1); v1.put(2,1); v2.put(2,0);
-  vcl_vector<vnl_vector<double>*> axis; axis.reserve(3);
-  axis.push_back(&v0);
-  axis.push_back(&v1);
-  axis.push_back(&v2);
+  vcl_vector<vnl_vector<double> > axis; axis.reserve(3);
+  axis.push_back(v0);
+  axis.push_back(v1);
+  axis.push_back(v2);
   dis->set_axis(axis);
 
   vnl_vector<double> p0(3), p1(3), p2(3);
   p0.put(0,1); p1.put(0,2); p2.put(0,4);
   p0.put(1,2); p1.put(1,3); p2.put(1,5);
   p0.put(2,3); p1.put(2,4); p2.put(2,6);
-  vcl_vector<vnl_vector<double>*> point; point.reserve(3);
-  point.push_back(&p0);
-  point.push_back(&p1);
-  point.push_back(&p2);
+  vcl_vector<vnl_vector<double> > point; point.reserve(3);
+  point.push_back(p0);
+  point.push_back(p1);
+  point.push_back(p2);
   dis->set_point(point);
 
   vcl_vector<double> angles; angles.reserve(3);

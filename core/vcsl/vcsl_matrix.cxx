@@ -1,24 +1,7 @@
+#ifdef __GNUC__
+#pragma implementation
+#endif
 #include <vcsl/vcsl_matrix.h>
-
-//***************************************************************************
-// Constructors/Destructor
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-// Default constructor
-//---------------------------------------------------------------------------
-vcsl_matrix::vcsl_matrix(void)
-{
-  matrix_=0;
-}
-
-//---------------------------------------------------------------------------
-// Destructor
-//---------------------------------------------------------------------------
-vcsl_matrix::~vcsl_matrix()
-{
-  if (!matrix_) delete matrix_;
-}
 
 //***************************************************************************
 // Status report
@@ -28,7 +11,7 @@ vcsl_matrix::~vcsl_matrix()
 // Is `this' invertible at time `time'?
 // REQUIRE: valid_time(time)
 //---------------------------------------------------------------------------
-bool vcsl_matrix::is_invertible(const double time) const
+bool vcsl_matrix::is_invertible(double time) const
 {
   // require
   assert(valid_time(time));
@@ -41,11 +24,8 @@ bool vcsl_matrix::is_invertible(const double time) const
 //---------------------------------------------------------------------------
 bool vcsl_matrix::is_valid(void) const
 {
-  return (matrix_!=0)&&(((beat_==0)&&(interpolator_==0)&&(matrix_->size()==1))
-                        ||
-                        ((beat_!=0)&&(interpolator_!=0)
-                         &&(beat_->size()==(interpolator_->size()+1))
-                         &&(beat_->size()==matrix_->size())));
+  return (beat_.size()==0&&matrix_.size()==1) ||
+         (beat_.size()==interpolator_.size()+1&&beat_.size()==matrix_.size());
 }
 
 //***************************************************************************
@@ -57,29 +37,16 @@ bool vcsl_matrix::is_valid(void) const
 //---------------------------------------------------------------------------
 void vcsl_matrix::set_static( vcsl_matrix_param_sptr new_matrix)
 {
-  if(matrix_==0||matrix_->size()!=1)
-    matrix_=new list_of_vcsl_matrix_param_sptr(1);
-  (*matrix_)[0]=new_matrix;
-  beat_=0;
-  interpolator_=0;
+  matrix_.clear(); matrix_.push_back(new_matrix);
+  vcsl_spatial_transformation::set_static();
 }
 
 //---------------------------------------------------------------------------
-// Set the direction matrix variation along the time
+// Set the direction vector variation along the time
 //---------------------------------------------------------------------------
-void vcsl_matrix::set_matrix(list_of_vcsl_matrix_param_sptr &new_matrix)
+void vcsl_matrix::set_matrix(list_of_vcsl_matrix_param_sptr const& new_matrix)
 {
-  if(matrix_!=0&&matrix_->size()==1)
-    delete matrix_;
-  matrix_=&new_matrix;
-}
-
-//---------------------------------------------------------------------------
-// Return the angle variation along the time
-//---------------------------------------------------------------------------
-list_of_vcsl_matrix_param_sptr *vcsl_matrix::matrix_list(void) const
-{
-  return matrix_;
+  matrix_=new_matrix;
 }
 
 //***************************************************************************
@@ -91,7 +58,7 @@ list_of_vcsl_matrix_param_sptr *vcsl_matrix::matrix_list(void) const
 // REQUIRE: is_valid()
 //---------------------------------------------------------------------------
 vnl_vector<double> vcsl_matrix::execute(const vnl_vector<double> &v,
-                                        const double time) const
+                                        double time) const
 {
   // require
   assert(is_valid());
@@ -113,7 +80,7 @@ vnl_vector<double> vcsl_matrix::execute(const vnl_vector<double> &v,
 // REQUIRE: is_invertible(time)
 //---------------------------------------------------------------------------
 vnl_vector<double> vcsl_matrix::inverse(const vnl_vector<double> &v,
-                                        const double time) const
+                                        double time) const
 {
   assert(is_valid());
   assert(v.size()==3);
@@ -133,18 +100,18 @@ vnl_vector<double> vcsl_matrix::inverse(const vnl_vector<double> &v,
 //---------------------------------------------------------------------------
 
 
-vnl_matrix<double> vcsl_matrix::matrix_value(const double time, bool type) const
+vnl_matrix<double> vcsl_matrix::matrix_value(double time, bool type) const
 {
-  if(beat_==0) // static
-    return param_to_matrix((*matrix_)[0],type);
+  if(beat_.size()==0) // static
+    return param_to_matrix(matrix_[0],type);
 
   else
     {
       int i=matching_interval(time);
-      switch((*interpolator_)[i])
+      switch(interpolator_[i])
         {
         case vcsl_linear:
-          return lmi(param_to_matrix((*matrix_)[i],type),param_to_matrix((*matrix_)[i+1],type),i,time);
+          return lmi(param_to_matrix(matrix_[i],type),param_to_matrix(matrix_[i+1],type),i,time);
         case vcsl_cubic:
           assert(false); // Not yet implemented
           break;

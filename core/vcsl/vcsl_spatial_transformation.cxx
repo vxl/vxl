@@ -1,55 +1,22 @@
+#ifdef __GNUC__
+#pragma implementation
+#endif
 #include <vcsl/vcsl_spatial_transformation.h>
 #include <vcl_cmath.h> // for acos(), sin()
 
 #include <vcl_cassert.h>
 
 //***************************************************************************
-// Constructors/Destructor
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-// Default constructor
-//---------------------------------------------------------------------------
-vcsl_spatial_transformation::vcsl_spatial_transformation(void)
-{
-  beat_=0;
-  interpolator_=0;
-}
-
-//---------------------------------------------------------------------------
-// Destructor
-//---------------------------------------------------------------------------
-vcsl_spatial_transformation::~vcsl_spatial_transformation()
-{
-}
-
-//***************************************************************************
 // Status report
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// Return the list of time clocks
-//---------------------------------------------------------------------------
-vcl_vector<double> *vcsl_spatial_transformation::beat(void) const
-{
-  return beat_;
-}
-
-//---------------------------------------------------------------------------
-// Return the list of interpolators
-//---------------------------------------------------------------------------
-vcl_vector<vcsl_interpolator> *
-vcsl_spatial_transformation::interpolators(void) const
-{
-  return interpolator_;
-}
-
-//---------------------------------------------------------------------------
 // Is `time' between the two time bounds ?
 //---------------------------------------------------------------------------
-bool vcsl_spatial_transformation::valid_time(const double time) const
+bool vcsl_spatial_transformation::valid_time(double time) const
 {
-  return ((*beat_)[0]<=time)&&(time<=(*beat_)[beat_->size()-1]);
+  if (beat_.size() == 0) return true;
+  return (beat_[0]<=time)&&(time<=beat_[beat_.size()-1]);
 }
 
 //---------------------------------------------------------------------------
@@ -57,9 +24,8 @@ bool vcsl_spatial_transformation::valid_time(const double time) const
 //---------------------------------------------------------------------------
 bool vcsl_spatial_transformation::is_valid(void) const
 {
-  return ((beat_==0)&&(interpolator_==0))||
-    ((beat_!=0)&&(interpolator_!=0)
-     &&(beat_->size()==(interpolator_->size()+1)));
+  return ((beat_.size()==0)&&(interpolator_.size()==0))||
+         (beat_.size()==interpolator_.size()+1);
 }
 
 //***************************************************************************
@@ -70,31 +36,23 @@ bool vcsl_spatial_transformation::is_valid(void) const
 // Return the index of the beat inferior or equal to `time'
 // REQUIRE: valid_time(time)
 //---------------------------------------------------------------------------
-int vcsl_spatial_transformation::matching_interval(const double time) const
+int vcsl_spatial_transformation::matching_interval(double time) const
 {
   // require
   assert(valid_time(time));
 
-  int result;
-  int inf;
-  int sup;
-  int mid;
-
   // Dichotomic research of the index
-
-  inf=0;
-  sup=beat_->size()-1;
-  while((sup-inf)!=1)
+  int inf=0;
+  int sup=beat_.size()-1;
+  while(sup-inf > 1)
     {
-      mid=(inf+sup)/2;
-      if((*beat_)[mid]>time)
+      int mid=(inf+sup)/2;
+      if(beat_[mid]>time)
         sup=mid;
       else
         inf=mid;
     }
-  result=inf;
-
-  return result;
+  return inf;
 }
 
 //***************************************************************************
@@ -102,20 +60,28 @@ int vcsl_spatial_transformation::matching_interval(const double time) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// Set the list of time clocks
+//: Set the list of time clocks
 //---------------------------------------------------------------------------
-void vcsl_spatial_transformation::set_beat(vcl_vector<double> &new_beat)
+void vcsl_spatial_transformation::set_beat(vcl_vector<double> const& new_beat)
 {
-  beat_=&new_beat;
+  beat_=new_beat;
 }
 
 //---------------------------------------------------------------------------
-// Set the list of interpolators
+//: Set the list of interpolators
 //---------------------------------------------------------------------------
-void
-vcsl_spatial_transformation::set_interpolators(vcl_vector<vcsl_interpolator> &new_interpolators)
+void vcsl_spatial_transformation::set_interpolators(vcl_vector<vcsl_interpolator> const& new_interpolators)
 {
-  interpolator_=&new_interpolators;
+  interpolator_=new_interpolators;
+}
+
+//---------------------------------------------------------------------------
+// Empty the time clock and interpolators, thereby making the transf static
+//---------------------------------------------------------------------------
+void vcsl_spatial_transformation::set_static()
+{
+  beat_.clear();
+  interpolator_.clear();
 }
 
 //***************************************************************************
@@ -125,22 +91,15 @@ vcsl_spatial_transformation::set_interpolators(vcl_vector<vcsl_interpolator> &ne
 //---------------------------------------------------------------------------
 // Linear interpolation on scalar values
 //---------------------------------------------------------------------------
-double vcsl_spatial_transformation::lsi(const double v0,
-                                const double v1,
-                                const int index,
-                                const double time) const
+double vcsl_spatial_transformation::lsi(double v0,
+                                        double v1,
+                                        int index,
+                                        double time) const
 {
-  double result;
+  double t0=beat_[index];
+  double t1=beat_[index+1];
 
-  double t0;
-  double t1;
-
-  t0=(*beat_)[index];
-  t1=(*beat_)[index+1];
-
-  result=(v0*(t1-time)+v1*(time-t0))/(t1-t0);
-
-  return result;
+  return (v0*(t1-time)+v1*(time-t0))/(t1-t0);
 }
 
 //---------------------------------------------------------------------------
@@ -149,12 +108,12 @@ double vcsl_spatial_transformation::lsi(const double v0,
 vnl_vector<double>
 vcsl_spatial_transformation::lvi(const vnl_vector<double> &v0,
                                  const vnl_vector<double> &v1,
-                                 const int index,
-                                 const double time) const
+                                 int index,
+                                 double time) const
 {
   int size=v0.size();
-  double t0=(*beat_)[index];
-  double t1=(*beat_)[index+1];
+  double t0=beat_[index];
+  double t1=beat_[index+1];
 
   double denominator=1/(t1-t0);
   double dt1=(t1-time)*denominator;
@@ -173,13 +132,13 @@ vcsl_spatial_transformation::lvi(const vnl_vector<double> &v0,
 vnl_matrix<double>
 vcsl_spatial_transformation::lmi(const vnl_matrix<double> &m0,
                                  const vnl_matrix<double> &m1,
-                                 const int index,
-                                 const double time) const
+                                 int index,
+                                 double time) const
 {
   int rows=m0.rows();
   int cols=m0.cols();
-  double t0=(*beat_)[index];
-  double t1=(*beat_)[index+1];
+  double t0=beat_[index];
+  double t1=beat_[index+1];
 
   double denominator=1/(t1-t0);
   double dt1=(t1-time)*denominator;
@@ -199,11 +158,11 @@ vcsl_spatial_transformation::lmi(const vnl_matrix<double> &m0,
 vnl_quaternion<double>
 vcsl_spatial_transformation::lqi(const vnl_quaternion<double> &v0,
                                  const vnl_quaternion<double> &v1,
-                                 const int index,
-                                 const double time) const
+                                 int index,
+                                 double time) const
 {
-  double t0=(*beat_)[index];
-  double t1=(*beat_)[index+1];
+  double t0=beat_[index];
+  double t1=beat_[index+1];
   double t=(time-t0)/(t1-t0);
 
   double cosangle;

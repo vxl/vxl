@@ -1,25 +1,9 @@
+#ifdef __GNUC__
+#pragma implementation
+#endif
 #include <vcsl/vcsl_scale.h>
 
 #include <vcl_cassert.h>
-
-//***************************************************************************
-// Constructors/Destructor
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-// Default constructor
-//---------------------------------------------------------------------------
-vcsl_scale::vcsl_scale(void):
-scale_(0)
-{
-}
-
-//---------------------------------------------------------------------------
-// Destructor
-//---------------------------------------------------------------------------
-vcsl_scale::~vcsl_scale()
-{
-}
 
 //***************************************************************************
 // Status report
@@ -29,12 +13,12 @@ vcsl_scale::~vcsl_scale()
 // Is `this' invertible at time `time'?
 // REQUIRE: valid_time(time)
 //---------------------------------------------------------------------------
-bool vcsl_scale::is_invertible(const double time) const
+bool vcsl_scale::is_invertible(double time) const
 {
   // require
   assert(valid_time(time));
 
-  return ((beat_==0)&&((*scale_)[0]!=0))||(scale_value(time)!=0);
+  return ((beat_.size()==0)&&(scale_[0]!=0.0))||(scale_value(time)!=0.0);
 }
 
 //---------------------------------------------------------------------------
@@ -42,11 +26,9 @@ bool vcsl_scale::is_invertible(const double time) const
 //---------------------------------------------------------------------------
 bool vcsl_scale::is_valid(void) const
 {
-  return (scale_!=0)&&(((beat_==0)&&(interpolator_==0)&&(scale_->size()==1))
-                        ||
-                        ((beat_!=0)&&(interpolator_!=0)
-                         &&(beat_->size()==(interpolator_->size()+1))
-                         &&(beat_->size()==scale_->size())));
+  return (scale_.size()!=0)&&
+         ((beat_.size()==0&&interpolator_.size()==0&&scale_.size()==1) ||
+          (beat_.size()==interpolator_.size()+1&&beat_.size()==scale_.size()));
 }
 
 //***************************************************************************
@@ -56,31 +38,19 @@ bool vcsl_scale::is_valid(void) const
 //---------------------------------------------------------------------------
 // Set the scale value of a static scale
 //---------------------------------------------------------------------------
-void vcsl_scale::set_static(const double new_scale)
+void vcsl_scale::set_static(double new_scale)
 {
-  if (scale_==0||scale_->size()!=1)
-    scale_=new list_of_scalars(1);
-  (*scale_)[0]=new_scale;
-  beat_=0;
-  interpolator_=0;
+  scale_.clear();
+  scale_.push_back(new_scale);
+  vcsl_spatial_transformation::set_static();
 }
 
 //---------------------------------------------------------------------------
-// Set the scale variation along the time
+//: Set the scale variation along the time
 //---------------------------------------------------------------------------
-void vcsl_scale::set_scale(vcl_vector<double> &new_scale)
+void vcsl_scale::set_scale(vcl_vector<double> const& new_scale)
 {
-  if (scale_!=0&&scale_->size()==1)
-    delete scale_;
-  scale_=&new_scale;
-}
-
-//---------------------------------------------------------------------------
-// Return the scale variation along the time
-//---------------------------------------------------------------------------
-vcl_vector<double> *vcsl_scale::scale(void) const
-{
-  return scale_;
+  scale_=new_scale;
 }
 
 //***************************************************************************
@@ -92,7 +62,7 @@ vcl_vector<double> *vcsl_scale::scale(void) const
 // REQUIRE: is_valid()
 //---------------------------------------------------------------------------
 vnl_vector<double> vcsl_scale::execute(const vnl_vector<double> &v,
-                                       const double time) const
+                                       double time) const
 {
   // require
   assert(is_valid());
@@ -111,7 +81,7 @@ vnl_vector<double> vcsl_scale::execute(const vnl_vector<double> &v,
 // REQUIRE: is_invertible(time)
 //---------------------------------------------------------------------------
 vnl_vector<double> vcsl_scale::inverse(const vnl_vector<double> &v,
-                                       const double time) const
+                                       double time) const
 {
   // require
   assert(is_valid());
@@ -128,17 +98,17 @@ vnl_vector<double> vcsl_scale::inverse(const vnl_vector<double> &v,
 //---------------------------------------------------------------------------
 // Compute the value of the parameter at time `time'
 //---------------------------------------------------------------------------
-double vcsl_scale::scale_value(const double time) const
+double vcsl_scale::scale_value(double time) const
 {
-  if (beat_==0) // static
-    return (*scale_)[0];
+  if (beat_.size()==0) // static
+    return scale_[0];
   else
     {
       int i=matching_interval(time);
-      switch((*interpolator_)[i])
+      switch(interpolator_[i])
         {
         case vcsl_linear:
-          return lsi((*scale_)[i],(*scale_)[i+1],i,time);
+          return lsi(scale_[i],scale_[i+1],i,time);
         case vcsl_cubic:
           assert(false); // Not yet implemented
           break;

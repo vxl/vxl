@@ -1,5 +1,8 @@
 #ifndef vcsl_displacement_h
 #define vcsl_displacement_h
+#ifdef __GNUC__
+#pragma interface
+#endif
 
 //:
 // \file
@@ -8,6 +11,7 @@
 // \verbatim
 // 2000/06/28 François BERTEL Creation. Adapted from IUE
 // 2002/01/22 Peter Vanroose - return type of execute() and inverse() changed to non-ptr
+// 2002/01/28 Peter Vanroose - vcl_vector member point_ changed to non-ptr
 // \endverbatim
 
 
@@ -27,10 +31,10 @@ public:
   //***************************************************************************
 
   //: Default constructor
-  explicit vcsl_displacement(void);
+  explicit vcsl_displacement(void) {}
 
   //: Destructor
-  virtual ~vcsl_displacement();
+  virtual ~vcsl_displacement() {}
 
   //***************************************************************************
   // Status report
@@ -44,13 +48,13 @@ public:
   //***************************************************************************
 
   //: Set the point for a static displacement
-  virtual void set_static_point(vnl_vector<double> &new_point);
+  virtual void set_static_point(vnl_vector<double> const& new_point);
 
   //: Set the variation of the point of the axis along the time
-  virtual void set_point(list_of_vectors &new_point);
+  virtual void set_point(list_of_vectors const& new_point);
 
   //: Return the variation of the point of the axis along the time
-  virtual list_of_vectors *point(void) const;
+  virtual list_of_vectors point(void) const { return point_; }
 
   //***************************************************************************
   // Basic operations
@@ -59,20 +63,20 @@ public:
   //: Image of `v' by `this'
   //  REQUIRE: is_valid()
   virtual vnl_vector<double> execute(const vnl_vector<double> &v,
-                                     const double time) const;
+                                     double time) const;
 
   //: Image of `v' by the inverse of `this'
   //  REQUIRE: is_valid()
   //  REQUIRE: is_invertible(time)
   virtual vnl_vector<double> inverse(const vnl_vector<double> &v,
-                                     const double time) const;
+                                     double time) const;
 protected:
 
   //: Compute the value of the vector at time `time'
-  virtual vnl_vector<double> vector_value(const double time) const;
+  virtual vnl_vector<double> vector_value(double time) const;
 
   //: Variation of the point of the axis along the time
-  list_of_vectors *point_;
+  list_of_vectors point_;
 };
 
 #endif // vcsl_displacement_h

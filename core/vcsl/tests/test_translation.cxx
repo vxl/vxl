@@ -46,14 +46,14 @@ int main(int argc,
   interpolators.push_back(vcsl_linear);
   interpolators.push_back(vcsl_linear);
   tr->set_interpolators(interpolators);
-  vcl_vector<vnl_vector<double>*> vectors; vectors.reserve(3);
+  vcl_vector<vnl_vector<double> > vectors; vectors.reserve(3);
   vnl_vector<double> v0(3), v1(3), v2(3);
   v0.put(0,0); v1.put(0,1); v2.put(0,-1);
   v0.put(1,0); v1.put(1,2); v2.put(1,-2);
   v0.put(2,0); v1.put(2,3); v2.put(2,-3);
-  vectors.push_back(&v0);
-  vectors.push_back(&v1);
-  vectors.push_back(&v2);
+  vectors.push_back(v0);
+  vectors.push_back(v1);
+  vectors.push_back(v2);
   tr->set_vector(vectors);
   motion.push_back(tr.ptr());
 
