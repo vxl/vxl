@@ -3,7 +3,7 @@
 */
 #include <vcl_iostream.h>
 
-#include <vbl/vbl_sprintf.h>
+#include <vul/vul_sprintf.h>
 
 #include <vil/vil_image.h>
 #include <vil/vil_load.h>
@@ -78,7 +78,7 @@ int main(int argc, char **argv) {
       vcl_cerr << "done" << vcl_endl;
 
       vcl_cerr << "save..." << vcl_flush;
-      vil_save(vil_image_as_byte(smooth), vbl_sprintf("%s.%d.pnm", argv[i], j).c_str(), "pnm");
+      vil_save(vil_image_as_byte(smooth), vul_sprintf("%s.%d.pnm", argv[i], j).c_str(), "pnm");
       vcl_cerr << "done" << vcl_endl;
     }
   }
