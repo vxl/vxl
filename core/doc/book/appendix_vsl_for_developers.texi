@@ -270,8 +270,9 @@ class vxl_my_class : public vxl_baseclass
 @};
 
 //: Provide IO for vxl_my_class
-class vxl_my_class : public vxl_baseclassIO @{
-public:
+class vxl_my_class : public vxl_baseclassIO
+@{
+ public:
   //: Constructor
   vxl_my_classIO();
 
@@ -300,8 +301,7 @@ public:
 @};
 
 
-//: Provide IO class for each type of polymorphic object
-// that might appear in the stream.
+//: Provide IO class for each type of polymorphic object that might appear in the stream.
 void vxl_configure_loaders()
 @{
     vsl_add_to_binary_loader(vxl_my_class_io());
@@ -598,8 +598,8 @@ void vanyl_my_class::b_read(vsl_b_istream &is)
   break;
 
   default:
-    vcl_cerr << "I/O ERROR: vanyl_my_class::b_read(vsl_b_istream&) \n";
-    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    vcl_cerr << "I/O ERROR: vanyl_my_class::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   @}
@@ -738,10 +738,10 @@ void vsl_add_to_binary_loader(const vanyl_my_base_class& b)
 //: Stream summary output for base class pointer
 void vsl_print_summary(vcl_ostream& os,const vanyl_my_base_class* b)
 @{
-    if (b)
-        return vsl_print_summary(*b);
-    else
-        return os << "No vanyl_my_base_class defined.";
+  if (b)
+    return vsl_print_summary(*b);
+  else
+    return os << "No vanyl_my_base_class defined.\n";
 @}
 @end example
 
@@ -983,7 +983,7 @@ Each one is written using only the public access functions of the class.
 For instance, @code{vgl_point_2d} has binary IO as follows:
 
 @example
-// This is vxl/vgl/io/vgl_io_point_2d.h
+// This is core/vgl/io/vgl_io_point_2d.h
 #ifndef vgl_io_point_2d_h_
 #define vgl_io_point_2d_h_
 //:
@@ -1004,15 +1004,16 @@ void vsl_b_read(vsl_b_istream &is, vgl_point_2d<T>& p);
 //: Print human readable summary of a vgl_point_2d object to a stream
 template <class T>
 void vsl_print_summary(vcl_ostream& os,const vgl_point_2d<T>& p);
+
 #endif // #ifndef vgl_io_point_2d_h_
 @end example
 
 The implementation is
 
 @example
-// This is vxl/vgl/vgl_io_point_2d.txx
+// This is core/vgl/io/vgl_io_point_2d.txx
 
-#include <vgl/io/vgl_io_point_2d.h>
+#include "vgl_io_point_2d.h"
 #include <vsl/vsl_binary_io.h>
 
 //==============================================================================
@@ -1042,8 +1043,8 @@ void vsl_b_read(vsl_b_istream &is, vgl_point_2d<T>& p)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_point_2d<T>&) \n";
-    vcl_cerr << "           Unknown version number "<< w << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_point_2d<T>&)\n"
+             << "           Unknown version number "<< w << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   @}
@@ -1055,14 +1056,14 @@ void vsl_b_read(vsl_b_istream &is, vgl_point_2d<T>& p)
 template<class T>
 void vsl_print_summary(vcl_ostream &os, const vgl_point_2d<T>& p)
 @{
-    os<<"(";
+    os<<'(';
     vsl_print_summary(p.x());
-    os<<","
+    os<<','
     vsl_print_summary(p.y());
-    os<<")";
+    os<<')';
 @}
 
-#define VGL_IO_LINE_2D_INSTANTIATE(T) \
+#define VGL_IO_POINT_2D_INSTANTIATE(T) \
 template void vsl_print_summary(vcl_ostream &, const vgl_point_2d<T >&); \
 template void vsl_b_read(vsl_b_istream &, vgl_point_2d<T >&); \
 template void vsl_b_write(vsl_b_ostream &, const vgl_point_2d<T >&)
@@ -1093,8 +1094,9 @@ class BaseClass;
 // \author Tim Cootes
 
 //: Base for objects which provide IO for classes derived from BaseClass
-class BaseClassIO @{
-public:
+class BaseClassIO
+@{
+ public:
   //: Constructor
   BaseClassIO();
 
@@ -1151,12 +1153,12 @@ For a BaseClass, one creates @file{BaseClassIO.cxx} as follows
 
 @example
 // This is BaseClassIO.cxx
+#include "BaseClassIO.h"
 //:
 // \file
 // \author Tim Cootes
 
 #include <BaseClass.h>
-#include <BaseClassIO.h>
 #include <vsl/vsl_clipon_binary_loader.txx>
 
 //: Constructor
@@ -1234,8 +1236,8 @@ void vsl_b_read(vsl_b_istream &is, BaseClass & p)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, BaseClass&) \n";
-    vcl_cerr << "           Unknown version number "<< v << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, BaseClass&)\n"
+             << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   @}
@@ -1245,7 +1247,7 @@ void vsl_b_read(vsl_b_istream &is, BaseClass & p)
 //: Output a human readable summary to the stream
 void vsl_print_summary(vcl_ostream& os,const BaseClass & p)
 @{
-    os<<"("<<p.x()<<","<<p.y()<<")";
+    os<<'('<<p.x()<<','<<p.y()<<')';
     ... Insert rest of xxxxxx code here
 @}
 
@@ -1279,7 +1281,7 @@ VSL_CLIPON_BINARY_LOADER_INSTANTIATE(BaseClass, BaseClassIO);
 
 @subsubsection Clip-on IO Derived Class Header
 
-For a DerivedClass, one creates DerivedClassIO header as follows
+For a DerivedClass, one creates @file{DerivedClassIO.h} as follows
 
 @example
 // This is DerivedClassIO.h
@@ -1294,8 +1296,9 @@ For a DerivedClass, one creates DerivedClassIO header as follows
 class DerivedClass;
 
 //: Provide IO for DerivedClass
-class DerivedClass : public BaseClassIO @{
-public:
+class DerivedClass : public BaseClassIO
+@{
+ public:
   //: Constructor
   DerivedClassIO();
 
@@ -1422,8 +1425,8 @@ void vsl_b_read(vsl_b_istream &is, DerivedClass & p)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, DerivedClass&) \n";
-    vcl_cerr << "           Unknown version number "<< v << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, DerivedClass&)\n"
+             << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   @}
@@ -1439,13 +1442,13 @@ It is important to write test programs for all the IO.  Below is a
 summary of how it is done for classes in vgl.  Extrapolate as
 appropriate.
 
-The test programs for vgl live in the subdirectory vgl/tests.
+The test programs for vgl live in the subdirectory core/vgl/tests.
 
 To add a test for a class you
 
 @enumerate
 @item Write a test function in a file : @file{test_classname_io.cxx}
-@item Add a call to that function in the file @file{vgl_test_io.cxx}
+@item Add a call to that function in the file @file{test_driver.cxx}
 @end enumerate
 
 For instance, to test the IO in class @code{vgl_point_2d<T>}, we
@@ -1454,69 +1457,60 @@ write
 @file{test_point_2d_io.cxx}:
 @example
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
 
-#include <vgl/vgl_test.h>
-#include <vgl/io/vgl_io/point_2d.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/io/vgl_io_point_2d.h>
 
-void test_point_2d_double_io()
+#include <testlib/testlib_test.h>
+
+void test_point_2d_io()
 @{
-    vcl_cout << "***********************" << vcl_endl;
-    vcl_cout << "Testing vgl_point_2d<double> io" << vcl_endl;
-    vcl_cout << "***********************" << vcl_endl;
+    vcl_cout << "*******************************\n"
+             << "Testing vgl_point_2d<double> io\n"
+             << "*******************************\n";
 
     vgl_point_2d<double> p_out(1.2,3.4), p_in;
 
-
     vsl_b_ofstream bfs_out("vgl_point_2d_test_double_io.bvl.tmp");
-    TEST ("Created vgl_point_2d_test_double_io.bvl.tmp for writing", (!bfs_out), false);
+    TEST("Created vgl_point_2d_test_double_io.bvl.tmp for writing", (!bfs_out), false);
     vsl_b_write(bfs_out, p_out);
     bfs_out.close();
 
     vsl_b_ifstream bfs_in("vgl_point_2d_test_double_io.bvl.tmp");
-    TEST ("Opened vgl_point_2d_test_double_io.bvl.tmp for reading", (!bfs_in), false);
+    TEST("Opened vgl_point_2d_test_double_io.bvl.tmp for reading", (!bfs_in), false);
     vsl_b_read(bfs_in, p_in);
-    TEST ("Finished reading file successfully", (!bfs_in), false);
+    TEST("Finished reading file successfully", (!bfs_in), false);
     bfs_in.close();
 
-    TEST ("p_out == p_in", p_out == p_in, true);
+    TEST("p_out == p_in", p_out, p_in);
 
     vsl_print_summary(vcl_cout, p_out);
     vcl_cout << vcl_endl;
 @}
 
-void test_point_2d_prime()
-@{
-    // Test each template type
-    test_point_2d_double_io();
-@}
-
-TESTMAIN(test_point_2d_prime);
+TESTMAIN(test_point_2d_io);
 @end example
 
 The macros @code{TEST} and @code{TESTMAIN} are defined in the file @file{testlib/testlib_test.h}
 
-We must then add a call to this test to @file{test_vgl_io.cxx}:
+We must then add a call to this test to @file{test_driver.cxx}:
 
 @example
-#include <vgl/vgl_test.h>
-#undef TESTMAIN
-#define TESTMAIN(x)
-#include <vgl/tests/test_point_2d_io.cxx>
-#include <vgl/tests/test_point_3d_io.cxx>
+#include <testlib/testlib_register.h>
 
-#undef TESTMAIN
-#define TESTMAIN(x) int main() @{ vgl_test_start(#x); x(); return vgl_test_summary(); @}
+DECLARE( test_point_2d_io );
+DECLARE( test_point_3d_io );
+// More tests ....
 
-void run_test_vgl_io()
+void
+register_tests()
 @{
-  test_point_2d_double_io();
-  test_point_3d_double_io();
+  REGISTER( test_point_2d_io );
+  REGISTER( test_point_3d_io );
   // More tests ....
 @}
 
-TESTMAIN(run_test_vgl_io);
+DEFINE_MAIN;
 @end example
 
 When one runs make (under Unix) all the programs are compiled and the
@@ -1530,5 +1524,5 @@ To summarise, when adding a test program to v?l you need to
 
 @enumerate
 @item Create a test function in @file{tests/test_classname_io.cxx}
-@item Add a call to the function in @file{tests/test_v?l_io.cxx}
+@item Add a call to the function in @file{tests/test_driver.cxx}
 @end enumerate
