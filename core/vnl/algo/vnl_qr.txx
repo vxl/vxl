@@ -16,13 +16,6 @@
 #include <vnl/vnl_complex_traits.h>
 #include <vnl/algo/vnl_netlib.h> // dqrdc_(), dqrsl_()
 
-#ifdef HAS_FSM_PACK
-template <typename T> int fsm_qrdc_cxx(vnl_netlib_qrdc_proto(T));
-template <typename T> int fsm_qrsl_cxx(vnl_netlib_qrsl_proto(T));
-# define vnl_linpack_qrdc fsm_qrdc_cxx
-# define vnl_linpack_qrsl fsm_qrsl_cxx
-
-#else
 // use C++ overloading to call the right linpack routine from the template code :
 #define macro(p, T) \
 inline void vnl_linpack_qrdc(vnl_netlib_qrdc_proto(T)) \
@@ -34,7 +27,6 @@ macro(d, double);
 macro(c, vcl_complex<float>);
 macro(z, vcl_complex<double>);
 #undef macro
-#endif
 
 template <class T>
 vnl_qr<T>::vnl_qr(vnl_matrix<T> const& M):

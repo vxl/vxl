@@ -16,10 +16,6 @@
 #include <vnl/vnl_fortran_copy.h>
 #include <vnl/algo/vnl_netlib.h> // dsvdc_()
 
-#ifdef HAS_FSM_PACK
-template <typename T> int fsm_svdc_cxx(vnl_netlib_svd_proto(T));
-# define vnl_linpack_svdc fsm_svdc_cxx
-#else
 // use C++ overloading to call the right linpack routine from the template code :
 #define macro(p, T) \
 inline void vnl_linpack_svdc(vnl_netlib_svd_proto(T)) \
@@ -29,7 +25,6 @@ macro(d, double);
 macro(c, vcl_complex<float>);
 macro(z, vcl_complex<double>);
 #undef macro
-#endif
 
 //--------------------------------------------------------------------------------
 
