@@ -14,4 +14,5 @@ AUX_SOURCE_DIRECTORY(Templates gmvl_sources)
 
 IF( BUILD_TESTING)
   SUBDIRS(examples)
+# SUBDIRS(tests)
 ENDIF( BUILD_TESTING)
