@@ -23,9 +23,9 @@ void vsl_b_write(vsl_b_ostream & os, const vbl_array_2d<T> &p)
   int array_cols = p.cols();
   vsl_b_write(os, array_rows);
   vsl_b_write(os, array_cols);
-  for (unsigned i=0; i<array_rows; i++)
+  for (int i=0; i<array_rows; i++)
   {
-    for (unsigned j=0; j<array_cols; j++)
+    for (int j=0; j<array_cols; j++)
       vsl_b_write(os, p(i,j));
   }
 }

@@ -21,9 +21,9 @@ struct vnl_test_amoeba_cost1 : public vnl_cost_function {
   vnl_test_amoeba_cost1(int n) : vnl_cost_function(n) {}
 
   double f(const vnl_vector<double>& x) {
-    assert(x.size()==dim);
+    assert((int)x.size()==dim);
     double sum=0;
-    for (int i=0;i<x.size();++i) sum+=(x[i]-i)*(x[i]-i);
+    for (unsigned int i=0;i<x.size();++i) sum+=(x[i]-i)*(x[i]-i);
     return sum;
   }
 };
