@@ -1,8 +1,4 @@
-#
 # ./oxl/vgui/impl/CMakeLists.txt
-#
-#   geoff.cross@crd.ge.com
-#
 
 INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindGLUT.cmake)
 
