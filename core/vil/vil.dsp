@@ -222,6 +222,48 @@ SOURCE=.\Templates/vil2_image_view+vil_rgb+double--.cxx
 SOURCE=.\Templates/vil2_image_view+vil_rgba+byte--.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil2_image_view+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_image_view_functions+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_copy+bool-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_copy+byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_copy+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_copy+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_copy+int_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_copy+int_32-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_copy+sbyte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_copy+uint_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_copy+uint_32-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_image_view+sbyte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_image_view+vil_rgb+sbyte--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_image_view_functions+sbyte-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vil2_memory_image.cxx
 # End Source File
 # Begin Source File
@@ -273,12 +315,6 @@ SOURCE=.\vil2_image_view_functions.txx
 SOURCE=.\vil2_load.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_reg_image.h
-# End Source File
-# Begin Source File
-SOURCE=.\vil2_reg_image_2d.h
-# End Source File
-# Begin Source File
 SOURCE=.\vil2_crop.h
 # End Source File
 # Begin Source File
@@ -303,9 +339,6 @@ SOURCE=.\vil2_sample_profile_bilin.txx
 SOURCE=.\vil2_save.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_byte.h
-# End Source File
-# Begin Source File
 SOURCE=.\vil2_pixel_traits.h
 # End Source File
 # Begin Source File
@@ -313,6 +346,18 @@ SOURCE=.\vil2_sample_grid_bilin.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_sample_grid_bilin.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_copy.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_copy.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_math.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_property.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
