@@ -18,6 +18,15 @@
 #include "klt_util.h"
 #include "pyramid.h"
 
+/*
+ * Using sqrtf() for float arguments, instead of sqrt(double),
+ * at least when math.h provides this.
+ */
+#include <vxl_config.h>
+#if ! VXL_MATH_HAS_SQRTF
+#define sqrtf(x) (float)sqrt((double)(x))
+#endif
+
 int KLT_verbose = 1;
 
 typedef enum {SELECTING_ALL, REPLACING_SOME} selectionMode;
