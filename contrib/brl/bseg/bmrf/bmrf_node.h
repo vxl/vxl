@@ -22,7 +22,7 @@
 #include <vbl/vbl_smart_ptr.h>
 #include <bmrf/bmrf_node_sptr.h>
 #include <bmrf/bmrf_epi_seg_sptr.h>
-#include <bmrf/bmrf_epi_transform_sptr.h>
+#include <bmrf/bmrf_gamma_func_sptr.h>
 
 // forward declare the arc
 class bmrf_arc;
@@ -83,8 +83,8 @@ class bmrf_node : public vbl_ref_count
   //: Calculate the conditional probability that this node is correct given its neighbors
   double probability();
 
-  //: Calculate the probability given the trasformation and neighbors
-  double probability(const bmrf_epi_transform_sptr& xform);
+  //: Calculate the probability given the gamma function and neighbors
+  double probability(const bmrf_gamma_func_sptr& gamma);
 
   //: Returns an iterator to the beginning of the type \p type neighbors
   // \note if \p type is ALL then iteration is over all types

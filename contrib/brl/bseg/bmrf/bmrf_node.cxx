@@ -4,6 +4,7 @@
 // \file
 
 #include <bmrf/bmrf_epi_transform.h>
+#include <bmrf/bmrf_gamma_func.h>
 #include <vsl/vsl_binary_io.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vcl_algorithm.h>
@@ -133,8 +134,8 @@ bmrf_node::probability()
     int time_step = neighbor->frame_num() - this->frame_num();
     double gamma = (1.0 - dist_ratio) / time_step;
     
-    bmrf_epi_transform_sptr xform = new bmrf_const_epi_transform(gamma);
-    pmf.push_back(vcl_pair<double,double>(this->probability(xform),gamma));
+    bmrf_gamma_func_sptr gamma_func = new bmrf_const_gamma_func(gamma);
+    pmf.push_back(vcl_pair<double,double>(this->probability(gamma_func),gamma));
   }
   vcl_sort(pmf.begin(), pmf.end());
 /*
@@ -152,15 +153,15 @@ bmrf_node::probability()
 
 //: Calculate the error in similarity between this trasformed by \p xform
 double
-bmrf_node::probability(const bmrf_epi_transform_sptr& xform)
+bmrf_node::probability(const bmrf_gamma_func_sptr& gamma)
 {
   if(weight_.empty())
     this->compute_weights();
 
   // precompute the segment in the next and previous frames since
   // this should make up most of the neighbors
-  bmrf_epi_seg_sptr prev_seg = xform->apply(this->epi_seg(), -1.0);
-  bmrf_epi_seg_sptr next_seg = xform->apply(this->epi_seg(), 1.0);
+  bmrf_epi_seg_sptr prev_seg = bmrf_epi_transform(this->epi_seg(), gamma, -1.0);
+  bmrf_epi_seg_sptr next_seg = bmrf_epi_transform(this->epi_seg(), gamma, 1.0);
   double prob = 0.0;
   for ( arc_iterator a_itr = this->begin(TIME); a_itr != this->end(TIME); ++a_itr ) {
     bmrf_node_sptr neighbor = (*a_itr)->to();
@@ -175,7 +176,7 @@ bmrf_node::probability(const bmrf_epi_transform_sptr& xform)
       break;
      default:
       // compute less likely transformations as needed
-      bmrf_epi_seg_sptr xform_seg = xform->apply(this->epi_seg(), double(time_step));
+      bmrf_epi_seg_sptr xform_seg = bmrf_epi_transform(this->epi_seg(), gamma, double(time_step));
       error = bmrf_match_error(xform_seg, neighbor->epi_seg());
     }
     vcl_map<bmrf_node*, double>::iterator w_itr = weight_.find(neighbor.ptr());
