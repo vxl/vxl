@@ -22,6 +22,9 @@ SOURCE=.\Templates/vbl_smart_ptr+vvid_video_process-.cxx
 SOURCE=.\Templates/vcl_vector+vvid_live_video_frame_sptr-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vcl_vector+vvid_live_video_tableau_sptr-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vvid_epipolar_space_process.cxx
 # End Source File
 # Begin Source File
@@ -35,6 +38,18 @@ SOURCE=.\vvid_live_video_manager.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vvid_video_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vvid_edge_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vvid_live_stereo_manager.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vvid_live_video_tableau.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vvid_region_process.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -65,6 +80,21 @@ SOURCE=.\vvid_video_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\vvid_video_process_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vvid_edge_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vvid_live_stereo_manager.h
+# End Source File
+# Begin Source File
+SOURCE=.\vvid_live_video_tableau.h
+# End Source File
+# Begin Source File
+SOURCE=.\vvid_region_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vvid_live_video_tableau_sptr.h
 # End Source File
 # End Group
 # End Target
