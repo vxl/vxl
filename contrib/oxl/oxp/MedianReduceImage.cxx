@@ -25,7 +25,7 @@ MedianReduceImage::MedianReduceImage(vil_memory_image_of<unsigned char> const& i
   int ow = w / SCALE;
   int oh = h / SCALE;
   vil_memory_image_of<byte>& out = *this;
-  vil_memory_image_of<byte> hists(ow * oh, SCALE * SCALE);
+//vil_memory_image_of<byte> hists(ow * oh, SCALE * SCALE);
   vcl_vector<int> intensities(SCALE*SCALE);
   for (int ox = 0; ox < ow; ++ox)
     for (int oy = 0; oy < oh; ++oy) {
