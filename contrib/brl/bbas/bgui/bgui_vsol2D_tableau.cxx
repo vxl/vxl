@@ -27,6 +27,7 @@ bgui_vsol2D_tableau::bgui_vsol2D_tableau(vgui_tableau_sptr const& t,
 
 bgui_vsol2D_tableau::~bgui_vsol2D_tableau()
 {
+  this->clear_all();
 }
 
 void bgui_vsol2D_tableau::init()

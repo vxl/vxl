@@ -38,6 +38,7 @@
 #include <vtol/vtol_topology_object_sptr.h>
 #include <vgui/vgui_tableau_sptr.h>
 #include <vgui/vgui_image_tableau_sptr.h>
+#include <vgui/vgui_rubberband_tableau.h>
 #include <bgui/bgui_easy2D_tableau.h>
 #include <bgui/bgui_vsol2D_tableau.h>
 #include <bgui/bgui_vsol2D_tableau_sptr.h>
@@ -60,6 +61,9 @@ class bgui_vtol2D_tableau : public bgui_vsol2D_tableau
                       const char* n="unnamed");
 
   ~bgui_vtol2D_tableau();
+
+  //:virtual handle method for events
+  virtual bool handle(vgui_event const &);
 
   //: the vtol display methods for individual topology classes
   bgui_vtol_soview2D_vertex* add_vertex(vtol_vertex_2d_sptr const& v);
@@ -155,12 +159,17 @@ class bgui_vtol2D_tableau : public bgui_vsol2D_tableau
                             const float line_width);
   void set_face_style(const float r, const float g, const float b,
                       const float line_width);
+
+  //: Access to temporary cached object, useful for new rubberbanded objects
+  void set_temp(vtol_topology_object_sptr const& to){temp_=to;}
+  vtol_topology_object_sptr get_temp(){return temp_;}
  protected:
   DefaultStyle vertex_style_;
   DefaultStyle edge_style_;
   DefaultStyle edge_group_style_;
   DefaultStyle face_style_;
   void init();
+  vtol_topology_object_sptr temp_; //temporary storage for a topology object
   vcl_map<int, vtol_topology_object_sptr> obj_map_;
 };
 
@@ -180,6 +189,44 @@ struct bgui_vtol2D_tableau_new : public bgui_vtol2D_tableau_sptr
     :  base(new bgui_vtol2D_tableau(t, n)) { }
 
   operator bgui_vsol2D_tableau_sptr () const { bgui_vsol2D_tableau_sptr tt; tt.vertical_cast(*this); return tt; }
+};
+
+//A client for rubberbanding stuff
+class bgui_vtol2D_rubberband_client : public vgui_rubberband_client
+{
+ public:
+
+  bgui_vtol2D_tableau_sptr vtol2D_;
+
+  //:constructor - takes a pointer to a vtol2D tableau
+  bgui_vtol2D_rubberband_client(bgui_vtol2D_tableau_sptr const& vtol2D);
+
+    //: Called by vgui_rubberband_tableau when the user has selected a point.
+  virtual void add_point(float, float);
+
+  //: Called by vgui_rubberband_tableau when the user has selected a finite line.
+  virtual void add_line(float,float,float,float);
+
+  //: Called by vgui_rubberband_tableau when user has selected an infinite line.
+  virtual void add_infinite_line(float,float,float);
+
+  //: Called by vgui_rubberband_tableau when the user has selected a circle.
+  virtual void add_circle(float,float,float);
+
+  //: Called by vgui_rubberband_tableau when the user has selectd a linestrip.
+  virtual void add_linestrip(int n,float const *,float const *);
+
+  //: Called by vgui_rubberband_tableau when the user has selected a polygon.
+  virtual void add_polygon(int n,float const*,float const*);
+
+  //: Called by vgui_rubberband_tableau when user has selected a rectangular box
+  virtual void add_box(float,float,float,float);
+
+  //: Called by vgui_rubberband_tableau whenever mouse motion is captured.
+  //  This turns off the highlighting of geometry objects to eliminate
+  //  flickering highlights while drawing temporary objects.
+  void clear_highlight();
+
 };
 
 #endif // bgui_vtol2D_tableau_h_

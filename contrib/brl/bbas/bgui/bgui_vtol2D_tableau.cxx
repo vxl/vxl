@@ -25,6 +25,7 @@ bgui_vtol2D_tableau::bgui_vtol2D_tableau(vgui_tableau_sptr const& t,
 
 bgui_vtol2D_tableau::~bgui_vtol2D_tableau()
 {
+  this->clear_all();
 }
 
 #ifdef DEBUG
@@ -59,6 +60,12 @@ void bgui_vtol2D_tableau::init()
   bgui_vsol2D_tableau::init();
 }
 
+bool bgui_vtol2D_tableau::handle(vgui_event const &e)
+{
+  // We aren't interested in other events so pass them to the base class.
+  return bgui_vsol2D_tableau::handle(e);
+}
+
 //display topological objects
 bgui_vtol_soview2D_vertex*
 bgui_vtol2D_tableau::add_vertex(vtol_vertex_2d_sptr const& v)
@@ -85,6 +92,7 @@ bgui_vtol2D_tableau::add_vertex(vtol_vertex_2d_sptr const& v,
                                                  b,
                                                  point_radius,
                                                  0.0f ) );
+
   //set the default style
   //bgui_style_sptr sty = style_map_[obj->type_name()];
   if (obj) {
@@ -114,6 +122,7 @@ bgui_vtol2D_tableau::add_edge(vtol_edge_2d_sptr const& e ,
                               const float b,
                               const float line_width)
 {
+
 #ifdef DEBUG
   print_edgels(e);
 #endif
@@ -126,6 +135,7 @@ bgui_vtol2D_tableau::add_edge(vtol_edge_2d_sptr const& e ,
                                                  b ,
                                                  1.0f,
                                                  line_width ) );
+
   if (obj) {
     //obj->set_style(sty.ptr());
     // if (highlight_)
@@ -481,4 +491,85 @@ void bgui_vtol2D_tableau::set_face_style(const float r, const float g,
   face_style_.g = g;
   face_style_.b = b;
   face_style_.line_width = line_width;
+}
+
+//--------------------------------------------------------------
+//  bgui_vtol2D_rubberband_client methods
+//--------------------------------------------------------------
+bgui_vtol2D_rubberband_client::
+bgui_vtol2D_rubberband_client(bgui_vtol2D_tableau_sptr const& vtol2D) 
+  : vtol2D_(vtol2D)
+{
+}
+
+void
+bgui_vtol2D_rubberband_client::
+add_point(float x, float y)
+{
+  vtol2D_->add_point(x,y);
+}
+
+
+void
+bgui_vtol2D_rubberband_client::
+add_line(float x0, float y0, float x1, float y1)
+{
+  vtol2D_->add_line(x0, y0, x1, y1);
+}
+
+
+void
+bgui_vtol2D_rubberband_client::
+add_infinite_line(float a, float b, float c)
+{
+  vtol2D_->add_infinite_line(a, b, c);
+}
+
+
+void
+bgui_vtol2D_rubberband_client::
+add_circle(float x, float y, float r)
+{
+  vtol2D_->add_circle(x, y, r);
+}
+
+
+void
+bgui_vtol2D_rubberband_client::
+add_linestrip(int n, float const* x, float const* y)
+{
+  vtol2D_->add_linestrip(n, x, y);
+}
+
+
+void
+bgui_vtol2D_rubberband_client::
+add_polygon(int n, float const* x, float const* y)
+{
+  vtol2D_->add_polygon(n, x, y);
+}
+
+
+void
+bgui_vtol2D_rubberband_client::
+add_box(float x0, float y0, float x1, float y1)
+{
+  vtol_vertex_sptr v0 = new vtol_vertex_2d(x0, y0);  
+  vtol_vertex_sptr v1 = new vtol_vertex_2d(x1, y0);  
+  vtol_vertex_sptr v2 = new vtol_vertex_2d(x1, y1);  
+  vtol_vertex_sptr v3 = new vtol_vertex_2d(x0, y1); 
+  vcl_vector<vtol_vertex_sptr> verts;
+  verts.push_back(v0);   verts.push_back(v1);
+  verts.push_back(v2);   verts.push_back(v3);
+  vtol_face_2d_sptr box = new vtol_face_2d(verts);
+  vtol2D_->add_face(box);
+  vtol2D_->set_temp(box->cast_to_face());
+}
+
+
+void
+bgui_vtol2D_rubberband_client::
+clear_highlight()
+{
+  vtol2D_->highlight(0);
 }

@@ -158,6 +158,17 @@ bgui_vtol_soview2D_edge::bgui_vtol_soview2D_edge(vtol_edge_2d_sptr const& e)
         }
       return;
     }
+  if(c->cast_to_line_2d())
+    {
+      n = 2;
+      x = new float[n], y = new float[n];
+      vsol_line_2d_sptr l = c->cast_to_line_2d();
+      vsol_point_2d_sptr p0 = l->p0();
+      x[0]=p0->x();      y[0]=p0->y();
+      vsol_point_2d_sptr p1 = l->p1();
+      x[1]=p1->x();      y[1]=p1->y();
+      return;
+    }
   vcl_cout << "In bgui_vtol_soview2D_edge(vtol_edge_2d_sptr& e) -"
            << " attempt to draw an edge with unknown curve geometry\n";
 }
