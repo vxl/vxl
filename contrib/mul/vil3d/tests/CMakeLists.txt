@@ -22,6 +22,7 @@ ADD_EXECUTABLE( vil3d_test_all
   test_algo_convolve_1d.cxx
   test_algo_histogram.cxx
   test_algo_histogram_equalise.cxx
+  test_from_image_2d.cxx
 )
 TARGET_LINK_LIBRARIES( vil3d_test_all vil3d_algo vil3d vil vil_algo vpl vul testlib vcl )
 
@@ -35,17 +36,17 @@ ADD_TEST( vil3d_test_switch_axes              vil3d_test_all test_switch_axes )
 ADD_TEST( vil3d_test_image_resource           vil3d_test_all test_image_resource )
 ADD_TEST( vil3d_test_convert                  vil3d_test_all test_convert ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
 
-
-ADD_TEST( vil3d_test_algo_threshold           vil3d_test_all test_algo_threshold )
-ADD_TEST( vil3d_test_algo_structuring_element vil3d_test_all test_algo_structuring_element )
-ADD_TEST( vil3d_test_algo_binary_dilate       vil3d_test_all test_algo_binary_dilate )
-ADD_TEST( vil3d_test_algo_binary_erode        vil3d_test_all test_algo_binary_erode )
-ADD_TEST( vil3d_test_algo_exp_filter          vil3d_test_all test_algo_exp_filter )
-ADD_TEST( vil3d_test_algo_grad_1x3            vil3d_test_all test_algo_grad_1x3 )
-ADD_TEST( vil3d_test_algo_normalised_correlation_3d  vil3d_test_all test_algo_normalised_correlation_3d )
-ADD_TEST( vil3d_test_algo_convolve_1d         vil3d_test_all test_algo_convolve_1d )
-ADD_TEST( vil3d_test_algo_histogram           vil3d_test_all test_algo_histogram )
-ADD_TEST( vil3d_test_algo_histogram_equalise  vil3d_test_all test_algo_histogram_equalise )
+ADD_TEST( vil3d_test_algo_threshold                   vil3d_test_all  test_algo_threshold )
+ADD_TEST( vil3d_test_algo_structuring_element         vil3d_test_all  test_algo_structuring_element )
+ADD_TEST( vil3d_test_algo_binary_dilate               vil3d_test_all  test_algo_binary_dilate )
+ADD_TEST( vil3d_test_algo_binary_erode                vil3d_test_all  test_algo_binary_erode )
+ADD_TEST( vil3d_test_algo_exp_filter                  vil3d_test_all  test_algo_exp_filter )
+ADD_TEST( vil3d_test_algo_grad_1x3                    vil3d_test_all  test_algo_grad_1x3 )
+ADD_TEST( vil3d_test_algo_normalised_correlation_3d   vil3d_test_all  test_algo_normalised_correlation_3d )
+ADD_TEST( vil3d_test_algo_convolve_1d                 vil3d_test_all  test_algo_convolve_1d )
+ADD_TEST( vil3d_test_algo_histogram                   vil3d_test_all  test_algo_histogram )
+ADD_TEST( vil3d_test_algo_histogram_equalise          vil3d_test_all  test_algo_histogram_equalise )
+ADD_TEST( vil3d_test_from_image_2d                    vil3d_test_all  test_from_image_2d )
 
 ADD_EXECUTABLE( vil3d_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vil3d_test_include vil3d_algo vil3d )

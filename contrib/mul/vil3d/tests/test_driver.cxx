@@ -19,6 +19,7 @@ DECLARE( test_algo_convolve_1d );
 DECLARE( test_convert );
 DECLARE( test_algo_histogram_equalise );
 DECLARE( test_algo_histogram );
+DECLARE( test_from_image_2d );
 
 void
 register_tests()
@@ -42,6 +43,7 @@ register_tests()
   REGISTER( test_algo_convolve_1d );
   REGISTER( test_algo_histogram_equalise );
   REGISTER( test_algo_histogram );
+  REGISTER( test_from_image_2d );
 }
 
 DEFINE_MAIN;
