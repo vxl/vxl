@@ -9,7 +9,7 @@
 #include <mvl/HMatrix2D.h>
 #include <mvl/AffineMetric.h>
 #include <mvl/HomgPoint2D.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 class HMatrix2DComputeRobust {
 public:

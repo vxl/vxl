@@ -23,7 +23,7 @@
 #include <mvl/HMatrix2DCompute4Point.h>
 #include <mvl/HMatrix2D.h>
 #include <mvl/AffineMetric.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 class HMatrix2DComputeMLESAC : public HMatrix2DComputeRobust {
 public:

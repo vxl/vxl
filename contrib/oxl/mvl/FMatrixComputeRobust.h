@@ -18,7 +18,7 @@
 #include <mvl/FMatrix.h>
 #include <mvl/HomgPoint2D.h>
 #include <vnl/vnl_vector.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 class FMatrixComputeRobust : FMatrixCompute {
 public:

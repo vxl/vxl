@@ -18,7 +18,7 @@
 //-----------------------------------------------------------------------------
 
 #include <mvl/FMatrixComputeRobust.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 class FMatrixComputeLMedSq : public FMatrixComputeRobust {
 public :

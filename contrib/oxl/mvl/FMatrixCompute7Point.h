@@ -23,7 +23,7 @@
 //
 //-----------------------------------------------------------------------------
 #include <mvl/FMatrix.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 #include <mvl/PairMatchSetCorner.h>
 
 class FMatrixCompute7Point {

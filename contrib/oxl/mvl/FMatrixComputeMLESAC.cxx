@@ -3,9 +3,9 @@
 #include <mvl/HomgOperator2D.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_double_2.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
-#include <vcl/vcl_cmath.h>
+#include <vcl_cmath.h>
 
 FMatrixComputeMLESAC::FMatrixComputeMLESAC(bool rank2_truncate, double std)
 {

@@ -4,10 +4,11 @@
 
 #include "FMatrixComputeNonLinear.h"
 
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_cstdlib.h> // for abort()
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_cmath.h>
+#include <vcl_cassert.h>
+#include <vcl_cstdlib.h> // for abort()
+#include <vcl_iostream.h>
+#include <vcl_cmath.h>
+#include <vcl_iomanip.h>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
@@ -58,8 +59,6 @@ FMatrixComputeNonLinear::FMatrixComputeNonLinear(PairMatchSetCorner* matches) :
     points2_[a] = HomgPoint2D(temp2[0], temp2[1], 1.0);
   }
 }
-
-#include <vcl/vcl_iomanip.h>
 
 //-----------------------------------------------------------------------------
 //: Compute the F Matrix by augmenting a 7 point basis

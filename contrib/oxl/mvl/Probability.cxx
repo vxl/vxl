@@ -1,8 +1,8 @@
 #include <stdlib.h>
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_iterator.h>
-#include <vcl/vcl_cmath.h>
+#include <vcl_vector.h>
+#include <vcl_iostream.h>
+#include <vcl_iterator.h>
+#include <vcl_cmath.h>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_svd.h>

@@ -1,7 +1,7 @@
 #include "ComputeGRIC.h"
 #include <mvl/FMatrixComputeMLESAC.h>
 #include <mvl/HMatrix2DComputeMLESAC.h>
-#include <vcl/vcl_cmath.h>
+#include <vcl_cmath.h>
 #include <mvl/HomgInterestPointSet.h>
 
 ComputeGRIC::ComputeGRIC(double std) : std_(std) {}

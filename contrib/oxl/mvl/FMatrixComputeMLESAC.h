@@ -19,7 +19,7 @@
 
 #include <mvl/FMatrixComputeRobust.h>
 #include <mvl/FManifoldProject.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 class FMatrixComputeMLESAC : public FMatrixComputeRobust {
 public:

@@ -8,7 +8,7 @@
 #include <mvl/PairMatchSetCorner.h>
 #include <mvl/FMatrix.h>
 #include <mvl/HMatrix2D.h>
-#include <vcl/vcl_vector.h>
+#include <vcl_vector.h>
 
 class ComputeGRIC {
 public:
