@@ -22,6 +22,8 @@ class rgrl_convergence_tester
   //: ctor
   rgrl_convergence_tester() : rel_tol_thres_(1e-3) { }
   
+  virtual ~rgrl_convergence_tester(); 
+  
   //:  Compute the converge_status of the current view using multiple match sets
   //   This is the pure virtual function implemented in the derived classes.
   //
@@ -62,6 +64,20 @@ class rgrl_convergence_tester
                   rgrl_scale_sptr                         current_scale,
                   bool                                    penalize_scaling = false)const;
 
+  //: convinient function for initializing status
+  rgrl_converge_status_sptr
+  initialize_status( rgrl_view       const& init_view,
+                     rgrl_scale_sptr const& prior_scale,
+                     bool                   penalize_scaling ) const;
+
+  //: convinient function for initializing status
+  rgrl_converge_status_sptr
+  initialize_status( rgrl_transformation_sptr                xform_estimate,
+                     rgrl_estimator_sptr                     xform_estimator,
+                     rgrl_scale_sptr                  const& prior_scale,
+                     bool                                    penalize_scaling )const;
+
+
   //: set relative tolerance on convergence
   void set_rel_tol( double rel_tol ) 
   { rel_tol_thres_ = rel_tol; }
@@ -70,6 +86,13 @@ class rgrl_convergence_tester
   rgrl_type_macro( rgrl_convergence_tester, rgrl_object );
 
 protected:
+  
+  //: the real init status function
+  virtual rgrl_converge_status_sptr
+  init_status( rgrl_view       const& init_view,
+               rgrl_scale_sptr const& prior_scale,
+               bool                   penalize_scaling ) const;
+  
   //:  helper function for computing status
   virtual 
   rgrl_converge_status_sptr

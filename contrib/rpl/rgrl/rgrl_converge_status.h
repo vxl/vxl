@@ -24,11 +24,16 @@ public:
   rgrl_converge_status( bool     has_converged,
                         bool     has_stagnated,
                         bool     is_good_enough,
+                        bool     in_is_failed,
                         double   error,
                         unsigned oscillation_count,
                         double   error_diff );
 
   virtual ~rgrl_converge_status();
+
+  enum converge_type { conv_on_going, converged, stagnated };
+  
+  enum status_type { status_on_going, good_enough, failed };
 
   //:  Return true if the estimation has converged to a viable estimate.
   //
@@ -43,6 +48,22 @@ public:
   //
   bool is_good_enough() const;
 
+  //:  Return true if the current estimate should be considered "a failure" that would not solve the problem.
+  //
+  bool is_failed() const;
+
+  //: return converge enum
+  converge_type current_converge() const;
+  
+  //: return current status
+  status_type  current_status() const;
+
+  //: set current coverage
+  void set_current_converge( converge_type c );
+  
+  //: set current coverage
+  void set_current_status( status_type s );
+  
   //: Current value of the objective function
   //
   //  Lower is better.
@@ -64,10 +85,9 @@ public:
   // Defines type-related functions
   rgrl_type_macro( rgrl_converge_status, rgrl_object );
 
-private:
-  bool     has_converged_;
-  bool     has_stagnated_;
-  bool     is_good_enough_;
+protected:
+  converge_type conv_;
+  status_type   status_;
   double   error_;
   unsigned oscillation_count_;
   double   error_diff_;

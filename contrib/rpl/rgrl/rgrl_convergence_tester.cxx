@@ -3,6 +3,11 @@
 #include "rgrl_converge_status.h"
 #include "rgrl_view.h"
 
+rgrl_convergence_tester::
+~rgrl_convergence_tester()
+{
+}
+
 rgrl_converge_status_sptr
 rgrl_convergence_tester::
 compute_status( rgrl_converge_status_sptr               prev_status,
@@ -52,6 +57,41 @@ compute_status( rgrl_converge_status_sptr               prev_status,
   scales.push_back( current_scale );
   return compute_status( prev_status, xform_estimate, xform_estimator,
                          match_sets, scales, penalize_scaling );
+}
+
+
+rgrl_converge_status_sptr
+rgrl_convergence_tester::
+initialize_status( rgrl_transformation_sptr                xform_estimate,
+                   rgrl_estimator_sptr                     xform_estimator,
+                   rgrl_scale_sptr                  const& prior_scale,
+                   bool                                    penalize_scaling )const
+{
+  rgrl_mask_box   dummy_image_region(0);
+  rgrl_view view( dummy_image_region, dummy_image_region,
+                  dummy_image_region, dummy_image_region,
+                  xform_estimator, xform_estimate, 0);
+  return this->init_status( view, prior_scale, penalize_scaling );
+}
+
+rgrl_converge_status_sptr
+rgrl_convergence_tester::
+initialize_status( rgrl_view       const& init_view,
+                   rgrl_scale_sptr const& prior_scale,
+                   bool                   penalize_scaling ) const
+{
+  // call the real virtual function
+  return this->init_status( init_view, prior_scale, penalize_scaling );
+}
+
+rgrl_converge_status_sptr
+rgrl_convergence_tester::
+init_status( rgrl_view       const& init_view,
+             rgrl_scale_sptr const& prior_scale,
+             bool                   penalize_scaling ) const
+{
+  // nothing to initialize
+  return 0;
 }
 
 rgrl_converge_status_sptr
@@ -117,5 +157,5 @@ compute_status_helper( double new_error,
     converged = false;
   }
 
-  return new rgrl_converge_status( converged, stagnated, good_enough, new_error, oscillation_count, error_diff );
+  return new rgrl_converge_status( converged, stagnated, good_enough, false, new_error, oscillation_count, error_diff );
 }
