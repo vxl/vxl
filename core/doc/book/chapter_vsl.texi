@@ -666,9 +666,9 @@ will optimise them completely away.
 void vsl_print_summary(vcl_ostream& os,const vanyl_my_class& v)
 @{
   os << v.is_a() << ": ";
-  vsl_inc_indent(os);
+  vsl_indent_inc(os);
   v.print_summary(os);
-  vsl_dec_indent(os);
+  vsl_indent_dec(os);
 @}
 
 @end example
@@ -1435,7 +1435,7 @@ indentation using
 os<<vsl_indent()<<"Rest of stuff.."<<vcl_endl;
 @end example
 and increases and decreases the current indentation for the stream with
-@code{vsl_inc_indent(os)} and @code{vsl_dec_indent(os)},
+@code{vsl_indent_inc(os)} and @code{vsl_indent_dec(os)},
 then one can easily generate readable output for complex nested sets
 of classes.
 
@@ -1443,13 +1443,13 @@ It's use is best described by example:
 
 @example
 vcl_cout<<vsl_indent()<<"No Indent"<<vcl_endl;
-vsl_inc_indent(vcl_cout);
+vsl_indent_inc(vcl_cout);
 vcl_cout<<vsl_indent()<<"1 Indent"<<vcl_endl;
-vsl_inc_indent(vcl_cout);
+vsl_indent_inc(vcl_cout);
 vcl_cout<<vsl_indent()<<"2 Indent"<<vcl_endl;
-vsl_dec_indent(vcl_cout);
+vsl_indent_dec(vcl_cout);
 vcl_cout<<vsl_indent()<<"1 Indent"<<vcl_endl;
-vsl_dec_indent(vcl_cout);
+vsl_indent_dec(vcl_cout);
 vcl_cout<<vsl_indent()<<"No Indent"<<vcl_endl;
 @end example
 
@@ -1473,9 +1473,9 @@ public:
 vcl_ostream& operator<<(vcl_ostream& os, const Fred& fred)
 {
   os<<"Fred: "<<vcl_endl;
-  vsl_inc_indent(os);
+  vsl_indent_inc(os);
   fred.print(os);
-  vsl_dec_indent(os);
+  vsl_indent_dec(os);
   return os;
 }
 
@@ -1495,9 +1495,9 @@ public:
 vcl_ostream& operator<<(vcl_ostream& os, const Jim& jim)
 {
   os<<"Jim: "<<vcl_endl;
-  vsl_inc_indent(os);
+  vsl_indent_inc(os);
   jim.print(os);
-  vsl_dec_indent(os);
+  vsl_indent_dec(os);
   return os;
 }
 
