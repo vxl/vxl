@@ -67,7 +67,7 @@ vcl_string vul_file::dirname(char const* fn)
 {
   vcl_string self(fn);
 
-  unsigned int slash_index = self.rfind('/');
+  vcl_string::size_type slash_index = self.rfind('/');
   if (slash_index == vcl_string::npos)
     return ".";
 
