@@ -50,8 +50,11 @@ vil_image vil_image_as_float(vil_image const & i);
 //: \brief Converts to a greyscale image with integer double pixels. \sa{vil_image_as}
 vil_image vil_image_as_double(vil_image const & i);
 
-//: \brief Converts to a rgb image with 8bits per component. \sa{vil_image_as}
+//: \brief Converts to a rgb image with 8 bits per component. \sa{vil_image_as}
 vil_image vil_image_as_rgb_byte(vil_image const & i);
+
+//: \brief Converts to a rgb image with 16 bits per component. \sa{vil_image_as}
+vil_image vil_image_as_rgb_uint16(vil_image const & i);
 
 //: \brief Converts to a rgb image with float components. \sa{vil_image_as}
 vil_image vil_image_as_rgb_float(vil_image const & i);
