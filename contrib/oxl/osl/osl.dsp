@@ -372,6 +372,11 @@ SOURCE=.\osl_edgel_chain.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\osl_fit_circle.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\osl_fit_lines.cxx
 
 # End Source File
