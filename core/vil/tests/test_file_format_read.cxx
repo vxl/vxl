@@ -13,6 +13,7 @@
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_print.h>
 
+#define DEBUG
 
 // Amitha Perera
 // Apr 2002
@@ -262,6 +263,13 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_perform( test( "ff_rgb8biteasy_true.txt",
     CheckRGBNear<vxl_byte>( "ff_rgb8biteasy_compressed.jpg", 3 ) ) );
 
+  vcl_cout << "Windows bitmap [bmp]\n";
+  testlib_test_begin( "  8-bit greyscale (xv created)" );
+  testlib_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_byte>( "ff_grey8bit.bmp" ) ) );
+  testlib_test_begin( "  8-bit RGB (xv created)" );
+  testlib_test_perform( test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_byte>( "ff_rgb8bit_xv.bmp" ) ) );
+
+
 #if 0
   testlib_test_begin( "  8-bit indexed RGB" );
   testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_indexed.ras" ) ) );
@@ -274,10 +282,6 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_raw.ras" ) ) );
   testlib_test_begin( "  8-bit indexed RGB" );
   testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_indexed.ras" ) ) );
-
-   vcl_cout << "Windows bitmap [bmp]\n";
-   testlib_test_begin( "  8-bit RGB (xv created)" );
-   testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_xv.bmp" ) ) );
 
   vcl_cout << "TIFF [tiff]\n";
   testlib_test_begin( "  8-bit RGB uncompressed" );

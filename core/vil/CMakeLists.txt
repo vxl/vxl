@@ -25,8 +25,13 @@ SET( vil2_sources ${vil2_sources}
   vil2_file_format.cxx vil2_file_format.h
   vil2_memory_image.cxx vil2_memory_image.h
 
-  # file format readers/writers (see below for conditional ones)
+  # file format readers/writers (see above for conditional ones)
   file_formats/vil2_pnm.cxx file_formats/vil2_pnm.h
+
+  file_formats/vil2_bmp_file_header.cxx file_formats/vil2_bmp_file_header.h
+  file_formats/vil2_bmp_core_header.cxx file_formats/vil2_bmp_core_header.h
+  file_formats/vil2_bmp_info_header.cxx file_formats/vil2_bmp_info_header.h
+  file_formats/vil2_bmp.cxx file_formats/vil2_bmp.h
 
   # image operations
   vil2_crop.cxx  vil2_crop.h

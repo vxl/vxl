@@ -26,6 +26,7 @@
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
+#include <vcl_cassert.h>
 
 #include <vxl_config.h> // for vxl_byte
 
@@ -127,60 +128,6 @@ bool test_image_equal(char const* type_name,
     return true;
 }
 
-//: Test the read and write for the given image into the image type specified in type.
-// Some image types flip data around to get default formats. This function uses
-// vil_load_raw and vil_save_raw to avoid that, so that testing can be performed.
-// The non_raw save and load functions are also called, but the images aren't compared.
-
-template <class T>
-void vil_test_image_type_raw(char const* type_name, // type for image to read and write
-                             vil2_image_view<T> const & image, // test image to save and restore
-                             bool exact = true) // require read back image identical
-{
-  vcl_cout << "=== Start testing " << type_name << "===\n" << vcl_flush;
-
-  // Step 1) Write the image out to disk
-  //
-  // create a file name
-  vcl_string fname = vul_temp_filename();
-  fname += ".";
-  if (type_name) fname += type_name;
-
-  vcl_cout << "vil_test_image_type: Save to [" << fname << "]\n" << vcl_flush;
-
-  {
-    // Check non-raw saving and loading actually don't fail obviously.
-    bool tst = vil_save(image, fname.c_str(), type_name);
-    TEST ("non-raw write image to disk", tst, true);
-    if (!tst) return; // fatal error
-    vil_image image3 = vil_load(fname.c_str());
-    TEST ("non-raw load image", !image3, false);
-    if (!image3) return; // fatal error
-
-    tst = vil_save(image, fname.c_str(), type_name);
-    TEST ("raw write image to disk", tst, true);
-    if (!tst) return; // fatal error
-
-    // STEP 2) Read the image that was just saved to file
-    vil_image image2 = vil_load(fname.c_str());
-    TEST ("raw load image", !image2, false);
-    if (!image2) return; // fatal error
-
-    // make sure saved image has the same pixels as the original image
-    tst = !(vcl_strcmp(type_name,image2.file_format()));
-    TEST ("compare image file formats", tst, true);
-    if (!tst)
-      vcl_cout << "read back image type is " << image2.file_format()
-               << " instead of written " << type_name << '\n' << vcl_flush;
-    else
-      test_image_equal(type_name, image, image2, exact);
-  }
-
-#if !LEAVE_IMAGES_BEHIND
-  vpl_unlink(fname.c_str());
-#endif
-}
-
 // create a colour gif image
 static bool create_colour_gif(const char* filename)
 {
@@ -262,7 +209,7 @@ static bool create_grey_gif(const char* filename)
 
 
 template<class T>
-void vil_test_image_type(char const* type_name, // type for image to read and write
+void vil2_test_image_type(char const* type_name, // type for image to read and write
                          vil2_image_view<T> const & image, // test image to save and restore
                          bool exact = true) // require read back image identical
 {
@@ -275,7 +222,7 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
   fname += ".";
   if (type_name) fname += type_name;
 
-  vcl_cout << "vil_test_image_type: Save to [" << fname << "]\n" << vcl_flush;
+  vcl_cout << "vil2_test_image_type: Save to [" << fname << "]\n" << vcl_flush;
 
   // Write image to disk
   if (vcl_strcmp(type_name, "gif") == 0 &&
@@ -332,7 +279,7 @@ vil2_image_view<vxl_byte> CreateTest8bitImage(int wd, int ht)
   vil2_image_view<vxl_byte> image(wd, ht);
   for (int j = 0; j < ht; j++)
     for (int i = 0; i < wd; i++) {
-      image(i,j) = ((i-wd/2)*(j-ht/2)/16) & 0xff;
+      image(i,j) = ((i-wd/2)*(j-ht/2)) & 0xff;
     }
   return image;
 }
@@ -416,14 +363,16 @@ MAIN( test_save_load_image )
 #endif
 
 
+
+
   // JPEG
 #if HAS_JPEG
   // lossy format ==> not guaranteed to be identical (hence arg. 3 set to false)
-  vil_test_image_type("jpeg", image8, false);
-# if 0 
-  vil_test_image_type("jpeg", image16);
+  vil2_test_image_type("jpeg", image8, false);
+# if 0
+  vil2_test_image_type("jpeg", image16);
 # endif
-  vil_test_image_type("jpeg", image3p, false);
+  vil2_test_image_type("jpeg", image3p, false);
 
   // Test small image
   {
@@ -432,7 +381,7 @@ MAIN( test_save_load_image )
     for (unsigned j=0;j<nj;++j)
       for (unsigned i=0;i<ni;++i) small_greyscale_image(i,j)=(i+j)*4;
     vil2_print_all(vcl_cout, small_greyscale_image);
-    vil_test_image_type("jpeg", small_greyscale_image, false);
+    vil2_test_image_type("jpeg", small_greyscale_image, false);
     vcl_string out_path("test_save_load_jpeg.jpg");
     TEST("Saving JPEG",vil2_save(small_greyscale_image, out_path.c_str()),true);
 
@@ -447,66 +396,66 @@ MAIN( test_save_load_image )
 
   // pnm ( = PBM / PGM / PPM )
 #if 1
-  vil_test_image_type("pbm", image1);
-  vil_test_image_type("pgm", image8);
-  vil_test_image_type("pnm", image16);
-  vil_test_image_type("pnm", image32);
-  vil_test_image_type("ppm", image3p);
+  vil2_test_image_type("pbm", image1);
+  vil2_test_image_type("pgm", image8);
+  vil2_test_image_type("pnm", image16);
+  vil2_test_image_type("pnm", image32);
+  vil2_test_image_type("ppm", image3p);
 #endif
 
   // bmp
-#if 0
-  vil_test_image_type_raw("bmp", image8);
-  vil_test_image_type_raw("bmp", image3p);
+#if 1
+  vil2_test_image_type("bmp", image8);
+  vil2_test_image_type("bmp", image3p);
 #endif
 
   // VIFF image (Khoros)
 #if 0
-//vil_test_image_type("viff", image1);
-  vil_test_image_type("viff", image8);
-  vil_test_image_type("viff", image16);
-  vil_test_image_type("viff", image32);
-  vil_test_image_type("viff", image3p);
-  vil_test_image_type("viff", imagefloat);
+//vil2_test_image_type("viff", image1);
+  vil2_test_image_type("viff", image8);
+  vil2_test_image_type("viff", image16);
+  vil2_test_image_type("viff", image32);
+  vil2_test_image_type("viff", image3p);
+  vil2_test_image_type("viff", imagefloat);
 #endif
 
   // TIFF
 #if 0
-  vil_test_image_type("tiff", image1);
-  vil_test_image_type("tiff", image8);
-  vil_test_image_type("tiff", image16);
-  vil_test_image_type("tiff", image32);
-  vil_test_image_type("tiff", image3p);
-  vil_test_image_type("tiff", imagefloat);
+  vil2_test_image_type("tiff", image1);
+  vil2_test_image_type("tiff", image8);
+  vil2_test_image_type("tiff", image16);
+  vil2_test_image_type("tiff", image32);
+  vil2_test_image_type("tiff", image3p);
+  vil2_test_image_type("tiff", imagefloat);
 #endif
 
   // GIF (read-only)
 #if 0
   // lossy format ==> not guaranteed to be identical (hence arg. 3 set to false)
-  vil_test_image_type("gif", image8, false);
-  vil_test_image_type("gif", image3p, false);
+  vil2_test_image_type("gif", image8, false);
+  vil2_test_image_type("gif", image3p, false);
 #endif
 
   // PNG
 #if 0
-  vil_test_image_type("png", image8);
-  vil_test_image_type("png", image16);
-  vil_test_image_type("png", image3p);
+  vil2_test_image_type("png", image8);
+  vil2_test_image_type("png", image16);
+  vil2_test_image_type("png", image3p);
 #endif
 
   // SGI "iris" rgb
 #if 0
-  vil_test_image_type("iris", image8);
-//vil_test_image_type("iris", image16); // not implemented yet
-  vil_test_image_type("iris", image3p);
+  vil2_test_image_type("iris", image8);
+//vil2_test_image_type("iris", image16); // not implemented yet
+  vil2_test_image_type("iris", image3p);
 #endif
 
 
   // mit
 #if 0
-  vil_test_image_type("mit", image8);
-  vil_test_image_type("mit", image16);
-  vil_test_image_type("mit", image3p);
+  vil2_test_image_type("mit", image8);
+  vil2_test_image_type("mit", image16);
+  vil2_test_image_type("mit", image3p);
 #endif
 
   SUMMARY();
