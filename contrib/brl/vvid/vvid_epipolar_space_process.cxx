@@ -44,6 +44,8 @@ bool vvid_epipolar_space_process::execute()
         else
           im(x1,x2)=cp;
       }
-  _output_image = im;
+  output_image_ = im;
   return true;
 }
+
+

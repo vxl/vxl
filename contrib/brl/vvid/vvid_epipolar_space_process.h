@@ -26,6 +26,7 @@ public:
   ~vvid_epipolar_space_process();
   //: We assume that two grey scale images are in the input list
   virtual bool execute();
+  
 private:
   //members
 };
