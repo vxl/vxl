@@ -9,6 +9,7 @@
 #include "vil_colour_space.h"
 #include <vcl_cstdlib.h>
 #include <vcl_algorithm.h>
+#include <vcl_cmath.h>
 
 template <class T>
 void vil_colour_space_RGB_to_YIQ(T const in[3], T out[3])
@@ -59,10 +60,74 @@ void vil_colour_space_RGB_to_HSV(T r, T g, T b, T *h, T *s, T *v)
   }
 }
 
+template <class T>
+void vil_colour_space_HSV_to_RGB(T h, T s, T v, T *r, T *g, T *b)
+{
+  float p1, p2, p3, i, f, nr, ng, nb;
+  float xh;
+
+  v = v/255;
+        
+  //extern float hue,  s,  v;  /* hue (0.0 to 360.0, is circular, 0=360)
+  //                                    s and v are from 0.0 - 1.0) */
+  //extern long  r2,  g2,  b2; /* values from 0 to 63 */
+
+  if (h == 360.0)
+  h = 0.0;           /* (THIS LOOKS BACKWARDS)       */
+
+  xh = h / 60.;                   /* convert hue to be in 0,6       */
+  i = (float)vcl_floor((double)xh);    /* i = greatest integer <= h    */
+  f = xh - i;                     /* f = fractional part of h     */
+  p1 = v * (1 - s);
+  p2 = v * (1 - (s * f));
+  p3 = v * (1 - (s * (1 - f)));
+
+  switch ((int) i)
+  {
+    case 0:
+            nr = v;
+            ng = p3;
+            nb = p1;
+            break;
+    case 1:
+            nr = p2;
+            ng = v;
+            nb = p1;
+            break;
+    case 2:
+            nr = p1;
+            ng = v;
+            nb = p3;
+            break;
+    case 3:
+            nr = p1;
+            ng = p2;
+            nb = v;
+            break;
+    case 4:
+            nr = p3;
+            ng = p1;
+            nb = v;
+            break;
+    case 5:
+            nr = v;
+            ng = p1;
+            nb = p2;
+            break;
+  }
+
+  *r = (T)(nr * 255.); /* Normalize the values to 63 */
+  *g = (T)(ng * 255.);
+  *b = (T)(nb * 255.);
+  return;
+}
+
+
 //----------------------------------------------------------------------
 
 #define inst(T) \
 template void vil_colour_space_RGB_to_YIQ(T const [3], T [3]); \
-template void vil_colour_space_RGB_to_HSV(T, T, T, T *, T *, T *)
+template void vil_colour_space_RGB_to_HSV(T, T, T, T *, T *, T *); \
+template void vil_colour_space_HSV_to_RGB(T, T, T, T *, T *, T *)
 
 inst(double);

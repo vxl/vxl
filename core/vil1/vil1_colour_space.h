@@ -32,4 +32,17 @@ void vil_colour_space_RGB_to_YIQ(T const in[3], T out[3]);
 template <class T>
 void vil_colour_space_RGB_to_HSV(T r, T g, T b, T *h, T *s, T *v);
 
+//: Transform from HSV to RGB colour space
+
+// The input HSV values will lie in the ranges:
+//    H : [0, 360)   (an angle, in bloody degrees)
+//    S : [0, 1]
+//    V : [0, 255]
+//
+// The output RGB values will lie in [0, 255]
+//
+// [HSV is also known as HSB]
+template <class T>
+void vil_colour_space_HSV_to_RGB(T h, T s, T v, T *r, T *g, T *b);
+
 #endif
