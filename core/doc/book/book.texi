@@ -138,28 +138,12 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 @include chapter_vsl.texi
 
 @comment ------------------------------------------------------------------
-@node    vcsl,      vgui,     vsl,      top
+@node    vcsl,      Concept Index,     vsl,      top
 @comment node-name, next,    previous, up
 @chapter vcsl: Co-ordinate systems
 @cindex co-ordinate systems
 
 @include chapter_vcsl.texi
-
-@comment ------------------------------------------------------------------
-@node    vgui,      Conclusion,     vcsl,      top
-@comment node-name, next,    previous, up
-@chapter vgui: cross-platform user interface
-@cindex vgui
-@cindex OpenGL
-@cindex graphical user interface
-
-
-
-@comment ------------------------------------------------------------------
-@node    Conclusion, Concept Index, vgui, Top
-@comment node-name, next,    previous, up
-@chapter Conclusion
-
 
 @comment ------------------------------------------------------------------
 @appendix  Filenames and structure
@@ -179,12 +163,7 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 
 
 @comment ------------------------------------------------------------------
-@appendix Adding to vnl_algo
-
-@include appendix_adding_to_vnl_algo.texi
-
-@comment ------------------------------------------------------------------
-@node    Concept Index,  , Conclusion, Top
+@node    Concept Index,  , vcsl, Top
 @c        node-name,    next, previous,        up
 @unnumbered Concept Index
 

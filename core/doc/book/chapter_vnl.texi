@@ -531,7 +531,7 @@ In this case, we need to make a class derived from
 @code{vnl_least_squares_function}.  xxx
 
 @page
-@section Design issues
+@section Design issues (Developer Topic)
 This section documents some design decisions with which people might
 disagree.  Please let me know how you feel on these issues.  It's also a
 malleable to-do list.  The most important consideration has been to
@@ -693,3 +693,7 @@ and of alternative implementations.
 @item Many classes are defined as double-only rather than templated.
 I will use default template arguments when the compilers support them.
 @end itemize
+
+@section Adding to vnl_algo (Developer Topic)
+
+@include appendix_adding_to_vnl_algo.texi
