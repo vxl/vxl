@@ -20,20 +20,20 @@
 
 template<class T>
 mil_image_2d_of<T>::mil_image_2d_of()
-	: data_(0),nx_(0),ny_(0),xstep_(1),ystep_(0)
+    : data_(0),nx_(0),ny_(0),xstep_(1),ystep_(0)
 {
-	planes_.resize(1);
-	planes_[0] = 0;
+    planes_.resize(1);
+    planes_[0] = 0;
 
-	format_ = vcl_string("GreyByte");
+    format_ = vcl_string("GreyByte");
 }
 
 template<class T>
 mil_image_2d_of<T>::mil_image_2d_of(int nx, int ny, int n_planes)
-	: data_(0),nx_(0),ny_(0),xstep_(1),ystep_(0)
+    : data_(0),nx_(0),ny_(0),xstep_(1),ystep_(0)
 {
-	setNPlanes(n_planes);
-	resize(nx,ny);
+    setNPlanes(n_planes);
+    resize(nx,ny);
 }
 
 //: Perform deep copy of this into image
@@ -41,30 +41,30 @@ template<class T>
 void mil_image_2d_of<T>::deepCopy(const mil_image_2d_of& src)
 {
     setNPlanes(src.nPlanes());
-	resize(src.nx(),src.ny());
-	world2im_     = src.world2im_;
+    resize(src.nx(),src.ny());
+    world2im_     = src.world2im_;
 
-	int s_xstep = src.xstep();
-	int s_ystep = src.ystep();
+    int s_xstep = src.xstep();
+    int s_ystep = src.ystep();
 
-	// Do a deep copy
-	// This is potentially inefficient
-	for (int i=0;i<planes_.size();++i)
-	{
-	  T* row = planes_[i];
-	  const T* i_row = src.plane(i);
-	  for (int y=0;y<ny_;++y)
+    // Do a deep copy
+    // This is potentially inefficient
+    for (int i=0;i<planes_.size();++i)
+    {
+      T* row = planes_[i];
+      const T* i_row = src.plane(i);
+      for (int y=0;y<ny_;++y)
       {
-	    const T* ip = i_row;
-	    for (int x=0;x<nx_;++x)
-		{
-		  row[x] = *ip;
-		  ip+=s_xstep;
+        const T* ip = i_row;
+        for (int x=0;x<nx_;++x)
+        {
+          row[x] = *ip;
+          ip+=s_xstep;
         }
-		i_row += s_ystep;
-		row += ystep_;
-	  }
-	}
+        i_row += s_ystep;
+        row += ystep_;
+      }
+    }
 }
 
 //=======================================================================
@@ -79,7 +79,7 @@ void mil_image_2d_of<T>::release_data()
 
 template<class T> mil_image_2d_of<T>::~mil_image_2d_of()
 {
-//	release_data();
+// release_data();
 }
 
 
@@ -89,23 +89,23 @@ template<class T> mil_image_2d_of<T>::~mil_image_2d_of()
 template<class T>
 void mil_image_2d_of<T>::resize2(int nx, int ny)
 {
-	if (nx==nx_ && ny==ny_  || nPlanes()==0) return;
+    if (nx==nx_ && ny==ny_  || nPlanes()==0) return;
 
-	release_data();
+    release_data();
 
-	data_ = new mil_image_data<T>;
-	data_->resize(nPlanes()*nx*ny);
+    data_ = new mil_image_data<T>;
+    data_->resize(nPlanes()*nx*ny);
 
-	planes_[0]= (T*) data_->data();
-	for (int i=1;i<planes_.size();++i)
-	{
-		planes_[i] = planes_[i-1] + (nx*ny);
-	}
+    planes_[0]= (T*) data_->data();
+    for (int i=1;i<planes_.size();++i)
+    {
+        planes_[i] = planes_[i-1] + (nx*ny);
+    }
 
-	nx_ = nx;
-	ny_ = ny;
-	xstep_ = 1;
-	ystep_ = nx;
+    nx_ = nx;
+    ny_ = ny;
+    xstep_ = 1;
+    ystep_ = nx;
 }
 
 //: Resize to n_planes of [0..nx-1][0..ny-1]
@@ -124,17 +124,17 @@ void mil_image_2d_of<T>::resize3(int nx, int ny, int n_planes)
 template<class T>
 void mil_image_2d_of<T>::setNPlanes(int n)
 {
-	if (planes_.size()!=n)
-	{
-		release_data();
-		planes_.resize(n);
-		for (int i=0;i<n;++i) planes_[i]=0;
-	}
+    if (planes_.size()!=n)
+    {
+        release_data();
+        planes_.resize(n);
+        for (int i=0;i<n;++i) planes_[i]=0;
+    }
 
-	nx_ = 0;
-	ny_ = 0;
-	xstep_ = 0;
-	ystep_ = 0;
+    nx_ = 0;
+    ny_ = 0;
+    xstep_ = 0;
+    ystep_ = 0;
 }
 
 //=======================================================================
@@ -147,8 +147,8 @@ void mil_image_2d_of<T>::setNPlanes(int n)
 template<class T>
 void mil_image_2d_of<T>::setValidRegion(int xlo, int xhi, int ylo, int yhi)
 {
-	resize(xhi-xlo,yhi-ylo);
-	world2im_.set_translation(-xlo,-ylo);
+    resize(xhi-xlo,yhi-ylo);
+    world2im_.set_translation(-xlo,-ylo);
 }
 
 
@@ -158,26 +158,26 @@ void mil_image_2d_of<T>::setValidRegion(int xlo, int xhi, int ylo, int yhi)
 template<class T>
 void mil_image_2d_of<T>::fill(T b)
 {
-	for (int i=0;i<planes_.size();++i)
-	{
-		T* row = planes_[i];
-		for (int y=0;y<ny_;++y)
-		{
-			if (xstep_==1)
-				for (int x=0;x<nx_;++x) row[x]=b;
-			else
-			{
-				int x2 = 0;
-				for (int x=0;x<nx_;++x)
-				{
-					row[x2]=b;
-					x2+=xstep_;
-				}
-			}
+    for (int i=0;i<planes_.size();++i)
+    {
+        T* row = planes_[i];
+        for (int y=0;y<ny_;++y)
+        {
+            if (xstep_==1)
+                for (int x=0;x<nx_;++x) row[x]=b;
+            else
+            {
+                int x2 = 0;
+                for (int x=0;x<nx_;++x)
+                {
+                    row[x2]=b;
+                    x2+=xstep_;
+                }
+            }
 
-			row += ystep_;
-		}
-	}
+            row += ystep_;
+        }
+    }
 }
 
 
@@ -187,7 +187,7 @@ void mil_image_2d_of<T>::fill(T b)
 template<class T>
 void mil_image_2d_of<T>::setFormat(const char* f)
 {
-	format_ = f;
+    format_ = f;
 }
 
 //=======================================================================
@@ -198,18 +198,18 @@ void mil_image_2d_of<T>::setFormat(const char* f)
 //=======================================================================
 template<class T>
 void mil_image_2d_of<T>::set(vcl_vector<T*>& planes,
-						int nx, int ny, int xstep, int ystep,
-			 			const char* format)
+                        int nx, int ny, int xstep, int ystep,
+                        const char* format)
 {
-	release_data();
-	planes_ = planes;
+    release_data();
+    planes_ = planes;
 
-	nx_ = nx;
-	ny_ = ny;
-	xstep_ = xstep;
-	ystep_ = ystep;
+    nx_ = nx;
+    ny_ = ny;
+    xstep_ = xstep;
+    ystep_ = ystep;
 
-	format_ = format;
+    format_ = format;
 }
 
 //=======================================================================
@@ -218,15 +218,15 @@ void mil_image_2d_of<T>::set(vcl_vector<T*>& planes,
 template<class T>
 void mil_image_2d_of<T>::setGrey(T* grey_data, int nx, int ny, int ystep)
 {
-	release_data();
-	planes_.resize(1);
-	planes_[0] = grey_data;
+    release_data();
+    planes_.resize(1);
+    planes_[0] = grey_data;
 
-	nx_ = nx;
-	ny_ = ny;
-	ystep_ = ystep;
+    nx_ = nx;
+    ny_ = ny;
+    ystep_ = ystep;
 
-	format_ = vcl_string("GreyByte");
+    format_ = vcl_string("GreyByte");
 }
 
 //=======================================================================
@@ -235,18 +235,18 @@ void mil_image_2d_of<T>::setGrey(T* grey_data, int nx, int ny, int ystep)
 //=======================================================================
 template<class T>
 void mil_image_2d_of<T>::setRGB(T* r, T* g, T* b,
-						 int nx, int ny, int ystep)
+                         int nx, int ny, int ystep)
 {
-	release_data();
-	planes_.resize(3);
-	planes_[0] = r;
-	planes_[1] = g;
-	planes_[2] = b;
-	nx_ = nx;
-	ny_ = ny;
-	ystep_ = ystep;
+    release_data();
+    planes_.resize(3);
+    planes_[0] = r;
+    planes_[1] = g;
+    planes_[2] = b;
+    nx_ = nx;
+    ny_ = ny;
+    ystep_ = ystep;
 
-	format_ = vcl_string("RGBPlaneByte");
+    format_ = vcl_string("RGBPlaneByte");
 }
 
 //: Define parameters for packed RGB T images
@@ -257,17 +257,17 @@ void mil_image_2d_of<T>::setRGB(T* r, T* g, T* b,
 template<class T>
 void mil_image_2d_of<T>::setRGB(T* data, int nx, int ny, int xstep, int ystep)
 {
-	release_data();
-	planes_.resize(3);
-	planes_[0] = data;
-	planes_[1] = data+1;
-	planes_[2] = data+2;
-	nx_ = nx;
-	ny_ = ny;
-	xstep_ = xstep;
-	ystep_ = ystep;
+    release_data();
+    planes_.resize(3);
+    planes_[0] = data;
+    planes_[1] = data+1;
+    planes_[2] = data+2;
+    nx_ = nx;
+    ny_ = ny;
+    xstep_ = xstep;
+    ystep_ = ystep;
 
-	format_ = vcl_string("RGBPackedByte");
+    format_ = vcl_string("RGBPackedByte");
 }
 
 //=======================================================================
@@ -279,33 +279,33 @@ void mil_image_2d_of<T>::setRGB(T* data, int nx, int ny, int xstep, int ystep)
 //=======================================================================
 template<class T>
 void mil_image_2d_of<T>::setToWindow(const mil_image_2d_of& im,
-					 int xlo, int xhi, int ylo, int yhi)
+                     int xlo, int xhi, int ylo, int yhi)
 {
     assert(this!=&im);
 
-	int n_planes = im.nPlanes();
-	setNPlanes(n_planes);
-	release_data();
+    int n_planes = im.nPlanes();
+    setNPlanes(n_planes);
+    release_data();
 
-	// Take smart pointer to im's data to keep it in scope
-	data_ = im.data_;
+    // Take smart pointer to im's data to keep it in scope
+    data_ = im.data_;
 
-	nx_ = 1+xhi-xlo;
-	ny_ = 1+yhi-ylo;
-	xstep_ = im.xstep();
-	ystep_ = im.ystep();
-	int offset = xlo * im.xstep() + ylo * im.ystep();
+    nx_ = 1+xhi-xlo;
+    ny_ = 1+yhi-ylo;
+    xstep_ = im.xstep();
+    ystep_ = im.ystep();
+    int offset = xlo * im.xstep() + ylo * im.ystep();
 
-		// const problem: planes_ isn't const but im.plane(i) is.
-		// without having separate pointers for const/non-const
-		// we can't get over this easily
-	for (int i=0;i<n_planes;++i)
-		planes_[i] = (T*) im.plane(i)+offset;
+        // const problem: planes_ isn't const but im.plane(i) is.
+        // without having separate pointers for const/non-const
+        // we can't get over this easily
+    for (int i=0;i<n_planes;++i)
+        planes_[i] = (T*) im.plane(i)+offset;
 
-	mil_transform_2d trans;
-	trans.set_translation(-xlo,-ylo);
-	world2im_ = trans * im.world2im();
-	format_ = im.format();
+    mil_transform_2d trans;
+    trans.set_translation(-xlo,-ylo);
+    world2im_ = trans * im.world2im();
+    format_ = im.format();
 }
 
 //=======================================================================
@@ -314,21 +314,21 @@ void mil_image_2d_of<T>::setToWindow(const mil_image_2d_of& im,
 template<class T>
 void mil_image_2d_of<T>::getRange(T& min_f, T& max_f, int p) const
 {
-	const T* row = planes_[p];
-	min_f = row[0];
-	max_f = min_f;
-	for (int y=0;y<ny_;++y)
-	{
-		int x=0;
-		for (int j=0;j<nx_;++j)
-		{
-			if (row[x]<min_f) min_f=row[x];
-			else
-			if (row[x]>max_f) max_f=row[x];
-			x+=xstep_;
-		}
-		row+=ystep_;
-	}
+    const T* row = planes_[p];
+    min_f = row[0];
+    max_f = min_f;
+    for (int y=0;y<ny_;++y)
+    {
+        int x=0;
+        for (int j=0;j<nx_;++j)
+        {
+            if (row[x]<min_f) min_f=row[x];
+            else
+            if (row[x]>max_f) max_f=row[x];
+            x+=xstep_;
+        }
+        row+=ystep_;
+    }
 }
 
 //=======================================================================
@@ -337,22 +337,22 @@ void mil_image_2d_of<T>::getRange(T& min_f, T& max_f, int p) const
 template<class T>
 void mil_image_2d_of<T>::getRange(T& min_f, T& max_f) const
 {
-	if (planes_.size()==0)
-	{
-		min_f = 0;
-		max_f = 0;
-		return;
-	}
+    if (planes_.size()==0)
+    {
+        min_f = 0;
+        max_f = 0;
+        return;
+    }
 
-	getRange(min_f,max_f,0);
+    getRange(min_f,max_f,0);
 
-	for (int i=1;i<planes_.size();++i)
-	{
-		T min_fi,max_fi;
-		getRange(min_fi,max_fi,i);
-		if (min_fi<min_f) min_f=min_fi;
-		if (max_fi>max_f) max_f=max_fi;
-	}
+    for (int i=1;i<planes_.size();++i)
+    {
+        T min_fi,max_fi;
+        getRange(min_fi,max_fi,i);
+        if (min_fi<min_f) min_f=min_fi;
+        if (max_fi>max_f) max_f=max_fi;
+    }
 }
 
 //=======================================================================
@@ -371,7 +371,7 @@ vcl_string mil_image_2d_of<T>::is_a() const
 template<class T>
 short mil_image_2d_of<T>::version_no() const
 {
-	return 1;
+    return 1;
 }
 
 //=======================================================================
@@ -380,7 +380,7 @@ short mil_image_2d_of<T>::version_no() const
 template<class T>
 mil_image* mil_image_2d_of<T>::clone() const
 {
-	return new mil_image_2d_of(*this);
+    return new mil_image_2d_of(*this);
 }
 
 //=======================================================================
@@ -390,65 +390,65 @@ mil_image* mil_image_2d_of<T>::clone() const
 template<class T>
 void mil_image_2d_of<T>::print_summary(vcl_ostream& os) const
 {
-	os<<"Format: "<<format_<<"  "
-		<<planes_.size()<<" planes, each "<<nx_<<" x "<<ny_;
-	os<<vcl_endl;
-	os<<"Transform: "<<world2im_;
+    os<<"Format: "<<format_<<"  "
+      <<planes_.size()<<" planes, each "<<nx_<<" x "<<ny_
+      <<vcl_endl
+      <<"Transform: "<<world2im_;
 }
 
-		
+
 //: print all data to os
-template<class T> 
+template<class T>
 void mil_image_2d_of<T>::print_all(vcl_ostream& os) const
 {
-	print_summary(os);
-	os<<vcl_endl;
-	
-	for (int i=0;i<nPlanes();++i)
-	{
-		if (nPlanes()>1) os<<"Plane "<<i<<":"<<vcl_endl;
-		const T* im_data = plane(i);
-		for (int y=ny_-1;y>=0;--y)
-		{
-			for (int x=0;x<nx_;++x)
-			{
-				int v = int(im_data[ystep_*y+x*xstep_]);
-				if (v<10)  os<<" ";
-				if (v<100) os<<" ";
-				os<<v<<" ";
-			}
-			os<<vcl_endl;
-		}
-	}
+    print_summary(os);
+    os<<vcl_endl;
+
+    for (int i=0;i<nPlanes();++i)
+    {
+        if (nPlanes()>1) os<<"Plane "<<i<<":"<<vcl_endl;
+        const T* im_data = plane(i);
+        for (int y=ny_-1;y>=0;--y)
+        {
+            for (int x=0;x<nx_;++x)
+            {
+                int v = int(im_data[ystep_*y+x*xstep_]);
+                if (v<10)  os<<" ";
+                if (v<100) os<<" ";
+                os<<v<<" ";
+            }
+            os<<vcl_endl;
+        }
+    }
 }
 
 //=======================================================================
 // Method: save
 //=======================================================================
 
-template<class T> 
+template<class T>
 void mil_image_2d_of<T>::b_write(vsl_b_ostream& bfs) const
 {
-	vsl_b_write(bfs,version_no());
-	if (!data_)
-	{
-	  vcl_cerr << "template<class T> mil_image_2d_of<T>::b_write() ";
-	  vcl_cerr << "This image refers to external data and ";
-	  vcl_cerr << "cannot be restored correctly if saved like this." << vcl_endl;
-	  abort();
+    vsl_b_write(bfs,version_no());
+    if (!data_)
+    {
+      vcl_cerr << "template<class T> mil_image_2d_of<T>::b_write() ";
+      vcl_cerr << "This image refers to external data and ";
+      vcl_cerr << "cannot be restored correctly if saved like this." << vcl_endl;
+      vcl_abort();
     }
-	vsl_b_write(bfs,data_);
+    vsl_b_write(bfs,data_);
 
-	vsl_b_write(bfs,nx_);
-	vsl_b_write(bfs,ny_);
-	vsl_b_write(bfs,xstep_);
-	vsl_b_write(bfs,ystep_);
-	vsl_b_write(bfs,format_);
-	vsl_b_write(bfs,world2im_);
+    vsl_b_write(bfs,nx_);
+    vsl_b_write(bfs,ny_);
+    vsl_b_write(bfs,xstep_);
+    vsl_b_write(bfs,ystep_);
+    vsl_b_write(bfs,format_);
+    vsl_b_write(bfs,world2im_);
 
-	int n = planes_.size();
+    int n = planes_.size();
     vcl_vector<int> plane_offsets(n);
-	for (int i=0;i<n;++i)
+    for (int i=0;i<n;++i)
         plane_offsets[i]=int(planes_[i]-(T*)data_->data());
     vsl_b_write(bfs,plane_offsets);
 }
@@ -464,33 +464,35 @@ void mil_image_2d_of<T>::b_read(vsl_b_istream& bfs)
 
     vcl_vector<int> plane_offsets;;
 
-	short version;
-	vsl_b_read(bfs,version);
-	switch (version)
-	{
-		case (1):
-			vsl_b_read(bfs,data_);
-			vsl_b_read(bfs,nx_);
-			vsl_b_read(bfs,ny_);
-			vsl_b_read(bfs,xstep_);
-			vsl_b_read(bfs,ystep_);
-			vsl_b_read(bfs,format_);
-			vsl_b_read(bfs,world2im_);
-    		vsl_b_read(bfs,plane_offsets);
-			break;
-		default:
-			vcl_cerr << "template<class T> mil_image_2d_of<T>::b_read() ";
-			vcl_cerr << "Unexpected version number " << version << vcl_endl;
-			abort();
-	}
+    short version;
+    vsl_b_read(bfs,version);
+    switch (version)
+    {
+        case (1):
+            vsl_b_read(bfs,data_);
+            vsl_b_read(bfs,nx_);
+            vsl_b_read(bfs,ny_);
+            vsl_b_read(bfs,xstep_);
+            vsl_b_read(bfs,ystep_);
+            vsl_b_read(bfs,format_);
+            vsl_b_read(bfs,world2im_);
+            vsl_b_read(bfs,plane_offsets);
+            break;
+        default:
+            vcl_cerr << "template<class T> mil_image_2d_of<T>::b_read() ";
+            vcl_cerr << "Unexpected version number " << version << vcl_endl;
+            vcl_abort();
+    }
 
-	int n = plane_offsets.size();
-	planes_.resize(n);
-	for (int i=0;i<n;++i)
-	    planes_[i]=(T*)data_->data() + plane_offsets[i];
+    int n = plane_offsets.size();
+    planes_.resize(n);
+    for (int i=0;i<n;++i)
+        planes_[i]=(T*)data_->data() + plane_offsets[i];
 }
 
-// #define MIL_IMAGE_2D_OF_INSTANTIATE(T) \
-// template class mil_image_2d_of<T >; \
+#if 0
+#define MIL_IMAGE_2D_OF_INSTANTIATE(T) \
+template class mil_image_2d_of<T >
+#endif
 
 #endif // mil_image_2d_of_txx_
