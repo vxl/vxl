@@ -19,17 +19,19 @@
 //  values of Gaussian random variates.  See rrel_muset_obj for more
 //  details.
 
-class rrel_muse_key_type {
+class rrel_muse_key_type
+{
  public:
   rrel_muse_key_type( unsigned int k, unsigned int n ) : k_(k), n_(n) {}
   unsigned int k_;
   unsigned int n_;
 };
 
-bool operator< ( rrel_muse_key_type const& left, rrel_muse_key_type const& right );
+bool operator< ( rrel_muse_key_type const& left_t, rrel_muse_key_type const& right_t );
 
 
-class rrel_muse_table_entry {
+class rrel_muse_table_entry
+{
  public:
   rrel_muse_table_entry() : initialized_(false) {}
   bool initialized_;
@@ -38,13 +40,12 @@ class rrel_muse_table_entry {
   double muse_t_divisor_;
   double muse_t_sq_divisor_;
 };
-  
+
 typedef vcl_map< rrel_muse_key_type, rrel_muse_table_entry > rrel_muse_map_type;
 
 
-class rrel_muse_table {
- public:
-
+class rrel_muse_table
+{
  public:
   //: Constructor.
   //  \a table_size is the size of table (= max number of residuals
@@ -73,7 +74,7 @@ class rrel_muse_table {
   //  The value is retrieved from the lookup table when possible.
   double muset_sq_divisor( unsigned int k, unsigned int n );
 
-private:
+ private:
   void calculate_all( unsigned int k, unsigned int n, rrel_muse_table_entry & entry );
 
   //: Expected value of the kth ordered residual from n samples.
@@ -92,8 +93,8 @@ private:
   //  The value is computed "from scratch".
   double calculate_sq_divisor( unsigned int k, unsigned int n, double expected_kth ) const;
 
-private:
+ private:
   rrel_muse_map_type table_;
 };
 
-#endif
+#endif // rrel_muse_table_h_

@@ -7,10 +7,10 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 
-bool operator< ( rrel_muse_key_type const& left, rrel_muse_key_type const& right )
+bool operator< ( rrel_muse_key_type const& left_t, rrel_muse_key_type const& right_t )
 {
-  return left.n_ < right.n_ 
-    || ( left.n_ == right.n_ && left.k_ < right.k_ );
+  return left_t.n_ < right_t.n_
+    || ( left_t.n_ == right_t.n_ && left_t.k_ < right_t.k_ );
 }
 
 double
@@ -59,8 +59,8 @@ rrel_muse_table::muset_sq_divisor( unsigned int k, unsigned int n )
 }
 
 void
-rrel_muse_table::calculate_all( unsigned int k, unsigned int n, 
-				rrel_muse_table_entry & entry )
+rrel_muse_table::calculate_all( unsigned int k, unsigned int n,
+                                rrel_muse_table_entry & entry )
 {
   vcl_cout << "rrel_muse_table::calculate_all" << vcl_endl;
   entry . initialized_ = true;
@@ -127,6 +127,6 @@ rrel_muse_table::calculate_sq_divisor( unsigned int k, unsigned int n,
                                        double expected_kth ) const
 {
   return k - (n+1) * expected_kth * vcl_sqrt(2/vnl_math::pi)
-    * vcl_exp(-vnl_math_sqr(expected_kth)/2.0); 
+    * vcl_exp(-vnl_math_sqr(expected_kth)/2.0);
 }
 
