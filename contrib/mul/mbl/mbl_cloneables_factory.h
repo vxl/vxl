@@ -59,11 +59,8 @@ class mbl_cloneables_factory
   static MAP &objects()
   {
     if (objects_.get() == 0)
-    {
-      MAP * p = new MAP;
-      objects_ = vcl_auto_ptr<MAP>(p);
-    }
-
+      objects_.reset(new MAP);
+ 
     return *objects_;
   }
 
