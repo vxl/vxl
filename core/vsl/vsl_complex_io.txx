@@ -42,7 +42,7 @@ void vsl_print_summary(vcl_ostream& os, const vcl_complex<T> &v)
   os << vcl_real(v) << " + " << vcl_imag(v) << "i ";
 }
 
-#define VSL_COMPLEX_INSTANTIATE(T) \
+#define VSL_COMPLEX_IO_INSTANTIATE(T) \
 template void vsl_print_summary(vcl_ostream&, const vcl_complex<T >&); \
 template void vsl_b_write(vsl_b_ostream& s, const vcl_complex<T >& v); \
 template void vsl_b_read(vsl_b_istream& s, vcl_complex<T >& v)

@@ -51,7 +51,7 @@ void vsl_b_read(vsl_b_istream& s, vcl_basic_string<T>& v)
 }
 
 
-#define VSL_STRING_INSTANTIATE(T) \
+#define VSL_STRING_IO_INSTANTIATE(T) \
 template void vsl_b_write(vsl_b_ostream& s, const vcl_basic_string<T >& v); \
 template void vsl_b_read(vsl_b_istream& s, vcl_basic_string<T >& v)
 

@@ -72,7 +72,7 @@ void vsl_print_summary(vcl_ostream& os, const vcl_list<T> &v)
     os << " ..." << vcl_endl;
 }
 
-#define VSL_LIST_INSTANTIATE(T) \
+#define VSL_LIST_IO_INSTANTIATE(T) \
 template void vsl_print_summary(vcl_ostream&, const vcl_list<T >&); \
 template void vsl_b_write(vsl_b_ostream& s, const vcl_list<T >& v); \
 template void vsl_b_read(vsl_b_istream& s, vcl_list<T >& v)

@@ -72,7 +72,7 @@ void vsl_print_summary(vcl_ostream& os, const vcl_set<T> &v)
 }
 
 
-#define VSL_SET_INSTANTIATE(T) \
+#define VSL_SET_IO_INSTANTIATE(T) \
 template void vsl_print_summary(vcl_ostream& s, const vcl_set<T >& v); \
 template void vsl_b_write(vsl_b_ostream& s, const vcl_set<T >& v); \
 template void vsl_b_read(vsl_b_istream& s, vcl_set<T >& v)

@@ -67,7 +67,7 @@ void vsl_print_summary(vcl_ostream& os, const vcl_deque<T> &v)
 }
 
 
-#define VSL_DEQUE_INSTANTIATE(T) \
+#define VSL_DEQUE_IO_INSTANTIATE(T) \
 template void vsl_print_summary(vcl_ostream&, const vcl_deque<T >&); \
 template void vsl_b_write(vsl_b_ostream& s, const vcl_deque<T >& v); \
 template void vsl_b_read(vsl_b_istream& s, vcl_deque<T >& v)
