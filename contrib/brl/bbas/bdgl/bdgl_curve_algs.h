@@ -5,7 +5,7 @@
 //:
 // \file
 // \author J.L. Mundy
-// \brief topology algorithms involving edges or edge-centric routines
+// \brief vdgl_digital_curve algorithms 
 //
 // \verbatim
 // Initial version November 25, 2002
@@ -13,6 +13,7 @@
 //
 //-----------------------------------------------------------------------------
 #include <btol/dll.h>
+#include <vgl/vgl_line_2d.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 
