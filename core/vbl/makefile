@@ -7,6 +7,8 @@ USES += vxl
 LIBRARY := vbl
 VERSION := 1.0
 
+SOURCES += vbl.cxx
+
 SOURCES += vbl_arg.cxx  # if this is in a .txx file, gcc 2.95 will not generate any code.
 SOURCES += vbl_awk.cxx
 SOURCES += vbl_base_array_3d.cxx
