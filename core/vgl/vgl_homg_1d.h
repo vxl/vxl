@@ -20,6 +20,7 @@
 //-----------------------------------------------------------------------------
 
 #include <vgl/vgl_homg.h>
+#include <vgl/vgl_homg_point_1d.h>
 
 template <class T>
 class vgl_homg_1d : public vgl_homg<T> {
@@ -33,10 +34,16 @@ public:
   vgl_homg_1d(T px, T pw = 1) : x_(px), w_(pw) {}
 
 //: Copy constructor
-  vgl_homg_1d(const vgl_homg_1d& that) : x_(that.x()), w_(that.w()) {}
+  vgl_homg_1d(vgl_homg_1d<T> const& that) : x_(that.x()), w_(that.w()) {}
+
+//: Constructor from a vgl_homg_point_1d
+  vgl_homg_1d(vgl_homg_point_1d<T> const& that) : x_(that.x()), w_(that.w()) {}
 
 //: Destructor
  ~vgl_homg_1d() {}
+
+//: Equality
+  bool operator==(const vgl_homg_1d<T>& that) const { return w()*that.x()==x()*that.w(); }
 
 //: Assignment
   vgl_homg_1d& operator=(const vgl_homg_1d<T>& that) { set(that.x(), that.w()); return *this; }
@@ -49,5 +56,8 @@ protected:
   T x_;
   T w_;
 };
+
+template <class T>
+vcl_ostream& operator<<(vcl_ostream& os, vgl_homg_1d<T> const& h);
 
 #endif // vgl_homg_1d_h_
