@@ -7,7 +7,7 @@
 #include <vsrl/vsrl_dense_matcher.h>
 
 //: this class is an abstract class that
-// will define various methods used to difuse
+// will define various methods used to diffuse
 // disparity measures across a disparity map
 
 class vsrl_diffusion
