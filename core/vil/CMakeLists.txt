@@ -8,7 +8,7 @@ SET( vil2_sources
 
   # basic things
   vil2_image_data.cxx vil2_image_data.h
-  vil2_image_view.cxx vil2_image_view.h
+  vil2_image_view.cxx vil2_image_view.h vil2_image_view.txx
   vil2_image_view_base.h
 
 
@@ -18,6 +18,7 @@ SET( vil2_sources
   # Operations
 
   # Stuff
+  vil2_smart_ptr.txx vil2_smart_ptr.h
 )
 
 
