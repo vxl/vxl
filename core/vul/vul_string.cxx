@@ -6,6 +6,8 @@
 #include <vcl_cstring.h>
 #include <vcl_cctype.h>
 
+#include <vcl_algorithm.h> // for vcl_transform
+
 #define TO_LOWER tolower                        // use ANSI functions
 #define TO_UPPER toupper
 
@@ -115,22 +117,34 @@ void vul_string_c_reverse (char* c) {                // Reverse the order of cha
 // Converts all alphabetical characters in string s to uppercase.
 vcl_string& vul_string_upcase(vcl_string& s)
 {
-  vul_string_c_upcase(/*const_cast*/(char *)(s.c_str()));
-  return s;                     // Return reference to modified string
+  vcl_transform( s.begin(), s.end(), s.begin(), toupper );
+  return s;
 }
 
 // Converts all alphabetical characters in string s to lowercase.
 vcl_string& vul_string_downcase(vcl_string& s)
 {
-  vul_string_c_downcase(/*const_cast*/(char *)(s.c_str()));
-  return s;                     // Return reference to modified string
+  vcl_transform( s.begin(), s.end(), s.begin(), tolower );
+  return s;
 }
 
 // Capitalizes all words in string s.
 vcl_string& vul_string_capitalize(vcl_string& s)
 {
-  vul_string_c_capitalize(/*const_cast*/(char *)(s.c_str()));
-  return s;                     // Return reference to modified string
+  // Word beginnings are defined as the transition from
+  // non-alphanumeric to alphanumeric, and word endings as the reverse
+  // transition.
+  vcl_string::iterator si;
+  bool in_word = false;
+  for( si = s.begin(); si != s.end(); ++si ) {
+    if( !in_word && vcl_isalnum( *si ) ) {
+      *si = toupper( *si );
+      in_word = true;
+    } else if( in_word && !vcl_isalnum( *si ) ) {
+      in_word = false;
+    }
+  }
+  return s;
 }
 
 // Removes any occurrence of the character string rem
