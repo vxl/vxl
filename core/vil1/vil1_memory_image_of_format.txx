@@ -14,14 +14,15 @@
 #include <vcl_climits.h>  // for CHAR_BIT, number of bits in a char.
 #include <vcl_complex_fwd.h>
 
-#include <vil/vil_memory_image_of.h>
+#include <vil/vil_memory_image.h>
 #include <vil/vil_rgb.h>
 
 #include <vxl_config.h>
 
 //: Map from Types to image formats
 template <class T>
-struct vil_memory_image_of_format : public vil_memory_image_format {
+struct vil_memory_image_of_format : public vil_memory_image_format
+{
  protected:
   // A protection error here means you haven't derived
   // the vil_memory_image_format<T> for a vil_memory_image_of<T>
@@ -29,8 +30,10 @@ struct vil_memory_image_of_format : public vil_memory_image_format {
 };
 
 VCL_DEFINE_SPECIALIZATION
-struct vil_memory_image_of_format<float> : public vil_memory_image_format {
-  vil_memory_image_of_format() {
+struct vil_memory_image_of_format<float> : public vil_memory_image_format
+{
+  vil_memory_image_of_format()
+  {
     components = 1;
     bits_per_component = sizeof(float)*CHAR_BIT;
     component_format = VIL_COMPONENT_FORMAT_IEEE_FLOAT;
@@ -38,8 +41,10 @@ struct vil_memory_image_of_format<float> : public vil_memory_image_format {
 };
 
 VCL_DEFINE_SPECIALIZATION
-struct vil_memory_image_of_format<double> : public vil_memory_image_format {
-  vil_memory_image_of_format() {
+struct vil_memory_image_of_format<double> : public vil_memory_image_format
+{
+  vil_memory_image_of_format()
+  {
     components = 1;
     bits_per_component = sizeof(double)*CHAR_BIT;
     component_format = VIL_COMPONENT_FORMAT_IEEE_FLOAT;
@@ -47,8 +52,10 @@ struct vil_memory_image_of_format<double> : public vil_memory_image_format {
 };
 
 VCL_DEFINE_SPECIALIZATION
-struct vil_memory_image_of_format<vcl_complex<float> > : public vil_memory_image_format {
-  vil_memory_image_of_format() {
+struct vil_memory_image_of_format<vcl_complex<float> > : public vil_memory_image_format
+{
+  vil_memory_image_of_format()
+  {
     components = 2;
     bits_per_component = 32;
     component_format = VIL_COMPONENT_FORMAT_IEEE_FLOAT;
@@ -56,8 +63,10 @@ struct vil_memory_image_of_format<vcl_complex<float> > : public vil_memory_image
 };
 
 VCL_DEFINE_SPECIALIZATION
-struct vil_memory_image_of_format<vcl_complex<double> > : public vil_memory_image_format {
-  vil_memory_image_of_format() {
+struct vil_memory_image_of_format<vcl_complex<double> > : public vil_memory_image_format
+{
+  vil_memory_image_of_format()
+  {
     components = 2;
     bits_per_component = 64;
     component_format = VIL_COMPONENT_FORMAT_IEEE_FLOAT;
@@ -65,8 +74,10 @@ struct vil_memory_image_of_format<vcl_complex<double> > : public vil_memory_imag
 };
 
 VCL_DEFINE_SPECIALIZATION
-struct vil_memory_image_of_format<signed char> : public vil_memory_image_format {
-  vil_memory_image_of_format() {
+struct vil_memory_image_of_format<signed char> : public vil_memory_image_format
+{
+  vil_memory_image_of_format()
+  {
     components = 1;
     bits_per_component = CHAR_BIT;
     component_format = VIL_COMPONENT_FORMAT_SIGNED_INT;
@@ -74,8 +85,10 @@ struct vil_memory_image_of_format<signed char> : public vil_memory_image_format 
 };
 
 VCL_DEFINE_SPECIALIZATION
-struct vil_memory_image_of_format<bool> : public vil_memory_image_format {
-  vil_memory_image_of_format() {
+struct vil_memory_image_of_format<bool> : public vil_memory_image_format
+{
+  vil_memory_image_of_format()
+  {
     components = 1;
     bits_per_component = sizeof(bool)*CHAR_BIT; // ugh! this is 32 on gcc -- fsm.
     component_format = VIL_COMPONENT_FORMAT_UNSIGNED_INT;
@@ -83,8 +96,10 @@ struct vil_memory_image_of_format<bool> : public vil_memory_image_format {
 };
 
 VCL_DEFINE_SPECIALIZATION
-struct vil_memory_image_of_format<unsigned char> : public vil_memory_image_format {
-  vil_memory_image_of_format() {
+struct vil_memory_image_of_format<unsigned char> : public vil_memory_image_format
+{
+  vil_memory_image_of_format()
+  {
     components = 1;
     bits_per_component = CHAR_BIT;
     component_format = VIL_COMPONENT_FORMAT_UNSIGNED_INT;
@@ -92,8 +107,10 @@ struct vil_memory_image_of_format<unsigned char> : public vil_memory_image_forma
 };
 
 VCL_DEFINE_SPECIALIZATION
-struct vil_memory_image_of_format<unsigned short> : public vil_memory_image_format {
-  vil_memory_image_of_format() {
+struct vil_memory_image_of_format<unsigned short> : public vil_memory_image_format
+{
+  vil_memory_image_of_format()
+  {
     components = 1;
     bits_per_component = sizeof(short)*CHAR_BIT;
     component_format = VIL_COMPONENT_FORMAT_UNSIGNED_INT;
@@ -101,8 +118,10 @@ struct vil_memory_image_of_format<unsigned short> : public vil_memory_image_form
 };
 
 VCL_DEFINE_SPECIALIZATION
-struct vil_memory_image_of_format<signed short> : public vil_memory_image_format {
-  vil_memory_image_of_format() {
+struct vil_memory_image_of_format<signed short> : public vil_memory_image_format
+{
+  vil_memory_image_of_format()
+  {
     components = 1;
     bits_per_component = sizeof(short)*CHAR_BIT;
     component_format = VIL_COMPONENT_FORMAT_SIGNED_INT;
@@ -110,8 +129,10 @@ struct vil_memory_image_of_format<signed short> : public vil_memory_image_format
 };
 
 VCL_DEFINE_SPECIALIZATION
-struct vil_memory_image_of_format<signed int> : public vil_memory_image_format {
-  vil_memory_image_of_format() {
+struct vil_memory_image_of_format<signed int> : public vil_memory_image_format
+{
+  vil_memory_image_of_format()
+  {
     components = 1;
     bits_per_component = sizeof(int)*CHAR_BIT;
     component_format = VIL_COMPONENT_FORMAT_SIGNED_INT;
@@ -119,8 +140,10 @@ struct vil_memory_image_of_format<signed int> : public vil_memory_image_format {
 };
 
 VCL_DEFINE_SPECIALIZATION
-struct vil_memory_image_of_format<unsigned int> : public vil_memory_image_format {
-  vil_memory_image_of_format() {
+struct vil_memory_image_of_format<unsigned int> : public vil_memory_image_format
+{
+  vil_memory_image_of_format()
+  {
     components = 1;
     bits_per_component = sizeof(int)*CHAR_BIT;
     component_format = VIL_COMPONENT_FORMAT_UNSIGNED_INT;
@@ -128,8 +151,10 @@ struct vil_memory_image_of_format<unsigned int> : public vil_memory_image_format
 };
 
 VCL_DEFINE_SPECIALIZATION
-struct vil_memory_image_of_format<vil_rgb<unsigned char> > : public vil_memory_image_format {
-  vil_memory_image_of_format() {
+struct vil_memory_image_of_format<vil_rgb<unsigned char> > : public vil_memory_image_format
+{
+  vil_memory_image_of_format()
+  {
     components = 3;
     bits_per_component = CHAR_BIT;
     component_format = VIL_COMPONENT_FORMAT_UNSIGNED_INT;
@@ -137,8 +162,10 @@ struct vil_memory_image_of_format<vil_rgb<unsigned char> > : public vil_memory_i
 };
 
 VCL_DEFINE_SPECIALIZATION
-struct vil_memory_image_of_format<vil_rgb<vxl_uint_16> > : public vil_memory_image_format {
-  vil_memory_image_of_format() {
+struct vil_memory_image_of_format<vil_rgb<vxl_uint_16> > : public vil_memory_image_format
+{
+  vil_memory_image_of_format()
+  {
     components = 3;
     bits_per_component = 16;
     component_format = VIL_COMPONENT_FORMAT_UNSIGNED_INT;
@@ -146,8 +173,10 @@ struct vil_memory_image_of_format<vil_rgb<vxl_uint_16> > : public vil_memory_ima
 };
 
 VCL_DEFINE_SPECIALIZATION
-struct vil_memory_image_of_format<vil_rgb<float> > : public vil_memory_image_format {
-  vil_memory_image_of_format() {
+struct vil_memory_image_of_format<vil_rgb<float> > : public vil_memory_image_format
+{
+  vil_memory_image_of_format()
+  {
     components = 3;
     bits_per_component = 32;
     component_format = VIL_COMPONENT_FORMAT_IEEE_FLOAT;
@@ -155,8 +184,10 @@ struct vil_memory_image_of_format<vil_rgb<float> > : public vil_memory_image_for
 };
 
 VCL_DEFINE_SPECIALIZATION
-struct vil_memory_image_of_format<vil_rgb<double> > : public vil_memory_image_format {
-  vil_memory_image_of_format() {
+struct vil_memory_image_of_format<vil_rgb<double> > : public vil_memory_image_format
+{
+  vil_memory_image_of_format()
+  {
     components = 3;
     bits_per_component = 64;
     component_format = VIL_COMPONENT_FORMAT_IEEE_FLOAT;
