@@ -128,6 +128,10 @@ SOURCES += camsun.c
 # from LASO2
 SOURCES += dnlaso.c
 
+# from OPT
+SOURCES += lbfgs.c
+SOURCES += lbfgs-lb1.c
+
 # from LAPACK
 SOURCES += ilaenv.c
 SOURCES += izmax1.c
@@ -223,8 +227,8 @@ ifeq ($(OS),hpux10.20)
 endif
 
 ifneq ($(OS),win32)
-  debug := 
-  APP_CFLAGS = $(optimize)
+#   debug := 
+#   APP_CFLAGS = $(optimize)
 endif
 
 ifeq ($(OS),solaris)

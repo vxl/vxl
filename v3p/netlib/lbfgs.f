@@ -11,7 +11,7 @@ C
       DOUBLE PRECISION X(N),G(N),DIAG(N),W(N*(2*M+1)+2*M)
       DOUBLE PRECISION F,EPS,XTOL
       LOGICAL DIAGCO
-      
+
 C
 C        LIMITED MEMORY BFGS METHOD FOR LARGE SCALE OPTIMIZATION
 C                          JORGE NOCEDAL
@@ -234,6 +234,15 @@ C
       LOGICAL FINISH
 C
       SAVE
+C
+C   ----------------------------------------------------------
+C     DATA
+C   ----------------------------------------------------------
+C
+C      BLOCK DATA LB3
+      DATA MP,LP,GTOL,STPMIN,STPMAX/6,6,9.0D-01,1.0D-20,1.0D+20/
+
+
       DATA ONE,ZERO/1.0D+0,0.0D+0/
 C
 C     INITIALIZE
@@ -244,7 +253,10 @@ C
   10  ITER= 0
       IF(N.LE.0.OR.M.LE.0) GO TO 196
       IF(GTOL.LE.1.D-04) THEN
-        IF(LP.GT.0) WRITE(LP,245)
+        IF(LP.GT.0) then 
+           call lbptf('  GTOL IS LESS THAN OR EQUAL TO 1.D-04')
+           call lbptf('  IT HAS BEEN RESET TO 9.D-01')
+        endif
         GTOL=9.D-01
       ENDIF
       NFUN= 1
@@ -285,9 +297,9 @@ C
       FTOL= 1.0D-4
       MAXFEV= 20
 C
-      IF(IPRINT(1).GE.0) CALL LB1(IPRINT,ITER,NFUN,
-     *                     GNORM,N,M,X,F,G,STP,FINISH)
-C
+      IF (IPRINT(1).GE.0)
+     $     CALL LB1(IPRINT,ITER,NFUN,GNORM,N,M,X,F,G,STP,FINISH)
+C     
 C    --------------------
 C     MAIN ITERATION LOOP
 C    --------------------
@@ -367,6 +379,8 @@ C     ----------------------------------------------------
      *            XTOL,MAXFEV,INFO,NFEV,DIAG)
       IF (INFO .EQ. -1) THEN
         IFLAG=1
+C       Return, in order to get another sample of F and G.
+c       Next call comes right back here.
         RETURN
       ENDIF
       IF (INFO .NE. 1) GO TO 190
@@ -403,116 +417,33 @@ C     END OF MAIN ITERATION LOOP. ERROR EXITS.
 C     ------------------------------------------------------------
 C
  190  IFLAG=-1
-      IF(LP.GT.0) WRITE(LP,200) INFO
+      IF(LP.GT.0) then 
+         call lbptf('IFLAG= -1. LINE SEARCH FAILED.')
+         call lbptf(' SEE DOCUMENTATION OF ROUTINE MCSRCH')
+         call lbp1d(' ERROR RETURN  OF LINE SEARCH: INFO=%d', INFO)
+         call lbptf(' POSSIBLE CAUSES: FUNCTION OR GRADIENT ARE ')
+         call lbptf(' INCORRECT OR INCORRECT TOLERANCES')
+      endif
       RETURN
  195  IFLAG=-2
-      IF(LP.GT.0) WRITE(LP,235) I
+      IF(LP.GT.0) then
+         call lbp1d('IFLAG=-2, THE %d-TH DIAGONAL ELEMENT OF THE',I)
+         call lbptf('INVERSE HESSIAN APPROXIMATION IS NOT POSITIVE')
+      endif
       RETURN
  196  IFLAG= -3
-      IF(LP.GT.0) WRITE(LP,240)
-C
-C     FORMATS
-C     -------
-C
- 200  FORMAT(/' IFLAG= -1 ',/' LINE SEARCH FAILED. SEE'
-     .          ' DOCUMENTATION OF ROUTINE MCSRCH',/' ERROR RETURN'
-     .          ' OF LINE SEARCH: INFO= ',I2,/
-     .          ' POSSIBLE CAUSES: FUNCTION OR GRADIENT ARE INCORRECT',/,
-     .          ' OR INCORRECT TOLERANCES')
- 235  FORMAT(/' IFLAG= -2',/' THE',I5,'-TH DIAGONAL ELEMENT OF THE',/,
-     .       ' INVERSE HESSIAN APPROXIMATION IS NOT POSITIVE')
- 240  FORMAT(/' IFLAG= -3',/' IMPROPER INPUT PARAMETERS (N OR M',
-     .       ' ARE NOT POSITIVE)')
- 245  FORMAT(/'  GTOL IS LESS THAN OR EQUAL TO 1.D-04',
-     .       / ' IT HAS BEEN RESET TO 9.D-01')
+      IF(LP.GT.0) then
+         call lbptf('IFLAG= -3, IMPROPER INPUT PARAMETERS.')
+         call lbptf(' (N OR M ARE NOT POSITIVE)')
+      endif
       RETURN
       END
 C
 C     LAST LINE OF SUBROUTINE LBFGS
 C
 C
-      SUBROUTINE LB1(IPRINT,ITER,NFUN,
-     *                     GNORM,N,M,X,F,G,STP,FINISH)
-C
-C     -------------------------------------------------------------
-C     THIS ROUTINE PRINTS MONITORING INFORMATION. THE FREQUENCY AND
-C     AMOUNT OF OUTPUT ARE CONTROLLED BY IPRINT.
-C     -------------------------------------------------------------
-C
-      INTEGER IPRINT(2),ITER,NFUN,LP,MP,N,M
-      DOUBLE PRECISION X(N),G(N),F,GNORM,STP,GTOL,STPMIN,STPMAX
-      LOGICAL FINISH
-      COMMON /LB3/MP,LP,GTOL,STPMIN,STPMAX
-C
-      IF (ITER.EQ.0)THEN
-           WRITE(MP,10)
-           WRITE(MP,20) N,M
-           WRITE(MP,30)F,GNORM
-                 IF (IPRINT(2).GE.1)THEN
-                     WRITE(MP,40)
-                     WRITE(MP,50) (X(I),I=1,N)
-                     WRITE(MP,60)
-                     WRITE(MP,50) (G(I),I=1,N)
-                  ENDIF
-           WRITE(MP,10)
-           WRITE(MP,70)
-      ELSE
-          IF ((IPRINT(1).EQ.0).AND.(ITER.NE.1.AND..NOT.FINISH))RETURN
-              IF (IPRINT(1).NE.0)THEN
-                   IF(MOD(ITER-1,IPRINT(1)).EQ.0.OR.FINISH)THEN
-                         IF(IPRINT(2).GT.1.AND.ITER.GT.1) WRITE(MP,70)
-                         WRITE(MP,80)ITER,NFUN,F,GNORM,STP
-                   ELSE
-                         RETURN
-                   ENDIF
-              ELSE
-                   IF( IPRINT(2).GT.1.AND.FINISH) WRITE(MP,70)
-                   WRITE(MP,80)ITER,NFUN,F,GNORM,STP
-              ENDIF
-              IF (IPRINT(2).EQ.2.OR.IPRINT(2).EQ.3)THEN
-                    IF (FINISH)THEN
-                        WRITE(MP,90)
-                    ELSE
-                        WRITE(MP,40)
-                    ENDIF
-                      WRITE(MP,50)(X(I),I=1,N)
-                  IF (IPRINT(2).EQ.3)THEN
-                      WRITE(MP,60)
-                      WRITE(MP,50)(G(I),I=1,N)
-                  ENDIF
-              ENDIF
-            IF (FINISH) WRITE(MP,100)
-      ENDIF
-C
- 10   FORMAT('*************************************************')
- 20   FORMAT('  N=',I5,'   NUMBER OF CORRECTIONS=',I2,
-     .       /,  '       INITIAL VALUES')
- 30   FORMAT(' F= ',1PD10.3,'   GNORM= ',1PD10.3)
- 40   FORMAT(' VECTOR X= ')
- 50   FORMAT(6(2X,1PD10.3))
- 60   FORMAT(' GRADIENT VECTOR G= ')
- 70   FORMAT(/'   I   NFN',4X,'FUNC',8X,'GNORM',7X,'STEPLENGTH'/)
- 80   FORMAT(2(I4,1X),3X,3(1PD10.3,2X))
- 90   FORMAT(' FINAL POINT X= ')
- 100  FORMAT(/' THE MINIMIZATION TERMINATED WITHOUT DETECTING ERRORS.',
-     .       /' IFLAG = 0')
-C
-      RETURN
-      END
-C     ******
-C
-C
-C   ----------------------------------------------------------
-C     DATA
-C   ----------------------------------------------------------
-C
-      BLOCK DATA LB2
-      INTEGER LP,MP
-      DOUBLE PRECISION GTOL,STPMIN,STPMAX
-      COMMON /LB3/MP,LP,GTOL,STPMIN,STPMAX
-      DATA MP,LP,GTOL,STPMIN,STPMAX/6,6,9.0D-01,1.0D-20,1.0D+20/
-      END
-C
+C      SUBROUTINE LB1(IPRINT,ITER,NFUN,GNORM,N,M,X,F,G,STP,FINISH)
+C      ** moved to c file
 C
 C   ----------------------------------------------------------
 C
@@ -750,7 +681,6 @@ C     ARGONNE NATIONAL LABORATORY. MINPACK PROJECT. JUNE 1983
 C     JORGE J. MORE', DAVID J. THUENTE
 C
 C     **********
-      external printf
       INTEGER INFOC,J
       LOGICAL BRACKT,STAGE1
       DOUBLE PRECISION DG,DGM,DGINIT,DGTEST,DGX,DGXM,DGY,DGYM,
@@ -774,7 +704,8 @@ C
          DGINIT = DGINIT + G(J)*S(J)
    10    CONTINUE
       IF (DGINIT .GE. ZERO) then
-         CALL PRINTF('THE SEARCH DIRECTION IS NOT A DESCENT DIRECTION')
+         CALL LBPTF
+     *        ('THE SEARCH DIRECTION IS NOT A DESCENT DIRECTION')
          RETURN
          ENDIF
 C

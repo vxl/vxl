@@ -19,9 +19,10 @@ C
 C
 C     The driver for LBFGS must always declare LB2 as EXTERNAL
 C
-      EXTERNAL LB2
+
       COMMON /LB3/MP,LP,GTOL,STPMIN,STPMAX
 C
+      lp = 1
       N=100
       M=5
       IPRINT(1)= 1
@@ -50,12 +51,15 @@ C
         F= F+T1**2+T2**2
  30   CONTINUE
       CALL LBFGS(N,M,X,F,G,DIAGCO,DIAG,IPRINT,EPS,XTOL,W,IFLAG)
+      call lbp1f("f = %g\n", F)
       IF(IFLAG.LE.0) GO TO 50
       ICALL=ICALL + 1
 C     We allow at most 2000 evaluations of F and G
       IF(ICALL.GT.2000) GO TO 50
       GO TO 20
   50  CONTINUE
+      call lbp1f("f = %g\n", F)
+      call lbp1d("iterations = %d\n", ICALL)
       END
 C
 C     ** LAST LINE OF SIMPLE DRIVER (SDRIVE) **

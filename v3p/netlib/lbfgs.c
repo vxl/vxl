@@ -48,27 +48,12 @@ integer *iflag;
     static doublereal one = 1.;
     static doublereal zero = 0.;
 
-    /* Format strings */
-    static char fmt_245[] = "(/\002  GTOL IS LESS THAN OR EQUAL TO 1.D-04\
-\002,/\002 IT HAS BEEN RESET TO 9.D-01\002)";
-    static char fmt_200[] = "(/\002 IFLAG= -1 \002,/\002 LINE SEARCH FAILED.\
- SEE\002\002 DOCUMENTATION OF ROUTINE MCSRCH\002,/\002 ERROR RETURN\002\002 \
-OF LINE SEARCH: INFO= \002,i2,/\002 POSSIBLE CAUSES: FUNCTION OR GRADIENT AR\
-E INCORRECT\002,/\002 OR INCORRECT TOLERANCES\002)";
-    static char fmt_235[] = "(/\002 IFLAG= -2\002,/\002 THE\002,i5,\002-TH D\
-IAGONAL ELEMENT OF THE\002,/,\002 INVERSE HESSIAN APPROXIMATION IS NOT POSIT\
-IVE\002)";
-    static char fmt_240[] = "(/\002 IFLAG= -3\002,/\002 IMPROPER INPUT PARAM\
-ETERS (N OR M\002,\002 ARE NOT POSITIVE)\002)";
-
     /* System generated locals */
     integer i__1;
     doublereal d__1;
 
     /* Builtin functions */
-    integer s_wsfe(), e_wsfe();
     double sqrt();
-    integer do_fio();
 
     /* Local variables */
     static doublereal beta;
@@ -76,7 +61,10 @@ ETERS (N OR M\002,\002 ARE NOT POSITIVE)\002)";
     extern doublereal ddot_();
     static integer info, iscn, nfev, iycn, iter;
     static doublereal ftol;
-    static integer nfun, ispt, iypt, i, bound;
+    static integer nfun, ispt, iypt;
+    extern /* Subroutine */ int lbp1d_();
+    static integer i, bound;
+    extern /* Subroutine */ int lbptf_();
     static doublereal gnorm;
     extern /* Subroutine */ int daxpy_();
     static integer point;
@@ -90,13 +78,6 @@ ETERS (N OR M\002,\002 ARE NOT POSITIVE)\002)";
     extern /* Subroutine */ int lb1_();
     static integer npt;
     static doublereal stp, stp1;
-
-    /* Fortran I/O blocks */
-    static cilist io___4 = { 0, 0, 0, fmt_245, 0 };
-    static cilist io___30 = { 0, 0, 0, fmt_200, 0 };
-    static cilist io___31 = { 0, 0, 0, fmt_235, 0 };
-    static cilist io___32 = { 0, 0, 0, fmt_240, 0 };
-
 
 
 
@@ -364,6 +345,12 @@ t*/
 -*/
 
 
+
+/*   ---------------------------------------------------------- */
+/*     DATA */
+/*   ---------------------------------------------------------- */
+
+/*      BLOCK DATA LB3 */
     /* Parameter adjustments */
     --w;
     --iprint;
@@ -390,9 +377,8 @@ L10:
     }
     if (lb3_1.gtol <= 1e-4) {
 	if (lb3_1.lp > 0) {
-	    io___4.ciunit = lb3_1.lp;
-	    s_wsfe(&io___4);
-	    e_wsfe();
+	    lbptf_("  GTOL IS LESS THAN OR EQUAL TO 1.D-04", 38L);
+	    lbptf_("  IT HAS BEEN RESET TO 9.D-01", 29L);
 	}
 	lb3_1.gtol = .9;
     }
@@ -568,6 +554,8 @@ L172:
 	    &maxfev, &info, &nfev, &diag[1]);
     if (info == -1) {
 	*iflag = 1;
+/*       Return, in order to get another sample of F and G. */
+/*       Next call comes right back here. */
 	return 0;
     }
     if (info != 1) {
@@ -617,32 +605,26 @@ L172:
 L190:
     *iflag = -1;
     if (lb3_1.lp > 0) {
-	io___30.ciunit = lb3_1.lp;
-	s_wsfe(&io___30);
-	do_fio(&c__1, (char *)&info, (ftnlen)sizeof(integer));
-	e_wsfe();
+	lbptf_("IFLAG= -1. LINE SEARCH FAILED.", 30L);
+	lbptf_(" SEE DOCUMENTATION OF ROUTINE MCSRCH", 36L);
+	lbp1d_(" ERROR RETURN  OF LINE SEARCH: INFO=%d", &info, 38L);
+	lbptf_(" POSSIBLE CAUSES: FUNCTION OR GRADIENT ARE ", 43L);
+	lbptf_(" INCORRECT OR INCORRECT TOLERANCES", 34L);
     }
     return 0;
 L195:
     *iflag = -2;
     if (lb3_1.lp > 0) {
-	io___31.ciunit = lb3_1.lp;
-	s_wsfe(&io___31);
-	do_fio(&c__1, (char *)&i, (ftnlen)sizeof(integer));
-	e_wsfe();
+	lbp1d_("IFLAG=-2, THE %d-TH DIAGONAL ELEMENT OF THE", &i, 43L);
+	lbptf_("INVERSE HESSIAN APPROXIMATION IS NOT POSITIVE", 45L);
     }
     return 0;
 L196:
     *iflag = -3;
     if (lb3_1.lp > 0) {
-	io___32.ciunit = lb3_1.lp;
-	s_wsfe(&io___32);
-	e_wsfe();
+	lbptf_("IFLAG= -3, IMPROPER INPUT PARAMETERS.", 37L);
+	lbptf_(" (N OR M ARE NOT POSITIVE)", 26L);
     }
-
-/*     FORMATS */
-/*     ------- */
-
     return 0;
 } /* lbfgs_ */
 
@@ -650,204 +632,8 @@ L196:
 /*     LAST LINE OF SUBROUTINE LBFGS */
 
 
-/* Subroutine */ int lb1_(iprint, iter, nfun, gnorm, n, m, x, f, g, stp, 
-	finish)
-integer *iprint, *iter, *nfun;
-doublereal *gnorm;
-integer *n, *m;
-doublereal *x, *f, *g, *stp;
-logical *finish;
-{
-    /* Format strings */
-    static char fmt_10[] = "(\002*******************************************\
-******\002)";
-    static char fmt_20[] = "(\002  N=\002,i5,\002   NUMBER OF CORRECTIONS\
-=\002,i2,/,\002       INITIAL VALUES\002)";
-    static char fmt_30[] = "(\002 F= \002,1pd10.3,\002   GNORM= \002,1pd10.3)"
-	    ;
-    static char fmt_40[] = "(\002 VECTOR X= \002)";
-    static char fmt_50[] = "(6(2x,1pd10.3))";
-    static char fmt_60[] = "(\002 GRADIENT VECTOR G= \002)";
-    static char fmt_70[] = "(/\002   I   NFN\002,4x,\002FUNC\002,8x,\002GN\
-ORM\002,7x,\002STEPLENGTH\002/)";
-    static char fmt_80[] = "(2(i4,1x),3x,3(1pd10.3,2x))";
-    static char fmt_90[] = "(\002 FINAL POINT X= \002)";
-    static char fmt_100[] = "(/\002 THE MINIMIZATION TERMINATED WITHOUT DETE\
-CTING ERRORS.\002,/\002 IFLAG = 0\002)";
-
-    /* System generated locals */
-    integer i__1;
-
-    /* Builtin functions */
-    integer s_wsfe(), e_wsfe(), do_fio();
-
-    /* Local variables */
-    static integer i;
-
-    /* Fortran I/O blocks */
-    static cilist io___33 = { 0, 0, 0, fmt_10, 0 };
-    static cilist io___34 = { 0, 0, 0, fmt_20, 0 };
-    static cilist io___35 = { 0, 0, 0, fmt_30, 0 };
-    static cilist io___36 = { 0, 0, 0, fmt_40, 0 };
-    static cilist io___37 = { 0, 0, 0, fmt_50, 0 };
-    static cilist io___39 = { 0, 0, 0, fmt_60, 0 };
-    static cilist io___40 = { 0, 0, 0, fmt_50, 0 };
-    static cilist io___41 = { 0, 0, 0, fmt_10, 0 };
-    static cilist io___42 = { 0, 0, 0, fmt_70, 0 };
-    static cilist io___43 = { 0, 0, 0, fmt_70, 0 };
-    static cilist io___44 = { 0, 0, 0, fmt_80, 0 };
-    static cilist io___45 = { 0, 0, 0, fmt_70, 0 };
-    static cilist io___46 = { 0, 0, 0, fmt_80, 0 };
-    static cilist io___47 = { 0, 0, 0, fmt_90, 0 };
-    static cilist io___48 = { 0, 0, 0, fmt_40, 0 };
-    static cilist io___49 = { 0, 0, 0, fmt_50, 0 };
-    static cilist io___50 = { 0, 0, 0, fmt_60, 0 };
-    static cilist io___51 = { 0, 0, 0, fmt_50, 0 };
-    static cilist io___52 = { 0, 0, 0, fmt_100, 0 };
-
-
-
-/*     ------------------------------------------------------------- */
-/*     THIS ROUTINE PRINTS MONITORING INFORMATION. THE FREQUENCY AND */
-/*     AMOUNT OF OUTPUT ARE CONTROLLED BY IPRINT. */
-/*     ------------------------------------------------------------- */
-
-
-    /* Parameter adjustments */
-    --g;
-    --x;
-    --iprint;
-
-    /* Function Body */
-    if (*iter == 0) {
-	io___33.ciunit = lb3_1.mp;
-	s_wsfe(&io___33);
-	e_wsfe();
-	io___34.ciunit = lb3_1.mp;
-	s_wsfe(&io___34);
-	do_fio(&c__1, (char *)&(*n), (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&(*m), (ftnlen)sizeof(integer));
-	e_wsfe();
-	io___35.ciunit = lb3_1.mp;
-	s_wsfe(&io___35);
-	do_fio(&c__1, (char *)&(*f), (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&(*gnorm), (ftnlen)sizeof(doublereal));
-	e_wsfe();
-	if (iprint[2] >= 1) {
-	    io___36.ciunit = lb3_1.mp;
-	    s_wsfe(&io___36);
-	    e_wsfe();
-	    io___37.ciunit = lb3_1.mp;
-	    s_wsfe(&io___37);
-	    i__1 = *n;
-	    for (i = 1; i <= i__1; ++i) {
-		do_fio(&c__1, (char *)&x[i], (ftnlen)sizeof(doublereal));
-	    }
-	    e_wsfe();
-	    io___39.ciunit = lb3_1.mp;
-	    s_wsfe(&io___39);
-	    e_wsfe();
-	    io___40.ciunit = lb3_1.mp;
-	    s_wsfe(&io___40);
-	    i__1 = *n;
-	    for (i = 1; i <= i__1; ++i) {
-		do_fio(&c__1, (char *)&g[i], (ftnlen)sizeof(doublereal));
-	    }
-	    e_wsfe();
-	}
-	io___41.ciunit = lb3_1.mp;
-	s_wsfe(&io___41);
-	e_wsfe();
-	io___42.ciunit = lb3_1.mp;
-	s_wsfe(&io___42);
-	e_wsfe();
-    } else {
-	if (iprint[1] == 0 && (*iter != 1 && ! (*finish))) {
-	    return 0;
-	}
-	if (iprint[1] != 0) {
-	    if ((*iter - 1) % iprint[1] == 0 || *finish) {
-		if (iprint[2] > 1 && *iter > 1) {
-		    io___43.ciunit = lb3_1.mp;
-		    s_wsfe(&io___43);
-		    e_wsfe();
-		}
-		io___44.ciunit = lb3_1.mp;
-		s_wsfe(&io___44);
-		do_fio(&c__1, (char *)&(*iter), (ftnlen)sizeof(integer));
-		do_fio(&c__1, (char *)&(*nfun), (ftnlen)sizeof(integer));
-		do_fio(&c__1, (char *)&(*f), (ftnlen)sizeof(doublereal));
-		do_fio(&c__1, (char *)&(*gnorm), (ftnlen)sizeof(doublereal));
-		do_fio(&c__1, (char *)&(*stp), (ftnlen)sizeof(doublereal));
-		e_wsfe();
-	    } else {
-		return 0;
-	    }
-	} else {
-	    if (iprint[2] > 1 && *finish) {
-		io___45.ciunit = lb3_1.mp;
-		s_wsfe(&io___45);
-		e_wsfe();
-	    }
-	    io___46.ciunit = lb3_1.mp;
-	    s_wsfe(&io___46);
-	    do_fio(&c__1, (char *)&(*iter), (ftnlen)sizeof(integer));
-	    do_fio(&c__1, (char *)&(*nfun), (ftnlen)sizeof(integer));
-	    do_fio(&c__1, (char *)&(*f), (ftnlen)sizeof(doublereal));
-	    do_fio(&c__1, (char *)&(*gnorm), (ftnlen)sizeof(doublereal));
-	    do_fio(&c__1, (char *)&(*stp), (ftnlen)sizeof(doublereal));
-	    e_wsfe();
-	}
-	if (iprint[2] == 2 || iprint[2] == 3) {
-	    if (*finish) {
-		io___47.ciunit = lb3_1.mp;
-		s_wsfe(&io___47);
-		e_wsfe();
-	    } else {
-		io___48.ciunit = lb3_1.mp;
-		s_wsfe(&io___48);
-		e_wsfe();
-	    }
-	    io___49.ciunit = lb3_1.mp;
-	    s_wsfe(&io___49);
-	    i__1 = *n;
-	    for (i = 1; i <= i__1; ++i) {
-		do_fio(&c__1, (char *)&x[i], (ftnlen)sizeof(doublereal));
-	    }
-	    e_wsfe();
-	    if (iprint[2] == 3) {
-		io___50.ciunit = lb3_1.mp;
-		s_wsfe(&io___50);
-		e_wsfe();
-		io___51.ciunit = lb3_1.mp;
-		s_wsfe(&io___51);
-		i__1 = *n;
-		for (i = 1; i <= i__1; ++i) {
-		    do_fio(&c__1, (char *)&g[i], (ftnlen)sizeof(doublereal));
-		}
-		e_wsfe();
-	    }
-	}
-	if (*finish) {
-	    io___52.ciunit = lb3_1.mp;
-	    s_wsfe(&io___52);
-	    e_wsfe();
-	}
-    }
-
-
-    return 0;
-} /* lb1_ */
-
-/*     ****** */
-
-
-/*   ---------------------------------------------------------- */
-/*     DATA */
-/*   ---------------------------------------------------------- */
-
-
-
+/*      SUBROUTINE LB1(IPRINT,ITER,NFUN,GNORM,N,M,X,F,G,STP,FINISH) */
+/*      ** moved to c file */
 
 /*   ---------------------------------------------------------- */
 
@@ -980,12 +766,13 @@ doublereal *wa;
     /* Local variables */
     static doublereal dgxm, dgym;
     static integer j, infoc;
+    extern /* Subroutine */ int lbptf_();
     static doublereal finit, width, stmin, stmax;
     static logical stage1;
     static doublereal width1, ftest1, dg, fm, fx, fy;
     static logical brackt;
     static doublereal dginit, dgtest;
-    extern /* Subroutine */ int mcstep_(), printf_();
+    extern /* Subroutine */ int mcstep_();
     static doublereal dgm, dgx, dgy, fxm, fym, stx, sty;
 
 
@@ -1075,6 +862,13 @@ doublereal *wa;
 /*       MAXFEV IS A POSITIVE INTEGER INPUT VARIABLE. TERMINATION */
 /*         OCCURS WHEN THE NUMBER OF CALLS TO FCN IS AT LEAST */
 /*         MAXFEV BY THE END OF AN ITERATION. */
+
+/*       INFO IS AN INTEGER OUTPUT VARIABLE SET AS FOLLOWS: */
+
+/*         INFO = 0  IMPROPER INPUT PARAMETERS. */
+
+/*        INFO =-1  A RETURN IS MADE TO COMPUTE THE FUNCTION AND GRADIENT.
+*/
 /*       NFEV IS AN INTEGER OUTPUT VARIABLE SET TO THE NUMBER OF */
 /*         CALLS TO FCN. */
 
@@ -1120,7 +914,7 @@ doublereal *wa;
 /* L10: */
     }
     if (dginit >= zero) {
-	printf_("THE SEARCH DIRECTION IS NOT A DESCENT DIRECTION", 47L);
+	lbptf_("THE SEARCH DIRECTION IS NOT A DESCENT DIRECTION", 47L);
 	return 0;
     }
 
