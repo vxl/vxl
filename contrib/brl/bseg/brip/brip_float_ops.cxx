@@ -1,10 +1,9 @@
-#include "brip_float_ops.h"
 #include <vcl_fstream.h>
 #include <vul/vul_timer.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>
 #include <vil/vil_smooth.h>
-
+#include "brip_float_ops.h"
 //------------------------------------------------------------
 //  Convolve with a kernel
 //   It's assumed that the kernel is square with odd dimensions
@@ -291,4 +290,3 @@ vbl_array_2d<float> brip_float_ops::load_kernel(vcl_string const & file)
      }
   return output;
 }
-
