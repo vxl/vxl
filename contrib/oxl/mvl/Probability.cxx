@@ -29,12 +29,13 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
   double col_div = col_size/buckets;  
   int no_buckets = buckets*buckets;
   if(buckets < 1) {
-    vcl_cout << "Warning Monte Carlo sampling will not work." << vcl_endl;
-    vcl_cout << "Not enough buckets, need 1 " << " have " << buckets << "." << vcl_endl;
+    vcl_cout << "Warning Monte Carlo sampling will not work." << vcl_endl
+             << "Not enough buckets: need 1, have " << buckets << "." << vcl_endl;
   }
   if(index.size() < samples) {
-    vcl_cout << "Warning Monte Carlo sampling will not work." << vcl_endl;
-    vcl_cout << "Not enough points to choose from, need " << samples << " have " << index.size() << "." << vcl_endl; 
+    vcl_cout << "Warning Monte Carlo sampling will not work." << vcl_endl
+             << "Not enough points to choose from: need " << samples
+             << ", have " << index.size() << "." << vcl_endl; 
   }
   int i = 0;
   while(i < samples) {
@@ -47,13 +48,13 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
 
     int row_num;
     if(buckets > 1) {
-      row_num = vcl_abs(random/buckets);
+      row_num = random/buckets;
     } else {
       row_num = 0;
     }
     int col_num;
     if(buckets > 1) {
-      col_num = random - row_num*buckets;;
+      col_num = random - row_num*buckets;
     } else {
       col_num = 0;
     }
