@@ -51,6 +51,80 @@ void vgui_rubberband_client::add_box(float,float,float,float) {
 #undef function_macro
 
 
+//---------------------------------------------------------------------------
+//                                              vgui_rubberband_easy2D_client
+
+
+vgui_rubberband_easy2D_client::
+vgui_rubberband_easy2D_client(vgui_easy2D_tableau_sptr const& e)
+  : easy(e)
+{
+}
+
+
+void
+vgui_rubberband_easy2D_client::
+add_point(float x, float y)
+{
+  easy->add_point(x,y);
+}
+
+
+void
+vgui_rubberband_easy2D_client::
+add_line(float x0, float y0, float x1, float y1)
+{
+  easy->add_line(x0, y0, x1, y1);
+}
+
+
+void
+vgui_rubberband_easy2D_client::
+add_infinite_line(float a, float b, float c)
+{
+  easy->add_infinite_line(a, b, c);
+}
+
+
+void
+vgui_rubberband_easy2D_client::
+add_circle(float x, float y, float r)
+{
+  easy->add_circle(x, y, r);
+}
+
+
+void
+vgui_rubberband_easy2D_client::
+add_linestrip(int n, float const* x, float const* y)
+{
+  easy->add_linestrip(n, x, y);
+}
+
+
+void
+vgui_rubberband_easy2D_client::
+add_polygon(int n, float const* x, float const* y)
+{
+  easy->add_polygon(n, x, y);
+}
+
+
+void
+vgui_rubberband_easy2D_client::
+add_box(float x0, float y0, float x1, float y1)
+{
+  float x[4] = {x0, x1, x1, x0};
+  float y[4] = {y0, y0, y1, y1};
+  this->add_polygon( 4, x, y );
+}
+
+
+
+//---------------------------------------------------------------------------
+//                                                    vgui_rubberband_tableau
+
+
 void vgui_rubberband_tableau::init(vgui_rubberband_client* the_client)
 {
   client_ = the_client;

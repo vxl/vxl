@@ -71,39 +71,36 @@ class vgui_rubberband_easy2D_client : public vgui_rubberband_client
   vgui_easy2D_tableau_sptr easy;
 
   //: Constructor - takes a pointer to a vgui_easy2D_tableau.
-  vgui_rubberband_easy2D_client(vgui_easy2D_tableau_sptr const& e): easy(e) { }
+  vgui_rubberband_easy2D_client(vgui_easy2D_tableau_sptr const& e);
 
   //: Called by vgui_rubberband_tableau when the user has selected a point.
   //  Adds a point to the vgui_easy2D_tableau.
-  void add_point(float x, float y){easy->add_point(x,y);}
+  void add_point(float x, float y);
 
   //: Called by vgui_rubberband_tableau when the user has selected a finite line.
   //  Adds a finite line to the vgui_easy2D_tableau.
-  void add_line(float x0, float y0, float x1, float y1)
-    {easy->add_line(x0, y0, x1, y1);}
+  void add_line(float x0, float y0, float x1, float y1);
 
   //: Called by vgui_rubberband_tableau when user has selected an infinite line.
   //  Adds an infinite line to the vgui_easy2D_tableau.
-  void add_infinite_line(float a, float b, float c)
-    {easy->add_infinite_line(a, b, c);}
+  void add_infinite_line(float a, float b, float c);
 
   //: Called by vgui_rubberband_tableau when the user has selected a circle.
   //  Adds a circle to the vgui_easy2D_tableau.
-  void add_circle(float x, float y, float r)
-    {easy->add_circle(x, y, r);}
+  void add_circle(float x, float y, float r);
 
   //: Called by vgui_rubberband_tableau when the user has selectd a linestrip.
   //  Adds a linestrip to the vgui_easy2D_tableau.
-  void add_linestrip(int n, float const* x, float const* y)
-    {easy->add_linestrip(n, x, y);}
+  void add_linestrip(int n, float const* x, float const* y);
 
   //: Called by vgui_rubberband_tableau when the user has selected a polygon.
   //  Adds a polygon to the vgui_easy2D_tableau.
-  void add_polygon(int n, float const* x, float const* y)
-    {easy->add_polygon(n, x, y);}
+  void add_polygon(int n, float const* x, float const* y);
 
-  //: Does nothing - vgui_easy2D_tableau doesn't have a rectangular box object.
-  void add_box(float, float, float, float){}
+  //: Called by vgui_rubberband_tableau when the user has selected a box.
+  //  Since vgui_easy2D_tableau doesn't have a rectangular box object, this
+  //  add an equivalent 4 point polygon instead.
+  void add_box(float x0, float y0, float x1, float y1);
 };
 
 //-----------------------------------------------------------------------------
