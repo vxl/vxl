@@ -1,7 +1,8 @@
+// This is ./gel/vsol/vsol_line_3d.cxx
 #include <vsol/vsol_line_3d.h>
 
 //:
-//  \file
+// \file
 
 //*****************************************************************************
 // External declarations for implementation
@@ -152,41 +153,28 @@ vsol_line_3d::spatial_type(void) const
 //---------------------------------------------------------------------------
 void vsol_line_3d::compute_bounding_box(void)
 {
-  double xmin;
-  double xmax;
-  double ymin;
-  double ymax;
-  double zmin;
-  double zmax;
+  double xmin=p0_->x();
+  double ymin=p0_->y();
+  double zmin=p0_->z();
+  double xmax=xmin;
+  double ymax=ymin;
+  double zmax=zmin;
 
-  xmin=p0_->x();
-  ymin=p0_->y();
-  zmin=p0_->z();
-  xmax=xmin;
-  ymax=ymin;
-  zmax=zmin;
+  if      (p1_->x()<xmin) xmin=p1_->x();
+  else if (p1_->x()>xmax) xmax=p1_->x();
+  if      (p1_->y()<ymin) ymin=p1_->y();
+  else if (p1_->y()>ymax) ymax=p1_->y();
+  if      (p1_->z()<zmin) zmin=p1_->z();
+  else if (p1_->z()>zmax) zmax=p1_->z();
 
-  if(p1_->x()<xmin)
-    xmin=p1_->x();
-  else if(p1_->x()>xmax)
-    xmax=p1_->x();
-  if(p1_->y()<ymin)
-    ymin=p1_->y();
-  else if(p1_->y()>ymax)
-    ymax=p1_->y();
-  if(p1_->z()<zmin)
-    zmin=p1_->z();
-  else if(p1_->z()>zmax)
-    zmax=p1_->z();
-
-  if(_bounding_box==0)
-    _bounding_box=new vsol_box_3d();
-  _bounding_box->set_min_x(xmin);
-  _bounding_box->set_max_x(xmax);
-  _bounding_box->set_min_y(ymin);
-  _bounding_box->set_max_y(ymax);
-  _bounding_box->set_min_y(zmin);
-  _bounding_box->set_max_y(zmax);
+  if (bounding_box_==0)
+    bounding_box_=new vsol_box_3d;
+  bounding_box_->set_min_x(xmin);
+  bounding_box_->set_max_x(xmax);
+  bounding_box_->set_min_y(ymin);
+  bounding_box_->set_max_y(ymax);
+  bounding_box_->set_min_y(zmin);
+  bounding_box_->set_max_y(zmax);
 }
 
 //---------------------------------------------------------------------------

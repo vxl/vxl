@@ -1,7 +1,8 @@
+// This is ./gel/vsol/vsol_polygon_2d.cxx
 #include <vsol/vsol_polygon_2d.h>
 
 //:
-//  \file
+// \file
 
 //*****************************************************************************
 // External declarations for implementation
@@ -34,7 +35,7 @@ vsol_polygon_2d::vsol_polygon_2d(const vsol_polygon_2d &other)
   //vsol_point_2d_sptr p;
 
   storage_=new vcl_vector<vsol_point_2d_sptr>(*other.storage_);
-  for(unsigned int i=0;i<storage_->size();++i)
+  for (unsigned int i=0;i<storage_->size();++i)
     (*storage_)[i]=new vsol_point_2d(*((*other.storage_)[i]));
 }
 
@@ -85,14 +86,14 @@ bool vsol_polygon_2d::operator==(const vsol_polygon_2d &other) const
   if (!result)
   {
     result = (storage_->size()==other.storage_->size());
-    if(result)
+    if (result)
     {
       vsol_point_2d_sptr p=(*storage_)[0];
 
       unsigned int i=0;
       for (result=false;i<storage_->size()&&!result;++i)
         result = (*p==*(*other.storage_)[i]);
-      if(result)
+      if (result)
       {
         for (int j=1;j<size()&&result;++i,++j)
         {
@@ -135,26 +136,22 @@ void vsol_polygon_2d::compute_bounding_box(void)
   double xmax=xmin;
   double ymax=ymin;
 
-  for(unsigned int i=0;i<storage_->size();++i)
+  for (unsigned int i=1;i<storage_->size();++i)
     {
        double x=(*storage_)[i]->x();
+       if      (x<xmin) xmin=x;
+       else if (x>xmax) xmax=x;
        double y=(*storage_)[i]->y();
-       if(x<xmin)
-         xmin=x;
-       else if(x>xmax)
-         xmax=x;
-       if(y<ymin)
-         ymin=y;
-       else if(y>ymax)
-         ymax=y;
+       if      (y<ymin) ymin=y;
+       else if (y>ymax) ymax=y;
     }
 
-  if(_bounding_box==0)
-    _bounding_box=new vsol_box_2d();
-  _bounding_box->set_min_x(xmin);
-  _bounding_box->set_max_x(xmax);
-  _bounding_box->set_min_y(ymin);
-  _bounding_box->set_max_y(ymax);
+  if (bounding_box_==0)
+    bounding_box_=new vsol_box_2d;
+  bounding_box_->set_min_x(xmin);
+  bounding_box_->set_max_x(xmax);
+  bounding_box_->set_min_y(ymin);
+  bounding_box_->set_max_y(ymax);
 }
 
 //---------------------------------------------------------------------------
@@ -192,7 +189,7 @@ bool vsol_polygon_2d::is_convex(void) const
    // in the other direction after a cross-product=0.
 
    double n = 0.0;
-   for(unsigned int i=0; i<storage_->size(); ++i)
+   for (unsigned int i=0; i<storage_->size(); ++i)
    {
      int j = (i>1) ? i-2 : i-2+storage_->size();
      int k = (i>0) ? i-1 : i-1+storage_->size();
@@ -208,7 +205,7 @@ bool vsol_polygon_2d::is_convex(void) const
    if (n == 0.0)
      return true;
 
-   for(unsigned int i=0; i<storage_->size(); ++i)
+   for (unsigned int i=0; i<storage_->size(); ++i)
    {
      int j = (i>1) ? i-2 : i-2+storage_->size();
      int k = (i>0) ? i-1 : i-1+storage_->size();

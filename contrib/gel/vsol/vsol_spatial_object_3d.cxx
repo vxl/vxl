@@ -1,12 +1,13 @@
+// This is ./gel/vsol/vsol_spatial_object_3d.cxx
 #include <vsol/vsol_spatial_object_3d.h>
 
 //:
-//  \file
+// \file
 
 #include <vcl_iostream.h>
 
 const float vsol_spatial_object_3d::eps = 1.0e-3f;
-int vsol_spatial_object_3d::_tagcount = 0;
+int vsol_spatial_object_3d::tagcount_ = 0;
 
 char * vsol_spatial_object_3d::SpatialTypes[] = {"NO_TYPE             ",
                         "TOPOLOGYOBJECT      ",
@@ -38,8 +39,8 @@ void vsol_spatial_object_3d::protected_destroy()
 
 vsol_spatial_object_3d::~vsol_spatial_object_3d()
 {
-  if (_bounding_box)
-    _bounding_box->unref();
+  if (bounding_box_)
+    bounding_box_->unref();
 }
 
 
@@ -136,9 +137,9 @@ vsol_spatial_object_3d::Shear(float )
 
 void vsol_spatial_object_3d::grow_minmax_bounds(vsol_box_3d & comp_box)
 {
-  if (_bounding_box==0)
-    _bounding_box=new vsol_box_3d;
-  _bounding_box->grow_minmax_bounds(comp_box);
+  if (bounding_box_==0)
+    bounding_box_=new vsol_box_3d;
+  bounding_box_->grow_minmax_bounds(comp_box);
 }
 
 //#include <vcl_rel_ops.h> // gcc 2.7

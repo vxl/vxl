@@ -1,7 +1,8 @@
+// This is ./gel/vsol/vsol_line_2d.cxx
 #include <vsol/vsol_line_2d.h>
 
 //:
-//  \file
+// \file
 
 //*****************************************************************************
 // External declarations for implementation
@@ -163,31 +164,22 @@ vsol_line_2d::spatial_type(void) const
 //---------------------------------------------------------------------------
 void vsol_line_2d::compute_bounding_box(void)
 {
-  double xmin;
-  double xmax;
-  double ymin;
-  double ymax;
+  double xmin=p0_->x();
+  double ymin=p0_->y();
+  double xmax=xmin;
+  double ymax=ymin;
 
-  xmin=p0_->x();
-  ymin=p0_->y();
-  xmax=xmin;
-  ymax=ymin;
+  if      (p1_->x()<xmin) xmin=p1_->x();
+  else if (p1_->x()>xmax) xmax=p1_->x();
+  if      (p1_->y()<ymin) ymin=p1_->y();
+  else if (p1_->y()>ymax) ymax=p1_->y();
 
-  if(p1_->x()<xmin)
-    xmin=p1_->x();
-  else if(p1_->x()>xmax)
-    xmax=p1_->x();
-  if(p1_->y()<ymin)
-    ymin=p1_->y();
-  else if(p1_->y()>ymax)
-    ymax=p1_->y();
-
-  if(_bounding_box==0)
-    _bounding_box=new vsol_box_2d();
-  _bounding_box->set_min_x(xmin);
-  _bounding_box->set_max_x(xmax);
-  _bounding_box->set_min_y(ymin);
-  _bounding_box->set_max_y(ymax);
+  if (bounding_box_==0)
+    bounding_box_=new vsol_box_2d;
+  bounding_box_->set_min_x(xmin);
+  bounding_box_->set_max_x(xmax);
+  bounding_box_->set_min_y(ymin);
+  bounding_box_->set_max_y(ymax);
 }
 
 //---------------------------------------------------------------------------

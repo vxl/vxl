@@ -1,7 +1,8 @@
+// This is ./gel/vsol/vsol_point_3d.cxx
 #include <vsol/vsol_point_3d.h>
 
 //:
-//  \file
+// \file
 
 //*****************************************************************************
 // External declarations for implementation
@@ -70,14 +71,14 @@ vsol_point_3d::spatial_type(void) const
 //---------------------------------------------------------------------------
 void vsol_point_3d::compute_bounding_box(void)
 {
-  if(_bounding_box==0)
-    _bounding_box=new vsol_box_3d();
-  _bounding_box->set_min_x(p_.x());
-  _bounding_box->set_max_x(p_.x());
-  _bounding_box->set_min_y(p_.y());
-  _bounding_box->set_max_y(p_.y());
-  _bounding_box->set_min_z(p_.z());
-  _bounding_box->set_max_z(p_.z());
+  if (bounding_box_==0)
+    bounding_box_=new vsol_box_3d;
+  bounding_box_->set_min_x(p_.x());
+  bounding_box_->set_max_x(p_.x());
+  bounding_box_->set_min_y(p_.y());
+  bounding_box_->set_max_y(p_.y());
+  bounding_box_->set_min_z(p_.z());
+  bounding_box_->set_max_z(p_.z());
 }
 
 //***************************************************************************

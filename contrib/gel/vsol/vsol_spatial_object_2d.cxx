@@ -1,12 +1,13 @@
+// This is ./gel/vsol/vsol_spatial_object_2d.cxx
 #include <vsol/vsol_spatial_object_2d.h>
 
 //:
-//  \file
+// \file
 
 #include <vcl_iostream.h>
 
 const float vsol_spatial_object_2d::eps=1.0e-3f;
-int vsol_spatial_object_2d::_tagcount=0;
+int vsol_spatial_object_2d::tagcount_=0;
 
 char *vsol_spatial_object_2d::SpatialTypes[]=
 {
@@ -41,34 +42,34 @@ void vsol_spatial_object_2d::protected_destroy()
 //   bounding_box is set to NULL.
 vsol_spatial_object_2d::vsol_spatial_object_2d(void)
 {
-  _bounding_box=0;
-  _id = 0;
-  _tag = 0;
-  ++vsol_spatial_object_2d::_tagcount;
-  set_tag_id(_tagcount);
+  bounding_box_=0;
+  id_ = 0;
+  tag_ = 0;
+  ++vsol_spatial_object_2d::tagcount_;
+  set_tag_id(tagcount_);
   touch();
 }
 
 
 vsol_spatial_object_2d::vsol_spatial_object_2d(const vsol_spatial_object_2d &other)
 {
-  _bounding_box=0;
-  _id=other.get_id();
-  _tag=0;
-  ++vsol_spatial_object_2d::_tagcount;
-  set_tag_id(_tagcount);
+  bounding_box_=0;
+  id_=other.get_id();
+  tag_=0;
+  ++vsol_spatial_object_2d::tagcount_;
+  set_tag_id(tagcount_);
 }
 
 vsol_spatial_object_2d::~vsol_spatial_object_2d()
 {
-  if (_bounding_box)
-    _bounding_box->unref();
+  if (bounding_box_)
+    bounding_box_->unref();
 }
 
 int vsol_spatial_object_2d::not_applicable(const vcl_string &message) const
 {
-  vcl_cerr<<message<<" Function call not applicable \tfor spatial object";
-  vcl_cerr<<get_name()<<" ! "<<vcl_endl;
+  vcl_cerr<<message<<"() function call not applicable\tfor spatial object "
+          <<get_name()<<" !\n";
   return 0;
 }
 
@@ -167,14 +168,14 @@ vsol_spatial_object_2d::Shear(float )
 //---------------------------------------------------------------------------
 void vsol_spatial_object_2d::compute_bounding_box(void)
 {
-  if (_bounding_box==0)
-    _bounding_box = new vsol_box_2d;
-  _bounding_box->touch();
+  if (bounding_box_==0)
+    bounding_box_ = new vsol_box_2d;
+  bounding_box_->touch();
 }
 
 void vsol_spatial_object_2d::grow_minmax_bounds(vsol_box_2d & comp_box)
 {
-  if (_bounding_box==0)
-    _bounding_box=new vsol_box_2d;
-  _bounding_box->grow_minmax_bounds(comp_box);
+  if (bounding_box_==0)
+    bounding_box_=new vsol_box_2d;
+  bounding_box_->grow_minmax_bounds(comp_box);
 }

@@ -1,7 +1,8 @@
+// This is ./gel/vsol/vsol_group_2d.cxx
 #include <vsol/vsol_group_2d.h>
 
 //:
-//  \file
+// \file
 
 //*****************************************************************************
 // External declarations for implementation
@@ -96,12 +97,11 @@ void vsol_group_2d::compute_bounding_box(void)
   double ymin;
   double xmax;
   double ymax;
-  vsol_box_2d *b;
   vcl_list<vsol_spatial_object_2d_sptr>::iterator i;
 
   for (i=storage_->begin();i!=storage_->end();++i)
     {
-      b=(*i)->get_bounding_box();
+      vsol_box_2d *b=(*i)->get_bounding_box();
       if (i==storage_->begin())
         {
           xmin=b->get_min_x();
@@ -111,23 +111,19 @@ void vsol_group_2d::compute_bounding_box(void)
         }
       else
         {
-          if (b->get_min_x()<xmin)
-            xmin=b->get_min_x();
-          if (b->get_min_y()<ymin)
-            ymin=b->get_min_y();
-          if (b->get_max_x()>xmax)
-            xmax=b->get_max_x();
-          if (b->get_max_y()>ymax)
-            ymax=b->get_max_y();
+          if (b->get_min_x()<xmin) xmin=b->get_min_x();
+          if (b->get_min_y()<ymin) ymin=b->get_min_y();
+          if (b->get_max_x()>xmax) xmax=b->get_max_x();
+          if (b->get_max_y()>ymax) ymax=b->get_max_y();
         }
       delete b;
     }
-  if (_bounding_box==0)
-    _bounding_box=new vsol_box_2d();
-  _bounding_box->set_min_x(xmin);
-  _bounding_box->set_max_x(xmax);
-  _bounding_box->set_min_y(ymin);
-  _bounding_box->set_max_y(ymax);
+  if (bounding_box_==0)
+    bounding_box_=new vsol_box_2d;
+  bounding_box_->set_min_x(xmin);
+  bounding_box_->set_max_x(xmax);
+  bounding_box_->set_min_y(ymin);
+  bounding_box_->set_max_y(ymax);
 }
 
 //---------------------------------------------------------------------------

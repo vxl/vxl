@@ -1,7 +1,8 @@
+// This is ./gel/vsol/vsol_group_3d.cxx
 #include <vsol/vsol_group_3d.h>
 
 //:
-//  \file
+// \file
 
 //*****************************************************************************
 // External declarations for implementation
@@ -99,12 +100,11 @@ void vsol_group_3d::compute_bounding_box(void)
   double ymax;
   double zmax;
 
-  vsol_box_3d *b;
   vcl_list<vsol_spatial_object_3d_sptr>::iterator i;
 
   for (i=storage_->begin();i!=storage_->end();++i)
     {
-      b=(*i)->get_bounding_box();
+      vsol_box_3d *b=(*i)->get_bounding_box();
       if (i==storage_->begin())
         {
           xmin=b->get_min_x();
@@ -116,29 +116,23 @@ void vsol_group_3d::compute_bounding_box(void)
         }
       else
         {
-          if (b->get_min_x()<xmin)
-            xmin=b->get_min_x();
-          if (b->get_min_y()<ymin)
-            ymin=b->get_min_y();
-          if (b->get_min_z()<zmin)
-            zmin=b->get_min_z();
-          if (b->get_max_x()>xmax)
-            xmax=b->get_max_x();
-          if (b->get_max_y()>ymax)
-            ymax=b->get_max_y();
-          if (b->get_max_z()>zmax)
-            zmax=b->get_max_z();
+          if (b->get_min_x()<xmin) xmin=b->get_min_x();
+          if (b->get_min_y()<ymin) ymin=b->get_min_y();
+          if (b->get_min_z()<zmin) zmin=b->get_min_z();
+          if (b->get_max_x()>xmax) xmax=b->get_max_x();
+          if (b->get_max_y()>ymax) ymax=b->get_max_y();
+          if (b->get_max_z()>zmax) zmax=b->get_max_z();
         }
       delete b;
     }
-  if (_bounding_box==0)
-    _bounding_box=new vsol_box_3d();
-  _bounding_box->set_min_x(xmin);
-  _bounding_box->set_max_x(xmax);
-  _bounding_box->set_min_y(ymin);
-  _bounding_box->set_max_y(ymax);
-  _bounding_box->set_min_z(zmin);
-  _bounding_box->set_max_z(zmax);
+  if (bounding_box_==0)
+    bounding_box_=new vsol_box_3d;
+  bounding_box_->set_min_x(xmin);
+  bounding_box_->set_max_x(xmax);
+  bounding_box_->set_min_y(ymin);
+  bounding_box_->set_max_y(ymax);
+  bounding_box_->set_min_z(zmin);
+  bounding_box_->set_max_z(zmax);
 }
 
 //---------------------------------------------------------------------------

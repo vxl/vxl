@@ -1,7 +1,8 @@
+// This is ./gel/vsol/vsol_rectangle_2d.cxx
 #include <vsol/vsol_rectangle_2d.h>
 
 //:
-//  \file
+// \file
 
 //*****************************************************************************
 // External declarations for implementation
@@ -133,53 +134,33 @@ bool vsol_rectangle_2d::operator==(const vsol_spatial_object_2d& obj) const
 //---------------------------------------------------------------------------
 void vsol_rectangle_2d::compute_bounding_box(void)
 {
-  double xmin;
-  double xmax;
-  double ymin;
-  double ymax;
+  double xmin=(*storage_)[0]->x();
+  double ymin=(*storage_)[0]->y();
+  double xmax=xmin;
+  double ymax=ymin;
 
-  vsol_point_2d_sptr tp3;
+  for (unsigned int i=1;i<3;++i)
+  {
+    double x=(*storage_)[i]->x();
+    if      (x<xmin) xmin=x;
+    else if (x>xmax) xmax=x;
+    double y=(*storage_)[i]->y();
+    if      (y<ymin) ymin=y;
+    else if (y>ymax) ymax=y;
+  }
+  double x=p3()->x();
+  if      (x<xmin) xmin=x;
+  else if (x>xmax) xmax=x;
+  double y=p3()->y();
+  if      (y<ymin) ymin=y;
+  else if (y>ymax) ymax=y;
 
-  tp3=p3();
-
-  xmin=(*storage_)[0]->x();
-  ymin=(*storage_)[0]->y();
-  xmax=xmin;
-  ymax=ymin;
-
-  if((*storage_)[1]->x()<xmin)
-    xmin=(*storage_)[1]->x();
-  else if((*storage_)[1]->x()>xmax)
-    xmax=(*storage_)[1]->x();
-  if((*storage_)[1]->y()<ymin)
-    ymin=(*storage_)[1]->y();
-  else if((*storage_)[1]->y()>ymax)
-    ymax=(*storage_)[1]->y();
-
-  if((*storage_)[2]->x()<xmin)
-    xmin=(*storage_)[2]->x();
-  else if((*storage_)[2]->x()>xmax)
-    xmax=(*storage_)[2]->x();
-  if((*storage_)[2]->y()<ymin)
-    ymin=(*storage_)[2]->y();
-  else if((*storage_)[2]->y()>ymax)
-    ymax=(*storage_)[2]->y();
-
-  if(tp3->x()<xmin)
-    xmin=tp3->x();
-  else if(tp3->x()>xmax)
-    xmax=tp3->x();
-  if(tp3->y()<ymin)
-    ymin=tp3->y();
-  else if(tp3->y()>ymax)
-    ymax=tp3->y();
-
-  if(_bounding_box==0)
-    _bounding_box=new vsol_box_2d();
-  _bounding_box->set_min_x(xmin);
-  _bounding_box->set_max_x(xmax);
-  _bounding_box->set_min_y(ymin);
-  _bounding_box->set_max_y(ymax);
+  if (bounding_box_==0)
+    bounding_box_=new vsol_box_2d;
+  bounding_box_->set_min_x(xmin);
+  bounding_box_->set_max_x(xmax);
+  bounding_box_->set_min_y(ymin);
+  bounding_box_->set_max_y(ymax);
 }
 
 //---------------------------------------------------------------------------

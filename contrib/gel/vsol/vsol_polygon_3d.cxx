@@ -1,7 +1,8 @@
+// This is ./gel/vsol/vsol_polygon_3d.cxx
 #include <vsol/vsol_polygon_3d.h>
 
 //:
-//  \file
+// \file
 
 //*****************************************************************************
 // External declarations for implementation
@@ -36,7 +37,7 @@ vsol_polygon_3d::vsol_polygon_3d(const vsol_polygon_3d &other)
   //vsol_point_3d_sptr p;
 
   storage_=new vcl_vector<vsol_point_3d_sptr>(*other.storage_);
-  for(unsigned int i=0;i<storage_->size();++i)
+  for (unsigned int i=0;i<storage_->size();++i)
     (*storage_)[i]=new vsol_point_3d(*((*other.storage_)[i]));
 }
 
@@ -84,22 +85,22 @@ bool vsol_polygon_3d::operator==(const vsol_polygon_3d &other) const
 {
   bool result = (this==&other);
 
-  if(!result)
+  if (!result)
     {
       result = (storage_->size()==other.storage_->size());
 
-      if(result)
+      if (result)
         {
           vsol_point_3d_sptr p=(*storage_)[0];
 
           unsigned int i=0;
-          for(result=false;i<storage_->size()&&!result;++i)
+          for (result=false;i<storage_->size()&&!result;++i)
             result = (*p==*(*other.storage_)[i]);
-          if(result)
+          if (result)
             {
               for (int j=1;j<size()&&result;++i,++j)
                 {
-                  if(i>=storage_->size()) i=0;
+                  if (i>=storage_->size()) i=0;
                   result = ((*storage_)[i]==(*storage_)[j]);
                 }
             }
@@ -140,32 +141,26 @@ void vsol_polygon_3d::compute_bounding_box(void)
   double ymax=ymin;
   double zmax=zmin;
 
-  for(unsigned int i=0;i<storage_->size();++i)
+  for (unsigned int i=1;i<storage_->size();++i)
     {
        double x=(*storage_)[i]->x();
+       if      (x<xmin) xmin=x;
+       else if (x>xmax) xmax=x;
        double y=(*storage_)[i]->y();
+       if      (y<ymin) ymin=y;
+       else if (y>ymax) ymax=y;
        double z=(*storage_)[i]->z();
-       if(x<xmin)
-         xmin=x;
-       else if(x>xmax)
-         xmax=x;
-       if(y<ymin)
-         ymin=y;
-       else if(y>ymax)
-         ymax=y;
-       if(z<zmin)
-         zmin=z;
-       else if(z>zmax)
-         zmax=z;
+       if      (z<zmin) zmin=z;
+       else if (z>zmax) zmax=z;
     }
-  if(_bounding_box==0)
-    _bounding_box=new vsol_box_3d();
-  _bounding_box->set_min_x(xmin);
-  _bounding_box->set_max_x(xmax);
-  _bounding_box->set_min_y(ymin);
-  _bounding_box->set_max_y(ymax);
-  _bounding_box->set_min_z(zmin);
-  _bounding_box->set_max_z(zmax);
+  if (bounding_box_==0)
+    bounding_box_=new vsol_box_3d;
+  bounding_box_->set_min_x(xmin);
+  bounding_box_->set_max_x(xmax);
+  bounding_box_->set_min_y(ymin);
+  bounding_box_->set_max_y(ymax);
+  bounding_box_->set_min_z(zmin);
+  bounding_box_->set_max_z(zmax);
 }
 
 //---------------------------------------------------------------------------
@@ -207,7 +202,7 @@ bool vsol_polygon_3d::is_convex(void) const
    // in the other direction after a cross-product=0.
 
    vgl_vector_3d<double> n = vgl_vector_3d<double>(0.0,0.0,0.0);
-   for(unsigned int i=0; i<storage_->size(); ++i)
+   for (unsigned int i=0; i<storage_->size(); ++i)
    {
      int j = (i>1) ? i-2 : i-2+storage_->size();
      int k = (i>0) ? i-1 : i-1+storage_->size();
@@ -223,7 +218,7 @@ bool vsol_polygon_3d::is_convex(void) const
    if (n == vgl_vector_3d<double>(0.0,0.0,0.0))
      return true;
 
-   for(unsigned int i=0; i<storage_->size(); ++i)
+   for (unsigned int i=0; i<storage_->size(); ++i)
    {
      int j = (i>1) ? i-2 : i-2+storage_->size();
      int k = (i>0) ? i-1 : i-1+storage_->size();
@@ -262,7 +257,7 @@ bool vsol_polygon_3d::valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_ve
                             p2->z()-p0->z());
   vgl_vector_3d<double> n = cross_product(v1,v2);// normal to the plane made by the vertices
 
-  for(unsigned int i=3;i<new_vertices.size();++i)
+  for (unsigned int i=3;i<new_vertices.size();++i)
   {
     p2=new_vertices[i];
     v2=vgl_vector_3d<double>(p2->x()-p0->x(),

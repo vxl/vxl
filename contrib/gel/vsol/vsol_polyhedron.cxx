@@ -1,7 +1,8 @@
+// This is ./gel/vsol/vsol_polyhedron.cxx
 #include "vsol_polyhedron.h"
 
 //:
-//  \file
+// \file
 
 //*****************************************************************************
 // External declarations for implementation
@@ -88,7 +89,7 @@ void vsol_polyhedron::compute_bounding_box(void)
   double ymax=ymin;
   double zmax=zmin;
 
-  for (unsigned int i=0;i<storage_.size();++i)
+  for (unsigned int i=1;i<storage_.size();++i)
   {
     double x=storage_[i]->x();
     if      (x<xmin) xmin=x;
@@ -101,14 +102,14 @@ void vsol_polyhedron::compute_bounding_box(void)
     else if (z>zmax) zmax=z;
   }
 
-  if(_bounding_box==0)
-    _bounding_box = new vsol_box_3d;
-  _bounding_box->set_min_x(xmin);
-  _bounding_box->set_max_x(xmax);
-  _bounding_box->set_min_y(ymin);
-  _bounding_box->set_max_y(ymax);
-  _bounding_box->set_min_z(zmin);
-  _bounding_box->set_max_z(zmax);
+  if (bounding_box_==0)
+    bounding_box_ = new vsol_box_3d;
+  bounding_box_->set_min_x(xmin);
+  bounding_box_->set_max_x(xmax);
+  bounding_box_->set_min_y(ymin);
+  bounding_box_->set_max_y(ymax);
+  bounding_box_->set_min_z(zmin);
+  bounding_box_->set_max_z(zmax);
 }
 
 //---------------------------------------------------------------------------

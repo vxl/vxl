@@ -1,7 +1,8 @@
+// This is ./gel/vsol/vsol_rectangle_3d.cxx
 #include <vsol/vsol_rectangle_3d.h>
 
 //:
-//  \file
+// \file
 
 //*****************************************************************************
 // External declarations for implementation
@@ -134,72 +135,43 @@ bool vsol_rectangle_3d::operator==(const vsol_spatial_object_3d& obj) const
 //---------------------------------------------------------------------------
 void vsol_rectangle_3d::compute_bounding_box(void)
 {
-  vsol_point_3d_sptr tp3;
+  double xmin=(*storage_)[0]->x();
+  double ymin=(*storage_)[0]->y();
+  double zmin=(*storage_)[0]->z();
+  double xmax=xmin;
+  double ymax=ymin;
+  double zmax=zmin;
 
-  double xmin;
-  double xmax;
-  double ymin;
-  double ymax;
-  double zmin;
-  double zmax;
+  for (unsigned int i=1;i<3;++i)
+  {
+    double x=(*storage_)[i]->x();
+    if      (x<xmin) xmin=x;
+    else if (x>xmax) xmax=x;
+    double y=(*storage_)[i]->y();
+    if      (y<ymin) ymin=y;
+    else if (y>ymax) ymax=y;
+    double z=(*storage_)[i]->z();
+    if      (z<zmin) zmin=z;
+    else if (z>zmax) zmax=z;
+  }
+  double x=p3()->x();
+  if      (x<xmin) xmin=x;
+  else if (x>xmax) xmax=x;
+  double y=p3()->y();
+  if      (y<ymin) ymin=y;
+  else if (y>ymax) ymax=y;
+  double z=p3()->z();
+  if      (z<zmin) zmin=z;
+  else if (z>zmax) zmax=z;
 
-
-  tp3=p3();
-
-  xmin=(*storage_)[0]->x();
-  ymin=(*storage_)[0]->y();
-  zmin=(*storage_)[0]->z();
-  xmax=xmin;
-  ymax=ymin;
-  zmax=zmin;
-
-  if((*storage_)[1]->x()<xmin)
-    xmin=(*storage_)[1]->x();
-  else if((*storage_)[1]->x()>xmax)
-    xmax=(*storage_)[1]->x();
-  if((*storage_)[1]->y()<ymin)
-    ymin=(*storage_)[1]->y();
-  else if((*storage_)[1]->y()>ymax)
-    ymax=(*storage_)[1]->y();
-  if((*storage_)[1]->z()<zmin)
-    zmin=(*storage_)[1]->z();
-  else if((*storage_)[1]->z()>zmax)
-    zmax=(*storage_)[1]->z();
-
-  if((*storage_)[2]->x()<xmin)
-    xmin=(*storage_)[2]->x();
-  else if((*storage_)[2]->x()>xmax)
-    xmax=(*storage_)[2]->x();
-  if((*storage_)[2]->y()<ymin)
-    ymin=(*storage_)[2]->y();
-  else if((*storage_)[2]->y()>ymax)
-    ymax=(*storage_)[2]->y();
-  if((*storage_)[2]->z()<zmin)
-    zmin=(*storage_)[2]->z();
-  else if((*storage_)[2]->z()>zmax)
-    zmax=(*storage_)[2]->z();
-
-  if(tp3->x()<xmin)
-    xmin=tp3->x();
-  else if(tp3->x()>xmax)
-    xmax=tp3->x();
-  if(tp3->y()<ymin)
-    ymin=tp3->y();
-  else if(tp3->y()>ymax)
-    ymax=tp3->y();
-  if(tp3->z()<zmin)
-    zmin=tp3->z();
-  else if(tp3->z()>zmax)
-    zmax=tp3->z();
-
-  if(_bounding_box==0)
-    _bounding_box=new vsol_box_3d();
-  _bounding_box->set_min_x(xmin);
-  _bounding_box->set_max_x(xmax);
-  _bounding_box->set_min_y(ymin);
-  _bounding_box->set_max_y(ymax);
-  _bounding_box->set_min_z(zmin);
-  _bounding_box->set_max_z(zmax);
+  if (bounding_box_==0)
+    bounding_box_=new vsol_box_3d;
+  bounding_box_->set_min_x(xmin);
+  bounding_box_->set_max_x(xmax);
+  bounding_box_->set_min_y(ymin);
+  bounding_box_->set_max_y(ymax);
+  bounding_box_->set_min_z(zmin);
+  bounding_box_->set_max_z(zmax);
 }
 
 //---------------------------------------------------------------------------

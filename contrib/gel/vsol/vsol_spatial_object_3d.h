@@ -1,8 +1,9 @@
+// This is ./gel/vsol/vsol_spatial_object_3d.h
 #ifndef _vsol_spatial_object_3d_h_
 #define _vsol_spatial_object_3d_h_
 //-----------------------------------------------------------------------------
 //:
-//  \file
+// \file
 // \brief Base class of spatial entities Topology Geometry SpatialGroup
 //
 //   vsol_spatial_object_3d is the base class of all spatial entities: vtol, vsol.
@@ -91,10 +92,10 @@ public:
 
 protected:
 
-  vsol_box_3d *_bounding_box; // bounding volume
-  unsigned int  _tag;         // for the COOL containers.
-  int           _id;
-  static int    _tagcount;    // global count of all spatial objects.
+  vsol_box_3d *bounding_box_; // bounding volume
+  unsigned int  tag_;         // for the COOL containers.
+  int           id_;
+  static int    tagcount_;    // global count of all spatial objects.
 
 protected:
 
@@ -104,9 +105,9 @@ protected:
   inline vsol_spatial_object_3d(void);
   inline vsol_spatial_object_3d(vsol_spatial_object_3d const& s);
   inline int not_applicable(const char *message) const
-    { vcl_cerr << message << " Function call not applicable "
-           << "\tfor spatial object " << get_name() << " ! "<< vcl_endl;
-    return 0;
+    { vcl_cerr << message << "() function call not applicable"
+               << "\tfor spatial object " << get_name() << " !\n";
+      return 0;
     }
 public:
 
@@ -125,14 +126,8 @@ public:
 
   //: get set id of objects
 
-  int get_id(void) const
-  {
-    return _id;
-  }
-  void set_id(int i)
-  {
-    _id = i;
-  }
+  inline int get_id(void) const { return id_; }
+  inline void set_id(int i) { id_ = i; }
 
   //: unprotect the object
   virtual void un_protect(void)
@@ -316,38 +311,38 @@ public:
 
 inline void vsol_spatial_object_3d::set_tag_id(int id)
 {
-  //     ( set the new id bits)  or (save just the flag bits from the _tag)
-  _tag = ( (id & VSOL_DEXID_BITS)     |  ( _tag & VSOL_FLAG_BITS ));
+  //     ( set the new id bits)  or (save just the flag bits from the tag_)
+  tag_ = ( (id & VSOL_DEXID_BITS)     |  ( tag_ & VSOL_FLAG_BITS ));
 }
 
 //: constructor initialize basic vsol_spatial_object_3d attributes.
 //   bounding_box is set to NULL.
 inline vsol_spatial_object_3d::vsol_spatial_object_3d(void)
 {
-  _bounding_box = NULL;
-  _id = 0;
-  _tag = 0;
-  vsol_spatial_object_3d::_tagcount++;
-  set_tag_id(_tagcount);
+  bounding_box_ = NULL;
+  id_ = 0;
+  tag_ = 0;
+  vsol_spatial_object_3d::tagcount_++;
+  set_tag_id(tagcount_);
   touch();
 }
 
 
 inline vsol_spatial_object_3d::vsol_spatial_object_3d(vsol_spatial_object_3d const &s)
 {
-  _bounding_box=0;
-  _id = s.get_id();
-  _tag = 0;
-  vsol_spatial_object_3d::_tagcount++;
-  set_tag_id(_tagcount);
+  bounding_box_=0;
+  id_ = s.get_id();
+  tag_ = 0;
+  vsol_spatial_object_3d::tagcount_++;
+  set_tag_id(tagcount_);
 }
 
 
 inline void vsol_spatial_object_3d::compute_bounding_box(void)   //Does nothing in this case
 {
-  if (_bounding_box==0)
-    _bounding_box=new vsol_box_3d();
-  _bounding_box->touch();
+  if (bounding_box_==0)
+    bounding_box_=new vsol_box_3d();
+  bounding_box_->touch();
 }
 
 
@@ -358,16 +353,16 @@ inline void vsol_spatial_object_3d::compute_bounding_box(void)   //Does nothing 
 
 inline void vsol_spatial_object_3d::check_update_bounding_box(void)  // Test consistency of bound
 {
-  if (_bounding_box==0)
+  if (bounding_box_==0)
     {
-      _bounding_box=new vsol_box_3d;
+      bounding_box_=new vsol_box_3d;
       this->compute_bounding_box();
-      _bounding_box->touch();
+      bounding_box_->touch();
       return;
     }
-  if (_bounding_box->older(this))
+  if (bounding_box_->older(this))
     { // NOTE: first touch then compute, to avoid infinite loop!! - PVr
-      _bounding_box->touch();
+      bounding_box_->touch();
       this->compute_bounding_box();
     }
 }
@@ -375,121 +370,121 @@ inline void vsol_spatial_object_3d::check_update_bounding_box(void)  // Test con
 inline vsol_box_3d *vsol_spatial_object_3d::get_bounding_box(void)
 {
   this->check_update_bounding_box();
-  return _bounding_box;
+  return bounding_box_;
 }
 
 //inline void vsol_spatial_object_3d::get_min_location(vcl_vector<double>& min_loc)
 //{
 //  this->check_update_bounding_box();
-//  _bounding_box->get_min_location(min_loc);
+//  bounding_box_->get_min_location(min_loc);
 //}
 
 //inline void vsol_spatial_object_3d::get_max_location(vcl_vector<double>& max_loc)
 //{
 //  this->check_update_bounding_box();
-//  _bounding_box->get_max_location(max_loc);
+//  bounding_box_->get_max_location(max_loc);
 //}
 
 inline float vsol_spatial_object_3d::get_min_x(void)
 {
   this->check_update_bounding_box();
-  return _bounding_box->get_min_x();
+  return bounding_box_->get_min_x();
 }
 
 
 inline float vsol_spatial_object_3d::get_max_x(void)
 {
   this->check_update_bounding_box();
-  return _bounding_box->get_max_x();
+  return bounding_box_->get_max_x();
 }
 
 
 inline float vsol_spatial_object_3d::get_min_y(void)
 {
   this->check_update_bounding_box();
-  return _bounding_box->get_min_y();
+  return bounding_box_->get_min_y();
 }
 
 inline float vsol_spatial_object_3d::get_max_y(void)
 {
   this->check_update_bounding_box();
-  return _bounding_box->get_max_y();
+  return bounding_box_->get_max_y();
 }
 
 inline float vsol_spatial_object_3d::get_min_z(void)
 {
   this->check_update_bounding_box();
-  return _bounding_box->get_min_z();
+  return bounding_box_->get_min_z();
 }
 
 inline float vsol_spatial_object_3d::get_max_z(void)
 {
   this->check_update_bounding_box();
-  return _bounding_box->get_max_z();
+  return bounding_box_->get_max_z();
 }
 
 inline void vsol_spatial_object_3d::set_min_x(float xmin)
 {
-  if (_bounding_box==0)
-    _bounding_box=new vsol_box_3d();
-  _bounding_box->set_min_x(xmin);
+  if (bounding_box_==0)
+    bounding_box_=new vsol_box_3d();
+  bounding_box_->set_min_x(xmin);
 }
 
 inline void vsol_spatial_object_3d::set_max_x(float xmax)
 {
-  if (_bounding_box==0)
-    _bounding_box=new vsol_box_3d();
-  _bounding_box->set_max_x(xmax);
+  if (bounding_box_==0)
+    bounding_box_=new vsol_box_3d();
+  bounding_box_->set_max_x(xmax);
 }
 
 inline void vsol_spatial_object_3d::set_min_y(float ymin)
 {
-  if (_bounding_box==0)
-    _bounding_box=new vsol_box_3d();
-  _bounding_box->set_min_y(ymin);
+  if (bounding_box_==0)
+    bounding_box_=new vsol_box_3d();
+  bounding_box_->set_min_y(ymin);
 }
 
 inline void vsol_spatial_object_3d::set_max_y(float ymax)
 {
-  if (_bounding_box==0)
-    _bounding_box=new vsol_box_3d();
-  _bounding_box->set_max_y(ymax);
+  if (bounding_box_==0)
+    bounding_box_=new vsol_box_3d();
+  bounding_box_->set_max_y(ymax);
 }
 
 inline void vsol_spatial_object_3d::set_min_z(float zmin)
 {
-  if (_bounding_box==0)
-    _bounding_box=new vsol_box_3d();
-  _bounding_box->set_min_z(zmin);
+  if (bounding_box_==0)
+    bounding_box_=new vsol_box_3d();
+  bounding_box_->set_min_z(zmin);
 }
 
 
 inline void vsol_spatial_object_3d::set_max_z(float zmax)
 {
-  if (_bounding_box==0)
-    _bounding_box=new vsol_box_3d();
-  _bounding_box->set_max_z(zmax);
+  if (bounding_box_==0)
+    bounding_box_=new vsol_box_3d();
+  bounding_box_->set_max_z(zmax);
 }
 
 
 //: set_ a flag for a spatialObject, flag can be VSOL_FLAG[1-6]
 inline void vsol_spatial_object_3d::set_user_flag(unsigned int flag)
 {
-  _tag=(_tag|flag);
+  tag_=(tag_|flag);
 }
 
 //: get_ a flag for a spatialObject, flag can be VSOL_FLAG[1-6] return value is
 //    one or zero.
 inline unsigned int  vsol_spatial_object_3d::get_user_flag(unsigned int flag)
 {
-  return (_tag&flag) ? 1 : 0;
+  return (tag_&flag) ? 1 : 0;
 }
 
 //: set_ a flag for a spatialObject, flag can be VSOL_FLAG[1-6] value is
 //    set to zero.
 inline void vsol_spatial_object_3d::unset_user_flag(unsigned int flag)
 {
-  _tag = ( _tag & (~flag) );
+  tag_ = ( tag_ & (~flag) );
 }
 
 //: set_ the flag used by TAGGED_UNION.
@@ -511,7 +506,7 @@ inline void vsol_spatial_object_3d::unset_tagged_union_flag(void)
 
 inline int vsol_spatial_object_3d::get_tag_id(void)
 {
-  return _tag & VSOL_DEXID_BITS;
+  return tag_ & VSOL_DEXID_BITS;
 }
 
 inline void vsol_spatial_object_3d::print(vcl_ostream &strm) const
