@@ -360,8 +360,6 @@ read( vcl_istream& is )
       tos.push_back( one );
     }
     
-    this->add_feature_matches_and_weights( from, mapped, tos, sig_wgts, geo_wgts, cum_wgts );
-
     // set feature type
     if( to_set_feature_type && !tos.empty() ) {
       //set flag
@@ -370,6 +368,10 @@ read( vcl_istream& is )
       from_type_ = &(from->type_id());
       to_type_ = &(tos[0]->type_id());
     }
+
+    // add features and weights
+    this->add_feature_matches_and_weights( from, mapped, tos, sig_wgts, geo_wgts, cum_wgts );
+
   }
   
   // set num_constraints
