@@ -109,7 +109,7 @@ while (<>)
         # remove lines of the form ========= or +-+-+-+-+ or ********* or longer:
         print unless m/^\s*[*=+-]{9,}\s*$/;
         # found \brief: finish it after single line:
-        print "\n" if ( m!\\brief\b!);
+      #  print "\n" if ( m!\\brief\b!);
         next;
     }
 
@@ -118,7 +118,7 @@ while (<>)
     # (In an earlier version of this script, empty lines were allowed inside comments.)
     if ( $comment && ! m!$slashslashpatt!  )
     {
-        print "$starslashpatt\n";
+        print "$starslashpatt";
         $comment = 0;
         print; next;
     }
