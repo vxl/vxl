@@ -83,6 +83,7 @@ void mbl_file_data_collector<T>::delete_stuff()
 {
   bfs_.close();
   delete wrapper_;
+  wrapper_ = 0;
 }
 
 //: Clear any stored data
