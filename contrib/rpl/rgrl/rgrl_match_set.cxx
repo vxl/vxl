@@ -502,6 +502,12 @@ set_cumulative_weight( double cum_wgt )
   itr_->cumulative_weight = cum_wgt;
 }
 
+void
+rgrl_match_set_from_to_iterator::
+set_geometric_error( double geom_err )
+{
+  itr_->geometric_residual = geom_err;
+}
 
 rgrl_match_set_from_to_iterator::
 rgrl_match_set_from_to_iterator( MatchInfoIter const& itr )
