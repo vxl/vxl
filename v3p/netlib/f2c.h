@@ -78,7 +78,7 @@ typedef struct
 /*close*/
 typedef struct
 {
-        flag cerr;
+        flag c_err;
         ftnint cunit;
         char *csta;
 } cllist;
