@@ -11,6 +11,7 @@ IF(UNIX)
 ENDIF(UNIX)
 
 ADD_EXECUTABLE( vil_test_all         vil_test_all.cxx )
+ADD_EXECUTABLE( test_flipud          test_flipud.cxx )
 ADD_EXECUTABLE( test_assign          test_assign.cxx )
 ADD_EXECUTABLE( test_interpolate     test_interpolate.cxx )
 ADD_EXECUTABLE( test_load            test_load.cxx )
