@@ -106,19 +106,16 @@ check( const vnl_vector<double>& correct_params,
 
   //  Get standardized error
   double err = vcl_sqrt(dot_product( err_vector*covar, err_vector ));
-#ifdef DEBUG
-  vcl_cerr << "Mahalanobis param error = " << err << ", scale = " << s << "\n";
-#endif
   bool success = err < 0.5*s;
-#if 0
+#ifdef DEBUG
   bool conv = ( irls->did_it_converge( ) );
   vcl_cout << "Finished:\n"
            << "  estimate = " << irls->estimate()
-           << ", true fit = " << correct_params << "\n"
-           << "  Mahalanobis param error = " << err << "\n"
-           << (success ? "success" : "fail") << "\n"
-           << "  scale estimate = " << s  << "\n"
-           << "  iterations used = " << irls->iterations_used() << "\n"
+           << ", true fit = " << correct_params << '\n'
+           << "  Mahalanobis param error = " << err << '\n'
+           << "  " << (success ? "success" : "fail") << '\n'
+           << "  scale estimate = " << s  << '\n'
+           << "  iterations used = " << irls->iterations_used() << '\n'
            << "  did it converge? " << (conv ? "yes\n" : "no\n");
 #endif
  return success;
@@ -149,7 +146,7 @@ MAIN( test_irls )
   testlib_test_perform( irls != 0 );
 
   //  Setting max iteration parameters.
-  max_iterations = 25;
+  max_iterations = 50;
   irls->set_max_iterations( max_iterations );
 
   //  Setting scale estimation parameters.
@@ -219,7 +216,7 @@ MAIN( test_irls )
 
   testlib_test_begin( "non-unique matches -- params initialized correctly, weighted scale" );
   testlib_test_perform( irls_m.estimate( match_prob, m_est ) &&
-                    check( params, &irls_m ) );
+                        check( params, &irls_m ) );
   vcl_cout << "true scale = " << sigma << ", weighted scale = " << irls_m.scale() << vcl_endl;
 
   irls_m.reset_params();
@@ -228,7 +225,7 @@ MAIN( test_irls )
   irls_m.set_convergence_test();
   testlib_test_begin( "non-unique matches -- params initialized correctly, MAD scale" );
   testlib_test_perform( irls_m.estimate( match_prob, m_est ) &&
-                    check( params, &irls_m ) );
+                        check( params, &irls_m ) );
   vcl_cout << "true scale = " << sigma << ", MAD scale = " << irls_m.scale() << vcl_endl;
 
   irls_m.reset_params();
@@ -238,7 +235,7 @@ MAIN( test_irls )
   irls_m.set_convergence_test();
   testlib_test_begin( "non-unique matches -- params initialized correctly, fixed scale" );
   testlib_test_perform( irls_m.estimate( match_prob, m_est ) &&
-                    check( params, &irls_m ) );
+                        check( params, &irls_m ) );
   testlib_test_begin( "scale unchanged" );
   testlib_test_perform( close( sigma, irls_m.scale() ) );
 
