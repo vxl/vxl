@@ -1,5 +1,7 @@
 USES := conversions vxl
-IULIBS := -lvnl # for vnl_test.h
+IULIBS := -lvnl -ltestlib
+
+TESTMAIN := test_driver.cxx
 
 TESTS += test_container.cxx
 

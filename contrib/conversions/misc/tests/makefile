@@ -1,5 +1,7 @@
 USES := conversions vxl
 
+#TESTMAIN := test_driver.cxx
+
 TESTS += 
 
 IULIBS := 

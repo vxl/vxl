@@ -1,5 +1,7 @@
 USES := conversions vxl
-IULIBS := -lvnl -lvbl
+IULIBS := -lvnl -lvbl -ltestlib
+
+TESTMAIN := test_driver.cxx
 
 TESTS += test_matrix_conversions.cxx
 
