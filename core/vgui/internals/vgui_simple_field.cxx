@@ -40,7 +40,7 @@ bool vgui_simple_field<T>::update_value(const vcl_string &s)
 {
   vcl_stringstream ss(s);
   ss >> var;
-  return ss && ss.eof();
+  return ss.eof();
 }
 
 
