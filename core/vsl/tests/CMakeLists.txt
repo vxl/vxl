@@ -1,11 +1,6 @@
-#
 # ./vxl/vsl/tests/CMakeLists.txt
-#
-#   Ian Scott
-#
 
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vsl/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )
+ADD_EXECUTABLE( vsl_test_all vsl_test_all.cxx )
 
 ADD_EXECUTABLE( test_indent test_indent.cxx )
 ADD_EXECUTABLE( test_vsl_io test_vsl_io.cxx )
@@ -24,6 +19,8 @@ ADD_EXECUTABLE( test_string_io test_string_io.cxx )
 ADD_EXECUTABLE( test_vector_io test_vector_io.cxx )
 
 
+ADD_TEST( vsl_test_all vsl_test_all )
+
 ADD_TEST( vsl_test_indent test_indent )
 ADD_TEST( vsl_test_vsl_io test_vsl_io )
 ADD_TEST( vsl_test_binary_io test_binary_io )
@@ -39,3 +36,7 @@ ADD_TEST( vsl_test_set_io test_set_io )
 ADD_TEST( vsl_test_stack_io test_stack_io )
 ADD_TEST( vsl_test_string_io test_string_io )
 ADD_TEST( vsl_test_vector_io test_vector_io )
+
+# Immediate dependencies
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vsl/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )
