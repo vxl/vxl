@@ -26,7 +26,7 @@ IF( VXL_BUILD_DCMTK )
 # change. The format follows a DNS-style numbering: the current date
 # followed by a modification time within the day.
 #
-SET( DCMTK_CONFIG_SERIAL_CURRENT "2004-01-19-000" )
+SET( DCMTK_CONFIG_SERIAL_CURRENT "2004-02-03-000" )
 
 IF( ${DCMTK_CONFIG_SERIAL_CURRENT} MATCHES "^${DCMTK_CONFIG_SERIAL_LAST}$" )
   # The configuration is current
@@ -212,7 +212,7 @@ IF( DCMTK_HAVE_STD_NAMESPACE MATCHES "DCMTK_HAVE_STD_NAMESPACE" )
   FILE(WRITE ${CMAKE_BINARY_DIR}/CMakeTmp/test_have_namespace.cxx
     "#include <string>\n"
     "using namespace std;\n"
-    "int main() { string a="a"; return 0; }\n" )
+    "int main() { string a=\"a\"; return 0; }\n" )
   TRY_COMPILE( DCMTK_HAVE_STD_NAMESPACE
     ${CMAKE_BINARY_DIR}
     ${CMAKE_BINARY_DIR}/CMakeTmp/test_have_namespace.cxx
