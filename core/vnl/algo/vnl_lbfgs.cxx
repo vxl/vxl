@@ -16,6 +16,7 @@
 #include <vcl_iomanip.h> // for setw (replaces cout.form())
 
 #include <vnl/algo/vnl_netlib.h> // lbfgs_()
+#include <lbfgs.h> // from netlib, for lb3_ data struct
 
 //: Default constructor.
 // memory is set to 5, line_search_accuracy to 0.9.
@@ -42,40 +43,6 @@ void vnl_lbfgs::init_parameters()
   line_search_accuracy = 0.9;
   default_step_length = 1.0;
 }
-
-#if 0
-# include <netlib/f2c.h>
-#else
-typedef int integer;
-typedef double doublereal;
-#endif
-
-/* Common Block Declarations */
-
-// Declare this as "static" (=local) to avoid multiple definition, because
-// this struct is also defined in v3p/netlib/lbfgs.c
-static struct {
-// C    GTOL is a DOUBLE PRECISION variable with default value 0.9, which
-// C        controls the accuracy of the line search routine MCSRCH. If the
-// C        function and gradient evaluations are inexpensive with respect
-// C        to the cost of the iteration (which is sometimes the case when
-// C        solving very large problems) it may be advantageous to set GTOL
-// C        to a small value. A typical small value is 0.1.  Restriction:
-// C        GTOL should be greater than 1.D-04.
-
-
-// C    STPMIN and STPMAX are non-negative DOUBLE PRECISION variables which
-// C        specify lower and uper bounds for the step in the line search.
-// C        Their default values are 1.D-20 and 1.D+20, respectively. These
-// C        values need not be modified unless the exponents are too large
-// C        for the machine being used, or unless the problem is extremely
-// C        badly scaled (in which case the exponents should be increased).
-  integer mp, lp; // Fortran i/o stuff.  Unused here.
-  doublereal gtol, stpmin, stpmax;
-  doublereal stpawf; // line search default step length, added by awf
-} lb3_; // SGI CC warns here about unused variable. Just ignore it.
-
-#define lb3_1 lb3_
 
 bool vnl_lbfgs::minimize(vnl_vector<double>& x)
 {
