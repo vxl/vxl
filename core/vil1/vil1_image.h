@@ -51,7 +51,7 @@ class vil1_image
     { vil1_image_delegate(component_format, (), VIL1_COMPONENT_FORMAT_UNKNOWN);  }
 
   //: return the ith plane.
-  vil1_image get_plane(int p) const { vil1_image_delegate(get_plane, (p), vil1_image()); }
+  vil1_image get_plane(unsigned int p) const { vil1_image_delegate(get_plane, (p), vil1_image()); }
 
   //: Copy from image to buf
   bool get_section(void *buf, int x0, int y0, int width, int height) const

@@ -245,9 +245,9 @@ bool vil1_iris_generic_image::write_header()
 }
 
 
-vil1_image vil1_iris_generic_image::get_plane(int plane) const
+vil1_image vil1_iris_generic_image::get_plane(unsigned int plane) const
 {
-  assert(plane >= 0 && plane < planes_);
+  assert(plane < planes_);
   vcl_cerr << __FILE__ ": do something for vil1_iris_generic_image::get_plane\n";
   return 0;
 }

@@ -67,7 +67,7 @@ class vil1_iris_generic_image : public vil1_image_impl
 
   virtual enum vil1_component_format component_format() const { return VIL1_COMPONENT_FORMAT_UNSIGNED_INT; }
 
-  virtual vil1_image get_plane(int) const;
+  virtual vil1_image get_plane(unsigned int p) const;
 
   virtual bool get_section(void* buf, int x0, int y0, int, int) const;
   virtual bool put_section(void const* buf, int x0, int y0, int width, int height);

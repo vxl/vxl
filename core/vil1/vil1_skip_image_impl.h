@@ -28,23 +28,18 @@ class vil1_skip_image_impl : public vil1_image_impl
   int bits_per_component() const { return base.bits_per_component(); }
   vil1_component_format component_format() const { return base.component_format(); }
 
-  vil1_image get_plane(int ) const;
+  vil1_image get_plane(unsigned int p) const;
 
   bool get_section(void *buf, int x0, int y0, int w, int h) const;
   bool put_section(void const *buf, int x0, int y0, int w, int h); // <- will fail
 
   bool get_property(char const *tag, void *property_value_out = 0) const;
 
-
-/* START_MANCHESTER_BINARY_IO_CODE */
-
   //: Return the name of the class;
   virtual vcl_string is_a() const;
 
   //: Return true if the name of the class matches the argument
   virtual bool is_class(vcl_string const&) const;
-
-/* END_MANCHESTER_BINARY_IO_CODE */
 
  private:
   vil1_image base;

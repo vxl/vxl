@@ -10,8 +10,8 @@
 //-----------------------------------------------------------------------------
 
 #include "vil1_image_impl.h"
-#include <vcl_iostream.h>
 #include <vil1/vil1_image.h>
+#include <vcl_cassert.h>
 
 //--------------------------------------------------------------------------------
 
@@ -20,10 +20,10 @@ vil1_image_impl::vil1_image_impl() : reference_count(0) { }
 
 vil1_image_impl::~vil1_image_impl() { }
 
-vil1_image vil1_image_impl::get_plane(int ) const
+vil1_image vil1_image_impl::get_plane(unsigned int p) const
 {
-  vcl_cerr << __FILE__ ":" << __LINE__ << ": get_plane()\n"; // probably remove this.
-  return 0;
+  assert(p < planes());
+  return 0; // since this function has to be overloaded
 }
 
 bool vil1_image_impl::get_property(char const *, void *) const
@@ -46,8 +46,6 @@ bool vil1_image_impl::put_section(void const* /*buf*/, int /*x0*/, int /*y0*/, i
   return false;
 }
 
-/* START_MANCHESTER_BINARY_IO_CODE */
-
 //: Return the name of the class;
 vcl_string vil1_image_impl::is_a() const
 {
@@ -60,5 +58,3 @@ bool vil1_image_impl::is_class(vcl_string const& s) const
 {
   return s==vil1_image_impl::is_a();
 }
-
-/* END_MANCHESTER_BINARY_IO_CODE */

@@ -53,12 +53,12 @@ vil1_image_impl *vil1_jpeg_file_format::make_input_image(vil1_stream *vs) {
 }
 
 vil1_image_impl *vil1_jpeg_file_format::make_output_image(vil1_stream *vs,
-                                                        int planes,
-                                                        int width,
-                                                        int height,
-                                                        int components,
-                                                        int bits_per_component,
-                                                        vil1_component_format format)
+                                                          int planes,
+                                                          int width,
+                                                          int height,
+                                                          int components,
+                                                          int bits_per_component,
+                                                          vil1_component_format format)
 {
   if (format != VIL1_COMPONENT_FORMAT_UNSIGNED_INT)
     return 0;
@@ -89,12 +89,12 @@ bool vil1_jpeg_generic_image::get_property(char const *tag, void *prop) const
 }
 
 vil1_jpeg_generic_image::vil1_jpeg_generic_image(vil1_stream *s,
-                                               int planes,
-                                               int width,
-                                               int height,
-                                               int components,
-                                               int bits_per_component,
-                                               vil1_component_format format)
+                                                 int planes,
+                                                 int width,
+                                                 int height,
+                                                 int components,
+                                                 int bits_per_component,
+                                                 vil1_component_format format)
   : jc(new vil1_jpeg_compressor(s))
   , jd(0)
   , stream(s)
@@ -170,7 +170,7 @@ bool vil1_jpeg_generic_image::put_section(void const *buf, int x0, int y0, int w
     return false;
   }
   if ((unsigned int)y0 != jc->jobj.next_scanline) {
-    vcl_cerr << __FILE__ << " : Scanlines must be sent sequentially \n";
+    vcl_cerr << __FILE__ << " : Scanlines must be sent sequentially\n";
     return false;
   }
 
@@ -226,8 +226,8 @@ vil1_component_format vil1_jpeg_generic_image::component_format() const {
 }
 
 //: assume only one plane
-vil1_image vil1_jpeg_generic_image::get_plane(int i) const {
-  assert(i == 0);
+vil1_image vil1_jpeg_generic_image::get_plane(unsigned int p) const {
+  assert(p == 0);
   return const_cast<vil1_jpeg_generic_image*>( this );
 }
 

@@ -29,13 +29,11 @@ class vil1_gen_file_format : public vil1_file_format
   virtual char const* tag() const;
   virtual vil1_image_impl* make_input_image(vil1_stream* vs);
   virtual vil1_image_impl* make_output_image(vil1_stream* /*vs*/, int /*planes*/,
-                                            int /*width*/,
-                                            int /*height*/,
-                                            int /*components*/,
-                                            int /*bits_per_component*/,
-                                            vil1_component_format /*format*/) {
-    return 0;
-  }
+                                             int /*width*/,
+                                             int /*height*/,
+                                             int /*components*/,
+                                             int /*bits_per_component*/,
+                                             vil1_component_format /*format*/) { return 0; }
 };
 
 enum vil1_gen_type {
@@ -59,12 +57,12 @@ class vil1_gen_generic_image : public vil1_image_impl
 
   vil1_gen_generic_image(vcl_string const & s);
   vil1_gen_generic_image(vcl_string const & s,
-                        int planes,
-                        int width,
-                        int height,
-                        int components,
-                        int bits_per_component,
-                        vil1_component_format format);
+                         int planes,
+                         int width,
+                         int height,
+                         int components,
+                         int bits_per_component,
+                         vil1_component_format format);
   ~vil1_gen_generic_image();
 
   //: Dimensions:  planes x width x height x components
@@ -83,7 +81,7 @@ class vil1_gen_generic_image : public vil1_image_impl
 
   char const* file_format() const;
   bool get_property(char const *tag, void *prop = 0) const;
-  vil1_image get_plane(int ) const;
+  vil1_image get_plane(unsigned int p) const;
 };
 
 #endif // vil1_gen_file_format_h_

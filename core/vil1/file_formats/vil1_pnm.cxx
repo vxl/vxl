@@ -48,11 +48,11 @@ vil1_image_impl* vil1_pnm_file_format::make_input_image(vil1_stream* vs)
 }
 
 vil1_image_impl* vil1_pnm_file_format::make_output_image(vil1_stream* vs, int planes,
-                                                       int width,
-                                                       int height,
-                                                       int components,
-                                                       int bits_per_component,
-                                                       vil1_component_format format)
+                                                         int width,
+                                                         int height,
+                                                         int components,
+                                                         int bits_per_component,
+                                                         vil1_component_format format)
 {
   return new vil1_pnm_generic_image(vs, planes, width, height, components, bits_per_component, format);
 }
@@ -88,11 +88,11 @@ char const* vil1_pnm_generic_image::file_format() const
 }
 
 vil1_pnm_generic_image::vil1_pnm_generic_image(vil1_stream* vs, int planes,
-                                             int width,
-                                             int height,
-                                             int components,
-                                             int bits_per_component,
-                                             vil1_component_format format):
+                                               int width,
+                                               int height,
+                                               int components,
+                                               int bits_per_component,
+                                               vil1_component_format format):
   vs_(vs)
 {
   vs_->ref();
@@ -446,7 +446,7 @@ bool vil1_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs
   return true;
 }
 
-vil1_image vil1_pnm_generic_image::get_plane(int plane) const
+vil1_image vil1_pnm_generic_image::get_plane(unsigned int plane) const
 {
   assert(plane == 0);
   return const_cast<vil1_pnm_generic_image*>(this);

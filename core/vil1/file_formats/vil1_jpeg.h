@@ -64,7 +64,7 @@ class vil1_jpeg_generic_image : public vil1_image_impl
   vil1_component_format component_format() const;
   char const *file_format() const; // returns "jpeg"
   bool get_property(char const *tag, void *prop = 0) const;
-  vil1_image get_plane(int ) const;
+  vil1_image get_plane(unsigned int p) const;
   bool get_section(void       *buf, int x0, int y0, int w, int h) const;
   bool put_section(void const *buf, int x0, int y0, int w, int h);
 

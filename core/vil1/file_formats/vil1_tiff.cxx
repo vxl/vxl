@@ -34,7 +34,7 @@ char const* vil1_tiff_format_tag = "tiff";
 // Functions
 static bool xxproblem(char const* linefile, char const* msg)
 {
-  vcl_cerr << linefile << "[PROBLEM " <<msg << "]";
+  vcl_cerr << linefile << "[PROBLEM " <<msg << ']';
   return false;
 }
 #define xproblem(x, l) xxproblem(__FILE__ ":" #l ":", x)
@@ -99,11 +99,11 @@ vil1_image_impl* vil1_tiff_file_format::make_input_image(vil1_stream* is)
 }
 
 vil1_image_impl* vil1_tiff_file_format::make_output_image(vil1_stream* is, int planes,
-                                                        int width,
-                                                        int height,
-                                                        int components,
-                                                        int bits_per_component,
-                                                        vil1_component_format format)
+                                                          int width,
+                                                          int height,
+                                                          int components,
+                                                          int bits_per_component,
+                                                          vil1_component_format format)
 {
   return new vil1_tiff_generic_image(is, planes, width, height, components, bits_per_component, format);
 }
@@ -157,9 +157,9 @@ typedef int (*TIFFMapFileProc)(thandle_t, tdata_t*, toff_t*);
 typedef void (*TIFFUnmapFileProc)(thandle_t, tdata_t, toff_t);
 
 TIFF* TIFFClientOpen(const char* filename, const char* mode, thandle_t clientdata,
-    TIFFReadWriteProc readproc, TIFFReadWriteProc writeproc, TIFFSeekProc seekproc,
-    TIFFCloseProc closeproc, TIFFSizeProc sizeproc, TIFFMapFileProc mapproc,
-    TIFFUnmapFileProc unmapproc)
+                     TIFFReadWriteProc readproc, TIFFReadWriteProc writeproc, TIFFSeekProc seekproc,
+                     TIFFCloseProc closeproc, TIFFSizeProc sizeproc, TIFFMapFileProc mapproc,
+                     TIFFUnmapFileProc unmapproc)
 #endif
 
 static tsize_t vil1_tiff_readproc(thandle_t h, tdata_t buf, tsize_t n)
@@ -167,7 +167,7 @@ static tsize_t vil1_tiff_readproc(thandle_t h, tdata_t buf, tsize_t n)
   vil1_tiff_structures* p = (vil1_tiff_structures*)h;
   if (n > p->filesize) p->filesize= n;
   tsize_t ret = p->vs->read(buf, n);
-  trace << "readproc, n = " << n << ", ret = " << ret << "\n";
+  trace << "readproc, n = " << n << ", ret = " << ret << '\n';
   return ret;
 }
 
@@ -178,7 +178,7 @@ static tsize_t vil1_tiff_writeproc(thandle_t h, tdata_t buf, tsize_t n)
   vil1_streampos s = p->vs->tell();
   if (s > p->filesize)
     p->filesize = s;
-  trace << "writeproc: ret=" << ret << "/" << n << " , filesize = " << p->filesize << "   " << s << vcl_endl;
+  trace << "writeproc: ret=" << ret << '/' << n << " , filesize = " << p->filesize << "   " << s << vcl_endl;
   return ret;
 }
 
@@ -302,11 +302,11 @@ bool vil1_tiff_generic_image::set_property(char const *tag, const void *prop) co
 }
 
 vil1_tiff_generic_image::vil1_tiff_generic_image(vil1_stream* is, int /*planes*/,
-                                               int width,
-                                               int height,
-                                               int components,
-                                               int bits_per_component,
-                                               vil1_component_format /*format*/):
+                                                 int width,
+                                                 int height,
+                                                 int components,
+                                                 int bits_per_component,
+                                                 vil1_component_format /*format*/):
   p(new vil1_tiff_structures(is))
 {
   width_ = width;
@@ -314,7 +314,7 @@ vil1_tiff_generic_image::vil1_tiff_generic_image(vil1_stream* is, int /*planes*/
   components_ = components;
   bits_per_component_ = bits_per_component;
 
-  // vcl_cerr << "\n\n *** \n";
+  // vcl_cerr << "\n\n ***\n";
   write_header();
 }
 
@@ -368,7 +368,7 @@ bool vil1_tiff_generic_image::read_header()
     this->bits_per_component_ = bitspersample;
     break;
   default:
-    // vcl_cerr << "vil1_tiff: Saw " << samplesperpixel << " samples @ " << bitspersample << "\n";
+    // vcl_cerr << "vil1_tiff: Saw " << samplesperpixel << " samples @ " << bitspersample << '\n';
     TIFFError("TIFFImageRH: ", "Can only handle 1-channel gray scale or 3-channel color");
     return false;
   }
@@ -507,9 +507,9 @@ bool vil1_tiff_generic_image::read_header()
 
 #if defined(RIH_DEBUG)
   vcl_printf("vil1_tiff: size %dx%d, components %d of %d bits, tiled %d, compressed %d,"
-         " rows per strip %ld, photometric code %d, stripsize %ld, scanlinesize %ld\n",
-         this->width(), this->height(), this->components(), this->bits_per_component(),
-         p->tiled, p->compressed, p->rows_per_strip, p->photometric, p->stripsize, p->scanlinesize);
+             " rows per strip %ld, photometric code %d, stripsize %ld, scanlinesize %ld\n",
+             this->width(), this->height(), this->components(), this->bits_per_component(),
+             p->tiled, p->compressed, p->rows_per_strip, p->photometric, p->stripsize, p->scanlinesize);
 #endif
 
   static const int MB = 1024 * 1024;
@@ -540,12 +540,11 @@ bool vil1_tiff_generic_image::write_header()
 #if 0 // commented out
         // Strips or Tiles?
         if (GetArea()*GetBytesPixel() > MIN_AREA_FOR_TILING &&
-           !(GetBlockSizeX() % 8) && !(GetBlockSizeY() % 8)){
+            !(GetBlockSizeX() % 8) && !(GetBlockSizeY() % 8)) {
                 // Tiles
                 TIFFSetField(p->tif, TIFFTAG_TILEWIDTH, GetBlockSizeX());
                 TIFFSetField(p->tif, TIFFTAG_TILELENGTH, GetBlockSizeY());
-        }
-        else{
+        } else {
                 // Strips
                 // Think about setting the strip length
                 TIFFSetField(p->tif, TIFFTAG_ROWSPERSTRIP, GetSizeY());
@@ -645,9 +644,9 @@ bool vil1_tiff_generic_image::write_header()
 
 #ifdef RIH_DEBUG
   vcl_printf("vil1_tiff: size %dx%d, components %d of %d bits, tiled %d, compressed %d,"
-         " rows per strip %ld, photometric code %d, stripsize %ld, scanlinesize %ld\n",
-         this->width(), this->height(), this->components(), this->bits_per_component(),
-         p->tiled, p->compressed, p->rows_per_strip, p->photometric, p->stripsize, p->scanlinesize);
+             " rows per strip %ld, photometric code %d, stripsize %ld, scanlinesize %ld\n",
+             this->width(), this->height(), this->components(), this->bits_per_component(),
+             p->tiled, p->compressed, p->rows_per_strip, p->photometric, p->stripsize, p->scanlinesize);
 #endif
 
   return true;
@@ -740,7 +739,7 @@ bool vil1_tiff_generic_image::put_section(void const* buf, int x0, int y0, int x
   return true;
 }
 
-vil1_image vil1_tiff_generic_image::get_plane(int plane) const
+vil1_image vil1_tiff_generic_image::get_plane(unsigned int plane) const
 {
   assert(plane == 0);
   return const_cast<vil1_tiff_generic_image*>(this);

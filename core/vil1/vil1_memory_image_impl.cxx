@@ -15,36 +15,36 @@
 #include <vil1/vil1_property.h>
 
 vil1_memory_image_impl::vil1_memory_image_impl(int planes, int w, int h,
-                                             vil1_memory_image_format
-                                             const& format)
+                                               vil1_memory_image_format
+                                               const& format)
 {
   init((void*)0, planes, w, h, format.components, format.bits_per_component,
             format.component_format);
 }
 
 vil1_memory_image_impl::vil1_memory_image_impl(int planes, int w, int h,
-                                             int components,
-                                             int bits_per_component,
-                                             vil1_component_format component_format)
+                                               int components,
+                                               int bits_per_component,
+                                               vil1_component_format component_format)
 {
   init((void*)0, planes, w, h, components, bits_per_component, component_format);
 }
 
 vil1_memory_image_impl::vil1_memory_image_impl(int planes, int w, int h,
-                                             vil1_pixel_format_t pixel_format)
+                                               vil1_pixel_format_t pixel_format)
 {
   init((void*)0, planes, w, h, pixel_format);
 }
 
 vil1_memory_image_impl::vil1_memory_image_impl(int w, int h, int components,
-                                             int bits_per_component,
-                                             vil1_component_format component_format)
+                                               int bits_per_component,
+                                               vil1_component_format component_format)
 {
   init((void*)0, 1, w, h, components, bits_per_component, component_format);
 }
 
 vil1_memory_image_impl::vil1_memory_image_impl(int w, int h,
-                                             vil1_pixel_format_t pixel_format)
+                                               vil1_pixel_format_t pixel_format)
 {
   init((void*)0, 1, w, h, pixel_format);
 }
@@ -57,9 +57,9 @@ vil1_memory_image_impl::vil1_memory_image_impl
 }
 
 void vil1_memory_image_impl::init(void *buf,
-                                 int planes, int w, int h,
-                                 int components, int bits_per_component,
-                                 vil1_component_format component_format)
+                                  int planes, int w, int h,
+                                  int components, int bits_per_component,
+                                  vil1_component_format component_format)
 {
   is_foreign_buf_ = (buf != 0); // true if buf is non-nil
   planes_ = planes;
@@ -98,15 +98,15 @@ void vil1_memory_image_impl::init(void *buf,
 }
 
 void vil1_memory_image_impl::init(void *buf, int planes, int w, int h,
-                                 vil1_pixel_format_t pixel_format)
+                                  vil1_pixel_format_t pixel_format)
 {
   switch (pixel_format) {
   case VIL1_BYTE:     init(buf, planes, w, h, 1,  8,
-                          VIL1_COMPONENT_FORMAT_UNSIGNED_INT); break;
+                           VIL1_COMPONENT_FORMAT_UNSIGNED_INT); break;
   case VIL1_RGB_BYTE: init(buf, planes, w, h, 3,  8,
-                          VIL1_COMPONENT_FORMAT_UNSIGNED_INT); break;
+                           VIL1_COMPONENT_FORMAT_UNSIGNED_INT); break;
   case VIL1_FLOAT:    init(buf, planes, w, h, 1, 32,
-                          VIL1_COMPONENT_FORMAT_UNSIGNED_INT); break;
+                           VIL1_COMPONENT_FORMAT_UNSIGNED_INT); break;
   default:
     vcl_cerr << "vil1_memory_image_impl: crazy format!\n";
   }
@@ -124,9 +124,9 @@ vil1_memory_image_impl::~vil1_memory_image_impl()
 
 
 void vil1_memory_image_impl::resize(int planes, int width, int height,
-                                   int components,
-                                   int bits_per_component,
-                                   vil1_component_format format)
+                                    int components,
+                                    int bits_per_component,
+                                    vil1_component_format format)
 {
   components_ = components;
   bits_per_component_ = bits_per_component;
@@ -152,7 +152,7 @@ void vil1_memory_image_impl::resize(int planes, int width, int height)
 }
 
 bool vil1_memory_image_impl::get_section(void* obuf, int x0, int y0,
-                                        int xs, int ys) const
+                                         int xs, int ys) const
 {
   int bytes_per_row = (width_ * bits_per_component_ * components_ + 7) / 8;
   for (int p=0; p<planes_; ++p) {
@@ -174,7 +174,7 @@ bool vil1_memory_image_impl::get_section(void* obuf, int x0, int y0,
 }
 
 bool vil1_memory_image_impl::put_section(void const* ibuf, int x0,
-                                        int y0, int xs, int ys)
+                                         int y0, int xs, int ys)
 {
   int bytes_per_row = (width_ * bits_per_component_ * components_ + 7) / 8;
   for (int p=0; p<planes_; ++p) {
@@ -185,7 +185,7 @@ bool vil1_memory_image_impl::put_section(void const* ibuf, int x0,
 
       for (int y = 0; y < ys; ++y) {
         vcl_memcpy(buf_ + offset + y * byte_width,
-               (unsigned char const*)ibuf + y * byte_in_width, byte_in_width);
+                   (unsigned char const*)ibuf + y*byte_in_width, byte_in_width);
       }
       ibuf = (void const*)((char const*)ibuf + byte_in_width * ys);
     } else {
@@ -197,14 +197,14 @@ bool vil1_memory_image_impl::put_section(void const* ibuf, int x0,
   return true;
 }
 
-vil1_image vil1_memory_image_impl::get_plane(int plane) const
+vil1_image vil1_memory_image_impl::get_plane(unsigned int plane) const
 {
   assert(plane==0);
   return const_cast<vil1_memory_image_impl*>(this);
 }
 
 bool vil1_memory_image_impl::get_property(char const *tag,
-                                         void *property_value) const
+                                          void *property_value) const
 {
   if (0==vcl_strcmp(tag, vil1_property_memory))
     return property_value ? (*(bool*)property_value) = true : true;
@@ -228,39 +228,37 @@ bool vil1_memory_image_impl::get_property(char const *tag,
 // Added by: Brendan McCane
 
 vil1_memory_image_impl::vil1_memory_image_impl(void *buf, int planes, int w, int h,
-                                             vil1_memory_image_format const& format)
+                                               vil1_memory_image_format const& format)
 {
   init(buf, planes, w, h, format.components, format.bits_per_component,
        format.component_format);
 }
 
 vil1_memory_image_impl::vil1_memory_image_impl(void *buf, int planes, int w, int h,
-                                             int components, int bits_per_component,
-                                             vil1_component_format component_format)
+                                               int components, int bits_per_component,
+                                               vil1_component_format component_format)
 {
   init(buf, planes, w, h, components, bits_per_component, component_format);
 }
 
 vil1_memory_image_impl::vil1_memory_image_impl(void *buf, int planes, int w, int h,
-                                             vil1_pixel_format_t pixel_format)
+                                               vil1_pixel_format_t pixel_format)
 {
   init(buf, planes, w, h, pixel_format);
 }
 
 vil1_memory_image_impl::vil1_memory_image_impl(void *buf, int w, int h,
-                                             int components, int bits_per_component,
-                                             vil1_component_format component_format)
+                                               int components, int bits_per_component,
+                                               vil1_component_format component_format)
 {
   init(buf, 1, w, h, components, bits_per_component, component_format);
 }
 
 vil1_memory_image_impl::vil1_memory_image_impl(void *buf, int w, int h,
-                                             vil1_pixel_format_t pixel_format)
+                                               vil1_pixel_format_t pixel_format)
 {
   init(buf, 1, w, h, pixel_format);
 }
-
-/* START_MANCHESTER_BINARY_IO_CODE */
 
 //: Return the name of the class;
 vcl_string vil1_memory_image_impl::is_a() const
@@ -274,5 +272,3 @@ bool vil1_memory_image_impl::is_class(vcl_string const& s) const
 {
   return s==vil1_memory_image_impl::is_a() || vil1_image_impl::is_class(s);
 }
-
-/* END_MANCHESTER_BINARY_IO_CODE */

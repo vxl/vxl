@@ -11,9 +11,8 @@
 //
 //\verbatim
 // Modifications
-//     010126 BJM (mccane@cs.otago.ac.nz) added constructor from
-//            previously allocated memory. This memory is not deallocated on
-//            destruction.
+//     010126 BJM (mccane@cs.otago.ac.nz) added constructor from previously
+//            allocated memory. This memory is not deallocated on destruction.
 // 7 June 2001 - Peter Vanroose - added support for packed 1-bit pixel type
 //\endverbatim
 
@@ -26,15 +25,15 @@ class vil1_memory_image_impl : public vil1_image_impl
 {
  public:
   vil1_memory_image_impl(int planes, int w, int h,
-                        vil1_memory_image_format const& format);
+                         vil1_memory_image_format const& format);
   vil1_memory_image_impl(int planes, int w, int h, int components, int bits_per_component,
-                        vil1_component_format component_format);
+                         vil1_component_format component_format);
   vil1_memory_image_impl(int planes, int w, int h,
-                        vil1_pixel_format_t pixel_format);
+                         vil1_pixel_format_t pixel_format);
   vil1_memory_image_impl(int w, int h, int components, int bits_per_component,
-                        vil1_component_format component_format);
+                         vil1_component_format component_format);
   vil1_memory_image_impl(int w, int h,
-                        vil1_pixel_format_t pixel_format);
+                         vil1_pixel_format_t pixel_format);
   vil1_memory_image_impl(vil1_memory_image_impl const&);
 
   ~vil1_memory_image_impl();
@@ -45,7 +44,7 @@ class vil1_memory_image_impl : public vil1_image_impl
   virtual int components() const { return components_; }
   virtual int bits_per_component() const { return bits_per_component_; }
   virtual vil1_component_format component_format() const { return component_format_; }
-  virtual vil1_image get_plane(int plane) const;
+  virtual vil1_image get_plane(unsigned int p) const;
 
   virtual bool get_section(void* buf, int x0, int y0, int width, int height) const;
   virtual bool put_section(void const* buf, int x0, int y0, int width, int height);
@@ -54,10 +53,7 @@ class vil1_memory_image_impl : public vil1_image_impl
 
   void resize(int planes, int width, int height);
   void resize(int planes, int width, int height, int components, int bits_per_component,
-    vil1_component_format format);
-
-
-/* START_MANCHESTER_BINARY_IO_CODE */
+              vil1_component_format format);
 
   //: Return the name of the class;
   virtual vcl_string is_a() const;
@@ -65,21 +61,26 @@ class vil1_memory_image_impl : public vil1_image_impl
   //: Return true if the name of the class matches the argument
   virtual bool is_class(vcl_string const&) const;
 
-/* END_MANCHESTER_BINARY_IO_CODE */
-
-
-  // added by Brendan McCane
-  // Constructors from previously allocated memory. This memory is not deallocated on destruction.
+  //: Constructor from previously allocated memory.
+  // This memory is not deallocated on destruction.
   vil1_memory_image_impl(void *buf, int planes, int w, int h,
-                        vil1_memory_image_format const& format);
+                         vil1_memory_image_format const& format);
+  //: Constructor from previously allocated memory.
+  // This memory is not deallocated on destruction.
   vil1_memory_image_impl(void *buf, int planes, int w, int h, int components, int bits_per_component,
-                        vil1_component_format component_format);
+                         vil1_component_format component_format);
+  //: Constructor from previously allocated memory.
+  // This memory is not deallocated on destruction.
   vil1_memory_image_impl(void *buf, int planes, int w, int h,
-                        vil1_pixel_format_t pixel_format);
+                         vil1_pixel_format_t pixel_format);
+  //: Constructor from previously allocated memory.
+  // This memory is not deallocated on destruction.
   vil1_memory_image_impl(void *buf, int w, int h, int components, int bits_per_component,
-                        vil1_component_format component_format);
+                         vil1_component_format component_format);
+  //: Constructor from previously allocated memory.
+  // This memory is not deallocated on destruction.
   vil1_memory_image_impl(void *buf, int w, int h,
-                        vil1_pixel_format_t pixel_format);
+                         vil1_pixel_format_t pixel_format);
 
  protected:
   friend class vil1_memory_image;

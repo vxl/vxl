@@ -8,6 +8,7 @@
 
 #include "vil1_block_cache_image_impl.h"
 #include <vcl_cstring.h>  // strcmp()
+#include <vcl_cassert.h>
 
 // Constructors/Destructors--------------------------------------------------
 
@@ -22,8 +23,9 @@ vil1_block_cache_image_impl::vil1_block_cache_image_impl(vil1_image i_, unsigned
 vil1_block_cache_image_impl::~vil1_block_cache_image_impl() {
 }
 
-vil1_image vil1_block_cache_image_impl::get_plane(int ) const {
-  return 0;
+vil1_image vil1_block_cache_image_impl::get_plane(unsigned int p) const {
+  assert(p < base.planes());
+  return base.get_plane(p);
 }
 
 bool vil1_block_cache_image_impl::get_section(void *buf, int x0, int y0, int w, int h) const {
@@ -38,7 +40,7 @@ bool vil1_block_cache_image_impl::put_section(void const *buf, int x0, int y0, i
 //--------------------------------------------------------------------------------
 
 bool vil1_block_cache_image_impl::get_property(char const *tag,
-                                              void *out) const
+                                               void *out) const
 {
   if (vcl_strcmp(tag, "is_blocked") == 0)
     return true;
@@ -57,8 +59,6 @@ bool vil1_block_cache_image_impl::get_property(char const *tag,
 }
 
 
-/* START_MANCHESTER_BINARY_IO_CODE */
-
 //: Return the name of the class;
 vcl_string vil1_block_cache_image_impl::is_a() const
 {
@@ -71,5 +71,3 @@ bool vil1_block_cache_image_impl::is_class(vcl_string const& s) const
 {
   return s==vil1_block_cache_image_impl::is_a() || vil1_image_impl::is_class(s);
 }
-
-/* END_MANCHESTER_BINARY_IO_CODE */

@@ -32,7 +32,7 @@ struct vil1_image_as_impl : public vil1_image_impl, public vil1_memory_image_of_
   int components() const { return format::components; }
   int bits_per_component() const { return format::bits_per_component; }
   vil1_component_format component_format() const { return format::component_format; }
-  vil1_image get_plane(int i) const { assert(i==0); return const_cast<vil1_image_as_impl*>(this); }
+  vil1_image get_plane(unsigned int p) const { assert(p==0); return const_cast<vil1_image_as_impl*>(this); }
 
 #if 0
   char const* file_format() const { return 0; }
@@ -285,8 +285,6 @@ bool vil1_image_as_impl<vil1_byte>::get_section(void *buf, int x0, int y0, int w
     return false;
   }
 }
-/* START_MANCHESTER_BINARY_IO_CODE */
-
 VCL_DEFINE_SPECIALIZATION
 vcl_string vil1_image_as_impl<vil1_byte>::is_a() const
 {
@@ -299,8 +297,6 @@ bool vil1_image_as_impl<vil1_byte>::is_class(vcl_string const& s) const
 {
   return s==vil1_image_as_impl<vil1_byte>::is_a() || vil1_image_impl::is_class(s);
 }
-
-/* END_MANCHESTER_BINARY_IO_CODE */
 
 // instantiate for byte.
 template struct vil1_image_as_impl<vil1_byte>;
@@ -346,8 +342,6 @@ bool vil1_image_as_impl<vxl_uint_16>::get_section(void *buf, int x0, int y0, int
   }
 }
 
-/* START_MANCHESTER_BINARY_IO_CODE */
-
 VCL_DEFINE_SPECIALIZATION
 vcl_string vil1_image_as_impl<vxl_uint_16>::is_a() const
 {
@@ -360,8 +354,6 @@ bool vil1_image_as_impl<vxl_uint_16>::is_class(vcl_string const& s) const
 {
   return s==vil1_image_as_impl<vxl_uint_16>::is_a() || vil1_image_impl::is_class(s);
 }
-
-/* END_MANCHESTER_BINARY_IO_CODE */
 
 // instantiate for vxl_uint_16
 template struct vil1_image_as_impl<vxl_uint_16>;
@@ -408,8 +400,6 @@ bool vil1_image_as_impl<int>::get_section(void *buf, int x0, int y0, int width, 
   }
 }
 
-/* START_MANCHESTER_BINARY_IO_CODE */
-
 VCL_DEFINE_SPECIALIZATION
 vcl_string vil1_image_as_impl<int>::is_a() const
 {
@@ -422,8 +412,6 @@ bool vil1_image_as_impl<int>::is_class(vcl_string const& s) const
 {
   return s==vil1_image_as_impl<int>::is_a() || vil1_image_impl::is_class(s);
 }
-
-/* END_MANCHESTER_BINARY_IO_CODE */
 
 // instantiate for int.
 template struct vil1_image_as_impl<int>;
@@ -469,8 +457,6 @@ bool vil1_image_as_impl<float>::get_section(void *buf, int x0, int y0, int width
   }
 }
 
-/* START_MANCHESTER_BINARY_IO_CODE */
-
 VCL_DEFINE_SPECIALIZATION
 vcl_string vil1_image_as_impl<float>::is_a() const
 {
@@ -483,8 +469,6 @@ bool vil1_image_as_impl<float>::is_class(vcl_string const& s) const
 {
   return s==vil1_image_as_impl<float>::is_a() || vil1_image_impl::is_class(s);
 }
-
-/* END_MANCHESTER_BINARY_IO_CODE */
 
 // instantiate for float.
 template struct vil1_image_as_impl<float>;
@@ -530,9 +514,6 @@ bool vil1_image_as_impl<double>::get_section(void *buf, int x0, int y0, int widt
   }
 }
 
-
-/* START_MANCHESTER_BINARY_IO_CODE */
-
 VCL_DEFINE_SPECIALIZATION
 vcl_string vil1_image_as_impl<double>::is_a() const
 {
@@ -545,8 +526,6 @@ bool vil1_image_as_impl<double>::is_class(vcl_string const& s) const
 {
   return s==vil1_image_as_impl<double>::is_a() || vil1_image_impl::is_class(s);
 }
-
-/* END_MANCHESTER_BINARY_IO_CODE */
 
 // instantiate for double.
 template struct vil1_image_as_impl<double>;
@@ -564,8 +543,8 @@ vil1_image vil1_image_as(vil1_image const &image, double*) {
 
 VCL_DEFINE_SPECIALIZATION // specialize for rgb.
 bool vil1_image_as_impl<vil1_rgb<unsigned char> >::get_section(void *buf,
-                                                             int x0, int y0,
-                                                             int width, int height) const
+                                                               int x0, int y0,
+                                                               int width, int height) const
 {
   typedef unsigned char Outtype;
 
@@ -596,7 +575,6 @@ bool vil1_image_as_impl<vil1_rgb<unsigned char> >::get_section(void *buf,
     return false;
   }
 }
-/* START_MANCHESTER_BINARY_IO_CODE */
 
 VCL_DEFINE_SPECIALIZATION
 vcl_string vil1_image_as_impl<vil1_rgb<unsigned char> >::is_a() const
@@ -610,8 +588,6 @@ bool vil1_image_as_impl<vil1_rgb<unsigned char> >::is_class(vcl_string const& s)
 {
   return s==vil1_image_as_impl<vil1_rgb<unsigned char> >::is_a() || vil1_image_impl::is_class(s);
 }
-
-/* END_MANCHESTER_BINARY_IO_CODE */
 
 // instantiate for vil1_rgb_byte .
 template struct vil1_image_as_impl<vil1_rgb<unsigned char> >;
@@ -629,8 +605,8 @@ vil1_image vil1_image_as(vil1_image const &image, vil1_rgb<vil1_byte>*) {
 
 VCL_DEFINE_SPECIALIZATION // specialize for rgb float.
 bool vil1_image_as_impl<vil1_rgb<float> >::get_section(void *buf,
-                                                     int x0, int y0,
-                                                     int width, int height) const
+                                                       int x0, int y0,
+                                                       int width, int height) const
 {
   typedef float Outtype;
 
@@ -662,9 +638,6 @@ bool vil1_image_as_impl<vil1_rgb<float> >::get_section(void *buf,
   }
 }
 
-
-/* START_MANCHESTER_BINARY_IO_CODE */
-
 VCL_DEFINE_SPECIALIZATION
 vcl_string vil1_image_as_impl<vil1_rgb<float> >::is_a() const
 {
@@ -677,8 +650,6 @@ bool vil1_image_as_impl<vil1_rgb<float> >::is_class(vcl_string const& s) const
 {
   return s==vil1_image_as_impl<vil1_rgb<float> >::is_a() || vil1_image_impl::is_class(s);
 }
-
-/* END_MANCHESTER_BINARY_IO_CODE */
 
 // instantiate for vil1_rgb_float .
 template struct vil1_image_as_impl<vil1_rgb<float> >;
@@ -697,8 +668,8 @@ vil1_image vil1_image_as(vil1_image const &image, vil1_rgb<float>*) {
 
 VCL_DEFINE_SPECIALIZATION // specialize for rgb 16-bit.
 bool vil1_image_as_impl<vil1_rgb<vxl_uint_16> >::get_section(void *buf,
-                                                           int x0, int y0,
-                                                           int width, int height) const
+                                                             int x0, int y0,
+                                                             int width, int height) const
 {
   typedef vxl_uint_16 Outtype;
 

@@ -47,7 +47,7 @@ struct vil1_image_proxy_impl : public vil1_image_impl
   char const *file_format() const { return file_format_.c_str(); }
 
   // non-cached stuff
-  vil1_image get_plane(int i) const { return vil1_load(filename.c_str()).get_plane(i); }
+  vil1_image get_plane(unsigned int p) const { return vil1_load(filename.c_str()).get_plane(p); }
 
   bool get_section(void       *buf, int x0, int y0, int width, int height) const
     { return vil1_load(filename.c_str()).get_section(buf, x0, y0, width, height); }
@@ -59,23 +59,17 @@ struct vil1_image_proxy_impl : public vil1_image_impl
   bool set_property(char const *tag, void const *property_value) const
     { return vil1_load(filename.c_str()).set_property(tag, property_value); }
 
-/* START_MANCHESTER_BINARY_IO_CODE */
-
   //: Return the name of the class;
   virtual vcl_string is_a() const;
 
   //: Return true if the name of the class matches the argument
   virtual bool is_class(vcl_string const&) const;
-
-/* END_MANCHESTER_BINARY_IO_CODE */
 };
 
 vil1_image_proxy::vil1_image_proxy(char const *file)
   : vil1_image(new vil1_image_proxy_impl(file))
 {
 }
-
-/* START_MANCHESTER_BINARY_IO_CODE */
 
 //: Return the name of the class;
 vcl_string vil1_image_proxy_impl::is_a() const
@@ -89,5 +83,3 @@ bool vil1_image_proxy_impl::is_class(vcl_string const& s) const
 {
   return s==vil1_image_proxy_impl::is_a() || vil1_image_impl::is_class(s);
 }
-
-/* END_MANCHESTER_BINARY_IO_CODE */

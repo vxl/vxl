@@ -31,7 +31,7 @@ vil1_resample_image_impl::~vil1_resample_image_impl()
 
 //--------------------------------------------------------------------------------
 
-vil1_image vil1_resample_image_impl::get_plane(int p) const
+vil1_image vil1_resample_image_impl::get_plane(unsigned int p) const
 {
   vil1_image_impl *i = new vil1_resample_image_impl(base.get_plane(p), new_width, new_height);
   return vil1_image(i);
@@ -69,20 +69,18 @@ bool vil1_resample_image_impl::get_section(void *buf, int x0, int y0, int w, int
   switch ( vil1_pixel_format(base) ) {
   case VIL1_BYTE:
     return vil1_resample_image(base, new_width, new_height,
-                              (vil1_byte*)buf, (unsigned*)0,
-                              x0, y0, w, h);
+                               (vil1_byte*)buf, (unsigned*)0,
+                               x0, y0, w, h);
   case VIL1_RGB_BYTE:
     return vil1_resample_image(base, new_width, new_height,
-                              (vil1_rgb<vil1_byte>*)buf, (vil1_rgb<int>*)0,
-                              x0, y0, w, h);
+                               (vil1_rgb<vil1_byte>*)buf, (vil1_rgb<int>*)0,
+                               x0, y0, w, h);
 
   default:
     vcl_cerr << __FILE__ ": not implemented for this pixel type\n";
     return false;
   }
 }
-
-/* START_MANCHESTER_BINARY_IO_CODE */
 
 //: Return the name of the class;
 vcl_string vil1_resample_image_impl::is_a() const
@@ -96,5 +94,3 @@ bool vil1_resample_image_impl::is_class(vcl_string const& s) const
 {
   return s==vil1_resample_image_impl::is_a() || vil1_image_impl::is_class(s);
 }
-
-/* END_MANCHESTER_BINARY_IO_CODE */

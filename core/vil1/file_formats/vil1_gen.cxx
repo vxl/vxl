@@ -63,12 +63,12 @@ char const* vil1_gen_generic_image::file_format() const
 }
 
 vil1_gen_generic_image::vil1_gen_generic_image(vcl_string const& /*s*/,
-                                             int /*planes*/,
-                                             int /*width*/,
-                                             int /*height*/,
-                                             int /*components*/,
-                                             int /*bits_per_component*/,
-                                             vil1_component_format /*format*/)
+                                               int /*planes*/,
+                                               int /*width*/,
+                                               int /*height*/,
+                                               int /*components*/,
+                                               int /*bits_per_component*/,
+                                               vil1_component_format /*format*/)
 {
   vcl_abort();
 }
@@ -154,7 +154,7 @@ void vil1_gen_generic_image::init(vcl_string const& s)
     type_ = vil1_gen_rgb;
 
     vcl_cerr << "vil1_gen_generic_image: p0 = ["<<params_[0]<<"], "
-             << "p1 = ["<<params_[1]<<"], p2 = ["<<params_[2]<<"] \n";
+             << "p1 = ["<<params_[1]<<"], p2 = ["<<params_[2]<<"]\n";
   }
   else
     assert(!"type must be one of grey, gray or rgb");
@@ -201,7 +201,7 @@ bool vil1_gen_generic_image::put_section(void const* /*buf*/, int /*x0*/, int /*
   return false;
 }
 
-vil1_image vil1_gen_generic_image::get_plane(int plane) const
+vil1_image vil1_gen_generic_image::get_plane(unsigned int plane) const
 {
   assert(plane == 0);
   return const_cast<vil1_gen_generic_image*>(this);

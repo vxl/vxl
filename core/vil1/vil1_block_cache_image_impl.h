@@ -42,7 +42,7 @@ class vil1_block_cache_image_impl : public vil1_image_impl
   vil1_component_format component_format() const { return base.component_format(); }
 
   //: Access to image-plane
-  vil1_image get_plane(int ) const;
+  vil1_image get_plane(unsigned int p) const;
 
   //: Write nominated section of image to buf
   bool get_section(void *buf, int x0, int y0, int w, int h) const;
@@ -53,16 +53,11 @@ class vil1_block_cache_image_impl : public vil1_image_impl
   //: Get info about block-characteristics
   bool get_property(char const *tag, void *property_value_out = 0) const;
 
-
-/* START_MANCHESTER_BINARY_IO_CODE */
-
   //: Return the name of the class;
   virtual vcl_string is_a() const;
 
   //: Return true if the name of the class matches the argument
   virtual bool is_class(vcl_string const&) const;
-
-/* END_MANCHESTER_BINARY_IO_CODE */
 
  private:
   // the underlying, uncached image.

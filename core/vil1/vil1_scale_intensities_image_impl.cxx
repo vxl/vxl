@@ -12,7 +12,7 @@
 #include <vil1/vil1_byte.h>
 #include <vxl_config.h>
 
-vil1_image vil1_scale_intensities_image_impl::get_plane(int p) const
+vil1_image vil1_scale_intensities_image_impl::get_plane(unsigned int p) const
 {
   vil1_image_impl *i = new vil1_scale_intensities_image_impl(base.get_plane(p), scale_, shift_);
   return i;
@@ -48,8 +48,6 @@ bool vil1_scale_intensities_image_impl::get_section(void * buf, int x0, int y0, 
   }
 }
 
-/* START_MANCHESTER_BINARY_IO_CODE */
-
 //: Return the name of the class;
 vcl_string vil1_scale_intensities_image_impl::is_a() const
 {
@@ -62,5 +60,3 @@ bool vil1_scale_intensities_image_impl::is_class(vcl_string const& s) const
 {
   return s==vil1_scale_intensities_image_impl::is_a() || vil1_image_impl::is_class(s);
 }
-
-/* END_MANCHESTER_BINARY_IO_CODE */

@@ -55,12 +55,12 @@ struct vil1_gif_loader_saver : public vil1_image_impl
   vil1_gif_loader_saver(vil1_stream *);
 #if 0
   vil1_gif_loader_saver(vil1_stream *is,
-                       int planes,
-                       int width,
-                       int height,
-                       int components,
-                       int bits_per_component,
-                       vil1_component_format format);
+                        int planes,
+                        int width,
+                        int height,
+                        int components,
+                        int bits_per_component,
+                        vil1_component_format format);
 #endif
   ~vil1_gif_loader_saver();
 
@@ -71,7 +71,7 @@ struct vil1_gif_loader_saver : public vil1_image_impl
   int bits_per_component() const { return 8; }
   enum vil1_component_format component_format() const { return VIL1_COMPONENT_FORMAT_UNSIGNED_INT; }
 
-  vil1_image get_plane(int i) const;
+  vil1_image get_plane(unsigned int p) const;
   bool get_section(void *buf, int x0, int y0, int width, int height) const;
   bool get_section(int image, void *buf, int x0, int y0, int width, int height) const;
   bool put_section(void const *, int, int, int, int);

@@ -29,10 +29,10 @@ vil1_skip_image_impl::~vil1_skip_image_impl()
 
 //--------------------------------------------------------------------------------
 
-vil1_image vil1_skip_image_impl::get_plane(int p) const
+vil1_image vil1_skip_image_impl::get_plane(unsigned int p) const
 {
   vil1_image_impl *i = new vil1_skip_image_impl(base.get_plane(p), skipx, skipy);
-  return i; //
+  return i;
 }
 
 bool vil1_skip_image_impl::put_section(void const * , int, int, int, int)
@@ -80,8 +80,6 @@ bool vil1_skip_image_impl::get_section(void * buf, int x0, int y0, int w, int h)
   return true;
 }
 
-/* START_MANCHESTER_BINARY_IO_CODE */
-
 //: Return the name of the class;
 vcl_string vil1_skip_image_impl::is_a() const
 {
@@ -94,5 +92,3 @@ bool vil1_skip_image_impl::is_class(vcl_string const& s) const
 {
   return s==vil1_skip_image_impl::is_a() || vil1_image_impl::is_class(s);
 }
-
-/* END_MANCHESTER_BINARY_IO_CODE */

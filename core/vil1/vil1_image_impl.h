@@ -110,18 +110,18 @@ class vil1_image_impl
   virtual enum vil1_component_format component_format() const = 0;
 
   //: return the ith plane.
-  virtual vil1_image get_plane(int ) const;
+  virtual vil1_image get_plane(unsigned int p) const;
 
   //: Copy buffer of this to BUF.
   // The buffer is stored like this for each pixel:
-  // component0(plane0,plane1,plane2,...),component1(plane0,plane1,plane2,...),... \n
+  // component0(plane0,plane1,plane2,...),component1(plane0,plane1,plane2,...),...\n
   //   total size of BUF in bytes should be (bits_per_component * components + 7) / 8
   //   i.e. rounding to the next multiple of 8 bits (only correct if 1 byte = 8 bits)
   virtual bool get_section(void* buf, int x0, int y0, int width, int height) const = 0;
 
   //: Copy plane PLANE of BUF to this.
   // The buffer should look like this for each pixel:
-  // component0(plane0,plane1,plane2,...),component1(plane0,plane1,plane2,...),... \n
+  // component0(plane0,plane1,plane2,...),component1(plane0,plane1,plane2,...),...\n
   // total size of BUF in bytes should be (bits_per_component * components + 7) / 8
   // i.e. rounding to the next multiple of 8 bits (only correct if 1 byte = 8 bits)
   virtual bool put_section(void const* buf, int x0, int y0, int width, int height) = 0;
@@ -134,16 +134,11 @@ class vil1_image_impl
   virtual bool get_property(char const* tag, void* property_value = 0) const;
   virtual bool set_property(char const* tag, void const* property_value = 0) const;
 
-
-/* START_MANCHESTER_BINARY_IO_CODE */
-
   //: Return the name of the class;
   virtual vcl_string is_a() const;
 
   //: Return true if the name of the class matches the argument
   virtual bool is_class(vcl_string const&) const;
-
-/* END_MANCHESTER_BINARY_IO_CODE */
 
  private:
   friend class vil1_image;

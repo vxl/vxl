@@ -24,11 +24,11 @@ class vil1_tiff_file_format : public vil1_file_format
   virtual char const* tag() const;
   virtual vil1_image_impl* make_input_image(vil1_stream* vs);
   virtual vil1_image_impl* make_output_image(vil1_stream* vs, int planes,
-                                            int width,
-                                            int height,
-                                            int components,
-                                            int bits_per_component,
-                                            vil1_component_format format);
+                                             int width,
+                                             int height,
+                                             int components,
+                                             int bits_per_component,
+                                             vil1_component_format format);
 };
 
 struct vil1_tiff_structures;
@@ -52,11 +52,11 @@ class vil1_tiff_generic_image : public vil1_image_impl
 
   vil1_tiff_generic_image(vil1_stream* is);
   vil1_tiff_generic_image(vil1_stream* is, int planes,
-                                               int width,
-                                               int height,
-                                               int components,
-                                               int bits_per_component,
-                                               vil1_component_format format);
+                          int width,
+                          int height,
+                          int components,
+                          int bits_per_component,
+                          vil1_component_format format);
   ~vil1_tiff_generic_image();
 
   //: TIFF specific fields relating to scanned images
@@ -80,7 +80,7 @@ class vil1_tiff_generic_image : public vil1_image_impl
   bool get_property(char const *tag, void *prop = 0) const;
   bool set_property(char const *tag, const void *prop = 0) const;
 
-  vil1_image get_plane(int ) const;
+  vil1_image get_plane(unsigned int p) const;
 };
 
 #endif // vil1_tiff_file_format_h_

@@ -87,7 +87,7 @@ class vil1_viff_generic_image : public vil1_image_impl
   //: Write BUF into image plane PLANE of this
   virtual bool put_section(void const* buf, int x0, int y0, int width, int height);
   //: Emulate a single plane image
-  virtual vil1_image get_plane(int plane) const;
+  virtual vil1_image get_plane(unsigned int p) const;
 
   //: Return the image interpreted as rgb bytes.
   virtual bool get_section_rgb_byte(void* buf, int x0, int y0, int width, int height) const;

@@ -8,8 +8,8 @@
 #include "vil1_flip_components_impl.h"
 #include <vcl_cstring.h> // for memcpy
 
-vil1_image vil1_flip_components_impl::get_plane(int i) const {
-  return new vil1_flip_components_impl(base.get_plane(i));
+vil1_image vil1_flip_components_impl::get_plane(unsigned int p) const {
+  return new vil1_flip_components_impl(base.get_plane(p));
 }
 
 static void do_swap(char* buf, int nr_bytes, int nr_swaps)

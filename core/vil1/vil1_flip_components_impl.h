@@ -24,7 +24,7 @@ class vil1_flip_components_impl : public vil1_image_impl
   int bits_per_component() const { return base.bits_per_component(); }
   vil1_component_format component_format() const { return base.component_format(); }
 
-  vil1_image get_plane(int ) const;
+  vil1_image get_plane(unsigned int p) const;
 
   bool get_section(void *buf, int x0, int y0, int w, int h) const;
   bool put_section(void const *buf, int x0, int y0, int w, int h);
