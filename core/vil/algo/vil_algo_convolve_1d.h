@@ -236,26 +236,28 @@ inline void vil2_algo_convolve_1d(const vil2_image_view<srcT>& src_im,
 }
 
 
-//: Create an image_data object which convolve kernel[x] x in [k_lo,k_hi] with srcT
-// \param kernel should point to tap 0.
-template <class destT, class kernelT, class accumT>
-inline vil2_image_data_sptr vil2_algo_convolve_1d<kernelT, accumT, destT>(
-  const vil2_image_data_sptr& src_im,
-  const destT dt,
-  const kernelT* kernel, int k_lo, int k_hi,
-  const accumT ac,
-  vil2_convolve_boundary_option start_option,
-  vil2_convolve_boundary_option end_option)
-{
-  return new vil2_algo_convolve_1d_resource<kernelT, accumT, destT>(src_im,
-    kernel, k_lo, k_hi, start_option, end_option);
-}
-
 
 //: A resource adaptor that behaves like a algo_convolve_1d'ed version of its input
 template <class kernelT, class accumT, class destT>
 class vil2_algo_convolve_1d_resource : public vil2_image_data
 {
+  //: Construct a convolve filter.
+  // You can't create one of these directly, use vil2_algo_convolve_1d instead
+  vil2_algo_convolve_1d_resource(const vil2_image_data_sptr& src,
+                                  const kernelT* kernel, int k_lo, int k_hi,
+                                  vil2_convolve_boundary_option start_option,
+                                  vil2_convolve_boundary_option end_option):
+    src_(src), kernel_(kernel), klo_(k_lo), khi_(k_hi),
+    start_option_(start_option), end_option_(end_option) {
+      // Can't do period extension yet.
+      assert (start_option != vil2_convolve_periodic_extend ||
+        end_option != vil2_convolve_periodic_extend);}
+
+  friend vil2_image_data_sptr vil2_algo_convolve_1d( const vil2_image_data_sptr& src_im, const destT dt, const kernelT* kernel,
+    int k_lo, int k_hi, const accumT ac,
+    vil2_convolve_boundary_option start_option,
+    vil2_convolve_boundary_option end_option);
+
  public:
   virtual vil2_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni, 
                                                   unsigned j0, unsigned nj) const
@@ -277,15 +279,6 @@ class vil2_algo_convolve_1d_resource : public vil2_image_data
         return 0;
     }
   }
-  vil2_algo_convolve_1d_resource(const vil2_image_data_sptr& src,
-                                  const kernelT* kernel, int k_lo, int k_hi,
-                                  vil2_convolve_boundary_option start_option,
-                                  vil2_convolve_boundary_option end_option):
-    src_(src), kernel_(kernel), klo_(k_lo), khi_(k_hi),
-    start_option_(start_option), end_option_(end_option) {
-      // Can't do period extension yet.
-      assert (start_option != vil2_convolve_periodic_extend ||
-        end_option != vil2_convolve_periodic_extend);}
 
   virtual unsigned nplanes() const { return src_->nplanes(); }
   virtual unsigned ni() const { return src_->ni(); }
@@ -331,6 +324,22 @@ class vil2_algo_convolve_1d_resource : public vil2_image_data
   int klo_, khi_;
   vil2_convolve_boundary_option start_option_, end_option_;
 };
+
+//: Create an image_data object which convolve kernel[x] x in [k_lo,k_hi] with srcT
+// \param kernel should point to tap 0.
+template <class destT, class kernelT, class accumT>
+inline vil2_image_data_sptr vil2_algo_convolve_1d<kernelT, accumT, destT>(
+  const vil2_image_data_sptr& src_im,
+  const destT dt,
+  const kernelT* kernel, int k_lo, int k_hi,
+  const accumT ac,
+  vil2_convolve_boundary_option start_option,
+  vil2_convolve_boundary_option end_option)
+{
+  return new vil2_algo_convolve_1d_resource<kernelT, accumT, destT>(src_im,
+    kernel, k_lo, k_hi, start_option, end_option);
+}
+
 
 
 #endif // vil2_algo_convolve_1d_h_
