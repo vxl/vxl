@@ -15,13 +15,15 @@ SET(bmrf_sources
     bmrf_network.cxx           bmrf_network.h            bmrf_network_sptr.h
     bmrf_network_builder_params.cxx   bmrf_network_builder_params.h  
     bmrf_network_builder.cxx   bmrf_network_builder.h   
+    bmrf_curvel_3d.cxx         bmrf_curvel_3d.h          bmrf_curvel_3d_sptr.h
+    bmrf_curve_3d_builder.cxx  bmrf_curve_3d_builder.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates bmrf_sources)
 
 ADD_LIBRARY(bmrf ${bmrf_sources})
 
-TARGET_LINK_LIBRARIES(bmrf brip vtol gevd vdgl vil vbl vnl vgl vsl)
+TARGET_LINK_LIBRARIES(bmrf brip bugl vtol gevd vdgl vil vbl vnl vgl vsl)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)
