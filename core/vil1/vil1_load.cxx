@@ -10,7 +10,7 @@
 #include <vil/vil_open.h>
 #include <vil/vil_file_format.h>
 #include <vil/vil_stream.h>
-#include <vil/vil_property.h> // for vil_property_top_row_first
+#include <vil/vil_property.h>
 #include <vil/vil_flipud.h>
 #include <vil/vil_flip_components.h>
 

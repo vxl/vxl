@@ -48,7 +48,7 @@ vil_stream *vil_open(char const* what, char const* how)
       if (vcl_strcmp(how, "r") == 0) {
         // Make an in-core stream...
         vil_stream_core *cis = new vil_stream_core();
-        cis->m_transfer((char*)what, 0, l+1, false/*write*/); /* const violation */
+        cis->write(what, l+1);
         is = cis;
       }
       else {
