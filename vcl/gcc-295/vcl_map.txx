@@ -18,11 +18,11 @@
 
 
 // Macro to instantiate the underlying _Rb_tree and its member templates.
-//template class _Rb_tree<Key, pair<Key const, T>, _Select1st<pair<Key const, T> >, Comp >;
+//template class _Rb_tree<Key, pair<Key const, T>, _Select1st<pair<Key const,T > >,Comp >;
 #define VCL_MAP_INSTANTIATE_RB_TREE_tagged(tag, Key, T, Comp) \
-template class _Rb_tree<Key, pair<Key const, T>, _Select1st<pair<Key const, T> >, Comp, allocator<T > >; \
-typedef        _Rb_tree<Key, pair<Key const, T>, _Select1st<pair<Key const, T> >, Comp, allocator<T >  > cont##tag; \
-template void cont##tag::insert_unique(cont##tag::iterator, cont##tag::iterator);
+template class _Rb_tree<Key, pair<Key const,T >, _Select1st<pair<Key const,T > >, Comp, allocator<T > >; \
+typedef        _Rb_tree<Key, pair<Key const,T >, _Select1st<pair<Key const,T > >, Comp, allocator<T >  > cont##tag; \
+template void cont##tag::insert_unique(cont##tag::iterator, cont##tag::iterator)
 #define VCL_MAP_INSTANTIATE_RB_TREE_passthrough(tag, Key, T, Comp) \
 VCL_MAP_INSTANTIATE_RB_TREE_tagged(tag, Key, T, Comp);
 #define VCL_MAP_INSTANTIATE_RB_TREE(Key, T, Comp) \
