@@ -29,7 +29,7 @@ SOURCES += vidl_vil1_io.cxx
 ifdef HAS_MPEG2
 SOURCES += vidl_vil1_mpegcodec.cxx
 SOURCES += vidl_vil1_mpegcodec_helper.cxx
-SOURCES += vidl_vil1_yuv_2_rgb.cxx
+MANPAGE_SOURCES += vidl_vil1_yuv_2_rgb.h
 endif
 
 MANPAGE_SOURCES += vidl_vil1_avicodec_sptr.h

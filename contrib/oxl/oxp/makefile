@@ -28,7 +28,7 @@ SOURCES += MovieFile.cxx
 SOURCES += MovieFileInterface.cxx
 ifeq ("$(HAS_JPEG)-$(HAS_BROKEN_AS)","1-")
 SOURCES += SGIMovieFile.cxx
-SOURCES += SGIMovieFilePrivates.cxx
+MANPAGE_SOURCES += SGIMovieFilePrivates.h
 SOURCES += SGIMovieFileWrite.cxx
 ifeq "$(TJ_GCC30)" "1"# otherwise gcc 3.0 needs too much virtual memory
 FLAGS_SGIMovieFile.cxx := -O1

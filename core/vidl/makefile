@@ -34,7 +34,7 @@ ifdef HAS_MPEG2
 SOURCES += vidl_mpegcodec.cxx
 MANPAGE_SOURCES += vidl_mpegcodec_sptr.h
 SOURCES += vidl_mpegcodec_helper.cxx
-SOURCES += vidl_yuv_2_rgb.cxx
+MANPAGE_SOURCES += vidl_yuv_2_rgb.h
 endif
 
 ifdef HAS_AVI

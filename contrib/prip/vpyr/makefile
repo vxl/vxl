@@ -4,10 +4,10 @@ LIBRARY := vpyr
 VERSION := 1.0
 
 SOURCES += vpyr_2_pyramid_base.cxx
-SOURCES += vpyr_2_pyramid_level_elts.cxx
 SOURCES += vpyr_2_tpyramid_base.cxx
 MANPAGE_SOURCES += vpyr_2_pyramid.txx
 MANPAGE_SOURCES += vpyr_2_pyramid_level.txx
+MANPAGE_SOURCES += vpyr_2_pyramid_level_elts.h
 MANPAGE_SOURCES += vpyr_2_tpyramid.txx
 MANPAGE_SOURCES += vpyr_2_tpyramid_level.txx
 MANPAGE_SOURCES += vpyr_2_tpyramid_level_elts.h
