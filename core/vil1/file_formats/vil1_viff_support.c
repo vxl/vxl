@@ -309,7 +309,6 @@ void vil_viff_freeimage(struct vil_viff_xvimage *image)
               free ((char *) image->location);
 
            free((char *) image);
-
         }
 }
 
