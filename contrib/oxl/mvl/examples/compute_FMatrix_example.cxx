@@ -16,18 +16,18 @@ int main(int argc, char**argv)
 {
   vcl_vector<HomgPoint2D> points1;
   vcl_vector<HomgPoint2D> points2;
+  int ishomg = (argc > 1 && argv[1][0] == 'h');
 
   // Read points
   while (vcl_cin.good()) {
-    int ishomg = argv[1][0] == 'h';
     points1.push_back(HomgPoint2D::read(vcl_cin,ishomg)); // Read 2 reals
     points2.push_back(HomgPoint2D::read(vcl_cin,ishomg)); // Read 2 reals
     vcl_cin >> vcl_ws; // Eat whitespace
   }
 
   {
-    // Perform the fit using the normalized linear computor.
-    FMatrixComputeLinear computor;
+    // Perform the fit using the non-normalized linear computor.
+    FMatrixComputeLinear computor(false);
     FMatrix f = computor.compute(points1, points2);
 
     vcl_cout << "FMatrixComputeLinear:\nF = " << f << vcl_endl;
@@ -39,8 +39,8 @@ int main(int argc, char**argv)
   }
 
   {
-    // Perform the fit using the 7-point estimator.
-    FMatrixCompute7Point computor;
+    // Perform the fit using the non-normalised 7-point estimator.
+    FMatrixCompute7Point computor(false);
     FMatrix f;
     vcl_vector<FMatrix*> l; l.push_back(&f);
     computor.compute(points1, points2, l);
