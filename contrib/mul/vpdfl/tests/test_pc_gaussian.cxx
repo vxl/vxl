@@ -72,7 +72,8 @@ void test_pc_gaussian()
 
 	vpdfl_pdf_base* p_pdf_built = builder.new_model();
 	
-	mbl_data_array_wrapper<vnl_vector<double> > data_array(data.begin(), n_samples);
+        // vector<T>::iterator need not be a T* (fsm)
+	mbl_data_array_wrapper<vnl_vector<double> > data_array(&data[0]/*.begin()*/, n_samples);
 	
 	builder.build(*p_pdf_built, data_array);
 	
