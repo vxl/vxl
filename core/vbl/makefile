@@ -6,12 +6,11 @@ VERSION := 1.0
 MANPAGE_SOURCES += vbl_fwd.h
 
 SOURCES += vbl_bool_ostream.cxx
-SOURCES += vbl_ref_count.cxx
+MANPAGE_SOURCES += vbl_ref_count.h
 SOURCES += vbl_sort.cxx
 MANPAGE_SOURCES += vbl_sort.txx
 SOURCES += vbl_qsort.cxx
-SOURCES += vbl_shared_pointer.cxx
-MANPAGE_SOURCES += vbl_shared_pointer.txx
+MANPAGE_SOURCES += vbl_shared_pointer.h
 MANPAGE_SOURCES += vbl_protection_traits.txx
 MANPAGE_SOURCES += vbl_smart_ptr.txx
 
