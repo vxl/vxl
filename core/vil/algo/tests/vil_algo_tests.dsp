@@ -96,6 +96,9 @@ SOURCE=.\test_algo_cartesian_differential_invariants.cxx
 # Begin Source File
 SOURCE=.\test_algo_corners.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_algo_sobel.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
