@@ -225,6 +225,16 @@ SOURCE=.\Templates/mbl_file_data_wrapper+vcl_vector+vbl_triple+double.int.int---
 # End Source File
 # Begin Source File
 
+SOURCE=.\Templates/mbl_data_array_wrapper+vcl_vector+vbl_triple+double.int.int---.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/mbl_data_collector_list+vcl_vector+vbl_triple+double.int.int---.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\mbl_data_collector_base.cxx
 
 # End Source File

@@ -385,6 +385,11 @@ SOURCE=.\Templates/mil_sample_grid_2d+uchar.double-.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\Templates/vbl_io_array_2d+mil_transform_2d-.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\mil_scale_pyramid_builder_2d.cxx
 
 # End Source File
