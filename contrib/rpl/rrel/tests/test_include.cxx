@@ -1,9 +1,11 @@
+#include <rrel/rrel_affine_est.h>
 #include <rrel/rrel_cauchy_obj.h>
 #include <rrel/rrel_estimation_problem.h>
 #include <rrel/rrel_homography2d_est.h>
 #include <rrel/rrel_homography2d_est_aff.h>
 #include <rrel/rrel_shift2d_est.h>
 #include <rrel/rrel_irls.h>
+#include <rrel/rrel_kernel_density_obj.h>
 #include <rrel/rrel_linear_regression.h>
 #include <rrel/rrel_lms_obj.h>
 #include <rrel/rrel_lts_obj.h>
@@ -21,6 +23,5 @@
 #include <rrel/rrel_tukey_obj.h>
 #include <rrel/rrel_util.h>
 #include <rrel/rrel_wls_obj.h>
-#include <rrel/rrel_kernel_density_obj.h>
 
 int main() { return 0; }
