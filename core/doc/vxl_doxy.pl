@@ -19,8 +19,8 @@ exec perl -w -x $0 ${1+"$@"}
 # patterns to be matched
 $verbpatt = "\\\\verbatim";
 $endverbpatt = "\\\\endverbatim";
-$slashslashpatt = "^\s*//";
-$slashslashcolonpatt = "^\s*//:";
+$slashslashpatt = '^\s*//';
+$slashslashcolonpatt = '^\s*//:';
 $slashstarstarpatt = "/**";
 $spacespacepatt = "  ";
 $starpatt = "*";
@@ -36,6 +36,7 @@ $verbatim = 0;
 # finish verbatim mode at the end of this line.
 $should_end_verbatim = 0;
 
+$debug = 0;
 
 # mainloop
 while (<>)
