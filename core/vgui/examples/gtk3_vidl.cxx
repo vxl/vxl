@@ -5,7 +5,7 @@
 #include <vul/vul_sprintf.h>
 #include <vgui/vgui.h>
 
-#include <vgui/vgui_load.h>
+#include <vgui/vgui_loader_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vcl_cstdlib.h>
 #include <vgui/impl/gtk/vgui_gtk_adaptor.h>
@@ -77,7 +77,7 @@ int main(int argc, char ** argv)
   vgui_image_tableau_new img_tab(im);
 
   // set initial image region :
-  vgui_load_new vs(img_tab);
+  vgui_loader_tableau_new vs(img_tab);
   vs->set_ortho(0,im.height(),im.width(),0);
 
   // plug into a GL context :
