@@ -398,7 +398,7 @@ sub process_headers {
       s/<math\/resize\.h>/<vnl\/vnl_resize.h>/;
       s/^(\#include <math\/matlab\.h>)/\#define matlab(M) M \/\/$1/;
       s/<math\/BaseSVD\.h>/<vnl\/algo\/vnl_svd.h>/;
-      s/<math\/numeric_limits(|_double|_float|_int)\.h>/<vnl\/vnl_numeric_limits.h>/;
+      s/<math\/numeric_limits(|_double|_float|_int)\.h>/<vcl_limits.h>/;
       s/<math\/numeric_traits\.h>/<vnl\/vnl_numeric_traits.h>/;
       s/<math\/complex_traits\.h>/<vnl\/vnl_complex_traits.h>/;
       s/<math\/MatOps\.h>/<vnl\/vnl_matops.h> \/\/ use vnl_matlab_print.h for pretty printing/;
@@ -823,7 +823,7 @@ sub process_lines {
       s/\bQR\b/vnl_qr<double>/g;
       s/\bBaseSVD\b/vnl_svd/g;
       s/\bSVD\b/vnl_svd<double>/g;
-      s/\bIUE_numeric_limits\b/vnl_numeric_limits/g;
+      s/\bIUE_numeric_limits\b/vcl_limits/g;
       s/\bIUE_numeric_traits\b/vnl_numeric_traits/g;
       s/\bIUE_complex_traits\b/vnl_complex_traits/g;
       s/\bComplexVectorT\b/vnl_complex_vector_t/g;

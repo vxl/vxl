@@ -1,5 +1,5 @@
 // This is core/vnl/tests/test_algo.cxx
-#include <testlib/testlib_test.h>
+
 //:
 // \file
 // \brief test miscellaneous classes and functions in vnl/algo.
@@ -23,7 +23,11 @@
 // \author Peter Vanroose, KULeuven/ESAT.
 // \date 20 September 2003
 
+#ifdef VXL_VC60 
+# include <vcl_limits> // The order of some vcl_files can cause problems: IMS
+#endif
 #include <vcl_complex.h>
+#include <testlib/testlib_test.h>
 
 #include <vnl/algo/vnl_adjugate.h>
 #include <vnl/algo/vnl_conjugate_gradient.h>

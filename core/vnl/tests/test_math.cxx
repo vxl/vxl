@@ -1,7 +1,7 @@
 #include <vcl_iostream.h>
+#include <vcl_limits.h> // for infinity()
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_complex.h>
-#include <vnl/vnl_numeric_limits.h> // for infinity()
 #include <testlib/testlib_test.h>
 
 static
@@ -72,17 +72,17 @@ void test_math()
   testlib_test_assert(" isfinite(z)    ",  vnl_math_isfinite(z));
 
   // Create Inf and -Inf:
-  float pinf_f =   vnl_numeric_limits<float>::infinity();
-  float ninf_f = - vnl_numeric_limits<float>::infinity();
-  double pinf_d =   vnl_numeric_limits<double>::infinity();
-  double ninf_d = - vnl_numeric_limits<double>::infinity();
-  long double pinf_q =   vnl_numeric_limits<long double>::infinity();
-  long double ninf_q = - vnl_numeric_limits<long double>::infinity();
+  float pinf_f =   vcl_numeric_limits<float>::infinity();
+  float ninf_f = - vcl_numeric_limits<float>::infinity();
+  double pinf_d =   vcl_numeric_limits<double>::infinity();
+  double ninf_d = - vcl_numeric_limits<double>::infinity();
+  long double pinf_q =   vcl_numeric_limits<long double>::infinity();
+  long double ninf_q = - vcl_numeric_limits<long double>::infinity();
 
   // Create NaN
-  float qnan_f = vnl_numeric_limits<float>::quiet_NaN();
-  double qnan_d = vnl_numeric_limits<double>::quiet_NaN();
-  long double qnan_q = vnl_numeric_limits<long double>::quiet_NaN();
+  float qnan_f = vcl_numeric_limits<float>::quiet_NaN();
+  double qnan_d = vcl_numeric_limits<double>::quiet_NaN();
+  long double qnan_q = vcl_numeric_limits<long double>::quiet_NaN();
 
   vcl_cout << "pinf_f = " << pinf_f << vcl_endl
            << "ninf_f = " << ninf_f << vcl_endl

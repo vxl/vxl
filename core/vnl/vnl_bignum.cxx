@@ -11,8 +11,8 @@
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
+#include <vcl_limits.h> 
 #include <vnl/vnl_math.h> // for vnl_math_isfinite(double)
-#include <vnl/vnl_numeric_limits.h> // for vnl_numeric_limits<double>::infinity()
 
 typedef unsigned short Counter;
 typedef unsigned short Data;
@@ -724,7 +724,7 @@ vnl_bignum::operator float () const
   float f = 0.0f;
   for (Counter i = this->count; i > 0; )
     f = f*0x10000 + this->data[--i];
-  if (this->is_infinity()) f = vnl_numeric_limits<float>::infinity();
+  if (this->is_infinity()) f = vcl_numeric_limits<float>::infinity();
   return this->sign*f;
 }
 
@@ -736,7 +736,7 @@ vnl_bignum::operator double () const
   double d = 0.0;
   for (Counter i = this->count; i > 0; )
     d = d*0x10000 + this->data[--i];
-  if (this->is_infinity()) d = vnl_numeric_limits<double>::infinity();
+  if (this->is_infinity()) d = vcl_numeric_limits<double>::infinity();
   return this->sign*d;
 }
 
@@ -747,7 +747,7 @@ vnl_bignum::operator long double () const
   long double d = 0.0;
   for (Counter i = this->count; i > 0; )
     d = d*0x10000 + this->data[--i];
-  if (this->is_infinity()) d = vnl_numeric_limits<long double>::infinity();
+  if (this->is_infinity()) d = vcl_numeric_limits<long double>::infinity();
   return this->sign*d;
 }
 

@@ -6,6 +6,7 @@
 // numeric_limits
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 28 Aug 96
+// \deprecated in favour of vcl_limits.
 //
 //-----------------------------------------------------------------------------
 

@@ -3,6 +3,7 @@
 // converted from COOL/test/test_BigNum.C by Peter Vanroose, 25 April 2002.
 
 #include <vcl_iostream.h>
+#include <vcl_limits.h> // for vnl_numeric_limits<double>::infinity()
 #ifndef __alpha__ // On Alpha, compiler runs out of memory when including these
 # include <vcl_sstream.h>
 # include <vcl_iomanip.h>
@@ -10,7 +11,6 @@
 #include <vnl/vnl_bignum.h>
 #include <vnl/vnl_bignum_traits.h>
 #include <vnl/vnl_numeric_traits.h> // for vnl_numeric_traits<double>::maxval
-#include <vnl/vnl_numeric_limits.h> // for vnl_numeric_limits<double>::infinity()
 
 #include <testlib/testlib_test.h>
 
@@ -178,7 +178,7 @@ static void run_conversion_operator_tests()
        (vnl_numeric_traits<float>::maxval), (float) vnl_bignum(vnl_numeric_traits<float>::maxval));
   TEST("float(vnl_bignum(-vnl_numeric_traits<float>::maxval)) == -vnl_numeric_traits<float>::maxval",
        (-vnl_numeric_traits<float>::maxval), float(vnl_bignum(-vnl_numeric_traits<float>::maxval)));
-  TEST("float(vnl_bignum(\"+Inf\")) == +Inf", (float) vnl_bignum("+Inf"), vnl_numeric_limits<float>::infinity());
+  TEST("float(vnl_bignum(\"+Inf\")) == +Inf", (float) vnl_bignum("+Inf"), vcl_numeric_limits<float>::infinity());
 
   b = vnl_numeric_traits<double>::maxval;
   ++b;
@@ -200,7 +200,7 @@ static void run_conversion_operator_tests()
        (double) vnl_bignum(vnl_numeric_traits<double>::maxval), vnl_numeric_traits<double>::maxval);
   TEST("double(vnl_bignum(-vnl_numeric_traits<double>::maxval)) == -vnl_numeric_traits<double>::maxval",
        (double) vnl_bignum(-vnl_numeric_traits<double>::maxval), -vnl_numeric_traits<double>::maxval);
-  TEST("double(vnl_bignum(\"+Inf\")) == +Inf", (double) vnl_bignum("+Inf"), vnl_numeric_limits<double>::infinity());
+  TEST("double(vnl_bignum(\"+Inf\")) == +Inf", (double) vnl_bignum("+Inf"), vcl_numeric_limits<double>::infinity());
 
   // Test for bug in bignum::dtobignum()
   // it wasn't resetting the value at the start.

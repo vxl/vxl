@@ -22,7 +22,7 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_scatter_3x3.h> // used in most_orthogonal_vector()
-#include <vnl/vnl_numeric_limits.h> // for infinity
+#include <vcl_limits.h> // for infinity
 #include <vnl/algo/vnl_real_eigensystem.h> // used for conic intersection
 #include <vnl/vnl_diag_matrix.h>  // used for conic intersection
 
@@ -124,7 +124,7 @@ vgl_homg_operators_2d<T>::distance_squared(const vgl_homg_point_2d<T>& p1,
 
   if (p1.w() == 0 || p2.w() == 0) {
     vcl_cerr << "vgl_homg_operators_2d<T>::distance_squared() -- point at infinity\n";
-    return vnl_numeric_limits<T>::infinity();
+    return vcl_numeric_limits<T>::infinity();
   }
 
   double scale1 = 1.0/p1.w();

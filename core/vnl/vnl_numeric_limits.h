@@ -14,12 +14,14 @@
 //
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   28 Aug 96
+// \deprecated in favour of vcl_limits.h
 //
 // \verbatim
 //  Modifications
 //   LSB (Manchester) 23/3/01 Documentation tidied
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //   Jan.2003 - Peter Vanroose - bug fix in infinity() and NaN(): LITTLE_ENDIAN
+//   Oct.2003 - Ian Scott - deprecated in favour of vcl_numeric_limits
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
