@@ -7,4 +7,7 @@ IF(BUILD_TESTING)
   # test
   ADD_EXECUTABLE( netlib_lsqr_test lsqr-test.c )
   ADD_TEST( netlib_lsqr_test netlib_lsqr_test )
+  # test
+  ADD_EXECUTABLE( netlib_tricall tricall.c )
+  ADD_TEST( netlib_tricall netlib_tricall )
 ENDIF(BUILD_TESTING)

@@ -277,6 +277,9 @@ SET( netlib_sources
   dtrmv.c
   dtrsv.c
   i_dnnt.c
+
+  # The "Triangle" program of Jonathan Richard Shewchuk
+  triangle.h triangle.c
 )
 
 ADD_LIBRARY( netlib ${netlib_sources} )
@@ -285,6 +288,10 @@ IF(UNIX)
   TARGET_LINK_LIBRARIES( netlib m )
 ENDIF(UNIX)
 
-IF( BUILD_TESTING)
+IF(BUILD_TESTING)
   SUBDIRS(tests)
-ENDIF( BUILD_TESTING)
+ENDIF(BUILD_TESTING)
+
+IF(BUILD_EXAMPLES)
+  SUBDIRS(examples)
+ENDIF(BUILD_EXAMPLES)
