@@ -750,36 +750,6 @@ SOURCE=.\Templates/vgui_vil2_section_buffer_apply+uint_16-.cxx
 SOURCE=.\Templates/vgui_vil2_section_buffer_apply+uint_32-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_vil2_section_buffer_apply+vil2_rgb+byte--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vgui_vil2_section_buffer_apply+vil2_rgb+double--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vgui_vil2_section_buffer_apply+vil2_rgb+float--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vgui_vil2_section_buffer_apply+vil2_rgb+int_16--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vgui_vil2_section_buffer_apply+vil2_rgb+int_32--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vgui_vil2_section_buffer_apply+vil2_rgb+sbyte--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vgui_vil2_section_buffer_apply+vil2_rgb+uint_16--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vgui_vil2_section_buffer_apply+vil2_rgb+uint_32--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vgui_vil2_section_buffer_apply+vil2_rgba+byte--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vgui_vil2_section_buffer_apply+vil2_rgba+float--.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vgui_vil2_section_buffer.cxx
 # End Source File
 # End Group
