@@ -24,8 +24,8 @@
 #include <mvl/HomgNorm2D.h>
 
 FMatrixComputeLinear::FMatrixComputeLinear(bool precondition, bool rank2_truncate):
-  _precondition(precondition),
-  _rank2_truncate(rank2_truncate)
+  precondition_(precondition),
+  rank2_truncate_(rank2_truncate)
 {
 }
 
@@ -56,7 +56,7 @@ bool FMatrixComputeLinear::compute (vcl_vector<HomgPoint2D>& points1,
     return false;
   }
 
-  if (_precondition) {
+  if (precondition_) {
     // Condition points
     HomgNorm2D conditioned1(points1);
     HomgNorm2D conditioned2(points2);
@@ -92,7 +92,7 @@ bool FMatrixComputeLinear::compute_preconditioned (vcl_vector<HomgPoint2D>& poin
   F->set(vnl_double_3x3(svd.nullvector().data_block()));
 
   // Rank-truncate F
-  if (_rank2_truncate)
+  if (rank2_truncate_)
     F->set_rank2_using_svd();
 
   return true;

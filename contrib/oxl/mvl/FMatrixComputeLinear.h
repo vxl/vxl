@@ -33,37 +33,35 @@
 class FMatrixComputeLinear : public FMatrixCompute
 {
  public:
-//: Initialize FMatrixComputeLinear object.
-//  If precondition = false, points are not conditioned prior to computation.
-// If rank2_truncate = false, the resulting solution is not forced to rank 2
-// using the vnl_svd<double>.
+  //: Initialize FMatrixComputeLinear object.
+  //  If precondition = false, points are not conditioned prior to computation.
+  // If rank2_truncate = false, the resulting solution is not forced to rank 2
+  // using the vnl_svd<double>.
   FMatrixComputeLinear(bool precondition = true, bool rank2_truncate = true);
 
   // Computations--------------------------------------------------------------
 
-//: Compute a fundamental matrix for a set of point matches.
-//
-// Return false if the calculation fails or there are fewer than eight point
-// matches in the list.
-//
+  //: Compute a fundamental matrix for a set of point matches.
+  //
+  // Return false if the calculation fails or there are fewer than eight point
+  // matches in the list.
+  //
   bool compute(PairMatchSetCorner&, FMatrix* F);
 
-//: Interface to above using arrays of HomgPoint2D.
-//  Makes a PairMatchSetCorner, and then calls the compute method above.
+  //: Interface to above using arrays of HomgPoint2D.
+  //  Makes a PairMatchSetCorner, and then calls the compute method above.
   bool compute(vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&, FMatrix* F);
 
-//: Interface to above using preconditioned points
+  //: Interface to above using preconditioned points
   bool compute_preconditioned(vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&, FMatrix* F);
 
-//: Return an FMatrix computed as above.
-  FMatrix compute(PairMatchSetCorner& matches) { return FMatrixCompute::compute(matches); }
-  FMatrix compute(vcl_vector<HomgPoint2D>& points1, vcl_vector<HomgPoint2D>& points2) {
-    return FMatrixCompute::compute(points1, points2);
-  }
+  inline FMatrix compute(PairMatchSetCorner& p) { return FMatrixCompute::compute(p); }
+  inline FMatrix compute(vcl_vector<HomgPoint2D>& p1, vcl_vector<HomgPoint2D>& p2)
+    { return FMatrixCompute::compute(p1,p2); }
 
  private:
-  bool _precondition;
-  bool _rank2_truncate;
+  bool precondition_;
+  bool rank2_truncate_;
 };
 
 #endif // FMatrixComputeLinear_h_
