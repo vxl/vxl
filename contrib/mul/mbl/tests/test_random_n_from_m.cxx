@@ -1,6 +1,7 @@
 // This is mul/mbl/tests/test_random_n_from_m.cxx
 #include <vcl_iostream.h>
 #include <mbl/mbl_random_n_from_m.h>
+#include <testlib/testlib_test.h>
 
 void test_random_n_from_m()
 {
@@ -33,4 +34,4 @@ void test_random_n_from_m()
   TEST("None not chosen from none",not_chosen.size(),0);
 }
 
-TESTLIB_DEFINE_MAIN(test_random_n_from_m);
+TESTMAIN(test_random_n_from_m);

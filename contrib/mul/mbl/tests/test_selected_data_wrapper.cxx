@@ -49,4 +49,4 @@ void test_selected_data_wrapper()
 }
 
 
-TESTLIB_DEFINE_MAIN(test_selected_data_wrapper);
+TESTMAIN(test_selected_data_wrapper);

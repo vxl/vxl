@@ -1,6 +1,7 @@
 // This is mul/mbl/tests/test_combination.cxx
 #include <vcl_iostream.h>
 #include <mbl/mbl_combination.h>
+#include <testlib/testlib_test.h>
 
 void test_combination()
 {
@@ -27,4 +28,4 @@ void test_combination()
   }
 }
 
-TESTLIB_DEFINE_MAIN(test_combination);
+TESTMAIN(test_combination);

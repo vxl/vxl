@@ -54,4 +54,4 @@ void test_rbf_network()
   }
 }
 
-TESTLIB_DEFINE_MAIN(test_rbf_network);
+TESTMAIN(test_rbf_network);

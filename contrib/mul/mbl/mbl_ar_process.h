@@ -13,6 +13,9 @@
 #include <vnl/vnl_vector.h>
 #include <vcl_vector.h>
 
+
+class vnl_random;
+
 //: Compute the parameters of a second order autoregressive process.
 template<class T>
 class mbl_ar_process
@@ -54,7 +57,9 @@ class mbl_ar_process
 
   //: Prediction
   // of a vector given the two previous vectors
-  vnl_vector<T> predict(vnl_vector<T>& Xm1, vnl_vector<T>& Xm2);
+  // \param rng Use an externally provided random number generator,
+  // rather than one statically local to the function.
+  vnl_vector<T> predict(vnl_vector<T>& Xm1, vnl_vector<T>& Xm2, vnl_random *rng=0);
 };
 
 //: Write  to binary stream

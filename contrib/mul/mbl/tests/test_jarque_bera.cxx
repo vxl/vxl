@@ -3,6 +3,7 @@
 #include <vcl_vector.h>
 #include <mbl/mbl_jarque_bera.h>
 #include <vnl/vnl_random.h>
+#include <testlib/testlib_test.h>
 
 void test_jarque_bera()
 {
@@ -30,4 +31,4 @@ void test_jarque_bera()
     0.6100, 10-3);
 }
 
-TESTLIB_DEFINE_MAIN(test_gamma);
+TESTMAIN(test_jarque_bera);

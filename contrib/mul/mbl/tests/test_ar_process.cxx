@@ -4,6 +4,7 @@
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_matrix.h>
+#include <testlib/testlib_test.h>
 
 vnl_vector<double> arp_mean(const vcl_vector<vnl_vector<double> >& v)
 {
@@ -52,8 +53,7 @@ void test_ar_process()
            << " Testing mbl_ar_process\n"
            << "************************\n";
 
-  vnl_random mz_random;
-  mz_random.reseed(1000);
+  vnl_random mz_random(1000); //Seed
 
   // A, B and C are random diagonal matrices:
   vnl_matrix<double> A(2,2,0.0),B(2,2,0.0),C(2,2,0.0); // initialise to 0
@@ -98,7 +98,7 @@ void test_ar_process()
   glist.push_back(vlist[1]);
 
   for (unsigned int i=0;i<SIZE;i++)
-    glist.push_back(arp.predict(glist[i],glist[i+1]));
+    glist.push_back(arp.predict(glist[i],glist[i+1], &mz_random));
 
   vnl_vector<double> dm=arp_mean(vlist)-arp_mean(glist);
   vnl_vector<double> ds=arp_vars(vlist)-arp_vars(glist);
@@ -122,7 +122,7 @@ void test_ar_process()
   glist.push_back(vlist[1]);
 
   for (unsigned int i=0;i<SIZE;i++)
-    glist.push_back(arp.predict(glist[i],glist[i+1]));
+    glist.push_back(arp.predict(glist[i],glist[i+1], &mz_random));
 
   dm=arp_mean(vlist)-arp_mean(glist);
   vnl_matrix<double> dC=arp_covar(vlist)-arp_covar(glist);
@@ -138,4 +138,4 @@ void test_ar_process()
   TEST("Similar covariance matrix",dC.array_inf_norm()<0.1,true);
 }
 
-TESTLIB_DEFINE_MAIN(test_ar_process);
+TESTMAIN(test_ar_process);

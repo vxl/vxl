@@ -49,4 +49,4 @@ void test_parse_block()
   vcl_cout << "\n\n";
 }
 
-TESTLIB_DEFINE_MAIN(test_parse_block);
+TESTMAIN(test_parse_block);

@@ -1,6 +1,7 @@
 // This is mul/mbl/tests/test_gamma.cxx
 #include <vcl_iostream.h>
 #include <mbl/mbl_select_n_from_m.h>
+#include <testlib/testlib_test.h>
 
 void test_select_n_from_m()
 {
@@ -69,4 +70,4 @@ void test_select_n_from_m()
   TEST("7 from 6 = no combinations",count,0);
 }
 
-TESTLIB_DEFINE_MAIN(test_select_n_from_m);
+TESTMAIN(test_select_n_from_m);

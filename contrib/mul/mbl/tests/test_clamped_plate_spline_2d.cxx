@@ -64,4 +64,4 @@ void test_clamped_plate_spline_2d()
     test_cps_at_fixed_points(i);
  }
 
-TESTLIB_DEFINE_MAIN(test_clamped_plate_spline_2d);
+TESTMAIN(test_clamped_plate_spline_2d);

@@ -107,4 +107,4 @@ void test_thin_plate_spline_weights_3d()
     test_tpsw3d_at_fixed_points_with_weights(i);
 }
 
-TESTLIB_DEFINE_MAIN( test_thin_plate_spline_weights_3d );
+TESTMAIN( test_thin_plate_spline_weights_3d );

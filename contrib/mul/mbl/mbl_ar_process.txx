@@ -67,18 +67,23 @@ bool mbl_ar_process<T>::is_class(vcl_string const& s) const
 // of a vcl_vector given the two previous vectors
 template<class T>
 vnl_vector<T> mbl_ar_process<T>::predict(vnl_vector<T>& Xm1,
-                                         vnl_vector<T>& Xm2)
+                                         vnl_vector<T>& Xm2,
+										 vnl_random *rng/*=0*/)
 {
   vnl_vector<T> Xm0; // uninitialised
   if (Xm1.size()!=Xm2.size() || Xm1.size()!=Xm.size()) return Xm0;
 
   vnl_vector<T> wk(Xm.size());
 
-  static vnl_random mz_random;
+  if (!rng)
+  {
+    static vnl_random mz_random;
+	rng = &mz_random;
+  }
 
   for (unsigned int i=0;i<Xm.size();i++)
   {
-    wk[i]=(T)mz_random.normal();
+    wk[i]=(T)rng->normal();
   }
 
   return Xm+A_2*(Xm2-Xm)+A_1*(Xm1-Xm)+B_0*wk;

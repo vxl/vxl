@@ -2,6 +2,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
 #include <mbl/mbl_stats_1d.h>
+#include <testlib/testlib_test.h>
 
 void test_stats_1d()
 {
@@ -28,4 +29,4 @@ void test_stats_1d()
   TEST("Equality operator",stats==stats2,true);
 }
 
-TESTLIB_DEFINE_MAIN(test_stats_1d);
+TESTMAIN(test_stats_1d);

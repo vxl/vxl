@@ -49,4 +49,4 @@ void test_matrix_products()
   TEST("mbl_matrix_product_adb",dCWB.absolute_value_max()<1e-6,true);
 }
 
-TESTLIB_DEFINE_MAIN(test_matrix_products);
+TESTMAIN(test_matrix_products);

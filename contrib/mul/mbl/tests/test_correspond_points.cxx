@@ -2,6 +2,7 @@
 #include <vcl_iostream.h>
 #include <mbl/mbl_correspond_points.h>
 #include <vnl/vnl_random.h>
+#include <testlib/testlib_test.h>
 
 void test_correspond_points()
 {
@@ -113,4 +114,4 @@ void test_correspond_points()
 #endif // 0
 }
 
-TESTLIB_DEFINE_MAIN(test_correspond_points);
+TESTMAIN(test_correspond_points);

@@ -121,4 +121,4 @@ void test_stochastic_data_collector()
 }
 
 
-TESTLIB_DEFINE_MAIN(test_stochastic_data_collector);
+TESTMAIN(test_stochastic_data_collector);

@@ -214,4 +214,4 @@ void test_lda()
   TEST_NEAR("Test prop correct prop1>0.8", prop1, 1.0, 0.2);
 }
 
-TESTLIB_DEFINE_MAIN(test_lda);
+TESTMAIN(test_lda);

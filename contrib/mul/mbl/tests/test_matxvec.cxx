@@ -38,4 +38,4 @@ void test_matxvec()
   TEST("mbl_matxvec_prod_vm x(3)",vcl_fabs(x(3)-175)<1e-8,true);
 }
 
-TESTLIB_DEFINE_MAIN(test_matxvec);
+TESTMAIN(test_matxvec);

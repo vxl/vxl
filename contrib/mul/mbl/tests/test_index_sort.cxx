@@ -62,4 +62,4 @@ void test_index_sort()
   TEST("Order correct",order_ok,true);
 }
 
-TESTLIB_DEFINE_MAIN(test_index_sort);
+TESTMAIN(test_index_sort);

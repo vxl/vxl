@@ -2,6 +2,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
 #include <mbl/mbl_sum_1d.h>
+#include <testlib/testlib_test.h>
 
 void test_sum_1d()
 {
@@ -32,4 +33,4 @@ void test_sum_1d()
   TEST("Addition",stats4.nObs()==10 && vcl_fabs(stats4.mean()-4.5)<1e-6,true);
 }
 
-TESTLIB_DEFINE_MAIN(test_sum_1d);
+TESTMAIN(test_sum_1d);

@@ -36,4 +36,4 @@ void test_histogram()
   TEST("Equality operator",histo==histo2,true);
 }
 
-TESTLIB_DEFINE_MAIN(test_histogram);
+TESTMAIN(test_histogram);

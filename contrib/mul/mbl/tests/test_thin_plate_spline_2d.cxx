@@ -55,4 +55,4 @@ void test_thin_plate_spline_2d()
     test_tps_at_fixed_points(i);
  }
 
-TESTLIB_DEFINE_MAIN(test_thin_plate_spline_2d);
+TESTMAIN(test_thin_plate_spline_2d);

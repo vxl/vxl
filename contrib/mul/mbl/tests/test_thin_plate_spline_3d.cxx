@@ -57,4 +57,4 @@ void test_thin_plate_spline_3d()
     test_tps3d_at_fixed_points(i);
  }
 
-TESTLIB_DEFINE_MAIN(test_thin_plate_spline_3d);
+TESTMAIN(test_thin_plate_spline_3d);

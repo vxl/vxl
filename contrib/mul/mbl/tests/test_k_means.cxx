@@ -185,4 +185,4 @@ void test_k_means()
   vcl_cout << "\n\n";
 }
 
-TESTLIB_DEFINE_MAIN(test_k_means);
+TESTMAIN(test_k_means);

@@ -1,6 +1,7 @@
 // This is mul/mbl/tests/test_gamma.cxx
 #include <vcl_iostream.h>
 #include <mbl/mbl_gamma.h>
+#include <testlib/testlib_test.h>
 
 void test_gamma()
 {
@@ -17,4 +18,4 @@ void test_gamma()
   TEST_NEAR("mbl_erf(-inf)",         mbl_erf(-1e9),            -1.0,  1e-8);
 }
 
-TESTLIB_DEFINE_MAIN(test_gamma);
+TESTMAIN(test_gamma);

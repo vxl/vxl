@@ -138,4 +138,4 @@ void test_read_props()
   vcl_cout << "\n\n";
 }
 
-TESTLIB_DEFINE_MAIN(test_read_props);
+TESTMAIN(test_read_props);

@@ -23,4 +23,4 @@ void test_lru_cache()
   TEST("Lookup 2 hits -2",*cache.lookup(2), -2);
 }
 
-TESTLIB_DEFINE_MAIN(test_lru_cache);
+TESTMAIN(test_lru_cache);

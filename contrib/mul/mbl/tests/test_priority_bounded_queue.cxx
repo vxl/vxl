@@ -27,4 +27,4 @@ void test_priority_bounded_queue()
   TEST("After 3 pops, Priority queue now empty ", pq.size(), 0);
 }
 
-TESTLIB_DEFINE_MAIN(test_priority_bounded_queue);
+TESTMAIN(test_priority_bounded_queue);
