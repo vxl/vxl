@@ -29,30 +29,29 @@ vpyr_2_pyramid<TLevel>::~vpyr_2_pyramid()
 template <class TLevel>
 vpyr_2_pyramid<TLevel> & vpyr_2_pyramid<TLevel>::operator=(const self_type &right)
 {
-    if (this!=&right)
+  if (this!=&right)
+  {
+    clear() ;
+    _base_map.set_structure(right) ;
+    initialise_levels(right.nb_levels());
+    for (int i=0; i<nb_levels(); ++i)
     {
-      clear() ;
-      _base_map.set_structure(right) ;
-      initialise_levels(right.nb_levels());
-      for (int i=0; i<nb_levels();++i)
-      {
-        level(i).set_nb_darts(right.level(i).nb_darts()) ;
-      }
+      level(i).set_nb_darts(right.level(i).nb_darts()) ;
     }
-    return *this ;
+  }
+  return *this ;
 }
 
 template <class TLevel>
 void vpyr_2_pyramid<TLevel>::initialise_levels(int nb_levels)
 {
-    int i ;
-    clear() ;
-    for (i=0; i<_level.size()-1;++i)
-    {
-        level_type tmp(i,(typename level_type::pyramid_type&)*this) ;
-        _level.insert(level_array_type::value_type(i,tmp)) ;
-    }
-    (--_level.end())->second.set_level_index(vmap_top_level_index()) ;
+  clear() ;
+  for (unsigned int i=0; i+1<_level.size(); ++i)
+  {
+    level_type tmp(i,(typename level_type::pyramid_type&)*this) ;
+    _level.insert(level_array_type::value_type(i,tmp)) ;
+  }
+  (--_level.end())->second.set_level_index(vmap_top_level_index()) ;
 }
 #endif // 0
 
@@ -84,15 +83,16 @@ template <class TLevel>
 template <class M>
 void vpyr_2_pyramid<TLevel>::set_base_structure(const M & arg)
 {
-    _base_map.set_structure(arg) ;
-    _level.clear() ;
-    _level.insert(level_array_type::value_type(::vmap_top_level_index(),
-                  level_type(::vmap_top_level_index(),(typename level_type::pyramid_type&) *this))) ;
+  _base_map.set_structure(arg) ;
+  _level.clear() ;
+  _level.insert(level_array_type::value_type(::vmap_top_level_index(),
+                level_type(::vmap_top_level_index(),(typename level_type::pyramid_type&) *this))) ;
 }
 
 template <class TLevel>
 bool vpyr_2_pyramid<TLevel>::valid()
 {
+  return false;
 }
 
 template <class TLevel>

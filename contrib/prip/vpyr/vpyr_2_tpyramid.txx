@@ -28,38 +28,39 @@ vpyr_2_tpyramid<TLevel>::~vpyr_2_tpyramid()
 template <class TLevel>
 vpyr_2_tpyramid<TLevel> & vpyr_2_tpyramid<TLevel>::operator=(const self_type &right)
 {
-    if (this!=&rigth)
+  if (this!=&rigth)
+  {
+    _Base::operator=(right) ;
+    vertex_sequence_iterator first_vertex=base_map().begin_vertex_sequence(), last_vertex=base_map().end_vertex_sequence();
+    edge_sequence_iterator firstEdge=base_map().begin_edge_sequence(), lastEdge=base_map().end_edge_sequence();
+    face_sequence_iterator firstFace=base_map().begin_face_sequence(), lastFace=base_map().end_face_sequence();
+    for (int i=0; i<_level.size();++i)
     {
-      _Base::operator=(right) ;
-      vertex_sequence_iterator first_vertex=base_map().begin_vertex_sequence(), last_vertex=base_map().end_vertex_sequence();
-      edge_sequence_iterator firstEdge=base_map().begin_edge_sequence(), lastEdge=base_map().end_edge_sequence();
-      face_sequence_iterator firstFace=base_map().begin_face_sequence(), lastFace=base_map().end_face_sequence();
-      for (int i=0; i<_level.size();++i)
-      {
-        //first_vertex=&base_map().vertex((*right._level[i].begin_base_vertex())->index()) ;
-        last_vertex=base_map().begin_vertex_sequence()+(right.level(i).end_base_vertex()-right.base_map().begin_vertex_sequence()) ;
-        level(i).set_vertex_sequence(first_vertex,last_vertex) ;
-        //firstEdge=&base_map().edge((*right._level[i].beginbase_edge())->index()) ;
-        lastEdge=base_map().begin_edge_sequence()+(right.level(i).endbase_edge()-right.base_map().begin_edge_sequence()) ;
-        level(i).set_edge_sequence(firstEdge,lastEdge) ;
-        //firstFace=&base_map().face((*right._level[i].beginbase_type())->index()) ;
-        lastFace=base_map().begin_face_sequence()+(right.level(i).endbase_type()-right.base_map().begin_face_sequence()) ;
-        level(i).set_face_sequence(firstFace,lastFace) ;
-      }
+      //first_vertex=&base_map().vertex((*right._level[i].begin_base_vertex())->index()) ;
+      last_vertex=base_map().begin_vertex_sequence()+(right.level(i).end_base_vertex()-right.base_map().begin_vertex_sequence()) ;
+      level(i).set_vertex_sequence(first_vertex,last_vertex) ;
+      //firstEdge=&base_map().edge((*right._level[i].beginbase_edge())->index()) ;
+      lastEdge=base_map().begin_edge_sequence()+(right.level(i).endbase_edge()-right.base_map().begin_edge_sequence()) ;
+      level(i).set_edge_sequence(firstEdge,lastEdge) ;
+      //firstFace=&base_map().face((*right._level[i].beginbase_type())->index()) ;
+      lastFace=base_map().begin_face_sequence()+(right.level(i).endbase_type()-right.base_map().begin_face_sequence()) ;
+      level(i).set_face_sequence(firstFace,lastFace) ;
     }
-    return *this ;
+  }
+  return *this ;
 }
 #endif // 0
 
 template <class TLevel>
 bool vpyr_2_tpyramid<TLevel>::valid()
 {
+  return false;
 }
 
 template <class TLevel>
 void vpyr_2_tpyramid<TLevel>::clear()
 {
-  _Base::clear() ;
+  _Base::clear();
 }
 
 template <class TLevel>
