@@ -37,17 +37,17 @@ SOURCE_FILES( tiff_sources
   tif_zip.c
 )
 
-IF(WIN32)
+IF(UNIX)
+  SOURCE_FILES( tiff_sources
+    tif_unix.c
+  )
+ELSE(UNIX)
   ADD_DEFINITIONS( -DTIF_PLATFORM_CONSOLE)
 
   SOURCE_FILES( tiff_sources
     tif_win32.c
   )
-ELSE(WIN32)
-  SOURCE_FILES( tiff_sources
-    tif_unix.c
-  )
-ENDIF(WIN32)
+ENDIF(UNIX)
 
 IF (WIN32)
   IF (NOT CYGWIN)
