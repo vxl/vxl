@@ -326,7 +326,7 @@ PMatrix operator*(const PMatrix& P, const HMatrix3D& H)
 //-----------------------------------------------------------------------------
 //
 //: Return the element of the matrix at the specified indices
-inline double
+double
 PMatrix::get (unsigned int row_index, unsigned int col_index) const
 {
   return _p_matrix. get (row_index, col_index);
