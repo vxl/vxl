@@ -19,6 +19,8 @@ SOURCES += vdgl_digital_curve.cxx
 SOURCES += vdgl_digital_region.cxx
 
 SOURCES += vdgl_fit_line.cxx
+SOURCES += vdgl_fit_lines.cxx
+SOURCES += vdgl_fit_lines_params.cxx
 SOURCES += vdgl_ortho_regress.cxx
 SOURCES += vdgl_OrthogRegress.cxx
 
