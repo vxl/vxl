@@ -3,31 +3,29 @@ include ${IUEROOT}/vxl/vil/config.mk
 
 TESTMAIN = test_driver.cxx
 
+IULIBS = -lvil -lvpl -lvul -ltestlib
+
 # general reader/saver tester
-SOURCES += test_save_load_image.cxx
+TESTS += test_save_load_image.cxx
 
 # specific testers:
 
 # pnm:
-SOURCES += test_load.cxx
+TESTS += test_load.cxx
 #memory_image:
-SOURCES += test_memory_image.cxx
-SOURCES += test_memory_image_of.cxx
+TESTS += test_memory_image.cxx
+TESTS += test_memory_image_of.cxx
 #other:
-SOURCES += test_write_endian.cxx
-SOURCES += test_interpolate.cxx
-SOURCES += test_flipud.cxx
-SOURCES += test_colour_space.cxx
-SOURCES += test_copy.cxx
-SOURCES += test_file_format_read.cxx
-SOURCES += test_include.cxx
-SOURCES += test_assign.cxx
-
-PARAMS_test_driver := test_save_load_image
+TESTS += test_write_endian.cxx
+TESTS += test_interpolate.cxx
+TESTS += test_flipud.cxx
+TESTS += test_colour_space.cxx
+TESTS += test_copy.cxx
 PARAMS_test_copy := square.pgm
+TESTS += test_file_format_read.cxx
 PARAMS_test_file_format_read := file_read_data
-
-IULIBS = -lvil -lvpl -lvul -ltestlib
+TESTS += test_include.cxx
+TESTS += test_assign.cxx
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
