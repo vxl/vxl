@@ -14,6 +14,7 @@
 #include <mil/mil_gauss_reduce_2d.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
+#include <vnl/vnl_math.h> // for sqrt2
 
 //=======================================================================
 // Dflt ctor
@@ -195,11 +196,11 @@ void mil_gaussian_pyramid_builder_2d<T>::build(mil_image_pyramid& image_pyr,
 
     // Estimate width of pixels in base image
     vgl_point_2d<double>  c0(0.5*(nx-1),0.5*(ny-1));
-    vgl_point_2d<double>  c1 = c0 + vgl_point_2d<double> (1,1);
+    vgl_point_2d<double>  c1 = c0 + vgl_vector_2d<double> (1,1);
     mil_transform_2d im2world = base_image.world2im().inverse();
-    vgl_point_2d<double>  dw = im2world(c1) - im2world(c0);
+    vgl_vector_2d<double>  dw = im2world(c1) - im2world(c0);
 
-    double base_pixel_width = vcl_sqrt(0.5*(dw.x()*dw.x() + dw.y()*dw.y()));
+    double base_pixel_width = dw.length()/vnl_math::sqrt2;
     double scale_step = 2.0;
 
     image_pyr.setWidths(base_pixel_width,scale_step);

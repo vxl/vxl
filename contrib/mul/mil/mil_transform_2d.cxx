@@ -352,7 +352,7 @@ vgl_point_2d<double>  mil_transform_2d::operator()(double x, double y) const
     return vgl_point_2d<double> (); // To keep over-zealous compilers happy
 }
 
-vgl_point_2d<double>  mil_transform_2d::delta(const vgl_point_2d<double> & p, const vgl_point_2d<double>  &dp) const
+vgl_vector_2d<double>  mil_transform_2d::delta(const vgl_point_2d<double>& p, const vgl_vector_2d<double>& dp) const
 {
     switch (form_)
     {
@@ -360,12 +360,12 @@ vgl_point_2d<double>  mil_transform_2d::delta(const vgl_point_2d<double> & p, co
         case Translation:
             return dp;
         case ZoomOnly :
-            return vgl_point_2d<double> (dp.x()*xx_,dp.y()*yy_);
+            return vgl_vector_2d<double> (dp.x()*xx_,dp.y()*yy_);
         case RigidBody :
         case Similarity :
         case Reflection :
         case Affine :
-            return vgl_point_2d<double> (dp.x()*xx_+dp.y()*xy_,dp.x()*yx_+dp.y()*yy_);
+            return vgl_vector_2d<double> (dp.x()*xx_+dp.y()*xy_,dp.x()*yx_+dp.y()*yy_);
         case Projective :
             return operator()(p+dp)-operator()(p);
         default:
@@ -373,7 +373,7 @@ vgl_point_2d<double>  mil_transform_2d::delta(const vgl_point_2d<double> & p, co
             vcl_abort();
     }
 
-    return vgl_point_2d<double> (); // To keep over-zealous compilers happy
+    return vgl_vector_2d<double> (); // To keep over-zealous compilers happy
 }
 
 

@@ -142,7 +142,7 @@ public:
     //: Returns change in tranformed point when original point moved by dp
     // Point dp: Movement from point
     // Returns: T(p+dp)-T(p)
-    vgl_point_2d<double>  delta(const vgl_point_2d<double> & p, const vgl_point_2d<double> & dp) const;
+    vgl_vector_2d<double>  delta(const vgl_point_2d<double> & p, const vgl_vector_2d<double> & dp) const;
 
     friend mil_transform_2d operator*(const mil_transform_2d&,
                                       const mil_transform_2d&);
