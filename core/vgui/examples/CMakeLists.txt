@@ -1,4 +1,4 @@
-INCLUDE( ${vxl_SOURCE_DIR}/core/vgui/UseVGUI.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 
 IF( HAS_VGUI )
 

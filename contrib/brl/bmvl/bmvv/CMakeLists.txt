@@ -11,7 +11,7 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bmvl)
 INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/find_xerces.cmake )
 
 # determines if vgui is built and opengl is available
-INCLUDE( ${vxl_SOURCE_DIR}/core/vgui/UseVGUI.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 
 IF(HAS_VGUI)                                       
 # sources that depend on xerces and vgui  being present

@@ -1,7 +1,7 @@
 #executables for segmentation processing
 # brl/bseg/sbin/
 
-INCLUDE( ${vxl_SOURCE_DIR}/core/vgui/UseVGUI.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/find_xerces.cmake )
 
 IF( HAS_VGUI )
