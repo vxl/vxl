@@ -66,6 +66,7 @@
 
 #include "gevd_memory_mixin.h"
 #include <vcl_iostream.h>
+#include <vil/vil_image.h>
 
 class gevd_bufferxy : public gevd_memory_mixin
 {
@@ -94,6 +95,7 @@ class gevd_bufferxy : public gevd_memory_mixin
 
       gevd_bufferxy(int X, int Y, int B);
       gevd_bufferxy(int X, int Y, int B, void* memptr);
+      gevd_bufferxy(vil_image &img);
       ~gevd_bufferxy();
       gevd_bufferxy(gevd_bufferxy const&);
 
