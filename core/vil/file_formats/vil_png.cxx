@@ -378,7 +378,9 @@ bool vil_png_image::write_header()
   png_set_write_fn(p_->png_ptr, vs_, user_write_data, user_flush_data);
 
   int color_type;
-  if (components_ == 3)
+  if (components_ == 4)
+    color_type = PNG_COLOR_TYPE_RGB_ALPHA;
+  else if (components_ == 3)
     color_type = PNG_COLOR_TYPE_RGB;
   else
     color_type = PNG_COLOR_TYPE_GRAY;
@@ -488,15 +490,26 @@ bool vil_png_image::put_view(const vil_image_view_base &view,
         for (unsigned x=0; x < view.ni(); ++x)
           rows[y0+y][x0+x] = view2(x,y);
     }
-    else
+    else if (nplanes()==3)
     {
-      assert(nplanes() == 3);
       for (unsigned y = 0; y < view.nj(); ++y)
         for (unsigned x=0; x < view.ni(); ++x)
         {
           rows[y0+y][(x0+x)*3] = view2(x,y,0);
           rows[y0+y][(x0+x)*3+1] = view2(x,y,1);
           rows[y0+y][(x0+x)*3+2] = view2(x,y,2);
+        }
+    }
+    else
+    {
+      assert(nplanes() == 4);
+      for (unsigned y = 0; y < view.nj(); ++y)
+        for (unsigned x=0; x < view.ni(); ++x)
+        {
+          rows[y0+y][(x0+x)*4] = view2(x,y,0);
+          rows[y0+y][(x0+x)*4+1] = view2(x,y,1);
+          rows[y0+y][(x0+x)*4+2] = view2(x,y,2);
+          rows[y0+y][(x0+x)*4+3] = view2(x,y,3);
         }
     }
   }
@@ -510,15 +523,26 @@ bool vil_png_image::put_view(const vil_image_view_base &view,
         for (unsigned x=0; x < view.ni(); ++x)
           *reinterpret_cast<vxl_uint_16*>(&rows[y0+y][(x0+x)*2]) = view2(x,y);
     }
-    else
+    else if (nplanes() == 3)
     {
-      assert(nplanes() == 3);
       for (unsigned y = 0; y < view.nj(); ++y)
         for (unsigned x=0; x < view.ni(); ++x)
         {
           *reinterpret_cast<vxl_uint_16*>(&rows[y0+y][(x0+x)*6]) = view2(x,y,0);
           *reinterpret_cast<vxl_uint_16*>(&rows[y0+y][(x0+x)*6+2]) = view2(x,y,1);
           *reinterpret_cast<vxl_uint_16*>(&rows[y0+y][(x0+x)*6+4]) = view2(x,y,2);
+        }
+    }
+    else 
+    {
+      assert(nplanes() == 4);
+      for (unsigned y = 0; y < view.nj(); ++y)
+        for (unsigned x=0; x < view.ni(); ++x)
+        {
+          *reinterpret_cast<vxl_uint_16*>(&rows[y0+y][(x0+x)*8]) = view2(x,y,0);
+          *reinterpret_cast<vxl_uint_16*>(&rows[y0+y][(x0+x)*8+2]) = view2(x,y,1);
+          *reinterpret_cast<vxl_uint_16*>(&rows[y0+y][(x0+x)*8+4]) = view2(x,y,2);
+          *reinterpret_cast<vxl_uint_16*>(&rows[y0+y][(x0+x)*8+6]) = view2(x,y,3);
         }
     }
   }
