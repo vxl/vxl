@@ -21,6 +21,7 @@ SOURCES += vbl_reg_exp.cxx
 SOURCES += vbl_sprintf.cxx
 SOURCES += vbl_string.cxx
 SOURCES += vbl_timer.cxx
+SOURCES += vbl_test.cxx
 SOURCES += vbl_get_timestamp.cxx
 SOURCES += vbl_timestamp.cxx  # ??
 SOURCES += vbl_user_info.cxx
