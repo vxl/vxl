@@ -23,7 +23,7 @@ vimt_image_2d_of<T>::vimt_image_2d_of()
 }
 
 template<class T>
-vimt_image_2d_of<T>::vimt_image_2d_of(int nx, int ny, int nplanes)
+vimt_image_2d_of<T>::vimt_image_2d_of(unsigned nx, unsigned ny, unsigned nplanes)
 : image_(nx,ny,nplanes)
 {
 }
@@ -45,10 +45,10 @@ template<class T> vimt_image_2d_of<T>::~vimt_image_2d_of()
 //  Resizes and sets the tranformation so that
 //  worldToIm(x,y) is valid for all points in range
 template<class T>
-void vimt_image_2d_of<T>::set_valid_region(unsigned x0, unsigned nx, unsigned y0, unsigned ny)
+void vimt_image_2d_of<T>::set_valid_region(int x0, unsigned nx, int y0, unsigned ny)
 {
   image_.resize(nx,ny);
-  world2im_.set_translation(-double(x0),-double(y0));
+  world2im_.set_translation(-x0,-y0);
 }
 
 

@@ -22,7 +22,7 @@ class vimt_image_2d_of : public vimt_image_2d
   vimt_image_2d_of();
 
   //: Create a n_plane plane image of nx x ny pixels
-  vimt_image_2d_of(int nx, int ny, int n_planes=1);
+  vimt_image_2d_of(unsigned nx, unsigned ny, unsigned n_planes=1);
 
   //: Construct from a view and a world-to-image transform (takes copies of both)
   vimt_image_2d_of(const vil2_image_view<T>& view, const vimt_transform_2d& w2i)
@@ -68,7 +68,7 @@ class vimt_image_2d_of : public vimt_image_2d
   //  world2im() translates by (-xlo,-ylo)
   //
   //  WARNING - confusing choice of parameters? Not consistent with vil2_image_view
-  void set_valid_region(unsigned x0, unsigned nx, unsigned y0, unsigned ny);
+  void set_valid_region(int x0, unsigned nx, int y0, unsigned ny);
 
   //: Take a deep copy of image (copy data, not just pointers)
   void deep_copy(const vimt_image_2d_of& image);
