@@ -11,8 +11,8 @@
 // \endverbatim
 //
 
-#include <vcl/vcl_cmath.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cmath.h>
+#include <vcl_iostream.h>
 #include <xcv/xcv_axes_limits.h>
 
 static bool debug = false;
