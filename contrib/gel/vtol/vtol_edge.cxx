@@ -193,7 +193,7 @@ void vtol_edge::remove_edge_loop(vtol_one_chain &doomed_edge_loop)
 bool
 vtol_edge::valid_inferior_type(const vtol_topology_object &inferior) const
 {
-  return bool(inferior.cast_to_zero_chain());
+  return inferior.cast_to_zero_chain() != 0;
 }
 
 //---------------------------------------------------------------------------
@@ -202,7 +202,7 @@ vtol_edge::valid_inferior_type(const vtol_topology_object &inferior) const
 bool
 vtol_edge::valid_superior_type(const vtol_topology_object &superior) const
 {
-  return bool(superior.cast_to_one_chain());
+  return superior.cast_to_one_chain() != 0;
 }
 
 // ******************************************************

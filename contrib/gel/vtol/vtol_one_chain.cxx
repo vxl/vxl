@@ -210,7 +210,7 @@ signed char vtol_one_chain::direction(vtol_edge const &e) const
 bool
 vtol_one_chain::valid_inferior_type(vtol_topology_object const &inferior) const
 {
-  return bool(inferior.cast_to_edge());
+  return inferior.cast_to_edge() != 0;
 }
 
 //---------------------------------------------------------------------------
@@ -219,7 +219,7 @@ vtol_one_chain::valid_inferior_type(vtol_topology_object const &inferior) const
 bool
 vtol_one_chain::valid_superior_type(vtol_topology_object const &superior) const
 {
-  return bool(superior.cast_to_face());
+  return superior.cast_to_face() != 0;
 }
 
 //---------------------------------------------------------------------------
@@ -228,7 +228,7 @@ vtol_one_chain::valid_superior_type(vtol_topology_object const &superior) const
 bool
 vtol_one_chain::valid_chain_type(vtol_chain const &chain_inf_sup) const
 {
-  return bool(chain_inf_sup.cast_to_one_chain());
+  return chain_inf_sup.cast_to_one_chain() != 0;
 }
 
 
