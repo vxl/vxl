@@ -144,7 +144,7 @@ struct vul_file_iterator_data
     original_dirname_ = vul_file::dirname(glob) + "/";
 
     vcl_string baseglob = vul_file::basename(glob);
-    vcl_string::iterator i = baseglob_.begin();
+    vcl_string::iterator i = baseglob.begin();
     bool prev_slash=false, in_sqr_brackets=false;
     vcl_string re; //assemble the Regexp string
     while (i != baseglob.end())
@@ -154,25 +154,25 @@ struct vul_file_iterator_data
       else if (prev_slash)
       {
         prev_slash = false;
-        re.push_back('\\');
-        re.push_back(*i);
+        re += '\\';
+        re += *i;
       }
       else if (*i=='[' && !in_sqr_brackets)
       {
         in_sqr_brackets = true;
-        re.push_back('[');
+        re += '[';
       }
       else if (*i==']' && in_sqr_brackets)
       {
         in_sqr_brackets = false;
-        re.push_back(']');
+        re += ']';
       }
       else if (*i=='?' && !in_sqr_brackets)
-        re.push_back('.');
+        re += '.';
       else if (*i=='*' && !in_sqr_brackets)
-        re.append(".*");
+        re += ".*";
       else
-        re.append(vul_reg_exp::protect(*i));
+        re += vul_reg_exp::protect(*i);
 
       ++i;
     }
