@@ -4,6 +4,7 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
+#include <vcl_cstring.h>
 
 #ifdef VCL_WIN32
 

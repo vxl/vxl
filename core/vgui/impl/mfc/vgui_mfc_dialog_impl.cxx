@@ -22,6 +22,7 @@
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_cstdio.h> // for sprintf()
+#include <vcl_cstring.h>
 
 #include <vgui/internals/vgui_dialog_field.h>
 #include <vgui/internals/vgui_simple_field.h>
