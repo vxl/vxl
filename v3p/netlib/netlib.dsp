@@ -1273,6 +1273,16 @@ SOURCE=.\dgemm.c
 SOURCE=.\dgecon.c
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\urand.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dznrm2.c
+
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
