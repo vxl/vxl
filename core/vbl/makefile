@@ -12,6 +12,7 @@ SOURCES += vbl_ref_count.cxx
 SOURCES += vbl_sort.cxx
 SOURCES += vbl_qsort.cxx
 SOURCES += vbl_shared_pointer.cxx
+SOURCES += vbl_test.cxx
 
 MANPAGE_SOURCES += vbl_array.txx # deprecated
 MANPAGE_SOURCES += vbl_array_1d.txx
