@@ -17,6 +17,8 @@ exec perl -I $IUEROOT/vxl/bin -x $0 ${1+"$@"}
 # 21 May 2001 - Amitha Perera - fixed to work on FreeBSD (temp
 #      filenames should not have $s in them in perl, because interpolation
 #      happens in the most awkward places.
+# 17 Jun 2001 - Peter Vanroose - added test failures as errors,
+#      but now ignoring "error in subdirs" messages.
 #
 
 # global modules from CPAN
@@ -68,7 +70,11 @@ $date= localtime;
 # make[6]: ***
 $gmake_enteringdirectory= q/^g?make\[\d+\]: Entering directory \`(.+?)\'\s*$/;
 $gmake_leavingdirectory = q/^g?make\[\d+\]: Leaving directory \`(.+?)\'\s*$/;
-$gmake_errorindirectory = q/^g?make\[\d+\]: \*\*\* \[/;
+$gmake_errorindirectory = q/^g?make(\[\d+\])?: \*\*\* \[(x?all|subdirs|.*recurse-subdirs\])/;
+$gmake_errorintest = q/^g?make(\[\d+\])?: \*\*\* \[.*\.out\]/;
+$gmake_errortestfail = q/Test Summary:.*\*\*\*/;
+$gmake_error_segfault = q/^g?make(\[\d+\])?: \[.*\.out\]\s+Error\s+139/;
+$gmake_error = q/^g?make(\[\d+\])?: \*\*\* \[/;
 
 ############
 # gcc-2.95
@@ -193,8 +199,23 @@ while( $in=<INFO>)
       }
     elsif( m/$linkwarning/)
       {
+        $buildwarnings[$index]++;
+        $currentlineweb="<font color=\"AA0000\">$currentlineweb</font>";
+      }
+    elsif( m/$gmake_errorintest/ || m/$gmake_errortestfail/)
+      {
+        $builderrors[$index]++;
+	$currentlineweb="<a name=\"ERRORLINK$htmlerrorlink\">";
+        $currentlineweb.="<font color=red>$currentlineweb</font>";
+	$htmlerrorlink++;
+	$currentlineweb.="<a href=\"\#ERRORLINK$htmlerrorlink\">Jump to next error</a><br>\n";
       }
     elsif( m/$gmake_errorindirectory/)
+      {
+        $buildwarnings[$index]++;
+        $currentlineweb="<font color=\"AA0000\">$currentlineweb</font>";
+      }
+    elsif( m/$gmake_error_segfault/ || m/$gmake_error/)
       {
         $builderrors[$index]++;
 	$currentlineweb="<a name=\"ERRORLINK$htmlerrorlink\">";
@@ -213,6 +234,7 @@ while( $in=<INFO>)
         $f = $1; $f =~ s/ ?DST / /;
         @thisdate= ParseDate( $f);
         $endtime= UnixDate( @thisdate, "%a %b %e %H:%M:%S %z %Y");
+	$currentlineweb="<a name=\"ERRORLINK$htmlerrorlink\">";
       }
 
     if( $index)
