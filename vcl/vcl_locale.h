@@ -7,6 +7,10 @@
 
 #include "vcl_compiler.h"
 
-#include <locale>
+#if !VCL_CXX_HAS_HEADER_LOCALE
+# include <locale.h>
+#else
+# include <locale>
+#endif
 
 #endif // vcl_locale_h_
