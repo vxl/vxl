@@ -36,6 +36,7 @@
 //
 //   02-26-97 Added implementation for virtual Transform() - Peter Vanroose
 //   PTU ported to vxl may 2000.
+//   November 30, 2002 - added local implementation for compute_bounding_box
 // \endverbatim
 
 #include <vcl_vector.h>
@@ -138,6 +139,7 @@ public:
   //---------------------------------------------------------------------------
   virtual vtol_edge_2d *cast_to_edge_2d(void) { return this; }
 
+  virtual void compute_bounding_box(void); //A local implementation
 
   virtual void print(vcl_ostream &strm=vcl_cout) const;
   virtual void describe(vcl_ostream &strm=vcl_cout,

@@ -39,7 +39,10 @@
 // \author
 //    Patricia A. Vrobel.
 //    ported by Luis E. Galup
-
+// \verbatim
+// Modifications
+//  JLM November 2002 - added a local bounding box method
+//\endverbatim
 #include <vtol/vtol_topology_object_sptr.h>
 #include <vsol/vsol_spatial_object_2d.h>
 
@@ -406,6 +409,8 @@ public:
   // WARNING should not be used by clients
   //---------------------------------------------------------------------------
   virtual vcl_vector<vtol_block*> *compute_blocks(void);
+
+  virtual void compute_bounding_box(void);//A local implementation
 
 protected:
 

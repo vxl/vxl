@@ -4,6 +4,7 @@
 //  \file
 
 #include <vtol/vtol_topology_cache.h>
+#include <vtol/vtol_vertex.h>
 #include <vcl_cassert.h>
 
 //***************************************************************************
@@ -500,4 +501,30 @@ vcl_vector<vtol_block *> *vtol_topology_object::compute_blocks(void)
 {
   vcl_cout << "Compute blocks" << vcl_endl;
   return 0;
+}
+
+//---------------------------------------------------------------------------
+//: compute the bounding box from the set of vertices.  A generic method that
+//  applies to all topology_object(s)
+//---------------------------------------------------------------------------
+void vtol_topology_object::compute_bounding_box()
+{
+    if(!this->bounding_box_)
+    {
+      vcl_cout << "In void vtol_topology_object::compute_bounding_box() -"
+               << " shouldn't happen" << vcl_endl;
+      return;
+    }
+    vcl_vector<vtol_vertex_sptr> *verts= this->vertices();
+    if(!verts->size())
+      {
+      vcl_cout << "In void vtol_topology_object::compute_bounding_box() -"
+               << " no vertices " << vcl_endl;
+      return;
+      }
+    this->bounding_box_->reset_bounds();
+    for(vcl_vector<vtol_vertex_sptr>::iterator vit = verts->begin();
+        vit != verts->end(); vit++)
+      this->bounding_box_->grow_minmax_bounds(*(*vit)->get_bounding_box());
+    delete verts;
 }

@@ -24,6 +24,9 @@
 //     JLM Jan 1998  Added method to get direction of an edge
 //     JLM Feb 1999  Added correct method for ComputeBoundingBox()
 //     PTU May 2000  ported to vxl
+//     JLM Nov 2002  Modified the compute_bounding_box method to use 
+//                   box::grow_minmax_bounds for uniformity and to 
+//                   avoid dependence on dimension.  Old method was strictly 2-d.
 // \endverbatim
 //-----------------------------------------------------------------------------
 

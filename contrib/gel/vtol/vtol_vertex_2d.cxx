@@ -309,3 +309,17 @@ bool vtol_vertex_2d::compare_geometry(const vtol_vertex &other) const
 {
   return other.cast_to_vertex_2d() && (*point_)==(*(other.cast_to_vertex_2d()->point()));
 }
+
+void vtol_vertex_2d::compute_bounding_box(void)
+{
+    if(!this->bounding_box_)
+    {
+      vcl_cout << "In void vtol_vertex::compute_bounding_box() - shouldn't happen"
+               << vcl_endl;
+      return;
+    }
+    bounding_box_->set_min_x(this->x());
+    bounding_box_->set_min_y(this->y());
+    bounding_box_->set_max_x(this->x());
+    bounding_box_->set_max_y(this->y());
+}

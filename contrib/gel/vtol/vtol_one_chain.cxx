@@ -571,45 +571,42 @@ vcl_vector<vtol_block*> *vtol_one_chain::compute_blocks(void)
 //---------------------------------------------------------------------------
 //: Computes the bounding box of a vtol_one_chain from the edges.
 //    Just get the bounding box for each Edge and update this's
-//    box accordingly.
+//    box accordingly. Note that the computation can be done independently of
+//    dimension.
 //---------------------------------------------------------------------------
 
 void vtol_one_chain::compute_bounding_box(void)
 {
-  vcl_vector<vtol_edge_sptr> *edgs=edges();
-  vcl_vector<vtol_edge_sptr>::iterator eit=edgs->begin();
+  if(!this->bounding_box_)
+    {
+      vcl_cout << "In void vtol_one_chain::compute_bounding_box() - shouldn't happen"
+               << vcl_endl;
+      return;
+    }
+
+  vcl_vector<vtol_edge_sptr> *edgs= this->edges();
 
   if (edgs->size()==0)//default method, things are screwed up anyway
     {
       vtol_topology_object::compute_bounding_box();
       return;
     }
-
-  vsol_box_2d_sptr b = (*eit)->get_bounding_box();
-  double xmin=b->get_min_x();
-  double ymin=b->get_min_y();
-  double xmax=b->get_max_x();
-  double ymax=b->get_max_y();
-
-  while (++eit!=edgs->end())
+  //at this point we need to clear the bounds of the box
+  //to correctly reflect edge bounds
+  bounding_box_->reset_bounds();
+  
+  for(vcl_vector<vtol_edge_sptr>::iterator eit = edgs->begin();
+      eit != edgs->end(); eit++)
   {
-    vsol_box_2d_sptr b=(*eit)->get_bounding_box();
-    if (!b)
+    if (!(*eit)->get_bounding_box())
     {
       vcl_cout << "In vtol_one_chain::ComputeBoundingBox()"
                << " - Edge has null bounding box\n";
       continue;
     }
-    if (xmin>b->get_min_x()) xmin=b->get_min_x();
-    if (ymin>b->get_min_y()) ymin=b->get_min_y();
-    if (xmax<b->get_max_x()) xmax=b->get_max_x();
-    if (ymax<b->get_max_y()) ymax=b->get_max_y();
+    bounding_box_->grow_minmax_bounds(*(*eit)->get_bounding_box());
   }
   delete edgs;
-  set_min_x(xmin);
-  set_max_x(xmax);
-  set_min_y(ymin);
-  set_max_y(ymax);
 }
 
 //---------------------------------------------------------------------------

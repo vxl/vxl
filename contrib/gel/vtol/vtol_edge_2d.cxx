@@ -6,6 +6,7 @@
 #include <vtol/vtol_zero_chain.h>
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_line_2d.h>
+#include <vdgl/vdgl_digital_curve.h>
 
 //***************************************************************************
 // Initialization
@@ -290,4 +291,38 @@ bool vtol_edge_2d::compare_geometry(const vtol_edge &other) const
     return (*curve()) == *(other.cast_to_edge_2d()->curve());
   else
     return false;
+}
+void vtol_edge_2d::compute_bounding_box(void)
+{
+  if(!this->bounding_box_)
+    {
+      vcl_cout << "In void vtol_edge_2d::compute_bounding_box() - shouldn't happen"
+               << vcl_endl;
+      return;
+    }
+  vsol_curve_2d_sptr c = this->curve();
+  if(!c)
+    {
+      vcl_cout << "In vtol_edge_2d::compute_bounding_box() - null curve"
+               << vcl_endl;
+      vtol_topology_object::compute_bounding_box();
+      return;
+    }
+  if(c->cast_to_digital_curve())
+    {
+      vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
+      vsol_box_2d * dc_box = dc->get_bounding_box();
+      if(!dc_box)
+        {
+          vcl_cout << "In vtol_edge_2d::compute_bounding_box() - curve has null"
+                   << " bounding_box " << vcl_endl;
+          vtol_topology_object::compute_bounding_box();
+          return;
+        }
+      this->bounding_box_->reset_bounds();
+      this->bounding_box_->grow_minmax_bounds(*dc_box);
+      return;
+    }
+  //the geometry is either a line segment or unknown so use the generic method
+  vtol_topology_object::compute_bounding_box();
 }

@@ -17,6 +17,7 @@
 //     to permit Charlie Rothwell's Polyhedra code to be more
 //     generic.  Note this is distance, NOT squared distance.
 //  LEG May 2000. ported to vxl
+//  JLM November 2002 - added local bounding_box method
 // \endverbatim
 
 #include <vnl/vnl_double_2.h>
@@ -151,7 +152,7 @@ public:
 
   void print(vcl_ostream &strm=vcl_cout) const;
   void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;
-
+  virtual void compute_bounding_box(void);//A local implementation
 protected:
   //---------------------------------------------------------------------------
   // Description: point associated to the vertex
