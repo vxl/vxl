@@ -84,12 +84,14 @@ class bdgl_curve_tracking
   void level_order_traversal(bdgl_tracker_curve_sptr curve,vcl_list<bdgl_tracker_curve_sptr> & tr);
   
   int get_min_len_of_curves(){return min_len_of_curves_;}
+  
+ protected:
+	 bdgl_curve_tracking_params tp_;
  private:
 	// current frame number 
   int frame_;
   bool clustering_;
-  bdgl_curve_matching_params mp_;
-  bdgl_curve_clustering_params cp_;
+ 
   int min_len_of_curves_;
 	  
 };
