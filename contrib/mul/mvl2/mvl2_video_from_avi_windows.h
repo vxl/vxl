@@ -47,6 +47,7 @@ class mvl2_video_from_avi: public mvl2_video_reader
  
     //: Move frame counter on to next frame
   virtual int next_frame();
+  virtual int seek(int frame_number);
  
     //: Reset frame counter to zero
   virtual void reset_frame();
