@@ -60,12 +60,12 @@
 # define vxl_uint_32 void
 #endif
 
-#define VXL_HAS_INT_64 1
-#define VXL_INT_64_STRING "__int64"
-#if 1
-  typedef          __int64 vxl_int_64;
-  typedef          __int64 vxl_sint_64;
-  typedef unsigned __int64 vxl_uint_64;
+#define VXL_HAS_INT_64 0
+#define VXL_INT_64_STRING "void"
+#if 0
+  typedef          void vxl_int_64;
+  typedef          void vxl_sint_64;
+  typedef          void vxl_uint_64;
 #else
 # define vxl_int_64  void
 # define vxl_sint_64 void
