@@ -20,10 +20,9 @@ inline vil2_image_view<T> vil2_transpose(const vil2_image_view<T>& v)
 {
   // Create view with i and j switched
   return vil2_image_view<T>(v.memory_chunk(),v.top_left_ptr(),
-                                   v.nj(),v.ni(),v.nplanes(),
-                                   v.jstep(),v.istep(),v.planestep());
+                            v.nj(),v.ni(),v.nplanes(),
+                            v.jstep(),v.istep(),v.planestep());
 }
-
 
 
 //: Transpose an image.
@@ -34,36 +33,31 @@ vil2_image_resource_sptr vil2_transpose(const vil2_image_resource_sptr &src);
 //: A generic_image adaptor that behaves like a transposed version of its input
 class vil2_transpose_image_resource : public vil2_image_resource
 {
+  //: Reference to underlying image source
+  vil2_image_resource_sptr src_;
   //: You can't construct one of these directly, use vil2_transpose() instead.
   vil2_transpose_image_resource(vil2_image_resource_sptr const&);
   friend vil2_image_resource_sptr vil2_transpose(const vil2_image_resource_sptr &src);
+
  public:
+  inline unsigned nplanes() const { return src_->nplanes(); }
+  inline unsigned ni() const { return src_->nj(); }
+  inline unsigned nj() const { return src_->ni(); }
 
-  virtual unsigned nplanes() const { return src_->nplanes(); }
-  virtual unsigned ni() const { return src_->nj(); }
-  virtual unsigned nj() const { return src_->ni(); }
+  inline enum vil2_pixel_format pixel_format() const { return src_->pixel_format(); }
 
-  virtual enum vil2_pixel_format pixel_format() const { return src_->pixel_format(); }
-
-
-  virtual vil2_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni, 
+  virtual vil2_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
                                                   unsigned j0, unsigned nj) const;
 
   virtual vil2_image_view_base_sptr get_view(unsigned i0, unsigned ni,
                                              unsigned j0, unsigned nj) const;
 
-
   //: Put the data in this view back into the image source.
-  virtual bool put_view(const vil2_image_view_base& im, unsigned i0,
-                        unsigned j0); 
+  virtual bool put_view(const vil2_image_view_base& im, unsigned i0, unsigned j0);
 
   //: Extra property information
   virtual bool get_property(char const* tag, void* property_value = 0) const {
     return src_->get_property(tag, property_value); }
-
- protected:
-  //: Reference to underlying image source
-  vil2_image_resource_sptr src_;
 };
 
 #endif // vil2_transpose_h_
