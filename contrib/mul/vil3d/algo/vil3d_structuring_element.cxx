@@ -1,4 +1,4 @@
-// This is mul/vil2/algo/vil3d_structuring_element.cxx
+// This is mul/vil3d/algo/vil3d_structuring_element.cxx
 #include "vil3d_structuring_element.h"
 //:
 // \file
@@ -9,16 +9,16 @@
 
   //: Define elements { (p_i[a],p_j[a],p_k[a]) }
 vil3d_structuring_element::vil3d_structuring_element(const vcl_vector<int>& p_i,
-                                                   const vcl_vector<int>& p_j,
-                                                   const vcl_vector<int>& p_k)
+                                                     const vcl_vector<int>& p_j,
+                                                     const vcl_vector<int>& p_k)
 {
   set(p_i,p_j,p_k);
 }
 
   //: Define elements { (p_i[a],p_j[a],p_k[a]) }
 void vil3d_structuring_element::set(const vcl_vector<int>& p_i,
-                                                   const vcl_vector<int>& p_j,
-                                                   const vcl_vector<int>& p_k)
+                                    const vcl_vector<int>& p_j,
+                                    const vcl_vector<int>& p_k)
 {
   assert(p_i.size()==p_j.size());
   assert(p_i.size()==p_k.size());
@@ -132,6 +132,6 @@ void vil3d_compute_offsets(vcl_vector<vcl_ptrdiff_t>& offset,
   offset.resize(n);
   for (unsigned int a=0;a<n;++a)
     offset[a] = element.p_i()[a]*istep + element.p_j()[a]*jstep
-                +  element.p_k()[a]*kstep;
+              + element.p_k()[a]*kstep;
 }
 
