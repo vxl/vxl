@@ -35,7 +35,7 @@ int vsl_clipon_binary_loader<BaseClass,BaseClassIO>::index_for_name(const vcl_st
     vcl_cerr << object_io_.size()<<" valid loaders available for "<<vcl_endl;
         for (int j=0; j<object_io_.size(); ++j)
         vcl_cerr << object_io_[j]->target_classname() << vcl_endl;
-      abort();
+      vcl_abort();
   }
 
   return i;
@@ -55,7 +55,7 @@ const BaseClassIO& vsl_clipon_binary_loader<BaseClass,BaseClassIO>::io_for_class
     vcl_cerr << object_io_.size()<<" valid loaders available for "<<vcl_endl;
         for (int j=0; j<object_io_.size(); ++j)
         vcl_cerr << object_io_[j]->target_classname() << vcl_endl;
-      abort();
+      vcl_abort();
   }
 
   return *object_io_[i];
