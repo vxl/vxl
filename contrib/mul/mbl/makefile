@@ -52,6 +52,7 @@ MANPAGE_SOURCES += mbl_file_data_wrapper.txx
 MANPAGE_SOURCES += mbl_combination.h
 MANPAGE_SOURCES += mbl_ar_process.txx
 MANPAGE_SOURCES += mbl_jarque_bera.h
+MANPAGE_SOURCES += mbl_stl_pred.h
 MANPAGE_SOURCES += mbl_test.h
 
 #######################################
