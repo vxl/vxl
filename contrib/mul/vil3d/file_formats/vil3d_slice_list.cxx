@@ -7,19 +7,69 @@
 // \author Ian Scott - Manchester
 
 #include "vil3d_slice_list.h"
+#include <vcl_cstring.h>
 #include <vcl_cstdlib.h>
+#include <vcl_algorithm.h>
 #include <vul/vul_file.h>
+#include <vul/vul_file_iterator.h>
 #include <vil/vil_load.h>
 #include <vil/vil_copy.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_slice.h>
 #include <vil3d/file_formats/vil3d_slice_list.h>
+#include <vil3d/file_formats/vil3d_dicom.h>
 
 vil3d_slice_list_format::vil3d_slice_list_format() {}
 
-// The destructor must be virtual so that the memory chunk is destroyed.
 vil3d_slice_list_format::~vil3d_slice_list_format()
 {
+}
+
+// Look for a set of filenames that match the glob spec in filename
+// The globbing format expects only '#' to represent numbers.
+// Do not use "*" or "?"
+// All "#" should be in one contiguous group.
+void parse_globbed_filenames(const vcl_string & input,
+                             vcl_vector<vcl_string> &filenames)
+{
+  filenames.clear();
+  vcl_string filename = input;
+
+  // Avoid confusing globbing functions
+  if (filename.find("*") != filename.npos) return;
+  if (filename.find("?") != filename.npos) return;
+
+  // Check that all the #s are in a single group.
+  unsigned start = filename.find_first_of("#");
+  if (start == filename.npos) return ;
+  unsigned end = filename.find_first_not_of("#", start);
+  if (filename.find_first_of("#",end) != filename.npos) return;
+  filename.replace(start,end-start,end-start,'?');
+
+
+  // Search for the files
+  for (vul_file_iterator fit(filename); fit; ++fit)
+  {
+    // Discard those which have non-numeric characters in the glob field.
+    if (vcl_string(fit()).find_first_not_of("0123456789",start)>=end)
+      filenames.push_back(fit());
+  }
+
+  if (filenames.empty()) return;
+
+  // Put them all in numeric order.
+  vcl_sort(filenames.begin(), filenames.end());
+
+  // Now discard non-contiguously numbered files.
+  long count = vcl_atol(filenames.front().substr(start, end-start).c_str());
+  vcl_vector<vcl_string>::iterator it=filenames.begin()+1;
+  while (it != filenames.end())
+  {
+    if (vcl_atol(it->substr(start, end-start).c_str()) != ++count)
+      break;
+    ++it;
+  }
+  filenames.erase(it, filenames.end());
 }
 
 
@@ -47,16 +97,27 @@ vil3d_slice_list_format::make_input_image(const char * filename) const
 
   for (unsigned i=0; i<filenames.size(); ++i)
     if (!vul_file::exists(filenames[i]))
-      return 0;
+    {
+      filenames.clear();
+      break;
+    }
+
+
+  if (filenames.empty())
+    parse_globbed_filenames(filename, filenames);
 
   if (filenames.empty()) return 0;
 
   // load all the slices
   vcl_vector<vil_image_resource_sptr> images(filenames.size());
+  
+  bool same = true;
+
   for (unsigned i=0; i<filenames.size(); ++i)
   {
     vil_image_resource_sptr im  =
       vil_load_image_resource(filenames[i].c_str());
+
     images[i]=im;
     // make sure all slices are consistent,
     if (!im ||
@@ -65,8 +126,17 @@ vil3d_slice_list_format::make_input_image(const char * filename) const
         im->nj() != images.front()->nj() ||
         im->pixel_format() != images.front()->pixel_format())
       return 0;
+    // decide if all slices are of the same type.
+    if (vcl_strcmp(im->file_format(), images.front()->file_format())!=0)
+      same=true;
   }
+
   // everything seems fine so create the volume
+  
+  // If they are all dicom images, create an explicit dicom volume.
+  if (same && vcl_strcmp("dicom", images.front()->file_format())==0)
+    return new vil3d_dicom_image(images);
+
   return new vil3d_slice_list_image(images);
 }
 

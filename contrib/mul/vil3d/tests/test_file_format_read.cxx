@@ -13,7 +13,6 @@
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_print.h>
 
-#define DEBUG
 
 // Ian Scott
 // Mar 2003
@@ -183,10 +182,23 @@ int test_file_format_read_main( int argc, char* argv[] )
   testlib_test_perform( test( "ff_3planes8bit_true.txt",
                               CheckColourPlanes<vxl_byte>( "ff_rgb8bit_ascii.1.ppm:ff_rgb8bit_ascii.2.ppm" ) ) );
 
+  testlib_test_begin( "  Implied List of ppm slices" );
+  testlib_test_perform( test( "ff_3planes8bit_true.txt",
+                              CheckColourPlanes<vxl_byte>( "ff_rgb8bit_ascii.#.ppm" ) ) );
+
+//  testlib_test_begin( "  Implied list of dicom slices" );
+//  testlib_test_perform( test( "ff_grey16bit_true.txt",
+//                              CheckGrey<vxl_uint_16>( "ff_grey16bit_uncompressed_####.dcm" ) ) );
+
+
+
   vcl_cout << "GIPL images)\n";
-  testlib_test_begin( "  List of ppm slices" );
+  testlib_test_begin( "  GIPL image" );
   testlib_test_perform( test( "ff_grey_cross16bit_true.txt",
                               CheckGrey<vxl_uint_16>( "ff_grey_cross.gipl" ) ) );
+
+
+
 
   if (res==cwd) vpl_chdir(cwd);
   return testlib_test_summary();
