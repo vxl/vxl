@@ -1,10 +1,10 @@
 # Additional functions to support vsol
-# brl/bsol/CMakeLists.txt
+# brl/bbas/bsol/CMakeLists.txt
 
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
 SET(bsol_sources
-bsol_hough_line_index.cxx	bsol_hough_line_index.h
+  bsol_hough_line_index.cxx  bsol_hough_line_index.h
 )
 AUX_SOURCE_DIRECTORY(Templates bsol_sources)
 
