@@ -31,4 +31,4 @@ Your copy of VXL may contain control files for other build systems
 such as make or Developer Studio. Copies of these control files
 (e.g. makefiles or .dsp files) do exist in the repository, although
 they may not be quite as up to date. They are tucked away in the
-@code{build-makefiles} branch of the repository.
+@code{build-makefiles} and @code{build-dsps} branches of the repository.
