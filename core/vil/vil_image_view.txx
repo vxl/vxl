@@ -609,8 +609,9 @@ void vil_image_view<T>::set_size(unsigned n_i, unsigned n_j, unsigned n_planes)
 
   release_memory();
 
+  vil_pixel_format fmt = vil_pixel_format_of(T());
   ptr_ = new vil_memory_chunk(sizeof(T)*n_planes*n_j*n_i,
-                              vil_pixel_format_component_format(vil_pixel_format_of(T())));
+                              vil_pixel_format_component_format(fmt));
 
   ni_ = n_i;
   nj_ = n_j;

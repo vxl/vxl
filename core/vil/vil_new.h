@@ -84,8 +84,9 @@ template <class T>
 vil_image_view<T> vil_new_image_view_j_i_plane(unsigned ni, unsigned nj, unsigned nplanes, T /*dummy*/)
 {
   VXL_DEPRECATED("vil_new_image_view_j_i_plane");
+  vil_pixel_format fmt = vil_pixel_format_of(T());
   vil_memory_chunk_sptr chunk = new vil_memory_chunk(ni*nj*nplanes*sizeof(T),
-                                                     vil_pixel_format_component_format(vil_pixel_format_of(T())));
+                                                     vil_pixel_format_component_format(fmt));
   return vil_image_view<T>(chunk, reinterpret_cast<T*>(chunk->data()), ni, nj, nplanes, nplanes, nplanes*ni, 1);
 }
 
@@ -95,8 +96,9 @@ vil_image_view<T> vil_new_image_view_j_i_plane(unsigned ni, unsigned nj, unsigne
 template <class T>
 vil_image_view<T> vil_new_image_view_plane_i_j(unsigned ni, unsigned nj, unsigned nplanes, T /*dummy*/)
 {
+  vil_pixel_format fmt = vil_pixel_format_of(T());   
   vil_memory_chunk_sptr chunk = new vil_memory_chunk(ni*nj*nplanes*sizeof(T),
-                                                     vil_pixel_format_component_format(vil_pixel_format_of(T())));
+                                                     vil_pixel_format_component_format(fmt));
   return vil_image_view<T>(chunk, reinterpret_cast<T*>(chunk->data()), ni, nj, nplanes, nj, 1, nj*ni);
 }
 
