@@ -1,5 +1,3 @@
-
-
 /*
  * This file defines additional symbols, that I prefer to use in order
  * to simplify dumping data to the user. It's a different file from bt848.h
@@ -50,8 +48,6 @@
 
 
 #define BT848_I2C_DIV_S        4
-
-
 
 
 #endif /* _BT848_ADDONS_H_ */

@@ -342,7 +342,7 @@ void vgui_glut_slab::reshape(int width,int height)
   // call reshape on the sub-contexts :
   for (unsigned i=0;i<sub_contexts.size();i++) {
     // FIXME
-    vgui_macro_warning << "subcontext reshape not implemented" << endl;
+    vgui_macro_warning << "subcontext reshape not implemented\n";
   }
 #endif
 }

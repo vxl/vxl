@@ -252,6 +252,7 @@ foreach $f (@FILES)
       $f !~ m/\bfile_formats\/vil_viff(header|_support)/ &&
       $f !~ m/\bvgui\/internals\/trackball/ &&
       $f !~ m/\bvxl\/vgl\/internals\/gpc.h$/ &&
+      $f !~ m/\bvxl\/vidl\/vidl_mpegcodec_helper.cxx$/ &&
       $f !~ m/\/oufgl\/(pxc200|bt848(-addons)?)\.h$/ &&
       $f !~ m/\bgel\/vgel\/kl\/.*\.h$/ &&
       $f !~ m/\bvcl\/vcl_c/ &&

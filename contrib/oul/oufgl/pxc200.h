@@ -94,7 +94,7 @@ typedef struct Px_Dev {
 #define PX_FLAG_BTONLY   0x00002000 /* not a pxc200 */
 #define PX_FLAG_PXC200F  0x00004000 /* pxc200-F (not pxc200-L) */
 #define PX_FLAG_USEPLL   0x00008000 /* need the internal PLL for PAL clk */
-#define PX_HWTYPE_FLAGS  0x0000E000 
+#define PX_HWTYPE_FLAGS  0x0000E000
 
 #define PX_FLAG_DODMA    0x00010000 /* positively ask for DMA at open time  */
 #define PX_FLAG_RUNNING  0x00020000 /* status flag */
@@ -104,7 +104,7 @@ typedef struct Px_Dev {
 #define PX_FLAG_TRIGLEVL 0x00000000 /* level-triggered */
 #define PX_FLAG_TRIGPOS  0x00800000 /* positive */
 #define PX_FLAG_TRIGNEG  0x00000000 /* negative */
-#define PX_TRIG_FLAGS    0x00F00000 
+#define PX_TRIG_FLAGS    0x00F00000
 
 
     struct Px_Dev *next;
@@ -172,12 +172,11 @@ typedef struct Px_Dev {
 
     unsigned long       seq_head;    /* write position */
     unsigned long       seq_tail;    /* read position */
-    
+
     volatile __u32      seq_pending;  /* from user space, decr to 0 */
     __u32               seq_step2;    /* get one every that many IRQ */
     __u32               seq_next;     /* next acquisition time */
     __u32               seq_overrun;  /* buffer overflow */
-    
 
 } Px_Dev;
 
@@ -300,7 +299,7 @@ extern Px_Dev *px_devices;
 
 /* I2C definitions */
 
-#define PX_I2C_DIVISOR (7 << BT848_I2C_DIV_S) 
+#define PX_I2C_DIVISOR (7 << BT848_I2C_DIV_S)
 /* #define PX_I2C_DIVISOR (5 << BT848_I2C_DIV_S) */
 
 #define PX_I2C_DELAY      700 /* microseconds */
@@ -330,7 +329,7 @@ extern Px_Dev *px_devices;
 /* Another default */
 #define PX_DEFAULT_IRQ_MASK 0x7b800 /* discard gpio interrupts */
 
-#ifdef PX_DEBUG 
+#ifdef PX_DEBUG
 #  define PX_USE_PROC
 #endif
 
@@ -353,4 +352,3 @@ extern Px_Dev *px_devices;
 #endif /* __KERNEL__ */
 
 #endif /* _LINUX_PXC200_H_ */
-
