@@ -49,7 +49,6 @@ rgrl_trans_similarity( vnl_matrix<double> const& rot_and_scale,
   assert ( ( A_.rows() != 3 || covar_.rows() == 7 ) ); // 3d has 7 params
 }
 
-
 rgrl_trans_similarity::
 rgrl_trans_similarity( vnl_matrix<double> const& in_A,
                        vnl_vector<double> const& in_trans,
@@ -68,7 +67,6 @@ rgrl_trans_similarity( vnl_matrix<double> const& in_A,
   assert ( ( A_.rows() != 3 || covar_.rows() == 7 ) ); // 3d has 7 params
   assert ( from_centre_.size() == trans_.size() );
 }
-
 
 void
 rgrl_trans_similarity::
@@ -91,7 +89,6 @@ map_dir( vnl_vector<double> const& from_loc,
   to_dir.normalize();
 }
 
-
 vnl_matrix<double>
 rgrl_trans_similarity::
 transfer_error_covar( vnl_vector<double> const& p  ) const
@@ -111,7 +108,6 @@ transfer_error_covar( vnl_vector<double> const& p  ) const
   return temp * covar_ * temp.transpose();
 }
 
-
 vnl_matrix<double>
 rgrl_trans_similarity::
 covar() const
@@ -119,14 +115,12 @@ covar() const
   return covar_;
 }
 
-
 vnl_matrix<double> const&
 rgrl_trans_similarity::
 A() const
 {
   return A_;
 }
-
 
 vnl_vector<double>
 rgrl_trans_similarity::
@@ -159,7 +153,6 @@ inv_map( const vnl_vector<double>& to,
   }
 }
 
-
 void
 rgrl_trans_similarity::
 inv_map( const vnl_vector<double>& to,
@@ -171,7 +164,7 @@ inv_map( const vnl_vector<double>& to,
 
 vnl_matrix<double>
 rgrl_trans_similarity::
-jacobian( vnl_vector<double> const& from_loc ) const
+jacobian( vnl_vector<double> const& /*from_loc*/ ) const
 {
   return  A_ ;
 }

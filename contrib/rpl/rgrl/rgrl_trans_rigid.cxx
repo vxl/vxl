@@ -99,7 +99,6 @@ void rgrl_trans_rigid::determine_angles(double& phi, double& alpha, double& thet
     theta = vcl_atan( -1 * R_(0,1)/R_(0,0) ) + vnl_math::pi;
   }
 
-
   if (R_(2,2) * vcl_cos(alpha) > 0 )
   {
     phi = vcl_atan( -1 * R_(1,2) / R_(2,2) );
@@ -136,7 +135,6 @@ map_dir( vnl_vector<double> const& from_loc,
   to_dir = R_ * from_dir;
   to_dir.normalize();
 }
-
 
 vnl_matrix<double>
 rgrl_trans_rigid::
@@ -177,7 +175,6 @@ transfer_error_covar( vnl_vector<double> const& p  ) const
   return jacobian * covar_ * jacobian.transpose();
 }
 
-
 vnl_matrix<double>
 rgrl_trans_rigid::
 covar() const
@@ -185,14 +182,12 @@ covar() const
   return covar_;
 }
 
-
 vnl_matrix<double> const&
 rgrl_trans_rigid::
 R() const
 {
   return R_;
 }
-
 
 vnl_vector<double>
 rgrl_trans_rigid::
@@ -227,7 +222,7 @@ inv_map( const vnl_vector<double>& to,
 
 vnl_matrix<double>
 rgrl_trans_rigid::
-jacobian( vnl_vector<double> const& from_loc ) const
+jacobian( vnl_vector<double> const& /*from_loc*/ ) const
 {
   return R_;
 }
@@ -248,7 +243,6 @@ scale_by( double scale ) const
   return new rgrl_trans_rigid( R_, trans_ * scale,
                                     covar_);
 }
-
 
 void
 rgrl_trans_rigid::

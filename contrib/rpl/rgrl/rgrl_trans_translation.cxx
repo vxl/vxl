@@ -3,7 +3,6 @@
 // \file
 // \author Charlene Tsai
 // \date   Dec 2003
-//
 
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
@@ -17,7 +16,6 @@ rgrl_trans_translation( unsigned int dimension )
     from_centre_( dimension, 0.0 )
 {
 }
-
 
 rgrl_trans_translation::
 rgrl_trans_translation( vnl_vector<double> const& in_trans,
@@ -54,7 +52,6 @@ rgrl_trans_translation( vnl_vector<double> const& in_trans,
   assert ( from_centre_.size() == trans_.size() );
 }
 
-
 void
 rgrl_trans_translation::
 map_loc( vnl_vector<double> const& from,
@@ -64,7 +61,6 @@ map_loc( vnl_vector<double> const& from,
 
   to = (from-from_centre_) + trans_;
 }
-
 
 void
 rgrl_trans_translation::
@@ -87,7 +83,6 @@ transfer_error_covar( vnl_vector<double> const& p  ) const
   return covar_;
 }
 
-
 vnl_matrix<double>
 rgrl_trans_translation::
 covar() const
@@ -95,14 +90,12 @@ covar() const
   return covar_;
 }
 
-
 vnl_vector<double>
 rgrl_trans_translation::
 t() const
 {
   return trans_ -  from_centre_;
 }
-
 
 void
 rgrl_trans_translation::
@@ -135,7 +128,7 @@ inv_map( const vnl_vector<double>& to,
 
 vnl_matrix<double>
 rgrl_trans_translation::
-jacobian(  vnl_vector<double> const& from_loc ) const
+jacobian(  vnl_vector<double> const& /*from_loc*/ ) const
 {
   unsigned int m = trans_.size();
   return vnl_matrix<double> (m, m, vnl_matrix_identity);

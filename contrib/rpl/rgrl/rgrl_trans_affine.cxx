@@ -166,6 +166,7 @@ inv_map( const vnl_vector<double>& to,
   }
 }
 
+
 void
 rgrl_trans_affine::
 inv_map( const vnl_vector<double>& to,
@@ -175,12 +176,14 @@ inv_map( const vnl_vector<double>& to,
   from = svd.inverse()*to - svd.inverse()*trans_ + from_centre_;
 }
 
+
 vnl_matrix<double>
 rgrl_trans_affine::
-jacobian( vnl_vector<double> const& from_loc ) const
+jacobian( vnl_vector<double> const& /*from_loc*/ ) const
 {
   return A_;
 }
+
 
 rgrl_transformation_sptr
 rgrl_trans_affine::
@@ -190,6 +193,7 @@ scale_by( double scale ) const
                                 covar_, from_centre_ * scale,
                                 vnl_vector<double>(from_centre_.size(), 0.0) );
 }
+
 
 void
 rgrl_trans_affine::
@@ -201,6 +205,7 @@ write( vcl_ostream& os ) const
      << trans_.size() << vcl_endl
      << A_ << trans_ << ' ' << from_centre_ << vcl_endl;
 }
+
 
 void
 rgrl_trans_affine::
