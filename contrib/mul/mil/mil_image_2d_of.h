@@ -156,18 +156,24 @@ public:
 
         //: Access to (x,y) pixel in plane i
     T& operator()(int x, int y, int i)
-        { return planes_[i][ystep_*y+x*xstep_]; }
+    { assert(x>=0); assert(x<nx_); assert(y>=0); assert(y<ny_);
+      assert(i>=0); assert(i<planes_.size());
+      return planes_[i][ystep_*y+x*xstep_]; }
 
         //: Access to (x,y) pixel in plane i
     const T& operator()(int x, int y, int i) const
-        { return planes_[i][ystep_*y+x*xstep_]; }
+    { assert(x>=0); assert(x<nx_); assert(y>=0); assert(y<ny_);
+      return planes_[i][ystep_*y+x*xstep_]; }
 
         //: Access to (x,y) pixel in plane 0
-    T& operator()(int x, int y) {  return planes_[0][ystep_*y+x*xstep_]; }
+    T& operator()(int x, int y) {
+      assert(x>=0); assert(x<nx_); assert(y>=0); assert(y<ny_);
+      return planes_[0][ystep_*y+x*xstep_]; }
 
         //: Access to (x,y) pixel in plane 0
     const T& operator()(int x, int y) const
-        { return planes_[0][ystep_*y+x*xstep_]; }
+    { assert(x>=0); assert(x<nx_); assert(y>=0); assert(y<ny_);
+      return planes_[0][ystep_*y+x*xstep_]; }
 
         //: True if transforms are equal, and they share same image data.
         //  This does not do a deep equality on image data. If the images point

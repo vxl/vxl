@@ -25,6 +25,14 @@ mil_gaussian_pyramid_builder_2d_general<T>::mil_gaussian_pyramid_builder_2d_gene
 	set_scale_step(2.0);
 }
 
+
+//: Consturct with given scale_step
+template <class T>
+mil_gaussian_pyramid_builder_2d_general<T>::mil_gaussian_pyramid_builder_2d_general(double scale_step)
+{
+  set_scale_step(scale_step);
+}
+
 //=======================================================================
 
 template <class T>
@@ -34,7 +42,7 @@ mil_gaussian_pyramid_builder_2d_general<T>::~mil_gaussian_pyramid_builder_2d_gen
 
 template <class T>
 void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(mil_image_2d_of<T>& dest_im, 
-					 const mil_image_2d_of<T>& src_im)
+					 const mil_image_2d_of<T>& src_im) const
 {
 	int src_nx = src_im.nx();
 	int src_ny = src_im.ny();
@@ -67,6 +75,20 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(mil_image_2d_of<T>
 	
 }
 
+
+//: An optimisable templated rounding function
+template <class T>
+inline T l_round(double x, T dummy)
+{  return (T) (x+0.5);}
+
+template <>
+inline double l_round<double> (double x, double dummy)
+{  return x; }
+
+template <>
+inline float l_round<float> (double x, float dummy)
+{  return (float) x; }
+
 //=======================================================================
 //: Smooth and subsample src_im to produce dest_im
 //  Applies 5 pin filter in x and y, then samples
@@ -76,7 +98,7 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(mil_image_2d_of<T>
 template <class T>
 void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(T* dest_im, int dest_ystep,
 					 const T* src_im, 
-					 int src_nx, int src_ny, int dest_nx, int dest_ny, int src_ystep)
+					 int src_nx, int src_ny, int dest_nx, int dest_ny, int src_ystep) const
 {
 	
 	// Convolve src with a 5 x 1 gaussian filter, 
@@ -213,8 +235,8 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(T* dest_im, int de
 		for (int xi=0; xi<dest_nx; xi++)
 		{
 
-			dest_row[xi] = (T) mil_safe_extend_bilin_interp_2d(x, y,
-					workb_im,  src_nx, src_ny, work_ystep);
+			dest_row[xi] = l_round<T> (mil_safe_extend_bilin_interp_2d(x, y,
+					workb_im,  src_nx, src_ny, work_ystep), (T)0);
 			x += scale_step_;
 
 		}
@@ -267,7 +289,7 @@ void mil_gaussian_pyramid_builder_2d_general<T>::set_scale_step(double scaleStep
 
 template <class T>
 void mil_gaussian_pyramid_builder_2d_general<T>::build(mil_image_pyramid& im_pyr, 
-									const mil_image& im)
+									const mil_image& im) const
 {
   //  Require image mil_image_2d_of<T>
   assert(im.is_a()==worka_.is_a());
@@ -333,7 +355,7 @@ void mil_gaussian_pyramid_builder_2d_general<T>::build(mil_image_pyramid& im_pyr
 //: Extend pyramid
 // The first layer of the pyramid must already be set.
 template<class T>
-void mil_gaussian_pyramid_builder_2d_general<T>::extend(mil_image_pyramid& image_pyr)
+void mil_gaussian_pyramid_builder_2d_general<T>::extend(mil_image_pyramid& image_pyr) const
 {
     
   //  Require image mil_image_2d_of<T>

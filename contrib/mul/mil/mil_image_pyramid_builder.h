@@ -37,14 +37,14 @@ public:
     virtual void setMaxLevels(int max_l) =0;
 
         //: Get the current maximum number levels allowed
-    virtual int maxLevels() =0;
+    virtual int maxLevels() const =0;
 
         //: Build pyramid
-    virtual void build(mil_image_pyramid&, const mil_image&) = 0;
+    virtual void build(mil_image_pyramid&, const mil_image&) const = 0;
 
         //: Extend pyramid
         // The first layer of the pyramid must already be set.
-    virtual void extend(mil_image_pyramid&) = 0;
+    virtual void extend(mil_image_pyramid&) const = 0;
 
         //: Scale step between levels
     virtual double scale_step() const = 0;

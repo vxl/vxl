@@ -5,11 +5,11 @@
 //  \brief Class to build gaussian pyramids of mil_image_2d_of<T>
 //  \author Tim Cootes
 
+#include <mil/mil_gaussian_pyramid_builder_2d.h>
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
 
 #include <vsl/vsl_indent.h>
-#include <mil/mil_gaussian_pyramid_builder_2d.h>
 #include <mil/mil_image_pyramid.h>
 #include <mil/mil_gauss_reduce_2d.h>
 #include <vcl_cassert.h>
@@ -49,7 +49,7 @@ void mil_gaussian_pyramid_builder_2d<T>::setMaxLevels(int max_l)
 
 //: Get the current maximum number levels allowed
 template<class T>
-int mil_gaussian_pyramid_builder_2d<T>::maxLevels()
+int mil_gaussian_pyramid_builder_2d<T>::maxLevels() const
 {
   return max_levels_;
 }
@@ -78,7 +78,7 @@ double mil_gaussian_pyramid_builder_2d<T>::scale_step() const
 //  every other pixel.
 template<class T>
 void mil_gaussian_pyramid_builder_2d<T>::gauss_reduce(mil_image_2d_of<T>& dest_im,
-                     const mil_image_2d_of<T>& src_im)
+                     const mil_image_2d_of<T>& src_im) const
 {
     int nx = src_im.nx();
     int ny = src_im.ny();
@@ -118,7 +118,7 @@ void mil_gaussian_pyramid_builder_2d<T>::gauss_reduce(mil_image_2d_of<T>& dest_i
 //=======================================================================
 //: Deletes all data in im_pyr
 template<class T>
-void mil_gaussian_pyramid_builder_2d<T>::emptyPyr(mil_image_pyramid& im_pyr)
+void mil_gaussian_pyramid_builder_2d<T>::emptyPyr(mil_image_pyramid& im_pyr) const
 {
     for (int i=0; i<im_pyr.nLevels();++i)
         delete im_pyr.data()[i];
@@ -127,7 +127,7 @@ void mil_gaussian_pyramid_builder_2d<T>::emptyPyr(mil_image_pyramid& im_pyr)
 //=======================================================================
 //: Checks pyramid has at least n levels
 template<class T>
-void mil_gaussian_pyramid_builder_2d<T>::checkPyr(mil_image_pyramid& im_pyr,  int n_levels)
+void mil_gaussian_pyramid_builder_2d<T>::checkPyr(mil_image_pyramid& im_pyr,  int n_levels) const
 {
     if (im_pyr.nLevels()>=n_levels)
     {
@@ -145,7 +145,7 @@ void mil_gaussian_pyramid_builder_2d<T>::checkPyr(mil_image_pyramid& im_pyr,  in
 //: Build pyramid
 template<class T>
 void mil_gaussian_pyramid_builder_2d<T>::build(mil_image_pyramid& image_pyr,
-                                    const mil_image& im)
+                                    const mil_image& im) const
 {
     //  Require image mil_image_2d_of<T>
     assert(im.is_a()==work_im_.is_a());
@@ -203,7 +203,7 @@ void mil_gaussian_pyramid_builder_2d<T>::build(mil_image_pyramid& image_pyr,
 //: Extend pyramid
 // The first layer of the pyramid must already be set.
 template<class T>
-void mil_gaussian_pyramid_builder_2d<T>::extend(mil_image_pyramid& image_pyr)
+void mil_gaussian_pyramid_builder_2d<T>::extend(mil_image_pyramid& image_pyr) const
 {
     
     //  Require image mil_image_2d_of<T>

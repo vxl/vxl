@@ -24,9 +24,9 @@ private:
 	//: the current scale step between pyramid levels
 	double scale_step_;
 	//: image workspace
-	mil_image_2d_of<T> worka_;
+	mutable mil_image_2d_of<T> worka_;
 	//: image workspace
-	mil_image_2d_of<T> workb_;
+	mutable mil_image_2d_of<T> workb_;
 	
 
 	//: Filter tap value
@@ -72,12 +72,15 @@ private:
 
 public:
 		//: Build pyramid
-	virtual void build(mil_image_pyramid& im_pyr, const mil_image& im);
+	virtual void build(mil_image_pyramid& im_pyr, const mil_image& im) const;
 
 
 
 		//: Dflt ctor
 	mil_gaussian_pyramid_builder_2d_general();
+
+  	//: Consturct with given scale_step
+	mil_gaussian_pyramid_builder_2d_general(double scale_step);
 
 		//: Destructor
 	~mil_gaussian_pyramid_builder_2d_general();
@@ -95,18 +98,20 @@ public:
     //  Applies an appropriate filter in x and y, then sub-samples
     //  at the choosen scaleStep;
 	void gauss_reduce(mil_image_2d_of<T>& dest_im, 
-					 const mil_image_2d_of<T>& src_im);
+					 const mil_image_2d_of<T>& src_im) const;
 
     //: Extend pyramid
     // The first layer of the pyramid must already be set.
-  void extend(mil_image_pyramid& image_pyr);
+  void extend(mil_image_pyramid& image_pyr) const;
 
     //: Smooth and subsample src_im to produce dest_im
     //  Applies 5 element FIR filter in x and y, then samples
     //  Assumes dest_im has suffient data allocated		 
 	void gauss_reduce(T* dest_im, int dest_ystep,
 					 const T* src_im, 
-					 int src_nx, int src_ny, int dest_nx, int dest_ny, int src_ystep);
+					 int src_nx, int src_ny,
+           int dest_nx, int dest_ny,
+           int src_ystep) const;
 
 	mil_image_pyramid_builder* clone() const;
 		//: Version number for I/O 

@@ -33,10 +33,10 @@ private:
 
 protected:
   //: Checks pyramid has at least n levels of correct type
-  void checkPyr(mil_image_pyramid& im_pyr,  int n_levels);
+  void checkPyr(mil_image_pyramid& im_pyr,  int n_levels) const;
 
   //: Deletes all data in im_pyr
-  void emptyPyr(mil_image_pyramid& im_pyr);
+  void emptyPyr(mil_image_pyramid& im_pyr) const;
 
 public:
 
@@ -58,33 +58,33 @@ public:
     virtual void setMaxLevels(int max_l);
 
         //: Get the current maximum number levels allowed
-    virtual int maxLevels();
+    virtual int maxLevels() const;
 
 
         //: Build pyramid
-    virtual void build(mil_image_pyramid&, const mil_image&);
+    virtual void build(mil_image_pyramid&, const mil_image&) const;
 
         //: Extend pyramid
         // The first layer of the pyramid must already be set.
         // Scale steps must be equal.
-    virtual void extend(mil_image_pyramid&);
+    virtual void extend(mil_image_pyramid&) const;
 
         //: Smooth and subsample src_im to produce dest_im
         //  Applies 1-5-8-5-1 filter in x and y, then samples
         //  every other pixel.
     void gauss_reduce(mil_image_2d_of<T>& dest_im,
-                     const mil_image_2d_of<T>& src_im);
+                     const mil_image_2d_of<T>& src_im) const;
 
         //: Scale step between levels
     virtual double scale_step() const;
 
 	    //: get the minimum Y size of the top layer of the pyramid
 	    // defaults to 5.
-	  unsigned min_y_size() { return minYSize_;}
+	  unsigned min_y_size() const { return minYSize_;}
 
 	    //: get the minimum Y size of the top layer of the pyramid
 	    // defaults to 5.
-	  unsigned min_x_size() { return minXSize_;}
+	  unsigned min_x_size() const { return minXSize_;}
 
 	    //: Set the minimum size of the top layer of the pyramid
 	  virtual void set_min_size(unsigned X, unsigned Y) { minYSize_ = Y; minXSize_ = X;}
