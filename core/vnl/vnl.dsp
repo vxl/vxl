@@ -294,6 +294,24 @@ SOURCE=.\Templates/vnl_matlab_print+vcl_complex+float--.cxx
 SOURCE=.\Templates/vnl_matlab_print+vcl_complex+long_double--.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vnl_matlab_print2+vnl_vector+double--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matlab_print2+vnl_vector+float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matlab_print2+vnl_vector+vcl_complex+double---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matlab_print2+vnl_matrix+double--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matlab_print2+vnl_matrix+float--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matlab_print2+vnl_matrix+vcl_complex+double---.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vnl_matrix+double-.cxx
 # End Source File
 # Begin Source File
@@ -522,22 +540,10 @@ SOURCE=.\Templates/vnl_vector_fixed+int.3-.cxx
 SOURCE=.\Templates/vnl_vector_fixed+int.4-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vnl_vector_ref+double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vnl_vector_ref+int-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vnl_alloc.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_block.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_complex.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_complex_traits.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_copy.cxx
@@ -546,49 +552,10 @@ SOURCE=.\vnl_copy.cxx
 SOURCE=.\vnl_cost_function.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vnl_cross_product_matrix.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_double_2.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_double_2x3.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_double_3.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_double_3x2.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_double_4.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vnl_error.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_fastops.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_float_2.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_float_3.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_float_4.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_identity_3x3.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_int_2.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_int_3.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_int_4.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_int_matrix.cxx
@@ -600,9 +567,6 @@ SOURCE=.\vnl_least_squares_cost_function.cxx
 SOURCE=.\vnl_least_squares_function.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vnl_linear_operators_3.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vnl_linear_system.cxx
 # End Source File
 # Begin Source File
@@ -610,15 +574,6 @@ SOURCE=.\vnl_math.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_matlab_filewrite.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_matlab_header.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_matlab_print.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_matlab_print2.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_matlab_print_format.cxx
@@ -672,13 +627,13 @@ SOURCE=.\vnl_sample.cxx
 SOURCE=.\vnl_sparse_matrix_linear_system.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vnl_trace.cxx
+SOURCE=.\Templates/vnl_unary_function+int.int-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vnl_transpose.cxx
+SOURCE=.\Templates/vnl_identity+int-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vnl_unary_function.cxx
+SOURCE=.\Templates/vnl_unary_function+double.vnl_vector+double--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vcl_algorithm+vnl_bignum-.cxx
@@ -793,6 +748,18 @@ SOURCE=.\Templates/vnl_vector_fixed+float.12-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vnl_vector_fixed+float.6-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matrix_fixed+double.1.2-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matrix_fixed+double.2.1-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matrix_fixed+float.1.2-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matrix_fixed+float.2.1-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_gamma.cxx
@@ -1059,9 +1026,6 @@ SOURCE=.\vnl_vector_fixed.txx
 SOURCE=.\vnl_vector_ref.h
 # End Source File
 # Begin Source File
-SOURCE=.\vnl_vector_ref.txx
-# End Source File
-# Begin Source File
 SOURCE=.\vnl_T_n.h
 # End Source File
 # Begin Source File
@@ -1150,6 +1114,18 @@ SOURCE=.\vnl_rank.h
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_rank.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_double_1x2.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_double_2x1.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_float_1x2.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_float_2x1.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
