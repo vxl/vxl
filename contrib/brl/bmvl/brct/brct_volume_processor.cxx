@@ -15,7 +15,7 @@ brct_volume_processor::brct_volume_processor(brct_volume_processor_params const&
   double r = 1;
   if (cube_edge_length_&&cube_edge_length_>0)
     r = 1.0/cube_edge_length_;
-  ncols_ = w*r, nrows_ = h*r, nslabs_ = d*r;
+  ncols_ = int(w*r), nrows_ = int(h*r), nslabs_ = int(d*r);
   index_ = new bsol_point_index_3d(ncols_, nrows_, nslabs_, b);
   change_index_ = new bsol_point_index_3d(ncols_, nrows_, nslabs_, b);
 }
@@ -78,6 +78,7 @@ bool brct_volume_processor::write_prob_volumes_vrml(vcl_string const&  filename)
   brct_algos::write_vrml_trailer(os);
   return true;
 }
+
 bool brct_volume_processor::read_change_data_vrml(vcl_string const&  filename)
 {
   vcl_ifstream is(filename.c_str());
