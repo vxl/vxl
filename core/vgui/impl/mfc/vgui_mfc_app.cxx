@@ -162,16 +162,13 @@ BOOL vgui_mfc_app::Run()
 
       // Set up a breakpoint place for interesting msgs
       {
-        switch(tmp_msg.message) {
-        case 0x036a: // kickidle
-        case 0x0362: // setmessagestring
-        case WM_PAINT:
-        case WM_KEYUP:
-          f();
-          break;
-        default:
-          f();
-          break;
+        switch (tmp_msg.message)
+        {
+         case 0x036a: // kickidle
+         case 0x0362: // setmessagestring
+         case WM_PAINT:
+         case WM_KEYUP:
+         default: f(); break;
         }
       }
 

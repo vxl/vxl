@@ -19,7 +19,6 @@
 #include <vcl_cstdio.h>  // sprintf()
 
 #if defined(unix) || defined(__unix)
-
 # include <unistd.h>       // read(), write(), close()
 # include <netdb.h>        // gethostbyname(), sockaddr_in()
 # include <sys/socket.h>
@@ -299,7 +298,7 @@ vil1_stream_url::vil1_stream_url(char const *url)
     }
   }
 
-#if (0) // useful for figuring out where the error is
+#if 0 // useful for figuring out where the error is
   char btest[4096];
   vcl_ofstream test("/test.jpg", vcl_ios_binary);
   u_->seek(0L);

@@ -115,9 +115,5 @@ void vil_stream_section::seek(vil_streampos position)
 
 vil_streampos vil_stream_section::file_size()
 {
-  if( end_ >= 0 ) {
-    return end_ - begin_;
-  } else {
-    return underlying_->file_size() - begin_;
-  }
+  return end_ >= begin_ ? end_ - begin_ : underlying_->file_size() - begin_;
 }
