@@ -16,6 +16,7 @@
 
 // Implementation of vnl_sparse_matrix
 //------------------------------------------------------------
+
 //: Construct an empty matrix
 template <class T>
 vnl_sparse_matrix<T>::vnl_sparse_matrix()
@@ -190,6 +191,7 @@ void vnl_sparse_matrix<T>::mult(unsigned int prows, unsigned int pcols,
       // (this).  This must be multiplied by each entry in row
       // col_id in the p matrix, and the result added to
       // (row_id,p_col_id) in the q matrix.
+      //
 
       // Iterate over p's row.
       for (unsigned int p_col_id = 0; p_col_id < pcols; p_col_id++) {

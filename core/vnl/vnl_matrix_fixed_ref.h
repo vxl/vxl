@@ -80,18 +80,18 @@ public:
   bool resize (unsigned int, unsigned int) { return 0; }
 
 private:
+  // You can't assign one of these from a matrix, cos' you don't have any space
+  vnl_matrix_fixed_ref(const vnl_matrix<T>&) {}
+  vnl_matrix_fixed_ref(const vnl_matrix_fixed_ref<T,m,n>&) {}
+
   // Private operator new because deleting a pointer to
   // one of these through a baseclass pointer will attempt
   // to free this in-class memory.
   // Therefore disallow newing of these -- if you're paying for
   // one malloc, you can afford three.
-
+  //
   // New operator restored to avoid problems constructing STL containers
   // - capes Nov 99
-
-  // You can't assign one of these from a matrix, cos' you don't have any space
-  vnl_matrix_fixed_ref(const vnl_matrix<T>&) {}
-  vnl_matrix_fixed_ref(const vnl_matrix_fixed_ref<T,m,n>&) {}
 };
 
 #endif // vnl_matrix_fixed_ref_h_

@@ -1,7 +1,6 @@
+// This is vxl/vnl/vnl_test.h
 #ifndef vnl_test_h_
 #define vnl_test_h_
-
-// This is vxl/vnl/vnl_test.h
 
 //
 // Copyright (C) 1991 Texas Instruments Incorporated.
@@ -15,18 +14,9 @@
 // express or implied warranty.
 //
 
-//: \file
-//: \brief
-//  \author Copyright (C) 1991 Texas Instruments Incorporated.
-//
-// Permission is granted to any individual or institution to use, copy, modify,
-// and distribute this software, provided that this complete copyright and
-// permission notice is maintained, intact, in all copies and supporting
-// documentation.
-//
-// Texas Instruments Incorporated provides this software "as is" without
-// express or implied warranty.
-//
+//:
+// \file
+// \brief
 
 #include <vcl_string.h>
 

@@ -18,7 +18,7 @@
 //
 // Inspired by the numerous double-3, int-2 things lying around.
 
-// cpp traits!
+//: cpp traits!
 #define vnl_T_n_aux_1(T) (T x) { data[0] = x; }
 #define vnl_T_n_aux_2(T) (T x, T y) { data[0] = x; data[1] = y; }
 #define vnl_T_n_aux_3(T) (T x, T y, T z) { data[0] = x; data[1] = y; data[2] = z; }

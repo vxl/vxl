@@ -4,9 +4,10 @@
 
 // This is vxl/vnl/vnl_least_squares_function.cxx
 
-// vnl_least_squares_function
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 31 Aug 96
+//:
+// \file
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   31 Aug 96
 
 #include <vcl_iostream.h>
 #include "vnl_least_squares_function.h"
@@ -39,13 +40,13 @@ vnl_least_squares_function::~vnl_least_squares_function()
 
 void vnl_least_squares_function::throw_failure()
 {
-  //cerr << "throw_failure()" << endl;
+  //vcl_cerr << "throw_failure()" << vcl_endl;
   failure = true;
 }
 
 void vnl_least_squares_function::clear_failure()
 {
-  //cerr << "clear_failure()" << endl;
+  //vcl_cerr << "clear_failure()" << vcl_endl;
   failure = false;
 }
 

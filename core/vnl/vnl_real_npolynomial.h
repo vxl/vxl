@@ -69,10 +69,9 @@ public:
   vnl_real_npolynomial& operator/=(double P) { return operator*=(1.0/P); }
   friend vcl_ostream& operator<<(vcl_ostream& , vnl_real_npolynomial const& );
 
-
   // nb also added functions to access the coeffs_ member variable
 
-  // Data Access---------------------------------------------------------------
+  //--- Data Access------------------------------------------------------------
 
   //: Return the degree (highest power of x) of the polynomial.
   int degree() const { return ((int)coeffs_.size()) - 1; }
@@ -97,12 +96,12 @@ public:
   //: Return the vector of coefficients
   vnl_matrix<int>& polyn()       { return polyn_; }
 
-
 private:
   void simplify();
   double eval(const vnl_matrix<double>& xn);
 
   // Data Members--------------------------------------------------------------
+
   //: coefficients
   vnl_vector<double> coeffs_;
   //: degrees of every term for every variable
@@ -114,6 +113,5 @@ private:
   //: max. degree of polynomial
   int                ideg_;
 };
-
 
 #endif // vnl_real_npolynomial_h_

@@ -48,18 +48,21 @@ public:
     }
 
   // Operations----------------------------------------------------------------
+
   //: In-place arithmetic operations
   vnl_diag_matrix<T>& operator*=(T v) { diagonal_ *= v; return *this; }
   //: In-place arithmetic operations
   vnl_diag_matrix<T>& operator/=(T v) { diagonal_ /= v; return *this; }
 
   // Computations--------------------------------------------------------------
+
   void invert_in_place();
   T determinant() const;
   vnl_vector<T> solve(vnl_vector<T> const& b);
   void solve(vnl_vector<T> const& b, vnl_vector<T>* out);
 
   // Data Access---------------------------------------------------------------
+
   T operator () (unsigned i, unsigned j) const {
     return (i != j) ? T(0) : diagonal_[i];
   }
@@ -72,6 +75,7 @@ public:
   T const& operator() (unsigned i) const { return diagonal_[i]; }
 
   // iterators
+
   typedef typename vnl_vector<T>::iterator iterator;
   inline iterator begin() { return diagonal_.begin(); }
   inline iterator end() { return diagonal_.end(); }
@@ -105,10 +109,12 @@ protected:
   vnl_vector<T> diagonal_;
 
 private:
-  //  // This is private because it's not really a matrix operation.
-  //  T operator()(unsigned i) const {
-  //    return diagonal_[i];
-  //  }
+#if 0
+  // This is private because it's not really a matrix operation.
+  T operator()(unsigned i) const {
+    return diagonal_[i];
+  }
+#endif
 
   #if VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD
   friend vnl_vector<T> operator*(vnl_diag_matrix<T> const&,vnl_vector<T> const&);

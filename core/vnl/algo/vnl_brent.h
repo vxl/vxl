@@ -8,10 +8,11 @@
 // \file
 // \author awf@robots.ox.ac.uk
 // \date   07 Dec 00
-
+// \verbatim
 // Modifications
 // 31 May 2001 Ian Scott (Manchester). Added some documentation
 // 31 May 2001 Ian Scott (Manchester). Added minimize_given_bounds_and_1st_f
+// \endverbatim
 
 #include <vnl/vnl_cost_function.h>
 #include <vnl/vnl_nonlinear_minimizer.h>

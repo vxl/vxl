@@ -5,6 +5,8 @@
 /*
   fsm@robots.ox.ac.uk
 */
+
+//:
 // \file
 
 struct vnl_tag_add { };

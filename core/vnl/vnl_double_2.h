@@ -1,9 +1,10 @@
 #ifndef vnl_double_2_h_
 #define vnl_double_2_h_
+// This is vxl/vnl/vnl_double_2.h
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_double_2.h
+
 //: \file
 //  \brief
 //  \author Andrew W. Fitzgibbon, Oxford RRG

@@ -3,9 +3,10 @@
 #endif
 // This is vxl/vnl/vnl_linear_system.cxx
 
-// vnl_linear_system
-// Author: David Capel, capes@robots
-// Created: July 2000
+//:
+// \file
+// \author David Capel, capes@robots
+// \date   July 2000
 
 #include "vnl_linear_system.h"
 #include <vcl_cassert.h>

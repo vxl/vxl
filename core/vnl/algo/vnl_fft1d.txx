@@ -17,8 +17,7 @@
 
 //--------------------------------------------------------------------------------
 
-//: super-easy constructor #1: take real vector
-//: and do the forward transform
+//: super-easy constructor #1: take real vector and do the forward transform
 
 template<class T>
 vnl_fft1d<T>::vnl_fft1d (vnl_vector<T> const& R) : base (R.size())
@@ -35,7 +34,7 @@ vnl_fft1d<T>::vnl_fft1d (vnl_vector<T> const& R) : base (R.size())
 }
 
 //: super-easy constructor #2: take complex vector and direction
-//: don't worry about twiddle-factors, just lean back ....
+//  don't worry about twiddle-factors, just lean back ....
 template<class T>
 vnl_fft1d<T>::vnl_fft1d (vnl_vector<vcl_complex<T> > const &Z, int dir) : base (Z)
 {

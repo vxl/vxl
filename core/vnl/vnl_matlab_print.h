@@ -9,7 +9,6 @@
 //  \brief Print matrices and vectors in nice MATLAB format.
 //  \author fsm@robots.ox.ac.uk, from awf's MatOps code.
 
-
 template <class T> class vnl_vector;
 template <class T> class vnl_matrix;
 template <class T> class vnl_diag_matrix;
@@ -24,7 +23,7 @@ template <class T> class vnl_diag_matrix;
 // and followed by "])\n", "]\n" and "]\n" respectively. If the variable name
 // is a null pointer, the data is printed as is.
 
-// -------------------- "unnamed" forms.
+//-------------------- "unnamed" forms.
 
 //: print a 1D array.
 template <class T>
@@ -40,7 +39,7 @@ vcl_ostream &vnl_matlab_print(vcl_ostream &,
                               unsigned rows, unsigned cols,
                               vnl_matlab_print_format =vnl_matlab_print_format_default);
 
-// -------------------- "named" forms.
+//-------------------- "named" forms.
 
 //: print a vnl_diagonal_matrix<>.
 template <class T>

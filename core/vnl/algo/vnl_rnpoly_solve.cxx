@@ -69,7 +69,7 @@ vcl_vector<vnl_vector<double>*> vnl_rnpoly_solve::realroots(double tol)
 }
 
 
-// ------------------------- INPTBR ---------------------------
+//------------------------- INPTBR ---------------------------
 //: This will initialize the random variables which are used
 // to preturb the starting point so as to have measure zero
 // probability that we will start at a singular point.
@@ -101,7 +101,7 @@ static void inptbr(int n, vnl_rnpoly_solve_cmplx p[M], vnl_rnpoly_solve_cmplx q[
   for (int j=n-1;j>=0;--j) { int jj=j%10; p[j]=pp[jj]; q[j]=qq[jj]; }
 }
 
-// -----------------------------  POWR  -----------------------
+//-----------------------------  POWR  -----------------------
 //: This returns the complex number y raised to the nth degree
 static inline vnl_rnpoly_solve_cmplx powr(int n,vnl_rnpoly_solve_cmplx const& y)
 {
@@ -123,7 +123,7 @@ static void initr(int n,int ideg[M], vnl_rnpoly_solve_cmplx p[M], vnl_rnpoly_sol
 }
 
 
-// -------------------------------- DEGREE -------------------------------
+//-------------------------------- DEGREE -------------------------------
 //: This will compute the degree of the polynomial based upon the index.
 static inline int degree(int index)
 {
@@ -131,7 +131,7 @@ static inline int degree(int index)
 }
 
 
-// -------------------------- FFUNR -------------------------
+//-------------------------- FFUNR -------------------------
 //: Evaluate the target system component of h.  This is the
 // system of equations that we are trying to find the roots.
 static void ffunr(double coeff[M][T], int polyn[M][T][M], int n,
@@ -188,7 +188,7 @@ static void ffunr(double coeff[M][T], int polyn[M][T][M], int n,
 }
 
 
-// --------------------------- GFUNR --------------------------
+//--------------------------- GFUNR --------------------------
 //: Evaluate the starting system component of h from a system
 // of equations that we already know the roots. (ex: x^n - 1)
 static void gfunr(int len, int ideg[M], vnl_rnpoly_solve_cmplx pdg[M], vnl_rnpoly_solve_cmplx qdg[M],
@@ -219,7 +219,7 @@ static void gfunr(int len, int ideg[M], vnl_rnpoly_solve_cmplx pdg[M], vnl_rnpol
 }
 
 
-// -------------------------- HFUNR --------------------------
+//-------------------------- HFUNR --------------------------
 //: This is the routine that traces the curve from the gfunr
 // to the f function (i.e. Evaluate the continuation function)
 static void hfunr(int len,int ideg[M], vnl_rnpoly_solve_cmplx pdg[M], vnl_rnpoly_solve_cmplx qdg[M],
@@ -247,7 +247,7 @@ static void hfunr(int len,int ideg[M], vnl_rnpoly_solve_cmplx pdg[M], vnl_rnpoly
 }
 
 
-// ------------------------ LU DECOMPOSITION --------------------------
+//------------------------ LU DECOMPOSITION --------------------------
 //: This performs LU decomposition on a matrix.
 static int ludcmp(vnl_rnpoly_solve_cmplx a[M][M], int n, int indx[M])
 {
@@ -358,7 +358,7 @@ static void lubksb(vnl_rnpoly_solve_cmplx a[M][M], int n, int indx[M],
 }
 
 
-// -------------------------- LINNR -------------------
+//-------------------------- LINNR -------------------
 //: Solve a complex system of equations by using l-u
 // decomposition and then back subsitution.
 static int linnr(int len,vnl_rnpoly_solve_cmplx dhx[M][M],
@@ -371,7 +371,7 @@ static int linnr(int len,vnl_rnpoly_solve_cmplx dhx[M][M],
 }
 
 
-// -----------------------  XNORM  --------------------
+//-----------------------  XNORM  --------------------
 //: Finds the unit normal of a vector v
 static double xnorm(int n, vnl_rnpoly_solve_cmplx v[])
 {
@@ -380,7 +380,7 @@ static double xnorm(int n, vnl_rnpoly_solve_cmplx v[])
   return txnorm;
 }
 
-// ---------------------- PREDICT ---------------------
+//---------------------- PREDICT ---------------------
 //: Predict new x vector using Taylor's Expansion.
 static void predict(int len, int ideg[M], vnl_rnpoly_solve_cmplx pdg[M], vnl_rnpoly_solve_cmplx qdg[M],
                     double step, double& t, vnl_rnpoly_solve_cmplx x[M], int polyn[M][T][M],
@@ -418,7 +418,7 @@ static void predict(int len, int ideg[M], vnl_rnpoly_solve_cmplx pdg[M], vnl_rnp
 }
 
 
-// ------------------------- CORRECT --------------------------
+//------------------------- CORRECT --------------------------
 //: Correct the predicted point to lie near the actual curve
 // Use Newton's Method to do this.
 // Returns:
@@ -454,7 +454,7 @@ static int correct(int len,int ideg[M], int loop, double eps,
 }
 
 
-// -------------------------- TRACE ---------------------------
+//-------------------------- TRACE ---------------------------
 //: This is the continuation routine, it will trace a curve
 // from a known point in the complex plane to an unknown
 // point in the complex plane.  The new end point is the root
@@ -557,7 +557,7 @@ static int trace (int len, vnl_rnpoly_solve_cmplx x[M], int ideg[M],
 }
 
 
-// -------------------------- STRPTR ---------------------------
+//-------------------------- STRPTR ---------------------------
 //: This will find a starting point on the 'g' function circle.
 // The new point to start tracing is stored in the x array.
 static void strptr(int n,int icount[M],int ideg[M], vnl_rnpoly_solve_cmplx r[M],vnl_rnpoly_solve_cmplx x[M])
@@ -651,7 +651,7 @@ static int Perform_Distributed_Task(int points,vnl_rnpoly_solve_cmplx sols[LEN][
 }
 
 
-// ----------------------- READ INPUT ----------------------
+//----------------------- READ INPUT ----------------------
 //: This will read the input polynomials from a data file.
 int vnl_rnpoly_solve::Read_Input(int ideg[M], int terms[M],
                                  int polyn[M][T][M], double coeff[M][T])

@@ -1,9 +1,9 @@
 #ifndef vnl_complex_traits_h_
 #define vnl_complex_traits_h_
+// This is vxl/vnl/vnl_complex_traits.h
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_complex_traits.h
 
 //: \file
 //  \brief To allow templated real or complex algorithms to determine appropriate actions of conjugation, complexification etc.
@@ -34,7 +34,6 @@ public:
 };
 
 //: override for vcl_complex<REAL> :
-
 // vcl_complex<float>
 VCL_DEFINE_SPECIALIZATION
 class vnl_complex_traits< vcl_complex<float> > {
@@ -46,6 +45,7 @@ public:
     { return z; }
 };
 
+//: override for vcl_complex<REAL> :
 // vcl_complex<double>
 VCL_DEFINE_SPECIALIZATION
 class vnl_complex_traits< vcl_complex<double> > {

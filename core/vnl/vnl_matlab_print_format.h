@@ -6,6 +6,8 @@
 /*
   fsm@robots.ox.ac.uk
 */
+
+//:
 // \file
 
 //: pretty-printing matlab formats

@@ -6,6 +6,8 @@
 /*
   fsm@robots.ox.ac.uk
 */
+
+//:
 // \file
 // \brief In-place 1D fast fourier transform
 

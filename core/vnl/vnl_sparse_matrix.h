@@ -6,9 +6,9 @@
 // This is vxl/vnl/vnl_sparse_matrix.h
 
 //: \file
-//  \brief Simple Sparse Matrix
+//  \brief Simple sparse matrix
 //
-//   Simple sparse matrix.  Only those values which
+//    Only those values which
 //    are non-zero are stored. The sparse matrix currently supports
 //    only getting/putting elements, and multiply by vector or another
 //    sparse matrix.

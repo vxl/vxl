@@ -192,7 +192,7 @@ public:
 
 // SPECIALIZATIONS :
 
-// -------------------- #include <vnl/vnl_numeric_limits_int.h>
+//-------------------- #include <vnl/vnl_numeric_limits_int.h>
 
 #ifdef IUE_64_BIT
 # define vnl_tmp_signed32 ????
@@ -374,7 +374,7 @@ public:
   static const vnl_float_round_style round_style VCL_STATIC_CONST_INIT_INT(vnl_round_toward_zero);
 };
 
-// -------------------- #include <vnl/vnl_numeric_limits_float.h>
+//-------------------- #include <vnl/vnl_numeric_limits_float.h>
 
 // IEEE 754 single precision
 VCL_DEFINE_SPECIALIZATION
@@ -411,7 +411,7 @@ public:
   static const vnl_float_round_style round_style VCL_STATIC_CONST_INIT_INT(vnl_round_to_nearest);
 };
 
-// -------------------- #include <vnl/vnl_numeric_limits_double.h>
+//-------------------- #include <vnl/vnl_numeric_limits_double.h>
 
 // IEEE 754 double precision with denorm
 VCL_DEFINE_SPECIALIZATION

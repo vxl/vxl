@@ -6,20 +6,18 @@
 #include <vcl_vector.h>
 
 //: Choose precision in printouts.
-// 
+//
 // vnl_matlab_format(vnl_matops::fmt_long) selects 16-digit precision
-// 
+//
 // vnl_matlab_format(vnl_matops::fmt_short) selects 4-digit precision
-// 
-
-// moved here because 2.7 choked
 
 //: this variable is the current top of the stack.
+// moved here because gcc 2.7 choked
 static vnl_matlab_print_format the_format = vnl_matlab_print_format_short;
 //: the rest of the stack is stored in this vector.
 static vcl_vector<int> *format_stack = 0;
 //: call this to initialize the format stack.
-static void vnl_matlab_print_format_init() 
+static void vnl_matlab_print_format_init()
 { if (!format_stack) format_stack = new vcl_vector<int>; }
 
 void vnl_matlab_print_format_push(vnl_matlab_print_format f)

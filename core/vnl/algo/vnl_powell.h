@@ -4,6 +4,8 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+
+//:
 // \file
 // \brief Powell minimizer.
 // \author awf@robots.ox.ac.uk
