@@ -87,7 +87,6 @@ int vil_stream_core::m_transfer(char *buf, int pos, int n, bool read)
     while (blocksize*block.size() < pos+n)
       block.push_back(new char [blocksize]);
 
-  int v = errno; // IMS tracking down errors
   // transfer data
   {
     char     *tbuf = buf;
