@@ -1,3 +1,4 @@
+// This is rpl/rrel/rrel_mlesac_obj.cxx
 #include "rrel_mlesac_obj.h"
 
 #include <rrel/rrel_util.h>
@@ -27,7 +28,7 @@ rrel_mlesac_obj::fcn( vect_const_iter begin, vect_const_iter end,
   double value=0;
   double pi,p0,zi;
   vect_const_iter begin0 = begin;
-  unsigned int num_residual = end - begin;
+  unsigned long num_residual = end - begin;
   double mult1 = 1.0 / (vcl_sqrt( 2 * vnl_math::pi ));
 
   double inlier_frac = 1.0;
@@ -72,7 +73,7 @@ rrel_mlesac_obj::fcn( vect_const_iter begin, vect_const_iter end,
   double value=0;
   double pi,p0,zi;
   vect_const_iter begin0 = begin;
-  unsigned int num_residual = end - begin;
+  unsigned long num_residual = end - begin;
 
   double inlier_frac = 1.0;
   double new_inlier_frac = 1 - outlier_frac_;
