@@ -5,7 +5,7 @@
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_int_3.h>
 #include <vnl/vnl_matrix.h>
-#include <vnl/algo/vnl_svd.h>
+#include <vnl/vnl_inverse.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_save.h>
 
@@ -122,7 +122,7 @@ void vmal_dense_matching::refine_lines_using_F(vmal_multi_view_data_edge_sptr mv
     }
   }
   else
-    vcl_cerr<<"Error: you must set the Fundamental matrix to use this method."<<vcl_endl;
+    vcl_cerr<<"Error: you must set the Fundamental matrix to use this method.\n";
 }
 
 // Between two set of lines in 2 images that are matched, it compute the best lines
@@ -149,9 +149,7 @@ void vmal_dense_matching::refine_lines_using_H(vmal_multi_view_data_edge_sptr mv
       convert_lines_double_3(tmp_lines0, lines0_p, lines0_q);
       convert_lines_double_3(tmp_lines1, lines1_p, lines1_q);
 
-      vnl_double_3x3 HI;
-      vnl_svd<double> SVD(_H);
-      HI=SVD.inverse();
+      vnl_double_3x3 HI=vnl_inverse(_H);
       for (int i=0;i<numlines;i++)
       {
         vnl_double_3 pt0p=lines0_p[i];
@@ -203,7 +201,7 @@ void vmal_dense_matching::refine_lines_using_H(vmal_multi_view_data_edge_sptr mv
     }
   }
   else
-    vcl_cerr<<"Error: you must set the Homography matrix to use this method."<<vcl_endl;
+    vcl_cerr<<"Error: you must set the Homography matrix to use this method.\n";
 }
 
 
@@ -226,9 +224,7 @@ void vmal_dense_matching::disparity_map(vmal_multi_view_data_edge_sptr mvd_edge,
   convert_lines_double_3(tmp_lines0, lines0_p, lines0_q);
   convert_lines_double_3(tmp_lines1, lines1_p, lines1_q);
 
-  vnl_double_3x3 IH0;
-  vnl_svd<double> SVD(_H0);
-  IH0=SVD.inverse();
+  vnl_double_3x3 IH0=vnl_inverse(_H0);
 
   vnl_double_3 int_line0p;
   vnl_double_3 int_line0q;

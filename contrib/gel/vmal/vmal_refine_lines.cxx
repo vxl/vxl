@@ -2,7 +2,7 @@
 #include "vmal_refine_lines.h"
 
 #include <vmal/vmal_operators.h>
-#include <vnl/algo/vnl_svd.h>
+#include <vnl/vnl_inverse.h>
 
 vmal_refine_lines::vmal_refine_lines()
 {
@@ -14,10 +14,10 @@ vmal_refine_lines::~vmal_refine_lines()
 
 //Need to be improve. Perhaps a normalization of the lines would give better results
 void vmal_refine_lines::refine_lines_f(vnl_double_3 &line0p, vnl_double_3 &line0q,
-                       vnl_double_3 &line1p, vnl_double_3 &line1q,
-                     const vnl_double_3x3 & F,
-                     vnl_double_3 &r_line0p, vnl_double_3 &r_line0q,
-                       vnl_double_3 &r_line1p, vnl_double_3 &r_line1q)
+                                       vnl_double_3 &line1p, vnl_double_3 &line1q,
+                                       const vnl_double_3x3 & F,
+                                       vnl_double_3 &r_line0p, vnl_double_3 &r_line0q,
+                                       vnl_double_3 &r_line1p, vnl_double_3 &r_line1q)
 {
   vnl_double_3 epi_line1p=F*line0p;
   vnl_double_3 epi_line1q=F*line0q;
@@ -35,21 +35,21 @@ void vmal_refine_lines::refine_lines_f(vnl_double_3 &line0p, vnl_double_3 &line0
   double alpha,beta;
 
   if (vmal_operators::line_cross_seg(line1p, line1q,
-                    epi_line1p, inter1p,alpha))
+                                     epi_line1p, inter1p,alpha))
     if (vmal_operators::line_cross_seg(line1p, line1q,
-                        epi_line1q, inter1q,beta))
+                                       epi_line1q, inter1q,beta))
     {
       //1 case: the first segment is "included" in the second segment
       vmal_operators::line_cross_seg(line0p, line0q,
-                         epi_line0p, r_line0p,alpha);
+                                     epi_line0p, r_line0p,alpha);
       vmal_operators::line_cross_seg(line0p, line0q,
-                         epi_line0q, r_line0q,beta);
+                                     epi_line0q, r_line0q,beta);
     }
     else
     {
       //2 case: the segments share a part.
       vmal_operators::line_cross_seg(line0p, line0q,
-                         epi_line0p, r_line0p, alpha);
+                                     epi_line0p, r_line0p, alpha);
       r_line1q=inter1q;
     }
   else
@@ -58,7 +58,7 @@ void vmal_refine_lines::refine_lines_f(vnl_double_3 &line0p, vnl_double_3 &line0
     {
       //3 case:  the segments share a part.
       vmal_operators::line_cross_seg(line0p, line0q,
-                         epi_line0q, r_line0q, beta);
+                                     epi_line0q, r_line0q, beta);
       r_line1p=inter1p;
     }
     else
@@ -72,14 +72,12 @@ void vmal_refine_lines::refine_lines_f(vnl_double_3 &line0p, vnl_double_3 &line0
 // Between two lines in 2 images that are matched, it compute the best lines
 // using the homography
 void vmal_refine_lines::refine_lines_max_h(vnl_double_3 &line0p, vnl_double_3 &line0q,
-                       vnl_double_3 &line1p, vnl_double_3 &line1q,
-                           const vnl_double_3x3 & H,
-                           vnl_double_3 &r_line0p, vnl_double_3 &r_line0q,
-                           vnl_double_3 &r_line1p, vnl_double_3 &r_line1q)
+                                           vnl_double_3 &line1p, vnl_double_3 &line1q,
+                                           const vnl_double_3x3 & H,
+                                           vnl_double_3 &r_line0p, vnl_double_3 &r_line0q,
+                                           vnl_double_3 &r_line1p, vnl_double_3 &r_line1q)
 {
-  vnl_double_3x3 HI;
-  vnl_svd<double> SVD(H);
-  HI=SVD.inverse();
+  vnl_double_3x3 HI=vnl_inverse(H);
 
   vnl_double_3 h_line1_p=H*line0p;
   vnl_double_3 h_line1_q=H*line0q;
@@ -125,14 +123,12 @@ void vmal_refine_lines::refine_lines_max_h(vnl_double_3 &line0p, vnl_double_3 &l
 //Refine a pair of lines: it means that it keeps the common part of the two lines
 //using the homography.
 void vmal_refine_lines::refine_lines_min_h(vnl_double_3 &line0p, vnl_double_3 &line0q,
-                       vnl_double_3 &line1p, vnl_double_3 &line1q,
-                       const vnl_double_3x3 &H,
-                       vnl_double_3 &r_line0p, vnl_double_3 &r_line0q,
-                           vnl_double_3 &r_line1p, vnl_double_3 &r_line1q)
+                                           vnl_double_3 &line1p, vnl_double_3 &line1q,
+                                           const vnl_double_3x3 &H,
+                                           vnl_double_3 &r_line0p, vnl_double_3 &r_line0q,
+                                           vnl_double_3 &r_line1p, vnl_double_3 &r_line1q)
 {
-  vnl_double_3x3 HI;
-  vnl_svd<double> SVD(H);
-  HI=SVD.inverse();
+  vnl_double_3x3 HI=vnl_inverse(H);
 
   r_line0p=line0p;
   r_line0q=line0q;

@@ -12,7 +12,7 @@
 #include <vsl/vsl_indent.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
-#include <vnl/algo/vnl_svd.h>
+#include <vnl/vnl_inverse.h>
 
 vnl_matrix<double> vimt_transform_2d::matrix() const
 {
@@ -460,8 +460,7 @@ void vimt_transform_2d::calcInverse()  const
         {
             vnl_matrix<double> M(3,3),M_inv(3,3);
             matrix(M);
-            vnl_svd<double> svd(M);
-            M_inv = svd.inverse();
+            M_inv = vnl_inverse(M);
             double **m_data=M_inv.data_array();
             xx2_=m_data[0][0];   xy2_=m_data[0][1]; xt2_=m_data[0][2];
             yx2_=m_data[1][0];   yy2_=m_data[1][1]; yt2_=m_data[1][2];
