@@ -6,10 +6,6 @@
 
 VXL := 1 
 
-##########################################
-include ${IUEROOT}/config/top-params.mk
-##########################################
-
 USES += vxl
 IULIBS := -lvcl
 IULIBS += -lvbl
@@ -17,11 +13,6 @@ IULIBS += -lvsol
 
 LIBRARY := vtol
 VERSION := 1.0
-
-ifndef NOTEST
-SUBDIRS += tests
-SUBDIRS += examples
-endif
 
 
 
@@ -53,10 +44,16 @@ SOURCES += vtol_face_3d.cxx
 SOURCES += vtol_vertex_3d.cxx
 
 
-
-
-
 # DEFINES += -DBUILDING_VTOL_DLL
+
+##########################################
+include ${IUEROOT}/config/top-params.mk
+##########################################
+
+ifndef NOTEST
+SUBDIRS += tests
+SUBDIRS += examples
+endif
 
 ##########################################
 include ${IUEROOT}/config/top-rules.mk
