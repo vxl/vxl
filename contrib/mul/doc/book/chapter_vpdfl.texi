@@ -8,20 +8,19 @@ multivariate probability density functions (@acronym{PDF}s).
 
 Each @acronym{PDF} comes as a builder-model-sampler triplet of objects.
 
-@multitable {Derived Classes:} {vpdfl_axis_gaussian_builder}  {vpdfl_axis_gaussian}  {vpdfl_axis_gaussian_sampler}  
-@item Base Class:
-@tab vpdfl_builder_base
-@tab vpdfl_pdf_base
-@tab vpdfl_pdf_sampler
-@item Derived Classes:
-@tab vpdfl_axis_gaussian_builder
-@tab vpdfl_axis_gaussian
-@tab vpdfl_axis_gaussian_sampler
-@item
-@tab vpdfl_gaussian_builder
-@tab vpdfl_gaussian
-@tab vpdfl_gaussian_sampler
-@end multitable
+e.g. The abstract @acronym{PDF} base classes
+@itemize
+@item vpdfl_builder_base
+@item vpdfl_pdf_base
+@item vpdfl_pdf_sampler
+@end itemize
+
+The multivariate Gaussian @acronym{PDF} classes
+@itemize
+@item vpdfl_axis_gaussian_builder
+@item vpdfl_axis_gaussian
+@item vpdfl_axis_gaussian_sampler
+@end itemize
 
 The builders are used to compute the model data (eg the means, variances
 etc) for the models. The models are used to calculate densities,
@@ -29,7 +28,7 @@ cumulative probabilities, gradients, etc. Samplers are used to generate samples
 from a given model. The samples are produced with a @acronym{PDF} given by its model.
 
 
-@section Strategy Pattern
+@subsection Strategy Pattern
 This code is an example of the strategy pattern
 (@cite{Gamma, et al. Design Patterns, Addison Wesley, 1995}.) It is possible to
 write code that builds and uses a @acronym{PDF}, where your code does not itself
@@ -43,6 +42,10 @@ For cases where the distributions of parameters are multi-modal,
 the number and centres of each peak can be recorded. This is particularly
 useful for non-linear and mixture model representations of the parameter
 distributions.
+
+The PDFs are assumed to be continuous, and defined over an @math{|R^n} vector space.
+The type of these vectors is @code{vnl_vector<double>}.
+
 @heading Main functions
 @table @code
 
@@ -82,7 +85,7 @@ Compute nearest point to x which has a log density above a threshold
 
 @section vpdfl_builder_base
 A base class for objects which build Multivariate @acronym{PDF} models from sets
-of vectors supplied in a mbl_data_wrapper<vnl_vector<double> > derived iterator.
+of vectors supplied in a @code{mbl_data_wrapper<vnl_vector<double> >} derived iterator.
 
 @heading Main functions
 @table @code
@@ -97,17 +100,17 @@ Build the model from the supplied vectors, allowing for given weights
 @end table
 
 @section vpdfl_base_sampler
-This generates samples drawn from the distribution described by a vpdfl_pdf_base.
+This generates samples drawn from the distribution described by a @code{vpdfl_pdf_base}.
 Note that unlike other types in the library, the samplers don't contain useful
 state, and cannot be saved.
 
 @heading Main functions
 @table @code
 @item const vpdfl_pdf_base& model() const
-The vpdfl_pdf_base for which this is a sampler
+The @code{vpdfl_pdf_base} for which this is a sampler
 
 @item void set_model(pdf)
-Set model for which this is an instance
+Set model for which this is a sampler
 
 @item void sample(x)
 Draw random sample from distribution
@@ -122,15 +125,15 @@ Gaussian @acronym{PDF} aligned with the cartesian axes.
 
 @item vpdfl_gaussian
 General gaussian at arbitrary orientation. Axes are
-defined by a set of eigenvectors, eigenvecs(), and their associated eigenvalues,
-eigenvals() of the covariance matrix of the original data.
+defined by a set of eigenvectors, @code{eigenvecs()}, and their associated eigenvalues,
+@code{eigenvals()} of the covariance matrix of the original data.
 
 @item vpdfl_pc_gaussian
 A gaussian at arbitrary orientation. The covariance in the direction of the smaller
 eigenvalues are assumed for efficiency to be circular.
 
 @item vpdfl_mixture_pdf
-Mixture model containing two or more components (each a vpdfl_pdf_base derived class)
+Mixture model containing two or more components (each a @code{vpdfl_pdf_base} derived class)
 @end table
 
 @section Examples
