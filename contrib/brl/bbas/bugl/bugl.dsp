@@ -110,6 +110,12 @@ SOURCE=.\Templates/bugl_uncertainty_point_2d+double-.cxx
 # Begin Source File
 SOURCE=.\Templates/bugl_uncertainty_point_3d+double-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bugl_normal_point_2d-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bugl_normal_point_3d-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -126,12 +132,6 @@ SOURCE=.\bugl_gaussian_point_3d.h
 SOURCE=.\bugl_gaussian_point_3d.txx
 # End Source File
 # Begin Source File
-SOURCE=.\bugl_gaussian_point_2d_sptr.h
-# End Source File
-# Begin Source File
-SOURCE=.\bugl_gaussian_point_3d_sptr.h
-# End Source File
-# Begin Source File
 SOURCE=.\bugl_uncertainty_point_2d.h
 # End Source File
 # Begin Source File
@@ -142,6 +142,18 @@ SOURCE=.\bugl_uncertainty_point_3d.h
 # End Source File
 # Begin Source File
 SOURCE=.\bugl_uncertainty_point_3d.txx
+# End Source File
+# Begin Source File
+SOURCE=.\bugl_normal_point_2d.h
+# End Source File
+# Begin Source File
+SOURCE=.\bugl_normal_point_2d_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bugl_normal_point_3d.h
+# End Source File
+# Begin Source File
+SOURCE=.\bugl_normal_point_3d_sptr.h
 # End Source File
 # End Group
 # End Target
