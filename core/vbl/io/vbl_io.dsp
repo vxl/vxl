@@ -193,10 +193,6 @@ SOURCE=".\Templates\vbl_io_sparse_array+int.uint-.cxx"
 
 SOURCE=".\Templates\vbl_io_sparse_array+int.vcl_pair+uint.uint--.cxx"
 # End Source File
-# Begin Source File
-
-SOURCE=.\vbl_io_user_info.cxx
-# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -260,10 +256,6 @@ SOURCE=.\vbl_io_sparse_array_2d.h
 # Begin Source File
 
 SOURCE=.\vbl_io_sparse_array_base.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_io_user_info.h
 # End Source File
 # End Group
 # End Target
