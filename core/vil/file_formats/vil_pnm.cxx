@@ -94,6 +94,7 @@ vil_pnm_image::vil_pnm_image(vil_stream* vs, unsigned ni, unsigned nj,
   nj_ = nj;
 
   ncomponents_ = nplanes;
+  format_ = vil_pixel_format_component_format(format);
   if (nplanes == 1 &&
       (format==VIL_PIXEL_FORMAT_RGB_BYTE ||
        format==VIL_PIXEL_FORMAT_RGB_SBYTE ||
