@@ -41,8 +41,7 @@ struct null_problem : public rrel_estimation_problem
 
 static void test_ran_sam_search()
 {
-  double a[] = { 10.0, 0.02, -0.1 };
-  vnl_vector<double> true_params(3, 3, a);
+  vnl_double_3 true_params(10.0, 0.02, -0.1);
   const int num_pts=12;
 
   //  Build LinearRegression objects.
@@ -169,9 +168,11 @@ static void test_ran_sam_search()
   testlib_test_begin( "estimate succeed" );
   testlib_test_perform( ransam->estimate( lr, lms ) );
   vnl_vector<double> est_params = ransam->params();
-  //  vcl_cout << "estimate = " << est_params
-  //           << ", true model = " << true_params << vcl_endl
-  //           << "scale = " << ransam->get_scale() << vcl_endl;
+#ifdef DEBUG
+  vcl_cout << "estimate = " << est_params
+           << ", true model = " << true_params << vcl_endl
+           << "scale = " << ransam->get_scale() << vcl_endl;
+#endif // DEBUG
   ok = vnl_math_abs( est_params[0] - true_params[0] ) < 0.2
     && vnl_math_abs( est_params[1] - true_params[1] ) < 0.025
     && vnl_math_abs( est_params[2] - true_params[2] ) < 0.025;
@@ -183,7 +184,7 @@ static void test_ran_sam_search()
   double sigma = 0.1;
   vcl_vector<image_point_match> matches;
   vnl_double_4 sim_params(1.4,-0.2,20.0,-18.0);
-  generate_similarity_matches( sim_params, sigma, matches );  // 20 matches, 13 points
+  generate_similarity_matches( sim_params.as_vector(), sigma, matches );  // 20 matches, 13 points
   rrel_estimation_problem* match_prob = new similarity_from_matches( matches );
 #if 0
   ransam->set_sampling_params( 0.5, 0.999, 1 );

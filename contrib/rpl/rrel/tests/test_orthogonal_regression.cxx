@@ -88,7 +88,7 @@ static void test_orthogonal_regression()
   lr1 = new rrel_orthogonal_regression( pts );
 
   testlib_test_begin( "residuals" );
-  lr1->compute_residuals( true_params, residuals );
+  lr1->compute_residuals( true_params.as_vector(), residuals );
   bool ok = (residuals.size() == num_pts);
   for ( unsigned int i=0; i<residuals.size() && ok; ++ i )
     ok = close( residuals[i], error[i] );
