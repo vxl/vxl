@@ -48,7 +48,7 @@ bool vpro_capture_process::finish()
   vidl_vil1_clip_sptr clip = new vidl_vil1_clip(frames_);
   vidl_vil1_movie_sptr mov= new vidl_vil1_movie();
   mov->add_clip(clip);
-  if (!vidl_vil1_io::save(mov.ptr(), video_file_.c_str(), "png")){
+  if (!vidl_vil1_io::save(mov.ptr(), video_file_.c_str(), "tiff")){
     vcl_cout << "In vpro_capture_process::finish()"
              << " - failed to save video" << vcl_endl;
     return false;
