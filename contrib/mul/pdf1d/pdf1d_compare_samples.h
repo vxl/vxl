@@ -20,7 +20,7 @@ bool pdf1d_smaller_samples(const double* x1, int n1, const double* x2, int n2, d
 //: Return the average number of elements of x2 greater than each x1[i]
 double pdf1d_prop_larger(const double* x1, int n1, const double* x2, int n2);
 
-//: Select the samples which are on average largest
+//: Select the samples which are on average largest.
 //  x[i] is considered larger than x[j] if on average each element of x[i] is
 //  larger than a proportion p of those in x[j].
 //  Where there is ambiguity return smallest index.

@@ -31,50 +31,50 @@ protected:
   double sum_weights_;
 public:
 
-  //:calc the weighted mean and var of kernels
+  //:calc the weighted mean and var of kernels.
   // w is expected to sum to n.
   static void pdf1d_weighted_kernel_pdf::pdf1d_weighted_kernel_mean_var(
     double& mean, double& var,
     const vnl_vecd& centres, const vnl_vecd& widths, const vnl_vecd& weights);
 
 
-    //: Set the weights
-    // The weights will be scaled to sum to 1.0
+  //: Set the weights.
+  // The weights will be scaled to sum to 1.0
   void set_weight(const vnl_vector<double>& weights);
 
-    //: Swap in the weights values.
-    // This function is fast when you are changing the weights regularly
-    // The weights will be scaled to sum to 1.0
+  //: Swap in the weights values.
+  // This function is fast when you are changing the weights regularly
+  // The weights will be scaled to sum to 1.0
   void swap_weight(vnl_vector<double>& weights);
 
   //: Weight of each kernel
   const vnl_vector<double>& weight() const { return weight_; }
 
-    //: Initialise so all kernels have the same width
-    // This function resets the weights.
+  //: Initialise so all kernels have the same width
+  // This function resets the weights.
   virtual void set_centres(const vnl_vector<double>& x, double width);
 
-    //: Initialise so all kernels have given width
-    // This function resets the weights.
+  //: Initialise so all kernels have given width
+  // This function resets the weights.
   virtual void set_centres(const vnl_vector<double>& x,
-                   const vnl_vector<double>& width);
+                           const vnl_vector<double>& width);
 
-    //: Version number for I/O
+  //: Version number for I/O
   short version_no() const;
 
-    //: Name of the class
+  //: Name of the class
   virtual vcl_string is_a() const;
 
-    //: Does the name of the class match the argument?
+  //: Does the name of the class match the argument?
   virtual bool is_class(vcl_string const& s) const;
 
-    //: Print class to os
+  //: Print class to os
   virtual void print_summary(vcl_ostream& os) const;
 
-    //: Save class to binary file stream
+  //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
 
-    //: Load class from binary file stream
+  //: Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs);
 };
 
