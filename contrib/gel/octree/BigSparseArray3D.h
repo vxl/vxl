@@ -49,6 +49,11 @@
 //     180497 AWF Moved to Basics
 // \endverbatim
 //-----------------------------------------------------------------------------
+#ifndef VCL_WIN32
+typedef long long longlong
+#else // There are no 64-bit integers on MS-Windows
+typedef long longlong
+#endif
 
 #include <vcl_functional.h>
 #include <vcl_utility.h>
@@ -87,9 +92,9 @@ protected:
   unsigned _n1;
   unsigned _n2;
   unsigned _n3;
-  vcl_map<unsigned long long, T, vcl_less<unsigned long long> > _storage;
+  vcl_map<unsigned longlong, T, vcl_less<unsigned longlong> > _storage;
 
-  typedef vcl_map<unsigned long long, T, vcl_less<unsigned long long> > Map;
+  typedef vcl_map<unsigned longlong, T, vcl_less<unsigned longlong> > Map;
 
 public:
   // Helpers-------------------------------------------------------------------

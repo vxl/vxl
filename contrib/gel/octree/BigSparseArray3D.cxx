@@ -80,20 +80,20 @@ BigSparseArray3D<T>::~BigSparseArray3D()
 }
 
 // locals
-inline long long bigencode(unsigned i, unsigned j, unsigned k)
+inline longlong bigencode(unsigned i, unsigned j, unsigned k)
 {
   // A bit of an arbitrary restriction, for efficiency
   // 2048 is 1 << 11, could be 1 << 21 for 64bit machines.
   // Use a map of tuples if you need bigger sparse arrays
   assert( (i < 2097152) && (j < 2097152) && (k < 2097152) );
-  return (((unsigned long long)(i)) << 42) |
-         (((unsigned long long)(j)) << 21) |
-         ((unsigned long long)(k));
+  return (((unsigned longlong)(i)) << 42) |
+         (((unsigned longlong)(j)) << 21) |
+         ((unsigned longlong)(k));
 }
 
-inline void bigdecode(unsigned long long v, unsigned& i, unsigned& j, unsigned& k)
+inline void bigdecode(unsigned longlong v, unsigned& i, unsigned& j, unsigned& k)
 {
-  unsigned long long lowmask = (1U << 21) - 1;
+  unsigned longlong lowmask = (1U << 21) - 1;
   k = v & lowmask;
   j = (v >> 11) & lowmask;
   i = (v >> 22) & lowmask;
