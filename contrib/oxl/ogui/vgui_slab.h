@@ -7,9 +7,7 @@
 //:
 // \file
 // \author fsm
-// \brief
-//
-//  Contains classes: vgui_slab
+// \brief contains struct vgui_slab
 
 #include <vgui/vgui_event.h>
 

@@ -7,7 +7,6 @@
 //:
 // \file
 // \author fsm
-// \brief
 
 struct vgui_slab;
 struct vgui_tableau_sptr;
