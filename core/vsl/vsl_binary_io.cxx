@@ -396,7 +396,7 @@ int vsl_b_ostream::get_serialisation_other_data(void *pointer) const
 //: Modify the user-defined data associated with the object.
 // If there is no record of the object, this function will abort.
 int vsl_b_ostream::set_serialisation_other_data
-    (void *pointer, int other_data)
+    (void *pointer, int /*other_data*/)
 {
   serialisation_records_type::iterator entry =
     serialisation_records_.find(pointer);
@@ -456,7 +456,7 @@ vsl_b_istream::vsl_b_istream(vcl_istream *is): is_(is)
              << v << ". Expected value 1." << vcl_endl;
     is_->clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
   }
-  version_no_ = v;
+  version_no_ = (unsigned short)v;
 }
 
 //: A reference to the adaptor's stream
@@ -533,7 +533,7 @@ int vsl_b_istream::get_serialisation_other_data
 //: Modify the user-defined data associated with the unique serial number
 // If there is no record of the object, this function will  abort.
 int vsl_b_istream::set_serialisation_other_data
-    (unsigned long serial_number, int other_data)
+    (unsigned long serial_number, int /*other_data*/)
 {
   serialisation_records_type::const_iterator entry =
     serialisation_records_.find(serial_number);

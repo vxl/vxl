@@ -424,7 +424,7 @@ static int list_parse(vcl_list<int> &out, char ** argv)
     }
 
     // this is the current token.
-    vcl_string token = str.substr(start, endp);
+//  vcl_string token = str.substr(start, endp);
 //  vcl_cout << "KYM token = " << token << endl;
     vcl_string match1 = range_regexp.match(1);
 //  vcl_cout << "KYM match1 = " << match1 << endl;
