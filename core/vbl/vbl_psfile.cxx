@@ -3,7 +3,6 @@
 #include <vcl/vcl_iomanip.h>
 #include <vcl/vcl_cmath.h>
 #include <vcl/vcl_fstream.h>
-#include <vcl/vcl_vector.h>
 #include <vcl/vcl_iostream.h>
 
 #include <vbl/vbl_printf.h>
