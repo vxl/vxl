@@ -75,7 +75,7 @@ void* operator new(vcl_size_t s)
   ++malloc_count;
 
   if (verbose_malloc)
-    vcl_printf("malloc: %08X for %d\n", unsigned(r), int(s));
+    vcl_printf("malloc: %08lX for %d\n", (unsigned long)r, int(s));
 
   return r;
 }
@@ -86,7 +86,7 @@ void operator delete(void* s)
 #endif
 {
   if (verbose_malloc)
-    vcl_printf("delete: %08X\n", unsigned(s));
+    vcl_printf("delete: %08lX\n", (unsigned long)s);
 
   vcl_free(s);
 }
