@@ -102,8 +102,11 @@ SET( vil2_sources ${vil2_sources}
   vil2_stream_section.cxx vil2_stream_section.h
   vil2_stream_url.cxx vil2_stream_url.h
   vil2_open.cxx vil2_open.h
-  vil2_stream_16bit.cxx vil2_stream_16bit.h
-  vil2_stream_32bit.cxx vil2_stream_32bit.h
+# The next two lines are deprecated in favour of the following two
+#  vil2_stream_16bit.cxx vil2_stream_16bit.h
+#  vil2_stream_32bit.cxx vil2_stream_32bit.h
+  vil2_stream_read.cxx vil2_stream_read.h
+  vil2_stream_write.cxx vil2_stream_write.h
 
 
   # Conversion to from vil1 images

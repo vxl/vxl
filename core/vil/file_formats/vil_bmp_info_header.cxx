@@ -11,7 +11,8 @@
 #include <vcl_iostream.h>
 
 #include <vil2/vil2_stream.h>
-#include <vil2/vil2_stream_32bit.h>
+#include <vil2/vil2_stream_read.h>
+#include <vil2/vil2_stream_write.h>
 
 vil2_bmp_info_header::vil2_bmp_info_header()
 {
@@ -25,22 +26,22 @@ vil2_bmp_info_header::vil2_bmp_info_header()
 
 void vil2_bmp_info_header::read(vil2_stream *s)
 {
-  compression = vil2_stream_32bit_read_little_endian(s);
-  bitmap_size = vil2_stream_32bit_read_little_endian(s);
-  horiz_res   = vil2_stream_32bit_read_little_endian(s);
-  verti_res   = vil2_stream_32bit_read_little_endian(s);
-  colormapsize= vil2_stream_32bit_read_little_endian(s);
-  colorcount  = vil2_stream_32bit_read_little_endian(s);
+  compression = vil2_stream_read_little_endian_uint_32(s);
+  bitmap_size = vil2_stream_read_little_endian_uint_32(s);
+  horiz_res   = vil2_stream_read_little_endian_uint_32(s);
+  verti_res   = vil2_stream_read_little_endian_uint_32(s);
+  colormapsize= vil2_stream_read_little_endian_uint_32(s);
+  colorcount  = vil2_stream_read_little_endian_uint_32(s);
 }
 
 void vil2_bmp_info_header::write(vil2_stream *s) const
 {
-  vil2_stream_32bit_write_little_endian(s, compression);
-  vil2_stream_32bit_write_little_endian(s, bitmap_size);
-  vil2_stream_32bit_write_little_endian(s, horiz_res);
-  vil2_stream_32bit_write_little_endian(s, verti_res);
-  vil2_stream_32bit_write_little_endian(s, colormapsize);
-  vil2_stream_32bit_write_little_endian(s, colorcount);
+  vil2_stream_write_little_endian_uint_32(s, compression);
+  vil2_stream_write_little_endian_uint_32(s, bitmap_size);
+  vil2_stream_write_little_endian_uint_32(s, horiz_res);
+  vil2_stream_write_little_endian_uint_32(s, verti_res);
+  vil2_stream_write_little_endian_uint_32(s, colormapsize);
+  vil2_stream_write_little_endian_uint_32(s, colorcount);
 }
 
 void vil2_bmp_info_header::print(vcl_ostream &s) const

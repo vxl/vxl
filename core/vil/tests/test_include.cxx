@@ -63,8 +63,8 @@
 #include <vil2/vil2_save.h>
 #include <vil2/vil2_smart_ptr.h>
 #include <vil2/vil2_stream.h>
-#include <vil2/vil2_stream_16bit.h>
-#include <vil2/vil2_stream_32bit.h>
+#include <vil2/vil2_stream_read.h>
+#include <vil2/vil2_stream_write.h>
 #include <vil2/vil2_stream_core.h>
 #include <vil2/vil2_stream_fstream.h>
 #include <vil2/vil2_stream_section.h>
