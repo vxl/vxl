@@ -95,24 +95,33 @@ void vgui_soview2D_lineseg::translate(float tx, float ty)
 
 //--------------------------------------------------------------------------//
 
+void vgui_soview2D_group::set_style(vgui_style *s)
+{
+  for( unsigned int i=0; i< ls.size(); i++)
+    if( !ls[i]->get_style())
+      ls[i]->set_style(s);
+
+  vgui_soview::set_style( s);
+}
+
 vcl_ostream& vgui_soview2D_group::print(vcl_ostream& s) const {
   s << "[vgui_soview2D_group ";
 
-  for(unsigned int i=0; i< ls.size(); i++)
+  for( unsigned int i=0; i< ls.size(); i++)
     ls[i]->print(s);
   
   return vgui_soview2D::print(s) << "]";
 }
 
 void vgui_soview2D_group::draw() {
-  for(unsigned int i=0; i< ls.size(); i++)
+  for( unsigned int i=0; i< ls.size(); i++)
     ls[i]->draw();
 }
 
 float vgui_soview2D_group::distance_squared(float x, float y) {
   float min= -1;
 
-  for(unsigned int i=0; i< ls.size(); i++) {
+  for( unsigned int i=0; i< ls.size(); i++) {
     float d= ls[i]->distance_squared( x, y);
     
     if(( min== -1) || ( d< min))
@@ -144,7 +153,7 @@ void vgui_soview2D_group::translate(float tx, float ty)
 {
   int n = ls.size();
   
-  for( int i=0; i < n; i++)
+  for( unsigned int i=0; i < n; i++)
     ls[i]->translate(tx, ty);
 }
 
