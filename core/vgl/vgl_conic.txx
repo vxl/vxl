@@ -12,7 +12,7 @@
 #include <vcl_iostream.h>
 #include <vcl_compiler.h>
 
-static char *vgl_conic_name[]= {
+static const char *vgl_conic_name[]= {
   "invalid conic",
   "real ellipse",
   "real circle",
@@ -38,7 +38,7 @@ typename vgl_conic<T>::vgl_conic_type vgl_conic<T>::type_by_name(vcl_string cons
 {
   for (int i = (int)no_type; i < num_conic_types; i++)
     if (name == vgl_conic_name[i])
-      return (vgl_conic<T>::vgl_conic_type)i;
+      return (typename vgl_conic<T>::vgl_conic_type)i;
   return no_type; // should never reach this point
 }
 
