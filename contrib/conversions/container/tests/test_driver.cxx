@@ -9,3 +9,5 @@ register_tests()
   REGISTER( test_container );
   REGISTER( test_COOL_container );
 }
+
+DEFINE_MAIN;

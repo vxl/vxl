@@ -14,6 +14,8 @@ register_tests()
   REGISTER( vepl_test_threshold );
 }
 
+DEFINE_MAIN;
+
 // create an 8 bit test image
 vil_image CreateTest8bitImage(int wd, int ht)
 {
@@ -114,4 +116,3 @@ bool difference(vil_image const& a, vil_image const& b, int v, vcl_string const&
   TEST(m.c_str(), ret, v);
   return (v!=ret);
 }
-

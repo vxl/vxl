@@ -16,6 +16,8 @@ register_tests()
   REGISTER( vipl_test_gaussian_convolution );
 }
 
+DEFINE_MAIN;
+
 // create an 8 bit test image
 vil_image CreateTest8bitImage(int wd, int ht)
 {

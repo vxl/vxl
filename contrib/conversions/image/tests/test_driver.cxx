@@ -9,3 +9,5 @@ register_tests()
   REGISTER( test_vil_vbl_conversions );
   REGISTER( test_image_conversions );
 }
+
+DEFINE_MAIN;

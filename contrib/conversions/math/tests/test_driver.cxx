@@ -11,3 +11,5 @@ register_tests()
   REGISTER( test_CoolMatrix_conversions );
   REGISTER( test_IUE_matrix_conversions );
 }
+
+DEFINE_MAIN;
