@@ -75,6 +75,11 @@ class CardinalSpline
   vcl_string is_a() const { return vcl_string("CardinalSpline"); }
   bool is_class(const vcl_string &s) { return s==is_a(); }
 
+#ifdef VCL_SGI_CC
+  friend bool operator!=(Vector3D const& a, Vector3D const& b) {
+    return a[0]!=b[0] || a[1]!=b[1] || a[2]!=b[2];
+  }
+#endif
   bool operator==(const CardinalSpline &c) {
     return (controlPoints==c.controlPoints) && (Mc==c.Mc) && (s==c.s);
   }
@@ -93,9 +98,9 @@ class CardinalSpline
     return t;
   }
 
-  void setMc(double _s)
+  void setMc(double s_)
   {
-    s = _s;
+    s = s_;
     Mc(0,0)=-s; Mc(0,1)=2-s; Mc(0,2)=s-2; Mc(0,3)=s;
     Mc(1,0)=2*s; Mc(1,1)=s-3; Mc(1,2)=3-2*s; Mc(1,3)=-s;
     Mc(2,0)=-s; Mc(2,1)=0; Mc(2,2)=s; Mc(2,3)=0;
