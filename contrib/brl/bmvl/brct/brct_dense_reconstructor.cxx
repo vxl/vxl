@@ -56,7 +56,7 @@ void brct_dense_reconstructor::set_continuity_cost(const double continuity_cost)
 
 void brct_dense_reconstructor::print_params()
 {
-  vsrl_parameters::instance()->print();
+  //  vsrl_parameters::instance()->print();
 }
 
 void brct_dense_reconstructor::execute()
