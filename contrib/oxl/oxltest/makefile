@@ -1,5 +1,6 @@
 USES += vxl oxl
 include ${IUEROOT}/vxl/vnl/algo/config.mk
+include ${IUEROOT}/vxl/vul/config.mk
 
 TESTS += oxltest.cpp
 ifdef WIN32
