@@ -31,6 +31,7 @@ ADD_EXECUTABLE( vil2_test_driver
   test_median.cxx
   test_algo_line_filter.cxx
   test_algo_threshold.cxx
+  test_deep_copy_3_plane.cxx
 )
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
@@ -67,6 +68,7 @@ ADD_TEST( vil2_test_greyscale_erode   vil2_test_driver test_greyscale_erode)
 ADD_TEST( vil2_test_median            vil2_test_driver test_median)
 ADD_TEST( vil2_test_algo_line_filter  vil2_test_driver test_algo_line_filter)
 ADD_TEST( vil2_test_algo_threshold    vil2_test_driver test_algo_threshold)
+ADD_TEST( test_deep_copy_3_plane      vil2_test_driver test_deep_copy_3_plane )
 
 
 # To run timing tests

@@ -28,6 +28,7 @@ DECLARE( test_greyscale_erode );
 DECLARE( test_median );
 DECLARE( test_algo_line_filter );
 DECLARE( test_algo_threshold );
+DECLARE( test_deep_copy_3_plane );
 
 void
 register_tests()
@@ -60,6 +61,7 @@ register_tests()
   REGISTER( test_median );
   REGISTER( test_algo_line_filter );
   REGISTER( test_algo_threshold );
+  REGISTER( test_deep_copy_3_plane );
 }
 
 DEFINE_MAIN;
