@@ -1,14 +1,25 @@
 #include <vcl_algorithm.txx>
 #include <vcl_cstddef.h> // for vcl_size_t
 
-VCL_SORT_INSTANTIATE(unsigned short*, unsigned short);
-VCL_FIND_INSTANTIATE(unsigned short*, unsigned short);
-VCL_FIND_INSTANTIATE(unsigned short const*, unsigned short);
+typedef ushort ushort;
+
+VCL_SORT_INSTANTIATE(ushort*, ushort);
+VCL_FIND_INSTANTIATE(ushort*, ushort);
+VCL_FIND_INSTANTIATE(ushort const*, ushort);
+
+#ifdef GNU_LIBSTDCXX_V3
+# include <vcl_vector.h>
+VCL_SORT_INSTANTIATE(vcl_vector<ushort>::iterator, ushort);
+VCL_SORT_INSTANTIATE(vcl_vector<ushort*>::iterator, ushort*);
+namespace std {
+  template ushort* std::fill_n<ushort*, unsigned long, ushort>(ushort*, unsigned long, ushort const&);
+}
+#endif
 
 #if defined(VCL_EGCS) && !defined(GNU_LIBSTDCXX_V3)
-template unsigned short* unique(unsigned short *, unsigned short *);
+template ushort* unique(ushort *, ushort *);
 #endif
 
 #if defined(VCL_GCC_295) && !defined(GNU_LIBSTDCXX_V3)
-template unsigned short* fill_n(unsigned short*, unsigned int, unsigned short const &);
+template ushort* fill_n(ushort*, unsigned int, ushort const &);
 #endif
