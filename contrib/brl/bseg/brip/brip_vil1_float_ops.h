@@ -59,6 +59,12 @@ class brip_vil1_float_ops
   half_resolution(vil1_memory_image_of<float> const & input,
                   float filter_coef=0.359375);
 
+  //:downsamples the color input image using the Bert-Adelson algorithm
+  static vil1_memory_image_of<vil1_rgb<unsigned char> >
+  half_resolution(vil1_memory_image_of<vil1_rgb<unsigned char> > const & input,
+                  float filter_coef=0.359375);
+
+
 #if 0
   //: interpolates the input using the Bert-Adelson algorithm
   static vil1_memory_image_of<float>

@@ -31,6 +31,7 @@
 //-----------------------------------------------------------------------------
 
 #include <brip/brip_para_cvrg_params.h>
+#include <vil1/vil1_rgb.h>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_memory_image_of.h>
 class brip_para_cvrg : public brip_para_cvrg_params
@@ -54,6 +55,7 @@ class brip_para_cvrg : public brip_para_cvrg_params
   vil1_memory_image_of<float> get_float_detection_image(const float max = 255);
   vil1_memory_image_of<unsigned char> get_detection_image();
   vil1_memory_image_of<unsigned char> get_dir_image();
+  vil1_memory_image_of<vil1_rgb<unsigned char> > get_combined_image();
   // Utility Methods
  private:
   void init(vil1_image const& image);

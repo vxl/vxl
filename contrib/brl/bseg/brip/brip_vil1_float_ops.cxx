@@ -148,6 +148,52 @@ brip_vil1_float_ops::half_resolution(vil1_memory_image_of<float> const & input,
   return output;
 }
 
+vil1_memory_image_of<vil1_rgb<unsigned char> > brip_vil1_float_ops::
+half_resolution(vil1_memory_image_of<vil1_rgb<unsigned char> > const & input,
+                  float filter_coef)
+{
+  int w = input.width(), h = input.height();
+  //make the three color planes
+  vil1_memory_image_of<float> red(w,h), grn(w,h), blu(w,h);
+  for(int row = 0; row<h; row++)
+    for(int col = 0; col<w; col++)
+      {
+        vil1_rgb<unsigned char> v = input(col,row);
+        red(col,row) = v.r;
+        grn(col,row) = v.g;
+        blu(col,row) = v.b;
+      }      
+  vil1_memory_image_of<float> red_half = 
+    brip_vil1_float_ops::half_resolution(red, filter_coef);
+
+  vil1_memory_image_of<float> grn_half = 
+    brip_vil1_float_ops::half_resolution(grn, filter_coef);
+
+  vil1_memory_image_of<float> blu_half = 
+    brip_vil1_float_ops::half_resolution(blu, filter_coef);
+
+  vil1_memory_image_of<unsigned char> red_half_char = 
+    brip_vil1_float_ops::convert_to_byte(red_half);
+
+  vil1_memory_image_of<unsigned char> grn_half_char = 
+    brip_vil1_float_ops::convert_to_byte(grn_half);
+
+  vil1_memory_image_of<unsigned char> blu_half_char = 
+    brip_vil1_float_ops::convert_to_byte(blu_half);
+
+  int w2 = red_half.width(), h2 = red_half.height();
+  vil1_memory_image_of<vil1_rgb<unsigned char> > out(w2,h2);  
+  for(int row = 0; row<h2; row++)
+    for(int col = 0; col<w2; col++)
+      {
+        unsigned char rduc = red_half_char(col,row);
+        unsigned char gruc = grn_half_char(col,row);
+        unsigned char bluc = blu_half_char(col,row);
+        vil1_rgb<unsigned char> v(rduc, gruc, bluc);
+        out(col, row) = v;
+      }
+  return out;
+}
 
 vil1_memory_image_of<float>
 brip_vil1_float_ops::gaussian(vil1_memory_image_of<float> const & input, float sigma)

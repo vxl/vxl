@@ -429,7 +429,7 @@ void brip_para_cvrg::non_maximum_supress(float* input_array, float* sup_array)
   for (int i = sup_radius_; i < (proj_n_-sup_radius_); i++)
   {
     //find the maximum value in the current kernel
-    float max_val = tmp[0];
+    float max_val = 0;
     for (int k = -sup_radius_; k <= sup_radius_ ;k++)
     {
       int index = i+k;
@@ -473,6 +473,7 @@ void brip_para_cvrg::compute_parallel_coverage()
 //float min_sum = .01f;
   this->set_float_image(det_,0.0);
   this->set_float_image(dir_,0.0);
+  int direct;
   int radius = proj_width_+proj_height_ + 3;
   for (int y=radius; y<(image_.height()-radius);y++)
     for (int x=radius ;x<(image_.width()-radius);x++)
@@ -486,18 +487,28 @@ void brip_para_cvrg::compute_parallel_coverage()
       this->project(x, y, 0, proj_0_);
       coverage[0] = this->parallel_coverage(proj_0_);
       float max_coverage = coverage[0];
+      direct = 0;
       this->project(x, y, 45, proj_45_);
       coverage[1] = this->parallel_coverage(proj_45_);
       if (coverage[1]>max_coverage)
-        max_coverage = coverage[1];
+        {
+          max_coverage = coverage[1];
+          direct = 45;
+        }
       this->project(x, y, 90, proj_90_);
       coverage[2] = this->parallel_coverage(proj_90_);
       if (coverage[2]>max_coverage)
-        max_coverage = coverage[2];
+        {
+          max_coverage = coverage[2];
+          direct = 90;
+        }
       this->project(x, y, 135, proj_135_);
       coverage[3] = this->parallel_coverage(proj_135_);
       if (coverage[3]>max_coverage)
-        max_coverage = coverage[3];
+        {
+          max_coverage = coverage[3];
+          direct = 135;
+        }
 #ifdef DEBUG
       vcl_cout << '(' << x << ',' << y << ") coverage:\n"
                << "   O degrees = " << coverage[0] << '\n'
@@ -508,6 +519,7 @@ void brip_para_cvrg::compute_parallel_coverage()
 #endif
 
       det_[x][y] = max_coverage;
+      dir_[x][y] = direct;
     }
   vcl_cout << "Do parallel coverage in " << t.real() << " msecs\n";
 }
@@ -591,4 +603,34 @@ vil1_memory_image_of<unsigned char>  brip_para_cvrg::get_dir_image()
   if (!dir_image_)
     this->compute_image(dir_, dir_image_);
   return dir_image_;
+}
+
+//------------------------------------------------------------
+//: Get the combination of coverage and direction as a color image
+//
+vil1_memory_image_of<vil1_rgb<unsigned char> > 
+brip_para_cvrg::get_combined_image()
+{
+  //arbitrary color assignments
+  float r[4] ={0, 0.5, 0, 1.0};
+  float g[4] ={0.5, 0, 1.0, 0};
+  float b[4] ={0.5, 0.5, 0, 0};
+  vil1_memory_image_of<unsigned char> cvrg_image = this->get_detection_image();
+  vil1_memory_image_of<unsigned char> dir_image = this->get_dir_image();
+  vil1_memory_image_of<vil1_rgb<unsigned char> > out(xsize_, ysize_);
+  for (int y = 0; y<ysize_; y++)
+    for (int x = 0; x<xsize_; x++)
+      {
+        int direct = ((int)dir_image(x,y))/45;
+        float c = cvrg_image(x,y);
+        float red = r[direct]*c, green = g[direct]*c, blue = b[direct]*c;
+        if(red>255)
+          red =255;
+        if(green>255)
+          green =255;
+        if(blue>255)
+          blue = 255;
+        out(x, y) = vil1_rgb<unsigned char>(red, green, blue);
+      }
+  return out;
 }
