@@ -16,3 +16,8 @@ void vsrl_dense_matcher::set_correlation_range(int range)
 {
   correlation_range_=range;
 }
+
+int vsrl_dense_matcher::get_correlation_range()
+{
+  return correlation_range_;
+}

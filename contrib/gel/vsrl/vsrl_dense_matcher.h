@@ -26,6 +26,10 @@ class vsrl_dense_matcher
 
   virtual void set_correlation_range(int range);
 
+  // get the correlation range
+
+  virtual int get_correlation_range();
+
   // get the assigned coordinate
 
   virtual int get_assignment(int x, int y) = 0;
