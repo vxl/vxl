@@ -131,6 +131,24 @@ SOURCE=.\Templates/vil3d_image_view+bool-.cxx
 # Begin Source File
 SOURCE=.\vil3d_image_view_base.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_smart_ptr+vil3d_header_data-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_smart_ptr+vil3d_image_view_base-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil3d_gipl_format.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_file_format.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_header_data.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_load.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -169,6 +187,18 @@ SOURCE=.\vil3d_switch_axes.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil3d_math.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil3d_gipl_format.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_file_format.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_header_data.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_load.h
 # End Source File
 # End Group
 # End Target
