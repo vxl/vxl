@@ -24,4 +24,14 @@ SOURCE=.\glut2_raw.cxx
 SOURCE=.\gtk1_display_image.cxx
 SOURCE=.\gtk2_movie_player.cxx
 SOURCE=.\gtk3_vidl.cxx
+SOURCE=.\basic01a_multiple_panes.cxx
+SOURCE=.\basic01b_deck.cxx
+SOURCE=.\basic10a_rubberband.cxx
+SOURCE=.\basic_app.cxx
+SOURCE=.\basic_manager.cxx
+SOURCE=.\basic_menus.cxx
+# End Group
+# Begin Group "Header Files"
+SOURCE=.\basic_manager.h
+SOURCE=.\basic_menus.h
 # End Group
