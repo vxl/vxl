@@ -3,28 +3,28 @@
 //--------------------------------------------------------------------------
 //:
 // \file
-
 // \brief bugl_curve_3d - a 3-d pointset with curve (1-d) neighborhood
 //
 //    The data structure is a matrix of 3-d points with uncertainty
-//    
+// \verbatim
 //     ->|              |<--- 2*num_neighbors_ + 1
-//       x x x  p0  x x x  
+//       x x x  p0  x x x
 //       x x x  p1  x x x
 //             ...  |---|  <--- num_neighbors_
 //             ...
 //       x x x pN-1 x x x
 //                    ^---neighboring points
+// \endverbatim
 //    N = data_.size()
 //
-//   There is also the notion of "fragments". A vector, index_, marks 
+//   There is also the notion of "fragments". A vector, index_, marks
 //   intervals between sets of 3-d points inserted by each invocation of
 //   ::add_curve(..)
-//   
-//  
+//
 // \author Kongbin Kang
 // \verbatim
-// Initial version November 22, 2003
+//  Modifications
+//   Initial version November 22, 2003
 // \endverbatim
 //---------------------------------------------------------------------------
 
