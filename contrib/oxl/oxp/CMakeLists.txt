@@ -9,7 +9,6 @@ SOURCE_FILES(oxp_sources
   ImageSequenceName.cxx
   oxp_vidl_moviefile.cxx
   oxp_vidl_mpeg_codec.cxx
-  oxp_mpeg_codec.cxx
   JPEG_Decompressor.cxx
   Mapping_2d_2d.cxx
   MedianReduceImage.cxx
@@ -30,6 +29,12 @@ SOURCE_FILES(oxp_sources
 AUX_SOURCE_DIRECTORY(Templates oxp_sources)
 
 INCLUDE( ${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindMPEG.cmake )
+
+IF( HAS_MPEG )
+  SOURCE_FILES(oxp_sources
+    oxp_mpeg_codec.cxx
+  )
+ENDIF( HAS_MPEG )
 
 IF (WIN32)
   IF (NOT CYGWIN)
