@@ -12,9 +12,6 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name vbl
     End Project Dependency
     Begin Project Dependency
@@ -49,6 +46,9 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vcgl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vcl
     End Project Dependency
 }}}
 
@@ -135,19 +135,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vcl"=.\vcl\vcl.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vcl_tests"=.\vcl\tests\vcl_tests.dsp - Package Owner=<4>
+Project: "vcl"=..\vcl\vcl.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

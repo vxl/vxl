@@ -66,8 +66,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)/vxl/config.win32-vc60" /I "$(IUEROOT)/Image/JPEG" /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)/vxl" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D "_AFXDLL" /FR /FD /GZ /c
-# SUBTRACT CPP /YX
+# ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D "_AFXDLL" /FR /FD /GZ " /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
 BSC32=bscmake.exe
@@ -88,31 +87,11 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=.\Templates\vnl_adjugate+double-.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates\vnl_fft1d+float-.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates\vnl_orthogonal_complement+double-.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates\vnl_orthogonal_complement+double_complex-.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates\vnl_scatter_3x3+float-.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_lsqr.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=".\Templates\vcl_vector+vnl_amoeba_SimplexCorner-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vnl_adjugate+double-.cxx"
 # End Source File
 # Begin Source File
 
@@ -152,6 +131,10 @@ SOURCE=".\Templates\vnl_fft1d+double-.cxx"
 # End Source File
 # Begin Source File
 
+SOURCE=".\Templates\vnl_fft1d+float-.cxx"
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates\vnl_fft2d.cxx
 # End Source File
 # Begin Source File
@@ -176,7 +159,19 @@ SOURCE=.\vnl_levenberg_marquardt.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vnl_lsqr.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=".\Templates\vnl_matrix_inverse+double-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vnl_orthogonal_complement+double-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vnl_orthogonal_complement+double_complex-.cxx"
 # End Source File
 # Begin Source File
 
@@ -209,6 +204,10 @@ SOURCE=.\vnl_rpoly_roots.cxx
 # Begin Source File
 
 SOURCE=".\Templates\vnl_scatter_3x3+double-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vnl_scatter_3x3+float-.cxx"
 # End Source File
 # Begin Source File
 
