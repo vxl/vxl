@@ -125,14 +125,13 @@ void osl_canny_ox::detect_edges(vil_image const &image_in, vcl_list<osl_Edge*> *
                    _kernel, _width, _sub_area_OX,
                    _smooth);
 
-  if (verbose) vcl_cerr << "computing x derivatives, y derivatives and norm of gradient\n";
+  if (verbose)
+    vcl_cerr << "computing x derivatives, y derivatives and norm of gradient\n";
   osl_canny_gradient(_xsize, _ysize, _smooth, _dx, _dy, _grad);
-
 
   if (verbose) vcl_cerr << "doing non-maximal supression\n";
   int n_edgels_NMS = osl_canny_nms(_xsize, _ysize, _dx, _dy, _grad, _thick, _theta);
   if (verbose) vcl_cerr << "Number of edgels after NMS = " << n_edgels_NMS << vcl_endl;
-
 
 
   // (_x,_y) holds the pixel location (and not the sub pixel accuracy)
@@ -199,11 +198,9 @@ void osl_canny_ox::detect_edges(vil_image const &image_in, vcl_list<osl_Edge*> *
 }
 
 
-
 //-----------------------------------------------------------------------------
-
-
-// -- Copy edgels from _thick image. These edgels are the result of NMS.
+//
+//: Copy edgels from _thick image. These edgels are the result of NMS.
 // Although the edgels are stored in osl_EdgelChain edgels_NMS, they are
 // not actually connected.
 // Also initialises _x and _y: the pixel locations of the edgels. These
@@ -233,10 +230,9 @@ osl_EdgelChain *osl_canny_ox::Get_NMS_edgelsOX(int n_edgels_NMS, int *_x, int *_
 }
 
 
-
 //-----------------------------------------------------------------------------
 //
-// -- Hysteresis follows edgels that lie above the low threshold and have at
+//: Hysteresis follows edgels that lie above the low threshold and have at
 // least one edgel above the high threshold.
 //
 int osl_canny_ox::HysteresisOX(osl_EdgelChain *&edgels_NMS,
@@ -265,12 +261,11 @@ int osl_canny_ox::HysteresisOX(osl_EdgelChain *&edgels_NMS,
   }
 
 
-
   // Create a list of links for each edgel.
   Link_edgelsOX(col, rows, &links[0]); //vector<>::iterator
 
 
-  // -- Perform Hysteresis part of canny.
+  // Perform Hysteresis part of canny.
   float low  = (32.0/log(2.0)) * log(_low/100+1.0);     // compute lower threshold
   float high = (32.0/log(2.0)) * log(_high/100+1.0);    // compute upper threshold
   //formerly "Do_hysteresisOX(edgels_NMS,links,status,low,high);"
@@ -299,8 +294,8 @@ int osl_canny_ox::HysteresisOX(osl_EdgelChain *&edgels_NMS,
 
 
 //-------------------------------------------------------------------------
-
-// -- Initial follow. Used for the hysteresis part of canny.
+//
+//: Initial follow. Used for the hysteresis part of canny.
 void osl_canny_ox::Initial_followOX(int to,
                                     int from,
                                     osl_EdgelChain *&edgels_NMS,
@@ -319,10 +314,9 @@ void osl_canny_ox::Initial_followOX(int to,
 }
 
 
-
 //-------------------------------------------------------------------------
-
-// -- Add link. 'edgel' and 'to' are the indices of the two edges to be linked.
+//
+//: Add link. 'edgel' and 'to' are the indices of the two edges to be linked.
 // A link with value 'to'    becomes the new head of the link-list for 'edgel'.
 // A link with value 'edgel' becomes the new head of the link-list for 'to'.
 void osl_canny_ox::Add_linkOX(int edgel,
@@ -341,10 +335,9 @@ void osl_canny_ox::Add_linkOX(int edgel,
 }
 
 
-
 //-------------------------------------------------------------------------
 //
-// -- Link edgels.  First try pixels at distance 1 (direct neighbours),
+//: Link edgels.  First try pixels at distance 1 (direct neighbours),
 // then at sqrt(2) (diagonal), then at 2 (horizontal or vertical), then
 // at sqrt(5) (chess horse). I.e. in the following order:
 //
@@ -468,7 +461,7 @@ void osl_canny_ox::Link_edgelsOX(vcl_vector<unsigned> const &col,
 
 //-------------------------------------------------------------------------
 //
-// -- Returns the number of edgels after hysteresis.
+//: Returns the number of edgels after hysteresis.
 //
 int osl_canny_ox::Get_n_edgels_hysteresisOX(osl_EdgelChain *&edgels_NMS,
                                             int *&status)
@@ -481,10 +474,9 @@ int osl_canny_ox::Get_n_edgels_hysteresisOX(osl_EdgelChain *&edgels_NMS,
 }
 
 
-
 //-------------------------------------------------------------------------
 //
-// -- Returns the edgels after hysteresis
+//: Returns the edgels after hysteresis
 // Also fill the image _thin with the edgels after hysteresis for
 // further processing by the FollowerOX() part.
 //
@@ -513,8 +505,8 @@ void osl_canny_ox::Get_hysteresis_edgelsOX(osl_EdgelChain *& edgels_NMS,
 }
 
 //----------------------------------------------------------------------------
-
-// -- NO_FollowerOX : In the case of _follow_strategy_OX = 0, this function
+//
+//: NO_FollowerOX : In the case of _follow_strategy_OX = 0, this function
 // returns an osl_Edge * filled from osl_EdgelChain *edgels_Hysteresis.
 // i.e., the result of the Hysteresis part of Canny is returned in the osl_Edge *.
 // The Follow part (FollowerOX) is not executed.
@@ -545,10 +537,9 @@ osl_Edge *osl_canny_ox::NO_FollowerOX(osl_EdgelChain *edgels_Hysteresis)
 }
 
 
-
 //----------------------------------------------------------------------------
-
-// -- Returns the first osl_Vertex* in l which matches (i.e. compares equal to) v.
+//
+//: Returns the first osl_Vertex* in l which matches (i.e. compares equal to) v.
 // returns 0 if none found.
 osl_Vertex *osl_find(vcl_list<osl_Vertex*> const *l, osl_Vertex const &v) {
   for (vcl_list<osl_Vertex*>::const_iterator i=l->begin(); i!=l->end(); ++i)
@@ -565,8 +556,9 @@ osl_Vertex *osl_find(vcl_list<osl_Vertex*> const *l, float x, float y) {
 }
 
 
+//----------------------------------------------------------------------------
 //
-// -- Go through every point in the image and for every one which is above a
+//: Go through every point in the image and for every one which is above a
 // threshold:   follow from the point, in one direction and then the other.
 //
 void osl_canny_ox::FollowerOX(vcl_list<osl_Edge*> *edges) {
@@ -706,9 +698,9 @@ void osl_canny_ox::FollowerOX(vcl_list<osl_Edge*> *edges) {
 }
 
 
-
 //-----------------------------------------------------------------------------
-// -- Adds point (x, y) to the current curve, sets its value in the image to
+//
+//: Adds point (x, y) to the current curve, sets its value in the image to
 // zero (any point may be included at most once in at most one curve)
 // then searches for adjacent pixels (in an order intended to make closed
 // curves ordered in a clockwise direction).
@@ -840,17 +832,20 @@ void osl_canny_ox::Final_followOX(int x,
 }
 
 
-
 //-----------------------------------------------------------------------------
 
-//void Set_intsOX(int& int1, int& int2, int val1, int val2) {
-//  int1 = val1;
-//  int2 = val2;
-//}
+#if 0
+void Set_intsOX(int& int1, int& int2, int val1, int val2) {
+  int1 = val1;
+  int2 = val2;
+}
+#endif
 #define Set_intsOX(d1, d2, v1, v2) ((d1)=(v1), (d2)=(v2))
 
 
-// -- The point (x, y) is the current curve point;
+//----------------------------------------------------------------------------
+//
+//: The point (x, y) is the current curve point;
 // (dx, dy) is the increment in position to (x, y) from the preceding point.
 // Based on dx and dy, it looks ahead in the same direction (or failing
 // that,  similar directions) for another point.
@@ -911,10 +906,9 @@ int osl_canny_ox::Join_dotsOX(int x, int y, int dx, int dy, int& xNew, int& yNew
 }
 
 
-
 //-----------------------------------------------------------------------------
 //
-// -- Multiply image by scale, and clip at 255.
+//: Multiply image by scale, and clip at 255.
 //
 void osl_canny_ox::Scale_imageOX(float **image, float scale)
 {
@@ -924,10 +918,9 @@ void osl_canny_ox::Scale_imageOX(float **image, float scale)
 }
 
 
-
 //-----------------------------------------------------------------------------
 //
-// -- Set size of pixels around image (border) to value, so follow can't
+//: Set size of pixels around image (border) to value, so follow can't
 // overrun.
 //
 void osl_canny_ox::Set_image_borderOX(float **image, int border_size, float value) {
@@ -940,10 +933,9 @@ void osl_canny_ox::Set_image_borderOX(float **image, int border_size, float valu
 }
 
 
-
 //-----------------------------------------------------------------------------
 //
-//  -- Searches for the junctions in the image.
+//: Searches for the junctions in the image.
 //
 void osl_canny_ox::Find_junctionsOX() {
 
@@ -973,10 +965,9 @@ void osl_canny_ox::Find_junctionsOX() {
 }
 
 
-
 //-----------------------------------------------------------------------------
 //
-// -- Locate junction clusters using the following method of hysteresis.
+//: Locate junction clusters using the following method of hysteresis.
 //
 void osl_canny_ox::Find_junction_clustersOX() {
 

@@ -10,7 +10,7 @@
 #include <osl/osl_edgel_chain.h>
 #include <osl/osl_OrthogRegress.h>
 
-// -- Takes a DigitalCurve that is assumed to form a closed loop and finds the
+//: Takes a DigitalCurve that is assumed to form a closed loop and finds the
 // largest corner in the chain. This point is then used as the starting point for
 // the chain and the rest of the points are reordered. Doing this improves the
 // segmentation for osl_edgel_chains composed of many straight lines.
@@ -36,7 +36,7 @@ void osl_reorder_chain(osl_edgel_chain *dc)
   double MPIby2 = 3.1415926/2.0;
 
   // Add the first npts to the data set and fit.
-  for (i=0; i<npts; ++i) 
+  for (i=0; i<npts; ++i)
     data.IncrByXY(dc->GetX(i),dc->GetY(i));
   data.Fit();
   a0 = data.GetA();  b0 = data.GetB();
@@ -84,7 +84,7 @@ void osl_reorder_chain(osl_edgel_chain *dc)
     grad[i] = dc->GetGrad(i);
     theta[i] = dc->GetTheta(i);
   }
-  
+
   for (i=0,j=start; i<size; i++,j++)  {
     if ( j == size )
       j = 0;

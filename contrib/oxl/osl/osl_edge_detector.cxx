@@ -71,7 +71,6 @@ osl_edge_detector::~osl_edge_detector() {
 }
 
 
-
 //-----------------------------------------------------------------------------
 
 void osl_edge_detector::detect_edges(vil_image const &image,
@@ -166,7 +165,7 @@ void osl_edge_detector::detect_edges(vil_image const &image,
 
 //-----------------------------------------------------------------------------
 //
-// -- A procedure that performs sub-pixel interpolation for all edges greater
+//: A procedure that performs sub-pixel interpolation for all edges greater
 // than the threshold by parabolic fitting. Writes edges into the _thresh image
 // if they are maxima and above _low. This gives a good indication of the local
 // edge strengths. Stores sub-pixel positions in _dx and _dy, and set the
@@ -232,8 +231,6 @@ void osl_edge_detector::Sub_pixel_interpolation() {
           //h1 = h2 = 0.0;  // Dummy values;
           //cerr << "*** ERROR ON SWITCH IN NMS ***\n";
         }
-
-
 
         // Do subpixel interpolation by fitting a parabola
         // along the NMS line and finding its peak
@@ -324,14 +321,12 @@ void osl_edge_detector::Sub_pixel_interpolation() {
       _dy[x][y] = y + 0.5;
     }
   }
-
 }
-
 
 
 //-----------------------------------------------------------------------------
 //
-// -- Thickens the threshold image around each good pixel to take account for
+//: Thickens the threshold image around each good pixel to take account for
 // the smoothing kernel (almost a dilation with a square structuring element).
 //
 //
@@ -352,10 +347,9 @@ void osl_edge_detector::Thicken_threshold(int x, int y) {
 }
 
 
-
 //-----------------------------------------------------------------------------
 //
-// -- Takes the _thresh image that contains threshold values near to where
+//: Takes the _thresh image that contains threshold values near to where
 // non-maximal suppression succeeded, and zero elsewhere, and extend the
 // values to all areas of the image. This is done using chamfer masks so that
 // the final threshold assigned at any one point (ie. a point that was
@@ -372,8 +366,8 @@ void osl_edge_detector::Thicken_threshold(int x, int y) {
 // The histogram calculation was added to support
 // osl_Edgel change detection-JLM May 1995
 //
-void osl_edge_detector::Set_thresholds() {
-
+void osl_edge_detector::Set_thresholds()
+{
   int **fdist,**bdist,**a1dist,**a2dist;
   fdist = Make_int_image(_xsize,_ysize);
   bdist = Make_int_image(_xsize,_ysize);
@@ -486,10 +480,9 @@ static int compare(osl_edge_detector_xyfloat* xyf1, osl_edge_detector_xyfloat* x
 }
 
 
-
 //-----------------------------------------------------------------------------
 //
-// -- Method to thin the image using the variation of Tsai-Fu thinning used
+//: Method to thin the image using the variation of Tsai-Fu thinning used
 // by Van-Duc Nguyen in Geo-Calc. This relies on computing the genus of
 // an edge location, and removing it if it is not a dangling chain as has
 // genus zero. We also order the edges by strength and try to remove the weaker
@@ -577,10 +570,9 @@ void osl_edge_detector::Thin_edges() {
 }
 
 
-
 //-----------------------------------------------------------------------------
 //
-// -- Finds all pixels that are surrounded by four edgels, but which are
+//: Finds all pixels that are surrounded by four edgels, but which are
 // themselves not edgels. These `holes' cause the construction of complex
 // topological descriptions. To simplify matters, we raise the _thin value
 // of the central pixel and so force it to be an edgel.
@@ -605,15 +597,12 @@ void osl_edge_detector::Fill_holes() {
 }
 
 
-
 //-----------------------------------------------------------------------------
-
 
 // see osl_canny_ox.cxx
 extern osl_Vertex *osl_find(vcl_list<osl_Vertex*> const *l, osl_Vertex const &v);
 
-
-// -- Follow all edgel chains that have pixel values above their corresponding
+//: Follow all edgel chains that have pixel values above their corresponding
 // threshold values (_thin[x][y] > _thresh[x][y]).
 //
 void osl_edge_detector::Follow_curves(vcl_list<osl_Edge*> *edges)
@@ -763,10 +752,9 @@ void osl_edge_detector::Follow_curves(vcl_list<osl_Edge*> *edges)
 }
 
 
-
 //-----------------------------------------------------------------------------
 //
-// -- Following routine looking for connectiveness of edgel chains, and
+//: Following routine looking for connectiveness of edgel chains, and
 // accounts for single pixel gaps in the chains.
 //
 void osl_edge_detector::Follow(int x, int y,
@@ -775,7 +763,6 @@ void osl_edge_detector::Follow(int x, int y,
                                vcl_list<float> *grad,
                                int reverse)
 {
-
   // Make sure that we do not overun the border of the image
   if ( (x<=0) || (x>=_xsize-1) || (y<=0) || (y>=_ysize-1) )
     return;
@@ -832,15 +819,14 @@ void osl_edge_detector::Follow(int x, int y,
   smoo(x+1, y+1)
 #undef smoo
   else {
-    // ?
+    // ? FIXME
   }
 }
 
 
-
 //-----------------------------------------------------------------------------
 //
-// -- Searches for the junctions in the image.
+//: Searches for the junctions in the image.
 //
 void osl_edge_detector::Find_junctions() {
   // Reset the junction variables
@@ -872,10 +858,9 @@ void osl_edge_detector::Find_junctions() {
 }
 
 
-
 //-----------------------------------------------------------------------------
 //
-// -- Locate junction clusters using the following method of hysteresis.
+//: Locate junction clusters using the following method of hysteresis.
 //
 //
 void osl_edge_detector::Find_junction_clusters() {
@@ -936,10 +921,9 @@ void osl_edge_detector::Find_junction_clusters() {
 }
 
 
-
 //-----------------------------------------------------------------------------
 //
-// -- Following routine looking for searching out junction clusters.
+//: Following routine looking for searching out junction clusters.
 //
 void osl_edge_detector::Follow_junctions(int x, int y, vcl_list<int> *xc, vcl_list<int> *yc)
 {
@@ -970,7 +954,7 @@ void osl_edge_detector::Follow_junctions(int x, int y, vcl_list<int> *xc, vcl_li
 
 //-----------------------------------------------------------------------------
 //
-// -- Finds which member of the lists lies closest to the centre of the list.
+//: Finds which member of the lists lies closest to the centre of the list.
 //
 //
 void osl_edge_detector::Cluster_centre(vcl_list<int> &xc,
@@ -989,7 +973,7 @@ void osl_edge_detector::Cluster_centre(vcl_list<int> &xc,
       x += xc.value();  y += yc.value();
     }
   x /= xc.size();  y /= yc.size();
-  
+
   // Now find the point closest to the CofG
   float dist,newdist;
   dist = _xsize*_ysize; // A number larger than the image size

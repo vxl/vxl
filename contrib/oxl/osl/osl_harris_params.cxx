@@ -1,6 +1,6 @@
 #include "osl_harris_params.h"
 
-// -- Make default osl_harris_params object
+//: Make default osl_harris_params object
 osl_harris_params::osl_harris_params()
 {
   set_defaults();

@@ -63,9 +63,7 @@ osl_canny_rothwell::~osl_canny_rothwell() {
 }
 
 
-
 //-----------------------------------------------------------------------------
-
 
 void osl_canny_rothwell::detect_edges(vil_image const &image, vcl_list<osl_Edge*> *edges, bool adaptive)
 {
@@ -180,9 +178,10 @@ void osl_canny_rothwell::detect_edges(vil_image const &image, vcl_list<osl_Edge*
   if (verbose) vcl_cerr << "finished Canny\n";
 }
 
+
 //-----------------------------------------------------------------------------
 //
-// -- Non-maximally supresses the output image by searching along the edge
+//: Non-maximally supresses the output image by searching along the edge
 // normal and checking that the test edge has a greater that the interpolated
 // neighbours in the direction. We have also included sub-pixel interpolation
 // of the peak position by parabolic fitting.  Writes edges into the _thick
@@ -296,10 +295,9 @@ void osl_canny_rothwell::Non_maximal_supression() {
 }
 
 
-
 //-----------------------------------------------------------------------------
 //
-// -- Hysteresis follows edgel chains that lie above the _low threshold and
+//: Hysteresis follows edgel chains that lie above the _low threshold and
 // have at least one edgel above the _high threshold. Once we have followed,
 // the good edgelchains are re-writted to the _thin image for further
 // processing.
@@ -360,7 +358,7 @@ void osl_canny_rothwell::Initial_hysteresis() {
 extern osl_Vertex *osl_find(vcl_list<osl_Vertex*> const *l, osl_Vertex const &v);
 extern osl_Vertex *osl_find(vcl_list<osl_Vertex*> const *l, float x, float y);
 
-// -- Hysteresis follows edgel chains that lie above the _low threshold and
+//: Hysteresis follows edgel chains that lie above the _low threshold and
 // have at least one edgel above the _high threshold. Due to the Initial_hysteresis
 // phase, all edges greater than _low will be by default good and so have a member
 // greater than _high.
@@ -516,10 +514,9 @@ void osl_canny_rothwell::Final_hysteresis(vcl_list<osl_Edge*> *edges) {
 }
 
 
-
 //-----------------------------------------------------------------------------
 //
-// -- Method to thin the image using the variation of Tsai-Fu thinning used
+//: Method to thin the image using the variation of Tsai-Fu thinning used
 // by Van-Duc Nguyen in Geo-Calc. This relies on computing the genus of
 // an edge location, and removing it if it is not a dangling chain as has
 // genus zero.
@@ -573,10 +570,9 @@ void osl_canny_rothwell::Thin_edges() {
 }
 
 
-
 //-----------------------------------------------------------------------------
 //
-// -- Searches for single pixel breaks near dangling ends and patches them
+//: Searches for single pixel breaks near dangling ends and patches them
 // up. This is destructive on the dangling lists.
 //
 void osl_canny_rothwell::Jump_single_breaks() {
@@ -654,10 +650,9 @@ void osl_canny_rothwell::Jump_single_breaks() {
 }
 
 
-
 //-----------------------------------------------------------------------------
 //
-// -- Searches for high contrast changes in the vicinity of dangling ends. This
+//: Searches for high contrast changes in the vicinity of dangling ends. This
 // is done by halving the previously used Canny sigma to reduce the effects of
 // smoothing near corners. Ultimately the kernel size will be scaled down until
 // its radius of influence is only two pixels; at that stage pixel-jumping should
@@ -742,9 +737,10 @@ void osl_canny_rothwell::Adaptive_Canny(vil_image const &image) {
   osl_canny_base_free_raw_image(grad);
 }
 
-//-----------------------------------------------------------------------------
 
-// -- Wherever the _thick image has an edge marked set the new gradient value
+//-----------------------------------------------------------------------------
+//
+//: Wherever the _thick image has an edge marked set the new gradient value
 // to zero.
 void osl_canny_rothwell::Subtract_thick(int x0, int y0, int image_size, float **grad)
 {
@@ -755,9 +751,8 @@ void osl_canny_rothwell::Subtract_thick(int x0, int y0, int image_size, float **
 }
 
 
-
 //-----------------------------------------------------------------------------
-
+//
 //: Returns the eight-way neighbour with the strongest contrast change.
 //
 //fsm: No, this routine returns the last of the eight neighbours with contrast
@@ -781,10 +776,9 @@ void osl_canny_rothwell::Best_eight_way(int x, int y, float **grad, int *xnew, i
 }
 
 
-
 //-----------------------------------------------------------------------------
 //
-//  -- Searches for the junctions in the image.
+//: Searches for the junctions in the image.
 //
 void osl_canny_rothwell::Find_dangling_ends() {
   // Reset the dangling ends
@@ -818,10 +812,9 @@ void osl_canny_rothwell::Find_dangling_ends() {
 }
 
 
-
 //-----------------------------------------------------------------------------
 //
-//  -- Tests whether a points is a dangling end.
+//: Tests whether a points is a dangling end.
 //
 int osl_canny_rothwell::Dangling_end(int x, int y)
 {
@@ -845,10 +838,9 @@ int osl_canny_rothwell::Dangling_end(int x, int y)
 }
 
 
-
 //-----------------------------------------------------------------------------
 //
-//  -- Searches for the junctions in the image.
+//: Searches for the junctions in the image.
 //
 void osl_canny_rothwell::Find_junctions() {
 
@@ -883,11 +875,9 @@ void osl_canny_rothwell::Find_junctions() {
 }
 
 
-
 //-----------------------------------------------------------------------------
 //
-// -- Locate junction clusters using the following method of hysteresis.
-//
+//: Locate junction clusters using the following method of hysteresis.
 //
 void osl_canny_rothwell::Find_junction_clusters() {
 

@@ -34,13 +34,13 @@ osl_canny_base::osl_canny_base(float sigma, float low, float high, bool v)
   _high = high;
 }
 
-// -- Destructor does nothing at all.
+//: Destructor does nothing at all.
 osl_canny_base::~osl_canny_base() {  }
 
 
 //-----------------------------------------------------------------------------
 
-// -- Following routine looking for connectiveness of edgel chains
+//: Following routine looking for connectiveness of edgel chains
 // and accounts for single pixel gaps in the chains.
 void osl_canny_base::Initial_follow(float * const *thin, int xsize, int ysize, float low,
                                     int x, int y,
@@ -48,7 +48,6 @@ void osl_canny_base::Initial_follow(float * const *thin, int xsize, int ysize, f
                                     vcl_list<int> *yc,
                                     vcl_list<float> *grad)
 {
-
   // Make sure that we are not likely to overun the border of the image
   if ( (x<=0) || (x>=xsize-1) || (y<=0) || (y>=ysize-1) )
     return;
@@ -80,10 +79,9 @@ void osl_canny_base::Initial_follow(float * const *thin, int xsize, int ysize, f
 }
 
 
-
 //-----------------------------------------------------------------------------
 
-// -- Following routine looking for connectiveness of edgel chains
+//: Following routine looking for connectiveness of edgel chains
 // and accounts for single pixel gaps in the chains.
 void osl_canny_base::Final_follow(int x, int y,
                                   vcl_list<int> *xc,
@@ -162,14 +160,13 @@ void osl_canny_base::Final_follow(int x, int y,
 
 //-----------------------------------------------------------------------------
 //
-// -- Following routine looking for searching out junction clusters.
+//: Following routine looking for searching out junction clusters.
 //
 void osl_canny_base::Follow_junctions(int * const *junction,
                                       int x, int y,
                                       vcl_list<int> *xc,
                                       vcl_list<int> *yc)
 {
-
   // Add the current junction to the coordinate lists, and delete from
   // the junction image
   xc->push_front(x);
@@ -196,10 +193,9 @@ void osl_canny_base::Follow_junctions(int * const *junction,
 }
 
 
-
 //-----------------------------------------------------------------------------
 
-// -- Finds which member of the lists lies closest to the centre
+//: Finds which member of the lists lies closest to the centre
 // of gravity of the lists.
 void osl_canny_base::Cluster_centre_of_gravity(int * const *jx, int * const *jy,
                                                vcl_list<int> &xc,
@@ -243,10 +239,9 @@ void osl_canny_base::Cluster_centre_of_gravity(int * const *jx, int * const *jy,
 }
 
 
-
 //-----------------------------------------------------------------------------
 //
-// -- Determines whether the point (x,y) is a neighbour to a junction.
+//: Determines whether the point (x,y) is a neighbour to a junction.
 //
 int osl_canny_base::Junction_neighbour(int const * const *junction, int x, int y) {
   // Find the neighbour of (x][y) in the image
@@ -259,10 +254,10 @@ int osl_canny_base::Junction_neighbour(int const * const *junction, int x, int y
     return 0;
 }
 
+
 //-----------------------------------------------------------------------------
 
-
-// -- Returns an m*n array of Ts.
+//: Returns an m*n array of Ts.
 template <class T>
 T **osl_canny_base_make_raw_image(int m, int n, T * /*dummy*/) {
   T *array = new T[m*n];
@@ -272,7 +267,7 @@ T **osl_canny_base_make_raw_image(int m, int n, T * /*dummy*/) {
   return data;
 }
 
-// -- Initialise an m*n array of Ts with value
+//: Initialise an m*n array of Ts with value
 template <class T>
 void osl_canny_base_fill_raw_image(T * * image, int sizex, int sizey, T value) {
   for (int x =0; x < sizex; ++x)
@@ -280,7 +275,7 @@ void osl_canny_base_fill_raw_image(T * * image, int sizex, int sizey, T value) {
       image[x][y] = value;
 }
 
-// -- Frees an m*n array of Ts.
+//: Frees an m*n array of Ts.
 template <class T>
 void osl_canny_base_free_raw_image(T **ptr) {
   T *array = ptr[0];
@@ -288,7 +283,7 @@ void osl_canny_base_free_raw_image(T **ptr) {
   fsm_delete_array ptr;
 }
 
-//  -- Copies image1 to image2.
+//: Copies image1 to image2.
 template <class S, class T>
 void osl_canny_base_copy_raw_image(S const * const *image1, T * const *image2, int m, int n) //
 {

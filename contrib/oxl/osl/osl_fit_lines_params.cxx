@@ -17,7 +17,7 @@ osl_fit_lines_params::osl_fit_lines_params(int min_fit_len,
   , _ignore_end_edgels(ignore_end_edgels)
 {}
 
-// -- Checks that parameters are within acceptable bounds
+//: Checks that parameters are within acceptable bounds
 bool osl_fit_lines_params::SanityCheck() {
 #if 0
   strstream msg;
