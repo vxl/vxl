@@ -70,6 +70,23 @@ class vil_blob_finder
   //: Get number of blobs in given image
   //  Overrides any internal state
   unsigned n_4con_regions(const vil_image_view<bool>& image);
+
+  //: Get boundary pixels of next blob in current image.
+  //  Uses four connected boundary representation.
+  //  Return false if no more regions
+  bool next_8con_region(vcl_vector<int>& bi, vcl_vector<int>& bj);
+
+  //: Get longest blob boundary in current image
+  //  Assumes image has been initialised, and that next_8con_region not
+  //  yet called.  Erases internal image during this call, so any
+  //  subsequent calls will not work.
+  //
+  //  bi,bj empty if no blobs found.
+  void longest_8con_boundary(vcl_vector<int>& bi, vcl_vector<int>& bj);
+
+  //: Get number of blobs in given image
+  //  Overrides any internal state
+  unsigned n_8con_regions(const vil_image_view<bool>& image);
 };
 
 #endif

@@ -4,7 +4,8 @@
 // \author Tim Cootes
 
 #include "vil_blob_finder.h"
-#include <vil/algo/vil_trace_4con_boundary.h>
+#include "vil_trace_4con_boundary.h"
+#include "vil_trace_8con_boundary.h"
 
 //: Default constructor
 vil_blob_finder::vil_blob_finder()
@@ -101,4 +102,58 @@ unsigned vil_blob_finder::n_4con_regions(const vil_image_view<bool>& image)
   while (next_4con_region(tmp_bi,tmp_bj)) n++;
   return n;
 }
+
+
+//-----------------------------------------------------
+
+//: Get boundary pixels of next blob in current image.
+// Uses four connected boundary representation.
+// Return false if no more regions
+bool vil_blob_finder::next_8con_region(vcl_vector<int>& bi, vcl_vector<int>& bj)
+{
+  // Start from current pixel (i_,j_), run over rows until matching pixel found
+  for (; j_<image_.nj(); ++j_,i_=0)
+  {
+    for (; i_<image_.ni(); ++i_)
+    {
+      if (image_(i_,j_))
+      {
+        vil_trace_8con_boundary(bi,bj,image_,i_,j_);
+        delete_blob(image_,bi,bj);
+        return true;
+      }
+    }
+  }
+
+  return false;  // Reached end of image without finding another blob
+}
+
+//: Get longest blob boundary in current image
+//  Assumes image has been initialised, and that next_8con_region not
+//  yet called.  Erases internal image during this call, so any
+//  subsequent calls will not work.
+void vil_blob_finder::longest_8con_boundary(vcl_vector<int>& bi, vcl_vector<int>& bj)
+{
+  bi.resize(0); bj.resize(0);
+  vcl_vector<int> tmp_bi,tmp_bj;
+  while (next_8con_region(tmp_bi,tmp_bj))
+  {
+    if (tmp_bi.size()>bi.size())
+    {
+      vcl_swap(bi,tmp_bi);
+      vcl_swap(bj,tmp_bj);
+    }
+  }
+}
+
+//: Get number of blobs in given image
+unsigned vil_blob_finder::n_8con_regions(const vil_image_view<bool>& image)
+{
+  set_image(image);
+  unsigned n=0;
+  vcl_vector<int> tmp_bi,tmp_bj;
+  while (next_8con_region(tmp_bi,tmp_bj)) n++;
+  return n;
+}
+
 
