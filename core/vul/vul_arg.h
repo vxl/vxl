@@ -42,10 +42,10 @@ public:
 
   friend class vul_arg_info_list;
 
-  char const* option() { return option_; };
+  char const* option();
 
   //: Returns true if arg was set on the command line.
-  bool set() const { return set_; };
+  bool set() const;
 
 public://protected:
   bool set_;
@@ -57,31 +57,21 @@ public://protected:
   vul_arg_base(vul_arg_info_list& l, char const* option_string,
                  char const*helpstring);
   vul_arg_base(char const* option_string, char const*helpstring);
-  virtual ~vul_arg_base() {}
+  virtual ~vul_arg_base();
 
   virtual int parse(char ** argv) = 0;
   virtual vcl_ostream& print_value(vcl_ostream&) = 0;
 };
 
 //: Parse the list of arguments....
-inline void vul_arg_parse(int& argc, char **& argv,
-                          bool warn_about_unrecognized_arguments = true)
-{
-  vul_arg_base::parse_deprecated(argc, argv,
-                                 warn_about_unrecognized_arguments);
-}
+void vul_arg_parse(int& argc, char **& argv,
+                          bool warn_about_unrecognized_arguments = true);
 
 //: Add an externally supplied list of args to the global list.
-inline void vul_arg_include(vul_arg_info_list& l)
-{
-  vul_arg_base::include_deprecated(l);
-}
+void vul_arg_include(vul_arg_info_list& l);
 
 //: Print all args, and usage messages.
-inline void vul_arg_display_usage_and_exit(char const* msg = 0)
-{
-  vul_arg_base::display_usage_and_exit(msg);
-}
+void vul_arg_display_usage_and_exit(char const* msg = 0);
 
 //: parse command-line arguments
 // vul_arg::parse simplifies the parsing of command-line arguments by combining
@@ -183,7 +173,7 @@ public:
   void add(vul_arg_base* arg);
   void parse(int& argc, char **& argv, bool warn_about_unrecognized_arguments);
   void include(vul_arg_info_list& l);
-  void verbose(bool on) { verbose_ = on; }
+  void verbose(bool on);
   void set_help_option(char const* str);
 
 public:

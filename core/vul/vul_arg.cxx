@@ -37,6 +37,37 @@
 //------------------------------------------------------------------------------
 
 // class vul_arg_base
+vul_arg_base::~vul_arg_base()
+{
+}
+
+char const* vul_arg_base::option()
+{ return option_; }
+
+//: Parse the list of arguments....
+void vul_arg_parse(int& argc, char **& argv,
+                          bool warn_about_unrecognized_arguments)
+{
+  vul_arg_base::parse_deprecated(argc, argv,
+                                 warn_about_unrecognized_arguments);
+}
+
+//: Add an externally supplied list of args to the global list.
+void vul_arg_include(vul_arg_info_list& l)
+{
+  vul_arg_base::include_deprecated(l);
+}
+
+//: Print all args, and usage messages.
+void vul_arg_display_usage_and_exit(char const* msg)
+{
+  vul_arg_base::display_usage_and_exit(msg);
+}
+
+
+//: Returns true if arg was set on the command line.
+bool vul_arg_base::set() const
+{ return set_; }
 
 static vul_arg_info_list& current_list() // instance "method"
 {
@@ -113,6 +144,10 @@ vul_arg_info_list::vul_arg_info_list(vul_arg_info_list::autonomy autonomy__):
   autonomy_(autonomy__)
 {
 }
+
+void vul_arg_info_list::verbose(bool on)
+{ verbose_ = on; }
+
 
 //: Destructor.
 vul_arg_info_list::~vul_arg_info_list()
