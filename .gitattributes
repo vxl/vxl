@@ -1,6 +1,5 @@
 .git*            export-ignore
 
-*.bin           -crlf
 *.bmp           -crlf
 *.dsp           -crlf
 *.dsptemplate   -crlf
