@@ -1758,11 +1758,6 @@ SOURCE=.\vnl_binary.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vnl_complexify.h
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vnl_config.h
 
 # End Source File
@@ -1793,17 +1788,17 @@ SOURCE=.\vnl_double_4x4.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\vnl_double_5.h
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\vnl_fwd.h
 
 # End Source File
 # Begin Source File
 
 SOURCE=.\vnl_identity.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_imag.h
 
 # End Source File
 # Begin Source File
@@ -1819,11 +1814,6 @@ SOURCE=.\vnl_matrix_ref.h
 # Begin Source File
 
 SOURCE=.\vnl_operators.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vnl_real.h
 
 # End Source File
 # Begin Source File
