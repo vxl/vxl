@@ -4,7 +4,7 @@
 
 #include <mil/mil_convert_image_2d.h>
 
-//: Copys src_im (of bytes) into dest_im (of float)
+//: Copies src_im (of bytes) into dest_im (of float)
 void mil_convert_image_2d(mil_image_2d_of<float>& dest,
                           const mil_image_2d_of<vil_byte>& src)
 {
@@ -98,9 +98,9 @@ void mil_rgb_to_greyscale(mil_image_2d_of<vil_byte>& g_im,
   int gxstep=g_im.xstep();
   int gystep=g_im.ystep();
 
-	const vil_byte* c0_row = rgb_im.plane(0);
-	const vil_byte* c1_row = rgb_im.plane(1);
-	const vil_byte* c2_row = rgb_im.plane(2);
+  const vil_byte* c0_row = rgb_im.plane(0);
+  const vil_byte* c1_row = rgb_im.plane(1);
+  const vil_byte* c2_row = rgb_im.plane(2);
   vil_byte* grey_row = g_im.plane(0);
 
   for (int y=0;y<ny;++y)
@@ -140,9 +140,9 @@ void mil_rgb_to_greyscale(mil_image_2d_of<float>& g_im,
   int gxstep=g_im.xstep();
   int gystep=g_im.ystep();
 
-	const float* c0_row = rgb_im.plane(0);
-	const float* c1_row = rgb_im.plane(1);
-	const float* c2_row = rgb_im.plane(2);
+  const float* c0_row = rgb_im.plane(0);
+  const float* c1_row = rgb_im.plane(1);
+  const float* c2_row = rgb_im.plane(2);
   float* grey_row = g_im.plane(0);
 
   for (int y=0;y<ny;++y)
