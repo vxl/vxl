@@ -1,6 +1,7 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
+#include <vcl_cmath.h> // for vcl_sqrt()
 
 #include <vnl/vnl_test.h>
 #include <mbl/mbl_mz_random.h>
@@ -33,7 +34,7 @@ void test_mz_random()
   }
 
   double mean = sum/n;
-  double var  = sqrt(sum_sq/n-mean*mean);
+  double var  = vcl_sqrt(sum_sq/n-mean*mean);
   TEST("normal() mean near zero",mean*mean<1e5,true);
   double dv = var-1.0;
   TEST("normal() var near one",dv*dv<1e4,true);
@@ -49,7 +50,7 @@ void test_mz_random()
   }
 
   mean = sum/n;
-  var  = sqrt(sum_sq/n-mean*mean);
+  var  = vcl_sqrt(sum_sq/n-mean*mean);
   TEST("normal64() mean near zero",mean*mean<1e5,true);
   dv = var-1.0;
   TEST("normal64() var near one",dv*dv<1e4,true);
