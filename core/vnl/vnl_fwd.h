@@ -23,8 +23,8 @@ template <class T> class vnl_matrix_ref;
 // Thereby missing the whole point....
 # include <vnl/vnl_vector_fixed.h>
 # include <vnl/vnl_matrix_fixed.h>
-# include <vnl/vnl_vector_fixed_ref.h>
-# include <vnl/vnl_matrix_fixed_ref.h>
+// Could not make #including vec_fixed_ref.h and matrix_fixed_ref.h work under VC6 - compiler error
+// Just have to leave them out of vnl_fwd.h
 #else
   template <class T, unsigned int n> class vnl_vector_fixed;
   template <class T, unsigned int num_rows, unsigned int num_cols> class vnl_matrix_fixed;
