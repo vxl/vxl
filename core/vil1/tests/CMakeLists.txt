@@ -19,9 +19,10 @@ ADD_EXECUTABLE( test_memory_image    test_memory_image.cxx )
 ADD_EXECUTABLE( test_memory_image_of test_memory_image_of.cxx )
 ADD_EXECUTABLE( test_save_load_image test_save_load_image.cxx )
 ADD_EXECUTABLE( test_write_endian    test_write_endian.cxx )
+ADD_EXECUTABLE( test_colour_space    test_colour_space.cxx )
 
 
-ADD_TEST( vil_test_all         vil_test_all )
+ADD_TEST( vil_test_all         	   vil_test_all )
 ADD_TEST( vil_test_flipud          test_flipud )
 ADD_TEST( vil_test_assign          test_assign )
 ADD_TEST( vil_test_interpolate     test_interpolate )
@@ -30,3 +31,5 @@ ADD_TEST( vil_test_memory_image    test_memory_image )
 ADD_TEST( vil_test_memory_image_of test_memory_image_of )
 ADD_TEST( vil_test_save_load_image test_save_load_image )
 ADD_TEST( vil_test_write_endian    test_write_endian )
+ADD_TEST( vil_test_colour_space    test_colour_space )
+
