@@ -26,6 +26,7 @@ TESTS += test_complex_eigensystem.cxx
 TESTS += test_symmetric_eigensystem.cxx
 TESTS += test_generalized_eigensystem.cxx
 TESTS += test_matrix_exp.cxx
+TESTS += test_transpose.cxx
 
 IULIBS += -lvnl-algo -lvnl -lnetlib -lvcl
 

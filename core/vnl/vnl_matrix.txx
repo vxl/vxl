@@ -1326,7 +1326,7 @@ void vnl_matrix<T>::inplace_transpose()
 {
   int m = rows();
   int n = columns();
-  int iwrk = (m+n/2);
+  int iwrk = (m+n)/2;
   vnl_vector<int> move(iwrk);
 
   int iok;
@@ -1337,6 +1337,16 @@ void vnl_matrix<T>::inplace_transpose()
 
   this->num_rows = n;
   this->num_cols = m;
+
+  // row pointers. we have to reallocate even when n<=m because
+  // vnl_c_vector<T>::deallocate needs to know n_when_allocatod.
+  {
+    T *tmp = data[0];
+    vnl_c_vector<T>::deallocate(data, m);
+    data = vnl_c_vector<T>::allocate_Tptr(n);
+    for (int i=0; i<n; ++i)
+      data[i] = tmp + i * m;
+  }
 }
 
 #if VCL_CAN_DO_STATIC_TEMPLATE_MEMBER
