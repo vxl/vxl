@@ -35,8 +35,8 @@ void bvgl_test_norm_trans_2d()
     cy += p.y();
   }
   vcl_cout << "Residual Center(" << cx/Npts << ' ' << cy/Npts << ")\n";
-  TEST_NEAR("...", 0.0, cx/Npts, 1e-4);
-  TEST_NEAR("...", 0.0, cy/Npts, 1e-4);
+  TEST_NEAR("Residual x", 0.0, cx, 1e-4);
+  TEST_NEAR("Residual y", 0.0, cy, 1e-4);
 }
 
 TESTMAIN(bvgl_test_norm_trans_2d);
