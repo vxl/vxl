@@ -22,10 +22,10 @@
 * is a set of objects called darts or half-edges, \f$ \sigma \f$ is a permutation
 * on \f$ \mathcal{D} \f$, and \f$ \alpha \f$ is an involution on \f$ \mathcal{D} \f$.
 * A 2-map can be viewed as a plane graph, where its darts are directed edges
-* between vertices of the graph, \f$ \sigma \f$ gives all the darts clocwise
-* arround a vertex, and \f$ \alpha \f$ gives the two darts associated to a non
+* between vertices of the graph, \f$ \sigma \f$ gives all the darts clockwise
+* around a vertex, and \f$ \alpha \f$ gives the two darts associated to a non
 * oriented edge. A third permutation can be defined as \f$ \varphi= \sigma \circ \alpha \f$,
-* which gives all darts arround a face turning clocwise.
+* which gives all darts around a face turning clockwise.
 *
 * It has been shown that there exits a bijection between the set of combinatorial maps
 * and the set of topological maps (up to an isomorphism). A code for a topological map
@@ -47,24 +47,26 @@
 * - initialise_darts(arg), which reserves arg darts and set alpha for them,
 * - set_sigma (arg, arg_sigma), which sets sigma for the dart of index arg,
 * - set_alpha (arg, arg_alpha), which sets alpha,
-* - set_phi (arg, arg_phi), replacing set_sigma, provided that the pemutation alpha is set.
+* - set_phi (arg, arg_phi), replacing set_sigma, provided that the permutation alpha is set.
 *
 * Other functionalities assumes that the permutations are correctly set.
 *
-* Modifying operations, contration and removal, are outlined below.
+* Modifying operations, contraction and removal, are outlined below.
 *
 * \section tmap Handling Topological Maps
 *
 * The class vmap_2_tmap<V,E,F,D> enable to handle the structure of a topological 2-map.
 * V,E,F and D are user provided types which must publically inherit from respectively
 * vmap_2_tmap_vertex, vmap_2_tmap_edge, vmap_2_tmap_face and vmap_2_tmap_dart.
-* Thus, the simplest instance of the typpe is given by : * \verbatim
+* Thus, the simplest instance of the type is given by :
+* \code
 typedef vmap_2_tmap<vmap_2_tmap_vertex,vmap_2_tmap_edge,vmap_2_tmap_face,vmap_2_tmap_dart> my_tmap
-\endverbatim
+\endcode
 * vmap_2_tmap<V,E,F,D> provides iterators for vertices, edges, faces and darts.
 * The dart iterators can be used to access all the adjacency relations between the different
 * elements, using the operation sigma(), alpha() and phi(). For example, iterating on all
-* vertices, edges and faces adjacent to each vertex of the map is done by :\verbatim
+* vertices, edges and faces adjacent to each vertex of the map is done by:
+* \code
 my_map m;
 //... initialisation of the map
 
@@ -82,11 +84,12 @@ for (my_map::vertex_iterator v=m.begin_vertex(); v!=m.end_vertex(); ++v) // iter
 
     //do something with d->face() ;
 
-    d->sigma() ; // next dart turning clocwise around a vertex
+    d->sigma() ; // next dart turning clockwise around a vertex
   } while (d!=e) ;
 }
-\endverbatim
-* Similarly, for retrieving all elements adjacent to a face:\verbatim
+\endcode
+* Similarly, for retrieving all elements adjacent to a face:
+\code
 for (my_map::face_iterator f=m.begin_face(); f!=m.end_face(); ++f) // iterates on all faces
 {
   my_map::dart_iterator d=f->begin(), // gives the iterator on a dart of *f
@@ -101,25 +104,25 @@ for (my_map::face_iterator f=m.begin_face(); f!=m.end_face(); ++f) // iterates o
 
     //do something with a->face() ;
 
-    d->phi() ; // next dart turning clocwise around a vertex
+    d->phi() ; // next dart turning clockwise around a vertex
   } while (d!=e) ;
 }
-\endverbatim
+\endcode
 *
 * The topological map can be initialised using convenient functions:
 * - setting functions of vmap_2_map,
-* - set_vertex (arg_dart, arg_vertex), set_edge(arg_dart, arg_edge) and set_face (arg_dart, arg_face), which enable to assiciate the cells to darts,
+* - set_vertex (arg_dart, arg_vertex), set_edge(arg_dart, arg_edge) and set_face (arg_dart, arg_face), which enable to associate the cells to darts,
 * - set_dart(arg_dart, arg_sigma, arg_vertex, arg_face) and set_dart(arg_dart, arg_sigma, arg_alpha, arg_vertex, arg_edge, arg_face), which are setting several things together,
 * - set_vertex_cycles(), set_edge_cycles() and set_face_cycles() which initializes and set the different cells provided that the permutations have been set beforehand,
 * - and set_all_cycles(), which sets all the cells and association when the permutations have been set.
 *
 * \section operations Operations on Topological Maps
 *
-* Two dual operations defined on combinatorial maps can be used. These operations are conraction and removal of edges (pair of darts).
+* Two dual operations defined on combinatorial maps can be used. These operations are contraction and removal of edges (pair of darts).
 * When a dart is removed from a topological map its left face is being identified with its right face. It is a way to implement
 * the fusion operation.
 * When a dart is being contracted, its beginning vertex is identified with its end vertex (for details, see Marchadier Jocelyn,
-* Luc Brun, Walter Kropatsch « Rooted Kernels and Labeled Combinatorial Pyramids », CVWW 2004, page 59-68).
+* Luc Brun, Walter Kropatsch ``Rooted Kernels and Labeled Combinatorial Pyramids'', CVWW 2004, page 59-68).
 * Removal and contraction can be used respectively to merge regions and simply the boundaries resulting from merging.
 * Note that it is not possible (for now) to remove darts adjacent to a single face (i.e. isthmus and pendant darts), or to contract
 * loops.
@@ -133,13 +136,9 @@ for (my_map::face_iterator f=m.begin_face(); f!=m.end_face(); ++f) // iterates o
 *
 * Two extra classes are provided: vmap_oriented_kernel<K> and vmap_non_oriented_kernel<K>. Both template parameters must be either
 * contraction_kernel or removal_kernel from the class they are defined on. vmap_oriented_kernel<K> ensures that darts included
-* in the kernel form a rooted tree, whereas vmap_non_oriente_kernel<K> ensure that the kernel built is a non-rooted tree.
+* in the kernel form a rooted tree, whereas vmap_non_oriented_kernel<K> ensure that the kernel built is a non-rooted tree.
 * Usually, the second class is needed, although certain uses may require the first one.
 *
 * \section Lead Developer
 * Jocelyn Marchadier is currently project assistant at PRIP., under Austrian Science Fund's grants P14445-MAT and P14662-INF.
-*/
-
-/*! \page Design Notes
-* \htmlinclude core/vil/notes.html
 */
