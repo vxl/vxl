@@ -34,7 +34,8 @@ template<class T>
 inline void test_memory_chunk_io_as(T value)
 {
   vcl_cout<<"Testing IO as type "<<vil2_pixel_format_of(T())<<vcl_endl;
-  vil2_memory_chunk chunk1(35*sizeof(T),vil2_pixel_format_of(T()));
+  vil2_memory_chunk chunk1(35*sizeof(T),
+    vil2_pixel_format_component_format(vil2_pixel_format_of(T())));
   T* data1 = (T*) chunk1.data();
   data1[3]= value;
 
