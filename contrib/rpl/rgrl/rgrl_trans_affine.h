@@ -94,7 +94,7 @@ class rgrl_trans_affine
   // Defines type-related functions
   rgrl_type_macro( rgrl_trans_affine, rgrl_transformation );
 
-  //: Output UNCENTERED transformation and the original center.
+  //: Output CENTERED transformation and the original center.
   virtual void write(vcl_ostream& os ) const;
 
   // for input

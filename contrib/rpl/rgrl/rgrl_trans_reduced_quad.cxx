@@ -300,11 +300,12 @@ void
 rgrl_trans_reduced_quad::
 write( vcl_ostream& os ) const
 {
+  vnl_vector<double> origin(from_centre_.size(), 0.0);
   // tag
   os << "REDUCED_QUADRATIC\n"
   // parameters
      << t().size() << vcl_endl
-     << Q_<< A_ << trans_ << ' ' << from_centre_ << vcl_endl;
+     << Q_<< A_ << trans_ << ' ' << origin << vcl_endl;
 }
 
 void

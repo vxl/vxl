@@ -96,7 +96,7 @@ class rgrl_trans_reduced_quad
   // Defines type-related functions
   rgrl_type_macro( rgrl_trans_reduced_quad, rgrl_transformation );
 
-  //: Output UNCENTERED transformation and the original center.
+  //: Output UNCENTERED transformation, with the origin as the center.
   void write(vcl_ostream& os ) const;
 
   // for input

@@ -71,7 +71,7 @@ class rgrl_trans_homography2d
   // Defines type-related functions
   rgrl_type_macro( rgrl_trans_homography2d, rgrl_transformation );
 
-  // for output UNCENTERED transformation and the original center
+  // for output UNCENTERED transformation, with the origin as the center.
   void write(vcl_ostream& os ) const;
 
   // for input
