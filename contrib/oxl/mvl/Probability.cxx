@@ -8,7 +8,6 @@
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_matrix.h>
-#include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_diag_matrix.h>
 #include <vnl/vnl_math.h>
 
@@ -180,14 +179,14 @@ vcl_vector<HomgPoint2D> Taubins_MLE(HomgPoint2D x1, HomgPoint2D x2, FMatrix *F)
   J.put(2, 3, 0.0);
   J.put(2, 4, (-x*F->get(3, 1) - y_dash*F->get(3, 2) - F->get(3, 3)));
 
-  // Find the Moore-Penrose Psuedo Inverse for the Jacobian matrix
+  // Find the Moore-Penrose Pseudo Inverse for the Jacobian matrix
   vnl_svd<double> svd(J, 1e-8);
   vnl_diag_matrix<double> diag = svd.W;
   for (int i = 0; i < diag.size(); i++) {
     if (diag(i, i) != 0.0)
       diag(i, i) = 1 / diag(i, i);
   }
-  vnl_matrix<double> psuedo = svd.U * diag * svd.V.transpose();
+  vnl_matrix<double> pseudo = svd.U * diag * svd.V.transpose();
 
   // Find the residuals
 
@@ -205,9 +204,9 @@ double Sampsons_MLE(HomgPoint2D x1, HomgPoint2D x2, FMatrix *F)
   rY = F->get(0, 1)*x2.x() + F->get(1, 1)*x2.y() + F->get(2, 1);
   rX_dash = F->get(0, 0)*x1.x() + F->get(0, 1)*x1.y() + F->get(0, 2);
   rY_dash = F->get(1, 0)*x1.x() + F->get(1, 1)*x1.y() + F->get(1, 2);
-  vcl_cerr << "Points : " << rX << " " << rY << " " << rX_dash << " " << rY_dash << vcl_endl;
+  vcl_cerr << "Points : " << rX << ' ' << rY << ' ' << rX_dash << ' ' << rY_dash << vcl_endl;
   GRADr = vnl_math_sqr(rX*rX + rY*rY + rX_dash*rX_dash + rY_dash*rY_dash);
-  vcl_cerr << "1 : " << " " << GRADr << vcl_endl;
+  vcl_cerr << "1 :  " << GRADr << vcl_endl;
   // This is an annoying interface
   HomgPoint2D *x1p = new HomgPoint2D(x1.x(), x1.y(), 1.0);
   HomgPoint2D *x2p = new HomgPoint2D(x2.x(), x2.y(), 1.0);
