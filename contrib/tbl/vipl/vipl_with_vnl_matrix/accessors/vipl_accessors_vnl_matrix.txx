@@ -23,6 +23,7 @@ void setpixel(vnl_matrix<DataType>& i, int x, int y, DataType e) {
   i(x,y) = e;
 }
 
+#undef VIPL_INSTANTIATE_ACCESSORS
 #define VIPL_INSTANTIATE_ACCESSORS(T) \
 template T fgetpixel(vnl_matrix<T > const&, int, int, T);\
 template void fsetpixel(vnl_matrix<T >&, int, int, T);\

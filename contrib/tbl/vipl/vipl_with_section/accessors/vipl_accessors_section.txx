@@ -23,6 +23,7 @@ void setpixel(section<DataType,2>& i, int x, int y, DataType e) {
   i.Set(e,x,y);
 }
 
+#undef VIPL_INSTANTIATE_ACCESSORS
 #define VIPL_INSTANTIATE_ACCESSORS(T) \
 template T fgetpixel(section<T,2> const&, int, int, T);\
 template void fsetpixel(section<T,2>&, int, int, T);\

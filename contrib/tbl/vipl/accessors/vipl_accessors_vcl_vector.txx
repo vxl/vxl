@@ -27,6 +27,7 @@ void setpixel(vcl_vector<DataType>& i, int x, int y, DataType e) {
   i[x] = e;
 }
 
+#undef VIPL_INSTANTIATE_ACCESSORS
 #define VIPL_INSTANTIATE_ACCESSORS(T) \
 template T fgetpixel(vcl_vector<T > const&, int, int, T);\
 template void fsetpixel(vcl_vector<T >&, int, int, T);\

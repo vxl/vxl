@@ -23,6 +23,7 @@ void setpixel(vbl_array_2d<DataType>& i, int x, int y, DataType e) {
   i(x,y) = e;
 }
 
+#undef VIPL_INSTANTIATE_ACCESSORS
 #define VIPL_INSTANTIATE_ACCESSORS(T) \
 template T fgetpixel(vbl_array_2d<T > const&, int, int, T);\
 template void fsetpixel(vbl_array_2d<T >&, int, int, T);\

@@ -23,6 +23,7 @@ void setpixel(mil_image_2d_of<DataType>& i, int x, int y, DataType e) {
   i(x,y) = e;
 }
 
+#undef VIPL_INSTANTIATE_ACCESSORS
 #define VIPL_INSTANTIATE_ACCESSORS(T) \
 template T fgetpixel(mil_image_2d_of<T > const&, int, int, T);\
 template void fsetpixel(mil_image_2d_of<T >&, int, int, T);\

@@ -24,6 +24,7 @@ void setpixel(vil_image& i, int x, int y, DataType e) {
 }
 // note the (vil_image&)i cast because there is no const vil_image method to get pixels.
 
+#undef VIPL_INSTANTIATE_ACCESSORS
 #define VIPL_INSTANTIATE_ACCESSORS(T) \
 template T fgetpixel(vil_image const&, int, int, T);\
 template void fsetpixel(vil_image&, int, int, T);\
