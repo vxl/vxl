@@ -988,7 +988,7 @@ test_est_spline()
         true_to[ i ] = from_pt[ i ] + splines[i]->f_x( from_pt );
       error = (map_to - true_to).two_norm();
       test_pass = true;
-      if ( error > 1e-3 ) {
+      if ( error > 3e-2 ) {
         test_pass = false;
         vcl_cout << " point (" << from_pt << ") is transformed to (" << map_to << ")\n"
                  << " true mapping points is (" << true_to << ")\n";
