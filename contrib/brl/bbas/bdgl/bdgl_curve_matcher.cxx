@@ -14,6 +14,9 @@
 #include <vcl_vector.h>
 #include <vcl_utility.h>
 #include <vcl_cassert.h>
+#ifdef DEBUG
+# include <vcl_fstream.h>
+#endif
 
 void bdgl_curve_matcher::match()
 {
