@@ -6,12 +6,10 @@ include ${IUEROOT}/config/top-params.mk
 SUBDIRS += netlib
 #endif
 
-#ifneq (1,$(strip $(HAS_NATIVE_JPEG)))
 ifneq (,$(strip $(wildcard $(JPEG_INC_DIR)/v3p_tag)))
 SUBDIRS += jpeg
 endif
 
-#ifneq (1,$(strip $(HAS_NATIVE_TIFF)))
 ifneq (,$(strip $(wildcard $(TIFF_INC_DIR)/v3p_tag)))
 SUBDIRS += tiff
 endif
