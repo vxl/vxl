@@ -45,18 +45,18 @@ bool btol_edge_algs::unlink_all_inferiors_twoway(vtol_edge_2d_sptr const& e)
   if (!infs->size())
     return true;
   if (infs->size()>1)
-    {
-      vcl_cout << " In btol_edge_algs::unlink_all_inferiors_twoway(..) -"
-               << " inferiors inconsistent size\n";
-      return false;
-    }
+  {
+    vcl_cout << " In btol_edge_algs::unlink_all_inferiors_twoway(..) -"
+             << " inferiors inconsistent size\n";
+    return false;
+  }
   vtol_zero_chain_sptr inf_zero_chain = infs->front()->cast_to_zero_chain();
   if (!inf_zero_chain)
-    {
-      vcl_cout << " In btol_edge_algs::unlink_all_inferiors_twoway(..) -"
-               << " null zero chain\n";
-      return false;
-    }
+  {
+    vcl_cout << " In btol_edge_algs::unlink_all_inferiors_twoway(..) -"
+             << " null zero chain\n";
+    return false;
+  }
   inf_zero_chain->unlink_inferior(tv1);
   if (tv1!=tv2)
     inf_zero_chain->unlink_inferior(tv2);
@@ -78,15 +78,15 @@ bool btol_edge_algs::subst_vertex_on_edge(vtol_vertex_sptr const& va,
   if (!v1||!v2)
     return false;
   if (v1==va)
-    {
-      e->set_v1(vb);
-      return true;
-    }
+  {
+    e->set_v1(vb);
+    return true;
+  }
   if (v2==va)
-    {
-      e->set_v2(vb);
-      return true;
-    }
+  {
+    e->set_v2(vb);
+    return true;
+  }
   return false;
 }
 
@@ -99,19 +99,19 @@ vsol_box_2d btol_edge_algs::bounding_box(vcl_vector<vtol_edge_2d_sptr>& edges)
 
   for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
        eit != edges.end(); eit++)
+  {
+    vsol_curve_2d_sptr c = (*eit)->curve();
+    if (!c)
     {
-      vsol_curve_2d_sptr c = (*eit)->curve();
-      if (!c)
-        {
-          vcl_cout << "In btol_edge_algs::bounding_box(..) - null curve\n";
-          continue;
-        }
-      if (c->cast_to_digital_curve())
-        b.grow_minmax_bounds(*c->cast_to_vdgl_digital_curve()->get_bounding_box());
-      else
-        vcl_cout << "In btol_edge_algs::bounding_box(..) -"
-                 << " curve has unknown geometry\n";
+      vcl_cout << "In btol_edge_algs::bounding_box(..) - null curve\n";
+      continue;
     }
+    if (c->cast_to_vdgl_digital_curve())
+      b.grow_minmax_bounds(*c->cast_to_vdgl_digital_curve()->get_bounding_box());
+    else
+      vcl_cout << "In btol_edge_algs::bounding_box(..) -"
+               << " curve has unknown geometry\n";
+  }
   return b;
 }
 
