@@ -22,7 +22,7 @@
 #include <vnl/vnl_matrix.h>
 //:   A collection of Matrix operations
 //    mostly declared as static methods.
-//    Highlights include the in-place transpose, and type conversions.
+//    Highlights include matrix gluing, and type conversions.
 //    matlab_print has been moved to vnl_matlab_print.h.
 class vnl_matops
 {
