@@ -90,12 +90,12 @@ ELSE (WIN32)
           /usr/X11R6/lib
   )
 
-# On Unix OpenGL requires X11, and pthread I think. IMS
+# On Unix OpenGL most certainly always requires X11.
 # Feel free to tighten up these conditions if you don't think this is always true.
   IF (OPENGL_gl_LIBRARY)
     INCLUDE( ${MODULE_PATH}/NewCMake/FindX11.cmake )
     IF (X11_FOUND)
-      SET (OPENGL_LIBRARIES ${X11_LIBRARIES} pthread)
+      SET (OPENGL_LIBRARIES ${X11_LIBRARIES})
     ENDIF (X11_FOUND)
   ENDIF (OPENGL_gl_LIBRARY)
 
