@@ -16,6 +16,7 @@ TESTS += test_sample_profile_bilin.cxx
 TESTS += test_algo_convolve_1d.cxx
 TESTS += test_sample_grid_bilin.cxx
 TESTS += test_algo_exp_filter_1d.cxx
+TESTS += test_pixel_format.cxx
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
