@@ -50,6 +50,7 @@ VCL_COMPLEX_INSTANTIATE(double);
 template ostream& operator<<(ostream &, complex<FLOAT > const &); \
 template complex<FLOAT > sqrt (complex<FLOAT >const& x); \
 template complex<FLOAT > operator / (complex<FLOAT >const&,complex<FLOAT >const&); \
+template complex<FLOAT > operator / (complex<FLOAT >const&,FLOAT); \
 implement_rsh(FLOAT);
 
 do_inlines(float); 
