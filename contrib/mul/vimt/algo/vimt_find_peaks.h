@@ -76,9 +76,9 @@ vgl_point_2d<int> vimt_find_max(const vil2_image_view<T>& im, unsigned plane=0)
     const T* pixel = row;
     for (int i=0;i<ni;++i,pixel+=istep)
       if (*pixel>max_val)
-	  {
-	    max_val = *pixel;
-		p = vgl_point_2d<int>(i,j);
+      {
+        max_val = *pixel;
+        p = vgl_point_2d<int>(i,j);
       }
   }
   return p;
