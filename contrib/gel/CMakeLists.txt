@@ -25,6 +25,9 @@ SUBDIRS(geml)
 # Multi-view database
 SUBDIRS(gmvl)
 
+# Kanade-Lucas-Tomasi feature tracker
+SUBDIRS(vgel/kl vgel gkll)
+
 # Dense matcher
 SUBDIRS(vsrl vmal)
 
@@ -37,9 +40,6 @@ SUBDIRS(octree)
 # photogrammetry in mrc/vpgl,
 # coordinate systems add-on in mrc/vcsl
 SUBDIRS(mrc)
-
-# Kanade-Lucas-Tomasi feature tracker
-SUBDIRS(vgel gkll)
 
 # Experiments with the vidl library and vgui (JLM)
 SUBDIRS(jvid)

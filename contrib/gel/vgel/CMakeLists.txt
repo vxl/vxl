@@ -14,7 +14,6 @@ TARGET_LINK_LIBRARIES(vgel vgel_kl vtol vil vil1 vidl vidl_vil1 mvl)
 
 INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR})
 
-SUBDIRS(kl)
 IF (BUILD_EXAMPLES)
   SUBDIRS(examples)
 ENDIF (BUILD_EXAMPLES)
