@@ -104,7 +104,7 @@ inline bool GetInt(char* cbuf, int* ival, int count, vil_stream * f, bool preser
 //
 // \return true if read successful
 //
-inline bool get_unsigned(char* cbuf, unsigned * ival, int count, vil_stream * f, bool preserve = true)
+inline bool get_unsigned(char* cbuf, unsigned * ival, int count, vil_stream * f, bool /*preserve*/ = true)
 {
 #if 0 // see below
     unsigned orig_val = *ival;
@@ -140,7 +140,7 @@ inline bool PutInt(char* b, int v, int w, vil_stream* f, bool p = true)
 
 // this inline assumes b and f are valid.
 //
-inline bool put_unsigned(char* b, unsigned int v, int w, vil_stream* f, bool p = true)
+inline bool put_unsigned(char* b, unsigned int v, int w, vil_stream* f, bool /*p*/ = true)
 {
     vcl_sprintf(b, "%0*u", w, v);
     int pos = f->tell();
