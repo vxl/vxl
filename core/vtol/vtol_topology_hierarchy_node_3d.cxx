@@ -33,7 +33,7 @@ vtol_topology_hierarchy_node_3d::~vtol_topology_hierarchy_node_3d()
 */
 
 //:
-// -- Static variable.  When true, fast updates are done (superiors are not
+// Static variable.  When true, fast updates are done (superiors are not
 // linked) under the understanding that they will be completed later.
 
 bool
@@ -222,7 +222,7 @@ vtol_topology_hierarchy_node_3d::unlink_all_superiors (vtol_topology_object_3d *
     {
 //    vtol_topology_object_3d* link;
 //    int size = _superiors.length();
-//    for(register int i=0;i<size;i++)
+//    for(register int i=0;i<size;++i)
 //	{
 //	  link = _superiors.get(i);
           unlink_inferior_simple(child);
@@ -244,7 +244,7 @@ vtol_topology_hierarchy_node_3d::unlink_all_inferiors (vtol_topology_object_3d *
     {
 //    vtol_topology_object_3d* link;
 //    int size = _inferiors.length();
-//    for(register int i=0;i<size;i++)
+//    for(register int i=0;i<size;++i)
 //	{
 //	  link = _inferiors.get(i);
           unlink_superior_simple(parent);
@@ -353,38 +353,6 @@ void vtol_topology_hierarchy_node_3d::remove(topology_list_3d &list,
 // list traversal.
 
 
-// void vtol_topology_hierarchy_node_3d::Describeinferiors(ostream& strm,int blanking)
-//{
-//  BLANK_DESCRIBE;
-//
-//  if (_inferiors.is_empty())
-//    strm << "**INFERIORS:  Empty" << endl;
-//  else  strm << "**INFERIORS:" << endl;
-//
-//  for (_inferiors.reset(); _inferiors.next();)
-//    {
-//    strm << TopoNames[_inferiors.value()->GetType()] << _inferiors.value() << "   ";
-//      _inferiors.value()->print();
-//    }
-//}
-
-
-
-//void vtol_topology_hierarchy_node_3d::Describesuperiors(ostream& strm,int blanking)
-//{
-//
-//  BLANK_DESCRIBE;
-//  if (_superiors.is_empty())
-//    strm << "**SUPERIORS:  Empty" << endl;
-//  else  strm << "**SUPERIORS:" << endl;
-//
-//  for (_superiors.reset(); _superiors.next();)
-//    {
-//    strm << TopoNames[_superiors.value()->GetType()] << _superiors.value() << "  ";
-//      _superiors.value()->print();
-//    }
-//}
-
 //:
 // print the node
 void vtol_topology_hierarchy_node_3d::print(ostream& strm) const
@@ -392,35 +360,33 @@ void vtol_topology_hierarchy_node_3d::print(ostream& strm) const
   strm << "<vtol_topology_hierarchy_node_3d " << (void *)this << ">" << endl;
   strm << "number of inferiors " << numinf() << endl;
   strm << "number of superiors " << numsup() << endl;
-    
-
 }
 
-void vtol_topology_hierarchy_node_3d::describe_inferiors(ostream& strm,int blanking)
+void vtol_topology_hierarchy_node_3d::describe_inferiors(ostream& strm,int blanking) const
 {
-
+  for (int j=0; j<blanking; ++j) strm << ' ';
   if (_inferiors.size()==0)
     strm << "**INFERIORS:  Empty" << endl;
   else  strm << "**INFERIORS:" << endl;
-  
-  
-  for (topology_list_3d::iterator ii=_inferiors.begin();ii!= _inferiors.end();ii++)
+
+  for (topology_list_3d::const_iterator ii=_inferiors.begin();ii!= _inferiors.end();++ii)
     {
+      for (int j=0; j<blanking; ++j) strm << ' ';
       (*ii)->print();
     }
 }
 
 
-
-void vtol_topology_hierarchy_node_3d::describe_superiors(ostream& strm,int blanking)
+void vtol_topology_hierarchy_node_3d::describe_superiors(ostream& strm,int blanking) const
 {
-
+  for (int j=0; j<blanking; ++j) strm << ' ';
   if (_superiors.size()==0)
     strm << "**SUPERIORS:  Empty" << endl;
   else  strm << "**SUPERIORS:" << endl;
 
-  for (topology_list_3d::iterator ii=_superiors.begin();ii!= _superiors.end();ii++)
+  for (topology_list_3d::const_iterator ii=_superiors.begin();ii!= _superiors.end();++ii)
     {
+      for (int j=0; j<blanking; ++j) strm << ' ';
       (*ii)->print();
     }
 }
@@ -428,7 +394,7 @@ void vtol_topology_hierarchy_node_3d::describe_superiors(ostream& strm,int blank
 
 void vtol_topology_hierarchy_node_3d::describe(ostream& strm,int blanking) const
 {
-  ((vtol_topology_hierarchy_node_3d*)this)->describe_inferiors(strm, blanking);
-  ((vtol_topology_hierarchy_node_3d*)this)->describe_superiors(strm, blanking);
+  describe_inferiors(strm, blanking);
+  describe_superiors(strm, blanking);
 }
 
