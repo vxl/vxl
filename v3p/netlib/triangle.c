@@ -176,9 +176,9 @@
 /*  Disclaimer:  Neither I nor Carnegie Mellon warrant this code in any way  */
 /*    whatsoever.  This code is provided "as-is".  Use at your own risk.     */
 /*                                                                           */
-/*  Modifications: Ian Scott 10 Jan 2003 - attempt to quash 64 bit
-/*                 conversion warnings. Replaced most (unsigned long) with
-/*                 (ptr_sized_int).
+/*  Modifications: Ian Scott 10 Jan 2003 - attempt to quash 64 bit           */
+/*                 conversion warnings. Replaced most (unsigned long) with   */
+/*                 (ptr_sized_int).                                          */
 /*                                                                           */
 /*****************************************************************************/
 
