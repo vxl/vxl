@@ -1,5 +1,5 @@
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vxl)
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/tbl)
 
-SUBDIRS(vipl)
+SUBDIRS(vipl vepl)
 
