@@ -1,4 +1,3 @@
-
 @chapsummary
 This section describes how to save and restore objects using a binary stream.
 It details how to add the appropriate functions to each class to make use
@@ -140,6 +139,54 @@ Always write the input and output code in tandem - the output should
 precisely mirror the input.
 @end quotation
 
+@subsection Binary I/O by baseclass pointer
+
+When using polymorphism, there are frequently times when one needs to
+save and restore an object just using a base class pointer to it.
+@code{vsl} provides facilities to do this.
+
+Assuming class @code{my_derived} is derived from class @code{my_base}, the following
+will work.
+
+To save an object by baseclass:
+
+@example
+my_derived d;
+
+my_base *b = &d;
+
+vsl_b_ofstream bfs("data.bvl");
+vsl_b_write(bfs,b);
+...
+@end example
+
+To restore an object:
+@example
+// Make application aware of possible classes that it might see in the file
+
+vsl_add_to_binary_loader(my_derived());
+vsl_add_to_binary_loader(my_derived2());
+...
+
+
+my_base *b = 0;
+
+vsl_b_ifstream bfs("data.bvl");
+vsl_b_read(bfs,b);
+// b now points to the correct class which has been created
+// on the heap and filled with the data from bfs
+...
+@end example
+
+Note that the read function will only work if the application has been made
+aware of each of the possible derived classes that it might come across in the
+file.  This is done using calls to @code{vsl_add_to_binary_loader(my_derived())}
+(see below for details).
+
+To reduce the pain of doing this, many libraries have a function that adds all
+the relevant derived classes (eg @code{xxxx_add_all_binary_loaders()} where
+@code{xxxx} is the library name).
+
 @subsection Which files do I need to include/link?
 
 In general the vsl_b_read and vsl_b_write functions use Koenig Lookup - that is the location
@@ -151,6 +198,8 @@ load or save a @code{vcl_vector}, the appropriate @code{vsl_b_write} and @code{v
 functions will be in @code{<vsl/vsl_vector_io.h>}. Likewise for most of the other vcl classes.
 The @code{vsl} library contains the implementation of all of this.
 
+When reading/writing by baseclass pointer, you need to include @code{vsl/vsl_binary_loader.h}.
+
 If you want to load or save a @code{vgl_point_2d}, you will need to include
 @code{<vgl/io/vgl_io_point_2d.h>} and similarly for all other Level-1 VXL libraries. You
 will need to include the vgl_io library.
@@ -160,7 +209,7 @@ vpdfl_gaussian are declared in the same file as the Gaussian, @code{vpdfl/vpdfl_
 Alternatively, it might be in a clip-on library in the same form as the Level-1 libraries
 above.
 
-@subsection Advanced Topics: Loading by baseclass pointer
+@section Loading by baseclass pointer: Design Overview
 
 When using polymorphism, there are frequently times when one needs to
 save and restore an object just using a base class pointer to it.
@@ -179,7 +228,7 @@ modified.  However, for technical reasons (see design notes below) it is also
 used to provide binary IO for the polymorphic hierarchies in the VXL core
 libraries.
 
-@subsubsection IO provided within the class
+@subsection IO provided within the class
 
 @example
 #include <vsl/vsl_binary_loader.h>
@@ -252,7 +301,7 @@ The above methods also work if the
 pointer that was saved was NULL.  The loader will detect this and set the baseclass
 pointer to zero.
 
-@subsubsection IO provided by external `clip-on' classes
+@subsection IO provided by external `clip-on' classes
 
 @example
 class vxl_my_class : public vxl_baseclass
@@ -306,7 +355,7 @@ void vxl_configure_loaders()
 
 See below for details of the implementation of the clip-on IO libraries.
 
-@subsubsection How loading by baseclass pointer works (external IO case)
+@subsection How loading by baseclass pointer works (external IO case)
 
 Essentially this is similar to the within-class-IO case, in that a string
 is written to the stream to indicate which class is saved, and when reading
