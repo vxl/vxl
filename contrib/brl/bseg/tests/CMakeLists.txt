@@ -15,3 +15,6 @@ ADD_EXECUTABLE( bseg_test_include test_include.cxx )
 
 ADD_EXECUTABLE(brip_test_lucas_kanade brip_test_lucas_kanade.cxx)
 ADD_TEST(brip_test_lucas_kanade brip_test_lucas_kanade)
+
+ADD_EXECUTABLE(sdet_test_tracker sdet_test_tracker.cxx)
+ADD_TEST(sdet_test_tracker sdet_test_tracker)
