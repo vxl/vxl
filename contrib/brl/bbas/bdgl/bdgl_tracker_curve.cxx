@@ -74,10 +74,8 @@ void bdgl_tracker_curve  ::init_set(vcl_vector<vgl_point_2d<double> > p,int id)
 double bdgl_tracker_curve::compute_mean(vcl_vector<double> t)
 {
   double sum=0;
-  for (int i=0;i<t.size();i++)
-  {
+  for (unsigned int i=0; i<t.size(); ++i)
     sum+=t[i];
-  }
   sum=sum/t.size();
   return sum;
 }
@@ -90,7 +88,7 @@ void bdgl_tracker_curve
   vcl_vector<double> x;
   vcl_vector<double> y;
 
-  for (int i=0;i<p.size();i++)
+  for (unsigned int i=0; i<p.size(); ++i)
   {
     x.push_back(p[i].x());
     y.push_back(p[i].y());
@@ -99,7 +97,7 @@ void bdgl_tracker_curve
   double x_cen=compute_mean(x);
   double y_cen=compute_mean(y);
 
-  for (int i=0;i<p.size();i++)
+  for (unsigned int i=0; i<p.size(); ++i)
   {
     double tempx=p[i].x()-x_cen;
     double tempy=p[i].y()-y_cen;
@@ -116,8 +114,6 @@ double bdgl_tracker_curve ::compute_euclidean_distance(vnl_matrix<double> R,vnl_
 {
   if (get_best_match_prev())
   {
-    double x2,y2;
-    double cost=0;
     vcl_map<int,int>::iterator iter;
     vcl_vector<vgl_point_2d<double> > curve1;
     vcl_vector<vgl_point_2d<double> > tcurve1;
@@ -137,17 +133,18 @@ double bdgl_tracker_curve ::compute_euclidean_distance(vnl_matrix<double> R,vnl_
       curve2.push_back(point2);
     }
     compute_transformation(curve1,tcurve1,R,T);
-    for (int i=0;i<tcurve1.size();i++)
+    double cost=0;
+    for (unsigned int i=0; i<tcurve1.size(); ++i)
     {
-      double min_dist=2e12;
-      for (int j=0;j<curve2.size();j++)
+      double min_dist=-1.0;
+      for (unsigned int j=0; j<curve2.size(); ++j)
       {
         double dist_sqr=(tcurve1[i].x()-curve2[j].x())*(tcurve1[i].x()-curve2[j].x())
                        +(tcurve1[i].y()-curve2[j].y())*(tcurve1[i].y()-curve2[j].y());
-        if (min_dist>dist_sqr)
+        if (min_dist<0 || min_dist>dist_sqr)
           min_dist=dist_sqr;
       }
-      if (min_dist<1e12)
+      if (min_dist>=0)
         cost+=vcl_sqrt(min_dist);
     }
     cost/=get_best_match_prev()->mapping_.size();

@@ -371,40 +371,37 @@ smooth_curve(vcl_vector<vgl_point_2d<double> > &curve,double sigma)
   curve.insert(curve.end(),curve[curve.size()-1]);
   curve.insert(curve.end(),curve[curve.size()-1]);
   curve.insert(curve.end(),curve[curve.size()-1]);
-  double sum=0;
+  double sum=gauss_1d[0];
   for (int i=1;i<gauss_1d.width();i++)
     sum+=2*gauss_1d[i];
 
-  sum+=gauss_1d[0];
-
-  for (int i=3;i<= curve.size()-4;i++)
+  for (unsigned int i=3; i+3<curve.size(); ++i)
   {
-
     double x=curve[i-3].x()*gauss_1d[3] + curve[i-2].x()*gauss_1d[2]+
-         curve[i-1].x()*gauss_1d[1] + curve[i].x()*gauss_1d[0]+
-         curve[i+1].x()*gauss_1d[1] + curve[i+2].x()*gauss_1d[2]+
-         curve[i+3].x()*gauss_1d[3];
+             curve[i-1].x()*gauss_1d[1] + curve[i  ].x()*gauss_1d[0]+
+             curve[i+1].x()*gauss_1d[1] + curve[i+2].x()*gauss_1d[2]+
+             curve[i+3].x()*gauss_1d[3];
     double y=curve[i-3].y()*gauss_1d[3] + curve[i-2].y()*gauss_1d[2]+
-         curve[i-1].y()*gauss_1d[1] + curve[i].y()*gauss_1d[0]+
-         curve[i+1].y()*gauss_1d[1] + curve[i+2].y()*gauss_1d[2]+
-         curve[i+3].y()*gauss_1d[3];
+             curve[i-1].y()*gauss_1d[1] + curve[i  ].y()*gauss_1d[0]+
+             curve[i+1].y()*gauss_1d[1] + curve[i+2].y()*gauss_1d[2]+
+             curve[i+3].y()*gauss_1d[3];
     x/=sum;
     y/=sum;
     curve[i].set(x,y);
-    }
+  }
 }
 
 vdgl_digital_curve_sptr  bdgl_curve_algs::
 create_digital_curves(vcl_vector<vgl_point_2d<double> > & curve)
 {
- vdgl_edgel_chain_sptr vec;
- vec= new vdgl_edgel_chain;
- for (int j=0;j<curve.size();j++)
- {
-  vdgl_edgel el(curve[j].x(),curve[j].y(), 0,0 );
-  vec->add_edgel(el);
- }
- vdgl_interpolator_sptr interp= new vdgl_interpolator_linear(vec);
- vdgl_digital_curve_sptr dc = new vdgl_digital_curve(interp);
- return dc;
+  vdgl_edgel_chain_sptr vec;
+  vec= new vdgl_edgel_chain;
+  for (unsigned int j=0; j<curve.size(); ++j)
+  {
+   vdgl_edgel el(curve[j].x(),curve[j].y(), 0,0 );
+   vec->add_edgel(el);
+  }
+  vdgl_interpolator_sptr interp= new vdgl_interpolator_linear(vec);
+  vdgl_digital_curve_sptr dc = new vdgl_digital_curve(interp);
+  return dc;
 }
