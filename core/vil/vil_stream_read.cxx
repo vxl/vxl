@@ -84,7 +84,7 @@ float vil_stream_read_big_endian_float(vil_stream* is)
 {
   float f;
   is->read((char*)&f,4);
-#ifdef VXL_LITTLE_ENDIAN
+#if VXL_LITTLE_ENDIAN
   swap32((char*)&f,1);
 #endif
   return f;
@@ -97,7 +97,7 @@ void vil_stream_read_big_endian_int_16(vil_stream* is,
 {
   assert(sizeof(short)==2);
   is->read((char*)data,n*2);
-#ifdef VXL_LITTLE_ENDIAN
+#if VXL_LITTLE_ENDIAN
   swap16((char*)data,n);
 #endif
 }
