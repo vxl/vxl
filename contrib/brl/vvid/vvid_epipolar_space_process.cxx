@@ -27,8 +27,8 @@ bool vvid_epipolar_space_process::execute()
   im.resize(width, width);
   vil_rgb<unsigned char> white(255,255,255);
   int h2 = height/2, d = 10;
-  for (int x1 = 0; x1<width; x1++)
-    for (int x2 = 0; x2<width; x2++)
+  for (unsigned int x1 = 0; x1<width; x1++)
+    for (unsigned int x2 = 0; x2<width; x2++)
       {
         float p0=0.0, p1=0.0, n=0.0;
         for (int y = h2-d; y<h2+d; y++, n++)
