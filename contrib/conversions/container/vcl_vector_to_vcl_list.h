@@ -10,7 +10,7 @@ vcl_list<T> vcl_vector_to_vcl_list(vcl_vector<T> const& cl)
 {
   vcl_list<T> l;
   vcl_vector<T>::const_iterator it = cl.begin();
-  for (; it != cl.end(); ++it)
+  for (; !(it == cl.end()); ++it)
     l.push_back(*it);
   return l;
 }
