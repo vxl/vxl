@@ -23,16 +23,18 @@
 //  destruction).  This allows external images to be accessed
 //  without a deep copy.
 //
-//
+// \par 
 //  Note that copying one mil_image_of<T> to another takes a shallow
 //  copy by default.  Use the explicit deepCopy() call to take a deep copy.
 //
-//
+// \par
 //  format() returns a vcl_string describing the format.
 //  Formats currently include:
+//  \verbatim
 //  "GreyByte" : an nx() x ny() greyscale image of Ts plane(0)[x+y*ystep()]
 //  "RGBPlaneByte" : an nx() x ny() colour image with three separate
 //                   planes of data, plane(i)[x*im.xstep() + y*imystep()] i=0,1,2 for r,g,b
+//  \end verbatim
 //  It is safest to examine the number of planes, xstep() and ystep() to
 //  determine the format.
 template<class T>
