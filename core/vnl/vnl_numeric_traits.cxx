@@ -1,6 +1,6 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "numeric_traits.h"
+#pragma implementation "vnl_numeric_traits.h"
 #endif
 //
 // Class: vnl_numeric_traits

@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vnl_sample"
+#pragma implementation "vnl_sample.h"
 #endif
 #include "vnl_sample.h"
 

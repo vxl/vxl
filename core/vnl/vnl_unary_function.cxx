@@ -1,6 +1,6 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "vnl_unary_function.h>"
+#pragma implementation "vnl_unary_function.h"
 #endif
 //
 // Class: UnaryFunction

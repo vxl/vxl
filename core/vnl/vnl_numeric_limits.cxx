@@ -1,5 +1,5 @@
 #ifdef __GNUC__
-#pragma implementation "vnl_numeric_limits"
+#pragma implementation "vnl_numeric_limits.h"
 #endif
 //
 // Class: numeric_limits

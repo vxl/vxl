@@ -2,10 +2,10 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vnl_matlab_read"
+#pragma implementation "vnl_matlab_read.h"
 #endif
+#include <vcl/vcl_iostream.h> // must be first!
 #include "vnl_matlab_read.h"
-#include <vcl/vcl_iostream.h>
 #include <vcl/vcl_cstdlib.h> // abort()
 #include <vnl/vnl_c_vector.h>
 #include <vnl/vnl_complex.h>
