@@ -114,7 +114,13 @@ SOURCE=.\bsol_point_index_2d.cxx
 SOURCE=.\bsol_point_index_3d.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bsol_intrinsic_curve_2d.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bsol_hough_line_index-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bsol_intrinsic_curve_2d-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_array_2d+vcl_vector+vcl_vector+vsol_point_3d_sptr--~-.cxx
@@ -139,6 +145,12 @@ SOURCE=.\bsol_point_index_2d.h
 # End Source File
 # Begin Source File
 SOURCE=.\bsol_point_index_3d.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsol_intrinsic_curve_2d.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsol_intrinsic_curve_2d_sptr.h
 # End Source File
 # End Group
 # End Target
