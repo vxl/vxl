@@ -38,7 +38,7 @@ class CheckRGB : public CheckPixel
 public:
   CheckRGB( const char* file )
   {
-    vil2_image_view_base *i = vil2_load_into_memory( (image_base + file).c_str() );
+    vil2_image_view_base *i = vil2_load( (image_base + file).c_str() );
     if ( !i )
       vcl_cout << "[ couldn't load " << file << "]\n";
     else
@@ -64,7 +64,7 @@ class CheckColourPlanes : public CheckPixel
 public:
   CheckColourPlanes( const char* file )
   {
-    vil2_image_view_base *i = vil2_load_into_memory( (image_base + file).c_str() );
+    vil2_image_view_base *i = vil2_load( (image_base + file).c_str() );
     if ( !i )
       vcl_cout << "[ couldn't load " << file << "]\n";
     else
@@ -90,7 +90,7 @@ class CheckGrey : public CheckPixel
 public:
   CheckGrey( const char* file )
   {
-    vil2_image_view_base *i = vil2_load_into_memory( (image_base + file).c_str() );
+    vil2_image_view_base *i = vil2_load( (image_base + file).c_str() );
     if ( !i )
       vcl_cout << "[ couldn't load " << file << "]\n";
     else

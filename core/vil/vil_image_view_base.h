@@ -47,20 +47,20 @@ public:
   //: resize to width x height x nplanes
   // If already correct size, this function returns quickly
   virtual void resize(unsigned width, unsigned height, unsigned nplanes) =0;
-  
+
   //: Print a 1-line summary of contents
   virtual void print(vcl_ostream&) const =0;
 
-    //: Return class name
+  //: Return class name
   virtual vcl_string is_a() const;
 
-    //: Return a description of the concrete data pixel type.
-    // For example if the value is VIL2_PIXEL_FORMAT_VIL_BYTE,
-    // you can safely cast, or assign the base class reference to
-    // a vil2_image_view<vil_byte>.
+  //: Return a description of the concrete data pixel type.
+  // For example if the value is VIL2_PIXEL_FORMAT_VIL_BYTE,
+  // you can safely cast, or assign the base class reference to
+  // a vil2_image_view<vil_byte>.
   virtual enum vil2_pixel_format pixel_format() const=0;
 
-    //: True if this is (or is derived from) class s
+  //: True if this is (or is derived from) class s
   virtual bool is_class(vcl_string const& s) const;
 };
 

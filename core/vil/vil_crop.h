@@ -12,7 +12,7 @@
 
 //: Crop to a region of src.
 vil2_image_data_sptr vil2_crop(const vil2_image_data_sptr &src, unsigned x0,
-  unsigned y0, unsigned nx, unsigned ny);
+                               unsigned y0, unsigned nx, unsigned ny);
 
 
 //: A generic_image adaptor that behaves like a cropped version of its input
@@ -31,26 +31,25 @@ class vil2_crop_image_data : public vil2_image_data
 
 
   virtual vil2_image_view_base* get_copy_view(unsigned x0, unsigned y0,
-    unsigned plane0, unsigned nx, unsigned ny,
-    unsigned nplanes) const {
+                                              unsigned plane0, unsigned nx, unsigned ny,
+                                              unsigned nplanes) const {
     return gi_->get_copy_view(x0 + x0_, y0+y0_, plane0, nx, ny, nplanes);
   }
 
   virtual vil2_image_view_base* get_view(unsigned x0, unsigned y0,
-    unsigned plane0, unsigned nx, unsigned ny,
-    unsigned nplanes) const {
+                                         unsigned plane0, unsigned nx, unsigned ny,
+                                         unsigned nplanes) const {
     return gi_->get_view(x0 + x0_, y0+y0_, plane0, nx, ny, nplanes);
   }
 
 
   //: Put the data in this view back into the image source.
   virtual bool put_view(const vil2_image_view_base& im, unsigned x0,
-    unsigned y0, unsigned plane0 = 0) {
+                        unsigned y0, unsigned plane0 = 0) {
     return gi_->put_view(im, x0 + x0_, y0 + y0_, plane0);
   }
 
-
-    //: Extra property information
+  //: Extra property information
   virtual bool get_property(char const* tag, void* property_value = 0) const {
     return gi_->get_property(tag, property_value);
   }
@@ -68,7 +67,5 @@ class vil2_crop_image_data : public vil2_image_data
   int nx_;
   int ny_;
 };
-
-
 
 #endif // vil22_crop_h_

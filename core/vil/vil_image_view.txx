@@ -29,7 +29,7 @@ vil2_image_view<T>::vil2_image_view(unsigned nx, unsigned ny, unsigned nplanes)
 //: Set this view to look at someone else's memory data.
 template<class T>
 vil2_image_view<T>::vil2_image_view(const T* top_left, unsigned nx, unsigned ny, unsigned nplanes,
-                  int xstep, int ystep, int planestep)
+                                    int xstep, int ystep, int planestep)
 {
   set_to_memory(top_left,nx,ny,nplanes,xstep,ystep,planestep);
 }
@@ -38,17 +38,18 @@ vil2_image_view<T>::vil2_image_view(const T* top_left, unsigned nx, unsigned ny,
 //  Need to pass the memory chunk to set up the internal smart ptr appropriately
 template<class T>
 vil2_image_view<T>::vil2_image_view(const vil2_smart_ptr<vil2_memory_chunk>& mem_chunk,
-                  const T* top_left, unsigned nx, unsigned ny, unsigned nplanes,
-                  int xstep, int ystep, int planestep):
-  vil2_image_view_base(nx, ny, nplanes), top_left_(const_cast<T*>( top_left))
-  ,xstep_(xstep), ystep_(ystep), planestep_(planestep), ptr_(mem_chunk)
-
+                                    const T* top_left, unsigned nx, unsigned ny, unsigned nplanes,
+                                    int xstep, int ystep, int planestep)
+ : vil2_image_view_base(nx, ny, nplanes)
+ , top_left_(const_cast<T*>( top_left))
+ , xstep_(xstep), ystep_(ystep)
+ , planestep_(planestep)
+ , ptr_(mem_chunk)
 {
   // check view and chunk are in rough agreement
   assert(mem_chunk->size() >= nplanes*nx*ny*sizeof(T));
   assert(top_left >= (const T*)mem_chunk->data() &&
-    top_left < (const T*)mem_chunk->data() + mem_chunk->size());
-  
+         top_left  < (const T*)mem_chunk->data() + mem_chunk->size());
 }
 
 //: Copy constructor
@@ -59,7 +60,6 @@ vil2_image_view<T>::vil2_image_view(const vil2_image_view_base& that)
 {
   operator=(that);
 }
-
 
 
 //: Perform deep copy of the src image, placing in this image
@@ -97,6 +97,7 @@ void vil2_image_view<T>::deep_copy(const vil2_image_view<T>& src)
     data += planestep_;
   }
 }
+
 
 //: Create a copy of the data viewed by this, and return a view of copy.
 template<class T>
@@ -161,15 +162,15 @@ bool vil2_image_view<T>::is_contiguous() const
   // RRR GGG BBB
   if (planestep_==nx_*ny_)
   {
-    if (xstep_==1 && ystep_==nx_)  return true;
+    if (xstep_==1 && ystep_==nx_) return true;
     if (ystep_==1 && xstep_==ny_) return true;
   }
 
   // RGBRGBRGB
   if (planestep_==1)
   {
-    if (xstep_==nplanes_ && ystep_==nx_*nplanes_)  return true;
-    if (ystep_==nplanes_ && xstep_==ny_*nplanes_)  return true;
+    if (xstep_==nplanes_ && ystep_==nx_*nplanes_) return true;
+    if (ystep_==nplanes_ && xstep_==ny_*nplanes_) return true;
   }
 
   // Note that there may be other weird combinations
@@ -201,8 +202,8 @@ void vil2_image_view<T>::resize(unsigned nx, unsigned ny, unsigned nplanes)
 //: Set this view to look at someone else's memory.
 template<class T>
 void vil2_image_view<T>::set_to_memory(const T* top_left,
-                             unsigned nx, unsigned ny, unsigned nplanes,
-                             int xstep, int ystep, int planestep)
+                                       unsigned nx, unsigned ny, unsigned nplanes,
+                                       int xstep, int ystep, int planestep)
 {
   release_data();
   top_left_ = (T*) top_left;  // Remove const, as view may end up manipulating data
@@ -221,8 +222,8 @@ void vil2_image_view<T>::set_to_memory(const T* top_left,
 //  I.e. plane(i) points to im.plane(i+p0) + offset
 template<class T>
 void vil2_image_view<T>::set_to_window(const vil2_image_view& im,
-                     unsigned x0, unsigned nx, unsigned y0,
-                     unsigned ny, unsigned p0, unsigned np)
+                                       unsigned x0, unsigned nx, unsigned y0,
+                                       unsigned ny, unsigned p0, unsigned np)
 {
   assert(this!=&im);
 
@@ -242,14 +243,14 @@ void vil2_image_view<T>::set_to_window(const vil2_image_view& im,
   ystep_ = im.ystep();
   planestep_ = im.planestep();
 
-    // Have to force the cast to avoid compiler warnings about const
+  // Have to force the cast to avoid compiler warnings about const
   top_left_ = (T*) im.top_left_ptr() + x0*xstep_ + y0*ystep_ + p0*planestep_;
 }
 
 //: Arrange that this is window on all planes of given image.
 template<class T>
 void vil2_image_view<T>::set_to_window(const vil2_image_view& im,
-                     unsigned x0, unsigned nx, unsigned y0, unsigned ny)
+                                       unsigned x0, unsigned nx, unsigned y0, unsigned ny)
 {
   set_to_window(im,x0,ny,y0,ny,0,im.nplanes());
 }

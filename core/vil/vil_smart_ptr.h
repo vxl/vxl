@@ -1,7 +1,6 @@
-// This is ./mul/vil2/vil2_smart_ptr.h
+// This is mul/vil2/vil2_smart_ptr.h
 #ifndef vil2_smart_ptr_h_
 #define vil2_smart_ptr_h_
-
 //:
 // \file
 // \brief Contains a templated smart pointer class
