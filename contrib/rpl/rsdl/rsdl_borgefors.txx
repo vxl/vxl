@@ -5,7 +5,6 @@
 #include <vcl_iostream.h>
 #include <vbl/vbl_array_2d.h>
 #include <vnl/vnl_math.h>
-#include <vil/vil_memory_image_of.h>
 
 template <class T>
 rsdl_borgefors<T>::rsdl_borgefors()
@@ -20,7 +19,7 @@ rsdl_borgefors<T>::rsdl_borgefors(int org_x, int org_y,
 {
   initialize(begin,end);
   if ( release_dist_map )
-    distance_map_.resize(1,1);
+    distance_map_.clear();
 }
 
 template <class T>
@@ -36,7 +35,7 @@ rsdl_borgefors<T>::set(int org_x, int org_y,
 
   initialize(begin,end);
   if ( release_dist_map )
-    distance_map_.resize(1,1);
+    distance_map_.clear();
 }
 
 template <class T>
@@ -72,8 +71,8 @@ rsdl_borgefors<T>::reset()
 {
   org_x_ = org_y_ = size_x_ = size_y_ = 0;
   data_.clear();
-  distance_map_.resize(1,1);
-  index_map_.resize(1,1);
+  distance_map_.clear();
+  index_map_.clear();
   is_valid_ = false;
 }
 

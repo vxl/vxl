@@ -1,17 +1,14 @@
 #ifndef rsdl_borgefors_h_
 #define rsdl_borgefors_h_
 
-// This is rpil/rsdl/rsdl_borgefors.h
-
 //:
 // \file
-// \brief masked, templated borgefors distance map using 3-4 chamfer distance transform
+// \brief templated borgefors distance map using 3-4 chamfer distance transform
 // \author Charlene Tsai
 // \date 5 May 2001
 //
-// Defines functions assocaited with a masked, templated borgefors
-// distance map. The user has the freedom to specify the map either masked or
-// unmasked, and the data based on which the map is built is a vector
+// Defines functions assocaited with a templated borgefors
+// distance map. The data based on which the map is built is a vector
 // (should be changed to any stl container type later) of any
 // datatype with x() and y() functions defined.
 
@@ -20,9 +17,8 @@
 #include <vil/vil_fwd.h>
 #include <vil/vil_byte.h>
 
-//: Defines functions assocaited with a masked, templated borgefors
-//  distance map. The user has the freedom to specify the map either masked or
-//  unmasked, and the data based on which the map is built is a vector
+//: Defines functions assocaited with a templated borgefors
+//  distance map. Tthe data based on which the map is built is a vector
 //  (should be changed to any stl container type later) of any
 //  datatype with x() and y() functions defined.
 //
@@ -45,7 +41,7 @@ class rsdl_borgefors {
 public:
   //: default constructor
   rsdl_borgefors();
-  //: constructor: constructs unmasked distance map, with dimensions set by size_x and size_y
+  //: constructor: constructs a distance map, with dimensions set by size_x and size_y
   rsdl_borgefors(int org_x, int org_y, int size_x, int size_y,
                  iterator_type begin, iterator_type end, bool release_dist_map = false);
   //: sets distance and index maps, with dimensions set by size_x and size_y
@@ -110,7 +106,6 @@ private:
   void forward_chamfer();
   void backward_chamfer();
   int minimum5(int,int,int,int,int);
-  void mask_maps(const vil_memory_image_of<vil_byte>& mask);
 
 private:
   bool is_valid_;
