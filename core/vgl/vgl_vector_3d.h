@@ -12,9 +12,12 @@
 // \author Peter Vanroose
 // \date 27 June, 2001
 //
+// \verbatim
+// Modifications
+// 2001-07-05 Peter Vanroose  Added orthogonal(); operator* now accepts double
+// \endverbatim
 
 #include <vcl_iosfwd.h>
-#include <vcl_cassert.h>
 
 //----------------------------------------------------------------------
 
@@ -95,21 +98,21 @@ template <class T> inline v      operator+(v const& b) { return b; }
 template <class T> inline v      operator-(v const& b) { return v(-b.x(), -b.y(), -b.z()); }
 
 //: c=f*b: return a scaled version of the vector.
-template <class T> inline v      operator*(T s, v const& b) { return v(s*b.x(), s*b.y(), s*b.z()); }
+template <class T> inline v      operator*(double s, v const& b) { return v(T(s*b.x()), T(s*b.y()), T(s*b.z())); }
 
-//: c=b*f: return a scaled version of the vector.
-template <class T> inline v      operator*(v const& a, T s) { return v(a.x()*s, a.y()*s, a.z()*s); }
+//: c=a*f: return a scaled version of the vector.
+template <class T> inline v      operator*(v const& a, double s) { return v(T(a.x()*s), T(a.y()*s), T(a.z()*s)); }
 
 //: c=b/f: return an inversely scaled version of the vector (scale must be nonzero).
 //  Note that the argument type is double, not T, to avoid rounding errors
 //  when type T has no multiplicative inverses (like T=int).
-template <class T> inline v      operator/(v const& a, double s) { return v(a.x()/s, a.y()/s, a.z()/s); }
+template <class T> inline v      operator/(v const& a, double s) { return v(T(a.x()/s), T(a.y()/s), T(a.z()/s)); }
 
 //: a*=f: scale the vector.
-template <class T> inline v&     operator*=(v& a, T s) { a.set(a.x()*s, a.y()*s, a.z()*s); return a; }
+template <class T> inline v&     operator*=(v& a, double s) { a.set(T(a.x()*s), T(a.y()*s), T(a.z()*s)); return a; }
 
 //: a/=f: inversely scale the vector (scale must be nonzero).
-template <class T> inline v&     operator/=(v& a, double s) { a.set(x()/s, a.y()/s, a.z()/s); return a; }
+template <class T> inline v&     operator/=(v& a, double s) { a.set(T(a.x()/s), T(a.y()/s), T(a.z()/s)); return a; }
 
 //: dot product or inner product of two vectors.
 template <class T> inline T      dot_product(v const& a, v const& b) { return a.x()*b.x()+a.y()*b.y()+a.z()*b.z(); }
@@ -127,6 +130,11 @@ template <class T> inline double cos_angle(v const& a, v const& b) { return inne
 //: smallest angle between two vectors (in radians, between 0 and Pi).
 template <class T>        double angle(v const& a, v const& b); // return acos(cos_angle(a,b));
 
+//: are two vectors orthogonal, i.e., is their dot product zero?
+// If the third argument is specified, it is taken as the "tolerance", i.e.
+// in that case this function returns true if the vectors are almost orthogonal.
+template <class T>        bool orthogonal(v const& a, v const& b, double eps=0.0);
+
 //: are two vectors parallel, i.e., is one a scalar multiple of the other?
 // If the third argument is specified, it is taken as the "tolerance", i.e.
 // in that case this function returns true if the vectors are almost parallel.
@@ -140,14 +148,15 @@ template <class T> inline double operator/(v const& a, v const& b) {
   return dot_product(a,b)/(double)dot_product(b,b); }
 
 //: Normalise by dividing through by the length, thus returning a length 1 vector.
-template <class T> inline v&     normalize(v& a) { return a /= a.length(); }
+//  If a is zero length, return (0,0).
+template <class T> inline v&     normalize(v& a) { double l=a.length(); return l?a/=l:a; }
 
 //: Return a normalised version of a.
-template <class T> inline v      normalized(v const& a) { return a / a.length(); }
+//  If a is zero length, return (0,0).
+template <class T> inline v      normalized(v const& a) { double l=a.length(); return l?a/l:a; }
 
 #undef v
 
-#define VGL_VECTOR_3D_INSTANTIATE(T) \
-extern "please include vgl/vgl_vector_3d.txx instead"
+#define VGL_VECTOR_3D_INSTANTIATE(T) extern "please include vgl/vgl_vector_3d.txx first"
 
 #endif // vgl_vector_3d_h_
