@@ -27,7 +27,7 @@ private:
   T *ptr_;
 };
 
-#include <vector>
+#include <vcl_vector.h>
 
 class X;
 

@@ -20,7 +20,7 @@
 #include <afxcmn.h>         // MFC support for Windows Common Controls
 #endif // _AFX_NO_AFXCMN_SUPPORT
 
-#include <iostream>
+#include <vcl_iostream.h>
 
 // TODO: reference additional headers your program requires here
 
