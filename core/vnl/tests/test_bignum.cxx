@@ -196,6 +196,13 @@ static void run_conversion_operator_tests() {
 #ifndef __alpha__ // On Alpha, compiler runs out of memory
   TEST("double(vnl_bignum(\"+Inf\")) == +Inf", (double) vnl_bignum("+Inf"), 1.0/zerod);
 #endif
+
+  // Test for bug in bignum::dtobignum()
+  // it wasn't reseting the value at the start.
+  const vnl_bignum e(1000);
+  vnl_bignum d(20);
+  vnl_bignum_from_string(d, "1000");
+  TEST("vnl_bignum_from_string", e, d);
 }
 
 static void run_assignment_tests() {
