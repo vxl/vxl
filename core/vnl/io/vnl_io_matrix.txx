@@ -16,7 +16,10 @@ void vsl_b_write(vsl_b_ostream & os, const vnl_matrix<T> & p)
   vsl_b_write(os, version_no);
   vsl_b_write(os, p.rows());
   vsl_b_write(os, p.cols());
-  vsl_b_write_block(os, p.begin(), p.size());
+
+  // Calling p.begin() on empty matrix causes segfault
+  if (p.size()>0)
+    vsl_b_write_block(os, p.begin(), p.size());
 }
 
 //=================================================================================
@@ -34,7 +37,9 @@ void vsl_b_read(vsl_b_istream &is, vnl_matrix<T> & p)
     vsl_b_read(is, m);
     vsl_b_read(is, n);
     p.resize(m, n);
-    vsl_b_read_block(is, p.begin(), p.size());
+	// Calling begin() on empty matrix causes segfault
+    if (m*n>0)
+      vsl_b_read_block(is, p.begin(), p.size());
     break;
   default:
     vcl_cerr << "vsl_b_read(s, vnl_matrix&) Unknown version number "<< v << vcl_endl;
