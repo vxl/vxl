@@ -48,8 +48,6 @@ class vil_dicom_image : public vil_image_resource
   vil_dicom_image(vil_stream* is);
   ~vil_dicom_image();
 
-  // Inherit the documentation from vil_image_resource
-
   virtual unsigned nplanes() const {return 1;}
   virtual unsigned ni() const {return header_.dimx_;}
   virtual unsigned nj() const {return header_.dimy_;}
@@ -63,6 +61,9 @@ class vil_dicom_image : public vil_image_resource
 
   char const* file_format() const;
   bool get_property(char const *tag, void *prop = 0) const;
+
+// Dicom specific stuff
+  const vil_dicom_header_info & header() const { return header_;} 
 };
 
 #endif // vil_dicom_file_format_h_
