@@ -25,12 +25,10 @@ vtol_face_2d::vtol_face_2d(void)
 }
 
 //---------------------------------------------------------------------------
-// Copy constructor
+//: Copy constructor
 //---------------------------------------------------------------------------
-//:
 // This is the Copy Constructor for vtol_face_2d. It performs a deep copy of
 // all vtol_face_2d inferior one_chains.
-
 vtol_face_2d::vtol_face_2d(const vtol_face_2d &other)
   : _surface(0)
 {
@@ -167,11 +165,9 @@ vtol_face *vtol_face_2d::shallow_copy_with_no_links(void) const
   return result;
 }
 
-//:
-//  Constructor for a planar vtol_face_2d from an ordered list of vertices.
-// edges are constructed by connecting vtol_vertex_2d[i] to
-// vtol_vertex_2d[(i+1)mod L]. L is the length of the vertex list, verts, and
-// i goes from 0 to L.
+//: Constructor for a planar vtol_face_2d from an ordered list of vertices.
+// Edges are constructed by connecting vtol_vertex_2d[i] to vtol_vertex_2d[(i+1)mod L].
+// L is the length of the vertex list, verts, and i goes from 0 to L.
 // Require: verts.size()>2
 
 vtol_face_2d::vtol_face_2d(vertex_list &verts)
@@ -234,9 +230,8 @@ vtol_face_2d::vtol_face_2d(vertex_list &verts)
   link_inferior(*eloop);
 }
 
-//:
-// Constructor for a Planar face from a list of one_chains.  This
-// method assumes that the first vtol_one_chain on the list is the outside
+//: Constructor for a planar face from a list of one_chains.
+// This method assumes that the first vtol_one_chain on the list is the outside
 // boundary vtol_one_chain.  The remaining one_chains are holes boundaries
 // on the face.
 

@@ -23,16 +23,17 @@ vtol_vertex::vtol_vertex(void)
 {
 }
 
-
+#if 0
 //---------------------------------------------------------------------------
 //: Copy constructor. Copy the point but not the links
 //---------------------------------------------------------------------------
-//vtol_vertex::vtol_vertex(const vtol_vertex &other)
-//{
-//  copy_geometry(other);
-//
-//  //_point=new vsol_point(*other._point);
-//}
+vtol_vertex::vtol_vertex(const vtol_vertex &other)
+{
+  copy_geometry(other);
+
+  //_point=new vsol_point(*other._point);
+}
+#endif
 
 //---------------------------------------------------------------------------
 // Destructor
@@ -42,20 +43,21 @@ vtol_vertex::~vtol_vertex()
   unlink_all_inferiors();
 }
 
+#if 0
 //---------------------------------------------------------------------------
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-// vsol_spatial_object_3d_sptr vtol_vertex::clone(void) const
-//{
-//  return new vtol_vertex(*this);
-//}
+ vsol_spatial_object_3d_sptr vtol_vertex::clone(void) const
+{
+  return new vtol_vertex(*this);
+}
+#endif
 
-/*
- ******************************************************
- *
- *    Accessor Functions
- */
+//******************************************************
+//*
+//*    Accessor Functions
+//*
 
 //---------------------------------------------------------------------------
 //: Return the topology type
@@ -152,11 +154,11 @@ vtol_vertex::valid_superior_type(const vtol_topology_object &superior) const
   return superior.cast_to_zero_chain()!=0;
 }
 
-/*
- ******************************************************
- *
- *    Print Functions
- */
+//******************************************************
+//*
+//*    Print Functions
+//*
+
 //: This method outputs a simple text representation of the vertex including its address in memory.
 void vtol_vertex::print(vcl_ostream &strm) const
 {
@@ -176,11 +178,11 @@ void vtol_vertex::describe(vcl_ostream &strm,
 }
 
 
-/*
- ******************************************************
- *
- *    Implementor Functions
- */
+//******************************************************
+//*
+//*    Implementor Functions
+//*
+
 //-----------------------------------------------------------------------------
 //: Is `this' connected with `v2' ?
 //    ie has a superior of `this' `v2' as inferior ?
@@ -295,5 +297,7 @@ void vtol_vertex::explore_vertex(vertex_list &verts)
   delete e_list;
 }
 
-//#include <vcl_rel_ops.h> // gcc 2.7
-//VCL_INSTANTIATE_INLINE(bool operator!=(vtol_vertex const &, vtol_vertex const &));
+#ifdef VCL_GCC_27
+#include <vcl_rel_ops.h>
+VCL_INSTANTIATE_INLINE(bool operator!=(vtol_vertex const &, vtol_vertex const &));
+#endif
