@@ -1,12 +1,12 @@
 #include "f2c.h"
+#include "netlib.h"
 
 #ifdef KR_headers
-double r_sign(a,b) real *a, *b;
+real r_sign(a,b) const real *a, *b;
 #else
-double r_sign(real *a, real *b)
+real r_sign(const real *a, const real *b)
 #endif
 {
-double x;
-x = (*a >= 0 ? *a : - *a);
-return( *b >= 0 ? x : -x);
+  real x = (*a >= 0 ? *a : - *a);
+  return *b >= 0 ? x : -x;
 }

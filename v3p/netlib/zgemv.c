@@ -1,37 +1,27 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
-/* Subroutine */ void zgemv_(trans, m, n, alpha, a, lda, x, incx, beta, y, incy, trans_len)
-char *trans;
-integer *m, *n;
+/* Subroutine */ void zgemv_(trans, m, n, alpha, a, lda, x, incx, beta, y, incy)
+const char *trans;
+const integer *m, *n;
 doublecomplex *alpha, *a;
-integer *lda;
+const integer *lda;
 doublecomplex *x;
-integer *incx;
+const integer *incx;
 doublecomplex *beta, *y;
-integer *incy;
-ftnlen trans_len;
+const integer *incy;
 {
     /* System generated locals */
     integer i__1;
     doublecomplex z__1;
 
-    /* Builtin functions */
-    void d_cnjg();
-
     /* Local variables */
     static integer info;
     static doublecomplex temp;
     static integer lenx, leny, i, j;
-    extern logical lsame_();
     static integer ix, iy, jx, jy, kx, ky;
-    extern /* Subroutine */ void xerbla_();
     static logical noconj;
 
 /*  ===================================================================== */
@@ -130,8 +120,7 @@ ftnlen trans_len;
 /*     Richard Hanson, Sandia National Labs. */
 
     info = 0;
-    if (! lsame_(trans, "N", 1L, 1L) && ! lsame_(trans, "T", 1L, 1L) && !
-            lsame_(trans, "C", 1L, 1L)) {
+    if (! lsame_(trans, "N") && ! lsame_(trans, "T") && ! lsame_(trans, "C")) {
         info = 1;
     } else if (*m < 0) {
         info = 2;
@@ -145,7 +134,7 @@ ftnlen trans_len;
         info = 11;
     }
     if (info != 0) {
-        xerbla_("ZGEMV ", &info, 6L);
+        xerbla_("ZGEMV ", &info);
         return;
     }
 
@@ -155,12 +144,12 @@ ftnlen trans_len;
         return;
     }
 
-    noconj = lsame_(trans, "T", 1L, 1L);
+    noconj = lsame_(trans, "T");
 
 /*     Set  LENX  and  LENY, the lengths of the vectors x and y, and set */
 /*     up the start points in  X  and  Y. */
 
-    if (lsame_(trans, "N", 1L, 1L)) {
+    if (lsame_(trans, "N")) {
         lenx = *n;
         leny = *m;
     } else {
@@ -216,7 +205,7 @@ ftnlen trans_len;
     if (alpha->r == 0. && alpha->i == 0.) {
         return;
     }
-    if (lsame_(trans, "N", 1L, 1L)) {
+    if (lsame_(trans, "N")) {
 
 /*        Form  y := alpha*A*x + y. */
 
@@ -266,9 +255,8 @@ ftnlen trans_len;
                     }
                 } else {
                     for (i = 0; i < *m; ++i) {
-                        d_cnjg(&z__1, &a[i + j * *lda]);
-                        temp.r += z__1.r * x[i].r - z__1.i * x[i].i,
-                        temp.i += z__1.r * x[i].i + z__1.i * x[i].r;
+                        temp.r += a[i + j * *lda].r * x[i].r + a[i + j * *lda].i * x[i].i,
+                        temp.i += a[i + j * *lda].r * x[i].i - a[i + j * *lda].i * x[i].r;
                     }
                 }
                 y[jy].r += alpha->r * temp.r - alpha->i * temp.i,
@@ -288,9 +276,8 @@ ftnlen trans_len;
                     }
                 } else {
                     for (i = 0; i < *m; ++i) {
-                        d_cnjg(&z__1, &a[i + j * *lda]);
-                        temp.r += z__1.r * x[ix].r - z__1.i * x[ix].i,
-                        temp.i += z__1.r * x[ix].i + z__1.i * x[ix].r;
+                        temp.r += a[i + j * *lda].r * x[ix].r + a[i + j * *lda].i * x[ix].i,
+                        temp.i += a[i + j * *lda].r * x[ix].i - a[i + j * *lda].i * x[ix].r;
                         ix += *incx;
                     }
                 }

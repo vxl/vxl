@@ -1,40 +1,26 @@
-/* zdotc.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 /*                               and moved out of zsvdc.c to separate file */
 
-
-/* Double Complex */
-void zdotc_( ret_val, n, zx, incx, zy, incy)
-doublecomplex * ret_val;
-integer *n;
-doublecomplex *zx;
-integer *incx;
-doublecomplex *zy;
-integer *incy;
+/* Double Complex */ void zdotc_(ret_val, n, zx, incx, zy, incy)
+doublecomplex *ret_val;
+const integer *n;
+const doublecomplex *zx;
+const integer *incx;
+const doublecomplex *zy;
+const integer *incy;
 {
-    /* System generated locals */
-    doublecomplex z__1;
-
-    /* Builtin functions */
-    void d_cnjg();
-
     /* Local variables */
     static integer i;
     static doublecomplex ztemp;
     static integer ix, iy;
 
-
-/*     forms the dot product of a vector. */
+/*     forms the dot product of two vectors, conjugating the first vector */
+/*           */
 /*     jack dongarra, 3/11/78. */
 /*     modified 12/3/93, array(1) declarations changed to array(*) */
-
-    /* Function Body */
 
     if (*n <= 0) {
         ret_val->r = 0., ret_val->i = 0.;
@@ -44,9 +30,8 @@ integer *incy;
 
     if (*incx == 1 && *incy == 1) {
         for (i = 0; i < *n; ++i) {
-            d_cnjg(&z__1, &zx[i]);
-            ztemp.r += z__1.r * zy[i].r - z__1.i * zy[i].i,
-            ztemp.i += z__1.r * zy[i].i + z__1.i * zy[i].r;
+            ztemp.r += zx[i].r * zy[i].r + zx[i].i * zy[i].i,
+            ztemp.i += zx[i].r * zy[i].i - zx[i].i * zy[i].r;
         }
         ret_val->r = ztemp.r, ret_val->i = ztemp.i;
     }
@@ -59,13 +44,10 @@ integer *incy;
             iy = (1-(*n)) * *incy;
         }
         for (i = 0; i < *n; ++i) {
-            d_cnjg(&z__1, &zx[ix]);
-            ztemp.r += z__1.r * zy[iy].r - z__1.i * zy[iy].i,
-            ztemp.i += z__1.r * zy[iy].i + z__1.i * zy[iy].r;
+            ztemp.r += zx[ix].r * zy[iy].r + zx[ix].i * zy[iy].i,
+            ztemp.i += zx[ix].r * zy[iy].i - zx[ix].i * zy[iy].r;
             ix += *incx; iy += *incy;
         }
         ret_val->r = ztemp.r, ret_val->i = ztemp.i;
     }
-    return;
-
 } /* zdotc_ */

@@ -1,9 +1,5 @@
-/*  -- translated by f2c (version 19991025).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Subroutine */ void dorgr2_(m, n, k, a, lda, tau, work, info)
 integer *m, *n, *k;
@@ -18,9 +14,7 @@ integer *info;
 
     /* Local variables */
     static integer i, j, l;
-    extern /* Subroutine */ void dscal_(), dlarf_();
     static integer ii, ij;
-    extern /* Subroutine */ void xerbla_();
 
 /*  -- LAPACK routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -87,7 +81,7 @@ integer *info;
     }
     if (*info != 0) {
         i__1 = -(*info);
-        xerbla_("DORGR2", &i__1, (ftnlen)6);
+        xerbla_("DORGR2", &i__1);
         return;
     }
 
@@ -119,7 +113,7 @@ integer *info;
 
         a[ii + ij * *lda] = 1.;
         i__1 = ij + 1;
-        dlarf_("Right", &ii, &i__1, &a[ii], lda, &tau[i], a, lda, work, (ftnlen)5);
+        dlarf_("Right", &ii, &i__1, &a[ii], lda, &tau[i], a, lda, work);
         d__1 = -tau[i];
         dscal_(&ij, &d__1, &a[ii], lda);
         a[ii + ij * *lda] = 1. - tau[i];

@@ -1,9 +1,10 @@
 #include "f2c.h"
+#include "netlib.h"
 
 #ifdef KR_headers
 integer pow_ii(ap, bp) integer *ap, *bp;
 #else
-integer pow_ii(integer *ap, integer *bp)
+integer pow_ii(const integer *ap, const integer *bp)
 #endif
 {
   integer pow = 1, x = *ap, n = *bp;
@@ -27,5 +28,5 @@ integer pow_ii(integer *ap, integer *bp)
     else
       break;
   }
-  return(pow);
+  return pow;
 }

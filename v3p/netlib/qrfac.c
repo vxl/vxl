@@ -1,15 +1,11 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-
 #include "f2c.h"
+#include "netlib.h"
+extern double sqrt(double); /* #include <math.h> */
 
 /* Table of constant values */
-
 static integer c__1 = 1;
 
-/* Subroutine */ void qrfac_(m, n, a, lda, pivot, ipvt, lipvt, rdiag, acnorm,
-        wa)
+/* Subroutine */ void qrfac_(m, n, a, lda, pivot, ipvt, lipvt, rdiag, acnorm, wa)
 integer *m, *n;
 doublereal *a;
 integer *lda;
@@ -18,25 +14,19 @@ integer *ipvt, *lipvt;
 doublereal *rdiag, *acnorm, *wa;
 {
     /* Initialized data */
-
     static doublereal one = 1.;
     static doublereal p05 = .05;
     static doublereal zero = 0.;
 
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
-    doublereal d__1, d__2, d__3;
-
-    /* Builtin functions */
-    double sqrt();
+    integer a_dim1, a_offset, i__1;
+    doublereal d__1;
 
     /* Local variables */
     static integer kmax;
     static doublereal temp;
     static integer i, j, k, minmn;
-    extern doublereal enorm_();
     static doublereal epsmch;
-    extern doublereal dpmpar_();
     static doublereal ajnorm;
     static integer jp1;
     static doublereal sum;
@@ -106,16 +96,11 @@ doublereal *rdiag, *acnorm, *wa;
 /*       wa is a work array of length n. if pivot is false, then wa */
 /*         can coincide with rdiag. */
 
-/*     subprograms called */
-
-/*       minpack-supplied ... dpmpar,enorm */
-
-/*       fortran-supplied ... dmax1,dsqrt,min0 */
-
 /*     argonne national laboratory. minpack project. march 1980. */
 /*     burton s. garbow, kenneth e. hillstrom, jorge j. more */
 
 /*     ********** */
+
     /* Parameter adjustments */
     --wa;
     --acnorm;
@@ -125,30 +110,25 @@ doublereal *rdiag, *acnorm, *wa;
     a_offset = a_dim1 + 1;
     a -= a_offset;
 
-    /* Function Body */
-
 /*     epsmch is the machine precision. */
 
     epsmch = dpmpar_(&c__1);
 
 /*     compute the initial column norms and initialize several arrays. */
 
-    i__1 = *n;
-    for (j = 1; j <= i__1; ++j) {
+    for (j = 1; j <= *n; ++j) {
         acnorm[j] = enorm_(m, &a[j * a_dim1 + 1]);
         rdiag[j] = acnorm[j];
         wa[j] = rdiag[j];
         if (*pivot) {
             ipvt[j] = j;
         }
-/* L10: */
     }
 
 /*     reduce a to r with householder transformations. */
 
     minmn = min(*m,*n);
-    i__1 = minmn;
-    for (j = 1; j <= i__1; ++j) {
+    for (j = 1; j <= minmn; ++j) {
         if (! (*pivot)) {
             goto L40;
         }
@@ -156,22 +136,18 @@ doublereal *rdiag, *acnorm, *wa;
 /*        bring the column of largest norm into the pivot position. */
 
         kmax = j;
-        i__2 = *n;
-        for (k = j; k <= i__2; ++k) {
+        for (k = j; k <= *n; ++k) {
             if (rdiag[k] > rdiag[kmax]) {
                 kmax = k;
             }
-/* L20: */
         }
         if (kmax == j) {
             goto L40;
         }
-        i__2 = *m;
-        for (i = 1; i <= i__2; ++i) {
+        for (i = 1; i <= *m; ++i) {
             temp = a[i + j * a_dim1];
             a[i + j * a_dim1] = a[i + kmax * a_dim1];
             a[i + kmax * a_dim1] = temp;
-/* L30: */
         }
         rdiag[kmax] = rdiag[j];
         wa[kmax] = wa[j];
@@ -183,18 +159,16 @@ L40:
 /*        compute the householder transformation to reduce the */
 /*        j-th column of a to a multiple of the j-th unit vector. */
 
-        i__2 = *m - j + 1;
-        ajnorm = enorm_(&i__2, &a[j + j * a_dim1]);
+        i__1 = *m - j + 1;
+        ajnorm = enorm_(&i__1, &a[j + j * a_dim1]);
         if (ajnorm == zero) {
             goto L100;
         }
         if (a[j + j * a_dim1] < zero) {
             ajnorm = -ajnorm;
         }
-        i__2 = *m;
-        for (i = j; i <= i__2; ++i) {
+        for (i = j; i <= *m; ++i) {
             a[i + j * a_dim1] /= ajnorm;
-/* L50: */
         }
         a[j + j * a_dim1] += one;
 
@@ -202,50 +176,29 @@ L40:
 /*        and update the norms. */
 
         jp1 = j + 1;
-        if (*n < jp1) {
-            goto L100;
-        }
-        i__2 = *n;
-        for (k = jp1; k <= i__2; ++k) {
+        for (k = jp1; k <= *n; ++k) {
             sum = zero;
-            i__3 = *m;
-            for (i = j; i <= i__3; ++i) {
+            for (i = j; i <= *m; ++i) {
                 sum += a[i + j * a_dim1] * a[i + k * a_dim1];
-/* L60: */
             }
             temp = sum / a[j + j * a_dim1];
-            i__3 = *m;
-            for (i = j; i <= i__3; ++i) {
+            for (i = j; i <= *m; ++i) {
                 a[i + k * a_dim1] -= temp * a[i + j * a_dim1];
-/* L70: */
             }
             if (! (*pivot) || rdiag[k] == zero) {
-                goto L80;
+                continue;
             }
             temp = a[j + k * a_dim1] / rdiag[k];
-/* Computing MAX */
-/* Computing 2nd power */
-            d__3 = temp;
-            d__1 = zero, d__2 = one - d__3 * d__3;
-            rdiag[k] *= sqrt((max(d__1,d__2)));
-/* Computing 2nd power */
+            rdiag[k] *= sqrt((max(zero, one - temp * temp)));
             d__1 = rdiag[k] / wa[k];
-            if (p05 * (d__1 * d__1) > epsmch) {
-                goto L80;
+            if (p05 * d__1 * d__1 > epsmch) {
+                continue;
             }
-            i__3 = *m - j;
-            rdiag[k] = enorm_(&i__3, &a[jp1 + k * a_dim1]);
+            i__1 = *m - j;
+            rdiag[k] = enorm_(&i__1, &a[jp1 + k * a_dim1]);
             wa[k] = rdiag[k];
-L80:
-/* L90: */
-            ;
         }
 L100:
         rdiag[j] = -ajnorm;
-/* L110: */
     }
-    return;
-
-/*     last card of subroutine qrfac. */
-
 } /* qrfac_ */

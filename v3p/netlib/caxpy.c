@@ -1,19 +1,15 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
 
 /* Subroutine */ void caxpy_(n, ca, cx, incx, cy, incy)
-integer *n;
-complex *ca, *cx;
-integer *incx;
+const integer *n;
+const complex *ca, *cx;
+const integer *incx;
 complex *cy;
-integer *incy;
+const integer *incy;
 {
     /* System generated locals */
     complex q__1;
@@ -24,8 +20,6 @@ integer *incy;
 /*     constant times a vector plus a vector. */
 /*     jack dongarra, linpack, 3/11/78. */
 /*     modified 12/3/93, array(1) declarations changed to array(*) */
-
-    /* Function Body */
 
     if (*n <= 0) {
         return;
@@ -56,4 +50,3 @@ integer *incy;
         }
     }
 } /* caxpy_ */
-

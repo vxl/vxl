@@ -1,12 +1,12 @@
 #include "f2c.h"
+#include "netlib.h"
 
-logical lsame_(char *ca, char *cb)
+logical lsame_(const char *ca, const char *cb)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
        Courant Institute, Argonne National Lab, and Rice University
        September 30, 1994
-
 
     Purpose
     =======
@@ -39,7 +39,8 @@ logical lsame_(char *ca, char *cb)
 /*     Use 'Z' rather than 'A' so that ASCII can be detected on Prime
        machines, on which ICHAR returns a value with bit 8 set.
        ICHAR('A') on Prime machines returns 193 which is the same as
-       ICHAR('A') on an EBCDIC machine. */
+       ICHAR('A') on an EBCDIC machine.
+*/
 
     inta = *(unsigned char *)ca;
     intb = *(unsigned char *)cb;
@@ -47,7 +48,8 @@ logical lsame_(char *ca, char *cb)
     if (zcode == 90 || zcode == 122) {
 
 /*        ASCII is assumed - ZCODE is the ASCII code of either lower or
-          upper case 'Z'. */
+          upper case 'Z'.
+*/
 
         if (inta >= 97 && inta <= 122) {
             inta += -32;
@@ -59,7 +61,8 @@ logical lsame_(char *ca, char *cb)
     } else if (zcode == 233 || zcode == 169) {
 
 /*        EBCDIC is assumed - ZCODE is the EBCDIC code of either lower or
-          upper case 'Z'. */
+          upper case 'Z'.
+*/
 
         if ((inta >= 129 && inta <= 137) || (inta >= 145 && inta <= 153) || (inta >= 162 && inta <= 169)) {
             inta += 64;
@@ -71,7 +74,8 @@ logical lsame_(char *ca, char *cb)
     } else if (zcode == 218 || zcode == 250) {
 
 /*        ASCII is assumed, on Prime machines - ZCODE is the ASCII code
-          plus 128 of either lower or upper case 'Z'. */
+          plus 128 of either lower or upper case 'Z'.
+*/
 
         if (inta >= 225 && inta <= 250) {
             inta += -32;

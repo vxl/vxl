@@ -1,12 +1,7 @@
-/*  -- translated by f2c (version 19991025).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Table of constant values */
-
 static integer c__1 = 1;
 static doublereal c_b10 = -1.;
 
@@ -16,11 +11,8 @@ doublereal *a;
 integer *lda, *ipiv, *jpiv, *info;
 {
     /* Local variables */
-    extern /* Subroutine */ void dger_();
     static doublereal smin, xmax;
     static integer i, j;
-    extern /* Subroutine */ void dswap_(), dlabad_();
-    extern doublereal dlamch_();
     static integer ip, jp;
     static doublereal bignum, smlnum, eps;
     static integer ipv, jpv;
@@ -83,8 +75,8 @@ integer *lda, *ipiv, *jpiv, *info;
 /*     Set constants to control overflow */
 
     *info = 0;
-    eps = dlamch_("P", (ftnlen)1);
-    smlnum = dlamch_("S", (ftnlen)1) / eps;
+    eps = dlamch_("P");
+    smlnum = dlamch_("S") / eps;
     bignum = 1. / smlnum;
     dlabad_(&smlnum, &bignum);
 

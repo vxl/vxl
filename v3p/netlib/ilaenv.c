@@ -1,24 +1,11 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
-integer ilaenv_(ispec, name, opts, n1, n2, n3, n4, name_len, opts_len)
-integer *ispec;
-char *name, *opts;
-integer *n1, *n2, *n3, *n4;
-ftnlen name_len;
-ftnlen opts_len;
+integer ilaenv_(ispec, name, opts, n1, n2, n3, n4)
+const integer *ispec;
+const char *name, *opts;
+const integer *n1, *n2, *n3, *n4;
 {
-    /* System generated locals */
-    integer ret_val;
-
-    /* Builtin functions */
-    /* Subroutine */ void s_copy();
-    integer s_cmp();
-
     /* Local variables */
     static integer i;
     static logical cname, sname;
@@ -33,16 +20,11 @@ ftnlen opts_len;
 /*     Courant Institute, Argonne National Lab, and Rice University */
 /*     September 30, 1994 */
 
-/*     .. Scalar Arguments .. */
-/*     .. */
-
 /*  Purpose */
 /*  ======= */
 
-/*  ILAENV is called from the LAPACK routines to choose problem-dependent
-*/
-/*  parameters for the local environment.  See ISPEC for a description of
-*/
+/*  ILAENV is called from the LAPACK routines to choose problem-dependent */
+/*  parameters for the local environment.  See ISPEC for a description of */
 /*  the parameters. */
 
 /*  This version provides a set of parameters which should give good, */
@@ -60,8 +42,7 @@ ftnlen opts_len;
 /*  ISPEC   (input) INTEGER */
 /*          Specifies the parameter to be returned as the value of */
 /*          ILAENV. */
-/*          = 1: the optimal blocksize; if this value is 1, an unblocked
-*/
+/*          = 1: the optimal blocksize; if this value is 1, an unblocked */
 /*               algorithm will give the best performance. */
 /*          = 2: the minimum block size for which the block routine */
 /*               should be used; if the usable block size is less than */
@@ -71,19 +52,14 @@ ftnlen opts_len;
 /*          = 4: the number of shifts, used in the nonsymmetric */
 /*               eigenvalue routines */
 /*          = 5: the minimum column dimension for blocking to be used; */
-/*               rectangular blocks must have dimension at least k by m,
-*/
-/*               where k is given by ILAENV(2,...) and m by ILAENV(5,...)
-*/
-/*          = 6: the crossover point for the SVD (when reducing an m by n
-*/
-/*               matrix to bidiagonal form, if max(m,n)/min(m,n) exceeds
-*/
+/*               rectangular blocks must have dimension at least k by m, */
+/*               where k is given by ILAENV(2,...) and m by ILAENV(5,...) */
+/*          = 6: the crossover point for the SVD (when reducing an m by n */
+/*               matrix to bidiagonal form, if max(m,n)/min(m,n) exceeds */
 /*               this value, a QR factorization is used first to reduce */
 /*               the matrix to a triangular form.) */
 /*          = 7: the number of processors */
-/*          = 8: the crossover point for the multishift QR and QZ methods
-*/
+/*          = 8: the crossover point for the multishift QR and QZ methods */
 /*               for nonsymmetric eigenvalue problems. */
 
 /*  NAME    (input) CHARACTER*(*) */
@@ -100,48 +76,34 @@ ftnlen opts_len;
 /*  N2      (input) INTEGER */
 /*  N3      (input) INTEGER */
 /*  N4      (input) INTEGER */
-/*          Problem dimensions for the subroutine NAME; these may not all
-*/
+/*          Problem dimensions for the subroutine NAME; these may not all */
 /*          be required. */
 
 /* (ILAENV) (output) INTEGER */
 /*          >= 0: the value of the parameter specified by ISPEC */
-/*          < 0:  if ILAENV = -k, the k-th argument had an illegal value.
-*/
+/*          < 0:  if ILAENV = -k, the k-th argument had an illegal value.  */
 
 /*  Further Details */
 /*  =============== */
 
-/*  The following conventions have been used when calling ILAENV from the
-*/
+/*  The following conventions have been used when calling ILAENV from the */
 /*  LAPACK routines: */
 /*  1)  OPTS is a concatenation of all of the character options to */
 /*      subroutine NAME, in the same order that they appear in the */
-/*      argument list for NAME, even if they are not used in determining
-*/
+/*      argument list for NAME, even if they are not used in determining */
 /*      the value of the parameter specified by ISPEC. */
-/*  2)  The problem dimensions N1, N2, N3, N4 are specified in the order
-*/
+/*  2)  The problem dimensions N1, N2, N3, N4 are specified in the order */
 /*      that they appear in the argument list for NAME.  N1 is used */
 /*      first, N2 second, and so on, and unused problem dimensions are */
 /*      passed a value of -1. */
-/*  3)  The parameter value returned by ILAENV is checked for validity in
-*/
-/*      the calling subroutine.  For example, ILAENV is used to retrieve
-*/
+/*  3)  The parameter value returned by ILAENV is checked for validity in */
+/*      the calling subroutine.  For example, ILAENV is used to retrieve */
 /*      the optimal blocksize for STRTRI as follows: */
 
 /*      NB = ILAENV( 1, 'STRTRI', UPLO // DIAG, N, -1, -1, -1 ) */
 /*      IF( NB.LE.1 ) NB = MAX( 1, N ) */
 
-/*  =====================================================================
-*/
-
-/*     .. Local Scalars .. */
-/*     .. */
-/*     .. Intrinsic Functions .. */
-/*     .. */
-/*     .. Executable Statements .. */
+/*  ===================================================================== */
 
     switch ((int)*ispec) {
         case 1:  goto L100;
@@ -156,15 +118,13 @@ ftnlen opts_len;
 
 /*     Invalid value for ISPEC */
 
-    ret_val = -1;
-    return ret_val;
+    return -1;
 
 L100:
 
 /*     Convert NAME to upper case if the first character is lower case. */
 
-    ret_val = 1;
-    s_copy(subnam, name, 6L, name_len);
+    s_copy(subnam, name, 6L, 6L);
     ic = *subnam;
     iz = 'Z';
     if (iz == 90 || iz == 122) {
@@ -178,7 +138,6 @@ L100:
                 if (ic >= 97 && ic <= 122) {
                     subnam[i - 1] = (char) (ic - 32);
                 }
-/* L10: */
             }
         }
 
@@ -186,16 +145,13 @@ L100:
 
 /*        EBCDIC character set */
 
-        if (ic >= 129 && ic <= 137 || ic >= 145 && ic <= 153 || ic >= 162 &&
-                ic <= 169) {
+        if ((ic >= 129 && ic <= 137) || (ic >= 145 && ic <= 153) || (ic >= 162 && ic <= 169)) {
             *subnam = (char) (ic + 64);
             for (i = 2; i <= 6; ++i) {
                 ic = (integer) subnam[i - 1];
-                if (ic >= 129 && ic <= 137 || ic >= 145 && ic <= 153 || ic >=
-                        162 && ic <= 169) {
+                if ((ic >= 129 && ic <= 137) || (ic >= 145 && ic <= 153) || (ic >= 162 && ic <= 169)) {
                     subnam[i - 1] = (char) (ic + 64);
                 }
-/* L20: */
             }
         }
 
@@ -210,7 +166,6 @@ L100:
                 if (ic >= 225 && ic <= 250) {
                     subnam[i - 1] = (char) (ic - 32);
                 }
-/* L30: */
             }
         }
     }
@@ -219,7 +174,7 @@ L100:
     sname = *c1 == 'S' || *c1 == 'D';
     cname = *c1 == 'C' || *c1 == 'Z';
     if (! (cname || sname)) {
-        return ret_val;
+        return 1;
     }
     s_copy(c2, subnam + 1, 2L, 2L);
     s_copy(c3, subnam + 3, 3L, 3L);
@@ -248,9 +203,10 @@ L110:
             } else {
                 nb = 64;
             }
-        } else if (s_cmp(c3, "QRF", 3L, 3L) == 0 || s_cmp(c3, "RQF", 3L, 3L)
-                == 0 || s_cmp(c3, "LQF", 3L, 3L) == 0 || s_cmp(c3, "QLF", 3L,
-                3L) == 0) {
+        } else if (s_cmp(c3, "QRF", 3L, 3L) == 0 ||
+                   s_cmp(c3, "RQF", 3L, 3L) == 0 ||
+                   s_cmp(c3, "LQF", 3L, 3L) == 0 ||
+                   s_cmp(c3, "QLF", 3L, 3L) == 0) {
             if (sname) {
                 nb = 32;
             } else {
@@ -305,33 +261,45 @@ L110:
         }
     } else if (sname && s_cmp(c2, "OR", 2L, 2L) == 0) {
         if (*c3 == 'G') {
-            if (s_cmp(c4, "QR", 2L, 2L) == 0 || s_cmp(c4, "RQ", 2L, 2L) == 0
-                    || s_cmp(c4, "LQ", 2L, 2L) == 0 || s_cmp(c4, "QL", 2L, 2L)
-                     == 0 || s_cmp(c4, "HR", 2L, 2L) == 0 || s_cmp(c4, "TR",
-                    2L, 2L) == 0 || s_cmp(c4, "BR", 2L, 2L) == 0) {
+            if (s_cmp(c4, "QR", 2L, 2L) == 0 ||
+                s_cmp(c4, "RQ", 2L, 2L) == 0 ||
+                s_cmp(c4, "LQ", 2L, 2L) == 0 ||
+                s_cmp(c4, "QL", 2L, 2L) == 0 ||
+                s_cmp(c4, "HR", 2L, 2L) == 0 ||
+                s_cmp(c4, "TR", 2L, 2L) == 0 ||
+                s_cmp(c4, "BR", 2L, 2L) == 0) {
                 nb = 32;
             }
         } else if (*c3 == 'M') {
-            if (s_cmp(c4, "QR", 2L, 2L) == 0 || s_cmp(c4, "RQ", 2L, 2L) == 0
-                    || s_cmp(c4, "LQ", 2L, 2L) == 0 || s_cmp(c4, "QL", 2L, 2L)
-                     == 0 || s_cmp(c4, "HR", 2L, 2L) == 0 || s_cmp(c4, "TR",
-                    2L, 2L) == 0 || s_cmp(c4, "BR", 2L, 2L) == 0) {
+            if (s_cmp(c4, "QR", 2L, 2L) == 0 ||
+                s_cmp(c4, "RQ", 2L, 2L) == 0 ||
+                s_cmp(c4, "LQ", 2L, 2L) == 0 ||
+                s_cmp(c4, "QL", 2L, 2L) == 0 ||
+                s_cmp(c4, "HR", 2L, 2L) == 0 ||
+                s_cmp(c4, "TR", 2L, 2L) == 0 ||
+                s_cmp(c4, "BR", 2L, 2L) == 0) {
                 nb = 32;
             }
         }
     } else if (cname && s_cmp(c2, "UN", 2L, 2L) == 0) {
         if (*c3 == 'G') {
-            if (s_cmp(c4, "QR", 2L, 2L) == 0 || s_cmp(c4, "RQ", 2L, 2L) == 0
-                    || s_cmp(c4, "LQ", 2L, 2L) == 0 || s_cmp(c4, "QL", 2L, 2L)
-                     == 0 || s_cmp(c4, "HR", 2L, 2L) == 0 || s_cmp(c4, "TR",
-                    2L, 2L) == 0 || s_cmp(c4, "BR", 2L, 2L) == 0) {
+            if (s_cmp(c4, "QR", 2L, 2L) == 0 ||
+                s_cmp(c4, "RQ", 2L, 2L) == 0 ||
+                s_cmp(c4, "LQ", 2L, 2L) == 0 ||
+                s_cmp(c4, "QL", 2L, 2L) == 0 ||
+                s_cmp(c4, "HR", 2L, 2L) == 0 ||
+                s_cmp(c4, "TR", 2L, 2L) == 0 ||
+                s_cmp(c4, "BR", 2L, 2L) == 0) {
                 nb = 32;
             }
         } else if (*c3 == 'M') {
-            if (s_cmp(c4, "QR", 2L, 2L) == 0 || s_cmp(c4, "RQ", 2L, 2L) == 0
-                    || s_cmp(c4, "LQ", 2L, 2L) == 0 || s_cmp(c4, "QL", 2L, 2L)
-                     == 0 || s_cmp(c4, "HR", 2L, 2L) == 0 || s_cmp(c4, "TR",
-                    2L, 2L) == 0 || s_cmp(c4, "BR", 2L, 2L) == 0) {
+            if (s_cmp(c4, "QR", 2L, 2L) == 0 ||
+                s_cmp(c4, "RQ", 2L, 2L) == 0 ||
+                s_cmp(c4, "LQ", 2L, 2L) == 0 ||
+                s_cmp(c4, "QL", 2L, 2L) == 0 ||
+                s_cmp(c4, "HR", 2L, 2L) == 0 ||
+                s_cmp(c4, "TR", 2L, 2L) == 0 ||
+                s_cmp(c4, "BR", 2L, 2L) == 0) {
                 nb = 32;
             }
         }
@@ -388,8 +356,7 @@ L110:
             nb = 1;
         }
     }
-    ret_val = nb;
-    return ret_val;
+    return nb;
 
 L200:
 
@@ -397,9 +364,10 @@ L200:
 
     nbmin = 2;
     if (s_cmp(c2, "GE", 2L, 2L) == 0) {
-        if (s_cmp(c3, "QRF", 3L, 3L) == 0 || s_cmp(c3, "RQF", 3L, 3L) == 0 ||
-                s_cmp(c3, "LQF", 3L, 3L) == 0 || s_cmp(c3, "QLF", 3L, 3L) ==
-                0) {
+        if (s_cmp(c3, "QRF", 3L, 3L) == 0 ||
+            s_cmp(c3, "RQF", 3L, 3L) == 0 ||
+            s_cmp(c3, "LQF", 3L, 3L) == 0 ||
+            s_cmp(c3, "QLF", 3L, 3L) == 0) {
             if (sname) {
                 nbmin = 2;
             } else {
@@ -440,39 +408,50 @@ L200:
         }
     } else if (sname && s_cmp(c2, "OR", 2L, 2L) == 0) {
         if (*c3 == 'G') {
-            if (s_cmp(c4, "QR", 2L, 2L) == 0 || s_cmp(c4, "RQ", 2L, 2L) == 0
-                    || s_cmp(c4, "LQ", 2L, 2L) == 0 || s_cmp(c4, "QL", 2L, 2L)
-                     == 0 || s_cmp(c4, "HR", 2L, 2L) == 0 || s_cmp(c4, "TR",
-                    2L, 2L) == 0 || s_cmp(c4, "BR", 2L, 2L) == 0) {
+            if (s_cmp(c4, "QR", 2L, 2L) == 0 ||
+                s_cmp(c4, "RQ", 2L, 2L) == 0 ||
+                s_cmp(c4, "LQ", 2L, 2L) == 0 ||
+                s_cmp(c4, "QL", 2L, 2L) == 0 ||
+                s_cmp(c4, "HR", 2L, 2L) == 0 ||
+                s_cmp(c4, "TR", 2L, 2L) == 0 ||
+                s_cmp(c4, "BR", 2L, 2L) == 0) {
                 nbmin = 2;
             }
         } else if (*c3 == 'M') {
-            if (s_cmp(c4, "QR", 2L, 2L) == 0 || s_cmp(c4, "RQ", 2L, 2L) == 0
-                    || s_cmp(c4, "LQ", 2L, 2L) == 0 || s_cmp(c4, "QL", 2L, 2L)
-                     == 0 || s_cmp(c4, "HR", 2L, 2L) == 0 || s_cmp(c4, "TR",
-                    2L, 2L) == 0 || s_cmp(c4, "BR", 2L, 2L) == 0) {
+            if (s_cmp(c4, "QR", 2L, 2L) == 0 ||
+                s_cmp(c4, "RQ", 2L, 2L) == 0 ||
+                s_cmp(c4, "LQ", 2L, 2L) == 0 ||
+                s_cmp(c4, "QL", 2L, 2L) == 0 ||
+                s_cmp(c4, "HR", 2L, 2L) == 0 ||
+                s_cmp(c4, "TR", 2L, 2L) == 0 ||
+                s_cmp(c4, "BR", 2L, 2L) == 0) {
                 nbmin = 2;
             }
         }
     } else if (cname && s_cmp(c2, "UN", 2L, 2L) == 0) {
         if (*c3 == 'G') {
-            if (s_cmp(c4, "QR", 2L, 2L) == 0 || s_cmp(c4, "RQ", 2L, 2L) == 0
-                    || s_cmp(c4, "LQ", 2L, 2L) == 0 || s_cmp(c4, "QL", 2L, 2L)
-                     == 0 || s_cmp(c4, "HR", 2L, 2L) == 0 || s_cmp(c4, "TR",
-                    2L, 2L) == 0 || s_cmp(c4, "BR", 2L, 2L) == 0) {
+            if (s_cmp(c4, "QR", 2L, 2L) == 0 ||
+                s_cmp(c4, "RQ", 2L, 2L) == 0 ||
+                s_cmp(c4, "LQ", 2L, 2L) == 0 ||
+                s_cmp(c4, "QL", 2L, 2L) == 0 ||
+                s_cmp(c4, "HR", 2L, 2L) == 0 ||
+                s_cmp(c4, "TR", 2L, 2L) == 0 ||
+                s_cmp(c4, "BR", 2L, 2L) == 0) {
                 nbmin = 2;
             }
         } else if (*c3 == 'M') {
-            if (s_cmp(c4, "QR", 2L, 2L) == 0 || s_cmp(c4, "RQ", 2L, 2L) == 0
-                    || s_cmp(c4, "LQ", 2L, 2L) == 0 || s_cmp(c4, "QL", 2L, 2L)
-                     == 0 || s_cmp(c4, "HR", 2L, 2L) == 0 || s_cmp(c4, "TR",
-                    2L, 2L) == 0 || s_cmp(c4, "BR", 2L, 2L) == 0) {
+            if (s_cmp(c4, "QR", 2L, 2L) == 0 ||
+                s_cmp(c4, "RQ", 2L, 2L) == 0 ||
+                s_cmp(c4, "LQ", 2L, 2L) == 0 ||
+                s_cmp(c4, "QL", 2L, 2L) == 0 ||
+                s_cmp(c4, "HR", 2L, 2L) == 0 ||
+                s_cmp(c4, "TR", 2L, 2L) == 0 ||
+                s_cmp(c4, "BR", 2L, 2L) == 0) {
                 nbmin = 2;
             }
         }
     }
-    ret_val = nbmin;
-    return ret_val;
+    return nbmin;
 
 L300:
 
@@ -480,9 +459,10 @@ L300:
 
     nx = 0;
     if (s_cmp(c2, "GE", 2L, 2L) == 0) {
-        if (s_cmp(c3, "QRF", 3L, 3L) == 0 || s_cmp(c3, "RQF", 3L, 3L) == 0 ||
-                s_cmp(c3, "LQF", 3L, 3L) == 0 || s_cmp(c3, "QLF", 3L, 3L) ==
-                0) {
+        if (s_cmp(c3, "QRF", 3L, 3L) == 0 ||
+            s_cmp(c3, "RQF", 3L, 3L) == 0 ||
+            s_cmp(c3, "LQF", 3L, 3L) == 0 ||
+            s_cmp(c3, "QLF", 3L, 3L) == 0) {
             if (sname) {
                 nx = 128;
             } else {
@@ -511,62 +491,59 @@ L300:
         }
     } else if (sname && s_cmp(c2, "OR", 2L, 2L) == 0) {
         if (*c3 == 'G') {
-            if (s_cmp(c4, "QR", 2L, 2L) == 0 || s_cmp(c4, "RQ", 2L, 2L) == 0
-                    || s_cmp(c4, "LQ", 2L, 2L) == 0 || s_cmp(c4, "QL", 2L, 2L)
-                     == 0 || s_cmp(c4, "HR", 2L, 2L) == 0 || s_cmp(c4, "TR",
-                    2L, 2L) == 0 || s_cmp(c4, "BR", 2L, 2L) == 0) {
+            if (s_cmp(c4, "QR", 2L, 2L) == 0 ||
+                s_cmp(c4, "RQ", 2L, 2L) == 0 ||
+                s_cmp(c4, "LQ", 2L, 2L) == 0 ||
+                s_cmp(c4, "QL", 2L, 2L) == 0 ||
+                s_cmp(c4, "HR", 2L, 2L) == 0 ||
+                s_cmp(c4, "TR", 2L, 2L) == 0 ||
+                s_cmp(c4, "BR", 2L, 2L) == 0) {
                 nx = 128;
             }
         }
     } else if (cname && s_cmp(c2, "UN", 2L, 2L) == 0) {
         if (*c3 == 'G') {
-            if (s_cmp(c4, "QR", 2L, 2L) == 0 || s_cmp(c4, "RQ", 2L, 2L) == 0
-                    || s_cmp(c4, "LQ", 2L, 2L) == 0 || s_cmp(c4, "QL", 2L, 2L)
-                     == 0 || s_cmp(c4, "HR", 2L, 2L) == 0 || s_cmp(c4, "TR",
-                    2L, 2L) == 0 || s_cmp(c4, "BR", 2L, 2L) == 0) {
+            if (s_cmp(c4, "QR", 2L, 2L) == 0 ||
+                s_cmp(c4, "RQ", 2L, 2L) == 0 ||
+                s_cmp(c4, "LQ", 2L, 2L) == 0 ||
+                s_cmp(c4, "QL", 2L, 2L) == 0 ||
+                s_cmp(c4, "HR", 2L, 2L) == 0 ||
+                s_cmp(c4, "TR", 2L, 2L) == 0 ||
+                s_cmp(c4, "BR", 2L, 2L) == 0) {
                 nx = 128;
             }
         }
     }
-    ret_val = nx;
-    return ret_val;
+    return nx;
 
 L400:
 
 /*     ISPEC = 4:  number of shifts (used by xHSEQR) */
 
-    ret_val = 6;
-    return ret_val;
+    return 6;
 
 L500:
 
 /*     ISPEC = 5:  minimum column dimension (not used) */
 
-    ret_val = 2;
-    return ret_val;
+    return 2;
 
 L600:
 
 /*     ISPEC = 6:  crossover point for SVD (used by xGELSS and xGESVD) */
 
-    ret_val = (integer) ((real) min(*n1,*n2) * (float)1.6);
-    return ret_val;
+    return (integer) ((real) min(*n1,*n2) * 1.6f);
 
 L700:
 
 /*     ISPEC = 7:  number of processors (not used) */
 
-    ret_val = 1;
-    return ret_val;
+    return 1;
 
 L800:
 
 /*     ISPEC = 8:  crossover point for multishift (used by xHSEQR) */
 
-    ret_val = 50;
-    return ret_val;
-
-/*     End of ILAENV */
+    return 50;
 
 } /* ilaenv_ */
-

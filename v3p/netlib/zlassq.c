@@ -1,16 +1,12 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
 /* Subroutine */ void zlassq_(n, x, incx, scale, sumsq)
-integer *n;
-doublecomplex *x;
-integer *incx;
+const integer *n;
+const doublecomplex *x;
+const integer *incx;
 doublereal *scale, *sumsq;
 {
     /* System generated locals */
@@ -20,7 +16,6 @@ doublereal *scale, *sumsq;
     /* Local variables */
     static doublereal temp1;
     static integer ix;
-
 
 /*  -- LAPACK auxiliary routine (version 2.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -75,8 +70,6 @@ doublereal *scale, *sumsq;
 /*                                                                       */
 /* ===================================================================== */
 
-    /* Function Body */
-
     if (*n > 0) {
         i__1 = (*n - 1) * *incx;
         for (ix = 0; *incx < 0 ? ix >= i__1 : ix <= i__1; ix += *incx) {
@@ -104,8 +97,4 @@ doublereal *scale, *sumsq;
             }
         }
     }
-
-/*     End of ZLASSQ */
-
 } /* zlassq_ */
-

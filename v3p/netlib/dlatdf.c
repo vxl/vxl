@@ -1,12 +1,8 @@
-/*  -- translated by f2c (version 19991025).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
+extern double sqrt(double); /* #include <math.h> */
 
 /* Table of constant values */
-
 static integer c__1 = 1;
 static integer c_n1 = -1;
 static doublereal c_b23 = 1.;
@@ -22,27 +18,16 @@ integer *ipiv, *jpiv;
     /* System generated locals */
     integer nm1;
 
-    /* Builtin functions */
-    double sqrt();
-
     /* Local variables */
-    extern doublereal ddot_();
     static integer info;
     static doublereal temp, work[32];
     static integer i, j, k;
-    extern /* Subroutine */ void dscal_();
-    extern doublereal dasum_();
     static doublereal pmone;
-    extern /* Subroutine */ void dcopy_(), daxpy_();
     static doublereal sminu;
     static integer iwork[8];
     static doublereal splus;
-    extern /* Subroutine */ void dgesc2_();
     static doublereal bm, bp;
-    extern /* Subroutine */ void dgecon_();
     static doublereal xm[8], xp[8];
-    extern /* Subroutine */ void dlassq_(), dlaswp_();
-
 
 /*  -- LAPACK auxiliary routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -219,7 +204,7 @@ integer *ipiv, *jpiv;
 
 /*        IJOB = 2, Compute approximate nullvector XM of Z */
 
-        dgecon_("I", n, z, ldz, &c_b23, &temp, work, iwork, &info, (ftnlen)1);
+        dgecon_("I", n, z, ldz, &c_b23, &temp, work, iwork, &info);
         dcopy_(n, &work[*n], &c__1, xm, &c__1);
 
 /*        Compute RHS */

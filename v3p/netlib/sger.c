@@ -1,22 +1,17 @@
-
-/*  -- translated by f2c (version 19940927).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
-/* Subroutine */ void sger_(integer *m, integer *n, real *alpha, real *x,
-        integer *incx, real *y, integer *incy, real *a, integer *lda)
+/* Subroutine */ void sger_(const integer *m, const integer *n, real *alpha,
+                            real *x, const integer *incx, real *y, const integer *incy,
+                            real *a, const integer *lda)
 {
     /* Local variables */
     static integer info;
     static real temp;
     static integer i, j, ix, jy, kx;
-    extern /* Subroutine */ void xerbla_(char *, integer *);
 
-
-/*  Purpose
+/*
+    Purpose
     =======
 
     SGER   performs the rank 1 operation
@@ -87,18 +82,9 @@
        Jeremy Du Croz, Nag Central Office.
        Sven Hammarling, Nag Central Office.
        Richard Hanson, Sandia National Labs.
+*/
 
-
-
-       Test the input parameters.
-
-
-   Parameter adjustments
-       Function Body */
-#define X(I) x[(I)-1]
-#define Y(I) y[(I)-1]
-
-#define A(I,J) a[(I)-1 + ((J)-1)* ( *lda)]
+/*     Test the input parameters. */
 
     info = 0;
     if (*m < 0) {
@@ -127,44 +113,36 @@
        accessed sequentially with one pass through A. */
 
     if (*incy > 0) {
-        jy = 1;
+        jy = 0;
     } else {
-        jy = 1 - (*n - 1) * *incy;
+        jy = (1 - *n) * *incy;
     }
     if (*incx == 1) {
-        for (j = 1; j <= *n; ++j) {
-            if (Y(jy) != 0.) {
-                temp = *alpha * Y(jy);
-                for (i = 1; i <= *m; ++i) {
-                    A(i,j) += X(i) * temp;
-/* L10: */
+        for (j = 0; j < *n; ++j) {
+            if (y[jy] != 0.) {
+                temp = *alpha * y[jy];
+                for (i = 0; i < *m; ++i) {
+                    a[i + j* *lda] += x[i] * temp;
                 }
             }
             jy += *incy;
-/* L20: */
         }
     } else {
         if (*incx > 0) {
-            kx = 1;
+            kx = 0;
         } else {
-            kx = 1 - (*m - 1) * *incx;
+            kx = (1 - *m) * *incx;
         }
-        for (j = 1; j <= *n; ++j) {
-            if (Y(jy) != 0.) {
-                temp = *alpha * Y(jy);
+        for (j = 0; j < *n; ++j) {
+            if (y[jy] != 0.) {
+                temp = *alpha * y[jy];
                 ix = kx;
-                for (i = 1; i <= *m; ++i) {
-                    A(i,j) += X(ix) * temp;
+                for (i = 0; i < *m; ++i) {
+                    a[i + j* *lda] += x[ix] * temp;
                     ix += *incx;
-/* L30: */
                 }
             }
             jy += *incy;
-/* L40: */
         }
     }
-
-/*     End of SGER  . */
-
 } /* sger_ */
-

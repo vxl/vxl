@@ -1,26 +1,23 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
 /* Subroutine */ void zunghr_(n, ilo, ihi, a, lda, tau, work, lwork, info)
-integer *n, *ilo, *ihi;
+const integer *n;
+integer *ilo, *ihi;
 doublecomplex *a;
-integer *lda;
-doublecomplex *tau, *work;
-integer *lwork, *info;
+const integer *lda;
+const doublecomplex *tau;
+doublecomplex *work;
+const integer *lwork;
+integer *info;
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Local variables */
     static integer i, j, iinfo, nh;
-    extern /* Subroutine */ void xerbla_(), zungqr_();
-
 
 /*  -- LAPACK routine (version 2.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -77,8 +74,6 @@ integer *lwork, *info;
 /*                                                                        */
 /*  ===================================================================== */
 
-    /* Function Body */
-
     *info = 0;
     if (*n < 0) {
         *info = -1;
@@ -95,7 +90,7 @@ integer *lwork, *info;
     }
     if (*info != 0) {
         i__1 = -(*info);
-        xerbla_("ZUNGHR", &i__1, 6L);
+        xerbla_("ZUNGHR", &i__1);
         return;
     }
 
@@ -149,8 +144,4 @@ integer *lwork, *info;
 
         zungqr_(&nh, &nh, &nh, &a[*ilo + *ilo * *lda], lda, &tau[*ilo-1], work, lwork, &iinfo);
     }
-
-/*     End of ZUNGHR */
-
 } /* zunghr_ */
-

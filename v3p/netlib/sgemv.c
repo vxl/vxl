@@ -1,25 +1,18 @@
-
-/*  -- translated by f2c (version 19940927).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
-/* Subroutine */ void sgemv_(char *trans, integer *m, integer *n, real *alpha,
-        real *a, integer *lda, real *x, integer *incx, real *beta, real *y,
-        integer *incy)
+/* Subroutine */ void sgemv_(const char *trans, const integer *m, const integer *n, real *alpha,
+                             real *a, const integer *lda, real *x, const integer *incx,
+                             real *beta, real *y, const integer *incy)
 {
     /* Local variables */
     static integer info;
     static real temp;
     static integer lenx, leny, i, j;
-    extern logical lsame_(char *, char *);
     static integer ix, iy, jx, jy, kx, ky;
-    extern /* Subroutine */ void xerbla_(char *, integer *);
 
-
-/*  Purpose
+/*
+    Purpose
     =======
 
     SGEMV  performs one of the matrix-vector operations
@@ -111,22 +104,11 @@
        Jeremy Du Croz, Nag Central Office.
        Sven Hammarling, Nag Central Office.
        Richard Hanson, Sandia National Labs.
+*/
 
-
-
-       Test the input parameters.
-
-
-   Parameter adjustments
-       Function Body */
-#define X(I) x[(I)-1]
-#define Y(I) y[(I)-1]
-
-#define A(I,J) a[(I)-1 + ((J)-1)* ( *lda)]
-
+/*     Test the input parameters. */
     info = 0;
-    if (! lsame_(trans, "N") && ! lsame_(trans, "T") && !
-            lsame_(trans, "C")) {
+    if (! lsame_(trans, "N") && ! lsame_(trans, "T") && ! lsame_(trans, "C")) {
         info = 1;
     } else if (*m < 0) {
         info = 2;
@@ -146,30 +128,29 @@
 
 /*     Quick return if possible. */
 
-    if (*m == 0 || *n == 0 || *alpha == 0. && *beta == 1.) {
+    if (*m == 0 || *n == 0 || (*alpha == 0. && *beta == 1.)) {
         return;
     }
 
 /*     Set  LENX  and  LENY, the lengths of the vectors x and y, and set
-
        up the start points in  X  and  Y. */
 
-    if (lsame_(trans, "N")) {
+    if (lsame_(trans, "N")) { /* no transpose */
         lenx = *n;
         leny = *m;
-    } else {
+    } else { /* transpose */
         lenx = *m;
         leny = *n;
     }
     if (*incx > 0) {
-        kx = 1;
+        kx = 0;
     } else {
-        kx = 1 - (lenx - 1) * *incx;
+        kx = - (lenx - 1) * *incx;
     }
     if (*incy > 0) {
-        ky = 1;
+        ky = 0;
     } else {
-        ky = 1 - (leny - 1) * *incy;
+        ky = - (leny - 1) * *incy;
     }
 
 /*     Start the operations. In this version the elements of A are
@@ -180,24 +161,24 @@
     if (*beta != 1.) {
         if (*incy == 1) {
             if (*beta == 0.) {
-                for (i = 1; i <= leny; ++i) {
-                    Y(i) = 0.;
+                for (i = 0; i < leny; ++i) {
+                    y[i] = 0.;
                 }
             } else {
-                for (i = 1; i <= leny; ++i) {
-                    Y(i) = *beta * Y(i);
+                for (i = 0; i < leny; ++i) {
+                    y[i] *= *beta;
                 }
             }
         } else {
             iy = ky;
             if (*beta == 0.) {
-                for (i = 1; i <= leny; ++i) {
-                    Y(iy) = 0.;
+                for (i = 0; i < leny; ++i) {
+                    y[iy] = 0.;
                     iy += *incy;
                 }
             } else {
-                for (i = 1; i <= leny; ++i) {
-                    Y(iy) = *beta * Y(iy);
+                for (i = 0; i < leny; ++i) {
+                    y[iy] *= *beta;
                     iy += *incy;
                 }
             }
@@ -206,64 +187,59 @@
     if (*alpha == 0.) {
         return;
     }
-    if (lsame_(trans, "N")) {
+    if (lsame_(trans, "N")) { /* no transpose */
 
 /*        Form  y := alpha*A*x + y. */
 
         jx = kx;
         if (*incy == 1) {
-            for (j = 1; j <= *n; ++j) {
-                if (X(jx) != 0.) {
-                    temp = *alpha * X(jx);
-                    for (i = 1; i <= *m; ++i) {
-                        Y(i) += temp * A(i,j);
+            for (j = 0; j < *n; ++j) {
+                if (x[jx] != 0.) {
+                    temp = *alpha * x[jx];
+                    for (i = 0; i < *m; ++i) {
+                        y[i] += temp * a[i + j* *lda];
                     }
                 }
                 jx += *incx;
             }
         } else {
-            for (j = 1; j <= *n; ++j) {
-                if (X(jx) != 0.) {
-                    temp = *alpha * X(jx);
+            for (j = 0; j < *n; ++j) {
+                if (x[jx] != 0.) {
+                    temp = *alpha * x[jx];
                     iy = ky;
-                    for (i = 1; i <= *m; ++i) {
-                        Y(iy) += temp * A(i,j);
+                    for (i = 0; i < *m; ++i) {
+                        y[iy] += temp * a[i + j* *lda];
                         iy += *incy;
                     }
                 }
                 jx += *incx;
             }
         }
-    } else {
+    } else { /* transpose */
 
 /*        Form  y := alpha*A'*x + y. */
 
         jy = ky;
         if (*incx == 1) {
-            for (j = 1; j <= *n; ++j) {
+            for (j = 0; j < *n; ++j) {
                 temp = 0.;
-                for (i = 1; i <= *m; ++i) {
-                    temp += A(i,j) * X(i);
+                for (i = 0; i < *m; ++i) {
+                    temp += a[i + j* *lda] * x[i];
                 }
-                Y(jy) += *alpha * temp;
+                y[jy] += *alpha * temp;
                 jy += *incy;
             }
         } else {
-            for (j = 1; j <= *n; ++j) {
+            for (j = 0; j < *n; ++j) {
                 temp = 0.;
                 ix = kx;
-                for (i = 1; i <= *m; ++i) {
-                    temp += A(i,j) * X(ix);
+                for (i = 0; i < *m; ++i) {
+                    temp += a[i + j* *lda] * x[ix];
                     ix += *incx;
                 }
-                Y(jy) += *alpha * temp;
+                y[jy] += *alpha * temp;
                 jy += *incy;
             }
         }
     }
-
-
-/*     End of SGEMV . */
-
 } /* sgemv_ */
-

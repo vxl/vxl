@@ -1,12 +1,8 @@
-/*  -- translated by f2c (version 19991025).
-   You must link the resulting object file with the libraries:
-	-lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
+extern double sqrt(double); /* #include <math.h> */
 
 /* Table of constant values */
-
 static integer c__2 = 2;
 static integer c_n1 = -1;
 static integer c__5 = 5;
@@ -16,17 +12,17 @@ static integer c__1 = 1;
 static doublereal c_b53 = -1.;
 static doublereal c_b54 = 1.;
 
-/* Subroutine */ int dtgsyl_(trans, ijob, m, n, a, lda, b, ldb, c__, ldc, d__,
-	 ldd, e, lde, f, ldf, scale, dif, work, lwork, iwork, info, trans_len)
+/* Subroutine */ void dtgsyl_(trans, ijob, m, n, a, lda, b, ldb, c, ldc, d,
+         ldd, e, lde, f, ldf, scale, dif, work, lwork, iwork, info)
 char *trans;
 integer *ijob, *m, *n;
 doublereal *a;
 integer *lda;
 doublereal *b;
 integer *ldb;
-doublereal *c__;
+doublereal *c;
 integer *ldc;
-doublereal *d__;
+doublereal *d;
 integer *ldd;
 doublereal *e;
 integer *lde;
@@ -34,32 +30,21 @@ doublereal *f;
 integer *ldf;
 doublereal *scale, *dif, *work;
 integer *lwork, *iwork, *info;
-ftnlen trans_len;
 {
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, d_dim1, 
-	    d_offset, e_dim1, e_offset, f_dim1, f_offset, i__1, i__2, i__3, 
-	    i__4;
-
-    /* Builtin functions */
-    double sqrt();
+    integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, d_dim1,
+            d_offset, e_dim1, e_offset, f_dim1, f_offset, i__1;
 
     /* Local variables */
     static doublereal dsum;
-    static integer ppqq, i__, j, k, p, q;
-    extern /* Subroutine */ int dscal_(), dgemm_();
-    extern logical lsame_();
+    static integer ppqq, i, j, k, p, q;
     static integer ifunc, linfo;
-    extern /* Subroutine */ int dcopy_();
     static integer lwmin;
     static doublereal scale2;
-    extern /* Subroutine */ int dtgsy2_();
     static integer ie, je, mb, nb;
     static doublereal dscale;
     static integer is, js, pq;
     static doublereal scaloc;
-    extern /* Subroutine */ int dlacpy_(), xerbla_();
-    extern integer ilaenv_();
     static integer iround;
     static logical notran;
     static integer isolve;
@@ -70,11 +55,6 @@ ftnlen trans_len;
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
 /*     Courant Institute, Argonne National Lab, and Rice University */
 /*     June 30, 1999 */
-
-/*     .. Scalar Arguments .. */
-/*     .. */
-/*     .. Array Arguments .. */
-/*     .. */
 
 /*  Purpose */
 /*  ======= */
@@ -251,20 +231,6 @@ ftnlen trans_len;
 
 /*  ===================================================================== */
 
-/*     .. Parameters .. */
-/*     .. */
-/*     .. Local Scalars .. */
-/*     .. */
-/*     .. External Functions .. */
-/*     .. */
-/*     .. External Subroutines .. */
-/*     .. */
-/*     .. Intrinsic Functions .. */
-/*     .. */
-/*     .. Executable Statements .. */
-
-/*     Decode and test input parameters */
-
     /* Parameter adjustments */
     a_dim1 = *lda;
     a_offset = 1 + a_dim1 * 1;
@@ -274,10 +240,10 @@ ftnlen trans_len;
     b -= b_offset;
     c_dim1 = *ldc;
     c_offset = 1 + c_dim1 * 1;
-    c__ -= c_offset;
+    c -= c_offset;
     d_dim1 = *ldd;
     d_offset = 1 + d_dim1 * 1;
-    d__ -= d_offset;
+    d -= d_offset;
     e_dim1 = *lde;
     e_offset = 1 + e_dim1 * 1;
     e -= e_offset;
@@ -287,148 +253,134 @@ ftnlen trans_len;
     --work;
     --iwork;
 
-    /* Function Body */
+/*     Decode and test input parameters */
+
     *info = 0;
-    notran = lsame_(trans, "N", (ftnlen)1, (ftnlen)1);
+    notran = lsame_(trans, "N");
     lquery = *lwork == -1;
 
     if ((*ijob == 1 || *ijob == 2) && notran) {
-/* Computing MAX */
-	i__1 = 1, i__2 = (*m << 1) * *n;
-	lwmin = max(i__1,i__2);
+        lwmin = max(1, 2 * *m * *n);
     } else {
-	lwmin = 1;
+        lwmin = 1;
     }
 
-    if (! notran && ! lsame_(trans, "T", (ftnlen)1, (ftnlen)1)) {
-	*info = -1;
+    if (! notran && ! lsame_(trans, "T")) {
+        *info = -1;
     } else if (*ijob < 0 || *ijob > 4) {
-	*info = -2;
+        *info = -2;
     } else if (*m <= 0) {
-	*info = -3;
+        *info = -3;
     } else if (*n <= 0) {
-	*info = -4;
+        *info = -4;
     } else if (*lda < max(1,*m)) {
-	*info = -6;
+        *info = -6;
     } else if (*ldb < max(1,*n)) {
-	*info = -8;
+        *info = -8;
     } else if (*ldc < max(1,*m)) {
-	*info = -10;
+        *info = -10;
     } else if (*ldd < max(1,*m)) {
-	*info = -12;
+        *info = -12;
     } else if (*lde < max(1,*n)) {
-	*info = -14;
+        *info = -14;
     } else if (*ldf < max(1,*m)) {
-	*info = -16;
+        *info = -16;
     } else if (*lwork < lwmin && ! lquery) {
-	*info = -20;
+        *info = -20;
     }
 
     if (*info == 0) {
-	work[1] = (doublereal) lwmin;
+        work[1] = (doublereal) lwmin;
     }
 
     if (*info != 0) {
-	i__1 = -(*info);
-	xerbla_("DTGSYL", &i__1, (ftnlen)6);
-	return 0;
+        i__1 = -(*info);
+        xerbla_("DTGSYL", &i__1);
+        return;
     } else if (lquery) {
-	return 0;
+        return;
     }
 
 /*     Determine optimal block sizes MB and NB */
 
-    mb = ilaenv_(&c__2, "DTGSYL", trans, m, n, &c_n1, &c_n1, (ftnlen)6, (
-	    ftnlen)1);
-    nb = ilaenv_(&c__5, "DTGSYL", trans, m, n, &c_n1, &c_n1, (ftnlen)6, (
-	    ftnlen)1);
+    mb = ilaenv_(&c__2, "DTGSYL", trans, m, n, &c_n1, &c_n1);
+    nb = ilaenv_(&c__5, "DTGSYL", trans, m, n, &c_n1, &c_n1);
 
     isolve = 1;
     ifunc = 0;
     if (*ijob >= 3 && notran) {
-	ifunc = *ijob - 2;
-	i__1 = *n;
-	for (j = 1; j <= i__1; ++j) {
-	    dcopy_(m, &c_b14, &c__0, &c__[j * c_dim1 + 1], &c__1);
-	    dcopy_(m, &c_b14, &c__0, &f[j * f_dim1 + 1], &c__1);
-/* L10: */
-	}
+        ifunc = *ijob - 2;
+        for (j = 1; j <= *n; ++j) {
+            dcopy_(m, &c_b14, &c__0, &c[j * c_dim1 + 1], &c__1);
+            dcopy_(m, &c_b14, &c__0, &f[j * f_dim1 + 1], &c__1);
+        }
     } else if (*ijob >= 1 && notran) {
-	isolve = 2;
+        isolve = 2;
     }
 
-    if (mb <= 1 && nb <= 1 || mb >= *m && nb >= *n) {
+    if ((mb <= 1 && nb <= 1) || (mb >= *m && nb >= *n)) {
 
-	i__1 = isolve;
-	for (iround = 1; iround <= i__1; ++iround) {
+        for (iround = 1; iround <= isolve; ++iround) {
 
 /*           Use unblocked Level 2 solver */
 
-	    dscale = 0.;
-	    dsum = 1.;
-	    pq = 0;
-	    dtgsy2_(trans, &ifunc, m, n, &a[a_offset], lda, &b[b_offset], ldb,
-		     &c__[c_offset], ldc, &d__[d_offset], ldd, &e[e_offset], 
-		    lde, &f[f_offset], ldf, scale, &dsum, &dscale, &iwork[1], 
-		    &pq, info, (ftnlen)1);
-	    if (dscale != 0.) {
-		if (*ijob == 1 || *ijob == 3) {
-		    *dif = sqrt((doublereal) ((*m << 1) * *n)) / (dscale * 
-			    sqrt(dsum));
-		} else {
-		    *dif = sqrt((doublereal) pq) / (dscale * sqrt(dsum));
-		}
-	    }
+            dscale = 0.;
+            dsum = 1.;
+            pq = 0;
+            dtgsy2_(trans, &ifunc, m, n, &a[a_offset], lda, &b[b_offset], ldb,
+                    &c[c_offset], ldc, &d[d_offset], ldd, &e[e_offset],
+                    lde, &f[f_offset], ldf, scale, &dsum, &dscale, &iwork[1],
+                    &pq, info);
+            if (dscale != 0.) {
+                if (*ijob == 1 || *ijob == 3) {
+                    *dif = sqrt((doublereal) ((*m << 1) * *n)) / (dscale * sqrt(dsum));
+                } else {
+                    *dif = sqrt((doublereal) pq) / (dscale * sqrt(dsum));
+                }
+            }
 
-	    if (isolve == 2 && iround == 1) {
-		ifunc = *ijob;
-		scale2 = *scale;
-		dlacpy_("F", m, n, &c__[c_offset], ldc, &work[1], m, (ftnlen)
-			1);
-		dlacpy_("F", m, n, &f[f_offset], ldf, &work[*m * *n + 1], m, (
-			ftnlen)1);
-		i__2 = *n;
-		for (j = 1; j <= i__2; ++j) {
-		    dcopy_(m, &c_b14, &c__0, &c__[j * c_dim1 + 1], &c__1);
-		    dcopy_(m, &c_b14, &c__0, &f[j * f_dim1 + 1], &c__1);
-/* L20: */
-		}
-	    } else if (isolve == 2 && iround == 2) {
-		dlacpy_("F", m, n, &work[1], m, &c__[c_offset], ldc, (ftnlen)
-			1);
-		dlacpy_("F", m, n, &work[*m * *n + 1], m, &f[f_offset], ldf, (
-			ftnlen)1);
-		*scale = scale2;
-	    }
-/* L30: */
-	}
+            if (isolve == 2 && iround == 1) {
+                ifunc = *ijob;
+                scale2 = *scale;
+                dlacpy_("F", m, n, &c[c_offset], ldc, &work[1], m);
+                dlacpy_("F", m, n, &f[f_offset], ldf, &work[*m * *n + 1], m);
+                for (j = 1; j <= *n; ++j) {
+                    dcopy_(m, &c_b14, &c__0, &c[j * c_dim1 + 1], &c__1);
+                    dcopy_(m, &c_b14, &c__0, &f[j * f_dim1 + 1], &c__1);
+                }
+            } else if (isolve == 2 && iround == 2) {
+                dlacpy_("F", m, n, &work[1], m, &c[c_offset], ldc);
+                dlacpy_("F", m, n, &work[*m * *n + 1], m, &f[f_offset], ldf);
+                *scale = scale2;
+            }
+        }
 
-	return 0;
+        return;
     }
 
 /*     Determine block structure of A */
 
     p = 0;
-    i__ = 1;
+    i = 1;
 L40:
-    if (i__ > *m) {
-	goto L50;
+    if (i > *m) {
+        goto L50;
     }
     ++p;
-    iwork[p] = i__;
-    i__ += mb;
-    if (i__ >= *m) {
-	goto L50;
+    iwork[p] = i;
+    i += mb;
+    if (i >= *m) {
+        goto L50;
     }
-    if (a[i__ + (i__ - 1) * a_dim1] != 0.) {
-	++i__;
+    if (a[i + (i - 1) * a_dim1] != 0.) {
+        ++i;
     }
     goto L40;
 L50:
 
     iwork[p + 1] = *m + 1;
     if (iwork[p] == iwork[p + 1]) {
-	--p;
+        --p;
     }
 
 /*     Determine block structure of B */
@@ -437,156 +389,124 @@ L50:
     j = 1;
 L60:
     if (j > *n) {
-	goto L70;
+        goto L70;
     }
     ++q;
     iwork[q] = j;
     j += nb;
     if (j >= *n) {
-	goto L70;
+        goto L70;
     }
     if (b[j + (j - 1) * b_dim1] != 0.) {
-	++j;
+        ++j;
     }
     goto L60;
 L70:
 
     iwork[q + 1] = *n + 1;
     if (iwork[q] == iwork[q + 1]) {
-	--q;
+        --q;
     }
 
     if (notran) {
 
-	i__1 = isolve;
-	for (iround = 1; iround <= i__1; ++iround) {
+        for (iround = 1; iround <= isolve; ++iround) {
 
 /*           Solve (I, J)-subsystem */
 /*               A(I, I) * R(I, J) - L(I, J) * B(J, J) = C(I, J) */
 /*               D(I, I) * R(I, J) - L(I, J) * E(J, J) = F(I, J) */
 /*           for I = P, P - 1,..., 1; J = 1, 2,..., Q */
 
-	    dscale = 0.;
-	    dsum = 1.;
-	    pq = 0;
-	    *scale = 1.;
-	    i__2 = q;
-	    for (j = p + 2; j <= i__2; ++j) {
-		js = iwork[j];
-		je = iwork[j + 1] - 1;
-		nb = je - js + 1;
-		for (i__ = p; i__ >= 1; --i__) {
-		    is = iwork[i__];
-		    ie = iwork[i__ + 1] - 1;
-		    mb = ie - is + 1;
-		    ppqq = 0;
-		    dtgsy2_(trans, &ifunc, &mb, &nb, &a[is + is * a_dim1], 
-			    lda, &b[js + js * b_dim1], ldb, &c__[is + js * 
-			    c_dim1], ldc, &d__[is + is * d_dim1], ldd, &e[js 
-			    + js * e_dim1], lde, &f[is + js * f_dim1], ldf, &
-			    scaloc, &dsum, &dscale, &iwork[q + 2], &ppqq, &
-			    linfo, (ftnlen)1);
-		    if (linfo > 0) {
-			*info = linfo;
-		    }
+            dscale = 0.;
+            dsum = 1.;
+            pq = 0;
+            *scale = 1.;
+            for (j = p + 2; j <= q; ++j) {
+                js = iwork[j];
+                je = iwork[j + 1] - 1;
+                nb = je - js + 1;
+                for (i = p; i >= 1; --i) {
+                    is = iwork[i];
+                    ie = iwork[i + 1] - 1;
+                    mb = ie - is + 1;
+                    ppqq = 0;
+                    dtgsy2_(trans, &ifunc, &mb, &nb, &a[is + is * a_dim1], lda,
+                            &b[js + js * b_dim1], ldb, &c[is + js * c_dim1], ldc,
+                            &d[is + is * d_dim1], ldd, &e[js + js * e_dim1], lde,
+                            &f[is + js * f_dim1], ldf, &scaloc, &dsum, &dscale,
+                            &iwork[q + 2], &ppqq, &linfo);
+                    if (linfo > 0) {
+                        *info = linfo;
+                    }
 
-		    pq += ppqq;
-		    if (scaloc != 1.) {
-			i__3 = js - 1;
-			for (k = 1; k <= i__3; ++k) {
-			    dscal_(m, &scaloc, &c__[k * c_dim1 + 1], &c__1);
-			    dscal_(m, &scaloc, &f[k * f_dim1 + 1], &c__1);
-/* L80: */
-			}
-			i__3 = je;
-			for (k = js; k <= i__3; ++k) {
-			    i__4 = is - 1;
-			    dscal_(&i__4, &scaloc, &c__[k * c_dim1 + 1], &
-				    c__1);
-			    i__4 = is - 1;
-			    dscal_(&i__4, &scaloc, &f[k * f_dim1 + 1], &c__1);
-/* L90: */
-			}
-			i__3 = je;
-			for (k = js; k <= i__3; ++k) {
-			    i__4 = *m - ie;
-			    dscal_(&i__4, &scaloc, &c__[ie + 1 + k * c_dim1], 
-				    &c__1);
-			    i__4 = *m - ie;
-			    dscal_(&i__4, &scaloc, &f[ie + 1 + k * f_dim1], &
-				    c__1);
-/* L100: */
-			}
-			i__3 = *n;
-			for (k = je + 1; k <= i__3; ++k) {
-			    dscal_(m, &scaloc, &c__[k * c_dim1 + 1], &c__1);
-			    dscal_(m, &scaloc, &f[k * f_dim1 + 1], &c__1);
-/* L110: */
-			}
-			*scale *= scaloc;
-		    }
+                    pq += ppqq;
+                    if (scaloc != 1.) {
+                        for (k = 1; k < js; ++k) {
+                            dscal_(m, &scaloc, &c[k * c_dim1 + 1], &c__1);
+                            dscal_(m, &scaloc, &f[k * f_dim1 + 1], &c__1);
+                        }
+                        for (k = js; k <= je; ++k) {
+                            i__1 = is - 1;
+                            dscal_(&i__1, &scaloc, &c[k * c_dim1 + 1], &c__1);
+                            i__1 = is - 1;
+                            dscal_(&i__1, &scaloc, &f[k * f_dim1 + 1], &c__1);
+                        }
+                        for (k = js; k <= je; ++k) {
+                            i__1 = *m - ie;
+                            dscal_(&i__1, &scaloc, &c[ie + 1 + k * c_dim1], &c__1);
+                            i__1 = *m - ie;
+                            dscal_(&i__1, &scaloc, &f[ie + 1 + k * f_dim1], &c__1);
+                        }
+                        for (k = je + 1; k <= *n; ++k) {
+                            dscal_(m, &scaloc, &c[k * c_dim1 + 1], &c__1);
+                            dscal_(m, &scaloc, &f[k * f_dim1 + 1], &c__1);
+                        }
+                        *scale *= scaloc;
+                    }
 
 /*                 Substitute R(I, J) and L(I, J) into remaining */
 /*                 equation. */
 
-		    if (i__ > 1) {
-			i__3 = is - 1;
-			dgemm_("N", "N", &i__3, &nb, &mb, &c_b53, &a[is * 
-				a_dim1 + 1], lda, &c__[is + js * c_dim1], ldc,
-				 &c_b54, &c__[js * c_dim1 + 1], ldc, (ftnlen)
-				1, (ftnlen)1);
-			i__3 = is - 1;
-			dgemm_("N", "N", &i__3, &nb, &mb, &c_b53, &d__[is * 
-				d_dim1 + 1], ldd, &c__[is + js * c_dim1], ldc,
-				 &c_b54, &f[js * f_dim1 + 1], ldf, (ftnlen)1, 
-				(ftnlen)1);
-		    }
-		    if (j < q) {
-			i__3 = *n - je;
-			dgemm_("N", "N", &mb, &i__3, &nb, &c_b54, &f[is + js *
-				 f_dim1], ldf, &b[js + (je + 1) * b_dim1], 
-				ldb, &c_b54, &c__[is + (je + 1) * c_dim1], 
-				ldc, (ftnlen)1, (ftnlen)1);
-			i__3 = *n - je;
-			dgemm_("N", "N", &mb, &i__3, &nb, &c_b54, &f[is + js *
-				 f_dim1], ldf, &e[js + (je + 1) * e_dim1], 
-				lde, &c_b54, &f[is + (je + 1) * f_dim1], ldf, 
-				(ftnlen)1, (ftnlen)1);
-		    }
-/* L120: */
-		}
-/* L130: */
-	    }
-	    if (dscale != 0.) {
-		if (*ijob == 1 || *ijob == 3) {
-		    *dif = sqrt((doublereal) ((*m << 1) * *n)) / (dscale * 
-			    sqrt(dsum));
-		} else {
-		    *dif = sqrt((doublereal) pq) / (dscale * sqrt(dsum));
-		}
-	    }
-	    if (isolve == 2 && iround == 1) {
-		ifunc = *ijob;
-		scale2 = *scale;
-		dlacpy_("F", m, n, &c__[c_offset], ldc, &work[1], m, (ftnlen)
-			1);
-		dlacpy_("F", m, n, &f[f_offset], ldf, &work[*m * *n + 1], m, (
-			ftnlen)1);
-		i__2 = *n;
-		for (j = 1; j <= i__2; ++j) {
-		    dcopy_(m, &c_b14, &c__0, &c__[j * c_dim1 + 1], &c__1);
-		    dcopy_(m, &c_b14, &c__0, &f[j * f_dim1 + 1], &c__1);
-/* L140: */
-		}
-	    } else if (isolve == 2 && iround == 2) {
-		dlacpy_("F", m, n, &work[1], m, &c__[c_offset], ldc, (ftnlen)
-			1);
-		dlacpy_("F", m, n, &work[*m * *n + 1], m, &f[f_offset], ldf, (
-			ftnlen)1);
-		*scale = scale2;
-	    }
-/* L150: */
-	}
+                    if (i > 1) {
+                        i__1 = is - 1;
+                        dgemm_("N", "N", &i__1, &nb, &mb, &c_b53, &a[is * a_dim1 + 1], lda,
+                               &c[is + js * c_dim1], ldc, &c_b54, &c[js * c_dim1 + 1], ldc);
+                        i__1 = is - 1;
+                        dgemm_("N", "N", &i__1, &nb, &mb, &c_b53, &d[is * d_dim1 + 1], ldd,
+                               &c[is + js * c_dim1], ldc, &c_b54, &f[js * f_dim1 + 1], ldf);
+                    }
+                    if (j < q) {
+                        i__1 = *n - je;
+                        dgemm_("N", "N", &mb, &i__1, &nb, &c_b54, &f[is + js * f_dim1], ldf,
+                               &b[js + (je + 1) * b_dim1], ldb, &c_b54, &c[is + (je + 1) * c_dim1], ldc);
+                        i__1 = *n - je;
+                        dgemm_("N", "N", &mb, &i__1, &nb, &c_b54, &f[is + js * f_dim1], ldf,
+                               &e[js + (je + 1) * e_dim1], lde, &c_b54, &f[is + (je + 1) * f_dim1], ldf);
+                    }
+                }
+            }
+            if (dscale != 0.) {
+                if (*ijob == 1 || *ijob == 3) {
+                    *dif = sqrt((doublereal) ((*m << 1) * *n)) / (dscale * sqrt(dsum));
+                } else {
+                    *dif = sqrt((doublereal) pq) / (dscale * sqrt(dsum));
+                }
+            }
+            if (isolve == 2 && iround == 1) {
+                ifunc = *ijob;
+                scale2 = *scale;
+                dlacpy_("F", m, n, &c[c_offset], ldc, &work[1], m);
+                dlacpy_("F", m, n, &f[f_offset], ldf, &work[*m * *n + 1], m);
+                for (j = 1; j <= *n; ++j) {
+                    dcopy_(m, &c_b14, &c__0, &c[j * c_dim1 + 1], &c__1);
+                    dcopy_(m, &c_b14, &c__0, &f[j * f_dim1 + 1], &c__1);
+                }
+            } else if (isolve == 2 && iround == 2) {
+                dlacpy_("F", m, n, &work[1], m, &c[c_offset], ldc);
+                dlacpy_("F", m, n, &work[*m * *n + 1], m, &f[f_offset], ldf);
+                *scale = scale2;
+            }
+        }
 
     } else {
 
@@ -595,95 +515,68 @@ L70:
 /*             R(I, J)  * B(J, J)' + L(I, J)  * E(J, J)' = -F(I, J) */
 /*        for I = 1,2,..., P; J = Q, Q-1,..., 1 */
 
-	*scale = 1.;
-	i__1 = p;
-	for (i__ = 1; i__ <= i__1; ++i__) {
-	    is = iwork[i__];
-	    ie = iwork[i__ + 1] - 1;
-	    mb = ie - is + 1;
-	    i__2 = p + 2;
-	    for (j = q; j >= i__2; --j) {
-		js = iwork[j];
-		je = iwork[j + 1] - 1;
-		nb = je - js + 1;
-		dtgsy2_(trans, &ifunc, &mb, &nb, &a[is + is * a_dim1], lda, &
-			b[js + js * b_dim1], ldb, &c__[is + js * c_dim1], ldc,
-			 &d__[is + is * d_dim1], ldd, &e[js + js * e_dim1], 
-			lde, &f[is + js * f_dim1], ldf, &scaloc, &dsum, &
-			dscale, &iwork[q + 2], &ppqq, &linfo, (ftnlen)1);
-		if (linfo > 0) {
-		    *info = linfo;
-		}
-		if (scaloc != 1.) {
-		    i__3 = js - 1;
-		    for (k = 1; k <= i__3; ++k) {
-			dscal_(m, &scaloc, &c__[k * c_dim1 + 1], &c__1);
-			dscal_(m, &scaloc, &f[k * f_dim1 + 1], &c__1);
-/* L160: */
-		    }
-		    i__3 = je;
-		    for (k = js; k <= i__3; ++k) {
-			i__4 = is - 1;
-			dscal_(&i__4, &scaloc, &c__[k * c_dim1 + 1], &c__1);
-			i__4 = is - 1;
-			dscal_(&i__4, &scaloc, &f[k * f_dim1 + 1], &c__1);
-/* L170: */
-		    }
-		    i__3 = je;
-		    for (k = js; k <= i__3; ++k) {
-			i__4 = *m - ie;
-			dscal_(&i__4, &scaloc, &c__[ie + 1 + k * c_dim1], &
-				c__1);
-			i__4 = *m - ie;
-			dscal_(&i__4, &scaloc, &f[ie + 1 + k * f_dim1], &c__1)
-				;
-/* L180: */
-		    }
-		    i__3 = *n;
-		    for (k = je + 1; k <= i__3; ++k) {
-			dscal_(m, &scaloc, &c__[k * c_dim1 + 1], &c__1);
-			dscal_(m, &scaloc, &f[k * f_dim1 + 1], &c__1);
-/* L190: */
-		    }
-		    *scale *= scaloc;
-		}
+        *scale = 1.;
+        for (i = 1; i <= p; ++i) {
+            is = iwork[i];
+            ie = iwork[i + 1] - 1;
+            mb = ie - is + 1;
+            for (j = q; j >= p + 2; --j) {
+                js = iwork[j];
+                je = iwork[j + 1] - 1;
+                nb = je - js + 1;
+                dtgsy2_(trans, &ifunc, &mb, &nb, &a[is + is * a_dim1], lda,
+                        &b[js + js * b_dim1], ldb, &c[is + js * c_dim1], ldc,
+                        &d[is + is * d_dim1], ldd, &e[js + js * e_dim1], lde,
+                        &f[is + js * f_dim1], ldf, &scaloc, &dsum, &dscale, &iwork[q + 2], &ppqq, &linfo);
+                if (linfo > 0) {
+                    *info = linfo;
+                }
+                if (scaloc != 1.) {
+                    for (k = 1; k < js; ++k) {
+                        dscal_(m, &scaloc, &c[k * c_dim1 + 1], &c__1);
+                        dscal_(m, &scaloc, &f[k * f_dim1 + 1], &c__1);
+                    }
+                    for (k = js; k <= je; ++k) {
+                        i__1 = is - 1;
+                        dscal_(&i__1, &scaloc, &c[k * c_dim1 + 1], &c__1);
+                        i__1 = is - 1;
+                        dscal_(&i__1, &scaloc, &f[k * f_dim1 + 1], &c__1);
+                    }
+                    for (k = js; k <= je; ++k) {
+                        i__1 = *m - ie;
+                        dscal_(&i__1, &scaloc, &c[ie + 1 + k * c_dim1], &c__1);
+                        i__1 = *m - ie;
+                        dscal_(&i__1, &scaloc, &f[ie + 1 + k * f_dim1], &c__1);
+                    }
+                    for (k = je + 1; k <= *n; ++k) {
+                        dscal_(m, &scaloc, &c[k * c_dim1 + 1], &c__1);
+                        dscal_(m, &scaloc, &f[k * f_dim1 + 1], &c__1);
+                    }
+                    *scale *= scaloc;
+                }
 
 /*              Substitute R(I, J) and L(I, J) into remaining equation. */
 
-		if (j > p + 2) {
-		    i__3 = js - 1;
-		    dgemm_("N", "T", &mb, &i__3, &nb, &c_b54, &c__[is + js * 
-			    c_dim1], ldc, &b[js * b_dim1 + 1], ldb, &c_b54, &
-			    f[is + f_dim1], ldf, (ftnlen)1, (ftnlen)1);
-		    i__3 = js - 1;
-		    dgemm_("N", "T", &mb, &i__3, &nb, &c_b54, &f[is + js * 
-			    f_dim1], ldf, &e[js * e_dim1 + 1], lde, &c_b54, &
-			    f[is + f_dim1], ldf, (ftnlen)1, (ftnlen)1);
-		}
-		if (i__ < p) {
-		    i__3 = *m - ie;
-		    dgemm_("T", "N", &i__3, &nb, &mb, &c_b53, &a[is + (ie + 1)
-			     * a_dim1], lda, &c__[is + js * c_dim1], ldc, &
-			    c_b54, &c__[ie + 1 + js * c_dim1], ldc, (ftnlen)1,
-			     (ftnlen)1);
-		    i__3 = *m - ie;
-		    dgemm_("T", "N", &i__3, &nb, &mb, &c_b53, &d__[is + (ie + 
-			    1) * d_dim1], ldd, &f[is + js * f_dim1], ldf, &
-			    c_b54, &c__[ie + 1 + js * c_dim1], ldc, (ftnlen)1,
-			     (ftnlen)1);
-		}
-/* L200: */
-	    }
-/* L210: */
-	}
-
+                if (j > p + 2) {
+                    i__1 = js - 1;
+                    dgemm_("N", "T", &mb, &i__1, &nb, &c_b54, &c[is + js * c_dim1], ldc,
+                           &b[js * b_dim1 + 1], ldb, &c_b54, &f[is + f_dim1], ldf);
+                    i__1 = js - 1;
+                    dgemm_("N", "T", &mb, &i__1, &nb, &c_b54, &f[is + js * f_dim1], ldf,
+                           &e[js * e_dim1 + 1], lde, &c_b54, &f[is + f_dim1], ldf);
+                }
+                if (i < p) {
+                    i__1 = *m - ie;
+                    dgemm_("T", "N", &i__1, &nb, &mb, &c_b53, &a[is + (ie + 1) * a_dim1], lda,
+                           &c[is + js * c_dim1], ldc, &c_b54, &c[ie + 1 + js * c_dim1], ldc);
+                    i__1 = *m - ie;
+                    dgemm_("T", "N", &i__1, &nb, &mb, &c_b53, &d[is + (ie + 1) * d_dim1], ldd,
+                           &f[is + js * f_dim1], ldf, &c_b54, &c[ie + 1 + js * c_dim1], ldc);
+                }
+            }
+        }
     }
 
     work[1] = (doublereal) lwmin;
 
-    return 0;
-
-/*     End of DTGSYL */
-
 } /* dtgsyl_ */
-

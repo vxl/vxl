@@ -1,17 +1,13 @@
-/* srot.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Subroutine */ void srot_(n, sx, incx, sy, incy, c, s)
-integer *n;
+const integer *n;
 real *sx;
-integer *incx;
+const integer *incx;
 real *sy;
-integer *incy;
-real *c, *s;
+const integer *incy;
+const real *c, *s;
 {
     /* Local variables */
     static integer i;
@@ -22,7 +18,6 @@ real *c, *s;
 /*     jack dongarra, linpack, 3/11/78. */
 /*     modified 12/3/93, array(1) declarations changed to array(*) */
 
-    /* Function Body */
     if (*n <= 0) {
         return;
     }
@@ -49,4 +44,3 @@ real *c, *s;
         }
     }
 } /* srot_ */
-

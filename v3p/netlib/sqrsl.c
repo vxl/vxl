@@ -1,37 +1,29 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Table of constant values */
-
 static integer c__1 = 1;
 
-/* Subroutine */ void sqrsl_(x, ldx, n, k, qraux, y, qy, qty, b, rsd, xb, job,
-        info)
-real *x;
-integer *ldx, *n, *k;
-real *qraux, *y, *qy, *qty, *b, *rsd, *xb;
-integer *job, *info;
+/* Subroutine */ void sqrsl_(x, ldx, n, k, qraux, y, qy, qty, b, rsd, xb, job, info)
+const real *x;
+const integer *ldx, *n, *k;
+const real *qraux, *y;
+real *qy, *qty, *b, *rsd, *xb;
+const integer *job;
+integer *info;
 {
     /* System generated locals */
-    integer x_dim1, x_offset, i__1, i__2;
+    integer i__1;
 
     /* Local variables */
     static real temp;
-    extern doublereal sdot_();
     static logical cqty;
     static integer i, j;
     static real t;
-    extern /* Subroutine */ void scopy_(), saxpy_();
     static logical cb;
-    static integer jj;
     static logical cr;
-    static integer ju, kp1;
+    static integer ju;
     static logical cxb, cqy;
-
 
 /*     sqrsl applies the output of sqrdc to compute coordinate */
 /*     transformations, projections, and least squares solutions. */
@@ -94,7 +86,7 @@ integer *job, *info;
 /*     on return */
 
 /*        qy     real(n). */
-/*               qy conntains q*y, if its computation has been */
+/*               qy contains q*y, if its computation has been */
 /*               requested. */
 
 /*        qty    real(n). */
@@ -171,25 +163,7 @@ integer *job, *info;
 /*     blas saxpy,scopy,sdot */
 /*     fortran abs,min0,mod */
 
-/*     internal variables */
-
-
-
 /*     set info flag. */
-
-    /* Parameter adjustments */
-    --xb;
-    --rsd;
-    --b;
-    --qty;
-    --qy;
-    --y;
-    --qraux;
-    x_dim1 = *ldx;
-    x_offset = x_dim1 + 1;
-    x -= x_offset;
-
-    /* Function Body */
     *info = 0;
 
 /*     determine what is to be computed. */
@@ -199,199 +173,114 @@ integer *job, *info;
     cb = *job % 1000 / 100 != 0;
     cr = *job % 100 / 10 != 0;
     cxb = *job % 10 != 0;
-/* Computing MIN */
-    i__1 = *k, i__2 = *n - 1;
-    ju = min(i__1,i__2);
+    ju = min(*k,*n - 1);
 
 /*     special action when n=1. */
 
-    if (ju != 0) {
-        goto L40;
+    if (ju == 0) {
+        if (cqy)  qy[0] = y[0];
+        if (cqty) qty[0] = y[0];
+        if (cxb)  xb[0] = y[0];
+        if (cb) {
+          if (x[0] == 0.f) *info = 1;
+          else             b[0] = y[0] / x[0];
+        }
+        if (cr) rsd[0] = 0.f;
+        return;
     }
-    if (cqy) {
-        qy[1] = y[1];
-    }
-    if (cqty) {
-        qty[1] = y[1];
-    }
-    if (cxb) {
-        xb[1] = y[1];
-    }
-    if (! cb) {
-        goto L30;
-    }
-    if (x[x_dim1 + 1] != (float)0.) {
-        goto L10;
-    }
-    *info = 1;
-    goto L20;
-L10:
-    b[1] = y[1] / x[x_dim1 + 1];
-L20:
-L30:
-    if (cr) {
-        rsd[1] = (float)0.;
-    }
-    goto L250;
-L40:
 
 /*        set up to compute qy or qty. */
 
     if (cqy) {
-        scopy_(n, &y[1], &c__1, &qy[1], &c__1);
+        scopy_(n, y, &c__1, qy, &c__1);
     }
     if (cqty) {
-        scopy_(n, &y[1], &c__1, &qty[1], &c__1);
-    }
-    if (! cqy) {
-        goto L70;
+        scopy_(n, y, &c__1, qty, &c__1);
     }
 
 /*           compute qy. */
 
-    i__1 = ju;
-    for (jj = 1; jj <= i__1; ++jj) {
-        j = ju - jj + 1;
-        if (qraux[j] == (float)0.) {
-            goto L50;
-        }
-        temp = x[j + j * x_dim1];
-        x[j + j * x_dim1] = qraux[j];
-        i__2 = *n - j + 1;
-        t = -(doublereal)sdot_(&i__2, &x[j + j * x_dim1], &c__1, &qy[j], &
-                c__1) / x[j + j * x_dim1];
-        i__2 = *n - j + 1;
-        saxpy_(&i__2, &t, &x[j + j * x_dim1], &c__1, &qy[j], &c__1);
-        x[j + j * x_dim1] = temp;
-L50:
-/* L60: */
-        ;
-    }
-L70:
-    if (! cqty) {
-        goto L100;
+    if (cqy)
+    for (j = ju-1; j >= 0; --j) {
+        if (qraux[j] == 0.f)
+            continue;
+        temp = x[j + j * *ldx];
+        ((real*)x)[j + j * *ldx] = qraux[j]; /* temporarily */
+        i__1 = *n - j;
+        t = -sdot_(&i__1, &x[j + j * *ldx], &c__1, &qy[j], &c__1) / x[j + j * *ldx];
+        saxpy_(&i__1, &t, &x[j + j * *ldx], &c__1, &qy[j], &c__1);
+        ((real*)x)[j + j * *ldx] = temp; /* restore original */
     }
 
 /*           compute trans(q)*y. */
 
-    i__1 = ju;
-    for (j = 1; j <= i__1; ++j) {
-        if (qraux[j] == (float)0.) {
-            goto L80;
-        }
-        temp = x[j + j * x_dim1];
-        x[j + j * x_dim1] = qraux[j];
-        i__2 = *n - j + 1;
-        t = -(doublereal)sdot_(&i__2, &x[j + j * x_dim1], &c__1, &qty[j], &
-                c__1) / x[j + j * x_dim1];
-        i__2 = *n - j + 1;
-        saxpy_(&i__2, &t, &x[j + j * x_dim1], &c__1, &qty[j], &c__1);
-        x[j + j * x_dim1] = temp;
-L80:
-/* L90: */
-        ;
+    if (cqty)
+    for (j = 0; j < ju; ++j) {
+        if (qraux[j] == 0.f)
+            continue;
+        temp = x[j + j * *ldx];
+        ((real*)x)[j + j * *ldx] = qraux[j]; /* temporarily */
+        i__1 = *n - j;
+        t = -sdot_(&i__1, &x[j + j * *ldx], &c__1, &qty[j], &c__1) / x[j + j * *ldx];
+        saxpy_(&i__1, &t, &x[j + j * *ldx], &c__1, &qty[j], &c__1);
+        ((real*)x)[j + j * *ldx] = temp; /* restore original */
     }
-L100:
 
 /*        set up to compute b, rsd, or xb. */
 
     if (cb) {
-        scopy_(k, &qty[1], &c__1, &b[1], &c__1);
+        scopy_(k, qty, &c__1, b, &c__1);
     }
-    kp1 = *k + 1;
     if (cxb) {
-        scopy_(k, &qty[1], &c__1, &xb[1], &c__1);
+        scopy_(k, qty, &c__1, xb, &c__1);
     }
     if (cr && *k < *n) {
         i__1 = *n - *k;
-        scopy_(&i__1, &qty[kp1], &c__1, &rsd[kp1], &c__1);
+        scopy_(&i__1, &qty[*k], &c__1, &rsd[*k], &c__1);
     }
-    if (! cxb || kp1 > *n) {
-        goto L120;
+    if (cxb)
+    for (i = *k; i < *n; ++i) {
+        xb[i] = 0.f;
     }
-    i__1 = *n;
-    for (i = kp1; i <= i__1; ++i) {
-        xb[i] = (float)0.;
-/* L110: */
-    }
-L120:
-    if (! cr) {
-        goto L140;
-    }
-    i__1 = *k;
-    for (i = 1; i <= i__1; ++i) {
-        rsd[i] = (float)0.;
-/* L130: */
-    }
-L140:
-    if (! cb) {
-        goto L190;
+    if (cr)
+    for (i = 0; i < *k; ++i) {
+        rsd[i] = 0.f;
     }
 
 /*           compute b. */
 
-    i__1 = *k;
-    for (jj = 1; jj <= i__1; ++jj) {
-        j = *k - jj + 1;
-        if (x[j + j * x_dim1] != (float)0.) {
-            goto L150;
+    if (cb)
+    for (j = *k-1; j >= 0; --j) {
+        if (x[j + j * *ldx] == 0.f) {
+            *info = j+1;
+            break;
         }
-        *info = j;
-/*           ......exit */
-        goto L180;
-L150:
-        b[j] /= x[j + j * x_dim1];
-        if (j == 1) {
-            goto L160;
+        b[j] /= x[j + j * *ldx];
+        if (j != 0) {
+            t = -b[j];
+            saxpy_(&j, &t, &x[j * *ldx], &c__1, b, &c__1);
         }
-        t = -(doublereal)b[j];
-        i__2 = j - 1;
-        saxpy_(&i__2, &t, &x[j * x_dim1 + 1], &c__1, &b[1], &c__1);
-L160:
-/* L170: */
-        ;
     }
-L180:
-L190:
-    if (! cr && ! cxb) {
-        goto L240;
-    }
+    if (! cr && ! cxb)
+        return;
 
 /*           compute rsd or xb as required. */
 
-    i__1 = ju;
-    for (jj = 1; jj <= i__1; ++jj) {
-        j = ju - jj + 1;
-        if (qraux[j] == (float)0.) {
-            goto L220;
+    for (j = ju-1; j >= 0; --j) {
+        if (qraux[j] == 0.f) {
+            continue;
         }
-        temp = x[j + j * x_dim1];
-        x[j + j * x_dim1] = qraux[j];
-        if (! cr) {
-            goto L200;
+        temp = x[j + j * *ldx];
+        ((real*)x)[j + j * *ldx] = qraux[j]; /* temporarily */
+        i__1 = *n - j;
+        if (cr) {
+            t = -sdot_(&i__1, &x[j + j * *ldx], &c__1, &rsd[j], &c__1) / x[j + j * *ldx];
+            saxpy_(&i__1, &t, &x[j + j * *ldx], &c__1, &rsd[j], &c__1);
         }
-        i__2 = *n - j + 1;
-        t = -(doublereal)sdot_(&i__2, &x[j + j * x_dim1], &c__1, &rsd[j], &
-                c__1) / x[j + j * x_dim1];
-        i__2 = *n - j + 1;
-        saxpy_(&i__2, &t, &x[j + j * x_dim1], &c__1, &rsd[j], &c__1);
-L200:
-        if (! cxb) {
-            goto L210;
+        if (cxb) {
+            t = -sdot_(&i__1, &x[j + j * *ldx], &c__1, &xb[j], &c__1) / x[j + j * *ldx];
+            saxpy_(&i__1, &t, &x[j + j * *ldx], &c__1, &xb[j], &c__1);
         }
-        i__2 = *n - j + 1;
-        t = -(doublereal)sdot_(&i__2, &x[j + j * x_dim1], &c__1, &xb[j], &
-                c__1) / x[j + j * x_dim1];
-        i__2 = *n - j + 1;
-        saxpy_(&i__2, &t, &x[j + j * x_dim1], &c__1, &xb[j], &c__1);
-L210:
-        x[j + j * x_dim1] = temp;
-L220:
-/* L230: */
-        ;
+        ((real*)x)[j + j * *ldx] = temp; /* restore original */
     }
-L240:
-L250:
-    return;
 } /* sqrsl_ */
-

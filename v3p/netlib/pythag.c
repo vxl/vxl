@@ -1,18 +1,14 @@
-/* pythag.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 doublereal pythag_(a, b)
-doublereal *a, *b;
+const doublereal *a, *b;
 {
     /* Local variables */
     static doublereal p, r, s, t, u;
 
 /* ********************************************************************** */
-/*     finds dsqrt(a**2+b**2) without overflow or destructive underflow   */
+/*     finds sqrt(a**2+b**2) without overflow or destructive underflow    */
 /* ********************************************************************** */
 
     p = max(abs(*a),abs(*b));

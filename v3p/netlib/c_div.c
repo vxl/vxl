@@ -1,13 +1,14 @@
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001, to allow c being equal to a or b */
 
 #ifdef KR_headers
 extern VOID sig_die();
-VOID c_div(c, a, b) complex       *a, *b, *c;
+VOID c_div(c, a, b) complex *a; const complex *b, *c;
 #else
 extern void sig_die(char*, int);
-void c_div(complex       *c, complex       *a, complex       *b)
+void c_div(complex *c, const complex *a, const complex *b)
 #endif
 {
   float ratio, den;

@@ -1,17 +1,13 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
 /* Subroutine */ void zdscal_(n, da, zx, incx)
-integer *n;
-doublereal *da;
+const integer *n;
+const doublereal *da;
 doublecomplex *zx;
-integer *incx;
+const integer *incx;
 {
     /* Local variables */
     static integer i, ix;
@@ -20,8 +16,6 @@ integer *incx;
 /*     jack dongarra, 3/11/78. */
 /*     modified 3/93 to return if incx .le. 0. */
 /*     modified 12/3/93, array(1) declarations changed to array(*) */
-
-    /* Function Body */
 
     if (*n <= 0 || *incx <= 0) {
         return;
@@ -39,4 +33,3 @@ integer *incx;
         }
     }
 } /* zdscal_ */
-

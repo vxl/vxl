@@ -1,18 +1,14 @@
-/* ddot.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 #ifdef KR_headers
 doublereal ddot_(n, dx, incx, dy, incy)
-integer *n;
-doublereal *dx;
-integer *incx;
-doublereal *dy;
-integer *incy;
+const integer *n;
+const doublereal *dx;
+const integer *incx;
+const doublereal *dy;
+const integer *incy;
 #else
-doublereal ddot_(integer *n, doublereal *dx, integer *incx, doublereal *dy, integer *incy)
+doublereal ddot_(const integer *n, const doublereal *dx, const integer *incx, const doublereal *dy, const integer *incy)
 #endif
 {
     /* Local variables */
@@ -25,7 +21,6 @@ doublereal ddot_(integer *n, doublereal *dx, integer *incx, doublereal *dy, inte
 /*     jack dongarra, linpack, 3/11/78. */
 /*     modified 12/3/93, array(1) declarations changed to array(*) */
 
-    /* Function Body */
     dtemp = 0.;
     if (*n <= 0) {
         return dtemp;
@@ -53,10 +48,8 @@ doublereal ddot_(integer *n, doublereal *dx, integer *incx, doublereal *dy, inte
         }
         for (i = 0; i < *n; ++i) {
             dtemp += dx[ix] * dy[iy];
-            ix += *incx;
-            iy += *incy;
+            ix += *incx; iy += *incy;
         }
     }
     return dtemp;
 } /* ddot_ */
-

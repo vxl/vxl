@@ -1,12 +1,13 @@
-/* eisrsg.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
+extern double sqrt(double); /* #include <math.h> */
+
+static void rebak_(const integer *nm, const integer *n, const doublereal *b, const doublereal *dl, const integer *m, doublereal *z);
+static void reduc_(const integer *nm, const integer *n, doublereal *a, doublereal *b, doublereal *dl, integer *ierr);
+static void tqlrat_(const integer *n, doublereal *d, doublereal *e2, integer *ierr);
+static doublereal epslon_(doublereal *x);
 
 /* Table of constant values */
-
 static doublereal c_b17 = 1.;
 
 /* ====================================================================== */
@@ -15,26 +16,17 @@ static doublereal c_b17 = 1.;
 /* Retrieved from NETLIB on Thu Aug 29 08:25:55 1996. */
 /* ====================================================================== */
 /* Subroutine */ void rsg_(nm, n, a, b, w, matz, z, fv1, fv2, ierr)
-integer *nm, *n;
-doublereal *a, *b, *w;
-integer *matz;
+const integer *nm, *n;
+doublereal *a, *b;
+doublereal *w;
+const integer *matz;
 doublereal *z, *fv1, *fv2;
 integer *ierr;
 {
-    /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, z_dim1, z_offset;
-
-    /* Local variables */
-    extern /* Subroutine */ void tred1_(), tred2_(), rebak_(), reduc_(),
-            tqlrat_(), tql2_();
-
-
-
 /*     this subroutine calls the recommended sequence of */
 /*     subroutines from the eigensystem subroutine package (eispack) */
 /*     to find the eigenvalues and eigenvectors (if desired) */
-/*     for the real symmetric generalized eigenproblem  ax = (lambda)bx.
-*/
+/*     for the real symmetric generalized eigenproblem  ax = (lambda)bx.  */
 
 /*     on input */
 
@@ -65,71 +57,40 @@ integer *ierr;
 /*        fv1  and  fv2  are temporary storage arrays. */
 
 /*     questions and comments should be directed to burton s. garbow, */
-/*     mathematics and computer science div, argonne national laboratory
-*/
+/*     mathematics and computer science div, argonne national laboratory */
 
 /*     this version dated august 1983. */
 
-/*     ------------------------------------------------------------------
-*/
+/*     ------------------------------------------------------------------ */
 
-    /* Parameter adjustments */
-    --fv2;
-    --fv1;
-    z_dim1 = *nm;
-    z_offset = z_dim1 + 1;
-    z -= z_offset;
-    --w;
-    b_dim1 = *nm;
-    b_offset = b_dim1 + 1;
-    b -= b_offset;
-    a_dim1 = *nm;
-    a_offset = a_dim1 + 1;
-    a -= a_offset;
-
-    /* Function Body */
-    if (*n <= *nm) {
-        goto L10;
+    if (*n > *nm) {
+        *ierr = *n * 10;
+        return;
     }
-    *ierr = *n * 10;
-    goto L50;
-
-L10:
-    reduc_(nm, n, &a[a_offset], &b[b_offset], &fv2[1], ierr);
+    reduc_(nm, n, a, b, fv2, ierr);
     if (*ierr != 0) {
-        goto L50;
+        return;
     }
-    if (*matz != 0) {
-        goto L20;
-    }
+    if (*matz == 0) {
 /*     .......... find eigenvalues only .......... */
-    tred1_(nm, n, &a[a_offset], &w[1], &fv1[1], &fv2[1]);
-    tqlrat_(n, &w[1], &fv2[1], ierr);
-    goto L50;
-/*     .......... find both eigenvalues and eigenvectors .......... */
-L20:
-    tred2_(nm, n, &a[a_offset], &w[1], &fv1[1], &z[z_offset]);
-    tql2_(nm, n, &w[1], &fv1[1], &z[z_offset], ierr);
-    if (*ierr != 0) {
-        goto L50;
+        tred1_(nm, n, a, w, fv1, fv2);
+        tqlrat_(n, w, fv2, ierr);
+        return;
     }
-    rebak_(nm, n, &b[b_offset], &fv2[1], n, &z[z_offset]);
-L50:
-    return;
+/*     .......... find both eigenvalues and eigenvectors .......... */
+    tred2_(nm, n, a, w, fv1, z);
+    tql2_(nm, n, w, fv1, z, ierr);
+    if (*ierr == 0)
+        rebak_(nm, n, b, fv2, n, z);
 } /* rsg_ */
 
 doublereal epslon_(x)
 doublereal *x;
 {
-    /* System generated locals */
-    doublereal ret_val, d__1;
-
     /* Local variables */
     static doublereal a, b, c, eps;
 
-
 /*     estimate unit roundoff in quantities of size x. */
-
 
 /*     this program should function properly on all systems */
 /*     satisfying the following two assumptions, */
@@ -153,38 +114,23 @@ doublereal *x;
 /*     this version dated 4/6/83. */
 
     a = 1.3333333333333333;
-L10:
-    b = a - 1.;
-    c = b + b + b;
-    eps = (d__1 = c - 1., abs(d__1));
-    if (eps == 0.) {
-        goto L10;
-    }
-    ret_val = eps * abs(*x);
-    return ret_val;
+    do {
+        b = a - 1.;
+        c = b + b + b;
+        eps = abs(c - 1.);
+    } while (eps == 0.);
+    return eps * abs(*x);
 } /* epslon_ */
 
 /* Subroutine */ void tqlrat_(n, d, e2, ierr)
-integer *n;
+const integer *n;
 doublereal *d, *e2;
 integer *ierr;
 {
-    /* System generated locals */
-    integer i__1, i__2;
-    doublereal d__1, d__2;
-
-    /* Builtin functions */
-    double sqrt(), d_sign();
-
     /* Local variables */
     static doublereal b, c, f, g, h;
     static integer i, j, l, m;
     static doublereal p, r, s, t;
-    static integer l1, ii;
-    extern doublereal pythag_(), epslon_();
-    static integer mml;
-
-
 
 /*     this subroutine is a translation of the algol procedure tqlrat, */
 /*     algorithm 464, comm. acm 16, 689(1973) by reinsch. */
@@ -199,8 +145,7 @@ integer *ierr;
 /*        d contains the diagonal elements of the input matrix. */
 
 /*        e2 contains the squares of the subdiagonal elements of the */
-/*          input matrix in its last n-1 positions.  e2(1) is arbitrary.
-*/
+/*          input matrix in its last n-1 positions.  e2(1) is arbitrary.  */
 
 /*      on output */
 
@@ -216,59 +161,45 @@ integer *ierr;
 /*          j          if the j-th eigenvalue has not been */
 /*                     determined after 30 iterations. */
 
-/*     calls pythag for  dsqrt(a*a + b*b) . */
+/*     calls pythag for  sqrt(a*a + b*b) . */
 
 /*     questions and comments should be directed to burton s. garbow, */
-/*     mathematics and computer science div, argonne national laboratory
-*/
+/*     mathematics and computer science div, argonne national laboratory */
 
 /*     this version dated august 1983. */
 
-/*     ------------------------------------------------------------------
-*/
+/*     ------------------------------------------------------------------ */
 
-    /* Parameter adjustments */
-    --e2;
-    --d;
-
-    /* Function Body */
     *ierr = 0;
     if (*n == 1) {
         return;
     }
 
-    i__1 = *n;
-    for (i = 2; i <= i__1; ++i) {
-        e2[i - 1] = e2[i];
+    for (i = 1; i < *n; ++i) {
+        e2[i-1] = e2[i];
     }
 
     f = 0.;
     t = 0.;
-    e2[*n] = 0.;
+    e2[*n-1] = 0.;
 
-    i__1 = *n;
-    for (l = 1; l <= i__1; ++l) {
+    for (l = 0; l < *n; ++l) {
         j = 0;
-        h = (d__1 = d[l], abs(d__1)) + sqrt(e2[l]);
-        if (t > h) {
-            goto L105;
+        h = abs(d[l]) + sqrt(e2[l]);
+        if (t <= h) {
+            t = h;
+            b = epslon_(&t);
+            c = b * b;
         }
-        t = h;
-        b = epslon_(&t);
-        c = b * b;
-/*     .......... look for small squared sub-diagonal element ........
-.. */
-L105:
-        i__2 = *n;
-        for (m = l; m <= i__2; ++m) {
+/*     .......... look for small squared sub-diagonal element .......... */
+        for (m = l; m < *n; ++m) {
             if (e2[m] <= c) {
-                goto L120;
+                break;
             }
 /*     .......... e2(n) is always zero, so there is no exit */
 /*                through the bottom of the loop .......... */
         }
 
-L120:
         if (m == l) {
             goto L210;
         }
@@ -276,21 +207,19 @@ L130:
         if (j == 30) {
 /*     .......... set error -- no convergence to an */
 /*                eigenvalue after 30 iterations .......... */
-            *ierr = l;
+            *ierr = l+1;
             return;
         }
         ++j;
 /*     .......... form shift .......... */
-        l1 = l + 1;
         s = sqrt(e2[l]);
         g = d[l];
-        p = (d[l1] - g) / (s * 2.);
+        p = (d[l+1] - g) / (s * 2.);
         r = pythag_(&p, &c_b17);
         d[l] = s / (p + d_sign(&r, &p));
         h = g - d[l];
 
-        i__2 = *n;
-        for (i = l1; i <= i__2; ++i) {
+        for (i = l+1; i < *n; ++i) {
             d[i] -= h;
         }
 
@@ -302,16 +231,12 @@ L130:
         }
         h = g;
         s = 0.;
-        mml = m - l;
-/*     .......... for i=m-1 step -1 until l do -- .......... */
-        i__2 = mml;
-        for (ii = 1; ii <= i__2; ++ii) {
-            i = m - ii;
+        for (i = m-1; i >= l; --i) {
             p = g * h;
             r = p + e2[i];
-            e2[i + 1] = s * r;
+            e2[i+1] = s * r;
             s = e2[i] / r;
-            d[i + 1] = h + s * (h + d[i]);
+            d[i+1] = h + s * (h + d[i]);
             g = d[i] - e2[i] / g;
             if (g == 0.) {
                 g = b;
@@ -321,56 +246,39 @@ L130:
 
         e2[l] = s * g;
         d[l] = h;
-/*     .......... guard against underflow in convergence test ........
-.. */
+/*     .......... guard against underflow in convergence test ........ .. */
         if (h == 0.) {
             goto L210;
         }
-        if ((d__1 = e2[l], abs(d__1)) <= (d__2 = c / h, abs(d__2))) {
+        if (abs(e2[l]) <= abs(c / h)) {
             goto L210;
         }
-        e2[l] = h * e2[l];
+        e2[l] *= h;
         if (e2[l] != 0.) {
             goto L130;
         }
 L210:
         p = d[l] + f;
 /*     .......... order eigenvalues .......... */
-        if (l == 1) {
-            goto L250;
-        }
-/*     .......... for i=l step -1 until 2 do -- .......... */
-        i__2 = l;
-        for (ii = 2; ii <= i__2; ++ii) {
-            i = l + 2 - ii;
-            if (p >= d[i - 1]) {
-                goto L270;
+        for (i = l; i > 0; --i) {
+            if (p >= d[i-1]) {
+                break;
             }
-            d[i] = d[i - 1];
+            d[i] = d[i-1];
         }
-
-L250:
-        i = 1;
-L270:
         d[i] = p;
     }
 } /* tqlrat_ */
 
 /* Subroutine */ void rebak_(nm, n, b, dl, m, z)
-integer *nm, *n;
-doublereal *b, *dl;
-integer *m;
+const integer *nm, *n;
+const doublereal *b, *dl;
+const integer *m;
 doublereal *z;
 {
-    /* System generated locals */
-    integer b_dim1, b_offset, z_dim1, z_offset, i__1, i__2, i__3;
-
     /* Local variables */
     static integer i, j, k;
     static doublereal x;
-    static integer i1, ii;
-
-
 
 /*     this subroutine is a translation of the algol procedure rebaka, */
 /*     num. math. 11, 99-110(1968) by martin and wilkinson. */
@@ -405,71 +313,33 @@ doublereal *z;
 /*          in its first m columns. */
 
 /*     questions and comments should be directed to burton s. garbow, */
-/*     mathematics and computer science div, argonne national laboratory
-*/
+/*     mathematics and computer science div, argonne national laboratory */
 
 /*     this version dated august 1983. */
 
-/*     ------------------------------------------------------------------
-*/
+/*     ------------------------------------------------------------------ */
 
-    /* Parameter adjustments */
-    z_dim1 = *nm;
-    z_offset = z_dim1 + 1;
-    z -= z_offset;
-    --dl;
-    b_dim1 = *nm;
-    b_offset = b_dim1 + 1;
-    b -= b_offset;
-
-    /* Function Body */
-    if (*m == 0) {
-        goto L200;
-    }
-
-    i__1 = *m;
-    for (j = 1; j <= i__1; ++j) {
-/*     .......... for i=n step -1 until 1 do -- .......... */
-        i__2 = *n;
-        for (ii = 1; ii <= i__2; ++ii) {
-            i = *n + 1 - ii;
-            i1 = i + 1;
-            x = z[i + j * z_dim1];
-            if (i == *n) {
-                goto L80;
+    for (j = 0; j < *m; ++j) {
+        for (i = *n-1; i >= 0; --i) {
+            x = z[i + j * *nm];
+            for (k = i+1; k < *n; ++k) {
+                x -= b[k + i * *nm] * z[k + j * *nm];
             }
-
-            i__3 = *n;
-            for (k = i1; k <= i__3; ++k) {
-                x -= b[k + i * b_dim1] * z[k + j * z_dim1];
-            }
-
-L80:
-            z[i + j * z_dim1] = x / dl[i];
+            z[i + j * *nm] = x / dl[i];
         }
     }
-
-L200:
-    return;
 } /* rebak_ */
 
 /* Subroutine */ void reduc_(nm, n, a, b, dl, ierr)
-integer *nm, *n;
-doublereal *a, *b, *dl;
+const integer *nm, *n;
+doublereal *a, *b;
+doublereal *dl;
 integer *ierr;
 {
-    /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
-
-    /* Builtin functions */
-    double sqrt();
-
     /* Local variables */
     static integer i, j, k;
     static doublereal x, y;
-    static integer i1, j1, nn;
-
-
+    static integer nn;
 
 /*     this subroutine is a translation of the algol procedure reduc1, */
 /*     num. math. 11, 99-110(1968) by martin and wilkinson. */
@@ -492,8 +362,7 @@ integer *ierr;
 /*        a and b contain the real symmetric input matrices.  only the */
 /*          full upper triangles of the matrices need be supplied.  if */
 /*          n is negative, the strict lower triangle of b contains, */
-/*          instead, the strict lower triangle of its cholesky factor l.
-*/
+/*          instead, the strict lower triangle of its cholesky factor l.  */
 
 /*        dl contains, if n is negative, the diagonal elements of l. */
 
@@ -501,8 +370,7 @@ integer *ierr;
 
 /*        a contains in its full lower triangle the full lower triangle */
 /*          of the symmetric matrix derived from the reduction to the */
-/*          standard form.  the strict upper triangle of a is unaltered.
-*/
+/*          standard form.  the strict upper triangle of a is unaltered.  */
 
 /*        b contains in its strict lower triangle the strict lower */
 /*          triangle of its cholesky factor l.  the full upper */
@@ -515,49 +383,24 @@ integer *ierr;
 /*          7*n+1      if b is not positive definite. */
 
 /*     questions and comments should be directed to burton s. garbow, */
-/*     mathematics and computer science div, argonne national laboratory
-*/
+/*     mathematics and computer science div, argonne national laboratory */
 
 /*     this version dated august 1983. */
 
-/*     ------------------------------------------------------------------
-*/
+/*     ------------------------------------------------------------------ */
 
-    /* Parameter adjustments */
-    --dl;
-    b_dim1 = *nm;
-    b_offset = b_dim1 + 1;
-    b -= b_offset;
-    a_dim1 = *nm;
-    a_offset = a_dim1 + 1;
-    a -= a_offset;
-
-    /* Function Body */
     *ierr = 0;
     nn = abs(*n);
-    if (*n < 0) {
-        goto L100;
-    }
 /*     .......... form l in the arrays b and dl .......... */
-    i__1 = *n;
-    for (i = 1; i <= i__1; ++i) {
-        i1 = i - 1;
-
-        i__2 = *n;
-        for (j = i; j <= i__2; ++j) {
-            x = b[i + j * b_dim1];
-            if (i == 1) {
-                goto L40;
+    for (i = 0; i < *n; ++i) {
+        for (j = i; j < *n; ++j) {
+            x = b[i + j * *nm];
+            for (k = 0; k < i; ++k) {
+                x -= b[i + k * *nm] * b[j + k * *nm];
             }
-
-            i__3 = i1;
-            for (k = 1; k <= i__3; ++k) {
-                x -= b[i + k * b_dim1] * b[j + k * b_dim1];
-            }
-
-L40:
             if (j != i) {
-                goto L60;
+                b[j + i * *nm] = x / y;
+                continue;
             }
             if (x <= 0.) {
 /*     .......... set error -- b is not positive definite .......... */
@@ -566,70 +409,32 @@ L40:
             }
             y = sqrt(x);
             dl[i] = y;
-            goto L80;
-L60:
-            b[j + i * b_dim1] = x / y;
-L80:
-            ;
         }
     }
 /*     .......... form the transpose of the upper triangle of inv(l)*a */
 /*                in the lower triangle of the array a .......... */
-L100:
-    i__2 = nn;
-    for (i = 1; i <= i__2; ++i) {
-        i1 = i - 1;
+    for (i = 0; i < nn; ++i) {
         y = dl[i];
 
-        i__1 = nn;
-        for (j = i; j <= i__1; ++j) {
-            x = a[i + j * a_dim1];
-            if (i == 1) {
-                goto L180;
+        for (j = i; j < nn; ++j) {
+            x = a[i + j * *nm];
+            for (k = 0; k < i; ++k) {
+                x -= b[i + k * *nm] * a[j + k * *nm];
             }
-
-            i__3 = i1;
-            for (k = 1; k <= i__3; ++k) {
-                x -= b[i + k * b_dim1] * a[j + k * a_dim1];
-            }
-
-L180:
-            a[j + i * a_dim1] = x / y;
+            a[j + i * *nm] = x / y;
         }
     }
 /*     .......... pre-multiply by inv(l) and overwrite .......... */
-    i__1 = nn;
-    for (j = 1; j <= i__1; ++j) {
-        j1 = j - 1;
-
-        i__2 = nn;
-        for (i = j; i <= i__2; ++i) {
-            x = a[i + j * a_dim1];
-            if (i == j) {
-                goto L240;
+    for (j = 0; j < nn; ++j) {
+        for (i = j; i < nn; ++i) {
+            x = a[i + j * *nm];
+            for (k = j; k < i; ++k) {
+                x -= a[k + j * *nm] * b[i + k * *nm];
             }
-            i1 = i - 1;
-
-            i__3 = i1;
-            for (k = j; k <= i__3; ++k) {
-                x -= a[k + j * a_dim1] * b[i + k * b_dim1];
+            for (k = 0; k < j; ++k) {
+                x -= a[j + k * *nm] * b[i + k * *nm];
             }
-
-L240:
-            if (j == 1) {
-                goto L280;
-            }
-
-            i__3 = j1;
-            for (k = 1; k <= i__3; ++k) {
-                x -= a[j + k * a_dim1] * b[i + k * b_dim1];
-            }
-
-L280:
-            a[i + j * a_dim1] = x / dl[i];
+            a[i + j * *nm] = x / dl[i];
         }
     }
-
-    return;
 } /* reduc_ */
-

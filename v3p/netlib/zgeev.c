@@ -1,44 +1,33 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
+extern double sqrt(double); /* #include <math.h> */
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
 /* Table of constant values */
-
 static integer c__1 = 1;
 static integer c__0 = 0;
 static integer c__8 = 8;
 static integer c_n1 = -1;
 static integer c__4 = 4;
 
-/* Subroutine */ void zgeev_(jobvl, jobvr, n, a, lda, w, vl, ldvl, vr, ldvr,
-        work, lwork, rwork, info, jobvl_len, jobvr_len)
-char *jobvl, *jobvr;
-integer *n;
+/* Subroutine */ void zgeev_(jobvl, jobvr, n, a, lda, w, vl, ldvl, vr, ldvr, work, lwork, rwork, info)
+const char *jobvl, *jobvr;
+const integer *n;
 doublecomplex *a;
-integer *lda;
+const integer *lda;
 doublecomplex *w, *vl;
-integer *ldvl;
+const integer *ldvl;
 doublecomplex *vr;
-integer *ldvr;
+const integer *ldvr;
 doublecomplex *work;
 integer *lwork;
 doublereal *rwork;
 integer *info;
-ftnlen jobvl_len;
-ftnlen jobvr_len;
 {
     /* System generated locals */
     integer i__1, i__2;
     doublereal d__1;
-
-    /* Builtin functions */
-    double sqrt();
-    void d_cnjg();
 
     /* Local variables */
     static integer ibal;
@@ -46,28 +35,15 @@ ftnlen jobvr_len;
     static integer maxb;
     static doublereal anrm;
     static integer ierr, itau, iwrk, nout, i, k;
-    extern logical lsame_();
-    extern /* Subroutine */ void zscal_(), dlabad_();
-    extern doublereal dznrm2_();
     static logical scalea;
-    extern doublereal dlamch_();
     static doublereal cscale;
-    extern /* Subroutine */ void zgebak_(), zgebal_();
-    extern integer idamax_();
-    extern /* Subroutine */ void xerbla_();
-    extern integer ilaenv_();
     static logical select[1];
-    extern /* Subroutine */ void zdscal_();
     static doublereal bignum;
-    extern doublereal zlange_();
-    extern /* Subroutine */ void zgehrd_(), zlascl_(), zlacpy_();
     static integer minwrk, maxwrk;
     static logical wantvl;
     static doublereal smlnum;
     static integer hswork, irwork;
-    extern /* Subroutine */ void zhseqr_(), ztrevc_();
     static logical wantvr;
-    extern /* Subroutine */ void zunghr_();
     static integer ihi;
     static doublereal scl;
     static integer ilo;
@@ -164,11 +140,11 @@ ftnlen jobvr_len;
 /*  ===================================================================== */
 
     *info = 0;
-    wantvl = lsame_(jobvl, "V", 1L, 1L);
-    wantvr = lsame_(jobvr, "V", 1L, 1L);
-    if (! wantvl && ! lsame_(jobvl, "N", 1L, 1L)) {
+    wantvl = lsame_(jobvl, "V");
+    wantvr = lsame_(jobvr, "V");
+    if (! wantvl && ! lsame_(jobvl, "N")) {
         *info = -1;
-    } else if (! wantvr && ! lsame_(jobvr, "N", 1L, 1L)) {
+    } else if (! wantvr && ! lsame_(jobvr, "N")) {
         *info = -2;
     } else if (*n < 0) {
         *info = -3;
@@ -193,22 +169,22 @@ ftnlen jobvr_len;
 
     minwrk = 1;
     if (*info == 0 && *lwork >= 1) {
-        maxwrk = *n + *n * ilaenv_(&c__1, "ZGEHRD", " ", n, &c__1, n, &c__0, 6L, 1L);
+        maxwrk = *n + *n * ilaenv_(&c__1, "ZGEHRD", " ", n, &c__1, n, &c__0);
         if (! wantvl && ! wantvr) {
             minwrk = max(1,(*n<<1));
-            maxb = ilaenv_(&c__8, "ZHSEQR", "EN", n, &c__1, n, &c_n1, 6L, 2L);
+            maxb = ilaenv_(&c__8, "ZHSEQR", "EN", n, &c__1, n, &c_n1);
             maxb = max(maxb,2);
-            k = ilaenv_(&c__4, "ZHSEQR", "EN", n, &c__1, n, & c_n1, 6L, 2L);
+            k = ilaenv_(&c__4, "ZHSEQR", "EN", n, &c__1, n, &c_n1);
             k = min(min(maxb,*n),max(2,k));
             hswork = max(k * (k + 2),(*n<<1));
             maxwrk = max(maxwrk,hswork);
         } else {
             minwrk = max(1,(*n<<1));
-            i__1 = *n + (*n - 1) * ilaenv_(&c__1, "ZUNGHR", " ", n, &c__1, n, &c_n1, 6L, 1L);
+            i__1 = *n + (*n - 1) * ilaenv_(&c__1, "ZUNGHR", " ", n, &c__1, n, &c_n1);
             maxwrk = max(maxwrk,i__1);
-            maxb = ilaenv_(&c__8, "ZHSEQR", "SV", n, &c__1, n, &c_n1, 6L, 2L);
+            maxb = ilaenv_(&c__8, "ZHSEQR", "SV", n, &c__1, n, &c_n1);
             maxb = max(maxb,2);
-            k = ilaenv_(&c__4, "ZHSEQR", "SV", n, &c__1, n, & c_n1, 6L, 2L);
+            k = ilaenv_(&c__4, "ZHSEQR", "SV", n, &c__1, n, &c_n1);
             k = min(min(maxb,*n),max(2,k));
             hswork = max(k * (k + 2),(*n<<1));
             maxwrk = max(max(maxwrk,hswork),(*n<<1));
@@ -220,7 +196,7 @@ ftnlen jobvr_len;
     }
     if (*info != 0) {
         i__1 = -(*info);
-        xerbla_("ZGEEV ", &i__1, 6L);
+        xerbla_("ZGEEV ", &i__1);
         return;
     }
 
@@ -232,8 +208,8 @@ ftnlen jobvr_len;
 
 /*     Get machine constants */
 
-    eps = dlamch_("P", 1L);
-    smlnum = dlamch_("S", 1L);
+    eps = dlamch_("P");
+    smlnum = dlamch_("S");
     bignum = 1. / smlnum;
     dlabad_(&smlnum, &bignum);
     smlnum = sqrt(smlnum) / eps;
@@ -241,7 +217,7 @@ ftnlen jobvr_len;
 
 /*     Scale A if max element outside range [SMLNUM,BIGNUM] */
 
-    anrm = zlange_("M", n, n, a, lda, dum, 1L);
+    anrm = zlange_("M", n, n, a, lda, dum);
     scalea = FALSE_;
     if (anrm > 0. && anrm < smlnum) {
         scalea = TRUE_;
@@ -251,7 +227,7 @@ ftnlen jobvr_len;
         cscale = bignum;
     }
     if (scalea) {
-        zlascl_("G", &c__0, &c__0, &anrm, &cscale, n, n, a, lda, &ierr, 1L);
+        zlascl_("G", &c__0, &c__0, &anrm, &cscale, n, n, a, lda, &ierr);
     }
 
 /*     Balance the matrix */
@@ -259,7 +235,7 @@ ftnlen jobvr_len;
 /*     (RWorkspace: need N) */
 
     ibal = 0;
-    zgebal_("B", n, a, lda, &ilo, &ihi, &rwork[ibal], &ierr, 1L);
+    zgebal_("B", n, a, lda, &ilo, &ihi, &rwork[ibal], &ierr);
 
 /*     Reduce to upper Hessenberg form */
 /*     (CWorkspace: need 2*N, prefer N+N*NB) */
@@ -276,7 +252,7 @@ ftnlen jobvr_len;
 /*        Copy Householder vectors to VL */
 
         *side = 'L';
-        zlacpy_("L", n, n, a, lda, vl, ldvl, 1L);
+        zlacpy_("L", n, n, a, lda, vl, ldvl);
 
 /*        Generate unitary matrix in VL */
 /*        (CWorkspace: need 2*N-1, prefer N+(N-1)*NB) */
@@ -291,7 +267,7 @@ ftnlen jobvr_len;
 
         iwrk = itau;
         i__1 = *lwork - iwrk;
-        zhseqr_("S", "V", n, &ilo, &ihi, a, lda, w, vl, ldvl, &work[iwrk], &i__1, info, 1L, 1L);
+        zhseqr_("S", "V", n, &ilo, &ihi, a, lda, w, vl, ldvl, &work[iwrk], &i__1, info);
 
         if (wantvr) {
 
@@ -299,7 +275,7 @@ ftnlen jobvr_len;
 /*           Copy Schur vectors to VR */
 
             *side = 'B';
-            zlacpy_("F", n, n, vl, ldvl, vr, ldvr, 1L);
+            zlacpy_("F", n, n, vl, ldvl, vr, ldvr);
         }
 
     } else if (wantvr) {
@@ -308,7 +284,7 @@ ftnlen jobvr_len;
 /*        Copy Householder vectors to VR */
 
         *side = 'R';
-        zlacpy_("L", n, n, a, lda, vr, ldvr, 1L);
+        zlacpy_("L", n, n, a, lda, vr, ldvr);
 
 /*        Generate unitary matrix in VR */
 /*        (CWorkspace: need 2*N-1, prefer N+(N-1)*NB) */
@@ -323,7 +299,7 @@ ftnlen jobvr_len;
 
         iwrk = itau;
         i__1 = *lwork - iwrk;
-        zhseqr_("S", "V", n, &ilo, &ihi, a, lda, w, vr, ldvr, &work[iwrk], &i__1, info, 1L, 1L);
+        zhseqr_("S", "V", n, &ilo, &ihi, a, lda, w, vr, ldvr, &work[iwrk], &i__1, info);
 
     } else {
 
@@ -333,7 +309,7 @@ ftnlen jobvr_len;
 
         iwrk = itau;
         i__1 = *lwork - iwrk;
-        zhseqr_("E", "N", n, &ilo, &ihi, a, lda, w, vr, ldvr, &work[iwrk], &i__1, info, 1L, 1L);
+        zhseqr_("E", "N", n, &ilo, &ihi, a, lda, w, vr, ldvr, &work[iwrk], &i__1, info);
     }
 
 /*     If INFO > 0 from ZHSEQR, then quit */
@@ -349,8 +325,7 @@ ftnlen jobvr_len;
 /*        (RWorkspace: need 2*N) */
 
         irwork = ibal + *n;
-        ztrevc_(side, "B", select, n, a, lda, vl, ldvl, vr, ldvr, n, &nout,
-                &work[iwrk], &rwork[irwork], &ierr, 1L, 1L);
+        ztrevc_(side, "B", select, n, a, lda, vl, ldvl, vr, ldvr, n, &nout, &work[iwrk], &rwork[irwork], &ierr);
     }
 
     if (wantvl) {
@@ -359,7 +334,7 @@ ftnlen jobvr_len;
 /*        (CWorkspace: none) */
 /*        (RWorkspace: need N) */
 
-        zgebak_("B", "L", n, &ilo, &ihi, &rwork[ibal], n, vl, ldvl, &ierr, 1L, 1L);
+        zgebak_("B", "L", n, &ilo, &ihi, &rwork[ibal], n, vl, ldvl, &ierr);
 
 /*        Normalize left eigenvectors and make largest component real */
 
@@ -385,7 +360,7 @@ ftnlen jobvr_len;
 /*        (CWorkspace: none) */
 /*        (RWorkspace: need N) */
 
-        zgebak_("B", "R", n, &ilo, &ihi, &rwork[ibal], n, vr, ldvr, &ierr, 1L, 1L);
+        zgebak_("B", "R", n, &ilo, &ihi, &rwork[ibal], n, vr, ldvr, &ierr);
 
 /*        Normalize right eigenvectors and make largest component real */
 
@@ -411,10 +386,10 @@ L50:
     if (scalea) {
         i__1 = *n - *info;
         i__2 = max(i__1, 1);
-        zlascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &w[*info], &i__2, &ierr, 1L);
+        zlascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &w[*info], &i__2, &ierr);
         if (*info > 0) {
             i__1 = ilo - 1;
-            zlascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, w, n, &ierr, 1L);
+            zlascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, w, n, &ierr);
         }
     }
 

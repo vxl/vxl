@@ -1,34 +1,26 @@
-/* zdrot.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 /*                               and moved out of zsvdc.c to separate file */
 
-
 /* Subroutine */ void zdrot_(n, zx, incx, zy, incy, c, s)
-integer *n;
+const integer *n;
 doublecomplex *zx;
-integer *incx;
+const integer *incx;
 doublecomplex *zy;
-integer *incy;
-doublereal *c, *s;
+const integer *incy;
+const doublereal *c, *s;
 {
     /* Local variables */
     static integer i;
     static doublecomplex ztemp;
     static integer ix, iy;
 
-
 /*     applies a plane rotation, where the cos and sin (c and s) are */
 /*     double precision and the vectors zx and zy are double complex. */
 /*     jack dongarra, linpack, 3/11/78. */
 
-
-    /* Function Body */
     if (*n <= 0) {
         return;
     }

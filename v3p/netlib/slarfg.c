@@ -1,28 +1,16 @@
-/* slarfg.f -- translated by f2c (version of 4 June 1993  1:43:59).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
-/* Subroutine */ void slarfg_(integer *n, real *alpha, real *x, integer *incx,
-        real *tau)
+/* Subroutine */ void slarfg_(const integer *n, real *alpha, real *x, const integer *incx, real *tau)
 {
     /* System generated locals */
-    integer i__1;
+    const integer nm1 = *n - 1;
     real r__1;
-
-    /* Builtin functions */
-    double r_sign(real *, real *);
 
     /* Local variables */
     static real beta;
-    extern doublereal snrm2_(integer *, real *, integer *);
     static integer j;
-    extern /* Subroutine */ void sscal_(integer *, real *, real *, integer *);
     static real xnorm;
-    extern real slapy2_(real *, real *);
-    extern doublereal slamch_(char *);
     static real safmin, rsafmn;
     static integer knt;
 
@@ -82,8 +70,7 @@
         return;
     }
 
-    i__1 = *n - 1;
-    xnorm = (float)snrm2_(&i__1, x, incx);
+    xnorm = snrm2_(&nm1, x, incx);
 
     if (xnorm == 0.f) {
 
@@ -95,8 +82,8 @@
 /*        general case */
 
         r__1 = slapy2_(alpha, &xnorm);
-        beta = -(float)r_sign(&r__1, alpha);
-        safmin = (float)slamch_("S") / (float)slamch_("E");
+        beta = -r_sign(&r__1, alpha);
+        safmin = slamch_("S") / slamch_("E");
         if (abs(beta) < safmin) {
 
 /*           XNORM, BETA may be inaccurate; scale X and recompute them */
@@ -105,22 +92,19 @@
             knt = 0;
             do {
                 ++knt;
-                i__1 = *n - 1;
-                sscal_(&i__1, &rsafmn, x, incx);
+                sscal_(&nm1, &rsafmn, x, incx);
                 beta *= rsafmn;
                 *alpha *= rsafmn;
             } while (abs(beta) < safmin);
 
 /*           New BETA is at most 1, at least SAFMIN */
 
-            i__1 = *n - 1;
-            xnorm = (float)snrm2_(&i__1, x, incx);
+            xnorm = snrm2_(&nm1, x, incx);
             r__1 = slapy2_(alpha, &xnorm);
-            beta = -(float)r_sign(&r__1, alpha);
+            beta = -r_sign(&r__1, alpha);
             *tau = (beta - *alpha) / beta;
-            i__1 = *n - 1;
             r__1 = 1.f / (*alpha - beta);
-            sscal_(&i__1, &r__1, x, incx);
+            sscal_(&nm1, &r__1, x, incx);
 
 /*           If ALPHA is subnormal, it may lose relative accuracy */
 
@@ -130,9 +114,8 @@
             }
         } else {
             *tau = (beta - *alpha) / beta;
-            i__1 = *n - 1;
             r__1 = 1.f / (*alpha - beta);
-            sscal_(&i__1, &r__1, x, incx);
+            sscal_(&nm1, &r__1, x, incx);
             *alpha = beta;
         }
     }

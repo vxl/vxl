@@ -1,40 +1,31 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
 /* Table of constant values */
-
 static integer c__1 = 1;
 static doublecomplex c_b17 = {1.,0.};
 
-/* Subroutine */ void ztrevc_(side, howmny, select, n, t, ldt, vl, ldvl, vr,
-        ldvr, mm, m, work, rwork, info, side_len, howmny_len)
-char *side, *howmny;
+/* Subroutine */ void ztrevc_(side, howmny, select, n, t, ldt, vl, ldvl, vr, ldvr, mm, m, work, rwork, info)
+const char *side, *howmny;
 logical *select;
-integer *n;
+const integer *n;
 doublecomplex *t;
-integer *ldt;
+const integer *ldt;
 doublecomplex *vl;
-integer *ldvl;
+const integer *ldvl;
 doublecomplex *vr;
-integer *ldvr, *mm, *m;
+const integer *ldvr;
+const integer *mm;
+integer *m;
 doublecomplex *work;
 doublereal *rwork;
 integer *info;
-ftnlen side_len;
-ftnlen howmny_len;
 {
     /* System generated locals */
     integer i__1, i__2;
     doublecomplex z__1;
-
-    /* Builtin functions */
-    void d_cnjg();
 
     /* Local variables */
     static logical allv;
@@ -42,23 +33,14 @@ ftnlen howmny_len;
     static logical over;
     static integer i, j, k;
     static doublereal scale;
-    extern logical lsame_();
     static doublereal remax;
     static logical leftv, bothv;
-    extern /* Subroutine */ void zgemv_();
     static logical somev;
-    extern /* Subroutine */ void zcopy_(), dlabad_();
     static integer ii, ki;
-    extern doublereal dlamch_();
     static integer is;
-    extern /* Subroutine */ void xerbla_(), zdscal_();
-    extern integer izamax_();
     static logical rightv;
-    extern doublereal dzasum_();
     static doublereal smlnum;
-    extern /* Subroutine */ void zlatrs_();
     static doublereal ulp;
-
 
 /*  -- LAPACK routine (version 2.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -184,15 +166,13 @@ ftnlen howmny_len;
 /*                                                                        */
 /*  ===================================================================== */
 
-    /* Function Body */
+    bothv = lsame_(side, "B");
+    rightv = lsame_(side, "R") || bothv;
+    leftv = lsame_(side, "L") || bothv;
 
-    bothv = lsame_(side, "B", 1L, 1L);
-    rightv = lsame_(side, "R", 1L, 1L) || bothv;
-    leftv = lsame_(side, "L", 1L, 1L) || bothv;
-
-    allv = lsame_(howmny, "A", 1L, 1L);
-    over = lsame_(howmny, "B", 1L, 1L) || lsame_(howmny, "O", 1L, 1L);
-    somev = lsame_(howmny, "S", 1L, 1L);
+    allv = lsame_(howmny, "A");
+    over = lsame_(howmny, "B") || lsame_(howmny, "O");
+    somev = lsame_(howmny, "S");
 
 /*     Set M to the number of columns required to store the selected */
 /*     eigenvectors. */
@@ -217,16 +197,16 @@ ftnlen howmny_len;
         *info = -4;
     } else if (*ldt < max(1,*n)) {
         *info = -6;
-    } else if (*ldvl < 1 || leftv && *ldvl < *n) {
+    } else if (*ldvl < 1 || (leftv && *ldvl < *n)) {
         *info = -8;
-    } else if (*ldvr < 1 || rightv && *ldvr < *n) {
+    } else if (*ldvr < 1 || (rightv && *ldvr < *n)) {
         *info = -10;
     } else if (*mm < *m) {
         *info = -11;
     }
     if (*info != 0) {
         i__1 = -(*info);
-        xerbla_("ZTREVC", &i__1, 6L);
+        xerbla_("ZTREVC", &i__1);
         return;
     }
 
@@ -238,17 +218,17 @@ ftnlen howmny_len;
 
 /*     Set the constants to control overflow. */
 
-    unfl = dlamch_("Safe minimum", 12L);
+    unfl = dlamch_("Safe minimum");
     ovfl = 1. / unfl;
     dlabad_(&unfl, &ovfl);
-    ulp = dlamch_("Precision", 9L);
+    ulp = dlamch_("Precision");
     smlnum = unfl * (*n / ulp);
 
 /*     Store the diagonal elements of T in working array WORK. */
 
     for (i = 0; i < *n; ++i) {
         i__1 = i + *n;
-        i__2 = i + i * *ldt;
+        i__2 = i + i * *ldt; /* index [i,i] */
         work[i__1].r = t[i__2].r, work[i__1].i = t[i__2].i;
     }
 
@@ -272,7 +252,7 @@ ftnlen howmny_len;
                     continue; /* next ki */
                 }
             }
-            i__1 = ki + ki * *ldt;
+            i__1 = ki + ki * *ldt; /* index [ki,ki] */
             smin = ulp * (abs(t[i__1].r) + abs(t[i__1].i));
             smin = max(smin, smlnum);
 
@@ -281,7 +261,7 @@ ftnlen howmny_len;
 /*           Form right-hand side. */
 
             for (k = 0; k < ki; ++k) {
-                i__1 = k + ki * *ldt;
+                i__1 = k + ki * *ldt; /* index [k,ki] */
                 work[k].r = -t[i__1].r, work[k].i = -t[i__1].i;
             }
 
@@ -289,8 +269,8 @@ ftnlen howmny_len;
 /*              (T(1:KI-1,1:KI-1) - T(KI,KI))*X = SCALE*WORK. */
 
             for (k = 0; k < ki; ++k) {
-                i__1 = k + k * *ldt;
-                i__2 = ki + ki * *ldt;
+                i__1 = k + k * *ldt; /* index [k,k] */
+                i__2 = ki + ki * *ldt; /* index [ki,ki] */
                 t[i__1].r -= t[i__2].r,
                 t[i__1].i -= t[i__2].i;
                 if (abs(t[i__1].r) + abs(t[i__1].i) < smin) {
@@ -299,8 +279,7 @@ ftnlen howmny_len;
             }
 
             if (ki > 0) {
-                zlatrs_("Upper", "No transpose", "Non-unit", "Y", &ki,
-                        t, ldt, work, &scale, rwork, info, 5L, 12L, 8L, 1L);
+                zlatrs_("Upper", "No transpose", "Non-unit", "Y", &ki, t, ldt, work, &scale, rwork, info);
                 work[ki].r = scale, work[ki].i = 0.;
             }
 
@@ -311,23 +290,22 @@ ftnlen howmny_len;
                 zcopy_(&k, work, &c__1, &vr[is * *ldvr], &c__1);
 
                 ii = izamax_(&k, &vr[is * *ldvr], &c__1);
-                i__1 = ii-1 + is * *ldvr;
+                i__1 = ii-1 + is * *ldvr; /* index [ii-1,is] */
                 remax = 1. / (abs(vr[i__1].r) + abs(vr[i__1].i));
                 zdscal_(&k, &remax, &vr[is * *ldvr], &c__1);
 
                 for (k = ki+1; k < *n; ++k) {
-                    i__1 = k + is * *ldvr;
+                    i__1 = k + is * *ldvr; /* index [k,is] */
                     vr[i__1].r = 0., vr[i__1].i = 0.;
                 }
             } else {
                 if (ki > 0) {
                     z__1.r = scale, z__1.i = 0.;
-                    zgemv_("N", n, &ki, &c_b17, vr, ldvr,
-                           work, &c__1, &z__1, &vr[ki * *ldvr], &c__1, 1L);
+                    zgemv_("N", n, &ki, &c_b17, vr, ldvr, work, &c__1, &z__1, &vr[ki * *ldvr], &c__1);
                 }
 
                 ii = izamax_(n, &vr[ki * *ldvr], &c__1);
-                i__1 = ii-1 + ki * *ldvr;
+                i__1 = ii-1 + ki * *ldvr; /* index [ii-1,ki] */
                 remax = 1. / (abs(vr[i__1].r) + abs(vr[i__1].i));
                 zdscal_(n, &remax, &vr[ki * *ldvr], &c__1);
             }
@@ -335,7 +313,7 @@ ftnlen howmny_len;
 /*           Set back the original diagonal elements of T. */
 
             for (k = 0; k < ki; ++k) {
-                i__1 = k + k * *ldt;
+                i__1 = k + k * *ldt; /* index [k,k] */
                 i__2 = k + *n;
                 t[i__1].r = work[i__2].r, t[i__1].i = work[i__2].i;
             }
@@ -355,7 +333,7 @@ ftnlen howmny_len;
                     continue; /* next ki */
                 }
             }
-            i__1 = ki + ki * *ldt;
+            i__1 = ki + ki * *ldt; /* index [ki,ki] */
             smin = ulp * (abs(t[i__1].r) + abs(t[i__1].i));
             smin = max(smin, smlnum);
             work[*n - 1].r = 1., work[*n - 1].i = 0.;
@@ -363,16 +341,15 @@ ftnlen howmny_len;
 /*           Form right-hand side. */
 
             for (k = ki+1; k < *n; ++k) {
-                d_cnjg(&z__1, &t[ki + k * *ldt]);
-                work[k].r = -z__1.r, work[k].i = -z__1.i;
+                work[k].r = -t[ki + k * *ldt].r, work[k].i = t[ki + k * *ldt].i;
             }
 
 /*           Solve the triangular system: */
 /*              (T(KI+1:N,KI+1:N) - T(KI,KI))'*X = SCALE*WORK. */
 
             for (k = ki+1; k < *n; ++k) {
-                i__1 = k + k * *ldt;
-                i__2 = ki + ki * *ldt;
+                i__1 = k + k * *ldt; /* index [k,k] */
+                i__2 = ki + ki * *ldt; /* index [ki,ki] */
                 t[i__1].r -= t[i__2].r,
                 t[i__1].i -= t[i__2].i;
                 if (abs(t[i__1].r) + abs(t[i__1].i) < smin) {
@@ -384,8 +361,7 @@ ftnlen howmny_len;
             if (k < *n) {
                 i__1 = *n - k;
                 zlatrs_("Upper", "Conjugate transpose", "Non-unit", "Y",
-                        &i__1, &t[k + k * *ldt], ldt, &work[k],
-                        &scale, rwork, info, 5L, 19L, 8L, 1L);
+                        &i__1, &t[k + k * *ldt], ldt, &work[k], &scale, rwork, info);
                 work[ki].r = scale, work[ki].i = 0.;
             }
 
@@ -395,12 +371,12 @@ ftnlen howmny_len;
                 i__1 = *n - ki;
                 zcopy_(&i__1, &work[ki], &c__1, &vl[ki + is * *ldvl], &c__1);
                 ii = izamax_(&i__1, &vl[ki + is * *ldvl], &c__1) + ki;
-                i__2 = ii-1 + is * *ldvl;
+                i__2 = ii-1 + is * *ldvl; /* index [ii-1,is] */
                 remax = 1. / (abs(vl[i__2].r) + abs(vl[i__2].i));
                 zdscal_(&i__1, &remax, &vl[ki + is * *ldvl], &c__1);
 
                 for (k = 0; k < ki; ++k) {
-                    i__1 = k + is * *ldvl;
+                    i__1 = k + is * *ldvl; /* index [k,is] */
                     vl[i__1].r = 0., vl[i__1].i = 0.;
                 }
             } else {
@@ -409,11 +385,11 @@ ftnlen howmny_len;
                     i__1 = *n - k;
                     z__1.r = scale, z__1.i = 0.;
                     zgemv_("N", n, &i__1, &c_b17, &vl[k * *ldvl],
-                           ldvl, &work[k], &c__1, &z__1, &vl[ki * *ldvl], &c__1, 1L);
+                           ldvl, &work[k], &c__1, &z__1, &vl[ki * *ldvl], &c__1);
                 }
 
                 ii = izamax_(n, &vl[ki * *ldvl], &c__1);
-                i__1 = ii-1 + ki * *ldvl;
+                i__1 = ii-1 + ki * *ldvl; /* index [ii-1,ki] */
                 remax = 1. / (abs(vl[i__1].r) + abs(vl[i__1].i));
                 zdscal_(n, &remax, &vl[ki * *ldvl], &c__1);
             }
@@ -421,17 +397,11 @@ ftnlen howmny_len;
 /*           Set back the original diagonal elements of T. */
 
             for (k = ki+1; k < *n; ++k) {
-                i__1 = k + k * *ldt;
+                i__1 = k + k * *ldt; /* index [k,k] */
                 i__2 = k + *n;
                 t[i__1].r = work[i__2].r, t[i__1].i = work[i__2].i;
             }
-
             ++is;
         }
     }
-
-
-/*     End of ZTREVC */
-
 } /* ztrevc_ */
-

@@ -1,9 +1,15 @@
-/* rpoly.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
+extern double log(double), exp(double), sqrt(double); /* #include <math.h> */
+
+static void calcsc_(integer *type);
+static void fxshfr_(integer *l2, integer *nz);
+static void newest_(integer *type, doublereal *uu, doublereal *vv);
+static void nextk_(integer *type);
+static void quad_(doublereal *a, doublereal *b1, doublereal *c, doublereal *sr, doublereal *si, doublereal *lr, doublereal *li);
+static void quadit_(doublereal *uu, doublereal *vv, integer *nz);
+static void quadsd_(integer *nn, doublereal *u, doublereal *v, doublereal *p, doublereal *q, doublereal *a, doublereal *b);
+static void realit_(doublereal *sss, integer *nz, integer *iflag);
 
 /* Common Block Declarations */
 
@@ -17,7 +23,6 @@ struct {
 #define global_1 global_
 
 /* Table of constant values */
-
 static doublereal c_b41 = 1.;
 
 /* ====================================================================== */
@@ -35,12 +40,8 @@ logical *fail;
     /* System generated locals */
     integer i__1;
 
-    /* Builtin functions */
-    double log(), pow_di(), exp();
-
     /* Local variables */
     static real base;
-    extern /* Subroutine */ void quad_();
     static doublereal temp[101];
     static real cosr, sinr;
     static integer i, j, l;
@@ -54,7 +55,6 @@ logical *fail;
     static integer nz;
     static doublereal factor;
     static real xx, yy, smalno;
-    extern /* Subroutine */ void fxshfr_();
     static integer nm1;
     static real bnd, min_, max_;
     static integer cnt;
@@ -97,7 +97,7 @@ logical *fail;
 /* changed for sparc, but these seem better -- awf */
 
     base = 2.0f;
-    global_1.eta = (float)2.23e-16;
+    global_1.eta = 2.23e-16f;
     /* the sun compiler will not compile with the number too large for float */
 #ifdef __SUNPRO_C
     infin = (float)3.40282346638528860e+38;
@@ -159,7 +159,7 @@ L60:
     max_ = 0.0f;
     min_ = infin;
     for (i = 0; i < global_1.nn; ++i) {
-        x = (float)dabs(global_1.p[i]);
+        x = (real)abs(global_1.p[i]);
         if (x > max_) {
             max_ = x;
         }
@@ -189,23 +189,23 @@ L80:
         goto L110;
     }
 L90:
-    l = (int)(log(sc) / log(base) + 0.5f);
-    factor = base * 1.;
+    l = (int)(log((doublereal)sc) / log((doublereal)base) + 0.5);
+    factor = (doublereal)base;
     factor = pow_di(&factor, &l);
     if (factor == 1.) {
         goto L110;
     }
     for (i = 0; i < global_1.nn; ++i) {
-        global_1.p[i] = factor * global_1.p[i];
+        global_1.p[i] *= factor;
     }
 /* COMPUTE LOWER BOUND ON MODULI OF ZEROS. */
 L110:
     for (i = 0; i < global_1.nn; ++i) {
-        pt[i] = (float)dabs(global_1.p[i]);
+        pt[i] = (real)abs(global_1.p[i]);
     }
     pt[global_1.nn - 1] = -pt[global_1.nn - 1];
 /* COMPUTE UPPER ESTIMATE OF BOUND */
-    x = (float)exp((log(-pt[global_1.nn - 1]) - log(pt[0])) / global_1.n);
+    x = (real)exp((log(-pt[global_1.nn - 1]) - log(pt[0])) / global_1.n);
     if (pt[global_1.n - 1] == 0.0f) {
         goto L130;
     }
@@ -228,7 +228,7 @@ L130:
     dx = x;
 /* DO NEWTON ITERATION UNTIL X CONVERGES TO TWO */
 /* DECIMAL PLACES */
-    while (dabs(dx/x) > 0.005f) {
+    while (abs(dx/x) > 0.005f) {
         ff = pt[0];
         df = ff;
         for (i = 1; i < global_1.n; ++i) {
@@ -244,7 +244,7 @@ L130:
 /* AND DO 5 STEPS WITH NO SHIFT */
     nm1 = global_1.n - 1;
     for (i = 1; i < global_1.n; ++i) {
-        global_1.k[i] = (real) (global_1.nn - i - 1) * global_1.p[i] / (real) global_1.n;
+        global_1.k[i] = (global_1.nn - i - 1) * global_1.p[i] / global_1.n;
     }
     global_1.k[0] = global_1.p[0];
     aa = global_1.p[global_1.nn - 1];
@@ -267,7 +267,7 @@ L130:
                 global_1.k[j] = t * global_1.k[j - 1] + global_1.p[j];
             }
             global_1.k[0] = global_1.p[0];
-            zerok = abs(global_1.k[global_1.n - 1]) <= abs(bb) * global_1.eta * 10.0f;
+            zerok = abs(global_1.k[global_1.n - 1]) <= abs(bb) * global_1.eta * 10.0;
         }
     }
 /* SAVE K FOR RESTARTS WITH NEW SHIFTS */
@@ -335,12 +335,9 @@ integer *l2, *nz;
     static doublereal s;
     static real betas, betav;
     static logical spass;
-    extern /* Subroutine */ void nextk_();
     static logical vpass;
-    extern /* Subroutine */ void calcsc_();
     static doublereal ui, vi;
     static real ts, tv, vv;
-    extern /* Subroutine */ void realit_(), quadsd_(), quadit_(), newest_();
     static real ots, otv, tss;
     static doublereal ss, oss, ovv, svu, svv;
     static real tvv;
@@ -358,17 +355,16 @@ integer *l2, *nz;
     oss = global_1.sr;
     ovv = global_1.v;
 /* EVALUATE POLYNOMIAL BY SYNTHETIC DIVISION */
-    quadsd_(&global_1.nn, &global_1.u, &global_1.v, global_1.p, global_1.qp, &
-            global_1.a, &global_1.b);
+    quadsd_(&global_1.nn, &global_1.u, &global_1.v, global_1.p, global_1.qp, &global_1.a, &global_1.b);
     calcsc_(&type);
     for (j = 1; j <= *l2; ++j) {
 /* CALCULATE NEXT K POLYNOMIAL AND ESTIMATE V */
         nextk_(&type);
         calcsc_(&type);
         newest_(&type, &ui, &vi);
-        vv = (float)vi;
+        vv = (real)vi;
 /* ESTIMATE S */
-        ss = 0.0f;
+        ss = 0.0;
         if (global_1.k[global_1.n - 1] != 0.) {
             ss = -global_1.p[global_1.nn - 1] / global_1.k[global_1.n - 1];
         }
@@ -380,10 +376,10 @@ integer *l2, *nz;
 /* COMPUTE RELATIVE MEASURES OF CONVERGENCE OF S AND V */
 /* SEQUENCES */
         if (vv != 0.0f) {
-            tv = (float)dabs((vv - ovv) / vv);
+            tv = (real)abs((vv - ovv) / vv);
         }
-        if (ss != 0.0f) {
-            ts = (float)dabs((ss - oss) / ss);
+        if (ss != 0.0) {
+            ts = (real)abs((ss - oss) / ss);
         }
 /* IF DECREASING, MULTIPLY TWO MOST RECENT */
 /* CONVERGENCE MEASURES */
@@ -463,8 +459,7 @@ L50:
         }
 /* RECOMPUTE QP AND SCALAR VALUES TO CONTINUE THE */
 /* SECOND STAGE */
-        quadsd_(&global_1.nn, &global_1.u, &global_1.v, global_1.p,
-                global_1.qp, &global_1.a, &global_1.b);
+        quadsd_(&global_1.nn, &global_1.u, &global_1.v, global_1.p, global_1.qp, &global_1.a, &global_1.b);
         calcsc_(&type);
 L70:
         ovv = vv;
@@ -478,21 +473,13 @@ L70:
 doublereal *uu, *vv;
 integer *nz;
 {
-    /* Builtin functions */
-    double sqrt();
-#define sqrtf(f) ((float)sqrt((double)(f)))
-
     /* Local variables */
-    extern /* Subroutine */ void quad_();
     static integer type, i, j;
     static doublereal t;
     static logical tried;
-    extern /* Subroutine */ void nextk_();
     static real ee;
-    extern /* Subroutine */ void calcsc_();
     static doublereal ui, vi;
     static real mp, zm;
-    extern /* Subroutine */ void quadsd_(), newest_();
     static real relstp, omp;
 
 /* VARIABLE-SHIFT K-POLYNOMIAL ITERATION FOR A */
@@ -507,8 +494,7 @@ integer *nz;
     j = 0;
 /* MAIN LOOP */
 L10:
-    quad_(&c_b41, &global_1.u, &global_1.v, &global_1.szr, &global_1.szi, &
-            global_1.lzr, &global_1.lzi);
+    quad_(&c_b41, &global_1.u, &global_1.v, &global_1.szr, &global_1.szi, &global_1.lzr, &global_1.lzi);
 /* RETURN IF ROOTS OF THE QUADRATIC ARE REAL AND NOT */
 /* CLOSE TO MULTIPLE OR NEARLY EQUAL AND  OF OPPOSITE */
 /* SIGN */
@@ -517,19 +503,20 @@ L10:
     }
 /* EVALUATE POLYNOMIAL BY QUADRATIC SYNTHETIC DIVISION */
     quadsd_(&global_1.nn, &global_1.u, &global_1.v, global_1.p, global_1.qp, &global_1.a, &global_1.b);
-    mp = (float)abs(global_1.a - global_1.szr * global_1.b) + (float)abs(global_1.szi * global_1.b);
+    mp = (real)abs(global_1.a - global_1.szr * global_1.b)
+       + (real)abs(global_1.szi * global_1.b);
 /* COMPUTE A RIGOROUS  BOUND ON THE ROUNDING ERROR IN */
 /* EVALUTING P */
-    zm = sqrtf((float)dabs(global_1.v));
-    ee = (float)dabs(global_1.qp[0]) * 2.0f;
+    zm = (real)sqrt(abs(global_1.v));
+    ee = (real)abs(global_1.qp[0]) * 2.0f;
     t = -global_1.szr * global_1.b;
     for (i = 2; i <= global_1.n; ++i) {
-        ee = ee * zm + (float)dabs(global_1.qp[i - 1]);
+        ee = ee * zm + (real)abs(global_1.qp[i - 1]);
     }
-    ee = ee * zm + (float)dabs(global_1.a + t);
-    ee = (global_1.mre * 5.0f + global_1.are * 4.0f) * ee
-       - (global_1.mre * 5.0f + global_1.are * 2.0f) * (float)(dabs(global_1.a + t) + dabs(global_1.b) * zm)
-       + global_1.are * 2.0f * (float)dabs(t);
+    ee = ee * zm + (real)abs(global_1.a + t);
+    ee = (real)((global_1.mre * 5.0 + global_1.are * 4.0) * ee
+       - (global_1.mre * 5.0 + global_1.are * 2.0) * (abs(global_1.a + t) + abs(global_1.b) * zm)
+       + global_1.are * 2.0 * abs(t));
 /* ITERATION HAS CONVERGED SUFFICIENTLY IF THE */
 /* POLYNOMIAL VALUE IS LESS THAN 20 TIMES THIS BOUND */
     if (mp <= ee * 20.0f) {
@@ -555,8 +542,7 @@ L10:
     relstp = sqrtf(relstp);
     global_1.u -= global_1.u * relstp;
     global_1.v += global_1.v * relstp;
-    quadsd_(&global_1.nn, &global_1.u, &global_1.v, global_1.p, global_1.qp, &
-            global_1.a, &global_1.b);
+    quadsd_(&global_1.nn, &global_1.u, &global_1.v, global_1.p, global_1.qp, &global_1.a, &global_1.b);
     for (i = 1; i <= 5; ++i) {
         calcsc_(&type);
         nextk_(&type);
@@ -574,7 +560,7 @@ L50:
     if (vi == 0.) {
         return;
     }
-    relstp = (float)abs((vi - global_1.v) / vi);
+    relstp = (real)abs((vi - global_1.v) / vi);
     global_1.u = ui;
     global_1.v = vi;
     goto L10;
@@ -610,13 +596,13 @@ L10:
         pv = pv * s + global_1.p[i - 1];
         global_1.qp[i - 1] = pv;
     }
-    mp = (float)abs(pv);
+    mp = (real)abs(pv);
 /* COMPUTE A RIGOROUS BOUND ON THE ERROR IN EVALUATING */
 /* P */
-    ms = (float)abs(s);
-    ee = global_1.mre / (global_1.are + global_1.mre) * (float)dabs(global_1.qp[0]);
+    ms = (real)abs(s);
+    ee = (real)(global_1.mre / (global_1.are + global_1.mre) * abs(global_1.qp[0]));
     for (i = 2; i <= global_1.nn; ++i) {
-        ee = ee * ms + (float)dabs(global_1.qp[i - 1]);
+        ee = ee * ms + (real)abs(global_1.qp[i - 1]);
     }
 /* ITERATION HAS CONVERGED SUFFICIENTLY IF THE */
 /* POLYNOMIAL VALUE IS LESS THAN 20 TIMES THIS BOUND */
@@ -633,7 +619,7 @@ L10:
     if (j < 2) {
         goto L50;
     }
-    if (abs(t) > abs(s - t) * 0.001f || mp <= omp) {
+    if (abs(t) > abs(s - t) * 0.001 || mp <= omp) {
         goto L50;
     }
 /* A CLUSTER OF ZEROS NEAR THE REAL AXIS HAS BEEN */
@@ -653,7 +639,7 @@ L50:
         kv = kv * s + global_1.k[i - 1];
         global_1.qk[i - 1] = kv;
     }
-    if (abs(kv) <= abs(global_1.k[global_1.n - 1]) * 10.0f * global_1.eta) {
+    if (abs(kv) <= abs(global_1.k[global_1.n - 1]) * 10.0 * global_1.eta) {
         goto L80;
     }
 /* USE THE SCALED FORM OF THE RECURRENCE IF THE VALUE */
@@ -676,7 +662,7 @@ L100:
         kv = kv * s + global_1.k[i - 1];
     }
     t = 0.;
-    if (abs(kv) > abs(global_1.k[global_1.n - 1]) * 10.0f * global_1.eta) {
+    if (abs(kv) > abs(global_1.k[global_1.n - 1]) * 10.0 * global_1.eta) {
         t = -pv / kv;
     }
     s += t;
@@ -686,21 +672,17 @@ L100:
 /* Subroutine */ void calcsc_(type)
 integer *type;
 {
-    /* Local variables */
-    extern /* Subroutine */ void quadsd_();
-
 /* THIS ROUTINE CALCULATES SCALAR QUANTITIES USED TO */
 /* COMPUTE THE NEXT K POLYNOMIAL AND NEW ESTIMATES OF */
 /* THE QUADRATIC COEFFICIENTS. */
 /* TYPE - INTEGER VARIABLE SET HERE INDICATING HOW THE */
 /* CALCULATIONS ARE NORMALIZED TO AVOID OVERFLOW */
 /* SYNTHETIC DIVISION OF K BY THE QUADRATIC 1,U,V */
-    quadsd_(&global_1.n, &global_1.u, &global_1.v, global_1.k, global_1.qk, &
-            global_1.c, &global_1.d);
-    if (abs(global_1.c) > abs(global_1.k[global_1.n - 1]) * 100.0f * global_1.eta) {
+    quadsd_(&global_1.n, &global_1.u, &global_1.v, global_1.k, global_1.qk, &global_1.c, &global_1.d);
+    if (abs(global_1.c) > abs(global_1.k[global_1.n - 1]) * 100.0 * global_1.eta) {
         goto L10;
     }
-    if (abs(global_1.d) > abs(global_1.k[global_1.n - 2]) * 100.0f * global_1.eta) {
+    if (abs(global_1.d) > abs(global_1.k[global_1.n - 2]) * 100.0 * global_1.eta) {
         goto L10;
     }
     *type = 3;
@@ -717,8 +699,7 @@ L10:
     global_1.f = global_1.c / global_1.d;
     global_1.g = global_1.u * global_1.b;
     global_1.h = global_1.v * global_1.b;
-    global_1.a3 = (global_1.a + global_1.g) * global_1.e + global_1.h * (
-            global_1.b / global_1.d);
+    global_1.a3 = (global_1.a + global_1.g) * global_1.e + global_1.h * (global_1.b / global_1.d);
     global_1.a1 = global_1.b * global_1.f - global_1.a;
     global_1.a7 = (global_1.f + global_1.u) * global_1.a + global_1.h;
     return;
@@ -729,11 +710,9 @@ L20:
     global_1.f = global_1.d / global_1.c;
     global_1.g = global_1.u * global_1.e;
     global_1.h = global_1.v * global_1.b;
-    global_1.a3 = global_1.a * global_1.e + (global_1.h / global_1.c +
-            global_1.g) * global_1.b;
+    global_1.a3 = global_1.a * global_1.e + (global_1.h / global_1.c + global_1.g) * global_1.b;
     global_1.a1 = global_1.b - global_1.a * (global_1.d / global_1.c);
-    global_1.a7 = global_1.a + global_1.g * global_1.d + global_1.h *
-            global_1.f;
+    global_1.a7 = global_1.a + global_1.g * global_1.d + global_1.h * global_1.f;
     return;
 } /* calcsc_ */
 
@@ -753,7 +732,7 @@ integer *type;
     if (*type == 1) {
         temp = global_1.b;
     }
-    if (abs(global_1.a1) > abs(temp) * global_1.eta * 10.0f) {
+    if (abs(global_1.a1) > abs(temp) * global_1.eta * 10.0) {
         goto L20;
     }
 /* IF A1 IS NEARLY ZERO THEN USE A SPECIAL FORM OF THE */
@@ -761,8 +740,7 @@ integer *type;
     global_1.k[0] = 0.;
     global_1.k[1] = -global_1.a7 * global_1.qp[0];
     for (i = 3; i <= global_1.n; ++i) {
-        global_1.k[i - 1] = global_1.a3 * global_1.qk[i - 3] - global_1.a7 *
-                global_1.qp[i - 2];
+        global_1.k[i - 1] = global_1.a3 * global_1.qk[i - 3] - global_1.a7 * global_1.qp[i - 2];
     }
     return;
 /* USE SCALED FORM OF THE RECURRENCE */
@@ -772,8 +750,7 @@ L20:
     global_1.k[0] = global_1.qp[0];
     global_1.k[1] = global_1.qp[1] - global_1.a7 * global_1.qp[0];
     for (i = 3; i <= global_1.n; ++i) {
-        global_1.k[i - 1] = global_1.a3 * global_1.qk[i - 3] - global_1.a7 *
-                global_1.qp[i - 2] + global_1.qp[i - 1];
+        global_1.k[i - 1] = global_1.a3 * global_1.qk[i - 3] - global_1.a7 * global_1.qp[i - 2] + global_1.qp[i - 1];
     }
     return;
 /* USE UNSCALED FORM OF THE RECURRENCE IF TYPE IS 3 */
@@ -809,8 +786,7 @@ L10:
 /* EVALUATE NEW QUADRATIC COEFFICIENTS. */
 L20:
     b1 = -global_1.k[global_1.n - 1] / global_1.p[global_1.nn - 1];
-    b2 = -(global_1.k[global_1.n - 2] + b1 * global_1.p[global_1.n - 1]) /
-            global_1.p[global_1.nn - 1];
+    b2 = -(global_1.k[global_1.n - 2] + b1 * global_1.p[global_1.n - 1]) / global_1.p[global_1.nn - 1];
     c1 = global_1.v * b2 * global_1.a1;
     c2 = b1 * global_1.a7;
     c3 = b1 * b1 * global_1.a3;
@@ -819,9 +795,8 @@ L20:
     if (temp == 0.) {
         goto L30;
     }
-    *uu = global_1.u - (global_1.u * (c3 + c2) + global_1.v * (b1 *
-            global_1.a1 + b2 * global_1.a7)) / temp;
-    *vv = global_1.v * (c4 / temp + 1.0f);
+    *uu = global_1.u - (global_1.u * (c3 + c2) + global_1.v * (b1 * global_1.a1 + b2 * global_1.a7)) / temp;
+    *vv = global_1.v * (c4 / temp + 1.0);
     return;
 /* IF TYPE=3 THE QUADRATIC IS ZEROED */
 L30:
@@ -857,9 +832,6 @@ doublereal *u, *v, *p, *q, *a, *b;
 /* Subroutine */ void quad_(a, b1, c, sr, si, lr, li)
 doublereal *a, *b1, *c, *sr, *si, *lr, *li;
 {
-    /* Builtin functions */
-    double sqrt();
-
     /* Local variables */
     static doublereal b, d, e;
 
@@ -891,7 +863,7 @@ L20:
     b = *b1 / 2.;
     if (abs(b) >= abs(*c)) {
         e = 1. - *a / b * (*c / b);
-        d = sqrt((abs(e))) * abs(b);
+        d = sqrt(abs(e)) * abs(b);
     }
     else {
         e = *a;
@@ -899,7 +871,7 @@ L20:
             e = -(*a);
         }
         e = b * (b / abs(*c)) - e;
-        d = sqrt((abs(e))) * sqrt((abs(*c)));
+        d = sqrt(abs(e)) * sqrt(abs(*c));
     }
     if (e < 0.) {
         goto L60;
@@ -921,4 +893,3 @@ L60:
     *si = abs(d / *a);
     *li = -(*si);
 } /* quad_ */
-

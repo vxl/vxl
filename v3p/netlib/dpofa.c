@@ -1,23 +1,15 @@
-/* dpofa.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
+extern double sqrt(double); /* #include <math.h> */
 
 /* Table of constant values */
-
 static integer c__1 = 1;
 
 /* Subroutine */ void dpofa_(a, lda, n, info)
 doublereal *a;
 integer *lda, *n, *info;
 {
-    /* Builtin functions */
-    double sqrt();
-
     /* Local variables */
-    extern doublereal ddot_();
     static integer j, k;
     static doublereal s, t;
 
@@ -54,11 +46,6 @@ integer *lda, *n, *info;
 /*                                                                      */
 /*     linpack.  this version dated 08/14/78 .                          */
 /*     cleve moler, university of new mexico, argonne national lab.     */
-
-/*     subroutines and functions */
-/*                               */
-/*     blas ddot                 */
-/*     fortran dsqrt             */
 
     for (j = 0; j < *n; ++j) {
         *info = j+1;

@@ -1,19 +1,13 @@
-/* tred1.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
+extern double sqrt(double); /* #include <math.h> */
 
 /* Subroutine */ void tred1_(nm, n, a, d, e, e2)
-integer *nm, *n;
+const integer *nm, *n;
 doublereal *a, *d, *e, *e2;
 {
     /* System generated locals */
     doublereal d__1;
-
-    /* Builtin functions */
-    double sqrt(), d_sign();
 
     /* Local variables */
     static doublereal f, g, h;

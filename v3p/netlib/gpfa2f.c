@@ -1,12 +1,8 @@
-/* gpfa2f.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
+extern double sqrt(double); /* #include <math.h> */
 
 /* Table of constant values */
-
 static integer c__2 = 2;
 
 /*     fortran version of *gpfa2* -                                    */
@@ -16,20 +12,14 @@ static integer c__2 = 2;
 /*                                                                     */
 /* ------------------------------------------------------------------- */
 
-/* Subroutine */ void gpfa2f_(real *a, real *b, real *trigs, integer *inc,
-        integer *jump, integer *n, integer *mm, integer *lot, integer *isign)
+/* Subroutine */ void gpfa2f_(real *a, real *b, const real *trigs, const integer *inc,
+        const integer *jump, const integer *n, const integer *mm, const integer *lot, const integer *isign)
 {
     /* Initialized data */
-
     static integer lvr = 1024;
 
     /* System generated locals */
     integer i__1;
-
-    /* Builtin functions */
-    integer pow_ii(integer *, integer *);
-    double sqrt(doublereal);
-#define sqrtf(f) ((float)sqrt((double)(f)))
 
     /* Local variables */
     static integer ninc, left, nvex, j, k, l, m;
@@ -42,8 +32,7 @@ static integer c__2 = 2;
     static real t0;
     static integer m8;
     static real t2, t1, t3, u0, u2, u1, u3;
-    static integer ja, jb, la, jc, jd, nb, je, jf, jg, jh, mh, kk, ji, ll, jj,
-                   jk, jl, jm, jn, jo, jp, mu, nu, laincl;
+    static integer ja, jb, jc, jd, je, jf, jg, jh, ji, jj, jk, jl, jm, jn, jo, jp, la, nb, mh, kk, ll, mu, nu, laincl;
     static real ss;
     static integer jstepl;
     static real co1, co2, co3;
@@ -92,7 +81,6 @@ static integer c__2 = 2;
     istart = 0;
 
 /*  loop on blocks of lvr transforms */
-/*  -------------------------------- */
     for (nb = 0; nb < nblox; ++nb) {
 
         if (left <= lvr) {
@@ -108,14 +96,13 @@ static integer c__2 = 2;
         la = 1;
 
 /*  loop on type I radix-4 passes */
-/*  ----------------------------- */
         mu = inq % 4;
         if (*isign == -1) {
             mu = 4 - mu;
         }
-        ss = 1.0f;
+        ss = 1.f;
         if (mu == 3) {
-            ss = -1.0f;
+            ss = -1.f;
         }
 
         if (mh == 0) {
@@ -127,13 +114,11 @@ static integer c__2 = 2;
             jstepl = jstep - ninc;
 
 /*  k = 0 loop (no twiddle factors) */
-/*  ------------------------------- */
             i__1 = jstep << 2;
             for (jjj = 0; i__1 < 0 ? jjj >= (*n - 1) * *inc : jjj <= (*n - 1) * *inc; jjj += i__1) {
                 ja = istart + jjj;
 
 /*     "transverse" loop */
-/*     ----------------- */
                 for (nu = 0; nu < inq; ++nu) {
                     jb = ja + jstepl;
                     if (jb < istart) {
@@ -150,7 +135,6 @@ static integer c__2 = 2;
                     j = 0;
 
 /*  loop across transforms */
-/*  ---------------------- */
 /* dir$ ivdep, shortloop */
                     for (l = 0; l < nvex; ++l) {
                         aja = a[ja + j];
@@ -187,27 +171,23 @@ static integer c__2 = 2;
             }
 
 /*  finished if n2 = 4 */
-/*  ------------------ */
             if (n2 == 4) {
                 goto L490;
             }
             kk = la << 1;
 
 /*  loop on nonzero k */
-/*  ----------------- */
             for (k = ink; ink < 0 ? k >= jstep - ink : k <= jstep - ink; k += ink) {
                 co1 = trigs[kk];     si1 = s * trigs[kk + 1];
                 co2 = trigs[kk * 2]; si2 = s * trigs[kk * 2 + 1];
                 co3 = trigs[kk * 3]; si3 = s * trigs[kk * 3 + 1];
 
 /*  loop along transform */
-/*  -------------------- */
                 i__1 = jstep << 2;
                 for (jjj = k; i__1 < 0 ? jjj >= (*n - 1) * *inc : jjj <= (*n - 1) * *inc; jjj += i__1) {
                     ja = istart + jjj;
 
 /*     "transverse" loop */
-/*     ----------------- */
                     for (nu = 0; nu < inq; ++nu) {
                         jb = ja + jstepl;
                         if (jb < istart) {
@@ -224,7 +204,6 @@ static integer c__2 = 2;
                         j = 0;
 
 /*  loop across transforms */
-/*  ---------------------- */
 /* dir$ ivdep,shortloop */
                         for (l = 0; l < nvex; ++l) {
                             aja = a[ja + j];
@@ -253,23 +232,18 @@ static integer c__2 = 2;
                             b[jd + j] = si3 * (t2 + u3) + co3 * (u2 - t3);
                             j += *jump;
                         }
-/* -----( end of loop across transforms ) */
                         ja += jstepx;
                         if (ja < istart) {
                             ja += ninc;
                         }
                     }
                 }
-/* -----( end of loop along transforms ) */
                 kk += la << 1;
             }
-/* -----( end of loop on nonzero k ) */
             la <<= 2;
         }
-/* -----( end of loop on type I radix-4 passes) */
 
 /*  central radix-2 pass */
-/*  -------------------- */
 L200:
         if (m2 == 0) {
             goto L300;
@@ -279,12 +253,10 @@ L200:
         jstepl = jstep - ninc;
 
 /*  k=0 loop (no twiddle factors) */
-/*  ----------------------------- */
         for (jjj = 0; jjj <= (*n - 1) * *inc; jjj += (jstep<<1)) {
             ja = istart + jjj;
 
 /*     "transverse" loop */
-/*     ----------------- */
             for (nu = 0; nu < inq; ++nu) {
                 jb = ja + jstepl;
                 if (jb < istart) {
@@ -293,7 +265,6 @@ L200:
                 j = 0;
 
 /*  loop across transforms */
-/*  ---------------------- */
 /* dir$ ivdep, shortloop */
                 for (l = 0; l < nvex; ++l) {
                     aja = a[ja + j];
@@ -308,7 +279,6 @@ L200:
                     b[jb + j] = u0;
                     j += *jump;
                 }
-/* -----(end of loop across transforms) */
                 ja += jstepx;
                 if (ja < istart) {
                     ja += ninc;
@@ -317,7 +287,6 @@ L200:
         }
 
 /*  finished if n2=2 */
-/*  ---------------- */
         if (n2 == 2) {
             goto L490;
         }
@@ -325,19 +294,16 @@ L200:
         kk = la << 1;
 
 /*  loop on nonzero k */
-/*  ----------------- */
         for (k = ink; ink < 0 ? k >= jstep - ink : k <= jstep - ink; k += ink) {
             co1 = trigs[kk];
             si1 = s * trigs[kk + 1];
 
 /*  loop along transforms */
-/*  --------------------- */
             i__1 = jstep << 1;
             for (jjj = k; i__1 < 0 ? jjj >= (*n - 1) * *inc : jjj <= (*n - 1) * *inc; jjj += i__1) {
                 ja = istart + jjj;
 
 /*     "transverse" loop */
-/*     ----------------- */
                 for (nu = 0; nu < inq; ++nu) {
                     jb = ja + jstepl;
                     if (jb < istart) {
@@ -346,7 +312,6 @@ L200:
                     j = 0;
 
 /*  loop across transforms */
-/*  ---------------------- */
                     if (kk == n2 / 2) {
 /* dir$ ivdep, shortloop */
                         for (l = 0; l < nvex; ++l) {
@@ -361,7 +326,6 @@ L200:
                             b[jb + j] = t0;
                             j += *jump;
                         }
-
                     } else {
 
 /* dir$ ivdep, shortloop */
@@ -378,27 +342,21 @@ L200:
                             b[jb + j] = si1 * t0 + co1 * u0;
                             j += *jump;
                         }
-
                     }
 
-/* -----(end of loop across transforms) */
                     ja += jstepx;
                     if (ja < istart) {
                         ja += ninc;
                     }
                 }
             }
-/* -----(end of loop along transforms) */
             kk += la << 1;
         }
-/* -----(end of loop on nonzero k) */
-/* -----(end of radix-2 pass) */
 
         la <<= 1;
         goto L400;
 
 /*  central radix-8 pass */
-/*  -------------------- */
 L300:
         if (m8 == 0) {
             goto L400;
@@ -409,25 +367,23 @@ L300:
         if (*isign == -1) {
             mu = 8 - mu;
         }
-        c1 = 1.0f;
+        c1 = 1.f;
         if (mu == 3 || mu == 7) {
-            c1 = -1.0f;
+            c1 = -1.f;
         }
-        c2 = sqrtf(0.5f);
+        c2 = sqrtf(.5f);
         if (mu == 3 || mu == 5) {
             c2 = -c2;
         }
         c3 = c1 * c2;
 
 /*  stage 1 */
-/*  ------- */
         for (k = 0; ink < 0 ? k >= jstep - ink : k <= jstep - ink; k += ink) {
             i__1 = jstep << 3;
             for (jjj = k; i__1 < 0 ? jjj >= (*n - 1) * *inc : jjj <= (*n - 1) * *inc; jjj += i__1) {
                 ja = istart + jjj;
 
 /*     "transverse" loop */
-/*     ----------------- */
                 for (nu = 0; nu < inq; ++nu) {
                     jb = ja + jstepl;
                     if (jb < istart) {
@@ -511,16 +467,13 @@ L300:
         }
 
 /*  stage 2 */
-/*  ------- */
 
 /*  k=0 (no twiddle factors) */
-/*  ------------------------ */
         i__1 = jstep << 3;
         for (jjj = 0; i__1 < 0 ? jjj >= (*n - 1) * *inc : jjj <= (*n - 1) * *inc; jjj += i__1) {
             ja = istart + jjj;
 
 /*     "transverse" loop */
-/*     ----------------- */
             for (nu = 0; nu < inq; ++nu) {
                 jb = ja + jstepl;
                 if (jb < istart) {
@@ -615,7 +568,6 @@ L300:
         }
 
 /*  loop on nonzero k */
-/*  ----------------- */
         kk = la << 1;
 
         for (k = ink; ink < 0 ? k >= jstep - ink : k <= jstep - ink; k += ink) {
@@ -632,7 +584,6 @@ L300:
                 ja = istart + jjj;
 
 /*     "transverse" loop */
-/*     ----------------- */
                 for (nu = 0; nu < inq; ++nu) {
                     jb = ja + jstepl;
                     if (jb < istart) {
@@ -727,15 +678,14 @@ L300:
         la <<= 3;
 
 /*  loop on type II radix-4 passes */
-/*  ------------------------------ */
 L400:
         mu = inq % 4;
         if (*isign == -1) {
             mu = 4 - mu;
         }
-        ss = 1.0f;
+        ss = 1.f;
         if (mu == 3) {
-            ss = -1.0f;
+            ss = -1.f;
         }
 
         for (ipass = mh; ipass < m; ++ipass) {
@@ -744,7 +694,6 @@ L400:
             laincl = la * ink - ninc;
 
 /*  k=0 loop (no twiddle factors) */
-/*  ----------------------------- */
             i__1 = jstep << 2;
             for (ll = 0; i__1 < 0 ? ll >= (la - 1) * ink : ll <= (la - 1) * ink; ll += i__1) {
 
@@ -753,7 +702,6 @@ L400:
                     ja = istart + jjj;
 
 /*     "transverse" loop */
-/*     ----------------- */
                     for (nu = 0; nu < inq; ++nu) {
                         jb = ja + jstepl;
                         if (jb < istart) {
@@ -818,8 +766,6 @@ L400:
                         j = 0;
 
 /*  loop across transforms */
-/*  ---------------------- */
-/* dir$ ivdep, shortloop */
                         for (l = 0; l < nvex; ++l) {
                             aja = a[ja + j];
                             ajc = a[jc + j];
@@ -851,7 +797,7 @@ L400:
                             ajd = t2 + u3;
                             bjb = u2 + t3;
                             b[jm + j] = u2 - t3;
-/* ---------------------- */
+
                             ajg = a[jg + j];
                             t0 = ajb + ajg;
                             t2 = ajb - ajg;
@@ -880,7 +826,7 @@ L400:
                             ajh = t2 + u3;
                             b[jf + j] = u2 + t3;
                             bjh = u2 - t3;
-/* ---------------------- */
+
                             ajk = a[jk + j];
                             t0 = ajc + ajk;
                             t2 = ajc - ajk;
@@ -907,7 +853,7 @@ L400:
                             a[jo + j] = t2 + u3;
                             b[jg + j] = u2 + t3;
                             b[jo + j] = u2 - t3;
-/* ---------------------- */
+
                             ajm = a[jm + j];
                             t0 = ajm + ajl;
                             t2 = ajm - ajl;
@@ -934,7 +880,6 @@ L400:
                             b[jp + j] = u2 - t3;
                             j += *jump;
                         }
-/* -----( end of loop across transforms ) */
                         ja += jstepx;
                         if (ja < istart) {
                             ja += ninc;
@@ -942,10 +887,8 @@ L400:
                     }
                 }
             }
-/* -----( end of double loop for k=0 ) */
 
 /*  finished if last pass */
-/*  --------------------- */
             if (ipass == m-1) {
                 goto L490;
             }
@@ -953,14 +896,12 @@ L400:
             kk = la << 1;
 
 /*     loop on nonzero k */
-/*     ----------------- */
             for (k = ink; ink < 0 ? k >= jstep - ink : k <= jstep - ink; k += ink) {
                 co1 = trigs[kk];     si1 = s * trigs[kk + 1];
                 co2 = trigs[kk * 2]; si2 = s * trigs[kk * 2 + 1];
                 co3 = trigs[kk * 3]; si3 = s * trigs[kk * 3 + 1];
 
 /*  double loop along first transform in block */
-/*  ------------------------------------------ */
                 i__1 = jstep << 2;
                 for (ll = k; i__1 < 0 ? ll >= (la - 1) * ink : ll <= (la - 1) * ink; ll += i__1) {
 
@@ -969,7 +910,6 @@ L400:
                         ja = istart + jjj;
 
 /*     "transverse" loop */
-/*     ----------------- */
                         for (nu = 0; nu < inq; ++nu) {
                             jb = ja + jstepl;
                             if (jb < istart) {
@@ -1034,7 +974,6 @@ L400:
                             j = 0;
 
 /*  loop across transforms */
-/*  ---------------------- */
 /* dir$ ivdep, shortloop */
                             for (l = 0; l < nvex; ++l) {
                                 aja = a[ja + j];
@@ -1067,7 +1006,7 @@ L400:
                                 bjc = si2 * (t0 - t1) + co2 * (u0 - u1);
                                 ajd = co3 * (t2 + u3) - si3 * (u2 - t3);
                                 b[jm + j] = si3 * (t2 + u3) + co3 * (u2 - t3);
-/* ---------------------------------------- */
+
                                 ajg = a[jg + j];
                                 t0 = ajb + ajg;
                                 t2 = ajb - ajg;
@@ -1096,7 +1035,7 @@ L400:
                                 b[jj + j] = si2 * (t0 - t1) + co2 * (u0 - u1);
                                 ajh = co3 * (t2 + u3) - si3 * (u2 - t3);
                                 bjh = si3 * (t2 + u3) + co3 * (u2 - t3);
-/* ---------------------------------------- */
+
                                 ajk = a[jk + j];
                                 t0 = ajc + ajk;
                                 t2 = ajc - ajk;
@@ -1123,7 +1062,7 @@ L400:
                                 b[jk + j] = si2 * (t0 - t1) + co2 * (u0 - u1);
                                 a[jo + j] = co3 * (t2 + u3) - si3 * (u2 - t3);
                                 b[jo + j] = si3 * (t2 + u3) + co3 * (u2 - t3);
-/* ---------------------------------------- */
+
                                 ajm = a[jm + j];
                                 t0 = ajm + ajl;
                                 t2 = ajm - ajl;
@@ -1150,7 +1089,6 @@ L400:
                                 b[jp + j] = si3 * (t2 + u3) + co3 * (u2 - t3);
                                 j += *jump;
                             }
-/* -----(end of loop across transforms) */
                             ja += jstepx;
                             if (ja < istart) {
                                 ja += ninc;
@@ -1158,17 +1096,11 @@ L400:
                         }
                     }
                 }
-/* -----( end of double loop for this k ) */
                 kk += la << 1;
             }
-/* -----( end of loop over values of k ) */
             la <<= 2;
         }
-/* -----( end of loop on type II radix-4 passes ) */
-/* -----( nvex transforms completed) */
 L490:
         istart += nvex * *jump;
     }
-/* -----( end of loop on blocks of transforms ) */
-
 } /* gpfa2f_ */

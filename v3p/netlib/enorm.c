@@ -1,19 +1,17 @@
 #include "f2c.h"
+#include "netlib.h"
+extern double sqrt(double); /* #include <math.h> */
 
 doublereal enorm_(n, x)
-integer *n;
-doublereal *x;
+const integer *n;
+const doublereal *x;
 {
     /* Initialized data */
-
     static doublereal rdwarf = 3.834e-20;
     static doublereal rgiant = 1.304e19;
 
     /* System generated locals */
     doublereal d__1;
-
-    /* Builtin functions */
-    double sqrt();
 
     /* Local variables */
     static doublereal xabs, x1max, x3max;
@@ -48,10 +46,6 @@ doublereal *x;
 /*       n is a positive integer input variable.                        */
 /*                                                                      */
 /*       x is an input array of length n.                               */
-/*                                                                      */
-/*     subprograms called                                               */
-/*                                                                      */
-/*       fortran-supplied ... dabs,dsqrt                                */
 /*                                                                      */
 /*     argonne national laboratory. minpack project. march 1980.        */
 /*     burton s. garbow, kenneth e. hillstrom, jorge j. more            */

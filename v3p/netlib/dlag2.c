@@ -1,9 +1,6 @@
-/*  -- translated by f2c (version 19991025).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
+extern double sqrt(double); /* #include <math.h> */
 
 /* Subroutine */ void dlag2_(a, lda, b, ldb, safmin, scale1, scale2, wr1, wr2, wi)
 doublereal *a;
@@ -12,11 +9,8 @@ doublereal *b;
 integer *ldb;
 doublereal *safmin, *scale1, *scale2, *wr1, *wr2, *wi;
 {
-    /* Builtin functions */
-    double sqrt(), d_sign();
-
     /* Local variables */
-    static doublereal diff, bmin, wbig, wabs, wdet, r__, binv11, binv22,
+    static doublereal diff, bmin, wbig, wabs, wdet, r, binv11, binv22,
             discr, anorm, bnorm, bsize, shift, c1, c2, c3, c4, c5, rtmin,
             rtmax, wsize, s1, s2, a11, a12, a21, a22, b11, b12, b22, ascale,
             bscale, pp, qq, ss, wscale, safmax, wsmall, as11, as12, as22, sum,
@@ -170,14 +164,14 @@ doublereal *safmin, *scale1, *scale2, *wr1, *wr2, *wi;
     qq = ss * as12;
     if (abs(pp * rtmin) >= 1.) {
         discr = rtmin * pp; discr = discr * discr + qq * *safmin;
-        r__ = sqrt((abs(discr))) * rtmax;
+        r = sqrt((abs(discr))) * rtmax;
     } else {
         if (pp * pp + abs(qq) <= *safmin) {
             discr = rtmax * pp; discr = discr * discr + qq * safmax;
-            r__ = sqrt((abs(discr))) * rtmin;
+            r = sqrt((abs(discr))) * rtmin;
         } else {
             discr = pp * pp + qq;
-            r__ = sqrt((abs(discr)));
+            r = sqrt((abs(discr)));
         }
     }
 
@@ -187,9 +181,9 @@ doublereal *safmin, *scale1, *scale2, *wr1, *wr2, *wi;
 /*           flush-to-zero threshhold and handle numbers above that */
 /*           threshhold correctly, it would not be necessary. */
 
-    if (discr >= 0. || r__ == 0.) {
-        sum = pp + d_sign(&r__, &pp);
-        diff = pp - d_sign(&r__, &pp);
+    if (discr >= 0. || r == 0.) {
+        sum = pp + d_sign(&r, &pp);
+        diff = pp - d_sign(&r, &pp);
         wbig = shift + sum;
 
 /*        Compute smaller eigenvalue */
@@ -217,7 +211,7 @@ doublereal *safmin, *scale1, *scale2, *wr1, *wr2, *wi;
 
         *wr1 = shift + pp;
         *wr2 = *wr1;
-        *wi = r__;
+        *wi = r;
     }
 
 /*     Further scaling to avoid underflow and overflow in computing */

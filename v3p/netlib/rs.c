@@ -1,20 +1,13 @@
-/* rs.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Subroutine */ void rs_(nm, n, a, w, matz, z, fv1, fv2, ierr)
-integer *nm, *n;
+const integer *nm, *n;
 doublereal *a, *w;
-integer *matz;
+const integer *matz;
 doublereal *z, *fv1, *fv2;
 integer *ierr;
 {
-    /* Local variables */
-    extern /* Subroutine */ void tred1_(), tred2_(), tql1_(), tql2_();
-
 /*     this subroutine calls the recommended sequence of                */
 /*     subroutines from the eigensystem subroutine package (eispack)    */
 /*     to find the eigenvalues and eigenvectors (if desired)            */

@@ -1,27 +1,21 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
-/* Subroutine */ void zlacpy_(uplo, m, n, a, lda, b, ldb, uplo_len)
-char *uplo;
-integer *m, *n;
+/* Subroutine */ void zlacpy_(uplo, m, n, a, lda, b, ldb)
+const char *uplo;
+const integer *m, *n;
 doublecomplex *a;
-integer *lda;
+const integer *lda;
 doublecomplex *b;
-integer *ldb;
-ftnlen uplo_len;
+const integer *ldb;
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Local variables */
     static integer i, j;
-    extern logical lsame_();
 
 
 /*  -- LAPACK auxiliary routine (version 2.0) -- */
@@ -68,9 +62,7 @@ ftnlen uplo_len;
 /*                                                                        */
 /*  ===================================================================== */
 
-    /* Function Body */
-
-    if (lsame_(uplo, "U", 1L, 1L)) {
+    if (lsame_(uplo, "U")) {
         for (j = 0; j < *n; ++j) {
             for (i = 0; i <= j && i < *m; ++i) {
                 i__1 = i + j * *ldb;
@@ -79,7 +71,7 @@ ftnlen uplo_len;
             }
         }
 
-    } else if (lsame_(uplo, "L", 1L, 1L)) {
+    } else if (lsame_(uplo, "L")) {
         for (j = 0; j < *n; ++j) {
             for (i = j; i < *m; ++i) {
                 i__1 = i + j * *ldb;
@@ -97,8 +89,4 @@ ftnlen uplo_len;
             }
         }
     }
-
-/*     End of ZLACPY */
-
 } /* zlacpy_ */
-

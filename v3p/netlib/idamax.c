@@ -1,17 +1,13 @@
-/*  -- translated by f2c (version 19940927).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
-integer idamax_(integer *n, doublereal *dx, integer *incx)
+integer idamax_(const integer *n, const doublereal *dx, const integer *incx)
 {
     /* System generated locals */
     integer ret_val = 1;
 
     /* Local variables */
-    static doublereal dmax;
+    static doublereal maxv;
     static integer i, ix;
 
 /*     finds the index of element having max. absolute value.           */
@@ -25,22 +21,22 @@ integer idamax_(integer *n, doublereal *dx, integer *incx)
     if (*n == 1) {
         return 1;
     }
-    dmax = abs(dx[0]);
+    maxv = abs(dx[0]);
 /*        code for increment equal to 1 */
     if (*incx == 1) {
         for (i = 1; i < *n; ++i)
-            if (abs(dx[i]) > dmax) {
+            if (abs(dx[i]) > maxv) {
                 ret_val = i+1;
-                dmax = abs(dx[i]);
+                maxv = abs(dx[i]);
             }
     }
 /*        code for increment not equal to 1 */
     else {
         ix = *incx;
         for (i = 1; i < *n; ++i, ix += *incx)
-            if (abs(dx[ix]) > dmax) {
+            if (abs(dx[ix]) > maxv) {
                 ret_val = i+1;
-                dmax = abs(dx[ix]);
+                maxv = abs(dx[ix]);
             }
     }
     return ret_val;

@@ -1,24 +1,15 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
-/* Subroutine */ void ztrmm_(side, uplo, transa, diag, m, n, alpha, a, lda, b,
-           ldb, side_len, uplo_len, transa_len, diag_len)
-char *side, *uplo, *transa, *diag;
-integer *m, *n;
+/* Subroutine */ void ztrmm_(side, uplo, transa, diag, m, n, alpha, a, lda, b, ldb)
+const char *side, *uplo, *transa, *diag;
+const integer *m, *n;
 doublecomplex *alpha, *a;
-integer *lda;
+const integer *lda;
 doublecomplex *b;
-integer *ldb;
-ftnlen side_len;
-ftnlen uplo_len;
-ftnlen transa_len;
-ftnlen diag_len;
+const integer *ldb;
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -29,10 +20,8 @@ ftnlen diag_len;
     static doublecomplex temp;
     static integer i, j, k;
     static logical lside;
-    extern logical lsame_();
     static integer nrowa;
     static logical upper;
-    extern /* Subroutine */ void xerbla_();
     static logical noconj, nounit;
 
 /**************************************************************************/
@@ -153,27 +142,24 @@ ftnlen diag_len;
 /*     Jeremy Du Croz, Numerical Algorithms Group Ltd. */
 /*     Sven Hammarling, Numerical Algorithms Group Ltd. */
 
-    /* Function Body */
-
-    lside = lsame_(side, "L", 1L, 1L);
+    lside = lsame_(side, "L");
     if (lside) {
         nrowa = *m;
     } else {
         nrowa = *n;
     }
-    noconj = lsame_(transa, "T", 1L, 1L);
-    nounit = lsame_(diag, "N", 1L, 1L);
-    upper = lsame_(uplo, "U", 1L, 1L);
+    noconj = lsame_(transa, "T");
+    nounit = lsame_(diag, "N");
+    upper = lsame_(uplo, "U");
 
     info = 0;
-    if (! lside && ! lsame_(side, "R", 1L, 1L)) {
+    if (! lside && ! lsame_(side, "R")) {
         info = 1;
-    } else if (! upper && ! lsame_(uplo, "L", 1L, 1L)) {
+    } else if (! upper && ! lsame_(uplo, "L")) {
         info = 2;
-    } else if (! lsame_(transa, "N", 1L, 1L) && ! lsame_(transa, "T", 1L, 1L)
-            && ! lsame_(transa, "C", 1L, 1L)) {
+    } else if (! lsame_(transa, "N") && ! lsame_(transa, "T") && ! lsame_(transa, "C")) {
         info = 3;
-    } else if (! lsame_(diag, "U", 1L, 1L) && ! lsame_(diag, "N", 1L, 1L)) {
+    } else if (! lsame_(diag, "U") && ! lsame_(diag, "N")) {
         info = 4;
     } else if (*m < 0) {
         info = 5;
@@ -185,7 +171,7 @@ ftnlen diag_len;
         info = 11;
     }
     if (info != 0) {
-        xerbla_("ZTRMM ", &info, 6L);
+        xerbla_("ZTRMM ", &info);
         return;
     }
 
@@ -210,7 +196,7 @@ ftnlen diag_len;
 /*     Start the operations. */
 
     if (lside) {
-        if (lsame_(transa, "N", 1L, 1L)) {
+        if (lsame_(transa, "N")) {
 
 /*           Form  B := alpha*A*B. */
 
@@ -343,7 +329,7 @@ ftnlen diag_len;
             }
         }
     } else {
-        if (lsame_(transa, "N", 1L, 1L)) {
+        if (lsame_(transa, "N")) {
 
 /*           Form  B := alpha*B*A. */
 
@@ -503,9 +489,4 @@ ftnlen diag_len;
             }
         }
     }
-
-
-/*     End of ZTRMM . */
-
 } /* ztrmm_ */
-

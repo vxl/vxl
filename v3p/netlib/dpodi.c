@@ -1,30 +1,22 @@
-/* dpodi.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Table of constant values */
-
 static integer c__1 = 1;
 
 /* Subroutine */ void dpodi_(a, lda, n, det, job)
 doublereal *a;
-integer *lda, *n;
+const integer *lda, *n;
 doublereal *det;
-integer *job;
+const integer *job;
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    integer i__1;
     doublereal d__1;
 
     /* Local variables */
     static integer i, j, k;
     static doublereal s, t;
-    extern /* Subroutine */ void dscal_(), daxpy_();
-    static integer jm1, kp1;
-
 
 /*     dpodi computes the determinant and inverse of a certain */
 /*     double precision symmetric positive definite matrix (see below) */
@@ -79,104 +71,63 @@ integer *job;
 /*     blas daxpy,dscal */
 /*     fortran mod */
 
-/*     internal variables */
-
-
 /*     compute determinant */
 
-    /* Parameter adjustments */
-    --det;
-    a_dim1 = *lda;
-    a_offset = a_dim1 + 1;
-    a -= a_offset;
-
-    /* Function Body */
     if (*job / 10 == 0) {
         goto L70;
     }
-    det[1] = 1.;
-    det[2] = 0.;
+
+    det[0] = 1.;
+    det[1] = 0.;
     s = 10.;
-    i__1 = *n;
-    for (i = 1; i <= i__1; ++i) {
-/* Computing 2nd power */
-        d__1 = a[i + i * a_dim1];
-        det[1] = d__1 * d__1 * det[1];
-/*        ...exit */
-        if (det[1] == 0.) {
-            goto L60;
+    for (i = 0; i < *n; ++i) {
+        d__1 = a[i + i * *lda];
+        det[0] *= d__1 * d__1;
+        if (det[0] == 0.) {
+            break;
         }
-L10:
-        if (det[1] >= 1.) {
-            goto L20;
+        while (det[0] < 1.) {
+            det[0] *= s;
+            det[1] += -1.;
         }
-        det[1] = s * det[1];
-        det[2] += -1.;
-        goto L10;
-L20:
-L30:
-        if (det[1] < s) {
-            goto L40;
+        while (det[0] >= s) {
+            det[0] /= s;
+            det[1] += 1.;
         }
-        det[1] /= s;
-        det[2] += 1.;
-        goto L30;
-L40:
-/* L50: */
-        ;
     }
-L60:
-L70:
 
 /*     compute inverse(r) */
 
+L70:
     if (*job % 10 == 0) {
-        goto L140;
+        return;
     }
-    i__1 = *n;
-    for (k = 1; k <= i__1; ++k) {
-        a[k + k * a_dim1] = 1. / a[k + k * a_dim1];
-        t = -a[k + k * a_dim1];
-        i__2 = k - 1;
-        dscal_(&i__2, &t, &a[k * a_dim1 + 1], &c__1);
-        kp1 = k + 1;
-        if (*n < kp1) {
-            goto L90;
+    for (k = 0; k < *n; ++k) {
+        a[k + k * *lda] = 1. / a[k + k * *lda];
+        t = -a[k + k * *lda];
+        i__1 = k;
+        dscal_(&i__1, &t, &a[k * *lda], &c__1);
+        if (*n < k + 2) {
+            continue;
         }
-        i__2 = *n;
-        for (j = kp1; j <= i__2; ++j) {
-            t = a[k + j * a_dim1];
-            a[k + j * a_dim1] = 0.;
-            daxpy_(&k, &t, &a[k * a_dim1 + 1], &c__1, &a[j * a_dim1 + 1], &
-                    c__1);
-/* L80: */
+        for (j = k + 1; j < *n; ++j) {
+            t = a[k + j * *lda];
+            a[k + j * *lda] = 0.;
+            i__1 = k+1;
+            daxpy_(&i__1, &t, &a[k * *lda], &c__1, &a[j * *lda], &c__1);
         }
-L90:
-/* L100: */
-        ;
     }
 
 /*        form  inverse(r) * trans(inverse(r)) */
 
-    i__1 = *n;
-    for (j = 1; j <= i__1; ++j) {
-        jm1 = j - 1;
-        if (jm1 < 1) {
-            goto L120;
+    for (j = 0; j < *n; ++j) {
+        for (k = 0; k < j; ++k) {
+            t = a[k + j * *lda];
+            i__1 = k+1;
+            daxpy_(&i__1, &t, &a[j * *lda], &c__1, &a[k * *lda], &c__1);
         }
-        i__2 = jm1;
-        for (k = 1; k <= i__2; ++k) {
-            t = a[k + j * a_dim1];
-            daxpy_(&k, &t, &a[j * a_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &
-                    c__1);
-/* L110: */
-        }
-L120:
-        t = a[j + j * a_dim1];
-        dscal_(&j, &t, &a[j * a_dim1 + 1], &c__1);
-/* L130: */
+        t = a[j + j * *lda];
+        i__1 = j+1;
+        dscal_(&j, &t, &a[j * *lda], &c__1);
     }
-L140:
-    return;
 } /* dpodi_ */
-

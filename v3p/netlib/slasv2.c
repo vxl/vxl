@@ -1,24 +1,16 @@
-/* slasv2.f -- translated by f2c (version of 4 June 1993  1:43:59).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
+extern double sqrt(double); /* #include <math.h> */
 
 /* Table of constant values */
-
 static real c_b3 = 2.f;
 static real c_b4 = 1.f;
 
-/* Subroutine */ void slasv2_(real *f, real *g, real *h, real *ssmin, real *
-        ssmax, real *snr, real *csr, real *snl, real *csl)
+/* Subroutine */ void slasv2_(real *f, real *g, real *h,
+        real *ssmin, real *ssmax, real *snr, real *csr, real *snl, real *csl)
 {
     /* System generated locals */
     real r__1;
-
-    /* Builtin functions */
-    double sqrt(doublereal), r_sign(real *, real *);
-#define sqrtf(f) ((float)sqrt((double)(f)))
 
     /* Local variables */
     static integer pmax;
@@ -26,7 +18,6 @@ static real c_b4 = 1.f;
     static logical swap;
     static real a, d, l, m, r, s, t, tsign, fa, ga, ha, ft, gt, ht, mm;
     static logical gasmal;
-    extern doublereal slamch_(char *);
     static real tt, clt, crt, slt, srt;
 
 /*  -- LAPACK auxiliary routine (version 2.0) -- */
@@ -119,10 +110,10 @@ static real c_b4 = 1.f;
         temp = fa;
         fa = ha;
         ha = temp;
+    }
 
 /*        Now FA .ge. HA */
 
-    }
     gt = *g;
     ga = abs(gt);
     if (ga == 0.f) {
@@ -205,9 +196,9 @@ static real c_b4 = 1.f;
 /*              Note that M is very tiny */
 
                 if (l == 0.f) {
-                    t = (float)r_sign(&c_b3, &ft) * (float)r_sign(&c_b4, &gt);
+                    t = r_sign(&c_b3, &ft) * r_sign(&c_b4, &gt);
                 } else {
-                    t = gt / (float)r_sign(&d, &ft) + m / t;
+                    t = gt / r_sign(&d, &ft) + m / t;
                 }
             } else {
                 t = (m / (s + t) + m / (r + l)) * (a + 1.f);
@@ -234,15 +225,15 @@ static real c_b4 = 1.f;
 /*     Correct signs of SSMAX and SSMIN */
 
     if (pmax == 1) {
-        tsign = (float)r_sign(&c_b4, csr) * (float)r_sign(&c_b4, csl) * (float)r_sign(&c_b4, f);
+        tsign = r_sign(&c_b4, csr) * r_sign(&c_b4, csl) * r_sign(&c_b4, f);
     }
     if (pmax == 2) {
-        tsign = (float)r_sign(&c_b4, snr) * (float)r_sign(&c_b4, csl) * (float)r_sign(&c_b4, g);
+        tsign = r_sign(&c_b4, snr) * r_sign(&c_b4, csl) * r_sign(&c_b4, g);
     }
     if (pmax == 3) {
-        tsign = (float)r_sign(&c_b4, snr) * (float)r_sign(&c_b4, snl) * (float)r_sign(&c_b4, h);
+        tsign = r_sign(&c_b4, snr) * r_sign(&c_b4, snl) * r_sign(&c_b4, h);
     }
-    *ssmax = (float)r_sign(ssmax, &tsign);
-    r__1 = tsign * (float)r_sign(&c_b4, f) * (float)r_sign(&c_b4, h);
-    *ssmin = (float)r_sign(ssmin, &r__1);
+    *ssmax = r_sign(ssmax, &tsign);
+    r__1 = tsign * r_sign(&c_b4, f) * r_sign(&c_b4, h);
+    *ssmin = r_sign(ssmin, &r__1);
 } /* slasv2_ */

@@ -1,10 +1,11 @@
 #include "f2c.h"
+#include "netlib.h"
 
 #ifdef KR_headers
-double r_imag(z) complex *z;
+real r_imag(z) const complex *z;
 #else
-double r_imag(complex *z)
+real r_imag(const complex *z)
 #endif
 {
-return(z->i);
+    return z->i;
 }

@@ -1,26 +1,19 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
-/* Subroutine */ void zlaset_(uplo, m, n, alpha, beta, a, lda, uplo_len)
-char *uplo;
-integer *m, *n;
+/* Subroutine */ void zlaset_(uplo, m, n, alpha, beta, a, lda)
+const char *uplo;
+const integer *m, *n;
 doublecomplex *alpha, *beta, *a;
-integer *lda;
-ftnlen uplo_len;
+const integer *lda;
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
     static integer i, j;
-    extern logical lsame_();
-
 
 /*  -- LAPACK auxiliary routine (version 2.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -68,9 +61,7 @@ ftnlen uplo_len;
 /*                                                                        */
 /*  ===================================================================== */
 
-    /* Function Body */
-
-    if (lsame_(uplo, "U", 1L, 1L)) {
+    if (lsame_(uplo, "U")) {
 
 /*        Set the diagonal to BETA and the strictly upper triangular */
 /*        part of the array to ALPHA. */
@@ -86,7 +77,7 @@ ftnlen uplo_len;
             a[i__1].r = beta->r, a[i__1].i = beta->i;
         }
 
-    } else if (lsame_(uplo, "L", 1L, 1L)) {
+    } else if (lsame_(uplo, "L")) {
 
 /*        Set the diagonal to BETA and the strictly lower triangular */
 /*        part of the array to ALPHA. */
@@ -116,8 +107,4 @@ ftnlen uplo_len;
             a[i__1].r = beta->r, a[i__1].i = beta->i;
         }
     }
-
-/*     End of ZLASET */
-
 } /* zlaset_ */
-

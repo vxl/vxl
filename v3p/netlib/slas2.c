@@ -1,17 +1,9 @@
-/* slas2.f -- translated by f2c (version of 4 June 1993  1:43:59).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
+extern double sqrt(double); /* #include <math.h> */
 
-/* Subroutine */ void slas2_(real *f, real *g, real *h, real *ssmin, real *
-        ssmax)
+/* Subroutine */ void slas2_(real *f, real *g, real *h, real *ssmin, real *ssmax)
 {
-    /* Builtin functions */
-    double sqrt(doublereal);
-#define sqrtf(f) ((float)sqrt((double)(f)))
-
     /* Local variables */
     static real fhmn, fhmx, c, fa, ga, ha, as, at, au;
 
@@ -93,9 +85,8 @@
             au = fhmx / ga;
             if (au == 0.f) {
 
-/*              Avoid possible harmful underflow if exponent range */
-/*              asymmetric (true SSMIN may not underflow even if */
-/*              AU underflows) */
+/*              Avoid possible harmful underflow if exponent range asymmetric */
+/*              (true SSMIN may not underflow even if AU underflows) */
 
                 *ssmin = fhmn * fhmx / ga;
                 *ssmax = ga;

@@ -1,18 +1,24 @@
-/* cg.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
-#include "assert.h"
-#include "stdio.h"
 #include "f2c.h"
+#include "netlib.h"
+#include <assert.h>
+#include <stdio.h>
+extern double log(double), exp(double), sqrt(double); /* #include <math.h> */
+
+static doublereal fv_(doublereal *a, doublereal *x, doublereal *h, const integer *n, doublereal (*value)(doublereal*));
+static doublereal fd_(doublereal *a, doublereal *x, doublereal *h, const integer *n, void (*grad)(doublereal*,doublereal*));
+static void fvd_(doublereal *v, doublereal *d, doublereal *a, doublereal *x, doublereal *h, const integer *n,
+                 void (*both)(doublereal*,doublereal*,doublereal*));
+static void cub_(doublereal *x, doublereal *a, doublereal *b, doublereal *c, doublereal *d, doublereal *e, doublereal *f);
+static void ins_(doublereal *s, doublereal *f, doublereal *a, doublereal *b, doublereal *c,
+                 doublereal *fa, doublereal *fb, doublereal *fc, integer *j, doublereal *y, doublereal *z);
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
+#ifdef DEBUG
 /* Table of constant values */
-
 static integer c__9 = 9;
 static integer c__1 = 1;
+#endif
 
 /*      ________________________________________________________  */
 /*     |                                                        | */
@@ -80,14 +86,16 @@ static integer c__1 = 1;
 /* Subroutine */ void cg_(x, e, it, step, t, limit, n, m, value, grad, both, pre, h)
 doublereal *x, *e;
 integer *it;
-doublereal *step, *t;
-integer *limit, *n, *m;
-doublereal (*value) ();
-void (*grad) (), (*both) (), (*pre) ();
+doublereal *step;
+const doublereal *t;
+const integer *limit, *n, *m;
+doublereal (*value) (doublereal*);
+void (*grad) (doublereal*,doublereal*);
+void (*both) (doublereal*,doublereal*,doublereal*);
+void (*pre) (doublereal*,doublereal*);
 doublereal *h;
 {
     /* Initialized data */
-
     static doublereal a1 = .1;
     static doublereal a2 = .9;
     static doublereal a3 = 5.;
@@ -97,29 +105,21 @@ doublereal *h;
     static doublereal a7 = .3;
 
     /* System generated locals */
-    doublereal d__1, d__2;
-
-    /* Builtin functions */
-    double log(), exp(), d_sign(), sqrt();
-    /* integer s_wsle(), do_lio(), e_wsle();*/
-    /* Subroutine */ /* void s_stop();*/
+    doublereal d__1;
 
     /* Local variables */
     static doublereal a, b, c, d, f, g;
     static integer i, j, k, l;
     static doublereal p, q, r, s, v, w, y[50], z[50], a8, c0, c1, d0, f0, f1, l3, da, db, fa, fb, fc;
-    extern doublereal fd_();
     static integer na, nb, nc, nd, iq;
-    extern doublereal fv_();
-    extern /* Subroutine */ void cub_(), fvd_(), ins_();
 
+#ifdef DEBUG
     /* Fortran I/O blocks */
     static cilist io___43 = { 0, 6, 0, 0, 0 };
     static cilist io___44 = { 0, 6, 0, 0, 0 };
     static cilist io___45 = { 0, 6, 0, 0, 0 };
     static cilist io___46 = { 0, 6, 0, 0, 0 };
-
-    /* Function Body */
+#endif
 
     a8 = a3 + .01;
     *it = 0;
@@ -192,7 +192,7 @@ L100:
     if (nd > 25) {
         goto L610;
     }
-    q = a3 * q;
+    q *= a3;
     p = fv_(&q, x, h, n, value);
     ins_(&q, &p, &a, &b, &c, &fa, &fb, &fc, &j, y, z);
     if (p - f < w * q) {
@@ -234,7 +234,7 @@ L150:
     if (na > 25) {
         goto L630;
     }
-    q = a4 * q;
+    q *= a4;
     p = fv_(&q, x, h, n, value);
     ins_(&q, &p, &a, &b, &c, &fa, &fb, &fc, &j, y, z);
     if (p - f >= v * q) {
@@ -277,7 +277,7 @@ L190:
     if (na > 25) {
         goto L630;
     }
-    q = a4 * q;
+    q *= a4;
     p = fv_(&q, x, h, n, value);
     ins_(&q, &p, &a, &b, &c, &fa, &fb, &fc, &j, y, z);
     if (p - f >= v * q) {
@@ -303,7 +303,7 @@ L220:
     if (nd > 25) {
         goto L610;
     }
-    q = a3 * q;
+    q *= a3;
     p = fv_(&q, x, h, n, value);
     ins_(&q, &p, &a, &b, &c, &fa, &fb, &fc, &j, y, z);
     if (p - f < w * q) {
@@ -408,7 +408,7 @@ L310:
     if (nd > 25) {
         goto L610;
     }
-    q = a3 * q;
+    q *= a3;
     p = fv_(&q, x, h, n, value);
     ins_(&q, &p, &a, &b, &c, &fa, &fb, &fc, &j, y, z);
     if (p - f < w * q) {
@@ -443,7 +443,7 @@ L340:
     if (nd > 25) {
         goto L610;
     }
-    q = a3 * q;
+    q *= a3;
     p = fv_(&q, x, h, n, value);
     f1 = fa;
     ins_(&q, &p, &a, &b, &c, &fa, &fb, &fc, &j, y, z);
@@ -627,7 +627,7 @@ L560:
     }
     f = fa;
     d = da;
-    a = a7 * a;
+    a *= a7;
     (*pre)(&h[*n], &h[*n*2]);
     r = 0.f;
     for (i = 0; i < *n; ++i) {
@@ -652,39 +652,40 @@ L600:
     if (d < g) {
         goto L560;
     }
-/*     s_wsle(&io___43); */
-/*     do_lio(&c__9, &c__1, "UNABLE TO OBTAIN DESCENT DIRECTION", 34L); */
-/*     e_wsle(); */
+#ifdef DEBUG
+    s_wsle(&io___43);
+    do_lio(&c__9, &c__1, "UNABLE TO OBTAIN DESCENT DIRECTION", 34L);
+    e_wsle();
+#endif
     printf("UNABLE TO OBTAIN DESCENT DIRECTION\n"); assert(0);
 /*     s_stop("", 0L); */
 L610:
-/*     s_wsle(&io___44); */
-/*     do_lio(&c__9, &c__1, "THE FUNCTION DECREASES WITH NO MINIMUM", 38L); */
-/*     e_wsle(); */
+#ifdef DEBUG
+    s_wsle(&io___44);
+    do_lio(&c__9, &c__1, "THE FUNCTION DECREASES WITH NO MINIMUM", 38L);
+    e_wsle();
+#endif
     printf("THE FUNCTION DECREASES WITH NO MINIMUM\n"); assert(0);
 /*     s_stop("", 0L); */
 L620:
-/*     s_wsle(&io___45); */
-/*     do_lio(&c__9, &c__1, "PRECONDITIONER NOT POSITIVE DEFINITE", 36L); */
-/*     e_wsle(); */
+#ifdef DEBUG
+    s_wsle(&io___45);
+    do_lio(&c__9, &c__1, "PRECONDITIONER NOT POSITIVE DEFINITE", 36L);
+    e_wsle();
+#endif
     printf("PRECONDITIONER NOT POSITIVE DEFINITE\n"); assert(0);
 /*     s_stop("", 0L); */
 L630:
-/* Computing 25th power */
-    d__1 = a3,
-    d__2 = a3,
-    d__1 *= d__1,
-    d__1 *= d__1,
-    d__1 *= d__1,
-    d__2 *= d__1;
-    q *= d__2 * (d__1 * d__1);
+    /* Computing 25th power */
+    d__1 = a3, d__1 *= d__1, d__1 *= d__1, d__1 *= d__1,
+    q *= a3 * d__1 * d__1 * d__1;
     nd = 0;
 L640:
     ++nd;
     if (nd > 25) {
         goto L650;
     }
-    q = a3 * q;
+    q *= a3;
     p = fv_(&q, x, h, n, value);
     ins_(&q, &p, &a, &b, &c, &fa, &fb, &fc, &j, y, z);
     if (p - f > v * q) {
@@ -692,9 +693,11 @@ L640:
     }
     goto L135;
 L650:
-/*     s_wsle(&io___46); */
-/*     do_lio(&c__9, &c__1, "UNABLE TO SATISFY ARMIJO CONDITION", 34L); */
-/*     e_wsle(); */
+#ifdef DEBUG
+    s_wsle(&io___46);
+    do_lio(&c__9, &c__1, "UNABLE TO SATISFY ARMIJO CONDITION", 34L);
+    e_wsle();
+#endif
     printf("UNABLE TO SATISFY ARMIJO CONDITION\n");
     return;
 L660:
@@ -703,13 +706,12 @@ L660:
 
 doublereal fv_(a, x, h, n, value)
 doublereal *a, *x, *h;
-integer *n;
-doublereal (*value) ();
+const integer *n;
+doublereal (*value) (doublereal*);
 {
     /* Local variables */
     static integer i;
 
-    /* Function Body */
     for (i = 0; i < *n; ++i) {
         h[i+*n] = x[i] + *a * h[i];
     }
@@ -718,14 +720,13 @@ doublereal (*value) ();
 
 doublereal fd_(a, x, h, n, grad)
 doublereal *a, *x, *h;
-integer *n;
-void (*grad) ();
+const integer *n;
+void (*grad) (doublereal*,doublereal*);
 {
     /* Local variables */
     static doublereal d;
     static integer i;
 
-    /* Function Body */
     for (i = 0; i < *n; ++i) {
         h[i+*n] = x[i] + *a * h[i];
     }
@@ -739,13 +740,12 @@ void (*grad) ();
 
 /* Subroutine */ void fvd_(v, d, a, x, h, n, both)
 doublereal *v, *d, *a, *x, *h;
-integer *n;
-/* Subroutine */ void (*both) ();
+const integer *n;
+/* Subroutine */ void (*both) (doublereal*,doublereal*,doublereal*);
 {
     /* Local variables */
     static integer i;
 
-    /* Function Body */
     for (i = 0; i < *n; ++i) {
         h[i+*n] = x[i] + *a * h[i];
     }
@@ -760,12 +760,6 @@ integer *n;
 /* Subroutine */ void cub_(x, a, b, c, d, e, f)
 doublereal *x, *a, *b, *c, *d, *e, *f;
 {
-    /* System generated locals */
-    doublereal d__1;
-
-    /* Builtin functions */
-    double sqrt(), d_sign();
-
     /* Local variables */
     static doublereal g, v, w, y, z;
 
@@ -778,8 +772,8 @@ doublereal *x, *a, *b, *c, *d, *e, *f;
     if (w < 0.) {
         w = 0.f;
     }
-    d__1 = sqrt(w);
-    w = d_sign(&d__1, &g);
+    w = sqrt(w);
+    w = d_sign(&w, &g);
     y = *e + v;
     z = *f + v;
     if (d_sign(&y, &g) != y) {
@@ -822,7 +816,6 @@ doublereal *s, *f, *a, *b, *c, *fa, *fb, *fc;
 integer *j;
 doublereal *y, *z;
 {
-    /* Function Body */
     y[*j] = *s;
     z[*j] = *f;
     ++(*j);
@@ -842,4 +835,3 @@ doublereal *y, *z;
     *c = *s;
     *fc = *f;
 } /* ins_ */
-

@@ -1,12 +1,7 @@
-/*  -- translated by f2c (version 19991025).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Table of constant values */
-
 static integer c__1 = 1;
 static doublereal c_b11 = 1.;
 
@@ -20,18 +15,11 @@ integer *kase;
     /* System generated locals */
     doublereal d__1;
 
-    /* Builtin functions */
-    double d_sign();
-    integer i_dnnt();
-
     /* Local variables */
     static integer iter;
     static doublereal temp;
     static integer jump, i, j;
-    extern doublereal dasum_();
     static integer jlast;
-    extern /* Subroutine */ void dcopy_();
-    extern integer idamax_();
     static doublereal altsgn, estold;
 
 

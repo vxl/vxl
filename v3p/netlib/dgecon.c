@@ -1,22 +1,16 @@
-/*  -- translated by f2c (version 19991025).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Table of constant values */
-
 static integer c__1 = 1;
 
-/* Subroutine */ void dgecon_(norm, n, a, lda, anorm, rcond, work, iwork, info, norm_len)
+/* Subroutine */ void dgecon_(norm, n, a, lda, anorm, rcond, work, iwork, info)
 char *norm;
 integer *n;
 doublereal *a;
 integer *lda;
 doublereal *anorm, *rcond, *work;
 integer *iwork, *info;
-ftnlen norm_len;
 {
     /* System generated locals */
     integer i__1;
@@ -24,17 +18,10 @@ ftnlen norm_len;
     /* Local variables */
     static integer kase, kase1;
     static doublereal scale;
-    extern logical lsame_();
-    extern /* Subroutine */ void drscl_();
-    extern doublereal dlamch_();
     static doublereal sl;
     static integer ix;
-    extern /* Subroutine */ void dlacon_();
-    extern integer idamax_();
     static doublereal su;
-    extern /* Subroutine */ void xerbla_();
     static doublereal ainvnm;
-    extern /* Subroutine */ void dlatrs_();
     static logical onenrm;
     static char normin[1];
     static doublereal smlnum;
@@ -96,8 +83,8 @@ ftnlen norm_len;
 /*     Test the input parameters. */
 
     *info = 0;
-    onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", (ftnlen)1, (ftnlen)1);
-    if (! onenrm && ! lsame_(norm, "I", (ftnlen)1, (ftnlen)1)) {
+    onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O");
+    if (! onenrm && ! lsame_(norm, "I")) {
         *info = -1;
     } else if (*n < 0) {
         *info = -2;
@@ -108,7 +95,7 @@ ftnlen norm_len;
     }
     if (*info != 0) {
         i__1 = -(*info);
-        xerbla_("DGECON", &i__1, (ftnlen)6);
+        xerbla_("DGECON", &i__1);
         return;
     }
 
@@ -122,7 +109,7 @@ ftnlen norm_len;
         return;
     }
 
-    smlnum = dlamch_("Safe minimum", (ftnlen)12);
+    smlnum = dlamch_("Safe minimum");
 
 /*     Estimate the norm of inv(A). */
 
@@ -141,24 +128,20 @@ L10:
 
 /*           Multiply by inv(L). */
 
-            dlatrs_("Lower", "No transpose", "Unit", normin, n, a, lda, work, &sl,
-                    &work[*n << 1], info, (ftnlen)5, (ftnlen)12, (ftnlen)4, (ftnlen)1);
+            dlatrs_("Lower", "No transpose", "Unit", normin, n, a, lda, work, &sl, &work[*n << 1], info);
 
 /*           Multiply by inv(U). */
 
-            dlatrs_("Upper", "No transpose", "Non-unit", normin, n, a, lda, work, &su,
-                    &work[*n * 3], info, (ftnlen)5, (ftnlen)12, (ftnlen)8, (ftnlen)1);
+            dlatrs_("Upper", "No transpose", "Non-unit", normin, n, a, lda, work, &su, &work[*n * 3], info);
         } else {
 
 /*           Multiply by inv(U'). */
 
-            dlatrs_("Upper", "Transpose", "Non-unit", normin, n, a, lda, work, &su,
-                    &work[*n * 3], info, (ftnlen)5, (ftnlen)9, (ftnlen)8, (ftnlen)1);
+            dlatrs_("Upper", "Transpose", "Non-unit", normin, n, a, lda, work, &su, &work[*n * 3], info);
 
 /*           Multiply by inv(L'). */
 
-            dlatrs_("Lower", "Transpose", "Unit", normin, n, a, lda, work, &sl,
-                    &work[*n << 1], info, (ftnlen)5, (ftnlen)9, (ftnlen)4, (ftnlen)1);
+            dlatrs_("Lower", "Transpose", "Unit", normin, n, a, lda, work, &sl, &work[*n << 1], info);
         }
 
 /*        Divide X by 1/(SL*SU) if doing so will not cause overflow. */

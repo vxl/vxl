@@ -1,14 +1,10 @@
-/* sasum.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
-doublereal sasum_(n, sx, incx)
-integer *n;
-real *sx;
-integer *incx;
+real sasum_(n, sx, incx)
+const integer *n;
+const real *sx;
+const integer *incx;
 {
     /* Local variables */
     static integer i, m, nincx;
@@ -20,25 +16,25 @@ integer *incx;
 /*     modified 3/93 to return if incx .le. 0.                          */
 /*     modified 12/3/93, array(1) declarations changed to array(*)      */
 
+    stemp = 0.f;
     if (*n <= 0 || *incx <= 0) {
-        return 0.0f;
+        return stemp;
     }
-    stemp = 0.0f;
 /*        code for increment equal to 1 */
     if (*incx == 1) {
         m = *n % 6;
         for (i = 0; i < m; ++i) {
-            stemp += (float)dabs(sx[i]);
+            stemp += abs(sx[i]);
         }
         for (i = m; i < *n; i += 6) {
-            stemp += (float)(dabs(sx[i]) + dabs(sx[i+1]) + dabs(sx[i+2]) + dabs(sx[i+3]) + dabs(sx[i+4]) + dabs(sx[i+5]));
+            stemp += abs(sx[i]) + abs(sx[i+1]) + abs(sx[i+2]) + abs(sx[i+3]) + abs(sx[i+4]) + abs(sx[i+5]);
         }
     }
 /*        code for increment not equal to 1 */
     else {
         nincx = *n * *incx;
         for (i = 0; i < nincx; i += *incx) {
-            stemp += (float)dabs(sx[i]);
+            stemp += abs(sx[i]);
         }
     }
     return stemp;

@@ -1,19 +1,14 @@
-/* zsvdc.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
+extern double sqrt(double); /* #include <math.h> */
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 /*     and moved zswap() zscal() zdrot() zdotc() zaxpy() to separate files */
 
-
 /* Table of constant values */
-
 static integer c__1 = 1;
-static doublecomplex c_b10 = {1.,0.};
-static doublecomplex c_b60 = {-1.,0.};
+static doublecomplex c_1 = {1.,0.};
+static doublecomplex c_m1 = {-1.,0.};
 
 /* ====================================================================== */
 /* NIST Guide to Available Math Software. */
@@ -22,23 +17,19 @@ static doublecomplex c_b60 = {-1.,0.};
 /* ====================================================================== */
 /* Subroutine */ void zsvdc_(x, ldx, n, p, s, e, u, ldu, v, ldv, work, job, info)
 doublecomplex *x;
-integer *ldx, *n, *p;
+const integer *ldx, *n, *p;
 doublecomplex *s, *e, *u;
-integer *ldu;
+const integer *ldu;
 doublecomplex *v;
-integer *ldv;
+const integer *ldv;
 doublecomplex *work;
-integer *job, *info;
+const integer *job;
+integer *info;
 {
     /* System generated locals */
     integer i__1, i__2;
     doublereal d__1, d__2;
     doublecomplex z__1;
-
-    /* Builtin functions */
-    double z_abs();
-    void z_div(), d_cnjg();
-    double sqrt();
 
     /* Local variables */
     static integer jobu, iter;
@@ -48,23 +39,17 @@ integer *job, *info;
     static integer i, j, k, l, m;
     static doublecomplex r, t;
     static doublereal scale;
-    extern /* Subroutine */ void zscal_();
     static doublereal shift;
-    extern /* Subroutine */ void drotg_();
     static integer maxit;
-    extern /* Double Complex */ void zdotc_();
     static logical wantu, wantv;
-    extern /* Subroutine */ void zdrot_(), zswap_();
     static doublereal t1, ztest;
-    extern /* Subroutine */ void zaxpy_();
-    extern doublereal dznrm2_();
     static doublereal el;
     static doublereal cs;
     static integer mm, ls;
     static doublereal sl;
     static integer lu;
     static doublereal sm, sn;
-    static integer nct, ncu, lls, nrt;
+    static integer nct, ncu, nrt;
     static doublereal emm1, smm1;
 
 /************************************************************************/
@@ -131,7 +116,6 @@ integer *job, *info;
 /*                                                                      */
 /*         u         complex*16(ldu,k), where ldu.ge.n.  if joba.eq.1   */
 /*                                   then k.eq.n, if joba.ge.2 then     */
-/*                                                                      */
 /*                                   k.eq.min(n,p).                     */
 /*                   u contains the matrix of left singular vectors.    */
 /*                   u is not referenced if joba.eq.0.  if n.le.p       */
@@ -156,6 +140,8 @@ integer *job, *info;
 /*                   is the conjugate-transpose of u).  thus the        */
 /*                   singular values of x and b are the same.           */
 /*                                                                      */
+/************************************************************************/
+
 /*     linpack. this version dated 03/19/79 .                           */
 /*              correction to shift calculation made 2/85.              */
 /*     g.w. stewart, university of maryland, argonne national lab.      */
@@ -166,10 +152,6 @@ integer *job, *info;
 /*     blas zaxpy,zdotc,zscal,zswap,dznrm2,drotg                        */
 /*     fortran dmax1,zabs,dcmplx                                        */
 /*     fortran dconjg,max0,min0,mod,dsqrt                               */
-/*                                                                      */
-/************************************************************************/
-
-    /* Function Body */
 
 /*     set the maximum number of iterations. */
     maxit = 30;
@@ -212,16 +194,15 @@ integer *job, *info;
         if (s[l].r == 0.) {
             goto L10;
         }
-        i__2 = l + l * *ldx;
+        i__2 = l + l * *ldx; /* index [l,l] */
         if (x[i__2].r != 0. || x[i__2].i != 0.) {
             d__1 = z_abs(&s[l]);
             d__2 = z_abs(&x[i__2]);
             s[l].r = d__1 * x[i__2].r / d__2,
             s[l].i = d__1 * x[i__2].i / d__2;
         }
-        z_div(&z__1, &c_b10, &s[l]);
+        z_div(&z__1, &c_1, &s[l]);
         i__1 = *n - l;
-        i__2 = l + l * *ldx;
         zscal_(&i__1, &z__1, &x[i__2], &c__1);
         x[i__2].r += 1.;
 L10:
@@ -233,7 +214,7 @@ L20:
 
             if (l < nct && (s[l].r != 0. || s[l].i != 0.)) {
                 i__1 = *n - l;
-                i__2 = l + l * *ldx;
+                i__2 = l + l * *ldx; /* index [l,l] */
                 zdotc_(&t, &i__1, &x[i__2], &c__1, &x[l+j* *ldx], &c__1);
                 t.r = -t.r, t.i = -t.i;
                 z_div(&t, &t, &x[i__2]);
@@ -251,8 +232,8 @@ L20:
 
         if (wantu && l < nct)
         for (i = l; i < *n; ++i) {
-            i__1 = i + l * *ldu;
-            i__2 = i + l * *ldx;
+            i__1 = i + l * *ldu; /* index [i,l] */
+            i__2 = i + l * *ldx; /* index [i,l] */
             u[i__1].r = x[i__2].r, u[i__1].i = x[i__2].i;
         }
 
@@ -273,7 +254,7 @@ L20:
                 e[l].i = d__1 * e[l+1].i / d__2;
             }
             i__1 = *p - l - 1;
-            z_div(&z__1, &c_b10, &e[l]);
+            z_div(&z__1, &c_1, &e[l]);
             zscal_(&i__1, &z__1, &e[l+1], &c__1);
             e[l+1].r += 1.;
         }
@@ -294,7 +275,7 @@ L20:
         for (j = l+1; j < *p; ++j) {
             z__1.r = -e[j].r, z__1.i = -e[j].i;
             z_div(&z__1, &z__1, &e[l+1]);
-            d_cnjg(&z__1, &z__1);
+            z__1.i = -z__1.i; /* d_cnjg(&z__1, &z__1); */
             i__1 = *n - l - 1;
             zaxpy_(&i__1, &z__1, &work[l+1], &c__1, &x[l+1 +j* *ldx], &c__1);
         }
@@ -305,7 +286,7 @@ L20:
 L120:
         if (wantv)
         for (i = l+1; i < *p; ++i) {
-            i__1 = i + l * *ldv;
+            i__1 = i + l * *ldv; /* index [i,l] */
             v[i__1].r = e[i].r, v[i__1].i = e[i].i;
         }
     }
@@ -314,14 +295,14 @@ L120:
 
     m = min(*p-1, *n);
     if (nct < *p) {
-        i__1 = nct * (*ldx+1);
+        i__1 = nct * (*ldx+1); /* index [nct,nct] */
         s[nct].r = x[i__1].r, s[nct].i = x[i__1].i;
     }
     if (*n-1 < m) {
         s[m].r = 0., s[m].i = 0.;
     }
     if (nrt < m) {
-        i__1 = nrt + m * *ldx;
+        i__1 = nrt + m * *ldx; /* index [nrt,m] */
         e[nrt].r = x[i__1].r, e[nrt].i = x[i__1].i;
     }
     e[m].r = 0., e[m].i = 0.;
@@ -331,35 +312,35 @@ L120:
     if (wantu)
     for (j = nct; j < ncu; ++j) {
         for (i = 0; i < *n; ++i) {
-            i__1 = i + j * *ldu;
+            i__1 = i + j * *ldu; /* index [i,j] */
             u[i__1].r = 0., u[i__1].i = 0.;
         }
-        i__1 = j + j * *ldu;
+        i__1 = j + j * *ldu; /* index [j,j] */
         u[i__1].r = 1., u[i__1].i = 0.;
     }
     if (wantu)
     for (l = nct-1; l >= 0; --l) {
         if (s[l].r == 0. && s[l].i == 0.) {
             for (i = 0; i < *n; ++i) {
-                i__1 = i + l * *ldu;
+                i__1 = i + l * *ldu; /* index [i,l] */
                 u[i__1].r = 0., u[i__1].i = 0.;
             }
-            i__1 = l + l * *ldu;
+            i__1 = l + l * *ldu; /* index [l,l] */
             u[i__1].r = 1., u[i__1].i = 0.;
             continue; /* next l */
         }
         i__1 = *n - l;
-        i__2 = l + l * *ldu;
+        i__2 = l + l * *ldu; /* index [l,l] */
         for (j = l+1; j < ncu; ++j) {
             zdotc_(&t, &i__1, &u[i__2], &c__1, &u[l+j* *ldu], &c__1);
             t.r = -t.r, t.i = -t.i;
             z_div(&t, &t, &u[i__2]);
             zaxpy_(&i__1, &t, &u[i__2], &c__1, &u[l+j* *ldu], &c__1);
         }
-        zscal_(&i__1, &c_b60, &u[i__2], &c__1);
+        zscal_(&i__1, &c_m1, &u[i__2], &c__1);
         u[i__2].r += 1.;
         for (i = 0; i < l; ++i) {
-            i__1 = i + l * *ldu;
+            i__1 = i + l * *ldu; /* index [i,l] */
             u[i__1].r = 0., u[i__1].i = 0.;
         }
     }
@@ -371,17 +352,17 @@ L120:
         if (l < nrt && (e[l].r != 0. || e[l].i != 0.))
         for (j = l+1; j < *p; ++j) {
             i__1 = *p - l - 1;
-            i__2 = l+1 + l * *ldv;
+            i__2 = l+1 + l * *ldv; /* index [l+1,l] */
             zdotc_(&t, &i__1, &v[i__2], &c__1, &v[l+1 +j* *ldv], &c__1);
             t.r = -t.r, t.i = -t.i;
             z_div(&t, &t, &v[i__2]);
             zaxpy_(&i__1, &t, &v[i__2], &c__1, &v[l+1 +j* *ldv], &c__1);
         }
         for (i = 0; i < *p; ++i) {
-            i__1 = i + l * *ldv;
+            i__1 = i + l * *ldv; /* index [i,l] */
             v[i__1].r = 0., v[i__1].i = 0.;
         }
-        i__1 = l + l * *ldv;
+        i__1 = l + l * *ldv; /* index [l,l] */
         v[i__1].r = 1., v[i__1].i = 0.;
     }
 
@@ -461,7 +442,7 @@ L400:
         if (s[l].r < 0.) {
             s[l].r = -s[l].r, s[l].i = -s[l].i;
             if (wantv) {
-                zscal_(p, &c_b60, &v[l* *ldv], &c__1);
+                zscal_(p, &c_m1, &v[l* *ldv], &c__1);
             }
         }
 
@@ -501,19 +482,18 @@ L400:
 
 /*           calculate the shift. */
 
-        d__1 =           z_abs(&s[m]),
-        d__1 = max(d__1, z_abs(&s[m-1])),
-        d__1 = max(d__1, z_abs(&e[m-1])),
-        d__1 = max(d__1, z_abs(&s[l])),
-        scale= max(d__1, z_abs(&e[l]));
+        scale =            z_abs(&s[m]),
+        scale = max(scale, z_abs(&s[m-1])),
+        scale = max(scale, z_abs(&e[m-1])),
+        scale = max(scale, z_abs(&s[l])),
+        scale = max(scale, z_abs(&e[l]));
         sm = s[m].r / scale;
         smm1 = s[m-1].r / scale;
         emm1 = e[m-1].r / scale;
         sl = s[l].r / scale;
         el = e[l].r / scale;
         b = ((smm1+sm) * (smm1-sm) + emm1*emm1) / 2.;
-        d__1 = sm * emm1;
-        c = d__1 * d__1;
+        c = sm * emm1; c *= c;
         shift = 0.;
         if (b != 0. || c != 0.) {
             shift = sqrt(b*b + c);
@@ -588,74 +568,3 @@ L400:
     goto L400;
 
 } /* zsvdc_ */
-
-doublereal dznrm2_(n, x, incx)
-integer *n;
-doublecomplex *x;
-integer *incx;
-{
-    /* System generated locals */
-    integer i__1;
-    doublereal d__1;
-
-    /* Builtin functions */
-    double sqrt();
-
-    /* Local variables */
-    static doublereal temp, norm, scale;
-    static integer ix;
-    static doublereal ssq;
-
-/*  DZNRM2 returns the euclidean norm of a vector via the function */
-/*  name, so that                                                  */
-/*                                                                 */
-/*     DZNRM2 := sqrt( conjg( x' )*x )                             */
-
-/*  -- This version written on 25-October-1982. */
-/*     Modified on 14-October-1993 to inline the call to ZLASSQ. */
-/*     Sven Hammarling, Nag Ltd. */
-
-    /* Function Body */
-
-    if (*n < 1 || *incx < 1) {
-        norm = 0.;
-    } else {
-        scale = 0.;
-        ssq = 1.;
-/*        The following loop is equivalent to this call to the LAPACK */
-/*        auxiliary routine: */
-/*        CALL ZLASSQ( N, X, INCX, SCALE, SSQ ) */
-
-        i__1 = (*n - 1) * *incx;
-        for (ix = 0; *incx< 0 ? ix >= i__1 : ix <= i__1; ix += *incx) {
-            if (x[ix].r != 0.) {
-                temp = abs(x[ix].r);
-                if (scale < temp) {
-                    d__1 = scale / temp;
-                    ssq = ssq * (d__1 * d__1) + 1.;
-                    scale = temp;
-                } else {
-                    d__1 = temp / scale;
-                    ssq += d__1 * d__1;
-                }
-            }
-            if (x[ix].i != 0.) {
-                temp = abs(x[ix].i);
-                if (scale < temp) {
-                    d__1 = scale / temp;
-                    ssq = ssq * (d__1 * d__1) + 1.;
-                    scale = temp;
-                } else {
-                    d__1 = temp / scale;
-                    ssq += d__1 * d__1;
-                }
-            }
-        }
-        norm = scale * sqrt(ssq);
-    }
-
-    return norm;
-
-/*     End of DZNRM2. */
-
-} /* dznrm2_ */

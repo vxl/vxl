@@ -1,49 +1,34 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
+extern double sqrt(double); /* #include <math.h> */
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
 /* Table of constant values */
-
 static integer c__1 = 1;
-static doublecomplex c_b28 = {1.,0.};
+static doublecomplex c_1 = {1.,0.};
 
 /* Subroutine */ void zqrdc_(x, ldx, n, p, qraux, jpvt, work, job)
 doublecomplex *x;
-integer *ldx, *n, *p;
+const integer *ldx, *n, *p;
 doublecomplex *qraux;
 integer *jpvt;
 doublecomplex *work;
-integer *job;
+const integer *job;
 {
     /* System generated locals */
     integer i__1, i__2;
     doublereal d__1, d__2;
     doublecomplex z__1;
 
-    /* Builtin functions */
-    void z_div();
-    double sqrt(double);
-
     /* Local variables */
     static logical negj;
     static integer maxj, j, l;
-    extern doublereal z_abs();
     static doublecomplex t;
-    extern /* Subroutine */ void zscal_();
-    extern /* Double Complex */ void zdotc_();
     static logical swapj;
     static doublecomplex nrmxl;
-    extern /* Subroutine */ void zswap_(), zaxpy_();
-    extern doublereal dznrm2_();
     static integer jp, pl, pu;
-    static doublereal tt;
-    extern doublereal cdsqrt_();
-    static doublereal maxnrm;
+    static doublereal tt, maxnrm;
 
 /************************************************************************/
 /*                                                                      */
@@ -127,8 +112,6 @@ integer *job;
 /*     fortran dmax1,cdabs,dcmplx,cdsqrt,min0                           */
 /*                                                                      */
 /************************************************************************/
-
-    /* Function Body */
 
     pl = 0;
     pu = -1;
@@ -225,7 +208,7 @@ L120:
             nrmxl.r = d__1 * x[i__2].r / d__2,
             nrmxl.i = d__1 * x[i__2].i / d__2;
         }
-        z_div(&z__1, &c_b28, &nrmxl);
+        z_div(&z__1, &c_1, &nrmxl);
         zscal_(&i__1, &z__1, &x[i__2], &c__1);
         x[i__2].r += 1.;
 
@@ -270,4 +253,3 @@ L120:
         x[i__1].r = -nrmxl.r, x[i__1].i = -nrmxl.i;
     }
 } /* zqrdc_ */
-

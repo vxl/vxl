@@ -1,38 +1,25 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
-/* Subroutine */ void ztrmv_(uplo, trans, diag, n, a, lda, x, incx, uplo_len,
-        trans_len, diag_len)
-char *uplo, *trans, *diag;
-integer *n;
+/* Subroutine */ void ztrmv_(uplo, trans, diag, n, a, lda, x, incx)
+const char *uplo, *trans, *diag;
+const integer *n;
 doublecomplex *a;
-integer *lda;
+const integer *lda;
 doublecomplex *x;
-integer *incx;
-ftnlen uplo_len;
-ftnlen trans_len;
-ftnlen diag_len;
+const integer *incx;
 {
     /* System generated locals */
     integer i__1;
     doublecomplex z__1;
 
-    /* Builtin functions */
-    void d_cnjg();
-
     /* Local variables */
     static integer info;
     static doublecomplex temp;
     static integer i, j;
-    extern logical lsame_();
     static integer ix, jx, kx;
-    extern /* Subroutine */ void xerbla_();
     static logical noconj, nounit;
 
 /************************************************************************/
@@ -128,15 +115,12 @@ ftnlen diag_len;
 /*     Sven Hammarling, Nag Central Office. */
 /*     Richard Hanson, Sandia National Labs. */
 
-    /* Function Body */
-
     info = 0;
-    if (! lsame_(uplo, "U", 1L, 1L) && ! lsame_(uplo, "L", 1L, 1L)) {
+    if (! lsame_(uplo, "U") && ! lsame_(uplo, "L")) {
         info = 1;
-    } else if (! lsame_(trans, "N", 1L, 1L) && ! lsame_(trans, "T", 1L, 1L) &&
-             ! lsame_(trans, "C", 1L, 1L)) {
+    } else if (! lsame_(trans, "N") && ! lsame_(trans, "T") && ! lsame_(trans, "C")) {
         info = 2;
-    } else if (! lsame_(diag, "U", 1L, 1L) && ! lsame_(diag, "N", 1L, 1L)) {
+    } else if (! lsame_(diag, "U") && ! lsame_(diag, "N")) {
         info = 3;
     } else if (*n < 0) {
         info = 4;
@@ -146,7 +130,7 @@ ftnlen diag_len;
         info = 8;
     }
     if (info != 0) {
-        xerbla_("ZTRMV ", &info, 6L);
+        xerbla_("ZTRMV ", &info);
         return;
     }
 
@@ -156,8 +140,8 @@ ftnlen diag_len;
         return;
     }
 
-    noconj = lsame_(trans, "T", 1L, 1L);
-    nounit = lsame_(diag, "N", 1L, 1L);
+    noconj = lsame_(trans, "T");
+    nounit = lsame_(diag, "N");
 
 /*     Set up the start point in X if the increment is not unity. This */
 /*     will be  ( N - 1 )*INCX  too small for descending loops. */
@@ -171,11 +155,11 @@ ftnlen diag_len;
 /*     Start the operations. In this version the elements of A are */
 /*     accessed sequentially with one pass through A. */
 
-    if (lsame_(trans, "N", 1L, 1L)) {
+    if (lsame_(trans, "N")) {
 
 /*        Form  x := A*x. */
 
-        if (lsame_(uplo, "U", 1L, 1L)) {
+        if (lsame_(uplo, "U")) {
             if (*incx == 1) {
                 for (j = 0; j < *n; ++j) {
 
@@ -264,7 +248,7 @@ ftnlen diag_len;
 
 /*        Form  x := A'*x  or  x := conjg( A' )*x. */
 
-        if (lsame_(uplo, "U", 1L, 1L)) {
+        if (lsame_(uplo, "U")) {
             if (*incx == 1) {
                 for (j = *n - 1; j >= 0; --j) {
 
@@ -403,9 +387,4 @@ ftnlen diag_len;
             }
         }
     }
-
-
-/*     End of ZTRMV . */
-
 } /* ztrmv_ */
-

@@ -1,35 +1,27 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
 /* Table of constant values */
-
 static integer c__1 = 1;
 
 /* Subroutine */ void zqrsl_(x, ldx, n, k, qraux, y, qy, qty, b, rsd, xb, job, info)
-doublecomplex *x;
-integer *ldx, *n, *k;
-doublecomplex *qraux, *y, *qy, *qty, *b, *rsd, *xb;
-integer *job, *info;
+const doublecomplex *x;
+const integer *ldx, *n, *k;
+const doublecomplex *qraux, *y;
+doublecomplex *qy, *qty, *b, *rsd, *xb;
+const integer *job;
+integer *info;
 {
     /* System generated locals */
     integer i__1, i__2;
-
-    /* Builtin functions */
-    void z_div();
 
     /* Local variables */
     static doublecomplex temp;
     static logical cqty;
     static integer i, j;
     static doublecomplex t;
-    extern /* Double Complex */ void zdotc_();
-    extern /* Subroutine */ void zcopy_(), zaxpy_();
     static logical cb;
     static logical cr;
     static integer ju;
@@ -98,7 +90,7 @@ integer *job, *info;
 /*     on return                                                        */
 /*                                                                      */
 /*        qy     complex*16(n).                                         */
-/*               qy conntains q*y, if its computation has been          */
+/*               qy contains q*y, if its computation has been           */
 /*               requested.                                             */
 /*                                                                      */
 /*        qty    complex*16(n).                                         */
@@ -172,8 +164,6 @@ integer *job, *info;
 /*                                                                      */
 /************************************************************************/
 
-    /* Function Body */
-
 /*     set info flag. */
     *info = 0;
 
@@ -230,13 +220,13 @@ integer *job, *info;
         }
         i__1 = j * *ldx + j; /* index [j,j] */
         temp.r = x[i__1].r, temp.i = x[i__1].i;
-        x[i__1].r = qraux[j].r, x[i__1].i = qraux[j].i;
+        ((doublecomplex*)x)[i__1].r = qraux[j].r, ((doublecomplex*)x)[i__1].i = qraux[j].i; /* temporarily */
         i__2 = *n - j;
         zdotc_(&t, &i__2, &x[i__1], &c__1, &qy[j], &c__1);
         z_div(&t, &t, &x[i__1]);
         t.r = -t.r, t.i = -t.i;
         zaxpy_(&i__2, &t, &x[i__1], &c__1, &qy[j], &c__1);
-        x[i__1].r = temp.r, x[i__1].i = temp.i;
+        ((doublecomplex*)x)[i__1].r = temp.r, ((doublecomplex*)x)[i__1].i = temp.i; /* restore original */
     }
 
 /*           compute ctrans(q)*y. */
@@ -248,13 +238,13 @@ integer *job, *info;
         }
         i__1 = j * *ldx + j; /* index [j,j] */
         temp.r = x[i__1].r, temp.i = x[i__1].i;
-        x[i__1].r = qraux[j].r, x[i__1].i = qraux[j].i;
+        ((doublecomplex*)x)[i__1].r = qraux[j].r, ((doublecomplex*)x)[i__1].i = qraux[j].i; /* temporarily */
         i__2 = *n - j;
         zdotc_(&t, &i__2, &x[i__1], &c__1, &qty[j], &c__1);
         z_div(&t, &t, &x[i__1]);
         t.r = -t.r, t.i = -t.i;
         zaxpy_(&i__2, &t, &x[i__1], &c__1, &qty[j], &c__1);
-        x[i__1].r = temp.r, x[i__1].i = temp.i;
+        ((doublecomplex*)x)[i__1].r = temp.r, ((doublecomplex*)x)[i__1].i = temp.i; /* restore original */
     }
 
 /*        set up to compute b, rsd, or xb. */
@@ -266,8 +256,8 @@ integer *job, *info;
         zcopy_(k, qty, &c__1, xb, &c__1);
     }
     if (cr && *k < *n) {
-        i__1 = *n - *k;
-        zcopy_(&i__1, &qty[*k], &c__1, &rsd[*k], &c__1);
+        i__2 = *n - *k;
+        zcopy_(&i__2, &qty[*k], &c__1, &rsd[*k], &c__1);
     }
     if (cxb && *k < *n)
     for (i = *k; i < *n; ++i) {
@@ -304,7 +294,7 @@ integer *job, *info;
         }
         i__1 = j * *ldx + j; /* index [j,j] */
         temp.r = x[i__1].r, temp.i = x[i__1].i;
-        x[i__1].r = qraux[j].r, x[i__1].i = qraux[j].i;
+        ((doublecomplex*)x)[i__1].r = qraux[j].r, ((doublecomplex*)x)[i__1].i = qraux[j].i; /* temporarily */
         i__2 = *n - j;
         if (cr) {
             zdotc_(&t, &i__2, &x[i__1], &c__1, &rsd[j], &c__1);
@@ -318,7 +308,6 @@ integer *job, *info;
             t.r = -t.r, t.i = -t.i;
             zaxpy_(&i__2, &t, &x[i__1], &c__1, &xb[j], &c__1);
         }
-        x[i__1].r = temp.r, x[i__1].i = temp.i;
+        ((doublecomplex*)x)[i__1].r = temp.r, ((doublecomplex*)x)[i__1].i = temp.i; /* restore original */
     }
 } /* zqrsl_ */
-

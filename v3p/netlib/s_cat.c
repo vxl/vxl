@@ -4,6 +4,7 @@
  */
 
 #include "f2c.h"
+#include "netlib.h"
 #ifndef NO_OVERWRITE
 #include "stdio.h"
 #undef abs
@@ -15,20 +16,19 @@
 #undef min
 #undef max
 #include "stdlib.h"
- extern char *F77_aloc(ftnlen, char*);
 #endif
 #include "string.h"
 #endif /* NO_OVERWRITE */
 
  VOID
 #ifdef KR_headers
-s_cat(lp, rpp, rnp, np, ll) char *lp, *rpp[]; ftnlen rnp[], *np, ll;
+s_cat(lp, rpp, rnp, np, ll) char *lp; const char *rpp[]; ftnlen rnp[], *np, ll;
 #else
-s_cat(char *lp, char *rpp[], ftnlen rnp[], ftnlen *np, ftnlen ll)
+s_cat(char *lp, const char *rpp[], ftnlen rnp[], ftnlen *np, ftnlen ll)
 #endif
 {
         ftnlen i, nc;
-        char *rp;
+        const char *rp;
         ftnlen n = *np;
 #ifndef NO_OVERWRITE
         ftnlen L, m;

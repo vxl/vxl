@@ -1,34 +1,24 @@
-/*  -- translated by f2c (version 19991025).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
+extern double sqrt(double); /* #include <math.h> */
 
 /* Table of constant values */
-
 static integer c__1 = 1;
 
-doublereal dlanhs_(norm, n, a, lda, work, norm_len)
-char *norm;
-integer *n;
+doublereal dlanhs_(norm, n, a, lda, work)
+const char *norm;
+const integer *n;
 doublereal *a;
-integer *lda;
+const integer *lda;
 doublereal *work;
-ftnlen norm_len;
 {
     /* System generated locals */
     integer i__1;
 
-    /* Builtin functions */
-    double sqrt();
-
     /* Local variables */
     static integer i, j;
     static doublereal scale;
-    extern logical lsame_();
     static doublereal value;
-    extern /* Subroutine */ void dlassq_();
     static doublereal sum;
 
 
@@ -88,7 +78,7 @@ ftnlen norm_len;
 
     if (*n == 0) {
         value = 0.;
-    } else if (lsame_(norm, "M", (ftnlen)1, (ftnlen)1)) {
+    } else if (lsame_(norm, "M")) {
 
 /*        Find max(abs(A(i,j))). */
 
@@ -98,7 +88,7 @@ ftnlen norm_len;
                 value = max(value, abs(a[i + j * *lda]));
             }
         }
-    } else if (lsame_(norm, "O", (ftnlen)1, (ftnlen)1) || *(unsigned char *)norm == '1') {
+    } else if (lsame_(norm, "O") || *(unsigned char *)norm == '1') {
 
 /*        Find norm1(A). */
 
@@ -110,7 +100,7 @@ ftnlen norm_len;
             }
             value = max(value,sum);
         }
-    } else if (lsame_(norm, "I", (ftnlen)1, (ftnlen)1)) {
+    } else if (lsame_(norm, "I")) {
 
 /*        Find normI(A). */
 
@@ -126,7 +116,7 @@ ftnlen norm_len;
         for (i = 0; i < *n; ++i) {
             value = max(value, work[i]);
         }
-    } else if (lsame_(norm, "F", (ftnlen)1, (ftnlen)1) || lsame_(norm, "E", (ftnlen)1, (ftnlen)1)) {
+    } else if (lsame_(norm, "F") || lsame_(norm, "E")) {
 
 /*        Find normF(A). */
 

@@ -1,24 +1,17 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
-/* Subroutine */ void zgemm_(transa, transb, m, n, k, alpha, a, lda, b, ldb,
-        beta, c, ldc, transa_len, transb_len)
-char *transa, *transb;
-integer *m, *n, *k;
+/* Subroutine */ void zgemm_(transa, transb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc)
+const char *transa, *transb;
+const integer *m, *n, *k;
 doublecomplex *alpha, *a;
-integer *lda;
+const integer *lda;
 doublecomplex *b;
-integer *ldb;
+const integer *ldb;
 doublecomplex *beta, *c;
-integer *ldc;
-ftnlen transa_len;
-ftnlen transb_len;
+const integer *ldc;
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -31,9 +24,7 @@ ftnlen transb_len;
     static integer i, j, l;
     static logical conja, conjb;
 /*  static integer ncola; */
-    extern logical lsame_();
     static integer nrowa, nrowb;
-    extern /* Subroutine */ void xerbla_();
 
 /*  ===================================================================== */
 /*                                                                        */
@@ -157,19 +148,16 @@ ftnlen transb_len;
 /*     Jeremy Du Croz, Numerical Algorithms Group Ltd. */
 /*     Sven Hammarling, Numerical Algorithms Group Ltd. */
 
-
 /*     Set  NOTA  and  NOTB  as  true if  A  and  B  respectively are not */
 /*     conjugated or transposed, set  CONJA and CONJB  as true if  A  and */
 /*     B  respectively are to be  transposed but  not conjugated  and set */
 /*     NROWA, NCOLA and  NROWB  as the number of rows and  columns  of  A */
 /*     and the number of rows of  B  respectively. */
 
-    /* Function Body */
-
-    nota = lsame_(transa, "N", 1L, 1L);
-    notb = lsame_(transb, "N", 1L, 1L);
-    conja = lsame_(transa, "C", 1L, 1L);
-    conjb = lsame_(transb, "C", 1L, 1L);
+    nota = lsame_(transa, "N");
+    notb = lsame_(transb, "N");
+    conja = lsame_(transa, "C");
+    conjb = lsame_(transb, "C");
     if (nota) {
         nrowa = *m;
 /*      ncola = *k; */
@@ -186,9 +174,9 @@ ftnlen transb_len;
 /*     Test the input parameters. */
 
     info = 0;
-    if (! nota && ! conja && ! lsame_(transa, "T", 1L, 1L)) {
+    if (! nota && ! conja && ! lsame_(transa, "T")) {
         info = 1;
-    } else if (! notb && ! conjb && ! lsame_(transb, "T", 1L, 1L)) {
+    } else if (! notb && ! conjb && ! lsame_(transb, "T")) {
         info = 2;
     } else if (*m < 0) {
         info = 3;
@@ -204,15 +192,14 @@ ftnlen transb_len;
         info = 13;
     }
     if (info != 0) {
-        xerbla_("ZGEMM ", &info, 6L);
+        xerbla_("ZGEMM ", &info);
         return;
     }
 
 /*     Quick return if possible. */
 
     if (*m == 0 || *n == 0 ||
-        (((alpha->r == 0. && alpha->i == 0.) || *k == 0) &&
-         (beta->r == 1. && beta->i == 0.))) {
+        (((alpha->r == 0. && alpha->i == 0.) || *k == 0) && (beta->r == 1. && beta->i == 0.))) {
         return;
     }
 

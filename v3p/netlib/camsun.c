@@ -1,18 +1,17 @@
-/* camsun.f -- translated by f2c (version 19950102).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 #include <stdio.h>
+extern double sqrt(double), exp(double), pow(double,double), log(double); /* #include <math.h> */
+
+static void norcdf_(real *x, real *cdf);
+static void dnorcdf_(doublereal *x, doublereal *cdf);
 
 /* Subroutine */ void chscdf_(x, nu, cdf)
-real *x;
-integer *nu;
+const real *x;
+const integer *nu;
 real *cdf;
 {
     /* Initialized data */
-
     static integer nucut = 1000;
     static doublereal b43 = 17.;
     static doublereal pi = 3.14159265358979;
@@ -34,10 +33,6 @@ real *cdf;
     /* System generated locals */
     real danu2;
 
-    /* Builtin functions */
-    double sqrt(), exp(), pow(), log();
-#define sqrtf(f) ((float)sqrt((double)(f)))
-
     /* Local variables */
     static real cdfn, danu;
     static integer imin, imax;
@@ -51,7 +46,6 @@ real *cdf;
     static real sd;
     static doublereal dw, dx;
     static integer ievodd;
-    extern /* Subroutine */ void norcdf_();
     static doublereal chi;
     static real anu;
     static doublereal dnu;
@@ -260,7 +254,6 @@ L3000:
 real *x, *cdf;
 {
     /* Initialized data */
-
     static real b1 = .31938153f;
     static real b2 = -.356563782f;
     static real b3 = 1.781477937f;
@@ -270,9 +263,6 @@ real *x, *cdf;
 
     /* System generated locals */
     real tt;
-
-    /* Builtin functions */
-    double exp();
 
     /* Local variables */
     static real t, z;
@@ -331,7 +321,6 @@ integer *nu;
 doublereal *cdf;
 {
     /* Initialized data */
-
     static integer nucut = 1000;
     static doublereal b43 = 17.;
     static doublereal pi = 3.14159265358979;
@@ -353,9 +342,6 @@ doublereal *cdf;
     /* System generated locals */
     doublereal danu2;
 
-    /* Builtin functions */
-    double sqrt(), exp(), pow(), log();
-
     /* Local variables */
     static doublereal cdfn, danu;
     static integer imin, imax;
@@ -369,7 +355,6 @@ doublereal *cdf;
     static doublereal sd;
     static doublereal dw, dx;
     static integer ievodd;
-    extern /* Subroutine */ void dnorcdf_();
     static doublereal chi;
     static doublereal anu;
     static doublereal dnu;
@@ -579,7 +564,6 @@ L3000:
 doublereal *x, *cdf;
 {
     /* Initialized data */
-
     static doublereal b1 = .31938153;
     static doublereal b2 = -.356563782;
     static doublereal b3 = 1.781477937;
@@ -589,9 +573,6 @@ doublereal *x, *cdf;
 
     /* System generated locals */
     doublereal tt;
-
-    /* Builtin functions */
-    double exp();
 
     /* Local variables */
     static doublereal t, z;

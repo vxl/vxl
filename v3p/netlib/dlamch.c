@@ -1,7 +1,16 @@
 #include "f2c.h"
+#include "netlib.h"
 #include <stdio.h>
 
-doublereal dlamch_(char *cmach)
+static void dlamc1_(integer *beta, integer *t, logical *rnd, logical *ieee1);
+static void dlamc2_(integer *beta, integer *t, logical *rnd, doublereal *eps,
+                     integer *emin, doublereal *rmin, integer *emax, doublereal *rmax);
+static doublereal dlamc3_(doublereal *a, doublereal *b);
+static void dlamc4_(integer *emin, doublereal *start, integer *base);
+static void dlamc5_(integer *beta, integer *p, integer *emin, logical *ieee, integer *emax, doublereal *rmax);
+static doublereal dlamc33_(doublereal *a, doublereal *b);
+
+doublereal dlamch_(const char *cmach)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
@@ -48,8 +57,6 @@ doublereal dlamch_(char *cmach)
     static logical first = TRUE_;
     /* System generated locals */
     integer i__1;
-    /* Builtin functions */
-    double pow_di(doublereal *, integer *);
     /* Local variables */
     static doublereal base;
     static integer beta;
@@ -57,10 +64,7 @@ doublereal dlamch_(char *cmach)
     static integer imin, imax;
     static logical lrnd;
     static doublereal rmin, rmax, t, rmach;
-    extern logical lsame_(char *, char *);
     static doublereal small, sfmin;
-    extern /* Subroutine */ void dlamc2_(integer *, integer *, logical *,
-            doublereal *, integer *, doublereal *, integer *, doublereal *);
     static integer it;
     static doublereal rnd, eps;
 
@@ -86,7 +90,8 @@ doublereal dlamch_(char *cmach)
         if (small >= sfmin) {
 
 /*           Use SMALL plus a bit, to avoid the possibility of rounding
-             causing overflow when computing  1/sfmin. */
+             causing overflow when computing  1/sfmin.
+*/
 
             sfmin = small * (eps + 1.);
         }
@@ -175,8 +180,6 @@ doublereal dlamch_(char *cmach)
     static doublereal a, b, c, f;
     static integer lbeta;
     static doublereal savec;
-    extern doublereal dlamc3_(doublereal *, doublereal *);
-    extern doublereal dlamc33_(doublereal *, doublereal *);
     static logical lieee1;
     static doublereal t1, t2;
     static integer lt;
@@ -194,8 +197,8 @@ doublereal dlamch_(char *cmach)
 
           Compute  a = 2.0**m  with the  smallest positive integer m such
           that
-
-             fl( a + 1.0 ) = a. */
+                fl( a + 1.0 ) = a.
+*/
 
         a = c = one;
 
@@ -207,8 +210,8 @@ doublereal dlamch_(char *cmach)
 
 /*        Now compute  b = 2.0**m  with the smallest positive integer m
           such that
-
-             fl( a + b ) .gt. a. */
+                    fl( a + b ) .gt. a.
+*/
 
         b = one;
 
@@ -220,7 +223,8 @@ doublereal dlamch_(char *cmach)
 /*        Now compute the base.  a and c  are neighbouring floating point
           numbers  in the  interval  ( beta**t, beta**( t + 1 ) )  and so
           their difference is beta. Adding 0.25 to c is to ensure that it
-          is truncated to beta and not ( beta - 1 ). */
+          is truncated to beta and not ( beta - 1 ).
+*/
 
         qtr = one / 4;
         savec = c;
@@ -228,7 +232,8 @@ doublereal dlamch_(char *cmach)
         lbeta = (integer) (c + qtr);
 
 /*        Now determine whether rounding or chopping occurs,  by adding a
-          bit  less  than  beta/2  and a  bit  more  than  beta/2  to a. */
+          bit  less  than  beta/2  and a  bit  more  than  beta/2  to a.
+*/
 
         b = (doublereal) lbeta;
         d__1 = b / 2;
@@ -252,7 +257,8 @@ doublereal dlamch_(char *cmach)
           nearest' style. B/2 is half a unit in the last place of the two
           numbers A and SAVEC. Furthermore, A is even, i.e. has last bit
           zero, and SAVEC is odd. Thus adding B/2 to A should not  change
-          A, but adding B/2 to SAVEC should change SAVEC. */
+          A, but adding B/2 to SAVEC should change SAVEC.
+*/
 
         d__1 = b / 2;
         t1 = dlamc3_(&d__1, &a);
@@ -265,7 +271,8 @@ doublereal dlamch_(char *cmach)
           by powering.  So we find t as the smallest positive integer for
           which
 
-             fl( beta**t + 1.0 ) = 1.0. */
+             fl( beta**t + 1.0 ) = 1.0.
+*/
 
         lt = 0;
         a = c = one;
@@ -282,13 +289,11 @@ doublereal dlamch_(char *cmach)
     *t = lt;
     *rnd = lrnd;
     *ieee1 = lieee1;
-    return;
-
 } /* dlamc1_ */
 
 /* Subroutine */ void dlamc2_(integer *beta, integer *t, logical *rnd,
-        doublereal *eps, integer *emin, doublereal *rmin, integer *emax,
-        doublereal *rmax)
+                              doublereal *eps, integer *emin, doublereal *rmin,
+                              integer *emax, doublereal *rmax)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
@@ -352,14 +357,13 @@ doublereal dlamch_(char *cmach)
 
    =====================================================================
 */
+
     /* Initialized data */
     static logical first = TRUE_;
     static logical iwarn = FALSE_;
     /* System generated locals */
     integer i__1;
     doublereal d__1, d__2;
-    /* Builtin functions */
-    double pow_di(doublereal *, integer *);
     /* Local variables */
     static logical ieee;
     static doublereal half = 0.5;
@@ -371,12 +375,7 @@ doublereal dlamch_(char *cmach)
     static doublereal small;
     static integer gpmin;
     static doublereal third, lrmin, lrmax, sixth;
-    extern /* Subroutine */ void dlamc1_(integer *, integer *, logical *, logical *);
-    extern doublereal dlamc3_(doublereal *, doublereal *);
-    extern doublereal dlamc33_(doublereal *, doublereal *);
     static logical lieee1;
-    extern /* Subroutine */ void dlamc4_(integer *, doublereal *, integer *);
-    extern /* Subroutine */ void dlamc5_(integer *, integer *, integer *, logical *, integer *, doublereal *);
     static integer lt, ngnmin, ngpmin;
     static doublereal one = 1.;
 
@@ -435,7 +434,8 @@ doublereal dlamch_(char *cmach)
 
           Now find  EMIN.  Let A = + or - 1, and + or - (1 + BASE**(-3)).
           Keep dividing  A by BETA until (gradual) underflow occurs. This
-          is detected when we cannot recover the previous A. */
+          is detected when we cannot recover the previous A.
+*/
 
         rbase = one / lbeta;
         small = one;
@@ -455,13 +455,11 @@ doublereal dlamch_(char *cmach)
         if (ngpmin == ngnmin && gpmin == gnmin) {
             if (ngpmin == gpmin) {
                 lemin = ngpmin;
-/*            ( Non twos-complement machines, no gradual underflow;
-                e.g.,  VAX ) */
+/*            ( Non twos-complement machines, no gradual underflow; e.g.,  VAX ) */
             } else if (gpmin - ngpmin == 3) {
                 lemin = ngpmin - 1 + lt;
                 ieee = TRUE_;
-/*            ( Non twos-complement machines, with gradual underflow;
-                e.g., IEEE standard followers ) */
+/*            ( Non twos-complement machines, with gradual underflow; e.g., IEEE standard followers ) */
             } else {
                 lemin = min(ngpmin,gpmin);
 /*            ( A guess; no known machine ) */
@@ -471,33 +469,27 @@ doublereal dlamch_(char *cmach)
         } else if (ngpmin == gpmin && ngnmin == gnmin) {
             if (abs(ngpmin - ngnmin) == 1) {
                 lemin = max(ngpmin,ngnmin);
-/*            ( Twos-complement machines, no gradual underflow;
-                e.g., CYBER 205 ) */
+/*            ( Twos-complement machines, no gradual underflow; e.g., CYBER 205 ) */
             } else {
                 lemin = min(ngpmin,ngnmin);
 /*            ( A guess; no known machine ) */
                 iwarn = TRUE_;
             }
-
-        } else if (abs(ngpmin - ngnmin) == 1 && gpmin == gnmin)
-                 {
+        } else if (abs(ngpmin - ngnmin) == 1 && gpmin == gnmin) {
             if (gpmin - min(ngpmin,ngnmin) == 3) {
                 lemin = max(ngpmin,ngnmin) - 1 + lt;
-/*            ( Twos-complement machines with gradual underflow;
-                no known machine ) */
+/*            ( Twos-complement machines with gradual underflow; no known machine ) */
             } else {
                 lemin = min(ngpmin,ngnmin);
 /*            ( A guess; no known machine ) */
                 iwarn = TRUE_;
             }
-
         } else {
             lemin = min(min(min(ngpmin,ngnmin),gpmin),gnmin);
 /*         ( A guess; no known machine ) */
             iwarn = TRUE_;
         }
-/* **
-   Comment out this if block if EMIN is ok */
+/* ** Comment out this if block if EMIN is ok */
         if (iwarn) {
             first = TRUE_;
             printf("\n\n WARNING. The value EMIN may be incorrect:- ");
@@ -507,18 +499,18 @@ doublereal dlamch_(char *cmach)
             printf("code of routine DLAMC2, \n otherwise supply EMIN");
             printf("explicitly.\n");
         }
-/* **
-
-          Assume IEEE arithmetic if we found denormalised  numbers above,
+/* **     Assume IEEE arithmetic if we found denormalised  numbers above,
           or if arithmetic seems to round in the  IEEE style,  determined
           in routine DLAMC1. A true IEEE machine should have both  things
-          true; however, faulty machines may have one or the other. */
+          true; however, faulty machines may have one or the other.
+*/
 
         ieee = ieee || lieee1;
 
 /*        Compute  RMIN by successive division by  BETA. We could compute
           RMIN as BASE**( EMIN - 1 ),  but some machines underflow during
-          this computation. */
+          this computation.
+*/
 
         lrmin = one;
         for (i = 1; i <= 1-lemin; ++i) {
@@ -539,7 +531,6 @@ doublereal dlamch_(char *cmach)
     *rmin = lrmin;
     *emax = lemax;
     *rmax = lrmax;
-
 } /* dlamc2_ */
 
 doublereal dlamc3_(doublereal *a, doublereal *b)
@@ -564,8 +555,8 @@ doublereal dlamc3_(doublereal *a, doublereal *b)
 
    =====================================================================
 */
-    return *a + *b;
 
+    return *a + *b;
 } /* dlamc3_ */
 
 doublereal dlamc33_(doublereal *a, doublereal *b)
@@ -621,7 +612,6 @@ doublereal dlamc33_(doublereal *a, doublereal *b)
     static doublereal zero = 0., a;
     static integer i;
     static doublereal rbase, b1, b2, c1, c2, d1, d2;
-    extern doublereal dlamc3_(doublereal *, doublereal *);
     static doublereal one = 1.;
 
     a = *start;
@@ -650,7 +640,6 @@ doublereal dlamc33_(doublereal *a, doublereal *b)
             d2 += b2;
         }
     }
-
 } /* dlamc4_ */
 
 /* Subroutine */ void dlamc5_(integer *beta, integer *p, integer *emin,
@@ -668,7 +657,6 @@ doublereal dlamc33_(doublereal *a, doublereal *b)
     number, without overflow.  It assumes that EMAX + abs(EMIN) sum
     approximately to a power of 2.  It will fail on machines where this
     assumption does not hold, for example, the Cyber 205 (EMIN = -28625,
-
     EMAX = 28718).  It will also fail if the value supplied for EMIN is
     too large (i.e. too close to zero), probably with overflow.
 
@@ -697,6 +685,7 @@ doublereal dlamc33_(doublereal *a, doublereal *b)
 
    =====================================================================
 */
+
     /* Table of constant values */
     static doublereal c_b5 = 0.;
     /* System generated locals */
@@ -707,33 +696,32 @@ doublereal dlamc33_(doublereal *a, doublereal *b)
     static integer uexp, i;
     static doublereal y, z;
     static integer nbits;
-    extern doublereal dlamc3_(doublereal *, doublereal *);
     static doublereal recbas;
-    static integer exbits, expsum, try__;
+    static integer exbits, expsum, try;
 
-    /* First compute LEXP and UEXP, two powers of 2 that bound
+/*     First compute LEXP and UEXP, two powers of 2 that bound
        abs(EMIN). We then assume that EMAX + abs(EMIN) will sum
        approximately to the bound that is closest to abs(EMIN).
-       (EMAX is the exponent of the required number RMAX). */
+       (EMAX is the exponent of the required number RMAX).
+*/
 
     lexp = 1;
     exbits = 1;
-    try__ = lexp << 1;
-    while (try__ <= -(*emin)) {
-        lexp = try__;
-        try__ = lexp << 1;
+    while ((try = lexp << 1) <= -(*emin)) {
+        lexp = try;
         ++exbits;
     }
     if (lexp == -(*emin)) {
         uexp = lexp;
     } else {
-        uexp = try__;
+        uexp = try;
         ++exbits;
     }
 
 /*     Now -LEXP is less than or equal to EMIN, and -UEXP is greater
        than or equal to EMIN. EXBITS is the number of bits needed to
-       store the exponent. */
+       store the exponent.
+*/
 
     if (uexp + *emin > -lexp - *emin) {
         expsum = lexp << 1;
@@ -741,14 +729,12 @@ doublereal dlamc33_(doublereal *a, doublereal *b)
         expsum = uexp << 1;
     }
 
-/*     EXPSUM is the exponent range, approximately equal to
-       EMAX - EMIN + 1 . */
+/*     EXPSUM is the exponent range, approximately equal to EMAX - EMIN + 1 . */
 
     *emax = expsum + *emin - 1;
     nbits = exbits + 1 + *p;
 
-/*     NBITS is the total number of bits needed to store a
-       floating-point number. */
+/*     NBITS is the total number of bits needed to store a floating-point number. */
 
     if (nbits % 2 == 1 && *beta == 2) {
 
@@ -761,15 +747,15 @@ doublereal dlamc33_(doublereal *a, doublereal *b)
           If this is true, then we need to reduce EMAX by one because
           there must be some way of representing zero in an implicit-bit
           system. On machines like Cray, we are reducing EMAX by one
-          unnecessarily. */
+          unnecessarily.
+*/
 
         --(*emax);
     }
 
     if (*ieee) {
 
-/*        Assume we are on an IEEE machine which reserves one exponent
-          for infinity and NaN. */
+/*        Assume we are on an IEEE machine which reserves one exponent for infinity and NaN.  */
 
         --(*emax);
     }
@@ -777,8 +763,7 @@ doublereal dlamc33_(doublereal *a, doublereal *b)
 /*     Now create RMAX, the largest machine number, which should
        be equal to (1.0 - BETA**(-P)) * BETA**EMAX .
 
-       First compute 1.0 - BETA**(-P), being careful that the
-       result is less than 1.0 . */
+       First compute 1.0 - BETA**(-P), being careful that the result is less than 1.0 . */
 
     recbas = 1. / *beta;
     z = *beta - 1.;
@@ -802,5 +787,4 @@ doublereal dlamc33_(doublereal *a, doublereal *b)
     }
 
     *rmax = y;
-
 } /* dlamc5_ */

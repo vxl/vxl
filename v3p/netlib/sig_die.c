@@ -1,3 +1,8 @@
+#include "f2c.h"
+#include "netlib.h"
+#undef abs
+#undef min
+#undef max
 #include <stdio.h>
 #include <stdlib.h> /* for abort() */
 

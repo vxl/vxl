@@ -1,40 +1,31 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
 /* Table of constant values */
-
 static integer c__1 = 1;
 static integer c_n1 = -1;
 static integer c__3 = 3;
 static integer c__2 = 2;
 
 /* Subroutine */ void zungqr_(m, n, k, a, lda, tau, work, lwork, info)
-integer *m, *n, *k;
+const integer *m, *n, *k;
 doublecomplex *a;
-integer *lda;
-doublecomplex *tau, *work;
-integer *lwork, *info;
+const integer *lda;
+const doublecomplex *tau;
+doublecomplex *work;
+const integer *lwork;
+integer *info;
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
 
     /* Local variables */
     static integer i, j, l, nbmin, iinfo, ib, nb, ki, kk;
-    extern /* Subroutine */ void zung2r_();
     static integer nx;
-    extern /* Subroutine */ void xerbla_();
-    extern integer ilaenv_();
-    extern /* Subroutine */ void zlarfb_();
     static integer ldwork;
-    extern /* Subroutine */ void zlarft_();
     static integer iws;
-
 
 /*  -- LAPACK routine (version 2.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -95,8 +86,6 @@ integer *lwork, *info;
 /*                                                                        */
 /*  ===================================================================== */
 
-    /* Function Body */
-
     *info = 0;
     if (*m < 0) {
         *info = -1;
@@ -111,7 +100,7 @@ integer *lwork, *info;
     }
     if (*info != 0) {
         i__1 = -(*info);
-        xerbla_("ZUNGQR", &i__1, 6L);
+        xerbla_("ZUNGQR", &i__1);
         return;
     }
 
@@ -124,7 +113,7 @@ integer *lwork, *info;
 
 /*     Determine the block size. */
 
-    nb = ilaenv_(&c__1, "ZUNGQR", " ", m, n, k, &c_n1, 6L, 1L);
+    nb = ilaenv_(&c__1, "ZUNGQR", " ", m, n, k, &c_n1);
     nbmin = 2;
     nx = 0;
     iws = *n;
@@ -132,7 +121,7 @@ integer *lwork, *info;
 
 /*        Determine when to cross over from blocked to unblocked code. */
 
-        i__1 = ilaenv_(&c__3, "ZUNGQR", " ", m, n, k, &c_n1, 6L, 1L);
+        i__1 = ilaenv_(&c__3, "ZUNGQR", " ", m, n, k, &c_n1);
         nx = max(0,i__1);
         if (nx < *k) {
 
@@ -146,7 +135,7 @@ integer *lwork, *info;
 /*              determine the minimum value of NB. */
 
                 nb = *lwork / ldwork;
-                i__1 = ilaenv_(&c__2, "ZUNGQR", " ", m, n, k, &c_n1, 6L, 1L);
+                i__1 = ilaenv_(&c__2, "ZUNGQR", " ", m, n, k, &c_n1);
                 nbmin = max(2,i__1);
             }
         }
@@ -193,15 +182,15 @@ integer *lwork, *info;
 /*              H = H(i) H(i+1) . . . H(i+ib-1) */
 
                 i__1 = *m - i;
-                zlarft_("Forward", "Columnwise", &i__1, &ib, &a[i+i* *lda], lda, &tau[i], work, &ldwork, 7L, 10L);
+                zlarft_("Forward", "Columnwise", &i__1, &ib, &a[i+i* *lda], lda, &tau[i], work, &ldwork);
 
 /*              Apply H to A(i:m,i+ib:n) from the left */
 
                 i__1 = *m - i;
                 i__2 = *n - i - ib;
-                zlarfb_("Left", "No transpose", "Forward", "Columnwise", &
-                        i__1, &i__2, &ib, &a[i+i* *lda], lda, work, &ldwork,
-                        &a[i+(i+ib)* *lda], lda, &work[ib], &ldwork, 4L, 12L, 7L, 10L);
+                zlarfb_("Left", "No transpose", "Forward", "Columnwise",
+                        &i__1, &i__2, &ib, &a[i+i* *lda], lda, work, &ldwork,
+                        &a[i+(i+ib)* *lda], lda, &work[ib], &ldwork);
             }
 
 /*           Apply H to rows i:m of current block */
@@ -221,8 +210,4 @@ integer *lwork, *info;
     }
 
     work[0].r = (doublereal) iws, work[0].i = 0.;
-
-/*     End of ZUNGQR */
-
 } /* zungqr_ */
-

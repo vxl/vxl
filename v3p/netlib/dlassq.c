@@ -1,16 +1,8 @@
-/* dlassq.f -- translated by f2c (version of 4 June 1993  1:43:59).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
-/* Subroutine */ void dlassq_(integer *n, doublereal *x, integer *incx,
-        doublereal *scale, doublereal *sumsq)
+/* Subroutine */ void dlassq_(const integer *n, const doublereal *x, const integer *incx, doublereal *scale, doublereal *sumsq)
 {
-    /* System generated locals */
-    doublereal d__1;
-
     /* Local variables */
     static doublereal absxi;
     static integer ix;
@@ -68,12 +60,12 @@
             if (x[ix] != 0.) {
                 absxi = abs(x[ix]);
                 if (*scale < absxi) {
-                    d__1 = *scale / absxi;
-                    *sumsq = *sumsq * d__1 * d__1 + 1;
+                    *scale /= absxi;
+                    *sumsq = *sumsq * *scale * *scale + 1;
                     *scale = absxi;
                 } else {
-                    d__1 = absxi / *scale;
-                    *sumsq += d__1 * d__1;
+                    absxi /= *scale;
+                    *sumsq += absxi * absxi;
                 }
             }
         }

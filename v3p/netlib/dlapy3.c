@@ -1,16 +1,10 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
+extern double sqrt(double); /* #include <math.h> */
 
 doublereal dlapy3_(x, y, z)
-doublereal *x, *y, *z;
+const doublereal *x, *y, *z;
 {
-    /* Builtin functions */
-    double sqrt();
-
     /* Local variables */
     static doublereal xabs, yabs, zabs, w;
 

@@ -1,6 +1,7 @@
 #include "f2c.h"
+#include "netlib.h"
 
-double d_imag(doublecomplex *a)
+doublereal d_imag(const doublecomplex *z)
 {
-  return  a->i;
+  return  z->i;
 }

@@ -1,12 +1,7 @@
-/* slapmt.f -- translated by f2c (version of 4 June 1993  1:43:59).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
-/* Subroutine */ void slapmt_(logical *forwrd, integer *m, integer *n, real *x,
-         integer *ldx, integer *k)
+/* Subroutine */ void slapmt_(logical *forwrd, integer *m, integer *n, real *x, integer *ldx, integer *k)
 {
     /* System generated locals */
     integer x_dim1, x_offset, i__1, i__2;
@@ -16,58 +11,48 @@
     static integer i, j, ii, in;
 
 
-/*  -- LAPACK auxiliary routine (version 2.0) -- */
-/*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
-/*     Courant Institute, Argonne National Lab, and Rice University */
-/*     March 31, 1993 */
+/*  -- LAPACK auxiliary routine (version 2.0) --                          */
+/*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,        */
+/*     Courant Institute, Argonne National Lab, and Rice University       */
+/*     March 31, 1993                                                     */
 
-/*     .. Scalar Arguments .. */
-/*     .. */
-/*     .. Array Arguments .. */
-/*     .. */
-
-/*  Purpose */
-/*  ======= */
-
-/*  SLAPMT rearranges the columns of the M by N matrix X as specified */
-/*  by the permutation K(1),K(2),...,K(N) of the integers 1,...,N. */
-/*  If FORWRD = .TRUE.,  forward permutation: */
-
-/*       X(*,K(J)) is moved X(*,J) for J = 1,2,...,N. */
-
-/*  If FORWRD = .FALSE., backward permutation: */
-
-/*       X(*,J) is moved to X(*,K(J)) for J = 1,2,...,N. */
-
-/*  Arguments */
-/*  ========= */
-
-/*  FORWRD  (input) LOGICAL */
-/*          = .TRUE., forward permutation */
-/*          = .FALSE., backward permutation */
-
-/*  M       (input) INTEGER */
-/*          The number of rows of the matrix X. M >= 0. */
-
-/*  N       (input) INTEGER */
-/*          The number of columns of the matrix X. N >= 0. */
-
-/*  X       (input/output) REAL array, dimension (LDX,N) */
-/*          On entry, the M by N matrix X. */
-/*          On exit, X contains the permuted matrix X. */
-
-/*  LDX     (input) INTEGER */
-/*          The leading dimension of the array X, LDX >= MAX(1,M). */
-
-/*  K       (input) INTEGER array, dimension (N) */
-/*          On entry, K contains the permutation vector. */
-
-/*  =====================================================================
-*/
-
-/*     .. Local Scalars .. */
-/*     .. */
-/*     .. Executable Statements .. */
+/*  Purpose                                                               */
+/*  =======                                                               */
+/*                                                                        */
+/*  SLAPMT rearranges the columns of the M by N matrix X as specified     */
+/*  by the permutation K(1),K(2),...,K(N) of the integers 1,...,N.        */
+/*  If FORWRD = .TRUE.,  forward permutation:                             */
+/*                                                                        */
+/*       X(*,K(J)) is moved X(*,J) for J = 1,2,...,N.                     */
+/*                                                                        */
+/*  If FORWRD = .FALSE., backward permutation:                            */
+/*                                                                        */
+/*       X(*,J) is moved to X(*,K(J)) for J = 1,2,...,N.                  */
+/*                                                                        */
+/*  Arguments                                                             */
+/*  =========                                                             */
+/*                                                                        */
+/*  FORWRD  (input) LOGICAL                                               */
+/*          = .TRUE., forward permutation                                 */
+/*          = .FALSE., backward permutation                               */
+/*                                                                        */
+/*  M       (input) INTEGER                                               */
+/*          The number of rows of the matrix X. M >= 0.                   */
+/*                                                                        */
+/*  N       (input) INTEGER                                               */
+/*          The number of columns of the matrix X. N >= 0.                */
+/*                                                                        */
+/*  X       (input/output) REAL array, dimension (LDX,N)                  */
+/*          On entry, the M by N matrix X.                                */
+/*          On exit, X contains the permuted matrix X.                    */
+/*                                                                        */
+/*  LDX     (input) INTEGER                                               */
+/*          The leading dimension of the array X, LDX >= MAX(1,M).        */
+/*                                                                        */
+/*  K       (input) INTEGER array, dimension (N)                          */
+/*          On entry, K contains the permutation vector.                  */
+/*                                                                        */
+/*  ===================================================================== */
 
     /* Parameter adjustments */
     --k;
@@ -75,7 +60,6 @@
     x_offset = x_dim1 + 1;
     x -= x_offset;
 
-    /* Function Body */
     if (*n <= 1) {
         return;
     }
@@ -83,7 +67,6 @@
     i__1 = *n;
     for (i = 1; i <= i__1; ++i) {
         k[i] = -k[i];
-/* L10: */
     }
 
     if (*forwrd) {
@@ -100,7 +83,6 @@
             j = i;
             k[j] = -k[j];
             in = k[j];
-
 L20:
             if (k[in] > 0) {
                 goto L40;
@@ -111,7 +93,6 @@ L20:
                 temp = x[ii + j * x_dim1];
                 x[ii + j * x_dim1] = x[ii + in * x_dim1];
                 x[ii + in * x_dim1] = temp;
-/* L30: */
             }
 
             k[in] = -k[in];
@@ -120,8 +101,6 @@ L20:
             goto L20;
 
 L40:
-
-/* L60: */
             ;
         }
 
@@ -148,21 +127,13 @@ L80:
                 temp = x[ii + i * x_dim1];
                 x[ii + i * x_dim1] = x[ii + j * x_dim1];
                 x[ii + j * x_dim1] = temp;
-/* L90: */
             }
 
             k[j] = -k[j];
             j = k[j];
             goto L80;
-
 L100:
-/* L110: */
             ;
         }
-
     }
-
-/*     End of SLAPMT */
-
 } /* slapmt_ */
-

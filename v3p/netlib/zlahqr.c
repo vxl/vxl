@@ -1,34 +1,27 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
 /* Table of constant values */
-
 static integer c__2 = 2;
 static integer c__1 = 1;
 
 /* Subroutine */ void zlahqr_(wantt, wantz, n, ilo, ihi, h, ldh, w, iloz, ihiz, z, ldz, info)
-logical *wantt, *wantz;
-integer *n, *ilo, *ihi;
+const logical *wantt, *wantz;
+const integer *n, *ilo, *ihi;
 doublecomplex *h;
-integer *ldh;
+const integer *ldh;
 doublecomplex *w;
 integer *iloz, *ihiz;
 doublecomplex *z;
-integer *ldz, *info;
+const integer *ldz;
+integer *info;
 {
     /* System generated locals */
     integer i__1, i__2;
     doublereal d__1, d__2;
     doublecomplex z__1, z__2;
-
-    /* Builtin functions */
-    void z_sqrt(), d_cnjg();
 
     /* Local variables */
     static doublereal unfl, ovfl;
@@ -36,26 +29,18 @@ integer *ldz, *info;
     static integer i, j, k, l, m;
     static doublereal s;
     static doublecomplex t, u, v[2], x, y;
-    extern /* Subroutine */ void zscal_();
     static doublereal rtemp;
     static integer i1, i2;
     static doublereal rwork[1];
     static doublecomplex t1;
     static doublereal t2;
-    extern /* Subroutine */ void zcopy_();
     static doublecomplex v2;
-    extern doublereal dlapy2_();
-    extern /* Subroutine */ void dlabad_();
     static doublereal h10;
     static doublecomplex h11;
     static doublereal h21;
     static doublecomplex h22;
     static integer nh;
-    extern doublereal dlamch_();
     static integer nz;
-    extern /* Subroutine */ void zlarfg_();
-    extern /* Double Complex */ void zladiv_();
-    extern doublereal zlanhs_();
     static doublereal smlnum;
     static doublecomplex h11s;
     static integer itn, its;
@@ -161,10 +146,10 @@ integer *ldz, *info;
 /*     Set machine-dependent constants for the stopping criterion. */
 /*     If norm(H) <= sqrt(OVFL), overflow should not occur. */
 
-    unfl = dlamch_("Safe minimum", 12L);
+    unfl = dlamch_("Safe minimum");
     ovfl = 1. / unfl;
     dlabad_(&unfl, &ovfl);
-    ulp = dlamch_("Precision", 9L);
+    ulp = dlamch_("Precision");
     smlnum = unfl * (nh / ulp);
 
 /*     I1 and I2 are the indices of the first row and last column of H */
@@ -207,7 +192,7 @@ L10:
             tst1 = abs(h[i__1].r) + abs(h[i__1].i) + abs(h[i__2].r) + abs(h[i__2].i);
             if (tst1 == 0.) {
                 i__1 = i - l + 1;
-                tst1 = zlanhs_("1", &i__1, &h[l + l * *ldh], ldh, rwork, 1L);
+                tst1 = zlanhs_("1", &i__1, &h[l + l * *ldh], ldh, rwork);
             }
             if (abs(h[k + (k - 1) * *ldh].r) <= max(ulp * tst1,smlnum)) {
                 break;

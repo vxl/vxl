@@ -1,14 +1,20 @@
-/* rg.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
+extern double sqrt(double); /* #include <math.h> */
+
+static void balanc_(integer *nm, integer *n, doublereal *a, integer *low, integer *igh, doublereal *scale);
+static void balbak_(integer *nm, integer *n, integer *low, integer *igh, doublereal *scale, integer *m, doublereal *z);
+static void cdiv_(doublereal *ar, doublereal *ai, doublereal *br, doublereal *bi, doublereal *cr, doublereal *ci);
+static void elmhes_(integer *nm, integer *n, integer *low, integer *igh, doublereal *a, integer *int_);
+static void eltran_(integer *nm, integer *n, integer *low, integer *igh, doublereal *a, integer *int_, doublereal *z);
+static void hqr_(integer *nm, integer *n, integer *low, integer *igh, doublereal *h,
+                 doublereal *wr, doublereal *wi, integer *ierr);
+static void hqr2_(integer *nm, integer *n, integer *low, integer *igh, doublereal *h,
+                  doublereal *wr, doublereal *wi, doublereal *z, integer *ierr);
 
 /* Modified by Peter Vanroose, Sept 2001: manual optimisation and clean-up */
 
 /* Table of constant values */
-
 static doublereal c_b130 = 0.;
 
 /* ====================================================================== */
@@ -26,11 +32,7 @@ doublereal *fv1;
 integer *ierr;
 {
     /* Local variables */
-    extern /* Subroutine */ void balbak_(), balanc_(), elmhes_(), eltran_();
     static integer is1, is2;
-    extern /* Subroutine */ void hqr_(), hqr2_();
-
-
 
 /*     this subroutine calls the recommended sequence of */
 /*     subroutines from the eigensystem subroutine package (eispack) */
@@ -79,7 +81,6 @@ integer *ierr;
 
 /*     ------------------------------------------------------------------ */
 
-    /* Function Body */
     if (*n <= *nm) {
         goto L10;
     }
@@ -119,7 +120,6 @@ doublereal *scale;
     static integer i, j, k, l, m;
     static doublereal r, s, radix, b2;
     static logical noconv;
-
 
 
 /*     this subroutine is a translation of the algol procedure balance, */
@@ -174,15 +174,13 @@ doublereal *scale;
 
 /*     ------------------------------------------------------------------ */
 
-    /* Function Body */
     radix = 16.;
 
     b2 = radix * radix;
     k = 0;
     l = *n;
     goto L100;
-/*     .......... in-line procedure for row and */
-/*                column exchange .......... */
+/*     .......... in-line procedure for row and column exchange .......... */
 L20:
     scale[m] = (doublereal) j+1;
     if (j == m) {
@@ -206,8 +204,7 @@ L50:
         case 1:  goto L80;
         case 2:  goto L130;
     }
-/*     .......... search for rows isolating an eigenvalue */
-/*                and push them down .......... */
+/*     .......... search for rows isolating an eigenvalue and push them down .......... */
 L80:
     if (l == 1) {
         goto L280;
@@ -217,14 +214,9 @@ L80:
 L100:
     for (j = l-1; j >= 0; --j) {
         for (i = 0; i < l; ++i) {
-            if (i == j) {
-                goto L110;
+            if (i != j && a[j + i * *nm] != 0.) {
+                goto L120; /* continue outer loop */
             }
-            if (a[j + i * *nm] != 0.) {
-                goto L120;
-            }
-L110:
-            ;
         }
 
         m = l-1;
@@ -235,22 +227,16 @@ L120:
     }
 
     goto L140;
-/*     .......... search for columns isolating an eigenvalue */
-/*                and push them left .......... */
+/*     .......... search for columns isolating an eigenvalue and push them left .......... */
 L130:
     ++k;
 
 L140:
     for (j = k; j < l; ++j) {
         for (i = k; i < l; ++i) {
-            if (i == j) {
-                goto L150;
+            if (i != j && a[i + j * *nm] != 0.) {
+                goto L170; /* continue outer loop */
             }
-            if (a[i + j * *nm] != 0.) {
-                goto L170;
-            }
-L150:
-            ;
         }
 
         m = k;
@@ -279,7 +265,7 @@ L190:
         }
 /*     .......... guard against zero c or r due to underflow .......... */
         if (c == 0. || r == 0.) {
-            goto L270;
+            continue;
         }
         g = r / radix;
         f = 1.;
@@ -303,7 +289,7 @@ L230:
 /*     .......... now balance .......... */
 L240:
         if ((c + r) / f >= s * .95) {
-            goto L270;
+            continue;
         }
         g = 1. / f;
         scale[i] *= f;
@@ -316,9 +302,6 @@ L240:
         for (j = 0; j < l; ++j) {
             a[j + i * *nm] *= f;
         }
-
-L270:
-        ;
     }
 
     if (noconv) {
@@ -375,15 +358,12 @@ doublereal *z;
 /*          transformed eigenvectors in its first m columns. */
 
 /*     questions and comments should be directed to burton s. garbow, */
-/*     mathematics and computer science div, argonne national laboratory
-*/
+/*     mathematics and computer science div, argonne national laboratory */
 
 /*     this version dated august 1983. */
 
-/*     ------------------------------------------------------------------
-*/
+/*     ------------------------------------------------------------------ */
 
-    /* Function Body */
     if (*m == 0) {
         return; /* exit from balbak_ */
     }
@@ -394,12 +374,10 @@ doublereal *z;
     for (i = *low-1; i < *igh; ++i) {
         s = scale[i];
 /*     .......... left hand eigenvectors are back transformed */
-/*                if the foregoing statement is replaced by */
-/*                s=1.0d0/scale(i). .......... */
+/*                if the foregoing statement is replaced by s=1.0d0/scale(i). .......... */
         for (j = 0; j < *m; ++j) {
             z[i + j * *nm] *= s;
         }
-
     }
 /*     ......... for i=low-1 step -1 until 1, */
 /*               igh+1 step 1 until n do -- .......... */
@@ -407,24 +385,18 @@ L120:
     for (ii = 0; ii < *n; ++ii) {
         i = ii;
         if (i+1 >= *low && i < *igh) {
-            goto L140;
+            continue;
         }
         if (i+1 < *low) {
             i = *low - ii - 2;
         }
         k = (integer) scale[i] - 1;
-        if (k == i) {
-            goto L140;
-        }
-
+        if (k != i)
         for (j = 0; j < *m; ++j) {
             s = z[i + j * *nm];
             z[i + j * *nm] = z[k + j * *nm];
             z[k + j * *nm] = s;
         }
-
-L140:
-        ;
     }
 } /* balbak_ */
 
@@ -433,7 +405,6 @@ doublereal *ar, *ai, *br, *bi, *cr, *ci;
 {
     /* Local variables */
     static doublereal s, ais, bis, ars, brs;
-
 
 /*     complex division, (cr,ci) = (ar,ai)/(br,bi) */
 
@@ -445,7 +416,6 @@ doublereal *ar, *ai, *br, *bi, *cr, *ci;
     s = brs * brs + bis * bis;
     *cr = (ars * brs + ais * bis) / s;
     *ci = (ais * brs - ars * bis) / s;
-    return;
 } /* cdiv_ */
 
 /* Subroutine */ void elmhes_(nm, n, low, igh, a, int_)
@@ -499,7 +469,6 @@ integer *int_;
 
 /*     ------------------------------------------------------------------ */
 
-    /* Function Body */
     la = *igh - 1;
     if (la < *low + 1) {
         return; /* exit from elmhes_ */
@@ -509,15 +478,11 @@ integer *int_;
         mm1 = m-1;
         x = 0.;
         i = m;
-
         for (j = m; j < *igh; ++j) {
-            if (abs(a[j + mm1 * *nm]) <= abs(x)) {
-                goto L100;
+            if (abs(a[j + mm1 * *nm]) > abs(x)) {
+                x = a[j + mm1 * *nm];
+                i = j;
             }
-            x = a[j + mm1 * *nm];
-            i = j;
-L100:
-            ;
         }
 
         int_[m] = i+1;
@@ -538,13 +503,11 @@ L100:
         }
 /*     .......... end interchange .......... */
 L130:
-        if (x == 0.) {
-            goto L180;
-        }
+        if (x != 0.)
         for (i = m+1; i < *igh; ++i) {
             y = a[i + mm1 * *nm];
             if (y == 0.) {
-                goto L160;
+                continue;
             }
             y /= x;
             a[i + mm1 * *nm] = y;
@@ -556,11 +519,7 @@ L130:
             for (j = 0; j < *igh; ++j) {
                 a[j + m * *nm] += y * a[j + i * *nm];
             }
-L160:
-            ;
         }
-L180:
-        ;
     }
 } /* elmhes_ */
 
@@ -615,7 +574,6 @@ doublereal *z;
 
 /*     .......... initialize z to identity matrix .......... */
 
-    /* Function Body */
     for (j = 0; j < *n; ++j) {
         for (i = 0; i < *n; ++i) {
             z[i + j * *nm] = 0.;
@@ -656,9 +614,6 @@ integer *ierr;
     /* System generated locals */
     doublereal d__1;
 
-    /* Builtin functions */
-    double sqrt(), d_sign();
-
     /* Local variables */
     static doublereal norm;
     static integer i, j, k, l, m;
@@ -670,7 +625,6 @@ integer *ierr;
     static doublereal tst1, tst2;
 
 /*  RESTORED CORRECT INDICES OF LOOPS (200,210,230,240). (9/29/89 BSG) */
-
 
 /*     this subroutine is a translation of the algol procedure hqr, */
 /*     num. math. 14, 219-231(1970) by martin, peters, and wilkinson. */
@@ -722,26 +676,20 @@ integer *ierr;
 
 /*     ------------------------------------------------------------------ */
 
-    /* Function Body */
     *ierr = 0;
     norm = 0.;
     k = 0;
 /*     .......... store roots isolated by balanc */
 /*                and compute matrix norm .......... */
     for (i = 0; i < *n; ++i) {
-
         for (j = k; j < *n; ++j) {
             norm += abs(h[i + j * *nm]);
         }
-
         k = i;
-        if (i+1 >= *low && i < *igh) {
-            goto L50;
+        if (i+1 < *low || i >= *igh) {
+            wr[i] = h[i + i * *nm];
+            wi[i] = 0.;
         }
-        wr[i] = h[i + i * *nm];
-        wi[i] = 0.;
-L50:
-        ;
     }
 
     en = *igh - 1;
@@ -826,12 +774,9 @@ L130:
 L150:
     for (i = m+2; i <= en; ++i) {
         h[i + (i-2) * *nm] = 0.;
-        if (i == m+2) {
-            goto L160;
+        if (i != m+2) {
+            h[i + (i-3) * *nm] = 0.;
         }
-        h[i + (i-3) * *nm] = 0.;
-L160:
-        ;
     }
 /*     .......... double qr step involving rows l to en and */
 /*                columns m to en .......... */
@@ -848,7 +793,7 @@ L160:
         }
         x = abs(p) + abs(q) + abs(r);
         if (x == 0.) {
-            goto L260;
+            continue;
         }
         p /= x;
         q /= x;
@@ -889,7 +834,7 @@ L190:
             h[i + k * *nm] -= p;
             h[i + (k+1) * *nm] -= p * q;
         }
-        goto L255;
+        continue;
 L225:
 /*     .......... row modification .......... */
         for (j = k; j <= en; ++j) {
@@ -907,10 +852,6 @@ L225:
             h[i + (k+1) * *nm] -= p * q;
             h[i + (k+2) * *nm] -= p * r;
         }
-L255:
-
-L260:
-        ;
     }
 
     goto L70;
@@ -964,11 +905,7 @@ integer *ierr;
     /* System generated locals */
     doublereal d__1, d__2;
 
-    /* Builtin functions */
-    double sqrt(), d_sign();
-
     /* Local variables */
-    extern /* Subroutine */ void cdiv_();
     static doublereal norm;
     static integer i, j, k, l, m;
     static doublereal p, q, r, s, t, w, x, y;
@@ -976,9 +913,8 @@ integer *ierr;
     static doublereal ra, sa;
     static doublereal vi, vr, zz;
     static logical notlas;
-    static integer mp2, itn, its, enm2;
+    static integer itn, its, enm2;
     static doublereal tst1, tst2;
-
 
 
 /*     this subroutine is a translation of the algol procedure hqr2, */
@@ -1046,7 +982,6 @@ integer *ierr;
 
 /*     ------------------------------------------------------------------ */
 
-    /* Function Body */
     *ierr = 0;
     norm = 0.;
     k = 0;
@@ -1057,13 +992,10 @@ integer *ierr;
             norm += abs(h[i + j * *nm]);
         }
         k = i;
-        if (i+1 >= *low && i < *igh) {
-            goto L50;
+        if (i+1 < *low || i >= *igh) {
+            wr[i] = h[i + i * *nm];
+            wi[i] = 0.;
         }
-        wr[i] = h[i + i * *nm];
-        wi[i] = 0.;
-L50:
-        ;
     }
 
     en = *igh - 1;
@@ -1148,10 +1080,9 @@ L130:
 L150:
     for (i = m+2; i <= en; ++i) {
         h[i + (i-2) * *nm] = 0.;
-        if (i == m+2) {
-            continue;
+        if (i != m+2) {
+            h[i + (i-3) * *nm] = 0.;
         }
-        h[i + (i-3) * *nm] = 0.;
     }
 /*     .......... double qr step involving rows l to en and */
 /*                columns m to en .......... */
@@ -1168,7 +1099,7 @@ L150:
         }
         x = abs(p) + abs(q) + abs(r);
         if (x == 0.) {
-            goto L260;
+            continue;
         }
         p /= x;
         q /= x;
@@ -1215,7 +1146,7 @@ L190:
             z[i + k * *nm] -= p;
             z[i + (k+1) * *nm] -= p * q;
         }
-        goto L255;
+        continue;
 L225:
 /*     .......... row modification .......... */
         for (j = k; j < *n; ++j) {
@@ -1240,10 +1171,6 @@ L225:
             z[i + (k+1) * *nm] -= p * q;
             z[i + (k+2) * *nm] -= p * r;
         }
-L255:
-
-L260:
-        ;
     }
 
     goto L70;
@@ -1323,13 +1250,13 @@ L340:
         if (q < 0.) {
             goto L710;
         } else if (q != 0) {
-            goto L800;
+            continue ;
         }
 /*     .......... real vector .......... */
         m = en;
         h[en + en * *nm] = 1.;
         if (en == 0) {
-            goto L800;
+            continue ;
         }
 /*     .......... for i=en-1 step -1 until 1 do -- .......... */
         for (i = na; i >= 0; --i) {
@@ -1345,7 +1272,7 @@ L340:
             }
             zz = w;
             s = r;
-            goto L700;
+            continue;
 L630:
             m = i;
             if (wi[i] != 0.) {
@@ -1385,22 +1312,19 @@ L650:
 L680:
             t = abs(h[i + en * *nm]);
             if (t == 0.) {
-                goto L700;
+                continue;
             }
             tst1 = t;
             tst2 = tst1 + 1. / tst1;
             if (tst2 > tst1) {
-                goto L700;
+                continue;
             }
             for (j = i; j <= en; ++j) {
                 h[j + en * *nm] /= t;
             }
-
-L700:
-            ;
         }
 /*     .......... end real vector .......... */
-        goto L800;
+        continue;
 /*     .......... complex vector .......... */
 L710:
         m = na;
@@ -1420,10 +1344,8 @@ L730:
         h[en + na * *nm] = 0.;
         h[en + en * *nm] = 1.;
         enm2 = na - 1;
-        if (na == 0) {
-            goto L800;
-        }
 /*     .......... for i=en-2 step -1 until 1 do -- .......... */
+        if (na != 0)
         for (i = enm2; i >= 0; --i) {
             w = h[i + i * *nm] - p;
             ra = 0.;
@@ -1440,7 +1362,7 @@ L730:
             zz = w;
             r = ra;
             s = sa;
-            goto L795;
+            continue;
 L770:
             m = i;
             if (wi[i] != 0.) {
@@ -1487,38 +1409,25 @@ L790:
             d__1 = abs(h[i + na * *nm]), d__2 = abs(h[i + en * *nm]);
             t = max(d__1,d__2);
             if (t == 0.) {
-                goto L795;
+                continue;
             }
             tst1 = t;
             tst2 = tst1 + 1. / tst1;
-            if (tst2 > tst1) {
-                goto L795;
-            }
+            if (tst2 <= tst1)
             for (j = i; j <= en; ++j) {
                 h[j + na * *nm] /= t;
                 h[j + en * *nm] /= t;
             }
-
-L795:
-            ;
         }
 /*     .......... end complex vector .......... */
-L800:
-        ;
     }
 /*     .......... end back substitution. */
 /*                vectors of isolated roots .......... */
     for (i = 0; i < *n; ++i) {
-        if (i+1 >= *low && i < *igh) {
-            goto L840;
-        }
-
+        if (i+1 < *low || i >= *igh)
         for (j = i; j < *n; ++j) {
             z[i + j * *nm] = h[i + j * *nm];
         }
-
-L840:
-        ;
     }
 /*     .......... multiply by transformation matrix to give */
 /*                vectors of original full matrix. */
@@ -1545,4 +1454,3 @@ L1000:
 L1001:
     return;
 } /* hqr2_ */
-

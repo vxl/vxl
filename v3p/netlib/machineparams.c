@@ -1,7 +1,8 @@
 #include "f2c.h"
+#include "netlib.h"
 
 doublereal dpmpar_(i)
-integer *i;
+const integer *i;
 {
 /*     function dpmpar */
 
@@ -38,6 +39,6 @@ integer *i;
     1.7976931348623158e+308,
     2.2250738585072014e-308
   };
-  
+
   return dmach[*i - 1];
 }

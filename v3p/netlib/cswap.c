@@ -1,19 +1,14 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
-
 /* Subroutine */ void cswap_(n, cx, incx, cy, incy)
-integer *n;
+const integer *n;
 complex *cx;
-integer *incx;
+const integer *incx;
 complex *cy;
-integer *incy;
+const integer *incy;
 {
     /* Local variables */
     static integer i;
@@ -23,8 +18,6 @@ integer *incy;
 /*     interchanges two vectors. */
 /*     jack dongarra, linpack, 3/11/78. */
 /*     modified 12/3/93, array(1) declarations changed to array(*) */
-
-    /* Function Body */
 
     if (*n <= 0) {
         return;

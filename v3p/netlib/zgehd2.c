@@ -1,20 +1,15 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
 /* Table of constant values */
-
 static integer c__1 = 1;
 
 /* Subroutine */ void zgehd2_(n, ilo, ihi, a, lda, tau, work, info)
-integer *n, *ilo, *ihi;
+const integer *n, *ilo, *ihi;
 doublecomplex *a;
-integer *lda;
+const integer *lda;
 doublecomplex *tau, *work;
 integer *info;
 {
@@ -22,14 +17,9 @@ integer *info;
     integer i__1, i__2, i__3;
     doublecomplex z__1;
 
-    /* Builtin functions */
-    void d_cnjg();
-
     /* Local variables */
     static integer i;
     static doublecomplex alpha;
-    extern /* Subroutine */ void zlarf_(), xerbla_(), zlarfg_();
-
 
 /*  -- LAPACK routine (version 2.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -114,8 +104,6 @@ integer *info;
 /*                                                                        */
 /*  ===================================================================== */
 
-    /* Function Body */
-
     *info = 0;
     if (*n < 0) {
         *info = -1;
@@ -128,7 +116,7 @@ integer *info;
     }
     if (*info != 0) {
         i__1 = -(*info);
-        xerbla_("ZGEHD2", &i__1, 6L);
+        xerbla_("ZGEHD2", &i__1);
         return;
     }
 
@@ -144,20 +132,14 @@ integer *info;
 
 /*        Apply H(i) to A(1:ihi,i+1:ihi) from the right */
 
-        zlarf_("Right", ihi, &i__2, &a[i__1], &c__1, &tau[i],
-               &a[(i+1)*(*lda)], lda, work, 5L);
+        zlarf_("Right", ihi, &i__2, &a[i__1], &c__1, &tau[i], &a[(i+1)*(*lda)], lda, work);
 
 /*        Apply H(i)' to A(i+1:ihi,i+1:n) from the left */
 
         d_cnjg(&z__1, &tau[i]);
         i__3 = *n - i - 1;
-        zlarf_("Left", &i__2, &i__3, &a[i__1], &c__1, &z__1,
-               &a[(i+1)*(*lda+1)], lda, work, 4L);
+        zlarf_("Left", &i__2, &i__3, &a[i__1], &c__1, &z__1, &a[(i+1)*(*lda+1)], lda, work);
 
         a[i__1].r = alpha.r, a[i__1].i = alpha.i;
     }
-
-/*     End of ZGEHD2 */
-
 } /* zgehd2_ */
-

@@ -1,20 +1,15 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
 /* Subroutine */ void zlacgv_(n, x, incx)
-integer *n;
+const integer *n;
 doublecomplex *x;
-integer *incx;
+const integer *incx;
 {
     /* Local variables */
     static integer ioff, i;
-
 
 /*  -- LAPACK auxiliary routine (version 2.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -44,8 +39,6 @@ integer *incx;
 /*                                                                       */
 /* ===================================================================== */
 
-    /* Function Body */
-
     if (*incx == 1) {
         for (i = 0; i < *n; ++i) {
             x[i].i = -x[i].i; /* d_cnjg(&x[i], &x[i]); */
@@ -60,8 +53,4 @@ integer *incx;
             ioff += *incx;
         }
     }
-
-/*     End of ZLACGV */
-
 } /* zlacgv_ */
-

@@ -1,47 +1,37 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
 /* Table of constant values */
-
 static doublecomplex c_b9 = {0.,0.};
 static doublecomplex c_b10 = {1.,0.};
 static integer c__1 = 1;
 static integer c__4 = 4;
 static integer c_n1 = -1;
-static integer c__2 = 2;
+static ftnlen c__2 = 2;
 static integer c__8 = 8;
 static integer c__15 = 15;
 static integer c__0 = 0;
 
-/* Subroutine */ void zhseqr_(job, compz, n, ilo, ihi, h, ldh, w, z, ldz, work,
-         lwork, info, job_len, compz_len)
-char *job, *compz;
-integer *n, *ilo, *ihi;
+/* Subroutine */ void zhseqr_(job, compz, n, ilo, ihi, h, ldh, w, z, ldz, work, lwork, info)
+const char *job, *compz;
+const integer *n;
+integer *ilo, *ihi;
 doublecomplex *h;
-integer *ldh;
+const integer *ldh;
 doublecomplex *w, *z;
-integer *ldz;
+const integer *ldz;
 doublecomplex *work;
 integer *lwork, *info;
-ftnlen job_len;
-ftnlen compz_len;
 {
     /* System generated locals */
     address a__1[2];
-    integer i__1, i__2, ii__4[2];
+    integer i__1, i__2;
+    ftnlen ii__4[2];
     doublereal d__1;
     doublecomplex z__1;
     char ch__1[2];
-
-    /* Builtin functions */
-    void d_cnjg();
-    /* Subroutine */ void s_cat();
 
     /* Local variables */
     static integer maxb, ierr;
@@ -50,27 +40,14 @@ ftnlen compz_len;
     static doublereal ovfl;
     static integer i, j, k, l;
     static doublecomplex s[225] /* was [15][15] */, v[16];
-    extern logical lsame_();
-    extern /* Subroutine */ void zscal_();
     static integer itemp;
     static doublereal rtemp;
     static integer i1, i2;
-    extern /* Subroutine */ void zgemv_();
     static logical initz, wantt, wantz;
     static doublereal rwork[1];
-    extern /* Subroutine */ void zcopy_();
-    extern doublereal dlapy2_();
-    extern /* Subroutine */ void dlabad_();
     static integer ii, nh;
-    extern doublereal dlamch_();
     static integer nr, ns, nv;
     static doublecomplex vv[16];
-    extern /* Subroutine */ void xerbla_();
-    extern integer ilaenv_();
-    extern /* Subroutine */ void zdscal_(), zlarfg_();
-    extern integer izamax_();
-    extern doublereal zlanhs_();
-    extern /* Subroutine */ void zlahqr_(), zlacpy_(), zlaset_(), zlarfx_();
     static doublereal smlnum;
     static integer itn;
     static doublecomplex tau;
@@ -168,16 +145,14 @@ ftnlen compz_len;
 /*                                                                        */
 /*  ===================================================================== */
 
-    /* Function Body */
-
-    wantt = lsame_(job, "S", 1L, 1L);
-    initz = lsame_(compz, "I", 1L, 1L);
-    wantz = initz || lsame_(compz, "V", 1L, 1L);
+    wantt = lsame_(job, "S");
+    initz = lsame_(compz, "I");
+    wantz = initz || lsame_(compz, "V");
 
     *info = 0;
-    if (! lsame_(job, "E", 1L, 1L) && ! wantt) {
+    if (! lsame_(job, "E") && ! wantt) {
         *info = -1;
-    } else if (! lsame_(compz, "N", 1L, 1L) && ! wantz) {
+    } else if (! lsame_(compz, "N") && ! wantz) {
         *info = -2;
     } else if (*n < 0) {
         *info = -3;
@@ -187,29 +162,29 @@ ftnlen compz_len;
         *info = -5;
     } else if (*ldh < max(1,*n)) {
         *info = -7;
-    } else if (*ldz < 1 || wantz && *ldz < max(1,*n)) {
+    } else if (*ldz < 1 || (wantz && *ldz < max(1,*n))) {
         *info = -10;
     }
     if (*info != 0) {
         i__1 = -(*info);
-        xerbla_("ZHSEQR", &i__1, 6L);
+        xerbla_("ZHSEQR", &i__1);
         return;
     }
 
 /*     Initialize Z, if necessary */
 
     if (initz) {
-        zlaset_("Full", n, n, &c_b9, &c_b10, z, ldz, 4L);
+        zlaset_("Full", n, n, &c_b9, &c_b10, z, ldz);
     }
 
 /*     Store the eigenvalues isolated by ZGEBAL. */
 
     for (i = 0; i < *ilo - 1; ++i) {
-        i__1 = i + i * *ldh;
+        i__1 = i + i * *ldh; /* index [i,i] */
         w[i].r = h[i__1].r, w[i].i = h[i__1].i;
     }
     for (i = *ihi; i < *n; ++i) {
-        i__1 = i + i * *ldh;
+        i__1 = i + i * *ldh; /* index [i,i] */
         w[i].r = h[i__1].r, w[i].i = h[i__1].i;
     }
 
@@ -219,7 +194,7 @@ ftnlen compz_len;
         return;
     }
     if (*ilo == *ihi) {
-        i__1 = (*ilo-1) + (*ilo-1) * *ldh;
+        i__1 = (*ilo-1) + (*ilo-1) * *ldh; /* index [*ilo-1,*ilo-1] */
         w[*ilo-1].r = h[i__1].r, w[*ilo-1].i = h[i__1].i;
         return;
     }
@@ -229,7 +204,7 @@ ftnlen compz_len;
 
     for (j = *ilo-1; j < *ihi - 2; ++j) {
         for (i = j + 2; i < *n; ++i) {
-            i__1 = i + j * *ldh;
+            i__1 = i + j * *ldh; /* index [i,j] */
             h[i__1].r = 0., h[i__1].i = 0.;
         }
     }
@@ -250,11 +225,11 @@ ftnlen compz_len;
 /*     Ensure that the subdiagonal elements are real. */
 
     for (i = *ilo; i < *ihi; ++i) {
-        i__1 = i + (i - 1) * *ldh;
+        i__1 = i + (i - 1) * *ldh; /* index [i,i-1] */
         temp.r = h[i__1].r, temp.i = h[i__1].i;
         if (temp.i != 0.) {
             rtemp = dlapy2_(&(temp.r), &(temp.i));
-            i__1 = i + (i - 1) * *ldh;
+            i__1 = i + (i - 1) * *ldh; /* index [i,i-1] */
             h[i__1].r = rtemp, h[i__1].i = 0.;
             temp.r /= rtemp, temp.i /= rtemp;
             if (i2 > i) {
@@ -265,7 +240,7 @@ ftnlen compz_len;
             i__1 = i - i1;
             zscal_(&i__1, &temp, &h[i1 + i * *ldh], &c__1);
             if (i < *ihi-1) {
-                i__1 = i + 1 + i * *ldh;
+                i__1 = i + 1 + i * *ldh; /* index [i+1,i] */
                 z__1.r = temp.r * h[i__1].r - temp.i * h[i__1].i,
                 z__1.i = temp.r * h[i__1].i + temp.i * h[i__1].r;
                 h[i__1].r = z__1.r, h[i__1].i = z__1.i;
@@ -282,12 +257,12 @@ ftnlen compz_len;
     ii__4[0] = 1, a__1[0] = job;
     ii__4[1] = 1, a__1[1] = compz;
     s_cat(ch__1, a__1, ii__4, &c__2, 2L);
-    ns = ilaenv_(&c__4, "ZHSEQR", ch__1, n, ilo, ihi, &c_n1, 6L, 2L) - 1;
+    ns = ilaenv_(&c__4, "ZHSEQR", ch__1, n, ilo, ihi, &c_n1) - 1;
 /* Writing concatenation */
     ii__4[0] = 1, a__1[0] = job;
     ii__4[1] = 1, a__1[1] = compz;
     s_cat(ch__1, a__1, ii__4, &c__2, 2L);
-    maxb = ilaenv_(&c__8, "ZHSEQR", ch__1, n, ilo, ihi, &c_n1, 6L, 2L);
+    maxb = ilaenv_(&c__8, "ZHSEQR", ch__1, n, ilo, ihi, &c_n1);
     if (ns <= 0 || ns >= nh || maxb >= nh) {
 
 /*        Use the standard double-shift algorithm */
@@ -303,10 +278,10 @@ ftnlen compz_len;
 /*     Set machine-dependent constants for the stopping criterion. */
 /*     If norm(H) <= sqrt(OVFL), overflow should not occur. */
 
-    unfl = dlamch_("Safe minimum", 12L);
+    unfl = dlamch_("Safe minimum");
     ovfl = 1. / unfl;
     dlabad_(&unfl, &ovfl);
-    ulp = dlamch_("Precision", 9L);
+    ulp = dlamch_("Precision");
     smlnum = unfl * (nh / ulp);
 
 /*     ITN is the total number of multiple-shift QR iterations allowed. */
@@ -335,24 +310,23 @@ L60:
 /*        Look for a single small subdiagonal element. */
 
         for (k = i; k > l; --k) {
-            i__1 = (k - 1) * (*ldh + 1);
-            i__2 = k + k * *ldh;
+            i__1 = (k - 1) * (*ldh + 1); /* index [k-1,k-1] */
+            i__2 = k + k * *ldh; /* index [k,k] */
             tst1 = abs(h[i__1].r) + abs(h[i__1].i) + abs(h[i__2].r) + abs(h[i__2].i);
             if (tst1 == 0.) {
                 i__1 = i - l + 1;
-                tst1 = zlanhs_("1", &i__1, &h[l + l * *ldh], ldh, rwork, 1L);
+                tst1 = zlanhs_("1", &i__1, &h[l + l * *ldh], ldh, rwork);
             }
             if (abs(h[k + (k - 1) * *ldh].r) <= max(ulp*tst1, smlnum)) {
-                goto L80;
+                break;
             }
         }
-L80:
         l = k;
         if (l > *ilo-1) {
 
 /*           H(L,L-1) is negligible. */
 
-            i__1 = l + (l - 1) * *ldh;
+            i__1 = l + (l - 1) * *ldh; /* index [l,l-1] */
             h[i__1].r = 0., h[i__1].i = 0.;
         }
 
@@ -376,9 +350,7 @@ L80:
 /*           Exceptional shifts. */
 
             for (ii = i - ns; ii <= i; ++ii) {
-                i__1 = ii + (ii - 1) * *ldh;
-                i__2 = ii + ii * *ldh;
-                w[ii].r = (abs(h[i__1].r) + abs(h[i__2].r)) * 1.5,
+                w[ii].r = (abs(h[ii + (ii - 1) * *ldh].r) + abs(h[ii + ii * *ldh].r)) * 1.5,
                 w[ii].i = 0.;
             }
         } else {
@@ -386,10 +358,9 @@ L80:
 /*           Use eigenvalues of trailing submatrix of order NS as shifts. */
 
             i__1 = ns + 1;
-            zlacpy_("Full", &i__1, &i__1, &h[i - ns + (i - ns) * *ldh],
-                    ldh, s, &c__15, 4L);
-            zlahqr_(&c__0, &c__0, &i__1, &c__1, &i__1, s, &c__15, &w[i - ns],
-                    &c__1, &i__1, z, ldz, &ierr);
+            zlacpy_("Full", &i__1, &i__1, &h[i - ns + (i - ns) * *ldh], ldh, s, &c__15);
+            zlahqr_(&c__0, &c__0, &i__1, &c__1, &i__1, s, &c__15, &w[i - ns], &c__1, &i__1, z, ldz, &ierr);
+
             if (ierr > 0) {
 
 /*              If ZLAHQR failed to compute all NS eigenvalues, use the */
@@ -417,8 +388,7 @@ L80:
             i__1 = nv + 1;
             zcopy_(&i__1, v, &c__1, vv, &c__1);
             z__1.r = -w[j].r, z__1.i = -w[j].i;
-            zgemv_("No transpose", &i__1, &nv, &c_b10, &h[l + l * *ldh],
-                   ldh, vv, &c__1, &z__1, v, &c__1, 12L);
+            zgemv_("No transpose", &i__1, &nv, &c_b10, &h[l + l * *ldh], ldh, vv, &c__1, &z__1, v, &c__1);
             ++nv;
 
 /*           Scale V(1:NV) so that max(abs(V(i))) = 1. If V is zero, */
@@ -458,10 +428,10 @@ L80:
             }
             zlarfg_(&nr, v, &v[1], &c__1, &tau);
             if (k > l) {
-                i__1 = k + (k - 1) * *ldh;
+                i__1 = k + (k - 1) * *ldh; /* index [k,k-1] */
                 h[i__1].r = v[0].r, h[i__1].i = v[0].i;
                 for (ii = k+1; ii <= i; ++ii) {
-                    i__1 = ii + (k - 1) * *ldh;
+                    i__1 = ii + (k - 1) * *ldh; /* index [ii,k-1] */
                     h[i__1].r = 0., h[i__1].i = 0.;
                 }
             }
@@ -472,29 +442,29 @@ L80:
 
             i__1 = i2 - k + 1;
             d_cnjg(&z__1, &tau);
-            zlarfx_("Left", &nr, &i__1, v, &z__1, &h[k + k * *ldh], ldh, work, 4L);
+            zlarfx_("Left", &nr, &i__1, v, &z__1, &h[k + k * *ldh], ldh, work);
 
 /*           Apply G from the right to transform the columns of the */
 /*           matrix in rows I1 to min(K+NR,I). */
 
             i__1 = min(k+nr,i) - i1 + 1;
-            zlarfx_("Right", &i__1, &nr, v, &tau, &h[i1 + k * *ldh], ldh, work, 5L);
+            zlarfx_("Right", &i__1, &nr, v, &tau, &h[i1 + k * *ldh], ldh, work);
 
             if (wantz) {
 
 /*              Accumulate transformations in the matrix Z */
 
-                zlarfx_("Right", &nh, &nr, v, &tau, &z[*ilo-1 + k * *ldz], ldz, work, 5L);
+                zlarfx_("Right", &nh, &nr, v, &tau, &z[*ilo-1 + k * *ldz], ldz, work);
             }
         }
 
 /*        Ensure that H(I,I-1) is real. */
 
-        i__1 = i + (i - 1) * *ldh;
+        i__1 = i + (i - 1) * *ldh; /* index [i,i-1] */
         temp.r = h[i__1].r, temp.i = h[i__1].i;
         if (temp.i != 0.) {
             rtemp = dlapy2_(&(temp.r), &(temp.i));
-            i__1 = i + (i - 1) * *ldh;
+            i__1 = i + (i - 1) * *ldh; /* index [i,i-1] */
             h[i__1].r = rtemp, h[i__1].i = 0.;
             temp.r /= rtemp, temp.i /= rtemp;
             if (i2 > i) {
@@ -532,8 +502,4 @@ L170:
     itn -= its;
     i = l-1;
     goto L60;
-
-/*     End of ZHSEQR */
-
 } /* zhseqr_ */
-

@@ -1,35 +1,25 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
 /* Table of constant values */
-
 static doublecomplex c_b3 = {0.,0.};
 static doublecomplex c_b5 = {1.,0.};
 static integer c__1 = 1;
 
-/* Subroutine */ void zlarf_(side, m, n, v, incv, tau, c, ldc, work, side_len)
-char *side;
-integer *m, *n;
+/* Subroutine */ void zlarf_(side, m, n, v, incv, tau, c, ldc, work)
+const char *side;
+const integer *m, *n;
 doublecomplex *v;
-integer *incv;
-doublecomplex *tau, *c;
-integer *ldc;
+const integer *incv;
+const doublecomplex *tau;
+doublecomplex *c;
+const integer *ldc;
 doublecomplex *work;
-ftnlen side_len;
 {
     /* System generated locals */
     doublecomplex z__1;
-
-    /* Local variables */
-    extern logical lsame_();
-    extern /* Subroutine */ void zgerc_(), zgemv_();
-
 
 /*  -- LAPACK auxiliary routine (version 2.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -93,9 +83,7 @@ ftnlen side_len;
 /*                                                                        */
 /*  ===================================================================== */
 
-    /* Function Body */
-
-    if (lsame_(side, "L", 1L, 1L)) {
+    if (lsame_(side, "L")) {
 
 /*        Form  H * C */
 
@@ -103,13 +91,12 @@ ftnlen side_len;
 
 /*           w := C' * v */
 
-            zgemv_("Conjugate transpose", m, n, &c_b5, &c[0], ldc,
-                   &v[0], incv, &c_b3, work, &c__1, 19L);
+            zgemv_("Conjugate transpose", m, n, &c_b5, c, ldc, v, incv, &c_b3, work, &c__1);
 
 /*           C := C - v * w' */
 
             z__1.r = -tau->r, z__1.i = -tau->i;
-            zgerc_(m, n, &z__1, &v[0], incv, work, &c__1, &c[0], ldc);
+            zgerc_(m, n, &z__1, v, incv, work, &c__1, c, ldc);
         }
     } else {
 
@@ -119,17 +106,12 @@ ftnlen side_len;
 
 /*           w := C * v */
 
-            zgemv_("No transpose", m, n, &c_b5, &c[0], ldc, &v[0],
-                   incv, &c_b3, work, &c__1, 12L);
+            zgemv_("No transpose", m, n, &c_b5, c, ldc, v, incv, &c_b3, work, &c__1);
 
 /*           C := C - w * v' */
 
             z__1.r = -tau->r, z__1.i = -tau->i;
-            zgerc_(m, n, &z__1, work, &c__1, &v[0], incv, &c[0], ldc);
+            zgerc_(m, n, &z__1, work, &c__1, v, incv, c, ldc);
         }
     }
-
-/*     End of ZLARF */
-
 } /* zlarf_ */
-

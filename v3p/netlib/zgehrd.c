@@ -1,14 +1,9 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
 /* Table of constant values */
-
 static integer c__1 = 1;
 static integer c_n1 = -1;
 static integer c__3 = 3;
@@ -18,9 +13,10 @@ static doublecomplex c_b21 = {1.,0.};
 static doublecomplex c_b24 = {-1.,0.};
 
 /* Subroutine */ void zgehrd_(n, ilo, ihi, a, lda, tau, work, lwork, info)
-integer *n, *ilo, *ihi;
+const integer *n;
+integer *ilo, *ihi;
 doublecomplex *a;
-integer *lda;
+const integer *lda;
 doublecomplex *tau, *work;
 integer *lwork, *info;
 {
@@ -31,15 +27,10 @@ integer *lwork, *info;
     static integer i;
     static doublecomplex t[4160] /* was [65][64] */;
     static integer nbmin, iinfo;
-    extern /* Subroutine */ void zgemm_(), zgehd2_();
     static integer ib;
     static doublecomplex ei;
     static integer nb, nh, nx;
-    extern /* Subroutine */ void xerbla_();
-    extern integer ilaenv_();
-    extern /* Subroutine */ void zlarfb_(), zlahrd_();
     static integer ldwork, iws;
-
 
 /*  -- LAPACK routine (version 2.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -131,8 +122,6 @@ integer *lwork, *info;
 /*                                                                        */
 /*  ===================================================================== */
 
-    /* Function Body */
-
     *info = 0;
     if (*n < 0) {
         *info = -1;
@@ -147,7 +136,7 @@ integer *lwork, *info;
     }
     if (*info != 0) {
         i__1 = -(*info);
-        xerbla_("ZGEHRD", &i__1, 6L);
+        xerbla_("ZGEHRD", &i__1);
         return;
     }
 
@@ -170,7 +159,7 @@ integer *lwork, *info;
 
 /*     Determine the block size. */
 
-    i__2 = ilaenv_(&c__1, "ZGEHRD", " ", n, ilo, ihi, &c_n1, 6L, 1L);
+    i__2 = ilaenv_(&c__1, "ZGEHRD", " ", n, ilo, ihi, &c_n1);
     nb = min(64,i__2);
     nbmin = 2;
     iws = 1;
@@ -179,7 +168,7 @@ integer *lwork, *info;
 /*        Determine when to cross over from blocked to unblocked code */
 /*        (last block is always handled by unblocked code). */
 
-        i__2 = ilaenv_(&c__3, "ZGEHRD", " ", n, ilo, ihi, &c_n1, 6L, 1L);
+        i__2 = ilaenv_(&c__3, "ZGEHRD", " ", n, ilo, ihi, &c_n1);
         nx = max(nb,i__2);
         if (nx < nh) {
 
@@ -192,7 +181,7 @@ integer *lwork, *info;
 /*              minimum value of NB, and reduce NB or force use of */
 /*              unblocked code. */
 
-                i__2 = ilaenv_(&c__2, "ZGEHRD", " ", n, ilo, ihi, &c_n1, 6L, 1L);
+                i__2 = ilaenv_(&c__2, "ZGEHRD", " ", n, ilo, ihi, &c_n1);
                 nbmin = max(2,i__2);
                 if (*lwork >= *n * nbmin) {
                     nb = *lwork / *n;
@@ -224,32 +213,27 @@ integer *lwork, *info;
 /*           which performs the reduction, and also the matrix Y = A*V*T */
 
             i__1 = i + 1;
-            zlahrd_(ihi, &i__1, &ib, &a[i * *lda], lda, &tau[i], t, &c__65,
-                    work, &ldwork);
+            zlahrd_(ihi, &i__1, &ib, &a[i * *lda], lda, &tau[i], t, &c__65, work, &ldwork);
 
-/*           Apply the block reflector H to A(1:ihi,i+ib:ihi) from the */
-/*           right, computing  A := A - Y * V'. V(i+ib,ib-1) must be set */
-/*           to 1. */
+/*           Apply the block reflector H to A(1:ihi,i+ib:ihi) from the right, */
+/*           computing  A := A - Y * V'. V(i+ib,ib-1) must be set to 1. */
 
             i__3 = i + ib + (i + ib - 1) * *lda;
             ei.r = a[i__3].r, ei.i = a[i__3].i;
             a[i__3].r = 1., a[i__3].i = 0.;
             i__3 = *ihi - i - ib;
-            zgemm_("No transpose", "Conjugate transpose", ihi, &i__3, &ib,
-                   &c_b24, work, &ldwork, &a[i + ib + i * *lda], lda,
-                   &c_b21, &a[(i + ib) * *lda], lda, 12L, 19L);
+            zgemm_("No transpose", "Conjugate transpose", ihi, &i__3, &ib, &c_b24, work,
+                   &ldwork, &a[i+ib + i * *lda], lda, &c_b21, &a[(i+ib) * *lda], lda);
             i__3 = i + ib + (i + ib - 1) * *lda;
             a[i__3].r = ei.r, a[i__3].i = ei.i;
 
-/*           Apply the block reflector H to A(i+1:ihi,i+ib:n) from the */
-/*           left */
+/*           Apply the block reflector H to A(i+1:ihi,i+ib:n) from the left */
 
             i__3 = *ihi-1 - i;
             i__4 = *n - i - ib;
-            zlarfb_("Left", "Conjugate transpose", "Forward", "Columnwise", &
-                    i__3, &i__4, &ib, &a[i+1 + i * *lda], lda, t, &c__65,
-                    &a[i+1 + (i + ib) * *lda], lda, work, &ldwork, 4L,
-                    19L, 7L, 10L);
+            zlarfb_("Left", "Conjugate transpose", "Forward", "Columnwise",
+                    &i__3, &i__4, &ib, &a[i+1 + i * *lda], lda, t, &c__65,
+                    &a[i+1 + (i + ib) * *lda], lda, work, &ldwork);
         }
     }
 
@@ -260,8 +244,4 @@ integer *lwork, *info;
     work[0].r = (doublereal) iws, work[0].i = 0.;
 
     return;
-
-/*     End of ZGEHRD */
-
 } /* zgehrd_ */
-

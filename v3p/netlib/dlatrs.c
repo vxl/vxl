@@ -1,27 +1,17 @@
-/*  -- translated by f2c (version 19991025).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Table of constant values */
-
 static integer c__1 = 1;
 static doublereal c_b36 = .5;
 
-/* Subroutine */ void dlatrs_(uplo, trans, diag, normin, n, a, lda, x, scale,
-        cnorm, info, uplo_len, trans_len, diag_len, normin_len)
-char *uplo, *trans, *diag, *normin;
-integer *n;
-doublereal *a;
-integer *lda;
+/* Subroutine */ void dlatrs_(uplo, trans, diag, normin, n, a, lda, x, scale, cnorm, info)
+const char *uplo, *trans, *diag, *normin;
+const integer *n;
+const doublereal *a;
+const integer *lda;
 doublereal *x, *scale, *cnorm;
 integer *info;
-ftnlen uplo_len;
-ftnlen trans_len;
-ftnlen diag_len;
-ftnlen normin_len;
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
@@ -29,30 +19,20 @@ ftnlen normin_len;
 
     /* Local variables */
     static integer jinc;
-    extern doublereal ddot_();
     static doublereal xbnd;
     static integer imax;
     static doublereal tmax, tjjs, xmax, grow, sumj;
-    static integer i__, j;
-    extern /* Subroutine */ void dscal_();
-    extern logical lsame_();
+    static integer i, j;
     static doublereal tscal, uscal;
-    extern doublereal dasum_();
     static integer jlast;
-    extern /* Subroutine */ void daxpy_();
     static logical upper;
-    extern /* Subroutine */ void dtrsv_();
-    extern doublereal dlamch_();
     static doublereal xj;
-    extern integer idamax_();
-    extern /* Subroutine */ void xerbla_();
     static doublereal bignum;
     static logical notran;
     static integer jfirst;
     static doublereal smlnum;
     static logical nounit;
     static doublereal rec, tjj;
-
 
 /*  -- LAPACK auxiliary routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -221,20 +201,19 @@ ftnlen normin_len;
     --cnorm;
 
     *info = 0;
-    upper = lsame_(uplo, "U", (ftnlen)1, (ftnlen)1);
-    notran = lsame_(trans, "N", (ftnlen)1, (ftnlen)1);
-    nounit = lsame_(diag, "N", (ftnlen)1, (ftnlen)1);
+    upper = lsame_(uplo, "U");
+    notran = lsame_(trans, "N");
+    nounit = lsame_(diag, "N");
 
 /*     Test the input parameters. */
 
-    if (! upper && ! lsame_(uplo, "L", (ftnlen)1, (ftnlen)1)) {
+    if (! upper && ! lsame_(uplo, "L")) {
         *info = -1;
-    } else if (! notran && ! lsame_(trans, "T", (ftnlen)1, (ftnlen)1) &&
-                           ! lsame_(trans, "C", (ftnlen)1, (ftnlen)1)) {
+    } else if (! notran && ! lsame_(trans, "T") && ! lsame_(trans, "C")) {
         *info = -2;
-    } else if (! nounit && ! lsame_(diag, "U", (ftnlen)1, (ftnlen)1)) {
+    } else if (! nounit && ! lsame_(diag, "U")) {
         *info = -3;
-    } else if (! lsame_(normin, "Y", (ftnlen)1, (ftnlen)1) && ! lsame_(normin, "N", (ftnlen)1, (ftnlen)1)) {
+    } else if (! lsame_(normin, "Y") && ! lsame_(normin, "N")) {
         *info = -4;
     } else if (*n < 0) {
         *info = -5;
@@ -243,7 +222,7 @@ ftnlen normin_len;
     }
     if (*info != 0) {
         i__1 = -(*info);
-        xerbla_("DLATRS", &i__1, (ftnlen)6);
+        xerbla_("DLATRS", &i__1);
         return;
     }
 
@@ -255,11 +234,11 @@ ftnlen normin_len;
 
 /*     Determine machine dependent parameters to control overflow. */
 
-    smlnum = dlamch_("Safe minimum", (ftnlen)12) / dlamch_("Precision", (ftnlen)9);
+    smlnum = dlamch_("Safe minimum") / dlamch_("Precision");
     bignum = 1. / smlnum;
     *scale = 1.;
 
-    if (lsame_(normin, "N", (ftnlen)1, (ftnlen)1)) {
+    if (lsame_(normin, "N")) {
 
 /*        Compute the 1-norm of each column, not including the diagonal. */
 
@@ -466,7 +445,7 @@ L80:
 /*        Use the Level 2 BLAS solve if the reciprocal of the bound on */
 /*        elements of X is not too small. */
 
-        dtrsv_(uplo, trans, diag, n, &a[a_offset], lda, &x[1], &c__1, (ftnlen)1, (ftnlen)1, (ftnlen)1);
+        dtrsv_(uplo, trans, diag, n, &a[a_offset], lda, &x[1], &c__1);
     } else {
 
 /*        Use a Level 1 BLAS solve, scaling intermediate results. */
@@ -547,8 +526,8 @@ L80:
 /*                    scale = 0, and compute a solution to A*x = 0. */
 
                     i__3 = *n;
-                    for (i__ = 1; i__ <= i__3; ++i__) {
-                        x[i__] = 0.;
+                    for (i = 1; i <= i__3; ++i) {
+                        x[i] = 0.;
                     }
                     x[j] = 1.;
                     xj = 1.;
@@ -588,8 +567,8 @@ L100:
                         d__1 = -x[j] * tscal;
                         daxpy_(&i__3, &d__1, &a[j * a_dim1 + 1], &c__1, &x[1], &c__1);
                         i__3 = j - 1;
-                        i__ = idamax_(&i__3, &x[1], &c__1);
-                        xmax = abs(x[i__]);
+                        i = idamax_(&i__3, &x[1], &c__1);
+                        xmax = abs(x[i]);
                     }
                 } else {
                     if (j < *n) {
@@ -601,8 +580,8 @@ L100:
                         d__1 = -x[j] * tscal;
                         daxpy_(&i__3, &d__1, &a[j + 1 + j * a_dim1], &c__1, &x[j + 1], &c__1);
                         i__3 = *n - j;
-                        i__ = j + idamax_(&i__3, &x[j + 1], &c__1);
-                        xmax = abs(x[i__]);
+                        i = j + idamax_(&i__3, &x[j + 1], &c__1);
+                        xmax = abs(x[i]);
                     }
                 }
             }
@@ -665,13 +644,13 @@ L100:
 
                     if (upper) {
                         i__3 = j - 1;
-                        for (i__ = 1; i__ <= i__3; ++i__) {
-                            sumj += a[i__ + j * a_dim1] * uscal * x[i__];
+                        for (i = 1; i <= i__3; ++i) {
+                            sumj += a[i + j * a_dim1] * uscal * x[i];
                         }
                     } else if (j < *n) {
                         i__3 = *n;
-                        for (i__ = j + 1; i__ <= i__3; ++i__) {
-                            sumj += a[i__ + j * a_dim1] * uscal * x[i__];
+                        for (i = j + 1; i <= i__3; ++i) {
+                            sumj += a[i + j * a_dim1] * uscal * x[i];
                         }
                     }
                 }
@@ -731,8 +710,8 @@ L100:
 /*                       scale = 0, and compute a solution to A'*x = 0. */
 
                         i__3 = *n;
-                        for (i__ = 1; i__ <= i__3; ++i__) {
-                            x[i__] = 0.;
+                        for (i = 1; i <= i__3; ++i) {
+                            x[i] = 0.;
                         }
                         x[j] = 1.;
                         *scale = 0.;

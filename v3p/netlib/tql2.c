@@ -1,28 +1,19 @@
-/* tql2.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Table of constant values */
-
 static doublereal c_b10 = 1.;
 
 /* Subroutine */ void tql2_(nm, n, d, e, z, ierr)
-integer *nm, *n;
+const integer *nm, *n;
 doublereal *d, *e, *z;
 integer *ierr;
 {
-    /* Builtin functions */
-    double d_sign();
-
     /* Local variables */
     static doublereal c, f, g, h;
     static integer i, j, k, l, m;
     static doublereal p, r, s, c2, c3;
     static doublereal s2;
-    extern doublereal pythag_();
     static doublereal dl1, el1;
     static doublereal tst1, tst2;
 
@@ -73,7 +64,7 @@ integer *ierr;
 /*          j          if the j-th eigenvalue has not been                */
 /*                     determined after 30 iterations.                    */
 /*                                                                        */
-/*     calls pythag for  dsqrt(a*a + b*b) .                               */
+/*     calls pythag for  sqrt(a*a + b*b) .                                */
 /*                                                                        */
 /*     questions and comments should be directed to burton s. garbow,     */
 /*     mathematics and computer science div, argonne national laboratory  */

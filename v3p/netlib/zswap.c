@@ -1,33 +1,25 @@
-/* zswap.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 /*                               and moved out of zsvdc.c to separate file */
 
-
 /* Subroutine */ void zswap_(n, zx, incx, zy, incy)
-integer *n;
+const integer *n;
 doublecomplex *zx;
-integer *incx;
+const integer *incx;
 doublecomplex *zy;
-integer *incy;
+const integer *incy;
 {
     /* Local variables */
     static integer i;
     static doublecomplex ztemp;
     static integer ix, iy;
 
-
 /*     interchanges two vectors. */
 /*     jack dongarra, 3/11/78. */
 /*     modified 12/3/93, array(1) declarations changed to array(*) */
 
-
-    /* Function Body */
     if (*n <= 0) {
         return;
     }

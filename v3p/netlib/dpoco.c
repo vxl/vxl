@@ -1,12 +1,7 @@
-/* dpoco.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Table of constant values */
-
 static integer c__1 = 1;
 
 /* Subroutine */ void dpoco_(a, lda, n, rcond, z, info)
@@ -19,90 +14,77 @@ integer *info;
     integer a_dim1, a_offset, i__1;
     doublereal d__1;
 
-    /* Builtin functions */
-    double d_sign();
-
     /* Local variables */
-    extern doublereal ddot_();
     static integer i, j, k;
     static doublereal s, t;
-    extern /* Subroutine */ void dscal_(), dpofa_();
-    extern doublereal dasum_();
     static doublereal anorm;
-    extern /* Subroutine */ void daxpy_();
     static doublereal ynorm;
     static integer kb;
     static doublereal ek, sm, wk;
     static integer jm1, kp1;
     static doublereal wkm;
 
-
-/*     dpoco factors a double precision symmetric positive definite */
-/*     matrix and estimates the condition of the matrix. */
-
-/*     if  rcond  is not needed, dpofa is slightly faster. */
-/*     to solve  a*x = b , follow dpoco by dposl. */
-/*     to compute  inverse(a)*c , follow dpoco by dposl. */
-/*     to compute  determinant(a) , follow dpoco by dpodi. */
-/*     to compute  inverse(a) , follow dpoco by dpodi. */
-
-/*     on entry */
-
-/*        a       double precision(lda, n) */
-/*                the symmetric matrix to be factored.  only the */
-/*                diagonal and upper triangle are used. */
-
-/*        lda     integer */
-/*                the leading dimension of the array  a . */
-
-/*        n       integer */
-/*                the order of the matrix  a . */
-
-/*     on return */
-
-/*        a       an upper triangular matrix  r  so that  a = trans(r)*r */
-/*                where  trans(r)  is the transpose. */
-/*                the strict lower triangle is unaltered. */
-/*                if  info .ne. 0 , the factorization is not complete. */
-
-/*        rcond   double precision */
-/*                an estimate of the reciprocal condition of  a . */
-/*                for the system  a*x = b , relative perturbations */
-/*                in  a  and  b  of size  epsilon  may cause */
-/*                relative perturbations in  x  of size  epsilon/rcond .  */
-/*                if  rcond  is so small that the logical expression */
-/*                           1.0 + rcond .eq. 1.0 */
-/*                is true, then  a  may be singular to working */
-/*                precision.  in particular,  rcond  is zero  if */
-/*                exact singularity is detected or the estimate */
-/*                underflows.  if info .ne. 0 , rcond is unchanged. */
-
-/*        z       double precision(n) */
+/*     dpoco factors a double precision symmetric positive definite     */
+/*     matrix and estimates the condition of the matrix.                */
+/*                                                                      */
+/*     if  rcond  is not needed, dpofa is slightly faster.              */
+/*     to solve  a*x = b , follow dpoco by dposl.                       */
+/*     to compute  inverse(a)*c , follow dpoco by dposl.                */
+/*     to compute  determinant(a) , follow dpoco by dpodi.              */
+/*     to compute  inverse(a) , follow dpoco by dpodi.                  */
+/*                                                                      */
+/*     on entry                                                         */
+/*                                                                      */
+/*        a       double precision(lda, n)                              */
+/*                the symmetric matrix to be factored.  only the        */
+/*                diagonal and upper triangle are used.                 */
+/*                                                                      */
+/*        lda     integer                                               */
+/*                the leading dimension of the array  a .               */
+/*                                                                      */
+/*        n       integer                                               */
+/*                the order of the matrix  a .                          */
+/*                                                                      */
+/*     on return                                                        */
+/*                                                                      */
+/*        a       an upper triangular matrix  r  so that a = trans(r)*r */
+/*                where  trans(r)  is the transpose.                    */
+/*                the strict lower triangle is unaltered.               */
+/*                if  info .ne. 0 , the factorization is not complete.  */
+/*                                                                      */
+/*        rcond   double precision                                      */
+/*                an estimate of the reciprocal condition of  a .       */
+/*                for the system  a*x = b , relative perturbations      */
+/*                in  a  and  b  of size  epsilon  may cause            */
+/*                relative perturbations in  x  of size  epsilon/rcond .*/
+/*                if  rcond  is so small that the logical expression    */
+/*                           1.0 + rcond .eq. 1.0                       */
+/*                is true, then  a  may be singular to working          */
+/*                precision.  in particular,  rcond  is zero  if        */
+/*                exact singularity is detected or the estimate         */
+/*                underflows.  if info .ne. 0 , rcond is unchanged.     */
+/*                                                                      */
+/*        z       double precision(n)                                   */
 /*                a work vector whose contents are usually unimportant. */
-/*                if  a  is close to a singular matrix, then  z  is */
-/*                an approximate null vector in the sense that */
-/*                norm(a*z) = rcond*norm(a)*norm(z) . */
-/*                if  info .ne. 0 , z  is unchanged. */
+/*                if  a  is close to a singular matrix, then  z  is     */
+/*                an approximate null vector in the sense that          */
+/*                norm(a*z) = rcond*norm(a)*norm(z) .                   */
+/*                if  info .ne. 0 , z  is unchanged.                    */
+/*                                                                      */
+/*        info    integer                                               */
+/*                = 0  for normal return.                               */
+/*                = k  signals an error condition.  the leading minor   */
+/*                     of order  k  is not positive definite.           */
+/*                                                                      */
+/*     linpack.  this version dated 08/14/78 .                          */
+/*     cleve moler, university of new mexico, argonne national lab.     */
 
-/*        info    integer */
-/*                = 0  for normal return. */
-/*                = k  signals an error condition.  the leading minor */
-/*                     of order  k  is not positive definite. */
-
-/*     linpack.  this version dated 08/14/78 . */
-/*     cleve moler, university of new mexico, argonne national lab. */
-
-/*     subroutines and functions */
-
-/*     linpack dpofa */
-/*     blas daxpy,ddot,dscal,dasum */
+/*     subroutines and functions      */
+/*                                    */
+/*     linpack dpofa                  */
+/*     blas daxpy,ddot,dscal,dasum    */
 /*     fortran dabs,dmax1,dreal,dsign */
 
-/*     internal variables */
-
-
-
-/*     find norm of a using only upper half */
 
     /* Parameter adjustments */
     --z;
@@ -110,7 +92,8 @@ integer *info;
     a_offset = a_dim1 + 1;
     a -= a_offset;
 
-    /* Function Body */
+/*     find norm of a using only upper half */
+
     for (j = 1; j <= *n; ++j) {
         z[j] = dasum_(&j, &a[j * a_dim1 + 1], &c__1);
         jm1 = j - 1;
@@ -157,7 +140,7 @@ L20:
         }
         s = a[k + k * a_dim1] / abs(ek - z[k]);
         dscal_(n, &s, &z[1], &c__1);
-        ek = s * ek;
+        ek *= s;
 L60:
         wk = ek - z[k];
         wkm = -ek - z[k];
@@ -219,13 +202,13 @@ L120:
         }
         s = a[k + k * a_dim1] / abs(z[k]);
         dscal_(n, &s, &z[1], &c__1);
-        ynorm = s * ynorm;
+        ynorm *= s;
 L140:
         z[k] /= a[k + k * a_dim1];
     }
     s = 1. / dasum_(n, &z[1], &c__1);
     dscal_(n, &s, &z[1], &c__1);
-    ynorm = s * ynorm;
+    ynorm *= s;
 
 /*        solve r*z = v */
 
@@ -236,7 +219,7 @@ L140:
         }
         s = a[k + k * a_dim1] / abs(z[k]);
         dscal_(n, &s, &z[1], &c__1);
-        ynorm = s * ynorm;
+        ynorm *= s;
 L160:
         z[k] /= a[k + k * a_dim1];
         t = -z[k];
@@ -246,7 +229,7 @@ L160:
 /*        make znorm = 1.0 */
     s = 1. / dasum_(n, &z[1], &c__1);
     dscal_(n, &s, &z[1], &c__1);
-    ynorm = s * ynorm;
+    ynorm *= s;
 
     if (anorm != 0.) {
         *rcond = ynorm / anorm;
@@ -257,4 +240,3 @@ L160:
 L180:
     return;
 } /* dpoco_ */
-

@@ -62,6 +62,7 @@ SOURCE_FILES( netlib_sources
   zdotc.c
   zdotu.c
   zdrot.c
+  dznrm2.c
   zdscal.c
   zgemm.c
   zgemv.c
@@ -129,6 +130,7 @@ SOURCE_FILES( netlib_sources
   ilaenv.c
   izmax1.c
   xerbla.c
+  urand.c
   lsame.c
   dlamch.c
   slamch.c

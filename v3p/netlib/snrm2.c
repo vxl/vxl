@@ -1,21 +1,14 @@
-/* snrm2.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
+extern double sqrt(double); /* #include <math.h> */
 
-doublereal snrm2_(n, x, incx)
-integer *n;
-real *x;
-integer *incx;
+real snrm2_(n, x, incx)
+const integer *n;
+const real *x;
+const integer *incx;
 {
     /* System generated locals */
     real r__1;
-
-    /* Builtin functions */
-    double sqrt();
-#define sqrtf(f) ((float)sqrt((double)(f)))
 
     /* Local variables */
     static real norm, scale, absxi;
@@ -32,22 +25,22 @@ integer *incx;
 /*     Sven Hammarling, Nag Ltd.                                        */
 
     if (*n < 1 || *incx < 1) {
-        norm = 0.0f;
+        norm = 0.f;
     } else if (*n == 1) {
-        norm = (float)dabs(x[0]);
+        norm = abs(x[0]);
     } else {
-        scale = 0.0f;
-        ssq = 1.0f;
+        scale = 0.f;
+        ssq = 1.f;
 /*        The following loop is equivalent to this call to the LAPACK */
 /*        auxiliary routine: */
 /*        CALL SLASSQ( N, X, INCX, SCALE, SSQ ) */
 
         for (ix = 0; ix < *n * *incx; ix += *incx) {
-            if (x[ix] != 0.0f) {
-                absxi = (float)dabs(x[ix]);
+            if (x[ix] != 0.f) {
+                absxi = abs(x[ix]);
                 if (scale < absxi) {
                     r__1 = scale / absxi;
-                    ssq = ssq * r__1 * r__1 + 1.0f;
+                    ssq = ssq * r__1 * r__1 + 1.f;
                     scale = absxi;
                 } else {
                     r__1 = absxi / scale;

@@ -1,38 +1,29 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
+extern double sqrt(double); /* #include <math.h> */
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
 /* Table of constant values */
-
 static integer c__1 = 1;
-static complex c_b8 = {1.f,0.f};
-static complex c_b53 = {-1.f,0.f};
+static complex c_1 = {1.f,0.f};
+static complex c_m1 = {-1.f,0.f};
 
 /* Subroutine */ void csvdc_(x, ldx, n, p, s, e, u, ldu, v, ldv, work, job, info)
 complex *x;
-integer *ldx, *n, *p;
+const integer *ldx, *n, *p;
 complex *s, *e, *u;
-integer *ldu;
+const integer *ldu;
 complex *v;
-integer *ldv;
+const integer *ldv;
 complex *work;
-integer *job, *info;
+const integer *job;
+integer *info;
 {
     /* System generated locals */
     integer i__1, i__2;
-    real r__1;
-    doublereal d__1, d__2;
+    real r__1, r__2;
     complex q__1;
-
-    /* Builtin functions */
-    double c_abs();
-    void c_div(), r_cnjg();
-    double sqrt();
 
     /* Local variables */
     static integer jobu, iter;
@@ -42,23 +33,17 @@ integer *job, *info;
     static integer i, j, k, l, m;
     static complex r, t;
     static real scale;
-    extern /* Subroutine */ void cscal_();
-    extern /* Complex */ void cdotc_();
     static real shift;
-    extern /* Subroutine */ void cswap_();
     static integer maxit;
-    extern /* Subroutine */ void caxpy_(), csrot_();
     static logical wantu, wantv;
-    extern /* Subroutine */ void srotg_();
     static real t1, ztest;
-    extern doublereal scnrm2_();
     static real el;
     static real cs;
     static integer mm, ls;
     static real sl;
     static integer lu;
     static real sm, sn;
-    static integer nct, ncu, lls, nrt;
+    static integer nct, ncu, nrt;
     static real emm1, smm1;
 
 /************************************************************************/
@@ -123,8 +108,8 @@ integer *job, *info;
 /*                   e ordinarily contains zeros.  however see the      */
 /*                   discussion of info for exceptions.                 */
 /*                                                                      */
-/*         u         complex(ldu,k), where ldu.ge.n.  if joba.eq.1 then */
-/*                                   k.eq.n, if joba.ge.2 then          */
+/*         u         complex(ldu,k), where ldu.ge.n.  if joba.eq.1      */
+/*                                   then k.eq.n, if joba.ge.2 then     */
 /*                                   k.eq.min(n,p).                     */
 /*                   u contains the matrix of left singular vectors.    */
 /*                   u is not referenced if joba.eq.0.  if n.le.p       */
@@ -156,13 +141,11 @@ integer *job, *info;
 /*     g.w. stewart, university of maryland, argonne national lab. */
 
 /*     csvdc uses the following functions and subprograms. */
-
-/*     external csrot */
-/*     blas caxpy,cdotc,cscal,cswap,scnrm2,srotg */
-/*     fortran aimag,amax1,cabs,cmplx */
-/*     fortran conjg,max0,min0,mod,real,sqrt */
-
-    /* Function Body */
+/*                                                         */
+/*     external csrot                                      */
+/*     blas caxpy,cdotc,cscal,cswap,scnrm2,srotg           */
+/*     fortran aimag,amax1,cabs,cmplx                      */
+/*     fortran conjg,max0,min0,mod,real,sqrt               */
 
 /*     set the maximum number of iterations. */
     maxit = 30;
@@ -200,21 +183,20 @@ integer *job, *info;
 /*           place the l-th diagonal in s(l). */
 
         i__1 = *n - l;
-        s[l].r = (float)scnrm2_(&i__1, &x[l+l* *ldx], &c__1);
+        s[l].r = scnrm2_(&i__1, &x[l+l* *ldx], &c__1);
         s[l].i = 0.f;
         if (s[l].r == 0.f) {
             goto L10;
         }
-        i__2 = l + l * *ldx;
+        i__2 = l + l * *ldx; /* index [l,l] */
         if (x[i__2].r != 0.f || x[i__2].i != 0.f) {
-            d__1 = c_abs(&s[l]);
-            d__2 = c_abs(&x[i__2]);
-            s[l].r = (float)(d__1 * x[i__2].r / d__2),
-            s[l].i = (float)(d__1 * x[i__2].i / d__2);
+            r__1 = c_abs(&s[l]);
+            r__2 = c_abs(&x[i__2]);
+            s[l].r = r__1 * x[i__2].r / r__2,
+            s[l].i = r__1 * x[i__2].i / r__2;
         }
-        c_div(&q__1, &c_b8, &s[l]);
+        c_div(&q__1, &c_1, &s[l]);
         i__1 = *n - l;
-        i__2 = l + l * *ldx;
         cscal_(&i__1, &q__1, &x[i__2], &c__1);
         x[i__2].r += 1.f;
 L10:
@@ -226,7 +208,7 @@ L20:
 
             if (l < nct && (s[l].r != 0.f || s[l].i != 0.f)) {
                 i__1 = *n - l;
-                i__2 = l + l * *ldx;
+                i__2 = l + l * *ldx; /* index [l,l] */
                 cdotc_(&t, &i__1, &x[i__2], &c__1, &x[l+j* *ldx], &c__1);
                 t.r = -t.r, t.i = -t.i;
                 c_div(&t, &t, &x[i__2]);
@@ -244,8 +226,8 @@ L20:
 
         if (wantu && l < nct)
         for (i = l; i < *n; ++i) {
-            i__1 = i + l * *ldu;
-            i__2 = i + l * *ldx;
+            i__1 = i + l * *ldu; /* index [i,l] */
+            i__2 = i + l * *ldx; /* index [i,l] */
             u[i__1].r = x[i__2].r, u[i__1].i = x[i__2].i;
         }
 
@@ -257,16 +239,16 @@ L20:
 /*           l-th super-diagonal in e(l). */
 
         i__1 = *p - l - 1;
-        e[l].r = (float)scnrm2_(&i__1, &e[l+1], &c__1);
+        e[l].r = scnrm2_(&i__1, &e[l+1], &c__1);
         e[l].i = 0.f;
         if (e[l].r != 0.f) {
             if (e[l+1].r != 0.f || e[l+1].i != 0.f) {
-                d__1 = c_abs(&e[l]); d__2 = c_abs(&e[l+1]);
-                e[l].r = (float)(d__1 * e[l+1].r / d__2),
-                e[l].i = (float)(d__1 * e[l+1].i / d__2);
+                r__1 = c_abs(&e[l]); r__2 = c_abs(&e[l+1]);
+                e[l].r = r__1 * e[l+1].r / r__2,
+                e[l].i = r__1 * e[l+1].i / r__2;
             }
             i__1 = *p - l - 1;
-            c_div(&q__1, &c_b8, &e[l]);
+            c_div(&q__1, &c_1, &e[l]);
             cscal_(&i__1, &q__1, &e[l+1], &c__1);
             e[l+1].r += 1.f;
         }
@@ -287,7 +269,7 @@ L20:
         for (j = l+1; j < *p; ++j) {
             q__1.r = -e[j].r, q__1.i = -e[j].i;
             c_div(&q__1, &q__1, &e[l+1]);
-            r_cnjg(&q__1, &q__1);
+            q__1.i = -q__1.i; /* r_cnjg(&q__1, &q__1); */
             i__1 = *n - l - 1;
             caxpy_(&i__1, &q__1, &work[l+1], &c__1, &x[l+1 +j* *ldx], &c__1);
         }
@@ -298,7 +280,7 @@ L20:
 L120:
         if (wantv)
         for (i = l+1; i < *p; ++i) {
-            i__1 = i + l * *ldv;
+            i__1 = i + l * *ldv; /* index [i,l] */
             v[i__1].r = e[i].r, v[i__1].i = e[i].i;
         }
     }
@@ -307,14 +289,14 @@ L120:
 
     m = min(*p-1, *n);
     if (nct < *p) {
-        i__1 = nct * (*ldx+1);
+        i__1 = nct * (*ldx+1); /* index [nct,nct] */
         s[nct].r = x[i__1].r, s[nct].i = x[i__1].i;
     }
     if (*n-1 < m) {
         s[m].r = 0.f, s[m].i = 0.f;
     }
     if (nrt < m) {
-        i__1 = nrt + m * *ldx;
+        i__1 = nrt + m * *ldx; /* index [nrt,m] */
         e[nrt].r = x[i__1].r, e[nrt].i = x[i__1].i;
     }
     e[m].r = 0.f, e[m].i = 0.f;
@@ -324,7 +306,7 @@ L120:
     if (wantu)
     for (j = nct; j < ncu; ++j) {
         for (i = 0; i < *n; ++i) {
-            i__1 = i + j * *ldu;
+            i__1 = i + j * *ldu; /* index [i,j] */
             u[i__1].r = 0.f, u[i__1].i = 0.f;
         }
         i__1 = j + j * *ldu;
@@ -334,22 +316,22 @@ L120:
     for (l = nct-1; l >= 0; --l) {
         if (s[l].r == 0.f && s[l].i == 0.f) {
             for (i = 0; i < *n; ++i) {
-                i__1 = i + l * *ldu;
+                i__1 = i + l * *ldu; /* index [i,l] */
                 u[i__1].r = 0.f, u[i__1].i = 0.f;
             }
-            i__1 = l + l * *ldu;
+            i__1 = l + l * *ldu; /* index [l,l] */
             u[i__1].r = 1.f, u[i__1].i = 0.f;
             continue; /* next l */
         }
         i__1 = *n - l;
-        i__2 = l + l * *ldu;
+        i__2 = l + l * *ldu; /* index [l,l] */
         for (j = l+1; j < ncu; ++j) {
             cdotc_(&t, &i__1, &u[i__2], &c__1, &u[l+j* *ldu], &c__1);
             t.r = -t.r, t.i = -t.i;
             c_div(&t, &t, &u[i__2]);
             caxpy_(&i__1, &t, &u[i__2], &c__1, &u[l+j* *ldu], &c__1);
         }
-        cscal_(&i__1, &c_b53, &u[i__2], &c__1);
+        cscal_(&i__1, &c_m1, &u[i__2], &c__1);
         u[i__2].r += 1.f;
         for (i = 0; i < l; ++i) {
             i__1 = i + l * *ldu;
@@ -364,17 +346,17 @@ L120:
         if (l < nrt && (e[l].r != 0.f || e[l].i != 0.f))
         for (j = l+1; j < *p; ++j) {
             i__1 = *p - l - 1;
-            i__2 = l+1 + l * *ldv;
+            i__2 = l+1 + l * *ldv; /* index [l+1,l] */
             cdotc_(&t, &i__1, &v[i__2], &c__1, &v[l+1 +j* *ldv], &c__1);
             t.r = -t.r, t.i = -t.i;
             c_div(&t, &t, &v[i__2]);
             caxpy_(&i__1, &t, &v[i__2], &c__1, &v[l+1 +j* *ldv], &c__1);
         }
         for (i = 0; i < *p; ++i) {
-            i__1 = i + l * *ldv;
+            i__1 = i + l * *ldv; /* index [i,l] */
             v[i__1].r = 0.f, v[i__1].i = 0.f;
         }
-        i__1 = l + l * *ldv;
+        i__1 = l + l * *ldv; /* index [l,l] */
         v[i__1].r = 1.f, v[i__1].i = 0.f;
     }
 
@@ -382,7 +364,7 @@ L120:
 
     for (i = 0; i <= m; ++i) {
         if (s[i].r != 0.f || s[i].i != 0.f) {
-            t.r = (float)c_abs(&s[i]), t.i = 0.f;
+            t.r = c_abs(&s[i]), t.i = 0.f;
             c_div(&r, &s[i], &t);
             s[i].r = t.r, s[i].i = t.i;
             if (i < m) {
@@ -398,7 +380,7 @@ L120:
         if (e[i].r == 0.f && e[i].i == 0.f) {
             continue; /* next i */
         }
-        t.r = (float)c_abs(&e[i]), t.i = 0.f;
+        t.r = c_abs(&e[i]), t.i = 0.f;
         c_div(&r, &t, &e[i]);
         e[i].r = t.r, e[i].i = t.i;
         q__1.r = s[i+1].r * r.r - s[i+1].i * r.i,
@@ -440,8 +422,8 @@ L400:
 /*           kase = 4     if e(m-1) is negligible (convergence). */
 
     for (l = m; l > 0; --l) {
-        test = (float)c_abs(&s[l-1]) + (float)c_abs(&s[l]);
-        ztest = test + (float)c_abs(&e[l-1]);
+        test = c_abs(&s[l-1]) + c_abs(&s[l]);
+        ztest = test + c_abs(&e[l-1]);
         if (ztest == test) {
             e[l-1].r = 0.f, e[l-1].i = 0.f;
             break; /* last l */
@@ -454,7 +436,7 @@ L400:
         if (s[l].r < 0.f) {
             s[l].r = -s[l].r, s[l].i = -s[l].i;
             if (wantv) {
-                cscal_(p, &c_b53, &v[l* *ldv], &c__1);
+                cscal_(p, &c_m1, &v[l* *ldv], &c__1);
             }
         }
 
@@ -479,12 +461,12 @@ L400:
     for (ls = m; ls >= l; --ls) {
         test = 0.f;
         if (ls != m) {
-            test += (float)c_abs(&e[ls]);
+            test += c_abs(&e[ls]);
         }
         if (ls != l) {
-            test += (float)c_abs(&e[ls-1]);
+            test += c_abs(&e[ls-1]);
         }
-        ztest = test + (float)c_abs(&s[ls]);
+        ztest = test + c_abs(&s[ls]);
         if (ztest == test) {
             s[ls].r = 0.f, s[ls].i = 0.f;
             break; /* last ls */
@@ -494,22 +476,21 @@ L400:
 
 /*           calculate the shift. */
 
-        r__1 =           (float)c_abs(&s[m]),
-        r__1 = max(r__1, (float)c_abs(&s[m-1])),
-        r__1 = max(r__1, (float)c_abs(&e[m-1])),
-        r__1 = max(r__1, (float)c_abs(&s[l])),
-        scale= max(r__1, (float)c_abs(&e[l]));
+        scale =            c_abs(&s[m]),
+        scale = max(scale, c_abs(&s[m-1])),
+        scale = max(scale, c_abs(&e[m-1])),
+        scale = max(scale, c_abs(&s[l])),
+        scale = max(scale, c_abs(&e[l]));
         sm = s[m].r / scale;
         smm1 = s[m-1].r / scale;
         emm1 = e[m-1].r / scale;
         sl = s[l].r / scale;
         el = e[l].r / scale;
         b = ((smm1+sm) * (smm1-sm) + emm1*emm1) / 2.f;
-        r__1 = sm * emm1;
-        c = r__1 * r__1;
+        c = sm * emm1; c *= c;
         shift = 0.f;
         if (b != 0.f || c != 0.f) {
-            shift = (float)sqrt(b*b + c);
+            shift = sqrtf(b*b + c);
             if (b < 0.f) {
                 shift = -shift;
             }
@@ -581,4 +562,3 @@ L400:
     goto L400;
 
 } /* csvdc_ */
-

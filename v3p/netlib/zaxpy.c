@@ -1,34 +1,25 @@
-/* zaxpy.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 /*                               and moved out of zsvdc.c to separate file */
 
-
 /* Subroutine */ void zaxpy_(n, za, zx, incx, zy, incy)
-integer *n;
-doublecomplex *za, *zx;
-integer *incx;
+const integer *n;
+const doublecomplex *za, *zx;
+const integer *incx;
 doublecomplex *zy;
-integer *incy;
+const integer *incy;
 {
     /* System generated locals */
     doublecomplex z__1;
 
     /* Local variables */
-    static integer i;
-    static integer ix, iy;
-
+    static integer i, ix, iy;
 
 /*     constant times a vector plus a vector. */
 /*     jack dongarra, 3/11/78. */
 /*     modified 12/3/93, array(1) declarations changed to array(*) */
-
-    /* Function Body */
 
     if (*n <= 0) {
         return;

@@ -1,11 +1,7 @@
-/* slassq.f -- translated by f2c (version of 4 June 1993  1:43:59).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
-/* Subroutine */ void slassq_(integer *n, real *x, integer *incx, real *scale, real *sumsq)
+/* Subroutine */ void slassq_(const integer *n, const real *x, const integer *incx, real *scale, real *sumsq)
 {
     /* Local variables */
     static real absxi;
@@ -15,7 +11,7 @@
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,      */
 /*     Courant Institute, Argonne National Lab, and Rice University     */
 /*     October 31, 1992                                                 */
-/*                                                                      */
+
 /*  Purpose                                                             */
 /*  =======                                                             */
 /*                                                                      */
@@ -59,19 +55,19 @@
 /*                                                                      */
 /* =====================================================================*/
 
-    if (*n > 0)
-    for (ix = 0; *incx < 0 ? ix > *n * *incx : ix < *n * *incx; ix += *incx) {
-        if (x[ix] != 0.f) {
-            absxi = abs(x[ix]);
-            if (*scale < absxi) {
-                *scale /= absxi;
-                *sumsq = *sumsq * *scale * *scale + 1;
-                *scale = absxi;
-            } else {
-                absxi /= *scale;
-                *sumsq += absxi * absxi;
+    if (*n > 0) {
+        for (ix = 0; *incx < 0 ? ix > *n * *incx : ix < *n * *incx; ix += *incx) {
+            if (x[ix] != 0.f) {
+                absxi = abs(x[ix]);
+                if (*scale < absxi) {
+                    *scale /= absxi;
+                    *sumsq = *sumsq * *scale * *scale + 1;
+                    *scale = absxi;
+                } else {
+                    absxi /= *scale;
+                    *sumsq += absxi * absxi;
+                }
             }
         }
     }
-
 } /* slassq_ */

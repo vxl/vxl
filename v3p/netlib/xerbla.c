@@ -1,4 +1,5 @@
 #include "f2c.h"
+#include "netlib.h"
 #include <stdio.h>
 
 /* Subroutine */ void xerbla_(char *srname, integer *info)
@@ -7,7 +8,6 @@
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
        Courant Institute, Argonne National Lab, and Rice University
        September 30, 1994
-
 
     Purpose
     =======
@@ -33,10 +33,5 @@
    =====================================================================
 */
 
-    printf("** On entry to %6s, parameter number %2i had an illegal value\n",
-                srname, *info);
-
-/*     End of XERBLA */
-
+    printf("** On entry to %6s, parameter number %2i had an illegal value\n", srname, *info);
 } /* xerbla_ */
-

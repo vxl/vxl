@@ -1,14 +1,11 @@
-/* sscal.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Subroutine */ void sscal_(n, sa, sx, incx)
-integer *n;
-real *sa, *sx;
-integer *incx;
+const integer *n;
+const real *sa;
+real *sx;
+const integer *incx;
 {
     /* Local variables */
     static integer i, m, nincx;
@@ -26,7 +23,7 @@ integer *incx;
     if (*incx == 1) {
         m = *n % 5;
         for (i = 0; i < m; ++i) {
-            sx[i] = *sa * sx[i];
+            sx[i] *= *sa;
         }
         for (i = m; i < *n; i += 5) {
             sx[i] *= *sa; sx[i+1] *= *sa; sx[i+2] *= *sa; sx[i+3] *= *sa; sx[i+4] *= *sa;

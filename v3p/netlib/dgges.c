@@ -1,12 +1,8 @@
-/*  -- translated by f2c (version 19991025).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
+extern double sqrt(double); /* #include <math.h> */
 
 /* Table of constant values */
-
 static integer c__1 = 1;
 static integer c__0 = 0;
 static integer c_n1 = -1;
@@ -14,10 +10,9 @@ static doublereal c_b33 = 0.;
 static doublereal c_b34 = 1.;
 
 /* Subroutine */ void dgges_(jobvsl, jobvsr, sort, delctg, n, a, lda, b, ldb,
-        sdim, alphar, alphai, beta, vsl, ldvsl, vsr, ldvsr, work, lwork,
-        bwork, info, jobvsl_len, jobvsr_len, sort_len)
+        sdim, alphar, alphai, beta, vsl, ldvsl, vsr, ldvsr, work, lwork, bwork, info)
 char *jobvsl, *jobvsr, *sort;
-logical (*delctg) ();
+logical (*delctg) (doublereal*,doublereal*,doublereal*);
 integer *n;
 doublereal *a;
 integer *lda;
@@ -31,46 +26,27 @@ doublereal *work;
 integer *lwork;
 logical *bwork;
 integer *info;
-ftnlen jobvsl_len;
-ftnlen jobvsr_len;
-ftnlen sort_len;
 {
     /* System generated locals */
     integer i__1;
-
-    /* Builtin functions */
-    double sqrt();
 
     /* Local variables */
     static doublereal anrm, bnrm;
     static integer idum[1], ierr, itau, iwrk;
     static doublereal pvsl, pvsr;
     static integer i;
-    extern logical lsame_();
     static integer ileft, icols;
     static logical cursl, ilvsl, ilvsr;
     static integer irows;
-    extern /* Subroutine */ void dlabad_(), dggbak_(), dggbal_();
     static logical lst2sl;
-    extern doublereal dlamch_();
     static integer ip;
-    extern doublereal dlange_();
-    extern /* Subroutine */ void dgghrd_(), dlascl_();
     static logical ilascl, ilbscl;
-    extern /* Subroutine */ void dgeqrf_(), dlacpy_();
     static doublereal safmin;
-    extern /* Subroutine */ void dlaset_();
     static doublereal safmax;
-    extern /* Subroutine */ void xerbla_();
     static doublereal bignum;
-    extern /* Subroutine */ void dhgeqz_();
-    extern integer ilaenv_();
-    extern /* Subroutine */ void dtgsen_();
     static integer ijobvl, iright, ijobvr;
-    extern /* Subroutine */ void dorgqr_();
     static doublereal anrmto, bnrmto;
     static logical lastsl;
-    extern /* Subroutine */ void dormqr_();
     static integer minwrk, maxwrk;
     static doublereal smlnum;
     static logical wantst, lquery;
@@ -247,10 +223,10 @@ ftnlen sort_len;
 
 /*     Decode the input arguments */
 
-    if (lsame_(jobvsl, "N", (ftnlen)1, (ftnlen)1)) {
+    if (lsame_(jobvsl, "N")) {
         ijobvl = 1;
         ilvsl = FALSE_;
-    } else if (lsame_(jobvsl, "V", (ftnlen)1, (ftnlen)1)) {
+    } else if (lsame_(jobvsl, "V")) {
         ijobvl = 2;
         ilvsl = TRUE_;
     } else {
@@ -258,10 +234,10 @@ ftnlen sort_len;
         ilvsl = FALSE_;
     }
 
-    if (lsame_(jobvsr, "N", (ftnlen)1, (ftnlen)1)) {
+    if (lsame_(jobvsr, "N")) {
         ijobvr = 1;
         ilvsr = FALSE_;
-    } else if (lsame_(jobvsr, "V", (ftnlen)1, (ftnlen)1)) {
+    } else if (lsame_(jobvsr, "V")) {
         ijobvr = 2;
         ilvsr = TRUE_;
     } else {
@@ -269,7 +245,7 @@ ftnlen sort_len;
         ilvsr = FALSE_;
     }
 
-    wantst = lsame_(sort, "S", (ftnlen)1, (ftnlen)1);
+    wantst = lsame_(sort, "S");
 
 /*     Test the input arguments */
 
@@ -279,7 +255,7 @@ ftnlen sort_len;
         *info = -1;
     } else if (ijobvr <= 0) {
         *info = -2;
-    } else if (! wantst && ! lsame_(sort, "N", (ftnlen)1, (ftnlen)1)) {
+    } else if (! wantst && ! lsame_(sort, "N")) {
         *info = -3;
     } else if (*n < 0) {
         *info = -5;
@@ -303,9 +279,9 @@ ftnlen sort_len;
     minwrk = 1;
     if (*info == 0 && (*lwork >= 1 || lquery)) {
         minwrk = (*n + 1) * 7 + 16;
-        maxwrk = (*n + 1) * 7 + *n * ilaenv_(&c__1, "DGEQRF", " ", n, &c__1, n, &c__0, (ftnlen)6, (ftnlen)1) + 16;
+        maxwrk = (*n + 1) * 7 + *n * ilaenv_(&c__1, "DGEQRF", " ", n, &c__1, n, &c__0) + 16;
         if (ilvsl) {
-            i__1 = (*n + 1) * 7 + *n * ilaenv_(&c__1, "DORGQR", " ", n, &c__1, n, &c_n1, (ftnlen)6, (ftnlen)1);
+            i__1 = (*n + 1) * 7 + *n * ilaenv_(&c__1, "DORGQR", " ", n, &c__1, n, &c_n1);
             maxwrk = max(maxwrk,i__1);
         }
         work[0] = (doublereal) maxwrk;
@@ -316,7 +292,7 @@ ftnlen sort_len;
     }
     if (*info != 0) {
         i__1 = -(*info);
-        xerbla_("DGGES ", &i__1, (ftnlen)6);
+        xerbla_("DGGES ", &i__1);
         return;
     } else if (lquery) {
         return;
@@ -331,8 +307,8 @@ ftnlen sort_len;
 
 /*     Get machine constants */
 
-    eps = dlamch_("P", (ftnlen)1);
-    safmin = dlamch_("S", (ftnlen)1);
+    eps = dlamch_("P");
+    safmin = dlamch_("S");
     safmax = 1. / safmin;
     dlabad_(&safmin, &safmax);
     smlnum = sqrt(safmin) / eps;
@@ -340,7 +316,7 @@ ftnlen sort_len;
 
 /*     Scale A if max element outside range [SMLNUM,BIGNUM] */
 
-    anrm = dlange_("M", n, n, a, lda, work, (ftnlen)1);
+    anrm = dlange_("M", n, n, a, lda, work);
     ilascl = FALSE_;
     if (anrm > 0. && anrm < smlnum) {
         anrmto = smlnum;
@@ -350,12 +326,12 @@ ftnlen sort_len;
         ilascl = TRUE_;
     }
     if (ilascl) {
-        dlascl_("G", &c__0, &c__0, &anrm, &anrmto, n, n, a, lda, &ierr, (ftnlen)1);
+        dlascl_("G", &c__0, &c__0, &anrm, &anrmto, n, n, a, lda, &ierr);
     }
 
 /*     Scale B if max element outside range [SMLNUM,BIGNUM] */
 
-    bnrm = dlange_("M", n, n, b, ldb, work, (ftnlen)1);
+    bnrm = dlange_("M", n, n, b, ldb, work);
     ilbscl = FALSE_;
     if (bnrm > 0. && bnrm < smlnum) {
         bnrmto = smlnum;
@@ -365,7 +341,7 @@ ftnlen sort_len;
         ilbscl = TRUE_;
     }
     if (ilbscl) {
-        dlascl_("G", &c__0, &c__0, &bnrm, &bnrmto, n, n, b, ldb, &ierr, (ftnlen)1);
+        dlascl_("G", &c__0, &c__0, &bnrm, &bnrmto, n, n, b, ldb, &ierr);
     }
 
 /*     Permute the matrix to make it more nearly triangular */
@@ -374,8 +350,7 @@ ftnlen sort_len;
     ileft = 0;
     iright = *n;
     iwrk = iright + *n;
-    dggbal_("P", n, a, lda, b, ldb, &ilo, &ihi,
-            &work[ileft], &work[iright], &work[iwrk], &ierr, (ftnlen)1);
+    dggbal_("P", n, a, lda, b, ldb, &ilo, &ihi, &work[ileft], &work[iright], &work[iwrk], &ierr);
     --ilo;
 
 /*     Reduce B to triangular form (QR decomposition of B) */
@@ -393,15 +368,15 @@ ftnlen sort_len;
 
     i__1 = *lwork - iwrk;
     dormqr_("L", "T", &irows, &icols, &irows, &b[ilo + ilo * *ldb], ldb, &work[itau],
-            &a[ilo + ilo * *lda], lda, &work[iwrk], &i__1, &ierr, (ftnlen)1, (ftnlen)1);
+            &a[ilo + ilo * *lda], lda, &work[iwrk], &i__1, &ierr);
 
 /*     Initialize VSL */
 /*     (Workspace: need N, prefer N*NB) */
 
     if (ilvsl) {
-        dlaset_("Full", n, n, &c_b33, &c_b34, vsl, ldvsl, (ftnlen)4);
+        dlaset_("Full", n, n, &c_b33, &c_b34, vsl, ldvsl);
         i__1 = irows - 1;
-        dlacpy_("L", &i__1, &i__1, &b[ilo + 1 + ilo * *ldb], ldb, &vsl[ilo + 1 + ilo * *ldvsl], ldvsl, (ftnlen)1);
+        dlacpy_("L", &i__1, &i__1, &b[ilo + 1 + ilo * *ldb], ldb, &vsl[ilo + 1 + ilo * *ldvsl], ldvsl);
         i__1 = *lwork - iwrk;
         dorgqr_(&irows, &irows, &irows, &vsl[ilo + ilo * *ldvsl], ldvsl, &work[itau], &work[iwrk], &i__1, &ierr);
     }
@@ -409,15 +384,14 @@ ftnlen sort_len;
 /*     Initialize VSR */
 
     if (ilvsr) {
-        dlaset_("Full", n, n, &c_b33, &c_b34, vsr, ldvsr, (ftnlen)4);
+        dlaset_("Full", n, n, &c_b33, &c_b34, vsr, ldvsr);
     }
 
 /*     Reduce to generalized Hessenberg form */
 /*     (Workspace: none needed) */
 
     ++ilo;
-    dgghrd_(jobvsl, jobvsr, n, &ilo, &ihi, a, lda, b,
-            ldb, vsl, ldvsl, vsr, ldvsr, &ierr, (ftnlen)1, (ftnlen)1);
+    dgghrd_(jobvsl, jobvsr, n, &ilo, &ihi, a, lda, b, ldb, vsl, ldvsl, vsr, ldvsr, &ierr);
 
 /*     Perform QZ algorithm, computing Schur vectors if desired */
 /*     (Workspace: need N) */
@@ -425,7 +399,7 @@ ftnlen sort_len;
     iwrk = itau;
     i__1 = *lwork - iwrk;
     dhgeqz_("S", jobvsl, jobvsr, n, &ilo, &ihi, a, lda, b, ldb, alphar, alphai, beta,
-            vsl, ldvsl, vsr, ldvsr, &work[iwrk], &i__1, &ierr, (ftnlen)1, (ftnlen)1, (ftnlen)1);
+            vsl, ldvsl, vsr, ldvsr, &work[iwrk], &i__1, &ierr);
     if (ierr != 0) {
         if (ierr > 0 && ierr <= *n) {
             *info = ierr;
@@ -447,11 +421,11 @@ ftnlen sort_len;
 /*        Undo scaling on eigenvalues before DELZTGing */
 
         if (ilascl) {
-            dlascl_("G", &c__0, &c__0, &anrmto, &anrm, n, &c__1, alphar, n, &ierr, (ftnlen)1);
-            dlascl_("G", &c__0, &c__0, &anrmto, &anrm, n, &c__1, alphai, n, &ierr, (ftnlen)1);
+            dlascl_("G", &c__0, &c__0, &anrmto, &anrm, n, &c__1, alphar, n, &ierr);
+            dlascl_("G", &c__0, &c__0, &anrmto, &anrm, n, &c__1, alphai, n, &ierr);
         }
         if (ilbscl) {
-            dlascl_("G", &c__0, &c__0, &bnrmto, &bnrm, n, &c__1, beta, n, &ierr, (ftnlen)1);
+            dlascl_("G", &c__0, &c__0, &bnrmto, &bnrm, n, &c__1, beta, n, &ierr);
         }
 
 /*        Select eigenvalues */
@@ -472,13 +446,11 @@ ftnlen sort_len;
 /*     (Workspace: none needed) */
 
     if (ilvsl) {
-        dggbak_("P", "L", n, &ilo, &ihi, &work[ileft], &work[iright], n,
-                vsl, ldvsl, &ierr, (ftnlen)1, (ftnlen)1);
+        dggbak_("P", "L", n, &ilo, &ihi, &work[ileft], &work[iright], n, vsl, ldvsl, &ierr);
     }
 
     if (ilvsr) {
-        dggbak_("P", "R", n, &ilo, &ihi, &work[ileft], &work[iright], n,
-                vsr, ldvsr, &ierr, (ftnlen)1, (ftnlen)1);
+        dggbak_("P", "R", n, &ilo, &ihi, &work[ileft], &work[iright], n, vsr, ldvsr, &ierr);
     }
 
 /*     Check if unscaling would cause over/underflow, if so, rescale */
@@ -519,14 +491,14 @@ ftnlen sort_len;
 /*     Undo scaling */
 
     if (ilascl) {
-        dlascl_("H", &c__0, &c__0, &anrmto, &anrm, n, n, a, lda, &ierr, (ftnlen)1);
-        dlascl_("G", &c__0, &c__0, &anrmto, &anrm, n, &c__1, alphar, n, &ierr, (ftnlen)1);
-        dlascl_("G", &c__0, &c__0, &anrmto, &anrm, n, &c__1, alphai, n, &ierr, (ftnlen)1);
+        dlascl_("H", &c__0, &c__0, &anrmto, &anrm, n, n, a, lda, &ierr);
+        dlascl_("G", &c__0, &c__0, &anrmto, &anrm, n, &c__1, alphar, n, &ierr);
+        dlascl_("G", &c__0, &c__0, &anrmto, &anrm, n, &c__1, alphai, n, &ierr);
     }
 
     if (ilbscl) {
-        dlascl_("U", &c__0, &c__0, &bnrmto, &bnrm, n, n, b, ldb, &ierr, (ftnlen)1);
-        dlascl_("G", &c__0, &c__0, &bnrmto, &bnrm, n, &c__1, beta, n, &ierr, (ftnlen)1);
+        dlascl_("U", &c__0, &c__0, &bnrmto, &bnrm, n, n, b, ldb, &ierr);
+        dlascl_("G", &c__0, &c__0, &bnrmto, &bnrm, n, &c__1, beta, n, &ierr);
     }
 
     if (wantst) {

@@ -1,42 +1,29 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
 /* Table of constant values */
-
 static integer c__1 = 1;
 
-/* Subroutine */ void zgebal_(job, n, a, lda, ilo, ihi, scale, info, job_len)
-char *job;
-integer *n;
+/* Subroutine */ void zgebal_(job, n, a, lda, ilo, ihi, scale, info)
+const char *job;
+const integer *n;
 doublecomplex *a;
-integer *lda, *ilo, *ihi;
+const integer *lda;
+integer *ilo, *ihi;
 doublereal *scale;
 integer *info;
-ftnlen job_len;
 {
     /* System generated locals */
     integer i__1;
-
-    /* Builtin functions */
-    double z_abs();
 
     /* Local variables */
     static integer iexc;
     static doublereal c, f, g;
     static integer i, j, k, l, m;
     static doublereal r, s;
-    extern logical lsame_();
-    extern /* Subroutine */ void zswap_();
     static doublereal sfmin1, sfmin2, sfmax1, sfmax2, ca, ra;
-    extern doublereal dlamch_();
-    extern /* Subroutine */ void xerbla_(), zdscal_();
-    extern integer izamax_();
     static logical noconv;
     static integer ica, ira;
 
@@ -133,11 +120,8 @@ ftnlen job_len;
 /*                                                                        */
 /*  ===================================================================== */
 
-    /* Function Body */
-
     *info = 0;
-    if (! lsame_(job, "N", 1L, 1L) && ! lsame_(job, "P", 1L, 1L) && ! lsame_(
-            job, "S", 1L, 1L) && ! lsame_(job, "B", 1L, 1L)) {
+    if (! lsame_(job, "N") && ! lsame_(job, "P") && ! lsame_(job, "S") && ! lsame_(job, "B")) {
         *info = -1;
     } else if (*n < 0) {
         *info = -2;
@@ -146,7 +130,7 @@ ftnlen job_len;
     }
     if (*info != 0) {
         i__1 = -(*info);
-        xerbla_("ZGEBAL", &i__1, 6L);
+        xerbla_("ZGEBAL", &i__1);
         return;
     }
 
@@ -157,14 +141,14 @@ ftnlen job_len;
         goto L210;
     }
 
-    if (lsame_(job, "N", 1L, 1L)) {
+    if (lsame_(job, "N")) {
         for (i = 0; i < *n; ++i) {
             scale[i] = 1.;
         }
         goto L210;
     }
 
-    if (lsame_(job, "S", 1L, 1L)) {
+    if (lsame_(job, "S")) {
         goto L120;
     }
 
@@ -246,7 +230,7 @@ L120:
         scale[i] = 1.;
     }
 
-    if (lsame_(job, "P", 1L, 1L)) {
+    if (lsame_(job, "P")) {
         goto L210;
     }
 
@@ -254,7 +238,7 @@ L120:
 
 /*     Iterative loop for norm reduction */
 
-    sfmin1 = dlamch_("S", 1L) / dlamch_("P", 1L);
+    sfmin1 = dlamch_("S") / dlamch_("P");
     sfmax1 = 1. / sfmin1;
     sfmin2 = sfmin1 * 10.;
     sfmax2 = 1. / sfmin2;
@@ -336,8 +320,4 @@ L190:
 L210:
     *ilo = k+1;
     *ihi = l;
-
-/*     End of ZGEBAL */
-
 } /* zgebal_ */
-

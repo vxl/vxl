@@ -1,27 +1,22 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
 /* Table of constant values */
-
 static doublecomplex c_b4 = {-1.,0.};
 static doublecomplex c_b5 = {1.,0.};
 static integer c__1 = 1;
 static doublecomplex c_b39 = {0.,0.};
 
 /* Subroutine */ void zlahrd_(n, k, nb, a, lda, tau, t, ldt, y, ldy)
-integer *n, *k, *nb;
+const integer *n, *k, *nb;
 doublecomplex *a;
-integer *lda;
+const integer *lda;
 doublecomplex *tau, *t;
-integer *ldt;
+const integer *ldt;
 doublecomplex *y;
-integer *ldy;
+const integer *ldy;
 {
     /* System generated locals */
     integer i__1;
@@ -29,10 +24,7 @@ integer *ldy;
 
     /* Local variables */
     static integer i;
-    extern /* Subroutine */ void zscal_(), zgemv_(), zcopy_(), zaxpy_(), ztrmv_();
     static doublecomplex ei;
-    extern /* Subroutine */ void zlarfg_(), zlacgv_();
-
 
 /*  -- LAPACK auxiliary routine (version 2.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -130,8 +122,6 @@ integer *ldy;
 /*                                                                        */
 /*  ===================================================================== */
 
-    /* Function Body */
-
 /*     Quick return if possible */
 
     if (*n <= 1) {
@@ -147,7 +137,7 @@ integer *ldy;
 
             zlacgv_(&i, &a[*k + i - 1], lda);
             zgemv_("No transpose", n, &i, &c_b4, y, ldy,
-                   &a[*k + i - 1], lda, &c_b5, &a[i * *lda], &c__1, 12L);
+                   &a[*k + i - 1], lda, &c_b5, &a[i * *lda], &c__1);
             zlacgv_(&i, &a[*k + i - 1], lda);
 
 /*           Apply I - V * T' * V' to this column (call it b) from the */
@@ -161,31 +151,28 @@ integer *ldy;
 /*           w := V1' * b1 */
 
             zcopy_(&i, &a[*k+i* *lda], &c__1, &t[(*nb-1)* *ldt], &c__1);
-            ztrmv_("Lower", "Conjugate transpose", "Unit", &i,
-                   &a[*k], lda, &t[(*nb-1) * *ldt], &c__1, 5L, 19L, 4L);
+            ztrmv_("Lower", "Conjugate transpose", "Unit", &i, &a[*k], lda, &t[(*nb-1) * *ldt], &c__1);
 
 /*           w := w + V2'*b2 */
 
             i__1 = *n - *k - i;
             zgemv_("Conjugate transpose", &i__1, &i, &c_b5,
                    &a[*k-1+i+*lda], lda, &a[*k+i+i* *lda], &c__1,
-                   &c_b5, &t[(*nb-1) * *ldt], &c__1, 19L);
+                   &c_b5, &t[(*nb-1) * *ldt], &c__1);
 
 /*           w := T'*w */
 
-            ztrmv_("Upper", "Conjugate transpose", "Non-unit", &i,
-                   t, ldt, &t[(*nb-1) * *ldt], &c__1, 5L, 19L, 8L);
+            ztrmv_("Upper", "Conjugate transpose", "Non-unit", &i, t, ldt, &t[(*nb-1) * *ldt], &c__1);
 
 /*           b2 := b2 - V2*w */
 
             i__1 = *n - *k - i;
             zgemv_("No transpose", &i__1, &i, &c_b4, &a[*k-1+i+ *lda], lda,
-                   &t[(*nb-1)* *ldt], &c__1, &c_b5, &a[*k+i+i* *lda], &c__1, 12L);
+                   &t[(*nb-1)* *ldt], &c__1, &c_b5, &a[*k+i+i* *lda], &c__1);
 
 /*           b1 := b1 - V1*w */
 
-            ztrmv_("Lower", "No transpose", "Unit", &i, &a[*k],
-                   lda, &t[(*nb-1) * *ldt], &c__1, 5L, 12L, 4L);
+            ztrmv_("Lower", "No transpose", "Unit", &i, &a[*k], lda, &t[(*nb-1) * *ldt], &c__1);
             zaxpy_(&i, &c_b4, &t[(*nb-1) * *ldt], &c__1, &a[*k+i* *lda], &c__1);
 
             i__1 = *k + i - 1 + (i - 1) * *lda;
@@ -206,26 +193,21 @@ integer *ldy;
 
         i__1 = *n - *k - i;
         zgemv_("No transpose", n, &i__1, &c_b5, &a[(i+1) * *lda], lda,
-               &a[*k+i+i* *lda], &c__1, &c_b39, &y[i* *ldy], &c__1, 12L);
+               &a[*k+i+i* *lda], &c__1, &c_b39, &y[i* *ldy], &c__1);
         zgemv_("Conjugate transpose", &i__1, &i, &c_b5, &a[*k+i],
-               lda, &a[*k+i+i* *lda], &c__1, &c_b39, &t[i* *ldt], &c__1, 19L);
+               lda, &a[*k+i+i* *lda], &c__1, &c_b39, &t[i* *ldt], &c__1);
         zgemv_("No transpose", n, &i, &c_b4, y, ldy, &t[i* *ldt],
-               &c__1, &c_b5, &y[i* *ldy], &c__1, 12L);
+               &c__1, &c_b5, &y[i* *ldy], &c__1);
         zscal_(n, &tau[i], &y[i* *ldy], &c__1);
 
 /*        Compute T(1:i,i) */
 
         z__1.r = -tau[i].r, z__1.i = -tau[i].i;
         zscal_(&i, &z__1, &t[i* *ldt], &c__1);
-        ztrmv_("Upper", "No transpose", "Non-unit", &i, t, ldt, &t[i* *ldt],
-               &c__1, 5L, 12L, 8L);
+        ztrmv_("Upper", "No transpose", "Non-unit", &i, t, ldt, &t[i* *ldt], &c__1);
         i__1 = i + i * *ldt;
         t[i__1].r = tau[i].r, t[i__1].i = tau[i].i;
     }
     i__1 = *k + (*nb-1) + (*nb-1) * *lda;
     a[i__1].r = ei.r, a[i__1].i = ei.i;
-
-/*     End of ZLAHRD */
-
 } /* zlahrd_ */
-

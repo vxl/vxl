@@ -1,27 +1,20 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
 /* Table of constant values */
-
 static doublecomplex c_b4 = {0.,0.};
 static integer c__1 = 1;
 
-/* Subroutine */ void zlarft_(direct, storev, n, k, v, ldv, tau, t, ldt,
-        direct_len, storev_len)
-char *direct, *storev;
-integer *n, *k;
+/* Subroutine */ void zlarft_(direct, storev, n, k, v, ldv, tau, t, ldt)
+const char *direct, *storev;
+const integer *n, *k;
 doublecomplex *v;
-integer *ldv;
-doublecomplex *tau, *t;
+const integer *ldv;
+const doublecomplex *tau;
+doublecomplex *t;
 integer *ldt;
-ftnlen direct_len;
-ftnlen storev_len;
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -29,10 +22,7 @@ ftnlen storev_len;
 
     /* Local variables */
     static integer i, j;
-    extern logical lsame_();
-    extern /* Subroutine */ void zgemv_(), ztrmv_(), zlacgv_();
     static doublecomplex vii;
-
 
 /*  -- LAPACK auxiliary routine (version 2.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -131,14 +121,12 @@ ftnlen storev_len;
 /*                                                                        */
 /*  ===================================================================== */
 
-    /* Function Body */
-
 /*     Quick return if possible */
     if (*n == 0) {
         return;
     }
 
-    if (lsame_(direct, "F", 1L, 1L)) {
+    if (lsame_(direct, "F")) {
         for (i = 0; i < *k; ++i) {
             if (tau[i].r == 0. && tau[i].i == 0.) {
 
@@ -156,7 +144,7 @@ ftnlen storev_len;
                 vii.r = v[i__2].r, vii.i = v[i__2].i;
                 i__2 = i + i * *ldv;
                 v[i__2].r = 1., v[i__2].i = 0.;
-                if (lsame_(storev, "C", 1L, 1L)) {
+                if (lsame_(storev, "C")) {
 
 /*                 T(1:i-1,i) := - tau(i) * V(i:n,1:i-1)' * V(i:n,i) */
 
@@ -164,7 +152,7 @@ ftnlen storev_len;
                     i__1 = *n - i;
                     zgemv_("Conjugate transpose", &i__1, &i, &z__1,
                            &v[i], ldv, &v[i + i * *ldv], &c__1, &c_b4,
-                           &t[i * *ldt], &c__1, 19L);
+                           &t[i * *ldt], &c__1);
                 } else {
 
 /*                 T(1:i-1,i) := - tau(i) * V(1:i-1,i:n) * V(i,i:n)' */
@@ -176,7 +164,7 @@ ftnlen storev_len;
                     z__1.r = -tau[i].r, z__1.i = -tau[i].i;
                     i__2 = *n - i;
                     zgemv_("No transpose", &i, &i__2, &z__1, &v[i* *ldv], ldv,
-                           &v[i+i* *ldv], ldv, &c_b4, &t[i* *ldt], &c__1, 12L);
+                           &v[i+i* *ldv], ldv, &c_b4, &t[i* *ldt], &c__1);
                     if (i < *n-1) {
                         i__2 = *n-1 - i;
                         zlacgv_(&i__2, &v[i + (i + 1) * *ldv], ldv);
@@ -187,8 +175,7 @@ ftnlen storev_len;
 
 /*              T(1:i-1,i) := T(1:i-1,1:i-1) * T(1:i-1,i) */
 
-                ztrmv_("Upper", "No transpose", "Non-unit", &i,
-                       t, ldt, &t[i * *ldt], &c__1, 5L, 12L, 8L);
+                ztrmv_("Upper", "No transpose", "Non-unit", &i, t, ldt, &t[i * *ldt], &c__1);
                 i__2 = i + i * *ldt;
                 t[i__2].r = tau[i].r, t[i__2].i = tau[i].i;
             }
@@ -208,7 +195,7 @@ ftnlen storev_len;
 /*              general case */
 
                 if (i < *k-1) {
-                    if (lsame_(storev, "C", 1L, 1L)) {
+                    if (lsame_(storev, "C")) {
                         i__1 = *n - *k + i + i * *ldv;
                         vii.r = v[i__1].r, vii.i = v[i__1].i;
                         v[i__1].r = 1., v[i__1].i = 0.;
@@ -221,7 +208,7 @@ ftnlen storev_len;
                         i__2 = *k - i - 1;
                         zgemv_("Conjugate transpose", &i__1, &i__2, &z__1,
                                &v[(i + 1) * *ldv], ldv, &v[i * *ldv], &c__1,
-                               &c_b4, &t[i + 1 + i * *ldt], &c__1, 19L);
+                               &c_b4, &t[i + 1 + i * *ldt], &c__1);
                         i__1 = *n - *k + i + i * *ldv;
                         v[i__1].r = vii.r, v[i__1].i = vii.i;
                     } else {
@@ -238,7 +225,7 @@ ftnlen storev_len;
                         i__1 = *k - i - 1;
                         i__2 = *n - *k + i + 1;
                         zgemv_("No transpose", &i__1, &i__2, &z__1, &v[i+1], ldv,
-                               &v[i], ldv, &c_b4, &t[i+1 + i* *ldt], &c__1, 12L);
+                               &v[i], ldv, &c_b4, &t[i+1 + i* *ldt], &c__1);
                         i__1 = *n - *k + i;
                         zlacgv_(&i__1, &v[i], ldv);
                         i__1 = i + (*n - *k + i) * *ldv;
@@ -250,15 +237,11 @@ ftnlen storev_len;
                     i__1 = *k - i - 1;
                     ztrmv_("Lower", "No transpose", "Non-unit", &i__1,
                            &t[i + 1 + (i + 1) * *ldt], ldt,
-                           &t[i + 1 + i * *ldt], &c__1, 5L, 12L, 8L);
+                           &t[i + 1 + i * *ldt], &c__1);
                 }
                 i__1 = i + i * *ldt;
                 t[i__1].r = tau[i].r, t[i__1].i = tau[i].i;
             }
         }
     }
-
-/*     End of ZLARFT */
-
 } /* zlarft_ */
-

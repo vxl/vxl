@@ -1,9 +1,10 @@
 #include "f2c.h"
+#include "netlib.h"
 
 #ifdef KR_headers
-double pow_di(ap, bp) doublereal *ap; integer *bp;
+double pow_di(ap, bp) const doublereal *ap; const integer *bp;
 #else
-double pow_di(doublereal *ap, integer *bp)
+double pow_di(const doublereal *ap, const integer *bp)
 #endif
 {
 double pow, x;
@@ -31,5 +32,5 @@ if(n != 0)
                         break;
                 }
         }
-return(pow);
+return pow;
 }

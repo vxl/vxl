@@ -1,58 +1,42 @@
-/*  -- translated by f2c (version 19991025).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Table of constant values */
-
 static integer c__1 = 1;
 static doublereal c_b34 = 10.;
 static doublereal c_b70 = .5;
 
-/* Subroutine */ void dggbal_(job, n, a, lda, b, ldb, ilo, ihi, lscale, rscale, work, info, job_len)
-char *job;
-integer *n;
+/* Subroutine */ void dggbal_(job, n, a, lda, b, ldb, ilo, ihi, lscale, rscale, work, info)
+const char *job;
+const integer *n;
 doublereal *a;
-integer *lda;
+const integer *lda;
 doublereal *b;
-integer *ldb, *ilo, *ihi;
+const integer *ldb;
+integer *ilo, *ihi;
 doublereal *lscale, *rscale, *work;
 integer *info;
-ftnlen job_len;
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1;
     doublereal d__1;
-
-    /* Builtin functions */
-    double d_lg10(), d_sign(), pow_di();
 
     /* Local variables */
     static integer lcab;
     static doublereal beta, coef;
     static integer irab, lrab;
     static doublereal basl, cmax;
-    extern doublereal ddot_();
     static doublereal coef2, coef5;
     static integer i, j, k, l, m;
     static doublereal gamma, t, alpha;
-    extern /* Subroutine */ void dscal_();
-    extern logical lsame_();
     static doublereal sfmin, sfmax;
-    extern /* Subroutine */ void dswap_();
     static integer iflow;
-    extern /* Subroutine */ void daxpy_();
     static integer kount, jc;
     static doublereal ta, tb, tc;
-    extern doublereal dlamch_();
     static integer ir, it;
     static doublereal ew;
     static integer nr;
     static doublereal pgamma;
-    extern integer idamax_();
-    extern /* Subroutine */ void xerbla_();
     static integer lsfmin, lsfmax, ip1, jp1, lm1;
     static doublereal cab, rab, ewc, cor, sum;
     static integer nrp2, icab;
@@ -164,10 +148,7 @@ ftnlen job_len;
 /*     Test the input parameters */
 
     *info = 0;
-    if (! lsame_(job, "N", (ftnlen)1, (ftnlen)1) &&
-        ! lsame_(job, "P", (ftnlen)1, (ftnlen)1) &&
-        ! lsame_(job, "S", (ftnlen)1, (ftnlen)1) &&
-        ! lsame_(job, "B", (ftnlen)1, (ftnlen)1)) {
+    if (! lsame_(job, "N") && ! lsame_(job, "P") && ! lsame_(job, "S") && ! lsame_(job, "B")) {
         *info = -1;
     } else if (*n < 0) {
         *info = -2;
@@ -178,7 +159,7 @@ ftnlen job_len;
     }
     if (*info != 0) {
         i__1 = -(*info);
-        xerbla_("DGGBAL", &i__1, (ftnlen)6);
+        xerbla_("DGGBAL", &i__1);
         return;
     }
 
@@ -191,7 +172,7 @@ ftnlen job_len;
         return;
     }
 
-    if (lsame_(job, "N", (ftnlen)1, (ftnlen)1)) {
+    if (lsame_(job, "N")) {
         *ilo = 1;
         *ihi = *n;
         for (i = 1; i <= *n; ++i) {
@@ -209,7 +190,7 @@ ftnlen job_len;
         return;
     }
 
-    if (lsame_(job, "S", (ftnlen)1, (ftnlen)1)) {
+    if (lsame_(job, "S")) {
         goto L190;
     }
 
@@ -324,7 +305,7 @@ L190:
         return;
     }
 
-    if (lsame_(job, "P", (ftnlen)1, (ftnlen)1)) {
+    if (lsame_(job, "P")) {
         return;
     }
 
@@ -490,7 +471,7 @@ L320:
 /*     End generalized conjugate gradient iteration */
 
 L350:
-    sfmin = dlamch_("S", (ftnlen)1);
+    sfmin = dlamch_("S");
     sfmax = 1. / sfmin;
     lsfmin = (integer) (d_lg10(&sfmin) / basl + 1.);
     lsfmax = (integer) (d_lg10(&sfmax) / basl);

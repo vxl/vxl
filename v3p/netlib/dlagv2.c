@@ -1,9 +1,5 @@
-/*  -- translated by f2c (version 19991025).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Table of constant values */
 
@@ -21,16 +17,10 @@ doublereal *alphar, *alphai, *beta, *csl, *snl, *csr, *snr;
     doublereal d__1;
 
     /* Local variables */
-    extern /* Subroutine */ void drot_(), dlag2_();
-    static doublereal r__, t, anorm, bnorm, h1, h2, h3, scale1, scale2;
-    extern /* Subroutine */ void dlasv2_();
-    extern doublereal dlapy2_();
+    static doublereal r, t, anorm, bnorm, h1, h2, h3, scale1, scale2;
     static doublereal ascale, bscale;
-    extern doublereal dlamch_();
     static doublereal wi, qq, rr, safmin;
-    extern /* Subroutine */ void dlartg_();
     static doublereal wr1, wr2, ulp;
-
 
 /*  -- LAPACK auxiliary routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -112,8 +102,8 @@ doublereal *alphar, *alphai, *beta, *csl, *snl, *csr, *snr;
 /*                                                                        */
 /*  ===================================================================== */
 
-    safmin = dlamch_("S", (ftnlen)1);
-    ulp = dlamch_("P", (ftnlen)1);
+    safmin = dlamch_("S");
+    ulp = dlamch_("P");
 
 /*     Scale A */
 
@@ -145,7 +135,7 @@ doublereal *alphar, *alphai, *beta, *csl, *snl, *csr, *snr;
 /*     Check if B is singular */
 
     } else if (abs(b[0]) <= ulp) {
-        dlartg_(&a[0], &a[1], csl, snl, &r__);
+        dlartg_(&a[0], &a[1], csl, snl, &r);
         *csr = 1.;
         *snr = 0.;
         drot_(&c__2, &a[0], lda, &a[1], lda, csl, snl);
@@ -205,10 +195,10 @@ doublereal *alphar, *alphai, *beta, *csl, *snl, *csr, *snr;
 
             if (scale1 * h1 >= abs(wr1) * h2) {
 /*              find left rotation matrix Q to zero out B(2,1) */
-                dlartg_(&b[0], &b[1], csl, snl, &r__);
+                dlartg_(&b[0], &b[1], csl, snl, &r);
             } else {
 /*              find left rotation matrix Q to zero out A(2,1) */
-                dlartg_(&a[0], &a[1], csl, snl, &r__);
+                dlartg_(&a[0], &a[1], csl, snl, &r);
             }
 
             drot_(&c__2, &a[0], lda, &a[1], lda, csl, snl);
@@ -222,7 +212,7 @@ doublereal *alphar, *alphai, *beta, *csl, *snl, *csr, *snr;
 /*           a pair of complex conjugate eigenvalues */
 /*           first compute the SVD of the matrix B */
 
-            dlasv2_(&b[0], &b[*ldb], &b[*ldb + 1], &r__, &t, snr, csr, snl, csl);
+            dlasv2_(&b[0], &b[*ldb], &b[*ldb + 1], &r, &t, snr, csr, snl, csl);
 
 /*           Form (A,B) := Q(A,B)Z' where Q is left rotation matrix and */
 /*           Z is right rotation matrix computed from DLASV2 */

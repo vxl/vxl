@@ -1,12 +1,13 @@
 #include "f2c.h"
+#include "netlib.h"
 
 #ifdef KR_headers
-double pow_ri(ap, bp) real *ap; integer *bp;
+real pow_ri(ap, bp) const real *ap; const integer *bp;
 #else
-double pow_ri(real *ap, integer *bp)
+real pow_ri(const real *ap, const integer *bp)
 #endif
 {
-double pow, x;
+real pow, x;
 integer n;
 unsigned long u;
 

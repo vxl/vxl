@@ -1,17 +1,15 @@
 #include "f2c.h"
-extern double sqrt(double);
+#include "netlib.h"
+extern double sqrt(double); /* #include <math.h> */
 
 /* A slightly more efficient implementation for complex square roots, */
 /* which does not use any of hypot(), atan2(), cos(), sin(). */
 /* Author: Peter Vanroose, June 2001. */
 
-/* Note that the imaginary part of the returned value will never be negative.
- * The other complex square root is just minus the one returned here.
- */
+/* Note that the imaginary part of the returned value will never be negative. */
+/* The other complex square root is just minus the one returned here.  */
 
-extern doublereal z_abs();
-
-void z_sqrt(doublecomplex *ret_value, doublecomplex *z)
+void z_sqrt(doublecomplex *ret_value, const doublecomplex *z)
 {
   doublereal w = z_abs(z);
 

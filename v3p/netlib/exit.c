@@ -9,6 +9,7 @@
  */
 
 #include "f2c.h"
+#include "netlib.h"
 #undef abs
 #undef min
 #undef max

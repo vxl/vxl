@@ -1,18 +1,13 @@
-/*  -- translated by f2c (version 19991025).
-   You must link the resulting object file with the libraries:
-	-lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Table of constant values */
-
 static integer c__1 = 1;
 static integer c_n1 = -1;
 static integer c__3 = 3;
 static integer c__2 = 2;
 
-/* Subroutine */ int dorgqr_(m, n, k, a, lda, tau, work, lwork, info)
+/* Subroutine */ void dorgqr_(m, n, k, a, lda, tau, work, lwork, info)
 integer *m, *n, *k;
 doublereal *a;
 integer *lda;
@@ -23,27 +18,17 @@ integer *lwork, *info;
     integer a_dim1, a_offset, i__1, i__2, i__3;
 
     /* Local variables */
-    static integer i__, j, l, nbmin, iinfo;
-    extern /* Subroutine */ int dorg2r_();
+    static integer i, j, l, nbmin, iinfo;
     static integer ib, nb, ki, kk;
-    extern /* Subroutine */ int dlarfb_();
     static integer nx;
-    extern /* Subroutine */ int dlarft_(), xerbla_();
-    extern integer ilaenv_();
     static integer ldwork, lwkopt;
     static logical lquery;
     static integer iws;
-
 
 /*  -- LAPACK routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
 /*     Courant Institute, Argonne National Lab, and Rice University */
 /*     June 30, 1999 */
-
-/*     .. Scalar Arguments .. */
-/*     .. */
-/*     .. Array Arguments .. */
-/*     .. */
 
 /*  Purpose */
 /*  ======= */
@@ -102,20 +87,6 @@ integer *lwork, *info;
 
 /*  ===================================================================== */
 
-/*     .. Parameters .. */
-/*     .. */
-/*     .. Local Scalars .. */
-/*     .. */
-/*     .. External Subroutines .. */
-/*     .. */
-/*     .. Intrinsic Functions .. */
-/*     .. */
-/*     .. External Functions .. */
-/*     .. */
-/*     .. Executable Statements .. */
-
-/*     Test the input arguments */
-
     /* Parameter adjustments */
     a_dim1 = *lda;
     a_offset = 1 + a_dim1 * 1;
@@ -123,36 +94,37 @@ integer *lwork, *info;
     --tau;
     --work;
 
-    /* Function Body */
+/*     Test the input arguments */
+
     *info = 0;
-    nb = ilaenv_(&c__1, "DORGQR", " ", m, n, k, &c_n1, (ftnlen)6, (ftnlen)1);
+    nb = ilaenv_(&c__1, "DORGQR", " ", m, n, k, &c_n1);
     lwkopt = max(1,*n) * nb;
     work[1] = (doublereal) lwkopt;
     lquery = *lwork == -1;
     if (*m < 0) {
-	*info = -1;
+        *info = -1;
     } else if (*n < 0 || *n > *m) {
-	*info = -2;
+        *info = -2;
     } else if (*k < 0 || *k > *n) {
-	*info = -3;
+        *info = -3;
     } else if (*lda < max(1,*m)) {
-	*info = -5;
+        *info = -5;
     } else if (*lwork < max(1,*n) && ! lquery) {
-	*info = -8;
+        *info = -8;
     }
     if (*info != 0) {
-	i__1 = -(*info);
-	xerbla_("DORGQR", &i__1, (ftnlen)6);
-	return 0;
+        i__1 = -(*info);
+        xerbla_("DORGQR", &i__1);
+        return;
     } else if (lquery) {
-	return 0;
+        return;
     }
 
 /*     Quick return if possible */
 
     if (*n <= 0) {
-	work[1] = 1.;
-	return 0;
+        work[1] = 1.;
+        return;
     }
 
     nbmin = 2;
@@ -162,28 +134,24 @@ integer *lwork, *info;
 
 /*        Determine when to cross over from blocked to unblocked code. */
 
-/* Computing MAX */
-	i__1 = 0, i__2 = ilaenv_(&c__3, "DORGQR", " ", m, n, k, &c_n1, (
-		ftnlen)6, (ftnlen)1);
-	nx = max(i__1,i__2);
-	if (nx < *k) {
+        nx = ilaenv_(&c__3, "DORGQR", " ", m, n, k, &c_n1);
+        nx = max(0,nx);
+        if (nx < *k) {
 
 /*           Determine if workspace is large enough for blocked code. */
 
-	    ldwork = *n;
-	    iws = ldwork * nb;
-	    if (*lwork < iws) {
+            ldwork = *n;
+            iws = ldwork * nb;
+            if (*lwork < iws) {
 
 /*              Not enough workspace to use optimal NB:  reduce NB and */
 /*              determine the minimum value of NB. */
 
-		nb = *lwork / ldwork;
-/* Computing MAX */
-		i__1 = 2, i__2 = ilaenv_(&c__2, "DORGQR", " ", m, n, k, &c_n1,
-			 (ftnlen)6, (ftnlen)1);
-		nbmin = max(i__1,i__2);
-	    }
-	}
+                nb = *lwork / ldwork;
+                nbmin = ilaenv_(&c__2, "DORGQR", " ", m, n, k, &c_n1);
+                nbmin = max(2,nbmin);
+            }
+        }
     }
 
     if (nb >= nbmin && nb < *k && nx < *k) {
@@ -191,91 +159,67 @@ integer *lwork, *info;
 /*        Use blocked code after the last block. */
 /*        The first kk columns are handled by the block method. */
 
-	ki = (*k - nx - 1) / nb * nb;
-/* Computing MIN */
-	i__1 = *k, i__2 = ki + nb;
-	kk = min(i__1,i__2);
+        ki = (*k - nx - 1) / nb * nb;
+        kk = min(*k, ki + nb);
 
 /*        Set A(1:kk,kk+1:n) to zero. */
 
-	i__1 = *n;
-	for (j = kk + 1; j <= i__1; ++j) {
-	    i__2 = kk;
-	    for (i__ = 1; i__ <= i__2; ++i__) {
-		a[i__ + j * a_dim1] = 0.;
-/* L10: */
-	    }
-/* L20: */
-	}
+        for (j = kk + 1; j <= *n; ++j) {
+            for (i = 1; i <= kk; ++i) {
+                a[i + j * a_dim1] = 0.;
+            }
+        }
     } else {
-	kk = 0;
+        kk = 0;
     }
 
 /*     Use unblocked code for the last or only block. */
 
     if (kk < *n) {
-	i__1 = *m - kk;
-	i__2 = *n - kk;
-	i__3 = *k - kk;
-	dorg2r_(&i__1, &i__2, &i__3, &a[kk + 1 + (kk + 1) * a_dim1], lda, &
-		tau[kk + 1], &work[1], &iinfo);
+        i__1 = *m - kk;
+        i__2 = *n - kk;
+        i__3 = *k - kk;
+        dorg2r_(&i__1, &i__2, &i__3, &a[kk + 1 + (kk + 1) * a_dim1], lda, &tau[kk + 1], &work[1], &iinfo);
     }
 
     if (kk > 0) {
 
 /*        Use blocked code */
 
-	i__1 = -nb;
-	for (i__ = ki + 1; i__1 < 0 ? i__ >= 1 : i__ <= 1; i__ += i__1) {
-/* Computing MIN */
-	    i__2 = nb, i__3 = *k - i__ + 1;
-	    ib = min(i__2,i__3);
-	    if (i__ + ib <= *n) {
+        for (i = ki + 1; nb > 0 ? i >= 1 : i <= 1; i -= nb) {
+            ib = min(nb, *k - i + 1);
+            if (i + ib <= *n) {
 
 /*              Form the triangular factor of the block reflector */
 /*              H = H(i) H(i+1) . . . H(i+ib-1) */
 
-		i__2 = *m - i__ + 1;
-		dlarft_("Forward", "Columnwise", &i__2, &ib, &a[i__ + i__ * 
-			a_dim1], lda, &tau[i__], &work[1], &ldwork, (ftnlen)7,
-			 (ftnlen)10);
+                i__2 = *m - i + 1;
+                dlarft_("Forward", "Columnwise", &i__2, &ib, &a[i + i * a_dim1], lda, &tau[i], &work[1], &ldwork);
 
 /*              Apply H to A(i:m,i+ib:n) from the left */
 
-		i__2 = *m - i__ + 1;
-		i__3 = *n - i__ - ib + 1;
-		dlarfb_("Left", "No transpose", "Forward", "Columnwise", &
-			i__2, &i__3, &ib, &a[i__ + i__ * a_dim1], lda, &work[
-			1], &ldwork, &a[i__ + (i__ + ib) * a_dim1], lda, &
-			work[ib + 1], &ldwork, (ftnlen)4, (ftnlen)12, (ftnlen)
-			7, (ftnlen)10);
-	    }
+                i__2 = *m - i + 1;
+                i__3 = *n - i - ib + 1;
+                dlarfb_("Left", "No transpose", "Forward", "Columnwise", &i__2, &i__3,
+                        &ib, &a[i + i * a_dim1], lda, &work[1], &ldwork,
+                        &a[i + (i + ib) * a_dim1], lda, &work[ib + 1], &ldwork);
+            }
 
 /*           Apply H to rows i:m of current block */
 
-	    i__2 = *m - i__ + 1;
-	    dorg2r_(&i__2, &ib, &ib, &a[i__ + i__ * a_dim1], lda, &tau[i__], &
-		    work[1], &iinfo);
+            i__2 = *m - i + 1;
+            dorg2r_(&i__2, &ib, &ib, &a[i + i * a_dim1], lda, &tau[i], &work[1], &iinfo);
 
 /*           Set rows 1:i-1 of current block to zero */
 
-	    i__2 = i__ + ib - 1;
-	    for (j = i__; j <= i__2; ++j) {
-		i__3 = i__ - 1;
-		for (l = 1; l <= i__3; ++l) {
-		    a[l + j * a_dim1] = 0.;
-/* L30: */
-		}
-/* L40: */
-	    }
-/* L50: */
-	}
+            for (j = i; j < i + ib; ++j) {
+                for (l = 1; l < i; ++l) {
+                    a[l + j * a_dim1] = 0.;
+                }
+            }
+        }
     }
 
     work[1] = (doublereal) iws;
-    return 0;
-
-/*     End of DORGQR */
 
 } /* dorgqr_ */
-

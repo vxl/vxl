@@ -1,17 +1,13 @@
-/*  -- translated by f2c (version 19940927).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
-integer isamax_(integer *n, real *sx, integer *incx)
+integer isamax_(const integer *n, const real *sx, const integer *incx)
 {
     /* System generated locals */
     integer ret_val = 1;
 
     /* Local variables */
-    static real smax;
+    static real maxv;
     static integer i, ix;
 
 /*     finds the index of element having max. absolute value.           */
@@ -25,22 +21,22 @@ integer isamax_(integer *n, real *sx, integer *incx)
     if (*n == 1) {
         return 1;
     }
-    smax = abs(sx[0]);
+    maxv = abs(sx[0]);
 /*        code for increment equal to 1 */
     if (*incx == 1) {
         for (i = 1; i < *n; ++i)
-            if (abs(sx[i]) > smax) {
+            if (abs(sx[i]) > maxv) {
                 ret_val = i+1;
-                smax = abs(sx[i]);
+                maxv = abs(sx[i]);
             }
     }
 /*        code for increment not equal to 1 */
     else {
         ix = *incx;
         for (i = 1; i < *n; ++i, ix += *incx)
-            if (abs(sx[ix]) > smax) {
+            if (abs(sx[ix]) > maxv) {
                 ret_val = i+1;
-                smax = abs(sx[ix]);
+                maxv = abs(sx[ix]);
             }
     }
     return ret_val;

@@ -1,33 +1,23 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
+extern double sqrt(double); /* #include <math.h> */
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
 /* Table of constant values */
-
 static integer c__1 = 1;
 
-doublereal zlange_(norm, m, n, a, lda, work, norm_len)
-char *norm;
-integer *m, *n;
+doublereal zlange_(norm, m, n, a, lda, work)
+const char *norm;
+const integer *m, *n;
 doublecomplex *a;
-integer *lda;
+const integer *lda;
 doublereal *work;
-ftnlen norm_len;
 {
-    /* Builtin functions */
-    double z_abs(), sqrt();
-
     /* Local variables */
     static integer i, j;
     static doublereal scale;
-    extern logical lsame_();
     static doublereal value;
-    extern /* Subroutine */ void zlassq_();
     static doublereal sum;
 
 
@@ -90,11 +80,9 @@ ftnlen norm_len;
 /*                                                                       */
 /* ===================================================================== */
 
-    /* Function Body */
-
     if (min(*m,*n) == 0) {
         value = 0.;
-    } else if (lsame_(norm, "M", 1L, 1L)) {
+    } else if (lsame_(norm, "M")) {
 
 /*        Find max(abs(A(i,j))). */
 
@@ -104,7 +92,7 @@ ftnlen norm_len;
                 value = max(value, z_abs(&a[i + j * *lda]));
             }
         }
-    } else if (lsame_(norm, "O", 1L, 1L) || *norm == '1') {
+    } else if (lsame_(norm, "O") || *norm == '1') {
 
 /*        Find norm1(A). */
 
@@ -116,7 +104,7 @@ ftnlen norm_len;
             }
             value = max(value,sum);
         }
-    } else if (lsame_(norm, "I", 1L, 1L)) {
+    } else if (lsame_(norm, "I")) {
 
 /*        Find normI(A). */
 
@@ -132,7 +120,7 @@ ftnlen norm_len;
         for (i = 0; i < *m; ++i) {
             value = max(value, work[i]);
         }
-    } else if (lsame_(norm, "F", 1L, 1L) || lsame_(norm, "E", 1L, 1L)) {
+    } else if (lsame_(norm, "F") || lsame_(norm, "E")) {
 
 /*        Find normF(A). */
 
@@ -145,8 +133,4 @@ ftnlen norm_len;
     }
 
     return value;
-
-/*     End of ZLANGE */
-
 } /* zlange_ */
-

@@ -1,9 +1,5 @@
-/* dggsvp.f -- translated by f2c (version of 4 June 1993  1:43:59).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Table of constant values */
 
@@ -11,50 +7,23 @@ static doublereal c_b12 = 0.;
 static doublereal c_b22 = 1.;
 
 /* Subroutine */ void dggsvp_(char *jobu, char *jobv, char *jobq, integer *m,
-        integer *p, integer *n, doublereal *a, integer *lda, doublereal *b,
-        integer *ldb, doublereal *tola, doublereal *tolb, integer *k, integer
-        *l, doublereal *u, integer *ldu, doublereal *v, integer *ldv,
-        doublereal *q, integer *ldq, integer *iwork, doublereal *tau,
-        doublereal *work, integer *info, ftnlen jobu_len, ftnlen jobv_len,
-        ftnlen jobq_len)
+        integer *p, integer *n, doublereal *a, integer *lda, doublereal *b, integer *ldb,
+        doublereal *tola, doublereal *tolb, integer *k, integer *l, doublereal *u, integer *ldu,
+        doublereal *v, integer *ldv, doublereal *q, integer *ldq, integer *iwork, doublereal *tau,
+        doublereal *work, integer *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1,
-            u_offset, v_dim1, v_offset, i__1, i__2;
+    integer i__1, i__2;
 
     /* Local variables */
     static integer i, j;
-    extern logical lsame_(char *, char *, ftnlen, ftnlen);
     static logical wantq, wantu, wantv;
-    extern /* Subroutine */ void dgeqr2_(integer *, integer *, doublereal *,
-            integer *, doublereal *, doublereal *, integer *), dgerq2_(
-            integer *, integer *, doublereal *, integer *, doublereal *,
-            doublereal *, integer *), dorg2r_(integer *, integer *, integer *,
-             doublereal *, integer *, doublereal *, doublereal *, integer *),
-            dorm2r_(char *, char *, integer *, integer *, integer *,
-            doublereal *, integer *, doublereal *, doublereal *, integer *,
-            doublereal *, integer *, ftnlen, ftnlen), dormr2_(char *, char *,
-            integer *, integer *, integer *, doublereal *, integer *,
-            doublereal *, doublereal *, integer *, doublereal *, integer *,
-            ftnlen, ftnlen), dgeqpf_(integer *, integer *, doublereal *,
-            integer *, integer *, doublereal *, doublereal *, integer *),
-            dlacpy_(char *, integer *, integer *, doublereal *, integer *,
-            doublereal *, integer *, ftnlen), dlaset_(char *, integer *,
-            integer *, doublereal *, doublereal *, doublereal *, integer *,
-            ftnlen), xerbla_(char *, integer *, ftnlen), dlapmt_(logical *,
-            integer *, integer *, doublereal *, integer *, integer *);
     static logical forwrd;
-
 
 /*  -- LAPACK routine (version 2.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
 /*     Courant Institute, Argonne National Lab, and Rice University */
 /*     September 30, 1994 */
-
-/*     .. Scalar Arguments .. */
-/*     .. */
-/*     .. Array Arguments .. */
-/*     .. */
 
 /*  Purpose */
 /*  ======= */
@@ -129,8 +98,8 @@ static doublereal c_b22 = 1.;
 /*          TOLA and TOLB are the thresholds to determine the effective */
 /*          numerical rank of matrix B and a subblock of A. Generally, */
 /*          they are set to */
-/*             TOLA = MAX(M,N)*norm(A)*MAZHEPS, */
-/*             TOLB = MAX(P,N)*norm(B)*MAZHEPS. */
+/*             TOLA = MAX(M,N)*norm(A)*MACHEPS, */
+/*             TOLB = MAX(P,N)*norm(B)*MACHEPS. */
 /*          The size of TOLA and TOLB may affect the size of backward */
 /*          errors of the decomposition. */
 
@@ -184,39 +153,19 @@ static doublereal c_b22 = 1.;
 
 /*  ===================================================================== */
 
-    /* Parameter adjustments */
-    --work;
-    --tau;
-    --iwork;
-    q_dim1 = *ldq;
-    q_offset = q_dim1 + 1;
-    q -= q_offset;
-    v_dim1 = *ldv;
-    v_offset = v_dim1 + 1;
-    v -= v_offset;
-    u_dim1 = *ldu;
-    u_offset = u_dim1 + 1;
-    u -= u_offset;
-    b_dim1 = *ldb;
-    b_offset = b_dim1 + 1;
-    b -= b_offset;
-    a_dim1 = *lda;
-    a_offset = a_dim1 + 1;
-    a -= a_offset;
-
 /*     Test the input parameters */
 
-    wantu = lsame_(jobu, "U", 1L, 1L);
-    wantv = lsame_(jobv, "V", 1L, 1L);
-    wantq = lsame_(jobq, "Q", 1L, 1L);
+    wantu = lsame_(jobu, "U");
+    wantv = lsame_(jobv, "V");
+    wantq = lsame_(jobq, "Q");
     forwrd = TRUE_;
 
     *info = 0;
-    if (! (wantu || lsame_(jobu, "N", 1L, 1L))) {
+    if (! (wantu || lsame_(jobu, "N"))) {
         *info = -1;
-    } else if (! (wantv || lsame_(jobv, "N", 1L, 1L))) {
+    } else if (! (wantv || lsame_(jobv, "N"))) {
         *info = -2;
-    } else if (! (wantq || lsame_(jobq, "N", 1L, 1L))) {
+    } else if (! (wantq || lsame_(jobq, "N"))) {
         *info = -3;
     } else if (*m < 0) {
         *info = -4;
@@ -228,36 +177,36 @@ static doublereal c_b22 = 1.;
         *info = -8;
     } else if (*ldb < max(1,*p)) {
         *info = -10;
-    } else if (*ldu < 1 || wantu && *ldu < *m) {
+    } else if (*ldu < 1 || (wantu && *ldu < *m) ) {
         *info = -16;
-    } else if (*ldv < 1 || wantv && *ldv < *p) {
+    } else if (*ldv < 1 || (wantv && *ldv < *p) ) {
         *info = -18;
-    } else if (*ldq < 1 || wantq && *ldq < *n) {
+    } else if (*ldq < 1 || (wantq && *ldq < *n) ) {
         *info = -20;
     }
     if (*info != 0) {
         i__1 = -(*info);
-        xerbla_("DGGSVP", &i__1, 6L);
+        xerbla_("DGGSVP", &i__1);
         return;
     }
 
 /*     QR with column pivoting of B: B*P = V*( S11 S12 ) */
 /*                                           (  0   0  ) */
 
-    for (i = 1; i <= *n; ++i) {
+    for (i = 0; i < *n; ++i) {
         iwork[i] = 0;
     }
-    dgeqpf_(p, n, &b[b_offset], ldb, &iwork[1], &tau[1], &work[1], info);
+    dgeqpf_(p, n, b, ldb, iwork, tau, work, info);
 
 /*     Update A := A*P */
 
-    dlapmt_(&forwrd, m, n, &a[a_offset], lda, &iwork[1]);
+    dlapmt_(&forwrd, m, n, a, lda, iwork);
 
 /*     Determine the effective rank of matrix B. */
 
     *l = 0;
-    for (i = 1; i <= min(*p,*n); ++i) {
-        if (abs(b[i + i * b_dim1]) > *tolb) {
+    for (i = 0; i < *p && i < *n; ++i) {
+        if (abs(b[i + i * *ldb]) > *tolb) {
             ++(*l);
         }
     }
@@ -266,61 +215,59 @@ static doublereal c_b22 = 1.;
 
 /*        Copy the details of V, and form V. */
 
-        dlaset_("Full", p, p, &c_b12, &c_b12, &v[v_offset], ldv, 4L);
+        dlaset_("Full", p, p, &c_b12, &c_b12, v, ldv);
         if (*p > 1) {
             i__1 = *p - 1;
-            dlacpy_("Lower", &i__1, n, &b[b_dim1 + 2], ldb, &v[v_dim1 + 2], ldv, 5L);
+            dlacpy_("Lower", &i__1, n, &b[1], ldb, &v[1], ldv);
         }
         i__1 = min(*p,*n);
-        dorg2r_(p, p, &i__1, &v[v_offset], ldv, &tau[1], &work[1], info);
+        dorg2r_(p, p, &i__1, v, ldv, tau, work, info);
     }
 
 /*     Clean up B */
 
-    for (j = 1; j <= *l - 1; ++j) {
-        for (i = j + 1; i <= *l; ++i) {
-            b[i + j * b_dim1] = 0.;
+    for (j = 0; j < *l; ++j) {
+        for (i = j + 1; i < *l; ++i) {
+            b[i + j * *ldb] = 0.;
         }
     }
     if (*p > *l) {
         i__1 = *p - *l;
-        dlaset_("Full", &i__1, n, &c_b12, &c_b12, &b[*l + 1 + b_dim1], ldb, 4L);
+        dlaset_("Full", &i__1, n, &c_b12, &c_b12, &b[*l], ldb);
     }
 
     if (wantq) {
 
 /*        Set Q = I and Update Q := Q*P */
 
-        dlaset_("Full", n, n, &c_b12, &c_b22, &q[q_offset], ldq, 4L);
-        dlapmt_(&forwrd, n, n, &q[q_offset], ldq, &iwork[1]);
+        dlaset_("Full", n, n, &c_b12, &c_b22, q, ldq);
+        dlapmt_(&forwrd, n, n, q, ldq, iwork);
     }
 
     if (*p >= *l && *n != *l) {
 
 /*        RQ factorization of (S11 S12): ( S11 S12 ) = ( 0 S12 )*Z */
 
-        dgerq2_(l, n, &b[b_offset], ldb, &tau[1], &work[1], info);
+        dgerq2_(l, n, b, ldb, tau, work, info);
 
 /*        Update A := A*Z' */
 
-        dormr2_("Right", "Transpose", m, n, l, &b[b_offset], ldb, &tau[1], &a[
-                a_offset], lda, &work[1], info, 5L, 9L);
+        dormr2_("Right", "Transpose", m, n, l, b, ldb, tau, a, lda, work, info);
 
         if (wantq) {
 
 /*           Update Q := Q*Z' */
 
-            dormr2_("Right", "Transpose", n, n, l, &b[b_offset], ldb, &tau[1],
-                     &q[q_offset], ldq, &work[1], info, 5L, 9L);
+            dormr2_("Right", "Transpose", n, n, l, b, ldb, tau, q, ldq, work, info);
         }
 
 /*        Clean up B */
 
         i__1 = *n - *l;
-        dlaset_("Full", l, &i__1, &c_b12, &c_b12, &b[b_offset], ldb, 4L);
-        for (j = *n - *l + 1; j <= *n; ++j) {
-            for (i = j - *n + *l + 1; i <= *l; ++i) {
-                b[i + j * b_dim1] = 0.;
+        dlaset_("Full", l, &i__1, &c_b12, &c_b12, b, ldb);
+        for (j = *n - *l; j < *n; ++j) {
+            for (i = j - *n + *l + 1; i < *l; ++i) {
+                b[i + j * *ldb] = 0.;
             }
         }
     }
@@ -333,17 +280,17 @@ static doublereal c_b22 = 1.;
 /*              A11 = U*(  0  T12 )*P1' */
 /*                      (  0   0  ) */
 
-    for (i = 1; i <= *n - *l; ++i) {
+    for (i = 0; i < *n - *l; ++i) {
         iwork[i] = 0;
     }
     i__1 = *n - *l;
-    dgeqpf_(m, &i__1, &a[a_offset], lda, &iwork[1], &tau[1], &work[1], info);
+    dgeqpf_(m, &i__1, a, lda, iwork, tau, work, info);
 
 /*     Determine the effective rank of A11 */
 
     *k = 0;
-    for (i = 1; i <= min(*m,*n - *l); ++i) {
-        if (abs(a[i + i * a_dim1]) > *tola) {
+    for (i = 0; i < *m && i < *n - *l; ++i) {
+        if (abs(a[i + i * *lda]) > *tola) {
             ++(*k);
         }
     }
@@ -351,21 +298,20 @@ static doublereal c_b22 = 1.;
 /*     Update A12 := U'*A12, where A12 = A( 1:M, N-L+1:N ) */
 
     i__1 = min(*m,*n - *l);
-    dorm2r_("Left", "Transpose", m, l, &i__1, &a[a_offset], lda, &tau[1],
-            &a[(*n - *l + 1) * a_dim1 + 1], lda, &work[1], info, 4L, 9L);
+    dorm2r_("Left", "Transpose", m, l, &i__1, a, lda, tau, &a[(*n - *l) * *lda], lda, work, info);
 
     if (wantu) {
 
 /*        Copy the details of U, and form U */
 
-        dlaset_("Full", m, m, &c_b12, &c_b12, &u[u_offset], ldu, 4L);
+        dlaset_("Full", m, m, &c_b12, &c_b12, u, ldu);
         if (*m > 1) {
             i__1 = *m - 1;
             i__2 = *n - *l;
-            dlacpy_("Lower", &i__1, &i__2, &a[a_dim1 + 2], lda, &u[u_dim1 + 2], ldu, 5L);
+            dlacpy_("Lower", &i__1, &i__2, &a[1], lda, &u[1], ldu);
         }
         i__1 = min(*m,*n - *l);
-        dorg2r_(m, m, &i__1, &u[u_offset], ldu, &tau[1], &work[1], info);
+        dorg2r_(m, m, &i__1, u, ldu, tau, work, info);
     }
 
     if (wantq) {
@@ -373,21 +319,21 @@ static doublereal c_b22 = 1.;
 /*        Update Q( 1:N, 1:N-L )  = Q( 1:N, 1:N-L )*P1 */
 
         i__1 = *n - *l;
-        dlapmt_(&forwrd, n, &i__1, &q[q_offset], ldq, &iwork[1]);
+        dlapmt_(&forwrd, n, &i__1, q, ldq, iwork);
     }
 
 /*     Clean up A: set the strictly lower triangular part of */
 /*     A(1:K, 1:K) = 0, and A( K+1:M, 1:N-L ) = 0. */
 
-    for (j = 1; j <= *k - 1; ++j) {
-        for (i = j + 1; i <= *k; ++i) {
-            a[i + j * a_dim1] = 0.;
+    for (j = 0; j < *k; ++j) {
+        for (i = j + 1; i < *k; ++i) {
+            a[i + j * *lda] = 0.;
         }
     }
     if (*m > *k) {
         i__1 = *m - *k;
         i__2 = *n - *l;
-        dlaset_("Full", &i__1, &i__2, &c_b12, &c_b12, &a[*k + 1 + a_dim1], lda, 4L);
+        dlaset_("Full", &i__1, &i__2, &c_b12, &c_b12, &a[*k], lda);
     }
 
     if (*n - *l > *k) {
@@ -395,27 +341,25 @@ static doublereal c_b22 = 1.;
 /*        RQ factorization of ( T11 T12 ) = ( 0 T12 )*Z1 */
 
         i__1 = *n - *l;
-        dgerq2_(k, &i__1, &a[a_offset], lda, &tau[1], &work[1], info);
+        dgerq2_(k, &i__1, a, lda, tau, work, info);
 
         if (wantq) {
 
 /*           Update Q( 1:N,1:N-L ) = Q( 1:N,1:N-L )*Z1' */
 
             i__1 = *n - *l;
-            dormr2_("Right", "Transpose", n, &i__1, k, &a[a_offset], lda, &
-                    tau[1], &q[q_offset], ldq, &work[1], info, 5L, 9L);
+            dormr2_("Right", "Transpose", n, &i__1, k, a, lda, tau, q, ldq, work, info);
         }
 
 /*        Clean up A */
 
         i__1 = *n - *l - *k;
-        dlaset_("Full", k, &i__1, &c_b12, &c_b12, &a[a_offset], lda, 4L);
-        for (j = *n - *l - *k + 1; j <= *n - *l; ++j) {
-            for (i = j - *n + *l + *k + 1; i <= *k; ++i) {
-                a[i + j * a_dim1] = 0.;
+        dlaset_("Full", k, &i__1, &c_b12, &c_b12, a, lda);
+        for (j = *n - *l - *k; j < *n - *l; ++j) {
+            for (i = j - *n + *l + *k + 1; i < *k; ++i) {
+                a[i + j * *lda] = 0.;
             }
         }
-
     }
 
     if (*m > *k) {
@@ -423,7 +367,7 @@ static doublereal c_b22 = 1.;
 /*        QR factorization of A( K+1:M,N-L+1:N ) */
 
         i__1 = *m - *k;
-        dgeqr2_(&i__1, l, &a[*k + 1 + (*n - *l + 1) * a_dim1], lda, &tau[1], &work[1], info);
+        dgeqr2_(&i__1, l, &a[*k + (*n - *l) * *lda], lda, tau, work, info);
 
         if (wantu) {
 
@@ -432,19 +376,16 @@ static doublereal c_b22 = 1.;
             i__1 = *m - *k;
             i__2 = min(i__1,*l);
             dorm2r_("Right", "No transpose", m, &i__1, &i__2,
-                    &a[*k + 1 + (*n - *l + 1) * a_dim1], lda, &tau[1],
-                    &u[(*k + 1) * u_dim1 + 1], ldu, &work[1], info, 5L, 12L);
+                    &a[*k + (*n - *l) * *lda], lda, tau,
+                    &u[*k * *ldu], ldu, work, info);
         }
 
 /*        Clean up */
 
-        for (j = *n - *l + 1; j <= *n; ++j) {
-            for (i = j - *n + *k + *l + 1; i <= *m; ++i) {
-                a[i + j * a_dim1] = 0.;
+        for (j = *n - *l; j < *n; ++j) {
+            for (i = j - *n + *k + *l + 1; i < *m; ++i) {
+                a[i + j * *lda] = 0.;
             }
         }
     }
-
-    return;
-
 } /* dggsvp_ */

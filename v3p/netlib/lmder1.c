@@ -1,13 +1,8 @@
-/* lmder1.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
-/* Subroutine */ void lmder1_(fcn, m, n, x, fvec, fjac, ldfjac, tol, info,
-        ipvt, wa, lwa)
-/* Subroutine */ void (*fcn) ();
+/* Subroutine */ void lmder1_(fcn, m, n, x, fvec, fjac, ldfjac, tol, info, ipvt, wa, lwa)
+void (*fcn)(integer*,integer*,doublereal*,doublereal*,doublereal*,integer*,integer*);
 integer *m, *n;
 doublereal *x, *fvec, *fjac;
 integer *ldfjac;
@@ -19,15 +14,10 @@ integer *lwa;
     /* Initialized data */
 
     static doublereal factor = 100.;
-    static doublereal zero = 0.;
-
-    /* System generated locals */
-    integer fjac_dim1, fjac_offset;
 
     /* Local variables */
     static integer mode, nfev, njev;
     static doublereal ftol, gtol, xtol;
-    extern /* Subroutine */ void lmder_();
     static integer maxfev, nprint;
 
 /*     ********** */
@@ -151,37 +141,24 @@ integer *lwa;
 /*     burton s. garbow, kenneth e. hillstrom, jorge j. more */
 
 /*     ********** */
-    /* Parameter adjustments */
-    --wa;
-    --ipvt;
-    fjac_dim1 = *ldfjac;
-    fjac_offset = fjac_dim1 + 1;
-    fjac -= fjac_offset;
-    --fvec;
-    --x;
 
-    /* Function Body */
     *info = 0;
 
 /*     check the input parameters for errors. */
 
-    if (*n <= 0 || *m < *n || *ldfjac < *m || *tol < zero || *lwa < *n * 5 + *
-            m) {
-        goto L10;
-    }
+    if (*n <= 0 || *m < *n || *ldfjac < *m || *tol < 0. || *lwa < *n * 5 + *m)
+        return;
 
 /*     call lmder. */
 
     maxfev = (*n + 1) * 100;
     ftol = *tol;
     xtol = *tol;
-    gtol = zero;
+    gtol = 0.;
     mode = 1;
     nprint = 0;
-    lmder_(fcn, m, n, &x[1], &fvec[1], &fjac[fjac_offset], ldfjac, &ftol, &
-            xtol, &gtol, &maxfev, &wa[1], &mode, &factor, &nprint, info, &
-            nfev, &njev, &ipvt[1], &wa[*n + 1], &wa[(*n << 1) + 1], &wa[*n *
-            3 + 1], &wa[(*n << 2) + 1], &wa[*n * 5 + 1]);
+    lmder_(fcn, m, n, x, fvec, fjac, ldfjac, &ftol, &xtol, &gtol, &maxfev, wa, &mode, &factor, &nprint,
+           info, &nfev, &njev, ipvt, &wa[*n], &wa[*n << 1], &wa[*n * 3], &wa[(*n << 2)], &wa[*n * 5]);
 
 #ifdef NUMERICS_DEBUG
     printf("INFO = %d\n", *info);
@@ -189,10 +166,5 @@ integer *lwa;
     if (*info == 8) {
         *info = 4;
     }
-L10:
-    return;
-
-/*     last card of subroutine lmder1. */
 
 } /* lmder1_ */
-

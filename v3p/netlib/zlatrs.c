@@ -1,30 +1,20 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
 /* Table of constant values */
-
 static integer c__1 = 1;
 static doublereal c_b36 = .5;
 
-/* Subroutine */ void zlatrs_(uplo, trans, diag, normin, n, a, lda, x, scale,
-        cnorm, info, uplo_len, trans_len, diag_len, normin_len)
-char *uplo, *trans, *diag, *normin;
-integer *n;
-doublecomplex *a;
-integer *lda;
+/* Subroutine */ void zlatrs_(uplo, trans, diag, normin, n, a, lda, x, scale, cnorm, info)
+const char *uplo, *trans, *diag, *normin;
+const integer *n;
+const doublecomplex *a;
+const integer *lda;
 doublecomplex *x;
 doublereal *scale, *cnorm;
 integer *info;
-ftnlen uplo_len;
-ftnlen trans_len;
-ftnlen diag_len;
-ftnlen normin_len;
 {
     /* System generated locals */
     integer i__1;
@@ -39,30 +29,18 @@ ftnlen normin_len;
     static doublecomplex tjjs;
     static doublereal xmax, grow;
     static integer i, j;
-    extern /* Subroutine */ void dscal_();
-    extern logical lsame_();
     static doublereal tscal;
     static doublecomplex uscal;
     static integer jlast;
     static doublecomplex csumj;
-    extern /* Double Complex */ void zdotc_();
     static logical upper;
-    extern /* Double Complex */ void zdotu_();
-    extern /* Subroutine */ void zaxpy_(), ztrsv_(), dlabad_();
-    extern doublereal dlamch_();
     static doublereal xj;
-    extern integer idamax_();
-    extern /* Subroutine */ void xerbla_(), zdscal_();
     static doublereal bignum;
-    extern integer izamax_();
-    extern /* Double Complex */ void zladiv_();
     static logical notran;
     static integer jfirst;
-    extern doublereal dzasum_();
     static doublereal smlnum;
     static logical nounit;
     static doublereal rec, tjj;
-
 
 /*  -- LAPACK auxiliary routine (version 2.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -225,23 +203,20 @@ ftnlen normin_len;
 /*                                                                        */
 /*  ===================================================================== */
 
-    /* Function Body */
-
     *info = 0;
-    upper = lsame_(uplo, "U", 1L, 1L);
-    notran = lsame_(trans, "N", 1L, 1L);
-    nounit = lsame_(diag, "N", 1L, 1L);
+    upper = lsame_(uplo, "U");
+    notran = lsame_(trans, "N");
+    nounit = lsame_(diag, "N");
 
 /*     Test the input parameters. */
 
-    if (! upper && ! lsame_(uplo, "L", 1L, 1L)) {
+    if (! upper && ! lsame_(uplo, "L")) {
         *info = -1;
-    } else if (! notran && ! lsame_(trans, "T", 1L, 1L) &&
-                           ! lsame_(trans, "C", 1L, 1L)) {
+    } else if (! notran && ! lsame_(trans, "T") && ! lsame_(trans, "C")) {
         *info = -2;
-    } else if (! nounit && ! lsame_(diag, "U", 1L, 1L)) {
+    } else if (! nounit && ! lsame_(diag, "U")) {
         *info = -3;
-    } else if (! lsame_(normin, "Y", 1L, 1L) && ! lsame_(normin, "N", 1L, 1L)) {
+    } else if (! lsame_(normin, "Y") && ! lsame_(normin, "N")) {
         *info = -4;
     } else if (*n < 0) {
         *info = -5;
@@ -250,7 +225,7 @@ ftnlen normin_len;
     }
     if (*info != 0) {
         i__1 = -(*info);
-        xerbla_("ZLATRS", &i__1, 6L);
+        xerbla_("ZLATRS", &i__1);
         return;
     }
 
@@ -262,14 +237,14 @@ ftnlen normin_len;
 
 /*     Determine machine dependent parameters to control overflow. */
 
-    smlnum = dlamch_("Safe minimum", 12L);
+    smlnum = dlamch_("Safe minimum");
     bignum = 1. / smlnum;
     dlabad_(&smlnum, &bignum);
-    smlnum /= dlamch_("Precision", 9L);
+    smlnum /= dlamch_("Precision");
     bignum = 1. / smlnum;
     *scale = 1.;
 
-    if (lsame_(normin, "N", 1L, 1L)) {
+    if (lsame_(normin, "N")) {
 
 /*        Compute the 1-norm of each column, not including the diagonal. */
 
@@ -490,7 +465,7 @@ L90:
 /*        Use the Level 2 BLAS solve if the reciprocal of the bound on */
 /*        elements of X is not too small. */
 
-        ztrsv_(uplo, trans, diag, n, a, lda, x, &c__1, 1L, 1L, 1L);
+        ztrsv_(uplo, trans, diag, n, a, lda, x, &c__1);
     } else {
 
 /*        Use a Level 1 BLAS solve, scaling intermediate results. */
@@ -621,14 +596,14 @@ L110:
 
                         z__1.r = - tscal * x[j].r, z__1.i = - tscal * x[j].i;
                         i__1 = *n - j - 1;
-                        zaxpy_(&i__1, &z__1, &a[j + 1 + j * *lda], &c__1, & x[j + 1], &c__1);
+                        zaxpy_(&i__1, &z__1, &a[j + 1 + j * *lda], &c__1, &x[j + 1], &c__1);
                         i = j + izamax_(&i__1, &x[j + 1], &c__1);
                         xmax = abs(x[i].r) + abs(x[i].i);
                     }
                 }
             }
 
-        } else if (lsame_(trans, "T", 1L, 1L)) {
+        } else if (lsame_(trans, "T")) {
 
 /*           Solve A**T * x = b */
 
@@ -676,7 +651,7 @@ L110:
                         zdotu_(&csumj, &j, &a[j * *lda], &c__1, x, &c__1);
                     } else if (j < *n - 1) {
                         i__1 = *n - j - 1;
-                        zdotu_(&csumj, &i__1, &a[j + 1 + j * *lda], &c__1, & x[j + 1], &c__1);
+                        zdotu_(&csumj, &i__1, &a[j + 1 + j * *lda], &c__1, &x[j + 1], &c__1);
                     }
                 } else {
 
@@ -934,8 +909,4 @@ L210:
         d__1 = 1. / tscal;
         dscal_(n, &d__1, cnorm, &c__1);
     }
-
-/*     End of ZLATRS */
-
 } /* zlatrs_ */
-

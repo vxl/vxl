@@ -1,20 +1,17 @@
-/* dscal.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Subroutine */ void dscal_(n, da, dx, incx)
-integer *n;
-doublereal *da, *dx;
-integer *incx;
+const integer *n;
+const doublereal *da;
+doublereal *dx;
+const integer *incx;
 {
     /* Local variables */
     static integer i, m, nincx;
 
 /*     scales a vector by a constant.                                   */
-/*     uses unrolled loops for increment equal to one.                  */
+/*     uses unrolled loops for increment equal to 1.                    */
 /*     jack dongarra, linpack, 3/11/78.                                 */
 /*     modified 3/93 to return if incx .le. 0.                          */
 /*     modified 12/3/93, array(1) declarations changed to array(*)      */
@@ -36,7 +33,7 @@ integer *incx;
     else {
         nincx = *n * *incx;
         for (i = 0; i < nincx; i += *incx) {
-            dx[i] = *da * dx[i];
+            dx[i] *= *da;
         }
     }
 } /* dscal_ */

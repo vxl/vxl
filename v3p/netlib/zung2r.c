@@ -1,21 +1,17 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
 /* Table of constant values */
-
 static integer c__1 = 1;
 
 /* Subroutine */ void zung2r_(m, n, k, a, lda, tau, work, info)
-integer *m, *n, *k;
+const integer *m, *n, *k;
 doublecomplex *a;
-integer *lda;
-doublecomplex *tau, *work;
+const integer *lda;
+const doublecomplex *tau;
+doublecomplex *work;
 integer *info;
 {
     /* System generated locals */
@@ -24,8 +20,6 @@ integer *info;
 
     /* Local variables */
     static integer i, j, l;
-    extern /* Subroutine */ void zscal_(), zlarf_(), xerbla_();
-
 
 /*  -- LAPACK routine (version 2.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -80,8 +74,6 @@ integer *info;
 /*                                                                        */
 /*  ===================================================================== */
 
-    /* Function Body */
-
     *info = 0;
     if (*m < 0) {
         *info = -1;
@@ -94,7 +86,7 @@ integer *info;
     }
     if (*info != 0) {
         i__1 = -(*info);
-        xerbla_("ZUNG2R", &i__1, 6L);
+        xerbla_("ZUNG2R", &i__1);
         return;
     }
 
@@ -124,8 +116,7 @@ integer *info;
             a[i__1].r = 1., a[i__1].i = 0.;
             i__1 = *m - i;
             i__2 = *n - i - 1;
-            zlarf_("Left", &i__1, &i__2, &a[i + i * *lda], &c__1, &tau[i], &
-                    a[i + (i + 1) * *lda], lda, work, 4L);
+            zlarf_("Left", &i__1, &i__2, &a[i + i * *lda], &c__1, &tau[i], &a[i + (i+1) * *lda], lda, work);
         }
         if (i+1 < *m) {
             i__1 = *m - i - 1;
@@ -143,8 +134,4 @@ integer *info;
             a[i__1].r = 0., a[i__1].i = 0.;
         }
     }
-
-/*     End of ZUNG2R */
-
 } /* zung2r_ */
-

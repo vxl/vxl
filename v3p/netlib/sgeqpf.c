@@ -1,12 +1,8 @@
-/* sgeqpf.f -- translated by f2c (version of 4 June 1993  1:43:59).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
+extern double sqrt(double); /* #include <math.h> */
 
 /* Table of constant values */
-
 static integer c__1 = 1;
 
 /* Subroutine */ void sgeqpf_(integer *m, integer *n, real *a, integer *lda,
@@ -15,31 +11,13 @@ static integer c__1 = 1;
     /* System generated locals */
     integer i__1, i__2;
 
-    /* Builtin functions */
-    double sqrt(doublereal);
-#define sqrtf(f) ((float)sqrt((double)(f)))
-
     /* Local variables */
     static real temp, temp2;
-    extern doublereal snrm2_(integer *, real *, integer *);
     static integer i, j;
-    extern /* Subroutine */ void slarf_(char *, integer *, integer *, real *,
-            integer *, real *, real *, integer *, real *, ftnlen);
     static integer itemp;
-    extern /* Subroutine */ void sswap_(integer *, real *, integer *, real *,
-            integer *), sgeqr2_(integer *, integer *, real *, integer *, real
-            *, real *, integer *);
-    static integer ma;
-    extern /* Subroutine */ void sorm2r_(char *, char *, integer *, integer *,
-            integer *, real *, integer *, real *, real *, integer *, real *,
-            integer *, ftnlen, ftnlen);
-    static integer mn;
-    extern /* Subroutine */ void xerbla_(char *, integer *, ftnlen), slarfg_(
-            integer *, real *, real *, integer *, real *);
-    extern integer isamax_(integer *, real *, integer *);
+    static integer ma, mn;
     static real aii;
     static integer pvt;
-
 
 /*  -- LAPACK test routine (version 2.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -120,7 +98,7 @@ static integer c__1 = 1;
     }
     if (*info != 0) {
         i__1 = -(*info);
-        xerbla_("SGEQPF", &i__1, 6L);
+        xerbla_("SGEQPF", &i__1);
         return;
     }
 
@@ -152,18 +130,18 @@ static integer c__1 = 1;
         sgeqr2_(m, &ma, a, lda, tau, work, info);
         if (ma < *n) {
             i__1 = *n - ma;
-            sorm2r_("Left", "Transpose", m, &i__1, &ma, a, lda, tau, &a[ma * *lda], lda, work, info, 4L, 9L);
+            sorm2r_("Left", "Transpose", m, &i__1, &ma, a, lda, tau, &a[ma * *lda], lda, work, info);
         }
     }
 
-    if (itemp+1 < mn) {
+    if (itemp < mn-1) {
 
 /*        Initialize partial column norms. The first n elements of */
 /*        work store the exact column norms. */
 
         for (i = itemp + 1; i < *n; ++i) {
             i__1 = *m - itemp - 1;
-            work[i] = (float)snrm2_(&i__1, &a[itemp + 1 + i * *lda], &c__1);
+            work[i] = snrm2_(&i__1, &a[itemp + 1 + i * *lda], &c__1);
             work[*n + i] = work[i];
         }
 
@@ -187,14 +165,15 @@ static integer c__1 = 1;
 
 /*           Generate elementary reflector H(i) */
 
-            if (i+1 < *m) {
+            if (i < *m - 1) {
                 i__1 = *m - i;
                 slarfg_(&i__1, &a[i + i * *lda], &a[i + 1 + i * *lda], &c__1, &tau[i]);
             } else {
-                slarfg_(&c__1, &a[(*m-1) + (*m-1) * *lda], &a[(*m-1) + (*m-1) * *lda], &c__1, &tau[*m-1]);
+                i__1 = *m - 1;
+                slarfg_(&c__1, &a[i__1 + i__1 * *lda], &a[i__1 + i__1 * *lda], &c__1, &tau[i__1]);
             }
 
-            if (i+1 < *n) {
+            if (i < *n - 1) {
 
 /*              Apply H(i) to A(i:m,i+1:n) from the left */
 
@@ -203,7 +182,7 @@ static integer c__1 = 1;
                 i__1 = *m - i;
                 i__2 = *n - i - 1;
                 slarf_("LEFT", &i__1, &i__2, &a[i + i * *lda], &c__1, &tau[i],
-                       &a[i + (i + 1) * *lda], lda, &work[*n << 1], 4L);
+                       &a[i + (i + 1) * *lda], lda, &work[*n << 1]);
                 a[i + i * *lda] = aii;
             }
 
@@ -219,7 +198,7 @@ static integer c__1 = 1;
                     if (temp2 == 1.f) {
                         if (*m - i > 1) {
                             i__2 = *m - i - 1;
-                            work[j] = (float)snrm2_(&i__2, &a[i + 1 + j * *lda], &c__1);
+                            work[j] = snrm2_(&i__2, &a[i + 1 + j * *lda], &c__1);
                             work[*n + j] = work[j];
                         } else {
                             work[j] = 0.f;

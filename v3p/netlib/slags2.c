@@ -1,106 +1,83 @@
-/* slags2.f -- translated by f2c (version of 4 June 1993  1:43:59).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Subroutine */ void slags2_(logical *upper, real *a1, real *a2, real *a3,
-        real *b1, real *b2, real *b3, real *csu, real *snu, real *csv, real *
-        snv, real *csq, real *snq)
+        real *b1, real *b2, real *b3, real *csu, real *snu,
+        real *csv, real *snv, real *csq, real *snq)
 {
     /* System generated locals */
     real r__1;
 
     /* Local variables */
-    static real aua11, aua12, aua21, aua22, avb11, avb12, avb21, avb22, ua11r,
-             ua22r, vb11r, vb22r, a, b, c, d, r, s1, s2;
-    extern /* Subroutine */ void slasv2_(real *, real *, real *, real *, real *
-            , real *, real *, real *, real *), slartg_(real *, real *, real *,
-             real *, real *);
-    static real ua11, ua12, ua21, ua22, vb11, vb12, vb21, vb22, csl, csr, snl,
-             snr;
-
+    static real aua11, aua12, aua21, aua22, avb11, avb12, avb21, avb22,
+                ua11r, ua22r, vb11r, vb22r, a, b, c, d, r, s1, s2;
+    static real ua11, ua12, ua21, ua22, vb11, vb12, vb21, vb22, csl, csr, snl, snr;
 
 /*  -- LAPACK auxiliary routine (version 2.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
 /*     Courant Institute, Argonne National Lab, and Rice University */
 /*     September 30, 1994 */
 
-/*     .. Scalar Arguments .. */
-/*     .. */
-
-/*  Purpose */
-/*  ======= */
-
-/*  SLAGS2 computes 2-by-2 orthogonal matrices U, V and Q, such */
-/*  that if ( UPPER ) then */
-
-/*            U'*A*Q = U'*( A1 A2 )*Q = ( x  0  ) */
-/*                        ( 0  A3 )     ( x  x  ) */
-/*  and */
-/*            V'*B*Q = V'*( B1 B2 )*Q = ( x  0  ) */
-/*                        ( 0  B3 )     ( x  x  ) */
-
-/*  or if ( .NOT.UPPER ) then */
-
-/*            U'*A*Q = U'*( A1 0  )*Q = ( x  x  ) */
-/*                        ( A2 A3 )     ( 0  x  ) */
-/*  and */
-/*            V'*B*Q = V'*( B1 0  )*Q = ( x  x  ) */
-/*                        ( B2 B3 )     ( 0  x  ) */
-
-/*  The rows of the transformed A and B are parallel, where */
-
-/*    U = (  CSU  SNU ), V = (  CSV SNV ), Q = (  CSQ   SNQ ) */
-/*        ( -SNU  CSU )      ( -SNV CSV )      ( -SNQ   CSQ ) */
-
-/*  Z' denotes the transpose of Z. */
-
-
-/*  Arguments */
-/*  ========= */
-
-/*  UPPER   (input) LOGICAL */
-/*          = .TRUE.: the input matrices A and B are upper triangular. */
-/*          = .FALSE.: the input matrices A and B are lower triangular. */
-
-/*  A1      (input) REAL */
-/*  A2      (input) REAL */
-/*  A3      (input) REAL */
-/*          On entry, A1, A2 and A3 are elements of the input 2-by-2 */
-/*          upper (lower) triangular matrix A. */
-
-/*  B1      (input) REAL */
-/*  B2      (input) REAL */
-/*  B3      (input) REAL */
-/*          On entry, B1, B2 and B3 are elements of the input 2-by-2 */
-/*          upper (lower) triangular matrix B. */
-
-/*  CSU     (output) REAL */
-/*  SNU     (output) REAL */
-/*          The desired orthogonal matrix U. */
-
-/*  CSV     (output) REAL */
-/*  SNV     (output) REAL */
-/*          The desired orthogonal matrix V. */
-
-/*  CSQ     (output) REAL */
-/*  SNQ     (output) REAL */
-/*          The desired orthogonal matrix Q. */
-
-/*  =====================================================================
-*/
-
-/*     .. Parameters .. */
-/*     .. */
-/*     .. Local Scalars .. */
-/*     .. */
-/*     .. External Subroutines .. */
-/*     .. */
-/*     .. Intrinsic Functions .. */
-/*     .. */
-/*     .. Executable Statements .. */
+/*  Purpose                                                               */
+/*  =======                                                               */
+/*                                                                        */
+/*  SLAGS2 computes 2-by-2 orthogonal matrices U, V and Q, such           */
+/*  that if ( UPPER ) then                                                */
+/*                                                                        */
+/*            U'*A*Q = U'*( A1 A2 )*Q = ( x  0  )                         */
+/*                        ( 0  A3 )     ( x  x  )                         */
+/*  and                                                                   */
+/*            V'*B*Q = V'*( B1 B2 )*Q = ( x  0  )                         */
+/*                        ( 0  B3 )     ( x  x  )                         */
+/*                                                                        */
+/*  or if ( .NOT.UPPER ) then                                             */
+/*                                                                        */
+/*            U'*A*Q = U'*( A1 0  )*Q = ( x  x  )                         */
+/*                        ( A2 A3 )     ( 0  x  )                         */
+/*  and                                                                   */
+/*            V'*B*Q = V'*( B1 0  )*Q = ( x  x  )                         */
+/*                        ( B2 B3 )     ( 0  x  )                         */
+/*                                                                        */
+/*  The rows of the transformed A and B are parallel, where               */
+/*                                                                        */
+/*    U = (  CSU  SNU ), V = (  CSV SNV ), Q = (  CSQ   SNQ )             */
+/*        ( -SNU  CSU )      ( -SNV CSV )      ( -SNQ   CSQ )             */
+/*                                                                        */
+/*  Z' denotes the transpose of Z.                                        */
+/*                                                                        */
+/*                                                                        */
+/*  Arguments                                                             */
+/*  =========                                                             */
+/*                                                                        */
+/*  UPPER   (input) LOGICAL                                               */
+/*          = .TRUE.: the input matrices A and B are upper triangular.    */
+/*          = .FALSE.: the input matrices A and B are lower triangular.   */
+/*                                                                        */
+/*  A1      (input) REAL                                                  */
+/*  A2      (input) REAL                                                  */
+/*  A3      (input) REAL                                                  */
+/*          On entry, A1, A2 and A3 are elements of the input 2-by-2      */
+/*          upper (lower) triangular matrix A.                            */
+/*                                                                        */
+/*  B1      (input) REAL                                                  */
+/*  B2      (input) REAL                                                  */
+/*  B3      (input) REAL                                                  */
+/*          On entry, B1, B2 and B3 are elements of the input 2-by-2      */
+/*          upper (lower) triangular matrix B.                            */
+/*                                                                        */
+/*  CSU     (output) REAL                                                 */
+/*  SNU     (output) REAL                                                 */
+/*          The desired orthogonal matrix U.                              */
+/*                                                                        */
+/*  CSV     (output) REAL                                                 */
+/*  SNV     (output) REAL                                                 */
+/*          The desired orthogonal matrix V.                              */
+/*                                                                        */
+/*  CSQ     (output) REAL                                                 */
+/*  SNQ     (output) REAL                                                 */
+/*          The desired orthogonal matrix Q.                              */
+/*                                                                        */
+/*  ===================================================================== */
 
     if (*upper) {
 
@@ -122,8 +99,7 @@
 
         if (abs(csl) >= abs(snl) || abs(csr) >= abs(snr)) {
 
-/*           Compute the (1,1) and (1,2) elements of U'*A and V'*B
-, */
+/*           Compute the (1,1) and (1,2) elements of U'*A and V'*B, */
 /*           and (1,2) element of |U|'*|A| and |V|'*|B|. */
 
             ua11r = csl * *a1;
@@ -138,8 +114,7 @@
 /*           zero (1,2) elements of U'*A and V'*B */
 
             if (abs(ua11r) + abs(ua12) != 0.f) {
-                if (aua12 / (abs(ua11r) + abs(ua12)) <= avb12 / (abs(vb11r) +
-                        abs(vb12))) {
+                if (aua12 / (abs(ua11r) + abs(ua12)) <= avb12 / (abs(vb11r) + abs(vb12))) {
                     r__1 = -ua11r;
                     slartg_(&r__1, &ua12, csq, snq, &r);
                 } else {
@@ -158,8 +133,7 @@
 
         } else {
 
-/*           Compute the (2,1) and (2,2) elements of U'*A and V'*B
-, */
+/*           Compute the (2,1) and (2,2) elements of U'*A and V'*B, */
 /*           and (2,2) element of |U|'*|A| and |V|'*|B|. */
 
             ua21 = -snl * *a1;
@@ -171,12 +145,10 @@
             aua22 = abs(snl) * abs(*a2) + abs(csl) * abs(*a3);
             avb22 = abs(snr) * abs(*b2) + abs(csr) * abs(*b3);
 
-/*           zero (2,2) elements of U'*A and V'*B, and then swap.
-*/
+/*           zero (2,2) elements of U'*A and V'*B, and then swap.  */
 
             if (abs(ua21) + abs(ua22) != 0.f) {
-                if (aua22 / (abs(ua21) + abs(ua22)) <= avb22 / (abs(vb21) +
-                        abs(vb22))) {
+                if (aua22 / (abs(ua21) + abs(ua22)) <= avb22 / (abs(vb21) + abs(vb22))) {
                     r__1 = -ua21;
                     slartg_(&r__1, &ua22, csq, snq, &r);
                 } else {
@@ -192,7 +164,6 @@
             *snu = csl;
             *csv = snr;
             *snv = csr;
-
         }
 
     } else {
@@ -215,8 +186,7 @@
 
         if (abs(csr) >= abs(snr) || abs(csl) >= abs(snl)) {
 
-/*           Compute the (2,1) and (2,2) elements of U'*A and V'*B
-, */
+/*           Compute the (2,1) and (2,2) elements of U'*A and V'*B, */
 /*           and (2,1) element of |U|'*|A| and |V|'*|B|. */
 
             ua21 = -snr * *a1 + csr * *a2;
@@ -231,8 +201,7 @@
 /*           zero (2,1) elements of U'*A and V'*B. */
 
             if (abs(ua21) + abs(ua22r) != 0.f) {
-                if (aua21 / (abs(ua21) + abs(ua22r)) <= avb21 / (abs(vb21) +
-                        abs(vb22r))) {
+                if (aua21 / (abs(ua21) + abs(ua22r)) <= avb21 / (abs(vb21) + abs(vb22r))) {
                     slartg_(&ua22r, &ua21, csq, snq, &r);
                 } else {
                     slartg_(&vb22r, &vb21, csq, snq, &r);
@@ -248,8 +217,7 @@
 
         } else {
 
-/*           Compute the (1,1) and (1,2) elements of U'*A and V'*B
-, */
+/*           Compute the (1,1) and (1,2) elements of U'*A and V'*B, */
 /*           and (1,1) element of |U|'*|A| and |V|'*|B|. */
 
             ua11 = csr * *a1 + snr * *a2;
@@ -261,12 +229,10 @@
             aua11 = abs(csr) * abs(*a1) + abs(snr) * abs(*a2);
             avb11 = abs(csl) * abs(*b1) + abs(snl) * abs(*b2);
 
-/*           zero (1,1) elements of U'*A and V'*B, and then swap.
-*/
+/*           zero (1,1) elements of U'*A and V'*B, and then swap.  */
 
             if (abs(ua11) + abs(ua12) != 0.f) {
-                if (aua11 / (abs(ua11) + abs(ua12)) <= avb11 / (abs(vb11) +
-                        abs(vb12))) {
+                if (aua11 / (abs(ua11) + abs(ua12)) <= avb11 / (abs(vb11) + abs(vb12))) {
                     slartg_(&ua12, &ua11, csq, snq, &r);
                 } else {
                     slartg_(&vb12, &vb11, csq, snq, &r);
@@ -279,12 +245,6 @@
             *snu = csr;
             *csv = snl;
             *snv = csl;
-
         }
-
     }
-
-/*     End of SLAGS2 */
-
 } /* slags2_ */
-

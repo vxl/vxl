@@ -1,20 +1,16 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
-/* Subroutine */ void zlascl_(type, kl, ku, cfrom, cto, m, n, a, lda, info, type_len)
-char *type;
-integer *kl, *ku;
+/* Subroutine */ void zlascl_(type, kl, ku, cfrom, cto, m, n, a, lda, info)
+const char *type;
+const integer *kl, *ku;
 doublereal *cfrom, *cto;
-integer *m, *n;
+const integer *m, *n;
 doublecomplex *a;
-integer *lda, *info;
-ftnlen type_len;
+const integer *lda;
+integer *info;
 {
     /* System generated locals */
     integer i__1;
@@ -23,14 +19,10 @@ ftnlen type_len;
     static logical done;
     static doublereal ctoc;
     static integer i, j;
-    extern logical lsame_();
     static integer itype, k1, k2, k3, k4;
     static doublereal cfrom1;
-    extern doublereal dlamch_();
     static doublereal cfromc;
-    extern /* Subroutine */ void xerbla_();
     static doublereal bignum, smlnum, mul, cto1;
-
 
 /*  -- LAPACK auxiliary routine (version 2.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -102,19 +94,19 @@ ftnlen type_len;
 
     *info = 0;
 
-    if (lsame_(type, "G", 1L, 1L)) {
+    if (lsame_(type, "G")) {
         itype = 0;
-    } else if (lsame_(type, "L", 1L, 1L)) {
+    } else if (lsame_(type, "L")) {
         itype = 1;
-    } else if (lsame_(type, "U", 1L, 1L)) {
+    } else if (lsame_(type, "U")) {
         itype = 2;
-    } else if (lsame_(type, "H", 1L, 1L)) {
+    } else if (lsame_(type, "H")) {
         itype = 3;
-    } else if (lsame_(type, "B", 1L, 1L)) {
+    } else if (lsame_(type, "B")) {
         itype = 4;
-    } else if (lsame_(type, "Q", 1L, 1L)) {
+    } else if (lsame_(type, "Q")) {
         itype = 5;
-    } else if (lsame_(type, "Z", 1L, 1L)) {
+    } else if (lsame_(type, "Z")) {
         itype = 6;
     } else {
         itype = -1;
@@ -134,8 +126,7 @@ ftnlen type_len;
         if (*kl < 0 || *kl > max(*m - 1,0)) {
             *info = -2;
         } else /* if(complicated condition) */ {
-            if (*ku < 0 || *ku > max(*n - 1,0) ||
-                ( (itype == 4 || itype == 5) && *kl != *ku) ) {
+            if (*ku < 0 || *ku > max(*n - 1,0) || ( (itype == 4 || itype == 5) && *kl != *ku) ) {
                 *info = -3;
             } else if ((itype == 4 && *lda < *kl + 1) ||
                        (itype == 5 && *lda < *ku + 1) ||
@@ -147,7 +138,7 @@ ftnlen type_len;
 
     if (*info != 0) {
         i__1 = -(*info);
-        xerbla_("ZLASCL", &i__1, 6L);
+        xerbla_("ZLASCL", &i__1);
         return;
     }
 
@@ -159,7 +150,7 @@ ftnlen type_len;
 
 /*     Get machine parameters */
 
-    smlnum = dlamch_("S", 1L);
+    smlnum = dlamch_("S");
     bignum = 1. / smlnum;
 
     cfromc = *cfrom;

@@ -1,13 +1,20 @@
 #include "f2c.h"
+#include "netlib.h"
 #include <stdio.h>
 
-doublereal slamch_(char *cmach)
+static void slamc1_(integer *beta, integer *t, logical *rnd, logical *ieee1);
+static void slamc2_(integer *beta, integer *t, logical *rnd, real *eps,
+                    integer *emin, real *rmin, integer *emax, real *rmax);
+static real slamc3_(real *a, real *b);
+static void slamc4_(integer *emin, real *start, integer *base);
+static void slamc5_(integer *beta, integer *p, integer *emin, logical *ieee, integer *emax, real *rmax);
+
+real slamch_(const char *cmach)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
        Courant Institute, Argonne National Lab, and Rice University
        October 31, 1992
-
 
     Purpose
     =======
@@ -45,14 +52,11 @@ doublereal slamch_(char *cmach)
 
    =====================================================================
 */
-/* >>Start of File<<
-       Initialized data */
+
+    /* Initialized data */
     static logical first = TRUE_;
     /* System generated locals */
     integer i__1;
-    real ret_val;
-    /* Builtin functions */
-    doublereal pow_ri(real *, integer *);
     /* Local variables */
     static real base;
     static integer beta;
@@ -60,14 +64,9 @@ doublereal slamch_(char *cmach)
     static integer imin, imax;
     static logical lrnd;
     static real rmin, rmax, t, rmach;
-    extern logical lsame_(char *, char *);
     static real small, sfmin;
-    extern /* Subroutine */ void slamc2_(integer *, integer *, logical *, real
-            *, integer *, real *, integer *, real *);
     static integer it;
     static real rnd, eps;
-
-
 
     if (first) {
         first = FALSE_;
@@ -90,9 +89,9 @@ doublereal slamch_(char *cmach)
         small = 1.f / rmax;
         if (small >= sfmin) {
 
-/*           Use SMALL plus a bit, to avoid the possibility of rou
-nding
-             causing overflow when computing  1/sfmin. */
+/*           Use SMALL plus a bit, to avoid the possibility of rounding
+             causing overflow when computing  1/sfmin.
+*/
 
             sfmin = small * (eps + 1.f);
         }
@@ -120,8 +119,7 @@ nding
         rmach = rmax;
     }
 
-    ret_val = rmach;
-    return ret_val;
+    return rmach;
 
 } /* slamch_ */
 
@@ -131,7 +129,6 @@ nding
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
        Courant Institute, Argonne National Lab, and Rice University
        October 31, 1992
-
 
     Purpose
     =======
@@ -153,7 +150,6 @@ nding
             chopping  ( RND = .FALSE. )  occurs in addition. This may not
 
             be a reliable guide to the way in which the machine performs
-
             its arithmetic.
 
     IEEE1   (output) LOGICAL
@@ -175,6 +171,7 @@ nding
 
    =====================================================================
 */
+
     /* Initialized data */
     static logical first = TRUE_;
     /* System generated locals */
@@ -186,9 +183,8 @@ nding
     static real savec;
     static logical lieee1;
     static real t1, t2;
-    extern doublereal slamc3_(real *, real *);
     static integer lt;
-    static real one = 1.0f;
+    static real one = 1.f;
 
     if (first) {
         first = FALSE_;
@@ -202,13 +198,12 @@ nding
 
           Compute  a = 2.0**m  with the  smallest positive integer m such
           that
+               fl( a + 1.0 ) = a.
+*/
 
-             fl( a + 1.0 ) = a.  */
+        a = c = one;
 
-        a = 1.f;
-        c = 1.f;
-
-        while (c == 1.f) {
+        while (c == one) {
             a *= 2;
             c = slamc3_(&a, &one);
             r__1 = -a;
@@ -217,16 +212,16 @@ nding
 
 /*        Now compute  b = 2.0**m  with the smallest positive integer m
           such that
+             fl( a + b ) .gt. a.
+*/
 
-             fl( a + b ) .gt. a. */
-
-        b = 1.f;
+        b = one;
         c = slamc3_(&a, &b);
 
 /* The next two lines of code were replaced by Ian Scott from the original line
   > while (c==a) {
-  During a optimised build under MSVC, the compiler was using the value of 
-  C still in a register in while loop test. This is an 80-bit value rather than 
+  During a optimised build under MSVC, the compiler was using the value of
+  C still in a register in while loop test. This is an 80-bit value rather than
   the 64 bit value it uses after saving and loading from memory.
   So the 80 bit precision value was having 1 added, making it a different number
   and so not executing the loop.
@@ -234,7 +229,7 @@ nding
   as during the previous calculation.
 */
         r__1 = -a;
-        while (slamc3_(&c, &r__1) == 0) {
+        while (slamc3_(&c, &r__1) == 0.f) {
             b *= 2;
             c = slamc3_(&a, &b);
         }
@@ -242,15 +237,17 @@ nding
 /*        Now compute the base.  a and c  are neighbouring floating point
           numbers  in the  interval  ( beta**t, beta**( t + 1 ) )  and so
           their difference is beta. Adding 0.25 to c is to ensure that it
-          is truncated to beta and not ( beta - 1 ). */
+          is truncated to beta and not ( beta - 1 ).
+*/
 
         savec = c;
         r__1 = -a;
         c = slamc3_(&c, &r__1);
-        lbeta = (int)(c + 0.25f);
+        lbeta = (integer)(c + 0.25f);
 
 /*        Now determine whether rounding or chopping occurs,  by adding a
-          bit  less  than  beta/2  and a  bit  more  than  beta/2  to a. */
+          bit  less  than  beta/2  and a  bit  more  than  beta/2  to a.
+*/
 
         b = (real) lbeta;
         r__1 = b / 2;
@@ -274,7 +271,8 @@ nding
           nearest' style. B/2 is half a unit in the last place of the two
           numbers A and SAVEC. Furthermore, A is even, i.e. has last bit
           zero, and SAVEC is odd. Thus adding B/2 to A should not  change
-          A, but adding B/2 to SAVEC should change SAVEC. */
+          A, but adding B/2 to SAVEC should change SAVEC.
+*/
 
         r__1 = b / 2;
         t1 = slamc3_(&r__1, &a);
@@ -290,10 +288,9 @@ nding
              fl( beta**t + 1.0 ) = 1.0. */
 
         lt = 0;
-        a = 1.f;
-        c = 1.f;
+        a = c = one;
 
-        while (c == 1.0f) {
+        while (c == one) {
             ++lt;
             a *= lbeta;
             c = slamc3_(&a, &one);
@@ -306,13 +303,11 @@ nding
     *t = lt;
     *rnd = lrnd;
     *ieee1 = lieee1;
-
 } /* slamc1_ */
 
-#include "f2c.h"
-
-/* Subroutine */ void slamc2_(integer *beta, integer *t, logical *rnd, real *
-        eps, integer *emin, real *rmin, integer *emax, real *rmax)
+/* Subroutine */ void slamc2_(integer *beta, integer *t, logical *rnd,
+                              real *eps, integer *emin, real *rmin,
+                              integer *emax, real *rmax)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
@@ -376,19 +371,18 @@ nding
 
    =====================================================================
 */
+
     /* Initialized data */
     static logical first = TRUE_;
     static logical iwarn = FALSE_;
     /* System generated locals */
     integer i__1;
     real r__1, r__2;
-    /* Builtin functions */
-    doublereal pow_ri(real *, integer *);
     /* Local variables */
     static logical ieee;
     static real half = 0.5f;
     static logical lrnd;
-    static real leps, zero = 0.0f, a, b, c;
+    static real leps, zero = 0.f, a, b, c;
     static integer i, lbeta;
     static real rbase;
     static integer lemin, lemax, gnmin;
@@ -396,16 +390,8 @@ nding
     static integer gpmin;
     static real third, lrmin, lrmax, sixth;
     static logical lieee1;
-    extern /* Subroutine */ void slamc1_(integer *, integer *, logical *,
-            logical *);
-    extern doublereal slamc3_(real *, real *);
-    extern /* Subroutine */ void slamc4_(integer *, real *, integer *),
-            slamc5_(integer *, integer *, integer *, logical *, integer *,
-            real *);
     static integer lt, ngnmin, ngpmin;
-    static real one = 1.0f;
-
-
+    static real one = 1.f;
 
     if (first) {
         first = FALSE_;
@@ -432,21 +418,21 @@ nding
 /*        Try some tricks to see whether or not this is the correct  EPS. */
 
         b = 2.f / 3;
-        r__1 = -0.5f;
+        r__1 = -half;
         sixth = slamc3_(&b, &r__1);
         third = slamc3_(&sixth, &sixth);
         b = slamc3_(&third, &r__1);
         b = slamc3_(&b, &sixth);
-        b = dabs(b);
+        b = abs(b);
         if (b < leps) {
             b = leps;
         }
 
-        leps = 1.f;
+        leps = one;
 
-        while (leps > b && b > 0.f) {
+        while (leps > b && b > zero) {
             leps = b;
-            r__1 = 0.5f * leps;
+            r__1 = half * leps;
             r__2 = 32.0f * leps * leps;
             c = slamc3_(&r__1, &r__2);
             r__1 = -c;
@@ -465,17 +451,18 @@ nding
 
           Now find  EMIN.  Let A = + or - 1, and + or - (1 + BASE**(-3)).
           Keep dividing  A by BETA until (gradual) underflow occurs. This
-          is detected when we cannot recover the previous A. */
+          is detected when we cannot recover the previous A.
+*/
 
-        rbase = 1.0f / lbeta;
-        small = 1.0f;
+        rbase = one / lbeta;
+        small = one;
         for (i = 1; i <= 3; ++i) {
             r__1 = small * rbase;
             small = slamc3_(&r__1, &zero);
         }
         a = slamc3_(&one, &small);
         slamc4_(&ngpmin, &one, &lbeta);
-        r__1 = -1.0f;
+        r__1 = -one;
         slamc4_(&ngnmin, &r__1, &lbeta);
         slamc4_(&gpmin, &a, &lbeta);
         r__1 = -a;
@@ -485,49 +472,40 @@ nding
         if (ngpmin == ngnmin && gpmin == gnmin) {
             if (ngpmin == gpmin) {
                 lemin = ngpmin;
-/*            ( Non twos-complement machines, no gradual underflow;
-                e.g.,  VAX ) */
+/*            ( Non twos-complement machines, no gradual underflow; e.g.,  VAX ) */
             } else if (gpmin - ngpmin == 3) {
                 lemin = ngpmin - 1 + lt;
                 ieee = TRUE_;
-/*            ( Non twos-complement machines, with gradual underflow;
-                e.g., IEEE standard followers ) */
+/*            ( Non twos-complement machines, with gradual underflow; e.g., IEEE standard followers ) */
             } else {
                 lemin = min(ngpmin,gpmin);
 /*            ( A guess; no known machine ) */
                 iwarn = TRUE_;
             }
-
         } else if (ngpmin == gpmin && ngnmin == gnmin) {
             if (abs(ngpmin - ngnmin) == 1) {
                 lemin = max(ngpmin,ngnmin);
-/*            ( Twos-complement machines, no gradual underflow;
-                e.g., CYBER 205 ) */
+/*            ( Twos-complement machines, no gradual underflow; e.g., CYBER 205 ) */
             } else {
                 lemin = min(ngpmin,ngnmin);
 /*            ( A guess; no known machine ) */
                 iwarn = TRUE_;
             }
-
-        } else if (abs(ngpmin - ngnmin) == 1 && gpmin == gnmin)
-                 {
+        } else if (abs(ngpmin - ngnmin) == 1 && gpmin == gnmin) {
             if (gpmin - min(ngpmin,ngnmin) == 3) {
                 lemin = max(ngpmin,ngnmin) - 1 + lt;
-/*            ( Twos-complement machines with gradual underflow;
-                no known machine ) */
+/*            ( Twos-complement machines with gradual underflow; no known machine ) */
             } else {
                 lemin = min(ngpmin,ngnmin);
 /*            ( A guess; no known machine ) */
                 iwarn = TRUE_;
             }
-
         } else {
             lemin = min(min(min(ngpmin,ngnmin),gpmin),gnmin);
 /*         ( A guess; no known machine ) */
             iwarn = TRUE_;
         }
-/* **
-   Comment out this if block if EMIN is ok */
+/* ** Comment out this if block if EMIN is ok */
         if (iwarn) {
             first = TRUE_;
             printf("\n\n WARNING. The value EMIN may be incorrect:- ");
@@ -537,20 +515,20 @@ nding
             printf("code of routine SLAMC2, \n otherwise supply EMIN");
             printf("explicitly.\n");
         }
-/* **
-
-          Assume IEEE arithmetic if we found denormalised  numbers above,
+/* **     Assume IEEE arithmetic if we found denormalised  numbers above,
           or if arithmetic seems to round in the  IEEE style,  determined
           in routine SLAMC1. A true IEEE machine should have both  things
-          true; however, faulty machines may have one or the other. */
+          true; however, faulty machines may have one or the other.
+*/
 
         ieee = ieee || lieee1;
 
 /*        Compute  RMIN by successive division by  BETA. We could compute
           RMIN as BASE**( EMIN - 1 ),  but some machines underflow during
-          this computation. */
+          this computation.
+*/
 
-        lrmin = 1.f;
+        lrmin = one;
         for (i = 1; i <= 1-lemin; ++i) {
             r__1 = lrmin * rbase;
             lrmin = slamc3_(&r__1, &zero);
@@ -569,28 +547,20 @@ nding
     *rmin = lrmin;
     *emax = lemax;
     *rmax = lrmax;
-
-    return;
-
 } /* slamc2_ */
 
-#include "f2c.h"
-
-doublereal slamc3_(real *a, real *b)
+real slamc3_(real *a, real *b)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
        Courant Institute, Argonne National Lab, and Rice University
        October 31, 1992
 
-
     Purpose
     =======
 
     SLAMC3  is intended to force  A  and  B  to be stored prior to doing
-
     the addition of  A  and  B ,  for use in situations where optimizers
-
     might hold one of these in a register.
 
     Arguments
@@ -601,19 +571,9 @@ doublereal slamc3_(real *a, real *b)
 
    =====================================================================
 */
-/* >>Start of File<<
-       System generated locals */
-    real ret_val;
 
-
-
-    ret_val = *a + *b;
-
-    return ret_val;
-
+    return *a + *b;
 } /* slamc3_ */
-
-#include "f2c.h"
 
 /* Subroutine */ void slamc4_(integer *emin, real *start, integer *base)
 {
@@ -621,7 +581,6 @@ doublereal slamc3_(real *a, real *b)
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
        Courant Institute, Argonne National Lab, and Rice University
        October 31, 1992
-
 
     Purpose
     =======
@@ -633,7 +592,6 @@ doublereal slamc3_(real *a, real *b)
 
     EMIN    (output) EMIN
             The minimum exponent before (gradual) underflow, computed by
-
             setting A = START and dividing by BASE until the previous A
             can not be recovered.
 
@@ -645,23 +603,21 @@ doublereal slamc3_(real *a, real *b)
 
    =====================================================================
 */
+
     /* System generated locals */
     real r__1;
     /* Local variables */
-    static real zero = 0.0f, a;
+    static real zero = 0.f, a;
     static integer i;
     static real rbase, b1, b2, c1, c2, d1, d2;
-    extern doublereal slamc3_(real *, real *);
+    static real one = 1.f;
 
     a = *start;
-    rbase = 1.0f / *base;
+    rbase = one / *base;
     *emin = 1;
     r__1 = a * rbase;
     b1 = slamc3_(&r__1, &zero);
-    c1 = a;
-    c2 = a;
-    d1 = a;
-    d2 = a;
+    c1 = c2 = d1 = d2 = a;
     while (c1 == a && c2 == a && d1 == a && d2 == a) {
         --(*emin);
         a = b1;
@@ -669,7 +625,7 @@ doublereal slamc3_(real *a, real *b)
         b1 = slamc3_(&r__1, &zero);
         r__1 = b1 * *base;
         c1 = slamc3_(&r__1, &zero);
-        d1 = 0.0f;
+        d1 = zero;
         for (i = 1; i <= *base; ++i) {
             d1 += b1;
         }
@@ -677,15 +633,12 @@ doublereal slamc3_(real *a, real *b)
         b2 = slamc3_(&r__1, &zero);
         r__1 = b2 / rbase;
         c2 = slamc3_(&r__1, &zero);
-        d2 = 0.0f;
+        d2 = zero;
         for (i = 1; i <= *base; ++i) {
             d2 += b2;
         }
     }
-
 } /* slamc4_ */
-
-#include "f2c.h"
 
 /* Subroutine */ void slamc5_(integer *beta, integer *p, integer *emin,
         logical *ieee, integer *emax, real *rmax)
@@ -695,7 +648,6 @@ doublereal slamc3_(real *a, real *b)
        Courant Institute, Argonne National Lab, and Rice University
        October 31, 1992
 
-
     Purpose
     =======
 
@@ -703,7 +655,6 @@ doublereal slamc3_(real *a, real *b)
     number, without overflow.  It assumes that EMAX + abs(EMIN) sum
     approximately to a power of 2.  It will fail on machines where this
     assumption does not hold, for example, the Cyber 205 (EMIN = -28625,
-
     EMAX = 28718).  It will also fail if the value supplied for EMIN is
     too large (i.e. too close to zero), probably with overflow.
 
@@ -731,14 +682,10 @@ doublereal slamc3_(real *a, real *b)
             The largest machine floating-point number.
 
    =====================================================================
+*/
 
-       First compute LEXP and UEXP, two powers of 2 that bound
-       abs(EMIN). We then assume that EMAX + abs(EMIN) will sum
-       approximately to the bound that is closest to abs(EMIN).
-       (EMAX is the exponent of the required number RMAX). */
     /* Table of constant values */
     static real c_b5 = 0.f;
-
     /* System generated locals */
     real r__1;
     /* Local variables */
@@ -747,29 +694,32 @@ doublereal slamc3_(real *a, real *b)
     static integer uexp, i;
     static real y, z;
     static integer nbits;
-    extern doublereal slamc3_(real *, real *);
     static real recbas;
-    static integer exbits, expsum, try__;
+    static integer exbits, expsum, try;
+
+/*     First compute LEXP and UEXP, two powers of 2 that bound
+       abs(EMIN). We then assume that EMAX + abs(EMIN) will sum
+       approximately to the bound that is closest to abs(EMIN).
+       (EMAX is the exponent of the required number RMAX).
+*/
 
     lexp = 1;
     exbits = 1;
-L10:
-    try__ = lexp << 1;
-    if (try__ <= -(*emin)) {
-        lexp = try__;
+    while ((try = lexp << 1) <= -(*emin)) {
+        lexp = try;
         ++exbits;
-        goto L10;
     }
     if (lexp == -(*emin)) {
         uexp = lexp;
     } else {
-        uexp = try__;
+        uexp = try;
         ++exbits;
     }
 
 /*     Now -LEXP is less than or equal to EMIN, and -UEXP is greater
        than or equal to EMIN. EXBITS is the number of bits needed to
-       store the exponent. */
+       store the exponent.
+*/
 
     if (uexp + *emin > -lexp - *emin) {
         expsum = lexp << 1;
@@ -777,38 +727,33 @@ L10:
         expsum = uexp << 1;
     }
 
-/*     EXPSUM is the exponent range, approximately equal to
-       EMAX - EMIN + 1 . */
+/*     EXPSUM is the exponent range, approximately equal to EMAX - EMIN + 1 . */
 
     *emax = expsum + *emin - 1;
     nbits = exbits + 1 + *p;
 
-/*     NBITS is the total number of bits needed to store a
-       floating-point number. */
+/*     NBITS is the total number of bits needed to store a floating-point number. */
 
     if (nbits % 2 == 1 && *beta == 2) {
 
 /*        Either there are an odd number of bits used to store a
           floating-point number, which is unlikely, or some bits are
-
           not used in the representation of numbers, which is possible,
           (e.g. Cray machines) or the mantissa has an implicit bit,
           (e.g. IEEE machines, Dec Vax machines), which is perhaps the
-
           most likely. We have to assume the last alternative.
           If this is true, then we need to reduce EMAX by one because
-
           there must be some way of representing zero in an implicit-bit
           system. On machines like Cray, we are reducing EMAX by one
-          unnecessarily. */
+          unnecessarily.
+*/
 
         --(*emax);
     }
 
     if (*ieee) {
 
-/*        Assume we are on an IEEE machine which reserves one exponent
-          for infinity and NaN. */
+/*        Assume we are on an IEEE machine which reserves one exponent for infinity and NaN. */
 
         --(*emax);
     }
@@ -816,8 +761,7 @@ L10:
 /*     Now create RMAX, the largest machine number, which should
        be equal to (1.0 - BETA**(-P)) * BETA**EMAX .
 
-       First compute 1.0 - BETA**(-P), being careful that the
-       result is less than 1.0 . */
+       First compute 1.0 - BETA**(-P), being careful that the result is less than 1.0 . */
 
     recbas = 1.f / *beta;
     z = *beta - 1.f;
@@ -841,5 +785,4 @@ L10:
     }
 
     *rmax = y;
-
 } /* slamc5_ */

@@ -8,7 +8,7 @@
 #define F2C_INCLUDE
 
 typedef int integer; /* awf changed from long */
-typedef char *address;
+typedef const char *address;
 typedef short int shortint;
 typedef float real;
 typedef double doublereal;
@@ -158,6 +158,8 @@ typedef struct Namelist Namelist;
 #define dmin(a,b) (doublereal)min(a,b)
 #define dmax(a,b) (doublereal)max(a,b)
 
+#if 0 /* These are not used in netlib, and are causing gcc compiler warnings */
+
 /* procedure parameter types for -A and -C++ */
 
 #define F2C_proc_par_types 1
@@ -191,6 +193,8 @@ typedef VOID C_f;       /* complex function */
 typedef VOID H_f;       /* character function */
 typedef VOID Z_f;       /* double complex function */
 typedef doublereal E_f; /* real function with -R not specified */
+
+#endif /* 0 */
 
 /* undef any lower-case symbols that your C compiler predefines, e.g.: */
 

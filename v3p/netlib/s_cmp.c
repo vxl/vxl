@@ -1,4 +1,5 @@
 #include "f2c.h"
+#include "netlib.h"
 
 /* compare two strings */
 

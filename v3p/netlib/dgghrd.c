@@ -1,9 +1,5 @@
-/*  -- translated by f2c (version 19991025).
-   You must link the resulting object file with the libraries:
-	-lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Table of constant values */
 
@@ -11,33 +7,28 @@ static doublereal c_b10 = 0.;
 static doublereal c_b11 = 1.;
 static integer c__1 = 1;
 
-/* Subroutine */ int dgghrd_(compq, compz, n, ilo, ihi, a, lda, b, ldb, q, 
-	ldq, z__, ldz, info, compq_len, compz_len)
-char *compq, *compz;
-integer *n, *ilo, *ihi;
+/* Subroutine */ void dgghrd_(compq, compz, n, ilo, ihi, a, lda, b, ldb, q, ldq, z, ldz, info)
+const char *compq, *compz;
+const integer *n;
+integer *ilo, *ihi;
 doublereal *a;
-integer *lda;
+const integer *lda;
 doublereal *b;
-integer *ldb;
+const integer *ldb;
 doublereal *q;
-integer *ldq;
-doublereal *z__;
-integer *ldz, *info;
-ftnlen compq_len;
-ftnlen compz_len;
+const integer *ldq;
+doublereal *z;
+const integer *ldz;
+integer *info;
 {
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, 
-	    z_offset, i__1, i__2, i__3;
+    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1;
 
     /* Local variables */
     static integer jcol;
     static doublereal temp;
-    extern /* Subroutine */ int drot_();
     static integer jrow;
-    static doublereal c__, s;
-    extern logical lsame_();
-    extern /* Subroutine */ int dlaset_(), dlartg_(), xerbla_();
+    static doublereal c, s;
     static integer icompq, icompz;
     static logical ilq, ilz;
 
@@ -46,11 +37,6 @@ ftnlen compz_len;
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
 /*     Courant Institute, Argonne National Lab, and Rice University */
 /*     September 30, 1994 */
-
-/*     .. Scalar Arguments .. */
-/*     .. */
-/*     .. Array Arguments .. */
-/*     .. */
 
 /*  Purpose */
 /*  ======= */
@@ -152,20 +138,6 @@ ftnlen compz_len;
 
 /*  ===================================================================== */
 
-/*     .. Parameters .. */
-/*     .. */
-/*     .. Local Scalars .. */
-/*     .. */
-/*     .. External Functions .. */
-/*     .. */
-/*     .. External Subroutines .. */
-/*     .. */
-/*     .. Intrinsic Functions .. */
-/*     .. */
-/*     .. Executable Statements .. */
-
-/*     Decode COMPQ */
-
     /* Parameter adjustments */
     a_dim1 = *lda;
     a_offset = 1 + a_dim1 * 1;
@@ -178,140 +150,119 @@ ftnlen compz_len;
     q -= q_offset;
     z_dim1 = *ldz;
     z_offset = 1 + z_dim1 * 1;
-    z__ -= z_offset;
+    z -= z_offset;
 
-    /* Function Body */
-    if (lsame_(compq, "N", (ftnlen)1, (ftnlen)1)) {
-	ilq = FALSE_;
-	icompq = 1;
-    } else if (lsame_(compq, "V", (ftnlen)1, (ftnlen)1)) {
-	ilq = TRUE_;
-	icompq = 2;
-    } else if (lsame_(compq, "I", (ftnlen)1, (ftnlen)1)) {
-	ilq = TRUE_;
-	icompq = 3;
+/*     Decode COMPQ */
+
+    if (lsame_(compq, "N")) {
+        ilq = FALSE_;
+        icompq = 1;
+    } else if (lsame_(compq, "V")) {
+        ilq = TRUE_;
+        icompq = 2;
+    } else if (lsame_(compq, "I")) {
+        ilq = TRUE_;
+        icompq = 3;
     } else {
-	icompq = 0;
+        icompq = 0;
     }
 
 /*     Decode COMPZ */
 
-    if (lsame_(compz, "N", (ftnlen)1, (ftnlen)1)) {
-	ilz = FALSE_;
-	icompz = 1;
-    } else if (lsame_(compz, "V", (ftnlen)1, (ftnlen)1)) {
-	ilz = TRUE_;
-	icompz = 2;
-    } else if (lsame_(compz, "I", (ftnlen)1, (ftnlen)1)) {
-	ilz = TRUE_;
-	icompz = 3;
+    if (lsame_(compz, "N")) {
+        ilz = FALSE_;
+        icompz = 1;
+    } else if (lsame_(compz, "V")) {
+        ilz = TRUE_;
+        icompz = 2;
+    } else if (lsame_(compz, "I")) {
+        ilz = TRUE_;
+        icompz = 3;
     } else {
-	icompz = 0;
+        icompz = 0;
     }
 
 /*     Test the input parameters. */
 
     *info = 0;
     if (icompq <= 0) {
-	*info = -1;
+        *info = -1;
     } else if (icompz <= 0) {
-	*info = -2;
+        *info = -2;
     } else if (*n < 0) {
-	*info = -3;
+        *info = -3;
     } else if (*ilo < 1) {
-	*info = -4;
+        *info = -4;
     } else if (*ihi > *n || *ihi < *ilo - 1) {
-	*info = -5;
+        *info = -5;
     } else if (*lda < max(1,*n)) {
-	*info = -7;
+        *info = -7;
     } else if (*ldb < max(1,*n)) {
-	*info = -9;
-    } else if (ilq && *ldq < *n || *ldq < 1) {
-	*info = -11;
-    } else if (ilz && *ldz < *n || *ldz < 1) {
-	*info = -13;
+        *info = -9;
+    } else if ( (ilq && *ldq < *n ) || *ldq < 1) {
+        *info = -11;
+    } else if ( (ilz && *ldz < *n ) || *ldz < 1) {
+        *info = -13;
     }
     if (*info != 0) {
-	i__1 = -(*info);
-	xerbla_("DGGHRD", &i__1, (ftnlen)6);
-	return 0;
+        i__1 = -(*info);
+        xerbla_("DGGHRD", &i__1);
+        return;
     }
 
 /*     Initialize Q and Z if desired. */
 
     if (icompq == 3) {
-	dlaset_("Full", n, n, &c_b10, &c_b11, &q[q_offset], ldq, (ftnlen)4);
+        dlaset_("Full", n, n, &c_b10, &c_b11, &q[q_offset], ldq);
     }
     if (icompz == 3) {
-	dlaset_("Full", n, n, &c_b10, &c_b11, &z__[z_offset], ldz, (ftnlen)4);
+        dlaset_("Full", n, n, &c_b10, &c_b11, &z[z_offset], ldz);
     }
 
 /*     Quick return if possible */
 
     if (*n <= 1) {
-	return 0;
+        return;
     }
 
 /*     Zero out lower triangle of B */
 
-    i__1 = *n - 1;
-    for (jcol = 1; jcol <= i__1; ++jcol) {
-	i__2 = *n;
-	for (jrow = jcol + 1; jrow <= i__2; ++jrow) {
-	    b[jrow + jcol * b_dim1] = 0.;
-/* L10: */
-	}
-/* L20: */
+    for (jcol = 1; jcol <= *n - 1; ++jcol) {
+        for (jrow = jcol + 1; jrow <= *n; ++jrow) {
+            b[jrow + jcol * b_dim1] = 0.;
+        }
     }
 
 /*     Reduce A and B */
 
-    i__1 = *ihi - 2;
-    for (jcol = *ilo; jcol <= i__1; ++jcol) {
+    for (jcol = *ilo; jcol <= *ihi - 2; ++jcol) {
 
-	i__2 = jcol + 2;
-	for (jrow = *ihi; jrow >= i__2; --jrow) {
+        for (jrow = *ihi; jrow >= jcol + 2; --jrow) {
 
 /*           Step 1: rotate rows JROW-1, JROW to kill A(JROW,JCOL) */
 
-	    temp = a[jrow - 1 + jcol * a_dim1];
-	    dlartg_(&temp, &a[jrow + jcol * a_dim1], &c__, &s, &a[jrow - 1 + 
-		    jcol * a_dim1]);
-	    a[jrow + jcol * a_dim1] = 0.;
-	    i__3 = *n - jcol;
-	    drot_(&i__3, &a[jrow - 1 + (jcol + 1) * a_dim1], lda, &a[jrow + (
-		    jcol + 1) * a_dim1], lda, &c__, &s);
-	    i__3 = *n + 2 - jrow;
-	    drot_(&i__3, &b[jrow - 1 + (jrow - 1) * b_dim1], ldb, &b[jrow + (
-		    jrow - 1) * b_dim1], ldb, &c__, &s);
-	    if (ilq) {
-		drot_(n, &q[(jrow - 1) * q_dim1 + 1], &c__1, &q[jrow * q_dim1 
-			+ 1], &c__1, &c__, &s);
-	    }
+            temp = a[jrow - 1 + jcol * a_dim1];
+            dlartg_(&temp, &a[jrow + jcol * a_dim1], &c, &s, &a[jrow - 1 + jcol * a_dim1]);
+            a[jrow + jcol * a_dim1] = 0.;
+            i__1 = *n - jcol;
+            drot_(&i__1, &a[jrow - 1 + (jcol + 1) * a_dim1], lda, &a[jrow + (jcol + 1) * a_dim1], lda, &c, &s);
+            i__1 = *n + 2 - jrow;
+            drot_(&i__1, &b[jrow - 1 + (jrow - 1) * b_dim1], ldb, &b[jrow + (jrow - 1) * b_dim1], ldb, &c, &s);
+            if (ilq) {
+                drot_(n, &q[(jrow - 1) * q_dim1 + 1], &c__1, &q[jrow * q_dim1 + 1], &c__1, &c, &s);
+            }
 
 /*           Step 2: rotate columns JROW, JROW-1 to kill B(JROW,JROW-1) */
 
-	    temp = b[jrow + jrow * b_dim1];
-	    dlartg_(&temp, &b[jrow + (jrow - 1) * b_dim1], &c__, &s, &b[jrow 
-		    + jrow * b_dim1]);
-	    b[jrow + (jrow - 1) * b_dim1] = 0.;
-	    drot_(ihi, &a[jrow * a_dim1 + 1], &c__1, &a[(jrow - 1) * a_dim1 + 
-		    1], &c__1, &c__, &s);
-	    i__3 = jrow - 1;
-	    drot_(&i__3, &b[jrow * b_dim1 + 1], &c__1, &b[(jrow - 1) * b_dim1 
-		    + 1], &c__1, &c__, &s);
-	    if (ilz) {
-		drot_(n, &z__[jrow * z_dim1 + 1], &c__1, &z__[(jrow - 1) * 
-			z_dim1 + 1], &c__1, &c__, &s);
-	    }
-/* L30: */
-	}
-/* L40: */
+            temp = b[jrow + jrow * b_dim1];
+            dlartg_(&temp, &b[jrow + (jrow - 1) * b_dim1], &c, &s, &b[jrow + jrow * b_dim1]);
+            b[jrow + (jrow - 1) * b_dim1] = 0.;
+            drot_(ihi, &a[jrow * a_dim1 + 1], &c__1, &a[(jrow - 1) * a_dim1 + 1], &c__1, &c, &s);
+            i__1 = jrow - 1;
+            drot_(&i__1, &b[jrow * b_dim1 + 1], &c__1, &b[(jrow - 1) * b_dim1 + 1], &c__1, &c, &s);
+            if (ilz) {
+                drot_(n, &z[jrow * z_dim1 + 1], &c__1, &z[(jrow - 1) * z_dim1 + 1], &c__1, &c, &s);
+            }
+        }
     }
-
-    return 0;
-
-/*     End of DGGHRD */
-
 } /* dgghrd_ */
-

@@ -1,15 +1,7 @@
-/* gpfa3f.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 #include "f2c.h"
+#include "netlib.h"
 
 /* Table of constant values */
-
 static integer c__3 = 3;
 
 /*     fortran version of *gpfa3* - */
@@ -18,19 +10,16 @@ static integer c__3 = 3;
 
 /* ------------------------------------------------------------------- */
 
-/* Subroutine */ void gpfa3f_(real *a, real *b, real *trigs, integer *inc,
-        integer *jump, integer *n, integer *mm, integer *lot, integer *isign)
+/* Subroutine */ void gpfa3f_(real *a, real *b, const real *trigs,
+        const integer *inc, const integer *jump, const integer *n, const integer *mm,
+        const integer *lot, const integer *isign)
 {
     /* Initialized data */
-
     static real sin60 = .866025403784437f;
     static integer lvr = 128;
 
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8, i__9, i__10;
-
-    /* Builtin functions */
-    integer pow_ii(integer *, integer *);
+    integer i__3, i__4, i__5, i__6, i__7, i__8;
 
     /* Local variables */
     static integer ninc, left, nvex, j, k, l, m;
@@ -39,22 +28,13 @@ static integer c__3 = 3;
     static real c1;
     static integer jstep, n3;
     static real t1, t2, t3, u1, u2, u3;
-    static integer ja, jb, la, jc, jd, nb, je, jf, jg, jh, mh, kk, ji, ll, mu,
-             nu, laincl, jstepl;
+    static integer ja, jb, jc, jd, je, jf, jg, jh, ji, la, nb, mh, kk, ll, mu, nu, laincl, jstepl;
     static real co1, co2;
     static integer istart, jstepx;
-    static real si1, si2, aja, ajb, ajc, bjb, bjc, bja, ajd, bjd, aje, ajf,
-            ajh, bje, bjf, bjh, aji, ajg, bji;
+    static real si1, si2, aja, ajb, ajc, bjb, bjc, bja, ajd, bjd, aje, ajf, ajh, bje, bjf, bjh, aji, ajg, bji;
     static integer jjj;
     static real bjg;
     static integer ink, inq;
-
-    /* Parameter adjustments */
-    --trigs;
-    --b;
-    --a;
-
-    /* Function Body */
 
 /*     *************************************************************** */
 /*     *                                                             * */
@@ -84,12 +64,11 @@ static integer c__3 = 3;
     nblox = (*lot - 1) / lvr + 1;
     left = *lot;
     s = (real) (*isign);
-    istart = 1;
+    istart = 0;
 
 /*  loop on blocks of lvr transforms */
 /*  -------------------------------- */
-    i__1 = nblox;
-    for (nb = 1; nb <= i__1; ++nb) {
+    for (nb = 1; nb <= nblox; ++nb) {
 
         if (left <= lvr) {
             nvex = left;
@@ -105,8 +84,7 @@ static integer c__3 = 3;
 
 /*  loop on type I radix-3 passes */
 /*  ----------------------------- */
-        i__2 = mh;
-        for (ipass = 1; ipass <= i__2; ++ipass) {
+        for (ipass = 0; ipass < mh; ++ipass) {
             jstep = *n * *inc / (la * 3);
             jstepl = jstep - ninc;
 
@@ -119,8 +97,7 @@ static integer c__3 = 3;
 
 /*  "transverse" loop */
 /*  ----------------- */
-                i__5 = inq;
-                for (nu = 1; nu <= i__5; ++nu) {
+                for (nu = 1; nu <= inq; ++nu) {
                     jb = ja + jstepl;
                     if (jb < istart) {
                         jb += ninc;
@@ -134,8 +111,7 @@ static integer c__3 = 3;
 /*  loop across transforms */
 /*  ---------------------- */
 /* dir$ ivdep, shortloop */
-                    i__6 = nvex;
-                    for (l = 1; l <= i__6; ++l) {
+                    for (l = 1; l <= nvex; ++l) {
                         ajb = a[jb + j];
                         ajc = a[jc + j];
                         t1 = ajb + ajc;
@@ -173,25 +149,20 @@ static integer c__3 = 3;
 /*  loop on nonzero k */
 /*  ----------------- */
             i__4 = jstep - ink;
-            i__3 = ink;
-            for (k = ink; i__3 < 0 ? k >= i__4 : k <= i__4; k += i__3) {
-                co1 = trigs[kk + 1];
-                si1 = s * trigs[kk + 2];
-                co2 = trigs[(kk << 1) + 1];
-                si2 = s * trigs[(kk << 1) + 2];
+            for (k = ink; ink < 0 ? k >= i__4 : k <= i__4; k += ink) {
+                co1 = trigs[kk];     si1 = s * trigs[kk + 1];
+                co2 = trigs[kk * 2]; si2 = s * trigs[kk * 2 + 1];
 
 /*  loop along transform */
 /*  -------------------- */
                 i__5 = (*n - 1) * *inc;
                 i__6 = jstep * 3;
-                for (jjj = k; i__6 < 0 ? jjj >= i__5 : jjj <= i__5; jjj +=
-                        i__6) {
+                for (jjj = k; i__6 < 0 ? jjj >= i__5 : jjj <= i__5; jjj += i__6) {
                     ja = istart + jjj;
 
 /*  "transverse" loop */
 /*  ----------------- */
-                    i__7 = inq;
-                    for (nu = 1; nu <= i__7; ++nu) {
+                    for (nu = 1; nu <= inq; ++nu) {
                         jb = ja + jstepl;
                         if (jb < istart) {
                             jb += ninc;
@@ -205,8 +176,7 @@ static integer c__3 = 3;
 /*  loop across transforms */
 /*  ---------------------- */
 /* dir$ ivdep,shortloop */
-                        i__8 = nvex;
-                        for (l = 1; l <= i__8; ++l) {
+                        for (l = 1; l <= nvex; ++l) {
                             ajb = a[jb + j];
                             ajc = a[jc + j];
                             t1 = ajb + ajc;
@@ -227,26 +197,21 @@ static integer c__3 = 3;
                             b[jc + j] = si2 * (t2 + u3) + co2 * (u2 - t3);
                             j += *jump;
                         }
-/* -----( end of loop across transforms ) */
                         ja += jstepx;
                         if (ja < istart) {
                             ja += ninc;
                         }
                     }
                 }
-/* -----( end of loop along transforms ) */
                 kk += la << 1;
             }
-/* -----( end of loop on nonzero k ) */
             la *= 3;
         }
-/* -----( end of loop on type I radix-3 passes) */
 
 /*  loop on type II radix-3 passes */
 /*  ------------------------------ */
 
-        i__2 = m;
-        for (ipass = mh + 1; ipass <= i__2; ++ipass) {
+        for (ipass = mh; ipass < m; ++ipass) {
             jstep = *n * *inc / (la * 3);
             jstepl = jstep - ninc;
             laincl = la * ink - ninc;
@@ -259,14 +224,12 @@ static integer c__3 = 3;
 
                 i__6 = (*n - 1) * *inc;
                 i__5 = la * 3 * ink;
-                for (jjj = ll; i__5 < 0 ? jjj >= i__6 : jjj <= i__6; jjj +=
-                        i__5) {
+                for (jjj = ll; i__5 < 0 ? jjj >= i__6 : jjj <= i__6; jjj += i__5) {
                     ja = istart + jjj;
 
 /*  "transverse" loop */
 /*  ----------------- */
-                    i__7 = inq;
-                    for (nu = 1; nu <= i__7; ++nu) {
+                    for (nu = 1; nu <= inq; ++nu) {
                         jb = ja + jstepl;
                         if (jb < istart) {
                             jb += ninc;
@@ -304,8 +267,7 @@ static integer c__3 = 3;
 /*  loop across transforms */
 /*  ---------------------- */
 /* dir$ ivdep, shortloop */
-                        i__8 = nvex;
-                        for (l = 1; l <= i__8; ++l) {
+                        for (l = 1; l <= nvex; ++l) {
                             ajb = a[jb + j];
                             ajc = a[jc + j];
                             t1 = ajb + ajc;
@@ -355,14 +317,14 @@ static integer c__3 = 3;
                             ajg = a[jg + j];
                             t2 = ajg - t1 * .5f;
                             t3 = c1 * (ajf - aji);
-                            t1 = ajg + t1;
+                            t1 += ajg;
                             a[jg + j] = ajc;
                             bji = b[ji + j];
                             u1 = bjf + bji;
                             bjg = b[jg + j];
                             u2 = bjg - u1 * .5f;
                             u3 = c1 * (bjf - bji);
-                            u1 = bjg + u1;
+                            u1 += bjg;
                             b[jg + j] = bjc;
                             a[jc + j] = t1;
                             b[jc + j] = u1;
@@ -372,7 +334,6 @@ static integer c__3 = 3;
                             b[ji + j] = u2 - t3;
                             j += *jump;
                         }
-/* -----( end of loop across transforms ) */
                         ja += jstepx;
                         if (ja < istart) {
                             ja += ninc;
@@ -380,11 +341,10 @@ static integer c__3 = 3;
                     }
                 }
             }
-/* -----( end of double loop for k=0 ) */
 
 /*  finished if last pass */
 /*  --------------------- */
-            if (ipass == m) {
+            if (ipass == m-1) {
                 goto L490;
             }
 
@@ -393,12 +353,9 @@ static integer c__3 = 3;
 /*     loop on nonzero k */
 /*     ----------------- */
             i__4 = jstep - ink;
-            i__3 = ink;
-            for (k = ink; i__3 < 0 ? k >= i__4 : k <= i__4; k += i__3) {
-                co1 = trigs[kk + 1];
-                si1 = s * trigs[kk + 2];
-                co2 = trigs[(kk << 1) + 1];
-                si2 = s * trigs[(kk << 1) + 2];
+            for (k = ink; ink < 0 ? k >= i__4 : k <= i__4; k += ink) {
+                co1 = trigs[kk];     si1 = s * trigs[kk + 1];
+                co2 = trigs[kk * 2]; si2 = s * trigs[kk * 2 + 1];
 
 /*  double loop along first transform in block */
 /*  ------------------------------------------ */
@@ -408,14 +365,12 @@ static integer c__3 = 3;
 
                     i__7 = (*n - 1) * *inc;
                     i__8 = la * 3 * ink;
-                    for (jjj = ll; i__8 < 0 ? jjj >= i__7 : jjj <= i__7; jjj
-                            += i__8) {
+                    for (jjj = ll; i__8 < 0 ? jjj >= i__7 : jjj <= i__7; jjj += i__8) {
                         ja = istart + jjj;
 
 /*  "transverse" loop */
 /*  ----------------- */
-                        i__9 = inq;
-                        for (nu = 1; nu <= i__9; ++nu) {
+                        for (nu = 1; nu <= inq; ++nu) {
                             jb = ja + jstepl;
                             if (jb < istart) {
                                 jb += ninc;
@@ -453,8 +408,7 @@ static integer c__3 = 3;
 /*  loop across transforms */
 /*  ---------------------- */
 /* dir$ ivdep, shortloop */
-                            i__10 = nvex;
-                            for (l = 1; l <= i__10; ++l) {
+                            for (l = 1; l <= nvex; ++l) {
                                 ajb = a[jb + j];
                                 ajc = a[jc + j];
                                 t1 = ajb + ajc;
@@ -504,14 +458,14 @@ static integer c__3 = 3;
                                 ajg = a[jg + j];
                                 t2 = ajg - t1 * .5f;
                                 t3 = c1 * (ajf - aji);
-                                t1 = ajg + t1;
+                                t1 += ajg;
                                 a[jg + j] = ajc;
                                 bji = b[ji + j];
                                 u1 = bjf + bji;
                                 bjg = b[jg + j];
                                 u2 = bjg - u1 * .5f;
                                 u3 = c1 * (bjf - bji);
-                                u1 = bjg + u1;
+                                u1 += bjg;
                                 b[jg + j] = bjc;
                                 a[jc + j] = t1;
                                 b[jc + j] = u1;
@@ -521,7 +475,6 @@ static integer c__3 = 3;
                                 b[ji + j] = si2 * (t2 + u3) + co2 * (u2 - t3);
                                 j += *jump;
                             }
-/* -----(end of loop across transforms) */
                             ja += jstepx;
                             if (ja < istart) {
                                 ja += ninc;
@@ -529,21 +482,11 @@ static integer c__3 = 3;
                         }
                     }
                 }
-/* -----( end of double loop for this k ) */
                 kk += la << 1;
             }
-/* -----( end of loop over values of k ) */
             la *= 3;
         }
-/* -----( end of loop on type II radix-3 passes ) */
-/* -----( nvex transforms completed) */
 L490:
         istart += nvex * *jump;
     }
-/* -----( end of loop on blocks of transforms ) */
-
 } /* gpfa3f_ */
-
-#ifdef __cplusplus
-        }
-#endif

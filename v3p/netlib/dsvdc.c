@@ -1,9 +1,6 @@
-/* dsvdc.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
+extern double sqrt(double); /* #include <math.h> */
 
 /*
  * Calling this ensures that the operands are spilled to
@@ -11,47 +8,36 @@
  * for x86 with heavy optimization (gcc). It is better to do
  * this than to turn on -ffloat-store.
  */
-static int fsm_ieee_doubles_equal(double *x, double *y);
+static int fsm_ieee_doubles_equal(const doublereal *x, const doublereal *y);
 
 /* Table of constant values */
 static integer c__1 = 1;
-static doublereal c_b44 = -1.;
+static doublereal c_m1 = -1.;
 
 /* Subroutine */ void dsvdc_(x, ldx, n, p, s, e, u, ldu, v, ldv, work, job, info)
 doublereal *x;
-integer *ldx, *n, *p;
+const integer *ldx, *n, *p;
 doublereal *s, *e, *u;
-integer *ldu;
+const integer *ldu;
 doublereal *v;
-integer *ldv;
+const integer *ldv;
 doublereal *work;
-integer *job, *info;
+const integer *job;
+integer *info;
 {
     /* System generated locals */
-    integer x_dim1, x_offset, u_dim1, u_offset, v_dim1, v_offset, i__1;
+    integer i__1;
     doublereal d__1;
 
-    /* Builtin functions */
-    double d_sign(), sqrt();
-
     /* Local variables */
-    static integer kase;
-    extern doublereal ddot_();
-    static integer jobu, iter;
-    extern /* Subroutine */ void drot_();
+    static integer kase, jobu, iter;
     static doublereal test;
-    extern doublereal dnrm2_();
-    static integer nctp1;
     static doublereal b, c;
-    static integer nrtp1;
     static doublereal f, g;
     static integer i, j, k, l, m;
     static doublereal t, scale;
-    extern /* Subroutine */ void dscal_();
     static doublereal shift;
-    extern /* Subroutine */ void dswap_(), drotg_();
     static integer maxit;
-    extern /* Subroutine */ void daxpy_();
     static logical wantu, wantv;
     static doublereal t1, ztest, el;
     static doublereal cs;
@@ -59,12 +45,12 @@ integer *job, *info;
     static doublereal sl;
     static integer lu;
     static doublereal sm, sn;
-    static integer lm1, lp1, nct, ncu, nrt;
+    static integer lp1, nct, ncu, nrt;
     static doublereal emm1, smm1;
 
 /*     dsvdc is a subroutine to reduce a double precision nxp matrix x  */
-/*     by orthogonal transformations u and v to diagonal form.  the     */
-/*     diagonal elements s(i) are the singular values of x.  the        */
+/*     by orthogonal transformations u and v to diagonal form.  The     */
+/*     diagonal elements s(i) are the singular values of x.  The        */
 /*     columns of u are the corresponding left singular vectors,        */
 /*     and the columns of v the right singular vectors.                 */
 /*                                                                      */
@@ -118,13 +104,13 @@ integer *job, *info;
 /*                   singular values of x arranged in descending        */
 /*                   order of magnitude.                                */
 /*                                                                      */
-/*         e         double precision(p),                               */
+/*         e         double precision(p).                               */
 /*                   e ordinarily contains zeros.  however see the      */
 /*                   discussion of info for exceptions.                 */
 /*                                                                      */
 /*         u         double precision(ldu,k), where ldu.ge.n.  if       */
-/*                                   joba.eq.1 then k.eq.n, if joba.ge.2*/
-/*                                   then k.eq.min(n,p).                */
+/*                               joba.eq.1 then k.eq.n, if joba.ge.2    */
+/*                               then k.eq.min(n,p).                    */
 /*                   u contains the matrix of left singular vectors.    */
 /*                   u is not referenced if joba.eq.0.  if n.le.p       */
 /*                   or if joba.eq.2, then u may be identified with x   */
@@ -158,20 +144,6 @@ integer *job, *info;
 /*     blas daxpy,ddot,dscal,dswap,dnrm2,drotg             */
 /*     fortran dabs,dmax1,max0,min0,mod,dsqrt              */
 
-    /* Parameter adjustments */
-    --work;
-    v_dim1 = *ldv;
-    v_offset = v_dim1 + 1;
-    v -= v_offset;
-    u_dim1 = *ldu;
-    u_offset = u_dim1 + 1;
-    u -= u_offset;
-    --e;
-    --s;
-    x_dim1 = *ldx;
-    x_offset = x_dim1 + 1;
-    x -= x_offset;
-
 /*     set the maximum number of iterations. */
 
     maxit = 30;
@@ -199,76 +171,61 @@ integer *job, *info;
     nct = min(*n-1,*p);
     nrt = max(0,min(*p-2,*n));
     lu = max(nct,nrt);
-    if (lu < 1) {
-        goto L170;
-    }
-    for (l = 1; l <= lu; ++l) {
-        lp1 = l + 1;
-        if (l > nct) {
+    for (l = 0; l < lu; ++l) {
+        lp1 = l+1;
+        if (lp1 > nct) {
             goto L20;
         }
 
 /*           compute the transformation for the l-th column and */
 /*           place the l-th diagonal in s(l). */
 
-        i__1 = *n - l + 1;
-        s[l] = dnrm2_(&i__1, &x[l + l * x_dim1], &c__1);
+        i__1 = *n - l;
+        s[l] = dnrm2_(&i__1, &x[l + l * *ldx], &c__1);
         if (s[l] == 0.) {
             goto L10;
         }
-        if (x[l + l * x_dim1] != 0.) {
-            s[l] = d_sign(&s[l], &x[l + l * x_dim1]);
+        if (x[l + l * *ldx] != 0.) {
+            s[l] = d_sign(&s[l], &x[l + l * *ldx]);
         }
-        i__1 = *n - l + 1;
+        i__1 = *n - l;
         d__1 = 1. / s[l];
-        dscal_(&i__1, &d__1, &x[l + l * x_dim1], &c__1);
-        x[l + l * x_dim1] += 1.;
+        dscal_(&i__1, &d__1, &x[l + l * *ldx], &c__1);
+        x[l + l * *ldx] += 1.;
 L10:
         s[l] = -s[l];
 L20:
-        if (*p < lp1) {
-            goto L50;
-        }
-        for (j = lp1; j <= *p; ++j) {
-            if (l > nct) {
-                goto L30;
-            }
-            if (s[l] == 0.) {
-                goto L30;
-            }
+        for (j = lp1; j < *p; ++j) {
 
 /*              apply the transformation. */
 
-            i__1 = *n - l + 1;
-            t = -ddot_(&i__1, &x[l + l * x_dim1], &c__1, &x[l + j * x_dim1], &c__1) / x[l + l * x_dim1];
-            daxpy_(&i__1, &t, &x[l + l * x_dim1], &c__1, &x[l + j * x_dim1], &c__1);
-L30:
+            if (l < nct && s[l] != 0.) {
+                i__1 = *n - l;
+                t = -ddot_(&i__1, &x[l + l * *ldx], &c__1, &x[l + j * *ldx], &c__1) / x[l + l * *ldx];
+                daxpy_(&i__1, &t, &x[l + l * *ldx], &c__1, &x[l + j * *ldx], &c__1);
+            }
 
 /*           place the l-th row of x into  e for the */
 /*           subsequent calculation of the row transformation. */
 
-            e[j] = x[l + j * x_dim1];
-        }
-L50:
-        if (! wantu || l > nct) {
-            goto L70;
+            e[j] = x[l + j * *ldx];
         }
 
 /*           place the transformation in u for subsequent back */
 /*           multiplication. */
 
-        for (i = l; i <= *n; ++i) {
-            u[i + l * u_dim1] = x[i + l * x_dim1];
+        if (wantu && l < nct)
+        for (i = l; i < *n; ++i) {
+            u[i + l * *ldu] = x[i + l * *ldx];
         }
-L70:
-        if (l > nrt) {
-            goto L150;
+        if (lp1 > nrt) {
+            continue;
         }
 
 /*           compute the l-th row transformation and place the */
 /*           l-th super-diagonal in e(l). */
 
-        i__1 = *p - l;
+        i__1 = *p - lp1;
         e[l] = dnrm2_(&i__1, &e[lp1], &c__1);
         if (e[l] == 0.) {
             goto L80;
@@ -276,121 +233,101 @@ L70:
         if (e[lp1] != 0.) {
             e[l] = d_sign(&e[l], &e[lp1]);
         }
-        i__1 = *p - l;
+        i__1 = *p - lp1;
         d__1 = 1. / e[l];
         dscal_(&i__1, &d__1, &e[lp1], &c__1);
         e[lp1] += 1.;
 L80:
         e[l] = -e[l];
-        if (lp1 > *n || e[l] == 0.) {
+        if (l+2 > *n || e[l] == 0.) {
             goto L120;
         }
 
 /*              apply the transformation. */
 
-        for (i = lp1; i <= *n; ++i) {
+        for (i = lp1; i < *n; ++i) {
             work[i] = 0.;
         }
-        for (j = lp1; j <= *p; ++j) {
-            i__1 = *n - l;
-            daxpy_(&i__1, &e[j], &x[lp1 + j * x_dim1], &c__1, &work[lp1], &c__1);
+        for (j = lp1; j < *p; ++j) {
+            i__1 = *n - lp1;
+            daxpy_(&i__1, &e[j], &x[lp1 + j * *ldx], &c__1, &work[lp1], &c__1);
         }
-        for (j = lp1; j <= *p; ++j) {
-            i__1 = *n - l;
+        for (j = lp1; j < *p; ++j) {
+            i__1 = *n - lp1;
             d__1 = -e[j] / e[lp1];
-            daxpy_(&i__1, &d__1, &work[lp1], &c__1, &x[lp1 + j * x_dim1], &c__1);
+            daxpy_(&i__1, &d__1, &work[lp1], &c__1, &x[lp1 + j * *ldx], &c__1);
         }
 L120:
-        if (! wantv) {
-            goto L140;
-        }
 
 /*              place the transformation in v for subsequent */
 /*              back multiplication. */
 
-        for (i = lp1; i <= *p; ++i) {
-            v[i + l * v_dim1] = e[i];
+        if (wantv)
+        for (i = lp1; i < *p; ++i) {
+            v[i + l * *ldv] = e[i];
         }
-L140:
-L150:
-        ;
     }
-L170:
 
 /*     set up the final bidiagonal matrix or order m. */
 
-    m = min(*p,*n+1);
-    nctp1 = nct + 1;
-    nrtp1 = nrt + 1;
+    m = min(*p-1,*n);
     if (nct < *p) {
-        s[nctp1] = x[nctp1 + nctp1 * x_dim1];
+        s[nct] = x[nct + nct * *ldx];
     }
-    if (*n < m) {
+    if (*n < m+1) {
         s[m] = 0.;
     }
-    if (nrtp1 < m) {
-        e[nrtp1] = x[nrtp1 + m * x_dim1];
+    if (nrt < m) {
+        e[nrt] = x[nrt + m * *ldx];
     }
     e[m] = 0.;
 
 /*     if required, generate u. */
 
     if (wantu)
-    for (j = nctp1; j <= ncu; ++j) {
-        for (i = 1; i <= *n; ++i) {
-            u[i + j * u_dim1] = 0.;
+    for (j = nct; j < ncu; ++j) {
+        for (i = 0; i < *n; ++i) {
+            u[i + j * *ldu] = 0.;
         }
-        u[j + j * u_dim1] = 1.;
+        u[j + j * *ldu] = 1.;
     }
     if (wantu)
-    for (l = nct; l >= 1; --l) {
+    for (l = nct-1; l >= 0; --l) {
         if (s[l] == 0.) {
-            for (i = 1; i <= *n; ++i) {
-                u[i + l * u_dim1] = 0.;
+            for (i = 0; i < *n; ++i) {
+                u[i + l * *ldu] = 0.;
             }
-            u[l + l * u_dim1] = 1.;
+            u[l + l * *ldu] = 1.;
             continue;
         }
-        lp1 = l + 1;
-        if (ncu < lp1) {
-            goto L220;
+        for (j = l+1; j < ncu; ++j) {
+            i__1 = *n - l;
+            t = -ddot_(&i__1, &u[l + l * *ldu], &c__1, &u[l + j * *ldu], &c__1) / u[l + l * *ldu];
+            daxpy_(&i__1, &t, &u[l + l * *ldu], &c__1, &u[l + j * *ldu], &c__1);
         }
-        for (j = lp1; j <= ncu; ++j) {
-            i__1 = *n - l + 1;
-            t = -ddot_(&i__1, &u[l + l * u_dim1], &c__1, &u[l + j * u_dim1], &c__1) / u[l + l * u_dim1];
-            daxpy_(&i__1, &t, &u[l + l * u_dim1], &c__1, &u[l + j * u_dim1], &c__1);
-        }
-L220:
-        i__1 = *n - l + 1;
-        dscal_(&i__1, &c_b44, &u[l + l * u_dim1], &c__1);
-        u[l + l * u_dim1] += 1.;
-        lm1 = l - 1;
-        for (i = 1; i <= lm1; ++i) {
-            u[i + l * u_dim1] = 0.;
+        i__1 = *n - l;
+        dscal_(&i__1, &c_m1, &u[l + l * *ldu], &c__1);
+        u[l + l * *ldu] += 1.;
+        for (i = 0; i < l; ++i) {
+            u[i + l * *ldu] = 0.;
         }
     }
 
 /*     if it is required, generate v. */
 
     if (wantv)
-    for (l = *p; l >= 1; --l) {
-        lp1 = l + 1;
-        if (l > nrt) {
-            goto L320;
+    for (l = *p-1; l >= 0; --l) {
+        lp1 = l+1;
+        if (l < nrt && e[l] != 0.)
+        for (j = lp1; j < *p; ++j) {
+            i__1 = *p - lp1;
+            t = -ddot_(&i__1, &v[lp1 + l * *ldv], &c__1, &v[lp1 + j * *ldv], &c__1) / v[lp1 + l * *ldv];
+            daxpy_(&i__1, &t, &v[lp1 + l * *ldv], &c__1, &v[lp1 + j * *ldv], &c__1);
         }
-        if (e[l] == 0.) {
-            goto L320;
+        for (i = 0; i < *p; ++i) {
+            v[i + l * *ldv] = 0.;
         }
-        for (j = lp1; j <= *p; ++j) {
-            i__1 = *p - l;
-            t = -ddot_(&i__1, &v[lp1 + l * v_dim1], &c__1, &v[lp1 + j * v_dim1], &c__1) / v[lp1 + l * v_dim1];
-            daxpy_(&i__1, &t, &v[lp1 + l * v_dim1], &c__1, &v[lp1 + j * v_dim1], &c__1);
-        }
-L320:
-        for (i = 1; i <= *p; ++i) {
-            v[i + l * v_dim1] = 0.;
-        }
-        v[l + l * v_dim1] = 1.;
+        v[l + l * *ldv] = 1.;
     }
 
 /*     main iteration loop for the singular values. */
@@ -401,7 +338,7 @@ L360:
 
 /*        quit if all the singular values have been found. */
 
-    if (m == 0) {
+    if (m < 0) {
         return;
     }
 
@@ -409,7 +346,7 @@ L360:
 /*        flag and return. */
 
     if (iter >= maxit) {
-        *info = m;
+        *info = m+1;
         return;
     }
 
@@ -424,61 +361,43 @@ L360:
 /*           kase = 4     if e(m-1) is negligible (convergence). */
 
     for (l = m-1; l >= 0; --l) {
-/*        ...exit */
-        if (l == 0) {
-            goto L400;
-        }
-        test = abs(s[l]) + abs(s[l + 1]);
+        test = abs(s[l]) + abs(s[l+1]);
         ztest = test + abs(e[l]);
         if (fsm_ieee_doubles_equal(&ztest, &test)) {
+/* WAS: if (ztest == test) { */
             e[l] = 0.;
-/*        ......exit */
-            goto L400;
+            break;
         }
     }
-L400:
-    if (l != m - 1) {
-        goto L410;
+    if (l == m-1) {
+        kase = 4;
+        goto L480;
     }
-    kase = 4;
-    goto L480;
-L410:
-    lp1 = l + 1;
-    for (ls = m; ls >= l; --ls) {
-/*           ...exit */
-        if (ls == l) {
-            goto L440;
-        }
+    for (ls = m; ls > l; --ls) {
         test = 0.;
         if (ls != m) {
             test += abs(e[ls]);
         }
-        if (ls != l + 1) {
-            test += abs(e[ls - 1]);
+        if (ls != l+1) {
+            test += abs(e[ls-1]);
         }
         ztest = test + abs(s[ls]);
         if (fsm_ieee_doubles_equal(&ztest, &test)) {
+/* WAS: if (ztest == test) { */
             s[ls] = 0.;
-/*           ......exit */
-            goto L440;
+            break;
         }
     }
-L440:
-    if (ls != l) {
-        goto L450;
+    if (ls == l) {
+        kase = 3;
     }
-    kase = 3;
-    goto L470;
-L450:
-    if (ls != m) {
-        goto L460;
+    else if (ls == m) {
+        kase = 1;
     }
-    kase = 1;
-    goto L470;
-L460:
-    kase = 2;
-    l = ls;
-L470:
+    else {
+        kase = 2;
+        l = ls;
+    }
 L480:
     ++l;
 
@@ -494,20 +413,18 @@ L480:
 /*        deflate negligible s(m). */
 
 L490:
-    f = e[m - 1];
-    e[m - 1] = 0.;
+    f = e[m-1];
+    e[m-1] = 0.;
     for (k = m-1; k >= l; --k) {
         t1 = s[k];
         drotg_(&t1, &f, &cs, &sn);
         s[k] = t1;
-        if (k == l) {
-            goto L500;
+        if (k != l) {
+            f = -sn * e[k-1];
+            e[k-1] *= cs;
         }
-        f = -sn * e[k - 1];
-        e[k - 1] = cs * e[k - 1];
-L500:
         if (wantv) {
-            drot_(p, &v[k * v_dim1 + 1], &c__1, &v[m * v_dim1 + 1], &c__1, &cs, &sn);
+            drot_(p, &v[k * *ldv], &c__1, &v[m * *ldv], &c__1, &cs, &sn);
         }
     }
     goto L360;
@@ -515,16 +432,16 @@ L500:
 /*        split at negligible s(l). */
 
 L520:
-    f = e[l - 1];
-    e[l - 1] = 0.;
+    f = e[l-1];
+    e[l-1] = 0.;
     for (k = l; k <= m; ++k) {
         t1 = s[k];
         drotg_(&t1, &f, &cs, &sn);
         s[k] = t1;
         f = -sn * e[k];
-        e[k] = cs * e[k];
+        e[k] *= cs;
         if (wantu) {
-            drot_(n, &u[k * u_dim1 + 1], &c__1, &u[(l - 1) * u_dim1 + 1], &c__1, &cs, &sn);
+            drot_(n, &u[k * *ldu], &c__1, &u[(l-1) * *ldu], &c__1, &cs, &sn);
         }
     }
     goto L360;
@@ -537,51 +454,50 @@ L540:
 
     scale = max(max(max(max(abs(s[m]),abs(s[m-1])),abs(e[m-1])),abs(s[l])),abs(e[l]));
     sm = s[m] / scale;
-    smm1 = s[m - 1] / scale;
-    emm1 = e[m - 1] / scale;
+    smm1 = s[m-1] / scale;
+    emm1 = e[m-1] / scale;
     sl = s[l] / scale;
     el = e[l] / scale;
     b = ((smm1 + sm) * (smm1 - sm) + emm1 * emm1) / 2.;
-    d__1 = sm * emm1;
-    c = d__1 * d__1;
-    shift = 0.;
+    c = sm * emm1; c *= c;
     if (b == 0. && c == 0.) {
-        goto L550;
+        shift = 0.;
     }
-    shift = sqrt(b * b + c);
-    if (b < 0.) {
-        shift = -shift;
+    else {
+        shift = sqrt(b * b + c);
+        if (b < 0.) {
+            shift = -shift;
+        }
+        shift = c / (b + shift);
     }
-    shift = c / (b + shift);
-L550:
     f = (sl + sm) * (sl - sm) + shift;
     g = sl * el;
 
 /*           chase zeros. */
 
-    for (k = l; k <= m-1; ++k) {
+    for (k = l; k < m; ++k) {
         drotg_(&f, &g, &cs, &sn);
         if (k != l) {
-            e[k - 1] = f;
+            e[k-1] = f;
         }
         f = cs * s[k] + sn * e[k];
         e[k] = cs * e[k] - sn * s[k];
-        g = sn * s[k + 1];
-        s[k + 1] = cs * s[k + 1];
+        g = sn * s[k+1];
+        s[k+1] *= cs;
         if (wantv) {
-            drot_(p, &v[k * v_dim1 + 1], &c__1, &v[(k + 1) * v_dim1 + 1], &c__1, &cs, &sn);
+            drot_(p, &v[k * *ldv], &c__1, &v[(k+1) * *ldv], &c__1, &cs, &sn);
         }
         drotg_(&f, &g, &cs, &sn);
         s[k] = f;
-        f = cs * e[k] + sn * s[k + 1];
-        s[k + 1] = -sn * e[k] + cs * s[k + 1];
-        g = sn * e[k + 1];
-        e[k + 1] = cs * e[k + 1];
-        if (wantu && k < *n) {
-            drot_(n, &u[k * u_dim1 + 1], &c__1, &u[(k + 1) * u_dim1 + 1], &c__1, &cs, &sn);
+        f = cs * e[k] + sn * s[k+1];
+        s[k+1] = -sn * e[k] + cs * s[k+1];
+        g = sn * e[k+1];
+        e[k+1] *= cs;
+        if (wantu && k+1 < *n) {
+            drot_(n, &u[k * *ldu], &c__1, &u[(k+1) * *ldu], &c__1, &cs, &sn);
         }
     }
-    e[m - 1] = f;
+    e[m-1] = f;
     ++iter;
     goto L360;
 
@@ -591,14 +507,12 @@ L570:
 
 /*           make the singular value  positive. */
 
-    if (s[l] >= 0.) {
-        goto L580;
+    if (s[l] < 0.) {
+        s[l] = -s[l];
+        if (wantv) {
+            dscal_(p, &c_m1, &v[l * *ldv], &c__1);
+        }
     }
-    s[l] = -s[l];
-    if (wantv) {
-        dscal_(p, &c_b44, &v[l * v_dim1 + 1], &c__1);
-    }
-L580:
 
 /*           order the singular value. */
 
@@ -606,20 +520,19 @@ L590:
     if (l == mm) {
         goto L600;
     }
-/*           ...exit */
-    if (s[l] >= s[l + 1]) {
+    if (s[l] >= s[l+1]) {
         goto L600;
     }
     t = s[l];
-    s[l] = s[l + 1];
-    s[l + 1] = t;
+    s[l] = s[l+1];
+    ++l;
+    s[l] = t;
     if (wantv && l < *p) {
-        dswap_(p, &v[l * v_dim1 + 1], &c__1, &v[(l + 1) * v_dim1 + 1], &c__1);
+        dswap_(p, &v[(l-1) * *ldv], &c__1, &v[l * *ldv], &c__1);
     }
     if (wantu && l < *n) {
-        dswap_(n, &u[l * u_dim1 + 1], &c__1, &u[(l + 1) * u_dim1 + 1], &c__1);
+        dswap_(n, &u[(l-1) * *ldu], &c__1, &u[l * *ldu], &c__1);
     }
-    ++l;
     goto L590;
 L600:
     iter = 0;
@@ -627,7 +540,7 @@ L600:
     goto L360;
 } /* dsvdc_ */
 
-int fsm_ieee_doubles_equal(double *x, double *y)
+int fsm_ieee_doubles_equal(const doublereal *x, const doublereal *y)
 {
   return *x == *y;
 }

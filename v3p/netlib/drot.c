@@ -1,25 +1,16 @@
-/* drot.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 #ifdef KR_headers
 /* Subroutine */ void drot_(n, dx, incx, dy, incy, c, s)
-integer *n;
+const integer *n;
 doublereal *dx;
-integer *incx;
+const integer *incx;
 doublereal *dy;
-integer *incy;
-doublereal *c, *s;
+const integer *incy;
+const doublereal *c, *s;
 #else
-void drot_(
-integer *n,
-doublereal *dx,
-integer *incx,
-doublereal *dy,
-integer *incy,
-doublereal *c, doublereal*s)
+void drot_(const integer *n, doublereal *dx, const integer *incx, doublereal *dy, const integer *incy,
+           const doublereal *c, const doublereal*s)
 #endif
 {
     /* Local variables */
@@ -31,7 +22,6 @@ doublereal *c, doublereal*s)
 /*     jack dongarra, linpack, 3/11/78. */
 /*     modified 12/3/93, array(1) declarations changed to array(*) */
 
-    /* Function Body */
     if (*n <= 0) {
         return;
     }
@@ -58,4 +48,3 @@ doublereal *c, doublereal*s)
         }
     }
 } /* drot_ */
-

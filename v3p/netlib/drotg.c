@@ -1,20 +1,13 @@
-/* drotg.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
+extern double sqrt(double); /* #include <math.h> */
 
 /* Table of constant values */
-
 static doublereal c_b4 = 1.;
 
 /* Subroutine */ void drotg_(da, db, c, s)
 doublereal *da, *db, *c, *s;
 {
-    /* Builtin functions */
-    double sqrt(), d_sign();
-
     /* Local variables */
     static doublereal r, scale, z, roe;
 
@@ -23,10 +16,8 @@ doublereal *da, *db, *c, *s;
 
     scale = abs(*da) + abs(*db);
     if (scale == 0.) {
-        *c = 1.;
-        *s = 0.;
-        *da = 0.;
-        *db = 0.;
+        *c = 1.; *s = 0.;
+        *da = *db = 0.;
     }
     else {
         roe = *db;

@@ -1,24 +1,17 @@
-/* dposl.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Table of constant values */
-
 static integer c__1 = 1;
 
 /* Subroutine */ void dposl_(a, lda, n, b)
-doublereal *a;
-integer *lda, *n;
+const doublereal *a;
+const integer *lda, *n;
 doublereal *b;
 {
     /* Local variables */
-    extern doublereal ddot_();
     static integer k;
     static doublereal t;
-    extern /* Subroutine */ void daxpy_();
 
 /*     dposl solves the double precision symmetric positive definite    */
 /*     system a * x = b                                                 */
@@ -79,4 +72,3 @@ doublereal *b;
         daxpy_(&k, &t, &a[k * *lda], &c__1, b, &c__1);
     }
 } /* dposl_ */
-

@@ -1,40 +1,27 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
 /* Table of constant values */
-
 static doublecomplex c_b2 = {0.,0.};
 static doublecomplex c_b15 = {1.,0.};
 static integer c__1 = 1;
 
-/* Subroutine */ void zlarfx_(side, m, n, v, tau, c, ldc, work, side_len)
-char *side;
-integer *m, *n;
+/* Subroutine */ void zlarfx_(side, m, n, v, tau, c, ldc, work)
+const char *side;
+const integer *m, *n;
 doublecomplex *v, *tau, *c;
-integer *ldc;
+const integer *ldc;
 doublecomplex *work;
-ftnlen side_len;
 {
     /* System generated locals */
     integer i__1;
     doublecomplex z__1;
 
-    /* Builtin functions */
-    void d_cnjg();
-
     /* Local variables */
     static integer j;
-    extern logical lsame_();
-    extern /* Subroutine */ void zgerc_(), zgemv_();
-    static doublecomplex t1, t2, t3, t4, t5, t6, t7, t8, t9, v1, v2, v3, v4,
-            v5, v6, v7, v8, v9, t10, v10, sum;
-
+    static doublecomplex t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, sum;
 
 /*  -- LAPACK auxiliary routine (version 2.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -92,13 +79,11 @@ ftnlen side_len;
 /*                                                                        */
 /*  ===================================================================== */
 
-    /* Function Body */
-
 /*     Quick return if possible */
     if (tau->r == 0. && tau->i == 0.) {
         return;
     }
-    if (lsame_(side, "L", 1L, 1L)) {
+    if (lsame_(side, "L")) {
 
 /*        Form  H * C, where H has order m. */
 
@@ -119,8 +104,7 @@ ftnlen side_len;
 
 /*        w := C'*v */
 
-        zgemv_("Conjugate transpose", m, n, &c_b15, c, ldc, v,
-               &c__1, &c_b2, work, &c__1, 19L);
+        zgemv_("Conjugate transpose", m, n, &c_b15, c, ldc, v, &c__1, &c_b2, work, &c__1);
 
 /*        C := C - tau * v * w' */
 
@@ -146,19 +130,17 @@ L30:
 
 /*        Special code for 2 x 2 Householder */
 
-        d_cnjg(&v1, v);
         t1.r = tau->r * v[0].r - tau->i * v[0].i,
         t1.i = tau->r * v[0].i + tau->i * v[0].r;
-        d_cnjg(&v2, &v[1]);
         t2.r = tau->r * v[1].r - tau->i * v[1].i,
         t2.i = tau->r * v[1].i + tau->i * v[1].r;
         for (j = 0; j < *n; ++j) {
             i__1 = j * *ldc;
-            sum.r = v1.r * c[i__1].r - v1.i * c[i__1].i,
-            sum.i = v1.r * c[i__1].i + v1.i * c[i__1].r;
+            sum.r = v[0].r * c[i__1].r + v[0].i * c[i__1].i,
+            sum.i = v[0].r * c[i__1].i - v[0].i * c[i__1].r;
             ++i__1;
-            sum.r += v2.r * c[i__1].r - v2.i * c[i__1].i,
-            sum.i += v2.r * c[i__1].i + v2.i * c[i__1].r;
+            sum.r += v[1].r * c[i__1].r + v[1].i * c[i__1].i,
+            sum.i += v[1].r * c[i__1].i - v[1].i * c[i__1].r;
             i__1 = j * *ldc;
             c[i__1].r -= sum.r * t1.r - sum.i * t1.i,
             c[i__1].i -= sum.r * t1.i + sum.i * t1.r;
@@ -171,25 +153,22 @@ L50:
 
 /*        Special code for 3 x 3 Householder */
 
-        d_cnjg(&v1, v);
         t1.r = tau->r * v[0].r - tau->i * v[0].i,
         t1.i = tau->r * v[0].i + tau->i * v[0].r;
-        d_cnjg(&v2, &v[1]);
         t2.r = tau->r * v[1].r - tau->i * v[1].i,
         t2.i = tau->r * v[1].i + tau->i * v[1].r;
-        d_cnjg(&v3, &v[2]);
         t3.r = tau->r * v[2].r - tau->i * v[2].i,
         t3.i = tau->r * v[2].i + tau->i * v[2].r;
         for (j = 0; j < *n; ++j) {
             i__1 = j * *ldc;
-            sum.r = v1.r * c[i__1].r - v1.i * c[i__1].i,
-            sum.i = v1.r * c[i__1].i + v1.i * c[i__1].r;
+            sum.r = v[0].r * c[i__1].r + v[0].i * c[i__1].i,
+            sum.i = v[0].r * c[i__1].i - v[0].i * c[i__1].r;
             ++i__1;
-            sum.r += v2.r * c[i__1].r - v2.i * c[i__1].i,
-            sum.i += v2.r * c[i__1].i + v2.i * c[i__1].r;
+            sum.r += v[1].r * c[i__1].r + v[1].i * c[i__1].i,
+            sum.i += v[1].r * c[i__1].i - v[1].i * c[i__1].r;
             ++i__1;
-            sum.r += v3.r * c[i__1].r - v3.i * c[i__1].i,
-            sum.i += v3.r * c[i__1].i + v3.i * c[i__1].r;
+            sum.r += v[2].r * c[i__1].r + v[2].i * c[i__1].i,
+            sum.i += v[2].r * c[i__1].i - v[2].i * c[i__1].r;
             i__1 = j * *ldc;
             c[i__1].r -= sum.r * t1.r - sum.i * t1.i,
             c[i__1].i -= sum.r * t1.i + sum.i * t1.r;
@@ -205,31 +184,27 @@ L70:
 
 /*        Special code for 4 x 4 Householder */
 
-        d_cnjg(&v1, v);
         t1.r = tau->r * v[0].r - tau->i * v[0].i,
         t1.i = tau->r * v[0].i + tau->i * v[0].r;
-        d_cnjg(&v2, &v[1]);
         t2.r = tau->r * v[1].r - tau->i * v[1].i,
         t2.i = tau->r * v[1].i + tau->i * v[1].r;
-        d_cnjg(&v3, &v[2]);
         t3.r = tau->r * v[2].r - tau->i * v[2].i,
         t3.i = tau->r * v[2].i + tau->i * v[2].r;
-        d_cnjg(&v4, &v[3]);
         t4.r = tau->r * v[3].r - tau->i * v[3].i,
         t4.i = tau->r * v[3].i + tau->i * v[3].r;
         for (j = 0; j < *n; ++j) {
             i__1 = j * *ldc;
-            sum.r = v1.r * c[i__1].r - v1.i * c[i__1].i,
-            sum.i = v1.r * c[i__1].i + v1.i * c[i__1].r;
+            sum.r = v[0].r * c[i__1].r + v[0].i * c[i__1].i,
+            sum.i = v[0].r * c[i__1].i - v[0].i * c[i__1].r;
             ++i__1;
-            sum.r += v2.r * c[i__1].r - v2.i * c[i__1].i,
-            sum.i += v2.r * c[i__1].i + v2.i * c[i__1].r;
+            sum.r += v[1].r * c[i__1].r + v[1].i * c[i__1].i,
+            sum.i += v[1].r * c[i__1].i - v[1].i * c[i__1].r;
             ++i__1;
-            sum.r += v3.r * c[i__1].r - v3.i * c[i__1].i,
-            sum.i += v3.r * c[i__1].i + v3.i * c[i__1].r;
+            sum.r += v[2].r * c[i__1].r + v[2].i * c[i__1].i,
+            sum.i += v[2].r * c[i__1].i - v[2].i * c[i__1].r;
             ++i__1;
-            sum.r += v4.r * c[i__1].r - v4.i * c[i__1].i,
-            sum.i += v4.r * c[i__1].i + v4.i * c[i__1].r;
+            sum.r += v[3].r * c[i__1].r + v[3].i * c[i__1].i,
+            sum.i += v[3].r * c[i__1].i - v[3].i * c[i__1].r;
             i__1 = j * *ldc;
             c[i__1].r -= sum.r * t1.r - sum.i * t1.i,
             c[i__1].i -= sum.r * t1.i + sum.i * t1.r;
@@ -248,37 +223,32 @@ L90:
 
 /*        Special code for 5 x 5 Householder */
 
-        d_cnjg(&v1, v);
         t1.r = tau->r * v[0].r - tau->i * v[0].i,
         t1.i = tau->r * v[0].i + tau->i * v[0].r;
-        d_cnjg(&v2, &v[1]);
         t2.r = tau->r * v[1].r - tau->i * v[1].i,
         t2.i = tau->r * v[1].i + tau->i * v[1].r;
-        d_cnjg(&v3, &v[2]);
         t3.r = tau->r * v[2].r - tau->i * v[2].i,
         t3.i = tau->r * v[2].i + tau->i * v[2].r;
-        d_cnjg(&v4, &v[3]);
         t4.r = tau->r * v[3].r - tau->i * v[3].i,
         t4.i = tau->r * v[3].i + tau->i * v[3].r;
-        d_cnjg(&v5, &v[4]);
         t5.r = tau->r * v[4].r - tau->i * v[4].i,
         t5.i = tau->r * v[4].i + tau->i * v[4].r;
         for (j = 0; j < *n; ++j) {
             i__1 = j * *ldc;
-            sum.r = v1.r * c[i__1].r - v1.i * c[i__1].i,
-            sum.i = v1.r * c[i__1].i + v1.i * c[i__1].r;
+            sum.r = v[0].r * c[i__1].r + v[0].i * c[i__1].i,
+            sum.i = v[0].r * c[i__1].i - v[0].i * c[i__1].r;
             ++i__1;
-            sum.r += v2.r * c[i__1].r - v2.i * c[i__1].i,
-            sum.i += v2.r * c[i__1].i + v2.i * c[i__1].r;
+            sum.r += v[1].r * c[i__1].r + v[1].i * c[i__1].i,
+            sum.i += v[1].r * c[i__1].i - v[1].i * c[i__1].r;
             ++i__1;
-            sum.r += v3.r * c[i__1].r - v3.i * c[i__1].i,
-            sum.i += v3.r * c[i__1].i + v3.i * c[i__1].r;
+            sum.r += v[2].r * c[i__1].r + v[2].i * c[i__1].i,
+            sum.i += v[2].r * c[i__1].i - v[2].i * c[i__1].r;
             ++i__1;
-            sum.r += v4.r * c[i__1].r - v4.i * c[i__1].i,
-            sum.i += v4.r * c[i__1].i + v4.i * c[i__1].r;
+            sum.r += v[3].r * c[i__1].r + v[3].i * c[i__1].i,
+            sum.i += v[3].r * c[i__1].i - v[3].i * c[i__1].r;
             ++i__1;
-            sum.r += v5.r * c[i__1].r - v5.i * c[i__1].i,
-            sum.i += v5.r * c[i__1].i + v5.i * c[i__1].r;
+            sum.r += v[4].r * c[i__1].r + v[4].i * c[i__1].i,
+            sum.i += v[4].r * c[i__1].i - v[4].i * c[i__1].r;
             i__1 = j * *ldc;
             c[i__1].r -= sum.r * t1.r - sum.i * t1.i,
             c[i__1].i -= sum.r * t1.i + sum.i * t1.r;
@@ -300,43 +270,37 @@ L110:
 
 /*        Special code for 6 x 6 Householder */
 
-        d_cnjg(&v1, v);
         t1.r = tau->r * v[0].r - tau->i * v[0].i,
         t1.i = tau->r * v[0].i + tau->i * v[0].r;
-        d_cnjg(&v2, &v[1]);
         t2.r = tau->r * v[1].r - tau->i * v[1].i,
         t2.i = tau->r * v[1].i + tau->i * v[1].r;
-        d_cnjg(&v3, &v[2]);
         t3.r = tau->r * v[2].r - tau->i * v[2].i,
         t3.i = tau->r * v[2].i + tau->i * v[2].r;
-        d_cnjg(&v4, &v[3]);
         t4.r = tau->r * v[3].r - tau->i * v[3].i,
         t4.i = tau->r * v[3].i + tau->i * v[3].r;
-        d_cnjg(&v5, &v[4]);
         t5.r = tau->r * v[4].r - tau->i * v[4].i,
         t5.i = tau->r * v[4].i + tau->i * v[4].r;
-        d_cnjg(&v6, &v[5]);
         t6.r = tau->r * v[5].r - tau->i * v[5].i,
         t6.i = tau->r * v[5].i + tau->i * v[5].r;
         for (j = 0; j < *n; ++j) {
             i__1 = j * *ldc;
-            sum.r = v1.r * c[i__1].r - v1.i * c[i__1].i,
-            sum.i = v1.r * c[i__1].i + v1.i * c[i__1].r;
+            sum.r = v[0].r * c[i__1].r + v[0].i * c[i__1].i,
+            sum.i = v[0].r * c[i__1].i - v[0].i * c[i__1].r;
             ++i__1;
-            sum.r += v2.r * c[i__1].r - v2.i * c[i__1].i,
-            sum.i += v2.r * c[i__1].i + v2.i * c[i__1].r;
+            sum.r += v[1].r * c[i__1].r + v[1].i * c[i__1].i,
+            sum.i += v[1].r * c[i__1].i - v[1].i * c[i__1].r;
             ++i__1;
-            sum.r += v3.r * c[i__1].r - v3.i * c[i__1].i,
-            sum.i += v3.r * c[i__1].i + v3.i * c[i__1].r;
+            sum.r += v[2].r * c[i__1].r + v[2].i * c[i__1].i,
+            sum.i += v[2].r * c[i__1].i - v[2].i * c[i__1].r;
             ++i__1;
-            sum.r += v4.r * c[i__1].r - v4.i * c[i__1].i,
-            sum.i += v4.r * c[i__1].i + v4.i * c[i__1].r;
+            sum.r += v[3].r * c[i__1].r + v[3].i * c[i__1].i,
+            sum.i += v[3].r * c[i__1].i - v[3].i * c[i__1].r;
             ++i__1;
-            sum.r += v5.r * c[i__1].r - v5.i * c[i__1].i,
-            sum.i += v5.r * c[i__1].i + v5.i * c[i__1].r;
+            sum.r += v[4].r * c[i__1].r + v[4].i * c[i__1].i,
+            sum.i += v[4].r * c[i__1].i - v[4].i * c[i__1].r;
             ++i__1;
-            sum.r += v6.r * c[i__1].r - v6.i * c[i__1].i,
-            sum.i += v6.r * c[i__1].i + v6.i * c[i__1].r;
+            sum.r += v[5].r * c[i__1].r + v[5].i * c[i__1].i,
+            sum.i += v[5].r * c[i__1].i - v[5].i * c[i__1].r;
             i__1 = j * *ldc;
             c[i__1].r -= sum.r * t1.r - sum.i * t1.i,
             c[i__1].i -= sum.r * t1.i + sum.i * t1.r;
@@ -361,49 +325,42 @@ L130:
 
 /*        Special code for 7 x 7 Householder */
 
-        d_cnjg(&v1, v);
         t1.r = tau->r * v[0].r - tau->i * v[0].i,
         t1.i = tau->r * v[0].i + tau->i * v[0].r;
-        d_cnjg(&v2, &v[1]);
         t2.r = tau->r * v[1].r - tau->i * v[1].i,
         t2.i = tau->r * v[1].i + tau->i * v[1].r;
-        d_cnjg(&v3, &v[2]);
         t3.r = tau->r * v[2].r - tau->i * v[2].i,
         t3.i = tau->r * v[2].i + tau->i * v[2].r;
-        d_cnjg(&v4, &v[3]);
         t4.r = tau->r * v[3].r - tau->i * v[3].i,
         t4.i = tau->r * v[3].i + tau->i * v[3].r;
-        d_cnjg(&v5, &v[4]);
         t5.r = tau->r * v[4].r - tau->i * v[4].i,
         t5.i = tau->r * v[4].i + tau->i * v[4].r;
-        d_cnjg(&v6, &v[5]);
         t6.r = tau->r * v[5].r - tau->i * v[5].i,
         t6.i = tau->r * v[5].i + tau->i * v[5].r;
-        d_cnjg(&v7, &v[6]);
         t7.r = tau->r * v[6].r - tau->i * v[6].i,
         t7.i = tau->r * v[6].i + tau->i * v[6].r;
         for (j = 0; j < *n; ++j) {
             i__1 = j * *ldc;
-            sum.r = v1.r * c[i__1].r - v1.i * c[i__1].i,
-            sum.i = v1.r * c[i__1].i + v1.i * c[i__1].r;
+            sum.r = v[0].r * c[i__1].r + v[0].i * c[i__1].i,
+            sum.i = v[0].r * c[i__1].i - v[0].i * c[i__1].r;
             ++i__1;
-            sum.r += v2.r * c[i__1].r - v2.i * c[i__1].i,
-            sum.i += v2.r * c[i__1].i + v2.i * c[i__1].r;
+            sum.r += v[1].r * c[i__1].r + v[1].i * c[i__1].i,
+            sum.i += v[1].r * c[i__1].i - v[1].i * c[i__1].r;
             ++i__1;
-            sum.r += v3.r * c[i__1].r - v3.i * c[i__1].i,
-            sum.i += v3.r * c[i__1].i + v3.i * c[i__1].r;
+            sum.r += v[2].r * c[i__1].r + v[2].i * c[i__1].i,
+            sum.i += v[2].r * c[i__1].i - v[2].i * c[i__1].r;
             ++i__1;
-            sum.r += v4.r * c[i__1].r - v4.i * c[i__1].i,
-            sum.i += v4.r * c[i__1].i + v4.i * c[i__1].r;
+            sum.r += v[3].r * c[i__1].r + v[3].i * c[i__1].i,
+            sum.i += v[3].r * c[i__1].i - v[3].i * c[i__1].r;
             ++i__1;
-            sum.r += v5.r * c[i__1].r - v5.i * c[i__1].i,
-            sum.i += v5.r * c[i__1].i + v5.i * c[i__1].r;
+            sum.r += v[4].r * c[i__1].r + v[4].i * c[i__1].i,
+            sum.i += v[4].r * c[i__1].i - v[4].i * c[i__1].r;
             ++i__1;
-            sum.r += v6.r * c[i__1].r - v6.i * c[i__1].i,
-            sum.i += v6.r * c[i__1].i + v6.i * c[i__1].r;
+            sum.r += v[5].r * c[i__1].r + v[5].i * c[i__1].i,
+            sum.i += v[5].r * c[i__1].i - v[5].i * c[i__1].r;
             ++i__1;
-            sum.r += v7.r * c[i__1].r - v7.i * c[i__1].i,
-            sum.i += v7.r * c[i__1].i + v7.i * c[i__1].r;
+            sum.r += v[6].r * c[i__1].r + v[6].i * c[i__1].i,
+            sum.i += v[6].r * c[i__1].i - v[6].i * c[i__1].r;
             i__1 = j * *ldc;
             c[i__1].r -= sum.r * t1.r - sum.i * t1.i,
             c[i__1].i -= sum.r * t1.i + sum.i * t1.r;
@@ -431,55 +388,47 @@ L150:
 
 /*        Special code for 8 x 8 Householder */
 
-        d_cnjg(&v1, v);
         t1.r = tau->r * v[0].r - tau->i * v[0].i,
         t1.i = tau->r * v[0].i + tau->i * v[0].r;
-        d_cnjg(&v2, &v[1]);
         t2.r = tau->r * v[1].r - tau->i * v[1].i,
         t2.i = tau->r * v[1].i + tau->i * v[1].r;
-        d_cnjg(&v3, &v[2]);
         t3.r = tau->r * v[2].r - tau->i * v[2].i,
         t3.i = tau->r * v[2].i + tau->i * v[2].r;
-        d_cnjg(&v4, &v[3]);
         t4.r = tau->r * v[3].r - tau->i * v[3].i,
         t4.i = tau->r * v[3].i + tau->i * v[3].r;
-        d_cnjg(&v5, &v[4]);
         t5.r = tau->r * v[4].r - tau->i * v[4].i,
         t5.i = tau->r * v[4].i + tau->i * v[4].r;
-        d_cnjg(&v6, &v[5]);
         t6.r = tau->r * v[5].r - tau->i * v[5].i,
         t6.i = tau->r * v[5].i + tau->i * v[5].r;
-        d_cnjg(&v7, &v[6]);
         t7.r = tau->r * v[6].r - tau->i * v[6].i,
         t7.i = tau->r * v[6].i + tau->i * v[6].r;
-        d_cnjg(&v8, &v[7]);
         t8.r = tau->r * v[7].r - tau->i * v[7].i,
         t8.i = tau->r * v[7].i + tau->i * v[7].r;
         for (j = 0; j < *n; ++j) {
             i__1 = j * *ldc;
-            sum.r = v1.r * c[i__1].r - v1.i * c[i__1].i,
-            sum.i = v1.r * c[i__1].i + v1.i * c[i__1].r;
+            sum.r = v[0].r * c[i__1].r + v[0].i * c[i__1].i,
+            sum.i = v[0].r * c[i__1].i - v[0].i * c[i__1].r;
             ++i__1;
-            sum.r += v2.r * c[i__1].r - v2.i * c[i__1].i,
-            sum.i += v2.r * c[i__1].i + v2.i * c[i__1].r;
+            sum.r += v[1].r * c[i__1].r + v[1].i * c[i__1].i,
+            sum.i += v[1].r * c[i__1].i - v[1].i * c[i__1].r;
             ++i__1;
-            sum.r += v3.r * c[i__1].r - v3.i * c[i__1].i,
-            sum.i += v3.r * c[i__1].i + v3.i * c[i__1].r;
+            sum.r += v[2].r * c[i__1].r + v[2].i * c[i__1].i,
+            sum.i += v[2].r * c[i__1].i - v[2].i * c[i__1].r;
             ++i__1;
-            sum.r += v4.r * c[i__1].r - v4.i * c[i__1].i,
-            sum.i += v4.r * c[i__1].i + v4.i * c[i__1].r;
+            sum.r += v[3].r * c[i__1].r + v[3].i * c[i__1].i,
+            sum.i += v[3].r * c[i__1].i - v[3].i * c[i__1].r;
             ++i__1;
-            sum.r += v5.r * c[i__1].r - v5.i * c[i__1].i,
-            sum.i += v5.r * c[i__1].i + v5.i * c[i__1].r;
+            sum.r += v[4].r * c[i__1].r + v[4].i * c[i__1].i,
+            sum.i += v[4].r * c[i__1].i - v[4].i * c[i__1].r;
             ++i__1;
-            sum.r += v6.r * c[i__1].r - v6.i * c[i__1].i,
-            sum.i += v6.r * c[i__1].i + v6.i * c[i__1].r;
+            sum.r += v[5].r * c[i__1].r + v[5].i * c[i__1].i,
+            sum.i += v[5].r * c[i__1].i - v[5].i * c[i__1].r;
             ++i__1;
-            sum.r += v7.r * c[i__1].r - v7.i * c[i__1].i,
-            sum.i += v7.r * c[i__1].i + v7.i * c[i__1].r;
+            sum.r += v[6].r * c[i__1].r + v[6].i * c[i__1].i,
+            sum.i += v[6].r * c[i__1].i - v[6].i * c[i__1].r;
             ++i__1;
-            sum.r += v8.r * c[i__1].r - v8.i * c[i__1].i,
-            sum.i += v8.r * c[i__1].i + v8.i * c[i__1].r;
+            sum.r += v[7].r * c[i__1].r + v[7].i * c[i__1].i,
+            sum.i += v[7].r * c[i__1].i - v[7].i * c[i__1].r;
             i__1 = j * *ldc;
             c[i__1].r -= sum.r * t1.r - sum.i * t1.i,
             c[i__1].i -= sum.r * t1.i + sum.i * t1.r;
@@ -510,61 +459,52 @@ L170:
 
 /*        Special code for 9 x 9 Householder */
 
-        d_cnjg(&v1, v);
         t1.r = tau->r * v[0].r - tau->i * v[0].i,
         t1.i = tau->r * v[0].i + tau->i * v[0].r;
-        d_cnjg(&v2, &v[1]);
         t2.r = tau->r * v[1].r - tau->i * v[1].i,
         t2.i = tau->r * v[1].i + tau->i * v[1].r;
-        d_cnjg(&v3, &v[2]);
         t3.r = tau->r * v[2].r - tau->i * v[2].i,
         t3.i = tau->r * v[2].i + tau->i * v[2].r;
-        d_cnjg(&v4, &v[3]);
         t4.r = tau->r * v[3].r - tau->i * v[3].i,
         t4.i = tau->r * v[3].i + tau->i * v[3].r;
-        d_cnjg(&v5, &v[4]);
         t5.r = tau->r * v[4].r - tau->i * v[4].i,
         t5.i = tau->r * v[4].i + tau->i * v[4].r;
-        d_cnjg(&v6, &v[5]);
         t6.r = tau->r * v[5].r - tau->i * v[5].i,
         t6.i = tau->r * v[5].i + tau->i * v[5].r;
-        d_cnjg(&v7, &v[6]);
         t7.r = tau->r * v[6].r - tau->i * v[6].i,
         t7.i = tau->r * v[6].i + tau->i * v[6].r;
-        d_cnjg(&v8, &v[7]);
         t8.r = tau->r * v[7].r - tau->i * v[7].i,
         t8.i = tau->r * v[7].i + tau->i * v[7].r;
-        d_cnjg(&v9, &v[8]);
         t9.r = tau->r * v[8].r - tau->i * v[8].i,
         t9.i = tau->r * v[8].i + tau->i * v[8].r;
         for (j = 0; j < *n; ++j) {
             i__1 = j * *ldc;
-            sum.r = v1.r * c[i__1].r - v1.i * c[i__1].i,
-            sum.i = v1.r * c[i__1].i + v1.i * c[i__1].r;
+            sum.r = v[0].r * c[i__1].r + v[0].i * c[i__1].i,
+            sum.i = v[0].r * c[i__1].i - v[0].i * c[i__1].r;
             ++i__1;
-            sum.r += v2.r * c[i__1].r - v2.i * c[i__1].i,
-            sum.i += v2.r * c[i__1].i + v2.i * c[i__1].r;
+            sum.r += v[1].r * c[i__1].r + v[1].i * c[i__1].i,
+            sum.i += v[1].r * c[i__1].i - v[1].i * c[i__1].r;
             ++i__1;
-            sum.r += v3.r * c[i__1].r - v3.i * c[i__1].i,
-            sum.i += v3.r * c[i__1].i + v3.i * c[i__1].r;
+            sum.r += v[2].r * c[i__1].r + v[2].i * c[i__1].i,
+            sum.i += v[2].r * c[i__1].i - v[2].i * c[i__1].r;
             ++i__1;
-            sum.r += v4.r * c[i__1].r - v4.i * c[i__1].i,
-            sum.i += v4.r * c[i__1].i + v4.i * c[i__1].r;
+            sum.r += v[3].r * c[i__1].r + v[3].i * c[i__1].i,
+            sum.i += v[3].r * c[i__1].i - v[3].i * c[i__1].r;
             ++i__1;
-            sum.r += v5.r * c[i__1].r - v5.i * c[i__1].i,
-            sum.i += v5.r * c[i__1].i + v5.i * c[i__1].r;
+            sum.r += v[4].r * c[i__1].r + v[4].i * c[i__1].i,
+            sum.i += v[4].r * c[i__1].i - v[4].i * c[i__1].r;
             ++i__1;
-            sum.r += v6.r * c[i__1].r - v6.i * c[i__1].i,
-            sum.i += v6.r * c[i__1].i + v6.i * c[i__1].r;
+            sum.r += v[5].r * c[i__1].r + v[5].i * c[i__1].i,
+            sum.i += v[5].r * c[i__1].i - v[5].i * c[i__1].r;
             ++i__1;
-            sum.r += v7.r * c[i__1].r - v7.i * c[i__1].i,
-            sum.i += v7.r * c[i__1].i + v7.i * c[i__1].r;
+            sum.r += v[6].r * c[i__1].r + v[6].i * c[i__1].i,
+            sum.i += v[6].r * c[i__1].i - v[6].i * c[i__1].r;
             ++i__1;
-            sum.r += v8.r * c[i__1].r - v8.i * c[i__1].i,
-            sum.i += v8.r * c[i__1].i + v8.i * c[i__1].r;
+            sum.r += v[7].r * c[i__1].r + v[7].i * c[i__1].i,
+            sum.i += v[7].r * c[i__1].i - v[7].i * c[i__1].r;
             ++i__1;
-            sum.r += v9.r * c[i__1].r - v9.i * c[i__1].i,
-            sum.i += v9.r * c[i__1].i + v9.i * c[i__1].r;
+            sum.r += v[8].r * c[i__1].r + v[8].i * c[i__1].i,
+            sum.i += v[8].r * c[i__1].i - v[8].i * c[i__1].r;
             i__1 = j * *ldc;
             c[i__1].r -= sum.r * t1.r - sum.i * t1.i,
             c[i__1].i -= sum.r * t1.i + sum.i * t1.r;
@@ -598,67 +538,57 @@ L190:
 
 /*        Special code for 10 x 10 Householder */
 
-        d_cnjg(&v1, v);
         t1.r = tau->r * v[0].r - tau->i * v[0].i,
         t1.i = tau->r * v[0].i + tau->i * v[0].r;
-        d_cnjg(&v2, &v[1]);
         t2.r = tau->r * v[1].r - tau->i * v[1].i,
         t2.i = tau->r * v[1].i + tau->i * v[1].r;
-        d_cnjg(&v3, &v[2]);
         t3.r = tau->r * v[2].r - tau->i * v[2].i,
         t3.i = tau->r * v[2].i + tau->i * v[2].r;
-        d_cnjg(&v4, &v[3]);
         t4.r = tau->r * v[3].r - tau->i * v[3].i,
         t4.i = tau->r * v[3].i + tau->i * v[3].r;
-        d_cnjg(&v5, &v[4]);
         t5.r = tau->r * v[4].r - tau->i * v[4].i,
         t5.i = tau->r * v[4].i + tau->i * v[4].r;
-        d_cnjg(&v6, &v[5]);
         t6.r = tau->r * v[5].r - tau->i * v[5].i,
         t6.i = tau->r * v[5].i + tau->i * v[5].r;
-        d_cnjg(&v7, &v[6]);
         t7.r = tau->r * v[6].r - tau->i * v[6].i,
         t7.i = tau->r * v[6].i + tau->i * v[6].r;
-        d_cnjg(&v8, &v[7]);
         t8.r = tau->r * v[7].r - tau->i * v[7].i,
         t8.i = tau->r * v[7].i + tau->i * v[7].r;
-        d_cnjg(&v9, &v[8]);
         t9.r = tau->r * v[8].r - tau->i * v[8].i,
         t9.i = tau->r * v[8].i + tau->i * v[8].r;
-        d_cnjg(&v10, &v[9]);
         t10.r = tau->r * v[9].r - tau->i * v[9].i,
         t10.i = tau->r * v[9].i + tau->i * v[9].r;
         for (j = 0; j < *n; ++j) {
             i__1 = j * *ldc;
-            sum.r = v1.r * c[i__1].r - v1.i * c[i__1].i,
-            sum.i = v1.r * c[i__1].i + v1.i * c[i__1].r;
+            sum.r = v[0].r * c[i__1].r + v[0].i * c[i__1].i,
+            sum.i = v[0].r * c[i__1].i - v[0].i * c[i__1].r;
             ++i__1;
-            sum.r += v2.r * c[i__1].r - v2.i * c[i__1].i,
-            sum.i += v2.r * c[i__1].i + v2.i * c[i__1].r;
+            sum.r += v[1].r * c[i__1].r + v[1].i * c[i__1].i,
+            sum.i += v[1].r * c[i__1].i - v[1].i * c[i__1].r;
             ++i__1;
-            sum.r += v3.r * c[i__1].r - v3.i * c[i__1].i,
-            sum.i += v3.r * c[i__1].i + v3.i * c[i__1].r;
+            sum.r += v[2].r * c[i__1].r + v[2].i * c[i__1].i,
+            sum.i += v[2].r * c[i__1].i - v[2].i * c[i__1].r;
             ++i__1;
-            sum.r += v4.r * c[i__1].r - v4.i * c[i__1].i,
-            sum.i += v4.r * c[i__1].i + v4.i * c[i__1].r;
+            sum.r += v[3].r * c[i__1].r + v[3].i * c[i__1].i,
+            sum.i += v[3].r * c[i__1].i - v[3].i * c[i__1].r;
             ++i__1;
-            sum.r += v5.r * c[i__1].r - v5.i * c[i__1].i,
-            sum.i += v5.r * c[i__1].i + v5.i * c[i__1].r;
+            sum.r += v[4].r * c[i__1].r + v[4].i * c[i__1].i,
+            sum.i += v[4].r * c[i__1].i - v[4].i * c[i__1].r;
             ++i__1;
-            sum.r += v6.r * c[i__1].r - v6.i * c[i__1].i,
-            sum.i += v6.r * c[i__1].i + v6.i * c[i__1].r;
+            sum.r += v[5].r * c[i__1].r + v[5].i * c[i__1].i,
+            sum.i += v[5].r * c[i__1].i - v[5].i * c[i__1].r;
             ++i__1;
-            sum.r += v7.r * c[i__1].r - v7.i * c[i__1].i,
-            sum.i += v7.r * c[i__1].i + v7.i * c[i__1].r;
+            sum.r += v[6].r * c[i__1].r + v[6].i * c[i__1].i,
+            sum.i += v[6].r * c[i__1].i - v[6].i * c[i__1].r;
             ++i__1;
-            sum.r += v8.r * c[i__1].r - v8.i * c[i__1].i,
-            sum.i += v8.r * c[i__1].i + v8.i * c[i__1].r;
+            sum.r += v[7].r * c[i__1].r + v[7].i * c[i__1].i,
+            sum.i += v[7].r * c[i__1].i - v[7].i * c[i__1].r;
             ++i__1;
-            sum.r += v9.r * c[i__1].r - v9.i * c[i__1].i,
-            sum.i += v9.r * c[i__1].i + v9.i * c[i__1].r;
+            sum.r += v[8].r * c[i__1].r + v[8].i * c[i__1].i,
+            sum.i += v[8].r * c[i__1].i - v[8].i * c[i__1].r;
             ++i__1;
-            sum.r += v10.r * c[i__1].r - v10.i * c[i__1].i,
-            sum.i += v10.r * c[i__1].i + v10.i * c[i__1].r;
+            sum.r += v[9].r * c[i__1].r + v[9].i * c[i__1].i,
+            sum.i += v[9].r * c[i__1].i - v[9].i * c[i__1].r;
             i__1 = j * *ldc;
             c[i__1].r -= sum.r * t1.r - sum.i * t1.i,
             c[i__1].i -= sum.r * t1.i + sum.i * t1.r;
@@ -712,7 +642,7 @@ L190:
 
 /*        w := C * v */
 
-        zgemv_("No transpose", m, n, &c_b15, c, ldc, v, &c__1, &c_b2, work, &c__1, 12L);
+        zgemv_("No transpose", m, n, &c_b15, c, ldc, v, &c__1, &c_b2, work, &c__1);
 
 /*        C := C - tau * w * v' */
 
@@ -739,21 +669,17 @@ L230:
 
 /*        Special code for 2 x 2 Householder */
 
-        v1.r = v[0].r, v1.i = v[0].i;
-        d_cnjg(&z__1, &v1);
-        t1.r = tau->r * z__1.r - tau->i * z__1.i,
-        t1.i = tau->r * z__1.i + tau->i * z__1.r;
-        v2.r = v[1].r, v2.i = v[1].i;
-        d_cnjg(&z__1, &v2);
-        t2.r = tau->r * z__1.r - tau->i * z__1.i,
-        t2.i = tau->r * z__1.i + tau->i * z__1.r;
+        t1.r = tau->r * v[0].r + tau->i * v[0].i,
+        t1.i = - tau->r * v[0].i + tau->i * v[0].r;
+        t2.r = tau->r * v[1].r + tau->i * v[1].i,
+        t2.i = - tau->r * v[1].i + tau->i * v[1].r;
         for (j = 0; j < *m; ++j) {
             i__1 = j;
-            sum.r = v1.r * c[i__1].r - v1.i * c[i__1].i,
-            sum.i = v1.r * c[i__1].i + v1.i * c[i__1].r;
+            sum.r = v[0].r * c[i__1].r - v[0].i * c[i__1].i,
+            sum.i = v[0].r * c[i__1].i + v[0].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v2.r * c[i__1].r - v2.i * c[i__1].i,
-            sum.i += v2.r * c[i__1].i + v2.i * c[i__1].r;
+            sum.r += v[1].r * c[i__1].r - v[1].i * c[i__1].i,
+            sum.i += v[1].r * c[i__1].i + v[1].i * c[i__1].r;
             i__1 = j;
             c[i__1].r -= sum.r * t1.r - sum.i * t1.i,
             c[i__1].i -= sum.r * t1.i + sum.i * t1.r;
@@ -766,28 +692,22 @@ L250:
 
 /*        Special code for 3 x 3 Householder */
 
-        v1.r = v[0].r, v1.i = v[0].i;
-        d_cnjg(&z__1, &v1);
-        t1.r = tau->r * z__1.r - tau->i * z__1.i,
-        t1.i = tau->r * z__1.i + tau->i * z__1.r;
-        v2.r = v[1].r, v2.i = v[1].i;
-        d_cnjg(&z__1, &v2);
-        t2.r = tau->r * z__1.r - tau->i * z__1.i,
-        t2.i = tau->r * z__1.i + tau->i * z__1.r;
-        v3.r = v[2].r, v3.i = v[2].i;
-        d_cnjg(&z__1, &v3);
-        t3.r = tau->r * z__1.r - tau->i * z__1.i,
-        t3.i = tau->r * z__1.i + tau->i * z__1.r;
+        t1.r = tau->r * v[0].r + tau->i * v[0].i,
+        t1.i = - tau->r * v[0].i + tau->i * v[0].r;
+        t2.r = tau->r * v[1].r + tau->i * v[1].i,
+        t2.i = - tau->r * v[1].i + tau->i * v[1].r;
+        t3.r = tau->r * v[2].r + tau->i * v[2].i,
+        t3.i = - tau->r * v[2].i + tau->i * v[2].r;
         for (j = 0; j < *m; ++j) {
             i__1 = j;
-            sum.r = v1.r * c[i__1].r - v1.i * c[i__1].i,
-            sum.i = v1.r * c[i__1].i + v1.i * c[i__1].r;
+            sum.r = v[0].r * c[i__1].r - v[0].i * c[i__1].i,
+            sum.i = v[0].r * c[i__1].i + v[0].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v2.r * c[i__1].r - v2.i * c[i__1].i,
-            sum.i += v2.r * c[i__1].i + v2.i * c[i__1].r;
+            sum.r += v[1].r * c[i__1].r - v[1].i * c[i__1].i,
+            sum.i += v[1].r * c[i__1].i + v[1].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v3.r * c[i__1].r - v3.i * c[i__1].i,
-            sum.i += v3.r * c[i__1].i + v3.i * c[i__1].r;
+            sum.r += v[2].r * c[i__1].r - v[2].i * c[i__1].i,
+            sum.i += v[2].r * c[i__1].i + v[2].i * c[i__1].r;
             i__1 = j;
             c[i__1].r -= sum.r * t1.r - sum.i * t1.i,
             c[i__1].i -= sum.r * t1.i + sum.i * t1.r;
@@ -803,35 +723,27 @@ L270:
 
 /*        Special code for 4 x 4 Householder */
 
-        v1.r = v[0].r, v1.i = v[0].i;
-        d_cnjg(&z__1, &v1);
-        t1.r = tau->r * z__1.r - tau->i * z__1.i,
-        t1.i = tau->r * z__1.i + tau->i * z__1.r;
-        v2.r = v[1].r, v2.i = v[1].i;
-        d_cnjg(&z__1, &v2);
-        t2.r = tau->r * z__1.r - tau->i * z__1.i,
-        t2.i = tau->r * z__1.i + tau->i * z__1.r;
-        v3.r = v[2].r, v3.i = v[2].i;
-        d_cnjg(&z__1, &v3);
-        t3.r = tau->r * z__1.r - tau->i * z__1.i,
-        t3.i = tau->r * z__1.i + tau->i * z__1.r;
-        v4.r = v[3].r, v4.i = v[3].i;
-        d_cnjg(&z__1, &v4);
-        t4.r = tau->r * z__1.r - tau->i * z__1.i,
-        t4.i = tau->r * z__1.i + tau->i * z__1.r;
+        t1.r = tau->r * v[0].r + tau->i * v[0].i,
+        t1.i = - tau->r * v[0].i + tau->i * v[0].r;
+        t2.r = tau->r * v[1].r + tau->i * v[1].i,
+        t2.i = - tau->r * v[1].i + tau->i * v[1].r;
+        t3.r = tau->r * v[2].r + tau->i * v[2].i,
+        t3.i = - tau->r * v[2].i + tau->i * v[2].r;
+        t4.r = tau->r * v[3].r + tau->i * v[3].i,
+        t4.i = - tau->r * v[3].i + tau->i * v[3].r;
         for (j = 0; j < *m; ++j) {
             i__1 = j;
-            sum.r = v1.r * c[i__1].r - v1.i * c[i__1].i,
-            sum.i = v1.r * c[i__1].i + v1.i * c[i__1].r;
+            sum.r = v[0].r * c[i__1].r - v[0].i * c[i__1].i,
+            sum.i = v[0].r * c[i__1].i + v[0].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v2.r * c[i__1].r - v2.i * c[i__1].i,
-            sum.i += v2.r * c[i__1].i + v2.i * c[i__1].r;
+            sum.r += v[1].r * c[i__1].r - v[1].i * c[i__1].i,
+            sum.i += v[1].r * c[i__1].i + v[1].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v3.r * c[i__1].r - v3.i * c[i__1].i,
-            sum.i += v3.r * c[i__1].i + v3.i * c[i__1].r;
+            sum.r += v[2].r * c[i__1].r - v[2].i * c[i__1].i,
+            sum.i += v[2].r * c[i__1].i + v[2].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v4.r * c[i__1].r - v4.i * c[i__1].i,
-            sum.i += v4.r * c[i__1].i + v4.i * c[i__1].r;
+            sum.r += v[3].r * c[i__1].r - v[3].i * c[i__1].i,
+            sum.i += v[3].r * c[i__1].i + v[3].i * c[i__1].r;
             i__1 = j;
             c[i__1].r -= sum.r * t1.r - sum.i * t1.i,
             c[i__1].i -= sum.r * t1.i + sum.i * t1.r;
@@ -850,42 +762,32 @@ L290:
 
 /*        Special code for 5 x 5 Householder */
 
-        v1.r = v[0].r, v1.i = v[0].i;
-        d_cnjg(&z__1, &v1);
-        t1.r = tau->r * z__1.r - tau->i * z__1.i,
-        t1.i = tau->r * z__1.i + tau->i * z__1.r;
-        v2.r = v[1].r, v2.i = v[1].i;
-        d_cnjg(&z__1, &v2);
-        t2.r = tau->r * z__1.r - tau->i * z__1.i,
-        t2.i = tau->r * z__1.i + tau->i * z__1.r;
-        v3.r = v[2].r, v3.i = v[2].i;
-        d_cnjg(&z__1, &v3);
-        t3.r = tau->r * z__1.r - tau->i * z__1.i,
-        t3.i = tau->r * z__1.i + tau->i * z__1.r;
-        v4.r = v[3].r, v4.i = v[3].i;
-        d_cnjg(&z__1, &v4);
-        t4.r = tau->r * z__1.r - tau->i * z__1.i,
-        t4.i = tau->r * z__1.i + tau->i * z__1.r;
-        v5.r = v[4].r, v5.i = v[4].i;
-        d_cnjg(&z__1, &v5);
-        t5.r = tau->r * z__1.r - tau->i * z__1.i,
-        t5.i = tau->r * z__1.i + tau->i * z__1.r;
+        t1.r = tau->r * v[0].r + tau->i * v[0].i,
+        t1.i = - tau->r * v[0].i + tau->i * v[0].r;
+        t2.r = tau->r * v[1].r + tau->i * v[1].i,
+        t2.i = - tau->r * v[1].i + tau->i * v[1].r;
+        t3.r = tau->r * v[2].r + tau->i * v[2].i,
+        t3.i = - tau->r * v[2].i + tau->i * v[2].r;
+        t4.r = tau->r * v[3].r + tau->i * v[3].i,
+        t4.i = - tau->r * v[3].i + tau->i * v[3].r;
+        t5.r = tau->r * v[4].r + tau->i * v[4].i,
+        t5.i = - tau->r * v[4].i + tau->i * v[4].r;
         for (j = 0; j < *m; ++j) {
             i__1 = j;
-            sum.r = v1.r * c[i__1].r - v1.i * c[i__1].i,
-            sum.i = v1.r * c[i__1].i + v1.i * c[i__1].r;
+            sum.r = v[0].r * c[i__1].r - v[0].i * c[i__1].i,
+            sum.i = v[0].r * c[i__1].i + v[0].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v2.r * c[i__1].r - v2.i * c[i__1].i,
-            sum.i += v2.r * c[i__1].i + v2.i * c[i__1].r;
+            sum.r += v[1].r * c[i__1].r - v[1].i * c[i__1].i,
+            sum.i += v[1].r * c[i__1].i + v[1].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v3.r * c[i__1].r - v3.i * c[i__1].i,
-            sum.i += v3.r * c[i__1].i + v3.i * c[i__1].r;
+            sum.r += v[2].r * c[i__1].r - v[2].i * c[i__1].i,
+            sum.i += v[2].r * c[i__1].i + v[2].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v4.r * c[i__1].r - v4.i * c[i__1].i,
-            sum.i += v4.r * c[i__1].i + v4.i * c[i__1].r;
+            sum.r += v[3].r * c[i__1].r - v[3].i * c[i__1].i,
+            sum.i += v[3].r * c[i__1].i + v[3].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v5.r * c[i__1].r - v5.i * c[i__1].i,
-            sum.i += v5.r * c[i__1].i + v5.i * c[i__1].r;
+            sum.r += v[4].r * c[i__1].r - v[4].i * c[i__1].i,
+            sum.i += v[4].r * c[i__1].i + v[4].i * c[i__1].r;
             i__1 = j;
             c[i__1].r -= sum.r * t1.r - sum.i * t1.i,
             c[i__1].i -= sum.r * t1.i + sum.i * t1.r;
@@ -907,49 +809,37 @@ L310:
 
 /*        Special code for 6 x 6 Householder */
 
-        v1.r = v[0].r, v1.i = v[0].i;
-        d_cnjg(&z__1, &v1);
-        t1.r = tau->r * z__1.r - tau->i * z__1.i,
-        t1.i = tau->r * z__1.i + tau->i * z__1.r;
-        v2.r = v[1].r, v2.i = v[1].i;
-        d_cnjg(&z__1, &v2);
-        t2.r = tau->r * z__1.r - tau->i * z__1.i,
-        t2.i = tau->r * z__1.i + tau->i * z__1.r;
-        v3.r = v[2].r, v3.i = v[2].i;
-        d_cnjg(&z__1, &v3);
-        t3.r = tau->r * z__1.r - tau->i * z__1.i,
-        t3.i = tau->r * z__1.i + tau->i * z__1.r;
-        v4.r = v[3].r, v4.i = v[3].i;
-        d_cnjg(&z__1, &v4);
-        t4.r = tau->r * z__1.r - tau->i * z__1.i,
-        t4.i = tau->r * z__1.i + tau->i * z__1.r;
-        v5.r = v[4].r, v5.i = v[4].i;
-        d_cnjg(&z__1, &v5);
-        t5.r = tau->r * z__1.r - tau->i * z__1.i,
-        t5.i = tau->r * z__1.i + tau->i * z__1.r;
-        v6.r = v[5].r, v6.i = v[5].i;
-        d_cnjg(&z__1, &v6);
-        t6.r = tau->r * z__1.r - tau->i * z__1.i,
-        t6.i = tau->r * z__1.i + tau->i * z__1.r;
+        t1.r = tau->r * v[0].r + tau->i * v[0].i,
+        t1.i = - tau->r * v[0].i + tau->i * v[0].r;
+        t2.r = tau->r * v[1].r + tau->i * v[1].i,
+        t2.i = - tau->r * v[1].i + tau->i * v[1].r;
+        t3.r = tau->r * v[2].r + tau->i * v[2].i,
+        t3.i = - tau->r * v[2].i + tau->i * v[2].r;
+        t4.r = tau->r * v[3].r + tau->i * v[3].i,
+        t4.i = - tau->r * v[3].i + tau->i * v[3].r;
+        t5.r = tau->r * v[4].r + tau->i * v[4].i,
+        t5.i = - tau->r * v[4].i + tau->i * v[4].r;
+        t6.r = tau->r * v[5].r + tau->i * v[5].i,
+        t6.i = - tau->r * v[5].i + tau->i * v[5].r;
         for (j = 0; j < *m; ++j) {
             i__1 = j;
-            sum.r = v1.r * c[i__1].r - v1.i * c[i__1].i,
-            sum.i = v1.r * c[i__1].i + v1.i * c[i__1].r;
+            sum.r = v[0].r * c[i__1].r - v[0].i * c[i__1].i,
+            sum.i = v[0].r * c[i__1].i + v[0].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v2.r * c[i__1].r - v2.i * c[i__1].i,
-            sum.i += v2.r * c[i__1].i + v2.i * c[i__1].r;
+            sum.r += v[1].r * c[i__1].r - v[1].i * c[i__1].i,
+            sum.i += v[1].r * c[i__1].i + v[1].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v3.r * c[i__1].r - v3.i * c[i__1].i,
-            sum.i += v3.r * c[i__1].i + v3.i * c[i__1].r;
+            sum.r += v[2].r * c[i__1].r - v[2].i * c[i__1].i,
+            sum.i += v[2].r * c[i__1].i + v[2].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v4.r * c[i__1].r - v4.i * c[i__1].i,
-            sum.i += v4.r * c[i__1].i + v4.i * c[i__1].r;
+            sum.r += v[3].r * c[i__1].r - v[3].i * c[i__1].i,
+            sum.i += v[3].r * c[i__1].i + v[3].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v5.r * c[i__1].r - v5.i * c[i__1].i,
-            sum.i += v5.r * c[i__1].i + v5.i * c[i__1].r;
+            sum.r += v[4].r * c[i__1].r - v[4].i * c[i__1].i,
+            sum.i += v[4].r * c[i__1].i + v[4].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v6.r * c[i__1].r - v6.i * c[i__1].i,
-            sum.i += v6.r * c[i__1].i + v6.i * c[i__1].r;
+            sum.r += v[5].r * c[i__1].r - v[5].i * c[i__1].i,
+            sum.i += v[5].r * c[i__1].i + v[5].i * c[i__1].r;
             i__1 = j;
             c[i__1].r -= sum.r * t1.r - sum.i * t1.i,
             c[i__1].i -= sum.r * t1.i + sum.i * t1.r;
@@ -974,56 +864,42 @@ L330:
 
 /*        Special code for 7 x 7 Householder */
 
-        v1.r = v[0].r, v1.i = v[0].i;
-        d_cnjg(&z__1, &v1);
-        t1.r = tau->r * z__1.r - tau->i * z__1.i,
-        t1.i = tau->r * z__1.i + tau->i * z__1.r;
-        v2.r = v[1].r, v2.i = v[1].i;
-        d_cnjg(&z__1, &v2);
-        t2.r = tau->r * z__1.r - tau->i * z__1.i,
-        t2.i = tau->r * z__1.i + tau->i * z__1.r;
-        v3.r = v[2].r, v3.i = v[2].i;
-        d_cnjg(&z__1, &v3);
-        t3.r = tau->r * z__1.r - tau->i * z__1.i,
-        t3.i = tau->r * z__1.i + tau->i * z__1.r;
-        v4.r = v[3].r, v4.i = v[3].i;
-        d_cnjg(&z__1, &v4);
-        t4.r = tau->r * z__1.r - tau->i * z__1.i,
-        t4.i = tau->r * z__1.i + tau->i * z__1.r;
-        v5.r = v[4].r, v5.i = v[4].i;
-        d_cnjg(&z__1, &v5);
-        t5.r = tau->r * z__1.r - tau->i * z__1.i,
-        t5.i = tau->r * z__1.i + tau->i * z__1.r;
-        v6.r = v[5].r, v6.i = v[5].i;
-        d_cnjg(&z__1, &v6);
-        t6.r = tau->r * z__1.r - tau->i * z__1.i,
-        t6.i = tau->r * z__1.i + tau->i * z__1.r;
-        v7.r = v[6].r, v7.i = v[6].i;
-        d_cnjg(&z__1, &v7);
-        t7.r = tau->r * z__1.r - tau->i * z__1.i,
-        t7.i = tau->r * z__1.i + tau->i * z__1.r;
+        t1.r = tau->r * v[0].r + tau->i * v[0].i,
+        t1.i = - tau->r * v[0].i + tau->i * v[0].r;
+        t2.r = tau->r * v[1].r + tau->i * v[1].i,
+        t2.i = - tau->r * v[1].i + tau->i * v[1].r;
+        t3.r = tau->r * v[2].r + tau->i * v[2].i,
+        t3.i = - tau->r * v[2].i + tau->i * v[2].r;
+        t4.r = tau->r * v[3].r + tau->i * v[3].i,
+        t4.i = - tau->r * v[3].i + tau->i * v[3].r;
+        t5.r = tau->r * v[4].r + tau->i * v[4].i,
+        t5.i = - tau->r * v[4].i + tau->i * v[4].r;
+        t6.r = tau->r * v[5].r + tau->i * v[5].i,
+        t6.i = - tau->r * v[5].i + tau->i * v[5].r;
+        t7.r = tau->r * v[6].r + tau->i * v[6].i,
+        t7.i = - tau->r * v[6].i + tau->i * v[6].r;
         for (j = 0; j < *m; ++j) {
             i__1 = j;
-            sum.r = v1.r * c[i__1].r - v1.i * c[i__1].i,
-            sum.i = v1.r * c[i__1].i + v1.i * c[i__1].r;
+            sum.r = v[0].r * c[i__1].r - v[0].i * c[i__1].i,
+            sum.i = v[0].r * c[i__1].i + v[0].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v2.r * c[i__1].r - v2.i * c[i__1].i,
-            sum.i += v2.r * c[i__1].i + v2.i * c[i__1].r;
+            sum.r += v[1].r * c[i__1].r - v[1].i * c[i__1].i,
+            sum.i += v[1].r * c[i__1].i + v[1].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v3.r * c[i__1].r - v3.i * c[i__1].i,
-            sum.i += v3.r * c[i__1].i + v3.i * c[i__1].r;
+            sum.r += v[2].r * c[i__1].r - v[2].i * c[i__1].i,
+            sum.i += v[2].r * c[i__1].i + v[2].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v4.r * c[i__1].r - v4.i * c[i__1].i,
-            sum.i += v4.r * c[i__1].i + v4.i * c[i__1].r;
+            sum.r += v[3].r * c[i__1].r - v[3].i * c[i__1].i,
+            sum.i += v[3].r * c[i__1].i + v[3].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v5.r * c[i__1].r - v5.i * c[i__1].i,
-            sum.i += v5.r * c[i__1].i + v5.i * c[i__1].r;
+            sum.r += v[4].r * c[i__1].r - v[4].i * c[i__1].i,
+            sum.i += v[4].r * c[i__1].i + v[4].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v6.r * c[i__1].r - v6.i * c[i__1].i,
-            sum.i += v6.r * c[i__1].i + v6.i * c[i__1].r;
+            sum.r += v[5].r * c[i__1].r - v[5].i * c[i__1].i,
+            sum.i += v[5].r * c[i__1].i + v[5].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v7.r * c[i__1].r - v7.i * c[i__1].i,
-            sum.i += v7.r * c[i__1].i + v7.i * c[i__1].r;
+            sum.r += v[6].r * c[i__1].r - v[6].i * c[i__1].i,
+            sum.i += v[6].r * c[i__1].i + v[6].i * c[i__1].r;
             i__1 = j;
             c[i__1].r -= sum.r * t1.r - sum.i * t1.i,
             c[i__1].i -= sum.r * t1.i + sum.i * t1.r;
@@ -1051,63 +927,47 @@ L350:
 
 /*        Special code for 8 x 8 Householder */
 
-        v1.r = v[0].r, v1.i = v[0].i;
-        d_cnjg(&z__1, &v1);
-        t1.r = tau->r * z__1.r - tau->i * z__1.i,
-        t1.i = tau->r * z__1.i + tau->i * z__1.r;
-        v2.r = v[1].r, v2.i = v[1].i;
-        d_cnjg(&z__1, &v2);
-        t2.r = tau->r * z__1.r - tau->i * z__1.i,
-        t2.i = tau->r * z__1.i + tau->i * z__1.r;
-        v3.r = v[2].r, v3.i = v[2].i;
-        d_cnjg(&z__1, &v3);
-        t3.r = tau->r * z__1.r - tau->i * z__1.i,
-        t3.i = tau->r * z__1.i + tau->i * z__1.r;
-        v4.r = v[3].r, v4.i = v[3].i;
-        d_cnjg(&z__1, &v4);
-        t4.r = tau->r * z__1.r - tau->i * z__1.i,
-        t4.i = tau->r * z__1.i + tau->i * z__1.r;
-        v5.r = v[4].r, v5.i = v[4].i;
-        d_cnjg(&z__1, &v5);
-        t5.r = tau->r * z__1.r - tau->i * z__1.i,
-        t5.i = tau->r * z__1.i + tau->i * z__1.r;
-        v6.r = v[5].r, v6.i = v[5].i;
-        d_cnjg(&z__1, &v6);
-        t6.r = tau->r * z__1.r - tau->i * z__1.i,
-        t6.i = tau->r * z__1.i + tau->i * z__1.r;
-        v7.r = v[6].r, v7.i = v[6].i;
-        d_cnjg(&z__1, &v7);
-        t7.r = tau->r * z__1.r - tau->i * z__1.i,
-        t7.i = tau->r * z__1.i + tau->i * z__1.r;
-        v8.r = v[7].r, v8.i = v[7].i;
-        d_cnjg(&z__1, &v8);
-        t8.r = tau->r * z__1.r - tau->i * z__1.i,
-        t8.i = tau->r * z__1.i + tau->i * z__1.r;
+        t1.r = tau->r * v[0].r + tau->i * v[0].i,
+        t1.i = - tau->r * v[0].i + tau->i * v[0].r;
+        t2.r = tau->r * v[1].r + tau->i * v[1].i,
+        t2.i = - tau->r * v[1].i + tau->i * v[1].r;
+        t3.r = tau->r * v[2].r + tau->i * v[2].i,
+        t3.i = - tau->r * v[2].i + tau->i * v[2].r;
+        t4.r = tau->r * v[3].r + tau->i * v[3].i,
+        t4.i = - tau->r * v[3].i + tau->i * v[3].r;
+        t5.r = tau->r * v[4].r + tau->i * v[4].i,
+        t5.i = - tau->r * v[4].i + tau->i * v[4].r;
+        t6.r = tau->r * v[5].r + tau->i * v[5].i,
+        t6.i = - tau->r * v[5].i + tau->i * v[5].r;
+        t7.r = tau->r * v[6].r + tau->i * v[6].i,
+        t7.i = - tau->r * v[6].i + tau->i * v[6].r;
+        t8.r = tau->r * v[7].r + tau->i * v[7].i,
+        t8.i = - tau->r * v[7].i + tau->i * v[7].r;
         for (j = 0; j < *m; ++j) {
             i__1 = j;
-            sum.r = v1.r * c[i__1].r - v1.i * c[i__1].i,
-            sum.i = v1.r * c[i__1].i + v1.i * c[i__1].r;
+            sum.r = v[0].r * c[i__1].r - v[0].i * c[i__1].i,
+            sum.i = v[0].r * c[i__1].i + v[0].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v2.r * c[i__1].r - v2.i * c[i__1].i,
-            sum.i += v2.r * c[i__1].i + v2.i * c[i__1].r;
+            sum.r += v[1].r * c[i__1].r - v[1].i * c[i__1].i,
+            sum.i += v[1].r * c[i__1].i + v[1].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v3.r * c[i__1].r - v3.i * c[i__1].i,
-            sum.i += v3.r * c[i__1].i + v3.i * c[i__1].r;
+            sum.r += v[2].r * c[i__1].r - v[2].i * c[i__1].i,
+            sum.i += v[2].r * c[i__1].i + v[2].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v4.r * c[i__1].r - v4.i * c[i__1].i,
-            sum.i += v4.r * c[i__1].i + v4.i * c[i__1].r;
+            sum.r += v[3].r * c[i__1].r - v[3].i * c[i__1].i,
+            sum.i += v[3].r * c[i__1].i + v[3].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v5.r * c[i__1].r - v5.i * c[i__1].i,
-            sum.i += v5.r * c[i__1].i + v5.i * c[i__1].r;
+            sum.r += v[4].r * c[i__1].r - v[4].i * c[i__1].i,
+            sum.i += v[4].r * c[i__1].i + v[4].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v6.r * c[i__1].r - v6.i * c[i__1].i,
-            sum.i += v6.r * c[i__1].i + v6.i * c[i__1].r;
+            sum.r += v[5].r * c[i__1].r - v[5].i * c[i__1].i,
+            sum.i += v[5].r * c[i__1].i + v[5].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v7.r * c[i__1].r - v7.i * c[i__1].i,
-            sum.i += v7.r * c[i__1].i + v7.i * c[i__1].r;
+            sum.r += v[6].r * c[i__1].r - v[6].i * c[i__1].i,
+            sum.i += v[6].r * c[i__1].i + v[6].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v8.r * c[i__1].r - v8.i * c[i__1].i,
-            sum.i += v8.r * c[i__1].i + v8.i * c[i__1].r;
+            sum.r += v[7].r * c[i__1].r - v[7].i * c[i__1].i,
+            sum.i += v[7].r * c[i__1].i + v[7].i * c[i__1].r;
             i__1 = j;
             c[i__1].r -= sum.r * t1.r - sum.i * t1.i,
             c[i__1].i -= sum.r * t1.i + sum.i * t1.r;
@@ -1138,70 +998,52 @@ L370:
 
 /*        Special code for 9 x 9 Householder */
 
-        v1.r = v[0].r, v1.i = v[0].i;
-        d_cnjg(&z__1, &v1);
-        t1.r = tau->r * z__1.r - tau->i * z__1.i,
-        t1.i = tau->r * z__1.i + tau->i * z__1.r;
-        v2.r = v[1].r, v2.i = v[1].i;
-        d_cnjg(&z__1, &v2);
-        t2.r = tau->r * z__1.r - tau->i * z__1.i,
-        t2.i = tau->r * z__1.i + tau->i * z__1.r;
-        v3.r = v[2].r, v3.i = v[2].i;
-        d_cnjg(&z__1, &v3);
-        t3.r = tau->r * z__1.r - tau->i * z__1.i,
-        t3.i = tau->r * z__1.i + tau->i * z__1.r;
-        v4.r = v[3].r, v4.i = v[3].i;
-        d_cnjg(&z__1, &v4);
-        t4.r = tau->r * z__1.r - tau->i * z__1.i,
-        t4.i = tau->r * z__1.i + tau->i * z__1.r;
-        v5.r = v[4].r, v5.i = v[4].i;
-        d_cnjg(&z__1, &v5);
-        t5.r = tau->r * z__1.r - tau->i * z__1.i,
-        t5.i = tau->r * z__1.i + tau->i * z__1.r;
-        v6.r = v[5].r, v6.i = v[5].i;
-        d_cnjg(&z__1, &v6);
-        t6.r = tau->r * z__1.r - tau->i * z__1.i,
-        t6.i = tau->r * z__1.i + tau->i * z__1.r;
-        v7.r = v[6].r, v7.i = v[6].i;
-        d_cnjg(&z__1, &v7);
-        t7.r = tau->r * z__1.r - tau->i * z__1.i,
-        t7.i = tau->r * z__1.i + tau->i * z__1.r;
-        v8.r = v[7].r, v8.i = v[7].i;
-        d_cnjg(&z__1, &v8);
-        t8.r = tau->r * z__1.r - tau->i * z__1.i,
-        t8.i = tau->r * z__1.i + tau->i * z__1.r;
-        v9.r = v[8].r, v9.i = v[8].i;
-        d_cnjg(&z__1, &v9);
-        t9.r = tau->r * z__1.r - tau->i * z__1.i,
-        t9.i = tau->r * z__1.i + tau->i * z__1.r;
+        t1.r = tau->r * v[0].r + tau->i * v[0].i,
+        t1.i = - tau->r * v[0].i + tau->i * v[0].r;
+        t2.r = tau->r * v[1].r + tau->i * v[1].i,
+        t2.i = - tau->r * v[1].i + tau->i * v[1].r;
+        t3.r = tau->r * v[2].r + tau->i * v[2].i,
+        t3.i = - tau->r * v[2].i + tau->i * v[2].r;
+        t4.r = tau->r * v[3].r + tau->i * v[3].i,
+        t4.i = - tau->r * v[3].i + tau->i * v[3].r;
+        t5.r = tau->r * v[4].r + tau->i * v[4].i,
+        t5.i = - tau->r * v[4].i + tau->i * v[4].r;
+        t6.r = tau->r * v[5].r + tau->i * v[5].i,
+        t6.i = - tau->r * v[5].i + tau->i * v[5].r;
+        t7.r = tau->r * v[6].r + tau->i * v[6].i,
+        t7.i = - tau->r * v[6].i + tau->i * v[6].r;
+        t8.r = tau->r * v[7].r + tau->i * v[7].i,
+        t8.i = - tau->r * v[7].i + tau->i * v[7].r;
+        t9.r = tau->r * v[8].r + tau->i * v[8].i,
+        t9.i = - tau->r * v[8].i + tau->i * v[8].r;
         for (j = 0; j < *m; ++j) {
             i__1 = j;
-            sum.r = v1.r * c[i__1].r - v1.i * c[i__1].i,
-            sum.i = v1.r * c[i__1].i + v1.i * c[i__1].r;
+            sum.r = v[0].r * c[i__1].r - v[0].i * c[i__1].i,
+            sum.i = v[0].r * c[i__1].i + v[0].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v2.r * c[i__1].r - v2.i * c[i__1].i,
-            sum.i += v2.r * c[i__1].i + v2.i * c[i__1].r;
+            sum.r += v[1].r * c[i__1].r - v[1].i * c[i__1].i,
+            sum.i += v[1].r * c[i__1].i + v[1].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v3.r * c[i__1].r - v3.i * c[i__1].i,
-            sum.i += v3.r * c[i__1].i + v3.i * c[i__1].r;
+            sum.r += v[2].r * c[i__1].r - v[2].i * c[i__1].i,
+            sum.i += v[2].r * c[i__1].i + v[2].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v4.r * c[i__1].r - v4.i * c[i__1].i,
-            sum.i += v4.r * c[i__1].i + v4.i * c[i__1].r;
+            sum.r += v[3].r * c[i__1].r - v[3].i * c[i__1].i,
+            sum.i += v[3].r * c[i__1].i + v[3].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v5.r * c[i__1].r - v5.i * c[i__1].i,
-            sum.i += v5.r * c[i__1].i + v5.i * c[i__1].r;
+            sum.r += v[4].r * c[i__1].r - v[4].i * c[i__1].i,
+            sum.i += v[4].r * c[i__1].i + v[4].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v6.r * c[i__1].r - v6.i * c[i__1].i,
-            sum.i += v6.r * c[i__1].i + v6.i * c[i__1].r;
+            sum.r += v[5].r * c[i__1].r - v[5].i * c[i__1].i,
+            sum.i += v[5].r * c[i__1].i + v[5].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v7.r * c[i__1].r - v7.i * c[i__1].i,
-            sum.i += v7.r * c[i__1].i + v7.i * c[i__1].r;
+            sum.r += v[6].r * c[i__1].r - v[6].i * c[i__1].i,
+            sum.i += v[6].r * c[i__1].i + v[6].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v8.r * c[i__1].r - v8.i * c[i__1].i,
-            sum.i += v8.r * c[i__1].i + v8.i * c[i__1].r;
+            sum.r += v[7].r * c[i__1].r - v[7].i * c[i__1].i,
+            sum.i += v[7].r * c[i__1].i + v[7].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v9.r * c[i__1].r - v9.i * c[i__1].i,
-            sum.i += v9.r * c[i__1].i + v9.i * c[i__1].r;
+            sum.r += v[8].r * c[i__1].r - v[8].i * c[i__1].i,
+            sum.i += v[8].r * c[i__1].i + v[8].i * c[i__1].r;
             i__1 = j;
             c[i__1].r -= sum.r * t1.r - sum.i * t1.i,
             c[i__1].i -= sum.r * t1.i + sum.i * t1.r;
@@ -1235,77 +1077,57 @@ L390:
 
 /*        Special code for 10 x 10 Householder */
 
-        v1.r = v[0].r, v1.i = v[0].i;
-        d_cnjg(&z__1, &v1);
-        t1.r = tau->r * z__1.r - tau->i * z__1.i,
-        t1.i = tau->r * z__1.i + tau->i * z__1.r;
-        v2.r = v[1].r, v2.i = v[1].i;
-        d_cnjg(&z__1, &v2);
-        t2.r = tau->r * z__1.r - tau->i * z__1.i,
-        t2.i = tau->r * z__1.i + tau->i * z__1.r;
-        v3.r = v[2].r, v3.i = v[2].i;
-        d_cnjg(&z__1, &v3);
-        t3.r = tau->r * z__1.r - tau->i * z__1.i,
-        t3.i = tau->r * z__1.i + tau->i * z__1.r;
-        v4.r = v[3].r, v4.i = v[3].i;
-        d_cnjg(&z__1, &v4);
-        t4.r = tau->r * z__1.r - tau->i * z__1.i,
-        t4.i = tau->r * z__1.i + tau->i * z__1.r;
-        v5.r = v[4].r, v5.i = v[4].i;
-        d_cnjg(&z__1, &v5);
-        t5.r = tau->r * z__1.r - tau->i * z__1.i,
-        t5.i = tau->r * z__1.i + tau->i * z__1.r;
-        v6.r = v[5].r, v6.i = v[5].i;
-        d_cnjg(&z__1, &v6);
-        t6.r = tau->r * z__1.r - tau->i * z__1.i,
-        t6.i = tau->r * z__1.i + tau->i * z__1.r;
-        v7.r = v[6].r, v7.i = v[6].i;
-        d_cnjg(&z__1, &v7);
-        t7.r = tau->r * z__1.r - tau->i * z__1.i,
-        t7.i = tau->r * z__1.i + tau->i * z__1.r;
-        v8.r = v[7].r, v8.i = v[7].i;
-        d_cnjg(&z__1, &v8);
-        t8.r = tau->r * z__1.r - tau->i * z__1.i,
-        t8.i = tau->r * z__1.i + tau->i * z__1.r;
-        v9.r = v[8].r, v9.i = v[8].i;
-        d_cnjg(&z__1, &v9);
-        t9.r = tau->r * z__1.r - tau->i * z__1.i,
-        t9.i = tau->r * z__1.i + tau->i * z__1.r;
-        v10.r = v[9].r, v10.i = v[9].i;
-        d_cnjg(&z__1, &v10);
-        t10.r = tau->r * z__1.r - tau->i * z__1.i,
-        t10.i = tau->r * z__1.i + tau->i * z__1.r;
+        t1.r = tau->r * v[0].r + tau->i * v[0].i,
+        t1.i = - tau->r * v[0].i + tau->i * v[0].r;
+        t2.r = tau->r * v[1].r + tau->i * v[1].i,
+        t2.i = - tau->r * v[1].i + tau->i * v[1].r;
+        t3.r = tau->r * v[2].r + tau->i * v[2].i,
+        t3.i = - tau->r * v[2].i + tau->i * v[2].r;
+        t4.r = tau->r * v[3].r + tau->i * v[3].i,
+        t4.i = - tau->r * v[3].i + tau->i * v[3].r;
+        t5.r = tau->r * v[4].r + tau->i * v[4].i,
+        t5.i = - tau->r * v[4].i + tau->i * v[4].r;
+        t6.r = tau->r * v[5].r + tau->i * v[5].i,
+        t6.i = - tau->r * v[5].i + tau->i * v[5].r;
+        t7.r = tau->r * v[6].r + tau->i * v[6].i,
+        t7.i = - tau->r * v[6].i + tau->i * v[6].r;
+        t8.r = tau->r * v[7].r + tau->i * v[7].i,
+        t8.i = - tau->r * v[7].i + tau->i * v[7].r;
+        t9.r = tau->r * v[8].r + tau->i * v[8].i,
+        t9.i = - tau->r * v[8].i + tau->i * v[8].r;
+        t10.r = tau->r * v[9].r + tau->i * v[9].i,
+        t10.i = - tau->r * v[9].i + tau->i * v[9].r;
         for (j = 0; j < *m; ++j) {
             i__1 = j;
-            sum.r = v1.r * c[i__1].r - v1.i * c[i__1].i,
-            sum.i = v1.r * c[i__1].i + v1.i * c[i__1].r;
+            sum.r = v[0].r * c[i__1].r - v[0].i * c[i__1].i,
+            sum.i = v[0].r * c[i__1].i + v[0].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v2.r * c[i__1].r - v2.i * c[i__1].i,
-            sum.i += v2.r * c[i__1].i + v2.i * c[i__1].r;
+            sum.r += v[1].r * c[i__1].r - v[1].i * c[i__1].i,
+            sum.i += v[1].r * c[i__1].i + v[1].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v3.r * c[i__1].r - v3.i * c[i__1].i,
-            sum.i += v3.r * c[i__1].i + v3.i * c[i__1].r;
+            sum.r += v[2].r * c[i__1].r - v[2].i * c[i__1].i,
+            sum.i += v[2].r * c[i__1].i + v[2].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v4.r * c[i__1].r - v4.i * c[i__1].i,
-            sum.i += v4.r * c[i__1].i + v4.i * c[i__1].r;
+            sum.r += v[3].r * c[i__1].r - v[3].i * c[i__1].i,
+            sum.i += v[3].r * c[i__1].i + v[3].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v5.r * c[i__1].r - v5.i * c[i__1].i,
-            sum.i += v5.r * c[i__1].i + v5.i * c[i__1].r;
+            sum.r += v[4].r * c[i__1].r - v[4].i * c[i__1].i,
+            sum.i += v[4].r * c[i__1].i + v[4].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v6.r * c[i__1].r - v6.i * c[i__1].i,
-            sum.i += v6.r * c[i__1].i + v6.i * c[i__1].r;
+            sum.r += v[5].r * c[i__1].r - v[5].i * c[i__1].i,
+            sum.i += v[5].r * c[i__1].i + v[5].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v7.r * c[i__1].r - v7.i * c[i__1].i,
-            sum.i += v7.r * c[i__1].i + v7.i * c[i__1].r;
+            sum.r += v[6].r * c[i__1].r - v[6].i * c[i__1].i,
+            sum.i += v[6].r * c[i__1].i + v[6].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v8.r * c[i__1].r - v8.i * c[i__1].i,
-            sum.i += v8.r * c[i__1].i + v8.i * c[i__1].r;
+            sum.r += v[7].r * c[i__1].r - v[7].i * c[i__1].i,
+            sum.i += v[7].r * c[i__1].i + v[7].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v9.r * c[i__1].r - v9.i * c[i__1].i,
-            sum.i += v9.r * c[i__1].i + v9.i * c[i__1].r;
+            sum.r += v[8].r * c[i__1].r - v[8].i * c[i__1].i,
+            sum.i += v[8].r * c[i__1].i + v[8].i * c[i__1].r;
             i__1 += *ldc;
-            sum.r += v10.r * c[i__1].r - v10.i * c[i__1].i,
-            sum.i += v10.r * c[i__1].i + v10.i * c[i__1].r;
+            sum.r += v[9].r * c[i__1].r - v[9].i * c[i__1].i,
+            sum.i += v[9].r * c[i__1].i + v[9].i * c[i__1].r;
             i__1 = j;
             c[i__1].r -= sum.r * t1.r - sum.i * t1.i,
             c[i__1].i -= sum.r * t1.i + sum.i * t1.r;
@@ -1339,8 +1161,4 @@ L390:
         }
         return; /* exit zlarfx */
     }
-
-/*     End of ZLARFX */
-
 } /* zlarfx_ */
-

@@ -1,23 +1,18 @@
-/* dnrm2.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
+extern double sqrt(double); /* #include <math.h> */
+
 #ifdef KR_headers
 doublereal dnrm2_(n, x, incx)
-integer *n;
-doublereal *x;
-integer *incx;
+const integer *n;
+const doublereal *x;
+const integer *incx;
 #else
-doublereal dnrm2_(integer* n, doublereal* x, integer* incx)
+doublereal dnrm2_(const integer* n, const doublereal* x, const integer* incx)
 #endif
 {
     /* System generated locals */
     doublereal d__1;
-
-    /* Builtin functions */
-    double sqrt();
 
     /* Local variables */
     static doublereal norm, scale, absxi;
@@ -63,4 +58,3 @@ doublereal dnrm2_(integer* n, doublereal* x, integer* incx)
     return norm;
 
 } /* dnrm2_ */
-

@@ -1,20 +1,15 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
 /* Table of constant values */
-
 static doublecomplex c_b5 = {1.,0.};
 
 /* Subroutine */ void zlarfg_(n, alpha, x, incx, tau)
-integer *n;
+const integer *n;
 doublecomplex *alpha, *x;
-integer *incx;
+const integer *incx;
 doublecomplex *tau;
 {
     /* System generated locals */
@@ -22,22 +17,14 @@ doublecomplex *tau;
     doublereal d__1;
     doublecomplex z__1;
 
-    /* Builtin functions */
-    double d_sign();
-
     /* Local variables */
     static doublereal beta;
     static integer j;
     static doublereal alphi, alphr;
-    extern /* Subroutine */ void zscal_();
     static doublereal xnorm;
-    extern doublereal dlapy3_(), dznrm2_(), dlamch_();
     static doublereal safmin;
-    extern /* Subroutine */ void zdscal_();
     static doublereal rsafmn;
-    extern /* Double Complex */ void zladiv_();
     static integer knt;
-
 
 /*  -- LAPACK auxiliary routine (version 2.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -92,8 +79,6 @@ doublecomplex *tau;
 /*                                                                        */
 /*  ===================================================================== */
 
-    /* Function Body */
-
     if (*n <= 0) {
         tau->r = 0., tau->i = 0.;
         return;
@@ -115,7 +100,7 @@ doublecomplex *tau;
 
         d__1 = dlapy3_(&alphr, &alphi, &xnorm);
         beta = -d_sign(&d__1, &alphr);
-        safmin = dlamch_("S", 1L) / dlamch_("E", 1L);
+        safmin = dlamch_("S") / dlamch_("E");
         rsafmn = 1. / safmin;
 
         if (abs(beta) < safmin) {
@@ -162,8 +147,4 @@ L10:
             alpha->r = beta, alpha->i = 0.;
         }
     }
-
-/*     End of ZLARFG */
-
 } /* zlarfg_ */
-

@@ -1,16 +1,12 @@
-/* sdot.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
-doublereal sdot_(n, sx, incx, sy, incy)
-integer *n;
-real *sx;
-integer *incx;
-real *sy;
-integer *incy;
+real sdot_(n, sx, incx, sy, incy)
+const integer *n;
+const real *sx;
+const integer *incx;
+const real *sy;
+const integer *incy;
 {
     /* Local variables */
     static integer i, m;
@@ -22,7 +18,6 @@ integer *incy;
 /*     jack dongarra, linpack, 3/11/78. */
 /*     modified 12/3/93, array(1) declarations changed to array(*) */
 
-    /* Function Body */
     stemp = 0.f;
     if (*n <= 0) {
         return stemp;
@@ -55,4 +50,3 @@ integer *incy;
     }
     return stemp;
 } /* sdot_ */
-

@@ -1,32 +1,24 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
 
 /* Subroutine */ void zgerc_(m, n, alpha, x, incx, y, incy, a, lda)
-integer *m, *n;
+const integer *m, *n;
 doublecomplex *alpha, *x;
-integer *incx;
+const integer *incx;
 doublecomplex *y;
-integer *incy;
+const integer *incy;
 doublecomplex *a;
-integer *lda;
+const integer *lda;
 {
     /* System generated locals */
     integer i__1;
-
-    /* Builtin functions */
-    void d_cnjg();
 
     /* Local variables */
     static integer info;
     static doublecomplex temp;
     static integer i, j, ix, jy, kx;
-    extern /* Subroutine */ void xerbla_();
 
 /*  ===================================================================== */
 /*                                                                        */
@@ -113,7 +105,7 @@ integer *lda;
         info = 9;
     }
     if (info != 0) {
-        xerbla_("ZGERC ", &info, 6L);
+        xerbla_("ZGERC ", &info);
         return;
     }
 

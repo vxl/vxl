@@ -1,16 +1,12 @@
-/* dswap.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Subroutine */ void dswap_(n, dx, incx, dy, incy)
-integer *n;
+const integer *n;
 doublereal *dx;
-integer *incx;
+const integer *incx;
 doublereal *dy;
-integer *incy;
+const integer *incy;
 {
     /* Local variables */
     static integer i, m;
@@ -18,7 +14,7 @@ integer *incy;
     static integer ix, iy;
 
 /*     interchanges two vectors.                                    */
-/*     uses unrolled loops for increments equal one.                */
+/*     uses unrolled loops for increments equal to 1.               */
 /*     jack dongarra, linpack, 3/11/78.                             */
 /*     modified 12/3/93, array(1) declarations changed to array(*)  */
 

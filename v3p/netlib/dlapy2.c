@@ -1,18 +1,11 @@
-/* dlapy2.f -- translated by f2c (version of 4 June 1993  1:43:59).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
+extern double sqrt(double); /* #include <math.h> */
 
-doublereal dlapy2_(doublereal *x, doublereal *y)
+doublereal dlapy2_(const doublereal *x, const doublereal *y)
 {
-    /* Builtin functions */
-    double sqrt(doublereal);
-
     /* Local variables */
     static doublereal xabs, yabs, w, z;
-
 
 /*  -- LAPACK auxiliary routine (version 2.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */

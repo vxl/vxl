@@ -1,13 +1,14 @@
 #include "f2c.h"
+#include "netlib.h"
 
 /* Modified by Peter Vanroose, June 2001, to allow c being equal to a or b */
 
 #ifdef KR_headers
 extern VOID sig_die();
-VOID z_div(c, a, b) doublecomplex *a, *b, *c;
+VOID z_div(c, a, b) doublecomplex *c, const doublecomplex *a, *b;
 #else
 extern void sig_die(char*, int);
-void z_div(doublecomplex *c, doublecomplex *a, doublecomplex *b)
+void z_div(doublecomplex *c, const doublecomplex *a, const doublecomplex *b)
 #endif
 {
   double ratio, den;

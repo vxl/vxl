@@ -1,29 +1,24 @@
-/* dcopy.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 #ifdef KR_headers
 /* Subroutine */ void dcopy_(n, dx, incx, dy, incy)
-integer *n;
-doublereal *dx;
-integer *incx;
+const integer *n;
+const doublereal *dx;
+const integer *incx;
 doublereal *dy;
-integer *incy;
+const integer *incy;
 #else
-void dcopy_(integer *n, doublereal *dx, integer *incx, doublereal *dy, integer *incy)
+void dcopy_(const integer *n, const doublereal *dx, const integer *incx, doublereal *dy, const integer *incy)
 #endif
 {
     /* Local variables */
     static integer i, ix, iy;
 
 /*     copies a vector, x, to a vector, y. */
-/*     uses unrolled loops for increments equal to one. */
+/*     uses unrolled loops for increments equal to 1. */
 /*     jack dongarra, linpack, 3/11/78. */
 /*     modified 12/3/93, array(1) declarations changed to array(*) */
 
-    /* Function Body */
     if (*n <= 0) {
         return;
     }
@@ -42,10 +37,8 @@ void dcopy_(integer *n, doublereal *dx, integer *incx, doublereal *dy, integer *
         }
         for (i = 0; i < *n; ++i) {
             dy[iy] = dx[ix];
-            ix += *incx;
-            iy += *incy;
+            ix += *incx; iy += *incy;
         }
     }
     return;
 } /* dcopy_ */
-

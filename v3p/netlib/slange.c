@@ -1,26 +1,15 @@
-/* slange.f -- translated by f2c (version of 4 June 1993  1:43:59).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
+extern double sqrt(double); /* #include <math.h> */
 
 /* Table of constant values */
-
 static integer c__1 = 1;
 
-real slange_(char *norm, integer *m, integer *n, real *a, integer *lda, real *work, ftnlen norm_len)
+real slange_(const char *norm, const integer *m, const integer *n, real *a, const integer *lda, real *work)
 {
-    /* Builtin functions */
-    double sqrt(doublereal);
-#define sqrtf(f) ((float)sqrt((double)(f)))
-
     /* Local variables */
     static integer i, j;
-    static real scale;
-    extern logical lsame_(char *, char *, ftnlen, ftnlen);
     static real value;
-    extern /* Subroutine */ void slassq_(integer *, real *, integer *, real *, real *);
     static real sum;
 
 /*  -- LAPACK auxiliary routine (version 2.0) -- */
@@ -80,31 +69,32 @@ real slange_(char *norm, integer *m, integer *n, real *a, integer *lda, real *wo
 /*                                                                       */
 /* ===================================================================== */
 
-    if (min(*m,*n) == 0) {
-        return 0.f;
-    } else if (lsame_(norm, "M", 1L, 1L)) {
+    value = 0.f;
+    if (*m == 0 || *n == 0) {
+        return value;
+    } else if (lsame_(norm, "M")) {
 
 /*        Find max(abs(A(i,j))). */
 
-        value = 0.f;
         for (j = 0; j < *n; ++j) {
             for (i = 0; i < *m; ++i) {
-                value = max(value, abs(a[i + j * *lda]));
+                if (value < abs(a[i + j * *lda]))
+                    value = abs(a[i + j * *lda]);
             }
         }
-    } else if (lsame_(norm, "O", 1L, 1L) || *norm == '1') {
+    } else if (lsame_(norm, "O") || *norm == '1') {
 
 /*        Find norm1(A). */
 
-        value = 0.f;
         for (j = 0; j < *n; ++j) {
             sum = 0.f;
             for (i = 0; i < *m; ++i) {
                 sum += abs(a[i + j * *lda]);
             }
-            value = max(value,sum);
+            if (value < sum)
+                value = sum;
         }
-    } else if (lsame_(norm, "I", 1L, 1L)) {
+    } else if (lsame_(norm, "I")) {
 
 /*        Find normI(A). */
 
@@ -116,20 +106,19 @@ real slange_(char *norm, integer *m, integer *n, real *a, integer *lda, real *wo
                 work[i] += abs(a[i + j * *lda]);
             }
         }
-        value = 0.f;
         for (i = 0; i < *m; ++i) {
-            value = max(value,work[i]);
+            if (value < work[i])
+                value = work[i];
         }
-    } else if (lsame_(norm, "F", 1L, 1L) || lsame_(norm, "E", 1L, 1L)) {
+    } else if (lsame_(norm, "F") || lsame_(norm, "E")) {
 
 /*        Find normF(A). */
 
-        scale = 0.f;
         sum = 1.f;
         for (j = 0; j < *n; ++j) {
-            slassq_(m, &a[j * *lda], &c__1, &scale, &sum);
+            slassq_(m, &a[j * *lda], &c__1, &value, &sum);
         }
-        value = scale * sqrtf(sum);
+        value *= sqrtf(sum);
     }
 
     return value;

@@ -1,15 +1,9 @@
-/* dlas2.f -- translated by f2c (version of 4 June 1993  1:43:59).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
+extern double sqrt(double); /* #include <math.h> */
 
 /* Subroutine */ void dlas2_(doublereal *f, doublereal *g, doublereal *h, doublereal *ssmin, doublereal *ssmax)
 {
-    /* Builtin functions */
-    double sqrt(doublereal);
-
     /* Local variables */
     static doublereal fhmn, fhmx, c, fa, ga, ha, as, at, au;
 

@@ -1,12 +1,7 @@
-/* gpfa5f.f -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Table of constant values */
-
 static integer c__5 = 5;
 
 /*     fortran version of *gpfa5* - */
@@ -15,21 +10,17 @@ static integer c__5 = 5;
 
 /* ------------------------------------------------------------------- */
 
-/* Subroutine */ void gpfa5f_(real *a, real *b, real *trigs, integer *inc,
-        integer *jump, integer *n, integer *mm, integer *lot, integer *isign)
+/* Subroutine */ void gpfa5f_(real *a, real *b, const real *trigs, const integer *inc,
+        const integer *jump, const integer *n, const integer *mm, const integer *lot, const integer *isign)
 {
     /* Initialized data */
-
     static real sin36 = .587785252292473f;
     static real sin72 = .951056516295154f;
     static real qrt5 = .559016994374947f;
     static integer lvr = 128;
 
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8, i__9, i__10;
-
-    /* Builtin functions */
-    integer pow_ii(integer *, integer *);
+    integer i__3, i__4, i__5, i__6, i__7, i__8;
 
     /* Local variables */
     static integer ninc, left, nvex, j, k, l, m;
@@ -37,35 +28,24 @@ static integer c__5 = 5;
     static integer ipass, nblox;
     static real c1, c2, c3;
     static integer jstep, n5;
-    static real t1, t2, t3, t4, t5, t6, t7, t8, t9, u1, u2, u3, u4, u5, u6,
-            u7, u8, u9;
-    static integer ja, jb, la, jc, jd, nb, je, jf, jg, jh, mh, kk;
+    static real t1, t2, t3, t4, t5, t6, t7, t8, t9, u1, u2, u3, u4, u5, u6, u7, u8, u9;
+    static integer ja, jb, jc, jd, je, jf, jg, jh, ji, jj, jk, jl, jm, jn, jo, jp, jq, jr, js, jt, ju, jv, jw, jx, jy;
     static real t10, t11, u10, u11;
-    static integer ll, ji, jj, jk, jl, jm, mu, nu, laincl, jn, jo, jp, jq, jr,
-             js, jt, ju, jv, jw, jx, jy;
+    static integer ll, mu, nu, laincl, la, nb, mh, kk;
     static real ax, bx;
     static integer jstepl;
     static real co1, co2, co3;
     static integer istart;
     static real co4;
     static integer jstepx;
-    static real si1, si2, si3, si4, aja, ajb, ajc, ajd, aje, bjb, bje, bjc,
-            bjd, bja, ajf, ajk, bjf, bjk, ajg, ajj, ajh;
+    static real si1, si2, si3, si4, aja, ajb, ajc, ajd, aje, bjb, bje, bjc, bjd, bja, ajf, ajk, bjf, bjk, ajg, ajj, ajh;
     static integer jjj;
     static real aji, ajl;
     static integer ink;
     static real ajq, bjg, bjj, bjh, bji;
     static integer inq;
     static real bjl, bjq, ajo, ajm, ajn, ajr, ajw, bjo, bjm, bjn, bjr, bjw,
-            ajt, ajs, ajx, ajp, bjt, bjs, bjx, bjp, ajv, ajy, aju, bjv, bjy,
-            bju;
-
-    /* Parameter adjustments */
-    --trigs;
-    --b;
-    --a;
-
-    /* Function Body */
+                ajt, ajs, ajx, ajp, bjt, bjs, bjx, bjp, ajv, ajy, aju, bjv, bjy, bju;
 
 /*     *************************************************************** */
 /*     *                                                             * */
@@ -106,12 +86,11 @@ static integer c__5 = 5;
     nblox = (*lot - 1) / lvr + 1;
     left = *lot;
     s = (real) (*isign);
-    istart = 1;
+    istart = 0;
 
 /*  loop on blocks of lvr transforms */
 /*  -------------------------------- */
-    i__1 = nblox;
-    for (nb = 1; nb <= i__1; ++nb) {
+    for (nb = 1; nb <= nblox; ++nb) {
 
         if (left <= lvr) {
             nvex = left;
@@ -127,8 +106,7 @@ static integer c__5 = 5;
 
 /*  loop on type I radix-5 passes */
 /*  ----------------------------- */
-        i__2 = mh;
-        for (ipass = 1; ipass <= i__2; ++ipass) {
+        for (ipass = 0; ipass < mh; ++ipass) {
             jstep = *n * *inc / (la * 5);
             jstepl = jstep - ninc;
             kk = 0;
@@ -136,32 +114,25 @@ static integer c__5 = 5;
 /*  loop on k */
 /*  --------- */
             i__3 = jstep - ink;
-            i__4 = ink;
-            for (k = 0; i__4 < 0 ? k >= i__3 : k <= i__3; k += i__4) {
+            for (k = 0; ink < 0 ? k >= i__3 : k <= i__3; k += ink) {
 
                 if (k > 0) {
-                    co1 = trigs[kk + 1];
-                    si1 = s * trigs[kk + 2];
-                    co2 = trigs[(kk << 1) + 1];
-                    si2 = s * trigs[(kk << 1) + 2];
-                    co3 = trigs[kk * 3 + 1];
-                    si3 = s * trigs[kk * 3 + 2];
-                    co4 = trigs[(kk << 2) + 1];
-                    si4 = s * trigs[(kk << 2) + 2];
+                    co1 = trigs[kk];     si1 = s * trigs[kk + 1];
+                    co2 = trigs[kk * 2]; si2 = s * trigs[kk * 2 + 1];
+                    co3 = trigs[kk * 3]; si3 = s * trigs[kk * 3 + 1];
+                    co4 = trigs[kk * 4]; si4 = s * trigs[kk * 4 + 1];
                 }
 
 /*  loop along transform */
 /*  -------------------- */
                 i__5 = (*n - 1) * *inc;
                 i__6 = jstep * 5;
-                for (jjj = k; i__6 < 0 ? jjj >= i__5 : jjj <= i__5; jjj +=
-                        i__6) {
+                for (jjj = k; i__6 < 0 ? jjj >= i__5 : jjj <= i__5; jjj += i__6) {
                     ja = istart + jjj;
 
 /*     "transverse" loop */
 /*     ----------------- */
-                    i__7 = inq;
-                    for (nu = 1; nu <= i__7; ++nu) {
+                    for (nu = 1; nu <= inq; ++nu) {
                         jb = ja + jstepl;
                         if (jb < istart) {
                             jb += ninc;
@@ -185,8 +156,7 @@ static integer c__5 = 5;
                         if (k == 0) {
 
 /* dir$ ivdep, shortloop */
-                            i__8 = nvex;
-                            for (l = 1; l <= i__8; ++l) {
+                            for (l = 1; l <= nvex; ++l) {
                                 ajb = a[jb + j];
                                 aje = a[je + j];
                                 t1 = ajb + aje;
@@ -235,8 +205,7 @@ static integer c__5 = 5;
                         } else {
 
 /* dir$ ivdep,shortloop */
-                            i__8 = nvex;
-                            for (l = 1; l <= i__8; ++l) {
+                            for (l = 1; l <= nvex; ++l) {
                                 ajb = a[jb + j];
                                 aje = a[je + j];
                                 t1 = ajb + aje;
@@ -271,28 +240,17 @@ static integer c__5 = 5;
                                 u9 = u7 - u6;
                                 u10 = c3 * u3 - c2 * u4;
                                 u11 = c2 * u3 + c3 * u4;
-                                a[jb + j] = co1 * (t8 - u11) - si1 * (u8 +
-                                        t11);
-                                b[jb + j] = si1 * (t8 - u11) + co1 * (u8 +
-                                        t11);
-                                a[je + j] = co4 * (t8 + u11) - si4 * (u8 -
-                                        t11);
-                                b[je + j] = si4 * (t8 + u11) + co4 * (u8 -
-                                        t11);
-                                a[jc + j] = co2 * (t9 - u10) - si2 * (u9 +
-                                        t10);
-                                b[jc + j] = si2 * (t9 - u10) + co2 * (u9 +
-                                        t10);
-                                a[jd + j] = co3 * (t9 + u10) - si3 * (u9 -
-                                        t10);
-                                b[jd + j] = si3 * (t9 + u10) + co3 * (u9 -
-                                        t10);
+                                a[jb + j] = co1 * (t8 - u11) - si1 * (u8 + t11);
+                                b[jb + j] = si1 * (t8 - u11) + co1 * (u8 + t11);
+                                a[je + j] = co4 * (t8 + u11) - si4 * (u8 - t11);
+                                b[je + j] = si4 * (t8 + u11) + co4 * (u8 - t11);
+                                a[jc + j] = co2 * (t9 - u10) - si2 * (u9 + t10);
+                                b[jc + j] = si2 * (t9 - u10) + co2 * (u9 + t10);
+                                a[jd + j] = co3 * (t9 + u10) - si3 * (u9 - t10);
+                                b[jd + j] = si3 * (t9 + u10) + co3 * (u9 - t10);
                                 j += *jump;
                             }
-
                         }
-
-/* -----( end of loop across transforms ) */
 
                         ja += jstepx;
                         if (ja < istart) {
@@ -300,13 +258,10 @@ static integer c__5 = 5;
                         }
                     }
                 }
-/* -----( end of loop along transforms ) */
                 kk += la << 1;
             }
-/* -----( end of loop on nonzero k ) */
             la *= 5;
         }
-/* -----( end of loop on type I radix-5 passes) */
 
         if (*n == 5) {
             goto L490;
@@ -315,8 +270,7 @@ static integer c__5 = 5;
 /*  loop on type II radix-5 passes */
 /*  ------------------------------ */
 
-        i__2 = m;
-        for (ipass = mh + 1; ipass <= i__2; ++ipass) {
+        for (ipass = mh; ipass < m; ++ipass) {
             jstep = *n * *inc / (la * 5);
             jstepl = jstep - ninc;
             laincl = la * ink - ninc;
@@ -325,18 +279,13 @@ static integer c__5 = 5;
 /*     loop on k */
 /*     --------- */
             i__4 = jstep - ink;
-            i__3 = ink;
-            for (k = 0; i__3 < 0 ? k >= i__4 : k <= i__4; k += i__3) {
+            for (k = 0; ink < 0 ? k >= i__4 : k <= i__4; k += ink) {
 
                 if (k > 0) {
-                    co1 = trigs[kk + 1];
-                    si1 = s * trigs[kk + 2];
-                    co2 = trigs[(kk << 1) + 1];
-                    si2 = s * trigs[(kk << 1) + 2];
-                    co3 = trigs[kk * 3 + 1];
-                    si3 = s * trigs[kk * 3 + 2];
-                    co4 = trigs[(kk << 2) + 1];
-                    si4 = s * trigs[(kk << 2) + 2];
+                    co1 = trigs[kk];     si1 = s * trigs[kk + 1];
+                    co2 = trigs[kk * 2]; si2 = s * trigs[kk * 2 + 1];
+                    co3 = trigs[kk * 3]; si3 = s * trigs[kk * 3 + 1];
+                    co4 = trigs[kk * 4]; si4 = s * trigs[kk * 4 + 1];
                 }
 
 /*  double loop along first transform in block */
@@ -347,14 +296,12 @@ static integer c__5 = 5;
 
                     i__7 = (*n - 1) * *inc;
                     i__8 = la * 5 * ink;
-                    for (jjj = ll; i__8 < 0 ? jjj >= i__7 : jjj <= i__7; jjj
-                            += i__8) {
+                    for (jjj = ll; i__8 < 0 ? jjj >= i__7 : jjj <= i__7; jjj += i__8) {
                         ja = istart + jjj;
 
 /*     "transverse" loop */
 /*     ----------------- */
-                        i__9 = inq;
-                        for (nu = 1; nu <= i__9; ++nu) {
+                        for (nu = 1; nu <= inq; ++nu) {
                             jb = ja + jstepl;
                             if (jb < istart) {
                                 jb += ninc;
@@ -458,8 +405,7 @@ static integer c__5 = 5;
                             if (k == 0) {
 
 /* dir$ ivdep, shortloop */
-                                i__10 = nvex;
-                                for (l = 1; l <= i__10; ++l) {
+                                for (l = 1; l <= nvex; ++l) {
                                     ajb = a[jb + j];
                                     aje = a[je + j];
                                     t1 = ajb + aje;
@@ -704,8 +650,7 @@ static integer c__5 = 5;
                             } else {
 
 /* dir$ ivdep, shortloop */
-                                i__10 = nvex;
-                                for (l = 1; l <= i__10; ++l) {
+                                for (l = 1; l <= nvex; ++l) {
                                     ajb = a[jb + j];
                                     aje = a[je + j];
                                     t1 = ajb + aje;
@@ -748,16 +693,12 @@ static integer c__5 = 5;
                                     bjc = bjk;
                                     u10 = c3 * u3 - c2 * u4;
                                     u11 = c2 * u3 + c3 * u4;
-                                    a[jf + j] = co1 * (t8 - u11) - si1 * (u8
-                                            + t11);
-                                    b[jf + j] = si1 * (t8 - u11) + co1 * (u8
-                                            + t11);
+                                    a[jf + j] = co1 * (t8 - u11) - si1 * (u8 + t11);
+                                    b[jf + j] = si1 * (t8 - u11) + co1 * (u8 + t11);
                                     aje = co4 * (t8 + u11) - si4 * (u8 - t11);
                                     bje = si4 * (t8 + u11) + co4 * (u8 - t11);
-                                    a[jk + j] = co2 * (t9 - u10) - si2 * (u9
-                                            + t10);
-                                    b[jk + j] = si2 * (t9 - u10) + co2 * (u9
-                                            + t10);
+                                    a[jk + j] = co2 * (t9 - u10) - si2 * (u9 + t10);
+                                    b[jk + j] = si2 * (t9 - u10) + co2 * (u9 + t10);
                                     ajd = co3 * (t9 + u10) - si3 * (u9 - t10);
                                     bjd = si3 * (t9 + u10) + co3 * (u9 - t10);
 /* ---------------------- */
@@ -801,20 +742,14 @@ static integer c__5 = 5;
                                     bji = bjq;
                                     u10 = c3 * u3 - c2 * u4;
                                     u11 = c2 * u3 + c3 * u4;
-                                    a[jg + j] = co1 * (t8 - u11) - si1 * (u8
-                                            + t11);
-                                    b[jg + j] = si1 * (t8 - u11) + co1 * (u8
-                                            + t11);
-                                    ajj = co4 * (t8 + u11) - si4 * (u8 - t11);
-                                    bjj = si4 * (t8 + u11) + co4 * (u8 - t11);
-                                    a[jl + j] = co2 * (t9 - u10) - si2 * (u9
-                                            + t10);
-                                    b[jl + j] = si2 * (t9 - u10) + co2 * (u9
-                                            + t10);
-                                    a[jq + j] = co3 * (t9 + u10) - si3 * (u9
-                                            - t10);
-                                    b[jq + j] = si3 * (t9 + u10) + co3 * (u9
-                                            - t10);
+                                    a[jg + j] = co1 * (t8 - u11) - si1 * (u8 + t11);
+                                    b[jg + j] = si1 * (t8 - u11) + co1 * (u8 + t11);
+                                    ajj       = co4 * (t8 + u11) - si4 * (u8 - t11);
+                                    bjj       = si4 * (t8 + u11) + co4 * (u8 - t11);
+                                    a[jl + j] = co2 * (t9 - u10) - si2 * (u9 + t10);
+                                    b[jl + j] = si2 * (t9 - u10) + co2 * (u9 + t10);
+                                    a[jq + j] = co3 * (t9 + u10) - si3 * (u9 - t10);
+                                    b[jq + j] = si3 * (t9 + u10) + co3 * (u9 - t10);
 /* ---------------------- */
                                     ajo = a[jo + j];
                                     t1 = ajh + ajo;
@@ -854,22 +789,14 @@ static integer c__5 = 5;
                                     bjo = bjw;
                                     u10 = c3 * u3 - c2 * u4;
                                     u11 = c2 * u3 + c3 * u4;
-                                    a[jh + j] = co1 * (t8 - u11) - si1 * (u8
-                                            + t11);
-                                    b[jh + j] = si1 * (t8 - u11) + co1 * (u8
-                                            + t11);
-                                    a[jw + j] = co4 * (t8 + u11) - si4 * (u8
-                                            - t11);
-                                    b[jw + j] = si4 * (t8 + u11) + co4 * (u8
-                                            - t11);
-                                    a[jm + j] = co2 * (t9 - u10) - si2 * (u9
-                                            + t10);
-                                    b[jm + j] = si2 * (t9 - u10) + co2 * (u9
-                                            + t10);
-                                    a[jr + j] = co3 * (t9 + u10) - si3 * (u9
-                                            - t10);
-                                    b[jr + j] = si3 * (t9 + u10) + co3 * (u9
-                                            - t10);
+                                    a[jh + j] = co1 * (t8 - u11) - si1 * (u8 + t11);
+                                    b[jh + j] = si1 * (t8 - u11) + co1 * (u8 + t11);
+                                    a[jw + j] = co4 * (t8 + u11) - si4 * (u8 - t11);
+                                    b[jw + j] = si4 * (t8 + u11) + co4 * (u8 - t11);
+                                    a[jm + j] = co2 * (t9 - u10) - si2 * (u9 + t10);
+                                    b[jm + j] = si2 * (t9 - u10) + co2 * (u9 + t10);
+                                    a[jr + j] = co3 * (t9 + u10) - si3 * (u9 - t10);
+                                    b[jr + j] = si3 * (t9 + u10) + co3 * (u9 - t10);
 /* ---------------------- */
                                     ajt = a[jt + j];
                                     t1 = aji + ajt;
@@ -909,22 +836,14 @@ static integer c__5 = 5;
                                     u10 = c3 * u3 - c2 * u4;
                                     u11 = c2 * u3 + c3 * u4;
                                     b[jd + j] = bx;
-                                    a[ji + j] = co1 * (t8 - u11) - si1 * (u8
-                                            + t11);
-                                    b[ji + j] = si1 * (t8 - u11) + co1 * (u8
-                                            + t11);
-                                    a[jx + j] = co4 * (t8 + u11) - si4 * (u8
-                                            - t11);
-                                    b[jx + j] = si4 * (t8 + u11) + co4 * (u8
-                                            - t11);
-                                    a[jn + j] = co2 * (t9 - u10) - si2 * (u9
-                                            + t10);
-                                    b[jn + j] = si2 * (t9 - u10) + co2 * (u9
-                                            + t10);
-                                    a[js + j] = co3 * (t9 + u10) - si3 * (u9
-                                            - t10);
-                                    b[js + j] = si3 * (t9 + u10) + co3 * (u9
-                                            - t10);
+                                    a[ji + j] = co1 * (t8 - u11) - si1 * (u8 + t11);
+                                    b[ji + j] = si1 * (t8 - u11) + co1 * (u8 + t11);
+                                    a[jx + j] = co4 * (t8 + u11) - si4 * (u8 - t11);
+                                    b[jx + j] = si4 * (t8 + u11) + co4 * (u8 - t11);
+                                    a[jn + j] = co2 * (t9 - u10) - si2 * (u9 + t10);
+                                    b[jn + j] = si2 * (t9 - u10) + co2 * (u9 + t10);
+                                    a[js + j] = co3 * (t9 + u10) - si3 * (u9 - t10);
+                                    b[js + j] = si3 * (t9 + u10) + co3 * (u9 - t10);
 /* ---------------------- */
                                     ajv = a[jv + j];
                                     ajy = a[jy + j];
@@ -962,28 +881,17 @@ static integer c__5 = 5;
                                     u10 = c3 * u3 - c2 * u4;
                                     u11 = c2 * u3 + c3 * u4;
                                     b[je + j] = bx;
-                                    a[jj + j] = co1 * (t8 - u11) - si1 * (u8
-                                            + t11);
-                                    b[jj + j] = si1 * (t8 - u11) + co1 * (u8
-                                            + t11);
-                                    a[jy + j] = co4 * (t8 + u11) - si4 * (u8
-                                            - t11);
-                                    b[jy + j] = si4 * (t8 + u11) + co4 * (u8
-                                            - t11);
-                                    a[jo + j] = co2 * (t9 - u10) - si2 * (u9
-                                            + t10);
-                                    b[jo + j] = si2 * (t9 - u10) + co2 * (u9
-                                            + t10);
-                                    a[jt + j] = co3 * (t9 + u10) - si3 * (u9
-                                            - t10);
-                                    b[jt + j] = si3 * (t9 + u10) + co3 * (u9
-                                            - t10);
+                                    a[jj + j] = co1 * (t8 - u11) - si1 * (u8 + t11);
+                                    b[jj + j] = si1 * (t8 - u11) + co1 * (u8 + t11);
+                                    a[jy + j] = co4 * (t8 + u11) - si4 * (u8 - t11);
+                                    b[jy + j] = si4 * (t8 + u11) + co4 * (u8 - t11);
+                                    a[jo + j] = co2 * (t9 - u10) - si2 * (u9 + t10);
+                                    b[jo + j] = si2 * (t9 - u10) + co2 * (u9 + t10);
+                                    a[jt + j] = co3 * (t9 + u10) - si3 * (u9 - t10);
+                                    b[jt + j] = si3 * (t9 + u10) + co3 * (u9 - t10);
                                     j += *jump;
                                 }
-
                             }
-
-/* -----(end of loop across transforms) */
 
                             ja += jstepx;
                             if (ja < istart) {
@@ -992,18 +900,11 @@ static integer c__5 = 5;
                         }
                     }
                 }
-/* -----( end of double loop for this k ) */
                 kk += la << 1;
             }
-/* -----( end of loop over values of k ) */
             la *= 5;
         }
-/* -----( end of loop on type II radix-5 passes ) */
-/* -----( nvex transforms completed) */
 L490:
         istart += nvex * *jump;
     }
-/* -----( end of loop on blocks of transforms ) */
-
 } /* gpfa5f_ */
-

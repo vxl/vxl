@@ -1,31 +1,22 @@
-/*  -- translated by f2c (version 19991025).
-   You must link the resulting object file with the libraries:
-	-lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
-/* Subroutine */ int dggbak_(job, side, n, ilo, ihi, lscale, rscale, m, v, 
-	ldv, info, job_len, side_len)
-char *job, *side;
-integer *n, *ilo, *ihi;
+/* Subroutine */ void dggbak_(job, side, n, ilo, ihi, lscale, rscale, m, v, ldv, info)
+const char *job, *side;
+const integer *n;
+integer *ilo, *ihi;
 doublereal *lscale, *rscale;
-integer *m;
+const integer *m;
 doublereal *v;
-integer *ldv, *info;
-ftnlen job_len;
-ftnlen side_len;
+const integer *ldv;
+integer *info;
 {
     /* System generated locals */
     integer v_dim1, v_offset, i__1;
 
     /* Local variables */
-    static integer i__, k;
-    extern /* Subroutine */ int dscal_();
-    extern logical lsame_();
-    extern /* Subroutine */ int dswap_();
+    static integer i, k;
     static logical leftv;
-    extern /* Subroutine */ int xerbla_();
     static logical rightv;
 
 
@@ -33,11 +24,6 @@ ftnlen side_len;
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
 /*     Courant Institute, Argonne National Lab, and Rice University */
 /*     September 30, 1994 */
-
-/*     .. Scalar Arguments .. */
-/*     .. */
-/*     .. Array Arguments .. */
-/*     .. */
 
 /*  Purpose */
 /*  ======= */
@@ -102,18 +88,6 @@ ftnlen side_len;
 
 /*  ===================================================================== */
 
-/*     .. Local Scalars .. */
-/*     .. */
-/*     .. External Functions .. */
-/*     .. */
-/*     .. External Subroutines .. */
-/*     .. */
-/*     .. Intrinsic Functions .. */
-/*     .. */
-/*     .. Executable Statements .. */
-
-/*     Test the input parameters */
-
     /* Parameter adjustments */
     --lscale;
     --rscale;
@@ -121,154 +95,108 @@ ftnlen side_len;
     v_offset = 1 + v_dim1 * 1;
     v -= v_offset;
 
-    /* Function Body */
-    rightv = lsame_(side, "R", (ftnlen)1, (ftnlen)1);
-    leftv = lsame_(side, "L", (ftnlen)1, (ftnlen)1);
+/*     Test the input parameters */
+
+    rightv = lsame_(side, "R");
+    leftv = lsame_(side, "L");
 
     *info = 0;
-    if (! lsame_(job, "N", (ftnlen)1, (ftnlen)1) && ! lsame_(job, "P", (
-	    ftnlen)1, (ftnlen)1) && ! lsame_(job, "S", (ftnlen)1, (ftnlen)1) 
-	    && ! lsame_(job, "B", (ftnlen)1, (ftnlen)1)) {
-	*info = -1;
+    if (! lsame_(job, "N") && ! lsame_(job, "P") && ! lsame_(job, "S") && ! lsame_(job, "B")) {
+        *info = -1;
     } else if (! rightv && ! leftv) {
-	*info = -2;
+        *info = -2;
     } else if (*n < 0) {
-	*info = -3;
+        *info = -3;
     } else if (*ilo < 1) {
-	*info = -4;
+        *info = -4;
     } else if (*ihi < *ilo || *ihi > max(1,*n)) {
-	*info = -5;
+        *info = -5;
     } else if (*m < 0) {
-	*info = -6;
+        *info = -6;
     } else if (*ldv < max(1,*n)) {
-	*info = -10;
+        *info = -10;
     }
     if (*info != 0) {
-	i__1 = -(*info);
-	xerbla_("DGGBAK", &i__1, (ftnlen)6);
-	return 0;
+        i__1 = -(*info);
+        xerbla_("DGGBAK", &i__1);
+        return;
     }
 
 /*     Quick return if possible */
 
     if (*n == 0) {
-	return 0;
+        return;
     }
     if (*m == 0) {
-	return 0;
+        return;
     }
-    if (lsame_(job, "N", (ftnlen)1, (ftnlen)1)) {
-	return 0;
+    if (lsame_(job, "N")) {
+        return;
     }
 
     if (*ilo == *ihi) {
-	goto L30;
+        goto L30;
     }
 
 /*     Backward balance */
 
-    if (lsame_(job, "S", (ftnlen)1, (ftnlen)1) || lsame_(job, "B", (ftnlen)1, 
-	    (ftnlen)1)) {
+    if (lsame_(job, "S") || lsame_(job, "B")) {
 
 /*        Backward transformation on right eigenvectors */
 
-	if (rightv) {
-	    i__1 = *ihi;
-	    for (i__ = *ilo; i__ <= i__1; ++i__) {
-		dscal_(m, &rscale[i__], &v[i__ + v_dim1], ldv);
-/* L10: */
-	    }
-	}
+        if (rightv) {
+            for (i = *ilo; i <= *ihi; ++i) {
+                dscal_(m, &rscale[i], &v[i + v_dim1], ldv);
+            }
+        }
 
 /*        Backward transformation on left eigenvectors */
 
-	if (leftv) {
-	    i__1 = *ihi;
-	    for (i__ = *ilo; i__ <= i__1; ++i__) {
-		dscal_(m, &lscale[i__], &v[i__ + v_dim1], ldv);
-/* L20: */
-	    }
-	}
+        if (leftv) {
+            for (i = *ilo; i <= *ihi; ++i) {
+                dscal_(m, &lscale[i], &v[i + v_dim1], ldv);
+            }
+        }
     }
 
 /*     Backward permutation */
 
 L30:
-    if (lsame_(job, "P", (ftnlen)1, (ftnlen)1) || lsame_(job, "B", (ftnlen)1, 
-	    (ftnlen)1)) {
+    if (lsame_(job, "P") || lsame_(job, "B")) {
 
 /*        Backward permutation on right eigenvectors */
 
-	if (rightv) {
-	    if (*ilo == 1) {
-		goto L50;
-	    }
-
-	    for (i__ = *ilo - 1; i__ >= 1; --i__) {
-		k = (integer) rscale[i__];
-		if (k == i__) {
-		    goto L40;
-		}
-		dswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
-L40:
-		;
-	    }
-
-L50:
-	    if (*ihi == *n) {
-		goto L70;
-	    }
-	    i__1 = *n;
-	    for (i__ = *ihi + 1; i__ <= i__1; ++i__) {
-		k = (integer) rscale[i__];
-		if (k == i__) {
-		    goto L60;
-		}
-		dswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
-L60:
-		;
-	    }
-	}
+        if (rightv) {
+            for (i = *ilo - 1; i >= 1; --i) {
+                k = (integer) rscale[i];
+                if (k != i) {
+                    dswap_(m, &v[i + v_dim1], ldv, &v[k + v_dim1], ldv);
+                }
+            }
+            for (i = *ihi + 1; i <= *n; ++i) {
+                k = (integer) rscale[i];
+                if (k != i) {
+                dswap_(m, &v[i + v_dim1], ldv, &v[k + v_dim1], ldv);
+                }
+            }
+        }
 
 /*        Backward permutation on left eigenvectors */
 
-L70:
-	if (leftv) {
-	    if (*ilo == 1) {
-		goto L90;
-	    }
-	    for (i__ = *ilo - 1; i__ >= 1; --i__) {
-		k = (integer) lscale[i__];
-		if (k == i__) {
-		    goto L80;
-		}
-		dswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
-L80:
-		;
-	    }
+        if (leftv) {
+            for (i = *ilo - 1; i >= 1; --i) {
+                k = (integer) lscale[i];
+                if (k != i) {
+                    dswap_(m, &v[i + v_dim1], ldv, &v[k + v_dim1], ldv);
+                }
+            }
 
-L90:
-	    if (*ihi == *n) {
-		goto L110;
-	    }
-	    i__1 = *n;
-	    for (i__ = *ihi + 1; i__ <= i__1; ++i__) {
-		k = (integer) lscale[i__];
-		if (k == i__) {
-		    goto L100;
-		}
-		dswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
-L100:
-		;
-	    }
-	}
+            for (i = *ihi + 1; i <= *n; ++i) {
+                k = (integer) lscale[i];
+                if (k != i) {
+                    dswap_(m, &v[i + v_dim1], ldv, &v[k + v_dim1], ldv);
+                }
+            }
+        }
     }
-
-L110:
-
-    return 0;
-
-/*     End of DGGBAK */
-
 } /* dggbak_ */
-

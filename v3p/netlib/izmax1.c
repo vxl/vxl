@@ -1,14 +1,10 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 integer izmax1_(n, cx, incx)
-integer *n;
-doublecomplex *cx;
-integer *incx;
+const integer *n;
+const doublecomplex *cx;
+const integer *incx;
 {
     /* System generated locals */
     integer ret_val = 0;

@@ -64,7 +64,7 @@ c
 c     on return
 c
 c        qy     double precision(n).
-c               qy conntains q*y, if its computation has been
+c               qy contains q*y, if its computation has been
 c               requested.
 c
 c        qty    double precision(n).

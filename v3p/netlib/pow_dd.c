@@ -1,4 +1,5 @@
 #include "f2c.h"
+#include "netlib.h"
 extern double pow(double,double); /* #include <math.h> */
 
 /* extern "C" */

@@ -1,9 +1,5 @@
-/*  -- translated by f2c (version 19991025).
-   You must link the resulting object file with the libraries:
-        -lf2c -lm   (in that order)
-*/
-
 #include "f2c.h"
+#include "netlib.h"
 
 /* Subroutine */ void drscl_(n, sa, sx, incx)
 integer *n;
@@ -13,8 +9,6 @@ integer *incx;
     static doublereal cden;
     static logical done;
     static doublereal cnum, cden1, cnum1;
-    extern /* Subroutine */ void dscal_(), dlabad_();
-    extern doublereal dlamch_();
     static doublereal bignum, smlnum, mul;
 
 /*  -- LAPACK auxiliary routine (version 3.0) -- */
@@ -57,7 +51,7 @@ integer *incx;
 
 /*     Get machine parameters */
 
-    smlnum = dlamch_("S", (ftnlen)1);
+    smlnum = dlamch_("S");
     bignum = 1. / smlnum;
     dlabad_(&smlnum, &bignum);
 
