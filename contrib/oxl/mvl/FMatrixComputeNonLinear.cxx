@@ -173,7 +173,7 @@ bool FMatrixComputeNonLinear::compute(FMatrix* F)
       vcl_cerr << "Epipole locations 1 : " << e1 << " 2 : " << e2 << '\n';
     }
   }
-  F = F_final;
+  *F = *F_final;
   return true;
 }
 
