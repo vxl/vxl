@@ -63,7 +63,7 @@ class rgrl_initializer_prior
   rgrl_view_sptr           init_view_;
   rgrl_scale_sptr          prior_scale_;
   vcl_vector< rgrl_transformation_sptr > xforms_;
-  int xform_index_;
+  unsigned int xform_index_;
 };
 
 #endif

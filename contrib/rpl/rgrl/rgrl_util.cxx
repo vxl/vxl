@@ -67,7 +67,7 @@ rgrl_util_estimate_global_region( rgrl_mask_box const&         from_image_roi,
 
   //2. Forward map all the points in from_pts
   pt_vector to_pts;
-  for ( pt_iter pitr = from_pts.begin();  pitr != from_pts.end(); ++pitr) {
+  for (pt_iter pitr = from_pts.begin();  pitr != from_pts.end(); ++pitr) {
     vnl_vector<double> to_pt = curr_xform.map_location(*pitr);
     to_pts.push_back(to_pt);
   }
@@ -180,7 +180,7 @@ rgrl_util_geometric_error_scaling( rgrl_match_set const& match_set )
 {
   vnl_vector<double> factors;
   bool success = rgrl_util_geometric_scaling_factors( match_set, factors );
-  if( !success ) 
+  if ( !success )
     return 0.0;
 
   // Estimate the change in the spread of the feature set
@@ -212,7 +212,7 @@ rgrl_util_geometric_error_scaling( rgrl_set_of<rgrl_match_set_sptr> const& curre
 {
   vnl_vector<double> factors;
   bool success = rgrl_util_geometric_scaling_factors( current_match_sets, factors );
-  if( !success ) 
+  if ( !success )
     return 0.0;
 
   // Estimate the change in the spread of the feature set
@@ -227,7 +227,7 @@ rgrl_util_geometric_error_scaling( rgrl_set_of<rgrl_match_set_sptr> const& curre
   return scaling;
 }
 
-bool 
+bool
 rgrl_util_geometric_scaling_factors( rgrl_match_set const& match_set,
                                      vnl_vector<double>& factors )
 {
@@ -238,8 +238,7 @@ rgrl_util_geometric_scaling_factors( rgrl_match_set const& match_set,
   // The dimensionality of the space we are working in. Find it by
   // looking at the dimension of one of the data points.
   //
-  int m;
-  m = match_set.from_begin().from_feature()->location().size();
+  unsigned int m = match_set.from_begin().from_feature()->location().size();
 
   // Compute the centers of the from_feature_set and the mapped_feature_set
   //
@@ -271,10 +270,10 @@ rgrl_util_geometric_scaling_factors( rgrl_match_set const& match_set,
   //
   vnl_svd<double> svd_from (cov_matrix_from );
   vnl_svd<double> svd_mapped (cov_matrix_mapped );
-  
+
   double sv_from, sv_mapped;
   factors.set_size( m );
-  for( unsigned i=0; i<m; ++i ) {
+  for ( unsigned i=0; i<m; ++i ) {
     sv_from = vcl_sqrt( svd_from.W(i) );
     sv_mapped = vcl_sqrt( vnl_math_max( svd_mapped.W(i), 1e-16 ) );
     factors[i] = sv_mapped / sv_from;
@@ -283,7 +282,7 @@ rgrl_util_geometric_scaling_factors( rgrl_match_set const& match_set,
   return true;
 }
 
-bool 
+bool
 rgrl_util_geometric_scaling_factors( rgrl_set_of<rgrl_match_set_sptr> const& current_match_sets,
                                      vnl_vector<double>& factors )
 {
@@ -294,19 +293,18 @@ rgrl_util_geometric_scaling_factors( rgrl_set_of<rgrl_match_set_sptr> const& cur
   // The dimensionality of the space we are working in. Find it by
   // looking at the dimension of one of the data points.
   //
-  int m;
   unsigned int i=0;
-  while( current_match_sets[i]->from_size() == 0 && i<current_match_sets.size() ) 
+  while ( current_match_sets[i]->from_size() == 0 && i<current_match_sets.size() )
     ++i;
-  if( i==current_match_sets.size() )  return false;
-  m = current_match_sets[i]->from_begin().from_feature()->location().size();
+  if ( i==current_match_sets.size() )  return false;
+  unsigned int m = current_match_sets[i]->from_begin().from_feature()->location().size();
 
   // Compute the centers of the from_feature_set and the mapped_feature_set
   //
   vnl_vector<double> from_centre( m, 0.0 );
   vnl_vector<double> mapped_centre( m, 0.0 );
   unsigned num = 0;
-  for( i=0; i<current_match_sets.size(); ++i) {
+  for (unsigned int i=0; i<current_match_sets.size(); ++i) {
     rgrl_match_set const& match_set = *(current_match_sets[i]);
     num += match_set.from_size();
     for ( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
@@ -321,7 +319,7 @@ rgrl_util_geometric_scaling_factors( rgrl_set_of<rgrl_match_set_sptr> const& cur
   //
   vnl_matrix<double> cov_matrix_from(m,m,0.0);
   vnl_matrix<double> cov_matrix_mapped(m,m,0.0);
-  for( i=0; i<current_match_sets.size(); ++i) {
+  for (unsigned int i=0; i<current_match_sets.size(); ++i) {
     rgrl_match_set const& match_set = *(current_match_sets[i]);
     for ( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
       cov_matrix_from +=
@@ -339,10 +337,10 @@ rgrl_util_geometric_scaling_factors( rgrl_set_of<rgrl_match_set_sptr> const& cur
   //
   vnl_svd<double> svd_from (cov_matrix_from );
   vnl_svd<double> svd_mapped (cov_matrix_mapped );
-  
+
   double sv_from, sv_mapped;
   factors.set_size( m );
-  for( unsigned i=0; i<m; ++i ) {
+  for ( unsigned i=0; i<m; ++i ) {
     sv_from = svd_from.W(i);
     sv_mapped = vnl_math_max( svd_mapped.W(i), 1e-16 );
     factors[i] = sv_mapped / sv_from;
@@ -616,7 +614,6 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
   unsigned int max_iterations = 25;
   bool failed = false;
   vnl_vector<double> scaling;
-  bool ret_success;
 
   //  Basic loop:
   //  1. Calculate new estimate
@@ -645,12 +642,11 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
     }
 
     // Step 1.5 Update scaling factors in transformation
-    ret_success = rgrl_util_geometric_scaling_factors( match_sets, scaling );
-    if( ret_success ) 
+    if ( rgrl_util_geometric_scaling_factors( match_sets, scaling ) )
       new_estimate->set_scaling_factors( scaling );
-    else 
+    else
       vcl_cout << "WARNING in " << __FILE__ << __LINE__ << "cannot compute scaling factors!!!" << vcl_endl;
-    
+
     //  Step 2.  Map matches and calculate weights
     //
     for ( unsigned ms=0; ms < match_sets.size(); ++ms ) {
@@ -681,9 +677,9 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
             iteration < max_iterations );
 
   DebugFuncMacro_abv(debug_flag, 1, "irls status: " <<
-                     ( ( current_status->has_converged() )?
-                       "converged" : ( ( current_status->has_stagnated() )?
-                                       "stagnated" : "reaches max iteration\n" ) ) );
+                     ( current_status->has_converged() ?
+                       "converged\n" : current_status->has_stagnated() ?
+                                       "stagnated\n" : "reaches max iteration\n" ) );
 
   // Compute the total alignment error as the sum of the weighted
   // residual squares
