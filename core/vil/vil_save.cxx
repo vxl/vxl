@@ -12,6 +12,7 @@
 
 #include <vil/vil_open.h>
 #include <vil2/vil2_new.h>
+#include <vil2/vil2_pixel_format.h>
 #include <vil2/vil2_image_data.h>
 #include <vil2/vil2_image_view_functions.h>
 
@@ -31,25 +32,27 @@ bool vil2_save(const vil2_image_view_base &im, char const* filename, char const*
     vcl_cerr << __FILE__ ": (vil2_save) Cannot save to type [" << file_format << "]\n";
     return false;
   }
-  switch (im.pixel_format())
+  switch (vil2_pixel_format_component_format(im.pixel_format()))
   {
-  case VIL2_PIXEL_FORMAT_RGB_BYTE:
-    return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<vil2_byte> >&>(im)),0,0);
-  case VIL2_PIXEL_FORMAT_RGB_UINT_16:
-    return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<vxl_uint_16> >&>(im)),0,0);
+  case VIL2_PIXEL_FORMAT_BYTE:
+    return out->put_view(vil2_image_view<vil2_byte>(im),0,0);
+  case VIL2_PIXEL_FORMAT_UINT_16:
+    return out->put_view(vil2_image_view<vxl_uint_16>(im),0,0);
+  case VIL2_PIXEL_FORMAT_INT_16:
+    return out->put_view(vil2_image_view<vxl_int_16>(im),0,0);
+  case VIL2_PIXEL_FORMAT_UINT_32:
+    return out->put_view(vil2_image_view<vxl_uint_32>(im),0,0);
+  case VIL2_PIXEL_FORMAT_INT_32:
+    return out->put_view(vil2_image_view<vxl_int_32>(im),0,0);
+  case VIL2_PIXEL_FORMAT_FLOAT:
+    return out->put_view(vil2_image_view<float>(im),0,0);
+  case VIL2_PIXEL_FORMAT_BOOL:
+    return out->put_view(vil2_image_view<bool>(im),0,0);
 #ifdef VIL2_TO_BE_FIXED
-  case VIL2_PIXEL_FORMAT_RGB_INT_8:
-    return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<vxl_int_8> >&>(im)),0,0);
-  case VIL2_PIXEL_FORMAT_RGB_INT_16:
-    return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<vxl_int_16> >&>(im)),0,0);
-  case VIL2_PIXEL_FORMAT_RGB_UINT_32:
-    return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<vxl_uint_32> >&>(im)),0,0);
-  case VIL2_PIXEL_FORMAT_RGB_INT_32:
-    return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<vxl_int_32> >&>(im)),0,0);
-  case VIL2_PIXEL_FORMAT_RGB_DOUBLE:
-    return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<double> >&>(im)),0,0);
-  case VIL2_PIXEL_FORMAT_RGB_FLOAT:
-    return out->put_view(vil2_view_as_planes(static_cast<const vil2_image_view<vil_rgb<float> >&>(im)),0,0);
+  case VIL2_PIXEL_FORMAT_INT_8:
+    return out->put_view(vil2_image_view<vxl_int_8>(im),0,0);
+  case VIL2_PIXEL_FORMAT_DOUBLE:
+    return out->put_view(vil2_image_view<double>(im),0,0);
 #endif
   default:
     return out->put_view(im, 0, 0);
