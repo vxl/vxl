@@ -32,8 +32,8 @@ class projection_lsqf : public vnl_least_squares_function
  public:
   projection_lsqf(vcl_vector<vgl_homg_point_2d<double> > const& from_points, 
                   vcl_vector<vgl_homg_point_2d<double> > const& to_points)
-    : vnl_least_squares_function(9, 2*from_points.size(), no_gradient),
-    from_points_(from_points), n_(from_points.size())
+    : n_(from_points.size()), from_points_(from_points),
+    vnl_least_squares_function(9, 2*from_points.size(), no_gradient)
     {
     
       assert(n_==to_points.size());
