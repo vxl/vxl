@@ -5,8 +5,8 @@
 
 //:
 // \file
-// \author Rupert Curwen, August 28th, 1998, 
-//                        GE Corporate Research and Development
+// \author Rupert Curwen, GE Corporate Research and Development
+// \date   Aug 28th, 1998
 //
 // \verbatim
 // Modifications
@@ -16,7 +16,7 @@
 
 
 //: A base class for all vbl_basic_relations; provides type-safe downcasting
-//
+
 class vbl_basic_relation_type
 {
 public:
@@ -33,7 +33,6 @@ public:
 
 protected:
   int dex_id;
-
 };
 
 #endif // vbl_basic_relation_type_h

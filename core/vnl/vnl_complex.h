@@ -15,9 +15,11 @@
 //     functions from vnl_math which use complex here instead.
 //     In a sense, vnl_math should be a namespace, and this file adds to that
 //     namespace.
-
+//
+// \verbatim
 // Modifications
 // LSB (Manchester) 26/3/01 Tidied documentation
+// \endverbatim
 
 #include <vcl_cmath.h>
 #include <vcl_complex.h>

@@ -7,15 +7,16 @@
 
 //: \file
 //  \brief Unit quaternion represents rotation in 3D.
-//  \author awf@robots.ox.ac.uk 16 Mar 00
+//  \author awf@robots.ox.ac.uk
+//  \date  16 Mar 00
 //
-
-
+// \verbatim
 //  Modifications
 //  20-05-2000 fsm@robots. changed FLOAT to T since gcc will barf at
 //            the very reasonable forward declaration
 //            template <class T> class vnl_quaternion;
 //  LSB (Manchester) 23/3/01 Tidied documentation
+// \endverbatim
 
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>

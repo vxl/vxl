@@ -8,8 +8,9 @@
 //:
 // \file
 // \brief Reads information about a user from the password file.
-// \author Andrew W. Fitzgibbon, Oxford RRG, 08 Apr 99
-// 
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   08 Apr 99
+//
 // \verbatim
 //    Modifications
 //     990408 AWF Initial version.

@@ -7,38 +7,39 @@
 #pragma interface
 #endif
 
-
 //:
 // \file
 // \brief class to iterate through directories and/or "glob" patterns (*.*)
-// \author awf@robots.ox.ac.uk, 27 Nov 00
+// \author awf@robots.ox.ac.uk
+// \date 27 Nov 00
 //
 // \verbatim
 // Modifications
-// 
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
+// Peter Vanroose   27/05/2001: Corrected the documentation
 // \endverbatim
-
-
-// Author: awf@robots.ox.ac.uk
-// Created: 27 Nov 00
 
 #include <vcl_string.h>
 
 struct vbl_file_iterator_data;
 
 //: Iterate through directories and/or "glob" patterns (*.*)
-// It is efficient to use 
+// It is efficient to use
+// \verbatim
 //   for(vbl_file_iterator fn("/dir/*"); fn; ++fn) {
 //     ... use fn() as filename
 //   }
+// \endverbatim
 // simply to list the contents of a directory.  If you really
 // want just the *.ext files, it is efficient to use
+// \verbatim
 //   for(vbl_file_iterator fn("/dir/*.ext"); fn; ++fn) {
 //     ... use fn() as filename
 //   }
+// \endverbatim
 // rather than opendir/glob/etc.
 // Valid glob patterns are unix-like.
+
 class vbl_file_iterator {
 public:
 

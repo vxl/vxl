@@ -2,10 +2,10 @@
 #define vnl_rotation_matrix_h_
 // This is vxl/vnl/vnl_rotation_matrix.h
 
-//: 
+//:
 //  \file
 //  \brief Functions to compute the exponential of a skew 3x3 matrix [x].
-//  \author Unknown
+//
 // The result is a (special) orthogonal 3x3 matrix which is a
 // rotation about the axis x, by an angle equal to ||x||.
 

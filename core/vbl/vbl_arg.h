@@ -9,7 +9,8 @@
 //:
 // \file
 // \brief Command-line arguments
-// \author Andrew W. Fitzgibbon, Oxford RRG, 05 Feb 98
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   05 Feb 98
 //
 // \verbatim
 // Modifications
@@ -30,7 +31,7 @@ template <class T> int  parse       (vbl_arg<T>*, char**);
 //: This is the base class for the templated vbl_arg<T>s
 class vbl_arg_base {
 public:
-  static void parse_deprecated(int& argc, char **& argv, 
+  static void parse_deprecated(int& argc, char **& argv,
                bool warn_about_unrecognized_arguments = true);
   static void include_deprecated(vbl_arg_info_list& l);
 
@@ -53,7 +54,7 @@ public://protected:
   char const* help_;
   char const *type_;
 
-  vbl_arg_base(vbl_arg_info_list& l, char const* option_string, 
+  vbl_arg_base(vbl_arg_info_list& l, char const* option_string,
                  char const*helpstring);
   vbl_arg_base(char const* option_string, char const*helpstring);
   virtual ~vbl_arg_base() {}
@@ -63,10 +64,10 @@ public://protected:
 };
 
 //: Parse the list of arguments....
-inline void vbl_arg_parse(int& argc, char **& argv, 
+inline void vbl_arg_parse(int& argc, char **& argv,
                           bool warn_about_unrecognized_arguments = true)
 {
-  vbl_arg_base::parse_deprecated(argc, argv, 
+  vbl_arg_base::parse_deprecated(argc, argv,
                                  warn_about_unrecognized_arguments);
 }
 
@@ -100,8 +101,8 @@ inline void vbl_arg_display_usage_and_exit(char const* msg = 0)
 // either the default value or the one supplied on the command line.
 //
 // The big design decision here was whether or not the args should collect
-// themselves into a global pool, so that the static vbl_arg_base::parse can 
-// find them, or whether there should be a local argPool which is passed to 
+// themselves into a global pool, so that the static vbl_arg_base::parse can
+// find them, or whether there should be a local argPool which is passed to
 // each arg in order that it may add itself.  That would give a syntax like
 // <verb>
 //      argList args;
@@ -125,12 +126,12 @@ public:
 
   //: Construct an vbl_arg<T> with command-line switch and default value.
   // Command line switch \arg{option_string}, and default value
-  // \arg{default_value}.  Add this argument to the global 
-  // list of arguments that vbl_arg_base::parse() uses when it eventually 
+  // \arg{default_value}.  Add this argument to the global
+  // list of arguments that vbl_arg_base::parse() uses when it eventually
   // gets the command line.
   //
-  // If \arg{option_string} is null, then the argument is assigned to the 
-  // first plain word in the command line (warning: this causes problems for 
+  // If \arg{option_string} is null, then the argument is assigned to the
+  // first plain word in the command line (warning: this causes problems for
   // T=char *, but that just means that you have to have a help string if you
   // want a default... good)
   vbl_arg(char const* option_string = 0,
@@ -148,7 +149,7 @@ public:
     : vbl_arg_base(l, option_string, helpstring),
       value_(default_value) { settype(); }
 
-  //: return the arg's current value, whether the default or the one from the 
+  //: return the arg's current value, whether the default or the one from the
   // command line.
   T      & operator () () { return value_; }
   T const& operator () () const { return value_; }

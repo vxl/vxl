@@ -8,19 +8,22 @@
 //:
 //  \file
 //  \brief Abstract 1D map
-//  \author Andrew W. Fitzgibbon, Oxford RRG, 28 Nov 98
-//  vnl_unary_function is an abstract map between two types (read spaces).
-
 //
+//  vnl_unary_function is an abstract map between two types (read spaces).
+//
+//  \author Andrew W. Fitzgibbon, Oxford RRG
+//  \date   28 Nov 98
+// \verbatim
 // Modifications
-// 981128 AWF Initial version.
+//  981128 AWF Initial version.
 //  LSB Manchester 19/3/01 Documentation tidied
+// \endverbatim
 //
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_numeric_limits.h>
 
-//: Abstract 1D map
+//: Abstract 1D map between two types (read spaces)
 template <class Return, class Argument>
 class vnl_unary_function {
 public:

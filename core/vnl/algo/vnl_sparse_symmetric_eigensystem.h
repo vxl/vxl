@@ -5,26 +5,27 @@
 #endif
 
 //:
-//  \file
-//  \brief Find the eigenvalues of a sparse symmetric matrix
-//  \author Rupert W. Curwen, GE CR&D, 20 Oct 98
+// \file
+// \brief Find the eigenvalues of a sparse symmetric matrix
+// \author Rupert W. Curwen, GE CR&D
+// \date   20 Oct 98
 //
-//  Modifications
+// \verbatim
+// Modifications
 //  dac (Manchester) 28/03/2001: tidied up documentation
-//
+// \endverbatim
 
 #include <vnl/vnl_sparse_matrix.h>
 #include <vcl_vector.h>
 
 //: Find the eigenvalues of a sparse symmetric matrix
-//  Solve the eigenproblem $A x = \lambda x$, with $A$ symmetric and
+//  Solve the eigenproblem \f$A x = \lambda x\f$, with \f$A\f$ symmetric and
 //  sparse.  The block Lanczos algorithm is used to allow the
 //  recovery of a number of eigenvale/eigenvector pairs from either
 //  end of the spectrum, to a required accuracy.
 //
-//  Uses the dnlaso routine from the LASO package of netlib. 
-  
-//: Solve $A x = \lambda x$ using Lanczos algorithm.
+//  Uses the dnlaso routine from the LASO package of netlib.
+
 class vnl_sparse_symmetric_eigensystem {
 public:
   vnl_sparse_symmetric_eigensystem();

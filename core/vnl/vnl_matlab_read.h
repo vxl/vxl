@@ -6,11 +6,13 @@
 // This is vxl/vnl/vnl_matlab_read.h
 
 //: \file
-// \brief Read from MATLAB files 
+// \brief Read from MATLAB files
 // \author fsm@robots.ox.ac.uk
-
+//
+// \verbatim
 // Modifications
 // LSB (Manchester) 23/3/01 documentation tidied
+// \endverbatim
 
 #include <vcl_iosfwd.h>
 #include <vcl_complex_fwd.h>
@@ -22,8 +24,8 @@ template <class T> class vnl_vector;
 template <class T> class vnl_matrix;
 
 //: Attempt to read vector or matrix. If the MATLAB header cannot be
-// read, return false. Else, if a name is given, and it doesn't 
-// match what's in the file, abort(). If the data in the file cannot 
+// read, return false. Else, if a name is given, and it doesn't
+// match what's in the file, abort(). If the data in the file cannot
 // reasonably be read into the destination, abort().
 //
 // The vector/matrix will be resized if necessary.
@@ -44,7 +46,7 @@ public:
 
   operator bool () const;
   void read_next(); // skip to next header in file
-  
+
   bool is_single() const;
   bool is_rowwise() const;
   bool is_bigendian() const; // don't use this
@@ -69,7 +71,7 @@ fsm_declare_methods(double);
 fsm_declare_methods(vcl_complex<float>);
 fsm_declare_methods(vcl_complex<double>);
 #undef fsm_declare_methods
-  
+
 private:
   vcl_istream &s;
   vnl_matlab_header hdr;

@@ -4,16 +4,15 @@
 #pragma interface
 #endif
 
-//:
-//  \file
-//  \brief Name space for various chi-squared distribution functions.
-//  \author Rupert Curwen, GE CRD, August 18th, 1998
+//: \file
+// \brief Name space for various chi-squared distribution functions.
+// \author Rupert Curwen, GE CRD
+// \date   August 18th, 1998
 //
-//  \verbatim
-//  Modifications
+// \verbatim
+// Modifications
 //  dac (Manchester) 26/03/2001: tidied up documentation
-//  \endverbatim
-//
+// \endverbatim
 
 
 //: Compute cumulative distribution function value for chi-squared distribution
@@ -23,18 +22,19 @@ extern float vnl_chi_squared_cumulative(float chisq, int dof);
 
 //: Name space for various chi-squared distribution functions.
 //
-//\verbatim
 //  A[] and B[] are (pointers to) arrays containing histograms.
 //  If the 'normalize' parameter is true, each histogram will
 //  be implicitly normalized (so as to sum to 1) before the
 //  statistic is calculated :
-// 
+//
 //  a[i] = A[i] / \sum_j A[j]
+//
 //  b[i] = B[i] / \sum_j B[j]
 //
-//  *DO NOT* add scale factors to these functions or you will break 
+//  *DO NOT* add scale factors to these functions or you will break
 //  the code written by those who read the documentation. fsm.
-
+//
+//\verbatim
 //      (a[i] - b[i])^2
 // \sum ---------------
 //   i       a[i]
@@ -42,7 +42,7 @@ extern float vnl_chi_squared_cumulative(float chisq, int dof);
 //
 
 template <class T>
-double vnl_chi_squared_statistic_1 (T const *A, T const *B, 
+double vnl_chi_squared_statistic_1 (T const *A, T const *B,
                                     int n, bool normalize);
 
 //:
@@ -52,7 +52,7 @@ double vnl_chi_squared_statistic_1 (T const *A, T const *B,
 //   i       b[i]
 //\endverbatim
 template <class T>
-double vnl_chi_squared_statistic_2 (T const *A, T const *B, 
+double vnl_chi_squared_statistic_2 (T const *A, T const *B,
                                     int n, bool normalize);
 
 //:
@@ -62,7 +62,7 @@ double vnl_chi_squared_statistic_2 (T const *A, T const *B,
 //   i    a[i] + b[i]
 //\endverbatim
 template <class T>
-double vnl_chi_squared_statistic_12(T const *A, T const *B, 
+double vnl_chi_squared_statistic_12(T const *A, T const *B,
                                     int n, bool normalize);
 
 #endif // vnl_chi_squared_h_

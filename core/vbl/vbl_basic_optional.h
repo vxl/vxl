@@ -3,7 +3,6 @@
 
 // This is vxl/vbl/vbl_basic_optional.h
 
-
 //:
 // \file
 // \author Rupert Curwen GE Corporate Research and Development

@@ -7,13 +7,14 @@
 
 //: \file
 //  \brief Load vnl_vector<T> from file
-//  \author Andrew W. Fitzgibbon, Oxford RRG, 23 Dec 96
-
-
+//  \author Andrew W. Fitzgibbon, Oxford RRG
+//  \date   23 Dec 96
 //
-//   Modifications:
-//     fsm created by modifying class FileMatrix
-//  LSB (Manchester) 23/3/01 Tidied documentation
+// \verbatim
+// Modifications:
+//   fsm created by modifying class FileMatrix
+//   LSB (Manchester) 23/3/01 Tidied documentation
+// \endverbatim
 //
 //-----------------------------------------------------------------------------
 

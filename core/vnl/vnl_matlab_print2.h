@@ -6,7 +6,7 @@
 #endif
 
 //: \file
-//  \author fsm@robots.ox.ac.uk
+//
 // After including this header file, the client should be able to say :
 // \verbatim
 //   vnl_matrix<double> foo(3, 14);
@@ -24,6 +24,8 @@
 //        vnl_matlab_print(cerr, foo, "foo");
 //        vnl_matlab_print(cerr, foo, 0, vnl_matlab_fmt_long);
 // \endverbatim
+//
+//  \author fsm@robots.ox.ac.uk
 
 #include <vnl/vnl_matlab_print.h>
 

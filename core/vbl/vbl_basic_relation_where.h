@@ -5,8 +5,8 @@
 
 //:
 // \file
-// \author Rupert W. Curwen, November 13, 1997, 
-//         GE Corporate Research and Development
+// \author Rupert W. Curwen, GE Corporate Research and Development
+// \date   Nov 13, 1997
 //
 // \verbatim
 // Modifications
@@ -26,7 +26,6 @@ template <class T1, class T2,
   VCL_DFL_TYPE_PARAM_STLDECL(T5,vbl_basic_optional)>
 class vbl_basic_relation_where : public vbl_basic_tuple<T1,T2,T3,T4,T5>
 {
-
 public:
   //: Constructors.
   vbl_basic_relation_where()
@@ -66,7 +65,7 @@ public:
   }
 
   //: Operator =.
-  inline vbl_basic_relation_where<T1,T2,T3,T4,T5>& 
+  inline vbl_basic_relation_where<T1,T2,T3,T4,T5>&
     operator=(const vbl_basic_relation_where<T1,T2,T3,T4,T5>& w)
   {
     if (this == &w) return *this;
@@ -191,7 +190,6 @@ private:
   bool third_wild;
   bool fourth_wild;
   bool fifth_wild;
-
 };
 
 #endif // vbl_basic_relation_where_h

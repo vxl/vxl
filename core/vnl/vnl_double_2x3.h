@@ -6,12 +6,16 @@
 // This is vxl/vnl/vnl_double_2x3.h
 
 //: \file
-//  \author Andrew W. Fitzgibbon, Oxford RRG, 23 Dec 96
-
-// .Modifications:
+//  \brief 2x3 matrix of double
+//  \author Andrew W. Fitzgibbon, Oxford RRG
+//  \date   23 Dec 96
+//
+// \verbatim
+// Modifications:
 //   Peter Vanroose, 25 June 1999: no need to use #pragma instantiate anymore
 //   Peter Vanroose, 21 Oct 1999: vnl_matrix_fixed<double,2,3> already instantiated
 //   LSB (Manchester) 26/3/01
+// \endverbatim
 //
 //-----------------------------------------------------------------------------
 

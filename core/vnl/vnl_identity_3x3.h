@@ -6,13 +6,13 @@
 // This is vxl/vnl/vnl_identity_3x3.h
 
 //: \file
-//  \brief  Undocumented class
-//  \author Andrew W. Fitzgibbon, Oxford RRG, 30 Nov 96
-//     
-
+//  \author Andrew W. Fitzgibbon, Oxford RRG
+//  \date   30 Nov 96
+//
+// \verbatim
 // Modifications:
 // LSB (Manchester) 23/3/01 tidied documentation
-//
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_double_3x3.h>

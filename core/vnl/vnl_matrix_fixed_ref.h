@@ -5,10 +5,9 @@
 #endif
 // This is vxl/vnl/vnl_matrix_fixed_ref.h
 
-//
 //: \file
 //  \brief Fixed size stack-stored vnl_matrix
-// \author Andrew W. Fitzgibbon, Oxford RRG, 04 Aug 96
+//
 //    vnl_matrix_fixed_ref is a fixed-size vnl_matrix for which the data space
 //    has been supplied externally.  This is useful for two main tasks:
 //
@@ -24,12 +23,16 @@
 //    using operator new.  This in turn is plausible as the point is to avoid
 //    such calls.
 //
-
-// .Modifications:
-//     Peter Vanroose, 27 nov 1996:  added default constructor, which does
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   04 Aug 96
+//
+// \verbatim
+// Modifications:
+//  Peter Vanroose, 27 nov 1996:  added default constructor, which does
 //            itself allocate the matrix storage.  Necessary because otherwise
 //            the compiler will itself generate a default constructor.
 //  4/4/01 LSB (Manchester) Tidied documentation
+// \endverbatim
 //
 //-----------------------------------------------------------------------------
 

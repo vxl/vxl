@@ -8,12 +8,12 @@
 //:
 // \file
 // \brief Collection of common predicates for library sort routines
-// \author awf@robots.ox.ac.uk, 15 Mar 00
+// \author awf@robots.ox.ac.uk
+// \date   15 Mar 00
 //
 // \verbatim
 // Modifications
-//971119 AWF Initial version
-//
+// 971119 AWF Initial version
 // PDA (Manchester) 23/03/2001: Tidied up the documentation
 // \endverbatim
 

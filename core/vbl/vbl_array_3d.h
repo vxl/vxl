@@ -9,7 +9,8 @@
 //:
 // \file
 // \brief Contains class for templated 3d array
-// \author Paul Beardsley, Oxford University, UK, 29.03.96
+// \author Paul Beardsley, Oxford University, UK
+// \date   29.03.96
 //
 // \verbatim
 // Modifications
@@ -18,7 +19,6 @@
 // 01 Mar 2001 fsm@robots. Converted to fascist C++
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
 // \endverbatim
-
 
 
 #include <vcl_compiler.h>

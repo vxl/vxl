@@ -8,12 +8,14 @@
 //:
 // \file
 // \brief vbl_sprintf - creates a formatted ANSI C++ string.
-// \author Andrew W. Fitzgibbon, Oxford RRG, 08 Aug 96
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   08 Aug 96
 //
 // \verbatim
 // Modifications:
 // 10 June 1999 fsm@robots removed constructor from 'const vcl_string &' and
 //              changed remaining constructors to use do_vbl_sprintf().
+// Peter Vanroose   27/05/2001: Corrected the documentation
 // \endverbatim
 //-----------------------------------------------------------------------------
 
@@ -27,6 +29,7 @@
 // cerr << vbl_sprintf("int %d, float %f ", 1, 3.14)
 //      << bigobject << endl;
 // \endverbatim
+
 struct vbl_sprintf : vcl_string
 {
   // ISO C++ does not allow reference types or structure types for the
@@ -39,9 +42,9 @@ struct vbl_sprintf : vcl_string
 
 #ifndef VCL_WIN32
   // assignment
-  vbl_sprintf& operator=(vcl_string const& s) 
+  vbl_sprintf& operator=(vcl_string const& s)
   { vcl_string::operator=(s); return *this; }
-  vbl_sprintf& operator=(char const* s) 
+  vbl_sprintf& operator=(char const* s)
   { vcl_string::operator=(s); return *this; }
 #endif
 

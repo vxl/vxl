@@ -8,7 +8,8 @@
 //:
 // \file
 // \brief Collection of common predicates for sorting
-// \author Andrew W. Fitzgibbon, Oxford RRG, 19 Nov 97
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   19 Nov 97
 //
 // \verbatim
 // Modifications

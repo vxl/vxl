@@ -5,19 +5,16 @@
 #endif
 // This is vxl/vbl/vbl_sequence_filename_map.h
 
-
-
 //:
 // \file
 // \brief Contains class for mapping sequence frame indices to filenames
-// \author David Capel, Oxford RRG, 15 April 2000
+// \author David Capel, Oxford RRG
+// \date   15 April 2000
 //
 // \verbatim
 // Modifications
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
 // \endverbatim
-
-
 
 #include <vcl_string.h>
 #include <vcl_iosfwd.h>
@@ -25,26 +22,28 @@
 
 
 //: Maps sequence frame indices to filenames
-// vbl_sequence_filename_map maps sequence frame indices to filenames. It 
-// also performs some disk probing functions to discover the image extension, 
+// vbl_sequence_filename_map maps sequence frame indices to filenames. It
+// also performs some disk probing functions to discover the image extension,
 // directories and sequence template if not specified by the user.
+//
 // The template can have any of the following forms :
-//   "pgm/img.%03d.pgm,0:5:100", "pgm/img.####.pgm", "img.###.pgm", 
-// "img.###,5:1:20", "img.%02d,:5:" (you get the idea..) If the image 
+//   "pgm/img.%03d.pgm,0:5:100", "pgm/img.####.pgm", "img.###.pgm",
+// "img.###,5:1:20", "img.%02d,:5:" (you get the idea..) If the image
 // directory and/or filename extension are not specified they
-// are automagically determined by probing the current directory for likely 
+// are automagically determined by probing the current directory for likely
 // candidates.
-// The vector of indices specifies the mapping from sequence frame-index to 
-// filename-index.  If not specified, the image directory is probed to 
+//
+// The vector of indices specifies the mapping from sequence frame-index to
+// filename-index.  If not specified, the image directory is probed to
 // determine the sequence start/end frames.
 class vbl_sequence_filename_map {
 public:
   vbl_sequence_filename_map ();
-  vbl_sequence_filename_map (vcl_string const & seq_template, 
+  vbl_sequence_filename_map (vcl_string const & seq_template,
     vcl_vector<int> const & indices);
-  vbl_sequence_filename_map (vcl_string const & seq_template, 
+  vbl_sequence_filename_map (vcl_string const & seq_template,
     int start, int end, int step = 1);
-  vbl_sequence_filename_map (vcl_string const & seq_template, 
+  vbl_sequence_filename_map (vcl_string const & seq_template,
     int step = 1);
   ~vbl_sequence_filename_map ();
 
@@ -53,7 +52,7 @@ public:
   vcl_string pair_name(int i, int j);
   vcl_string triplet_name(int i, int j, int k);
 
-  vcl_string image_name(int frame) 
+  vcl_string image_name(int frame)
   { return image_dir_ + name(frame) + image_extension_; }
 
   //: returns the image directory e.g. "pgm/"

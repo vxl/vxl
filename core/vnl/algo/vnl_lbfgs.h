@@ -5,13 +5,16 @@
 #endif
 
 //:
-//  \file
-//  \brief Limited memory Broyden Fletcher Goldfarb Shannon minimization
-//  \author Andrew W. Fitzgibbon, Oxford RRG, 22 Aug 99
+// \file
+// \brief Limited memory Broyden Fletcher Goldfarb Shannon minimization
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   22 Aug 99
 //
-//  Modifications 
+// \verbatim
+// Modifications
 //  990822 AWF Initial version.
 //  dac (Manchester) 28/03/2001: tidied up documentation
+// \endverbatim
 //
 
 #include <vnl/vnl_cost_function.h>

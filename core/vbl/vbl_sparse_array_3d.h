@@ -8,10 +8,13 @@
 //:
 // \file
 // \brief a space efficient 3d array
-// \author Andrew W. Fitzgibbon, Oxford RRG, 02 Oct 96
-// Description
-//    vbl_sparse_array_3d is a sparse 3D array allowing space 
+//
+//    vbl_sparse_array_3d is a sparse 3D array allowing space
 //    efficient access of the form s(300,700,900) = 2.
+//
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   02 Oct 96
+//
 // \verbatim
 // Modifications:
 // 26 March 01 cjb updated documentation
@@ -26,7 +29,7 @@
 #include <vbl/vbl_index_3d.h>
 
 
-//: Sparse 3d array allowing space efficient access 
+//: Sparse 3d array allowing space efficient access
 // You can use this as s(300,700,900) = 2.
 template <class T>
 class vbl_sparse_array_3d : public vbl_sparse_array_base<T, vbl_index_3d>
@@ -40,7 +43,7 @@ public:
   }
 
   //: Return contents of location (i,j,k).
-  //  Returns an undefined value (in fact 
+  //  Returns an undefined value (in fact
   //  a T()) if location (i,j,k) has not been filled with a value.
   T& operator () (unsigned i, unsigned j, unsigned k)
   {
@@ -71,7 +74,7 @@ public:
 
 //: Stream operator - print the Array to a stream in "(i,j,k): value" format.
 template <class T>
-inline vcl_ostream& operator << 
+inline vcl_ostream& operator <<
 (vcl_ostream& s, const vbl_sparse_array_3d<T>& a)
 {
   return a.print(s);

@@ -7,15 +7,19 @@
 //:
 //  \file
 //  \brief Finds roots of a real polynomial
-//  \author  Andrew W. Fitzgibbon, Oxford RRG, 06 Aug 96
+//  \author  Andrew W. Fitzgibbon, Oxford RRG
+//  \date   06 Aug 96
 //
+// \verbatim
 //  Modifications
-//  23 may 97, Peter Vanroose - "NO_COMPLEX" option added
-//  (until "complex" type is standardised)
+//  23 may 97, Peter Vanroose - "NO_COMPLEX" option added (until "complex" type is standardised)
 //  dac (Manchester) 28/03/2001: tidied up documentation
+//  \endverbatim
 
 #include <vcl_complex.h>
 #include <vnl/vnl_vector.h>
+
+class vnl_real_polynomial;
 
 //: Find the roots of a real polynomial.
 //  Uses algorithm 493 from
@@ -27,10 +31,6 @@
 //  This class is not very const-correct as it is intended as a compute object
 //  rather than a data object.
 
-
-class vnl_real_polynomial;
-
-//: Roots of real polynomial.
 class vnl_rpoly_roots {
 public:
 // Constructors/Destructors--------------------------------------------------

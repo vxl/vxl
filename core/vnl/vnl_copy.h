@@ -8,9 +8,11 @@
 //:  \file
 //   \brief Easy conversion between vectors and matrices templated over different types.
 //   \author fsm@robots.ox.ac.uk
-
-//   Modifications
+//
+// \verbatim
+// Modifications
 //   LSB (Manchester) 26/3/01 Tidied documentation
+// \endverbatim
 
 //: Easy conversion between vectors and matrices templated over different types.
 template <class S, class T>

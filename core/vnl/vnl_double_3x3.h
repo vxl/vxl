@@ -6,12 +6,18 @@
 // This is vxl/vnl/vnl_double_3x3.h
 
 //: \file
-//  \brief vnl_double_3x3 is a vnl_matrix<double> of fixed size 3x3.  It is merely a typedef for vnl_matrix_fixed<double,3,3>
-//  \author Andrew W. Fitzgibbon, Oxford RRG, 04 Aug 96
+//  \brief 3x3 matrix of double
 //
+//  vnl_double_3x3 is a vnl_matrix<double> of fixed size 3x3.
+//  It is merely a typedef for vnl_matrix_fixed<double,3,3>
+//
+//  \author Andrew W. Fitzgibbon, Oxford RRG
+//  \date   04 Aug 96
+//
+// \verbatim
 //  Modifications:
 //  LSB (Manchester) 26/3/01 Tidied documentation
-//
+//  \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_matrix_fixed.h>

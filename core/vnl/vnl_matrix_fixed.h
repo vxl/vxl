@@ -8,28 +8,29 @@
 
 //:
 // \file
-// \brief Fixed Size Matrix
-// \author  Andrew W. Fitzgibbon, Oxford RRG, 04 Aug 96
-// 
+// \brief fixed size matrix
+//
 // A subclass of vnl_matrix_fixed_ref,
 // all storage is local and all vnl_matrix operations are valid.
 //
-//
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   04 Aug 96
+// \verbatim
 // Modifications:
 // Peter Vanroose, 23 Nov 1996:  added explicit copy constructor
 // LSB (Manchester) 15/03/2001:  added Binary I/O and tidied up the documentation
-
-//: Fixed size matrix
-//  vnl_matrix_fixed<T,m,n> - Fixed size matrix.
-//  A subclass of vnl_matrix_fixed_ref,
-//  all storage is local and all vnl_matrix operations are valid.
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vcl_cassert.h>
 #include <vnl/vnl_matrix_fixed_ref.h>
 
-template <class T, int m, int n>
+//: Fixed size matrix
+//  vnl_matrix_fixed<T,m,n> - Fixed size matrix.
+//  A subclass of vnl_matrix_fixed_ref,
+//  all storage is local and all vnl_matrix operations are valid.
 
+template <class T, int m, int n>
 class vnl_matrix_fixed : public vnl_matrix_fixed_ref<T,m,n> {
   T space[m*n]; // Local storage
 public:
@@ -73,7 +74,6 @@ public:
   vnl_matrix_fixed(const vnl_matrix_fixed<T,m,n>& rhs) : vnl_matrix_fixed_ref<T,m,n>(space) {
     memcpy(space, rhs.data_block(), m*n*sizeof(T));
   }
-
 };
 
 #ifndef VCL_SUNPRO_CC

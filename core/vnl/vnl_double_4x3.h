@@ -6,14 +6,16 @@
 // This is vxl/vnl/vnl_double_4x3.h
 
 //: \file
-//  \brief 4x3 Matrix of double
-//  \author Geoff Cross
+//  \brief 4x3 matrix of double
+//
 //    vnl_double_4x3 is a vnl_matrix<double> of fixed size 4x3.  It is
 //    merely a typedef for vnl_matrix_fixed<double,4,3>
 //
-
+//  \author Geoff Cross
+// \verbatim
 // Modifications:
 // 4/4/01 LSB (<Manchester) Tidied documentation
+// \endverbatim
 //
 //-----------------------------------------------------------------------------
 

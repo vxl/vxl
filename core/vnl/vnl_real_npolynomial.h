@@ -9,11 +9,10 @@
 //:
 //  \file
 //  \brief contains class for polynomials with N variables
-//  \authur Marc Pollefeys, ESAT-VISICS, K.U.Leuven, 12-08-97
 //  Implements a polynomial with N variables
 //
-
-//
+//  \author Marc Pollefeys, ESAT-VISICS, K.U.Leuven
+//  \date   12-08-97
 //  \verbatim
 //  Modifications
 //  Peter Vanroose 10 Oct 1999 - added simplify();
@@ -29,28 +28,27 @@
 #include <vnl/vnl_matrix.h>
 
 //: real polynomial in N variables.
-//  \verbatim
 //    vnl_real_npolynomial represents a polynomial in multiple variables.
 //    Used by vnl_rnpoly_solve which solves systems of polynomial equations.
 //    Representation:  an N-omial (N terms) is represented by (1) a vector
 //    with the N coefficients (vnl_vector<double>), and (2) a matrix with
 //    N rows, the i-th row representing the exponents of term i, as follows:
 //    (vnl_matrix<int>) column k contains the (integer) exponent of variable
-//    k.  Example: the polynomial A*X^3 + B*X*Y + C*Y^2 + D*X*Y^2 is
+//    k.  Example: the polynomial \f$A*X^3 + B*X*Y + C*Y^2 + D*X*Y^2\f$ is
 //    represented by the coefficients vector [A B C D] and the exponents
 //    matrix
+//  \verbatim
 //    [3 0]
 //    [1 1]
 //    [0 2]
 //    [1 2].
-//  \endverbatim 
-//
+//  \endverbatim
 
 class vnl_real_npolynomial {
   friend class vnl_rnpoly_solve;
 
 public:
-  
+
   // Constructor-----------------------------------------------------------------
   vnl_real_npolynomial() { } // don't use this. only here for the STL vector class.
   vnl_real_npolynomial(const vnl_vector<double>& c, const vnl_matrix<int>& p);
@@ -91,8 +89,8 @@ public:
 
   //: Set vector of coefficients of each product
   void set(const vnl_vector<double> & c, const vnl_matrix<int> & p);
-  
-  //: Return the polynomial matrix 
+
+  //: Return the polynomial matrix
   // (ie specifying the variables in each product)
   const vnl_matrix<int>& polyn() const { return polyn_; }
 
@@ -106,15 +104,15 @@ private:
 
   // Data Members--------------------------------------------------------------
   //: coefficients
-  vnl_vector<double> coeffs_; 
+  vnl_vector<double> coeffs_;
   //: degrees of every term for every variable
-  vnl_matrix<int>    polyn_;  
+  vnl_matrix<int>    polyn_;
   //: number of variables = # columns of polyn_
   int                nvar_;
   //: number of terms of polynomial
-  int                nterms_; 
+  int                nterms_;
   //: max. degree of polynomial
-  int                ideg_;   
+  int                ideg_;
 };
 
 

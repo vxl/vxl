@@ -10,12 +10,13 @@
 // \file
 // \brief vnl_matrix reference to user-supplied storage.
 //
-// \author Andrew W. Fitzgibbon, Oxford RRG, 04 Aug 96
-
-
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   04 Aug 96
 //
-//Modifications:
+// \verbatim
+// Modifications:
 //  Documentation updated by Ian Scott 12 Mar 2000
+// \endverbatim
 //
 //-----------------------------------------------------------------------------
 

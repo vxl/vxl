@@ -3,18 +3,15 @@
 
 // This is vxl/vbl/vbl_br_impl.h
 
-
 //:
 // \file
-// \author Rupert Curwen, January 14th, 1998, 
-//         GE Corporate Research and Development
+// \author Rupert Curwen, GE Corporate Research and Development
+// \date   Jan 14th, 1998
 //
 // \verbatim
 // Modifications
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
 // \endverbatim
-//
-
 
 
 #include <vcl_string.h>
@@ -109,7 +106,7 @@ public:
   virtual bool Remove(const vbl_basic_tuple<T1,T2,T3,T4,T5>&) { return false; }
 
   //: Remove tuples matching where clause.
-  virtual bool Remove(const vbl_basic_relation_where<T1,T2,T3,T4,T5>&) 
+  virtual bool Remove(const vbl_basic_relation_where<T1,T2,T3,T4,T5>&)
   { return false; }
 
   //: Make attributes unique.
@@ -126,15 +123,15 @@ public:
 
 
   // Get iterators.
-  virtual vbl_br_iter_impl<T1,T2,T3,T4,T5>* 
+  virtual vbl_br_iter_impl<T1,T2,T3,T4,T5>*
     begin(const vbl_basic_relation_where<T1,T2,T3,T4,T5>&) { return NULL; }
-  virtual vbl_br_iter_impl<T1,T2,T3,T4,T5>* 
+  virtual vbl_br_iter_impl<T1,T2,T3,T4,T5>*
     end(const vbl_basic_relation_where<T1,T2,T3,T4,T5>&) { return NULL; }
 
   // Size methods.
-  virtual int size(const vbl_basic_relation_where<T1,T2,T3,T4,T5>&) 
+  virtual int size(const vbl_basic_relation_where<T1,T2,T3,T4,T5>&)
   { return 0; }
-  virtual bool empty(const vbl_basic_relation_where<T1,T2,T3,T4,T5>&) 
+  virtual bool empty(const vbl_basic_relation_where<T1,T2,T3,T4,T5>&)
   { return true; }
 
   // Get name.
@@ -146,7 +143,6 @@ public:
 protected:
   vcl_string name;
   static vbl_basic_relation_factory<T1,T2,T3,T4,T5>*& factory();
-
 };
 
 template <class T1, class T2, class T3, class T4, class T5>

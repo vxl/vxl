@@ -7,13 +7,13 @@
 // This is vxl/vnl/vnl_matlab_filewrite.h
 
 //: \file
-//  \brief 
-//  \author David Capel, Oxford RRG, 17 August 1998
-
+//  \author David Capel, Oxford RRG
+//  \date   17 August 1998
+//
+// \verbatim
 // Modifications
 // LSB (Manchester) 23/3/01  Tidied documentation
-
-
+// \endverbatim
 
 #include <vcl_string.h>
 #include <vcl_iostream.h>

@@ -13,16 +13,18 @@
 //:
 // \file
 // \brief Fixed length stack-stored vnl_vector
-// \author Andrew W. Fitzgibbon, Oxford RRG, 04 Aug 96
-
-//: Fixed length stack-stored vnl_vector.
+//
 //    vnl_vector_fixed is a fixed-length, stack storage vnl_vector.
 //  vnl_vector_fixed allocates storage space,
 //  and passes reference to this space to vnl_vector_ref
 //  See the docs for vnl_matrix_ref
-
+//
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   04 Aug 96
+// \verbatim
 // Modifications
 // LSB Manchester 16/3/01 Binary I/O added
+// \endverbatim
 
 //: fixed length  stack-stored vnl_vector.
 export template <class T, int n>
@@ -53,7 +55,7 @@ public:
   }
 
   //: Constructs 3D vector(px, py, pz )
-  vnl_vector_fixed (T const& px, T const& py, T const& pz): Base(n,space) { 
+  vnl_vector_fixed (T const& px, T const& py, T const& pz): Base(n,space) {
     if (n != 3) vnl_error_vector_dimension ("constructor (x,y,z): n != 3", n, 3);
     data[0] = px;
     data[1] = py;
@@ -61,7 +63,7 @@ public:
   }
 
   //: Constructs 2D vector  (px, py)
-  vnl_vector_fixed (T const& px, T const& py): Base(n,space) { 
+  vnl_vector_fixed (T const& px, T const& py): Base(n,space) {
     if (n != 2) vnl_error_vector_dimension ("constructor (x,y): n != 2", n, 2);
     data[0] = px;
     data[1] = py;
@@ -132,7 +134,7 @@ public:
     { return (vnl_vector_fixed<T,n>&) vnl_vector<T>::update (v, start); }
 
   //: v /= sqrt(dot(v,v))
-  vnl_vector_fixed<T,n>& normalize()  
+  vnl_vector_fixed<T,n>& normalize()
     { return (vnl_vector_fixed<T,n>&) vnl_vector<T>::normalize(); }
 
   friend vnl_vector_fixed<T,n> element_product VCL_NULL_TMPL_ARGS (vnl_vector_fixed<T,n> const&,
@@ -148,10 +150,8 @@ public:
   vnl_vector<T>& pre_multiply (vnl_matrix<T> const&);
 
   //: v = v * m
-  vnl_vector<T>& post_multiply (vnl_matrix<T> const&); 
+  vnl_vector<T>& post_multiply (vnl_matrix<T> const&);
   vnl_vector<T>& operator*= (vnl_matrix<T> const&);
-
-
 
 private:
   T space[n];

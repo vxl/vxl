@@ -8,10 +8,13 @@
 
 //: \file
 //  \brief Specializes vnl_matrix for integers
-//  \author Andrew W. Fitzgibbon, Oxford RRG, 27 Dec 96
-
+//  \author Andrew W. Fitzgibbon, Oxford RRG
+//  \date   27 Dec 96
+//
+// \verbatim
 // Modifications:
 // LSB (Manchester) 23/3/01 Tidied documentation
+// \endverbatim
 //
 //-----------------------------------------------------------------------------
 
@@ -21,7 +24,7 @@
 class vnl_int_matrix : public vnl_matrix<int> {
   typedef vnl_matrix<int> Base;
 public:
-  
+
   vnl_int_matrix() {}
   vnl_int_matrix(char const* filename);
   vnl_int_matrix(vcl_istream& s);

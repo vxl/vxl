@@ -122,7 +122,7 @@
 
 //: Copies the given regular expression.
 
-vbl_reg_exp::vbl_reg_exp (const vbl_reg_exp& rxp) {
+vbl_reg_exp::vbl_reg_exp (vbl_reg_exp const& rxp) {
   int ind;
   this->progsize = rxp.progsize;            // Copy regular expression size
   this->program = new char[this->progsize]; // Allocate storage
@@ -165,7 +165,7 @@ bool vbl_reg_exp::operator== (vbl_reg_exp const& rxp) const {
 //: Returns true if have the same compiled regular expressions
 // and the same start and end pointers.
 
-bool vbl_reg_exp::deep_equal (const vbl_reg_exp& rxp) const {
+bool vbl_reg_exp::deep_equal (vbl_reg_exp const& rxp) const {
   int ind = this->progsize;                     // Get regular expression size
   if (ind != rxp.progsize)                      // If different size regexp
     return false;                               // Return failure

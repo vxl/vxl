@@ -6,17 +6,15 @@
 // This is vxl/vnl/vnl_matrix_exp.h
 
 //: \file
-//  \brief Compute the exponential of a square matrix
-//  \author fsm@robots.ox.ac.uk
+// \brief Compute the exponential of a square matrix
+//
 // Compute the exponential of a square matrix, by summing its
 // exponential series $exp(X) = \sum_{n \ge 0} X^n/n!$ till a
 // convergence requirement is met.
 //
 // Many improvements are possible.
-
-// Modifications LSB (Manchester) 23/1/01
-
-
+//
+//  \author fsm@robots.ox.ac.uk
 
 #include <vnl/vnl_matrix.h>
 

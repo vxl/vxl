@@ -8,10 +8,13 @@
 //:
 //  \file
 //  \brief Base class for nonlinear optimization
-//  \author Andrew W. Fitzgibbon, Oxford RRG, 22 Aug 99
-
-//  Modifications
+//  \author Andrew W. Fitzgibbon, Oxford RRG
+//  \date   22 Aug 99
+//
+// \verbatim
+// Modifications
 //  22/03/2001  dac - added binary io and tidied documentation
+// \endverbatim
 
 #include <vnl/vnl_matrix.h>
 

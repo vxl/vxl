@@ -6,18 +6,21 @@
 // This is vxl/vnl/vnl_matlab_write.h
 
 //: \file
-//  \brief Wriet to a MAT file
-//  \author fsm@robots.ox.ac.uk
+//  \brief Write to a MAT file
+//
 // Core code stolen from D. Capel's code. These functions are useful
 // because they allow one to write, say, an image buffer to a MAT file.
 //
 // NB. with these functions, the variable name *must* be a non-null and
 // point to a zero-terminated string. otherwise the code will segfault.
-
+//
+//  \author fsm@robots.ox.ac.uk
+//
+// \verbatim
 //  Modifications
-// 09 Mar 2000 fsm@robots. changed order of arguments for consistency
-//             with vnl_matlab_read.
+// 09 Mar 2000 fsm@robots. changed order of arguments for consistency with vnl_matlab_read.
 // LSB (Manchester) 23/3/01 Tided documentation
+// \endverbatim
 
 #include <vcl_iosfwd.h>
 

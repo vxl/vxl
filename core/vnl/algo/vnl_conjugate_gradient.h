@@ -6,12 +6,14 @@
 //:
 //  \file
 //  \brief  vnl_conjugate_gradient - real function minimization
-//  \author Geoffrey Cross, Oxford RRG, 15 Feb 99
-
+//  \author Geoffrey Cross, Oxford RRG
+//  \date   15 Feb 99
+//
+// \verbatim
 // Modifications
 // 990215 Geoff Initial version.
-// 000628 David Capel - Major rewrite. Now derived from vnl_nonlinear_minimizer
-//                      and operates on a vnl_cost_function.
+// 000628 David Capel - Major rewrite. Now derived from vnl_nonlinear_minimizer and operates on a vnl_cost_function.
+// \endverbatim
 //
 //-----------------------------------------------------------------------------
 
@@ -21,7 +23,7 @@
 #include <vnl/vnl_nonlinear_minimizer.h>
 
 class vnl_cost_function;
-  
+
 //: vnl_conjugate_gradient - real function minimization
 //  vnl_conjugate_gradient - real function minimization
 
@@ -29,7 +31,7 @@ class vnl_cost_function;
 class vnl_conjugate_gradient : public vnl_nonlinear_minimizer {
 public:
   // Constructors/Destructors--------------------------------------------------
-  
+
   //: Initialize with the function object that is to be minimized.
   vnl_conjugate_gradient(vnl_cost_function& f) { init( f); }
 
@@ -66,6 +68,7 @@ protected:
   // Helpers-------------------------------------------------------------------
 
   friend class vnl_conjugate_gradient_Activate;
+
 #ifdef VCL_SUNPRO_CC
 public:
 #endif
@@ -73,13 +76,14 @@ public:
   static int gradientcomputer_( double *g, double *x);
   static int valueandgradientcomputer_( double *v, double *g, double *x);
   static int preconditioner_( double *out, double *in);
-#ifdef VCL_SUNPRO_CC
+
+#if 0
 protected:
+  void approximate_gradient( const vnl_vector<double> &x,
+                             vnl_vector<double> &g, const double step);
+  void approximate_hessian( const vnl_vector<double> &x,
+                            vnl_matrix<double> &h, const double step);
 #endif
-//   void approximate_gradient( const vnl_vector<double> &x, 
-//          vnl_vector<double> &g, const double step);
-//   void approximate_hessian( const vnl_vector<double> &x,
-//          vnl_matrix<double> &h, const double step);
 };
 
 #endif // vnl_conjugate_gradient_h_

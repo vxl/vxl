@@ -8,7 +8,9 @@
 //:
 // \file
 // \brief Sparse array allowing space efficient access of the form s[3000]=2.
-// \author  Andrew W. Fitzgibbon, Oxford RRG, 02 Oct 96
+// \author  Andrew W. Fitzgibbon, Oxford RRG
+// \date    02 Oct 96
+//
 // \verbatim
 // Modifications:
 //     Ian Scott (Manchester, ISBE) rewritten to use vbl_sparse_array_base

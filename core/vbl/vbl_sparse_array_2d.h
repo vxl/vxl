@@ -8,10 +8,13 @@
 //:
 // \file
 // \brief a space efficient 2d array
-// \author Andrew W. Fitzgibbon, Oxford RRG, 02 Oct 96
-// Description
-//    vbl_sparse_array_2d is a sparse 2D array allowing space 
+//
+//    vbl_sparse_array_2d is a sparse 2D array allowing space
 //    efficient access of the form s(3000,7000) = 2.
+//
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   02 Oct 96
+//
 // \verbatim
 // Modifications:
 // 26 March 01 cjb updated documentation
@@ -37,7 +40,7 @@ public:
   }
 
   //: Return contents of location (i,j).
-  //  Returns an undefined value (in fact 
+  //  Returns an undefined value (in fact
   //  a T()) if location (i,j) has not been filled with a value.
   T& operator () (unsigned i, unsigned j)
   {
@@ -68,7 +71,7 @@ public:
 
 //: Stream operator - print the Array to a stream in "(i,j): value" format.
 template <class T>
-inline vcl_ostream& operator << 
+inline vcl_ostream& operator <<
 (vcl_ostream& s, const vbl_sparse_array_2d<T>& a) {
   return a.print(s);
 }

@@ -7,10 +7,13 @@
 
 //: \file
 // \brief Load vnl_matrix<double> from file
-//  \author Andrew W. Fitzgibbon, Oxford RRG, 23 Dec 96
-
+//  \author Andrew W. Fitzgibbon, Oxford RRG
+//  \date   23 Dec 96
+//
+// \verbatim
 // Modifications:
 // LSB (Manchester) 23/3/01 Documenation tidied
+// \endverbatim
 //
 //-----------------------------------------------------------------------------
 

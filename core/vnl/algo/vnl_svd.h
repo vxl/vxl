@@ -7,14 +7,15 @@
 //:
 //  \file
 //  \brief Holds the singular value decomposition of a vnl_matrix.
-//  \author Andrew W. Fitzgibbon, Oxford IERG, 15 Jul 96
+//  \author Andrew W. Fitzgibbon, Oxford IERG
+//  \date   15 Jul 96
 //
+// \verbatim
 //  Modifications
 // F. Schaffalitzky, Oxford IESRG, 26 Mar 1999
-//     1. The singular values are now stored as reals (not complexes) when T is
-//        complex.
-//     2. Fixed bug : for complex T, matrices have to be conjugated as well as 
-//        transposed.
+//     1. The singular values are now stored as reals (not complexes) when T is complex.
+//     2. Fixed bug : for complex T, matrices have to be conjugated as well as transposed.
+// \endverbatim
 
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_vector.h>
@@ -24,12 +25,12 @@
 
 //: Holds the singular value decomposition of a vnl_matrix.
 //
-//  @{ The class holds three matrices U, W, V such that the original matrix 
-//  $M = U W V^\top$.The DiagMatrix W stores the singular values in decreasing
+//  The class holds three matrices U, W, V such that the original matrix
+//  \f$M = U W V^\top\f$.  The DiagMatrix W stores the singular values in decreasing
 //  order.  The columns of U which correspond to the nonzero singular values
 //  form a basis for range of M, while the columns of V corresponding to the
-//  zero singular values are the nullspace. @}
-//    
+//  zero singular values are the nullspace.
+//
 //  The SVD is computed at construction time, and enquiries may then be made
 //  of the SVD.  In particular, this allows easy access to multiple
 //  right-hand-side solves without the bother of putting all the RHS's into a
@@ -62,20 +63,21 @@ public:
   // The singular values of a matrix of complex<T> are of type T,not complex<T>
   typedef typename vnl_numeric_traits<T>::abs_t singval_t;
 
-//: @{
-// Construct an vnl_svd<T> object from $m \times n$ matrix $M$.  The 
-// vnl_svd<T> object contains matrices $U, W, V$ such that $U W V^\top = M$.
-// \par
+//:
+// Construct an vnl_svd<T> object from \f$m \times n\f$ matrix \f$M\f$.  The
+// vnl_svd<T> object contains matrices \f$U, W, V\f$ such that
+// \f$U W V^\top = M\f$.
+//
 // Uses linpack routine DSVDC to calculate an ``economy-size'' SVD
-// where the returned $U$ is the same size as $M$, while $W$ and $V$
-// are both $n \times n$.  This is efficient for
-// large rectangular solves where $m > n$, typical in least squares.
-// @}
+// where the returned \f$U\f$ is the same size as \f$M\f$, while \f$W\f$
+// and \f$V\f$ are both \f$n \times n\f$.  This is efficient for
+// large rectangular solves where \f$m > n\f$, typical in least squares.
+//
 // The optional argument zero_out_tol is used to mark the zero singular
 // values: If nonnegative, any s.v. smaller than zero_out_tol in
 // absolute value is set to zero.  If zero_out_tol is negative, the
 // zeroing is relative to |zero_out_tol| * sigma_max();
-//
+
   vnl_svd(vnl_matrix<T> const &M, double zero_out_tol = 0.0);
  ~vnl_svd() {}
 
@@ -107,7 +109,7 @@ public:
   vnl_matrix<T>      & V()       { return V_; }
   vnl_matrix<T> const& V() const { return V_; }
   T V(int i, int j) { return V_(i,j); }
-  
+
   //
   vnl_matrix<T> inverse () const;
   vnl_matrix<T> pinverse () const; // pseudo-inverse (for non-square matrix).
@@ -138,7 +140,7 @@ private:
   vnl_diag_matrix<singval_t> Winverse_;
   vnl_matrix<T> V_;       // Columns Vi are basis for nullspace of M for Wi = 0
   unsigned rank_;
-  bool have_max_; 
+  bool have_max_;
   singval_t max_;
   bool have_min_;
   singval_t min_;

@@ -5,13 +5,15 @@
 #endif
 // This is vxl/vnl/vnl_trace.h
 
-//: 
+//:
 //  \file
 //  \brief Calculate trace of a matrix
 //  \author fsm@robots.ox.ac.uk
-
+//
+// \verbatim
 // Modifications
 // LSB (Manchester) 19/3/01 Documentation tidied
+// \endverbatim
 
 template <class T> class vnl_matrix;
 

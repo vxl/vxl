@@ -8,9 +8,8 @@
 //:
 // \file
 // \brief base class for sparse arrays.
-// \author Ian Scott, Manchester ISBE, 10 April 2001
-//
-
+// \author Ian Scott, Manchester ISBE
+// \date   10 April 2001
 
 #include <vcl_functional.h>
 #include <vcl_map.h>
@@ -18,8 +17,8 @@
 
 
 //: A fully featured sparse array which devolves indexing to its templated type
-// If you just want an ordianry sparse array use vbl_sparse_array_1d,
-// vbl_sparse_array_2d, or vbl_sparse_array_3d, 
+// If you just want an ordinary sparse array use vbl_sparse_array_1d,
+// vbl_sparse_array_2d, or vbl_sparse_array_3d.
 //
 // Design Decision: Advanced Users only.
 //
@@ -35,6 +34,7 @@
 // instead of a single encoded integer, then you can create
 // an encoder class as the index type, and use it directly, or hide the
 // details by writing a specialising derivative of vbl_sparse_array_base.
+
 template <class T, class Index>
 class vbl_sparse_array_base
 {
@@ -48,7 +48,7 @@ public:
 
     //: Return contents at (i)
   T      & operator () (Index i) { return storage_[i]; }
-    
+
     //: Return contents at (i). Asserts if (i) empty.
   T const& operator () (Index i) const;
 
@@ -95,7 +95,7 @@ public:
     // because the interface does not generalise to more than one
     // dimension. e.g. array[i,j] will not compile.
   T      & operator [] (Index i) { return storage_[i]; }
-    
+
     //: DEPRECATED Return contents at (i).
     // use operator () instead;
     //
@@ -103,8 +103,6 @@ public:
     // because the interface does not generalise to more than one
     // dimension. e.g. array[i,j] will not compile.
   T const& operator [] (Index i) const;
-
-
 };
 
 #endif // vbl_sparse_array_base_h_

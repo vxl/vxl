@@ -7,11 +7,13 @@
 
 //: \file
 //  \brief Abstraction for a linear system of equations.
-//  \author David Capel, capes@robots, July 2000
-
-
+//  \author David Capel, capes@robots
+//  \date   July 2000
+//
+// \verbatim
 // Modifications:
 // LSB (Manchester) 23/1/01 Documentation tidied
+// \endverbatim
 
 #include <vcl_string.h>
 #include <vnl/vnl_vector.h>

@@ -6,18 +6,22 @@
 // This is vxl/vnl/vnl_fortran_copy.h
 
 //: \file
-//  \brief Convert row-stored matrix to column-stored 
-//  \author Andrew W. Fitzgibbon, Oxford RRG, 29 Aug 96
+//  \brief Convert row-stored matrix to column-stored
+//
 //   convert C format (row-stored) matrix to fortran format (column-stored) matrix.
 //
-
+//  \author Andrew W. Fitzgibbon, Oxford RRG
+//  \date   29 Aug 96
+//
+// \verbatim
 //   Modifications:
 //   LSB (Manchester) 23/3/01 Tidied documentation
+// \endverbatim
 //
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_matrix.h>
-//:  Convert row-stored matrix to column-stored 
+//:  Convert row-stored matrix to column-stored
 //  convert C format (row-stored) matrix to fortran format (column-stored) matrix.
 template <class T>
 class vnl_fortran_copy {

@@ -8,9 +8,11 @@
 //: \file
 //  \brief Classes for complex numbers
 //  \author fsm@robots.ox.ac.uk
-
+//
+// \verbatim
 // Modifications
 // LSB (Manchester) 26/3/01
+// \endverbatim
 
 #include <vcl_complex.h>
 #include <vnl/vnl_vector.h>

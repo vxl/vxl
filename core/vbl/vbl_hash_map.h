@@ -7,15 +7,9 @@
 #pragma interface
 #endif
 
-
 //:
 // \file
 // \brief Simpler hashtable
-// \author 
-//
-// \verbatim
-// \endverbatim
-
 
 #include <vcl_iosfwd.h>
 #include <vcl_functional.h> // vcl_equal_to()
@@ -23,10 +17,10 @@
 #include <vcl_utility.h> // vcl_pair<>
 
 //: Simpler hashtable
-//
+
 template <class Key, class T>
-class vbl_hash_map : 
-         public vcl_hash_map<Key, T, vcl_hash<Key>, vcl_equal_to<Key> > 
+class vbl_hash_map :
+         public vcl_hash_map<Key, T, vcl_hash<Key>, vcl_equal_to<Key> >
 {
  public:
   typedef vcl_hash_map<Key, T, vcl_hash<Key>, vcl_equal_to<Key> > base;

@@ -7,12 +7,14 @@
 
 //: \file
 //  \brief Vector->Real function
-//  \author Andrew W. Fitzgibbon, Oxford RRG, 23 Oct 97
-
-
-//    Modifications
-//     971023 AWF Initial version.
-//     LSB (Manchester) 26/3/01 Tidied documnetation
+//  \author Andrew W. Fitzgibbon, Oxford RRG
+//  \date   23 Oct 97
+//
+// \verbatim
+// Modifications
+//  971023 AWF Initial version.
+//  LSB (Manchester) 26/3/01 Tidied documnetation
+// \endverbatim
 //
 //-----------------------------------------------------------------------------
 
@@ -21,7 +23,7 @@
 
 //:   An object that represents a function from R^n -> R.
 //    It is commonly used to express the
-//    interface of a minimizer. 
+//    interface of a minimizer.
 class vnl_cost_function : public vnl_unary_function<double, vnl_vector<double> > {
 public:
   vnl_cost_function(int number_of_unknowns):dim(number_of_unknowns) {}

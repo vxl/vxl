@@ -8,11 +8,13 @@
 //:
 //  \file
 //  \brief Efficient matrix transpose
-//  \author Andrew W. Fitzgibbon, Oxford RRG, 23 Dec 96
-//    
-
+//  \author Andrew W. Fitzgibbon, Oxford RRG
+//  \date   23 Dec 96
+//
+// \verbatim
 //  Modifications
-//  LSB (Manchester) 19/3/01 Tidied documentation    
+//  LSB (Manchester) 19/3/01 Tidied documentation
+// \endverbatim
 
 #include <vcl_iostream.h>
 #include <vnl/vnl_matops.h>
@@ -71,7 +73,6 @@ public:
     vnl_fastops::ABt(A, B.M_, &ret);
     return ret;
   }
-
 };
 
 #endif // vnl_transpose_h_

@@ -7,14 +7,13 @@
 
 //: \file
 //  \brief To allow templated real or complex algorithms to determine appropriate actions of conjugation, complexification etc.
-//  \author F. Schaffalitzky, Oxford RRG, 26 Mar 1999
-
-
+//  \author F. Schaffalitzky, Oxford RRG
+//  \date   26 Mar 1999
 //
-//
+// \verbatim
 // Modifications:
 // LSB (Manchester) 26/3/01 Documentation tidied
-//
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vcl_complex.h>

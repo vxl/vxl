@@ -4,8 +4,8 @@
 
 //:
 // \file
-// \author Rupert Curwen, January 13th, 1998,
-//         GE Corporate Research and Development
+// \author Rupert Curwen, GE Corporate Research and Development
+// \date   Jan 13th, 1998
 //
 // \verbatim
 // Modifications

@@ -7,15 +7,20 @@
 
 //: \file
 //  \brief Templated zero/one/precision
-//  \author Andrew W. Fitzgibbon, Oxford RRG, 04 Sep 96
+//
 //  To allow templated numerical algorithms to determine appropriate
 //    values for zero, one, maxval, and types for double precision,
 //    maximum product etc.
-
+//
+//  \author Andrew W. Fitzgibbon, Oxford RRG
+//  \date   04 Sep 96
+//
+// \verbatim
 //     Modifications:
 //     980212 AWF Initial version.
 //     AWF 010498 Moved to math
-//     LSB (Manchester) 23/3/01 Documentation tidied 
+//     LSB (Manchester) 23/3/01 Documentation tidied
+// \endverbatim
 //
 //-----------------------------------------------------------------------------
 

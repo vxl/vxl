@@ -7,12 +7,13 @@
 
 //: \file
 //  \brief Collection of C-style matrix functions
-//  \author Andrew W. Fitzgibbon, Oxford RRG, 09 Dec 96
-
-
+//  \author Andrew W. Fitzgibbon, Oxford RRG
+//  \date   09 Dec 96
+//
+// \verbatim
 //   Modifications
 //   LSB (Manchester) 23/3/01 Tidied documentation
-//    
+// \endverbatim
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>

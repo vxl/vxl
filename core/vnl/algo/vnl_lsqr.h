@@ -6,24 +6,25 @@
 //:
 // \file
 // \brief Linear least squares
-// \author David Capel, capes@robots, July 2000
+//
 //    vnl_lsqr implements an algorithm for large, sparse linear systems and
 //    sparse, linear least squares. It is a wrapper for the LSQR algorithm
 //    of Paige and Saunders (ACM TOMS 583). The sparse system is encapsulated
 //    by a vnl_linear_system.
 //
-//     
-
-//   Modifications
-//     000705 capes@robots initial version.
-//     4/4/01 LSB (Manchester) Documentation tidied
+// \author David Capel, capes@robots
+// \date   July 2000
+// \verbatim
+// Modifications
+//   000705 capes@robots initial version.
+//   4/4/01 LSB (Manchester) Documentation tidied
+// \endverbatim
 //
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_linear_system.h>
-
 
 class vnl_lsqr {
 public:
@@ -55,11 +56,10 @@ protected:
   double result_norm_;
   int return_code_;
 
-  static int aprod_(int* mode, int* m, int* n, double* x, 
+  static int aprod_(int* mode, int* m, int* n, double* x,
     double* y, int* leniw, int* lenrw, int* iw, double* rw );
 
   friend class vnl_lsqr_Activate;
-
 };
 
 #endif // vnl_lsqr_h_

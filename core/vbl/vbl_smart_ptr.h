@@ -2,12 +2,10 @@
 #define vbl_smart_ptr_h_
 // This is vxl/vbl/vbl_smart_ptr.h
 
-
-
 //:
 // \file
-// \brief Contains a templated smart pointer class 
-// \author Richard Hartley (original Macro version), 
+// \brief Contains a templated smart pointer class
+// \author Richard Hartley (original Macro version),
 //         William A. Hoffman (current templated version)
 //
 // \verbatim
@@ -16,29 +14,30 @@
 // 2000.05.16 Peter Vanroose  Operators > < >= <= made const
 // 2000.09.13 fsm@robots      Added rationale for unprotect().
 // PDA (Manchester) 23/03/2001: Tidied up the documentation
+// Peter Vanroose   27/05/2001: Corrected the documentation
 // \endverbatim
-
 
 #include <vcl_iosfwd.h>
 
-
-
-//: A templated smart pointer class 
+//: A templated smart pointer class
 // This class requires that the class being templated over has
 // the following signatures (methods) :
+// \verbatim
 //   void T::ref();
 //   void T::unref();
+// \endverbatim
 //
 // By default, the vbl_smart_ptr<T> will ref() the object given
 // to it upon construction and unref() it upon destruction. In
 // some cases, however, it is useful to cause an unref() immediately
 // and to avoid an unref() in the constructor. For example, in the
 // cyclic data structure
-//
+// \verbatim
 // start -> A -> B -> C -> D -> E
 //          ^                   |
 //          |                   |
 //          +-------------------+
+// \endverbatim
 //
 // The refcounts on A, B, C, D, E are 2, 1, 1, 1, 1 so when 'start'
 // goes out of scope, the refcount will be 1, 1, 1, 1, 1 and therefore
@@ -112,14 +111,17 @@ public:
   T &operator * () const { return *ptr_; }
 
   //: These methods all return the raw/dumb pointer.
+  T *operator -> () const { return ptr_; }
+
+  //: These methods all return the raw/dumb pointer.
+  T *ptr () const { return ptr_; }
+
+  //: These methods all return the raw/dumb pointer.
+  //
   // WARNING : Do not add an automatic cast to T*.
   //           This is intrinsically incorrect as you loose the smartness!
   //           In cases where you really need the pointer, it is better
   //           to be explicit about it and use one of the methods.
-  T *operator -> () const { return ptr_; }
-
-  T *ptr () const { return ptr_; }
-
   T *as_pointer () const { return ptr_; }
 
   //: Used for breaking circular references (see above).
@@ -133,28 +135,25 @@ public:
   // If this value is false, the object does not have to save it.
   bool is_protected() const { return protected_;};
 
-  // //: If a T_ref is converted to a pointer then back to a T_ref,
-  // // you'll need to call this
-  // // void protect()
-  // {
-  //    if (!protected_ && ptr_)
-  //     ref(ptr_);
-  //   protected_ = true;
-  // }
+#if 0 // no longer needed
+  //: If a T_ref is converted to a pointer then back to a T_ref,
+  // you'll need to call this
+  void protect()
+  {
+    if (!protected_ && ptr_)
+      ref(ptr_);
+    protected_ = true;
+  }
+#endif
 
   //: Relational operators.
   //There's no need for casts to void* or any other pointer type than T* here.
-  bool operator == (T const *p) const { return ptr_ == p; }
-  bool operator == (vbl_smart_ptr<T> const &p) const 
-  { return ptr_ == p.as_pointer(); }
-  bool operator <  (vbl_smart_ptr<T> const &p) const 
-  { return ptr_ <  p.as_pointer(); }
-  bool operator >  (vbl_smart_ptr<T> const &p) const 
-  { return ptr_ >  p.as_pointer(); }
-  bool operator <= (vbl_smart_ptr<T> const &p) const 
-  { return ptr_ <= p.as_pointer(); }
-  bool operator >= (vbl_smart_ptr<T> const &p) const 
-  {return ptr_ >= p.as_pointer(); }
+  bool operator==(T const *p) const { return ptr_ == p; }
+  bool operator==(vbl_smart_ptr<T>const&p)const{return ptr_ == p.as_pointer();}
+  bool operator< (vbl_smart_ptr<T>const&p)const{return ptr_ <  p.as_pointer();}
+  bool operator> (vbl_smart_ptr<T>const&p)const{return ptr_ >  p.as_pointer();}
+  bool operator<=(vbl_smart_ptr<T>const&p)const{return ptr_ <= p.as_pointer();}
+  bool operator>=(vbl_smart_ptr<T>const&p)const{return ptr_ >= p.as_pointer();}
 
 private:
   // These two methods should not be inlined as they call T's ref()

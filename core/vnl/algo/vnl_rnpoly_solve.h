@@ -5,33 +5,30 @@
 #endif
 
 //:
-//  \file
-//  \brief Solves for roots of system of real polynomials
-//  \author Marc Pollefeys, ESAT-VISICS, K.U.Leuven, 12-08-97
+// \file
+// \brief Solves for roots of system of real polynomials
+// \author Marc Pollefeys, ESAT-VISICS, K.U.Leuven
+// \date   12-08-97
 //
-//  Modifications
-//  Peter Vanroose, 20 Oct 1999: implementation simplified through "cmplx"
-//                                 class for doing complex arithmetic.
+// \verbatim
+// Modifications
+//  Peter Vanroose, 20 Oct 1999: implementation simplified through "cmplx" class for doing complex arithmetic.
 //  dac (Manchester) 28/03/2001: tidied up documentation
-//
+// \endverbatim
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_real_npolynomial.h>
 #include <vcl_vector.h>
-
-//: Solves for roots of system of real polynomials
-//  Calculates all the roots of a system of N polynomials in N variables
-//  through continuation.
-//  Adapted from the  PARALLEL CONTINUATION algorithm , written by Darrell
-//  Stam, 1991, and further improved by  Kriegman and Ponce, 1992.
-//
-
 
 #ifdef static
 # error "grr!!"
 #endif
 
 //: Solves for roots of system of real polynomials
+//  Calculates all the roots of a system of N polynomials in N variables
+//  through continuation.
+//  Adapted from the  PARALLEL CONTINUATION algorithm , written by Darrell
+//  Stam, 1991, and further improved by  Kriegman and Ponce, 1992.
 
 class vnl_rnpoly_solve {
 public:

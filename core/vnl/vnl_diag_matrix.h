@@ -7,22 +7,13 @@
 //:
 //  \file
 //  \brief Contains class for diagonal matrices
-//  \author Andrew W. Fitzgibbon (Oxford RRG) 5/8/96
-//
+//  \author Andrew W. Fitzgibbon (Oxford RRG)
+//  \date   5/8/96
 //
 // \verbatim
 //  Modifications
 //  IMS (Manchester) 16/03/2001: Tidied up the documentation + added binary_io
 // \endverbatim
-
-
-
-//  forward declare friend functions
-//  template <class T> class vnl_diag_matrix;
-//  template<class T> bool epsilon_equals
-
-//        (vnl_diag_matrix<T> const& m1, vnl_diag_matrix<T> const& m2, double alt_epsilon = 0);
-
 
 #include <vcl_cassert.h>
 #include <vnl/vnl_vector.h>
@@ -50,7 +41,6 @@ public:
   // the diagonal elements.
   vnl_diag_matrix(vnl_vector<T> const& that): diagonal_(that) {}
  ~vnl_diag_matrix() {}
-
 
   vnl_diag_matrix& operator=(vnl_diag_matrix<T> const& that) {
   this->diagonal_ = that.diagonal_;
@@ -128,11 +118,6 @@ private:
 template <class T>
 vcl_ostream& operator<< (vcl_ostream&, vnl_diag_matrix<T> const&);
 
-
-
-
-// Define this now,
-// #define IUE_DEFINED_vnl_diag_matrix
 
 template <class T> vcl_ostream& operator<< (vcl_ostream&, vnl_diag_matrix<T> const&);
 

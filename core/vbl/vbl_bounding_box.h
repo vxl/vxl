@@ -8,21 +8,18 @@
 //:
 // \file
 // \brief Contains a bounding box class
-// \author awf@robots.ox.ac.uk, Created: 17 Mar 00
+// \author awf@robots.ox.ac.uk
+// \date   17 Mar 00
 //
 // \verbatim
 // Modifications
-//970807 AWF Initial version.
-//     07 Mar 01 stewart@cs.rpi.edu added "inside" functions
+// 970807 AWF Initial version.
+// 07 Mar 01 stewart@cs.rpi.edu added "inside" functions
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
 // \endverbatim
 
 #include <vcl_iosfwd.h>
 #include <vcl_cassert.h>
-
-//: A class to hold and update a bounding box.
-//  Save valuable time not writing
-//    if (x > xmax).....
 
 #if defined(VCL_SUNPRO_CC_50)
 // Non-type template parameters are not allowed for function templates.
@@ -134,6 +131,12 @@ struct vbl_bounding_box_base
   T max_[DIM_::value];
 };
 
+//: A class to hold and update a bounding box.
+//  Save valuable time not writing
+// \verbatim
+//    if (x > xmax).....
+// \endverbatim
+
 template <class T, int DIM>
 class vbl_bounding_box : public vbl_bounding_box_base<T, vbl_bounding_box_DIM<DIM> >
 {
@@ -154,7 +157,7 @@ bool nested(vbl_bounding_box_base<T,DIM_> const &a, vbl_bounding_box_base<T,DIM_
 
 template <class T, class DIM_>
 inline
-bool disjoint(vbl_bounding_box_base<T,DIM_> const &a, 
+bool disjoint(vbl_bounding_box_base<T,DIM_> const &a,
               vbl_bounding_box_base<T,DIM_> const &b)
 {
   for (int i=0; i<DIM_::value; ++i)
@@ -165,7 +168,7 @@ bool disjoint(vbl_bounding_box_base<T,DIM_> const &a,
 
 template <class T, class DIM_>
 inline
-bool meet(vbl_bounding_box_base<T,DIM_> const &a, 
+bool meet(vbl_bounding_box_base<T,DIM_> const &a,
           vbl_bounding_box_base<T,DIM_> const &b)
 { return ! disjoint(a, b); }
 

@@ -5,14 +5,10 @@
 #endif
 // This is vxl/vnl/vnl_vector_dereference.h
 
-//: 
+//:
 //  \file
-//  \brief  Undocumented
-//  \author Andrew W. Fitzgibbon, Oxford RRG, 28 Nov 98
-//
-
-//    vnl_vector_dereference is a class that awf hasn't documented properly. FIXME
-//
+//  \author Andrew W. Fitzgibbon, Oxford RRG
+//  \date   28 Nov 98
 //-----------------------------------------------------------------------------
 
 

@@ -8,9 +8,12 @@
 //:
 // \file
 // \brief DEPRECATED An index for 3d arrays
-// \author Ian M. Scott, Manchester ISBE, 10 April 2001
+//
 // This class is only designed as a temporary stop gap until vbl_sparse_array
 // and vtl_triple end up in the same library.
+// \author Ian M. Scott, Manchester ISBE
+// \date 10 April 2001
+//
 // \verbatim
 // Modifications:
 // 10 April 2001 Peter Vanroose - corrected operator<
@@ -21,7 +24,7 @@
 
 
 //: DEPRECATED An index for 3d arrays
-// For use only with vbl_sparse_array_3d. It will disappear in 
+// For use only with vbl_sparse_array_3d. It will disappear in
 // favour of vtl_triple, as soon as it is in the same library.
 struct vbl_index_3d
 {

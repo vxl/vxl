@@ -9,7 +9,9 @@
   fsm@robots.ox.ac.uk
 */
 #include <vnl/vnl_vector_fixed.h>
-// Purpose: the vnl_vector_fixed<T,n> template class provides 
+//:
+// \file
+// Purpose: the vnl_vector_fixed<T,n> template class provides
 // non-mallocing vectors of given size, but it has no constructor
 // from n Ts. This macro declares a class vnl_T_n which is derived
 // directly from vnl_vector_fixed<T,n> and has such a constructor.

@@ -7,12 +7,15 @@
 
 //: \file
 //  \brief vnl_sparse_matrix -> vnl_linear_system adaptor
-//  \author David Capel, capes@robots, July 2000
+//
 //  An adaptor that converts a vnl_sparse_matrix<T> to a vnl_linear_system
 //
-
+//  \author David Capel, capes@robots
+//  \date   July 2000
+// \verbatim
 //  Modifications
-//  LSB (Manchester) 19/3/01 Documentation tidied    
+//  LSB (Manchester) 19/3/01 Documentation tidied
+// \endverbatim
 //
 //-----------------------------------------------------------------------------
 

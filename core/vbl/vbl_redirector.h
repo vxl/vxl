@@ -12,11 +12,9 @@
 //
 // \verbatim
 // Modifications
-// 21-JUL-00  M.Bacic, Oxford RRG -- fixed 'pubsync' on gcc. 
-//               See vbl_redirector.cxx 
+// 21-JUL-00  M.Bacic, Oxford RRG -- fixed 'pubsync' on gcc.
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
 // \endverbatim
-
 
 #include <vcl_iostream.h>
 
@@ -28,28 +26,23 @@ struct vbl_redirector_data;
 class vbl_redirector {
 public:
 
-  //: 
-  // Attach redirector to ostream s, 
+  //: Attach redirector to ostream s,
   // so that all future output to s goes through this->putchunk
    vbl_redirector(vcl_ostream& s);
 
-  //:
-  // Destroy redirector, restore stream to original.
+  //: Destroy redirector, restore stream to original.
    virtual ~vbl_redirector();
 
-  //:
-  // The filter function
+  //: The filter function
   // Called with `n' characters in `buf', do with as you like.
    virtual int putchunk(char const* buf, int n);
 
 protected:
-  //:
-  // Put characters to original stream.
+  //: Put characters to original stream.
   // Useful for derived classes which wish to filter a stream.
    int put_passthru(char const* buf, int n);
 
-  //:
-  // Sync original stream.
+  //: Sync original stream.
    int sync_passthru();
 
 private:

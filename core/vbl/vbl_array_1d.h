@@ -9,18 +9,19 @@
 // \file
 // \brief A simple container.
 // \author fsm@robots.ox.ac.uk
-// This container stores its elements in contiguous
-// storage and whose iterator types are raw pointers. There is
-// no requirement that the element type have a default constructor.
-
-// Modifications
+//
 // \verbatim
+// Modifications
 //    Peter Vanroose 5apr2001 added operator==
 // \verbatim
 
 #include <vcl_new.h>
 #include <vcl_cassert.h>
 
+//: A simple container.
+// This container stores its elements in contiguous
+// storage and whose iterator types are raw pointers. There is
+// no requirement that the element type have a default constructor.
 template <class T>
 struct vbl_array_1d
 {

@@ -5,12 +5,14 @@
 #endif
 
 //:
-//  \file
-//  \brief Purpose: declare in a central place the list of symbols from netlib
-//  \author fsm@robots.ox.ac.uk
+// \file
+// \brief Purpose: declare in a central place the list of symbols from netlib
+// \author fsm@robots.ox.ac.uk
 //
-//  Modifications
+// \verbatim
+// Modifications
 //  dac (Manchester) 28/03/2001: tidied up documentation
+// \endverbatim
 
 //: Purpose: declare in a central place the list of symbols from netlib
 //  referenced from vnl-algo. This list was auto-generated, so it is

@@ -4,13 +4,15 @@
 #pragma interface
 #endif
 
-//: 
+//:
 // \file
 // \brief For computing the orthogonal complement to a linear subspace.
 // \author fsm@robots.ox.ac.uk
-  
-// Modifications 
+//
+// \verbatim
+// Modifications
 // 4/4/01 LSB(Manchester) Tidied documentation
+// \endverbatim
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
@@ -20,9 +22,11 @@
 template <class T>
 vnl_matrix<T> vnl_orthogonal_complement(vnl_vector<T> const &v);
 
-// Return a matrix whose column span is the orthogonal 
-// // complement of the column span of M.
-// template <typename T>
-// vnl_matrix<T> vnl_orthogonal_complement(vnl_matrix<T> const &M);
+#if 0
+//: Return a matrix whose column span is the orthogonal
+// complement of the column span of M.
+template <typename T>
+vnl_matrix<T> vnl_orthogonal_complement(vnl_matrix<T> const &M);
+#endif
 
 #endif // vnl_orthogonal_complement_h_

@@ -16,16 +16,6 @@
 // \file
 // \brief vbl_timer - A timing facility for C++.
 //
-// \verbatim
-// Modifications:
-// Created: BMK 07/14/89  Initial design and implementation.
-// Updated: LGO 09/23/89  Conform to COOL coding style.
-// Updated: AFM 12/31/89  OS/2 port.
-// Updated: DLS 03/22/91  New lite version.
-// Updated: VDN 10/14/93  ANSI C does not have user/system time.
-// \endverbatim
-//
-// Description
 // The Timer class and provides an interface to system timing.
 // It allows a C++ program to record the time between  a  reference
 // point (mark) and now. This class uses the system
@@ -43,9 +33,7 @@
 // time  as  appropriate. See the Timer header file for system-
 // specific notes.
 //
-// The Timer class provides timing code  for performance evaluation.
-// This code
-// was originally written by Joe Rahmeh at UT Austin.
+// The Timer class provides timing code for performance evaluation.
 // \verbatim
 //  User time:
 //    time cpu spends in user mode on behalf of the program.
@@ -54,13 +42,25 @@
 //  Real time:
 //    what you get from a stop watch timer.
 // \endverbatim
+//
+// \author This code was originally written by Joe Rahmeh at UT Austin.
+//
+// \verbatim
+// Modifications:
+// Created: BMK 07/14/89  Initial design and implementation.
+// Updated: LGO 09/23/89  Conform to COOL coding style.
+// Updated: AFM 12/31/89  OS/2 port.
+// Updated: DLS 03/22/91  New lite version.
+// Updated: VDN 10/14/93  ANSI C does not have user/system time.
+// Peter Vanroose   27/05/2001: Corrected the documentation
+// \endverbatim
 
 //: struct containing timer data
 struct vbl_timer_data;
 
 #include <vcl_iosfwd.h>
 
-//: The Timer class provides timing code  for performance evaluation.
+//: The Timer class provides timing code for performance evaluation.
 class vbl_timer {
 public:
   //: construct and mark

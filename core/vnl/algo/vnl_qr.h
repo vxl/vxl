@@ -7,16 +7,19 @@
 //:
 //  \file
 //  \brief Calculate inverse of a matrix using QR
-//  \author  Andrew W. Fitzgibbon, Oxford RRG, 08 Dec 96
+//  \author  Andrew W. Fitzgibbon, Oxford RRG
+//  \date   08 Dec 96
 //
+// \verbatim
 //  Modifications:
 //  081296 AWF Temporarily abandoned as I realized my problem was symmetric...
 //  080697 AWF Recovered, implemented solve().
 //  200897 AWF Added determinant().
 //  071097 AWF Added Q(), R().
-//  Christian Stoecklin, ETH Zurich, added QtB(v);
+//  Christian Stoecklin, ETH Zurich, added QtB(v)
 //  31-mar-2000 fsm@robots.ox.ac.uk: templated
 //  dac (Manchester) 28/03/2001: tidied up documentation
+// \endverbatim
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
@@ -25,12 +28,13 @@
 //  The decomposition is stored in a compact and time-efficient
 // packed form, which is most easily used via the "solve" and
 // "determinant" methods.
+
 export template <class T>
 class vnl_qr {
 public:
   vnl_qr(vnl_matrix<T> const & M);
  ~vnl_qr();
-  
+
   vnl_matrix<T> inverse () const;   // inverse
   vnl_matrix<T> tinverse () const;  // transpose-inverse
   vnl_matrix<T> recompose () const;
@@ -42,7 +46,7 @@ public:
   vnl_matrix<T>& Q();
   vnl_matrix<T>& R();
   vnl_vector<T> QtB(const vnl_vector<T>& b) const;
-  
+
   void extract_q_and_r(vnl_matrix<T>* Q, vnl_matrix<T>* R);
 
 private:
@@ -51,7 +55,7 @@ private:
   vnl_vector<int> jpvt_;
   vnl_matrix<T>* Q_;
   vnl_matrix<T>* R_;
-  
+
   // Disallow assignment.
   vnl_qr(const vnl_qr<T> &) { }
   void operator=(const vnl_qr<T> &) { }

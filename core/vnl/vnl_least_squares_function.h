@@ -8,15 +8,16 @@
 
 //: \file
 //  \brief Abstract base for minimising functions
-//  \author Andrew W. Fitzgibbon, Oxford RRG, 31 Aug 96
-
+//  \author Andrew W. Fitzgibbon, Oxford RRG
+//  \date   31 Aug 96
 //
+// \verbatim
 //     Modifications:
 //     280697 AWF Changed return type of f from double to void, as it wasn't used, and
 //                people were going to extra trouble to compute it.
-//     20 Apr 1999 FSM
-//            Added failure flag so that f() and grad() may signal failure to the caller.
+//     20 Apr 1999 FSM Added failure flag so that f() and grad() may signal failure to the caller.
 //     23/3/01 LSB (Manchester) Tidied documentation
+// \endverbatim
 //
 #include <vcl_string.h>
 #include <vnl/vnl_vector.h>
@@ -51,7 +52,7 @@ public:
   // the virtuals may call this to signal a failure.
   void throw_failure();
   void clear_failure();
-  
+
   // Computations--------------------------------------------------------------
 
 //: The main function.  Given the parameter vector x, compute the vector

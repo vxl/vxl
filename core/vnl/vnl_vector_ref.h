@@ -5,15 +5,16 @@
 #endif
 // This is vxl/vnl/vnl_vector_ref.h
 
-//: 
+//:
 //  \file
 //  \brief vnl_vector using user-supplied storage
-//  \author Andrew W. Fitzgibbon, Oxford RRG, 04 Aug 96 
-
+//  \author Andrew W. Fitzgibbon, Oxford RRG
+//  \date   04 Aug 96
 //
+// \verbatim
 // Modifications
 // LSB (Manchester) 19/03/2001: Tidied up the documentation
-//
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_vector.h>
@@ -36,7 +37,7 @@ public:
   //: Destructor
   // Prevents base destructor from releasing memory we don't own
   ~vnl_vector_ref() {
-    
+
     Base::data = 0;
   }
 

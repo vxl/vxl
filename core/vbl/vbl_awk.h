@@ -7,12 +7,14 @@
 
 //:
 // \file
-// \author Andrew W. Fitzgibbon, Oxford RRG, 17 May 97
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   17 May 97
 //
-// Modifications
 // \verbatim
+// Modifications
 // 970517 AWF Initial version.
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
+// Peter Vanroose   27/05/2001: Corrected the documentation
 // \endverbatim
 
 
@@ -21,16 +23,16 @@
 #include <vcl_vector.h>
 
 //: The core of awk
-// vbl_awk reads lines from an istream and breaks them into whitespace-
-// separated
+// vbl_awk reads lines from an istream and breaks them into whitespace-separated
 // fields.  Its primary advantage is that its name defines the semantics of
 // its methods---except that this C++ version uses zero-based fields.  The
 // usage is exemplified in this example, to print the second field in every
 // line:
-//
+// \verbatim
 //    for(vbl_awk awk(cin); awk; ++awk)
 //      cout << awk[2] << endl;
-//
+// \endverbatim
+
 class vbl_awk {
 public:
   // Constructors/Destructors--------------------------------------------------
@@ -76,8 +78,8 @@ public:
 //: Display error message, line number.
 // Also display optional field number and  char within field.
 
-  void error(vcl_ostream&, char const* message, int field = -1, 
-    int char_within_field = 0);
+  void error(vcl_ostream&, char const* message, int field = -1,
+             int char_within_field = 0);
 
   // Computations--------------------------------------------------------------
 

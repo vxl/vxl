@@ -6,10 +6,13 @@
 // This is vxl/vnl/vnl_identity.h
 
 //: \file
-//  \author Andrew W. Fitzgibbon, Oxford RRG, 07 Dec 98
-
+//  \author Andrew W. Fitzgibbon, Oxford RRG
+//  \date   07 Dec 98
+//
+// \verbatim
 // Modification
 // LSB (Manchester) 23/1/01 Tidied documentation
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_unary_function.h>

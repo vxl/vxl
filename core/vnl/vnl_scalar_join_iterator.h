@@ -5,11 +5,9 @@
 #endif
 // This is vxl/vnl/vnl_scalar_join_iterator.h
 
-//: 
+//:
 //  \file
 //  \brief  Database join on matrix columns
-//  \author Andrew W. Fitzgibbon, Oxford RRG, 27 Dec 96
-//  \verbatim
 //    vnl_scalar_join_iterator implements a fast database join on columns
 //    of matrices of scalars.  "Scalar" here really means that the
 //    objects have comparison operators.  The cost is O(n log n) where
@@ -17,7 +15,7 @@
 //
 //    CAVEAT: The current implementation fudges multiple occurrences
 //    of the same key in the source column.  For example,
-//
+//  \verbatim
 //    join  1 3 and  3 5 on columns 2 and 1 respectively
 //          2 3      3 6
 //    should give
@@ -25,14 +23,16 @@
 //          1 3 3 6
 //          2 3 3 5
 //          2 3 3 6
-//    And it doesn't.  Contact awf if you need this to work.
-//
 //  \endverbatim
+//    and it doesn't.  Contact awf if you need this to work.
 //
-
+//  \author Andrew W. Fitzgibbon, Oxford RRG
+//  \date   27 Dec 96
 //
+// \verbatim
 // Modifications:
 // LSB (Manchester) Documentation Tidied
+// \endverbatim
 //
 //-----------------------------------------------------------------------------
 
@@ -77,8 +77,10 @@ private:
   // Postfix ++ is private as it would be costly to implement.
   vnl_scalar_join_iterator<T>& operator ++ (int);
 
-  //T object1() { return *I1[index1].object; }
-  //T object2() { return *I2[index2].object; }
+#if 0
+  T object1() { return *I1[index1].object; }
+  T object2() { return *I2[index2].object; }
+#endif
 
 protected:
   unsigned n1;
@@ -103,7 +105,6 @@ public:
 
   bool operator == (const vnl_scalar_join_iterator_indexed_pair<T>& that) const;
   bool operator <  (const vnl_scalar_join_iterator_indexed_pair<T>& that) const;
-
 };
 
 #endif // vnl_scalar_join_iterator_h_

@@ -7,15 +7,17 @@
 
 //: \file
 //  \brief Functions for saving and loading matrices and vectors in binary format.
-//  \author fsm@robots.ox.ac.uk
-// The point of doing that is to 1) make it 
+//
+// The point of doing that is to 1) make it
 // go faster and 2) ensure that no accuracy is lost in the
 // process of saving to disk. It doesn't matter that the
 // format is architecture dependent.
-
-
-// Modifictaions
+//
+//  \author fsm@robots.ox.ac.uk
+// \verbatim
+// Modifications
 //  LSB (Manchester) 23/3/01
+// \endverbatim
 
 
 #include <vcl_iosfwd.h>

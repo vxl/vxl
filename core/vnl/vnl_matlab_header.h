@@ -7,8 +7,7 @@
 
 //: \file
 //  \brief MATLAB header structure
-//  \author fsm@robots.ox.ac.uk 
-
+//  \author fsm@robots.ox.ac.uk
 
 struct vnl_matlab_header
 {
@@ -17,7 +16,7 @@ struct vnl_matlab_header
   long cols;
   long imag;
   long namlen;
-  
+
   enum type_t {
     // precision specifier
     vnl_DOUBLE_PRECISION = 0,

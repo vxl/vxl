@@ -6,12 +6,14 @@
 // This is vxl/vnl/vnl_int_2.h
 
 //: \file
-// \brief
-// \author Andrew W. Fitzgibbon, Oxford RRG, 31 Aug 96
-
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   31 Aug 96
+//
+// \verbatim
 // Modifications:
 //   Peter Vanroose, 21 Oct 1999: vnl_vector_fixed<int,2> already instantiated
-// 4/4/01 LSB (Manchester) Tidied documentation
+//   4/4/01 LSB (Manchester) Tidied documentation
+// \endverbatim
 
 #include <vnl/vnl_T_n.h>
 

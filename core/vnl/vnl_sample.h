@@ -6,14 +6,9 @@
 
 // This is vxl/vnl/vnl_sample.h
 
-
 //:
 //  \file
 //  \brief easy ways to sample from various probability distributions
-//  \author unknown
-
-
-
 
 //: re-seed the random number generator.
 void vnl_sample_reseed();

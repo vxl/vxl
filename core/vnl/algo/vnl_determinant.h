@@ -4,24 +4,22 @@
 #pragma interface
 #endif
 
-
 //:
-//  \file
-//  \brief calculates the determinant of a matrix
-//  \author fsm@robots.ox.ac.uk
-// 
-//  Modifications
-//  dac (Manchester) 26/03/2001: tidied up documentation
+// \file
+// \brief calculates the determinant of a matrix
+// \author fsm@robots.ox.ac.uk
 //
-
+// \verbatim
+// Modifications
+//  dac (Manchester) 26/03/2001: tidied up documentation
+// \endverbatim
 
 #include <vnl/vnl_determinant.h> // <-- not this file: different dir!
-
 
 //: calculates the determinant of a matrix
 //  evaluation of determinants of any size. for small
 //  matrices, will use the direct routines (no netlib)
-//  but for larger matrices, a matrix decomposition 
+//  but for larger matrices, a matrix decomposition
 //  such as SVD or QR will be used.
 
 template <class T>

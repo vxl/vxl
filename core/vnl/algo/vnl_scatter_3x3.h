@@ -4,14 +4,16 @@
 #pragma interface
 #endif
 //:
-//  \file 
-//  \brief 
-//  \author Andrew W. Fitzgibbon, Oxford RRG, 02 Oct 96
-
-//    Modifications:
-//     18 Feb 2000. fsm: templated.
-//     4/4/01 LSB (Manchester) documentation tidied
+// \file
+// \brief
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   02 Oct 96
 //
+// \verbatim
+// Modifications:
+//  18 Feb 2000. fsm: templated.
+//  4/4/01 LSB (Manchester) documentation tidied
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_matrix_fixed.h>
@@ -37,7 +39,7 @@ public:
   void sub_outer_product(const vnl_vector_fixed<T,3> & v);
 
   //: Subtract v*u' from scatter.
-  void sub_outer_product(const vnl_vector_fixed<T,3> & u, 
+  void sub_outer_product(const vnl_vector_fixed<T,3> & u,
         const vnl_vector_fixed<T,3> & v);
 
   //: Replace S with $(S+S^\top)/2$.
