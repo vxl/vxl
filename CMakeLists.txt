@@ -41,3 +41,7 @@ IF(WIN32)
   INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vcl/config.win32-VC60)
 ENDIF(WIN32)
 
+IF(RUN_CONFIGURE)
+  EXEC_PROGRAM( ${allvxl_SOURCE_DIR}/config.cmake/configure
+                ${allvxl_BINARY_DIR} )
+ENDIF(RUN_CONFIGURE)
