@@ -133,7 +133,7 @@ template <class T>
 inline bool convert_components_from_planes(vil2_image_view<T> &lhs,
                                            const vil2_image_view_base &rhs_base)
 {
-  typedef T::value_type comp_type;
+  typedef typename T::value_type comp_type;
 
   const unsigned ncomp =
     vil2_pixel_format_num_components(vil2_pixel_format_of(T()));
