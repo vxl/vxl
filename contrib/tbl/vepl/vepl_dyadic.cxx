@@ -6,6 +6,7 @@
 #include <vil/vil_rgb.h>
 
 typedef unsigned char ubyte;
+typedef unsigned short ushort;
 typedef vil_rgb<ubyte> r_g_b;
 void sum_ubyte(ubyte& a, ubyte const& b) { a += b; }
 void sum_ushort(ushort& a, ushort const& b) { a += b; }
