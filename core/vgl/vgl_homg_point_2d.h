@@ -57,15 +57,15 @@ public:
 
   // Data Access-------------------------------------------------------------
 
-  inline Type x() const {return _data[0];}
-  inline Type y() const {return _data[1];}
-  inline Type w() const {return _data[2];}
+  inline Type x() const {return data_[0];}
+  inline Type y() const {return data_[1];}
+  inline Type w() const {return data_[2];}
 
   // -- Set x,y,w.
   inline void set (Type px, Type py, Type pw) {
-    _data[0] = px,
-    _data[1] = py,
-    _data[2] = pw;
+    data_[0] = px,
+    data_[1] = py,
+    data_[2] = pw;
   }
 
   // -- Return true iff the point is at infinity (an ideal point).
@@ -78,19 +78,19 @@ public:
 
 protected:
   // the data associated with this point 
-  Type _data[3];
+  Type data_[3];
 };
 
 // stream operators 
 template <class Type>
 ostream&  operator<<(ostream& s, const vgl_homg_point_2d<Type>& p) {
   return s << " <vgl_homg_point_2d ("
-           << p->_data[0] << "," << p->_data[1] << "," << p->_data[2] << ") >";
+           << p->data_[0] << "," << p->data_[1] << "," << p->data_[2] << ") >";
 }
 
 template <class Type>
 istream&  operator>>(istream& is,  vgl_homg_point_2d<Type>& p) {
-  return is >> p->_data[0] >> p->_data[1] >> p->_data[2] ;
+  return is >> p->data_[0] >> p->data_[1] >> p->data_[2] ;
 }
 
 #endif

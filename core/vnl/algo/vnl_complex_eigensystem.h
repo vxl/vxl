@@ -17,14 +17,14 @@
 //
 // The input NxN matrix A is passed into the constructor. The flags
 // right,left request the calculation of right and left eigenvectors
-// respectively. The compute eigenvalues are stored in the member 'W'.
+// respectively. The compute eigenvalues are stored in the member 'W_'.
 //  Computed right eigenvectors are stored in the columns of the
-// member 'R' and computed left eigenvectors are stored in the columns
-// of the member 'L'. L, R are set to zero when eigenvectors are not
+// member 'R_' and computed left eigenvectors are stored in the columns
+// of the member 'L_'. L_, R_ are set to zero when eigenvectors are not
 // requested.
 //
-// The ith right eigenvector v satisfies A*v = W[i]*v
-// The ith right eigenvector u satisfies u*A = W[i]*u (no conjugation)
+// The ith right eigenvector v satisfies A*v = W_[i]*v
+// The ith right eigenvector u satisfies u*A = W_[i]*u (no conjugation)
 //
 
 //: computes the eigenvalues [+eigenvectors] of a general complex matrix.
@@ -40,10 +40,10 @@ public:
 
   ~vnl_complex_eigensystem();
 
-  int const N;
-  vnl_matrix<vnl_double_complex> L; // left evecs
-  vnl_matrix<vnl_double_complex> R; // right evecs
-  vnl_vector<vnl_double_complex> W; // evals
+  int const N_;
+  vnl_matrix<vnl_double_complex> L_; // left evecs
+  vnl_matrix<vnl_double_complex> R_; // right evecs
+  vnl_vector<vnl_double_complex> W_; // evals
 
 private:
   void compute(const vnl_matrix<vnl_double_complex> &,bool,bool);

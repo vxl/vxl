@@ -28,9 +28,9 @@ template <class V, class U>
 inline
 vbl_rgb<U> vbl_clamp(const vbl_rgb<V>& d, vbl_rgb<U>* dummy)
 {
-  return vbl_rgb<U>(vbl_clamp(d.R, &dummy->R),
-                vbl_clamp(d.G, &dummy->G),
-                vbl_clamp(d.B, &dummy->B));
+  return vbl_rgb<U>(vbl_clamp(d.R_, &dummy->R_),
+                vbl_clamp(d.G_, &dummy->G_),
+                vbl_clamp(d.B_, &dummy->B_));
 }
 #elif defined(VCL_GCC_27)
 // this one seems to be particularly broken: even if the vbl_clamp() from double
@@ -45,9 +45,9 @@ VCL_DEFINE_SPECIALIZATION
 inline
 vbl_rgb<unsigned char> vbl_clamp(const vbl_rgb<double>& d, vbl_rgb<unsigned char>* dummy)
 {
-  return vbl_rgb<unsigned char>(vbl_clamp(d.R, &dummy->R),
-                            vbl_clamp(d.G, &dummy->G),
-                            vbl_clamp(d.B, &dummy->B));
+  return vbl_rgb<unsigned char>(vbl_clamp(d.R_, &dummy->R_),
+                            vbl_clamp(d.G_, &dummy->G_),
+                            vbl_clamp(d.B_, &dummy->B_));
 }
 #endif
 

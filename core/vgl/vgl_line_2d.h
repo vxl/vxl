@@ -37,31 +37,31 @@ public:
   
   // Default copy constructor  
   // vgl_line_2d (const vgl_line_2d<Type>& that) {
-  //   _data[0]=that._data[0];
-  //   _data[1]=that._data[1];
-  //   _data[2]=that._data[2];
+  //   data_[0]=that.data_[0];
+  //   data_[1]=that.data_[1];
+  //   data_[2]=that.data_[2];
   // }
 
   vgl_line_2d<Type> (vgl_homg_line_2d<Type> const& p);
 
   //: -- Construct a vgl_line_2d from its equation, three Types.
-  vgl_line_2d (Type a, Type b, Type c) { _data[0]=a; _data[1]=b; _data[2]=c; }
+  vgl_line_2d (Type a, Type b, Type c) { data_[0]=a; data_[1]=b; data_[2]=c; }
   
   // -- Construct from two distinct points
   vgl_line_2d (vgl_point_2d<Type> const& p1,
                vgl_point_2d<Type> const& p2);
     
   //: -- Construct from its equation, a 3-vector.
-  vgl_line_2d (const Type v[3]) { _data[0]=v[0];_data[1]=v[1];_data[2]=v[2]; }
+  vgl_line_2d (const Type v[3]) { data_[0]=v[0];data_[1]=v[1];data_[2]=v[2]; }
   
   // Default destructor:
   // ~vgl_line_2d () {}
   
   // Default assignment operator:
   // vgl_line_2d<Type>& operator=(const vgl_line_2d<Type>& that){
-  //   _data[0]=that._data[0];
-  //   _data[1]=that._data[1];
-  //   _data[2]=that._data[2];
+  //   data_[0]=that.data_[0];
+  //   data_[1]=that.data_[1];
+  //   data_[2]=that.data_[2];
   //   return *this;
   // }
 
@@ -76,12 +76,12 @@ public:
   inline Type normal_x() const { return -dir_y(); }
   inline Type normal_y() const { return dir_x(); }
 
-  inline Type a() const {return _data[0];}
-  inline Type b() const {return _data[1];}
-  inline Type c() const {return _data[2];}
+  inline Type a() const {return data_[0];}
+  inline Type b() const {return data_[1];}
+  inline Type c() const {return data_[2];}
 
   //: -- Set a b c.
-  void set (Type a, Type b, Type c){ _data[0] = a; _data[1] = b; _data[2] = c; }
+  void set (Type a, Type b, Type c){ data_[0] = a; data_[1] = b; data_[2] = c; }
 
   //: find the distance of the line to the origin
   Type distance_to_origin() const;
@@ -94,20 +94,20 @@ public:
 
 protected:
   // the data associated with this point 
-  Type _data[3];
+  Type data_[3];
 };
 
 //: stream operators 
   
 template <class Type>
 ostream&  operator<<(ostream& s, const vgl_line_2d<Type>& p) {
-  return s << " <vgl_line_2d " << p->_data[0] << " x + " << p->_data[1]
-           << " y + " << p->_data[2] << " = 0>";
+  return s << " <vgl_line_2d " << p->data_[0] << " x + " << p->data_[1]
+           << " y + " << p->data_[2] << " = 0>";
 }
 
 template <class Type>
 istream&  operator>>(istream& is,  vgl_line_2d<Type>& p) {
-  return is >> p->_data[0] >> p->_data[1] >> p->_data[2];
+  return is >> p->data_[0] >> p->data_[1] >> p->data_[2];
 }
   
 #endif

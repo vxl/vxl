@@ -27,15 +27,15 @@ public:
   
   vbl_base_array_3d(unsigned int n1, unsigned int n2, unsigned int n3);
 
-  int get_row1_count () const { return _row1_count; }
-  int get_row2_count () const { return _row2_count; }
-  int get_row3_count () const { return _row3_count; }
+  int get_row1_count () const { return row1_count_; }
+  int get_row2_count () const { return row2_count_; }
+  int get_row3_count () const { return row3_count_; }
   
   // INTERNALS-----------------------------------------------------------------
 public:
-  unsigned int _row1_count;
-  unsigned int _row2_count;
-  unsigned int _row3_count;
+  unsigned int row1_count_;
+  unsigned int row2_count_;
+  unsigned int row3_count_;
 };
 
 #endif // _vbl_base_array_3d_h

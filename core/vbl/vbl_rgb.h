@@ -44,37 +44,37 @@ public:
   typedef T value_type;
   
   // -- The rgb values
-  T R, G, B;
+  T R_, G_, B_;
   
   // -- Create (0,0,0) vbl_rgb cell. We need the default ctor to do this as the STL
   // effectively mandates that T() produces a nil value.
   vbl_rgb():
-    R(0), G(0), B(0) {}
+    R_(0), G_(0), B_(0) {}
   
   // -- Create grey (v,v,v) vbl_rgb cell from value v.  This provides a conversion
   // from T to vbl_rgb<T>, needed by e.g. two constructors in vbl_filter.h.
 
   vbl_rgb(T v):
-    R(v), G(v), B(v) {}
+    R_(v), G_(v), B_(v) {}
   
   // -- Construct an vbl_rgb value.
   vbl_rgb(T red, T green, T blue):
-    R(red), G(green), B(blue) {}
+    R_(red), G_(green), B_(blue) {}
 
 
 // VC50 bombs with INTERNAL COMPILER ERROR on template member functions
 #if VCL_HAS_MEMBER_TEMPLATES
   template <class S>
   vbl_rgb(const vbl_rgb<S>& that) :
-    R((T)that.R),
-    G((T)that.G),
-    B((T)that.B) {}
+    R_((T)that.R_),
+    G_((T)that.G_),
+    B_((T)that.B_) {}
 
   template <class S>
   vbl_rgb<T>& operator=(const vbl_rgb<S>& that) {
-    R=((T)that.R);
-    G=((T)that.G);
-    B=((T)that.B);
+    R_=((T)that.R_);
+    G_=((T)that.G_);
+    B_=((T)that.B_);
     return *this;
   }
 #else
@@ -84,59 +84,59 @@ public:
 
   vbl_rgb<T>& operator=(const vbl_rgb<double>& that)
   {
-    R=((T)that.R);
-    G=((T)that.G);
-    B=((T)that.B);
+    R_=((T)that.R_);
+    G_=((T)that.G_);
+    B_=((T)that.B_);
     return *this;
   }
 
   vbl_rgb<T>& operator=(const vbl_rgb<unsigned char>& that)
   {
-    R=((T)that.R);
-    G=((T)that.G);
-    B=((T)that.B);
+    R_=((T)that.R_);
+    G_=((T)that.G_);
+    B_=((T)that.B_);
     return *this;
   }
 
   vbl_rgb<T>& operator=(const vbl_rgb<int>& that)
   {
-    R=((T)that.R);
-    G=((T)that.G);
-    B=((T)that.B);
+    R_=((T)that.R_);
+    G_=((T)that.G_);
+    B_=((T)that.B_);
     return *this;
   }
 
   vbl_rgb<T>& operator=(const vbl_rgb<long>& that)
   {
-    R=((T)that.R);
-    G=((T)that.G);
-    B=((T)that.B);
+    R_=((T)that.R_);
+    G_=((T)that.G_);
+    B_=((T)that.B_);
     return *this;
   }
 #endif
 
  
   // -- Convert vbl_rgb to gray using standard (.299, .587, .114) weighting.
-  T grey() const { return int(0.5+R*0.299+0.587*G+0.114*B); }
+  T grey() const { return int(0.5+R_*0.299+0.587*G_+0.114*B_); }
   
   // Who wants this? It's a pain in the ass.
   // ImageProcessing/IIFOperators use this a lot!
   // Why can we not use .gray()?  This adds ambiguities.
-  // operator T() const { return int(0.5+R*0.299+0.587*G+0.114*B); }
+  // operator T() const { return int(0.5+R_*0.299+0.587*G_+0.114*B_); }
   
   // -- equality
   inline bool operator== (vbl_rgb<T> const&) const;
 
   // -- operators
-  vbl_rgb<T> operator+ (vbl_rgb<T> const& A) const { return vbl_rgb<T>(R+A.R,G+A.G,B+A.B); }
-  vbl_rgb<T> operator- (vbl_rgb<T> const& A) const { return vbl_rgb<T>(R-A.R,G-A.G,B-A.B); }
-  vbl_rgb<T> operator/ (vbl_rgb<T> const& A) const { return vbl_rgb<T>(R/A.R,G/A.G,B/A.B);}
-  vbl_rgb<T>& operator+= (vbl_rgb<T> const& A) { R+=A.R,G+=A.G,B+=A.B; return *this; }
-  vbl_rgb<T>& operator-= (vbl_rgb<T> const& A) { R-=A.R,G-=A.G,B-=A.B; return *this; }
-  vbl_rgb<T> operator* (T A) const { return vbl_rgb<T>(R*A,G*A,B*A); }
-  vbl_rgb<T> operator/ (T A) const { return vbl_rgb<T>(R/A,G/A,B/A); }
-  vbl_rgb<T>& operator*= (T A) { R*=A,G*=A,B*=A; return *this; }
-  vbl_rgb<T>& operator/= (T A) { R/=A,G/=A,B/=A; return *this; }
+  vbl_rgb<T> operator+ (vbl_rgb<T> const& A) const { return vbl_rgb<T>(R_+A.R_,G_+A.G_,B_+A.B_); }
+  vbl_rgb<T> operator- (vbl_rgb<T> const& A) const { return vbl_rgb<T>(R_-A.R_,G_-A.G_,B_-A.B_); }
+  vbl_rgb<T> operator/ (vbl_rgb<T> const& A) const { return vbl_rgb<T>(R_/A.R_,G_/A.G_,B_/A.B_);}
+  vbl_rgb<T>& operator+= (vbl_rgb<T> const& A) { R_+=A.R_,G_+=A.G_,B_+=A.B_; return *this; }
+  vbl_rgb<T>& operator-= (vbl_rgb<T> const& A) { R_-=A.R_,G_-=A.G_,B_-=A.B_; return *this; }
+  vbl_rgb<T> operator* (T A) const { return vbl_rgb<T>(R_*A,G_*A,B_*A); }
+  vbl_rgb<T> operator/ (T A) const { return vbl_rgb<T>(R_/A,G_/A,B_/A); }
+  vbl_rgb<T>& operator*= (T A) { R_*=A,G_*=A,B_*=A; return *this; }
+  vbl_rgb<T>& operator/= (T A) { R_/=A,G_/=A,B_/=A; return *this; }
 };
 
 // Assorted hackery for busted compilers
@@ -150,22 +150,22 @@ extern vbl_rgb<double> tickle_mi_fancy;
 #if !VCL_HAS_MEMBER_TEMPLATES
 template <class T>
 InLine vbl_rgb<T>::vbl_rgb(const vbl_rgb_double& r) :
-  R((T)r.R),
-  G((T)r.G),
-  B((T)r.B) {}
+  R_((T)r.R_),
+  G_((T)r.G_),
+  B_((T)r.B_) {}
 
 template <class T>
 InLine vbl_rgb<T>::vbl_rgb(const vbl_rgb<unsigned char>& r) :
-  R((T)r.R),
-  G((T)r.G),
-  B((T)r.B) {}
+  R_((T)r.R_),
+  G_((T)r.G_),
+  B_((T)r.B_) {}
 #endif
 
 template <class T>
 inline
 ostream& operator<<(ostream& s, const vbl_rgb<T>& rgb)
 {
-  return s << '[' << rgb.R << ' ' << rgb.G << ' ' << rgb.B << ']';
+  return s << '[' << rgb.R_ << ' ' << rgb.G_ << ' ' << rgb.B_ << ']';
 }
 
 // Specialization to get vbl_rgb<byte> right.
@@ -177,60 +177,60 @@ template <class T>
 inline
 bool vbl_rgb<T>::operator== (vbl_rgb<T> const& o) const
 {
-  return R==o.R && G==o.G && B==o.B;
+  return R_==o.R_ && G_==o.G_ && B_==o.B_;
 }
 
 template <class T> 
 inline
 vbl_rgb<T> max(const vbl_rgb<T>& a, const vbl_rgb<T>& b)
 {
-  return vbl_rgb<T>((a.R>b.R)?a.R:b.R,
-		(a.G>b.G)?a.G:b.G,
-		(a.B>b.B)?a.B:b.B);
+  return vbl_rgb<T>((a.R_>b.R_)?a.R_:b.R_,
+		(a.G_>b.G_)?a.G_:b.G_,
+		(a.B_>b.B_)?a.B_:b.B_);
 }
 
 template <class T> 
 inline
 vbl_rgb<T> min(const vbl_rgb<T>& a, const vbl_rgb<T>& b)
 {
-  return vbl_rgb<T>((a.R<b.R)?a.R:b.R,
-		(a.G<b.G)?a.G:b.G,
-		(a.B<b.B)?a.B:b.B);
+  return vbl_rgb<T>((a.R_<b.R_)?a.R_:b.R_,
+		(a.G_<b.G_)?a.G_:b.G_,
+		(a.B_<b.B_)?a.B_:b.B_);
 }
 
 template <class T> 
 inline
 vbl_rgb<T> average(const vbl_rgb<T>& a, const vbl_rgb<T>& b)
 {
-  return vbl_rgb<T>((a.R + b.R)/2, (a.G + b.G)/2, (a.B + b.B)/2);
+  return vbl_rgb<T>((a.R_ + b.R_)/2, (a.G_ + b.G_)/2, (a.B_ + b.B_)/2);
 }
 
 template <class T> 
 inline
 vbl_rgb<T> operator+(const vbl_rgb<T>& a, const vbl_rgb<T>& b)
 {
-  return vbl_rgb<T>(a.R + b.R, a.G + b.G, a.B + b.B);
+  return vbl_rgb<T>(a.R_ + b.R_, a.G_ + b.G_, a.B_ + b.B_);
 }
 
 template <class T> 
 inline
 vbl_rgb<double> operator*(double b, vbl_rgb<T> const& a)
 {
-  return vbl_rgb<double>(a.R * b, a.G * b, a.B * b);
+  return vbl_rgb<double>(a.R_ * b, a.G_ * b, a.B_ * b);
 }
 
 template <class T> 
 inline
 vbl_rgb<double> operator*(const vbl_rgb<T>& a, double b)
 {
-  return vbl_rgb<double>(a.R * b, a.G * b, a.B * b);
+  return vbl_rgb<double>(a.R_ * b, a.G_ * b, a.B_ * b);
 }
 
 template <class T> 
 inline
 vbl_rgb<double> operator/(const vbl_rgb<T>& a, double b)
 {
-  return vbl_rgb<double>(a.R / b, a.G / b, a.B / b);
+  return vbl_rgb<double>(a.R_ / b, a.G_ / b, a.B_ / b);
 }
 
 #define VBL_RGB_INSTANTIATE(T) \

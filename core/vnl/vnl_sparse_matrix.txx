@@ -13,7 +13,7 @@
 // -- Construct an empty matrix
 template <class T>
 vnl_sparse_matrix<T>::vnl_sparse_matrix()
-  : rs(0), cs(0)
+  : rs_(0), cs_(0)
 {
 }
 
@@ -21,7 +21,7 @@ vnl_sparse_matrix<T>::vnl_sparse_matrix()
 // -- Construct an empty m*n matrix.  There are m rows and n columns.
 template <class T>
 vnl_sparse_matrix<T>::vnl_sparse_matrix(unsigned int m, unsigned int n)
-  : elements(m), rs(m), cs(n)
+  : elements(m), rs_(m), cs_(n)
 {
 }
 
@@ -29,7 +29,7 @@ vnl_sparse_matrix<T>::vnl_sparse_matrix(unsigned int m, unsigned int n)
 // -- Construct an m*n Matrix and copy rhs into it.  
 template <class T>
 vnl_sparse_matrix<T>::vnl_sparse_matrix(const vnl_sparse_matrix<T>& rhs)
-  : elements(rhs.elements), rs(rhs.rs), cs(rhs.cs)
+  : elements(rhs.elements), rs_(rhs.rs_), cs_(rhs.cs_)
 {
 }
 
@@ -42,8 +42,8 @@ vnl_sparse_matrix<T>& vnl_sparse_matrix<T>::operator=(const vnl_sparse_matrix<T>
     return *this;
 
   elements = rhs.elements;
-  rs = rhs.rs;
-  cs = rhs.cs;
+  rs_ = rhs.rs_;
+  cs_ = rhs.cs_;
   
   return *this;
 }
@@ -62,8 +62,8 @@ void vnl_sparse_matrix<T>::mult(const vnl_sparse_matrix<T>& rhs, vnl_sparse_matr
   
   // Now give the result matrix enough rows.
   result.elements.resize(result_rows);
-  result.rs = result_rows;
-  result.cs = result_cols;
+  result.rs_ = result_rows;
+  result.cs_ = result_cols;
   
   // Now, iterate over non-zero rows of this.
   for (unsigned row_id=0; row_id<elements.size(); ++row_id) {
@@ -274,8 +274,8 @@ void vnl_sparse_matrix<T>::add(const vnl_sparse_matrix<T>& rhs,
   
   // Now give the result matrix enough rows.
   result.elements.resize(rows());
-  result.rs = rows();
-  result.cs = columns();
+  result.rs_ = rows();
+  result.cs_ = columns();
   
   // Now, iterate over non-zero rows of this.
   unsigned int row_id = 0;
@@ -327,8 +327,8 @@ void vnl_sparse_matrix<T>::subtract(const vnl_sparse_matrix<T>& rhs,
   
   // Now give the result matrix enough rows.
   result.elements.resize(rows());
-  result.rs = rows();
-  result.cs = columns();
+  result.rs_ = rows();
+  result.cs_ = columns();
   
   // Now, iterate over non-zero rows of this.
   unsigned int row_id = 0;

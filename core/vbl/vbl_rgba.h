@@ -29,47 +29,43 @@ public:
   typedef T value_type;
   
   // -- The values.
-  // #ifdef WIN32
-  //   T  A, B, G, R;
-  // #else
-  T  R; T G; T B; T A;
-  // #endif
+  T  R_; T G_; T B_; T A_;
   
   // -- Create (0,0,0,0) vbl_rgba cell. We need the default ctor to do this as the STL
   // effectively mandates that T() produces a nil value.
   vbl_rgba():
-    R(0), G(0), B(0), A(0) {}
+    R_(0), G_(0), B_(0), A_(0) {}
   
   // -- Create grey (v,v,v,1) vbl_rgba cell from value v.  This provides a conversion
   // from T to vbl_rgba<T>, needed by e.g. two constructors in IUE_filter.h.
   vbl_rgba(T v):
-    R(v), G(v), B(v), A(1) {}
+    R_(v), G_(v), B_(v), A_(1) {}
   
   // -- Construct from four values.
   vbl_rgba(T red, T green, T blue, T alpha):
-    R(red), G(green), B(blue), A(alpha) {}
+    R_(red), G_(green), B_(blue), A_(alpha) {}
 
   //#if defined(VCL_SGI_CC) // quell warning 3150 -- fsm
   //  vbl_rgba(vbl_rgba<T> const &that):
-  //    R(that.R), B(that.B), G(that.G), A(that.A) {}
+  //    R_(that.R_), G_(that.G_), B_(that.B_), A_(that.A_) {}
   //#endif
 
   // VC50 bombs with INTERNAL COMPILER ERROR on template member functions
 #if VCL_HAS_MEMBER_TEMPLATES
   template <class S>
   vbl_rgba(const vbl_rgba<S>& that) {
-    R=((T)that.R);
-    G=((T)that.G);
-    B=((T)that.B);
-    A=((T)that.A);
+    R_=((T)that.R_);
+    G_=((T)that.G_);
+    B_=((T)that.B_);
+    A_=((T)that.A_);
   } 
 
   template <class S>
   vbl_rgba<T>& operator=(const vbl_rgba<S>& that) {
-    R=((T)that.R);
-    G=((T)that.G);
-    B=((T)that.B);
-    A=((T)that.A);
+    R_=((T)that.R_);
+    G_=((T)that.G_);
+    B_=((T)that.B_);
+    A_=((T)that.A_);
     return *this;
   }
 #else
@@ -78,61 +74,62 @@ public:
   inline 
 # endif
   vbl_rgba(const vbl_rgba<double>& that) {
-    R=((T)that.R);
-    G=((T)that.G);
-    B=((T)that.B);
-    A=((T)that.A);
+    R_=((T)that.R_);
+    G_=((T)that.G_);
+    B_=((T)that.B_);
+    A_=((T)that.A_);
   }
 # ifdef VCL_SUNPRO_CC
   inline 
 # endif
   vbl_rgba(const vbl_rgba<unsigned char>& that) {
-    R=((T)that.R);
-    G=((T)that.G);
-    B=((T)that.B);
-    A=((T)that.A);
+    R_=((T)that.R_);
+    G_=((T)that.G_);
+    B_=((T)that.B_);
+    A_=((T)that.A_);
   }
 
   vbl_rgba<T>& operator=(const vbl_rgba<double>& that)
   {
-    R=((T)that.R);
-    G=((T)that.G);
-    B=((T)that.B);
-    A=((T)that.A);
+    R_=((T)that.R_);
+    G_=((T)that.G_);
+    B_=((T)that.B_);
+    A_=((T)that.A_);
     return *this;
   }
 
   vbl_rgba<T>& operator=(const vbl_rgba<float>& that)
   {
-    R=((T)that.R);
-    G=((T)that.G);
-    B=((T)that.B);
-    A=((T)that.A);
+    R_=((T)that.R_);
+    G_=((T)that.G_);
+    B_=((T)that.B_);
+    A_=((T)that.A_);
     return *this;
   }
 
   vbl_rgba<T>& operator=(const vbl_rgba<unsigned char>& that)
   {
-    R=((T)that.R);
-    G=((T)that.G);
-    B=((T)that.B);
-    A=((T)that.A);
+    R_=((T)that.R_);
+    G_=((T)that.G_);
+    B_=((T)that.B_);
+    A_=((T)that.A_);
     return *this;
   }
 #endif
 
  
   // -- Convert vbl_rgba to gray using standard (.299, .587, .114) weighting.
-  T grey() const { return int(0.5+R*0.299+0.587*G+0.114*B); }
+  T grey() const { return int(0.5+R_*0.299+0.587*G_+0.114*B_); }
   
   // Who wants this? It's a pain in the ass.
   // ImageProcessing/IIFOperators use this a lot!
-  operator T() const { return int(0.5+R*0.299+0.587*G+0.114*B); }
+  operator T() const { return int(0.5+R_*0.299+0.587*G_+0.114*B_); }
   
   // -- equality
   inline bool operator== (vbl_rgba<T> const&) const;
 };
 
-#define VBL_RGBA_INSTANTIATE(T) extern "please include vbl_rgba.txx"
+#define VBL_RGBA_INSTANTIATE \
+extern "please include vbl/vbl_rgba.txx instead"
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vbl_rgba.

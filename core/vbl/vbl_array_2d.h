@@ -47,8 +47,8 @@ public:
   int columns() const;
 
   // Data Control--------------------------------------------------------------
-  T** GetRows() { return rows_; }
-  T const* const* GetRows() const { return rows_; }
+  T** get_rows() { return rows_; }
+  T const* const* get_rows() const { return rows_; }
 
 protected:
   // Data Members--------------------------------------------------------------
@@ -65,6 +65,7 @@ protected:
 template<class Type> 
 ostream& operator<< (ostream& os, const vbl_array_2d<Type> &v);
 
-#define VBL_ARRAY_2D_INSTANTIATE extern "please include vbl/vbl_array_2d.txx instead"
+#define VBL_ARRAY_2D_INSTANTIATE \
+extern "please include vbl/vbl_array_2d.txx instead"
 
 #endif // vbl_array_2d_h_

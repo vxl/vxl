@@ -34,10 +34,10 @@ public:
   
   // Default copy constructor  
   // vgl_plane_3d (const vgl_plane_3d<Type>& that) {
-  //   _data[0]=that._data[0];
-  //   _data[1]=that._data[1];
-  //   _data[2]=that._data[2];
-  //   _data[3]=that._data[3];
+  //   data_[0]=that.data_[0];
+  //   data_[1]=that.data_[1];
+  //   data_[2]=that.data_[2];
+  //   data_[3]=that.data_[3];
   // }
   
   vgl_plane_3d<Type> (vgl_homg_plane_3d<Type> const& p);
@@ -69,33 +69,33 @@ public:
   
   // Default assignment operator
   // vgl_plane_3d<Type>& operator=(vgl_plane_3d<Type> const& that) {
-  //   this->_data[0] = that._data[0];
-  //   this->_data[1] = that._data[1];
-  //   this->_data[2] = that._data[2];
-  //   this->_data[3] = that._data[3];
+  //   this->data_[0] = that.data_[0];
+  //   this->data_[1] = that.data_[1];
+  //   this->data_[2] = that.data_[2];
+  //   this->data_[3] = that.data_[3];
   //   return *this;
   // }
   
   // Data Access-------------------------------------------------------------
   
-  inline Type nx() const {return _data[0];}
-  inline Type ny() const {return _data[1];}
-  inline Type nz() const {return _data[2];}
-  inline Type d()  const {return _data[3];}
+  inline Type nx() const {return data_[0];}
+  inline Type ny() const {return data_[1];}
+  inline Type nz() const {return data_[2];}
+  inline Type d()  const {return data_[3];}
   
   //: -- Set nx ny nz d
   inline void set (Type nx, Type ny, Type nz, Type d){
-    _data[0] = nx;
-    _data[1] = ny;
-    _data[2] = nz;
-    _data[3] = d;
+    data_[0] = nx;
+    data_[1] = ny;
+    data_[2] = nz;
+    data_[3] = d;
   }
   
   // INTERNALS---------------------------------------------------------------
 
 protected:
   // the data associated with this plane 
-  Type _data[4];
+  Type data_[4];
 };
 
 
@@ -104,15 +104,15 @@ protected:
 template <class Type>
 inline ostream&  operator<<(ostream& s, const vgl_plane_3d<Type>& p) {
   return s << " <vgl_plane_3d "
-           << p._data[0] << " x + "
-           << p._data[1] << " y + "
-           << p._data[2] << " z + "
-           << p._data[3] << " = 0 >";
+           << p.data_[0] << " x + "
+           << p.data_[1] << " y + "
+           << p.data_[2] << " z + "
+           << p.data_[3] << " = 0 >";
 }
 
 template <class Type>
 istream&  operator>>(istream& is, vgl_plane_3d<Type>& p) {
-  return is >> p._data[0] >> p._data[1] >> p._data[2] >> p._data[3];
+  return is >> p.data_[0] >> p.data_[1] >> p.data_[2] >> p.data_[3];
 }
 
 #endif

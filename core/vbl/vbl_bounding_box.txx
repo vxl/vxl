@@ -17,10 +17,10 @@ ostream& vbl_bounding_box<T, DIM>::print(ostream& s) const
 {
   s << "<bbox(";
   for(int i = 0; i < DIM; ++i)
-    s << _min[i] << " ";
+    s << min_[i] << " ";
   s << ") to (";
   for(int i = 0; i < DIM; ++i)
-    s << _max[i] << " ";
+    s << max_[i] << " ";
   s << ")>";
   return s;
 }

@@ -56,9 +56,9 @@ protected:
 #endif
   > Map;
 
-  unsigned _n1;
-  unsigned _n2;
-  unsigned _n3;
+  unsigned n1_;
+  unsigned n2_;
+  unsigned n3_;
   Map storage_;
   
 public:

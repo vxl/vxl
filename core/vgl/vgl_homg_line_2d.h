@@ -63,15 +63,15 @@ public:
   inline Type nx() const {return -b() ;} // TODO
   inline Type ny() const {return a(); } // TODO
   
-  inline Type a() const {return _pos[0];}
-  inline Type b() const {return _pos[1];}
-  inline Type c() const {return _pos[2];}
+  inline Type a() const {return pos_[0];}
+  inline Type b() const {return pos_[1];}
+  inline Type c() const {return pos_[2];}
 
   // -- Set a b c.
   void set (Type a, Type b, Type c){
-    _pos[0] = a;
-    _pos[1] = b;
-    _pos[2] = c;
+    pos_[0] = a;
+    pos_[1] = b;
+    pos_[2] = c;
   }
 
   // -- Return true iff the point is the point at infinity
@@ -89,7 +89,7 @@ public:
 
 protected:
   // the data associated with this line 
-  Type _pos[3];
+  Type pos_[3];
 };
 
 //: stream operators 
@@ -97,13 +97,13 @@ protected:
 template <class Type>
 ostream&  operator<<(ostream& s, const vgl_homg_line_2d<Type>& p) {
   return s << " <vgl_homg_line_2d "
-           << p->_pos[0] << " x + " << p->_pos[1] << " y + "
-           << p->_pos[2] << " z = 0>";
+           << p->pos_[0] << " x + " << p->pos_[1] << " y + "
+           << p->pos_[2] << " z = 0>";
 }
 
 template <class Type>
 istream&  operator>>(istream& is,  vgl_homg_line_2d<Type>& p) {
-  return is >> p->_pos[0] >> p->_pos[1] >> p->_pos[2];
+  return is >> p->pos_[0] >> p->pos_[1] >> p->pos_[2];
 }
 
 #endif

@@ -99,10 +99,10 @@ public:
   T& operator()(unsigned int row, unsigned int column);
 
   //: Get the number of rows in the matrix.
-  unsigned int rows() const { return rs; }
+  unsigned int rows() const { return rs_; }
 
   //: Get the number of columns in the matrix.
-  unsigned int columns() const { return cs; }
+  unsigned int columns() const { return cs_; }
 
   //: Return whether a given row is empty
   bool empty_row(unsigned int r) const { return elements[r].empty(); }
@@ -134,7 +134,7 @@ public:
 
 protected:
   vnl_sparse_matrix_elements elements;
-  unsigned int rs, cs;
+  unsigned int rs_, cs_;
 
   // internal iterator
   unsigned int itr_row;

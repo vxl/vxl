@@ -17,7 +17,7 @@ class vbl_bounding_box {
 public:
   // -- Construct an empty bounding box.
   vbl_bounding_box() {
-    _initialized = false;
+    initialized_ = false;
   }
 
   //: Incorporate 2d point x, y
@@ -28,41 +28,41 @@ public:
 
   //: Incorporate DIM-d point
   void update(const T* point) {
-    if (!_initialized) {
-      _initialized = true;
+    if (!initialized_) {
+      initialized_ = true;
       for(int i = 0; i < DIM; ++i)
-	_min[i] = _max[i] = point[i];
+	min_[i] = max_[i] = point[i];
     } else {
       for(int i = 0; i < DIM; ++i) {
-	if (point[i] < _min[i]) _min[i] = point[i];
-	if (point[i] > _max[i]) _max[i] = point[i];
+	if (point[i] < min_[i]) min_[i] = point[i];
+	if (point[i] > max_[i]) max_[i] = point[i];
       }
     }
   }
 
   //: Reset to infinitesimal
   void reset() {
-    _initialized = false;
+    initialized_ = false;
   }
   
   ostream& print(ostream& s) const;
 
-  const T* get_min() const { return _min; }
-  const T* get_max() const { return _max; }
+  const T* get_min() const { return min_; }
+  const T* get_max() const { return max_; }
 
-  T* get_min() { return _min; }
-  T* get_max() { return _max; }
+  T* get_min() { return min_; }
+  T* get_max() { return max_; }
   
-  const T& get_xmin() const { return _min[0]; }
-  const T& get_xmax() const { return _max[0]; }
-  const T& get_ymin() const { return _min[1]; }
-  const T& get_ymax() const { return _max[1]; }
+  const T& get_xmin() const { return min_[0]; }
+  const T& get_xmax() const { return max_[0]; }
+  const T& get_ymin() const { return min_[1]; }
+  const T& get_ymax() const { return max_[1]; }
 
 protected:
   // Data Members--------------------------------------------------------------
-  bool _initialized;
-  T _min[DIM];
-  T _max[DIM];
+  bool initialized_;
+  T min_[DIM];
+  T max_[DIM];
 
   // Helpers-------------------------------------------------------------------
 };

@@ -18,5 +18,5 @@ vbl_timestamp::~vbl_timestamp()
 
 void vbl_timestamp::touch()
 {
-  _timestamp = get_unique_timestamp();
+  timestamp_ = get_unique_timestamp();
 }

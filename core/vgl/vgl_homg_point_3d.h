@@ -56,17 +56,17 @@ public:
 
   // Data Access-------------------------------------------------------------
 
-  inline Type x() const {return _data[0];}
-  inline Type y() const {return _data[1];}
-  inline Type z() const {return _data[2];}
-  inline Type w() const {return _data[3];}
+  inline Type x() const {return data_[0];}
+  inline Type y() const {return data_[1];}
+  inline Type z() const {return data_[2];}
+  inline Type w() const {return data_[3];}
 
   // -- Set x,y,z,w
   inline void set (Type px, Type py, Type pz, Type pw) {
-    _data[0] = px,
-    _data[1] = py,
-    _data[2] = pz,
-    _data[3] = pw;
+    data_[0] = px,
+    data_[1] = py,
+    data_[2] = pz,
+    data_[3] = pw;
   }
 
   // test for point at infinity  
@@ -79,20 +79,20 @@ public:
 
 protected:
   // the data associated with this point 
-  Type _data[4];
+  Type data_[4];
 };
 
   // stream operators 
 template <class Type>
 ostream&  operator<<(ostream& s, const vgl_homg_point_3d<Type>& p) {
   return s << " <vgl_homg_point_3d ("
-           << p->_data[0] << "," << p->_data[1] << "," 
-           << p->_data[2] << "," << p->_data[3] << ") >";  
+           << p->data_[0] << "," << p->data_[1] << "," 
+           << p->data_[2] << "," << p->data_[3] << ") >";  
 }
 
 template <class Type>
 istream&  operator>>(istream& is,  vgl_homg_point_3d<Type>& p) {
-  return is >> p->_data[0] >> p->_data[1] >> p->_data[2] >> p->_data[3]; 
+  return is >> p->data_[0] >> p->data_[1] >> p->data_[2] >> p->data_[3]; 
 }
 
 #endif

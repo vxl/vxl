@@ -47,9 +47,9 @@
 // Default ctor
 template <class T>
 vbl_sparse_array_3d<T>::vbl_sparse_array_3d(unsigned int n1, unsigned int n2, unsigned int n3):
-  _n1(n1),
-  _n2(n2),
-  _n3(n3)
+  n1_(n1),
+  n2_(n2),
+  n3_(n3)
 {
 }
 
@@ -64,9 +64,9 @@ vbl_sparse_array_3d<T>::vbl_sparse_array_3d(const vbl_sparse_array_3d& that)
 template <class T>
 vbl_sparse_array_3d<T>& vbl_sparse_array_3d<T>::operator=(const vbl_sparse_array_3d& that)
 {
-  _n1 = that._n1;
-  _n2 = that._n2;
-  _n3 = that._n3;
+  n1_ = that.n1_;
+  n2_ = that.n2_;
+  n3_ = that.n3_;
   storage_ = that.storage_;
   return *this;
 }

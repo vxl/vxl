@@ -46,9 +46,9 @@ vbl_array_3d<T>::vbl_array_3d (unsigned int n1, unsigned int n2, unsigned int n3
 // -- Copy constructor
 template <class T>
 vbl_array_3d<T>::vbl_array_3d(const vbl_array_3d<T>& that):
-  base(that._row1_count, that._row2_count, that._row3_count)
+  base(that.row1_count_, that.row2_count_, that.row3_count_)
 {
-  allocate_array(_row1_count, _row2_count, _row3_count);
+  allocate_array(row1_count_, row2_count_, row3_count_);
   set(that.data_block());
 }
 
@@ -96,9 +96,9 @@ vbl_array_3d<T>::~vbl_array_3d()
 template <class T>
 vbl_array_3d<T>& vbl_array_3d<T>::operator = (const vbl_array_3d<T>& that)
 {
-  assert(_row1_count == that._row1_count);
-  assert(_row2_count == that._row2_count);
-  assert(_row3_count == that._row3_count);
+  assert(row1_count_ == that.row1_count_);
+  assert(row2_count_ == that.row2_count_);
+  assert(row3_count_ == that.row3_count_);
   set(that.data_block());
   return *this;
 }
@@ -109,9 +109,9 @@ vbl_array_3d<T>& vbl_array_3d<T>::operator = (const vbl_array_3d<T>& that)
 template <class T>
 void vbl_array_3d<T>::set(const T* p)
 {
-  for (unsigned int row1_index = 0; row1_index < _row1_count; row1_index++)
-    for (unsigned int row2_index = 0; row2_index < _row2_count; row2_index++)
-      for (unsigned int row3_index = 0; row3_index < _row3_count; row3_index++)
+  for (unsigned int row1_index = 0; row1_index < row1_count_; row1_index++)
+    for (unsigned int row2_index = 0; row2_index < row2_count_; row2_index++)
+      for (unsigned int row3_index = 0; row3_index < row3_count_; row3_index++)
 	_element [row1_index][row2_index][row3_index] = *p++;
 }
 
@@ -119,9 +119,9 @@ void vbl_array_3d<T>::set(const T* p)
 template <class T>
 void vbl_array_3d<T>::get(T* p) const
 {
-  for (unsigned int row1_index = 0; row1_index < _row1_count; row1_index++)
-    for (unsigned int row2_index = 0; row2_index < _row2_count; row2_index++)
-      for (unsigned int row3_index = 0; row3_index < _row3_count; row3_index++)
+  for (unsigned int row1_index = 0; row1_index < row1_count_; row1_index++)
+    for (unsigned int row2_index = 0; row2_index < row2_count_; row2_index++)
+      for (unsigned int row3_index = 0; row3_index < row3_count_; row3_index++)
 	*p++ = _element [row1_index][row2_index][row3_index];
 }
 
@@ -129,7 +129,7 @@ void vbl_array_3d<T>::get(T* p) const
 template <class T>
 void vbl_array_3d<T>::fill(const T& value)
 {
-  int n = _row1_count * _row2_count * _row3_count;
+  int n = row1_count_ * row2_count_ * row3_count_;
   T* d = data_block();
   T* e = d + n;
   while(d < e)

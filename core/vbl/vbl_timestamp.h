@@ -9,10 +9,10 @@ public:
   virtual ~vbl_timestamp();
   
   void touch();
-  unsigned long get_time_stamp() const { return _timestamp; };
+  unsigned long get_time_stamp() const { return timestamp_; };
 
 protected:
-  unsigned long _timestamp;
+  unsigned long timestamp_;
 
 private:
   static unsigned long mark;
