@@ -1,10 +1,9 @@
-// This is brl/bseg/segv/bmvv_multiview_manager.cxx
+// This is brl/bmvl/bmvv/bmvv_multiview_manager.cxx
 #include "bmvv_multiview_manager.h"
 //:
 // \file
 // \author J.L. Mundy
 
-#include <math.h>
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vcl_iostream.h>
 #include <vil/vil_load.h>
@@ -32,14 +31,13 @@
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_image_tableau.h>
-#include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_homg_line_2d.h>
 #include <vtol/vtol_face_2d_sptr.h>
 #include <gevd/gevd_float_operators.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
 #include <bgui/bgui_vtol2D_tableau.h>
 #include <bgui/bgui_picker_tableau.h>
+
 //static live_video_manager instance
 bmvv_multiview_manager *bmvv_multiview_manager::instance_ = 0;
 //===============================================================
@@ -60,7 +58,7 @@ bmvv_multiview_manager() : vgui_grid_tableau(2,1)
 {
   tabs_init_ = false;
   this->set_grid_size_changeable(true);
- 	for(int col = 0; col<2; col++)
+  for (int col = 0; col<2; col++)
     {
       vgui_image_tableau_sptr itab = vgui_image_tableau_new();
       bgui_vtol2D_tableau_sptr btab = bgui_vtol2D_tableau_new(itab);
@@ -70,18 +68,18 @@ bmvv_multiview_manager() : vgui_grid_tableau(2,1)
 
 bmvv_multiview_manager::~bmvv_multiview_manager()
 {
-
 }
+
 //======================================================================
 //: set up the tableaux at each grid cell
 //  the vtol2D_tableaux have been initialized in the constructor
 //======================================================================
 void bmvv_multiview_manager::init_tabs()
 {
-  if(tabs_init_)
+  if (tabs_init_)
     return;
   unsigned int col=0, row = 0;
-  for(; col<2; col++)
+  for (; col<2; col++)
     {
       vgui_shell_tableau_sptr stab = vgui_shell_tableau_new(vtol_tabs_[col]);
       bgui_picker_tableau_new pcktab(stab);
@@ -90,6 +88,7 @@ void bmvv_multiview_manager::init_tabs()
     }
   tabs_init_=true;
 }
+
 //=========================================================================
 //: make an event handler
 // note that we have to get an adaptor and set the tableau to receive events
@@ -104,7 +103,7 @@ bool bmvv_multiview_manager::handle(const vgui_event &e)
 //: Gets the picker tableau at the given position.
 //  Returns a null tableau if it fails
 //====================================================================
-bgui_picker_tableau_sptr 
+bgui_picker_tableau_sptr
 bmvv_multiview_manager::get_picker_tableau_at(unsigned col, unsigned row)
 {
   vgui_tableau_sptr top_tab = this->get_tableau_at(col, row);
@@ -117,9 +116,10 @@ bmvv_multiview_manager::get_picker_tableau_at(unsigned col, unsigned row)
       return tt;
   }
   vgui_macro_warning << "Unable to get bgui_picker_tableau at (" << col << ", "
-    << row << ")" << vcl_endl;
+                     << row << ")\n";
   return 0;
 }
+
 //====================================================================
 //: Gets the picker tableau at the currently selected grid position
 //  Returns a null tableau if it fails
@@ -128,8 +128,9 @@ bgui_picker_tableau_sptr bmvv_multiview_manager::get_selected_picker_tableau()
 {
   unsigned int row =0, col=0;
   this->get_last_selected_position(&col, &row);
-  return (this->get_picker_tableau_at(col, row));
+  return this->get_picker_tableau_at(col, row);
 }
+
 //====================================================================
 //: Gets the picker tableau at the given position.
 //  if col, row are out of bounds then null is returned
@@ -137,13 +138,14 @@ bgui_picker_tableau_sptr bmvv_multiview_manager::get_selected_picker_tableau()
 //====================================================================
 bgui_vtol2D_tableau_sptr bmvv_multiview_manager::get_vtol2D_tableau_at(unsigned col, unsigned row)
 {
-  if(row!=0)
+  if (row!=0)
     return 0;
  bgui_vtol2D_tableau_sptr btab = 0;
- if(col==0||col==1)
+ if (col==0||col==1)
    btab = vtol_tabs_[col];
  return btab;
 }
+
 //=================================================================
 //: Get the vtol_2D_tableau at the currently selected grid cell.
 //=================================================================
@@ -158,6 +160,7 @@ void bmvv_multiview_manager::quit()
 {
   vcl_exit(1);
 }
+
 //=========================================================================
 //: load an image an put it in the currently selected grid cell
 //=========================================================================
@@ -174,7 +177,7 @@ void bmvv_multiview_manager::load_image()
     return;
   img_ = vil_load(image_filename.c_str());
   bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
-  if(btab)
+  if (btab)
     {
       vgui_image_tableau_sptr itab = btab->get_image_tableau();
       itab->set_image(img_);
@@ -182,6 +185,7 @@ void bmvv_multiview_manager::load_image()
     }
   vcl_cout << "In bmvv_multiview_manager::load_image() - null tableau\n";
 }
+
 //===================================================================
 //: Clear the display
 //===================================================================
@@ -189,28 +193,30 @@ void bmvv_multiview_manager::clear_display()
 {
   this->init_tabs();
   bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
-  if(btab)
-    btab->clear();	
+  if (btab)
+    btab->clear();
   else
     vcl_cout << "In bmvv_multiview_manager::clear_display() - null tableau\n";
 }
+
 //======================================================================
 //: Draw a set of intensity faces on the currently selected grid cell
 //======================================================================
 void bmvv_multiview_manager::draw_regions(vcl_vector<vdgl_intensity_face_sptr>& regions,
-                                             bool verts)
+                                          bool verts)
 {
   vcl_vector<vtol_face_2d_sptr> faces;
    for (vcl_vector<vdgl_intensity_face_sptr>::iterator rit = regions.begin();
         rit != regions.end(); rit++)
      faces.push_back((*rit)->cast_to_face_2d());
 
-	bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
-  if(btab)
-    btab->add_faces(faces, verts);	
+  bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
+  if (btab)
+    btab->add_faces(faces, verts);
   else
     vcl_cout << "In bmvv_multiview_manager::draw_regions() - null tableau\n";
 }
+
 //========================================================================
 //: Compute Van Duc edges for the currently selected grid cell
 //========================================================================
@@ -236,9 +242,9 @@ void bmvv_multiview_manager::vd_edges()
   det.DoContour();
   vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
 
-  //display the edges 
+  //display the edges
   bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
-  if(btab)
+  if (btab)
     btab->add_edges(*edges, true);
   else
     {
@@ -281,10 +287,10 @@ void bmvv_multiview_manager::regions()
   if (debug)
     {
       bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
-      if(!btab)
+      if (!btab)
         {
           vcl_cout << "In bmvv_multiview_manager::regions() - "
-                   << "null tableau\n";          
+                   << "null tableau\n";
           return;
         }
       vil_image ed_img = rp.get_edge_image();
@@ -313,18 +319,19 @@ void bmvv_multiview_manager::read_xml_edges()
   if (!load_image_dlg.ask())
     return;
   bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
-  if(!btab)
+  if (!btab)
     {
       vcl_cout << "In bmvv_multiview_manager::regions() - "
-               << "null tableau\n";          
+               << "null tableau\n";
       return;
     }
   vcl_vector<vtol_edge_2d_sptr> edges;
   if (bxml_vtol_io::read_edges(xml_filename, edges))
     btab->add_edges(edges, true);
 }
+
 //====================================================================
-//: a test FMatrix 
+//: a test FMatrix
 // epipole at infinity so points map to horizontal lines
 //===================================================================
 FMatrix bmvv_multiview_manager::test_fmatrix()
@@ -334,6 +341,7 @@ FMatrix bmvv_multiview_manager::test_fmatrix()
   m.put(2,1,-1.0);
   return m;
 }
+
 //===================================================================
 //: pick a point in the left image and show the corresponding epipolar
 //  line in the right image
@@ -345,10 +353,10 @@ void bmvv_multiview_manager::show_epipolar_line()
   vgui::out << "pick point in left image\n";
   unsigned int col=0, row=0;//left image
   bgui_picker_tableau_sptr pkt = this->get_picker_tableau_at(col, row);
-  if(!pkt)
+  if (!pkt)
     {
       vcl_cout << "In bmvv_multiview_manager::show_epipolar_line() - "
-               << "null tableau\n";          
+               << "null tableau\n";
       return;
     }
   float x = 0, y=0;
@@ -364,7 +372,7 @@ void bmvv_multiview_manager::show_epipolar_line()
   vgl_homg_point_2d<double> pl(x,y);
   vgl_homg_line_2d<double> lr = f.image2_epipolar_line(pl);
   //end test
-  if(v2D)
+  if (v2D)
     {
      v2D->add_infinite_line(lr.a(), lr.b(), lr.c());
       v2D->post_redraw();

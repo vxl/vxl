@@ -41,6 +41,7 @@ void edgel_regions::cache_bad_edges(CoolArrayP<Edge*>& bad_edges)
     corrupt_edges.push_back(*eit);
   corrupt_edges_.push_back(corrupt_edges);
 }
+
 void edgel_regions::cache_bad_edges(vcl_vector<Edge*>& bad_edges)
 {
   vcl_vector<Edge*> corrupt_edges;
@@ -49,6 +50,7 @@ void edgel_regions::cache_bad_edges(vcl_vector<Edge*>& bad_edges)
     corrupt_edges.push_back(*eit);
   corrupt_edges_.push_back(corrupt_edges);
 }
+
 void edgel_regions::cache_bad_verts(CoolArrayP<Vertex*>& bad_verts)
 {
   vcl_vector<Vertex*> corrupt_verts;
@@ -65,7 +67,9 @@ void sdet_edgel_regions::print_region_array()
   vcl_cout << vcl_endl << vcl_endl;
   for (unsigned int y = yo_; y<=yend_; y++)
     {
-      //      vcl_cout << setw(2);
+#if 0
+      vcl_cout << setw(2);
+#endif
       for (unsigned int x = xo_; x<=xend_; x++)
         if (region_label_array_[Y(y)][X(x)]==EDGE
             //&&edge_boundary_array_[Y(y)][X(x)]->IsVertex()
@@ -99,6 +103,7 @@ void sdet_edgel_regions::print_region_equivalence()
     }
   vcl_cout << vcl_endl;
 }
+
 //
 //Print the contents of the reverse eqivalence index
 void sdet_edgel_regions::print_reverse_region_equivalence()
@@ -121,6 +126,7 @@ void sdet_edgel_regions::print_reverse_region_equivalence()
     }
   vcl_cout << vcl_endl;
 }
+
 //
 //Print the reduced equivalence relation
 void sdet_edgel_regions::print_base_equivalence()
@@ -155,10 +161,12 @@ unsigned int sdet_edgel_regions::X(unsigned int x)
 {
   return x-xo_;
 }
+
 unsigned int sdet_edgel_regions::Y(unsigned int y)
 {
   return y-yo_;
 }
+
 //---------------------------------------------------------
 //: Casts the float x location of a point to an unsigned-int location
 unsigned int sdet_edgel_regions::Xf(float x)
@@ -166,6 +174,7 @@ unsigned int sdet_edgel_regions::Xf(float x)
   unsigned int xu = ((unsigned int)(x));
   return xu;
 }
+
 //---------------------------------------------------------
 //: Casts the float x location of a point to an unsigned-int location
 unsigned int sdet_edgel_regions::Yf(float y)
@@ -173,6 +182,7 @@ unsigned int sdet_edgel_regions::Yf(float y)
   unsigned int yu = ((unsigned int)(y));
   return yu;
 }
+
 //----------------------------------------------------------
 //: Default constructor
 sdet_edgel_regions::sdet_edgel_regions(bool debug, bool verbose)
@@ -422,6 +432,7 @@ vil_image sdet_edgel_regions::GetEdgeImage(vcl_vector<vtol_edge_2d_sptr>& sg)
         image[y][x] = no_edge;
   return image;
 }
+
 //-----------------------------------------------------------
 //: Populate the label_map_ to reflect the equivalences between labels.
 //
@@ -443,6 +454,7 @@ void sdet_edgel_regions::PropagateEquivalence()
     if (label_map_.find(i) == label_map_.end())
       label_map_[i] = i;
 }
+
 //---------------------------------------------------------------------
 //:
 //  Find the set of labels equivalent to label from a given hash table
@@ -506,6 +518,7 @@ merge_equivalence(vcl_map<unsigned int, vcl_vector<unsigned int>* >& tab,
 
   return true;
 }
+
 //----------------------------------------------------------------
 //: Find the next label not accounted for in the current equivalence set.
 //    The set of labels is searched to find a label larger than label, but
@@ -537,6 +550,7 @@ bool sdet_edgel_regions::get_next_label(vcl_vector<unsigned int>* labels,
     }
   return false;
 }
+
 //----------------------------------------------------------------
 //:   Form equivalence classes by transitive closure on each label.
 //    The resulting label equivalence is stored in the map, equivalence_set_.
@@ -624,6 +638,7 @@ void sdet_edgel_regions::GrowEquivalenceClasses()
       if (!get_next_label(cur_set, cur_label)) return;
     }
 }
+
 //------------------------------------------------------------
 //: Check if the SpatialGroup contains Edge(s)
 //
@@ -636,6 +651,7 @@ bool sdet_edgel_regions::GroupContainsEdges(vcl_vector<vtol_edge_2d_sptr>& sg)
 #endif
   return true; // TODO
 }
+
 //Advance along a line and generate continguous pixels on the line.
 //This function assures that the spatial digitization of the Edge(s)
 //produces completely connected boundaries.
@@ -690,6 +706,7 @@ bool sdet_edgel_regions::line_gen(float xs, float ys, float xe, float ye,
   vcl_cout << "in sdet_edgel_regions line_gen: - shouldn't happen\n";
   return false;
 }
+
 //----------------------------------------------------------
 //: A utility for inserting an edgel into the region_label_array_.
 //    An edgel and a previous edgel in the chain are used to interpolate
@@ -742,6 +759,7 @@ int sdet_edgel_regions::bytes_per_pix()
     bypp = buf_->GetBytesPixel();
   return bypp;
 }
+
 //-----------------------------------------------------------
 //: Initialize the region label array.
 //  There are three types of region label symbols:
@@ -893,6 +911,7 @@ unsigned char sdet_edgel_regions::label_code(unsigned int label)
     result = LABEL;
   return result;
 }
+
 //----------------------------------------------------------------
 //: Add a new pair to the forward equivalence list.
 //    That is, a ==> b. Note that there can be multiple equivalences which are
@@ -959,6 +978,7 @@ bool sdet_edgel_regions::add_to_reverse(unsigned int key, unsigned int value)
     }
   return result;
 }
+
 //-------------------------------------------------------------------
 //: Encode a 2x2 neighbor hood with the state of the region array for a given location.
 //    The Neighborhood    The states are:
@@ -990,6 +1010,7 @@ sdet_edgel_regions::EncodeNeighborhood(unsigned int ul, unsigned int ur,
 
   return nhood;
 }
+
 //----------------------------------------------------------------------
 // --This is the fundamental assignment of label equivalence
 //
@@ -1011,6 +1032,7 @@ void sdet_edgel_regions::insert_equivalence(unsigned int ll, unsigned int ur, un
   else //yes, a=b the simple case
     lr = ur;
 }
+
 //-------------------------------------------------------------------
 //: Propagate connected components.
 //    Uses an unsigned char encoding
@@ -1231,6 +1253,7 @@ void sdet_edgel_regions::UpdateConnectedNeighborhood(unsigned int x, unsigned in
                << "impossible pattern = " << (int)nhood << vcl_endl;
     }
 }
+
 static bool reg_edges_neq(sdet_region_edge* r1, sdet_region_edge* r2)
 {
   if (!r1||!r2) return false;
@@ -1239,6 +1262,7 @@ static bool reg_edges_neq(sdet_region_edge* r1, sdet_region_edge* r2)
   if (v1||v2) return false;
   return r1->get_edge()!=r2->get_edge();
 }
+
 //A collision is defined by the condition where an region is bounded
 //by two different edges at adjacent pixels without crossing a vertex.
 //This can happen since boundary positions are sub-pixel and region
@@ -1289,6 +1313,7 @@ static bool embedded_T(vtol_vertex_sptr v, vtol_edge_2d_sptr bar, vcl_vector<vto
   embedded = (tedges>=3);
   return embedded;
 }
+
 //--------------------------------------------------------------------
 //: Remove hairs from region boundary.
 //    This condition can occur because
@@ -1345,6 +1370,7 @@ bool sdet_edgel_regions::remove_hairs(vcl_vector<vtol_edge_2d_sptr>& edges)
 
   return hairs.size() != 0;
 }
+
 //-------------------------------------------------------------------
 //:
 //    There can be some gaps in the region boundary due to missing
@@ -1548,6 +1574,7 @@ void sdet_edgel_regions::AssignEdgeLabels(unsigned int x, unsigned int y)
                << "impossible pattern = " << (int)nhood << vcl_endl;
     }
 }
+
 //---------------------------------------------------------------------
 //: Scan the region_label_array_ and apply the region equivalence map.
 //    The result is that all equivalences are reconciled with the smallest
@@ -1566,6 +1593,7 @@ void sdet_edgel_regions::ApplyRegionEquivalence()
         region_label_array_[Y(y)][X(x)] = base;
       }
 }
+
 //-------------------------------------------------------------------
 //: Bounds check on region_label_array_
 bool sdet_edgel_regions::out_of_bounds(unsigned int x, unsigned int y)
@@ -1603,6 +1631,7 @@ void sdet_edgel_regions::insert_adjacency(unsigned int r, vtol_edge_2d_sptr e)
     reit->second->push_back(e);
   //    region_edge_adjacency_.value()->push(e);
 }
+
 //------------------------------------------------------------------
 //: Get the edges adjacent to each region
 //
@@ -1628,6 +1657,7 @@ void sdet_edgel_regions::CollectEdges()
         vcl_cout << ")\n";
     }
 }
+
 //---------------------------------------------------------------------
 //: Trace through the topology network keeping regions on the left.
 //    At this point, we have a list of edges for each region. We will
@@ -1661,7 +1691,7 @@ void sdet_edgel_regions::CollectFaceEdges()
       if (vtol_cycle_processor::corrupt_boundary(*edges, bad_verts))
         {
           this->repair_failed_insertions(*edges, bad_verts);
-	  if (!vtol_cycle_processor::connect_paths(*edges, bad_verts))
+          if (!vtol_cycle_processor::connect_paths(*edges, bad_verts))
             {
               if (verbose_)
                 {
@@ -1707,6 +1737,7 @@ void sdet_edgel_regions::CollectFaceEdges()
   vcl_cout << "Constructed Face-Edges(" << max_region_label_ - min_region_label_
            << ") in " << t.real() << " msecs.\n";
 }
+
 //----------------------------------------------------------------
 //: Construct Face(s) from Edge(s) in the face_edge_index_ array.
 //    This method has been made virtual so that sub-classes of
@@ -1758,6 +1789,7 @@ void sdet_edgel_regions::ConstructFaces()
   vcl_cout << "\nConstructed Faces(" << max_region_label_ - min_region_label_
            << ") in " << t.real() << " msecs.\n";
 }
+
 //--------------------------------------------------------------
 //: get a row from a BufferXY
 //
@@ -1781,6 +1813,7 @@ void sdet_edgel_regions::get_buffer_row(unsigned int row)
         return;
       }
 }
+
 //These routines were added to speed up the intensity face data fill
 //------------------------------------------------
 //: Get an image row
@@ -1803,6 +1836,7 @@ void sdet_edgel_regions::get_image_row(unsigned int row)
       vcl_cout<<"In sdet_edgel_regions::get_row(): bytes/pixel not 1 or 2\n";
     }
 }
+
 //---------------------------------------------------------------
 //: Get the intensity of a single pixel
 unsigned short sdet_edgel_regions::get_intensity(unsigned int x)
@@ -1823,6 +1857,7 @@ unsigned short sdet_edgel_regions::get_intensity(unsigned int x)
     }
   return intensity;
 }
+
 //---------------------------------------------------------------------
 //: Accumulate intensity statistics from each region and update the vdgl_intensity_face parameters
 void sdet_edgel_regions::AccumulateMeans()
@@ -1895,6 +1930,7 @@ void sdet_edgel_regions::AccumulateRegionData()
   vcl_cout << "Accumulate Region Data(" << max_region_label_ - min_region_label_
            << ") in " << t.real() << " msecs.\n";
 }
+
 //---------------------------------------------------------------------
 //:
 //    Do both a scatter matrix update and insertion into the region pixel
@@ -1906,4 +1942,3 @@ void sdet_edgel_regions::InsertFaceData()
   this->AccumulateMeans();
   this->AccumulateRegionData();
 }
-

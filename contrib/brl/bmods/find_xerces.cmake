@@ -8,11 +8,11 @@
 IF(WIN32)
 
   FIND_PATH(XERCES_BXML_INCLUDE_PATH DOM.hpp
-    c:/TargetJr/xerces-c-src1_4_0/include
+            /usr/local/xerces-c-src1_4_0/include
   )
 
   FIND_LIBRARY(XERCES_BXML_LIBRARY_PATH xerces-c_1.lib
-    c:/TargetJr/xerces-c-src1_4_0/lib/	
+               /usr/local/xerces-c-src1_4_0/lib/
   )
 
   IF(XERCES_BXML_INCLUDE_PATH)
