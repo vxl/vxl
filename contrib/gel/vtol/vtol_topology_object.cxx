@@ -311,7 +311,7 @@ void vtol_topology_object::describe_superiors(vcl_ostream &strm,
   vcl_list<vtol_topology_object*>::const_iterator i;
   for (i=superiors_.begin();i!= superiors_.end();++i)
   {
-    for (int n=0; n<blanking; ++n) strm << ' ';
+    for (int n=0; n<blanking+2; ++n) strm << ' ';
     (*i)->print();
   }
 }
