@@ -161,6 +161,9 @@ SOURCE=.\vsrl_manager.cxx
 # Begin Source File
 SOURCE=.\vsrl_menus.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vsrl_region_disparity.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -223,6 +226,9 @@ SOURCE=.\vsrl_point_picker.h
 # End Source File
 # Begin Source File
 SOURCE=.\vsrl_point_picker_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsrl_region_disparity.h
 # End Source File
 # End Group
 # End Target
