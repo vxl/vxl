@@ -80,7 +80,7 @@ bool isEncapsulated(vil_dicom_header_image_type im_type)
 }
 
 
-void imageSwap(char *in_im, int num_bytes,
+void imageSwap(char* in_im, int num_bytes,
                vil_dicom_header_info dhi)
 {
   char swaps[2];
@@ -166,11 +166,11 @@ void imageSwap(char *in_im, int num_bytes,
 }
 
 
-char *convert12to16(char *im, vil_dicom_header_info dhi,
+char* convert12to16(char* im, vil_dicom_header_info dhi,
                     bool del_old=true)
 {
   int new_im_size=(dhi.dimx_*2) * dhi.dimy_;
-  char *new_im=new char[new_im_size];
+  char* new_im=new char[new_im_size];
   int rowstep = dhi.dimx_*2;
   int curr_row;
 
@@ -271,7 +271,7 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs):
   start_of_pixels_ = vs->tell();
 }
 
-bool vil_dicom_image::get_property(char const * /*tag*/, void * /*prop*/) const
+bool vil_dicom_image::get_property(char const* /*tag*/, void* /*prop*/) const
 {
   // Need to write lots of access code for the dicom header.
   return false;
@@ -330,11 +330,10 @@ enum vil_pixel_format vil_dicom_image::pixel_format() const
 vil_image_view_base_sptr vil_dicom_image::get_copy_view(
   unsigned x0, unsigned nx, unsigned y0, unsigned ny) const
 {
-
   if (x0+nx > ni() || y0+ny > nj()) return 0;
 
-  void *void_im=0;
-  int bytes_read=1; // initialised to avoid compiler warning
+  void* void_im=0;
+  int bytes_read=1;
   bool readable = checkReadableFormat(header_.image_type_);
 
   vs_->seek(start_of_pixels_);
@@ -342,7 +341,7 @@ vil_image_view_base_sptr vil_dicom_image::get_copy_view(
   // vs_ should point at the start of the data
   if (!vs_->ok() || !readable)
   {
-    delete [] (char *) void_im;
+    delete [] (char*) void_im;
     return 0;
   }
 
@@ -363,13 +362,11 @@ vil_image_view_base_sptr vil_dicom_image::get_copy_view(
   // allocated bits. If 16 or 12 are allocated, then two bytes
   // should be read (with a reduced number of reads for 12
   // bits as each value only takes up 3/4 of the actual number
-  // of bits (16) read). Otherwise, one vxl_byte at a time is read
+  // of bits (16) read). Otherwise, one byte at a time is read
 
   if (header_.allocated_bits_ == 16 ||
       header_.allocated_bits_ == 12)
     bytes_read = 2;
-  else
-    bytes_read = 1;
 
   // If 12 bits allocated, read enough sets of 16 bits
   if (header_.allocated_bits_ == 12)
@@ -390,11 +387,10 @@ vil_image_view_base_sptr vil_dicom_image::get_copy_view(
 
   // First, if it's 12 bit convert to 16
   if (header_.allocated_bits_ == 12)
-    void_im = (void *)convert12to16((char *) void_im, header_);
+    void_im = (void*)convert12to16((char*)void_im, header_);
 
   // Do any swapping necessary (also may do any bit shifting needed if part-words are being used
-  imageSwap((char *)void_im,bytes_read,header_);
-
+  imageSwap((char*)void_im,bytes_read,header_);
 
   if (header_.res_slope_ == VIL_DICOM_HEADER_DEFAULTSLOPE)
     if (header_.pix_rep_ == 0) // unsigned
@@ -405,23 +401,21 @@ vil_image_view_base_sptr vil_dicom_image::get_copy_view(
         {
           int next_row = header_.dimx_*i;
           for (unsigned j=x0; j<(x0+nx); ++j)
-          {
-            view(j-x0,i-y0) = static_cast<vxl_uint_16 *>(void_im)[next_row+j]; ;
-          }
+            view(j-x0,i-y0) = static_cast<vxl_uint_16*>(void_im)[next_row+j];
         }
-        delete [] (char *) void_im;
+        delete [] (char*) void_im;
         return new vil_image_view<vxl_uint_16>(view);
       }
-      else // vxl_byte
+      else // byte
       {
         vil_image_view<vxl_byte> view(nx, ny);
         for (unsigned i=y0; i<ny; i++)
         {
           int next_row = header_.dimx_*i;
           for (unsigned j=x0; j<nx; j++)
-            view(j-x0,i-y0) = static_cast<vxl_byte *>(void_im)[next_row+j];
+            view(j-x0,i-y0) = static_cast<vxl_byte*>(void_im)[next_row+j];
         }
-        delete [] (char *) void_im;
+        delete [] (char*) void_im;
         return new vil_image_view<vxl_byte>(view);
       }
     else // signed
@@ -432,9 +426,9 @@ vil_image_view_base_sptr vil_dicom_image::get_copy_view(
         {
           int next_row = header_.dimx_*i;
           for (unsigned j=x0; j<nx; j++)
-            view(j-x0,i-y0) = static_cast<vxl_int_16 *>(void_im)[next_row+j];
+            view(j-x0,i-y0) = static_cast<vxl_int_16*>(void_im)[next_row+j];
         }
-        delete [] (char *) void_im;
+        delete [] (char*) void_im;
         return new vil_image_view<vxl_int_16>(view);
       }
       else // vxl_sbyte
@@ -444,9 +438,9 @@ vil_image_view_base_sptr vil_dicom_image::get_copy_view(
         {
           int next_row = header_.dimx_*i;
           for (unsigned j=x0; j<nx; j++)
-            view(j-x0,i-y0) = static_cast<vxl_sbyte *>(void_im)[next_row+j];
+            view(j-x0,i-y0) = static_cast<vxl_sbyte*>(void_im)[next_row+j];
         }
-        delete [] (char *) void_im;
+        delete [] (char*) void_im;
         return new vil_image_view<vxl_sbyte>(view);
       }
   else // floating point image.
@@ -460,19 +454,19 @@ vil_image_view_base_sptr vil_dicom_image::get_copy_view(
       {
         if (header_.pix_rep_ == 0) // unsigned data
           if (bytes_read == 2) // 2 byte data
-            f = static_cast<vxl_uint_16 *>(void_im)[next_row+j];
+            f = static_cast<vxl_uint_16*>(void_im)[next_row+j];
           else // 1 byte data
-            f = static_cast<vxl_byte *>(void_im)[next_row+j];
+            f = static_cast<vxl_byte*>(void_im)[next_row+j];
         else // signed data
           if (bytes_read == 2)// 2 byte data
-            f = static_cast<vxl_int_16 *>(void_im)[next_row+j];
+            f = static_cast<vxl_int_16*>(void_im)[next_row+j];
           else // 1 byte data
-            f = static_cast<vxl_sbyte *>(void_im)[next_row+j];
+            f = static_cast<vxl_sbyte*>(void_im)[next_row+j];
 
         view(j,i) = f * header_.res_slope_ + header_.res_intercept_;
       }
     }
-    delete [] (char *) void_im;
+    delete [] (char*)void_im;
 
     return new vil_image_view<float>(view);
   }
@@ -511,7 +505,7 @@ bool vil_dicom_image::readEncapsulatedData(vimt_image_2d_of<vxl_int_32>&im,
   // data, and the remaining data sent to a decoder.
 
   // First set up a data buffer
-  unsigned char *data;
+  unsigned char* data;
   int data_size, num_bytes;
 
   unsigned short group=0, element=0;  // Each group and element read from
@@ -519,8 +513,6 @@ bool vil_dicom_image::readEncapsulatedData(vimt_image_2d_of<vxl_int_32>&im,
   unsigned int length=0;   // The length of the next data block
   unsigned long tot_len=0; // The final length of the data
   unsigned int off_entry=0; // For disposing of the offset table entries
-  bool result=true;
-
 
   // We can make the data the same as the uncompressed image size
   // so we're sure all the data will fit to save constant resizing
@@ -549,8 +541,8 @@ bool vil_dicom_image::readEncapsulatedData(vimt_image_2d_of<vxl_int_32>&im,
   // First ignore the offset table!
   // This may cause some problems if we come across a
   // multiframe image!
-  fs.read((char *)&group, sizeof(unsigned short));
-  fs.read((char *)&element, sizeof(unsigned short));
+  fs.read((char*)&group, sizeof(unsigned short));
+  fs.read((char*)&element, sizeof(unsigned short));
 
   group = shortSwap(group);
   element = shortSwap(element);
@@ -558,7 +550,7 @@ bool vil_dicom_image::readEncapsulatedData(vimt_image_2d_of<vxl_int_32>&im,
   if (group   == CW_DICOM_DELIMITERGROUP &&
       element == CW_DICOM_DLITEM)
   {
-    fs.read((char *)&length, sizeof(unsigned int));
+    fs.read((char*)&length, sizeof(unsigned int));
     length = intSwap(length);
 
     // We need to check that the offsets are divisible
@@ -569,35 +561,24 @@ bool vil_dicom_image::readEncapsulatedData(vimt_image_2d_of<vxl_int_32>&im,
       // needed!
       while (length)
       {
-        fs.read((char *)&off_entry, sizeof(unsigned int));
+        fs.read((char*)&off_entry, sizeof(unsigned int));
         length -= 4;
       }
     }
-    else
-    {
-      // Problem with the offset table
-      result = false;
-    }
+    else // Problem with the offset table
+      return false;
   }
-  else
-  {
-    // Problem with the group and element read
-    result = false;
-  }
+  else // Problem with the group and element read
+    return false;
 
   // If all's ok, read the image in
-  if (result)
-  {
-    result = getDataFromEncapsulation(&data, tot_len, fs);
-  }
-
-  return result;
+  return getDataFromEncapsulation(&data, tot_len, fs);
 }
 
 //==================================================================
 // getDataFromEncapsulation
 //==================================================================
-bool vil_dicom_image::getDataFromEncapsulation(unsigned char **data, unsigned long &data_len,
+bool vil_dicom_image::getDataFromEncapsulation(unsigned char** data, unsigned long &data_len,
                                                vcl_ifstream &fs)
 {
   bool result = true;
@@ -608,8 +589,8 @@ bool vil_dicom_image::getDataFromEncapsulation(unsigned char **data, unsigned lo
   data_len = 0;
 
   // First read a group and element
-  fs.read((char *)&group, sizeof(unsigned short));
-  fs.read((char *)&element, sizeof(unsigned short));
+  fs.read((char*)&group, sizeof(unsigned short));
+  fs.read((char*)&element, sizeof(unsigned short));
 
   group = shortSwap(group);
   element = shortSwap(element);
@@ -619,11 +600,11 @@ bool vil_dicom_image::getDataFromEncapsulation(unsigned char **data, unsigned lo
        result)
   {
     // Read the length
-    fs.read((char *)&length, sizeof(unsigned int));
+    fs.read((char*)&length, sizeof(unsigned int));
     length = intSwap(length);
 
     // Now read the data
-    fs.read((char *)&((*data)[data_len]), length);
+    fs.read((char*)&((*data)[data_len]), length);
 
     if (!fs.good())
     {
@@ -635,8 +616,8 @@ bool vil_dicom_image::getDataFromEncapsulation(unsigned char **data, unsigned lo
       data_len += length;
 
       // Read the next data group and element
-      fs.read((char *)&group, sizeof(unsigned short));
-      fs.read((char *)&element, sizeof(unsigned short));
+      fs.read((char*)&group, sizeof(unsigned short));
+      fs.read((char*)&element, sizeof(unsigned short));
 
       group = shortSwap(group);
       element = shortSwap(element);
@@ -649,12 +630,12 @@ bool vil_dicom_image::getDataFromEncapsulation(unsigned char **data, unsigned lo
         element == CW_DICOM_DLSEQDELIMITATIONITEM)
     {
       // Just read the length and all's ok!
-      fs.read((char *)&length, sizeof(unsigned int));
+      fs.read((char*)&length, sizeof(unsigned int));
       length = intSwap(length);
 
       // Try writing it out!
       vcl_ofstream ost("C:\\testout.jpg",vcl_ios_binary);
-      ost.write((char *)(*data),data_len);
+      ost.write((char*)(*data),data_len);
       ost.close();
     }
     else
@@ -672,8 +653,6 @@ bool vil_dicom_image::getDataFromEncapsulation(unsigned char **data, unsigned lo
 //===============================================================
 short vil_dicom_image::shortSwap(short short_in)
 {
-  short result = short_in;
-
   // Only swap if the architecture is different to the
   // file (the logic means that if one is unknown it swaps,
   // if both are unknown, it doesnt)
@@ -694,10 +673,10 @@ short vil_dicom_image::shortSwap(short short_in)
     short_swap.byte_val[0]=short_swap.byte_val[1];
     short_swap.byte_val[1]=temp;
 
-    result = short_swap.short_val;
+    short_in = short_swap.short_val;
   }
 
-  return result;
+  return short_in;
 }
 
 //===============================================================
@@ -705,8 +684,6 @@ short vil_dicom_image::shortSwap(short short_in)
 //===============================================================
 int vil_dicom_image::intSwap(int int_in)
 {
-  int result = int_in;
-
   // Only swap if the architecture is different to the
   // file (the logic means that if one is unknown it swaps,
   // if both are unknown, it doesnt)
@@ -732,16 +709,16 @@ int vil_dicom_image::intSwap(int int_in)
     int_swap.byte_val[1] = int_swap.byte_val[2];
     int_swap.byte_val[2] = temp;
 
-    result = int_swap.int_val;
+    int_in = int_swap.int_val;
   }
 
-  return result;
+  return int_in;
 }
 
 //===============================================================
 // charSwap
 //===============================================================
-void vil_dicom_image::charSwap(char *char_in, int val_size)
+void vil_dicom_image::charSwap(char* char_in, int val_size)
 {
   // Only swap if the architecture is different to the
   // file (the logic means that if one is unknown it swaps,
@@ -749,7 +726,7 @@ void vil_dicom_image::charSwap(char *char_in, int val_size)
   if (headerInfo().file_endian_ != headerInfo().sys_endian_)
   {
     // Create a char the same size to swap
-    char *temp = new char[val_size];
+    char* temp = new char[val_size];
 
     if (temp)
     {
