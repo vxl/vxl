@@ -97,15 +97,15 @@ void strk_info_model_tracker::init()
   current_samples_.push_back(mod);
 }
 
-static double rand_val(double range)
+static float rand_val(float range)
 {
-  return ((2.0*range)*(rand()/(RAND_MAX+1.0)) - range);
+  return float((2.0f*range)*(rand()/(RAND_MAX+1.0f)) - range);
 }
 
 //--------------------------------------------------------------------------
 //: generate a randomly positioned articulated model
 strk_art_info_model_sptr
-strk_info_model_tracker::generate_model(strk_art_info_model_sptr  const& seed)
+strk_info_model_tracker::generate_model(strk_art_info_model_sptr const& seed)
 {
   if (!seed)
     return 0;
@@ -121,7 +121,8 @@ strk_info_model_tracker::generate_model(strk_art_info_model_sptr  const& seed)
   if (!mod->transform(stem_tx, stem_ty, stem_angle, long_arm_angle,
                       short_arm_angle, long_arm_tip_angle, short_arm_tip_angle))
     return (strk_art_info_model*)0;
-  return mod;
+  else
+    return mod;
 }
 
 //--------------------------------------------------------------------------
