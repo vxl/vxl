@@ -3,7 +3,8 @@
 #endif
 #include <vcl_cmath.h>
 #ifdef DEBUG
-#include <vcl_cstdio.h> // for tempnam(), fopen()
+#include <vul_temp_filename.h>
+#include <vcl_cstdio.h>
 #include <vpl/vpl.h>
 #include <vcl_iostream.h>
 #endif
@@ -584,19 +585,19 @@ static int Perform_Distributed_Task(int points,vnl_rnpoly_solve_cmplx sols[LEN][
   bool solflag=false;           // flag used to remember if a root is found
   int max_deg=P;
 #ifdef DEBUG
-  char const* TMPNAM = tempnam(0,"cont.results");
+  char const* TMPNAM = vul_temp_filename();
   char const* FILENAM = TMPNAM ? TMPNAM : "/tmp/cont.results";
-  FILE *F = fopen(FILENAM,"w");
+  FILE *F = vcl_fopen(FILENAM,"w");
   if (!F) {
     vpl_unlink(FILENAM);
-    F = fopen(FILENAM,"w");
+    F = vcl_fopen(FILENAM,"w");
   }
   if (!F) {
     vcl_cerr<<"could not open "<<FILENAM<<"\nplease erase old file first\n";
     F = stderr;
   }
   else
-    fprintf(stderr, "Writing to %s\n", FILENAM);
+    vcl_fprintf(stderr, "Writing to %s\n", FILENAM);
 #endif
   // Initialize some variables
   inptbr(points,p,q);

@@ -19,7 +19,6 @@ SOURCE_FILES( vul_sources
   vul_test.h
   vul_timer.h
   vul_timestamp.h
-  vul_tmpnam.h
   vul_trace.h
   vul_url.h
   vul_user_info.h

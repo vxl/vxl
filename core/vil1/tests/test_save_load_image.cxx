@@ -18,11 +18,11 @@
 
 #include <vcl_string.h>
 #include <vcl_cstring.h>
-#include <vcl_cstdio.h> // tmpnam()
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h> // vcl_flush
 #include <vcl_vector.h>
 
+#include <vul/vul_temp_filename.h>
 #include <vpl/vpl.h> // vpl_unlink()
 
 #include <vil/vil_rgb.h>
@@ -149,7 +149,7 @@ void vil_test_image_type_raw(char const* type_name, // type for image to read an
   // Step 1) Write the image out to disk
   //
   // create a file name
-  vcl_string fname(tmpnam(0));
+  vcl_string fname = vul_temp_filename();
   fname += ".";
   if (type_name) fname += type_name;
 
@@ -204,7 +204,7 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
   // Step 1) Write the image out to disk
   //
   // create a file name
-  vcl_string fname(tmpnam(0));
+  vcl_string fname = vul_temp_filename();
   fname += ".";
   if (type_name) fname += type_name;
 

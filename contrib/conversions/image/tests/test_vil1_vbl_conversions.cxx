@@ -6,18 +6,19 @@
 #include <vpl/vpl.h> // for vpl_unlink()
 #include <vil/vil_load.h>
 #include <vil/vil_test.h>
+#include <vul/vul_temp_filename.h>
 
 static void create_image(const char* name)
 {
   // create a PGM image, just a very simple one (3x2)
-  FILE* f = fopen(name, "wb");
+  FILE* f = vcl_fopen(name, "wb");
   fprintf(f, "P5\n3 2\n255\n123456");
   fclose(f);
 }
 
 void test_image_conversions()
 {
-  char const* filename = tempnam(0,0);
+  char const* filename = vul_temp_filename();
   create_image(filename);
   vil_image im1 = vil_load(filename);
   TEST("image file", (bool)im1, true);

@@ -6,6 +6,7 @@
 #include <vcl_cstring.h> // for memcmp()
 #include <vcl_cstdio.h> // for fopen() etc.
 #include <vpl/vpl.h> // for vpl_unlink()
+#include <vul/vul_temp_filename.h>
 #include <vil/vil_load.h>
 #include <vil/vil_test.h>
 
@@ -19,7 +20,7 @@ static void create_image(const char* name)
 
 void test_image_conversions()
 {
-  char const* filename = tempnam(0,0);
+  char const* filename = vul_temp_filename();
   create_image(filename);
   vil_image im1 = vil_load(filename);
   TEST("image file", (bool)im1, true);

@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #include <vpl/vpl.h>
-#include <vcl_cstdio.h> /* for tempnam() */
+#include <vul/vul_temp_filename.h>
 
 #include <vil/vil_16bit.h>
 #include <vil/vil_stream_fstream.h>
@@ -11,7 +11,7 @@
 
 void test_write_endian()
 {
-  char const *TMPNAM = tempnam(0,0);
+  char const *TMPNAM = vul_temp_filename().c_str();
   char const *file = TMPNAM ? TMPNAM : "/tmp/smoo";
   vil_stream *s = 0;
 

@@ -3,10 +3,11 @@
 */
 #include <vcl_cmath.h>
 #include <vcl_cstring.h>
-#include <vcl_cstdio.h> // tempnam()
 #include <vcl_fstream.h>
 
 #include <vpl/vpl.h>
+
+#include <vul/vul_temp_filename.h>
 
 #include <vnl/vnl_test.h>
 #include <vnl/vnl_vector.h>
@@ -41,7 +42,7 @@ void test_matlab() {
 
   // vnl_matlab_write, vnl_matlab_read
   {
-    char const* TMPNAM = tempnam(0,0);
+    char const* TMPNAM = vul_temp_filename().c_str();
     char const *file = TMPNAM ? TMPNAM : "/tmp/smoo.mat";
     {
       vcl_ofstream f(file);

@@ -1,7 +1,7 @@
 #include <vcl_fstream.h>
 
 #include <vpl/vpl.h>
-#include <vcl_cstdio.h> /* for tempnam() */
+#include <vul/vul_temp_filename.h>
 
 #include <vil/vil_load.h>
 #include <vil/vil_image_impl.h>
@@ -10,7 +10,7 @@
 
 static void test(char const* magic, int comps, int bits)
 {
-  char const* TMPNAM = tempnam(0,0);
+  char const* TMPNAM = vul_temp_filename().c_str();
   char const* FNAME = TMPNAM ? TMPNAM : "/tmp/t.pgm";
   {
     vcl_ofstream f(FNAME);

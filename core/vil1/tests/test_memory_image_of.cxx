@@ -7,14 +7,14 @@
 #include <vil/vil_rgb.h>
 
 #include <vil/vil_test.h>
-#include <vcl_cstdio.h>
+#include <vul/vul_temp_filename.h>
 
 const int W = 768;
 const int H = 256;
 
 void test_vil_memory_image_of()
 {
-  char const* TMPNAM2 = tempnam(0,"vil_test_memory_image_of.pgm");
+  char const* TMPNAM2 = vul_temp_filename().c_str();
   char const* file_name_2 = TMPNAM2 ? TMPNAM2 : "/tmp/vil_test_memory_image_of.pgm";
   {
     vcl_cout << "unsigned char" << vcl_endl;
@@ -33,7 +33,7 @@ void test_vil_memory_image_of()
   // your changes.
   vpl_unlink(file_name_2);
 
-  char const* TMPNAM1 = tempnam(0,"vil_test_memory_image_of.ppm");
+  char const* TMPNAM1 = vul_temp_filename().c_str();
   char const* file_name_1 = TMPNAM1 ? TMPNAM1 : "/tmp/vil_test_memory_image_of.ppm";
 
   {

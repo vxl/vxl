@@ -1,7 +1,7 @@
 #include <vcl_iostream.h>
 
 #include <vpl/vpl.h>
-#include <vcl_cstdio.h> /* for tempnam() */
+#include <vul/vul_temp_filename.h>
 
 #include <vil/vil_memory_image.h>
 #include <vil/vil_save.h>
@@ -20,9 +20,9 @@ void p(vil_image const& m)
 
 int main()
 {
-  char const* TMPNAM1 = tempnam(0,"vil_test_memory_image_1.pgm");
+  char const* TMPNAM1 = vul_temp_filename().c_str();
   char const* PGMFILE1 = TMPNAM1 ? TMPNAM1 : "/tmp/vil_test_memory_image_1.pgm";
-  char const* TMPNAM2 = tempnam(0,"vil_test_memory_image_2.pgm");
+  char const* TMPNAM2 = vul_temp_filename().c_str();
   char const* PGMFILE2 = TMPNAM2 ? TMPNAM2 : "/tmp/vil_test_memory_image_2.pgm";
 
   {
