@@ -16,7 +16,6 @@
 #include "vgui_viewer3D.h"
 
 #include <vcl_cmath.h>
-#include <vcl_algorithm.h>
 
 #include <vbl/vbl_bool_ostream.h>
 #include <vul/vul_sprintf.h>
@@ -267,10 +266,12 @@ bool vgui_viewer3D::handle(const vgui_event& e)
   }
 }
 
+#if 0 // unused
 inline bool gotmods(vgui_event const& event)
 {
   return event.modifier_is_down(vgui_SHIFT);
 }
+#endif
 
 bool vgui_viewer3D::mouse_down(int x, int y, vgui_button button, vgui_modifier /*modifier*/)
 {
