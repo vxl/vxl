@@ -1,4 +1,6 @@
 #include "rgrl_trans_affine.h"
+#include <vnl/vnl_fastops.h>
+
 //:
 // \file
 // \author Amitha Perera
@@ -78,7 +80,11 @@ map_loc( vnl_vector<double> const& from,
          vnl_vector<double>      & to   ) const
 {
   assert ( from.size() == A_.rows() );
-  to = A_ * (from-from_centre_) + trans_;
+  // for efficiency, rewrite the following as:
+  // to = A_ * (from-from_centre_) + trans_;
+  // 
+  vnl_fastops::Ab( to, A_, from-from_centre_ );
+  to -= trans_;
 }
 
 
