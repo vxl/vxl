@@ -144,4 +144,4 @@ void test_axis_gaussian()
   delete base_builder_ptr_in;
 }
 
-TESTLIB_DEFINE_MAIN(test_axis_gaussian);
+TESTMAIN(test_axis_gaussian);

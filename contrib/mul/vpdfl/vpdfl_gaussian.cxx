@@ -16,6 +16,7 @@
 #include "vpdfl_gaussian.h"
 
 #include <vcl_cassert.h>
+#include <vcl_cstdlib.h>
 #include <vcl_string.h>
 #include <vcl_cmath.h>
 
@@ -201,17 +202,24 @@ vpdfl_sampler_base* vpdfl_gaussian::new_sampler() const
 
 //=======================================================================
 
-// Probability densities:
-double vpdfl_gaussian::log_p(const vnl_vector<double>& x) const
+//: Calculate (x-mu)' * Sigma^-1 * (x-mu)
+// This is the Mahalanobis distance squared from the mean.
+double vpdfl_gaussian::dx_sigma_dx(const vnl_vector<double>& x) const
 {
   unsigned int n = n_dims();
-  assert(x.size() == n);
+ #ifndef NDEBUG
+  if (n!=x.size())
+  {
+    vcl_cerr<<"ERROR: vpdfl_gaussian::dx_sigma_dx: Target vector has "
+            <<n<<" dimensions, not the required "<<n_dims()<<vcl_endl;
+    vcl_abort();
+  }
+#endif
 
-  dx_ = x;
-  dx_ -= mean();
+  b_.set_size(n);
 
-  if (b_.size()!=n) b_.set_size(n);
-
+  dx_=x;
+  dx_-=mean();
   // Rotate dx_ into co-ordinate frame of axes of Gaussian
   // b_ = P'dx_
   mbl_matxvec_prod_vm(dx_, eigenvecs(),b_);
@@ -227,8 +235,13 @@ double vpdfl_gaussian::log_p(const vnl_vector<double>& x) const
     double db=b_data[i];
     sum+=(db*db)/v_data[i];
   }
+  return sum;
+}
 
-  return log_k() - 0.5*sum;
+// Probability densities:
+double vpdfl_gaussian::log_p(const vnl_vector<double>& x) const
+{
+  return log_k() - 0.5*dx_sigma_dx(x);
 }
 
 //=======================================================================
@@ -286,38 +299,17 @@ void vpdfl_gaussian::nearest_plausible(vnl_vector<double>& x, double log_p_min) 
   // calculate radius of plausible region in standard deviations.
   log_p_min -= log_k();
   assert(log_p_min <0); // Check sd_limit is positive and real.
-  const double sd_limit =
-    vcl_sqrt(-2.0*log_p_min);
-
-  dx_ = x;
-  dx_ -= mean();
+  const double sd_limit_sqr = -2.0*log_p_min;
+  const double x_dist_sqr = dx_sigma_dx(x);
 
   unsigned int n = n_dims();
-  if (b_.size()!=n) b_.set_size(n);
 
-  // Rotate dx_ into co-ordinate frame of axes of Gaussian
-  // b_ = P'dx_
-  mbl_matxvec_prod_vm(dx_, eigenvecs(),b_);
+  if (sd_limit_sqr >= x_dist_sqr) return;
 
-  // The limit of sd_limit_;
-  const double *evals = eigenvals().data_block();
+  const double corrective_factor = vcl_sqrt(sd_limit_sqr / x_dist_sqr);
 
-  double *b_data = b_.data_block();
-  unsigned int i=n;
-  while (i-- != 0)
-  {
-    double limit = sd_limit * vcl_sqrt(evals[i]);
-    double lo = -1.0 * limit;
-    double hi = limit;
-
-    if (b_data[i]<lo) b_data[i] = lo;
-    else
-      if (b_data[i]>hi) b_data[i] = hi;
-  }
-
-  // Rotate back into x-space
-  mbl_matxvec_prod_mv(eigenvecs(), b_, x);
-  x+= mean();
+  for (unsigned i=0;i<n;++i)
+    x(i) = ((x(i)-mean()(i)) * corrective_factor) + mean()(i);
 }
 
 //=======================================================================

@@ -8,6 +8,7 @@
 #include <vcl_iostream.h>
 #include <vpl/vpl.h> // vpl_unlink()
 
+#include <vsl/vsl_binary_loader.h>
 #include <vpdfl/vpdfl_gaussian.h>
 #include <vpdfl/vpdfl_gaussian_builder.h>
 #include <vpdfl/vpdfl_gaussian_sampler.h>
@@ -131,12 +132,12 @@ void test_gaussian()
   TEST("Original Builder == Builder loaded by base ptr",
        mbl_test_summaries_are_equal(p_builder, p_base_builder_in), true);
 
-  vcl_cout << "========Testing PDF Thresholds==========";
+  vcl_cout << "\n\n========Testing PDF Thresholds==========\n";
   vpdfl_sampler_base *p_sampler2 = p_pdf_built->new_sampler();
   unsigned pass=0, fail=0;
   vnl_vector<double> x;
   double thresh = p_pdf_built->log_prob_thresh(0.9);
-  vcl_cout << "\nlog density threshold for passing 90%: " << thresh << vcl_endl;
+  vcl_cout << "log density threshold for passing 90%: " << thresh << vcl_endl;
   for (unsigned i=0; i < 1000; i++)
   {
     p_sampler2->sample(x);
@@ -163,11 +164,36 @@ void test_gaussian()
   delete p_sampler2;
 
 
+  vcl_cout << "\n\n========Testing PDF Plausible regions==========\n";
+  vnl_vector<double> v2(n);
+  vnl_vector<double> mean2(n),evals2(n);
+  for (int i=0;i<n;++i)
+  {
+    v2(i)=n+1-i;
+    mean2(i) = i*i+1;
+    evals2(i) = i+1;
+  }
+  v2+=mean2;
+  pdf.set(mean2,evecs,evals2);
+
+  double pd = pdf.log_prob_thresh(0.9);
+  TEST("v2 is outside Int(Prob)<0.9 region", pdf.log_p(v2) < pd, true);
+  vnl_vector<double>v3(v2);
+
+  pdf.nearest_plausible(v3,pd);
+  vcl_cout << "Nearest plausible of v2(" << v2 << ") = v3("
+    << v3 << ")" << vcl_endl;
+  TEST_NEAR("v3 is on Int(Prob)=0.9 boundary", pdf.log_p(v3), pd, 1e-5);
+
+  TEST_NEAR("v3 and v2 have identical directions from mean",
+    angle(v3-mean2,v2-mean2), 0, 1e-5);
+
   delete p_pdf_built;
   delete p_sampler;
   delete p_base_pdf_in;
   delete p_base_builder_in;
   vsl_delete_all_loaders();
+
 }
 
-TESTLIB_DEFINE_MAIN(test_gaussian);
+TESTMAIN( test_gaussian );

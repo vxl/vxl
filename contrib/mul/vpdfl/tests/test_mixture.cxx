@@ -197,6 +197,5 @@ void test_mixture()
   delete p_pdf3;
 }
 
-TESTLIB_DEFINE_MAIN(test_mixture);
+TESTMAIN(test_mixture);
 
-//==================< end of file: test_mixture.cxx >====================

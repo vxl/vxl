@@ -65,7 +65,8 @@ class vpdfl_axis_gaussian : public vpdfl_pdf_base
 
   //: Compute nearest point to x which has a density above a threshold
   //  If log_p(x)>log_p_min then x unchanged.  Otherwise x is moved
-  //  (typically up the gradient) until log_p(x)>=log_p_min.
+  //  directly towards the mean (i.e. to the nearest plausible point using a
+  //  Mahalobis distance) until log_p(x)=log_p_min.
   // \param x This may be modified to the nearest plausible position.
   // \param log_p_min lower threshold for log_p(x)
   virtual void nearest_plausible(vnl_vector<double>& x, double log_p_min) const;

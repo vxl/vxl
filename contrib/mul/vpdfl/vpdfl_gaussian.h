@@ -28,6 +28,10 @@ class vpdfl_gaussian : public vpdfl_pdf_base
   double log_k_;
   void calcLogK();
 
+  //: Calculate (x-mu)' * Sigma^-1 * (x-mu)
+  // This is the Mahalanobis distance squared from the mean.
+  double dx_sigma_dx(const vnl_vector<double>& x) const;
+
  protected: // Workspace may be accessed by sub-classes
   //: Workspace
   // The difference between an input vector an the mean
@@ -35,6 +39,7 @@ class vpdfl_gaussian : public vpdfl_pdf_base
   //: Workspace
   // Usually the input vector after normalisation.
   mutable vnl_vector<double> b_;
+
 
  public:
   //: Dflt ctor
@@ -110,7 +115,8 @@ class vpdfl_gaussian : public vpdfl_pdf_base
 
   //: Compute nearest point to x which has a density above a threshold
   //  If log_p(x)>log_p_min then x unchanged.  Otherwise x is moved
-  //  (typically up the gradient) until log_p(x)>=log_p_min.
+  //  directly towards the mean (i.e. to the nearest plausible point using a
+  //  Mahalobis distance) until log_p(x)=log_p_min.
   // \param x This may be modified to the nearest plausible position.
   // \param log_p_min lower threshold for log_p(x)
   virtual void nearest_plausible(vnl_vector<double>& x, double log_p_min) const;
