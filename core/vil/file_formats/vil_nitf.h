@@ -6,12 +6,12 @@
 #endif
 //:
 // \file
-// \author    laymon@crd.ge.com
-// \date  2003/12/26 00:19:25
+// \author laymon@crd.ge.com
+// \date   2003/12/26
 //
-//\verbatim
+// \verbatim
 //  Modifications
-//\endverbatim
+// \endverbatim
 
 #include <vcl_sys/times.h>  // for struct tms
 
@@ -52,16 +52,16 @@ class vil_nitf_file_format : public vil_file_format
 //: Generic image interface for NITF files
 class vil_nitf_image : public vil_image_resource
 {
-  unsigned int ni_;  /// number of pixels in x dimension
-  unsigned int nj_;  /// number of pixels in y dimension
-  unsigned int nplanes_;  /// NOTE: Same as number of bands in NITF terminology
+  unsigned int ni_;  //!< number of pixels in x dimension
+  unsigned int nj_;  //!< number of pixels in y dimension
+  unsigned int nplanes_;  //!< NOTE: Same as number of bands in NITF terminology
 
-  unsigned int bits_per_component_;  /// For NITF, make equivalent to actual bits per pixel (ABPP)
+  unsigned int bits_per_component_;  //!< For NITF, make equivalent to actual bits per pixel (ABPP)
 
   // stream stuff similar to NITFFile.  For now, output_stream_ will always be null.
   // Figure out how to deal with output after reading is OK.  MAL  22oct2003
-  vil_stream * in_stream_;  //<! vil_stream for input
-  vil_stream * out_stream_; //<! vil_stream for output
+  vil_stream * in_stream_;  //!< vil_stream for input
+  vil_stream * out_stream_; //!< vil_stream for output
   vil_streampos ifilePos_;
   vil_streampos ofilePos_;
   vil_streampos image_data_offset_;
@@ -70,7 +70,7 @@ class vil_nitf_image : public vil_image_resource
   vil_nitf_image_subheader_sptr image_subheader_;
   vil_nitf_blocking_info blocking_info_;
 
-  BandType repformat_;        //:< enum values = BANDED or INTERLEAVED.
+  BandType repformat_;        //!< enum values = BANDED or INTERLEAVED.
 
   // Attributes used when dealing with accessing data stored
   // in an vil_stream.
@@ -101,9 +101,9 @@ class vil_nitf_image : public vil_image_resource
   ~vil_nitf_image();
 
   //: Dimensions:  planes x width x height x planes
-  virtual unsigned nplanes() const {return nplanes_;}
-  virtual unsigned ni() const {return ni_;}
-  virtual unsigned nj() const {return nj_;}
+  virtual unsigned nplanes() const { return nplanes_; }
+  virtual unsigned ni() const { return ni_; }
+  virtual unsigned nj() const { return nj_; }
 
   virtual enum vil_pixel_format pixel_format() const;
 
@@ -159,25 +159,25 @@ class vil_nitf_image : public vil_image_resource
                                 vcl_string dir_name);
 
   virtual vil_nitf_image_subheader_sptr getHeader();
-  virtual unsigned int get_bits_per_pixel() const;  /// Return stored bits per pixel
+  virtual unsigned int get_bits_per_pixel() const;  //!< Return stored bits per pixel
   //: Return actual bits per pixel ( = ABPP in NITF image header)
   virtual unsigned int get_bits_per_component() const { return bits_per_component_; }
-  vil_streampos get_image_data_offset() const {return image_data_offset_;}
+  vil_streampos get_image_data_offset() const { return image_data_offset_; }
   int check_image_data_offset() const;
 
-  BandType GetRepFormat() const {return repformat_;}  //!< enum values = BANDED or INTERLEAVED.
-  void SetRepFormat(BandType new_val) {repformat_ = new_val;}
+  BandType GetRepFormat() const { return repformat_; }  //!< enum values = BANDED or INTERLEAVED.
+  void SetRepFormat(BandType new_val) { repformat_ = new_val; }
 
-  unsigned get_top_pad() const {return top_pad_; }
+  unsigned get_top_pad() const { return top_pad_; }
   virtual void set_top_pad(unsigned);
-  unsigned get_bottom_pad() const {return bottom_pad_; }
+  unsigned get_bottom_pad() const { return bottom_pad_; }
   virtual void set_bottom_pad(unsigned);
-  unsigned get_left_pad() const {return left_pad_; }
+  unsigned get_left_pad() const { return left_pad_; }
   virtual void set_left_pad(unsigned);
-  unsigned get_right_pad() const {return right_pad_; }
+  unsigned get_right_pad() const { return right_pad_; }
   virtual void set_right_pad(unsigned);
 
-  unsigned get_row_modulus() const {return row_modulus_; }
+  unsigned get_row_modulus() const { return row_modulus_; }
   void set_row_modulus(int new_val);
 
   InterleaveType get_interleave_type() const;
@@ -221,13 +221,13 @@ class vil_nitf_image : public vil_image_resource
   void display_message_attributes(vcl_string caller);
   void display_image_attributes(vcl_string caller);
   void display_block_attributes(vcl_string caller);
-  static void display_elapsed_time(const tms &start, const tms &end, const vcl_string &msg);
+  static void display_elapsed_time(struct tms const& start, struct tms const& end, const vcl_string &msg);
 
  protected:
   virtual StatusCode set_image_data();
   virtual void set_nplanes(unsigned int new_val);
   virtual void set_nplanes(int new_val);
-  void set_image_data_offset(vil_streampos new_val) {image_data_offset_ = new_val;}
+  void set_image_data_offset(vil_streampos new_val) { image_data_offset_ = new_val; }
 
   void calculate_start_block(
       unsigned j0,
