@@ -99,13 +99,13 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx;c"
 # Begin Source File
-SOURCE=.\Templates/vbl_io_smart_ptr+bmrf_node+-bmrf_arc-.cxx
+SOURCE=.\Templates/vbl_io_smart_ptr+bmrf_arc-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_io_smart_ptr+bmrf_node-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bmrf_node+-bmrf_arc-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+bmrf_arc-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bmrf_epi_point-.cxx
@@ -167,6 +167,9 @@ SOURCE=.\bmrf_curve_3d_builder.cxx
 # Begin Source File
 SOURCE=.\bmrf_curvel_3d.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bmrf_arc.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -220,6 +223,12 @@ SOURCE=.\bmrf_curvel_3d.h
 # End Source File
 # Begin Source File
 SOURCE=.\bmrf_curvel_3d_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bmrf_arc.h
+# End Source File
+# Begin Source File
+SOURCE=.\bmrf_arc_sptr.h
 # End Source File
 # End Group
 # End Target

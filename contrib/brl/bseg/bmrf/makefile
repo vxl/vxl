@@ -20,6 +20,8 @@ SOURCES += bmrf_network_builder_params.cxx
 SOURCES += bmrf_curvel_3d.cxx
 MANPAGE_SOURCES += bmrf_curvel_3d_sptr.h
 SOURCES += bmrf_curve_3d_builder.cxx
+SOURCES += bmrf_arc.cxx
+MANPAGE_SOURCES += bmrf_arc_sptr.h
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
