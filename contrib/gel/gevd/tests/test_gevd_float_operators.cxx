@@ -31,8 +31,14 @@ test_gevd_float_operators()
   gevd_float_operators::Laplacian(*buf_out, buf_mag, buf_dirx, buf_diry);
   TEST("gevd_float_operators::Laplacian()", *(float*)buf_mag->GetElementAddr(1,2) > 6.0f, true);
   TEST("gevd_float_operators::Laplacian()", *(float*)buf_mag->GetElementAddr(7,7) < 1e-5f, true);
+  delete buf_mag;
+  delete buf_dirx;
+  delete buf_diry;
   float* kernel = 0; int radius;
   gevd_float_operators::Find1dGaussianKernel(7.0f, kernel, radius);
+  TEST("gevd_float_operators::Find1dGaussianKernel(7) radius", radius, 20);
+  TEST_NEAR("gevd_float_operators::Find1dGaussianKernel(7) kernel values", kernel[20], 0.0571849, 1e-7);
+  delete[] kernel;
   gevd_bufferxy kernel_buf(2,2,32);
   *(float*)kernel_buf.GetElementAddr(0,0) = 1.0f;
   *(float*)kernel_buf.GetElementAddr(0,1) = -1.0f;
@@ -59,6 +65,7 @@ test_gevd_float_operators()
   for (int i=1; i<7; ++i) for (int j=1; j<7; ++j) {
     TEST_("CorrelationAlongAxis", i,j, 0.f);
   }
+  delete buf_out;
 }
 
 TESTMAIN(test_gevd_float_operators);
