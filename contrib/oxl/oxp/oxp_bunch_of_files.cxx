@@ -151,7 +151,7 @@ int oxp_bunch_of_files::tell() const
 
 int oxp_bunch_of_files::read(void* buf, unsigned int len)
 {
-  int space_left_in_this_file = filesizes[current_file_index] - ftell(fps[current_file_index]);
+  unsigned long space_left_in_this_file = filesizes[current_file_index] - ftell(fps[current_file_index]);
 
   int bytes_from_curr = len;
   int bytes_from_next = 0;

@@ -16,7 +16,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 static int get_u16(vcl_istream& f);
-static int get_u32(vcl_istream& f);
+static unsigned long get_u32(vcl_istream& f);
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -384,12 +384,12 @@ void SGIMV_Variables::read(vcl_istream& f) {
   //     VarData data[num_vars];
   //   };
   /*int pad =*/ get_u32(f);
-  int n = get_u32(f);
+  unsigned long n = get_u32(f);
   /*pad =*/ get_u32(f);
-  if (n > 1000) {
+  if (n > 1000L) {
     vul_printf(vcl_cerr, "SGIMovieFile: warning: A Variable list is %d elements long\n", n);
   }
-  for(int i = 0; i < n; ++i) {
+  for(unsigned long i = 0; i < n; ++i) {
     VarData v;
 
     char var_buf[17];
@@ -480,7 +480,7 @@ static int get_u16(vcl_istream& f)
   return (buf[0] << 8) + buf[1];
 }
 
-static int get_u32(vcl_istream& f)
+static unsigned long get_u32(vcl_istream& f)
 {
   vxl_uint_8 buf[4];
   f.read((char*)buf, 4);
