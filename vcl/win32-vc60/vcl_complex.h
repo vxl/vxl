@@ -110,6 +110,7 @@ template <class T> vcl_complex<T> vcl_exp(const vcl_complex<T>& x) { return std:
 template <class T> vcl_complex<T> vcl_log(const vcl_complex<T>& x) { return std::log(x); }
 template <class T> vcl_complex<T> vcl_log10(const vcl_complex<T>& x) { return std::log10(x); }
 template <class T> vcl_complex<T> vcl_pow(const vcl_complex<T>& x, int y) { return std::pow(x, y); }
+template <class T> vcl_complex<T> vcl_pow(const vcl_complex<T>& x, const T& y) { return std::pow(x, y); }
 template <class T> vcl_complex<T> vcl_pow(const vcl_complex<T>& x, const vcl_complex<T>& y) { return std::pow(x, y); }
 template <class T> vcl_complex<T> vcl_pow(const T& x, const vcl_complex<T>& y) { return std::pow(x, y); }
 template <class T> vcl_complex<T> vcl_sin(const vcl_complex<T>& x) { return std::sin(x); }
