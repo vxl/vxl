@@ -3,6 +3,9 @@
 #include <bseg/bmrf/bmrf_epi_point.h>
 #include <bseg/bmrf/bmrf_epi_seg_sptr.h>
 #include <bseg/bmrf/bmrf_epi_seg.h>
+#include <bseg/bmrf/bmrf_epi_transform_sptr.h>
+#include <bseg/bmrf/bmrf_epi_transform.h>
+#include <bseg/bmrf/bmrf_epipole.h>
 #include <bseg/bmrf/bmrf_node_sptr.h>
 #include <bseg/bmrf/bmrf_node.h>
 #include <bseg/bmrf/bmrf_network_sptr.h>
