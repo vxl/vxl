@@ -107,7 +107,7 @@ void vil_save_gray_template(T const* p, int w, int h, vcl_string const& fn)
   unsigned char* o = out.get_buffer();
   T const* p_end = p + w*h;
   while (p != p_end)
-    *o++ = *p++;
+    *o++ = *p++; // FIXME - possible loss of data! (e.g. clipping)
   vil_save(out, fn.c_str());
 }
 
