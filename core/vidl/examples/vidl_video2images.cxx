@@ -13,7 +13,6 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
 #include <vxl_config.h>
-#include <vil/vil_rgb.h>
 #include <vidl/vidl_io.h>
 #include <vidl/vidl_frame.h>
 #include <vidl/vidl_movie.h>
@@ -217,11 +216,9 @@ main (int argc, char **argv)
     {
       vil_image_view_base_sptr frame0 = pframe->get_view();
       V2( "frame image: " << frame0 );
-      CHECKE( 3 == vil_pixel_format_num_components(frame0->pixel_format()),
-              "video frames must have 3 components" );
       CHECKE( 1 == vil_pixel_format_sizeof_components(frame0->pixel_format()),
               "video frames must have 8 bits per component" );
-      vil_image_view<vil_rgb<vxl_byte> > frame (frame0);
+      vil_image_view<vxl_byte> frame (frame0);
       if (oifnt()) {
         vcl_string fn = vul_sprintf (oifnt(), i);
         V2( "writing frame to file " << fn );
