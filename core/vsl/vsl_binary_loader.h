@@ -4,8 +4,14 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+
 //:
 // \file
+// \brief Loader to do Polymorphic IO.
+// \author Ian Scott, Tim Cootes (Manchester) March 2001
+//
+// You should include this file if you want to do polymorphic IO
+// (i.e. save a class by its base-class pointer.)
 
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_loader_base.h>
