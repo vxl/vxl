@@ -96,16 +96,6 @@ inline static void local_qsort(vgl_polygon_scan_iterator<double>::crossedge* cro
 }
 
 //===============================================================
-// Print routine for vertind
-//===============================================================
-template <class T>
-void vgl_polygon_scan_iterator<T>::vertind::display( char const* str)
-{
-  vcl_cout << str << " chainnum = " << chainnum << "   vertnum = " << vertnum << vcl_endl;
-}
-
-
-//===============================================================
 // Destructor
 //===============================================================
 template <class T>
