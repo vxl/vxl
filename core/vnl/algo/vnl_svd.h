@@ -26,7 +26,7 @@
 //: Holds the singular value decomposition of a vnl_matrix.
 //
 //  The class holds three matrices U, W, V such that the original matrix
-//  $M = U W V^\top$.  The DiagMatrix W stores the singular values in decreasing
+//  \f$ M = U W V^\top\f$ .  The DiagMatrix W stores the singular values in decreasing
 //  order.  The columns of U which correspond to the nonzero singular values
 //  form a basis for range of M, while the columns of V corresponding to the
 //  zero singular values are the nullspace.
@@ -64,14 +64,14 @@ public:
   typedef typename vnl_numeric_traits<T>::abs_t singval_t;
 
 //:
-// Construct an vnl_svd<T> object from $m \times n$ matrix $M$.  The
+// Construct an vnl_svd<T> object from \f$m \times n\f$ matrix \f$M\f$.  The
 // vnl_svd<T> object contains matrices $U$, $W$, $V$ such that
-// $U W V^\top = M$.
+// \f$U W V^\top = M\f$.
 //
 // Uses linpack routine DSVDC to calculate an ``economy-size'' SVD
-// where the returned $U$ is the same size as $M$, while $W$
-// and $V$ are both $n \times n$.  This is efficient for
-// large rectangular solves where $m > n$, typical in least squares.
+// where the returned \f$U\f$ is the same size as \f$M\f$, while \f$W\f$
+// and \f$V\f$ are both \f$n \times n\f$.  This is efficient for
+// large rectangular solves where \f$m > n\f$, typical in least squares.
 //
 // The optional argument zero_out_tol is used to mark the zero singular
 // values: If nonnegative, any s.v. smaller than zero_out_tol in
@@ -97,6 +97,7 @@ public:
 
 //: Get at DiagMatrix (q.v.) of singular values,sorted from largest to smallest
   vnl_diag_matrix<singval_t>       & W()             { return W_; }
+//: Get at DiagMatrix (q.v.) of singular values,sorted from largest to smallest
   vnl_diag_matrix<singval_t> const & W() const       { return W_; }
   vnl_diag_matrix<singval_t>       & Winverse()      { return Winverse_; }
   vnl_diag_matrix<singval_t> const & Winverse() const { return Winverse_; }
