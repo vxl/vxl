@@ -189,7 +189,7 @@ int main()
 @section Copying an image
 @anchor{sec:vil_copy}
 @cindex images, copying
-You should know by know that copying @code{vil_image} objects does not
+You should know by now that copying @code{vil_image} objects does not
 duplicate the data they point to.  This allows images to be passed into and
 out of functions efficiently.  It also means that modifying the data in one
 vil_image might change that in another.  Take this example
