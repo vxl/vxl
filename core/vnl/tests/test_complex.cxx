@@ -1,6 +1,6 @@
 #include <vcl_iostream.h>
-#include <vcl_complex.h>
 #include <vcl_cmath.h>
+#include <vcl_complex.h>
 
 #include <vnl/vnl_test.h>
 #include <vnl/vnl_vector.h>
@@ -84,7 +84,7 @@ void test_complex() {
     seed = (seed*16807)%2147483647L;
     double v = double(seed)/1000000000L;
     vcl_complex<double> c(u,v);
-    vcl_complex<double> d = std::cos(c);
+    vcl_complex<double> d = vcl_cos(c);
     vcl_complex<double> e = acos(d);
     vcl_cout << c << ' ' << d << ' ' << e << '\n';
     vnl_test_assert("acos", vcl_abs(c-e) < 1e-12);
