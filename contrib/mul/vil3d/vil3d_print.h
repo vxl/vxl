@@ -17,11 +17,11 @@ template<class T>
 inline void vil3d_print_all(vcl_ostream& os,const vil3d_image_view<T>& view)
 {
   os<<view.is_a()<<" "<<view.nplanes()
-    <<" planes, each "<<view.ni()<<" x "<<view.nj()<<" x "<<view.nk();
-  os<<" istep: "<<view.istep()<<" ";
-  os<<" jstep: "<<view.jstep()<<" ";
-  os<<" kstep: "<<view.kstep()<<" ";
-  os<<" planestep: "<<view.planestep()<<'\n';
+    <<" planes, each "<<view.ni()<<" x "<<view.nj()<<" x "<<view.nk()
+    <<" istep: "<<view.istep()<<' '
+    <<" jstep: "<<view.jstep()<<' '
+    <<" kstep: "<<view.kstep()<<' '
+    <<" planestep: "<<view.planestep()<<'\n' << vcl_flush;
   for (unsigned int p=0;p<view.nplanes();++p)
    for (unsigned int k=0;k<view.nk();++k)
    {
@@ -33,7 +33,7 @@ inline void vil3d_print_all(vcl_ostream& os,const vil3d_image_view<T>& view)
         vil2_print_value(os,view(i,j,k,p));
         os<<" ";
       }
-      os<<'\n';
+      os<<'\n' << vcl_flush;
     }
   }
 }
