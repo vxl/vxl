@@ -1,0 +1,8 @@
+
+LINK_LIBRARIES(netlib jpeg)
+
+LINK_DIRECTORIES(
+${allvxl_BINARY_DIR}/v3p/netlib
+${allvxl_BINARY_DIR}/v3p/jpeg
+)
+

@@ -13,4 +13,10 @@ MovieFile               vsl_conic_as_params
 MovieFileInterface      vsl_conic_points
 )
 
+IF(JPEG)
+  # do nothing
+ELSE(JPEG)
+  INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/v3p/jpeg)
+ENDIF(JPEG)
+
 AUX_SOURCE_DIRECTORY(Templates oxp_sources)

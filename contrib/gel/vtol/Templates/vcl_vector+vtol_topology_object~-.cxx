@@ -1,7 +1,7 @@
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_vector.txx>
-#include <vcl/vcl_algorithm.txx>
-#include <vcl/vcl_algorithm.h>
+#include <vcl_vector.h>
+#include <vcl_vector.txx>
+#include <vcl_algorithm.txx>
+#include <vcl_algorithm.h>
 #include <vtol/vtol_topology_object.h>
 
 typedef class vtol_topology_object *elt_t;

@@ -75,7 +75,8 @@ TripleMatchSet
 TripleMatchSetCorner
 TripleMatchSetLineSeg
 mvl_five_point_camera_pencil
-mvl_multi_view_matches
+# mvl_multi_view_matches
+#    gives an error under Win32
 mvl_psi
 mvl_six_point_design_matrix_row
 mvl_three_view_six_point_structure

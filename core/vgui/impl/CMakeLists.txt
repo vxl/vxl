@@ -1,0 +1,4 @@
+
+IF(WIN32)
+  SUBDIRS(mfc)
+ENDIF(WIN32)

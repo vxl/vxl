@@ -1,7 +1,7 @@
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_vector.txx>
-#include <vcl/vcl_algorithm.txx>
-#include <vcl/vcl_algorithm.h>
+#include <vcl_vector.h>
+#include <vcl_vector.txx>
+#include <vcl_algorithm.txx>
+#include <vcl_algorithm.h>
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_block.h>
 //#include <vtol/some_stubs.h>
