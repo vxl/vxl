@@ -8,83 +8,114 @@
 #include <vgui/vgui_style.h>
 #include <vgui/vgui_projection_inspector.h>
 #include <vgui/internals/vgui_draw_line.h>
+#include <vdgl/vdgl_digital_curve.h>
+#include <vdgl/vdgl_interpolator.h>
+#include <vdgl/vdgl_edgel_chain.h>
+#include <vtol/vtol_face_2d.h>
 #include <segv/segv_vtol_soview2D.h>
 
-//--------------------------------------------------------------------------//
+//--------------------------------------------------------------------------
 //: vtol_vertex_2d view
+//--------------------------------------------------------------------------
 vcl_ostream& segv_vtol_soview2D_vertex::print(vcl_ostream& s) const
 {
   s << "[segv_vtol_soview2D_vertex " << x << "," << y << " ";
   s << " "; return vgui_soview2D::print(s) << "]";
 }
 
+//--------------------------------------------------------------------------
+//: vtol_edge_2d view
+//--------------------------------------------------------------------------
+vcl_ostream& segv_vtol_soview2D_edge::print(vcl_ostream& s) const
+{
+  return vgui_soview2D_linestrip::print(s);
+}
 
-// //--------------------------------------------------------------------------//
+segv_vtol_soview2D_edge::segv_vtol_soview2D_edge(vtol_edge_2d_sptr& e)
+{
+  if(!e)
+    {
+      vcl_cout << "In segv_vtol_soview2D_edge(..) - null input edge"
+               << vcl_endl;
+      return;
+    }
 
-// void vgui_soview2D_group::set_style(vgui_style *s)
-// {
-//   for (unsigned int i=0; i< ls.size(); i++)
-//     if (!ls[i]->get_style())
-//       ls[i]->set_style(s);
+  //find out what kind of curve the edge has
+  vsol_curve_2d_sptr c = e->curve();
+  if(!c)
+    {
+      vcl_cout << "In segv_vtol_soview2D_edge(..) -"
+               << " null curve " << vcl_endl;
+      return;
+    }
+  if(c->cast_to_digital_curve())
+    {
+      vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
+      //get the edgel chain
+      vdgl_interpolator_sptr itrp = dc->get_interpolator();
+      vdgl_edgel_chain_sptr ech = itrp->get_edgel_chain();
 
-//   vgui_soview::set_style( s);
-// }
+      //n, x, and y are in the parent class vgui_soview2D_linestrip
+      n = ech->size();
+      //offset the coordinates for display (may not be needed)
+      x = new float[n], y = new float[n];
+      for(int i=0; i<n;i++)
+        {
+          vdgl_edgel ed = (*ech)[i];
+          x[i]=ed.get_x();
+          y[i]=ed.get_y();
+        }
+      return;
+    }
+  vcl_cout << "In segv_vtol_soview2D_edge(vtol_vertex_2d_sptr& e) -"
+           << " attempt to draw an edge with unknown curve geometry" 
+           << vcl_endl;
+}
 
-// vcl_ostream& vgui_soview2D_group::print(vcl_ostream& s) const
-// {
-//   s << "[vgui_soview2D_group ";
+//--------------------------------------------------------------------------
+//: vtol_edge_2d group view
+//--------------------------------------------------------------------------
 
-//   for (unsigned int i=0; i< ls.size(); i++)
-//     ls[i]->print(s);
+vcl_ostream& segv_vtol_soview2D_edge_group::print(vcl_ostream& s) const
+{
+  return vgui_soview2D_group::print(s);
+}
 
-//   return vgui_soview2D::print(s) << "]";
-// }
+segv_vtol_soview2D_edge_group::
+segv_vtol_soview2D_edge_group(vcl_vector<vtol_edge_2d_sptr>& edges)
+{
+  for(vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
+      eit != edges.end(); eit++)
+    {
+      vgui_soview2D* sov = new segv_vtol_soview2D_edge(*eit);
+      ls.push_back(sov);
+    }
+}
+//--------------------------------------------------------------------------
+//: vtol_face_2d view
+//--------------------------------------------------------------------------
 
-// void vgui_soview2D_group::draw()
-// {
-//   for (unsigned int i=0; i< ls.size(); i++)
-//     ls[i]->draw();
-// }
+vcl_ostream& segv_vtol_soview2D_face::print(vcl_ostream& s) const
+{
+  return vgui_soview2D_group::print(s);
+}
 
-// float vgui_soview2D_group::distance_squared(float x, float y)
-// {
-//   if (ls.size() == 0)
-//     return -1e30f;
+segv_vtol_soview2D_face::segv_vtol_soview2D_face(vtol_face_2d_sptr& f)
+{
+  if(!f)
+    {
+      vcl_cout << "In segv_vtol_soview2D_face(..) - null input face"
+               << vcl_endl;
+      return;
+    }
+  vcl_vector<vtol_edge_sptr>* edges = f->edges();
 
-//   float min= ls[0]->distance_squared( x, y);
-
-//   for (unsigned int i=1; i< ls.size(); i++)
-//   {
-//     float d= ls[i]->distance_squared( x, y);
-//     if ( d< min ) min= d;
-//   }
-
-//   return min;
-// }
-
-// void vgui_soview2D_group::get_centroid(float* x, float* y)
-// {
-//   *x = 0;
-//   *y = 0;
-//   int n = ls.size();
-
-//   for (int i=0; i < n; i++)
-//   {
-//     float cx, cy;
-//     ls[i]->get_centroid(&cx, &cy);
-//     *x += cx;
-//     *y += cy;
-//   }
-
-//   float s = 1.0f/n;
-//   *x *= s;
-//   *y *= s;
-// }
-
-// void vgui_soview2D_group::translate(float tx, float ty)
-// {
-//   for (unsigned int i=0; i < ls.size(); i++)
-//     ls[i]->translate(tx, ty);
-// }
-
-
+  for(vcl_vector<vtol_edge_sptr>::iterator eit = edges->begin();
+      eit != edges->end(); eit++)
+    {  
+      vtol_edge_2d_sptr e = (*eit)->cast_to_edge_2d();
+	  vgui_soview2D* sov = new segv_vtol_soview2D_edge(e);
+      ls.push_back(sov);
+    }
+  delete edges;
+}

@@ -27,6 +27,7 @@
 
 class segv_vtol_soview2D_vertex;
 class segv_vtol_soview2D_edge;
+class segv_vtol_soview2D_edge_group;
 class segv_vtol_soview2D_face;
 
 class segv_vtol2D_tableau : public vgui_easy2D_tableau
@@ -40,11 +41,15 @@ class segv_vtol2D_tableau : public vgui_easy2D_tableau
   segv_vtol2D_tableau(vgui_tableau_sptr const& t,
                       const char* n="unnamed");
 
-  ~segv_vtol2D_tableau();
+  ~segv_vtol2D_tableau(){};
 
+  //: the vtol display methods
   segv_vtol_soview2D_vertex* add_vertex(vtol_vertex_2d_sptr& v);
-  segv_vtol_soview2D_edge* add_edge(vtol_edge_2d_sptr& v){return 0;}
-  segv_vtol_soview2D_face* add_face(vtol_face_2d_sptr& f){return 0;}
+  segv_vtol_soview2D_edge* add_edge(vtol_edge_2d_sptr& e);
+
+  segv_vtol_soview2D_edge_group* add_edge_group(vcl_vector<vtol_edge_2d_sptr>&
+                                                edges);
+  segv_vtol_soview2D_face* add_face(vtol_face_2d_sptr& f);
 
  protected:
 
@@ -56,6 +61,8 @@ class segv_vtol2D_tableau : public vgui_easy2D_tableau
   //members
 };
 
+//this stuff is needed to establish inheritance between tableau  smart pointers
+//cloned from xcv_image_tableau
 struct segv_vtol2D_tableau_new : public segv_vtol2D_tableau_sptr
 {
   typedef segv_vtol2D_tableau_sptr base;

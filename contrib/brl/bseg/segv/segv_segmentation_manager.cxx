@@ -4,7 +4,6 @@
 // \file
 // \author J.L. Mundy
 
-#include "segv_segmentation_manager.h"
 #include <math.h>
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vcl_iostream.h>
@@ -33,7 +32,8 @@
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 #include <gevd/gevd_float_operators.h>
-
+#include <segv/segv_vtol2D_tableau.h>
+#include <segv/segv_segmentation_manager.h>
 //static live_video_manager instance
 segv_segmentation_manager *segv_segmentation_manager::_instance = 0;
 
@@ -81,8 +81,10 @@ void segv_segmentation_manager::load_image()
     return;
   _img = vil_load(image_filename.c_str());
   vgui_image_tableau_sptr itab = vgui_image_tableau_new(_img);
-  _e2D = vgui_easy2D_tableau_new(itab);
-  vgui_shell_tableau_sptr stab = vgui_shell_tableau_new(_e2D);
+  //  _e2D = vgui_easy2D_tableau_new(itab);
+  _t2D = segv_vtol2D_tableau_new(itab);
+  //vgui_shell_tableau_sptr stab = vgui_shell_tableau_new(_e2D);
+  vgui_shell_tableau_sptr stab = vgui_shell_tableau_new(_t2D);
   vgui_viewer2D_tableau_sptr v2d = vgui_viewer2D_tableau_new(stab);
   unsigned col=0, row=0;
   this->add_at(v2d, col, row);
@@ -92,9 +94,9 @@ void segv_segmentation_manager::load_image()
 //-----------------------------------------------------------------------------
 void segv_segmentation_manager::clear_display()
 {
-  if(!_e2D)
+  if(!_t2D)
     return;
-  _e2D->clear();
+  _t2D->clear();
 }
 //-----------------------------------------------------------------------------
 //: Draw the given edges onto the given location.
@@ -103,69 +105,43 @@ void
 segv_segmentation_manager::draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges,
                                       bool verts)
 {
-  if (!_e2D)
+  if (!_t2D)
     return;
-  _e2D->set_line_width(3.0);
-  _e2D->set_point_radius(5.0);
+  _t2D->set_line_width(3.0);
+  _t2D->set_point_radius(5.0);
   this->clear_display();
-  vgui_image_tableau_sptr itab = _e2D->get_image_tableau();
+  vgui_image_tableau_sptr itab = _t2D->get_image_tableau();
   if(!itab)
     {
       vcl_cout << "In segv_segmentation_manager::draw_edges - null image tab"
                << vcl_endl;
       return;
     }
-  float low[3],high[3];
-  itab->get_bounding_box(low,high);
   for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
        eit != edges.end(); eit++)
-    {
-      vsol_curve_2d_sptr c = (*eit)->curve();
-      if(!c)
-        {
-          vcl_cout << "In segv_segmentation_manager::draw_edges - null curve"
-                   << vcl_endl;
-          continue;
-        }
-      vdgl_digital_curve_sptr dc =
-        (vdgl_digital_curve*)c->cast_to_digital_curve();
-      if(!dc) continue;
-      vdgl_interpolator_sptr itrp = dc->get_interpolator();
-      vdgl_edgel_chain_sptr ech = itrp->get_edgel_chain();
-      int N = ech->size();
-      //offset the coordinates for display (may not be needed)
-      float* x = new float[N], *y=new float[N];
-      for(int i=0; i<N;i++)
-        {
-          vdgl_edgel ed = (*ech)[i];
-          x[i]=ed.get_x()+low[0];
-          y[i]=ed.get_y()+low[1];
-        }
-      _e2D->set_foreground(0.5,0.5,0.0);
-      _e2D->add_linestrip(N,x, y);
-      delete [] x;
-      delete [] y;
-      //optionally display the vertices
+    {     
+      _t2D->set_foreground(0.5,0.5,0.0);
+      _t2D->add_edge(*eit);
+      //optionally display the edge vertices
       if(verts)
         {
-          _e2D->set_foreground(1.0,0.0,0.0);
-		  if((*eit)->v1())
-		  {
-          vtol_vertex_2d_sptr v1 =
-            (vtol_vertex_2d*)(*eit)->v1()->cast_to_vertex_2d();
-			_e2D->add_point(v1->x(), v1->y());
-		  }
-		  if((*eit)->v2())
-		  {	
-          vtol_vertex_2d_sptr v2 =
-            (vtol_vertex_2d*)(*eit)->v2()->cast_to_vertex_2d();
-          
-          _e2D->add_point(v2->x(), v2->y());
-			}
-	  }
+          _t2D->set_foreground(1.0,0.0,0.0);
+          if((*eit)->v1())
+            {
+              vtol_vertex_2d_sptr v1 =
+                (vtol_vertex_2d*)(*eit)->v1()->cast_to_vertex_2d();
+              _t2D->add_vertex(v1);
+            }
+          if((*eit)->v2())
+            {	
+              vtol_vertex_2d_sptr v2 =
+                (vtol_vertex_2d*)(*eit)->v2()->cast_to_vertex_2d();
+              _t2D->add_vertex(v2);
+            }
+        }
 
     }
-  _e2D->post_redraw();
+  _t2D->post_redraw();
 }
 void segv_segmentation_manager::vd_edges()
 {
@@ -190,11 +166,11 @@ void segv_segmentation_manager::vd_edges()
   this->draw_edges(*edges, true);
   //display test verts
   vcl_vector<vtol_vertex_2d_sptr> test_verts = det.get_test_verts();
-  _e2D->set_foreground(0.0,1.0,0.0);
+  _t2D->set_foreground(0.0,1.0,0.0);
   for(vcl_vector<vtol_vertex_2d_sptr>::iterator vit = test_verts.begin();
       vit != test_verts.end(); vit++)
     if((*vit))
-        _e2D->add_point((*vit)->x(), (*vit)->y());
+      _t2D->add_vertex(*vit);
 }
 
 void segv_segmentation_manager::clean_vd_edges()
@@ -204,7 +180,7 @@ void segv_segmentation_manager::clean_vd_edges()
   vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
   vcl_vector<vtol_edge_2d_sptr> broken_edges;
   det.corner_angle=70.0;
- // det.DoBreakCorners(*edges, broken_edges);
+  // det.DoBreakCorners(*edges, broken_edges);
   gevd_clean_edgels clean;
   vcl_vector<vtol_edge_2d_sptr> clean_edges;
   clean.DoCleanEdgelChains(broken_edges, clean_edges);

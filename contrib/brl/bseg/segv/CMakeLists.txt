@@ -13,9 +13,9 @@ IF(HAS_VGUI)
 INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/oxl )
 
 SET(segv_sources
-    segv_segmentation_manager.cxx     segv_segmentation_manager.h 
-    segv_vtol2D_tableau.cxx     segv_vtol2D_tableau.h 
-    segv_vtol_soview2D.cxx     segv_vtol_soview2D.h 
+ segv_segmentation_manager.cxx segv_segmentation_manager.h 
+ segv_vtol2D_tableau.cxx       segv_vtol2D_tableau.h segv_vtol2D_tableau_sptr.h
+ segv_vtol_soview2D.cxx        segv_vtol_soview2D.h 
 )
 
 AUX_SOURCE_DIRECTORY(Templates segv_sources)

@@ -21,3 +21,26 @@ segv_vtol_soview2D_vertex* segv_vtol2D_tableau::add_vertex(vtol_vertex_2d_sptr& 
   add(obj);
   return obj;
 }
+
+segv_vtol_soview2D_edge* segv_vtol2D_tableau::add_edge(vtol_edge_2d_sptr& e)
+{
+  segv_vtol_soview2D_edge* obj = new segv_vtol_soview2D_edge(e);
+  add(obj);
+  return obj;
+}
+
+segv_vtol_soview2D_edge_group* 
+segv_vtol2D_tableau::add_edge_group(vcl_vector<vtol_edge_2d_sptr>& edges)
+{
+  segv_vtol_soview2D_edge_group* obj = 
+    new segv_vtol_soview2D_edge_group(edges);
+  add(obj);
+  return obj;
+}
+
+segv_vtol_soview2D_face* segv_vtol2D_tableau::add_face(vtol_face_2d_sptr& f)
+{
+  segv_vtol_soview2D_face* obj = new segv_vtol_soview2D_face(f);
+  add(obj);
+  return obj;
+}

@@ -19,6 +19,7 @@
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
+#include <vtol/vtol_face_2d_sptr.h>
 #include <vgui/vgui_soview2D.h>
 
 //: vtol_vertex_2d 
@@ -35,6 +36,57 @@ class segv_vtol_soview2D_vertex : public vgui_soview2D_point
 
   //: Returns the type of this class ('segv_vtol_soview2D_vertex').
   vcl_string type_name() const { return "segv_vtol_soview2D_vertex"; }
+
+};
+
+class segv_vtol_soview2D_edge : public vgui_soview2D_linestrip
+{
+ public:
+  //: Constructor - creates a default edge_2d view
+  segv_vtol_soview2D_edge() {}
+
+  //: Constructor - creates a view of a vtol_vertex_2d
+  segv_vtol_soview2D_edge(vtol_edge_2d_sptr& e);
+
+  //: Print details about this vtol_vertex_2d to the given stream.
+  virtual vcl_ostream& print(vcl_ostream&) const;
+
+  //: Returns the type of this class ('segv_vtol_soview2D_edge').
+  vcl_string type_name() const { return "segv_vtol_soview2D_edge"; }
+
+};
+
+class segv_vtol_soview2D_edge_group : public vgui_soview2D_group
+{
+ public:
+  //: Constructor - creates a default edge_2d view
+  segv_vtol_soview2D_edge_group() {}
+
+  //: Constructor - creates a view of a vtol_vertex_2d
+  segv_vtol_soview2D_edge_group(vcl_vector<vtol_edge_2d_sptr>& edges);
+
+  //: Print details about this vtol_vertex_2d to the given stream.
+  virtual vcl_ostream& print(vcl_ostream&) const;
+
+  //: Returns the type of this class ('segv_vtol_soview2D_edge_group').
+  vcl_string type_name() const { return "segv_vtol_soview2D_edge_group"; }
+
+};
+
+class segv_vtol_soview2D_face : public vgui_soview2D_group
+{
+ public:
+  //: Constructor - creates a default edge_2d view
+  segv_vtol_soview2D_face() {}
+
+  //: Constructor - creates a view of a vtol_vertex_2d
+  segv_vtol_soview2D_face(vtol_face_2d_sptr& f);
+
+  //: Print details about this vtol_vertex_2d to the given stream.
+  virtual vcl_ostream& print(vcl_ostream&) const;
+
+  //: Returns the type of this class ('segv_vtol_soview2D_face').
+  vcl_string type_name() const { return "segv_vtol_soview2D_face"; }
 
 };
 
