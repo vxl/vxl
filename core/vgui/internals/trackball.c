@@ -59,7 +59,7 @@
  * simple example, though, so that is left as an Exercise for the
  * Programmer.
  */
-#define TRACKBALLSIZE  ((float)0.8)
+#define TRACKBALLSIZE  0.8f
 
 /*
  * Using sqrtf() for float arguments, instead of sqrt(double),
@@ -184,8 +184,8 @@ trackball(float q[4], float p1x, float p1y, float p2x, float p2y)
      * First, figure out z-coordinates for projection of P1 and P2 to
      * deformed sphere
      */
-    vset(p1,p1x,p1y,(float)tb_project_to_sphere(TRACKBALLSIZE,p1x,p1y));
-    vset(p2,p2x,p2y,(float)tb_project_to_sphere(TRACKBALLSIZE,p2x,p2y));
+    vset(p1,p1x,p1y,tb_project_to_sphere(TRACKBALLSIZE,p1x,p1y));
+    vset(p2,p2x,p2y,tb_project_to_sphere(TRACKBALLSIZE,p2x,p2y));
 
     /*
      *  Now, we want the cross product of P1 and P2
@@ -196,7 +196,7 @@ trackball(float q[4], float p1x, float p1y, float p2x, float p2y)
      *  Figure out how much to rotate around that axis.
      */
     vsub(p1,p2,d);
-    t = (float)(vlength(d) / (2.0f*TRACKBALLSIZE));
+    t = vlength(d) / (2.0f*TRACKBALLSIZE);
 
     /*
      * Avoid problems with out-of-control values...
@@ -227,16 +227,12 @@ axis_to_quat(float a[3], float phi, float q[4])
 static float
 tb_project_to_sphere(float r, float x, float y)
 {
-    float d, t, z;
-
-    d = sqrtf(x*x + y*y);
-    if (d < r * 0.70710678118654752440) {    /* Inside sphere */
-        z = sqrtf(r*r - d*d);
-    } else {           /* On hyperbola */
-        t = r / 1.41421356237309504880f;
-        z = t*t / d;
-    }
-    return z;
+    float d = x*x + y*y;
+    r *= r;
+    if (d*2 < r) /* Inside sphere */
+        return sqrtf(r - d);
+    else         /* On hyperbola */
+        return r * 0.5 / sqrtf(d);
 }
 
 /*
