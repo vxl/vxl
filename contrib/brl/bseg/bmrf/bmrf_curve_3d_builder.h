@@ -54,7 +54,8 @@ class bmrf_curve_3d_builder
   void reconstruct(float sigma = 0.5);
 
   //: Compute the bounding box aligned with vehicle direction
-  bool compute_bounding_box(double inlier_fraction = 0.95, bool align_ep = false);
+  // \param inlier_fractions is an array of 3 float for inlier fraction in {X,Y,Z}
+  bool compute_bounding_box(const float *inlier_fractions = NULL, bool align_ep = false);
 
   //: Return the constructed curves
   vcl_set<bmrf_curve_3d_sptr> curves() const;

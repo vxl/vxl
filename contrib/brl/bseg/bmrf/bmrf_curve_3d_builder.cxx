@@ -198,7 +198,7 @@ bool bmrf_cmp_z(const vnl_double_3& rhs, const vnl_double_3& lhs)
 
 //: Compute the bounding box aligned with vehicle direction
 bool
-bmrf_curve_3d_builder::compute_bounding_box(double inlier_fraction, bool align_ep)
+bmrf_curve_3d_builder::compute_bounding_box(const float *inlier_fractions, bool align_ep)
 {
   if (curves_.empty())
     return false;
@@ -229,13 +229,13 @@ bmrf_curve_3d_builder::compute_bounding_box(double inlier_fraction, bool align_e
     vnl_double_3 x_axis(1.0, 0.0, 0.0);
     vnl_double_3 xy_proj(direction_.x(), direction_.y(), 0.0);
     xy_proj.normalize();
-    double ang = angle(xy_proj, x_axis);
+    double ang = angle(xy_proj, -x_axis);
     vcl_cerr << "bbox rotation angle: " <<ang << vcl_endl;
     vnl_double_3 rot_axis(0.0, 0.0, ang);
     rot = vnl_rotation_matrix(rot_axis);
   }
 
-  vcl_vector<vnl_double_3> pts_x;
+  vcl_vector<vnl_double_3> pts_z;
 
   for ( vcl_set<bmrf_curve_3d_sptr>::const_iterator itr1 = curves_.begin();
         itr1 != curves_.end();  ++itr1)
@@ -245,22 +245,45 @@ bmrf_curve_3d_builder::compute_bounding_box(double inlier_fraction, bool align_e
     {
       bmrf_curvel_3d_sptr curvel = *itr2;
       vnl_double_3 point(curvel->x(), curvel->y(), curvel->z());
-      pts_x.push_back(rot*point);
+      pts_z.push_back(rot*point);
     }
   }
 
+  vcl_sort(pts_z.begin(), pts_z.end(), bmrf_cmp_z);
+  vcl_vector<vnl_double_3> pts_x;
+
+  // only consider points in x and y above 0.5 feet
+  for(vcl_vector<vnl_double_3>::const_iterator itr = pts_z.begin();
+      itr != pts_z.end();  ++itr)
+  {
+    if((*itr)[2] > 0.5){
+      pts_x.push_back(*itr);
+    }
+  }
+  if(pts_x.empty())
+    pts_x = pts_z;
+
   vcl_vector<vnl_double_3> pts_y = pts_x;
-  vcl_vector<vnl_double_3> pts_z = pts_x;
 
   vcl_sort(pts_x.begin(), pts_x.end(), bmrf_cmp_x);
   vcl_sort(pts_y.begin(), pts_y.end(), bmrf_cmp_y);
-  vcl_sort(pts_z.begin(), pts_z.end(), bmrf_cmp_z);
 
-  const double fraction_out = (1.0 - inlier_fraction)/2.0;
-  const int min_ind = int((pts_x.size()-1)*fraction_out);
-  const int max_ind = int((pts_x.size()-1)*(1.0 - fraction_out));
-  vnl_double_3 min_point(pts_x[min_ind][0], pts_y[min_ind][1], pts_z[min_ind][2]);
-  vnl_double_3 max_point(pts_x[max_ind][0], pts_y[max_ind][1], pts_z[max_ind][2]);
+  unsigned int min_ind_x = 0, min_ind_y = 0, min_ind_z = 0;
+  unsigned int max_ind_x = pts_x.size()-1, max_ind_y = pts_y.size()-1, max_ind_z = pts_z.size()-1;
+  if(inlier_fractions){
+    float fraction_out = (1.0 - inlier_fractions[0])/2.0;
+    min_ind_x = (unsigned int)(max_ind_x*fraction_out);
+    max_ind_x = (unsigned int)(max_ind_x*(1.0-fraction_out));
+    fraction_out = (1.0 - inlier_fractions[1])/2.0;
+    min_ind_y = (unsigned int)(max_ind_y*fraction_out);
+    max_ind_y = (unsigned int)(max_ind_y*(1.0-fraction_out));
+    fraction_out = (1.0 - inlier_fractions[2])/2.0;
+    min_ind_z = (unsigned int)(max_ind_z*fraction_out);
+    max_ind_z = (unsigned int)(max_ind_z*(1.0-fraction_out));
+  }
+
+  vnl_double_3 min_point(pts_x[min_ind_x][0], pts_y[min_ind_y][1], pts_z[min_ind_z][2]);
+  vnl_double_3 max_point(pts_x[max_ind_x][0], pts_y[max_ind_y][1], pts_z[max_ind_z][2]);
 
   vnl_double_3 diag_vector = max_point - min_point;
   vnl_vector_fixed<double,3> x_axis(0.0), y_axis(0.0), z_axis(0.0);
