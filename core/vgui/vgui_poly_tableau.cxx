@@ -109,8 +109,8 @@ bool vgui_poly_tableau::item::inside(GLint const vp[4],int vx, int vy) const {
 //: Constructor - don't use this, use vgui_poly_tableu_new.
 vgui_poly_tableau::vgui_poly_tableau() 
   : vgui_tableau()
-  , may_switch_child(true)
   , current(-1) 
+  , may_switch_child(true)
 {
 }
 
