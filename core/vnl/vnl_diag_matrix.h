@@ -5,10 +5,10 @@
 #pragma interface
 #endif
 //:
-//  \file
-//  \brief Contains class for diagonal matrices
-//  \author Andrew W. Fitzgibbon (Oxford RRG)
-//  \date   5/8/96
+// \file
+// \brief Contains class for diagonal matrices
+// \author Andrew W. Fitzgibbon (Oxford RRG)
+// \date   5/8/96
 //
 // \verbatim
 //  Modifications
@@ -20,7 +20,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 
-//: stores a diagonal matrix as a single vector
+//: stores a diagonal matrix as a single vector.
 //  vnl_diag_matrix stores a diagonal matrix for time and space efficiency.
 //  Specifically, only the diagonal elements are stored, and some matrix
 //  operations (currently *, + and -) are overloaded to use more efficient
@@ -45,15 +45,15 @@ class vnl_diag_matrix
  ~vnl_diag_matrix() {}
 
   vnl_diag_matrix& operator=(vnl_diag_matrix<T> const& that) {
-  this->diagonal_ = that.diagonal_;
-  return *this;
-    }
+    this->diagonal_ = that.diagonal_;
+    return *this;
+  }
 
   // Operations----------------------------------------------------------------
 
-  //: In-place arithmetic operations
+  //: In-place arithmetic operation
   vnl_diag_matrix<T>& operator*=(T v) { diagonal_ *= v; return *this; }
-  //: In-place arithmetic operations
+  //: In-place arithmetic operation
   vnl_diag_matrix<T>& operator/=(T v) { diagonal_ /= v; return *this; }
 
   // Computations--------------------------------------------------------------
@@ -89,9 +89,6 @@ class vnl_diag_matrix
   inline const_iterator end() const { return diagonal_.end(); }
 
   unsigned size() const { return diagonal_.size(); }
-#if 0 // deprecated
-  unsigned n() const { return diagonal_.size(); }
-#endif
   unsigned rows() const { return diagonal_.size(); }
   unsigned cols() const { return diagonal_.size(); }
   unsigned columns() const { return diagonal_.size(); }
@@ -117,13 +114,6 @@ class vnl_diag_matrix
   vnl_vector<T> diagonal_;
 
  private:
-#if 0
-  // This is private because it's not really a matrix operation.
-  T operator()(unsigned i) const {
-    return diagonal_[i];
-  }
-#endif
-
   #if VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD
   friend vnl_vector<T> operator*(vnl_diag_matrix<T> const&,vnl_vector<T> const&);
   #endif
@@ -204,7 +194,7 @@ inline vnl_matrix<T> operator* (vnl_diag_matrix<T> const& D, vnl_matrix<T> const
 template <class T>
 inline vnl_matrix<T> operator + (vnl_matrix<T> const& A, vnl_diag_matrix<T> const& D)
 {
-  const unsigned n = D.n();
+  const unsigned n = D.size();
   vnl_matrix<T> ret(A);
   T const* d = D.data_block();
   for (unsigned j = 0; j < n; ++j)
@@ -223,7 +213,7 @@ inline vnl_matrix<T> operator + (vnl_diag_matrix<T> const& D, vnl_matrix<T> cons
 template <class T>
 inline vnl_matrix<T> operator - (vnl_matrix<T> const& A, vnl_diag_matrix<T> const& D)
 {
-  const unsigned n = D.n();
+  const unsigned n = D.size();
   vnl_matrix<T> ret(A);
   T const* d = D.data_block();
   for (unsigned j = 0; j < n; ++j)
@@ -235,7 +225,7 @@ inline vnl_matrix<T> operator - (vnl_matrix<T> const& A, vnl_diag_matrix<T> cons
 template <class T>
 inline vnl_matrix<T> operator - (vnl_diag_matrix<T> const& D, vnl_matrix<T> const& A)
 {
-  const unsigned n = D.n();
+  const unsigned n = D.size();
   vnl_matrix<T> ret(n, n);
   T const* d = D.data_block();
   for (unsigned i = 0; i < n; ++i)
