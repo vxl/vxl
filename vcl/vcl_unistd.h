@@ -27,7 +27,7 @@
 
 #include <vcl/vcl_compiler.h>
 #include <vcl/vcl_sys/types.h>
-#include <vxl_unistd_config.h>
+//#include <vxl_unistd_config.h>
 
 typedef size_t	    vcl_size_t;
 // fixme this needs configging
