@@ -117,7 +117,7 @@ class gevd_detector_params : public gevd_param_mixin
                        float maxgp = 4, float minjmp = 0.1,
                        float contour_f = 2.0, float junction_f = 1.0,
                        bool recover_j = true, bool equal_spacing=true,
-                       bool follow_b = true,  
+                       bool follow_b = true,
                        bool peaks_only=false,
                        bool valleys_only=false,
                        float ang = 10, float sep = 1, int min_corner_len = 5,
@@ -134,7 +134,7 @@ class gevd_detector_params : public gevd_param_mixin
   void set_automatic_threshold(bool automatic_threshold);
   void set_aggressive_junction_closure(int aggressive_junction_closure);
   void set_close_borders(bool close_borders);
-  
+
 protected:
   void InitParams(float smooth_sigma, float noise_w,
                   float noise_m, bool automatic_t,
@@ -142,7 +142,7 @@ protected:
                   float maxgp, float minjmp,
                   float contour_f, float junction_f,
                   bool recover_j, bool equal_spacing,
-                  bool follow_b,  
+                  bool follow_b,
                   bool peaks_only,
                   bool valleys_only,
                   float ang, float sep, int min_corner_len,
