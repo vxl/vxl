@@ -293,4 +293,4 @@ The parallel @code{vil_image} and @code{vil_image_impl} class hierarchies.
 @endcaption
 @end figure
 
-@ejectallfigures
+@c @ejectallfigures
