@@ -48,7 +48,7 @@ vcl_istream * vul_http_open(char const *url)
   vcl_string path;
   vcl_string auth;
   int port = 80; // default
-  assert (vcl_strncmp(url, "http://", 7) != 0);// doesn't look like an http URL to me.
+  assert (vcl_strncmp(url, "http://", 7) == 0);// doesn't look like an http URL to me.
 
   char const *p = url + 7;
   while (*p && *p!='/')
@@ -196,7 +196,7 @@ bool vul_http_exists(char const *url)
   vcl_string path;
   vcl_string auth;
   int port = 80; // default
-  assert (vcl_strncmp(url, "http://", 7) != 0);// doesn't look like an http URL to me.
+  assert (vcl_strncmp(url, "http://", 7) == 0);// doesn't look like an http URL to me.
 
   char const *p = url + 7;
   while (*p && *p!='/')
