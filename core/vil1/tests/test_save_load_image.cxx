@@ -1,4 +1,4 @@
-// This is vxl/vil/tests/test_save_load_image.cxx
+// This is core/vil/tests/test_save_load_image.cxx
 
 //:
 // \file
@@ -18,6 +18,7 @@
 //  1 May 2001 - Peter Vanroose - now using vil_test.h
 // 7 June 2001 - Peter Vanroose - test added for pbm images
 // 14 Apr 2002 - Amitha Perera - switched from vil_test to testlib
+//  6 Jan 2003 - Peter Vanroose - test added for ras images
 // \endverbatim
 
 #include <vcl_string.h>
@@ -464,6 +465,12 @@ MAIN( test_save_load_image )
 #if 1
   vil_test_image_type_raw("bmp", image8);
   vil_test_image_type_raw("bmp", image24);
+#endif
+
+  // Sun raster image
+#if 1
+  vil_test_image_type_raw("ras", image8);
+  vil_test_image_type_raw("ras", image24);
 #endif
 
   // VIFF image (Khoros)
