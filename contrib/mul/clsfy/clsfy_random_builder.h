@@ -74,17 +74,6 @@ public:
   void set_confidence(double);
 };
 
-//: Allows derived class to be loaded by base-class pointer
-//  A loader object exists which is invoked by calls
-//  of the form "vsl_b_read(bfs,base_ptr);".  This loads derived class
-//  objects from the disk, places them on the heap and
-//  returns a base class pointer.
-//  In order to work the loader object requires
-//  an instance of each derived class that might be
-//  found.  This function gives the model class to
-//  the appropriate loader.
-void vsl_add_to_binary_loader(const clsfy_random_builder& b);
-
 //: Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const clsfy_random_builder& b);
 

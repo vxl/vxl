@@ -132,7 +132,4 @@ private:
   vcl_vector<double> min_to_win_;
 };
 
-  //: Allows derived class to be loaded by base-class pointer
-void vsl_add_to_binary_loader(const clsfy_random_classifier& b);
-
 #endif // clsfy_random_classifier_h_
