@@ -16,12 +16,12 @@ void test_vbl_sparse_array_3d(void)
   x(100,200,300) = 100.2003;
 
   Assert("Something in (1,2,3)", x.fullp(1,2,3));
-  Assert("get_addr in (1,2,3)", int(x.get_addr(1,2,3)));
+  Assert("get_addr in (1,2,3)", bool(x.get_addr(1,2,3)));
 
   Assert("x(1,2,3) == 1.23", x(1,2,3) == d);
 
   Assert("Something in (100,200,300)", x.fullp(100,200,300));
-  Assert("get_addr in (100,200,300)", int(x.get_addr(100,200,300)));
+  Assert("get_addr in (100,200,300)", bool(x.get_addr(100,200,300)));
 
   Assert("Nothing in (2,3,4) yet", !x.fullp(2,3,4));
   Assert("Still nothing in (2,3,4)", !x.get_addr(2,3,4));
