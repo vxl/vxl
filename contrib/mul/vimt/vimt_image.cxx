@@ -5,10 +5,12 @@
 //:
 //  \file
 
-#include <vimt/vimt_image.h>
+#include "vimt_image.h"
+#if VCL_CXX_HAS_HEADER_TYPEINFO
+# include <vcl_typeinfo.h>
+#endif
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
-
 //=======================================================================
 
 short vimt_image::version_no() const
@@ -22,7 +24,8 @@ short vimt_image::version_no() const
 // to the same image data with equal step sizes, etc.
 bool vimt_image::operator==(const vimt_image &im) const
 {
-#if VCL_HAS_DYNAMIC_CAST // Use as a proxy for existence of RTTI.
+// Use as a proxy for existence of RTTI support.
+#if VCL_HAS_DYNAMIC_CAST && VCL_CXX_HAS_HEADER_TYPEINFO
   if (typeid(*this) == typeid(im))
 #else
   if (this->is_class(im.is_a()))
