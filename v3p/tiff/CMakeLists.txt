@@ -1,8 +1,8 @@
 # v3p/tiff/CMakeLists.txt
 
-INCLUDE(${MODULE_PATH}/FindNativeTIFF.cmake)
+INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
 
-IF(NOT HAS_NATIVE_TIFF)
+IF(NOT VXL_USING_NATIVE_TIFF)
 
 SET( tiff_sources
   format.h
@@ -67,4 +67,4 @@ ENDIF(UNIX)
 
 ADD_LIBRARY( tiff ${tiff_sources} )
 
-ENDIF(NOT HAS_NATIVE_TIFF)
+ENDIF(NOT VXL_USING_NATIVE_TIFF)

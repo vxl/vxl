@@ -2,7 +2,7 @@
 
 INCLUDE( ${MODULE_PATH}/FindJPEG.cmake )
 
-IF(VXL_USING_NATIVE_JPEG)
+IF(NOT VXL_USING_NATIVE_JPEG)
 
 SET( jpeg_sources
   jconfig.h
@@ -64,4 +64,4 @@ SET( jpeg_sources
 
 ADD_LIBRARY( jpeg ${jpeg_sources} )
 
-ENDIF(VXL_USING_NATIVE_JPEG)
+ENDIF(NOT VXL_USING_NATIVE_JPEG)
