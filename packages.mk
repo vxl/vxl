@@ -25,8 +25,8 @@ IU_PACKAGES := TestLib vcl v3p
 ifndef IUE_ONLY
 # Limit compilation to core TargetJr libraries if TJ_ONLY is set
 ifndef TJ_ONLY
-IU_PACKAGES += vxl mul tbl rpl oxl gel oul brl
-PROGRAMS += conversions
+IU_PACKAGES += core contrib
+PROGRAMS += contrib/conversions
 endif # TJ_ONLY
 endif # IUE_ONLY
 
