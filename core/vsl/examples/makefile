@@ -1,5 +1,8 @@
 USES += vxl
 
+## vil_stream_url uses tcp sockets
+USE_SOCKETS := 1
+
 # Harris corner detector
 MINI_PROG_SOURCES += run_vsl_harris.cxx
 
