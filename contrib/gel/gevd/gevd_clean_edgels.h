@@ -5,18 +5,18 @@
 // \brief Remove edgel chains with (1) end vertices closer than 3 pixels, (2) bridges, (3) self-intersection
 //
 //  In using an edge segmentation for region analysis it is necessary to
-//  eliminate edges that do not perimit the extraction of valid region
+//  eliminate edges that do not permit the extraction of valid region
 //  topology. There are a number of conditions that would defeat a region
 //  analysis algorithm:
 //
 //   1: Too short edges.  If the vertices of an edge closer than 3 pixels,
 //   (where distance is measured by the minimum image distance along the
-//    image axis) and the edgels are all within a pixel of a staight line
+//    image axis) and the edgels are all within a pixel of a straight line
 //   joining the vertices then the edge should be eliminated and replaced
 //   by a single vertex at the midpoint of the original vertices.
 //
 //   2: Insufficient edgels.  In some cases the VDEdgeDetector does not
-//     suppy enough edgels to form a continuous chain between vertices.
+//     supply enough edgels to form a continuous chain between vertices.
 //     This problem appears to happen for n_edgels<=2.
 //
 //   3: Bridges.  There is no point in passing edges which have a vertex
@@ -46,7 +46,7 @@
 
 class gevd_clean_edgels
 {
-public:
+ public:
   gevd_clean_edgels();
   ~gevd_clean_edgels();
   void DoCleanEdgelChains(vcl_vector<vtol_edge_2d_sptr>& in_edgels, vcl_vector<vtol_edge_2d_sptr>& out_edgels, int steps = 10);
@@ -56,7 +56,7 @@ public:
   void FixDefficientEdgels();
   void RemoveJaggies();
   void RemoveLoops();
-protected:
+ protected:
   void print_protection();
   void detect_similar_edges(vcl_vector<vtol_edge_2d_sptr>& common_edges, float tolerance,
                             vcl_vector<vtol_edge_2d_sptr>& deleted_edges);
