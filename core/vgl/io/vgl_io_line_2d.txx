@@ -21,6 +21,8 @@ void vsl_b_write(vsl_b_ostream &os, const vgl_line_2d<T>& v)
 template<class T>
 void vsl_b_read(vsl_b_istream &is, vgl_line_2d<T>& v)
 {
+  if (!is) return;
+
   T a,b,c;
   short w;
   vsl_b_read(is, w);
@@ -34,9 +36,10 @@ void vsl_b_read(vsl_b_istream &is, vgl_line_2d<T>& v)
     break;
 
   default:
-    vcl_cerr << "vsl_b_read(vsl_b_istream_adpt &is, vgl_line_2d<T>& v) ";
-    vcl_cerr << "Unknown version number "<< w << vcl_endl;
-    vcl_abort();
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_line_2d<T>&) \n";
+    vcl_cerr << "           Unknown version number "<< v << "\n";
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
 

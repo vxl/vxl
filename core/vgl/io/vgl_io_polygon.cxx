@@ -22,6 +22,8 @@ void vsl_b_write(vsl_b_ostream &os, const vgl_polygon & p)
 //: Binary load self from stream.
 void vsl_b_read(vsl_b_istream &is, vgl_polygon & p)
 {
+  if (!is) return;
+
   short v;
   vsl_b_read(is, v);
   switch(v)
@@ -45,8 +47,10 @@ void vsl_b_read(vsl_b_istream &is, vgl_polygon & p)
     break;
 
   default:
-    vcl_cerr << "ERROR: vsl_b_read(s, vgl_polygon&): Unknown version number "<< v << vcl_endl;
-    vcl_abort();
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_polygon&) \n";
+    vcl_cerr << "           Unknown version number "<< v << "\n";
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
 
