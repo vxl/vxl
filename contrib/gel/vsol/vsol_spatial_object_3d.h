@@ -149,10 +149,10 @@ public:
 
   //: set user flag 1-6
   inline void set_user_flag(unsigned int flag);
-  inline unsigned int  get_user_flag(unsigned int flag);
+  inline bool get_user_flag(unsigned int flag);
   inline void unset_user_flag(unsigned int flag);
   inline void set_tagged_union_flag();
-  inline unsigned int get_tagged_union_flag();
+  inline bool get_tagged_union_flag();
   inline void unset_tagged_union_flag();
   inline int get_tag_id();
   inline void set_tag_id(int id);
@@ -465,38 +465,37 @@ inline void vsol_spatial_object_3d::set_max_z(float zmax)
 }
 
 
-//: set_ a flag for a spatialObject, flag can be VSOL_FLAG[1-6]
+//: set a flag for a spatial object; flag can be VSOL_FLAG[1-6]
 inline void vsol_spatial_object_3d::set_user_flag(unsigned int flag)
 {
   tag_=(tag_|flag);
 }
 
-//: get_ a flag for a spatialObject, flag can be VSOL_FLAG[1-6] return value is
-//    one or zero.
-inline unsigned int  vsol_spatial_object_3d::get_user_flag(unsigned int flag)
+//: check if a flag is set for a spatial object; flag can be VSOL_FLAG[1-6]
+inline bool vsol_spatial_object_3d::get_user_flag(unsigned int flag)
 {
-  return (tag_&flag) ? 1 : 0;
+  return (tag_&flag) ? true : false;
 }
 
-//: set_ a flag for a spatialObject, flag can be VSOL_FLAG[1-6] value is
-//    set to zero.
+//: un-set a flag for a spatial object; flag can be VSOL_FLAG[1-6]
 inline void vsol_spatial_object_3d::unset_user_flag(unsigned int flag)
 {
   tag_ = ( tag_ & (~flag) );
 }
 
-//: set_ the flag used by TAGGED_UNION.
+//: set the flag used by TAGGED_UNION.
 inline void vsol_spatial_object_3d::set_tagged_union_flag()
 {
   set_user_flag(VSOL_UNIONBIT);
 }
 
-//: get_ the flag used by TAGGED_UNION.
-inline unsigned int vsol_spatial_object_3d::get_tagged_union_flag(void)
+//: check if the flag used by TAGGED_UNION is set.
+inline bool vsol_spatial_object_3d::get_tagged_union_flag(void)
 {
   return get_user_flag(VSOL_UNIONBIT);
 }
 
+//: un-set the flag used by TAGGED_UNION.
 inline void vsol_spatial_object_3d::unset_tagged_union_flag(void)
 {
   unset_user_flag(VSOL_UNIONBIT);
@@ -511,7 +510,6 @@ inline void vsol_spatial_object_3d::print(vcl_ostream &strm) const
 {
   describe(strm);
 }
-
 
 inline void vsol_spatial_object_3d::describe(vcl_ostream &strm,
                                              int blanking) const
