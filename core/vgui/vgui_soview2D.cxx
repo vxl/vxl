@@ -153,6 +153,12 @@ void vgui_soview2D_group::draw() const
     ls[i]->draw();
 }
 
+void vgui_soview2D_group::draw_select() const
+{
+  for (unsigned int i=0; i< ls.size(); i++)
+    ls[i]->draw_select();
+}
+
 float vgui_soview2D_group::distance_squared(float x, float y) const
 {
   if (ls.size() == 0)
@@ -173,7 +179,7 @@ void vgui_soview2D_group::get_centroid(float* x, float* y) const
 {
   *x = 0;
   *y = 0;
-  int n = ls.size();
+  const int n = ls.size();
 
   for (int i=0; i < n; i++)
   {

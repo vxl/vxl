@@ -152,6 +152,10 @@ class vgui_soview2D_group : public vgui_soview2D
   //: Render this 2D soview group on the display.
   virtual void draw() const;
 
+  //: for selection purpose
+  //  see comments in base class
+  virtual void draw_select() const;
+
   //: Print details about this 2D soview group to the given stream.
   virtual vcl_ostream& print(vcl_ostream&) const;
 
