@@ -12,7 +12,7 @@ SET(brct_sources
     brct_structure_estimator.h    brct_structure_estimator.cxx
     brct_epi_reconstructor.h      brct_epi_reconstructor.cxx
     brct_plane_calibrator.h       brct_plane_calibrator.cxx
-    brct_corr.h                   brct_corr.cxx          brct_corr_sptr.h
+    brct_corr.h                   brct_corr.cxx          
     brct_plane_corr.h             brct_plane_corr.cxx    brct_plane_corr_sptr.h
     brct_plane_sweeper_params.h   brct_plane_sweeper_params.cxx      
     brct_plane_sweeper.h          brct_plane_sweeper.cxx      
