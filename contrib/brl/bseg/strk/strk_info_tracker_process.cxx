@@ -13,7 +13,7 @@
 #include <strk/strk_info_tracker_process.h>
 
 strk_info_tracker_process::strk_info_tracker_process(strk_info_tracker_params & tp)
- : tracker_(tp)
+  : tracker_(tp)
 {
   n_verts_ = 0;
   start_frame_ = 0;
@@ -66,29 +66,29 @@ bool strk_info_tracker_process::execute()
       failure_ = true;
       return false;
     }
-    if(tracker_.use_background_&&nto!=2)
-      {
+    if (tracker_.use_background_&&nto!=2)
+    {
       vcl_cout << "In strk_info_tracker_process::execute() -"
                << " no background face\n";
       failure_ = true;
       return false;
-      }
+    }
 
-    if(tracker_.use_background_)
+    if (tracker_.use_background_)
+    {
+      vtol_topology_object_sptr tob = input_topo_objs_[1];
+      vtol_face_sptr fb = tob->cast_to_face();
+      vtol_face_2d_sptr f2db = fb->cast_to_face_2d();
+      if (!f2db)
       {
-        vtol_topology_object_sptr tob = input_topo_objs_[1];
-        vtol_face_sptr fb = tob->cast_to_face();
-        vtol_face_2d_sptr f2db = fb->cast_to_face_2d();
-        if (!f2db)
-          {
-            vcl_cout << "In strk_info_tracker_process::execute() -"
-                     << " background input is not a vtol_face_2d\n";
-            failure_ = true;
-            return false;
-          }
-        tracker_.set_background(f2db);
+        vcl_cout << "In strk_info_tracker_process::execute() -"
+                 << " background input is not a vtol_face_2d\n";
+        failure_ = true;
+        return false;
       }
-    
+      tracker_.set_background(f2db);
+    }
+
     vcl_vector<vtol_vertex_sptr> verts;
     f2d->vertices(verts);
     n_verts_ = verts.size();
@@ -117,8 +117,7 @@ bool strk_info_tracker_process::execute()
     for (vcl_vector<vtol_face_2d_sptr>::iterator fit = samples.begin();
         fit != samples.end(); fit++)
     {
-      vtol_topology_object_sptr to =
-        (vtol_topology_object*)((*fit)->cast_to_face());
+      vtol_topology_object_sptr to = (*fit)->cast_to_topology_object();
       output_topo_objs_.push_back(to);
     }
 #endif
@@ -140,18 +139,18 @@ bool strk_info_tracker_process::execute()
     vtol_topology_object_sptr to = (*eit)->cast_to_edge();
     output_topo_objs_.push_back(to);
   }
-  if(tracker_.use_background_)
+  if (tracker_.use_background_)
+  {
+    vtol_face_2d_sptr fb = tracker_.current_background();
+    vcl_vector<vtol_edge_sptr> bedges;
+    fb->edges(bedges);
+    for (vcl_vector<vtol_edge_sptr>::iterator eit = bedges.begin();
+         eit != bedges.end(); eit++)
     {
-      vtol_face_2d_sptr fb = tracker_.current_background();
-      vcl_vector<vtol_edge_sptr> bedges;
-      fb->edges(bedges);
-      for (vcl_vector<vtol_edge_sptr>::iterator eit = bedges.begin();
-           eit != bedges.end(); eit++)
-        {
-          vtol_topology_object_sptr to = (*eit)->cast_to_edge();
-          output_topo_objs_.push_back(to);
-        }
+      vtol_topology_object_sptr to = (*eit)->cast_to_edge();
+      output_topo_objs_.push_back(to);
     }
+  }
 #endif
   return true;
 }
