@@ -3,16 +3,18 @@
 INCLUDE(${MODULE_PATH}/FindPNG.cmake)
 IF(PNG_FOUND)
   INCLUDE_DIRECTORIES( ${PNG_INCLUDE_DIR})
-  ADD_DEFINITIONS( ${PNG_DEFINITIONS}  -DHAS_PNG )
+  ADD_DEFINITIONS( ${PNG_DEFINITIONS}  -DHAS_PNG=1 )
   SET( vil_sources ${vil_sources}
     file_formats/vil_png.cxx file_formats/vil_png.h
   )
+ELSE(PNG_FOUND)
+  ADD_DEFINITIONS( -DHAS_PNG=0 )
 ENDIF(PNG_FOUND)
 
 INCLUDE(${MODULE_PATH}/FindJPEG.cmake)
 IF(JPEG_FOUND)
   INCLUDE_DIRECTORIES( ${JPEG_INCLUDE_DIR} )
-  ADD_DEFINITIONS( ${JPEG_DEFINITIONS} -DHAS_JPEG )
+  ADD_DEFINITIONS( ${JPEG_DEFINITIONS} -DHAS_JPEG=1 )
   SET( vil_sources ${vil_sources}
     file_formats/vil_jpeglib.h
     file_formats/vil_jpeg.cxx                 file_formats/vil_jpeg.h
@@ -21,15 +23,19 @@ IF(JPEG_FOUND)
     file_formats/vil_jpeg_destination_mgr.cxx file_formats/vil_jpeg_destination_mgr.h
     file_formats/vil_jpeg_compressor.cxx      file_formats/vil_jpeg_compressor.h
   )
+ELSE(JPEG_FOUND)
+  ADD_DEFINITIONS( -DHAS_JPEG=0 )
 ENDIF(JPEG_FOUND)
 
 INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
 IF(TIFF_FOUND)
   INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
-  ADD_DEFINITIONS( ${TIFF_DEFINITIONS} -DHAS_TIFF )
+  ADD_DEFINITIONS( ${TIFF_DEFINITIONS} -DHAS_TIFF=1 )
   SET( vil_sources ${vil_sources}
     file_formats/vil_tiff.cxx file_formats/vil_tiff.h
   )
+ELSE(TIFF_FOUND)
+  ADD_DEFINITIONS( -DHAS_TIFF=0 )
 ENDIF(TIFF_FOUND)
 
 SET( vil_sources ${vil_sources}

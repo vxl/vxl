@@ -30,8 +30,10 @@ class vil_pixel_traits<bool>
   typedef bool component_type;
 };
 
+#if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
 class vil_pixel_traits<bool const> : public vil_pixel_traits<bool> {};
+#endif
 
 VCL_DEFINE_SPECIALIZATION
 class vil_pixel_traits<char>
@@ -41,8 +43,10 @@ class vil_pixel_traits<char>
   typedef bool component_type;
 };
 
+#if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
 class vil_pixel_traits<char const> : public vil_pixel_traits<char> {};
+#endif
 
 VCL_DEFINE_SPECIALIZATION
 class vil_pixel_traits<unsigned char>
@@ -52,8 +56,10 @@ class vil_pixel_traits<unsigned char>
   typedef unsigned char component_type;
 };
 
+#if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
 class vil_pixel_traits<unsigned char const> : public vil_pixel_traits<unsigned char> {};
+#endif
 
 VCL_DEFINE_SPECIALIZATION
 class vil_pixel_traits<signed char>
@@ -63,8 +69,10 @@ class vil_pixel_traits<signed char>
   typedef signed char component_type;
 };
 
+#if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
 class vil_pixel_traits<signed char const> : public vil_pixel_traits<signed char> {};
+#endif
 
 VCL_DEFINE_SPECIALIZATION
 class vil_pixel_traits<short>
@@ -74,8 +82,10 @@ class vil_pixel_traits<short>
   typedef short component_type;
 };
 
+#if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
 class vil_pixel_traits<short const> : public vil_pixel_traits<short> {};
+#endif
 
 VCL_DEFINE_SPECIALIZATION
 class vil_pixel_traits<unsigned short>
@@ -85,8 +95,10 @@ class vil_pixel_traits<unsigned short>
   typedef unsigned short component_type;
 };
 
+#if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
 class vil_pixel_traits<unsigned short const> : public vil_pixel_traits<unsigned short> {};
+#endif
 
 VCL_DEFINE_SPECIALIZATION
 class vil_pixel_traits<int>
@@ -96,8 +108,10 @@ class vil_pixel_traits<int>
   typedef int component_type;
 };
 
+#if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
 class vil_pixel_traits<int const> : public vil_pixel_traits<int> {};
+#endif
 
 VCL_DEFINE_SPECIALIZATION
 class vil_pixel_traits<unsigned int>
@@ -107,8 +121,10 @@ class vil_pixel_traits<unsigned int>
   typedef unsigned int component_type;
 };
 
+#if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
 class vil_pixel_traits<unsigned int const> : public vil_pixel_traits<unsigned int> {};
+#endif
 
 VCL_DEFINE_SPECIALIZATION
 class vil_pixel_traits<long>
@@ -118,8 +134,10 @@ class vil_pixel_traits<long>
   typedef long component_type;
 };
 
+#if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
 class vil_pixel_traits<long const> : public vil_pixel_traits<long > {};
+#endif
 
 VCL_DEFINE_SPECIALIZATION
 class vil_pixel_traits<unsigned long>
@@ -129,8 +147,10 @@ class vil_pixel_traits<unsigned long>
   typedef unsigned long component_type;
 };
 
+#if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
 class vil_pixel_traits<unsigned long const> : public vil_pixel_traits<unsigned long> {};
+#endif
 
 VCL_DEFINE_SPECIALIZATION
 class vil_pixel_traits<float>
@@ -140,8 +160,10 @@ class vil_pixel_traits<float>
   typedef float component_type;
 };
 
+#if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
 class vil_pixel_traits<float const> : public vil_pixel_traits<float> {};
+#endif
 
 VCL_DEFINE_SPECIALIZATION
 class vil_pixel_traits<double>
@@ -151,8 +173,10 @@ class vil_pixel_traits<double>
   typedef double component_type;
 };
 
+#if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
 class vil_pixel_traits<double const> : public vil_pixel_traits<double> {};
+#endif
 
 VCL_DEFINE_SPECIALIZATION
 class vil_pixel_traits<long double>
@@ -162,8 +186,10 @@ class vil_pixel_traits<long double>
   typedef long double component_type;
 };
 
+#if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
 class vil_pixel_traits<long double const> : public vil_pixel_traits<long double> {};
+#endif
 
 // Define default implementation which assumes that T is compound type which
 // declares the STL-like value_type typedef.

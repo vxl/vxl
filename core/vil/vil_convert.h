@@ -138,6 +138,7 @@ macro( vil_rgba<vxl_byte> )
 VCL_DEFINE_SPECIALIZATION \
 inline void vil_convert_cast_pixel<in,vcl_complex<double> >::operator () (in v, vcl_complex<double>& d) const \
 { d = vcl_complex<double>(double(v),0.0); } \
+VCL_DEFINE_SPECIALIZATION \
 inline void vil_convert_cast_pixel<in,vcl_complex<float> >::operator () (in v, vcl_complex<float>& d) const \
 { d = vcl_complex<float>(float(v),0.0f); }
 macro( vxl_byte )
@@ -151,6 +152,7 @@ macro( vxl_uint_32 )
 VCL_DEFINE_SPECIALIZATION \
 inline void vil_convert_cast_pixel<vcl_complex<double>,out >::operator () (vcl_complex<double> d, out& v) const \
 { v = (out)(d.real()); } \
+VCL_DEFINE_SPECIALIZATION \
 inline void vil_convert_cast_pixel<vcl_complex<float>,out >::operator () (vcl_complex<float> d, out& v) const \
 { v = (out)(d.real()); }
 macro( vxl_byte )

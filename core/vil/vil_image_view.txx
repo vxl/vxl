@@ -735,9 +735,24 @@ bool vil_image_view_deep_equality(const vil_image_view<T> &lhs,
   return true;
 }
 
+//=======================================================================
+
+// Specializations must be declared in all translation units where
+// they are used.  Since we do not know what instantiations will be
+// defined, and each requires a specialization, we define the primary
+// template of is_a to call a function that will be declared and
+// specialized only in the instantiation translation units.
+template <class T> vcl_string vil_image_view_type_name(T*);
+
+template <class T>
+vcl_string vil_image_view<T>::is_a() const
+{
+  return vil_image_view_type_name(static_cast<T*>(0));
+}
+
 #define VIL_IMAGE_VIEW_INSTANTIATE(T) \
-VCL_DEFINE_SPECIALIZATION vcl_string vil_image_view<T >::is_a() const \
-{  return vcl_string("vil_image_view<" #T ">"); }\
+VCL_DEFINE_SPECIALIZATION vcl_string vil_image_view_type_name<T >(T*) \
+{ return vcl_string("vil_image_view<" #T ">"); } \
 template class vil_image_view<T >; \
 template bool vil_image_view_deep_equality(const vil_image_view<T >&, \
                                            const vil_image_view<T >&)

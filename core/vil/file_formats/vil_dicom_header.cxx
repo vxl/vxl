@@ -11,6 +11,7 @@
 #include "vil_dicom_header.h"
 #include <vil/vil_stream.h>
 #include <vcl_iostream.h>
+#include <vcl_cstdlib.h>
 
 //================================================================
 // Default constructor
@@ -381,14 +382,14 @@ void vil_dicom_header_format::readIdentifyingElements(short element,
    CASE(VIL_DICOM_HEADER_IDIMAGETYPE,         image_id_type_, (char *)); // It's the image type
    CASE(VIL_DICOM_HEADER_IDSOPCLASSID,        sop_cl_uid_, (char *)); // It's the SOP class ID
    CASE(VIL_DICOM_HEADER_IDSOPINSTANCEID,     sop_in_uid_, (char *)); // It's the SOP instance ID
-   CASE(VIL_DICOM_HEADER_IDSTUDYDATE,         study_date_,atol); // It's the study date
-   CASE(VIL_DICOM_HEADER_IDSERIESDATE,        series_date_,atol); // It's the series date
-   CASE(VIL_DICOM_HEADER_IDACQUISITIONDATE,   acquisition_date_,atol); // It's the acquisition date
-   CASE(VIL_DICOM_HEADER_IDIMAGEDATE,         image_date_,atol); // It's the image date
-   CASE(VIL_DICOM_HEADER_IDSTUDYTIME,         study_time_,(float)atof); // It's the study time
-   CASE(VIL_DICOM_HEADER_IDSERIESTIME,        series_time_,(float)atof); // It's the series time
-   CASE(VIL_DICOM_HEADER_IDACQUISITIONTIME,   acquisition_time_,(float)atof); // It's the acquisition time
-   CASE(VIL_DICOM_HEADER_IDIMAGETIME,         image_time_,(float)atof); // It's the image time
+   CASE(VIL_DICOM_HEADER_IDSTUDYDATE,         study_date_,vcl_atol); // It's the study date
+   CASE(VIL_DICOM_HEADER_IDSERIESDATE,        series_date_,vcl_atol); // It's the series date
+   CASE(VIL_DICOM_HEADER_IDACQUISITIONDATE,   acquisition_date_,vcl_atol); // It's the acquisition date
+   CASE(VIL_DICOM_HEADER_IDIMAGEDATE,         image_date_,vcl_atol); // It's the image date
+   CASE(VIL_DICOM_HEADER_IDSTUDYTIME,         study_time_,(float)vcl_atof); // It's the study time
+   CASE(VIL_DICOM_HEADER_IDSERIESTIME,        series_time_,(float)vcl_atof); // It's the series time
+   CASE(VIL_DICOM_HEADER_IDACQUISITIONTIME,   acquisition_time_,(float)vcl_atof); // It's the acquisition time
+   CASE(VIL_DICOM_HEADER_IDIMAGETIME,         image_time_,(float)vcl_atof); // It's the image time
    CASE(VIL_DICOM_HEADER_IDACCESSIONNUMBER,   accession_number_, (char *)); // It's the accession number
    CASE(VIL_DICOM_HEADER_IDMODALITY,          modality_, (char *)); // It's the imaging modality
    CASE(VIL_DICOM_HEADER_IDMANUFACTURER,      manufacturer_, (char *)); // It's the manufacturer name
@@ -423,10 +424,10 @@ void vil_dicom_header_format::readPatientElements(short element,
   {
    CASE(VIL_DICOM_HEADER_PIPATIENTNAME,     patient_name_, (char *)); // It's the patient's name
    CASE(VIL_DICOM_HEADER_PIPATIENTID,       patient_id_, (char *)); // It's the patient's id
-   CASE(VIL_DICOM_HEADER_PIPATIENTBIRTHDATE,patient_dob_,atol); // It's the patient's date of birth
+   CASE(VIL_DICOM_HEADER_PIPATIENTBIRTHDATE,patient_dob_,vcl_atol); // It's the patient's date of birth
    CASE(VIL_DICOM_HEADER_PIPATIENTSEX,      patient_sex_, (char *)); // It's the patient's sex
    CASE(VIL_DICOM_HEADER_PIPATIENTAGE,      patient_age_, (char *)); // It's the patient's age
-   CASE(VIL_DICOM_HEADER_PIPATIENTWEIGHT,   patient_weight_,(float)atof); // It's the patient's weight
+   CASE(VIL_DICOM_HEADER_PIPATIENTWEIGHT,   patient_weight_,(float)vcl_atof); // It's the patient's weight
    CASE(VIL_DICOM_HEADER_PIPATIENTHISTORY,  patient_hist_, (char *)); // It's the patient's history
    default: // It's nothing we want, so skip it!
     fs.seek(dblock_size + fs.tell());
@@ -454,26 +455,26 @@ void vil_dicom_header_format::readAcquisitionElements(short element,
    CASE(VIL_DICOM_HEADER_AQMRACQUISITIONTYPE,     mr_acq_type_, (char *)); // It's the MR acquisition type
    CASE(VIL_DICOM_HEADER_AQSEQUENCENAME,          sequence_name_, (char *)); // It's the sequence name
    CASE(VIL_DICOM_HEADER_AQANGIOFLAG,             angio_flag_, (char *)); // It's the angio flag
-   CASE(VIL_DICOM_HEADER_AQSLICETHICKNESS,        slice_thickness_,(float)atof); // It's the slice thickness
-   CASE(VIL_DICOM_HEADER_AQREPETITIONTIME,        repetition_time_,(float)atof); // It's the repetition time
-   CASE(VIL_DICOM_HEADER_AQECHOTIME,              echo_time_,(float)atof); // It's the echo time
-   CASE(VIL_DICOM_HEADER_AQINVERSIONTIME,         inversion_time_,(float)atof); // It's the inversion time
-   CASE(VIL_DICOM_HEADER_AQNUMBEROFAVERAGES,      number_of_averages_,(float)atof); // It's the number of averages
-   CASE(VIL_DICOM_HEADER_AQECHONUMBERS,           echo_numbers_,atoi); // It's the echo numbers
-   CASE(VIL_DICOM_HEADER_AQMAGNETICFIELDSTRENGTH, mag_field_strength_,(float)atof); // It's the magnetic field strength
-   CASE(VIL_DICOM_HEADER_AQSLICESPACING,          slice_spacing_,(float)atof); // It's the slice spacing
-   CASE(VIL_DICOM_HEADER_AQECHOTRAINLENGTH,       echo_train_length_,atoi); // It's the echo train length
-   CASE(VIL_DICOM_HEADER_AQPIXELBANDWIDTH,        pixel_bandwidth_,(float)atof); // It's the pixel bandwidth
+   CASE(VIL_DICOM_HEADER_AQSLICETHICKNESS,        slice_thickness_,(float)vcl_atof); // It's the slice thickness
+   CASE(VIL_DICOM_HEADER_AQREPETITIONTIME,        repetition_time_,(float)vcl_atof); // It's the repetition time
+   CASE(VIL_DICOM_HEADER_AQECHOTIME,              echo_time_,(float)vcl_atof); // It's the echo time
+   CASE(VIL_DICOM_HEADER_AQINVERSIONTIME,         inversion_time_,(float)vcl_atof); // It's the inversion time
+   CASE(VIL_DICOM_HEADER_AQNUMBEROFAVERAGES,      number_of_averages_,(float)vcl_atof); // It's the number of averages
+   CASE(VIL_DICOM_HEADER_AQECHONUMBERS,           echo_numbers_,vcl_atoi); // It's the echo numbers
+   CASE(VIL_DICOM_HEADER_AQMAGNETICFIELDSTRENGTH, mag_field_strength_,(float)vcl_atof); // It's the magnetic field strength
+   CASE(VIL_DICOM_HEADER_AQSLICESPACING,          slice_spacing_,(float)vcl_atof); // It's the slice spacing
+   CASE(VIL_DICOM_HEADER_AQECHOTRAINLENGTH,       echo_train_length_,vcl_atoi); // It's the echo train length
+   CASE(VIL_DICOM_HEADER_AQPIXELBANDWIDTH,        pixel_bandwidth_,(float)vcl_atof); // It's the pixel bandwidth
    CASE(VIL_DICOM_HEADER_AQSOFTWAREVERSION,       software_vers_, (char *)); // It's the scanner software version
    CASE(VIL_DICOM_HEADER_AQPROTOCOLNAME,          protocol_name_, (char *)); // It's the protocol name
-   CASE(VIL_DICOM_HEADER_AQHEARTRATE,             heart_rate_,atoi); // It's the heart rate
-   CASE(VIL_DICOM_HEADER_AQCARDIACNUMBEROFIMAGES, card_num_images_,atoi); // It's the cardiac number of images
-   CASE(VIL_DICOM_HEADER_AQTRIGGERWINDOW,         trigger_window_,atoi); // It's the trigger window
-   CASE(VIL_DICOM_HEADER_AQRECONTRUCTIONDIAMETER, reconst_diameter_,(float)atof); // It's the reconstruction diameter
+   CASE(VIL_DICOM_HEADER_AQHEARTRATE,             heart_rate_,vcl_atoi); // It's the heart rate
+   CASE(VIL_DICOM_HEADER_AQCARDIACNUMBEROFIMAGES, card_num_images_,vcl_atoi); // It's the cardiac number of images
+   CASE(VIL_DICOM_HEADER_AQTRIGGERWINDOW,         trigger_window_,vcl_atoi); // It's the trigger window
+   CASE(VIL_DICOM_HEADER_AQRECONTRUCTIONDIAMETER, reconst_diameter_,(float)vcl_atof); // It's the reconstruction diameter
    CASE(VIL_DICOM_HEADER_AQRECEIVINGCOIL,         receiving_coil_, (char *)); // It's the receiving coil
    CASE(VIL_DICOM_HEADER_AQPHASEENCODINGDIRECTION,phase_enc_dir_, (char *)); // It's the phase encoding direction
-   CASE(VIL_DICOM_HEADER_AQFLIPANGLE,             flip_angle_,(float)atof); // It's the flip angle
-   CASE(VIL_DICOM_HEADER_AQSAR,                   sar_,(float)atof); // It's the sar
+   CASE(VIL_DICOM_HEADER_AQFLIPANGLE,             flip_angle_,(float)vcl_atof); // It's the flip angle
+   CASE(VIL_DICOM_HEADER_AQSAR,                   sar_,(float)vcl_atof); // It's the sar
    CASE(VIL_DICOM_HEADER_AQPATIENTPOSITION,       patient_pos_, (char *)); // It's the patient position
    default: // It's nothing we want, so skip it!
     fs.seek(dblock_size + fs.tell());
@@ -498,16 +499,16 @@ void vil_dicom_header_format::readRelationshipElements(short element,
    CASE(VIL_DICOM_HEADER_RSSTUDYINSTANCEUID,   stud_ins_uid_, (char *)); // It's the study instance id
    CASE(VIL_DICOM_HEADER_RSSERIESINSTANCEUID,  ser_ins_uid_, (char *)); // It's the series instance id
    CASE(VIL_DICOM_HEADER_RSSTUDYID,            study_id_, (char *)); // It's the study id
-   CASE(VIL_DICOM_HEADER_RSSERIESNUMBER,       series_number_,atoi); // It's the series number
-   CASE(VIL_DICOM_HEADER_RSAQUISITIONNUMBER,   acquisition_number_,atoi); // It's the acqusition number
-   CASE(VIL_DICOM_HEADER_RSIMAGENUMBER,        image_number_,atoi); // It's the image number
+   CASE(VIL_DICOM_HEADER_RSSERIESNUMBER,       series_number_,vcl_atoi); // It's the series number
+   CASE(VIL_DICOM_HEADER_RSAQUISITIONNUMBER,   acquisition_number_,vcl_atoi); // It's the acqusition number
+   CASE(VIL_DICOM_HEADER_RSIMAGENUMBER,        image_number_,vcl_atoi); // It's the image number
    CASE(VIL_DICOM_HEADER_RSPATIENTORIENTATION, pat_orient_, (char *)); // It's the patient orientation
    CASE(VIL_DICOM_HEADER_RSIMAGEPOSITION,      image_pos_, (char *)); // It's the image position
    CASE(VIL_DICOM_HEADER_RSIMAGEORIENTATION,   image_orient_, (char *)); // It's the image orientation
    CASE(VIL_DICOM_HEADER_RSFRAMEOFREFERENCEUID,frame_of_ref_, (char *)); // It's the frame of reference uid
-   CASE(VIL_DICOM_HEADER_RSIMAGESINACQUISITION,images_in_acq_,atoi); // It's the number of images in the acquisition
+   CASE(VIL_DICOM_HEADER_RSIMAGESINACQUISITION,images_in_acq_,vcl_atoi); // It's the number of images in the acquisition
    CASE(VIL_DICOM_HEADER_RSPOSITIONREFERENCE,  pos_ref_ind_, (char *)); // It's the position reference
-   CASE(VIL_DICOM_HEADER_RSSLICELOCATION,      slice_location_,(float) atof); // It's the slice location
+   CASE(VIL_DICOM_HEADER_RSSLICELOCATION,      slice_location_,(float) vcl_atof); // It's the slice location
    default: // It's nothing we want, so skip it!
     fs.seek(dblock_size + fs.tell());
     break;
@@ -542,17 +543,17 @@ void vil_dicom_header_format::readImageElements(short element,
    CASE_SWP(VIL_DICOM_HEADER_IMSMALLIMPIXELVALUE,  small_im_pix_val_); // It's the smallest image pixel value
    CASE_SWP(VIL_DICOM_HEADER_IMLARGEIMPIXELVALUE,  large_im_pix_val_); // It's the largest image pixel value
    CASE_SWP(VIL_DICOM_HEADER_IMPIXELPADDINGVALUE,  pixel_padding_val_); // It's the pixel padding value
-   CASE(VIL_DICOM_HEADER_IMWINDOWCENTER,           window_centre_,(float) atof); // It's the window centre
-   CASE(VIL_DICOM_HEADER_IMWINDOWWIDTH,            window_width_,(float) atof); // It's the window width
-   CASE(VIL_DICOM_HEADER_IMRESCALEINTERCEPT,       res_intercept_,(float) atof); // It's the rescale intercept
-   CASE(VIL_DICOM_HEADER_IMRESCALESLOPE,           res_slope_,(float) atof); // It's the rescale slope
+   CASE(VIL_DICOM_HEADER_IMWINDOWCENTER,           window_centre_,(float) vcl_atof); // It's the window centre
+   CASE(VIL_DICOM_HEADER_IMWINDOWWIDTH,            window_width_,(float) vcl_atof); // It's the window width
+   CASE(VIL_DICOM_HEADER_IMRESCALEINTERCEPT,       res_intercept_,(float) vcl_atof); // It's the rescale intercept
+   CASE(VIL_DICOM_HEADER_IMRESCALESLOPE,           res_slope_,(float) vcl_atof); // It's the rescale slope
    case VIL_DICOM_HEADER_IMPIXELSPACING : // It's the pixel spacing
     data_p = new char[dblock_size+1];
     if (data_p)
     {
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
-      last_read_.xsize_ = (float) atof(data_p);
+      last_read_.xsize_ = (float) vcl_atof(data_p);
 
       // The y size should come after a '\'
       // If only a 0 is found, ysize = xsize
@@ -564,7 +565,7 @@ void vil_dicom_header_format::readImageElements(short element,
           data_p[i] = data_p[i+1];
       }
       if (gone == '\\')
-        last_read_.ysize_ = (float) atof(data_p);
+        last_read_.ysize_ = (float) vcl_atof(data_p);
       else
         last_read_.ysize_ = (float) last_read_.xsize_;
     }
