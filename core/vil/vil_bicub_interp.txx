@@ -114,13 +114,15 @@ double vil_bicub_interp_raw(double x, double y, const T* data,
         // miscompiles the computation of 'val' in this section of
         // code.  It appears that the computation of 'val' is lumped
         // into one large operation that is not handled properly,
-        // resulting in incorrect arithmetic.  After a lot of
-        // experimentation I have found that if we force the compiler
-        // to split the computation of 'val' into two parts by
-        // assigning 'val' to a static variable here, then the
-        // compilation and tests are OK.  In the past this bug was
-        // dealt with by turning optimization off for this file under
-        // MSVC, but this is a much better solution. --Fred Wheeler
+        // resulting in incorrect arithmetic.  The very similar
+        // section of code below, for the normx==0.0 case works fine.
+        // After a lot of experimentation I have found that if we
+        // force the compiler to split the computation of 'val' here
+        // into two parts by assigning 'val' to a static variable
+        // here, then the compilation and tests are OK.  In the past
+        // this bug was dealt with by turning optimization off for
+        // this file under MSVC, but this is a much better
+        // solution. --Fred Wheeler
         vil_bicub_interp_raw_temp_hack = val;
 #endif
 
