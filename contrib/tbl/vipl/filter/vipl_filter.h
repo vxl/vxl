@@ -277,9 +277,9 @@ class vipl_filter          : public vipl_filter_abs {
   bool put_in_data_ptr(ImgIn const* fpointer, int index=0);
 
   //:
-  // Return the a pointer to the input ``image'' at the
+  // Return a smart pointer to the input ``image'' at the
   // provided index. Increments refcount before returning
-  const ImgIn* in_data_ptr( int index=0);
+  inimagept in_data_ptr( int index=0);
 
   //:
   // Return a ref to the input ``data object'' at the provided

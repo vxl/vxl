@@ -402,7 +402,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
 // Return the a pointer to the input ``functions'' at the provided
 // index. Increments refcount before returning
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>
-  const ImgIn* vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
+  vbl_smart_ptr<ImgIn const> vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
                           ::in_data_ptr(int index)
 {
   if(0 <= index && index < numinputs()) return inf()[index];
