@@ -44,6 +44,7 @@
 //   but barfs when an vnl_vector<int> is declared nearby.
 
 #include <vcl/vcl_iosfwd.h>
+#include <vnl/vnl_tag.h>
 #include <vnl/vnl_error.h>
 #include <vnl/vnl_c_vector.h>
 
@@ -80,6 +81,18 @@ public:
     : num_rows(that.num_rows), num_cols(that.num_cols), data(that.data) 
     { that.num_cols=that.num_rows=0; that.data=0; }
   //vnl_matrix(const DiagMatrix<T>&); this confuses g++ 2.7.2 When an vnl_vector<int> is declared nearby...
+  // <internal>
+  // These constructors are here so that operator* etc can take
+  // advantage of the C++ return value optimization.
+  vnl_matrix (vnl_matrix<T> const &, vnl_matrix<T> const &, vnl_tag_add); // M + M
+  vnl_matrix (vnl_matrix<T> const &, vnl_matrix<T> const &, vnl_tag_sub); // M - M
+  vnl_matrix (vnl_matrix<T> const &, T,                     vnl_tag_mul); // M * s
+  vnl_matrix (vnl_matrix<T> const &, T,                     vnl_tag_div); // M / s
+  vnl_matrix (vnl_matrix<T> const &, T,                     vnl_tag_add); // M + s
+  vnl_matrix (vnl_matrix<T> const &, T,                     vnl_tag_sub); // M - s
+  vnl_matrix (vnl_matrix<T> const &, vnl_matrix<T> const &, vnl_tag_mul); // M * M
+  vnl_matrix (vnl_matrix<T> const &, vnl_tag_grab); // magic
+  // </internal>
   ~vnl_matrix();
 
   // -- Return number of rows/columns/elements
@@ -123,27 +136,27 @@ public:
   vnl_matrix<T>& operator-= (vnl_matrix<T> const&);
   vnl_matrix<T>& operator*= (vnl_matrix<T> const&);
 
-  vnl_matrix<T> operator- () const;	    // negation and 
-  vnl_matrix<T> operator+ (T const&) const; // all binary operations 
-  vnl_matrix<T> operator- (T const&) const; // return by values.
-  vnl_matrix<T> operator* (T const&) const; //
-  vnl_matrix<T> operator/ (T const&) const;
+  vnl_matrix<T> operator- () const;
+  vnl_matrix<T> operator+ (T const& v) const { return vnl_matrix<T>(*this, v, vnl_tag_add()); }
+  vnl_matrix<T> operator- (T const& v) const { return vnl_matrix<T>(*this, v, vnl_tag_sub()); }
+  vnl_matrix<T> operator* (T const& v) const { return vnl_matrix<T>(*this, v, vnl_tag_mul()); }
+  vnl_matrix<T> operator/ (T const& v) const { return vnl_matrix<T>(*this, v, vnl_tag_div()); }
 
-  vnl_matrix<T> operator+ (vnl_matrix<T> const& rhs) const;
-  vnl_matrix<T> operator- (vnl_matrix<T> const& rhs) const;
-  vnl_matrix<T> operator* (vnl_matrix<T> const& rhs) const;
+  vnl_matrix<T> operator+ (vnl_matrix<T> const& rhs) const { return vnl_matrix<T>(*this, rhs, vnl_tag_add()); }
+  vnl_matrix<T> operator- (vnl_matrix<T> const& rhs) const { return vnl_matrix<T>(*this, rhs, vnl_tag_sub()); }
+  vnl_matrix<T> operator* (vnl_matrix<T> const& rhs) const { return vnl_matrix<T>(*this, rhs, vnl_tag_mul()); }
 
   ////--------------------------- Additions ----------------------------
-  
-  //
+
+  // make new matrix by applying function to each element.
   vnl_matrix<T> apply(T (*f)(T)) const;
   vnl_matrix<T> apply(T (*f)(T const&)) const;
 
-  // transpose 
+  // transpose(s).
   vnl_matrix<T> transpose () const;           // transpose row/column.
   vnl_matrix<T> conjugate_transpose () const; // transpose and conjugate.
 
-  // submatrices
+  // submatrices.
   vnl_matrix<T>& update (vnl_matrix<T> const&, unsigned top=0, unsigned left=0);
   void set_column(unsigned col_index, T const *);
   void set_column(unsigned col_index, T value );
@@ -169,7 +182,8 @@ public:
   void normalize_columns();
   void scale_row   (unsigned row, T value);
   void scale_column(unsigned col, T value);
-  
+  void swap(vnl_matrix<T> &);
+
   // norms etc. see vnl_c_vector<T> for the meaning of the norms.
   typedef typename vnl_c_vector<T>::abs_t abs_t;
   abs_t fro_norm() const { return vnl_c_vector<T>::two_norm(begin(), size()); }
@@ -231,7 +245,7 @@ public:
   void print(ostream& os) const;
 
   //--------------------------------------------------------------------------------
-  bool resize (unsigned r, unsigned c); // True if size changes
+  bool resize (unsigned r, unsigned c); // returns true if size changed.
 
 protected:
   unsigned num_rows;   // Number of rows
@@ -265,6 +279,9 @@ protected:
 // Definitions of inline functions.
 //
 
+template<class T>
+inline void swap(vnl_matrix<T> &A, vnl_matrix<T> &B) { A.swap(B); }
+
 // get -- Returns the value of the element at specified row and column. O(1).
 // Checks for valid range of indices.
 
@@ -294,14 +311,6 @@ inline void vnl_matrix<T>::put (unsigned row, unsigned column, T const& value) {
 }
 
 
-// operator- -- Returns new matrix with elements of lhs matrix substacted
-// with value. O(m*n).
-
-template<class T> 
-inline vnl_matrix<T> vnl_matrix<T>::operator-(T const& value) const {
-  return (*this) + (- value);
-}
-
 // operator*= -- Multiplies lhs matrix with rhs matrix, 
 // then assigns the product to lhs matrix. O(n^3).
 
@@ -311,40 +320,16 @@ inline vnl_matrix<T>& vnl_matrix<T>::operator*= (vnl_matrix<T> const&rhs) {
   return *this;
 }
 
-// -- 
-
-template<class T>
-inline vnl_matrix<T> vnl_matrix<T>::operator+ (vnl_matrix<T> const& rhs) const {
-  vnl_matrix<T> result(*this);
-  result += rhs;
-  return result;
-}
-
-// -- Returns a new matrix containing the addition/substraction 
-// of two matrices m1 and m2.
-
-template<class T>
-inline vnl_matrix<T> vnl_matrix<T>::operator- (vnl_matrix<T> const& rhs) const {
-  vnl_matrix<T> result(*this);
-  result -= rhs;
-  return result;
-}
-
-// -- Returns new matrix with elements of matrix m added with
-// value. O(m*n).
-
-template<class T> 
-inline vnl_matrix<T> operator+ (T const& value, vnl_matrix<T> const& m) {
-  return m + value;
-}
-
-
-// -- Returns new matrix with elements of matrix m multiplied with
-// value. O(m*n).
+// non-member arithmetical operators.
 
 template<class T> 
 inline vnl_matrix<T> operator* (T const& value, vnl_matrix<T> const& m) {
-  return m * value;
+  return vnl_matrix<T>(m, value, vnl_tag_mul());
+}
+
+template<class T> 
+inline vnl_matrix<T> operator+ (T const& value, vnl_matrix<T> const& m) {
+  return vnl_matrix<T>(m, value, vnl_tag_add());
 }
 
 #endif // vnl_matrix_h_

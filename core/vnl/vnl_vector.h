@@ -19,34 +19,36 @@
 // time, use vnl_vector_fixed* or vnl_T_n (e.g. vnl_double_3).
 
 #include <vcl/vcl_iosfwd.h>
+#include <vnl/vnl_tag.h>
 #include <vnl/vnl_error.h>
 #include <vnl/vnl_c_vector.h>
 
 template <class T> class vnl_vector;
 template <class T> class vnl_matrix;
 
-//--------------------------------------------------------------------------------
-
-template <class T> T             dot_product (vnl_vector<T> const&, vnl_vector<T> const&);
-template <class T> T             inner_product (vnl_vector<T> const&, vnl_vector<T> const&);
-template <class T> T             bracket (vnl_vector<T> const &,
-					  vnl_matrix<T> const &, 
-					  vnl_vector<T> const &);
-template <class T> T             cos_angle(vnl_vector<T> const&, vnl_vector<T> const& );
-template <class T> double        angle (vnl_vector<T> const&, vnl_vector<T> const&);
-template <class T> vnl_matrix<T> outer_product (vnl_vector<T> const&, vnl_vector<T> const&);
-template <class T> vnl_vector<T> operator+(T const, vnl_vector<T> const&);
-template <class T> vnl_vector<T> operator-(T const, vnl_vector<T> const&);
-template <class T> vnl_vector<T> operator*(T const, vnl_vector<T> const&);
-template <class T> vnl_vector<T> operator* (vnl_matrix<T> const& m, vnl_vector<T> const& v);
-template <class T> vnl_vector<T> element_product(vnl_vector<T> const&,vnl_vector<T> const&);
-template <class T> vnl_vector<T> element_quotient(vnl_vector<T> const&,vnl_vector<T> const&);
-template <class T> T             cross_2d (vnl_vector<T> const&, vnl_vector<T> const&);
-template <class T> vnl_vector<T> cross_3d (vnl_vector<T> const&, vnl_vector<T> const&); 
-
 //----------------------------------------------------------------------
 
-struct vnl_vector_grab_tag { };
+#define v vnl_vector<T>
+#define m vnl_matrix<T>
+template <class T> T      dot_product (v const&, v const&);
+template <class T> T      inner_product (v const&, v const&);
+template <class T> T      bracket (v const &, m const &, v const &);
+template <class T> T      cos_angle(v const&, v const& );
+template <class T> double angle (v const&, v const&);
+template <class T> m      outer_product (v const&, v const&);
+template <class T> v      operator+(T, v const&);
+template <class T> v      operator-(T, v const&);
+template <class T> v      operator*(T, v const&);
+template <class T> v      operator*(m const&, v const&);
+template <class T> v      operator*(v const&, m const&);
+template <class T> v      element_product(v const&,v const&);
+template <class T> v      element_quotient(v const&,v const&);
+template <class T> T      cross_2d (v const&, v const&);
+template <class T> v      cross_3d (v const&, v const&); 
+#undef v
+#undef m
+
+//----------------------------------------------------------------------
 
 template<class T>
 class vnl_vector {
@@ -61,22 +63,35 @@ public:
   vnl_vector (T const&, T const&, T const&);                   // 3-vector (x,y,z).
   vnl_vector (T const* data_block,unsigned int n);             // n-vector from a block of data.
   vnl_vector (vnl_vector<T> const&);                           // from another vector
-  vnl_vector (vnl_vector<T> &that, vnl_vector_grab_tag)
+  vnl_vector (vnl_vector<T> &that, vnl_tag_grab)
     : num_elmts(that.num_elmts), data(that.data) 
     { that.num_elmts=0; that.data=0; }
+  // <internal>
+  // These constructors are here so that operator* etc can take
+  // advantage of the C++ return value optimization.
+  vnl_vector (vnl_vector<T> const &, vnl_vector<T> const &, vnl_tag_add); // v + v
+  vnl_vector (vnl_vector<T> const &, vnl_vector<T> const &, vnl_tag_sub); // v - v
+  vnl_vector (vnl_vector<T> const &, T,                     vnl_tag_mul); // v * s
+  vnl_vector (vnl_vector<T> const &, T,                     vnl_tag_div); // v / s
+  vnl_vector (vnl_vector<T> const &, T,                     vnl_tag_add); // v + s
+  vnl_vector (vnl_vector<T> const &, T,                     vnl_tag_sub); // v - s
+  vnl_vector (vnl_matrix<T> const &, vnl_vector<T> const &, vnl_tag_mul); // M * v
+  vnl_vector (vnl_vector<T> const &, vnl_matrix<T> const &, vnl_tag_mul); // v * M
+  vnl_vector (vnl_vector<T> const &, vnl_tag_grab); // magic
+  // </internal>
   ~vnl_vector();
   
   // -- Return the length, number of elements, dimension of this vector.
   unsigned size() const { return num_elmts; }
   
-  //
-  inline void put (unsigned int i, T const&);                  // assign value
-  inline T get (unsigned int i) const;                         // get value
+  // put/get value at given position in matrix.
+  inline void put (unsigned int i, T const&);
+  inline T get (unsigned int i) const;
   
   void fill (T const&);     // set elements to value
   void copy_in(T const *);  // from array[] to vector.
   void copy_out(T *) const; // from vector to array[].
-  inline void set (T const *d) { copy_in(d); }
+  void set (T const *d) { copy_in(d); }
   
   // Return reference to the element at specified index. O(1).
   // No range check is performed.
@@ -86,13 +101,13 @@ public:
   T const & operator[] (unsigned int i) const { return data[i]; }
 
   // assignment
-  inline vnl_vector<T>& operator= (T const&v) { fill(v); return *this; } // assignment from scalar.
+  vnl_vector<T>& operator= (T const&v) { fill(v); return *this; } // from scalar.
   vnl_vector<T>& operator= (vnl_vector<T> const& rhs);
 
-  vnl_vector<T>& operator+= (T const);
-  vnl_vector<T>& operator-= (T const);
-  vnl_vector<T>& operator*= (T const);
-  vnl_vector<T>& operator/= (T const);
+  vnl_vector<T>& operator+= (T );
+  vnl_vector<T>& operator-= (T );
+  vnl_vector<T>& operator*= (T );
+  vnl_vector<T>& operator/= (T );
 
   vnl_vector<T>& operator+= (vnl_vector<T> const&);
   vnl_vector<T>& operator-= (vnl_vector<T> const&);
@@ -101,31 +116,30 @@ public:
   vnl_vector<T>& post_multiply (vnl_matrix<T> const&);         // v = v * M
   vnl_vector<T>& operator*= (vnl_matrix<T> const&);            // v = v * M
 
-  vnl_vector<T> operator- () const;                            // negation and
-  vnl_vector<T> operator+ (T const) const;                     // all binary operations
-  vnl_vector<T> operator* (T const) const;                     // return by values.
-  vnl_vector<T> operator/ (T const) const;
+  vnl_vector<T> operator- () const;
+  vnl_vector<T> operator+ (T v) const { return vnl_vector<T>(*this, v, vnl_tag_add()); }
+  vnl_vector<T> operator- (T v) const { return vnl_vector<T>(*this, v, vnl_tag_sub()); }
+  vnl_vector<T> operator* (T v) const { return vnl_vector<T>(*this, v, vnl_tag_mul()); }
+  vnl_vector<T> operator/ (T v) const { return vnl_vector<T>(*this, v, vnl_tag_div()); }
 
-  vnl_vector<T> operator- (T const) const;
-
-  vnl_vector<T> operator+ (vnl_vector<T> const& ) const;
-  vnl_vector<T> operator- (vnl_vector<T> const& ) const;
-  vnl_vector<T> operator* (vnl_matrix<T> const& ) const;
+  vnl_vector<T> operator+ (vnl_vector<T> const& v) const { return vnl_vector<T>(*this, v, vnl_tag_add()); }
+  vnl_vector<T> operator- (vnl_vector<T> const& v) const { return vnl_vector<T>(*this, v, vnl_tag_sub()); }
+  vnl_vector<T> operator* (vnl_matrix<T> const& M) const { return vnl_vector<T>(*this, M, vnl_tag_mul()); }
 
   //--------------------------------------------------------------------------------
 
   // -- access the contiguous block storing the elements in the vector. O(1).
-  inline T const* data_block () const { return data; }
-  inline T      * data_block () { return data; }
+  T const* data_block () const { return data; }
+  T      * data_block () { return data; }
 
   // iterators
   typedef T element_type;
   typedef T       *iterator;
-  inline iterator begin() { return data; }
-  inline iterator end() { return data+num_elmts; }
+  iterator begin() { return data; }
+  iterator end() { return data+num_elmts; }
   typedef T const *const_iterator;
-  inline const_iterator begin() const { return data; }
-  inline const_iterator end() const { return data+num_elmts; }
+  const_iterator begin() const { return data; }
+  const_iterator end() const { return data+num_elmts; }
 
   //
   vnl_vector<T> apply(T (*f)(T)) const;
@@ -150,12 +164,13 @@ public:
   // mutators
   vnl_vector<T>& normalize() { vnl_c_vector<T>::normalize(begin(), size()); return *this; } // v /= v.magnitude()
   void flip();
+  void swap(vnl_vector<T> &);
   
   // coordinates along 4 axes. no boundary checks.
-  inline T& x() const { return data[0]; }
-  inline T& y() const { return data[1]; }
-  inline T& z() const { return data[2]; }
-  inline T& t() const { return data[3]; }
+  T& x() const { return data[0]; }
+  T& y() const { return data[1]; }
+  T& z() const { return data[2]; }
+  T& t() const { return data[3]; }
 
   // these check bounds :
   inline void set_x(T const&);
@@ -173,6 +188,8 @@ public:
   bool operator==(vnl_vector<T> const &that) const { return  this->operator_eq(that); }
   bool operator!=(vnl_vector<T> const &that) const { return !this->operator_eq(that); }
 
+  bool resize (unsigned n); // returns true if size changed.
+  
   // I/O
   bool read_ascii(istream& s);
   static vnl_vector<T> read(istream& s);
@@ -244,37 +261,31 @@ inline vnl_vector<T>& vnl_vector<T>::operator-= (T const value) {
 
 template<class T>
 inline vnl_vector<T>& vnl_vector<T>::operator*= (vnl_matrix<T> const& m) {
-   return this->post_multiply(m);
+  return this->post_multiply(m);
 }
 
-
-// -- Returns new vector with elements of v added with value. O(n).
-
-template<class T>
-inline vnl_vector<T> operator+ (T const value, vnl_vector<T> const& v) {
-  return v + value;
+//: multiply matrix and (column) vector. O(m*n).
+template<class T> 
+inline vnl_vector<T> operator* (vnl_matrix<T> const& m, vnl_vector<T> const& v) {
+  return vnl_vector<T>(m, v, vnl_tag_mul());
 }
 
-// -- Returns new vector with elements of v substracted with value. O(n).
-
-
-template<class T>
-inline vnl_vector<T> vnl_vector<T>::operator-(T const value) const {
-  return (*this) + (- value);
+//: add scalar and vector. O(n).
+template<class T> 
+inline vnl_vector<T> operator+ (T s, vnl_vector<T> const& v) {
+  return vnl_vector<T>(v, s, vnl_tag_add());
 }
 
-// -- Returns new vector with value substracted with elements of v. O(n).
-
-template<class T>
-inline vnl_vector<T> operator- (T const value, vnl_vector<T> const& v) {
-  return (- v) + value;
+//: subtract vector from scalar. O(n).
+template<class T> 
+inline vnl_vector<T> operator- (T s, vnl_vector<T> const& v) {
+  return vnl_vector<T>(-v, s, vnl_tag_add());
 }
 
-// -- Returns new vector with elements of v multiplied with value. O(n).
-
-template<class T>
-inline vnl_vector<T> operator* (T const value, vnl_vector<T> const& v) {
-  return v * value;
+//: multiply scalar and vector. O(n).
+template<class T> 
+inline vnl_vector<T> operator* (T s, vnl_vector<T> const& v) {
+  return vnl_vector<T>(v, s, vnl_tag_mul());
 }
 
 // set_x(Type) --
@@ -309,6 +320,9 @@ inline void vnl_vector<T>::set_t(T const& tt){
   if (size() >= 4)
     data[3] = tt;
 }
+
+template<class T>
+inline void swap(vnl_vector<T> &a, vnl_vector<T> &b) { a.swap(b); }
 
 // -- Read/write vector from/to an istream :
 template <class T> vcl_ostream& operator<< (vcl_ostream &, vnl_vector<T> const&);

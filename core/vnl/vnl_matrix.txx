@@ -79,13 +79,9 @@
 #include <vcl/vcl_cstring.h>  // strcpy()
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_vector.h>
-// #ifndef GNU_LIBSTDCXX_V3
-// // conflicts with operator!= for std::vector<vcl_complex<double> >::iterator.
-// //include/g++-v3/bits/stl_construct.h:60: ambiguous overload for `std::__normal_iterator<vcl_complex<double> *,std::vector<vcl_complex<double>,std::allocator<vcl_complex<double> > > > & != std::__normal_iterator<vcl_complex<double> *,std::vector<vcl_complex<double>,std::allocator<vcl_complex<double> > > > &'
-// //include/g++-v3/bits/stl_iterator.h:1067: candidates are: bool std::operator !=<vcl_complex<double> *, vcl_complex<double> *, std::vector<vcl_complex<double>,std::allocator<vcl_complex<double> > > >(const std::__normal_iterator<vcl_complex<double> *,std::vector<vcl_complex<double>,std::allocator<vcl_complex<double> > > > &, const std::__normal_iterator<vcl_complex<double> *,std::vector<vcl_complex<double>,std::allocator<vcl_complex<double> > > > &)
-// //include/g++-v3/bits/stl_relops.h:37:                 bool std::rel_ops::operator !=<std::__normal_iterator<vcl_complex<double> *,std::vector<vcl_complex<double>,std::allocator<vcl_complex<double> > > > >(const std::__normal_iterator<vcl_complex<double> *,std::vector<vcl_complex<double>,std::allocator<vcl_complex<double> > > > &, const std::__normal_iterator<vcl_complex<double> *,std::vector<vcl_complex<double>,std::allocator<vcl_complex<double> > > > &)
+#include <vcl/vcl_algorithm.h>
+// conflicts with operator!= for std::vector<vcl_complex<double> >::iterator.
 // # include <vcl/vcl_rel_ops.h>  // inline operator!= function template
-// #endif
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
@@ -104,120 +100,261 @@ vnl_matrix<T>::vnl_matrix () :
 {
 }
 
+// This macro allocates and initializes the dynamic storage used by a vnl_matrix.
+#define vnl_matrix_alloc_blah(rowz_, colz_) \
+do { \
+  this->num_rows = (rowz_); \
+  this->num_cols = (colz_); \
+  if (this->num_rows && this->num_cols) { \
+    /* Allocate memory to hold the row pointers */ \
+    this->data = vnl_c_vector<T>::allocate_Tptr(this->num_rows); \
+    /* Allocate memory to hold the elements of the matrix */ \
+    T* elmns = vnl_c_vector<T>::allocate_T(this->num_rows * this->num_cols); \
+    /* Fill in the array of row pointers */ \
+    for (int i = 0; i < this->num_rows; ++ i) \
+      this->data[i] = elmns + i*this->num_cols; \
+  } \
+  else { \
+   /* This is to make sure .begin() and .end() work for 0xN matrices: */ \
+   (this->data = vnl_c_vector<T>::allocate_Tptr(1))[0] = 0; \
+  } \
+} while (false)
+
+// This macro releases the dynamic storage used by a vnl_matrix.
+#define vnl_matrix_free_blah \
+do { \
+  if (this->data) { \
+    if (this->num_cols && this->num_rows) { \
+      vnl_c_vector<T>::deallocate(this->data[0], this->num_cols * this->num_rows); \
+      vnl_c_vector<T>::deallocate(this->data, this->num_rows); \
+    } else { \
+      vnl_c_vector<T>::deallocate(this->data, 1); \
+    } \
+  } \
+} while(false)
+
 // Matrix -- Creates a matrix with given number of rows and columns.
 // Elements are not initialized. O(m*n).
 
 template<class T> 
-vnl_matrix<T>::vnl_matrix (unsigned rowz, unsigned colz):
-  num_rows(rowz),
-  num_cols(colz)
+vnl_matrix<T>::vnl_matrix (unsigned rowz, unsigned colz)
 {
-  if (colz && rowz) {
-    this->data = vnl_c_vector<T>::allocate_Tptr(rowz);                 // Allocate the row memory
-    T* clmns = vnl_c_vector<T>::allocate_T(colz*rowz);               // Allocate the array of elmts
-    for (unsigned i = 0; i < rowz; i ++)  // For each row in the Matrix
-      this->data[i] = &clmns[i*colz];          // Fill in address of row
-  } else {
-#define AWF_WANTS_ZERO_BY_N_MATRICES_TO_WORK this->data = 0;
-#undef AWF_WANTS_ZERO_BY_N_MATRICES_TO_WORK
-#define AWF_WANTS_ZERO_BY_N_MATRICES_TO_WORK (this->data = vnl_c_vector<T>::allocate_Tptr(1))[0] = 0
-    AWF_WANTS_ZERO_BY_N_MATRICES_TO_WORK;
-  }
+  vnl_matrix_alloc_blah(rowz, colz);
 }
 
 // Matrix -- Creates a matrix with given number of rows and columns,
 // and initialize all elements to value. O(m*n).
 
 template<class T> 
-vnl_matrix<T>::vnl_matrix (unsigned rowz, unsigned colz, T const& value) :
-  num_rows(rowz), num_cols(colz)
+vnl_matrix<T>::vnl_matrix (unsigned rowz, unsigned colz, T const& value)
 {
-  if (colz && rowz) {
-    this->data = vnl_c_vector<T>::allocate_Tptr(rowz);                  // Allocate the row memory
-    T* clmns = vnl_c_vector<T>::allocate_T(colz*rowz);                // Allocate the array of elmts
-    for (unsigned i = 0; i < rowz; i ++) { // For each row in the Matrix
-      this->data[i] = &clmns[i*colz];           // Fill in address of row
-      for (unsigned j = 0; j < colz; j++)  // For each element in column
-	this->data[i][j] = value;               // Assign initial value
-    }
-  } else {
-    AWF_WANTS_ZERO_BY_N_MATRICES_TO_WORK;
-  }
+  vnl_matrix_alloc_blah(rowz, colz);
+  for (unsigned i = 0; i < rowz; ++ i)
+    for (unsigned j = 0; j < colz; ++ j)
+      this->data[i][j] = value;
 }
 
 
-
+#if 1 // fsm: who uses this?
 // Matrix -- Creates a matrix with given dimension (rows, cols) and initialize
 // first n elements, row-wise, to values. O(m*n).
 
 template<class T> 
 vnl_matrix<T>::vnl_matrix (unsigned rowz, unsigned colz, int n, T const values[])
-: num_rows(rowz), num_cols( colz) {
-  this->data = vnl_c_vector<T>::allocate_Tptr(rowz);                 // Allocate the row memory
-  T* clmns = vnl_c_vector<T>::allocate_T(colz*rowz);               // Allocate the array of elmts
-  unsigned i = 0, j = 0, k = 0;
-  for (i = 0; i < rowz; i ++)                // For each row in the Matrix
-    this->data[i] = &clmns[i*colz];          // Fill in address of row
-  for (i = 0; i < rowz && n; i++)            // Initialize elements of matrix
-    for (j = 0; j < colz && n; j++, n--)     // row-wise with values.
-      this->data[i][j] = values[k++];
+{
+  vnl_matrix_alloc_blah(rowz, colz);
+  if (n > rowz*colz)
+    n = rowz*colz;
+  T *dst = this->data[0];
+  for (int k=0; k<n; ++k)
+    dst[k] = values[k];
 }
+#endif
 
 // Matrix -- Creates a matrix from a block array of data, stored row-wise.
 // O(m*n).
 
 template<class T>
 vnl_matrix<T>::vnl_matrix (T const* datablck, unsigned rowz, unsigned colz)
-: num_rows(rowz), num_cols(colz) {
-  if (colz && rowz) {
-    this->data = vnl_c_vector<T>::allocate_Tptr(num_rows);             // Allocate the row memory
-    unsigned n = num_rows * num_cols;        // Number of elements 
-    T* clmns = vnl_c_vector<T>::allocate_T(n);                  // Allocate the array of elmts
-    for (unsigned i = 0; i < num_rows; i ++) // For each row in the Matrix
-      this->data[i] = &clmns[i*num_cols];       // Fill in address of row
-    for (unsigned d = 0; d < n; d++)         // Copy all the data elements
-      clmns[d] = datablck[d];
-  } else 
-    AWF_WANTS_ZERO_BY_N_MATRICES_TO_WORK;
+{
+  vnl_matrix_alloc_blah(rowz, colz);
+  int n = rowz*colz;
+  T *dst = this->data[0];
+  for (int k=0; k<n; ++k)
+    dst[k] = datablck[k];
 }
 
 
-// Matrix -- Creates a new matrix and copies all the elements of from matrix.
+// Matrix -- Creates a new matrix and copies all the elements.
 // O(m*n).
 
 template<class T> 
 vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const& from)
 {
-  this->num_rows = from.num_rows;
-  this->num_cols = from.num_cols;
-  if (this->num_rows && this->num_cols) {
-    this->data = vnl_c_vector<T>::allocate_Tptr(this->num_rows);       // Allocate the row memory
-    T* clmns = vnl_c_vector<T>::allocate_T(num_cols*num_rows);  // Allocate the array of elmts
-    for (unsigned i = 0; i < num_rows; i ++) {       // For each row in the Matrix
-      this->data[i] = &clmns[i*num_cols];       // Fill in address of row
-      for (unsigned j = 0; j < this->num_cols; j++)  // For each element in column
-	this->data[i][j] = from.data[i][j];               // Copy value
-    }
-  } else {
-    AWF_WANTS_ZERO_BY_N_MATRICES_TO_WORK;
+  if (from.data) {
+    vnl_matrix_alloc_blah(from.num_rows, from.num_cols);
+    int n = this->num_rows * this->num_cols;
+    T *dst = this->data[0];
+    T const *src = from.data[0];
+    for (int k=0; k<n; ++k)
+      dst[k] = src[k];
+  }
+  else {
+    num_rows = 0;
+    num_cols = 0;
+    data = 0;
   }
 }
 
+//------------------------------------------------------------
 
-// ~Matrix -- Deletes matrix and frees up the arrays and the elements in them.
+template<class T> 
+vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &A, vnl_matrix<T> const &B, vnl_tag_add)
+{
+  if (A.num_rows != B.num_rows || A.num_cols != B.num_cols)
+    vnl_error_matrix_dimension ("vnl_tag_add", A.num_rows, A.num_cols, B.num_rows, B.num_cols);
+  
+  vnl_matrix_alloc_blah(A.num_rows, A.num_cols);
+  
+  int n = A.num_rows * A.num_cols;
+  T const *a = A.data[0];
+  T const *b = B.data[0];
+  T *dst = this->data[0];
+
+  for (int i=0; i<n; ++i)
+    dst[i] = a[i] + b[i];
+}
+
+template<class T> 
+vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &A, vnl_matrix<T> const &B, vnl_tag_sub)
+{
+  if (A.num_rows != B.num_rows || A.num_cols != B.num_cols)
+    vnl_error_matrix_dimension ("vnl_tag_sub", A.num_rows, A.num_cols, B.num_rows, B.num_cols);
+
+  vnl_matrix_alloc_blah(A.num_rows, A.num_cols);
+
+  int n = A.num_rows * A.num_cols;
+  T const *a = A.data[0];
+  T const *b = B.data[0];
+  T *dst = this->data[0];
+
+  for (int i=0; i<n; ++i)
+    dst[i] = a[i] - b[i];
+}
+
+template<class T> 
+vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &M, T s, vnl_tag_mul)
+{
+  vnl_matrix_alloc_blah(M.num_rows, M.num_cols);
+
+  int n = M.num_rows * M.num_cols;
+  T const *m = M.data[0];
+  T *dst = this->data[0];
+
+  for (int i=0; i<n; ++i)
+    dst[i] = m[i] * s;
+}
+
+template<class T> 
+vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &M, T s, vnl_tag_div)
+{
+  vnl_matrix_alloc_blah(M.num_rows, M.num_cols);
+
+  int n = M.num_rows * M.num_cols;
+  T const *m = M.data[0];
+  T *dst = this->data[0];
+
+  for (int i=0; i<n; ++i)
+    dst[i] = m[i] / s;
+}
+
+template<class T> 
+vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &M, T s, vnl_tag_add)
+{
+  vnl_matrix_alloc_blah(M.num_rows, M.num_cols);
+
+  int n = M.num_cols * M.num_cols;
+  T const *m = M.data[0];
+  T *dst = this->data[0];
+
+  for (int i=0; i<n; ++i)
+    dst[i] = m[i] + s;
+}
+
+template<class T> 
+vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &M, T s, vnl_tag_sub)
+{
+  vnl_matrix_alloc_blah(M.num_rows, M.num_cols);
+
+  int n = M.num_rows * M.num_cols;
+  T const *m = M.data[0];
+  T *dst = this->data[0];
+
+  for (int i=0; i<n; ++i)
+    dst[i] = m[i] - s;
+}
+
+template<class T> 
+vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const &A, vnl_matrix<T> const &B, vnl_tag_mul)
+{  
+  if (A.num_cols != B.num_rows)
+    vnl_error_matrix_dimension("vnl_tag_mul", A.num_rows, A.num_cols, B.num_rows, B.num_cols);
+  
+  int l = A.num_rows;
+  int m = A.num_cols; // == B.num_rows
+  int n = B.num_cols;
+
+  vnl_matrix_alloc_blah(l, n);
+
+  for (int i=0; i<l; ++i) {
+    for (int k=0; k<n; ++k) {
+      T sum(0);
+      for (int j=0; j<m; ++j)
+	sum += A.data[i][j] * B.data[j][k];
+      this->data[i][k] = sum;
+    }
+  }
+}
+
+//------------------------------------------------------------
+
+// ~vnl_matrix -- Frees up the dynamic storage used by matrix.
 // O(m*n).
 
 template<class T> 
-vnl_matrix<T>::~vnl_matrix() {
-  if (this->data) {
-    if (num_cols && num_rows) {
-      vnl_c_vector<T>::deallocate(this->data[0], num_cols*num_rows);  // Free up the array of elmts
-      vnl_c_vector<T>::deallocate(this->data, num_rows);              // Free up the row memory
-    } else {
-      vnl_c_vector<T>::deallocate(this->data, 1); 
-    }
-  }
+vnl_matrix<T>::~vnl_matrix()
+{
+  vnl_matrix_free_blah;
 }
+
+// resize // Resizes the data arrays of THIS matrix to (rows x cols). O(m*n).
+// Elements are not initialized. Returns true if size is changed.
+
+template<class T> 
+bool vnl_matrix<T>::resize (unsigned rowz, unsigned colz)
+{
+  if (this->data) {
+    // if no change in size, do not reallocate.
+    if (this->num_rows == rowz && this->num_cols == colz)
+      return false;
+    
+    // else, simply release old storage and allocate new.
+    vnl_matrix_free_blah;
+    vnl_matrix_alloc_blah(rowz, colz);
+  }
+  else {
+    // This happens if the matrix is default constructed.
+    vnl_matrix_alloc_blah(rowz, colz);
+  }
+
+  return true;
+}
+
+#undef vnl_matrix_alloc_blah
+#undef vnl_matrix_free_blah
+
+//------------------------------------------------------------
+
 
 // fill -- Sets all elements of matrix to specified value. O(m*n).
 
@@ -337,17 +474,6 @@ vnl_matrix<T>& vnl_matrix<T>::operator/= (T value) {
 
 
 
-template<class T>
-vnl_matrix<T> operator- (T const& value, vnl_matrix<T> const& m) {
-  vnl_matrix<T> result(m.rows(),m.columns());
-  for (unsigned i = 0; i < m.rows(); i++)  // For each row
-    for (unsigned j = 0; j < m.columns(); j++) // For each elmt. in column
-      result.put(i,j, value - m.get(i,j) );     // subtract from value elmt.
-  return result;
-}
-
-
-
 // operator+= -- Adds lhs matrix with rhs matrix, and stores in place in
 // lhs matrix. O(m*n). The dimensions of the two matrices must be identical.
 
@@ -382,27 +508,38 @@ vnl_matrix<T>& vnl_matrix<T>::operator-= (vnl_matrix<T> const& rhs) {
   return *this;
 }
 
-// operator* -- Returns new matrix which is the product of m1 with m2, m1 * m2.
-// O(n^3). Number of columns of first matrix must match number of rows
-// of second matrix.
 
-template<class T> 
-vnl_matrix<T> vnl_matrix<T>::operator* (vnl_matrix<T> const& rhs) const {
-  if (this->num_cols != rhs.num_rows)           // dimensions do not match?
-    vnl_error_matrix_dimension("operator*", 
-			  this->num_rows, this->num_cols, 
-			  rhs.num_rows, rhs.num_cols);
-  vnl_matrix<T> result(this->num_rows, rhs.num_cols); // Temp to store product
-  for (unsigned i = 0; i < this->num_rows; i++) {  // For each row
-    for (unsigned j = 0; j < rhs.num_cols; j++) {  // For each element in column
-      T sum = 0;
-      for (unsigned k = 0; k < this->num_cols; k++) // Loop over column values
-	sum += (this->data[i][k] * rhs.data[k][j]);     // Multiply
-      result(i,j) = sum;
-    }
-  }
+template<class T>
+vnl_matrix<T> operator- (T const& value, vnl_matrix<T> const& m) {
+  vnl_matrix<T> result(m.rows(),m.columns());
+  for (unsigned i = 0; i < m.rows(); i++)  // For each row
+    for (unsigned j = 0; j < m.columns(); j++) // For each elmt. in column
+      result.put(i,j, value - m.get(i,j) );     // subtract from value elmt.
   return result;
 }
+
+
+// // operator* -- Returns new matrix which is the product of m1 with m2, m1 * m2.
+// // O(n^3). Number of columns of first matrix must match number of rows
+// // of second matrix.
+// 
+// template<class T> 
+// vnl_matrix<T> vnl_matrix<T>::operator* (vnl_matrix<T> const& rhs) const {
+//   if (this->num_cols != rhs.num_rows)           // dimensions do not match?
+//     vnl_error_matrix_dimension("operator*", 
+// 			  this->num_rows, this->num_cols, 
+// 			  rhs.num_rows, rhs.num_cols);
+//   vnl_matrix<T> result(this->num_rows, rhs.num_cols); // Temp to store product
+//   for (unsigned i = 0; i < this->num_rows; i++) {  // For each row
+//     for (unsigned j = 0; j < rhs.num_cols; j++) {  // For each element in column
+//       T sum = 0;
+//       for (unsigned k = 0; k < this->num_cols; k++) // Loop over column values
+// 	sum += (this->data[i][k] * rhs.data[k][j]);     // Multiply
+//       result(i,j) = sum;
+//     }
+//   }
+//   return result;
+// }
 
 // operator- -- Returns new matrix which is the negation of THIS matrix. O(m*n).
 
@@ -415,43 +552,43 @@ vnl_matrix<T> vnl_matrix<T>::operator- () const {
   return result;
 }
 
-// operator+ -- Returns new matrix with elements of lhs matrix added
-// with value. O(m*n).
-
-template<class T> 
-vnl_matrix<T> vnl_matrix<T>::operator+ (T const& value) const {
-  vnl_matrix<T> result(this->num_rows, this->num_cols);
-  for (unsigned i = 0; i < this->num_rows; i++)    // For each row
-    for (unsigned j = 0; j < this->num_cols; j++)  // For each element in column
-      result.data[i][j] = (this->data[i][j] + value);   // Add scalar
-  return result;
-}
-
-
-// operator+ -- Returns new matrix with elements of lhs matrix multiplied
-// with value. O(m*n).
-
-template<class T> 
-vnl_matrix<T> vnl_matrix<T>::operator* (T const& value) const {
-  vnl_matrix<T> result(this->num_rows, this->num_cols);
-  for (unsigned i = 0; i < this->num_rows; i++)    // For each row
-    for (unsigned j = 0; j < this->num_cols; j++)  // For each element in column
-      result.data[i][j] = (this->data[i][j] * value);   // Multiply
-  return result;
-}
+// // operator+ -- Returns new matrix with elements of lhs matrix added
+// // with value. O(m*n).
+// 
+// template<class T> 
+// vnl_matrix<T> vnl_matrix<T>::operator+ (T const& value) const {
+//   vnl_matrix<T> result(this->num_rows, this->num_cols);
+//   for (unsigned i = 0; i < this->num_rows; i++)    // For each row
+//     for (unsigned j = 0; j < this->num_cols; j++)  // For each element in column
+//       result.data[i][j] = (this->data[i][j] + value);   // Add scalar
+//   return result;
+// }
 
 
-// operator+ -- Returns new matrix with elements of lhs matrix divided by
-// value. O(m*n).
+// // operator+ -- Returns new matrix with elements of lhs matrix multiplied
+// // with value. O(m*n).
+// 
+// template<class T> 
+// vnl_matrix<T> vnl_matrix<T>::operator* (T const& value) const {
+//   vnl_matrix<T> result(this->num_rows, this->num_cols);
+//   for (unsigned i = 0; i < this->num_rows; i++)    // For each row
+//     for (unsigned j = 0; j < this->num_cols; j++)  // For each element in column
+//       result.data[i][j] = (this->data[i][j] * value);   // Multiply
+//   return result;
+// }
 
-template<class T> 
-vnl_matrix<T> vnl_matrix<T>::operator/ (T const& value) const {
-  vnl_matrix<T> result(this->num_rows, this->num_cols);
-  for (unsigned i = 0; i < this->num_rows; i++)    // For each row
-    for (unsigned j = 0; j < this->num_cols; j++)  // For each element in column
-      result.data[i][j] = (this->data[i][j] / value);   // Divide
-  return result;
-}
+
+// // operator+ -- Returns new matrix with elements of lhs matrix divided by
+// // value. O(m*n).
+// 
+// template<class T> 
+// vnl_matrix<T> vnl_matrix<T>::operator/ (T const& value) const {
+//   vnl_matrix<T> result(this->num_rows, this->num_cols);
+//   for (unsigned i = 0; i < this->num_rows; i++)    // For each row
+//     for (unsigned j = 0; j < this->num_cols; j++)  // For each element in column
+//       result.data[i][j] = (this->data[i][j] / value);   // Divide
+//   return result;
+// }
 
 // -- Return the matrix made by applying "f" to each element.
 template <class T>
@@ -823,42 +960,6 @@ void vnl_matrix<T>::set_columns(unsigned starting_column, vnl_matrix<T> const& m
 
 //--------------------------------------------------------------------------------
 
-// resize // Resizes the data arrays of THIS matrix to (rows x cols). O(m*n).
-// Elements are not initialized. Returns true if size is changed.
-
-#if defined(VCL_GCC_295)
-# include <vcl/vcl_new.h>
-#endif
-
-template<class T> 
-bool vnl_matrix<T>::resize (unsigned rowz, unsigned colz) {
-  if (this->num_rows != rowz || this->num_cols != colz) {
-#if defined(VCL_GCC_295)
-    // this requires less maintenance -- fsm
-    this->~vnl_matrix();                  // destruct
-    new (this) vnl_matrix<T>(rowz, colz); // construct
-#else
-    if (this->data) {
-      vnl_c_vector<T>::deallocate(this->data[0], num_cols*num_rows);                 // Free up the array of elmts
-      vnl_c_vector<T>::deallocate(this->data, num_rows);                    // Free up the row memory
-    }
-    this->num_rows = rowz;                     // Copy rowz
-    this->num_cols = colz;                     // Copy colz
-    if (rowz && colz) {
-      this->data = vnl_c_vector<T>::allocate_Tptr(num_rows);           // Allocate the rows
-      T* clmns = vnl_c_vector<T>::allocate_T(num_cols*num_rows);     // Allocate the columns
-      for (unsigned i = 0; i < this->num_rows; i++)   // For each row
-	this->data[i] = &clmns[i*num_cols];    // Fill in address of row
-    } else {
-      AWF_WANTS_ZERO_BY_N_MATRICES_TO_WORK;
-    }
-#endif
-    return true;
-  } else
-    return false;
-}
-#undef AWF_WANTS_ZERO_BY_N_MATRICES_TO_WORK
-
 // operator== -- Two matrices are equal if and only if they have the same
 // dimensions and the same values. O(m*n). 
 // Elements are compared with operator== as default.
@@ -1110,6 +1211,14 @@ template <class T>
 bool vnl_matrix<T>::print_format_set()
 {
   return (print_format != 0);
+}
+
+template <class T>
+void vnl_matrix<T>::swap(vnl_matrix<T> &that)
+{
+  vcl_swap(this->num_rows, that.num_rows);
+  vcl_swap(this->num_cols, that.num_cols);
+  vcl_swap(this->data, that.data);
 }
 
 // -- Reverse order of rows.  Name is from Matlab, meaning "flip upside down".
