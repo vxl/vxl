@@ -42,35 +42,30 @@ vgui_glut_adaptor::vgui_glut_adaptor( vgui_glut_window *win_, int id_ )
 }
 
 vgui_glut_adaptor::~vgui_glut_adaptor() {
-  //
+  // destroy the overlay helper, if necessary.
   if (ovl_helper)
     delete ovl_helper;
   ovl_helper = 0;
-
-  //
+  
+  // destroy the GLUT window through its handle.
   glutDestroyWindow( id );
   id = 0;
   win = 0;
-
-  // deallocate popup
+  
+  // deallocate popup.
   if (popup)
     delete popup;
   popup = 0;
-
-  // delete sub contexts :
+  
+  // destroy GLUT sub-contexts.
   for (unsigned i=0; i<sub_contexts.size(); ++i)
     delete sub_contexts[i];
   sub_contexts.clear();
-
-  //
-  { // Start block scope to circumvent bizarre gcc 2.7.2 bug.
-    // Without it, the next use of 'i' (even in a different
-    // function) will cause a warning about 'i' shadowing a
-    // local to be emitted -- fsm.
-    vcl_vector<vgui_glut_adaptor*>::iterator i=vcl_find(all().begin(), all().end(), this);
-    assert(i != all().end());
-    all().erase(i);
-  }
+  
+  // remove `this' from `all()'.
+  vcl_vector<vgui_glut_adaptor*>::iterator i = vcl_find(all().begin(), all().end(), this);
+  assert(i != all().end());
+  all().erase(i);
 }
 
 //--------------------------------------------------------------------------------
@@ -141,7 +136,7 @@ extern bool vgui_emulate_overlays;
 // invocation does something. That way, the caller doesn't need to check a
 // first-time flag all the time (the routine does it).
 void vgui_glut_adaptor::establish_overlays() {
-  //
+  // make this function idempotent.
   if (ovl_established)
     return;
 
@@ -161,7 +156,7 @@ void vgui_glut_adaptor::establish_overlays() {
     }
   }
 
-  //
+  // now do it.
   if (use_hardware) {
     glutEstablishOverlay();
     // The callback must be registered after the overlay has been established.
@@ -175,8 +170,8 @@ void vgui_glut_adaptor::establish_overlays() {
     ovl_helper = new vgui_overlay_helper(this);
     vcl_cerr << "emulation overlay helper established" << vcl_endl;
   }
-
-  //
+  
+  // done.
   ovl_established = true;
 }
 
@@ -203,6 +198,7 @@ bool vgui_glut_adaptor::glut_dispatch(vgui_event &e) {
       //glutUseLayer(GLenum(GLUT_NORMAL));
 
       bool f = dispatch_to_tableau(e);
+      //fsm_hook();
       swap_buffers();
       return f;
     }
@@ -443,9 +439,11 @@ void vgui_glut_adaptor::reshape(int width,int height) {
   vgui_event e;
   e.type = vgui_RESHAPE;
   bool f=glut_dispatch(e);
-  if (!f)
-    glViewport(0,0,width,height);
-
+  if (!f) {
+    glViewport(0, 0, width, height);
+    glScissor (0, 0, width, height);
+  }
+  
   // call reshape on the sub-contexts :
   for (unsigned i=0;i<sub_contexts.size();i++) {
     // FIXME
@@ -711,7 +709,7 @@ void vgui_glut_adaptor::name##_callback proto { \
  if (v) \
    v->name args; \
  else \
-   abort(); \
+   vcl_abort(); \
 }
 implement_static_callback(display,(),());
 implement_static_callback(overlay_display,(),());
@@ -727,3 +725,75 @@ implement_static_callback(special,(int key,int x,int y),(key,x,y));
 implement_static_callback(special_up,(int key,int x,int y),(key,x,y));
 
 //--------------------------------------------------------------------------------
+
+#if 0
+#include <vbl/vbl_sprintf.h>
+#include <vil/vil_save.h>
+#include <vil/vil_rgb.h>
+#include <vil/vil_rgba.h>
+#include <vil/vil_memory_image_of.h>
+static
+void fsm_dump(char const *file)
+{
+  // get viewport size
+  GLint vp[4]; // x,y,w,h
+  glGetIntegerv(GL_VIEWPORT, vp);
+  unsigned x = vp[0];
+  unsigned y = vp[1];
+  unsigned w = vp[2];
+  unsigned h = vp[3];
+  
+  // It's easier to get the buffer in vil_rgba format and then convert to
+  // RGB, because that avoids alignment problems with glReadPixels.
+  static vil_rgba<GLubyte> *pixels = 0;
+  if (! pixels)
+    pixels = new vil_rgba<GLubyte>[ w * h ];
+  
+  //
+  glPixelZoom(1,1);
+  glPixelTransferi(GL_MAP_COLOR,0);
+  glPixelTransferi(GL_RED_SCALE,1);   glPixelTransferi(GL_RED_BIAS,0);
+  glPixelTransferi(GL_GREEN_SCALE,1); glPixelTransferi(GL_GREEN_BIAS,0);
+  glPixelTransferi(GL_BLUE_SCALE,1);  glPixelTransferi(GL_BLUE_BIAS,0);
+  
+  // 
+  glPixelStorei(GL_PACK_ALIGNMENT,1);   // byte alignment.
+  glPixelStorei(GL_PACK_ROW_LENGTH,0);  // use default value (the arg to pixel routine).
+  glPixelStorei(GL_PACK_SKIP_PIXELS,0); //
+  glPixelStorei(GL_PACK_SKIP_ROWS,0);   //
+  
+  // read from the *back buffer*.
+  glReadBuffer(GL_BACK);
+  
+  //
+  glReadPixels(x, y,             //
+	       w, h,             //
+	       GL_RGBA,          // format
+	       GL_UNSIGNED_BYTE, // type
+	       pixels);
+  
+  // glReadPixels() reads the pixels from the bottom of the viewport up.
+  // Copy them into an vil_memory_image_of in the other order :
+  static vil_memory_image_of<vil_rgb<GLubyte> > colour_buffer;
+  colour_buffer.resize(w, h);
+  
+  for (unsigned yy=0; yy<h; ++yy)
+    for (unsigned xx=0; xx<w; ++xx) {
+      colour_buffer(xx, h-1-yy).r = pixels[xx + w*yy].r;
+      colour_buffer(xx, h-1-yy).g = pixels[xx + w*yy].g;
+      colour_buffer(xx, h-1-yy).b = pixels[xx + w*yy].b;
+    }
+  
+  //
+  vil_save(colour_buffer, file, "pnm");
+}
+bool fsm_hook_flag = false;
+static
+void fsm_hook()
+{
+  if (fsm_hook_flag) {
+    static int frame_counter = 0;
+    fsm_dump(vbl_sprintf("/tmp/dump%03d.pnm", frame_counter++).c_str());
+  }
+}
+#endif
