@@ -92,57 +92,57 @@ typedef struct common_instance_s {
     vo_frame_t * frame_ptr[3];
 } common_instance_t;
 
-int libvo_common_alloc_frames (vo_instance_t * _instance,
-			       int width, int height, int frame_size,
-			       void (* copy) (vo_frame_t *, uint8_t **),
-			       void (* field) (vo_frame_t *, int),
-			       void (* draw) (vo_frame_t *))
+int libvo_common_alloc_frames (vo_instance_t * instance_,
+                               int width, int height, int frame_size,
+                               void (* copy) (vo_frame_t *, uint8_t **),
+                               void (* field) (vo_frame_t *, int),
+                               void (* draw) (vo_frame_t *))
 {
     common_instance_t * instance;
     int size;
     uint8_t * alloc;
     int i;
 
-    instance = (common_instance_t *) _instance;
+    instance = (common_instance_t *) instance_;
     instance->prediction_index = 1;
     size = width * height / 4;
     alloc = memalign (16, 18 * size);
     if (alloc == NULL)
-	return 1;
+        return 1;
 
     for (i = 0; i < 3; i++) {
-	instance->frame_ptr[i] =
-	    (vo_frame_t *) (((char *) instance) + sizeof (common_instance_t) +
-			    i * frame_size);
-	instance->frame_ptr[i]->base[0] = alloc;
-	instance->frame_ptr[i]->base[1] = alloc + 4 * size;
-	instance->frame_ptr[i]->base[2] = alloc + 5 * size;
-	instance->frame_ptr[i]->copy = copy;
-	instance->frame_ptr[i]->field = field;
-	instance->frame_ptr[i]->draw = draw;
-	instance->frame_ptr[i]->instance = (vo_instance_t *) instance;
-	alloc += 6 * size;
+        instance->frame_ptr[i] =
+            (vo_frame_t *) (((char *) instance) + sizeof (common_instance_t) +
+                            i * frame_size);
+        instance->frame_ptr[i]->base[0] = alloc;
+        instance->frame_ptr[i]->base[1] = alloc + 4 * size;
+        instance->frame_ptr[i]->base[2] = alloc + 5 * size;
+        instance->frame_ptr[i]->copy = copy;
+        instance->frame_ptr[i]->field = field;
+        instance->frame_ptr[i]->draw = draw;
+        instance->frame_ptr[i]->instance = (vo_instance_t *) instance;
+        alloc += 6 * size;
     }
 
     return 0;
 }
 
-void libvo_common_free_frames (vo_instance_t * _instance)
+void libvo_common_free_frames (vo_instance_t * instance_)
 {
     common_instance_t * instance;
 
-    instance = (common_instance_t *) _instance;
+    instance = (common_instance_t *) instance_;
     free (instance->frame_ptr[0]->base[0]);
 }
 
-vo_frame_t * libvo_common_get_frame (vo_instance_t * _instance, int flags)
+vo_frame_t * libvo_common_get_frame (vo_instance_t * instance_, int flags)
 {
     common_instance_t * instance;
 
-    instance = (common_instance_t *)_instance;
+    instance = (common_instance_t *)instance_;
     if (flags & VO_PREDICTION_FLAG) {
-	instance->prediction_index ^= 1;
-	return instance->frame_ptr[instance->prediction_index];
+        instance->prediction_index ^= 1;
+        return instance->frame_ptr[instance->prediction_index];
     } else
-	return instance->frame_ptr[2];
+        return instance->frame_ptr[2];
 }

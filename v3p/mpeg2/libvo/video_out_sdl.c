@@ -53,14 +53,14 @@ typedef struct sdl_instance_s {
     Uint8 bpp;
 } sdl_instance_t;
 
-static vo_frame_t * sdl_get_frame (vo_instance_t * _instance, int flags)
+static vo_frame_t * sdl_get_frame (vo_instance_t * instance_, int flags)
 {
     sdl_instance_t * instance;
     sdl_frame_t * frame;
 
-    instance = (sdl_instance_t *) _instance;
+    instance = (sdl_instance_t *) instance_;
     frame = (sdl_frame_t *) libvo_common_get_frame ((vo_instance_t *) instance,
-						    flags);
+                                                    flags);
     SDL_LockYUVOverlay (frame->overlay);
     return (vo_frame_t *) frame;
 }
@@ -70,18 +70,18 @@ static void check_events (sdl_instance_t * instance)
     SDL_Event event;
 
     while (SDL_PollEvent (&event))
-	if (event.type == SDL_VIDEORESIZE)
-	    instance->surface =
-		SDL_SetVideoMode (event.resize.w, event.resize.h,
-				  instance->bpp, instance->sdlflags);
+        if (event.type == SDL_VIDEORESIZE)
+            instance->surface =
+                SDL_SetVideoMode (event.resize.w, event.resize.h,
+                                  instance->bpp, instance->sdlflags);
 }
 
-static void sdl_draw_frame (vo_frame_t * _frame)
+static void sdl_draw_frame (vo_frame_t * frame_)
 {
     sdl_frame_t * frame;
     sdl_instance_t * instance;
 
-    frame = (sdl_frame_t *) _frame;
+    frame = (sdl_frame_t *) frame_;
     instance = (sdl_instance_t *) frame->vo.instance;
 
     SDL_UnlockYUVOverlay (frame->overlay);
@@ -94,52 +94,52 @@ static int sdl_alloc_frames (sdl_instance_t * instance, int width, int height)
     int i;
 
     for (i = 0; i < 3; i++) {
-	instance->frame[i].overlay =
-	    SDL_CreateYUVOverlay (width, height, SDL_YV12_OVERLAY,
-				  instance->surface);
-	if (instance->frame[i].overlay == NULL)
-	    return 1;
-	instance->frame_ptr[i] = (vo_frame_t *) (instance->frame + i);
-	instance->frame[i].vo.base[0] = instance->frame[i].overlay->pixels[0];
-	instance->frame[i].vo.base[1] = instance->frame[i].overlay->pixels[2];
-	instance->frame[i].vo.base[2] = instance->frame[i].overlay->pixels[1];
-	instance->frame[i].vo.copy = NULL;
-	instance->frame[i].vo.field = NULL;
-	instance->frame[i].vo.draw = sdl_draw_frame;
-	instance->frame[i].vo.instance = (vo_instance_t *) instance;
+        instance->frame[i].overlay =
+            SDL_CreateYUVOverlay (width, height, SDL_YV12_OVERLAY,
+                                  instance->surface);
+        if (instance->frame[i].overlay == NULL)
+            return 1;
+        instance->frame_ptr[i] = (vo_frame_t *) (instance->frame + i);
+        instance->frame[i].vo.base[0] = instance->frame[i].overlay->pixels[0];
+        instance->frame[i].vo.base[1] = instance->frame[i].overlay->pixels[2];
+        instance->frame[i].vo.base[2] = instance->frame[i].overlay->pixels[1];
+        instance->frame[i].vo.copy = NULL;
+        instance->frame[i].vo.field = NULL;
+        instance->frame[i].vo.draw = sdl_draw_frame;
+        instance->frame[i].vo.instance = (vo_instance_t *) instance;
     }
 
     return 0;
 }
 
-static void sdl_close (vo_instance_t * _instance)
+static void sdl_close (vo_instance_t * instance_)
 {
     sdl_instance_t * instance;
     int i;
 
-    instance = (sdl_instance_t *) _instance;
+    instance = (sdl_instance_t *) instance_;
     for (i = 0; i < 3; i++)
-	SDL_FreeYUVOverlay (instance->frame[i].overlay);
+        SDL_FreeYUVOverlay (instance->frame[i].overlay);
     SDL_FreeSurface (instance->surface);
     SDL_QuitSubSystem (SDL_INIT_VIDEO);
 }
 
-static int sdl_setup (vo_instance_t * _instance, int width, int height)
+static int sdl_setup (vo_instance_t * instance_, int width, int height)
 {
     sdl_instance_t * instance;
 
-    instance = (sdl_instance_t *) _instance;
+    instance = (sdl_instance_t *) instance_;
 
     instance->surface = SDL_SetVideoMode (width, height, instance->bpp,
-					  instance->sdlflags);
+                                          instance->sdlflags);
     if (! (instance->surface)) {
-	fprintf (stderr, "sdl could not set the desired video mode\n");
-	return 1;
+        fprintf (stderr, "sdl could not set the desired video mode\n");
+        return 1;
     }
 
     if (sdl_alloc_frames (instance, width, height)) {
-	fprintf (stderr, "sdl could not allocate frame buffers\n");
-	return 1;
+        fprintf (stderr, "sdl could not allocate frame buffers\n");
+        return 1;
     }
 
     return 0;
@@ -152,7 +152,7 @@ vo_instance_t * vo_sdl_open (void)
 
     instance = malloc (sizeof (sdl_instance_t));
     if (instance == NULL)
-	return NULL;
+        return NULL;
 
     instance->vo.setup = sdl_setup;
     instance->vo.close = sdl_close;
@@ -165,25 +165,26 @@ vo_instance_t * vo_sdl_open (void)
     putenv("SDL_VIDEO_X11_NODIRECTCOLOR=1");
 
     if (SDL_Init (SDL_INIT_VIDEO)) {
-	fprintf (stderr, "sdl video initialization failed.\n");
-	return NULL;
+        fprintf (stderr, "sdl video initialization failed.\n");
+        return NULL;
     }
 
     vidInfo = SDL_GetVideoInfo ();
     if (!SDL_ListModes (vidInfo->vfmt, SDL_HWSURFACE | SDL_RESIZABLE)) {
-	instance->sdlflags = SDL_RESIZABLE;
-	if (!SDL_ListModes (vidInfo->vfmt, SDL_RESIZABLE)) {
-	    fprintf (stderr, "sdl couldn't get any acceptable video mode\n");
-	    return NULL;
-	}
+        instance->sdlflags = SDL_RESIZABLE;
+        if (!SDL_ListModes (vidInfo->vfmt, SDL_RESIZABLE)) {
+            fprintf (stderr, "sdl couldn't get any acceptable video mode\n");
+            return NULL;
+        }
     }
     instance->bpp = vidInfo->vfmt->BitsPerPixel;
     if (instance->bpp < 16) {
-	fprintf(stderr, "sdl has to emulate a 16 bit surfaces, "
-		"that will slow things down.\n");
-	instance->bpp = 16;
+        fprintf(stderr, "sdl has to emulate a 16 bit surfaces, "
+                "that will slow things down.\n");
+        instance->bpp = 16;
     }
 
     return (vo_instance_t *) instance;
 }
-#endif
+
+#endif /* LIBVO_SDL */

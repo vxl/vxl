@@ -54,8 +54,8 @@ static void null_draw_frame (vo_frame_t * frame)
 static int null_setup (vo_instance_t * instance, int width, int height)
 {
     return libvo_common_alloc_frames (instance, width, height,
-				      sizeof (null_frame_t),
-				      NULL, NULL, null_draw_frame);
+                                      sizeof (null_frame_t),
+                                      NULL, NULL, null_draw_frame);
 }
 
 vo_instance_t * vo_null_open (void)
@@ -64,7 +64,7 @@ vo_instance_t * vo_null_open (void)
 
     instance = malloc (sizeof (null_instance_t));
     if (instance == NULL)
-	return NULL;
+        return NULL;
 
     instance->vo.setup = null_setup;
     instance->vo.close = libvo_common_free_frames;
@@ -80,8 +80,8 @@ static void null_copy_slice (vo_frame_t * frame, uint8_t ** src)
 static int nullslice_setup (vo_instance_t * instance, int width, int height)
 {
     return libvo_common_alloc_frames (instance, width, height,
-				      sizeof (null_frame_t),
-				      null_copy_slice, NULL, null_draw_frame);
+                                      sizeof (null_frame_t),
+                                      null_copy_slice, NULL, null_draw_frame);
 }
 
 vo_instance_t * vo_nullslice_open (void)
@@ -90,7 +90,7 @@ vo_instance_t * vo_nullslice_open (void)
 
     instance = malloc (sizeof (null_instance_t));
     if (instance == NULL)
-	return NULL;
+        return NULL;
 
     instance->vo.setup = nullslice_setup;
     instance->vo.close = libvo_common_free_frames;
@@ -99,15 +99,15 @@ vo_instance_t * vo_nullslice_open (void)
     return (vo_instance_t *) instance;
 }
 
-static vo_frame_t * rgb_get_frame (vo_instance_t * _instance, int flags)
+static vo_frame_t * rgb_get_frame (vo_instance_t * instance_, int flags)
 {
     null_instance_t * instance;
     null_frame_t * frame;
 
-    instance = (null_instance_t *) _instance;
+    instance = (null_instance_t *) instance_;
     frame =
-	(null_frame_t *) libvo_common_get_frame ((vo_instance_t *) instance,
-						 flags);
+        (null_frame_t *) libvo_common_get_frame ((vo_instance_t *) instance,
+                                                 flags);
 
     frame->rgb_ptr = instance->rgbdata;
     frame->rgb_stride = instance->rgbstride;
@@ -122,37 +122,37 @@ static vo_frame_t * rgb_get_frame (vo_instance_t * _instance, int flags)
     return (vo_frame_t *) frame;
 }
 
-static void rgb_copy_slice (vo_frame_t * _frame, uint8_t ** src)
+static void rgb_copy_slice (vo_frame_t * frame_, uint8_t ** src)
 {
     null_frame_t * frame;
     null_instance_t * instance;
 
-    frame = (null_frame_t *) _frame;
+    frame = (null_frame_t *) frame_;
     instance = (null_instance_t *) frame->vo.instance;
 
     yuv2rgb (frame->rgb_ptr, src[0], src[1], src[2], instance->width, 16,
-	     frame->rgb_stride, frame->yuv_stride, frame->yuv_stride >> 1);
+             frame->rgb_stride, frame->yuv_stride, frame->yuv_stride >> 1);
     frame->rgb_ptr += frame->rgb_stride << 4;
 }
 
-static void rgb_field (vo_frame_t * _frame, int flags)
+static void rgb_field (vo_frame_t * frame_, int flags)
 {
     null_frame_t * frame;
     null_instance_t * instance;
 
-    frame = (null_frame_t *) _frame;
+    frame = (null_frame_t *) frame_;
     instance = (null_instance_t *) frame->vo.instance;
 
     frame->rgb_ptr = instance->rgbdata;
     if ((flags & VO_TOP_FIELD) == 0)
-	frame->rgb_ptr += instance->rgbstride;
+        frame->rgb_ptr += instance->rgbstride;
 }
 
-static int nullrgb_setup (vo_instance_t * _instance, int width, int height)
+static int nullrgb_setup (vo_instance_t * instance_, int width, int height)
 {
     null_instance_t * instance;
 
-    instance = (null_instance_t *) _instance;
+    instance = (null_instance_t *) instance_;
 
     instance->width = width;
     instance->rgbstride = width * instance->bpp / 8;
@@ -161,9 +161,9 @@ static int nullrgb_setup (vo_instance_t * _instance, int width, int height)
     yuv2rgb_init (instance->bpp, MODE_RGB);
 
     return libvo_common_alloc_frames ((vo_instance_t *) instance,
-				      width, height, sizeof (null_frame_t),
-				      rgb_copy_slice, rgb_field,
-				      null_draw_frame);
+                                      width, height, sizeof (null_frame_t),
+                                      rgb_copy_slice, rgb_field,
+                                      null_draw_frame);
 }
 
 vo_instance_t * vo_nullrgb16_open (void)
@@ -172,7 +172,7 @@ vo_instance_t * vo_nullrgb16_open (void)
 
     instance = malloc (sizeof (null_instance_t));
     if (instance == NULL)
-	return NULL;
+        return NULL;
 
     instance->vo.setup = nullrgb_setup;
     instance->vo.close = libvo_common_free_frames;
@@ -188,7 +188,7 @@ vo_instance_t * vo_nullrgb32_open (void)
 
     instance = malloc (sizeof (null_instance_t));
     if (instance == NULL)
-	return NULL;
+        return NULL;
 
     instance->vo.setup = nullrgb_setup;
     instance->vo.close = libvo_common_free_frames;

@@ -45,75 +45,75 @@
 #include "mmx.h"
 
 static void yuvinterleave (uint8_t * dst, uint8_t * pu, uint8_t * pv,
-			   int width)
+                           int width)
 {
     width >>= 3;
     do {
-	dst[0] = pu[0];
-	dst[1] = pv[0];
-	dst[2] = pu[1];
-	dst[3] = pv[1];
-	dst[4] = pu[2];
-	dst[5] = pv[2];
-	dst[6] = pu[3];
-	dst[7] = pv[3];
-	dst += 8;
-	pu += 4;
-	pv += 4;
+        dst[0] = pu[0];
+        dst[1] = pv[0];
+        dst[2] = pu[1];
+        dst[3] = pv[1];
+        dst[4] = pu[2];
+        dst[5] = pv[2];
+        dst[6] = pu[3];
+        dst[7] = pv[3];
+        dst += 8;
+        pu += 4;
+        pv += 4;
     } while (--width);
 }
 
 static void yuv2g200_c (uint8_t * dst, uint8_t * py,
-			uint8_t * pu, uint8_t * pv,
-			int width, int height,
-			int bes_stride, int y_stride, int uv_stride)
+                        uint8_t * pu, uint8_t * pv,
+                        int width, int height,
+                        int bes_stride, int y_stride, int uv_stride)
 {
     int i;
 
     i = height;
     do {
-	memcpy (dst, py, width);
-	py += y_stride;
-	dst += bes_stride;
+        memcpy (dst, py, width);
+        py += y_stride;
+        dst += bes_stride;
     } while (--i);
 
     i = height >> 1;
     do {
-	yuvinterleave (dst, pu, pv, width);
-	pu += uv_stride;
-	pv += uv_stride;
-	dst += bes_stride;
+        yuvinterleave (dst, pu, pv, width);
+        pu += uv_stride;
+        pv += uv_stride;
+        dst += bes_stride;
     } while (--i);
 }
 
 static void yuv2g400_c (uint8_t * dst, uint8_t * py,
-			uint8_t * pu, uint8_t * pv,
-			int width, int height,
-			int bes_stride, int y_stride, int uv_stride)
+                        uint8_t * pu, uint8_t * pv,
+                        int width, int height,
+                        int bes_stride, int y_stride, int uv_stride)
 {
     int i;
 
     i = height;
     do {
-	memcpy (dst, py, width);
-	py += y_stride;
-	dst += bes_stride;
+        memcpy (dst, py, width);
+        py += y_stride;
+        dst += bes_stride;
     } while (--i);
 
     width >>= 1;
     bes_stride >>= 1;
     i = height >> 1;
     do {
-	memcpy (dst, pu, width);
-	pu += uv_stride;
-	dst += bes_stride;
+        memcpy (dst, pu, width);
+        pu += uv_stride;
+        dst += bes_stride;
     } while (--i);
 
     i = height >> 1;
     do {
-	memcpy (dst, pv, width);
-	pv += uv_stride;
-	dst += bes_stride;
+        memcpy (dst, pv, width);
+        pv += uv_stride;
+        dst += bes_stride;
     } while (--i);
 }
 
@@ -139,42 +139,42 @@ static void mga_draw_frame (vo_frame_t * frame)
     instance = (mga_instance_t *) frame->instance;
 
     yuv2g400_c (instance->vid_data,
-		frame->base[0], frame->base[1], frame->base[2],
-		instance->mga_vid_config.src_width,
-		instance->mga_vid_config.src_height,
-		instance->stride, instance->mga_vid_config.src_width,
-		instance->mga_vid_config.src_width >> 1);
+                frame->base[0], frame->base[1], frame->base[2],
+                instance->mga_vid_config.src_width,
+                instance->mga_vid_config.src_height,
+                instance->stride, instance->mga_vid_config.src_width,
+                instance->mga_vid_config.src_width >> 1);
 
     ioctl (instance->fd, MGA_VID_FSEL, &instance->next_frame);
 
     instance->next_frame ^= 2; /* switch between fields A1 and B1 */
     if (instance->next_frame) 
-	instance->vid_data = instance->frame1;
+        instance->vid_data = instance->frame1;
     else
-	instance->vid_data = instance->frame0;
+        instance->vid_data = instance->frame0;
 }
 
-static void mga_close (vo_instance_t * _instance)
+static void mga_close (vo_instance_t * instance_)
 {
     mga_instance_t * instance;
 
-    instance = (mga_instance_t *) _instance;
+    instance = (mga_instance_t *) instance_;
 
     close (instance->fd);
     libvo_common_free_frames ((vo_instance_t *) instance);
 }
 
-static int mga_setup (vo_instance_t * _instance, int width, int height)
+static int mga_setup (vo_instance_t * instance_, int width, int height)
 {
     mga_instance_t * instance;
     char * frame_mem;
     int frame_size;
 
-    instance = (mga_instance_t *) _instance;
+    instance = (mga_instance_t *) instance_;
 
     if (ioctl (instance->fd, MGA_VID_ON, 0)) {
-	close (instance->fd);
-	return 1;
+        close (instance->fd);
+        return 1;
     }
 
     instance->mga_vid_config.src_width = width;
@@ -186,7 +186,7 @@ static int mga_setup (vo_instance_t * _instance, int width, int height)
     instance->mga_vid_config.colkey_on = 1;
 
     if (ioctl (instance->fd, MGA_VID_CONFIG, &(instance->mga_vid_config)))
-	perror ("Error in instance->mga_vid_config ioctl");
+        perror ("Error in instance->mga_vid_config ioctl");
     ioctl (instance->fd, MGA_VID_ON, 0);
 
     instance->stride = (width + 31) & ~31;
@@ -198,8 +198,8 @@ static int mga_setup (vo_instance_t * _instance, int width, int height)
     instance->next_frame = 0;
 
     return libvo_common_alloc_frames ((vo_instance_t *) instance,
-				      width, height, sizeof (vo_frame_t),
-				      NULL, NULL, mga_draw_frame);
+                                      width, height, sizeof (vo_frame_t),
+                                      NULL, NULL, mga_draw_frame);
 }
 
 vo_instance_t * vo_mga_open (void)
@@ -208,12 +208,12 @@ vo_instance_t * vo_mga_open (void)
 
     instance = malloc (sizeof (mga_instance_t));
     if (instance == NULL)
-	return NULL;
+        return NULL;
 
     instance->fd = open ("/dev/mga_vid", O_RDWR);
     if (instance->fd < 0) {
-	free (instance);
-	return NULL;
+        free (instance);
+        return NULL;
     }
 
     instance->vo.setup = mga_setup;
@@ -222,4 +222,5 @@ vo_instance_t * vo_mga_open (void)
 
     return (vo_instance_t *) instance;
 }
-#endif
+
+#endif /* LIBVO_MGA */
