@@ -71,4 +71,4 @@ static void test_curve_algs()
   vcl_cout << "Closest Point to (0.5, 2.0)=(" << xc << ' ' << yc << ")\n";
 }
 
-TESTLIB_DEFINE_MAIN(test_curve_algs);
+//TESTLIB_DEFINE_MAIN(test_curve_algs);

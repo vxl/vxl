@@ -1,5 +1,6 @@
 //:
 // \file
+#include <vcl_algorithm.h>
 #include <vcl_cmath.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vdgl/vdgl_digital_region.h>
@@ -39,6 +40,35 @@ mahalanobis_distance(vdgl_digital_region_sptr const& r1,
     s2 = SMALL;
   float s_sq = (s1*s1*s2*s2)/(s1*s1 + s2*s2);
   float d = vcl_sqrt((m1-m2)*(m1-m2)/s_sq);
+  vcl_cout << "MDistance||(" << r1->Npix()
+           << ")(Xo:" << r1->Xo() << " Yo:" << r1 ->Yo() 
+           << " Io:" << r1 ->Io() << ")::(" << r2->Npix()
+           << " Xo:" << r2->Xo() << " Yo:" << r2 ->Yo() 
+           << " Io:" << r2 ->Io() <<")||= " << d << "\n"<< vcl_flush;
+
+  return d;
+}
+
+float bdgl_region_algs::intensity_distance(vdgl_digital_region_sptr const& r1,
+                                           vdgl_digital_region_sptr const& r2)
+{
+  int min_npts = 5;
+  float MY_HUGE = vnl_numeric_traits<float>::maxval;
+  float SMALL = 1;
+  if(!r1||!r2)
+    return MY_HUGE;
+  if(r1->Npix()<min_npts||r2->Npix()<min_npts)
+    return MY_HUGE;
+  float m1 = r1->Io(), m2 = r2->Io();
+  if(vcl_fabs(m1-m2)<SMALL)
+    return 0;
+  float msq = (m1+m2)*(m1+m2);
+  float d = 2.0*vcl_sqrt((m1-m2)*(m1-m2)/msq);
+  vcl_cout << "Intensity Distance||(" << r1->Npix()
+           << ")(Xo:" << r1->Xo() << " Yo:" << r1 ->Yo() 
+           << " Io:" << r1 ->Io() << ")::(" << r2->Npix()
+           << " Xo:" << r2->Xo() << " Yo:" << r2 ->Yo() 
+           << " Io:" << r2 ->Io() <<")||= " << d << "\n"<< vcl_flush;
   return d;
 }
 
@@ -69,19 +99,92 @@ bool bdgl_region_algs::merge(vdgl_digital_region_sptr const& r1,
   float const* Y2 = r2->Yj();
   unsigned short const* I2 = r2->Ij();
 
-  for (int i = 0; i<n1; i++)
-  {
-    Xm[i] = X1[i];
-    Ym[i] = Y1[i];
-    Im[i] = I1[i];
-  }
-
-  for (int i = 0; i<n2; i++)
-  {
-    Xm[i] = X2[i];
-    Ym[i] = Y2[i];
-    Im[i] = I2[i];
-  }
+  for(int i = 0; i<n1; i++)
+    {
+      Xm[i] = X1[i];
+      Ym[i] = Y1[i];
+      Im[i] = I1[i];
+    }
+  int j = n1;
+  for(int i = 0; i<n2; i++,j++)
+    {
+      Xm[j] = X2[i];
+      Ym[j] = Y2[i];
+      Im[j] = I2[i];
+    }
   rm = new vdgl_digital_region(n, Xm, Ym, Im);
   return true;
+}                            
+static int increasing_compare(const void *x1, const void *x2)
+{
+  unsigned short* f1 = (unsigned short*)x1;
+  unsigned short* f2 = (unsigned short*)x2;
+  if(*f1<*f2)
+    return -1;
+  if(*f1==*f2)
+    return 0;
+  
+    return 1;
+}
+
+static int decreasing_compare(const void *x1, const void *x2)
+{
+  unsigned short* f1 = (unsigned short*)x1;
+  unsigned short* f2 = (unsigned short*)x2;
+  if(*f1>*f2)
+    return -1;
+  if(*f1==*f2)
+    return 0;
+  
+    return 1;
+}
+
+//: Computes the maximum average distance between the intensity samples in two
+//  regions. 
+float 
+bdgl_region_algs::earth_mover_distance(vdgl_digital_region_sptr const& r1,
+                                       vdgl_digital_region_sptr const& r2)
+{
+  int min_npts = 5;
+  float MY_HUGE = vnl_numeric_traits<float>::maxval;
+  float SMALL = 1;
+  if(!r1||!r2)
+    return MY_HUGE;
+  int n1 = r1->Npix(), n2 = r2->Npix();
+  if(n1<min_npts||n2<min_npts)
+    return MY_HUGE;
+  int n_smaller = n1, n_larger = n2;
+  vdgl_digital_region_sptr r_smaller = r1, r_larger = r2;
+  if(n_smaller>n_larger)
+    {
+      n_smaller = n2;
+      n_larger = n1;
+      r_smaller = r2;
+      r_larger = r1;
+    }
+  //Sort the intensities in each region
+  vcl_qsort( (void *)(r_smaller->Ij()), n_smaller,
+             sizeof( unsigned short ), increasing_compare );  
+
+  vcl_qsort( (void *)(r_larger->Ij()), n_larger,
+             sizeof( unsigned short ), decreasing_compare );  
+  //Match up the smallest intensities in the smaller region with
+  //the largest intensities in the larger region.  This provides a 
+  //measure of the distance between the two regions
+
+  float sum = 0;
+  for(int i = 0; i<n_smaller; i++)
+    {
+      float Ini = (r_smaller->Ij())[i];
+      float Inj = (r_larger->Ij())[i];
+      float d = vcl_sqrt((Ini-Inj)*(Ini-Inj));
+      sum += d;
+    }
+  sum /= n_smaller;
+//   vcl_cout << "EarthMover Max Distance||(" << r1->Npix()
+//            << ")(Xo:" << r1->Xo() << " Yo:" << r1 ->Yo() 
+//            << " Io:" << r1 ->Io() << ")::(" << r2->Npix()
+//            << " Xo:" << r2->Xo() << " Yo:" << r2 ->Yo() 
+//            << " Io:" << r2 ->Io() <<")||= " << sum << "\n"<< vcl_flush;
+  return sum;
 }
