@@ -429,12 +429,16 @@ void segv_segmentation_manager::fit_lines()
 {
    this->clear_display();
   static sdet_grid_finder_params gfp;
+  vcl_vector<vcl_string> choices;
+  gfp.get_debug_choices(choices);
   static bool agr = true;
   static sdet_detector_params dp;
   dp.borderp=false;
   static sdet_fit_lines_params flp;
   static float nm = 2.0;
   static bool detect_grid=true;
+  static bool grid_debug=false;
+  static bool matched_lines = false;
   vgui_dialog vd_dialog("Fit Lines");
   vd_dialog.field("Gaussian sigma", dp.smooth);
   vd_dialog.field("Noise Threshold", nm);
@@ -446,6 +450,9 @@ void segv_segmentation_manager::fit_lines()
   vd_dialog.field("Angle Tolerance", gfp.angle_tol_);
   vd_dialog.field("Line Count Threshold", gfp.thresh_);
   vd_dialog.checkbox("Detect Grid", detect_grid);
+  vd_dialog.checkbox("Grid Debug Output", gfp.verbose_);
+  vd_dialog.checkbox("Matched Lines", matched_lines);
+  vd_dialog.choice("Choose Debug Line Display", choices, gfp.debug_state_); 
   if (!vd_dialog.ask())
     return;
   dp.noise_multiplier=nm;
@@ -478,9 +485,13 @@ void segv_segmentation_manager::fit_lines()
         }
       vcl_vector<vsol_line_2d_sptr> mapped_lines;
       gf.compute_homography();
-//    if (gf.get_mapped_lines(mapped_lines))
-      if (gf.get_backprojected_grid(mapped_lines))
-        this->draw_lines(mapped_lines);
+      if(!gfp.debug_state_)
+        //        gf.get_mapped_lines(mapped_lines);
+        gf.get_backprojected_grid(mapped_lines);
+      else
+        gf.get_debug_lines(mapped_lines);
+
+      this->draw_lines(mapped_lines);
       return;
     }
   this->draw_lines(lines);
