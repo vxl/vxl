@@ -15,6 +15,7 @@ DECLARE( test_algo_exp_filter );
 DECLARE( test_algo_grad_1x3 );
 DECLARE( test_image_resource );
 DECLARE( test_algo_normalised_correlation_3d );
+DECLARE( test_algo_convolve_1d );
 DECLARE( test_convert );
 
 void
@@ -36,6 +37,7 @@ register_tests()
   REGISTER( test_algo_exp_filter );
   REGISTER( test_algo_grad_1x3 );
   REGISTER( test_algo_normalised_correlation_3d );
+  REGISTER( test_algo_convolve_1d );
 }
 
 DEFINE_MAIN;
