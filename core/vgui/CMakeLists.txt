@@ -1,5 +1,7 @@
 # oxl/vgui/CMakeLists.txt
 
+# Please default this to "yes" in the repository so that
+# dashboards will try to compile vgui.
 OPTION( BUILD_VGUI "Build VGUI" "YES" )
 
 IF( BUILD_VGUI )
