@@ -6,9 +6,7 @@
 
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
-#include <vcl_cstdlib.h>
 #include <vul/vul_timer.h>
-#include <vil1/vil1_load.h>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vidl_vil1/vidl_vil1_movie.h>
@@ -408,9 +406,9 @@ void vvid_file_manager::un_cached_play()
     this->save_display(frame_index);
   }
 
-  if(video_process_)
-	  video_process_->finish();
-  if(save_display_)
+  if (video_process_)
+    video_process_->finish();
+  if (save_display_)
     this->end_save_display();
   save_display_ = false;
 }
@@ -791,17 +789,17 @@ void vvid_file_manager::save_display(int frame)
 {
   if (!save_display_)
     return;
-  if(!overlay_pane_)
-    {
-      vil1_image image = itab1_->get_image();
-      if(!image)
-        return;
-      display_output_frames_.push_back(image);
+  if (!overlay_pane_)
+  {
+    vil1_image image = itab1_->get_image();
+    if (!image)
       return;
-    }
-  vil1_memory_image_of<vil1_rgb<unsigned char> > temp =  
-  vgui_utils::colour_buffer_to_image();
-  for(int i = 0; i<display_frame_repeat_; i++)
+    display_output_frames_.push_back(image);
+    return;
+  }
+  vil1_memory_image_of<vil1_rgb<unsigned char> >
+    temp = vgui_utils::colour_buffer_to_image();
+  for (int i = 0; i<display_frame_repeat_; i++)
     display_output_frames_.push_back(temp);
 }
 
