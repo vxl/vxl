@@ -7,7 +7,7 @@ SUBDIRS += mbl
 SUBDIRS += vpdfl
 
 # Manchester images 
-SUBDIRS += mil
+SUBDIRS += mil mil3d
 
 # Manchester classifier
 SUBDIRS += clsfy
