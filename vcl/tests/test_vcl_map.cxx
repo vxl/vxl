@@ -18,7 +18,7 @@ int test_vcl_map_main()
   mymap::iterator i = m.find(3);
   okay = okay && (i == m.end()); // not found (=OK)
   i = m.find(2);
-  okay = okay && (i != m.end()) && (i->second == 3141);
+  okay = okay && (i != m.end()) && ((*i).second == 3141);
 
   if( okay )
     return 0;
