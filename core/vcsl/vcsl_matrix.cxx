@@ -1,15 +1,8 @@
 // This is core/vcsl/vcsl_matrix.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 #include "vcsl_matrix.h"
 #include <vcl_cassert.h>
 #include <vcl_cmath.h> // for cos(), sin()
 #include <vcl_iostream.h>
-
-//***************************************************************************
-// Status report
-//***************************************************************************
 
 //---------------------------------------------------------------------------
 // Is `this' invertible at time `time'?
@@ -24,19 +17,6 @@ bool vcsl_matrix::is_invertible(double time) const
 }
 
 //---------------------------------------------------------------------------
-// Is `this' correctly set ?
-//---------------------------------------------------------------------------
-bool vcsl_matrix::is_valid(void) const
-{
-  return (beat_.size()==0&&matrix_.size()==1) ||
-         (beat_.size()==interpolator_.size()+1&&beat_.size()==matrix_.size());
-}
-
-//***************************************************************************
-// Transformation parameters
-//***************************************************************************
-
-//---------------------------------------------------------------------------
 // Set the parameters of a static translation
 //---------------------------------------------------------------------------
 void vcsl_matrix::set_static( vcsl_matrix_param_sptr new_matrix)
@@ -44,18 +24,6 @@ void vcsl_matrix::set_static( vcsl_matrix_param_sptr new_matrix)
   matrix_.clear(); matrix_.push_back(new_matrix);
   vcsl_spatial_transformation::set_static();
 }
-
-//---------------------------------------------------------------------------
-// Set the direction vector variation along the time
-//---------------------------------------------------------------------------
-void vcsl_matrix::set_matrix(list_of_vcsl_matrix_param_sptr const& new_matrix)
-{
-  matrix_=new_matrix;
-}
-
-//***************************************************************************
-// Basic operations
-//***************************************************************************
 
 //---------------------------------------------------------------------------
 // Image of `v' by `this'
@@ -95,10 +63,9 @@ vnl_vector<double> vcsl_matrix::inverse(const vnl_vector<double> &v,
 // Compute the value of the parameter at time `time'
 //---------------------------------------------------------------------------
 
-
 vnl_matrix<double> vcsl_matrix::matrix_value(double time, bool type) const
 {
-  if (beat_.size()==0) // static
+  if (this->duration()==0) // static
     return param_to_matrix(matrix_[0],type);
 
   else
@@ -122,7 +89,7 @@ vnl_matrix<double> vcsl_matrix::matrix_value(double time, bool type) const
   return vnl_matrix<double>(); // never reached if asserts are in effect
 }
 
-vnl_matrix<double>  vcsl_matrix::param_to_matrix(vcsl_matrix_param_sptr from,bool type ) const
+vnl_matrix<double> vcsl_matrix::param_to_matrix(vcsl_matrix_param_sptr from,bool type ) const
 {
   int coef =1;
   if (type) coef = -1;
