@@ -89,7 +89,9 @@ MANPAGE_SOURCES += vnl_double_2.h
 MANPAGE_SOURCES += vnl_double_3.h
 MANPAGE_SOURCES += vnl_double_4.h
 
+MANPAGE_SOURCES += vnl_int_1x1.h
 MANPAGE_SOURCES += vnl_int_2x2.h
+MANPAGE_SOURCES += vnl_float_1x1.h
 MANPAGE_SOURCES += vnl_float_1x2.h
 MANPAGE_SOURCES += vnl_float_2x1.h
 MANPAGE_SOURCES += vnl_float_2x2.h
@@ -99,6 +101,7 @@ MANPAGE_SOURCES += vnl_float_3x3.h
 MANPAGE_SOURCES += vnl_float_3x4.h
 MANPAGE_SOURCES += vnl_float_4x3.h
 MANPAGE_SOURCES += vnl_float_4x4.h
+MANPAGE_SOURCES += vnl_double_1x1.h
 MANPAGE_SOURCES += vnl_double_1x2.h
 MANPAGE_SOURCES += vnl_double_2x1.h
 MANPAGE_SOURCES += vnl_double_2x2.h
