@@ -23,8 +23,8 @@
 #include <vnl/vnl_error.h>
 #include <vnl/vnl_c_vector.h>
 
-template <class T> class vnl_vector;
-template <class T> class vnl_matrix;
+export template <class T> class vnl_vector;
+export template <class T> class vnl_matrix;
 
 //----------------------------------------------------------------------
 
