@@ -9,10 +9,9 @@
 //-----------------------------------------------------------------------------
 
 #include "vil2_clamp.h"
-#include "vcl_cstring.h"
+#include <vcl_cstring.h>
+#include <vcl_cassert.h>
 #include "vil2/vil2_property.h"
-
-
 
 
 vil2_image_resource_sptr vil2_clamp(const vil2_image_resource_sptr &src, double lo, double hi)

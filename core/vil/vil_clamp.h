@@ -10,7 +10,7 @@
 
 #include <vil2/vil2_image_resource.h>
 #include <vil2/vil2_image_view.h>
-
+#include <vcl_cassert.h>
 
 
 template <class T>

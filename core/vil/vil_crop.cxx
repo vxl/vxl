@@ -9,6 +9,7 @@
 //-----------------------------------------------------------------------------
 
 #include "vil2_crop.h"
+#include <vcl_cassert.h>
 
 
 vil2_image_resource_sptr vil2_crop(const vil2_image_resource_sptr &src, unsigned i0,
