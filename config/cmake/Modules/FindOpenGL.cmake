@@ -14,56 +14,56 @@
 # Windows)
 #
 
-SET (HAS_OPENGL "NO")
-
-IF (WIN32)
-
-  SET (HAS_OPENGL "YES")
-  ADD_DEFINITIONS( -DHAS_OPENGL )
-  LINK_LIBRARIES(opengl32 glu32)
-
-ELSE (WIN32)
-
-  SET( HAS_OPENGL "NO" )
-
-  FIND_PATH(OPENGL_INCLUDE_PATH GL/gl.h 
-    /usr/include 
-    /usr/local/include 
-    /usr/openwin/share/include 
-    /opt/graphics/OpenGL/include 
-    /usr/X11R6/include 
-  )
-
-  FIND_LIBRARY(OPENGL_gl_LIBRARY
-    NAMES GL MesaGL
-    PATHS /usr/lib 
-          /usr/local/lib 
-          /opt/graphics/OpenGL/lib 
-          /usr/openwin/lib 
-          /usr/X11R6/lib
-  )
-
-  FIND_LIBRARY(OPENGL_glu_LIBRARY
-    NAMES GLU MesaGLU
-    PATHS /usr/lib 
-          /usr/local/lib 
-          /opt/graphics/OpenGL/lib 
-          /usr/openwin/lib 
-          /usr/X11R6/lib
-  )
-
-  IF(OPENGL_INCLUDE_PATH)
-  IF(OPENGL_gl_LIBRARY)
-  IF(OPENGL_glu_LIBRARY)
-
-    SET( HAS_OPENGL "YES" )
+IF(NOT HAS_OPENGL)
+  IF (WIN32)
+  
+    SET (HAS_OPENGL "YES")
     ADD_DEFINITIONS( -DHAS_OPENGL )
-
-    INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_PATH})
-    LINK_LIBRARIES( ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY} )
-
-  ENDIF(OPENGL_glu_LIBRARY)
-  ENDIF(OPENGL_gl_LIBRARY)
-  ENDIF(OPENGL_INCLUDE_PATH)
-
-ENDIF (WIN32)
+    LINK_LIBRARIES(opengl32 glu32)
+  
+  ELSE (WIN32)
+  
+    SET( HAS_OPENGL "NO" )
+  
+    FIND_PATH(OPENGL_INCLUDE_PATH GL/gl.h 
+      /usr/include 
+      /usr/local/include 
+      /usr/openwin/share/include 
+      /opt/graphics/OpenGL/include 
+      /usr/X11R6/include 
+    )
+  
+    FIND_LIBRARY(OPENGL_gl_LIBRARY
+      NAMES GL MesaGL
+      PATHS /usr/lib 
+            /usr/local/lib 
+            /opt/graphics/OpenGL/lib 
+            /usr/openwin/lib 
+            /usr/X11R6/lib
+    )
+  
+    FIND_LIBRARY(OPENGL_glu_LIBRARY
+      NAMES GLU MesaGLU
+      PATHS /usr/lib 
+            /usr/local/lib 
+            /opt/graphics/OpenGL/lib 
+            /usr/openwin/lib 
+            /usr/X11R6/lib
+    )
+  
+    IF(OPENGL_INCLUDE_PATH)
+    IF(OPENGL_gl_LIBRARY)
+    IF(OPENGL_glu_LIBRARY)
+  
+      SET( HAS_OPENGL "YES" )
+      ADD_DEFINITIONS( -DHAS_OPENGL )
+  
+      INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_PATH})
+      LINK_LIBRARIES( ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY} )
+  
+    ENDIF(OPENGL_glu_LIBRARY)
+    ENDIF(OPENGL_gl_LIBRARY)
+    ENDIF(OPENGL_INCLUDE_PATH)
+  
+  ENDIF (WIN32)
+ENDIF(NOT HAS_OPENGL)
