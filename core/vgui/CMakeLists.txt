@@ -93,6 +93,7 @@ vgui_slab
 vgui_event_loop
 )
 
+INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindGLUT.cmake )
 INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake )
 
 AUX_SOURCE_DIRECTORY(Templates vgui_sources)
