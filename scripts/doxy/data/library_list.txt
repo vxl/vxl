@@ -7,10 +7,18 @@
 # Each library is assumed to depend on those preceding it (for the
 # purpose of building links between libraries in the html).
 
-# package: vcl Cross platform STL library
+# package: vcl :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl Cross platform STL library
 # . vcl vcl_ build
 
-package: vxl Core Vision Libraries
+
+
+search: ../search_vxl.html Search this Documentation Tree.
+
+book: vxl : VXL overview documentation
+book: mul : Manchester University Library overview documentation
+
+
+package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl vxl Core Vision Libraries
 vxl vsl vsl_ build
 vxl vnl vnl_ build
 vxl vbl vbl_ build
@@ -19,31 +27,31 @@ vxl vil vil_ build
 vxl vul vul_ build
 vxl vpl vpl_ build
 
-package: vxl Level-2 Vision Libraries
+package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl vxl Level-2 Vision Libraries
 vxl vidl vidl_ build
 vxl vcsl vcsl_ build
 
-package: vxl Test Framework
+package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl vxl Test Framework
 vxl testlib testlib_ build
 
-package: mul Manchester University Libraries
+package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl mul Manchester University Libraries
 mul mbl   mbl_   build
 mul mil   mil_   build
 mul mil3d mil3d_ build
 mul vpdfl vpdfl_ build
 mul clsfy clsfy_ build
 
-package: tbl Various Image Processing Libraries
+package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl tbl Various Image Processing Libraries
 tbl vipl vipl_ build
 tbl vepl vepl_ build
 
-package: oxl Oxford University Libraries
+package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl oxl Oxford University Libraries
 # Need to check dependency order
 oxl mvl mvl_ build
 oxl osl osl_ build
 oxl vgui vgui_ build
 
-package: gel GE Libraries
+package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl gel GE Libraries
 # Need to check dependency order
 gel geml geml_ build
 gel gevd gevd_ build
@@ -58,6 +66,6 @@ gel vsol vsol_ build
 gel vsrl vsrl_ build
 gel vtol vtol_ build
 
-package: rpl RPI libraries
+package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl rpl RPI libraries
 rpl rrel rrel_ build
 rpl rsdl rsdl_ build

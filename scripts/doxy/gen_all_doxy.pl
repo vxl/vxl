@@ -97,8 +97,8 @@ sub update_library
   {
     if ($cvsup ne "true")
     {
-		  die "$vxlsrc/$package/$library does not exist.\n";
-	  }
+      die "$vxlsrc/$package/$library does not exist.\n";
+    }
 
     # Check the library out of cvs
     $cmd="cvs -z3 up -d $library\n";
@@ -208,7 +208,13 @@ while (<MODULES>)
   # ignore lines containing "package:";
   if ( /package:/ ) { next; }
 
-	chomp;
+  # ignore lines containing "book:";
+  if ( /book:/ ) { next; }
+
+  # ignore lines containing "search:";
+  if ( /search:/ ) { next; }
+
+  chomp;
   @bits = split /\s/;
   $package = $bits[0];
   $library = $bits[1];

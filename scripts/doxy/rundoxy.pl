@@ -59,6 +59,12 @@ sub get_dependencies
     # ignore lines containing "package:"
     if ( /package:/ ) { next; }
 
+    # ignore lines containing "search:"
+    if ( /search:/ ) { next; }
+
+    # ignore lines containing "book:"
+    if ( /book:/ ) { next; }
+
     chomp;
     ($package, $libry, $pref, @stuff) = split /\s/;
 
@@ -72,7 +78,7 @@ sub get_dependencies
       $prefix = $pref;
       last;
     }
-		# Add library to list of those seen
+    # Add library to list of those seen
     @liblist = (@liblist,$packlib);
   }
   close(IN);

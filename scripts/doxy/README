@@ -33,7 +33,7 @@ All the scripts take one or more of the following parameters:
 -l library_list : Defines file containing list of libraries and dependencies
                   (Default is $script_dir/library_list.txt)
 -l book_list : Defines file containing list of texi books
-                  (Default is $script_dir/book_list.txt)
+                  (Default is $script_dir/library_list.txt)
 -u : Update each package from CVS and only build if changes occur
 -f : Force build of everything (useful every now and again to keep things in sync).
 
@@ -56,7 +56,7 @@ c) Create a book_list.txt file, based on the one in the data directory,
    indicating the extra texi books you have written
 d) Invoke
 
-build_all_doc.pl -v $VXLSRC -l my_library_list.txt -o OUTPUTDIR -b my_book_list.txt [-f] [-u]
+build_all_doc.pl -v $VXLSRC -l my_library_list.txt -o OUTPUTDIR -b my_library_list.txt [-f] [-u]
 
 That's all there is to it.
 
@@ -72,10 +72,7 @@ This makes it easy to add a new package to the system and have its documentation
 appear on the webserver (over-night if you invoke the script each night).
 
 When a package is added to the repository, to make documentation
-appear for it you should modify
-a) The package_list.txt file
-b) The library_list.txt file
-c) The book_list.txt file
+appear for it you should modify the library_list.txt file
 The checkout_packages.pl tool will be used to make sure the package gets checked
 out onto the webserver, so that its documentation can then be generated.
 

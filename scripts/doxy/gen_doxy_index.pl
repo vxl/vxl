@@ -3,7 +3,7 @@
 exec perl -w -x $0 ${1+"$@"}
 #!perl
 #line 6
-# If Windows barfs at line 3 here, you will need to run perl -x vxl_doxy.pl
+# If Windows barfs at line 3 here, you will need to run perl -x this_file.pl
 # You can set up as a permanent file association using the following commands
 #  >assoc .pl=PerlScript
 #  >ftype PerlScript=C:\Perl\bin\Perl.exe -x "%1" %*
@@ -51,7 +51,8 @@ sub do_dirs
   my($vxlsrc,$library_list)=@_;
   my $label;
 
-    my $firstpackage=1;
+  my $firstpackage=1;
+  my $cvsroot;
 
   print OF  "<h2>Library Documentation</h2>\n";
 
@@ -69,19 +70,24 @@ sub do_dirs
     chomp;
     @bits = split /\s/;
 
-        if ($bits[0] eq "package:")
-        {
-          # Get package name and description
-          ($label,$package,@descrip) = split /\s/;
-            if (!$firstpackage)
-            {
-              print OF "</blockquote>\n";
+    if ($bits[0] eq "book:") {next;}
+
+    if ($bits[0] eq "search:") {next;}
+
+    if ($bits[0] eq "package:")
+    {
+      # Get package name and description
+      ($label,$cvsroot,$package, @descrip) = split /\s/;
+      if (!$firstpackage)
+      {
+        print OF "</blockquote>\n";
       }
       print OF "<h3>$package : @descrip</h3>\n";
             print OF "<blockquote>\n";
             $firstpackage=0;
       next;
-        }
+    }
+
 
     $package = $bits[0];
     $library = $bits[1];
@@ -101,11 +107,24 @@ sub do_dirs
 }
 
 #-----------------------------------------------------------
+#      print_link
 
-sub print_header()
+sub print_link
+{
+  my ($text, $link)  = @_;
+  print OF "<a href=\"";
+  print OF $link;
+  print OF "\"> $text";
+  print OF '</a>' , "\n";
+
+}
+
+#-----------------------------------------------------------
+
+sub print_header
 
 {
-
+my ($ctrl_list) = @_;
 
 print OF  "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">";
 
@@ -119,20 +138,31 @@ print OF  "<body>\n";
 print OF  "<h1>VXL Documentation</h1>\n";
 print OF  "<p>C++ Libraries for Computer Vision Research and Implementation</p>\n";
 
-print OF  "<HR>";
-}
 
-#-----------------------------------------------------------
-#      print_link
-
-sub print_link
+# Read in control file for search term.
+open(CTRLFILE, $ctrl_list) || die "can't open $ctrl_list\n";
+while (<CTRLFILE>)
 {
-  my ($text, $link)  = @_;
-  print OF "<a href=\"";
-  print OF $link;
-  print OF "\"> $text";
-  print OF '</a>' , "\n";
+  # ignore empty lines
+  if ( /^\s*$/ ) { next; }
 
+  # ignore comments
+  if ( /^#/ ) { next; }
+
+  # ignore non-book info lines.
+  if ( /^search: / )
+  {
+    chomp;
+    ($command, $search_ref, @textlinebits) = split /\s/;
+    $textline = join(' ', @textlinebits);
+    print OF  '<p>';
+    print_link ($textline, $search_ref);
+    print OF "</p>\n";
+  }
+}
+close(CTRLFILE);
+
+print OF  "<HR>";
 }
 
 #-----------------------------------------------------------
@@ -160,12 +190,15 @@ sub print_book_index_links
     # ignore comments
     if ( /^#/ ) { next; }
 
+    # ignore non-book info lines.
+    if ( ! /^book: / ) { next; }
+
     chomp;
-    ($module, @textline) = split /\s/;
+    ($command, $module, @textline) = split /\s/;
 
       $link = "books/$module/book.html";
-
-      print_link($_,$link);
+      $ltext = join(' ',@textline);
+      print_link("$module $ltext",$link);
       print OF "<br>";
 
   }
@@ -205,7 +238,7 @@ getopts('v:s:l:b:o:fu', \%options);
 my $vxlsrc  = $options{v} || "";
 my $script_dir = $options{s} || "$vxlsrc/scripts/doxy";
 my $library_list = $options{l} || "$script_dir/data/library_list.txt";
-my $book_list = $options{b} || "$script_dir/data/book_list.txt";
+my $book_list = $options{b} || "$script_dir/data/library_list.txt";
 my $doxydir = $options{o} || "$vxlsrc/Doxy";
 
 if (!$vxlsrc)
@@ -218,7 +251,7 @@ if (!$vxlsrc)
 
 $index = "$doxydir/html/index.html";
 open(OF, ">$index");
-print_header();
+print_header($library_list);
 print_book_index_links($vxlsrc,$book_list);
 do_dirs($vxlsrc,$library_list);
 print_tail();

@@ -1,8 +1,0 @@
-# List of books to be included in documentation
-# Books are assumed to be written in texi and live in Module/doc/book/
-# Format: Module Line_for_index
-# Currently the whole line is included in the index, the first word used
-# to deduce where the book is.
-
-vxl : VXL overview documentation
-mul : Manchester University Library overview documentation

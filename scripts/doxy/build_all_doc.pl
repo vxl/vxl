@@ -3,7 +3,7 @@
 exec perl -w -x $0 ${1+"$@"}
 #!perl
 #line 6
-# If Windows barfs at line 3 here, you will need to run perl -x vxl_doxy.pl
+# If Windows barfs at line 3 here, you will need to run perl -x this_file.pl
 # You can set up as a permanent file association using the following commands
 #  >assoc .pl=PerlScript
 #  >ftype PerlScript=C:\Perl\bin\Perl.exe -x "%1" %*
@@ -41,7 +41,7 @@ getopts('v:l:s:b:o:fu', \%options);
 my $vxlsrc = $options{v} || "";
 my $script_dir = $options{s} || "$vxlsrc/scripts/doxy";
 my $library_list = $options{l} || "$script_dir/data/library_list.txt";
-my $book_list = $options{b} || "$script_dir/data/book_list.txt";
+my $book_list = $options{b} || "$script_dir/data/library_list.txt";
 my $doxydir = $options{o} || "$vxlsrc/Doxy";
 
 $forcedflag="";
@@ -65,12 +65,12 @@ if ($vxlsrc eq "")
     print "  ie the directory which contains vcl,vxl,mul etc\n\n";
     print "  outputdir (default VXLSRC/Doxy) indicates where the documentation \n";
     print "  is to be placed.\n";
-		print "  script_dir gives the location of the scripts\n";
-		print "    default is VXLSRC/scripts/doxy\n";
+    print "  script_dir gives the location of the scripts\n";
+    print "    default is VXLSRC/scripts/doxy\n";
     print "  If lib_file is not supplied it is assumed to be\n";
     print "  script_dir/library_list.txt\n";
     print "  If book_file is not supplied it is assumed to be\n";
-    print "  script_dir/book_list.txt\n";
+    print "  script_dir/library_list.txt\n";
     print "  Other options:\n";
     print "  -u : Update cvs\n";
     print "  -f : Force build\n";

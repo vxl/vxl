@@ -55,3 +55,5 @@ they don't already exist in vxlsrc.
 
 This is provided to help automate the process of getting documentation on
 a webserver.
+
+Note that the package list, book file and package list can be (and are usually) the same file.  $linktext = get_summary_line($vxlsrc,$package,$library);

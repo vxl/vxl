@@ -3,7 +3,7 @@
 exec perl -w -x $0 ${1+"$@"}
 #!perl
 #line 6
-# If Windows barfs at line 3 here, you will need to run perl -x vxl_doxy.pl
+# If Windows barfs at line 3 here, you will need to run perl -x this_file.pl
 # You can set up as a permanent file association using the following commands
 #  >assoc .pl=PerlScript
 #  >ftype PerlScript=C:\Perl\bin\Perl.exe -x "%1" %*
@@ -45,8 +45,8 @@ my $data_dir = $options{d} || "$script_dir/data";
 my $doxydir = $options{o} || "$vxlsrc/Doxy";
 
 my $library_list = "$data_dir/library_list.txt";
-my $book_list    = "$data_dir/book_list.txt";
-my $package_list = "$data_dir/package_list.txt";
+my $book_list    = "$data_dir/library_list.txt";
+my $package_list = "$data_dir/library_list.txt";
 
 $forcedflag="";
 if (defined($options{f}))
@@ -71,8 +71,8 @@ if ($vxlsrc eq "")
     print "  is to be placed.\n";
     print "  script_dir gives the location of the scripts\n";
     print "    default is VXLSRC/scripts/doxy\n";
-    print "  data_dir is the directory containing library_list.txt, book_list.txt\n";
-	print "           and package_list.txt.  If not supplied, assumed to be script_dir/data\n";
+    print "  data_dir is the directory containing library_list.txt. If not \n";
+    print "  supplied, assumed to be script_dir/data\n";
     print "  Other options:\n";
     print "  -u : Update cvs\n";
     print "  -f : Force build\n";
