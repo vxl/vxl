@@ -355,7 +355,7 @@ n_nearest( const vnl_vector_fixed< COORD_T, 2 > & query_pt,
 
       // across left
       if ( min_bin_x == c_bin_x - infinity_norm_dist  ) {   // haven't fallen off left edge
-        for ( bin_y = min_bin_y + 1;  bin_x < max_bin_y; ++ bin_y ) {
+        for ( bin_y = min_bin_y + 1;  bin_y < max_bin_y; ++ bin_y ) {
           bin_xs.push_back( min_bin_x );
           bin_ys.push_back( bin_y );
         }
