@@ -1,5 +1,4 @@
 LINK_LIBRARIES( netlib )
-LINK_DIRECTORIES ( ${allvxl_BINARY_DIR}/v3p/netlib )
 
 IF(UNIX)
   LINK_LIBRARIES( m )
