@@ -1,6 +1,5 @@
 #ifndef rrel_ran_sam_search_h_
 #define rrel_ran_sam_search_h_
-
 //:
 // \file
 // \brief Random sampling search for minimization of a robust objective function
@@ -27,7 +26,7 @@ class mbl_mz_random;
 //  the short-circuiting of RANSAC, which can cause incorrect results
 //  for a large number of outliers.
 //
-//  The number of samples taken is computed to accomodate the
+//  The number of samples taken is computed to accommodate the
 //  possibility of more than one population in the data, as described
 //  in Stewart, PAMI 1995.  It is a relatively straightforward
 //  generalization of the ordinary method for calculating the number
@@ -38,8 +37,9 @@ class mbl_mz_random;
 //  calling estimate().  Results may be obtained through the functions
 //  params() and scale().
 
-class rrel_ran_sam_search {
-public:
+class rrel_ran_sam_search
+{
+ public:
   //: Constructor using a non-deterministic random-sampling seed.
   rrel_ran_sam_search( );
 
@@ -87,7 +87,7 @@ public:
 
   void set_trace_level( int level ) { trace_level_ = level; }
 
-private:
+ private:
   // ------------------------------------------------------------
   //  Random sampling functions.  Don't call directly.  These are
   //  public for test purposes.
@@ -100,12 +100,12 @@ private:
   void next_sample( unsigned int taken, unsigned int num_points, vcl_vector<int>& sample,
                     unsigned int points_per_sample );
 
-private:
+ private:
 
   void trace_sample( const vcl_vector<int>& point_indices ) const;
   void trace_residuals( const vcl_vector<double>& residuals ) const;
 
-protected:
+ protected:
   //
   //  Parameters
   //
