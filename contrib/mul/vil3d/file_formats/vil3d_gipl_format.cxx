@@ -18,7 +18,7 @@
 
 // GIPL magic number
 const unsigned GIPL_MAGIC1 = 719555000;
-const unsigned GIPL_MAGIC2 = 4026526128;
+const unsigned GIPL_MAGIC2 = 4026526128U;
 
 // GIPL header size
 #define GIPL_HEADERSIZE   256
