@@ -5,14 +5,14 @@
 //:
 // \file
 // \brief A xml process class for converting aggregates of objects
-//        
+//
 // \author
 //   J.L. Mundy
 //
 // \verbatim
 //  Modifications:
 //   J.L. Mundy December 8, 2002    Initial version.
-//   Based on the original TargetJr design 
+//   Based on the original TargetJr design
 // \endverbatim
 //--------------------------------------------------------------------------------
 #include <vcl_string.h>
@@ -21,7 +21,8 @@
 #include <bxml/dll.h>
 #include <bxml/bxml_generic_ptr.h>
 #include <bxml/bxml_input_converter_sptr.h>
-class bxml_io 
+
+class bxml_io
 {
  public:
   bxml_io();
@@ -38,10 +39,10 @@ class bxml_io
   static bool parse_xml(vcl_string fname,vcl_vector<bxml_generic_ptr>& objs);
 
  protected:
-  static BXML_DLL_DATA int _current_object_index;
+  static BXML_DLL_DATA int current_object_index_;
 
   //members
-  static BXML_DLL_DATA vcl_vector<bxml_input_converter_sptr> _input_converters;
+  static BXML_DLL_DATA vcl_vector<bxml_input_converter_sptr> input_converters_;
 };
 
 #endif // bxml_io_h_
