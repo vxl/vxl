@@ -77,8 +77,8 @@ inline double eps(vcl_complex<double> *) { return 1e-12; }
 template <class T>
 void new_test(T *)
 {
-  unsigned m = 4;
-  unsigned n = 5;
+  unsigned m = 5; // m must be >= n when using the netlib QR algorithms,
+  unsigned n = 5; // but n >= m for a random A and b to have exact solution.
 
   vnl_matrix<T> A(m, n);
   vnl_test_fill_random(A.begin(), A.end());
@@ -114,44 +114,46 @@ inst(vcl_complex<float>);
 inst(vcl_complex<double>);
 #undef inst
 
+#include <stdio.h>
 void complex_test()
 {
   typedef vcl_complex<double> ct;
   
-  vnl_matrix<ct> A(4,5);
-  vnl_vector<ct> b(4);
+  vnl_matrix<ct> A(5,4); // #rows must be >= #cols when using netlib QR decomposition
+  vnl_vector<ct> b(5);
   
   A(0,0)=ct( -0.1370,0.5573);
-  A(0,1)=ct(  0.6187,0.3482);
-  A(0,2)=ct( -0.4402,0.6825);
-  A(0,3)=ct(  0.7284,0.7294);
-  A(0,4)=ct( -0.5840,0.5004);
-  A(1,0)=ct( -0.4108,0.7201);
+  A(1,0)=ct(  0.6187,0.3482);
+  A(2,0)=ct( -0.4402,0.6825);
+  A(3,0)=ct(  0.7284,0.7294);
+  A(4,0)=ct( -0.5840,0.5004);
+  A(0,1)=ct( -0.4108,0.7201);
   A(1,1)=ct( -0.5621,0.6056);
-  A(1,2)=ct(  0.4312,0.1262);
-  A(1,3)=ct(  0.9796,0.6049);
-  A(1,4)=ct( -0.1388,0.4999);
-  A(2,0)=ct(  0.7219,0.5105);
-  A(2,1)=ct(  0.9562,0.7896);
+  A(2,1)=ct(  0.4312,0.1262);
+  A(3,1)=ct(  0.9796,0.6049);
+  A(4,1)=ct( -0.1388,0.4999);
+  A(0,2)=ct(  0.7219,0.5105);
+  A(1,2)=ct(  0.9562,0.7896);
   A(2,2)=ct( -0.1356,0.2092);
-  A(2,3)=ct( -0.0847,0.7457);
-  A(2,4)=ct(  0.9721,0.5243);
-  A(3,0)=ct(  0.2085,0.3057);
-  A(3,1)=ct( -0.0903,0.5162);
-  A(3,2)=ct( -0.8424,0.5799);
+  A(3,2)=ct( -0.0847,0.7457);
+  A(4,2)=ct(  0.9721,0.5243);
+  A(0,3)=ct(  0.2085,0.3057);
+  A(1,3)=ct( -0.0903,0.5162);
+  A(2,3)=ct( -0.8424,0.5799);
   A(3,3)=ct( -0.6948,0.0472);
-  A(3,4)=ct(  0.8900,0.5085);
+  A(4,3)=ct(  0.8900,0.5085);
   
-  b(0)=ct(0.9764,0.2280);
-  b(1)=ct(  0.5994,0.0454);
-  b(2)=ct( -0.2385,0.4884);
-  b(3)=ct(  0.0538,0.0402);
+  b(0)=ct( 0.9764,0.2280);
+  b(1)=ct( 0.5994,0.0454);
+  b(2)=ct(-0.2385,0.4884);
+  b(3)=ct( 0.0538,0.0402);
+  b(4)=ct( 1.8634,.64558);
                                     vnl_matlab_print(vcl_cout, b, "b");
   vnl_qr<ct> qr(A);                 vnl_matlab_print(vcl_cout, A, "A");
   const vnl_matrix<ct>& Q = qr.Q(); vnl_matlab_print(vcl_cout, Q, "Q");
   const vnl_matrix<ct>& R = qr.R(); vnl_matlab_print(vcl_cout, R, "R");
   vnl_vector<ct> x = qr.solve(b);   vnl_matlab_print(vcl_cout, x, "solve");
-  vnl_test_assert_near("||Ax - b||", (A*x - b).two_norm(), 0, 1e-12);
+  vnl_test_assert_near("||Ax - b||", (A*x - b).two_norm(), 0, 1e-5);
 }
 
 //--------------------------------------------------------------------------------
