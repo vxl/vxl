@@ -33,7 +33,7 @@ inline void vil3d_math_value_range(const vil3d_image_view<T>& im,
   unsigned np = im.nplanes();
   vcl_ptrdiff_t istep = im.istep(), jstep=im.jstep(), kstep=im.kstep();
 
-  for (unsigned int p=0;p<nplanes;++p, plane += im.planestep())
+  for (unsigned int p=0;p<np;++p, plane += im.planestep())
   {
     const T* slice = plane;
     for (unsigned int k=0;k<nk;++k, slice += kstep)
