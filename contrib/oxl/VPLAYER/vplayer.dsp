@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)" /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/vxl" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "_AFX_DLL" /D "_AFX_NO_DEBUG_CRT" /FD /c
+# ADD CPP /nologo /MT /W3 /GX /O2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "_AFX_DLL" /D "_AFX_NO_DEBUG_CRT" /FD /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x809 /d "NDEBUG"
 # ADD RSC /l 0x809 /d "NDEBUG"
@@ -51,7 +51,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 nafxcw.lib allvxl.lib alloxl.lib opengl32.lib glu32.lib /nologo /subsystem:console /machine:I386 /libpath:"$(IUEROOT)/vxl/Release" /libpath:"$(IUEROOT)/v3p/Release" /libpath:"$(IUEROOT)/oxl/Release"
+# ADD LINK32 nafxcw.lib allvxl.lib alloxl.lib opengl32.lib glu32.lib /nologo /subsystem:console /machine:I386 /libpath:"$(IUEROOT)\vxl\Release" /libpath:"$(IUEROOT)\v3p\Release" /libpath:"$(IUEROOT)\oxl\Release"
 
 !ELSEIF  "$(CFG)" == "vplayer - Win32 Debug"
 
@@ -67,7 +67,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /Gi /GX /ZI /Od /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/vxl" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D "_AFXDLL" /FR /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /Gi /GX /ZI /Od /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\oxl" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D "_AFXDLL" /FR /FD /GZ /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x809 /d "_DEBUG"
 # ADD RSC /l 0x809 /d "_DEBUG" /d "_AFXDLL"
@@ -76,7 +76,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 alloxl.lib vgui_vrml.lib allvxl.lib Qv.lib glu32.lib opengl32.lib vfw32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"$(IUEROOT)/vxl/Debug" /libpath:"$(IUEROOT)/v3p/Debug" /libpath:"$(IUEROOT)/oxl/Debug"
+# ADD LINK32 alloxl.lib vgui_vrml.lib allvxl.lib Qv.lib glu32.lib opengl32.lib vfw32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"$(IUEROOT)\vxl\Debug" /libpath:"$(IUEROOT)\v3p\Debug" /libpath:"$(IUEROOT)\oxl\Debug"
 
 !ENDIF 
 
