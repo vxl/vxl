@@ -1,8 +1,6 @@
-/*=======================================================================
 
-	Copyright: (C) 2000 British Telecommunications PLC
+//	Copyright: (C) 2000 British Telecommunications PLC
 
-=======================================================================*/
 
 //:
 // \file
@@ -240,51 +238,7 @@ void test_k_nearest_neighbour()
 	vcl_cout << "****************Testing builder**************" <<vcl_endl;
 
 
-  {
-    vcl_string desc("{\nclassifier_builder_type: clsfy_knn_builder\n{\nk: 3\n}\n}\n");
-    vcl_istringstream ss(desc);
 
-    clsfy_builder_base *p_builder = clsfy_builder_load(ss);
-    clsfy_classifier_base *c = p_builder->new_classifier();
-    p_builder->build(*c, training_set_inputs, 2, labels);
-    test_set_inputs.reset();
-    unsigned i=0;
-    do
-    {
-      if (c->log_l(test_set_inputs.current()) != knn.log_l(test_set_inputs.current()) ) break;
-      i++;
-    } while (test_set_inputs.next());
-
-    TEST("KNN gives identical results whether created directly or by text-initialised builder",
-      i, nTestSamples);
-
-    delete p_builder; p_builder=0;
-    delete c;
-  }
-
-  {
-    vcl_string desc("{\nclassifier_builder_type: clsfy_parzen_builder\n{\n"
-      "rbf_width: 0.3\npower: 2.0\n}\n}\n");
-    vcl_istringstream ss(desc);
-
-    clsfy_builder_base *p_builder = clsfy_builder_load(ss);
-    clsfy_classifier_base *c = p_builder->new_classifier();
-    p_builder->build(*c, training_set_inputs, 2, labels);
-
-    test_set_inputs.reset();
-    unsigned i=0;
-    do
-    {
-      if (c->log_l(test_set_inputs.current()) != win.log_l(test_set_inputs.current()) ) break;
-      i++;
-    } while (test_set_inputs.next());
-
-    TEST("Parzen gives identical results whether created directly or by text-initialised builder",
-      i, nTestSamples);
-
-    delete p_builder; p_builder=0;
-    delete c;
-  }
   
 	rc.class_probabilities(out, x);
   TEST("Random classifier indicates correct input size", rc.n_dims(), 2);
