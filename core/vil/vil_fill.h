@@ -73,5 +73,40 @@ void vil2_fill_col(vil2_image_view<T>& view, unsigned i, T value)
     vil2_fill_line(col_top,nj,jstep,value);
 }
 
+//: Writes given value into each pixel of image under the elements of the mask set to b
+//  If mask.nplanes()==1 then the same mask is applied to every image plane, otherwise
+//  there must be the same number of mask planes as image planes.
+template<class srcT>
+inline
+void vil2_fill_mask(vil2_image_view<srcT>& image,
+                     const vil2_image_view<bool>& mask,
+                     srcT value, bool b=true)
+{
+  unsigned ni = image.ni(),nj = image.nj(),np = image.nplanes();
+  assert(ni==mask.ni() && nj==mask.nj());
+  assert(mask.nplanes()==1 ||  mask.nplanes() ==np);
+
+  vcl_ptrdiff_t istepA=image.istep(),jstepA=image.jstep(),pstepA = image.planestep();
+  vcl_ptrdiff_t istepB=mask.istep(),jstepB=mask.jstep(),pstepB = mask.planestep();
+
+  // If only one mask plane, apply to all image planes
+  // Setting pstepB to 0 ensures that the same mask is used for each pass
+  if (mask.nplanes()==1) pstepB=0;
+
+  srcT* planeA = image.top_left_ptr();
+  const bool* planeB = mask.top_left_ptr();
+  for (unsigned p=0;p<np;++p,planeA += pstepA,planeB += pstepB)
+  {
+    srcT* rowA   = planeA;
+    const bool* rowB   = planeB;
+    for (unsigned j=0;j<nj;++j,rowA += jstepA,rowB += jstepB)
+    {
+      srcT* pixelA = rowA;
+      const bool* pixelB = rowB;
+      for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelB+=istepB)
+        if (*pixelB==b) *pixelA=value;
+    }
+  }
+}
 
 #endif // vil2_fill_h_
