@@ -77,7 +77,7 @@ class vtol_face_2d : public vtol_face
   //: Constructor
   //---------------------------------------------------------------------------
   explicit vtol_face_2d(vtol_one_chain_sptr const& edgeloop);
-// private:
+ private:
   // Deprecated
   explicit vtol_face_2d(vtol_one_chain &edgeloop);
  public:
@@ -90,7 +90,7 @@ class vtol_face_2d : public vtol_face
   //: Pseudo copy constructor.  Deep copy.
   //---------------------------------------------------------------------------
   vtol_face_2d(vtol_face_2d_sptr const& other);
-// private:
+ private:
   //---------------------------------------------------------------------------
   //: Copy constructor.  Deep copy.  Deprecated.
   //---------------------------------------------------------------------------

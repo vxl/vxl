@@ -123,7 +123,7 @@ class vtol_edge : public vtol_topology_object
 
   virtual void add_edge_loop(vtol_one_chain_sptr const&);
   virtual void remove_edge_loop(vtol_one_chain_sptr const&);
-// private:
+ private:
   // Deprecated:
   virtual void add_edge_loop(vtol_one_chain &);
   virtual void remove_edge_loop(vtol_one_chain &);
@@ -189,7 +189,7 @@ class vtol_edge : public vtol_topology_object
 
   virtual bool add_vertex(vtol_vertex_sptr const&);
   virtual bool remove_vertex(vtol_vertex_sptr const&);
-// private:
+ private:
   // Deprecated:
   virtual bool add_vertex(vtol_vertex &);
   virtual bool remove_vertex(vtol_vertex &);

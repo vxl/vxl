@@ -166,11 +166,13 @@ void vtol_edge::add_edge_loop(vtol_one_chain_sptr const& new_edge_loop)
   new_edge_loop->link_inferior(this);
 }
 
+#if 1 // deprecated
 void vtol_edge::add_edge_loop(vtol_one_chain &new_edge_loop)
 {
   vcl_cerr << "Warning: deprecated form of vtol_edge::add_edge_loop()\n";
   new_edge_loop.link_inferior(this);
 }
+#endif
 
 //:
 // This is a utility method that removes doomed_edge_loop from the
@@ -182,11 +184,13 @@ void vtol_edge::remove_edge_loop(vtol_one_chain_sptr const& doomed_edge_loop)
   doomed_edge_loop->unlink_inferior(this);
 }
 
+#if 1 // deprecated
 void vtol_edge::remove_edge_loop(vtol_one_chain &doomed_edge_loop)
 {
   vcl_cerr << "Warning: deprecated form of vtol_edge::remove_edge_loop()\n";
   doomed_edge_loop.unlink_inferior(this);
 }
+#endif
 
 // ******************************************************
 //
@@ -322,6 +326,7 @@ bool vtol_edge::add_vertex(vtol_vertex_sptr const& newvert)
   return true;
 }
 
+#if 1 // deprecated
 bool vtol_edge::add_vertex(vtol_vertex &newvert)
 {
   vcl_cerr << "Warning: deprecated form of vtol_edge::add_vertex()\n";
@@ -334,6 +339,7 @@ bool vtol_edge::add_vertex(vtol_vertex &newvert)
   zc->link_inferior(&newvert);
   return true;
 }
+#endif
 
 //:
 // This method removes uglyvert from the vtol_edge by removing it from the
@@ -351,6 +357,7 @@ bool vtol_edge::remove_vertex(vtol_vertex_sptr const& uglyvert)
   return true;
 }
 
+#if 1 // deprecated
 bool vtol_edge::remove_vertex(vtol_vertex &uglyvert)
 {
   vcl_cerr << "Warning: deprecated form of vtol_edge::remove_vertex()\n";
@@ -363,6 +370,7 @@ bool vtol_edge::remove_vertex(vtol_vertex &uglyvert)
   touch();
   return true;
 }
+#endif
 
 bool vtol_edge::is_endpoint(const vtol_vertex &v) const
 {

@@ -49,7 +49,7 @@ class vtol_block : public vtol_topology_object
   //: Constructor from a two-chain (inferior)
   //---------------------------------------------------------------------------
   explicit vtol_block(vtol_two_chain_sptr const& faceloop);
-// private:
+ private:
   // Deprecated
   explicit vtol_block(vtol_two_chain &faceloop);
  public:
@@ -69,7 +69,7 @@ class vtol_block : public vtol_topology_object
   //: Pseudo copy constructor. Deep copy.
   //---------------------------------------------------------------------------
   vtol_block(vtol_block_sptr const& other);
-// private:
+ private:
   //---------------------------------------------------------------------------
   //: Copy constructor. Deep copy. Deprecated.
   //---------------------------------------------------------------------------

@@ -54,6 +54,7 @@ vtol_vertex_2d::vtol_vertex_2d(vtol_vertex_2d_sptr const& other)
 {
 }
 
+#if 0 // deprecated
 //---------------------------------------------------------------------------
 //: Copy constructor. Copy the point but not the links.  Deprecated.
 //---------------------------------------------------------------------------
@@ -62,6 +63,7 @@ vtol_vertex_2d::vtol_vertex_2d(const vtol_vertex_2d &other)
   vcl_cerr << "vtol_vertex_2d copy constructor is deprecated; use vtol_vertex_2d_sptr constructor instead\n";
   point_=new vsol_point_2d(*other.point_);
 }
+#endif
 
 //---------------------------------------------------------------------------
 //: make a copy of the geometry

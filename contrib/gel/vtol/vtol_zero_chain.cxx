@@ -55,6 +55,7 @@ vtol_zero_chain::vtol_zero_chain(vtol_vertex_2d_sptr const& v1,
   link_inferior(v2);
 }
 
+#if 0 // deprecated
 vtol_zero_chain::vtol_zero_chain(vtol_vertex &v1,
                                  vtol_vertex &v2)
 {
@@ -63,6 +64,7 @@ vtol_zero_chain::vtol_zero_chain(vtol_vertex &v1,
   link_inferior(&v1);
   link_inferior(&v2);
 }
+#endif
 
 //---------------------------------------------------------------------------
 //: Constructor from an array of vertices
@@ -87,6 +89,7 @@ vtol_zero_chain::vtol_zero_chain(vtol_zero_chain_sptr const& other)
     link_inferior((*i)->clone()->cast_to_topology_object()->cast_to_vertex());
 }
 
+#if 0 // deprecated
 //---------------------------------------------------------------------------
 //: Copy constructor. Copy the vertices and the links.  Deprecated.
 //---------------------------------------------------------------------------
@@ -97,6 +100,7 @@ vtol_zero_chain::vtol_zero_chain(const vtol_zero_chain &other)
   for (i=other.inferiors()->begin();i!=other.inferiors()->end();++i)
     link_inferior((*i)->clone()->cast_to_topology_object()->cast_to_vertex());
 }
+#endif
 
 //---------------------------------------------------------------------------
 // Destructor

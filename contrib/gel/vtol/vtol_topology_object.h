@@ -318,7 +318,9 @@ class vtol_topology_object : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   //: Return the superiors list (must be deallocated after use)
   //---------------------------------------------------------------------------
+ private:
   const topology_list *superiors(void) const;
+ public:
   const vcl_list<vtol_topology_object*> *superiors_list(void) const {return &superiors_;}
 
   //---------------------------------------------------------------------------

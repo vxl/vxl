@@ -48,6 +48,7 @@ vtol_edge_2d::vtol_edge_2d(vtol_vertex_sptr const& new_v1,
   link_inferior(new vtol_zero_chain(v1_,v2_));
 }
 
+#if 0 // deprecated
 vtol_edge_2d::vtol_edge_2d(vtol_vertex_2d &new_v1,
                            vtol_vertex_2d &new_v2,
                            const vsol_curve_2d_sptr &new_curve)
@@ -63,6 +64,7 @@ vtol_edge_2d::vtol_edge_2d(vtol_vertex_2d &new_v1,
   link_inferior(new vtol_zero_chain(vtol_vertex_2d_sptr(&new_v1),
                                     vtol_vertex_2d_sptr(&new_v2)));
 }
+#endif
 
 //---------------------------------------------------------------------------
 //: Pseudo copy constructor. Deep copy.
@@ -101,6 +103,7 @@ vtol_edge_2d::vtol_edge_2d(vtol_edge_2d_sptr const& other)
   touch();
 }
 
+#if 0 // deprecated
 //---------------------------------------------------------------------------
 //: Copy constructor. Deep copy.  Deprecated.
 //---------------------------------------------------------------------------
@@ -141,6 +144,7 @@ vtol_edge_2d::vtol_edge_2d(const vtol_edge_2d &other)
     }
   touch();
 }
+#endif
 
 //---------------------------------------------------------------------------
 //: Constructor from a zero-chain.
@@ -168,6 +172,7 @@ vtol_edge_2d::vtol_edge_2d(vtol_zero_chain_sptr const& new_zero_chain)
   touch();
 }
 
+#if 0 // deprecated
 vtol_edge_2d::vtol_edge_2d(vtol_zero_chain &new_zero_chain)
 {
   vcl_cerr << "Warning: deprecated vtol_edge_2d constructor\n";
@@ -184,6 +189,7 @@ vtol_edge_2d::vtol_edge_2d(vtol_zero_chain &new_zero_chain)
     curve_=0;
   touch();
 }
+#endif
 
 //: Constructor for a vtol_edge_2d from a list of zero-chains.
 // The list of zero-chains, newchains, is

@@ -23,6 +23,7 @@
 //       Should use vtol_face geometry recursively to be proper.
 //       Currently reverts to bounds on vertices from
 //       vtol_topology_object::ComputeBoundingBox()
+//   05/13/98  RIH replaced append by insert_after to avoid n^2 behavior
 //   PTU May 2000 ported to vxl
 //   Dec. 2002, Peter Vanroose -interface change: vtol objects -> smart pointers
 // \endverbatim
@@ -74,7 +75,7 @@ class vtol_two_chain : public vtol_chain
   //: Pseudo copy constructor.  Deep copy.
   //---------------------------------------------------------------------------
   vtol_two_chain(vtol_two_chain_sptr const& other);
-// private:
+ private:
   //---------------------------------------------------------------------------
   //: Copy constructor.  Deep copy.  Deprecated.
   //---------------------------------------------------------------------------
@@ -117,7 +118,7 @@ class vtol_two_chain : public vtol_chain
 
   virtual void add_face(vtol_face_sptr const&, signed char);
   virtual void remove_face(vtol_face_sptr const&);
-// private:
+ private:
   // Deprecated:
   virtual void add_face(vtol_face &,signed char);
   virtual void remove_face(vtol_face &);

@@ -70,6 +70,7 @@ vtol_face_2d::vtol_face_2d(vtol_face_2d_sptr const& other)
     set_surface(other->surface_->clone()->cast_to_region());
 }
 
+#if 0 // deprecated
 //---------------------------------------------------------------------------
 //: Copy constructor.  Deep copy.  Deprecated.
 //---------------------------------------------------------------------------
@@ -124,6 +125,7 @@ vtol_face_2d::vtol_face_2d(const vtol_face_2d &other)
   if (oldf->surface_)
     set_surface(oldf->surface_->clone()->cast_to_region());
 }
+#endif
 
 //---------------------------------------------------------------------------
 // Destructor
@@ -284,6 +286,7 @@ vtol_face_2d::vtol_face_2d(vtol_one_chain_sptr const& edgeloop)
                                     new vsol_point_2d(get_max_x(),get_max_y())));
 }
 
+#if 0 // deprecated
 vtol_face_2d::vtol_face_2d(vtol_one_chain &edgeloop)
   : surface_(0)
 {
@@ -295,6 +298,7 @@ vtol_face_2d::vtol_face_2d(vtol_one_chain &edgeloop)
                                     new vsol_point_2d(get_max_x(),get_min_y()),
                                     new vsol_point_2d(get_max_x(),get_max_y())));
 }
+#endif
 
 //: Constructor requiring only the underlying geometric surface
 vtol_face_2d::vtol_face_2d (vsol_region_2d &facesurf)
@@ -383,7 +387,9 @@ void vtol_face_2d::print(vcl_ostream &strm) const
 
   topology_list::const_iterator ii;
   for (ii=inferiors()->begin();ii!= inferiors()->end();++ii)
+  {
     strm << ' ' << (*ii)->inferiors()->size();
+  }
   strm << "   " << (void const *) this << ">\n";
 }
 

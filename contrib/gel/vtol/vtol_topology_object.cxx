@@ -74,6 +74,7 @@ vtol_topology_object::is_superior(vtol_topology_object* const& superior) const
   return false;
 }
 
+#if 0
 //---------------------------------------------------------------------------
 //: Return the superiors list (must be deallocated after use)
 //---------------------------------------------------------------------------
@@ -89,6 +90,7 @@ const topology_list * vtol_topology_object::superiors(void) const
 
   return result;
 }
+#endif
 
 //***************************************************************************
 // Basic operations
@@ -275,9 +277,9 @@ void vtol_topology_object::blocks(block_list &new_list)
 //: print the object
 void vtol_topology_object::print(vcl_ostream &strm) const
 {
-  strm<<"<vtol_topology_object "<<(void const *)this<<">\n";
-  strm<<"number of inferiors "<<numinf()<<vcl_endl;
-  strm<<"number of superiors "<<numsup()<<vcl_endl;
+  strm<<"<vtol_topology_object "<<(void const *)this<<">\n"
+      <<"number of inferiors "<<numinf()<<vcl_endl
+      <<"number of superiors "<<numsup()<<vcl_endl;
 }
 
 void vtol_topology_object::describe_inferiors(vcl_ostream &strm,

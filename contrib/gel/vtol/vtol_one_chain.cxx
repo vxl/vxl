@@ -108,6 +108,7 @@ vtol_one_chain::vtol_one_chain(vtol_one_chain_sptr const& other)
   delete verts;
 }
 
+#if 0 // deprecated
 //---------------------------------------------------------------------------
 //: Copy constructor.  Deep copy.  Deprecated.
 //---------------------------------------------------------------------------
@@ -144,6 +145,7 @@ vtol_one_chain::vtol_one_chain(vtol_one_chain const& other)
     link_chain_inferior((*h)->clone()->cast_to_topology_object()->cast_to_one_chain());
   delete verts;
 }
+#endif
 
 //---------------------------------------------------------------------------
 // Destructor
@@ -635,6 +637,7 @@ void vtol_one_chain::add_edge(vtol_edge_2d_sptr const& new_edge,
   link_inferior(new_edge->cast_to_edge());
 }
 
+#if 1 // deprecated
 void vtol_one_chain::add_edge(vtol_edge &new_edge,
                               bool dir)
 {
@@ -645,6 +648,7 @@ void vtol_one_chain::add_edge(vtol_edge &new_edge,
     directions_.push_back((signed char)(-1));
   link_inferior(&new_edge);
 }
+#endif
 
 //---------------------------------------------------------------------------
 //: Remove an edge
@@ -687,6 +691,7 @@ void vtol_one_chain::remove_edge(vtol_edge_2d_sptr const& doomed_edge,
     }
 }
 
+#if 1 // deprecated
 void vtol_one_chain::remove_edge(vtol_edge &doomed_edge,
                                  bool force_it)
 {
@@ -705,6 +710,7 @@ void vtol_one_chain::remove_edge(vtol_edge &doomed_edge,
       unlink_inferior(&doomed_edge);
     }
 }
+#endif
 
 //---------------------------------------------------------------------------
 //: Comparison operator
@@ -820,7 +826,8 @@ bool vtol_one_chain::operator==(vsol_spatial_object_2d const& obj) const
 //---------------------------------------------------------------------------
 void vtol_one_chain::print(vcl_ostream &strm) const
 {
-  strm << "<one_chain " << inferiors()->size() << "  " << (void const *) this << ">\n";
+  strm << "<one_chain " << inferiors()->size() << "  "
+       << (void const *) this << ">\n";
 }
 
 //---------------------------------------------------------------------------
@@ -828,13 +835,14 @@ void vtol_one_chain::print(vcl_ostream &strm) const
 //---------------------------------------------------------------------------
 void vtol_one_chain::describe_directions(vcl_ostream &strm, int blanking) const
 {
-  for (int j=0; j<blanking; ++j)
-    strm << ' ';
+  for (int j=0; j<blanking; ++j) { strm << ' '; }
   strm << "<Dirs [" << directions_.size() << "]:";
 
   vcl_vector<signed char>::const_iterator d1;
   for (d1=directions_.begin();d1!=directions_.end();++d1)
+  {
     strm << ' ' << (int)(*d1);
+  }
   strm << ">\n";
 }
 

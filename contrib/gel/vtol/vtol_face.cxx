@@ -218,7 +218,7 @@ void vtol_face::add_one_chain(vtol_one_chain_sptr const& new_vtol_one_chain)
   link_inferior(new_vtol_one_chain);
 }
 
-#if 0 // deprecated
+#if 1 // deprecated
 void vtol_face::add_one_chain(vtol_one_chain &new_vtol_one_chain)
 {
   vcl_cerr << "Warning: deprecated form of vtol_face::add_one_chain()\n";

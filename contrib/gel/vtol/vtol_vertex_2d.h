@@ -69,7 +69,7 @@ class vtol_vertex_2d : public vtol_vertex
   //: Pseudo copy constructor.  Deep copy.
   //---------------------------------------------------------------------------
   explicit vtol_vertex_2d(vtol_vertex_2d_sptr const& other);
-// private:
+ private:
   //---------------------------------------------------------------------------
   //: Copy constructor. Copy the point but not the links.  Deprecated.
   //---------------------------------------------------------------------------

@@ -77,7 +77,7 @@ class vtol_one_chain : public vtol_chain
   //: Pseudo copy constructor.  Deep copy.
   //---------------------------------------------------------------------------
   vtol_one_chain(vtol_one_chain_sptr const& other);
-// private:
+ private:
   //---------------------------------------------------------------------------
   //: Copy constructor.  Deep copy.  Deprecated.
   //---------------------------------------------------------------------------
@@ -169,7 +169,7 @@ class vtol_one_chain : public vtol_chain
   virtual void add_edge(vtol_edge_2d_sptr const&, bool);
   virtual void remove_edge(vtol_edge_sptr const&, bool);
   virtual void remove_edge(vtol_edge_2d_sptr const&, bool);
-// private:
+ private:
   // Deprecated:
   virtual void add_edge(vtol_edge &, bool);
   virtual void remove_edge(vtol_edge &, bool);

@@ -32,11 +32,13 @@ vtol_block::vtol_block(vtol_two_chain_sptr const& faceloop)
   link_inferior(faceloop);
 }
 
+#if 0 // deprecated
 vtol_block::vtol_block(vtol_two_chain &faceloop)
 {
   vcl_cerr << "Warning: deprecated vtol_block constructor\n";
   link_inferior(&faceloop);
 }
+#endif
 
 //---------------------------------------------------------------------------
 //: Constructor from a list of two-chains.
@@ -108,6 +110,7 @@ vtol_block::vtol_block(vtol_block_sptr const& other)
   delete verts;
 }
 
+#if 0 // deprecated
 //---------------------------------------------------------------------------
 //: Copy constructor. Deep copy. Deprecated.
 //---------------------------------------------------------------------------
@@ -154,6 +157,7 @@ vtol_block::vtol_block(const vtol_block &other)
   delete edgs;
   delete verts;
 }
+#endif
 
 //---------------------------------------------------------------------------
 // Destructor

@@ -3,8 +3,8 @@
 //:
 // \file
 // \verbatim
-// Modifications
-//  05/13/98  RIH replaced append by insert_after to avoid n^2 behavior
+//  Modifications
+//   05/13/98  RIH replaced append by insert_after to avoid n^2 behavior
 // \endverbatim
 
 #include <vcl_vector.h>
@@ -141,6 +141,7 @@ vtol_two_chain::vtol_two_chain(vtol_two_chain_sptr const& other)
     link_chain_inferior((*hhi)->cast_to_two_chain()->copy_with_arrays(newverts,newedges));
 }
 
+#if 0 // deprecated
 //---------------------------------------------------------------------------
 //: Copy constructor.  Deep copy.  Deprecated.
 //---------------------------------------------------------------------------
@@ -209,6 +210,7 @@ vtol_two_chain::vtol_two_chain(vtol_two_chain const &other)
   for (chain_list::const_iterator hhi=hierarchy_infs->begin();hhi!=hierarchy_infs->end();++hhi)
     link_chain_inferior((*hhi)->cast_to_two_chain()->copy_with_arrays(newverts,newedges));
 }
+#endif
 
 vtol_two_chain *
 vtol_two_chain::copy_with_arrays(topology_list &newverts,
@@ -430,6 +432,7 @@ void vtol_two_chain::add_face(vtol_face_sptr const& new_face,
   link_inferior(new_face);
 }
 
+#if 1 // deprecated
 void vtol_two_chain::add_face(vtol_face &new_face,
                               signed char dir)
 {
@@ -437,6 +440,7 @@ void vtol_two_chain::add_face(vtol_face &new_face,
   directions_.push_back(dir);
   link_inferior(&new_face);
 }
+#endif
 
 void vtol_two_chain::remove_face(vtol_face_sptr const& doomed_face)
 {
@@ -453,6 +457,7 @@ void vtol_two_chain::remove_face(vtol_face_sptr const& doomed_face)
     }
 }
 
+#if 1 // deprecated
 void vtol_two_chain::remove_face(vtol_face &doomed_face)
 {
   vcl_cerr << "Warning: deprecated form of vtol_face::remove_face()\n";
@@ -468,6 +473,7 @@ void vtol_two_chain::remove_face(vtol_face &doomed_face)
       unlink_inferior(&doomed_face);
     }
 }
+#endif
 
 //***************************************************************************
 //    Accessor Functions
@@ -787,12 +793,14 @@ void vtol_two_chain::print(vcl_ostream &strm) const
 void vtol_two_chain::describe_directions(vcl_ostream &strm,
                                          int blanking) const
 {
-  for (int j=0; j<blanking; ++j) strm << ' ';
+  for (int j=0; j<blanking; ++j) { strm << ' '; }
   strm << "<Dirs [" << directions_.size() << "]:";
 
   vcl_vector<signed char>::const_iterator di;
   for (di=directions_.begin();di!=directions_.end();++di)
+  {
     strm << ' ' << (int)(*di);
+  }
   strm << ">\n";
 }
 

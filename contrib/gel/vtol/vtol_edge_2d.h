@@ -80,7 +80,7 @@ class vtol_edge_2d : public vtol_edge
   vtol_edge_2d(vtol_vertex_sptr const& new_v1,
                vtol_vertex_sptr const& new_v2,
                const vsol_curve_2d_sptr &new_curve=0);
-// private:
+ private:
   // deprecated interface:
   vtol_edge_2d(vtol_vertex_2d &new_v1,
                vtol_vertex_2d &new_v2,
@@ -100,7 +100,7 @@ class vtol_edge_2d : public vtol_edge
   //: Constructor from a zero-chain.
   //---------------------------------------------------------------------------
   explicit vtol_edge_2d(vtol_zero_chain_sptr const& new_zero_chain);
-// private:
+ private:
   // Deprecated:
   explicit vtol_edge_2d(vtol_zero_chain &new_zero_chain);
  public:

@@ -123,7 +123,7 @@ class vtol_vertex : public vtol_topology_object
   //---------------------------------------------------------------------------
 
   virtual vtol_edge_sptr new_edge(vtol_vertex_sptr const& other)=0;
-// private: // deprecated:
+ private: // deprecated:
   vtol_edge_sptr new_edge(vtol_vertex const& other);
  public:
 

@@ -56,7 +56,7 @@ class vtol_zero_chain : public vtol_topology_object
 
   vtol_zero_chain(vtol_vertex_2d_sptr const& v1,
                   vtol_vertex_2d_sptr const& v2);
-// private:
+ private:
   // Deprecated
   vtol_zero_chain(vtol_vertex &v1, vtol_vertex &v2);
 
@@ -71,7 +71,7 @@ class vtol_zero_chain : public vtol_topology_object
   //: Pseudo copy constructor. Deep copy.
   //---------------------------------------------------------------------------
   vtol_zero_chain(vtol_zero_chain_sptr const& other);
-// private:
+ private:
   //---------------------------------------------------------------------------
   //: Copy constructor. Copy the vertices and the links.  Deprecated.
   //---------------------------------------------------------------------------
