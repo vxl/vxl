@@ -32,7 +32,7 @@ void vnl_adjugate(vnl_matrix<T> const &A, vnl_matrix<T> *out)
       for (int u=0; u<n-1; ++u)
         for (int v=0; v<n-1; ++v)
           sub[u][v] = A[v+(v<i?0:1)][u+(u<j?0:1)];
-      (*out)[i][j] = vnl_determinant(sub);
+      (*out)[i][j] = vnl_determinant(sub, false);
     }
 }
 
