@@ -29,12 +29,13 @@ bool oxp_vob_frame_index::load(char const* filename)
 
   int frame = 0;
   int dummy;
-  for(; awk; ++awk, ++frame) {
+  for (; awk; ++awk, ++frame) {
     // Skip comment and ----- lines
     oxp_vob_frame_index_entry e;
-    if (idx_type == LBA && sscanf(awk.line(), " %x | %d", &e.lba, &e.frame) == 2)
+    if (idx_type == LBA && vcl_sscanf(awk.line(), " %x | %d", &e.lba, &e.frame) == 2)
       tmp.push_back(e);
-    if (idx_type == MPEG_IDX && sscanf(awk.line(), " %x %x", &e.lba, &dummy) == 2) {
+    if (idx_type == MPEG_IDX && vcl_sscanf(awk.line(), " %x %x", &e.lba, &dummy) == 2)
+    {
       e.frame = frame;
       tmp.push_back(e);
     }

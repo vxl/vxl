@@ -119,16 +119,18 @@ bool oxp_mpeg_codec_data::seek_to_iframe_before(int frame)
   // --lba; // lba's start from 1?
   typedef oxp_bunch_of_files::offset_t index_t;
   index_t byte = index_t(lba) * 2048;
-  
+
   if (verbose)
     vcl_fprintf(stderr, __FILE__ ": seek_to_iframe_before: Frame %d -> Start at closest frame %d, LBA 0x%x, byte %lu\n",
                 frame, start_frame_index, lba, (unsigned long) byte);
-  if (lba < 0) {
+  if (lba < 0)
+  {
     vcl_fprintf(stderr, "oxp_mpeg_codec: ERROR!\n");
     vcl_fprintf(stderr, __FILE__ ": ERROR!\n");
     return false;
   }
-  if (!fp.seek(byte)) {
+  if (!fp.seek(byte))
+  {
     vcl_cerr << "oxp_mpeg_codec_data::seek_to_iframe_before: ERROR!\n";
     return false;
   }
@@ -149,19 +151,16 @@ void oxp_mpeg_codec_data::decode_at_least_one()
   while ((n = fp.read(buf, sizeof buf)) > 0) {
     unsigned char* start = &buf[0];
     unsigned char* end = start + n;
-    if (demux_track) {
+    if (demux_track)
+    {
       if (::demux(this, start, end, 0))
         return; // hit program_end_code
     }
-    else if (demux_pid) {
-      // abort
+    else if (demux_pid)
       vcl_abort();
-      // ts_loop();
-    }
-    else {
+    else
       // plain old
       this->decode_mpeg2(start, end);
-    }
 
     if (frame_number > starting_frame_number)
       return;
@@ -188,7 +187,8 @@ bool oxp_mpeg_codec_data::decode_until_desired(int f,
 
   // Check the ring buffer to see if any in there...
   for (int i = 0; i < 8; ++i)
-    if (ring_buffer[i] && ring_buffer[i]->frame == f) {
+    if (ring_buffer[i] && ring_buffer[i]->frame == f)
+    {
       if (verbose)
         vcl_fprintf(stderr, __FILE__ ": decode_until_desired: Found frame %d in ring buffer\n", f);
       convert_frame(ring_buffer[i], &r);
@@ -197,7 +197,8 @@ bool oxp_mpeg_codec_data::decode_until_desired(int f,
     }
 
   // Not in ring buffer, only possible if f < frame_number
-  if (f <= frame_number) {
+  if (f <= frame_number)
+  {
     if (verbose)
       vcl_fprintf(stderr, __FILE__ ": decode_until_desired: Need to seek for %d\n", f);
     return false;
@@ -208,24 +209,23 @@ bool oxp_mpeg_codec_data::decode_until_desired(int f,
 
   unsigned char fbuf[2048];
   int n;
-  while ((n = fp.read(fbuf, sizeof fbuf)) > 0) {
+  while ((n = fp.read(fbuf, sizeof fbuf)) > 0)
+  {
     unsigned char* start = &fbuf[0];
     unsigned char* end = start + n;
-    if (demux_track) {
+    if (demux_track)
+    {
       if (::demux(this, start, end, 0))
         return r.done;  // hit program_end_code
     }
-    else if (demux_pid) {
-      // abort
+    else if (demux_pid)
       vcl_abort();
-      // ts_loop();
-    }
-    else {
+    else
       // plain old
       this->decode_mpeg2(start, end);
-    }
 
-    if (r.done) {
+    if (r.done)
+    {
       pending_decode = 0;
       return true;
     }
@@ -340,21 +340,21 @@ void my_draw(vo_frame_t *frame_p)
     return;
 
   // got pending_decode from decode_until_desired
-  if (p->frame == impl->frame_number) {
+  if (p->frame == impl->frame_number)
+  {
     if (verbose)
       vcl_fprintf(stderr, __FILE__ ": Found %d\n", impl->frame_number);
     impl->convert_frame(frame, p);
     p->done = true;
   }
-  else {
-    if (verbose) {
-      if (impl->frame_number < p->frame)
-        vcl_fprintf(stderr, __FILE__ ": Skipping %d waiting for %d\n",
-                    impl->frame_number, p->frame);
-      else
-        vcl_fprintf(stderr, __FILE__ ": Queuing %d having got %d\n",
-                    impl->frame_number, p->frame);
-    }
+  else if (verbose)
+  {
+    if (impl->frame_number < p->frame)
+      vcl_fprintf(stderr, __FILE__ ": Skipping %d waiting for %d\n",
+                  impl->frame_number, p->frame);
+    else
+      vcl_fprintf(stderr, __FILE__ ": Queuing %d having got %d\n",
+                  impl->frame_number, p->frame);
   }
 }
 
@@ -368,7 +368,8 @@ void oxp_mpeg_codec_data::convert_frame(frame_plus_index* frame,
   uint8_t *U = frame->base[1];
   uint8_t *V = frame->base[2];
 
-  if (this->output_format == oxp_mpeg_codec_data::grey) {
+  if (this->output_format == oxp_mpeg_codec_data::grey)
+  {
     // Recover in gray
     //int w = this->w;
     //int h = this->h;
@@ -380,7 +381,8 @@ void oxp_mpeg_codec_data::convert_frame(frame_plus_index* frame,
         // this is assuming the chroma channels are half-size in each direction.
         p->buf[c]= Y[i*p->w+j];
   }
-  else {
+  else
+  {
     // Recover in RGB
     //int w = this->w;
     //int h = this->h;
@@ -409,7 +411,8 @@ void oxp_mpeg_codec_data::destroy_frame(vo_frame_t *frame)
 //-----------------------------------------------------------------------------
 oxp_mpeg_codec::~oxp_mpeg_codec()
 {
-  if (impl_) {
+  if (impl_)
+  {
     // close();
     vcl_cerr << "oxp_mpeg_codec: WARNING: deleting before close() was called\n";
     // You can't call close from within here because it may be being destroyed
@@ -417,11 +420,12 @@ oxp_mpeg_codec::~oxp_mpeg_codec()
     // So the options are segv or unflushed input.  segv is
     // incontrovertibly wrong, so we make sure that doesn't happen.
     for (int i=0; i<8; ++i)
-      if (impl_->ring_buffer[i]) {
+      if (impl_->ring_buffer[i])
+      {
         impl_->destroy_frame(impl_->ring_buffer[i]);
         impl_->ring_buffer[i] = 0;
       }
-      
+
     delete impl_;
     impl_ = 0;
   }
@@ -430,7 +434,8 @@ oxp_mpeg_codec::~oxp_mpeg_codec()
 //-----------------------------------------------------------------------------
 void oxp_mpeg_codec::close()
 {
-  if (impl_) {
+  if (impl_)
+  {
     // destroy decoder.
     mpeg2_close(&impl_->decoder);
 
@@ -438,7 +443,8 @@ void oxp_mpeg_codec::close()
     vo_close(impl_);
 
     for (int i=0; i<8; ++i)
-      if (impl_->ring_buffer[i]) {
+      if (impl_->ring_buffer[i])
+      {
         impl_->destroy_frame(impl_->ring_buffer[i]);
         impl_->ring_buffer[i] = 0;
       }
@@ -478,17 +484,16 @@ bool oxp_mpeg_codec::get_section(int position, // position of the frame in the s
 // be able to put a section different
 // of the entire frame.
 int oxp_mpeg_codec::put_section(int position,
-                                     void* ib,
-                                     int x0, int y0,
-                                     int xs, int ys)
+                                void* ib,
+                                int x0, int y0,
+                                int xs, int ys)
 {
   vcl_cerr << "oxp_mpeg_codec::put_section not implemented\n";
   return -1;
 }
 
 //-----------------------------------------------------------------------------
-//: probe the file fname, open it as an MPEG file, if it works, close it and
-// return true. False otherwise.
+//: probe the file fname, open it as an MPEG file. If this works, close it and return true. False otherwise.
 
 bool oxp_mpeg_codec::probe(const char* fname)
 {
@@ -496,25 +501,20 @@ bool oxp_mpeg_codec::probe(const char* fname)
     vcl_cerr << "oxp_mpeg_codec::probe[" << fname << "]\n";
 
   // 1st try to open
-  if (vcl_FILE* fp = fopen(fname, "rb")) {
+  if (vcl_FILE* fp = vcl_fopen(fname, "rb"))
+  {
     unsigned int buf = 0xffffffffu;
-    fread(&buf, 1, 4, fp);
-    fclose(fp);
+    vcl_fread(&buf, 1, 4, fp);
+    vcl_fclose(fp);
 
     bool ok = false;
-    if (buf == 0x000001b3 || buf == 0xb3010000) {
-      // mpeg
-      ok=true;
-    }
-    if (buf == 0x000001ba || buf == 0xba010000) {
-      // vob
-      ok=true;
-    }
+    if (buf == 0x000001b3 || buf == 0xb3010000)
+      ok=true; // mpeg
+    if (buf == 0x000001ba || buf == 0xba010000)
+      ok=true; // vob
 
-    if (ok) {
-      // Try to find an idx
+    if (ok) // Try to find an idx
       return true;
-    }
   }
 
   vcl_string fn(fname);
@@ -531,59 +531,58 @@ bool oxp_mpeg_codec::load(const char* fname, char mode)
   bool is_mpeg = false;
   bool is_vob = false;
   {
-    vcl_FILE* fp = fopen(fname, "rb");
-    if (fp) {
+    vcl_FILE* fp = vcl_fopen(fname, "rb");
+    if (fp)
+    {
       unsigned int buf = 0xffffffffu;
-      fread(&buf, 1, 4, fp);
-      fclose(fp);
-      
-      if (buf == 0x000001b3 || buf == 0xb3010000) {
-        // mpeg
-        is_mpeg = true;
-      }
-      if (buf == 0x000001ba || buf == 0xba010000) {
-        // vob
-        is_vob = true;
-      }
+      vcl_fread(&buf, 1, 4, fp);
+      vcl_fclose(fp);
+
+      if (buf == 0x000001b3 || buf == 0xb3010000)
+        is_mpeg = true; // mpeg
+      if (buf == 0x000001ba || buf == 0xba010000)
+        is_vob = true; // vob
     }
   }
 
-  if (is_mpeg || is_vob) {
+  if (is_mpeg || is_vob)
+  {
     impl_->fp.open_1(fname);
     impl_->decode_at_least_one();
 
-    // Try to find an idx  
+    // Try to find an idx
     char buf[1024];
     vcl_strcpy(buf, fname);
     char* p = vcl_strrchr(buf, '.');
-    if (!p) {
-      // No . in filename
+    if (!p) // No . in filename
       p = buf + vcl_strlen(buf)-1;
-    }
     vcl_strcpy(p, ".idx");
     vcl_fprintf(stderr, "Trying index file [%s] ... ", buf);
-    if (vul_file::size(buf) > 0) {
+    if (vul_file::size(buf) > 0)
+    {
       vcl_cerr << " loading ...";
       impl_->idx.load(buf);
-
-    } else {
+    }
+    else
+    {
       vcl_cerr << " not present, will not be able to seek\n";
-      impl_->idx.add(0, 0);  
+      impl_->idx.add(0, 0);
     }
 
     // Set demux if vob
     impl_->demux_track = is_vob ? 0xe0 : 0;
-
-  } else {
+  }
+  else
+  {
     // Open fname, if a vob, set_demux
     vcl_string fn = fname;
-    
+
     impl_->fp.open((fn + ".lst").c_str());
-    
+
     impl_->decode_at_least_one();
-    
+
     impl_->idx.load((fn + ".idx").c_str());
-    
+
     impl_->demux_track = 0xe0;
   }
 
@@ -650,9 +649,7 @@ static int demux(oxp_mpeg_codec_data* impl, unsigned char const *buf, unsigned c
 
 #define NEEDBYTES(x)                                  \
   do {                                                \
-    int missing;                                      \
-                                                      \
-    missing = (x) - bytes;                            \
+    int missing = (x) - bytes;                        \
     if (missing > 0) {                                \
       if (header == head_buf) {                       \
         if (missing <= end - buf) {                   \
@@ -673,27 +670,29 @@ static int demux(oxp_mpeg_codec_data* impl, unsigned char const *buf, unsigned c
         return 0;                                     \
       }                                               \
     }                                                 \
-  } while (0)
+  } while (false)
 
 #define DONEBYTES(x)        \
   do {                      \
     if (header != head_buf) \
       buf = header + (x);   \
-  } while (0)
+  } while (false)
 
   // demux routine starts here.  above is var and fn defns.
   if (flags & DEMUX_PAYLOAD_START)
     goto payload_start;
   switch (state) {
   case DEMUX_HEADER:
-    if (state_bytes > 0) {
+    if (state_bytes > 0)
+    {
       header = head_buf;
       bytes = state_bytes;
       goto continue_header;
     }
     break;
   case DEMUX_DATA:
-    if (impl->demux_pid || (state_bytes > end - buf)) {
+    if (impl->demux_pid || (state_bytes > end - buf))
+    {
       impl->decode_mpeg2(buf, end);
       state_bytes -= end - buf;
       return 0;
@@ -702,7 +701,8 @@ static int demux(oxp_mpeg_codec_data* impl, unsigned char const *buf, unsigned c
     buf += state_bytes;
     break;
   case DEMUX_SKIP:
-    if (impl->demux_pid || (state_bytes > end - buf)) {
+    if (impl->demux_pid || (state_bytes > end - buf))
+    {
       state_bytes -= end - buf;
       return 0;
     }
@@ -710,8 +710,9 @@ static int demux(oxp_mpeg_codec_data* impl, unsigned char const *buf, unsigned c
     break;
   }
 
-  while (1) {
-    if (impl->demux_pid) {
+  while (true) {
+    if (impl->demux_pid)
+    {
       state = DEMUX_SKIP;
       return 0;
     }
@@ -720,16 +721,20 @@ static int demux(oxp_mpeg_codec_data* impl, unsigned char const *buf, unsigned c
     bytes = end - buf;
   continue_header:
     NEEDBYTES(4);
-    if (header[0] || header[1] || (header[2] != 1)) {
-      if (impl->demux_pid) {
+    if (header[0] || header[1] || (header[2] != 1))
+    {
+      if (impl->demux_pid)
+      {
         state = DEMUX_SKIP;
         return 0;
       }
-      else if (header != head_buf) {
+      else if (header != head_buf)
+      {
         buf++;
         goto payload_start;
       }
-      else {
+      else
+      {
         header[0] = header[1];
         header[1] = header[2];
         header[2] = header[3];
@@ -737,7 +742,8 @@ static int demux(oxp_mpeg_codec_data* impl, unsigned char const *buf, unsigned c
         goto continue_header;
       }
     }
-    if (impl->demux_pid) {
+    if (impl->demux_pid)
+    {
       if ((header[3] >= 0xe0) && (header[3] <= 0xef))
         goto pes;
       vcl_fprintf(stderr, "bad stream id %x\n", header[3]);
@@ -750,43 +756,51 @@ static int demux(oxp_mpeg_codec_data* impl, unsigned char const *buf, unsigned c
       return 1;
     case 0xba: // pack header
       NEEDBYTES(12);
-      if ((header[4] & 0xc0) == 0x40) { // mpeg2
+      if ((header[4] & 0xc0) == 0x40) // mpeg2
+      {
         NEEDBYTES(14);
         len = 14 + (header[13] & 7);
         NEEDBYTES(len);
         DONEBYTES(len);
         // header points to the mpeg2 pack header
       }
-      else if ((header[4] & 0xf0) == 0x20) { // mpeg1
+      else if ((header[4] & 0xf0) == 0x20) // mpeg1
+      {
         DONEBYTES(12);
         // header points to the mpeg1 pack header
       }
-      else {
+      else
+      {
         vcl_fprintf(stderr, "weird pack header\n");
         vcl_exit(1);
       }
       break;
     default:
-      if (header[3] == impl->demux_track) {
+      if (header[3] == impl->demux_track)
+      {
       pes:
         NEEDBYTES(7);
-        if ((header[6] & 0xc0) == 0x80) { // mpeg2
+        if ((header[6] & 0xc0) == 0x80) // mpeg2
+        {
           NEEDBYTES(9);
           len = 9 + header[8];
           NEEDBYTES(len);
           // header points to the mpeg2 pes header
         }
-        else { // mpeg1
+        else // mpeg1
+        {
           len = 7;
           while ((header-1)[len] == 0xff) {
             len++;
             NEEDBYTES(len);
-            if (len == 23) {
+            if (len == 23)
+            {
               vcl_fprintf(stderr, "too much stuffing\n");
               break;
             }
           }
-          if (((header-1)[len] & 0xc0) == 0x40) {
+          if (((header-1)[len] & 0xc0) == 0x40)
+          {
             len += 2;
             NEEDBYTES(len);
           }
@@ -796,7 +810,8 @@ static int demux(oxp_mpeg_codec_data* impl, unsigned char const *buf, unsigned c
         }
         DONEBYTES(len);
         bytes = 6 + (header[4] << 8) + header[5] - len;
-        if (impl->demux_pid || (bytes > end - buf)) {
+        if (impl->demux_pid || (bytes > end - buf))
+        {
           impl->decode_mpeg2(buf, end);
           state = DEMUX_DATA;
           state_bytes = bytes - (end - buf);
@@ -807,16 +822,18 @@ static int demux(oxp_mpeg_codec_data* impl, unsigned char const *buf, unsigned c
         impl->decode_mpeg2(buf, buf + bytes);
         buf += bytes;
       }
-      else if (header[3] < 0xb9) {
-        vcl_fprintf(stderr,
-                    "looks like a video stream, not system stream\n");
+      else if (header[3] < 0xb9)
+      {
+        vcl_fprintf(stderr, "looks like a video stream, not system stream\n");
         vcl_exit(1);
       }
-      else {
+      else
+      {
         NEEDBYTES(6);
         DONEBYTES(6);
         bytes = (header[4] << 8) + header[5];
-        if (bytes > end - buf) {
+        if (bytes > end - buf)
+        {
           state = DEMUX_SKIP;
           state_bytes = bytes - (end - buf);
           return 0;
@@ -834,10 +851,12 @@ static void ts_loop(void)
   int packets;
   do {
     packets = vcl_fread(buffer, 188, PACKETS, in_file);
-    for (int i = 0; i < packets; i++) {
+    for (int i = 0; i < packets; i++)
+    {
       uint8_t * buf = buffer + i * 188;
       uint8_t * end = buf + 188;
-      if (buf[0] != 0x47) {
+      if (buf[0] != 0x47)
+      {
         vcl_fprintf(stderr, "bad sync byte\n");
         vcl_exit(1);
       }
@@ -845,7 +864,8 @@ static void ts_loop(void)
       if (pid != impl->demux_pid)
         continue;
       uint8_t * data = buf + 4;
-      if (buf[3] & 0x20) { // buf contains an adaptation field
+      if (buf[3] & 0x20) // buf contains an adaptation field
+      {
         data = buf + 5 + buf[4];
         if (data > end)
           continue;
