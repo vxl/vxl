@@ -218,6 +218,7 @@ void vtol_face::add_one_chain(vtol_one_chain_sptr const& new_vtol_one_chain)
   link_inferior(new_vtol_one_chain);
 }
 
+#if 0 // deprecated
 void vtol_face::add_one_chain(vtol_one_chain &new_vtol_one_chain)
 {
   vcl_cerr << "Warning: deprecated form of vtol_face::add_one_chain()\n";
@@ -225,6 +226,7 @@ void vtol_face::add_one_chain(vtol_one_chain &new_vtol_one_chain)
 
   link_inferior(&new_vtol_one_chain);
 }
+#endif
 
 //: deep equality check on faces.  uses fuzzy equal on vertices.
 //
@@ -369,7 +371,9 @@ void vtol_face::print(vcl_ostream &strm) const
 
   topology_list::const_iterator ii;
   for (ii=inferiors()->begin();ii!= inferiors()->end();++ii)
+  {
     strm << ' ' << (*ii)->inferiors()->size();
+  }
   strm << "   " << (void const *) this << ">\n";
 }
 
@@ -379,9 +383,27 @@ void vtol_face::print(vcl_ostream &strm) const
 //  the boundary of the face.
 void vtol_face::compute_bounding_box() const
 {
-  vcl_vector<vtol_edge_sptr>* edges = const_cast<vtol_face*>(this)->edges();
+  edge_list* edges = const_cast<vtol_face*>(this)->edges();
 
-  for (vcl_vector<vtol_edge_sptr>::iterator eit = edges->begin();eit != edges->end(); eit++)
+  for (edge_list::iterator eit = edges->begin();eit != edges->end(); eit++)
     this->grow_minmax_bounds(*((*eit)->get_bounding_box()));
   delete edges;
+}
+
+//: This method determines if a vtol_face is a hole of another vtol_face.
+bool vtol_face::IsHoleP() const
+{
+  edge_list* edges = const_cast<vtol_face*>(this)->outside_boundary_edges();
+  if (edges->size() == 0)
+    return false;
+  vtol_edge_sptr e = edges->front();
+  vcl_list<vtol_topology_object*> const* chains = e->superiors_list();
+  for (vcl_list<vtol_topology_object*>::const_iterator i=chains->begin(); i!=chains->end(); ++i)
+    if ((*i)->cast_to_one_chain()->numsup() > 0)
+    {
+      delete edges;
+      return true;
+    }
+  delete edges;
+  return false;
 }

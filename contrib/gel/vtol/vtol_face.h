@@ -32,6 +32,7 @@
 //   PTU may-2000 ported to vxl
 //   Dec. 2002, Peter Vanroose -interface change: vtol objects -> smart pointers
 //   9 Jan. 2003, Peter Vanroose - added pure virtual "copy_geometry()"
+//   5 Feb. 2003, Peter Vanroose - moved IsHoleP() here from vdgl_intensity_face
 // \endverbatim
 
 #include <vtol/vtol_topology_object.h>
@@ -144,7 +145,7 @@ class vtol_face : public vtol_topology_object
   // Editing Functions
 
   virtual void add_one_chain(vtol_one_chain_sptr const&);
-// private:
+ private:
   // Deprecated:
   virtual void add_one_chain(vtol_one_chain &);
  public:
@@ -152,6 +153,9 @@ class vtol_face : public vtol_topology_object
 
   virtual void reverse_normal(void);
   virtual int get_num_edges(void) const;
+
+  //: This method determines if a vtol_face is a hole of another vtol_face.
+  bool IsHoleP() const;
 
   //---------------------------------------------------------------------------
   //: Copy with no links. Only copy the surface if it exists

@@ -26,6 +26,7 @@
 //   8-May-2002 - Peter Vanroose - no longer inherits from vdgl_digital_region:
 //                dependency changed to "has_a", but with cast_to semantics
 //   8-Jan-2003 - Peter Vanroose - moved compute_bounding_box() to vtol_face
+//   5-Feb-2003 - Peter Vanroose - moved IsHoleP() to vtol_face_2d
 // \endverbatim
 //
 //-------------------------------------------------------------------------
@@ -60,7 +61,6 @@ class vdgl_intensity_face : public vtol_face_2d
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_2d_sptr clone(void) const;
 
-  bool IsHoleP();
   inline vtol_topology_object::vtol_topology_object_type
     GetTopologyType() const { return vtol_topology_object::INTENSITYFACE; }
   virtual vdgl_intensity_face* CastToIntensityFace() {return this;}

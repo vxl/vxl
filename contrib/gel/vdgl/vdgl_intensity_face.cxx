@@ -131,29 +131,6 @@ void vdgl_intensity_face::extrema(vcl_vector<float>& orientation,
 }
 #endif
 
-//: This method determines if a vtol_face_2d is a Hole of another vtol_face_2d.
-bool
-vdgl_intensity_face::IsHoleP()
-{
-  vcl_vector<vtol_edge_sptr>* edges = outside_boundary_edges();
-  if (edges->size() == 0)
-    return false;
-  vtol_edge_sptr e = edges->front();
-  bool ret = false;
-  const vcl_vector<vtol_topology_object_sptr>* chains = e->superiors();
-  for (vcl_vector<vtol_topology_object_sptr>::const_iterator i=chains->begin(); i!=chains->end(); ++i)
-    {
-      vtol_one_chain* onec = (*i)->cast_to_one_chain();
-      if (onec->numsup() > 0)
-      {
-        ret = true;
-        break;
-      }
-    }
-  delete edges;
-  return ret;
-}
-
 #if 0 //nobody appears to call this method
 //-----------------------------------------------------------
 //: Compute the total face boundary perimeter.
