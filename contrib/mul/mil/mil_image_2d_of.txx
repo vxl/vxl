@@ -17,7 +17,6 @@
 
 //=======================================================================
 
-
 template<class T>
 mil_image_2d_of<T>::mil_image_2d_of()
 : data_(0),nx_(0),ny_(0),xstep_(1),ystep_(0)
@@ -79,7 +78,6 @@ template<class T> mil_image_2d_of<T>::~mil_image_2d_of()
 {
   // release_data();
 }
-
 
 //=======================================================================
 
@@ -478,10 +476,10 @@ void mil_image_2d_of<T>::print_messy_all(vcl_ostream& os) const
     {
       os<<vsl_indent();
       for (int x=0;x<nx_;++x)
-	  {
-		float v = float ( im_data[ystep_*y+x*xstep_] );
-		os<<v<<" ";
-	  }
+      {
+        float v = float ( im_data[ystep_*y+x*xstep_] );
+        os<<v<<" ";
+      }
       os<<vcl_endl;
     }
   }
@@ -573,9 +571,7 @@ bool mil_image_2d_of<T>::operator==(const mil_image_2d_of<T> &other) const
 }
 
 
-#if 0
 #define MIL_IMAGE_2D_OF_INSTANTIATE(T) \
 template class mil_image_2d_of<T >
-#endif
 
 #endif // mil_image_2d_of_txx_
