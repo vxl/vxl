@@ -1,9 +1,26 @@
-// This is oxl/vgui/vgui_adaptor.h
+// This is ./oxl/vgui/vgui_adaptor.h
 
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
 // \brief  Provides an abstract interface to an OpenGL rendering state.
+//
+// \verbatim
+// Modifications
+// 20 October  1999 pcp@robots. removed derivation from tableau.
+// 20 Octover  1999 fsm@robots. detach()ed the adaptor from the tableau in
+//                  the destuctor to avoid leaving a dangling pointer in the
+//                  tableau.
+// 28 October  1999 fsm@robots. added more menu support (as agreed with pcp).
+//  7 January  1999 fsm@robots. new observer/observable method of getting
+//                  redraw from tableau to adaptor.
+//  2 February 1999 fsm@robots. more overlay documentation.
+// 23-AUG-2000      Marko Bacic,Oxford RRG - Added post_message
+// 31 August   2000 u97mb@robots. Support for mfc acceleration
+// 07-SEP-2000      Marko Bacic,Oxford RRG - Added pure virtual method "draw"
+// 20 Sept     2000 capes@robots. added post_destroy() method.
+// Feb.2002         Peter Vanroose - brief doxygen comment placed on single line
+// \endverbatim
 
 #ifndef vgui_adaptor_h_
 #define vgui_adaptor_h_
@@ -31,25 +48,7 @@ class vgui_adaptor_tableau;
 // to the tableau as an observer. The tableau may detach that observer if it so
 // chooses, but that would be a bad idea as it would stop post()s from tableaux
 // reaching the adaptor.
-//
-// \author
-//   fsm@robots.ox.ac.uk
-// \verbatim
-// Modifications
-// 20 October  1999 pcp@robots. removed derivation from tableau.
-// 20 Octover  1999 fsm@robots. detach()ed the adaptor from the tableau in
-//                  the destuctor to avoid leaving a dangling pointer in the
-//                  tableau.
-// 28 October  1999 fsm@robots. added more menu support (as agreed with pcp).
-//  7 January  1999 fsm@robots. new observer/observable method of getting
-//                  redraw from tableau to adaptor.
-//  2 February 1999 fsm@robots. more overlay documentation.
-// 23-AUG-2000      Marko Bacic,Oxford RRG - Added post_message
-// 31 August   2000 u97mb@robots. Support for mfc acceleration
-// 07-SEP-2000      Marko Bacic,Oxford RRG - Added pure virtual method "draw"
-// 20 Sept     2000 capes@robots. added post_destroy() method.
-// Feb.2002         Peter Vanroose - brief doxygen comment placed on single line
-// \endverbatim
+
 class vgui_adaptor {
 public:
   vgui_adaptor();
@@ -113,15 +112,15 @@ public:
   virtual void make_current();
 
 protected:
-  // Parameters controlling the popup menu style. These are put onto
-  // a popup_params object and passed to tableau::get_popup()
+  //: Parameters controlling the popup menu style.
+  // These are put onto a popup_params object and passed to tableau::get_popup()
   bool nested_popups;
   bool default_items;
 
 private:
   vgui_adaptor_tableau *the_tableau;
 
-  // this menu is put before the tableau's popup menu.
+  //: this menu is put before the tableau's popup menu.
   vgui_menu menu;
 };
 

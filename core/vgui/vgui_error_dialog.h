@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_error_dialog.h
+// This is ./oxl/vgui/vgui_error_dialog.h
 
 //:
 // \file

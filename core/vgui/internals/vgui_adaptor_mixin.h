@@ -1,4 +1,4 @@
-// This is oxl/vgui/internals/vgui_adaptor_mixin.h
+// This is ./oxl/vgui/internals/vgui_adaptor_mixin.h
 
 //:
 // \file
@@ -25,6 +25,7 @@ public:
   unsigned height;
 
   // These specify the event that causes the popup menu to appear
+
   //: Mouse button (used with popup_modifier) which causes the popup menu to appear.
   vgui_button popup_button;
   //: Modifier (used with popup_button) which causes the popup menu to appear.

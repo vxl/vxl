@@ -1,10 +1,16 @@
-// This is oxl/vgui/vgui_drag_mixin.h
+// This is ./oxl/vgui/vgui_drag_mixin.h
 
 //:
 // \file 
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   11 Sep 99
 // \brief  A tableau for drag events.
+//
+// \verbatim
+//  Modifications:
+//    11-SEP-1999 P.Pritchett - Initial version.
+//    26-APR-2002 K.Y.McGaul - Converted to doxygen style comments.
+// \endverbatim
 
 #ifndef vgui_drag_mixin_h_
 #define vgui_drag_mixin_h_
@@ -25,12 +31,6 @@
 // The drag_mixin also records the last mouse button to be pressed and will send
 // vgui_MOTION events to the function mouse_drag() if the mouse is being moved
 // with a button depressed.
-//
-// \verbatim
-//  Modifications:
-//    11-SEP-1999 P.Pritchett - Initial version.
-//    26-APR-2002 K.Y.McGaul - Converted to doxygen style comments.
-// \endverbatim
 class vgui_drag_mixin {
 public:
   vgui_drag_mixin(void);

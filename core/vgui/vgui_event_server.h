@@ -1,10 +1,16 @@
-// This is oxl/vgui/vgui_event_server.h
+// This is ./oxl/vgui/vgui_event_server.h
 
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   11 Sep 99
 // \brief  Procedural event grabbing from a tableau
+//
+// \verbatim
+//  Modifications:
+//    11-SEP-1999 P.Pritchett - Initial version.
+//    26-APR-2002 K.Y.McGaul - Converted to and added doxygen style comments.
+// \endverbatim
 
 #ifndef vgui_event_server_h_
 #define vgui_event_server_h_
@@ -31,12 +37,6 @@ class vgui_event_server_interpose_tableau;
 //   drawing into the wrong buffer. For a mouse event we may not be able to get 
 //   the position in the image using the projection_inspector (if e.g. the image 
 //   was zoomed) since all the gl matrices would have been reset - kym.
-//
-// \verbatim
-//  Modifications:
-//    11-SEP-1999 P.Pritchett - Initial version.
-//    26-APR-2002 K.Y.McGaul - Converted to and added doxygen style comments.
-// \endverbatim
 class vgui_event_server {
 public:
   vgui_event_server(vgui_tableau_sptr const&);

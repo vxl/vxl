@@ -1,5 +1,7 @@
-// This is oxl/vgui/vgui_blackbox.cxx
-//
+// This is ./oxl/vgui/vgui_blackbox.cxx
+
+//:
+// \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   13 Oct 99
 

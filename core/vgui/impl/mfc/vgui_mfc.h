@@ -1,10 +1,17 @@
-// This is /oxl/vgui/impl/mfc/vgui_mfc.h
+// This is ./oxl/vgui/impl/mfc/vgui_mfc.h
 
 //:
 // \file
 // \author  awf@robots.ox.ac.uk 
 // \date    July 2000
 // \brief   The MFC implementation of vgui
+//
+// \verbatim
+//  Modifications:
+//   July 2000   Marko Bacic, Oxford RRG   -- Implemented support for MFC
+//   15-AUG-2000 Marko Bacic, Oxford RRG    -- Implemented run_one_event.
+//   29-AUG-2001 K.Y.McGaul - Added destructor to remove Purify mem leak.
+// \endverbatim
 
 #ifndef vgui_mfc_h_
 #define vgui_mfc_h_
@@ -22,13 +29,6 @@ class vgui_mfc_utils;
 //
 // Provides functions for controlling the event loop.
 // Based upon vgui_gtk.
-//
-// \verbatim
-//  Modifications:
-//   July 2000   Marko Bacic, Oxford RRG   -- Implemented support for MFC
-//   15-AUG-2000 Marko Bacic, Oxford RRG    -- Implemented run_one_event.
-//   29-AUG-2001 K.Y.McGaul - Added destructor to remove Purify mem leak.
-// \endverbatim
 class vgui_mfc : public vgui_toolkit {
 public:
   // singleton method

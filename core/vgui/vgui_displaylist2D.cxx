@@ -1,5 +1,7 @@
-// This is oxl/vgui/vgui_displaylist2D.cxx
-//
+// This is ./oxl/vgui/vgui_displaylist2D.cxx
+
+//:
+// \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   14 Sep 99
 

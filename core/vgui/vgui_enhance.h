@@ -1,10 +1,16 @@
-// This is oxl/vgui/vgui_enhance.h
+// This is ./oxl/vgui/vgui_enhance.h
 
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   16 Nov 99
 // \brief  Magnify or display another tableau in a region around the mouse pointer.
+//
+// \verbatim
+//  Modifications:
+//    16-NOV-1999 P.Pritchett - Initial version.
+//    26-APR-2002 K.Y.McGaul - Converted to and added doxygen style comments.
+// \endverbatim
 
 #ifndef vgui_enhance_h_
 #define vgui_enhance_h_
@@ -22,12 +28,6 @@ class vgui_event;
 //  This happens when the left mouse button is pressed down.
 //  Use '[' and ']' to change size of region around the mouse pointer.
 //  Use '{' and '}' to change the magnification.
-//
-// \verbatim
-//  Modifications:
-//    16-NOV-1999 P.Pritchett - Initial version.
-//    26-APR-2002 K.Y.McGaul - Converted to and added doxygen style comments.
-// \endverbatim
 class vgui_enhance : public vgui_tableau {
 public:
   //: Constructor - magnifies area under the mouse pointer.

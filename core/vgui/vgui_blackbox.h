@@ -1,10 +1,16 @@
-// This is oxl/vgui/vgui_blackbox.h
+// This is ./oxl/vgui/vgui_blackbox.h
 
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   13 Oct 99
 // \brief  Event record and playback.
+//
+// \verbatim
+//  Modifications:
+//    13-OCT-1999  P.Pritchett - Initial version.
+//    26-APR-2002  K.Y.McGaul - Converted to and added doxygen style comments.
+// \endverbatim.
 
 #ifndef vgui_blackbox_h_
 #define vgui_blackbox_h_
@@ -19,19 +25,11 @@
 
 //: Event record and playback.
 //
-// \verbatim
-// `,'  start/stop record 
-// `.'           playback 
-// `s'   playback w. dump 
-// `/'       print events 
-// `#'       clear events 
-// \endverbatim
-//
-// \verbatim
-//  Modifications:
-//    13-OCT-1999  P.Pritchett - Initial version.
-//    26-APR-2002  K.Y.McGaul - Converted to and added doxygen style comments.
-// \endverbatim.
+// - `,'  start/stop record 
+// - `.'           playback 
+// - `s'   playback w. dump 
+// - `/'       print events 
+// - `#'       clear events 
 class vgui_blackbox : public vgui_wrapper_tableau
 {
 public:

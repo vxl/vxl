@@ -7,6 +7,12 @@
 // \author  Marko Bacic, Oxford RRG
 // \date    27 July 2000
 // \brief   Defines main window of the application
+//
+// \verbatim
+//  Modifications:
+//   22-AUG-2000 - Marko Bacic, Oxford RRG -- Added support for horizontal and
+//                                            vertical scroll bars
+// \endverbatim
 
 #if _MSC_VER > 1000
 #pragma once
@@ -16,12 +22,6 @@
 class vgui_mfc_statusbar;
 
 //: Defines main window of the application.
-//
-// \verbatim
-//  Modifications:
-//   22-AUG-2000 - Marko Bacic, Oxford RRG -- Added support for horizontal and
-//                                            vertical scroll bars
-// \endverbatim
 class vgui_mfc_mainfrm : public CFrameWnd
 {
 protected: // create from serialization only

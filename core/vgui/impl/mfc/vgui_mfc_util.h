@@ -1,10 +1,15 @@
-// This is oxl/vgui/impl/mfc/vgui_mfc_util.h
+// This is ./oxl/vgui/impl/mfc/vgui_mfc_util.h
 
 //:
 // \file
 // \author Marko Bacic
 // \date   4 August 2000
 // \brief  Provides support for menus.
+//
+// \verbatim
+//  Modifications:
+//    04-AUG-2000 Marko Bacic - Initial version.
+// \endverbatim
 
 #ifndef vgui_mfc_util_h_
 #define vgui_mfc_util_h_
@@ -23,11 +28,6 @@ typedef double gdouble;
 typedef unsigned int guint;
 
 //: Provides support for menus.
-//
-// \verbatim
-//  Modifications:
-//    04-AUG-2000 Marko Bacic - Initial version.
-// \endverbatim
 class vgui_mfc_utils {
 public:
   static vgui_button translate_button(int button);

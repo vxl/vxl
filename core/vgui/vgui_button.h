@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_button.h
+// This is ./oxl/vgui/vgui_button.h
 
 //:
 // \file

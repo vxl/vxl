@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_find.h
+// This is ./oxl/vgui/vgui_find.h
 
 //:
 // \file

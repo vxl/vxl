@@ -1,10 +1,21 @@
-// This is oxl/vgui/internals/vgui_dialog.h
+// This is ./oxl/vgui/vgui_dialog.h
 
-//: 
+//:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   23 Oct 1999
 // \brief  Abstract dialog class.
+//
+// \verbatim
+//  Modifications
+//   23-OCT-1999 P.Pritchet - Initial version.
+//   25-JAN-2000 K.Y.McGaul - Added message function to allow text messages in dialogs.
+//   27-JAN-2000 K.Y.McGaul - Added set_modal function to allow non-modal dialogs.
+//   24-FEB-2000 K.Y.McGaul - Added file browser and color chooser.
+//   11-JUL-2000 Marko Bacic - Added inline file browser
+//   12-JUL-2000 Marko Bacic - Added inline color chooser
+//   26-APR-2002 K.Y.McGaul - Converted to doxygen style comments.
+// \endverbatim
 
 #ifndef vgui_dialog_h_
 #define vgui_dialog_h_
@@ -38,21 +49,10 @@ class vgui_dialog_impl;
 //     return; // cancelled
 //   send_order(the_table, the_dressing, has_mayo);
 // \endcode
-//
-// \verbatim
-//  Modifications
-//   23-OCT-1999 P.Pritchet - Initial version.
-//   25-JAN-2000 K.Y.McGaul - Added message function to allow text messages in dialogs.
-//   27-JAN-2000 K.Y.McGaul - Added set_modal function to allow non-modal dialogs.
-//   24-FEB-2000 K.Y.McGaul - Added file browser and color chooser.
-//   11-JUL-2000 Marko Bacic - Added inline file browser
-//   12-JUL-2000 Marko Bacic - Added inline color chooser
-//   26-APR-2002 K.Y.McGaul - Converted to doxygen style comments.
-// \endverbatim
 class vgui_dialog
 {
 public:
-  
+
   //: Constructor - takes the title of the dialog box.
   vgui_dialog(const char* name);
  ~vgui_dialog();
@@ -70,10 +70,13 @@ public:
   //: Multiple choice - with three options.
   void choice(const char* label, const char* option1, const char* option2, const char* option3, int& chosen);
   //: Multiple choice - with the list of options given.
-  void choice(const char*, const vcl_vector<vcl_string>&, int &);  // get index in vcl_vector of strings.
+  void choice(const char*, const vcl_vector<vcl_string>&, int &);
   void choice(const char*s, const vcl_vector<vcl_string>&v, unsigned &r) { choice(s,v,*reinterpret_cast<int*>(&r)); }
 
-  //void choices(const vcl_vector<vcl_string> &,vcl_vector<int> &); // get indices in vcl_vector of strings.
+#if 0
+  //: get indices in vcl_vector of strings.
+  void choices(const vcl_vector<vcl_string> &,vcl_vector<int> &);
+#endif
 
   //: File browsers
   void file (const char* label, vcl_string& regexp, vcl_string& filepath);
@@ -90,12 +93,12 @@ public:
   //: Display a tableau in the dialog
   void inline_tableau(const vgui_tableau_sptr tab, unsigned width, unsigned height);
 
-  // Set the labels on each button, if 0 that button does not appear.
+  //: Set the labels on each button, if 0 that button does not appear.
   void set_cancel_button(const char* label);
+  //: Set the labels on each button, if 0 that button does not appear.
   void set_ok_button(const char* label);
 
-  // A "modal" dialog captures all events sent to the
-  // application.
+  //: A "modal" dialog captures all events sent to the application.
   void set_modal(const bool);
 
   bool ask();

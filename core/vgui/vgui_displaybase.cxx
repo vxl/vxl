@@ -1,5 +1,7 @@
-// This is oxl/vgui/vgui_displaybase.cxx
+// This is ./oxl/vgui/vgui_displaybase.cxx
 
+//:
+// \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   14 Sep 99
 
@@ -67,7 +69,6 @@ void vgui_displaybase::set_selection_callback(vgui_displaybase_selection_callbac
 
 void vgui_displaybase::add(vgui_soview* object)
 {
-
   vcl_vector<vgui_soview*>::iterator i = vcl_find(objects.begin(), objects.end(), object);
   if (i == objects.end())
   {
@@ -193,7 +194,7 @@ void vgui_displaybase::draw_soviews_select()
   {
     // only highlight if the so is selectable
     vgui_soview* so = *so_iter;
-    if( so->get_selectable())
+    if ( so->get_selectable())
       {
         vgui_soview *so = *so_iter;
         glPushName(so->get_id());
@@ -273,7 +274,7 @@ vcl_vector<vgui_soview*> const & vgui_displaybase::get_all() const
 vcl_vector<unsigned> const vgui_displaybase::get_all_ids() const
 {
   vcl_vector<unsigned> ids;
-  for(unsigned int i=0; i< objects.size(); i++)
+  for (unsigned int i=0; i< objects.size(); i++)
     ids.push_back( objects[i]->get_id());
 
   return ids;
@@ -290,7 +291,7 @@ bool vgui_displaybase::select(unsigned id)
     // notify so's observers
     vgui_soview* so = vgui_soview::id_to_object(id);
 
-    if( so->get_selectable())
+    if ( so->get_selectable())
       {
         vgui_message msg;
         //msg.text = "soview select";

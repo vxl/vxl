@@ -1,5 +1,7 @@
-// This is oxl/vgui/internals/vgui_adaptor_tableau.cxx
-//
+// This is ./oxl/vgui/internals/vgui_adaptor_tableau.cxx
+
+//:
+// \file
 // \author fsm@robots.ox.ac.uk
 
 #ifdef __GNUC__
@@ -11,6 +13,7 @@
 
 #include <vgui/vgui_adaptor.h>
 
+//:
 // The sole raison d'etre of the adaptor_tableau is to propagate
 // tableau posts onto an adaptor.
 

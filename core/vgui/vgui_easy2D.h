@@ -1,10 +1,18 @@
-// This is oxl/vgui/vgui_easy2D.h
-//
-//: 
+// This is ./oxl/vgui/vgui_easy2D.h
+
+//:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   24 Sep 1999
 // \brief  Tableau to display two-dimensional geometric objects.
+//
+// \verbatim
+// Modifications
+//    24-SEP-1999  P.Pritchett - Initial version.
+//    20-JUL-2000  Marko Bacic, Oxford RRG -- Provided support for printing linestrips
+//    25-APR-2002  domi@vision.ee.ethz.ch - make print_psfile work without image tableau
+//    26-APR-2002  K.Y.McGaul - Added some doxygen-style documentation.
+// \endverbatim
 
 #ifndef vgui_easy2D_h_
 #define vgui_easy2D_h_
@@ -29,11 +37,11 @@ class vgui_soview2D_polygon;
 //
 //  Two dimensional geometric objects (see vgui_soview2D) such as lines, points, circles,
 //  etc can be added using add, or add_point, add_line, add_circle, etc.
-//  The constructor of this tableau can accept a child tableau such as an image or clear 
+//  The constructor of this tableau can accept a child tableau such as an image or clear
 //  tableau on top of which the geometric objects will be displayed (so for example, lines
-//  can be drawn on an image).  To display objects on a non-black, plain coloured background 
+//  can be drawn on an image).  To display objects on a non-black, plain coloured background
 //  use a clear_tableau and set its colour.
-//  
+//
 //  To remove objects call remove(vgui_soview*).  The vgui_soview* is returned by add(), or
 //  you can get a list of all soviews using get_all().  To remove all objects use clear().
 //  These functions are inherited from vgui_displaybase.
@@ -41,14 +49,6 @@ class vgui_soview2D_polygon;
 //  The geometric objects on the easy2D (and any underlying image) can be saved as PostScript
 //  by calling print_psfile. (If you just wish to save an image of your easy2D you may
 //  want to use vgui_utils::dump_colour_buffer instead).
-//
-// \verbatim
-// Modifications
-//    24-SEP-1999  P.Pritchett - Initial version.
-//    20-JUL-2000  Marko Bacic, Oxford RRG -- Provided support for printing linestrips
-//    25-APR-2002  domi@vision.ee.ethz.ch - make print_psfile work without image tableau
-//    26-APR-2002  K.Y.McGaul - Added some doxygen-style documentation.
-// \endverbatim
 class vgui_easy2D : public vgui_displaylist2D
 {
 public:

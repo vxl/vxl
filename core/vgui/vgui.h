@@ -1,10 +1,18 @@
-// This is oxl/vgui/vgui.h
+// This is ./oxl/vgui/vgui.h
 
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   30 Sep 99
 // \brief  Namespace with a singleton vgui_toolkit instance.
+//
+// \verbatim
+//  Modifications:
+//   30-SEP-1999  P.Pritchett - Initial version.
+//   26 Oct 1999  fsm. various changes to facilitate the port of old impl code.
+//   30-AUG-2000  Marko Bacic, Oxford RRG -- Added flags to support MFC accel.
+//   26-APR-2002  K.Y.McGaul - Added some doxygen style comments.
+// \endverbatim
 
 //-*- c++ -*-------------------------------------------------------------------
 #ifndef vgui_h_
@@ -47,16 +55,9 @@ struct vgui_tableau_sptr;
 // 3. Initialization of toolkit. There is only one method for doing this, namely
 //      vgui::init(argc, argv);
 //    which needs a plausible command line. If no toolkit has been selected
-//    the init() function will try to choose one for you based on the the
+//    the init() function will try to choose one for you based on the
 //    given command line.
-//
-// \verbatim
-//  Modifications:
-//   30-SEP-1999  P.Pritchett - Initial version.
-//   26 Oct 1999  fsm. various changes to facilitate the port of old impl code.
-//   30-AUG-2000  Marko Bacic, Oxford RRG -- Added flags to support MFC accel.
-//   26-APR-2002  K.Y.McGaul - Added some doxygen style comments.
-// \endverbatim
+
 class vgui {
 public:
   //: Method for determining if a given toolkit is available.
@@ -76,29 +77,36 @@ public:
   // function returns false. Else the return value is true.
   static bool select(int &argc, char **argv);
 
-
   //: Initialize the selected toolkit passing it the given command line.
   static void init(int &argc, char **argv);
 
-
   // Factory methods
+
   //: Produce window with menubar.
   static vgui_window* produce_window(int width, int height,
-                                     vgui_menu const & menubar, vcl_string const &title ="");
+                                     vgui_menu const & menubar,
+                                     vcl_string const &title ="");
   //: Produce window without menubar.
-  static vgui_window* produce_window(int width, int height, vcl_string const &title ="");
+  static vgui_window* produce_window(int width, int height,
+                                     vcl_string const &title ="");
   //: Produce dialog box.
   static vgui_dialog_impl* produce_dialog(vcl_string const &name);
 
   // Convenience methods
+
   //: Display this tableau and run till dead (no menubar).
-  static int run(vgui_tableau_sptr const&, int w, int h, vcl_string const &title ="");
+  static int run(vgui_tableau_sptr const&, int w, int h,
+                 vcl_string const &title ="");
   //: Display this tableau and run till dead (with menubar)
-  static int run(vgui_tableau_sptr const&, int w, int h, vgui_menu const &menubar, vcl_string const &title ="");
-  static vgui_window *adapt(vgui_tableau_sptr const&, int w, int h, vcl_string const &title ="");
-  static vgui_window *adapt(vgui_tableau_sptr const&, int w, int h, vgui_menu const &, vcl_string const &title ="");
+  static int run(vgui_tableau_sptr const&, int w, int h, vgui_menu const &menubar,
+                 vcl_string const &title ="");
+  static vgui_window *adapt(vgui_tableau_sptr const&, int w, int h,
+                            vcl_string const &title ="");
+  static vgui_window *adapt(vgui_tableau_sptr const&, int w, int h, vgui_menu const &,
+                            vcl_string const &title ="");
 
   // Functions for event-loop management
+
   //:
   static int  run();
   //: Run the next event in the event queue.
@@ -118,7 +126,7 @@ public:
 private:
   //: Selected toolkit instance.
   static vgui_DLLDATA vgui_toolkit* instance_;
-  //
+  //:
   static vgui_DLLDATA bool init_called;
 };
 

@@ -1,4 +1,4 @@
-// This is oxl/vgui/internals/vgui_file_field.h
+// This is ./oxl/vgui/internals/vgui_file_field.h
 
 //:
 // \file
@@ -23,10 +23,10 @@ class vgui_file_field : public vgui_dialog_field {
 public:
   vgui_file_field(const char *text, vcl_string&, vcl_string&);
   ~vgui_file_field();
-  
+
   vcl_string current_value() const;
   bool update_value(const vcl_string &);
-  
+
 private:
   vcl_string &var;
   vcl_string &regexp;

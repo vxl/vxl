@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_color_text.h
+// This is ./oxl/vgui/vgui_color_text.h
 
 //:
 // \file

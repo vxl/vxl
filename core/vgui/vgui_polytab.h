@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_polytab.h
+// This is ./oxl/vgui/vgui_polytab.h
 
 //:
 // \file

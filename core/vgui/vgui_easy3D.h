@@ -1,10 +1,16 @@
-// This is oxl/vgui/vgui_easy3D.h
+// This is ./oxl/vgui/vgui_easy3D.h
 
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   24 Sep 99
 // \brief  Tableau to display three-dimensional geometric objects.
+//
+// \verbatim
+//  Modifications:
+//    24-SEP-1999  P.Pritchett - Initial version.
+//    26-APR-2002  K.Y.McGaul - Added some doxygen-style documentation.
+// \endverbatim
 
 #ifndef vgui_easy3D_h_
 #define vgui_easy3D_h_
@@ -20,12 +26,6 @@ class vgui_lineseg3D;
 //: Tableau to display three-dimensional geometric objects.
 //
 //  Three-dimensional objects (see vgui_soview3D) can be added using add, or add_point, add_line.
-//
-// \verbatim
-//  Modifications:
-//    24-SEP-1999  P.Pritchett - Initial version.
-//    26-APR-2002  K.Y.McGaul - Added some doxygen-style documentation.
-// \endverbatim
 class vgui_easy3D : public vgui_displaylist3D
 {
 public:

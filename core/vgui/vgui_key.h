@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_key.h
+// This is ./oxl/vgui/vgui_key.h
 
 //:
 // \file

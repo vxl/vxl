@@ -1,10 +1,17 @@
-// This is oxl/vgui/vgui_composite.h
+// This is ./oxl/vgui/vgui_composite.h
 
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   15 Sep 99
 // \brief  Tableau which treats it children as a stack of acetates
+//
+// \verbatim
+//  Modifications:
+//   18 Sep 00 capes@robots. Added set_enable_key_bindings. Key bindings are OFF by default.
+//    9 Feb 01 awf@robots. Add Alt-C to re-enable key bindings.
+//   26-APR-2002 K.Y.McGaul - Converted to doxygen style comments.
+// \endverbatim
 
 #ifndef vgui_composite_h_
 #define vgui_composite_h_
@@ -31,14 +38,7 @@ class vgui_event;
 //
 //  The exceptions to this rule are :
 //  [a] key presses '0'-'9', which toggle the activeness of the children and
-//  [b] the DRAW, DRAW_OVERLAY events which are sent to all children.   
-//
-// \verbatim
-//  Modifications:
-//   18 Sep 00 capes@robots. Added set_enable_key_bindings. Key bindings are OFF by default.
-//    9 Feb 01 awf@robots. Add Alt-C to re-enable key bindings.
-//   26-APR-2002 K.Y.McGaul - Converted to doxygen style comments.
-// \endverbatim
+//  [b] the DRAW, DRAW_OVERLAY events which are sent to all children.
 class vgui_composite : public vgui_tableau {
 public:
   //: Constructor - default.
@@ -86,6 +86,7 @@ protected:
   bool index_ok(int);
 
   // data
+
   //: List of child tableaux.
   vcl_vector<vgui_slot> children;
   vcl_vector<bool> active;

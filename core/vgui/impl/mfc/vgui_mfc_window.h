@@ -5,6 +5,15 @@
 // \author  Marko Bacic, Oxford RRG
 // \date    24-JUL-2000
 // \brief   The mfc implementation of vgui_window
+//
+// \verbatim
+//  Modifications:
+//    24-JUL-2000  Marko Bacic, Oxford RRG - Initial version.
+//    17-AUG-2000  Marko Bacic, Oxford RRG - Now windows can have specified size
+//    23-AUG-2000  Marko Bacic, Oxford RRG - Added support for scrollbars
+//    20-JUL-2001  K.Y.McGaul  Added init_window function carry out common
+//                             functionality from all constructors.
+// \endverbatim
 
 #ifndef vgui_mfc_window_h_
 #define vgui_mfc_window_h_
@@ -21,15 +30,6 @@ class vgui_mfc_statusbar;
 
 //: MFC implementation of vgui_window.
 //  Based on vgui_glut_win.
-//
-// \verbatim
-//  Modifications:
-//    24-JUL-2000  Marko Bacic, Oxford RRG - Initial version.
-//    17-AUG-2000  Marko Bacic, Oxford RRG - Now windows can have specified size
-//    23-AUG-2000  Marko Bacic, Oxford RRG - Added support for scrollbars
-//    20-JUL-2001  K.Y.McGaul  Added init_window function carry out common
-//                             functionality from all constructors.
-// \endverbatim
 class vgui_mfc_window : public vgui_window {
 public:
   //: Initialise window - common functionality called by all constructors.

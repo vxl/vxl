@@ -1,9 +1,15 @@
-// This is oxl/vgui/vgui_command.h
+// This is ./oxl/vgui/vgui_command.h
 
 //:
 // \file
 // \author fsm@robots.ox.ac.uk and pcp@robots.ox.ac.uk
 // \brief  Defines the abstract interface to commands.
+//
+// \verbatim
+// Modifications
+//  awf renamed derived classes to be consistent with header-file naming convention.
+//  fsm fixed everything afterwards....
+// \endverbatim
 
 #ifndef vgui_command_h_
 #define vgui_command_h_
@@ -14,12 +20,6 @@
 #include <vbl/vbl_ref_count.h>
 
 //: Defines the abstract interface to commands
-//
-// \verbatim
-// Modifications
-//  awf renamed derived classes to be consistent with header-file naming convention.
-//  fsm fixed everything afterwards....
-// \endverbatim
 struct vgui_command : public vbl_ref_count
 {
   vgui_command();

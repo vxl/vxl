@@ -1,10 +1,15 @@
-// This is oxl/vgui/vgui_function_tableau.h
+// This is ./oxl/vgui/vgui_function_tableau.h
 
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   25 Nov 99
 // \brief  Tableau where functions passed in are called for various events.
+//
+// \verbatim
+//  Modifications:
+//    25-NOV-1999 P.Pritchett - Initial version.
+// \endverbatim
 
 #ifndef vgui_function_tableau_h_
 #define vgui_function_tableau_h_
@@ -16,30 +21,25 @@
 #include "dll.h"
 
 //:  Tableau where functions passed in are called for various events.
-//
-// \verbatim
-//  Modifications:
-//    25-NOV-1999 P.Pritchett - Initial version.
-// \endverbatim
 class vgui_function_tableau : public vgui_tableau {
 public:
   typedef bool (*function)(const vgui_event&);
-  
+
   vgui_function_tableau();
 
   vcl_string type_name() const { return "vgui_function_tableau"; }
-  
-  void draw(function f) {draw_ = f;} 
-  void mouse_up(function f) {mouse_up_ = f;} 
+
+  void draw(function f) {draw_ = f;}
+  void mouse_up(function f) {mouse_up_ = f;}
   void mouse_down(function f) {mouse_down_ = f;};
   void motion(function f) {motion_ = f;}
   void key_press(function f) {key_press_ = f;}
   void help(function f) {help_ = f;}
-  
+
 
   static vgui_DLLDATA bool redraw;
 
-protected: 
+protected:
  ~vgui_function_tableau();
   bool handle(const vgui_event&);
 

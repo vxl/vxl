@@ -5,6 +5,18 @@
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   25 Oct 99
 // \brief vgui_dialog_impl is the abstract base class for dialog implementation.
+//
+// \verbatim
+//  Modifications:
+//   K.Y.McGaul  25-JAN-00    Moved field functions to this class to save repetition.
+//                            Added virtual ..._widget functions.
+//                            Added text_message function.
+//   K.Y.McGaul  27-JAN-00    Added modal function.
+//   Marko Bacic 11-JUL-00    Added support for inline file browser
+//   Marko Bacic 12-JUL-00    Added support for inline color chooser
+//   Joris S.    09-NOV-00    Fixed weird color browser things
+//   K.Y.McGaul  22-MAY-01    Added tableau field.
+// \endverbatim
 
 #ifndef vgui_dialog_impl_h_
 #define vgui_dialog_impl_h_
@@ -25,18 +37,6 @@ class vgui_dialog_field;
 //  vgui_dialog_field and a variable indicating what type of field they are. The
 //  elements also contain void* for implementors to add any gui specific
 //  information/class to the element.
-//
-// \verbatim
-//  Modifications:
-//   K.Y.McGaul  25-JAN-00    Moved field functions to this class to save repetition.
-//                            Added virtual _widget functions.
-//                            Added text_message function.
-//   K.Y.McGaul  27-JAN-00    Added modal function.
-//   Marko Bacic 11-JUL-00    Added support for inline file browser
-//   Marko Bacic 12-JUL-00    Added support for inline color chooser
-//   Joris S.    09-NOV-00    Fixed weird color browser things
-//   K.Y.McGaul  22-MAY-01    Added tableau field.
-// \endverbatim
 class vgui_dialog_impl
 {
 public:
@@ -87,7 +87,6 @@ public:
     void *widget;
     vgui_dialog_field *field;
   };
-
 
 protected:
   vcl_string name;

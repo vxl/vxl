@@ -1,5 +1,7 @@
-// This is oxl/vgui/vgui_camera.cxx
-//
+// This is ./oxl/vgui/vgui_camera.cxx
+
+//:
+// \file
 // \author Geoffrey Cross, Oxford RRG
 // \date   03 Nov 99
 

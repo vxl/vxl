@@ -1,10 +1,16 @@
-// This is oxl/vgui/vgui_displaylist2D.h
+// This is ./oxl/vgui/vgui_displaylist2D.h
 
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   14 Sep 99
 // \brief  Displaying two-dimensional geometric objects.
+//
+// \verbatim
+//  Modifications
+//    1-SEP-2000 -- Marko Bacic,Oxford RRG -- Added displaying of object
+//                  information
+// \endverbatim
 
 #ifndef vgui_displaylist2D_h_
 #define vgui_displaylist2D_h_
@@ -18,12 +24,6 @@
 #include <vgui/vgui_displaylist2D_sptr.h>
 
 //: Displaying two-dimensional geometric objects.
-//
-// \verbatim
-//  Modifications
-//    1-SEP-2000 -- Marko Bacic,Oxford RRG -- Added displaying of object
-//                  information
-// \endverbatim
 class vgui_displaylist2D : public vgui_displaybase {
 public:
   vgui_displaylist2D();

@@ -1,5 +1,7 @@
-// This is oxl/vgui/vgui_adaptor_mixin.cxx
-//
+// This is ./oxl/vgui/internals/vgui_adaptor_mixin.cxx
+
+//:
+// \file
 // \author fsm@robots.ox.ac.uk
 
 #ifdef __GNUC__

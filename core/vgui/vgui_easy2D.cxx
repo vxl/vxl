@@ -1,10 +1,11 @@
-// This is oxl/vgui/vgui_easy2D.cxx
+// This is ./oxl/vgui/vgui_easy2D.cxx
 
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
+//:
+// \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   24 Sep 99
 //

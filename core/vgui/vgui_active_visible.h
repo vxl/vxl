@@ -1,10 +1,15 @@
-// This is oxl/vgui/vgui_active_visible.h
+// This is ./oxl/vgui/vgui_active_visible.h
 
 //:
 // \file   Robotics Research Group, University of Oxford
 // \author Philip C. Pritchett
 // \date   25 Jan 00
-// \brief  
+// \brief
+//
+// \verbatim
+//  Modifications:
+//    25-JAN-2000 P.Pritchett - Initial version.
+// \endverbatim
 
 #ifndef vgui_active_visible_h_
 #define vgui_active_visible_h_
@@ -16,11 +21,6 @@
 #include "vgui_wrapper_tableau.h"
 
 //:
-//
-// \verbatim
-//  Modifications:
-//    25-JAN-2000 P.Pritchett - Initial version.
-// \endverbatim
 class vgui_active_visible : public vgui_wrapper_tableau {
 public:
   vgui_active_visible(vgui_tableau_sptr const &, bool name_in_menu = false);

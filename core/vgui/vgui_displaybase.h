@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_displaybase.h
+// This is ./oxl/vgui/vgui_displaybase.h
 
 //:
 // \file
@@ -33,8 +33,7 @@ struct vgui_displaybase_selection_callback {
 };
 
 #include "vgui_displaybase_sptr.h"
-//: General display list functionality, can use any type of soview.
-// As long as it's black.
+//: General display list functionality; can use any type of soview as long as it's black.
 class vgui_displaybase : public vgui_tableau {
 public:
 
@@ -50,7 +49,6 @@ public:
   void draw_soviews_render();
   void draw_soviews_select();
 
-
   // selections
   bool is_selected(unsigned id);
   vcl_vector<unsigned> const & get_selected() const;
@@ -64,7 +62,6 @@ public:
   unsigned get_highlighted();
   vgui_soview* get_highlighted_soview();
   bool highlight(unsigned id);
-
 
   // add soview
   void add(vgui_soview*);
@@ -82,7 +79,6 @@ public:
   vgui_soview* contains_hit(vcl_vector<unsigned> hit);
 
   unsigned get_id() {return id;}
-
 
 protected:
   vcl_vector<vgui_soview*> objects;

@@ -1,10 +1,15 @@
-// This is oxl/vgui/impl/mfc/vgui_mfc_app.
+// This is ./oxl/vgui/impl/mfc/vgui_mfc_app.h
 
 //:
 // \file
 // \author Marko Bacic, Oxford RRG
 // \date   27 July 2000
 // \brief  Defines CWinApp which initialises all the MRC stuff.
+//
+// \verbatim
+//  Modifications:
+//    23-AUG-2000 Marko Bacic, Oxford RRG -- Added support for scroll bars
+// \endverbatim
 
 #ifndef AFX_VGUIMFCAPP_H__259D1B15_6A52_45B3_B335_8A7C78097A13__INCLUDED_
 #define AFX_VGUIMFCAPP_H__259D1B15_6A52_45B3_B335_8A7C78097A13__INCLUDED_
@@ -23,11 +28,6 @@
 //
 //   This application class (CWinApp) is instantiated once
 //   and only once in the application and initialises all the MFC stuff
-//
-// \verbatim
-//  Modifications:
-//    23-AUG-2000 Marko Bacic, Oxford RRG -- Added support for scroll bars
-// \endverbatim
 class vgui_mfc_app : public CWinApp
 {
 public:

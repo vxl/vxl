@@ -1,10 +1,18 @@
-// This is vgui/impl/mfc/vgui_mfc_utils.h
+// This is ./oxl/vgui/impl/mfc/vgui_mfc_utils.h
 
 //:
 // \file
 // \author  Marko Bacic, Oxford RRG
 // \date    4 August 2000
 // \brief   Provides support for menus 
+//
+// \verbatim
+//  Modifications:
+//   04-AUG-2000 Marko Bacic - Initial version.
+//   14-AUG-2000 Marko Bacic - Added support for popup menus
+//   16-MAR-2001 K.Y.McGaul - Added menu accelerators
+//   22-AUG-2001 K.Y.McGaul - Added destructor to fix memory leak: all menus now deleted.
+// \endverbatim
 
 #ifndef vgui_mfc_utils_h_
 #define vgui_mfc_utils_h_
@@ -23,14 +31,6 @@ typedef void (*fp)();
 
 //: MFC version of vgui_utils - provides support for menus.
 //  Only one instance of the class is allowed
-//
-// \verbatim
-//  Modifications:
-//   04-AUG-2000 Marko Bacic - Initial version.
-//   14-AUG-2000 Marko Bacic - Added support for popup menus
-//   16-MAR-2001 K.Y.McGaul - Added menu accelerators
-//   22-AUG-2001 K.Y.McGaul - Added destructor to fix memory leak: all menus now deleted.
-// \endverbatim
 class vgui_mfc_utils 
 {
   //: Number of menu items.
@@ -65,7 +65,6 @@ public:
 private:
   //: List of menus to be deleted when we are finished:
   vcl_vector<CMenu*> menus_to_be_deleted;
-
 };
 
 #endif // vgui_mfc_utils_h_

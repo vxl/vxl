@@ -1,10 +1,16 @@
-// This is oxl/vgui/vgui_clear_tableau.h
+// This is ./oxl/vgui/vgui_clear_tableau.h
 
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   11 Nov 99
 // \brief  Tableau performing OpenGL clearing.
+//
+// \verbatim
+//  Modifications:
+//    11-NOV-1999 P.Pritchett - Initial version.
+//    26-APR-2002 K.Y.McGaul - Added some doxygen style comments.
+// \endverbatim
 
 #ifndef vgui_clear_tableau_h_
 #define vgui_clear_tableau_h_
@@ -22,12 +28,6 @@ class vgui_menu;
 //
 // vgui_clear_tableau is a tableau that performs OpenGL clearing upon
 // receipt of a vgui_DRAW event. It passes all events to its single child.
-//
-// \verbatim
-//  Modifications:
-//    11-NOV-1999 P.Pritchett - Initial version.
-//    26-APR-2002 K.Y.McGaul - Added some doxygen style comments.
-// \endverbatim
 class vgui_clear_tableau : public vgui_tableau {
 public:
   vgui_clear_tableau();

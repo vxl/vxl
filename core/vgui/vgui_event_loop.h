@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_event_loop.h
+// This is ./oxl/vgui/vgui_event_loop.h
 
 //:
 // \file

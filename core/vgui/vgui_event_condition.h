@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_event_condition.h
+// This is ./oxl/vgui/vgui_event_condition.h
 
 //:
 // \file
@@ -56,4 +56,4 @@ struct vgui_event_condition
   vcl_string as_string(int field_width = 0) const;
 };
 
-#endif
+#endif // vgui_event_condition_h_

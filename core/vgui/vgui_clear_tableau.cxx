@@ -1,5 +1,7 @@
-// This is oxl/vgui/vgui_clear_tableau.cxx
+// This is ./oxl/vgui/vgui_clear_tableau.cxx
 
+//:
+// \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   11 Nov 99
 // See vgui_clear_tableau.h for a description of this class.

@@ -1,4 +1,4 @@
-// This is oxl/vgui/internals/vgui_accelerate_x11.h
+// This is ./oxl/vgui/internals/vgui_accelerate_x11.h
 
 //:
 // \file
