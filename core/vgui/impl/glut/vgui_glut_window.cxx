@@ -13,13 +13,25 @@ vgui_glut_window::vgui_glut_window(char const *title,
   , pending_reshape(false)
   , pending_reposition(false)
 {
-  // create window :
+  // We have to be careful to remember what the current
+  // window is before creating a new one because we might
+  // be inside the event handler of another window and
+  // when we return we will still expect that GL context
+  // to be the active one.
+  int old = glutGetWindow();
+  
+  // create new window:
   glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
   glutInitWindowSize (w,h);
   glutInitWindowPosition(posx, posy);
   int window = glutCreateWindow( title ? title : __FILE__ );
   glutwin = new vgui_glut_adaptor(this, window);
   //glutHideWindow();
+  
+  // if another window was already current when the new one
+  // was created, switch back to the old one now:
+  if (old != 0)
+    glutSetWindow(old);
 }
 
 vgui_glut_window::~vgui_glut_window()
