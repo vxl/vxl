@@ -35,8 +35,14 @@ public:
 // -- Construct from PMatrix.
   PMatrixDecompAa(const PMatrix& P) { set(P); }
 
+// -- Construct from PMatrix.
+  PMatrixDecompAa(const vnl_matrix<double>& P) { set(P); }
+
 // --  Set [A a] from PMatrix.
   void set(const PMatrix& P) { P.get(&A, &a); }
+
+// --  Set [A a] from PMatrix.
+  void set(const vnl_matrix<double>& P);
 
 // --  Set PMatrix from [A a].
   void get(PMatrix* P) const { P->set(A, a); }
