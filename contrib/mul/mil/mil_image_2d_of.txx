@@ -23,7 +23,7 @@ mil_image_2d_of<T>::mil_image_2d_of()
 {
   planes_.resize(1);
   planes_[0] = 0;
-  
+
   format_ = vcl_string("GreyByte");
 }
 
@@ -42,10 +42,10 @@ void mil_image_2d_of<T>::deepCopy(const mil_image_2d_of& src)
   set_n_planes(src.n_planes());
   resize(src.nx(),src.ny());
   world2im_     = src.world2im_;
-  
+
   int s_xstep = src.xstep();
   int s_ystep = src.ystep();
-  
+
   // Do a deep copy
   // This is potentially inefficient
   for (int i=0;i<planes_.size();++i)
@@ -86,18 +86,18 @@ template<class T>
 void mil_image_2d_of<T>::resize2(int nx, int ny)
 {
   if (nx==nx_ && ny==ny_  || n_planes()==0) return;
-  
+
   release_data();
-  
+
   data_ = new mil_image_data<T>;
   data_->resize(n_planes()*nx*ny);
-  
+
   planes_[0]= (T*) data_->data();
   for (int i=1;i<planes_.size();++i)
   {
     planes_[i] = planes_[i-1] + (nx*ny);
   }
-  
+
   nx_ = nx;
   ny_ = ny;
   xstep_ = 1;
@@ -126,7 +126,7 @@ void mil_image_2d_of<T>::set_n_planes(int n)
     planes_.resize(n);
     for (int i=0;i<n;++i) planes_[i]=0;
   }
-  
+
   nx_ = 0;
   ny_ = 0;
   xstep_ = 0;
@@ -168,7 +168,7 @@ void mil_image_2d_of<T>::fill(T b)
             x2+=xstep_;
           }
         }
-        
+
         row += ystep_;
     }
   }
@@ -195,12 +195,12 @@ void mil_image_2d_of<T>::set(vcl_vector<T*>& planes,
 {
   release_data();
   planes_ = planes;
-  
+
   nx_ = nx;
   ny_ = ny;
   xstep_ = xstep;
   ystep_ = ystep;
-  
+
   format_ = format;
 }
 
@@ -218,12 +218,12 @@ void mil_image_2d_of<T>::set(T** planes, int n_planes,
   planes_.resize(n_planes);
   for (int i=0; i<n_planes; ++i)
     planes_[i] = planes[i];
-  
+
   nx_ = nx;
   ny_ = ny;
   xstep_ = xstep;
   ystep_ = ystep;
-  
+
   format_ = format;
 }
 
@@ -235,11 +235,11 @@ void mil_image_2d_of<T>::setGrey(T* grey_data, int nx, int ny, int ystep)
   release_data();
   planes_.resize(1);
   planes_[0] = grey_data;
-  
+
   nx_ = nx;
   ny_ = ny;
   ystep_ = ystep;
-  
+
   format_ = vcl_string("GreyByte");
 }
 
@@ -259,7 +259,7 @@ void mil_image_2d_of<T>::setRGB(T* r, T* g, T* b,
   nx_ = nx;
   ny_ = ny;
   ystep_ = ystep;
-  
+
   format_ = vcl_string("RGBPlaneByte");
 }
 
@@ -279,7 +279,7 @@ void mil_image_2d_of<T>::setRGB(T* r, T* g, T* b,
   ny_ = ny;
   xstep_ = xstep;
   ystep_ = ystep;
-  
+
   format_ = vcl_string("RGBPlaneByte");
 }
 
@@ -301,7 +301,7 @@ void mil_image_2d_of<T>::setRGB(T* data, int nx, int ny, int xstep, int ystep)
   ny_ = ny;
   xstep_ = xstep;
   ystep_ = ystep;
-  
+
   format_ = vcl_string("RGBPackedByte");
 }
 
@@ -316,26 +316,26 @@ void mil_image_2d_of<T>::setToWindow(const mil_image_2d_of& im,
                                      int xlo, int xhi, int ylo, int yhi)
 {
   assert(this!=&im);
-  
+
   int n_planes = im.n_planes();
   set_n_planes(n_planes);
   release_data();
-  
+
   // Take smart pointer to im's data to keep it in scope
   data_ = im.data_;
-  
+
   nx_ = 1+xhi-xlo;
   ny_ = 1+yhi-ylo;
   xstep_ = im.xstep();
   ystep_ = im.ystep();
   int offset = xlo * im.xstep() + ylo * im.ystep();
-  
+
   // const problem: planes_ isn't const but im.plane(i) is.
   // without having separate pointers for const/non-const
   // we can't get over this easily
   for (int i=0;i<n_planes;++i)
     planes_[i] = (T*) im.plane(i)+offset;
-  
+
   mil_transform_2d trans;
   trans.set_translation(-xlo,-ylo);
   world2im_ = trans * im.world2im();
@@ -375,9 +375,9 @@ void mil_image_2d_of<T>::getRange(T& min_f, T& max_f) const
     max_f = 0;
     return;
   }
-  
+
   getRange(min_f,max_f,0);
-  
+
   for (int i=1;i<planes_.size();++i)
   {
     T min_fi,max_fi;
@@ -439,12 +439,12 @@ void mil_image_2d_of<T>::print_all(vcl_ostream& os) const
   os<<vsl_indent();
   print_summary(os);
   os<<vcl_endl;
-  
+
   for (int i=0;i<n_planes();++i)
   {
     if (n_planes()>1) os<<vsl_indent()<<"Plane "<<i<<":"<<vcl_endl;
     const T* im_data = plane(i);
-    for (int y=ny_-1;y>=0;--y)
+    for (int y=0;y<ny_;++y)
     {
       os<<vsl_indent();
       for (int x=0;x<nx_;++x)
@@ -473,14 +473,14 @@ void mil_image_2d_of<T>::b_write(vsl_b_ostream& bfs) const
     vcl_abort();
   }
   vsl_b_write(bfs,data_);
-  
+
   vsl_b_write(bfs,nx_);
   vsl_b_write(bfs,ny_);
   vsl_b_write(bfs,xstep_);
   vsl_b_write(bfs,ystep_);
   vsl_b_write(bfs,format_);
   vsl_b_write(bfs,world2im_);
-  
+
   int n = planes_.size();
   vcl_vector<int> plane_offsets(n);
   for (int i=0;i<n;++i)
@@ -496,9 +496,9 @@ void mil_image_2d_of<T>::b_read(vsl_b_istream& bfs)
   if (!bfs) return;
 
   release_data();
-  
+
   vcl_vector<int> plane_offsets;;
-  
+
   short version;
   vsl_b_read(bfs,version);
   switch (version)
@@ -519,7 +519,7 @@ void mil_image_2d_of<T>::b_read(vsl_b_istream& bfs)
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
-  
+
   int n = plane_offsets.size();
   planes_.resize(n);
   for (int i=0;i<n;++i)
