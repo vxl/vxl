@@ -307,6 +307,7 @@ void vimt_gaussian_pyramid_builder_2d<T>::b_read(vsl_b_istream& bfs)
   vsl_b_read(bfs,version);
   switch (version)
   {
+  // version number starts at 2 to follow on from the old mil stuff
   case (2):
     vsl_b_read(bfs,max_levels_);
     vsl_b_read(bfs,filter_width_);
