@@ -12,15 +12,13 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_cmath.h>
-
 #include "VoxmapPoints.h"
 
 // Default ctor
 VoxmapPoints::VoxmapPoints( int d, vnl_double_3 c, double s)
   : depth(d),
-    nocorners( int(vcl_pow(2,depth))+1),
-    nocentres( int(vcl_pow(2,depth))),
+    nocorners( int(1<<depth)+1),
+    nocentres( int(1<<depth)),
     centre(c),
     size(s)
     //    corners( nocorners, nocorners, nocorners),
