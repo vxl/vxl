@@ -25,6 +25,7 @@
 #include <bgui/bgui_image_tableau.h>
 #include <bgui/bgui_vtol2D_tableau.h>
 #include <bgui/bgui_picker_tableau.h>
+#include <bgui/bgui_bargraph_clipon_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_image_tableau.h>
@@ -103,6 +104,12 @@ void vvid_file_manager::init()
   grid_->add_at(v2D1_, 1,0);
   vgui_shell_tableau_sptr shell = vgui_shell_tableau_new(grid_);
   this->add_child(shell);
+  bargraph_ = 0;
+  //add a clipon display for bargraph
+  //  vgui_easy2D_tableau_sptr easy;
+  //  easy.vertical_cast(easy1_);
+  //  bargraph_ = new bgui_bargraph_clipon_tableau(easy);
+
   stem_ = 0;
   long_tip_ =0;
   short_tip_=0;
@@ -285,6 +292,14 @@ void vvid_file_manager::display_topology()
   vcl_cout << "display " << topos.size()
            << " topology objs in " << t.real() << " msecs.\n";
 #endif
+  easy0_->post_redraw();
+}
+
+void vvid_file_manager::display_bargraph(vcl_vector<float> const& data)
+{
+  if(!bargraph_)
+    return;
+  bargraph_->update(data);
 }
 
 //-----------------------------------------------------------------------------
@@ -306,7 +321,7 @@ void vvid_file_manager::load_video_file()
   load_video_dlg.checkbox("Cache Frames ", cache_frames_);
   if (!load_video_dlg.ask())
     return;
-
+  
   my_movie_ = vidl_vil1_io::load_movie(image_filename.c_str());
   if (!my_movie_) {
     vgui_error_dialog("Failed to load movie file");
@@ -340,9 +355,9 @@ void vvid_file_manager::load_video_file()
   }
   else
   {
-    itab0_->set_image(second);
     //v2D0_->child.assign(easy0_);
     itab1_->set_image(second);
+    itab0_->set_image(second);
   }
   grid_->post_redraw();
   vgui::run_till_idle();
@@ -429,6 +444,11 @@ void vvid_file_manager::un_cached_play()
           display_image();
         else if (video_process_->get_output_type()==vpro_video_process::TOPOLOGY)
           display_topology();
+        if(video_process_->graph_flag())
+          {
+            vcl_vector<float> const& data = video_process_->graph();
+            this->display_bargraph(data);
+          }
       }
     }
     grid_->post_redraw();
@@ -438,6 +458,8 @@ void vvid_file_manager::un_cached_play()
 
   if (video_process_)
     video_process_->finish();
+  bargraph_= 0;
+  easy1_->clear();
   if (save_display_)
     this->end_save_display();
   save_display_ = false;
@@ -693,7 +715,7 @@ void vvid_file_manager::compute_corr_tracking()
   vcl_cout << tp << '\n';
   vtol_topology_object_sptr to = easy0_->get_temp();
   if (!to)
-    vcl_cout << "In vvid_file_manager::compute_info_tracking() - no model\n";
+    vcl_cout << "In vvid_file_manager::compute_corr_tracking() - no model\n";
   else
   {
     video_process_ = new strk_corr_tracker_process(tp);
@@ -704,8 +726,10 @@ void vvid_file_manager::compute_corr_tracking()
 void vvid_file_manager::compute_info_tracking()
 {
   static bool output_track = false;
+  static bool output_hist = false;
+  static bool display_hist = false;
   static strk_info_tracker_params tp;
-  vgui_dialog tracker_dialog("Mutual Information Tracker V1.5");
+  vgui_dialog tracker_dialog("Mutual Information Tracker V1.6");
   tracker_dialog.field("Number of Samples", tp.n_samples_);
   tracker_dialog.field("Search Radius", tp.search_radius_);
   tracker_dialog.field("Angle Range (radians)", tp.angle_range_);
@@ -718,17 +742,27 @@ void vvid_file_manager::compute_info_tracking()
   tracker_dialog.checkbox("Add Color Info", tp.color_info_);
   tracker_dialog.checkbox("Renyi Joint Entropy", tp.renyi_joint_entropy_);
   tracker_dialog.checkbox("Output Track Data", output_track);
+  tracker_dialog.checkbox("Output Feature Data", output_hist);
+  tracker_dialog.checkbox("Display Histograms", display_hist);
   tracker_dialog.checkbox("Verbose", tp.verbose_);
   tracker_dialog.checkbox("Debug", tp.debug_);
   if (!tracker_dialog.ask())
     return;
-  static vcl_string track_file;
+  static vcl_string track_file, hist_file;
   if (output_track)
   {
     vgui_dialog output_dialog("Track Data File");
     static vcl_string ext = "*.*";
     output_dialog.file("Track File:", ext, track_file);
     if (!output_dialog.ask())
+      return;
+  }
+  if (output_hist)
+  {
+    vgui_dialog hist_dialog("Feature Data File");
+    static vcl_string ext = "*.*";
+    hist_dialog.file("Feature File:", ext, hist_file);
+    if (!hist_dialog.ask())
       return;
   }
   vcl_cout << tp << '\n';
@@ -747,8 +781,18 @@ void vvid_file_manager::compute_info_tracking()
       else
         video_process_->add_input_topology_object(background_model_->cast_to_topology_object());
     if (output_track)
-      if (!vitp->set_output_file(track_file))
+      if (!vitp->set_track_output_file(track_file))
         return;
+    if (output_hist)
+      if (!vitp->set_hist_output_file(hist_file))
+        return;
+    if(display_hist)
+      {
+        vgui_easy2D_tableau_sptr easy;
+        easy.vertical_cast(easy1_);
+        bargraph_ = new bgui_bargraph_clipon_tableau(easy);
+        bargraph_->set_color_vector(vitp->color_index());
+      }
   }
 }
 

@@ -21,6 +21,7 @@
 #include <vgui/vgui_style_sptr.h>
 #include <bgui/bgui_vtol2D_tableau_sptr.h>
 #include <bgui/bgui_picker_tableau_sptr.h>
+#include <bgui/bgui_bargraph_clipon_tableau_sptr.h>
 #include <vgui/vgui_viewer2D_tableau_sptr.h>
 #include <strk/strk_art_info_model_sptr.h>
 #include <vtol/vtol_face_2d_sptr.h>
@@ -192,6 +193,7 @@ class vvid_file_manager : public vgui_wrapper_tableau
   void display_image();
   void display_spatial_objects();
   void display_topology();
+  void display_bargraph(vcl_vector<float> const& data);
   void set_changing_colors(int num, float *r, float *g, float *b);
   void save_display(int frame);
  private:
@@ -235,6 +237,7 @@ class vvid_file_manager : public vgui_wrapper_tableau
   vtol_face_2d_sptr background_model_;
   vgui_style_sptr on_style_;
   vgui_style_sptr off_style_;
+  bgui_bargraph_clipon_tableau_sptr bargraph_;
 };
 
 #endif // vvid_file_manager_h_
