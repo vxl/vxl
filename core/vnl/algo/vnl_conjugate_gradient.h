@@ -20,7 +20,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_nonlinear_minimizer.h>
@@ -48,7 +48,8 @@ public:
 
   // Operations----------------------------------------------------------------
 
-  void diagnose_outcome(vcl_ostream& = vcl_cout) const;
+  void diagnose_outcome(vcl_ostream&) const;
+  void diagnose_outcome(/*vcl_ostream& = vcl_cout*/) const;
 
   // Computations--------------------------------------------------------------
 
