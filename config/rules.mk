@@ -496,6 +496,8 @@ STDLIBS += $(lib_dl)
 # C math and run-time libraries
 STDLIBS += $(lib_m) $(lib_c)
 
+# remove duplicates in LIBDIRS
+LIBDIRS := $(sort $(LIBDIRS))
 
 #
 # catch errors
