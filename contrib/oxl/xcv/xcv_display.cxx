@@ -185,6 +185,7 @@ void xcv_display::make_roi()
   rubber->set_client(old_client);
   //roi_tableau_client_ = 0;
 }
+
 //-----------------------------------------------------------------------------
 //: Remove the region of interest
 //-----------------------------------------------------------------------------
@@ -211,7 +212,7 @@ void xcv_display::remove_roi()
 //  the coordinates of the image pixels in the slice, and one array
 //  containing the intensity values along the line.
 //-----------------------------------------------------------------------------
-void xcv_display::line_profile(const vil_image& src, float x0, float y0, float x1,float y1, 
+void xcv_display::line_profile(const vil_image& src, float x0, float y0, float x1,float y1,
   int num_points, float* xvals, float* yvals, float* ivals)
 {
   int sdepth = src.bits_per_component();
@@ -229,21 +230,23 @@ void xcv_display::line_profile(const vil_image& src, float x0, float y0, float x
   {
     xvals[i] = x0 + x_step*i;
     yvals[i] = y0 + y_step*i;
- 
+
     // copy input image to byte buffer
     //vil_memory_image_of<vil_byte> memimg(src);
     vil_memory_image_of<vil_byte> memimg;
     memimg.resize(src.width(), src.height());
-    vil_image_as_byte(src).get_section(memimg.get_buffer(), 0, 0, src.width(), src.height()); 
+    vil_image_as_byte(src).get_section(memimg.get_buffer(), 0, 0, src.width(), src.height());
 
     if (sdepth == 8)
     {
       float imgval = (float)memimg(vnl_math_rnd(xvals[i]), vnl_math_rnd(yvals[i]));
       ivals[i] = imgval;
     }
-    /*else if (sdepth == 16)
-      ivals[i] 
-        = (int)(*(unsigned short*)(memimg(vnl_math_rnd(xvals[i]), vnl_math_rnd(yvals[i]))));*/
+#if 0
+    else if (sdepth == 16)
+      ivals[i]
+        = (int)(*(unsigned short*)(memimg(vnl_math_rnd(xvals[i]), vnl_math_rnd(yvals[i]))));
+#endif
   }
 }
 
@@ -257,15 +260,15 @@ void xcv_display::show_line_slice()
   xcv_picker_tableau_sptr picker = get_picker_tableau_at(col, row);
   if (!picker) return;
 
-  float fx0,fy0,fx1,fy1; 
+  float fx0,fy0,fx1,fy1;
   picker->pick_line(&fx0, &fy0, &fx1, &fy1);
 
   vil_image img;
   if (!get_image_at(&img, col, row))
     return;
 
-  int num_points 
-    = (int)(vnl_math_rnd(sqrt((double)((fx1-fx0)*(fx1-fx0)+ (fy1-fy0)*(fy1-fy0)))));
+  int num_points
+    = (int)(vnl_math_rnd(vcl_sqrt((double)((fx1-fx0)*(fx1-fx0)+ (fy1-fy0)*(fy1-fy0)))));
 
   // Avoid divide by zero
   if(!num_points) num_points = 10;
@@ -283,7 +286,7 @@ void xcv_display::show_line_slice()
   xcv_axes_tableau_new axes(tmp_heading, "X", "Intensity");
   for (int i=0; i<num_points+1; i++)
     axes->add_point(x[i], val[i]);
-  axes->compute_axes(); 
+  axes->compute_axes();
   vgui_viewer2D_new viewer(axes);
 
   vgui_window *popup = vgui::produce_window(700, 500, "Image Line Profile");
@@ -293,7 +296,6 @@ void xcv_display::show_line_slice()
     popup->get_adaptor()->set_tableau(vgui_shell_tableau_new(viewer));
     popup->show();
   }
-
 }
 
 //-----------------------------------------------------------------------------
