@@ -67,7 +67,7 @@ EXTRACT_PRIVATE      = NO
 # If the HIDE_UNDOC_MEMBERS tag is set to YES, Doxygen will hide all
 # undocumented members inside documented classes or files.
 
-HIDE_UNDOC_MEMBERS   = NO
+HIDE_UNDOC_MEMBERS   = YES
 
 # If the HIDE_UNDOC_CLASSES tag is set to YES, Doxygen will hide all
 # undocumented classes.
@@ -170,6 +170,13 @@ INLINE_INFO          = YES
 
 TAB_SIZE             = 8
 
+# the GENERATE_TODOLIST tag can be used to enable (YES) or disable (NO) the todo
+# list.  This list is created by putting \todo commands in the documentation.
+
+GENERATE_TODOLIST    = YES
+
+WARN_FORMAT          = "*** $file:$line: $text ***\n"
+
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
@@ -238,6 +245,8 @@ IMAGE_PATH           =
 
 INPUT_FILTER         = "$IUEROOT/vxl/doc/vxl_doxy.pl"
 
+IGNORE_PREFIX        = "vxl_ vcl_ vbl_ vgl_ vil_ vnl_ vpl_ vsl_ vul_ vidl_ vcgl_ vcsl_ vdgl_ vpgl_ vsol_ vtol_ mbl_ mil_ oxp_ osl_ gst_ gevd_ mvl_ gmvl_ geml_ vsrl_ gtrl_ vipl_ vepl_ vgui_ vgel_ vmal_ vpdfl_ gkll_ rrel_ rsdl_ clsfy_"
+
 #---------------------------------------------------------------------------
 # configuration options related to the HTML output
 #---------------------------------------------------------------------------
@@ -295,7 +304,7 @@ ALPHABETICAL_INDEX   = YES
 # the COLS_IN_ALPHA_INDEX tag can be used to specify the number of columns
 # in which this list will be split (can be a number in the range [1..20])
 
-COLS_IN_ALPHA_INDEX  = 2
+COLS_IN_ALPHA_INDEX  = 1
 
 #---------------------------------------------------------------------------
 # configuration options related to the LaTeX output
