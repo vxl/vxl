@@ -30,6 +30,7 @@ SOURCE=.\basic10a_rubberband.cxx
 SOURCE=.\basic_app.cxx
 SOURCE=.\basic_manager.cxx
 SOURCE=.\basic_menus.cxx
+SOURCE=.\basic01b_display_vil2_image.cxx
 # End Group
 # Begin Group "Header Files"
 SOURCE=.\basic_manager.h
