@@ -80,7 +80,6 @@ SOURCE_FILES( Qv_sources
   Qv_pi.h
   color.h
   mtl.h
-  stdafx.h
   vectors.h
   vecutil.h
 
