@@ -2,6 +2,8 @@ USES += vxl
 USE_SOCKETS := 1 # for libvul
 IULIBS := -lvsl -lvul
 
+TESTS += vsl_test_all.cxx
+
 TESTS += test_indent.cxx
 TESTS += test_vsl_io.cxx
 TESTS += test_binary_io.cxx
