@@ -34,8 +34,8 @@ IF( NOT BUILDING_IN_VXL_TREE )
         CMAKE_C_FLAGS
         CMAKE_CXX_FLAGS
       INCLUDE_INTERNALS
-        allvxl_SOURCE_DIR
-        allvxl_BINARY_DIR
+        vxl_SOURCE_DIR
+        vxl_BINARY_DIR
     )
     LINK_DIRECTORIES( ${VXL_LIBRARY_PATH} )
   ELSE( VXL_BINARY_PATH )
@@ -100,13 +100,13 @@ ENDIF(WARN_DEPRECATED)
 
 # For out of place builds, the configure generated headers are in the
 # binary directory
-INCLUDE_DIRECTORIES(${allvxl_BINARY_DIR}/vcl
-                    ${allvxl_BINARY_DIR}/vxl)
+INCLUDE_DIRECTORIES(${vxl_BINARY_DIR}/vcl
+                    ${vxl_BINARY_DIR}/core)
 
-INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vcl)
+INCLUDE_DIRECTORIES(${vxl_SOURCE_DIR}/vcl)
 
 IF(WIN32)
   IF(NOT CYGWIN)
-    INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vcl/config.win32)
+    INCLUDE_DIRECTORIES(${vxl_SOURCE_DIR}/vcl/config.win32)
   ENDIF(NOT CYGWIN)
 ENDIF(WIN32)
