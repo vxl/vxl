@@ -5,8 +5,9 @@ TESTS += vul_test_all.cxx
 TESTS += vul_test_arg.cxx
 TESTS += vul_test_sprintf.cxx
 TESTS += vul_test_root_dir.cxx
+TESTS += vul_test_tmpnam.cxx
 
-IULIBS := -lvul
+IULIBS := -lvul -lvpl
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
