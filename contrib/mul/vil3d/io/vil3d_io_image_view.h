@@ -27,7 +27,7 @@ inline void vsl_b_write(vsl_b_ostream &os, const vil3d_image_view<T>& image)
   {
     vsl_b_write(os, image.memory_chunk());
 
-    int offset = (image.top_left_ptr()-(const T*)image.memory_chunk()->data());
+    int offset = (image.origin_ptr()-(const T*)image.memory_chunk()->data());
     vsl_b_write(os, offset);
   }
 }

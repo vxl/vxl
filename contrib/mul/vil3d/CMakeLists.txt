@@ -19,7 +19,7 @@ ADD_LIBRARY(vil3d ${vil3d_sources})
 TARGET_LINK_LIBRARIES( vil3d vil2 vil vcl )
 
 
-# SUBDIRS(algo io)
+SUBDIRS(algo io)
 
 #IF( BUILD_EXAMPLES )
 #  SUBDIRS( examples )
