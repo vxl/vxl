@@ -39,9 +39,6 @@ void test_at_file_size(const vcl_size_t n)
 void test_image_loader_robustness( )
 {
 
-  const vcl_size_t n=20000;
-  
-
   test_at_file_size(0);
 
   for (unsigned i=0;i<100;++i)
