@@ -44,7 +44,7 @@ INCLUDE_DIRECTORIES(${VXLCORE_INCLUDE_DIR})
 AUX_SOURCE_DIRECTORY(Templates vsol_sources)
 
 ADD_LIBRARY(vsol ${vsol_sources})
-TARGET_LINK_LIBRARIES(vsol vgl_algo vgl vnl vsl vbl vul vcl)
+TARGET_LINK_LIBRARIES(vsol vgl_algo vgl vnl vbl_io vbl vsl vul vcl)
 
 IF (BUILD_EXAMPLES)
   SUBDIRS(examples)
