@@ -1,0 +1,403 @@
+# vxl/config/cmake/config/CMakeLists.txt
+#
+
+PROJECT(vxl_config)
+CMAKE_MINIMUM_REQUIRED(VERSION 1.8)
+
+#
+# Include necessary modules
+#
+
+INCLUDE (${CMAKE_ROOT}/Modules/CheckIncludeFileCXX.cmake)
+INCLUDE (${CMAKE_ROOT}/Modules/TestBigEndian.cmake)
+INCLUDE (${CMAKE_ROOT}/Modules/CheckTypeSize.cmake)
+INCLUDE (${CMAKE_ROOT}/Modules/CheckFunctionExists.cmake)
+
+#
+# Perform the VXL specific test with status output
+#
+
+MACRO(PERFORM_CMAKE_TEST FILE TEST)
+  IF("${TEST}" MATCHES "^${TEST}$")
+    # Perform test
+    SET(MACRO_CHECK_FUNCTION_DEFINITIONS 
+      "-D${TEST} ${CMAKE_REQUIRED_FLAGS}")
+    IF(CMAKE_REQUIRED_LIBRARIES)
+      SET(TEST_ADD_LIBRARIES
+        "-DLINK_LIBRARIES:STRING=${CMAKE_REQUIRED_LIBRARIES}")
+    ENDIF(CMAKE_REQUIRED_LIBRARIES)
+    MESSAGE(STATUS "Performing Test ${TEST}")
+
+    TRY_COMPILE(${TEST}
+      ${CMAKE_BINARY_DIR}
+      ${vxl_config_SOURCE_DIR}/${FILE}
+      CMAKE_FLAGS -DCOMPILE_DEFINITIONS:STRING=${MACRO_CHECK_FUNCTION_DEFINITIONS}
+      "${TEST_ADD_LIBRARIES}"
+      OUTPUT_VARIABLE OUTPUT)
+    IF(${TEST})
+      SET(${TEST} 1 CACHE INTERNAL "Curl test ${FUNCTION}")
+      MESSAGE(STATUS "Performing Test ${TEST} - Success")
+    ELSE(${TEST})
+      MESSAGE(STATUS "Performing Test ${TEST} - Failed")
+      SET(${TEST} 0 CACHE INTERNAL "Test ${FUNCTION}")
+      WRITE_FILE(${CMAKE_BINARY_DIR}/CMakeError.log 
+        "Performing Test ${TEST} failed with the following output:\n"
+        "${OUTPUT}\n" APPEND)
+    ENDIF(${TEST})
+  ELSE("${TEST}" MATCHES "^${TEST}$")
+    # Have result
+    #FOREACH(tst ${TEST})
+    #  MESSAGE("Test ${TEST} resulted in ${${tst}}")
+    #ENDFOREACH(tst ${TEST})
+  ENDIF("${TEST}" MATCHES "^${TEST}$")
+ENDMACRO(PERFORM_CMAKE_TEST FILE TEST)
+
+#
+# Check for include file and if not found, set variable to 0
+#
+
+MACRO(PERFORM_CHECK_HEADER FILE VARIABLE)
+  CHECK_INCLUDE_FILE_CXX(${FILE} ${VARIABLE})
+  IF("${VARIABLE}" MATCHES "^$")
+    SET(${VARIABLE} 0)
+  ENDIF("${VARIABLE}" MATCHES "^$")
+ENDMACRO(PERFORM_CHECK_HEADER HEADER VAR)
+
+#
+# Check value of variable and if true, set to VALUE_TRUE, otherwise to
+# VALUE_FALSE
+#
+
+MACRO(SET_BOOL VAR VALUE_TRUE VALUE_FALSE)
+  SET(SET_BOOL_VAR "${VAR}")
+  IF(${SET_BOOL_VAR})
+    SET(${VAR} ${VALUE_TRUE})
+  ELSE(${SET_BOOL_VAR})
+    SET(${VAR} ${VALUE_FALSE})
+  ENDIF(${SET_BOOL_VAR})
+ENDMACRO(SET_BOOL VAR VALUE_TRUE VALUE_FALSE)
+
+#
+# Set the variable to inverse of the given value
+#
+
+MACRO(SET_INVERT VAR VALUE)
+  SET(SET_INVERT_VAR "${VALUE}")
+  IF(SET_INVERT_VAR)
+    SET(${VAR} 0)
+  ELSE(SET_INVERT_VAR)
+    SET(${VAR} 1)
+  ENDIF(SET_INVERT_VAR)
+ENDMACRO(SET_INVERT VAR VALUE)
+
+#
+# Check if the type exists (should really go to CMake/Modules)
+#
+
+MACRO(CHECK_TYPE_EXISTS TYPE FILES VARIABLE)
+  IF("${VARIABLE}" MATCHES "^${VARIABLE}$")
+    SET(CHECK_TYPE_EXISTS_CONTENT "/* */\n")
+    SET(MACRO_CHECK_TYPE_EXISTS_FLAGS ${CMAKE_REQUIRED_FLAGS})
+    IF(CMAKE_REQUIRED_LIBRARIES)
+      SET(CHECK_TYPE_EXISTS_LIBS 
+        "-DLINK_LIBRARIES:STRING=${CMAKE_REQUIRED_LIBRARIES}")
+    ENDIF(CMAKE_REQUIRED_LIBRARIES)
+    FOREACH(FILE ${FILES})
+      SET(CHECK_TYPE_EXISTS_CONTENT
+        "${CHECK_TYPE_EXISTS_CONTENT}#include <${FILE}>\n")
+    ENDFOREACH(FILE)
+    SET(CHECK_TYPE_EXISTS_CONTENT
+      "${CHECK_TYPE_EXISTS_CONTENT}\nvoid cmakeRequireSymbol(${TYPE} dummy){(void)dummy;}\nint main()\n{return 0;\n}\n")
+
+    FILE(WRITE ${CMAKE_BINARY_DIR}/CMakeTmp/CheckTypeExists.cxx 
+      "${CHECK_TYPE_EXISTS_CONTENT}")
+
+    MESSAGE(STATUS "Looking for ${TYPE}")
+    TRY_COMPILE(${VARIABLE}
+      ${CMAKE_BINARY_DIR}
+      ${CMAKE_BINARY_DIR}/CMakeTmp/CheckTypeExists.cxx
+      CMAKE_FLAGS 
+      -DCOMPILE_DEFINITIONS:STRING=${MACRO_CHECK_TYPE_EXISTS_FLAGS}
+      "${CHECK_TYPE_EXISTS_LIBS}"
+      OUTPUT_VARIABLE OUTPUT)
+    IF(${VARIABLE})
+      MESSAGE(STATUS "Looking for ${TYPE} - found")
+      SET(${VARIABLE} 1 CACHE INTERNAL "Have symbol ${TYPE}")
+      FILE(APPEND ${CMAKE_BINARY_DIR}/CMakeOutput.log 
+        "Determining if the ${TYPE} "
+        "exist passed with the following output:\n"
+        "${OUTPUT}\nFile ${CMAKE_BINARY_DIR}/CMakeTmp/CheckTypeExists.cxx:\n"
+        "${CHECK_TYPE_EXISTS_CONTENT}\n")
+    ELSE(${VARIABLE})
+      MESSAGE(STATUS "Looking for ${TYPE} - not found.")
+      SET(${VARIABLE} "" CACHE INTERNAL "Have symbol ${TYPE}")
+      FILE(APPEND ${CMAKE_BINARY_DIR}/CMakeError.log 
+        "Determining if the ${TYPE} "
+        "exist failed with the following output:\n"
+        "${OUTPUT}\nFile ${CMAKE_BINARY_DIR}/CMakeTmp/CheckSymbolExists.c:\n"
+        "${CHECK_TYPE_EXISTS_CONTENT}\n")
+    ENDIF(${VARIABLE})
+  ENDIF("${VARIABLE}" MATCHES "^${VARIABLE}$")
+ENDMACRO(CHECK_TYPE_EXISTS)
+
+#
+# Check if the type exists and if not make result 0
+#
+
+MACRO(CHECK_TYPE_EXISTS_ZERO SYMBOL FILES VARIABLE)
+  CHECK_TYPE_EXISTS("${SYMBOL}" "${FILES}" "${VARIABLE}")
+  IF(NOT ${VARIABLE})
+    SET(${VARIABLE} 0)
+  ENDIF(NOT ${VARIABLE})
+ENDMACRO(CHECK_TYPE_EXISTS_ZERO SYMBOL FILES VARIABLE)
+
+#
+# Check if the function exists and if not make result 0
+#
+
+MACRO(CHECK_FUNCTION_EXISTS_ZERO FUNCTION VARIABLE)
+  CHECK_FUNCTION_EXISTS("${FUNCTION}" "${VARIABLE}")
+  IF(NOT ${VARIABLE})
+    SET(${VARIABLE} 0)
+  ENDIF(NOT ${VARIABLE})
+ENDMACRO(CHECK_FUNCTION_EXISTS_ZERO FUNCTION VARIABLE)
+
+#
+# Determine which type matches the given size
+#
+
+MACRO(DETERMINE_TYPE VAR SIZE 
+    TYPE1_SIZE TYPE1_NAME TYPE2_SIZE TYPE2_NAME TYPE3_SIZE TYPE3_NAME)
+  IF(${TYPE1_SIZE} MATCHES "^${SIZE}$")
+    SET("VXL_${VAR}" "${TYPE1_NAME}")
+    SET("VXL_HAS_${VAR}" "1")
+  ELSE(${TYPE1_SIZE} MATCHES "^${SIZE}$")
+    IF(${TYPE2_SIZE} MATCHES "^${SIZE}$")
+      SET("VXL_${VAR}" "${TYPE2_NAME}")
+      SET("VXL_HAS_${VAR}" "1")
+    ELSE(${TYPE2_SIZE} MATCHES "^${SIZE}$")
+      IF(${TYPE3_SIZE} MATCHES "^${SIZE}$")
+        SET("VXL_${VAR}" "${TYPE3_NAME}")
+        SET("VXL_HAS_${VAR}" "1")
+      ELSE(${TYPE3_SIZE} MATCHES "^${SIZE}$")
+        SET("VXL_${VAR}" "void")
+        SET("VXL_HAS_${VAR}" "0")
+      ENDIF(${TYPE3_SIZE} MATCHES "^${SIZE}$")
+    ENDIF(${TYPE2_SIZE} MATCHES "^${SIZE}$")
+  ENDIF(${TYPE1_SIZE} MATCHES "^${SIZE}$")
+ENDMACRO(DETERMINE_TYPE VAR)
+
+#
+# Perform all the specific tests
+#
+
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_has_bool)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_has_typename)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_has_export)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_has_mutable)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_has_explicit)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_has_dynamic_cast)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_check_for_scope)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_default_value)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_has_member_templates)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_can_do_partial_specialization)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_define_specialization)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_ALLOWS_INLINE_INSTANTIATION)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_NEEDS_INLINE_INSTANTIATION)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_static_const_init_int)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_STATIC_CONST_INIT_FLOAT)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_CAN_DO_STATIC_TEMPLATE_MEMBER)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_OVERLOAD_CAST)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_NULL_TMPL_ARGS)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_NO_STATIC_DATA_MEMBERS)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_HAS_TEMPLATE_SYMBOLS)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_CAN_DO_IMPLICIT_TEMPLATES)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_SUNPRO_CLASS_SCOPE_HACK)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_has_exceptions)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_has_namespaces)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_allows_namespace_std)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx vcl_cv_cxx_needs_namespace_std)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_UNISTD_USLEEP_IS_VOID)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx ac_vxl_has_qsort)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_MATH_HAS_FINITE)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_MATH_HAS_SQRTF)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_IEEEFP_HAS_FINITE)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_STDLIB_HAS_LRAND48)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_STDLIB_HAS_DRAND48)
+
+#
+# Find header files
+#
+
+PERFORM_CHECK_HEADER(cassert VCL_CXX_HAS_HEADER_CASSERT)
+PERFORM_CHECK_HEADER(ciso646 VCL_CXX_HAS_HEADER_CISO646)
+PERFORM_CHECK_HEADER(csetjmp VCL_CXX_HAS_HEADER_CSETJMP)
+PERFORM_CHECK_HEADER(cstdio VCL_CXX_HAS_HEADER_CSTDIO)
+PERFORM_CHECK_HEADER(ctime VCL_CXX_HAS_HEADER_CTIME)
+PERFORM_CHECK_HEADER(cctype VCL_CXX_HAS_HEADER_CCTYPE)
+PERFORM_CHECK_HEADER(climits VCL_CXX_HAS_HEADER_CLIMITS)
+PERFORM_CHECK_HEADER(csignal VCL_CXX_HAS_HEADER_CSIGNAL)
+PERFORM_CHECK_HEADER(cstdlib VCL_CXX_HAS_HEADER_CSTDLIB)
+PERFORM_CHECK_HEADER(cwchar VCL_CXX_HAS_HEADER_CWCHAR)
+PERFORM_CHECK_HEADER(cerrno VCL_CXX_HAS_HEADER_CERRNO)
+PERFORM_CHECK_HEADER(clocale VCL_CXX_HAS_HEADER_CLOCALE)
+PERFORM_CHECK_HEADER(cstdarg VCL_CXX_HAS_HEADER_CSTDARG)
+PERFORM_CHECK_HEADER(cstring VCL_CXX_HAS_HEADER_CSTRING)
+PERFORM_CHECK_HEADER(cwctype VCL_CXX_HAS_HEADER_CWCTYPE)
+PERFORM_CHECK_HEADER(cfloat VCL_CXX_HAS_HEADER_CFLOAT)
+PERFORM_CHECK_HEADER(cmath VCL_CXX_HAS_HEADER_CMATH)
+PERFORM_CHECK_HEADER(cstddef VCL_CXX_HAS_HEADER_CSTDDEF)
+PERFORM_CHECK_HEADER(algorithm VCL_CXX_HAS_HEADER_ALGORITHM)
+PERFORM_CHECK_HEADER(iomanip VCL_CXX_HAS_HEADER_IOMANIP)
+PERFORM_CHECK_HEADER(list VCL_CXX_HAS_HEADER_LIST)
+PERFORM_CHECK_HEADER(ostream VCL_CXX_HAS_HEADER_OSTREAM)
+PERFORM_CHECK_HEADER(streambuf VCL_CXX_HAS_HEADER_STREAMBUF)
+PERFORM_CHECK_HEADER(bitset VCL_CXX_HAS_HEADER_BITSET)
+PERFORM_CHECK_HEADER(ios VCL_CXX_HAS_HEADER_IOS)
+PERFORM_CHECK_HEADER(locale VCL_CXX_HAS_HEADER_LOCALE)
+PERFORM_CHECK_HEADER(queue VCL_CXX_HAS_HEADER_QUEUE)
+PERFORM_CHECK_HEADER(string VCL_CXX_HAS_HEADER_STRING)
+PERFORM_CHECK_HEADER(complex VCL_CXX_HAS_HEADER_COMPLEX)
+PERFORM_CHECK_HEADER(iosfwd VCL_CXX_HAS_HEADER_IOSFWD)
+PERFORM_CHECK_HEADER(map VCL_CXX_HAS_HEADER_MAP)
+PERFORM_CHECK_HEADER(set VCL_CXX_HAS_HEADER_SET)
+PERFORM_CHECK_HEADER(typeinfo VCL_CXX_HAS_HEADER_TYPEINFO)
+PERFORM_CHECK_HEADER(deque VCL_CXX_HAS_HEADER_DEQUE)
+PERFORM_CHECK_HEADER(iostream VCL_CXX_HAS_HEADER_IOSTREAM)
+PERFORM_CHECK_HEADER(memory VCL_CXX_HAS_HEADER_MEMORY)
+PERFORM_CHECK_HEADER(sstream VCL_CXX_HAS_HEADER_SSTREAM)
+PERFORM_CHECK_HEADER(utility VCL_CXX_HAS_HEADER_UTILITY)
+PERFORM_CHECK_HEADER(exception VCL_CXX_HAS_HEADER_EXCEPTION)
+PERFORM_CHECK_HEADER(istream VCL_CXX_HAS_HEADER_ISTREAM)
+PERFORM_CHECK_HEADER(new VCL_CXX_HAS_HEADER_NEW)
+PERFORM_CHECK_HEADER(stack VCL_CXX_HAS_HEADER_STACK)
+PERFORM_CHECK_HEADER(valarray VCL_CXX_HAS_HEADER_VALARRAY)
+PERFORM_CHECK_HEADER(fstream VCL_CXX_HAS_HEADER_FSTREAM)
+PERFORM_CHECK_HEADER(iterator VCL_CXX_HAS_HEADER_ITERATOR)
+PERFORM_CHECK_HEADER(numeric VCL_CXX_HAS_HEADER_NUMERIC)
+PERFORM_CHECK_HEADER(stdexcept VCL_CXX_HAS_HEADER_STDEXCEPT)
+PERFORM_CHECK_HEADER(vector VCL_CXX_HAS_HEADER_VECTOR)
+PERFORM_CHECK_HEADER(functional VCL_CXX_HAS_HEADER_FUNCTIONAL)
+PERFORM_CHECK_HEADER(limits VCL_CXX_HAS_HEADER_LIMITS)
+PERFORM_CHECK_HEADER(strstream VCL_CXX_HAS_HEADER_STRSTREAM)
+PERFORM_CHECK_HEADER(pthread.h VXL_HAS_PTHREAD_H)
+PERFORM_CHECK_HEADER(semaphore.h VXL_HAS_SEMAPHORE_H)
+PERFORM_CHECK_HEADER(ieeefp.h VXL_HAS_IEEEFP_H)
+
+#
+
+TEST_BIG_ENDIAN(VXL_BIG_ENDIAN)
+
+#
+# Map test results to configured header names and appropriate values
+#
+
+SET(VCL_HAS_EXCEPTIONS ${vcl_cv_cxx_has_exceptions})
+SET(VCL_HAS_BOOL ${vcl_cv_cxx_has_bool})
+SET(VCL_HAS_TYPENAME ${vcl_cv_cxx_has_typename})
+SET(VCL_HAS_DYNAMIC_CAST ${vcl_cv_cxx_has_dynamic_cast})
+SET(VCL_HAS_MUTABLE ${vcl_cv_cxx_has_mutable})
+SET(VCL_HAS_EXPLICIT ${vcl_cv_cxx_has_explicit})
+SET(VCL_HAS_EXPORT ${vcl_cv_cxx_has_export})
+SET_INVERT(VCL_FOR_SCOPE_HACK ${vcl_cv_cxx_check_for_scope})
+SET_INVERT(VCL_NEEDS_NAMESPACE_STD ${vcl_cv_cxx_needs_namespace_std})
+SET(VCL_HAS_MEMBER_TEMPLATES ${vcl_cv_cxx_has_member_templates})
+SET(VCL_CAN_DO_PARTIAL_SPECIALIZATION ${vcl_cv_cxx_can_do_partial_specialization})
+SET(VCL_ALLOWS_NAMESPACE_STD ${vcl_cv_cxx_allows_namespace_std})
+SET(VCL_HAS_NAMESPACES ${vcl_cv_cxx_has_namespaces})
+SET(VCL_STATIC_CONST_INIT_INT ${vcl_cv_cxx_static_const_init_int})
+SET_INVERT(VXL_LITTLE_ENDIAN ${VXL_BIG_ENDIAN})
+SET(VXL_STDLIB_HAS_QSORT ${ac_vxl_has_qsort})
+SET(VCL_DEFINE_SPECIALIZATION ${vcl_cv_cxx_define_specialization})
+SET_INVERT(VCL_HAS_TEMPLATE_SYMBOLS ${VCL_HAS_TEMPLATE_SYMBOLS})
+
+SET_BOOL(VCL_NULL_TMPL_ARGS "/* <> */" "<>")
+SET_BOOL(VCL_OVERLOAD_CAST "(x)" "((T)(x))")
+SET_BOOL(VCL_NO_STATIC_DATA_MEMBERS "0" "1")
+SET_BOOL(VCL_SUNPRO_CLASS_SCOPE_HACK "/* , A */" ", A")
+SET_BOOL(VCL_DEFINE_SPECIALIZATION "template <>" "/* template <> */")
+SET(VCL_DEFAULT_VALUE ${vcl_cv_cxx_default_value})
+SET_BOOL(VCL_DEFAULT_VALUE "/* no need */" " = x")
+SET_BOOL(VCL_NEEDS_INLINE_INSTANTIATION "0" "1")
+SET_BOOL(VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD "0" "1")
+
+SET(VCL_USE_NATIVE_STL 1) # change if no
+SET(VCL_USE_IMPLICIT_TEMPLATES 1) # change if no
+SET(VCL_USE_NATIVE_COMPLEX 1)
+SET(VXL_TWO_ARG_GETTIME 0) # not used
+
+IF(NOT VCL_CAN_DO_IMPLICIT_TEMPLATES)
+  MESSAGE("Warning: turning off implicit template instantiation")
+  SET(VCL_USE_IMPLICIT_TEMPLATES 0)
+ENDIF(NOT VCL_CAN_DO_IMPLICIT_TEMPLATES)
+
+#
+# Check type sizes
+#
+
+#
+# We are assuming CHAR_BIN = 8. Here we guess that CMake probably does not work
+# on platform where this is not the case.
+# 
+
+SET(CMAKE_REQUIRED_FLAGS ${CMAKE_ANSI_CFLAGS})
+CHECK_TYPE_SIZE("char" SIZEOF_CHAR)
+CHECK_TYPE_SIZE("short" SIZEOF_SHORT)
+CHECK_TYPE_SIZE("int" SIZEOF_INT)
+CHECK_TYPE_SIZE("long" SIZEOF_LONG)
+CHECK_TYPE_SIZE("__int64" SIZEOF___INT64)
+CHECK_TYPE_SIZE("long long" SIZEOF_LONG_LONG)
+CHECK_TYPE_SIZE("float" SIZEOF_FLOAT)
+CHECK_TYPE_SIZE("double" SIZEOF_DOUBLE)
+CHECK_TYPE_SIZE("long double" SIZEOF_LONG_DOUBLE)
+
+DETERMINE_TYPE(BYTE 1 "${SIZEOF_CHAR}" "char" "${SIZEOF_CHAR}" "char" "${SIZEOF_CHAR}" "char")
+DETERMINE_TYPE(INT_8 1 "${SIZEOF_CHAR}" "char" "${SIZEOF_SHORT}" "short" "${SIZEOF_CHAR}" "char")
+DETERMINE_TYPE(INT_16 2 "${SIZEOF_SHORT}" "short" "${SIZEOF_INT}" "int" "${SIZEOF_CHAR}" "char")
+DETERMINE_TYPE(INT_32 4 "${SIZEOF_INT}" "int" "${SIZEOF_LONG}" "long" "${SIZEOF_SHORT}" "short")
+DETERMINE_TYPE(INT_64 8 "${SIZEOF_LONG_LONG}" "long long" "${SIZEOF_LONG}" "long" "${SIZEOF___INT64}" "__int64")
+DETERMINE_TYPE(IEEE_32 4 "${SIZEOF_DOUBLE}" "double" "${SIZEOF_FLOAT}" "float" "${SIZEOF_FLOAT}" "float")
+DETERMINE_TYPE(IEEE_64 8 "${SIZEOF_DOUBLE}" "double" "${SIZEOF_LONG_DOUBLE}" "long double" "${SIZEOF_FLOAT}" "float")
+DETERMINE_TYPE(IEEE_96 12 "${SIZEOF_LONG_DOUBLE}" "long double" "${SIZEOF_DOUBLE}" "double" "${SIZEOF_FLOAT}" "float")
+DETERMINE_TYPE(IEEE_128 16 "${SIZEOF_LONG_DOUBLE}" "long double" "${SIZEOF_DOUBLE}" "double" "${SIZEOF_FLOAT}" "float")
+
+#
+# Check unistd stuff
+#
+
+CHECK_INCLUDE_FILE_CXX("unistd.h" HAVE_UNISTD_H)
+IF(HAVE_UNISTD_H)
+  SET_BOOL(VXL_UNISTD_USLEEP_IS_VOID "0" "1")
+  CHECK_TYPE_EXISTS_ZERO(useconds_t "unistd.h" VXL_UNISTD_HAS_USECONDS_T)
+  CHECK_TYPE_EXISTS_ZERO(intptr_t "unistd.h" VXL_UNISTD_HAS_INTPTR_T)
+  CHECK_FUNCTION_EXISTS_ZERO(ualarm VXL_UNISTD_HAS_UALARM)
+  CHECK_FUNCTION_EXISTS_ZERO(usleep VXL_UNISTD_HAS_USLEEP)
+  CHECK_FUNCTION_EXISTS_ZERO(lchown VXL_UNISTD_HAS_LCHOWN)
+  CHECK_FUNCTION_EXISTS_ZERO(pread VXL_UNISTD_HAS_PREAD)
+  CHECK_FUNCTION_EXISTS_ZERO(pwrite VXL_UNISTD_HAS_PWRITE)
+  CHECK_FUNCTION_EXISTS_ZERO(tell VXL_UNISTD_HAS_TELL)
+ELSE(HAVE_UNISTD_H)
+  # If there is not unistd.h, assume windows and therefore hardcode results.
+  SET(VXL_UNISTD_HAS_USECONDS_T 0)
+  SET(VXL_UNISTD_HAS_INTPTR_T 0)
+  SET(VXL_UNISTD_HAS_UALARM 1)
+  SET(VXL_UNISTD_HAS_USLEEP 1)
+  SET(VXL_UNISTD_HAS_LCHOWN 1)
+  SET(VXL_UNISTD_HAS_PREAD 1)
+  SET(VXL_UNISTD_HAS_PWRITE 1)
+  SET(VXL_UNISTD_HAS_TELL 1)
+ENDIF(HAVE_UNISTD_H)
+
+#
+# configure files
+#
+
+CONFIGURE_FILE(${vxl_SOURCE_DIR}/vcl/vcl_config_compiler.h.in ${vxl_BINARY_DIR}/vcl/vcl_config_compiler.h)
+CONFIGURE_FILE(${vxl_SOURCE_DIR}/vcl/vcl_config_headers.h.in ${vxl_BINARY_DIR}/vcl/vcl_config_headers.h)
+CONFIGURE_FILE(${vxl_SOURCE_DIR}/vcl/vcl_config_manual.h.in ${vxl_BINARY_DIR}/vcl/vcl_config_manual.h)
+CONFIGURE_FILE(${vxl_SOURCE_DIR}/vcl/vcl_where_root_dir.h.in ${vxl_BINARY_DIR}/vcl/vcl_where_root_dir.h)
+CONFIGURE_FILE(${vxl_SOURCE_DIR}/core/vxl_config.h.in ${vxl_BINARY_DIR}/core/vxl_config.h)
