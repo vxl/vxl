@@ -1,0 +1,2 @@
+#include <vimt3d/vimt3d_gaussian_pyramid_builder_3d.txx>
+VIMT3D_GAUSSIAN_PYRAMID_BUILDER_3D_INSTANTIATE(int);
