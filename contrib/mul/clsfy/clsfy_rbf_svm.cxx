@@ -1,19 +1,19 @@
+// This is mul/clsfy/clsfy_rbf_svm.cxx
 // Copyright: (C) 2001 British Telecommunications plc
-
+#include "clsfy_rbf_svm.h"
 //:
 // \file
 // \brief Implement a RBF Support Vector Machine
 // \author Ian Scott
 // \date Jan 2001
 
-#include "clsfy_rbf_svm.h"
-#include <vcl_limits.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>
+#include <vcl_cstdlib.h> // for vcl_abort()
 #include <vsl/vsl_indent.h>
+#include <vsl/vsl_vector_io.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/vnl_math.h>
-#include <vsl/vsl_vector_io.h>
 
 //=======================================================================
 

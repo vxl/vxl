@@ -1,13 +1,15 @@
+// This is gel/vtol/vtol_vertex.cxx
+#include "vtol_vertex.h"
 //:
 //  \file
 
-#include <vtol/vtol_vertex.h>
 #include <vtol/vtol_zero_chain.h>
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_face.h>
 #include <vtol/vtol_macros.h>
 #include <vtol/vtol_list_functions.h>
 
+#include <vcl_algorithm.h> // for vcl_find()
 #include <vcl_cassert.h>
 
 

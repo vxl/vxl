@@ -15,15 +15,15 @@
 
 #include "vpdfl_pc_gaussian.h"
 #include <vcl_string.h>
-#include <vpdfl/vpdfl_pc_gaussian_builder.h>
-#include <vsl/vsl_binary_loader.h>
+#include <vcl_cstdlib.h> // for vcl_abort()
 #include <vcl_cassert.h>
+#include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_indent.h>
-#include <vpdfl/vpdfl_gaussian_sampler.h>
-#include <vpdfl/vpdfl_gaussian.h>
-#include "vpdfl_pc_gaussian_builder.h"
 #include <vnl/vnl_math.h>
 #include <mbl/mbl_matxvec.h>
+#include <vpdfl/vpdfl_pc_gaussian_builder.h>
+#include <vpdfl/vpdfl_gaussian_sampler.h>
+#include <vpdfl/vpdfl_gaussian.h>
 
 //=======================================================================
 

@@ -1,4 +1,5 @@
-#include <vcl_fstream.h>
+// This is vxl/vul/examples/vul_sequence_filename_example.cxx
+#include <vcl_iostream.h>
 #include <vul/vul_sequence_filename_map.h>
 
 int main (int argc, char** argv)
@@ -8,7 +9,7 @@ int main (int argc, char** argv)
     vul_sequence_filename_map map(argv[1]);
 
     // Print out all the files that are specified by that pattern.
-    for(int i = 0; i < map.get_nviews(); ++i) {
+    for (int i = 0; i < map.get_nviews(); ++i) {
       vcl_cout << map.name(i) << vcl_endl;
     }
   } else {

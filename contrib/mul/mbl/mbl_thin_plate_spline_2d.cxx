@@ -1,19 +1,20 @@
+// This is mul/mbl/mbl_thin_plate_spline_2d.cxx
+#include "mbl_thin_plate_spline_2d.h"
 //:
 // \file
 // \brief Construct thin plate spline to map 2D to 2D
 // \author Tim Cootes
 
-#include "mbl_thin_plate_spline_2d.h"
-
-#include <vsl/vsl_indent.h>
-#include <mbl/mbl_matxvec.h>
 #include <vcl_cmath.h>
+#include <vcl_cstdlib.h> // for vcl_abort()
+#include <vsl/vsl_indent.h>
+#include <vsl/vsl_vector_io.h>
+#include <mbl/mbl_matxvec.h>
 #include <vnl/vnl_math.h>
+#include <vnl/algo/vnl_svd.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
 #include <vgl/io/vgl_io_point_2d.h>
-#include <vsl/vsl_vector_io.h>
-#include <vnl/algo/vnl_svd.h>
 
 //=======================================================================
 

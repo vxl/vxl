@@ -1,9 +1,11 @@
-#include<vsrl/vsrl_image_correlation.h>
-#include<vil/vil_image.h>
-#include<vsrl/vsrl_window_accumulator.h>
-#include<vcl_iostream.h>
-#include<vsrl/vsrl_parameters.h>
+// This is gel/vsrl/vsrl_image_correlation.cxx
+#include "vsrl_image_correlation.h"
+
+#include <vcl_cmath.h> // for sqrt(double)
 #include <vcl_cassert.h>
+#include <vil/vil_image.h>
+#include <vsrl/vsrl_window_accumulator.h>
+#include <vsrl/vsrl_parameters.h>
 
 // constructor
 

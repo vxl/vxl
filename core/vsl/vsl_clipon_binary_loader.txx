@@ -1,10 +1,11 @@
-// This is ./vxl/vsl/vsl_clipon_binary_loader.txx
+// This is vxl/vsl/vsl_clipon_binary_loader.txx
 #ifndef vsl_clipon_binary_loader_txx_
 #define vsl_clipon_binary_loader_txx_
 //:
 // \file
 
-#include <vsl/vsl_clipon_binary_loader.h>
+#include "vsl_clipon_binary_loader.h"
+#include <vcl_cstdlib.h> // vcl_abort()
 #include <vcl_vector.txx>
 
 template<class BaseClass, class BaseClassIO>
@@ -148,4 +149,4 @@ vsl_clipon_binary_loader<B, IO>* vsl_clipon_binary_loader<B, IO>::instance_ = 0;
 template class vsl_clipon_binary_loader<B, IO >; \
 VCL_VECTOR_INSTANTIATE(IO*)
 
-#endif
+#endif // vsl_clipon_binary_loader_txx_

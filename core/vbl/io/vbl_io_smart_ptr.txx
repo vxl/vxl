@@ -1,7 +1,6 @@
 // This is vxl/vbl/io/vbl_io_smart_ptr.txx
 #ifndef vbl_io_smart_ptr_txx_
 #define vbl_io_smart_ptr_txx_
-
 //:
 // \file
 // \brief Serialised binary IO functions for vbl_smart_ptr<T>
@@ -10,7 +9,7 @@
 
 #include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_smart_ptr.h>
-
+#include <vcl_cstdlib.h> // vcl_abort()
 
 //=========================================================================
 //: Binary save self to stream.
@@ -109,7 +108,7 @@ void vsl_b_read(vsl_b_istream &is, vbl_smart_ptr<T> &p)
       vsl_b_read(is, id);
 
       T * pointer = (T *) is.get_serialisation_pointer(id);
-      if(first_time != (pointer == 0))
+      if (first_time != (pointer == 0))
       {
         // This checks that the saving stream and reading stream
         // both agree on whether or not this is the first time they

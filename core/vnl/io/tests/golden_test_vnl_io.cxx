@@ -1,18 +1,4 @@
-// This is ./vxl/vnl/io/tests/golden_test_vnl_io.cxx
-
-#include <vcl_string.h>
-#include <vcl_fstream.h>
-#include <testlib/testlib_root_dir.h>
-#include <vsl/vsl_binary_io.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/io/vnl_io_vector.h>
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/io/vnl_io_matrix.h>
-#include <vnl/io/vnl_io_diag_matrix.h>
-#include <vnl/io/vnl_io_real_npolynomial.h>
-#include <vnl/io/vnl_io_real_polynomial.h>
-#include <vnl/io/vnl_io_sparse_matrix.h>
-
+// This is vxl/vnl/io/tests/golden_test_vnl_io.cxx
 
 //:
 // \file
@@ -22,11 +8,21 @@
 // the single parameter "create":
 // \verbatim
 //    golden_test_vnl_io create
-// \verbatim
+// \endverbatim
 
-
+#include <vcl_string.h>
+#include <vcl_cstdlib.h> // for vcl_exit()
+#include <vsl/vsl_binary_io.h>
+#include <vnl/vnl_vector_fixed.h>
+#include <vnl/io/vnl_io_vector.h>
+#include <vnl/vnl_matrix_fixed.h>
+#include <vnl/io/vnl_io_matrix.h>
+#include <vnl/io/vnl_io_diag_matrix.h>
+#include <vnl/io/vnl_io_real_npolynomial.h>
+#include <vnl/io/vnl_io_real_polynomial.h>
+#include <vnl/io/vnl_io_sparse_matrix.h>
+#include <testlib/testlib_root_dir.h>
 #include <testlib/testlib_test.h>
-
 
 void golden_test_vnl_io(bool save_file)
 {

@@ -1,16 +1,14 @@
-// This is ./vxl/vsl/tests/test_clipon_polymorphic_io.cxx
+// This is vxl/vsl/tests/test_clipon_polymorphic_io.cxx
 
 //:
 // \file
 
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
+#include <vcl_cstdlib.h> // vcl_abort()
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_clipon_binary_loader.h>
 #include <vsl/vsl_clipon_binary_loader.txx>
+#include <testlib/testlib_test.h>
 
 //: Base class to test polymorphic loading
 class test2_base_class {

@@ -5,13 +5,14 @@
 //:
 //  \file
 
-#include <mil/mil_transform_2d.h>
-#include <vsl/vsl_indent.h>
-#include <vcl_cassert.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/algo/vnl_svd.h>
-#include <vnl/vnl_matrix.h>
+#include "mil_transform_2d.h"
 #include <vcl_cmath.h>
+#include <vcl_cstdlib.h> // for vcl_abort()
+#include <vcl_cassert.h>
+#include <vsl/vsl_indent.h>
+#include <vnl/vnl_vector.h>
+#include <vnl/vnl_matrix.h>
+#include <vnl/algo/vnl_svd.h>
 
 vnl_matrix<double> mil_transform_2d::matrix() const
 {

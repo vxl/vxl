@@ -1,8 +1,9 @@
+// This is vxl/vidl/vidl_mpegcodec_helper.cxx
 #include "vidl_mpegcodec_helper.h"
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <vcl_cstdio.h> // for fopen(), fclose()
 #include <vcl_cstring.h> // for memcpy
+#include <vcl_cstdlib.h> // for exit()
 
 #ifdef HAVE_IO_H
 #include <fcntl.h>
@@ -107,10 +108,9 @@ vidl_mpegcodec_helper::execute(decode_request * p)
 
   output_->pending_decode = p;
 
-  int reads;
   do
     {
-      reads = vcl_fread (buffer_, chunk_size_, chunk_number_, in_file_);
+      int reads = vcl_fread (buffer_, chunk_size_, chunk_number_, in_file_);
       if (reads != chunk_number_) return -1;
       (this->*decoder_routine)(reads);
     } while ((!p->done) &&

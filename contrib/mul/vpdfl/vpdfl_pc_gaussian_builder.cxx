@@ -21,12 +21,13 @@
 
 #include <vcl_string.h>
 #include <vcl_cassert.h>
-#include <vpdfl/vpdfl_gaussian.h>
-#include <vpdfl/vpdfl_pdf_base.h>
+#include <vcl_cstdlib.h> // for vcl_abort()
 #include <mbl/mbl_data_wrapper.h>
-#include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_c_vector.h>
+#include <vnl/algo/vnl_symmetric_eigensystem.h>
+#include <vpdfl/vpdfl_gaussian.h>
+#include <vpdfl/vpdfl_pdf_base.h>
 #include <vpdfl/vpdfl_pc_gaussian.h>
 
 //=======================================================================

@@ -1,8 +1,10 @@
+// This is vxl/vbl/vbl_big_sparse_array_3d.txx
 #ifndef vbl_big_sparse_array_3d_txx_
 #define vbl_big_sparse_array_3d_txx_
 
-#include <vcl_cassert.h>
 #include "vbl_big_sparse_array_3d.h"
+#include <vcl_cassert.h>
+#include <vcl_utility.h> // for vcl_pair<T,bool>
 
 // Default ctor
 template <class T>

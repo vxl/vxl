@@ -1,10 +1,12 @@
+// This is mul/mil/mil_normalise_image_2d.cxx
+#include "mil_normalise_image_2d.h"
 //: \file
 //  \brief Functions to normalise 2d float plane images
 //  \author Tim Cootes
 
+#include <vcl_cmath.h>
 #include <mil/mil_image_2d_of.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_cmath.h>
 
 //: creates a variance normalised version of an input image
 void mil_var_norm_image_2d(mil_image_2d_of<float>& dest,
@@ -64,7 +66,7 @@ void mil_var_norm_image_2d(mil_image_2d_of<float>& dest,
         if ( std(i)==0 )
           *d = 0;
         else
-          *d = ( (*s)-mean(i) )*1.0/std(i);
+          *d = ( (*s)-mean(i) )*1.0f/std(i);
         s+=sxstep;
         d+=dxstep;
       }

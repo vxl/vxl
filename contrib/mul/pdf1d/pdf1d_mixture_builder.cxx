@@ -1,19 +1,21 @@
+// This is mul/pdf1d/pdf1d_mixture_builder.cxx
+#include "pdf1d_mixture_builder.h"
 //:
 // \file
 // \brief Implements builder for a mixture model PDF.
 // \author Tim Cootes and Ian Scott
 
+#include <vcl_cassert.h>
+#include <vcl_cmath.h>
+#include <vcl_algorithm.h>
+#include <vcl_cstdlib.h> // for vcl_abort()
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_vector_io.h>
-#include <pdf1d/pdf1d_mixture_builder.h>
+#include <vsl/vsl_binary_loader.h>
 #include <pdf1d/pdf1d_mixture_sampler.h>
 #include <pdf1d/pdf1d_mixture.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <mbl/mbl_data_array_wrapper.h>
-#include <vcl_cassert.h>
-#include <vcl_cmath.h>
-#include <vcl_algorithm.h>
-#include <vsl/vsl_binary_loader.h>
 
 // Weights smaller than this are assumed to be zero
 const double min_wt = 1e-8;

@@ -1,9 +1,10 @@
+// This is mul/vpdfl/vpdfl_mixture_builder.cxx
 //=======================================================================
 //
 //  Copyright: (C) 2000 Victoria University of Manchester
 //
 //=======================================================================
-
+#include "vpdfl_mixture_builder.h"
 //:
 // \file
 // \brief Implements builder for a mixture model PDF.
@@ -15,10 +16,9 @@
 //    IMS   Converted to VXL 14 May 2000, with redesign
 // \endverbatim
 
-#include "vpdfl_mixture_builder.h"
-
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
+#include <vcl_cstdlib.h> // for vcl_abort()
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_binary_loader.h>

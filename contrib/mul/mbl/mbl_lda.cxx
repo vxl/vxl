@@ -13,6 +13,7 @@
 #include <vcl_cassert.h>
 #include <vcl_cstddef.h> // for size_t
 #include <vcl_cstring.h> // for memcpy()
+#include <vcl_cstdlib.h> // for vcl_abort()
 #include <mbl/mbl_matxvec.h>
 #include <vsl/vsl_indent.h>
 #include <vnl/algo/vnl_svd.h>

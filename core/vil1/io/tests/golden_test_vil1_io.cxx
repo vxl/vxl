@@ -1,7 +1,18 @@
-// This is ./vxl/vil/io/tests/golden_test_vil_io.cxx
+// This is vxl/vil/io/tests/golden_test_vil_io.cxx
+
+//:
+// \file
+// \brief Read in a golden data file, and check the values are correct.
+//
+// If you need to recreate the golden data file build this as a
+// standalone program, and run it with the single parameter create:
+// \verbatim
+// golden_test_vnl_io create
+// \endverbatim
 
 #include <vcl_string.h>
-#include <vcl_fstream.h>
+#include <vcl_vector.h>
+#include <vcl_cstdlib.h> // for vcl_exit()
 #include <vsl/vsl_binary_io.h>
 #include <vil/vil_memory_image_of_format.txx>
 #include <vil/vil_memory_image_impl.h>
@@ -13,21 +24,9 @@
 #include <vil/io/vil_io_memory_image_of.h>
 #include <vil/io/vil_io_rgb.h>
 #include <vil/io/vil_io_rgba.h>
+
 #include <testlib/testlib_root_dir.h>
-
 #include <testlib/testlib_test.h>
-
-#include <vcl_vector.h>
-
-//:
-// \file
-// \brief Read in a golden data file, and check the values are correct.
-//
-// If you need to recreate the golden data file build this as a
-// standalone program, and run it with the single parameter create:
-// \verbatim
-// golden_test_vnl_io create
-// \endverbatim
 
 void golden_test_vil_io(bool save_file=false);
 

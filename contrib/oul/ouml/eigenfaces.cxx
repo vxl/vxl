@@ -1,9 +1,13 @@
+// This is oul/ouml/eigenfaces.cxx
+#include "eigenfaces.h"
 //:
 // \file
-#include "eigenfaces.h"
+
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vil/vil_save.h>
 #include <vcl_queue.h>
+#include <vcl_fstream.h>
+#include <vcl_cstdio.h> // for sprintf()
 #include <vcl_cstring.h>
 #include <vcl_cassert.h>
 

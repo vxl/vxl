@@ -1,10 +1,11 @@
+// This is vxl/vidl/vidl_mpegcodec.cxx
 #include "vidl_mpegcodec.h"
 #include "vidl_yuv_2_rgb.h"
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdio.h>
-#include <vcl_algorithm.h>
 #include <vcl_cassert.h>
+#include <vcl_cstdlib.h> // for vcl_strtol()
 #include <vul/vul_file.h>
 #include <vil/vil_image.h>
 #include <vil/vil_memory_image_of.h>
@@ -38,7 +39,7 @@ static void internal_draw_frame (vidl_mpegcodec_data * instance,
   int roiy = p->y0;
   int roiw = p->w;
   int roih = p->h;
-  int roixend = roix + p->w;
+//int roixend = roix + p->w;
   int wh = w>>1;
 
   if (instance->output_format == vidl_mpegcodec_data::GREY)
@@ -350,7 +351,7 @@ vidl_mpegcodec::init()
   this->set_height(h);
   if (decoder_->get_format() == vidl_mpegcodec_data::RGB)
     b=24;
-  else if (decoder_->get_format() == vidl_mpegcodec_data::GREY)
+  else // if (decoder_->get_format() == vidl_mpegcodec_data::GREY)
     b=8;
   set_bits_pixel(b);
 
