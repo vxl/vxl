@@ -1,9 +1,11 @@
+//:
+// \file
 #include <vcl_sys/types.h>
 #include <vcl_cerrno.h>
 #include <vcl_cassert.h>
 #include "asyncio.h"
 
-// Initialise shared state to "no operation in progress"
+//: Initialise shared state to "no operation in progress"
 
 volatile sig_atomic_t AsyncIO_Shared_State::complete = 1;
 
@@ -15,10 +17,10 @@ void AsyncIO_Shared_State::signal_handler(int)
   complete = 1;
 }
 
-// Constructor - perform I/O on file descriptor fd, using sig as completion
+//: Constructor - perform I/O on file descriptor fd, using sig as completion
 // signal. Note that SIGUSR1,2 may be used by the linuxthreads library.
 
-AsyncIO::AsyncIO(int fd, int sig = SIGIO)
+AsyncIO::AsyncIO(int fd, int sig)
 {
   cb.aio_fildes = fd;
   cb.aio_reqprio = 0;
@@ -29,14 +31,14 @@ AsyncIO::AsyncIO(int fd, int sig = SIGIO)
   signal(sig, &AsyncIO_Shared_State::signal_handler);
 }
 
-// Destructor - disconnect signal handler
+//: Destructor - disconnect signal handler
 
 AsyncIO::~AsyncIO()
 {
   signal(cb.aio_sigevent.sigev_signo, SIG_DFL);
 }
 
-// Begin reading n bytes into buf starting at current file position
+//: Begin reading n bytes into buf starting at current file position
 
 int AsyncIO::read(volatile void *buf, vcl_size_t n)
 {
@@ -53,7 +55,7 @@ int AsyncIO::read(volatile void *buf, vcl_size_t n)
     return read(buf, n, pos);
 }
 
-// Begin reading n bytes into buf starting at absolute file position pos
+//: Begin reading n bytes into buf starting at absolute file position pos
 
 int AsyncIO::read(volatile void *buf, vcl_size_t n, off_t pos)
 {
@@ -79,7 +81,7 @@ int AsyncIO::read(volatile void *buf, vcl_size_t n, off_t pos)
     return 0;
 }
 
-// Begin writing n bytes from buf starting at current file position
+//: Begin writing n bytes from buf starting at current file position
 
 int AsyncIO::write(volatile void *buf, vcl_size_t n)
 {
@@ -96,7 +98,7 @@ int AsyncIO::write(volatile void *buf, vcl_size_t n)
     return write(buf, n, pos);
 }
 
-// Begin writing n bytes from buf starting at absolute file position pos
+//: Begin writing n bytes from buf starting at absolute file position pos
 
 int AsyncIO::write(volatile void *buf, vcl_size_t n, off_t pos)
 {
@@ -122,11 +124,12 @@ int AsyncIO::write(volatile void *buf, vcl_size_t n, off_t pos)
     return 0;
 }
 
-// Wait for I/O to complete, then return status. If suspend is true, block
-// the calling process while waiting, otherwise continously poll for completion
+//: Wait for I/O to complete, then return status.
+// If suspend is true (the default), block the calling process while waiting,
+// otherwise continously poll for completion
 // (not recommended, but may be more reliable).
 
-int AsyncIO::wait_for_completion(bool suspend = true)
+int AsyncIO::wait_for_completion(bool suspend)
 {
   int status;
 
