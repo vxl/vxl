@@ -20,7 +20,6 @@
 
 #include <vcl_compiler.h>
 #include <vidl/vidl_codec.h>
-#include <vidl/vidl_avicodec_sptr.h>
 #include <vidl/vidl_frame_sptr.h>
 #ifdef VCL_WIN32
 # include <windows.h>
@@ -76,12 +75,12 @@ class vidl_avicodec : public vidl_codec
   void choose_encoder(AVIEncoderType encoder);
 
  private:
-   PAVIFILE avi_file_;
-   PAVISTREAM avi_stream_;
-   PGETFRAME avi_get_frame_;
+  PAVIFILE avi_file_;
+  PAVISTREAM avi_stream_;
+  PGETFRAME avi_get_frame_;
 
-   AVIFILEINFO avi_file_info_;
-   AVISTREAMINFO avi_stream_info_;
+  AVIFILEINFO avi_file_info_;
+  AVISTREAMINFO avi_stream_info_;
 
   // Helpers
   HANDLE  make_dib(vidl_frame_sptr frame, UINT bits);
@@ -89,8 +88,8 @@ class vidl_avicodec : public vidl_codec
   bool load_avi(const char* fname, char mode);
 
  protected:
-   bool read_header();
-   bool write_header();
+  bool read_header();
+  bool write_header();
 };
 
 #endif // vidl_win_avicodec_h
