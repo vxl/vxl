@@ -76,6 +76,9 @@ class vdgl_digital_region : public vsol_region_2d
   float Yo() const; //!< The mean Y value of the region
   float Zo() const; //!< The mean Z value of the region
   float Io() const; //!< The mean intensity value of the region
+  float Io_sd() const; //!< The intensity standard deviation value of the region
+  float ComputeIntensityStdev(); //!< Compute the intensity stdev for the region
+
   // Scatter Matrix Values
   double X2() const; //!< The second order X moment of the region
   double Y2() const; //!< The second order Y moment of the region
@@ -117,6 +120,7 @@ class vdgl_digital_region : public vsol_region_2d
   unsigned short *pix_;     //!< The pixel intensity
   float max_, min_;         //!< Upper and lower bounds
   float xo_, yo_, zo_, io_; //!< Mean Values
+  float io_stdev_;          //!< Intensity standard deviation for region
   mutable int pix_index_;   //!< Index in pixel array (iterator)
   void ComputeScatterMatrix() const; // mutable
   void IncrByXYI(double x, double y, int intens) const; // mutable

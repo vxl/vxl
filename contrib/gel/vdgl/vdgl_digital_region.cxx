@@ -34,7 +34,7 @@ void vdgl_digital_region::init()
   max_ = 0;
   min_ = (unsigned short)(-1);
   xp_ = NULL; yp_ = NULL; zp_ = NULL; pix_ = NULL;
-  xo_ = 0; yo_ = 0; zo_ = 0; io_ = 0;
+  xo_ = 0; yo_ = 0; zo_ = 0; io_ = 0; io_stdev_ = 0.0;
   X2_ = 0;  Y2_ = 0;  I2_ = 0;
   XY_ = 0;  XI_ = 0;  YI_ = 0;
   error_ = 0; sigma_sq_ = 0;
@@ -58,6 +58,7 @@ vdgl_digital_region::vdgl_digital_region(vdgl_digital_region const& r)
   this->init();
   for (int i = 0; i<r.Npix(); ++i)
     this->IncrementMeans(r.Xj()[i], r.Yj()[i], r.Zj()[i], r.Ij()[i]);
+  this->ComputeIntensityStdev();
   this->InitPixelArrays();
   for (int i = 0; i<r.Npix(); i++)
     this->InsertInPixelArrays(r.Xj()[i], r.Yj()[i], r.Zj()[i], r.Ij()[i]);
@@ -69,6 +70,7 @@ vdgl_digital_region::vdgl_digital_region(int npts, const float* xp, const float*
   this->init();
   for (int i = 0; i<npts; i++)
     this->IncrementMeans(xp[i], yp[i], pix[i]);
+  this->ComputeIntensityStdev();
   this->InitPixelArrays();
   for (int i = 0; i<npts_; i++)
     this->InsertInPixelArrays(xp[i], yp[i], pix[i]);
@@ -80,6 +82,7 @@ vdgl_digital_region::vdgl_digital_region(int npts, const float* xp, const float*
   this->init();
   for (int i = 0; i<npts; i++)
     this->IncrementMeans(xp[i], yp[i], zp[i], pix[i]);
+  this->ComputeIntensityStdev();
   this->InitPixelArrays();
   for (int i = 0; i<npts_; i++)
     this->InsertInPixelArrays(xp[i], yp[i], zp[i], pix[i]);
@@ -185,7 +188,7 @@ void vdgl_digital_region::ResetPixelData()
   delete [] yp_; yp_ = NULL;
   delete [] zp_; zp_ = NULL;
   delete [] pix_; pix_ = NULL;
-  xo_ = 0; yo_ = 0; zo_ = 0; io_ = 0;
+  xo_ = 0; yo_ = 0; zo_ = 0; io_ = 0; io_stdev_=0.0;
 }
 //---------------------------------------------------------
 //: The 2-d version
@@ -208,6 +211,20 @@ void vdgl_digital_region::IncrementMeans(float x, float y, float z,
   yo_ += y;
   zo_ += z;
   io_ += pix;
+}
+//-----------------------------------------------------------------
+//:
+// Calculate the standard deviation of intensity for the region.
+//
+float vdgl_digital_region::ComputeIntensityStdev()
+{
+  io_stdev_ = 0.0; // start from scratch each time
+  float mean = this->Io(); // get the mean.
+  for (int i=0; i<npts_; i++) {
+    io_stdev_ += (pix_[i]-mean)*(pix_[i]-mean);
+  }
+  io_stdev_ = io_stdev_ * 1.0/(npts_ - 1.0);
+  return io_stdev_;
 }
 //-----------------------------------------------------------------
 //:
@@ -268,6 +285,13 @@ float vdgl_digital_region::Io() const
   assert(npts_ > 0);
   return io_/npts_;
 }
+
+float vdgl_digital_region::Io_sd() const
+{
+  assert(npts_ > 0);
+  return io_stdev_;
+}
+
 //: Individual scatter matrix elements
 double vdgl_digital_region::X2() const
 {
