@@ -35,7 +35,7 @@ int list_contents[] = {
 int count_my_args(char const * const * my_argv)
 {
   int c = 0;
-  for(; *my_argv; ++my_argv)
+  for (; *my_argv; ++my_argv)
     ++c;
   return c;
 }
@@ -71,7 +71,7 @@ void test_do_vul_arg()
   vcl_list<int> l = list1();
   TEST("list length", l.size(), true_list_length);
   bool ok = true;
-  for(unsigned int i = 0; i < true_list_length; ++i) {
+  for (unsigned int i = 0; i < true_list_length; ++i) {
     if (vcl_find(l.begin(), l.end(), list_contents[i]) == l.end()) {
       vcl_cout << "Integer [" << list_contents[i] << "] not found in list\n";
       ok = false;

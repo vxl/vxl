@@ -39,7 +39,7 @@ AUX_SOURCE_DIRECTORY(Templates vul_sources)
 #
 SET( vul_network_sources
   vul_url.h                   vul_url.cxx
-)  
+)
 
 
 IF(CMAKE_COMPILER_IS_GNUCXX)

@@ -19,8 +19,8 @@ int main()
   int npts = pts.rows();
   int dim = pts.columns();
   vnl_matrix<double> D(npts, dim+1);
-  for(int i = 0; i < npts; ++i) {
-    for(int j = 0; j < dim; ++j) D(i,j) = pts(i,j);
+  for (int i = 0; i < npts; ++i) {
+    for (int j = 0; j < dim; ++j) D(i,j) = pts(i,j);
     D(i,dim) = 1;
   }
 

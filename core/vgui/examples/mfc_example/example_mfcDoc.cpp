@@ -72,7 +72,6 @@ BOOL example_CExample_mfcDoc::OnNewDocument()
 }
 
 
-
 /////////////////////////////////////////////////////////////////////////////
 // example_CExample_mfcDoc serialization
 

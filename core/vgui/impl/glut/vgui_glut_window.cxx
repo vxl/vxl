@@ -19,7 +19,7 @@ vgui_glut_window::vgui_glut_window(char const *title,
   // when we return we will still expect that GL context
   // to be the active one.
   int old = glutGetWindow();
-  
+
   // create new window:
   glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
   glutInitWindowSize (w,h);
@@ -27,7 +27,7 @@ vgui_glut_window::vgui_glut_window(char const *title,
   int window = glutCreateWindow( title ? title : __FILE__ );
   glutwin = new vgui_glut_adaptor(this, window);
   //glutHideWindow();
-  
+
   // if another window was already current when the new one
   // was created, switch back to the old one now:
   if (old != 0)

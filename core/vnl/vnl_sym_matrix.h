@@ -24,7 +24,6 @@ export
 template <class T>
 class vnl_sym_matrix
 {
-
   //: Resize matrix to n by n.
   // \deprecated. This has been intentionally poisoned. Use set_size instead.
   inline void resize(int n) {set_size(n);}
