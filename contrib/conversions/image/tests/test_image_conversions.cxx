@@ -1,3 +1,5 @@
+#include <testlib/testlib_test.h>
+
 #ifdef HAS_NO_IMAGE
 
 #include <vcl_iostream.h>
@@ -15,7 +17,6 @@ void test_image_conversions()
 #include <vpl/vpl.h> // for vpl_unlink()
 #include <vul/vul_temp_filename.h>
 #include <vil/vil_load.h>
-#include <testlib/testlib_test.h>
 
 static void create_image(const char* name)
 {
