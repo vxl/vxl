@@ -12,7 +12,7 @@
 // \endverbatim
 
 #include "vmap_types.h"
-#include "vcl_vector.h"
+#include <vcl_vector.h>
 
 //:
 template< typename F, typename Ref, typename Ptr, typename It >
@@ -26,35 +26,31 @@ class vmap_ptr_iterator_wrapper
     typedef F element_type ;
 
     //:
-    vmap_ptr_iterator_wrapper()
-    {}
+    vmap_ptr_iterator_wrapper() {}
 
     //:
-    vmap_ptr_iterator_wrapper(const self_type &right)
-            :_it(right._it)
-    {}
+    vmap_ptr_iterator_wrapper(const self_type &it) :_it(it._it) {}
 
     //:
-    ~vmap_ptr_iterator_wrapper()
-    {}
+    ~vmap_ptr_iterator_wrapper() {}
 
     //:
-    self_type & operator=(const self_type &right)
+    self_type & operator=(const self_type &it)
     {
-        _it=right._it ;
+        _it=it._it ;
         return *this ;
     }
 
     //:
-    bool operator==(const self_type &right) const
+    bool operator==(const self_type &it) const
     {
-        return _it==right._it ;
+        return _it==it._it ;
     }
 
     //:
-    bool operator!=(const self_type &right) const
+    bool operator!=(const self_type &it) const
     {
-        return _it!=right._it ;
+        return _it!=it._it ;
     }
 
     //:
@@ -76,11 +72,10 @@ class vmap_ptr_iterator_wrapper
         return *this ;
     }
 
-    //////////////////////private :
+// private :
+
     //:
-    vmap_ptr_iterator_wrapper(It arg)
-            :_it(arg)
-    {}
+    vmap_ptr_iterator_wrapper(It arg) :_it(arg) {}
 
     //:
     It reference() const
@@ -119,14 +114,10 @@ class vmap_ptr_sequence
 
  public:
   //:
-  vmap_ptr_sequence()
-      : _begin(NULL), _end(NULL)
-  {}
+  vmap_ptr_sequence() : _begin(NULL), _end(NULL) {}
 
   //:
-  vmap_ptr_sequence(const vmap_ptr_sequence<D> & arg )
-      : _begin(arg._begin), _end(arg._end)
-  {}
+  vmap_ptr_sequence(const vmap_ptr_sequence<D> & arg ) : _begin(arg._begin), _end(arg._end) {}
 
   //:
   int size () const
@@ -249,8 +240,7 @@ class vmap_owning_sequence: public vmap_ptr_sequence<D>
 
  public:
   //:
-  vmap_owning_sequence()
-  {}
+  vmap_owning_sequence() {}
 
   //:
   vmap_owning_sequence(const self_type & arg )

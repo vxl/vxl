@@ -12,8 +12,8 @@
 //   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
+#include <vcl_vector.h>
 
-#include "vcl_vector.h"
 //: enables to handle partitions with actually choosing the representative for each set.
 // vbl_controlled_partition provides a way to choose while merging the representative for each set. It can be used
 // when the representative plays a special role.

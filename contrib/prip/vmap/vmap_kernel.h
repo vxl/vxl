@@ -11,7 +11,7 @@
 //  06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
-#include "vcl_vector.h"
+#include <vcl_vector.h>
 #include "vmap_types.h"
 #include "vbl_controlled_partition.h"
 
@@ -406,7 +406,7 @@ class vmap_kernel
   }
 
   //:
-  int size() const
+  unsigned int size() const
   {
     return _dart.size() ;
   }
@@ -524,7 +524,7 @@ class vmap_permutation_kernel : public vmap_kernel<typename TPermutation::map_ty
   {
     _dart.resize(arg.size()) ;
     _dart_associated_elt.resize(arg.size());
-    for (int i=0; i<arg.size(); i++)
+    for (unsigned int i=0; i<arg.size(); ++i)
     {
       _dart[i]=_p.get_element_pointer(arg.get_dart_index(i)) ;
       _dart_associated_elt[i]=_p.get_cycle_pointer(arg.get_element_index(i)) ;
