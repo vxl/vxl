@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 #include "bcal_zhang_linear_calibrate.h"
 #include <vnl/vnl_inverse.h>
-#include <vnl/vnl_double_3.h> // for cross_3d
+#include <vnl/vnl_double_3.h> // for vnl_cross_3d
 #include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
@@ -159,7 +159,7 @@ vnl_double_3x3 bcal_zhang_linear_calibrate::compute_intrinsic(vgl_h_matrix_2d<do
     if (vcl_fabs(ratio) < 200){
       vcl_cerr << "Warning after comparing the singular values\n"
                << "It may be that the system of homographies is underconstrained:\n"
-               << sv4 <<  " " << sv5 << '\n';
+               << sv4 <<  ' ' << sv5 << '\n';
     }
   }
 
@@ -209,56 +209,34 @@ compute_extrinsic(vgl_h_matrix_2d<double> const &H, vnl_double_3x3 const &A)
   // In this case we will have to find the closest pure rotation matrix
 
 
-
   // compute A_inv which is the inverse of the intrinsic parameters
-
   vnl_double_3x3 A_inv = vnl_inverse(A);
 
   // get h1 h2 h3
-
   vnl_double_3 h1, h2, h3;
-
   for (int i=0;i<3;i++){
     h1[i] = H.get(i,0);
     h2[i] = H.get(i,1);
     h3[i] = H.get(i,2);
   }
 
-  // allocate r1 r2 r3 t
-
-  vnl_double_3 r1, r2, r3, t;
-
   // compute l = 1.0 / ||(A_inv * h1)||
-
-  vnl_double_3 hold;
-
-  hold = A_inv * h1;
-
-
-  double mag;
-
-  mag = hold.two_norm();
-
-  double l = 1;
-  if (mag){
-    l = 1.0/mag;
-  }
-
+  vnl_double_3 hold = A_inv * h1;
+  double mag = hold.two_norm();
+  double l = mag ? 1.0/mag : 1.0;
 
   // calcuate r1 = l A_inv h1
-
-  r1 = l * A_inv * h1;
-
+  vnl_double_3 r1 = l * A_inv * h1;
 
   // calcuate r2 = l A_inv h2
-  r2 = l * A_inv * h2;
+  vnl_double_3 r2 = l * A_inv * h2;
 
   // note that although r1 will have a unit normal,
   // r2 is not guaranteed to have a unit normal due
   // to noise.
 
   // caluculate r3 = r1 x r2
-  r3 = cross_3d(r1,r2);
+  vnl_double_3 r3 = vnl_cross_3d(r1,r2);
 
   vnl_double_3x3 Q;
   for (int i=0; i<3; i++){
@@ -272,10 +250,9 @@ compute_extrinsic(vgl_h_matrix_2d<double> const &H, vnl_double_3x3 const &A)
   vnl_double_3x3 R = get_closest_rotation(Q);
 
   // calculate t = l A_inv h3
-  t = l * A_inv * h3;
+  vnl_double_3 t = l * A_inv * h3;
 
   // make a transformation matrix to return
-
   return vgl_h_matrix_3d<double>(R, t);
 }
 
@@ -293,20 +270,18 @@ vnl_double_3x3 bcal_zhang_linear_calibrate::get_closest_rotation(const vnl_doubl
 
 void bcal_zhang_linear_calibrate::calibrate_intrinsic()
 {
-  int num_camera = cam_graph_ptr_->num_vertice();  
+  int num_camera = cam_graph_ptr_->num_vertice();
   for (int i= 0; i<num_camera; i++){
     bcal_zhang_camera_node *cam = cam_graph_ptr_->get_vertex_from_pos(i);
     assert(cam);
     vnl_double_3x3 K = compute_intrinsic(h_matrice_[i], num_views_[i]);
     cam->set_intrinsic(K);
-    vcl_cerr<<"intrinsic parameters K is: \n"<<cam->get_intrinsic()<<"\n";
+    vcl_cerr<<"intrinsic parameters K is:\n"<<cam->get_intrinsic()<<'\n';
   }
-
 }
 
 int bcal_zhang_linear_calibrate::calibrate_extrinsic()
 {
-
   int num_camera = cam_graph_ptr_->num_vertice();
 
   for (int i= 0; i<num_camera; i++){// for each camera
@@ -318,7 +293,7 @@ int bcal_zhang_linear_calibrate::calibrate_extrinsic()
     bcal_euclidean_transformation *e = cam_graph_ptr_->get_edge(source_id, vertex_id);
     assert(e != 0) ;
 
-    // compute and set extrinsic parameter 
+    // compute and set extrinsic parameter
     vnl_double_3x3 K = cam->get_intrinsic();
     int num_views = cam->num_views();
 

@@ -223,7 +223,7 @@ void kalman_filter::init_covariant_matrix()
 
   vnl_double_3 xaxis(1, 0, 0);
   vnl_double_3 T(X_[0], X_[1], X_[2]);
-  vnl_double_3 axis = cross_3d(xaxis, T);
+  vnl_double_3 axis = vnl_cross_3d(xaxis, T);
   axis /= axis.magnitude();
   double theta = angle(T, xaxis);
 

@@ -517,7 +517,7 @@ inline vnl_vector_fixed<T,n> element_quotient( const vnl_vector_fixed_ref_const<
 }
 
 template<class T>
-vnl_vector_fixed<T,3> cross_3d (vnl_vector_fixed_ref_const<T,3> const& v1, vnl_vector_fixed_ref_const<T,3> const& v2)
+vnl_vector_fixed<T,3> vnl_cross_3d(vnl_vector_fixed_ref_const<T,3> const& v1, vnl_vector_fixed_ref_const<T,3> const& v2)
 {
   vnl_vector_fixed<T,3> result;
 
@@ -581,13 +581,13 @@ inline vnl_matrix<T> outer_product( const vnl_vector_fixed_ref_const<T,n>& a, co
 }
 
 template<class T,unsigned int n>
-  inline vnl_vector_fixed<T,n> cross_3d( const vnl_vector_fixed_ref_const<T,n>& a, const vnl_vector<T>& b ) {
-  return cross_3d( a.as_ref(), b);
+  inline vnl_vector_fixed<T,n> vnl_cross_3d( const vnl_vector_fixed_ref_const<T,n>& a, const vnl_vector<T>& b ) {
+  return vnl_cross_3d( a.as_ref(), b);
 }
 
 template<class T,unsigned int n>
-  inline vnl_vector_fixed<T,n> cross_3d( const vnl_vector<T>& a, const vnl_vector_fixed_ref_const<T,n>& b ) {
-  return cross_3d( a, b.as_ref());
+  inline vnl_vector_fixed<T,n> vnl_cross_3d( const vnl_vector<T>& a, const vnl_vector_fixed_ref_const<T,n>& b ) {
+  return vnl_cross_3d( a, b.as_ref());
 }
 
 template<class T, unsigned int n>

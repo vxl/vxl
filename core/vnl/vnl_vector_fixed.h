@@ -696,63 +696,6 @@ inline vnl_vector<T> element_quotient( const vnl_vector<T>& a, const vnl_vector_
 
 //:
 // \relates vnl_vector_fixed
-template<class T>
-T cross_2d (vnl_vector_fixed<T,2> const& v1, vnl_vector_fixed<T,2> const& v2)
-{
-  return v1[0] * v2[1] - v1[1] * v2[0];
-}
-
-//:
-// \relates vnl_vector
-// \relates vnl_vector_fixed
-template<class T>
-T cross_2d (vnl_vector_fixed<T,2> const& v1, vnl_vector<T> const& v2)
-{
-  assert( v2.size() == 2 );
-  return v1[0] * v2[1] - v1[1] * v2[0];
-}
-
-//:
-// \relates vnl_vector
-// \relates vnl_vector_fixed
-template<class T>
-T cross_2d (vnl_vector<T> const& v1, vnl_vector_fixed<T,2> const& v2)
-{
-  assert( v1.size() == 2 );
-  return v1[0] * v2[1] - v1[1] * v2[0];
-}
-
-//:
-// \relates vnl_vector_fixed
-template<class T>
-vnl_vector_fixed<T,3> cross_3d (vnl_vector_fixed<T,3> const& v1, vnl_vector_fixed<T,3> const& v2)
-{
-  vnl_vector_fixed<T,3> result;
-
-  result[0] = v1[1] * v2[2] - v1[2] * v2[1];
-  result[1] = v1[2] * v2[0] - v1[0] * v2[2];
-  result[2] = v1[0] * v2[1] - v1[1] * v2[0];
-  return result;
-}
-
-//:
-// \relates vnl_vector
-// \relates vnl_vector_fixed
-template<class T,unsigned int n>
-  inline vnl_vector_fixed<T,n> cross_3d( const vnl_vector_fixed<T,n>& a, const vnl_vector<T>& b ) {
-  return cross_3d( a.as_ref(), b);
-}
-
-//:
-// \relates vnl_vector
-// \relates vnl_vector_fixed
-template<class T,unsigned int n>
-  inline vnl_vector_fixed<T,n> cross_3d( const vnl_vector<T>& a, const vnl_vector_fixed<T,n>& b ) {
-  return cross_3d( a, b.as_ref());
-}
-
-//:
-// \relates vnl_vector_fixed
 template<class T, unsigned n>
 inline T dot_product( const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b )
 {

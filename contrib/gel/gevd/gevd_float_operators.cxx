@@ -7,7 +7,8 @@
 #include <vcl_fstream.h>
 #include <vcl_algorithm.h>
 #include <vnl/vnl_math.h> // for pi_over_2
-#include <vnl/vnl_vector.h>
+#include <vnl/vnl_float_3.h>
+#include <vnl/vnl_cross.h>
 
 #include <vcl_cmath.h>
 #include <vcl_cstring.h>
@@ -1103,7 +1104,6 @@ float
 gevd_float_operators::Orientation(const gevd_bufferxy& smooth,
                                   gevd_bufferxy*& theta, gevd_bufferxy*& coherence,
                                   const int frame)
-
 {
   theta = gevd_float_operators::Allocate(theta, smooth);
   coherence = gevd_float_operators::Allocate(coherence, smooth);
@@ -1420,14 +1420,13 @@ gevd_float_operators::SurfaceNormal(const gevd_bufferxy& range, gevd_bufferxy*& 
   const int highx = range.GetSizeX()-frame, highy = range.GetSizeY()-frame;
   normal = gevd_float_operators::Allocate(normal, range, bits_per_ptr);
   normal->Clear();              // NULL vector on border
-  vnl_vector<float> tx(3, 0.0f), ty(3, 0.0f); // tangents x-y axes
-  tx[0]=2.0f; ty[1]=2.0f;
+  vnl_float_3 tx(2.f,0.f,0.f), ty(0.f,2.f,0.f); // tangents x-y axes
   for (int j = frame; j < highy; j++)
     for (int i = frame; i < highx; i++) { // for all grid points
-      tx[3] = floatPixel(range, i+1, j) - floatPixel(range, i-1, j);
-      ty[3] = floatPixel(range, i, j+1) - floatPixel(range, i, j-1);
+      tx[2] = floatPixel(range, i+1, j) - floatPixel(range, i-1, j);
+      ty[2] = floatPixel(range, i, j+1) - floatPixel(range, i, j-1);
 
-      vnl_vector<float> *nz= new vnl_vector<float>(cross_3d(tx,ty));
+      vnl_vector<float> *nz= new vnl_vector<float>(vnl_cross_3d(tx,ty));
 
       float mag = nz->magnitude();
       if (mag != 0) *nz /= mag; // make unit vector
@@ -1450,19 +1449,19 @@ gevd_float_operators::SurfaceCurvature(const gevd_bufferxy& normal, gevd_bufferx
   for (int j = frame; j < highy; j++)
     for (int i = frame; i < highx; i++) { // for all grid points
       float max_curv2 =         // along 0 degree
-        cross_3d(*fvectorPixel(normal, i+1, j),
-                 *fvectorPixel(normal, i-1, j)).squared_magnitude();
+        vnl_cross_3d(*fvectorPixel(normal, i+1, j),
+                     *fvectorPixel(normal, i-1, j)).squared_magnitude();
       float curv2 =             // along 90 degree
-        cross_3d(*fvectorPixel(normal, i, j+1),
-                 *fvectorPixel(normal, i, j-1)).squared_magnitude();
+        vnl_cross_3d(*fvectorPixel(normal, i, j+1),
+                     *fvectorPixel(normal, i, j-1)).squared_magnitude();
       if (max_curv2 < curv2) max_curv2 = curv2;
       curv2 =                   // along 45 degree
-        cross_3d(*fvectorPixel(normal, i+1, j+1),
-                 *fvectorPixel(normal, i-1, j-1)).squared_magnitude()/2;
+        vnl_cross_3d(*fvectorPixel(normal, i+1, j+1),
+                     *fvectorPixel(normal, i-1, j-1)).squared_magnitude()/2;
       if (max_curv2 < curv2) max_curv2 = curv2;
       curv2 =                   // along 135 degree
-        cross_3d(*fvectorPixel(normal, i+1, j-1),
-                 *fvectorPixel(normal, i-1, j+1)).squared_magnitude()/2;
+        vnl_cross_3d(*fvectorPixel(normal, i+1, j-1),
+                     *fvectorPixel(normal, i-1, j+1)).squared_magnitude()/2;
       if (max_curv2 < curv2) max_curv2 = curv2;
       floatPixel(*curvature, i, j) = vcl_sqrt(max_curv2);
     }
@@ -1548,12 +1547,9 @@ gevd_float_operators::SurfaceNormalD(const gevd_bufferxy& range,
       if (_TangentComponents(range, i-1, j, i, j, i+1, j, no_value, d_x, d_z_x) &&
           _TangentComponents(range, i, j-1, i, j, i, j+1, no_value, d_y, d_z_y) )
         {
-          //vnl_vector<float> tx(3, d_x*pixel_distance,0.f,d_z_x);
-          //vnl_vector<float> ty(3, 0.f,d_y*pixel_distance,d_z_y);
-          vnl_vector<float> tx(3,0.0), ty(3,0.0);
-          tx[0]=d_x*pixel_distance; tx[2]=d_z_x;
-          ty[1]=d_y*pixel_distance; ty[2]=d_z_y;
-          vnl_vector<float>* nz = new vnl_vector<float>(cross_3d(tx, ty));
+          vnl_float_3 tx(d_x*pixel_distance, 0.f, d_z_x),
+                      ty(0.f, d_y*pixel_distance, d_z_y);
+          vnl_vector<float>* nz = new vnl_vector<float>(vnl_cross_3d(tx, ty));
 
 #ifdef DEBUG
           vcl_cout << "Tx = " << tx << ",  Ty = " << ty << vcl_endl;
@@ -1621,7 +1617,7 @@ _CurvatureInDir(const gevd_bufferxy& normal,
     dx = high_x - x;
     dy = high_y - y;
     sq_dist = (dx*dx) + (dy*dy) + (dz*dz);
-    sq_curve = cross_3d( *high_norm, *norm ).squared_magnitude();
+    sq_curve = vnl_cross_3d( *high_norm, *norm ).squared_magnitude();
 #ifdef DEBUG
     vcl_cout << "CinDir  low missing:  sq_dist = " << sq_dist
              << ",  high = " << *high_norm
@@ -1637,7 +1633,7 @@ _CurvatureInDir(const gevd_bufferxy& normal,
     dx = x - low_x;
     dy = y - low_y;
     sq_dist = (dx*dx) + (dy*dy) + (dz*dz);
-    sq_curve = cross_3d( *norm, *low_norm ).squared_magnitude();
+    sq_curve = vnl_cross_3d( *norm, *low_norm ).squared_magnitude();
 #ifdef DEBUG
     vcl_cout << "CinDir  high missing:  sq_dist = " << sq_dist
              << ",  norm = " << *norm
@@ -1653,7 +1649,7 @@ _CurvatureInDir(const gevd_bufferxy& normal,
     dx = high_x - low_x;
     dy = high_y - low_y;
     sq_dist = (dx*dx) + (dy*dy) + (dz*dz);
-    sq_curve = cross_3d( *high_norm, *low_norm ).squared_magnitude();
+    sq_curve = vnl_cross_3d( *high_norm, *low_norm ).squared_magnitude();
 #ifdef DEBUG
     vcl_cout << "CinDir  neither missing:  sq_dist = " << sq_dist
              << ",  high = " << *high_norm
@@ -3432,7 +3428,6 @@ gevd_bufferxy*
 gevd_float_operators::SimilarBuffer(const gevd_bufferxy& buf,
                                     int bits_per_pixel,
                                     int sizeX, int sizeY)
-
 {
   if (bits_per_pixel == 0)                      // find default pixel
     bits_per_pixel = buf.GetBitsPixel();

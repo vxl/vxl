@@ -53,8 +53,6 @@ template <class T> v      operator*(T, v const&);
 template <class T> v      operator*(v const&, m const&);
 template <class T> v      element_product(v const&,v const&);
 template <class T> v      element_quotient(v const&,v const&);
-template <class T> T      cross_2d(v const&, v const&);
-template <class T> v      cross_3d(v const&, v const&);
 template <class T> T      vnl_vector_ssd(v const&, v const&);
 template <class T> void   swap(v &, v &);
 #undef v
@@ -440,8 +438,6 @@ class vnl_vector
   friend v      operator*        VCL_NULL_TMPL_ARGS (m const&, v const&);
   friend v      element_product  VCL_NULL_TMPL_ARGS (v const&, v const&);
   friend v      element_quotient VCL_NULL_TMPL_ARGS (v const&, v const&);
-  friend T      cross_2d         VCL_NULL_TMPL_ARGS (v const&, v const&);
-  friend v      cross_3d         VCL_NULL_TMPL_ARGS (v const&, v const&);
 # undef v
 # undef m
 #endif

@@ -240,10 +240,10 @@ vnl_vector<T>::vnl_vector (vnl_matrix<T> const &M, vnl_vector<T> const &v, vnl_t
     vnl_error_vector_dimension ("vnl_vector<>::vnl_vector(M, v, vnl_vector_mul_tag)", M.cols(), v.size());
 #endif
   for (unsigned int i=0; i<num_elmts; ++i) {
-    T sum(0);
+    T som(0);
     for (unsigned int j=0; j<M.cols(); ++j)
-      sum += M[i][j] * v[j];
-    data[i] = sum;
+      som += M[i][j] * v[j];
+    data[i] = som;
   }
 }
 
@@ -257,10 +257,10 @@ vnl_vector<T>::vnl_vector (vnl_vector<T> const &v, vnl_matrix<T> const &M, vnl_t
     vnl_error_vector_dimension ("vnl_vector<>::vnl_vector(v, M, vnl_vector_mul_tag)", v.size(), M.rows());
 #endif
   for (unsigned int j=0; j<num_elmts; ++j) {
-    T sum(0);
+    T som(0);
     for (unsigned int i=0; i<M.rows(); ++i)
-      sum += v[i] * M[i][j];
-    data[j] = sum;
+      som += v[i] * M[i][j];
+    data[j] = som;
   }
 }
 
@@ -561,12 +561,12 @@ vnl_vector<T> vnl_vector<T>::operator* (vnl_matrix<T> const&m) const {
 
 template<class T>
 vnl_vector<T>& vnl_vector<T>::update (vnl_vector<T> const& v, unsigned start) {
-  unsigned end = start + v.size();
+  unsigned stop = start + v.size();
 #ifndef NDEBUG
-  if ( end> this->num_elmts)
-    vnl_error_vector_dimension ("update", end-start, v.size());
+  if ( stop > this->num_elmts)
+    vnl_error_vector_dimension ("update", stop-start, v.size());
 #endif
-  for (unsigned i = start; i < end; i++)
+  for (unsigned i = start; i < stop; i++)
     this->data[i] = v.data[i-start];
   return *this;
 }
@@ -577,9 +577,9 @@ vnl_vector<T>& vnl_vector<T>::update (vnl_vector<T> const& v, unsigned start) {
 template<class T>
 vnl_vector<T> vnl_vector<T>::extract (unsigned len, unsigned start) const {
 #ifndef NDEBUG
-  unsigned end = start + len;
-  if (this->num_elmts < end)
-    vnl_error_vector_dimension ("extract", end-start, len);
+  unsigned stop = start + len;
+  if (this->num_elmts < stop)
+    vnl_error_vector_dimension ("extract", stop-start, len);
 #endif
   vnl_vector<T> result(len);
   for (unsigned i = 0; i < len; i++)
@@ -686,33 +686,6 @@ vnl_matrix<T> outer_product (vnl_vector<T> const& v1,
   return out;
 }
 
-
-//: Returns the cross-product of two 2d-vectors.
-
-template<class T>
-T cross_2d (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
-#ifndef NDEBUG
-  if (v1.size() < 2 || v2.size() < 2)
-    vnl_error_vector_dimension ("cross_2d", v1.size(), v2.size());
-#endif
-  return v1[0] * v2[1] - v1[1] * v2[0];
-}
-
-//: Returns the 3X1 cross-product of two 3d-vectors.
-
-template<class T>
-vnl_vector<T> cross_3d (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
-#ifndef NDEBUG
-  if (v1.size() != 3 || v2.size() != 3)
-    vnl_error_vector_dimension ("cross_3d", v1.size(), v2.size());
-#endif
-  vnl_vector<T> result(v1.size());
-
-  result[0] = v1[1] * v2[2] - v1[2] * v2[1]; // work for both col/row
-  result[1] = v1[2] * v2[0] - v1[0] * v2[2]; // representation
-  result[2] = v1[0] * v2[1] - v1[1] * v2[0];
-  return result;
-}
 
 //--------------------------------------------------------------------------------
 
@@ -865,9 +838,6 @@ template T dot_product(vnl_vector<T > const &, vnl_vector<T > const &); \
 template T cos_angle(vnl_vector<T > const & , vnl_vector<T > const &); \
 template T bracket(vnl_vector<T > const &, vnl_matrix<T > const &, vnl_vector<T > const &); \
 template vnl_matrix<T > outer_product(vnl_vector<T > const &,vnl_vector<T > const &); \
-/* cross products */ \
-template T cross_2d(vnl_vector<T > const &, vnl_vector<T > const &); \
-template vnl_vector<T > cross_3d(vnl_vector<T > const &, vnl_vector<T > const &); \
 /* I/O */ \
 template vcl_ostream & operator<<(vcl_ostream &, vnl_vector<T > const &); \
 template vcl_istream & operator>>(vcl_istream &, vnl_vector<T >       &)

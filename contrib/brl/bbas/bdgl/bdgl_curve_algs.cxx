@@ -214,10 +214,10 @@ static bool intersect_crossing(vnl_double_3& line_coefs,
                                vnl_double_3& inter)
 {
   //Form the line from p0 and p1
-  vnl_double_3 lv01 = cross_3d(p0, p1);
+  vnl_double_3 lv01 = vnl_cross_3d(p0, p1);
 
   //Find the intersection point
-  inter = cross_3d(lv01, line_coefs);
+  inter = vnl_cross_3d(lv01, line_coefs);
   //Check sanity of the intersection
   return vcl_fabs(inter[2]) >= bdgl_curve_algs::tol;
 }
