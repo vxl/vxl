@@ -676,6 +676,16 @@ SOURCE=.\vil_flipud_impl.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vil_flip_components.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_flip_components_impl.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\vil_image.cxx
 
 # End Source File
