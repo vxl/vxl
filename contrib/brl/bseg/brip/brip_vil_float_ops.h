@@ -77,8 +77,13 @@ class brip_vil_float_ops
 
   //: sets absolute values greater than thresh to specified level
   static vil_image_view<float>
-    abs_clip_to_level(vil_image_view<float> const& image,
-                      float thresh, float level = 0.0f);
+
+    abs_clip_to_level(vil_image_view<float> const & image,
+                      const float thresh, const float level = 0.0);
+  static vil_image_view<float> 
+	  average_NxN(vil_image_view<float> const & img, int N);
+
+
 
   //: The gradient using a 3x3 kernel
   static void gradient_3x3(vil_image_view<float> const& input,
@@ -119,6 +124,17 @@ class brip_vil_float_ops
                                  int n, double thresh,
                                  vil_image_view<float>& vx,
                                  vil_image_view<float>& vy);
+
+  
+  //: computes optical flow using Horn & Schunck's method
+  static int  Horn_SchunckMotion(vil_image_view<float> & current_frame,
+                                  vil_image_view<float> & previous_frame,
+                                  vil_image_view<float> & vx,
+                                  vil_image_view<float> & vy,
+                                  float alpha_coef=10000.0f, 
+								  double err_thresh=0.01f);
+
+
 
   //: fills a border of width w on left and right of image with value
   static void fill_x_border(vil_image_view<float>& image, int w, float value);

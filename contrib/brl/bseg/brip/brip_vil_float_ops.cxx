@@ -12,6 +12,7 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_transpose.h>
+#include <vil/vil_math.h>
 #include <vnl/vnl_inverse.h>
 #include <vil/algo/vil_convolve_1d.h>
 #include <vsol/vsol_box_2d.h>
@@ -410,6 +411,20 @@ brip_vil_float_ops::abs_clip_to_level(vil_image_view<float> const& image,
   return out;
 }
 
+
+ vil_image_view<float> brip_vil_float_ops::average_NxN(vil_image_view<float> const & img, int N)
+{
+    vil_image_view<float> result;
+    int w = img.ni(), h = img.nj();
+    result.set_size (w, h);
+    
+    vbl_array_2d <float> averaging_filt(N, N);
+    averaging_filt.fill( float(1.00/(N*N)) );
+    result = brip_vil_float_ops::convolve(img, averaging_filt);
+    return result;
+    
+}
+
 //----------------------------------------------------------------
 // Compute the gradient of the input, use a 3x3 mask
 //
@@ -699,6 +714,233 @@ brip_vil_float_ops::Lucas_KanadeMotion(vil_image_view<float> & current_frame,
   vcl_cout << "\nCompute Lucas-Kanade in " << t.real() << " msecs.\n";
 }
 
+//---------------------------------------------------------------------
+// Horn-Schunk method for calc. motion vectors:  Solve for the motion vectors 
+// iteratively using a cost function with two terms (RHS of optical flow eqn
+// and the magnitude of spatial derivatives of the velocity field(so that pixel-
+// -to-pixel variations are small). The second term is weighted by alpha_coef term.
+// The iteration goes on until the error reaches below err_thresh
+
+
+int
+brip_vil_float_ops::Horn_SchunckMotion(vil_image_view<float> & current_frame,
+                                       vil_image_view<float> & previous_frame,
+                                       vil_image_view<float>& vx,
+                                       vil_image_view<float>& vy,
+                                       float alpha_coef, double err_thresh)
+{
+    //Declarations
+    int counter = 0;
+    int w = current_frame.ni(), h = current_frame.nj();
+    vil_image_view<float> grad_x, grad_y, diff;
+    vil_image_view<float> grad_xpf, grad_ypf;
+    vil_image_view<float> grad_xcf, grad_ycf;
+    
+    vil_image_view<float> vxx, vxy, vyy;
+    vil_image_view<float> average_of_vx;
+    vil_image_view<float> average_of_vy;
+    vil_image_view<float> emptyimg;
+    vil_image_view<float>  average_of_prev;
+    vil_image_view<float>  average_of_cur;
+
+    //Size Init
+
+
+    grad_xpf.set_size(w,h);
+    grad_ypf.set_size(w,h);
+    grad_xcf.set_size(w,h);
+    grad_ycf.set_size(w,h);
+    grad_x.set_size(w,h);
+    grad_y.set_size(w,h);
+    diff.set_size(w,h);
+    
+    vxx.set_size(w,h);
+    vxy.set_size(w,h);
+    vyy.set_size(w,h);
+    average_of_vx.set_size(w,h);
+    average_of_vy.set_size(w,h);
+    average_of_prev.set_size(w,h);
+    average_of_cur.set_size(w,h);
+    emptyimg.set_size(w,h);
+    
+
+    
+    
+    for (int y = 0; y<h; y++)
+        for (int x = 0; x<w; x++)
+        {
+            vx(x,y)=0.0f;
+            vy(x,y)=0.0f;
+            diff (x,y)=0.0f;
+            grad_xpf (x,y)=0.0f;
+            grad_xcf (x,y)=0.0f;
+            grad_ypf (x,y)=0.0f;
+            grad_ycf (x,y)=0.0f;
+            grad_x (x, y)= 0.0f;
+            grad_y (x, y)= 0.0f;
+            vxx (x, y)=0.0f;
+            vxy (x, y)=0.0f;
+            vyy (x, y)=0.0f;
+            average_of_vx (x, y) = 0.0f;
+            average_of_vy (x, y) = 0.0f;
+            average_of_prev (x , y) = 0.0f;
+            average_of_cur (x , y) = 0.0f;
+            emptyimg (x, y) = 0.0f;
+
+        }
+
+    //compute the gradient vector
+    brip_vil_float_ops::gradient_3x3 (current_frame , grad_x , grad_y);
+    brip_vil_float_ops::gradient_3x3 (previous_frame , grad_xpf , grad_ypf);
+    if ( (vil_image_view_deep_equality (emptyimg, current_frame )) || (vil_image_view_deep_equality(emptyimg, previous_frame)) ||
+         (vil_image_view_deep_equality (emptyimg, grad_x )) || (vil_image_view_deep_equality(emptyimg, grad_y)) )
+    {
+        vcl_cout<<"Image is empty";
+        return -1;
+    }
+    
+    vil_math_add_image_fraction(grad_x, 0.5, grad_xpf, 0.5);
+    vil_math_add_image_fraction(grad_y, 0.5, grad_ypf, 0.5);
+    
+    if (vil_image_view_deep_equality (previous_frame, current_frame ) )
+    {
+        vcl_cout<<"Images are same";
+        return -1;
+    }
+    //Compute the time derivative
+
+     average_of_prev = brip_vil_float_ops::average_NxN (previous_frame, 3);
+     average_of_cur = brip_vil_float_ops::average_NxN (current_frame, 3);
+    
+    
+
+    
+    diff = brip_vil_float_ops::difference(average_of_prev , average_of_cur);
+
+    if ( (vil_image_view_deep_equality (emptyimg, grad_x )) || (vil_image_view_deep_equality(emptyimg, grad_y)) ) 
+    {
+        vcl_cout<<"Gradient Image is empty";
+        return -1;
+    }
+ 
+    if (vil_image_view_deep_equality (emptyimg, average_of_prev ) || vil_image_view_deep_equality(emptyimg, average_of_cur))
+    {
+        vcl_cout<<"Averaged Image is empty";
+        return -1;
+    }
+
+    if (vil_image_view_deep_equality (emptyimg, diff ) )
+    {
+        vcl_cout<<"Difference Image is empty";
+        return -1;
+    }
+
+
+    vul_timer t;
+    int count = 0;
+    
+
+
+
+    double err;
+    double preverr = 0.0f;
+    double differr;
+    do {
+        
+        for (int y = 0; y<h; y++)
+            for (int x = 0; x<w; x++)
+            {
+                vxx (x, y)=0.0f;
+                vxy (x, y)=0.0f;
+                vyy (x, y)=0.0f;
+            }
+        
+        err = 0.00;
+
+        //Update vx and vy
+        
+        average_of_vx = brip_vil_float_ops::average_NxN (vx,  3);
+        average_of_vy = brip_vil_float_ops::average_NxN (vy,  3);
+        
+        
+        for (int y = 1; y<h-1;y++)
+            for (int x = 1; x<w-1;x++)
+            {
+                
+               
+                float tempx = average_of_vx(x,y); 
+                float tempy = average_of_vy(x,y); 
+                    
+                float gx = grad_x(x, y), gy = grad_y(x, y);
+                                              
+                float dt = diff(x, y);
+                   
+                float term = ( (gx * tempx) + (gy * tempy) + dt )/ (alpha_coef + gx*gx + gy*gy); 
+                vx(x,y) = tempx - (gx *  term);
+                vy(x,y) = tempy - (gy *  term);
+            }
+            vcl_cout<<"\n"<<count<<"\n";
+
+        //Calc error term
+
+        
+        brip_vil_float_ops::gradient_3x3(vx, vxx, vxy);
+        brip_vil_float_ops::gradient_3x3(vy, vxy, vyy);
+
+        
+        for (int y = 1; y<h-1;y++)
+            for (int x = 1; x<w-1;x++)
+            {
+                float gx = grad_x(x, y), gy = grad_y(x, y);
+                float dt = diff(x, y);
+                float tempx= vx(x, y);
+                float tempy= vy(x, y);
+                //float tempx = average_of_vx(x,y); 
+                //float tempy = average_of_vy(x,y); 
+
+ 
+                err +=  ((gx * tempx ) + (gy * tempy) + dt )*( (gx * tempx ) + (gy * tempy) + dt ) ;
+              //  vcl_cout<<"err1:"<<err<<"\n";
+                err += (alpha_coef*(vxx(x , y)*vxx(x , y) + 2* vxy(x , y)*vxy(x , y) + vyy(x , y)*vyy(x , y) ) );
+                if (count != 0)
+                differr=vnl_math_abs(err-preverr)/preverr;
+                else 
+                    differr = 1.0f;
+                ++count;
+#if 0
+
+               //Eliminate small motion factors
+                float dif = diff(x,y);
+                float motion_factor = vcl_fabs(det*dif);
+                if (motion_factor<thresh)
+                {
+                    vx(x,y) = 0.0f;
+                    vy(x,y) = 0.0f;
+                    continue;
+                }
+#endif       
+
+                
+
+            }
+
+            vcl_cout << "\nAmount of error " << err <<"\n";
+
+
+
+            brip_vil_float_ops::fill_x_border(vx, 1, 0.0f);
+            brip_vil_float_ops::fill_y_border(vx, 1, 0.0f);
+            brip_vil_float_ops::fill_x_border(vy, 1, 0.0f);
+            brip_vil_float_ops::fill_y_border(vy, 1, 0.0f);
+            vcl_cout << "\nCompute Horn-Schunck in " << t.real() << " msecs.\n";
+            preverr = err;
+    	
+    } while(differr > err_thresh);
+    
+    return counter;
+}
+
+
 void brip_vil_float_ops::fill_x_border(vil_image_view<float> & image,
                                        int w, float value)
 {
@@ -763,6 +1005,8 @@ brip_vil_float_ops::convert_to_byte(vil_image_view<float> const& image)
     }
   return output;
 }
+
+
 
 //------------------------------------------------------------
 // Convert the range between min_val and max_val to 255
@@ -2035,7 +2279,9 @@ cross_correlate(vil_image_view<float> const& image1,
 #endif
   if (!output_cc_row(r0, cc, out))
     return false;
+#ifdef DEBUG
   vcl_cout << "RunningSumCrossCorrelation for " << w*h/1000.0f << " k pixels in "
            << t.real() << " msecs\n"<< vcl_flush;
+#endif
   return true;
 }
