@@ -34,12 +34,10 @@ TESTS += test_algo_region_finder.cxx
 TESTS += test_algo_cartesian_differential_invariants.cxx
 TESTS += test_algo_corners.cxx
 
+#MINI_PROG_SOURCES += vil_mil_gauss_general_timings.cxx
+
 MINI_PROG_SOURCES += test_include.cxx
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
 #########################################
-
-ifeq ($(OS),OSF1V4) # with optimisation, gcc 3.x runs out of memory
- FLAGS_test_algo_convolve_1d.cxx := -O0
-endif
