@@ -65,6 +65,7 @@ void vil2_copy_to_window(const vil2_image_view<T> &src, vil2_image_view<T> &dest
 
 // For everything else
 #define VIL2_COPY_INSTANTIATE(T) \
+template void vil2_copy_deep(const vil2_image_view<T > &src, vil2_image_view<T > &dest); \
 template void vil2_copy_to_window(const vil2_image_view<T > &src, vil2_image_view<T > &dest, \
                                   unsigned i0, unsigned j0); \
 template void vil2_copy_reformat(const vil2_image_view<T > &src, vil2_image_view<T > &dest); \
