@@ -1,6 +1,6 @@
 # ./brl/bseg/CMakeLists.txt
 # main package for segmentation-related code and applications
-
+INCLUDE(${BRL_INCLUDE_DIR}/bmods/find_xerces.cmake)
 
 # segmentation feature detection library
 SUBDIRS(sdet)

@@ -25,7 +25,7 @@
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_window.h>
 
-#include <segv/segv_vtol2D_tableau_sptr.h>
+#include <bgui/bgui_vtol2D_tableau_sptr.h>
 
 //: A manager for displaying segmentation results.
 class segv_segmentation_manager : public vgui_grid_tableau
@@ -56,7 +56,7 @@ class segv_segmentation_manager : public vgui_grid_tableau
   vil_image img_;
   vgui_window* win_;
   //  vgui_easy2D_tableau_sptr e2D_;
-  segv_vtol2D_tableau_sptr t2D_;
+  bgui_vtol2D_tableau_sptr t2D_;
   static segv_segmentation_manager *instance_;
 };
 

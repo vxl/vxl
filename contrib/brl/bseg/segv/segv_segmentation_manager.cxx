@@ -1,5 +1,4 @@
 // This is brl/bseg/segv/segv_segmentation_manager.cxx
-#include "segv_segmentation_manager.h"
 //:
 // \file
 // \author J.L. Mundy
@@ -30,11 +29,11 @@
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_image_tableau.h>
+#include <bgui/bgui_vtol2D_tableau.h>
 #include <gevd/gevd_float_operators.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
-#include <segv/segv_vtol2D_tableau.h>
-
+#include <segv/segv_segmentation_manager.h>
 //static live_video_manager instance
 segv_segmentation_manager *segv_segmentation_manager::instance_ = 0;
 
@@ -85,7 +84,7 @@ void segv_segmentation_manager::load_image()
   img_ = vil_load(image_filename.c_str());
   vgui_image_tableau_sptr itab = vgui_image_tableau_new(img_);
   //  e2D_ = vgui_easy2D_tableau_new(itab);
-  t2D_ = segv_vtol2D_tableau_new(itab);
+  t2D_ = bgui_vtol2D_tableau_new(itab);
   //vgui_shell_tableau_sptr stab = vgui_shell_tableau_new(e2D_);
   vgui_shell_tableau_sptr stab = vgui_shell_tableau_new(t2D_);
   vgui_viewer2D_tableau_sptr v2d = vgui_viewer2D_tableau_new(stab);
