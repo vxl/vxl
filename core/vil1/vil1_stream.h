@@ -4,7 +4,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-typedef unsigned long vil_streampos;
+typedef long int vil_streampos; // should be identical to vcl_istream::streampos
 
 //:
 // \file
