@@ -98,13 +98,26 @@ LIB32=link.exe -lib
 
 # Begin Group "Source Files"
 # PROP Default_Filter "c;cxx"
+# Begin Source File
 SOURCE=.\bnl_legendre_polynomial.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bnl_adaptsimpson_integral.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bnl_simpson_integral.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\bnl_legendre_polynomial.h
+# End Source File
+# Begin Source File
+SOURCE=.\bnl_adaptsimpson_integral.h
+# End Source File
+# Begin Source File
+SOURCE=.\bnl_simpson_integral.h
 # End Source File
 # End Group
 # End Target
