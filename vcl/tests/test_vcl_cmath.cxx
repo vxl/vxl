@@ -17,19 +17,20 @@ int main()
     long   xl = 314159265L;
     float  xf = 13.14159265358979323846;
     double xd = 23.14159265358979323846;
-    // + long double
+    long double ld = xd;
     
-#define macro(cond, type) \
+#define macro(var, type) \
 do { \
-  if (cond) \
+  if (vcl_abs(var) == var && vcl_abs(- var) == var) \
     vcl_cout << "vcl_abs(" #type ") PASSED" << vcl_endl; \
   else \
     vcl_cerr << "vcl_abs(" #type ") *** FAILED *** " << vcl_endl; \
 } while (false)
-    macro(vcl_abs(- xi) == xi, int);
-    macro(vcl_abs(- xl) == xl, long);
-    macro(vcl_abs(- xf) == xf, float);
-    macro(vcl_abs(- xd) == xd, double);
+    macro(xi, int);
+    macro(xl, long);
+    macro(xf, float);
+    macro(xd, double);
+    macro(ld, long double);
 #undef macro
   }
   
@@ -44,18 +45,23 @@ do { \
     double cos = vcl_cos(theta);
     double sin = vcl_sin(theta);
     double tan = vcl_tan(theta);
-    theta = cos + sin + tan; // quell 'unused variable' warning.
+    if (theta==0.0) theta = cos + sin + tan; // quell 'unused variable' warning.
   }
   
-#define macro(T) \
+#define macro(T, eps) \
   do { \
     T x = 2; \
     T y = vcl_sqrt(x); \
-    vcl_cout << x - y*y << vcl_endl; \
+    if (vcl_abs(x - y*y) < eps) \
+      vcl_cout << "vcl_sqrt(" #T ") PASSED" << vcl_endl; \
+    else \
+      vcl_cerr << "vcl_sqrt(" #T ") *** FAILED *** " << vcl_endl; \
   } while (false)
-  macro(float);       // e-08
-  macro(double);      // e-16
-  macro(long double); // e-19
+  macro(float, 1e-6);
+  macro(double, 1e-14);
+#if 0 // no need for this, since vcl_cmath.h maps sqrt(long double) to sqrt(double)
+  macro(long double, 1e-16);
+#endif
 #undef macro
   
   return 0;
