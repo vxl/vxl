@@ -1,27 +1,24 @@
 // This is vxl/vnl/vnl_matlab_print_scalar.cxx
 
-#include "vnl_matlab_print.h"
+#include "vnl_matlab_print_scalar.h"
 
 #include <vcl_cstdio.h>  // sprintf()
 #include <vcl_cstdlib.h> // abort()
 #include <vcl_cstring.h> // strlen()
-#include <vcl_cctype.h>
 #include <vcl_cassert.h>
 #include <vcl_complex.h>
 
 
 // moved here because 2.7 choked
 
-VCL_DEFINE_SPECIALIZATION
-void vnl_matlab_print_scalar(int const &v,
-                 char *buf,
-                 vnl_matlab_print_format VCL_DEFAULT_VALUE(vnl_matlab_print_format_default))
+void vnl_matlab_print_scalar(int v,
+                             char *buf,
+                             vnl_matlab_print_format)
 {
   sprintf(buf, "%4d ", v);
 }
 
-VCL_DEFINE_SPECIALIZATION
-void vnl_matlab_print_scalar(float const &v,
+void vnl_matlab_print_scalar(float v,
                              char *buf,
                              vnl_matlab_print_format format)
 {
@@ -46,12 +43,11 @@ void vnl_matlab_print_scalar(float const &v,
   case vnl_matlab_print_format_short_e:
     sprintf(buf, "%8.4e ", v);
     break;
-  default:/*vnl_matlab_print_format_default:*/ abort(); break;
+  default:/*vnl_matlab_print_format_default:*/ vcl_abort(); break;
   }
 }
 
-VCL_DEFINE_SPECIALIZATION
-void vnl_matlab_print_scalar(double const &v,
+void vnl_matlab_print_scalar(double v,
                              char *buf,
                              vnl_matlab_print_format format)
 {
@@ -76,20 +72,18 @@ void vnl_matlab_print_scalar(double const &v,
   case vnl_matlab_print_format_short_e:
     sprintf(buf, "%10.4e ", v);
     break;
-  default:/*vnl_matlab_print_format_default:*/ abort(); break;
+  default:/*vnl_matlab_print_format_default:*/ vcl_abort(); break;
   }
 }
 
-VCL_DEFINE_SPECIALIZATION
-void vnl_matlab_print_scalar(long double const &v,
+void vnl_matlab_print_scalar(long double v,
                              char *buf,
                              vnl_matlab_print_format format)
 {
   vnl_matlab_print_scalar(double(v), buf, format); // FIXME
 }
 
-VCL_DEFINE_SPECIALIZATION
-void vnl_matlab_print_scalar(vcl_complex<double> const &v,
+void vnl_matlab_print_scalar(vcl_complex<double> v,
                              char *buf,
                              vnl_matlab_print_format format)
 {
@@ -110,7 +104,7 @@ void vnl_matlab_print_scalar(vcl_complex<double> const &v,
     width = 8;
     precision = 4;
     break;
-  default:/*vnl_matlab_print_format_default:*/ abort(); break;
+  default:/*vnl_matlab_print_format_default:*/ vcl_abort(); break;
   }
 
   switch (format) {
@@ -122,7 +116,7 @@ void vnl_matlab_print_scalar(vcl_complex<double> const &v,
   case vnl_matlab_print_format_short_e:
     conv = 'e';
     break;
-  default:/*vnl_matlab_print_format_default:*/ abort(); break;
+  default:/*vnl_matlab_print_format_default:*/ vcl_abort(); break;
   }
 
   double r = v.real();
@@ -156,8 +150,7 @@ void vnl_matlab_print_scalar(vcl_complex<double> const &v,
   }
 }
 
-VCL_DEFINE_SPECIALIZATION
-void vnl_matlab_print_scalar(vcl_complex<float> const &v,
+void vnl_matlab_print_scalar(vcl_complex<float> v,
                              char *buf,
                              vnl_matlab_print_format format)
 {
@@ -178,7 +171,7 @@ void vnl_matlab_print_scalar(vcl_complex<float> const &v,
     width = 8;
     precision = 4;
     break;
-  default:/*vnl_matlab_print_format_default:*/ abort(); break;
+  default:/*vnl_matlab_print_format_default:*/ vcl_abort(); break;
   }
 
   switch (format) {
@@ -190,7 +183,7 @@ void vnl_matlab_print_scalar(vcl_complex<float> const &v,
   case vnl_matlab_print_format_short_e:
     conv = 'e';
     break;
-  default:/*vnl_matlab_print_format_default:*/ abort(); break;
+  default:/*vnl_matlab_print_format_default:*/ vcl_abort(); break;
   }
 
   float r = v.real();
@@ -224,8 +217,7 @@ void vnl_matlab_print_scalar(vcl_complex<float> const &v,
   }
 }
 
-VCL_DEFINE_SPECIALIZATION
-void vnl_matlab_print_scalar(vcl_complex<long double> const &v,
+void vnl_matlab_print_scalar(vcl_complex<long double> v,
                              char *buf,
                              vnl_matlab_print_format format)
 {
