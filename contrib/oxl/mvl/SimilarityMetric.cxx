@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //:
-//  \file
+// \file
 
 #include "SimilarityMetric.h"
 
@@ -11,7 +11,10 @@
 #include <vnl/vnl_math.h>
 
 #include <vnl/vnl_double_2.h>
+#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
+#include <vgl/vgl_homg_line_2d.h>
+#include <vgl/vgl_line_segment_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 
 #include <mvl/HomgPoint2D.h>
@@ -114,7 +117,18 @@ vcl_ostream& SimilarityMetric::print(vcl_ostream& s) const
   return s<<"[SimilarityMetric ("<<centre_x_<<','<<centre_y_<<"), "<<inv_scale_ << ']';
 }
 
-// IMPLEMENTATION OF ImageMetric
+// IMPLEMENTATION OF SimilarityMetric
+
+//: Convert 2D image point $(x,y)$ to homogeneous coordinates.
+// The precise transformation is $(x,y) \rightarrow (x - cx, y - cy, f)$
+vgl_homg_point_2d<double> SimilarityMetric::image_to_homg(vgl_point_2d<double> const& p) const
+{
+  double nx = p.x();
+  double ny = p.y();
+
+  // homogenize point
+  return vgl_homg_point_2d<double>(nx - centre_x_, ny - centre_y_, inv_scale_);
+}
 
 //: Convert 2D point $(x,y)$ to homogeneous coordinates.
 // The precise transformation is
@@ -126,6 +140,12 @@ HomgPoint2D SimilarityMetric::image_to_homg(double x, double y) const
 
   // homogenize point
   return HomgPoint2D(nx - centre_x_, ny - centre_y_, inv_scale_);
+}
+
+//: Convert conditioned point p to image coordinates
+vgl_point_2d<double> SimilarityMetric::homg_to_image(vgl_homg_point_2d<double> const& p) const
+{
+  return vgl_point_2d<double>(p.x()/p.w()*inv_scale_+centre_x_, p.y()/p.w()*inv_scale_+centre_y_);
 }
 
 //: Decondition homogeneous point.
@@ -171,6 +191,18 @@ HomgPoint2D SimilarityMetric::imagehomg_to_homg(const HomgPoint2D& x) const
 }
 
 //: Compute distance (in image coordinates) between points supplied in conditioned coordinates.
+double SimilarityMetric::distance_squared(vgl_homg_point_2d<double> const& p1,
+                                          vgl_homg_point_2d<double> const& p2) const
+{
+  double x1 = p1.x() / p1.w();
+  double y1 = p1.y() / p1.w();
+
+  double x2 = p2.x() / p2.w();
+  double y2 = p2.y() / p2.w();
+
+  return vnl_math_sqr (inv_scale_) * (vnl_math_sqr (x1 - x2) + vnl_math_sqr (y1 - y2));
+}
+//: Compute distance (in image coordinates) between points supplied in conditioned coordinates.
 double SimilarityMetric::distance_squared(HomgPoint2D const& p1, HomgPoint2D const& p2) const
 {
   // ho_triveccam_noaspect_distance_squared
@@ -185,25 +217,51 @@ double SimilarityMetric::distance_squared(HomgPoint2D const& p1, HomgPoint2D con
 
 //: Get distance between a line segment and an infinite line.
 //  The metric used is the maximum of the two endpoint perp distances.
+double SimilarityMetric::distance_squared(vgl_line_segment_2d<double> const& segment,
+                                          vgl_homg_line_2d<double> const& line) const
+{
+  return vnl_math_max(this->perp_dist_squared(vgl_homg_point_2d<double>(segment.point1()), line),
+                      this->perp_dist_squared(vgl_homg_point_2d<double>(segment.point2()), line));
+}
+//: Get distance between a line segment and an infinite line.
+//  The metric used is the maximum of the two endpoint perp distances.
 double SimilarityMetric::distance_squared(const HomgLineSeg2D& segment, const HomgLine2D& line) const
 {
   return vnl_math_max(this->perp_dist_squared(segment.get_point1(), line),
-                       this->perp_dist_squared(segment.get_point2(), line));
+                      this->perp_dist_squared(segment.get_point2(), line));
 }
 
 //: Compute perpendicular distance (in image coordinates) from point to line (supplied in conditioned coordinates).
+double SimilarityMetric::perp_dist_squared(vgl_homg_point_2d<double> const& p,
+                                           vgl_homg_line_2d<double> const& l) const
+{
+  if (p.ideal()) {
+    vcl_cerr << "SimilarityMetric::perp_dist_squared -- point at infinity\n";
+    return Homg::infinity;
+  }
+
+  if (l.ideal()) {
+    vcl_cerr << "SimilarityMetric::perp_dist_squared -- line at infinity\n";
+    return Homg::infinity;
+  }
+
+  double numerator = vnl_math_sqr(p.x()*l.a()+p.y()*l.b()+p.w()*l.c());
+  double denominator = (vnl_math_sqr(l.a()) + vnl_math_sqr(l.b())) * vnl_math_sqr(p.w() * scale_);
+
+  return numerator / denominator;
+}
 double SimilarityMetric::perp_dist_squared(HomgPoint2D const & p, HomgLine2D const & l) const
 {
   // ho_triveccam_aspect_perpdistance_squared
 
   // pcp separated
   if (p.ideal()) {
-    vcl_cerr << "ImageMetric::perp_dist_squared -- point at infinity\n";
+    vcl_cerr << "SimilarityMetric::perp_dist_squared -- point at infinity\n";
     return Homg::infinity;
   }
 
   if (l.ideal()) {
-    vcl_cerr << "ImageMetric::perp_dist_squared -- line at infinity\n";
+    vcl_cerr << "SimilarityMetric::perp_dist_squared -- line at infinity\n";
     return Homg::infinity;
   }
 

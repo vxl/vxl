@@ -15,6 +15,11 @@
 // \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 04 Feb 97
 //
+// \verbatim
+//  Modifications
+//   22 Jun 2003 - Peter Vanroose - added vgl_homg_point_2d interface
+// \endverbatim
+//
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_double_3x3.h>
@@ -51,15 +56,24 @@ class SimilarityMetric : public ImageMetric
   void scale_matrices(double s);
 
   // Operations----------------------------------------------------------------
+  virtual vgl_homg_point_2d<double> image_to_homg(vgl_point_2d<double> const&) const;
   virtual HomgPoint2D image_to_homg(const vnl_double_2&) const;
   virtual HomgPoint2D image_to_homg(double x, double y) const;
+
+  virtual vgl_point_2d<double> homg_to_image(vgl_homg_point_2d<double> const&) const;
   virtual vnl_double_2 homg_to_image(const HomgPoint2D&) const;
+
   virtual HomgPoint2D imagehomg_to_homg(const HomgPoint2D&) const;
   virtual HomgPoint2D homg_to_imagehomg(const HomgPoint2D&) const;
   virtual vgl_homg_point_2d<double> imagehomg_to_homg(vgl_homg_point_2d<double> const&) const;
   virtual vgl_homg_point_2d<double> homg_to_imagehomg(vgl_homg_point_2d<double> const&) const;
 
   virtual double perp_dist_squared(HomgPoint2D const& p, HomgLine2D const& l) const;
+  virtual double perp_dist_squared(vgl_homg_point_2d<double> const&,
+                                   vgl_homg_line_2d<double> const&) const;
+  virtual double distance_squared(const vgl_homg_point_2d<double>&, const vgl_homg_point_2d<double>&) const;
+  virtual double distance_squared(vgl_line_segment_2d<double> const& segment,
+                                  vgl_homg_line_2d<double> const& line) const;
   virtual double distance_squared(HomgPoint2D const&, HomgPoint2D const&) const;
   virtual double distance_squared(HomgLineSeg2D const& segment, HomgLine2D const& line) const;
 

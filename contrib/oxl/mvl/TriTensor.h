@@ -1,6 +1,6 @@
 // This is oxl/mvl/TriTensor.h
-#ifndef _TriTensor_h
-#define _TriTensor_h
+#ifndef TriTensor_h_
+#define TriTensor_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -19,6 +19,7 @@
 //  Modifications:
 //   AWF - Added composition, transformation, homography generation.
 //   Peter Vanroose - 11 Mar 97 - added operator==
+//   Peter Vanroose - 22 Jun 03 - added vgl interface
 // \endverbatim
 //
 //------------------------------------------------------------------------------
@@ -31,6 +32,9 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_double_3x3.h>
+
+#include <vgl/vgl_fwd.h>
+#include <vgl/algo/vgl_algo_fwd.h>
 
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgLineSeg2D.h>
@@ -77,7 +81,7 @@ class TriTensor
   double& operator() (unsigned int i1, unsigned int i2, unsigned int i3) { return T(i1,i2,i3); }
   double operator() (unsigned int i1, unsigned int i2, unsigned int i3) const { return T(i1,i2,i3); }
 
-  void set (unsigned int i1, unsigned int i2, unsigned int i3, double value);
+  void set(unsigned int i1, unsigned int i2, unsigned int i3, double value);
 
   void set(const double* vec);
   void set(const vnl_matrix<double>& tvector); // 27x1 matrix
@@ -89,26 +93,69 @@ class TriTensor
 
   // Data Control------------------------------------------------------------
 
-  HomgPoint2D image1_transfer (const HomgPoint2D& point2, const HomgPoint2D& point3, HomgPoint2D corrected[] = 0) const;
-  HomgPoint2D image2_transfer (const HomgPoint2D& point1, const HomgPoint2D& point3, HomgPoint2D corrected[] = 0) const;
-  HomgPoint2D image3_transfer (const HomgPoint2D& point1, const HomgPoint2D& point2, HomgPoint2D corrected[] = 0) const;
+  vgl_homg_point_2d<double> image1_transfer(vgl_homg_point_2d<double> const& point2,
+                                            vgl_homg_point_2d<double> const& point3,
+                                            vgl_homg_point_2d<double> corrected[] = 0) const;
+  vgl_homg_point_2d<double> image2_transfer(vgl_homg_point_2d<double> const& point1,
+                                            vgl_homg_point_2d<double> const& point3,
+                                            vgl_homg_point_2d<double> corrected[] = 0) const;
+  vgl_homg_point_2d<double> image3_transfer(vgl_homg_point_2d<double> const& point1,
+                                            vgl_homg_point_2d<double> const& point2,
+                                            vgl_homg_point_2d<double> corrected[] = 0) const;
 
-  HomgPoint2D image1_transfer_qd (const HomgPoint2D& point2, const HomgPoint2D& point3) const;
-  HomgPoint2D image2_transfer_qd (const HomgPoint2D& point1, const HomgPoint2D& point3) const;
-  HomgPoint2D image3_transfer_qd (const HomgPoint2D& point1, const HomgPoint2D& point2) const;
+  HomgPoint2D image1_transfer(HomgPoint2D const& point2,
+                              HomgPoint2D const& point3,
+                              HomgPoint2D corrected[] = 0) const;
+  HomgPoint2D image2_transfer(HomgPoint2D const& point1,
+                              HomgPoint2D const& point3,
+                              HomgPoint2D corrected[] = 0) const;
+  HomgPoint2D image3_transfer(HomgPoint2D const& point1,
+                              HomgPoint2D const& point2,
+                              HomgPoint2D corrected[] = 0) const;
 
-  HomgPoint2D image1_transfer (const HomgPoint2D& point1, const HomgLine2D& line2) const;
-  HomgPoint2D image2_transfer (const HomgPoint2D& point1, const HomgLine2D& line3) const;
-  HomgPoint2D image3_transfer (const HomgPoint2D& point2, const HomgLine2D& line3) const;
+  vgl_homg_point_2d<double> image1_transfer_qd(vgl_homg_point_2d<double> const& point2,
+                                               vgl_homg_point_2d<double> const& point3) const;
+  vgl_homg_point_2d<double> image2_transfer_qd(vgl_homg_point_2d<double> const& point1,
+                                               vgl_homg_point_2d<double> const& point3) const;
+  vgl_homg_point_2d<double> image3_transfer_qd(vgl_homg_point_2d<double> const& point1,
+                                               vgl_homg_point_2d<double> const& point2) const;
 
-  HomgLine2D image1_transfer (const HomgLine2D& line2, const HomgLine2D& line3) const;
-  HomgLine2D image2_transfer (const HomgLine2D& line2, const HomgLine2D& line3) const;
-  HomgLine2D image3_transfer (const HomgLine2D& line2, const HomgLine2D& line3) const;
+  HomgPoint2D image1_transfer_qd(const HomgPoint2D& point2, const HomgPoint2D& point3) const;
+  HomgPoint2D image2_transfer_qd(const HomgPoint2D& point1, const HomgPoint2D& point3) const;
+  HomgPoint2D image3_transfer_qd(const HomgPoint2D& point1, const HomgPoint2D& point2) const;
 
-  //HMatrix2D get_hmatrix_23(const HomgLine2D& line1);
+  vgl_homg_point_2d<double> image1_transfer(vgl_homg_point_2d<double> const& point1,
+                                            vgl_homg_line_2d <double> const& line2) const;
+  vgl_homg_point_2d<double> image2_transfer(vgl_homg_point_2d<double> const& point1,
+                                            vgl_homg_line_2d <double> const& line3) const;
+  vgl_homg_point_2d<double> image3_transfer(vgl_homg_point_2d<double> const& point2,
+                                            vgl_homg_line_2d <double> const& line3) const;
+
+  HomgPoint2D image1_transfer(HomgPoint2D const& point1,
+                              HomgLine2D  const& line2) const;
+  HomgPoint2D image2_transfer(HomgPoint2D const& point1,
+                              HomgLine2D  const& line3) const;
+  HomgPoint2D image3_transfer(HomgPoint2D const& point2,
+                              HomgLine2D  const& line3) const;
+
+  vgl_homg_line_2d<double> image1_transfer(vgl_homg_line_2d<double> const& line2,
+                                           vgl_homg_line_2d<double> const& line3) const;
+  vgl_homg_line_2d<double> image2_transfer(vgl_homg_line_2d<double> const& line2,
+                                           vgl_homg_line_2d<double> const& line3) const;
+  vgl_homg_line_2d<double> image3_transfer(vgl_homg_line_2d<double> const& line2,
+                                           vgl_homg_line_2d<double> const& line3) const;
+
+  HomgLine2D image1_transfer(const HomgLine2D& line2, const HomgLine2D& line3) const;
+  HomgLine2D image2_transfer(const HomgLine2D& line2, const HomgLine2D& line3) const;
+  HomgLine2D image3_transfer(const HomgLine2D& line2, const HomgLine2D& line3) const;
+
+  vgl_h_matrix_2d<double> get_hmatrix_31(vgl_homg_line_2d<double> const& line2) const;
+  vgl_h_matrix_2d<double> get_hmatrix_21(vgl_homg_line_2d<double> const& line3) const;
+
   HMatrix2D get_hmatrix_31(const HomgLine2D& line2) const;
   HMatrix2D get_hmatrix_21(const HomgLine2D& line3) const;
 
+  bool get_epipoles(vgl_homg_point_2d<double>& e2, vgl_homg_point_2d<double>& e3) const;
   bool get_epipoles(HomgPoint2D* e2, HomgPoint2D* e3) const;
   bool compute_epipoles() const; // mutable const
 
@@ -117,10 +164,6 @@ class TriTensor
 
   FMatrix get_fmatrix_13() const;
   FMatrix get_fmatrix_12() const;
-
-  // Use these if you've already got the epipoles
-  FMatrix get_fmatrix_13(const HomgPoint2D& e2, const HomgPoint2D& e3) const;
-  FMatrix get_fmatrix_12(const HomgPoint2D& e2, const HomgPoint2D& e3) const;
 
   FMatrix compute_fmatrix_23() const;
 
@@ -143,9 +186,25 @@ class TriTensor
   void clear_caches();
 
   // Utility Methods---------------------------------------------------------
-  void get_constraint_lines_image3(const HomgPoint2D& p1, const HomgPoint2D& p2, vcl_vector<HomgLine2D>* lines) const;
-  void get_constraint_lines_image2(const HomgPoint2D& p1, const HomgPoint2D& p3, vcl_vector<HomgLine2D>* lines) const;
-  void get_constraint_lines_image1(const HomgPoint2D& p2, const HomgPoint2D& p3, vcl_vector<HomgLine2D>* lines) const;
+  void get_constraint_lines_image3(vgl_homg_point_2d<double> const& p1,
+                                   vgl_homg_point_2d<double> const& p2,
+                                   vcl_vector<vgl_homg_line_2d<double> >& lines) const;
+  void get_constraint_lines_image2(vgl_homg_point_2d<double> const& p1,
+                                   vgl_homg_point_2d<double> const& p3,
+                                   vcl_vector<vgl_homg_line_2d<double> >& lines) const;
+  void get_constraint_lines_image1(vgl_homg_point_2d<double> const& p2,
+                                   vgl_homg_point_2d<double> const& p3,
+                                   vcl_vector<vgl_homg_line_2d<double> >& lines) const;
+
+  void get_constraint_lines_image3(HomgPoint2D const& p1,
+                                   HomgPoint2D const& p2,
+                                   vcl_vector<HomgLine2D>* lines) const;
+  void get_constraint_lines_image2(HomgPoint2D const& p1,
+                                   HomgPoint2D const& p3,
+                                   vcl_vector<HomgLine2D>* lines) const;
+  void get_constraint_lines_image1(HomgPoint2D const& p2,
+                                   HomgPoint2D const& p3,
+                                   vcl_vector<HomgLine2D>* lines) const;
 
   //: Contract Tensor axis tensor_axis with first component of Matrix M.
   // That is:
@@ -196,4 +255,4 @@ class TriTensor
 vcl_ostream& operator << (vcl_ostream&, const TriTensor& T);
 vcl_istream& operator >> (vcl_istream&, TriTensor& T);
 
-#endif // _TriTensor_h
+#endif // TriTensor_h_

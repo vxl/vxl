@@ -8,17 +8,15 @@
 
 #include "TriTensorCompute.h"
 #include <mvl/TriTensor.h>
-//#include <mvl/HomgMatchLineSeg2D2D2D.h>
-//#include <mvl/HomgMatchPoint2D2D2D.h>
 
 // Constructor.
 BaseTriTensorCompute::BaseTriTensorCompute ()
 {
   // zero length list.
-  _matchlineseg_list_ptr = new vcl_list<HomgMatchLineSeg2D2D2D*> ();
+  matchlineseg_list_ptr_ = new vcl_list<HomgMatchLineSeg2D2D2D*> ();
 
   // zero length list.
-  _matchpoint_list_ptr = new vcl_list<HomgMatchPoint2D2D2D*> ();
+  matchpoint_list_ptr_ = new vcl_list<HomgMatchPoint2D2D2D*> ();
 }
 
 // Destructor.
@@ -33,8 +31,8 @@ BaseTriTensorCompute::~BaseTriTensorCompute()
 void
 BaseTriTensorCompute::add_matches (vcl_list<HomgMatchLineSeg2D2D2D*> *match_list)
 {
-  delete _matchlineseg_list_ptr;
-  _matchlineseg_list_ptr = match_list;
+  delete matchlineseg_list_ptr_;
+  matchlineseg_list_ptr_ = match_list;
 }
 
 //-----------------------------------------------------------------------------
@@ -44,8 +42,8 @@ BaseTriTensorCompute::add_matches (vcl_list<HomgMatchLineSeg2D2D2D*> *match_list
 void
 BaseTriTensorCompute::add_matches (vcl_list<HomgMatchPoint2D2D2D*> *match_list)
 {
-  delete _matchpoint_list_ptr;
-  _matchpoint_list_ptr = match_list;
+  delete matchpoint_list_ptr_;
+  matchpoint_list_ptr_ = match_list;
 }
 
 
@@ -55,7 +53,7 @@ BaseTriTensorCompute::add_matches (vcl_list<HomgMatchPoint2D2D2D*> *match_list)
 void 
 BaseTriTensorCompute::clear_matches_line (void)
 {
-  delete _matchlineseg_list_ptr;
+  delete matchlineseg_list_ptr_;
 }
 
 //-----------------------------------------------------------------------------
@@ -64,5 +62,5 @@ BaseTriTensorCompute::clear_matches_line (void)
 void 
 BaseTriTensorCompute::clear_matches_point (void)
 {
-  delete _matchpoint_list_ptr;
+  delete matchpoint_list_ptr_;
 }

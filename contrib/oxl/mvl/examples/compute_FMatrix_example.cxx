@@ -5,7 +5,6 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <mvl/FMatrix.h>
-#include <mvl/HomgOperator2D.h>
 #include <mvl/FMatrixComputeLinear.h>
 #include <mvl/FMatrixCompute7Point.h>
 #include <mvl/FMatrixComputeMLESAC.h>
@@ -14,14 +13,16 @@
 
 int main(int argc, char**argv)
 {
-  vcl_vector<HomgPoint2D> points1;
-  vcl_vector<HomgPoint2D> points2;
+  vcl_vector<vgl_homg_point_2d<double> > points1;
+  vcl_vector<vgl_homg_point_2d<double> > points2;
   bool ishomg = (argc > 1 && argv[1][0] == 'h');
 
   // Read points
   while (vcl_cin.good()) {
-    points1.push_back(HomgPoint2D::read(vcl_cin,ishomg)); // Read 2 reals
-    points2.push_back(HomgPoint2D::read(vcl_cin,ishomg)); // Read 2 reals
+    double x,y,w=1.0; vcl_cin >> x >> y; if (ishomg) vcl_cin >> w; // Read 2 or 3 reals
+    points1.push_back(vgl_homg_point_2d<double>(x,y,w));
+    w=1.0; vcl_cin >> x >> y; if (ishomg) vcl_cin >> w; // Read 2 or 3 reals
+    points2.push_back(vgl_homg_point_2d<double>(x,y,w));
     vcl_cin >> vcl_ws; // Eat whitespace
   }
 
@@ -35,7 +36,7 @@ int main(int argc, char**argv)
 
     double d = 0;
     for (unsigned int i = 0; i < points1.size(); ++i)
-      d += f.image1_epipolar_distance_squared(&points1[i], &points2[i]);
+      d += f.image1_epipolar_distance_squared(points1[i], points2[i]);
     vcl_cout << "Error = " << d/points1.size() << vcl_endl;
   }
 
@@ -51,7 +52,7 @@ int main(int argc, char**argv)
 
     double d = 0;
     for (unsigned int i = 0; i < points1.size(); ++i)
-      d += f.image1_epipolar_distance_squared(&points1[i], &points2[i]);
+      d += f.image1_epipolar_distance_squared(points1[i], points2[i]);
     vcl_cout << "Error = " << d/points1.size() << vcl_endl;
   }
 
@@ -65,7 +66,7 @@ int main(int argc, char**argv)
 
     double d = 0;
     for (unsigned int i = 0; i < points1.size(); ++i)
-      d += f.image1_epipolar_distance_squared(&points1[i], &points2[i]);
+      d += f.image1_epipolar_distance_squared(points1[i], points2[i]);
     vcl_cout << "Error = " << d/points1.size() << vcl_endl;
   }
 
@@ -79,7 +80,7 @@ int main(int argc, char**argv)
 
     double d = 0;
     for (unsigned int i = 0; i < points1.size(); ++i)
-      d += f.image1_epipolar_distance_squared(&points1[i], &points2[i]);
+      d += f.image1_epipolar_distance_squared(points1[i], points2[i]);
     vcl_cout << "Error = " << d/points1.size() << vcl_endl;
   }
 
@@ -93,7 +94,7 @@ int main(int argc, char**argv)
 
     double d = 0;
     for (unsigned int i = 0; i < points1.size(); ++i)
-      d += f.image1_epipolar_distance_squared(&points1[i], &points2[i]);
+      d += f.image1_epipolar_distance_squared(points1[i], points2[i]);
     vcl_cout << "Error = " << d/points1.size() << vcl_endl;
   }
 
