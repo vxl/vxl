@@ -15,6 +15,7 @@ ADD_EXECUTABLE( vbl_test_all
   vbl_test_sparse_array_2d.cxx
   vbl_test_sparse_array_3d.cxx
   vbl_test_smart_ptr.cxx
+  vbl_test_ref_count.cxx
 )
 
 ADD_TEST( vbl_test_bounding_box    vbl_test_all vbl_test_bounding_box )
@@ -26,6 +27,7 @@ ADD_TEST( vbl_test_bit_array       vbl_test_all vbl_test_bit_array )
 ADD_TEST( vbl_test_sparse_array_2d vbl_test_all vbl_test_sparse_array_2d )
 ADD_TEST( vbl_test_sparse_array_3d vbl_test_all vbl_test_sparse_array_3d )
 ADD_TEST( vbl_test_smart_ptr       vbl_test_all vbl_test_smart_ptr )
+ADD_TEST( vbl_test_ref_count       vbl_test_all vbl_test_ref_count )
 
 ADD_EXECUTABLE( vbl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vbl_test_include vbl )
