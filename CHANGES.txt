@@ -1,3 +1,11 @@
+This file summarizes the conceptual changes being made to VXL. It
+should document API changes and deprecations, and other "large"
+changes that have an effect on users. Bug fixes and minor changes
+aren't documented here, unless the bug-fix has a major observable
+effect. If you change something in VXL, please document it here.
+
+---------------------------------------------------------------------------
+
       - Remove vcl_complex hackery on MSVC 6. vcl_complex is now the
         standard <complex>, since it seems to work with VC6sp5.
 
