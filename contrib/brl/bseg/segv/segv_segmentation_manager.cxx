@@ -417,7 +417,7 @@ void segv_segmentation_manager::draw_regions(vcl_vector<vtol_intensity_face_sptr
     if (verts)
     {
       vcl_vector<vtol_vertex_sptr> vts;
-	  f->vertices(vts);
+      f->vertices(vts);
       for (vcl_vector<vtol_vertex_sptr>::iterator vit = vts.begin();
            vit != vts.end(); vit++)
       {
@@ -1284,7 +1284,7 @@ void segv_segmentation_manager::compute_parallel_coverage()
   brip_para_cvrg pc(pcp);
   pc.do_coverage(image);
   vil1_image cov_image;
-  if(combined)
+  if (combined)
     cov_image = pc.get_combined_image();
   else
    cov_image = pc.get_detection_image();
