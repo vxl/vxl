@@ -23,6 +23,8 @@ double vnl_gamma(double x) { return vcl_exp(vnl_log_gamma(x)); }
 
 //: Normalised Incomplete gamma function, P(a,x)
 // $P(a,x)=\frac{1}{\Gamma(a)}\int_0^x e^{-t}t^{a-1}dt
+// Note the order of parameters - this is the normal maths order.
+// MATLAB uses gammainc(x,a), ie the other way around
 double vnl_gamma_p(double a, double x);
 
 //:Normalised Incomplete gamma function, Q(a,x)
@@ -34,6 +36,16 @@ double vnl_gamma_q(double a, double x);
 inline double vnl_erf(double x)
 { return (x<0)?-vnl_gamma_p(0.5,x*x):vnl_gamma_p(0.5,x*x); };
 
+//: P(chi<chi2)
+// Calculates the probability that a value generated
+// at random from a chi-square distribution with given
+// degrees of freedom is less than the value chi2
+// \param n_dof  Number of degrees of freedom
+// \param chi2  Value of chi-squared
+double vnl_cum_prob_chi2(int n_dof, double chi2)
+{
+  return vnl_gamma_p((double) n_dof/2.0 , chi2/2.0 );
+}
 
 
 #endif

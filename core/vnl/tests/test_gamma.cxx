@@ -15,6 +15,13 @@ void test_gamma()
 
   TEST_NEAR("vnl_gamma_p(2,0)",      vnl_gamma_p(2,0),            0,  1e-8);
   TEST_NEAR("vnl_gamma_p(2,inf)",    vnl_gamma_p(2,1e9),        1.0,  1e-8);
+
+  // Values from MATLAB
+  TEST_NEAR("vnl_gamma_p(2.5,1.5)",  vnl_gamma_p(2.5,1.5),   0.30001416412137,  1e-8);
+  TEST_NEAR("vnl_gamma_p(2.5,0.5)",  vnl_gamma_p(2.5,0.5),   0.03743422675270,  1e-8);
+  // Next one not so accurate?
+  TEST_NEAR("vnl_gamma_p(10,10)",    vnl_gamma_p(10,10),     0.54207028552815,  1e-6);
+
   TEST_NEAR("vnl_gamma_q(2,0)",      vnl_gamma_q(2,0),          1.0,  1e-8);
   TEST_NEAR("vnl_gamma_q(2,inf)",    vnl_gamma_q(2,1e9),          0,  1e-8);
   TEST_NEAR("vnl_erf(0)",            vnl_erf(0),                  0,  1e-8);

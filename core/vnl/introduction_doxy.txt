@@ -41,4 +41,5 @@
 * - vnl_gamma
 * - vnl_gamma_p,vnl_gamma_q
 * - vnl_erf
+* - vnl_cum_prob_chi2 : CDF of chi-squared distribution
 */
