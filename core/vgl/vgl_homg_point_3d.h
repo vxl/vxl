@@ -9,16 +9,16 @@
 //
 // \verbatim
 // Modifications
+// Peter Vanroose -  2 July 2001 - Added constructor from 3 planes
+// Peter Vanroose -  1 July 2001 - Renamed data to x_ y_ z_ w_ and inlined constructors
 // Peter Vanroose - 27 June 2001 - Implemented operator==
 // \endverbatim
 
-template <class Type>
-class vgl_point_3d;
-
-#include <vcl_iostream.h>
 #include <vcl_cmath.h> // for vcl_abs(double) etc
 #include <vcl_cstdlib.h> // for vcl_abs(int) etc
-
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_fwd.h> // forward declare vgl_homg_plane_3d
+#include <vcl_iosfwd.h>
 
 //: Represents a homogenious 3D point
 template <class Type>
@@ -30,44 +30,30 @@ class vgl_homg_point_3d
 public:
 
   //: Default constructor with (0,0,0,1)
-  explicit vgl_homg_point_3d(void);
+  vgl_homg_point_3d(void) : x_(0), y_(0), z_(0), w_(Type(1)) {}
 
-#if 0
-  // Default copy constructor
-  vgl_homg_point_3d (const vgl_homg_point_3d<Type>& that) {
-    set(that.x(),that.y(),that.z(),that.w());
-  }
-#endif
+  explicit vgl_homg_point_3d(vgl_point_3d<Type> const& p)
+    : x_(p.x()), y_(p.y()), z_(p.z()), w_(Type(1)) {}
 
-#if 0 //unimp
-  vgl_homg_point_3d(vgl_point_3d<Type> const& p);
-#endif
-
-  //: Constructor from four Types
-  vgl_homg_point_3d(Type px,
-                    Type py,
-                    Type pz,
-                    Type pw)
-  {
-    set(px,py,pz,pw);
-  }
-
-  //: Constructor from three Types
-  vgl_homg_point_3d(Type px,
-                    Type py,
-                    Type pz)
-  {
-    set(px,py,pz);
-  }
+  //: Constructor from three or four Types
+  vgl_homg_point_3d(Type px, Type py, Type pz, Type pw = Type(1))
+    : x_(px), y_(py), z_(pz), w_(pw) {}
 
   //: Construct from 4-vector.
   vgl_homg_point_3d(const Type v[4])
-  {
-    set(v[0],v[1],v[2],v[3]);
-  }
+    : x_(v[0]), y_(v[1]), z_(v[2]), w_(v[3]) {}
+
+  //: Construct from 3 planes (intersection).
+  vgl_homg_point_3d(vgl_homg_plane_3d<Type> const& l1,
+                    vgl_homg_plane_3d<Type> const& l2,
+                    vgl_homg_plane_3d<Type> const& l3);
 
 #if 0
-  // Default destructor
+  // Default copy constructor
+  vgl_homg_point_3d (const vgl_homg_point_3d<Type>& that)
+    : x_(that.x()), y_(that.y()), z_(that.z()), w_(that.w()) {}
+
+  // Destructor
   ~vgl_homg_point_3d () {}
 
   // Default assignment operator
@@ -81,26 +67,14 @@ public:
   // Data Access
   //***************************************************************************
 
-  inline Type x() const { return data_[0]; }
-  inline Type y() const { return data_[1]; }
-  inline Type z() const { return data_[2]; }
-  inline Type w() const { return data_[3]; }
-  inline Type& x() { return data_[0]; }
-  inline Type& y() { return data_[1]; }
-  inline Type& z() { return data_[2]; }
-  inline Type& w() { return data_[3]; }
+  inline Type x() const { return x_; }
+  inline Type y() const { return y_; }
+  inline Type z() const { return z_; }
+  inline Type w() const { return w_; }
 
   //: Set x,y,z,w
-  inline void set(Type px,
-                  Type py,
-                  Type pz,
-                  Type pw = (Type)1)
-  {
-    data_[0]=px;
-    data_[1]=py;
-    data_[2]=pz;
-    data_[3]=pw;
-  }
+  inline void set(Type px, Type py, Type pz, Type pw = (Type)1)
+  { x_=px; y_=py; z_=pz; w_=pw; }
 
   //: the equality operator
   bool operator==(vgl_homg_point_3d<Type> const& other) const;
@@ -118,9 +92,12 @@ public:
   // Internals
   //***************************************************************************
 
-protected:
+private:
   // the data associated with this point
-  Type data_[4];
+  Type x_;
+  Type y_;
+  Type z_;
+  Type w_;
 };
 
 //*****************************************************************************
@@ -129,18 +106,10 @@ protected:
 
 template <class Type>
 vcl_ostream &operator<<(vcl_ostream &s,
-                    const vgl_homg_point_3d<Type> &p)
-{
-  return s << " <vgl_homg_point_3d ("
-           << p.x() << "," << p.y() << ","
-           << p.z() << "," << p.w() << ") >";
-}
+                    const vgl_homg_point_3d<Type> &p);
 
 template <class Type>
 vcl_istream &operator>>(vcl_istream &is,
-                    vgl_homg_point_3d<Type> &p)
-{
-  return is >> p.x() >> p.y() >> p.z() >> p.w();
-}
+                    vgl_homg_point_3d<Type> &p);
 
 #endif // vgl_homg_point_3d_h_
