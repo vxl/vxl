@@ -2,6 +2,7 @@
 /*! \mainpage vil : Core image library
 * A set of classes to represent and manipulate images
 *
+* \section intro Introduction
 * Broadly there are two sorts of image one is interested in - images in memory
 * (all parts of which can be accessed directly) and external images (eg in files)
 * which can only be accessed indirectly.  In most cases images in files are loaded
@@ -16,6 +17,8 @@
 * Large images (in files) can be accessed through the vil_image_resource class,
 * but one can only get at the data by asking for a view of it, which loads the
 * requested section into memory and creates a suitable vil_image_view<T>.
+*
+* \section images Images
 *
 * The vil_image_view<T> represents a view of a multi-plane image of given type.
 * A pointer is stored to the top-left pixel in the first plane of the image
