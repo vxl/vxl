@@ -18,7 +18,6 @@
 #include <vcl_iostream.h>
 
 
-
 template <class T, unsigned int n>
 class vnl_vector_fixed_ref_const
 {
@@ -80,11 +79,6 @@ class vnl_vector_fixed_ref_const
   // so that the vnl_vector_ref::non_const() cannot be used on
   // it. This prevents a vnl_vector_fixed_ref_const from being case into a
   // non-const vnl_vector reference, giving a slight increase in type safety.
-
-  //: Explicit conversion to a vnl_vector_ref.
-  // This is a cheap conversion for those functions that have an interface
-  // for vnl_vector_ref but not for vnl_vector_fixed_ref. There is also a
-  // conversion operator that should work most of the time.
 
   //: Explicit conversion to a vnl_vector_ref.
   // This is a cheap conversion for those functions that have an interface
@@ -277,13 +271,13 @@ class vnl_vector_fixed_ref_const
   //: See assert_finite().
   const vnl_vector_fixed_ref_const<T,n> & operator=(const vnl_vector_fixed<T,n> & i_Input) const
   {
-	  assert(!"This is illegal for a fixed_ref_const");
-	  return *this;
+    assert(!"This is illegal for a fixed_ref_const");
+    return *this;
   }
   const vnl_vector_fixed_ref_const<T,n> & operator=(const vnl_vector_fixed_ref_const<T,n> & i_Input) const
   {
-	  assert(!"This is illegal for a fixed_ref_const");
-	  return *this;
+    assert(!"This is illegal for a fixed_ref_const");
+    return *this;
   }
   void assert_finite_internal() const;
 };

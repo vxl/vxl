@@ -173,7 +173,6 @@
 // such calls.
 //
 
-
 template <class T, unsigned num_rows, unsigned num_cols>
 class vnl_matrix_fixed_ref_const
 {
@@ -380,14 +379,14 @@ class vnl_matrix_fixed_ref_const
  private:
   const vnl_matrix_fixed_ref_const<T,num_rows,num_cols> & operator=(const vnl_matrix_fixed<T,num_rows,num_cols>& i_Input) const
   {
-	  assert(!"This is illegal for a fixed_ref_const");
-	  return *this;
+    assert(!"This is illegal for a fixed_ref_const");
+    return *this;
   }
 
   const vnl_matrix_fixed_ref_const<T,num_rows,num_cols> & operator=(const vnl_matrix_fixed_ref_const<T,num_rows,num_cols>& ) const
   {
-	  assert(!"This is illegal for a fixed_ref_const");
-	  return *this;
+    assert(!"This is illegal for a fixed_ref_const");
+    return *this;
   }
 
   void assert_finite_internal() const;
@@ -433,7 +432,7 @@ class vnl_matrix_fixed_ref : public vnl_matrix_fixed_ref_const<T,num_rows,num_co
 
   //: return pointer to given row
   // No boundary checking here.
-  T       * operator[] (unsigned r) const{ return data_block() + num_cols * r; }
+  T  * operator[] (unsigned r) const { return data_block() + num_cols * r; }
 
 
   //: Access an element for reading or writing
@@ -447,9 +446,8 @@ class vnl_matrix_fixed_ref : public vnl_matrix_fixed_ref_const<T,num_rows,num_co
     return *(this->data_block() + num_cols * r + c);
   }
 
-  //: Access an element for reading
-  // There are assert style boundary checks - #define NDEBUG to turn them off.
-// Filling and copying------------------------------------------------
+
+  // Filling and copying------------------------------------------------
 
   //: Set all elements of matrix to specified value.
   // Complexity $O(r.c)$
@@ -468,8 +466,7 @@ class vnl_matrix_fixed_ref : public vnl_matrix_fixed_ref_const<T,num_rows,num_co
   void set(T const *d) const { copy_in(d); }
 
   //: Fill the given array with this matrix.
-  // We assume that p points to
-  // a contiguous rows*cols array, stored rowwise.
+  // We assume that p points to a contiguous rows*cols array, stored rowwise.
   // No bounds checking on the array
 
   //: Transpose this matrix efficiently, if it is a square matrix
