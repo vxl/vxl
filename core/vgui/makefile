@@ -132,7 +132,6 @@ MANPAGE_SOURCES += vgui_fwd.h
 MANPAGE_SOURCES += vgui_gl.h
 MANPAGE_SOURCES += vgui_glu.h
 MANPAGE_SOURCES += vgui_glx.h
-MANPAGE_SOURCES += vgui_text.h
 MANPAGE_SOURCES += vgui_linker_hack.h
 MANPAGE_SOURCES += vgui_deck.h
 
