@@ -78,7 +78,7 @@ bool bgui_selector_tableau::handle(const vgui_event& event)
 
     vcl_vector<vcl_string>::iterator itr = render_order_.begin();
     for (; itr != render_order_.end(); ++itr){
-      if (visible_[*itr]) {
+      if (visible_[*itr] && child_map_[*itr]) {
         PM.restore();
         if ( !child_map_[*itr]->handle(event) )
           retv=false;
@@ -91,7 +91,7 @@ bool bgui_selector_tableau::handle(const vgui_event& event)
   // all other events :
 
   vcl_map<vcl_string, vgui_parent_child_link>::iterator itr = child_map_.find(active_child_);
-  if (itr == child_map_.end())
+  if (itr == child_map_.end() || !itr->second)
     return false;
 
   return itr->second->handle(event);
@@ -178,8 +178,30 @@ bool bgui_selector_tableau::remove(const vcl_string& name)
 {
   vcl_map<vcl_string, vgui_parent_child_link>::iterator itr = child_map_.find(name);
   if (itr != child_map_.end())
-    return remove_child(itr->second.child());
-  return false;
+    child_map_.erase(itr);
+  else
+    return false;
+
+  vcl_map<vcl_string, bool>::iterator v_itr = visible_.find(name);
+  if (v_itr != visible_.end())
+    visible_.erase(v_itr);
+
+  vcl_vector<vcl_string>::iterator o_itr = vcl_find(render_order_.begin(), 
+                                                    render_order_.end(), 
+                                                    name);
+  if (o_itr != render_order_.end())
+    render_order_.erase(o_itr);
+
+  if (active_child_ == name){
+    active_child_ = "";
+    for (o_itr = render_order_.begin(); o_itr!=render_order_.end(); ++o_itr ){
+      if (visible_[*o_itr]){
+        active_child_ = *o_itr;
+        break;
+      }
+    }
+  }
+  return true;
 }
 
 //----------------------------------------------------------------------------
@@ -213,35 +235,14 @@ vgui_tableau_sptr bgui_selector_tableau::get_tableau(const vcl_string& name) con
 // virtual
 bool bgui_selector_tableau::remove_child(vgui_tableau_sptr const &t)
 {
+  bool retval = false;
+
   for (vcl_map<vcl_string, vgui_parent_child_link>::iterator itr=child_map_.begin();
        itr!=child_map_.end(); ++itr )
-    if ( (itr->second.child()) == t ) {
-      vcl_string name = itr->first;
-      child_map_.erase(itr);
+    if ( (itr->second.child()) == t )
+      retval = this->remove(itr->first) || retval;
 
-      vcl_map<vcl_string, bool>::iterator v_itr = visible_.find(name);
-      if (v_itr != visible_.end())
-        visible_.erase(v_itr);
-
-      for (vcl_vector<vcl_string>::iterator o_itr = render_order_.begin();
-           o_itr!=render_order_.end(); ++o_itr ){
-        if (name == *o_itr)
-          render_order_.erase(o_itr--);
-      }
-
-      if (active_child_ == name){
-        active_child_ = "";
-        for (vcl_vector<vcl_string>::iterator o_itr = render_order_.begin();
-             o_itr!=render_order_.end(); ++o_itr ){
-          if (visible_[*o_itr]){
-            active_child_ = *o_itr;
-            break;
-          }
-        }
-      }
-      return true;
-    }
-  return false;
+  return retval;
 }
 
 
@@ -389,13 +390,25 @@ void bgui_selector_tableau::get_popup(const vgui_popup_params& params,
   vcl_string check;
   vcl_vector<vcl_string>::reverse_iterator itr = render_order_.rbegin();
   for ( ; itr != render_order_.rend() ; ++itr) {
-    if ( *itr == active_child_ ) check = "[x] ";
-    else check = "[ ] ";
-    active_menu.add(check+(*itr), new bgui_selector_switch_command(this,*itr));
+    vcl_string box_head, box_tail, check;
+    if ( !get_tableau(*itr) ){
+      box_head = "(";
+      box_tail = ") ";
+    }
+    else{
+      box_head = "[";
+      box_tail = "] ";
+    }
 
-    if ( is_visible(*itr) ) check = "[x] ";
-    else check = "[ ] ";
-    visible_menu.add(check+(*itr), new bgui_selector_toggle_command(this,*itr));
+    if ( *itr == active_child_ ) check = "x";
+    else check = " ";
+    active_menu.add(box_head+check+box_tail+(*itr), 
+                    new bgui_selector_switch_command(this,*itr));
+
+    if ( is_visible(*itr) ) check = "x";
+    else check = " ";
+    visible_menu.add(box_head+check+box_tail+(*itr), 
+                     new bgui_selector_toggle_command(this,*itr));
   }
 
   position_menu.add("Move to Top", new bgui_selector_position_command(this, bgui_selector_position_command::TO_TOP));
