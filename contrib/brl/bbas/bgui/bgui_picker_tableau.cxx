@@ -21,11 +21,17 @@ bgui_picker_tableau::object_type bgui_picker_tableau::obj_type = none_enum;
 bgui_picker_tableau::bgui_picker_tableau(vgui_tableau_sptr const& t)
   :child_tab(this, t)
 {
+  r = 1.0f;
+  g = 1.0f;
+  b = 1.0f;
+  w = 2.0f;
   use_event_ = false;
   pointx1 = pointy1 = pointx2 = pointy2 = 0;
   FIRSTPOINT = true;
   pointx = 0; pointy = 0;
   point_ret = true;
+  anchor_x = 0;
+  anchor_y = 0;
 }
 
 //========================================================================
@@ -63,14 +69,26 @@ void bgui_picker_tableau::draw_line()
 {
   if (!FIRSTPOINT)  // there is no point in drawing till we have a first point
   {
-    glLineWidth(2);
-    glColor3f(1,1,1);
+    glLineWidth(w);
+    glColor3f(r,g,b);
 
     glBegin(GL_LINES);
     glVertex2f(pointx1, pointy1);
     glVertex2f(pointx2, pointy2);
     glEnd();
   }
+}
+
+//========================================================================
+//: Draw a line to help the user pick it.
+void bgui_picker_tableau::draw_anchor_line()
+{
+  glLineWidth(w);
+  glColor3f(r,g,b);
+  glBegin(GL_LINES);
+  glVertex2f(anchor_x, anchor_y);
+  glVertex2f(pointx1, pointy1);
+  glEnd();
 }
 
 //========================================================================
@@ -101,6 +119,31 @@ void bgui_picker_tableau::pick_line(float* x1, float* y1, float* x2, float* y2)
 }
 
 //========================================================================
+//: Gets a user selected point (x, y)
+//  This function grabs the event loop and will not return until a 
+//  mouse button down event occurs.
+  void bgui_picker_tableau::anchored_pick_point(const float anch_x,
+                                                const float anch_y,
+                                                float* x, float* y)
+{
+  anchor_x = anch_x;
+  anchor_y = anch_y;
+
+  obj_type = anchor_enum;
+  picking_completed = false;
+  vgui::flush();  // handle any pending events before we grab the event loop.
+  // Grab event loop until picking is completed:
+  while (picking_completed == false)
+    next();
+
+  *x = pointx1;
+  *y = pointy1;
+  post_redraw();
+  obj_type = none_enum;
+}
+
+
+//========================================================================
 //: Handles all events for this tableau.
 //  We grab events in this way rather than using a vgui_event_server because
 //  if we look at events outside the handle function then the gl state
@@ -111,6 +154,7 @@ void bgui_picker_tableau::pick_line(float* x1, float* y1, float* x2, float* y2)
 //  the gl matrices would have been reset.
 bool bgui_picker_tableau::handle(const vgui_event& event)
 {
+
   // Pass events on down to the child tableaux:
   child_tab->handle(event);
 
@@ -155,6 +199,20 @@ bool bgui_picker_tableau::handle(const vgui_event& event)
         picking_completed = true;
       }
     }
+  }
+  // ---- Object type is anchor line ----
+  if (obj_type == anchor_enum)
+  {
+    if (event.type == vgui_DRAW_OVERLAY)
+      draw_anchor_line();
+    else if (event.type == vgui_MOTION)
+    {
+      vgui_projection_inspector p_insp;
+      p_insp.window_to_image_coordinates(event.wx, event.wy, pointx1, pointy1);
+      post_overlay_redraw();
+    }
+    else if (event.type == vgui_BUTTON_DOWN)
+      picking_completed = true;
   }
   return true;
 }

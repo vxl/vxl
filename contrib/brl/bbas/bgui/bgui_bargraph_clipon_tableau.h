@@ -21,18 +21,20 @@
 class bgui_bargraph_clipon_tableau : public vbl_ref_count
 {
  public:
-  //: Constructor takes all the labels used on the graph.
+  //: Constructor 
   bgui_bargraph_clipon_tableau(vgui_easy2D_tableau_sptr const& easy);
   //: Destructor.
   ~bgui_bargraph_clipon_tableau();
-  //: Set the color vector
+  //: Set the color vector, 0-7 color code
   void set_color_vector(vcl_vector<unsigned char> const& colors);
 
-  //: Update the data vector
+  //: Update the data vector.  Defaults determine size of plot from window
   void update(vcl_vector<float> const& bars, const bool fixed = false, 
               const float scale=1.0);
+
   //: Return the name of this tableau.
   vcl_string type_name() const { return "bgui_bargraph_clipon_tableau";}
+
   //: Clear the data
   void clear();
  private:

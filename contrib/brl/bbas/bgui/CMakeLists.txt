@@ -22,11 +22,12 @@ IF(HAS_VGUI)
      bgui_histogram_tableau.cxx        bgui_histogram_tableau.h   bgui_histogram_tableau_sptr.h
      bgui_selector_tableau.cxx         bgui_selector_tableau.h    bgui_selector_tableau_sptr.h
 bgui_bargraph_clipon_tableau.cxx  bgui_bargraph_clipon_tableau.h  bgui_bargraph_clipon_tableau_sptr.h
+bgui_range_adjuster_tableau.cxx     bgui_range_adjuster_tableau.h bgui_range_adjuster_tableau_sptr.h	    
  )
 AUX_SOURCE_DIRECTORY(Templates bgui_sources)	
  ADD_LIBRARY(bgui ${bgui_sources})
 
- TARGET_LINK_LIBRARIES(bgui bmrf vdgl vtol vsol vgui vgl_algo vgl vil_algo vil vil1 vnl vcl)
+ TARGET_LINK_LIBRARIES(bgui bsta bmrf vdgl vtol vsol vgui vgl_algo vgl vil_algo vil vil1 vnl vcl)
 
 ENDIF(HAS_VGUI)
 
