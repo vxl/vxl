@@ -11,6 +11,7 @@
 // \verbatim
 // Modifications
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
+// Peter Vanroose - Jan 2002 - Removed DEX support
 // \endverbatim
 //
 
@@ -26,13 +27,6 @@ public:
   // which is unique for each vbl_basic_relation templated type.
   virtual void* GetType() { return NULL; }
   virtual void* This() { return (void*)this; }
-
-  // DEXisms.
-  int GetDEXID() { return dex_id; }
-  void SetDEXID(int id) { dex_id = id; }
-
-protected:
-  int dex_id;
 };
 
 #endif // vbl_basic_relation_type_h
