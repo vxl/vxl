@@ -342,7 +342,7 @@ void kalman_filter::update_observes(const vnl_double_3x4 &P, int iframe)
     //vgl_point_3d<double> X(curve_3d_[i].x(), curve_3d_[i].y(), curve_3d_[i].z());
     bugl_gaussian_point_2d<double> x = brct_algos::project_3d_point(P, curve_3d_[i]);
     //vgl_point_2d<double> u = brct_algos::closest_point(curves_[iframe], x);
-    vgl_point_2d<double> u = brct_algos::most_possible_point(curves_[iframe], x);
+    vgl_point_2d<double> u = brct_algos::most_possible_point(curves_[iframe%queue_size_], x);
     observes_[iframe%queue_size_][i].set_point(u);
     vnl_double_2x2 sigma;
     sigma.set_identity();
