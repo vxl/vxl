@@ -37,22 +37,27 @@ static void test_point_2d()
   TEST("equality", p1 == p3, true);
 
   vgl_vector_2d<int> d1 = p1 - p2;
-  TEST("sum, difference", p2+d1, p1);
+  TEST("sum; difference", p2+d1, p1);
 
   p2 += d1;
   TEST("+=", p2, p1);
   
   p2.set(4,5);
   p3.set(7,-1);
-  TEST("collinear", collinear(p1,p2,p3), true);
-  TEST("ratio", collinear(p1,p2,p3), 4.0);
-  TEST("midpoint", midpoint(p1,p2,4), p3;
-
-  TEST("centre", centre(p1,p3), vgl_point_2d<int>(5,3));
+  bool b = collinear(p1,p2,p3);
+  TEST("collinear", b, true);
+  int r = ratio(p1,p2,p3);
+  TEST("ratio", r, 4.0);
+  vgl_point_2d<int> m = midpoint(p1,p2,4);
+  TEST("midpoint", m, p3);
+  vgl_point_2d<int> c = centre(p1,p3);
+  vgl_point_2d<int> cc(5,3);
+  TEST("centre", c, cc);
 
   vgl_line_2d<double> l1(1,0,0), l2(0,1,0);
   vgl_point_2d<double> pi(l1,l2); // intersection
-  TEST("intersection", pi, vgl_point_2d<double>(0,0));
+  vgl_point_2d<double> pp(0,0);
+  TEST("intersection", pi, pp);
 }
 
 static void test_point_3d()
