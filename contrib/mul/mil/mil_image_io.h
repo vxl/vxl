@@ -38,7 +38,7 @@ public:
 
     //: Attempt to load image from named file
     //!in: filetype: String hinting at what image format is  (valid options depend on derived class)
-    //!ret: true if successfull
+    //!ret: true if successful
     //  If successful, image() will return the image which was loaded.
     virtual bool loadImage(const vcl_string& path,
                            const vcl_string& filetype) =0;
