@@ -43,7 +43,7 @@ pdf1d_gaussian::~pdf1d_gaussian()
 
 void pdf1d_gaussian::calc_log_k()
 {
-  k_ = 1.0/sqrt(2*vnl_math::pi*variance());
+  k_ = 1.0/vcl_sqrt(2*vnl_math::pi*variance());
   log_k_ = vcl_log(k_);
 }
 
@@ -111,7 +111,7 @@ double pdf1d_gaussian::gradient(double x,
   assert(v>0);
 
   double dx = x-mean();
-  p = k_ * exp( -0.5*dx*dx/v);
+  p = k_ * vcl_exp( -0.5*dx*dx/v);
 
   return -1.0*dx*p/v;
 }
