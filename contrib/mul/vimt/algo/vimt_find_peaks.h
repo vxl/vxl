@@ -74,7 +74,7 @@ inline void vimt_find_world_peaks_3x3(vcl_vector<vgl_point_2d<double> >& peak_po
                                       const vimt_image_2d_of<T>& image,
                                       unsigned plane=0, bool clear_list=true)
 {
-  if (clear_list) { peaks.resize(0); peak_value.resize(0); }
+  if (clear_list) { peak_pos.resize(0); peak_value.resize(0); }
   const vil2_image_view<T>& im = image.image();
   vimt_transform_2d im2w = image.world2im().inverse();
   unsigned ni=im.ni(),nj=im.nj();
