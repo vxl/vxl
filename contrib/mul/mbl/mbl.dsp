@@ -426,6 +426,9 @@ SOURCE=.\mbl_correspond_points.h
 SOURCE=.\mbl_jarque_bera.h
 # End Source File
 # Begin Source File
+SOURCE=.\mbl_stl_pred.h
+# End Source File
+# Begin Source File
 SOURCE=.\mbl_test.h
 # End Source File
 # Begin Source File
