@@ -253,8 +253,7 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
   if (get_image_tableau() && wd*ht > 0)
   {
     vil_image img = get_image_tableau()->get_image();
-    typedef vul_psfile::byte byte;
-    byte* data = new byte[img.get_size_bytes()];
+    unsigned char* data = new unsigned char[img.get_size_bytes()];
     img.get_section(data, 0, 0, wd, ht);
     if (vil_pixel_format(img) == VIL_BYTE)
     {
