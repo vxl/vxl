@@ -298,8 +298,13 @@ inline void vil2_convert_stretch_range(const vil2_image_view<T>& src,
 }
 
 //: Create a greyscale image of specified pixel type from any image src.
+// This function is designed to be used with vil2_load or vil2_image_resource::get_view()
+// where you do not know the pixel type in advance. e.g.
+// \verbatim
+// vil2_image_view<float> input = vil2_convert_to_grey_using_average(vil2_load(filename), float());
+// \endverbatim
+// If you have a image_view of known pixel_type then you should use one of the other vil2_convert functions.
 // The output may be a reconfigured view of the input.
-// \relates vil2_image_view
 template <class outP>
 inline vil2_image_view<outP> vil2_convert_to_grey_using_average(
   const vil2_image_view_base_sptr &src, outP /*dummy*/)
@@ -344,8 +349,9 @@ macro(VIL2_PIXEL_FORMAT_DOUBLE , double )
 
 
 //: Create a greyscale image of specified pixel type from any image src.
-// The output may be a reconfigured view of the input.
-// \relates vil2_image_view
+// This function is designed to be used with vil2_load or vil2_image_resource::get_view()
+// where you do not know the pixel type in advance. 
+// The output may be a reconfigured view of the input.This 
 //
 // Default weights convert from linear RGB to CIE luminance assuming a
 // modern monitor.  See Charles Pontyon's Colour FAQ
