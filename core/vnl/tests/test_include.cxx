@@ -19,6 +19,7 @@
 #include <vnl/vnl_cross_product_matrix.h>
 #include <vnl/vnl_det.h>
 #include <vnl/vnl_diag_matrix.h>
+#include <vnl/vnl_double_1x1.h>
 #include <vnl/vnl_double_1x2.h>
 #include <vnl/vnl_double_1x3.h>
 #include <vnl/vnl_double_2.h>
@@ -39,6 +40,7 @@
 #include <vnl/vnl_file_matrix.h>
 #include <vnl/vnl_file_vector.h>
 #include <vnl/vnl_finite.h>
+#include <vnl/vnl_float_1x1.h>
 #include <vnl/vnl_float_1x2.h>
 #include <vnl/vnl_float_1x3.h>
 #include <vnl/vnl_float_2.h>
@@ -56,6 +58,7 @@
 #include <vnl/vnl_identity.h>
 #include <vnl/vnl_identity_3x3.h>
 #include <vnl/vnl_imag.h>
+#include <vnl/vnl_int_1x1.h>
 #include <vnl/vnl_int_2.h>
 #include <vnl/vnl_int_2x2.h>
 #include <vnl/vnl_int_3.h>
