@@ -24,29 +24,54 @@ What does the single vil_image hierarchy actually give you?
 
 
 
+
 Questions with suggested answers.
 
 Should vil_image_view::resize be virtual and in the base class? (It is in mil_image_2d)
-Ans: Yes -it might be useful.
+Yes: it might be useful.
 
-Should memory_chunk be templated? You could have a memory_chunk containing rgb, and choose to view it as
-a vil2_image_view<rgb<>> with nplanes=1, or vil2_image_view<char> with nplanes =3;
-We can put a image type in a member variable.
-Ans: no - it might be useful.
+Should memory_chunk be templated?
+No: You could have a memory_chunk containing rgb, and choose to view it as
+a vil2_image_view<rgb<>> with nplanes=1, or vil2_image_view<char> with nplanes =3; It
+is hard to get the type of the smart pointers correct without linking the types of the
+vil2_memory_chunk and vil2_image_view. We can put a image type in a member variable for
+when it is necessary.
 
+Best order for x, y, plane in function calls.
+x, y, plane: is common, and consistent (increasing step size in common image format)
+
+
+Should functions dealing vil2_image_view really deal with vil2_image_view_sptr.
+No: We want a single "normal" and "easy" image class. There are many functions on images
+(e.g. single point sampling) which you want to happen very fast, smart pointer overhead is
+undesirable in these cases. This establishes "normal" image class should be vil2_image_view.
+
+Should vil_image_view be derived from vil_image_data?
+No: It involves merging two different sets of functionality.
+
+Should there be a general set_properties()?
+No: Its existance implies the ability to set arbitrary properties. You can always have a
+specialist set_obscure_tiff_property as a member function of vil2_tiff_file_image.
 
 
 Questions:
 
-Should n_planes, height, width return signed or unsigned int?
 
-Should vil_image_view be derived from vil_image_source?
+Should n_planes, height, width return signed or unsigned int?
+Signed has the advantage that it is much easier to pick up 0xffffffff errors.
+Unsigned has the advantage that it makes the fixed 0,0 origin clear, and it reduces the number of
+assertion checks needed (by exposing you to the 0xffffffff errors:)
+
+Where should we put and what should we call functions on image_views, and functions on image_data
+objects?
 
 Best names for image_view, image_data, base_image?
 
 Best name for height, width, rows, cols, nx, ny?
+We would like just one set.
 
-Should resize allow definition of assumed format (eg RGBRGB or RRR BBB GGG etc)
+
+Should resize allow definition of assumed format? (eg RGBRGB or RRR BBB GGG etc)
 Should deep_copy allow similar definition and thus possible re-ordering?
 Should we have void set_to_window(im,...) functions, or just the image_view window(..) function.
 Which of the following should really be member functions:
@@ -56,6 +81,19 @@ Pointers to data are often passed in as const, but may have the const removed.
 This is because it is rather complicated to keep track of whether the data is going to be
 changed or not.  Just try to be sensible, OK?
 
+The vil2_image_view<T> has an operator= from its own base class. Is this sensible?
+It allows for the simple conversion from the abstract base class which many functions will return
+to a concrete class with a useful interface. It should also allow in time for the smart conversion
+between various view formats.
+
+There is now now way to get a bit-compressed pbm into memory efficiently. Is this a problem?
+We could solve it by providing a vil2_image_view_of_compressed_bits, or somesuch.
+
+
+
 Notes:
 
-#includes to vil are simply to use old vil stuff that I haven't converted yet.
+#includes to vxl/vil are simply to use old vil stuff that doesn't need to be converted. e.g. vil_stream
+
+
+
