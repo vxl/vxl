@@ -5,6 +5,7 @@ DECLARE( test_distance );
 DECLARE( test_conic );
 DECLARE( test_homg );
 DECLARE( test_polygon );
+DECLARE( test_convex );
 DECLARE( test_polygon_scan_iterator );
 DECLARE( test_triangle_scan_iterator );
 DECLARE( test_ellipse_scan_iterator );
@@ -25,6 +26,7 @@ register_tests()
   REGISTER( test_conic );
   REGISTER( test_homg );
   REGISTER( test_polygon );
+  REGISTER( test_convex );
   REGISTER( test_polygon_scan_iterator );
   REGISTER( test_triangle_scan_iterator );
   REGISTER( test_ellipse_scan_iterator );

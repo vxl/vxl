@@ -9,6 +9,7 @@ ADD_EXECUTABLE( vgl_test_all
   test_conic.cxx
   test_homg.cxx
   test_polygon.cxx
+  test_convex.cxx
   test_polygon_scan_iterator.cxx
   test_triangle_scan_iterator.cxx
   test_ellipse_scan_iterator.cxx
@@ -28,6 +29,7 @@ ADD_TEST( vgl_test_closest_point                vgl_test_all test_closest_point 
 ADD_TEST( vgl_test_conic                        vgl_test_all test_conic )
 ADD_TEST( vgl_test_homg                         vgl_test_all test_homg )
 ADD_TEST( vgl_test_polygon                      vgl_test_all test_polygon )
+ADD_TEST( vgl_test_convex                       vgl_test_all test_convex )
 ADD_TEST( vgl_test_polygon_scan_iterator        vgl_test_all test_polygon_scan_iterator )
 ADD_TEST( vgl_test_triangle_scan_iterator       vgl_test_all test_triangle_scan_iterator )
 ADD_TEST( vgl_test_ellipse_scan_iterator        vgl_test_all test_ellipse_scan_iterator )
