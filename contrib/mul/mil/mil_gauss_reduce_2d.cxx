@@ -63,9 +63,9 @@ void mil_gauss_reduce_2d(float* dest_im,
         const float* s = s_row + sxs2;
         for (int x=0;x<nx2;++x)
         {
-            *d = 0.05*(s[-sxs2] + s[sxs2])
-                +0.25*(s[-s_x_step]+ s[s_x_step])
-                +0.40*s[0];
+            *d = 0.05f*(s[-sxs2] + s[sxs2])
+                +0.25f*(s[-s_x_step]+ s[s_x_step])
+                +0.40f*s[0];
 
             d += d_x_step;
             s += sxs2;
