@@ -59,9 +59,7 @@ class vil2_clamp_image_resource : public vil2_image_resource
 
 
   //: Put the data in this view back into the image source.
-  virtual bool put_view(const vil2_image_view_base& im, unsigned i0,
-                        unsigned j0) {
-    return false; }
+  virtual bool put_view(const vil2_image_view_base& /*im*/, unsigned /*i0*/, unsigned /*j0*/) { return false; }
 
   //: Extra property information
   virtual bool get_property(char const* tag, void* property_value = 0) const;

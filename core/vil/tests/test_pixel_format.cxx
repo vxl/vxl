@@ -5,7 +5,7 @@
 #include <vil/vil_rgb.h>
 #include <vil2/vil2_pixel_format.h>
 
-int test_pixel_format_main( int argc, char* argv[] )
+int test_pixel_format_main( int /*argc*/, char* /*argv*/[] )
 {
   vcl_cout << "***************************\n"
            << " Testing vil2_pixel_format\n"

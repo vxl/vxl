@@ -57,7 +57,7 @@ class vil2_memory_image : public vil2_image_resource
   //: Put the data in this view back into the image source.
   virtual bool put_view(const vil2_image_view_base& im, unsigned i0, unsigned j0);
 
-  bool get_property(char const *tag, void *prop = 0) const {return false;}
+  bool get_property(char const * /*tag*/, void * /*prop*/ = 0) const {return false;}
 };
 
 #endif // vil2_memory_image_h_

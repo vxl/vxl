@@ -1,7 +1,8 @@
 // This is mul/vil2/vil2_math.h
 #ifndef vil2_math_h_
 #define vil2_math_h_
-//: \file
+//:
+//  \file
 //  \brief Various mathematical manipulations of 2D images
 //  \author Tim Cootes
 
@@ -69,7 +70,7 @@ inline void vil2_math_value_range(const vil2_image_view<vil_rgb<float> >& rgb_vi
 //: Sum of squared differences between two images
 // \relates vil2_image_view
 template <class imT, class sumT>
-inline sumT vil2_math_ssd(const vil2_image_view<imT>& imA, const vil2_image_view<imT>& imB, sumT dummy)
+inline sumT vil2_math_ssd(const vil2_image_view<imT>& imA, const vil2_image_view<imT>& imB, sumT /*dummy*/)
 {
   assert(imA.ni() == imB.ni() && imB.nj() == imB.nj() && imA.nplanes() == imB.nplanes());
   sumT ssd=0;
@@ -156,7 +157,7 @@ inline void vil2_math_mean_and_variance(sumT& mean, sumT& var, const vil2_image_
   var = sum_sq/(im.ni()*im.nj()) - mean*mean;
 }
 
-//: Multiply values inplace in image view by scale
+//: Multiply values in-place in image view by scale
 // \relates vil2_image_view
 template<class T>
 void vil2_math_scale_values(vil2_image_view<T>& image, double scale)
@@ -175,7 +176,7 @@ void vil2_math_scale_values(vil2_image_view<T>& image, double scale)
   }
 }
 
-//: Multiply values inplace in image view by scale and add offset
+//: Multiply values in-place in image view by scale and add offset
 // \relates vil2_image_view
 template<class imT, class offsetT>
 void vil2_math_scale_and_offset_values(vil2_image_view<imT>& image, double scale, offsetT offset)

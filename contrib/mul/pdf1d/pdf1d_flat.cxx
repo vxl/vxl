@@ -107,14 +107,14 @@ double pdf1d_flat::gradient(double x,
 // ====================================================================
 
 
-double pdf1d_flat::log_prob_thresh(double pass_proportion) const
+double pdf1d_flat::log_prob_thresh(double /*pass_proportion*/) const
 {
   return log_p_;
 }
 
 //=======================================================================
 
-double pdf1d_flat::nearest_plausible(double x, double log_p_min) const
+double pdf1d_flat::nearest_plausible(double x, double /*log_p_min*/) const
 {
   if (x>hi_) return hi_;
   if (x<lo_) return lo_;

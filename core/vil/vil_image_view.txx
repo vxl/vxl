@@ -162,55 +162,55 @@ inline bool convert_components_from_planes(vil2_image_view<T> &lhs,
 
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_components_from_planes(vil2_image_view<float> &lhs,
-                                           const vil2_image_view_base &rhs_base)
+inline bool convert_components_from_planes(vil2_image_view<float> & /*lhs*/,
+                                           const vil2_image_view_base & /*rhs_base*/)
 {return false;}  // when lhs has scalar pixels, don't attempt conversion
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_components_from_planes(vil2_image_view<double> &lhs,
-                                           const vil2_image_view_base &rhs_base)
+inline bool convert_components_from_planes(vil2_image_view<double> & /*lhs*/,
+                                           const vil2_image_view_base & /*rhs_base*/)
 {return false;}
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_components_from_planes(vil2_image_view<bool> &lhs,
-                                           const vil2_image_view_base &rhs_base)
+inline bool convert_components_from_planes(vil2_image_view<bool> & /*lhs*/,
+                                           const vil2_image_view_base & /*rhs_base*/)
 {return false;}
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_components_from_planes(vil2_image_view<vxl_sbyte> &lhs,
-                                           const vil2_image_view_base &rhs_base)
+inline bool convert_components_from_planes(vil2_image_view<vxl_sbyte> & /*lhs*/,
+                                           const vil2_image_view_base & /*rhs_base*/)
 {return false;}
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_components_from_planes(vil2_image_view<vxl_byte> &lhs,
-                                           const vil2_image_view_base &rhs_base)
+inline bool convert_components_from_planes(vil2_image_view<vxl_byte> & /*lhs*/,
+                                           const vil2_image_view_base & /*rhs_base*/)
 {return false;}
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_components_from_planes(vil2_image_view<vxl_int_16> &lhs,
-                                           const vil2_image_view_base &rhs_base)
+inline bool convert_components_from_planes(vil2_image_view<vxl_int_16> & /*lhs*/,
+                                           const vil2_image_view_base & /*rhs_base*/)
 {return false;}
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_components_from_planes(vil2_image_view<vxl_uint_16> &lhs,
-                                           const vil2_image_view_base &rhs_base)
+inline bool convert_components_from_planes(vil2_image_view<vxl_uint_16> & /*lhs*/,
+                                           const vil2_image_view_base & /*rhs_base*/)
 {return false;}
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_components_from_planes(vil2_image_view<vxl_int_32> &lhs,
-                                           const vil2_image_view_base &rhs_base)
+inline bool convert_components_from_planes(vil2_image_view<vxl_int_32> & /*lhs*/,
+                                           const vil2_image_view_base & /*rhs_base*/)
 {return false;}
 
 VCL_DEFINE_SPECIALIZATION
-inline bool convert_components_from_planes(vil2_image_view<vxl_uint_32> &lhs,
-                                           const vil2_image_view_base &rhs_base)
+inline bool convert_components_from_planes(vil2_image_view<vxl_uint_32> & /*lhs*/,
+                                           const vil2_image_view_base & /*rhs_base*/)
 {return false;}
 
 
 //: Convert components to planes from planes, or do nothing if types are wrong.
 template <class T>
-inline bool convert_planes_from_components(vil2_image_view<T> &lhs,
-                                           const vil2_image_view_base &rhs_base)
+inline bool convert_planes_from_components(vil2_image_view<T> & /*lhs*/,
+                                           const vil2_image_view_base & /*rhs_base*/)
 { return false;} // when lhs has non-scalar pixels, don't attempt conversion
 
 VCL_DEFINE_SPECIALIZATION
