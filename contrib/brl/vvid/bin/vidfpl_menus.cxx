@@ -211,6 +211,16 @@ void vidfpl_menus::track_art_model_callback()
   vvid_file_manager::instance()->track_art_model();
 }
 
+void vidfpl_menus::epipolar_grouping_callback()
+{
+  vvid_file_manager::instance()->epipolar_grouping();
+}
+
+void vidfpl_menus::display_ihs_callback()
+{
+  vvid_file_manager::instance()->display_ihs();
+}
+
 void vidfpl_menus::quit_callback()
 {
   vcl_exit(1);
@@ -224,9 +234,16 @@ vgui_menu vidfpl_menus::get_menu()
   vgui_menu menufile;
   vgui_menu menuview;
   vgui_menu menuedit;
+  vgui_menu menutrack;
+  vgui_menu menuprocess;
+  vgui_menu menudebug;
+
   //file menu entries
   menufile.add( "Load", load_video_callback);
   menufile.add( "Quit", quit_callback,(vgui_key)'q', vgui_CTRL);
+  menufile.add( "Start Save Display", start_save_display_callback);
+  menufile.add( "End Save Display", end_save_display_callback,
+                (vgui_key)'e', vgui_CTRL);
 
   //view menu entries
   menuview.add( "Play", play_video_callback);
@@ -236,26 +253,8 @@ vgui_menu vidfpl_menus::get_menu()
   menuview.add( "Stop", stop_video_callback,(vgui_key)'s', vgui_CTRL);
   menuview.add( "Display Track", display_poly_track_callback);
   menuview.add( "Display Art Model Track", display_art_model_track_callback);
-  menuview.add( "Start Save Display", start_save_display_callback);
-  menuview.add( "End Save Display", end_save_display_callback,
-                (vgui_key)'e', vgui_CTRL);
-  menuview.add( "easy2D Demo", easy2D_tableau_demo_callback);
+
   //edit menu entries
-  menuedit.add( "No Op", no_op_callback);
-  menuedit.add( "Frame Difference", difference_frames_callback);
-  menuedit.add( "Compute Motion", compute_motion_callback);
-  menuedit.add( "Compute Lucas-Kanade Flow", compute_lucas_kanade_callback);
-  menuedit.add( "Compute Harris Corners", compute_harris_corners_callback);
-  menuedit.add( "Compute VD Edges", compute_vd_edges_callback);
-  menuedit.add( "Compute Line Fit", compute_line_fit_callback);
-  menuedit.add( "Compute Grid Match", compute_grid_match_callback);
-  menuedit.add( "Compute Curve Tracking", compute_curve_tracking_callback);
-  menuedit.add( "Compute Corr Tracking", compute_corr_tracking_callback);
-  menuedit.add( "Compute Info Tracking", compute_info_tracking_callback);
-  menuedit.add( "Generate Basis ", generate_basis_sequence_callback);
-  menuedit.add( "Compute Fourier Transform ",
-                compute_fourier_transform_callback);
-  menuedit.add( "Spatial Filter ", spatial_filter_callback);
   menuedit.add( "Create Box", create_box_callback);
   menuedit.add( "Create Polygon", create_polygon_callback,(vgui_key)'a', vgui_CTRL);
   menuedit.add( "Create Stem", create_stem_callback,
@@ -264,11 +263,39 @@ vgui_menu vidfpl_menus::get_menu()
                 (vgui_key)'2', vgui_CTRL);
   menuedit.add( "Create Short Arm Tip", create_short_arm_tip_callback,
                 (vgui_key)'3', vgui_CTRL);
-  menuedit.add( "Exercise Art Model", exercise_art_model_callback);
-  menuedit.add( "Track Art Model", track_art_model_callback);
+
+  //Process menu entries
+  menuprocess.add( "No Op", no_op_callback);
+  menuprocess.add( "Frame Difference", difference_frames_callback);
+  menuprocess.add( "Compute Motion", compute_motion_callback);
+  menuprocess.add( "Compute Lucas-Kanade Flow", compute_lucas_kanade_callback);
+  menuprocess.add( "Compute Harris Corners", compute_harris_corners_callback);
+  menuprocess.add( "Compute VD Edges", compute_vd_edges_callback);
+  menuprocess.add( "Compute Line Fit", compute_line_fit_callback);
+  menuprocess.add( "Compute Grid Match", compute_grid_match_callback);
+  menuprocess.add( "Generate Basis ", generate_basis_sequence_callback);
+  menuprocess.add( "Compute Fourier Transform ",
+                   compute_fourier_transform_callback);
+  menuprocess.add( "Spatial Filter ", spatial_filter_callback);
+
+  //Tracking menu entries
+  menutrack.add( "Compute Curve Tracking", compute_curve_tracking_callback);
+  menutrack.add( "Compute Corr Tracking", compute_corr_tracking_callback);
+  menutrack.add( "Compute Info Tracking", compute_info_tracking_callback);
+  menutrack.add( "Exercise Art Model", exercise_art_model_callback);
+  menutrack.add( "Track Art Model", track_art_model_callback);
+
+  // debug menu entries
+  menudebug.add("Epipolar Grouping", epipolar_grouping_callback);
+  menudebug.add("Display IHS", display_ihs_callback);
+  menudebug.add( "easy2D Demo", easy2D_tableau_demo_callback);
+
   //Top level menu layout
   menubar.add( "File", menufile);
   menubar.add( "View", menuview);
   menubar.add( "Edit", menuedit);
+  menubar.add( "Track", menutrack);
+  menubar.add( "Process", menuprocess);
+  menubar.add( "Debug", menudebug);
   return menubar;
 }

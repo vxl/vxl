@@ -20,6 +20,7 @@
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_utils.h>
+#include <bgui/bgui_image_tableau.h>
 #include <bgui/bgui_vtol2D_tableau.h>
 #include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
@@ -57,6 +58,9 @@
 #include <vpro/vpro_fourier_process.h>
 #include <vpro/vpro_spatial_filter_process.h>
 #include <strk/strk_art_model_display_process.h>
+#include <strk/strk_epipolar_grouper_params.h>
+#include <strk/strk_epipolar_grouper_process.h>
+#include <vpro/vpro_ihs_process.h>
 
 //static manager instance
 vvid_file_manager *vvid_file_manager::instance_ = 0;
@@ -80,7 +84,8 @@ void vvid_file_manager::init()
   grid_ = vgui_grid_tableau_new(2,1);
   grid_->set_grid_size_changeable(true);
 
-  itab0_ = vgui_image_tableau_new();
+  //  itab0_ = vgui_image_tableau_new();
+  itab0_ = bgui_image_tableau_new();
   easy0_ = bgui_vtol2D_tableau_new(itab0_);
   easy0_->disable_highlight();
   bgui_vtol2D_rubberband_client* cl0 =  new bgui_vtol2D_rubberband_client(easy0_);
@@ -90,7 +95,7 @@ void vvid_file_manager::init()
   v2D0_ = vgui_viewer2D_tableau_new(comp0);
   grid_->add_at(v2D0_, 0,0);
 
-  itab1_ = vgui_image_tableau_new();
+  itab1_ = bgui_image_tableau_new();
   easy1_ = bgui_vtol2D_tableau_new(itab1_);
   easy1_->disable_highlight();
   v2D1_ = vgui_viewer2D_tableau_new(easy1_);
@@ -159,13 +164,14 @@ void vvid_file_manager::display_image()
 //
 void vvid_file_manager::display_spatial_objects()
 {
+  static bool toggle = false;
   if (!video_process_)
     return;
   vcl_vector<vsol_spatial_object_2d_sptr> const& sos =
     video_process_->get_output_spatial_objects();
   if (easy0_)
   {
-    easy0_->clear_all();
+    //easy0_->clear_all();
     if (color_label_) {
       float r,g,b;
       //If tracking is on then we maintain a queue of points
@@ -198,11 +204,21 @@ void vvid_file_manager::display_spatial_objects()
         easy0_->add_spatial_objects(temp);
       }
       else
-        easy0_->add_spatial_objects(sos);
+        {
+          if(toggle)
+            {
+              easy0_->add_spatial_objects(sos, 1.0, 0.0, 0.0, 3.0, 4.0);
+              toggle = !toggle;
+            }
+          else
+            {
+              easy0_->add_spatial_objects(sos, 0.0, 1.0, 0.0, 3.0, 4.0);
+              toggle = !toggle;
+            }
+        }
     }
   }
 }
-
 // set changing colors for labelling curves, points, etc
 //-----------------------------------------------------------------------------
 void vvid_file_manager::set_changing_colors(int num, float *r, float *g, float *b)
@@ -362,6 +378,9 @@ void vvid_file_manager::un_cached_play()
     vcl_cout << "No movie has been loaded\n";
     return;
   }
+  int nframes = my_movie_->length();
+  if(video_process_)
+    video_process_->set_n_frames(my_movie_->length());
   for (vidl_vil1_movie::frame_iterator pframe=my_movie_->begin();
        pframe!=my_movie_->end() && play_video_;
        ++pframe)
@@ -405,10 +424,10 @@ void vvid_file_manager::un_cached_play()
     vgui::run_till_idle();
     this->save_display(frame_index);
   }
-
-  if (video_process_)
-    video_process_->finish();
-  if (save_display_)
+  
+  if(video_process_)
+	  video_process_->finish();
+  if(save_display_)
     this->end_save_display();
   save_display_ = false;
 }
@@ -431,8 +450,10 @@ void vvid_file_manager::play_video()
     this->un_cached_play();
     if (!my_movie_)
       return;
-    vil1_image img =my_movie_->get_image(0);
-    itab1_->set_image(img);
+    if(video_process_&&video_process_->get_output_image())
+      itab1_->set_image(video_process_->get_output_image());
+    else
+      itab1_->set_image(my_movie_->get_image(0));
   }
   this->post_redraw();
 }
@@ -712,8 +733,9 @@ void vvid_file_manager::compute_curve_tracking()
           vcl_cout<<"\n output is image";//display_image();
         if (video_process_->get_output_type()==vpro_video_process::SPATIAL_OBJECT)
           cached_spat_objs_.push_back(video_process_->get_output_spatial_objects());
-
-        if (video_process_->get_output_type()==vpro_video_process::TOPOLOGY)
+        vcl_cout<<"\n output is spatial objects";//display_image();
+        if (video_process_->get_output_type()==
+            vpro_video_process::TOPOLOGY)
           vcl_cout<<"\n output is topology_objects";//display_topology();
       }
     }
@@ -752,7 +774,7 @@ void vvid_file_manager::compute_info_tracking()
 {
   static bool output_track = false;
   static strk_info_tracker_params tp;
-  vgui_dialog tracker_dialog("Mutual Information Tracker V1.4");
+  vgui_dialog tracker_dialog("Mutual Information Tracker V1.5");
   tracker_dialog.field("Number of Samples", tp.n_samples_);
   tracker_dialog.field("Fraction of Samples Refreshed", tp.frac_time_samples_);
   tracker_dialog.field("Search Radius", tp.search_radius_);
@@ -760,6 +782,7 @@ void vvid_file_manager::compute_info_tracking()
   tracker_dialog.field("Scale Range (1+-s)", tp.scale_range_);
   tracker_dialog.field("Smooth Sigma", tp.sigma_);
   tracker_dialog.checkbox("Add Gradient Info", tp.gradient_info_);
+  tracker_dialog.checkbox("Add Color Info", tp.color_info_);
   tracker_dialog.checkbox("Output Track Data", output_track);
   tracker_dialog.checkbox("Verbose", tp.verbose_);
   if (!tracker_dialog.ask())
@@ -1050,3 +1073,41 @@ void vvid_file_manager::display_art_model_track()
   video_process_ = vtd;
   vtd->set_input_file(track_file);
 }
+
+void vvid_file_manager::epipolar_grouping()
+{
+  static bool agr = false;
+  static sdet_detector_params dp;
+  static strk_epipolar_grouper_params egp;
+  dp.borderp = false;
+  dp.automatic_threshold = false;
+  dp.junctionp = false;
+  vgui_dialog epipolar_dialog("Epipolar Grouping");
+  epipolar_dialog.field("Gaussian sigma", dp.smooth);
+  epipolar_dialog.field("Noise Threshold", dp.noise_multiplier);
+  epipolar_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
+  epipolar_dialog.checkbox("Agressive Closure", agr);
+  epipolar_dialog.checkbox("Compute Junctions", dp.junctionp);
+  epipolar_dialog.field("Epi U ", egp.eu_);
+  epipolar_dialog.field("Epi V ", egp.ev_);
+  epipolar_dialog.field("Epi Line U ", egp.elu_);
+  epipolar_dialog.field("Epi Line Vmin ", egp.elv_min_);
+  epipolar_dialog.field("Epi Line Vmax ", egp.elv_max_);
+  epipolar_dialog.field("N samples in s", egp.Ns_);
+  epipolar_dialog.field("Angle Threshold", egp.angle_thresh_);
+  if (!epipolar_dialog.ask())
+    return;
+  if (agr)
+    dp.aggressive_junction_closure=1;
+  else
+    dp.aggressive_junction_closure=0;
+
+  strk_epipolar_grouper_process* egpr
+    = new strk_epipolar_grouper_process(dp, egp);
+  video_process_  = egpr;
+}
+void vvid_file_manager::display_ihs()
+{
+  video_process_  = new vpro_ihs_process();
+}
+  
