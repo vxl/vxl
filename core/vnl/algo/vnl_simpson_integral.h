@@ -10,8 +10,8 @@
 class vnl_simpson_integral : public vnl_definite_integral
 {
  private:
-  //: used to extract integrant functions of the vnl_integrant_fnct.
-  static double int_fnct_(double* x);
+  //: used to wrap the function class to an ordinary function.
+  static double int_fnct_(float* x);
 
  public:
 
@@ -20,7 +20,7 @@ class vnl_simpson_integral : public vnl_definite_integral
   //: a and b are integral limits respectively.
   // n is the number of intervals used in integral.
   // The actual subinterval used is 2* num_intervals_
-  double integral(vnl_integrant_fnct *f, double a, double b, int n);
+  double integral(vnl_integrant_fnct *f, float a, float b, int n);
 };
 
 #endif

@@ -16,8 +16,8 @@ void test_integral()
   my_test_integrant f;
   vnl_simpson_integral simpson_integral;
 
-  double a = 0;
-  double b = 1;
+  float a = 0;
+  float b = 1;
 
   TEST_NEAR("simpson integral of x/(1+x^2) from  0 to 1 is: ",
             simpson_integral.integral(&f, a, b, 100), 0.5*vcl_log(2.0), 1e-6);
@@ -25,7 +25,7 @@ void test_integral()
   vnl_adaptsimpson_integral adaptsimpson_integral;
 
   TEST_NEAR("adaptive simpson integral of x/(1+x^2) from 0 to 1 is: ",
-            adaptsimpson_integral.integral(&f, a, b, 1e-11), 0.5*vcl_log(2.0), 1e-6);
+            adaptsimpson_integral.integral(&f, a, b, 1e-11f), 0.5*vcl_log(2.0), 1e-6);
 }
 
 TESTMAIN( test_integral );

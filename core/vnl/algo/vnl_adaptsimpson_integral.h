@@ -11,15 +11,14 @@ class vnl_adaptsimpson_integral : public vnl_definite_integral
 {
  private:
   //: used to wrap the function class to an ordinary function.
-  static double int_fnct_(double* x);
+  static double int_fnct_(float* x);
 
  public:
   vnl_adaptsimpson_integral() {}
 
   //: a and b are integral limits respectively.
   // n is the number of intervals used in integral.
-  // accuracy is the accuracy you want to achieve. Norally accuracy > 1e-11)
-  double integral(vnl_integrant_fnct *f, double a, double b, double accuracy);
+  double integral(vnl_integrant_fnct *f, float a, float b, float accuracy);
 };
 
 #endif
