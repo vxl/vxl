@@ -10,7 +10,6 @@ SOURCES += vpro_video_process.cxx
 MANPAGE_SOURCES += vpro_video_process_sptr.h
 SOURCES += vpro_region_process.cxx
 SOURCES += vpro_capture_process.cxx
-SOURCES += vpro_curve_tracking_process.cxx
 SOURCES += vpro_frame_diff_process.cxx
 SOURCES += vpro_motion_process.cxx
 SOURCES += vpro_motion_params.cxx
