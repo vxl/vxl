@@ -1,4 +1,4 @@
-// This is vgui_enhance.cxx
+// This is oxl/vgui/vgui_enhance.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -15,7 +15,6 @@
 
 #include "vgui_enhance.h"
 
-#include <vcl_cmath.h>
 #include <vcl_iostream.h>
 
 #include <vnl/vnl_matrix.h>

@@ -1,4 +1,4 @@
-// This is vxl/vil/io/vil_io_memory_image_impl.txx
+// This is vxl/vil/io/vil_io_memory_image_impl.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -6,9 +6,9 @@
 // \file
 // \author Ian Scott and Nick Costen (Manchester)
 
+#include "vil_io_memory_image_impl.h"
 #include <vil/vil_memory_image_impl.h>
 #include <vil/io/vil_io_memory_image_format.h>
-#include <vil/io/vil_io_memory_image_impl.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_explicit_io.h>
 

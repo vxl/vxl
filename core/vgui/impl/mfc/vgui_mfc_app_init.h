@@ -1,4 +1,4 @@
-// This is vgui/impl/mfc/vgui_mfc_app_init.h
+// This is oxl/vgui/impl/mfc/vgui_mfc_app_init.h
 #ifndef vgui_mfc_app_init_h_
 #define vgui_mfc_app_init_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -8,8 +8,6 @@
 // \file
 // \author  Oxford RRG
 // \brief   Initializes the MFC CWinApp object.
-//
-// .LIBRARY vgui-mfc
 
 class vgui_mfc_app;
 

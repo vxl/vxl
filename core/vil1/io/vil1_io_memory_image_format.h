@@ -1,4 +1,4 @@
-// This is vxl/vil/io/vil_memory_image_format.h
+// This is vxl/vil/io/vil_io_memory_image_format.h
 #ifndef vil_io_memory_image_format_h_
 #define vil_io_memory_image_format_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

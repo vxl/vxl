@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_io_polygon.h
+// This is vxl/vgl/io/vgl_io_polygon.h
 #ifndef vgl_io_polygon_h
 #define vgl_io_polygon_h
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

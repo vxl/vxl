@@ -1,9 +1,9 @@
-//
-// This is vgui/impl/mfc/vgui_mfc_tag.cxx
-//
-// \author  awf@robots.ox.ac.uk
-//
+// This is oxl/vgui/impl/mfc/vgui_mfc_tag.cxx
 #include "vgui_mfc.h"
+//:
+// \file
+// \author  awf@robots.ox.ac.uk
+
 #include <vgui/vgui_tag.h>
 #include <vul/vul_trace.h>
 

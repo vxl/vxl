@@ -1,4 +1,4 @@
-// This is vgui/impl/mfc/vgui_mfc_util.cxx
+// This is oxl/vgui/impl/mfc/vgui_mfc_util.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

@@ -1,8 +1,8 @@
+// This is vxl/vnl/algo/vnl_convolve.txx
 #ifndef vnl_convolve_txx_
 #define vnl_convolve_txx_
-// This is vxl/vnl/vnl_convolve.txx
 
-#include <vnl/algo/vnl_convolve.h>
+#include "vnl_convolve.h"
 #include <vnl/algo/vnl_fft_1d.h> // this #includes <vcl_complex.h>
 #include <vcl_cassert.h>
 #include <vcl_iostream.h> // for warning messages

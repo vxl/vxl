@@ -1,17 +1,17 @@
-// This is vil/io/vil_io_memory_image_of.txx
+// This is vxl/vil/io/vil_io_memory_image_of.txx
 #ifndef vil_io_memory_image_of_txx_
 #define vil_io_memory_image_of_txx_
-
-#include <vil/io/vil_io_memory_image_of.h>
-#include <vil/io/vil_io_memory_image.h>
-#include <vil/vil_memory_image_of.h>
-#include <vsl/vsl_clipon_binary_loader.txx>
-#include <vil/io/vil_io_image_impl.h>
 //:
 // \file
 // \brief Perform serialised binary IO for vil_memory_image_of<T>
 // \author Ian Scott (Manchester)
 // \date 27-Mar-2001
+
+#include "vil_io_memory_image_of.h"
+#include <vil/io/vil_io_memory_image.h>
+#include <vil/vil_memory_image_of.h>
+#include <vsl/vsl_clipon_binary_loader.txx>
+#include <vil/io/vil_io_image_impl.h>
 
 //: Binary write to stream.
 template <class T>

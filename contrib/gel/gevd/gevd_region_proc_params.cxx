@@ -1,12 +1,11 @@
-// This is gel/gevdl/gevd_region_proc_params.cxx
-
+// This is gel/gevd/gevd_region_proc_params.cxx
+#include "gevd_region_proc_params.h"
 //:
 // \file
 // See gevd_region_proc_params.h
 //
 //-----------------------------------------------------------------------------
 
-#include <gevd/gevd_region_proc_params.h>
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
 

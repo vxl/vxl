@@ -1,4 +1,4 @@
-// This is vxl/vil/io/vil_rgba.h
+// This is vxl/vil/io/vil_io_rgba.h
 #ifndef vil_io_rgba_h_
 #define vil_io_rgba_h_
 //:

@@ -1,5 +1,4 @@
-// This is osl/osl_fit_circle.cxx
-
+// This is oxl/osl/osl_fit_circle.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

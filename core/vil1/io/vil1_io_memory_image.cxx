@@ -1,4 +1,4 @@
-// This is vil/io/vil_io_memory_image.cxx
+// This is vxl/vil/io/vil_io_memory_image.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -8,7 +8,7 @@
 // \author Ian Scott (Manchester)
 // \date 26-Mar-2001
 
-#include <vil/io/vil_io_memory_image.h>
+#include "vil_io_memory_image.h"
 #include <vil/io/vil_io_image.h>
 #include <vil/vil_memory_image.h>
 #include <vsl/vsl_clipon_binary_loader.txx>

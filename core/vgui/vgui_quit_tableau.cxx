@@ -1,11 +1,10 @@
-// This is ./oxl/vgui/vgui_quit_tableau.h
-
+// This is oxl/vgui/vgui_quit_tableau.cxx
+#include "vgui_quit_tableau.h"
 //:
 // \file
 // \author  fsm@robots.ox.ac.uk
 // \brief   See vgui_quit_tableau.h for a description of this file.
 
-#include "vgui_quit_tableau.h"
 #include <vgui/vgui.h>
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_adaptor.h>

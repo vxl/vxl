@@ -1,4 +1,4 @@
-// This is vnl_convolve.h
+// This is vxl/vnl/algo/vnl_convolve.h
 #ifndef vnl_convolve_h_
 #define vnl_convolve_h_
 //:

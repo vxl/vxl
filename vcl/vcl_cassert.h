@@ -1,4 +1,4 @@
-// This is vcl_cassert.h
+// This is vcl/vcl_cassert.h
 
 //- The <cassert> header does not
 //- have inclusion guards. The
@@ -31,7 +31,7 @@ extern void vcl_cassert_failure(char const *, int, char const *);
 #endif
 
 #ifdef VCL_METRO_WERKS
-// for some reason, MW's <cassert> doesn't have it's own printf() and abort() declarations.
+// for some reason, MW's <cassert> doesn't have its own printf() and abort() declarations.
 # include <vcl_cstdio.h>
 # include <vcl_cstdlib.h>
 #endif
@@ -47,4 +47,3 @@ extern void vcl_cassert_failure(char const *, int, char const *);
 // fsm: There should not be a vcl_assert macro as there is no
 // std::assert symbol. If your assert macro is broken, fix it
 // here using #undef and #define.
-//#define vcl_assert(x) assert(x)

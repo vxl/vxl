@@ -1,7 +1,9 @@
+// This is vcl/vcl_cstdlib.h
 #ifndef vcl_cstdlib_h_
 #define vcl_cstdlib_h_
-// This is vcl_cstdlib.h
-
+//:
+// \file
+//
 // [26.5.4] In addition to the signatures from <stdlib.h> the C++
 // header <cstdlib> adds the overloaded signatures :
 //   long   abs(long);        // labs()

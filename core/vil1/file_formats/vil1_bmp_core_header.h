@@ -1,4 +1,4 @@
-// This is vxl/vil/vil_bmp_core_header.h
+// This is vxl/vil/file_formats/vil_bmp_core_header.h
 #ifndef vil_bmp_core_header_h_
 #define vil_bmp_core_header_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_io_sparse_matrix.h
+// This is vxl/vnl/io/vnl_io_sparse_matrix.h
 #ifndef vnl_io_sparse_matrix_h
 #define vnl_io_sparse_matrix_h
 //:

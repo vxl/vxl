@@ -1,4 +1,4 @@
-// This is vxl/vgl/io/vgl_homg_line_2d.h
+// This is vxl/vgl/io/vgl_io_homg_line_2d.h
 #ifndef vgl_io_homg_line_2d_h_
 #define vgl_io_homg_line_2d_h_
 //:

@@ -1,4 +1,4 @@
-// This is ./vxl/vul/tests/vul_test_url.cxx
+// This is vxl/vul/tests/test_url.cxx
 // Copyright: (C) 2000 British Telecommunications PLC
 
 //:
@@ -39,15 +39,15 @@ void test_url()
 
 
     vcl_string encoded = vul_url::encode_base64(data);
-    if(!(encoded.size() >= i * 4 / 3 && encoded.size() <= 4+i * 5 / 3))
+    if (!(encoded.size() >= i * 4 / 3 && encoded.size() <= 4+i * 5 / 3))
       correct_size=false;
     vcl_string decoded = vul_url::decode_base64(encoded);
 
     //Can be renambled to help track down errors.
     vcl_pair<vcl_string::iterator,vcl_string::iterator> x
       = vcl_mismatch(decoded.begin(), decoded.end(), data.begin());
-    int k = x.first - decoded.begin();
-    if (k!=int(i+1))
+    long k = x.first - decoded.begin();
+    if (k!=long(i+1))
       correct_decode = false;
     if (decoded != data)
     {

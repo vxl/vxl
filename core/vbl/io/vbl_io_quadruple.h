@@ -1,4 +1,4 @@
-// This is vxl/vbl/vbl_io_quadruple.h
+// This is vxl/vbl/io/vbl_io_quadruple.h
 #ifndef vbl_io_quadruple_h_
 #define vbl_io_quadruple_h_
 //:

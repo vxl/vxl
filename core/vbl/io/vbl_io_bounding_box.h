@@ -1,4 +1,4 @@
-// This is vxl/vbl/vbl_io_bounding_box_3d.h
+// This is vxl/vbl/io/vbl_io_bounding_box.h
 #ifndef vbl_io_bounding_box_h
 #define vbl_io_bounding_box_h
 //:
@@ -9,7 +9,7 @@
 #include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_bounding_box.h>
 
-//: Binary save vbl__point_3d to stream.
+//: Binary save vbl_bounding_box to stream.
 template <class T, class DIM_>
 void vsl_b_write(vsl_b_ostream &os, const vbl_bounding_box_base<T, DIM_> & p);
 

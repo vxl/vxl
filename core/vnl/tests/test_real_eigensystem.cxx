@@ -1,4 +1,4 @@
-// This is vxl/vnl/tests/test_real_eigensystem
+// This is vxl/vnl/tests/test_real_eigensystem.cxx
 
 //:
 // \file
@@ -29,7 +29,7 @@ void test_real_eigensystem()
     {
       vnl_real_eigensystem eig(S);
       vnl_diag_matrix<vcl_complex<double> > D(eig.D.rows());
-      for(unsigned i = 0; i < eig.D.rows(); ++i) {
+      for (unsigned i = 0; i < eig.D.rows(); ++i) {
         testlib_test_assert("All real", vcl_imag(eig.D(i,i)) < 1e-15);
         D(i,i) = vcl_real(eig.D(i,i));
       }

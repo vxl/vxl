@@ -1,11 +1,9 @@
-// This is vgui_roi_tableau_sptr.h
+// This is oxl/vgui/vgui_roi_tableau_sptr.h
 #ifndef vgui_roi_tableau_sptr_h_
 #define vgui_roi_tableau_sptr_h_
 //:
 // \file
 // \brief  Smart-pointer to a vgui_quit_tableau.
-//
-// This is a generated file.
 
 #include <vgui/vgui_tableau_sptr.h>
 

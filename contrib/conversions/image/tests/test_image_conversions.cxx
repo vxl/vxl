@@ -1,4 +1,4 @@
-// This is conversions/images/tests/test_image_conversions.cxx
+// This is conversions/image/tests/test_image_conversions.cxx
 #include <testlib/testlib_test.h>
 
 #ifdef HAS_NO_IMAGE

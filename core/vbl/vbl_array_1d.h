@@ -1,4 +1,4 @@
-// This is vbl/vbl_array_1d.h
+// This is vxl/vbl/vbl_array_1d.h
 #ifndef vbl_array_1d_h_
 #define vbl_array_1d_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -35,11 +35,11 @@ struct vbl_array_1d
   vbl_array_1d() : begin_(0), end_(0), alloc_(0) { }
 
   vbl_array_1d(const_iterator b, const_iterator e) {
-    unsigned n = e - b;
+    unsigned long n = e - b;
     begin_ = (T*) new char [n * sizeof(T)]; // FIXME alignment
     end_   = begin_ + n;
     alloc_ = begin_ + n;
-    for (unsigned i=0; i<n; ++i)
+    for (unsigned long i=0; i<n; ++i)
       new (begin_ + i) T(b[i]);
   }
 
@@ -79,7 +79,7 @@ struct vbl_array_1d
   }
 
   void reserve(unsigned new_n) {
-    unsigned n = end_ - begin_;
+    unsigned long n = end_ - begin_;
     if (new_n <= n)
       return;
 
@@ -87,7 +87,7 @@ struct vbl_array_1d
     T *new_end_   = new_begin_ + n;
     T *new_alloc_ = new_begin_ + new_n;
 
-    for (unsigned i=0; i<n; ++i) {
+    for (unsigned long i=0; i<n; ++i) {
       new (new_begin_ + i) T(begin_[i]);
       begin_[i].~T();
     }
@@ -130,8 +130,8 @@ struct vbl_array_1d
   const_iterator end() const { return end_; }
 
   bool empty() const { return begin_ == end_; }
-  unsigned size() const { return end_ - begin_; }
-  unsigned capacity() const { return alloc_ - begin_; }
+  unsigned long size() const { return end_ - begin_; }
+  unsigned long capacity() const { return alloc_ - begin_; }
 
   //: Get the ith element.
   // #define NDEBUG to turn bounds checking off.
