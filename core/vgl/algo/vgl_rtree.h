@@ -138,6 +138,7 @@ class vgl_rtree_iterator : public vgl_rtree_iterator_base<V, B, C> {
 public:
   typedef vgl_rtree_iterator_base<V, B, C> base;
   typedef vgl_rtree_iterator<V, B, C> self;
+  typedef vgl_rtree_node<V, B, C> node;
 
   vgl_rtree_iterator(node *root) : base(root) { }
   vgl_rtree_iterator() { }
@@ -157,6 +158,7 @@ class vgl_rtree_const_iterator : public vgl_rtree_iterator_base<V, B, C> {
 public:
   typedef vgl_rtree_iterator_base<V, B, C> base;
   typedef vgl_rtree_const_iterator<V, B, C> self;
+  typedef vgl_rtree_node<V, B, C> node;
 
   vgl_rtree_const_iterator(node *root) : base(root) { }
   vgl_rtree_const_iterator(vgl_rtree_iterator<V, B, C> const &that) : base(that) { }
