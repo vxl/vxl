@@ -268,7 +268,20 @@ vtol_vertex_2d &vtol_vertex_2d::operator=(const vtol_vertex_2d &other)
   return *this;
 }
 
+vtol_vertex& vtol_vertex_2d::operator=(const vtol_vertex &other)
+{
+  if(this!=&other)
+    {
+      _point->set_x(other.cast_to_vertex_2d()->_point->x());
+      _point->set_y(other.cast_to_vertex_2d()->_point->y());
+      touch();
+    }
+  return *this;
+}
+
+//---------------------------------------------------------------------------
 //: spatial object equality
+//---------------------------------------------------------------------------
 
 bool vtol_vertex_2d::operator==(const vsol_spatial_object_3d& obj) const
 {
@@ -278,7 +291,6 @@ bool vtol_vertex_2d::operator==(const vsol_spatial_object_3d& obj) const
   ? *this == (vtol_vertex_2d const&) (vtol_topology_object const&) obj
   : false;
 }
-
 
 //---------------------------------------------------------------------------
 //: Does `this' have the same coordinates for its point than `other' ?

@@ -269,6 +269,15 @@ bool vtol_edge_2d::operator==(const vtol_edge_2d &other) const
   return *zc1==*zc2;
 }
 
+//: edge equality
+bool vtol_edge_2d::operator==(const vtol_edge &other) const
+{
+  if (other.cast_to_edge_2d())
+    return *this == (vtol_edge_2d const&) other;
+  else
+    return false;
+}
+
 //: spatial object equality
 
 bool vtol_edge_2d::operator==(const vsol_spatial_object_3d& obj) const

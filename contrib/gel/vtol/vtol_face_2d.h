@@ -129,6 +129,7 @@ public:
   virtual vtol_face *shallow_copy_with_no_links(void) const;
 
   virtual bool operator==(const vtol_face_2d &other)const;
+  bool operator==(const vtol_face &other)const; // virtual of vtol_face
   bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object_2d
 
   virtual void print(vcl_ostream &strm=vcl_cout) const;

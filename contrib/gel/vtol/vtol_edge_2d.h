@@ -121,8 +121,11 @@ public:
   //---------------------------------------------------------------------------
   virtual void set_curve(vsol_curve_2d &new_curve);
 
-
+  //---------------------------------------------------------------------------
+  //: Equality operators
+  //---------------------------------------------------------------------------
   virtual bool operator==(const vtol_edge_2d &other) const;
+  bool operator==(const vtol_edge &other) const; // virtual of vtol_edge
   bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object_2d
 
   //***************************************************************************

@@ -340,6 +340,13 @@ bool vtol_face_2d::operator==(const vtol_face_2d &other) const
   return true;
 }
 
+bool vtol_face_2d::operator==(const vtol_face &other) const
+{
+  if (! other.cast_to_face_2d() )
+    return false;
+  return *this == (vtol_face_2d const&) other;
+}
+
 //: spatial object equality
 
 bool vtol_face_2d::operator==(const vsol_spatial_object_3d& obj) const
