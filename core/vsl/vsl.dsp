@@ -183,6 +183,8 @@ SOURCE=.\Templates/vsl_vector_io+uchar-.cxx
 SOURCE=.\Templates/vsl_vector_io+vcl_vector+float--.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vcl_vector+int--.cxx
+# Begin Source File
 SOURCE=.\vsl_binary_io.cxx
 # End Source File
 # Begin Source File
@@ -287,8 +289,6 @@ SOURCE=.\vsl_block_binary.h
 # Begin Source File
 SOURCE=.\vsl_b_read_block_old.h
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
