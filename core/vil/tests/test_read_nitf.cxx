@@ -8,6 +8,7 @@
 #include <vcl_cassert.h>
 
 #include <vil/vil_open.h>
+#include <vil/vil_property.h>
 #include <vil/vil_stream.h>
 #include <vil/file_formats/vil_nitf.h>
 
@@ -43,6 +44,21 @@ static void test_read_nitf (char const* filename)
                << "  nplanes = " << image_resource->nplanes()
                << "  pixel_format = " << image_resource->pixel_format()
                << vcl_endl;
+
+      char * tag_name = vil_property_quantisation_depth ;  // DEFINED IN vil_property.h
+      unsigned int bits_per_component = 0 ;
+      bool got_property = image_resource->get_property (tag_name, &bits_per_component) ;
+
+      if (got_property == false) {
+	vcl_cout << "WARNING: failed to get property <" << tag_name << ">"
+		 << vcl_endl ;
+      }
+      else {
+	vcl_cout << "vil_property_quantisation_depth"
+		 << " (= actual bits per pixel per band) = " 
+		 << bits_per_component
+		 << vcl_endl ;
+      }
     }
 
     // NEED A vil_nitf_image POINTER SO WE CAN INVOKE vil_nitf_image
