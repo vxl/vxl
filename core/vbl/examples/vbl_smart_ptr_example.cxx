@@ -62,7 +62,7 @@ public:
 // end of example_sp.h 
 
 //--------------------------------------------------------------------------------
-// start of list+vbl_smart_ptr+example_sp-.cxx
+// start of list+vbl_smart_ptr+example_sp--.cxx
 #include <vbl/vbl_smart_ptr.txx>
 #include <vcl/vcl_compiler.h>
 #include <vcl/vcl_list.txx>
