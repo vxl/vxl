@@ -1,11 +1,11 @@
 // This is mul/vil2/vil2_image_view_functions.cxx
+#include "vil2_image_view_functions.h"
 //:
 // \file
 // \brief Various functions for manipulating image views
 // \author Tim Cootes and Ian Scott - Manchester
 
 #include <vil/vil_rgb.h>
-#include <vil2/vil2_image_view_functions.h>
 #include <vil2/vil2_image_data.h>
 
 //: Explicit overload for bool
@@ -141,5 +141,4 @@ void vil2_value_range(vil_rgb<float>& min_value, vil_rgb<float>& max_value,
   vil2_value_range(min_value.g,max_value.g,plane_view.plane(1));
   vil2_value_range(min_value.b,max_value.b,plane_view.plane(2));
 }
-
 
