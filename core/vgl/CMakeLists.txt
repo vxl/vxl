@@ -22,7 +22,6 @@ SET( vgl_sources
   vgl_1d_basis.h                 vgl_1d_basis.cxx  vgl_1d_basis.txx
 
   vgl_homg.h                     vgl_homg.cxx
-  vgl_homg_1d.h                  vgl_homg_1d.txx
   vgl_homg_line_2d.h             vgl_homg_line_2d.txx
   vgl_homg_line_3d_2_points.h    vgl_homg_line_3d_2_points.txx
   vgl_homg_plane_3d.h            vgl_homg_plane_3d.txx
@@ -30,6 +29,7 @@ SET( vgl_sources
   vgl_homg_point_2d.h            vgl_homg_point_2d.txx
   vgl_homg_point_3d.h            vgl_homg_point_3d.txx
   vgl_line_2d.h                  vgl_line_2d.txx
+  vgl_line_3d_2_points.h         vgl_line_3d_2_points.txx
   vgl_line_segment_2d.h          vgl_line_segment_2d.txx
   vgl_line_segment_3d.h          vgl_line_segment_3d.txx
   vgl_plane_3d.h                 vgl_plane_3d.txx

@@ -9,7 +9,6 @@
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_ellipse_scan_iterator.h>
 #include <vgl/vgl_homg.h>
-#include <vgl/vgl_homg_1d.h>
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/vgl_homg_line_3d_2_points.h>
 #include <vgl/vgl_homg_plane_3d.h>
