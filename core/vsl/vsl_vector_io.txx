@@ -7,7 +7,6 @@
 // \author Tim Cootes
 
 #include "vsl_vector_io.h"
-#include <vsl/vsl_binary_explicit_io.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_block_binary.h>
 #include <vcl_iostream.h>
@@ -57,7 +56,7 @@ void vsl_b_read(vsl_b_istream& is, vcl_vector<T>& v)
 
     if (v.size())
     {
-      vsl_b_read_block(is, &v[0], n);
+      vsl_block_binary_read(is, &v[0], n);
     }
     break;
   case 2:
