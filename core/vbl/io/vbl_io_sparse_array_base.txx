@@ -6,6 +6,7 @@
 
 #include "vbl_io_sparse_array_base.h"
 #include <vsl/vsl_pair_io.h>
+#include <vsl/vsl_binary_io.h>
 
 //============================================================================
 //: Binary save self to stream.

@@ -6,7 +6,8 @@
 // \author Ian Scott
 // \date 11-Apr-2001
 
-#include <vsl/vsl_binary_io.h>
+#include <vcl_iosfwd.h>
+#include <vsl/vsl_fwd.h>
 #include <vbl/vbl_sparse_array_base.h>
 
 //: Binary save vbl_sparse_array_base to stream.

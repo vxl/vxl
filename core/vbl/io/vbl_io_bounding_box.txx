@@ -5,6 +5,7 @@
 // \file
 
 #include "vbl_io_bounding_box.h"
+#include <vsl/vsl_binary_io.h>
 
 //==========================================================================
 //: Binary save self to stream.

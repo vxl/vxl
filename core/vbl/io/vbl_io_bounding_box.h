@@ -6,7 +6,7 @@
 // \author P D Allen
 // \date 21-Mar-2001
 
-#include <vsl/vsl_binary_io.h>
+#include <vsl/vsl_fwd.h>
 #include <vbl/vbl_bounding_box.h>
 
 //: Binary save vbl_bounding_box to stream.

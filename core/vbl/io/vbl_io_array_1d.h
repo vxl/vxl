@@ -6,7 +6,7 @@
 // \author K.Y.McGaul
 // \date   22-Mar-2001
 
-#include <vsl/vsl_binary_io.h>
+#include <vsl/vsl_fwd.h>
 #include <vbl/vbl_array_1d.h>
 
 //: Binary save vbl_array_1d to stream.
