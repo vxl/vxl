@@ -51,7 +51,7 @@ void kalman_filter::init()
   memory_size_ = 0;
 
   // initialize the default queue size
-  queue_size_ = 100;
+  queue_size_ = 15;
   observes_.resize(queue_size_);
   motions_.resize(queue_size_);
 
@@ -339,10 +339,8 @@ void kalman_filter::update_observes(const vnl_double_3x4 &P, int iframe)
 
   for (int i=0; i<num_points_; i++)
   {
-    //vgl_point_3d<double> X(curve_3d_[i].x(), curve_3d_[i].y(), curve_3d_[i].z());
     bugl_gaussian_point_2d<double> x = brct_algos::project_3d_point(P, curve_3d_[i]);
-    //vgl_point_2d<double> u = brct_algos::closest_point(curves_[iframe], x);
-    vgl_point_2d<double> u = brct_algos::most_possible_point(curves_[iframe%queue_size_], x);
+    vgl_point_2d<double> u = brct_algos::most_possible_point(curves_[iframe], x);
     observes_[iframe%queue_size_][i].set_point(u);
     vnl_double_2x2 sigma;
     sigma.set_identity();
@@ -353,20 +351,20 @@ void kalman_filter::update_observes(const vnl_double_3x4 &P, int iframe)
 
 void kalman_filter::update_confidence()
 {
-  vcl_vector<vnl_double_3x4> cams(cur_pos_+1); //cur_pos_ is 0 based
-  for (int i = 0; i < cur_pos_; i++)
-    cams[i] = get_projective_matrix(motions_[i]);
+  vcl_vector<vnl_double_3x4> cams(memory_size_); //cur_pos_ is 0 based
+  for (int i = 0; i < memory_size_; i++)
+    cams[i] = get_projective_matrix(motions_[(cur_pos_-i)%memory_size_]);
 
   double normalization_factor = 0;
   for (int i=0; i<num_points_; i++)
   {
     double dist2 = 0; // square distance
 
-    for (int f = 0; f<cur_pos_; ++f)
+    for (int f = 0; f<memory_size_; ++f)
     {
       vgl_point_3d<double> X(curve_3d_[i].x(), curve_3d_[i].y(), curve_3d_[i].z());
       vgl_point_2d<double> x = brct_algos::projection_3d_point(X, cams[f]);
-      vgl_point_2d<double> u = brct_algos::closest_point(curves_[f], x);
+      vgl_point_2d<double> u = brct_algos::closest_point(curves_[cur_pos_ - f], x);
 
       double dx = x.x() - u.x();
       double dy = x.y() - u.y();
