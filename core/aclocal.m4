@@ -184,7 +184,27 @@ VXL_MATH_HAS_FINITE=0
 AC_MSG_RESULT(no)
 ])
 AC_LANG_RESTORE
-export VXL_STDLIB_HAS_QSORT
+export VXL_MATH_HAS_FINITE
+])
+
+
+
+dnl ------------------------------------------------------------
+AC_DEFUN(AC_VXL_IEEEFP_HAS_FINITE,[
+AC_MSG_CHECKING([whether <ieeefp.h> provides finite()])
+AC_LANG_CPLUSPLUS
+AC_TRY_COMPILE([
+#include <ieeefp.h>
+int vxl_finite(double x) { return finite(x); }
+],,[
+VXL_IEEEFP_HAS_FINITE=1
+AC_MSG_RESULT(yes)
+],[
+VXL_IEEEFP_HAS_FINITE=0
+AC_MSG_RESULT(no)
+])
+AC_LANG_RESTORE
+export VXL_IEEEFP_HAS_FINITE
 ])
 
 

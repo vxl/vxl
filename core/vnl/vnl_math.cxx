@@ -11,17 +11,18 @@
 // # define isnan _isnan
 # define finite _finite
 
-#elif VXL_HAS_IEEEFP_H
+#elif VXL_IEEEFP_HAS_FINITE
 # include <ieeefp.h>
 
 #elif VXL_MATH_HAS_FINITE
 # include <math.h>
 
 #elif defined(SYSV) && !defined(hppa)
-// ** "who still needs this?" **
+// needed on platforms with finite() declared in strange places, e.g. on alpha
 extern "C" int finite(double);
 
 #else
+#warning finite() is not declared on this platform
 static
 bool finite(double x)
 {

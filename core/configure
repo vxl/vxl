@@ -1613,7 +1613,47 @@ echo "$ac_t""no" 1>&6
 fi
 rm -f conftest*
 
-export VXL_STDLIB_HAS_QSORT
+export VXL_MATH_HAS_FINITE
+
+
+echo $ac_n "checking whether <ieeefp.h> provides finite()""... $ac_c" 1>&6
+echo "configure:1581: checking whether <ieeefp.h> provides finite()" >&5
+ac_ext=C
+# CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext 1>&5'
+ac_link='${CXX-g++} -o conftest $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&5'
+cross_compiling=$ac_cv_prog_cxx_cross
+
+cat > conftest.$ac_ext <<EOF
+#line 1590 "configure"
+#include "confdefs.h"
+
+#include <ieeefp.h>
+int vxl_finite(double x) { return finite(x); }
+
+int main() {
+
+; return 0; }
+EOF
+if { (eval echo configure:1600: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+  rm -rf conftest*
+  
+VXL_IEEEFP_HAS_FINITE=1
+echo "$ac_t""yes" 1>&6
+
+else
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -rf conftest*
+  
+VXL_IEEEFP_HAS_FINITE=0
+echo "$ac_t""no" 1>&6
+
+fi
+rm -f conftest*
+
+export VXL_IEEEFP_HAS_FINITE
 
 
 ac_ext=C
@@ -1980,6 +2020,7 @@ s%@VXL_UNISTD_HAS_TELL@%$VXL_UNISTD_HAS_TELL%g
 s%@VXL_STDLIB_HAS_QSORT@%$VXL_STDLIB_HAS_QSORT%g
 s%@VXL_STDLIB_HAS_LRAND48@%$VXL_STDLIB_HAS_LRAND48%g
 s%@VXL_STDLIB_HAS_DRAND48@%$VXL_STDLIB_HAS_DRAND48%g
+s%@VXL_IEEEFP_HAS_FINITE@%$VXL_IEEEFP_HAS_FINITE%g
 s%@VXL_MATH_HAS_FINITE@%$VXL_MATH_HAS_FINITE%g
 s%@VXL_UNISTD_USLEEP_IS_VOID@%$VXL_UNISTD_USLEEP_IS_VOID%g
 s%@VXL_TWO_ARG_GETTIME@%$VXL_TWO_ARG_GETTIME%g

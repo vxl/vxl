@@ -51,6 +51,9 @@
 // true if <stdlib.h> declares drand48()
 #define VXL_STDLIB_HAS_DRAND48    @VXL_STDLIB_HAS_DRAND48@
 
+// true if <ieeefp.h> declares finite()
+#define VXL_IEEEFP_HAS_FINITE     @VXL_IEEEFP_HAS_FINITE@
+
 // true if <math.h> declares finite()
 #define VXL_MATH_HAS_FINITE       @VXL_MATH_HAS_FINITE@
 
