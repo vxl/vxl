@@ -24,15 +24,29 @@ int main(int argc, char** argv)
   image.print_all(vcl_cout);
 
 
+  vcl_cout<<vcl_endl;
   vcl_cout<<"View central square of image"<<vcl_endl;
   vil2_image_view<vil_byte> win1 = image.window(2,4,2,4);
   win1.print_all(vcl_cout);
 
+  vcl_cout<<vcl_endl;
   vcl_cout<<"Manipulate central square of image through the window"<<vcl_endl;
   win1.fill(0);
 
   vcl_cout<<"Original image:"<<vcl_endl;
   image.print_all(vcl_cout);
+
+  vcl_cout<<vcl_endl;
+  vcl_cout<<"View first plane of image"<<vcl_endl;
+  vil2_image_view<vil_byte> plane = image.plane(1);
+  plane.print_all(vcl_cout);
+
+  vcl_cout<<vcl_endl;
+  vcl_cout<<"Create transposed view of plane"<<vcl_endl;
+  vil2_image_view<vil_byte> transpose = plane.transpose();
+  transpose.print_all(vcl_cout);
+
+
 
   return 0;
 }
