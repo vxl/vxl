@@ -237,8 +237,11 @@ bool PairMatchSet::read_ascii(istream& s)
     if (!s.good())
       break;
     // Eat any whitespace
-    //s >> std :: ws;
+#ifdef WIN32
+    s >> std :: ws;
+#else
     s >> ws;
+#endif
 
     // Sanity check
     if (i1 < 0 || i2 < 0 || i1 >= (int)_matches.size()) {
