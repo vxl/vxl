@@ -825,6 +825,9 @@ SOURCE=.\vnl_file_vector.txx
 SOURCE=.\vnl_float_2.h
 # End Source File
 # Begin Source File
+SOURCE=.\vnl_float_2x2.h
+# End Source File
+# Begin Source File
 SOURCE=.\vnl_float_3.h
 # End Source File
 # Begin Source File
@@ -1060,4 +1063,3 @@ SOURCE=.\vnl_inverse.h
 # End Group
 # End Target
 # End Project
-
