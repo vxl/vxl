@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="pcbuilder" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="test_mbl" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -10,11 +10,11 @@
 
 # variables to REPLACE
 # 
-# /I "$(IUEROOT)/WIN32-VC60/vcl" /I "$(IUEROOT)/WIN32-VC60/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/mul"  == include path
-# $(IUEROOT)/WIN32-VC60/bin/ == override in output directory
+# /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vcl/config.win32-VC60" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/mul"  == include path
+# $(VXLROOT)/bin/ == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 # test_mbl  == name of output library
-#  /LIBPATH:"$(IUEROOT)/WIN32-VC60/lib/$(IntDir)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/lib/"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/bin/$(IntDir)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/bin/"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/mul/mbl/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/mul/mbl"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl/io/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl/io"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl/algo/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl/algo"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/v3p/netlib/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/v3p/netlib"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vcl/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vcl"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vsl/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vsl"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vbl/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vbl"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vul/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vul"  "mbl.lib" "vnl_io.lib" "vnl_algo.lib" "vnl.lib" "netlib.lib" "vsl.lib" "vcl.lib" "vbl.lib" "vul.lib" /STACK:10000000  == libraries linked in 
+# /libpath:"$(VXLROOT)/mul/mbl/$(OUTDIR)" /libpath:"$(VXLROOT)/vxl/vnl/io/$(OUTDIR)" /libpath:"$(VXLROOT)/vxl/vnl/algo/$(OUTDIR)" /libpath:"$(VXLROOT)/vxl/vnl/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/netlib/$(OUTDIR)" /libpath:"$(VXLROOT)/vcl/$(OUTDIR)" /libpath:"$(VXLROOT)/vxl/vsl/$(OUTDIR)" /libpath:"$(VXLROOT)/vxl/vbl/$(OUTDIR)" /libpath:"$(VXLROOT)/vxl/vul/$(OUTDIR)"  "mbl.lib" "vnl_io.lib" "vnl_algo.lib" "vnl.lib" "netlib.lib" "vsl.lib" "vcl.lib" "vbl.lib" "vul.lib" /STACK:10000000  == libraries linked in 
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
 CFG=test_mbl - Win32 Debug
@@ -31,9 +31,7 @@ CFG=test_mbl - Win32 Debug
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
 !MESSAGE "test_mbl - Win32 Debug" (based on "Win32 (x86) Application")
-!MESSAGE "test_mbl - Win32 MinSizeRel" (based on "Win32 (x86) Application")
 !MESSAGE "test_mbl - Win32 Release" (based on "Win32 (x86) Application")
-!MESSAGE "test_mbl - Win32 RelWithDebInfo" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -53,12 +51,12 @@ RSC=rc.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "$(IUEROOT)/WIN32-VC60/bin/Release"
+# PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /I "$(IUEROOT)/WIN32-VC60/vcl" /I "$(IUEROOT)/WIN32-VC60/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/mul"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "test_mbl_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vcl/config.win32-VC60" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/mul"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "test_mbl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -67,30 +65,19 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/lib/$(IntDir)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/lib/" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/bin/$(IntDir)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/bin/" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/mul/mbl/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/mul/mbl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl/algo/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl/algo" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl/io/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl/io" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/v3p/netlib/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/v3p/netlib" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/vcl/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vcl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vsl/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vsl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vbl/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vbl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vul/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vul" 
-# ADD LINK32 "mbl.lib"
-# ADD LINK32 "vnl_algo.lib"
-# ADD LINK32 "vnl_io.lib"
-# ADD LINK32 "vnl.lib"
-# ADD LINK32 "netlib.lib"
-# ADD LINK32 "vsl.lib"
-# ADD LINK32 "vcl.lib"
-# ADD LINK32 "vbl.lib"
-# ADD LINK32 "vul.lib"
-# ADD LINK32 /STACK:10000000 
+# ADD LINK32 /libpath:"$(VXLROOT)/mul/mbl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vnl/algo/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vnl/io/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vnl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/v3p/netlib/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vcl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vsl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vbl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vul/$(OUTDIR)"
+# ADD LINK32 "mbl.lib" "vnl_algo.lib" "vnl_io.lib" "vnl.lib" "netlib.lib" "vsl.lib" "vcl.lib" "vbl.lib" "vul.lib" /STACK:10000000 
 
 
 !ELSEIF  "$(CFG)" == "test_mbl - Win32 Debug"
@@ -102,12 +89,12 @@ LINK32=link.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "$(IUEROOT)/WIN32-VC60/bin/Debug"
+# PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP   /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
 # ADD CPP /nologo  /D "WIN32"  /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
-# ADD CPP /I "$(IUEROOT)/WIN32-VC60/vcl" /I "$(IUEROOT)/WIN32-VC60/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/mul"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "test_mbl_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vcl/config.win32-VC60" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/mul"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "test_mbl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -118,128 +105,19 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32   kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/lib/$(IntDir)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/lib/" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/bin/$(IntDir)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/bin/" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/mul/mbl/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/mul/mbl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl/algo/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl/algo" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl/io/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl/io" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/v3p/netlib/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/v3p/netlib" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/vcl/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vcl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vsl/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vsl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vbl/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vbl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vul/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vul" 
-# ADD LINK32 "mbl.lib"
-# ADD LINK32 "vnl_algo.lib"
-# ADD LINK32 "vnl_io.lib"
-# ADD LINK32 "vnl.lib"
-# ADD LINK32 "netlib.lib"
-# ADD LINK32 "vsl.lib"
-# ADD LINK32 "vcl.lib"
-# ADD LINK32 "vbl.lib"
-# ADD LINK32 "vul.lib"
-# ADD LINK32 /STACK:10000000 
-
-
-!ELSEIF  "$(CFG)" == "test_mbl - Win32 MinSizeRel"
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "MinSizeRel"
-# PROP BASE Intermediate_Dir "MinSizeRel"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "$(IUEROOT)/WIN32-VC60/bin/MinSizeRel"
-# PROP Intermediate_Dir "MinSizeRel"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /nologo  /D "WIN32" /I "$(IUEROOT)/WIN32-VC60/vcl" /I "$(IUEROOT)/WIN32-VC60/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/mul"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /I "$(IUEROOT)/WIN32-VC60/vcl" /I "$(IUEROOT)/WIN32-VC60/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/mul"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "test_mbl_EXPORTS"
-# ADD CPP /W3 /Zm1000 /GX /GR
-# ADD CPP /MD /O1
-# ADD BASE RSC /l 0x409 /d "NDEBUG"
-# ADD RSC /l 0x409 /d "NDEBUG"
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LINK32=link.exe
-# ADD BASE LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
-# ADD LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
-
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/lib/$(IntDir)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/lib/" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/bin/$(IntDir)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/bin/" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/mul/mbl/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/mul/mbl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl/algo/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl/algo" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl/io/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl/io" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/v3p/netlib/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/v3p/netlib" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/vcl/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vcl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vsl/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vsl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vbl/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vbl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vul/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vul" 
-# ADD LINK32 "mbl.lib"
-# ADD LINK32 "vnl_algo.lib"
-# ADD LINK32 "vnl_io.lib"
-# ADD LINK32 "vnl.lib"
-# ADD LINK32 "netlib.lib"
-# ADD LINK32 "vsl.lib"
-# ADD LINK32 "vcl.lib"
-# ADD LINK32 "vbl.lib"
-# ADD LINK32 "vul.lib"
-# ADD LINK32 /STACK:10000000 
-
-
-!ELSEIF  "$(CFG)" == "test_mbl - Win32 RelWithDebInfo"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "RelWithDebInfo"
-# PROP BASE Intermediate_Dir "RelWithDebInfo"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "$(IUEROOT)/WIN32-VC60/bin/RelWithDebInfo"
-# PROP Intermediate_Dir "RelWithDebInfo"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /I "$(IUEROOT)/WIN32-VC60/vcl" /I "$(IUEROOT)/WIN32-VC60/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/mul"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "test_mbl_EXPORTS"
-# ADD CPP /W3 /Zm1000 /GX /GR
-# ADD CPP /MD /Zi /O2
-# ADD BASE RSC /l 0x409 /d "NDEBUG"
-# ADD RSC /l 0x409 /d "NDEBUG"
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LINK32=link.exe
-# ADD BASE LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /IGNORE:4089
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /IGNORE:4089
-
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/lib/$(IntDir)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/lib/" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/bin/$(IntDir)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/bin/" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/mul/mbl/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/mul/mbl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl/algo/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl/algo" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl/io/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl/io" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vnl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/v3p/netlib/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/v3p/netlib" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/vcl/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vcl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vsl/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vsl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vbl/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vbl" 
-# ADD LINK32 /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vul/$(OUTDIR)"  /LIBPATH:"$(IUEROOT)/WIN32-VC60/vxl/vul" 
-# ADD LINK32 "mbl.lib"
-# ADD LINK32 "vnl_algo.lib"
-# ADD LINK32 "vnl_io.lib"
-# ADD LINK32 "vnl.lib"
-# ADD LINK32 "netlib.lib"
-# ADD LINK32 "vsl.lib"
-# ADD LINK32 "vcl.lib"
-# ADD LINK32 "vbl.lib"
-# ADD LINK32 "vul.lib"
-# ADD LINK32 /STACK:10000000 
-
+# ADD LINK32 /libpath:"$(VXLROOT)/mul/mbl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vnl/algo/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vnl/io/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vnl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/v3p/netlib/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vcl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vsl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vbl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vul/$(OUTDIR)"
+# ADD LINK32 "mbl.lib" "vnl_algo.lib" "vnl_io.lib" "vnl.lib" "netlib.lib" "vsl.lib" "vcl.lib" "vbl.lib" "vul.lib" /STACK:10000000 
 
 !ENDIF 
 
@@ -247,8 +125,6 @@ LINK32=link.exe
 
 # Name "test_mbl - Win32 Release"
 # Name "test_mbl - Win32 Debug"
-# Name "test_mbl - Win32 MinSizeRel"
-# Name "test_mbl - Win32 RelWithDebInfo"
 
 # Begin Group "Source Files"
 # PROP Default_Filter ""

@@ -223,9 +223,43 @@ SOURCE=.\vpdfl_prob_chi2.cxx
 SOURCE=.\vpdfl_sampler_base.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_calc_mean_var.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_gaussian_kernel_pdf.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_gaussian_kernel_pdf_builder.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_gaussian_kernel_pdf_sampler.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_kernel_pdf.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_kernel_pdf_builder.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vpdfl_resample.cxx
+
+# End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
-

@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="pcbuilder" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="vplayer" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -10,11 +10,11 @@
 
 # variables to REPLACE
 # 
-# /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl"  == include path
+# /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vcl/config.win32-VC60" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/oxl"  == include path
 #  == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL == compiler defines
 # VPLAYER  == name of output library
-#  "opengl32.lib" "glu32.lib" "nafxcw.lib" "allvxl.lib" "alloxl.lib" "opengl32.lib" "glu32.lib" /STACK:10000000  == libraries linked in 
+# /libpath:"$(VXLROOT)/vxl/vgl/$(IntDir)" /libpath:"$(VXLROOT)/vcl/$(IntDir)" /libpath:"$(VXLROOT)/oxl/osl/$(IntDir)" /libpath:"$(VXLROOT)/vxl/vnl/$(IntDir)" /libpath:"$(VXLROOT)/vxl/vnl/algo/$(IntDir)" /libpath:"$(VXLROOT)/v3p/netlib/$(IntDir)" /libpath:"$(VXLROOT)/vxl/vil/$(IntDir)" /libpath:"$(VXLROOT)/vxl/vpl/$(IntDir)" /libpath:"$(VXLROOT)/v3p/jpeg/$(IntDir)" /libpath:"$(VXLROOT)/v3p/png/$(IntDir)" /libpath:"$(VXLROOT)/v3p/zlib/$(IntDir)" /libpath:"$(VXLROOT)/v3p/tiff/$(IntDir)" /libpath:"$(VXLROOT)/vxl/vbl/$(IntDir)" /libpath:"$(VXLROOT)/oxl/mvl/$(IntDir)" /libpath:"$(VXLROOT)/oxl/vgui/impl/mfc/$(IntDir)" /libpath:"$(VXLROOT)/oxl/vgui/$(IntDir)" /libpath:"$(VXLROOT)/v3p/Qv/$(IntDir)" /libpath:"$(VXLROOT)/vxl/vul/$(IntDir)" "opengl32.lib" "glu32.lib" "vgl.lib" "vcl.lib" "vcl.lib" "osl.lib" "vnl.lib" "vcl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vcl.lib" "vil.lib" "vpl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vbl.lib" "mvl.lib" "vnl.lib" "vcl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vcl.lib" "vbl.lib" "vgui_mfc.lib" "vgui.lib" "Qv.lib" "vnl.lib" "vcl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vcl.lib" "vil.lib" "vpl.lib" "vgl.lib" "vcl.lib" "vbl.lib" "vul.lib" "vgl.lib" "vcl.lib" "vil.lib" "vpl.lib" "vnl.lib" "vcl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vcl.lib" "vul.lib" "vbl.lib" "vpl.lib" "vcl.lib" /STACK:10000000 == libraries linked in 
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
 CFG=VPLAYER - Win32 Debug
@@ -31,9 +31,7 @@ CFG=VPLAYER - Win32 Debug
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
 !MESSAGE "VPLAYER - Win32 Debug" (based on "Win32 (x86) Application")
-!MESSAGE "VPLAYER - Win32 MinSizeRel" (based on "Win32 (x86) Application")
 !MESSAGE "VPLAYER - Win32 Release" (based on "Win32 (x86) Application")
-!MESSAGE "VPLAYER - Win32 RelWithDebInfo" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -58,7 +56,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "VPLAYER_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vcl/config.win32-VC60" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/oxl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "VPLAYER_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -67,17 +65,27 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
-
-# ADD LINK32 "opengl32.lib"
-# ADD LINK32 "glu32.lib"
-# ADD LINK32 "nafxcw.lib"
-# ADD LINK32 "allvxl.lib"
-# ADD LINK32 "alloxl.lib"
-# ADD LINK32 "opengl32.lib"
-# ADD LINK32 "glu32.lib"
-# ADD LINK32 /STACK:10000000 
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
+# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vgl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vcl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/oxl/osl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vnl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vnl/algo/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/v3p/netlib/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vil/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vidl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vpl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/v3p/jpeg/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/v3p/png/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/v3p/zlib/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/v3p/tiff/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vbl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/oxl/mvl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/oxl/vgui/impl/mfc/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/oxl/vgui/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/v3p/Qv/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vul/$(IntDir)"
+# ADD LINK32 "opengl32.lib" "glu32.lib" "osl.lib" "mvl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vgui_mfc.lib" "vgui.lib" "Qv.lib" vidl.lib "vgl.lib" "vbl.lib" "vil.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vul.lib" "vpl.lib" "vcl.lib" /STACK:10000000 
 
 
 !ELSEIF  "$(CFG)" == "VPLAYER - Win32 Debug"
@@ -94,7 +102,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP   /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
 # ADD CPP /nologo  /D "WIN32"  /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "VPLAYER_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vcl/config.win32-VC60" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/oxl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "VPLAYER_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -105,89 +113,27 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32   kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
-
-# ADD LINK32 "opengl32.lib"
-# ADD LINK32 "glu32.lib"
-# ADD LINK32 "nafxcw.lib"
-# ADD LINK32 "allvxl.lib"
-# ADD LINK32 "alloxl.lib"
-# ADD LINK32 "opengl32.lib"
-# ADD LINK32 "glu32.lib"
-# ADD LINK32 /STACK:10000000 
-
-
-!ELSEIF  "$(CFG)" == "VPLAYER - Win32 MinSizeRel"
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "MinSizeRel"
-# PROP BASE Intermediate_Dir "MinSizeRel"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "MinSizeRel"
-# PROP Intermediate_Dir "MinSizeRel"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /nologo  /D "WIN32" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "VPLAYER_EXPORTS"
-# ADD CPP /W3 /Zm1000 /GX /GR
-# ADD CPP /MD /O1
-# ADD BASE RSC /l 0x409 /d "NDEBUG"
-# ADD RSC /l 0x409 /d "NDEBUG"
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LINK32=link.exe
-# ADD BASE LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
-# ADD LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
-
-# ADD LINK32 "opengl32.lib"
-# ADD LINK32 "glu32.lib"
-# ADD LINK32 "nafxcw.lib"
-# ADD LINK32 "allvxl.lib"
-# ADD LINK32 "alloxl.lib"
-# ADD LINK32 "opengl32.lib"
-# ADD LINK32 "glu32.lib"
-# ADD LINK32 /STACK:10000000 
-
-
-!ELSEIF  "$(CFG)" == "VPLAYER - Win32 RelWithDebInfo"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "RelWithDebInfo"
-# PROP BASE Intermediate_Dir "RelWithDebInfo"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "RelWithDebInfo"
-# PROP Intermediate_Dir "RelWithDebInfo"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "VPLAYER_EXPORTS"
-# ADD CPP /W3 /Zm1000 /GX /GR
-# ADD CPP /MD /Zi /O2
-# ADD BASE RSC /l 0x409 /d "NDEBUG"
-# ADD RSC /l 0x409 /d "NDEBUG"
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LINK32=link.exe
-# ADD BASE LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /IGNORE:4089
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /IGNORE:4089
-
-# ADD LINK32 "opengl32.lib"
-# ADD LINK32 "glu32.lib"
-# ADD LINK32 "nafxcw.lib"
-# ADD LINK32 "allvxl.lib"
-# ADD LINK32 "alloxl.lib"
-# ADD LINK32 "opengl32.lib"
-# ADD LINK32 "glu32.lib"
-# ADD LINK32 /STACK:10000000 
-
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
+# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vgl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vcl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/oxl/osl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vnl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vnl/algo/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/v3p/netlib/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vil/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vidl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vpl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/v3p/jpeg/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/v3p/png/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/v3p/zlib/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/v3p/tiff/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vbl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/oxl/mvl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/oxl/vgui/impl/mfc/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/oxl/vgui/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/v3p/Qv/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vul/$(IntDir)"
+# ADD LINK32 "opengl32.lib" "glu32.lib" "osl.lib" "mvl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vgui_mfc.lib" "vgui.lib" "Qv.lib" vidl.lib "vgl.lib" "vbl.lib" "vil.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vul.lib" "vpl.lib" "vcl.lib" /STACK:10000000 
 
 !ENDIF 
 
@@ -195,8 +141,6 @@ LINK32=link.exe
 
 # Name "VPLAYER - Win32 Release"
 # Name "VPLAYER - Win32 Debug"
-# Name "VPLAYER - Win32 MinSizeRel"
-# Name "VPLAYER - Win32 RelWithDebInfo"
 
 # Begin Group "Source Files"
 # PROP Default_Filter ""

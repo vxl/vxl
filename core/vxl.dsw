@@ -12,10 +12,13 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name vbl
+    Project_Dep_Name vcl
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name vcl
+    Project_Dep_Name vsl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vbl
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vnl
@@ -33,25 +36,19 @@ Package=<4>
     Project_Dep_Name vgl_algo
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name vidl
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name vpl
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vul
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name vul_io
+    Project_Dep_Name vidl
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vcgl
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vcsl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name test_allvxl
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name mvl
@@ -64,6 +61,21 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name osl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vul_io
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vbl_io
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgl_io
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vil_io
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vnl_io
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vgui
@@ -108,40 +120,37 @@ Package=<4>
     Project_Dep_Name mil
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name test_vbl_io
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vbl_io
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name test_vgl_io
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vgl_io
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name test_vil_io
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vil_io
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name test_vnl_io
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vnl_io
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name test_vpdfl
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name vpdfl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name xcv
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name test_vsl_io
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name vsl
+    Project_Dep_Name test_vbl_io
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name test_vgl_io
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name test_vil_io
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name test_vnl_io
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name test_allvxl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name test_mbl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name test_mil
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name test_vpdfl
     End Project Dependency
 }}}
 
@@ -155,9 +164,6 @@ Package=<5>
 
 Package=<4>
 {{{
-    Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vbl
     End Project Dependency
@@ -183,9 +189,6 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name vbl
     End Project Dependency
 }}}
@@ -201,9 +204,6 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name vbl
     End Project Dependency
 }}}
@@ -211,6 +211,63 @@ Package=<4>
 ###############################################################################
 
 Project: "jpeg"=..\v3p\jpeg\jpeg.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name tiff
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name png
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name zlib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "tiff"=..\v3p\tiff\tiff.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "png"=..\v3p\png\png.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "zlib"=..\v3p\zlib\zlib.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "Qv"=..\v3p\Qv\Qv.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -230,9 +287,6 @@ Package=<5>
 
 Package=<4>
 {{{
-    Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vnl
     End Project Dependency
@@ -269,9 +323,6 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name vnl_algo
     End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vsl
-    End Project Dependency
 }}}
 
 ###############################################################################
@@ -285,9 +336,6 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name vbl
     End Project Dependency
     Begin Project Dependency
@@ -295,9 +343,6 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vgl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vnl
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vnl_algo
@@ -327,16 +372,10 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name vbl
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vil
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vnl
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vnl_algo
@@ -354,16 +393,10 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name vbl
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vil
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vnl
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vnl_algo
@@ -384,12 +417,6 @@ Package=<4>
     Project_Dep_Name vbl
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vnl
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name vnl_algo
     End Project Dependency
     Begin Project Dependency
@@ -408,16 +435,10 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name vil
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vpl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name jpeg
     End Project Dependency
 }}}
 
@@ -431,9 +452,6 @@ Package=<5>
 
 Package=<4>
 {{{
-    Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vbl_io
     End Project Dependency
@@ -450,9 +468,6 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name vgl_io
     End Project Dependency
 }}}
@@ -467,9 +482,6 @@ Package=<5>
 
 Package=<4>
 {{{
-    Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vil_io
     End Project Dependency
@@ -486,10 +498,37 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name vnl_io
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "test_mbl"=..\mul\mbl\tests\test_mbl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name mbl
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "test_mil"=..\mul\mil\tests\test_mil.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name mil
     End Project Dependency
 }}}
 
@@ -503,9 +542,6 @@ Package=<5>
 
 Package=<4>
 {{{
-    Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vpdfl
     End Project Dependency
@@ -521,9 +557,6 @@ Package=<5>
 
 Package=<4>
 {{{
-    Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vsl
     End Project Dependency
@@ -555,7 +588,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name vcl
+    Project_Dep_Name vbl
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vsl
@@ -572,9 +605,6 @@ Package=<5>
 
 Package=<4>
 {{{
-    Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vgl
     End Project Dependency
@@ -618,9 +648,6 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name vbl
     End Project Dependency
     Begin Project Dependency
@@ -639,16 +666,10 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name vbl
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vgl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vnl
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vnl_algo
@@ -668,12 +689,6 @@ Package=<5>
 
 Package=<4>
 {{{
-    Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vil
-    End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vipl
     End Project Dependency
@@ -705,10 +720,10 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name vcl
+    Project_Dep_Name vgl
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name vgl
+    Project_Dep_Name vnl_algo
     End Project Dependency
 }}}
 
@@ -723,7 +738,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name vcl
+    Project_Dep_Name vgl
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vsl
@@ -741,10 +756,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vbl
+    Project_Dep_Name Qv
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vgl
@@ -756,7 +768,7 @@ Package=<4>
     Project_Dep_Name vil
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name vnl
+    Project_Dep_Name vnl_algo
     End Project Dependency
 }}}
 
@@ -801,9 +813,6 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name vbl
     End Project Dependency
     Begin Project Dependency
@@ -822,12 +831,6 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name tiff
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name jpeg
     End Project Dependency
 }}}
@@ -843,7 +846,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name vcl
+    Project_Dep_Name vil
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vsl
@@ -861,7 +864,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name vcl
+    Project_Dep_Name vil
     End Project Dependency
 }}}
 
@@ -876,13 +879,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name vbl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vnl
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vnl_algo
@@ -933,9 +930,6 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name vnl
     End Project Dependency
     Begin Project Dependency
@@ -954,9 +948,6 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name vnl
     End Project Dependency
 }}}
@@ -972,7 +963,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name vcl
+    Project_Dep_Name vnl
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vsl
@@ -990,16 +981,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vnl
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name vnl_algo
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vsl
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vnl_io
@@ -1034,9 +1016,6 @@ Package=<5>
 
 Package=<4>
 {{{
-    Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vbl
     End Project Dependency
@@ -1095,16 +1074,10 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name vbl
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name vgl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vnl
+    Project_Dep_Name vgl_algo
     End Project Dependency
 }}}
 
@@ -1118,9 +1091,6 @@ Package=<5>
 
 Package=<4>
 {{{
-    Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vil
     End Project Dependency
@@ -1155,7 +1125,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name vcl
+    Project_Dep_Name vul
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vsl
@@ -1172,9 +1142,6 @@ Package=<5>
 
 Package=<4>
 {{{
-    Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vbl
     End Project Dependency
@@ -1194,9 +1161,6 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name vsl
     End Project Dependency
     Begin Project Dependency
@@ -1206,13 +1170,7 @@ Package=<4>
     Project_Dep_Name vil
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name vnl
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name vnl_algo
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vgl
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vgl_algo
@@ -1263,13 +1221,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name jpeg
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name mvl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name netlib
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name oxp
@@ -1278,10 +1230,7 @@ Package=<4>
     Project_Dep_Name vbl
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vgl
+    Project_Dep_Name vgl_algo
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vgui
@@ -1294,9 +1243,6 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vil
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vnl
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vnl_algo

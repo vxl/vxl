@@ -12,6 +12,18 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
+    Project_Dep_Name gbl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name geml
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name gevd
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name gkll
+    End Project Dependency
+    Begin Project Dependency
     Project_Dep_Name gmvl
     End Project Dependency
     Begin Project Dependency
@@ -21,13 +33,22 @@ Package=<4>
     Project_Dep_Name gtrl
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name vsrl
+    Project_Dep_Name vpgl
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vdgl
     End Project Dependency
     Begin Project Dependency
+    Project_Dep_Name vgel
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgel_kl
+    End Project Dependency
+    Begin Project Dependency
     Project_Dep_Name vmal
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vsrl
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vsol
@@ -39,7 +60,103 @@ Package=<4>
 
 ###############################################################################
 
+Project: "gbl"=.\gbl\gbl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "geml"=.\geml\geml.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "gevd"=.\gevd\gevd.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "gkll"=.\gkll\gkll.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "gmvl"=.\gmvl\gmvl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vpgl"=.\vpgl\vpgl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "vdgl"=.\vdgl\vdgl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vgel"=.\vgel\vgel.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vgel_kl"=.\vgel_kl\vgel_kl.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

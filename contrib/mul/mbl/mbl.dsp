@@ -110,7 +110,7 @@ SOURCE=.\Templates/mbl_data_wrapper+double-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/mbl_data_wrapper+double-.cxx
+SOURCE=.\Templates/mbl_data_array_wrapper+double-.cxx
 
 # End Source File
 # Begin Source File
