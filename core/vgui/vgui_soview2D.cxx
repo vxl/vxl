@@ -29,8 +29,8 @@ vgui_soview2D::vgui_soview2D() {}
 
 vcl_ostream& vgui_soview2D_point::print(vcl_ostream& s) const
 {
-  s << "[vgui_soview2D_point " << x << "," << y << " ";
-  return vgui_soview2D::print(s) << "]";
+  s << "[ vgui_soview2D_point " << x << ',' << y << ' ';
+  return vgui_soview2D::print(s) << " ]";
 }
 
 void vgui_soview2D_point::draw() const
@@ -86,8 +86,8 @@ void vgui_soview2D_point::translate(float tx, float ty)
 
 vcl_ostream& vgui_soview2D_lineseg::print(vcl_ostream& s) const
 {
-  s << "[vgui_soview2D_lineseg " << x0 << "," << y0 << " -- " << x1 << "," << y1;
-  s << " "; return vgui_soview2D::print(s) << "]";
+  s << "[ vgui_soview2D_lineseg " << x0 << ',' << y0 << " -- " << x1 << ',' << y1 << ' ';
+  return vgui_soview2D::print(s) << " ]";
 }
 
 void vgui_soview2D_lineseg::draw() const
@@ -133,12 +133,12 @@ void vgui_soview2D_group::set_style(vgui_style *s)
 
 vcl_ostream& vgui_soview2D_group::print(vcl_ostream& s) const
 {
-  s << "[vgui_soview2D_group ";
+  s << "[ vgui_soview2D_group ";
 
   for (unsigned int i=0; i< ls.size(); i++)
     ls[i]->print(s);
 
-  return vgui_soview2D::print(s) << "]";
+  return vgui_soview2D::print(s) << " ]";
 }
 
 void vgui_soview2D_group::draw() const
@@ -192,8 +192,8 @@ void vgui_soview2D_group::translate(float tx, float ty)
 
 vcl_ostream& vgui_soview2D_infinite_line::print(vcl_ostream& s) const
 {
-  s << "[vgui_soview2D_infinite_line " << a << "," << b << "," << c;
-  s << " "; return vgui_soview2D::print(s) << "]";
+  s << "[ vgui_soview2D_infinite_line " << a << ',' << b << ',' << c << ' ';
+  return vgui_soview2D::print(s) << " ]";
 }
 
 void vgui_soview2D_infinite_line::draw() const
@@ -239,8 +239,8 @@ void vgui_soview2D_circle::compile()
 
 vcl_ostream& vgui_soview2D_circle::print(vcl_ostream& s) const
 {
-  s << "[vgui_soview2D_circle " << x << "," << y << " r" << r;
-  s << " "; return vgui_soview2D::print(s) << "]";
+  s << "[ vgui_soview2D_circle " << x << ',' << y << " r" << r << ' ';
+  return vgui_soview2D::print(s) << " ]";
 }
 
 void vgui_soview2D_circle::draw() const
@@ -284,9 +284,9 @@ void vgui_soview2D_circle::translate(float tx, float ty)
 
 vcl_ostream& vgui_soview2D_ellipse::print(vcl_ostream& s) const
 {
-  s << "[vgui_soview2D_ellipse " << x << "," << y;
-  s << " w" << w << " h" << h << " phi" << phi;
-  s << "  "; return vgui_soview2D::print(s) << "]";
+  s << "[ vgui_soview2D_ellipse " << x << ',' << y
+    << " w" << w << " h" << h << " phi" << phi << ' ';
+  return vgui_soview2D::print(s) << " ]";
 }
 
 void vgui_soview2D_ellipse::draw() const
@@ -350,7 +350,7 @@ void vgui_soview2D_linestrip::draw() const
   glEnd();
 }
 
-vcl_ostream& vgui_soview2D_linestrip::print(vcl_ostream&s) const { return s << "[a linestrip. FIXME]"; }
+vcl_ostream& vgui_soview2D_linestrip::print(vcl_ostream&s) const { return s << "[ a linestrip. FIXME ]"; }
 
 float vgui_soview2D_linestrip::distance_squared(float x, float y) const
 {
@@ -426,7 +426,7 @@ void vgui_soview2D_polygon::draw() const
   glEnd();
 }
 
-vcl_ostream& vgui_soview2D_polygon::print(vcl_ostream&s) const { return s << "[a polygon. FIXME]"; }
+vcl_ostream& vgui_soview2D_polygon::print(vcl_ostream&s) const { return s << "[ a polygon. FIXME ]"; }
 
 float vgui_soview2D_polygon::distance_squared(float x, float y) const
 {
@@ -519,27 +519,26 @@ void vgui_soview2D_image::draw() const
   GLboolean blend_on;
   glGetBooleanv( GL_BLEND, &blend_on );
 
-  if( blend_ ) {
+  if ( blend_ ) {
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-  } else {
-    glDisable( GL_BLEND );
   }
+  else
+    glDisable( GL_BLEND );
 
   glTranslatef(  x_,  y_, 0.0f );
   buffer_->draw_as_image() || buffer_->draw_as_rectangle();
   glTranslatef( -x_, -y_, 0.0f );
 
-  if( blend_on ) {
+  if ( blend_on )
     glEnable( GL_BLEND );
-  } else {
+  else
     glDisable( GL_BLEND );
-  }
 }
 
 vcl_ostream& vgui_soview2D_image::print(vcl_ostream&s) const
 {
-  return s << "[vgui_soview2D_image "<<w_<<"x"<<h_<<", blend="<<blend_<<"]";
+  return s << "[ vgui_soview2D_image "<<w_<<'x'<<h_<<", blend="<<blend_<<" ]";
 }
 
 float vgui_soview2D_image::distance_squared(float x, float y) const

@@ -25,7 +25,7 @@ vgui_rubberband_tableau::object_type vgui_rubberband_tableau::obj_type = none_en
 #ifdef __GNUC__ /* __FUNCTION__ is a GNU extension */
 # define function_macro { vcl_cerr << __FUNCTION__ << " not yet implemented\n"; }
 #else
-# define function_macro { vcl_cerr << __FILE__ ":" << __LINE__ << " not yet implemented\n"; } 
+# define function_macro { vcl_cerr << __FILE__ " : " << __LINE__ << " not yet implemented\n"; }
 #endif
 void vgui_rubberband_client::add_point(float, float) function_macro
 void vgui_rubberband_client::add_line(float,float,float,float) function_macro
@@ -210,7 +210,7 @@ void vgui_rubberband_tableau::draw_point(float x, float y)
 {
   glColor3f(1,1,1);
   glBegin(GL_POINTS);
-  // vcl_cerr << "vgui_rubberband_tableau::draw_point(" << x << "," << y << ")\n";
+  // vcl_cerr << "vgui_rubberband_tableau::draw_point(" << x << ',' << y << ")\n";
   glVertex2f(x,y);
   glEnd();
 }
