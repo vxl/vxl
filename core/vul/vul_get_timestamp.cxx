@@ -8,6 +8,8 @@
 #endif
 #include "vul_get_timestamp.h"
 
+#include <vcl_compiler.h>
+
 #ifdef VCL_WIN32
 #include <direct.h>
 #include <sys/timeb.h>
