@@ -30,6 +30,8 @@ class xcv_file
   static void load_image();
   //: Save image to specified file.
   static void save_image();
+  //: Dump OpenGL buffer to specified file.
+  static void dump_image();
   //: Save image and spatial objects to postscript file.
   static void save_as_ps();
   //: Remove currently selected image.

@@ -18,6 +18,7 @@
 #include <vil1/vil1_save.h>
 
 #include <vgui/vgui.h>
+#include <vgui/vgui_utils.h>
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_easy2D_tableau.h>
@@ -92,6 +93,24 @@ void xcv_file::save_image()
 }
 
 //-----------------------------------------------------------------------------
+//: Dump OpenGL buffer to specified file.
+//-----------------------------------------------------------------------------
+void xcv_file::dump_image()
+{
+  vgui_dialog dump_image_dl(" Dump window to image file");
+  static vcl_string* image_filename = get_savefile();
+  static vcl_string regexp = "*.*";
+  dump_image_dl.inline_file("Filename to save image:", regexp, *image_filename);
+  if (dump_image_dl.ask())
+  {
+#ifdef DEBUG
+    vcl_cerr << "Saving image to file: " << image_filename->c_str() << vcl_endl;
+#endif
+    vgui_utils::dump_colour_buffer( image_filename->c_str() );
+  }
+}
+
+//-----------------------------------------------------------------------------
 //: Save image and spatial objects to specified file.
 //-----------------------------------------------------------------------------
 void xcv_file::save_as_ps()
@@ -159,6 +178,7 @@ vgui_menu xcv_file::create_file_menu()
   vgui_menu file_menu;
   file_menu.add("Load image", load_image);
   file_menu.add("Save image", save_image);
+  file_menu.add("Dump window to image file", dump_image);
   file_menu.add("Save as Postscript", save_as_ps);
   file_menu.add("Remove image", remove_image);
   file_menu.separator();
