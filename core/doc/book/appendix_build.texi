@@ -1,6 +1,6 @@
 After building VXL, you will want to write some code which links against
-your shiny new libraries. The details of this process vary depending on how
-you are building your own code. In general, as well as all the system standard libraries, you will need to
+your shiny new libraries.  The details of this process vary depending on how
+you are building your own code.  In general, as well as all the system standard libraries, you will need to
 tell your compiler and linker the following:
 
 @itemize @bullet
@@ -17,18 +17,18 @@ With the default build options in VXL, all the libraries are placed in
 @code{$VXLBIN/lib}.
 
 @item
-You obviously need to decide which libraries to link against. As
-explained before, VXL is a collection of libraries. You will almost
-certainly have to link against @code{vcl}. You should also link against any
+You obviously need to decide which libraries to link against.  As
+explained before, VXL is a collection of libraries.  You will almost
+certainly have to link against @code{vcl}.  You should also link against any
 libraries you explicitly use. e.g. if your code has a @code{#include
-<vnl/vector.h>} then link against @code{vnl}. Any missing libraries can be
-added as the linker complains they are missing. VXL's simple naming scheme
+<vnl/vector.h>} then link against @code{vnl}.  Any missing libraries can be
+added as the linker complains they are missing.  VXL's simple naming scheme
 should make it very easy to identify the missing library from the error
 message.
 
 @item
-You may also need to link against some extra system libraries, e.g. On
-Unix, VXL can use libm (for maths stuff), libpng, libjpeg, libtiff (for
+You may also need to link against some extra system libraries, e.g. on
+Unix, VXL can use libm (for math stuff), libpng, libjpeg, libtiff (for
 image loading), libnsl (for Solaris sockets.) On Windows you may need to
 link against ws2_32.dll (for sockets stuff.)
 
@@ -41,8 +41,8 @@ link against ws2_32.dll (for sockets stuff.)
 
 If keeping track of include directories, etc. is too much hassle, or if you
 are building a project to run on multiple platforms, then we suggest using
-the CMake system to build your project. CMake automatically communicates the
-necessary settings between VXL and your project. If you are unable to get your
+the CMake system to build your project.  CMake automatically communicates the
+necessary settings between VXL and your project.  If you are unable to get your
 non-CMake Makefile of project file to work properly, then please try CMake --- it
 will likely solve your problem for you.
 
@@ -262,7 +262,7 @@ INCLUDE_DIRECTORIES( $@{VXLCORE_INCLUDE_DIR@} )
 
 # Just as in Example 1, use the TARGET_LINK_LIBRARIES command to
 # specify each library that is directly used by this library.  CMake
-# will remember that vfbl needs these libraries. When an application
+# will remember that vfbl needs these libraries.  When an application
 # links with vfbl, CMake will automatically make sure it is linked
 # with each of these libraries.  This linking is recursive, so that
 # for example, the vcl in the line below is unnecessary - using vul
@@ -334,14 +334,14 @@ ENDIF(VXL_FOUND)
 # To set VXL_DIR, you could rely on an environment variable:
 #   SET( VXL_DIR $ENV@{VXLBIN@} )
 # However, you must then make sure that VXLBIN is set correctly every
-# time that cmake is run. This is often a source of much frustration
+# time that cmake is run.  This is often a source of much frustration
 # and is not recommended.
 #
 # Another option is to set the path directly:
 #   SET( VXL_DIR /usr/local/vxl-1.0-beta2/bin )
 # This has the drawback that the CMakeLists.txt file (this file) has
 # to be modified to suit your particular setup, which may cause
-# trouble. If this file is under CVS control, for example, you may
+# trouble.  If this file is under CVS control, for example, you may
 # inadvertently commit it with your local setup hard-coded, thus
 # playing havoc with other users.
 
@@ -541,9 +541,9 @@ will need a @file{CMakeLists.txt} file, but not a
 @cindex DSP files
 
 Your copy of VXL may contain control files for other build systems
-such as make or Developer Studio. Copies of these control files
+such as make or Developer Studio.  Copies of these control files
 (e.g. makefiles or .dsp files) do exist in the repository, although
-they may not be quite as up to date. They are tucked away in the
+they may not be quite as up to date.  They are tucked away in the
 @code{build-makefiles} and @code{build-dsps} branches of the repository.
 
 @section Frequently Asked Questions
@@ -556,23 +556,23 @@ they may not be quite as up to date. They are tucked away in the
 
 @quotation
 I have successfully built VXL under MS Visual Studio, and am now
-trying to build a simple program that uses the libraries. The Linker
+trying to build a simple program that uses the libraries.  The Linker
 complains that there are multiple definitions (error @code{LNK2005}) of
 several things from the C++ Standard Library, or locally defined symbols
-being imported (error @code{LNK4049}). What is going wrong?
+being imported (error @code{LNK4049}).  What is going wrong?
 @end quotation
 
 These kinds of errors often indicate that you are linking against
 different C++ run-time libraries with which you compiled VXL (release
-vs debug, static vs DLL stdlib, etc). The flags like @code{/MP} and @code{/MD}
-much match exactly, in VXL's build and your program's build. These
+vs debug, static vs DLL stdlib, etc).  The flags like @code{/MP} and @code{/MD}
+much match exactly, in VXL's build and your program's build.  These
 flags are set in Visual Studio under
 Project->Properties (or Settings under MSVC6.0)->C/C++->Code Generation->Use
-run-time library. You should set your project to (Debug) Multithreaded DLL to match
+run-time library.  You should set your project to (Debug) Multithreaded DLL to match
 the default settings for VXL.
 
 The easiest way to link against VXL, we've found, is to use
-CMake for your project too. CMake will then make sure the flags
+CMake for your project too.  CMake will then make sure the flags
 match, or else will give you an error or warning.
 
 
@@ -581,13 +581,13 @@ match, or else will give you an error or warning.
 @quotation
 I followed the VXL installation documentation, but found that some of the
 entries in the @file{CMakeCache.txt} file say that CMake could not find programs,
-paths, etc. Is this a problem?
+paths, etc.  Is this a problem?
 @end quotation
 
-No. VXL needs very little to build correctly (only a C/C++ compiler at worst), however
+No.  VXL needs very little to build correctly (only a C/C++ compiler at worst), however
 it can make use of various system provided libraries, rather than build its own
-versions. CMake also looks for lots of system tools so that it can understand
-the environment it is in. So having lots of @code{NOTFOUND} entries is quite normal.
+versions.  CMake also looks for lots of system tools so that it can understand
+the environment it is in.  So having lots of @code{NOTFOUND} entries is quite normal.
 There is no need to worry unless CMake displays a warning or error message while
 it runs.
 
@@ -595,17 +595,17 @@ it runs.
 
 @quotation
 I used CMake to create a MSVC project with @code{BUILD_SHARED_LIBRARY=ON}.
-But when I try to build, it gives message "cannot open vcl.lib". What's wrong?
+But when I try to build, it gives message "cannot open vcl.lib".  What's wrong?
 @end quotation
 
-The CMake "Shared Library" feature doesn't work with MSVC. You have to use
-static libraries. This is mostly due to MSVC's requirements to have either
+The CMake "Shared Library" feature doesn't work with MSVC.  You have to use
+static libraries.  This is mostly due to MSVC's requirements to have either
 a complete list of every exportable identifier or a decoration of every
-identifier in the code. We are too lazy (or appalled at this "feature")
-to try to fix this. If you absolutely need DLLs you can build your code
+identifier in the code.  We are too lazy (or appalled at this "feature")
+to try to fix this.  If you absolutely need DLLs you can build your code
 using Cygwin, which can produce shared libraries in a "normal" manner.
 Alternatively, if you only want to export a small number of classes or
-functions, then you can manually list them. See the MSVC tool documentation
+functions, then you can manually list them.  See the MSVC tool documentation
 for further details.
 
 

@@ -191,7 +191,7 @@ vector or matrix in their parameters.  A vector of double with fixed length
 @example
     vnl_vector_fixed<double, 4>
 @end example
-with analogous syntax for matrices.   Thus a more efficient version of the
+with analogous syntax for matrices.  Thus a more efficient version of the
 above sequence would be
 @example
 #include <vnl/vnl_matrix_fixed.h>
@@ -246,13 +246,13 @@ and 6 adds.
 @cindex non_const()
 The fixed-size classes are optimally space efficient;
 @code{sizeof(vnl_vector_fixed<double,4>)} and @code{sizeof(double[4])}
-are the same. To achieve this, it is necessary to decouple
+are the same.  To achieve this, it is necessary to decouple
 @code{vnl_vector} from @code{vnl_vector_fixed}, in the sense that
-neither inherits from the other. This means that you cannot pass a
+neither inherits from the other.  This means that you cannot pass a
 @code{vnl_vector_fixed} to a function that expects a @code{vnl_vector}
-without some conversion. Luckily, there is a cheap conversion operator
+without some conversion.  Luckily, there is a cheap conversion operator
 from @code{vnl_vector_fixed} to @code{vnl_vector_ref}, which is a
-derived class of @code{vnl_vector}. This conversion operator will be
+derived class of @code{vnl_vector}.  This conversion operator will be
 applied behind the scenes in most cases, so you often don't have to
 worry about it.
 @example
@@ -267,9 +267,9 @@ The cost of the conversion is on the order of 1 pointer copy (data pointer) and 
 integer copy (length) for a vector and 1 pointer and 2 integers for a
 matrix.
 
-Unfortunately, this is not the end of the story. According to the 1998
+Unfortunately, this is not the end of the story.  According to the 1998
 ISO C++ standard, user defined conversion operators will not be
-applied when determining candidate template functions. Therefore, the
+applied when determining candidate template functions.  Therefore, the
 following snippet fails to compile.
 @example
 template<typename T>
@@ -305,7 +305,7 @@ T norm( vnl_vector<T> const& v );  // real function
 template<typename T, unsigned n>
 inline
 T norm( vnl_vector_fixed<T,n> const& v ) @{ // thin wrapper
-   return norm( v.as_ref() );
+  return norm( v.as_ref() );
 @}
 ...
 vnl_vector_fixed<double,6> fixed_v;
@@ -316,7 +316,7 @@ The final wrinkle with mixing @code{vnl_vector} and
 @code{vnl_vector_fixed} is that the conversion operators, both the
 implicit and explicit, create temporary @code{vnl_vector_ref} objects,
 which, according to the standard, cannot bind to non-const
-references. Therefore, you cannot pass these to a mutator function
+references.  Therefore, you cannot pass these to a mutator function
 that modifies the values in your vector.
 @example
 void mutator( vnl_vector<double>& v );
@@ -327,7 +327,7 @@ mutator(fixed_v); // the temporary object created by the
                   // passed to mutator.
 @end example
 The only solution to this is to explicitly force the temporary object
-to ``give away'' it's constness, using the @code{non_const()}
+to ``give away'' its const-ness, using the @code{non_const()}
 method in @code{vnl_vector_ref}.
 @example
 void mutator( vnl_vector<double>& v );
@@ -424,7 +424,7 @@ int main()
 @end example
 @end cartouche
 @caption{4.2}
-Example of linear algebra operations. Points are read from stdin
+Example of linear algebra operations.  Points are read from stdin
 into matrix @code{pts}, and a hyperplane fitted using two different methods.
 @anchor{fig:planefit}
 @endcaption
@@ -433,7 +433,7 @@ into matrix @code{pts}, and a hyperplane fitted using two different methods.
 @section Polynomials
 
 The @code{vnl_rpoly_roots} class in @code{vnl/algo} is used to compute
-the roots (or "zeros") of a real polynomial.   For example, given the
+the roots (or "zeros") of a real polynomial.  For example, given the
 cubic equation
 @example
      4 x^3 + 3 x^2 - 7 x + 5 = 0
@@ -490,7 +490,7 @@ It is not uncommon in computer vision research to meet problems for which
 there is no known closed-form solution, and a common class of such problems
 are of the form "find @math{x}, @math{y} and @math{z}, such that the
 function @math{f(x,y,z)} takes its minimum value".  For example, fitting a
-line to a set of 2D points @{(x_i,y_i) | i=1..n@}. The problem is then
+line to a set of 2D points @{(x_i,y_i) | i=1..n@}.  The problem is then
 to find a,b,c to minimize the sum of distances of each point to the line
 (@math{a x + b y + c = 0})
 @example
@@ -531,15 +531,15 @@ are moderately well behaved.
 gradient algorithm.
 
 @item @code{vnl_lbfgs}: Limited memory Broyden Fletcher Goldfarb Shannon
-minimisation. Requires 1st derivatives. Considered to be the best
+minimisation.  Requires 1st derivatives.  Considered to be the best
 general optimisation algorithm for functions which are well behaved
 (i.e. locally smooth without too many local minima.)
 
 @item @code{vnl_levenberg_marquardt}: The Levenberg-Marquardt algorithm for
-least-squares problems. This is usually the best method for any function
+least-squares problems.  This is usually the best method for any function
 which can be expressed as
 @code{f(x) = (f_1 (x))^2 + (f_2(x))^2 + (f_3(x))^2 + \dots}
-@c Should get @math fixed. I think the @catcode92=12 is interfering.
+@c Should get @math fixed.  I think the @catcode92=12 is interfering.
 
 @end enumerate
 
@@ -808,7 +808,7 @@ Unfortunately, this approach is not likely to solve your problem,
 since constrained optimisation is not in general solved by adding
 constraints to an unconstrained optimiser.
 
-The usual approaches to doing constained optimisation are:
+The usual approaches to doing constrained optimisation are:
 @enumerate
 @item
 Work the constraints into your cost function, heavily penalising any

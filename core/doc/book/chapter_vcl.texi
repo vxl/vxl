@@ -52,7 +52,7 @@ been clever enough to avoid the vcl_ prefix by using fancy compiler flags,
 and many #defines.  However, that way lies madness---trying to confuse a
 C++ compiler always rebounds on one.
 
-Also, when time comes when all compilers will implement ansi STL classes
+Also, when time comes when all compilers will implement ANSI STL classes
 in a consistent way, it's very easy to `perl away' the @code{vcl_} prefixes,
 or replace them with @code{std::}; it's much more difficult, if not impossible,
 to insert @code{std::} prefixes when there are no @code{vcl_} prefixes.
@@ -99,12 +99,12 @@ standard error to a window (but see also @code{vul_redirector}).
 @section Macros and standard C++
 
 The C++ ISO standard library headers include the functionality of the C ISO standard
-library headers. For example, the declarations found in @code{<stdlib.h>} can be
-found in @code{<cstdlib>} but in namespace @code{std::}. This means that functions
+library headers.  For example, the declarations found in @code{<stdlib.h>} can be
+found in @code{<cstdlib>} but in namespace @code{std::}.  This means that functions
 like @code{printf()} should be called using @code{std::printf()} instead; omitting
-the @code{std::} is wrong and won't work if the compiler is truly conforming. The
+the @code{std::} is wrong and won't work if the compiler is truly conforming.  The
 exception to this (see @code{[C.2.3]} in the standard) is those names from ISO C
-which are actually macros. The following is an incomplete list:
+which are actually macros.  The following is an incomplete list:
 
 @itemize @bullet
 @item assert
@@ -132,8 +132,8 @@ void f(char const *file_name)
 @}
 @end smallexample
 Note that it uses @code{assert}, @code{stderr} and not @code{vcl_assert}, @code{vcl_stderr}
-even though it uses @code{vcl_fprintf}, @code{vcl_abort}. This may seem complicated and
-hard to remember, but it isn't the fault of VCL. If your compiler were strictly conformant
+even though it uses @code{vcl_fprintf}, @code{vcl_abort}.  This may seem complicated and
+hard to remember, but it isn't the fault of VCL.  If your compiler were strictly conformant
 you would still have to use @code{std::fprintf} and you couldn't use @code{std::stderr}.
 
 
@@ -170,8 +170,8 @@ managing polymorphic class trees).
 @comment fsm
 @section Template instantiation
 
-In C++, template instantiation is done by the compiler. In real life, it
-doesn't work as the standard says. In brief here is how template instantiation
+In C++, template instantiation is done by the compiler.  In real life, it
+doesn't work as the standard says.  In brief here is how template instantiation
 is supposed to work:
 
 @itemize @bullet
@@ -235,24 +235,24 @@ using two kinds of templates:
 @itemize @bullet
 @item "Inline" templates whose definitions are in scope at the point of use.
       This includes (in most implementations) the containers and algorithms
-      from the STL. An example is @code{vcl_vector<vcl_pair<int, vcl_string> >}.
+      from the STL.  An example is @code{vcl_vector<vcl_pair<int, vcl_string> >}.
 @item "Export" templates which are explicitly instantiated in the program (despite
-      being exported). In VXL, these instantiations all live in the @code{Templates/}
+      being exported).  In VXL, these instantiations all live in the @code{Templates/}
       directories in the source tree and include things like @code{vnl_svd<T>}
       which only need to be instantiated for a handful of types anyway.
 @end itemize
 
-Now, it gets worse. For various reasons it is sometimes advantageous to turn
-off automatic instantiation of the first kind of template. This is only really
+Now, it gets worse.  For various reasons it is sometimes advantageous to turn
+off automatic instantiation of the first kind of template.  This is only really
 the case for some architectures but if you are unlucky enough to be using one
 of them, you also have to explicitly instantiate your STL container classes
 and algorithms in the @code{Templates/} directories. [You should consider skipping
 the rest of this section until you actually have a template problem.  Don't read it
 just for pleasure.]  To make it easier to do
 this, and to make sure it works on all platforms, explicit instantiation is
-done using preprocessor macros. The macro used to instantiate a class or function
+done using preprocessor macros.  The macro used to instantiate a class or function
 is obtained by capitalizing the name (of that class or function) and appending
-@code{_INSTANTIATE}. For example, here is how to instantiate a
+@code{_INSTANTIATE}.  For example, here is how to instantiate a
 @code{vcl_map<int, X>} where @code{X} is the name of some class:
 
 @smallexample
@@ -286,16 +286,16 @@ implicit instantiation you should put such instantiations in the
 
 
 First of all a definition: Assertions include anything that acts
-like an assert(). They check for some error condition
+like an assert().  They check for some error condition
 that should not occur if the code is working
 correctly@footnote{Strictly, computing science defines
 assertions in association with a code section's pre- and
-post-conditions.}. They are there to
-detect broken code. The fact that they abort rather than do
+post-conditions.}.  They are there to
+detect broken code.  The fact that they abort rather than do
 something more graceful is irrelevant because the program is
-already broken. Typical things to check for include array bounds
+already broken.  Typical things to check for include array bounds
 violations, container size mismatches, invalid function
-parameters. The following things should not be considered as
+parameters.  The following things should not be considered as
 assertions; invalid user input, file input failure; users are too
 good at messing these things up, and should be treated
 sympathetically.
@@ -304,7 +304,7 @@ When putting an assertion in one of the @vxl{x} libraries, you
 should make sure that it can be turned off using @code{NDEBUG}.
 This is the intention of the NDEBUG macro, and is very useful for
 time-critical code.
-The easiest way to do this is using the @code{assert()} macro. If
+The easiest way to do this is using the @code{assert()} macro.  If
 you want to print out a more useful error message you could try
 @smallexample
 #include <vcl_iostream.h>
@@ -314,8 +314,8 @@ int f()
 #ifndef NDEBUG
   if (vcl_sqrt(4.0) < 1.0)
   @{
-    vcl_cerr << "There is something very wrong with your" <<
-                "vcl_sqrt() function" << vcl_endl;
+    vcl_cerr << "There is something very wrong with your"
+             << "vcl_sqrt() function" << vcl_endl;
     vcl_abort();
   @}
   ...
@@ -327,7 +327,7 @@ to just @code{#include <vcl_cassert.h>}.
 
 If you want finer control you can add extra control macros.
 Indeed in the case of time-critical code, you are encouraged to provide
-this extra control. You can have the default (i.e. when the control macro
+this extra control.  You can have the default (i.e. when the control macro
 is undefined) either include, or not include, the assertion.
 In any case, you @emph{should} ensure that defining @code{NDEBUG} will
 override your specialist macros, and turn off @emph{all} assertions.
@@ -340,8 +340,8 @@ int f()
 #if (!defined NDEBUG) && (defined I_AM_PARANOID_ABOUT_VCL_SQRT)
   if (vcl_sqrt(4.0) < 1.0)
   @{
-    vcl_cerr << "There is something very wrong with your" <<
-                "vcl_sqrt() function" << vcl_endl;
+    vcl_cerr << "There is something very wrong with your"
+             << "vcl_sqrt() function" << vcl_endl;
     vcl_abort();
   @}
   ...
@@ -355,14 +355,14 @@ the function Doxygen markup (or class level if appropriate.)
 @section Notes
 @subsection Forward Declaration of vcl Classes
 
-Do not forward declare classes in vcl. For example,
+Do not forward declare classes in vcl.  For example,
 @example
 class vcl_string;   // This is not allowed. std::string is a typedef.
 class my_class @{
 ..
 @end example
 
-In this case you should just include <vcl_string.h>. In the case of stream
+In this case you should just include <vcl_string.h>.  In the case of stream
 stuff, there is an include file of forward declarations that will work.
 @example
 #include <vcl_iosfwd.h>

@@ -1,9 +1,9 @@
 @chapsummary
 This library provides geometric primitive entities, like points and
-lines and planes. The goal is to provide very lightweight structures
-than are just slightly more costly than matrices or vectors. At the
+lines and planes.  The goal is to provide very lightweight structures
+than are just slightly more costly than matrices or vectors.  At the
 same time these classes can support all the routine geometric
-computations that are needed in basic computer vision operations. The
+computations that are needed in basic computer vision operations.  The
 idea is that more complex spatial objects would use the vgl operations
 to carry out basic geometric computations without duplicating
 operations like line intersection.
@@ -37,7 +37,7 @@ types like @code{int} (especially with homogeneous representations) or e.g.
 
 @subsection Homogeneous 2D classes and operations
 The most general geometric framework is based on projective geometry
-and homogeneous coordinates. Projective operations arise in the
+and homogeneous coordinates.  Projective operations arise in the
 analysis of image geometry and its relationship to the world geometry
 projected into the image by perspective cameras.
 
@@ -84,7 +84,7 @@ The most useful static functions in namespace @code{vgl_homg_operators_2d<T>} ar
 @end itemize
 
 Homogeneous projective geometry can be converted to standard Euclidean or Cartesian coordinates
-by normalizing by the third homogeneous coordinate. In general there will be need to convert back
+by normalizing by the third homogeneous coordinate.  In general there will be need to convert back
 and forth between the two geometries to carry out operations efficiently.  For example intersection
 of lines in homogeneous coordinates can be carried out simply using the cross-product of vectors.
 
@@ -146,7 +146,7 @@ The most useful static functions in namespace @code{vgl_homg_operators_3d<T>} ar
 
 @subsection Cartesian 3D classes
 
-The basic 3D classes using non-homogeoneous (3-argument) representations are:
+The basic 3D classes using non-homogeneous (3-argument) representations are:
 
 @itemize @bullet
 @item @code{vgl_point_3d<T>}
@@ -181,13 +181,13 @@ The general case for the polygon scan is shown in Figure 1.
 @figure
 @image{polygon-scan,,3in}
 @caption{1}
-The general situation for a polygon scan iterator. The polygon defines a set of
+The general situation for a polygon scan iterator.  The polygon defines a set of
 discrete scan lines which are bounded by the polygon or by an optional clipping window.
 @endcaption
 @endfigure
 The scan is initiated by calling @code{::reset()}.  The boolean method @code{::next()}
 then iterates over the spans until all spans have been produced.  When no more spans
-are available {::next()} returns false.
+are available @code{::next()} returns false.
 Thus an iteration over the interior of the polygon is executed as:
 @example
 ...
@@ -198,17 +198,17 @@ vgl_polygon<double> my_polygon;
 vgl_polygon_scan_iterator<double> psi(mypolygon);
 psi.set_include_boundary(true); // optional flag, default is true
 for (psi.reset(); psi.next(); ) @{
-   int y = psi.scany();
-   for (int x = psi.startx(); x <= psi.endx(); ++x)
-         ....
-        // do something with x and y, e.g. compute the center of gravity of
-        // the interior points.
-  @}
+  int y = psi.scany();
+  for (int x = psi.startx(); x <= psi.endx(); ++x)
+    ....
+    // do something with x and y, e.g. compute the center of gravity of
+    // the interior points.
+@}
 @end example
 The @code{vgl_polygon_scan_iterator<T>} also supports the specification
 of an optional clipping window.  The window is intersected with the polygon
-to define scan region as shown in Figure 1. The window is specified by
-an alterative constructor:
+to define scan region as shown in Figure 1.  The window is specified by
+an alternative constructor:
 @example
 vgl_polygon_scan_iterator<float>(vgl_polygon<float> const& face, bool boundaryp,
                                  vgl_box_2d<float> const& window)
@@ -220,32 +220,32 @@ The area of a polygon can be determined with the @code{vgl_area} function.
 
 @section Projective transformations
 One of the goals of vgl is to support the basic operations of
-projective geometry. This goal inevitably entails the use of
+projective geometry.  This goal inevitably entails the use of
 projective transformations which are typically represented as square
 matrices of dimension n+1, where n is the dimension of the geometric
-space in which a point set is embedded. Because of the strict rules of
+space in which a point set is embedded.  Because of the strict rules of
 core libraries, vgl is not permitted to require other core libraries
-in order to carry out its operations. At the same time there is no
+in order to carry out its operations.  At the same time there is no
 justification to re-invent a numerical library within vxl simply to
 avoid library cross-linking.  The solution is to define a @code{vgl/algo}
 library that can link to vnl and thus make use of the necessary vnl
-functions. A user can cleanly link to very basic vgl classes without
+functions.  A user can cleanly link to very basic vgl classes without
 including vnl, but the full operations of projective geometry will
 require the use of vnl matrix algorithms.
 @figure
 @image{homography,,2in}
 @caption{2}
-The mapping of points from one projective plane to another. The transformation can be represented by a 3x3 matrix.
+The mapping of points from one projective plane to another.  The transformation can be represented by a 3x3 matrix.
 @endcaption
 @endfigure
 @subsection 2-d projective transformations
 Much of the discussion here will center on the projective plane (2-d
 points and lines) but a partial set of operations are available for
-both 1-d and 3-d geometry. The basic operation is to transform a point
+both 1-d and 3-d geometry.  The basic operation is to transform a point
 or line, and in the projective plane this corresponds to multiplying
 the vector of corresponding homogeneous coordinates by a 3x3
 transformation matrix.  This basic operation is illustrated in Figure
-2. The projective transformation between planes is often called a
+2.  The projective transformation between planes is often called a
 planar homography, thus the symbol h, or H, is used to represent transformations.
 
 The class @code{vgl_h_matrix_2d<T>} defines the basic operations of a planar homography.
@@ -275,11 +275,11 @@ vgl_homg_point_2d <double> Xpre;
 Xpre = H.preimage(x1);
 ..
 @end example
-and X ~ Xpre. This operation is carried out by inverting the forward transformation matrix.
+and X ~ Xpre.  This operation is carried out by inverting the forward transformation matrix.
 
 The process is similar for lines, but it should be noted that the
 transformation for lines requires a different matrix then that for
-points. It can be shown that,
+points.  It can be shown that,
 
 H_line = (H_point)^-t
 
@@ -290,7 +290,7 @@ easier, only requiring a matrix transpose.
 
 The ambiguity as to whether an @code{vgl_h_matrix_2d<T>} is a point
 mapping or a line mapping is avoided by the convention that the class
-only refers to point mappings. The matrix inverse could be cached to
+only refers to point mappings.  The matrix inverse could be cached to
 avoid extra computation, but currently it is not, since there hasn't
 been performance issues to motivate the extra machinery.  Still, the
 user should be aware that inversion is occurring on every forward line
@@ -314,7 +314,7 @@ Hrot.set_rotation_about_axis(axis, angle);
 //Set up the translation transformation
 Htrans.set_translation(1.0, 2.0, 3.0);
 
-//compose the two. The rotation is applied first and then the translation
+//compose the two.  The rotation is applied first and then the translation
 H = Htrans*Hrot;
 ...
 // Transform a 3-d homogeneous point
@@ -325,12 +325,12 @@ x = H(X);
 // x = (1.707, 2.707, 3.0, 1.0)
 @end example
 In 3-d projective space, points and planes hold the same dual relationship as points and lines do
-in 2-d projective space. In 3-d, planes are transformed by H^-t, where H is a 3-d projective transformation on points.
+in 2-d projective space.  In 3-d, planes are transformed by H^-t, where H is a 3-d projective transformation on points.
 
 Lines in 3-d are considerably more complicated than points and
-planes. The representation called Plucker coordinates which allows
+planes.  The representation called Plucker coordinates which allows
 computations involving lines to be carried out using matrix and vector
-operations. It is planned to introduce Plucker geometry into @code{vgl/algo}
+operations.  It is planned to introduce Plucker geometry into @code{vgl/algo}
 when the need arises.
 
 @section Computing 2-d projective transformations
@@ -352,7 +352,7 @@ sets the transformation so as to map points from their projective plane to the p
 
 
 The more general case is based on classes that compute a plane projective
-transformations based on sets of corresponding points or lines. For example,
+transformations based on sets of corresponding points or lines.  For example,
 @example
 
 vgl_h_matrix_2d_compute_linear hcl;
@@ -364,12 +364,12 @@ vcl_vector <vgl_homg_point_2d <double> > point_set1, point_set2;
 //
 vgl_h_matrix_2d <double> H = hcl.compute(point_set1, point_set2);
 // H represents the homography that
-// transforms points from  plane1 into plane2.
+// transforms points from plane1 into plane2.
 
 @end example
 
 This functionality is very useful in tracking planar surfaces in images and
-in the calibration of perspective cameras. Currently, only linear
+in the calibration of perspective cameras.  Currently, only linear
 algorithms are available for finding the homography that best fits the
 mapping between two sets of corresponding points or two sets of
 corresponding lines.  It is planned to add

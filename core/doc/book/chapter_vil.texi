@@ -1,6 +1,5 @@
 @chapsummary
-Load images using @code{vil_load}. Access them
- using a @code{vil_image_view<T>}.
+Load images using @code{vil_load}.  Access them using a @code{vil_image_view<T>}.
 @endchapsummary
 
 The @vxl{x} image library has evolved from the TargetJr and Manchester Image
@@ -8,15 +7,15 @@ libraries.
 As with its predecessors, its primary goals is to provide flexible access
 to all 2D images, including those too large to fit in
 the address space of a single program or process, and very powerful and
-fast access to images in memory. In fact, both cases need similar
+fast access to images in memory.  In fact, both cases need similar
 treatment: even in-core images are assumed to be sufficiently large (say a
 megabyte) that special care must be taken to avoid unnecessary copying of
 their data.  In both cases, the normal requirements of efficiency and
 ease-of-use apply.  The system must allow:
 @itemize @bullet
-@item Beginners to have easy access to an image type. This image type
+@item Beginners to have easy access to an image type.  This image type
 should also be the default image type for an programmer writing
-image processing code. This image type must be very efficient to use.
+image processing code.  This image type must be very efficient to use.
 
 @item Fast access to images on disk, at no more than a 10% speed penalty
 for operations on images in memory.
@@ -32,7 +31,7 @@ optimisations that only a human can apply.
 @end itemize
 
 This vil library is the second VXL image library, and is sometimes referred
-to as vil2. The original  @vxl{a} image library vil1 is deprecated.
+to as vil2.  The original @vxl{a} image library vil1 is deprecated.
 
 You can read more about the design philosophy in @code{$VXLSRC/core/vil/notes.html}
 
@@ -57,7 +56,7 @@ int main()
 @end example
 
 The first interesting line declares img to be an image. vil_image_view
-is the basic image type. It represents an image in memory about
+is the basic image type.  It represents an image in memory about
 whose structure, size and pixel type we know everything.
 Hence we need to specify the pixel type at this point.
 
@@ -65,7 +64,7 @@ Now let's skip to the end to explain the pixel access method.
 @example
   img(100,100)
 @end example
-This looks up the pixel at position 100,100 and returns its value. The
+This looks up the pixel at position 100,100 and returns its value.  The
 pixel type was defined on the first line to be an rgb of bytes, and
 that is what will be displayed.
 @example
@@ -75,29 +74,29 @@ Where it matters (such as when loading
 an image in from disk) it is assumed that the image origin is at the
 top left of the image.
 
-Finally lets look at the middle line. This consists of two parts.
+Finally lets look at the middle line.  This consists of two parts.
 The @code{vil_load} function does a lot of work behind the scenes
 to determine what the image type is, and then load that image into
-memory. The second part is the assignment which has several special properties.
+memory.  The second part is the assignment which has several special properties.
 @itemize @bullet
-@item It does not copy the actual image data. A @code{vil_image_view} object
-is really a view of some underlying data. The view understands where the
-real image data is in memory and how to interpret it. When you copy
+@item It does not copy the actual image data.  A @code{vil_image_view} object
+is really a view of some underlying data.  The view understands where the
+real image data is in memory and how to interpret it.  When you copy
 a view, you merely copy this interpretation information, not the actual
-image data. This is important, because often images are very big, and
-copying is expensive. The underlying image is managed with smart pointers
+image data.  This is important, because often images are very big, and
+copying is expensive.  The underlying image is managed with smart pointers
 so when the last view to the underlying data is destroyed, the image data
 will be too.
 
 @item It can do cheap conversions between different views of the same image.
 @code{vil_load} by default loads the image as 3 planes, with the pixel
-type as @code{vxl_byte}. It is trivial to reconfigure a @code{vil_image_view}
-so that it views the same image data as one plane of rgb pixels. The
-assignment will automatically do any cheap conversion necessary. You may
+type as @code{vxl_byte}.  It is trivial to reconfigure a @code{vil_image_view}
+so that it views the same image data as one plane of rgb pixels.  The
+assignment will automatically do any cheap conversion necessary.  You may
 ask then, how is that we know that the pixel type can be viewed as RGB of bytes?
-Here, we simply know that our image foo.ppm is this type. In general you can
+Here, we simply know that our image foo.ppm is this type.  In general you can
 either find out what the pixel type is before you load the image, or
-you can force it to whatever pixel type you want. The latter may involve
+you can force it to whatever pixel type you want.  The latter may involve
 a relatively expensive pixel by pixel conversion, so this will not happen
 automatically.
 @end itemize
@@ -124,8 +123,8 @@ int main(int argc, char **argv)
   vil_image_view<vil_rgb<vxl_byte> > img;
   img = vil_convert_to_component_order(
           vil_convert_to_n_planes(3,
-            vil_convert_cast(vxl_byte(),
-              vil_load(argv[1]))));
+                                  vil_convert_cast(vxl_byte(),
+                                                   vil_load(argv[1]))));
 
   for (unsigned j = 0; j < img.nj(); ++j)
     for (unsigned i = 0; i < img.ni(); ++i)
@@ -139,7 +138,7 @@ int main(int argc, char **argv)
 
 The call to @code{vil_save} sends the modified image in @var{img} to disk.
 The choice of file format is determined automatically from the extension of
-the filename. If one wants more control, a string can be appended to specify the
+the filename.  If one wants more control, a string can be appended to specify the
 format, e.g.
 @cindex vil_save, choosing a specific file format
 @example
@@ -200,15 +199,15 @@ indirectly, or images about which we may currently be missing information
 As we have seen the first sort of images are represented
 by a @code{vil_image_view<T>} on the data in memory.
 For some very large images it is not
-possible or desirable to load them into memory. In this case it is
+possible or desirable to load them into memory.  In this case it is
 useful to be able to load in a sub-section of the image,
-manipulate it, and possible write it out again. Alternatively
+manipulate it, and possible write it out again.  Alternatively
 you may want to pass an image about, and process it without
 knowing its pixel type. vil supports these second sort of images
-using @code{vil_image_resource}. You cannot create an image
+using @code{vil_image_resource}.  You cannot create an image
 resource object directly, instead you use a creation function
 which returns a smart pointer to the base class
-@code{vil_image_resource_sptr}. When manipulating
+@code{vil_image_resource_sptr}.  When manipulating
 @code{vil_image_resource}s it will almost entirely be in terms of
 @code{vil_image_resource_sptr}s.
 There are several types of
@@ -216,20 +215,20 @@ image resource, with different creation functions:
 
 @itemize @bullet
 @item Representing an image in a file: e.g. @code{vil_pnm_image},
-@code{vil_jpeg_image}. These are created using
+@code{vil_jpeg_image}.  These are created using
 @code{vil_load_image_resource()},
 and @code{vil_new_image_resource()}.
 
 @item @code{vil_memory_image}: Representing an image in memory
  This is created using
-@code{vil_new_image_resource()}. Alternatively if you want to
+@code{vil_new_image_resource()}.  Alternatively if you want to
 wrap an existing view up as a vil_image_resource you can call
 @code{vil_new_image_resource_of_view()}
 
 @item Representing a filtered version of an
 image in a file (without loading in memory): e.g.
 @code{vil_crop_image_resource} and
-@code{vil_decimate_image_resource}. These
+@code{vil_decimate_image_resource}.  These
 are created using the equivalent functions: @code{vil_crop()},
 @code{vil_decimate()}, etc.
 
@@ -279,22 +278,22 @@ dealing with the arbitrary and complex hassles of image IO.
 @anchor{vil_memory_image}
 
 As explained above, you should be using @code{vil_image_view<T>} to
-actually manipulate your pixels. However, in some parts of your
+actually manipulate your pixels.  However, in some parts of your
 code, you may want to pass images around without having to decide
-the pixel type at compile time. This is a role for a
+the pixel type at compile time.  This is a role for a
 @code{vil_image_resource} derivative, in particular the
-@code{vil_memory_image}. You can wrap an existing
+@code{vil_memory_image}.  You can wrap an existing
 @code{vil_image_view<T>} in a @code{vil_memory_image} by calling
-@code{vil_new_image_resource_of_view()}. Reference counting keeps track
+@code{vil_new_image_resource_of_view()}.  Reference counting keeps track
 of the underlying data in memory, so you can let the original
 view go out of scope without loss.
 
-It may be tempting to use the @code{vil_image_view_base_stpr} for this
-purpose instead. That type is only intended for internal use by vil, and
+It may be tempting to use the @code{vil_image_view_base_sptr} for this
+purpose instead.  That type is only intended for internal use by vil, and
 it will almost certainly not behave as you want.
 
 The @code{vil_image_resource} API has been designed to allow efficient
-access to @code{vil_memory_image}. In the example
+access to @code{vil_memory_image}.  In the example
 below, if the image resource passed in is really a
 @code{vil_memory_image}, the @code{get_view()} returns a view
 to the underlying data, so no unneeded data copying happens.
@@ -307,10 +306,10 @@ void display_view(vil_image_resource_sptr &ir)
 @{
   switch (ir->pixel_format())
   @{
-  case VIL_PIXEL_FORMAT_BYTE: {
+   case VIL_PIXEL_FORMAT_BYTE: @{
     vil_image_view<vxl_byte> v1 = ir->get_view();
-    display_byte(v1); }
-  case ...
+    display_byte(v1); @}
+   case ...
   @}
 @}
 @end example
@@ -326,41 +325,41 @@ void display_view(vil_image_resource_sptr &ir)
 @code{vil_image_view}
 uses a pointer arithmetic style of indexing.
 The image data is assumed to be a regularly arranged set of
-pixels in memory. The view keeps a pointer to the pixel
-at the origin. It also keeps the pointer difference to
+pixels in memory.  The view keeps a pointer to the pixel
+at the origin.  It also keeps the pointer difference to
 get to the next pixel to the right, the next pixel down,
 and the same pixel in the next plane.
 
 In a general image representation a 2d image
 consists of multiple planes each containing multiple rasters (rows)
 each containing multiple pixels, and each pixel contains multiple
-components. The planes and the components are used for the same
+components.  The planes and the components are used for the same
 purpose, to represent different spectral or functional values (e.g. the
 red, green and blue channels of an RGB image.) In vil it is usually
 assumed that an image cannot have both multiple planes and multiple
-components per pixel. This allows
+components per pixel.  This allows
 @code{vil_image_view} to view the same a colour image data
-as either a 3 plane image or a 1 plane RGB image. You can do this
+as either a 3 plane image or a 1 plane RGB image.  You can do this
 explicitly by calling @code{vil_view_as_planes()} or
 @code{vil_view_as_rgb()}.
 
-However the two representations are not equal. The
+However the two representations are not equal.  The
 multi-plane representation
-is more general than the RGB multi-component one. If
+is more general than the RGB multi-component one.  If
 the underlying data is actually stored RRRR..GGGG..BBBB..
 then it is not possible to view that image as a single
-plane of RGB pixels. For this reason, a lot of vil prefers
-to view an image as multi-plane single-component. In particular,
+plane of RGB pixels.  For this reason, a lot of vil prefers
+to view an image as multi-plane single-component.  In particular,
 the vil_image_resource derivatives in vil, will treat
 all images as multi-plane, scalar component images, whether the
-underlying data is RGBRGBRGB... or RRRR..GGGG..BBBB.. This means
+underlying data is RGBRGBRGB... or RRRR..GGGG..BBBB..  This means
 if you have switch statement to deal with pixel
 types in an normal image resource, you need not worry about any
 types other than than the following
 @itemize @bullet
 @item bool
 @item vxl_byte, vxl_sbyte
-@item vxl_int_16, vvxl_uint_16
+@item vxl_int_16, vxl_uint_16
 @item vxl_int_32, vxl_uint_32
 @item float, double
 @item vcl_complex<float>, vcl_complex<double>
@@ -368,7 +367,7 @@ types other than than the following
 
 @cindex view manipulations
 Similarly to the planes to components conversion
-it is possible to perform a whole range of other manipulations. These
+it is possible to perform a whole range of other manipulations.  These
 include @code{vil_transpose()}, @code{vil_flip_ud()},
 @code{vil_decimate()}, @code{vil_crop()}.
 One further advantage of the arithmetic indexing scheme is that
@@ -378,7 +377,7 @@ it becomes easy to create a 2d slice view of a 3d image.
 @section Algorithms and Image Processing
 
 Several image processing functions can be found in the algo
-subdirectory of vil. Lets look at an example of finding the image
+subdirectory of vil.  Lets look at an example of finding the image
 gradient using a Sobel filter.
 
 @example
@@ -403,7 +402,7 @@ int main()
   vcl_cout<<"Original image:"<<vcl_endl;
   vil_print_all(vcl_cout,image);
 
-    // Objects to hold gradients
+  // Objects to hold gradients
   vil_image_view<float> grad_i,grad_j;
 
   vil_sobel_3x3(image,grad_i,grad_j);
@@ -431,12 +430,12 @@ This section explores the major differences between using the old vil1
 and using vil, and some of the implications for converting existing code.
 
 The first and most obvious difference is that whilst there is a broad equivalent to
-@code{vil1_image}, and its descendants, this class tree has been split in two. The abstract
+@code{vil1_image}, and its descendants, this class tree has been split in two.  The abstract
 @code{vil1_image} is now replaced with a smart pointer to a @code{vil_image_resource}.
 The concrete @code{vil1_memory_image_of<T>} is now a @code{vil_image_view<T>}.
 Whereas previously, you might have written code in terms of @code{vil1_image}, it now
 usually makes sense to write most image manipulations in terms of
-@code{vil_image_view<T>}s. With the old @code{vil1_image}, you either had to
+@code{vil_image_view<T>}s.  With the old @code{vil1_image}, you either had to
 do a @code{get_section} and operate on raw memory, or do a messy switch statement to cast
 it to its underlying @code{vil_memory_image_of<T>} type, or do an expensive
 @code{vil1_view_as()} conversion.
@@ -444,8 +443,8 @@ Now with vil, the @code{vil_image_view<T>} provides a powerful view directly ont
 your image in memory.
 
 The @code{vil_image_view} provides such facilities
-as compile-time type safety and switchable bounds checking. It also acts as a
-sort of canonicaliser. A wide range of actual memory layouts can all be treated
+as compile-time type safety and switchable bounds checking.  It also acts as a
+sort of canonicaliser.  A wide range of actual memory layouts can all be treated
 identically and transparently while working through the @code{vil_image_view}.
 Previously, in vil1, the image loader often needed to have several filters placed
 on top of it to do such things as re-order the raster rows and re-order the
@@ -453,18 +452,18 @@ component order. vil doesn't do this, but instead uses the vil_image_view to pro
 a canonical view of whatever deranged image format your loader finds most efficient to
 use.
 
-The second important change is that vil provides full support for planes. In many cases
+The second important change is that vil provides full support for planes.  In many cases
 accessing different image planes is directly equivalent to accessing different components.
 Indeed, it is often preferable to view an image as a multi-planar rather than multi-component.
 If your algorithms assume a single plane, it is however trivial to provide a wrapper function
-which takes a multi-planar image and passes one plane at a time to your algorithm. This
+which takes a multi-planar image and passes one plane at a time to your algorithm.  This
 can be done with virtually no loss in efficiency, and indeed is how some of the code in
 @code{vil/algo} is written.
 
 To help convert existing code there is a script (@code{core/vil/scripts/vil1tovil.pl})
-It converts as much code as it can. However, it can really only deal with file and identifier
-name changes. There are large structural differences between vil1 and vil, with many of the
-equivalent functions taking different parameters. The output of the conversion script
+It converts as much code as it can.  However, it can really only deal with file and identifier
+name changes.  There are large structural differences between vil1 and vil, with many of the
+equivalent functions taking different parameters.  The output of the conversion script
 can best be seen as a hint on which types and classes to use and which functions to call.
 You will almost certainly need to make extensive further edits to your code to get it
 to compile again.
@@ -494,7 +493,7 @@ The DICOM loader in VXL is not built by default,
 because it is large and only medical image people want it.
 
 You will need to rerun CMake and find Cache value called
-VXL_BUILD_DICOM. Turn it on, and rebuild --- it won't need to rebuild
+VXL_BUILD_DICOM.  Turn it on, and rebuild --- it won't need to rebuild
 everything.
 
 @item Question 2
@@ -571,11 +570,11 @@ This can halve the run time on some compilers.
 
 The most important rule in code optimisation is to observe how the code
 behaves in real life, and concentrate your efforts on where the code
-spends most of its time. In our example, this means the inner most loop
+spends most of its time.  In our example, this means the inner most loop
 Now, it turns out that in many cases, @code{istep_==1}, because of the
-default image layout in memory. Because of this common case it would
+default image layout in memory.  Because of this common case it would
 be worth having the compiler generate machine-code for the inner-most
-loop in this special case. We can do this by explicitly testing for
+loop in this special case.  We can do this by explicitly testing for
 such a special case.
 
 @example
@@ -592,7 +591,7 @@ void vil_image_view<T>::fill(T value)
       for (unsigned j=0;j<nj_;++j,row += jstep_)
       @{
         int i = ni_ ;
-        while (i>=0) { row[i--]=value; }
+        while (i>=0) @{ row[i--]=value; @}
       @}
     @}
     return;
@@ -610,29 +609,29 @@ void vil_image_view<T>::fill(T value)
 @}
 @end example
 
-There are two other optimisations going on here. The first is that
-we are using the pointer indexing operator @code{[]}. Most compilers
+There are two other optimisations going on here.  The first is that
+we are using the pointer indexing operator @code{[]}.  Most compilers
 treat @code{while (++i<n) @{ *(ptr++)=v; @} } differently from
 @code{while (++i<n) @{ ptr[i]=v; @} }, with the latter often
-being significantly faster. This is especially true when @code{ptr}
+being significantly faster.  This is especially true when @code{ptr}
 is a pointer to a character sized type.
 The other optimisation makes use of the fact that it is faster to count down to
-0 than count up to n. This is because it is faster to test against a constant, 0,
-than against a variable. Sometimes a compiler figures this out itself,
-but by no means always. One useful refinement that may be possible is to
-decrement the index counter right at the end of the loop. This allows the
+0 than count up to n.  This is because it is faster to test against a constant, 0,
+than against a variable.  Sometimes a compiler figures this out itself,
+but by no means always.  One useful refinement that may be possible is to
+decrement the index counter right at the end of the loop.  This allows the
 compiler to avoid issuing a separate test instruction, since this sort
 of test is automatically performed by the processor after a decrement
 or other arithmetic operation.
 
 Since we are performing the same operation on every pixel independent
 of its absolute or relative position, there is one further optimisation
-that can be performed. In many cases an image will be stored as a
-contiguous block of memory. If this is the case, it may make sense
+that can be performed.  In many cases an image will be stored as a
+contiguous block of memory.  If this is the case, it may make sense
 just to operate on this block of memory as a single dimensional array.
 In the case of fill, this may even allow a compiler to issue
 a specialised single machine instruction which performs the whole
-fill very very fast. This gives us our final implementation.
+fill very very fast.  This gives us our final implementation.
 
 @example
 template<class T>
@@ -644,7 +643,7 @@ void vil_image_view<T>::fill(T value)
   @{
     vil_image_view<T>::iterator it = begin();
     vil_image_view<T>::const_iterator end_it = end();
-    while (it!=end_it) {*it = value; ++it; }
+    while (it!=end_it) @{ *it = value; ++it; @}
     return;
   @}
 
@@ -656,7 +655,7 @@ void vil_image_view<T>::fill(T value)
       for (unsigned j=0;j<nj_;++j,row += jstep_)
       @{
         int i = ni_;
-        while (i>=0) { row[i--]=value; }
+        while (i>=0) @{ row[i--]=value; @}
       @}
     @}
     return;
@@ -678,12 +677,12 @@ This optimised version was between two and ten times faster than the original
 depending on the compiler, image structure, and pixel type.
 
 It should always be born in mind that there is a trade-off in testing for
-special cases. Each test takes time, and this slows the function down
-for the non-special cases. Limit yourself to only testing for very common
+special cases.  Each test takes time, and this slows the function down
+for the non-special cases.  Limit yourself to only testing for very common
 cases that have very significant potential speed improvements.
 
 Finally as with all optimisation - be rigorous in comparing the actual
-times for your original and optimised code. Run enough experiments to
+times for your original and optimised code.  Run enough experiments to
 measure the statistical spread to see if your improvements are significant.
 It is quite common for compiler or processor
 quirks to make your optimised code slower than the original.

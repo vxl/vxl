@@ -8,8 +8,8 @@ units.
 
 This includes classes for
 @itemize @bullet
-@item Radians, degrees, and metres.
-@item 2D and 3D cartesian co-ordinate systems
+@item Radians, degrees, and meters.
+@item 2D and 3D Cartesian co-ordinate systems
 @item Various polar co-ordinate systems
 @item Various geographic co-ordinate systems.
 @item Various Transformations
@@ -29,7 +29,7 @@ This includes classes for
   @itemize @bullet
     @item @code{vcsl_length_unit}
     @itemize @bullet
-      @item @code{vcsl_metre} - This is the standard length unit
+      @item @code{vcsl_meter} - This is the standard length unit
     @end itemize
     @item @code{vcsl_angle_unit}
     @itemize @bullet

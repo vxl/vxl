@@ -35,7 +35,7 @@ class.
 
 It is interesting to note that after vsl was written, and entirely independently
 as far as these authors are aware, a section on IO was added to the comp.lang.c++
-FAQ. The recommendations in the FAQ match the design of vsl very closely, in the
+FAQ.  The recommendations in the FAQ match the design of vsl very closely, in the
 design of binary formats, the serialisation scheme, and the base-class loader
 scheme.
 
@@ -48,14 +48,14 @@ alpha processors.) We had to choose one, and we mostly use Intel platforms.
 
 The original code from which @code{vsl} was derived was cross platform only in the sense
 that it worked on either big-endian 32-bit platforms or little-endian 32-bit platforms.
-This was not an unreasonable assumption at the time it was written. However during the
+This was not an unreasonable assumption at the time it was written.  However during the
 requirements capture for @code{vsl}, it became clear that being able to handle 64-bit
-fundamental types would be necessary. For example the long on an alpha-64 is 64 bits.
+fundamental types would be necessary.  For example the long on an alpha-64 is 64 bits.
 
 It is fundamentally impracticable to deal quietly and correctly with the problems this
-causes. In particular, a number greater than 4G can be represent by a 64-bit long. It
+causes.  In particular, a number greater than 4G can be represent by a 64-bit long.  It
 can be successfully saved, but a platform with a 32-bit long simply cannot represent
-the value. Nevertheless it is necessary to deal with the problems in a predictable manner.
+the value.  Nevertheless it is necessary to deal with the problems in a predictable manner.
 There were several options.
 
 @enumerate
@@ -71,18 +71,18 @@ some platforms, and not able to represent the full range of values on others.
 
 The second option, has the advantages of doing the correct thing on all platforms,
 and being very efficient when files are loaded and
-saved on the same platform. This is especially true if the endian-ness was also flagged
-in the header and values saved in native format. The disadvantage is that the code for
-reading files on each platform must know about every other possibility. So if there are
+saved on the same platform.  This is especially true if the endian-ness was also flagged
+in the header and values saved in native format.  The disadvantage is that the code for
+reading files on each platform must know about every other possibility.  So if there are
 @math{n} platforms supported, the numbers of options that need to be programmed is
 @math{n^2}.
 
 The third option, suggested by Peter Vanroose, has the advantage that it does the correct
-thing on all platforms. Also, there is only one format,
+thing on all platforms.  Also, there is only one format,
 and so the amount of code to write only grows linearly with the number of platforms rather
-than quadratically as in option 2. The final
+than quadratically as in option 2.  The final
 advantage is that the store file will likely be smaller, since numbers are represented
-in as few bytes as possible. It has
+in as few bytes as possible.  It has
 the disadvantage of some extra computation and memory overhead when both reading and writing.
 
 
@@ -100,38 +100,38 @@ unsigned    0  ->  4G     1,2,3,4,but mostly 5       37              95
 int        -2G ->  2G     1,2,3,4,but mostly 5       47             105
 @end example
 
-This means that a 850 Mhz PC can encode about 50 million small valued integers per
-second, and decode about 35 million. The decoding takes longer due to the need for testing
+This means that a 850 MHz PC can encode about 50 million small valued integers per
+second, and decode about 35 million.  The decoding takes longer due to the need for testing
 for integer overflow.
 
 We consider these speeds to be fast enough. and so option 3 was chosen.
 
-The arbitrary length format stores the number in a series of bytes. Of each byte, 7 bits
+The arbitrary length format stores the number in a series of bytes.  Of each byte, 7 bits
 are used to represent the number and the most significant bit is used to flag the end of the number.
 The flag bit is 0 if there
-are more bytes left for this integer, and 1 if this is the last byte. The bytes are stored
+are more bytes left for this integer, and 1 if this is the last byte.  The bytes are stored
 in little endian order, and the signed numbers are stored using 2s complement notation.
 
 A consequence of this choice is that for example a number can be written from a short, and read
-into a long. We strongly advise against doing this, as it relies on the implementation details.
+into a long.  We strongly advise against doing this, as it relies on the implementation details.
 
 @subsubsection Format of Floating Point Types
 
 Since almost all platforms use IEEE format floating point types to represent floats
 and doubles, we have used this format (in little endian order) to save them to disk.
 
-A downside of this decision is that it is unclear how to store long doubles. The 80bit format
+A downside of this decision is that it is unclear how to store long doubles.  The 80bit format
 that is native to Intel platforms would not appear to be sufficiently general.
 The best alternative would be to switch to variable length encoded floating point values.
-It might be easier just to design a 128 bit format. Until then I/O of long doubles is not
-supported. Please contact the designers if you need to add it.
+It might be easier just to design a 128 bit format.  Until then I/O of long doubles is not
+supported.  Please contact the designers if you need to add it.
 
 
 @subsection Changing the IO format
 
-The @code{vsl} system stores a IO schema version number at the start of the stream. This will enable
-a clean backwards compatible upgrade of the IO schema. It will not however make the rewrite of
-@code{vsl} trivial. Contact the designers if you wish to change the schema.
+The @code{vsl} system stores a IO schema version number at the start of the stream.  This will enable
+a clean backwards compatible upgrade of the IO schema.  It will not however make the rewrite of
+@code{vsl} trivial.  Contact the designers if you wish to change the schema.
 
 @subsection File Magic Numbers
 
@@ -157,24 +157,24 @@ will recognise @code{vsl} files.
 @subsection Serialisation
 
 A common approach to performing serialisation, is to store the serial number in the shared object
-itself. This is the approach used by the Microsoft Foundation Classes, and by DEX (the IUE's IO
+itself.  This is the approach used by the Microsoft Foundation Classes, and by DEX (the IUE's IO
 and serialisation scheme.)
 
-There are two disadvantages to this. The first is that you have to modify
+There are two disadvantages to this.  The first is that you have to modify
 the object being serialised.
 
 The second is that this scheme can get confused if a set of objects
-is being written to two streams. When do you clear the already saved flag for each object?
+is being written to two streams.  When do you clear the already saved flag for each object?
 What happens if the output to the two streams is being interleaved? Will a shared object get
 saved to one stream and not the other?
 
-A different approach is used by @code{vsl}. Here the serialisation record is kept by the stream object.
+A different approach is used by @code{vsl}.  Here the serialisation record is kept by the stream object.
 Pointers are used to uniquely identify each shared object within each computer, and a serial number
-is generated to be saved on the stream. Since there is now a record for each pair
-(stream, shared object) there will not be any clashes when saving to multiple streams. It also
+is generated to be saved on the stream.  Since there is now a record for each pair
+(stream, shared object) there will not be any clashes when saving to multiple streams.  It also
 avoids having to modify the shared object.
 
-@subsection Loading by baseclass pointer: Design Overview
+@subsection Loading by base class pointer: Design Overview
 
 When using polymorphism, there are frequently times when one needs to
 save and restore an object just using a base class pointer to it.
@@ -211,33 +211,33 @@ class vxl_my_class : public vxl_baseclass
 //: Provide examples of each type of polymorphic object that might appear in the stream.
 void vxl_configure_loaders()
 @{
-    vsl_add_to_binary_loader(vxl_my_class());
+  vsl_add_to_binary_loader(vxl_my_class());
 @}
 
 void demonstrate_save(vsl_b_ostream& os)
 @{
-    vxl_baseclass *base_ptr = new vxl_my_class;
+  vxl_baseclass *base_ptr = new vxl_my_class;
 
-    // Write the object to the stream, together with
-    // an identifier indicating what type it is.
-    vsl_b_write(os,base_ptr);
+  // Write the object to the stream, together with
+  // an identifier indicating what type it is.
+  vsl_b_write(os,base_ptr);
 
-    // Tidy up
-    delete base_ptr;
+  // Tidy up
+  delete base_ptr;
 @}
 
 
 void demonstrate_load(vsl_b_istream& is)
 @{
-    vxl_baseclass *base_ptr
+  vxl_baseclass *base_ptr
 
-    vsl_b_read(is,base_ptr);
+  vsl_b_read(is,base_ptr);
 
-    // Show the object
-    vcl_cout<<"Loaded object: "<<base_ptr<<vcl_endl;
+  // Show the object
+  vcl_cout<<"Loaded object: "<<base_ptr<<vcl_endl;
 
-    // Tidy up
-    delete base_ptr;
+  // Tidy up
+  delete base_ptr;
 @}
 @end example
 
@@ -258,7 +258,7 @@ occurs:
 @item The loader then sets the baseclass pointer to point to this new object.
 @end enumerate
 
-So you now have a shiny pointer to the object. Note: The caller is then responsible
+So you now have a shiny pointer to the object.  Note: The caller is then responsible
 for the object that the loader created.
 
 The above methods also work if the
@@ -309,7 +309,7 @@ class vxl_my_class : public vxl_baseclassIO
 //: Provide IO class for each type of polymorphic object that might appear in the stream.
 void vxl_configure_loaders()
 @{
-    vsl_add_to_binary_loader(vxl_my_class_io());
+  vsl_add_to_binary_loader(vxl_my_class_io());
 @}
 
 // The actual IO calls are then identical to those described above for the
@@ -346,7 +346,7 @@ occurs:
 @item The loader then sets the baseclass pointer to point to this new object.
 @end enumerate
 
-So you now have a shiny pointer to the object. Note: The caller is then responsible
+So you now have a shiny pointer to the object.  Note: The caller is then responsible
 for the object that the loader created.
 
 The above methods also work if the
@@ -357,7 +357,7 @@ pointer to zero.
 @subsection Future Work
 
 @enumerate
-@item Currently, a few error checks in the IO still result in an error message and @code{std::abort()}. Since
+@item Currently, a few error checks in the IO still result in an error message and @code{std::abort()}.  Since
 IO code is error prone for reasons often beyond the control of the programmer, this behaviour should be
 replaced with a standard error message a setting of the stream's fail flag, and return.
 @item Design a format for @code{long double} and add it @code{to vsl_binary_io.h}.
@@ -372,7 +372,7 @@ We based the first draft on the design of the Binary IO system in RADIAL, which 
 originally designed in Manchester by Dave Bailes and Dave Cooper.
 
 Finally, the hard work of programming @code{vsl} and the vxl/io libraries was performed by the
-C++ user's group at the Dept. of Imaging Science, Universtory of Manchester;
+C++ user's group at the Dept. of Imaging Science, University of Manchester;
 Danny Allen, Tim Cootes, Nick Costen,
 Ian Scott, Christine Beeston, David Cristinacce, Franck Bettinger, Louise Butcher, and
 John Kang.
@@ -542,11 +542,11 @@ methods and functions declared above.
 
 
 @subsubsection Version Numbering
-This identifies the I/O version numbering. It needs to be incremented when the
+This identifies the I/O version numbering.  It needs to be incremented when the
 class's binary I/O changes.
 
 There is no reason why this version number can't be
-used for other purposes. So long as the @code{b_read()} method is updated to deal with it.
+used for other purposes.  So long as the @code{b_read()} method is updated to deal with it.
 
 It is common and perfectly acceptable to modify a classes I/O during very early development without
 changing the version number.
@@ -560,13 +560,13 @@ short vanyl_my_class::version() const
 @end example
 
 @subsubsection Saving Binary State to a Stream
-Classes should first save their version number. Derived classes should then
+Classes should first save their version number.  Derived classes should then
 call the base class @code{b_write()}, if the base class has any data members.
 Finally write the classes data members.
 
 If data is duplicated within the class,
 (e.g. some workspace data) you will have to decide whether to save and reload the data,
-or else not save it  and regenerate it on loading.
+or else not save it and regenerate it on loading.
 
 The standard form for the method is
 @example
@@ -582,7 +582,7 @@ void vanyl_my_class::b_write(vsl_b_ostream &os) const
 
 @subsubsection Restoring Binary State from a Stream
 
-This function is less complicated than it looks. The complexity of the switch statement is there
+This function is less complicated than it looks.  The complexity of the switch statement is there
 solely to give as much backwards compatibility as you are willing to program.
 
 @example
@@ -596,13 +596,13 @@ void vanyl_my_class::b_read(vsl_b_istream &is)
   vsl_b_read(is, ver);
   switch(ver)
   @{
-  case 1:
+   case 1:
     vanyl_my_base_class::b_read(is); // vanyl_my_base_class is parent of vanyl_my_class
     vsl_b_read(is, this->my_value);
     ...
-  break;
+    break;
 
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vanyl_my_class::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
@@ -612,10 +612,10 @@ void vanyl_my_class::b_read(vsl_b_istream &is)
 @end example
 
 @subsubsection Print a Human Readable Summary to a Stream
-Classes should print a short summary of their contents. Devolve printing
+Classes should print a short summary of their contents.  Devolve printing
 of complex members and parent classes to that class, only if it is sensible.
 
-Do not give too much information. For instance if your class is a
+Do not give too much information.  For instance if your class is a
 container print the number of elements , and then no more than
 perhaps the first 5 elements, with ellipsis to indicate if there
 are more.
@@ -633,19 +633,19 @@ The standard form for the method is
 //: Output a human readable summary to the stream
 void vanyl_my_class::print_summary(vcl_ostream &os) const
 @{
-    os<<"Important Value: "<<this->my_value<<" .. ";
-    ...
-    // optionally os << vcl_endl;
+  os<<"Important Value: "<<this->my_value<<" .. ";
+  ...
+  // optionally os << vcl_endl;
 @}
 @end example
 
 @subsubsection Platform Independent Class Identification
 
 Unfortunately neither the @code{type_info} class nor the @code{type_info::name} field given
-by RTTI are platform independent. To allow loading of a class by base class
+by RTTI are platform independent.  To allow loading of a class by base class
 pointer, the @code{is_a()}
 method is used to identify exactly which
-object to create. It can also be used for other purposes.
+object to create.  It can also be used for other purposes.
 
 If the class is not part of an inheritance hierarchy or will not ever be loaded by base class
 pointer, the @code{is_a()} method is not necessary and can be left out.
@@ -654,7 +654,7 @@ pointer, the @code{is_a()} method is not necessary and can be left out.
 //: Return a platform independent string identifying the class
 vcl_string vanyl_my_class::is_a() const
 @{
-    return vcl_string("vanyl_my_class");
+  return vcl_string("vanyl_my_class");
 @}
 @end example
 
@@ -664,7 +664,7 @@ you don't have RTTI.
 //: Return true if the argument matches the string identifying the class or any parent class
 bool vanyl_my_class::is_class(vcl_string const& s) const
 @{
-    return s==vanyl_my_class::is_class || vanyl_parent_class::is_class(s);
+  return s==vanyl_my_class::is_class || vanyl_parent_class::is_class(s);
 @}
 @end example
 
@@ -672,12 +672,12 @@ bool vanyl_my_class::is_class(vcl_string const& s) const
 @subsubsection Polymorphic Copy Creation onto the Heap
 
 The base class loader scheme needs to be able to create a new object on the heap
-from a base_class pointer to an old one. If the class is not part of an inheritance
+from a base_class pointer to an old one.  If the class is not part of an inheritance
 hierarchy or will not ever be loaded by base class
 pointer, the @code{clone()} method is not necessary and can be left out.
 
 The code below assumes that either a working copy constructor has been defined, or else
-that compiler generated default copy constructor is suitable(e.g. The class has no pointer
+that compiler generated default copy constructor is suitable (e.g. the class has no pointer
 or reference member variables.)
 
 @example
@@ -752,20 +752,20 @@ void vsl_print_summary(vcl_ostream& os,const vanyl_my_base_class* b)
 
 
 If the base class is abstract, then you should not to provide
-implementations for the following methods. Instead declare them
+implementations for the following methods.  Instead declare them
 as pure virtual methods in the .h file.
 @example
-    //: Create a copy on the heap and return base class pointer
-    virtual my_base_class* clone() const = 0;
+  //: Create a copy on the heap and return base class pointer
+  virtual my_base_class* clone() const = 0;
 
-    //: Print class to os
-    virtual void print_summary(vcl_ostream& os) const = 0;
+  //: Print class to os
+  virtual void print_summary(vcl_ostream& os) const = 0;
 
-    //: Save class to binary file stream
-    virtual void b_write(vsl_b_ostream& bfs) const = 0;
+  //: Save class to binary file stream
+  virtual void b_write(vsl_b_ostream& bfs) const = 0;
 
-    //: Load class from binary file stream
-    virtual void b_read(vsl_b_istream& bfs) = 0;
+  //: Load class from binary file stream
+  virtual void b_read(vsl_b_istream& bfs) = 0;
 
 @end example
 
@@ -773,14 +773,14 @@ as pure virtual methods in the .h file.
 @subsection Serialisation - Saving Objects with Shared Ownership
 
 There is problem when you want to save an object whose ownership is shared by
-several other objects. The most common way this happens is if several objects
-(A1, A2, ..., An) contain pointers to a single other object B. If all the objects save B,
+several other objects.  The most common way this happens is if several objects
+(A1, A2, ..., An) contain pointers to a single other object B.  If all the objects save B,
 when the stream is reloaded, there wile be n copies of B in memory, instead of the
 single shared one there was before saving.
 
 If one object can be designated the @emph{owner} (for example if one object, say A1,
 is responsible for deleting B,) then A1 is responsible for saving and loading
-object B. This prevents multiple copies of B being created during loading, but all the
+object B.  This prevents multiple copies of B being created during loading, but all the
 other A objects do not have their pointer set up correctly.
 
 The standard way of dealing with these problems involves giving each shared object a unique
@@ -792,7 +792,7 @@ If you are using shared objects though existing classes such as @code{vbl_smart_
 serialisation.
 
 If you are managing shared ownership in any of your classes, you will need to write
-the serialising code yourself. There is no language support for serialisation in C++
+the serialising code yourself.  There is no language support for serialisation in C++
 (unlike Java), however the @code{vsl} library does provide some support.
 
 The basic algorithm performed by all of the owner objects during saving is
@@ -851,11 +851,11 @@ void vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T> &p)
   vsl_b_write(os, io_version_no);
 
   if (p.ptr() == 0)  // Deal with Null pointers first.
-  {
+  @{
     vsl_b_write(os, 0ul); // Use 0 to indicate a null pointer.
                           // True serialisation IDs are always 1 or more.
     return;
-  }
+  @}
 
   // Get a serial_number for object being pointed to
   unsigned long id = os.get_serial_number(p.ptr());
@@ -869,11 +869,11 @@ void vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T> &p)
 
     vsl_b_write(os, id);     // Save the serial number
 
-// If you get a compiler error in the next line, it could be because your type T
-// has no vsl_b_write(vsl_b_ostream &,const T*)  defined on it.
-// See the documentation in the .h file to see how to add it.
+    // If you get a compiler error in the next line, it could be because your type T
+    // has no vsl_b_write(vsl_b_ostream &,const T*)  defined on it.
+    // See the documentation in the .h file to see how to add it.
     vsl_b_write(os, p.ptr());  // Only save the actual object if
-                                // it hasn't been saved before to this stream
+                               // it hasn't been saved before to this stream
   @}
   else
   @{
@@ -890,32 +890,30 @@ void vsl_b_read(vsl_b_istream &is, vbl_smart_ptr<T> &p)
   vsl_b_read(is, ver);
   switch(ver)
   @{
-  case 1:
+   case 1: @{
+    unsigned long id; // Unique serial number identifying object
+    vsl_b_read(is, id);
+
+    if (id == 0) // Deal with Null pointers first.
     @{
-      unsigned long id; // Unique serial number identifying object
-      vsl_b_read(is, id);
-
-      if (id == 0) // Deal with Null pointers first.
-      {
-        p = 0;
-        return;
-      }
-
-      T * pointer = (T *) is.get_serialisation_pointer(id);
-      if (pointer == 0) // Not loaded before
-      @{
-// If you get a compiler error in the next line, it could be because your type T
-// has no vsl_b_read(vsl_b_ostream&,T*&)  defined on it.
-// See the documentation in the .h file to see how to add it.
-        vsl_b_read(is, pointer);                 // load object B
-        is.add_serialisation_record(id, pointer); // remember location of B
-      @}
-
-      p.set_ptr(pointer); // This operator method will set the internal
-                          // pointer in vbl_smart_ptr.
+      p = 0;
+      return;
     @}
-    break;
-  default:
+
+    T * pointer = (T *) is.get_serialisation_pointer(id);
+    if (pointer == 0) // Not loaded before
+    @{
+      // If you get a compiler error in the next line, it could be because your type T
+      // has no vsl_b_read(vsl_b_ostream&,T*&)  defined on it.
+      // See the documentation in the .h file to see how to add it.
+      vsl_b_read(is, pointer);                 // load object B
+      is.add_serialisation_record(id, pointer); // remember location of B
+    @}
+
+    p.set_ptr(pointer); // This operator method will set the internal
+                        // pointer in vbl_smart_ptr.
+    break; @}
+   default:
     vcl_cerr << "vbl_smart_ptr::b_read() Unknown version number "
              << ver << vcl_endl;
     vcl_abort();
@@ -925,8 +923,8 @@ void vsl_b_read(vsl_b_istream &is, vbl_smart_ptr<T> &p)
 
 You do not need to write any special code for the owned object, except
 to provide member functions for loading and saving the object by
-pointer. These will already exist if you have written polymorphic IO
-for the class of object B. If not, the following examples might help.
+pointer.  These will already exist if you have written polymorphic IO
+for the class of object B.  If not, the following examples might help.
 
 @example
 // Save with base class pointers
@@ -960,7 +958,7 @@ void vsl_b_write(vsl_b_ostream& os, const class_B *p)
 @end example
 
 The upshot of this is that serialisation can be tricky, but not
-necessarily difficult. You are advised to manage shored ownership
+necessarily difficult.  You are advised to manage shored ownership
 though smart pointers which will do all the serialisation (and
 memory management) for you.
 
@@ -1057,12 +1055,12 @@ void vsl_b_read(vsl_b_istream &is, vgl_point_2d<T>& p)
   vsl_b_read(is, w);
   switch(w)
   @{
-  case 1:
+   case 1:
     vsl_b_read(is, p.x());
     vsl_b_read(is, p.y());
     break;
 
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_point_2d<T>&)\n"
              << "           Unknown version number "<< w << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
@@ -1076,11 +1074,11 @@ void vsl_b_read(vsl_b_istream &is, vgl_point_2d<T>& p)
 template<class T>
 void vsl_print_summary(vcl_ostream &os, const vgl_point_2d<T>& p)
 @{
-    os<<'(';
-    vsl_print_summary(p.x());
-    os<<','
-    vsl_print_summary(p.y());
-    os<<')';
+  os<<'(';
+  vsl_print_summary(p.x());
+  os<<','
+  vsl_print_summary(p.y());
+  os<<')';
 @}
 
 #define VGL_IO_POINT_2D_INSTANTIATE(T) \
@@ -1236,7 +1234,7 @@ void vsl_b_write(vsl_b_ostream &os, const BaseClass & p)
   vsl_b_write(os, io_version_no);
   vsl_b_write(os, p.x());
   vsl_b_write(os, p.y());
-  ... Insert rest of xxxxxx code here
+  // ... Insert rest of xxxxxx code here
 @}
 
 //====================================================================================
@@ -1249,13 +1247,13 @@ void vsl_b_read(vsl_b_istream &is, BaseClass & p)
   vsl_b_read(is, v);
   switch(v)
   @{
-  case 1:
+   case 1:
     vsl_b_read(is, p.x());
     vsl_b_read(is, p.y());
-    ... Insert rest of xxxxxx code here
+    // ... Insert rest of xxxxxx code here
     break;
 
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, BaseClass&)\n"
              << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
@@ -1267,8 +1265,8 @@ void vsl_b_read(vsl_b_istream &is, BaseClass & p)
 //: Output a human readable summary to the stream
 void vsl_print_summary(vcl_ostream& os,const BaseClass & p)
 @{
-    os<<'('<<p.x()<<','<<p.y()<<')';
-    ... Insert rest of xxxxxx code here
+  os<<'('<<p.x()<<','<<p.y()<<')';
+  // ... Insert rest of xxxxxx code here
 @}
 
 //: Add example object to list of those that can be loaded
@@ -1277,20 +1275,20 @@ void vsl_print_summary(vcl_ostream& os,const BaseClass & p)
 //  A clone is taken of b
 void vsl_add_to_binary_loader(const BaseClassIO& b)
 @{
-    vsl_clipon_binary_loader<BaseClass,BaseClassIO>::instance().add(b);
+  vsl_clipon_binary_loader<BaseClass,BaseClassIO>::instance().add(b);
 @}
 
 
 //: Binary save to stream by baseclass pointer
 void vsl_b_write(vsl_b_ostream &os, const BaseClass * b)
 @{
-    vsl_clipon_binary_loader<BaseClass,BaseClassIO>::instance().write_object(os,b);
+  vsl_clipon_binary_loader<BaseClass,BaseClassIO>::instance().write_object(os,b);
 @}
 
 //: Binary read from stream by baseclass pointer
 void vsl_b_read(vsl_b_istream &is, BaseClass* &b)
 @{
-    vsl_clipon_binary_loader<BaseClass,BaseClassIO>::instance().read_object(is,b);
+  vsl_clipon_binary_loader<BaseClass,BaseClassIO>::instance().read_object(is,b);
 @}
 
 // Explicitly instantiate loader
@@ -1425,7 +1423,7 @@ void vsl_b_write(vsl_b_ostream &os, const DerivedClass & p)
   vsl_b_write(os, io_version_no);
   vsl_b_write(os, p.x());
   vsl_b_write(os, p.y());
-  ... Insert rest of xxxxxx code here
+  //... Insert rest of xxxxxx code here
 @}
 
 //====================================================================================
@@ -1438,13 +1436,13 @@ void vsl_b_read(vsl_b_istream &is, DerivedClass & p)
   vsl_b_read(is, v);
   switch(v)
   @{
-  case 1:
+   case 1:
     vsl_b_read(is, p.x());
     vsl_b_read(is, p.y());
-    ... Insert rest of xxxxxx code here
+    //... Insert rest of xxxxxx code here
     break;
 
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, DerivedClass&)\n"
              << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
@@ -1485,27 +1483,27 @@ write
 
 void test_point_2d_io()
 @{
-    vcl_cout << "*******************************\n"
-             << "Testing vgl_point_2d<double> io\n"
-             << "*******************************\n";
+  vcl_cout << "*******************************\n"
+           << "Testing vgl_point_2d<double> io\n"
+           << "*******************************\n";
 
-    vgl_point_2d<double> p_out(1.2,3.4), p_in;
+  vgl_point_2d<double> p_out(1.2,3.4), p_in;
 
-    vsl_b_ofstream bfs_out("vgl_point_2d_test_double_io.bvl.tmp");
-    TEST("Created vgl_point_2d_test_double_io.bvl.tmp for writing", (!bfs_out), false);
-    vsl_b_write(bfs_out, p_out);
-    bfs_out.close();
+  vsl_b_ofstream bfs_out("vgl_point_2d_test_double_io.bvl.tmp");
+  TEST("Created vgl_point_2d_test_double_io.bvl.tmp for writing", (!bfs_out), false);
+  vsl_b_write(bfs_out, p_out);
+  bfs_out.close();
 
-    vsl_b_ifstream bfs_in("vgl_point_2d_test_double_io.bvl.tmp");
-    TEST("Opened vgl_point_2d_test_double_io.bvl.tmp for reading", (!bfs_in), false);
-    vsl_b_read(bfs_in, p_in);
-    TEST("Finished reading file successfully", (!bfs_in), false);
-    bfs_in.close();
+  vsl_b_ifstream bfs_in("vgl_point_2d_test_double_io.bvl.tmp");
+  TEST("Opened vgl_point_2d_test_double_io.bvl.tmp for reading", (!bfs_in), false);
+  vsl_b_read(bfs_in, p_in);
+  TEST("Finished reading file successfully", (!bfs_in), false);
+  bfs_in.close();
 
-    TEST("p_out == p_in", p_out, p_in);
+  TEST("p_out == p_in", p_out, p_in);
 
-    vsl_print_summary(vcl_cout, p_out);
-    vcl_cout << vcl_endl;
+  vsl_print_summary(vcl_cout, p_out);
+  vcl_cout << vcl_endl;
 @}
 
 TESTMAIN(test_point_2d_io);
