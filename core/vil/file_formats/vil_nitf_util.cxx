@@ -319,7 +319,7 @@ int geostr_to_double(const char* string, double* val, geopt_coord lat_lon_flag)
       *string == '.' || *string == '\0')
   {
     char* temp = 0;
-    string = (char*) orig;
+    string = orig ;
 
     //go past any spaces
     while ((*string == ' ') || (*string == '\t'))
