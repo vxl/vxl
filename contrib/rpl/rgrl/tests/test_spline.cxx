@@ -106,7 +106,7 @@ test_1d_spline()
     vcl_cout << "\nreturn spline value  f(" << pt << ")=" << return_spline_value ;
     double true_spline_value = spline_1d_value( pt[0], c );
     vcl_cout << "    true spline value  f(" << pt << ")=" << true_spline_value << vcl_endl ;
-    TEST_NEAR(" test spline value: ", true_spline_value, return_spline_value, 1e-10);
+    TEST_NEAR_REL(" test spline value: ", true_spline_value, return_spline_value, 1e-9);
   }
   // random point
   vnl_vector<double> pt(1);
@@ -115,7 +115,7 @@ test_1d_spline()
   vcl_cout << "\nreturn spline value  f(" << pt[0] << ")=" << return_spline_value;
   double true_spline_value = spline_1d_value( pt[0], c );
   vcl_cout << "    true spline value  f(" << pt[0] << ")=" << true_spline_value << vcl_endl;
-  TEST_NEAR(" test random spline value: ", true_spline_value, return_spline_value , 1e-10);
+  TEST_NEAR_REL(" test random spline value: ", true_spline_value, return_spline_value , 1e-9);
 }
 
 void
@@ -140,7 +140,7 @@ test_2d_spline()
       vcl_cout << "\nreturn spline value  f(" << pt<< ")=" << return_spline_value;
       double true_spline_value = spline_2d_value( pt, c, m );
       vcl_cout << "    true spline value  f(" << pt << ")=" << true_spline_value << vcl_endl;
-      TEST_NEAR("test spline value: ", true_spline_value, return_spline_value, 1e-6);
+      TEST_NEAR_REL("test spline value: ", true_spline_value, return_spline_value, 1e-9);
     }
   }
   // test random point
@@ -153,7 +153,7 @@ test_2d_spline()
   double true_spline_value = spline_2d_value( pt, c, m );
   vcl_cout << "    true spline value  f(" << pt << ")=" << true_spline_value << vcl_endl;
 
-  TEST_NEAR("test random spline value: ", true_spline_value, return_spline_value, 1e-6);
+  TEST_NEAR_REL("test random spline value: ", true_spline_value, return_spline_value, 1e-9);
 }
 
 void
@@ -198,7 +198,7 @@ test_3d_spline()
         vcl_cout << "\nreturn spline value  f(" << pt<< ")=" << return_spline_value;
         double true_spline_value = spline_3d_value( pt, c, m );
         vcl_cout << "    true spline value  f(" << pt << ")=" << true_spline_value << vcl_endl;
-        TEST_NEAR("test spline value: ", true_spline_value, return_spline_value, 1e-6);
+        TEST_NEAR_REL("test spline value: ", true_spline_value, return_spline_value, 1e-9);
       }
     }
   }
@@ -213,7 +213,7 @@ test_3d_spline()
   double true_spline_value = spline_3d_value( pt, c, m );
   vcl_cout << "\ntrue spline value  f(" << pt << ")=" << true_spline_value << vcl_endl;
 
-  TEST_NEAR(" test spline value: ", true_spline_value, return_spline_value, 1e-6);
+  TEST_NEAR_REL(" test spline value: ", true_spline_value, return_spline_value, 1e-9);
 }
 
 void
@@ -242,7 +242,7 @@ test_refine_1d_spline()
     vnl_vector< double > p( 1 );
     p[0] = random.drand32( 0, new_m[0]*0.5 );
     vcl_cout << "f(" <<p[0] << ")= " << spline.f_x( p ) << " => " << refine_spline->f_x( p*2.0 ) << '\n';
-    TEST_NEAR( " test refined spline value: ", refine_spline->f_x( p*2.0 ), spline.f_x( p ), 1e-6);
+    TEST_NEAR_REL( " test refined spline value: ", refine_spline->f_x( p*2.0 ), spline.f_x( p ), 1e-9);
   }
 }
 
@@ -274,7 +274,7 @@ test_refine_2d_spline()
     for (unsigned j=0; j < 10; ++j ) {
       p[ 1 ] = random.drand32( 0, new_m[1]*0.5 );
       vcl_cout << "f(" <<p << ")= " << spline.f_x( p ) << " => " << refine_spline->f_x( p*2 ) << '\n';
-      TEST_NEAR( " test refined spline value: ", refine_spline->f_x( p*2.0 ), spline.f_x( p ), 1e-6);
+      TEST_NEAR_REL( " test refined spline value: ", refine_spline->f_x( p*2.0 ), spline.f_x( p ), 1e-9);
     }
   }
 }
@@ -308,7 +308,7 @@ test_refine_3d_spline()
       p[ 1 ] = random.drand32( 0, new_m[1]*0.5 );
       for (unsigned k=0; k < 10; ++k ) {
         p[ 2 ] = random.drand32( 0, new_m[2]*0.5 );
-        TEST_NEAR( " test refined spline value: ", refine_spline->f_x( p*2.0 ), spline.f_x( p ), 1e-6);
+        TEST_NEAR_REL( " test refined spline value: ", refine_spline->f_x( p*2.0 ), spline.f_x( p ), 1e-9);
       }
     }
   }
