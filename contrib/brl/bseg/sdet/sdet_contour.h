@@ -66,8 +66,8 @@
 //  Joe Mundy       (1997) Added continuous edgel orientation output \and
 //  Van-Duc Nguyen  (1998) Merge from end points of dangling chains only \and
 //  Joe Mundy       (1999) Modified ::InsertBorder to use ROI bounds
-//  Joe Mundy       (2002) Extensive repairs and consolidation after
-//                         conversion to VXL
+//  Joe Mundy       (2002) Extensive repairs and consolidation after conversion to VXL
+//  Peter Vanroose  (2003) removed z coord arg of Translate()
 //-----------------------------------------------------------------------------
 
 #include <vcl_vector.h>
@@ -110,8 +110,7 @@ class sdet_contour
   //: computation is carried out in a zero origin ROI - translate back
   static void Translate(vcl_vector<vtol_edge_2d_sptr>& edges,
                         vcl_vector<vtol_vertex_2d_sptr >& vertices,
-                        const float tx=0.5, const float ty = 0.5,
-                        const float tz = 0);
+                        const float tx=0.5, const float ty = 0.5);
 
   //: clear network storage (edges and vertices)
   static void ClearNetwork(vcl_vector<vtol_edge_2d_sptr>*& edges,

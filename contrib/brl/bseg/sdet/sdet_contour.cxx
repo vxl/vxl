@@ -2411,21 +2411,21 @@ sdet_contour::EqualizeSpacing(vcl_vector<vtol_edge_2d_sptr>& chains)
 }
 
 
-//: Translate all the pixels in the edges and vertices by (tx, ty, tz).
+//: Translate all the pixels in the edges and vertices by (tx, ty).
 // If the image is extracted from an ROI, a translation of
-// (roi->GetOrigX(), roi->GetOrigY(), 0) must be done to have
+// (roi->GetOrigX(), roi->GetOrigY()) must be done to have
 // coordinates in the reference frame of the original image.
 // Add 0.5 if you want to display location at center of pixel
 // instead of upper-left corner.
 void
 sdet_contour::Translate(vcl_vector<vtol_edge_2d_sptr>& edges, // translate loc to center
                         vcl_vector<vtol_vertex_2d_sptr >& vertices,
-                        const float tx, const float ty, const float tz)
+                        float tx, float ty)
 {
   vul_timer t;
 
   if (talkative_)
-    vcl_cout << "Translate edges/vertices";
+    vcl_cout << "Translate edges/vertices\n";
 
   for ( unsigned int i=0; i< vertices.size(); i++)
   {
