@@ -6,11 +6,8 @@
 # good to have this file in place, so that all things in v3p are found
 # via a module.
 
-IF(NOT HAS_NETLIB)
+SET( NETLIB_FOUND "YES" )
+SET( NETLIB_INCLUDE_DIR ${allvxl_SOURCE_DIR}/v3p/netlib )
+SET( NETLIB_LIBRARIES netlib )
 
-  SET( HAS_NETLIB "YES" )
 
-  SET( NETLIB_INCLUDE_PATH ${allvxl_SOURCE_DIR}/v3p/netlib )
-  SET( NETLIB_LIBRARIES netlib )
-
-ENDIF(NOT HAS_NETLIB)
