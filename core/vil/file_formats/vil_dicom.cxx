@@ -23,6 +23,11 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_pixel_format.h>
 
+#ifdef __BORLANDC__
+// We do not want to fix small problems in external maintained code.
+# pragma warn -8004 // 'smask' is assigned a value that is never used in function
+#endif
+
 #include <dcfilefo.h>
 #include <dcmetinf.h>
 #include <dcdatset.h>
