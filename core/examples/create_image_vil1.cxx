@@ -9,8 +9,8 @@
 vil_image make_image(int wd, int ht)
 {
   vil_memory_image_of<unsigned char> image(wd, ht);
-  for(int x = 0; x < wd; x++)
-    for(int y = 0; y < ht; y++)
+  for (int x = 0; x < wd; x++)
+    for (int y = 0; y < ht; y++)
       image(x,y) = ((x-wd/2)*(y-ht/2)/16) % 256;
  
   return image;
@@ -27,4 +27,6 @@ int main(int argc, char** argv)
   vil_image image = make_image(sizex, sizey);
 
   vil_save(image, output_filename().c_str());
+
+  return 0;
 }
