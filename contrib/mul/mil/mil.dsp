@@ -365,6 +365,21 @@ SOURCE=.\Templates/vsl_vector_io+mil_image_2d_of+vil_byte--.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\Templates/mil_scale_pyramid_builder_2d+float-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/mil_scale_pyramid_builder_2d+vil_byte-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_scale_pyramid_builder_2d.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\mil_normalise_image_2d.cxx
 
 # End Source File
@@ -499,6 +514,16 @@ SOURCE=.\mil_sample_profile_2d.txx
 # Begin Source File
 
 SOURCE=.\mil_normalise_image_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_scale_pyramid_builder_2d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_scale_pyramid_builder_2d.h
 
 # End Source File
 # End Group
