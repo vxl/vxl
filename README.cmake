@@ -1,4 +1,3 @@
-The config files and such for CMake lie in $VXLROOT/config.cmake. The
-CMake source is currently not in the vxl repository, since it is under
-active development. The source can be cvs'd from the Insight project at
-Kitware.
+The config files and such for CMake lie in $VXLROOT/config.cmake.
+
+You can download a copy of cmake from http://www.cmake.org
