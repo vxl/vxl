@@ -742,13 +742,11 @@ void bmvv_recon_manager::cross_correlate_harris_z()
     return;
   }
   static double z = 0;
-  static bool reset = true;
   vgui_dialog cc_z_harris_dlg("Cross Correlate Harris Corners at Z");
   cc_z_harris_dlg.field("World Plane", z);
   cc_z_harris_dlg.field("Match radius", sweep_.point_radius_);
   cc_z_harris_dlg.field("Corr radius", sweep_.corr_radius_);
   cc_z_harris_dlg.field("Correlation Threshold", sweep_.corr_thresh_);
-  cc_z_harris_dlg.checkbox("Reset Match Flags", reset);
   if (!cc_z_harris_dlg.ask())
     return;
   vil1_image img;
@@ -757,8 +755,7 @@ void bmvv_recon_manager::cross_correlate_harris_z()
   if (!sweep_.cross_correlate_proj_corners(z, img,
                                           matched_corners,
                                           back_proj_cnrs,
-                                          orig_cnrs0,
-                                          reset))
+                                          orig_cnrs0))
     {
       vcl_cout << "In bmvv_recon_manager::cross_correlate_harris_z()-"
                << " correlation failed\n";
