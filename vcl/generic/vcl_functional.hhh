@@ -1,20 +1,20 @@
-@unary_function      
-@binary_function     
-@plus                
-@minus               
-@multiplies          
-@divides             
-@modulus             
-@negate              
-@equal_to            
-@not_equal_to        
-@greater             
-@less                
-@greater_equal       
-@less_equal          
-@logical_and         
-@logical_or          
-@logical_not         
+@unary_function
+@binary_function
+@plus
+@minus
+@multiplies
+@divides
+@modulus
+@negate
+@equal_to
+@not_equal_to
+@greater
+@less
+@greater_equal
+@less_equal
+@logical_and
+@logical_or
+@logical_not
 @unary_negate
 @not1
 @binary_negate
@@ -44,11 +44,11 @@
 @const_mem_fun1_ref
 @transform
 //not in the standard:
-//@identity            
-//@select1st           
-//@select2nd           
-//@project1st          
-//@project2nd          
-//@constant_void_fun   
-//@constant_unary_fun  
-//@constant_binary_fun 
+// @identity
+// @select1st
+// @select2nd
+// @project1st
+// @project2nd
+// @constant_void_fun
+// @constant_unary_fun
+// @constant_binary_fun
