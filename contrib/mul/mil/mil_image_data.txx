@@ -130,14 +130,14 @@ void mil_image_data<T>::b_read(vsl_b_istream& bfs)
 // MSVC confuses the templated vsl_b_read(s, myclass<T> &)
 // and vsl_b_read(s, myclass<T> *&). We don't really need the former
 
-//: Write  to binary stream
+//: Write to binary stream
 template<class T>
 void vsl_b_write(vsl_b_ostream& s, const mil_image_data<T>& v)
 {
     v.b_write(s);
 }
 
-//: Read  from binary stream
+//: Read from binary stream
 template<class T>
 void vsl_b_read(vsl_b_istream& s, mil_image_data<T>& v)
 {
@@ -145,7 +145,7 @@ void vsl_b_read(vsl_b_istream& s, mil_image_data<T>& v)
 }
 #endif
 
-//: Write  to binary stream
+//: Write to binary stream
 template<class T>
 void vsl_b_write(vsl_b_ostream& os, const mil_image_data<T>* p)
 {
@@ -180,7 +180,6 @@ void vsl_b_read(vsl_b_istream& is, mil_image_data<T>* & v)
 }
 
 
-
 //: Print class to os
 template<class T>
 void vsl_print_summary(vcl_ostream& os, const mil_image_data<T>* p)
@@ -188,23 +187,15 @@ void vsl_print_summary(vcl_ostream& os, const mil_image_data<T>* p)
   p->print_summary(os);
 }
 
-#if 0 // For reasons I don't understand the following causes an error
+
 #undef MIL_IMAGE_DATA_INSTANTIATE
 #define MIL_IMAGE_DATA_INSTANTIATE(T) \
 template class mil_image_data<T >; \
-template void vsl_b_write(vsl_b_ostream& s, const mil_image_data<T >& v); \
-template void vsl_b_read(vsl_b_istream& s, mil_image_data<T >& v); \
-template void vsl_b_write(vsl_b_ostream& s, const mil_image_data<T >* v); \
-template void vsl_b_read(vsl_b_istream& s, mil_image_data<T >* & v);\
-template void vsl_print_summary(vsl_b_ostream& s, const mil_image_data<T >* p);
-#else // 0
-#undef MIL_IMAGE_DATA_INSTANTIATE
-#define MIL_IMAGE_DATA_INSTANTIATE(T) \
-template class mil_image_data<T >; \
-template void vsl_b_write(vsl_b_ostream& s, const mil_image_data<T >* v); \
-template void vsl_b_read(vsl_b_istream& s, mil_image_data<T >* & v);\
-template void vsl_print_summary(vcl_ostream& s, const mil_image_data<T >* p);
-#endif // 0
+/* template void vsl_b_write(vsl_b_ostream&s, const mil_image_data<T >&v); */ \
+   template void vsl_b_write(vsl_b_ostream&s, const mil_image_data<T >*v); \
+/* template void vsl_b_read(vsl_b_istream& s, mil_image_data<T >  & v); */ \
+   template void vsl_b_read(vsl_b_istream& s, mil_image_data<T >* & v); \
+template void vsl_print_summary(vsl_b_ostream& s, const mil_image_data<T >* p)
 
 
 #endif // mil_image_data_txx_
