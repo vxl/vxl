@@ -125,37 +125,6 @@ vipl_section_descriptor< DataType > ::vipl_section_descriptor(const vipl_section
 }
 
 //: This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
-// 1 means ``y'' axis etc...) and returns an integer which describes the start
-// coordinate value for ``x'' (or ``y'' etc..) with respect to the ``image''
-// coordinate system.
-template < class DataType >
-int vipl_section_descriptor< DataType > ::curr_sec_start( int axis) const
-{
-  return i_curr_sec_start()[axis];
-}
-
-//: This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
-// 1 means ``y'' axis etc...) and returns an integer which describes the end
-// coordinate value for ``x'' (or ``y'' etc..) with respect to the ``image''
-// coordinate system.
-
-template < class DataType >
-int vipl_section_descriptor< DataType > ::curr_sec_end( int axis) const
-{
-  return i_curr_sec_end()[axis];
-}
-
-//: This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
-// 1 means ``y'' axis etc...) and returns an integer which describes the size
-// of the axis (end minus start) for ``x'' (or ``y'' etc..) with respect to
-// the ``image'' coordinate system.
-template < class DataType >
-int vipl_section_descriptor< DataType > ::curr_sec_size( int axis) const
-{
-  return i_curr_sec_size()[axis];
-}
-
-//: This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
 // 1 means ``y'' axis etc...) and returns an integer which describes the offset
 // of the next (i.e. associated with the higher coordinate value) data item
 // along the axis.
@@ -182,22 +151,6 @@ const DataType* vipl_section_descriptor< DataType > ::data_ptr() const
 {
   vcl_cerr << "Warning: called unimplemented method data_ptr\n";
   return 0;
-}
-
-//: Returns a writable pointer to the ``real'' section descriptor.
-// If this method is called on a concrete instance, it should return 0.
-template < class DataType >
-vipl_section_descriptor< DataType >* vipl_section_descriptor< DataType > ::inner_descriptor()
-{
-  return ref_real_descriptor();
-}
-
-//: Returns a const pointer to the ``real'' section descriptor.
-// If this method is called on a concrete instance, it should return 0.
-template < class DataType >
-const vipl_section_descriptor< DataType >* vipl_section_descriptor< DataType > ::inner_descriptor() const
-{
-  return real_descriptor();
 }
 
 //: This method takes in a section_descriptor (which can be thought of as a
