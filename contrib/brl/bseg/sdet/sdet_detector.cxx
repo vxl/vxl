@@ -65,10 +65,14 @@ void sdet_detector::ClearData()
   delete edgel; delete direction; delete locationx; delete locationy;
   delete grad_mag; delete angle;
   delete [] junctionx; delete [] junctiony;
-  vertices->clear();
-  edges->clear();
+  if(vertices)
+	  vertices->clear();
+  if(edges)
+	  edges->clear();
   delete vertices;
+  vertices = 0;
   delete edges;
+  edges = 0;
 }
 
 
@@ -82,20 +86,25 @@ bool  sdet_detector::DoContour()
     vcl_cout << "***Fail on DoContour.\n";
     return false;
   }
+
   sdet_contour::ClearNetwork(edges, vertices);       // delete vertices/edges
-  sdet_contour contour(this->hysteresisFactor*this->noiseThreshold, this->minLength,
-                  this->minJump*this->noiseThreshold, this->maxGap);
-  bool t  = contour.FindNetwork(*edgel, njunction, // first, find isolated
-                                junctionx, junctiony,   // chains/cycles
-                                edges, vertices);
-  if (!t) {
+  sdet_contour contour(this->hysteresisFactor*this->noiseThreshold,
+                       this->minLength, this->minJump*this->noiseThreshold,
+                       this->maxGap);
+
+  // first, find isolated chains/cycles
+  bool find_net  = contour.FindNetwork(*edgel, junctionp,
+                                       njunction,
+                                       junctionx, junctiony, 
+                                       edges, vertices);
+  if (!find_net) {
     vcl_cout << "***Fail on FindNetwork.\n";
     return false;
   }
-  
+
   //vcl_vector<vtol_edge_2d_sptr>::iterator edge;
   //  vcl_cout << "IN DoContour before SubPixelAccuracy\n";
-  this->print(vcl_cout);
+  //  this->print(vcl_cout);
 //   for ( edge = edges->begin() ; edge != edges->end(); ++edge)
 //     {
 //     vcl_cout << "Edgel output from DoContour:";
@@ -112,8 +121,6 @@ bool  sdet_detector::DoContour()
 
   if (grad_mag&&angle)
     sdet_contour::SetEdgelData(*grad_mag, *angle, *edges); //Continous edgel orientation.
-  //JLM mayabe a better way to do this
-  //sdet_contour::add_vertex_edgels(*edges);
 
 //   const RectROI* roi = image->GetROI();
 //   sdet_contour::Translate(*edges, *vertices, // display location at center
@@ -140,8 +147,10 @@ bool  sdet_detector::DoFoldContour()
                   this->minLength, this->minJump*this->noiseThreshold,
                   this->maxGap);
 
-  bool t  = contour.FindNetwork(*edgel, njunction, // first, find isolated
-                                junctionx, junctiony,   // chains/cycles
+  // first, find isolated  chains/cycles
+  bool t  = contour.FindNetwork(*edgel, junctionp,
+                                njunction,
+                                junctionx, junctiony,
                                 edges, vertices);
   if (!t) {
     vcl_cout << "***Fail on FindNetwork.\n";
@@ -177,9 +186,10 @@ bool sdet_detector::DoStep()
     vcl_cout << " cannot get image buffer\n";
     return false;
   }
-
   gevd_step step(this->smooth, this->noise, this->contourFactor, this->junctionFactor);
+
   step.DetectEdgels(*source, edgel, direction, locationx, locationy, grad_mag, angle);
+
 
   if (this->junctionp) {                // extension to real/virtual contours
     njunction = step.RecoverJunctions(*source,
@@ -193,7 +203,7 @@ bool sdet_detector::DoStep()
   }
 
   this->noiseThreshold = step.NoiseThreshold();
-
+  delete source;//this fixes a leak
   return edgel!=NULL;
 }
 

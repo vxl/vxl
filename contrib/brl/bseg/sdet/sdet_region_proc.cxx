@@ -102,6 +102,7 @@ vil_image sdet_region_proc::get_residual_image()
     }
   int xsize = image_.width(), ysize = image_.height();
   vil_memory_image_of<unsigned char> res_image(xsize, ysize);
+  res_image.fill(0);
   float min_res = (float)vnl_numeric_traits<unsigned short>::maxval;
   for (vcl_vector<vdgl_intensity_face_sptr>::iterator fit = regions_.begin();
        fit != regions_.end(); fit++)

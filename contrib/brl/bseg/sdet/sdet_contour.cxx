@@ -10,7 +10,9 @@
 #include <vul/vul_timer.h>
 #include <vil/vil_byte.h>
 #include <vnl/vnl_math.h> // for sqrt2
+#include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vdgl/vdgl_digital_curve.h>
+#include <vdgl/vdgl_edgel_chain_sptr.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_interpolator_linear.h>
@@ -22,8 +24,8 @@
 #include <gevd/gevd_float_operators.h>
 #include <gevd/gevd_pixel.h>
 
-bool sdet_contour::talkative_ = true;    // By default contour is not silent.
-bool sdet_contour::debug_ = false;    // By default contour is not silent.
+bool sdet_contour::talkative_ = false;    // By default contour is not silent.
+bool sdet_contour::debug_ = false;    //Print extensive debug messages
 
 const int INVALID = -1;
 
@@ -134,21 +136,22 @@ sdet_contour::sdet_contour(float min_strength, int min_length,
     minJump = minStrength;
   }
   if (max_gap_in < 1)
-  {
-    vcl_cerr << "sdet_contour::sdet_contour -- too small max_gap: "
-             << max_gap << ". Reset to 1.\n";
-    max_gap_in = 1;
-  }
+    {
+      vcl_cerr << "sdet_contour::sdet_contour -- too small max_gap: "
+              << max_gap << ". Reset to 1.\n";
+      max_gap_in = 1;
+    }
   if (max_gap > FRAME)
   {
     vcl_cerr << "sdet_contour::sdet_contour -- too large max_gap: "
              << max_gap << ". Reset to " << FRAME << vcl_endl;
     max_gap = FRAME;
   }
+  max_gap = max_gap_in;
   for (int i = 0; i < 9; i++)   // find number of neighbors to search
     if (max_gap <= RGS[i])      // for given gap radius
       maxSpiral= i+1;
-  max_gap = max_gap_in;
+
   //  sdet_contour::debug_  = false;
 }
 
@@ -166,7 +169,7 @@ sdet_contour::~sdet_contour()
 // for example found from non maximum suppression.
 // Isolated edgels and short segments are erased.
 bool
-sdet_contour::FindNetwork(gevd_bufferxy& edgels,
+sdet_contour::FindNetwork(gevd_bufferxy& edgels, bool junctionp,
                           const int njunction,
                           const int* junctionx, const int* junctiony,
                           vcl_vector<vtol_edge_2d_sptr>*& edges,
@@ -203,8 +206,7 @@ sdet_contour::FindNetwork(gevd_bufferxy& edgels,
                        *edges2);
   if (!n)
     return false;               // empty network
-
-
+  if(junctionp){
   // 3. Sort chains longest first.
   if (edges2->size() < 10000)     // don't sort if too many edges
     {
@@ -227,17 +229,23 @@ sdet_contour::FindNetwork(gevd_bufferxy& edgels,
   for ( unsigned int i= 0; i< edges2->size(); i++)
     (*edges2)[i]->set_id(i);
 
+
   // 4. Split/Merge chains from touching end points
   vcl_vector<vtol_vertex_2d_sptr > vertices2;
+
   this->FindJunctions(edgels, // break/merge at junctions of
                       *edges2, vertices2); // distinct chains
-
+  for ( unsigned int i=0; i< vertices2.size(); i++)
+    vertices->push_back( vertices2[i]);
+    }
+  
   // 5. Copy back results into global lists
   for ( unsigned int i= 0; i< edges2->size(); i++)
     edges->push_back( (*edges2)[i]);
-
-  for ( unsigned int i=0; i< vertices2.size(); i++)
-    vertices->push_back( vertices2[i]);
+     
+  //eliminate memory leaks
+  edges2->clear();
+  delete edges2;
 
   return true;
 }
@@ -454,9 +462,9 @@ sdet_contour::FindChains(gevd_bufferxy& edgels, const int njunction,
           //      possibly ending at same junction, but never
           //      crossing one another
           vtol_edge_2d_sptr edge = new vtol_edge_2d();
-          vdgl_edgel_chain * ec = new vdgl_edgel_chain;
-          vdgl_interpolator * it = new vdgl_interpolator_linear(ec);
-          vdgl_digital_curve * dc = new vdgl_digital_curve(it);
+          vdgl_edgel_chain_sptr ec = new vdgl_edgel_chain;
+          vdgl_interpolator_sptr it = new vdgl_interpolator_linear(ec);
+          vdgl_digital_curve_sptr dc = new vdgl_digital_curve(it);
 
           for ( int k=0; k< len; k++)
             {
@@ -465,7 +473,7 @@ sdet_contour::FindChains(gevd_bufferxy& edgels, const int njunction,
               ec->add_edgel( vdgl_edgel( x, y));
               edgeMap->put(x, y, edge);
             }
-          edge->set_curve(*dc);
+          edge->set_curve(*dc->cast_to_curve());
           LookupTableInsert(edges, edge);
         }
       }
@@ -485,6 +493,7 @@ sdet_contour::FindChains(gevd_bufferxy& edgels, const int njunction,
              << " chains/cycles, with pixels > " << minLength
              << " and strength > " << minStrength
              << ", in " << t.real() << " msecs.\n";
+
   return edges.size();  // number of chains found so far
 }
 
@@ -1523,6 +1532,7 @@ MergeEndPtTouchingJunction(vtol_vertex_2d_sptr const& endpt,
                            vtol_edge_2d_sptr& old_edge,
                            vtol_edge_2d_sptr& new_edge)
 {
+
   if (sdet_contour::debug_)
     vcl_cout << "Merge at Junction e" << *endpt<< " j"  << *junction << "\n";
   vcl_vector<vtol_edge_sptr>* edges = endpt->edges();
@@ -1667,7 +1677,6 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
       vcl_cerr << "sdet_contour::FindChains must precede sdet_contour::FindJunctions.\n";
       return 0;
     }
-
   // 1. Create vertices at the end of edges (digital_curve geometry)
   const float connect_fuzz = 2;
 
@@ -2499,7 +2508,6 @@ sdet_contour::SetEdgelData(gevd_bufferxy& grad_mag, gevd_bufferxy& angle, vcl_ve
               vdgl_edgel edgel= xypos->edgel(i);
               edgel.set_grad( floatPixel( grad_mag, ix, iy));
               edgel.set_theta( floatPixel( angle, ix, iy));
-
 #if 0
               gr[i] = floatPixel(grad_mag, ix, iy);
               th[i] = floatPixel(angle, ix, iy);

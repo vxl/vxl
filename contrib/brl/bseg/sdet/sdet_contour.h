@@ -87,7 +87,7 @@ public:
   ~sdet_contour();
 
   //: Trace the edgel locations to form a topological network (edges, vertices)
-  bool FindNetwork(gevd_bufferxy& edgels,
+  bool FindNetwork(gevd_bufferxy& edgels, bool junctionp,
                    const int njunction,
                    const int* junctionx, const int* junctiony,
                    vcl_vector<vtol_edge_2d_sptr>*& edges,

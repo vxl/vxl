@@ -227,6 +227,33 @@ sdet_edgel_regions::~sdet_edgel_regions()
   delete failed_insertions_;
   delete [] ubuf_;
   delete [] sbuf_;
+  //fix leaks
+  delete faces_;
+  delete [] intensity_face_index_;
+
+  for(vcl_map<unsigned int, vcl_vector<vtol_edge_2d_sptr>* >::iterator 
+        mit = region_edge_adjacency_.begin(); 
+      mit != region_edge_adjacency_.end(); mit++)
+    {
+      if((*mit).second)
+        (*mit).second->clear();
+      delete (*mit).second;
+    }
+
+  for(vcl_map<unsigned int, vcl_vector<unsigned int>* >::iterator
+        mit = equivalence_set_.begin(); mit != equivalence_set_.end(); mit++)
+    delete (*mit).second;
+
+  for(vcl_map<unsigned int, vcl_vector<unsigned int>* >::iterator
+        mit = region_pairs_reverse_.begin(); 
+      mit != region_pairs_reverse_.end(); mit++)
+    delete (*mit).second;
+
+  for(vcl_map<unsigned int, vcl_vector<unsigned int>* >::iterator
+        mit = region_pairs_forward_.begin(); 
+      mit != region_pairs_forward_.end(); mit++)
+    delete (*mit).second;
+
 }
 
 bool sdet_edgel_regions::compute_edgel_regions(gevd_bufferxy* buf,
@@ -276,12 +303,14 @@ compute_edgel_regions(vcl_vector<vtol_edge_2d_sptr>& sgrp,
   this->InitRegionArray(sgrp);
   if (debug_)
     this->print_region_array();
+
   unsigned int y=0, x=0;
   //Propagate connected components
   // the -1 accounts for the 2x2 label classification neighborhood
   for (y=0; y<ys_-1; y++)
     for (x=0; x<xs_-1; x++)
       this->UpdateConnectedNeighborhood(x,y);
+
   if (debug_)
     this->print_region_array();
   //Resolve region label equivalence
@@ -322,7 +351,7 @@ compute_edgel_regions(vcl_vector<vtol_edge_2d_sptr>& sgrp,
 
   //Collect intensity data for each region
   this->InsertFaceData();
-
+      
   if (debug_)
     this->print_intensity_data();
   //Output the result
@@ -541,14 +570,18 @@ void sdet_edgel_regions::GrowEquivalenceClasses()
           bool find_forward =
             this->merge_equivalence(region_pairs_forward_, cur_label, i);
           if (find_forward)
-            region_pairs_forward_.erase(i);//remove hits from the forward map
-
+            {
+              delete region_pairs_forward_[i];//memory leak otherwise
+              region_pairs_forward_.erase(i);//remove hits from the forward map
+            }
           //find label equivalence in the reverse map
           bool find_reverse =
             this->merge_equivalence(region_pairs_reverse_, cur_label, i);
           if (find_reverse)
-            region_pairs_reverse_.erase(i);//remove hits from the reverse map
-
+            {
+              delete region_pairs_reverse_[i];//memory leak otherwise
+              region_pairs_reverse_.erase(i);//remove hits from the reverse map
+            }
           //At this point we may have established or added to the equivalence set
           //for cur_label stored in equivalence_set[cur_label]
           //we check if we have
@@ -684,9 +717,13 @@ bool sdet_edgel_regions::InitRegionArray(vcl_vector< vtol_edge_2d_sptr>& sg)
 
   xend_ = (unsigned int)b.get_max_x();
   yend_ = (unsigned int)b.get_max_y();
-
+ 
   xs_ = (this->GetXSize()-1)*s_+1;
   ys_ = (this->GetYSize()-1)*s_+1;
+
+  //JLM debug
+  vcl_cout << "bounding box(" << xo_ << " " << yo_ << " " << xs_ << " " << ys_
+           << ")\n";
 
   //Construct the edge and label arrays
   edge_boundary_array_ = vbl_array_2d<sdet_region_edge_sptr>(ys_, xs_);

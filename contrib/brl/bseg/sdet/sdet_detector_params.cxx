@@ -60,6 +60,7 @@ void sdet_detector_params::InitParams(float smooth_sigma, float noise_w,
   minLength = minl;
   spacingp = equal_spacing;
   borderp = follow_b;
+  junctionp = recover_j;
   // Fold Parameters
   peaks_only = only_peaks;
   valleys_only = only_valleys;
@@ -134,7 +135,6 @@ bool sdet_detector_params::SanityCheck()
   }
   if (aggressive_junction_closure == 0)
   {
-    junctionp = true;
     contourFactor = noise_multiplier;
     junctionFactor = 1.5f*noise_multiplier;
     maxGap = 2.2f;
@@ -246,6 +246,7 @@ vcl_ostream& operator << (vcl_ostream& os, const sdet_detector_params& dp)
   os << " Noise Multiplier " << dp.noise_multiplier << vcl_endl;
   os << " Automatic Threshold? " << st << vcl_endl;
   os << " Agressive Closure " << sa << vcl_endl;
+  os << " Recover Junctions " << dp.junctionp << vcl_endl;
   os << " Minimum Chain Length " << dp.minLength << vcl_endl;
   os << " Peaks Only " << dp.peaks_only << vcl_endl;
   os << " Valleys Only " << dp.valleys_only << vcl_endl << vcl_endl;
