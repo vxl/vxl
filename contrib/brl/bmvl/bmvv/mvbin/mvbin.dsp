@@ -1,7 +1,6 @@
-# Microsoft Developer Studio Project File - Name="pcbuilder" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="mviewer" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
-
 
 # variables to REPLACE
 # 
@@ -97,9 +96,6 @@ LINK32=link.exe
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
 
-
-
-
 !ELSEIF  "$(CFG)" == "mviewer - Win32 Debug"
 
 # PROP BASE Use_MFC 0
@@ -160,10 +156,8 @@ LINK32=link.exe
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
 
-
-
-
 !ELSEIF  "$(CFG)" == "mviewer - Win32 MinSizeRel"
+
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "MinSizeRel"
@@ -219,9 +213,6 @@ LINK32=link.exe
 # ADD LINK32 vbl.lib
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
-
-
-
 
 !ELSEIF  "$(CFG)" == "mviewer - Win32 RelWithDebInfo"
 
@@ -281,9 +272,6 @@ LINK32=link.exe
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
 
-
-
-
 !ENDIF 
 
 # Begin Target
@@ -298,9 +286,11 @@ LINK32=link.exe
 # Begin Source File
 SOURCE=.\mviewer.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\modtom.cxx
+# End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
-

@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="bmvv" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="btom" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -10,28 +10,28 @@
 
 # variables to REPLACE
 # 
-# /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" == include path
+# /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
-# bmvv  == name of output library
+# btom  == name of output library
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=bmvv - Win32 Debug
+CFG=btom - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "bmvv.mak".
+!MESSAGE NMAKE /f "btom.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "bmvv.mak" CFG="vil2 - Win32 Debug"
+!MESSAGE NMAKE /f "btom.mak" CFG="vil2 - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "bmvv - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "bmvv - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "btom - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "btom - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
@@ -39,7 +39,7 @@ CFG=bmvv - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "bmvv - Win32 Release"
+!IF  "$(CFG)" == "btom - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -53,7 +53,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bmvv_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "btom_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -65,7 +65,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-!ELSEIF  "$(CFG)" == "bmvv - Win32 Debug"
+!ELSEIF  "$(CFG)" == "btom - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -79,7 +79,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bmvv_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "btom_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -93,37 +93,40 @@ LIB32=link.exe -lib
 
 # Begin Target
 
-# Name "bmvv - Win32 Release"
-# Name "bmvv - Win32 Debug"
+# Name "btom - Win32 Release"
+# Name "btom - Win32 Debug"
 
 # Begin Group "Source Files"
 # PROP Default_Filter "c;cxx"
 # Begin Source File
-SOURCE=.\bmvv_multiview_manager.cxx
+SOURCE=.\btom_gauss_cylinder.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bmvv_menus.cxx
+SOURCE=.\btom_slice_simulator.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bmvv_tomography_manager.cxx
+SOURCE=.\btom_slice_simulator_params.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bmvv_tomg_menus.cxx
+SOURCE=.\Templates/vbl_smart_ptr+btom_gauss_cylinder-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vcl_vector+btom_gauss_cylinder_sptr-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\bmvv_multiview_manager.h
+SOURCE=.\btom_gauss_cylinder.h
 # End Source File
 # Begin Source File
-SOURCE=.\bmvv_menus.h
+SOURCE=.\btom_gauss_cylinder_sptr.h
 # End Source File
 # Begin Source File
-SOURCE=.\bmvv_tomography_manager.h
+SOURCE=.\btom_slice_simulator.h
 # End Source File
 # Begin Source File
-SOURCE=.\bmvv_tomg_menus.h
+SOURCE=.\btom_slice_simulator_params.h
 # End Source File
 # End Group
 # End Target
