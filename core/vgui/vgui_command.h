@@ -18,6 +18,8 @@
 
 #include <vbl/vbl_ref_count.h>
 
+#include "vgui_command_sptr.h"
+
 //: Defines the abstract interface to commands
 struct vgui_command : public vbl_ref_count
 {
