@@ -111,8 +111,8 @@ void clsfy_direct_boost::clear()
 // nb also changes n_clfrs_used to use all current weak classifiers
 // nb calc total threshold (ie threshes_ separately, see below)
 void clsfy_direct_boost::add_one_classifier(clsfy_classifier_1d* c1d,
-                                           double wt,
-                                           int index)
+                                            double wt,
+                                            int index)
 {
   classifier_1d_.push_back(c1d->clone());
   wts_.push_back(wt);
@@ -122,14 +122,14 @@ void clsfy_direct_boost::add_one_classifier(clsfy_classifier_1d* c1d,
 
 
 //: Add one threshold
-void clsfy_direct_boost::add_one_threshold(double thresh) 
+void clsfy_direct_boost::add_one_threshold(double thresh)
 {
   threshes_.push_back(thresh);
 }
 
 
 //: Add final threshold
-void clsfy_direct_boost::add_final_threshold(double thresh) 
+void clsfy_direct_boost::add_final_threshold(double thresh)
 {
   int n= threshes_.size();
   threshes_[n-1]= thresh;
@@ -140,8 +140,8 @@ void clsfy_direct_boost::add_final_threshold(double thresh)
 // Returns either 1 (for positive class) or 0 (for negative class)
 unsigned clsfy_direct_boost::classify(const vnl_vector<double> &v) const
 {
-  //vcl_cout<<"wts_.size()= "<<wts_.size()<<vcl_endl;
-  //vcl_cout<<"n_clfrs_used_= "<<n_clfrs_used_<<vcl_endl;
+  //vcl_cout<<"wts_.size()= "<<wts_.size()<<vcl_endl
+  //        <<"n_clfrs_used_= "<<n_clfrs_used_<<vcl_endl;
   assert ( n_clfrs_used_ >= 0);
   assert ( (unsigned)n_clfrs_used_ <= wts_.size() );
   assert ( n_dims_ >= 0);
@@ -152,7 +152,6 @@ unsigned clsfy_direct_boost::classify(const vnl_vector<double> &v) const
   for (int i=0;i<n_clfrs_used_;++i)
     sum+= wts_[i]* classifier_1d_[i]->log_l( v[ index_[i] ] );
     //sum += wts_[i]*classifier_1d_[i]->classify(v[ index_[i] ]);
-  
 
   if (sum < threshes_[n_clfrs_used_-1] ) return 1;
   return 0;
@@ -171,7 +170,7 @@ void clsfy_direct_boost::class_probabilities(vcl_vector<double> &outputs,
 
 //=======================================================================
 
-//: Log likelyhood of being in the positive class.
+//: Log likelihood of being in the positive class.
 // Class probability = 1 / (1+exp(-log_l))
 double clsfy_direct_boost::log_l(const vnl_vector<double> &v) const
 {
@@ -184,7 +183,7 @@ double clsfy_direct_boost::log_l(const vnl_vector<double> &v) const
     sum+= wts_[i]* classifier_1d_[i]->log_l( v[ index_[i] ] );
     //sum += wts_[i]*classifier_1d_[i]->classify(v[ index_[i] ]);
 
-  return sum;  // this isn't really a log liklihood, because the lower this 
+  return sum;  // this isn't really a log likelihood, because the lower this
                // value the more likely a vector is to be a pos example
 }
 
@@ -212,7 +211,7 @@ void clsfy_direct_boost::print_summary(vcl_ostream& os) const
   os<<vcl_endl;
   for (int i=0;i<n;++i)
   {
-    os<<" Weights: "<<wts_[i] 
+    os<<" Weights: "<<wts_[i]
       <<" Index: "<<index_[i]
       <<" Total Threshold: "<<threshes_[i]
       <<" Classifier: "<<classifier_1d_[i]<<vcl_endl;
