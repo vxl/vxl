@@ -10,7 +10,7 @@
 // \brief  Propagates tableau posts to an adaptor.
 
 #include <vgui/vgui_tableau.h>
-#include <vgui/vgui_slot.h>
+#include <vgui/vgui_parent_child_link.h>
 class vgui_adaptor;
 
 //: Propagates tableau posts to an adaptor.
@@ -28,7 +28,7 @@ class vgui_adaptor_tableau : private vgui_tableau
 
 /*even more*/ private:
   vgui_adaptor *adaptor;
-  vgui_slot slot;
+  vgui_parent_child_link slot;
   void post_message(char const *, void const *);
   void post_redraw();
   void post_overlay_redraw();
