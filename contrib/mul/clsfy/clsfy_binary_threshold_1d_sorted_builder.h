@@ -46,7 +46,7 @@ public:
   //  Returns weighted sum of error.
   //  Note that input data[i] may be sorted by this routine
   double build(clsfy_classifier_1d& classifier,
-               vbl_triple<double,int,int> *data,
+               const vbl_triple<double,int,int> *data,
                const vnl_vector<double>& wts) const;
 
   //: Name of the class

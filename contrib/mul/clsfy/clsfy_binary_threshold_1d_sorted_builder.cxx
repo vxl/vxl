@@ -106,7 +106,7 @@ double clsfy_binary_threshold_1d_sorted_builder::build(clsfy_classifier_1d& clas
 //   Assumes two classes
 double clsfy_binary_threshold_1d_sorted_builder::build(
                                   clsfy_classifier_1d& classifier,
-                                  vbl_triple<double,int,int> *data,
+                                  const vbl_triple<double,int,int> *data,
                                   const vnl_vector<double>& wts
                                   ) const
 {
@@ -114,6 +114,7 @@ double clsfy_binary_threshold_1d_sorted_builder::build(
   // the example index specifies the weight of each example
   //
   // NB DATA must be sorted for this to work!!!!
+
 
   // calc total weights for class0 and class1 separately
   int n=wts.size();

@@ -104,21 +104,16 @@ void clsfy_adaboost_sorted_trainer::build_strong_classifier(
     }
 
     // sort data for each individual classifier
-    vbl_triple<double,int,int> *data_ptr=&data[i][0];
-    vcl_sort(data_ptr,data_ptr+n);
+    vbl_triple<double,int,int>  * const data_ptr=&(data[i][0]);
 
+    assert (i >=0 && i <data.size());
+    assert (data[i].size() == n);
+    assert (data_ptr != 0);
+    assert (n != 0);
+   
+    vcl_sort(data[i].begin(), data[i].end() );
 
-#if 0
-    // print out the sorted data
-    for (int k=0; k<data[i].size();++k)
-    {
-      vcl_cout<<"data["<<i<<"]["<<k<<"].first= "<<data[i][k].first<<vcl_endl;
-      vcl_cout<<"data["<<i<<"]["<<k<<"].second= "<<data[i][k].second<<vcl_endl;
-      vcl_cout<<"data["<<i<<"]["<<k<<"].third= "<<data[i][k].third<<vcl_endl;
-    }
-#endif
   }
-
 
   // remove all alphas and classifiers from strong classifier
   strong_classifier.clear();
@@ -126,23 +121,26 @@ void clsfy_adaboost_sorted_trainer::build_strong_classifier(
   clsfy_classifier_1d* c1d = builder.new_classifier();
   clsfy_classifier_1d* best_c1d= builder.new_classifier();
 
+
+
   double beta, alpha;
 
   for (unsigned int r=0;r<(unsigned)max_n_clfrs;++r)
   {
     vcl_cout<<"adaboost training round = "<<r<<vcl_endl;
 
-    //vcl_cout<<"wts0= "<<wts0<<vcl_endl;
-    //vcl_cout<<"wts1= "<<wts1<<vcl_endl;
 
     int best_i=-1;
     double min_error= 100000;
     for (int i=0;i<d;++i)
     {
+      
+
       double error = builder.build(*c1d,&data[i][0],wts);
       if (i==0 || error<min_error)
       {
         min_error = error;
+        delete best_c1d;
         best_c1d= c1d->clone();
         best_i = i;
       }

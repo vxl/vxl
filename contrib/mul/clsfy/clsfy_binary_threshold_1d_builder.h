@@ -47,7 +47,7 @@ public:
   //  data[i] is a triple, {value,class_number,weight}
   //  Returns weighted sum of error.
   //  Note that input data[i] may be sorted by this routine
-  virtual double build(clsfy_classifier_1d& classifier,
+  double build(clsfy_classifier_1d& classifier,
                        vbl_triple<double,int,double> *data,
                        int n,
                        double tot_wts0,
