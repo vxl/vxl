@@ -143,7 +143,7 @@ vcl_vector<double> FMatrixCompute7Point::GetCoef(FMatrix const& F1, FMatrix cons
   double d1=bb*ii-cc*hh, e1=bb*r+ii*k-cc*q-hh*l, f1=r*k-l*q;
   double g1=bb*ff-cc*ee, h1=bb*o+ff*k-cc*n-ee*l, i1=o*k-l*n;
 
-  vcl_vector<double> v(aa*a1-dd*d1+gg*g1);
+  vcl_vector<double> v( unsigned(aa*a1-dd*d1+gg*g1) );
   v.push_back(aa*b1+a1*j-dd*e1-d1*m+gg*h1+g1*p);
   v.push_back(aa*c1+b1*j-dd*f1-e1*m+gg*i1+h1*p);
   v.push_back(c1*j-f1*m+i1*p);
@@ -173,7 +173,7 @@ vcl_vector<double> FMatrixCompute7Point::solve_quadratic (vcl_vector<double> v)
 
    double q = -0.5 * ( b + s * vcl_sqrt(d));
 
-   vcl_vector<double> l(q/a); l.push_back(c/q);
+   vcl_vector<double> l( unsigned(q/a) ); l.push_back(c/q);
    return l;
 }
 
@@ -209,7 +209,7 @@ vcl_vector<double> FMatrixCompute7Point::solve_cubic(vcl_vector<double> v)
    // At this point, a, c and d are no longer needed (c and d will be reused).
 
    if (q == 0)
-      return vcl_vector<double> (my_cbrt(-2*r) - b);
+      return vcl_vector<double> ( unsigned(my_cbrt(-2*r) - b) );
 
    // With the Vieta substitution y = z+q/z this becomes z^6+2rz^3+q^3 = 0
    // which is essentially a quadratic equation:
@@ -219,13 +219,13 @@ vcl_vector<double> FMatrixCompute7Point::solve_cubic(vcl_vector<double> v)
    {
       double z  = my_cbrt(-r + vcl_sqrt(d));
       // The case z=0 is excluded since this is q==0 which is handled above
-      return vcl_vector<double> (z + q/z - b);
+      return vcl_vector<double> ( unsigned(z + q/z - b) );
    }
 
    // And finally the "irreducible case" (with 3 solutions):
    c = vcl_sqrt(q);
    double theta = vcl_acos( r/q/c ) / 3;
-   vcl_vector<double> l(-2.0*c*vcl_cos(theta)           - b);
+   vcl_vector<double> l( unsigned( -2.0*c*vcl_cos(theta)           - b) );
    l.push_back(-2.0*c*vcl_cos(theta + 2*vnl_math::pi/3) - b);
    l.push_back(-2.0*c*vcl_cos(theta - 2*vnl_math::pi/3) - b);
    return l;

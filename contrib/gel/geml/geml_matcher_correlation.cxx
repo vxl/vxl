@@ -157,8 +157,8 @@ vcl_pair<double,double> geml_matcher_correlation::best_local_correlation_score( 
   double bestscore1= -1;
   double bestscore2= -1;
 
-  vil_memory_image_window w1( im1_, x1, y1, CORRELATION_KERNEL);
-  vil_memory_image_window w2( im2_, x2, y2, CORRELATION_KERNEL);
+  vil_memory_image_window w1( im1_, int(x1), int(y1), CORRELATION_KERNEL);
+  vil_memory_image_window w2( im2_, int(x2), int(y2), CORRELATION_KERNEL);
 
   for( int x= -MAX_CORNER_ERROR; x<= MAX_CORNER_ERROR; x++)
     {
@@ -168,8 +168,8 @@ vcl_pair<double,double> geml_matcher_correlation::best_local_correlation_score( 
 
       //  score1= w1.sum_squared_differences(im2_, x2+ x, y2+ y);
       //  score2= w2.sum_squared_differences(im1_, x1+ x, y1+ y);
-          score1= w1.normalised_cross_correlation(im2_, x2+ x, y2+ y);
-          score2= w2.normalised_cross_correlation(im1_, x1+ x, y1+ y);
+          score1= w1.normalised_cross_correlation(im2_, int(x2+ x), int(y2+ y));
+          score2= w2.normalised_cross_correlation(im1_, int(x1+ x), int(y1+ y));
 
           if(( score1< bestscore1) || ( bestscore1< 0))
             bestscore1= score1;

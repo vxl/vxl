@@ -420,10 +420,10 @@ int main(int argc, char ** argv)
                   else
                     {
                       // either completely inside or completely outside object
-                      if( (*distancestore[*it])(centre[0],centre[1]) > 3*radius)
+                      if( (*distancestore[*it])(int(centre[0]),int(centre[1])) > 3*radius)
                         {
                           // if completely outside object
-                          if( !(*imagestore[*it])(centre[0],centre[1]))
+                          if( !(*imagestore[*it])(int(centre[0]),int(centre[1])))
                             {
                               if( fout)
                                 {

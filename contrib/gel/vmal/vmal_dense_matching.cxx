@@ -254,7 +254,7 @@ void vmal_dense_matching::disparity_map(vmal_multi_view_data_edge_sptr mvd_edge,
   double delta0x,delta0y,delta1x,delta1y;
 
   vnl_matrix<int> map(w,h);
-  map.fill(0.0);
+  map.fill(0);
 
   for(int i=0;i<numlines;i++)
   {
