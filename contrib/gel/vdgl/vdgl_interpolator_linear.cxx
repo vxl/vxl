@@ -2,10 +2,11 @@
 #pragma implementation
 #endif
 
+#include "vdgl_interpolator_linear.h"
 #include <vnl/vnl_math.h>
 #include <vdgl/vdgl_edgel.h>
 #include <vdgl/vdgl_edgel_chain.h>
-#include "vdgl_interpolator_linear.h"
+#include <vsol/vsol_point_2d.h>
 #include <vcl_cassert.h>
 
 

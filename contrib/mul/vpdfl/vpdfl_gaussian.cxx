@@ -24,6 +24,7 @@
 #include <mbl/mbl_matxvec.h>
 #include <mbl/mbl_matrix_products.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
+#include <vnl/io/vnl_io_matrix.h>
 #include <vpdfl/vpdfl_gaussian_sampler.h>
 #include <vpdfl/vpdfl_sampler_base.h>
 #include <vpdfl/vpdfl_prob_chi2.h>
@@ -150,7 +151,7 @@ static bool inline almostEqualsOne(double value)
 {
   const double upper = 1 + 1e-06;
   const double lower = 1 - 1e-06;
-  return (value > lower && value < upper);
+  return value > lower && value < upper;
 }
 
 //=======================================================================

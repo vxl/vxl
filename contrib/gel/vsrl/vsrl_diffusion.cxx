@@ -3,7 +3,7 @@
 #include <vcl_cstddef.h>
 #include <vcl_cstdio.h>
 #include <vcl_cstdlib.h>
-#include <vil/vil_image.h>
+#include <vil/vil_byte.h>
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_save.h>
 #include <vsrl/vsrl_diffusion.h>
@@ -36,7 +36,7 @@ double vsrl_diffusion::get_disparity(int x, int y)
 {
   // we want to get the disparity for the point x, y
 
-  if(x>=0 && x<_width && y>=0 && y < _height){
+  if (x>=0 && x<_width && y>=0 && y < _height) {
 
     return (*_disparity_matrix)(x,y);
   }
@@ -50,13 +50,13 @@ void vsrl_diffusion::write_image(char *file_name,int it_num, vnl_matrix<double> 
 
   char new_name[512];
 
-  if(it_num < 10){
+  if (it_num < 10) {
     vcl_sprintf(&(new_name[0]),"%s00%d.ppm",file_name,it_num);
     write_image(&(new_name[0]),mat);
     return;
   }
 
-  if(it_num < 100){
+  if (it_num < 100) {
     vcl_sprintf(&(new_name[0]),"%s0%d.ppm",file_name,it_num);
     write_image(&(new_name[0]),mat);
     return;
@@ -84,8 +84,8 @@ void vsrl_diffusion::write_image(char *file_name,vnl_matrix<double> *mat)
   int value;
 
 
-  for(x=0;x<buffer.width();x++){
-    for(y=0;y<buffer.height();y++){
+  for (x=0;x<buffer.width();x++){
+    for (y=0;y<buffer.height();y++){
       buffer(x,y)=0;
     }
   }
@@ -94,14 +94,14 @@ void vsrl_diffusion::write_image(char *file_name,vnl_matrix<double> *mat)
 
   int corr_range = vsrl_parameters::instance()->correlation_range;
 
-  for(y=0;y<buffer.height();y++){
-     for(x=0;x<buffer.width();x++){
+  for (y=0;y<buffer.height();y++){
+     for (x=0;x<buffer.width();x++){
        disparity = (int)((*mat)(x,y));
        value = disparity + corr_range+1;
-       if(value < 0){
+       if (value < 0) {
          value = 0;
        }
-       if(value>2*corr_range+1){
+       if (value>2*corr_range+1) {
          value=0;
        }
        // buffer(x,y)=value*10;

@@ -1,6 +1,6 @@
 #include <vmal/vmal_kl.h>
 
-#include <vil/vil_colour_space.h>
+#include <vil/vil_byte.h>
 #include <vil/vil_pixel.h>
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_image_as.h>
@@ -21,7 +21,6 @@ vmal_kl::~vmal_kl()
 
 void vmal_kl::match_sequence(vcl_vector<vil_image> &image_list,vmal_multi_view_data_vertex_sptr matches)
 {
-
   // Uses the KL tracker to track points through an image
   int nFeatures = _params.numpoints;
   int nFrames = image_list.size();
@@ -108,7 +107,6 @@ void vmal_kl::match_sequence(vcl_vector<vil_image> &image_list,vmal_multi_view_d
 
 void vmal_kl::match_sequence(vidl_movie_sptr movie,vmal_multi_view_data_vertex_sptr matches)
 {
-
   vcl_vector<vil_image> image_list;
   for (vidl_movie::frame_iterator pframe = movie->first();
         pframe <= movie->last();
@@ -186,8 +184,8 @@ KLT_PixelType* vmal_kl::convert_to_gs_image(vil_image &image)
     vil_image_as_byte(image).get_section(ima_mono.get_buffer(), 0, 0, w, h);
     vil_byte* p=ima_mono.get_buffer();
 
-    for(int i=0;i<w;i++)
-      for(int j=0;j<h;j++)
+    for (int i=0;i<w;i++)
+      for (int j=0;j<h;j++)
         tab_mono[i*h+j]=(KLT_PixelType)p[i*h+j];
 
     return tab_mono;

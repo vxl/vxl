@@ -3,8 +3,9 @@
 */
 #include <vcl_cmath.h>
 #include <vgui/vgui.h>
+#include <vgui/vgui_event.h>
+#include <vgui/vgui_tableau.h>
 #include <vgui/vgui_adaptor.h>
-#include <vgui/vgui_shell_tableau.h>
 
 class tab : public vgui_tableau {
 public:

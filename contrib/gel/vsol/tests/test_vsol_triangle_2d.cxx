@@ -14,6 +14,7 @@
 
 #include <vcl_iostream.h>
 #include <vsol/vsol_triangle_2d.h>
+#include <vsol/vsol_triangle_2d_sptr.h>
 #include <vsol/vsol_point_2d.h>
 
 #define Assert(x) { vcl_cout << #x "\t\t\t test "; \

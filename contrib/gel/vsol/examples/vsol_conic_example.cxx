@@ -1,4 +1,5 @@
 #include <vsol/vsol_conic_2d.h>
+#include <vsol/vsol_conic_2d_sptr.h>
 #include <vsol/vsol_point_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 

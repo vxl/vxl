@@ -5,9 +5,9 @@
 // \brief Implements sampling for a mixture model (a set of individual pdfs + weights)
 // \author Tim Cootes and Ian Scott
 
+#include <vcl_vector.h>
 #include <pdf1d/pdf1d_sampler.h>
-#include <pdf1d/pdf1d_mixture.h>
-
+#include <mbl/mbl_mz_random.h>
 class pdf1d_mixture;
 
 //: Instance class for pdf1d_mixture

@@ -14,7 +14,9 @@
 
 #include <vcl_iostream.h>
 #include <vsol/vsol_rectangle_3d.h>
+#include <vsol/vsol_rectangle_3d_sptr.h>
 #include <vsol/vsol_point_3d.h>
+#include <vsol/vsol_point_3d_sptr.h>
 
 #define Assert(x) { vcl_cout << #x "\t\t\t test "; \
   if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }

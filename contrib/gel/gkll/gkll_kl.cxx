@@ -1,6 +1,6 @@
 #include <gkll/gkll_kl.h>
 
-#include <vil/vil_colour_space.h>
+#include <vil/vil_byte.h>
 #include <vil/vil_pixel.h>
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_image_as.h>
@@ -185,8 +185,8 @@ KLT_PixelType* gkll_kl::convert_to_gs_image(vil_image &image)
     vil_image_as_byte(image).get_section(ima_mono.get_buffer(), 0, 0, w, h);
     vil_byte* p=ima_mono.get_buffer();
 
-    for(int i=0;i<w;i++)
-      for(int j=0;j<h;j++)
+    for (int i=0;i<w;i++)
+      for (int j=0;j<h;j++)
       {
         tab_mono[i*h+j]=(KLT_PixelType)p[i*h+j];
       }

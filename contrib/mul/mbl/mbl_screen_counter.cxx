@@ -4,13 +4,12 @@
 // \author Ian Scott
 
 #include <mbl/mbl_screen_counter.h>
-#include <vcl_ostream.h>
+#include <vcl_iostream.h>
 
 mbl_screen_counter::mbl_screen_counter(vcl_ostream & os):
 count_(0), symbol_('a'), skip_(1), os_(os)
 {
 }
-
 
 //: Mark event
 // This is a postfix increment operator

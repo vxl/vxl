@@ -14,6 +14,7 @@
 
 #include <vpdfl/vpdfl_sampler_base.h>
 #include <vpdfl/vpdfl_mixture.h>
+#include <mbl/mbl_mz_random.h>
 
 //=======================================================================
 

@@ -18,6 +18,7 @@ class vsol_tetrahedron;
 //*****************************************************************************
 #include "vsol_tetrahedron_sptr.h"
 #include "vsol_polyhedron.h"
+#include "vsol_point_3d.h"
 
 class vsol_tetrahedron
   :public vsol_polyhedron

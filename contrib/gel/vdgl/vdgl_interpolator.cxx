@@ -3,6 +3,7 @@
 #endif
 
 #include "vdgl_interpolator.h"
+#include <vsol/vsol_point_2d.h>
 #include <vgl/vgl_distance.h>
 
 double vdgl_interpolator::distance_curve_to_point ( vsol_point_2d_sptr p )

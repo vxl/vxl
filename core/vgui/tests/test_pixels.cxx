@@ -3,6 +3,7 @@
 */
 #include <vcl_cstdio.h>
 #include <vcl_iostream.h>
+#include <vgui/vgui_gl.h>
 #include <vgui/vgui_pixel.h>
 
 void print_byte(GLubyte w) {

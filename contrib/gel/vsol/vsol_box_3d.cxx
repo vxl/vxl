@@ -1,7 +1,7 @@
 //:
 // \file
 #include <vsol/vsol_box_3d.h>
-#include <vnl/vnl_math.h>
+#include <vcl_cmath.h>
 
 vsol_box_3d::vsol_box_3d()
 {
@@ -119,21 +119,21 @@ bool vsol_box_3d::operator< (vsol_box_3d& box)
 
   float xmax = this->get_max_x(),ymax = this->get_max_y(),zmax = this->get_max_z();
 
-  if(!(xmin >= xmin_box)) return false;
-  if(!(ymin >= ymin_box)) return false;
-  if(!(zmin >= zmin_box)) return false;
+  if (!(xmin >= xmin_box)) return false;
+  if (!(ymin >= ymin_box)) return false;
+  if (!(zmin >= zmin_box)) return false;
 
-  if(!(xmax >= xmin_box)) return false;
-  if(!(ymax >= ymin_box)) return false;
-  if(!(zmax >= zmin_box)) return false;
+  if (!(xmax >= xmin_box)) return false;
+  if (!(ymax >= ymin_box)) return false;
+  if (!(zmax >= zmin_box)) return false;
 
-  if(!(xmin <= xmax_box)) return false;
-  if(!(ymin <= ymax_box)) return false;
-  if(!(zmin <= zmax_box)) return false;
+  if (!(xmin <= xmax_box)) return false;
+  if (!(ymin <= ymax_box)) return false;
+  if (!(zmin <= zmax_box)) return false;
 
-  if(!(xmax <= xmax_box)) return false;
-  if(!(ymax <= ymax_box)) return false;
-  if(!(zmax <= zmax_box)) return false;
+  if (!(xmax <= xmax_box)) return false;
+  if (!(ymax <= ymax_box)) return false;
+  if (!(zmax <= zmax_box)) return false;
 
   return true;
 }
@@ -157,12 +157,12 @@ bool vsol_box_3d:: near_equal(vsol_box_3d& box, const float& tolerance)
 
   float xmax = this->get_max_x(),ymax = this->get_max_y(),zmax = this->get_max_z();
 
-  if(!near_same(xmin, xmin_box, tolerance)) return false;
-  if(!near_same(ymin, ymin_box, tolerance)) return false;
-  if(!near_same(zmin, zmin_box, tolerance)) return false;
+  if (!near_same(xmin, xmin_box, tolerance)) return false;
+  if (!near_same(ymin, ymin_box, tolerance)) return false;
+  if (!near_same(zmin, zmin_box, tolerance)) return false;
 
-  if(!near_same(xmax, xmax_box, tolerance)) return false;
-  if(!near_same(ymax, ymax_box, tolerance)) return false;
-  if(!near_same(zmax, zmax_box, tolerance)) return false;
+  if (!near_same(xmax, xmax_box, tolerance)) return false;
+  if (!near_same(ymax, ymax_box, tolerance)) return false;
+  if (!near_same(zmax, zmax_box, tolerance)) return false;
   return true;
 }

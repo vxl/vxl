@@ -6,12 +6,13 @@
 
 #include <vil/vil_image.h>
 
+#include "gevd_detector.h"
 #include "gevd_pixel.h"
 #include "gevd_float_operators.h"
 #include "gevd_step.h"
 #include "gevd_bufferxy.h"
-#include "gevd_detector.h"
 #include "gevd_contour.h"
+#include <vtol/vtol_edge_2d.h>
 
 //--------------------------------------------------------------------------------
 //
@@ -203,7 +204,7 @@ bool gevd_detector::DoStep()
 
   this->noiseThreshold = step.NoiseThreshold();
 
-  return (edgel!=NULL);
+  return edgel!=NULL;
 }
 
 #if 0 // commented out
@@ -240,9 +241,9 @@ bool gevd_detector::DoFold()
   }
 
   this->noiseThreshold = fold.NoiseThreshold();
-  return (edgel!=NULL);
+  return edgel!=NULL;
 }
-#endif
+#endif // 0
 
 //--------------------------------------------------------------------------------
 //

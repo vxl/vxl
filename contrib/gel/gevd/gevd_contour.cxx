@@ -13,6 +13,8 @@
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_interpolator_linear.h>
+#include <vtol/vtol_vertex_2d.h>
+#include <vtol/vtol_edge_2d.h>
 #include <gevd/gevd_float_operators.h>
 #include <gevd/gevd_pixel.h>
 
@@ -1779,7 +1781,7 @@ gevd_contour::ClearNetwork(vcl_vector<vtol_edge_2d_sptr>*& edges,
       edge->set_curve(0); // and remove it from edge
 #endif
       edge->UnProtect();        // delete edge
-      delete ((vdgl_digital_curve *) dc); // delete dc
+      delete (vdgl_digital_curve *) dc; // delete dc
 #endif
     }
     delete edges; edges = NULL;

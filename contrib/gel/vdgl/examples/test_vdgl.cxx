@@ -3,7 +3,9 @@
 #include <vsol/vsol_point_2d.h>
 
 #include <vtol/vtol_vertex_2d.h>
+#include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_edge_2d.h>
+#include <vtol/vtol_edge_2d_sptr.h>
 
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator_linear.h>
@@ -40,7 +42,7 @@ int main()
   //   note: grad = 0 and theta = 1 for all edgels
   vcl_vector<vdgl_edgel> edgels;
 
-  for( int i=0; data[i]!= -999; i+= 2)
+  for ( int i=0; data[i]!= -999; i+= 2)
     edgels.push_back( vdgl_edgel( data[i], data[i+1], 0, 1));
 
   // Create an edgel chain...
@@ -66,7 +68,7 @@ int main()
   vtol_edge_2d_sptr edge = new vtol_edge_2d( *vertexstart, *vertexend, digital_curve.ptr());
 
   // Sample 50 points along the curve and print them out
-  for( double i=0; i< 1; i+=0.02)
+  for ( double i=0; i< 1; i+=0.02)
     {
       double x= digital_curve->get_x(i);
       double y= digital_curve->get_y(i);
