@@ -25,7 +25,7 @@ void bvnl_parabolic_interpolator::fill_scatter_matrix()
 {
   int n = this->n_points();
   double p4 = 0, p3 =0, p2 = 0, p2v=0, pv=0, v2=0, p =0, v=0;
-  for(int i=0; i<n; i++)
+  for (int i=0; i<n; i++)
     {
       double pi = p_[i], vi = v_[i];
       double x2 = pi*pi;
@@ -54,14 +54,13 @@ void bvnl_parabolic_interpolator::fill_scatter_matrix()
 
 bool bvnl_parabolic_interpolator::solve()
 {
-	int n = this->n_points();
-  if(!(n>=3))
+  if (this->n_points() < 3)
     return false;
   this->fill_scatter_matrix();
   vnl_svd<double> svd(s_);
   vnl_vector<double> nv = svd.nullvector();
-  vcl_cout << "NV: " << nv << "\n";
-  if(nv[0]>0||vcl_fabs(nv[0])<1e-06)
+  vcl_cout << "NV: " << nv << '\n';
+  if (nv[0] > -1e-6)
     return false;//Vxx is too small
   p_ext_ = -nv[1]/(2.0*nv[0]);
   return true;
@@ -69,9 +68,9 @@ bool bvnl_parabolic_interpolator::solve()
 
 void bvnl_parabolic_interpolator::print()
 {
-  vcl_cout << "P / V \n";
-  for(int i = 0; i<this->n_points(); i++)
-    vcl_cout << p_[i] << "\t" << v_[i] << "\n";
+  vcl_cout << "P / V\n";
+  for (int i = 0; i<this->n_points(); i++)
+    vcl_cout << p_[i] << '\t' << v_[i] << '\n';
   vcl_cout << vcl_flush;
 }
 
