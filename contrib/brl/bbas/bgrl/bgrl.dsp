@@ -135,9 +135,6 @@ SOURCE=.\Templates/vbl_smart_ptr+bgrl_search_func-.cxx
 SOURCE=.\Templates/vsl_binary_loader+bgrl_edge-.cxx
 # Begin Source File
 # End Source File
-SOURCE=.\Templates/vsl_binary_loader+bgrl_graph-.cxx
-# Begin Source File
-# End Source File
 SOURCE=.\Templates/vsl_binary_loader+bgrl_vertex-.cxx
 # Begin Source File
 # End Source File
