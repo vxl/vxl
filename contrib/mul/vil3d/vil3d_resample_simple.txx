@@ -1,18 +1,12 @@
-//
-// This is contrib/mul/vil3d/vil3d_resample_simple.txx
-//
+// This is mul/vil3d/vil3d_resample_simple.txx
 #ifndef vil3d_resample_simple_txx_
 #define vil3d_resample_simple_txx_
-
-
 //:
 // \file
 // \brief Resample a 3D image by an integer factor in each dimension
 // \author Kevin de Souza
 
-
 #include <vil3d/vil3d_resample_simple.h>
-
 
 //: Resample a 3D image by an integer factor in each dimension.
 //  dst_image resized by factors dx, dy, dz.
@@ -21,8 +15,8 @@
 template <class T >
 void vil3d_resample_simple(const vil3d_image_view< T >& src_image,
                            vil3d_image_view< T >& dst_image,
-                           const unsigned dx, 
-                           const unsigned dy, 
+                           const unsigned dx,
+                           const unsigned dy,
                            const unsigned dz)
 {
   // Assume planes are the same for both images
@@ -47,7 +41,7 @@ void vil3d_resample_simple(const vil3d_image_view< T >& src_image,
   const vcl_ptrdiff_t d_pstep = dst_image.planestep();
   T* d_plane = dst_image.origin_ptr();
 
-  // Loop over all voxels in the destination image and 
+  // Loop over all voxels in the destination image and
   // sample from the corresponding point in the source image
   for (unsigned p=0; p<np; ++p, d_plane+=d_pstep)
   {
@@ -68,12 +62,11 @@ void vil3d_resample_simple(const vil3d_image_view< T >& src_image,
 }
 
 
-
-#define VIL3D_RESAMPLE_SIMPLE_INSTANTIATE( T )                          \
+#define VIL3D_RESAMPLE_SIMPLE_INSTANTIATE( T ) \
 template void vil3d_resample_simple(const vil3d_image_view< T >& src_image, \
-                                    vil3d_image_view< T >& dst_image,       \
-                                    const unsigned dx,                  \
-                                    const unsigned dy,                  \
+                                    vil3d_image_view< T >& dst_image, \
+                                    const unsigned dx, \
+                                    const unsigned dy, \
                                     const unsigned dz);
 
 
