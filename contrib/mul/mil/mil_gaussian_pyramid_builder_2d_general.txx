@@ -15,6 +15,7 @@
 #include <mil/mil_image_pyramid.h>
 #include <mbl/mbl_gamma.h>
 #include <vsl/vsl_indent.h>
+#include <vcl_cmath.h>
 
 //=======================================================================
 

@@ -12,7 +12,7 @@
 
 #include <mil/mil_gaussian_pyramid_builder_2d.h>
 #include <mil/mil_image_2d_of.h>
-#include <vsml/vsml_g_point.h>
+
 
 //: Build pyramids of mil_image_2d_of<vil_byte> at any scale step
 
