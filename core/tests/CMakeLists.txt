@@ -9,15 +9,15 @@ CONFIGURE_FILE( ${CMAKE_CURRENT_SOURCE_DIR}/test_build_info.h.in
 # needed for generated test_build_info.h
 INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_BINARY_DIR} )
 
-ADD_EXECUTABLE( vxl_test_all
+ADD_EXECUTABLE( core_test_all
   test_driver.cxx
   test_config.cxx
   test_build_info.cxx test_build_info.h.in
 )
-TARGET_LINK_LIBRARIES( vxl_test_all testlib vcl )
+TARGET_LINK_LIBRARIES( core_test_all testlib vcl )
 
-ADD_TEST( vxl_test_config vxl_test_all test_config )
-ADD_TEST( vxl_test_build_info vxl_test_all test_build_info )
+ADD_TEST( core_test_config core_test_all test_config )
+ADD_TEST( core_test_build_info core_test_all test_build_info )
 
 # a simple Dart notes file, in case test_build_info fails
 IF( COMMAND WRITE_FILE )
