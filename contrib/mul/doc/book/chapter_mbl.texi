@@ -34,6 +34,8 @@ Reading data from an @code{mbl_data_wrapper} is straight forward.
 
 You can do random access, using the the @code{set_index(int n)} method, but there is no guarantee that
 the underlying iterator supports this efficiently, so you should use sequential access where possible.
+The wrappers themselves do not support IO, because they are only wrappers - they do not own the
+wrapped data.
 
 Currently there is only one concrete wrapper, @code{mbl_data_array_wrapper} which wraps C-style data
 arrays. This can be used to wrap @code{vcl_vector}s. Wrappers have in the past been written to
@@ -79,6 +81,42 @@ There are two concrete data collectors - @code{mbl_data_collector_list} and
 latter stores a fixed size complete random subset of all the data given to it. This is useful
 if you do not know how much data an algorithm is going to produce, but for space or time reasons
 you can only store and use subset of it.
+
+@section Miscellaneous
+@table @code
+
+@item mbl_cloneable_ptr
+Almost the opposite of a vbl_smart_ptr, this class acts like a pointer,
+but performs a deep copy of the referenced object when the pointer itself is copied.
+Supports IO via @code{vsl}.
+
+@item mbl_chord
+Describes a horizontal line on a image.
+
+@item mbl_priority_bounded_queue
+This acts like a vcl_priority_queue, but only stores the n least values, where n
+is the configurable bound.
+
+@item mbl_stats_1d, mbl_sum_1d
+Calculate, store, and manipulate running statistics and sums.
+
+@item mbl_lda
+Calculate, manipulate and use a Linear Discriminant Analysis of data.
+
+@item mbl_gamma.h
+Complete and incomplete gamma functions
+
+@item mbl_k_means.h
+Perform k means clustering.
+
+@item mbl_matrix_products.h, mbl_matxvec.h
+Perform various linear algebra operations.
+
+@item mbl_print.h
+Commands that debuggers can run easily on demand. Include this file
+in you application, and you call these functions from a debugger to
+display common containers.
+@end table
 
 @section Random Number Generator
 @cindex mbl_mz_random
