@@ -1,5 +1,6 @@
 #include <vgel/vgel_kl.h>
 
+#include <vxl_config.h>
 #include <vil/vil_byte.h>
 #include <vil/vil_pixel.h>
 #include <vil/vil_memory_image_of.h>
@@ -179,6 +180,7 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil_image &image)
     int h=image.height();
     KLT_PixelType* tab_mono=new KLT_PixelType[w*h];
     vcl_cerr << "width: " <<w<< "  height: "<<h<<  vcl_endl;
+    vcl_cerr << "pixel type: byte" << vcl_endl;
 
     vil_memory_image_of<vil_byte> ima_mono;
     ima_mono.resize(w,h);
@@ -199,6 +201,7 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil_image &image)
     int h=image.height();
     KLT_PixelType* tab_mono=new KLT_PixelType[w*h];
     vcl_cerr << "width: " <<w<< "  height: "<<h<<  vcl_endl;
+    vcl_cerr << "pixel type: byte" << vcl_endl;
 
     vil_memory_image_of<vil_byte> ima_mono;
     ima_mono.resize(w,h);
@@ -211,9 +214,37 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil_image &image)
       {
         tab_mono[i*h+j]=(KLT_PixelType)p[i*h+j];
       }
+
     return tab_mono;
   }
+  else if (vil_pixel_format(image)==VIL_UINT16)
+  {   
+    int w=image.width();
+    int h=image.height();
+    KLT_PixelType* tab_mono=new KLT_PixelType[w*h];
+    vcl_cerr << "width: " <<w<< "  height: "<<h<<  vcl_endl;
+    vcl_cerr << "pixel type: uint_16" << vcl_endl;
 
+    vil_memory_image_of<vxl_uint_16> ima_mono;
+    ima_mono.resize(w,h);
+
+    vil_image_as_uint16(image).get_section(ima_mono.get_buffer(), 0, 0, w, h);
+    vxl_uint_16* p=ima_mono.get_buffer();
+
+    for (int i=0;i<w;i++)
+      for (int j=0;j<h;j++)
+      {
+        tab_mono[i*h+j]=(KLT_PixelType)p[i*h+j];
+      }
+
+    return tab_mono;
+  }
+  else
+  {
+      vcl_cerr << "Error: Cannot convert pixel type: "
+               << vil_print(vil_pixel_format(image)) << vcl_endl;
+      return NULL;
+  }
 
   return NULL;
 }
