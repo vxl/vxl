@@ -13,6 +13,10 @@ MANPAGE_SOURCES += vil3d_trilin_interp.h
 MANPAGE_SOURCES += vil3d_crop.h
 MANPAGE_SOURCES += vil3d_switch_axes.h
 MANPAGE_SOURCES += vil3d_math.h
+SOURCES += vil3d_file_format.cxx
+SOURCES += vil3d_header_data.cxx
+SOURCES += file_formats/vil3d_gipl_format.cxx
+SOURCES += vil3d_load.cxx
 
 SUBDIRS += algo io
 
