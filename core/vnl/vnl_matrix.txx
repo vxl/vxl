@@ -832,9 +832,9 @@ void vnl_matrix<T>::normalize_rows()
       norm += vnl_math_squared_magnitude(this->data[i][j]);
 
     if (norm != 0) {
-      abs_t scale = static_cast<abs_t>(abs_real_t(1)/(vcl_sqrt((abs_real_t)norm)));
+      abs_real_t scale = abs_real_t(1)/(vcl_sqrt((abs_real_t)norm));
       for (unsigned int j = 0; j < this->num_cols; j++)
-        this->data[i][j] *= scale;
+        this->data[i][j] = T(real_t(this->data[i][j]) * scale);
     }
   }
 }
@@ -853,9 +853,9 @@ void vnl_matrix<T>::normalize_columns()
       norm += vnl_math_squared_magnitude(this->data[i][j]);
 
     if (norm != 0) {
-      abs_t scale = static_cast<abs_t>(abs_real_t(1)/(vcl_sqrt((abs_real_t)norm)));
-      for (unsigned int i = 0; i < this->num_rows; i++) 
-        this->data[i][j] *= scale;
+      abs_real_t scale = abs_real_t(1)/(vcl_sqrt((abs_real_t)norm));
+      for (unsigned int i = 0; i < this->num_rows; i++)
+        this->data[i][j] = T(real_t(this->data[i][j]) * scale);
     }
   }
 }
@@ -1117,7 +1117,7 @@ void vnl_matrix<T>::assert_finite_internal() const
   if (is_finite())
     return;
 
-  vcl_cerr << "\n\n" __FILE__ ":" << __LINE__ << ": matrix has non-finite elements\n";
+  vcl_cerr << "\n\n" __FILE__ ": " << __LINE__ << ": matrix has non-finite elements\n";
 
   if (rows() <= 20 && cols() <= 20) {
     vcl_cerr << __FILE__ ": here it is:\n" << *this;
