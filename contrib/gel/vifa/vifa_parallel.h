@@ -16,7 +16,7 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl_vector.h>
-#include <vtol/vtol_intensity_face.h>
+#include <vtol/vtol_intensity_face_sptr.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vifa/vifa_histogram.h>
 #include <vifa/vifa_parallel_params.h>
@@ -72,12 +72,11 @@ class vifa_parallel: public vifa_parallel_params
   float  bin_variance(void);
 
  private:
-  float          map_x(float  raw_x);
-  vifa_histogram*      normalize_histogram(vifa_histogram*  h);
-  float          find_peak(float&  max_value);
-  vtol_intensity_face*  get_adjacent_iface(vtol_intensity_face*  known_face,
-                                           vtol_edge_2d*         e
-                                          );
+  float           map_x(float  raw_x);
+  vifa_histogram* normalize_histogram(vifa_histogram*  h);
+  float           find_peak(float&  max_value);
+  vtol_intensity_face_sptr get_adjacent_iface(vtol_intensity_face_sptr known_face,
+                                              vtol_edge_2d*            e);
 };
 
 
