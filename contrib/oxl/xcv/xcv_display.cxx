@@ -206,6 +206,7 @@ void xcv_display::remove_roi()
 #endif
   xcv_image_tableau_sptr imt = get_image_tableau_at(col,row);
   imt->unset_roi();
+  imt->post_redraw();
 }
 
 //-----------------------------------------------------------------------------
