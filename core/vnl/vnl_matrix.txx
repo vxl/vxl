@@ -91,10 +91,6 @@
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>
 
-
-// conflicts with operator!= for std::vector<vcl_complex<double> >::iterator.
-// # include <vcl_rel_ops.h>  // inline operator!= function template
-
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_complex.h>
 #include <vnl/vnl_vector.h>

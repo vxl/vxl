@@ -13,7 +13,7 @@
 //  \file
 
 #include <vcl_iostream.h>
-#include <vcl_rel_ops.h>
+//#include <vcl_rel_ops.h>
 #include <vcl_cassert.h>
 #include <vsol/vsol_point_3d.h>
 

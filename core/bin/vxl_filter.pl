@@ -262,26 +262,18 @@ sub process_headers {
       $saw_stlfwd = 1 if s!^\#include.*<IUE_stlfwd\.h>!//$&!;
 
       # non-standard STL headers which can be fixed.
-      s/include\s*<algo>/include <vcl_algorithm.h>/;
-      s/include\s*<algo.h>/include <vcl_algorithm.h>/;
-      s/include\s*<algobase>/include <vcl_algorithm.h>/;
-      s/include\s*<algobase.h>/include <vcl_algorithm.h>/;
-      s/include\s*<function>/include <vcl_functional.h>\n\#include <vcl_rel_ops.h>/;
-      s/include\s*<function\.h>/include <vcl_functional.h>\n\#include <vcl_rel_ops.h>/;
-      s/include\s*<multimap>/include <vcl_map.h>/;
-      s/include\s*<multimap\.h>/include <vcl_map.h>/;
+      s/include\s*<algo(\.h)?>/include <vcl_algorithm.h>/;
+      s/include\s*<algobase(\.h)?>/include <vcl_algorithm.h>/;
+      s/include\s*<function(\.h)?>/include <vcl_functional.h>/;
+      s/include\s*<multimap(\.h)?>/include <vcl_map.h>/;
       #s/include\s*<hash_map\.h>/include <vcl_map.h>/;
-      s/include\s*<multiset>/include <vcl_set.h>/;
-      s/include\s*<multiset\.h>/include <vcl_set.h>/;
+      s/include\s*<multiset(\.h)?>/include <vcl_set.h>/;
       #s/include\s*<hash_set\.h>/include <vcl_set.h>/;
-      s/include\s*<pair>/include <vcl_utility.h>/;
-      s/include\s*<pair\.h>/include <vcl_utility.h>/;
-      s/include\s*<alloc>/include <vcl_memory.h>/;
-      s/include\s*<alloc\.h>/include <vcl_memory.h>/;
+      s/include\s*<pair(\.h)?>/include <vcl_utility.h>/;
+      s/include\s*<alloc(\.h)?>/include <vcl_memory.h>/;
       # non-standard STL headers which are to be commented out.
       s/^(\s*\#\s*include <defalloc.h>)/\/\/$1/;
-      s/^(\s*\#\s*include <tree>)/\/\/$1/;
-      s/^(\s*\#\s*include <tree.h>)/\/\/$1/;
+      s/^(\s*\#\s*include <tree(\.h)?>)/\/\/$1/;
       # `global' stl algorithms to be replaced with their vcl_ conterpart.
       s/(\s)::((sort|find|swap_ranges|copy|fill|find_if)\s*\()/$1vcl_$2/;
 
