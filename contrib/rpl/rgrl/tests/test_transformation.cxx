@@ -193,10 +193,10 @@ test_trans_homography()
   H(0,0) = 1;  H(0,1) = 0;  H(0,2) = 1;
   H(1,0) = 2;  H(1,1) = 4;  H(1,2) = 0;
   H(2,0) = 3;  H(2,1) = 5;  H(2,2) = 6;
-  
+
   testlib_test_begin( "Construct 2D homography transform object" );
   rgrl_transformation_sptr xform = new rgrl_trans_homography2d( H );
-  testlib_test_perform( xform );
+  testlib_test_perform( xform != 0 );
 
   testlib_test_begin( "Transform 2D location" );
 
@@ -211,7 +211,7 @@ test_trans_homography()
   vnl_vector<double> xformed_point( 2 );
 
   xform->map_location( point, xformed_point );
-  TEST_NEAR("transform points", (xformed_point-true_point).two_norm(), 0.0, 1e-4); 
+  TEST_NEAR("transform points", (xformed_point-true_point).two_norm(), 0.0, 1e-4);
 
   vnl_vector<double> direction( 2 );
   direction[0] =  2.0;
@@ -226,7 +226,6 @@ test_trans_homography()
   vnl_vector<double> xformed_direction( 2 );
   xform->map_tangent( point, direction, xformed_direction );
   TEST_NEAR("mapped tangent position", (xformed_direction - true_direction).two_norm(), 0.0, 1e-4);
-  
 }
 
 void
