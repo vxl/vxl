@@ -33,8 +33,8 @@ void distance_squared(const vcl_vector<vnl_vector<T> > &s1, const vcl_vector<vnl
     stats[st] = (1e9*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC));
   }
   vcl_sort(stats.begin(), stats.end());
-  vcl_cout<<"  Mean: "<<int(stats.mean()+0.5)
-        <<"ns  +/-"<<int((stats(nstests*0.75)-stats(nstests*0.25))+0.5)<<"ns\n"<<vcl_endl;
+  vcl_cout<<"  Mean: "<<stats.mean()
+        <<"ns  +/-"<<stats(nstests*0.75)-stats(nstests*0.25)<<"ns\n"<<vcl_endl;
 }
 
 template <class T>
@@ -54,8 +54,8 @@ void dot_product(const vcl_vector<vnl_vector<T> > &s1, const vcl_vector<vnl_vect
     stats[st] = (1e9*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC));
   }
   vcl_sort(stats.begin(), stats.end());
-  vcl_cout<<"  Mean: "<<int(stats.mean()+0.5)
-        <<"ns  +/-"<<int((stats(nstests*0.75)-stats(nstests*0.25))+0.5)<<"ns\n"<<vcl_endl;
+  vcl_cout<<"  Mean: "<<stats.mean()
+        <<"ns  +/-"<<stats(nstests*0.75)-stats(nstests*0.25)<<"ns\n"<<vcl_endl;
 }
 template <class T>
 void mat_x_vec(const vnl_matrix<T> &s1, const vcl_vector<vnl_vector<T> > &s2, 
@@ -74,8 +74,8 @@ void mat_x_vec(const vnl_matrix<T> &s1, const vcl_vector<vnl_vector<T> > &s2,
     stats[st] = (1e6*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC));
   }
   vcl_sort(stats.begin(), stats.end());
-  vcl_cout<<"  Mean: "<<(unsigned long)(stats.mean()+0.5)
-        <<"us  +/-"<<(unsigned long)((stats(nstests*0.75)-stats(nstests*0.25))+0.5)<<"us\n"<<vcl_endl;
+  vcl_cout<<"  Mean: "<<stats.mean()
+        <<"us  +/-"<<stats(nstests*0.75)-stats(nstests*0.25)<<"us\n"<<vcl_endl;
 }
 
 
