@@ -6,7 +6,7 @@
 class vbl_ref_count {
 public:
   vbl_ref_count() : ref_count(0) { }
-  virtual ~vbl_ref_count();
+  virtual ~vbl_ref_count() { }
   
   void ref() { ++ref_count; }
   
