@@ -126,7 +126,6 @@ void vsl_b_write(vsl_b_ostream &os, const vil2_memory_chunk* chunk_ptr)
 {
   bool not_null_ptr = (chunk_ptr!=0);
   vsl_b_write(os,not_null_ptr);
-    vcl_cout<<"Writing by pointer\n";
   if (not_null_ptr)
     vsl_b_write(os,*chunk_ptr);
 }
@@ -140,7 +139,6 @@ void vsl_b_read(vsl_b_istream &is, vil2_memory_chunk*& p)
   if (not_null_ptr)
   {
     p = new vil2_memory_chunk();
-    vcl_cout<<"Reading in by pointer\n";
     vsl_b_read(is, *p);
   }
   else
