@@ -42,3 +42,8 @@ DEFINES += -DBUILDING_VCL_DLL
 ######################################
 include ${IUEROOT}/config/top-rules.mk
 ######################################
+
+# on HP unix, this library has become too big, so it needs -fPIC
+ifeq "hpux" "$(findstring hpux,$(OS))"
+pic = $(PIC)
+endif
