@@ -16,7 +16,7 @@ IF(NOT HAS_GTK)
         /usr/X11R6/include/gtk12
         /usr/include/gtk-1.2
       )
-  
+
       # Some Linux distributions (e.g. Red Hat) have glibconfig.h
       # and glib.h in different directories, so we need to look
       # for both.
@@ -37,7 +37,7 @@ IF(NOT HAS_GTK)
         /usr/include/gtk-1.2
         /usr/local/include/glib12
         /usr/lib/glib/include
-	/usr/include/glib-1.2
+        /usr/include/glib-1.2
       )
 
       FIND_PATH( GTK_gtkgl_INCLUDE_PATH gtkgl/gtkglarea.h
@@ -97,7 +97,7 @@ IF(NOT HAS_GTK)
       IF(GTK_glib_LIBRARY)
       IF(GTK_gtkgl_LIBRARY)
 
-        # Assume that if gtk and glib were found, the other 
+        # Assume that if gtk and glib were found, the other
         # supporting libraries have also been found.
 
         SET( HAS_GTK "YES" )
