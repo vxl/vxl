@@ -21,7 +21,7 @@ const char * vsol_spatial_object_2d::SpatialTypes[] =
   "NUM_SPATIALOBJECT_TYPES"
 };
 
-vsol_spatial_object_2d::vsol_spatial_object_2d() 
+vsol_spatial_object_2d::vsol_spatial_object_2d()
   : vul_timestamp(), vbl_ref_count(), tag_(0), id_(0), bounding_box_(0)
 {
   set_tag_id(++tagcount_);
@@ -57,9 +57,19 @@ void vsol_spatial_object_2d::compute_bounding_box() const
   if (!bounding_box_) bounding_box_=new vsol_box_2d; bounding_box_->touch();
 }
 
+void vsol_spatial_object_2d::empty_bounding_box() const
+{
+  bounding_box_=new vsol_box_2d;
+}
+
 void vsol_spatial_object_2d::set_bounding_box(double x, double y) const
 {
   bounding_box_=new vsol_box_2d; bounding_box_->add_point(x,y);
+}
+
+void vsol_spatial_object_2d::set_bounding_box(vsol_box_2d_sptr const& box) const
+{
+  bounding_box_=new vsol_box_2d(*box);
 }
 
 void vsol_spatial_object_2d::add_to_bounding_box(double x, double y) const
@@ -67,7 +77,7 @@ void vsol_spatial_object_2d::add_to_bounding_box(double x, double y) const
   if (!bounding_box_) bounding_box_=new vsol_box_2d; bounding_box_->add_point(x,y);
 }
 
-void vsol_spatial_object_2d::grow_minmax_bounds(vsol_box_2d & comp_box) const
+void vsol_spatial_object_2d::add_to_bounding_box(vsol_box_2d_sptr const& comp_box) const
 {
   if (!bounding_box_)
     bounding_box_=new vsol_box_2d;

@@ -27,7 +27,7 @@ vsol_spatial_object_3d::vsol_spatial_object_3d()
   set_tag_id(++tagcount_);
 }
 
-vsol_spatial_object_3d::vsol_spatial_object_3d(vsol_spatial_object_3d const &s)
+vsol_spatial_object_3d::vsol_spatial_object_3d(vsol_spatial_object_3d const& s)
   : vul_timestamp(), vbl_ref_count(), tag_(0), id_(s.get_id()), bounding_box_(0)
 {
   set_tag_id(++tagcount_);
@@ -57,9 +57,19 @@ void vsol_spatial_object_3d::compute_bounding_box() const
   if (!bounding_box_) bounding_box_=new vsol_box_3d; bounding_box_->touch();
 }
 
+void vsol_spatial_object_3d::empty_bounding_box() const
+{
+  bounding_box_=new vsol_box_3d;
+}
+
 void vsol_spatial_object_3d::set_bounding_box(double x, double y, double z) const
 {
   bounding_box_=new vsol_box_3d; bounding_box_->add_point(x,y,z);
+}
+
+void vsol_spatial_object_3d::set_bounding_box(vsol_box_3d_sptr const& box) const
+{
+  bounding_box_=new vsol_box_3d(*box);
 }
 
 void vsol_spatial_object_3d::add_to_bounding_box(double x, double y, double z) const
@@ -67,7 +77,7 @@ void vsol_spatial_object_3d::add_to_bounding_box(double x, double y, double z) c
   if (!bounding_box_) bounding_box_=new vsol_box_3d; bounding_box_->add_point(x,y,z);
 }
 
-void vsol_spatial_object_3d::grow_minmax_bounds(vsol_box_3d & comp_box) const
+void vsol_spatial_object_3d::add_to_bounding_box(vsol_box_3d_sptr const& comp_box) const
 {
   if (!bounding_box_)
     bounding_box_=new vsol_box_3d;
@@ -84,7 +94,7 @@ void vsol_spatial_object_3d::check_update_bounding_box() const
 {
   if (!bounding_box_)
   {
-    bounding_box_=new vsol_box_3d;
+    bounding_box_ = new vsol_box_3d;
     this->compute_bounding_box();
     bounding_box_->touch();
     return;
