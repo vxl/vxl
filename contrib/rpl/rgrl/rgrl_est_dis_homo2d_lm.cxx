@@ -14,6 +14,7 @@
 #include <vnl/vnl_double_2x2.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_matrix_fixed.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_fastops.h>
 #include <vnl/vnl_least_squares_function.h>
@@ -23,9 +24,9 @@
 #include <vcl_cassert.h>
 
 static
-inline 
+inline
 void
-H2h( vnl_matrix_fixed<double, 3, 3>const& H, vnl_vector<double>& h )
+H2h( vnl_matrix_fixed<double,3,3> const& H, vnl_vector<double>& h )
 {
   // h is already size 11
   // h.set_size( 9 );
@@ -35,9 +36,9 @@ H2h( vnl_matrix_fixed<double, 3, 3>const& H, vnl_vector<double>& h )
 }
 
 static
-inline 
+inline
 void
-h2H( vnl_vector<double>const& h, vnl_matrix_fixed<double, 3, 3>& H )
+h2H( vnl_vector<double> const& h, vnl_matrix_fixed<double,3,3>& H )
 {
   for ( unsigned i=0; i<3; ++i )
     for ( unsigned j=0; j<3; ++j )
@@ -59,9 +60,9 @@ map_inhomo_point( vnl_double_2& mapped, vnl_matrix_fixed<double, 3, 3> const& H,
 //: Return the jacobian of the transform.
 static
 void
-homo_wrt_loc( vnl_matrix_fixed<double, 2, 2>&        jac_loc, 
-              vnl_matrix_fixed<double, 3, 3> const&  H, 
-              vnl_vector_fixed<double, 2>    const&  from_loc )
+homo_wrt_loc( vnl_matrix_fixed<double, 2, 2> &      jac_loc,
+              vnl_matrix_fixed<double, 3, 3> const& H,
+              vnl_vector_fixed<double, 2>    const& from_loc )
 {
   // The jacobian is a 2x2 matrix with entries
   // [d(f_0)/dx   d(f_0)/dy;
@@ -75,15 +76,15 @@ homo_wrt_loc( vnl_matrix_fixed<double, 2, 2>&        jac_loc,
   // w/ respect to y
   jac_loc(0,1) = H(0,1)*( H(2,0)*from_loc[0]+H(2,2) ) - H(2,1)*( H(0,0)*from_loc[0] + H(0,2) );
   jac_loc(1,1) = H(1,1)*( H(2,0)*from_loc[0]+H(2,2) ) - H(2,1)*( H(1,0)*from_loc[0] + H(1,2) );
-  
+
   jac_loc *= (1/(mapped_w*mapped_w));
 }
 
 
 static
 void
-homo_wrt_h( vnl_matrix_fixed<double, 2, 9>&        jac_h, 
-            vnl_matrix_fixed<double, 3, 3> const&  H, 
+homo_wrt_h( vnl_matrix_fixed<double, 2, 9> &       jac_h,
+            vnl_matrix_fixed<double, 3, 3> const&  H,
             vnl_vector_fixed<double, 2>    const&  from_loc )
 {
   vnl_matrix_fixed<double, 3, 9 > jf(0.0); // homogeneous coordinate
@@ -106,12 +107,11 @@ homo_wrt_h( vnl_matrix_fixed<double, 2, 9>&        jac_h,
 
   // Apply chain rule: Jab_g(f(p)) = Jac_g * Jac_f
   jac_h = jg * jf;
-
-}  
+}
 
 // distort image coordinate
 static
-inline 
+inline
 void
 distort( vnl_double_2& dis_loc, vnl_double_2 const& true_loc, double k1 )
 {
@@ -130,19 +130,18 @@ distort_wrt_k1( vnl_double_2& jac_k1, vnl_double_2 const& true_loc )
 }
 
 
-// jacobian w.r.t location 
+// jacobian w.r.t location
 static
 inline
 void
 distort_wrt_loc( vnl_double_2x2& jac_loc, vnl_double_2 const& true_loc, double k1 )
 {
   const double c = 1 + k1 * true_loc.squared_magnitude();
-  
+
   jac_loc(0,0) = c + 2*k1*vnl_math_sqr(true_loc[0]);
   jac_loc(1,1) = c + 2*k1*vnl_math_sqr(true_loc[1]);
   jac_loc(0,1) = jac_loc(1,0) = 2 * k1 * true_loc[0] * true_loc[1];
 }
-
 
 
 class rgrl_rad_dis_homo2d_func
@@ -188,28 +187,28 @@ f(vnl_vector<double> const& x, vnl_vector<double>& fx)
   double k1_to   = x[10];
   vnl_double_3x3  H;
   h2H( x, H );
-  
+
   unsigned int ind = 0;
   for ( unsigned ms = 0; ms<matches_ptr_->size(); ++ms )
     if ( (*matches_ptr_)[ms] != 0 ) { // if pointer is valid
 
       rgrl_match_set const& one_set = *((*matches_ptr_)[ms]);
 
-      for ( FIter fi=one_set.from_begin(); fi!=one_set.from_end(); ++fi ) {
-
+      for ( FIter fi=one_set.from_begin(); fi!=one_set.from_end(); ++fi )
+      {
         // map from point
         from = fi.from_feature()->location();
         from -= from_centre_;
-        
+
         // Step 1.
         distort( true_from, from, k1_from );
         // Step 2.
         map_inhomo_point( true_mapped, H, true_from );
-        // Step 3. 
+        // Step 3.
         distort( dis_mapped, true_mapped, k1_to );
 
-        for ( TIter ti=fi.begin(); ti!=fi.end(); ++ti ) {
-
+        for ( TIter ti=fi.begin(); ti!=fi.end(); ++ti )
+        {
           vnl_double_2 to = ti.to_feature()->location();
           to -= to_centre_;
           error_proj = ti.to_feature()->error_projector();
@@ -240,15 +239,15 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
   h2H( x, H );
 
   vnl_double_3 homo;
-  vnl_double_2x2 pu_pd; 
+  vnl_double_2x2 pu_pd;
   vnl_double_2 pu_k1_from;
   vnl_double_2x2 qu_pu;
   vnl_matrix_fixed<double, 2, 9> qu_h;
   vnl_double_2x2 qd_qu;
   vnl_double_2 qd_k1_to;
-  vnl_matrix_fixed<double, 2, 9> qd_h; 
+  vnl_matrix_fixed<double, 2, 9> qd_h;
   vnl_double_2  qd_k1_from;
-  
+
   vnl_matrix_fixed<double,2,2> error_proj;
 
   unsigned int ind = 0;
@@ -258,32 +257,32 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
 
       rgrl_match_set const& one_set = *((*matches_ptr_)[ms]);
 
-      for ( FIter fi=one_set.from_begin(); fi!=one_set.from_end(); ++fi ) {
-
+      for ( FIter fi=one_set.from_begin(); fi!=one_set.from_end(); ++fi )
+      {
         // Step 1. undistorted from coordinate and compute apu/apd
         vnl_double_2 dis_from_loc = fi.from_feature()->location();
         dis_from_loc -= from_centre_;
-        
+
         vnl_double_2 true_from_loc;
-        // make the trick: *distort* 
+        // make the trick: *distort*
         distort( true_from_loc, dis_from_loc, k1_from );
         distort_wrt_loc( pu_pd, dis_from_loc, k1_from );
         distort_wrt_k1( pu_k1_from, dis_from_loc );
-        
+
         // Step 2. homography transformation
         vnl_double_2 true_to_loc;
         map_inhomo_point( true_to_loc, H, true_from_loc );
         homo_wrt_loc( qu_pu, H, true_from_loc );
         homo_wrt_h( qu_h, H, true_from_loc );
-        
+
         // Step 3. distorted To coodinates
         distort_wrt_loc( qd_qu, true_to_loc, k1_to );
         distort_wrt_k1( qd_k1_to, true_to_loc );
-        
+
         // Steop 4. apply chain rule
         qd_h = qd_qu * qu_h;
         qd_k1_from = qd_qu * qu_pu * pu_k1_from;
-        
+
         for ( TIter ti=fi.begin(); ti!=fi.end(); ++ti ) {
           //vnl_double_2 to = ti.to_feature()->location();
           error_proj = ti.to_feature()->error_projector();
@@ -292,7 +291,7 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
           qd_k1_from = wgt * error_proj * qd_k1_from;
           qd_k1_to   = wgt * error_proj * qd_k1_to;
           qd_h       = wgt * error_proj * qd_h;
-          
+
           // fill in
           for ( unsigned i=0; i<9; i++ ) {
             jacobian(ind, i)   = qd_h(0, i);
@@ -304,7 +303,7 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
           // k1_to
           jacobian(ind, 10)   = qd_k1_to[0];
           jacobian(ind+1, 10) = qd_k1_to[1];
-          
+
           ind+=2;
         }
       }
@@ -335,9 +334,9 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // get initialization
   vnl_matrix_fixed<double, 3, 3> init_H;
   double k1_from = 0, k1_to = 0;
-  
-  if ( cur_transform.is_type( rgrl_trans_rad_dis_homo2d::type_id() ) ) {
-    
+
+  if ( cur_transform.is_type( rgrl_trans_rad_dis_homo2d::type_id() ) )
+  {
     rgrl_trans_rad_dis_homo2d const& trans = static_cast<rgrl_trans_rad_dis_homo2d const&>( cur_transform );
     init_H = trans.H();
     k1_from = trans.k1_from();
@@ -346,9 +345,9 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     // check centre
     assert( from_centre_ == trans.from_centre() );
     assert( to_centre_ == trans.to_centre() );
-  
-  } else if ( cur_transform.is_type( rgrl_trans_homography2d::type_id() ) ) {
-    
+  }
+  else if ( cur_transform.is_type( rgrl_trans_homography2d::type_id() ) )
+  {
     rgrl_trans_homography2d const& trans = static_cast<rgrl_trans_homography2d const&>( cur_transform );
     init_H = trans.H();
 
@@ -366,9 +365,9 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     from_inv(1,2) = from_centre_[1];
 
     init_H = to_trans * init_H * from_inv;
-  
-  }else {
-    
+  }
+  else
+  {
     // cannot get initial transform
     // return NULL
     return 0;
@@ -387,17 +386,17 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     }
 
   DebugMacro( 3, "From center: " << from_centre_
-               <<"  To center: " << to_centre_ << vcl_endl );
+              << "  To center: " << to_centre_ << vcl_endl );
 
   // normalize H
   init_H /= init_H.array_two_norm();
-  
+
   // convert to vector form
   vnl_vector<double> p( 11, 0.0 );
   H2h( init_H, p );
   p[9] = k1_from;
   p[10] = k1_to;
-  
+
   // construct least square cost function
   rgrl_rad_dis_homo2d_func dis_homo_func( matches, tot_num, with_grad_ );
   dis_homo_func.set_centres( from_centre_, to_centre_ );
@@ -426,7 +425,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   k1_to   = p[10];
   // normalize H
   init_H /= init_H.array_two_norm();
-  
+
   // compute covariance
   // JtJ is INVERSE of jacobian
   // vnl_svd<double> svd( lm.get_JtJ(), 1e-4 );

@@ -5,6 +5,7 @@
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_det.h>
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_vector_fixed.h>
 
 template<class T>
 void bugl_gaussian_point_3d<T>::set_covariant_matrix(vnl_matrix_fixed<T, 3, 3> const& s)

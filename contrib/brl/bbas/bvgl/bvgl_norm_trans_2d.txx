@@ -6,6 +6,7 @@
 
 #include "bvgl_norm_trans_2d.h"
 #include <vgl/vgl_point_2d.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vcl_iostream.h>
 
 //--------------------------------------------------------------
@@ -80,10 +81,10 @@ compute_from_points(vcl_vector<vgl_homg_point_2d<T> > const& points)
   vcl_vector<vgl_homg_point_2d<T> > temp;
   typedef typename vcl_vector<vgl_homg_point_2d<T> >::const_iterator iter;
   for (iter pit = points.begin(); pit != points.end(); pit++)
-    {
-      vgl_homg_point_2d<T> p((*this)(*pit));
-      temp.push_back(p);
-    }
+  {
+    vgl_homg_point_2d<T> p((*this)(*pit));
+    temp.push_back(p);
+  }
   //Points might be coincident
   T radius;
   if (!this->scale_xyroot2(temp, radius))
@@ -117,7 +118,7 @@ center_of_mass(vcl_vector<vgl_homg_point_2d<T> > const& in, T& cx, T& cy)
   T tol = 1e-06;
   unsigned n = in.size();
   for (unsigned i = 0; i < n; ++i)
-    {
+  {
     if (in[i].ideal(tol))
       continue;
     vgl_point_2d<T> p(in[i]);
@@ -126,7 +127,7 @@ center_of_mass(vcl_vector<vgl_homg_point_2d<T> > const& in, T& cx, T& cy)
     cog_x += x;
     cog_y += y;
     ++cog_count;
-    }
+  }
   if (cog_count > 0) {
     cog_x /= cog_count;
     cog_y /= cog_count;
@@ -148,20 +149,20 @@ scale_xyroot2(vcl_vector<vgl_homg_point_2d<T> > const& in, T& radius)
   T tol = T(1e-06);
   radius = T(0);
   for (unsigned i = 0; i < in.size(); ++i)
-    {
-      if (in[i].ideal(tol))
-        continue;
-      vgl_point_2d<T> p(in[i]);
-      vnl_vector_fixed<T, 2> v(p.x(), p.y());
-      magnitude += v.magnitude();
-      ++numfinite;
-    }
+  {
+    if (in[i].ideal(tol))
+      continue;
+    vgl_point_2d<T> p(in[i]);
+    vnl_vector_fixed<T, 2> v(p.x(), p.y());
+    magnitude += v.magnitude();
+    ++numfinite;
+  }
 
   if (numfinite > 0)
-    {
-      radius = magnitude / numfinite;
-      return radius>=tol;
-    }
+  {
+    radius = magnitude / numfinite;
+    return radius>=tol;
+  }
   return false;
 }
 

@@ -7,6 +7,7 @@
 #include <vcl_cmath.h> // for sqrt
 
 #include <vnl/vnl_matrix_fixed.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_2x2.h>
