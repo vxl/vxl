@@ -61,12 +61,12 @@ void golden_test_vgl_io(bool save_file=false);
   #include <vgl/vgl_test.h>
 #endif
 
-float epsilon(float f)
+float epsilon(float)
 {
 return 1e-5f;
 }
 
-double epsilon(double d)
+double epsilon(double)
 {
 return 1e-14f;
 }
