@@ -69,7 +69,7 @@ class vgl_homg_plane_3d
   //: Return \a z coefficient
   inline Type c() const {return c_;}
   inline Type nz() const {return c_;}
-  //: Return homogenous scaling coefficient
+  //: Return homogeneous scaling coefficient
   inline Type d() const {return d_;}
 
   //: Set equation \a a*x+b*y+c*z+d*w=0
