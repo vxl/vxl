@@ -1,3 +1,7 @@
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
 USES := vxl
 USES += mul
 LIBRARY := vgl-io
@@ -23,6 +27,6 @@ ifndef NOTEST
 SUBDIRS += tests
 endif
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################
