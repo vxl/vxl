@@ -1,9 +1,8 @@
 # segmentation tracking library
 # brl/bseg/strk/CMakeLists.txt
-
-INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
+INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )
 
 SET(strk_sources
     strk_tracker_params.cxx      strk_tracker_params.h
@@ -32,5 +31,4 @@ AUX_SOURCE_DIRECTORY(Templates strk_sources)
 
 ADD_LIBRARY(strk ${strk_sources})
 
-TARGET_LINK_LIBRARIES(strk sdet brip vpro bsol btol bdgl gevd vdgl vtol vsol vil1 vgl_algo vnl vbl)
-
+TARGET_LINK_LIBRARIES(strk sdet brip vpro btol gevd vdgl vtol vsol vil1 vgl_algo vnl vul vbl)
