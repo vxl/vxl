@@ -155,6 +155,13 @@ vil2_image_view<vil_byte> filtered_image = vil2_transpose(tmp_image2);
 * - vil2_algo_sobel_3x3 - to generate X/Y gradient images using 3x3 Sobel operators
 * - vil2_algo_gauss_reduce - smooth and sub-sample to produce half sized image
 *
+* \subsection interp Interpolating images
+* Bilinear interpolation (of single planes of scalar types) can be obtained using
+* - vil2_bilin_interp : Interpolate, assuming point in valid region (seg fault otherwise)
+* - vil2_safe_bilin_interp : Interpolate, returning zero if outside image
+* - vil2_assert_bilin_interp : Intepolate, using assert to check if in valid region
+* - vil2_safe_extend_bilin_interp : Interpolate, returning nearest edge value if outside
+*
 * \section reg_im Registered images
 * These meet two needs, a common base class for 2D and 3D images, and a means of
 * associating a world to image transform with an image.
