@@ -191,8 +191,8 @@ WeightedPerimeterLength()
     // Block-copied from intensity face rather than undergo the pain
     // of adding a "weighted" boolean parameter
     edge_list*  edges = face_->edges();
-    float    p = 0.0f;
-    float    intensity_sum = 1.0f;
+    double p = 0.0;
+    double intensity_sum = 1.0;
 
     if (edges)
     {
@@ -203,10 +203,10 @@ WeightedPerimeterLength()
         if (e)
         {
           // Leave at default of 1.0 if no adjacent face
-          float  int_grad =
-            get_contrast_across_edge(e->cast_to_edge(), 1.0f);
+          double  int_grad =
+            get_contrast_across_edge(e->cast_to_edge(), 1.0);
 
-          p += float(e->curve()->length()) * int_grad;
+          p += e->curve()->length() * int_grad;
           intensity_sum += int_grad;
         }
       }
@@ -215,7 +215,7 @@ WeightedPerimeterLength()
       delete edges;
     }
 
-    weighted_peri_length_ = p / intensity_sum;
+    weighted_peri_length_ = float(p / intensity_sum);
   }
 
   return weighted_peri_length_;
@@ -227,10 +227,8 @@ Complexity()
   float  area = this->Area();
   float  len = this->PerimeterLength();
 
-  if ((complexity_ < 0) && (len >= 0) && (area >= 0))
-  {
+  if (complexity_ < 0 && len >= 0 && area > 0)
     complexity_ = len * len / area;
-  }
 
   return complexity_;
 }
@@ -241,7 +239,7 @@ WeightedComplexity()
   float  area = this->Area();
   float  len = this->WeightedPerimeterLength();
 
-  if (weighted_complexity_ < 0 && len >= 0 && area >= 0)
+  if (weighted_complexity_ < 0 && len >= 0 && area > 0)
     weighted_complexity_ = len * len / area;
 
   return weighted_complexity_;
@@ -254,11 +252,9 @@ TwoPeakParallel()
   {
     SetNP();
 
-    float  max_angle;
-    float  std_dev;
-    float  scale;
     for (int i = 0; i < 1; i++)
     {
+      float  max_angle, std_dev, scale;
       npobj_->map_gaussian(max_angle, std_dev, scale);
       npobj_->remove_gaussian(max_angle, std_dev, scale);
     }
@@ -276,11 +272,9 @@ FourPeakParallel()
   {
     SetNP();
 
-    float  max_angle;
-    float  std_dev;
-    float  scale;
     for (int i = 0; i < 3; i++)
     {
+      float  max_angle, std_dev, scale;
       npobj_->map_gaussian(max_angle, std_dev, scale);
       npobj_->remove_gaussian(max_angle, std_dev, scale);
     }
@@ -320,7 +314,7 @@ ComputeCacheValues()
   if (real_min > real_max)
   {
     real_min = 0.0f;
-    real_max = 1.0f;  // Superstitous, probably could also be zero?
+    real_max = 1.0f;  // Superstitious, probably could also be zero?
   }
 
   int        max_bins = int(real_max - real_min + 1);
@@ -333,7 +327,7 @@ ComputeCacheValues()
     intensity_hist.UpCount(pval);
   }
 
-#if 0
+#ifdef DEBUG
   vcl_cout << "vifa::ComputeCacheValues(): start dump:\n";
   intensity_hist.Print();
   vcl_cout << "LowClipVal: " << intensity_hist.LowClipVal(0.1) << vcl_endl
@@ -348,7 +342,7 @@ ComputeCacheValues()
   cached_max_ = normalize_intensity(intensity_hist.LowClipVal(0.9f));
   cached_mean_ = normalize_intensity(face_->Io());
 
-  float          sum = 0.0f;
+  float sum = 0.0f;
   const unsigned short*  pvals = face_->Ij();
 
   for (int i = 0; i < face_->Npix(); i++)
@@ -371,7 +365,7 @@ SetNP()
     vcl_vector<vtol_intensity_face_sptr>  faces;
     faces.push_back(face_);
 
-    const bool  contrast = true;
+    static bool  contrast = true;
     npobj_ = new vifa_parallel(faces, contrast);
   }
 }
