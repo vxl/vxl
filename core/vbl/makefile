@@ -8,6 +8,7 @@ LIBRARY := vbl
 VERSION := 1.0
 
 SOURCES += vbl_bool_ostream.cxx
+SOURCES += vbl_ref_count.cxx
 SOURCES += vbl_sort.cxx
 SOURCES += vbl_qsort.cxx
 SOURCES += vbl_shared_pointer.cxx
