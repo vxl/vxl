@@ -21,8 +21,11 @@
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vtol/vtol_intensity_face_sptr.h>
 #include <vgui/vgui_wrapper_tableau.h>
+#include <vgui/vgui_grid_tableau_sptr.h>
+#include <vgui/vgui_rubberband_tableau_sptr.h>
+#include <bgui/bgui_picker_tableau_sptr.h>
 #include <bgui/bgui_vtol2D_tableau_sptr.h>
-#include <bgui/bgui_picker_tableau.h>
+#include <bgui/bgui_image_tableau_sptr.h>
 
 class vgui_window;
 
@@ -50,6 +53,9 @@ class segv_segmentation_manager : public vgui_wrapper_tableau
   void test_digital_lines();
   void display_IHS();
   void display_epi_region_image();
+  void compute_mutual_info();
+  void create_box();
+  void create_polygon();
 #if 0
 #ifdef HAS_XERCES
   void read_xml_edges();
@@ -72,13 +78,22 @@ class segv_segmentation_manager : public vgui_wrapper_tableau
                     bool verts=false);
   void draw_points(vcl_vector<vsol_point_2d_sptr> const & points,
                    float r, float g, float b, int radius);
+
+  void set_selected_grid_image(vil1_image& image);
+  void add_image(vil1_image& image);
+  vil1_image selected_image();
+  vil1_image image_at(const unsigned col, const unsigned row);
+  bgui_image_tableau_sptr selected_image_tab();
+  bgui_vtol2D_tableau_sptr selected_vtol2D_tab();
+  bgui_picker_tableau_sptr selected_picker_tab();
+  vgui_rubberband_tableau_sptr selected_rubber_tab();
  private:
   //flags
-
-  vil1_image img_;
+  bool first_; //first image load
+  unsigned row_; //row where last box or polygon created
+  unsigned col_; //col where last box or polygon created
   vgui_window* win_;
-  bgui_vtol2D_tableau_sptr t2D_;
-  bgui_picker_tableau_sptr picktab_; //for manually picking grid points
+  vgui_grid_tableau_sptr grid_;
   static segv_segmentation_manager *instance_;
 };
 

@@ -34,6 +34,9 @@ class segv_menus
   SEGV_DLL_DATA static void test_camera_parms_callback();
   SEGV_DLL_DATA static void display_IHS_callback();
   SEGV_DLL_DATA static void display_epi_region_image_callback();
+  SEGV_DLL_DATA static void compute_mutual_info_callback();
+  SEGV_DLL_DATA static void create_box_callback();
+  SEGV_DLL_DATA static void create_polygon_callback();
 #if 0
 #ifdef HAS_XERCES
   SEGV_DLL_DATA static void read_xml_edges_callback();

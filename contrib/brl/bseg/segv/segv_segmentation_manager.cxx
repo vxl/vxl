@@ -8,9 +8,10 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vbl/vbl_array_2d.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_load.h>
 #include <vil1/vil1_crop.h>
-#include <vil1/vil1_memory_image_of.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #if 0
@@ -35,13 +36,14 @@
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_macro.h>
-#include <vgui/vgui_image_tableau.h>
-#include <bgui/bgui_image_tableau.h>
-#include <vgui/vgui_easy2D_tableau.h>
-#include <bgui/bgui_picker_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
+#include <vgui/vgui_grid_tableau.h>
+#include <vgui/vgui_rubberband_tableau.h>
 #include <vgui/vgui_soview.h>
+#include <bgui/bgui_image_tableau.h>
+#include <bgui/bgui_vtol2D_tableau.h>
+#include <bgui/bgui_picker_tableau.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_curve_2d.h>
@@ -49,12 +51,13 @@
 #include <vtol/vtol_one_chain_sptr.h>
 #include <vtol/vtol_one_chain.h>
 #include <vtol/vtol_intensity_face.h>
-#include <bgui/bgui_vtol2D_tableau.h>
 #include <brip/brip_float_ops.h>
 #include <bsol/bsol_hough_line_index.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
 #include <strk/strk_epipolar_grouper.h>
+#include <strk/strk_info_tracker_params.h>
+#include <strk/strk_info_tracker.h>
 
 segv_segmentation_manager *segv_segmentation_manager::instance_ = 0;
 
@@ -73,6 +76,7 @@ segv_segmentation_manager *segv_segmentation_manager::instance()
 //
 segv_segmentation_manager::segv_segmentation_manager():vgui_wrapper_tableau()
 {
+  first_ = true;
 }
 
 segv_segmentation_manager::~segv_segmentation_manager()
@@ -82,15 +86,149 @@ segv_segmentation_manager::~segv_segmentation_manager()
 //: Set up the tableaux
 void segv_segmentation_manager::init()
 {
-  vgui_image_tableau_sptr itab = bgui_image_tableau_new();
-  t2D_ = bgui_vtol2D_tableau_new(itab);
-  //  t2D_->set_edge_style(0.0, 0.0, 0.0, 2.0);
-  picktab_ = bgui_picker_tableau_new(t2D_);
-  vgui_viewer2D_tableau_sptr v2d = vgui_viewer2D_tableau_new(picktab_);
-  vgui_shell_tableau_sptr shell = vgui_shell_tableau_new(v2d);
+  bgui_image_tableau_sptr itab = bgui_image_tableau_new();
+  bgui_vtol2D_tableau_sptr t2D = bgui_vtol2D_tableau_new(itab);
+  bgui_vtol2D_rubberband_client* rcl =  new bgui_vtol2D_rubberband_client(t2D);
+  vgui_rubberband_tableau_sptr rubber = vgui_rubberband_tableau_new(rcl);
+  vgui_composite_tableau_new comp(t2D,rubber);
+  bgui_picker_tableau_sptr picktab = bgui_picker_tableau_new(comp);
+  vgui_viewer2D_tableau_sptr v2D = vgui_viewer2D_tableau_new(picktab);
+  grid_ = vgui_grid_tableau_new(1,1);
+  grid_->set_grid_size_changeable(true);
+  grid_->add_at(v2D, 0, 0);
+  vgui_shell_tableau_sptr shell = vgui_shell_tableau_new(grid_);
   this->add_child(shell);
+  first_ = true;
 }
 
+//: set the image at the currently selected grid cell
+void segv_segmentation_manager::set_selected_grid_image(vil1_image& image)
+{
+  bgui_image_tableau_sptr itab = this->selected_image_tab();
+  if(!itab)
+    return; 
+  itab->set_image(image);
+  itab->post_redraw();
+}
+
+//: Add an image to the currently selected grid cell
+void segv_segmentation_manager::add_image(vil1_image& image)
+{
+  vgui_image_tableau_sptr itab = bgui_image_tableau_new(image);
+  bgui_vtol2D_tableau_sptr t2D = bgui_vtol2D_tableau_new(itab);
+  bgui_vtol2D_rubberband_client* rcl =  new bgui_vtol2D_rubberband_client(t2D);
+  vgui_rubberband_tableau_sptr rubber = vgui_rubberband_tableau_new(rcl);
+  vgui_composite_tableau_new comp(t2D,rubber);
+  bgui_picker_tableau_sptr picktab = bgui_picker_tableau_new(comp);
+  vgui_viewer2D_tableau_sptr v2D = vgui_viewer2D_tableau_new(picktab);
+  unsigned row=0, col=0;
+  grid_->get_last_selected_position(&col, &row);
+  grid_->add_at(v2D, col, row);
+  itab->post_redraw();
+}
+//: Get the image tableau for the currently selected grid cell
+bgui_image_tableau_sptr segv_segmentation_manager::selected_image_tab()
+{
+  unsigned row=0, col=0;
+  grid_->get_last_selected_position(&col, &row);
+  vgui_tableau_sptr top_tab = grid_->get_tableau_at(col, row);
+  if (top_tab)
+  {
+    bgui_image_tableau_sptr itab;
+    itab.vertical_cast(vgui_find_below_by_type_name(top_tab, 
+      vcl_string("vgui_image_tableau")));
+    if (itab)
+      return itab;
+  }
+  vcl_cout << "Unable to get bgui_image_tableau at (" << col
+                     << ", " << row << ")\n";
+  return bgui_image_tableau_sptr();
+}
+
+//: Get the vtol2D tableau for the currently selected grid cell
+bgui_vtol2D_tableau_sptr segv_segmentation_manager::selected_vtol2D_tab()
+{
+  unsigned row=0, col=0;
+  grid_->get_last_selected_position(&col, &row);
+  vgui_tableau_sptr top_tab = grid_->get_tableau_at(col, row);
+  if (top_tab)
+  {
+    bgui_vtol2D_tableau_sptr v2D;
+    v2D.vertical_cast(vgui_find_below_by_type_name(top_tab, 
+      vcl_string("bgui_vtol2D_tableau")));
+    if (v2D)
+      return v2D;
+  }
+  vcl_cout << "Unable to get bgui_vtol2D_tableau at (" << col
+                     << ", " << row << ")\n";
+  return bgui_vtol2D_tableau_sptr();
+}
+
+//: Get the picker tableau for the currently selected grid cell
+bgui_picker_tableau_sptr segv_segmentation_manager::selected_picker_tab()
+{
+  unsigned row=0, col=0;
+  grid_->get_last_selected_position(&col, &row);
+  vgui_tableau_sptr top_tab = grid_->get_tableau_at(col, row);
+  if (top_tab)
+  {
+    bgui_picker_tableau_sptr pick;
+    pick.vertical_cast(vgui_find_below_by_type_name(top_tab, 
+      vcl_string("bgui_picker_tableau")));
+    if (pick)
+      return pick;
+  }
+  vcl_cout << "Unable to get bgui_picker_tableau at (" << col
+                     << ", " << row << ")\n";
+  return bgui_picker_tableau_sptr();
+}
+
+//: Get the rubberband tableau at the selected grid cell
+vgui_rubberband_tableau_sptr segv_segmentation_manager::selected_rubber_tab()
+{
+  unsigned row=0, col=0;
+  grid_->get_last_selected_position(&col, &row);
+  vgui_tableau_sptr top_tab = grid_->get_tableau_at(col, row);
+  if (top_tab)
+  {
+    vgui_rubberband_tableau_sptr rubber;
+    rubber.vertical_cast(vgui_find_below_by_type_name(top_tab, 
+      vcl_string("vgui_rubberband_tableau")));
+    if (rubber)
+      return rubber;
+  }
+  vcl_cout << "Unable to get vgui_rubberband_tableau at (" << col
+                     << ", " << row << ")\n";
+  return vgui_rubberband_tableau_sptr();
+}
+
+vil1_image segv_segmentation_manager::selected_image()
+{
+  bgui_image_tableau_sptr itab = this->selected_image_tab();
+  if(!itab)
+    return vil1_image();
+  return itab->get_image();
+}
+
+vil1_image segv_segmentation_manager::image_at(const unsigned col, 
+                                               const unsigned row)
+{
+  vgui_tableau_sptr top_tab = grid_->get_tableau_at(col, row);
+  if(!top_tab)
+    return vil1_image();
+  
+  bgui_image_tableau_sptr itab;
+  itab.vertical_cast(vgui_find_below_by_type_name(top_tab, 
+                     vcl_string("vgui_image_tableau")));
+  if (!itab)
+    {
+      vcl_cout << "Unable to get bgui_image_tableau at (" << col
+               << ", " << row << ")\n";
+      return vil1_image();
+    }  
+  return itab->get_image();
+}
+    
 void segv_segmentation_manager::quit()
 {
   vcl_exit(1);
@@ -107,15 +245,19 @@ void segv_segmentation_manager::load_image()
   if (!load_image_dlg.ask())
     return;
 
-  vil1_image temp = vil1_load(image_filename.c_str());
+  vil1_image temp = vil1_load(image_filename.c_str()), image;
 
   if (greyscale)
-    img_ = brip_float_ops::convert_to_grey(temp);
+    image = brip_float_ops::convert_to_grey(temp);
   else
-    img_ = temp;
-
-  t2D_->get_image_tableau()->set_image(img_);
-  t2D_->post_redraw();
+    image = temp;
+  if(first_)
+    {
+      this->set_selected_grid_image(image);
+      first_ = false;
+    }
+  else
+    this->add_image(image);
 }
 
 //-----------------------------------------------------------------------------
@@ -123,9 +265,10 @@ void segv_segmentation_manager::load_image()
 //-----------------------------------------------------------------------------
 void segv_segmentation_manager::clear_display()
 {
-  if (!t2D_)
+  bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
+  if (!t2D)
     return;
-  t2D_->clear_all();
+  t2D->clear_all();
 }
 
 //-----------------------------------------------------------------------------
@@ -135,10 +278,11 @@ void
 segv_segmentation_manager::draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges,
                                       bool verts)
 {
-  if (!t2D_)
+  bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
+  if (!t2D)
     return;
   this->clear_display();
-  vgui_image_tableau_sptr itab = t2D_->get_image_tableau();
+  vgui_image_tableau_sptr itab = t2D->get_image_tableau();
   if (!itab)
   {
     vcl_cout << "In segv_segmentation_manager::draw_edges - null image tab\n";
@@ -147,23 +291,23 @@ segv_segmentation_manager::draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges,
   for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
        eit != edges.end(); eit++)
   {
-    t2D_->add_edge(*eit);
+    t2D->add_edge(*eit);
     //optionally display the edge vertices
     if (verts)
     {
       if ((*eit)->v1())
       {
         vtol_vertex_2d_sptr v1 = (*eit)->v1()->cast_to_vertex_2d();
-        t2D_->add_vertex(v1);
+        t2D->add_vertex(v1);
       }
       if ((*eit)->v2())
       {
         vtol_vertex_2d_sptr v2 = (*eit)->v2()->cast_to_vertex_2d();
-        t2D_->add_vertex(v2);
+        t2D->add_vertex(v2);
       }
     }
   }
-  t2D_->post_redraw();
+  t2D->post_redraw();
 }
 
 //-----------------------------------------------------------------------------
@@ -172,10 +316,11 @@ segv_segmentation_manager::draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges,
 void segv_segmentation_manager::
 draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines)
 {
-  if (!t2D_)
+  bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
+  if (!t2D)
     return;
   //this->clear_display();
-  vgui_image_tableau_sptr itab = t2D_->get_image_tableau();
+  vgui_image_tableau_sptr itab = t2D->get_image_tableau();
   if (!itab)
   {
     vcl_cout << "In segv_segmentation_manager::draw_edges - null image tab\n";
@@ -184,10 +329,10 @@ draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines)
   for (vcl_vector<vsol_line_2d_sptr>::const_iterator lit = lines.begin();
        lit != lines.end(); lit++)
   {
-    t2D_->add_vsol_line_2d(*lit);
+    t2D->add_vsol_line_2d(*lit);
   }
 
-  t2D_->post_redraw();
+  t2D->post_redraw();
 }
 
 //-----------------------------------------------------------------------------
@@ -196,10 +341,11 @@ draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines)
 void segv_segmentation_manager::
 draw_polylines(vcl_vector<vsol_polyline_2d_sptr > const& polys)
 {
-  if (!t2D_)
+  bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
+  if (!t2D)
     return;
   //this->clear_display();
-  vgui_image_tableau_sptr itab = t2D_->get_image_tableau();
+  vgui_image_tableau_sptr itab = t2D->get_image_tableau();
   if (!itab)
   {
     vcl_cout << "In segv_segmentation_manager::draw_edges - null image tab\n";
@@ -208,10 +354,10 @@ draw_polylines(vcl_vector<vsol_polyline_2d_sptr > const& polys)
   for (vcl_vector<vsol_polyline_2d_sptr>::const_iterator pit = polys.begin();
        pit != polys.end(); pit++)
   {
-    t2D_->add_vsol_polyline_2d(*pit);
+    t2D->add_vsol_polyline_2d(*pit);
   }
 
-  t2D_->post_redraw();
+  t2D->post_redraw();
 }
 
 //-----------------------------------------------------------------------------
@@ -221,10 +367,11 @@ void segv_segmentation_manager::
 draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines,
            float r, float g, float b, int width)
 {
-  if (!t2D_)
+  bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
+  if (!t2D)
     return;
   //this->clear_display();
-  vgui_image_tableau_sptr itab = t2D_->get_image_tableau();
+  vgui_image_tableau_sptr itab = t2D->get_image_tableau();
   if (!itab)
   {
     vcl_cout << "In segv_segmentation_manager::draw_edges - null image tab\n";
@@ -233,10 +380,10 @@ draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines,
   for (vcl_vector<vsol_line_2d_sptr>::const_iterator lit = lines.begin();
        lit != lines.end(); lit++)
   {
-    t2D_->add_vsol_line_2d(*lit,r,g,b,width);
+    t2D->add_vsol_line_2d(*lit,r,g,b,width);
   }
 
-  t2D_->post_redraw();
+  t2D->post_redraw();
 }
 
 //-----------------------------------------------------------------------------
@@ -245,10 +392,11 @@ draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines,
 void segv_segmentation_manager::
 draw_points(vcl_vector<vsol_point_2d_sptr> const& points, float r, float g, float b, int radius)
 {
-  if (!t2D_)
+  bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
+  if (!t2D)
     return;
   //this->clear_display();
-  vgui_image_tableau_sptr itab = t2D_->get_image_tableau();
+  vgui_image_tableau_sptr itab = t2D->get_image_tableau();
   if (!itab)
   {
     vcl_cout << "In segv_segmentation_manager::draw_edges - null image tab\n";
@@ -257,20 +405,23 @@ draw_points(vcl_vector<vsol_point_2d_sptr> const& points, float r, float g, floa
   for (vcl_vector<vsol_point_2d_sptr>::const_iterator pit = points.begin();
        pit != points.end(); pit++)
   {
-    t2D_->add_vsol_point_2d(*pit,r,g,b,radius);
+    t2D->add_vsol_point_2d(*pit,r,g,b,radius);
   }
 
-  t2D_->post_redraw();
+  t2D->post_redraw();
 }
 
 void segv_segmentation_manager::draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions,
                                              bool verts)
 {
+  bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
+  if(!t2D)
+    return;
   for (vcl_vector<vtol_intensity_face_sptr>::iterator rit = regions.begin();
        rit != regions.end(); rit++)
   {
     vtol_face_2d_sptr f = (*rit)->cast_to_face_2d();
-    t2D_->add_face(f);
+    t2D->add_face(f);
     if (verts)
     {
       vcl_vector<vtol_vertex_sptr>* vts = f->vertices();
@@ -278,46 +429,61 @@ void segv_segmentation_manager::draw_regions(vcl_vector<vtol_intensity_face_sptr
            vit != vts->end(); vit++)
       {
         vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
-        t2D_->add_vertex(v);
+        t2D->add_vertex(v);
       }
       delete vts;
     }
   }
-  t2D_->post_redraw();
+  t2D->post_redraw();
 }
 
 void segv_segmentation_manager::original_image()
 {
+#if 0
   if (img_)
   {
-    t2D_->get_image_tableau()->set_image(img_);
-    t2D_->post_redraw();
+    t2D->get_image_tableau()->set_image(img_);
+    t2D->post_redraw();
   }
+#endif
 }
 
 void segv_segmentation_manager::roi()
 {
+  vil1_image img = selected_image();
+  if (!img)
+  {
+    vcl_cout << "In segv_segmentation_manager::roi() - no image\n";
+    return;
+  }
   float x0=0, y0=0, x1=0, y1=0;
-
+  bgui_picker_tableau_sptr picktab = this->selected_picker_tab();
   vcl_cout << "Choose upper left corner of ROI.\n";
-  picktab_->pick_point(&x0,&y0);
+  picktab->pick_point(&x0,&y0);
   vcl_cout << "picked (x="<<x0<<", y="<<y0<<")\n"
            << "Choose lower right corner of ROI.\n";
-  picktab_->pick_point(&x1,&y1);
+  picktab->pick_point(&x1,&y1);
   vcl_cout << "picked (x="<<x1<<", y="<<y1<<")\n";
   if ( (x1 > x0) && (y1 > y0) )
   {
     int w = int(x1 - x0);
     int h = int(y1 - y0);
-    vil1_image cropped = vil1_crop(img_,int(x0),int(y0),w,h);
+    vil1_image cropped = vil1_crop(img,int(x0),int(y0),w,h);
     vcl_cout << "cropped x=" <<x0<<" y=" <<y0<< " w=" <<w<<" h=" <<h<< '\n';
+#if 0
     if (cropped)
     {
-      img_ = cropped;
-      t2D_->get_image_tableau()->set_image(cropped);
-      t2D_->post_redraw();
+      img = cropped;
+      t2D->get_image_tableau()->set_image(cropped);
+      t2D->post_redraw();
       return;
     }
+#endif
+    if (cropped)
+      {
+        this->add_image(cropped);
+        return;
+      }
     vcl_cout << "crop failed.\n";
     return;
   }
@@ -327,7 +493,8 @@ void segv_segmentation_manager::roi()
 
 void segv_segmentation_manager::gaussian()
 {
-  if (!img_)
+  vil1_image img = selected_image();
+  if (!img)
   {
     vcl_cout << "In segv_segmentation_manager::gaussian() - no image\n";
     return;
@@ -337,12 +504,11 @@ void segv_segmentation_manager::gaussian()
   gauss_dialog.field("Gaussian sigma", sigma);
   if (!gauss_dialog.ask())
     return;
-  vil1_memory_image_of<float> input(img_);
+  vil1_memory_image_of<float> input(img);
   vil1_memory_image_of<float> smooth = brip_float_ops::gaussian(input, sigma);
   vil1_memory_image_of<unsigned char> char_smooth =
     brip_float_ops::convert_to_byte(smooth);
-  t2D_->get_image_tableau()->set_image(char_smooth);
-  t2D_->post_redraw();
+  this->add_image(char_smooth);
 }
 
 void segv_segmentation_manager::convolution()
@@ -356,7 +522,13 @@ void segv_segmentation_manager::convolution()
   vbl_array_2d<float> kernel = brip_float_ops::load_kernel(kernel_filename);
 
   //convert input image
-  vil1_memory_image_of<unsigned char> temp(img_);
+  vil1_image img = selected_image();
+  if (!img)
+  {
+    vcl_cout << "In segv_segmentation_manager::convolution() - no image\n";
+    return;
+  }
+  vil1_memory_image_of<unsigned char> temp(img);
   vil1_memory_image_of<float> temp2 = brip_float_ops::convert_to_float(temp);
 
   //convolve
@@ -367,13 +539,13 @@ void segv_segmentation_manager::convolution()
     brip_float_ops::convert_to_byte(conv);
 
   //display the image
-  t2D_->get_image_tableau()->set_image(char_conv);
-  t2D_->post_redraw();
+   this->add_image(char_conv);
 }
 
 void segv_segmentation_manager::downsample()
 {
-  if (!img_)
+  vil1_image img = selected_image();
+  if (!img)
   {
     vcl_cout << "In segv_segmentation_manager::downsample) - no image\n";
     return;
@@ -383,19 +555,19 @@ void segv_segmentation_manager::downsample()
   downsample_dialog.field("Bert-Adelson Factor", filter_factor);
   if (!downsample_dialog.ask())
     return;
-  vil1_memory_image_of<unsigned char> input(img_);
+  vil1_memory_image_of<unsigned char> input(img);
   vil1_memory_image_of<float> inputf = brip_float_ops::convert_to_float(input);
   vil1_memory_image_of<float> half_res =
     brip_float_ops::half_resolution(inputf, filter_factor);
   vil1_memory_image_of<unsigned char> char_half_res =
     brip_float_ops::convert_to_byte(half_res);
-  t2D_->get_image_tableau()->set_image(char_half_res);
-  t2D_->post_redraw();
+  this->add_image(char_half_res);
 }
 
 void segv_segmentation_manager::harris_measure()
 {
-  if (!img_)
+  vil1_image img = selected_image();
+  if (!img)
   {
     vcl_cout << "In segv_segmentation_manager::harris_measure) - no image\n";
     return;
@@ -410,21 +582,25 @@ void segv_segmentation_manager::harris_measure()
   if (!harris_dialog.ask())
     return;
   sdet_harris_detector hd(hdp);
-  hd.set_image(img_);
+  hd.set_image(img);
   hd.extract_corners();
   vcl_vector<vsol_point_2d_sptr>& points = hd.get_points();
   int N = points.size();
   if (!N)
     return;
-  t2D_->clear_all();
+  bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();  
+  if(!t2D)
+    return;
+  t2D->clear_all();
   for (int i=0; i<N; i++)
-    t2D_->add_vsol_point_2d(points[i]);
-  t2D_->post_redraw();
+    t2D->add_vsol_point_2d(points[i]);
+  t2D->post_redraw();
 }
 
 void segv_segmentation_manager::beaudet_measure()
 {
-  if (!img_)
+  vil1_image img = selected_image();
+  if (!img)
   {
     vcl_cout <<"In segv_segmentation_manager::beaudet_measure) - no image\n";
     return;
@@ -438,8 +614,8 @@ void segv_segmentation_manager::beaudet_measure()
   harris_dialog.field("range", cmax);
   if (!harris_dialog.ask())
     return;
-  int w = img_.width(), h = img_.height();
-  vil1_memory_image_of<unsigned char> input(img_);
+  int w = img.width(), h = img.height();
+  vil1_memory_image_of<unsigned char> input(img);
   vil1_memory_image_of<float> inputf = brip_float_ops::convert_to_float(input);
   vil1_memory_image_of<float> smooth = brip_float_ops::gaussian(inputf, sigma);
   vil1_memory_image_of<float> Ixx, Ixy, Iyy, b;
@@ -448,8 +624,7 @@ void segv_segmentation_manager::beaudet_measure()
   b = brip_float_ops::beaudet(Ixx, Ixy, Iyy);
   vil1_memory_image_of<unsigned char> uchar_b =
     brip_float_ops::convert_to_byte(b,0.0f, cmax);
-  t2D_->get_image_tableau()->set_image(uchar_b);
-  t2D_->post_redraw();
+  this->add_image(uchar_b);
 }
 
 void segv_segmentation_manager::vd_edges()
@@ -472,9 +647,14 @@ void segv_segmentation_manager::vd_edges()
     dp.aggressive_junction_closure=1;
   else
     dp.aggressive_junction_closure=0;
-
+  vil1_image img = selected_image();
+  if (!img)
+  {
+    vcl_cout << "In segv_segmentation_manager::vd_edges() - no image\n";
+    return;
+  }
   sdet_detector det(dp);
-  det.SetImage(img_);
+  det.SetImage(img);
 
   det.DoContour();
   vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
@@ -506,14 +686,21 @@ void segv_segmentation_manager::regions()
   else
     dp.aggressive_junction_closure=0;
 
+  vil1_image img = selected_image();
+  if (!img)
+  {
+    vcl_cout << "In segv_segmentation_manager::regions() - no image\n";
+    return;
+  }
   sdet_region_proc_params rpp(dp, true, debug, 2);
   sdet_region_proc rp(rpp);
-  rp.set_image(img_);
+  rp.set_image(img);
   rp.extract_regions();
   if (debug)
   {
     vil1_image ed_img = rp.get_edge_image();
-    vgui_image_tableau_sptr itab =  t2D_->get_image_tableau();
+#if 0
+    vgui_image_tableau_sptr itab =  t2D->get_image_tableau();
     if (!itab)
     {
       vcl_cout << "In segv_segmentation_manager::regions() - null image tableau\n";
@@ -521,6 +708,8 @@ void segv_segmentation_manager::regions()
     }
     itab->set_image(ed_img);
     itab->post_redraw();
+#endif
+    this->add_image(ed_img);
   }
   if (!debug)
   {
@@ -530,7 +719,8 @@ void segv_segmentation_manager::regions()
   if (residual)
   {
     vil1_image res_img = rp.get_residual_image();
-    vgui_image_tableau_sptr itab =  t2D_->get_image_tableau();
+#if 0
+    vgui_image_tableau_sptr itab =  t2D->get_image_tableau();
     if (!itab)
     {
       vcl_cout << "In segv_segmentation_manager::regions() - null image tableau\n";
@@ -538,6 +728,8 @@ void segv_segmentation_manager::regions()
     }
     itab->set_image(res_img);
     itab->post_redraw();
+#endif
+    this->add_image(res_img);
   }
 }
 
@@ -706,7 +898,6 @@ void segv_segmentation_manager::fit_lines()
   vd_dialog.checkbox("Matched Lines", matched_lines);
   vd_dialog.checkbox("Use Manual Point Selection",manual_pt_selection);
   vd_dialog.choice("Choose Debug Line Display", choices, gfp.debug_state_);
-
   if (!vd_dialog.ask())
     return;
   dp.noise_multiplier=nm;
@@ -716,7 +907,14 @@ void segv_segmentation_manager::fit_lines()
     dp.aggressive_junction_closure=0;
   dp.borderp = false;
   sdet_detector det(dp);
-  det.SetImage(img_);
+  vil1_image img = selected_image();
+
+  if (!img)
+  {
+    vcl_cout << "In segv_segmentation_manager::lines() - no image\n";
+    return;
+  }
+  det.SetImage(img);
 
   det.DoContour();
   vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
@@ -732,7 +930,7 @@ void segv_segmentation_manager::fit_lines()
   if (detect_grid)
   {
     sdet_grid_finder gf(gfp);
-    if (!gf.set_lines(img_.width(), img_.height(), lines))
+    if (!gf.set_lines(img.width(), img.height(), lines))
     {
       vcl_cout << "Less than two dominant groups\n";
       return;
@@ -741,13 +939,16 @@ void segv_segmentation_manager::fit_lines()
     vcl_vector<vsol_line_2d_sptr> mapped_grid_lines;
     if (manual_pt_selection)
     {
+      bgui_picker_tableau_sptr picktab = this->selected_picker_tab();  
+      if(!picktab)
+        return;
       vsol_point_2d_sptr corners[4];
       vcl_cout << "Select the four corners of the grid, starting with "
                << "the upper left and moving clockwise.\n";
       for (int p=0; p<4; p++)
       {
         float x=0, y=0;
-        picktab_->pick_point(&x,&y);
+        picktab->pick_point(&x,&y);
         vcl_cout << "corner "<< p <<" (x=" << x << ", y=" << y <<")\n";
         corners[p] = new vsol_point_2d(x,y);
       }
@@ -765,7 +966,7 @@ void segv_segmentation_manager::fit_lines()
 
     gf.compute_homography();
     // double-check grid match
-    if (!gf.check_grid_match(img_))
+    if (!gf.check_grid_match(img))
     {
       // for now just display message - if this was a video process
       // we would want to disregard this homography and move on
@@ -805,12 +1006,20 @@ void segv_segmentation_manager::read_xml_edges()
 
 void segv_segmentation_manager::test_face()
 {
-  if (!img_)
+  vil1_image img = selected_image();
+  if (!img)
+  {
+    vcl_cout << "In segv_segmentation_manager::test_face() - no image\n";
     return;
-  int sx = img_.cols(), sy = img_.rows();
-  if (sx<10 || sy<10)
+  }
+  int sx = img.cols(), sy = img.rows();
+  if (sx<10||sy<10)
     return;
-  t2D_->set_foreground(0.0, 1.0, 0.0);
+
+  bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();  
+  if(!t2D)
+    return;
+  t2D->set_foreground(0.0, 1.0, 0.0);
   vsol_point_2d_sptr pa = new vsol_point_2d(1,1);
   vsol_point_2d_sptr pb = new vsol_point_2d(sx-2,1);
   vsol_point_2d_sptr pc = new vsol_point_2d(sx-2,sy-2);
@@ -854,19 +1063,22 @@ void segv_segmentation_manager::test_face()
   edges.push_back(e31->cast_to_edge());
   vtol_one_chain_sptr t_onch = new vtol_one_chain(edges,true);
   vtol_face_2d_sptr t_f = new  vtol_face_2d(t_onch);
-  t2D_->add_face(b_f);   t2D_->add_face(t_f);
-  t2D_->set_foreground(1.0, 0.0, 0.0);
+  t2D->add_face(b_f);   t2D->add_face(t_f);
+  t2D->set_foreground(1.0, 0.0, 0.0);
   for (int x = 0; x<sx; x+=20)
     for (int y = 0; y<sy; y+=20)
     {
       vtol_vertex_2d_sptr v = new vtol_vertex_2d(x, y);
-      t2D_->add_vertex(v);
+      t2D->add_vertex(v);
     }
 }
 
 void segv_segmentation_manager::test_digital_lines()
 {
-  t2D_->set_foreground(1.0, 1.0, 0.0);
+  bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();  
+  if(!t2D)
+    return;
+  t2D->set_foreground(1.0, 1.0, 0.0);
   vsol_point_2d_sptr pa = new vsol_point_2d(0,0);
   vsol_point_2d_sptr pb = new vsol_point_2d(20,0);
   vsol_point_2d_sptr pc = new vsol_point_2d(10, 20);
@@ -878,47 +1090,42 @@ void segv_segmentation_manager::test_digital_lines()
   vdgl_digital_curve_sptr cad = new vdgl_digital_curve(pa, pd);
   vdgl_digital_curve_sptr cae = new vdgl_digital_curve(pa, pe);
   vdgl_digital_curve_sptr caf = new vdgl_digital_curve(pa, pf);
-  t2D_->add_digital_curve(cab);
-  t2D_->add_digital_curve(cac);
-  t2D_->add_digital_curve(cad);
-  t2D_->add_digital_curve(cae);
-  t2D_->add_digital_curve(caf);
+  t2D->add_digital_curve(cab);
+  t2D->add_digital_curve(cac);
+  t2D->add_digital_curve(cad);
+  t2D->add_digital_curve(cae);
+  t2D->add_digital_curve(caf);
 }
 
 void segv_segmentation_manager::display_IHS()
 {
-  if (!img_)
-    return;
-  vgui_image_tableau_sptr itab =  t2D_->get_image_tableau();
-  if (!itab)
+  vil1_image img = selected_image();
+  if (!img)
   {
-    vcl_cout << "In segv_segmentation_manager::display_IHS() - null image tableau\n";
+    vcl_cout << "In segv_segmentation_manager::display_IHS() - no image\n";
     return;
   }
   vil1_memory_image_of<float> I,H,S;
 
-  vil1_memory_image_of<vil1_rgb<unsigned char> > in_image(img_), out_image;
-  if (!in_image)
-    return;
+  vil1_memory_image_of<vil1_rgb<unsigned char> > in_image(img), out_image;
+  if(!in_image)
+  return;
   brip_float_ops::convert_to_IHS(in_image, I, H, S);
   brip_float_ops::display_IHS_as_RGB(I, H, S, out_image);
-  itab->set_image(out_image);
-  itab->post_redraw();
+  this->add_image(out_image);
 }
 
 void segv_segmentation_manager::display_epi_region_image()
 {
-  if (!img_)
-    return;
-  vgui_image_tableau_sptr itab =  t2D_->get_image_tableau();
-  if (!itab)
+  vil1_image img = selected_image();
+  if (!img)
   {
-    vcl_cout << "In segv_segmentation_manager::display_epi_region_image() - null image tableau\n";
+    vcl_cout << "In segv_segmentation_manager::display_IHS() - no image\n";
     return;
   }
-  static bool agr = false;
   static sdet_detector_params dp;
   static strk_epipolar_grouper_params egp;
+  static bool agr = false;
   dp.borderp = false;
   dp.automatic_threshold = false;
   dp.junctionp = false;
@@ -943,22 +1150,74 @@ void segv_segmentation_manager::display_epi_region_image()
     dp.aggressive_junction_closure=0;
 
   sdet_detector det(dp);
-  det.SetImage(img_);
+  det.SetImage(img);
 
   det.DoContour();
   vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
   strk_epipolar_grouper eg(egp);
   eg.init(1);//only one frame
   vil1_memory_image_of<float> flt = 
-    brip_float_ops::convert_to_float(img_);
+    brip_float_ops::convert_to_float(img);
   eg.set_image(flt);
   eg.set_edges(0, *edges);
   eg.group();
   vil1_memory_image_of<unsigned char> out = eg.epi_region_image();
   if (!out)
     return;
-  itab->set_image(out);
+  this->add_image(out);
   vcl_vector<vsol_polyline_2d_sptr> segs = eg.display_segs(0);
   this->draw_polylines(segs);
-  itab->post_redraw();
+}
+void segv_segmentation_manager::compute_mutual_info()
+{
+  static strk_info_tracker_params tp;
+  vgui_dialog tracker_dialog("Mutual Information");
+  tracker_dialog.field("Min Gradient Magnitude", tp.min_gradient_);
+  tracker_dialog.checkbox("Add Gradient Info", tp.gradient_info_);
+  tracker_dialog.checkbox("Add Color Info", tp.color_info_);
+  tracker_dialog.checkbox("Verbose", tp.verbose_);
+  tracker_dialog.checkbox("Debug", tp.debug_);
+  if (!tracker_dialog.ask())
+    return;
+  vcl_cout << tp << '\n';
+  bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
+  if (!t2D)
+    return;
+  vtol_topology_object_sptr to = t2D->get_temp();
+  if (!to)
+    {
+      vcl_cout << "In segv_segmentation_manager::compute_mutual_info() - no model\n";
+      return;
+    }
+  vtol_face_sptr f = to->cast_to_face();
+  vtol_face_2d_sptr f2d = f->cast_to_face_2d();
+  if (!f2d)
+    {
+      vcl_cout << "In segv_segmentation_manager::compute_mutual_info() - "
+               << " input is not a vtol_face_2d\n";
+      return;
+    }
+
+  vil1_image img_0 = this->image_at(col_, row_);
+  vil1_image img_i = this->image_at(col_, row_);
+  strk_info_tracker itrk(tp);
+  itrk. set_image_0(img_0);
+  itrk.set_initial_model(f2d);
+  itrk.init();
+  itrk.set_image_i(img_i);
+  itrk.evaluate_info();
+}
+
+void segv_segmentation_manager::create_box()
+{
+  vgui_rubberband_tableau_sptr rubber = this->selected_rubber_tab();
+  rubber->rubberband_box();
+  grid_->get_last_selected_position(&col_, &row_);
+}
+
+void segv_segmentation_manager::create_polygon()
+{
+  vgui_rubberband_tableau_sptr rubber = this->selected_rubber_tab();
+  rubber->rubberband_polygon();
+  grid_->get_last_selected_position(&col_, &row_);
 }

@@ -102,6 +102,21 @@ void segv_menus::display_IHS_callback()
 segv_segmentation_manager::instance()->display_IHS();
 }
 
+void segv_menus::compute_mutual_info_callback()
+{
+segv_segmentation_manager::instance()->compute_mutual_info();
+}
+
+void segv_menus::create_box_callback()
+{
+  segv_segmentation_manager::instance()->create_box();
+}
+
+void segv_menus::create_polygon_callback()
+{
+  segv_segmentation_manager::instance()->create_polygon();
+}
+
 void segv_menus::display_epi_region_image_callback()
 {
 segv_segmentation_manager::instance()->display_epi_region_image();
@@ -140,7 +155,9 @@ vgui_menu segv_menus::get_menu()
   menuedit.add("TestFace", test_face_callback);
   menuedit.add("TestDigitalCurves", test_digital_lines_callback);
   menuedit.add("Test Camera Parms",test_camera_parms_callback);
-
+  menuedit.add("Create Box", create_box_callback);
+  menuedit.add("Create Polygon", create_polygon_callback);
+  menuedit.add("Compute Mutual Info",compute_mutual_info_callback);
   //Top level menu layout
   menubar.add( "File", menufile);
   menubar.add( "View", menuview);
