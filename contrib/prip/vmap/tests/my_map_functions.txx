@@ -1,6 +1,8 @@
 #ifndef my_map_functions_txx_
 #define my_map_functions_txx_
 
+#include <vcl_iostream.h>
+
 template <class M>
 void display_tmap(const M & map)
 {

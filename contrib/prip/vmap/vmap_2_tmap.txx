@@ -4,11 +4,13 @@
 
 #include "vmap_2_tmap.h"
 #include <vcl_cassert.h>
+#include <vcl_iostream.h>
 
 template <class V, class E, class F, class D>
-vmap_2_tmap< V,E,F,D >::vmap_2_tmap(const self_type &right)
+vmap_2_tmap< V,E,F,D >::vmap_2_tmap(const self_type &tmap)
+  : _Base(tmap)
 {
-   operator=(right) ;
+   operator=(tmap) ;
 }
 
 template <class V, class E, class F, class D>
@@ -81,31 +83,31 @@ vmap_2_tmap< V,E,F,D >::~ vmap_2_tmap()
 {}
 
 template <class V, class E, class F, class D>
-vmap_2_tmap< V,E,F,D > & vmap_2_tmap< V,E,F,D >::operator=(const self_type &right)
+vmap_2_tmap< V,E,F,D > & vmap_2_tmap< V,E,F,D >::operator=(const self_type &tmap)
 {
-  if (&right!=this)
+  if (&tmap!=this)
   {
-    _Base::operator=(right) ;
-    vertex_sequence::operator=(right) ;
-    edge_sequence::operator=(right) ;
-    face_sequence::operator=(right) ;
+    _Base::operator=(tmap) ;
+    vertex_sequence::operator=(tmap) ;
+    edge_sequence::operator=(tmap) ;
+    face_sequence::operator=(tmap) ;
     int i ;
     for (i=0; i<nb_darts(); i++)
     {
-      set_dart(i,right.sigma(i), right.alpha(i), right.dart_associated_vertex(i),
-               right.dart_associated_edge(i),right.dart_associated_face(i)) ;
+      set_dart(i,tmap.sigma(i), tmap.alpha(i), tmap.dart_associated_vertex(i),
+               tmap.dart_associated_edge(i),tmap.dart_associated_face(i)) ;
     }
     for (i=0; i<nb_vertices(); i++)
     {
-        vertex(i).set_begin(begin_dart()+right.vertex_associated_dart(i)) ;
+        vertex(i).set_begin(begin_dart()+tmap.vertex_associated_dart(i)) ;
     }
     for (i=0; i<nb_edges(); i++)
     {
-        edge(i).set_begin(begin_dart()+right.edge_associated_dart(i)) ;
+        edge(i).set_begin(begin_dart()+tmap.edge_associated_dart(i)) ;
     }
     for (i=0; i<nb_faces(); i++)
     {
-        face(i).set_begin(begin_dart()+right.face_associated_dart(i)) ;
+        face(i).set_begin(begin_dart()+tmap.face_associated_dart(i)) ;
     }
   }
   return *this ;
@@ -113,45 +115,45 @@ vmap_2_tmap< V,E,F,D > & vmap_2_tmap< V,E,F,D >::operator=(const self_type &righ
 
 template <class V, class E, class F, class D>
  template <class M>
-void vmap_2_tmap< V,E,F,D >::set_structure(const M &right, vmap_2_tmap_tag tag)
+void vmap_2_tmap< V,E,F,D >::set_structure(const M &st, vmap_2_tmap_tag tag)
 {
-    if ((const self_type*)&right!=this)
+    if ((const self_type*)&st!=this)
     {
-        //base_map_type::set_structure(right) ;
-        int lf=right.nb_faces(),
-          lv=right.nb_vertices(),
-          le=right.nb_edges(),i ;
+        //base_map_type::set_structure(st) ;
+        int lf=st.nb_faces(),
+          lv=st.nb_vertices(),
+          le=st.nb_edges(),i ;
         initialise(lv,le,lf) ;
         //initialise_vertices(lv) ;
         //initialise_edges(le) ;
         //initialise_faces(lf) ;
         for (i=0; i<nb_darts(); i++)
         {
-          set_dart(i,right.sigma(i), right.alpha(i), right.dart_associated_vertex(i),
-                   right.dart_associated_edge(i),right.dart_associated_face(i)) ;
+          set_dart(i,st.sigma(i), st.alpha(i), st.dart_associated_vertex(i),
+                   st.dart_associated_edge(i),st.dart_associated_face(i)) ;
         }
         for (i=0; i<nb_vertices(); i++)
         {
-            vertex(i).set_begin(begin_dart()+right.vertex_associated_dart(i)) ;
+            vertex(i).set_begin(begin_dart()+st.vertex_associated_dart(i)) ;
         }
         for (i=0; i<nb_edges(); i++)
         {
-            edge(i).set_begin(begin_dart()+right.edge_associated_dart(i)) ;
+            edge(i).set_begin(begin_dart()+st.edge_associated_dart(i)) ;
         }
         for (i=0; i<nb_faces(); i++)
         {
-            face(i).set_begin(begin_dart()+right.face_associated_dart(i)) ;
+            face(i).set_begin(begin_dart()+st.face_associated_dart(i)) ;
         }
     }
 }
 
 template <class V, class E, class F, class D>
 template <class M>
-void vmap_2_tmap< V,E,F,D >::set_structure(const M &right, vmap_2_map_tag tag)
+void vmap_2_tmap< V,E,F,D >::set_structure(const M &st, vmap_2_map_tag tag)
 {
-    if (&right!=this)
+    if (&st!=this)
     {
-        _Base::set_structure(right) ;
+        _Base::set_structure(st) ;
         set_edge_cycles() ;
         set_vertex_cycles() ;
         set_face_cycles() ;
