@@ -29,8 +29,8 @@ void vil_corners(const vil_image_view<float>& grad_i,
 //  It relies only on first derivatives.
 // \relates vil_image_view
 void vil_corners_rohr(const vil_image_view<float>& grad_i,
-                 const vil_image_view<float>& grad_j,
-                 vil_image_view<float>& dest);
+                      const vil_image_view<float>& grad_j,
+                      vil_image_view<float>& dest);
 
 //: Compute Harris corner strength function
 //  At each pixel compute
@@ -63,7 +63,7 @@ void vil_corners_rohr(const vil_image_view<T>& src,
 {
   vil_image_view<float> grad_i,grad_j;
   vil_sobel_3x3(src,grad_i,grad_j);
-  vil_corners_rohr(grad_i,grad_j,dest,k);
+  vil_corners_rohr(grad_i,grad_j,dest);
 }
 
 
