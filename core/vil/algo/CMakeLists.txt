@@ -20,6 +20,7 @@ SET( vil_algo_sources
                               vil_correlate_1d.h
                               vil_correlate_2d.h
                               vil_dog_filter_5tap.h
+                              vil_dog_pyramid.h
                               vil_exp_filter_1d.h
                               vil_normalised_correlation_2d.h
                               vil_exp_grad_filter_1d.h
