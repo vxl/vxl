@@ -50,10 +50,12 @@ void xcv_image_tableau::set_roi(float x,float y,float w,float h)
   roi_.width = w;
   roi_.height = h;
 }
+
 void xcv_image_tableau::unset_roi()
 {
   defined_ = false;
 }
+
 //--------------------------------------------------------------------------------
 //: Width of the ROI, or if not defined then the width of the whole image.
 unsigned xcv_image_tableau::width() const
@@ -115,16 +117,19 @@ bool xcv_image_tableau::handle(vgui_event const &e)
   else
     return base::handle(e);
 }
+
 vgui_roi_tableau_make_roi::vgui_roi_tableau_make_roi(xcv_image_tableau_sptr const& imt)
 {
   image_tableau_ = imt;
   done_ = false;
 }
+
 void vgui_roi_tableau_make_roi::add_box(float x0,float y0,float x1,float y1)
 {
   float sx = x0>x1 ? x1:x0;
   float sy = y0>y1 ? y1:y0;
-  float w = vcl_fabs(x1-x0),h = vcl_fabs(y1-y0);
+  float w = vcl_fabs(x1-x0),
+        h = vcl_fabs(y1-y0);
 
   image_tableau_->set_roi(sx,sy,w,h);
   done_ = true;
