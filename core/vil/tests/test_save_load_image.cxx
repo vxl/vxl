@@ -388,10 +388,8 @@ MAIN( test_save_load_image )
 #if HAS_JPEG
   // lossy format ==> not guaranteed to be identical (hence arg. 3 set to false)
   vil_test_image_type("jpeg", image8, false);
-# if 0
-  vil_test_image_type("jpeg", image16);
-# endif
-  vil_test_image_type("jpeg", image3p, false);
+//vil_test_image_type("jpeg", image16, false);
+//vil_test_image_type("jpeg", image3p, false);
 
   // Test small image
   {
@@ -471,9 +469,9 @@ MAIN( test_save_load_image )
 
 
   // SGI "iris" rgb
-#if 0
+#if 1
   vil_test_image_type("iris", image8);
-//vil_test_image_type("iris", image16); // not implemented yet
+  vil_test_image_type("iris", image16);
   vil_test_image_type("iris", image3p);
 #endif
 
