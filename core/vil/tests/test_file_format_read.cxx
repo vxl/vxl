@@ -15,7 +15,6 @@
 
 // For testing specific file formats
 #include <vil/vil_stream_fstream.h>
-#include <vil/file_formats/vil_dicom.h>
 
 //#define DEBUG
 
@@ -430,9 +429,9 @@ test_file_format_read_main( int argc, char* argv[] )
 
   // Test generic file loads
 
-  vcl_cout << "GENERIC FILE LOAD\n\n";
+  vcl_cout << "GENERIC FILE LOAD\n\n"
 
-  vcl_cout << "Portable aNy Map [pnm]: pbm, pgm, ppm)\n";
+           << "Portable aNy Map [pnm]: pbm, pgm, ppm)\n";
   testlib_test_begin( "  1-bit pbm ascii" );
   testlib_test_perform(CheckFile(CompareGrey<bool>(), "ff_grey1bit_true.txt", "ff_grey1bit_ascii.pbm" ) );
   testlib_test_begin( "  1-bit pbm raw" );
@@ -549,10 +548,11 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_begin( "  16-bit greyscale uncompressed 3" );
   testlib_test_perform(CheckFile(CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit_uncompressed3.dcm" ) );
   testlib_test_begin( "  12-bit greyscale float uncompressed" );
-  testlib_test_perform(CheckFile(CompareGreyFloat<float>(), "ff_grey_float_true_for_dicom.txt", "ff_grey_float_12bit_uncompressed.dcm" ) );
+  testlib_test_perform(CheckFile(CompareGreyFloat<float>(), "ff_grey_float_true_for_dicom.txt",
+                                                            "ff_grey_float_12bit_uncompressed.dcm" ) );
 #endif // HAS_DCMTK
 
-#if 0 // these are broken too
+#if 0 // these are broken
   vcl_cout << "NITF [NITF v2.0]\n";
   testlib_test_begin( "  8-bit grey" );
   testlib_test_perform(CheckFile(CompareGrey<vxl_uint_8>(), "ff_grey8bit_true_for_nitf.txt", "ff_grey8bit_uncompressed.nitf" ) );
@@ -572,7 +572,6 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_begin( "  64-bit float grey" );
   testlib_test_perform(CheckFile(CompareGreyFloat<double>(), "ff_grey_float_true.txt", "ff_grey_double.nitf" ) );
 #endif
-
 
   return testlib_test_summary();
 }
