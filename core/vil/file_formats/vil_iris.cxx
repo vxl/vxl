@@ -86,7 +86,7 @@ char const* vil_iris_file_format::tag() const
 /////////////////////////////////////////////////////////////////////////////
 
 vil_iris_generic_image::vil_iris_generic_image(vil_stream* is, char* imagename):
-  is_(is)
+  is_(is), starttab_(0), lengthtab_(0)
 {
   is_->ref();
   read_header();
@@ -109,7 +109,8 @@ vil_iris_generic_image::vil_iris_generic_image(vil_stream* is,
                                                vil_pixel_format format)
   : is_(is), magic_(474), ni_(ni), nj_(nj), nplanes_(nplanes), format_(format),
     pixmin_(0), pixmax_(vil_pixel_format_sizeof_components(format)==1 ? 255 : 65535),
-    storage_(0), dimension_(nplanes_==1 ? 2 : 3), colormap_(0)
+    storage_(0), dimension_(nplanes_==1 ? 2 : 3), colormap_(0),
+    starttab_(0), lengthtab_(0)
 {
   is_->ref();
 
@@ -127,6 +128,8 @@ vil_iris_generic_image::vil_iris_generic_image(vil_stream* is,
 vil_iris_generic_image::~vil_iris_generic_image()
 {
   is_->unref();
+  delete [] starttab_;
+  delete [] lengthtab_;
 }
 
 bool vil_iris_generic_image::read_header()
