@@ -1,3 +1,5 @@
+//:
+// \file
 #include <testlib/testlib_test.h>
 #include <vsl/vsl_binary_io.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
@@ -28,10 +30,10 @@ void test_epi_point()
 //-----------------------------------------------------------------------
 // I/O Tests
 //----------------------------------------------------------------------
-                        
+
   // binary test output file stream
   vsl_b_ofstream bep_out("test_epi_point_io.tmp");
-  TEST ("Created test_epi_point_io.tmp for writing",(!bep_out), false);
+  TEST("Created test_epi_point_io.tmp for writing",(!bep_out), false);
   //  epi_point_1->b_write(bep_out);
   vsl_b_write(bep_out, epi_point_1);
   bep_out.close();
@@ -40,13 +42,13 @@ void test_epi_point()
 
   // binary test input file stream
   vsl_b_ifstream bep_in("test_epi_point_io.tmp");
-  TEST ("Opened test_epi_point_io.tmp for reading",(!bep_in), false);
+  TEST("Opened test_epi_point_io.tmp for reading",(!bep_in), false);
 
   //  epi_point_in_1->b_read(bep_in);
   vsl_b_read(bep_in, epi_point_in_1);
   bep_in.close();
-  vcl_cout << *epi_point_1 << "\n";
-  vcl_cout << *epi_point_in_1 << "\n";
+  vcl_cout << *epi_point_1 << '\n'
+           << *epi_point_in_1 << '\n';
   TEST("Testing io",
        epi_point_1->x()==epi_point_in_1->x() &&
        epi_point_1->y()==epi_point_in_1->y() &&
@@ -57,15 +59,12 @@ void test_epi_point()
        true);
   // remove the temporary file
   vpl_unlink ("test_epi_point_io.tmp");
-
 }
 
 
 MAIN( test_epi_point )
 {
   START( "bmrf_epi_point" );
-
   test_epi_point();
-
   SUMMARY();
 }
