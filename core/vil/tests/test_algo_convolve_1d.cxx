@@ -1,8 +1,10 @@
 // This is mul/vil2/tests/test_algo_convolve_1d.cxx
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
-#include <vil2/algo/vil2_algo_convolve_1d.h>
 #include <testlib/testlib_test.h>
+#include <vil2/algo/vil2_algo_convolve_1d.h>
+#include <vil2/vil2_new.h>
+#include <vsl/vsl_vector_io.h>
 
 void test_algo_convolve_1d_double()
 {
@@ -113,6 +115,38 @@ void test_algo_convolve_1d_double()
   TEST_NEAR("End",dest[n],6*n-2.0,1e-6);
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
+
+
+  vcl_cout << "\n\nvil2_algo_convolve_1d(vil2_image_data_sptr&,...)" << vcl_endl;
+
+  vil2_image_data_sptr mem = vil2_new_image_data(n,n,1,VIL2_PIXEL_FORMAT_BYTE);
+  vil2_image_view<vxl_byte> v(n,n,1), v_out(n,n,1);
+  for (unsigned j=0; j<n; ++j)
+    for (unsigned i=0; i<n; ++i)
+      v(i,j) = i+1;
+  
+  TEST ("memory image.put_view()", mem->put_view(v,0,0), true);
+
+  // set up a convolved image_data object
+  vil2_image_data_sptr conv = vil2_algo_convolve_1d(mem, vxl_byte(), &kernel[1],-1,1, int(),
+    vil2_convolve_constant_extend, vil2_convolve_zero_extend);
+
+  //set up a convolved view.
+  vil2_algo_convolve_1d(v, v_out, &kernel[1], -1, 1, int(),
+    vil2_convolve_constant_extend, vil2_convolve_zero_extend);
+  
+  // check they are equal in various regions..
+  TEST("convolved resource.get_view() == convolved view.window() top-left corner",
+    vil2_deep_equality(vil2_window(v_out,0,4,0,4),
+    vil2_image_view<vxl_byte>(conv->get_view(0,4,0,4))), true);
+  TEST("convolved resource.get_view() == convolved view.window() centre",
+    vil2_deep_equality(vil2_window(v_out,3,4,3,4),
+    vil2_image_view<vxl_byte>(conv->get_view(3,4,3,4))), true);
+  TEST("convolved resource.get_view() == convolved view.window() bottom-right corner",
+    vil2_deep_equality(vil2_window(v_out,n-4,4,n-4,4),
+    vil2_image_view<vxl_byte>(conv->get_view(n-4,4,n-4,4))), true);
+
+
 }
 
 MAIN( test_algo_convolve_1d )

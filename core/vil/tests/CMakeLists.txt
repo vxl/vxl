@@ -17,7 +17,7 @@ ADD_EXECUTABLE( vil2_test_driver
   test_algo_exp_filter_1d.cxx
   test_image_view_maths.cxx
 )
-TARGET_LINK_LIBRARIES( vil2_test_driver vil2_algo vil2 vpl vul testlib vcl )
+TARGET_LINK_LIBRARIES( vil2_test_driver vil2_algo vil2 vpl vsl vul testlib vcl )
 
 
 ADD_TEST( vil2_test_pixel_format           vil2_test_driver test_pixel_format )

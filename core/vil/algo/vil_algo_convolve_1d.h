@@ -7,8 +7,13 @@
 //  \author Tim Cootes (based on work by fsm)
 
 #include <vcl_compiler.h>
+#include <vcl_algorithm.h>
 #include <vcl_cstdlib.h> // for vcl_abort()
+#include <vcl_cstring.h>
 #include <vil2/vil2_image_view.h>
+#include <vil2/vil2_image_view_functions.h>
+#include <vil2/vil2_image_data.h>
+#include <vil2/vil2_property.h>
 
 //: Available options for boundary behavior
 // When convolving a finite signal the boundaries may be
@@ -200,7 +205,7 @@ inline void vil2_algo_convolve_1d(const srcT* src0, unsigned nx, int s_step,
 
 //: Convolve kernel[i] (i in [k_lo,k_hi]) with srcT in i-direction
 // On exit dest_im(i,j) = sum src(i+x,j)*kernel(x)  (x=k_lo..k_hi)
-//
+// \param kernel should point to tap 0.
 // Assumes dest and src same size (nx)
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil2_algo_convolve_1d(const vil2_image_view<srcT>& src_im,
@@ -220,14 +225,112 @@ inline void vil2_algo_convolve_1d(const vil2_image_view<srcT>& src_im,
   for (int p=0;p<src_im.nplanes();++p)
   {
     // Select first row of p-th plane
-    const srcT*  src_row  = src_im.top_left_ptr()+p*src_im.pstep();
-    const destT* dest_row = dest_im.top_left_ptr()+p*dest_im.pstep();
+    const srcT*  src_row  = src_im.top_left_ptr()+p*src_im.planestep();
+    destT* dest_row = dest_im.top_left_ptr()+p*dest_im.planestep();
 
     // Apply convolution to each row in turn
     for (int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
       vil2_algo_convolve_1d(src_row,ni,s_istep,  dest_row,d_istep,
-                            kernel,l_lo,k_hi,ac,start_option,end_option);
+                            kernel,k_lo,k_hi,ac,start_option,end_option);
   }
 }
+
+
+//: Create an image_data object which convolve kernel[x] x in [k_lo,k_hi] with srcT
+// \param kernel should point to tap 0.
+template <class destT, class kernelT, class accumT>
+inline vil2_image_data_sptr vil2_algo_convolve_1d<kernelT, accumT, destT>(
+  const vil2_image_data_sptr& src_im,
+  const destT dt,
+  const kernelT* kernel, int k_lo, int k_hi,
+  const accumT ac,
+  vil2_convolve_boundary_option start_option,
+  vil2_convolve_boundary_option end_option)
+{
+  return new vil2_algo_convolve_1d_resource<kernelT, accumT, destT>(src_im,
+    kernel, k_lo, k_hi, start_option, end_option);
+}
+
+
+//: A resource adaptor that behaves like a algo_convolve_1d'ed version of its input
+template <class kernelT, class accumT, class destT>
+class vil2_algo_convolve_1d_resource : public vil2_image_data
+{
+ public:
+  virtual vil2_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni, 
+                                                  unsigned j0, unsigned nj) const
+  {
+    if (i0 + ni > src_->ni() || j0 + nj > src_->nj())  return 0;
+    const unsigned lsrc = (unsigned) vcl_max(0,(int)i0 + klo_); // lhs of input window
+    const unsigned hsrc = vcl_min(src_->ni(),i0 + ni - klo_ + khi_); // 1+rhs of input window.
+    const unsigned lboundary = vcl_min((unsigned) -klo_, i0); // width of lhs boundary area.
+    assert (hsrc > lsrc);
+    vil2_image_view_base_sptr vs = src_->get_view(lsrc, hsrc-lsrc, j0, nj);
+    vil2_image_view<destT> dest(vs->ni(), vs->nj(), vs->nplanes());
+    switch (vs->pixel_format())
+    {
+      case VIL2_PIXEL_FORMAT_BYTE:
+        vil2_algo_convolve_1d(static_cast<vil2_image_view<vxl_byte>&>(*vs),dest,
+          kernel_, klo_, khi_, accumT(), start_option_, end_option_);
+        return new vil2_image_view<destT>(vil2_window(dest, lboundary, ni, 0, nj));
+      default:
+        return 0;
+    }
+  }
+  vil2_algo_convolve_1d_resource(const vil2_image_data_sptr& src,
+                                  const kernelT* kernel, int k_lo, int k_hi,
+                                  vil2_convolve_boundary_option start_option,
+                                  vil2_convolve_boundary_option end_option):
+    src_(src), kernel_(kernel), klo_(k_lo), khi_(k_hi),
+    start_option_(start_option), end_option_(end_option) {
+      // Can't do period extension yet.
+      assert (start_option != vil2_convolve_periodic_extend ||
+        end_option != vil2_convolve_periodic_extend);}
+
+  virtual unsigned nplanes() const { return src_->nplanes(); }
+  virtual unsigned ni() const { return src_->ni(); }
+  virtual unsigned nj() const { return src_->nj(); }
+
+  virtual enum vil2_pixel_format pixel_format() const
+  { return vil2_pixel_format_of(accumT()); }
+
+
+
+  //: Put the data in this view back into the image source.
+  virtual bool put_view(const vil2_image_view_base& im, unsigned i0,
+                        unsigned j0) {
+    vcl_cerr << "WARNING: vil2_algo_convolve_1d_resource::put_back\n"
+      "\t You can't push data back into a convolve filter." << vcl_endl;
+    return false;
+  }
+
+  //: Extra property information
+  virtual bool get_property(char const* tag, void* property_value = 0) const {
+      if (0==vcl_strcmp(tag, vil2_property_read_only))
+    return property_value ? (*(bool*)property_value) = true : true;
+
+    return src_->get_property(tag, property_value);
+  }
+
+  //: Return the name of the class;
+  virtual vcl_string is_a() const
+  {
+    static const vcl_string class_name_="vil2_algo_convolve_1d_resource";
+    return class_name_;
+  }
+
+  //: Return true if the name of the class matches the argument
+  virtual bool is_class(vcl_string const&s) const
+  {
+    return s==vil2_algo_convolve_1d_resource::is_a() || vil2_image_data::is_class(s);
+  }
+
+ protected:
+  vil2_image_data_sptr src_;
+  const kernelT* kernel_;
+  int klo_, khi_;
+  vil2_convolve_boundary_option start_option_, end_option_;
+};
+
 
 #endif // vil2_algo_convolve_1d_h_
