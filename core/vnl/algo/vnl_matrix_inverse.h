@@ -21,7 +21,7 @@
 //  vnl_matrix_inverse is a wrapper around vnl_svd<double> that allows
 //  you to write
 //
-//  x = vnl_matrix_inverse(A) * b;
+//  x = vnl_matrix_inverse<double>(A) * b;
 //
 //  This is exactly equivalent to x = vnl_svd<double>(A).solve(b);
 //  but is arguably clearer, and also allows for the vnl_matrix_inverse
