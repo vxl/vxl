@@ -18,6 +18,7 @@ TESTS += test_vcl_cmath.cxx
 #TESTS += $(wildcard test_vcl_rtti.cxx)
 TESTS += test_vcl_stlfwd.cxx
 TESTS += test_vcl_exception.cxx
+TESTS += test_vcl_cctype.cxx
 TESTS += vcl_tests.cpp
 
 #########################################
