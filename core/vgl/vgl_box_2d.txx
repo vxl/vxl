@@ -308,7 +308,7 @@ vgl_box_2d<Type> vgl_bounding_box_2d(const vgl_point_2d<Type>& p1,
                                      const vgl_point_2d<Type>& p2)
 {
   return vgl_box_2d<Type>(vcl_min(p1.x(),p2.x()), vcl_max(p1.x(),p2.x()),
-	                        vcl_min(p1.y(),p2.y()), vcl_max(p1.y(),p2.y()) );
+                          vcl_min(p1.y(),p2.y()), vcl_max(p1.y(),p2.y()) );
 }
 
 #undef VGL_BOX_2D_INSTANTIATE
