@@ -137,10 +137,12 @@ bgui_vtol2D_tableau::add_digital_curve(vdgl_digital_curve_sptr const& dc)
   add(obj);
   if (obj)
     {
-      sty->clone_style(obj->get_style());
-      int id = obj->get_id();
+      obj->set_style(sty.ptr());
       if (highlight_)
-        obj_map_[id]=dc->cast_to_topology_object();
+        {
+          int id = obj->get_id();
+          obj_map_[id]=dc->cast_to_topology_object();
+        }
     }
   return obj;
 }
@@ -155,10 +157,12 @@ bgui_vtol2D_tableau::add_dotted_digital_curve(vdgl_digital_curve_sptr const& dc)
   add(obj);
   if (obj)
     {
-      sty->clone_style(obj->get_style());
-      int id = obj->get_id();
+      obj->set_style(sty.ptr());
       if (highlight_)
-      obj_map_[id]=dc->cast_to_topology_object();
+        {
+		  int id = obj->get_id(); 
+          obj_map_[id]=dc->cast_to_topology_object();            
+        }
     }
   return obj;
 }
@@ -175,10 +179,12 @@ bgui_vtol2D_tableau::add_vertex(vtol_vertex_2d_sptr const& v)
   add(obj);
   if (obj)
     {
-      sty->clone_style(obj->get_style());
-      int id = obj->get_id();
+      obj->set_style(sty.ptr());
       if (highlight_)
-      obj_map_[id]=v->cast_to_topology_object();
+        {
+          int id = obj->get_id();
+          obj_map_[id]=v->cast_to_topology_object();
+        }
     }
   return obj;
 }
@@ -195,10 +201,12 @@ bgui_vtol2D_tableau::add_edge(vtol_edge_2d_sptr const& e)
   add(obj);
   if (obj)
     {
-      sty->clone_style(obj->get_style());
-      int id = obj->get_id();
+      obj->set_style(sty.ptr());
       if (highlight_)
+        {
+          int id = obj->get_id();
         obj_map_[id]=e->cast_to_topology_object();
+        }
     }
   return obj;
 }
@@ -211,7 +219,7 @@ bgui_vtol2D_tableau::add_edge_group(vcl_vector<vtol_edge_2d_sptr>& edges)
   //set the default style
   bgui_style_sptr sty = style_map_[obj->type_name()];
   add(obj);
-  sty->clone_style(obj->get_style());
+  obj->set_style(sty.ptr());
   return obj;
 }
 
@@ -225,10 +233,12 @@ bgui_vtol2D_tableau::add_face(vtol_face_2d_sptr const& f)
   add(obj);
   if (obj)
     {
-      sty->clone_style(obj->get_style());
-      int id = obj->get_id();
+      obj->set_style(sty.ptr());
       if (highlight_)
-        obj_map_[id]=f->cast_to_topology_object();
+        {
+          int id = obj->get_id();
+          obj_map_[id]=f->cast_to_topology_object();
+        }
     }
   return obj;
 }
