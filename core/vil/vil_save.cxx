@@ -33,6 +33,9 @@ bool vil2_save(const vil2_image_view_base &im, char const* filename, char const*
     vcl_cerr << __FILE__ ": (vil2_save) Cannot save to type [" << file_format << "]\n";
     return false;
   }
+  
+  // Use smart copy constructor to convert multi-component images
+  // into multi-plane ones.
   switch (vil2_pixel_format_component_format(im.pixel_format()))
   {
   case VIL2_PIXEL_FORMAT_BYTE:
