@@ -85,6 +85,9 @@ LINK32=link.exe
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx;c"
 # Begin Source File
+SOURCE=.\test_driver.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_cartesian_2d.cxx
 # End Source File
 # Begin Source File

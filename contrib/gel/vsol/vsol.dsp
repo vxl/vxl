@@ -243,6 +243,21 @@ SOURCE=.\Templates/vbl_smart_ptr+vsol_digital_curve_2d-.cxx
 SOURCE=.\Templates/vsl_vector_io+vsol_digital_curve_2d_sptr-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+vsol_point_3d-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+vsol_spatial_object_3d-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_binary_loader+vsol_spatial_object_3d-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vsol_point_3d_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vsol_spatial_object_3d_sptr-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vsol_box_2d.cxx
 # End Source File
 # Begin Source File

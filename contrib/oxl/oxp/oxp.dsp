@@ -132,9 +132,6 @@ SOURCE=.\RadialLensCorrection.cxx
 SOURCE=.\SGIMovieFile.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\SGIMovieFilePrivates.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\SGIMovieFileWrite.cxx
 # End Source File
 # Begin Source File

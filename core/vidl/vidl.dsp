@@ -105,9 +105,6 @@ SOURCE=.\vidl_mpegcodec.cxx
 SOURCE=.\vidl_mpegcodec_helper.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_yuv_2_rgb.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+vidl_clip-.cxx
 # End Source File
 # Begin Source File

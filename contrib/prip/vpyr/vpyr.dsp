@@ -9,9 +9,6 @@
 SOURCE=.\vpyr_2_pyramid_base.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vpyr_2_pyramid_level_elts.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vpyr_2_tpyramid_base.cxx
 # End Source File
 # End Group
