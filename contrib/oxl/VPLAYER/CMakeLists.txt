@@ -1,5 +1,10 @@
 # ./oxl/VPLAYER/CMakeLists.txt
 
+INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake)
+
+# Build here only if OpenGL is available:
+IF(HAS_OPENGL)
+
 IF(WIN32)
  ADD_EXECUTABLE( VPLAYER VPLAYER_sources )
  SOURCE_FILES( VPLAYER_sources
@@ -22,3 +27,5 @@ IF(WIN32)
   INCLUDE(${allvxl_SOURCE_DIR}/oxl/VPLAYER/CMakeListsHeaders.txt)
  ENDIF (NOT CYGWIN)
 ENDIF(WIN32)
+
+ENDIF(HAS_OPENGL)

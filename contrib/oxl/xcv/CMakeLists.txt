@@ -1,5 +1,10 @@
 # ./oxl/xcv/CMakeLists.txt
 
+INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake)
+
+# Build here only if OpenGL is available:
+IF(HAS_OPENGL)
+
 ADD_EXECUTABLE( xcv xcv_sources )
 
 # This is needed for xcv_geometry.cxx
@@ -50,3 +55,5 @@ INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vbl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vpl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )
+
+ENDIF(HAS_OPENGL)

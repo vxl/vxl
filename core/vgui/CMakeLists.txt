@@ -1,5 +1,10 @@
 # ./oxl/vgui/CMakeLists.txt
 
+INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake)
+
+# Build here only if OpenGL is available:
+IF(HAS_OPENGL)
+
 ADD_LIBRARY(vgui vgui_sources)
 
 SOURCE_FILES(vgui_sources
@@ -147,3 +152,5 @@ ENDIF( BUILD_EXAMPLES )
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
+
+ENDIF(HAS_OPENGL)
