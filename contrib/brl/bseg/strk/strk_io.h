@@ -19,6 +19,8 @@
 #include <vcl_fstream.h>
 #include <vnl/vnl_matrix.h>
 #include <vgl/vgl_point_2d.h>
+#include <vtol/vtol_face_2d_sptr.h>
+
 class strk_io 
 {
  public:
