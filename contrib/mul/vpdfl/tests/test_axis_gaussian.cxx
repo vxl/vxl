@@ -1,6 +1,7 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
+#include <vcl_cmath.h> // for vcl_fabs()
 
 #include <vnl/vnl_test.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
@@ -19,7 +20,7 @@ void test_axis_gaussian()
   for (int i=0;i<n_dims;++i)
   {
     mean0(i)=i;
-	var0(i) =n_dims-i;
+    var0(i) =n_dims-i;
   }
 
   v0.fill(0);
@@ -29,13 +30,13 @@ void test_axis_gaussian()
 
   vcl_cout<<"Prob at zero: "<<gauss0(v0)<<vcl_endl;
 
-  TEST("gauss0(0)",fabs(gauss0(v0)-0.00273207)<1e-8,true);
+  TEST("gauss0(0)",vcl_fabs(gauss0(v0)-0.00273207)<1e-8,true);
 
   // Generate lots of samples
   int n = 5000;
   vcl_vector<vnl_vector<double> > samples(n);
   for (int i=0;i<n;++i)
-  	gauss0.sample(samples[i]);
+    gauss0.sample(samples[i]);
 
   mbl_data_array_wrapper<vnl_vector<double> > sample_wrapper(&samples[0],n);
 
@@ -72,7 +73,6 @@ void test_axis_gaussian()
   vpdfl_pdf_base            *base_pdf_ptr_in  = 0;
   vpdfl_pdf_builder_base *base_builder_ptr_in  = 0;
 
-
   vsl_b_ifstream bfs_in("test_axis_gaussian.bvl.tmp");
   TEST ("Opened test_axis_gaussian.bvl.tmp for reading",
            (!bfs_in), false);
@@ -94,8 +94,6 @@ void test_axis_gaussian()
        (gauss0.variance()-gauss0_in.variance()).squared_magnitude()<1e-8,true);
   TEST("Load model by base ptr",base_pdf_ptr_in->is_a()==gauss0.is_a(),true);
   TEST("Load builder by base ptr",base_builder_ptr_in->is_a()==builder0.is_a(),true);
-
-
 }
 
 TESTMAIN(test_axis_gaussian);
