@@ -36,6 +36,7 @@
 #include <vnl/vnl_file_vector.h>
 #include <vnl/vnl_finite.h>
 #include <vnl/vnl_float_2.h>
+#include <vnl/vnl_float_2x2.h>
 #include <vnl/vnl_float_3.h>
 #include <vnl/vnl_float_4.h>
 #include <vnl/vnl_fortran_copy.h>

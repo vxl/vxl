@@ -50,12 +50,6 @@ SET( vnl_sources
 
   # Misc header files
   vnl_T_n.h
-  vnl_double_2x2.h
-  vnl_double_3x3.h
-  vnl_double_3x4.h
-  vnl_double_4x3.h
-  vnl_double_4x4.h
-  vnl_double_5.h
   vnl_identity.h
   vnl_operators.h
   vnl_tag.h
@@ -80,11 +74,18 @@ SET( vnl_sources
   vnl_float_2.cxx              vnl_float_2.h
   vnl_float_3.cxx              vnl_float_3.h
   vnl_float_4.cxx              vnl_float_4.h
+                               vnl_float_2x2.h
   vnl_double_2.cxx             vnl_double_2.h
   vnl_double_3.cxx             vnl_double_3.h
   vnl_double_4.cxx             vnl_double_4.h
+                               vnl_double_5.h
+                               vnl_double_2x2.h
   vnl_double_2x3.cxx           vnl_double_2x3.h
   vnl_double_3x2.cxx           vnl_double_3x2.h
+                               vnl_double_3x3.h
+                               vnl_double_3x4.h
+                               vnl_double_4x3.h
+                               vnl_double_4x4.h
 
   # optimisation
   vnl_cost_function.cxx               vnl_cost_function.h
