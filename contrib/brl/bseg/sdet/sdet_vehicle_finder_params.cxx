@@ -9,59 +9,6 @@
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
 
-//------------------------------------------------------------------------
-// Constructors
-//
-
-sdet_vehicle_finder_params::
-sdet_vehicle_finder_params(const sdet_vehicle_finder_params& vfp)
-{
-  InitParams((sdet_watershed_region_proc_params)vfp.wrpp_,
-             (brip_para_cvrg_params)vfp.pcp_,
-             vfp.verbose_,
-             vfp.debug_,
-             vfp.search_radius_,
-             vfp.shadow_thresh_,
-             vfp.para_thresh_,
-             vfp.distance_scale_
-            );
-}
-
-sdet_vehicle_finder_params::
-sdet_vehicle_finder_params(const sdet_watershed_region_proc_params& wrpp,
-                           const brip_para_cvrg_params& pcp,
-                           bool verbose,
-                           bool debug,
-                           float search_radius,
-                           float shadow_thresh,
-                           float para_thresh,
-                           float distance_scale
-                           )
-{
-  InitParams(wrpp, pcp, verbose, debug, search_radius, shadow_thresh,
-             para_thresh, distance_scale);
-}
-
-void sdet_vehicle_finder_params::
-InitParams(const sdet_watershed_region_proc_params& wrpp,
-           const brip_para_cvrg_params& pcp,
-           bool verbose,
-           bool debug,
-           float search_radius,
-           float shadow_thresh,
-           float para_thresh,
-           float distance_scale)
-{
-  search_radius_ = search_radius;
-  shadow_thresh_ = shadow_thresh;
-  para_thresh_ = para_thresh;
-  distance_scale_ = distance_scale;
-  debug_ = debug;
-  verbose_ = verbose;
-  wrpp_ = wrpp;
-  pcp_ = pcp;
-}
-
 //-----------------------------------------------------------------------------
 //
 //:   Checks that parameters are within acceptable bounds
@@ -73,11 +20,11 @@ bool sdet_vehicle_finder_params::SanityCheck()
   vcl_stringstream msg;
   bool valid = true;
 
-  if(search_radius_<5)
-    {
-      msg << "ERROR: unrealistic to use a search radius< 5";
-      valid = false;
-    }
+  if (search_radius_<5)
+  {
+    msg << "ERROR: unrealistic to use a search radius< 5\n";
+    valid = false;
+  }
 
   valid = valid && wrpp_.SanityCheck();
   msg << wrpp_.GetErrorMsg() << vcl_ends;
@@ -89,18 +36,16 @@ bool sdet_vehicle_finder_params::SanityCheck()
   return valid;
 }
 
- vcl_ostream& operator << (vcl_ostream& os, const sdet_vehicle_finder_params& vfp)
+ vcl_ostream& operator << (vcl_ostream& os, sdet_vehicle_finder_params const& p)
 {
-  os << "sdet_vehicle_finder_params:" << vcl_endl << "[---" << vcl_endl;
-  os << vfp.wrpp_ << vcl_endl;
-  os << vfp.pcp_ << vcl_endl;
-     os << "  ---" << vcl_endl;
-  os << "debug " << vfp.debug_ << vcl_endl;
-  os << "verbose " << vfp.verbose_ << vcl_endl;
-  os << "search radius " << vfp.search_radius_ << vcl_endl;
-  os << "shadow thresh " << vfp.shadow_thresh_ << vcl_endl;
-  os << "distance scale " << vfp.distance_scale_ << vcl_endl;
-  os << "para cvrg thresh " << vfp.para_thresh_ << vcl_endl;
-  os << "---]" << vcl_endl;
-  return os;
+  return
+  os << "sdet_vehicle_finder_params:\n[---\n" << p.wrpp_
+     << '\n' << p.pcp_
+     << "\n  ---\ndebug " << p.debug_
+     << "\nverbose " << p.verbose_
+     << "\nsearch radius " << p.search_radius_
+     << "\nshadow thresh " << p.shadow_thresh_
+     << "\ndistance scale " << p.distance_scale_
+     << "\npara cvrg thresh " << p.para_thresh_
+     << "\n---]\n";
 }
