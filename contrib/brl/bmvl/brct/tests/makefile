@@ -1,4 +1,4 @@
-USES += contrib/brl contrib/brl/bbas core
+USES += contrib/brl contrib/brl/bbas contrib/brl/bseg contrib/brl/bmvl core
 include ../config.mk
 include ${IUEROOT}/contrib/brl/bbas/bgui/config.mk
 include ${IUEROOT}/core/vgui/config.mk
@@ -8,9 +8,10 @@ SOURCES += brct_windows_frame.cxx
 SOURCES += brct_menus.cxx
 
 IULIBS += -lbrct_test
-#TESTS += test_brct_kalman.cxx
 MINI_PROG_SOURCES += test_brct_kalman.cxx
 TESTS += brct_test_synthetic_data.cxx
+
+MINI_PROG_SOURCES += test_include.cxx
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
