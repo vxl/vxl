@@ -8,6 +8,7 @@
 #include <vcl_cstddef.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil2/io/vil2_io_memory_chunk.h>
+#include <vil2/io/vil2_io_smart_ptr.h>
 
 //: Binary save vil3d_image_view<T> to stream.
 template<class T>
