@@ -3,13 +3,14 @@
 #include <vidl_vil1/vidl_vil1_yuv_2_rgb.h>
 #include <vcl_string.h>
 #include <vcl_iostream.h>
-#include <vcl_cstdio.h>
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h> // for vcl_strtol()
 #include <vul/vul_file.h>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_rgb_byte.h>
+#undef sprintf // Works around a bug in libintl.h
+#include <vcl_cstdio.h>
 
 extern "C" {
   // instead of #include <../libvo/video_out_internal.h>
@@ -106,9 +107,9 @@ static void internal_draw_frame (vidl_vil1_mpegcodec_data * instance,
         int arg = (i>>1)*(wh)+(j>>1);
         // this is assuming the chroma channels are half-size in each direction.
         vidl_vil1_yuv_2_rgb(Y[i*w+j],
-                       U[arg],
-                       V[arg],
-                       &(buf[c]));
+                            U[arg],
+                            V[arg],
+                            &(buf[c]));
       }
   }
   return;
@@ -155,8 +156,7 @@ static void vil1_im_draw_frame (vo_frame_t * frame)
   decode_request * p = instance->pending_decode;
   if (!p)
   {
-    vcl_cerr << "vidl_vil1_mpegcodec. vil1_im_draw_frame."
-             << "decode request was never set\n";
+    vcl_cerr << __FILE__ ": vil1_im_draw_frame(): decode request was never set\n";
     return;
   }
 
@@ -244,8 +244,8 @@ vidl_vil1_codec_sptr vidl_vil1_mpegcodec::load(const char* fname, char  /*mode*/
   if (this->probe(fname))
   {
     decoder_ = new vidl_vil1_mpegcodec_helper(vo_vil_im_open,
-                                         filename,
-                                         buffers_);
+                                              filename,
+                                              buffers_);
     return this;
   }
   return 0;
@@ -253,11 +253,11 @@ vidl_vil1_codec_sptr vidl_vil1_mpegcodec::load(const char* fname, char  /*mode*/
 
 bool
 vidl_vil1_mpegcodec::get_section(int position,
-                            void* ib,
-                            int x0,
-                            int y0,
-                            int width,
-                            int height) const
+                                 void* ib,
+                                 int x0,
+                                 int y0,
+                                 int width,
+                                 int height) const
 {
   assert(inited == true);
   assert(x0+width  <= this->width());
@@ -429,10 +429,10 @@ vidl_vil1_mpegcodec::init()
 
 vil1_image *
 vidl_vil1_mpegcodec::get_image(int frame_position,
-                          int x0,
-                          int y0,
-                          int width,
-                          int height)
+                               int x0,
+                               int y0,
+                               int width,
+                               int height)
 {
   vil1_image * frame = 0;
 

@@ -9,13 +9,14 @@
 #include "vil1_stream_url.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstdio.h>  // sprintf()
 #include <vcl_cstring.h>
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vil1/vil1_stream_core.h>
 #include <vcl_fstream.h>
+#undef sprintf // This works around a bug in libintl.h
+#include <vcl_cstdio.h>  // sprintf()
 
 #if defined(unix) || defined(__unix)
 

@@ -1,6 +1,7 @@
-#include <vcl_cstdio.h>
 #include <vnl/vnl_math.h> // vnl_math_abs()
 #include <testlib/testlib_test.h>
+#undef printf // to work around a bug in libintl.h
+#include <vcl_cstdio.h>
 
 extern "C"
 int sggsvd_(char const *jobu, char const *jobv, char const *jobq, int *m, int *n, int *p,
@@ -36,14 +37,14 @@ void test_qsvd() {
              AA[0], AA[3], AA[6], AA[1], AA[4], AA[7], AA[2], AA[5], AA[8]);
 
   testlib_test_assert("D1 must be (0.6,0.8,0.6)",
-                  vnl_math_abs(Alpha[0]-0.6)<1e-6 &&
-                  vnl_math_abs(Alpha[1]-0.8)<1e-6 &&
-                  vnl_math_abs(Alpha[2]-0.6)<1e-6);
+                      vnl_math_abs(Alpha[0]-0.6)<1e-6 &&
+                      vnl_math_abs(Alpha[1]-0.8)<1e-6 &&
+                      vnl_math_abs(Alpha[2]-0.6)<1e-6);
 
   testlib_test_assert("D2 must be (0.8,0.6,0.8)",
-                  vnl_math_abs(Beta[0]-0.8)<1e-6 &&
-                  vnl_math_abs(Beta[1]-0.6)<1e-6 &&
-                  vnl_math_abs(Beta[2]-0.8)<1e-6);
+                      vnl_math_abs(Beta[0]-0.8)<1e-6 &&
+                      vnl_math_abs(Beta[1]-0.6)<1e-6 &&
+                      vnl_math_abs(Beta[2]-0.8)<1e-6);
 }
 
 TESTMAIN(test_qsvd);

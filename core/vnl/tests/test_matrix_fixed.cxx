@@ -2,7 +2,6 @@
 #ifdef TEST_MALLOC // see note below, at the other #ifdef TEST_MALLOC
 # include <vcl_new.h>
 #endif
-#include <vcl_cstdio.h> // do not use iostream within operator new - it causes infinite recursion
 #include <vcl_cstdlib.h>
 #include <vcl_cstddef.h> // for vcl_size_t
 #include <vcl_cmath.h> // for sqrt
@@ -15,6 +14,9 @@
 #include <vnl/vnl_int_2x2.h>
 
 #include <testlib/testlib_test.h>
+
+#undef printf // to work around a bug in libintl.h
+#include <vcl_cstdio.h> // do not use iostream within operator new - it causes infinite recursion
 
 bool verbose_malloc = false;
 int malloc_count = 0;

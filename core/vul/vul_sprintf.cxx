@@ -13,6 +13,7 @@
 #include <vcl_cstdarg.h>
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
+#undef vsprintf // this works around a bug in libintl.h
 #include <vcl_cstdio.h> // for vsprintf()
 
 vul_sprintf::vul_sprintf(char const *fmt, ...) : vcl_string("")

@@ -8,9 +8,7 @@
 #include "vil1_pnm.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstdio.h> // for sprintf
 #include <vcl_vector.h>
-
 #include <vcl_iostream.h>
 #include <vcl_cstring.h>
 
@@ -20,6 +18,8 @@
 #include <vil1/vil1_property.h>
 
 #include <vxl_config.h>
+#undef sprintf // This works around a bug in libintl.h
+#include <vcl_cstdio.h> // for sprintf
 
 char const* vil1_pnm_format_tag = "pnm";
 

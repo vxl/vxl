@@ -18,11 +18,12 @@
 // 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
 
-#include <vcl_cstdio.h>
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
 #include <vcl_fstream.h>
 #include <vcl_vector.h>
+#undef sprintf // works around a bug in libintl.h
+#include <vcl_cstdio.h>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_svd.h>
@@ -139,7 +140,7 @@ int main(int argc, char ** argv)
       // Printing:
     } else if (arg == "p") {
       //stack.print();
-      print(stack, print_format.c_str());
+      print(stack, print_format);
 
     } else if (arg == "fmt") {
       SHIFT;
