@@ -59,7 +59,9 @@ class bmvv_recon_menus
   BMVV_DLL_DATA static void read_change_data_callback();
   BMVV_DLL_DATA static void write_change_volumes_vrml_callback();
   BMVV_DLL_DATA static void compute_change_callback();
+#if 0
   BMVV_DLL_DATA static void display_dense_match_callback();
+#endif
   BMVV_DLL_DATA static void read_f_matrix_callback();
   BMVV_DLL_DATA static void show_epipolar_line_callback();
   BMVV_DLL_DATA static void show_world_homography_callback();

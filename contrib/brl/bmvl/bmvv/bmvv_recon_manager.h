@@ -80,7 +80,9 @@ class bmvv_recon_manager : public vgui_wrapper_tableau
   void read_change_data();
   void write_change_volumes_vrml();
   void compute_change();
+#if 0
   void display_dense_match();
+#endif
   void read_f_matrix();
   void show_epipolar_line();
   void show_world_homography();

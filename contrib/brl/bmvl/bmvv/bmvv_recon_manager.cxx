@@ -1156,7 +1156,7 @@ void bmvv_recon_manager::compute_change()
     return;
   vproc_.compute_change();
 }
-
+#if 0
 //: display a line of the dense match by drawing tokens
 void bmvv_recon_manager::display_dense_match()
 {
@@ -1246,7 +1246,7 @@ void bmvv_recon_manager::display_dense_match()
     vcl_cout << vcl_flush;
   }
 }
-
+#endif
 //===================================================================
 //: read the fundamental matrix
 //
