@@ -62,9 +62,9 @@ void bdgl_curve_description::init(vdgl_edgel_chain_sptr const& ec)
   points_.erase(points_.begin());
   points_.erase(points_.begin());
 
-  points_.erase(&points_.back());
-  points_.erase(&points_.back());
-  points_.erase(&points_.back());
+  points_.erase(points_.end()-1);
+  points_.erase(points_.end()-1);
+  points_.erase(points_.end()-1);
 
 
   // standard deviations
