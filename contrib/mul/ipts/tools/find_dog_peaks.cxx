@@ -58,7 +58,7 @@ int main( int argc, char* argv[] )
   pyr_builder.build_dog(dog_pyramid,smooth_pyramid,image_f);
 
   vcl_vector<vgl_point_3d<double> > peak_pts;
-  ipts_scale_space_peaks_2d(peak_pts,smooth_pyramid,float());
+  ipts_scale_space_peaks_2d(peak_pts,dog_pyramid,float());
   vcl_cout<<"Found "<<peak_pts.size()<<" peaks."<<vcl_endl;
 
   for (unsigned i=0;i<peak_pts.size();++i)
