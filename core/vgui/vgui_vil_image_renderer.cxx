@@ -25,7 +25,7 @@ static const bool debug = false;
 
 vgui_vil_image_renderer::
 vgui_vil_image_renderer()
-  : buffer_( 0 )
+  : buffer_( 0 ), buffer_params_(0), valid_buffer_(false)
 {
   valid_buffer_ = false;
 }
@@ -70,6 +70,8 @@ reread_image()
 void vgui_vil_image_renderer::
 create_buffer(vgui_range_map_params_sptr const& rmp)
 {
+  delete buffer_;
+
   buffer_ = new vgui_section_buffer( 0, 0,
                                        the_image_->ni(), the_image_->nj(),
                                        GL_NONE, GL_NONE );
@@ -233,7 +235,7 @@ old_range_map_params(vgui_range_map_params_sptr const& rmp)
 
   //1) Both the current params and the new params are null
   if (!buffer_params_&&!rmp)
-    return false;
+    return true;
 
   //2) The current params are null and the new params are not
   if (!buffer_params_&&rmp)

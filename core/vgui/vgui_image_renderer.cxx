@@ -22,8 +22,7 @@
 //-----------------------------------------------------------------------------
 //: Constructor - create an empty image renderer.
 vgui_image_renderer::vgui_image_renderer()
-  : buffer(0)
-  , use_texture_mapping(false)
+  : buffer(0), buffer_params(0), valid_buffer(false), use_texture_mapping(false)
 {
 }
 
@@ -74,6 +73,8 @@ void vgui_image_renderer::reread_image()
 void vgui_image_renderer::
 create_buffer(vgui_range_map_params_sptr const& rmp)
 {
+  delete buffer;
+
   buffer = new vgui_section_buffer(0, 0,
                                      the_image.width(), the_image.height(),
                                      GL_NONE, GL_NONE);
@@ -127,10 +128,10 @@ bool vgui_image_renderer::
 old_range_map_params(vgui_range_map_params_sptr const& rmp)
 {
   //Cases
-
+  
   //1) Both the current params and the new params are null
   if (!buffer_params&&!rmp)
-    return false;
+    return true;
 
   //2) The current params are null and the new params are not
   if (!buffer_params&&rmp)
