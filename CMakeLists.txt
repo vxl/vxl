@@ -1,4 +1,3 @@
-
 #
 # Root vxl 
 #
@@ -6,10 +5,11 @@
 
 PROJECT(allvxl)
 
-SUBDIRS(vxl vcl v3p)
+SUBDIRS(vxl vcl v3p oxl tbl gel)
 
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vcl)
 
-WIN32_INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vcl/config.win32-VC60)
-
+IF(WIN32)
+  INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vcl/config.win32-VC60)
+ENDIF(WIN32)
 
