@@ -9,8 +9,10 @@
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/vnl_least_squares_cost_function.h>
+
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/algo/vnl_amoeba.h>
+#include <vnl/algo/vnl_powell.h>
 #include <vnl/algo/vnl_conjugate_gradient.h>
 #include <vnl/algo/vnl_lbfgs.h>
 
@@ -110,6 +112,7 @@ int main()
     vcl_cout << "CG min of " << rcf.f(x) << " at " << x << vcl_endl;
     cg.diagnose_outcome();
   }
+
   {
     vcl_cout << "** LBFGS (Limited memory Broyden Fletcher Goldfarb Shanno) ** \n";
     vnl_rosenbrock_grad_cost_fun rcf;
@@ -119,6 +122,17 @@ int main()
     //    assert(lbfgs.get_end_error() == rcf.f(x));
     vcl_cout << "L-BFGS min of " << lbfgs.get_end_error() << " at " << x << vcl_endl;
     vcl_cout << "Evaluations: " << lbfgs.get_num_evaluations() << vcl_endl;
+  }
+
+  {
+    vcl_cout << "** Powell (Powell's direction set method) ** \n";
+    vnl_rosenbrock_grad_cost_fun rcf;
+    vnl_powell powell(&rcf);
+    x = x0;
+    powell.minimize(x);
+    //    assert(lbfgs.get_end_error() == rcf.f(x));
+    vcl_cout << "Powell min of " << powell.get_end_error() << " at " << x << vcl_endl;
+    vcl_cout << "Evaluations: " << powell.get_num_evaluations() << vcl_endl;
   }
   return 0;
 }

@@ -23,7 +23,7 @@
 
 #include <vnl/vnl_double_2.h>
 
-struct vsl_conic_as_matrix;
+class vsl_conic_as_matrix;
 
 class vsl_conic_points {
 public:
