@@ -64,7 +64,7 @@ public:
     // return the mean of the control pts
     Vector3D mean_control_pts() const {
         Vector3D mean(0.0);
-        for (uint i=0; i<controlPoints.size(); i++)
+        for (unsigned i=0; i<controlPoints.size(); i++)
             mean += controlPoints[i];
         mean /= (double)controlPoints.size();
         return mean;
