@@ -6,15 +6,16 @@
 // \date   July 2003
 //
 // \verbatim
-// Modifications:
+//  Modifications:
 //   29sep04 - templated over label image type for >256 labels;
 //             some bug fixes found w/ Amitha [roddy collins]
 //
 // \endverbatim
 
-
 #include <vxl_config.h>
 #include <vcl_vector.h>
+#include <vcl_cassert.h>
+#include <vcl_iostream.h>
 
 #include <vbl/vbl_ref_count.h>
 
@@ -26,21 +27,19 @@
 
 #include <vdgl/vdgl_digital_region.h>
 
-
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_intensity_face_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vtol/vtol_one_chain_sptr.h>
 
-// A class in the test harness that will test some of the internal
-// methods
+//: A class in the test harness that will test some of the internal methods
 //
 class test_vtol_extract_topology;
 
 //: Some data types, further aliased in the definitions and implementations.
 
 typedef vxl_byte vtol_extract_topology_data_pixel_type;
-typedef vil_image_view< vtol_extract_topology_data_pixel_type > 
+typedef vil_image_view< vtol_extract_topology_data_pixel_type >
          vtol_extract_topology_data_image_type;
 
 //: Controls the behaviour of vtol_extract_topology
@@ -134,22 +133,22 @@ struct vtol_extract_topology_vertex_node
 {
   //: Create a node for vertex at (i,j).
   vtol_extract_topology_vertex_node( unsigned i, unsigned j );
-  
+
   //: Location
   unsigned i, j;
-  
+
   //: vtol vertex in pixel coordinates.
   vtol_vertex_2d_sptr vertex;
-  
+
   //: Neighbouring vertices in the graph.
   unsigned link[4];
-  
+
   //: Direction in which we exit the neighbouring node to get back to this node.
   //
   // That is, (this->link)[n].link[ this->back_dir[n] ] == indexof(this).
   //
   unsigned back_dir[4];
-  
+
   //: Edgel chains leading to neighbouring vertices.
   vbl_smart_ptr< vtol_extract_topology_edgel_chain > edgel_chain[4];
 
@@ -166,7 +165,6 @@ struct vtol_extract_topology_vertex_node
   // through a vertex.
   //
   static const unsigned done_index   VCL_STATIC_CONST_INIT_INT_DECL( unsigned(-1) );
-
 };
 
 //: Extracts the topology from a segmentation label image.
@@ -214,29 +212,29 @@ class vtol_extract_topology
     // contained in the universe.
     //
     region_type_sptr region;
-    
+
     // The regions from all child nodes are spatially contained in the
     // region for this node.
     //
     vcl_vector<chain_tree_node*> children;
-    
-    chain_tree_node( region_type_sptr in_region ): region( in_region ) 
-    { /* empty ctor */ }
+
+    chain_tree_node( region_type_sptr in_region ) : region( in_region ) {}
+
     ~chain_tree_node() {
-      vcl_vector<chain_tree_node*>::iterator itr = children.begin();
-      for ( ; itr != children.end(); ++itr ) {
+      typename vcl_vector<chain_tree_node*>::const_iterator itr;
+      for (itr = children.begin(); itr != children.end(); ++itr ) {
         delete *itr;
       }
     }
-    
+
     // Add a new region below this node. Prerequiste: the new region is
     // contained within this chain.
     //
     void
     add( region_type_sptr new_region )
     {
-      vcl_vector<chain_tree_node*>::iterator itr;
-      
+      typename vcl_vector<chain_tree_node*>::const_iterator itr;
+
       // First, determine if it should go further down the tree. If so,
       // add it to the appropriate child and exit immediately.
       //
@@ -246,7 +244,7 @@ class vtol_extract_topology
           return;
         }
       }
-      
+
       // It belongs at this level. Create a new node for it, and find out
       // if this new node swallows up any of the existing children. Then
       // add the new node as a child of this.
@@ -265,7 +263,6 @@ class vtol_extract_topology
     }
 
 
-    
     // Create a face from the regions at this node and its children.
     //
     vtol_intensity_face_sptr
@@ -278,11 +275,11 @@ class vtol_extract_topology
       }
       if ( find ) {
         assert( img );
-        
+
         vcl_vector<unsigned> ri, rj;
         find->same_int_region( region->i, region->j, ri, rj );
         assert( ri.size() == rj.size() && !ri.empty() );
-        
+
         vcl_vector<float> x, y;
         vcl_vector<unsigned short> intensity;
         for ( unsigned c = 0; c < ri.size(); ++c ) {
@@ -299,7 +296,7 @@ class vtol_extract_topology
       }
     }
 
-    
+
     void
     print( vcl_ostream& ostr, unsigned indent ) const
     {
@@ -373,10 +370,10 @@ class vtol_extract_topology
   // overlap). A special case allows for a "universe": if a is null,
   // then the function will return true. Currently, b cannot be null.
   //
-  static 
+  static
   bool
   contains( region_type_sptr a, region_type_sptr b );
-  
+
   // Computes the number of times that a ray in the positive x direction
   // originating from (x,y) intersects the edgel chain.
   //
@@ -388,16 +385,16 @@ class vtol_extract_topology
   static
   unsigned
   num_crosses_x_pos_ray( double x, double y, vdgl_edgel_chain const& chain );
-  
+
   // Smoothes an edgel chain by fitting a line to the local
   // neighbourhood and projecting onto that line
   //
   vdgl_edgel_chain_sptr
   smooth_chain( vdgl_edgel_chain_sptr chain,
                 unsigned int num_pts ) const;
-  
-private:   // internal classes and constants
-  
+
+ private:   // internal classes and constants
+
   //: Queries into label_img_ return either (label, true) or (0, false)
   // ...this avoids using one of the possible labels as an off-image flag
 
@@ -407,7 +404,7 @@ private:   // internal classes and constants
     bool valid;
     LabelPoint(): label(0), valid(false) {}
     LabelPoint(LABEL_TYPE const& lt, bool v): label(lt), valid(v) {}
-    bool operator==( LabelPoint const& lp ) { 
+    bool operator==( LabelPoint const& lp ) {
       return (lp.valid == this->valid) && ( (lp.valid) ? lp.label == this->label : true );
     }
     bool operator!=( LabelPoint const& lp ) {
