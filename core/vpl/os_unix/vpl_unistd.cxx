@@ -158,7 +158,7 @@ int vpl_execlp(char const *file, char const *arg0, ...) {
       break;
   }
   va_end(ap);
-  return ::execvp(file, args.begin());
+  return ::execvp(file, &args[0]);
 }
 #endif
 PASSTHRU(int, execv, (const char *  a0,char *const a1[]), (a0, a1));

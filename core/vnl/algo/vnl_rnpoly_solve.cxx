@@ -9,6 +9,7 @@
 
 #include "vnl_rnpoly_solve.h"
 #include <vnl/vnl_real_npolynomial.h>
+#include <vcl/vcl_cmath.h>
 
 // fsm@robots: moved ::M and ::T into the namespace of vnl_rnpoly_solve, as they
 // were causing multiply defined symbols for static builds. if your compiler cannot

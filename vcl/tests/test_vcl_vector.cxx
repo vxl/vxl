@@ -29,8 +29,8 @@ int main()
     for (unsigned i=0; i<10; ++i) {
       cout << "size : " << v.size() << delim
 	   << "capacity : " << v.capacity() << delim
-	   << "begin : " << (void*)v.begin() << delim
-	   << "end : " << (void*)v.end() << endl;
+	   << "begin : " << (void*) &* v.begin() << delim
+	   << "end : " << (void*) &* v.end() << endl;
       
       v.push_back(3.1415926 * i);
     }

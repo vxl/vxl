@@ -12,7 +12,6 @@
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 
 // Test the sparse matrix operations.
-
 int doTest1()
 {
   const unsigned int n = 20;
@@ -157,7 +156,7 @@ int doTest4()
     ms(i,(i+n-3)%n) = md(i,(i+n-3)%n) = 1.0;
     // ms(i,i) = md(i,i) = 1.0*(i+1)*(i+1);
   }
-  
+
   const unsigned int nvals = 3;
   vnl_symmetric_eigensystem<double> ed(md);
   vnl_sparse_symmetric_eigensystem es;
@@ -176,10 +175,8 @@ int doTest4()
     cout << "Error: " << err << endl;
     Assert("vnl_sparse_symmetric_eigensystem eigenvalue error", err < 1e-10);
   }
-  
   return 0;
 }
-
 
 extern "C"
 int test_sparse_matrix()

@@ -135,7 +135,7 @@ bool vnl_lbfgs::minimize(vnl_vector<double>& x)
     if (verbose_ && check_derivatives_) {
       cerr << "vnl_lbfgs: f = " << f_->reported_error(f) << ", computing FD gradient\n";
       vnl_vector<double> fdg = f_->fdgradf(x);
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(GNU_LIBSTDCXX_V3)
       int l = n;
       int limit = 100;
       int limit_tail = 10;

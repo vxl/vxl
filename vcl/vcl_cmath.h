@@ -72,16 +72,22 @@
 
 
 // 2. define vcl_abs() inline functions.
-#ifndef vcl_abs
+#if defined(VCL_GCC_295) && defined(GNU_LIBSTDCXX_V3)
+# undef  vcl_abs
+# define vcl_abs abs
+using std::abs;
+
+#elif !defined(vcl_abs)
 # if defined(VCL_EGCS) || defined(VCL_GCC_295)
-#  define vcl_abs abs
+#  define vcl_abs  abs
 
 # elif defined(VCL_GCC_27) || defined(VCL_SGI_CC_720) || defined(VCL_VC60)
 inline float       vcl_abs (float  x) { return (x >= 0.0f) ? x : -x; }
 inline double      vcl_abs (double x) { return fabs (x); }
 inline long double vcl_abs (long double x) { return fabs (x); }
+
 # else
-#define vcl_abs vcl_cmath_std abs
+#  define vcl_abs vcl_cmath_std abs
 # endif
 #endif
 

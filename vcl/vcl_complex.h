@@ -28,15 +28,30 @@
 # include <vcl/emulation/vcl_complex.h>
 # define vcl_complex_STD /*std::*/::
 
-// ---------- gcc with old library
-#elif (defined(VCL_EGCS) || defined(VCL_GCC_295)) && !defined(GNU_LIBSTDCXX_V3)
+// ---------- egcs
+#elif defined(VCL_EGCS)
 # include <complex>
 # define vcl_complex_STD /*std::*/::
 
-// ---------- gcc 2.95.2 with libstdc++-v3
-#elif defined(VCL_GCC_295) && defined(GNU_LIBSTDCXX_V3)
-# include <vcl/emulation/vcl_complex.h>
-# define vcl_complex_STD /*std::*/::
+// ---------- gcc 2.95
+#elif defined(VCL_GCC_295)
+# if !defined(GNU_LIBSTDCXX_V3)
+// old library
+#  include <complex>
+#  define vcl_complex_STD /*std::*/::
+# else
+// new library (broken complex)
+#  include <vcl/emulation/vcl_complex.h>
+#  define vcl_complex_STD /*std::*/::
+// paradoxically, v3 needs 'abs' and 'sqrt' here because it 
+// wants to use the emulation vcl_complex<>.
+#  undef  vcl_abs
+#  define vcl_abs abs
+   using std::abs;
+#  undef  vcl_sqrt
+#  define vcl_sqrt sqrt
+   using std::sqrt;
+# endif
 
 // ---------- native WIN32
 #elif defined(VCL_WIN32)
@@ -57,6 +72,10 @@
 # ifndef vcl_abs
 #  define vcl_abs  vcl_complex_STD abs
 # endif
+# ifndef vcl_sqrt
+#  define vcl_sqrt vcl_complex_STD sqrt
+# endif
+# define vcl_arg   vcl_complex_STD arg
 # define vcl_conj  vcl_complex_STD conj
 # define vcl_norm  vcl_complex_STD norm
 # define vcl_polar vcl_complex_STD polar

@@ -1,4 +1,9 @@
-#include <vtol/vtol_edge_3d.h>
+#include "vtol_edge_3d.h"
+
+#ifndef GNU_LIBSTDCXX_V3
+# include <vcl/vcl_rel_ops.h>
+#endif
+
 // #include <vtol/vtol_vertex_3d.h>
 #include <vtol/vtol_zero_chain_3d.h>
 #include <vtol/vtol_one_chain_3d.h>
@@ -12,8 +17,6 @@
 //#include <vtol/some_stubs.h>
 #include <vsol/vsol_curve_3d.h>
 #include <vsol/vsol_line_3d.h>
-
-#include <vcl/vcl_rel_ops.h>
 
 /*
  ******************************************************
@@ -513,7 +516,8 @@ bool vtol_edge_3d::operator==(const vtol_edge_3d &e) const
   if (_curve&&!e._curve||!_curve&&e._curve)
     return false;
   if(_curve&&e._curve)
-    if(*_curve != *(e._curve))
+    // if(*_curve != *(e._curve))
+    if( !(*_curve == *(e._curve)) )
       return false;
   if((_v1==e._v1)&&(_v2==e._v2))    // pointer equivalence.
     {

@@ -37,7 +37,7 @@ void vnl_test_start(const char* name = NULL) {
 
 void vnl_test_begin(const char* msg) {
   num_test++;
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(GNU_LIBSTDCXX_V3)
   cout.form(" Test %03d: %-53s --> ", num_test, msg);
 #else
   cout << " Test " << num_test << ": " << msg << " --> ";

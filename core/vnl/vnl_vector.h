@@ -44,6 +44,8 @@ template <class T> vnl_vector<T> cross_3d (vnl_vector<T> const&, vnl_vector<T> c
 
 //----------------------------------------------------------------------
 
+struct vnl_vector_grab_tag { };
+
 template<class T>
 class vnl_vector {
 public:
@@ -57,6 +59,9 @@ public:
   vnl_vector (T const&, T const&, T const&);                   // 3-vector (x,y,z).
   vnl_vector (T const* data_block,unsigned int n);             // n-vector from a block of data.
   vnl_vector (vnl_vector<T> const&);                           // from another vector
+  vnl_vector (vnl_vector<T> &that, vnl_vector_grab_tag)
+    : num_elmts(that.num_elmts), data(that.data) 
+    { that.num_elmts=0; that.data=0; }
   ~vnl_vector();
   
   // -- Return the length, number of elements, dimension of this vector.

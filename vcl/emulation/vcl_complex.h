@@ -21,8 +21,6 @@
 # define inline
 #endif
 
-#include <vcl/emulation/vcl_functional.h> // for op!=
-
 // implementation of class vcl_complex<FLOAT>, copied from g++ 2.7.2 - PVR
 
 #if defined (VCL_VC50)
@@ -115,11 +113,27 @@ vcl_complex<FLOAT>::operator /= (const vcl_complex<FLOAT>& y)
   return *this;
 }
 
+// in order to #define vcl_abs to std::abs it is
+// necessary to put these function in namespace
+// std. that's ok because they have vcl_complex<>s
+// as part of their signatures, so they won't clash.
+#ifdef xxGNU_LIBSTDCXX_V3 // this didn't work -- fsm
+# define fsm_std_begin namespace std {
+# define fsm_std_end   }
+#else
+# define fsm_std_begin /* */
+# define fsm_std_end   /* */
+#endif
+
+/* !! */ fsm_std_begin
+
 template <class FLOAT> inline FLOAT
 real (vcl_complex<FLOAT> const& x) { return x.real(); }
 
 template <class FLOAT> inline FLOAT
 imag (vcl_complex<FLOAT> const& x) { return x.imag(); }
+
+/* !! */ fsm_std_end
 
 
 template <class FLOAT> inline vcl_complex<FLOAT>
@@ -213,11 +227,11 @@ operator == (FLOAT x, const vcl_complex<FLOAT>& y)
   return x == y.real() && y.imag() == 0;
 }
 
-// template <class FLOAT> inline bool
-// operator != (const vcl_complex<FLOAT>& x, const vcl_complex<FLOAT>& y)
-// {
-//   return x.real() != y.real() || x.imag() != y.imag();
-// }
+template <class FLOAT> inline bool
+operator != (const vcl_complex<FLOAT>& x, const vcl_complex<FLOAT>& y)
+{
+  return x.real() != y.real() || x.imag() != y.imag();
+}
 
 template <class FLOAT> inline bool
 operator != (const vcl_complex<FLOAT>& x, FLOAT y)
@@ -230,6 +244,8 @@ operator != (FLOAT x, const vcl_complex<FLOAT>& y)
 {
   return x != y.real() || y.imag() != 0;
 }
+
+/* !! */ fsm_std_begin
 
 template <class FLOAT> inline FLOAT
 abs (const vcl_complex<FLOAT>& x)
@@ -324,6 +340,8 @@ sinh (const vcl_complex<FLOAT>& x)
 			   cosh (x.real()) * sin (x.imag()));
 }
 
+/* !! */ fsm_std_end
+
 template <class FLOAT> inline vcl_complex<FLOAT>
 operator / (const vcl_complex<FLOAT>& x, const vcl_complex<FLOAT>& y)
 {
@@ -372,6 +390,8 @@ operator / (FLOAT x, const vcl_complex<FLOAT>& y)
   return vcl_complex<FLOAT> (nr, ni);
 }
 
+/* !! */ fsm_std_begin
+
 template <class FLOAT> inline vcl_complex<FLOAT>
 pow (const vcl_complex<FLOAT>& xin, int y)
 {
@@ -417,6 +437,11 @@ sqrt (const vcl_complex<FLOAT>& x)
   return vcl_complex<FLOAT> (nr, ni); 
 }
 
+/* !! */ fsm_std_end
+
+#undef fsm_std_begin
+#undef fsm_std_end
+
 template <class FLOAT>
 inline
 ostream& operator << (ostream& o, vcl_complex<FLOAT> const& x)
@@ -457,9 +482,5 @@ inline vcl_complex<float> operator*(const vcl_complex<float>& c, double d)
   float f = (float)d;
   return vcl_complex<float>(c.real() * f, c.imag() * f);
 }
-
-// This is already defined in vcl/vcl_complex.h
-//#define VCL_COMPLEX_INSTANTIATE \
-//extern "please include vcl/emulation/vcl_complex.txx instead"
 
 #endif // vcl_emulation_complex_h

@@ -1,8 +1,13 @@
+#include "vtol_face_3d.h"
+
+#ifndef GNU_LIBSTDCXX_V3
+# include <vcl/vcl_rel_ops.h>
+#endif
+
 #include <vtol/vtol_macros_3d.h>
 #include <vtol/vtol_two_chain_3d.h>
 #include <vtol/vtol_vertex_3d.h>
 #include <vtol/vtol_edge_3d.h>
-#include <vtol/vtol_face_3d.h>
 #include <vtol/vtol_one_chain_3d.h>
 #include <vtol/vtol_list_functions_3d.h>
 #include <vtol/vtol_face_3d.h>
@@ -12,8 +17,6 @@
 #include <vsol/vsol_point_3d.h>
 
 // #include <vtol/some_stubs.h>
-#include <vcl/vcl_rel_ops.h>
-
 
 
 vtol_face_3d::vtol_face_3d(void) 
@@ -699,7 +702,8 @@ bool vtol_face_3d::operator==(const vtol_face_3d& otherf) const
   if (this == &otherf) return true;
 
   if(_surface && otherf._surface)
-    if(*_surface != *otherf._surface)
+    // if(*_surface != *otherf._surface)
+    if( !(*_surface == *otherf._surface) )
       return false;
   if(_surface && !otherf._surface || otherf._surface && !_surface)
     return false;

@@ -143,13 +143,13 @@ int vnl_sparse_symmetric_eigensystem::CalculateNPairs(vnl_sparse_matrix<double>&
 
   dnlaso_(sse_op_callback, sse_iovect_callback,
 	  &dim, &nvals, &nfigures, &nperm, 
-	  &nmval, temp_vals.begin(),
-	  &nmvec, temp_vecs.begin(),
+	  &nmval, &temp_vals[0],
+	  &nmvec, &temp_vecs[0],
 	  &nblock,
 	  &maxop,
 	  &maxj, 
-	  work.begin(),
-	  ind.begin(),
+	  &work[0],
+	  &ind[0],
 	  &ierr);
   if (ierr > 0) {
     if (ierr & 0x1) {

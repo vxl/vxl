@@ -267,7 +267,7 @@ int vsl_canny_ox::HysteresisOX(vsl_EdgelChain *&edgels_NMS,
 
 
   // Create a list of links for each edgel.
-  Link_edgelsOX(col, rows, links.begin());
+  Link_edgelsOX(col, rows, &links[0]); //vector<>::iterator
 
 
   // -- Perform Hysteresis part of canny.
@@ -278,7 +278,7 @@ int vsl_canny_ox::HysteresisOX(vsl_EdgelChain *&edgels_NMS,
     if (!status[i] && edgels_NMS->GetGrad(i)>high) {
       status[i]=1;
       for (vsl_LINK *lptr=links[i]; lptr; lptr=lptr->nextl) 
-	Initial_followOX(lptr->to, i, edgels_NMS, links.begin(), status, low);
+	Initial_followOX(lptr->to, i, edgels_NMS, &links[0], status, low); //vector<>::iterator
     }
   
 

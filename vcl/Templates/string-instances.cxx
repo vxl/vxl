@@ -10,14 +10,14 @@ template class vcl_basic_string<char, vcl_char_traits<char> >;
 // this should work for all compilers. by putting it in the
 // library we (a) get the implicit template instances it 
 // needs and (b) make sure that it does work.
-void vcl_string_instance_tickler(ostream &os, char *a, char const *b)
+void vcl_string_instance_tickler(ostream &os, vcl_string::iterator i, char *a, char const *b)
 {
   char ch;
   vcl_char_traits<char>::eq(ch, ch);
   vcl_string s(b, b);
   os << s;
-  s.replace(a, a, a, a);
-  s.replace(a, a, b, b);
+  s.replace(i, i, a, a);
+  s.replace(i, i, b, b);
 }
 
 

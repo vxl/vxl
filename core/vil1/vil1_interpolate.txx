@@ -76,7 +76,8 @@ bool vil_interpolate_bilinear_grad(vil_memory_image_of<T> const& img,
   double v1 = src_y - src_y_int, v0 = 1-v1;
 
   // the derivatives are obtained by differentating the interpolating expression
-#if 1 || defined(code_must_look_nice)
+  // capes@robots - vil_rgb does not have the left operator- defined.
+#if 0 || defined(code_must_look_nice)
   *out_i  = U(  pix00 * u0*v0 + pix10 * u1*v0 + pix01 * u0*v1 + pix11 * u1*v1);
   *out_dx = U(- pix00 * v0    + pix10 * v0    - pix01 * v1    + pix11 * v1   );
   *out_dy = U(- pix00 * u0    - pix10 * u1    + pix01 * u0    + pix11 * u1   );
@@ -131,10 +132,10 @@ bool vil_interpolate_bicubic(vil_memory_image_of<T> const& img,
 }
 
 #define VIL_INTERPOLATE_INSTANTIATE(T, U) \
-template bool vil_interpolate_nearest(vil_memory_image_of<T> const&, double, double, U*); \
-template bool vil_interpolate_bilinear(vil_memory_image_of<T> const&, double, double, U*); \
-template bool vil_interpolate_bilinear_grad(vil_memory_image_of<T> const&, double, double, U*, U*, U*); \
-template bool vil_interpolate_bicubic(vil_memory_image_of<T> const&, double, double, U*);
+template bool vil_interpolate_nearest(vil_memory_image_of<T > const&, double, double, U*); \
+template bool vil_interpolate_bilinear(vil_memory_image_of<T > const&, double, double, U*); \
+template bool vil_interpolate_bilinear_grad(vil_memory_image_of<T > const&, double, double, U*, U*, U*); \
+template bool vil_interpolate_bicubic(vil_memory_image_of<T > const&, double, double, U*);
 
 #endif
 

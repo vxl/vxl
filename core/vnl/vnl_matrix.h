@@ -63,6 +63,8 @@ template <class T> istream& operator>> (istream& os, vnl_matrix<T>& m);
 
 //--------------------------------------------------------------------------------
 
+struct vnl_matrix_grab_tag { };
+
 template<class T>
 class vnl_matrix {
 public:
@@ -72,6 +74,9 @@ public:
   vnl_matrix(unsigned r, unsigned c, int n, T const values[]);	// use automatic arrays.
   vnl_matrix(T const* data_block, unsigned r, unsigned c);      // fill row-wise.
   vnl_matrix(vnl_matrix<T> const&);                             // from another matrix.
+  vnl_matrix(vnl_matrix<T> &that, vnl_matrix_grab_tag)
+    : num_rows(that.num_rows), num_cols(that.num_cols), data(that.data) 
+    { that.num_cols=that.num_rows=0; that.data=0; }
   //vnl_matrix(const DiagMatrix<T>&); this confuses g++ 2.7.2 When an vnl_vector<int> is declared nearby...
   ~vnl_matrix();
 

@@ -94,7 +94,7 @@ inline
 void vbl_qsort_descending(vcl_vector<T>& v)
 {
 #if VXL_STDLIB_HAS_QSORT
-  qsort(v.begin(), v.size(), sizeof v[0], vbl_qsort_helper<T>::descend);
+  qsort(&v[0], v.size(), sizeof v[0], vbl_qsort_helper<T>::descend); //vector<>::iterator
 #else
   vcl_sort(v.begin(), v.end(), vcl_greater<T>());
 #endif
@@ -106,7 +106,7 @@ inline
 void vbl_qsort(vcl_vector<T>& v, int (*compare)(T const& a, T const& b))
 {
 #if VXL_STDLIB_HAS_QSORT
-  qsort(v.begin(), v.size(), sizeof v[0], (vbl_qsort_compare_t)compare);
+  qsort(&v[0], v.size(), sizeof v[0], (vbl_qsort_compare_t)compare); //vector<>::iterator
 #else
   cerr << "Sorry, this type of qsort has not been implemented\n";
 #endif

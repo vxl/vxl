@@ -26,6 +26,9 @@ public:
   vbl_redirector_streambuf(vbl_redirector_data* p_):p(p_) {}
   int sync ();
   int overflow (int ch);
+#ifdef GNU_LIBSTDCXX_V3
+  unsigned
+#endif
   int underflow(){return 0;}
   // The libraries which comes with sgi 7.2.1 and
   // SunPro 5.0 take char const *, which is

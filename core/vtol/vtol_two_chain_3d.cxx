@@ -3,7 +3,9 @@
 
 #include <vcl/vcl_vector.h>
 #include <vcl/vcl_algorithm.h>
-#include <vcl/vcl_rel_ops.h>
+#ifndef GNU_LIBSTDCXX_V3
+# include <vcl/vcl_rel_ops.h>
+#endif
  
 #include <vtol/vtol_list_functions_3d.h>
 #include <vtol/vtol_two_chain_3d.h>
@@ -844,7 +846,8 @@ bool vtol_two_chain_3d::operator==(const vtol_two_chain_3d& obj) const
    hierarchy_node_list_3d::const_iterator hi1,hi2;
 
   for(hi1=righth.begin(),hi2= lefth.begin();hi1!= righth.end() && hi2!=lefth.end();++hi1,++hi2)
-    if( *((vsol_spatial_object_3d*)(*hi1)) != *((vsol_spatial_object_3d*)(*hi2)))
+    //if( *((vsol_spatial_object_3d*)(*hi1)) != *((vsol_spatial_object_3d*)(*hi2)))
+    if( !(*((vsol_spatial_object_3d*)(*hi1)) == *((vsol_spatial_object_3d*)(*hi2))) )
       return false;
   return true;
 }

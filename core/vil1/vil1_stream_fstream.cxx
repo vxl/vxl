@@ -27,7 +27,11 @@ static int id = 0;
 
 vil_stream_fstream::vil_stream_fstream(char const* fn, char const* mode):
   flags_(modeflags(mode)),
-  f_(fn, flags_ | vcl_ios_binary) // need ios::binary on windows.
+  f_(fn, 
+#ifdef GNU_LIBSTDCXX_V3
+     std::ios::openmode
+#endif
+     (flags_ | vcl_ios_binary)) // need ios::binary on windows.
 {
   id_ = ++id;
   xerr << "vil_stream_fstream(\"" << fn << "\", \""<<mode<<"\") = " << id_ << "\n";

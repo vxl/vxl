@@ -11,6 +11,7 @@
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_memory_image_of.h>
+#include <vil/vil_buffer.h>
 
 #define DEBUG 1
 #define LEAVE_IMAGES_BEHIND 0
@@ -79,8 +80,8 @@ bool test_image_equal(char const* test,
   }
 //ww;
 
-  vcl_vector<unsigned char> image_buf(image.get_size_bytes());
-  if (!image.get_section(image_buf.begin(), 0, 0, sizex, sizey))
+  vil_buffer<unsigned char> image_buf(image.get_size_bytes());
+  if (!image.get_section(image_buf.data(), 0, 0, sizex, sizey))
   {
     cout << "\nFAILED: test <" << test << "> for " << type_name
          << " -- image::do_get_section() on first image returned false!" << endl;
@@ -88,8 +89,8 @@ bool test_image_equal(char const* test,
   }
 //ww;
 
-  vcl_vector<unsigned char> image_buf2(image2.get_size_bytes());
-  if (!image2.get_section(image_buf2.begin(), 0, 0, sizex2, sizey2))
+  vil_buffer<unsigned char> image_buf2(image2.get_size_bytes());
+  if (!image2.get_section(image_buf2.data(), 0, 0, sizex2, sizey2))
   {
     cout << "\nFAILED: test <" << test << "> for " << type_name
          << " -- image::do_get_section() on second image returned false!" << endl;

@@ -99,6 +99,16 @@ FLAGS_Templates/vil_convolve_simple+byte.float.int.float-.cxx := $(optimize)
 FLAGS_Templates/vil_convolve_simple+byte.float.short.float-.cxx := $(optimize)
 FLAGS_Templates/vil_convolve_simple+byte.short.short.int-.cxx := $(optimize)
 
+# and for the interpolators
+FLAGS_Templates/vil_interpolate+double.double-.cxx := $(optimize)
+FLAGS_Templates/vil_interpolate+float.double-.cxx := $(optimize)
+FLAGS_Templates/vil_interpolate+float.float-.cxx := $(optimize)
+FLAGS_Templates/vil_interpolate+uchar.double-.cxx := $(optimize)
+FLAGS_Templates/vil_interpolate+uchar.uchar-.cxx := $(optimize)
+FLAGS_Templates/vil_interpolate+vil_rgb+uchar-.vil_rgb+double-.cxx := $(optimize)
+FLAGS_Templates/vil_interpolate+vil_rgb+uchar-.vil_rgb+float-.cxx := $(optimize)
+FLAGS_Templates/vil_interpolate+vil_rgb+uchar-.vil_rgb+uchar-.cxx := $(optimize)
+
 # subdirectories
 #SUBDIRS += algo
 ifndef NOTEST

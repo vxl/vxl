@@ -16,7 +16,8 @@
 #include <vcl/vcl_compiler.h>
 
 // Include system stdlib.h
-#if defined(VCL_GCC_27) || defined(VCL_SGI_CC_720) || defined(VCL_VC60) || defined(VCL_EGCS) || (defined(VCL_GCC_295) && !defined(GNU_LIBSTDCXX_V3))
+#if defined(VCL_GCC_27) || defined(VCL_SGI_CC_720) || defined(VCL_VC60) || defined(VCL_EGCS) || defined(VCL_GCC_295)
+// v3 of the stdlib for 2.95 is not conforming....
 # include <stdlib.h>
 # define vcl_exit    exit
 # define vcl_abort   abort

@@ -21,14 +21,21 @@
 #if !VCL_USE_NATIVE_COMPLEX
 # include <vcl/emulation/vcl_complex_fwd.h>
 
-// ---------- gcc with old library
-#elif defined(VCL_EGCS) || (defined(VCL_GCC_295) && !defined(GNU_LIBSTDCXX_V3))
+// ---------- egcs
+#elif defined(VCL_EGCS)
 template <class T> class complex;
 # define vcl_complex complex
 
-// ---------- gcc with new library
-#elif defined(VCL_GCC_295) && defined(GNU_LIBSTDCXX_V3)
-# include <vcl/emulation/vcl_complex_fwd.h>
+// ---------- gcc 2.95
+#elif defined(VCL_GCC_295)
+# if !defined(GNU_LIBSTDCXX_V3)
+// old library
+   template <class T> class complex;
+#  define vcl_complex complex
+# else
+// new library (broken)
+#  include <vcl/emulation/vcl_complex_fwd.h>
+# endif
 
 // ---------- native WIN32
 #elif defined(VCL_WIN32)

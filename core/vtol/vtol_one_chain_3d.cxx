@@ -1,13 +1,16 @@
+#include "vtol_one_chain_3d.h"
 
-#include <vtol/vtol_one_chain_3d.h>
+#include <vcl/vcl_algorithm.h>
+#ifndef GNU_LIBSTDCXX_V3
+# include <vcl/vcl_rel_ops.h>
+#endif
+
 #include <vtol/vtol_edge_3d.h>
 //#include <vtol/vtol_vertex_3d.h>
 //#include <vtol/vtol_face_3d.h>
 #include <vtol/vtol_macros_3d.h>
 #include <vtol/vtol_list_functions_3d.h>
 //#include <vtol/some_stubs.h>
-#include <vcl/vcl_algorithm.h>
-#include <vcl/vcl_rel_ops.h>
 
 // -- constructors for the vtol_one_chain_3d
 
@@ -649,7 +652,8 @@ bool vtol_one_chain_3d::operator==(const vtol_one_chain_3d& ch) const
     hierarchy_node_list_3d::const_iterator l;
     
     for(r=righth.begin(), l=lefth.begin(); r!=righth.end(); ++r, ++l)
-      if( *((vsol_spatial_object_3d*)(*r)) != *((vsol_spatial_object_3d*)((l))))
+      //if( *((vsol_spatial_object_3d*)(*r)) != *((vsol_spatial_object_3d*)((l))))
+      if( !(*((vsol_spatial_object_3d*)(*r)) == *((vsol_spatial_object_3d*)((*l)))) )
 	return false;
   }
   return true;

@@ -605,8 +605,7 @@ VDS int parse(vbl_arg<vcl_vector<unsigned> >* arg, char ** argv) {
   vcl_list<int> tmp;
   int retval = list_parse(tmp,argv);
   for (vcl_list<int>::iterator i=tmp.begin() ; i!=tmp.end() ; ++i)
-    arg->value_.push_back( *i );
+    arg->value_.push_back( unsigned(*i) );
   return retval;
 }
 template class vbl_arg<vcl_vector<unsigned> >;
-

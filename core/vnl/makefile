@@ -1,3 +1,10 @@
+# This needs to come before the use of $(optimize).
+# Why not just leave it up here always so we don't
+# have to keep moving it around?
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
 USES := vxl
 LIBRARY := vnl
 VERSION := 1.0
@@ -16,8 +23,6 @@ MANPAGE_SOURCES += vnl_matrix_fixed.txx
 MANPAGE_SOURCES += vnl_file_vector.txx
 MANPAGE_SOURCES += vnl_file_matrix.txx
 MANPAGE_SOURCES += vnl_resize.txx
-SOURCES += $(wildcard vnl_block.cxx)
-FLAGS_vnl_block.cxx += $(optimize)
 
 #
 SOURCES += vnl_alloc.cxx
@@ -40,7 +45,6 @@ SOURCES += vnl_binary.cxx
 
 # ops
 SOURCES += vnl_fastops.cxx
-FLAGS_vnl_fastops.cxx = $(optimize)
 SOURCES += vnl_linear_operators_3.cxx
 MANPAGE_SOURCES += vnl_complex_ops.txx
 
@@ -82,15 +86,12 @@ SOURCES += vnl_sample.cxx
 SOURCES += vnl_unary_function.cxx
 SOURCES += vnl_transpose.cxx
 
+FLAGS_vnl_fastops.cxx = $(optimize)
 FLAGS_Templates/vnl_c_vector+float-.cxx += $(optimize)
 FLAGS_Templates/vnl_c_vector+double-.cxx += $(optimize)
 FLAGS_Templates/vnl_c_vector+float_complex-.cxx += $(optimize)
 FLAGS_Templates/vnl_c_vector+double_complex-.cxx += $(optimize)
 FLAGS_Templates/vnl_sparse_matrix_instances.cxx += $(optimize)
-
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
 
 # algo
 SUBDIRS += algo
