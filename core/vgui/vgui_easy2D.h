@@ -27,6 +27,7 @@
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_easy2D_ref.h>
 
+class vgui_soview2D;
 class vgui_soview2D_point;
 class vgui_soview2D_lineseg;
 class vgui_soview2D_infinite_line;
