@@ -49,10 +49,29 @@ void mil_algo_exp_filter_2d<srcT,destT>::filter_y(mil_image_2d_of<destT>& dest,
 }
 
 template<class srcT, class destT>
-void filter_xy(mil_image_2d_of<destT>& dest, mil_image_2d_of<srcT>& src, double k)
+void mil_algo_exp_filter_2d<srcT,destT>::filter_xy(mil_image_2d_of<destT>& dest, mil_image_2d_of<srcT>& src, double k)
 {
-  filter_x(x_filtered_,src);
-  filter_y(dest,x_filtered_);
+  filter_x(x_filtered_,src,k);
+
+  // Now filter in y.
+  // Note that source and dest are now the same type, so re-implement y filtering appropriately
+  // to avoid compilation problems.
+  int n_planes = src.n_planes();
+  dest.set_n_planes(n_planes);
+  int nx = src.nx();
+  int ny = src.ny();
+  dest.resize(nx,ny);
+  for (int i=0;i<n_planes;++i)
+  {
+    destT* dest_data = dest.plane(i);
+	destT* fx_data   = x_filtered_.plane(i);
+    for (int x=0;x<nx;++x)
+    {
+      mil_algo_exp_filter_1d(dest_data,dest.ystep(), fx_data,x_filtered_.ystep(),ny,k);
+      dest_data += dest.xstep();
+      fx_data  += x_filtered_.xstep();
+    }
+  }
 }
 
 //: Apply exponential filter along x to single plane
@@ -65,8 +84,8 @@ void mil_algo_exp_filter_2d<srcT,destT>::filter_x(destT* dest, const srcT* src,
   for (int y=0;y<ny;++y)
   {
     mil_algo_exp_filter_1d(dest,d_x_step,src,s_x_step,nx,k);
-  dest += d_y_step;
-  src  += s_y_step;
+    dest += d_y_step;
+    src  += s_y_step;
   }
 }
 
