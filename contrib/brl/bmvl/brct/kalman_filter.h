@@ -44,7 +44,7 @@ class kalman_filter
 
   //: initialize the kalman filter states
   void init();
-  void kalman_filter::init_epipole(double x, double y);
+  void init_epipole(double x, double y);
   void inc();
   vnl_double_2 projection(const vnl_double_3x4 &P, const vnl_double_3 &X);
   void prediction();
