@@ -147,12 +147,12 @@ static void test_tracking_face_2d(int argc, char* argv[])
   for (int x = 0; x<w; ++x)
     for (int y = 0; y<w; ++y)
     {
-      model_image_comb(x,y) = 16*int(15*(vcl_rand()/(RAND_MAX+1.0)));
+      model_image_comb(x,y) = 16.0f*int(15*(vcl_rand()/(RAND_MAX+1.0)));
     }
   for (int x = 0; x<w; ++x)
     for (int y = 0; y<w; ++y)
     {
-      obs_image_comb(x,y) = 16*int(15*(vcl_rand()/(RAND_MAX+1.0)));
+      obs_image_comb(x,y) = 16.0f*int(15*(vcl_rand()/(RAND_MAX+1.0)));
     }
 
   //Testing ...
