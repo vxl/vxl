@@ -3,6 +3,7 @@
 
 #include "QvDict.h"
 #include "QvString.h"
+#include <vcl_cstdio.h>
 
 class QvNode;
 class QvDB;
@@ -14,8 +15,8 @@ class QvInput {
     ~QvInput();
 
     static float        isASCIIHeader(const char *string);
-    void                setFilePointer(FILE *newFP);
-    FILE *              getCurFile() const { return fp; }
+    void                setFilePointer(vcl_FILE *newFP);
+    vcl_FILE *          getCurFile() const { return fp; }
     float               getVersion();
     QvBool              get(char &c);
     QvBool              read(char           &c);
@@ -37,7 +38,7 @@ class QvInput {
     QvNode *            findReference(const QvName &name) const;
 
   private:
-    FILE                *fp;            // File pointer
+    vcl_FILE            *fp;            // File pointer
     int                 lineNum;        // Number of line currently reading
     float               version;        // Version number of file
     QvBool              readHeader;     // TRUE if header was checked for A/B
