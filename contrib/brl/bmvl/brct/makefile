@@ -1,10 +1,10 @@
-USES += contrib/brl contrib/brl/bbas core
+USES += contrib/brl contrib/brl/bbas contrib/gel contrib/oxl core
 
 LIBRARY := brct
 VERSION := 1.0
 
 MANPAGE_SOURCES += brct_algos.h
-MANPAGE_SOURCES += kalman_filter.h
+SOURCES += kalman_filter.cpp
 
 ################################
 include ${IUEROOT}/config/top.mk
