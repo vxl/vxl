@@ -13,13 +13,13 @@
 vnl_matrix<double> mil_transform_2d::matrix() const
 {
     vnl_matrix<double> M(3,3);
-	matrix(M);
-	return M;
+    matrix(M);
+    return M;
 }
 
 void mil_transform_2d::matrix(vnl_matrix<double>& M) const
 {
-	M.resize(3,3);
+    M.resize(3,3);
     double**m_data = M.data_array();
     m_data[0][0]=xx_;   m_data[0][1]=xy_;   m_data[0][2]=xt_;
     m_data[1][0]=yx_;   m_data[1][1]=yy_;   m_data[1][2]=yt_;
@@ -28,122 +28,122 @@ void mil_transform_2d::matrix(vnl_matrix<double>& M) const
 
 void mil_transform_2d::params(vnl_vector<double>& v) const
 {
-	double *v_data;
-	switch (form_)
-	{
-		case (Identity):
-			v.resize(0);
-			break;
-		case (Translation):
-			v.resize(2);
-			v(0)=xt_; v(1)=yt_;
-			break;
-		case (ZoomOnly):
-			v.resize(4);
-			v(0)=xx_; v(1)=yy_;
-			v(2)=xt_; v(3)=yt_;
-			break;
-		case (RigidBody):
-			v.resize(3);
-			v(0)=atan2(xy_,xx_);		// Angle
-			v(1)=xt_; v(2)=yt_;
-			break;
-		case (Reflection):
-			v.resize(4);
-			v_data = v.begin();
-			v_data[0]=xx_; v_data[1]=xy_;
-			v_data[2]=xt_; v_data[3]=yt_;
-			break;
-		case (Similarity):
-			v.resize(4);
-			v_data = v.begin();
-			v_data[0]=xx_; v_data[1]=xy_;
-			v_data[2]=xt_; v_data[3]=yt_;
-			break;
-		case (Affine):
-			v.resize(6);
-			v_data = v.begin();
-			v_data[0]=xx_; v_data[1]=xy_; v_data[2]=xt_;
-			v_data[3]=yx_; v_data[4]=yy_; v_data[5]=yt_;
-			break;
-		case (Projective):
-			v.resize(9);
-			v_data = v.begin();
-			v_data[0]=xx_; v_data[1]=xy_; v_data[2]=xt_;
-			v_data[3]=yx_; v_data[4]=yy_; v_data[5]=yt_;
-			v_data[6]=tx_; v_data[7]=ty_; v_data[8]=tt_;
-			break;
-		default:
-			vcl_cerr<<"mil_transform_2d::params() Unexpected form: "<<int(form_)<<vcl_endl;
-			abort();
-	}
+    double *v_data;
+    switch (form_)
+    {
+        case (Identity):
+            v.resize(0);
+            break;
+        case (Translation):
+            v.resize(2);
+            v(0)=xt_; v(1)=yt_;
+            break;
+        case (ZoomOnly):
+            v.resize(4);
+            v(0)=xx_; v(1)=yy_;
+            v(2)=xt_; v(3)=yt_;
+            break;
+        case (RigidBody):
+            v.resize(3);
+            v(0)=vcl_atan2(xy_,xx_); // Angle
+            v(1)=xt_; v(2)=yt_;
+            break;
+        case (Reflection):
+            v.resize(4);
+            v_data = v.begin();
+            v_data[0]=xx_; v_data[1]=xy_;
+            v_data[2]=xt_; v_data[3]=yt_;
+            break;
+        case (Similarity):
+            v.resize(4);
+            v_data = v.begin();
+            v_data[0]=xx_; v_data[1]=xy_;
+            v_data[2]=xt_; v_data[3]=yt_;
+            break;
+        case (Affine):
+            v.resize(6);
+            v_data = v.begin();
+            v_data[0]=xx_; v_data[1]=xy_; v_data[2]=xt_;
+            v_data[3]=yx_; v_data[4]=yy_; v_data[5]=yt_;
+            break;
+        case (Projective):
+            v.resize(9);
+            v_data = v.begin();
+            v_data[0]=xx_; v_data[1]=xy_; v_data[2]=xt_;
+            v_data[3]=yx_; v_data[4]=yy_; v_data[5]=yt_;
+            v_data[6]=tx_; v_data[7]=ty_; v_data[8]=tt_;
+            break;
+        default:
+            vcl_cerr<<"mil_transform_2d::params() Unexpected form: "<<int(form_)<<vcl_endl;
+            vcl_abort();
+    }
 }
 
 void mil_transform_2d::setCheck(int n1,int n2,const char* str) const
 {
-	if (n1==n2) return;
-	vcl_cerr<<"mil_transform_2d::set() "<<n1<<" parameters required for ";
-	vcl_cerr<<str<<". Passed "<<n2<<vcl_endl;
-	abort();
+    if (n1==n2) return;
+    vcl_cerr<<"mil_transform_2d::set() "<<n1<<" parameters required for ";
+    vcl_cerr<<str<<". Passed "<<n2<<vcl_endl;
+    vcl_abort();
 }
 
 void mil_transform_2d::set(const vnl_vector<double>& v, Form form)
 {
-	int n=v.size();
-	const double* v_data = v.begin();
+    int n=v.size();
+    const double* v_data = v.begin();
 
-	switch (form)
-	{
-		case (Identity):
-			set_identity();
-			break;
-		case (Translation):
-			setCheck(2,n,"Translation");
-			set_translation(v_data[0],v_data[1]);
-			break;
-		case (ZoomOnly):
-			setCheck(4,n,"ZoomOnly");
-			set_zoom_only(v_data[0],v_data[1],v_data[2],v_data[3]);
-			break;
-		case (RigidBody):
-			setCheck(3,n,"RigidBody");
-			set_rigid_body(v_data[0],v_data[1],v_data[2]);
-			break;
-		case (Reflection):
-			setCheck(4,n,"Reflection");
-			xx_ = v_data[0]; xy_ = v_data[1];
-			yx_ = xy_; yy_ = -xx_;
-			xt_ = v_data[2]; yt_ = v_data[3];
-			form_ = Reflection;
-			inv_uptodate_=false;
-			break;
-		case (Similarity):
-			setCheck(4,n,"Similarity");
-			xx_ = v_data[0]; xy_ = v_data[1];
-			yx_ = -xy_; yy_=xx_;
-			xt_ = v_data[2]; yt_ = v_data[3];
-			form_ = Similarity;
-			inv_uptodate_=false;
-			break;
-		case (Affine):
-			setCheck(6,n,"Affine");
-			xx_ = v_data[0]; xy_ = v_data[1]; xt_ = v_data[2];
-			yx_ = v_data[3]; yy_ = v_data[4]; yt_ = v_data[5];
-			form_ = Affine;
-			inv_uptodate_=false;
-			break;
-		case (Projective):
-			setCheck(9,n,"Projective");
-			xx_ = v_data[0]; xy_ = v_data[1]; xt_ = v_data[2];
-			yx_ = v_data[3]; yy_ = v_data[4]; yt_ = v_data[5];
-			tx_ = v_data[6]; ty_ = v_data[7]; tt_ = v_data[8];
-			form_ = Affine;
-			inv_uptodate_=false;
-			break;
-		default:
-			vcl_cerr<<"mil_transform_2d::set() Unexpected form: "<<int(form)<<vcl_endl;
-			abort();
-	}
+    switch (form)
+    {
+        case (Identity):
+            set_identity();
+            break;
+        case (Translation):
+            setCheck(2,n,"Translation");
+            set_translation(v_data[0],v_data[1]);
+            break;
+        case (ZoomOnly):
+            setCheck(4,n,"ZoomOnly");
+            set_zoom_only(v_data[0],v_data[1],v_data[2],v_data[3]);
+            break;
+        case (RigidBody):
+            setCheck(3,n,"RigidBody");
+            set_rigid_body(v_data[0],v_data[1],v_data[2]);
+            break;
+        case (Reflection):
+            setCheck(4,n,"Reflection");
+            xx_ = v_data[0]; xy_ = v_data[1];
+            yx_ = xy_; yy_ = -xx_;
+            xt_ = v_data[2]; yt_ = v_data[3];
+            form_ = Reflection;
+            inv_uptodate_=false;
+            break;
+        case (Similarity):
+            setCheck(4,n,"Similarity");
+            xx_ = v_data[0]; xy_ = v_data[1];
+            yx_ = -xy_; yy_=xx_;
+            xt_ = v_data[2]; yt_ = v_data[3];
+            form_ = Similarity;
+            inv_uptodate_=false;
+            break;
+        case (Affine):
+            setCheck(6,n,"Affine");
+            xx_ = v_data[0]; xy_ = v_data[1]; xt_ = v_data[2];
+            yx_ = v_data[3]; yy_ = v_data[4]; yt_ = v_data[5];
+            form_ = Affine;
+            inv_uptodate_=false;
+            break;
+        case (Projective):
+            setCheck(9,n,"Projective");
+            xx_ = v_data[0]; xy_ = v_data[1]; xt_ = v_data[2];
+            yx_ = v_data[3]; yy_ = v_data[4]; yt_ = v_data[5];
+            tx_ = v_data[6]; ty_ = v_data[7]; tt_ = v_data[8];
+            form_ = Affine;
+            inv_uptodate_=false;
+            break;
+        default:
+            vcl_cerr<<"mil_transform_2d::set() Unexpected form: "<<int(form)<<vcl_endl;
+            vcl_abort();
+    }
 }
 
 
@@ -156,36 +156,35 @@ void mil_transform_2d::set_identity()
     yx_=yt_=0.0;
     tx_=ty_=0.0;
 
-	inv_uptodate_=false;
+    inv_uptodate_=false;
 }
 
 void mil_transform_2d::set_translation(double t_x, double t_y)
 {
-	if (t_x==0 && t_y==0)
-		set_identity();
-	else
-	{
-   		form_=Translation;
-    	xx_=yy_=tt_=1.0;
-    	xy_=0.0;
-    	yx_=0.0;
-    	tx_=ty_=0.0;
-		xt_=t_x;
-		yt_=t_y;
-	}
+    if (t_x==0 && t_y==0)
+        set_identity();
+    else
+    {
+        form_=Translation;
+        xx_=yy_=tt_=1.0;
+        xy_=0.0;
+        yx_=0.0;
+        tx_=ty_=0.0;
+        xt_=t_x;
+        yt_=t_y;
+    }
 
-	inv_uptodate_=false;
-
+    inv_uptodate_=false;
 }
 
 void mil_transform_2d::origin( const vgl_point_2d<double> & p )
 {
-	xt_ = p.x()*tt_;
-	yt_ = p.y()*tt_;
+    xt_ = p.x()*tt_;
+    yt_ = p.y()*tt_;
 
-	if (form_ == Identity) form_=Translation;
+    if (form_ == Identity) form_=Translation;
 
-	inv_uptodate_=false;
+    inv_uptodate_=false;
 }
 
 void mil_transform_2d::set_zoom_only(double s_x, double s_y, double t_x, double t_y)
@@ -195,88 +194,88 @@ void mil_transform_2d::set_zoom_only(double s_x, double s_y, double t_x, double 
     xt_=t_x;   yt_=t_y;
     xy_=yx_=tx_=ty_=0.0;
 
-	inv_uptodate_=false;
+    inv_uptodate_=false;
 }
 
 
-	//: reflect about a line though the points m1, and m2
+    //: reflect about a line though the points m1, and m2
 void mil_transform_2d::set_reflection( const vgl_point_2d<double> & m1, const vgl_point_2d<double> & m2)
 {
-	form_=Reflection;
+    form_=Reflection;
 
-	assert (m1 != m2);
-	const double m1x = m1.x();
-	const double m1y = m1.y();
-	const double m2x = m2.x();
-	const double m2y = m2.y();
-	const double dx = m2x - m1x;
-	const double dy = m2y - m1y;
-	const double dx2dy2 = dx*dx + dy*dy;
+    assert (m1 != m2);
+    const double m1x = m1.x();
+    const double m1y = m1.y();
+    const double m2x = m2.x();
+    const double m2y = m2.y();
+    const double dx = m2x - m1x;
+    const double dy = m2y - m1y;
+    const double dx2dy2 = dx*dx + dy*dy;
 
 // after plugging all the equations for mirroring into matlab symbolic calculator,
 // I had to rearrange the equations to avoid divide-bvy-zero. See notebook for details. IMS
 
-	xx_ = (dx*dx - dy*dy) / dx2dy2;
+    xx_ = (dx*dx - dy*dy) / dx2dy2;
 
-	xy_ = 2.0*dx*dy / dx2dy2;
+    xy_ = 2.0*dx*dy / dx2dy2;
 
-	xt_ = (2.0*m1x*dy*dy - 2.0*m1y*dx*dy) / dx2dy2;
+    xt_ = (2.0*m1x*dy*dy - 2.0*m1y*dx*dy) / dx2dy2;
 
-	yx_ = 2.0*dx*dy / dx2dy2;
+    yx_ = 2.0*dx*dy / dx2dy2;
 
-	yy_ = (dy*dy - dx*dx) / dx2dy2;
+    yy_ = (dy*dy - dx*dx) / dx2dy2;
 
-	yt_ = (2.0*m1y*dx*dx - 2.0*m1x*dx*dy) / dx2dy2;
+    yt_ = (2.0*m1y*dx*dx - 2.0*m1x*dx*dy) / dx2dy2;
 
-	tx_ = ty_ = 0.0;
-	tt_ = 1.0;
+    tx_ = ty_ = 0.0;
+    tt_ = 1.0;
 }
 
 void mil_transform_2d::set_rigid_body(double theta, double t_x, double t_y)
 {
-	if (theta==0.0)
-		set_translation(t_x,t_y);
-	else
-	{
-    	form_=RigidBody;
-    	double a=cos(theta);
-    	double b=sin(theta);
-    	xx_=a;  xy_=-b;
-    	yx_=b;  yy_=a;
-    	xt_=t_x;   yt_=t_y;
-    	tx_=ty_=0.0;   tt_=1.0;
-	}
+    if (theta==0.0)
+        set_translation(t_x,t_y);
+    else
+    {
+        form_=RigidBody;
+        double a=vcl_cos(theta);
+        double b=vcl_sin(theta);
+        xx_=a;  xy_=-b;
+        yx_=b;  yy_=a;
+        xt_=t_x;   yt_=t_y;
+        tx_=ty_=0.0;   tt_=1.0;
+    }
 
-	inv_uptodate_=false;
+    inv_uptodate_=false;
 }
 
 void mil_transform_2d::set_similarity(double s, double theta, double t_x, double t_y)
 {
-	if (s==1.0)
-		set_rigid_body(theta,t_x,t_y);
-	else
-	{
-    	form_=Similarity;
-    	double a=s*cos(theta);
-    	double b=s*sin(theta);
-    	xx_=a;  xy_=-b;
-    	yx_=b;  yy_=a;
-    	xt_=t_x;   yt_=t_y;
-    	tx_=ty_=0.0;   tt_=1.0;
-	}
+    if (s==1.0)
+        set_rigid_body(theta,t_x,t_y);
+    else
+    {
+        form_=Similarity;
+        double a=s*vcl_cos(theta);
+        double b=s*vcl_sin(theta);
+        xx_=a;  xy_=-b;
+        yx_=b;  yy_=a;
+        xt_=t_x;   yt_=t_y;
+        tx_=ty_=0.0;   tt_=1.0;
+    }
 
-	inv_uptodate_=false;
+    inv_uptodate_=false;
 }
 
 //: Sets euclidean transformation.
 void mil_transform_2d::set_similarity(const vgl_point_2d<double> & dx, const vgl_point_2d<double> & t)
 {
-	form_=Similarity;
-	xx_ = dx.x(); xy_ = -dx.y();
-	yx_ = dx.y(); yy_ = dx.x();
-	xt_ = t.x();  yt_ = t.y();
-   	tx_=ty_=0.0;   tt_=1.0;
-	inv_uptodate_=false;
+    form_=Similarity;
+    xx_ = dx.x(); xy_ = -dx.y();
+    yx_ = dx.y(); yy_ = dx.x();
+    xt_ = t.x();  yt_ = t.y();
+    tx_=ty_=0.0;   tt_=1.0;
+    inv_uptodate_=false;
 }
 
 
@@ -285,17 +284,17 @@ void mil_transform_2d::set_affine(const vnl_matrix<double>& M23)  // 2x3 matrix
     if ((M23.rows()!=2) || (M23.columns()!=3))
     {
         vcl_cerr<<"mil_transform_2d::affine : Expect 2x3 matrix, got "<<M23.rows()<<" x "<<M23.columns()<<vcl_endl;
-        abort();
+        vcl_abort();
     }
 
     const double *const *m_data=M23.data_array();
 
-	if (m_data[0][0]*m_data[1][1] - m_data[0][1]*m_data[1][0] < 0)
-	{
+    if (m_data[0][0]*m_data[1][1] - m_data[0][1]*m_data[1][0] < 0)
+    {
         vcl_cerr << "mil_transform_2d::affine : "
-			 << "sub (2x2) matrix should have +ve |det|" << vcl_endl;
-        abort();
-	}
+             << "sub (2x2) matrix should have +ve |det|" << vcl_endl;
+        vcl_abort();
+    }
 
     xx_=m_data[0][0];   xy_=m_data[0][1]; xt_=m_data[0][2];
     yx_=m_data[1][0];   yy_=m_data[1][1]; yt_=m_data[1][2];
@@ -303,7 +302,7 @@ void mil_transform_2d::set_affine(const vnl_matrix<double>& M23)  // 2x3 matrix
 
     form_=Affine;
 
-	inv_uptodate_=false;
+    inv_uptodate_=false;
 }
 
 
@@ -312,7 +311,7 @@ void mil_transform_2d::set_projective(const vnl_matrix<double>& M33)   // 3x3 ma
      if ((M33.rows()!=3) || (M33.columns()!=3))
     {
         vcl_cerr<<"mil_transform_2d::projective : Expect 3x3 matrix, got "<<M33.rows()<<" x "<<M33.columns()<<vcl_endl;
-        abort();
+        vcl_abort();
     }
 
     const double *const *m_data=M33.data_array();
@@ -322,7 +321,7 @@ void mil_transform_2d::set_projective(const vnl_matrix<double>& M33)   // 3x3 ma
 
     form_=Projective;
 
-	inv_uptodate_=false;
+    inv_uptodate_=false;
 }
 
 vgl_point_2d<double>  mil_transform_2d::operator()(double x, double y) const
@@ -347,10 +346,10 @@ vgl_point_2d<double>  mil_transform_2d::operator()(double x, double y) const
            else  return vgl_point_2d<double> ((x*xx_+y*xy_+xt_)/z,(x*yx_+y*yy_+yt_)/z);
         default:
             vcl_cerr<<"mil_transform_2d::operator() : Unrecognised form:"<<int(form_)<<vcl_endl;
-            abort();
+            vcl_abort();
     }
 
-	return vgl_point_2d<double> ();	// To keep over-zealous compilers happy
+    return vgl_point_2d<double> (); // To keep over-zealous compilers happy
 }
 
 vgl_point_2d<double>  mil_transform_2d::delta(const vgl_point_2d<double> & p, const vgl_point_2d<double>  &dp) const
@@ -358,7 +357,7 @@ vgl_point_2d<double>  mil_transform_2d::delta(const vgl_point_2d<double> & p, co
     switch (form_)
     {
         case Identity :
-		case Translation:
+        case Translation:
             return dp;
         case ZoomOnly :
             return vgl_point_2d<double> (dp.x()*xx_,dp.y()*yy_);
@@ -368,49 +367,49 @@ vgl_point_2d<double>  mil_transform_2d::delta(const vgl_point_2d<double> & p, co
         case Affine :
             return vgl_point_2d<double> (dp.x()*xx_+dp.y()*xy_,dp.x()*yx_+dp.y()*yy_);
         case Projective :
-			return operator()(p+dp)-operator()(p);
+            return operator()(p+dp)-operator()(p);
         default:
             vcl_cerr<<"mil_transform_2d::delta() : Unrecognised form:"<<int(form_)<<vcl_endl;
-            abort();
+            vcl_abort();
     }
 
-	return vgl_point_2d<double> ();	// To keep over-zealous compilers happy
+    return vgl_point_2d<double> (); // To keep over-zealous compilers happy
 }
 
 
 mil_transform_2d mil_transform_2d::inverse() const
 {
-	if (!inv_uptodate_) calcInverse();
+    if (!inv_uptodate_) calcInverse();
 
-	mil_transform_2d inv;
+    mil_transform_2d inv;
 
-	inv.xx_ = xx2_; inv.xy_ = xy2_; inv.xt_ = xt2_;
-	inv.yx_ = yx2_; inv.yy_ = yy2_; inv.yt_ = yt2_;
-	inv.tx_ = tx2_; inv.ty_ = ty2_; inv.tt_ = tt2_;
+    inv.xx_ = xx2_; inv.xy_ = xy2_; inv.xt_ = xt2_;
+    inv.yx_ = yx2_; inv.yy_ = yy2_; inv.yt_ = yt2_;
+    inv.tx_ = tx2_; inv.ty_ = ty2_; inv.tt_ = tt2_;
 
-	inv.xx2_ = xx_; inv.xy2_ = xy_; inv.xt2_ = xt_;
-	inv.yx2_ = yx_; inv.yy2_ = yy_; inv.yt2_ = yt_;
-	inv.tx2_ = tx_; inv.ty2_ = ty_; inv.tt2_ = tt_;
+    inv.xx2_ = xx_; inv.xy2_ = xy_; inv.xt2_ = xt_;
+    inv.yx2_ = yx_; inv.yy2_ = yy_; inv.yt2_ = yt_;
+    inv.tx2_ = tx_; inv.ty2_ = ty_; inv.tt2_ = tt_;
 
-	inv.form_ = form_;
-	inv.inv_uptodate_ = 1;
+    inv.form_ = form_;
+    inv.inv_uptodate_ = 1;
 
     return inv;
 }
 
 void mil_transform_2d::calcInverse()  const
 {
-	xx2_ = yy2_ = tt2_ = 1;
-	xy2_ = xt2_ = yx2_ = yt2_ = tx2_ = ty2_ = 0;
+    xx2_ = yy2_ = tt2_ = 1;
+    xy2_ = xt2_ = yx2_ = yt2_ = tx2_ = ty2_ = 0;
 
     switch (form_)
     {
         case Identity :
             break;
-		case Translation :
-			xt2_ = -xt_;
-			yt2_ = -yt_;
-			break;
+        case Translation :
+            xt2_ = -xt_;
+            yt2_ = -yt_;
+            break;
         case ZoomOnly :
             xx2_=1.0/xx_;
             xt2_=-xt_/xx_;
@@ -418,261 +417,259 @@ void mil_transform_2d::calcInverse()  const
             yt2_=-yt_/yy_;
             break;
         case RigidBody :
-			xx2_ = xx_; xy2_ = yx_;
-			yx2_ = xy_; yy2_ = yy_;
-			xt2_ = -(xx2_*xt_ + xy2_*yt_);
-			yt2_ = -(yx2_*xt_ + yy2_*yt_);
-			break;
+            xx2_ = xx_; xy2_ = yx_;
+            yx2_ = xy_; yy2_ = yy_;
+            xt2_ = -(xx2_*xt_ + xy2_*yt_);
+            yt2_ = -(yx2_*xt_ + yy2_*yt_);
+            break;
         case Similarity :
         case Affine :
-		{
+        {
             double det = xx_*yy_-xy_*yx_;
             if (det==0)
             {
                   vcl_cerr<<"SM_Transform2D::inverse() : No inverse exists for this affine transform (det==0)"<<vcl_endl;
-                  abort();
+                  vcl_abort();
             }
             xx2_=yy_/det;   xy2_=-xy_/det;
             yx2_=-yx_/det;   yy2_=xx_/det;
             xt2_=-xx2_*xt_-xy2_*yt_;
             yt2_=-yx2_*xt_-yy2_*yt_;
-			break;
-		}
+            break;
+        }
         case Projective :
-		{
-    		vnl_matrix<double> M(3,3),M_inv(3,3);
+        {
+            vnl_matrix<double> M(3,3),M_inv(3,3);
             matrix(M);
-			vnl_svd<double> svd(M);
+            vnl_svd<double> svd(M);
             M_inv = svd.inverse();
-    		double **m_data=M_inv.data_array();
-    		xx2_=m_data[0][0];   xy2_=m_data[0][1]; xt2_=m_data[0][2];
-   		    yx2_=m_data[1][0];   yy2_=m_data[1][1]; yt2_=m_data[1][2];
+            double **m_data=M_inv.data_array();
+            xx2_=m_data[0][0];   xy2_=m_data[0][1]; xt2_=m_data[0][2];
+            yx2_=m_data[1][0];   yy2_=m_data[1][1]; yt2_=m_data[1][2];
             tx2_=m_data[2][0];   ty2_=m_data[2][1]; tt2_=m_data[2][2];
-			break;
-		}
+            break;
+        }
         default:
             vcl_cerr<<"mil_transform_2d::calcInverse() : Unrecognised form:"<<int(form_)<<vcl_endl;
-            abort();
+            vcl_abort();
     }
 
-	inv_uptodate_=true;
+    inv_uptodate_=true;
 }
 
 bool mil_transform_2d::operator==(const mil_transform_2d& t) const
 {
-	return
-		xx_ == t.xx_ &&
-		xy_ == t.xy_ &&
-		xt_ == t.xt_ &&
-		yx_ == t.yx_ &&
-		yy_ == t.yy_ &&
-		yt_ == t.yt_ &&
-		tx_ == t.tx_ &&
-		ty_ == t.ty_ &&
-		tt_ == t.tt_;
+    return
+        xx_ == t.xx_ &&
+        xy_ == t.xy_ &&
+        xt_ == t.xt_ &&
+        yx_ == t.yx_ &&
+        yy_ == t.yy_ &&
+        yt_ == t.yt_ &&
+        tx_ == t.tx_ &&
+        ty_ == t.ty_ &&
+        tt_ == t.tt_;
 }
 
 mil_transform_2d operator*(const mil_transform_2d& L, const mil_transform_2d& R)
 {
-				// Default is identity_
+                // Default is identity_
     mil_transform_2d T;
 
-	if (L.form() == mil_transform_2d::Identity)
-		return R;
-	else
-	if (R.form() == mil_transform_2d::Identity)
-		return L;
-	else
-	if (L.form() == mil_transform_2d::Translation)
-	{
-		T = R;
+    if (L.form() == mil_transform_2d::Identity)
+        return R;
+    else
+    if (R.form() == mil_transform_2d::Identity)
+        return L;
+    else
+    if (L.form() == mil_transform_2d::Translation)
+    {
+        T = R;
 
-		if (R.form() == mil_transform_2d::Projective)
-		{
-			T.xx_ += L.xt_*R.tx_;
-			T.xy_ += L.xt_*R.ty_;
-			T.xt_ += L.xt_*R.tt_;
+        if (R.form() == mil_transform_2d::Projective)
+        {
+            T.xx_ += L.xt_*R.tx_;
+            T.xy_ += L.xt_*R.ty_;
+            T.xt_ += L.xt_*R.tt_;
 
-			T.yx_ += L.yt_*R.tx_;
-			T.yy_ += L.yt_*R.ty_;
-			T.yt_ += L.yt_*R.tt_;
-		}
-		else
-		{
-			T.xt_ += L.xt_;
-			T.yt_ += L.yt_;
-		}
-	}
-	else
-	if (R.form() == mil_transform_2d::Translation)
-	{
-		T = L;
+            T.yx_ += L.yt_*R.tx_;
+            T.yy_ += L.yt_*R.ty_;
+            T.yt_ += L.yt_*R.tt_;
+        }
+        else
+        {
+            T.xt_ += L.xt_;
+            T.yt_ += L.yt_;
+        }
+    }
+    else
+    if (R.form() == mil_transform_2d::Translation)
+    {
+        T = L;
 
-		T.xt_ += L.xx_*R.xt_ +
-		        L.xy_*R.yt_;
-		T.yt_ += L.yx_*R.xt_ +
-		        L.yy_*R.yt_;
-		T.tt_ += L.tx_*R.xt_ +
-		        L.ty_*R.yt_;
-	}
-	else
-	{
-		if (R.form() == mil_transform_2d::Projective ||
-		    L.form() == mil_transform_2d::Projective)
-		{
-							// full monty_...
-	  		T.xx_ = L.xx_*R.xx_ + L.xy_*R.yx_ + L.xt_*R.tx_;
-	 		T.xy_ = L.xx_*R.xy_ + L.xy_*R.yy_ + L.xt_*R.ty_;
-			T.xt_ = L.xx_*R.xt_ + L.xy_*R.yt_ + L.xt_*R.tt_;
-			T.yx_ = L.yx_*R.xx_ + L.yy_*R.yx_ + L.yt_*R.tx_;
-			T.yy_ = L.yx_*R.xy_ + L.yy_*R.yy_ + L.yt_*R.ty_;
-			T.yt_ = L.yx_*R.xt_ + L.yy_*R.yt_ + L.yt_*R.tt_;
-			T.tx_ = L.tx_*R.xx_ + L.ty_*R.yx_ + L.tt_*R.tx_;
-			T.ty_ = L.tx_*R.xy_ + L.ty_*R.yy_ + L.tt_*R.ty_;
-			T.tt_ = L.tx_*R.xt_ + L.ty_*R.yt_ + L.tt_*R.tt_;
-		}
-		else
-		{
-							// Affine, Similarity, Reflection
-							// ZoomOnly, RigidBody
-	  		T.xx_ = L.xx_*R.xx_ + L.xy_*R.yx_;
-	 		T.xy_ = L.xx_*R.xy_ + L.xy_*R.yy_;
-			T.xt_ = L.xx_*R.xt_ + L.xy_*R.yt_ + L.xt_;
-			T.yx_ = L.yx_*R.xx_ + L.yy_*R.yx_;
-			T.yy_ = L.yx_*R.xy_ + L.yy_*R.yy_;
-			T.yt_ = L.yx_*R.xt_ + L.yy_*R.yt_ + L.yt_;
-		}
+        T.xt_ += L.xx_*R.xt_ +
+                L.xy_*R.yt_;
+        T.yt_ += L.yx_*R.xt_ +
+                L.yy_*R.yt_;
+        T.tt_ += L.tx_*R.xt_ +
+                L.ty_*R.yt_;
+    }
+    else
+    {
+        if (R.form() == mil_transform_2d::Projective ||
+            L.form() == mil_transform_2d::Projective)
+        {
+                            // full monty_...
+            T.xx_ = L.xx_*R.xx_ + L.xy_*R.yx_ + L.xt_*R.tx_;
+            T.xy_ = L.xx_*R.xy_ + L.xy_*R.yy_ + L.xt_*R.ty_;
+            T.xt_ = L.xx_*R.xt_ + L.xy_*R.yt_ + L.xt_*R.tt_;
+            T.yx_ = L.yx_*R.xx_ + L.yy_*R.yx_ + L.yt_*R.tx_;
+            T.yy_ = L.yx_*R.xy_ + L.yy_*R.yy_ + L.yt_*R.ty_;
+            T.yt_ = L.yx_*R.xt_ + L.yy_*R.yt_ + L.yt_*R.tt_;
+            T.tx_ = L.tx_*R.xx_ + L.ty_*R.yx_ + L.tt_*R.tx_;
+            T.ty_ = L.tx_*R.xy_ + L.ty_*R.yy_ + L.tt_*R.ty_;
+            T.tt_ = L.tx_*R.xt_ + L.ty_*R.yt_ + L.tt_*R.tt_;
+        }
+        else
+        {
+                            // Affine, Similarity, Reflection
+                            // ZoomOnly, RigidBody
+            T.xx_ = L.xx_*R.xx_ + L.xy_*R.yx_;
+            T.xy_ = L.xx_*R.xy_ + L.xy_*R.yy_;
+            T.xt_ = L.xx_*R.xt_ + L.xy_*R.yt_ + L.xt_;
+            T.yx_ = L.yx_*R.xx_ + L.yy_*R.yx_;
+            T.yy_ = L.yx_*R.xy_ + L.yy_*R.yy_;
+            T.yt_ = L.yx_*R.xt_ + L.yy_*R.yt_ + L.yt_;
+        }
 
-							// now set the ty_pe using the ty_pe of L and R
-		if (R.form() == L.form())
-			T.form_ = R.form();
-		else
-		{
-			if (R.form() == mil_transform_2d::Projective ||
-		    	L.form() == mil_transform_2d::Projective)
-				T.form_ = mil_transform_2d::Projective;
-			else
-			if (R.form() == mil_transform_2d::Affine ||
-		    	L.form() == mil_transform_2d::Affine)
-				T.form_ = mil_transform_2d::Affine;
-			else
-			if (R.form() == mil_transform_2d::Reflection ||
-		    	L.form() == mil_transform_2d::Reflection)
-				T.form_ = mil_transform_2d::Affine;
-			else
-			if (R.form() == mil_transform_2d::Similarity ||
-		    	L.form() == mil_transform_2d::Similarity)
-				T.form_ = mil_transform_2d::Similarity;
-			else
-			if (R.form() == mil_transform_2d::RigidBody ||
-		    	L.form() == mil_transform_2d::RigidBody)
-			{
-				if (R.form() == mil_transform_2d::ZoomOnly)
-					if (R.xx_ == R.yy_)
-						T.form_ = mil_transform_2d::Similarity;
-					else
-						T.form_ = mil_transform_2d::Affine;
-				else
-				if (L.form() == mil_transform_2d::ZoomOnly)
-					if (L.xx_ == L.yy_)
-						T.form_ = mil_transform_2d::Similarity;
-					else
-						T.form_ = mil_transform_2d::Affine;
-				else
-					T.form_ = mil_transform_2d::RigidBody;
-			}
-			else
-			if (R.form() == mil_transform_2d::ZoomOnly ||
-		    	L.form() == mil_transform_2d::ZoomOnly)
-				T.form_ = mil_transform_2d::ZoomOnly;
-			else
-				T.form_ = mil_transform_2d::Translation;
+                            // now set the ty_pe using the ty_pe of L and R
+        if (R.form() == L.form())
+            T.form_ = R.form();
+        else
+        {
+            if (R.form() == mil_transform_2d::Projective ||
+                L.form() == mil_transform_2d::Projective)
+                T.form_ = mil_transform_2d::Projective;
+            else
+            if (R.form() == mil_transform_2d::Affine ||
+                L.form() == mil_transform_2d::Affine)
+                T.form_ = mil_transform_2d::Affine;
+            else
+            if (R.form() == mil_transform_2d::Reflection ||
+                L.form() == mil_transform_2d::Reflection)
+                T.form_ = mil_transform_2d::Affine;
+            else
+            if (R.form() == mil_transform_2d::Similarity ||
+                L.form() == mil_transform_2d::Similarity)
+                T.form_ = mil_transform_2d::Similarity;
+            else
+            if (R.form() == mil_transform_2d::RigidBody ||
+                L.form() == mil_transform_2d::RigidBody)
+            {
+                if (R.form() == mil_transform_2d::ZoomOnly)
+                    if (R.xx_ == R.yy_)
+                        T.form_ = mil_transform_2d::Similarity;
+                    else
+                        T.form_ = mil_transform_2d::Affine;
+                else
+                if (L.form() == mil_transform_2d::ZoomOnly)
+                    if (L.xx_ == L.yy_)
+                        T.form_ = mil_transform_2d::Similarity;
+                    else
+                        T.form_ = mil_transform_2d::Affine;
+                else
+                    T.form_ = mil_transform_2d::RigidBody;
+            }
+            else
+            if (R.form() == mil_transform_2d::ZoomOnly ||
+                L.form() == mil_transform_2d::ZoomOnly)
+                T.form_ = mil_transform_2d::ZoomOnly;
+            else
+                T.form_ = mil_transform_2d::Translation;
+        }
 
-		}
+                // make sure det == 1 for rigid body (prevents
+                // accumulated rounding errors)
+        if (T.form_ == mil_transform_2d::RigidBody)
+        {
+            double det = T.xx_*T.yy_ - T.xy_*T.yx_;
+            T.xx_ /= det;
+            T.xy_ /= det;
+            T.yx_ /= det;
+            T.yy_ /= det;
+        }
+    }
 
-				// make sure det == 1 for rigid body (prevents
-				// accumulated rounding errors)
-		if (T.form_ == mil_transform_2d::RigidBody)
-		{
-			double det = T.xx_*T.yy_ - T.xy_*T.yx_;
-			T.xx_ /= det;
-			T.xy_ /= det;
-			T.yx_ /= det;
-			T.yy_ /= det;
-		}
-	}
+    T.inv_uptodate_ = false;
 
-	T.inv_uptodate_ = false;
-
-	return T;
+    return T;
 }
 
 void mil_transform_2d::print_summary(vcl_ostream& o) const
 {
+    o << vsl_indent()<< "Form: ";
+    vsl_inc_indent(o);
+    switch (form_)
+    {
+        case Identity:
+            o << "Identity";
+            break;
 
-	o << vsl_indent()<< "Form: ";
-	vsl_inc_indent(o);
-	switch (form_)
-	{
-		case Identity:
-			o << "Identity";
-			break;
+        case Translation:
+            o << "Translation ";
+            o << "(" << xt_ << "," << yt_ << ")";
+            break;
 
-		case Translation:
-			o << "Translation ";
-			o << "(" << xt_ << "," << yt_ << ")";
-			break;
+        case ZoomOnly:
+            o << "ZoomOnly" << vcl_endl;
+            o << vsl_indent()<< "scale factor = (" << xx_ << "," << yy_ << ")" << vcl_endl;
+            o << vsl_indent()<< "translation = (" << xt_ << "," << yt_ << ")";
+            break;
 
-		case ZoomOnly:
-			o << "ZoomOnly" << vcl_endl;
-			o << vsl_indent()<< "scale factor = (" << xx_ << "," << yy_ << ")" << vcl_endl;
-			o << vsl_indent()<< "translation = (" << xt_ << "," << yt_ << ")";
-			break;
+        case RigidBody:
+            o << "RigidBody" << vcl_endl;
+            o << vsl_indent()<< "angle = " << vcl_atan2(yx_,xx_) << vcl_endl;
+            o << vsl_indent()<< "translation = (" << xt_ << "," << yt_ << ")";
+            break;
 
-		case RigidBody:
-			o << "RigidBody" << vcl_endl;
-			o << vsl_indent()<< "angle = " << atan2(yx_,xx_) << vcl_endl;
-			o << vsl_indent()<< "translation = (" << xt_ << "," << yt_ << ")";
-			break;
+        case Similarity:
+            o << "Similarity {";
+            o << " s= " << vcl_sqrt(xx_*xx_+xy_*xy_);
+            o << " A= " << vcl_atan2(xy_,xx_);
+            o << " t= (" << xt_ << "," << yt_ << " ) }";
+            break;
 
-		case Similarity:
-			o << "Similarity {";
-			o << " s= " << sqrt(xx_*xx_+xy_*xy_);
-			o << " A= " << atan2(xy_,xx_);
-			o << " t= (" << xt_ << "," << yt_ << " ) }";
-			break;
+        case Reflection:
+            o << "Reflection" << vcl_endl;
+            o << vsl_indent()<< xx_ << " " << xy_ << vcl_endl;
+            o << vsl_indent()<< yx_ << " " << yy_ << vcl_endl;
+            o << vsl_indent()<< "translation = (" << xt_ << "," << yt_ << ")";
+            break;
 
-		case Reflection:
-			o << "Reflection" << vcl_endl;
-			o << vsl_indent()<< xx_ << " " << xy_ << vcl_endl;
-			o << vsl_indent()<< yx_ << " " << yy_ << vcl_endl;
-			o << vsl_indent()<< "translation = (" << xt_ << "," << yt_ << ")";
-			break;
+        case Affine:
+            o << "Affine" << vcl_endl;
+            o << vsl_indent()<< xx_ << " " << xy_ << vcl_endl;
+            o << vsl_indent()<< yx_ << " " << yy_ << vcl_endl;
+            o << vsl_indent()<< "translation = (" << xt_ << "," << yt_ << ")";
+            break;
 
-		case Affine:
-			o << "Affine" << vcl_endl;
-			o << vsl_indent()<< xx_ << " " << xy_ << vcl_endl;
-			o << vsl_indent()<< yx_ << " " << yy_ << vcl_endl;
-			o << vsl_indent()<< "translation = (" << xt_ << "," << yt_ << ")";
-			break;
-
-		case Projective:
-			o << "Projective"<<vcl_endl;
-			o << vsl_indent()<< xx_ << " " << xy_ << " " << xt_ << vcl_endl;
-			o << vsl_indent()<< yx_ << " " << yy_ << " " << yt_ << vcl_endl;
-			o << vsl_indent()<< tx_ << " " << ty_ << " " << tt_;
-			break;
-	}
-	vsl_dec_indent(o);
+        case Projective:
+            o << "Projective"<<vcl_endl;
+            o << vsl_indent()<< xx_ << " " << xy_ << " " << xt_ << vcl_endl;
+            o << vsl_indent()<< yx_ << " " << yy_ << " " << yt_ << vcl_endl;
+            o << vsl_indent()<< tx_ << " " << ty_ << " " << tt_;
+            break;
+    }
+    vsl_dec_indent(o);
 }
 
 vcl_ostream& operator<<( vcl_ostream& os, const mil_transform_2d& t )
 {
-	os << "mil_transform_2d:"<<vcl_endl;
-	vsl_inc_indent(os);
-	t.print_summary(os);
-	vsl_dec_indent(os);
-	return os;
+    os << "mil_transform_2d:"<<vcl_endl;
+    vsl_inc_indent(os);
+    t.print_summary(os);
+    vsl_dec_indent(os);
+    return os;
 }
 
 short mil_transform_2d::version_no() const { return 1; }
@@ -680,44 +677,41 @@ short mil_transform_2d::version_no() const { return 1; }
 
 void mil_transform_2d::b_write(vsl_b_ostream& bfs) const
 {
-	vsl_b_write(bfs,version_no());
-	vsl_b_write(bfs,int(form_));
-	vsl_b_write(bfs,xx_); vsl_b_write(bfs,xy_); vsl_b_write(bfs,xt_);
-	vsl_b_write(bfs,yx_); vsl_b_write(bfs,yy_); vsl_b_write(bfs,yt_);
-	vsl_b_write(bfs,tx_); vsl_b_write(bfs,ty_); vsl_b_write(bfs,tt_);
+    vsl_b_write(bfs,version_no());
+    vsl_b_write(bfs,int(form_));
+    vsl_b_write(bfs,xx_); vsl_b_write(bfs,xy_); vsl_b_write(bfs,xt_);
+    vsl_b_write(bfs,yx_); vsl_b_write(bfs,yy_); vsl_b_write(bfs,yt_);
+    vsl_b_write(bfs,tx_); vsl_b_write(bfs,ty_); vsl_b_write(bfs,tt_);
 }
 
 void mil_transform_2d::b_read(vsl_b_istream& bfs)
 {
-	short version;
-	vsl_b_read(bfs,version);
-	int f;
-	switch (version) {
-	case 1:
-		vsl_b_read(bfs,f); form_=Form(f);
-		vsl_b_read(bfs,xx_); vsl_b_read(bfs,xy_); vsl_b_read(bfs,xt_);
-		vsl_b_read(bfs,yx_); vsl_b_read(bfs,yy_); vsl_b_read(bfs,yt_);
-		vsl_b_read(bfs,tx_); vsl_b_read(bfs,ty_); vsl_b_read(bfs,tt_);
-		break;
-	default:
-		vcl_cerr<<"mil_transform_2d::load : ";
-		vcl_cerr<<"Illegal version number : "<< version << vcl_endl;
-		abort();
+    short version;
+    vsl_b_read(bfs,version);
+    int f;
+    switch (version) {
+    case 1:
+        vsl_b_read(bfs,f); form_=Form(f);
+        vsl_b_read(bfs,xx_); vsl_b_read(bfs,xy_); vsl_b_read(bfs,xt_);
+        vsl_b_read(bfs,yx_); vsl_b_read(bfs,yy_); vsl_b_read(bfs,yt_);
+        vsl_b_read(bfs,tx_); vsl_b_read(bfs,ty_); vsl_b_read(bfs,tt_);
+        break;
+    default:
+        vcl_cerr<<"mil_transform_2d::load : ";
+        vcl_cerr<<"Illegal version number : "<< version << vcl_endl;
+        vcl_abort();
    }
 
-	inv_uptodate_ = false;
-
+    inv_uptodate_ = false;
 }
 
 void vsl_b_read(vsl_b_istream& bfs,mil_transform_2d& t)
 {
-	t.b_read(bfs);
-	
+    t.b_read(bfs);
 }
 
 void vsl_b_write(vsl_b_ostream& bfs,const mil_transform_2d& t)
 {
-	t.b_write(bfs);
-	
+    t.b_write(bfs);
 }
 
