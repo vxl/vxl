@@ -6,6 +6,7 @@
 /*
   fsm@robots.ox.ac.uk
 */
+// \file
 
 #include <vcl_iosfwd.h>
 #include <vcl_complex_fwd.h>

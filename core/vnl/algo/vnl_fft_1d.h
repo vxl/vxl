@@ -6,6 +6,8 @@
 /*
   fsm@robots.ox.ac.uk
 */
+// \file
+// \brief In-place 1D fast fourier transform
 
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_fft_base.h>

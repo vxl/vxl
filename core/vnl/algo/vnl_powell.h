@@ -4,8 +4,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// Author: awf@robots.ox.ac.uk
-// Created: 05 Dec 00
+// \file
+// \brief Powell minimizer.
+// \author awf@robots.ox.ac.uk
+// \date   05 Dec 00
 
 #include <vnl/vnl_cost_function.h>
 #include <vnl/vnl_nonlinear_minimizer.h>

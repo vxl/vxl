@@ -4,8 +4,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// Author: awf@robots.ox.ac.uk
-// Created: 07 Dec 00
+// \file
+// \author awf@robots.ox.ac.uk
+// \date   07 Dec 00
 
 #include <vnl/vnl_cost_function.h>
 #include <vnl/vnl_nonlinear_minimizer.h>

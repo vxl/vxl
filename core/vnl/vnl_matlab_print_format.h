@@ -6,6 +6,7 @@
 /*
   fsm@robots.ox.ac.uk
 */
+// \file
 
 //: pretty-printing matlab formats
 enum vnl_matlab_print_format {

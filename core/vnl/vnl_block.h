@@ -6,6 +6,7 @@
 /*
   fsm@robots.ox.ac.uk
 */
+// \file
 
 #include <vcl_compiler.h>
 
@@ -180,4 +181,4 @@ void vnl_block_fill(T x[], unsigned n, T value)
     x[i] = value;
 }
 
-#endif
+#endif // vnl_block_h_

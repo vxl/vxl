@@ -6,12 +6,13 @@
 /*
   fsm@robots.ox.ac.uk
 */
+// \file
 
 #include <vcl_compiler.h>
 
 //: use C++ overloading to find the correct FORTRAN routine from templated FFT code.
-
 void vnl_fft_setgpfa(float  *triggs, int size, int const pqr[3], int *info);
+//: use C++ overloading to find the correct FORTRAN routine from templated FFT code.
 void vnl_fft_setgpfa(double *triggs, int size, int const pqr[3], int *info);
 
 
