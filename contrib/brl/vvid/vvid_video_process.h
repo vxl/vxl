@@ -38,25 +38,25 @@ class vvid_video_process : public vbl_ref_count
 
   void add_input_topology(vcl_vector<vtol_topology_object_sptr> const& topo_objes);
 
-  int get_N_input_images(){return input_images_.size();}
-  vil_image get_input_image(int i);
-  vil_image get_output_image(){return output_image_;}
+  int get_N_input_images() const { return input_images_.size(); }
+  vil_image get_input_image(unsigned int i) const;
+  vil_image get_output_image() const { return output_image_; }
 
 
-  int get_N_input_spat_objs(){return input_spat_objs_.size();}
+  int get_N_input_spat_objs() const { return input_spat_objs_.size(); }
   vcl_vector<vsol_spatial_object_2d_sptr> const&
-  get_input_spatial_objects(){return input_spat_objs_;}
+  get_input_spatial_objects() const { return input_spat_objs_; }
 
-  int get_N_input_topo_objs(){return input_topo_objs_.size();}
+  int get_N_input_topo_objs() const { return input_topo_objs_.size(); }
   vcl_vector<vtol_topology_object_sptr> const &
-  get_input_topology(){return input_topo_objs_;}
+  get_input_topology() const { return input_topo_objs_; }
 
   //:output handling may depend on the specific process
   virtual vcl_vector<vsol_spatial_object_2d_sptr> const& get_output_spatial_objects();
   virtual vcl_vector<vtol_topology_object_sptr> const & get_output_topology();
 
-  virtual process_data_type get_input_type(){return NOTYPE;}
-  virtual process_data_type get_output_type(){return NOTYPE;}
+  virtual process_data_type get_input_type() const { return NOTYPE; }
+  virtual process_data_type get_output_type() const { return NOTYPE; }
   virtual bool execute()=0;
   virtual bool finish()=0;
  protected:

@@ -26,7 +26,7 @@ class vvid_lucas_kanade_process : public vvid_video_process
   vvid_lucas_kanade_process(bool down_sample=false, int window_size=2,
                             double thresh=20000);
   ~vvid_lucas_kanade_process();
-  virtual process_data_type get_output_type(){return IMAGE;}
+  virtual process_data_type get_output_type() const { return IMAGE; }
   //: compute lucas_kanade
   virtual bool execute();
   virtual bool finish();

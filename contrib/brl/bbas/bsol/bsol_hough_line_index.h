@@ -106,14 +106,10 @@
 //
 //      index->parallel_lines(lines, 45.0, 5.0); //Lines parallel to 45 deg.
 //                                               //+- 5 deg.
-// \verbatim
-//  Author - J.L. Mundy December 1997, ported to VXL April 11, 2003
 //
-//  Modifications <none>
-// \endverbatim
+// \author J.L. Mundy December 1997, ported to VXL April 11, 2003
 //-----------------------------------------------------------------------------
 #include <vcl_vector.h>
-#include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_bounding_box.h>
 #include <vbl/vbl_array_2d.h>
@@ -141,11 +137,11 @@ class bsol_hough_line_index :  public vbl_ref_count
 
   // Data Access---------------------------------------------------------------
 
-  float getxsize_(){return xsize_;}
-  float getysize_(){return ysize_;}
+  float getxsize_() const {return xsize_;}
+  float getysize_() const {return ysize_;}
 
-  int get_r_dimension() {return r_dim_;}
-  int get_theta_dimension() {return th_dim_;}
+  int get_r_dimension() const {return r_dim_;}
+  int get_theta_dimension() const {return th_dim_;}
 
   //:Get the bsol_hough_line_index array location of a line segment
   void array_loc(vsol_line_2d_sptr const& line, float& r, float& theta);
@@ -217,7 +213,7 @@ class bsol_hough_line_index :  public vbl_ref_count
   //: Angle histogram - projection of hough space onto theta axis
   vcl_vector<int> angle_histogram();
 
-  //:Dominant line directions found by non-maximum supression above thresh
+  //:Dominant line directions found by non-maximum suppression above thresh
   int dominant_directions(const int thresh, const float angle_tol, 
                           vcl_vector<int>& dirs);
 
@@ -234,7 +230,7 @@ class bsol_hough_line_index :  public vbl_ref_count
 
   // INTERNALS-----------------------------------------------------------------
 
-protected:
+ protected:
   //internal functions
   void init(const int r_dimension, const int theta_dimension);
   vcl_vector<int> non_maximum_suppress(const int radius,

@@ -41,11 +41,11 @@ class vvid_live_stereo_manager : public vgui_grid_tableau
   static vvid_live_stereo_manager *instance();
 
   //: properties of the video frames
-  unsigned get_height(){return height_;}
-  unsigned get_width(){return width_;}
+  unsigned get_height() const { return height_; }
+  unsigned get_width() const { return width_; }
 
   //: properties of the camera setup
-  int get_N_views(){return N_views_;}
+  int get_N_views() const { return N_views_; }
 
   //: control live video actions
   void set_camera_params();
@@ -70,7 +70,6 @@ class vvid_live_stereo_manager : public vgui_grid_tableau
 
   //: the virtual handle function
   virtual bool handle(const vgui_event&);
- protected:
 
  private:
   //utility functions

@@ -21,14 +21,11 @@ class vvid_harris_corner_process : public vvid_video_process, public sdet_harris
  public:
   vvid_harris_corner_process(sdet_harris_detector_params & hdp);
   ~vvid_harris_corner_process();
-  virtual process_data_type get_output_type(){return SPATIAL_OBJECT;}
+  virtual process_data_type get_output_type() const { return SPATIAL_OBJECT; }
 
   //: compute edges on the input image
   virtual bool execute();
-  virtual bool finish(){return true;}
- private:
-  //members
+  virtual bool finish() { return true; }
 };
-
 
 #endif // vvid_harris_corner_process_h_

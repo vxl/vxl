@@ -22,14 +22,11 @@ class vvid_edge_process : public vvid_video_process, public sdet_detector_params
  public:
   vvid_edge_process(sdet_detector_params & dp);
   ~vvid_edge_process();
-  virtual process_data_type get_output_type(){return TOPOLOGY;}
+  virtual process_data_type get_output_type() const { return TOPOLOGY; }
 
   //: compute edges on the input image
   virtual bool execute();
-  virtual bool finish(){return true;}
- private:
-  //members
+  virtual bool finish() { return true; }
 };
-
 
 #endif // vvid_edge_process_h_

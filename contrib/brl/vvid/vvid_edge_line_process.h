@@ -24,17 +24,12 @@ class vvid_edge_line_process : public vvid_video_process, public sdet_detector_p
  public:
   vvid_edge_line_process(sdet_detector_params & dp, sdet_fit_lines_params& flp);
   ~vvid_edge_line_process();
-  virtual process_data_type get_input_type(){return IMAGE;}
-  virtual process_data_type get_output_type(){return SPATIAL_OBJECT;}
+  virtual process_data_type get_input_type() const { return IMAGE; }
+  virtual process_data_type get_output_type() const { return SPATIAL_OBJECT; }
 
   //: compute van duc edges and then line segments
   virtual bool execute();
-  virtual bool finish(){return true;}
-
- private:
-  //members
-
+  virtual bool finish() { return true; }
 };
-
 
 #endif // vvid_edge_line_process_h_

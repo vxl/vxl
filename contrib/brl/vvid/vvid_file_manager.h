@@ -42,10 +42,10 @@
 // caches.. etc.
 //
 // Known problems:
-//  1) quiting while the video is paused can cause a seg fault since
-//     the movie gets deleted before the loop quits
-//  2) There is a continuous gl error stream from vgui_adaptor. Something to
-//     do with "setting draw buffer to back"
+//  - quiting while the video is paused can cause a seg fault since
+//    the movie gets deleted before the loop quits
+//  - There is a continuous gl error stream from vgui_adaptor. Something to
+//    do with "setting draw buffer to back"
 //
 class vvid_file_manager : public vgui_wrapper_tableau
 {
@@ -56,10 +56,10 @@ class vvid_file_manager : public vgui_wrapper_tableau
   static vvid_file_manager *instance();
 
   //: height (in pixels) of the video frame
-  unsigned get_height(){return height_;}
+  unsigned get_height() const { return height_; }
 
   //: width (in pixels) of the video frame
-  unsigned get_width(){return width_;}
+  unsigned get_width() const { return width_; }
 
   //: load each frame of the video into a cached vector of overlays if chaching is enabled
   void load_video_file();
@@ -116,7 +116,7 @@ class vvid_file_manager : public vgui_wrapper_tableau
   void compute_grid_match();
 
   //: get the window of this player
-  vgui_window* get_window(){return win_;}
+  vgui_window* get_window() { return win_; }
 
   //: set the window
   void set_window(vgui_window* win){win_=win;}
@@ -125,6 +125,7 @@ class vvid_file_manager : public vgui_wrapper_tableau
   virtual bool handle(const vgui_event&);
 
  protected:
+  //utility functions
   void init();
   void cached_play();
   void un_cached_play();
@@ -132,9 +133,8 @@ class vvid_file_manager : public vgui_wrapper_tableau
   void display_spatial_objects();
   void display_topology();
   void set_changing_colors(int num, float *r, float *g, float *b);
- private:
-  //utility functions
 
+ private:
   //flags
   bool cache_frames_;
   bool play_video_;

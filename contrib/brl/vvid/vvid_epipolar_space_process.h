@@ -24,10 +24,10 @@ class vvid_epipolar_space_process : public vvid_video_process
  public:
   vvid_epipolar_space_process();
   ~vvid_epipolar_space_process();
-  virtual process_data_type get_output_type(){return IMAGE;}
+  virtual process_data_type get_output_type() const { return IMAGE; }
   //: We assume that two grey scale images are in the input list
   virtual bool execute();
-  virtual bool finish(){return true;}
+  virtual bool finish() { return true; }
 };
 
 #endif // vvid_epipolar_space_process_h_

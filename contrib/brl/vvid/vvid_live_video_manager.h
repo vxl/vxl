@@ -40,8 +40,8 @@ class vvid_live_video_manager : public vgui_wrapper_tableau
   void init();
 
   //: properties of the video frames
-  unsigned get_height(){return height_;}
-  unsigned get_width(){return width_;}
+  unsigned get_height() const { return height_; }
+  unsigned get_width() const { return width_; }
 
   //: control video parameters
   void set_camera_params();

@@ -20,22 +20,18 @@
 #include <sdet/sdet_grid_finder_params.h>
 #include <vvid/vvid_video_process.h>
 
-class vvid_grid_finder_process : public vvid_video_process, public sdet_detector_params, public sdet_fit_lines_params, public sdet_grid_finder_params
+class vvid_grid_finder_process : public vvid_video_process, public sdet_detector_params,
+                                 public sdet_fit_lines_params, public sdet_grid_finder_params
 {
  public:
   vvid_grid_finder_process(sdet_detector_params & dp, sdet_fit_lines_params& flp, sdet_grid_finder_params& gfp);
   ~vvid_grid_finder_process();
-  virtual process_data_type get_input_type(){return IMAGE;}
-  virtual process_data_type get_output_type(){return SPATIAL_OBJECT;}
+  virtual process_data_type get_input_type() const { return IMAGE; }
+  virtual process_data_type get_output_type() const { return SPATIAL_OBJECT; }
 
   //: compute van duc edges, line segments, and then match the grid
   virtual bool execute();
-  virtual bool finish(){return true;}
-
- private:
-  //members
-
+  virtual bool finish() { return true; }
 };
-
 
 #endif // vvid_grid_finder_process_h_

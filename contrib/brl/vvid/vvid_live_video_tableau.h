@@ -32,14 +32,14 @@ class vvid_live_video_tableau : public vgui_image_tableau
   //camera manipulation
 
   void set_camera_params(const cmu_1394_camera_params& cp);
-  cmu_1394_camera_params get_camera_params(){return (cmu_1394_camera_params)cam_;}
+  cmu_1394_camera_params get_camera_params() const { return (const cmu_1394_camera_params)cam_; }
   bool attach_live_video();
   void start_live_video();
   void update_frame();
   void stop_live_video();
 
   //: collection state, i.e. is live and capturing frames
-  bool get_video_live(){return live_;}
+  bool get_video_live() const { return live_; }
 
   //: Access to next live camera frames. Causes the camera to take a new frame
   void get_camera_rgb_image(vil_memory_image_of< vil_rgb<unsigned char> >& im,
@@ -62,12 +62,11 @@ class vvid_live_video_tableau : public vgui_image_tableau
   bool get_current_mono_image(int pix_sample_interval,
                               vil_memory_image_of<unsigned char>& im);
 
-
  protected:
   //: Handle all events for this tableau.
   bool handle(vgui_event const &e);
+
  private:
-  //utility functions
   //status flags
   bool live_;//video is live
   //the live camera
@@ -81,7 +80,6 @@ class vvid_live_video_tableau : public vgui_image_tableau
 struct vvid_live_video_tableau_new : public vvid_live_video_tableau_sptr
 {
  public:
-
   vvid_live_video_tableau_new() :
     vvid_live_video_tableau_sptr(new vvid_live_video_tableau()){}
 
