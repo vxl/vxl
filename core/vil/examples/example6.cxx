@@ -8,6 +8,7 @@
 #include <vil/vil_byte.h>
 #include <vil/vil_rgb.h>
 #include <vcl_iostream.h>
+#include <vcl_cassert.h>
 
 //: Example function to return a 3-plane view of an RGB image
 vil2_image_view<vil_byte> view_as_planes(const vil2_image_view<vil_rgb<vil_byte> >& v)
@@ -28,9 +29,9 @@ vil2_image_view<vil_rgb<vil_byte> > view_as_rgb(const vil2_image_view<vil_byte>&
   assert(v.xstep()==3 || v.ystep()==3);
 
   return vil2_image_view<vil_rgb<vil_byte> >(v.memory_chunk(),
-                                   (vil_rgb<vil_byte>*) v.top_left_ptr(),
-                                   v.nx(),v.ny(),1,
-                                   v.xstep()/3,v.ystep()/3,1);
+                                             (vil_rgb<vil_byte>*) v.top_left_ptr(),
+                                             v.nx(),v.ny(),1,
+                                             v.xstep()/3,v.ystep()/3,1);
 }
 
 int main(int argc, char** argv)
