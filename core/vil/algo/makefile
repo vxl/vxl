@@ -40,6 +40,7 @@ SOURCES += vil_histogram_equalise.cxx
 SOURCES += vil_distance_transform.cxx
 SOURCES += vil_blob_finder.cxx
 SOURCES += vil_trace_4con_boundary.cxx
+SOURCES += vil_trace_8con_boundary.cxx
 
 ################################
 include ${IUEROOT}/config/top.mk
