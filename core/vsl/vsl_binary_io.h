@@ -3,8 +3,8 @@
 
 //:
 // \file
-// \author Ian Scott, Tim Cootes (Manchester) March 2001
 // \brief Set of functions, and objects to perform binary IO
+// \author Ian Scott, Tim Cootes (Manchester) March 2001
 //
 // You should include this file if you want to do binary_io
 // 

@@ -1,8 +1,10 @@
 //:
 // \file
+// \brief Implementation of Multi-variate principal Component gaussian PDF.
 // \author Tim Cootes
 // \date 21-Jul-2000
-// \brief Implementation of Multi-variate principal Component gaussian PDF.
+//
+// Modifications
 // \verbatim
 //    IMS   Converted to VXL 23 April 2000
 // \endverbatim

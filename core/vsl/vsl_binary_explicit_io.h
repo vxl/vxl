@@ -3,8 +3,8 @@
 
 //:
 // \file
-// \author Ian Scott (Manchester) April 2001
 // \brief Byte-swapping, arbitrary length integer conversion, and explicit I/O
+// \author Ian Scott (Manchester) April 2001
 // Include this file if you wish to do binary IO for large numbers of
 // multi-byte fundamental types (short, int, long, float, double) at the same
 // time, or if you want to perform integer IO using fixed size encoding.
@@ -12,11 +12,11 @@
 // If you want to read or write a large number of floating points, then;
 // \verbatim
 // Floats and doubles need byte swapped, and this can be done in situ.
+//
 // Shorts, ints and longs need converted to/from the arbitrary length format.
 // \endverbatim
 //
-// Implementation details:
-//
+// \par Implementation details:
 // The arbitrary length encoding takes the number and breaks it into 7 bit
 // nibbles. Each nibble is saved with the 8th bit set if this is the last byte.
 // The nibbles are stored in little endian order. ie The first byte of the
