@@ -12,14 +12,17 @@
 //
 // \verbatim
 // Modifications:
-// 16 Sep 1999  fsm@robots. various.
-//  5 Oct 1999  fsm@robots. replaced (x,y) by (wx,wy) and (ux,uy).
-// 10 Oct 1999  pcp         added timestamp
-// 20 Oct 1999  awf         Changed timestamp to int.
-// 19 Oct 1999  fsm@robots. added pointer to adaptor.
-//  1 Nov 1999  fsm@robots. events now use viewport, not window coordinates.
-// 28 Nov 1999  fsm@robots. added vcl_string event.
-// 22 Aug 2000  Marko Bacic. added support for scroll bar events
+// 16-Sep-1999  fsm@robots. various.
+//  5-Oct-1999  fsm@robots. replaced (x,y) by (wx,wy) and (ux,uy).
+// 10-Oct-1999  pcp         added timestamp
+// 20-Oct-1999  awf         Changed timestamp to int.
+// 19-Oct-1999  fsm@robots. added pointer to adaptor.
+//  1-Nov-1999  fsm@robots. events now use viewport, not window coordinates.
+// 28-Nov-1999  fsm@robots. added vcl_string event.
+// 22-Aug-2000  Marko Bacic. added support for scroll bar events
+// 04-Oct-2002  K.Y.McGaul - Added set_key() to make sure vgui_key is now
+//                           always lower case to save confusion.
+//                         - Added ascii_char value to vgui_event.
 // \endverbatim
 
 #include <vcl_string.h>
@@ -51,19 +54,49 @@ enum vgui_event_type {
 vcl_ostream& operator<<(vcl_ostream& s, vgui_event_type e);
 
 //: The vgui_event class encapsulates the events handled by the vgui system.
-
+//
+//  For key presses with modifiers the following standards apply:
+//  \verbatim
+//          a   modifier = vgui_NULL   key = 'a'  ascii_char = 'a'
+//     CTRL+a   modifier = vgui_CTRL   key = 'a'  ascii_char = '^A'
+//    SHIFT+a   modifier = vgui_SHIFT  key = 'a'  ascii_char = 'A'
+//  \endverbatim
+//
+//  We have decided to make it a standard that key is always lower case for
+//  simplicity.  In particular people have been defining impossible 
+//  vgui_event_conditions, eg key='A', modifier=NULL (where NULL is the
+//  default modifier) and then wondering why SHIFT+a doesn't work.
+//
+//  A new data type has been added (ascii_char) which holds the actual
+//  key stroke pressed by the user.
 class vgui_event
 {
  public:
+  //: Constructor - create a default event.
   vgui_event();
+
+  //: Constructor - create an event of the given type.
   vgui_event(vgui_event_type);
 
+  //: The type of event (key press, mouse motion, etc).
   vgui_event_type type;
+
+  //: Mouse button used (if it is a mouse event).
   vgui_button button;
+
+  //: The key pressed in lower case (if it is a key event).
   vgui_key key;
+
+  //: Convert given key to lower case and use that to set key.
+  void set_key(char c);
+
+  //: Which modifiers are pressed during the event (NULL, CTRL, SHIFT).
   vgui_modifier modifier;
 
-  //: Position of the mouse pointer in viewport coordinates when the event occurred.
+  //: The actual key stroke pressed by the user.
+  char ascii_char;
+
+  //: Position of the mouse pointer in viewport coordinates when event occurred.
   int wx,wy;
 
   //: Timestamp in milliseconds since app started.
@@ -78,19 +111,19 @@ class vgui_event
   int timer_id;
 
   //: A vcl_string message, for an event of type vgui_STRING.
-  // An event of type vgui_STRING implies that
-  // this field contains some sort of textual message. The exact
-  // encoding of these messages is unspecified; the sender and the
-  // receiver may use any protocal they like. Caveat : as a
-  // corollary there is no guarantee that one protocal will not
-  // clash with another.
+  //  An event of type vgui_STRING implies that
+  //  this field contains some sort of textual message. The exact
+  //  encoding of these messages is unspecified; the sender and the
+  //  receiver may use any protocal they like. Caveat : as a
+  //  corollary there is no guarantee that one protocal will not
+  //  clash with another.
   vcl_string str;
 
-  //: type and data for events of type vgui_OTHER.
-  // The fields user and data are used only when the event type is vgui_OTHER.
-  // The 'user' field must uniquely identify the type of event, in the
-  // sense that once the user field is known, the 'data' field can be
-  // safely cast to point to the client data (type).
+  //: Type and data for events of type vgui_OTHER.
+  //  The fields user and data are used only when the event type is vgui_OTHER.
+  //  The 'user' field must uniquely identify the type of event, in the
+  //  sense that once the user field is known, the 'data' field can be
+  //  safely cast to point to the client data (type).
   void const *user;
   void const *data;
 

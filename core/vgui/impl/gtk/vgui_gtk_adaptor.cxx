@@ -7,6 +7,13 @@
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   19 Dec 99
 // \brief  See vgui_gtk_adaptor.h for a description of this file.
+// 
+// \verbatim
+//  Modifications:
+//   04-OCT-2002 K.Y.McGaul - Use event.set_key() to set key for events,
+//                            makes all key chars lower case.
+//                          - Set event.ascii_char to actual key stroke
+// \endverbatim
 
 #include "vgui_gtk_adaptor.h"
 #include <vcl_cstdlib.h>
@@ -214,7 +221,8 @@ gint vgui_gtk_adaptor::handle(GtkWidget *widget,
   else if (type==GDK_KEY_PRESS) {
     event.type = vgui_KEY_PRESS;
     GdkEventKey *e = (GdkEventKey*)gev;
-    event.key = vgui_gtk_utils::translate_key(e);
+    event.set_key( vgui_gtk_utils::translate_key(e));
+    event.ascii_char = vgui_gtk_utils::translate_key(e);
     vgui_gtk_utils::set_modifiers(event,e->state);
     event.wx = adaptor->last_mouse_x;
     event.wy = adaptor->last_mouse_y;
@@ -222,7 +230,8 @@ gint vgui_gtk_adaptor::handle(GtkWidget *widget,
   else if (type==GDK_KEY_RELEASE) {
     event.type = vgui_KEY_RELEASE;
     GdkEventKey *e = (GdkEventKey*)gev;
-    event.key = vgui_gtk_utils::translate_key(e);
+    event.set_key( vgui_gtk_utils::translate_key(e));
+    event.ascii_char = vgui_gtk_utils::translate_key(e);
     vgui_gtk_utils::set_modifiers(event,e->state);
     event.wx = adaptor->last_mouse_x;
     event.wy = adaptor->last_mouse_y;

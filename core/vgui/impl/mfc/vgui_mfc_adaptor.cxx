@@ -8,7 +8,10 @@
 //
 // \verbatim
 //   Modifications:
-//     06-AUG-2002 K.Y.McGaul - Changed key returned by CTRL events.
+//    06-AUG-2002 K.Y.McGaul - Changed key returned by CTRL events.
+//    04-OCT-2002 K.Y.McGaul - Use event.set_key() to set key, this makes sure
+//                             the key stroke is always lower case.
+//                           - Set event.ascii_char to be the actual key stroke.
 // \endverbatim
 
 #include <vcl_iostream.h>
@@ -35,8 +38,8 @@ IMPLEMENT_DYNCREATE(vgui_mfc_adaptor, CView)
 vgui_mfc_adaptor::vgui_mfc_adaptor():ovl_helper(0), /*come_out_now(false),*/ redraw_posted(true)
 {
   if (vgui_accelerate::vgui_mfc_acceleration)
-    double_buffered = false; // kym - double buffering is not available with acceleration (it
-                             // crashes windows).
+    double_buffered = false; // kym - double buffering is not available with 
+                             // acceleration (it crashes windows).
   else
     double_buffered = true;
 
@@ -337,7 +340,8 @@ void vgui_mfc_adaptor::service_redraws()
 {
   if (redraw_posted)
   {
-    if (double_buffered)  // kym - changed from if (!double_buffered) - why change the buffer otherwise?
+    if (double_buffered)  // kym - changed from if (!double_buffered) - why 
+                          // change the buffer otherwise?
       glDrawBuffer(GL_BACK);
     dispatch_to_tableau(vgui_event(vgui_DRAW));
     if (!double_buffered)
@@ -455,6 +459,7 @@ int mfc_key(UINT nChar, UINT nFlags)
     vcl_memset(buf, 0, 256);
 
     lpKeyState[VK_SHIFT] = GetKeyState(VK_SHIFT);
+
     // kym - don't specify the CTRL key - this returns the wrong
     // ASCII character.  On other toolkits we expect, for example,
     // CTRL+j to produce: modifier=vgui_CTRL, key='j'.
@@ -485,7 +490,7 @@ vgui_event vgui_mfc_adaptor::generate_vgui_event(UINT nChar, UINT nRepCnt, UINT 
   // by the menu, so, it seems, there will be no vgui_ALT events for MFC.
 
   int k = mfc_key(nChar, nFlags);
-  evt.key = vgui_key(k);
+  evt.set_key(k);
   return evt;
 }
 

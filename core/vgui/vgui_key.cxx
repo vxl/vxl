@@ -8,6 +8,8 @@
 // \file
 // \brief  See vgui_key.h for a description of this file.
 
+//----------------------------------------------------------------------------
+//: Convert key from lower case to upper case if necessary.
 vgui_key vgui_key_CTRL(int character)
 {
   if (character >= 'A' && character <= 'Z')
@@ -16,6 +18,7 @@ vgui_key vgui_key_CTRL(int character)
     return vgui_key(character - 'a' + 'A' - '@');
 }
 
+//----------------------------------------------------------------------------
 vcl_ostream& operator<<(vcl_ostream& s, vgui_key k)
 {
   int ik = int(k);
@@ -31,7 +34,8 @@ vcl_ostream& operator<<(vcl_ostream& s, vgui_key k)
       "F1", "F2" , "F3" , "F4" , // function keys
       "F5", "F6" , "F7" , "F8" ,
       "F9", "F10", "F11", "F12",
-      "CURSOR_LEFT", "CURSOR_UP", "CURSOR_RIGHT", "CURSOR_DOWN",  // cursor movement
+      "CURSOR_LEFT", "CURSOR_UP", "CURSOR_RIGHT", 
+        "CURSOR_DOWN", // cursor movement 
       "PAGE_UP", "PAGE_DOWN",
       "HOME", "END", 
       "DELETE", "INSERT"  // other things

@@ -17,10 +17,13 @@
 #include <vcl_iostream.h>
 #include <vul/vul_get_timestamp.h>
 
+//----------------------------------------------------------------------------
+//: Initialise default event.
 void vgui_event::init() {
   type = vgui_EVENT_NULL;
   button = vgui_BUTTON_NULL;
   key = vgui_KEY_NULL;
+  ascii_char = 0;
   modifier = vgui_MODIFIER_NULL;
   wx = 0;
   wy = 0;
@@ -40,31 +43,57 @@ void vgui_event::init() {
   data = 0;
 }
 
+//----------------------------------------------------------------------------
+//: Constructor - create a default event.
 vgui_event::vgui_event() {
   init();
 }
 
+//----------------------------------------------------------------------------
+//: Constructor - create an event of the given type.
 vgui_event::vgui_event(vgui_event_type etype) {
   init();
   type = etype;
 }
 
+//----------------------------------------------------------------------------
+//: Convert the given key to lower case and use that to set the key.
+//  I added this to avoid the complication of doing this conversion in each
+//  GUI impl - kym.
+void vgui_event::set_key(char c)
+{
+  if (c < 32)
+  {
+    // Convert control character to lower case character
+    key = vgui_key(c + 'a' -1);
+  }
+  else if (c >= 'A' && c <= 'Z')
+  {
+    // Convert upper case to lower case
+    key = vgui_key(c + 'a' - 'A');
+  }
+  else
+  {
+    key = vgui_key(c);
+  }
+}
+
+//----------------------------------------------------------------------------
 bool vgui_event::modifier_is_down(int mods) const {
   return (mods & modifier) == mods;
 }
 
+//----------------------------------------------------------------------------
 double vgui_event::secs_since(vgui_event const& e) const {
   return (this->timestamp - e.timestamp) * 1e-3;
 }
 
+//----------------------------------------------------------------------------
 long vgui_event::usecs_since(vgui_event const& e) const {
   return long(this->timestamp - e.timestamp) * 1000;
 }
 
-//------------------------------------------------------------------------------
-
-// formatted stream output operators below.
-
+//----------------------------------------------------------------------------
 static struct {
   vgui_event_type t;
   char const *name;
@@ -97,6 +126,7 @@ static struct {
 };
 static const int fsm_event_table_size = sizeof(fsm_event_table)/sizeof(fsm_event_table[0]);
 
+//-----------------------------------------------------------------------------
 vcl_ostream& operator<<(vcl_ostream& s, vgui_event_type t)
 {
   for (int i=0; i<fsm_event_table_size; ++i)
@@ -105,10 +135,12 @@ vcl_ostream& operator<<(vcl_ostream& s, vgui_event_type t)
   return s << "[" __FILE__ " : bad event, code " << int(t) << "]";
 }
 
+//-----------------------------------------------------------------------------
 vcl_ostream& operator<<(vcl_ostream& s, vgui_event const& e)
 {
   s << "[type:" << e.type;
   if (e.key != vgui_KEY_NULL) s << ", key:" << vgui_key(e.key);
+  if (e.ascii_char != 0) s << ", ascii_char: " << vgui_key(e.ascii_char);
   if (e.button != vgui_BUTTON_NULL) s << ", button:" << e.button;
   if (e.modifier != vgui_MODIFIER_NULL) s << ", modifiers:" << vgui_modifier(e.modifier);
   s << ", w(" << e.wx << "," << e.wy << ")";
@@ -117,7 +149,7 @@ vcl_ostream& operator<<(vcl_ostream& s, vgui_event const& e)
   return s << "]";
 };
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 //: Returns true if events are the same.
 //  Isn't this what the compiler would have generated anyway?
 //  moreover, the compiler-generated one wouldn't need to be

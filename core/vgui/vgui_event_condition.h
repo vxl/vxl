@@ -10,6 +10,13 @@
 // \brief  Represent and recognise simple event conditions.
 //
 //  Contains classes: vgui_event_condition
+//
+// \verbatim
+//  Modifications:
+//   04-OCT-2002 K.Y.McGaul - Added doxygen style documentation.
+//                          - Check for impossible events in new init function.
+//                          - key is now always lower case.
+// \verbatim
 
 #include <vcl_string.h>
 #include <vgui/vgui_key.h>
@@ -18,8 +25,11 @@
 class vgui_event;
 
 //: Represent and recognise simple event conditions.
+//
 //  This makes it easy to change the key/mouse combination that causes
 //  one's tableau to do something.
+//
+//  The key is now always lower case to save confusion.  
 struct vgui_event_condition
 {
   // We use bitfields to avoid the charge that these things take
@@ -34,14 +44,19 @@ struct vgui_event_condition
   vgui_button button : 3;
   vgui_modifier modifier : 4;
 
-  vgui_event_condition()
-    : on(false) { } //: key(vgui_KEY_NULL), button(vgui_BUTTON_NULL), modifier(vgui_MODIFIER_NULL) { }
+  //: Initialise event condition and check for impossible events.
+  void init(vgui_key k, vgui_button b, vgui_modifier m, bool p, bool is_on);
 
-  vgui_event_condition(vgui_key k, vgui_modifier m = vgui_MODIFIER_NULL, bool p = true)
-    : on(true), pressed(p), key(k), button(vgui_BUTTON_NULL), modifier(m) { }
+  //: Constructor - create a default event condition.
+  vgui_event_condition();
 
-  vgui_event_condition(vgui_button b, vgui_modifier m = vgui_MODIFIER_NULL, bool p = true)
-    : on(true), pressed(p), key(vgui_KEY_NULL), button(b), modifier(m) { }
+  //: Constructor for a key press event condition.
+  vgui_event_condition(vgui_key k, vgui_modifier m = vgui_MODIFIER_NULL, 
+    bool p = true);
+
+  //: Constructor for a button press event condition.
+  vgui_event_condition(vgui_button b, vgui_modifier m = vgui_MODIFIER_NULL, 
+    bool p = true);
 
   void enable(bool v = true) { on = v; }
   void disable(bool v = true) { on = !v; }
