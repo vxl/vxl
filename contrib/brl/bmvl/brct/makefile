@@ -1,5 +1,5 @@
 # 3D reconstruction from multiple views library
-USES += contrib/brl contrib/brl/bbas contrib/gel core
+USES += contrib/brl contrib/brl/bbas contrib/gel contrib/oxl core
 
 LIBRARY := brct
 VERSION := 1.0
