@@ -9,7 +9,7 @@ void test_scale_space_peaks_float()
   // Just check it compiles cleanly first
   vimt_image_2d_of<float> image;
   vcl_vector<vgl_point_3d<double> > peak_pts;
-  ipts_scale_space_peaks_2d(peak_pts,image,image,image,false);
+  ipts_scale_space_peaks_2d(peak_pts,image,image,image,float(0),false);
 }
 
 MAIN( test_scale_space_peaks )

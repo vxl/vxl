@@ -20,6 +20,7 @@ int main( int argc, char* argv[] )
   vul_arg<vcl_string> out_path("-o","Output image file (peaks)");
   vul_arg<vcl_string> dog_path("-d","Output image file (DOG)","dog.pnm");
   vul_arg<vcl_string> smooth_path("-s","Output image file (Smooth )","smooth.pnm");
+  vul_arg<float> threshold("-t","Threshold on DoG value",2.0f);
   vul_arg_parse(argc, argv);
 
   if(in_path() == "")
@@ -39,14 +40,14 @@ int main( int argc, char* argv[] )
   vil_convert_cast(image,image_f.image());
 
   // Invert image, so we pick out troughs
-  vil_math_scale_values(image_f.image(),-1.0);
+//  vil_math_scale_values(image_f.image(),-1.0);
 
   vimt_image_pyramid dog_pyramid,smooth_pyramid;
   vimt_dog_pyramid_builder_2d<float> pyr_builder;
-  pyr_builder.build_dog(dog_pyramid,smooth_pyramid,image_f);
+  pyr_builder.build_dog(dog_pyramid,smooth_pyramid,image_f,true);
 
   vcl_vector<vgl_point_3d<double> > peak_pts;
-  ipts_scale_space_peaks_2d(peak_pts,dog_pyramid,float());
+  ipts_scale_space_peaks_2d(peak_pts,dog_pyramid,threshold());
   vcl_cout<<"Found "<<peak_pts.size()<<" peaks."<<vcl_endl;
 
   for (unsigned i=0;i<peak_pts.size();++i)

@@ -3,7 +3,9 @@
 SET(ipts_sources
     ipts_scale_space_peaks.h
     ipts_draw.h
-    ipts_local_entropy.cxx ipts_local_entropy.h 
+    ipts_local_entropy.cxx ipts_local_entropy.h
+    ipts_corner_pyramid.cxx ipts_corner_pyramid.h
+    ipts_entropy_pyramid.cxx ipts_entropy_pyramid.h
 )
 AUX_SOURCE_DIRECTORY(Templates ipts_sources)
 

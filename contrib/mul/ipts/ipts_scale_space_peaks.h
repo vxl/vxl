@@ -28,13 +28,14 @@ inline bool ipts_is_above_3x3(T value, const T* im,
   return true;
 }
 
-//: Find local maxima in position and scale
+//: Find local maxima in position and scale above given threshold
 //  Points returned in a 3D point, given world coords + scale value
 template<class T>
 void ipts_scale_space_peaks_2d(vcl_vector<vgl_point_3d<double> >& peak_pts,
                                const vimt_image_2d_of<T>& image_below,
                                const vimt_image_2d_of<T>& image,
                                const vimt_image_2d_of<T>& image_above,
+                               T threshold = 0,
                                bool clear_list = true)
 {
   if (clear_list) { peak_pts.resize(0); }
@@ -61,14 +62,15 @@ void ipts_scale_space_peaks_2d(vcl_vector<vgl_point_3d<double> >& peak_pts,
     const T* pixel = row;
     for (unsigned i=2;i<ni-2;++i,pixel+=istep)
     {
-      if (vimt_is_peak_3x3(pixel,istep,jstep))
+      if (*pixel>threshold && vimt_is_peak_3x3(pixel,istep,jstep))
       {
         // (i,j) is local maxima at this level
         // Check it is also above all pixels nearby in level below
         vgl_point_2d<double> p0 = to_below(i,j);
+
         const T* pixel_below=&im_below(int(p0.x()+0.5),int(p0.y()+0.5));
         if (ipts_is_above_3x3(*pixel,pixel_below,
-                              im_below.istep(),im_below.jstep()))
+                                im_below.istep(),im_below.jstep())  )
         {
           // (i,j) is local maxima at the level below
           // Check it is also above all pixels nearby in level above
@@ -90,14 +92,14 @@ void ipts_scale_space_peaks_2d(vcl_vector<vgl_point_3d<double> >& peak_pts,
   }
 }
 
-//: Find local maxima in position and scale
+//: Find local maxima in position and scale above a threshold
 //  Points returned in a 3D point, given world coords + scale value
 //  Note that image_pyr is assumed to contain images of type
-//  vimt_image_2d_of<T> - dummy indicates the typing.
+//  vimt_image_2d_of<T> - threshold indicates the typing.
 template<class T>
 void ipts_scale_space_peaks_2d(vcl_vector<vgl_point_3d<double> >& peak_pts,
                                const vimt_image_pyramid& image_pyr,
-                               T dummy)
+                               T threshold)
 {
   peak_pts.resize(0);
   for (int L=image_pyr.lo()+1;L<image_pyr.hi();++L)
@@ -109,7 +111,7 @@ void ipts_scale_space_peaks_2d(vcl_vector<vgl_point_3d<double> >& peak_pts,
     const vimt_image_2d_of<T>& im_above =
                 dynamic_cast<const vimt_image_2d_of<T>&>(image_pyr(L+1));
 
-    ipts_scale_space_peaks_2d(peak_pts,im_below,image,im_above,false);
+    ipts_scale_space_peaks_2d(peak_pts,im_below,image,im_above,threshold,false);
   }
 }
 
