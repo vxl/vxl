@@ -27,8 +27,8 @@ vgl_homg_plane_3d<Type>::vgl_homg_plane_3d (vgl_homg_point_3d<Type> const& p1,
     +p2.w()*(p3.x()*p1.y()-p3.y()*p1.x())
     +p3.w()*(p1.x()*p2.y()-p1.y()*p2.x()))
 , d_(p1.x()*(p2.z()*p3.y()-p2.y()*p3.z())
-    +p2.x()*(p2.z()*p3.y()-p2.y()*p3.z())
-    +p3.x()*(p2.z()*p3.y()-p2.y()*p3.z()))
+    +p2.x()*(p1.y()*p3.z()-p1.z()*p3.y())
+    +p3.x()*(p1.z()*p2.y()-p1.y()*p2.z()))
 {
   assert(a_||b_||c_||d_); // points should not be collinear or coinciding
 }
