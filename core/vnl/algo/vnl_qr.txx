@@ -196,7 +196,7 @@ vnl_vector<T> vnl_qr<T>::solve(const vnl_vector<T>& b) const
            &info);
 
   if (info > 0)
-    vcl_cerr << "vnl_qr<T>::solve() : A is rank-deficient by " << info << vcl_endl;
+    vcl_cerr << "vnl_qr<T>::solve() : matrix is rank-deficient by " << info << vcl_endl;
 
   return x;
 }
@@ -226,9 +226,8 @@ vnl_vector<T> vnl_qr<T>::QtB(const vnl_vector<T>& b) const
            JOB,
            &info);
 
-  if (info > 0) {
-    vcl_cerr << "vnl_qr<T>::QtB() -- A is rank-def by " << info << vcl_endl;
-  }
+  if (info > 0)
+    vcl_cerr << "vnl_qr<T>::QtB() -- matrix is rank-def by " << info << vcl_endl;
 
   return QtB;
 }

@@ -54,7 +54,7 @@ public:
   enum vxl_formats {
     VXL_FLOAT,      /*!< This is documentation for this element of the enum */
     VXL_COMPLEX,    /*!< This works for Doxygen only */
-    VXL_DOUBLE,     /*!< Remark the needed '<' for this ! */
+    VXL_DOUBLE      /*!< Remark the needed '<' for this ! */
   };
 
 };
