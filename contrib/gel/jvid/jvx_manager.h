@@ -18,24 +18,21 @@
 #include <vgui/vgui_viewer2D_sptr.h>
 #include <vgui/vgui_dialog.h>
 #include <vidl/vidl_movie.h>
-#include <vidl/vidl_codec_callbacks.h>
 
 #ifdef HAS_MPEG
 #include <vidl/vidl_mpegcodec.h>
-
-extern void (*load_mpegcodec_callback)(vidl_codec*);
-
+ 
 //define mpeg callback here
 //this dialog box queries the user for info
 //necessary to initialize the codec. normally, this
 //would be done by reading the header, but that is
 //not implemented here.
-void
+static void
 jvid_load_mpegcodec_callback(vidl_codec * vc)
 {
   vgui_dialog dialog( "MPEG player setup");
 
-  bool grey_scale = true;
+  bool grey_scale = false;
   bool demux_video = true;
   vcl_string pid = "0x00";
   int numframes = -1;

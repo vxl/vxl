@@ -61,7 +61,7 @@ void jvx_manager::load_video_file()
 
 #ifdef HAS_MPEG
   //need to define callbacks
-  load_mpegcodec_callback = &jvid_load_mpegcodec_callback;
+  vidl_io::load_mpegcodec_callback = &jvid_load_mpegcodec_callback;
 #endif
   _my_movie = vidl_io::load_movie(image_filename.c_str());
   if (!_my_movie) {
@@ -69,7 +69,7 @@ void jvx_manager::load_video_file()
     return;
   }
   _tabs.clear();
-  vcl_cout << vcl_endl;
+  
   vidl_movie::frame_iterator pframe(_my_movie);
   pframe = _my_movie->first();
 

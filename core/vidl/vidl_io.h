@@ -20,6 +20,7 @@
 #include <vidl/vidl_codec_sptr.h>
 #include <vcl_vector.h>
 #include <vcl_list.h>
+#include "dll.h"
 
 class vidl_movie;
 class vidl_codec;
@@ -33,6 +34,11 @@ class vidl_io //: public vbl_ref_count
   // PUBLIC INTERFACE----------------------------------------------------------
 
 public:
+//-----------------------------------------------------
+//   Callbacks for initializing codecs
+//-------------------------------------------------------
+VIDL_DLL_DATA static void (* load_mpegcodec_callback)( vidl_codec*);
+
 
   //---------------------------------------------------------
   //   LoadMovie

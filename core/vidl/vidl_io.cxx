@@ -2,13 +2,9 @@
 // \file
 
 #include "vidl_io.h"
-#include "vidl_codec_callbacks.h"
 #include <vidl/vidl_movie.h>
 #include <vidl/vidl_clip.h>
 #include <vidl/vidl_image_list_codec.h>
-#ifdef HAS_MPEG
-# include <vidl/vidl_mpegcodec.h>
-#endif
 
 #ifdef _MSC_VER // Microsoft compiler
 # include <vidl/vidl_avicodec.h>
@@ -28,6 +24,11 @@
 #include <vcl_iostream.h>
 #include <vcl_list.h>
 #include <vcl_vector.h>
+
+#ifdef HAS_MPEG
+# include <vidl/vidl_mpegcodec.h>
+void (* vidl_io::load_mpegcodec_callback)(vidl_codec*) = 0;
+#endif
 
 vcl_list<vidl_codec_sptr> vidl_io::supported_types_;
 
