@@ -326,6 +326,8 @@ extern void exit();
 extern double strtod();
 extern long strtol();
 #endif /* _STDLIB_H_ */
+#else
+# include <stdlib.h>
 #endif
 
 /* A few forward declarations.                                               */
