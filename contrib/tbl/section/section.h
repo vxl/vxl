@@ -47,12 +47,7 @@
 
 #include <vcl_cstddef.h>  // for size_t
 #include <vcl_cassert.h>
-
-#ifdef VCL_WIN32
-#include <vcl_memory.h> // for memcpy
-#else
-#include <vcl_cstring.h>  // for memcpy where did it get it...
-#endif
+#include <vcl_cstring.h>  // for memcpy()
 
 typedef unsigned int uint;
 
@@ -115,7 +110,7 @@ public:
   section(uint sz0, uint sz1, T* b=0) { assert(N==2); uint sz[2]={sz0,sz1}; init(sz,b); }
   section(uint sz0, uint sz1, uint sz2, T* b=0) { assert(N==3); uint sz[3]={sz0,sz1,sz2}; init(sz,b); }
   section(section<T,N> const& s) {
-    init(s.Size(),0); memcpy(buffer,s.buffer,offset[N]*sizeof(T));
+    init(s.Size(),0); vcl_memcpy(buffer,s.buffer,offset[N]*sizeof(T));
     for (uint i=0; i<N; ++i)ROI_start[i]=s.ROI_start[i],ROI_end[i]=s.ROI_end[i];
   }
   ~section(){ if(allocated) delete[] buffer; }
@@ -152,7 +147,7 @@ public:
   //: Returns a newly allocated copy of this section.
   section<T,N> Copy() const {
     T* buf = new T[GetSize()];
-    memcpy(buf, buffer, GetSize()*sizeof(T));
+    vcl_memcpy(buf, buffer, GetSize()*sizeof(T));
     section<T,N> t(Size(),buf);
     for (uint i=0; i<N; ++i)t.ROI_start[i]=ROI_start[i],t.ROI_end[i]=ROI_end[i];
     return t; }
@@ -171,7 +166,7 @@ bool section<T,N>::operator== (section<T,N> const& s) const {
 template <class T, uint N>
 section<T,N>& section<T,N>::operator= (section<T,N> const& s) {
   if (allocated) delete[] buffer;
-  init(s.Size(),0); memcpy(buffer,s.buffer,offset[N]*sizeof(T));
+  init(s.Size(),0); vcl_memcpy(buffer,s.buffer,offset[N]*sizeof(T));
   for (uint i=0; i<N; ++i) ROI_start[i]=s.ROI_start[i], ROI_end[i]=s.ROI_end[i];
   return *this;
 }
@@ -199,7 +194,7 @@ section<T,N-1> Project(section<T,N> const& s, uint slice=0, int d=-1, bool copy=
   vcl_size_t len = s.Offset(dim);
   T* buf = new T[s.GetSize()/s.Size(dim)]; T* nptr = buf;
   for (T* optr=s.buffer+off; optr<s.buffer+s.GetSize(); nptr+=len,optr+=s.Offset(dim+1))
-    memcpy(nptr, optr, len*sizeof(T));
+    vcl_memcpy(nptr, optr, len*sizeof(T));
   section<T,N-1> t(size, buf);
   for (i=0; i<dim; ++i) t.ROI_start[i]=s.ROI_start[i],t.ROI_end[i]=s.ROI_end[i];
   for (; i<N-1; ++i)t.ROI_start[i]=s.ROI_start[i+1],t.ROI_end[i]=s.ROI_end[i+1];
