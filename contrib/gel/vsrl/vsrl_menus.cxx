@@ -95,6 +95,12 @@ void vsrl_menus::raw_correlation_callback()
   return;
 }
 
+void vsrl_menus::corner_method_callback()
+{
+  vsrl_manager::instance()->corner_method();
+  return;
+}
+
 
 // vsrl_menus definitions
 
@@ -120,6 +126,7 @@ vgui_menu vsrl_menus::get_menus()
   menuops.add("Draw North Arrow", draw_north_callback);
   menuops.add("Region Segmentation...", find_regions_callback);
   menuops.add("Raw Correlation", raw_correlation_callback);
+  menuops.add("Corner Method", corner_method_callback);
   menuops.add("Test Function (Left)", test_left_func_callback);
   menuops.add("Test Function (Right)", test_right_func_callback);
 

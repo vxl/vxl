@@ -26,6 +26,7 @@ class vsrl_menus
   static void test_right_func_callback();
   static void make_3d_callback();
   static void raw_correlation_callback();
+  static void corner_method_callback();
   static vgui_menu get_menus();
  private:
   vsrl_menus(){};
