@@ -24,7 +24,7 @@ vnl_nonlinear_minimizer::vnl_nonlinear_minimizer()
   epsfcn = xtol * 0.001; // Step length for FD Jacobian
   trace = false;
   verbose_ = false;
-
+  check_derivatives_=0;
   reset();
 }
 
