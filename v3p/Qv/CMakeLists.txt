@@ -96,12 +96,6 @@ SOURCE_FILES( Qv_sources
 
 AUX_SOURCE_DIRECTORY( Templates Qv_sources )
 
-IF (WIN32)
-  IF (NOT CYGWIN)
-    INCLUDE(${allvxl_SOURCE_DIR}/v3p/Qv/CMakeListsHeaders.txt)
-  ENDIF (NOT CYGWIN)
-ENDIF(WIN32)
-
 #INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/vcl )
 
 IF(BUILD_TESTING)
