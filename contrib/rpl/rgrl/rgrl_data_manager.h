@@ -21,6 +21,7 @@
 
 #include <vcl_vector.h>
 #include <vcl_map.h>
+#include <vcl_string.h>
 
 // ---------------------------------------------------------------------------
 //                                                                   data item
@@ -37,13 +38,15 @@ class rgrl_data_manager_data_item
                                rgrl_matcher_sptr                  in_matcher,
                                rgrl_weighter_sptr                 in_weighter,
                                rgrl_scale_estimator_unwgted_sptr  in_unwgted_scale_est,
-                               rgrl_scale_estimator_wgted_sptr    in_wgted_scale_est )
+                               rgrl_scale_estimator_wgted_sptr    in_wgted_scale_est,
+                               const vcl_string&                  in_label = vcl_string() )
     : from_set( in_from_set ),
       to_set( in_to_set ),
       matcher( in_matcher ),
       unwgted_scale_est( in_unwgted_scale_est ),
       wgted_scale_est( in_wgted_scale_est ),
-      weighter( in_weighter )
+      weighter( in_weighter ),
+      label( in_label )
     {
     }
 
@@ -53,6 +56,7 @@ class rgrl_data_manager_data_item
   rgrl_scale_estimator_unwgted_sptr unwgted_scale_est;
   rgrl_scale_estimator_wgted_sptr   wgted_scale_est;
   rgrl_weighter_sptr                weighter;
+  vcl_string                        label;
 };
 
 // ---------------------------------------------------------------------------
@@ -160,7 +164,8 @@ class rgrl_data_manager: public rgrl_object
                  rgrl_matcher_sptr                        matcher = 0,
                  rgrl_weighter_sptr                       weighter = 0,
                  rgrl_scale_estimator_unwgted_sptr        unwgted_scale_est = 0,
-                 rgrl_scale_estimator_wgted_sptr          wgted_scale_est = 0);
+                 rgrl_scale_estimator_wgted_sptr          wgted_scale_est = 0,
+                 const vcl_string&                        label = vcl_string() );
 
   //: Add a data item to a single-stage data storage.
   //
@@ -171,7 +176,8 @@ class rgrl_data_manager: public rgrl_object
                  rgrl_matcher_sptr                        matcher = 0,
                  rgrl_weighter_sptr                       weighter = 0,
                  rgrl_scale_estimator_unwgted_sptr        unwgted_scale_est = 0,
-                 rgrl_scale_estimator_wgted_sptr          wgted_scale_est = 0);
+                 rgrl_scale_estimator_wgted_sptr          wgted_scale_est = 0,
+                 const vcl_string&                        label = vcl_string() );
 
   //: Add an estimator to a multi-stage data storage.
   void add_estimator( unsigned                           stage,
@@ -243,6 +249,12 @@ class rgrl_data_manager: public rgrl_object
             rgrl_scale_estimator_unwgted_sptr & unwgted_scale_ests,
             rgrl_scale_estimator_wgted_sptr   & wgted_scale_ests,
             vcl_vector<rgrl_estimator_sptr>   & estimators) const;
+
+  //: Return labels
+  void get_label( unsigned stage, vcl_vector<vcl_string>& labels ) const;
+
+  //: Return labels
+  void get_label( vcl_vector<vcl_string>& labels ) const;
 
   //: Return true if certain stage exists with data
   bool has_stage(unsigned i ) const;

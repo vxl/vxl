@@ -43,7 +43,8 @@ add_data( unsigned stage,
           rgrl_matcher_sptr                        matcher,
           rgrl_weighter_sptr                       weighter,
           rgrl_scale_estimator_unwgted_sptr        unwgted_scale_est,
-          rgrl_scale_estimator_wgted_sptr          wgted_scale_est )
+          rgrl_scale_estimator_wgted_sptr          wgted_scale_est,
+          const vcl_string&                        label )
 {
   // Both feature sets are mandatory
   assert( from_set && to_set );
@@ -57,7 +58,8 @@ add_data( unsigned stage,
   data_[stage].push_back( rgrl_data_manager_data_item( from_set, to_set, 
                                                        matcher, weighter,
                                                        unwgted_scale_est, 
-                                                       wgted_scale_est ) );
+                                                       wgted_scale_est, 
+                                                       label ) );
   data_.set_dimension_increase_for_next_stage(stage, 1);
 }
 
@@ -69,14 +71,15 @@ add_data( rgrl_feature_set_sptr                    from_set,
           rgrl_matcher_sptr                        matcher,
           rgrl_weighter_sptr                       weighter,
           rgrl_scale_estimator_unwgted_sptr        unwgted_scale_est,
-          rgrl_scale_estimator_wgted_sptr          wgted_scale_est )
+          rgrl_scale_estimator_wgted_sptr          wgted_scale_est,
+          const vcl_string&                        label )
 {
   assert( !multi_stage_ );
   
   unsigned stage = 0;
 
   add_data( stage, from_set, to_set, matcher, weighter,
-            unwgted_scale_est, wgted_scale_est );
+            unwgted_scale_est, wgted_scale_est, label );
 }
 
 void 
@@ -269,3 +272,35 @@ generate_defaults(  rgrl_matcher_sptr                  &matcher,
     DebugMacro( 1, "Default unwgted scale estimator set to rgrl_scale_est_closest \n"); 
   }
 }
+
+//: For multi-stage, multi-type
+void
+rgrl_data_manager::
+get_label( unsigned stage,
+           vcl_vector<vcl_string>& labels) const
+{
+  labels.clear();
+  labels.reserve(10);
+
+  if( data_.has( stage ) ) {
+    typedef rgrl_data_manager_data_storage::data_vector::const_iterator iter_type;
+    iter_type itr = data_[stage].begin();
+    iter_type end = data_[stage].end();
+    for( ; itr != end; ++itr ) {
+      labels.push_back( itr->label );
+    }
+  }
+}
+
+//: For single-stage, multi-type
+void
+rgrl_data_manager::
+get_label( vcl_vector<vcl_string>& labels) const
+{
+  assert( !multi_stage_ );
+
+  const unsigned stage = 0;
+  get_label( stage, labels );
+}
+
+
