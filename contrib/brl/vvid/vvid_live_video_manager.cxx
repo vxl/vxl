@@ -75,8 +75,7 @@ void vvid_live_video_manager::init()
   init_successful_ = init_successful_&&vtab_->attach_live_video();
   if (!init_successful_)
     {
-      vcl_cout << "In vvid_live_video_manager::init() - bad camera"
-               << " initialization\n";
+      vcl_cout << "In vvid_live_video_manager::init() - bad camera initialization\n";
       return;
     }
   cp_ = vtab_->get_camera_params();
@@ -89,7 +88,7 @@ void vvid_live_video_manager::init()
 }
 
 //: make an event handler
-// note that we have to get an adaptor and set the tableau to receive events
+// Note that we have to get an adaptor and set the tableau to receive events
 bool vvid_live_video_manager::handle(const vgui_event &e)
 {
   //nothing special here yet
@@ -97,7 +96,8 @@ bool vvid_live_video_manager::handle(const vgui_event &e)
   return vgui_wrapper_tableau::handle(e);
 }
 //---------------------------------------------------------
-//: Cameras have different possible resolutions, frame rates and color 
+//:
+//  Cameras have different possible resolutions, frame rates and color
 //  sampling choices. This method sets up a vgui choice menu item
 //  based on the valid video configurations supported by the camera.
 //  (currently the rgb_ flag doesn't do anything but ultimately will
@@ -108,8 +108,7 @@ void vvid_live_video_manager::set_camera_params()
 {
   if (!vtab_)
     {
-      vcl_cout << "in vvid_live_video_manager::set_camera_params() - no live"
-               << " video tableau \n";
+      vcl_cout << "in vvid_live_video_manager::set_camera_params() - no live video tableau\n";
       return;
     }
   cp_ = vtab_->get_camera_params();
@@ -117,16 +116,15 @@ void vvid_live_video_manager::set_camera_params()
   vcl_vector<vcl_string> choices;
   vcl_string no_choice="CurrentConfiguration";
   choices.push_back(no_choice);
-  vcl_vector<vcl_string> valid_descrs = 
-    vtab_->get_capability_descriptions();
-  for(vcl_vector<vcl_string>::iterator cit = valid_descrs.begin();
-      cit != valid_descrs.end(); cit++)
+  vcl_vector<vcl_string> valid_descrs = vtab_->get_capability_descriptions();
+  for (vcl_vector<vcl_string>::iterator cit = valid_descrs.begin();
+       cit != valid_descrs.end(); cit++)
       choices.push_back(*cit);
   static int choice=0;
   //Set up the dialog.
   vgui_dialog cam_dlg("Camera Parameters");
   cam_dlg.message(vtab_->current_capability_desc().c_str());
-  cam_dlg.choice("Choose Configuration", choices, choice); 
+  cam_dlg.choice("Choose Configuration", choices, choice);
   cam_dlg.checkbox("Auto Exposure ", cp_.auto_exposure_);
   cam_dlg.checkbox("Auto Gain ", cp_.auto_gain_);
   cam_dlg.field("Shutter Speed", cp_.shutter_);
@@ -139,19 +137,18 @@ void vvid_live_video_manager::set_camera_params()
   cam_dlg.checkbox("RGB(monochrome) ", cp_.rgb_);
   if (!cam_dlg.ask())
     return;
-  if(choice)
+  if (choice)
     vtab_->set_current(choice-1);
   vtab_->set_pixel_sample_interval(pix_sample_interval);
   vtab_->set_camera_params(cp_);
-  vcl_cout << "Current Camera Parameters \n" << cp_ << "\n";
+  vcl_cout << "Current Camera Parameters\n" << cp_ << '\n';
 }
 
 void vvid_live_video_manager::set_detection_params()
 {
   if (!vtab_)
     {
-      vcl_cout << "in vvid_live_video_manager::set_camera_params() - no live"
-               << " video tableau \n";
+      vcl_cout << "in vvid_live_video_manager::set_camera_params() - no live video tableau\n";
       return;
     }
   //cache the live video state to restore
@@ -224,12 +221,11 @@ void vvid_live_video_manager::stop_capture()
 void vvid_live_video_manager::reset_camera_link()
 {
   this->stop_live_video();
-  if(vtab_)
+  if (vtab_)
     vtab_->reset_camera_link();
-  if(!vtab_->attach_live_video())
+  if (!vtab_->attach_live_video())
     {
-      vcl_cout <<"In vvid_live_video_manager::reset_camera_link()"
-               <<" - reset failed\n";
+      vcl_cout <<"In vvid_live_video_manager::reset_camera_link() - reset failed\n";
       init_successful_ = false;
       return;
     }
@@ -239,21 +235,20 @@ void vvid_live_video_manager::reset_camera_link()
 void vvid_live_video_manager::display_topology()
 {
   vt2D_->clear_all();
-  vcl_vector<vtol_topology_object_sptr> const & seg = 
-    video_process_->get_output_topology();
+  vcl_vector<vtol_topology_object_sptr> const & seg = video_process_->get_output_topology();
 
-  for(vcl_vector<vtol_topology_object_sptr>::const_iterator ti=seg.begin();
-      ti != seg.end(); ti++)
-    if(edges_)
+  for (vcl_vector<vtol_topology_object_sptr>::const_iterator ti=seg.begin();
+       ti != seg.end(); ti++)
+    if (edges_)
       {
         vtol_edge_2d_sptr e=(*ti)->cast_to_edge()->cast_to_edge_2d();
-        if(e)
+        if (e)
           vt2D_->add_edge(e);
       }
     else
       {
         vtol_face_2d_sptr f=(*ti)->cast_to_face()->cast_to_face_2d();
-        if(f)
+        if (f)
           vt2D_->add_face(f);
       }
 }
@@ -280,9 +275,9 @@ void vvid_live_video_manager::run_frames()
         else return;
         if (video_process_->execute())
           {
-            if(video_process_->get_output_type()==vpro_video_process::IMAGE)
+            if (video_process_->get_output_type()==vpro_video_process::IMAGE)
               display_image();
-            if(video_process_->get_output_type()==vpro_video_process::TOPOLOGY)
+            if (video_process_->get_output_type()==vpro_video_process::TOPOLOGY)
               display_topology();
           }
       }
@@ -299,10 +294,9 @@ void vvid_live_video_manager::start_live_video()
 {
   if (!init_successful_||!vtab_)
     return;
-  if(!vtab_->start_live_video())
+  if (!vtab_->start_live_video())
     {
-      vcl_cout << "In vvid_live_video_manager::start_live_video() -"
-               <<" start failed\n";
+      vcl_cout << "In vvid_live_video_manager::start_live_video() - start failed\n";
       return;
     }
   this->run_frames();
@@ -312,9 +306,9 @@ void vvid_live_video_manager::stop_live_video()
 {
   if (!init_successful_)
     return;
-  if(vtab_)
+  if (vtab_)
     vtab_->stop_live_video();
-  if(video_process_)
+  if (video_process_)
     video_process_->finish();
 }
 

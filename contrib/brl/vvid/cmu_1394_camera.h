@@ -5,7 +5,6 @@
 //:
 // \file
 // \brief cmu_1394_camera
-//
 // \author
 //   J.L. Mundy
 //
@@ -13,15 +12,14 @@
 //  approach is inheritance so we don't have to duplicate the CMU camera
 //  interface. The parameters can be passed as a block to duplicate camera
 //  setup and to conveniently support file I/0.
-// 
-// 
+//
 // \verbatim
 //  Modifications:
 //   J.L. Mundy Aug 29, 2002    Initial version.
 //   J.L. Mundy Jun 01, 2003    Added methods to determine the capabilities
-//                              of cameras and constrain parameters to 
+//                              of cameras and constrain parameters to
 //                              match max-min ranges of a given camera
-// \endverbatim 
+// \endverbatim
 //--------------------------------------------------------------------------------
 #include <windows.h>
 #include <winbase.h>
@@ -46,7 +44,8 @@ class cmu_1394_camera : public cmu_1394_camera_params, public C1394Camera
   bool get_camera_present() const { return camera_present_; }
   bool get_running() const { return running_; }
 
-  //: basic camera operations
+  // basic camera operations
+
   //: initialize the camera
   bool init(int node);
 
@@ -65,18 +64,22 @@ class cmu_1394_camera : public cmu_1394_camera_params, public C1394Camera
   bool  get_monochrome_image(vil1_memory_image_of<unsigned char>& im,
                              int pixel_sample_interval =1, bool reread = true);
 
-  //: caching and saving video data. The saved images are not sampled 
+  // caching and saving video data. The saved images are not sampled
+
   //: initialize the file capture process, provide a filename for the video
   void start_capture(vcl_string const & video_file_name);
 
   //: stop the file capture process, write out the video file
   bool stop_capture();
-  
-  //: camera information 
+
+  // camera information
+
   //: send the current parameter values to the camera
   void update_settings();
+
   //: get string values for valid camera video configurations
   vcl_vector<vcl_string> get_capability_descriptions(){return capability_desc_;}
+
   //: get the set of valid 1394 camera format values
   vcl_vector<int> get_valid_formats(){return format_;}
 
@@ -94,10 +97,12 @@ class cmu_1394_camera : public cmu_1394_camera_params, public C1394Camera
 
   //: get the string description of the currently selected configuration
   vcl_string current_capability_desc(){return capability_desc_[current_];}
-  
-  //: code values for the current configuration
+
+  //: code value for the current configuration
   int current_format(){return format_[current_];}
+  //: code value for the current configuration
   int current_mode(){return mode_[current_];}
+  //: code value for the current configuration
   int current_rate(){return rate_[current_];}
 
   //: stream output of the camera properties
