@@ -44,8 +44,7 @@ mahalanobis_distance(vdgl_digital_region_sptr const& r1,
            << ")(Xo:" << r1->Xo() << " Yo:" << r1 ->Yo()
            << " Io:" << r1 ->Io() << ")::(" << r2->Npix()
            << " Xo:" << r2->Xo() << " Yo:" << r2 ->Yo()
-           << " Io:" << r2 ->Io() <<")||= " << d << "\n"<< vcl_flush;
-
+           << " Io:" << r2 ->Io() <<")||= " << d << vcl_endl;
   return d;
 }
 
@@ -68,7 +67,7 @@ float bdgl_region_algs::intensity_distance(vdgl_digital_region_sptr const& r1,
            << ")(Xo:" << r1->Xo() << " Yo:" << r1 ->Yo()
            << " Io:" << r1 ->Io() << ")::(" << r2->Npix()
            << " Xo:" << r2->Xo() << " Yo:" << r2 ->Yo()
-           << " Io:" << r2 ->Io() <<")||= " << d << "\n"<< vcl_flush;
+           << " Io:" << r2 ->Io() <<")||= " << d << vcl_endl;
   return d;
 }
 
@@ -118,25 +117,25 @@ bool bdgl_region_algs::merge(vdgl_digital_region_sptr const& r1,
 
 static int increasing_compare(const void *x1, const void *x2)
 {
-  unsigned short* f1 = (unsigned short*)x1;
-  unsigned short* f2 = (unsigned short*)x2;
+  const unsigned short* f1 = (const unsigned short*)x1;
+  const unsigned short* f2 = (const unsigned short*)x2;
   if (*f1<*f2)
     return -1;
-  if (*f1==*f2)
+  else if (*f1==*f2)
     return 0;
-
+  else
     return 1;
 }
 
 static int decreasing_compare(const void *x1, const void *x2)
 {
-  unsigned short* f1 = (unsigned short*)x1;
-  unsigned short* f2 = (unsigned short*)x2;
+  const unsigned short* f1 = (const unsigned short*)x1;
+  const unsigned short* f2 = (const unsigned short*)x2;
   if (*f1>*f2)
     return -1;
-  if (*f1==*f2)
+  else if (*f1==*f2)
     return 0;
-
+  else
     return 1;
 }
 
@@ -147,7 +146,6 @@ bdgl_region_algs::earth_mover_distance(vdgl_digital_region_sptr const& r1,
 {
   int min_npts = 5;
   float MY_HUGE = vnl_numeric_traits<float>::maxval;
-  float SMALL = 1;
   if (!r1||!r2)
     return MY_HUGE;
   int n1 = r1->Npix(), n2 = r2->Npix();
@@ -186,7 +184,7 @@ bdgl_region_algs::earth_mover_distance(vdgl_digital_region_sptr const& r1,
            << ")(Xo:" << r1->Xo() << " Yo:" << r1 ->Yo()
            << " Io:" << r1 ->Io() << ")::(" << r2->Npix()
            << " Xo:" << r2->Xo() << " Yo:" << r2 ->Yo()
-           << " Io:" << r2 ->Io() <<")||= " << sum << "\n"<< vcl_flush;
+           << " Io:" << r2 ->Io() <<")||= " << sum << vcl_endl;
 #endif
   return sum;
 }
