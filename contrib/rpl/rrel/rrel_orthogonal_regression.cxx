@@ -78,7 +78,7 @@ rrel_orthogonal_regression::fit_from_minimal_set( const vcl_vector<int>& point_i
   }
   else {
     params = svd.nullvector();
-    params /= vcl_sqrt( 1 - vnl_math_sqr( params[ params.size()-1 ] ) );
+    params /= vcl_sqrt( 1 - vnl_math_sqr( params[ params.size()-1 ] ) );  // normal is a unit vector
   }
   return true;
 }
@@ -89,6 +89,7 @@ rrel_orthogonal_regression::compute_residuals( const vnl_vector<double>& params,
                                                vcl_vector<double>& residuals ) const
 {
   // The residual is the algebraic distance, which is simply A * p.
+  // Assumes the parameter vector has a unit normal.
   if ( residuals.size() != vars_.rows())
     residuals.resize( vars_.rows() );
   for ( unsigned int i=0; i<vars_.rows(); ++i ) {

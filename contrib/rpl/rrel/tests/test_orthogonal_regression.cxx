@@ -1,6 +1,6 @@
 #include <vcl_iostream.h>
 
-#include <vnl/vnl_double_3.h>
+// #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_math.h>
@@ -17,42 +17,72 @@ int
 main()
 {
   vbl_test_start( "orthogonal regression" );
-  vnl_double_3 true_params(3);
-  true_params[0] = 10.0;
-  true_params[1] = 0.02;
-  true_params[2] = -0.1;
-  vnl_double_3 a(true_params);
-  vnl_double_3 par;
+  vnl_vector<double> true_params(4);
+  //  z = 0.02 x - 0.1 y + 10.0
+  double a0 = 0.02, a1 = -0.1, a2 = 10.0;
+  true_params[0] =  a0;
+  true_params[1] =  a1;
+  true_params[2] =  -1;
+  true_params[3] =  a2;
+  vnl_vector<double> par(4); 
+  vnl_vector<double> norm_vect(3);
+  norm_vect[0] = true_params[0];
+  norm_vect[1] = true_params[1];
+  norm_vect[2] = true_params[2];
+  true_params /= norm_vect.two_norm();  //  4 component vector
+  norm_vect /= norm_vect.two_norm();    //  3 component normal only
   const int num_pts=7;
 
   //  Build LinearRegression objects exercising both constructors and
   //  the two different options for the first constructor.
-  vcl_vector< vnl_vector<double> > pts(num_pts);
   vcl_vector<double> error( num_pts );
+  error[0]=-0.001;
+  error[1]=0;
+  error[2]=0;
+  error[3]=-0.0025;
+  error[4]=0.007;
+  error[5]=0;
+  error[6]=-0.004;
 
-  vnl_double_3 p, q;
-  double x, y, z;
 
-  x = 1.0; y=-0.5; error[0]=-0.001;  z= -(a[0]*x + a[1]*y - error[0])/a[2] ;
-  p[0] = x; p[1]=y; p[2]=z;  pts[0]=p;
+  vcl_vector< vnl_vector<double> > pts(num_pts);
+  vnl_vector<double> p(3), homog_p(4);
+  homog_p[3] = 1.0;
 
-  x = 2.0;  y=4.0;  error[1]=0; z= -(a[0]*x + a[1]*y - error[1])/a[2] ;
-  p[0] = x; p[1]=y; p[2]=z;  pts[1]=p;
+  p.x() = 1.0;  p.y()=-0.5; p.z() = a0 * p.x() + a1* p.y() + a2;
+  p += error[0] * norm_vect;
+  homog_p[0] = p[0];   homog_p[1] = p[1];   homog_p[2] = p[2];
+  pts[0] = homog_p;
 
-  x = 3.0;  y=1.0;  error[2]=0; z= -(a[0]*x + a[1]*y - error[2])/a[2] ;
-  p[0] = x; p[1]=y; p[2]=z;  pts[2]=p;
+  p.x() = 2.0;  p.y()=4.0;  p.z() = a0 * p.x() + a1* p.y() + a2;
+  p += error[1] * norm_vect;
+  homog_p[0] = p[0];   homog_p[1] = p[1];   homog_p[2] = p[2];
+  pts[1] = homog_p;
 
-  x = -2.0;  y=3.0; error[3]=-0.0025;  z= -(a[0]*x + a[1]*y - error[3])/a[2] ;
-  p[0] = x; p[1]=y; p[2]=z;  pts[3]=p;
+  p.x()= 3.0;   p.y()=1.0;  p.z() = a0 * p.x() + a1* p.y() + a2;
+  p += error[2] * norm_vect;
+  homog_p[0] = p[0];   homog_p[1] = p[1];   homog_p[2] = p[2];
+  pts[2] = homog_p;
 
-  x = 2.0;  y=4.0;  error[4]=0.007;  z= -(a[0]*x + a[1]*y - error[4])/a[2] ;
-  p[0] = x; p[1]=y; p[2]=z;  pts[4]=p;
+  p.x()= -2.0;  p.y()=3.0;  p.z() = a0 * p.x() + a1* p.y() + a2;
+  p += error[3] * norm_vect;
+  homog_p[0] = p[0];   homog_p[1] = p[1];   homog_p[2] = p[2];
+  pts[3] = homog_p;
 
-  x = 5.0;  y=-4.0;  error[5]=0; z= -(a[0]*x + a[1]*y - error[5])/a[2] ;
-  p[0] = x; p[1]=y; p[2]=z;  pts[5]=p;
+  p.x()= 2.0;   p.y()=4.0;  p.z() = a0 * p.x() + a1* p.y() + a2;
+  p += error[4] * norm_vect;
+  homog_p[0] = p[0];   homog_p[1] = p[1];   homog_p[2] = p[2];
+  pts[4] = homog_p;
 
-  x = 3.0;  y=-2.0;  error[6]=-0.004; z= -(a[0]*x + a[1]*y - error[6])/a[2] ;
-  p[0] = x; p[1]=y; p[2]=z;  pts[6]=p;
+  p.x()= 5.0;   p.y()=-4.0; p.z() = a0 * p.x() + a1* p.y() + a2;
+  p += error[5] * norm_vect;
+  homog_p[0] = p[0];   homog_p[1] = p[1];   homog_p[2] = p[2];
+  pts[5] = homog_p;
+
+  p.x()= 3.0;   p.y()=-2.0; p.z() = a0 * p.x() + a1* p.y() + a2;
+  p += error[6] * norm_vect;
+  homog_p[0] = p[0];   homog_p[1] = p[1];   homog_p[2] = p[2];
+  pts[6] = homog_p;
 
   //
   //  The first set of tests are for the constructor, and parameter access methods.
@@ -63,7 +93,7 @@ main()
 
   
   vbl_test_begin( "num_points_to_instantiate (1)" );
-  vbl_test_perform( lr1->num_samples_to_instantiate() == 2 );
+  vbl_test_perform( lr1->num_samples_to_instantiate() == 3 );
   vbl_test_begin( "num_points_to_instantiate (3)" );
   vbl_test_perform( (int)lr1->num_samples() == num_pts );
   vbl_test_begin( "dtor (1)" );
@@ -97,14 +127,23 @@ main()
 
   // Ok.  This one should work.
   ok = lr1->weighted_least_squares_fit( par, cofact );
-  vnl_double_3 diff( par - true_params / true_params.two_norm() );
+  // vcl_cout << "true_params = " << true_params
+  //          << "\nest_params = " << par << vcl_endl;
+
+  vnl_vector<double> diff1( par - true_params );
+  vnl_vector<double> diff2( par + true_params );
+  double err;
+  if ( diff1.two_norm() < diff2.two_norm() )
+    err = diff1.two_norm();
+  else
+    err = diff2.two_norm();
+
+  
   vbl_test_begin( "weighted_least_squares_fit (ok) ");
-  double err = diff.two_norm (); // standardized error
-  //  vcl_cout << "estimated params: " << par
-  //           << ";  true params: " << true_params << vcl_endl
-  //           << "cofactor matrix: \n" << cofact 
-  //           << " error : " << err << vcl_endl;
   vbl_test_perform( ok && err <1e-2 ); 
+  vcl_cout << "estimated params: " << par
+           << ";  true params: " << true_params << vcl_endl
+           << " error : " << err << vcl_endl;
  
   delete lr1;
   vbl_test_summary();
