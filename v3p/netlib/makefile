@@ -151,7 +151,6 @@ SOURCES += cg.c
 SOURCES += camsun.c
 
 # from LASO2
-#fsm:avoid conflict with my own liblaso.so, SOURCES += dnlaso.c
 SOURCES += dnlaso.c
 
 # from OPT
@@ -243,23 +242,13 @@ SOURCES += zung2r.c
 SOURCES += zunghr.c
 SOURCES += zungqr.c
 
-##fsm
-#SOURCES += snlaso.c
-#SOURCES += slaeig.c
-#SOURCES += slaran.c
-#SOURCES += slager.c
-#SOURCES += slabfc.c
-#SOURCES += slabax.c
-#SOURCES += smvpc.c
-#SOURCES += slabcm.c
-#SOURCES += snppla.c
-#SOURCES += svsort.c
-#SOURCES += sortqr.c
-#SOURCES += pow_dd.c
-
 ##########################################
 include ${IUEROOT}/config/top.mk
 ##########################################
+
+ifeq ($(OS),Linux2)
+  CFLAGS += $(optimize)
+endif
 
 ifeq ($(OS),HP-UX10.20)
   FLAGS_gpfa5f.c = -O0
