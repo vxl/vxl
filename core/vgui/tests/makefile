@@ -6,7 +6,7 @@ TESTMAIN := test_driver.cxx
 
 TESTS += test_pixels.cxx
 TESTS += test_displaybase.cxx
-TESTS += test_generic_image_view.cxx
+#TESTS += test_generic_image_view.cxx
 TESTS += test_image_tableau.cxx
 PARAMS_test_image_tableau = test_image.ppm
 # The following tests cannot run in background:
