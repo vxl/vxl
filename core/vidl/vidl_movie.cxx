@@ -44,7 +44,7 @@ vidl_frame_sptr vidl_movie::get_frame(int n)
 
   while ((i!=clip_.end()) && (!(ret_frame=(*i)->get_frame(n))))
   {
-    n = n - (**i).length();
+    n = n - (*i)->length();
     i++;
   }
 
