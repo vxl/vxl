@@ -1,12 +1,11 @@
 USES := conversions vxl
 include ${IUEROOT}/vxl/vil/config.mk
-IULIBS := -lvil -lvnl
+IULIBS := -lvil -lvpl
 
 ifneq (,$(wildcard $(IUEROOT)/Image))
 USES += Image COOL Numerics GeneralUtility
 IULIBS += -lImageClasses -lBasics -lNumerics
 TESTS += test_image_conversions.cxx
-PARAMS_test_image_conversions := /tmp/vil_test_memory_image_of.ppm
 endif
 
 #########################################
