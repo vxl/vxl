@@ -33,8 +33,8 @@ class FDesignMatrix : public vnl_matrix<double> {
 public:
   // Constructors/Destructors--------------------------------------------------
 
-  FDesignMatrix(vcl_vector<HomgPoint2D>& points1,
-                vcl_vector<HomgPoint2D>& points2);
+  FDesignMatrix(vcl_vector<HomgPoint2D> const& points1,
+                vcl_vector<HomgPoint2D> const& points2);
 };
 
 #endif // FDesignMatrix_h_

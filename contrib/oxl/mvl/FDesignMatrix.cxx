@@ -26,8 +26,8 @@
 // }
 //
 
-FDesignMatrix::FDesignMatrix(vcl_vector<HomgPoint2D>& points1,
-                             vcl_vector<HomgPoint2D>& points2):
+FDesignMatrix::FDesignMatrix(vcl_vector<HomgPoint2D> const& points1,
+                             vcl_vector<HomgPoint2D> const& points2):
   base(points1.size(), 9)
 {
   int n = points1.size();
