@@ -10,8 +10,8 @@
 
 #include <vcl_iosfwd.h>
 
-class osl_edgel_chain {
-public:
+struct osl_edgel_chain
+{
   int n;
   float *x, *y, *grad, *theta;
   
@@ -39,8 +39,5 @@ public:
   void write_ascii(vcl_ostream &) const;
   void read_ascii(vcl_istream &);
 };
-
-// urgh
-typedef osl_edgel_chain osl_EdgelChain;
 
 #endif // osl_edgel_chain_h_

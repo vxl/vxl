@@ -11,8 +11,8 @@
 #include <osl/osl_edgel_chain.h>
 #include <osl/osl_vertex.h>
 
-class osl_edge : public osl_topology_base, public osl_edgel_chain {
-public:
+struct osl_edge : osl_topology_base, osl_edgel_chain
+{
   // end-vertices (ref-counted)
   osl_vertex *v1, *v2;
 
@@ -44,8 +44,5 @@ public:
   void SetEndY(float v);
   void SetEnd(float x, float y);
 };
-
-// urgh
-typedef osl_edge osl_Edge;
 
 #endif // osl_edge_h_
