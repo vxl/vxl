@@ -61,6 +61,19 @@
 // It may be a good idea to provide vil_image_resource_sptr based
 // vil_converts as well.
 //
+// The ITK project (in Code/IO/itkConvertPixelBuffer.txx) has
+// functionality similar to the RGB to grayscale conversion here.  A
+// change was made in ITK so the computation is
+// (2125.0*r+7154.0*g+0721.0*b)/1000.0 instead of
+// 0.2125*r+0.7154*g+0.0721*b.  The reason is that the latter
+// expression can produce different results between Intel and
+// non-Intel platforms (even in cases where r==g && g==b), probably
+// due to different floating point representations.  This may not be
+// too important, but it worth noting here.  In vil_convert.h we
+// cannot make the same change without adding computation because
+// vil_convert_rgb_to_grey() lets you pass in the weights.  We'd have
+// to multiply by 10000 to maintain the current API.
+//
 // \verbatim
 //  Modifications
 //   23 Oct.2003 - Peter Vanroose - Added support for 64-bit int pixels
