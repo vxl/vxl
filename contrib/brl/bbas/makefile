@@ -34,6 +34,9 @@ SUBDIRS += bgrl
 # Brown statistics library
 SUBDIRS += bsta
 
+# Brown dynamic programming library
+SUBDIRS += bdpg
+
 ################################
 include ${IUEROOT}/config/top.mk
 ################################
