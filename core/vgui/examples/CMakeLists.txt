@@ -54,7 +54,7 @@ IF(VGUI_USE_GTK)
  TARGET_LINK_LIBRARIES( gtk2_movie_player ${GTK_LIBRARIES} )
 
  ADD_EXECUTABLE( gtk3_vidl gtk3_vidl.cxx)
- TARGET_LINK_LIBRARIES( gtk3_vidl vidl ${GTK_LIBRARIES} )
+ TARGET_LINK_LIBRARIES( gtk3_vidl vidl_vil1 ${GTK_LIBRARIES} )
 ENDIF(VGUI_USE_GTK)
 
 # GLUT examples
