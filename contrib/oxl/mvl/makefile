@@ -63,8 +63,8 @@ SOURCES += PMatrix.cxx
 SOURCES += PMatrixDecompAa.cxx
 SOURCES += PMatrixDec.cxx
 SOURCES += PMatrixDecompCR.cxx
-#SOURCES += PMatrixAffine.cxx
-#SOURCES += PMatrixEuclidean.cxx
+SOURCES += PMatrixAffine.cxx
+SOURCES += PMatrixEuclidean.cxx
 
 SOURCES += TriTensor.cxx
 SOURCES += ProjectiveBasis2D.cxx
