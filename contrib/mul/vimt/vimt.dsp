@@ -174,6 +174,9 @@ SOURCE=.\Templates/vimt_scale_pyramid_builder_2d+float-.cxx
 SOURCE=.\Templates/vimt_image_2d_of+int-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vimt_image_2d_of+bool-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vimt_dog_pyramid_builder_2d+float-.cxx
 # End Source File
 # Begin Source File
