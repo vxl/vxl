@@ -110,31 +110,54 @@ template <class T> vcl_complex<T> vcl_exp(const vcl_complex<T>& x) { return std:
 template <class T> vcl_complex<T> vcl_log(const vcl_complex<T>& x) { return std::log(x); }
 template <class T> vcl_complex<T> vcl_log10(const vcl_complex<T>& x) { return std::log10(x); }
 template <class T> vcl_complex<T> vcl_pow(const vcl_complex<T>& x, int y) { return std::pow(x, y); }
-template <class T> vcl_complex<T> vcl_pow(const T& x, const vcl_complex<T>& y) { return std::pow(x, y); }
 template <class T> vcl_complex<T> vcl_sin(const vcl_complex<T>& x) { return std::sin(x); }
 template <class T> vcl_complex<T> vcl_sinh(const vcl_complex<T>& x) { return std::sinh(x); }
 template <class T> vcl_complex<T> vcl_sqrt(const vcl_complex<T>& x) { return std::sqrt(x); }
 template <class T> vcl_complex<T> vcl_tan(const vcl_complex<T>& x) { return std::tan(x); }
 template <class T> vcl_complex<T> vcl_tanh(const vcl_complex<T>& x) { return std::tanh(x); }
 
+
+
+
 // MSVC 6.0's implementations of pow are wrong.
 // e.g. pow(complex<double>(-1.0,0.0), 0.5) returns (Nan, 0) rather than (0,1).
-template <class T> vcl_complex<T> vcl_pow(const vcl_complex<T>& x, const T& y)
+
+//First provide local implementations of real pow and log.
+inline float vcl_vc60_complex_real_pow( float f, float g ) { return ::powf(f,g); }
+inline double vcl_vc60_complex_real_pow( double f, double g ) { return ::pow(f,g); }
+inline long double vcl_vc60_complex_real_pow( long double f, long double g ) { return ::powl(f,g); }
+inline float vcl_vc60_complex_real_log( float f ) { return ::logf(f); }
+inline double vcl_vc60_complex_real_log( double f ) { return ::log(f); }
+inline long double vcl_vc60_complex_real_log( long double f ) { return ::logl(f); }
+
+template <class T> vcl_complex<T> inline
+  vcl_pow(const vcl_complex<T>& x, const T& y)
 {
   if (std::imag(x) == 0 && 0 <= std::real(x))
-    return (std::complex<T>(::pow(std::real(x), y),T(0)));
+    return std::complex<T>(vcl_vc60_complex_real_pow(std::real(x), y), T(0));
   else
-    return (std::exp(y * std::log(x)));
+    return std::exp(y * std::log(x));
 }
 
-template <class T> vcl_complex<T> vcl_pow(const vcl_complex<T>& x, const vcl_complex<T>& y)
+template <class T> vcl_complex<T> inline
+  vcl_pow(const T& x, const vcl_complex<T>& y)
+{
+  if (std::imag(y) == 0 && 0 <= x)
+    return std::complex<T>(vcl_vc60_complex_real_pow(x, std::real(y)), T(0));
+  else
+    return std::exp(y * vcl_vc60_complex_real_log(x));
+}
+
+template <class T> vcl_complex<T> inline
+  vcl_pow(const vcl_complex<T>& x, const vcl_complex<T>& y)
 {
   if (std::imag(y) == 0)
     return vcl_pow(x, std::real(y));
   else if (std::imag(x) == 0)
-    return std::pow(std::real(x), y);
+    return vcl_pow(std::real(x), y);
   else
     return std::exp(y * std::log(x));
 }
 
 #endif // vcl_win32_vc60_complex_h_
+

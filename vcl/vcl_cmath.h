@@ -47,8 +47,7 @@
 # include "sgi/vcl_cmath.h"
 #elif defined(VCL_VC60)
 # include "win32-vc60/vcl_cmath.h"
-#elif defined(VCL_VC71)     // C++ .NET 2003 is iso compliant
-# include "iso/vcl_cmath.h" 
+                            // C++ .NET 2003 is iso compliant
 #elif defined(VCL_VC70)     // C++ .NET earlier than 2003 is not iso compliant
 # include "win32-vc70/vcl_cmath.h"
 #elif defined(VCL_SUNPRO_CC)
@@ -59,6 +58,14 @@
 # include "borland55/vcl_cmath.h"
 #else
 # include "iso/vcl_cmath.h"
+# if !VCL_COMPLEX_POW_WORKS
+// deal with corrections to pow(complex...)
+#  undef vcl_pow;
+#  define vcl_pow vcl_pow
+inline float vcl_pow(float x, float y) { std::pow(x, y); }
+inline double vcl_pow(double x, double y) { std::pow(x, y); }
+inline long double vcl_pow(long double x, long double y) { std::pow(x, y); }
+#  endif
 #endif
 
 #endif // vcl_cmath_h_
