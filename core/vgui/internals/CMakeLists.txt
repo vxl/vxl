@@ -35,11 +35,10 @@ IF(WIN32)
 ENDIF(WIN32)
 
 INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindX11.cmake)
-IF(X11_LIBRARY)
-  INCLUDE_DIRECTORIES( ${X11_INCLUDE_PATH} )
+IF(HAS_X11)
   SOURCE_FILES(vgui_internals_sources
     vgui_accelerate_tag
     vgui_accelerate_x11
   )
-ENDIF(X11_LIBRARY)
+ENDIF(HAS_X11)
 
