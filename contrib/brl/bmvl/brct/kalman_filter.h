@@ -13,7 +13,6 @@
 #include <vnl/vnl_double_3x4.h>
 #include <vnl/vnl_matrix.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
-#include "kalman_state.h"
 
 class kalman_filter  
 {
@@ -22,27 +21,28 @@ public:
   //virtual kalman_state inc(double dt);
 public:
 	void read_data(char* fname);
-	inc();
-	update_covariant();
+	void inc();
+	void update_covariant();
 	vnl_vector_fixed<double, 2> projection(vnl_double_3x4 &P, vnl_vector_fixed<double, 3> &X);
-	prediction();
+	int prediction();
 	kalman_filter(char* fname);
 	virtual ~kalman_filter();
 
 protected:
-	init_velocity();
-	adjust_state_vector(vnl_vector_fixed<double, 2> &pred, vnl_vector_fixed<double, 2> &meas);
+	void init_velocity();
+	void adjust_state_vector(vnl_vector_fixed<double, 2> &pred, vnl_vector_fixed<double, 2> &meas);
+	
   //: set linearized observation matrix
-	set_H_matrix(vnl_double_3x4 &P, vnl_vector_fixed<double, 3> &X);
+	void set_H_matrix(vnl_double_3x4 &P, vnl_vector_fixed<double, 3> &X);
 
   //: computer projective matrix from predicted position
   vnl_double_3x4	get_projective_matrix();
 
-	init_covariant_matrix();
-	init_cam_intrinsic();
-	init_observes(vcl_vector<vnl_matrix<double> > &input);
-	init_state_vector();
-	init_transit_matrix();
+	void init_covariant_matrix();
+	void init_cam_intrinsic();
+	void init_observes(vcl_vector<vnl_matrix<double> > &input);
+	void init_state_vector();
+	void init_transit_matrix();
 
 private:
   vcl_vector<vnl_vector_fixed<double, 3> > Xl_;

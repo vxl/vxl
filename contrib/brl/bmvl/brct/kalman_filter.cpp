@@ -48,7 +48,7 @@ kalman_filter::~kalman_filter()
 
 }
 
-kalman_filter::init_transit_matrix()
+void kalman_filter::init_transit_matrix()
 {
   for(int i=0; i<6; i++)
     for(int j=0; j<6; j++)
@@ -68,7 +68,7 @@ kalman_filter::init_transit_matrix()
 }
 
 
-kalman_filter::init_state_vector()
+void kalman_filter::init_state_vector()
 {
 
   // initialize the velocity direction
@@ -195,7 +195,7 @@ kalman_filter::init_state_vector()
 
 }
 
-kalman_filter::init_observes(vcl_vector<vnl_matrix<double> > &input)
+void kalman_filter::init_observes(vcl_vector<vnl_matrix<double> > &input)
 {
   cur_pos_ = 0;
   queue_size_ = 10;
@@ -208,7 +208,7 @@ kalman_filter::init_observes(vcl_vector<vnl_matrix<double> > &input)
     observes_[i] = input[i];
 }
 
-kalman_filter::init_covariant_matrix()
+void kalman_filter::init_covariant_matrix()
 {
   // initialize P
   for(int i=0; i<6; i++)
@@ -235,7 +235,7 @@ kalman_filter::init_covariant_matrix()
     R_[i][i] = 1;
 }
 
-kalman_filter::init_cam_intrinsic()
+void kalman_filter::init_cam_intrinsic()
 {
   // set up the intrinsic matrix of the camera
   M_in_[0][0] = 841.3804; M_in_[0][1] = 0;        M_in_[0][2] = 331.0916;
@@ -243,7 +243,7 @@ kalman_filter::init_cam_intrinsic()
   M_in_[2][0] = 0;        M_in_[2][1] = 0;        M_in_[2][2] = 1;
 }
 
-kalman_filter::prediction()
+void kalman_filter::prediction()
 {
 
 
