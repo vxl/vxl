@@ -5,6 +5,10 @@ be pragmatic. The following is a list of standards that have either been
 explicitly agreed, or implicitly observed, and are here to make our lives
 easier. If they are making life harder, then we will change them.
 
+Of course, these standards only apply to code in the VXL repository.
+Although some of they may be useful, there is absolutely no need for users
+of VXL to follow them at all.
+
 @itemize @bullet
   @item @xref{VXL_Philosophy, ,VXL Philosophy}.
   @item @xref{VCL_Requirements, ,VCL Requirements}.
@@ -29,9 +33,9 @@ easier. If they are making life harder, then we will change them.
 
 The following @vxl{x} coding standards were originally agreed at the Zurich
 meeting in March 2001. They are mandatory for libraries in the core module.
-Even if you are not writing code which you expect to enter core proper, then
-it is still worth following these coding standards, as they have been
-designed to minimise confusing and help avoid potential problems.
+Even if you are not writing code which you expect to enter vxl/core, then it
+is still worth following these coding standards, as they have been designed
+to minimise confusing and help avoid potential problems.
 
 @itemize @bullet
 @item All global scope identifiers are lowercase with underscores separating
