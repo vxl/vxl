@@ -61,4 +61,5 @@ public:
   int dim;
 };
 
+
 #endif // vnl_cost_function_h_
