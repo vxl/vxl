@@ -286,6 +286,7 @@ foreach $f (@FILES)
     elsif ($j =~ m"vil1/vil1_\d+bit\.h$") { $i="($i)(|_(read|write)_(big|little)_endian)"; }
     elsif ($j =~ m"vil/vil_bi(lin|cub)_interp\.h$") { $i="($i)(|_safe|_unsafe|_raw|_safe_extend)"; }
     elsif ($j eq "vil1/vil1_clamp.h") { $i="$i(|_pixel)"; }
+    elsif ($j eq "vil/vil_clamp.h") { $i="$i(|_below|_image_resource)"; }
     elsif ($j eq "vil1/vil1_colour_space.h") { $i="($i)_(RGB|HSV)_to_(YIQ|HSV|RGB)"; }
     elsif ($j eq "vil/vil_config.h") { $i="HAS_[A-Z]+"; }
     elsif ($j eq "vil/vil_convert.h") { $i="($i)_((cast|round)(|_pixel)|(rgb|planes)_to_grey|stretch_range|to_[a-z_]+)"; }
@@ -623,7 +624,7 @@ foreach $f (@FILES)
     }
   }
 
-  foreach $wd (split(' ',"complex real imag conj arg polar min max abs acos asin atan atan2 ceil cos cosh exp fabs floor fmod frexp ldexp log log10 modf pow sin sinh sqrt tan tanh printf fprintf sprintf scanf fscanf sscanf fopen fclose fread fwrite memchr memcpy memcmp memmove memset strcat strncat strcpy strncpy strchr strcmp strncmp strcoll strcspn strerror strlen strpbrk strrchr strspn strstr strtok strxfrm isspace isprint iscntrl isupper islower isalpha isgraph isdigit ispunct isxdigit isalnum isgraph toupper tolower"))
+  foreach $wd (split(' ',"complex real imag conj arg polar min max abs acos asin atan atan2 ceil cos cosh exp fabs floor fmod frexp ldexp log log10 modf pow sin sinh sqrt tan tanh printf fprintf sprintf scanf fscanf sscanf fopen fclose fread fwrite memchr memcpy memcmp memmove memset qsort strcat strncat strcpy strncpy strchr strcmp strncmp strcoll strcspn strerror strlen strpbrk strrchr strspn strstr strtok strxfrm isspace isprint iscntrl isupper islower isalpha isgraph isdigit ispunct isxdigit isalnum isgraph toupper tolower"))
   {
     &msg(1, "$wd$1() must be vcl_$wd()")
       if ($cpp_file &&
