@@ -488,8 +488,4 @@ template <class T, class Alloc>
     inline void vcl_swap(__vector__<T,Alloc>& a, __vector__<T,Alloc>& b) { a.swap(b); }
 # endif
 
-// KYM: don't do this, this is already defined in ../vcl_vector.h
-//#define VCL_VECTOR_INSTANTIATE \
-//extern "please include vcl/emulation/vcl_vector.txx instead"
-
 #endif // vcl_emulation_vector_h
