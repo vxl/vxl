@@ -231,6 +231,8 @@ vil2_image_view<vxl_byte> filtered_image = vil2_transpose(tmp_image2);
 * Morphological functions
 * - vil2_binary_erode
 * - vil2_binary_dilate
+* - vil2_binary_opening
+* - vil2_binary_closing
 *
 * Other related maths functions
 * - vil2_math_integral_image(imA,im_sum)               : Images integrating values

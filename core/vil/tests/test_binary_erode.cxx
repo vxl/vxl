@@ -5,6 +5,8 @@
 #include <vxl_config.h> // for vxl_byte
 #include <vil2/algo/vil2_binary_dilate.h>
 #include <vil2/algo/vil2_binary_erode.h>
+#include <vil2/algo/vil2_binary_opening.h>
+#include <vil2/algo/vil2_binary_closing.h>
 
 inline void print_binary_image(const vil2_image_view<bool>& im)
 {
@@ -67,6 +69,25 @@ void test_binary_erode_byte()
   TEST("image4(4,5)",image4(4,5),false);
   TEST("image4(6,5)",image4(6,5),false);
   TEST("image4(3,0)",image4(3,0),false);
+
+
+	vcl_cout<<"Testing vil2_binary_closing"<<vcl_endl;
+	image0.fill(false);
+	image0(4,5)=true;
+	image0(6,5)=true;
+	vil2_binary_closing(image0,image1,element_i);
+  TEST("image1(4,5)",image1(4,5),true);
+  TEST("Gap filled",image1(5,5),true);
+  TEST("image1(6,5)",image1(6,5),true);
+  TEST("image1(7,5)",image1(7,5),false);
+
+	vcl_cout<<"Testing vil2_binary_opening"<<vcl_endl;
+	vil2_binary_opening(image0,image1,element_i);
+  TEST("image1(4,5)",image1(4,5),false);
+  TEST("Gap",image1(5,5),false);
+  TEST("image1(6,5)",image1(6,5),false);
+  TEST("image1(7,5)",image1(7,5),false);
+
 
 }
 

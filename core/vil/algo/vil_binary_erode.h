@@ -16,6 +16,8 @@ inline bool vil2_binary_erode(const bool* im, const int* offset, unsigned n)
 }
 
 //: Erodes src_image to produce dest_image (assumed single plane)
+// \relates vil2_image_view
+// \relates vil2_structuring_element
 void vil2_binary_erode(const vil2_image_view<bool>& src_image,
                         vil2_image_view<bool>& dest_image,
                         const vil2_structuring_element& element);
