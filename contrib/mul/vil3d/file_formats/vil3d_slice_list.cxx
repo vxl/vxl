@@ -44,18 +44,20 @@ void parse_globbed_filenames(const vcl_string & input,
   if (start == filename.npos) return;
   vcl_size_t end = filename.find_first_not_of("#", start);
   if (filename.find_first_of("#",end) != filename.npos) return;
-  filename.replace(start,end-start,end-start,'?');
+  for (vcl_size_t i=start, j=start; i!=end; ++i, j+=12)
+    filename.replace(j,1,"[0123456789]");
+
 
 
   // Search for the files
   for (vul_file_iterator fit(filename); fit; ++fit)
-  {
-    // Discard those which have non-numeric characters in the glob field.
-    if (vcl_string(fit()).find_first_not_of("0123456789",start)>=end)
-      filenames.push_back(fit());
-  }
+    filenames.push_back(fit());
+
 
   if (filenames.empty()) return;
+
+  start = (start + filenames.front().size()) - input.size();
+  end = (end + filenames.front().size()) - input.size();
 
   // Put them all in numeric order.
   vcl_sort(filenames.begin(), filenames.end());
