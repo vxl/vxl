@@ -17,17 +17,19 @@
 //  Modifications
 //   14-SEP-1999 P.Pritchett - Initial version.
 //   01-OCT-2002 K.Y.McGaul - Moved displaybase to displaybase_tableau.
+//   25-AUG-2003 M.Johnson - Altered to allow named groupings of soviews
 // \endverbatim
 
-
 #include <vcl_vector.h>
+#include <vcl_map.h>
+#include <vcl_utility.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_tableau.h>
 
 class vgui_soview;
 class vgui_event;
-
+class vgui_style;
 
 //: Implement one of these to be told about picking etc.
 struct vgui_displaybase_tableau_selection_callback
@@ -35,6 +37,30 @@ struct vgui_displaybase_tableau_selection_callback
   virtual bool select(unsigned id);
   virtual bool deselect(unsigned id);
   virtual bool deselect_all();
+};
+
+//: Struct to maintain grouping information for soviews
+struct vgui_displaybase_tableau_grouping {
+
+  // list of objects belonging to this group
+  // duplicates entry in main objects list 
+  vcl_vector<vgui_soview*> objects;
+  
+  // style that will be used for override features
+  vgui_style * style;
+    
+  // used to hide or show this group of soviews
+  bool hide;
+
+  // applies a new temporary color to all soviews in this grouping
+  bool color_override;
+
+  // applies a new temporary point size to all soviews in this grouping
+  bool point_size_override; 
+
+  // applies a new temporary line width to all soviews in this grouping
+  bool line_width_override;
+  
 };
 
 #include "vgui_displaybase_tableau_sptr.h"
@@ -76,6 +102,12 @@ class vgui_displaybase_tableau : public vgui_tableau
   void remove(vgui_soview*);
   void clear();
 
+  // grouping
+  void set_current_grouping( vcl_string name );
+  vcl_string get_current_grouping();
+  vgui_displaybase_tableau_grouping* get_grouping_ptr( vcl_string name );
+  vcl_vector< vcl_string > get_grouping_names();
+  
   //: Attach your own selection callback.
   // You are in charge of deleting it later.
   void set_selection_callback(vgui_displaybase_tableau_selection_callback* cb);
@@ -83,7 +115,6 @@ class vgui_displaybase_tableau : public vgui_tableau
   vcl_vector<vgui_soview*> const &get_all() const;
   vcl_vector<unsigned>     const  get_all_ids() const;
 
-  //
   vgui_soview* contains_hit(vcl_vector<unsigned> hit);
 
   unsigned get_id() {return id;}
@@ -91,7 +122,16 @@ class vgui_displaybase_tableau : public vgui_tableau
  protected:
   vcl_vector<vgui_soview*> objects;
 
-  vcl_vector<unsigned> groups;
+  vcl_map< vcl_string , vgui_displaybase_tableau_grouping > groupings; 
+ 
+  vcl_string current_grouping;
+  
+  // This vector appears to be unused by other classes in VXL.
+  // Hopefully whatever functionality it was initially intended
+  // to provide will instead be satisfied by the new grouping system.
+  //
+  //vcl_vector<unsigned> groups;
+  
   vcl_vector<unsigned> selections;
   unsigned highlighted;
 

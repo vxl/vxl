@@ -50,11 +50,14 @@ vgui_displaybase_tableau::vgui_displaybase_tableau()
   gl_display_list = GL_INVALID_VALUE;
 
   cb_ = 0;
-}
 
+  current_grouping = "default";
+  groupings.clear();
+}
 
 vgui_displaybase_tableau::~vgui_displaybase_tableau()
 {
+  clear();
 }
 
 void vgui_displaybase_tableau::set_selection_callback(vgui_displaybase_tableau_selection_callback* cb)
@@ -62,13 +65,25 @@ void vgui_displaybase_tableau::set_selection_callback(vgui_displaybase_tableau_s
   cb_ = cb;
 }
 
-
 void vgui_displaybase_tableau::add(vgui_soview* object)
-{
+{ 
   vcl_vector<vgui_soview*>::iterator i = vcl_find(objects.begin(), objects.end(), object);
   if (i == objects.end())
   {
     objects.push_back(object);
+    vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.find( current_grouping );
+    if( it == groupings.end() ) {
+      vgui_displaybase_tableau_grouping temp;
+      temp.style = NULL;
+      temp.hide = false;
+      temp.color_override = false;
+      temp.line_width_override = false;
+      temp.point_size_override = false;
+      temp.objects.push_back( object );
+      groupings.insert( vcl_pair< vcl_string , vgui_displaybase_tableau_grouping >( current_grouping , temp ) );
+    } else {
+      it->second.objects.push_back( object );
+    }
   }
 }
 
@@ -90,7 +105,26 @@ void vgui_displaybase_tableau::remove(vgui_soview* object)
   {
     objects.erase(i);
   }
+
+  bool found = false;
+  
+  for( vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin() ;
+       !found && it != groupings.end() ; 
+       it++ ) {
+
+    vcl_vector<vgui_soview*>::iterator a = vcl_find(it->second.objects.begin(), it->second.objects.end(), object);
+    if (a != objects.end())
+    {
+      it->second.objects.erase(a);
+      if( it->second.objects.size() == 0 ) {
+        delete it->second.style;
+        groupings.erase( it );
+      }
+      found = true;
+    }
+  }
 }
+
 //: clear all soviews from the display.
 //  The soviews must be deleted otherwise we have a big memory leak.
 //  It is not clear that the design intended that the creator of the
@@ -112,12 +146,23 @@ void vgui_displaybase_tableau::clear()
   }
 
   objects.clear();
+
+  for( vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin() ;
+       it != groupings.end() ; 
+       it++ ) {
+
+       delete it->second.style;
+       it->second.objects.clear();
+  }
+
+  groupings.clear();
+  
 }
 
 void vgui_displaybase_tableau::draw_soviews_render()
 {
   vgui_macro_report_errors;
-  if (debug)
+  /*if (debug)
     vcl_cerr << "vgui_style_factory::use_factory : "
              << vbl_bool_ostream::true_false(vgui_style_factory::use_factory)
              << vcl_endl;
@@ -178,20 +223,53 @@ void vgui_displaybase_tableau::draw_soviews_render()
   }
   else // vgui_style_factory::use_factory == false
   {
-    for (vcl_vector<vgui_soview*>::iterator so_iter=objects.begin();
-         so_iter != objects.end(); ++so_iter)
-    {
-      vgui_soview *so = *so_iter;
-      vgui_style* style = so->get_style();
-      style->apply_all();
+  */
+  
+  for( vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin();
+      it != groupings.end();
+      it++ ) {
 
-      if (is_selected(so->get_id()))
-        glColor3f(1.0f, 0.0f, 0.0f);
+    if( ! it->second.hide ) {
+      for (vcl_vector<vgui_soview*>::iterator so_iter= it->second.objects.begin();
+          so_iter != it->second.objects.end(); ++so_iter)
+      {
+       
+        vgui_soview *so = *so_iter;
+        vgui_style* style = so->get_style();
+      
+        if( it->second.style != NULL ) {
+          
+          if( it->second.color_override )
+            it->second.style->apply_color();
+          else
+            style->apply_color();
 
-      so->draw();
-    }//  for all soviews
+          if( it->second.line_width_override ) 
+            it->second.style->apply_line_width();
+          else
+            style->apply_line_width();
+
+          if( it->second.point_size_override )
+            it->second.style->apply_point_size();
+          else
+            style->apply_point_size();
+
+        } else {
+
+          style->apply_all();
+
+        }
+        
+        if (is_selected(so->get_id()))
+          glColor3f(1.0f, 0.0f, 0.0f);
+
+        so->draw();
+      }//  for all soviews
+    }
   }
+  // }
   vgui_macro_report_errors;
+
 }
 
 
@@ -202,17 +280,26 @@ void vgui_displaybase_tableau::draw_soviews_select()
 
   glPushName(0); // will be replaced by the id of each object
 
-  for (vcl_vector<vgui_soview*>::iterator so_iter=objects.begin();
-       so_iter != objects.end(); ++so_iter)
-  {
-    // only highlight if the so is selectable
-    vgui_soview* so = *so_iter;
-    if ( so->get_selectable())
-    {
-      so->load_name();
-      so->draw_select();
+  for( vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin();
+         it != groupings.end();
+         it++ ) {
+
+    if( ! it->second.hide ) {
+
+      for (vcl_vector<vgui_soview*>::iterator so_iter=it->second.objects.begin();
+          so_iter != it->second.objects.end(); ++so_iter)
+      {
+        // only highlight if the so is selectable
+        vgui_soview* so = *so_iter;
+        if ( so->get_selectable())
+        {
+          so->load_name();
+          so->draw_select();
+        }
+      }//  for all soviews
+
     }
-  }//  for all soviews
+  }
 
   // remove name of last object
   glPopName();
@@ -384,3 +471,35 @@ vgui_soview* vgui_displaybase_tableau::contains_hit(vcl_vector<unsigned> names)
 
   return 0;
 }
+
+void vgui_displaybase_tableau::set_current_grouping( vcl_string name ) {
+  current_grouping = name;
+}
+
+vcl_string vgui_displaybase_tableau::get_current_grouping() {
+  return current_grouping;
+}
+
+vgui_displaybase_tableau_grouping* vgui_displaybase_tableau::get_grouping_ptr( vcl_string name ) {
+  vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.find( name );
+  if( it != groupings.end() ) {
+    return & it->second;
+  }
+  return NULL;
+}
+
+vcl_vector< vcl_string > vgui_displaybase_tableau::get_grouping_names() {
+
+  vcl_vector< vcl_string > to_return;
+
+  for( vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin();
+         it != groupings.end();
+         it++ ) {
+    
+    to_return.push_back( it->first );
+  }
+
+  return to_return;
+
+}
+
