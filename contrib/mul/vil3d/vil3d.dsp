@@ -114,6 +114,12 @@ SOURCE=.\Templates/vil3d_image_view+int_16-.cxx
 SOURCE=.\Templates/vil3d_image_view+int_32-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil3d_image_view+uint_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_image_view+uint_32-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil3d_sample_profile_trilin+byte.double-.cxx
 # End Source File
 # Begin Source File
