@@ -51,6 +51,10 @@ void test_selected_data_wrapper()
   } while (selection.next());
   TEST ("Rest of values correct", values_correct, true);
 
+  selection.set_index(0);
+  TEST ("Set index correct", selection.current(), n-1);
+
+
 
 }
 

@@ -134,6 +134,7 @@ void mbl_selected_data_wrapper<T>::set_index(unsigned long n)
     vcl_abort();
   }
   index_=n;
+  data_->set_index(selection_[index_]);
 }
 
 template <class T>
