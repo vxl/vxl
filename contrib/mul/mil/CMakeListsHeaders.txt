@@ -5,6 +5,7 @@ SOURCE_FILES(mil_sources
   mil_byte_image_2d_io_plugin.h
   mil_convert_image_2d.h
   mil_gaussian_pyramid_builder_2d.h
+  mil_scale_pyramid_builder_2d.h
   mil_gaussian_pyramid_builder_2d_general.h
   mil_gauss_reduce_2d.h
   mil_image.h
@@ -21,6 +22,7 @@ SOURCE_FILES(mil_sources
   mil_invert_image_2d.h   
 
   mil_gaussian_pyramid_builder_2d.txx
+  mil_scale_pyramid_builder_2d.txx
   mil_gaussian_pyramid_builder_2d_general.txx
   mil_image_2d_of.txx
   mil_image_data.txx
