@@ -65,7 +65,6 @@
 #include <bsol/bsol_hough_line_index.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
-#include <strk/strk_epipolar_grouper.h>
 #include <strk/strk_region_info_params.h>
 #include <strk/strk_region_info.h>
 
@@ -116,8 +115,9 @@ void segv_segmentation_manager::set_selected_grid_image(vil1_image& image)
 {
   bgui_image_tableau_sptr itab = this->selected_image_tab();
   if (!itab)
-    return;
-  itab->set_image(image);
+    this->add_image(image);
+  else
+    itab->set_image(image);
   itab->post_redraw();
 }
 
@@ -262,6 +262,7 @@ void segv_segmentation_manager::load_image()
     image = brip_vil1_float_ops::convert_to_grey(temp);
   else
     image = temp;
+
   if (first_)
   {
     this->set_selected_grid_image(image);
@@ -293,12 +294,14 @@ segv_segmentation_manager::draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges,
   if (!t2D)
     return;
   this->clear_display();
+#if 0
   vgui_image_tableau_sptr itab = t2D->get_image_tableau();
   if (!itab)
   {
     vcl_cout << "In segv_segmentation_manager::draw_edges - null image tab\n";
     return;
   }
+#endif
   for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
        eit != edges.end(); eit++)
   {
@@ -358,12 +361,14 @@ draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines,
   if (!t2D)
     return;
   //this->clear_display();
+#if 0
   vgui_image_tableau_sptr itab = t2D->get_image_tableau();
   if (!itab)
   {
     vcl_cout << "In segv_segmentation_manager::draw_edges - null image tab\n";
     return;
   }
+#endif
   for (vcl_vector<vsol_line_2d_sptr>::const_iterator lit = lines.begin();
        lit != lines.end(); lit++)
   {
@@ -411,10 +416,14 @@ void segv_segmentation_manager::draw_regions(vcl_vector<vtol_intensity_face_sptr
     t2D->add_face(f);
     if (verts)
     {
-      vcl_vector<vtol_vertex_sptr> vts; f->vertices(vts);
+      vcl_vector<vtol_vertex_sptr> vts;
+	  f->vertices(vts);
       for (vcl_vector<vtol_vertex_sptr>::iterator vit = vts.begin();
-           vit != vts.end(); ++vit)
-        t2D->add_vertex((*vit)->cast_to_vertex_2d());
+           vit != vts.end(); vit++)
+      {
+        vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
+        t2D->add_vertex(v);
+      }
     }
   }
   t2D->post_redraw();
@@ -1096,60 +1105,6 @@ void segv_segmentation_manager::display_IHS()
   this->add_image(out_image);
 }
 
-void segv_segmentation_manager::display_epi_region_image()
-{
-  vil1_image img = selected_image();
-  if (!img)
-  {
-    vcl_cout << "In segv_segmentation_manager::display_IHS() - no image\n";
-    return;
-  }
-  static sdet_detector_params dp;
-  static strk_epipolar_grouper_params egp;
-  static bool agr = false;
-  dp.borderp = false;
-  dp.automatic_threshold = false;
-  dp.junctionp = false;
-  vgui_dialog epipolar_dialog("Epipolar Grouping");
-  epipolar_dialog.field("Gaussian sigma", dp.smooth);
-  epipolar_dialog.field("Noise Threshold", dp.noise_multiplier);
-  epipolar_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
-  epipolar_dialog.checkbox("Agressive Closure", agr);
-  epipolar_dialog.checkbox("Compute Junctions", dp.junctionp);
-  epipolar_dialog.field("Epi U ", egp.eu_);
-  epipolar_dialog.field("Epi V ", egp.ev_);
-  epipolar_dialog.field("Epi Line U ", egp.elu_);
-  epipolar_dialog.field("Epi Line Vmin ", egp.elv_min_);
-  epipolar_dialog.field("Epi Line Vmax ", egp.elv_max_);
-  epipolar_dialog.field("N samples in s", egp.Ns_);
-  epipolar_dialog.field("Angle Threshold", egp.angle_thresh_);
-  if (!epipolar_dialog.ask())
-    return;
-  if (agr)
-    dp.aggressive_junction_closure=1;
-  else
-    dp.aggressive_junction_closure=0;
-
-  sdet_detector det(dp);
-  det.SetImage(img);
-
-  det.DoContour();
-  vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
-  strk_epipolar_grouper eg(egp);
-  eg.init(1);//only one frame
-  vil1_memory_image_of<float> flt =
-    brip_vil1_float_ops::convert_to_float(img);
-  eg.set_image(flt);
-  eg.set_edges(0, *edges);
-  eg.group();
-  vil1_memory_image_of<unsigned char> out = eg.epi_region_image();
-  if (!out)
-    return;
-  this->add_image(out);
-  vcl_vector<vsol_polyline_2d_sptr> segs = eg.display_segs(0);
-  this->draw_polylines(segs);
-}
-
 vtol_face_2d_sptr
 segv_segmentation_manager::face_at(const int col, const int row)
 {
@@ -1314,10 +1269,12 @@ void segv_segmentation_manager::set_background_face()
 void segv_segmentation_manager::compute_parallel_coverage()
 {
   static brip_para_cvrg_params pcp;
+  static bool combined=true;
   vgui_dialog para_dialog("Parallel Coverage");
   para_dialog.field("Sigma", pcp.sigma_);
   para_dialog.field("Projection Width", pcp.proj_width_);
   para_dialog.field("Projection Height", pcp.proj_height_);
+  para_dialog.checkbox("Display Coverage and Direction Combined", combined);
   para_dialog.checkbox("Verbose", pcp.verbose_);
   if (!para_dialog.ask())
     return;
@@ -1326,7 +1283,11 @@ void segv_segmentation_manager::compute_parallel_coverage()
   vil1_image image = this->image_at(col, row);
   brip_para_cvrg pc(pcp);
   pc.do_coverage(image);
-  vil1_memory_image_of<unsigned char> cov_image = pc.get_detection_image();
+  vil1_image cov_image;
+  if(combined)
+    cov_image = pc.get_combined_image();
+  else
+   cov_image = pc.get_detection_image();
   this->add_image(cov_image);
 }
 
@@ -1435,3 +1396,4 @@ void segv_segmentation_manager::find_vehicle()
   }
   t2D->post_redraw();
 }
+

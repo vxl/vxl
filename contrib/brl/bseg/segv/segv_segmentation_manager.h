@@ -54,18 +54,16 @@ class segv_segmentation_manager : public vgui_wrapper_tableau
   void test_digital_lines();
   void display_IHS();
   void rotate_image();
-  void display_epi_region_image();
   void compute_mutual_info();
   void create_box();
   void create_polygon();
-#if 0
   void compute_background_info();
   void set_foreground_face();
   void set_background_face();
   void compute_parallel_coverage();
   void compute_watershed_regions();
   void find_vehicle();
-#endif
+
 #if 0
 #ifdef HAS_XERCES
   void read_xml_edges();
@@ -100,12 +98,6 @@ class segv_segmentation_manager : public vgui_wrapper_tableau
   vgui_rubberband_tableau_sptr selected_rubber_tab();
   vtol_face_2d_sptr face_at(const int col, const int row);
 
-  void compute_background_info();
-  void set_foreground_face();
-  void set_background_face();
-  void compute_parallel_coverage();
-  void compute_watershed_regions();
-  void find_vehicle();
  private:
   //flags
   bool first_; //first image load
