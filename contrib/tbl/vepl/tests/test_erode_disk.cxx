@@ -11,7 +11,7 @@
 #include <vil/vil_rgb_byte.h>
 #include <vepl/vepl_erode_disk.h>
 #include <iostream.h>
-#include <vcl/vcl_cmath.h>
+#include <vcl_cmath.h>
 #include <vcl_cstdlib.h>
 typedef unsigned char ubyte;
 
