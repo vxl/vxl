@@ -5,7 +5,12 @@
 
 PROJECT(allvxl)
 
-SUBDIRS(vxl vcl v3p oxl tbl gel)
+SUBDIRS(vcl v3p vxl oxl gel)
+
+# For out of place builds, the configure generated headers are in the
+# binary directory
+INCLUDE_DIRECTORIES(${allvxl_BINARY_DIR}/vcl
+                    ${allvxl_BINARY_DIR}/vxl)
 
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vcl)
 
