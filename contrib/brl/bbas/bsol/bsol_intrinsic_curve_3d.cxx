@@ -473,7 +473,7 @@ bool bsol_intrinsic_curve_3d::SaveCON3File(vcl_string fileName)
   vcl_fprintf(fp, "%d\n", size());
 
   for (unsigned int i=0; i<size(); ++i) {
-    vcl_fprintf(fp, "%.10lf %.10lf %.10lf\n", x(i), y(i), z(i));
+    vcl_fprintf(fp, "%.10f %.10f %.10f\n", x(i), y(i), z(i));
   }
 
   vcl_fclose(fp);
