@@ -8,6 +8,7 @@
 class vcsl_matrix_param : public vbl_ref_count
 {
  public:
+  vcsl_matrix_param() : vbl_ref_count() {}
   vcsl_matrix_param(vcsl_matrix_param const& x)
     : vbl_ref_count(), xl(x.xl), yl(x.yl), zl(x.zl),
       omega(x.omega), phi(x.phi), kappa(x.kappa) {}
