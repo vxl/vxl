@@ -39,7 +39,11 @@ void vsl_b_read(vsl_b_istream& is, vcl_vector<bool>& v)
     vsl_b_read(is,n);
     v.resize(n);
     for (unsigned i=0; i<n; ++i)
-      vsl_b_read(is, v[i]);
+    {
+      bool b;
+      vsl_b_read(is, b);
+      v[i] = b;
+    }
     break;
   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_vector<T>&) \n";
