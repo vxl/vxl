@@ -557,6 +557,11 @@ SOURCE=.\vnl_generalized_eigensystem.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vnl_generalized_schur.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\vnl_lbfgs.cxx
 
 # End Source File
