@@ -1,0 +1,112 @@
+@chapsummary
+Metric entities, co-ordinate systems and transformations.
+@endchapsummary
+
+This non-core Level 2 library @code{vcsl} is intended to provide an environment
+for representing co-ordinate systems, transformations, dimensions, and metric
+units.
+
+This includes classes for
+@itemize @bullet
+@item Radians, degrees, and metres.
+@item 2D and 3D cartesian co-ordinate systems
+@item Various polar co-ordinate systems
+@item Various geographic co-ordinate systems.
+@item Various Transformations
+@end itemize
+
+
+@subsection Metric and Dimensional classes
+
+@table @samp
+  @item vcsl_dimension
+  Abstract dimension
+  @table @samp
+    @item vcsl_length
+    @item vcsl_angle
+  @end table
+
+  @item vcsl_unit
+    Abstract unit associated to a dimension
+  @table @samp
+    @item vcsl_length_unit
+    @table @samp
+    @end table
+    @item vcsl_angle_unit
+    @table @samp
+      @item vcsl_radian
+        This is the standard angular unit
+      @item vcsl_degree
+    @end table
+  @end table
+@end table
+
+@subsection Co-ordinate Systems and Transformations
+@table
+  @item vcsl_coordinate_system
+  @table @samp
+    @item vcsl_cartesian_2d
+    @item vcsl_cartesian_3d
+    @item vcsl_cylindrical
+    @item vcsl_polar
+    @item vcsl_spherical
+    @item vcsl_geographic
+    @table @samp
+      @item vcsl_geocentric
+        Intended to represent a location relative to the earth
+      @item vcsl_geodetic
+        Intended to represent a location relative to the earth
+      @item vcsl_lambertian
+        Lambert Conformal Conic Projection
+      @item vcsl_utm
+        Universal Transverse Mercator projection
+    @end table
+  @end table
+
+  @item vcsl_spatial_transformation
+  @table @samp
+    @item vcsl_cylindrical_to_cartesian_3d
+    @item vcsl_perspective
+    @item vcsl_rotation
+      Rotation about an axis through the origin
+    @table @samp
+      @item vcsl_displacement
+        Rotation about a general axis
+    @end table
+    @item vcsl_scale
+    @item vcsl_translation
+    @item vcsl_composition
+      Composition of transformations
+  @end table
+
+  @item vcsl_graph
+    Represent multiple co-ordinate systems and transformation between them.
+
+@end table
+
+@section Further Work
+
+@enumerate
+@item Write conversion between classic coordinate systems in the same than the
+class vcsl_cylindrical_to_cartesian_3d (singleton pattern)
+    @itemize @bullet
+    @item vcsl_spherical_to_cartesian_3d
+    @item vcsl_polar_to_cartesian_2d
+    @item vcsl_geocentric_to_cartesian_3d
+    @item vcsl_geodetic_to_cartesian_3d
+    @item vcsl_lambertian_to_cartesian_3d
+    @item vcsl_utm_to_cartesian_3d
+    @end itemize
+
+@item Add other units and dimensions
+
+@item In vcsl_spatial_transformation, add
+@example
+//: May `this' have a matrix representation ?
+virtual bool is_linear(void) const=0;
+
+//: Homogeneous matrix of `this' at time `time'
+// REQUIRE: is_valid()
+// REQUIRE: is_linear()
+virtual vnl_matrix<double> *matrix(const double time) const;
+@end example
