@@ -45,8 +45,6 @@ public:
   vnl_complex_eigensystem(vnl_matrix<vcl_complex<double> > const& A,
                           bool right=true, bool left=false);
 
-  ~vnl_complex_eigensystem();
-
   // please do not add underscores to my members.
   int const N;
   vnl_matrix<vcl_complex<double> > L; // left evecs

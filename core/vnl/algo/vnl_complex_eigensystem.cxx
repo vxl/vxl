@@ -7,6 +7,7 @@
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
 
+#include <vnl/vnl_matlab_print.h>
 #include <vnl/vnl_complex_ops.h>
 #include <vnl/algo/vnl_netlib.h> // zgeev_()
 
@@ -16,14 +17,13 @@ void vnl_complex_eigensystem::compute(vnl_matrix<vcl_complex<double> > const & A
 {
   A.assert_size(N, N);
 
-  if (right) {
+  A.assert_finite();
+  assert(! A.is_zero());
+
+  if (right)
     R.resize(N, N);
-    R.assert_size(N, N);
-  }
-  if (left) {
+  if (left)
     L.resize(N, N);
-    L.assert_size(N, N);
-  }
 
   //
   // Remember that fortran matrices and C matrices are transposed
@@ -72,10 +72,15 @@ void vnl_complex_eigensystem::compute(vnl_matrix<vcl_complex<double> > const & A
     // success
   }
   else if (info < 0) {
-    vcl_cerr << (-info) << "th argument has illegal value" << vcl_endl;
+    vcl_cerr << __FILE__ ": info = " << info << vcl_endl;
+    vcl_cerr << __FILE__ ": " << (-info) << "th argument has illegal value" << vcl_endl;
+    assert(false);
   }
   else if (info > 0) {
-    vcl_cerr << "vnl_qr algorithm failed." << vcl_endl;
+    vcl_cerr << __FILE__ ": info = " << info << vcl_endl;
+    vcl_cerr << __FILE__ ": QR algorithm failed to compute all eigenvalues." << vcl_endl;
+    vnl_matlab_print(vcl_cerr, A, "A", vnl_matlab_print_format_long);
+    assert(false);
   }
   else {
     assert(false); // blah
@@ -90,8 +95,6 @@ vnl_complex_eigensystem::vnl_complex_eigensystem(vnl_matrix<vcl_complex<double> 
                                                  bool left)
   : N(A.rows())
   // L and R are intentionally not initialized.
-  //  , L(N,N)
-  //  , R(N,N)
   , W(N)
 {
   compute(A, right, left);
@@ -104,8 +107,6 @@ vnl_complex_eigensystem::vnl_complex_eigensystem(vnl_matrix<double> const &A_rea
                                                  bool left)
   : N(A_real.rows())
   // L and R are intentionally not initialized.
-  //  , L(N,N)
-  //  , R(N,N)
   , W(N)
 {
   A_real.assert_size(N,N);
@@ -116,6 +117,3 @@ vnl_complex_eigensystem::vnl_complex_eigensystem(vnl_matrix<double> const &A_rea
 
   compute(A, right, left);
 }
-
-vnl_complex_eigensystem::~vnl_complex_eigensystem()
-{}

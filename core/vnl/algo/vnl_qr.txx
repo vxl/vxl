@@ -97,7 +97,7 @@ vnl_matrix<T>& vnl_qr<T>::Q()
     Q_ = new vnl_matrix<T>(m,m);
     // extract Q.
     if (verbose) {
-      vcl_cerr << "vnl_qr<T>::Q() " << vcl_endl;
+      vcl_cerr << __FILE__ ": vnl_qr<T>::Q() " << vcl_endl;
       vcl_cerr << " m,n = " << m << ", " << n << vcl_endl;
       vcl_cerr << " qr0 = [" << qrdc_out_ << "];\n";
       vcl_cerr << " aux = [" << qraux_ << "];\n";
@@ -200,7 +200,7 @@ vnl_vector<T> vnl_qr<T>::solve(const vnl_vector<T>& b) const
                    &info);
 
   if (info > 0)
-    vcl_cerr << "vnl_qr<T>::solve() : matrix is rank-deficient by " << info << vcl_endl;
+    vcl_cerr << __FILE__ ": vnl_qr<T>::solve() : matrix is rank-deficient by " << info << vcl_endl;
 
   return x;
 }
@@ -231,7 +231,7 @@ vnl_vector<T> vnl_qr<T>::QtB(const vnl_vector<T>& b) const
                    &info);
 
   if (info > 0)
-    vcl_cerr << "vnl_qr<T>::QtB() -- matrix is rank-def by " << info << vcl_endl;
+    vcl_cerr << __FILE__ ": vnl_qr<T>::QtB() -- matrix is rank-def by " << info << vcl_endl;
 
   return QtB;
 }
