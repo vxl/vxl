@@ -34,19 +34,19 @@ PMatrixDec::~PMatrixDec() {}
 
 void PMatrixDec::Init()
 {
-    double u0 = _p_matrix(0,0)*_p_matrix(2,0)
-              + _p_matrix(0,1)*_p_matrix(2,1)
-              + _p_matrix(0,2)*_p_matrix(2,2);
-    double v0 = _p_matrix(1,0)*_p_matrix(2,0)
-              + _p_matrix(1,1)*_p_matrix(2,1)
-              + _p_matrix(1,2)*_p_matrix(2,2);
+    double u0 = p_matrix_(0,0)*p_matrix_(2,0)
+              + p_matrix_(0,1)*p_matrix_(2,1)
+              + p_matrix_(0,2)*p_matrix_(2,2);
+    double v0 = p_matrix_(1,0)*p_matrix_(2,0)
+              + p_matrix_(1,1)*p_matrix_(2,1)
+              + p_matrix_(1,2)*p_matrix_(2,2);
 
-    double a_u = _p_matrix(0,0)*_p_matrix(0,0)
-               + _p_matrix(0,1)*_p_matrix(0,1)
-               + _p_matrix(0,2)*_p_matrix(0,2);
-    double a_v = _p_matrix(1,0)*_p_matrix(1,0)
-               + _p_matrix(1,1)*_p_matrix(1,1)
-               + _p_matrix(1,2)*_p_matrix(1,2);
+    double a_u = p_matrix_(0,0)*p_matrix_(0,0)
+               + p_matrix_(0,1)*p_matrix_(0,1)
+               + p_matrix_(0,2)*p_matrix_(0,2);
+    double a_v = p_matrix_(1,0)*p_matrix_(1,0)
+               + p_matrix_(1,1)*p_matrix_(1,1)
+               + p_matrix_(1,2)*p_matrix_(1,2);
     a_u = a_u-u0*u0;
     a_v = a_v-v0*v0;
     if ((a_u <= 0.0) || (a_v <= 0.0))
@@ -70,20 +70,20 @@ void PMatrixDec::Init()
       _j_matrix(2,2) = 1.0; // last diagonal element = 1
 
       // EXTRINSIC parameters => D
-      _d_matrix(0,0) = (_p_matrix(0,0) - u0*_p_matrix(2,0))/a_u;
-      _d_matrix(0,1) = (_p_matrix(0,1) - u0*_p_matrix(2,1))/a_u;
-      _d_matrix(0,2) = (_p_matrix(0,2) - u0*_p_matrix(2,2))/a_u;
-      _d_matrix(0,3) = (_p_matrix(0,3) - u0*_p_matrix(2,3))/a_u;
+      _d_matrix(0,0) = (p_matrix_(0,0) - u0*p_matrix_(2,0))/a_u;
+      _d_matrix(0,1) = (p_matrix_(0,1) - u0*p_matrix_(2,1))/a_u;
+      _d_matrix(0,2) = (p_matrix_(0,2) - u0*p_matrix_(2,2))/a_u;
+      _d_matrix(0,3) = (p_matrix_(0,3) - u0*p_matrix_(2,3))/a_u;
 
-      _d_matrix(1,0) = (_p_matrix(1,0) - v0*_p_matrix(2,0))/a_v;
-      _d_matrix(1,1) = (_p_matrix(1,1) - v0*_p_matrix(2,1))/a_v;
-      _d_matrix(1,2) = (_p_matrix(1,2) - v0*_p_matrix(2,2))/a_v;
-      _d_matrix(1,3) = (_p_matrix(1,3) - v0*_p_matrix(2,3))/a_v;
+      _d_matrix(1,0) = (p_matrix_(1,0) - v0*p_matrix_(2,0))/a_v;
+      _d_matrix(1,1) = (p_matrix_(1,1) - v0*p_matrix_(2,1))/a_v;
+      _d_matrix(1,2) = (p_matrix_(1,2) - v0*p_matrix_(2,2))/a_v;
+      _d_matrix(1,3) = (p_matrix_(1,3) - v0*p_matrix_(2,3))/a_v;
 
-      _d_matrix(2,0) = _p_matrix(2,0);
-      _d_matrix(2,1) = _p_matrix(2,1);
-      _d_matrix(2,2) = _p_matrix(2,2);
-      _d_matrix(2,3) = _p_matrix(2,3);
+      _d_matrix(2,0) = p_matrix_(2,0);
+      _d_matrix(2,1) = p_matrix_(2,1);
+      _d_matrix(2,2) = p_matrix_(2,2);
+      _d_matrix(2,3) = p_matrix_(2,3);
 
       _d_matrix(3,0) = 0.0;
       _d_matrix(3,1) = 0.0;
