@@ -58,13 +58,11 @@ inline bool operator!=(vbl_quadruple<T1, T2, T3, T4> const &x, vbl_quadruple<T1,
 template <class T1, class T2, class T3, class T4>
 inline bool operator< (vbl_quadruple<T1, T2, T3, T4> const &x, vbl_quadruple<T1, T2, T3, T4> const &y)
 {
-#define macro(p) if (x.p != y.p) return x.p < y.p
-  macro(first );
-  macro(second);
-  macro(third );
-  macro(fourth);
-#undef macro
-  return false;
+  return x.first  != y.first  ? x.first  < y.first  :
+         x.second != y.second ? x.second < y.second :
+         x.third  != y.third  ? x.third  < y.third  :
+         x.fourth != y.fourth ? x.fourth < y.fourth :
+         false;
 }
 
 template <class T1, class T2, class T3, class T4>

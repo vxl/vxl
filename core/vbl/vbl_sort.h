@@ -30,11 +30,7 @@ struct vbl_sort_helper
   static int ascend(const void* a, const void* b) {
     T const& ta = *((T const*)a);
     T const& tb = *((T const*)b);
-    if (tb > ta)
-      return -1;
-    if (tb == ta)
-      return 0;
-    return 1;
+    return tb > ta ? -1 : tb == ta ? 0 : 1;
   }
   static int descend(const void* a, const void* b) {
     return - ascend(a,b);
