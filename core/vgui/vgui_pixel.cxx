@@ -9,10 +9,13 @@
 
 //--------------------------------------------------------------------------------
 
-// tunit_init() gets called before anything else in this translation unit.
-extern "C" int printf(const char *format, ...);
-static bool tunit_init() {
-#define as(T,sz) { if (sizeof(T) != sz) printf("%s : %s has size %d, not %d\n", __FILE__, #T, sizeof(T), sz); }
+template <int M, int N> struct vgui_pixel_assert;
+VCL_DEFINE_SPECIALIZATION struct vgui_pixel_assert<2, 2> { };
+VCL_DEFINE_SPECIALIZATION struct vgui_pixel_assert<3, 3> { };
+VCL_DEFINE_SPECIALIZATION struct vgui_pixel_assert<4, 4> { };
+struct generates_no_code
+{
+#define as(T, sz) vgui_pixel_assert<sizeof(T), sz> T##_is_##sz
   as(vgui_pixel_rgb888, 3);
   as(vgui_pixel_bgr888, 3);
   as(vgui_pixel_rgb565, 2);
@@ -21,9 +24,7 @@ static bool tunit_init() {
   as(vgui_pixel_abgr8888, 4);
   as(vgui_pixel_bgra8888, 4);
 #undef as
-  return bool();
-}
-static bool dummy = tunit_init();
+};
 
 //--------------------------------------------------------------------------------
 
