@@ -1,3 +1,6 @@
+#ifndef vnl_io_vector_txx_
+#define vnl_io_vector_txx_
+
 // This is vxl/vnl/io/vnl_io_vector.txx
 
 #include <vsl/vsl_binary_io.h>
@@ -42,7 +45,7 @@ void vsl_b_read(vsl_b_istream &is, vnl_vector<T> & p)
 
   default:
     vcl_cerr << "vnl_vector::b_read() Unknown version number "<< ver << vcl_endl;
-    abort();
+    vcl_abort();
   }
 
 }
@@ -60,7 +63,9 @@ void vsl_print_summary(vcl_ostream & os,const vnl_vector<T> & p)
 }
 
 #define VNL_IO_VECTOR_INSTANTIATE(T) \
-template void vsl_print_summary(vcl_ostream &, const vnl_vector<T> &); \
-template void vsl_b_read(vsl_b_istream &, vnl_vector<T> &); \
-template void vsl_b_write(vsl_b_ostream &, const vnl_vector<T> &); \
+template void vsl_print_summary(vcl_ostream &, const vnl_vector<T > &); \
+template void vsl_b_read(vsl_b_istream &, vnl_vector<T > &); \
+template void vsl_b_write(vsl_b_ostream &, const vnl_vector<T > &); \
 ;
+
+#endif

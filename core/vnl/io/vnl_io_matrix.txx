@@ -45,7 +45,7 @@ void vsl_b_read(vsl_b_istream &is, vnl_matrix<T> & p)
 
   default:
     vcl_cerr << "vnl_matrix::b_read() Unknown version number "<< v << vcl_endl;
-    abort();
+    vcl_abort();
   }
 
 }
