@@ -48,9 +48,5 @@ public:
 int main(int argc,char **argv) {
   vgui::init(argc, argv);
 
-  tab t;
-
-  //vgui_shell_tableau shell(&echo);
-  //return vgui::run(&shell, 256, 256, "test_events");
-  return vgui::run(&t, 256, 256, __FILE__);
+  return vgui::run(new tab, 256, 256, __FILE__);
 }

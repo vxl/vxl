@@ -182,9 +182,5 @@ bool front_back_wibbler::handle(const vgui_event &e)  {
 
 int main(int argc,char **argv) {
   vgui::init(argc, argv);
-  front_back_wibbler fbw;
-
-  //vgui_shell_tableau shell(&fbw);
-  //return vgui::run(&shell, 256, 256, __FILE__);
-  return vgui::run(&fbw, 256, 256, __FILE__);
+  return vgui::run(new front_back_wibbler, 256, 256, __FILE__);
 }
