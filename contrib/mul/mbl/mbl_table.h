@@ -76,6 +76,31 @@ public:
   // \note The new row must be the same length as existing rows.
   bool append_row(const vcl_vector<double>& row);
   
+
+  //: Set the value of an existing element.
+  // \param header The string identifying the column to be modified.
+  // \param row The row index of the element to be modified.
+  // \param value The new value to use for the modified element.
+  // \return False if the column does not exist or the row index is not valid.
+  // \note This function is intended only for existing elements.
+  bool set_element(const vcl_string& header, 
+                   const unsigned row, 
+                   const double value);
+
+
+  //: Get the value of an existing element.
+  // \param header The string identifying the column of interest.
+  // \param row The row index of the element of interest.
+  // \return The value of the requested element (undefined if the element
+  //         does not exist).
+  // \retval success If provided, will be used to indicate whether the 
+  //                 specified element existed.
+  // \note This function is intended only for existing elements.
+  // \note It is recommended that you provide and check the parameter success.
+  double get_element(const vcl_string& header, 
+                     const unsigned row, 
+                     bool* success=0) const;
+
   
   //: Load this table's data from specified text stream.
   // Any existing data is lost.

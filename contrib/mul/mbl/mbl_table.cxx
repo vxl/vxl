@@ -123,6 +123,67 @@ bool mbl_table::get_row(const unsigned& r,
 
 
 //========================================================================
+// Set the value of an existing element.
+//========================================================================
+bool mbl_table::set_element(const vcl_string& header, 
+                            const unsigned row, 
+                            const double value)
+{
+  bool success = false;
+
+  // Does the map contain this column header?
+  vcl_map<vcl_string, unsigned>::const_iterator iter =
+    header_to_column_index_.find(header);
+  
+  if (iter != header_to_column_index_.end())
+  {
+    // Does the column have sufficient rows?
+    vcl_vector<double>& col = columns_[iter->second];
+    if (col.size()>row)
+    {
+      // Set the value
+      col[row] = value;
+      success = true;
+    }
+  }
+
+  return success;
+}
+
+
+//========================================================================
+// Get the value of an existing element.
+//========================================================================
+double mbl_table::get_element(const vcl_string& header, 
+                              const unsigned row, 
+                              bool* success/*=0*/) const
+{ 
+  double value = 1e-19;
+  if (success)
+    *success = false;
+
+  // Does the map contain this column header?
+  vcl_map<vcl_string, unsigned>::const_iterator iter =
+    header_to_column_index_.find(header);
+  
+  if (iter != header_to_column_index_.end())
+  {
+    // Does the column have sufficient rows?
+    const vcl_vector<double>& col = columns_[iter->second];
+    if (col.size()>row)
+    {
+      // Get the value
+      value = col[row];
+      if (success)
+        *success = true;
+    }
+  }
+  
+  return value;
+}
+
+
+//========================================================================
 // Append a column of data with its own heading.
 //========================================================================
 bool mbl_table::append_column(const vcl_string& header,
