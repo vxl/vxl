@@ -14,7 +14,7 @@ int test_vcl_cctype_main()
              vcl_isalpha('A') && vcl_isalpha('a') && !vcl_isalpha('1') &&
              vcl_isgraph('%') && vcl_isgraph('j') && !vcl_isgraph(' ') &&
              vcl_ispunct('&') && !vcl_ispunct('a') && !vcl_ispunct(' ') &&
-             vcl_isxdigit('8') && vcl_isxdigit('F') && vcl_isxdigit('f') && !isxdigit('g') &&
+             vcl_isxdigit('8') && vcl_isxdigit('F') && vcl_isxdigit('f') && !vcl_isxdigit('g') &&
              vcl_iscntrl('\n') && vcl_iscntrl('\177') && !vcl_iscntrl('i') &&
              vcl_tolower('A')=='a' && vcl_tolower('a')=='a' && vcl_tolower('@')=='@' &&
              vcl_toupper('K')=='K' && vcl_toupper('j')=='J' && vcl_toupper('$')=='$' );
