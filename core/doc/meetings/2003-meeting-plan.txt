@@ -90,7 +90,7 @@ Any volunteers?
 *** V3P - Why VCLize V3P?  V3P packages are already portable.  Upgrades tough after we VCLize.
 
 *** V3P - XML in v3p
-GE uses Xerces XML with VXL quite a bit.
+GE and Brown use Xerces XML libraries with VXL.
 If GE has a serious proposal for this, then it is worth presenting - IMS.
 
 *** Core - "Ownership" of core VXL libs - discussion started on list a few months ago
