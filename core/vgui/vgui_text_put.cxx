@@ -14,10 +14,15 @@
 
 #ifdef HAS_GLUT
 #include <vgui/vgui_glut.h>
-void vgui_text_put(char const *str)
+void vgui_text_put(char const *str, unsigned size)
 {
-  for (unsigned k=0; str[k]; ++k)
-    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, str[k]);
+  if (size > 17) {
+    for (unsigned k=0; str[k]; ++k)
+      glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, str[k]);
+  } else {
+    for (unsigned k=0; str[k]; ++k)
+      glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10, str[k]);
+  }
 }
 #else
 #include <vcl_iostream.h>

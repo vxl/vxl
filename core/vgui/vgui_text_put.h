@@ -11,6 +11,8 @@
 // \brief  Function for rendering text at the current raster position.
 
 //: Put the given text at the current raster position.
-void vgui_text_put(char const *s);
+// \param size Approximate point size of the text. Current
+// implementation only has 10pt and 24pt Times New Roman.
+void vgui_text_put(char const *s, unsigned size=24);
 
 #endif // vgui_text_put_h_
