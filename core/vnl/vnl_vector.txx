@@ -533,7 +533,7 @@ template<class T>
 vnl_vector<T>& vnl_vector<T>::update (vnl_vector<T> const& v, unsigned start) {
   unsigned end = start + v.size();
 #if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
-  if (this->num_elmts < end)
+  if (this->num_elmts <= end)
     vnl_error_vector_dimension ("update", end-start, v.size());
 #endif
   for (unsigned i = start; i < end; i++)
