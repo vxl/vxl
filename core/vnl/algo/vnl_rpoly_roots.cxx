@@ -16,7 +16,6 @@
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
 #include <vcl_complex.h>
-#include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_netlib.h> // rpoly_()
 #include <vnl/vnl_real_polynomial.h>
 
@@ -31,17 +30,7 @@ vnl_rpoly_roots::vnl_rpoly_roots(const vnl_vector<double>& a)
   // fsm : if the coefficients are NaNs then rpoly_ gets stuck in an
   // infinite loop. of course, the caller shouldn't pass in NaNs, but
   // it would be nice to get an error message instead of hanging.
-  bool has_nans=false;
-  for (unsigned i=0;i<a.size();i++)
-    if (vnl_math_isnan(a(i)))
-      has_nans=true;
-
-  if (has_nans) {
-    vcl_cerr << __FILE__ " these coefficients are invalid :" << vcl_endl;
-    for (unsigned i=0;i<a.size();i++)
-      vcl_cerr << i << ' ' << a(i) << vcl_endl;
-    vcl_abort();
-  }
+  a.assert_finite();
 
   compute();
 }
@@ -49,18 +38,7 @@ vnl_rpoly_roots::vnl_rpoly_roots(const vnl_vector<double>& a)
 vnl_rpoly_roots::vnl_rpoly_roots(const vnl_real_polynomial& poly)
   : coeffs_(poly.coefficients()), r_(poly.degree()), i_(poly.degree())
 {
-  bool has_nans=false;
-  unsigned size = poly.degree() + 1;
-  for (unsigned i=0;i< size; i++)
-    if (vnl_math_isnan(poly[i]))
-      has_nans=true;
-
-  if (has_nans) {
-    vcl_cerr << __FILE__ " these coefficients are invalid :" << vcl_endl;
-    for (unsigned i=0;i< size;i++)
-      vcl_cerr << i << ' ' << poly[i] << vcl_endl;
-    vcl_abort();
-  }
+  poly.coefficients().assert_finite();
 
   compute();
 }
@@ -81,13 +59,13 @@ vnl_vector<double> vnl_rpoly_roots::realroots(double tol) const
 {
   int c = 0;
   for(int i = 0; i < num_roots_found_; ++i)
-    if (vnl_math_abs(i_[i]) < tol)
+    if (vcl_abs(i_[i]) < tol)
       ++c;
 
   vnl_vector<double> ret(c);
   c = 0;
   {for(int i = 0; i < num_roots_found_; ++i)
-    if (vnl_math_abs(i_[i]) < tol)
+    if (vcl_abs(i_[i]) < tol)
       ret[c++] = r_[i];}
 
   return ret;
