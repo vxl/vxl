@@ -31,6 +31,7 @@
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
+#include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
 
 #include <vgl/vgl_fwd.h>
@@ -228,12 +229,12 @@ class TriTensor
   TriTensor premultiply2(const vnl_matrix<double>& M) const;
   TriTensor premultiply3(const vnl_matrix<double>& M) const;
 
-  vnl_double_3x3 dot1(const vnl_vector<double>& v) const;
-  vnl_double_3x3 dot2(const vnl_vector<double>& v) const;
-  vnl_double_3x3 dot3(const vnl_vector<double>& v) const;
-  vnl_double_3x3 dot1t(const vnl_vector<double>& v) const;
-  vnl_double_3x3 dot2t(const vnl_vector<double>& v) const;
-  vnl_double_3x3 dot3t(const vnl_vector<double>& v) const;
+  vnl_double_3x3 dot1(const vnl_double_3& v) const;
+  vnl_double_3x3 dot2(const vnl_double_3& v) const;
+  vnl_double_3x3 dot3(const vnl_double_3& v) const;
+  vnl_double_3x3 dot1t(const vnl_double_3& v) const;
+  vnl_double_3x3 dot2t(const vnl_double_3& v) const;
+  vnl_double_3x3 dot3t(const vnl_double_3& v) const;
 
   bool check_equal_up_to_scale(const TriTensor& that) const;
 

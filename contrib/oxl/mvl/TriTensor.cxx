@@ -467,7 +467,7 @@ HMatrix2D TriTensor::get_hmatrix_21(const HomgLine2D& line3) const
 // == CONTRACTION WITH VECTORS ==
 
 //: Compute ${\tt M}_{jk} = T_{ijk} v_i$.
-vnl_double_3x3 TriTensor::dot1(const vnl_vector<double>& v) const
+vnl_double_3x3 TriTensor::dot1(const vnl_double_3& v) const
 {
   vnl_double_3x3 answer; answer.fill(0.0);
   for (int i = 0; i < 3; i++)
@@ -478,7 +478,7 @@ vnl_double_3x3 TriTensor::dot1(const vnl_vector<double>& v) const
 }
 
 //: Compute ${\tt M}_{ik} = T_{ijk} v_j$.
-vnl_double_3x3 TriTensor::dot2(const vnl_vector<double>& v) const
+vnl_double_3x3 TriTensor::dot2(const vnl_double_3& v) const
 {
   vnl_double_3x3 answer; answer.fill(0.0);
   for (int i = 0; i < 3; i++)
@@ -489,7 +489,7 @@ vnl_double_3x3 TriTensor::dot2(const vnl_vector<double>& v) const
 }
 
 //: Compute ${\tt M}_{ij} = T_{ijk} v_k$.
-vnl_double_3x3 TriTensor::dot3(const vnl_vector<double>& v) const
+vnl_double_3x3 TriTensor::dot3(const vnl_double_3& v) const
 {
   vnl_double_3x3 answer; answer.fill(0.0);
   for (int i = 0; i < 3; i++)
@@ -500,7 +500,7 @@ vnl_double_3x3 TriTensor::dot3(const vnl_vector<double>& v) const
 }
 
 //: Compute ${\tt M}_{kj} = T_{ijk} v_i$. (The transpose of dot1).
-vnl_double_3x3 TriTensor::dot1t(const vnl_vector<double>& v) const
+vnl_double_3x3 TriTensor::dot1t(const vnl_double_3& v) const
 {
   vnl_double_3x3 answer; answer.fill(0.0);
   for (int i = 0; i < 3; i++)
@@ -511,7 +511,7 @@ vnl_double_3x3 TriTensor::dot1t(const vnl_vector<double>& v) const
 }
 
 //: Compute ${\tt M}_{ki} = T_{ijk} v_j$.
-vnl_double_3x3 TriTensor::dot2t(const vnl_vector<double>& v) const
+vnl_double_3x3 TriTensor::dot2t(const vnl_double_3& v) const
 {
   vnl_double_3x3 answer; answer.fill(0.0);
   for (int i = 0; i < 3; i++)
@@ -522,7 +522,7 @@ vnl_double_3x3 TriTensor::dot2t(const vnl_vector<double>& v) const
 }
 
 //: Compute ${\tt M}_{ji} = T_{ijk} v_k$.
-vnl_double_3x3 TriTensor::dot3t(const vnl_vector<double>& v) const
+vnl_double_3x3 TriTensor::dot3t(const vnl_double_3& v) const
 {
   vnl_double_3x3 answer; answer.fill(0.0);
   for (int i = 0; i < 3; i++)
