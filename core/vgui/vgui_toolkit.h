@@ -37,7 +37,7 @@ public:
 
   virtual vgui_window* produce_window(int width, int height,
                                       vgui_menu const &menubar,
-                                      const char *title);
+                                      char const *title);
 
   virtual vgui_window* produce_window(int width, int height,
                                       char const *title);

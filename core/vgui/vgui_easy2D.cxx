@@ -28,7 +28,7 @@
 
 static bool debug = false;
 
-vgui_easy2D::vgui_easy2D(char const* n):
+vgui_easy2D::vgui_easy2D(const char* n):
   image_slot(this),
   name_(n)
 {
@@ -41,7 +41,7 @@ vgui_easy2D::vgui_easy2D(char const* n):
 }
 
 
-vgui_easy2D::vgui_easy2D(vgui_image_tableau_sptr const& i, char const* n) :
+vgui_easy2D::vgui_easy2D(vgui_image_tableau_sptr const& i, const char* n) :
   image_slot(this,i),
   image_image(i),
   name_(n)
@@ -55,7 +55,7 @@ vgui_easy2D::vgui_easy2D(vgui_image_tableau_sptr const& i, char const* n) :
 }
 
 
-vgui_easy2D::vgui_easy2D(vgui_tableau_sptr const& i, char const* n) :
+vgui_easy2D::vgui_easy2D(vgui_tableau_sptr const& i, const char* n) :
   image_slot(this,i),
   name_(n)
 {

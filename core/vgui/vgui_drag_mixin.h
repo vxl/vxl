@@ -35,7 +35,7 @@ public:
   vgui_drag_mixin(void);
   virtual ~vgui_drag_mixin(void);
 
-  virtual bool handle(const vgui_event&);
+  virtual bool handle(vgui_event const&);
 
   virtual bool mouse_drag(int, int, vgui_button, vgui_modifier);
 

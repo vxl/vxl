@@ -8,4 +8,4 @@
 class vgui_deck_tableau;
 typedef vgui_tableau_sptr_t<vgui_deck_tableau> vgui_deck_tableau_sptr;
 
-#endif // vgui_deck_sptr_h_
+#endif // vgui_deck_tableau_sptr_h_

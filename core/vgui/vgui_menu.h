@@ -111,7 +111,7 @@ public:
            vgui_modifier modifiers =vgui_MODIFIER_NULL);
 #endif
   void separator();        // a separator
-  void include(const vgui_menu & that); // add 'that' to end of *this.
+  void include(vgui_menu const & that); // add 'that' to end of *this.
   void clear();
 
   unsigned size() const; // number of items in menu

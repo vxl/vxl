@@ -69,7 +69,7 @@ void vgui_window::reposition(int,int) {
   vgui_macro_warning << "vgui_window::reposition() dummy implementation" << vcl_endl;
 }
 
-void vgui_window::set_title(const vcl_string &) {
+void vgui_window::set_title(vcl_string const&) {
   vgui_macro_warning << "vgui_window::set_title() dummy implementation" << vcl_endl;
 }
 

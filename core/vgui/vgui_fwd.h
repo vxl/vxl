@@ -11,7 +11,7 @@ class vgui_utils;
 class vgui_projection_inspector;
 
 class vgui_composite;
-class vgui_deck;
+class vgui_deck_tableau;
 class vgui_displaylist2D;
 class vgui_easy2D;
 class vgui_soview2D_circle;

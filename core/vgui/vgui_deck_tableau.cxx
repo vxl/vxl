@@ -3,13 +3,14 @@
 #pragma implementation
 #endif
 //
-// .NAME vgui_deck
+// .NAME vgui_deck_tableau
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 13 Sep 99
 //
 //-----------------------------------------------------------------------------
 
-#include "vgui_deck.h"
+#include "vgui_deck_tableau.h"
+// #include "vgui_deck.h" // backward compatibility - no longer needed
 
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
@@ -24,17 +25,17 @@
 
 static bool debug=false;
 
-vgui_deck_tableau::vgui_deck() : index_(-1) {
+vgui_deck_tableau::vgui_deck_tableau() : index_(-1) {
 }
 
-vgui_deck_tableau::vgui_deck(vgui_tableau_sptr const& child0,
+vgui_deck_tableau::vgui_deck_tableau(vgui_tableau_sptr const& child0,
                      vgui_tableau_sptr const& child1) : index_(-1)
 {
   add(child0);
   add(child1);
 }
 
-vgui_deck_tableau::vgui_deck(vgui_tableau_sptr const& child0,
+vgui_deck_tableau::vgui_deck_tableau(vgui_tableau_sptr const& child0,
                      vgui_tableau_sptr const& child1,
                      vgui_tableau_sptr const& child2) : index_(-1)
 {
@@ -43,7 +44,7 @@ vgui_deck_tableau::vgui_deck(vgui_tableau_sptr const& child0,
   add(child2);
 }
 
-vgui_deck_tableau::~vgui_deck() {
+vgui_deck_tableau::~vgui_deck_tableau() {
 }
 
 bool vgui_deck_tableau::handle(const vgui_event& event) {
@@ -59,12 +60,11 @@ bool vgui_deck_tableau::handle(const vgui_event& event) {
 }
 
 bool vgui_deck_tableau::help() {
-  vcl_cerr << vcl_endl
-           << "-- vgui_deck ------------------------------------\n"
+  vcl_cerr << "\n"
+           << "-- vgui_deck_tableau ----------------------------\n"
            << "|     keys                                      |\n"
            << "| `PageUp' and `PageDown'  switch current child |\n"
-           << "-------------------------------------------------\n"
-           << vcl_endl;
+           << "-------------------------------------------------\n\n";
 
   return false;
 }
@@ -224,13 +224,13 @@ vcl_string vgui_deck_tableau::pretty_name() const {
 
 class vgui_deck_switch_command : public vgui_command {
 public:
-  vgui_deck_switch_command(vgui_deck* d, int i) : deck(d), index(i) {}
+  vgui_deck_switch_command(vgui_deck_tableau* d, int i) : deck(d), index(i) {}
   void execute() {
     deck->index(index);
     deck->post_redraw();
   }
 
-  vgui_deck *deck;
+  vgui_deck_tableau *deck;
   int index;
 };
 

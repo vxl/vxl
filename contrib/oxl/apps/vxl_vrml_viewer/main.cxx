@@ -27,7 +27,7 @@
 #include <vgui/vgui_viewer3D.h>
 #include <vgui/vgui_viewer2D.h>
 #include <vgui/vgui_composite.h>
-#include <vgui/vgui_deck.h>
+#include <vgui/vgui_deck_tableau.h>
 #include <vgui/vgui_text.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_image_blender.h>
@@ -47,7 +47,7 @@ vgui_mfc_app_init theAppinit;
 # include <vgui/vgui_linker_hack.h>
 #endif
 
-vgui_deck_sptr thedeck;
+vgui_deck_tableau_sptr thedeck;
 vcl_vector<vgui_vrml_tableau_sptr> thevrmls;
 
 vgui_tableau_sptr make_3d_tableau(char const* filename)
@@ -150,7 +150,7 @@ int main(int argc, char **argv)
 {
   vgui::init(argc, argv);
 
-  vgui_deck_new deck;
+  vgui_deck_tableau_new deck;
   thedeck = deck;
   for(int i = 1; i < argc; ++i) {
     vgui_tableau_sptr tab3d = make_3d_tableau(argv[i]);

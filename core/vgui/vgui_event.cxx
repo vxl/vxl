@@ -46,11 +46,11 @@ bool vgui_event::modifier_is_down(int mods) const {
   return (mods & modifier) == mods;
 }
 
-double vgui_event::secs_since(const vgui_event& e) const {
+double vgui_event::secs_since(vgui_event const& e) const {
   return (this->timestamp - e.timestamp) * 1e-3;
 }
 
-long vgui_event::usecs_since(const vgui_event& e) const {
+long vgui_event::usecs_since(vgui_event const& e) const {
   return long(this->timestamp - e.timestamp) * 1000;
 }
 

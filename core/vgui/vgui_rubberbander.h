@@ -109,14 +109,14 @@ public:
 
 protected:
   ~vgui_rubberbander() { }
-  bool handle_point(const vgui_event&, float, float);
-  bool handle_line(const vgui_event&, float, float);
-  bool handle_linestrip(const vgui_event&,float , float ); // u97mb
-  bool handle_infinite_line(const vgui_event&, float, float);
-  bool handle_circle(const vgui_event&, float, float);
-  bool handle_polygon(const vgui_event&, float, float);
-  bool handle_box(const vgui_event&, float, float);
-  bool handle(const vgui_event&);
+  bool handle_point(vgui_event const&, float, float);
+  bool handle_line(vgui_event const&, float, float);
+  bool handle_linestrip(vgui_event const&,float , float ); // u97mb
+  bool handle_infinite_line(vgui_event const&, float, float);
+  bool handle_circle(vgui_event const&, float, float);
+  bool handle_polygon(vgui_event const&, float, float);
+  bool handle_box(vgui_event const&, float, float);
+  bool handle(vgui_event const&);
 
 private:
   vgui_rubberbander_client *client_;

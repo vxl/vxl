@@ -56,7 +56,7 @@ bool vgui_wrapper_tableau::remove_child(vgui_tableau_sptr const& c) {
   }
 }
 
-bool vgui_wrapper_tableau::handle(const vgui_event &e) {
+bool vgui_wrapper_tableau::handle(vgui_event const& e) {
   return child && child->handle(e);
 }
 

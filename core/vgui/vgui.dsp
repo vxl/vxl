@@ -724,7 +724,7 @@ SOURCE=.\vgui_debug_tableau.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vgui_deck.h
+SOURCE=.\vgui_deck_tableau.h
 # End Source File
 # Begin Source File
 

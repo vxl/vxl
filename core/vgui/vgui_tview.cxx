@@ -19,7 +19,7 @@
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_slot.h>
-#include <vgui/vgui_deck.h>
+#include <vgui/vgui_deck_tableau.h>
 #include <vgui/vgui_composite.h>
 #include <vgui/vgui_projection_inspector.h>
 #include <vgui/vgui_listmanager2D.h>
@@ -132,8 +132,8 @@ void vgui_tview::draw_icons(vgui_tableau_sptr const& parent, float x, float y) {
       glDisable(GL_LINE_STIPPLE);
       glColor3f(1,1,1);
 
-      if (parent->type_name() == "vgui_deck") {
-        vgui_deck_sptr deck; deck.vertical_cast(parent);
+      if (parent->type_name() == "vgui_deck_tableau") {
+        vgui_deck_tableau_sptr deck; deck.vertical_cast(parent);
         if (deck->current() != *i) {
           glLineStipple (1, 0x1C47);  // dash/dot/dash
           glEnable (GL_LINE_STIPPLE);
@@ -175,7 +175,7 @@ void vgui_tview::draw_icons(vgui_tableau_sptr const& parent, float x, float y) {
     draw_tview_icon(x,y);
   }
   else {
-    if (parent->type_name() == "vgui_deck")
+    if (parent->type_name() == "vgui_deck_tableau")
       glColor3f(0,1,0);
     else if (parent->type_name() == "vgui_viewer2D")
       glColor3f(1,0,0);

@@ -67,7 +67,7 @@ public:
 
 private:
   // main GDK-to-vgui event despatcher
-  static gint handle(GtkWidget *, GdkEvent *, void *);
+  static gint handle(GtkWidget *, GdkEvent *, gpointer);
   int event_handler_id;
 
   // idle callbacks which service pending redraw/destroy posts

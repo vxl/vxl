@@ -17,7 +17,7 @@ vgui_test_thingy2d::vgui_test_thingy2d()
 {
 }
 
-bool vgui_test_thingy2d::handle(const vgui_event &e) {
+bool vgui_test_thingy2d::handle(vgui_event const& e) {
   if (e.type != vgui_DRAW)
     return false;
 
@@ -63,7 +63,7 @@ vgui_test_thingy3d::vgui_test_thingy3d()
 {
 }
 
-bool vgui_test_thingy3d::handle(const vgui_event &e) {
+bool vgui_test_thingy3d::handle(vgui_event const& e) {
   if (e.type != vgui_DRAW)
     return false;
 
