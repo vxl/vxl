@@ -1,12 +1,13 @@
 #ifndef oxp_yuv_to_rgb_h_
 #define oxp_yuv_to_rgb_h_
 #ifdef __GNUC__
-#pragma interface "oxp_yuv_to_rgb"
+#pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
-
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+//
+// \verbatim
 // RGB to YUV Conversion
 // 
 //      Y  =      (0.257 * R) + (0.504 * G) + (0.098 * B) + 16
@@ -29,6 +30,8 @@
 //      R = Y + 1.403V'
 //      G = Y - 0.344U' - 0.714V'
 //      B = Y + 1.770U'
+//
+// \endverbatim
 
 inline
 unsigned char oxp_yuv_to_rgb_byte_clamp(int x)
