@@ -28,7 +28,7 @@ SOURCE_FILES( vnl_sources
   vnl_fastops.h
   vnl_file_matrix.h
   vnl_file_vector.h
-  vnl_finite_field_number.h
+  vnl_finite.h
   vnl_float_2.h
   vnl_float_3.h
   vnl_float_4.h

@@ -28,7 +28,7 @@
 #include <vnl/vnl_fastops.h>
 #include <vnl/vnl_file_matrix.h>
 #include <vnl/vnl_file_vector.h>
-#include <vnl/vnl_finite_field_number.h>
+#include <vnl/vnl_finite.h>
 #include <vnl/vnl_float_2.h>
 #include <vnl/vnl_float_3.h>
 #include <vnl/vnl_float_4.h>
