@@ -1,5 +1,5 @@
-// .NAME example_add_random_noise
-// .SECTION Description
+//:
+// \file
 //  This example program shows a typical use of the vepl_add_random_noise function
 //  on a ubyte image.  The input image (argv[1]) must be ubyte, and in that
 //  case random noise is added to it (Gaussian, with sigma argv[3], default
@@ -9,8 +9,8 @@
 //   into a vil_memory_image_of<ubyte>, because otherwise get_pixel()
 //   would be very slow!)
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven, ESAT/PSI, 15 May 2001, from vipl/examples
+// \author Peter Vanroose, K.U.Leuven, ESAT/PSI
+// \date   15 May 2001, from vipl/examples
 //
 #include <vil/vil_image.h>
 #include <vil/vil_pixel.h>

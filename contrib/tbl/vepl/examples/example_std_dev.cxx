@@ -1,5 +1,5 @@
-// .NAME example_std_dev
-// .SECTION Description
+//:
+// \file
 //  This example program shows a typical use of the vepl_moment function on
 //  a ubyte image.  The input image (argv[1]) must be ubyte, and in that
 //  case is converted to an image where each pixel is the standard
@@ -8,8 +8,8 @@
 //  Uses vepl_moment(), vepl_monadic_sqr(), vepl_monadic_sqrt(),
 //  vepl_dyadic_dif() and vepl_convert().
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven, ESAT/PSI, 15 May 2001, from vipl/examples
+// \author Peter Vanroose, K.U.Leuven, ESAT/PSI
+// \date   15 May 2001, from vipl/examples
 //
 #include <vil/vil_pixel.h>
 #include <vil/vil_memory_image_of.h>

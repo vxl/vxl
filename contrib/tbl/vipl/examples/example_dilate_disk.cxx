@@ -1,5 +1,5 @@
-// .NAME example_dilate_disk
-// .SECTION Description
+//:
+// \file
 //  This example program shows a typical use of a morphological IP class on
 //  a colour image.  The input image (argv[1]) must be 24 bit (colour), and in
 //  that case is dilated (circular kernel, default 3+3 cross) to argv[2]
@@ -10,11 +10,13 @@
 //  Note that this requires the function max(rgbcell,rgbcell) which is provided
 //  here (giving the pixel with the highest R value).
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven, ESAT/PSI, 15 nov. 1997
+// \author Peter Vanroose, K.U.Leuven, ESAT/PSI
+// \date   15 nov. 1997
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications:
 //   Peter Vanroose, Aug.2000 - adapted to vxl
+// \endverbatim
 //
 #include <section/section.h>
 #include <vipl/vipl_with_section/accessors/vipl_accessors_section.h>

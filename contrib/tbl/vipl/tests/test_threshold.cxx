@@ -1,11 +1,11 @@
-// .NAME test_threshold
-// .SECTION Description
+//:
+// \file
 //  Test of the vipl_threshold templated IP classes
 //  vipl_threshold<vil_image,vil_image,T,T>
 //  for T in { unsigned char, unsigned short, float }.
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven, ESAT/PSI, 12 sept. 2000
+// \author Peter Vanroose, K.U.Leuven, ESAT/PSI
+// \date   12 sept. 2000
 //
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_rgb_byte.h>

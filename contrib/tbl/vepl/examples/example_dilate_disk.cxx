@@ -1,5 +1,5 @@
-// .NAME example_dilate_disk
-// .SECTION Description
+//:
+// \file
 //  This example program shows a typical use of a morphological function on
 //  a colour image.  The input image (argv[1]) must be 24 bit (colour), and in
 //  that case is dilated (circular kernel, default 3+3 cross) to argv[2]
@@ -7,8 +7,8 @@
 //  Note that this requires the function max(rgbcell,rgbcell) which is provided
 //  here (giving the pixel with the highest R value).
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven, ESAT/PSI, 15 May 2001, from vipl/examples
+// \author Peter Vanroose, K.U.Leuven, ESAT/PSI
+// \date   15 May 2001, from vipl/examples
 //
 #include <vil/vil_rgb.h>
 #include <vil/vil_pixel.h>

@@ -1,5 +1,5 @@
-// .NAME example_threshold
-// .SECTION Description
+//:
+// \file
 //  This example program shows a typical use of the vipl_threshold IP class on
 //  a ubyte image.  The input image (argv[1]) must be ubyte, and in that
 //  case is thresholded (threshold value argv[3], default 127) to argv[2]
@@ -10,11 +10,13 @@
 //   into a vil_memory_image_of<ubyte>, because otherwise get_pixel()
 //   would be very slow!)
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven, ESAT/PSI, 15 nov. 1997
+// \author Peter Vanroose, K.U.Leuven, ESAT/PSI
+// \date   15 nov. 1997
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications:
 //   Peter Vanroose, Aug.2000 - adapted to vxl
+// \endverbatim
 //
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>

@@ -1,5 +1,5 @@
-// .NAME example_erode_disk
-// .SECTION Description
+//:
+// \file
 //  This example program shows a typical use of a morphological IP class on
 //  a ubyte image.  The input image (argv[1]) must be ubyte, and in that
 //  case is eroded (circular kernel, default 3x3 square) to argv[2]
@@ -8,11 +8,13 @@
 //  The conversion between vil_image and the in-memory section<ubyte,2>
 //  is done explicitly.
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven, ESAT/PSI, 15 nov. 1997
+// \author Peter Vanroose, K.U.Leuven, ESAT/PSI
+// \date   15 nov. 1997
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications:
 //   Peter Vanroose, Aug.2000 - adapted to vxl
+// \endverbatim
 //
 #include <section/section.h>
 #include <vipl/vipl_with_section/accessors/vipl_accessors_section.h>

@@ -1,13 +1,13 @@
-// .NAME example_x_gradient
-// .SECTION Description
+//:
+// \file
 //  This example program shows a typical use of a gradient function on
 //  a colour image.  The input image (argv[1]) must be 24 bit (colour), and in
 //  that case its X gradient is written to argv[2] which is always a PPM file.
 //  Note that this requires operator-() on the vil_rgb<ubyte> data type.
 //  But this indeed produces a *colour* gradient!
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven, ESAT/PSI, 15 May 2001, from vipl/examples
+// \author Peter Vanroose, K.U.Leuven, ESAT/PSI
+// \date   15 May 2001, from vipl/examples
 //
 #include <vil/vil_pixel.h>
 #include <vil/vil_memory_image_of.h>

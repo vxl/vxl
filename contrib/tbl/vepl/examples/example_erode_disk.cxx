@@ -1,5 +1,5 @@
-// .NAME example_erode_disk
-// .SECTION Description
+//:
+// \file
 //  This example program shows a typical use of a morphological function on
 //  a ubyte image.  The input image (argv[1]) must be ubyte, and in that
 //  case is eroded (circular kernel, default 3x3 square) to argv[2]
@@ -7,8 +7,8 @@
 //  The conversion between vil_image and the in-memory section<ubyte,2>
 //  is done explicitly.
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven, ESAT/PSI, 15 May 2001, from vipl/examples
+// \author Peter Vanroose, K.U.Leuven, ESAT/PSI
+// \date   15 May 2001, from vipl/examples
 //
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_pixel.h>

@@ -1,5 +1,5 @@
-// .NAME example_std_dev
-// .SECTION Description
+//:
+// \file
 //  This example program shows a typical use of the vipl_moment IP class on
 //  a ubyte image.  The input image (argv[1]) must be ubyte, and in that
 //  case is converted to an image where each pixel is the standard
@@ -8,11 +8,13 @@
 //  Uses vipl_moment<vil_image,vil_image,ubyte,float>, vipl_monadic<vil_image,vil_image,float,float>,
 //  vipl_dyadic<vil_image,vil_image,float,float> and vipl_convert<vil_image,vil_image,float,ubyte> .
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven, ESAT/PSI, 15 sept. 1999
+// \author Peter Vanroose, K.U.Leuven, ESAT/PSI
+// \date   15 sept. 1999
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications:
 //   Peter Vanroose, Aug.2000 - adapted to vxl
+// \endverbatim
 //
 #include <vil/vil_pixel.h>
 #include <vil/vil_memory_image_of.h>

@@ -1,5 +1,5 @@
-// .NAME example_median
-// .SECTION Description
+//:
+// \file
 //  This example program shows a typical use of the median filter on
 //  a ubyte image.  The input image (argv[1]) must be ubyte, and in that
 //  case its median smoothed version (with circular kernel, default the
@@ -8,11 +8,13 @@
 //  The conversion between vil_image and the in-memory vnl_matrix<ubyte>
 //  is done explicitly.
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven, ESAT/PSI, 18 dec. 1998
+// \author Peter Vanroose, K.U.Leuven, ESAT/PSI
+// \date   18 dec. 1998
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications:
 //   Peter Vanroose, Aug.2000 - adapted to vxl
+// \endverbatim
 //
 #include <vnl/vnl_matrix.h>
 #include <vil/vil_pixel.h>

@@ -1,12 +1,12 @@
-// .NAME example_gradient_mag
-// .SECTION Description
+//:
+// \file
 //  This example program shows a typical use of an IP filter, namely
 //  the gradient magnitude operator on a greyscale image.  The input image
 //  (argv[1]) must be a ubyte image, and in that case its gradient is
 //  written to argv[2] which is always a PGM file image.
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven, ESAT/PSI, 15 May 2001, from vipl/examples
+// \author Peter Vanroose, K.U.Leuven, ESAT/PSI
+// \date   15 May 2001, from vipl/examples
 //
 #include <vil/vil_pixel.h>
 #include <vil/vil_memory_image_of.h>

@@ -1,5 +1,5 @@
-// .NAME example_convert
-// .SECTION Description
+//:
+// \file
 //  This example program shows a typical use of the vepl_convert function on
 //  any image.  The input image (argv[1]) is converted to a ubyte image
 //  and written to argv[2] which is always a PGM file image.
@@ -7,8 +7,8 @@
 //  To this end an explicit converter from vil_rgb<ubyte> to ubyte is necessary.
 //  When it is short, int or float, an implicit mapping is done to 0--255.
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven, ESAT/PSI, 15 May 2001, from vipl/examples
+// \author Peter Vanroose, K.U.Leuven, ESAT/PSI
+// \date   15 May 2001, from vipl/examples
 //
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_rgb.h>

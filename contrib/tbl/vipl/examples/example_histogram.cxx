@@ -1,5 +1,5 @@
-// .NAME example_histogram
-// .SECTION Description
+//:
+// \file
 //  This example program shows a typical use of the vipl_histogram IP class on
 //  an int image.  The input image (argv[1]) can be any scalar type (i.e.,
 //  it should be mappable to int: [[un]signed] char, [unsigned]short, int),
@@ -13,11 +13,13 @@
 //  That explains why I use section<int,2> and not section<ubyte,2>
 //  as input image type.
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven, ESAT/PSI, 15 nov. 1997
+// \author Peter Vanroose, K.U.Leuven, ESAT/PSI
+// \date   15 nov. 1997
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications:
 //   Peter Vanroose, Aug.2000 - adapted to vxl
+// \endverbatim
 //
 #include <section/section.h>
 #include <vipl/vipl_with_section/accessors/vipl_accessors_section.h>

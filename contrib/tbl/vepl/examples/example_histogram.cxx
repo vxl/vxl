@@ -1,12 +1,12 @@
-// .NAME example_histogram
-// .SECTION Description
+//:
+// \file
 //  This example program shows a typical use of the vepl_histogram function on
 //  an int image.  The input image (argv[1]) can be any scalar type (i.e.,
 //  it should be mappable to int: [[un]signed] char, [unsigned]short, int),
 //  and its histogram is calculated and written to stdout.
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven, ESAT/PSI, 15 May 2001, from vipl/examples
+// \author Peter Vanroose, K.U.Leuven, ESAT/PSI
+// \date   15 May 2001, from vipl/examples
 //
 #include <vil/vil_pixel.h>
 #include <vepl/vepl_histogram.h>

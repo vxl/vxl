@@ -1,5 +1,5 @@
-// .NAME example_convert
-// .SECTION Description
+//:
+// \file
 //  This example program shows a typical use of the vipl_convert IP class on
 //  any image.  The input image (argv[1]) is converted to a ubyte image
 //  and written to argv[2] which is always a PGM file image.
@@ -8,11 +8,13 @@
 //  When it is short, int or float, an implicit mapping is done to 0--255.
 //  Uses vipl_convert<vil_image,vil_image,*,ubyte>.
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven, ESAT/PSI, 29 may 1998
+// \author Peter Vanroose, K.U.Leuven, ESAT/PSI
+// \date   29 may 1998
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications:
 //   Peter Vanroose, Aug.2000 - adapted to vxl
+// \endverbatim
 //
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_rgb.h>

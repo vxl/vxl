@@ -1,5 +1,5 @@
-// .NAME example_x_gradient
-// .SECTION Description
+//:
+// \file
 //  This example program shows a typical use of a gradient IP class on
 //  a colour image.  The input image (argv[1]) must be 24 bit (colour), and in
 //  that case its X gradient is written to argv[2] which is always a PPM file.
@@ -7,11 +7,13 @@
 //  Note that this requires operator-() on the vil_rgb<ubyte> data type.
 //  But this indeed produces a *colour* gradient!
 //
-// .SECTION Author
-//   Peter Vanroose, K.U.Leuven, ESAT/PSI, 29 may 1998.
+// \author Peter Vanroose, K.U.Leuven, ESAT/PSI
+// \date   29 may 1998.
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications:
 //   Peter Vanroose, Aug.2000 - adapted to vxl
+// \endverbatim
 //
 #include <section/section.h>
 #include <vipl/vipl_with_section/accessors/vipl_accessors_section.h>
