@@ -10,7 +10,7 @@
 //
 // \verbatim
 //  Modifications
-// 24.03.2000 JS  Initial Version, adapted from vgui_gtk_adaptor
+//   24.03.2000 JS  Initial Version, adapted from vgui_gtk_adaptor
 // \endverbatim
 //-----------------------------------------------------------------------------
 
@@ -21,33 +21,33 @@
 #include <qevent.h>
 
 //: OpenGL canvas in QT as a VGUI adaptor
-class vgui_qt_adaptor : 
+class vgui_qt_adaptor :
    public QGLWidget,
-   public vgui_adaptor, 
+   public vgui_adaptor,
    public vgui_adaptor_mixin
 {
    Q_OBJECT
-public:
-    vgui_qt_adaptor(QWidget* parent = 0);
-   ~vgui_qt_adaptor() { };
+ public:
+   vgui_qt_adaptor(QWidget* parent=0) : QGLWidget(parent) { this->setMouseTracking(true); }
+   ~vgui_qt_adaptor() {}
 
-   void      swap_buffers() { if (doubleBuffer()) swapBuffers(); };
-   void      make_current() { makeCurrent(); };
-   void      post_redraw()  { updateGL(); };
-   void      post_overlay_redraw() { updateOverlayGL(); };
+   void      swap_buffers() { if (doubleBuffer()) swapBuffers(); }
+   void      make_current() { makeCurrent(); }
+   void      post_redraw()  { updateGL(); }
+   void      post_overlay_redraw() { updateOverlayGL(); }
 
-   unsigned  get_width()  const { return QGLWidget::width();  }
+   unsigned  get_width()  const { return QGLWidget::width(); }
    unsigned  get_height() const { return QGLWidget::height(); }
    void      get_popup_bindings(vgui_modifier &m, vgui_button &b) const
-   { 
-      m = vgui_adaptor_mixin::popup_modifier; 
-      b = vgui_adaptor_mixin::popup_button; 
+   {
+      m = vgui_adaptor_mixin::popup_modifier;
+      b = vgui_adaptor_mixin::popup_button;
    }
 
-   void      set_default_popup(vgui_menu) { };
-   vgui_menu get_popup() { return vgui_menu(); };
+   void      set_default_popup(vgui_menu) {}
+   vgui_menu get_popup() { return vgui_menu(); }
 
-public slots:
+ public:
    void      paintGL();
    void      paintOverlayGL();
    void      resizeGL(int w, int h);

@@ -129,15 +129,6 @@ void choose_cb(GtkWidget* /*widget*/,
 
 } // extern "C"
 
-//--------------------------------------------------------------------------------
-//: Changes the modality of the dialog.
-//  True makes the dialog modal (i.e. the dialog 'grabs' all events), this is the default.
-//  False makes the dialog non-modal.
-void vgui_gtk2_dialog_impl::modal(const bool m)
-{
-  is_modal = m;
-}
-
 void vgui_gtk2_dialog_impl::set_ok_button(const char* txt)
 {
   if (txt)

@@ -34,19 +34,6 @@ vgui_clear_tableau::vgui_clear_tableau()
 }
 
 //-----------------------------------------------------------------------------
-//: Destructor - called by vgui_clear_tableau_sptr.
-vgui_clear_tableau::~vgui_clear_tableau()
-{
-}
-
-//-----------------------------------------------------------------------------
-//: Returns the type of this tableau ('vgui_clear_tableau').
-vcl_string vgui_clear_tableau::type_name() const
-{
-  return "vgui_clear_tableau";
-}
-
-//-----------------------------------------------------------------------------
 //: Handle events sent to this tableau - use draw to perform OpenGL clearing.
 bool vgui_clear_tableau::handle(const vgui_event& event)
 {
@@ -81,13 +68,6 @@ void vgui_clear_tableau::set_colour(float r, float g, float b, float a)
   colour[1] = g;
   colour[2] = b;
   colour[3] = a;
-}
-
-//-----------------------------------------------------------------------------
-//: Set the given GLbitfield as the mask.
-void vgui_clear_tableau::set_mask(GLbitfield m)
-{
-  mask = m;
 }
 
 //-----------------------------------------------------------------------------

@@ -234,13 +234,3 @@ void vgui_dialog_impl::modal(const bool)
 {
   vcl_cerr << "No function defined to change dialog modality, by default dialogs are modal\n";
 }
-
-void vgui_dialog_impl::set_cancel_button(const char* txt)
-{
-  cancel_button_text_ = txt ? txt : "";
-}
-
-void vgui_dialog_impl::set_ok_button(const char* txt)
-{
-  ok_button_text_ = txt ? txt : "";
-}

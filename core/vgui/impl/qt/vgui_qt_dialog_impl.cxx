@@ -30,13 +30,6 @@ vgui_qt_dialog_impl::vgui_qt_dialog_impl(const char* name)
 
 
 //-----------------------------------------------------------------------------
-void vgui_qt_dialog_impl::modal(const bool m)
-{
-  is_modal = m;
-}
-
-
-//-----------------------------------------------------------------------------
 bool vgui_qt_dialog_impl::ask()
 {
    QPushButton *ok, *cancel;

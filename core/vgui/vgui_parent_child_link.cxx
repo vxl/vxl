@@ -212,8 +212,6 @@ void vgui_parent_child_link_impl::assign(vgui_tableau *t)
 
 //------------------------------------------------------------------------------
 
-vgui_parent_child_link::vgui_parent_child_link() : pimpl(0) { }
-
 vgui_parent_child_link::vgui_parent_child_link(vgui_tableau *p)
 {
   pimpl = new vgui_parent_child_link_impl(p, 0);

@@ -19,24 +19,16 @@
 #include <vgui/vgui_utils.h>
 #include <vgui/vgui_soview.h>
 
-vgui_displaylist3D_tableau::vgui_displaylist3D_tableau()
+bool vgui_displaylist3D_tableau::handle(const vgui_event& e)
 {
-}
-
-vgui_displaylist3D_tableau::~vgui_displaylist3D_tableau()
-{
-}
-
-bool vgui_displaylist3D_tableau::handle(const vgui_event& e) {
-
   if (e.type == vgui_LEAVE)
     return true;
 
   return vgui_displaybase_tableau::handle(e);
 }
 
-void vgui_displaylist3D_tableau::get_hits(float x, float y, vcl_vector<unsigned>& my_hits) {
-
+void vgui_displaylist3D_tableau::get_hits(float x, float y, vcl_vector<unsigned>& my_hits)
+{
   GLuint *ptr = vgui_utils::enter_pick_mode(x,y,10.0,10.0);
 
   this->gl_mode = GL_SELECT;
@@ -71,10 +63,11 @@ void vgui_displaylist3D_tableau::get_hits(float x, float y, vcl_vector<unsigned>
   }// for  hits
 }
 
-bool vgui_displaylist3D_tableau::mouse_down(int x, int y, vgui_button button, vgui_modifier modifier) {
-
+bool vgui_displaylist3D_tableau::mouse_down(int x, int y, vgui_button button, vgui_modifier modifier)
+{
   // selecting
-  if (button == vgui_LEFT) {
+  if (button == vgui_LEFT)
+  {
 #ifdef DEBUG
     vcl_cerr << "selecting at " << x << ' ' << y << vcl_endl;
 #endif
@@ -94,8 +87,8 @@ bool vgui_displaylist3D_tableau::mouse_down(int x, int y, vgui_button button, vg
   }// end selecting
 
   // deselecting
-  else if (button == vgui_MIDDLE) {
-
+  else if (button == vgui_MIDDLE)
+  {
     if (modifier & vgui_SHIFT) {
 #ifdef DEBUG
       vcl_cerr << "deselecting all\n";
@@ -120,7 +113,6 @@ bool vgui_displaylist3D_tableau::mouse_down(int x, int y, vgui_button button, vg
     if (hits.size() > 0) {
       this->post_redraw();
     }
-
 
     return true;
   }// end deselecting

@@ -20,10 +20,10 @@ class vgui_projection_inspector
 {
  public:
   //: Constructor - with default projection and modelview matrices.
-  vgui_projection_inspector();
+  vgui_projection_inspector() { inspect(); }
 
   //: Destructor.
-  ~vgui_projection_inspector();
+  ~vgui_projection_inspector() {}
 
   //: Returns the projection matrix.
   vnl_double_4x4 const& projection_matrix() const { return P; }

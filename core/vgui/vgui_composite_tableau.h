@@ -74,10 +74,10 @@ class vgui_composite_tableau : public vgui_tableau
   virtual bool help();
 
   //: Returns the type of this tableau ('vgui_composite_tableau').
-  vcl_string type_name() const;
+  vcl_string type_name() const { return "vgui_composite_tableau"; }
 
   //: There is no obvious filename, so this just returns the type.
-  vcl_string file_name() const;
+  vcl_string file_name() const { return type_name(); }
 
   //: Returns a nice version of the name, including info on the children.
   vcl_string pretty_name() const;
@@ -89,7 +89,8 @@ class vgui_composite_tableau : public vgui_tableau
   vgui_observable observers;
 
   //: Add a tableau to the list of child tableaux.
-  void add(vgui_tableau_sptr const&);
+  //  Same as add_child().
+  void add(vgui_tableau_sptr const& t) { add_child(t); }
 
   //: Remove a tableau from the list of child tableaux.
   void remove(vgui_tableau_sptr const&);
@@ -114,7 +115,7 @@ class vgui_composite_tableau : public vgui_tableau
 
  protected:
   //: Destructor - called by vgui_composite_tableau_sptr.
-  virtual ~vgui_composite_tableau();
+  virtual ~vgui_composite_tableau() {}
 
   //: Returns a bounding box large enough to contain all child bounding boxes.
   bool get_bounding_box(float low[3], float high[3]) const;
@@ -146,18 +147,18 @@ struct vgui_composite_tableau_new : public vgui_composite_tableau_sptr
   typedef vgui_composite_tableau_sptr base;
 
   //: Constructor - creates a pointer to an empty vgui_composite_tableau.
-  vgui_composite_tableau_new() : base(new vgui_composite_tableau()) { }
+  vgui_composite_tableau_new() : base(new vgui_composite_tableau()) {}
 
   //: Constructor - creates a pointer to a composite with two children.
   vgui_composite_tableau_new(vgui_tableau_sptr const& child0,
                              vgui_tableau_sptr const& child1)
-    : base(new vgui_composite_tableau(child0, child1)) { }
+    : base(new vgui_composite_tableau(child0, child1)) {}
 
   //: Constructor - creates a pointer to a composite with three children.
   vgui_composite_tableau_new(vgui_tableau_sptr const& child0,
                              vgui_tableau_sptr const& child1,
                              vgui_tableau_sptr const& child2)
-    : base(new vgui_composite_tableau(child0, child1, child2)) { }
+    : base(new vgui_composite_tableau(child0, child1, child2)) {}
 
   //: Constructor - creates pointer to a composite with the given children.
   //  Takes a vector of child tableaux.

@@ -129,10 +129,10 @@ class vgui_dialog_impl
   virtual void modal(const bool);
 
   //: Set the text on the cancel button.
-  virtual void set_cancel_button(const char* msg);
+  virtual void set_cancel_button(const char* msg) { cancel_button_text_ = msg ? msg : ""; }
 
   //: Set the text on the OK button.
-  virtual void set_ok_button(const char* msg);
+  virtual void set_ok_button(const char* msg) { ok_button_text_ = msg?msg:""; }
 
   //: Display the dialog box and collect data from the user.
   virtual bool ask() = 0;
@@ -162,7 +162,7 @@ class vgui_dialog_impl
     // The derived GUI implementation should not delete these.
     vgui_dialog_field *field;
 
-    element() : type(unknown), widget(0), field(0) { }
+    element() : type(unknown), widget(0), field(0) {}
   };
 
  protected:

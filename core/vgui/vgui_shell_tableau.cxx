@@ -15,16 +15,6 @@ vgui_event_condition vgui_shell_tableau_bindings::default_close = vgui_event_con
 vgui_event_condition vgui_shell_tableau_bindings::default_graph = vgui_event_condition( vgui_key('g'), vgui_SHIFT );
 
 
-vcl_string vgui_shell_tableau::type_name() const
-{
-  return "vgui_shell_tableau";
-}
-
-vgui_shell_tableau::vgui_shell_tableau()
-{
-  init();
-}
-
 vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const &t0)
 {
   init();

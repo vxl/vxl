@@ -30,10 +30,10 @@ class vgui_observer
 {
  public:
   //: Constructor - create a default observable.
-  vgui_observer();
+  vgui_observer() {}
 
   //: Destructor.
-  virtual ~vgui_observer();
+  virtual ~vgui_observer() {}
 
   //: Called by the observable when some event occurs.
   virtual void update();

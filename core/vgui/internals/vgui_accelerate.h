@@ -37,7 +37,7 @@ class vgui_accelerate
   static vgui_accelerate* instance();
 
   //: Destructor.
-  virtual ~vgui_accelerate();
+  virtual ~vgui_accelerate() {}
 
   //: OpenGL clearing.
   virtual bool vgui_glClear( GLbitfield mask );
@@ -66,7 +66,7 @@ class vgui_accelerate
   static void register_accelerator (vgui_accelerate* p, int level);
 
  protected:
-  vgui_accelerate();
+  vgui_accelerate() {}
 };
 
 #endif // vgui_accelerate_h_

@@ -21,11 +21,9 @@ class vgui_event_server_interpose_tableau : public vgui_wrapper_tableau
  public:
   vgui_event_server* the_server_;
 
-  vgui_event_server_interpose_tableau(vgui_event_server* s):
-    vgui_wrapper_tableau(0), // child to be added later
-    the_server_(s)
-    {
-    }
+  vgui_event_server_interpose_tableau(vgui_event_server* s)
+    : vgui_wrapper_tableau(0), // child to be added later
+      the_server_(s) {}
 
   bool handle(const vgui_event& event);
   vcl_string type_name() const {return "vgui_event_server";}
@@ -49,8 +47,8 @@ bool vgui_event_server_interpose_tableau::handle(const vgui_event& event)
 }
 
 //: Construct a vgui_event_server, which grabs all events intended for tableau t
-vgui_event_server::vgui_event_server(vgui_tableau_sptr const& t):
-  grabber_(0)
+vgui_event_server::vgui_event_server(vgui_tableau_sptr const& t)
+  : grabber_(0)
 {
   use_event_ = false;
   grabber_ = new vgui_event_server_interpose_tableau(this);
@@ -80,9 +78,4 @@ bool vgui_event_server::next()
     vgui::run_one_event();
 
   return true;
-}
-
-vgui_event vgui_event_server::last_event()
-{
-  return last_event_;
 }

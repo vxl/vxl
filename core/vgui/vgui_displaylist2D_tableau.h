@@ -24,14 +24,14 @@
 class vgui_displaylist2D_tableau : public vgui_displaybase_tableau
 {
  public:
-  vgui_displaylist2D_tableau();
+  vgui_displaylist2D_tableau() {}
 
   virtual bool handle(const vgui_event& e);
   bool motion(int x, int y);
   bool mouse_down(int x, int y, vgui_button button, vgui_modifier modifier);
 
  protected:
- ~vgui_displaylist2D_tableau();
+  ~vgui_displaylist2D_tableau() {}
 
  private:
   void get_hits(float x, float y, vcl_vector<unsigned>& my_hits);
@@ -41,8 +41,8 @@ class vgui_displaylist2D_tableau : public vgui_displaybase_tableau
 //: Create a smart-pointer to a vgui_displaylist2D_tableau.
 struct vgui_displaylist2D_tableau_new : public vgui_displaylist2D_tableau_sptr
 {
-  vgui_displaylist2D_tableau_new() :
-    vgui_displaylist2D_tableau_sptr(new vgui_displaylist2D_tableau) { }
+  vgui_displaylist2D_tableau_new()
+    : vgui_displaylist2D_tableau_sptr(new vgui_displaylist2D_tableau) {}
 };
 
 #endif // vgui_displaylist2D_tableau_h_

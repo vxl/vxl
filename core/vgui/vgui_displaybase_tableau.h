@@ -83,17 +83,17 @@ class vgui_displaybase_tableau : public vgui_tableau
 
   // selections
   bool is_selected(unsigned id);
-  vcl_vector<unsigned> const & get_selected() const;
+  vcl_vector<unsigned> const & get_selected() const { return selections; }
   vcl_vector<vgui_soview*>     get_selected_soviews() const;
   bool select(unsigned id);
   bool deselect(unsigned id);
   bool deselect_all();
 
   // highlighting
-  bool is_highlighted(unsigned id);
-  unsigned get_highlighted();
+  bool is_highlighted(unsigned id) { return id == highlighted; }
+  unsigned get_highlighted() { return highlighted; }
   vgui_soview* get_highlighted_soview();
-  bool highlight(unsigned id);
+  bool highlight(unsigned id) { highlighted = id; return true; }
 
   // add soview
   void add(vgui_soview*);
@@ -101,8 +101,8 @@ class vgui_displaybase_tableau : public vgui_tableau
   void clear();
 
   // grouping
-  void set_current_grouping( vcl_string name );
-  vcl_string get_current_grouping();
+  void set_current_grouping(vcl_string name) { current_grouping = name; }
+  vcl_string get_current_grouping() { return current_grouping; }
   vgui_displaybase_tableau_grouping* get_grouping_ptr( vcl_string name );
   vcl_vector< vcl_string > get_grouping_names();
 
@@ -110,7 +110,7 @@ class vgui_displaybase_tableau : public vgui_tableau
   // You are in charge of deleting it later.
   void set_selection_callback(vgui_displaybase_tableau_selection_callback* cb);
 
-  vcl_vector<vgui_soview*> const &get_all() const;
+  vcl_vector<vgui_soview*> const &get_all() const { return objects; }
   vcl_vector<unsigned>     const  get_all_ids() const;
 
   vgui_soview* contains_hit(vcl_vector<unsigned> hit);
@@ -145,7 +145,7 @@ class vgui_displaybase_tableau : public vgui_tableau
 struct vgui_displaybase_tableau_new : public vgui_displaybase_tableau_sptr
 {
   typedef vgui_displaybase_tableau_sptr base;
-  vgui_displaybase_tableau_new() : base(new vgui_displaybase_tableau()) { }
+  vgui_displaybase_tableau_new() : base(new vgui_displaybase_tableau()) {}
 };
 
 #endif // vgui_displaybase_tableau_h_

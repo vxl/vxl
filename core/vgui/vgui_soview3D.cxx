@@ -12,8 +12,6 @@
 #include <vcl_iostream.h>
 #include <vgui/vgui_gl.h>
 
-vgui_soview3D::vgui_soview3D() {}
-
 //--------------------------------------------------------------------------//
 
 vcl_ostream& vgui_point3D::print(vcl_ostream& s) const
@@ -41,13 +39,6 @@ void vgui_point3D::draw() const
 }
 
 //--------------------------------------------------------------------------//
-
-vgui_lineseg3D::vgui_lineseg3D( float x0_, float y0_, float z0_,
-                                float x1_, float y1_, float z1_ )
-  : x0(x0_), y0(y0_), z0(z0_),
-    x1(x1_), y1(y1_), z1(z1_)
-{
-}
 
 vcl_ostream& vgui_lineseg3D::print(vcl_ostream& s) const
 {
@@ -79,15 +70,6 @@ void vgui_lineseg3D::draw() const
 }
 
 //--------------------------------------------------------------------------//
-
-vgui_triangle3D::vgui_triangle3D( float x0_, float y0_, float z0_,
-                                  float x1_, float y1_, float z1_,
-                                  float x2_, float y2_, float z2_ )
-  : x0(x0_), y0(y0_), z0(z0_),
-    x1(x1_), y1(y1_), z1(z1_),
-    x2(x2_), y2(y2_), z2(z2_)
-{
-}
 
 vcl_ostream& vgui_triangle3D::print(vcl_ostream& s) const
 {

@@ -72,29 +72,9 @@ vgui_soview* vgui_soview::id_to_object(unsigned id)
 }
 
 
-vgui_soview::vgui_soview() : selectable(true), style(0)
-{
-  add_id();
-}
-
-vgui_soview::~vgui_soview()
-{
-}
-
 vcl_ostream& vgui_soview::print(vcl_ostream& s) const
 {
   return s << "id " << id;
-}
-
-vcl_string vgui_soview::type_name() const
-{
-  // this should never be called. derived classes should implement type_name().
-  static bool warned=false;
-  if (!warned) {
-    vcl_cerr << __FILE__ " : WARNING : vgui_soview::type_name() called\n";
-    warned=true;
-  }
-  return "vgui_soview";
 }
 
 
@@ -112,11 +92,6 @@ void vgui_soview::load_name() const
   glLoadName(id);
 }
 
-
-void vgui_soview::set_style(const vgui_style_sptr& newstyle)
-{
-  style = newstyle;
-}
 
 void vgui_soview::set_colour(float r, float g, float b)
 {
@@ -166,11 +141,6 @@ void vgui_soview::set_line_width(float w)
   style = newstyle;
 }
 
-
-vgui_style_sptr vgui_soview::get_style() const
-{
-  return style;
-}
 
 //
 const void * const vgui_soview::msg_select="x";

@@ -32,7 +32,8 @@
 #include <vgui/vgui_modifier.h>
 class vgui_adaptor;
 
-enum vgui_event_type {
+enum vgui_event_type
+{
   vgui_EVENT_NULL = 0,
   vgui_ENTER,
   vgui_LEAVE,
@@ -53,29 +54,30 @@ enum vgui_event_type {
   vgui_OTHER,
   vgui_EVENT_MAX
 };
+
 vcl_ostream& operator<<(vcl_ostream& s, vgui_event_type e);
 
 //: The vgui_event class encapsulates the events handled by the vgui system.
 //
-//  For key presses with modifiers the following standards apply:
-//  \verbatim
-//          a   modifier = vgui_NULL   key = 'a'  ascii_char = 'a'
-//     CTRL+a   modifier = vgui_CTRL   key = 'a'  ascii_char = '^A'
-//    SHIFT+a   modifier = vgui_SHIFT  key = 'a'  ascii_char = 'A'
-//  \endverbatim
+// For key presses with modifiers the following standards apply:
+// \verbatim
+//         a   modifier = vgui_NULL   key = 'a'  ascii_char = 'a'
+//    CTRL+a   modifier = vgui_CTRL   key = 'a'  ascii_char = '^A'
+//   SHIFT+a   modifier = vgui_SHIFT  key = 'a'  ascii_char = 'A'
+// \endverbatim
 //
-//  We have decided to make it a standard that key is always lower case for
-//  simplicity.  In particular people have been defining impossible
-//  vgui_event_conditions, eg key='A', modifier=NULL (where NULL is the
-//  default modifier) and then wondering why SHIFT+a doesn't work.
+// We have decided to make it a standard that key is always lower case for
+// simplicity.  In particular people have been defining impossible
+// vgui_event_conditions, eg key='A', modifier=NULL (where NULL is the
+// default modifier) and then wondering why SHIFT+a doesn't work.
 //
-//  A new data type has been added (ascii_char) which holds the actual
-//  key stroke pressed by the user.
+// A new data type has been added (ascii_char) which holds the actual
+// key stroke pressed by the user.
 class vgui_event
 {
  public:
   //: Constructor - create a default event.
-  vgui_event();
+  vgui_event() { init(); }
 
   //: Constructor - create an event of the given type.
   vgui_event(vgui_event_type);
@@ -137,6 +139,7 @@ class vgui_event
  private:
   void init();
 };
+
 bool operator==(vgui_event const& a, vgui_event const& b);
 vcl_ostream& operator<<(vcl_ostream&, vgui_event const&);
 

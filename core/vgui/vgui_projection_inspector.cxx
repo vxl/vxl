@@ -17,15 +17,6 @@
 
 //------------------------------------------------------------------------------
 
-vgui_projection_inspector::vgui_projection_inspector()
-{
-  inspect();
-}
-
-vgui_projection_inspector::~vgui_projection_inspector()
-{
-}
-
 void vgui_projection_inspector::print(vcl_ostream& s) const
 {
   s << "vgui_projection_inspector: {\n"

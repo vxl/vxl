@@ -40,16 +40,6 @@ void vgui_accelerate::register_accelerator(vgui_accelerate* p, int level)
 
 // Default implementations (return false to indicate that a non-accelerated path was used.)
 
-vgui_accelerate::vgui_accelerate()
-{
-  //  vcl_cerr << __FILE__ ": vgui_accelerate::vgui_accelerate()\n";
-}
-
-vgui_accelerate::~vgui_accelerate()
-{
-  //  vcl_cerr << __FILE__ ": vgui_accelerate::~vgui_accelerate()\n";
-}
-
 bool
 vgui_accelerate::vgui_glClear( GLbitfield mask )
 {

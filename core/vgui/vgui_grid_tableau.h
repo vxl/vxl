@@ -74,12 +74,13 @@ class vgui_grid_tableau : public vgui_poly_tableau
  public:
   typedef vgui_grid_tableau_data grid_data;
 
-  //: Returns the type name of the tableau (vgui_grid_tableau in this case).
-  vcl_string type_name() const;
+  //: Returns the type name of the tableau ("vgui_grid_tableau" in this case).
+  vcl_string type_name() const { return "vgui_grid_tableau"; }
 
   //: Constructor - don't use this, use vgui_grid_tableau_new.
   //  Takes the initial number of columns and rows.
-  vgui_grid_tableau(unsigned initial_columns = 1, unsigned initial_rows = 1);
+  vgui_grid_tableau(unsigned initial_columns = 1, unsigned initial_rows = 1)
+  { init(initial_columns, initial_rows); }
 
   //: Constructor - don't use this, use vgui_grid_tableau_new.
   //  This creates a bi-tab, taking the two tableaux as parameters.
@@ -121,7 +122,7 @@ class vgui_grid_tableau : public vgui_poly_tableau
   vgui_tableau_sptr get_tableau_at(unsigned col_pos, unsigned row_pos);
 
   //: Returns the list of tableaux.
-  vcl_vector<vgui_tableau_sptr> get_tableau_list();
+  vcl_vector<vgui_tableau_sptr> get_tableau_list() { return tabs; }
 
   //: Returns the active tableau, this is the tableau with the mouse in.
   void get_active_position(unsigned* col_pos, unsigned* row_pos);
@@ -194,7 +195,7 @@ class vgui_grid_tableau : public vgui_poly_tableau
 
  protected:
   //: Destructor - called by vgui_grid_tableau_sptr.
-  ~vgui_grid_tableau();
+  ~vgui_grid_tableau() {}
 
  private:
   // The number of rows and columns can be changed.
@@ -245,12 +246,12 @@ class vgui_grid_tableau : public vgui_poly_tableau
 struct vgui_grid_tableau_new : public vgui_grid_tableau_sptr {
   typedef vgui_grid_tableau_sptr base;
   vgui_grid_tableau_new(unsigned initial_columns = 1, unsigned initial_rows = 1)
-    : base(new vgui_grid_tableau(initial_columns,initial_rows)) { }
+    : base(new vgui_grid_tableau(initial_columns,initial_rows)) {}
   vgui_grid_tableau_new(vgui_tableau_sptr const& l, vgui_tableau_sptr const& r)
-    : base(new vgui_grid_tableau(l, r)) { }
+    : base(new vgui_grid_tableau(l, r)) {}
   vgui_grid_tableau_new(vgui_tableau_sptr const& l, vgui_tableau_sptr const& m,
                         vgui_tableau_sptr const& r)
-    : base(new vgui_grid_tableau(l, m, r)) { }
+    : base(new vgui_grid_tableau(l, m, r)) {}
 };
 
 #endif // vgui_grid_tableau_h_

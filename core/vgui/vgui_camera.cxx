@@ -13,26 +13,6 @@
 #include <vnl/vnl_matrix_fixed.h>
 
 //----------------------------------------------------------------------------
-//: Constructor - create a camera with a default projection matrix.
-vgui_camera::vgui_camera()
-{
-}
-
-//----------------------------------------------------------------------------
-//: Constructor - create a camera with the given projection matrix.
-vgui_camera::vgui_camera( vnl_matrix_fixed<double,3,4> const& m)
-  : pmatrix(m)
-{
-}
-
-//----------------------------------------------------------------------------
-//: Set the projection matrix to the given matrix.
-void vgui_camera::set_pmatrix( const vnl_matrix_fixed<double,3,4> &m)
-{
-  pmatrix= m;
-}
-
-//----------------------------------------------------------------------------
 //: Plug this matrix into a vgui_loader_tableau.
 //  Note: this will return a GL_PROJECTION_MATRIX with the assumption that
 //  you have an euclidean reconstruction.  The result is that the front and

@@ -34,10 +34,10 @@ class vgui_window
 {
  public:
   //: Default constructor.
-  vgui_window();
+  vgui_window() {}
 
   //: Destructor.
-  virtual ~vgui_window();
+  virtual ~vgui_window() {}
 
   //: Put the given menu in the menubar (if it exists).
   virtual void set_menubar(vgui_menu const &);

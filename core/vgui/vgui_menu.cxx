@@ -39,10 +39,6 @@ vgui_menu_item::~vgui_menu_item()
 
 //--------------------------------------------------------------------------------
 
-vgui_menu::vgui_menu()
-{
-}
-
 vgui_menu::vgui_menu(vgui_menu const &that)
 {
   operator=(that);
@@ -54,28 +50,6 @@ void vgui_menu::operator=(vgui_menu const &that)
     clear();
     this->include(that);
   }
-}
-
-vgui_menu::~vgui_menu()
-{
-  clear();
-}
-
-//--------------------------------------------------------------------------------
-
-void vgui_menu::clear()
-{
-  items.clear();
-}
-
-unsigned vgui_menu::size() const
-{
-  return items.size();
-}
-
-vgui_menu_item const & vgui_menu::operator[](unsigned i) const
-{
-  return items[i];
 }
 
 //--------------------------------------------------------------------------------

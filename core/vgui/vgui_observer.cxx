@@ -11,14 +11,6 @@
 #include "vgui_observer.h"
 #include <vgui/vgui_message.h>
 
-vgui_observer::vgui_observer()
-{
-}
-
-vgui_observer::~vgui_observer()
-{
-}
-
 void vgui_observer::update()
 {
   // do nothing

@@ -53,11 +53,13 @@ class vgui_gtk2_window : public vgui_window
   void set_title(vcl_string const &);
 
   void set_menubar(const vgui_menu &menu);
-  void set_statusbar(bool) {}
 
-  void set_adaptor(vgui_adaptor*);
-  vgui_adaptor* get_adaptor();
+  //: Returns the current adaptor (OpenGL widget holder).
+  vgui_adaptor* get_adaptor() { return adaptor; }
+  void set_adaptor(vgui_adaptor* a){adaptor=static_cast<vgui_gtk2_adaptor*>(a);}
+
   vgui_statusbar* get_statusbar() { return &statusbar; }
+  void set_statusbar(bool) {}
 
   // gtk specific
   vgui_gtk2_adaptor *adaptor;

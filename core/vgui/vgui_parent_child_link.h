@@ -71,7 +71,7 @@ struct vgui_parent_child_link
   VCL_SAFE_BOOL_DEFINE;
  public:
   //: Constructor - creates a default vgui_parent_child_link.
-  vgui_parent_child_link();
+  vgui_parent_child_link() : pimpl(0) {}
 
   //: Constructor - creates a vgui_parent_child_link same as the given one.
   vgui_parent_child_link(vgui_parent_child_link const &);

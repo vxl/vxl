@@ -22,13 +22,6 @@ static bool debug=false;
 
 //----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_deck_tableau_new.
-//  Makes an empty deck
-vgui_deck_tableau::vgui_deck_tableau() : index_(-1)
-{
-}
-
-//----------------------------------------------------------------------------
-//: Constructor - don't use this, use vgui_deck_tableau_new.
 //  Make a deck with two children, listed top to bottom.
 vgui_deck_tableau::vgui_deck_tableau(vgui_tableau_sptr const& child0,
                                      vgui_tableau_sptr const& child1) : index_(-1)
@@ -117,14 +110,6 @@ bool vgui_deck_tableau::key_press(int x, int y, vgui_key key, vgui_modifier)
    default:
     return false;
   }
-}
-
-//----------------------------------------------------------------------------
-//: Add a tableau to the deck.
-//  It is placed on top and made current.
-void vgui_deck_tableau::add(vgui_tableau_sptr const& t)
-{
-  add_child(t);
 }
 
 //----------------------------------------------------------------------------

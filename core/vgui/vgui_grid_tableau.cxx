@@ -65,11 +65,6 @@ void vgui_grid_tableau::init(unsigned initial_cols, unsigned initial_rows)
   }
 }
 
-vgui_grid_tableau::vgui_grid_tableau(unsigned initial_cols, unsigned initial_rows)
-{
-  init(initial_cols, initial_rows);
-}
-
 //: Makes a bitab.
 vgui_grid_tableau::vgui_grid_tableau(vgui_tableau_sptr const& l, vgui_tableau_sptr const& r)
 {
@@ -86,15 +81,6 @@ vgui_grid_tableau::vgui_grid_tableau(vgui_tableau_sptr const& l, vgui_tableau_sp
   add_next(m);
   add_next(r);
 }
-
-vgui_grid_tableau::~vgui_grid_tableau() { }
-
-
-vcl_string vgui_grid_tableau::type_name() const
-{
-  return "vgui_grid_tableau";
-}
-
 
 //------------------------------------------------------------------------------
 //: Given the column number, returns the x coord for that column.
@@ -292,14 +278,6 @@ vgui_tableau_sptr vgui_grid_tableau::get_tableau_at(unsigned col_pos, unsigned r
   else vgui_macro_warning << "Only default tableau at (" << col_pos << ", " << row_pos << ").\n";
 #endif
   return vgui_tableau_sptr();
-}
-
-//------------------------------------------------------------------------------
-//: Returns the list of tableaux.
-//------------------------------------------------------------------------------
-vcl_vector<vgui_tableau_sptr> vgui_grid_tableau::get_tableau_list()
-{
-  return tabs;
 }
 
 //------------------------------------------------------------------------------

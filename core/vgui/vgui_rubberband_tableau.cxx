@@ -40,12 +40,6 @@ void vgui_rubberband_client::clear_highlight() function_macro
 //---------------------------------------------------------------------------
 //                                              vgui_rubberband_easy2D_client
 
-vgui_rubberband_easy2D_client::
-vgui_rubberband_easy2D_client(vgui_easy2D_tableau_sptr const& e)
-  : easy(e)
-{
-}
-
 void
 vgui_rubberband_easy2D_client::
 add_point(float x, float y)
@@ -125,23 +119,6 @@ void vgui_rubberband_tableau::init(vgui_rubberband_client* the_client)
   // Mesa (or glx) is too slow otherwise.
   use_overlays = true;
 #endif
-}
-
-vgui_rubberband_tableau::vgui_rubberband_tableau(vgui_rubberband_client *client)
-{
-  init(client);
-}
-
-#if 0
-vgui_rubberband_tableau::vgui_rubberband_tableau(vgui_easy2D_tableau_sptr const& easy)
-{
-  init(new vgui_rubberband_tableau_easy2D_client(easy));
-}
-#endif
-
-void vgui_rubberband_tableau::set_client(vgui_rubberband_client *client)
-{
-  client_ = client;
 }
 
 void vgui_rubberband_tableau::rubberband_point()

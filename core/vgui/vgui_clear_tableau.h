@@ -37,13 +37,13 @@ class vgui_clear_tableau : public vgui_tableau
   vgui_clear_tableau();
 
   //: Returns the type of this tableau ('vgui_clear_tableau').
-  vcl_string type_name() const;
+  vcl_string type_name() const { return "vgui_clear_tableau"; }
 
   //: Set colour of clear_tableau to the given red, green, blue values.
   void set_colour(float r, float g, float b, float a=1);
 
   //: Set the given GLbitfield as the mask.
-  void set_mask(GLbitfield);
+  void set_mask(GLbitfield m) { mask = m; }
 
   //: Toggle clearing on and off.
   void toggle_clearing();
@@ -56,7 +56,7 @@ class vgui_clear_tableau : public vgui_tableau
 
  protected:
   //: Destructor - called by vgui_clear_tableau_sptr.
-  virtual ~vgui_clear_tableau();
+  virtual ~vgui_clear_tableau() {}
 
   //: Handle events sent to this tableau - use draw to perform OpenGL clearing.
   virtual bool handle(const vgui_event&);
@@ -78,7 +78,7 @@ struct vgui_clear_tableau_new : public vgui_clear_tableau_sptr
   typedef vgui_clear_tableau_sptr base;
 
   //: Create a smart-pointer to a vgui_clear_tableau.
-  vgui_clear_tableau_new() : base(new vgui_clear_tableau()) { }
+  vgui_clear_tableau_new() : base(new vgui_clear_tableau()) {}
 };
 
 #endif // vgui_clear_tableau_h_

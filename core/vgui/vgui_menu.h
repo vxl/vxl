@@ -113,7 +113,7 @@ class vgui_menu
 
  public:
   //: Constructor - creates an empty menu.
-  vgui_menu();
+  vgui_menu() {}
 
   //: Constructor - creates a menu same as the given menu.
   vgui_menu(vgui_menu const &);
@@ -122,7 +122,7 @@ class vgui_menu
   void operator=(vgui_menu const &);
 
   //: Destructor - clears the menu.
-  ~vgui_menu();
+  ~vgui_menu() { clear(); }
 
   //: Add given command to this menu.
   void add(vcl_string const &,
@@ -164,13 +164,13 @@ class vgui_menu
   void include(vgui_menu const & that); // add 'that' to end of *this.
 
   //: Empty this menu.
-  void clear();
+  void clear() { items.clear(); }
 
   //: Return the number of items in this menu
-  unsigned size() const;
+  unsigned size() const { return items.size(); }
 
   //: Get the menu item using the [] index operator.
-  vgui_menu_item const & operator[](unsigned i) const;
+  vgui_menu_item const & operator[](unsigned i) const { return items[i]; }
 };
 
 vcl_ostream & operator<<(vcl_ostream &,vgui_menu const &);

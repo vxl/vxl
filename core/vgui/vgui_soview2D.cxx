@@ -23,8 +23,6 @@
 #include <vgui/vgui_section_buffer.h>
 #include <vgui/internals/vgui_draw_line.h>
 
-vgui_soview2D::vgui_soview2D() {}
-
 //--------------------------------------------------------------------------//
 
 vcl_ostream& vgui_soview2D_point::print(vcl_ostream& s) const
@@ -208,7 +206,6 @@ void vgui_soview2D_infinite_line::draw() const
 {
   vgui_draw_line(a, b, c);
 }
-
 
 float vgui_soview2D_infinite_line::distance_squared(float x, float y) const
 {

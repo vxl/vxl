@@ -28,7 +28,7 @@ class vgui_displaylist3D_tableau : public vgui_displaybase_tableau, public vgui_
 {
  public:
   //: Constructor - don't use this, use vgui_displaylist3D_tableau_new.
-  vgui_displaylist3D_tableau();
+  vgui_displaylist3D_tableau() {}
 
   vcl_string type_name() const { return "vgui_displaylist3D_tableau"; }
 
@@ -37,7 +37,7 @@ class vgui_displaylist3D_tableau : public vgui_displaybase_tableau, public vgui_
 
  protected:
   //: Destructor - called by vgui_displaylist3D_tableau_sptr.
- ~vgui_displaylist3D_tableau();
+  ~vgui_displaylist3D_tableau() {}
 
  private:
   void get_hits(float x, float y, vcl_vector<unsigned>& my_hits);
@@ -48,7 +48,7 @@ struct vgui_displaylist3D_tableau_new : public vgui_displaylist3D_tableau_sptr
 {
   //: Constructor - create a default vgui_displaylist3D_tableau.
   vgui_displaylist3D_tableau_new( )
-    : vgui_displaylist3D_tableau_sptr(new vgui_displaylist3D_tableau) { }
+    : vgui_displaylist3D_tableau_sptr(new vgui_displaylist3D_tableau) {}
 };
 
 #endif // vgui_displaylist3D_tableau_h_

@@ -1,6 +1,4 @@
-/*
-  fsm
-*/
+// \author fsm
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
 
@@ -19,7 +17,7 @@
 class front_back_wibbler : public vgui_tableau
 {
  public:
-  front_back_wibbler();
+  front_back_wibbler() {}
 
   bool handle(vgui_event const &);
   vcl_string type_name() const {
@@ -27,10 +25,6 @@ class front_back_wibbler : public vgui_tableau
   }
   void print_help_message() const;
 };
-
-front_back_wibbler::front_back_wibbler()
-{
-}
 
 void front_back_wibbler::print_help_message() const
 {
@@ -49,7 +43,7 @@ void front_back_wibbler::print_help_message() const
           << "the current front buffer, rather than actually perform a swap.\n\n";
 }
 
-bool front_back_wibbler::handle(const vgui_event &e) 
+bool front_back_wibbler::handle(const vgui_event &e)
 {
   vgui_adaptor *ct = e.origin;
   if (!ct) {

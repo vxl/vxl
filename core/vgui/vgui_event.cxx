@@ -45,13 +45,6 @@ void vgui_event::init()
 }
 
 //----------------------------------------------------------------------------
-//: Constructor - create a default event.
-vgui_event::vgui_event()
-{
-  init();
-}
-
-//----------------------------------------------------------------------------
 //: Constructor - create an event of the given type.
 vgui_event::vgui_event(vgui_event_type etype)
 {
@@ -154,7 +147,7 @@ vcl_ostream& operator<<(vcl_ostream& s, vgui_event const& e)
     << ", time:" << e.timestamp << "ms";
   if (e.str != "") s << ", vcl_string:\"" << e.str << "\"";
   return s << ']';
-};
+}
 
 //-----------------------------------------------------------------------------
 //: Returns true if events are the same.

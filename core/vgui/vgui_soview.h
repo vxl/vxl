@@ -29,14 +29,14 @@ class vgui_message;
 //
 //  This class is the base class for vgui_soview2D and vgui_soview3D
 //  and contains the functionality they have in common.
-class vgui_soview /*: public vgui_observable*/
+class vgui_soview
 {
  public:
   //: Constructor - create a default soview.
-  vgui_soview();
+  vgui_soview() : selectable(true), style(0) { add_id(); }
 
   //: Destructor - delete this soview.
-  virtual ~vgui_soview();
+  virtual ~vgui_soview() {}
 
   //: Render this soview on the display.
   virtual void draw() const = 0;
@@ -57,16 +57,16 @@ class vgui_soview /*: public vgui_observable*/
   virtual void load_name() const;
 
   //: Prints the ID of this soview.
-  virtual vcl_ostream& print(vcl_ostream&) const;
+  virtual vcl_ostream& print(vcl_ostream& s) const;
 
   //: This should never be called, derived classes should implement this.
-  virtual vcl_string type_name() const;
+  virtual vcl_string type_name() const { return "vgui_soview"; }
 
   //: Set the style (colour, line width) of the soview.
-  virtual void set_style(const vgui_style_sptr&);
+  virtual void set_style(const vgui_style_sptr& newstyle) { style = newstyle; }
 
   //: Return the style (colour, line width) of the soview.
-  virtual vgui_style_sptr get_style() const;
+  virtual vgui_style_sptr get_style() const { return style; }
 
   //: Set the colour of the soview.
   void set_colour(float r, float g, float b);

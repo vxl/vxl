@@ -253,11 +253,6 @@ bool vgui_displaybase_tableau::is_selected(unsigned id)
   return result != selections.end();
 }
 
-vcl_vector<unsigned> const & vgui_displaybase_tableau::get_selected() const
-{
-  return selections;
-}
-
 vcl_vector<vgui_soview*> vgui_displaybase_tableau::get_selected_soviews() const
 {
   vcl_vector<vgui_soview*> svs;
@@ -266,11 +261,6 @@ vcl_vector<vgui_soview*> vgui_displaybase_tableau::get_selected_soviews() const
     svs.push_back(vgui_soview::id_to_object(selections[i]));
   }
   return svs;
-}
-
-vcl_vector<vgui_soview*> const & vgui_displaybase_tableau::get_all() const
-{
-  return objects;
 }
 
 vcl_vector<unsigned> const vgui_displaybase_tableau::get_all_ids() const
@@ -357,25 +347,9 @@ bool vgui_displaybase_tableau::deselect_all()
 }
 
 
-bool vgui_displaybase_tableau::is_highlighted(unsigned id)
-{
-  return id == highlighted;
-}
-
-unsigned vgui_displaybase_tableau::get_highlighted()
-{
-  return highlighted;
-}
-
 vgui_soview* vgui_displaybase_tableau::get_highlighted_soview()
 {
     return vgui_soview::id_to_object(highlighted);
-}
-
-bool vgui_displaybase_tableau::highlight(unsigned id)
-{
-  highlighted = id;
-  return true;
 }
 
 vgui_soview* vgui_displaybase_tableau::contains_hit(vcl_vector<unsigned> names)
@@ -394,16 +368,6 @@ vgui_soview* vgui_displaybase_tableau::contains_hit(vcl_vector<unsigned> names)
   }
 
   return 0;
-}
-
-void vgui_displaybase_tableau::set_current_grouping( vcl_string name )
-{
-  current_grouping = name;
-}
-
-vcl_string vgui_displaybase_tableau::get_current_grouping()
-{
-  return current_grouping;
 }
 
 vgui_displaybase_tableau_grouping* vgui_displaybase_tableau::get_grouping_ptr( vcl_string name )

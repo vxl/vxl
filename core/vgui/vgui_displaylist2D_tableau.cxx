@@ -24,14 +24,6 @@
 #include <vgui/vgui_soview2D.h>
 #include <vgui/vgui_style.h>
 
-vgui_displaylist2D_tableau::vgui_displaylist2D_tableau()
-{
-}
-
-vgui_displaylist2D_tableau::~vgui_displaylist2D_tableau()
-{
-}
-
 bool vgui_displaylist2D_tableau::handle(const vgui_event& e)
 {
   // if mouse leaves the context then unhighlight

@@ -109,7 +109,7 @@ void vgui_gtk2_window::init()
   }
 
   // place glarea inside a frame
-  GtkWidget *frame = gtk_frame_new(0/*NULL*/);
+  GtkWidget *frame = gtk_frame_new(0);
   gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_NONE);
   gtk_container_set_border_width(GTK_CONTAINER(frame), 2);
 
@@ -151,19 +151,6 @@ void vgui_gtk2_window::set_menubar(const vgui_menu &menu)
     gtk_window_add_accel_group(GTK_WINDOW(window),vgui_gtk2_utils::accel_group);
   }
   vgui_gtk2_utils::set_menu(menubar, *last_menubar, true);
-}
-
-
-void vgui_gtk2_window::set_adaptor(vgui_adaptor* a)
-{
-  adaptor = static_cast<vgui_gtk2_adaptor*>(a);
-}
-
-
-//: Returns the current adaptor (OpenGL widget holder).
-vgui_adaptor* vgui_gtk2_window::get_adaptor()
-{
-  return adaptor;
 }
 
 void vgui_gtk2_window::show()

@@ -36,7 +36,7 @@ class vgui_rubberband_client
 {
  public:
   //: Destructor - delete this vgui_rubberband_client.
-  virtual ~vgui_rubberband_client() { }
+  virtual ~vgui_rubberband_client() {}
 
   //: Called by vgui_rubberband_tableau when the user has selected a point.
   virtual void add_point(float, float);
@@ -75,7 +75,7 @@ class vgui_rubberband_easy2D_client : public vgui_rubberband_client
   vgui_easy2D_tableau_sptr easy;
 
   //: Constructor - takes a pointer to a vgui_easy2D_tableau.
-  vgui_rubberband_easy2D_client(vgui_easy2D_tableau_sptr const& e);
+  vgui_rubberband_easy2D_client(vgui_easy2D_tableau_sptr const& e) : easy(e) {}
 
   //: Called by vgui_rubberband_tableau when the user has selected a point.
   //  Adds a point to the vgui_easy2D_tableau.
@@ -149,9 +149,9 @@ class vgui_rubberband_tableau : public vgui_tableau
 
   //: Constructor - don't use this, use vgui_rubberband_tableau_new.
   //  Takes the vgui_rubberband_client as a parameter.
-  vgui_rubberband_tableau(vgui_rubberband_client* client);
+  vgui_rubberband_tableau(vgui_rubberband_client* client) { init(client); }
 
-//vgui_rubberband_tableau(vgui_easy2D_tableau_sptr const&);
+//vgui_rubberband_tableau(vgui_easy2D_tableau_sptr const& e) { init(new vgui_rubberband_tableau_easy2D_client(e)); }
 
   //: Return the type of this tableau ('vgui_rubberband_tableau').
   vcl_string type_name() const { return "vgui_rubberband_tableau"; }
@@ -170,8 +170,8 @@ class vgui_rubberband_tableau : public vgui_tableau
   void rubberband_box();
   void rubberband_none();
 
-  vgui_rubberband_client* get_client(){return client_;}
-  void set_client(vgui_rubberband_client *);
+  vgui_rubberband_client* get_client() { return client_; }
+  void set_client(vgui_rubberband_client *client) { client_ = client; }
 
   void draw_point(float x0, float y0);
   void draw_line(float x0, float y0, float x1, float y1);
@@ -182,7 +182,7 @@ class vgui_rubberband_tableau : public vgui_tableau
   void draw_box(float x0,float y0, float x1,float y1);
 
  protected:
-  ~vgui_rubberband_tableau() { }
+  ~vgui_rubberband_tableau() {}
   bool handle_point(vgui_event const&, float, float);
   bool handle_line(vgui_event const&, float, float);
   bool handle_linestrip(vgui_event const&,float , float ); // u97mb
@@ -195,7 +195,7 @@ class vgui_rubberband_tableau : public vgui_tableau
  private:
   vgui_rubberband_client *client_;
   enum object_type {none_enum, point_enum, line_enum, infinite_line_enum,
-    circle_enum, polygon_enum, linestrip_enum,box_enum};
+                    circle_enum, polygon_enum, linestrip_enum,box_enum};
   bool active;
   static object_type obj_type;
   float lastx, lasty;   // position where mouse was last seen.
@@ -209,7 +209,7 @@ typedef vgui_tableau_sptr_t<vgui_rubberband_tableau> vgui_rubberband_tableau_spt
 struct vgui_rubberband_tableau_new : public vgui_rubberband_tableau_sptr
 {
   vgui_rubberband_tableau_new(vgui_rubberband_client* client)
-    : vgui_rubberband_tableau_sptr(new vgui_rubberband_tableau(client)) { }
+    : vgui_rubberband_tableau_sptr(new vgui_rubberband_tableau(client)) {}
 };
 
 #endif // vgui_rubberband_tableau_h_

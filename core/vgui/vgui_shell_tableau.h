@@ -101,7 +101,8 @@ class vgui_shell_tableau : public vgui_composite_tableau
   vgui_clear_tableau_sptr clear;
   vgui_tview_launcher_tableau_sptr graph;
  public:
-  vgui_shell_tableau();
+  vgui_shell_tableau() { init(); }
+
   vgui_shell_tableau(vgui_tableau_sptr const &);
   vgui_shell_tableau(vgui_tableau_sptr const &,
                      vgui_tableau_sptr const &);
@@ -114,7 +115,7 @@ class vgui_shell_tableau : public vgui_composite_tableau
                      vgui_tableau_sptr const &);
 
   bool handle(vgui_event const &);
-  vcl_string type_name() const;
+  vcl_string type_name() const { return "vgui_shell_tableau"; }
 
   void get_popup(vgui_popup_params const &, vgui_menu &);
   void set_quit(bool on);
@@ -135,15 +136,15 @@ struct vgui_shell_tableau_new : public vgui_shell_tableau_sptr
 {
   typedef vgui_shell_tableau_sptr base;
   vgui_shell_tableau_new()
-    : base(new vgui_shell_tableau()) { }
+    : base(new vgui_shell_tableau()) {}
   vgui_shell_tableau_new(vgui_tableau_sptr const &a)
-    : base(new vgui_shell_tableau(a)) { }
+    : base(new vgui_shell_tableau(a)) {}
   vgui_shell_tableau_new(vgui_tableau_sptr const &a,vgui_tableau_sptr const &b)
-    : base(new vgui_shell_tableau(a, b)) { }
+    : base(new vgui_shell_tableau(a, b)) {}
   vgui_shell_tableau_new(vgui_tableau_sptr const &a,vgui_tableau_sptr const &b,vgui_tableau_sptr const &c)
-    : base(new vgui_shell_tableau(a, b, c)) { }
+    : base(new vgui_shell_tableau(a, b, c)) {}
   vgui_shell_tableau_new(vgui_tableau_sptr const &a,vgui_tableau_sptr const &b,vgui_tableau_sptr const &c,vgui_tableau_sptr const&d)
-    : base(new vgui_shell_tableau(a, b, c, d)) { }
+    : base(new vgui_shell_tableau(a, b, c, d)) {}
 };
 
 #endif // vgui_shell_tableau_h_

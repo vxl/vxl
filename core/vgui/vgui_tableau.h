@@ -5,7 +5,7 @@
 #pragma interface
 #endif
 //:
-//  \file
+// \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   11 Sep 99
 // \brief  Base class for all tableaux in vgui.
@@ -87,13 +87,14 @@ class vgui_tableau : public vgui_parent_child_link_data
   vgui_tableau();
 
   //: Return the name of the tableau.
-  virtual vcl_string name() const;
+  virtual vcl_string name() const { return file_name(); }
 
-  //: Get filename from descendant holding a file (if meaningful).
-  virtual vcl_string file_name() const;
+  //: Return the name of a file associated with some tableau below (if meaningful).
+  virtual vcl_string file_name() const { return "(none)"; }
 
-  //: Returns name suitable for debugging purposes.
-  virtual vcl_string pretty_name() const;
+  //: Used to provide an informative name for printouts, debugging etc.
+  //  Often it's type_name() + some representation of the essential state.
+  virtual vcl_string pretty_name() const { return type_name(); }
 
   //: Return name of most derived class (for RTTI purposes).
   virtual vcl_string type_name() const;

@@ -52,13 +52,12 @@ class vgui_event_server
   void set_popup(const vgui_menu&);
 
   //: Returns the last event.
-  vgui_event last_event();
+  vgui_event last_event() { return last_event_; }
 
  protected:
  ~vgui_event_server();
 
  private:
-
   friend class vgui_event_server_interpose_tableau;
   vgui_event_server_interpose_tableau* grabber_;
   vgui_tableau_sptr grabber_reference_;

@@ -5,14 +5,6 @@
 
 #include <qgl.h>
 
-//-----------------------------------------------------------------------------
-vgui_qt_adaptor::vgui_qt_adaptor(QWidget* parent)
-:  QGLWidget(parent)
-{
-   this->setMouseTracking(true);
-}
-
-
 //--------------------------------------------------------------------------------
 void vgui_qt_adaptor::paintGL()
 {

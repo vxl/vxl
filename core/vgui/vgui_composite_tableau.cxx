@@ -20,12 +20,11 @@
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_matrix_state.h>
 
-//quell_warning static bool debug=false;
 static vgui_event_condition default_c_enable_key_bindings(vgui_key_CTRL('c'));
 
 //----------------------------------------------------------------------------
 //: Prints info about this tableau - called when '?' is pressed.
-bool vgui_composite_tableau::help() 
+bool vgui_composite_tableau::help()
 {
   vcl_cerr << "\n+- vgui_composite_tableau -----+\n"
            << "|     keys                     |\n"
@@ -36,6 +35,7 @@ bool vgui_composite_tableau::help()
 
 //----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_composite_tableau_new.
+//  Creates an empty composite tableau.
 vgui_composite_tableau::vgui_composite_tableau()
   : c_enable_key_bindings(default_c_enable_key_bindings)
 {
@@ -45,7 +45,8 @@ vgui_composite_tableau::vgui_composite_tableau()
 //----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_composite_tableau_new.
 //  Takes 2 children: the first is on top, the second below.
-vgui_composite_tableau::vgui_composite_tableau(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1)
+vgui_composite_tableau::vgui_composite_tableau(vgui_tableau_sptr const& child0,
+                                               vgui_tableau_sptr const& child1)
   : c_enable_key_bindings(default_c_enable_key_bindings)
 {
   add(child0);
@@ -77,27 +78,6 @@ vgui_composite_tableau::vgui_composite_tableau(vcl_vector<vgui_tableau_sptr> con
     add(the_children[i]);
   enable_key_bindings = false;
 }
-
-//----------------------------------------------------------------------------
-//: Destructor - called by vgui_composite_tableau_sptr.
-vgui_composite_tableau::~vgui_composite_tableau()
-{
-}
-
-//----------------------------------------------------------------------------
-//: Returns the type of this tableau ('vgui_composite_tableau').
-vcl_string vgui_composite_tableau::type_name() const
-{
-  return "vgui_composite_tableau";
-}
-
-//----------------------------------------------------------------------------
-//: There is no obvious filename, so this just returns the type.
-vcl_string vgui_composite_tableau::file_name() const
-{
-  return type_name();
-}
-
 
 //----------------------------------------------------------------------------
 //: Returns a nice version of the name, including info on the children.
@@ -174,13 +154,15 @@ bool vgui_composite_tableau::handle(const vgui_event& event)
 
 //----------------------------------------------------------------------------
 //: Calls notify for the observers.
-void vgui_composite_tableau::notify() const {
+void vgui_composite_tableau::notify() const
+{
   observers.notify();
 }
 
 //----------------------------------------------------------------------------
 //: Returns a bounding box large enough to contain all the child bounding boxes.
-bool vgui_composite_tableau::get_bounding_box(float lo[3], float hi[3]) const {
+bool vgui_composite_tableau::get_bounding_box(float lo[3], float hi[3]) const
+{
   // it would be nice if we could return an empty bounding box.
   if (children.empty())
     return false;
@@ -205,15 +187,10 @@ bool vgui_composite_tableau::get_bounding_box(float lo[3], float hi[3]) const {
 }
 
 //----------------------------------------------------------------------------
-//: Same as add_child().
-void vgui_composite_tableau::add(vgui_tableau_sptr const& t) {
-  add_child(t);
-}
-
-//----------------------------------------------------------------------------
 //: Add to list of child tableaux.
 // virtual
-bool vgui_composite_tableau::add_child(vgui_tableau_sptr const& t) {
+bool vgui_composite_tableau::add_child(vgui_tableau_sptr const& t)
+{
   children.push_back( vgui_parent_child_link(this,t) );
   active.push_back(true);
   notify();
@@ -222,13 +199,15 @@ bool vgui_composite_tableau::add_child(vgui_tableau_sptr const& t) {
 
 //----------------------------------------------------------------------------
 //: Remove given tableau from list of child tableaux.
-void vgui_composite_tableau::remove(vgui_tableau_sptr const& t) {
+void vgui_composite_tableau::remove(vgui_tableau_sptr const& t)
+{
   if (!remove_child(t))
     vcl_cerr << __FILE__ " : no such child tableau\n";
 }
 
 //----------------------------------------------------------------------------
-void vgui_composite_tableau::clear() {
+void vgui_composite_tableau::clear()
+{
   children.clear();
   active.clear();
   notify();
@@ -236,7 +215,8 @@ void vgui_composite_tableau::clear() {
 
 //----------------------------------------------------------------------------
 // virtual
-bool vgui_composite_tableau::remove_child(vgui_tableau_sptr const &t) {
+bool vgui_composite_tableau::remove_child(vgui_tableau_sptr const &t)
+{
   vcl_vector<bool>::iterator ia = active.begin();
   for (vcl_vector<vgui_parent_child_link>::iterator i=children.begin() ; i!=children.end() ; ++i, ++ia)
     if ( (*i) == t ) {
@@ -251,13 +231,15 @@ bool vgui_composite_tableau::remove_child(vgui_tableau_sptr const &t) {
 
 //----------------------------------------------------------------------------
 //: Returns true if given integer could be an index to the child tableaux.
-bool vgui_composite_tableau::index_ok(int v) {
+bool vgui_composite_tableau::index_ok(int v)
+{
   return v >= 0 && v < int(children.size());
 }
 
 
 //----------------------------------------------------------------------------
-bool vgui_composite_tableau::toggle(int v) {
+bool vgui_composite_tableau::toggle(int v)
+{
   if (!index_ok(v)) return false;
   bool state = active[v];
   active[v] = !state;
@@ -266,7 +248,8 @@ bool vgui_composite_tableau::toggle(int v) {
 }
 
 //----------------------------------------------------------------------------
-bool vgui_composite_tableau::is_active(int v) {
+bool vgui_composite_tableau::is_active(int v)
+{
   if (!index_ok(v)) return false;
   return active[v];
 }

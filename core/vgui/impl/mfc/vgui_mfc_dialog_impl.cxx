@@ -97,15 +97,6 @@ void* vgui_mfc_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr tab,
 
 static int loop_flag = 0;
 
-//: Sets the modality of the dialog box.
-//  True makes the dialog modal (i.e. the dialog 'grabs' all events), this is
-//  the default.  False makes the dialog non-modal.  WARNING: It is dangerous to
-//  make a dialog that changes data non-modal, only messages should be non-modal.
-void vgui_mfc_dialog_impl::modal(const bool m)
-{
-  is_modal = m;
-}
-
 //: Called by MFC when the user clicks the OK button.
 void vgui_mfc_dialog_impl::OnOk()
 {

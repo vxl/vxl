@@ -43,7 +43,10 @@ class vgui_mfc_dialog_impl : public CWnd,public vgui_dialog_impl
   void* choice_field_widget(const char*, const vcl_vector<vcl_string>&, int&);
   void* inline_tableau_widget(const vgui_tableau_sptr tab, unsigned width, unsigned height);
   //: Sets the modality of the dialog box.
-  void modal(const bool);
+  // True makes the dialog modal (i.e. the dialog 'grabs' all events), this is
+  // the default.  False makes the dialog non-modal. WARNING: It is dangerous to
+  // make a dialog that changes data nonmodal, only messages should be nonmodal.
+  void modal(bool m) { is_modal = m; }
   //: Display the dialog box.
   bool ask();
  protected:

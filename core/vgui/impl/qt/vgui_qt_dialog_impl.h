@@ -24,7 +24,7 @@ class vgui_qt_dialog_impl :
    Q_OBJECT
  public:
     vgui_qt_dialog_impl(const char* name);
-   ~vgui_qt_dialog_impl() { };
+   ~vgui_qt_dialog_impl() {}
 
    void* bool_field_widget(const char*, bool&);
    void* int_field_widget(const char*, int&);
@@ -40,7 +40,7 @@ class vgui_qt_dialog_impl :
    void* color_chooser_widget(const char *,vcl_string&);//, vcl_string&);
    void* inline_color_chooser_widget(const char *,vcl_string&);//, vcl_string&);
 
-   void  modal(const bool);
+   void  modal(bool m) { is_modal = m; }
 
    bool  ask();
 };
@@ -55,11 +55,11 @@ class vgui_qt_filebrowser_impl : public QHGroupBox
    Q_OBJECT
  public:
    vgui_qt_filebrowser_impl(QWidget* parent, const char*, vcl_string&, vcl_string&);
-  ~vgui_qt_filebrowser_impl() { };
+  ~vgui_qt_filebrowser_impl() {}
 
-   vcl_string  file() const { return vcl_string(edit_->text().latin1()); };
+   vcl_string  file() const { return vcl_string(edit_->text().latin1()); }
 
- public slots:
+ public:
    void get_a_file();
 
  private:
@@ -72,11 +72,11 @@ class vgui_qt_colorchooser_impl : public QHGroupBox
    Q_OBJECT
  public:
    vgui_qt_colorchooser_impl(QWidget* parent, const char*, vcl_string&);
-  ~vgui_qt_colorchooser_impl() { };
+  ~vgui_qt_colorchooser_impl() {}
 
-  vcl_string  color() const { return value_; };
+  vcl_string  color() const { return value_; }
 
- public slots:
+ public:
    void get_a_color();
 
  private:

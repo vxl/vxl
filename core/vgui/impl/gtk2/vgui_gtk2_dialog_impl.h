@@ -38,7 +38,12 @@ class vgui_gtk2_dialog_impl : public vgui_dialog_impl
   void* choice_field_widget(const char*, const vcl_vector<vcl_string>&, int&);
   void* inline_tableau_widget(const vgui_tableau_sptr tab, unsigned width, unsigned height);
 
-  void modal(const bool);
+  //--------------------------------------------------------------------------------
+  //: Changes the modality of the dialog.
+  //  True makes the dialog modal (i.e. the dialog 'grabs' all events), this is the default.
+  //  False makes the dialog non-modal.
+  void modal(bool m) { is_modal = m; }
+
   void set_ok_button(const char* txt);
   void set_cancel_button(const char* txt);
 

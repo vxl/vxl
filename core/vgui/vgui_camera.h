@@ -10,14 +10,11 @@
 // \date   03 Nov 99
 // \brief Projects 3D models into a GL context given a camera projection matrix.
 //
-// Contains classes: vgui_camera
-//
 // \verbatim
 //  Modifications
-//    991103 Geoff Initial version.
-//    26-APR-2002  K.Y.McGaul - Converted to doxygen style comments.
+//   991103 Geoff Initial version.
+//   26-APR-2002  K.Y.McGaul - Converted to doxygen style comments.
 // \endverbatim
-//
 
 #include <vnl/vnl_matrix_fixed.h>
 
@@ -33,13 +30,13 @@ class vgui_camera
 {
  public:
   //: Constructor - create a camera with a default projection matrix.
-  vgui_camera();
+  vgui_camera() {}
 
   //: Constructor - create a camera with the given projection matrix.
-  vgui_camera( const vnl_matrix_fixed<double,3,4> &P);
+  vgui_camera(vnl_matrix_fixed<double,3,4> const& P) : pmatrix(P) {}
 
   //: Set the projection matrix to the given matrix.
-  void set_pmatrix( const vnl_matrix_fixed<double,3,4> &m);
+  void set_pmatrix(vnl_matrix_fixed<double,3,4> const& m) { pmatrix= m; }
 
   //: Plug this matrix into a vgui_loader_tableau.
   //  Note: this will return a GL_PROJECTION_MATRIX with the assumption that

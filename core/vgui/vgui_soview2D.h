@@ -39,7 +39,7 @@ class vgui_soview2D : public vgui_soview
 {
  public:
   //: Constructor - create a default soview2D.
-  vgui_soview2D();
+  vgui_soview2D() {}
 
   //: Destructor - delete this soview2D.
   virtual ~vgui_soview2D() {}
@@ -101,8 +101,8 @@ class vgui_soview2D_lineseg : public vgui_soview2D
   vgui_soview2D_lineseg() : x0(0), y0(0), x1(0), y1(0) {}
 
   //: Constructor - create a 2D line segment with given start and end points.
-  vgui_soview2D_lineseg(float x0_, float y0_, float x1_, float y1_) :
-    x0(x0_), y0(y0_), x1(x1_), y1(y1_) {}
+  vgui_soview2D_lineseg(float x0_, float y0_, float x1_, float y1_)
+    : x0(x0_), y0(y0_), x1(x1_), y1(y1_) {}
 
   //: Constructor - create a 2D line segment same as the given 2D line segment.
   vgui_soview2D_lineseg( vgui_soview2D_lineseg &l_) : vgui_soview2D(), x0(l_.x0), y0(l_.y0), x1(l_.x1), y1(l_.y1) {}
@@ -180,8 +180,8 @@ class vgui_soview2D_infinite_line : public vgui_soview2D
   vgui_soview2D_infinite_line() {}
 
   //: Constructor - create a 2D infinite line ax + by + c = 0.
-  vgui_soview2D_infinite_line( float a_, float b_, float c_) :
-    a(a_), b(b_), c(c_) {}
+  vgui_soview2D_infinite_line( float a_, float b_, float c_)
+    : a(a_), b(b_), c(c_) {}
 
   //: Render this 2D infinite line on the display.
   virtual void draw() const;

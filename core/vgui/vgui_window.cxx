@@ -15,16 +15,6 @@
 
 //------------------------------------------------------------------------------
 
-vgui_window::vgui_window()
-{
-}
-
-vgui_window::~vgui_window()
-{
-}
-
-//------------------------------------------------------------------------------
-
 void vgui_window::set_menubar(vgui_menu const &)
 {
   vgui_macro_warning << "set_menubar() not implemented for this window\n";

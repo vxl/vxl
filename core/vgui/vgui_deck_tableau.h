@@ -35,7 +35,7 @@ class vgui_deck_tableau : public vgui_tableau
  public:
   //: Constructor - don't use this, use vgui_deck_tableau_new.
   //  Make an empty deck
-  vgui_deck_tableau();
+  vgui_deck_tableau() : index_(-1) {}
 
   //: Constructor - don't use this, use vgui_deck_tableau_new.
   //  Make a deck with two children, listed top to bottom
@@ -47,7 +47,7 @@ class vgui_deck_tableau : public vgui_tableau
 
   //: Add a tableau to the deck
   //  It is placed on top, and made current.
-  void add(vgui_tableau_sptr const&);
+  void add(vgui_tableau_sptr const& t) { add_child(t); }
 
   //: Remove the tableau pointed to by P.
   //  The one below is then made current.
@@ -140,17 +140,17 @@ struct vgui_deck_tableau_new : public vgui_deck_tableau_sptr
   typedef vgui_deck_tableau_sptr base;
 
   //: Constructor - creates a pointer to an empty vgui_deck_tableau.
-  vgui_deck_tableau_new() : base(new vgui_deck_tableau()) { }
+  vgui_deck_tableau_new() : base(new vgui_deck_tableau()) {}
 
   //: Constructor - creates a pointer to a vgui_deck_tableau with two children.
   //  Children are given top to bottom.
   vgui_deck_tableau_new(vgui_tableau_sptr const& child0,vgui_tableau_sptr const& child1)
-    : base(new vgui_deck_tableau(child0, child1)) { }
+    : base(new vgui_deck_tableau(child0, child1)) {}
 
   //: Constructor - creates a pointer to a vgui_deck_tableau with 3 children.
   //  Children are given top to bottom.
   vgui_deck_tableau_new(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1, vgui_tableau_sptr const& child2)
-    : base(new vgui_deck_tableau(child0, child1, child2)) { }
+    : base(new vgui_deck_tableau(child0, child1, child2)) {}
 };
 
 #endif // vgui_deck_tableau_h_
