@@ -25,6 +25,7 @@
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_tableau.h>
+#include <vgui/vgui_style.h>
 #include <vgui/vgui_style_sptr.h>
 
 class vgui_soview;
