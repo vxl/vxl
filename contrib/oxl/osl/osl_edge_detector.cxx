@@ -81,7 +81,7 @@ void osl_edge_detector::detect_edges(vil_image const &image,
                                      vcl_list<osl_edge*> *edges,
                                      bool maintain_topology)
 {
-  assert(edges);
+  assert(edges!=0);
 
   //
   _xsize = image.height();
@@ -176,11 +176,11 @@ void osl_edge_detector::detect_edges(vil_image const &image,
 // orientations in _theta.
 //
 void osl_edge_detector::Sub_pixel_interpolation() {
-  float h1,h2;
+  float h1=0.0,h2=0.0; // dummy initialisation values
   float k = 180.0f/float(vnl_math::pi);
   int orient;
   float theta,grad;
-  float fraction,dnewx,dnewy;
+  float fraction,dnewx=0.0,dnewy=0.0; // dummy initialisation values
 
   // Add 1 to get rid of border effects.
   for (int x=_width+1; x<_xsize-_width-1; ++x)  {
@@ -232,7 +232,6 @@ void osl_edge_detector::Sub_pixel_interpolation() {
 
         default:
           vcl_abort();
-          //h1 = h2 = 0.0;  // Dummy values;
           //vcl_cerr << "*** ERROR ON SWITCH IN NMS ***\n";
         }
 
@@ -262,7 +261,6 @@ void osl_edge_detector::Sub_pixel_interpolation() {
 
         default:
           vcl_abort();
-          //dnewx = dnewy = 0.0; // Dummy values
           //vcl_cerr << "*** ERROR ON SWITCH IN NMS ***\n";
         }
 
@@ -411,7 +409,7 @@ void osl_edge_detector::Set_thresholds()
                                   bdist[x][y],
                                   a1dist[x][y],
                                   a2dist[x][y]);
-        float num,den;
+        float num=1.0,den=1.0; // dummy initialisation values
         switch(option) {
         case 1:
         case 2:
@@ -427,7 +425,6 @@ void osl_edge_detector::Set_thresholds()
 
         default:
           vcl_abort();
-          //den = num = 1.0; // Dummy values
           //break;
         }
         if ( den != 0.0 )

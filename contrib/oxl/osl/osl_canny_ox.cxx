@@ -73,7 +73,7 @@ osl_canny_ox::~osl_canny_ox() {
 //-----------------------------------------------------------------------------
 
 void osl_canny_ox::detect_edges(vil_image const &image_in, vcl_list<osl_edge*> *edges) {
-  assert(edges);
+  assert(edges!=0);
 
   // Get the image size
   _xsize = image_in.height();
@@ -257,7 +257,7 @@ int osl_canny_ox::HysteresisOX(osl_edgel_chain *&edgels_NMS,
     col[i]    = (int) edgels_NMS->GetX(i);
     status[i] = 0;
   }
-  for (int i=0,j=0; i<=_ysize; ++i) { // Note: rows[_ysize] is one more than last edgel index
+  for (unsigned int i=0,j=0; i<=_ysize; ++i) { // Note: rows[_ysize] is one more than last edgel index
     while (j<n_edgels_NMS && row[j]<i)
       ++j;
     rows[i]=j;   // index of first edgel after start of row i

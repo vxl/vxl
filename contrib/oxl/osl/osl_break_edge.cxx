@@ -14,12 +14,12 @@ void osl_break_edge(osl_edge const *in,
                     vcl_vector<unsigned> const &where,
                     vcl_list<osl_edge*> *broken)
 {
-  assert(in);
+  assert(in!=0);
   float const *x = in->GetX();
   float const *y = in->GetY();
   unsigned n = in->size();
 
-  assert(broken);
+  assert(broken!=0);
   assert(!where.empty());
   assert(where.front() == 0);
   assert(where.back() == n-1);
@@ -47,7 +47,7 @@ void osl_break_edge(osl_edge const *in,
                     double threshold,
                     unsigned nbhd_size)
 {
-  assert(in);
+  assert(in!=0);
 
   float const *x = in->GetX();
   float const *y = in->GetY();

@@ -60,7 +60,7 @@ void osl_fit_lines::simple_fit_to_list(vcl_list<osl_edge *> *myedges,
     bool angle_ok = true;
     {
       osl_edgel_chain *dc = edge;//->GetCurve()->CastToDigitalCurve();
-      assert(dc);
+      assert(dc!=0);
 
       // If the osl_edgel_chain is long enough fit
       if( dc->size() < _min_fit_length )
@@ -266,7 +266,7 @@ void osl_fit_lines::MeanIncrementalFit(vcl_list<osl_edgel_chain*> *_curves, osl_
   float new_cost, new_est_cost;
   // Get the digital curve
   osl_edgel_chain *dc = edge;//->GetCurve()->CastToDigitalCurve();
-  assert(dc);
+  assert(dc!=0);
 
   // If the EdgelChain is long enough fit
   if( dc->size() < _min_fit_length )
@@ -433,7 +433,7 @@ void osl_fit_lines::SquareIncrementalFit(vcl_list<osl_edgel_chain*> *_curves, os
 
   // Get the digital curve
   osl_edgel_chain *dc = edge;//->GetCurve()->CastToDigitalCurve();
-  assert(dc);
+  assert(dc!=0);
 
   // If the EdgelChain is long enough fit
   if( dc->size() < _min_fit_length )
