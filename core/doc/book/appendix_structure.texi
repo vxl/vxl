@@ -3,24 +3,25 @@
 The directory structure of @vxl{x} is below
 @example
   $VXLSRC/vcl
-          vxl/vnl
-             /vul
-             /vbl
-             /vil
-             /vgl
-             /vsl
+          core/vnl
+              /vul
+              /vbl
+              /vil
+              /vgl
+              /vsl
              @dots{}
           v3p/netlib
              /jpeg
              @dots{}
-          config.cmake
+          config/cmake
+          contrib/
 @end example
 
 @table @samp
 @item vcl
 is the C++ compatibility layer (@pxref{vcl}).
 
-@item  vxl
+@item core
 contains the core @vxl{x} libraries.
 
 @item v3p
@@ -31,17 +32,16 @@ contain image file format code used by vil. In theory, you don't need
 any of of the v3p libraries if you have locally installed versions. In
 practice, you need @code{v3p/netlib} but not the others.  the
 
-@item config.cmake
+@item config/cmake
 contains the configuration files used by the CMake build system
 (@pxref{CMake}).
 
 @end table
 
-@section Other modules
+@section Other packages
 
 On the repository and some @vxl{x} distributions, you will find several other
-modules beside vcl and vxl.
-
+packages in the @samp{contrib} directory.
 
 @cindex gel
 @cindex oxl

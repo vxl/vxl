@@ -16,8 +16,8 @@ CMake is available from @uref{http://www.cmake.org} where you'll find
 pre-compiled versions and instructions for getting the source code
 from an anonymous CVS server.  VXL is designed to be configured by the
 latest released version of CMake.  At the time of writing, this is
-version 1.4.5.  From CVS, you can use the tag @code{LatestRelease}.
-Cmake documentation can be found at
+version 1.4.5.  When obtaining CMake via CVS, you can use the tag
+@code{LatestRelease}.  Cmake documentation can be found at
 @uref{http://www.cmake.org/HTML/Documentation.html}.
 
 You can choose not to build certain portions of the VXL source tree by
@@ -74,7 +74,7 @@ prefixed by '#' in CMake.
 # rule, i.e., in either an ADD_EXECUTABLE or an ADD_LIBRARY rule in
 # exactly one CMakeLists.txt file (normally the one in the same
 # directory, but sometimes it could be the CMakeLists.txt file of the
-# parent directory, cf. vxl/vil/file_formats).  Template instantiation
+# parent directory, cf. core/vil/file_formats).  Template instantiation
 # files residing in Templates subdirectories are not included
 # specifically in any CMakeLists.txt file, but are included via the
 # AUX_SOURCE_DIRECTORY CMake command.  The AUX_SOURCE_DIRECTORY
@@ -92,23 +92,24 @@ ADD_EXECUTABLE( foobar
 # If this executable is using libraries other than vcl, then an
 # INCLUDE_DIRECTORIES is needed so that include files will be found
 # (vcl is automatically included via the top level VXL CMakeLists.txt
-# file).  This line is needed to include files from the vxl and gel
-# sections.  Most executables will, of course, need to include the vxl
-# sections.
+# file).  This line is needed to include files from the core vxl and
+# gel packages.  Most executables will, of course, need to include the
+# core vxl sections.
 
 INCLUDE_DIRECTORIES(
-  $@{allvxl_SOURCE_DIR@}/vxl
-  $@{allvxl_SOURCE_DIR@}/gel
+  $@{VXLCORE_INCLUDE_DIR@}
+  $@{GEL_INCLUDE_DIR@}
 )
 
 # For INCLUDE_DIRECTORIES, the preferred practice is to specify a
 # directory exactly one level below $@{allvxl_SOURCE_DIR@} as an include
 # directory, and then the further qualify include files in the source
 # code with commands like #include <vsol/vsol_box_2d.h>.  Do not do
-# either of the following.
+# any of the following.
 
-# NO # INCLUDE_DIRECTORIES( $@{allvxl_SOURCE_DIR@} )
-# NO # INCLUDE_DIRECTORIES( $@{allvxl_SOURCE_DIR@}/gel/vsol )
+# NO # INCLUDE_DIRECTORIES( $@{vxl_SOURCE_DIR@} )
+# NO # INCLUDE_DIRECTORIES( $@{GEL_INCLUDE_DIR@}/vsol )
+# NO # INCLUDE_DIRECTORIES( $@{vxl_SOURCE_DIR@}/contrib/gel/vsol )
 
 # Indicate which VXL libraries foobar depends on with the
 # TARGET_LINK_LIBRARIES command.  Include each library that is
@@ -215,7 +216,7 @@ ENDIF( ZLIB_FOUND )
 
 # As in Example 1, we will configure to include VXL header files.
 
-INCLUDE_DIRECTORIES( $@{allvxl_SOURCE_DIR@}/vxl )
+INCLUDE_DIRECTORIES( $@{VXLCORE_INCLUDE_DIR@} )
 
 # Just as in Example 1, use the TARGET_LINK_LIBRARIES command to
 # specify each library that is directly used by this library.  CMake
@@ -323,7 +324,7 @@ parenthesis.
 
 To determine the compiler being used at compile time, use macros
 defined in @file{vcl/vcl_compiler.h}.  The @file{FindXXX.cmake} files
-are in @file{$VXLSRC/config.cmake/Modules/}.
+are in @file{$VXLSRC/config/cmake/Modules/}.
 
 @table @asis
 @item  @bullet{} CMake: @code{WIN32} (defined by CMake, not in a file)
