@@ -473,7 +473,7 @@ void brip_para_cvrg::compute_parallel_coverage()
 //float min_sum = .01f;
   this->set_float_image(det_,0.0);
   this->set_float_image(dir_,0.0);
-  int direct;
+  float direct;
   int radius = proj_width_+proj_height_ + 3;
   for (int y=radius; y<(image_.height()-radius);y++)
     for (int x=radius ;x<(image_.width()-radius);x++)
@@ -487,28 +487,28 @@ void brip_para_cvrg::compute_parallel_coverage()
       this->project(x, y, 0, proj_0_);
       coverage[0] = this->parallel_coverage(proj_0_);
       float max_coverage = coverage[0];
-      direct = 0;
+      direct = 0.f;
       this->project(x, y, 45, proj_45_);
       coverage[1] = this->parallel_coverage(proj_45_);
       if (coverage[1]>max_coverage)
-        {
-          max_coverage = coverage[1];
-          direct = 45;
-        }
+      {
+        max_coverage = coverage[1];
+        direct = 45.f;
+      }
       this->project(x, y, 90, proj_90_);
       coverage[2] = this->parallel_coverage(proj_90_);
       if (coverage[2]>max_coverage)
-        {
-          max_coverage = coverage[2];
-          direct = 90;
-        }
+      {
+        max_coverage = coverage[2];
+        direct = 90.f;
+      }
       this->project(x, y, 135, proj_135_);
       coverage[3] = this->parallel_coverage(proj_135_);
       if (coverage[3]>max_coverage)
-        {
-          max_coverage = coverage[3];
-          direct = 135;
-        }
+      {
+        max_coverage = coverage[3];
+        direct = 135.f;
+      }
 #ifdef DEBUG
       vcl_cout << '(' << x << ',' << y << ") coverage:\n"
                << "   O degrees = " << coverage[0] << '\n'
@@ -612,25 +612,19 @@ vil1_memory_image_of<vil1_rgb<unsigned char> >
 brip_para_cvrg::get_combined_image()
 {
   //arbitrary color assignments
-  float r[4] ={0, 0.5, 0, 1.0};
-  float g[4] ={0.5, 0, 1.0, 0};
-  float b[4] ={0.5, 0.5, 0, 0};
+  int r[4] ={0, 1, 0, 1}; // cyan, magenta, green, red
+  int g[4] ={1, 0, 1, 0};
+  int b[4] ={1, 1, 0, 0};
   vil1_memory_image_of<unsigned char> cvrg_image = this->get_detection_image();
   vil1_memory_image_of<unsigned char> dir_image = this->get_dir_image();
   vil1_memory_image_of<vil1_rgb<unsigned char> > out(xsize_, ysize_);
   for (int y = 0; y<ysize_; y++)
     for (int x = 0; x<xsize_; x++)
-      {
-        int direct = ((int)dir_image(x,y))/45;
-        float c = cvrg_image(x,y);
-        float red = r[direct]*c, green = g[direct]*c, blue = b[direct]*c;
-        if(red>255)
-          red =255;
-        if(green>255)
-          green =255;
-        if(blue>255)
-          blue = 255;
-        out(x, y) = vil1_rgb<unsigned char>(red, green, blue);
-      }
+    {
+      int direct = ((int)dir_image(x,y))/45;
+      unsigned char c = cvrg_image(x,y);
+      unsigned char red = r[direct]*c, green = g[direct]*c, blue = b[direct]*c;
+      out(x, y) = vil1_rgb<unsigned char>(red, green, blue);
+    }
   return out;
 }
