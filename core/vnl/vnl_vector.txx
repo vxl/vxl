@@ -354,11 +354,8 @@ void vnl_vector<T>::copy_out (T *ptr) const {
 template<class T>
 vnl_vector<T>& vnl_vector<T>::operator= (vnl_vector<T> const& rhs) {
   if (this != &rhs) {                           // make sure *this != m
-    if (this->num_elmts != rhs.num_elmts) {
-      vnl_c_vector<T>::deallocate(this->data, this->num_elmts); // Free up the data space
-      this->num_elmts = rhs.num_elmts;          // Copy index specification
-      this->data = vnl_c_vector<T>::allocate_T(this->num_elmts);        // Allocate the elements
-    }
+    if (this->num_elmts != rhs.num_elmts)
+      this->resize(rhs.size());
     for (unsigned i = 0; i < this->num_elmts; i++)      // For each index
       this->data[i] = rhs.data[i];              // Copy value
   }
