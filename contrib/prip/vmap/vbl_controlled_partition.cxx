@@ -1,4 +1,4 @@
-// This is contrib/prip/vmap/vbl_controlled_partition.cxx
+// This is prip/vmap/vbl_controlled_partition.cxx
 #include "vbl_controlled_partition.h"
 
 
@@ -15,21 +15,22 @@ void vbl_controlled_partition::initialise(int size)
     _elements.resize(size) ;
     for (int i=0; i<size;i++)
     {
-        _elements[i].father=i ;
+        _elements[i].father=i;
     }
     _nb_sets=size ;
 }
 
 vbl_controlled_partition & vbl_controlled_partition::operator=(const vbl_controlled_partition & arg) 
 {
-	 _elements.resize(arg._elements.size()) ;
-    for (int i=0; i<_elements.size();i++)
+    _elements.resize(arg._elements.size()) ;
+    for (unsigned int i=0; i<_elements.size(); ++i)
     {
         _elements[i].father=arg._elements[i].father ;
     }
-		_nb_sets=arg._nb_sets ;
+    _nb_sets=arg._nb_sets ;
+    return *this ;
 }
-		
+
 void vbl_controlled_partition::set_as_representative(int i)
 {
     int tmp1 = i ;
