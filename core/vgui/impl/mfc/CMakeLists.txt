@@ -16,6 +16,7 @@ vgui_mfc_doc
 vgui_mfc_mainfrm
 vgui_mfc_statusbar
 vgui_mfc_tag
+vgui_mfc_util
 vgui_mfc_utils
 vgui_mfc_view
 vgui_mfc_window
