@@ -1,14 +1,12 @@
 #include <image/Image_to_vil.h>
 #include <image/vil_to_Image.h>
-//#include <image/vbl_array_to_vil.h>
-//#include <image/vil_to_vbl_array.h>
 
 #include <vcl_cstring.h> // for memcmp()
 #include <vcl_fstream.h>
 #include <vpl/vpl.h> // for vpl_unlink()
 #include <vul/vul_temp_filename.h>
 #include <vil/vil_load.h>
-#include <vil/vil_test.h>
+#include <testlib/testlib_test.h>
 
 static void create_image(const char* name)
 {
