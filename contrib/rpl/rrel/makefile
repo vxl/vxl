@@ -1,4 +1,4 @@
-USES += contrib/rpl contrib/mul core
+USES += contrib/rpl core
 
 LIBRARY := rrel
 VERSION := 1.0
