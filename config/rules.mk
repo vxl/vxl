@@ -243,7 +243,8 @@ endif
 
 # Switch to ifndef so LDLIBS = $(VAR) is seen as NON empty
 ifndef LDLIBS
-   LDLIBS = $(LOCAL_LIBS) $(IULIBS)
+  lib_tmp := $(shell $(IUE_PERL) $(sys_or_iu_Scripts)/Perl/remove_duplicates.pl $(IULIBS))
+  LDLIBS = $(LOCAL_LIBS) $(lib_tmp)
 endif
 
 #############################################################################
