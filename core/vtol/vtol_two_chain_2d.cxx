@@ -110,14 +110,14 @@ vtol_two_chain_2d::vtol_two_chain_2d(const vtol_two_chain_2d &other)
   i=0;
   for(vi=verts->begin();vi!=verts->end();vi++,i++)
     {
-      v=(*vi);
+      v=(*vi).ptr();
       newverts[i]=(vtol_vertex_2d *)(v->clone().ptr());
       v->set_id(i);
     }
   j=0;	
   for(ei=edges->begin();ei!= edges->end();ei++,j++)
     {
-      e=(*ei);
+      e=(*ei).ptr();
       newedges[j]=new vtol_edge_2d(*(newverts[e->v1()->get_id()]->cast_to_vertex()),
                                    *(newverts[e->v2()->get_id()]->cast_to_vertex()));
       e->set_id(j);
@@ -801,7 +801,8 @@ bool vtol_two_chain_2d::operator==(const vtol_two_chain_2d &other) const
   for(hi1=righth.begin(),hi2=lefth.begin();
       hi1!=righth.end()&&hi2!=lefth.end();
       hi1++,hi2++)
-    if(*((vsol_spatial_object_2d*)(*hi1))!=*((vsol_spatial_object_2d*)(*hi2)))
+    if(*((vsol_spatial_object_2d*)((*hi1).ptr()))
+       !=*((vsol_spatial_object_2d*)((*hi2).ptr())))
       return false;
   return true;
 }

@@ -526,7 +526,8 @@ bool vtol_edge_3d::operator==(const vtol_edge_3d &e) const
   if(_curve!=0&&e._curve==0||_curve==0&&e._curve!=0)
     return false;
   if(_curve!=0&&e._curve!=0)
-    if(*((vsol_spatial_object_3d*)_curve)!=*((vsol_spatial_object_3d*)(e._curve)))
+    if(*((vsol_spatial_object_3d *)_curve.ptr())
+       !=*((vsol_spatial_object_3d *)(e._curve.ptr())))
       return false;
   if((_v1==e._v1)&&(_v2==e._v2))    // pointer equivalence.
     {

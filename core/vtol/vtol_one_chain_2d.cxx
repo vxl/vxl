@@ -638,8 +638,8 @@ void vtol_one_chain_2d::compute_bounding_box(void)
   // float  zmin = max_float, zmax = -max_float ;
   for(eit=edgs->begin();eit!=edgs->end();eit++)
     {
-      vtol_edge_2d *e=(*eit);
-      vsol_box_2d *b=e->get_bounding_box();
+      vtol_edge_2d_ref e=(*eit);
+      vsol_box_2d_ref b=e->get_bounding_box();
       if(b==0)
 	{
 	  cout << "In vtol_one_chain_2d::ComputeBoundingBox()"
@@ -858,7 +858,8 @@ bool vtol_one_chain_2d::operator==(const vtol_one_chain_2d &other) const
             chain_list_2d::const_iterator l;
             
             for(r=righth.begin(), l=lefth.begin(); r!=righth.end(); r++, l++)
-              if( *((vsol_spatial_object_2d*)(*r)) != *((vsol_spatial_object_2d*)((l))))
+              if(*((vsol_spatial_object_2d *)((*r).ptr()))
+                 !=*((vsol_spatial_object_2d *)((*l).ptr())))
                 return false;
           }
         }

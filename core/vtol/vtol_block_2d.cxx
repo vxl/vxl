@@ -39,7 +39,7 @@ vtol_block_2d::vtol_block_2d(two_chain_list_2d &faceloops)
 {
   int i;
   if(faceloops.size()>0)
-    link_inferior(*((vtol_topology_object_2d *)faceloops[0]));
+    link_inferior(*((vtol_topology_object_2d *)faceloops[0].ptr()));
 
   vtol_two_chain_2d *twoch=get_boundary_cycle();
   

@@ -44,11 +44,11 @@ vtol_face_2d::vtol_face_2d(const vtol_face_2d &other)
   vcl_vector<vtol_edge_2d_ref>::iterator ei;
   vtol_edge_2d_ref e;
   vsol_curve_2d_ref c;
-  vtol_topology_object_2d *V1;
-  vtol_topology_object_2d *V2;
+  vtol_topology_object_2d_ref V1;
+  vtol_topology_object_2d_ref V2;
   vtol_one_chain_2d_ref inf;
   vtol_edge_2d_ref newedge;
-  vtol_one_chain_2d *onech;
+  vtol_one_chain_2d_ref onech;
   topology_list_2d::iterator ii;
 
   oldf=(vtol_face_2d *)(&other);
@@ -75,8 +75,8 @@ vtol_face_2d::vtol_face_2d(const vtol_face_2d &other)
       c=(e->curve()) ? (vsol_curve_2d*)e->curve()->clone().ptr() : 0;
 
 
-      vtol_topology_object_2d* V1 = newverts[e->v1()->get_id()];
-      vtol_topology_object_2d* V2 = newverts[e->v2()->get_id()];
+      V1=newverts[e->v1()->get_id()];
+      V2=newverts[e->v2()->get_id()];
       if(!V1 || !V2)
         {
  	  cerr << "Inconsistent topology in vtol_face_2d copy constructor\n";
@@ -92,7 +92,7 @@ vtol_face_2d::vtol_face_2d(const vtol_face_2d &other)
       c->set_p1(V2->cast_to_vertex()->point());
       // now set the curve on the new edge;
       newedge->set_curve(*c);
-      newedges[j]=newedge;
+      newedges[j]=newedge.ptr();
       e->set_id(j);
     }
   // This is a deep copy of the vtol_face_2d.
@@ -128,7 +128,7 @@ vsol_spatial_object_2d_ref vtol_face_2d::clone(void) const
   return new vtol_face_2d(*this);
 }
 
-vsol_region_2d *vtol_face_2d::surface(void) const
+vsol_region_2d_ref vtol_face_2d::surface(void) const
 {
   return _surface;
 }
@@ -144,9 +144,8 @@ vtol_face_2d::copy_with_arrays(vcl_vector<vtol_topology_object_2d_ref> &verts,
   topology_list_2d::const_iterator i;
   for(i=newface->_inferiors.begin();i!= newface->_inferiors.end();i++ )
     {
-      vtol_topology_object_2d* obj = (*i);
+      vtol_topology_object_2d_ref obj=(*i);
       newface->unlink_inferior(*obj);
-      iu_delete(obj);
     }
   newface->_inferiors.clear();
   for(i=_inferiors.begin();i!=_inferiors.end();i++)
@@ -272,7 +271,7 @@ vtol_face_2d::vtol_face_2d(vertex_list_2d &verts)
       newedge=v01->new_edge(*v02);
       elist.push_back(newedge);
       
-	  if(v02.ptr()==newedge->v2())
+	  if(v02.ptr()==newedge->v2().ptr())
 	    directions.push_back((signed char)1);
           else
             directions.push_back((signed char)(-1));

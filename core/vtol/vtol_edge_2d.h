@@ -124,7 +124,7 @@ public:
   //---------------------------------------------------------------------------
   //: Return the curve associated to `this'
   //---------------------------------------------------------------------------
-  virtual vsol_curve_2d *curve(void) const;
+  virtual vsol_curve_2d_ref curve(void) const;
 
   //---------------------------------------------------------------------------
   //: Set the curve with `new_curve'
@@ -134,17 +134,17 @@ public:
   //---------------------------------------------------------------------------
   //: Return the first endpoint
   //---------------------------------------------------------------------------
-  virtual vtol_vertex_2d *v1(void) const;
+  virtual vtol_vertex_2d_ref v1(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the second endpoint
   //---------------------------------------------------------------------------
-  virtual vtol_vertex_2d *v2(void) const;
+  virtual vtol_vertex_2d_ref v2(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the first zero-chain of `this'
   //---------------------------------------------------------------------------
-  virtual vtol_zero_chain_2d *zero_chain(void) const;
+  virtual vtol_zero_chain_2d_ref zero_chain(void) const;
 
   //---------------------------------------------------------------------------
   //: Set the first endpoint.
@@ -234,7 +234,7 @@ public:
   virtual bool is_endpoint1(const vtol_vertex_2d &) const;
   virtual bool is_endpoint2(const vtol_vertex_2d &) const;
 
-  virtual vtol_vertex_2d *other_endpoint(const vtol_vertex_2d &) const;
+  virtual vtol_vertex_2d_ref other_endpoint(const vtol_vertex_2d &) const;
 
  
   virtual void compute_bounding_box(void); // A local implementation

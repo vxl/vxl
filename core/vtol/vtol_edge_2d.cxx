@@ -208,7 +208,7 @@ vtol_edge_2d::topology_type(void) const
 // Name: curve
 // Task: Return the curve associated to `this'
 //---------------------------------------------------------------------------
-vsol_curve_2d *vtol_edge_2d::curve(void) const
+vsol_curve_2d_ref vtol_edge_2d::curve(void) const
 {
   return _curve;
 }
@@ -217,7 +217,7 @@ vsol_curve_2d *vtol_edge_2d::curve(void) const
 // Name: v1
 // Task: Return the first endpoint
 //---------------------------------------------------------------------------
-vtol_vertex_2d *vtol_edge_2d::v1(void) const
+vtol_vertex_2d_ref vtol_edge_2d::v1(void) const
 {
   return _v1;
 }
@@ -226,7 +226,7 @@ vtol_vertex_2d *vtol_edge_2d::v1(void) const
 // Name: v2
 // Task: Return the second endpoint
 //---------------------------------------------------------------------------
-vtol_vertex_2d *vtol_edge_2d::v2(void) const
+vtol_vertex_2d_ref vtol_edge_2d::v2(void) const
 {
   return _v2;
 }
@@ -235,7 +235,7 @@ vtol_vertex_2d *vtol_edge_2d::v2(void) const
 // Name: zero_chain
 // Task: Return the first zero-chain of `this'
 //---------------------------------------------------------------------------
-vtol_zero_chain_2d *vtol_edge_2d::zero_chain(void) const
+vtol_zero_chain_2d_ref vtol_edge_2d::zero_chain(void) const
 {
   return (vtol_zero_chain_2d *)(_inferiors[0].ptr());
 }
@@ -392,12 +392,12 @@ void vtol_edge_2d::set_vertices_from_zero_chains(void)
               _v2=0;
               break;
             case 1:
-              _v1=(vtol_vertex_2d *)((*verts)[0]);
+              _v1=(*verts)[0];
               _v2=_v1;
               break;
             default:
-              _v1=(vtol_vertex_2d *)(*verts)[0];
-              _v2=(vtol_vertex_2d *)(*verts)[(numverts-1)];
+              _v1=(*verts)[0];
+              _v2=(*verts)[(numverts-1)];
             }
         }
       delete verts;
@@ -625,12 +625,12 @@ bool vtol_edge_2d::share_vertex_with(vtol_edge_2d &other)
 
 bool vtol_edge_2d::add_vertex(vtol_vertex_2d &newvert)
 {
-  vtol_zero_chain_2d *zc;
+  vtol_zero_chain_2d_ref zc;
 
   zc=zero_chain();
   if(zc==0)
     {
-      zc=new vtol_zero_chain_2d();
+      zc=new vtol_zero_chain_2d;
       link_inferior(*zc);
     }
 
@@ -645,9 +645,9 @@ bool vtol_edge_2d::add_vertex(vtol_vertex_2d &newvert)
 
 bool vtol_edge_2d::remove_vertex(vtol_vertex_2d &uglyvert)
 {
-  if(&uglyvert==_v1)
+  if(&uglyvert==_v1.ptr())
     set_v1(0);
-  else if(&uglyvert==_v2)
+  else if(&uglyvert==_v2.ptr())
     set_v2(0);
   else
     return false;
@@ -681,12 +681,12 @@ bool vtol_edge_2d::is_endpoint2(const vtol_vertex_2d &v) const
 //:
 // other_endpoint(vtol_vertex_2d* overt) --
 // This method works only for ImplicitLine edges.
-vtol_vertex_2d *vtol_edge_2d::other_endpoint(const vtol_vertex_2d &overt) const
+vtol_vertex_2d_ref vtol_edge_2d::other_endpoint(const vtol_vertex_2d &overt) const
 {
-  vtol_vertex_2d *result=0;
-  if(&overt==_v1)
+  vtol_vertex_2d_ref result;
+  if(&overt==_v1.ptr())
     result=_v2;
-  else if(&overt==_v2)
+  else if(&overt==_v2.ptr())
     result=_v1;
   return result;
 }

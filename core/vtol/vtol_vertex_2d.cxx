@@ -103,7 +103,7 @@ vtol_vertex_2d::topology_type(void) const
 // Name: point
 // Task: Return the point
 //---------------------------------------------------------------------------
-vsol_point_2d *vtol_vertex_2d::point(void) const
+vsol_point_2d_ref vtol_vertex_2d::point(void) const
 {
   return _point;
 }

@@ -125,7 +125,7 @@ static void test_topology_2d(void)
 
   cout << "zc->v0() == v1";
   // bool tmp=zc->v0()==v1;
-  ASSERT((zc->v0() == v1));
+  ASSERT((zc->v0() == v1.ptr()));
 
   cout << "length: ";
   // int tmpi=zc->length();

@@ -102,8 +102,8 @@ public:
   //---------------------------------------------------------------------------
   virtual vtol_topology_object_3d_type topology_type(void) const;
 
-  inline const vsol_curve_3d *get_curve(void) const { return _curve;}
-  inline vsol_curve_3d *get_curve(void) { return _curve;}
+  //  inline const vsol_curve_3d *get_curve(void) const { return _curve;}
+  inline vsol_curve_3d *get_curve(void) { return _curve.ptr();}
   void set_curve(vsol_curve_3d_ref newcurve);
   void set_curve(vsol_curve_3d_ref newcurve,
                  vsol_curve_3d_ref &oldcurve);
