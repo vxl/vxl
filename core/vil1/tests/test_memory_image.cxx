@@ -20,7 +20,7 @@ void save_writable(vil_image const &m, char const *file)
   vpl_chmod(file, 0666);
 }
 
-void p(vil_image& m)
+void p(vil_image const& m)
 {
   for(int y = 0; y < m.height(); ++y) {
     for(int x = 0; x < m.width(); ++x) {
