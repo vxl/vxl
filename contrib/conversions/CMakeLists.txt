@@ -1,5 +1,7 @@
+INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vcl)
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/conversions)
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vxl)
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/gel)
+INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/mul)
 
 SUBDIRS(container geometry image math misc)
