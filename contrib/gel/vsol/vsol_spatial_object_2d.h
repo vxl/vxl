@@ -47,6 +47,9 @@ class vsol_spatial_object_2d;
 #include <vbl/vbl_ref_count.h>
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_box_2d_sptr.h>
+#include <vcl_vector.h>
+
+class vsol_point_2d;
 class vsol_curve_2d;
 class vsol_region_2d;
 class vsol_group_2d;
@@ -200,8 +203,9 @@ class vsol_spatial_object_2d : public vul_timestamp, public vbl_ref_count
   //: The same behavior than dynamic_cast<>.
   // Needed because VXL is not compiled with -frtti :-(
   //---------------------------------------------------------------------------
-  vsol_spatial_object_2d* cast_to_spatial_object() { return this; }
-  const vsol_spatial_object_2d* cast_to_spatial_object() const { return this; }
+
+  vsol_spatial_object_2d* cast_to_spatial_object_2d() {return this;}
+  const vsol_spatial_object_2d* cast_to_spatial_object_2d() const {return this;}
   virtual vtol_topology_object* cast_to_topology_object() {return 0;}
   virtual const vtol_topology_object* cast_to_topology_object()const{return 0;}
   virtual vsol_group_2d *cast_to_group(void) {return 0;}
@@ -210,6 +214,8 @@ class vsol_spatial_object_2d : public vul_timestamp, public vbl_ref_count
   virtual const vsol_curve_2d *cast_to_curve(void) const {return 0;}
   virtual vsol_region_2d* cast_to_region(void) { return 0; }
   virtual const vsol_region_2d* cast_to_region(void) const { return 0; }
+  virtual vsol_point_2d* cast_to_point(void) { return 0; }
+  virtual const vsol_point_2d* cast_to_point(void) const { return 0; }
 
   inline virtual void print(vcl_ostream &strm=vcl_cout) const { describe(strm); }
   inline virtual void describe(vcl_ostream& =vcl_cout, int /*blanking*/=0) const { not_applicable("describe"); }
