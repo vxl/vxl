@@ -199,29 +199,49 @@ void bgui_vsol2D_tableau::set_vsol_spatial_object_2d_style(vsol_spatial_object_2
 
 void bgui_vsol2D_tableau::set_vsol_point_2d_style(const vgui_style_sptr& style)
 {
-  point_style_ = style;
+  point_style_->rgba[0] = style->rgba[0];
+  point_style_->rgba[1] = style->rgba[1];
+  point_style_->rgba[2] = style->rgba[2];
+  point_style_->point_size = style->point_size;
+  point_style_->line_width = style->line_width;
 }
 
 
 void bgui_vsol2D_tableau::set_vsol_line_2d_style(const vgui_style_sptr& style)
 {
-  line_style_ = style;
+  line_style_->rgba[0] = style->rgba[0];
+  line_style_->rgba[1] = style->rgba[1];
+  line_style_->rgba[2] = style->rgba[2];
+  line_style_->point_size = style->point_size;
+  line_style_->line_width = style->line_width;
 }
 
 
 void bgui_vsol2D_tableau::set_vsol_polyline_2d_style(const vgui_style_sptr& style)
 {
-  polyline_style_ = style;
+  polyline_style_->rgba[0] = style->rgba[0];
+  polyline_style_->rgba[1] = style->rgba[1];
+  polyline_style_->rgba[2] = style->rgba[2];
+  polyline_style_->point_size = style->point_size;
+  polyline_style_->line_width = style->line_width;
 }
 
 
 void bgui_vsol2D_tableau::set_digital_curve_style(const vgui_style_sptr& style)
 {
-  digital_curve_style_ = style;
+  digital_curve_style_->rgba[0] = style->rgba[0];
+  digital_curve_style_->rgba[1] = style->rgba[1];
+  digital_curve_style_->rgba[2] = style->rgba[2];
+  digital_curve_style_->point_size = style->point_size;
+  digital_curve_style_->line_width = style->line_width;
 }
 
 
 void bgui_vsol2D_tableau::set_dotted_digital_curve_style(const vgui_style_sptr& style)
 {
-  dotted_digital_curve_style_ = style;
+  dotted_digital_curve_style_->rgba[0] = style->rgba[0];
+  dotted_digital_curve_style_->rgba[1] = style->rgba[1];
+  dotted_digital_curve_style_->rgba[2] = style->rgba[2];
+  dotted_digital_curve_style_->point_size = style->point_size;
+  dotted_digital_curve_style_->line_width = style->line_width;
 }
