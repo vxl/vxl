@@ -7,7 +7,6 @@
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
-#include <vnl/vnl_vector.h>
 
 inline double sqr(double x) { return x*x; }
 inline double sq_dist(double A, double B) { return sqr(A-B); }
@@ -29,9 +28,6 @@ inline double sq_dist(vgl_box_2d<double> const& A,
         +sqr(A.min_y()-B.min_y())
         +sqr(A.max_x()-B.max_x())
         +sqr(A.max_y()-B.max_y()); }
-inline double sq_dist(vnl_vector<double> const& A,
-                      vnl_vector<double> const& B)
-{ return (B-A).squared_magnitude(); }
 
 #define EPS 1e-6
 
