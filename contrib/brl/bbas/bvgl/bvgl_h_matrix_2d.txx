@@ -77,7 +77,7 @@ bvgl_h_matrix_2d<T>::operator()(vgl_homg_point_2d<T> const& p) const
 {
   vnl_vector_fixed<T, 3> v(p.x(), p.y(), p.w());
   vnl_vector_fixed<T,3> v2 = t12_matrix_ * v;
-  return vgl_homg_point_2d<T>(v2.x(), v2.y(), v2.z());
+  return vgl_homg_point_2d<T>(v2[0], v2[1], v2[2]);
 }
 
 template <class T>
@@ -86,7 +86,7 @@ bvgl_h_matrix_2d<T>::preimage(vgl_homg_line_2d<T> const& l) const
 {
   vnl_vector_fixed<T,3> v(l.a(), l.b(), l.c());
   vnl_vector_fixed<T,3> v2 = t12_matrix_.transpose() * v;
-  return vgl_homg_line_2d<T>(v2.x(), v2.y(), v2.z());
+  return vgl_homg_line_2d<T>(v2[0], v2[1], v2[2]);
 }
 
 template <class T>
@@ -95,7 +95,7 @@ bvgl_h_matrix_2d<T>::correlation(vgl_homg_point_2d<T> const& p) const
 {
   vnl_vector_fixed<T, 3> v(p.x(), p.y(), p.w());
   vnl_vector_fixed<T,3> v2 = t12_matrix_ * v;
-  return vgl_homg_line_2d<T>(v2.x(), v2.y(), v2.z());
+  return vgl_homg_line_2d<T>(v2[0], v2[1], v2[2]);
 }
 
 template <class T>
@@ -104,7 +104,7 @@ bvgl_h_matrix_2d<T>::correlation(vgl_homg_line_2d<T> const& l) const
 {
   vnl_vector_fixed<T,3> v(l.a(), l.b(), l.c());
   vnl_vector_fixed<T,3> v2 = t12_matrix_ * v;
-  return vgl_homg_point_2d<T>(v2.x(), v2.y(), v2.z());
+  return vgl_homg_point_2d<T>(v2[0], v2[1], v2[2]);
 }
 
 template <class T>
@@ -125,7 +125,7 @@ bvgl_h_matrix_2d<T>::preimage(vgl_homg_point_2d<T> const& p) const
 {
   vnl_vector_fixed<T,3> v(p.x(), p.y(), p.w());
   vnl_vector_fixed<T,3> v2 = vnl_inverse(t12_matrix_) * v;
-  return vgl_homg_point_2d<T>(v2.x(), v2.y(), v2.z());
+  return vgl_homg_point_2d<T>(v2[0], v2[1], v2[2]);
 }
 
 template <class T>
@@ -134,7 +134,7 @@ bvgl_h_matrix_2d<T>::operator()(vgl_homg_line_2d<T> const& l) const
 {
   vnl_vector_fixed<T,3> v(l.a(), l.b(), l.c());
   vnl_vector_fixed<T,3> v2 = vnl_inverse(t12_matrix_).transpose() * v;
-  return vgl_homg_line_2d<T>(v2.x(), v2.y(), v2.z());
+  return vgl_homg_line_2d<T>(v2[0], v2[1], v2[2]);
 }
 
 //-----------------------------------------------------------------------------
