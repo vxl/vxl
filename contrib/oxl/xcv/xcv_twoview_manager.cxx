@@ -302,7 +302,7 @@ void xcv_twoview_manager::handle_tjunction_event(vgui_event const& e, vgui_table
     dragging = false;
     rubberbands[0]->post_redraw();
   }
-  if (e.type == vgui_MOTION && dragging == true)
+  if ((e.type == vgui_MOTION || e.type == vgui_BUTTON_DOWN) && dragging == true)
   {
     if (f_matrix != 0 && f_matrix_is_displayed)
       draw_f_matrix(e, child_tab, false);
