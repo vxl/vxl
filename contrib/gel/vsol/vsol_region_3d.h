@@ -9,16 +9,14 @@
 // François BERTEL
 //
 // \verbatim
-// Modifications
-// 2000/05/04 François BERTEL Creation
-// 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-// 2003/01/08 Peter Vanroose  Added pure virtual is_convex()
+//  Modifications
+//   2000/05/04 François BERTEL Creation
+//   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
+//   2003/01/08 Peter Vanroose  Added pure virtual is_convex()
+//   2004/09/06 Peter Vanroose  Added safe cast methods to polygon_3d
 // \endverbatim
 //*****************************************************************************
 
-//*****************************************************************************
-// External declarations for values
-//*****************************************************************************
 #include <vsol/vsol_surface_3d.h>
 class vsol_polygon_3d;
 
@@ -54,11 +52,11 @@ class vsol_region_3d : public vsol_surface_3d
   // virtuals of vsol_spatial_object_3d
   //***************************************************************************
 
-   virtual vsol_region_3d* cast_to_region(void) { return this; }
-   virtual const vsol_region_3d * cast_to_region(void) const { return this; }
+  virtual vsol_region_3d* cast_to_region(void) { return this; }
+  virtual vsol_region_3d const* cast_to_region(void) const { return this; }
 
-   virtual vsol_polygon_3d *cast_to_polygon(void) {return 0;}
-   virtual const vsol_polygon_3d *cast_to_polygon(void) const {return 0;}
+  virtual vsol_polygon_3d *cast_to_polygon_3d(void) {return 0;}
+  virtual vsol_polygon_3d const* cast_to_polygon_3d(void) const {return 0;}
 
   //***************************************************************************
   // Status report
