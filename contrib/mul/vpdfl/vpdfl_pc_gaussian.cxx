@@ -274,14 +274,17 @@ void vpdfl_pc_gaussian::b_write(vsl_b_ostream& bfs) const
 
 void vpdfl_pc_gaussian::b_read(vsl_b_istream& bfs)
 {
+  if (!bfs) return;
+
   vcl_string name;
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "vpdfl_pc_gaussian::b_read() : ";
-    vcl_cerr << "Attempted to load object of type ";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_pc_gaussian &) \n";
+    vcl_cerr << "           Attempted to load object of type ";
     vcl_cerr << name <<" into object of type " << is_a() << vcl_endl;
-    vcl_abort();
+    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 
   short version;
@@ -306,9 +309,10 @@ void vpdfl_pc_gaussian::b_read(vsl_b_istream& bfs)
       }
       break;
     default:
-      vcl_cerr << "vpdfl_pc_gaussian::b_read() ";
-      vcl_cerr << "Unexpected version number " << version << vcl_endl;
-      vcl_abort();
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_pc_gaussian &) \n";
+      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      return;
   }
 }
 

@@ -195,6 +195,8 @@ void vpdfl_pdf_base::b_write(vsl_b_ostream& bfs) const
   // required if data is present in this base class
 void vpdfl_pdf_base::b_read(vsl_b_istream& bfs)
 {
+  if (!bfs) return;
+
   short version;
   vsl_b_read(bfs,version);
   switch (version)
@@ -204,9 +206,10 @@ void vpdfl_pdf_base::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,var_);
       break;
     default:
-      vcl_cerr << "vpdfl_pdf_base::b_read() ";
-      vcl_cerr << "Unexpected version number " << version << vcl_endl;
-      vcl_abort();
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_pdf_base &) \n";
+      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      return;
   }
 }
 

@@ -231,6 +231,8 @@ void vpdfl_axis_gaussian::b_write(vsl_b_ostream& bfs) const
 
 void vpdfl_axis_gaussian::b_read(vsl_b_istream& bfs)
 {
+  if (!bfs) return;
+
   short version;
   vsl_b_read(bfs,version);
   switch (version)
@@ -239,9 +241,10 @@ void vpdfl_axis_gaussian::b_read(vsl_b_istream& bfs)
       vpdfl_pdf_base::b_read(bfs);
       break;
     default:
-      vcl_cerr << "vpdfl_axis_gaussian::b_read() ";
-      vcl_cerr << "Unexpected version number " << version << vcl_endl;
-      vcl_abort();
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_axis_gaussian &) \n";
+      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      return;
   }
 
   calcLogK();
