@@ -14,6 +14,8 @@ fmk_libdeps += lib_mvox,lib_oxp,lib_mvl,lib_vrml:pkg_oxl
 fmk_libdeps += lib_vgui:pkg_oxl
 fmk_libdeps += lib_vgui:lib_vpl,lib_vbl,lib_vnl-algo,lib_vil,lib_vgl
 fmk_libdeps += lib_vgui:lib_glut
+# needed for vgui_texture_hacks.cxx:
+fmk_libdeps += lib_vgui:lib_dl
 ifeq (1,$(tpp_HASPKG_HERMES))
 fmk_libdeps += lib_vgui:lib_Hermes
 endif
