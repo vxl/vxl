@@ -1,5 +1,6 @@
 #include <vcl_string.h>
 #include <vcl_fstream.h>
+#include <vcl_sstream.h>
 #include <vul/vul_arg.h>
 #include <vidl/vidl_movie.h>
 #include <vidl/vidl_io.h>
