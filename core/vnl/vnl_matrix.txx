@@ -793,9 +793,9 @@ void vnl_matrix<T>::set_identity()
   for (unsigned int i = 0; i < this->num_rows; i++)    // For each row in the Matrix
     for (unsigned int j = 0; j < this->num_cols; j++)  // For each element in column
       if (i == j)
-	this->data[i][j] = T(1);
+        this->data[i][j] = T(1);
       else
-	this->data[i][j] = T(0);
+        this->data[i][j] = T(0);
 }
 
 //: Make each row of the matrix have unit norm.
