@@ -1,5 +1,5 @@
 // The following text is included in the main documentation page by doxygen
-/*! \mainpage mil : Manchester's Image Library
+/*! \mainpage mil3d : Manchester's 3D Image Library
 * Provides a set of image classes, derived from mil_image, which can be used
 * as `views' on actual image data in 3D.
 *
