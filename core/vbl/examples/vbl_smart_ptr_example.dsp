@@ -81,29 +81,18 @@ LINK32=link.exe
 
 # Name "vbl_smart_ptr_example - Win32 Release"
 # Name "vbl_smart_ptr_example - Win32 Debug"
+
 # Begin Group "Source Files"
-
-# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# PROP Default_Filter "cxx;c"
 # Begin Source File
-
 SOURCE=.\vbl_smart_ptr_example.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/smartptr-instances.cxx 
 # End Source File
 # End Group
 # Begin Group "Header Files"
-
-# PROP Default_Filter "h;hpp;hxx;hm;inl"
+# PROP Default_Filter "h"
 # Begin Source File
-
 SOURCE=.\vbl_smart_ptr_example.h
 # End Source File
-# End Group
-# Begin Group "Resource Files"
-
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
