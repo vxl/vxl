@@ -63,7 +63,7 @@ bool vsol_polyhedron::operator==(vsol_polyhedron const &other) const
 
 //: spatial object equality
 
-bool vsol_polyhedron::operator==(const vsol_spatial_object_3d& obj) const
+bool vsol_polyhedron::operator==(vsol_spatial_object_3d const& obj) const
 {
   return
    obj.spatial_type() == vsol_spatial_object_3d::VOLUME &&

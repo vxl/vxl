@@ -106,7 +106,7 @@ protected:
 
   virtual ~vsol_spatial_object_3d();
   inline vsol_spatial_object_3d(void);
-  inline vsol_spatial_object_3d(const vsol_spatial_object_3d &s);
+  inline vsol_spatial_object_3d(vsol_spatial_object_3d const& s);
   inline int not_applicable(const char *message) const
     { vcl_cerr << message << " Function call not applicable "
            << "\tfor spatial object " << get_name() << " ! "<< vcl_endl;
