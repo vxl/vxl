@@ -11,30 +11,7 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 
-// Declare fortran function, and what a magnificent function it is too!
-extern "C" int dnlaso_(int (*op)(const int* n,
-                                 const int* m,
-                                 const double* p,
-                                 double* q),
-                       int (*iovect)(const int* n,
-                                     const int* m,
-                                     double* q,
-                                     const int* j,
-                                     const int* k),
-                       const int* n,
-                       const int* nval,
-                       const int* nfig,
-                       int* nperm,
-                       const int* nmval,
-                       double* val,
-                       const int* nmvec,
-                       double* vec,
-                       const int* nblock,
-                       const int* maxop,
-                       const int* maxj,
-                       double* work,
-                       int* ind,
-                       int* ierr);
+#include "vnl_netlib.h" // dnlaso_()
 
 static vnl_sparse_symmetric_eigensystem * current_system = 0;
 
@@ -49,14 +26,14 @@ static vnl_sparse_symmetric_eigensystem * current_system = 0;
 //  The input is p, which is an NxM matrix.
 //  This function returns q = A p, where A is the current sparse matrix.
 FUNCTION
-int sse_op_callback(const int* n,
-                    const int* m,
-                    const double* p,
-                    double* q)
+void sse_op_callback(const int* n,
+                     const int* m,
+                     const double* p,
+                     double* q)
 {
   assert(current_system != 0);
 
-  return current_system->CalculateProduct(*n,*m,p,q);
+  current_system->CalculateProduct(*n,*m,p,q);
 }
 
 //------------------------------------------------------------
@@ -65,20 +42,18 @@ int sse_op_callback(const int* n,
 // vectors.  If k=1 then return the (j-m+1)th through jth vectors in
 // q.
 FUNCTION
-int sse_iovect_callback(const int* n,
-                        const int* m,
-                        double* q,
-                        const int* j,
-                        const int* k)
+void sse_iovect_callback(const int* n,
+                         const int* m,
+                         double* q,
+                         const int* j,
+                         const int* k)
 {
   assert(current_system != 0);
 
   if (*k==0)
-    return current_system->SaveVectors(*n,*m,q,*j-*m);
+    current_system->SaveVectors(*n,*m,q,*j-*m);
   else if (*k==1)
-    return current_system->RestoreVectors(*n,*m,q,*j-*m);
-
-  return 0;
+    current_system->RestoreVectors(*n,*m,q,*j-*m);
 }
 
 vnl_sparse_symmetric_eigensystem::vnl_sparse_symmetric_eigensystem()

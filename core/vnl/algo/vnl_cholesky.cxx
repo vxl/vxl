@@ -13,7 +13,7 @@
 #include <vcl_cmath.h> // pow()
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
-#include <vnl/algo/vnl_netlib.h> // dpofa_(), dposl_(), dpoco_(), dpodi_()
+#include "vnl_netlib.h" // dpofa_(), dposl_(), dpoco_(), dpodi_()
 
 //: Cholesky decomposition.
 // Make cholesky decomposition of M optionally computing
@@ -28,8 +28,8 @@
 vnl_cholesky::vnl_cholesky(vnl_matrix<double> const & M, Operation mode):
   A_(M)
 {
-  unsigned n = M.columns();
-  assert(n == M.rows());
+  int n = M.columns();
+  assert(n == (int)(M.rows()));
   num_dims_rank_def_ = -1;
   if (vcl_fabs(M(0,n-1) - M(n-1,0)) > 1e-8) {
     vcl_cerr << "vnl_cholesky: WARNING: unsymmetric: " << M << vcl_endl;
@@ -37,12 +37,12 @@ vnl_cholesky::vnl_cholesky(vnl_matrix<double> const & M, Operation mode):
 
   if (mode != estimate_condition) {
     // Quick factorization
-    dpofa_(A_.data_block(), n, n, &num_dims_rank_def_);
+    dpofa_(A_.data_block(), &n, &n, &num_dims_rank_def_);
     if (mode == verbose && num_dims_rank_def_ != 0)
       vcl_cerr << "vnl_cholesky:: " << num_dims_rank_def_ << " dimensions of non-posdeffness\n";
   } else {
     vnl_vector<double> nullvector(n);
-    dpoco_(A_.data_block(), n, n, &rcond_, nullvector.data_block(), &num_dims_rank_def_);
+    dpoco_(A_.data_block(), &n, &n, &rcond_, nullvector.data_block(), &num_dims_rank_def_);
   }
 }
 
@@ -51,42 +51,45 @@ vnl_cholesky::vnl_cholesky(vnl_matrix<double> const & M, Operation mode):
 //  which will give a fractional increase in speed.
 void vnl_cholesky::solve(vnl_vector<double> const& b, vnl_vector<double>* x) const
 {
-  unsigned n = A_.columns();
+  int n = A_.columns();
   assert(b.size() == n);
 
   *x = b;
-  dposl_(A_.data_block(), n, n, x->data_block());
+  dposl_(A_.data_block(), &n, &n, x->data_block());
 }
 
 //: Solve least squares problem M x = b.
 vnl_vector<double> vnl_cholesky::solve(vnl_vector<double> const& b) const
 {
   vnl_vector<double> ret = b;
-  unsigned n = A_.columns();
+  int n = A_.columns();
   assert(b.size() == n);
-  dposl_(A_.data_block(), n, n, ret.data_block());
+  dposl_(A_.data_block(), &n, &n, ret.data_block());
   return ret;
 }
 
 //: Compute determinant.
 double vnl_cholesky::determinant() const
 {
-  unsigned n = A_.columns();
+  int n = A_.columns();
+  vnl_matrix<double> I = A_;
   double det[2];
-  dpodi_(A_.data_block(), n, n, det, 10);
-  return det[0] * vcl_pow(10, det[1]);
+  int job = 10;
+  dpodi_(I.data_block(), &n, &n, det, &job);
+  return det[0] * vcl_pow(10.0, det[1]);
 }
 
 //: Compute inverse.  Not efficient.
 vnl_matrix<double> vnl_cholesky::inverse() const
 {
-  unsigned n = A_.columns();
+  int n = A_.columns();
   vnl_matrix<double> I = A_;
-  dpodi_(I.data_block(), n, n, 0, 01);
+  int job = 01;
+  dpodi_(I.data_block(), &n, &n, 0, &job);
 
   // Copy lower triangle into upper
-  for(unsigned i = 0; i < n; ++i)
-    for(unsigned j = i+1; j < n; ++j)
+  for(int i = 0; i < n; ++i)
+    for(int j = i+1; j < n; ++j)
       I(i,j) = I(j,i);
 
   return I;

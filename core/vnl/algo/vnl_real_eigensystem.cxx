@@ -15,7 +15,7 @@
 #include <vcl_iostream.h>
 #include <vnl/vnl_matops.h>
 #include <vnl/vnl_fortran_copy.h>
-#include <vnl/algo/vnl_netlib.h> // rg_()
+#include "vnl_netlib.h" // rg_()
 
 //: Extract eigensystem of unsymmetric matrix M, using the EISPACK routine rg.
 //  Should probably switch to using LAPACK's dgeev to avoid transposing.
@@ -25,7 +25,7 @@ vnl_real_eigensystem::vnl_real_eigensystem(vnl_matrix<double> const & M):
   D(M.rows())
 {
   int n = M.rows();
-  assert(n == (int)M.columns());
+  assert(n == (int)(M.columns()));
 
   vnl_fortran_copy<double> mf(M);
 
@@ -37,7 +37,7 @@ vnl_real_eigensystem::vnl_real_eigensystem(vnl_matrix<double> const & M):
 
   int ierr = 0;
   int matz = 1;
-  rg_(n, n, mf, wr.data_block(), wi.data_block(), matz, devout.data_block(), iv1.data_block(), fv1.data_block(), &ierr);
+  rg_(&n, &n, mf, wr.data_block(), wi.data_block(), &matz, devout.data_block(), iv1.data_block(), fv1.data_block(), &ierr);
 
   if (ierr != 0) {
     vcl_cerr << " *** vnl_real_eigensystem: Failed on " << ierr << "th eigenvalue\n";

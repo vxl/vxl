@@ -11,27 +11,7 @@
 
 #include <vnl/vnl_vector.h>
 
-extern "C" int dgges_(char const *JOBVSL,
-                      char const *JOBVSR,
-                      char const *SORT,
-                      bool (*DELCTG)(double, double, double),
-                      unsigned int const *N,
-                      double *A,
-                      unsigned int const *LDA,
-                      double *B,
-                      unsigned int const *LDB,
-                      int const *SDIM,
-                      double *ALPHAR,
-                      double *ALPHAI,
-                      double *BETA,
-                      double *VSL,
-                      unsigned int const *LDVSL,
-                      double *VSR,
-                      unsigned int const *LDVSR,
-                      double *WORK,
-                      int const *LWORK,
-                      bool *BWORK,
-                      int *INFO);
+#include "vnl_netlib.h" // dgges_()
 
 VCL_DEFINE_SPECIALIZATION
 bool vnl_generalized_schur/*<double>*/(vnl_matrix<double> *A,
@@ -42,9 +22,9 @@ bool vnl_generalized_schur/*<double>*/(vnl_matrix<double> *A,
                                        vnl_matrix<double> *L,
                                        vnl_matrix<double> *R)
 {
-  unsigned int n = A->rows();
-  
-  assert(n == A->rows());
+  int n = A->rows();
+
+//assert(n == A->rows());
   assert(n == A->cols());
   assert(n == B->rows());
   assert(n == B->cols());
@@ -53,7 +33,7 @@ bool vnl_generalized_schur/*<double>*/(vnl_matrix<double> *A,
   assert(beta!=0);   beta  ->resize(n);    beta  ->fill(0);
   assert(L!=0);      L     ->resize(n, n); L     ->fill(0);
   assert(R!=0);      R     ->resize(n, n); R     ->fill(0);
-  
+
   int sdim = 0;
   int lwork = 1000 + (8*n + 16);
   double *work = new double[lwork]; //vcl_vector<double> work(lwork);
@@ -80,7 +60,7 @@ bool vnl_generalized_schur/*<double>*/(vnl_matrix<double> *A,
   L->inplace_transpose();
   R->inplace_transpose();
   delete [] work;
-  
+
   if (info != 0) {
     vcl_clog << __FILE__ ": info = " << info << vcl_endl;
     return false;

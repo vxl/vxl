@@ -15,7 +15,7 @@
 #include <vnl/vnl_matlab_print.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/algo/vnl_netlib.h> // rsg_()
+#include "vnl_netlib.h" // rsg_()
 
 vnl_generalized_eigensystem::vnl_generalized_eigensystem(const vnl_matrix<double>& A,
                                                          const vnl_matrix<double>& B)
@@ -35,8 +35,8 @@ vnl_generalized_eigensystem::vnl_generalized_eigensystem(const vnl_matrix<double
   int ierr = -1;
 
   // Call EISPACK rsg.
-  rsg_ (n, n, a, b, D.data_block(),
-        want_eigenvectors,
+  rsg_ (&n, &n, a, b, D.data_block(),
+        &want_eigenvectors,
         V1.begin(),
         work1.begin(),
         work2.begin(), &ierr);

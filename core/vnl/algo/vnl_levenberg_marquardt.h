@@ -106,10 +106,10 @@ protected:
 
   // Communication with callback
   friend class vnl_levenberg_marquardt_Activate;
-  static int lmdif_lsqfun(int* m, int* n, const double* x,
-                          double* fx, int* iflag);
-  static int lmder_lsqfun(int* m, int* n, double const* x,
-                          double* fx, double* fJ, int&, int* iflag);
+  static void lmdif_lsqfun(int* m, int* n, double* x,
+                           double* fx, int* iflag);
+  static void lmder_lsqfun(int* m, int* n, double* x,
+                           double* fx, double* fJ, int*, int* iflag);
 };
 
 //: Find minimum of "f", starting at "initial_estimate", and return.

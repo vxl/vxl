@@ -10,7 +10,7 @@
 #include <vcl_cmath.h>
 
 // FORTRAN routine
-extern "C" void dchscdf_(double* x, int* nu, double* cdf);
+#include "vnl_netlib.h" // dchscdf_()
 
 //: Compute cumulative distribution function for chi-squared distribution.
 // This subroutine computes the cumulative distribution function

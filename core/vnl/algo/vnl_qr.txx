@@ -14,7 +14,7 @@
 #include <vnl/vnl_complex.h>  // vnl_math_squared_magnitude()
 #include <vnl/vnl_matlab_print.h>
 #include <vnl/vnl_complex_traits.h>
-#include <vnl/algo/vnl_netlib.h>
+#include "vnl_netlib.h"
 
 #ifdef HAS_FSM_PACK
 template <typename T> int fsm_qrdc_cxx(vnl_netlib_qrdc_proto(T));
@@ -25,10 +25,10 @@ template <typename T> int fsm_qrsl_cxx(vnl_netlib_qrsl_proto(T));
 #else
 // use C++ overloading to call the right linpack routine from the template code :
 #define macro(p, T) \
-inline int vnl_linpack_qrdc(vnl_netlib_qrdc_proto(T)) \
-{ return p##qrdc_(vnl_netlib_qrdc_params); } \
-inline int vnl_linpack_qrsl(vnl_netlib_qrsl_proto(T)) \
-{ return p##qrsl_(vnl_netlib_qrsl_params); }
+inline void vnl_linpack_qrdc(vnl_netlib_qrdc_proto(T)) \
+{ p##qrdc_(vnl_netlib_qrdc_params); } \
+inline void vnl_linpack_qrsl(vnl_netlib_qrsl_proto(T)) \
+{ p##qrsl_(vnl_netlib_qrsl_params); }
 macro(s, float);
 macro(d, double);
 macro(c, vcl_complex<float>);
@@ -56,11 +56,11 @@ vnl_qr<T>::vnl_qr(vnl_matrix<T> const& M):
 
   vnl_vector<T> work(M.rows());
   vnl_linpack_qrdc(qrdc_out_.data_block(), // On output, UT is R, below diag is mangled Q
-                   r, r, c,
+                   &r, &r, &c,
                    qraux_.data_block(), // Further information required to demangle Q
                    jpvt_.data_block(),
                    work.data_block(),
-                   do_pivot);
+                   &do_pivot);
 }
 
 template <class T>
@@ -193,13 +193,13 @@ vnl_vector<T> vnl_qr<T>::solve(const vnl_vector<T>& b) const
 
   int info = 0;
   vnl_linpack_qrsl(qrdc_out_.data_block(),
-                   n, n, p,
+                   &n, &n, &p,
                    qraux_.data_block(),
                    b_data, (T*)0, QtB.data_block(),
                    x.data_block(),
                    (T*)0/*residual*/,
                    (T*)0/*Ax*/,
-                   JOB,
+                   &JOB,
                    &info);
 
   if (info > 0)
@@ -222,7 +222,7 @@ vnl_vector<T> vnl_qr<T>::QtB(const vnl_vector<T>& b) const
 
   int info = 0;
   vnl_linpack_qrsl(qrdc_out_.data_block(),
-                   n, n, p,
+                   &n, &n, &p,
                    qraux_.data_block(),
                    b_data,
                    (T*)0,               // A: Qb
@@ -230,7 +230,7 @@ vnl_vector<T> vnl_qr<T>::QtB(const vnl_vector<T>& b) const
                    (T*)0,               // C: x
                    (T*)0,               // D: residual
                    (T*)0,               // E: Ax
-                   JOB,
+                   &JOB,
                    &info);
 
   if (info > 0)

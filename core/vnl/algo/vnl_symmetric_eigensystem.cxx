@@ -12,7 +12,7 @@
 #include <vcl_cmath.h> // for sqrt(double)
 #include <vcl_iostream.h>
 #include <vnl/vnl_copy.h>
-#include <vnl/algo/vnl_netlib.h> // rs_()
+#include "vnl_netlib.h" // rs_()
 
 bool vnl_symmetric_eigensystem_compute(vnl_matrix<float> const & A,
                                        vnl_matrix<float>       & V,
@@ -34,7 +34,7 @@ bool vnl_symmetric_eigensystem_compute(vnl_matrix<double> const & A,
 {
   A.assert_finite();
 
-  unsigned int n = A.rows();
+  int n = A.rows();
 
 // The fortran code does not like it if V or D are
 // undersized. I expect they probably should not be
@@ -51,7 +51,8 @@ bool vnl_symmetric_eigensystem_compute(vnl_matrix<double> const & A,
   int ierr = 0;
 
   // No need to transpose A, cos it's symmetric...
-  rs_(n, n, A.data_block(), &D[0], want_eigenvectors, &Vvec[0], &work1[0], &work2[0], &ierr);
+  vnl_matrix<double> B = A; // since A is read-only and rs_ might change its third argument...
+  rs_(&n, &n, B.data_block(), &D[0], &want_eigenvectors, &Vvec[0], &work1[0], &work2[0], &ierr);
 
   if (ierr) {
     vcl_cerr << "vnl_symmetric_eigensystem: ierr = " << ierr << vcl_endl;

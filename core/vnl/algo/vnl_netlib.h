@@ -22,39 +22,39 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
-#include <vcl_complex.h>
+#include <netlib.h>
 
 // xSVDC
 #define vnl_netlib_svd_proto(T) \
-T *x, int const &ldx, int const &m, int const &n, \
+T *x, int const *ldx, int const *m, int const *n, \
 T *sv, \
 T *errors, \
-T *u, int const &ldu, \
-T *v, int const &ldv, \
+T *u, int const *ldu, \
+T *v, int const *ldv, \
 T *work, \
-int const &job, int *info
+int const *job, int *info
 #define vnl_netlib_svd_params \
 x, ldx, m, n, sv, errors, u, ldu, v, ldv, work, job, info
 
 // xQRDC
 #define vnl_netlib_qrdc_proto(T) \
 T *x, \
-int const& ldx, \
-int const& n, \
-int const& p, \
+int const* ldx, \
+int const* n, \
+int const* p, \
 T* qraux, \
 int *jpvt, \
 T *work, \
-int const& job
+int const* job
 #define vnl_netlib_qrdc_params \
 x, ldx, n, p, qraux, jpvt, work, job
 
 // xQRSL
 #define vnl_netlib_qrsl_proto(T) \
 T const *x, \
-int &ldx, \
-int &n, \
-int &k, \
+int *ldx, \
+int *n, \
+int *k, \
 T const *qraux, \
 T const *y, \
 T *qy, \
@@ -62,10 +62,12 @@ T *qty, \
 T *b, \
 T *rsd, \
 T *xb, \
-int &job, \
+int *job, \
 int *info
 #define vnl_netlib_qrsl_params \
 x, ldx, n, k, qraux, y, qy, qty, b, rsd, xb, job, info
+
+#if 0 // old interface
 
 struct vnl_netlib
 {
@@ -121,12 +123,12 @@ extern "C" {
   int zqrsl_(vnl_netlib_qrsl_proto(doublecomplex));
 
   // real eigensystem
-  int rg_(int const& nm,
-          int const& n,
+  int rg_(int const* nm,
+          int const* n,
           double const* a,
           doublereal* wr,
           doublereal* wi,
-          int const& matz,
+          int const* matz,
           doublereal* z,
           int* iv1,
           doublereal* fv1,
@@ -134,33 +136,33 @@ extern "C" {
 
   // temperton fft routines
   int gpfa_ (real  *a, real  *b, real  const *triggs,
-             int const &inc, int const &jump, int const &n,
-             int const &lot, int const &isign, int const *, int *);
-  int setgpfa_ (real  *triggs, const int &, const int *, int *);
+             int const *inc, int const *jump, int const *n,
+             int const *lot, int const *isign, int const *, int *);
+  int setgpfa_ (real  *triggs, const int *, const int *, int *);
   int dgpfa_(doublereal *a, doublereal *b, doublereal const *triggs,
-             int const &inc, int const &jump, int const &n,
-             int const &lot, int const &isign, int const *, int *);
-  int dsetgpfa_(doublereal *triggs, const int &, const int *, int *);
+             int const *inc, int const *jump, int const *n,
+             int const *lot, int const *isign, int const *, int *);
+  int dsetgpfa_(doublereal *triggs, const int *, const int *, int *);
 
   // symmetric eigensystem
-  int rs_(int const & nm, int const & n,
+  int rs_(int const * nm, int const * n,
           doublereal const *a, doublereal *w,
-          int const & matz, doublereal const *z,
+          int const * matz, doublereal const *z,
           doublereal const *fv1, doublereal const *fv2,
           int * ierr);
 
   // generalized eigensystem
-  int rsg_ (int const & nm, int const & n, doublereal const *a, doublereal const *b,
-            doublereal *w, int const & matz, doublereal *z, doublereal *fv1, doublereal *fv2,
+  int rsg_ (int const * nm, int const * n, doublereal const *a, doublereal const *b,
+            doublereal *w, int const * matz, doublereal *z, doublereal *fv1, doublereal *fv2,
             int *ierr);
 
   // cholesky
-  int dpofa_(doublereal *m, const int& lda, const int& n, int* info);
-  int dposl_(const doublereal *a, const int& lda, const int& n, doublereal *b);
-  int dpoco_(doublereal *a, const int& lda, const int& n,
+  int dpofa_(doublereal *m, const int* lda, const int* n, int* info);
+  int dposl_(const doublereal *a, const int* lda, const int* n, doublereal *b);
+  int dpoco_(doublereal *a, const int* lda, const int* n,
              doublereal* rcond, doublereal *z, int *info);
-  int dpodi_(const doublereal *a, const int& lda, const int& n,
-             doublereal* det, const int& job);
+  int dpodi_(const doublereal *a, const int* lda, const int* n,
+             doublereal* det, const int* job);
 
   // roots of real polynomial
   void rpoly_(const doublereal* op, int* degree, doublereal *zeror,
@@ -210,26 +212,28 @@ extern "C" {
                       doublereal const* x, // I    Solution vector, size n
                       doublereal* fx,      // O    Residual vector f(x), size m
                       doublereal* fJ,      // O    m * n Jacobian f(x)
-                      int&,
+                      int*,
                       int* iflag        // I    1 -> calc fx, 2 -> calc fjac
                                         // O    0 ==> print, -1 ==> terminate
                       ),
-              int const& m,             // I    Number of residuals
-              int const& n,             // I    Number of unknowns
+              int const* m,             // I    Number of residuals
+              int const* n,             // I    Number of unknowns
               doublereal*    x,         // I    Solution vector, size n
               doublereal*    fvec,      // O    Residual vector f(x), size m
               doublereal*    fjac,      // O    m * n Jacobian f(x)
-              int const& ldfjac,        // I    LD of fjac
-              doublereal const& tol,    // I    x/ftol
+              int const* ldfjac,        // I    LD of fjac
+              doublereal const* tol,    // I    x/ftol
               int* info,                // O
               int* ipvt,                // O length n
               doublereal * wa,          // I work, length lwa
-              const int& lwa);          // I > 5*n+m
+              const int* lwa);          // I > 5*n+m
 #undef integer
 #undef real
 #undef doublereal
 #undef complex
 #undef doublecomplex
 };
+
+#endif // 0
 
 #endif // vnl_netlib_h_

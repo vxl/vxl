@@ -16,6 +16,8 @@
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h> // for setw (replaces cout.form())
 
+#include "vnl_netlib.h" // lbfgs_()
+
 //: Default constructor.
 // memory is set to 5, line_search_accuracy to 0.9.
 // Calls init_parameters
@@ -47,7 +49,6 @@ void vnl_lbfgs::init_parameters()
 #else
 typedef int integer;
 typedef double doublereal;
-typedef int logical; // not bool
 #endif
 
 /* Common Block Declarations */
@@ -76,13 +77,6 @@ static struct {
 } lb3_; // SGI CC warns here about unused variable. Just ignore it.
 
 #define lb3_1 lb3_
-
-extern "C" int
-lbfgs_(integer *n, integer *m, doublereal *x,
-       doublereal *f, doublereal *g,
-       logical *diagco, doublereal *diag, integer *iprint, doublereal *eps, doublereal *xtol,
-       doublereal *w, integer *iflag);
-
 
 bool vnl_lbfgs::minimize(vnl_vector<double>& x)
 {
@@ -119,7 +113,7 @@ bool vnl_lbfgs::minimize(vnl_vector<double>& x)
   int iflag = 0;
   for(;;) {
     // We do not wish to provide the diagonal matrices Hk0, and therefore set DIAGCO to FALSE.
-    int diagco = 0;
+    logical diagco = false;
 
     // Set these every iter in case user changes them to bail out
     double eps = gtol; // Gradient tolerance

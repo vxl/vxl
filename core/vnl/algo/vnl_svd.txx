@@ -14,7 +14,7 @@
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_fortran_copy.h>
-#include <vnl/algo/vnl_netlib.h>
+#include "vnl_netlib.h"
 
 #ifdef HAS_FSM_PACK
 template <typename T> int fsm_svdc_cxx(vnl_netlib_svd_proto(T));
@@ -22,8 +22,8 @@ template <typename T> int fsm_svdc_cxx(vnl_netlib_svd_proto(T));
 #else
 // use C++ overloading to call the right linpack routine from the template code :
 #define macro(p, T) \
-inline int vnl_linpack_svdc(vnl_netlib_svd_proto(T)) \
-{ return p##svdc_(vnl_netlib_svd_params); }
+inline void vnl_linpack_svdc(vnl_netlib_svd_proto(T)) \
+{ p##svdc_(vnl_netlib_svd_params); }
 macro(s, float);
 macro(d, double);
 macro(c, vcl_complex<float>);
@@ -66,13 +66,14 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
 
     // Call Linpack SVD
     int info = 0;
-    vnl_linpack_svdc((T*)X, n, n, p,
+    const int job = 21;
+    vnl_linpack_svdc((T*)X, &n, &n, &p,
                      wspace.data_block(),
                      espace.data_block(),
-                     uspace.data_block(), n,
-                     vspace.data_block(), p,
+                     uspace.data_block(), &n,
+                     vspace.data_block(), &p,
                      work.data_block(),
-                     21, &info);
+                     &job, &info);
 
     // Error return?
     if (info != 0) {
@@ -276,7 +277,7 @@ vnl_matrix<T> vnl_svd<T>::pinverse(int rank)  const
 {
   vnl_matrix<T> Winverse(Winverse_.rows(),Winverse_.columns());
   Winverse.fill(T(0));
-  for (unsigned i=0;i<rank;i++)
+  for (int i=0;i<rank;i++)
     Winverse(i,i)=Winverse_(i,i);
 
   return V_ * Winverse * U_.conjugate_transpose();
