@@ -206,7 +206,7 @@ static void test_topology_3d(void)
   b1->describe(vcl_cout, 8);
 
   //////////////////////// Test accessors
-  vcl_cout << "Accessors: vertices, zero_chains ... blocks\n" << vcl_endl;
+  vcl_cout << "Accessors: vertices, zero_chains ... blocks\n\n";
 
   vertex_list_3d *vl;
   zero_chain_list_3d *zcl;

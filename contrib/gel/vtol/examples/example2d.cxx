@@ -29,12 +29,9 @@ static void test_topology_2d(void);
 
 static void test_topology_2d(void)
 {
-
   vcl_cout << "Creating vertices\n";
 
   vtol_vertex_sptr v1=new vtol_vertex_2d(0.0,0.0);
-
-
 
   vtol_vertex_sptr v2=new vtol_vertex_2d(0.0,1.0);
   vtol_vertex_sptr v3=new vtol_vertex_2d(1.0,1.0);
@@ -59,26 +56,17 @@ static void test_topology_2d(void)
 
   f1->describe(vcl_cout, 8);
 
-
-
-
-
   verts.clear();
 
   verts.push_back(v3);
   verts.push_back(v4);
   verts.push_back(v1);
 
-
-
   vtol_face_sptr f2=new vtol_face_2d(verts);
 
   vcl_cout<<"Face f2 created\n";
 
   f2->describe(vcl_cout, 8);
-
-
-
 
   vcl_cout << "Creating a block\n";
 
@@ -95,12 +83,10 @@ static void test_topology_2d(void)
   b1->describe(vcl_cout, 8);
 
 
-
   /////////////// begin to test the vertex
 
   vcl_cout << "************** test vertex *************\n";
   vcl_cout << "topology_type: ";
-
 
   vcl_cout << v1->topology_type();
   ASSERT(v1->topology_type() == 1);
@@ -125,8 +111,6 @@ static void test_topology_2d(void)
   vcl_cout << "is_endpoint";
   vtol_edge_sptr ed=v1->new_edge(*v2);
 
-
-
   ASSERT(v1->is_endpoint(*ed));
 
   vcl_cout << "! is_endpoint";
@@ -150,7 +134,6 @@ static void test_topology_2d(void)
 
   vcl_cout << "describe zero_chain\n";
   zc->describe(vcl_cout, 8);
-
 
 
   /////////////// begin to test the edge
@@ -211,7 +194,6 @@ static void test_topology_2d(void)
   vcl_cout << f1->get_num_edges();
   ASSERT(f1->get_num_edges() == 3);
 
-
   vcl_cout << "Shared edge with f2";
   ASSERT(f1->shares_edge_with(*f2));
 
@@ -234,7 +216,7 @@ static void test_topology_2d(void)
 
   //////////////////////// Test accessors
 
-  vcl_cout <<"Accessors: vertices, zero_chains ... blocks \n" << vcl_endl;
+  vcl_cout <<"Accessors: vertices, zero_chains ... blocks \n\n";
 
   vcl_cout <<"Vertex expects: ";
   vcl_cout << "1 3 3 2 2 1 1 - gets:  ";
