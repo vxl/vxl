@@ -1,5 +1,4 @@
 #ifndef mil3d_image_3d_of_h_
-
 #define mil3d_image_3d_of_h_
 #ifdef __GNUC__
 #pragma interface
