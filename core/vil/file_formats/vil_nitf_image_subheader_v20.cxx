@@ -24,7 +24,7 @@
 #include "vil_nitf_header_v20.h"
 
 static
-inline float atoff( const char* s )
+inline float nitf_atoff( const char* s )
 {
   return static_cast<float>( vcl_atof( s ) );
 }
@@ -1491,7 +1491,7 @@ StatusCode vil_nitf_image_subheader_v20::extract_ichipb_extension()
       vcl_strncpy(temp,&work[offset],10); // grab string from buffer
       temp[10] = 0;                   // ensure NULL terminator
       offset += 10;                   // advance to next field
-      SCALE_FACTOR = atoff(temp);         // store value into data structure
+      SCALE_FACTOR = nitf_atoff(temp);         // store value into data structure
       vcl_cout << "Scale Factor: " << SCALE_FACTOR << vcl_endl;
 
       // Grab ANAMRPH_CORR
@@ -1512,112 +1512,112 @@ StatusCode vil_nitf_image_subheader_v20::extract_ichipb_extension()
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      OP_ROW_11 = atoff(temp);         // store value into data structure
+      OP_ROW_11 = nitf_atoff(temp);         // store value into data structure
       vcl_cout << "Output Product Row Number (1, 1): " << OP_ROW_11 << vcl_endl;
 
       // Grab OP_COL_11
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      OP_COL_11 = atoff(temp);         // store value into data structure
+      OP_COL_11 = nitf_atoff(temp);         // store value into data structure
       vcl_cout << "Output Product Col Number(1, 1): " << OP_COL_11 << vcl_endl;
 
       // Grab OP_ROW_12
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      OP_ROW_12 = atoff(temp);         // store value into data structure
+      OP_ROW_12 = nitf_atoff(temp);         // store value into data structure
       vcl_cout << "Output Product Row Number(1, 2): " << OP_ROW_12 << vcl_endl;
 
       // Grab OP_COL_12
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      OP_COL_12 = atoff(temp);         // store value into data structure
+      OP_COL_12 = nitf_atoff(temp);         // store value into data structure
       vcl_cout << "Output Product Col Number(1, 2): " << OP_COL_12 << vcl_endl;
 
       // Grab OP_ROW_21
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      OP_ROW_21 = atoff(temp);         // store value into data structure
+      OP_ROW_21 = nitf_atoff(temp);         // store value into data structure
       vcl_cout << "Output Product Row Number(2, 1): " << OP_ROW_21 << vcl_endl;
 
       // Grab OP_COL_21
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      OP_COL_21 = atoff(temp);         // store value into data structure
+      OP_COL_21 = nitf_atoff(temp);         // store value into data structure
       vcl_cout << "Output Product Col Number(2, 1): " << OP_COL_21 << vcl_endl;
 
       // Grab OP_ROW_22
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      OP_ROW_22 = atoff(temp);         // store value into data structure
+      OP_ROW_22 = nitf_atoff(temp);         // store value into data structure
       vcl_cout << "Output Product Row Number(2, 2): " << OP_ROW_22 << vcl_endl;
 
       // Grab OP_COL_22
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      OP_COL_22 = atoff(temp);         // store value into data structure
+      OP_COL_22 = nitf_atoff(temp);         // store value into data structure
       vcl_cout << "Output Product Col Number(2, 2): " << OP_COL_22 << vcl_endl;
 
       // Grab FI_ROW_11
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      FI_ROW_11 = atoff(temp);         // store value into data structure
+      FI_ROW_11 = nitf_atoff(temp);         // store value into data structure
       vcl_cout << "Full Image Row(1, 1): " << FI_ROW_11 << vcl_endl;
 
       // Grab FI_COL_11
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      FI_COL_11 = atoff(temp);         // store value into data structure
+      FI_COL_11 = nitf_atoff(temp);         // store value into data structure
       vcl_cout << "Full Image Col(1, 1): " << FI_COL_11 << vcl_endl;
 
       // Grab FI_ROW_12
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      FI_ROW_12 = atoff(temp);         // store value into data structure
+      FI_ROW_12 = nitf_atoff(temp);         // store value into data structure
       vcl_cout << "Full Image Row(1, 2): " << FI_ROW_12 << vcl_endl;
 
       // Grab FI_COL_12
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      FI_COL_12 = atoff(temp);         // store value into data structure
+      FI_COL_12 = nitf_atoff(temp);         // store value into data structure
       vcl_cout << "Full Image Col(1, 2): " << FI_COL_12 << vcl_endl;
 
       // Grab FI_ROW_21
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      FI_ROW_21 = atoff(temp);         // store value into data structure
+      FI_ROW_21 = nitf_atoff(temp);         // store value into data structure
       vcl_cout << "Full Image Row(2, 1): " << FI_ROW_21 << vcl_endl;
 
       // Grab FI_COL_21
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      FI_COL_21 = atoff(temp);         // store value into data structure
+      FI_COL_21 = nitf_atoff(temp);         // store value into data structure
       vcl_cout << "Full Image Col(2, 1): " << FI_COL_21 << vcl_endl;
 
       // Grab FI_ROW_22
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      FI_ROW_22 = atoff(temp);         // store value into data structure
+      FI_ROW_22 = nitf_atoff(temp);         // store value into data structure
       vcl_cout << "Full Image Row(2, 2): " << FI_ROW_22 << vcl_endl;
 
       // Grab FI_COL_22
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      FI_COL_22 = atoff(temp);         // store value into data structure
+      FI_COL_22 = nitf_atoff(temp);         // store value into data structure
       vcl_cout << "Full Image Col(2, 2): " << FI_COL_22 << vcl_endl;
 
       // Grab FI_ROW
@@ -1770,7 +1770,7 @@ StatusCode vil_nitf_image_subheader_v20::extract_piaimc_extension()
         vcl_strncpy(temp, &work[offset], 7);           // grab string from buffer
         temp[7] = 0;                                   // ensure NULL terminator
         offset += 7;                                   // advance to next field
-        MEANGSD = atoff(temp);                          // store value
+        MEANGSD = nitf_atoff(temp);                          // store value
         vcl_cout << ":Mean GSD " << MEANGSD << vcl_endl;
 
         // Grab IDATUM
