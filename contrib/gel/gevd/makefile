@@ -25,6 +25,11 @@ SOURCES += gevd_contour.cxx
 MANPAGE_SOURCES += gevd_pixel.h
 MANPAGE_SOURCES += gevd_xpixel.h
 
+ifeq "$(TJ_GCC30)$(optimize)" "1-O2"
+# gcc 3.0 needs too much virtual memory with -O2
+FLAGS_gevd_contour.cxx += -O1
+endif
+
 ######################################
 include ${IUEROOT}/config/top-rules.mk
 ######################################
