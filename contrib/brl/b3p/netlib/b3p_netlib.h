@@ -1,7 +1,3 @@
-//
-// \:
-// \author Kongbin Kang
-// \
 
 #ifdef __cplusplus
 extern "C" {
