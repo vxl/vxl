@@ -51,9 +51,11 @@
 #include "test_vcl_complex.cxx"
 #undef main
 
-//#define main test_vcl_rel_ops
-//#include "test_vcl_rel_ops.cxx"
-//#undef main
+#ifndef VCL_GCC_30 // ambiguous overload for != with vcl_vector<>::iterator
+#define main test_vcl_rel_ops
+#include "test_vcl_rel_ops.cxx"
+#undef main
+#endif
 
 #define main test_vcl_algorithm
 #include "test_vcl_algorithm.cxx"
@@ -71,7 +73,9 @@ int main(int argc, char* argv[])
 {
   vcl_cout << "Hello World!\n";
   test_vcl_compiler();
-//  test_vcl_rel_ops();
+#ifndef VCL_GCC_30 // ambiguous overload for != with vcl_vector<>::iterator
+  test_vcl_rel_ops();
+#endif
   test_vcl_iterator();
   test_vcl_iostream();
   test_vcl_fstream();
