@@ -36,6 +36,8 @@ tif_zip
 )
 
 IF(WIN32)
+  ADD_DEFINITIONS( -DTIF_PLATFORM_CONSOLE)
+
   SOURCE_FILES( tiff_sources
     tif_win32
   )
