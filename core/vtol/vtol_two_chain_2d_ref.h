@@ -18,6 +18,6 @@ class vtol_two_chain_2d;
 //*****************************************************************************
 #include <vbl/vbl_smart_ptr.h>
 
-typedef vbl_smart_ptr<vtol_two_chain_2d> tsol_two_chain_2d_ref;
+typedef vbl_smart_ptr<vtol_two_chain_2d> vtol_two_chain_2d_ref;
 
 #endif // #ifndef VTOL_TWO_CHAIN_2D_REF_H
