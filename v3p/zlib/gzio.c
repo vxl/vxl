@@ -1,5 +1,5 @@
 /* gzio.c -- IO on .gz files
- * Copyright (C) 1995-1998 Jean-loup Gailly.
+ * Copyright (C) 1995-2002 Jean-loup Gailly.
  * For conditions of distribution and use, see copyright notice in zlib.h
  *
  * Compile this file with -DNO_DEFLATE to avoid the compression code.
@@ -237,7 +237,7 @@ local int get_byte(s)
     if (s->z_eof) return EOF;
     if (s->stream.avail_in == 0) {
         errno = 0;
-        s->stream.avail_in = (uInt)fread(s->inbuf, 1, Z_BUFSIZE, s->file);
+        s->stream.avail_in = fread(s->inbuf, 1, Z_BUFSIZE, s->file);
         if (s->stream.avail_in == 0) {
             s->z_eof = 1;
             if (ferror(s->file)) s->z_err = Z_ERRNO;
@@ -383,8 +383,8 @@ int ZEXPORT gzread (file, buf, len)
                 s->stream.avail_in  -= n;
             }
             if (s->stream.avail_out > 0) {
-                s->stream.avail_out -= (uInt)fread(next_out, 1, s->stream.avail_out,
-                                                   s->file);
+                s->stream.avail_out -= fread(next_out, 1, s->stream.avail_out,
+                                             s->file);
             }
             len -= s->stream.avail_out;
             s->stream.total_in  += (uLong)len;
@@ -395,7 +395,7 @@ int ZEXPORT gzread (file, buf, len)
         if (s->stream.avail_in == 0 && !s->z_eof) {
 
             errno = 0;
-            s->stream.avail_in = (uInt)fread(s->inbuf, 1, Z_BUFSIZE, s->file);
+            s->stream.avail_in = fread(s->inbuf, 1, Z_BUFSIZE, s->file);
             if (s->stream.avail_in == 0) {
                 s->z_eof = 1;
                 if (ferror(s->file)) {
@@ -524,7 +524,7 @@ int ZEXPORTVA gzprintf (gzFile file, const char *format, /* args */ ...)
 {
     char buf[Z_PRINTF_BUFSIZE];
     va_list va;
-    size_t len;
+    int len;
 
     va_start(va, format);
 #ifdef HAS_vsnprintf
@@ -533,7 +533,7 @@ int ZEXPORTVA gzprintf (gzFile file, const char *format, /* args */ ...)
     (void)vsprintf(buf, format, va);
 #endif
     va_end(va);
-    len = (int)strlen(buf); /* some *sprintf don't return the nb of bytes written */
+    len = strlen(buf); /* some *sprintf don't return the nb of bytes written */
     if (len <= 0) return 0;
 
     return gzwrite(file, buf, (unsigned)len);
@@ -672,7 +672,7 @@ z_off_t ZEXPORT gzseek (file, offset, whence)
         return -1L;
 #else
         if (whence == SEEK_SET) {
-            offset -= (long)s->stream.total_in;
+            offset -= s->stream.total_in;
         }
         if (offset < 0) return -1L;
 
@@ -697,7 +697,7 @@ z_off_t ZEXPORT gzseek (file, offset, whence)
 
     /* compute absolute position */
     if (whence == SEEK_CUR) {
-        offset += (long)s->stream.total_out;
+        offset += s->stream.total_out;
     }
     if (offset < 0) return -1L;
 
@@ -713,7 +713,7 @@ z_off_t ZEXPORT gzseek (file, offset, whence)
 
     /* For a negative seek, rewind and use positive seek */
     if ((uLong)offset >= s->stream.total_out) {
-        offset -= (long)s->stream.total_out;
+        offset -= s->stream.total_out;
     } else if (gzrewind(file) < 0) {
         return -1L;
     }
