@@ -92,7 +92,7 @@ vil_jpeg_term_destination (j_compress_ptr cinfo) {
 
   // Write any data remaining in the buffer
   if (datacount > 0) {
-    if (dest->stream->write(dest->buffer, datacount) != datacount)
+    if (dest->stream->write(dest->buffer, datacount) != (vil_streampos)datacount)
       ERREXIT(cinfo, JERR_FILE_WRITE);
   }
 }
