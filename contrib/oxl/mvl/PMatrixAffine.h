@@ -32,8 +32,8 @@ public:
 
   // Constructors/Initializers/Destructors-----------------------------------
 
-  PMatrixAffine(void);
-  ~PMatrixAffine(void);
+  PMatrixAffine(void) {}
+  ~PMatrixAffine(void) {}
 };
 
 #endif // _PMatrixAffine_h
