@@ -8,12 +8,9 @@
 #include <vcl_iostream.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
-#include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_homg_line_2d.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_edgel_chain.h>
-#include <vsol/vsol_curve_2d.h>
 #include <bxml/bxml_vtol_io.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_find.h>
@@ -33,12 +30,12 @@
 #include <gevd/gevd_clean_edgels.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_modifier.h>
-#include <vtol/vtol_face_2d_sptr.h>
 #include <gevd/gevd_float_operators.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
 #include <brip/brip_float_ops.h>
 #include <btom/btom_slice_simulator.h>
+
 //static live_video_manager instance
 bmvv_tomography_manager *bmvv_tomography_manager::instance_ = 0;
 //===============================================================
@@ -190,7 +187,7 @@ void bmvv_tomography_manager::load_image()
 //=========================================================================
 void bmvv_tomography_manager::save_sinogram()
 {
-  if(!sino_||!img_)
+  if (!sino_||!img_)
     {
       vcl_cout << "In bmvv_tomography_manager::save_sinogram() - no images\n";
       return;
@@ -228,7 +225,6 @@ void bmvv_tomography_manager::clear_selected()
     if (*bit)
       (*bit)->deselect_all();
 }
-
 
 
 //===================================================================
