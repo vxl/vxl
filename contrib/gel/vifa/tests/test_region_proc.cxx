@@ -77,16 +77,11 @@ static void test_region_proc()
               vcl_cout << "      Edge #" << k << ": ";
               (*tli)->describe(vcl_cout, 6);
 
-              vtol_edge_2d*  e;
               if ((*tli)->topology_type() == vtol_topology_object::EDGE)
               {
-                e = (*tli)->cast_to_edge()->cast_to_edge_2d();
-              }
-
-              if (e)
-              {
-                vtol_vertex_2d*      p1 = e->v1()->cast_to_vertex_2d();
-                vtol_vertex_2d*      p2 = e->v2()->cast_to_vertex_2d();
+                vtol_edge_2d* e = (*tli)->cast_to_edge()->cast_to_edge_2d();
+                vtol_vertex_2d* p1 = e->v1()->cast_to_vertex_2d();
+                vtol_vertex_2d* p2 = e->v2()->cast_to_vertex_2d();
                 vgl_vector_2d<double>  v(p2->x() - p1->x(), p2->y() - p1->y());
                 double  l1 = v.length();
                 double  l2 = e->curve()->length();
