@@ -1,13 +1,15 @@
+#include "vidfpl_menus.h"
+
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vgui/vgui.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_modifier.h>
 #include <vgui/vgui_menu.h>
 #include <vvid/vvid_file_manager.h>
-#include <vvid/bin/vidfpl_menus.h>
+
 #ifdef HAS_MPEG2
-#include <vidl_vil1/vidl_vil1_mpegcodec.h>
-#include <vidl_vil1/vidl_vil1_io.h>
+# include <vidl_vil1/vidl_vil1_mpegcodec.h>
+# include <vidl_vil1/vidl_vil1_io.h>
 
 //define mpeg callback here
 //this dialog box queries the user for info
@@ -286,8 +288,8 @@ vgui_menu vidfpl_menus::get_menu()
   menutrack.add( "Track Art Model", track_art_model_callback);
 
   // debug menu entries
-  menudebug.add("Epipolar Grouping", epipolar_grouping_callback);
-  menudebug.add("Display IHS", display_ihs_callback);
+  menudebug.add( "Epipolar Grouping", epipolar_grouping_callback);
+  menudebug.add( "Display IHS", display_ihs_callback);
   menudebug.add( "easy2D Demo", easy2D_tableau_demo_callback);
 
   //Top level menu layout
