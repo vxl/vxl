@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* Double Complex */ int zdotu_( ret_val, n, zx, incx, zy, incy)
+/* Double Complex */ void zdotu_( ret_val, n, zx, incx, zy, incy)
 doublecomplex * ret_val;
 integer *n;
 doublecomplex *zx;

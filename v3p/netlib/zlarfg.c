@@ -33,7 +33,7 @@ doublecomplex *tau;
     static doublereal safmin;
     extern /* Subroutine */ int zdscal_();
     static doublereal rsafmn;
-    extern /* Double Complex */ int zladiv_();
+    extern /* Double Complex */ void zladiv_();
     static integer knt;
 
 

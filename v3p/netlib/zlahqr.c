@@ -54,7 +54,7 @@ integer *ldz, *info;
     extern doublereal dlamch_();
     static integer nz;
     extern /* Subroutine */ int zlarfg_();
-    extern /* Double Complex */ int zladiv_();
+    extern /* Double Complex */ void zladiv_();
     extern doublereal zlanhs_();
     static doublereal smlnum;
     static doublecomplex h11s;

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* Double Complex */ int zladiv_( ret_val, x, y)
+/* Double Complex */ void zladiv_( ret_val, x, y)
 doublecomplex * ret_val;
 doublecomplex *x, *y;
 {
