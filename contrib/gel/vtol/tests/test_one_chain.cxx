@@ -129,7 +129,7 @@ static void test_one_chain()
   // construct a digital_curve
   vsol_point_2d_sptr p0  = new vsol_point_2d(1, 1); 
   vsol_point_2d_sptr p1  = new vsol_point_2d(5, 5);
-  vsol_curve_2d_sptr dc  = new vdgl_digital_curve(*p0, *p1);
+  vsol_curve_2d_sptr dc  = new vdgl_digital_curve(p0, p1);
   vtol_vertex_2d_sptr vd0 = new vtol_vertex_2d(*p0);
   vtol_vertex_2d_sptr vd1 = new vtol_vertex_2d(*p1);
   vtol_edge_sptr e0   = new vtol_edge_2d(*vd0, *vd1, dc);
