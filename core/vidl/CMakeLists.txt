@@ -2,6 +2,11 @@
 
 INCLUDE( ${MODULE_PATH}/FindMPEG2.cmake )
 
+IF( MPEG2_FOUND )
+  INCLUDE_DIRECTORIES(${MPEG2_INCLUDE_DIR})
+  ADD_DEFINITIONS(-DHAS_MPEG2)
+ENDIF( MPEG2_FOUND )
+
 SET(vidl_sources
   vidl_test.cxx
 
@@ -15,8 +20,6 @@ SET(vidl_sources
 )
 
 IF( MPEG2_FOUND )
-  INCLUDE_DIRECTORIES(${MPEG2_INCLUDE_DIR})
-  ADD_DEFINITIONS(-DHAS_MPEG2)
   SET(vidl_sources ${vidl_sources}
     vidl_mpegcodec.cxx vidl_mpegcodec.h vidl_mpegcodec_sptr.h
     vidl_mpegcodec_helper.cxx vidl_mpegcodec_helper.h
