@@ -1,15 +1,10 @@
-# ./contrib/mul/mvl2/CMakeLists.txt
-#
-#   Franck Bettinger
-#
+# mul/mvl2/CMakeLists.txt
 
 SET(mvl2_sources
-  mvl2_video_writer.h mvl2_video_writer.cxx
-  mvl2_video_reader.h mvl2_video_reader.cxx
-  mvl2_video_from_sequence.h mvl2_video_from_sequence.cxx
+    mvl2_video_writer.h        mvl2_video_writer.cxx
+    mvl2_video_reader.h        mvl2_video_reader.cxx
+    mvl2_video_from_sequence.h mvl2_video_from_sequence.cxx
 )
-
-
 
 IF (NOT WIN32)
   INCLUDE(${MODULE_PATH}/NewCMake/FindAVIFile.cmake)
@@ -55,7 +50,7 @@ ENDIF (AVIFILE_FOUND)
 
 ADD_LIBRARY(mvl2 ${mvl2_sources})
 
-TARGET_LINK_LIBRARIES( mvl2 vil mbl vul ${AVIFILE_LIBRARIES} )
+TARGET_LINK_LIBRARIES( mvl2 vil vul ${AVIFILE_LIBRARIES} )
 
 IF (AVIFILE_FOUND)
   SUBDIRS(examples)
