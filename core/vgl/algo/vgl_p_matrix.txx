@@ -2,9 +2,6 @@
 #ifndef vgl_p_matrix_txx_
 #define vgl_p_matrix_txx_
 
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 //  \file
 
@@ -27,7 +24,7 @@
 //: Constructor. Set up a canonical P matrix.
 //
 template <class T>
-vgl_p_matrix<T>::vgl_p_matrix<T> ():
+vgl_p_matrix<T>::vgl_p_matrix():
   svd_(0)
 {
   for (int row_index = 0; row_index < 3; row_index++)
@@ -45,7 +42,7 @@ vgl_p_matrix<T>::vgl_p_matrix<T> ():
 //   vgl_p_matrix P(cin);
 // </pre>
 template <class T>
-vgl_p_matrix<T>::vgl_p_matrix<T> (vcl_istream& i) :
+vgl_p_matrix<T>::vgl_p_matrix(vcl_istream& i) :
   svd_(0)
 {
   read_ascii(i);
@@ -55,7 +52,7 @@ vgl_p_matrix<T>::vgl_p_matrix<T> (vcl_istream& i) :
 //
 //: Construct from 3x4 matrix
 template <class T>
-vgl_p_matrix<T>::vgl_p_matrix<T> (vnl_matrix_fixed<T, 3, 4> const& pmatrix) :
+vgl_p_matrix<T>::vgl_p_matrix(vnl_matrix_fixed<T, 3, 4> const& pmatrix) :
   p_matrix_ (pmatrix),
   svd_(0)
 {
@@ -75,7 +72,7 @@ vgl_p_matrix<T>::vgl_p_matrix<T> (const vnl_matrix<T>& A, const vnl_vector<T>& a
 //
 //: Construct from row-stored array of 12 elements
 template <class T>
-vgl_p_matrix<T>::vgl_p_matrix<T> (const T *c_matrix) :
+vgl_p_matrix<T>::vgl_p_matrix(const T *c_matrix) :
   p_matrix_ (c_matrix),
   svd_(0)
 {
@@ -85,7 +82,7 @@ vgl_p_matrix<T>::vgl_p_matrix<T> (const T *c_matrix) :
 //
 // - Copy ctor
 template <class T>
-vgl_p_matrix<T>::vgl_p_matrix<T> (const vgl_p_matrix& that) :
+vgl_p_matrix<T>::vgl_p_matrix(const vgl_p_matrix& that) :
   p_matrix_ (that.get_matrix()),
   svd_(0)
 {
@@ -104,7 +101,7 @@ vgl_p_matrix<T>& vgl_p_matrix<T>::operator=(const vgl_p_matrix& that)
 //
 // - Destructor
 template <class T>
-vgl_p_matrix<T>::~vgl_p_matrix<T>()
+vgl_p_matrix<T>::~vgl_p_matrix()
 {
   delete svd_; svd_ = 0;
 }
