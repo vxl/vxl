@@ -59,7 +59,9 @@ void test_image_view_maths_byte()
   vil2_image_abs_difference(imA,im_sum,im_abs_diff);
   TEST_NEAR("im_abs_diff(3,7)",im_abs_diff(3,7),vcl_fabs(float(imA(3,7))-float(im_sum(3,7))),1e-6);
 
-
+  float is45 = im_sum(4,5);
+  vil2_add_image_fraction(im_sum,0.77,imA,0.23);
+  TEST_NEAR("add_fraction",im_sum(4,5),0.77*is45+0.23*imA(4,5),1e-5);
 }
 
 MAIN( test_image_view_maths )

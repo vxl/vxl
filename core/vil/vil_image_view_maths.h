@@ -201,4 +201,33 @@ void vil2_image_abs_difference(const vil2_image_view<aT>& imA,
   }
 }
 
+//: imA = fa*imA + fb*imB  (Useful for moving averages!)
+// Can do running sum using vil2_add_image_fraction(running_mean,1-f,new_im,f)
+// to update current mean by a fraction f of new_im
+// \relates vil2_image_view
+template<class aT, class bT, class scaleT>
+void vil2_add_image_fraction(vil2_image_view<aT>& imA, scaleT fa,
+                             const vil2_image_view<bT>& imB, scaleT fb)
+{
+  unsigned ni = imA.ni(),nj = imA.nj(),np = imA.nplanes();
+  assert(imB.ni()==ni && imB.nj()==nj && imB.nplanes()==np);
+
+  int istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
+  int istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
+  aT* planeA = imA.top_left_ptr();
+  const bT* planeB = imB.top_left_ptr();
+  for (int p=0;p<np;++p,planeA += pstepA,planeB += pstepB)
+  {
+    aT* rowA   = planeA;
+    const bT* rowB   = planeB;
+    for (unsigned j=0;j<nj;++j,rowA += jstepA,rowB += jstepB)
+    {
+      aT* pixelA = rowA;
+      const bT* pixelB = rowB;
+      for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelB+=istepB)
+	    *pixelA = aT(fa*(*pixelA)+fb*(*pixelB));
+    }
+  }
+}
+
 #endif
