@@ -38,7 +38,8 @@
 //
 // \endverbatim
 
-#include <vil1/vil1_rgb_byte.h>
+#include <vil/vil_rgb.h>
+#include <vxl_config.h>
 
 const int c1164 = int(1.164 * 1024);
 const int c1596 = int(1.596 * 1024);
@@ -65,12 +66,12 @@ void vidl_yuv_2_rgb(unsigned char y, unsigned char u, unsigned char v, unsigned 
 }
 
 inline
-void vidl_yuv_2_rgb(unsigned char y, unsigned char u, unsigned char v, vil1_rgb_byte &vrgb)
+void vidl_yuv_2_rgb(unsigned char y, unsigned char u, unsigned char v, vil_rgb<vxl_byte> &vrgb)
 {
   unsigned char r = vidl_yuv_2_rgb_byte_clamp(c1164 * (y - 16) + c1596 * (v - 128));
   unsigned char g = vidl_yuv_2_rgb_byte_clamp(c1164 * (y - 16) - c0813 * (v - 128) - c0391 * (u - 128));
   unsigned char b = vidl_yuv_2_rgb_byte_clamp(c1164 * (y - 16) + c2018 * (u - 128));
-  vrgb = vil1_rgb_byte(r,g,b);
+  vrgb = vil_rgb<vxl_byte>(r,g,b);
 }
 
 #endif // vidl_yuv_2_rgb_h_
