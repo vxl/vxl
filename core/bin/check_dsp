@@ -32,6 +32,53 @@ foreach $dir (@DIRS)
   opendir(TMP,"$dir");
   @tmp_list = readdir(TMP);
   closedir(TMP);
+  if ($dir =~ m/\bvcl$/) {
+    foreach $sd ( ("vcl_sys","iso","generic","gcc","egcs","gcc-295","gcc-libstdcxx-v3","sgi","sunpro","win32","emulation") ) {
+      opendir(TMP,"$dir/$sd");
+      foreach $x (readdir(TMP)) { push @tmp_list, "$sd/$x"; }
+      closedir(TMP);
+    }
+  }
+  if ($dir =~ m/\bvil$/) {
+    opendir(TMP,"$dir/file_formats");
+    foreach $x (readdir(TMP)) { push @tmp_list, "file_formats/$x"; }
+    closedir(TMP);
+  }
+  if ($dir =~ m/\bvcgl$/) {
+    opendir(TMP,"$dir/internals");
+    foreach $x (readdir(TMP)) { push @tmp_list, "internals/$x"; }
+    closedir(TMP);
+  }
+  if ($dir =~ m/\bvipl$/) {
+    foreach $sd ( ("filter","section","accessors","vipl_with_section","vipl_with_vbl_array_2d","vipl_with_vnl_matrix","vipl_with_section/accessors","vipl_with_vbl_array_2d/accessors","vipl_with_vnl_matrix/accessors") ) {
+      opendir(TMP,"$dir/$sd");
+      foreach $x (readdir(TMP)) { push @tmp_list, "$sd/$x"; }
+      closedir(TMP);
+    }
+  }
+  if ($dir =~ m/\bvgui$/) {
+    opendir(TMP,"$dir/internals");
+    foreach $x (readdir(TMP)) { push @tmp_list, "internals/$x"; }
+    closedir(TMP);
+    opendir(TMP,"$dir/vrml");
+    foreach $x (readdir(TMP)) { push @tmp_list, "vrml/$x"; }
+    closedir(TMP);
+  }
+  if ($dir =~ m/\bosl$/) {
+    opendir(TMP,"$dir/internals");
+    foreach $x (readdir(TMP)) { push @tmp_list, "internals/$x"; }
+    closedir(TMP);
+  }
+  @hfiles = ();
+  foreach $fx (@tmp_list) {
+    next unless ($fx =~ m/\.(h|txx)(\.in)?$/);
+    next if ($dir =~ m/\bvcl\/generic$/);
+    next if ($fx =~ m/^(dll|resource|stdafx)\.h$/i);
+    next if ($dir =~ m/\bvcl$/ && $fx =~ m/^emulation\/(.*-stlconf|stlcomp)\.h$/);
+    next if ($dir =~ m/\bvcl$/ && $fx =~ m/^vcl_where_root_dir\.h$/);
+    next if ($dir =~ m/\bvbl$/ && $fx =~ m/^vbl_(basic_relation|br_default|br_impl|hash_map)\.(h|txx)$/);
+    push @hfiles, $fx;
+  }
   @source = ();
   @source = ("test_vdgl.cxx") if ($dir =~ m+\bgel/vdgl/tests$+);
   @hsource = ();
@@ -62,6 +109,7 @@ foreach $dir (@DIRS)
 
   $makef = $dir . "/makefile";
   @sources = ();
+  @tests = ();
   @subdirs = ();
   if (open(MAKEFILE, $makef)) {
     @hsources = ();
@@ -71,6 +119,7 @@ foreach $dir (@DIRS)
       if (m/^\s*(SOURCES|MINI_PROG_SOURCES|TESTS)\s*\:?\=\s*(\S+)/) {
         $file = "$2";
         @sources = ($file);
+        @tests = ($file) if ($1 eq "TESTS");
         $file =~ s/\.(c|cxx|cc|cpp|C)$/.h/;
         push @hsources, $file if (-f "$dir/$file");
       }
@@ -94,12 +143,13 @@ foreach $dir (@DIRS)
         }
         else {
           push @sources, $file;
+          push @tests, $file if ($1 eq "TESTS");
           $file =~ s/\.(c|cxx|cc|cpp|C)$/.h/;
           push @hsources, $file
             if (-f "$dir/$file"
               && $file !~ m/\b(vbl_shared_pointer|vbl_sort|vgl_1d_basis|vil_warp|vnl_matlab_print)\.h$/
               && $file !~ m/\b(mil_gaussian_pyramid_builder_2d(|_general)|mil_image_(2d_of|data|pyramid))\.h$/
-              && $file !~ m/\b(osl_canny_smooth)\.h$/);
+              && $file !~ m/\b(osl_canny_smooth|mil3d_image_3d_of)\.h$/);
         }
       }
       if (m/^\s*(MANPAGE_SOURCES)\s*\+\=\s*(\S+)/) {
@@ -146,6 +196,7 @@ foreach $dir (@DIRS)
   $hcmakef = $dir . "/CMakeListsHeaders.txt";
   $cmakefile = "";
   @source_files = ();
+  @test_files = ();
   @hsource_files = ();
   @subdirs2 = ();
   if (open(CMAKEFILE, $cmakef)) {
@@ -166,7 +217,7 @@ foreach $dir (@DIRS)
   while ($cmakefile =~ s/\bSOURCE_FILES\s*\(\s*\S+sources\s*([^()]+)\)//) {
     @tmpl_list = split /\s+/, "$1";
     foreach $x (@tmpl_list) {
-      if ( $x =~ m/\.h$/) { push @hsource_files, "$x"; }
+      if ( $x =~ m/\.h(\.in)?$/) { push @hsource_files, "$x"; }
       elsif ( $x =~ m/\.txx$/) { push @hsource_files, "$x"; }
       elsif (-f "$dir/$x") { push @source_files, "$x"; }
       elsif (-f "$dir/$x.cxx") { push @source_files, "$x.cxx"; }
@@ -177,9 +228,13 @@ foreach $dir (@DIRS)
       else { printf "No source file $x.* found in $dir\n"; }
     }
   }
-  while ($cmakefile =~ s/\bADD_EXECUTABLE\s*\(\s*\S+\s+(\S+)\s*\)//) {
-    $x = "$1";
-    next if ($x =~ m/_sources$/);
+  while ($cmakefile =~ s/\bADD_EXECUTABLE\s*\(\s*(\S+)\s+(\S+)\s*\)//) {
+    $name = "$1"; $x = "$2";
+    if ($x =~ m/_sources$/) {
+      $names{$name} = $source_files[0] if (defined($source_files[0]));
+      next;
+    }
+    $names{$name} = $x;
     if (-f "$dir/$x") { push @source_files, "$x"; }
     elsif (-f "$dir/$x.cxx") { push @source_files, "$x.cxx"; }
     elsif (-f "$dir/$x.c") { push @source_files, "$x.c"; }
@@ -187,6 +242,14 @@ foreach $dir (@DIRS)
     elsif (-f "$dir/$x.C") { push @source_files, "$x.C"; }
     elsif (-f "$dir/$x.cpp") { push @source_files, "$x.cpp"; }
     else { printf "No source file $x.* found in $dir\n"; }
+  }
+  while ($cmakefile =~ s/\bADD_TEST\s*\(\s*\S+\s+(\S+)\s*\)//) {
+    $name = "$1";
+    if (! exists ($names{$name}) ) {
+      print STDOUT "ADD_TEST($name) without ADD_EXECUTABLE($name)\tin $cmakef\n";
+      next;
+    }
+    push @test_files, $names{$name};
   }
   while ($cmakefile =~ s/\bSUBDIRS\s*\(\s*([^()]+)\)//) {
     @tmpl_list = split /\s+/, "$1";
@@ -217,8 +280,11 @@ foreach $dir (@DIRS)
   @hsource = sort(@hsource); push @hsource, "~END";
   @hsources = sort(@hsources); push @hsources, "~END";
   @hsource_files = sort(@hsource_files); push @hsource_files, "~END";
-  next if ("@source" eq "@sources" && "@source" eq "@source_files"
-        && "@hsource" eq "@hsources" && "@hsource" eq "@hsource_files");
+  @hfiles = sort(@hfiles); push @hfiles, "~END";
+  @tests = sort(@tests); push @tests, "~END";
+  @test_files = sort(@test_files); push @test_files, "~END";
+  next if ("@source" eq "@sources" && "@source" eq "@source_files" && "@tests" eq "@test_files"
+        && "@hsource" eq "@hsources" && "@hsource" eq "@hsource_files" && "@hsource" eq "@hfiles");
   
   $source=""; $sources=""; $source_files="";
   # Note that shift() removes the *first* element from the list, so we run through
@@ -297,10 +363,53 @@ foreach $dir (@DIRS)
     }
   }
 
-  # compare header file lists
-  $hsource=""; $hsources=""; $hsource_files="";
+  # compare "tests" files in makefile and CMakeLists.txt
+  $tests=""; $test_files="";
 
-  while (@hsource || @hsources || @hsource_files) {
+  while (@tests || @test_files) {
+    unless ($tests eq "~END") {
+      $s = shift(@tests);
+      while ($s eq $tests) {
+        print STDOUT "multiple occurrence of TESTS += $s in $makef\n";
+        $s = shift(@tests);
+      }
+      $tests = $s;
+    }
+    unless ($test_files eq "~END") {
+      $s = shift(@test_files);
+      while ($s eq $test_files) {
+        print STDOUT "multiple occurrence of ADD_TEST($s) in $cmakef\n";
+        $s = shift(@test_files);
+      }
+      $test_files = $s;
+    }
+    last if ($tests eq "~END" && $test_files eq "~END");
+    next if ($tests eq $test_files);
+    while ($test_files lt $tests) {
+      if (-f "$dir/$test_files") {
+        print STDOUT "TESTS += $test_files\tis missing from $makef\n";
+      } else {
+        print STDOUT "ADD_TEST($test_files)\tmust be removed from $cmakef\n";
+      }
+      $test_files = shift(@test_files);
+    }
+    last if ($tests eq "~END" && $test_files eq "~END");
+    next if ($tests eq $test_files);
+    while ($tests lt $test_files) {
+      if (-f "$dir/$tests") {
+        print STDOUT "ADD_TEST($tests)\tis missing from $cmakef\n";
+      } else {
+        print STDOUT "TESTS += $tests\tmust be removed from $makef\n";
+      }
+      $test_files = shift(@test_files) if ($tests eq $test_files);
+      $tests = shift(@tests);
+    }
+  }
+
+  # compare header file lists
+  $hsource=""; $hsources=""; $hsource_files=""; $hfiles="";
+
+  while (@hsource || @hsources || @hsource_files || @hfiles) {
     unless ($hsource eq "~END") {
       $s = shift(@hsource);
       while ($s eq $hsource) {
@@ -327,8 +436,11 @@ foreach $dir (@DIRS)
       }
       $hsource_files = $s;
     }
-    last if ($hsource eq "~END" && $hsources eq "~END" && $hsource_files eq "~END");
-    next if ($hsource eq $hsources && $hsource eq $hsource_files);
+    unless ($hfiles eq "~END") {
+      $hfiles = shift(@hfiles);
+    }
+    last if ($hsource eq "~END" && $hsources eq "~END" && $hsource_files eq "~END" && $hfiles eq "~END");
+    next if ($hsource eq $hsources && $hsource eq $hsource_files && $hsource eq $hfiles);
     while ($hsource lt $hsources) {
       if (-f "$dir/$hsource") {
         print STDOUT "MANPAGE_SOURCES += $hsource\tis missing from $makef\n";
@@ -337,8 +449,8 @@ foreach $dir (@DIRS)
       }
       $hsource = shift(@hsource);
     }
-    last if ($hsource eq "~END" && $hsources eq "~END" && $hsource_files eq "~END");
-    next if ($hsource eq $hsources && $hsource eq $hsource_files);
+    last if ($hsource eq "~END" && $hsources eq "~END" && $hsource_files eq "~END" && $hfiles eq "~END");
+    next if ($hsource eq $hsources && $hsource eq $hsource_files && $hsource eq $hfiles);
     while ($hsource_files lt $hsources) {
       if (-f "$dir/$hsource_files") {
         print STDOUT "MANPAGE_SOURCES += $hsource_files\tis missing from $makef\n";
@@ -347,9 +459,15 @@ foreach $dir (@DIRS)
       }
       $hsource_files = shift(@hsource_files);
     }
-    last if ($hsource eq "~END" && $hsources eq "~END" && $hsource_files eq "~END");
-    next if ($hsource eq $hsources && $hsource eq $hsource_files);
-    while ($hsources lt $hsource || $hsources lt $hsource_files) {
+    last if ($hsource eq "~END" && $hsources eq "~END" && $hsource_files eq "~END" && $hfiles eq "~END");
+    next if ($hsource eq $hsources && $hsource eq $hsource_files && $hsource eq $hfiles);
+    while ($hfiles lt $hsources) {
+      print STDOUT "MANPAGE_SOURCES += $hfiles\tis missing from $makef\n";
+      $hfiles = shift(@hfiles);
+    }
+    last if ($hsource eq "~END" && $hsources eq "~END" && $hsource_files eq "~END" && $hfiles eq "~END");
+    next if ($hsource eq $hsources && $hsource eq $hsource_files && $hsource eq $hfiles);
+    while ($hsources lt $hsource || $hsources lt $hsource_files || $hsources lt $hfiles) {
       if (-f "$dir/$hsources") {
         if ($hsources lt $hsource) {
           print STDOUT "SOURCE=.\\$hsources\tis missing from $f (header files)\n";
@@ -362,6 +480,7 @@ foreach $dir (@DIRS)
       }
       $hsource = shift(@hsource) if ($hsources eq $hsource);
       $hsource_files = shift(@hsource_files) if ($hsources eq $hsource_files);
+      $hfiles = shift(@hfiles) if ($hsources eq $hfiles);
       $hsources = shift(@hsources);
     }
   }
