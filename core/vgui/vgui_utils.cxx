@@ -16,6 +16,8 @@
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>
 
+#include <vil/vil_rgba.h>
+
 //------------------------------------------------------------------------------
 // copy the buffer into a memory image
 vil1_memory_image_of<vil1_rgb<GLubyte> > vgui_utils::get_image()
@@ -81,7 +83,70 @@ void vgui_utils::dump_colour_buffer(char const *file) {
   vil1_memory_image_of<vil1_rgb<GLubyte> > colour_buffer =
     vgui_utils::get_image();
   vil1_save(colour_buffer, file);
-}  
+} 
+
+//------------------------------------------------------------------------------
+// copy the buffer into a vil image view
+vil_image_view<GLubyte> 
+vgui_utils::get_view()
+{
+  // get viewport size
+  GLint vp[4]; // x,y,w,h
+  glGetIntegerv(GL_VIEWPORT, vp);
+  unsigned x = vp[0];
+  unsigned y = vp[1];
+  unsigned w = vp[2];
+  unsigned h = vp[3];
+
+  // It's easier to get the buffer in vil_rgba format and then convert to
+  // RGB, because that avoids alignment problems with glReadPixels.
+  vil_rgba<GLubyte> *pixels = new vil_rgba<GLubyte>[ w * h ];
+
+  //
+  glPixelZoom(1,1);
+  glPixelTransferi(GL_MAP_COLOR,0);
+  glPixelTransferi(GL_RED_SCALE,1);   glPixelTransferi(GL_RED_BIAS,0);
+  glPixelTransferi(GL_GREEN_SCALE,1); glPixelTransferi(GL_GREEN_BIAS,0);
+  glPixelTransferi(GL_BLUE_SCALE,1);  glPixelTransferi(GL_BLUE_BIAS,0);
+
+  //
+  glPixelStorei(GL_PACK_ALIGNMENT,1);   // byte alignment.
+  glPixelStorei(GL_PACK_ROW_LENGTH,0);  // use default value (the arg to pixel routine).
+  glPixelStorei(GL_PACK_SKIP_PIXELS,0); //
+  glPixelStorei(GL_PACK_SKIP_ROWS,0);   //
+
+  //
+  glReadPixels(x, y,             //
+               w, h,             //
+               GL_RGBA,          // format
+               GL_UNSIGNED_BYTE, // type
+               pixels);
+
+  // glReadPixels() reads the pixels from the bottom of the viewport up.
+  // Copy them into an vil_image_view in the other order :
+  vil_image_view<GLubyte> view(w, h, 3);
+  for (unsigned yy=0; yy<h; ++yy)
+    for (unsigned xx=0; xx<w; ++xx) {
+      view(xx, h-1-yy, 0) = pixels[xx + w*yy].r;
+      view(xx, h-1-yy, 1) = pixels[xx + w*yy].g;
+      view(xx, h-1-yy, 2) = pixels[xx + w*yy].b;
+    }
+
+  //
+  delete [] pixels;
+  return view;
+}
+
+  
+//: Get an image view corresponding to the OpenGL area
+vil_image_view<vxl_byte> 
+vgui_utils::colour_buffer_to_view()
+{  
+  vil_image_view<GLubyte> buffer = vgui_utils::get_view();
+  vil_image_view<vxl_byte> temp(buffer);
+  return temp;
+}
+ 
 
 //------------------------------------------------------------------------------
 

@@ -16,12 +16,17 @@
 #include <vcl_vector.h>
 #include <vil1/vil1_rgb.h>
 #include <vil1/vil1_memory_image_of.h>
+#include <vil/vil_image_view.h>
 
 //: Useful static functions for vgui.
 class vgui_utils {
 public:
-  //: Get an image corresponding to the OpenGL area
+  //: Get a memory image (vil1) corresponding to the OpenGL area
   static vil1_memory_image_of<vil1_rgb<unsigned char> > colour_buffer_to_image();
+  
+  //: Get an image view corresponding to the OpenGL area
+  static vil_image_view<vxl_byte> colour_buffer_to_view();
+
   //: Dump the OpenGL area to the given image filename.
   static void dump_colour_buffer(char const *file);
 
@@ -47,6 +52,7 @@ public:
 
 private:
   static vil1_memory_image_of<vil1_rgb<GLubyte> > get_image();
+  static vil_image_view<GLubyte> get_view();
   static void do_copy();
 };
 
