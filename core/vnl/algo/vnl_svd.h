@@ -1,18 +1,18 @@
-// This is vxl/vnl/algo/vnl_svd.h
+// This is core/vnl/algo/vnl_svd.h
 #ifndef vnl_svd_h_
 #define vnl_svd_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
-//  \file
-//  \brief Holds the singular value decomposition of a vnl_matrix.
-//  \author Andrew W. Fitzgibbon, Oxford IERG
-//  \date   15 Jul 96
+// \file
+// \brief Holds the singular value decomposition of a vnl_matrix.
+// \author Andrew W. Fitzgibbon, Oxford IERG
+// \date   15 Jul 96
 //
 // \verbatim
 //  Modifications
-// fsm, Oxford IESRG, 26 Mar 1999
+//   fsm, Oxford IESRG, 26 Mar 1999
 //     1. The singular values are now stored as reals (not complexes) when T is complex.
 //     2. Fixed bug : for complex T, matrices have to be conjugated as well as transposed.
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
@@ -77,7 +77,7 @@ class vnl_svd
   //
   // The optional argument zero_out_tol is used to mark the zero singular
   // values: If nonnegative, any s.v. smaller than zero_out_tol in
-// absolute value is set to zero.  If zero_out_tol is negative, the
+  // absolute value is set to zero.  If zero_out_tol is negative, the
   // zeroing is relative to |zero_out_tol| * sigma_max();
 
   vnl_svd(vnl_matrix<T> const &M, double zero_out_tol = 0.0);
@@ -129,19 +129,16 @@ class vnl_svd
   T V(int i, int j) { return V_(i,j); }
 
   //:
-  vnl_matrix<T> inverse () const;
-
-  //: pseudo-inverse (for non-square matrix).
-  vnl_matrix<T> pinverse () const;
+  inline vnl_matrix<T> inverse () const { return pinverse(); }
 
   //: pseudo-inverse (for non-square matrix) of desired rank.
-  vnl_matrix<T> pinverse (int rank) const;
+  vnl_matrix<T> pinverse (unsigned int rank = -1) const;
 
-  //: Calculate inverse of transpose.
-  vnl_matrix<T> tinverse () const;
+  //: Calculate inverse of transpose, using desired rank.
+  vnl_matrix<T> tinverse (unsigned int rank = -1) const;
 
-  //: Recompose SVD to U*W*V'
-  vnl_matrix<T> recompose () const;
+  //: Recompose SVD to U*W*V', using desired rank.
+  vnl_matrix<T> recompose (unsigned int rank = -1) const;
 
   //: Solve the matrix equation M X = B, returning X
   vnl_matrix<T> solve (vnl_matrix<T> const& B) const;
@@ -204,7 +201,6 @@ vnl_matrix<T> vnl_svd_inverse(vnl_matrix<T> const& m)
   return vnl_svd<T>(m).inverse();
 }
 
-// this aint no friend.
 export template <class T>
 vcl_ostream& operator<<(vcl_ostream&, vnl_svd<T> const& svd);
 

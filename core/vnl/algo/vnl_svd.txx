@@ -102,7 +102,7 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
       // by adding and -fPIC option to the command line for v3p\netlib\dsvdc.c. If
       // that doesn't work try adding -ffloat-store, which should fix the problem
       // at the expense of being significantly slower for big problems. Note that
-      // if this is the cause, vxl/vnl/tests/test_svd should have failed.
+      // if this is the cause, core/vnl/tests/test_svd should have failed.
       //
       // You may be able to diagnose the problem here by printing a warning message.
       vcl_cerr << __FILE__ ": suspicious return value (" << info << ") from SVDC\n"
@@ -163,27 +163,13 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
     zero_out_relative(double(-zero_out_tol));
 }
 
-#if 0
-// Assignment
-template <class T>
-vnl_svd<T>& vnl_svd<T>::operator=(vnl_svd<T> const& that)
-{
-  U_ = that.U_;
-  W_ = that.W_;
-  Winverse_ = that.Winverse_;
-  V_ = that.V_;
-  rank_ = that.rank_;
-  return *this;
-}
-#endif
-
 template <class T>
 vcl_ostream& operator<<(vcl_ostream& s, const vnl_svd<T>& svd)
 {
   s << "vnl_svd<T>:\n"
 //  << "M = [\n" << M << "]\n"
     << "U = [\n" << svd.U() << "]\n"
-    << "W = " << svd.W() << "\n"
+    << "W = " << svd.W() << '\n'
     << "V = [\n" << svd.V() << "]\n"
     << "rank = " << svd.rank() << vcl_endl;
   return s;
@@ -248,56 +234,40 @@ typename vnl_svd<T>::singval_t vnl_svd<T>::norm() const
 
 //: Recompose SVD to U*W*V'
 template <class T>
-vnl_matrix<T> vnl_svd<T>::recompose() const
+vnl_matrix<T> vnl_svd<T>::recompose(unsigned int rank) const
 {
+  if (rank > rank_) rank=rank_;
   vnl_matrix<T> W(W_.rows(),W_.columns());
   W.fill(T(0));
-  for (unsigned i=0;i<rank_;i++)
+  for (unsigned int i=0;i<rank;++i)
     W(i,i)=W_(i,i);
 
   return U_*W*V_.conjugate_transpose();
 }
 
 
-template <class T>
-vnl_matrix<T> vnl_svd<T>::inverse() const
-{
-  return pinverse();
-}
-
-
 //: Calculate pseudo-inverse.
 template <class T>
-vnl_matrix<T> vnl_svd<T>::pinverse()  const
+vnl_matrix<T> vnl_svd<T>::pinverse(unsigned int rank) const
 {
+  if (rank > rank_) rank=rank_;
   vnl_matrix<T> Winverse(Winverse_.rows(),Winverse_.columns());
   Winverse.fill(T(0));
-  for (unsigned i=0;i<rank_;i++)
-    Winverse(i,i)=Winverse_(i,i);
-
-  return V_ * Winverse * U_.conjugate_transpose();
-}
-
-//: Calculate pseudo-inverse.
-template <class T>
-vnl_matrix<T> vnl_svd<T>::pinverse(int rank)  const
-{
-  vnl_matrix<T> Winverse(Winverse_.rows(),Winverse_.columns());
-  Winverse.fill(T(0));
-  for (int i=0;i<rank;i++)
+  for (unsigned int i=0;i<rank;++i)
     Winverse(i,i)=Winverse_(i,i);
 
   return V_ * Winverse * U_.conjugate_transpose();
 }
 
 
-//: Calculate inverse of transpose.
+//: Calculate (pseudo-)inverse of transpose.
 template <class T>
-vnl_matrix<T> vnl_svd<T>::tinverse()  const
+vnl_matrix<T> vnl_svd<T>::tinverse(unsigned int rank) const
 {
+  if (rank > rank_) rank=rank_;
   vnl_matrix<T> Winverse(Winverse_.rows(),Winverse_.columns());
   Winverse.fill(T(0));
-  for (unsigned i=0;i<rank_;i++)
+  for (unsigned int i=0;i<rank;++i)
     Winverse(i,i)=Winverse_(i,i);
 
   return U_ * Winverse * V_.conjugate_transpose();
@@ -334,9 +304,9 @@ vnl_vector<T> vnl_svd<T>::solve(vnl_vector<T> const& y)  const
   if (y.size() != U_.rows())
   {
     vcl_cerr << __FILE__ << ": size of rhs is incompatible with no. of rows in U_\n"
-             << "y =" << y << "\n"
-             << "m_=" << m_ << "\n"
-             << "n_=" << n_ << "\n"
+             << "y =" << y << '\n'
+             << "m_=" << m_ << '\n'
+             << "n_=" << n_ << '\n'
              << "U_=\n" << U_
              << "V_=\n" << V_
              << "W_=\n" << W_;
@@ -365,6 +335,7 @@ vnl_vector<T> vnl_svd<T>::solve(vnl_vector<T> const& y)  const
   }
   return V_ * x;                                // premultiply with v.
 }
+
 template <class T> // FIXME. this should implement the above, not the other way round.
 void vnl_svd<T>::solve(T const *y, T *x) const
 {
@@ -420,7 +391,7 @@ vnl_matrix <T> vnl_svd<T>::left_nullspace()  const
   return U_.extract(U_.rows(), n_-k, 0, k);
 }
 
-//: Implementation to be done yet; currently returns left_nullspace(). - PVR.
+//: Implementation to be done yet; currently returns left_nullspace(). - PVr. // TODO
 template <class T>
 vnl_matrix<T> vnl_svd<T>::left_nullspace(int /*required_nullspace_dimension*/) const
 {
