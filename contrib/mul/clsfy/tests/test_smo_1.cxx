@@ -8,7 +8,6 @@
 #include <vcl_climits.h>
 #include <vcl_iostream.h>
 #include <vcl_ios.h>
-#include <vcl_strstream.h>
 #include <vcl_iomanip.h>
 #include <clsfy/clsfy_smo_1.h>
 #include <clsfy/clsfy_k_nearest_neighbour.h>

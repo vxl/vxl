@@ -7,7 +7,6 @@
 // Test construction, IO etc.
 
 #include <vcl_iostream.h>
-#include <vcl_strstream.h>
 #include <vcl_iomanip.h>
 #include <vcl_ios.h>
 #include <vcl_string.h>
@@ -28,9 +27,9 @@
 void test_binary_hyperplane()
 {
   vcl_cout << "\n\n\n"
-           << "****************************" << vcl_endl
-           << " Testing clsf_binary_linear " << vcl_endl
-           << "****************************" << vcl_endl;
+           << "*****************************\n"
+           << " Testing clsfy_binary_linear\n"
+           << "*****************************\n";
 
   vcl_vector<vpdfl_axis_gaussian_sampler *> generator(2);//
   const unsigned nDims = 2;

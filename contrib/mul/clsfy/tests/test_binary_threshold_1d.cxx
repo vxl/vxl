@@ -5,7 +5,6 @@
 // Test construction, IO etc
 
 #include <vcl_iostream.h>
-#include <vcl_strstream.h>
 #include <vcl_iomanip.h>
 #include <vcl_ios.h>
 #include <vcl_string.h>
