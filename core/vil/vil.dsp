@@ -860,6 +860,9 @@ SOURCE=.\vil_warp.h
 # Begin Source File
 SOURCE=.\vil_config.h.in
 # End Source File
+# Begin Source File
+SOURCE=.\vil_config.h
+# End Source File
 # End Group
 # End Target
 # End Project
