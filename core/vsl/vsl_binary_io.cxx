@@ -531,6 +531,14 @@ vcl_istream & vsl_b_istream::is() const
 }
 
 
+
+
+//: Return the version number of the IO format of the file being read.
+unsigned short vsl_b_istream::version_no() const
+{
+  return version_no_;
+}
+
 //: Returns true if the underlying stream has its fail bit set.
 bool vsl_b_istream::operator!() const
 {

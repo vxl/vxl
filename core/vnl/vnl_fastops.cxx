@@ -325,6 +325,44 @@ void vnl_fastops::dec_X_by_AtB(vnl_matrix<double>& X, const vnl_matrix<double>& 
     }
 }
 
+//: Compute $ X -= A^\top A$
+void vnl_fastops::dec_X_by_AtA(vnl_matrix<double>& X, const vnl_matrix<double>& A)
+{
+  unsigned m = X.rows();
+  unsigned n = X.columns();
+  unsigned l = A.rows();
+
+  if (m != n || m != A.columns()) {
+    vcl_cerr << "vnl_fastops::dec_X_by_AtA: size error\n";
+    vcl_abort();
+  }
+
+  double const* const* a = A.data_array();
+  double** x = X.data_array();
+
+  if (l == 2) {
+    for (unsigned i = 0; i < n; ++i) {
+      x[i][i] -= (a[0][i] * a[0][i] + a[1][i] * a[1][i]);
+      for (unsigned j = i+1; j < n; ++j) {
+        double accum = (a[0][i] * a[0][j] + a[1][i] * a[1][j]);
+        x[i][j] -= accum;
+        x[j][i] -= accum;
+      }
+    }
+  } else {
+    for (unsigned i = 0; i < n; ++i)
+      for (unsigned j = i; j < n; ++j) {
+        double accum = 0;
+        for (unsigned k = 0; k < l; ++k)
+          accum += a[k][i] * a[k][j];
+        x[i][j] -= accum;
+        if (i != j)
+          x[j][i] -= accum;
+      }
+  }
+}
+
+
 //: Compute dot product of a and b
 double vnl_fastops::dot(const double* a, const double* b, int n)
 {
