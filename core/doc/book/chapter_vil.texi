@@ -5,13 +5,12 @@ Load images using @code{vil2_load}. Access them
 
 vil2 will replace parts of the existing vil image library in the near future.
 
-The @vxl{} image library has evolved from the TargetJr Image
-library.  As with its predecessor, its primary goal is to provide flexible
-and powerful access to all 2D images, including those too large to fit in
-the address space of a single program or process.  This goal must be
-achieved, however, without affecting the speed or complexity of
-the much more common case of programs which can read all their images into
-main memory and process them in-core.  In fact, both cases need similar
+The @vxl{} image library has evolved from the TargetJr and Manchester Image
+libraries.
+As with its predecessors, its primary goals is to provide flexible
+to all 2D images, including those too large to fit in
+the address space of a single program or process, and very powerful and
+fast access to images in memory. In fact, both cases need similar
 treatment: even in-core images are assumed to be sufficiently large (say a
 megabyte) that special care must be taken to avoid unnecessary copying of
 their data.  In both cases, the normal requirements of efficiency and
@@ -53,7 +52,7 @@ int main()
 @}
 @end example
 
-The first interesting lines declares img to be an image. vil2_image_view
+The first interesting line declares img to be an image. vil2_image_view
 is the basic image type. It represents an image in memory about
 whose structure, size and pixel type we know everything.
 Hence we need to specify the pixel type at this point.
@@ -75,7 +74,7 @@ top left of the image.
 Finally lets look at the middle line. This consists of two parts.
 The @code{vil2_load} function does a lot of work behind the scenes
 to determine what the image type is, and then load that image into
-memory. The assignment has several special properties.
+memory. The second part is the assignment which has several special properties.
 @itemize @bullet
 @item It does not copy the actual image data. A @code{vil2_image_view} object
 is really a view of some underlying data. The view understands where the
@@ -86,13 +85,13 @@ copying is expensive. The underlying image is managed with smart pointers
 so when the last view to the underlying data is destroyed, the image data
 will be too.
 
-@item It can do cheap conversions between different vies of the same image.
+@item It can do cheap conversions between different views of the same image.
 @code{vil2_load} by default loads the image as 3 planes, with the pixel
 type as @code{vxl_byte}. It is trivial to reconfigure a @code{vil2_image_view}
 so that it views the same image data as one plane of rgb pixels. The
 assignment will automatically do any cheap conversion necessary. You may
-ask then how we know that the pixel type can be viewed as RGB of bytes.
-We simply know that our image foo.ppm is of this type. In general you can
+ask then, how is that we know that the pixel type can be viewed as RGB of bytes?
+Here, we simply know that our image foo.ppm is this type. In general you can
 either find out what the pixel type is before you load the image, or
 you can force it to whatever pixel type you want. The latter may involve
 a relatively expensive pixel by pixel conversion, so this will not happen
@@ -201,7 +200,7 @@ and @code{vil2_new_image_resource()}.
 @item @code{vil2_memory_image}: Representing an image in memory
 (essentially a
 wrapper around a view.) This is created using
-vil2_new_image_resource().
+@code{vil2_new_image_resource()}.
 
 @item Representing a filtered version of an
 image in a file (without loading in memory): e.g.
@@ -220,16 +219,24 @@ functions e.g. @code{vil2_convolve_1d()}.
 
 To actually get some image pixels you call the resource's
 @code{get_view(..)} or @code{get_copy_view(..)} method.
-the @code{vil2_load(..)} function works by creating
-a vil2_image_resource, and then calling @code{get_view(..)}
+The @code{vil2_load(..)} function works by creating
+a @code{vil2_image_resource}, and then calling @code{get_view(..)}
 for the whole image.
+@example
+vil2_image_view_base_sptr vil2_load(const char *file)
+@{
+  vil2_image_resource_sptr data = vil2_load_image_resource(file);
+  if (!data) return 0;
+  return data -> get_view(0, data->ni(), 0, data->nj());
+@}
+@end example
 
 @section Planes, components and stepping.
 @cindex image layout
 @cindex planes
 @cindex components
 
-vil2_image_view
+@code{vil2_image_view}
 uses a pointer arithmetic style of indexing.
 The image data is assumed to be a regularly arranged set of
 pixels in memory. The view keeps a pointer to the pixel
@@ -245,8 +252,9 @@ purpose, to represent different spectral or functional values (e.g. the
 red, green and blue channels of an RGB image.) In vil2 it is usually
 assumed that an image cannot have both multiple planes and multiple
 components per pixel. This allows
-vil2_image_view to view the same a colour image data
-as either a 3 plane image or a 1 plane RGB image.
+@code{vil2_image_view} to view the same a colour image data
+as either a 3 plane image or a 1 plane RGB image. You can do this
+explicitly by calling @code{vil2_view_as_planes()} or @code{vil2_view_as_rgb()}.
 
 However the two representations are not equal. The
 multi-plane representation
@@ -259,7 +267,8 @@ to view an image as multi-plane single-component.
 @cindex view manipulations
 Similarly to the planes to components conversion
 it is possible to perform a whole range of other manipulations. These
-include vil2_transpose, vil2_flip_ud, vil2_decimate, vil2_crop.
+include @code{vil2_transpose()}, @code{vil2_flip_ud()},
+@code{vil2_decimate()}, @code{vil2_crop()}.
 One further advantage of the arithmetic indexing scheme is that
 it becomes easy to create a 2d slice view of a 3d image.
 
