@@ -7,7 +7,7 @@
 
 rgrl_feature_point_region::
 rgrl_feature_point_region( vnl_vector<double> const& loc, double radius )
-  : rgrl_feature_point( loc ), 
+  : rgrl_feature_point( loc ),
     radius_(radius)
 {     }
 
@@ -61,7 +61,7 @@ generate_pixel_coordinates( vnl_vector< double > const& spacing_ratio )
   vnl_vector< double > directions_in_pixel( dim );
 
   vnl_vector< double > direction_in_pixel( dim );
-  for( unsigned int i = 0; i < dim; ++i )
+  for ( unsigned int i = 0; i < dim; ++i )
   {
     location_in_pixel[ i ] = this->location_[ i ] / spacing_ratio[ i ];
     radii_in_pixel[i] = radii_in_pixel[i] / spacing_ratio[i];
@@ -73,7 +73,7 @@ generate_pixel_coordinates( vnl_vector< double > const& spacing_ratio )
   for ( unsigned int i = 0; i < dim; ++i )
   {
     direction_in_pixel = tangent.get_column( i );
-    for( unsigned j = 0; j < dim; ++j )
+    for ( unsigned j = 0; j < dim; ++j )
       direction_in_pixel[ j ] /= spacing_ratio[ j ];
 
     directions.push_back( direction_in_pixel );
@@ -81,10 +81,9 @@ generate_pixel_coordinates( vnl_vector< double > const& spacing_ratio )
 
   //  Call the utility function to extract the pixel locations,
   //  record the caching and return the vector.
-  
+
   rgrl_util_extract_region_locations( location_in_pixel, directions,
-				      radii_in_pixel, pixel_coordinates_ );
+                                      radii_in_pixel, pixel_coordinates_ );
 
   pixel_coordinates_cached_ = true;
-
 }

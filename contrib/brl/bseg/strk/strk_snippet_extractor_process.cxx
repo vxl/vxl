@@ -44,17 +44,17 @@ bool strk_snippet_extractor_process::execute()
   {
     n_frames = tracked_rois_.size();
     unsigned int w = img.width(), h = img.height();
-    for(unsigned int i=0; i<n_frames; ++i)
+    for (unsigned int i=0; i<n_frames; ++i)
       tracked_rois_[i]->set_image_bounds(w, h);
     first_frame_ = false;
   }
   int frame_index = this->frame_index();
   int offset = frame_index-start_frame_;
   if (offset<0||offset>=n_frames)
-    {
-      failure_ = true;      
-      return false;
-    }
+  {
+    failure_ = true;
+    return false;
+  }
   brip_vil1_float_ops::chip(img, tracked_rois_[offset], output_image_);
   tracked_snippets_.push_back(output_image_);
   return true;
@@ -63,17 +63,17 @@ bool strk_snippet_extractor_process::execute()
 bool strk_snippet_extractor_process::
 extract_rois(vcl_vector<vtol_face_2d_sptr> const & tracked_faces)
 {
-  for(vcl_vector<vtol_face_2d_sptr>::const_iterator fit = tracked_faces.begin();fit != tracked_faces.end(); ++fit)
-    {
-      vsol_box_2d_sptr bb = (*fit)->get_bounding_box(), expanded_box;
-      double diameter = (bb->width()+bb->height())/2.0;
+  for (vcl_vector<vtol_face_2d_sptr>::const_iterator fit = tracked_faces.begin();fit != tracked_faces.end(); ++fit)
+  {
+    vsol_box_2d_sptr bb = (*fit)->get_bounding_box(), expanded_box;
+    double diameter = (bb->width()+bb->height())/2.0;
 
-      if(!bsol_algs::box_with_margin(bb, margin_frac_*diameter, expanded_box))
-		  return false;
-      brip_roi_sptr roi = new brip_roi();
-      roi->add_region(expanded_box);
-      tracked_rois_.push_back(roi);
-    }
+    if (!bsol_algs::box_with_margin(bb, margin_frac_*diameter, expanded_box))
+      return false;
+    brip_roi_sptr roi = new brip_roi();
+    roi->add_region(expanded_box);
+    tracked_rois_.push_back(roi);
+  }
   return true;
 }
 
@@ -94,19 +94,20 @@ set_input_file(vcl_string const& track_file_name)
   unsigned int n_frames = 0;
   vcl_vector<vgl_point_2d<double> > cogs;
   vcl_vector<vtol_face_2d_sptr> tracked_faces;
-  if(!strk_io::read_track_data(str, start_frame_, n_frames,
-                           cogs, tracked_faces))
-    {
-      str.close();
-      return false;
-    }
+  if (!strk_io::read_track_data(str, start_frame_, n_frames,
+                                cogs, tracked_faces))
+  {
+    str.close();
+    return false;
+  }
   end_frame_ = start_frame_+n_frames -1;
   str.close();
-  if(!extract_rois(tracked_faces))
+  if (!extract_rois(tracked_faces))
     return false;
   return true;
 }
-void 
+
+void
 strk_snippet_extractor_process::set_snippet_directory(vcl_string const& snip_dir)
 {
   snippet_directory_ = snip_dir;

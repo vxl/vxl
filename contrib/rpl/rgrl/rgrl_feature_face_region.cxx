@@ -8,20 +8,20 @@
 #include <rgrl/rgrl_util.h>
 
 rgrl_feature_face_region ::
-rgrl_feature_face_region( vnl_vector< double > const& location, 
+rgrl_feature_face_region( vnl_vector< double > const& location,
                           vnl_vector< double > const& normal )
   : rgrl_feature_face_pt( location, normal ),
-    thickness_( 0.0 ), radius_( 0.0 ) 
+    thickness_( 0.0 ), radius_( 0.0 )
 {
 }
 
 
-rgrl_feature_face_region :: 
+rgrl_feature_face_region ::
 rgrl_feature_face_region( vnl_vector< double > const& location,
                           vnl_vector< double > const& normal,
                           double thickness,
                           double radius )
-  : rgrl_feature_face_pt( location, normal ), 
+  : rgrl_feature_face_pt( location, normal ),
     thickness_( thickness ), radius_( radius )
 {
 }
@@ -42,8 +42,8 @@ num_constraints() const
   return 1;
 }
 
-rgrl_feature_sptr 
-rgrl_feature_face_region:: 
+rgrl_feature_sptr
+rgrl_feature_face_region::
 transform( rgrl_transformation const& xform ) const
 {
   rgrl_feature_face_region* face_ptr = new rgrl_feature_face_region();
@@ -61,8 +61,8 @@ transform( rgrl_transformation const& xform ) const
 }
 
 
-rgrl_feature_sptr 
-rgrl_feature_face_region :: 
+rgrl_feature_sptr
+rgrl_feature_face_region ::
 transform_region( rgrl_transformation const& xform ) const
 {
   //  Transform the location and direction, and form the new error projector.
@@ -79,7 +79,7 @@ transform_region( rgrl_transformation const& xform ) const
 
   vnl_vector< double > end_point( this -> location_ . size() );
   xform . map_location( this -> location_ + this->thickness_ / 2.0
-			* this -> normal_, end_point );
+                       * this -> normal_, end_point );
   face_ptr -> thickness_ = ( end_point - face_ptr -> location_) . magnitude() * 2.0;
 
   //  The radius is tougher.  First, find the basis of the subspace of
@@ -101,7 +101,7 @@ transform_region( rgrl_transformation const& xform ) const
   double sum_radii = 0;
 
   double this_radius = this->radius_; // Work-around for Borland C++ 5.
-  for( unsigned int i=0; i< this -> location_ . size() - 1; ++i )
+  for( unsigned int i=0; i+1 < this -> location_ . size(); ++i )
   {
     point_along_dir = this -> location();
     point_along_dir += this_radius * nullspace . get_column( i );
@@ -116,7 +116,7 @@ transform_region( rgrl_transformation const& xform ) const
 
 
 // Return region(neighboring) pixels in "pixel" coordinates.
-void 
+void
 rgrl_feature_face_region ::
 generate_pixel_coordinates( vnl_vector< double > const& spacing_ratio )
 {
@@ -139,38 +139,36 @@ generate_pixel_coordinates( vnl_vector< double > const& spacing_ratio )
   vnl_vector< double > directions_in_pixel( dim );
 
   vnl_vector< double > direction_in_pixel( dim );
-  for( unsigned int i = 0; i < dim; ++i )
-    {
-      direction_in_pixel[ i ] = this->normal_[ i ] / spacing_ratio[ i ];
-      location_in_pixel[ i ] = this->location_[ i ] / spacing_ratio[ i ];
-    }
+  for ( unsigned int i = 0; i < dim; ++i )
+  {
+    direction_in_pixel[ i ] = this->normal_[ i ] / spacing_ratio[ i ];
+    location_in_pixel[ i ] = this->location_[ i ] / spacing_ratio[ i ];
+  }
   directions.push_back( direction_in_pixel );
 
   radii_in_pixel[ 0 ] = this -> thickness_ / spacing_ratio[ 0 ] / 2.0;
   for ( unsigned int i = 0; i < dim-1; ++i )
+  {
+    direction_in_pixel = tangents.get_column( i );
+    for ( unsigned j = 0; j < dim; ++j )
     {
-      direction_in_pixel = tangents.get_column( i );
-      for( unsigned j = 0; j < dim; ++j )
-        {
-          direction_in_pixel[ j ] /= spacing_ratio[ j ];
-        }
-      directions.push_back( direction_in_pixel );
-      radii_in_pixel[ i+1 ] = this -> radius_ / spacing_ratio[ i+1 ];
+      direction_in_pixel[ j ] /= spacing_ratio[ j ];
     }
+    directions.push_back( direction_in_pixel );
+    radii_in_pixel[ i+1 ] = this -> radius_ / spacing_ratio[ i+1 ];
+  }
 
   //  Call the utility function to extract the pixel locations,
   //  record the caching and return the vector.
-  
+
   rgrl_util_extract_region_locations( location_in_pixel, directions,
-				      radii_in_pixel, pixel_coordinates_ );
+                                      radii_in_pixel, pixel_coordinates_ );
 
   pixel_coordinates_cached_ = true;
-
 }
 
-/*
-  Keep this for mapping --- move to different code
-  
+#if 0 // Keep this for mapping --- move to different code
+
 void
 rgrl_feature_face_region :: set_tangents()
 {
@@ -179,10 +177,10 @@ rgrl_feature_face_region :: set_tangents()
   vnl_svd<double> normal_svd( one_row );
 
   tangent_directions_.clear();
-  for( unsigned int i=1; i<normal_.size(); ++i )
-    {
-      tangent_directions_.push_back( normal_svd.V().get_column( i ) );
-    }
+  for ( unsigned int i=1; i<normal_.size(); ++i )
+  {
+    tangent_directions_.push_back( normal_svd.V().get_column( i ) );
+  }
 }
 
-*/
+#endif // 0

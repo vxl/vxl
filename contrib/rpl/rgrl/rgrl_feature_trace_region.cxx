@@ -21,9 +21,9 @@ rgrl_feature_trace_region( vnl_vector<double> const& loc,
 
 rgrl_feature_trace_region::
 rgrl_feature_trace_region( vnl_vector<double> const& loc,
-		       vnl_vector<double> const& tangent,
-		       double                    region_length, 
-		       double                    region_radius )
+                           vnl_vector<double> const& tangent,
+                           double                    region_length,
+                           double                    region_radius )
   : rgrl_feature_trace_pt( loc, tangent ),
     region_length_( region_length ), region_radius_( region_radius )
 {
@@ -83,7 +83,7 @@ transform_region( rgrl_transformation const& xform ) const
   rgrl_feature_sptr result_sptr = this -> transform( xform );
 
   //  Cast down the pointer so that we can set the specific variables.
-  rgrl_feature_trace_region * trace_ptr 
+  rgrl_feature_trace_region * trace_ptr
     = rgrl_cast<rgrl_feature_trace_region *> ( result_sptr );
 
   //  Determine the length along the tangent direction.  Map a point
@@ -93,7 +93,7 @@ transform_region( rgrl_transformation const& xform ) const
 
   vnl_vector< double > end_point( this -> location_ . size() );
   xform . map_location( this -> location_ + this -> region_length_ / 2.0
-			* this -> tangent_, end_point );
+                        * this -> tangent_, end_point );
   trace_ptr -> region_length_ = ( end_point - trace_ptr -> location_ ) . magnitude() * 2.0;
 
   //  The radius is tougher.  First, find the basis of the tangent
@@ -115,7 +115,7 @@ transform_region( rgrl_transformation const& xform ) const
   double sum_radii = 0;
 
   double this_region_radius = this->region_radius_; // Work-around for Borland C++ 5.
-  for( unsigned int i=0; i < this -> location_ . size() - 1; ++i )
+  for( unsigned int i=0; i+1 < this -> location_ . size(); ++i )
   {
     point_along_dir = this -> location();
     point_along_dir += this_region_radius * nullspace . get_column( i );
@@ -127,9 +127,9 @@ transform_region( rgrl_transformation const& xform ) const
 
   return result_sptr;
 }
-  
+
 // Return region(neighboring) pixels in "pixel" coordinates.
-void 
+void
 rgrl_feature_trace_region ::
 generate_pixel_coordinates( vnl_vector< double > const&  spacing_ratio )
 {
@@ -149,28 +149,28 @@ generate_pixel_coordinates( vnl_vector< double > const&  spacing_ratio )
   vnl_vector< double > direction_in_pixel( dim );
 
   // convert directions and location to the pixel coordinates
-  for( unsigned i = 0; i < dim; ++i ) 
-    {
-      direction_in_pixel[ i ] = this->tangent_[ i ] / spacing_ratio[ i ];
-      location_in_pixel[ i ] = this->location_[ i ] / spacing_ratio[ i ];
-    }
+  for ( unsigned i = 0; i < dim; ++i )
+  {
+    direction_in_pixel[ i ] = this->tangent_[ i ] / spacing_ratio[ i ];
+    location_in_pixel[ i ] = this->location_[ i ] / spacing_ratio[ i ];
+  }
   directions . push_back( direction_in_pixel );
 
-  radii_in_pixel[ 0 ] = this -> region_length_ / spacing_ratio[ 0 ] / 2.0 ;    
+  radii_in_pixel[ 0 ] = this -> region_length_ / spacing_ratio[ 0 ] / 2.0 ;
   for ( unsigned i = 0; i < dim-1; ++i )
-    {
-      direction_in_pixel = normals.get_column( i );
-      for( unsigned j = 0; j < dim; ++j )
-        direction_in_pixel[ j ] /= spacing_ratio[ j ];
+  {
+    direction_in_pixel = normals.get_column( i );
+    for ( unsigned j = 0; j < dim; ++j )
+      direction_in_pixel[ j ] /= spacing_ratio[ j ];
 
-      directions.push_back( direction_in_pixel );
-      radii_in_pixel[ i+1 ] = this -> region_radius_ / spacing_ratio[ i+1 ];
-    }
+    directions.push_back( direction_in_pixel );
+    radii_in_pixel[ i+1 ] = this -> region_radius_ / spacing_ratio[ i+1 ];
+  }
 
   //  Call the utility function to extract the pixel locations,
   //  record the caching and return the vector.
 
   rgrl_util_extract_region_locations( location_in_pixel, directions,
-				      radii_in_pixel, pixel_coordinates_ );
+                                      radii_in_pixel, pixel_coordinates_ );
   pixel_coordinates_cached_ = true;
 }
