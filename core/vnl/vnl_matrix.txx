@@ -79,13 +79,13 @@
 #include <vcl/vcl_cstring.h>  // strcpy()
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_vector.h>
-#ifndef GNU_LIBSTDCXX_V3
-// conflicts with operator!= for std::vector<vcl_complex<double> >::iterator.
-//include/g++-v3/bits/stl_construct.h:60: ambiguous overload for `std::__normal_iterator<vcl_complex<double> *,std::vector<vcl_complex<double>,std::allocator<vcl_complex<double> > > > & != std::__normal_iterator<vcl_complex<double> *,std::vector<vcl_complex<double>,std::allocator<vcl_complex<double> > > > &'
-//include/g++-v3/bits/stl_iterator.h:1067: candidates are: bool std::operator !=<vcl_complex<double> *, vcl_complex<double> *, std::vector<vcl_complex<double>,std::allocator<vcl_complex<double> > > >(const std::__normal_iterator<vcl_complex<double> *,std::vector<vcl_complex<double>,std::allocator<vcl_complex<double> > > > &, const std::__normal_iterator<vcl_complex<double> *,std::vector<vcl_complex<double>,std::allocator<vcl_complex<double> > > > &)
-//include/g++-v3/bits/stl_relops.h:37:                 bool std::rel_ops::operator !=<std::__normal_iterator<vcl_complex<double> *,std::vector<vcl_complex<double>,std::allocator<vcl_complex<double> > > > >(const std::__normal_iterator<vcl_complex<double> *,std::vector<vcl_complex<double>,std::allocator<vcl_complex<double> > > > &, const std::__normal_iterator<vcl_complex<double> *,std::vector<vcl_complex<double>,std::allocator<vcl_complex<double> > > > &)
-# include <vcl/vcl_rel_ops.h>  // inline operator!= function template
-#endif
+// #ifndef GNU_LIBSTDCXX_V3
+// // conflicts with operator!= for std::vector<vcl_complex<double> >::iterator.
+// //include/g++-v3/bits/stl_construct.h:60: ambiguous overload for `std::__normal_iterator<vcl_complex<double> *,std::vector<vcl_complex<double>,std::allocator<vcl_complex<double> > > > & != std::__normal_iterator<vcl_complex<double> *,std::vector<vcl_complex<double>,std::allocator<vcl_complex<double> > > > &'
+// //include/g++-v3/bits/stl_iterator.h:1067: candidates are: bool std::operator !=<vcl_complex<double> *, vcl_complex<double> *, std::vector<vcl_complex<double>,std::allocator<vcl_complex<double> > > >(const std::__normal_iterator<vcl_complex<double> *,std::vector<vcl_complex<double>,std::allocator<vcl_complex<double> > > > &, const std::__normal_iterator<vcl_complex<double> *,std::vector<vcl_complex<double>,std::allocator<vcl_complex<double> > > > &)
+// //include/g++-v3/bits/stl_relops.h:37:                 bool std::rel_ops::operator !=<std::__normal_iterator<vcl_complex<double> *,std::vector<vcl_complex<double>,std::allocator<vcl_complex<double> > > > >(const std::__normal_iterator<vcl_complex<double> *,std::vector<vcl_complex<double>,std::allocator<vcl_complex<double> > > > &, const std::__normal_iterator<vcl_complex<double> *,std::vector<vcl_complex<double>,std::allocator<vcl_complex<double> > > > &)
+// # include <vcl/vcl_rel_ops.h>  // inline operator!= function template
+// #endif
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>

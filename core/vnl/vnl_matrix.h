@@ -221,8 +221,9 @@ public:
   //--------------------------------------------------------------------------------
 
   // comparison
-  bool operator ==(vnl_matrix<T> const &that) const { return this->operator_eq(that); }
   bool operator_eq (vnl_matrix<T> const &) const;
+  bool operator==(vnl_matrix<T> const &that) const { return  this->operator_eq(that); }
+  bool operator!=(vnl_matrix<T> const &that) const { return !this->operator_eq(that); }
   void print(ostream& os) const;
 
   //--------------------------------------------------------------------------------

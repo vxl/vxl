@@ -1,5 +1,4 @@
 #include <vcl/vcl_cmath.h>
-#include <vcl/vcl_rel_ops.h>
 #include <vcl/vcl_iostream.h>
 
 #include <vnl/vnl_test.h>

@@ -167,8 +167,9 @@ public:
   bool is_finite() const;
 
   // comparison
-  bool operator== (vnl_vector<T> const& that) const { return this->operator_eq(that); }
   bool operator_eq (vnl_vector<T> const&) const;
+  bool operator==(vnl_vector<T> const &that) const { return  this->operator_eq(that); }
+  bool operator!=(vnl_vector<T> const &that) const { return !this->operator_eq(that); }
 
   // I/O
   bool read_ascii(istream& s);

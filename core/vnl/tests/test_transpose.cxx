@@ -1,5 +1,4 @@
 #include <vcl/vcl_iostream.h>
-#include <vcl/vcl_rel_ops.h>  // operator!=
 
 #include <vnl/vnl_test.h>
 #include <vnl/vnl_matrix.h>

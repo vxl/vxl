@@ -31,10 +31,6 @@
 
 #include <vcl/vcl_vector.h>
 #include <vcl/vcl_iostream.h>
-#ifndef GNU_LIBSTDCXX_V3
-// see vnl_matrix.txx
-# include <vcl/vcl_rel_ops.h> // inline operator!= function template
-#endif
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix.h>
