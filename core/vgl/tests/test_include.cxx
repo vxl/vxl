@@ -35,6 +35,7 @@
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_window_scan_iterator.h>
+#include <vgl/algo/vgl_convex_hull_2d.h>
 #include <vgl/algo/vgl_fit_lines_2d.h>
 #include <vgl/algo/vgl_homg_operators_1d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
