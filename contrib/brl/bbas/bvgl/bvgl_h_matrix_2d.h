@@ -9,10 +9,10 @@
 // and to perform common operations using it e.g. transfer point.
 //
 // \verbatim
-// Modifications
-//    22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
-//    23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
-//    22 Mar 2003 - J.L. Mundy - preparing for upgrade to vgl
+//  Modifications
+//   22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
+//   23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
+//   22 Mar 2003 - J.L. Mundy - preparing for upgrade to vgl
 // \endverbatim
 
 #include <vcl_vector.h>
@@ -63,7 +63,7 @@ class bvgl_h_matrix_2d
   vgl_homg_line_2d<T> operator*(vgl_homg_line_2d<T> const& l) const { return (*this)(l);}
 
   //: Composition
-  bvgl_h_matrix_2d operator*(const bvgl_h_matrix_2d& h2) { return bvgl_h_matrix_2d(t12_matrix_ * h2.t12_matrix_); }
+  bvgl_h_matrix_2d operator*(bvgl_h_matrix_2d<T> const& h2) { return bvgl_h_matrix_2d(t12_matrix_ * h2.t12_matrix_); }
 
   // Data Access---------------------------------------------------------------
 
@@ -86,7 +86,6 @@ class bvgl_h_matrix_2d
 
 template <class T> vcl_ostream& operator<<(vcl_ostream& s, const bvgl_h_matrix_2d<T>& h);
 template <class T> vcl_istream& operator>>(vcl_istream& s, bvgl_h_matrix_2d<T>& h);
-
 
 #define BVGL_H_MATRIX_2D_INSTANTIATE(T) extern "please include bvgl/bvgl_h_matrix_2d.txx first"
 
