@@ -147,7 +147,7 @@ bool vnl_math_isnan(double x){return bMe(&x,0x7ff00000L,sz_d)&&bMp(&x,0x000fffff
 bool vnl_math_isnan(long double x) {
   if (sizeof(long double) == 8) return bMe(&x,0x7ff00000L,sz_l) && bMp(&x,0x000fffffL,sz_l);
   else if (sizeof(long double) <= 12) return bMe(&x,0x4001ffffL,sz_l) && bMp(&x,0x40000000,sz_l-4);
-  else return bMe(&x,0x7ff70000L,sz_l) && bMp(&x,0x0008ffffL,sz_l);
+  else return bMe(&x,0x7ff00000L,sz_l) && bMp(&x,0x0000ffffL,sz_l);
 }
 #endif
 
