@@ -24,10 +24,8 @@ vnl_least_squares_function::vnl_least_squares_function(int number_of_unknowns,
 
   if (number_of_unknowns > number_of_residuals) {
     vcl_cerr << "vnl_least_squares_function: WARNING: "
-      "unknowns(" << number_of_unknowns << ")"
-      " > "
-      "residuals("<< number_of_residuals << ")"
-      "\n";
+             << "unknowns(" << number_of_unknowns << ") > "
+             << "residuals("<< number_of_residuals << ")\n";
   }
 }
 
@@ -41,10 +39,8 @@ void vnl_least_squares_function::init(int number_of_unknowns,
 
   if (number_of_unknowns > number_of_residuals) {
     vcl_cerr << "vnl_least_squares_function: WARNING: "
-      "unknowns(" << number_of_unknowns << ")"
-      " > "
-      "residuals("<< number_of_residuals << ")"
-      "\n";
+             << "unknowns(" << number_of_unknowns << ") > "
+             << "residuals("<< number_of_residuals << ")\n";
   }
 }
 
@@ -83,21 +79,21 @@ void vnl_least_squares_function::fdgradf(vnl_vector<double> const& x,
   vnl_vector<double> tx = x;
   vnl_vector<double> fplus(n);
   vnl_vector<double> fminus(n);
-  double h = stepsize;
   for (int i = 0; i < dim; ++i)
   {
-    double tplus = x[i] + h;
-    tx[i] = tplus;
+    // calculate f just to the right of x[i]
+    double tplus = tx[i] = x[i] + stepsize;
     this->f(tx, fplus);
 
-    double tminus = x[i] - h;
-    tx[i] = tminus;
+    // calculate f just to the left of x[i]
+    double tminus = tx[i] = x[i] - stepsize;
     this->f(tx, fminus);
 
-    double h = (tplus - tminus);
+    double h = 1.0 / (tplus - tminus);
     for (int j = 0; j < n; ++j)
-      jacobian(j,i) = (fplus[j] - fminus[j]) / h;
+      jacobian(j,i) = (fplus[j] - fminus[j]) * h;
 
+    // restore tx
     tx[i] = x[i];
   }
 }
