@@ -75,30 +75,35 @@ double vil2_bicub_interp_raw(double x, double y, const T* data,
     // avoids accessing an invalid pix1[t] which is going to have
     // weight 0.
 
-    if (normx == 0 && normy == 0) return pix1[0];
+    if (normx == 0.0 && normy == 0.0) return pix1[0];
 
-    // like bilinear interpolation, use separability.
-    // the s's are for the x-direction and the t's for the y-direction.
-    double s0 = ((2-normx)*normx-1)*normx;    // -1
-    double s1 = (3*normx-5)*normx*normx+2;    //  0
-    double s2 = ((4-3*normx)*normx+1)*normx;  // +1
-    double s3 = (normx-1)*normx*normx;        // +2
+    // coefficients for interpolation
+    double s0=-1.0, s1=-1.0, s2=-1.0, s3=-1.0;      // in the x-direction
+    double t0=-1.0, t1=-1.0, t2=-1.0, t3=-1.0;      // in the y-direction
+
+    if (normx != 0.0) {
+        s0 = ((2-normx)*normx-1)*normx;    // -1
+        s1 = (3*normx-5)*normx*normx+2;    //  0
+        s2 = ((4-3*normx)*normx+1)*normx;  // +1
+        s3 = (normx-1)*normx*normx;        // +2
+    }
+
+    if (normy != 0.0) {
+        t0 = ((2-normy)*normy-1)*normy;    // -1
+        t1 = (3*normy-5)*normy*normy+2;    //  0
+        t2 = ((4-3*normy)*normy+1)*normy;  // +1
+        t3 = (normy-1)*normy*normy;        // +2
+    }
 
 #define vil2_I(dx,dy) (pix1[(dx)*xstep+(dy)*ystep])
 
-    if (normy == 0) {
+    if (normy == 0.0) {
         double val = s0*vil2_I(-1,+0) + s1*vil2_I(+0,+0) + s2*vil2_I(+1,+0) + s3*vil2_I(+2,+0);
         val *= 0.5;
         return val;
     }
 
-    double t0 = ((2-normy)*normy-1)*normy;
-    double t1 = (3*normy-5)*normy*normy+2;
-    double t2 = ((4-3*normy)*normy+1)*normy;
-    double t3 = (normy-1)*normy*normy;
-
-    // inefficiency: if normx is 0, then the s's were computed for nothing
-    if (normx == 0) {
+    if (normx == 0.0) {
         double val = t0*vil2_I(+0,-1) + t1*vil2_I(+0,+0) + t2*vil2_I(+0,+1) + t3*vil2_I(+0,+2);
         val *= 0.5;
         return val;
