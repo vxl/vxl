@@ -12,7 +12,8 @@ SOURCES += mvl2_video_writer.cxx
 SOURCES += mvl2_video_reader.cxx
 SOURCES += mvl2_video_from_sequence.cxx
 
-ifdef HAS_AVI
+ifeq ($(HAS_AVI),1)
+USE_AVI := 1
  SOURCES += mvl2_image_format_plugin.cxx
  MANPAGE_SOURCES += mvl2_video_from_avi.h
  MANPAGE_SOURCES += mvl2_video_to_avi.h
