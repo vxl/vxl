@@ -5,8 +5,8 @@ include ${IUEROOT}/vxl/vil/config.mk
 USE_IMPLICIT_TEMPLATES := 1
 
 TESTMAIN := test_driver.cxx
-TESTS += test_threshold.cxx
-TESTS += test_erode_disk.cxx
+TESTS += vepl_test_threshold.cxx
+TESTS += vepl_test_erode_disk.cxx
 
 IULIBS += -lvepl -lvipl -lvil -ltestlib
 
