@@ -9,24 +9,17 @@
 
 //=======================================================================
 
-//=======================================================================
-// Dflt ctor
-//=======================================================================
 
 mil_image::mil_image()
 {
 }
 
 //=======================================================================
-// Destructor
-//=======================================================================
 
 mil_image::~mil_image()
 {
 }
 
-//=======================================================================
-// Method: version_no
 //=======================================================================
 
 short mil_image::version_no() const
@@ -35,8 +28,6 @@ short mil_image::version_no() const
 }
 
 //=======================================================================
-// Method: is_a
-//=======================================================================
 
 vcl_string mil_image::is_a() const
 {
@@ -44,8 +35,6 @@ vcl_string mil_image::is_a() const
   return c_;
 }
 
-//=======================================================================
-// Method: is_class
 //=======================================================================
 
 bool mil_image::is_class(vcl_string const& s) const
@@ -56,8 +45,6 @@ bool mil_image::is_class(vcl_string const& s) const
 
 
 //=======================================================================
-// Associated function: operator<<
-//=======================================================================
 
 void vsl_b_write(vsl_b_ostream& bfs, const mil_image& b)
 {
@@ -65,16 +52,12 @@ void vsl_b_write(vsl_b_ostream& bfs, const mil_image& b)
 }
 
 //=======================================================================
-// Associated function: operator>>
-//=======================================================================
 
 void vsl_b_read(vsl_b_istream& bfs, mil_image& b)
 {
     b.b_read(bfs);
 }
 
-//=======================================================================
-// Associated function: operator<<
 //=======================================================================
 
 vcl_ostream& operator<<(vcl_ostream& os,const mil_image& b)
@@ -87,8 +70,6 @@ vcl_ostream& operator<<(vcl_ostream& os,const mil_image& b)
 }
 
 //=======================================================================
-// Associated function: operator<<
-//=======================================================================
 
 vcl_ostream& operator<<(vcl_ostream& os,const mil_image* b)
 {
@@ -98,3 +79,9 @@ vcl_ostream& operator<<(vcl_ostream& os,const mil_image* b)
         return os << "No mil_image defined.";
 }
 
+//=======================================================================
+
+void vsl_add_to_binary_loader(const mil_image& b)
+{
+	vsl_binary_loader<mil_image>::instance().add(b);
+}
