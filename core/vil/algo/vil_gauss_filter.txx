@@ -131,10 +131,10 @@ void vil2_gauss_filter_5tap(const srcT* src_im, vcl_ptrdiff_t src_istep, vcl_ptr
   const destT* work_row_top_3  = work_row_top_5 - 2 * work_jstep;
   const destT* work_row_top_2  = work_row_top_5 - 3 * work_jstep;
 
-  destT* dest_row_top      = dest_im + (ny-1) * work_jstep;
-  destT* dest_row_next_top  = dest_row_top - work_jstep;
+  destT* dest_row_top      = dest_im + (ny-1) * dest_jstep;
+  destT* dest_row_next_top  = dest_row_top - dest_jstep;
   destT* dest_row_bottom    = dest_im;
-  destT* dest_row_next_bottom  = dest_row_bottom + work_jstep;
+  destT* dest_row_next_bottom  = dest_row_bottom + dest_jstep;
 
   for (unsigned int x=0;x<nx;x++)
   {

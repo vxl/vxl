@@ -15,11 +15,11 @@ template<class srcT, class destT>
 void vil2_sobel_1x3(const vil2_image_view<srcT>& src,
                     vil2_image_view<destT>& grad_ij)
 {
-  int np = src.nplanes();
-  int ni = src.ni();
-  int nj = src.nj();
+  unsigned np = src.nplanes();
+  unsigned ni = src.ni();
+  unsigned nj = src.nj();
   grad_ij.set_size(ni,nj,2*np);
-  for (int p=0;p<np;++p)
+  for (unsigned p=0;p<np;++p)
   {
     vil2_sobel_1x3_1plane(src.top_left_ptr()+p*src.planestep(),
                           src.istep(),src.jstep(),
@@ -36,12 +36,12 @@ void vil2_sobel_1x3(const vil2_image_view<srcT>& src,
                     vil2_image_view<destT>& grad_i,
                     vil2_image_view<destT>& grad_j)
 {
-  int np = src.nplanes();
-  int ni = src.ni();
-  int nj = src.nj();
+  unsigned np = src.nplanes();
+  unsigned ni = src.ni();
+  unsigned nj = src.nj();
   grad_i.set_size(ni,nj,np);
   grad_j.set_size(ni,nj,np);
-  for (int p=0;p<np;++p)
+  for (unsigned p=0;p<np;++p)
   {
     vil2_sobel_1x3_1plane(src.top_left_ptr()+p*src.planestep(),
                           src.istep(),src.jstep(),
