@@ -169,6 +169,7 @@ foreach $f (@FILES)
     if ($j eq "vil/vil_colour_space.h") { $i="($i)_(RGB|HSV)_to_(YIQ|HSV|RGB)"; }
     if ($j eq "vil/vil_image_as.h") { $i="$i(_[a-z16_]+)?"; }
     if ($j eq "vil/vil_interpolate.h") { $i="$i(|_[a-z_]+)"; }
+    if ($j eq "vil/vil_warp.h") { $i="$i(|_mapping|_interpolation_type|_output_driven)"; }
     if ($j eq "vil/vil_jpeglib.h") { $i="jpeg_[a-z_]+"; }
     if ($j eq "vil/vil_memory_image.h") { $i="$i(|_format)"; }
     if ($j eq "vil/vil_pixel.h") { $i="($i)_format(|_t)"; }
