@@ -6,12 +6,17 @@
 #include <vil/vil_load.h>
 #include <vil/vil_image.h>
 
-vcl_ostream &dec(vcl_ostream &os, unsigned char c) {
+vcl_ostream &to_dec(vcl_ostream &os, unsigned char c) {
   static char dig[]="0123456789";
   return os << dig[(c/100)%10] << dig[(c/10)%10] << dig[c%10];
 }
 
-vcl_ostream &hex(vcl_ostream &os, unsigned char c) {
+vcl_ostream &to_oct(vcl_ostream &os, unsigned char c) {
+  static char dig[]="01234567";
+  return os << dig[(c>>6)&7] << dig[(c>>3)&7] << dig[c&7];
+}
+
+vcl_ostream &to_hex(vcl_ostream &os, unsigned char c) {
   static char dig[]="0123456789ABCDEF";
   return os << dig[(c & 0xF0)>>4] << dig[c & 0x0F];
 }
@@ -39,19 +44,19 @@ int main(int argc, char **argv) {
       vcl_cout << "red values:" << vcl_endl;
       for (unsigned r=0; r<h; ++r) {
         for (unsigned c=0; c<w; ++c)
-          dec(vcl_cout, buf[3*(w*r+c)+0]) << ' ';
+          to_dec(vcl_cout, buf[3*(w*r+c)+0]) << ' ';
         vcl_cout << vcl_endl;
       }
       vcl_cout << "green values:" << vcl_endl;
       for (unsigned r=0; r<h; ++r) {
         for (unsigned c=0; c<w; ++c)
-          dec(vcl_cout, buf[3*(w*r+c)+1]) << ' ';
+          to_dec(vcl_cout, buf[3*(w*r+c)+1]) << ' ';
         vcl_cout << vcl_endl;
       }
       vcl_cout << "blue values:" << vcl_endl;
       for (unsigned r=0; r<h; ++r) {
         for (unsigned c=0; c<w; ++c)
-          dec(vcl_cout, buf[3*(w*r+c)+2]) << ' ';
+          to_dec(vcl_cout, buf[3*(w*r+c)+2]) << ' ';
         vcl_cout << vcl_endl;
       }
     }
