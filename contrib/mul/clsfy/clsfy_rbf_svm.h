@@ -91,11 +91,6 @@ public:
   // The array ordering corresponds to supportVectors()
   const vcl_vector<double> & lagrangians() const {return lagrangians_;}
 
-  //: Get a particular lagrange multiplier.
-  // A value corresponding to negative training vectors are premultiplied by -1.
-  // The array ordering corresponds to supportVectors()
-  double lagrangian(unsigned i) const {return lagrangians_[i];}
-
   //: The support vectors.
   // The array ordering corresponds to lagrangians()
   const vcl_vector<vnl_vector<double> > & support_vectors() const {return supports_;}

@@ -166,7 +166,7 @@ void test_rbf_svm()
   vcl_cout << "\nOptimisation took " << realtime/1000.0 << " seconds\n";
   vcl_cout << "\nLagrangians ";
   for (unsigned i=0; i < classifier3.n_support_vectors(); ++i)
-    vcl_cout << classifier3.lagrangian(i) << " ";
+    vcl_cout << classifier3.lagrangians()[i] << " ";
   vcl_cout << vcl_endl;
 
   vcl_cout << "Training Error " << error << vcl_endl;
