@@ -12,6 +12,7 @@
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
 #include <vnl/vnl_double_3x3.h>
+#include <vnl/vnl_double_3.h>
 #include <vnl/vnl_random.h>
 #include <vul/vul_timer.h>
 #include <vnl/vnl_c_vector.h>
@@ -124,7 +125,8 @@ void test_symmetric_eigensystem()
     {
       // Generate same random system
       vnl_random rng(5);
-      vnl_double_3x3 M;
+      vnl_double_3x3 M, evecs;
+      vnl_double_3 evals;
 
       timer.mark();
       for (unsigned c = 0; c < n; ++c)
@@ -133,9 +135,7 @@ void test_symmetric_eigensystem()
                                        M(1,1)=rng.drand64()*10.0-5.0;        M(2,1)=M(1,2)=rng.drand64()*10.0-5.0;
                                                                              M(2,2) = rng.drand64()*10.0-5.0;
 
-        vnl_vector<double> evals;
-        vnl_matrix<double> evec;
-        vnl_symmetric_eigensystem_compute(M.as_matrix(), evec, evals);
+        vnl_symmetric_eigensystem_compute(M.as_ref(), evecs.as_ref().non_const(), evals.as_ref().non_const());
         netlib_data[c][0] = evals[0];
         netlib_data[c][1] = evals[1];
         netlib_data[c][2] = evals[2];
