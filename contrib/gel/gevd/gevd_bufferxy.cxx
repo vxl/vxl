@@ -40,8 +40,8 @@
 //#include <fstream.h>
 //#include <stdio.h>	// For sscanf()
 
-//#include <IUE_compiler.h>
-#ifdef IUE_SUNPRO_CC_50
+#include <vcl_compiler.h>
+#if defined(VCL_SUNPRO_CC_50) || defined(VCL_SGI_CC)
 #define iostream_char char
 #else
 #define iostream_char unsigned char
@@ -94,7 +94,7 @@ gevd_bufferxy::gevd_bufferxy(gevd_bufferxy const& buf) : gevd_memory_mixin(buf)
 // -- Write to file.  Note that this can be OS-specific!
 void gevd_bufferxy::dump(const char* filename)
 {
-#ifdef WIN32
+#ifdef VCL_WIN32
   ofstream f(filename,ios::out|ios::binary);
 #else
   ofstream f(filename);
@@ -112,7 +112,7 @@ void gevd_bufferxy::dump(const char* filename)
 
 static int read_from_file(const char* filename)
 {
-#ifdef WIN32
+#ifdef VCL_WIN32
   ifstream f(filename,ios::in|ios::binary|ios::nocreate);
 #else
   ifstream f(filename);
@@ -138,7 +138,7 @@ gevd_bufferxy::gevd_bufferxy(const char* filename) : gevd_memory_mixin(read_from
   yra(0), xra(0)
 {
   if (gevd_memory_mixin::GetSize() > 0) {
-#ifdef WIN32
+#ifdef VCL_WIN32
     ifstream f(filename,ios::in|ios::binary|ios::nocreate);
 #else
     ifstream f(filename);
