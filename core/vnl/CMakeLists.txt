@@ -124,6 +124,7 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
   SET_SOURCE_FILES_PROPERTIES(Templates/vnl_matrix+vcl_complex+long_double--.cxx COMPILE_FLAGS -O0)
   SET_SOURCE_FILES_PROPERTIES(Templates/vnl_matrix_fixed+vnl_bignum.3.3-.cxx COMPILE_FLAGS -O0)
   SET_SOURCE_FILES_PROPERTIES(Templates/vnl_vector+vnl_rational-.cxx COMPILE_FLAGS -O0)
+  SET_SOURCE_FILES_PROPERTIES(Templates/vnl_vector_fixed+vnl_rational.3-.cxx COMPILE_FLAGS -O0)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 # VNL_ALLOC is a fast but currently thread-unsafe allocator
