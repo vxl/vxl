@@ -36,7 +36,7 @@ void pop_edge::set_transform(pop_transform *t)
 }
 
 
-//: get the transfrom
+//: get the transform
 pop_transform* pop_edge::get_transform()
 {
   return transform_;
