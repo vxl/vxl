@@ -49,8 +49,8 @@ static void test_face_2d()
   vtol_face_2d_sptr f2 = new vtol_face_2d(oc_list);
   f2->describe(vcl_cout,8);
 
-  TEST("vtol_face_2d::get_one_chain()", f2->get_one_chain(), oc1.ptr());
-  TEST("vtol_face_2d::get_boundary_cycle()", f2->get_boundary_cycle(), oc1.ptr());
+  TEST("vtol_face_2d::get_one_chain(0)", f2->get_one_chain(0), oc1);
+  TEST("vtol_face_2d::get_boundary_cycle()", f2->get_boundary_cycle(), oc1);
 
   edge_list he_list;
 

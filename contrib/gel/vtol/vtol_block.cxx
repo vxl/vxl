@@ -323,8 +323,8 @@ bool vtol_block::operator==(const vtol_block &other) const
   topology_list::const_iterator bi2=other.inferiors()->begin();
   for (; bi1!=inferiors()->end(); ++bi1,++bi2)
     {
-      vtol_two_chain *twoch1=(*bi1)->cast_to_two_chain();
-      vtol_two_chain *twoch2=(*bi2)->cast_to_two_chain();
+      vtol_two_chain_sptr twoch1=(*bi1)->cast_to_two_chain();
+      vtol_two_chain_sptr twoch2=(*bi2)->cast_to_two_chain();
 
       if (!(*twoch1 == *twoch2))
         return false;

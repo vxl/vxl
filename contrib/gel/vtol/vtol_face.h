@@ -68,8 +68,8 @@ class vtol_face
   //---------------------------------------------------------------------------
   virtual vtol_topology_object_type topology_type(void) const { return FACE; }
 
-  virtual vtol_one_chain *get_one_chain(int which = 0);
-  virtual vtol_one_chain *get_boundary_cycle(void);
+  virtual vtol_one_chain_sptr get_one_chain(int which = 0);
+  virtual vtol_one_chain_sptr get_boundary_cycle(void);
   virtual bool add_hole_cycle(vtol_one_chain_sptr new_hole);
   virtual one_chain_list *get_hole_cycles(void);
 

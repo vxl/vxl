@@ -200,7 +200,7 @@ vtol_face_2d::vtol_face_2d(one_chain_list const& onechs)
   if (onechs.size()>0)
     link_inferior(onechs[0]);
 
-  vtol_one_chain *onech=get_boundary_cycle();
+  vtol_one_chain_sptr onech=get_boundary_cycle();
 
   // 2) This constructor will assume that the
   // surface is an ImplicitPlane().
@@ -214,7 +214,7 @@ vtol_face_2d::vtol_face_2d(one_chain_list const& onechs)
                                     new vsol_point_2d(xmax,ymin),
                                     new vsol_point_2d(xmax,ymax)));
 
-  if (onech!=0)
+  if (onech)
     for (unsigned int i = 1; i < onechs.size(); ++i)
       onech->link_chain_inferior(onechs[i]);
 }
