@@ -1,4 +1,4 @@
-// This is core/vgl/algo/vgl_vgl_convex_hull_2d.h
+// This is core/vgl/algo/vgl_convex_hull_2d.h
 #ifndef vgl_convex_hull_2d_h_
 #define vgl_convex_hull_2d_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -9,8 +9,9 @@
 // \brief Compute the convex hull of a 2-d point set
 //
 // \verbatim
+//  Modifications
 //   July 13 2004 - J.L. Mundy - Converted to vgl interface
-//   from code by Ken Clarkson (see .txx file for details)
+//                  from code by Ken Clarkson (see .txx file for details)
 // \endverbatim
 
 #include <vcl_vector.h>
@@ -33,6 +34,5 @@ class vgl_convex_hull_2d
 };
 
 #define VGL_CONVEX_HULL_2D_INSTANTIATE(T) extern "please include vgl/algo/vgl_convex_hull_2d.txx first"
-  
-#endif
 
+#endif
