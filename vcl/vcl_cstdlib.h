@@ -20,7 +20,9 @@
 #elif defined(VCL_VC60)
 # include "win32-vc60/vcl_cstdlib.h"
 #elif defined(VCL_VC70)
-# include "win32-vc70/vcl_cstdlib.h"
+# include <cstdlib>
+# define vcl_generic_cstdlib_STD /* */
+# include "generic/vcl_cstdlib.h"
 #elif defined(VCL_METRO_WERKS)
 # include "mwerks/vcl_cstdlib.h"
 #else
