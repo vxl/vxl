@@ -29,7 +29,7 @@ protected:
   ~vil_stream_fstream();
   
 private:
-  int flags_;
+  vcl_ios_openmode flags_;
   vcl_fstream f_;
   int id_;
 };

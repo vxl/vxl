@@ -9,10 +9,10 @@
 #include <vcl_iostream.h>
 #include <vil/vil_stream_fstream.h>
 
-static int modeflags(char const* mode)
+static vcl_ios_openmode modeflags(char const* mode)
 {
   if (*mode == 0)
-    return 0;
+    return vcl_ios_openmode(0);
 
   if (*mode == 'r') 
     return vcl_ios_in | modeflags(mode+1);
@@ -21,7 +21,7 @@ static int modeflags(char const* mode)
     return vcl_ios_out | modeflags(mode+1);
 
   vcl_cerr << "DODGY MODE " << mode << vcl_endl;
-  return 0;
+  return vcl_ios_openmode(0);
 }
 
 #define xerr if (true) ; else (vcl_cerr << "vcl_fstream#" << id_ << ": ")
@@ -30,11 +30,7 @@ static int id = 0;
 
 vil_stream_fstream::vil_stream_fstream(char const* fn, char const* mode):
   flags_(modeflags(mode)),
-  f_(fn, 
-#ifdef GNU_LIBSTDCXX_V3
-     std::ios::openmode
-#endif
-     (flags_ | vcl_ios_binary)) // need ios::binary on windows.
+  f_(fn, flags_ | vcl_ios_binary) // need ios::binary on windows.
 {
   id_ = ++id;
   xerr << "vil_stream_fstream(\"" << fn << "\", \""<<mode<<"\") = " << id_ << "\n";
