@@ -99,43 +99,64 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-SOURCE=.\Templates/vil2_algo_sobel_3x3+float.float-.cxx
+SOURCE=.\vil2_sobel_3x3.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_algo_gauss_reduce+byte-.cxx
+SOURCE=.\vil2_gauss_reduce.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_algo_sobel_3x3+byte.float-.cxx
+SOURCE=.\vil2_structuring_element.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_algo_sobel_3x3.cxx
+SOURCE=.\vil2_binary_dilate.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_algo_gauss_reduce.cxx
+SOURCE=.\vil2_binary_erode.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_gauss_reduce+byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_gauss_reduce+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_sobel_3x3+byte.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_sobel_3x3+float.float-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
 # Begin Source File
-SOURCE=.\vil2_algo_sobel_3x3.h
+SOURCE=.\vil2_sobel_3x3.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_algo_sobel_3x3.txx
+SOURCE=.\vil2_sobel_3x3.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_algo_gauss_reduce.h
+SOURCE=.\vil2_gauss_reduce.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_algo_gauss_reduce.txx
+SOURCE=.\vil2_gauss_reduce.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_algo_convolve_1d.h
+SOURCE=.\vil2_convolve_1d.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_algo_convolve_2d.h
+SOURCE=.\vil2_convolve_2d.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_algo_exp_filter_1d.h
+SOURCE=.\vil2_exp_filter_1d.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_binary_erode.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_binary_dilate.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_structuring_element.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"

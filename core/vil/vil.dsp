@@ -138,6 +138,12 @@ SOURCE=.\vil2_image_view_base.cxx
 SOURCE=.\vil2_load.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vil2_decimate.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_vil1.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil2_sample_profile_bilin+float.double-.cxx
 # End Source File
 # Begin Source File
@@ -223,6 +229,18 @@ SOURCE=.\Templates/vil2_image_view+sbyte-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil2_image_view+vil_rgb+sbyte--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_resample_bilin+byte.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_resample_bilin+byte.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_resample_bilin+float.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_sample_grid_bilin+float.float-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_memory_image.cxx
@@ -385,6 +403,18 @@ SOURCE=.\file_formats/vil2_jpeg_source_mgr.h
 # End Source File
 # Begin Source File
 SOURCE=.\file_formats/vil2_jpeglib.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_decimate.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_resample_bilin.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_resample_bilin.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_vil1.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"

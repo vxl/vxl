@@ -15,6 +15,10 @@ SOURCE=.\test_image_view.cxx
 SOURCE=.\test_image_view_maths.cxx
 SOURCE=.\test_memory_chunk.cxx
 SOURCE=.\test_convert.cxx
+SOURCE=.\test_binary_dilate.cxx
+SOURCE=.\test_binary_erode.cxx
+SOURCE=.\test_resample_bilin.cxx
+SOURCE=.\test_vil1.cxx
 # End Group
 # Begin Group "Header Files"
 # End Group

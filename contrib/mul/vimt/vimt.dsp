@@ -117,19 +117,43 @@ SOURCE=.\vimt_image_pyramid_builder.cxx
 SOURCE=.\vimt_transform_2d.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vimt_gaussian_pyramid_builder_2d+uchar-.cxx
+SOURCE=.\vimt_gaussian_pyramid_builder_2d_general.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vimt_image_2d_of+uchar-.cxx
+SOURCE=.\Templates/vimt_gaussian_pyramid_builder_2d_general+byte-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vimt_sample_profile_bilin+uchar.double-.cxx
+SOURCE=.\Templates/vimt_sample_grid_bilin+byte.double-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vsl_binary_loader+vimt_image-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vsl_binary_loader+vimt_image_pyramid_builder-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vimt_gaussian_pyramid_builder_2d+byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vimt_gaussian_pyramid_builder_2d+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vimt_gaussian_pyramid_builder_2d_general+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vimt_image_2d_of+byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vimt_image_2d_of+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vimt_sample_grid_bilin+float.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vimt_sample_profile_bilin+byte.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vimt_sample_profile_bilin+float.double-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -169,6 +193,24 @@ SOURCE=.\vimt_sample_profile_bilin.h
 # End Source File
 # Begin Source File
 SOURCE=.\vimt_sample_profile_bilin.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vimt_bilin_interp.h
+# End Source File
+# Begin Source File
+SOURCE=.\vimt_gaussian_pyramid_builder_2d_general.h
+# End Source File
+# Begin Source File
+SOURCE=.\vimt_gaussian_pyramid_builder_2d_general.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vimt_resample_bilin.h
+# End Source File
+# Begin Source File
+SOURCE=.\vimt_sample_grid_bilin.h
+# End Source File
+# Begin Source File
+SOURCE=.\vimt_sample_grid_bilin.txx
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
