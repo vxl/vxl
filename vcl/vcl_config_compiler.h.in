@@ -1,6 +1,5 @@
 #ifndef vcl_config_compiler_h_
 #define vcl_config_compiler_h_
-
 //:
 // \file
 // This file either is or was generated from vcl_config_compiler.h.in
@@ -248,7 +247,7 @@ text { return ret; }
 //#define VCL_UNINSTANTIATE_SPECIALIZATION(symbol)  @pragma do_not_instantiate text@
 //#define VCL_UNINSTANTIATE_SPECIALIZATION(symbol) /* no need - sensible compiler */
 //FIXME #define VCL_UNINSTANTIATE_SPECIALIZATION(symbol) @VCL_UNINSTANTIATE_SPECIALIZATION@
-#define VCL_UNINSTANTIATE_SPECIALIZATION(symbol) /* which compiler needs this ? */
+#define VCL_UNINSTANTIATE_SPECIALIZATION(symbol) // which compiler needs this ?
 
 
 //: VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(symbol)
@@ -315,7 +314,7 @@ text { return ret; }
 # define VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) /* */
 #else
 # define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) symbol;
-# define VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) /* which compiler needs this ? */
+# define VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) // which compiler needs this ?
 #endif
 
 
@@ -495,4 +494,4 @@ text { return ret; }
 
 // architecture macros removed -- they're not in the C++ standard
 
-#endif
+#endif // vcl_config_compiler_h_

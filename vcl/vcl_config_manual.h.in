@@ -1,11 +1,10 @@
 #ifndef vcl_config_manual_h_
 #define vcl_config_manual_h_
-
 //:
 // \file
 // This file either is or was generated from vcl_config_manual.h.in
+// \brief manual options
 
-// -------------------- manual options
 
 //: VCL_USE_NATIVE_STL
 // Whether to use the compiler's STL.
@@ -24,4 +23,4 @@
 // Whether to use implicit template instantiation.
 #define VCL_USE_IMPLICIT_TEMPLATES @VCL_USE_IMPLICIT_TEMPLATES@
 
-#endif
+#endif // vcl_config_manual_h_

@@ -1,11 +1,12 @@
 #ifndef vcl_config_headers_h_
 #define vcl_config_headers_h_
-
+//:
+// \file
 // This file either is or was generated from vcl_config_headers.h.in
 
 //--------------------------------------------------------------------------------
 
-// standard header files.
+//: standard header files.
 #define VCL_CXX_HAS_HEADER_CASSERT    @VCL_CXX_HAS_HEADER_CASSERT@
 #define VCL_CXX_HAS_HEADER_CISO646    @VCL_CXX_HAS_HEADER_CISO646@
 #define VCL_CXX_HAS_HEADER_CSETJMP    @VCL_CXX_HAS_HEADER_CSETJMP@
@@ -60,4 +61,4 @@
 
 //--------------------------------------------------------------------------------
 
-#endif
+#endif // vcl_config_headers_h_
