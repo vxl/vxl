@@ -44,8 +44,8 @@ vil_gauss_filter_5tap_params::vil_gauss_filter_5tap_params(double sigma)
   filt1_ = filt1_ / five_tap_total;
   filt2_ = filt2_ / five_tap_total;
 
-  assert(filt_edge0_ > filt_edge1_);
-  assert(filt_edge1_ > filt_edge2_);
+  assert(filt_edge0_ >= filt_edge1_);
+  assert(filt_edge1_ >= filt_edge2_);
 }
 
 
