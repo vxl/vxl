@@ -1,9 +1,0 @@
-#ifndef vcl_iso_cstddef_h_
-#define vcl_iso_cstddef_h_
-
-#include <cstddef>
-
-@ptrdiff_t
-@size_t
-
-#endif
