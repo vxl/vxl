@@ -32,8 +32,8 @@ private:
   bool _allow_ideal_points;
 //--------------------------------------------------------------------------------=
 protected:
-  bool compute_p(const PointArray&,
-                 const PointArray&,
+  bool compute_p(PointArray const&,
+                 PointArray const&,
                  HMatrix2D* H);
 //--------------------------------------------------------------------------------=
 public:

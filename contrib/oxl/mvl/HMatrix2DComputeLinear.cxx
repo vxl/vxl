@@ -43,8 +43,8 @@ const double DEGENERACY_THRESHOLD = 0.00001;  // FSM. see below.
 // allows for ideal points is used.
 
 bool
-HMatrix2DComputeLinear::compute_p(vcl_vector<HomgPoint2D> const& inpoints1,
-                                  vcl_vector<HomgPoint2D> const& inpoints2,
+HMatrix2DComputeLinear::compute_p(PointArray const& inpoints1,
+                                  PointArray const& inpoints2,
                                   HMatrix2D *H)
 {
   // tm_tmatrix_linear_nonrobust_trivecs

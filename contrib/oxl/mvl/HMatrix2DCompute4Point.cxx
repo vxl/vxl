@@ -23,8 +23,8 @@
 // returns the combined transform $H = H_2^{-1} H_1$.
 
 bool
-HMatrix2DCompute4Point::compute_p(vcl_vector<HomgPoint2D> const& points1,
-                                  vcl_vector<HomgPoint2D> const& points2,
+HMatrix2DCompute4Point::compute_p(PointArray const& points1,
+                                  PointArray const& points2,
                                   HMatrix2D *H)
 {
   ProjectiveBasis2D basis1(points1);
