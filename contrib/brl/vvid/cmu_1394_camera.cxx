@@ -117,7 +117,7 @@ bool cmu_1394_camera::get_frame()
 }
 
 bool
-cmu_1394_camera::get_monochrome_image(vil_memory_image_of<unsigned char>& im,
+cmu_1394_camera::get_monochrome_image(vil1_memory_image_of<unsigned char>& im,
                                       int pixel_sample_interval, bool reread)
 
 {
@@ -157,12 +157,12 @@ cmu_1394_camera::get_monochrome_image(vil_memory_image_of<unsigned char>& im,
 }
 
 bool cmu_1394_camera::
-get_rgb_image(vil_memory_image_of< vil_rgb<unsigned char> >& im,
+get_rgb_image(vil1_memory_image_of< vil1_rgb<unsigned char> >& im,
               int pixel_sample_interval, bool reread)
 {
   int xsize = C1394Camera::m_width/pixel_sample_interval,
     ysize = C1394Camera::m_height/pixel_sample_interval;
-  vil_memory_image_of< vil_rgb<unsigned char> > temp;
+  vil1_memory_image_of< vil1_rgb<unsigned char> > temp;
 
   //potentially reread the frame
   if (reread||!image_valid_)

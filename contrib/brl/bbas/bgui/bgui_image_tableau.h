@@ -33,15 +33,15 @@ class bgui_image_tableau : public vgui_image_tableau
   typedef vgui_image_tableau base;
 
   bgui_image_tableau();
-  bgui_image_tableau(vil_image const &);
+  bgui_image_tableau(vil1_image const &);
   bgui_image_tableau(char const *);
 
   vcl_string type_name() const;
 
-  //: Return the vil_image
-  vil_image get_image() const;
+  //: Return the vil1_image
+  vil1_image get_image() const;
 
-  void set_image(vil_image const &);
+  void set_image(vil1_image const &);
   void set_image(char const *);          // <- convenience
 
   //: Width of the ROI, or if not defined then the width of the whole image.
@@ -65,7 +65,7 @@ struct bgui_image_tableau_new : public bgui_image_tableau_sptr
 {
   typedef bgui_image_tableau_sptr base;
   bgui_image_tableau_new() : base(new bgui_image_tableau()) { }
-  bgui_image_tableau_new(vil_image const &i) : base(new bgui_image_tableau(i)) { }
+  bgui_image_tableau_new(vil1_image const &i) : base(new bgui_image_tableau(i)) { }
   bgui_image_tableau_new(char const *n) : base(new bgui_image_tableau(n)) { }
   operator vgui_image_tableau_sptr () const { vgui_image_tableau_sptr tt; tt.vertical_cast(*this); return tt; }
 };

@@ -6,8 +6,8 @@
 
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vcl_iostream.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include <vil1/vil1_load.h>
+#include <vil1/vil1_save.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_edgel_chain.h>
@@ -171,7 +171,7 @@ void bmvv_tomography_manager::load_image()
   load_image_dlg.checkbox("greyscale ", greyscale);
   if (!load_image_dlg.ask())
     return;
-  img_ = vil_load(image_filename.c_str());
+  img_ = vil1_load(image_filename.c_str());
   bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
   if (btab)
     {
@@ -199,8 +199,8 @@ void bmvv_tomography_manager::save_sinogram()
   load_image_dlg.file("Sinogram Filename:", ext, sino_filename);
   if (!load_image_dlg.ask())
     return;
-  vil_save(img_, image_filename.c_str(), "tiff");
-  vil_save(sino_, sino_filename.c_str(), "tiff");
+  vil1_save(img_, image_filename.c_str(), "tiff");
+  vil1_save(sino_, sino_filename.c_str(), "tiff");
 }
 
 //===================================================================
@@ -242,12 +242,12 @@ void bmvv_tomography_manager::sinogram()
   if (!gauss_dialog.ask())
     return;
   btom_slice_simulator ss(ssp);
-  vil_memory_image_of<float> sinogram;
-  vil_memory_image_of<float> reconst;
+  vil1_memory_image_of<float> sinogram;
+  vil1_memory_image_of<float> reconst;
   ss.gaussian_sinogram(sinogram, reconst);
-  //vil_memory_image_of<unsigned char> char_sinogram =
+  //vil1_memory_image_of<unsigned char> char_sinogram =
   sino_= brip_float_ops::convert_to_byte(sinogram, 0.0, scale);
-  //  vil_memory_image_of<unsigned char> char_reconst =
+  //  vil1_memory_image_of<unsigned char> char_reconst =
   img_ =  brip_float_ops::convert_to_byte(reconst);
   bgui_vtol2D_tableau_sptr btab0 = vtol_tabs_[0];
   bgui_vtol2D_tableau_sptr btab1 = vtol_tabs_[1];

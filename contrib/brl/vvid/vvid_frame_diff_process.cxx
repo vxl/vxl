@@ -19,9 +19,9 @@ bool vvid_frame_diff_process::execute()
                << " input image \n";
       return false;
     }
-  vil_image img = vvid_video_process::get_input_image(0);
-  vil_memory_image_of<unsigned char> temp(img);
-  vil_memory_image_of<float> fimg = brip_float_ops::convert_to_float(temp);
+  vil1_image img = vvid_video_process::get_input_image(0);
+  vil1_memory_image_of<unsigned char> temp(img);
+  vil1_memory_image_of<float> fimg = brip_float_ops::convert_to_float(temp);
   this->clear_input();
 
   //if first frame, just cache
@@ -33,7 +33,7 @@ bool vvid_frame_diff_process::execute()
     }
 
   //compute difference
-  vil_memory_image_of<float> dif = brip_float_ops::difference(img0_,fimg);
+  vil1_memory_image_of<float> dif = brip_float_ops::difference(img0_,fimg);
 
   // push back buffer
   img0_=fimg;

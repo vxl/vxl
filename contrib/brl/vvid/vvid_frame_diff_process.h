@@ -13,7 +13,7 @@
 //   J.L. Mundy February 16, 2003    Initial version.
 // \endverbatim
 //-----------------------------------------------------------------------------
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_memory_image_of.h>
 #include <vvid/vvid_video_process.h>
 
 class vvid_frame_diff_process : public vvid_video_process
@@ -28,7 +28,7 @@ class vvid_frame_diff_process : public vvid_video_process
  private:
   //members
   bool first_frame_;
-  vil_memory_image_of<float> img0_;
+  vil1_memory_image_of<float> img0_;
 };
 
 #endif // vvid_frame_diff_process_h_

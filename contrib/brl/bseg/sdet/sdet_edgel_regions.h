@@ -5,7 +5,7 @@
 // \file
 // \brief generation of regions bounded by sdet_edgel chains
 // \verbatim
-//     Inputs:  vil_image, vector<vtol_edge_2d_sptr>
+//     Inputs:  vil1_image, vector<vtol_edge_2d_sptr>
 //     Output: vector<gevd_intensity_face_sptr>
 // \endverbatim
 //  The idea is to generate regions by inserting boundaries into an
@@ -51,7 +51,7 @@
 #include <vcl_vector.h>
 #include <vcl_map.h>
 #include <vbl/vbl_array_2d.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <gevd/gevd_bufferxy.h>
 #include <vdgl/vdgl_intensity_face_sptr.h>
@@ -66,7 +66,7 @@ public:
                      bool debug = false);
   ~sdet_edgel_regions();
   //Main process method
-  bool compute_edgel_regions(vil_image& image,
+  bool compute_edgel_regions(vil1_image& image,
                              vcl_vector<vtol_edge_2d_sptr>& sgrp,
                              vcl_vector<vdgl_intensity_face_sptr>& faces);
 
@@ -86,7 +86,7 @@ public:
   int GetXSize(){return xend_ - xo_ + 1;}
   int GetYSize(){return yend_ - yo_ + 1;}
 
-  vil_image GetEdgeImage(vcl_vector<vtol_edge_2d_sptr>& edgels);
+  vil1_image GetEdgeImage(vcl_vector<vtol_edge_2d_sptr>& edgels);
 #if 0
   topo_debug_data_ref get_topo_debug_data(){return debug_data_;};
 #endif
@@ -154,7 +154,7 @@ protected:
   bool image_source_;
   bool buf_source_;
   int s_;//resolution factor for label, edge arrays
-  vil_image image_;
+  vil1_image image_;
   gevd_bufferxy* buf_;
   vbl_array_2d<sdet_region_edge_sptr> edge_boundary_array_;
   vbl_array_2d<unsigned int> region_label_array_;

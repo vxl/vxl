@@ -2,7 +2,7 @@
 #include <vcl_iostream.h>
 #include <vul/vul_timer.h>
 #include <vcl_vector.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_memory_image_of.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vtol/vtol_edge_2d.h>
 #include <brip/brip_float_ops.h>
@@ -29,18 +29,18 @@ bool vvid_edge_process::execute()
     }
   output_topo_objs_.clear();
 
-  vil_image img = vvid_video_process::get_input_image(0);
-  vil_memory_image_of<unsigned char> cimg;
+  vil1_image img = vvid_video_process::get_input_image(0);
+  vil1_memory_image_of<unsigned char> cimg;
   if (img.components()==3)
     {
-      vil_memory_image_of<float> fimg = brip_float_ops::convert_to_float(img);
+      vil1_memory_image_of<float> fimg = brip_float_ops::convert_to_float(img);
       vvid_video_process::clear_input();//remove image from input
       //convert a color image to grey
       cimg = brip_float_ops::convert_to_byte(fimg);
     }
   else
     {
-      cimg = vil_memory_image_of<unsigned char>(img);
+      cimg = vil1_memory_image_of<unsigned char>(img);
       vvid_video_process::clear_input();
     }
   //initialize the detector

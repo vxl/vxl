@@ -9,13 +9,13 @@ vvid_video_process::~vvid_video_process()
 {
 }
 
-vil_image vvid_video_process::get_input_image(unsigned int i) const
+vil1_image vvid_video_process::get_input_image(unsigned int i) const
 {
   if (i>input_images_.size())
     {
       vcl_cout << "In vvid_video_process::get_input_image(..) - index out of"
                << " bounds\n";
-      return vil_image();
+      return vil1_image();
     }
   return input_images_[i];
 }

@@ -14,7 +14,7 @@
 // \endverbatim
 //---------------------------------------------------------------------------
 #include <vcl_vector.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vdgl/vdgl_intensity_face_sptr.h>
@@ -60,7 +60,7 @@ class segv_segmentation_manager : public vgui_wrapper_tableau
  private:
   //flags
 
-  vil_image img_;
+  vil1_image img_;
   vgui_window* win_;
   bgui_vtol2D_tableau_sptr t2D_;
   static segv_segmentation_manager *instance_;

@@ -1,5 +1,5 @@
 #include <vcl_iostream.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_memory_image_of.h>
 #include <vidl/vidl_movie.h>
 #include <vidl/vidl_clip.h>
 #include <vidl/vidl_io.h>
@@ -22,7 +22,7 @@ bool vvid_capture_process::execute()
                << " input image \n";
     return false;
     }
-  vil_memory_image_of<unsigned char> img(vvid_video_process::get_input_image(0));
+  vil1_memory_image_of<unsigned char> img(vvid_video_process::get_input_image(0));
   frames_.push_back(img);
   return true;
 }

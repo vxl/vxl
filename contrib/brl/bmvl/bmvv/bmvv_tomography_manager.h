@@ -14,7 +14,7 @@
 // \endverbatim
 //--------------------------------------------------------------------------------
 #include <vcl_vector.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vdgl/vdgl_intensity_face_sptr.h>
 #include <vgui/vgui_wrapper_tableau.h>
@@ -55,8 +55,8 @@ class bmvv_tomography_manager : public vgui_wrapper_tableau
   bgui_picker_tableau_sptr get_selected_picker_tableau();
   //
  private:
-  vil_image img_;
-  vil_image sino_;
+  vil1_image img_;
+  vil1_image sino_;
   vgui_window* win_;
   vcl_vector<bgui_vtol2D_tableau_sptr> vtol_tabs_;
   vcl_vector<vtol_edge_2d_sptr> selected_curves_;

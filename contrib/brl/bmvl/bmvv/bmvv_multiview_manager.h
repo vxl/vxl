@@ -14,7 +14,7 @@
 // \endverbatim
 //--------------------------------------------------------------------------------
 #include <vcl_vector.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vdgl/vdgl_intensity_face_sptr.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
@@ -71,11 +71,11 @@ class bmvv_multiview_manager : public vgui_wrapper_tableau
   bgui_vtol2D_tableau_sptr get_selected_vtol2D_tableau();
   bgui_picker_tableau_sptr get_picker_tableau_at(unsigned col, unsigned row);
   bgui_picker_tableau_sptr get_selected_picker_tableau();
-  vil_image get_image_at(unsigned col, unsigned row);
+  vil1_image get_image_at(unsigned col, unsigned row);
 
   //
  private:
-  vil_image img_;
+  vil1_image img_;
   vgui_window* win_;
   vcl_vector<bgui_vtol2D_tableau_sptr> vtol_tabs_;
   vcl_vector<vtol_edge_2d_sptr> selected_curves_;

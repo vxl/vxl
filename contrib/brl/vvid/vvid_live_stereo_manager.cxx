@@ -7,7 +7,7 @@
 #include "vvid_live_stereo_manager.h"
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vcl_iostream.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_memory_image_of.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_modifier.h>
 #include <vgui/vgui.h>
@@ -141,8 +141,8 @@ void vvid_live_stereo_manager::run_frames()
 
     if (!cp_.rgb_&&N_views_==2)//i.e. grey scale
       {
-        vil_memory_image_of<unsigned char> i1, i2;
-        vil_memory_image_of<vil_rgb<unsigned char> > im;
+        vil1_memory_image_of<unsigned char> i1, i2;
+        vil1_memory_image_of<vil1_rgb<unsigned char> > im;
 
         video_process_->clear_input();
 
@@ -193,7 +193,7 @@ void vvid_live_stereo_manager::quit()
 bool
 vvid_live_stereo_manager::get_current_rgb_image(int view_no,
                                                 int pix_sample_interval,
-                                                vil_memory_image_of< vil_rgb<unsigned char> >& im)
+                                                vil1_memory_image_of< vil1_rgb<unsigned char> >& im)
 {
   if (!init_successful_)
     return false;
@@ -209,7 +209,7 @@ vvid_live_stereo_manager::get_current_rgb_image(int view_no,
 
 bool vvid_live_stereo_manager::
 get_current_mono_image(int view_no, int pix_sample_interval,
-                       vil_memory_image_of<unsigned char>& im)
+                       vil1_memory_image_of<unsigned char>& im)
 {
   if (!init_successful_)
     return false;
@@ -224,13 +224,13 @@ get_current_mono_image(int view_no, int pix_sample_interval,
 }
 
 void vvid_live_stereo_manager::
-set_process_rgb_image(vil_memory_image_of< vil_rgb<unsigned char> >& im)
+set_process_rgb_image(vil1_memory_image_of< vil1_rgb<unsigned char> >& im)
 {
   process_rgb_ = im;
 }
 
 void vvid_live_stereo_manager::
-set_process_mono_image(vil_memory_image_of<unsigned char>& im)
+set_process_mono_image(vil1_memory_image_of<unsigned char>& im)
 {
   process_mono_ = im;
 }

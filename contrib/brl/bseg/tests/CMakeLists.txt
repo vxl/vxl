@@ -4,7 +4,7 @@ INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR})
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas)
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg)
 
-LINK_LIBRARIES(sdet brip btol bdgl vdgl vil vnl)
+LINK_LIBRARIES(sdet brip btol bdgl vdgl vil1 vnl)
 
 ADD_EXECUTABLE(sdet_test_detector  sdet_test_detector.cxx)
 ADD_TEST(sdet_test_detector sdet_test_detector ${BRL_INCLUDE_DIR}/bseg/tests/jar-closeup.tif)

@@ -7,7 +7,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 
 #include <gevd/gevd_pixel.h>
 #include <gevd/gevd_float_operators.h>
@@ -32,7 +32,7 @@ sdet_detector::sdet_detector(sdet_detector_params& params)
     noise = params.noise_multiplier;
 }
 
-sdet_detector::sdet_detector(vil_image img, float smoothSigma, float noiseSigma,
+sdet_detector::sdet_detector(vil1_image img, float smoothSigma, float noiseSigma,
                              float contour_factor, float junction_factor, int min_length,
                              float maxgap, float min_jump)
   :  image(img), noise(noiseSigma), edgel(NULL), direction(NULL),

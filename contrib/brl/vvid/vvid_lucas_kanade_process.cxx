@@ -1,6 +1,6 @@
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
-#include <vil/vil_rgb.h>
+#include <vil1/vil1_rgb.h>
 #include <brip/brip_float_ops.h>
 #include <vvid/vvid_lucas_kanade_process.h>
 
@@ -19,19 +19,19 @@ vvid_lucas_kanade_process::~vvid_lucas_kanade_process()
 }
 
 void vvid_lucas_kanade_process::
-compute_lucas_kanade(vil_memory_image_of<float>& image)
+compute_lucas_kanade(vil1_memory_image_of<float>& image)
 {
   int w = image.width(), h = image.height();
-  vil_memory_image_of<float> vx, vy;
+  vil1_memory_image_of<float> vx, vy;
   vx.resize(w,h);
   vy.resize(w,h);
 
-  vil_memory_image_of<float> prev(queue_[0]);
+  vil1_memory_image_of<float> prev(queue_[0]);
   brip_float_ops::Lucas_KanadeMotion(image, prev, window_size_, thresh_,
                                      vx, vy);
-  vil_memory_image_of< vil_rgb<unsigned char> > output;
+  vil1_memory_image_of< vil1_rgb<unsigned char> > output;
   output.resize(w,h);
-  vil_rgb<unsigned char> z(0,0,0);
+  vil1_rgb<unsigned char> z(0,0,0);
   for (int y = 0; y<h; y++)
     for (int x = 0; x<w; x++)
       {
@@ -45,13 +45,13 @@ compute_lucas_kanade(vil_memory_image_of<float>& image)
         double red = 63*vcl_cos(ang), grn = 63*vcl_sin(ang);
         unsigned char  r = (unsigned char)(red+127);
         unsigned char  g = (unsigned char)(grn+127);
-        vil_rgb<unsigned char> v(r,g, 127);
+        vil1_rgb<unsigned char> v(r,g, 127);
         output(x,y) = v;
       }
   output_image_ = output;
 }
 
-void vvid_lucas_kanade_process::update_queue(vil_image image)
+void vvid_lucas_kanade_process::update_queue(vil1_image image)
 {
   queue_[0]=queue_[1];
   queue_[1]=image;
@@ -65,14 +65,14 @@ bool vvid_lucas_kanade_process::execute()
                << " input image \n";
       return false;
     }
-  vil_image img = vvid_video_process::get_input_image(0);
-  vil_memory_image_of<float> fimg = brip_float_ops::convert_to_float(img);
-  vil_memory_image_of<float> temp2;
+  vil1_image img = vvid_video_process::get_input_image(0);
+  vil1_memory_image_of<float> fimg = brip_float_ops::convert_to_float(img);
+  vil1_memory_image_of<float> temp2;
   if(downsample_)
     temp2 = brip_float_ops::half_resolution(fimg);
   else
     temp2 = fimg;
-  vil_memory_image_of<float> fsmooth = brip_float_ops::gaussian(temp2, 0.8f);
+  vil1_memory_image_of<float> fsmooth = brip_float_ops::gaussian(temp2, 0.8f);
   this->clear_input();
   switch(state_)
     {

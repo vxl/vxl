@@ -16,7 +16,7 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl_vector.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_memory_image_of.h>
 #include <vvid/vvid_video_process.h>
 
 class vvid_lucas_kanade_process : public vvid_video_process
@@ -35,12 +35,12 @@ class vvid_lucas_kanade_process : public vvid_video_process
   double thresh_;
  private:
   //local methods
-  void compute_lucas_kanade(vil_memory_image_of<float>& image);
-  void update_queue(vil_image ix);
+  void compute_lucas_kanade(vil1_memory_image_of<float>& image);
+  void update_queue(vil1_image ix);
   //members
   state_symbol state_;
   bool first_frame_;
-  vcl_vector<vil_image> queue_;
+  vcl_vector<vil1_image> queue_;
 };
 
 #endif // vvid_lucas_kanade_process_h_

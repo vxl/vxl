@@ -1,7 +1,7 @@
 // This is brl/bseg/tests/brip_test_lucas_kanade.cxx
 #include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_memory_image_of.h>
 #include <brip/brip_float_ops.h>
 
 #define Assert(x) { vcl_cout << #x "\t\t\t test "; \
@@ -12,7 +12,7 @@ bool near_eq(double x, double y){return vcl_fabs(x-y)<0.1;}
 int main(int argc, char * argv[])
 {
   int success=0, failures=0;
-  vil_memory_image_of<float> cur, prev, vx, vy, ang;
+  vil1_memory_image_of<float> cur, prev, vx, vy, ang;
   int w = 32, h =32;
   double D_R = 180*vnl_math::one_over_pi;
   cur.resize(w,h);
@@ -31,8 +31,8 @@ int main(int argc, char * argv[])
   cur(11,10)=100.0; cur(12,16)=100.0; cur(10,21)=100.0; cur(9,26)=100.0;
   //180, 225, 270, 315
   cur(9,10)=100.0; cur(9,14)=100.0; cur(10,19)=100.0; cur(11,24)=100.0;
-  vil_memory_image_of<float> gauss_cur = brip_float_ops::gaussian(cur, 1.0);
-  vil_memory_image_of<float> gauss_prev = brip_float_ops::gaussian(prev, 1.0);
+  vil1_memory_image_of<float> gauss_cur = brip_float_ops::gaussian(cur, 1.0);
+  vil1_memory_image_of<float> gauss_prev = brip_float_ops::gaussian(prev, 1.0);
   brip_float_ops::Lucas_KanadeMotion(gauss_cur, gauss_prev, 1, 500.0, vx, vy);
   for (int y =0; y<h; y++)
     for (int x = 0; x<w; x++)

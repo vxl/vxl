@@ -12,7 +12,7 @@ AUX_SOURCE_DIRECTORY(Templates bsol_sources)
 
 ADD_LIBRARY(bsol ${bsol_sources})
 
-TARGET_LINK_LIBRARIES(bsol vsol vil vnl vbl)
+TARGET_LINK_LIBRARIES(bsol vsol vil1 vnl vbl)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)

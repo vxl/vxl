@@ -28,13 +28,13 @@ class vvid_motion_process : public vvid_video_process
   virtual bool finish();
  private:
   //local methods
-  void compute_motion(vil_image ix, vil_image iy);
-  void update_queue(vil_image ix, vil_image iy);
+  void compute_motion(vil1_image ix, vil1_image iy);
+  void update_queue(vil1_image ix, vil1_image iy);
   //members
   state_symbol state_;
   bool first_frame_;
-  vcl_vector<vil_image > queuex_;
-  vcl_vector<vil_image > queuey_;
+  vcl_vector<vil1_image > queuex_;
+  vcl_vector<vil1_image > queuey_;
 };
 
 #endif // vvid_motion_process_h_

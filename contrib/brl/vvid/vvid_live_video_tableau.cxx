@@ -123,38 +123,38 @@ void vvid_live_video_tableau::stop_live_video()
 }
 
 void vvid_live_video_tableau::
-get_camera_rgb_image(vil_memory_image_of< vil_rgb<unsigned char> >& im,
+get_camera_rgb_image(vil1_memory_image_of< vil1_rgb<unsigned char> >& im,
                      int pix_sample_interval)
 {
   cam_.get_rgb_image(im, pix_sample_interval, false);
 }
 
-vil_memory_image_of< vil_rgb<unsigned char> >
+vil1_memory_image_of< vil1_rgb<unsigned char> >
 vvid_live_video_tableau::get_current_rgb_image(int pix_sample_interval)
 {
-  vil_memory_image_of< vil_rgb<unsigned char> > im;
+  vil1_memory_image_of< vil1_rgb<unsigned char> > im;
   cam_.get_rgb_image(im, pix_sample_interval, false);
   return im;
 }
 
 bool vvid_live_video_tableau::
 get_current_rgb_image(int pix_sample_interval,
-                      vil_memory_image_of< vil_rgb<unsigned char> >& im)
+                      vil1_memory_image_of< vil1_rgb<unsigned char> >& im)
 {
  return  cam_.get_rgb_image(im, pix_sample_interval, false);
 }
 
-vil_memory_image_of<unsigned char>
+vil1_memory_image_of<unsigned char>
 vvid_live_video_tableau::get_current_mono_image(int pix_sample_interval)
 {
-  vil_memory_image_of<unsigned char> im;
+  vil1_memory_image_of<unsigned char> im;
   cam_.get_monochrome_image(im, pix_sample_interval, false);
   return im;
 }
 
 bool vvid_live_video_tableau::
 get_current_mono_image(int pix_sample_interval,
-                       vil_memory_image_of<unsigned char>& im )
+                       vil1_memory_image_of<unsigned char>& im )
 {
   return cam_.get_monochrome_image(im, pix_sample_interval, false);
 }

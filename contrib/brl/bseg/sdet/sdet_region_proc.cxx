@@ -3,7 +3,7 @@
 //:
 // \file
 #include <vnl/vnl_numeric_traits.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_memory_image_of.h>
 #include <gevd/gevd_float_operators.h>
 #include <sdet/sdet_edgel_regions.h>
 #include <vdgl/vdgl_intensity_face.h>
@@ -31,7 +31,7 @@ sdet_region_proc::~sdet_region_proc()
 //-------------------------------------------------------------------------
 //: Set the image to be processed
 //
-void sdet_region_proc::set_image(vil_image& image)
+void sdet_region_proc::set_image(vil1_image& image)
 {
   if (!image)
     {
@@ -93,7 +93,7 @@ void sdet_region_proc::clear()
 //--------------------------------------------------------------------------
 //: Use a linear approximation to intensity to predict region data.
 //  Return the residual error
-vil_image sdet_region_proc::get_residual_image()
+vil1_image sdet_region_proc::get_residual_image()
 {
   if (!image_||!regions_valid_)
     {
@@ -101,7 +101,7 @@ vil_image sdet_region_proc::get_residual_image()
       return 0;
     }
   int xsize = image_.width(), ysize = image_.height();
-  vil_memory_image_of<unsigned char> res_image(xsize, ysize);
+  vil1_memory_image_of<unsigned char> res_image(xsize, ysize);
   res_image.fill(0);
   float min_res = (float)vnl_numeric_traits<unsigned short>::maxval;
   for (vcl_vector<vdgl_intensity_face_sptr>::iterator fit = regions_.begin();

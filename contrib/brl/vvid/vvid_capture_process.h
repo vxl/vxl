@@ -30,7 +30,7 @@ class vvid_capture_process : public vvid_video_process
   vvid_capture_process();
   //members
   vcl_string video_file_;
-  vcl_list<vil_image> frames_;
+  vcl_list<vil1_image> frames_;
 };
 
 #endif // vvid_capture_process_h_

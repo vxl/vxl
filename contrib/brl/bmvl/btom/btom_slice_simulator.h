@@ -15,7 +15,7 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_memory_image_of.h>
 #include <btom/btom_slice_simulator_params.h>
 
 class btom_slice_simulator : public btom_slice_simulator_params
@@ -24,8 +24,8 @@ class btom_slice_simulator : public btom_slice_simulator_params
   btom_slice_simulator(btom_slice_simulator_params& ssp);
   ~btom_slice_simulator();
 
-  void gaussian_sinogram(vil_memory_image_of<float> & sinogram,
-                         vil_memory_image_of<float> & reconst);
+  void gaussian_sinogram(vil1_memory_image_of<float> & sinogram,
+                         vil1_memory_image_of<float> & reconst);
 
  protected:
   btom_slice_simulator();

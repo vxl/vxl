@@ -21,8 +21,8 @@
 #include <windows.h>
 #include <winbase.h>
 #include <1394Camera.h>
-#include <vil/vil_rgb.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_rgb.h>
+#include <vil1/vil1_memory_image_of.h>
 #include <vvid/cmu_1394_camera_params.h>
 #include <vcl_iosfwd.h>
 
@@ -43,9 +43,9 @@ class cmu_1394_camera : public cmu_1394_camera_params, public C1394Camera
   void start();
   void stop();
   bool get_frame();
-  bool get_rgb_image(vil_memory_image_of<vil_rgb<unsigned char> >& im,
+  bool get_rgb_image(vil1_memory_image_of<vil1_rgb<unsigned char> >& im,
                      int pixel_sample_interval=1, bool reread = true);
-  bool get_monochrome_image(vil_memory_image_of<unsigned char>& im,
+  bool get_monochrome_image(vil1_memory_image_of<unsigned char>& im,
                             int pixel_sample_interval =1, bool reread = true);
   friend vcl_ostream& operator << (vcl_ostream& os, const cmu_1394_camera& c);
 

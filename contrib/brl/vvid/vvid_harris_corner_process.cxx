@@ -3,7 +3,7 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vsol/vsol_point_2d.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_memory_image_of.h>
 #include <sdet/sdet_harris_detector.h>
 #include <vvid/vvid_harris_corner_process.h>
 
@@ -25,7 +25,7 @@ bool vvid_harris_corner_process::execute()
     }
   output_spat_objs_.clear();
   //assume the input images are grey scale (should really check)
-  vil_memory_image_of<unsigned char> img(vvid_video_process::get_input_image(0));
+  vil1_memory_image_of<unsigned char> img(vvid_video_process::get_input_image(0));
   vvid_video_process::clear_input();
   sdet_harris_detector harris_detector(*((sdet_harris_detector_params*)this));
   harris_detector.set_image(img);

@@ -34,7 +34,7 @@
 //
 //-------------------------------------------------------------------------
 #include <vcl_vector.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <sdet/sdet_harris_detector_params.h>
 
@@ -46,7 +46,7 @@ public:
 
   ~sdet_harris_detector();
   //Accessors
-  void set_image(vil_image& image);
+  void set_image(vil1_image& image);
   vcl_vector<vsol_point_2d_sptr>& get_points(){return points_;}
 
   //Utility Methods
@@ -58,7 +58,7 @@ protected:
 
   //members
   bool points_valid_;      //process state flag
-  vil_image image_;  //input image
+  vil1_image image_;  //input image
   vcl_vector<vsol_point_2d_sptr> points_; //resulting corners
 };
 #endif // sdet_harris_detector_h_

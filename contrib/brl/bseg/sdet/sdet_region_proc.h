@@ -18,7 +18,7 @@
 //
 //-------------------------------------------------------------------------
 #include <vcl_vector.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 #include <vdgl/vdgl_intensity_face.h>
 #include <sdet/sdet_region_proc_params.h>
 
@@ -30,22 +30,22 @@ public:
 
   ~sdet_region_proc();
   //Accessors
-  void set_image(vil_image& image);
+  void set_image(vil1_image& image);
   vcl_vector<vdgl_intensity_face_sptr>& get_regions(){return regions_;}
 
   //Utility Methods
   void extract_regions();
   void clear();
-  vil_image get_residual_image();
+  vil1_image get_residual_image();
   //Debug methods
-  vil_image get_edge_image(){return edge_image_;}
+  vil1_image get_edge_image(){return edge_image_;}
 protected:
   //protected methods
 
   //members
   bool regions_valid_;      //process state flag
-  vil_image image_;  //input image
-  vil_image edge_image_;//debug
+  vil1_image image_;  //input image
+  vil1_image edge_image_;//debug
   vcl_vector<vdgl_intensity_face_sptr> regions_; //resulting intensity faces
 };
 #endif // sdet_region_proc_h_

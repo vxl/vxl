@@ -9,4 +9,4 @@ AUX_SOURCE_DIRECTORY(Templates brip_sources)
 
 ADD_LIBRARY(brip ${brip_sources})
 
-TARGET_LINK_LIBRARIES(brip vil vnl vbl vul)
+TARGET_LINK_LIBRARIES(brip vil1 vnl vbl vul)

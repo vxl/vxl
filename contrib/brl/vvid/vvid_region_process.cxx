@@ -1,5 +1,5 @@
 #include <vcl_iostream.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_memory_image_of.h>
 #include <vcl_vector.h>
 #include <vdgl/vdgl_intensity_face_sptr.h>
 #include <vdgl/vdgl_intensity_face.h>
@@ -25,7 +25,7 @@ bool vvid_region_process::execute()
     }
   output_topo_objs_.clear();
   //assume the input images are grey scale (should really check)
-  vil_memory_image_of<unsigned char> img(vvid_video_process::get_input_image(0));
+  vil1_memory_image_of<unsigned char> img(vvid_video_process::get_input_image(0));
 
   sdet_region_proc_params rpp((*(sdet_detector_params*)this), true, false, 2);
   sdet_region_proc rp(rpp);

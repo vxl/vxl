@@ -7,8 +7,8 @@
 #include <vcl_algorithm.h> // vcl_find()
 #include <vbl/vbl_qsort.h> //for sorting labels
 
-#include <vil/vil_byte.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_byte.h>
+#include <vil1/vil1_memory_image_of.h>
 #include <vul/vul_timer.h>
 
 #include <vsol/vsol_box_2d.h>
@@ -271,7 +271,7 @@ bool sdet_edgel_regions::compute_edgel_regions(gevd_bufferxy* buf,
 //   1) Connected components 2)Edge-label assignment 3)Collect region
 //   boundaries 4) Construct vdgl_intensity_faces 5)Calculate intensity fit
 bool sdet_edgel_regions::
-compute_edgel_regions(vil_image& image,
+compute_edgel_regions(vil1_image& image,
                       vcl_vector<vtol_edge_2d_sptr>& sgrp,
                       vcl_vector<vdgl_intensity_face_sptr>& faces)
 {
@@ -397,12 +397,12 @@ unsigned int sdet_edgel_regions::BaseLabel(unsigned int label)
 //  Paint the edgels into the region label array and then
 //    output an image where the value is 255 if the pixel is an
 //    edge, 0 otherwise
-vil_image sdet_edgel_regions::GetEdgeImage(vcl_vector<vtol_edge_2d_sptr>& sg)
+vil1_image sdet_edgel_regions::GetEdgeImage(vcl_vector<vtol_edge_2d_sptr>& sg)
 {
   if (!this->InitRegionArray(sg)) return NULL;
   unsigned char no_edge = 0, edge = 255;
 
-  vil_memory_image_of<vil_byte> image(xs_,ys_);
+  vil1_memory_image_of<vil1_byte> image(xs_,ys_);
 
   for (unsigned int y = 0; y<ys_; y++)
     for (unsigned int x = 0; x<xs_; x++)

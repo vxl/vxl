@@ -3,7 +3,7 @@
 //:
 // \file
 #include <vcl_iostream.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 #include <vsol/vsol_line_2d.h>
 #include <sdet/sdet_fit_lines.h>
 #include <sdet/sdet_grid_finder.h>
@@ -35,7 +35,7 @@ bool vvid_grid_finder_process::execute()
                << " input image\n";
       return false;
     }
-  vil_image img = this->get_input_image(0);
+  vil1_image img = this->get_input_image(0);
   vvid_edge_process ep(*((sdet_detector_params*)this));
   ep.add_input_image(img);
   if (!ep.execute())

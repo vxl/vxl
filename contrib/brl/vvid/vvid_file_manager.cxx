@@ -7,8 +7,8 @@
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vul/vul_timer.h>
-#include <vil/vil_image.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_memory_image_of.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_find.h>
 #include <vgui/vgui_error_dialog.h>
@@ -244,8 +244,8 @@ void vvid_file_manager::load_video_file()
 
   vidl_movie::frame_iterator pframe(my_movie_);
   pframe = my_movie_->first();
-  vil_image img = pframe->get_image();
-  vil_image second = (my_movie_->first()+1)->get_image();
+  vil1_image img = pframe->get_image();
+  vil1_image second = (my_movie_->first()+1)->get_image();
   height_ = img.height();
   width_ = img.width();
   vcl_cout << "Video Height " << height_ << vcl_endl
@@ -258,7 +258,7 @@ void vvid_file_manager::load_video_file()
     {
       while (pframe!=my_movie_->last())
         {
-          vil_image img = pframe->get_image();
+          vil1_image img = pframe->get_image();
           vgui_image_tableau_sptr itab = vgui_image_tableau_new(img);
           bgui_vtol2D_tableau_new  e(itab);
           tabs_.push_back(e);
@@ -336,11 +336,11 @@ void vvid_file_manager::un_cached_play()
             }
           --pframe;
         }
-      vil_image img = pframe->get_image();
+      vil1_image img = pframe->get_image();
       itab0_->set_image(img);
       if (video_process_&&!pause_video_)
         {
-          vil_memory_image_of<unsigned char> image(img);
+          vil1_memory_image_of<unsigned char> image(img);
           video_process_->add_input_image(image);
           if (video_process_->execute())
             {
@@ -376,7 +376,7 @@ void vvid_file_manager::play_video()
   else
     {
       this->un_cached_play();
-      vil_image img =my_movie_->get_image(0);
+      vil1_image img =my_movie_->get_image(0);
       itab1_->set_image(img);
     }
   this->post_redraw();

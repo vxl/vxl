@@ -2,8 +2,8 @@
 #include <vcl_vector.h>
 #include <vcl_string.h>
 #include <vcl_iostream.h>
-#include <vil/vil_image.h>
-#include <vil/vil_load.h>
+#include <vil1/vil1_image.h>
+#include <vil1/vil1_load.h>
 #include <vdgl/vdgl_intensity_face.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
@@ -20,7 +20,7 @@ int main(int argc, char * argv[])
   if (image_path=="")
     image_path = "jar-closeup.tif";
   vcl_cout << "Loading Image " << image_path << "\n";
-  vil_image image = vil_load(image_path.c_str());
+  vil1_image image = vil1_load(image_path.c_str());
   if (image)
     {
       static sdet_detector_params dp;

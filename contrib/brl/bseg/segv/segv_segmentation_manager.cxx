@@ -7,8 +7,8 @@
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vcl_iostream.h>
 #include <vbl/vbl_array_2d.h>
-#include <vil/vil_load.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_load.h>
+#include <vil1/vil1_memory_image_of.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vdgl/vdgl_interpolator.h>
@@ -104,7 +104,7 @@ void segv_segmentation_manager::load_image()
   load_image_dlg.checkbox("greyscale ", greyscale);
   if (!load_image_dlg.ask())
     return;
-  img_ = vil_load(image_filename.c_str());
+  img_ = vil1_load(image_filename.c_str());
   t2D_->get_image_tableau()->set_image(img_);
 }
 
@@ -224,9 +224,9 @@ void segv_segmentation_manager::gaussian()
   gauss_dialog.field("Gaussian sigma", sigma);
   if (!gauss_dialog.ask())
     return;
-  vil_memory_image_of<float> input(img_);
-  vil_memory_image_of<float> smooth = brip_float_ops::gaussian(input, sigma);
-  vil_memory_image_of<unsigned char> char_smooth =
+  vil1_memory_image_of<float> input(img_);
+  vil1_memory_image_of<float> smooth = brip_float_ops::gaussian(input, sigma);
+  vil1_memory_image_of<unsigned char> char_smooth =
     brip_float_ops::convert_to_byte(smooth);
   t2D_->get_image_tableau()->set_image(char_smooth);
   t2D_->post_redraw();
@@ -243,14 +243,14 @@ void segv_segmentation_manager::convolution()
   vbl_array_2d<float> kernel = brip_float_ops::load_kernel(kernel_filename);
 
   //convert input image
-  vil_memory_image_of<unsigned char> temp(img_);
-  vil_memory_image_of<float> temp2 = brip_float_ops::convert_to_float(temp);
+  vil1_memory_image_of<unsigned char> temp(img_);
+  vil1_memory_image_of<float> temp2 = brip_float_ops::convert_to_float(temp);
 
   //convolve
-  vil_memory_image_of<float> conv = brip_float_ops::convolve(temp2, kernel);
+  vil1_memory_image_of<float> conv = brip_float_ops::convolve(temp2, kernel);
 
   //convert back to unsigned char
-  vil_memory_image_of<unsigned char> char_conv =
+  vil1_memory_image_of<unsigned char> char_conv =
     brip_float_ops::convert_to_byte(conv);
 
   //display the image
@@ -270,11 +270,11 @@ void segv_segmentation_manager::downsample()
   downsample_dialog.field("Bert-Adelson Factor", filter_factor);
   if (!downsample_dialog.ask())
     return;
-  vil_memory_image_of<unsigned char> input(img_);
-  vil_memory_image_of<float> inputf = brip_float_ops::convert_to_float(input);
-  vil_memory_image_of<float> half_res =
+  vil1_memory_image_of<unsigned char> input(img_);
+  vil1_memory_image_of<float> inputf = brip_float_ops::convert_to_float(input);
+  vil1_memory_image_of<float> half_res =
     brip_float_ops::half_resolution(inputf, filter_factor);
-  vil_memory_image_of<unsigned char> char_half_res =
+  vil1_memory_image_of<unsigned char> char_half_res =
     brip_float_ops::convert_to_byte(half_res);
   t2D_->get_image_tableau()->set_image(char_half_res);
   t2D_->post_redraw();
@@ -326,14 +326,14 @@ void segv_segmentation_manager::beaudet_measure()
   if (!harris_dialog.ask())
     return;
   int w = img_.width(), h = img_.height();
-  vil_memory_image_of<unsigned char> input(img_);
-  vil_memory_image_of<float> inputf = brip_float_ops::convert_to_float(input);
-  vil_memory_image_of<float> smooth = brip_float_ops::gaussian(inputf, sigma);
-  vil_memory_image_of<float> Ixx, Ixy, Iyy, b;
+  vil1_memory_image_of<unsigned char> input(img_);
+  vil1_memory_image_of<float> inputf = brip_float_ops::convert_to_float(input);
+  vil1_memory_image_of<float> smooth = brip_float_ops::gaussian(inputf, sigma);
+  vil1_memory_image_of<float> Ixx, Ixy, Iyy, b;
   Ixx.resize(w,h);  Ixy.resize(w,h);   Iyy.resize(w,h);
   brip_float_ops::hessian_3x3(smooth, Ixx, Ixy, Iyy);
   b = brip_float_ops::beaudet(Ixx, Ixy, Iyy);
-  vil_memory_image_of<unsigned char> uchar_b =
+  vil1_memory_image_of<unsigned char> uchar_b =
     brip_float_ops::convert_to_byte(b,0.0f, cmax);
   t2D_->get_image_tableau()->set_image(uchar_b);
   t2D_->post_redraw();
@@ -399,7 +399,7 @@ void segv_segmentation_manager::regions()
   rp.extract_regions();
   if (debug)
     {
-      vil_image ed_img = rp.get_edge_image();
+      vil1_image ed_img = rp.get_edge_image();
       vgui_image_tableau_sptr itab =  t2D_->get_image_tableau();
       if (!itab)
         {
@@ -415,7 +415,7 @@ void segv_segmentation_manager::regions()
     }
   if (residual)
     {
-      vil_image res_img = rp.get_residual_image();
+      vil1_image res_img = rp.get_residual_image();
       vgui_image_tableau_sptr itab =  t2D_->get_image_tableau();
       if (!itab)
         {

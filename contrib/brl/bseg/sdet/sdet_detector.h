@@ -76,7 +76,7 @@ class gevd_bufferxy;
 
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
-#include <vil/vil_image.h>
+#include <vil1/vil1_image.h>
 
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
@@ -89,7 +89,7 @@ class sdet_detector : public sdet_detector_params
   // be the most important in controlling performance - JLM
   //
   sdet_detector(sdet_detector_params& params);
-  sdet_detector(vil_image, float smoothSigma = 1.0, float noiseSigma =2.0,
+  sdet_detector(vil1_image, float smoothSigma = 1.0, float noiseSigma =2.0,
                 float contourFactor = 1.0, float junctionFactor = 1.5,
                 int minLength = 6, float maxGap = 2.23606, float minJump=1.0);
   ~sdet_detector();
@@ -99,10 +99,10 @@ class sdet_detector : public sdet_detector_params
   bool DoContour();
 
   //Fold contour detection
-  void DoFoldContourDetector(vil_image image, vcl_vector<vtol_edge_2d_sptr >& edgels);
+  void DoFoldContourDetector(vil1_image image, vcl_vector<vtol_edge_2d_sptr >& edgels);
 
   //Corner detection using curvature on edgel chains
-  //GEOFF  void  DoCornerDetector(vil_image image, IUPointGroup& corners);
+  //GEOFF  void  DoCornerDetector(vil1_image image, IUPointGroup& corners);
 
   //Corner detection using curvature on edgel chains
   void  DoBreakCorners(vcl_vector<vtol_edge_2d_sptr >& in_edgels, vcl_vector<vtol_edge_2d_sptr >& out_edgels);
@@ -122,7 +122,7 @@ class sdet_detector : public sdet_detector_params
 
   vcl_vector<vtol_vertex_2d_sptr> *GetVertices() {return vertices;}
   vcl_vector<vtol_edge_2d_sptr> *GetEdges() {return edges;}
-  void SetImage(vil_image img) {image = img;}
+  void SetImage(vil1_image img) {image = img;}
 
   void print(vcl_ostream &strm=vcl_cout) const;
 
@@ -130,7 +130,7 @@ class sdet_detector : public sdet_detector_params
   void ClearData(); // clear buffer
 
  protected:
-  vil_image image;
+  vil1_image image;
 
   float noise; // noise estimation/threshold
 

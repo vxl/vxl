@@ -14,7 +14,7 @@
 // \endverbatim
 //--------------------------------------------------------------------------------
 #include <vcl_vector.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_memory_image_of.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_image_tableau_sptr.h>
@@ -55,14 +55,14 @@ class vvid_live_stereo_manager : public vgui_grid_tableau
   void quit();
   //: access to the current frames
   bool get_current_rgb_image(int view_no, int pix_sample_interval,
-                             vil_memory_image_of<vil_rgb<unsigned char> >& im);
+                             vil1_memory_image_of<vil1_rgb<unsigned char> >& im);
 
   bool get_current_mono_image(int view_no, int pix_sample_interval,
-                              vil_memory_image_of<unsigned char>& im);
+                              vil1_memory_image_of<unsigned char>& im);
 
   //: control of the process result window
-  void set_process_rgb_image(vil_memory_image_of< vil_rgb<unsigned char> >& im);
-  void set_process_mono_image(vil_memory_image_of<unsigned char>& im);
+  void set_process_rgb_image(vil1_memory_image_of< vil1_rgb<unsigned char> >& im);
+  void set_process_mono_image(vil1_memory_image_of<unsigned char>& im);
 
   //: access to the window
   vgui_window* get_window(){return win_;}
@@ -86,8 +86,8 @@ class vvid_live_stereo_manager : public vgui_grid_tableau
   vgui_viewer2D_tableau_sptr v2D_;
   vcl_vector<vvid_live_video_tableau_sptr> vframes_;
   cmu_1394_camera_params cp_;
-  vil_memory_image_of< vil_rgb<unsigned char> > process_rgb_;
-  vil_memory_image_of<unsigned char> process_mono_;
+  vil1_memory_image_of< vil1_rgb<unsigned char> > process_rgb_;
+  vil1_memory_image_of<unsigned char> process_mono_;
   vvid_video_process_sptr video_process_;
   static vvid_live_stereo_manager *instance_;
 };

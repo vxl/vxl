@@ -6,7 +6,7 @@
 
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vcl_iostream.h>
-#include <vil/vil_load.h>
+#include <vil1/vil1_load.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
 #include <vdgl/vdgl_digital_curve.h>
@@ -172,7 +172,7 @@ void bmvv_multiview_manager::quit()
 //=========================================================================
 void bmvv_multiview_manager::load_image_file(vcl_string image_filename, bool greyscale, unsigned col, unsigned row)
 {
-  img_ = vil_load(image_filename.c_str());
+  img_ = vil1_load(image_filename.c_str());
   bgui_vtol2D_tableau_sptr btab = this->get_vtol2D_tableau_at(col, row);
   if (btab)
     {
@@ -196,7 +196,7 @@ void bmvv_multiview_manager::load_image()
   load_image_dlg.checkbox("greyscale ", greyscale);
   if (!load_image_dlg.ask())
     return;
-  img_ = vil_load(image_filename.c_str());
+  img_ = vil1_load(image_filename.c_str());
   bgui_vtol2D_tableau_sptr btab = this->get_selected_vtol2D_tableau();
   if (btab)
     {
@@ -326,7 +326,7 @@ void bmvv_multiview_manager::regions()
                    << "null tableau\n";
           return;
         }
-      vil_image ed_img = rp.get_edge_image();
+      vil1_image ed_img = rp.get_edge_image();
       vgui_image_tableau_sptr itab =  btab->get_image_tableau();
       if (!itab)
         {
@@ -611,7 +611,7 @@ void bmvv_multiview_manager::set_changing_colors(int num, float *r, float *g, fl
 //  if col, row are out of bounds then null is returned
 //  row is currently not used but may be when we have more than 2 cameras
 //====================================================================
-vil_image bmvv_multiview_manager::get_image_at(unsigned col, unsigned row)
+vil1_image bmvv_multiview_manager::get_image_at(unsigned col, unsigned row)
 {
   bgui_vtol2D_tableau_sptr btab = this->get_vtol2D_tableau_at(col, row);
   if (btab)

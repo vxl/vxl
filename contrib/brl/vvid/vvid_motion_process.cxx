@@ -12,21 +12,21 @@ vvid_motion_process::~vvid_motion_process()
 {
 }
 
-void vvid_motion_process::compute_motion(vil_image ix, vil_image iy)
+void vvid_motion_process::compute_motion(vil1_image ix, vil1_image iy)
 {
   //ix contains the current image not the gradient (maybe later)
-  vil_memory_image_of<float> fimg(ix);
+  vil1_memory_image_of<float> fimg(ix);
 
   //Get sqrt (sigma0*sigma1) of the gradient matrix on a 3x3 neighborhood
   int n = 1;
-  vil_memory_image_of<float> sing =
+  vil1_memory_image_of<float> sing =
     brip_float_ops::sqrt_grad_singular_values(fimg, n);
   //Get the time derivative
-  vil_memory_image_of<float> Im(queuex_[1]);
-  vil_memory_image_of<float> It = brip_float_ops::difference(Im, fimg);
+  vil1_memory_image_of<float> Im(queuex_[1]);
+  vil1_memory_image_of<float> It = brip_float_ops::difference(Im, fimg);
   //form the motion image
   int w = fimg.width(), h = fimg.height();
-  vil_memory_image_of<float> out;
+  vil1_memory_image_of<float> out;
   out.resize(w,h);
   for (int y = 0; y<h; y++)
     for (int x = 0; x<w; x++)
@@ -34,7 +34,7 @@ void vvid_motion_process::compute_motion(vil_image ix, vil_image iy)
   output_image_ = brip_float_ops::convert_to_byte(out, 0, 10000.0);
 }
 
-void vvid_motion_process::update_queue(vil_image ix, vil_image iy)
+void vvid_motion_process::update_queue(vil1_image ix, vil1_image iy)
 {
   queuex_[0]=queuex_[1];
   //  queuey_[0]=queuey_[1];
@@ -50,12 +50,12 @@ bool vvid_motion_process::execute()
                << " input image \n";
       return false;
     }
-  vil_image img = vvid_video_process::get_input_image(0);
-  vil_memory_image_of<unsigned char> temp(img);
-  vil_memory_image_of<float> fimg = brip_float_ops::convert_to_float(temp);
-  vil_memory_image_of<float> fsmooth = brip_float_ops::gaussian(fimg, 1.0);
- // vil_memory_image_of<float> fx = brip_float_ops::dx(fsmooth);
- // vil_memory_image_of<float> fy = brip_float_ops::dx(fsmooth);
+  vil1_image img = vvid_video_process::get_input_image(0);
+  vil1_memory_image_of<unsigned char> temp(img);
+  vil1_memory_image_of<float> fimg = brip_float_ops::convert_to_float(temp);
+  vil1_memory_image_of<float> fsmooth = brip_float_ops::gaussian(fimg, 1.0);
+ // vil1_memory_image_of<float> fx = brip_float_ops::dx(fsmooth);
+ // vil1_memory_image_of<float> fy = brip_float_ops::dx(fsmooth);
   this->clear_input();
   switch(state_)
     {

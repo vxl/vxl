@@ -42,25 +42,25 @@ class vvid_live_video_tableau : public vgui_image_tableau
   bool get_video_live() const { return live_; }
 
   //: Access to next live camera frames. Causes the camera to take a new frame
-  void get_camera_rgb_image(vil_memory_image_of< vil_rgb<unsigned char> >& im,
+  void get_camera_rgb_image(vil1_memory_image_of< vil1_rgb<unsigned char> >& im,
                             int pix_sample_interval = 1);
-  void get_camera_mono_image(vil_memory_image_of<unsigned char>& im,
+  void get_camera_mono_image(vil1_memory_image_of<unsigned char>& im,
                              int pix_sample_interval = 1);
 
   //: Access to current cached camera frames
   // Both styles of image access are supported
 
   //: New pointer to the image
-  vil_memory_image_of< vil_rgb<unsigned char> > get_current_rgb_image(int pix_sample_interval);
+  vil1_memory_image_of< vil1_rgb<unsigned char> > get_current_rgb_image(int pix_sample_interval);
 
   //: User supplies the pointer to the image
   bool get_current_rgb_image(int pix_sample_interval,
-                             vil_memory_image_of< vil_rgb<unsigned char> >& im);
+                             vil1_memory_image_of< vil1_rgb<unsigned char> >& im);
 
-  vil_memory_image_of<unsigned char> get_current_mono_image(int pix_sample_interval);
+  vil1_memory_image_of<unsigned char> get_current_mono_image(int pix_sample_interval);
 
   bool get_current_mono_image(int pix_sample_interval,
-                              vil_memory_image_of<unsigned char>& im);
+                              vil1_memory_image_of<unsigned char>& im);
 
  protected:
   //: Handle all events for this tableau.
@@ -73,8 +73,8 @@ class vvid_live_video_tableau : public vgui_image_tableau
   int node_;//the camera id
   cmu_1394_camera cam_;
   int pixel_sample_interval_;//default pixel sample spacing
-  vil_memory_image_of< vil_rgb<unsigned char> > rgb_frame_;
-  vil_memory_image_of< unsigned char > mono_frame_;
+  vil1_memory_image_of< vil1_rgb<unsigned char> > rgb_frame_;
+  vil1_memory_image_of< unsigned char > mono_frame_;
 };
 
 struct vvid_live_video_tableau_new : public vvid_live_video_tableau_sptr

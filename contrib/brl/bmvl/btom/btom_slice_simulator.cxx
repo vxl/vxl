@@ -23,8 +23,8 @@ btom_slice_simulator::~btom_slice_simulator()
 {
 }
 
-void btom_slice_simulator::gaussian_sinogram(vil_memory_image_of<float> & sinogram,
-                                             vil_memory_image_of<float> & reconst)
+void btom_slice_simulator::gaussian_sinogram(vil1_memory_image_of<float> & sinogram,
+                                             vil1_memory_image_of<float> & reconst)
 {
   int xmax = 512, ymax = 512, off = 64;
   float xt = xmax/2, yt = ymax/2;

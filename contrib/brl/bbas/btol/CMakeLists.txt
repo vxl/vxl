@@ -11,5 +11,5 @@ AUX_SOURCE_DIRECTORY(Templates btol_sources)
 
 ADD_LIBRARY(btol ${btol_sources})
 
-TARGET_LINK_LIBRARIES(btol vdgl vtol vsol vil vnl vbl)
+TARGET_LINK_LIBRARIES(btol vdgl vtol vsol vil1 vnl vbl)
 

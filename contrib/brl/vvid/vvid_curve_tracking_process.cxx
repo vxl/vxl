@@ -1,5 +1,5 @@
 #include <vcl_iostream.h>
-#include <vil/vil_memory_image_of.h>
+#include <vil1/vil1_memory_image_of.h>
 #include <vcl_vector.h>
 #include <bdgl/bdgl_curve_tracker.h>
 #include <brip/brip_float_ops.h>
@@ -37,17 +37,17 @@ bool vvid_curve_tracking_process::execute()
   output_spat_objs_.clear();
 
   // input image
-  vil_image img = vvid_video_process::get_input_image(0);
-  vil_memory_image_of<unsigned char> cimg;
+  vil1_image img = vvid_video_process::get_input_image(0);
+  vil1_memory_image_of<unsigned char> cimg;
   if (img.components()==3)
     {
-      vil_memory_image_of<float> fimg = brip_float_ops::convert_to_float(img);
+      vil1_memory_image_of<float> fimg = brip_float_ops::convert_to_float(img);
       vvid_video_process::clear_input();//remove image from input
       //convert a color image to grey
       cimg = brip_float_ops::convert_to_byte(fimg);
     }
   else
-    cimg = vil_memory_image_of<unsigned char>(img);
+    cimg = vil1_memory_image_of<unsigned char>(img);
 
   //initialize the detector
   sdet_detector detector(detect_params_);
