@@ -39,10 +39,8 @@ class vil_dicom2_file_format : public vil_file_format
 //: Generic image implementation for DICOM2 files
 class vil_dicom2_image : public vil_image_resource
 {
-  vil_dicom2_stream_input* dcis_;
-  DcmFileFormat* ffmt_;
-  DicomImage* img_;
   vil_dicom_header_info header_;
+  vil_image_resource_sptr pixels_;
 
  public:
   vil_dicom2_image(vil_stream* is, unsigned ni,
@@ -59,6 +57,9 @@ class vil_dicom2_image : public vil_image_resource
 
   virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
                                                  unsigned j0, unsigned nj) const;
+
+  virtual vil_image_view_base_sptr get_view(unsigned i0, unsigned ni,
+                                            unsigned j0, unsigned nj) const;
 
   virtual bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0);
 
