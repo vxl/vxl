@@ -12,6 +12,7 @@
 // \verbatim
 // Modifications
 // Peter Vanroose -  2 July 2001 - Added constructor from 3 planes
+// Peter Vanroose - 24 Oct. 2002 - Added coplanar()
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -251,6 +252,27 @@ vgl_point_3d<Type> centre(vcl_vector<vgl_point_3d<Type> > const& v) {
   Type x = 0, y = 0, z = 0;
   for (int i=0; i<n; ++i) x+=v[i].x(), y+=v[i].y(), z+=v[i].z();
   return vgl_point_3d<Type>(x/n,y/n,z/n);
+}
+
+//: Return true iff the 4 points are coplanar, i.e., they belong to a common plane
+// \relates vgl_point_3d
+template <class Type> inline
+bool coplanar(vgl_point_3d<Type> const& p1,
+              vgl_point_3d<Type> const& p2,
+              vgl_point_3d<Type> const& p3,
+              vgl_point_3d<Type> const& p4) {
+  return (p1.x()*p2.y()-p1.y()*p2.x())*p3.z()
+        +(p3.x()*p1.y()-p3.y()*p1.x())*p2.z()
+        +(p2.x()*p3.y()-p2.y()*p3.x())*p1.z()
+        +(p4.x()*p1.y()-p4.y()*p1.x())*p2.z()
+        +(p2.x()*p4.y()-p2.y()*p4.x())*p1.z()
+        +(p1.x()*p2.y()-p1.y()*p2.x())*p4.z()
+        +(p3.x()*p4.y()-p3.y()*p4.x())*p1.z()
+        +(p1.x()*p3.y()-p1.y()*p3.x())*p4.z()
+        +(p4.x()*p1.y()-p4.y()*p1.x())*p3.z()
+        +(p2.x()*p3.y()-p2.y()*p3.x())*p4.z()
+        +(p4.x()*p2.y()-p4.y()*p2.x())*p3.z()
+        +(p3.x()*p4.y()-p3.y()*p4.x())*p2.z() == 0;
 }
 
 #define VGL_POINT_3D_INSTANTIATE(T) extern "please include vgl/vgl_point_3d.txx first"
