@@ -89,6 +89,7 @@ void test_adaboost()
                                           outputs);
 
   TEST( "Clsfrs the same", *mean_square_clsfr2, *mean_square_clsfr);
+  TEST_NEAR( "Clsfr error", error2, 0, 0.2);
 
   vcl_cout<<*mean_square_clsfr2<<vcl_endl;
 
