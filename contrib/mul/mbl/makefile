@@ -22,6 +22,7 @@ SOURCES += mbl_read_str.cxx
 #SOURCES += mbl_arb_length_int.cxx
 SOURCES += mbl_thin_plate_spline_2d.cxx
 SOURCES += mbl_histogram.cxx
+SOURCES += mbl_clamped_plate_spline_2d.cxx
 
 # Additional files to document:
 MANPAGE_SOURCES += mbl_data_array_ptr_wrapper.txx
