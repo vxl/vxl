@@ -13,6 +13,10 @@
 //  \f[
 //      \rho(u) = 0.5 \log\bigl( 1 + \frac{u^2}{c^2} \bigr),
 //  \f]
+//  The associated weight function is
+//  \f[
+//       w(u) = \frac{1}{1 + \frac{u^2}{c^2} },
+//  \f]
 //  where u is a scale-normalized residual ($r/\sigma$) and $c$ is a
 //  tuning constant.  This should be used when a more gradual
 //  rejection of outliers is desired than something like the
