@@ -40,9 +40,9 @@
 class mvl_multi_view_matches {
 public:
   typedef vcl_map<unsigned int, unsigned int, vcl_less<unsigned int> 
-#ifdef VCL_SUNPRO_CC
-  , vcl_allocator<vcl_pair<unsigned const int, unsigned int> >
-#endif
+  //#ifdef VCL_SUNPRO_CC
+  //  , vcl_allocator<vcl_pair<unsigned const int, unsigned int> >
+  //#endif
   > Map;
 
   mvl_multi_view_matches(char const* filename);
