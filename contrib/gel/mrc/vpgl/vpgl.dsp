@@ -87,15 +87,15 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=..\vpgl_basic_camera.cxx
+SOURCE=.\vpgl_basic_camera.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\vpgl_matrix_camera.cxx
+SOURCE=.\vpgl_matrix_camera.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\vpgl_perspective_camera.cxx
+SOURCE=.\vpgl_perspective_camera.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -103,27 +103,27 @@ SOURCE=..\vpgl_perspective_camera.cxx
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\vpgl_basic_camera.h
+SOURCE=.\vpgl_basic_camera.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\vpgl_basic_camera_ref.H
+SOURCE=.\vpgl_basic_camera_ref.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\vpgl_matrix_camera.h
+SOURCE=.\vpgl_matrix_camera.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\vpgl_matrix_camera_ref.h
+SOURCE=.\vpgl_matrix_camera_ref.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\vpgl_perspective_camera.h
+SOURCE=.\vpgl_perspective_camera.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\vpgl_perspective_camera_ref.H
+SOURCE=.\vpgl_perspective_camera_ref.h
 # End Source File
 # End Group
 # End Target
