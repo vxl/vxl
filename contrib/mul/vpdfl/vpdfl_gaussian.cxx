@@ -20,6 +20,7 @@
 #include <vpdfl/vpdfl_gaussian.h>
 #include <vnl/vnl_math.h>
 #include <mbl/mbl_matxvec.h>
+#include <mbl/mbl_matrix_products.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vpdfl/vpdfl_gaussian_sampler.h>
 #include <vpdfl/vpdfl_sampler_base.h>
@@ -185,7 +186,7 @@ static bool vectorHasDescendingOrder(const vnl_vector<double>& v)
 vnl_matrix<double> vpdfl_gaussian::covariance() const
 {
 	vnl_matrix<double> Cov;
-	mbl_matxvec_prod_adb(Cov, evecs_, evals_, evecs_.transpose());
+	mbl_matrix_product_adb(Cov, evecs_, evals_, evecs_.transpose());
 	return Cov;
 }
 //=======================================================================

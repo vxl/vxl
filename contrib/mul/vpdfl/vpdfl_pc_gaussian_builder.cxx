@@ -86,10 +86,8 @@ void vpdfl_pc_gaussian_builder::build(vpdfl_pdf_base& model,
 	
 	// Generate an identity matrix for eigenvectors
 	vnl_matrix<double> P(n,n);
-	for (int i=1;i<=n;++i)
-		for (int j=1;j<=n;++j) P(i,j) = 0.0;
-	
-	for (int i=1;i<=n;++i) P(i,i) = 1.0;
+	P.fill(0);
+	P.fill_diagonal(1.0);
 
 	g.set(mean,P,vnl_vector<double>(0), min_var());
 }
