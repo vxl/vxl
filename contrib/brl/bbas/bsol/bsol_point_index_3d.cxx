@@ -27,6 +27,13 @@ static bool flag(vsol_point_3d_sptr const& p)
 //------------------------------------------------------------------------
 //: Constructors
 //------------------------------------------------------------------------
+bsol_point_index_3d::bsol_point_index_3d()
+{
+  nrows_ = 0;
+  ncols_ = 0;
+  nslabs_ = 0;
+  b_box_ = (vsol_box_3d*)0;
+}
 bsol_point_index_3d::bsol_point_index_3d(int nrows, int ncols, int nslabs,
                                          vsol_box_3d_sptr const& bb)
 {
@@ -336,8 +343,8 @@ vcl_vector<vsol_point_3d_sptr> bsol_point_index_3d::points()
 void bsol_point_index_3d::clear_marks()
 {
   vcl_vector<vsol_point_3d_sptr> pts = this->points();
-  for (vcl_vector<vsol_point_3d_sptr>::iterator pit = pts.begin();
-       pit!= pts.end(); pit++)
+  for(vcl_vector<vsol_point_3d_sptr>::iterator pit = pts.begin();
+            pit!= pts.end(); pit++)
     clear_flag(*pit);
 }
 

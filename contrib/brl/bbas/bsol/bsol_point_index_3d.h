@@ -24,7 +24,7 @@
 class bsol_point_index_3d
 {
  public:
-  bsol_point_index_3d(){}//not meaningful
+  bsol_point_index_3d();
   bsol_point_index_3d(int nrows, int ncols, int nslabs, 
                       vsol_box_3d_sptr const& bb);
   bsol_point_index_3d(int nrows, int ncols, int nslabs,
