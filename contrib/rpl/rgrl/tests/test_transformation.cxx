@@ -38,9 +38,8 @@ test_trans_affine()
 
   covar.set_identity();
 
-  testlib_test_begin( "Construct 3D affine transform object" );
   rgrl_transformation_sptr xform = new rgrl_trans_affine( A, t, covar );
-  testlib_test_perform( xform );
+  TEST("Construct 3D affine transform object", !xform, false);
 
   testlib_test_begin( "Transform 3D location" );
 
@@ -310,9 +309,8 @@ void test_trans_rigid()
   double ttyy = randomizer.drand32(-1000,1000);
   double ttzz = randomizer.drand32(-1000,1000);
 
-  testlib_test_begin( "Construct 3D rigid transform object" );
   rgrl_transformation_sptr xform = new rgrl_trans_rigid(3);
-  testlib_test_perform( xform );
+  TEST("Construct 3D rigid transform object", !xform, false);
 
   rgrl_trans_rigid* rigid = rgrl_cast<rgrl_trans_rigid*>(xform);
   rigid->set_rotation(theta,alpha,phi);

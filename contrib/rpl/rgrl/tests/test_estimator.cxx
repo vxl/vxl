@@ -234,9 +234,8 @@ test_est_affine_pt_to_pt()
         ms->add_feature_and_match( from_pts[i], 0, to_pts[i] );
       }
 
-      testlib_test_begin( "Minimal set of correspondences" );
       rgrl_transformation_sptr trans = rgrl_est_affine().estimate( ms, null3d_trans );
-      testlib_test_perform( trans );
+      TEST("Minimal set of correspondences", !trans, false);
       if ( trans ) {
         TEST( "Result is affine", trans->is_type(rgrl_trans_affine::type_id()) , true);
         testlib_test_begin( "Result is correct" );
@@ -271,9 +270,8 @@ test_est_affine_pt_to_pt()
         ms->add_feature_and_match( from_pts[i], 0, to_pts[i] );
       }
 
-      testlib_test_begin( "Many correspondences (zero error)" );
       rgrl_transformation_sptr trans = rgrl_est_affine().estimate( ms, null3d_trans );
-      testlib_test_perform( trans );
+      TEST("Many correspondences (zero error)", !trans, false);
       if ( trans ) {
         TEST( "Result is affine", trans->is_type(rgrl_trans_affine::type_id()) , true);
         testlib_test_begin( "Result is correct" );
@@ -298,9 +296,8 @@ test_est_affine_pt_to_pt()
                                  pf( vec3d( 2.0, 7.0, 4.0 ) ),
                                  0.0 );
 
-      testlib_test_begin( "With zero wgted outliers (zero error)" );
       rgrl_transformation_sptr trans = rgrl_est_affine().estimate( ms, null3d_trans );
-      testlib_test_perform( trans );
+      TEST("With zero wgted outliers (zero error)", !trans, false);
       if ( trans ) {
         TEST( "Result is affine", trans->is_type(rgrl_trans_affine::type_id()) , true);
         testlib_test_begin( "Result is correct" );
@@ -352,9 +349,8 @@ test_est_affine_pt_to_pt()
     for ( unsigned i=0; i < from.size(); ++i ) {
       ms->add_feature_and_match( pf(from[i]), 0, pf(to[i]), wgt[i] );
     }
-    testlib_test_begin( "Weighted least squares" );
     rgrl_transformation_sptr trans = rgrl_est_affine().estimate( ms, null3d_trans );
-    testlib_test_perform( trans );
+    TEST("Weighted least squares", !trans, false);
 
     // compute an independent solution
     //
@@ -563,9 +559,8 @@ test_est_affine_pt_to_line()
         ms->add_feature_and_match( pf( from[i] ), 0, tf( to[i], to_tang[i] ) );
       }
 
-      testlib_test_begin( "Minimal set of correspondences" );
       rgrl_transformation_sptr trans = rgrl_est_affine().estimate( ms, null2d_trans );
-      testlib_test_perform( trans );
+      TEST("Minimal set of correspondences", !trans, false);
       if ( trans ) {
         TEST( "Result is affine", trans->is_type(rgrl_trans_affine::type_id()), true );
         testlib_test_begin( "Result is correct" );
@@ -591,9 +586,8 @@ test_est_affine_pt_to_line()
         ms->add_feature_and_match( pf( from[i] ), 0, tf( to[i], to_tang[i] ) );
       }
 
-      testlib_test_begin( "Many correspondences (zero normal error)" );
       rgrl_transformation_sptr trans = rgrl_est_affine().estimate( ms, null2d_trans );
-      testlib_test_perform( trans );
+      TEST("Many correspondences (zero normal error)", !trans, false);
       if ( trans ) {
         TEST( "Result is affine", trans->is_type(rgrl_trans_affine::type_id()) , true);
         testlib_test_begin( "Result is correct" );
@@ -618,9 +612,8 @@ test_est_affine_pt_to_line()
                                  tf( vec2d( 2.0, 7.0 ), vec2d( 1.0, 1.0 ) ),
                                  0.0 );
 
-      testlib_test_begin( "With zero wgted outliers (zero normal error)" );
       rgrl_transformation_sptr trans = rgrl_est_affine().estimate( ms, null2d_trans );
-      testlib_test_perform( trans );
+      TEST("With zero wgted outliers (zero normal error)", !trans, false);
       if ( trans ) {
         TEST( "Result is affine", trans->is_type(rgrl_trans_affine::type_id()), true );
         testlib_test_begin( "Result is correct" );
@@ -689,9 +682,8 @@ test_est_affine_pt_to_line()
     for ( unsigned i=0; i < from.size(); ++i ) {
       ms->add_feature_and_match( pf( from[i] ), 0, tf( to[i], to_tang[i] ), wgt[i] );
     }
-    testlib_test_begin( "Weighted least squares" );
     rgrl_transformation_sptr trans = rgrl_est_affine().estimate( ms, null2d_trans );
-    testlib_test_perform( trans );
+    TEST("Weighted least squares", !trans, false);
 
     // compute an independent solution
     //
@@ -786,9 +778,8 @@ test_similarity_pt_to_pt()
 
       rgrl_estimator_sptr est = new rgrl_est_similarity3d();
       TEST( "Similarity estimator type is correct", est->transformation_type(), rgrl_trans_similarity::type_id() );
-      testlib_test_begin( "Similarity estimation with zero error and exact initial" );
       rgrl_transformation_sptr trans = est->estimate( ms, sim );
-      testlib_test_perform( trans );
+      TEST("Similarity estimation with zero error and exact initial", !trans, false);
       if ( trans ) {
         TEST( "Result is similarity", trans->is_type(rgrl_trans_similarity::type_id()), true );
         testlib_test_begin( "Result is correct" );
@@ -801,9 +792,8 @@ test_similarity_pt_to_pt()
 
     {
       ms.remap_from_features( identity );
-      testlib_test_begin( "Similarity estimation with zero error and close initial" );
       rgrl_transformation_sptr trans = rgrl_est_similarity3d().estimate( ms, identity );
-      testlib_test_perform( trans );
+      TEST("Similarity estimation with zero error and close initial", !trans, false);
       if ( trans ) {
         TEST( "Result is similarity", trans->is_type(rgrl_trans_similarity::type_id()), true );
         testlib_test_begin( "Result is correct" );
@@ -1185,10 +1175,9 @@ test_est_quadratic()
       ms->add_feature_and_match( from_pts[i], 0, to_pts[i] );
     }
 
-    testlib_test_begin( "Estimate Quadratic" );
     rgrl_trans_quadratic dummy_trans(2);
     rgrl_transformation_sptr trans = est->estimate( ms, dummy_trans );
-    testlib_test_perform( trans );
+    TEST("Estimate Quadratic", !trans, false);
     if ( trans ) {
       TEST( "Result is quadratic", trans->is_type(rgrl_trans_quadratic::type_id()), true );
       testlib_test_begin( "Result is correct" );
@@ -1237,10 +1226,9 @@ test_est_similarity2d()
       ms->add_feature_and_match( from_pts[i], 0, to_pts[i] );
     }
 
-    testlib_test_begin( "Estimate Similarity" );
     rgrl_trans_similarity dummy_trans(2);
     rgrl_transformation_sptr trans = est->estimate( ms, dummy_trans );
-    testlib_test_perform( trans );
+    TEST("Estimate Similarity", !trans, false);
     if ( trans ) {
       TEST( "Result is similarity", trans->is_type(rgrl_trans_similarity::type_id()), true );
       testlib_test_begin( "Result is correct" );
@@ -1322,10 +1310,9 @@ test_est_reduced_quad2d()
       ms->add_feature_and_match( from_pts[i], 0, to_pts[i] );
     }
 
-    testlib_test_begin( "Estimate Reduced Quadratic" );
     rgrl_trans_quadratic dummy_trans(2);
     rgrl_transformation_sptr trans = est->estimate( ms, dummy_trans );
-    testlib_test_perform( trans );
+    TEST("Estimate Reduced Quadratic", !trans, false);
     if ( trans ) {
       TEST( "Result is quadratic", trans->is_type(rgrl_trans_reduced_quad::type_id()), true );
       testlib_test_begin( "Result is correct" );
@@ -1423,13 +1410,9 @@ test_est_rigid()
       ms->add_feature_and_match( from_pts[i], 0, to_pts[i] );
   }
 
-    testlib_test_begin( "Estimate Rigid" );
     rgrl_trans_rigid dummy_trans(3);
-    rgrl_transformation_sptr trans;
-
-
-    trans = est->estimate( ms, dummy_trans );
-    testlib_test_perform( trans );
+    rgrl_transformation_sptr trans = est->estimate( ms, dummy_trans );
+    TEST("Estimate Rigid", !trans, false);
 
     if ( trans )
     {
