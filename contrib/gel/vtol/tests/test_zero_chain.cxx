@@ -23,7 +23,7 @@ static void test_zero_chain()
   vtol_zero_chain_sptr zc1_clone = zc1->clone()->cast_to_topology_object()->cast_to_zero_chain();
   TEST("vtol_zero_chain::clone()", *zc1, *zc1_clone);
 
-  vcl_vector<vtol_vertex_sptr> v_list;
+  vertex_list v_list;
   v_list.push_back(v1);
   v_list.push_back(v2);
   vtol_zero_chain_sptr zc1a = new vtol_zero_chain(v_list);
