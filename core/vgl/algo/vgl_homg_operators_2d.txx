@@ -837,10 +837,25 @@ vgl_homg_operators_2d<T>::compute_bounding_box(vgl_conic<T> const& c)
     return vgl_box_2d<T>(vgl_point_2d<T>(pt), vgl_point_2d<T>(pt));
   }
 
-  if (c.real_type() == "imaginary ellipse"
+  if (c.real_type() == "invalid conic"
+   || c.real_type() == "imaginary ellipse"
    || c.real_type() == "imaginary circle"
    || c.real_type() == "complex parallel lines")
-    return vgl_box_2d<T>((T)1, (T)0, (T)1, (T)0); // empty box
+    return vgl_box_2d<T>(); // empty box
+
+  if (c.real_type() == "real parallel lines"
+   || c.real_type() == "coincident lines")
+  {
+    // find out if these lines happen to be horizontal or vertical
+    vcl_list<vgl_homg_line_2d<T> > l = c.components();
+    if (l.front().a() == 0) // horizontal lines
+      return vgl_box_2d<T>(vgl_point_2d<T>(1e33,-l.front().c()/l.front().b()),
+                           vgl_point_2d<T>(-1e33,-l.back().c()/l.back().b()));
+    if (l.front().b() == 0) // vertical lines
+      return vgl_box_2d<T>(vgl_point_2d<T>(-l.front().c()/l.front().b(),1e33),
+                           vgl_point_2d<T>(-l.back().c()/l.back().b(),-1e33));
+    // if not, go to the general case, i.e., return "everything".
+  }
 
   if (c.real_type() != "real ellipse" && c.real_type() != "real circle")
     return vgl_box_2d<T>(T(-1e33), T(1e33), T(-1e33), T(1e33)); // everything
