@@ -17,7 +17,7 @@
 #include <vcl_new.h>
 #include <vcl_cassert.h>
 #include <vcl_iosfwd.h>
-#include <vcl_cstddef.h> // for ptrdiff_t
+#include <vcl_cstddef.h> // for ptrdiff_t and size_t
 
 //: A simple container.
 // This container stores its elements in contiguous
@@ -132,8 +132,8 @@ struct vbl_array_1d
   const_iterator end() const { return end_; }
 
   bool empty() const { return begin_ == end_; }
-  size_t size() const { return end_ - begin_; }
-  size_t capacity() const { return alloc_ - begin_; }
+  vcl_size_t size() const { return end_ - begin_; }
+  vcl_size_t capacity() const { return alloc_ - begin_; }
 
   //: Get the ith element.
   // #define NDEBUG to turn bounds checking off.
