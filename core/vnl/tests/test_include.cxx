@@ -2,6 +2,7 @@
 
 #include <vnl/vnl_T_n.h>
 #include <vnl/vnl_alloc.h>
+#include <vnl/vnl_analytic_integrant.h>
 #include <vnl/vnl_bignum.h>
 #include <vnl/vnl_bignum_traits.h>
 #include <vnl/vnl_block.h>
@@ -13,6 +14,7 @@
 #include <vnl/vnl_cross.h>
 #include <vnl/vnl_cost_function.h>
 #include <vnl/vnl_cross_product_matrix.h>
+#include <vnl/vnl_definite_integral.h>
 #include <vnl/vnl_det.h>
 #include <vnl/vnl_diag_matrix.h>
 #include <vnl/vnl_double_1x1.h>
@@ -61,6 +63,7 @@
 #include <vnl/vnl_int_3.h>
 #include <vnl/vnl_int_4.h>
 #include <vnl/vnl_int_matrix.h>
+#include <vnl/vnl_integrant_fnct.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_least_squares_cost_function.h>
 #include <vnl/vnl_least_squares_function.h>
@@ -106,7 +109,6 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_vector_ref.h>
 #include <vnl/vnl_vector_fixed_ref.h>
-
 
 // Put vnl_config.h at the end, to verify that none of the above implicitly depend on it
 #include <vnl/vnl_config.h>

@@ -1,5 +1,6 @@
 #include <vnl/algo/vnl_algo_fwd.h>
 
+#include <vnl/algo/vnl_adaptsimpson_integral.h>
 #include <vnl/algo/vnl_adjugate.h>
 #include <vnl/algo/vnl_amoeba.h>
 #include <vnl/algo/vnl_brent.h>
@@ -29,6 +30,7 @@
 #include <vnl/algo/vnl_rnpoly_solve.h>
 #include <vnl/algo/vnl_rpoly_roots.h>
 #include <vnl/algo/vnl_scatter_3x3.h>
+#include <vnl/algo/vnl_simpson_integral.h>
 #include <vnl/algo/vnl_sparse_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_svd_economy.h>
