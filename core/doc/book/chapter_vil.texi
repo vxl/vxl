@@ -106,44 +106,47 @@ automatically.
 @subsection Loading and saving: The threshold program
 @cindex threshold example
 @cindex vil_save
+@cindex vil_convert
 Anyway, the usual next step in demonstrating an image handling library is
 to show thresholding, so let's have a look.  This program loads an image
-into memory, and creates a new image where all pixels greater than a
-threshold value are set to 0.
+into memory, forcing it to RGB byte format, and creates a new image where
+all pixels greater than a threshold value are set to 0.
 @example
 #include <vxl_config.h>
 #include <vil/vil_rgb.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_convert.h>
 
-int main()
+int main(int argc, char **argv)
 @{
   vil_image_view<vil_rgb<vxl_byte> > img;
-  img = vil_load("foo.ppm");
+  img = vil_convert_to_component_order(
+          vil_convert_to_n_planes(3,
+            vil_convert_cast(vxl_byte(),
+              vil_load(argv[1]))));
 
   for (unsigned j = 0; j < img.height(); ++j)
     for (unsigned i = 0; i < img.width(); ++i)
       if (img(i,j).r < 200 && img(i,j).g < 200 && img(i,j).b < 200)
         img(i,j) = vil_rgb<vxl_byte>(0,0,0);
 
-  vil_save(img, "foothresh.ppm");
+  vil_save(img, argv[2]);
   return 0;
 @}
 @end example
 
 The call to @code{vil_save} sends the modified image in @var{img} to disk.
 The choice of file format is determined automatically from the extension of
-the filename.  In this case, the extension is "ppm", the Portable Pix Map
-format.  If one wants more control, a string can be appended to specify the
+the filename. If one wants more control, a string can be appended to specify the
 format, e.g.
 @cindex vil_save, choosing a specific file format
 @example
-  vil_save(buf, "foothresh.ppm", "jpeg");
+  vil_save(buf, argv[2], "jpeg");
 @end example
-Of course, it's rarely sensible to have incompatible names and formats, but
-the user of your program may have chosen the name, so that you have no
-other option.
+Of course, if your user has chosen a name such as "foo.ppm",
+you'll have a oddly named image.
 
 @section Copying an image
 @cindex images, copying
@@ -153,7 +156,7 @@ out of functions efficiently.  It also means that modifying the data in one
 @code{vil_image_view} might change that in another.  Take this example
 @example
 ...
-vil_image_view<float> a( vil_load("x") );
+vil_image_view<float> a( vil_convert_cast(float(), vil_load("x")) );
 vil_image_view<float> b = a;
 b(100,100) = 12;
 ...
@@ -163,7 +166,7 @@ are set to the value 12.  On the other hand, if we had used
 @code{vil_copy_deep}, thus:
 @example
 ...
-vil_image_view<float> a( vil_load("x") );
+vil_image_view<float> a( vil_convert_cast(float(), vil_load("x")) );
 vil_copy_deep(a, b);
 b(100,100) = 12;
 ...
@@ -181,27 +184,35 @@ Note again that the actual copying is done in @code{vil_copy_deep}; when the
 return value is assigned to @var{b}, there is an efficient view copy.
 
 @section Image resources
+@cindex large images
+@cindex external images
+@cindex vil_image_resource_sptr
 
-Broadly there are two sorts of image one is interested in - images
-in memory (all parts of which can be accessed directly) and
-images whose pixel-type we do not know, or which can only be accessed
-indirectly (eg image files). As we have seen those images in memory are represented
-by @code{vil_image_view}. You should use a @code{vil_image_view<T>} to
-actually manipulate pixels. If you are new to programming for image processing,
-@code{vil_image_view<T>} is probably all your need.
+Broadly there are two sorts of image one is interested in
+@itemize
+@item images in memory, about which everything is known and
+all parts of which can be accessed directly.
+@item external images (eg in files) which can only be accessed
+indirectly, or images about which we may currently be missing information
+(eg pixel type.)
+@end itemize
 
-For some very large images it is not possible or desirable to load
-them into memory. In this case it is useful to be able to load in
-a sub-section of the image, manipulate it, and possible write it
-out again. Alternatively you may want to pass an image around
-without having to worry about its type. vil supports this
-requirement with @code{vil_image_resource}. There are several
-types of image resource, described below. You cannot create an
-image resource object or one of its derivatives directly, instead
-you use a creation function which returns a smart pointer to the
-base class @code{vil_image_resource_sptr}. When manipulating
+As we have seen the first sort of images are represented
+by a @code{vil_image_view<T>} on the data in memory.
+For some very large images it is not
+possible or desirable to load them into memory. In this case it is
+useful to be able to load in a sub-section of the image,
+manipulate it, and possible write it out again. Alternatively
+you may want to pass an image about, and process it without
+knowing its pixel type. vil supports these second sort of images
+using @code{vil_image_resource}. You cannot create an image
+resource object directly, instead you use a creation function
+which returns a smart pointer to the base class
+@code{vil_image_resource_sptr}. When manipulating
 @code{vil_image_resource}s it will almost entirely be in terms of
 @code{vil_image_resource_sptr}s.
+There are several types of
+image resource, with different creation functions:
 
 @itemize @bullet
 @item Representing an image in a file: e.g. @code{vil_pnm_image},
@@ -231,27 +242,29 @@ functions e.g. @code{vil_convolve_1d()}.
 @end itemize
 
 To actually get some image pixels you call the resource's
-@code{get_view(..)} or @code{get_copy_view(..)} method.
-The @code{vil_load(..)} function works by creating
-a @code{vil_image_resource}, and then calling @code{get_view(..)}
+@code{get_view()} or @code{get_copy_view()} method.
+For example, the @code{vil_load()} function works by creating
+a @code{vil_image_resource}, and then calling @code{get_view()}
 for the whole image.
 @example
 vil_image_view_base_sptr vil_load(const char *file)
 @{
   vil_image_resource_sptr data = vil_load_image_resource(file);
   if (!data) return 0;
-  return data -> get_view(0, data->ni(), 0, data->nj());
+  return data -> get_view();
 @}
 @end example
 
+To set image pixels, you call the resource's @code{put_view()}.
 
-@subsection A rule of thumb
+@subsection A rule of thumb.
 @quotation
 When developing an image processing algorithm,
 first write your algorithm in terms of a function for @code{vil_image_view<T>}.
 Then, if you need it, write the vil_image_resource_sptr version, using
 the @code{vil_image_view<T>} version to do the actual pixel manipulation.
 @end quotation
+
 @code{vil_image_view<T>} is designed for playing with actual pixel values.
 @code{vil_image_resource} derivatives are designed to handle all the other stuff
 associated with images, e.g. choosing pixel types at runtime,
@@ -259,10 +272,51 @@ splitting an image into blocks so that it fits in memory,
 dealing with the arbitrary and complex hassles of image IO.
 
 
+
+@subsection Using @code{vil_memory_image} to ignore pixel type.
+@cindex pixel-type, ignoring
+@cindex vil_memory_image
+
+As explained above, you should be using @code{vil_image_view<T>} to
+actually manipulate your pixels. However, in some parts of your
+code, you may want to pass images around without having to decide 
+the pixel type at compile time. This is a role for a
+@code{vil_image_resource} derivative, in particular the
+@code{vil_memory_image}. You can wrap an existing
+@code{vil_image_view<T>} in a @code{vil_memory_image} by calling 
+@code{vil_new_image_resource_of_view()}. Reference counting keeps track
+of the underlying data in memory, so you can let the original
+view go out of scope without loss.
+
+The @code{vil_image_resource} API has been designed to allow efficient
+access to @code{vil_memory_image}. In the example
+below, if the image resource passed in is really a
+@code{vil_memory_image}, the @code{get_view()} returns a view
+to the underlying data, so no unneeded data copying happens.
+Similarly, a call to @code{put_view()}, can return almost immediately,
+checking only to confirm that the view is still pointing to
+the same underlying data.
+
+@example
+void display_view(vil_image_resource_sptr &ir)
+@{
+  switch (ir->pixel_format())
+  @{
+  case VIL_PIXEL_FORMAT_BYTE: {
+    vil_image_view<vxl_byte> v1 = ir->get_view();
+    display_byte(v1); }
+  case ...
+  @} 
+@}
+@end example
+
+
 @section Planes, components and stepping.
 @cindex image layout
 @cindex planes
 @cindex components
+@cindex pixel-type
+
 
 @code{vil_image_view}
 uses a pointer arithmetic style of indexing.
@@ -282,7 +336,8 @@ assumed that an image cannot have both multiple planes and multiple
 components per pixel. This allows
 @code{vil_image_view} to view the same a colour image data
 as either a 3 plane image or a 1 plane RGB image. You can do this
-explicitly by calling @code{vil_view_as_planes()} or @code{vil_view_as_rgb()}.
+explicitly by calling @code{vil_view_as_planes()} or
+@code{vil_view_as_rgb()}.
 
 However the two representations are not equal. The
 multi-plane representation
@@ -290,7 +345,21 @@ is more general than the RGB multi-component one. If
 the underlying data is actually stored RRRR..GGGG..BBBB..
 then it is not possible to view that image as a single
 plane of RGB pixels. For this reason, a lot of vil prefers
-to view an image as multi-plane single-component.
+to view an image as multi-plane single-component. In particular,
+the vil_image_resource derivatives in vil, will treat
+all images as multi-plane, scalar component images, whether the
+underlying data is RGBRGBRGB... or RRRR..GGGG..BBBB.. This means
+if you have switch statement to deal with pixel
+types in an normal image resource, you need not worry about any
+types other than than the following
+@itemize @bullet
+@item bool
+@item vxl_byte, vxl_sbyte
+@item vxl_int_16, vvxl_uint_16
+@item vxl_int_32, vxl_uint_32
+@item float, double
+@item vcl_complex<float>, vcl_complex<double>
+@end itemize
 
 @cindex view manipulations
 Similarly to the planes to components conversion
@@ -404,7 +473,7 @@ a class that wraps a @code{vil1_image}, and exports a @code{vil_image_resource} 
 @section Optimising Image Processing Algorithms (Advanced Topic)
 
 The design of vil_image_view (being more flexible than the design of vil1,)
-and the state of modern optimising compilers (no near as good as they
+and the state of modern optimising compilers (not as good as they
 could be,) means that naive use of vil images may not be as fast as it
 should be.
 

@@ -33,6 +33,11 @@ However, for level-2 libraries, in general, neither of these problems will arise
 In this case it is strongly recommended by the authors that IO be built into the
 class.
 
+It is interesting to note that after vsl was written, and entirely independently
+as far as these authors are aware, a section on IO was added to the comp.lang.c++
+FAQ. The recommendations in the FAQ match the design of vsl very closely, in the
+design of binary formats, the serialisation scheme, and the base-class loader
+scheme.
 
 @subsection Format of Fundamental types
 
