@@ -28,10 +28,8 @@
 
 #include <vgui/vgui_window.h>
 #include <vgui/vgui_menu.h>
-class vgui_gtk2_adaptor;
 
 #include <gtk/gtk.h>
-#include "vgui_gtk2_statusbar.h"
 
 //: The GTK implementation of vgui_window.
 //  Provides functions for manipulating a window.
@@ -56,14 +54,14 @@ class vgui_gtk2_window : public vgui_window
 
   //: Returns the current adaptor (OpenGL widget holder).
   vgui_adaptor* get_adaptor() { return adaptor; }
-  void set_adaptor(vgui_adaptor* a){adaptor=static_cast<vgui_gtk2_adaptor*>(a);}
+  void set_adaptor(vgui_adaptor* a) { adaptor=a; }
 
-  vgui_statusbar* get_statusbar() { return &statusbar; }
+  vgui_statusbar* get_statusbar() { return statusbar; }
   void set_statusbar(bool) {}
 
   // gtk specific
-  vgui_gtk2_adaptor *adaptor;
-  vgui_gtk2_statusbar statusbar;
+  vgui_adaptor *adaptor;
+  vgui_statusbar *statusbar;
 
   GtkWidget *window;
   GtkWidget *box;

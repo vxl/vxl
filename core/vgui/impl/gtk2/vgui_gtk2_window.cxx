@@ -28,9 +28,7 @@ extern "C" {
 // is not prematurely destroyed.
 static gint delete_event_callback(GtkWidget* w, GdkEvent* e, gpointer data)
 {
-  vgui_gtk2_adaptor* adaptor = static_cast<vgui_gtk2_adaptor*>(data);
-
-  adaptor->post_destroy();
+  static_cast<vgui_gtk2_adaptor*>(data)->post_destroy();
 
   // Don't emit the "destroy" signal. The adaptor will take care of calling
   // gtk_widget_destroy on this window after it has disconnected and destroyed itself.
@@ -44,6 +42,8 @@ static gint delete_event_callback(GtkWidget* w, GdkEvent* e, gpointer data)
 vgui_gtk2_window::vgui_gtk2_window(int w, int h, const char* title)
   : use_menubar(false)
   , use_statusbar(true)
+  , adaptor(new vgui_gtk2_adaptor(this))
+  , statusbar(new vgui_gtk2_statusbar)
   , last_menubar(new vgui_menu)
 {
   if (debug) vcl_cerr << "vgui_gtk2_window::vgui_gtk2_window\n";
@@ -55,10 +55,12 @@ vgui_gtk2_window::vgui_gtk2_window(int w, int h, const char* title)
   adaptor = new vgui_gtk2_adaptor(this);
 
 #ifndef __SGI_CC // SGI's iostream does not allow re-initialising
-  vgui::out.rdbuf(statusbar.statusbuf);
+  vgui::out.rdbuf(static_cast<vgui_gtk2_statusbar*>(statusbar)->statusbuf);
 #endif
 
-  gtk_signal_connect(GTK_OBJECT(window), "delete_event", GTK_SIGNAL_FUNC(delete_event_callback), adaptor);
+  gtk_signal_connect(GTK_OBJECT(window), "delete_event",
+                     GTK_SIGNAL_FUNC(delete_event_callback),
+                     static_cast<vgui_gtk2_adaptor*>(adaptor));
 }
 
 
@@ -67,6 +69,8 @@ vgui_gtk2_window::vgui_gtk2_window(int w, int h, const char* title)
 vgui_gtk2_window::vgui_gtk2_window(int w, int h, const vgui_menu& menu, const char* title)
   : use_menubar(true)
   , use_statusbar(true)
+  , adaptor(new vgui_gtk2_adaptor(this))
+  , statusbar(new vgui_gtk2_statusbar)
   , last_menubar(new vgui_menu)
 {
   if (debug) vcl_cerr << "vgui_gtk2_window::vgui_gtk2_window\n";
@@ -75,15 +79,15 @@ vgui_gtk2_window::vgui_gtk2_window(int w, int h, const vgui_menu& menu, const ch
   gtk_window_set_title(GTK_WINDOW(window), title);
   gtk_window_set_default_size(GTK_WINDOW(window),w,h);
 
-  adaptor = new vgui_gtk2_adaptor(this);
-
   set_menubar(menu);
 
 #ifndef __SGI_CC // SGI's iostream does not allow re-initialising
-  vgui::out.rdbuf(statusbar.statusbuf);
+  vgui::out.rdbuf(static_cast<vgui_gtk2_statusbar*>(statusbar)->statusbuf);
 #endif
 
-  gtk_signal_connect(GTK_OBJECT(window), "delete_event", GTK_SIGNAL_FUNC(delete_event_callback), adaptor);
+  gtk_signal_connect(GTK_OBJECT(window), "delete_event",
+                     GTK_SIGNAL_FUNC(delete_event_callback),
+                     static_cast<vgui_gtk2_adaptor*>(adaptor));
 }
 
 
@@ -93,6 +97,7 @@ vgui_gtk2_window::~vgui_gtk2_window()
 {
   gtk_widget_destroy(window);
   delete last_menubar;
+  delete statusbar;
 }
 
 
@@ -119,14 +124,15 @@ void vgui_gtk2_window::init()
 
   // This re-parents the glarea widget, so the adaptor should yield
   // ownership.
-  GtkWidget *glarea = adaptor->get_glarea_widget();
+  GtkWidget *glarea = static_cast<vgui_gtk2_adaptor*>(adaptor)->get_glarea_widget();
   gtk_container_add(GTK_CONTAINER(frame), glarea);
   gtk_widget_show(glarea);
 
   if (use_statusbar) {
-    statusbar.widget = gtk_statusbar_new();
-    gtk_box_pack_start(GTK_BOX(box), statusbar.widget, FALSE, TRUE, 0);
-    gtk_widget_show(statusbar.widget);
+    vgui_gtk2_statusbar* s = static_cast<vgui_gtk2_statusbar*>(statusbar);
+    s->widget = gtk_statusbar_new();
+    gtk_box_pack_start(GTK_BOX(box), s->widget, FALSE, TRUE, 0);
+    gtk_widget_show(s->widget);
   }
 
   gtk_widget_show(box);
