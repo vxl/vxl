@@ -35,8 +35,8 @@ void vnl_c_vector<T>::normalize(T* v, unsigned n)
   if (tmp!=0)
   {
     tmp = abs_t(real_t(1) / vcl_sqrt(real_t(tmp)));
-	for (unsigned i = 0; i < n; ++i)
-	    v[i] = T(tmp*v[i]);		
+    for (unsigned i = 0; i < n; ++i)
+      v[i] = T(tmp*v[i]);
   }
 }
 
