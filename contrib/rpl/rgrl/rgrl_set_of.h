@@ -41,6 +41,9 @@ public:
   void
   clear();
 
+  //: fill current set 
+  void fill( T const& item );
+  
   //: Same idea as std::vector::resize()
   void
   resize( unsigned n );

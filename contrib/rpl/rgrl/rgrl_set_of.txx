@@ -6,6 +6,7 @@
 // \date   Feb 2003
 
 #include "rgrl_set_of.h"
+#include <vcl_algorithm.h>
 
 template<typename T>
 rgrl_set_of<T>::
@@ -64,6 +65,14 @@ rgrl_set_of<T>::
 resize( unsigned n )
 {
   data_.resize( n );
+}
+
+template<typename T>
+void 
+rgrl_set_of<T>::
+fill( T const& item )
+{
+  vcl_fill( data_.begin(), data_.end(), item );
 }
 
 #endif // rgrl_set_of_txx_
