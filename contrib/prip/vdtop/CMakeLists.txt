@@ -27,7 +27,7 @@ SET(vdtop_sources
 
 ADD_LIBRARY(vdtop ${vdtop_sources})
 
-LINK_LIBRARIES(vdtop vmap vil)
+TARGET_LINK_LIBRARIES(vdtop vmap vil)
 
 #IF (BUILD_TESTING)
   SUBDIRS(tests)

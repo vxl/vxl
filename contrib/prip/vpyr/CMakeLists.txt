@@ -22,10 +22,9 @@ SET(vpyr_sources
    vpyr_top_tmap.txx             vpyr_top_tmap.h
 )
 
-# AUX_SOURCE_DIRECTORY(Templates vpyr_sources)
-
 ADD_LIBRARY(vpyr ${vpyr_sources})
-LINK_LIBRARIES(vmap vpyr vbl vcl)
+
+TARGET_LINK_LIBRARIES(vpyr vmap)
 
 #IF (BUILD_EXAMPLES)
   SUBDIRS(examples/simple_segmentation)
