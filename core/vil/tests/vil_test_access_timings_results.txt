@@ -3,6 +3,7 @@ Method1: for (unsigned i=0;i<image.ni();++i) image(i,j,p) = vxl_byte(i+j+3*p);
 Method2: for (unsigned i=0;i<ni;++i) image(i,j,p) = vxl_byte(i+j+3*p);
 Method3: for (unsigned i=0;i<image.ni();++i,pixel+=image.istep()) *pixel = vxl_byte(i+j+3*p);
 Method4: for (unsigned i=0;i<ni;++i,pixel+=istep) *pixel = vxl_byte(i+j+3*p);
+Method5: for (unsigned i=ni;i>ni;--i,pixel-=istep) *pixel = vxl_byte(i-1+j+3*p);
 
 
 Times to fill a 256 x 256 image of 3 planes (in microsecs) [Range= 0.5(max-min)]
@@ -30,7 +31,7 @@ Method 3) Mean: 1900us  +/-350us
 Method 4) Mean: 2220us  +/-50us
 Method 5) Mean: 2040us  +/-50us
 
-Conclusion: Methods 3&4 (using pointer incrementing) about 1000x faster than im(i,j,p)
+Conclusion: Methods 3&4 (using pointer incrementing) about 3x faster than im(i,j,p)
 
 850Mhz P3 Windows 2000, using MSVC 6.0 SP5
 ------------------------------------------
