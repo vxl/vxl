@@ -11,20 +11,18 @@
 #include <vgui/vgui_viewer3D_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
-
+#include "brct_menus.h"
 //static live_video_manager instance
 brct_windows_frame *brct_windows_frame::instance_ = 0;
-vcl_string brct_windows_frame::win_title_ = "BRCT";
 
 //===============================================================
 //: The singleton pattern - only one instance of the manager can occur
 //==============================================================
-brct_windows_frame *brct_windows_frame::instance(vcl_string& s)
+brct_windows_frame *brct_windows_frame::instance()
 {
   if (!instance_)
     {
       instance_ = new brct_windows_frame();
-	  brct_windows_frame::win_title_ = s;
       instance_->init();
     }
   return brct_windows_frame::instance_;
@@ -50,53 +48,34 @@ void brct_windows_frame::init()
 {
 	grid_ = vgui_grid_tableau_new(2,1);
 	grid_->set_grid_size_changeable(true);
-  	unsigned int col=0, row = 0;
+  unsigned int col=0, row = 0;
 	// add 3D tableau
-	vgui_easy3D_tableau_new tab3d;
-	
-	tab3d->set_point_radius(15);
-  	// Add a point at the origin
-  	tab3d->set_foreground(1,1,1);
-  	tab3d->add_point(0,0,0);
-
-  	// Add a line in the xaxis:
-  	tab3d->set_foreground(1,1,0);
-  	tab3d->add_line(1,0,0, 4,0,0);
-  	tab3d->add_point(5,0,0);
-
-  	// Add a line in the yaxis:
-  	tab3d->set_foreground(0,1,0);
-  	tab3d->add_line(0,1,0, 0,4,0);
-  	tab3d->add_point(0,5,0);
-
+    
+  vgui_easy3D_tableau_new tab3d;
+  tab_3d_ = tab3d;
+  tab_3d_->set_point_radius(2);
+  // Add a point at the origin
+  tab_3d_->set_foreground(1,1,1);
+  tab_3d_->add_point(0,0,0);
+    
+    // Add a line in the xaxis:
+  tab_3d_->set_foreground(1,1,0);
+  tab_3d_->add_line(1,0,0, 4,0,0);
+    
+  // Add a line in the yaxis:
+  tab_3d_->set_foreground(0,1,0);
+  tab_3d_->add_line(0,1,0, 0,4,0);
+    
   // Add a line in the zaxis:
-  tab3d->set_foreground(0,0,1);
-  tab3d->add_line(0,0,1, 0,0,4);
-  tab3d->add_point(0,0,5);
-
-  // Add a small triangle
-  tab3d->set_foreground(1,0,0);
-  tab3d->add_triangle( 2,0,0, 0,2,0, 0,0,2 );
-
-
-	tab3d->set_point_radius(15);
-	tab3d->set_foreground(1,1,1);
-	tab3d->add_point(0,0,0);
-    	
-	vgui_viewer3D_tableau_sptr v3d = vgui_viewer3D_tableau_new(tab3d);
-	grid_->add_at(v3d, col+1, row);
+  tab_3d_->set_foreground(0,0,1);
+  tab_3d_->add_line(0,0,1, 0,0,4);
+    
+    
+  vgui_viewer3D_tableau_sptr v3d = vgui_viewer3D_tableau_new(tab_3d_);
+  grid_->add_at(v3d, col+1, row);
 	vgui_shell_tableau_sptr shell = vgui_shell_tableau_new(grid_);
  	this->add_child(shell);
 
-	// set up components of window: menu, scroll bar etc.
-	win_ = vgui::produce_window(800, 600, produce_menu(), brct_windows_frame::win_title_);
-  	win_->set_statusbar(true);
-  	win_->enable_vscrollbar(true);
-  	win_->enable_hscrollbar(true);
-  	win_->show();
-  	win_->get_adaptor()->set_tableau(instance_);
-  	this->set_window(win_);
-  	this->post_redraw();
 }
 
 //=========================================================================
@@ -116,7 +95,22 @@ void brct_windows_frame::quit()
   vcl_exit(1);
 }
 
-vgui_menu brct_windows_frame::produce_menu()
+void brct_windows_frame::add_curve3d(vcl_vector<vgl_point_3d<double> >& pts)
 {
-	return vgui_menu();		
+  int size = pts.size();
+  points_3d_.resize(size);
+  instance_->tab_3d_->set_foreground(1, 1, 1);
+  for(int i=0; i<size-1; i++){
+    vgl_point_3d<double>& s = pts[i];
+    vgl_point_3d<double>& e = pts[i+1];
+    instance_->tab_3d_->add_line(s.x(), s.y(), s.z(), e.x(), e.y(), e.z());
+  }
+
+  instance_->post_redraw();
+}
+
+void brct_windows_frame::remove_curve3d()
+{
+  points_3d_.clear();
+  this->post_redraw();
 }
