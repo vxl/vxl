@@ -359,7 +359,6 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
       strong_classifier.add_one_classifier( classifiers[ind], 1.0, ind);
     else
       strong_classifier.add_one_classifier( classifiers[ind], 1.0/errors[ind], ind);
-    classifiers[ind]=0;
 
     if (calc_all_thresholds_)
     {
