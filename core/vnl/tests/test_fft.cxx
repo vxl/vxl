@@ -7,24 +7,16 @@
 #include <vnl/vnl_test.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
-#include <vnl/vnl_sample.h>
 #include <vnl/vnl_matlab_print.h>
 
 #include <vnl/algo/vnl_fft_1d.h>
 #include <vnl/algo/vnl_fft_2d.h>
 
-void fill_cplx(vcl_complex<double> *b,
-               vcl_complex<double> *e)
-{
-  for (vcl_complex<double> *p=b; p<e; ++p)
-    *p = vcl_complex<double>(vnl_sample_uniform(-1, +1), vnl_sample_uniform(-1, +1));
-}
-
 void test_fft_1d(int N)
 {
   vnl_vector<vcl_complex<double> > signal(N);
-  fill_cplx(signal.begin(), signal.end());
-
+  vnl_test_fill_random(signal.begin(), signal.end());
+  
   vnl_fft_1d<double> fft(N);
 
   vnl_vector<vcl_complex<double> > tmp = signal;
@@ -44,8 +36,8 @@ void test_fft_1d(int N)
 void test_fft_2d(int M, int N)
 {
   vnl_matrix<vcl_complex<double> > signal(M, N);
-  fill_cplx(signal.begin(), signal.end());
-
+  vnl_test_fill_random(signal.begin(), signal.end());
+  
   vnl_fft_2d<double> fft(M, N);
 
   vnl_matrix<vcl_complex<double> > tmp = signal;
