@@ -6,9 +6,9 @@
 
 //:
 // \file
-// \brief Implement a random classifier
-// \author 	iscott	
-// \date 	Tue Oct  9 10:21:59 2001	
+// \brief  Implement a random classifier
+// \author iscott
+// \date   Tue Oct  9 10:21:59 2001
 
 #include <clsfy/clsfy_random_classifier.h>
 
@@ -54,7 +54,7 @@ void clsfy_random_classifier::print_summary(vcl_ostream& os) const
 
 //=======================================================================
 
-short static version_no = 1;
+static short version_no = 1;
 
   // required if data is present in this base class
 void clsfy_random_classifier::b_write(vsl_b_ostream& bfs) const
@@ -83,10 +83,9 @@ void clsfy_random_classifier::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs, n_dims_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_random_classifier&) \n";
-    vcl_cerr << "           Unknown version number "<< version << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_random_classifier&)\n"
+             << "           Unknown version number "<< version << "\n";
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-    return;
   }
 }
 
@@ -173,8 +172,7 @@ unsigned clsfy_random_classifier::n_classes() const
 //=======================================================================
 
 //: Return the probability the input being in each class.
-// output(i) i<<nClasses, contains the probability that the input
-// is in class i;
+// output(i) i<nClasses, contains the probability that the input is in class i
 void clsfy_random_classifier::class_probabilities(vcl_vector<double> &outputs, const vnl_vector<double> &input) const
 {
   if(last_inputs_ != input)
@@ -210,13 +208,13 @@ void clsfy_random_classifier::class_probabilities(vcl_vector<double> &outputs, c
 
 //: Log likelyhood of being in class (binary classifiers only)
 // class probability = 1 / (1+exp(-log_l))
-// Operation of this method is undefined for multiclass classifiers;
+// Operation of this method is undefined for multiclass classifiers.
 double clsfy_random_classifier::log_l(const vnl_vector<double> &input) const
 {
   assert (n_classes() == 1);
-	vcl_vector<double> prob(1);
+  vcl_vector<double> prob(1);
   class_probabilities(prob, input);
-	return vcl_log(prob[0]/(1-prob[0]));
+  return vcl_log(prob[0]/(1-prob[0]));
 }
 
 //=======================================================================
