@@ -14,7 +14,7 @@ LONG WINAPI vxl_exception_filter( struct _EXCEPTION_POINTERS *ExceptionInfo )
   // Retrieve exception information
   PVOID ExceptionAddress       = ExceptionInfo->ExceptionRecord->ExceptionAddress;
   DWORD ExceptionCode          = ExceptionInfo->ExceptionRecord->ExceptionCode;
-  DWORD* ExceptionInformation  = ExceptionInfo->ExceptionRecord->ExceptionInformation;
+  DWORD* ExceptionInformation  = (DWORD*)ExceptionInfo->ExceptionRecord->ExceptionInformation;
 
   vcl_fprintf(stderr, "\nTOP-LEVEL EXCEPTION HANDLER\n");
   switch (ExceptionCode)
@@ -58,8 +58,8 @@ list_test_names( vcl_ostream& ostr )
   ostr << "\nOmitting a test name, or specifying the name \"all\" will run all the tests.\n";
 }
 
-void 
-testlib_enter_stealth_mode() 
+void
+testlib_enter_stealth_mode()
 {
   // Don't allow Visual Studio to open critical error dialog boxes
 #if defined(VCL_VC)
@@ -84,7 +84,7 @@ testlib_enter_stealth_mode()
   _control87(MCW_EM, MCW_EM);
 #endif // defined(VCL_BORLAND)
 }
-  
+
 int
 testlib_main( int argc, char* argv[] )
 {
@@ -92,7 +92,7 @@ testlib_main( int argc, char* argv[] )
 
   // NOT to produce any dialog windows
   testlib_enter_stealth_mode();
-  
+
   // Assume the index type for vector<string> and
   // vector<TestMainFunction> are the same.
   typedef vcl_vector<vcl_string>::size_type vec_size_t;
