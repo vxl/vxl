@@ -51,7 +51,7 @@ void kalman_filter::init()
   memory_size_ = 0;
 
   // initialize the default queue size
-  queue_size_ = 200;
+  queue_size_ = 100;
   observes_.resize(queue_size_);
   motions_.resize(queue_size_);
 
@@ -226,8 +226,8 @@ void kalman_filter::init_covariant_matrix()
   // velocity direction bigger
   vnl_double_3x3 Sigma;
 
-  Sigma = 0; Sigma[0][0] = 10;
-  Sigma[1][1] = 1; Sigma[2][2] = 1;
+  Sigma = 0; Sigma[0][0] = 1;
+  Sigma[1][1] = 0.25; Sigma[2][2] = 0.25;
 
   vnl_double_3 xaxis(1, 0, 0);
   vnl_double_3 T(X_[0], X_[1], X_[2]);
