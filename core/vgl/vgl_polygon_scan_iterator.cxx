@@ -139,6 +139,7 @@ void vgl_polygon_scan_iterator::init()
 
   // sort vertices by y coordinate
   chs = &poly_[0]; // a hack -- but apparently must do it to use qsort
+//  qsort(yverts, numverts, sizeof(yverts[0]), (Callback2)compare_vertind_x);
   qsort(yverts, numverts, sizeof(yverts[0]), (Callback2)compare_vertind);
 
   float miny, maxy;   // min and max y coordinate of vertices
@@ -298,8 +299,26 @@ bool vgl_polygon_scan_iterator::next( )
   vertind curvert, prevvert, nextvert;
   if ( y <= y1 )
     {
-      fy = (float)y;
-      for (; k<numverts && get_y(yverts[k]) <= (fy+vgl_polygon_scan_iterator_offset); k++)
+      // Current scan line is not the last one.
+      bool not_last = true;
+      // If boundary included and processing first or last scan line
+      // floating point scan line must be taken as a min/max y coordinate
+      // of the polygon. Otherwise these scan lines are not included because
+      // of the earlier rounding (ceil/floor).
+      if ( boundp ) {
+        if ( y == y0 )
+          fy = get_y( yverts[ 0 ] );
+        else if ( y == y1 ) {
+          fy = get_y( yverts[ numverts - 1 ] );
+          not_last = false;
+        }
+        else
+          fy = (float)y;
+      }
+      else
+        fy = (float)y;
+
+      for (; k<numverts && get_y(yverts[k]) <= (fy+vgl_polygon_scan_iterator_offset) && not_last; k++)
       {
           curvert = yverts[ k ];
 
