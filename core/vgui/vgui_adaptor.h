@@ -101,10 +101,6 @@ public:
   virtual void swap_buffers();
   virtual void make_current();
 
-  // Temporary marko hack.
-  // Draw now!
-  //  virtual void draw() { }
-
 protected:
   // Parameters controlling the popup menu style. These are put onto
   // a popup_params object and passed to tableau::get_popup()
