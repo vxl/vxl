@@ -56,7 +56,7 @@ int main(int argc, char**argv)
   }
 
   {
-    // Perform the fit using Phil Torr's Maximum Likelyhood Estimation.
+    // Perform the fit using Phil Torr's Maximum Likelihood Estimation.
     FMatrixComputeMLESAC computor(true,2);
     FMatrix f = computor.compute(points1, points2);
     f.set_rank2_using_svd();
