@@ -13,9 +13,9 @@
 
 const int vil1_memory_image_window_maxint = 0x07ffffff;
 
-//: Operations on a small region of an image
-//    vil1_memory_image_window centres a mask around a pixel in an vil1_memory_image_of,
-//    and implements a few comparison operators: SSD, NSSD, NCC.
+//: Operations on a small region of an image.
+//  vil1_memory_image_window centres a mask around a pixel in an vil1_memory_image_of,
+//  and implements a few comparison operators: SSD, NSSD, NCC.
 class vil1_memory_image_window
 {
  public:
