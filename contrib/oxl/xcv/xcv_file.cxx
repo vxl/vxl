@@ -1,7 +1,13 @@
-//-----------------------------------------------------------------------------
-// .DESCRIPTION:
-//   See xcv_file.h.
-//-----------------------------------------------------------------------------
+//
+// This is xcv/xcv_file.cxx
+// See xcv_file.h for a description of this file.
+// 
+// \author  K.Y.McGaul
+// \verbatim
+//  Modifications
+//    K.Y.McGaul  27-JAN-2000   Initial version.
+// \endverbatim
+//
 
 #include "xcv_file.h"
 

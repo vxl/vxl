@@ -1,7 +1,15 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//-----------------------------------------------------------------------------
+//
+// This is xcv/xcv_multiview.cxx
+// See xcv_multiview.h for a description of this file.
+//
+// \author K.Y.McGaul
+// \verbatim
+//  Modifications:
+//    K.Y.McGaul     27-JAN-2000  Initial version.
+// \endverbatim
 
 #include "xcv_multiview.h"
 #include "xcv_twoview_manager.h"
@@ -298,7 +306,7 @@ void xcv_multiview::save_h_matrix2d()
 }
 
 //-----------------------------------------------------------------------------
-//: Save the corner matches to file.
+//: Save the corner matches of the two selected views to file.
 //-----------------------------------------------------------------------------
 void xcv_multiview::save_corner_matches()
 {

@@ -1,6 +1,10 @@
-/*
-  u97mb@robots.ox.ac.uk
-*/
+//
+// This is xcv/xcv_image_tableau.cxx
+// See xcv_image_tableau.h for a description of this file.
+//
+// \author  Marko Bacic (u97mb@robots.ox.ac.uk)
+//
+
 #include "xcv_image_tableau.h"
 
 #include <vcl_string.h>
@@ -54,7 +58,7 @@ void xcv_image_tableau::unset_roi()
   defined_ = false;
 }
 //--------------------------------------------------------------------------------
-
+//: Width of the ROI, or if not defined then the width of the whole image.
 unsigned xcv_image_tableau::width() const
 {
   if(!defined_)
@@ -63,6 +67,8 @@ unsigned xcv_image_tableau::width() const
     return int(roi_.width);
 }
 
+//--------------------------------------------------------------------------------
+//: Height of the ROI, or if not defined then the height of the whole image.
 unsigned xcv_image_tableau::height() const
 {
   if(!defined_)
@@ -71,6 +77,8 @@ unsigned xcv_image_tableau::height() const
     return int(roi_.height);
 }
 
+//--------------------------------------------------------------------------------
+//: Get the low and high values for the ROI.
 bool xcv_image_tableau::get_bounding_box(float low[3], float high[3]) const
 {
   if(defined_) {
@@ -87,7 +95,7 @@ bool xcv_image_tableau::get_bounding_box(float low[3], float high[3]) const
 }
 
 //--------------------------------------------------------------------------------
-
+//: Handle all events for this tableau.
 bool xcv_image_tableau::handle(vgui_event const &e)
 {
   //
