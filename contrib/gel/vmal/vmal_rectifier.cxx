@@ -58,7 +58,7 @@ vmal_rectifier::~vmal_rectifier()
 }
 
 void vmal_rectifier::rectification_matrix(vnl_double_3x3& H0,
-                      vnl_double_3x3& H1)
+                                          vnl_double_3x3& H1)
 {
   if(!_is_f_compute)
   {
@@ -118,10 +118,7 @@ void vmal_rectifier::rectification_matrix(vnl_double_3x3& H0,
     affine);
   H0=_H0;
   H1=_H1;
-  vnl_double_3 p1=H0*_epipoles[0];
-  vnl_double_3 p2=H1*_epipoles[1];
-  vnl_double_3 p3=H0*_points0[0];
-  vnl_double_3 p4=H1*_points1[0];
+  // vnl_double_3 p1=H0*_epipoles[0], p2=H1*_epipoles[1], p3=H0*_points0[0], p4=H1*_points1[0];
 }
 
 //In this case (3 cameras), we assume that the first camera matrix is equal
@@ -201,7 +198,7 @@ void vmal_rectifier::compute_initial_joint_epipolar_transforms (
       vcl_cerr<<"Computation of epipolar transform failed"<<vcl_endl;
     }
   }
-  else
+  else // TODO
   {
 #if 0
     // First of all compute the Q matrix
