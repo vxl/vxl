@@ -12,11 +12,13 @@
 // conversions for you.
 // \author Tim Cootes, Ian Scott - Manchester
 
+#include <vcl_complex.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_rgb.h>
 #include <vil2/vil2_rgba.h>
 
-//: Return a 3-plane view of an RGB image (or a 4-plane view if RGBA).
+//: Return a 3-plane view of an RGB image, or a 4-plane view of an RGBA, or
+//  a 2-plane view of a complex image.
 // \return an empty view if it can't do the conversion.
 //  O(1).
 // \relates vil2_image_view
@@ -27,7 +29,10 @@ inline vil2_image_view<typename T::value_type> vil2_view_as_planes(const vil2_im
   if (v.nplanes()!=1) return vil2_image_view<T>();
   const unsigned ncomponents = sizeof(T) / sizeof(T::value_type);
 
-  // Image is RGBRGBRGB so i step = 3ncomponents*v.istep(), jstep=ncomponents*v.jstep()
+  // An RGB image is RGBRGBRGB, an RGBA image is RGBARGBARGBA, and a
+  // complex image is RCRCRC, so istep = ncomponents*v.istep(), and
+  // jstep = ncomponents*v.jstep().
+
 #if VCL_VC60 || !VCL_HAS_TYPENAME
   return vil2_image_view<T::value_type>(
     v.memory_chunk(),reinterpret_cast<T::value_type const*>(v.top_left_ptr()),
