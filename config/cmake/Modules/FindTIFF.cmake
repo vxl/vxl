@@ -19,7 +19,12 @@ ELSE( VXL_FORCE_V3P_TIFF )
   INCLUDE( ${MODULE_PATH}/NewCMake/FindTIFF.cmake )
 ENDIF( VXL_FORCE_V3P_TIFF )
 
-IF(NOT TIFF_FOUND)
+  
+IF(TIFF_FOUND)
+
+  SET(VXL_USING_NATIVE_TIFF "YES")
+
+ELSE(TIFF_FOUND)
 
   #
   # At some point, in a "release" version, it is possible that someone
@@ -35,9 +40,4 @@ IF(NOT TIFF_FOUND)
   
   ENDIF(EXISTS ${allvxl_SOURCE_DIR}/v3p/tiff/tiff.h)
   
-ENDIF(NOT TIFF_FOUND)
-  
-
-IF(TIFF_LIBRARY)
-  SET(VXL_USING_NATIVE_TIFF "YES")
-ENDIF(TIFF_LIBRARY)
+ENDIF(TIFF_FOUND)

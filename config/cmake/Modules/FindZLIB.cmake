@@ -19,7 +19,12 @@ ELSE( VXL_FORCE_V3P_ZLIB )
   INCLUDE( ${MODULE_PATH}/NewCMake/FindZLIB.cmake )
 ENDIF( VXL_FORCE_V3P_ZLIB )
 
-IF(NOT ZLIB_FOUND)
+  
+IF(ZLIB_FOUND)
+
+  SET(VXL_USING_NATIVE_ZLIB "YES")
+
+ELSE(ZLIB_FOUND)
 
   #
   # At some point, in a "release" version, it is possible that someone
@@ -34,8 +39,4 @@ IF(NOT ZLIB_FOUND)
     SET( ZLIB_LIBRARIES zlib )
   
   ENDIF(EXISTS ${allvxl_SOURCE_DIR}/v3p/zlib/zlib.h)
-ENDIF(NOT ZLIB_FOUND)
-  
-IF(ZLIB_LIBRARY)
-  SET(VXL_USING_NATIVE_ZLIB "YES")
-ENDIF(ZLIB_LIBRARY)
+ENDIF(ZLIB_FOUND)
