@@ -440,8 +440,13 @@
 #define VCL_OVERLOAD_CAST(T,x) /*(T)*/(x)
 #define VCL_DECLARE_SPECIALIZATION(f) template <> f;
 #define VCL_DEFINE_SPECIALIZATION template <>
+#if 0
 // Rather splendidly, gcc 2.95.1 bails if these are correctly specified...
 #define VCL_STL_NULL_TMPL_ARGS /* <> */
+#else
+// But 2.95.2 needs them, and that compiler is cleverer that 2.95.1, so:
+#define VCL_STL_NULL_TMPL_ARGS <>
+#endif
 #define VCL_DEFAULT_VALUE(x)
 #define VCL_DFL_TYPE_PARAM_STLDECL(A,a) class A = a
 #define VCL_DFL_TMPL_PARAM_STLDECL(A,a) class A = a
