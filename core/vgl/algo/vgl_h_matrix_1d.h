@@ -16,6 +16,7 @@
 //   22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
 //   23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
 //   22 Mar 2003 - J.L. Mundy - preparing for upgrade to vgl
+//   13 Jun 2004 - Peter Vanroose - added set_identity() and projective_basis()
 // \endverbatim
 
 #include <vnl/vnl_matrix_fixed.h>
@@ -55,8 +56,21 @@ class vgl_h_matrix_1d
   const vnl_matrix_fixed<T,2,2 >& get_matrix () const { return t12_matrix_; }
   const vgl_h_matrix_1d get_inverse () const;
 
-  void set (const T *t_matrix);
-  void set (vnl_matrix_fixed<T,2,2> const& t_matrix);
+  //: transformation to projective basis (canonical frame)
+  // Compute the homography that takes the input set of points to the
+  // canonical frame.  The points act as the projective basis for
+  // the canonical coordinate system.  In the canonical frame the points
+  // have coordinates:
+  // \verbatim
+  //   p[0]p[1]p[2]
+  //     1   0   1
+  //     0   1   1
+  // \endverbatim
+  bool projective_basis(vcl_vector<vgl_homg_point_1d<T> > const& three_points);
+
+  void set_identity() { t12_matrix_.set_identity(); }
+  void set(const T *t_matrix);
+  void set(vnl_matrix_fixed<T,2,2> const& t_matrix);
 
   static vgl_h_matrix_1d<T > read(char const* filename);
   static vgl_h_matrix_1d<T > read(vcl_istream&);

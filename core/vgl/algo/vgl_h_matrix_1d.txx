@@ -8,6 +8,7 @@
 #include <vgl/vgl_homg_point_1d.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_vector_fixed.h>
+#include <vnl/algo/vnl_svd.h>
 #include <vcl_fstream.h>
 
 //--------------------------------------------------------------
@@ -167,6 +168,59 @@ template <class T>
 void vgl_h_matrix_1d<T>::set(vnl_matrix_fixed<T,2,2> const& H)
 {
   t12_matrix_ = H;
+}
+
+//-------------------------------------------------------------------
+template <class T>
+bool vgl_h_matrix_1d<T>::
+projective_basis(vcl_vector<vgl_homg_point_1d<T> > const& points)
+{
+  if (points.size()!=3)
+    return false;
+  vnl_vector_fixed<T, 2> p0(points[0].x(), points[0].w());
+  vnl_vector_fixed<T, 2> p1(points[1].x(), points[1].w());
+  vnl_vector_fixed<T, 2> p2(points[2].x(), points[2].w());
+  vnl_matrix_fixed<T, 2, 3> point_matrix;
+  point_matrix.set_column(0, p0);
+  point_matrix.set_column(1, p1);
+  point_matrix.set_column(2, p2);
+
+  if (! point_matrix.is_finite() || point_matrix.has_nans())
+  {
+    vcl_cerr << "vgl_h_matrix_1d<T>::projective_basis():\n"
+             << " given points have infinite or NaN values\n";
+    this->set_identity();
+    return false;
+  }
+  vnl_svd<T> svd1(point_matrix, 1e-8);
+  if (svd1.rank() < 2)
+  {
+    vcl_cerr << "vgl_h_matrix_1d<T>::projective_basis():\n"
+             << " At least two out of the three points are nearly identical\n";
+    this->set_identity();
+    return false;
+  }
+
+  vnl_matrix_fixed<T, 2, 2> back_matrix;
+  back_matrix.set_column(0, p0);
+  back_matrix.set_column(1, p1);
+
+  vnl_svd<T> svd(back_matrix);
+
+  vnl_vector_fixed<T, 2> scales_vector = svd.solve(p2);
+
+  back_matrix.set_column(0, scales_vector[0] * p0);
+  back_matrix.set_column(1, scales_vector[1] * p1);
+
+  if (! back_matrix.is_finite() || back_matrix.has_nans())
+  {
+    vcl_cerr << "vgl_h_matrix_1d<T>::projective_basis():\n"
+             << " back matrix has infinite or NaN values\n";
+    this->set_identity();
+    return false;
+  }
+  this->set(vnl_inverse(back_matrix));
+  return true;
 }
 
 
