@@ -15,7 +15,7 @@
 int main(int argc, char** argv)
 {
   vcl_string filename = testlib_root_dir() + "/vxl/vil/tests/file_read_data/ff_grey8bit_raw.pgm";
-  vcl_cout<<"Load " << filename << " into an image data object." << vcl_endl;
+  vcl_cout<<"Load " << filename << " into an image data object.\n";
 
 
   // This is how we quickly load an image view.
@@ -26,7 +26,7 @@ int main(int argc, char** argv)
 
   // We can apply some operation to it.
 
-  // And the we save it.
+  // And then we save it.
 
   vil2_save(b_im, "test.pbm");
 
