@@ -36,7 +36,7 @@ class Homg2D : public vnl_double_3, public Homg
   Homg2D() {}
 
   //: Copy constructor
-  Homg2D(const Homg2D& that) : vnl_double_3(*this) {}
+  Homg2D(const Homg2D& that) : vnl_double_3(that) {}
 
   //: Construct a Homg2D from three doubles.
   Homg2D(double px, double py, double pw) { set(px,py,pw); }
