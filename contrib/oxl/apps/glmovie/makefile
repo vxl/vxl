@@ -7,7 +7,7 @@ USE_GLUT := 1
 MINI_PROG_SOURCES += glmovie.cxx
 MINI_PROG_SOURCES += vobgetframe.cxx
 
-IULIBS += -lvbl -lvpl -lvul -lvil -lvidl -loxp -lvnl-algo -lvnl
+IULIBS += -lvidl -loxp -lvnl-algo -lvnl -lvbl -lvpl -lvul -lvil
 
 ################################
 include $(IUEROOT)/config/top.mk
