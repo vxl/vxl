@@ -122,6 +122,12 @@ SOURCE=.\bgui_vtol2D_tableau.cxx
 # Begin Source File
 SOURCE=.\bgui_vtol_soview2D.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bgui_vsol_camera_tableau.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bgui_vsol_soview2D.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -151,6 +157,15 @@ SOURCE=.\bgui_style.h
 # End Source File
 # Begin Source File
 SOURCE=.\bgui_style_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bgui_vsol_camera_tableau.h
+# End Source File
+# Begin Source File
+SOURCE=.\bgui_vsol_camera_tableau_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bgui_vsol_soview2D.h
 # End Source File
 # End Group
 # End Target
