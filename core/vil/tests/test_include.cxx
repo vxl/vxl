@@ -51,6 +51,7 @@
 #include <vil/vil_fill.h>
 #include <vil/vil_flip.h>
 #include <vil/vil_fwd.h>
+#include <vil/vil_image_resource_sptr.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_resource_plugin.h>
 #include <vil/vil_image_view.h>
