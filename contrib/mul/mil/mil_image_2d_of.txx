@@ -391,7 +391,7 @@ void mil_image_2d_of<T>::print_summary(vcl_ostream& os) const
 		
 //: print all data to os
 template<class T> 
-void mil_image_2d_of<T>::printAll(vcl_ostream& os) const
+void mil_image_2d_of<T>::print_all(vcl_ostream& os) const
 {
 	print_summary(os);
 	os<<vcl_endl;

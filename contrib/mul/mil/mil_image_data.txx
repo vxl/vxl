@@ -90,7 +90,7 @@ vcl_string mil_image_data<T>::is_a() const
 
 //: Print class to os
 template<class T>
-void mil_image_data<T>::print(ostream& os) const
+void mil_image_data<T>::print_summary(ostream& os) const
 {
 	os<<size_<<" elements.";
 }

@@ -9,6 +9,7 @@
 //  \author Tim Cootes
 
 #include <vcl_string.h>
+#include <vcl_iostream.h>
 
 class vsl_b_ostream;
 class vsl_b_istream;
@@ -67,14 +68,14 @@ public:
     //: Name of the class
     vcl_string is_a() const;
 
-    //: Print class to os
-    void print(vcl_ostream& os) const;
-
     //: Save class to binary file stream
     void b_write(vsl_b_ostream& bfs) const;
 
     //: Load class from binary stream
     void b_read(vsl_b_istream& bfs);
+
+    //: Print class to os
+    void print_summary(vcl_ostream& os) const;
 };
 
 

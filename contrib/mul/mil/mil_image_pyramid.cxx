@@ -111,6 +111,17 @@ void mil_image_pyramid::print_summary(vcl_ostream& os) const
 		os<<"Image at level "<<i<<" : "<<image_[i]<<vcl_endl;
 }
 
+//: Print whole of each image to os
+void mil_image_pyramid::print_all(vcl_ostream& os) const
+{
+	os<<"Levels: "<<image_.size()<<vcl_endl;
+	for (int i=0;i<image_.size();++i)
+	{
+		os<<"Image at level "<<i<<" : ";
+		image_[i]->print_all(os);
+	}
+}
+
 vcl_ostream& operator<<(vcl_ostream& os, const mil_image_pyramid& im_pyr)
 {
 	im_pyr.print_summary(os);

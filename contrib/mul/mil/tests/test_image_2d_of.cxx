@@ -39,7 +39,7 @@ void test_image_2d_of_byte()
 	   image0(x,y) = x+y;
 	 }
 
-  image0.printAll(vcl_cout);
+  image0.print_all(vcl_cout);
 
   {
     // Test the shallow copy
