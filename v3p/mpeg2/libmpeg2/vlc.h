@@ -311,7 +311,7 @@ static DCTtab DCT_B14AC_5 [] = {
     {  1, 1, 2}, {  1, 1, 2}, {  1, 1, 2}, {  1, 1, 2}
 };
 
-// The following data is never used in VXL.
+/* The following data is never used in VXL. */
 #if 0
 static DCTtab DCT_B14DC_5 [] = {
                  {  1, 3, 5}, {  5, 1, 5}, {  4, 1, 5},
