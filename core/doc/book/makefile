@@ -10,6 +10,7 @@ PNMCROP = pnmcrop.exe
 PNMTOPNG = pnmtopng.exe
 MAKEINFO= makeinfo.exe # exe to avoid conflict with cygnus makeinfo sh script
 TEXI2HTML= T2H_HOME=/pkg/Texi2html perl /pkg/texi2html/texi2html.pl
+TEX = tex --c-style-errors --quiet
 else
 GS = gs
 PNGTOPNM = pngtopnm
@@ -18,6 +19,7 @@ PNMTOPNG = pnmtopng
 MAKEINFO = makeinfo
 T2H_HOME = false
 TEXI2HTML = texi2html
+TEX = tex
 endif
 
 MAKEINFOFLAGS=-Dmakeinfo --no-validate
@@ -44,7 +46,7 @@ rosenbrock.png: rosenbrock.eps
 
 # TeX for paper printing
 book.dvi: book.texi atexinfo.tex
-	tex --c-style-errors --quiet book.texi || touch -t 010100001970 book.dvi
+	$(TEX) book.texi || touch -t 010100001970 book.dvi
 
 
 # Windows help files. Process hpj the help compiler 
