@@ -3,10 +3,12 @@
 
 #include <vcl/vcl_compiler.h>
 
+#if !defined(VCL_HAS_EXCEPTIONS)
 #if defined(VCL_WIN32) || defined(__EXCEPTIONS)
 # define VCL_HAS_EXCEPTIONS 1
 #else
 # define VCL_HAS_EXCEPTIONS 0
+#endif
 #endif
 
 
