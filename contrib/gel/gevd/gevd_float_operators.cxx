@@ -356,7 +356,7 @@ gevd_float_operators::Convolve(gevd_bufferxy& from, gevd_bufferxy*& to,
   // 1. Setup the pipeline of 4*yradius+1 lines, convolved along x-axis
   float** cache = new float*[4*yradius+1];
   float** pipeline = cache+yradius;
-  double* rsum = new double[sizeX]; // avoid addition/substraction errors
+  double* rsum = new double[sizeX]; // avoid addition/subtraction errors
   float* row = NULL;            // current row
   for (int p = 0; p <= kborder; p++) {
     pipeline[p] = row = new float[sizeX];
@@ -653,7 +653,7 @@ gevd_float_operators::Gaussian(const float x, const float sigma)
 
 
 //:
-// Setup the cache for reflection/wraping at the borders,
+// Setup the cache for reflection/wrapping at the borders,
 // and the center pipeline. Only cache should be deleted after
 // you're done, not the pipeline, since pipeline shares the same space.
 
@@ -2683,7 +2683,7 @@ gevd_float_operators::CopyNdRecursive(const float* from_array,
 // Assumes data are stored consecutively with right-most index varying
 // fastest, consistent with convention in C m(i,j) = m[i][j].
 // This version decomposes only the n-dimensional sub-block of
-// low frequence convolutions. The wavelet are self-similar in
+// low frequency convolutions. The wavelet are self-similar in
 // n-dimensional space, rather than elongated.
 
 bool
@@ -3012,7 +3012,7 @@ gevd_float_operators::DeleteBoundaryArtifacts(float* wave, const int n,
 
 //:
 // Delete boundary artifacts because the dimension of the image
-// is not a power of 2, and so wraping will skip the last odd element.
+// is not a power of 2, and so wrapping will skip the last odd element.
 
 int
 gevd_float_operators::DeleteBoundaryArtifacts(gevd_bufferxy& wave, const int nlevels)
@@ -3242,7 +3242,7 @@ gevd_float_operators::CoarseFineCorrelation(const float* dataPyr, const int dlen
 #ifdef DEBUG
   vcl_cout << "shift0 = " << shift << vcl_endl;
 #endif
-  if (shift != 0)               // search from apriori shift
+  if (shift != 0)               // search from a priori shift
     shift /= (1 << coarse);
   shift = (float)rint(shift);
   int dlen = dlength >> coarse, plen = plength >> coarse;
