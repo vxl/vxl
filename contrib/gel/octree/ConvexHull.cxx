@@ -16,7 +16,7 @@
 #include "ConvexHull.h"
 
 #define CMPM(c,A,B) \
-        v = (*(double**)A)[c] - (*(double**)B)[c];\
+        v = (*(const double**)A)[c] - (*(const double**)B)[c];\
         if (v>0) return 1;\
         if (v<0) return -1;
 
