@@ -213,32 +213,22 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\Templates/vsl_set_io+vcl_string-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vsl_set_io+int-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vsl_deque_io+int-.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/vcl_vector+vsl_binary_loader_base~-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vsl_complex+double-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vsl_complex+float-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vsl_deque+int-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vsl_list+float-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vsl_list+int-.cxx
 
 # End Source File
 # Begin Source File
@@ -254,36 +244,6 @@ SOURCE=.\Templates/vsl_map_io+int.vcl_string-.cxx
 # Begin Source File
 
 SOURCE=.\Templates/vsl_map_io+vcl_string.int-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vsl_pair+uint.uint-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vsl_pair+vcl_pair+uint.uint-.double-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vsl_pair+vcl_pair+uint.uint-.int-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vsl_set+int-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vsl_set+vcl_string-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vsl_stack+int-.cxx
 
 # End Source File
 # Begin Source File
@@ -309,6 +269,66 @@ SOURCE=.\Templates/vsl_vector_io+uint-.cxx
 # Begin Source File
 
 SOURCE=.\Templates/vsl_vector_io+vcl_string-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vsl_stack_io+int-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vsl_pair_io+vcl_pair+uint.uint-.int-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vsl_pair_io+vcl_pair+uint.uint-.double-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vsl_pair_io+uint.uint-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vsl_pair_io+uint.int-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vsl_pair_io+uint.double-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vsl_pair_io+int.uint-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vsl_pair_io+double.uint-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vsl_list_io+int-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vsl_list_io+float-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vsl_complex_io+float-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vsl_complex_io+double-.cxx
 
 # End Source File
 # Begin Source File
