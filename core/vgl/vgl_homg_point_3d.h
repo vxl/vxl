@@ -100,6 +100,38 @@ class vgl_homg_point_3d
            vgl_Abs(w()) <= tol * vgl_Abs(z());
 #undef vgl_Abs
   }
+
+  inline bool get_nonhomogeneous(double& vx, double& vy, double& vz) const
+  {
+    if (w() == 0)
+    {
+#ifdef DEBUG
+      vcl_cerr << "vgl_homg_point_3d::get_nonhomogeneous - point at infinity\n";
+#endif
+      return false;
+    }
+
+    double hw = 1.0/w();
+
+    vx = x() * hw;
+    vy = y() * hw;
+    vz = z() * hw;
+
+    return true;
+  }
+
+  inline bool rescale_w(Type new_w = Type(1))
+  {
+    if (w() == 0)
+      return false;
+
+    x_ = x() * new_w / w();
+    y_ = y() * new_w / w();
+    z_ = z() * new_w / w();
+    w_ = new_w;
+
+    return true;
+  }
 };
 
 //  +-+-+ point_3d simple I/O +-+-+
