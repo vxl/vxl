@@ -17,7 +17,10 @@
 //  \f[
 //      \mathbf{Q}_{ijk}(u,v,w) = \sum_{r=0}^{3} \sum_{s=0}^{3} \sum_{t=0}^{3}V_{i+r,j+s,k+t} b_r(u) b_s(v) b_t(w)
 //  \f]
-//  where \f$i=\ceil{x}-1\f$,\f$i=\ceil{y}-1\f$,\f$i=\ceil{z}-1\f$,
+//  where
+// \verbatim
+// i=\ceil{x}-1,  i=\ceil{y}-1, i=\ceil{z}-1,
+// \endverbatim
 //  and \f$u=x-i\f$,\f$v=y-j\f$\f$w=z-k\f$ are local parameters ranging in $[0,1)$
 //  and
 //  \f[
