@@ -7,27 +7,27 @@
 #  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\rpl" == include path
 #  == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
-# rgrl_test  == name of output library
-#  /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\  rgrl.lib testlib.lib vbl.lib vnl_io.lib vnl_algo.lib vnl.lib netlib.lib vgl_io.lib vsl.lib vgl.lib vcl.lib /STACK:10000000  == libraries linked in
+# match_2d_multi  == name of output library
+#  /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\  rrel.lib vbl.lib vnl_io.lib vnl_algo.lib vnl.lib netlib.lib vgl_io.lib vsl.lib vgl.lib vcl.lib /STACK:10000000  == libraries linked in
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
-CFG=rgrl_test - Win32 Debug
+CFG=match_2d_multi - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE
-!MESSAGE NMAKE /f "rgrl_test.mak".
+!MESSAGE NMAKE /f "match_2d_multi.mak".
 !MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE
-!MESSAGE NMAKE /f "rgrl_test.mak" CFG="rgrl_test - Win32 Debug"
+!MESSAGE NMAKE /f "match_2d_multi.mak" CFG="match_2d_multi - Win32 Debug"
 !MESSAGE
 !MESSAGE Possible choices for configuration are:
 !MESSAGE
-!MESSAGE "rgrl_test - Win32 MinSizeRel" (based on "Win32 (x86) Application")
-!MESSAGE "rgrl_test - Win32 Release" (based on "Win32 (x86) Application")
-!MESSAGE "rgrl_test - Win32 RelWithDebInfo" (based on "Win32 (x86) Application")
-!MESSAGE "rgrl_test - Win32 Debug" (based on "Win32 (x86) Application")
+!MESSAGE "match_2d_multi - Win32 MinSizeRel" (based on "Win32 (x86) Application")
+!MESSAGE "match_2d_multi - Win32 Release" (based on "Win32 (x86) Application")
+!MESSAGE "match_2d_multi - Win32 RelWithDebInfo" (based on "Win32 (x86) Application")
+!MESSAGE "match_2d_multi - Win32 Debug" (based on "Win32 (x86) Application")
 !MESSAGE
 
 # Begin Project
@@ -38,7 +38,7 @@ CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "rgrl_test - Win32 Release"
+!IF  "$(CFG)" == "match_2d_multi - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -52,7 +52,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\rpl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "rgrl_test_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\rpl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "match_2d_multi_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2 -DCMAKE_INTDIR=\"Release\"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -65,8 +65,7 @@ LINK32=link.exe
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 
 # ADD LINK32 /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\
-# ADD LINK32 rgrl.lib
-# ADD LINK32 testlib.lib
+# ADD LINK32 rrel.lib
 # ADD LINK32 vbl.lib
 # ADD LINK32 vnl_io.lib
 # ADD LINK32 vnl_algo.lib
@@ -77,9 +76,7 @@ LINK32=link.exe
 # ADD LINK32 vgl.lib
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000
-
-!ELSEIF  "$(CFG)" == "rgrl_test - Win32 Debug"
-
+!ELSEIF  "$(CFG)" == "match_2d_multi - Win32 Debug"
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
 # PROP BASE Output_Dir "Debug"
@@ -92,7 +89,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP   /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
 # ADD CPP /nologo  /D "WIN32"  /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\rpl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "rgrl_test_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\rpl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "match_2d_multi_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ -DCMAKE_INTDIR=\"Debug\"
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -107,8 +104,7 @@ LINK32=link.exe
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
 
 # ADD LINK32 /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\
-# ADD LINK32 rgrl.lib
-# ADD LINK32 testlib.lib
+# ADD LINK32 rrel.lib
 # ADD LINK32 vbl.lib
 # ADD LINK32 vnl_io.lib
 # ADD LINK32 vnl_algo.lib
@@ -119,9 +115,7 @@ LINK32=link.exe
 # ADD LINK32 vgl.lib
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000
-
-!ELSEIF  "$(CFG)" == "rgrl_test - Win32 MinSizeRel"
-
+!ELSEIF  "$(CFG)" == "match_2d_multi - Win32 MinSizeRel"
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "MinSizeRel"
@@ -134,7 +128,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\rpl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\rpl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "rgrl_test_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\rpl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "match_2d_multi_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O1 -DCMAKE_INTDIR=\"MinSizeRel\"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -147,8 +141,7 @@ LINK32=link.exe
 # ADD LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 
 # ADD LINK32 /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\
-# ADD LINK32 rgrl.lib
-# ADD LINK32 testlib.lib
+# ADD LINK32 rrel.lib
 # ADD LINK32 vbl.lib
 # ADD LINK32 vnl_io.lib
 # ADD LINK32 vnl_algo.lib
@@ -159,9 +152,7 @@ LINK32=link.exe
 # ADD LINK32 vgl.lib
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000
-
-!ELSEIF  "$(CFG)" == "rgrl_test - Win32 RelWithDebInfo"
-
+!ELSEIF  "$(CFG)" == "match_2d_multi - Win32 RelWithDebInfo"
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "RelWithDebInfo"
@@ -174,7 +165,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\rpl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "rgrl_test_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\rpl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "match_2d_multi_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /Zi /O2 -DCMAKE_INTDIR=\"RelWithDebInfo\"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -187,8 +178,7 @@ LINK32=link.exe
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /IGNORE:4089
 
 # ADD LINK32 /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\
-# ADD LINK32 rgrl.lib
-# ADD LINK32 testlib.lib
+# ADD LINK32 rrel.lib
 # ADD LINK32 vbl.lib
 # ADD LINK32 vnl_io.lib
 # ADD LINK32 vnl_algo.lib
@@ -199,80 +189,20 @@ LINK32=link.exe
 # ADD LINK32 vgl.lib
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000
-
 !ENDIF
 
 # Begin Target
 
-# Name "rgrl_test - Win32 Release"
-# Name "rgrl_test - Win32 Debug"
-# Name "rgrl_test - Win32 MinSizeRel"
-# Name "rgrl_test - Win32 RelWithDebInfo"
+# Name "match_2d_multi - Win32 Release"
+# Name "match_2d_multi - Win32 Debug"
+# Name "match_2d_multi - Win32 MinSizeRel"
+# Name "match_2d_multi - Win32 RelWithDebInfo"
 
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-SOURCE=.\test_include.cxx
+SOURCE=.\match_2d_multi.cxx
 # End Source File
-# Begin Source File
-SOURCE=.\test_util.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_driver.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_convergence.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_estimator.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_feature.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_feature_region.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_feature_set.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_initializer.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_initializer_ran_sam.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_match_set.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_matcher.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_rgrl_util.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_scale_est.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_set_of.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_spline.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_trans_reader.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_transformation.cxx
-# End Source File
-# End Group
-# Begin Group "Header Files"
-# PROP Default_Filter ""
-# Begin Source File
-SOURCE=.\test_util.h
-# End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
