@@ -11,6 +11,10 @@
 #include <vcl_ctime.h>
 #include <mbl/mbl_stats_1d.h>
 
+const unsigned NI=256;
+const unsigned NJ=256;
+const unsigned NP=3;
+
 double method1(vil2_image_view<vxl_byte>& image, int n_loops)
 {
   vcl_time_t t0=vcl_clock();
@@ -109,6 +113,7 @@ double method5(vil2_image_view<vxl_byte>& image, int n_loops)
 
 double method6(vil2_image_view<vxl_byte>& image, int n_loops)
 {
+  assert (image.istep() == 1);
   // Uses row[i] to simulate lookup type access used in original vil images
   vcl_time_t t0=vcl_clock();
   for (int n=0;n<n_loops;++n)
@@ -130,6 +135,37 @@ double method6(vil2_image_view<vxl_byte>& image, int n_loops)
   return 1000000*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC);
 }
 
+double method7(vil2_image_view<vxl_byte>& image, int n_loops)
+{
+  assert (image.istep() == 1);
+  // Uses row[i] to simulate lookup type access used in original vil images
+  assert(image.nplanes() == NP && image.ni() == NI);
+  vxl_byte* raster_ptrs[NP][NJ];
+
+  {
+    unsigned ni=image.ni(),nj=image.nj(),np=image.nplanes();
+    for (unsigned p=0;p<np;++p)
+      for (unsigned j=0;j<nj;++j)
+        (raster_ptrs)[p][j] = & image(0,j,p);
+  }
+
+  vcl_time_t t0=vcl_clock();
+  for (int n=0;n<n_loops;++n)
+  {
+   unsigned ni=image.ni(),nj=image.nj(),np=image.nplanes();
+   for (unsigned p=0;p<np;++p)
+   {
+    for (unsigned j=0;j<nj;++j)
+    {
+      for (unsigned i=0;i<ni;++i)
+        raster_ptrs[p][j][i] = vxl_byte(i+j+3*p);
+    }
+   }
+  }
+  vcl_time_t t1=vcl_clock();
+  return 1000000*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC);
+}
+
 double method(int i, vil2_image_view<vxl_byte>& image, int n_loops)
 {
   double t;
@@ -141,6 +177,7 @@ double method(int i, vil2_image_view<vxl_byte>& image, int n_loops)
     case 4 : t=method4(image,n_loops); break;
     case 5 : t=method5(image,n_loops); break;
     case 6 : t=method6(image,n_loops); break;
+    case 7 : t=method7(image,n_loops); break;
     default: t=-1;
   }
   return t;
@@ -156,11 +193,11 @@ void compute_stats(int i, vil2_image_view<vxl_byte>& image, int n_loops)
 
 int main(int argc, char** argv)
 {
-  vil2_image_view<vxl_byte> image(256,256,3);
+  vil2_image_view<vxl_byte> image(NI,NJ,NP);
 
   vcl_cout<<"Times to fill a 256 x 256 image of 3 planes (in microsecs) [Range= 0.5(max-min)]"<<vcl_endl;
   int n_loops = 100;
-  for (int i=1;i<=6;++i)
+  for (int i=1;i<=7;++i)
   {
     compute_stats(i,image,n_loops);
   }
