@@ -9,7 +9,7 @@
 // .SECTION Description
 //
 // A class for performing the AZ-standard version of Canny's edge detector.
-// The basic implementatation is similar to that described in Canny's thesis,
+// The basic implementation is similar to that described in Canny's thesis,
 // though sub-pixel interpolation of the final edge output has been included,
 // and there is patching of single pixel gaps in the edgel chains.
 //
@@ -40,19 +40,21 @@
 
 class osl_canny_ox_params;
 
-struct osl_LINK {
+struct osl_LINK
+{
   int to;
   osl_LINK *nextl;
 };
 
 
-class osl_canny_ox : public osl_canny_base {
-public:
+class osl_canny_ox : public osl_canny_base
+{
+ public:
   osl_canny_ox(osl_canny_ox_params const &params);
   void detect_edges(vil1_image const &image, vcl_list<osl_edge*>*);
   ~osl_canny_ox();
 
-protected:
+ protected:
   osl_edgel_chain *Get_NMS_edgelsOX(int n_edgels_NMS, int *x_, int *y_);
 
   // Functions used in performing the hysteresis part of canny
@@ -76,7 +78,7 @@ protected:
   void Find_junctionsOX();
   void Find_junction_clustersOX();
 
-protected:
+ protected:
   int max_width_OX_;       // The maximum smoothing kernel width
   float *sub_area_OX_;     // Used in smoothing the image near the borders
 

@@ -4,7 +4,7 @@
 // \file
 //
 // A class for performing traditional Canny edge detection. The basic
-// implementatation is as close to that described in Canny's thesis
+// implementation is as close to that described in Canny's thesis
 // as possible, though sub-pixel interpolation of the final edge
 // output has been included, as has edge thinning. Note that there are
 // probably differences between this implementation and the documentation
@@ -15,7 +15,7 @@
 // to edgelchain terminations (dangling ends). At these places the scale
 // of the smoothing convolution kernel is reduced dynamically to remove
 // interference from corners (if they exist) near to the ends. Overall,
-// this yeilds a much better understanding of the image topology.
+// this yields a much better understanding of the image topology.
 //
 // Note that nothing special has been done around the border of the image;
 // we have simply ignored a border of size width_ all the way round. Perhaps

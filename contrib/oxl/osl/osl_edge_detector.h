@@ -11,7 +11,7 @@
 // implementation is (unintentionally) stochastic, so you don't necessarily
 // get the same results from the same image.
 //
-// The basic implementatation is based on that described in Canny's thesis
+// The basic implementation is based on that described in Canny's thesis
 // in that we compute the norm of the gradient, but then we use
 // non-maximal suppression dynamically to set the edge strength
 // thresholds. Non-maximal suppression is actually done using a
