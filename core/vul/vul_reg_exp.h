@@ -58,18 +58,16 @@ const int vul_reg_exp_nsubexp = 10;
 //  expression object allows specification of such patterns by using
 //  the following regular expression metacharacters:
 //
-// \verbatim
-//   ^        Matches at beginning of a line
-//   $        Matches at end of a line
-//  .         Matches any single character
-//  [ ]       Matches any character(s) inside the brackets
-//  [^ ]      Matches any character(s) not inside the brackets
-//  [ - ]     Matches any character in range on either side of a dash
-//   *        Matches preceeding pattern zero or more times
-//   +        Matches preceeding pattern one or more times
-//   ?        Matches preceeding pattern at most once
-//  ()        Saves a matched expression and uses it in a later match
-// \endverbatim
+// -  ^        Matches at beginning of a line
+// -  $        Matches at end of a line
+// - .         Matches any single character
+// - [ ]       Matches any character(s) inside the brackets
+// - [^ ]      Matches any character(s) not inside the brackets
+// - [ - ]     Matches any character in range on either side of a dash
+// -  *        Matches preceding pattern zero or more times
+// -  +        Matches preceding pattern one or more times
+// -  ?        Matches preceding pattern at most once
+// - ()        Saves a matched expression and uses it in a later match
 //
 //  Note that more than one of these metacharacters can be used in a
 //  single regular expression in order to create complex search
