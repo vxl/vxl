@@ -4,10 +4,9 @@
 // \date   21 May 99
 //-----------------------------------------------------------------------------
 
-#include <vcl_fstream.h>
 #include <vcl_vector.h>
 #include <vcl_cstdlib.h> // for vcl_abort
-#include <vcl_algorithm.h> // for vcl_max, vcl_min
+#include <vcl_algorithm.h> // for vcl_min
 
 #include <vul/vul_file.h>
 #include <vul/vul_printf.h>
@@ -472,8 +471,8 @@ struct example_ZoomCB : public example_CB {
       int width = 100;
       double factor = double(y - down_y) / width;
       factor = vcl_exp(factor);
-      factor = vcl_max(1e-2, factor);
-      factor = vcl_min(1e+2, factor);
+      if (factor < 1e-2) factor = 1e-2;
+      if (factor > 1e+2) factor = 1e+2;
 
       double down_img_x = (down_x - down_pixel_zoom_tx) / down_pixel_zoom;
       double down_img_y = (down_y - down_pixel_zoom_ty) / down_pixel_zoom;

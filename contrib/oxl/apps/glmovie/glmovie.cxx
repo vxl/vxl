@@ -1,3 +1,5 @@
+// This is oxl/apps/glmovie/glmovie.cxx
+
 //:
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG
@@ -8,7 +10,6 @@
 //  ~/images/HannoverDino/ppm/viff.%03d.ppm -n 3
 // /awf/images/handrail.avi -g /tmp/tcm/problem.out/camsolve
 
-#include <vcl_fstream.h>
 #include <vcl_vector.h>
 #include <vcl_cstdio.h>
 #include <vcl_cstdlib.h>

@@ -5,11 +5,7 @@
 
 #include "oxp_vidl_moviefile.h"
 
-#include <vcl_fstream.h>
-#include <vcl_cstdio.h>
-#include <vcl_cstring.h>
 #include <vcl_cassert.h>
-
 #include <vxl_config.h>
 
 #include <vidl/vidl_movie_sptr.h>

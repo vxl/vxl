@@ -1,10 +1,13 @@
+// This is oxl/apps/vxl_vrml_viewer/main.cxx
+
 //:
 // \file
 // \brief Load a vrml file, overlay 3d and view
 // \author awf@robots.ox.ac.uk, Nov 2000
 
-#include <vcl_cmath.h>
-#include <vcl_fstream.h>
+#if 0 // #ifdef VCL_WIN32
+# include <vgui/impl/mfc/vgui_mfc_app_init.h>
+#endif
 
 // vgui basics:
 #include <vgui/vgui.h>
