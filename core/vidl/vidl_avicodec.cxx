@@ -86,7 +86,7 @@ bool vidl_avicodec::read_header()
 //-----------------------------------------------------------------------------
 bool vidl_avicodec::write_header()
 {
-   fprintf(stderr, "vidl_avicodec::write_header Not implemented.\n");
+   vcl_fprintf(stderr, "vidl_avicodec::write_header Not implemented.\n");
    return false;
 }
 
@@ -242,7 +242,7 @@ vidl_codec_sptr vidl_avicodec::load(const char* fname, char mode)
   avi_get_frame_ = AVIStreamGetFrameOpen(avi_stream_, NULL);
 
   if(!read_header()) {
-    fprintf(stderr, "vidl_avicodec: error reading header\n");
+    vcl_fprintf(stderr, "vidl_avicodec: error reading header\n");
     return NULL;
   }
 

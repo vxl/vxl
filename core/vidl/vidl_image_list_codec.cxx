@@ -231,7 +231,7 @@ bool vidl_image_list_codec::save(
 
       // Create a name for the current image to be saved
       char currentname [100];
-      sprintf (currentname, "%s%05d.%s",
+      vcl_sprintf (currentname, "%s%05d.%s",
           fname, pframe.current_frame_number(), extension.c_str());
 
       bool saved_image = vil_save(image, currentname, type);

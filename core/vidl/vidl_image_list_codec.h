@@ -13,6 +13,7 @@
 
 
 #include <vcl_string.h>
+#include <vcl_cstring.h>
 #include <vbl/vbl_ref_count.h>
 #include <vidl/vidl_image_list_codec_sptr.h>
 #include <vidl/vidl_codec.h>
@@ -52,10 +53,10 @@ public:
 
   // Specific to vidl_image_list_codec
   static void set_default_image_type(const char* type)
-        {strcpy(default_initialization_image_type_,type);}
+        {vcl_strcpy(default_initialization_image_type_,type);}
 
   virtual void set_image_type(const char* type)
-        {strcpy(default_image_type_,type);}
+        {vcl_strcpy(default_image_type_,type);}
 
   virtual const char* get_image_type() const {return default_image_type_;}
   vcl_vector<vil_image> get_images() const {return images_;}
