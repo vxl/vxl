@@ -7,6 +7,9 @@ exec perl -w -x $0 ${1+"$@"}
 # the SOURCES lines in the makefile PLUS the list of Templates files,
 # which in turn should correspond to the SOURCE_FILES in CMakeLists.txt.
 #
+# Second purpose: if the current directory contains a file named
+# test_include.cxx, verify that it contains all .h files from the parent dir.
+#
 # Command line argument(s): list of directories to check (default: all)
 
 while (defined($ARGV[0]) && $ARGV[0] =~ m/^-/) {
@@ -78,6 +81,58 @@ foreach $dir (@DIRS)
     foreach $x (readdir(TMP)) { push @tmp_list, "internals/$x"; }
     closedir(TMP);
   }
+
+  # verify #includes in test_include.cxx
+  if (-f "$dir/test_include.cxx" && $dir =~ m+^/+) {
+    if (opendir(UPDIR,"$dir/../algo")) {
+      @updir_files = readdir(UPDIR);
+      closedir(UPDIR);
+      map s/^/algo\//,@updir_files;
+    }
+    if (opendir(UPDIR,"$dir/..")) {
+      push @updir_files, readdir(UPDIR);
+      closedir(UPDIR);
+    }
+    $prefix=$dir; $prefix =~ s/[^\/]*$//; $prefix =~ s/^.*\/(vcl|core|contrib\/[^\/]*)\///;
+    map s/^/$prefix/,@updir_files;
+    @updir_files = grep(/\.h$/, @updir_files);
+    @updir_files = sort(@updir_files); push @updir_files, "~END";
+    open(FILE, "$dir/test_include.cxx");
+    while(<FILE>) {
+      if (m/^\s*\#\s*include\s*\<(\S+)\>\s*$/) {
+        push @inc_files,$1;
+      }
+    }
+    close(FILE);
+    @inc_files = sort(@inc_files); push @inc_files, "~END";
+    $updir_files=""; $inc_files="";
+    while (@inc_files || @updir_files) {
+      unless ($updir_files eq "~END") {
+        $s = shift(@updir_files);
+        $updir_files = $s;
+      }
+      unless ($inc_files eq "~END") {
+        $s = shift(@inc_files);
+        while ($s eq $inc_files) {
+          print STDOUT "multiple occurrence of #include<$s> in $dir/test_include.cxx\n";
+          $s = shift(@inc_files);
+        }
+        $inc_files = $s;
+      }
+      last if ($updir_files eq "~END" && $inc_files eq "~END");
+      while ($inc_files lt $updir_files) {
+        print STDOUT "#include <$inc_files>\tmust be removed from $dir/test_include.cxx\n"
+          unless ($inc_files eq "vxl_config.h");
+        $inc_files = shift(@inc_files);
+      }
+      last if ($updir_files eq "~END" && $inc_files eq "~END");
+      while ($updir_files lt $inc_files) {
+        print STDOUT "#include <$updir_files>\tis missing from $dir/test_include.cxx\n";
+        $updir_files = shift(@updir_files);
+      }
+    }
+  }
+
   @hfiles = ();
   foreach $fx (@tmp_list) {
     next unless ($fx =~ m/\.(h|txx)(\.in)?$/);
@@ -113,6 +168,10 @@ foreach $dir (@DIRS)
       }
     }
     close FILE;
+  }
+  if ($dir =~ m!/mul/mvl2$!) {
+    push @source, "mvl2_video_to_avi_linux.cxx"; push @source, "mvl2_video_from_avi_linux.cxx";
+    push @hsource, "mvl2_video_to_avi_linux.h"; push @hsource, "mvl2_video_from_avi_linux.h";
   }
   $f =~ s/^ //;
 
