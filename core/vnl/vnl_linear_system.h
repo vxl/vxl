@@ -26,6 +26,8 @@
 //    multiply() and transpose_multiply(). This procedural access scheme
 //    makes it possible to solve very large, sparse systems which it would
 //    be inefficient to store in matrix form.
+//
+//    To solve the system, use an algorithm like vnl_lsqr.
 class vnl_linear_system {
 public:
 
