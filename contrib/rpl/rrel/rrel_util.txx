@@ -147,7 +147,7 @@ void rrel_util_intercept_adjust_stats( Ran first, Ran last,
   T center, half_width;
   rrel_util_intercept_adjustment( first, last, center, half_width, dof );
 
-  T std_dev = half_width * 1.4826 * ( 1 + 5/(count-dof) );
+  T std_dev = half_width * T(1.4826) * T( 1 + 5.0/(count-dof) );
   const T mu = 2.5;
   T bound = mu * std_dev;
 
