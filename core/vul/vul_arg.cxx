@@ -230,7 +230,7 @@ void vul_arg_info_list::display_help( char const*progname)
 
   // Print long form of args
   char fmtbuf[1024];
-  vul_sprintf(fmtbuf, "%%%ds %%-%ds %%s ", maxl_option, maxl_type);
+  vcl_sprintf(fmtbuf, "%%%ds %%-%ds %%s ", maxl_option, maxl_type);
 
   // Do required args first
   vul_printf(vcl_cerr, "REQUIRED:\n");
