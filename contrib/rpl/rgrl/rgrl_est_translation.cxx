@@ -61,6 +61,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   vnl_vector<double> from_pt( m );
   vnl_vector<double> to_pt( m );
   vnl_vector<double> Bq (m);
+  vnl_matrix<double> wgtB( m, m );
   double sum_wgt = 0.0;
   unsigned count=0;  //for debugging
   for ( unsigned ms=0; ms < matches.size(); ++ms ) {
@@ -69,9 +70,11 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       for ( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {
         double const wgt = ti.cumulative_weight();
         from_pt = fi.from_feature()->location();
-        from_centre += from_pt * wgt;
+        from_pt *= wgt;
+        from_centre += from_pt;
         to_pt = ti.to_feature()->location();
-        to_centre   += to_pt * wgt;
+        to_pt *= wgt;
+        to_centre   += to_pt;
         sum_wgt += wgt;
       }
     }
@@ -99,7 +102,9 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
         ++count;
 
         // For each constraint, add w*DtBD to XtWX
-        XtWX += wgt * B;
+        wgtB = B;
+        wgtB *= wgt;
+        XtWX += wgtB;
 
         // add w*Bq to XtWy
         Bq = to_pt.pre_multiply( B );

@@ -92,9 +92,11 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       for( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {
         double const wgt = ti.cumulative_weight();
         from_pt = fi.from_feature()->location();
-        from_centre += from_pt * wgt;
+        from_pt *= wgt;
+        from_centre += from_pt;
         to_pt = ti.to_feature()->location();
-        to_centre += to_pt * wgt;
+        to_pt *= wgt;
+        to_centre += to_pt;
         sum_wgt += wgt;
       }
     }
@@ -109,6 +111,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
 
   unsigned count=0; //for debugging
+  vnl_vector<double> p (p_size); //the content of p depends on m
   for( unsigned ms=0; ms < matches.size(); ++ms ) {
     rgrl_match_set const& match_set = *matches[ms];
     for( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
@@ -127,7 +130,6 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
         // Compute ptp.
         //
-        vnl_vector<double> p (p_size); //the content of p depends on m
         if (m == 3) {
           p[0] = vnl_math_sqr(from_pt[0]);   //x^2
           p[1] = vnl_math_sqr(from_pt[1]);   //y^2
