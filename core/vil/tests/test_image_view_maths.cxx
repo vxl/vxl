@@ -101,6 +101,14 @@ void test_image_view_maths_byte()
   TEST_NEAR("Mean",f_mean,0,1e-6);
   TEST_NEAR("Var",f_var,1.0,1e-6);
 
+  // Test range truncation
+  vil2_image_view<float> trun_image(5,5);
+  trun_image.fill(17);
+  vil2_math_truncate_range(trun_image,0.0f,3.5f);
+  TEST_NEAR("vil2_math_truncate_range Max test",trun_image(2,3),3.5,1e-6);
+  vil2_math_truncate_range(trun_image,4.7f,8.5f);
+  TEST_NEAR("vil2_math_truncate_range Min test",trun_image(0,1),4.7,1e-6);
+
 
   // extra test for normalisation
 
