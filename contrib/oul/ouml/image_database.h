@@ -1,32 +1,31 @@
-//-*-c++-*--------------------------------------------------------------
+// This is oul/ouml/image_database.h
 #ifndef OTAGO__image_database_INCLUDED_
 #define OTAGO__image_database_INCLUDED_
-/**
- * \file
- *
- * An image database. Basically maintains a list of labels and
- * associated images. And allows for saving and loading a database.
- * Ideally, this would form an inheritance hierarchy or be a templated
- * class, but I'm looking for simplicity at the moment.
- *
- * The images inserted into the database WILL be deleted on
- * destruction of the database. So only insert things you don't want
- * to persist.
- *
- * \author Brendan McCane
- * \date 17/7/01
- *
- * Copyright (c) 2001 Brendan McCane
- * University of Otago, Dunedin, New Zealand
- * Reproduction rights limited as described in the COPYRIGHT file.
- */
+//:
+// \file
+//
+// An image database. Basically maintains a list of labels and
+// associated images. And allows for saving and loading a database.
+// Ideally, this would form an inheritance hierarchy or be a templated
+// class, but I'm looking for simplicity at the moment.
+//
+// The images inserted into the database WILL be deleted on
+// destruction of the database. So only insert things you don't want
+// to persist.
+//
+// \author Brendan McCane
+// \date 17/7/01
+//
+// Copyright (c) 2001 Brendan McCane
+// University of Otago, Dunedin, New Zealand
+// Reproduction rights limited as described in the COPYRIGHT file.
+//
 //----------------------------------------------------------------------
 
 #include <vcl_sys/types.h>
 #include <vcl_cstring.h> // for strcpy(), strcmp()
 #include <vcl_map.h>
 #include <vcl_utility.h>
-#include <vcl_algorithm.h>
 #include <vil/vil_memory_image.h>
 
 class ImageDatabase
