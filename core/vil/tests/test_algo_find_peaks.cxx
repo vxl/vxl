@@ -1,15 +1,14 @@
-// This is core/vil/tests/test_find_peaks.cxx
+// This is core/vil/tests/test_algo_find_peaks.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/algo/vil_find_peaks.h>
-#include <vil/vil_print.h>
 
 static void test_find_peaks_byte()
 {
-  vcl_cout << "********************\n"
+  vcl_cout << "************************\n"
            << " Testing vil_find_peaks\n"
-           << "********************\n";
+           << "************************\n";
 
   vil_image_view<vxl_byte> image0;
   image0.set_size(10,10);
