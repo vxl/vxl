@@ -93,7 +93,7 @@ wall += -Wreturn-type
 #wall += -Wno-sign-compare -Wno-sign-promo
 
 # warn about non-virtual dtor in class with virtual methods.
-wall += -Wnon-virtual-dtor
+#wall += -Wnon-virtual-dtor
 
 # warn about overloaded virtuals whose signatures do not match those in the base class.
 #wall += -Woverloaded-virtual
