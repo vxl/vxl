@@ -13,6 +13,7 @@
 
 #include <vnl/vnl_numeric_traits.h>
 #include <vcl_complex.h>
+#include <vnl/vnl_rational.h>
 
 #if !VCL_CAN_STATIC_CONST_INIT_INT
 
@@ -39,11 +40,11 @@ const unsigned int vnl_numeric_traits<unsigned int>::one = 1;
 const signed int vnl_numeric_traits<signed int>::zero = 0;
 const signed int vnl_numeric_traits<signed int>::one = 1;
 
-const signed long vnl_numeric_traits<signed long>::zero = 0;
-const signed long vnl_numeric_traits<signed long>::one = 1;
+const signed long vnl_numeric_traits<signed long>::zero = 0L;
+const signed long vnl_numeric_traits<signed long>::one = 1L;
 
-const unsigned long vnl_numeric_traits<unsigned long>::zero = 0;
-const unsigned long vnl_numeric_traits<unsigned long>::one = 1;
+const unsigned long vnl_numeric_traits<unsigned long>::zero = 0L;
+const unsigned long vnl_numeric_traits<unsigned long>::one = 1L;
 
 #endif
 
@@ -70,3 +71,9 @@ const vcl_complex<double> vnl_numeric_traits<vcl_complex<double> >::one = 1.0;
 
 const vcl_complex<long double> vnl_numeric_traits<vcl_complex<long double> >::zero = 0.0;
 const vcl_complex<long double> vnl_numeric_traits<vcl_complex<long double> >::one = 1.0;
+
+//--------------------------------------------------------------------------------
+
+const vnl_rational vnl_numeric_traits<vnl_rational>::zero = 0L;
+const vnl_rational vnl_numeric_traits<vnl_rational>::one = 1L;
+

@@ -20,11 +20,13 @@
 //     980212 AWF Initial version.
 //     AWF 010498 Moved to math
 //     LSB (Manchester) 23/3/01 Documentation tidied
+//     Peter Vanroose   14/7/01 vnl_rational added
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
 
 #include <vcl_complex_fwd.h>
+class vnl_rational;
 
 // this is an empty class template.
 // only the specializations make sense.
@@ -199,6 +201,16 @@ public:
   typedef long double abs_t;
   typedef vcl_complex<vnl_numeric_traits<long double>::double_t> double_t;
   typedef vcl_complex<long double> real_t;
+};
+
+VCL_DEFINE_SPECIALIZATION
+class vnl_numeric_traits<vnl_rational> {
+public:
+  static const vnl_rational zero;
+  static const vnl_rational one;
+  typedef vnl_rational abs_t;
+  typedef vnl_rational double_t;
+  typedef double real_t;
 };
 
 #endif // vnl_numeric_traits_h_
