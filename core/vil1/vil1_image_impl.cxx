@@ -49,20 +49,3 @@ bool vil_image_impl::put_section(void const* /*buf*/, int /*x0*/, int /*y0*/, in
 {
   return false;
 }
-
-  
-bool vil_image_impl::get_section_rgb_byte(void* /*buf*/, int /*x0*/, int /*y0*/, int /*width*/, int /*height*/) const
-{
-  return false;
-}
-
-bool vil_image_impl::get_section_float(void* /*buf*/, int /*x0*/, int /*y0*/, int /*width*/, int /*height*/) const
-{
-  return false;
-}
-
-bool vil_image_impl::get_section_byte(void* /*buf*/, int /*x0*/, int /*y0*/, int /*width*/, int /*height*/) const
-{
-  return false;
-}
-

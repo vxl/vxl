@@ -13,10 +13,23 @@
 // macro to pull down data fields from the impl structure.
 #define cache_from_impl \
 { \
-  vil_memory_image_impl* mi = (vil_memory_image_impl*)ptr; \
-  this->width_  = mi->width_; \
-  this->height_ = mi->height_; \
-  this->rows0_  = mi->rows_ ? mi->rows_[0] : 0; \
+  if (ptr) { \
+    vil_memory_image_impl* mi = (vil_memory_image_impl*)ptr; \
+    this->width_  = mi->width_; \
+    this->height_ = mi->height_; \
+    this->rows0_  = mi->rows_ ? mi->rows_[0] : 0; \
+  } \
+  else { \
+    this->width_  = 0; \
+    this->height_ = 0; \
+    this->rows0_  = 0; \
+  } \
+}
+
+vil_memory_image::vil_memory_image()
+  : vil_image()
+{
+  cache_from_impl;
 }
 
 vil_memory_image::vil_memory_image(int planes, int w, int h, vil_memory_image_format const& format)
@@ -76,6 +89,7 @@ vil_memory_image& vil_memory_image::operator= (vil_memory_image const& that)
 
 void vil_memory_image::resize(int width, int height)
 {
+  assert(ptr);
   vil_memory_image_impl* mi = (vil_memory_image_impl*)ptr;
   mi->resize(1, width, height);
   cache_from_impl;
@@ -83,6 +97,7 @@ void vil_memory_image::resize(int width, int height)
 
 void vil_memory_image::resize(int planes, int width, int height)
 {
+  assert(ptr);
   vil_memory_image_impl* mi = (vil_memory_image_impl*)ptr;
   mi->resize(planes, width, height);
   cache_from_impl;

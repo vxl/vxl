@@ -18,7 +18,7 @@
 
 template <class T>
 vil_memory_image_of<T>::vil_memory_image_of():
-  vil_memory_image(0, 0, 0, vil_memory_image_of_format<T>())
+  vil_memory_image()
 {
 }
 
@@ -45,15 +45,15 @@ vil_memory_image_of<T>::vil_memory_image_of(int sizex, int sizey):
 {
 }
 
-template <class T>
-vil_memory_image_of<T>::vil_memory_image_of(int sizex, int sizey, T const& value):
-  vil_memory_image(1, sizex, sizey, vil_memory_image_of_format<T>())
-{
-  T *p = (T*)get_buffer();
-  T *e = p + planes() * width() * height();
-  while (p != e)
-    *p++ = value;
-}
+// template <class T>
+// vil_memory_image_of<T>::vil_memory_image_of(int sizex, int sizey, T const& value):
+//   vil_memory_image(1, sizex, sizey, vil_memory_image_of_format<T>())
+// {
+//   T *p = (T*)get_buffer();
+//   T *e = p + planes() * width() * height();
+//   while (p != e)
+//     *p++ = value;
+// }
 
 template <class T>
 void vil_memory_image_of<T>::set(vil_image const& image)
@@ -67,6 +67,24 @@ vil_memory_image_of<T>& vil_memory_image_of<T>::operator=(vil_memory_image_of<T>
 {
   vil_memory_image::operator=(that);
   return *this;
+}
+
+template <class  T>
+void vil_memory_image_of<T>::resize(int width, int height)
+{
+  if (ptr)
+    vil_memory_image::resize(width, height);
+  else
+    *this = vil_memory_image_of<T>(width, height);
+}
+
+template <class  T>
+void vil_memory_image_of<T>::resize(int planes, int width, int height)
+{
+  if (ptr)
+    vil_memory_image::resize(width, height);
+  else
+    assert(false);
 }
 
 template <class T>

@@ -118,15 +118,6 @@ public:
   virtual bool get_property(char const* tag, void* property_value = 0) const;
   virtual bool set_property(char const* tag, void const* property_value = 0) const;
 
-  //------------------------------ convenience ------------------------------
-
-  //: \brief Return the image interpreted as rgb bytes.
-  virtual bool get_section_rgb_byte(void* buf, int x0, int y0, int width, int height) const;
-  //: Return the image interpreted as floats.
-  virtual bool get_section_float(void* buf, int x0, int y0, int width, int height) const;
-  //: Return the image interpreted as bytes.
-  virtual bool get_section_byte(void* buf, int x0, int y0, int width, int height) const;
-
 private:
   friend class vil_image;
   // You probably should not use a vil_image_impl in a vbl_smart_ptr, so the

@@ -105,7 +105,9 @@ int main(int argc, char ** argv)
   }
 
   // Make "outimg" -- needs to be big enough to hold the full valid convolution
-  vil_memory_image_of<unsigned char> outimg(in.width() + kernelimg.width(), in.height() +kernelimg.height(), 0);
+  vil_memory_image_of<unsigned char> outimg(in.width()  + kernelimg.width(), 
+					    in.height() + kernelimg.height());
+  outimg.fill(0);
   
   vil_convolve_simple(inimg, kernelimg, (float*)0, outimg);
   

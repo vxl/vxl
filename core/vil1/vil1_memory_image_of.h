@@ -48,8 +48,8 @@ public:
   //: Construct a w x h image, pixel format is determined from T
   vil_memory_image_of(int sizex, int sizey);
   
-  //: Make memory imagebuffer, and fill with "value"
-  vil_memory_image_of(int sizex, int sizey, T const& value);
+  //  //: Make memory imagebuffer, and fill with "value"
+  //  vil_memory_image_of(int sizex, int sizey, T const& value);
   
   //: Clearly, this will deallocate the memory buffer
   ~vil_memory_image_of() {}
@@ -59,6 +59,13 @@ public:
   
   //: Load image.
   void set(vil_image const& image);
+
+  //: These override the methods in the base class.
+  void resize(int width, int height);
+private:
+  // don't try to use this.
+  void resize(int planes, int width, int height);
+public:
   
   // Data Access---------------------------------------------------------------
 

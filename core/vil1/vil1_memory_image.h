@@ -19,11 +19,12 @@ struct vil_memory_image_format {
 //: vil_image, stored entirely in RAM
 class vil_memory_image : public vil_image {
 public:
-  vil_memory_image(int planes, int w, int h, vil_memory_image_format const& format);
-  vil_memory_image(int planes, int w, int h, int components, int bits_per_component, vil_component_format component_format);
-  vil_memory_image(int planes, int w, int h, vil_pixel_format pixel_format);
-  vil_memory_image(int w, int h, int components, int bits_per_component, vil_component_format component_format);
-  vil_memory_image(int w, int h, vil_pixel_format pixel_format);
+  vil_memory_image();
+  vil_memory_image(int planes, int w, int h, vil_memory_image_format const&);
+  vil_memory_image(int planes, int w, int h, int components, int bits_per_component, vil_component_format);
+  vil_memory_image(int planes, int w, int h, vil_pixel_format);
+  vil_memory_image(int w, int h, int components, int bits_per_component, vil_component_format);
+  vil_memory_image(int w, int h, vil_pixel_format );
   vil_memory_image(vil_image const &, char const *silly_hack);
   vil_memory_image(vil_memory_image const&);
 

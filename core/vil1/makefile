@@ -28,6 +28,7 @@ SOURCES += vil_stream_section.cxx     # present a section of a vil_stream
 # classes derived from vil_image
 SOURCES += vil_file_image.cxx
 SOURCES += vil_memory_image.cxx
+SOURCES += vil_image_proxy.cxx
 
 # image adaptors
 SOURCES += vil_memory_image_impl.cxx
