@@ -26,10 +26,11 @@ public:
 	update_covariant();
 	vnl_vector_fixed<double, 2> projection(vnl_double_3x4 &P, vnl_vector_fixed<double, 3> &X);
 	prediction();
-	kalman_filter();
+	kalman_filter(char* fname);
 	virtual ~kalman_filter();
 
 protected:
+	init_velocity();
 	adjust_state_vector(vnl_vector_fixed<double, 2> &pred, vnl_vector_fixed<double, 2> &meas);
   //: set linearized observation matrix
 	set_H_matrix(vnl_double_3x4 &P, vnl_vector_fixed<double, 3> &X);

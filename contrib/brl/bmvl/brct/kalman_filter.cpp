@@ -19,15 +19,19 @@
 #include <vdgl/vdgl_interpolator_linear.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
+#include <bbas/bdgl/bdgl_curve_algs.h>
 #include "brct_algos.h"
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-kalman_filter::kalman_filter()
+kalman_filter::kalman_filter(char* fname)
 {
+  // read data into the pool
+  read_data(fname);
+
   // initialize the transit matrix
-  dt_ = 1.0/28;
+  dt_ = 1.0;
   init_transit_matrix();
 
   init_cam_intrinsic();
@@ -67,43 +71,14 @@ kalman_filter::init_transit_matrix()
 kalman_filter::init_state_vector()
 {
 
-  assert(observes_.size()>2);
-  vgl_homg_point_2d<double> mp0;
-  vgl_homg_point_2d<double> mp1;
- 
-  vcl_list<vgl_homg_line_2d<double> > lines;
+  // initialize the velocity direction
+  init_velocity();
+  vnl_double_3 T;
+  T[0] = X_[3];
+  T[1] = X_[4];
+  T[2] = X_[5];
 
-  vnl_matrix<double> &img0 = observes_[0], &img1 = observes_[1];
-  for(int i=0; i< num_points_; i++){
-
-    vgl_homg_line_2d<double> l(vgl_homg_point_2d<double>(img0[0][i],img0[1][i]), \
-                              vgl_homg_point_2d<double>(img1[0][i],img1[1][i]));
- 
-    lines.push_back(l);
-  }
-
-  vgl_homg_point_2d<double> epipole = vgl_homg_operators_2d<double>::lines_to_point(lines);
-  vnl_vector<double> e(3);
-  e[0] = epipole.x(); e[1] = epipole.y(); e[2] = epipole.w();
-
-  vnl_matrix<double> F(3, 3);
-  F[0][0] = 0;     F[0][1] = -e[2];  F[0][2] = e[1];
-  F[1][0] = e[2]; F[1][1] = 0;     F[1][2] = -e[0];
-  F[2][0] = -e[1];  F[2][1] = e[0]; F[2][2] = 0;
-
-  FMatrix Fmat = F;
-
-  init_cam_intrinsic();
-
-  // get tanslation
-  double trans_dist = 1; // 105mm
-  vnl_double_3 T = vnl_matrix_inverse<double>(M_in_) * e;
-  T /= sqrt(T[0]*T[0] + T[1]*T[1] + T[2]*T[2]);
-  T *= trans_dist;
-
-  vcl_cout<<T;
-  
-  // setting up the external parameters
+  // compute camera calibration matrix
   vnl_double_3x4 E1, E2;
   E1[0][0] = 1;       E1[0][1] = 0;        E1[0][2] = 0;          E1[0][3] = 0;
   E1[1][0] = 0;       E1[1][1] = 1;        E1[1][2] = 0;          E1[1][3] = 0;
@@ -114,15 +89,84 @@ kalman_filter::init_state_vector()
   E2[2][0] = 0;       E2[2][1] = 0;        E2[2][2] = 1;          E2[2][3] = T[2];
   
   vnl_double_3x4 P1 = M_in_*E1, P2 = M_in_*E2;
-  
+
+
+  // compute epipole from velocity
+  vnl_double_3 e = M_in_*T;
+  vnl_double_3x3 F;
+
+  // construct fundermental matrix between the first and second views.
+  F[0][0] = 0;     F[0][1] = -e[2];  F[0][2] = e[1];
+  F[1][0] = e[2];  F[1][1] = 0;      F[1][2] = -e[0];
+  F[2][0] = -e[1]; F[2][1] = e[0];   F[2][2] = 0;
+
+  FMatrix FM(F);
+
+  // point matcher
+  assert(curves_.size()>=2);
+  vdgl_digital_curve_sptr dc0 = curves_[0];
+  vdgl_interpolator_sptr interp0 = dc0->get_interpolator();
+  vdgl_edgel_chain_sptr  ec0 = interp0->get_edgel_chain();
+
+  vdgl_digital_curve_sptr dc1 = curves_[1];
+  vdgl_interpolator_sptr interp1 = dc1->get_interpolator();
+  vdgl_edgel_chain_sptr  ec1 = interp1->get_edgel_chain();
+    
+  int size0 = ec0->size();
+  int size1 = ec1->size();
+  int npts = 2* ((size0 < size1) ? size0 : size1); // interpolate 2 times more
+      
   vcl_vector<vgl_point_3d<double> > pts_3d;
-  
-  
-  for(int i=0; i<num_points_; i++){
-        pts_3d.push_back(brct_algos::triangulate_3d_point(vgl_point_2d<double> (img0[0][i],img0[1][i]), \
-                         P1, vgl_point_2d<double> (img1[0][i],img1[1][i]), P2));    
+  for(int i=0; i<npts; i++){
+    double index = 1.0*i/npts;
+    vgl_homg_point_2d<double> p1(dc0->get_x(index),dc0->get_y(index));
+    vgl_point_2d<double> x1(p1);
+    int x0_index = bdgl_curve_algs:: closest_point(ec0, x1.x(), x1.y());
+    double angle0 = (*ec0)[x0_index].get_theta();
+    
+    vgl_line_2d<double> lr(FM.image2_epipolar_line(p1));
+    
+    // get rid of any point whose graident is perpendicule to the epipole line
+    double nx = lr.a(), ny = lr.b();
+    nx = nx / sqrt(nx*nx + ny*ny);
+    ny = ny / sqrt(nx*nx + ny*ny);
+    if(fabs( nx*cos(angle0*3.14/180) + ny*sin(angle0*3.14/180) )< 0.95){   
+      // getting the intersection point
+      vgl_point_2d<double> p2;
+      vcl_vector<vgl_point_2d<double> > pts;
+      bdgl_curve_algs::intersect_line(dc1, lr, pts);
+      
+      // find the correspoinding point
+      double dist = 1e10; // big number
+      bool flag = false;
+      for(int j=0; j<pts.size(); j++){
+        vgl_homg_point_2d<double> temp(pts[j].x(), pts[j].y());
+        vgl_point_2d<double> x2(temp);
+        
+        int x1_index = bdgl_curve_algs:: closest_point(ec1, pts[j].x(), pts[j].y());
+        double angle1 = (*ec1)[x1_index].get_theta();
+        
+        double dist_p1p2 = vgl_homg_operators_2d<double>::distance_squared(p1, temp);
+        if(fabs(angle1-angle0)<90 && dist > dist_p1p2 && fabs(nx*cos(angle1*3.14/180) + ny*sin(angle1*3.14/180))<0.95 ){ // make sure it filted out lines parallel epipole lines.
+          p2 = temp;
+          flag = true;
+          dist = dist_p1p2;
+        }
+        else
+          continue;
+      }
+      
+      
+      if(flag){ // if have corresponding
+        vgl_point_2d<double> x2(p2);          
+        vgl_point_3d<double> point_3d = brct_algos::triangulate_3d_point(x1, P1, x2, P2);
+        pts_3d.push_back(point_3d);
+      }// end of if finding correspoinding point   
+    }
   }
 
+  num_points_ = pts_3d.size();
+  
 
   //get center of the point
   double xc=0, yc=0, zc=0;
@@ -136,6 +180,8 @@ kalman_filter::init_state_vector()
   yc /= num_points_;
   zc /= num_points_;
 
+  Xl_.resize(num_points_);
+
   for(int i=0; i<num_points_; i++){
     Xl_[i][0] = pts_3d[i].x() - xc;
     Xl_[i][1] = pts_3d[i].y() - yc;
@@ -146,10 +192,7 @@ kalman_filter::init_state_vector()
   X_[1] = yc;
   X_[2] = zc;
 
-  // initialize the velocity
-  X_[3] = 0;
-  X_[4] = 0;
-  X_[5] = 0;
+
 }
 
 kalman_filter::init_observes(vcl_vector<vnl_matrix<double> > &input)
@@ -365,7 +408,7 @@ kalman_filter::adjust_state_vector(vnl_vector_fixed<double, 2> &pred, vnl_vector
 
 void kalman_filter::read_data(char *fname)
 {
-  vcl_ifstream fp("temp.txt");
+  vcl_ifstream fp(fname);
   
   
   char buffer[1000];
@@ -374,10 +417,7 @@ void kalman_filter::read_data(char *fname)
   
   double x,y, dir , conf;
   while (fp.getline(buffer,MAX_LEN)) 
-  {
-    
-    
-    
+  {    
     //ignore comment lines and empty lines
     if (strlen(buffer)<2 || buffer[0]=='#')
       continue;
@@ -400,7 +440,7 @@ void kalman_filter::read_data(char *fname)
         fp.getline(buffer,MAX_LEN);
         sscanf(buffer," [%lf, %lf]   %lf %lf  ", &(x), &(y), &(dir), &(conf));
         vdgl_edgel e;
-        vcl_cout<<"\n " <<x;
+        //vcl_cout<<"\n " <<x;
         e.set_x(x);
         e.set_y(y);
         e.set_theta(0);
@@ -409,6 +449,7 @@ void kalman_filter::read_data(char *fname)
         //add this edge to the current contour
         
       }
+
       vdgl_interpolator_sptr intp=new vdgl_interpolator_linear(ec);
       vdgl_digital_curve_sptr curve= new vdgl_digital_curve(intp);
       
@@ -428,5 +469,67 @@ void kalman_filter::read_data(char *fname)
     }
   }          
   
+  
+}
+
+kalman_filter::init_velocity()
+{
+
+  vcl_list<vgl_homg_line_2d<double> > lines;
+
+/*
+  vnl_matrix<double> &img0 = observes_[0], &img1 = observes_[1];
+
+
+  for(int i=0; i< num_points_; i++){
+
+    vgl_homg_line_2d<double> l(vgl_homg_point_2d<double>(img0[0][i],img0[1][i]), \
+                              vgl_homg_point_2d<double>(img1[0][i],img1[1][i]));
+ 
+    lines.push_back(l);
+  }
+  
+*/
+
+  //
+  // This is a temporialy solution
+  //
+  vgl_homg_point_2d<double> mp00(179, 253), mp01(364, 254), mp02(463, 306), mp03(416, 202), mp04(402, 192);
+  vgl_homg_point_2d<double> mp10(235, 267), mp11(450, 271), mp12(566, 331), mp13(505, 212), mp14(488, 202);
+
+  vgl_homg_line_2d<double> l1(mp00, mp10), l2(mp01, mp11), l3(mp02, mp12), l4(mp03, mp13), l5(mp04, mp14);
+  lines.push_back(l1);
+  lines.push_back(l2);
+  lines.push_back(l3);
+  lines.push_back(l4);
+  lines.push_back(l5);
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+  vgl_homg_point_2d<double> epipole = vgl_homg_operators_2d<double>::lines_to_point(lines);
+  vnl_vector<double> e(3);
+  e[0] = epipole.x(); e[1] = epipole.y(); e[2] = epipole.w();
+
+  vnl_matrix<double> F(3, 3);
+  F[0][0] = 0;     F[0][1] = -e[2];  F[0][2] = e[1];
+  F[1][0] = e[2]; F[1][1] = 0;     F[1][2] = -e[0];
+  F[2][0] = -e[1];  F[2][1] = e[0]; F[2][2] = 0;
+
+  FMatrix Fmat = F;
+
+  init_cam_intrinsic();
+
+  // get tanslation
+  double trans_dist = 1; // 105mm
+  vnl_double_3 T = vnl_matrix_inverse<double>(M_in_) * e;
+  T /= sqrt(T[0]*T[0] + T[1]*T[1] + T[2]*T[2]);
+  T *= trans_dist;
+
+  vcl_cout<<T;
+
+  //seting velocity party of the state vector
+  X_[3] = T[0];
+  X_[4] = T[1];
+  X_[5] = T[2];
   
 }
