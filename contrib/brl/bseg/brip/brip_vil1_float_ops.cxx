@@ -1488,9 +1488,6 @@ bool brip_vil1_float_ops::homography(vil1_memory_image_of<float> const & input,
 {
   if (!input)
     return false;
-  // smooth the input to condition interpolation
-  vil1_memory_image_of<float> gimage =
-    brip_vil1_float_ops::gaussian(input, 0.5f);
 
   //First, there is some rather complex bookeeping to insure that
   //the input and output image rois are consistent with the homography.
