@@ -617,7 +617,7 @@ rgrl_util_skip_empty_lines( vcl_istream& is )
 {
   vcl_streampos pos;
   vcl_string str;
-  static const vcl_string white_chars = " \t";
+  static const vcl_string white_chars = " \t\r";
   int non_empty_pos;
 
   // skip any empty lines

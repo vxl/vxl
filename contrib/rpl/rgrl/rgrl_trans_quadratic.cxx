@@ -356,7 +356,8 @@ read( vcl_istream& is )
   vcl_string str;
   vcl_getline( is, str );
 
-  if ( str != "QUADRATIC" ) {
+  // The token should appear at the beginning of line
+  if ( str.find( "QUADRATIC" ) != 0 ) {
     WarningMacro( "The tag is not QUADRATIC. reading is aborted.\n" );
     vcl_exit(10);
   }

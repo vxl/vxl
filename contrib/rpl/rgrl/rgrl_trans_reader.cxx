@@ -20,7 +20,7 @@
 
 #undef READ_THIS_TRANSFORMATION
 #define READ_THIS_TRANSFORMATION(tag, trans) \
-  if( tag_str == tag ){ \
+  if( tag_str.find(tag) == 0 ){ \
     trans* trans_ptr = new trans(0); \
     trans_ptr->read(is); \
     sptr = trans_ptr; \
@@ -65,7 +65,8 @@ rgrl_trans_reader( vcl_istream& is )
   vcl_cout<< "WARNING: " << RGRL_HERE << " ( line " 
           << __LINE__ << " )\n" 
           << "       " << "Tag " << tag_str 
-          << " cannot match with any existing transformations." << vcl_endl;
+          << " cannot match with any existing transformations.\n" 
+          << "         Try to open istream in BINARY mode!" << vcl_endl;
   return sptr;
 }                 
                    

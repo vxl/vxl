@@ -330,7 +330,8 @@ read( vcl_istream& is )
   vcl_string str;
   vcl_getline( is, str );
 
-  if ( str != "REDUCED_QUADRATIC" ) {
+  // The token should appear at the beginning of line
+  if ( str.find( "REDUCED_QUADRATIC" ) != 0 ) {
     WarningMacro( "The tag is not REDUCED_QUADRATIC. reading is aborted.\n" );
     vcl_exit(10);
   }

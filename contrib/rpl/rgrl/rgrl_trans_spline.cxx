@@ -184,7 +184,8 @@ read( vcl_istream& is )
   vcl_string str;
   vcl_getline( is, str );
 
-  if ( str != "BSPLINE" ) {
+  // The token should appear at the beginning of line
+  if ( str.find( "BSPLINE" ) != 0 ) {
     WarningMacro( "The tag is not AFFINE. reading is aborted." << vcl_endl );
     vcl_exit(10);
   }

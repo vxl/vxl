@@ -273,7 +273,8 @@ read( vcl_istream& is )
   vcl_string str;
   vcl_getline( is, str );
 
-  if ( str != "RIGID" ) {
+  // The token should appear at the beginning of line
+  if ( str.find( "RIGID" ) != 0 ) {
     WarningMacro( "The tag is not RIGID. reading is aborted.\n" );
     vcl_exit(10);
   }

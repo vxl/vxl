@@ -214,7 +214,7 @@ read( vcl_istream& is )
   vcl_string str;
   vcl_getline( is, str );
 
-  if ( str != "AFFINE" ) {
+  if ( str.find("AFFINE") != 0 ) {
     WarningMacro( "The tag is not AFFINE. reading is aborted.\n" );
     vcl_exit(10);
   }

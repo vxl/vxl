@@ -10,12 +10,15 @@
 #include <vcl_iostream.h>
 
 //: Read a transformation from input stream
+//  IMPORTANCE: Open transformation file in BINARY mode! 
+//              Stream Pos does not work in Windows when a UNIX ascii 
+//              file is opened in text mode.
 //  The type of transformation depends on the content of the input stream.
 //  NULL smart ptr is returned if reading operation fails.
 //  Please check the validity of the return smart ptr
 rgrl_transformation_sptr rgrl_trans_reader( vcl_istream& is );
 
-//: input opreator for reading transformation
+//: stream input opreator for reading a transformation
 vcl_istream& operator>>( vcl_istream& is, rgrl_transformation_sptr& sptr );
 
 #endif // rgrl_trans_reader_h_

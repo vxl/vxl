@@ -16,7 +16,7 @@ MAIN_ARGS( test_trans_reader )
   
   START( "smart reader of transformation" );
 
-  vcl_ifstream is( argv[1] );
+  vcl_ifstream is( argv[1], vcl_ios::in|vcl_ios::binary );
   if( !is ) {
     vcl_cerr << "Cannot open transformation file: " << argv[2] << vcl_endl;
     return 0;

@@ -173,7 +173,8 @@ read( vcl_istream& is )
   vcl_string str;
   vcl_getline( is, str );
 
-  if ( str != "TRANSLATION" ) {
+  // The token should appear at the beginning of line
+  if ( str.find( "TRANSLATION" ) != 0 ) {
     WarningMacro( "The tag is not TRANSLATION. reading is aborted.\n" );
     vcl_exit(10);
   }
