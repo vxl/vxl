@@ -1,7 +1,8 @@
-#ifndef VCSL_CYLINDRICAL_H
-#define VCSL_CYLINDRICAL_H
+#ifndef vcsl_cylindrical_h_
+#define vcsl_cylindrical_h_
 //:
 // \file
+// \brief 3D cylindrical coordinate system
 // \author François BERTEL
 //
 // \verbatim
@@ -10,12 +11,9 @@
 //   2004/09/10 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
+#include <vcsl/vcsl_spatial.h>
 #include <vcsl/vcsl_cylindrical_sptr.h>
 
-//*****************************************************************************
-// External declarations for values
-//*****************************************************************************
-#include <vcsl/vcsl_spatial.h>
 //: 3D coordinate system specified by distance rho, angle theta and distance z.
 class vcsl_cylindrical
   : public vcsl_spatial
@@ -25,17 +23,17 @@ class vcsl_cylindrical
   // Constructors/Destructor
   //***************************************************************************
 
-  //: Default constructor.
-  explicit vcsl_cylindrical(void);
+  // Default constructor
+  vcsl_cylindrical();
 
-  //: Destructor
+  // Destructor
   virtual ~vcsl_cylindrical() {}
 
   //***************************************************************************
   // Because VXL does not necessarily use dynamic_cast<>
   //***************************************************************************
 
-  virtual const vcsl_cylindrical *cast_to_cylindrical(void) const { return this; }
+  virtual const vcsl_cylindrical *cast_to_cylindrical() const { return this; }
 };
 
-#endif // VCSL_CYLINDRICAL_H
+#endif // vcsl_cylindrical_h_

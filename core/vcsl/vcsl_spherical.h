@@ -1,7 +1,8 @@
-#ifndef VCSL_SPHERICAL_H
-#define VCSL_SPHERICAL_H
+#ifndef vcsl_spherical_h_
+#define vcsl_spherical_h_
 //:
 // \file
+// \brief 3D spherical coordinate system
 // \author François BERTEL
 //
 // \verbatim
@@ -11,13 +12,10 @@
 //   2004/09/10 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
+#include <vcsl/vcsl_spatial.h>
 #include <vcsl/vcsl_spherical_sptr.h>
 
-//*****************************************************************************
-// External declarations for values
-//*****************************************************************************
-#include <vcsl/vcsl_spatial.h>
-//: 3D coordinate system specified by distance rho, angle theta and phi.
+//: 3D coordinate system specified by distance rho, angles theta and phi.
 class vcsl_spherical
   : public vcsl_spatial
 {
@@ -26,17 +24,17 @@ class vcsl_spherical
   // Constructors/Destructor
   //***************************************************************************
 
-  //: Default constructor.
-  explicit vcsl_spherical(void);
+  // Default constructor
+  vcsl_spherical();
 
-  //: Destructor
+  // Destructor
   virtual ~vcsl_spherical() {}
 
   //***************************************************************************
   // Because VXL does not necessarily use dynamic_cast<>
   //***************************************************************************
 
-  virtual const vcsl_spherical *cast_to_spherical(void) const { return this; }
+  virtual const vcsl_spherical *cast_to_spherical() const { return this; }
 };
 
-#endif // VCSL_SPHERICAL_H
+#endif // vcsl_spherical_h_

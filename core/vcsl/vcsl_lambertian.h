@@ -1,22 +1,19 @@
-#ifndef VCSL_LAMBERTIAN_H
-#define VCSL_LAMBERTIAN_H
-
+#ifndef vcsl_lambertian_h_
+#define vcsl_lambertian_h_
 //:
-// \file 
+// \file
+// \brief Lambert Conformal Conic Projection
 // \author François BERTEL
 //
 // \verbatim
-// Modifications
-// 2000/06/30 François BERTEL Creation. Adapted from IUE
-// 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
+//  Modifications
+//   2000/06/30 François BERTEL Creation. Adapted from IUE
+//   2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
 
+#include <vcsl/vcsl_geographic.h>
 #include <vcsl/vcsl_lambertian_sptr.h>
 
-//*****************************************************************************
-// External declarations for values
-//*****************************************************************************
-#include <vcsl/vcsl_geographic.h>
 //: Lambert Conformal Conic Projection
 // Coordinate system in which shapes are preserved while scale is nonuniform.
 // Coordinates are specified in terms of x, y, and z, where z is the altitude
@@ -24,16 +21,16 @@
 class vcsl_lambertian
   : public vcsl_geographic
 {
-public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
 
-  //: Default constructor.
-  explicit vcsl_lambertian(void);
+  // Default constructor.
+  vcsl_lambertian();
 
-  //: Destructor
-  virtual ~vcsl_lambertian();
+ public:
+  // Destructor
+  virtual ~vcsl_lambertian() {}
 };
 
-#endif // #ifndef VCSL_LAMBERTIAN_H
+#endif // vcsl_lambertian_h_

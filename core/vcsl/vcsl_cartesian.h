@@ -1,5 +1,5 @@
-#ifndef vcsl_cartesian_h
-#define vcsl_cartesian_h
+#ifndef vcsl_cartesian_h_
+#define vcsl_cartesian_h_
 //:
 // \file
 // \brief Cartesian coordinate system
@@ -11,12 +11,8 @@
 //   2004/09/10 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
-#include <vcsl/vcsl_cartesian_sptr.h>
-
-//*****************************************************************************
-// External declarations
-//*****************************************************************************
 #include <vcsl/vcsl_coordinate_system.h>
+#include <vcsl/vcsl_cartesian_sptr.h>
 
 //: Cartesian coordinate system
 // The axes of a cartesian coordinate system are orthogonal and normally right
@@ -24,15 +20,15 @@
 class vcsl_cartesian
   : public vcsl_coordinate_system
 {
- public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
 
-  //: Default constructor. Set itself right handed
-  explicit vcsl_cartesian() : right_handed_(true) {}
+  //: Default constructor. Sets itself right handed
+  vcsl_cartesian() : right_handed_(true) {}
 
-  //: Destructor
+ public:
+  // Destructor
   virtual ~vcsl_cartesian() {}
 
   //***************************************************************************
@@ -58,4 +54,4 @@ class vcsl_cartesian
   bool right_handed_;
 };
 
-#endif // vcsl_cartesian_h
+#endif // vcsl_cartesian_h_

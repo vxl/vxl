@@ -1,5 +1,5 @@
-#ifndef vcsl_cartesian_3d_h
-#define vcsl_cartesian_3d_h
+#ifndef vcsl_cartesian_3d_h_
+#define vcsl_cartesian_3d_h_
 //:
 // \file
 // \brief 3D Cartesian coordinate system
@@ -11,8 +11,8 @@
 //   2004/09/10 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
-#include <vcsl/vcsl_cartesian_3d_sptr.h>
 #include <vcsl/vcsl_spatial.h>
+#include <vcsl/vcsl_cartesian_3d_sptr.h>
 
 //: 3D Cartesian coordinate system
 class vcsl_cartesian_3d
@@ -23,31 +23,31 @@ class vcsl_cartesian_3d
   // Constructors/Destructor
   //***************************************************************************
 
-  //: Default constructor.
-  explicit vcsl_cartesian_3d(void);
+  // Default constructor
+  vcsl_cartesian_3d();
 
-  //: Destructor
+  // Destructor
   virtual ~vcsl_cartesian_3d() {}
 
   //***************************************************************************
   // Because VXL does not necessarily use dynamic_cast<>
   //***************************************************************************
 
-  virtual const vcsl_cartesian_3d *cast_to_cartesian_3d(void)const{return this;}
+  virtual const vcsl_cartesian_3d *cast_to_cartesian_3d() const { return this; }
 
   //***************************************************************************
   // Status report
   //***************************************************************************
 
   //: Are the axes of `this' right handed ?
-  virtual bool is_right_handed(void) const { return right_handed_; }
+  bool is_right_handed() const { return right_handed_; }
 
   //***************************************************************************
   // Status setting
   //***************************************************************************
 
   //: Set whether the coordinate system is right handed or not
-  virtual void set_right_handed(bool val) { right_handed_ = val; }
+  void set_right_handed(bool val) { right_handed_ = val; }
 
  protected:
   //***************************************************************************
@@ -58,4 +58,4 @@ class vcsl_cartesian_3d
   bool right_handed_;
 };
 
-#endif // vcsl_cartesian_3d_h
+#endif // vcsl_cartesian_3d_h_

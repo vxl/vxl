@@ -1,7 +1,8 @@
-#ifndef VCSL_POLAR_H
-#define VCSL_POLAR_H
+#ifndef vcsl_polar_h_
+#define vcsl_polar_h_
 //:
 // \file
+// \brief Planar polar coordinate system
 // \author François BERTEL
 //
 // \verbatim
@@ -11,12 +12,8 @@
 //   2004/09/10 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
-#include <vcsl/vcsl_polar_sptr.h>
-
-//*****************************************************************************
-// External declarations for values
-//*****************************************************************************
 #include <vcsl/vcsl_spatial.h>
+#include <vcsl/vcsl_polar_sptr.h>
 
 //: Planar coordinate system specified by the parameters rho and theta
 class vcsl_polar
@@ -28,7 +25,7 @@ class vcsl_polar
   //***************************************************************************
 
   // Default constructor.
-  explicit vcsl_polar();
+  vcsl_polar();
 
   // Destructor
   virtual ~vcsl_polar() {}
@@ -37,7 +34,7 @@ class vcsl_polar
   // Because VXL does not necessarily use dynamic_cast<>
   //***************************************************************************
 
-  virtual const vcsl_polar *cast_to_polar(void) const { return this; }
+  virtual const vcsl_polar *cast_to_polar() const { return this; }
 };
 
-#endif // VCSL_POLAR_H
+#endif // vcsl_polar_h_

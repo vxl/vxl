@@ -1,23 +1,19 @@
-#ifndef VCSL_UTM_H
-#define VCSL_UTM_H
-
+#ifndef vcsl_utm_h_
+#define vcsl_utm_h_
 //:
-// \file 
+// \file
+// \brief Universal Transverse Mercator projection
 // \author François BERTEL
 //
 // \verbatim
-// Modifications
-// 2000/06/29 François BERTEL Creation. Adapted from IUE
-// 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
+//  Modifications
+//   2000/06/29 François BERTEL Creation. Adapted from IUE
+//   2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
 
-
+#include <vcsl/vcsl_geographic.h>
 #include <vcsl/vcsl_utm_sptr.h>
 
-//*****************************************************************************
-// External declarations for values
-//*****************************************************************************
-#include <vcsl/vcsl_geographic.h>
 //: Universal Transverse Mercator projection
 // Coordinate system in which a point is specified by a grid zone designation,
 // an x and y coordinate within the grid zone, and z, the height above the
@@ -25,16 +21,16 @@
 class vcsl_utm
   : public vcsl_geographic
 {
-public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
 
-  //: Default constructor.
-  explicit vcsl_utm(void);
+  // Default constructor.
+  vcsl_utm();
 
-  //: Destructor
-  virtual ~vcsl_utm();
+ public:
+  // Destructor
+  virtual ~vcsl_utm() {}
 };
 
-#endif // #ifndef VCSL_UTM_H
+#endif // vcsl_utm_h_
