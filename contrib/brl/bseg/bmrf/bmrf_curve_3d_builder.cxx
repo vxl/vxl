@@ -103,7 +103,7 @@ bmrf_curve_3d_builder::build()
 
   find_alpha_bounds();
 
-  double a_init = (min_alpha_ + max_alpha_)*0.5;
+  //double a_init = (min_alpha_ + max_alpha_)*0.5;
   vcl_list<vcl_list<bmrf_curvel_3d_sptr>*> growing_curves;
 
   vcl_list<bmrf_curvel_3d_sptr> init_curvels = build_curvels(min_alpha_);
@@ -112,8 +112,10 @@ bmrf_curve_3d_builder::build()
   {
     vcl_list<bmrf_curvel_3d_sptr> new_curve;
     new_curve.push_back(*itr);
-    //curves_.insert(new_curve);
-    growing_curves.push_back(&(*(curves_.insert(new_curve).first)));
+    // This is a very sloppy way of keeping pointers to lists in curves_
+    // I will rewrite this soon
+    vcl_list<bmrf_curvel_3d_sptr> *list_ptr = const_cast<vcl_list<bmrf_curvel_3d_sptr> *>  (&(*curves_.insert(new_curve).first));
+    growing_curves.push_back(list_ptr);
   }
 
   for( double alpha = min_alpha_+0.001; alpha < max_alpha_; alpha += 0.001 ) {
@@ -329,7 +331,10 @@ bmrf_curve_3d_builder::append_curvels(vcl_list<bmrf_curvel_3d_sptr> curvels,
   {
     vcl_list<bmrf_curvel_3d_sptr> new_curve;
     new_curve.push_back(*c_itr);
-    grown_curves.push_back(&(*(curves_.insert(new_curve).first)));
+    // This is a very sloppy way of keeping pointers to lists in curves_
+    // I will rewrite this soon
+    vcl_list<bmrf_curvel_3d_sptr> *list_ptr = const_cast<vcl_list<bmrf_curvel_3d_sptr> *>  (&(*curves_.insert(new_curve).first));
+    grown_curves.push_back(list_ptr);
   }
 
   growing_curves = grown_curves;
