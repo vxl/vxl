@@ -31,6 +31,7 @@ SET( vil_algo_sources
   vil_fft.txx                  vil_fft.h
   vil_histogram.cxx            vil_histogram.h
   vil_histogram_equalise.cxx   vil_histogram_equalise.h
+  vil_distance_transform.cxx   vil_distance_transform.h
 )
 
 

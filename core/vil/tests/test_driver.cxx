@@ -39,6 +39,7 @@ DECLARE( test_suppress_non_max );
 DECLARE( test_rotate_image );
 DECLARE( test_algo_histogram );
 DECLARE( test_algo_histogram_equalise );
+DECLARE( test_algo_distance_transform );
 
 void
 register_tests()
@@ -82,6 +83,7 @@ register_tests()
   REGISTER( test_rotate_image );
   REGISTER( test_algo_histogram );
   REGISTER( test_algo_histogram_equalise );
+  REGISTER( test_algo_distance_transform );
 }
 
 DEFINE_MAIN;
