@@ -70,8 +70,8 @@ double vpdfl_pc_gaussian::log_p(const vnl_vector<double>& x) const
 // Also, the two values are the squares of the distances.
 void vpdfl_pc_gaussian::get_distances(double &mahalDIFS, double &euclidDFFS, const vnl_vector<double>& x) const
 {
-  int m = n_principal_components();
-  int n = n_dims();
+  const unsigned int m = n_principal_components();
+  const unsigned int n = n_dims();
 
   assert(x.size() == n);
 
@@ -154,16 +154,16 @@ void vpdfl_pc_gaussian::set(const vnl_vector<double>& mean,
   // The Eigenvector matrix should be square (and full rank but we don;t test for that)
   assert (evecs.cols() == evecs.rows());
 
-  int n = evecs.cols();
+  unsigned int n = evecs.cols();
 
   vnl_vector<double> allEVals(n);
 
   // Fill in the complementary space Eigenvalues
-  for (int i = 0; i < partition_; i++)
+  for (unsigned int i = 0; i < partition_; i++)
   {
     allEVals(i) = evals(i);
   }
-  for (int i = partition_; i < n; i++)
+  for (unsigned int i = partition_; i < n; i++)
   {
     allEVals(i) = complementEVal;
   }

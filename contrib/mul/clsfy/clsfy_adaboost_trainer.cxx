@@ -58,9 +58,10 @@ void clsfy_adaboost_trainer::clsfy_update_weights_weak(vnl_vector<double> &wts,
                                  int class_number,
                                  double beta)
 {
-  int n = wts.size();
-  for (int i=0;i<n;++i)
-    if (classifier.classify(data[i])==class_number) wts[i]*=beta;
+  assert(class_number >= 0);
+  unsigned int n = wts.size();
+  for (unsigned int i=0;i<n;++i)
+    if (classifier.classify(data[i])==(unsigned)class_number) wts[i]*=beta;
 }
 
 

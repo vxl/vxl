@@ -55,7 +55,7 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
   int n_planes = src_im.n_planes();
 
 
-    // Reduce plane-by-plane
+  // Reduce plane-by-plane
 
   double init_x = 0.5 * (src_nx - 1 - dest_nx*scale_step());
   double init_y = 0.5 * (src_ny - 1 - dest_ny*scale_step());
@@ -380,7 +380,8 @@ void mil_gaussian_pyramid_builder_2d_general<T>::extend(mil_image_pyramid& image
   // than 5 x 5
   double s = scale_step();
   int max_levels = 1;
-  while (((int)(nx/s+0.5)>=min_x_size()) && ((int)(ny/s+0.5)>=min_y_size()))
+  while (((unsigned int)(nx/s+0.5)>=min_x_size()) &&
+         ((unsigned int)(ny/s+0.5)>=min_y_size()))
   {
      max_levels++;
      s*=scale_step();
@@ -416,7 +417,6 @@ void mil_gaussian_pyramid_builder_2d_general<T>::extend(mil_image_pyramid& image
 
 
 //=======================================================================
-
 #if 0
 template <class T>
 vcl_string mil_gaussian_pyramid_builder_2d_general<T>::is_a() const
@@ -482,7 +482,7 @@ void mil_gaussian_pyramid_builder_2d_general<T>::b_read(vsl_b_istream& bfs)
   {
   case (1):
     mil_gaussian_pyramid_builder_2d<T>::b_read(bfs);
-    
+
     vsl_b_read(bfs,scale);
     set_scale_step(scale);
     break;

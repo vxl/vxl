@@ -49,6 +49,7 @@ void clsfy_adaboost_sorted_trainer::build_strong_classifier(
                             mbl_data_wrapper<vnl_vector<double> >& egs0,
                             mbl_data_wrapper<vnl_vector<double> >& egs1)
 {
+  assert (max_n_clfrs >= 0);
   // first arrange the data in the form
   // vcl_vector< < vcl_vector< vtl_triple<double,int,int> > > > data
   // + vnl_vector wts
@@ -57,7 +58,7 @@ void clsfy_adaboost_sorted_trainer::build_strong_classifier(
   // number of examples
   unsigned n0 = egs0.size();
   unsigned n1 = egs1.size();
-  int n=n0+n1;
+  unsigned n=n0+n1;
   //vcl_cout<<"n= "<<n<<vcl_endl;
 
   // initialize weights
@@ -81,7 +82,7 @@ void clsfy_adaboost_sorted_trainer::build_strong_classifier(
     data[i].resize(0);
     egs0.reset();
     // add data for class 0
-    for (int j=0;j<n0;++j)
+    for (unsigned int j=0;j<n0;++j)
     {
       t.first=egs0.current()[i];
       t.second=0;
@@ -92,7 +93,7 @@ void clsfy_adaboost_sorted_trainer::build_strong_classifier(
 
     // add data for class 1
     egs1.reset();
-    for (int j=0;j<n1;++j)
+    for (unsigned int j=0;j<n1;++j)
     {
       t.first=egs1.current()[i];
       t.second=1;
@@ -126,7 +127,7 @@ void clsfy_adaboost_sorted_trainer::build_strong_classifier(
 
   double beta, alpha;
 
-  for (int r=0;r<max_n_clfrs;++r)
+  for (unsigned int r=0;r<(unsigned)max_n_clfrs;++r)
   {
     vcl_cout<<"adaboost training round = "<<r<<vcl_endl;
 
@@ -179,11 +180,11 @@ void clsfy_adaboost_sorted_trainer::build_strong_classifier(
     alpha  = -1.0*vcl_log(beta);
     strong_classifier.add_classifier( best_c1d, alpha, best_i);
 
-    if (r<(n-1))
+    if (r+1<n)
     {
       // update the wts using the best weak classifier
-      for (int j=0;j<n;++j)
-        if (best_c1d->classify(data[best_i][j].first)==data[best_i][j].second)
+      for (unsigned int j=0;j<n;++j)
+        if (best_c1d->classify(data[best_i][j].first)==(unsigned)data[best_i][j].second)
           wts[data[best_i][j].third]*=beta;
 
       double w_sum= wts.mean()*n;

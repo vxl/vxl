@@ -48,7 +48,7 @@ void mil_image_2d_of<T>::deepCopy(const mil_image_2d_of& src)
 
   // Do a deep copy
   // This is potentially inefficient
-  for (int i=0;i<planes_.size();++i)
+  for (unsigned int i=0;i<planes_.size();++i)
   {
     T* row = planes_[i];
     const T* i_row = src.plane(i);
@@ -119,7 +119,8 @@ void mil_image_2d_of<T>::resize3(int nx, int ny, int n_planes)
 template<class T>
 void mil_image_2d_of<T>::set_n_planes(int n)
 {
-  if (planes_.size()!=n)
+  assert(n>0);
+  if (planes_.size()!=(unsigned)n)
   {
     release_data();
     planes_.resize(n);
@@ -151,7 +152,7 @@ void mil_image_2d_of<T>::setValidRegion(int xlo, int xhi, int ylo, int yhi)
 template<class T>
 void mil_image_2d_of<T>::fill(T b)
 {
-  for (int i=0;i<planes_.size();++i)
+  for (unsigned int i=0;i<planes_.size();++i)
   {
     T* row = planes_[i];
     for (int y=0;y<ny_;++y)
@@ -377,7 +378,7 @@ void mil_image_2d_of<T>::getRange(T& min_f, T& max_f) const
 
   getRange(min_f,max_f,0);
 
-  for (int i=1;i<planes_.size();++i)
+  for (unsigned int i=1;i<planes_.size();++i)
   {
     T min_fi,max_fi;
     getRange(min_fi,max_fi,i);

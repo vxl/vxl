@@ -82,11 +82,11 @@ void vpdfl_gaussian::set(const vnl_vector<double>& mean,
   // back to the Covariance matrix, and select the diagonal
   // Efficiently - Var(i) = Sum Wij * Li * Wij
   vnl_vector<double> v(m);
-  for (int i=0; i<m; i++)
+  for (unsigned int i=0; i<m; i++)
   {
     double &vi = v(i);
     vi = 0.0;
-    for ( int j=0; j<n; j++)
+    for (unsigned int j=0; j<n; j++)
       vi += vnl_math_sqr(evecs(i,j)) * evals(i);
   }
 
@@ -118,7 +118,6 @@ void vpdfl_gaussian::set_mean(const vnl_vector<double>& mean)
 
 
 //=======================================================================
-
 //: Initialise from mean and covariance matrix
 //  Note, eigenvectors computed from covar, and those corresponding
 //  to evals smaller than min_eval are truncated
@@ -126,7 +125,7 @@ void vpdfl_gaussian::set(const vnl_vector<double>& mean,
                          const vnl_matrix<double>& covar,
                          double min_eval)
 {
-  int n = mean.size();
+  unsigned int n = mean.size();
   assert(covar.rows()==n && covar.cols()==n);
 
   vnl_matrix<double> evecs;
@@ -139,7 +138,7 @@ void vpdfl_gaussian::set(const vnl_vector<double>& mean,
   // eigenvalues are highest first now
 
   // Apply threshold to variance
-  for (int i=0;i<n;++i)
+  for (unsigned int i=0;i<n;++i)
     if (evals(i)<min_eval) evals(i)=min_eval;
 
   set(mean, evecs, evals);
@@ -147,8 +146,6 @@ void vpdfl_gaussian::set(const vnl_vector<double>& mean,
 
 
 //=======================================================================
-
-
 static bool inline almostEqualsOne(double value)
 {
   const double upper = 1 + 1e-06;
@@ -185,7 +182,6 @@ static bool vectorHasDescendingOrder(const vnl_vector<double>& v)
 
 //=======================================================================
 
-
 vnl_matrix<double> vpdfl_gaussian::covariance() const
 {
   vnl_matrix<double> Cov;
@@ -194,7 +190,6 @@ vnl_matrix<double> vpdfl_gaussian::covariance() const
 }
 
 //=======================================================================
-
 
 vpdfl_sampler_base* vpdfl_gaussian::new_sampler() const
 {
@@ -205,11 +200,10 @@ vpdfl_sampler_base* vpdfl_gaussian::new_sampler() const
 
 //=======================================================================
 
-
-  // Probability densities:
+// Probability densities:
 double vpdfl_gaussian::log_p(const vnl_vector<double>& x) const
 {
-  int n = n_dims();
+  unsigned int n = n_dims();
   assert(x.size() == n);
 
   dx_ = x;
@@ -226,8 +220,8 @@ double vpdfl_gaussian::log_p(const vnl_vector<double>& x) const
 
   double sum=0.0;
 
-  int i=n;
-  while (i--)
+  unsigned int i=n;
+  while (i-- != 0)
   {
     double db=b_data[i];
     sum+=(db*db)/v_data[i];
@@ -238,12 +232,11 @@ double vpdfl_gaussian::log_p(const vnl_vector<double>& x) const
 
 //=======================================================================
 
-
 void vpdfl_gaussian::gradient(vnl_vector<double>& g,
                               const vnl_vector<double>& x,
                               double& p) const
 {
-  int n = n_dims();
+  unsigned int n = n_dims();
   dx_ = x;
   dx_ -= mean();
 
@@ -260,7 +253,7 @@ void vpdfl_gaussian::gradient(vnl_vector<double>& g,
 
   double sum=0.0;
 
-  for (int i=0;i<n;++i)
+  for (unsigned int i=0;i<n;++i)
   {
     double db=b_data[i];
     sum+=(db*db)/v_data[i];
@@ -277,7 +270,6 @@ void vpdfl_gaussian::gradient(vnl_vector<double>& g,
 }
 
 // ====================================================================
-
 
 double vpdfl_gaussian::log_prob_thresh(double pass_proportion) const
 {
@@ -299,7 +291,7 @@ void vpdfl_gaussian::nearest_plausible(vnl_vector<double>& x, double log_p_min) 
   dx_ = x;
   dx_ -= mean();
 
-  int n = n_dims();
+  unsigned int n = n_dims();
   if (b_.size()!=n) b_.resize(n);
 
   // Rotate dx_ into co-ordinate frame of axes of gaussian
@@ -310,8 +302,8 @@ void vpdfl_gaussian::nearest_plausible(vnl_vector<double>& x, double log_p_min) 
   const double *evals = eigenvals().data_block();
 
   double *b_data = b_.data_block();
-  int i=n;
-  while (i--)
+  unsigned int i=n;
+  while (i-- != 0)
   {
     double limit = sd_limit * vcl_sqrt(evals[i]);
     double lo = -1.0 * limit;

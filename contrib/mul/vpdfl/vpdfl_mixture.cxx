@@ -63,7 +63,6 @@ vpdfl_mixture& vpdfl_mixture::operator=(const vpdfl_mixture& m)
   return *this;
 }
 
-
 //=======================================================================
 
 void vpdfl_mixture::delete_stuff()
@@ -164,7 +163,6 @@ void vpdfl_mixture::set_mean_and_variance(vnl_vector<double>&m, vnl_vector<doubl
   set_variance(v);
 }
 
-
 //=======================================================================
 
 vcl_string vpdfl_mixture::is_a() const
@@ -193,16 +191,14 @@ vpdfl_pdf_base* vpdfl_mixture::clone() const
   return new vpdfl_mixture(*this);
 }
 
-
 //=======================================================================
-
 
 void vpdfl_mixture::print_summary(vcl_ostream& os) const
 {
   os<<vcl_endl<<vsl_indent();
   vpdfl_pdf_base::print_summary(os);
   os<<vcl_endl;
-  for (int i=0;i<component_.size();++i)
+  for (unsigned int i=0;i<component_.size();++i)
   {
     os<<vsl_indent()<<"Component "<<i<<" :  Wt: "<<weight_[i] <<vcl_endl;
     os<<vsl_indent()<<"PDF: " << component_[i]<<vcl_endl;
@@ -258,7 +254,6 @@ void vpdfl_mixture::b_read(vsl_b_istream& bfs)
 
 //=======================================================================
 
-
 double vpdfl_mixture::operator()(const vnl_vector<double>& x) const
 {
   return vcl_exp(log_p(x));
@@ -307,7 +302,7 @@ void vpdfl_mixture::gradient(vnl_vector<double>& g,
   g = g1*weight_[0];
   p = p1*weight_[0];
 
-  for (int i=1;i<n_components();i++)
+  for (unsigned int i=1;i<n_components();i++)
   {
     component_[i]->gradient(g1,x,p1);
     g += g1*weight_[i];
@@ -315,7 +310,6 @@ void vpdfl_mixture::gradient(vnl_vector<double>& g,
     p += p_comp;
   }
 }
-
 
 //=======================================================================
 
@@ -344,7 +338,6 @@ unsigned vpdfl_mixture::nearest_comp(const vnl_vector<double>& x) const
 
 //=======================================================================
 
-
 //: Compute nearest point to x which has a density above a threshold
 //  If log_p(x)>log_p_min then x unchanged.  Otherwise x is moved
 //  (typically up the gradient) until log_p(x)>=log_p_min.
@@ -354,6 +347,5 @@ void vpdfl_mixture::nearest_plausible(vnl_vector<double>& /*x*/, double /*log_p_
   vcl_cerr << "ERROR: vpdfl_mixture::nearest_plausible NYI" << vcl_endl;
   vcl_abort();
 }
-
 
 //==================< end of file: vpdfl_mixture.cxx >====================

@@ -33,7 +33,7 @@ mbl_data_array_wrapper<T>::mbl_data_array_wrapper(const vcl_vector<T > &data)
   // to store its data in a contiguous memory block. However, most
   // implementations do store data this way.
   // Check this assumption holds.
-  assert(data.size() == 0|| &data[data.size() - 1] - &data[0] + 1 == data.size());
+  assert(data.size() == 0 || &data[data.size() - 1] + 1 == &data[0] + data.size());
   set(&data[0], data.size());
 }
 

@@ -164,7 +164,6 @@ void test_smo()
   clsfy_smo_1_rbf svAPI;
   svAPI.set_gamma( (1.0/(2.0*0.2*0.2)));
   //svAPI.set_C(1.0);
-  int i;
   svAPI.set_data(inputs, svlabels  );
 
   vul_timer mytimer;
@@ -172,15 +171,15 @@ void test_smo()
   svAPI.calc();
   vcl_cerr << "Optimisation took " << mytimer.real() << " milliseconds\n";
 
-  int nSupports=0;
-  for (i=0; i<nSamples; i++)
+  unsigned int nSupports=0;
+  for (unsigned int i=0; i<nSamples; i++)
   {
     if (svAPI.lagrange_mults()(i) != 0.0)
     {
       nSupports++;
       inputs.set_index(i);
       vcl_cout << i << " " << vcl_fabs(svAPI.lagrange_mults()(i)) << " ";
-      for (int j=0; j<nDims; j++)
+      for (unsigned int j=0; j<nDims; j++)
         vcl_cout << inputs.current().operator()(j) << " ";
       vcl_cout << labels[i] <<vcl_endl;
     }

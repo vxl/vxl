@@ -351,12 +351,12 @@ unsigned vpdfl_pc_gaussian_builder::decide_partition(const vnl_vector<double>& e
   }
   else
   {
-    vcl_cerr << "vpdfl_pc_gaussian_builder::decide_partition(): Unexpected partition method: " << partitionMethod_ <<vcl_endl;
+    vcl_cerr << "vpdfl_pc_gaussian_builder::decide_partition(): Unexpected partition method: "
+             << (short)partitionMethod_ <<vcl_endl;
     vcl_abort();
     return 0;
   }
 }
-
 
 //=======================================================================
 

@@ -54,10 +54,10 @@ void mbl_data_collector_list<T>::record(const T& d)
 template<class T>
 mbl_data_wrapper<T >& mbl_data_collector_list<T>::data_wrapper()
 {
-  if (data_.size())
+  if (data_.size() > 0)
   {
     // Check assumption that vcl_vectors store their data in a contiguous block of memory
-    assert(&data_[data_.size()-1] - &data_[0] == data_.size() - 1);
+    assert(&data_[data_.size()-1] + 1 == &data_[0] + data_.size());
 
     wrapper_.set(&data_[0],data_.size()); // not data_.begin() since set() expects T*, not vector_iterator
   }

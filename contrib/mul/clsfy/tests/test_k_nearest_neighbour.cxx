@@ -100,7 +100,7 @@ void test_k_nearest_neighbour()
            << labelcount[0] << ' ' << labelcount[1] << ' ' << labelcount[2]
            << ' ' << labelcount[3] <<  vcl_endl;
 
-  for (int i=0; i<nTestSamples; i++)
+  for (unsigned int i=0; i<nTestSamples; i++)
   {
     int c = rng.lrand32(0, 3);
     testLabels[i] = c/2;

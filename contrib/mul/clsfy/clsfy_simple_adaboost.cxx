@@ -59,7 +59,6 @@ void clsfy_simple_adaboost::delete_stuff()
   alphas_.resize(0);
   index_.resize(0);
   n_clfrs_used_= -1;
-
 }
 
 //: Destructor
@@ -72,7 +71,6 @@ clsfy_simple_adaboost::~clsfy_simple_adaboost()
 //: Comparison
 bool clsfy_simple_adaboost::operator==(const clsfy_simple_adaboost& x) const
 {
-
   if (x.classifier_1d_.size() != classifier_1d_.size() ) return false;
   int n= x.classifier_1d_.size();
   for (int i=0; i<n; ++i)
@@ -100,7 +98,6 @@ void clsfy_simple_adaboost::set_parameters(
 
   alphas_ = alphas;
   index_= index;
- 
 }
 
 
@@ -130,10 +127,10 @@ unsigned clsfy_simple_adaboost::classify(const vnl_vector<double> &v) const
 {
   //vcl_cout<<"alphas_.size()= "<<alphas_.size()<<vcl_endl;
   //vcl_cout<<"n_clfrs_used_= "<<n_clfrs_used_<<vcl_endl;
-  assert ( n_clfrs_used_ != -1);
-  assert ( n_clfrs_used_ <= alphas_.size() );
-  assert ( n_dims_ != -1);
-  assert ( v.size() == n_dims_ );
+  assert ( n_clfrs_used_ >= 0);
+  assert ( (unsigned)n_clfrs_used_ <= alphas_.size() );
+  assert ( n_dims_ >= 0);
+  assert ( v.size() == (unsigned)n_dims_ );
 
 
   double sum1 = 0.0, sum2 =0.0;
@@ -148,7 +145,6 @@ unsigned clsfy_simple_adaboost::classify(const vnl_vector<double> &v) const
   return 0;
 }
 
-
 //=======================================================================
 
 //: Find the posterior probability of the input being in the positive class.
@@ -160,15 +156,14 @@ void clsfy_simple_adaboost::class_probabilities(vcl_vector<double> &outputs,
   outputs[0] = 1.0 / (1.0 + vcl_exp(-log_l(input)));
 }
 
-
 //=======================================================================
 
 //: Log likelyhood of being in the positive class.
 // Class probability = 1 / (1+exp(-log_l))
 double clsfy_simple_adaboost::log_l(const vnl_vector<double> &v) const
 {
-  assert ( n_clfrs_used_ != -1);
-  assert ( n_clfrs_used_ <= alphas_.size() );
+  assert ( n_clfrs_used_ >= 0);
+  assert ( (unsigned)n_clfrs_used_ <= alphas_.size() );
   //assert ( n_dims_ != -1);
   //assert ( v.size() == n_dims_ );
   double sum1 = 0.0, sum2= 0.0;
@@ -181,9 +176,7 @@ double clsfy_simple_adaboost::log_l(const vnl_vector<double> &v) const
   return sum1 - sum2 * 0.5; 
 }
 
-
 //=======================================================================
-
 
 vcl_string clsfy_simple_adaboost::is_a() const
 {
@@ -257,4 +250,3 @@ void clsfy_simple_adaboost::b_read(vsl_b_istream& bfs)
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
   }
 }
-

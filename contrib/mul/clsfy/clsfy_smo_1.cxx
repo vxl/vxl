@@ -32,7 +32,6 @@ double clsfy_smo_1_lin::kernel(int i1, int i2)
     return dot_product(data_point(i1),data_point(i2));
 }
 
-
 // ----------------------------------------------------------------
 
 double clsfy_smo_1_rbf::kernel(int i1, int i2)
@@ -84,7 +83,6 @@ double clsfy_smo_1_rbf::gamma() const
   return -gamma_;
 }
 
-
 // ----------------------------------------------------------------
 
 //: Control sigma, the width of the gaussian kernel.
@@ -93,7 +91,6 @@ void clsfy_smo_1_rbf::set_gamma(double gamma)
 {
   gamma_ = -gamma;
 }
-
 
 // ----------------------------------------------------------------
 
@@ -108,7 +105,6 @@ clsfy_smo_1_lin::clsfy_smo_1_lin():
   C_(vnl_huge_val(double()))
 {
 }
-
 
 // ----------------------------------------------------------------
 
@@ -229,7 +225,7 @@ int clsfy_smo_1_lin::take_step(int i1, int i2, double E1)
     const double t1 = y1 * (a1-alph1);
     const double t2 = y2 * (a2-alph2);
 
-    for (int i=0; i<data_->size(); i++)
+    for (unsigned int i=0; i<data_->size(); i++)
       if (0 < alph_[i] && alph_[i] < C_)
         error_cache_[i] +=  t1 * kernel(i1,i) + t2 * kernel(i2,i)
         - delta_b;
@@ -264,13 +260,14 @@ int clsfy_smo_1_lin::examine_example(int i1)
   {
     // Try i2 by three ways; if successful, then immediately return 1;
     {
-      int k, i2;
+      unsigned int k;
+      int i2;
       double tmax;
 
       // Second choice heuristic A - Find the example i2 which maximises
       // |E1 - E2| where E1
 
-      for (i2 = (-1), tmax = 0, k = 0; k < N; k++)
+      for (i2 = (-1), tmax = 0, k = 0; k < N; ++k)
         if (alph_(k) > 0 && alph_(k) < C_)
         {
           double E2, temp;
@@ -354,10 +351,10 @@ int clsfy_smo_1_lin::calc()
   {
     numChanged = 0;
     if (examineAll)
-      for (int k = 0; k < N; k++)
+      for (unsigned int k = 0; k < N; k++)
         numChanged += examine_example (k);
     else
-      for (int k = 0; k < N; k++)
+      for (unsigned int k = 0; k < N; k++)
         if (alph_[k] != 0 && alph_[k] != C_)
           numChanged += examine_example (k);
     if (examineAll)

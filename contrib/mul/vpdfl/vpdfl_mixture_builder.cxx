@@ -41,13 +41,13 @@ void vpdfl_mixture_builder::init()
 
 //=======================================================================
 
-
 vpdfl_mixture_builder::vpdfl_mixture_builder()
 {
   init();
 }
 
 //=======================================================================
+
 vpdfl_mixture_builder::vpdfl_mixture_builder(const vpdfl_mixture_builder& b)
 {
   init();
@@ -55,6 +55,7 @@ vpdfl_mixture_builder::vpdfl_mixture_builder(const vpdfl_mixture_builder& b)
 }
 
 //=======================================================================
+
 vpdfl_mixture_builder& vpdfl_mixture_builder::operator=(const vpdfl_mixture_builder& b)
 {
   if (&b==this) return *this;
@@ -120,7 +121,6 @@ vpdfl_pdf_base* vpdfl_mixture_builder::new_model() const
 {
   return new vpdfl_mixture;
 }
-
 
 //=======================================================================
 
@@ -240,13 +240,13 @@ void vpdfl_mixture_builder::initialise_given_means(vpdfl_mixture& model,
           const vcl_vector<vnl_vector<double> >& mean,
                   const vcl_vector<double>& wts) const
 {
-  int n_comp = builder_.size();
-  int n_samples = wts.size();
+  const unsigned int n_comp = builder_.size();
+  const unsigned int n_samples = wts.size();
 
   // Compute range of data
   vnl_vector<double> min_v(mean[0]);
   vnl_vector<double> max_v(min_v);
-  for (int i=1;i<n_comp;++i)
+  for (unsigned int i=1;i<n_comp;++i)
     UpdateRange(min_v,max_v,mean[i]);
 
   double mean_sep = vnl_vector_ssd(max_v,min_v)/n_samples;
@@ -257,11 +257,11 @@ void vpdfl_mixture_builder::initialise_given_means(vpdfl_mixture& model,
 
   mbl_data_array_wrapper<vnl_vector<double> > data_array(data,n_samples);
 
-  for (int i=0;i<n_comp;++i)
+  for (unsigned int i=0;i<n_comp;++i)
   {
     // Compute weights proportional to inverse square to the mean
     double w_sum = 0.0;
-    for (int j=0;j<n_samples;++j)
+    for (unsigned int j=0;j<n_samples;++j)
     {
       wts_i[j] = wts[j]*mean_sep/(mean_sep+ vnl_vector_ssd(data[j], mean[i]));
       w_sum+=wts_i[j];
@@ -269,28 +269,27 @@ void vpdfl_mixture_builder::initialise_given_means(vpdfl_mixture& model,
 
     // Normalise so weights add to n_samples/n_comp
     double f = n_samples/(n_comp*w_sum);
-    for (int j=0;j<n_samples;++j) wts_i[j]*=f;
+    for (unsigned int j=0;j<n_samples;++j) wts_i[j]*=f;
 
     // Build i'th component, biasing data toward mean(i)
     builder_[i]->weighted_build(*(model.components()[i]),data_array,wts_i);
   }
-
 }
 
-
 //=======================================================================
+
 void vpdfl_mixture_builder::initialise_diagonal(vpdfl_mixture& model,
           const vnl_vector<double>* data,
           const vcl_vector<double>& wts) const
 {
   // Build each component using randomly weighted data
-  int n_comp = builder_.size();
-  int n_samples = wts.size();
+  const unsigned int n_comp = builder_.size();
+  const unsigned int n_samples = wts.size();
 
   // Compute range of data
   vnl_vector<double> min_v(data[0]);
   vnl_vector<double> max_v(min_v);
-  for (int i=1;i<n_samples;++i)
+  for (unsigned int i=1;i<n_samples;++i)
     UpdateRange(min_v,max_v,data[i]);
 
 #if 0 // unused variable
@@ -299,7 +298,7 @@ void vpdfl_mixture_builder::initialise_diagonal(vpdfl_mixture& model,
 
   // Create means along diagonal of bounding box
   vcl_vector<vnl_vector<double> > mean(n_comp);
-  for (int i=0;i<n_comp;++i)
+  for (unsigned int i=0;i<n_comp;++i)
   {
     double f = (i+1.0)/(n_comp+1);
     mean[i] = (1-f)*min_v + f*max_v;
@@ -309,23 +308,24 @@ void vpdfl_mixture_builder::initialise_diagonal(vpdfl_mixture& model,
 }
 
 //=======================================================================
+
 void vpdfl_mixture_builder::initialise_to_regular_samples(vpdfl_mixture& model,
           const vnl_vector<double>* data,
           const vcl_vector<double>& wts) const
 {
   // Build each component using randomly weighted data
-  int n_comp = builder_.size();
-  int n_samples = wts.size();
+  const unsigned int n_comp = builder_.size();
+  const unsigned int n_samples = wts.size();
 
   double f = double(n_samples)/n_comp;
 
   // Select means from data
   vcl_vector<vnl_vector<double> > mean(n_comp);
-  for (int i=0;i<n_comp;++i)
+  for (unsigned int i=0;i<n_comp;++i)
   {
-    int j = vnl_math_rnd((i+0.5)*f);
-  if (j>=n_samples) j=n_samples-1;
-    mean[i] = data[j];
+    unsigned int j = vnl_math_rnd((i+0.5)*f); // must not be negative!
+    if (j>=n_samples) j=n_samples-1;
+      mean[i] = data[j];
   }
 
   initialise_given_means(model,data,mean,wts);
@@ -340,20 +340,21 @@ void vpdfl_mixture_builder::initialise(vpdfl_mixture& model,
 }
 
 //=======================================================================
+
 void vpdfl_mixture_builder::e_step(vpdfl_mixture& model,
         vcl_vector<vnl_vector<double> >& probs,
         const vnl_vector<double>* data,
         const vcl_vector<double>& wts) const
 {
-  int n_comp = builder_.size();
-  int n_egs = wts.size();
+  const unsigned int n_comp = builder_.size();
+  const unsigned int n_egs = wts.size();
   const vcl_vector<double>& m_wts = model.weights();
 
   if (probs.size()!=n_comp) probs.resize(n_comp);
 
   // Compute log probs
   // probs(i)(j+1) is logProb that eg j was drawn from component i
-  for (int i=0;i<n_comp;++i)
+  for (unsigned int i=0;i<n_comp;++i)
   {
     if (probs[i].size()!=n_egs) probs[i].resize(n_egs);
 
@@ -365,7 +366,7 @@ void vpdfl_mixture_builder::e_step(vpdfl_mixture& model,
 
     double log_wt_i = vcl_log(m_wts[i]);
 
-    for (int j=0;j<n_egs;++j)
+    for (unsigned int j=0;j<n_egs;++j)
     {
       p_data[j] = log_wt_i+model.components()[i]->log_p(data[j]);
     }
@@ -373,11 +374,11 @@ void vpdfl_mixture_builder::e_step(vpdfl_mixture& model,
 
   // Turn into probabilities and normalise.
   // Normalise so that sum_i probs(i)(j) = 1.0;
-  for (int j=0;j<n_egs;++j)
+  for (unsigned int j=0;j<n_egs;++j)
   {
     // To minimise rounding errors, first find largest value
     double max_log_p=0;
-    for (int i=0;i<n_comp;++i)
+    for (unsigned int i=0;i<n_comp;++i)
     {
       if (m_wts[i]<=0) continue;
       if (i==0 || probs[i](j)>max_log_p) max_log_p = probs[i](j);
@@ -385,7 +386,7 @@ void vpdfl_mixture_builder::e_step(vpdfl_mixture& model,
 
     // Turn into probabilities and sum
     double sum = 0.0;
-    for (int i=0;i<n_comp;++i)
+    for (unsigned int i=0;i<n_comp;++i)
     {
       if (m_wts[i]<=0) continue;
       double p = vcl_exp(probs[i](j)-max_log_p);
@@ -395,7 +396,7 @@ void vpdfl_mixture_builder::e_step(vpdfl_mixture& model,
 
     // Divide through by sum to normalise
     if (sum>0.0)
-      for (int i=0;i<n_comp;++i)
+      for (unsigned int i=0;i<n_comp;++i)
         probs[i](j)/=sum;
 
     if (sum<=0) vcl_cerr<<"vpdfl_mixture_builder::e_step() Zero sum for probs!"<<vcl_endl;
@@ -403,13 +404,14 @@ void vpdfl_mixture_builder::e_step(vpdfl_mixture& model,
 }
 
 //=======================================================================
+
 double vpdfl_mixture_builder::m_step(vpdfl_mixture& model,
         const vcl_vector<vnl_vector<double> >& probs,
         const vnl_vector<double>* data,
         const vcl_vector<double>& wts) const
 {
-  int n_comp = builder_.size();
-  int n_egs = wts.size();
+  const unsigned int n_comp = builder_.size();
+  const unsigned int n_egs = wts.size();
   vcl_vector<double> wts_i(n_egs);
 
   mbl_data_array_wrapper<vnl_vector<double> > data_array(data,n_egs);
@@ -421,7 +423,7 @@ double vpdfl_mixture_builder::m_step(vpdfl_mixture& model,
   {
     double w_sum = 0.0;
     // update the model weights
-    for (int i=0;i<n_comp;++i)
+    for (unsigned int i=0;i<n_comp;++i)
     {
       model.weights()[i]=probs[i].mean();
 
@@ -432,11 +434,11 @@ double vpdfl_mixture_builder::m_step(vpdfl_mixture& model,
     }
 
     // Ensure they add up to one
-    for (int i=0;i<n_comp;++i)
+    for (unsigned int i=0;i<n_comp;++i)
     model.weights()[i]/=w_sum;
   }
 
-  for (int i=0;i<n_comp;++i)
+  for (unsigned int i=0;i<n_comp;++i)
   {
     // Any components with zero weights are ignored.
   // Eventually they should be pruned.
@@ -445,7 +447,7 @@ double vpdfl_mixture_builder::m_step(vpdfl_mixture& model,
     // Compute weights
     const double* p = probs[i].begin();
     double w_sum = 0.0;
-    for (int j=0;j<n_egs;++j)
+    for (unsigned int j=0;j<n_egs;++j)
     {
       wts_i[j] = wts[j]*p[j];
       w_sum += wts_i[j];
@@ -546,7 +548,7 @@ vpdfl_builder_base* vpdfl_mixture_builder::clone() const
 void vpdfl_mixture_builder::print_summary(vcl_ostream& os) const
 {
   os<<vcl_endl;
-  for (int i=0;i<builder_.size();++i)
+  for (unsigned int i=0;i<builder_.size();++i)
   {
     os<<vsl_indent()<<"Builder "<<i<<": ";
     vsl_print_summary(os, builder_[i]); os << vcl_endl;

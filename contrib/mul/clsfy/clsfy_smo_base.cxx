@@ -19,7 +19,6 @@
 #include <vnl/vnl_math.h>
 #include <vcl_iostream.h>
 
-
 // ----------------------------------------------------------------
 
 double clsfy_smo_base::error()
@@ -126,7 +125,6 @@ void clsfy_smo_base::set_eps(double eps)
   eps_ = eps;
 }
 
-
 // ----------------------------------------------------------------
 
 clsfy_smo_base::clsfy_smo_base():
@@ -147,7 +145,7 @@ double clsfy_smo_base::error_rate()
 {
     int n_total = 0;
     int n_error = 0;
-    for (int i=0; i<data_->size(); i++) {
+    for (unsigned int i=0; i<data_->size(); i++) {
        if (learned_func(i) > 0 != target_[i] > 0)
            n_error++;
        n_total++;
