@@ -140,6 +140,12 @@ SOURCE=.\bgui_displaylist2D_tableau.cxx
 # Begin Source File
 SOURCE=.\bgui_easy2D_tableau.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bgui_linked_vsol2D_tableau.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bgui_linked_vsol_soview2D.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -202,6 +208,15 @@ SOURCE=.\bgui_easy2D_tableau.h
 # End Source File
 # Begin Source File
 SOURCE=.\bgui_easy2D_tableau_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bgui_linked_vsol2D_tableau.h
+# End Source File
+# Begin Source File
+SOURCE=.\bgui_linked_vsol2D_tableau_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bgui_linked_vsol_soview2D.h
 # End Source File
 # End Group
 # End Target
