@@ -7,7 +7,9 @@
 #include <vil/vil_16bit.h>
 #include <vil/vil_stream_fstream.h>
 
-int main(int, char **)
+#include <vil/vil_test.h>
+
+void test_write_endian()
 {
   char const *TMPNAM = tempnam(0,0);
   char const *file = TMPNAM ? TMPNAM : "/tmp/smoo";
@@ -38,12 +40,11 @@ int main(int, char **)
   // clean up.
   vpl_unlink(file);
 
-  // check
-  if (bytes[0] == 0x02 &&
-      bytes[1] == 0x01 &&
-      bytes[2] == 0x03 &&
-      bytes[3] == 0x04)
-    return 0;
-  else
-    return 1;
+  TEST ("byte values",
+        bytes[0] == 0x02 &&
+        bytes[1] == 0x01 &&
+        bytes[2] == 0x03 &&
+        bytes[3] == 0x04,  true);
 }
+
+TESTMAIN(test_write_endian);

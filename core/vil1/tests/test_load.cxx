@@ -6,10 +6,9 @@
 #include <vil/vil_load.h>
 #include <vil/vil_image_impl.h>
 
-#define AssertEq(fred, x) {\
-vcl_cout << "TEST [" << fred << "] == [" << x << "] : "; bool b = (fred) == (x); vcl_cout << (b?"PASSED":"FAILED") << vcl_endl; }
+#include <vil/vil_test.h>
 
-void test(char const* magic, int comps, int bits)
+static void test(char const* magic, int comps, int bits)
 {
   char const* TMPNAM = tempnam(0,0);
   char const* FNAME = TMPNAM ? TMPNAM : "/tmp/t.pgm";
@@ -27,13 +26,13 @@ void test(char const* magic, int comps, int bits)
     ", " << i.bits_per_component() << " bit" <<
     vcl_endl;
 
-  AssertEq(i.components(), comps);
-  AssertEq(i.bits_per_component(), bits);
+  TEST("components", i.components(), comps);
+  TEST("bits per component", i.bits_per_component(), bits);
 
   vpl_unlink(FNAME);
 }
 
-int main(int , char **)
+void test_load_pnm()
 {
   test("P1", 1, 1);
   test("P2", 1, 8);
@@ -41,6 +40,6 @@ int main(int , char **)
   test("P4", 1, 1);
   test("P5", 1, 8);
   test("P6", 3, 8);
-
-  return 0;
 }
+
+TESTMAIN(test_load_pnm);

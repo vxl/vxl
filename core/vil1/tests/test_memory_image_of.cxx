@@ -6,10 +6,12 @@
 #include <vil/vil_save.h>
 #include <vil/vil_rgb.h>
 
+#include <vil/vil_test.h>
+
 const int W = 768;
 const int H = 256;
 
-int main()
+void test_vil_memory_image_of()
 {
   char const *file_name_2 = "/tmp/vil_test_memory_image_of.pgm";
   {
@@ -54,12 +56,12 @@ int main()
     vil_memory_image_of<unsigned char> image(buf,3,2);
 
     unsigned char&
-    p = image(0,0); if (p != 1) vcl_cout << "*** FAILED: " << p << "!= 1\n";
-    p = image(1,0); if (p != 2) vcl_cout << "*** FAILED: " << p << "!= 2\n";
-    p = image(2,0); if (p != 3) vcl_cout << "*** FAILED: " << p << "!= 3\n";
-    p = image(0,1); if (p != 4) vcl_cout << "*** FAILED: " << p << "!= 4\n";
-    p = image(1,1); if (p != 5) vcl_cout << "*** FAILED: " << p << "!= 5\n";
-    p = image(2,1); if (p != 6) vcl_cout << "*** FAILED: " << p << "!= 6\n";
+    p = image(0,0); TEST ("p == 1", p, 1);
+    p = image(1,0); TEST ("p == 2", p, 2);
+    p = image(2,0); TEST ("p == 3", p, 3);
+    p = image(0,1); TEST ("p == 4", p, 4);
+    p = image(1,1); TEST ("p == 5", p, 5);
+    p = image(2,1); TEST ("p == 6", p, 6);
   }
 
   {
@@ -69,6 +71,6 @@ int main()
     vpl_unlink(file_name_1);
     vpl_unlink(file_name_2);
   }
-
-  return 0;
 }
+
+TESTMAIN(test_vil_memory_image_of);
