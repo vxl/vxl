@@ -3,10 +3,7 @@
 #define __TBS_DPMATCH_DEF__
 #include <vcl_map.h>
 #include <vcl_vector.h> 
-
 #include <vcl_utility.h>
-#include <bdgl/utils.h>
-
 #include <vnl/vnl_matrix.h>
 
 #define DP_VERY_LARGE_COST 1E10
