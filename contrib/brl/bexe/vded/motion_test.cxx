@@ -14,16 +14,7 @@
 #include <vil/vil_new.h>
 #include <vil/algo/vil_gauss_filter.h>
 #include <vil/vil_image_resource.h>
-#include <vidl/vidl_image_list_codec.h>
 #include <brip/brip_vil_ops.h>
-
-#ifdef HAS_MPEG2
-# include <vidl/vidl_mpegcodec.h>
-#endif
-
-#ifdef HAS_AVI
-#include <vidl/vidl_avicodec.h>
-#endif
 
 
 #include <vil/algo/vil_threshold.txx>
@@ -42,17 +33,6 @@ void write_status(vcl_string output_file, int iframe, int nframes);
 
 int main(int argc, char** argv)
 {
-  // Register video codecs
-  vidl_io::register_codec(new vidl_image_list_codec);
-
-#ifdef HAS_AVI
-  vidl_io::register_codec(new vidl_avicodec);
-#endif
-
-#ifdef HAS_MPEG2
-  vidl_io::register_codec(new vidl_mpegcodec);
-#endif
-
   // Arguments
   vul_arg_info_list arg_list;
   vul_arg<double> sigma(arg_list,"-sigma","sigma for Gaussian smoothing",1.0);
