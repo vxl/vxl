@@ -157,7 +157,7 @@ vnl_real_polynomial operator*(const vnl_real_polynomial& f1, const vnl_real_poly
 }
 
 //: Returns RMS difference between f1 and f2 over range [x1,x2]
-//  $\sqrt{1/\x2-x1|\int_{x1}^{x2}(f1(x)-f2(x))^2dx}$
+//  $\sqrt{1/|x2-x1|\int_{x1}^{x2}(f1(x)-f2(x))^2dx}$
 double vnl_rms_difference(const vnl_real_polynomial& f1, const vnl_real_polynomial& f2,
                           double x1, double x2)
 {
