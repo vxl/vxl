@@ -46,14 +46,14 @@ void test_cps_at_fixed_points(int n_points)
     TEST("Warped point = target",vgl_distance(cps3(pts1[i]),pts2[i])<1e-6,true);
   }
 
-	vgl_point_2d<double> p1(0,1);
-	TEST("(0,1) unchanged",vgl_distance(cps3(p1),p1)<1e-6,true);
+  vgl_point_2d<double> p1(0,1);
+  TEST("(0,1) unchanged",vgl_distance(cps3(p1),p1)<1e-6,true);
 
-	vgl_point_2d<double> p2(0,-1);
-	TEST("(0,-1) unchanged",vgl_distance(cps3(p2),p2)<1e-6,true);
+  vgl_point_2d<double> p2(0,-1);
+  TEST("(0,-1) unchanged",vgl_distance(cps3(p2),p2)<1e-6,true);
 
-	vgl_point_2d<double> p3(1,0);
-	TEST("(1,0) unchanged",vgl_distance(cps3(p3),p3)<1e-6,true);
+  vgl_point_2d<double> p3(1,0);
+  TEST("(1,0) unchanged",vgl_distance(cps3(p3),p3)<1e-6,true);
 }
 
 void test_clamped_plate_spline_2d()
