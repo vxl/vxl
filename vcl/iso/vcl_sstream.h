@@ -1,30 +1,16 @@
 #ifndef vcl_iso_sstream_h_
 #define vcl_iso_sstream_h_
 
+// This is a generated file. DO NOT EDIT! Not even a little bit.
+
 #include <sstream>
 
-// basic_stringbuf
-#ifndef vcl_basic_stringbuf
-#define vcl_basic_stringbuf std::basic_stringbuf
-#endif
-// stringbuf
-#ifndef vcl_stringbuf
-#define vcl_stringbuf std::stringbuf
-#endif
-// wstringbuf
-#ifndef vcl_wstringbuf
-#define vcl_wstringbuf std::wstringbuf
-#endif
-// istringstream
-#ifndef vcl_istringstream
-#define vcl_istringstream std::istringstream
-#endif
-// ostringstream
-#ifndef vcl_ostringstream
-#define vcl_ostringstream std::ostringstream
+#ifdef vcl_generic_sstream_STD
+  ** error **
+#else
+# define vcl_generic_sstream_STD std
 #endif
 
-using std::ostringstream;
-using std::istringstream;
+#include "../generic/vcl_sstream.h"
 
 #endif // vcl_iso_sstream_h_
