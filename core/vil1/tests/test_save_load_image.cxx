@@ -22,6 +22,7 @@
 #include <vcl_string.h>
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
+#include <vcl_ios.h>
 #include <vcl_fstream.h>
 #include <vcl_iomanip.h> // vcl_flush
 #include <vcl_vector.h>
@@ -231,7 +232,7 @@ static bool create_colour_gif(const char* filename)
 #ifdef VCL_VC
 #pragma warning ( pop )
 #endif
-  vcl_ofstream f(filename);
+  vcl_ofstream f(filename, vcl_ios_binary);
   if (!f) return false;
   f << "GIF87a";
   for (int i=0; i<7; ++i) f << a[i];
@@ -265,7 +266,7 @@ static bool create_grey_gif(const char* filename)
 #ifdef VCL_VC
 #pragma warning ( pop )
 #endif
-  vcl_ofstream f(filename);
+  vcl_ofstream f(filename, vcl_ios_binary);
   if (!f) return false;
   f << "GIF87a";
   for (int i=0; i<7; ++i) f << a[i];
