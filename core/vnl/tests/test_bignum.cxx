@@ -13,155 +13,86 @@ static void run_constructor_tests() {
   vcl_cout << "\nbignum constructor tests:\n";
 
   vcl_cout << "long constructor:\n";
-  {vnl_bignum b2(0L);
-  TEST("vnl_bignum b2(0L);", (long)b2, 0L);}
-
-  {vnl_bignum b3(1L);
-  TEST("vnl_bignum b3(1L);", (long)b3, 1L);}
-
-  {vnl_bignum b4(-1L);
-  TEST("vnl_bignum b4(-1L);", (long)b4, -1L);}
-
-  {vnl_bignum b5(0x7fffL);
-  TEST("vnl_bignum b5(0x7fffL);", (long)b5, 0x7fffL);}
-
-  {vnl_bignum b6(-0x7fffL);
-  TEST("vnl_bignum b6(-0x7fffL);", (long)b6, -0x7fffL);}
-
-  {vnl_bignum b7(0x7fffffffL);
-  TEST("vnl_bignum b7(0x7fffffffL);", (long)b7, 0x7fffffffL);}
-
-  {vnl_bignum b8(-0x7fffffffL);
-  TEST("vnl_bignum b8(-0x7fffffffL);", (long)b8, -0x7fffffffL);}
-
-  {vnl_bignum b10l(0xf00000L);
-  TEST("vnl_bignum b10l(0xf00000L);", (long)b10l, 0xf00000);}
+  {vnl_bignum b(0L); TEST("vnl_bignum b(0L);", b, 0L);}
+  {vnl_bignum b(1L); TEST("vnl_bignum b(1L);", b, 1L);}
+  {vnl_bignum b(-1L); TEST("vnl_bignum b(-1L);", b, -1L);}
+  {vnl_bignum b(0x7fffL); TEST("vnl_bignum b(0x7fffL);", b, 0x7fffL);}
+  {vnl_bignum b(-0x7fffL); TEST("vnl_bignum b(-0x7fffL);", b, -0x7fffL);}
+  {vnl_bignum b(0x7fffffffL); TEST("vnl_bignum b(0x7fffffffL);", b, 0x7fffffffL);}
+  {vnl_bignum b(-0x7fffffffL); TEST("vnl_bignum b(-0x7fffffffL);", b, -0x7fffffffL);}
+  {vnl_bignum b(0xf00000L); TEST("vnl_bignum b(0xf00000L);", b, 0xf00000);}
 
   vcl_cout << "double constructor:\n";
-  {vnl_bignum b11(0.0);
-  TEST("vnl_bignum b11(0.0);", (double)b11, 0.0);}
-
-  {vnl_bignum b12(1.0);
-  TEST("vnl_bignum b12(1.0);", (double)b12, 1.0);}
-
-  {vnl_bignum b13(-1.0);
-  TEST("vnl_bignum b13(-1.0);", (double)b13, -1.0);}
-
-  {vnl_bignum b14(vnl_math::maxdouble);
-  TEST("vnl_bignum b14(vnl_math::maxdouble);", (double)b14, vnl_math::maxdouble);}
-
-  {vnl_bignum b15(-vnl_math::maxdouble);
-  TEST("vnl_bignum b15(-vnl_math::maxdouble);", (double)b15, -vnl_math::maxdouble);}
-
-  {vnl_bignum b16(1234567.0);
-  TEST("vnl_bignum b16(1234567.0);", (double)b16, 1234567.0);}
-
-  {vnl_bignum b17(-1234567.0);
-  TEST("vnl_bignum b17(-1234567.0);", (double)b17, -1234567.0);}
-
-  {vnl_bignum b18(1234567000.0);
-  TEST("vnl_bignum b18(1234567000.0);", (double)b18, 1234567000.0);}
-
-  {vnl_bignum b19(-1234567000.0);
-  TEST("vnl_bignum b19(-1234567000.0);", (double)b19, -1234567000.0);}
-
-  {vnl_bignum b20(double(0xf00000));
-  TEST("vnl_bignum b20(double(0xf00000));", (double)b20, (double)0xf00000);}
+  {vnl_bignum b(0.0); TEST("vnl_bignum b(0.0);", (double)b, 0.0);}
+  {vnl_bignum b(1.0); TEST("vnl_bignum b(1.0);", (double)b, 1.0);}
+  {vnl_bignum b(-1.0); TEST("vnl_bignum b(-1.0);", (double)b, -1.0);}
+  {vnl_bignum b(vnl_math::maxdouble);
+   TEST("vnl_bignum b(vnl_math::maxdouble);", (double)b, vnl_math::maxdouble);}
+  {vnl_bignum b(-vnl_math::maxdouble);
+   TEST("vnl_bignum b(-vnl_math::maxdouble);", (double)b, -vnl_math::maxdouble);}
+  {vnl_bignum b(1234567.0); TEST("vnl_bignum b(1234567.0);", (double)b, 1234567.0);}
+  {vnl_bignum b(-1234567.0); TEST("vnl_bignum b(-1234567.0);", (double)b, -1234567.0);}
+  {vnl_bignum b(1234567e3); TEST("vnl_bignum b(1234567e3);", (double)b, 1234567e3);}
+  {vnl_bignum b(-1234567e3); TEST("vnl_bignum b(-1234567e3);", (double)b, -1234567e3);}
+  {vnl_bignum b(double(0xf00000)); TEST("vnl_bignum b(double(0xf00000));", b, 0xf00000);}
 
   vcl_cout << "char* constructor:\n";
-  {vnl_bignum b21("-1");
-  TEST("vnl_bignum b21(\"-1\");", (long)b21, -1);}
-
-  {vnl_bignum b22("+1");
-  TEST("vnl_bignum b22(\"+1\");", (long)b22, 1);}
-
-  {vnl_bignum b23("1");
-  TEST("vnl_bignum b23(\"1\");", (long)b23, 1);}
-
-  {vnl_bignum b24("123");
-  TEST("vnl_bignum b24(\"123\");", (long)b24, 123);}
-
-  {vnl_bignum b25("123e12");
-  TEST("vnl_bignum b25(\"123e12\");", (double)b25, 123e12);}
-
-  {vnl_bignum b26("-123e120");
-  TEST("vnl_bignum b26(\"-123e120\");", (double)b26, -123e120);}
-
-  {vnl_bignum b27("0x0");
-  TEST("vnl_bignum b27(\"0x0\");", (long)b27, 0x0);}
-
-  {vnl_bignum b28("0x9");
-  TEST("vnl_bignum b28(\"0x9\");", (long)b28, 0x9);}
-
-  {vnl_bignum b29("0xa");
-  TEST("vnl_bignum b29(\"0xa\");", (long)b29, 0xa);}
-
-  {vnl_bignum b30("0xf");
-  TEST("vnl_bignum b30(\"0xf\");", (long)b30, 0xf);}
-
-  {vnl_bignum b31("0xa");
-  TEST("vnl_bignum b31(\"0xa\");", (long)b31, 0xa);}
-
-  {vnl_bignum b32("0xf");
-  TEST("vnl_bignum b32(\"0xf\");", (long)b32, 0xf);}
-
-  {vnl_bignum b33("0x1af");
-  TEST("vnl_bignum b33(\"0x1af\");", (long)b33, 0x1af);}
-
-  {vnl_bignum b34("0");
-  TEST("vnl_bignum b34(\"0\");", (long)b34, 0);}
-
-  {vnl_bignum b35("00");
-  TEST("vnl_bignum b35(\"00\");", (long)b35, 0);}
-
-  {vnl_bignum b36("012334567");
-  TEST("vnl_bignum b36(\"012334567\");", (long)b36, 012334567);}
-
-  {vnl_bignum b37("9");
-  TEST("vnl_bignum b37(\"9\");", (long)b37, 9);}
-#if 0
-  vnl_bignum b38("09");
-  TEST("vnl_bignum b38(\"09\");", (long)b38, 9);
-#endif
-  vnl_bignum b39(" 9");
-  TEST("vnl_bignum b39(\" 9\");", (long)b39, 9);
-
-  {vnl_bignum b40("0xf");
-  TEST("vnl_bignum b40(\"0xf\");", (long)b40, 0xf);}
+  {vnl_bignum b("-1"); TEST("vnl_bignum b(\"-1\");", b, -1L);}
+  {vnl_bignum b("+1"); TEST("vnl_bignum b(\"+1\");", b, 1L);}
+  {vnl_bignum b("1"); TEST("vnl_bignum b(\"1\");", b, 1L);}
+  {vnl_bignum b("123"); TEST("vnl_bignum b(\"123\");", b, 123L);}
+  {vnl_bignum b("123e5"); TEST("vnl_bignum b(\"123e5\");", b, 12300000L);}
+  {vnl_bignum b("123e+4"); TEST("vnl_bignum b(\"123e+4\");", b, 1230000L);}
+  {vnl_bignum b("123e12"); TEST("vnl_bignum b(\"123e12\");", (double)b, 123e12);}
+  {vnl_bignum b("-123e120"); TEST("vnl_bignum b(\"-123e120\");", (double)b, -123e120);}
+  {vnl_bignum b("0x0"); TEST("vnl_bignum b(\"0x0\");", b, 0x0);}
+  {vnl_bignum b("0x9"); TEST("vnl_bignum b(\"0x9\");", b, 0x9);}
+  {vnl_bignum b("0xa"); TEST("vnl_bignum b(\"0xa\");", b, 0xa);}
+  {vnl_bignum b("0xf"); TEST("vnl_bignum b(\"0xf\");", b, 0xf);}
+  {vnl_bignum b("0xA"); TEST("vnl_bignum b(\"0xA\");", b, 0xa);}
+  {vnl_bignum b("0xF"); TEST("vnl_bignum b(\"0xF\");", b, 0xf);}
+  {vnl_bignum b("0x1aF"); TEST("vnl_bignum b(\"0x1aF\");", b, 0x1af);}
+  {vnl_bignum b("0"); TEST("vnl_bignum b(\"0\");", b, 0);}
+  {vnl_bignum b("00"); TEST("vnl_bignum b(\"00\");", b, 0);}
+  {vnl_bignum b("012334567"); TEST("vnl_bignum b(\"012334567\");", b, 012334567);}
+  {vnl_bignum b("9"); TEST("vnl_bignum b(\"9\");", b, 9);}
+  {vnl_bignum b(" 9"); TEST("vnl_bignum b(\" 9\");", b, 9);}
 
   vcl_cout << "reading from istream:\n";
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
-  is << "+1"; is >> b; TEST("\"+1\" >> b;", b, 1L);}
+   is << "+1"; is >> b; TEST("\"+1\" >> b;", b, 1L);}
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
-  is << "-1"; is >> b; TEST("\"-1\" >> b;", b, -1L);}
+   is << "-1"; is >> b; TEST("\"-1\" >> b;", b, -1L);}
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
-  is << "123"; is >> b; TEST("\"123\";", b, 123L);}
+   is << "123"; is >> b; TEST("\"123\" >> b;", b, 123L);}
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
-  is << "0x0"; is >> b; TEST("\"0x0\" >> b;", b, 0x0);}
+   is << "123e5"; is >> b; TEST("\"123e5\" >> b;", b, 12300000L);}
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
-  is << "0x9"; is >> b; TEST("\"0x9\" >> b;", b, 0x9);}
+   is << "123e+4"; is >> b; TEST("\"123e+4\ >> b";", b, 1230000L);}
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
-  is << "0xa"; is >> b; TEST("\"0xa\" >> b;", b, 0xa);}
+   is << "0x0"; is >> b; TEST("\"0x0\" >> b;", b, 0x0);}
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
-  is << "0xf"; is >> b; TEST("\"0xf\" >> b;", b, 0xf);}
+   is << "0x9"; is >> b; TEST("\"0x9\" >> b;", b, 0x9);}
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
-  is << "0xa"; is >> b; TEST("\"0xa\" >> b;", b, 0xa);}
+   is << "0xa"; is >> b; TEST("\"0xa\" >> b;", b, 0xa);}
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
-  is << "0xf"; is >> b; TEST("\"0xf\" >> b;", b, 0xf);}
+   is << "0xf"; is >> b; TEST("\"0xf\" >> b;", b, 0xf);}
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
-  is << "0x1af"; is >> b; TEST("\"0x1af\" >> b;", b, 0x1af);}
+   is << "0xA"; is >> b; TEST("\"0xA\" >> b;", b, 0xa);}
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
-  is << "0"; is >> b; TEST("\"0\" >> b;", b, 0L);}
+   is << "0xF"; is >> b; TEST("\"0xF\" >> b;", b, 0xf);}
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
-  is << "00"; is >> b; TEST("\"00\" >> b;", b, 0L);}
+   is << "0x1aF"; is >> b; TEST("\"0x1aF\" >> b;", b, 0x1af);}
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
-  is << "012334567"; is >> b; TEST("\"012334567\" >> b;", b, 012334567);}
+   is << "0"; is >> b; TEST("\"0\" >> b;", b, 0L);}
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
-  is << "9"; is >> b; TEST("\"9\" >> b;", b, 9L);}
+   is << "00"; is >> b; TEST("\"00\" >> b;", b, 0L);}
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
-  is << " 9"; is >> b; TEST("\" 9\" >> b;", b, 9L);}
+   is << "012334567"; is >> b; TEST("\"012334567\" >> b;", b, 012334567);}
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
-  is << "0xf"; is >> b; TEST("\"0xf\" >> b;", b, 0xf);}
+   is << "9"; is >> b; TEST("\"9\" >> b;", b, 9L);}
+  {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
+   is << " 9"; is >> b; TEST("\" 9\" >> b;", b, 9L);}
 
   vcl_cout << "vnl_bignum& constructor:\n";
   {vnl_bignum b50(vnl_bignum(0L));
