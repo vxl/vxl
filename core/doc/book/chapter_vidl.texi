@@ -9,8 +9,8 @@
 
 @code{vidl} has the central notion of a @emph{movie}, which is turn is a
 sequence of clips. A @emph{clip} is simply a sequence of frames. A
-@emph{frame} can return a @code{vil_image} corresponding to the frame,
-using the coder/decoder @emph{codec} for a given video format.
+@emph{frame} can return a @code{vil_image_view} corresponding
+to the frame, using the coder/decoder @emph{codec} for a given video format.
 
 Large videos can be read a frame at a time from the codec so it is not
 necessary to load an entire video into memory in order to access individual
