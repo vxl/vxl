@@ -35,12 +35,12 @@ int main()
     m.put_section(data, 0, 0, 3, 2);
     p(m);
 
-    vil_save(m, PGMFILE1);
+    vil_save(m, PGMFILE1, "pnm");
 
     vil_memory_image n(data, 3, 2, VIL_BYTE);
     p(n);
 
-    vil_save(n, PGMFILE2);
+    vil_save(n, PGMFILE2, "pnm");
   }
 
   // don't leave garbage behind by default.
