@@ -13,7 +13,6 @@
 #include <vnl/vnl_test.h>
 #include <vnl/algo/vnl_generalized_eigensystem.h>
 
-extern "C"
 void test_generalized_eigensystem()
 {
   double Sdata[36] = {
