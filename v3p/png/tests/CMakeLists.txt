@@ -1,0 +1,6 @@
+IF(BUILD_TESTING)
+  LINK_LIBRARIES(png)
+
+  ADD_EXECUTABLE(pngtest pngtest.c)
+  ADD_TEST(pngtest pngtest)
+ENDIF(BUILD_TESTING)
