@@ -1,0 +1,14 @@
+Comparing timings using the old pyramid builder in mil (which uses explicit pointer arithmetic)
+and the vil2_gauss_reduce_general code in vil2 which uses operator() for pixel access.
+
+850 MHz P3, Windows 2000, MSVC6.0
+---------------------------------
+Debug Mode (-O2 equiv)
+Times to do a gaussion subsample of a 320 x 240 image of 1 planes (in microsecs) [Range= 0.5(max-min)]
+Using operator():        Mean: 5505us  +/-500us
+Using explicit pointers: Mean: 3100us  +/-250us
+
+RelwithDebInfo Mode - (-02 equiv)
+Times to do a gaussion subsample of a 320 x 240 image of 1 planes (in microsecs) [Range= 0.5(max-min)]
+Using operator():        Mean: 2505us  +/-25us
+Using explicit pointers: Mean: 1900us  +/-250us
