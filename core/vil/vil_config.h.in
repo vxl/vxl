@@ -19,6 +19,10 @@
 #define HAS_RAS   1
 #define HAS_NITF  1
 
+// These formats have not yet been ported from vil1
+#define HAS_GIF   0
+#define HAS_GEN   0
+
 // These formats are supported using external libraries, and hence may
 // not be present in a given build.
 
