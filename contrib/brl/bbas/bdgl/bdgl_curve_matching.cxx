@@ -14,8 +14,8 @@
 
 bdgl_curve_matching ::bdgl_curve_matching()
 {
- motion_in_pixels_=0;
- no_of_top_choices_=0;
+  motion_in_pixels_=0;
+  no_of_top_choices_=0;
 }
 
 struct less_cost
@@ -207,7 +207,7 @@ double bdgl_curve_matching::match_DP(bdgl_curve_description * desc1,
     double dy2=v2[v2.size()-2].second-v2[v2.size()-1].second;
     double theta2=desc2->angles_[v2.size()-1]*vnl_math::pi/180;
     sign22=dx2*vcl_sin(theta2)-dy2*vcl_cos(theta2);
- }
+  }
   if (sign11*sign12<0 && sign21*sign22<0)
   {
     double dist;
@@ -287,15 +287,15 @@ double bdgl_curve_matching::match_DP(bdgl_curve_description * desc1,
 }
 
 double bdgl_curve_matching::match_stat(bdgl_curve_description * desc1,
-                                       bdgl_curve_description  * desc2)
+                                       bdgl_curve_description * desc2)
 {
-  double dist=0;
-  double image_scale=1;
-  double angle_scale=.31416;
+  double image_scale=1.0;
   double grad_scale=10.0;
+  double angle_scale=vnl_math::pi/grad_scale;
 
+  double
   dist = 1.0*vcl_sqrt( vnl_math_sqr( (desc1->center_.x()-desc2->center_.x())/image_scale )
-                     +vnl_math_sqr( (desc1->center_.y()-desc2->center_.y())/image_scale ) );
+                      +vnl_math_sqr( (desc1->center_.y()-desc2->center_.y())/image_scale ) );
   dist+= 0.5*vnl_math_abs( (desc1->length_-desc2->length_)/image_scale );
   dist+= 0.5*vnl_math_abs( (desc1->curvature_-desc2->curvature_)/image_scale );
 
@@ -381,9 +381,9 @@ void bdgl_curve_matching::match(vcl_vector<bdgl_tracker_curve_sptr> * new_curves
       vcl_vector<match_data_sptr>::iterator piter=(*new_curves)[i]->prev_.begin();
       for (unsigned int j=0;j<(*new_curves)[i]->prev_.size(); ++j,++piter)
       {
-           double matching_cost=match_DP((*new_curves)[i]->prev_[j]->match_curve_set[0]->desc,
-                                         (*new_curves)[i]->desc,
-                                         mapping,euc,R1,T1,Tbar,scale,tail_old,tail_new,epipole_);
+        double matching_cost=match_DP((*new_curves)[i]->prev_[j]->match_curve_set[0]->desc,
+                                      (*new_curves)[i]->desc,
+                                      mapping,euc,R1,T1,Tbar,scale,tail_old,tail_new,epipole_);
 
         (*new_curves)[i]->prev_[j]->energy_=matching_cost;
         (*new_curves)[i]->prev_[j]->cost_=matching_cost;
@@ -508,7 +508,7 @@ void bdgl_curve_matching::best_matches(vcl_vector<bdgl_tracker_curve_sptr> * new
                     (*minpiter)->match_curve_set[0],(*min_iter_new),R1,T1,s,(*minpiter)->mapping_);
                   // join the two curves and add it to the new curves;
                   if (vcl_fabs(2*(tail_euc_dist-parent_euc_dist)/(tail_euc_dist+parent_euc_dist))<1.0
-                     && (tail_euc_dist+parent_euc_dist)/2<10)
+                      && (tail_euc_dist+parent_euc_dist)/2<10)
                   {
                     //merged two curves to form a virtual curve
                     bdgl_tracker_curve_sptr c=new bdgl_tracker_curve;
@@ -525,7 +525,7 @@ void bdgl_curve_matching::best_matches(vcl_vector<bdgl_tracker_curve_sptr> * new
                     temp->match_curve_set.push_back((*minpiter)->match_curve_set[0]);
                     double cst=match_DP(c->desc,temp->match_curve_set[0]->desc,
                                         temp->mapping_, temp->euc_,temp->R_,temp->T_,
-                                       temp->Tbar,temp->scale_,temp->tail1_,temp->tail2_,epipole_);
+                                        temp->Tbar,temp->scale_,temp->tail1_,temp->tail2_,epipole_);
                     // filling the best next match
                     temp1->mapping_=temp->mapping_;
                     temp1->R_=temp->R_;
@@ -843,7 +843,6 @@ double bdgl_curve_matching::compute_std(vcl_vector<double> t)
 void bdgl_curve_matching::best_matches_tc(vcl_vector<bdgl_tracker_curve_sptr> * current_curves,
                                           vcl_vector<bdgl_tracker_curve_sptr> * /* past_curves */,
                                           vcl_vector<bdgl_tracker_curve_sptr> * future_curves)
-
 {
   vcl_vector<bdgl_tracker_curve_sptr>::iterator iter,min_iter_current;
   match_data_sptr min_i_data;
