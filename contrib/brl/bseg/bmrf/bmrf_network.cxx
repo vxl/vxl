@@ -119,6 +119,14 @@ bmrf_network::seg_to_node(const bmrf_epi_seg_sptr& seg, int frame) const
 }
 
 
+//: Returns the number of frames in the network
+int 
+bmrf_network::num_frames() const
+{
+  return nodes_from_frame_.size();
+}
+
+
 //: Returns the number of nodes in the network;
 int
 bmrf_network::size(int frame)
@@ -174,8 +182,9 @@ bmrf_network::prune_by_gamma(double min_gamma, double max_gamma)
   for( seg_node_map::const_iterator itr = node_from_seg_.begin();
        itr != node_from_seg_.end(); )
   {
-    if( itr->second->out_arcs_.empty() && 
-        itr->second->in_arcs_.empty() ){
+    if( ( itr->second->out_arcs_.empty() && 
+          itr->second->in_arcs_.empty() ) ||
+        itr->second->gamma().ptr() == NULL ){
       seg_node_map::const_iterator next_itr = itr; ++next_itr;
       this->remove_node((itr)->second);
       itr = next_itr;

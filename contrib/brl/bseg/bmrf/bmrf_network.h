@@ -70,6 +70,9 @@ class bmrf_network : public vbl_ref_count
   // \note if the optional paramater \p frame is positive the search is restricted to that frame
   bmrf_node_sptr seg_to_node(const bmrf_epi_seg_sptr& seg, int frame = -1) const;
 
+  //: Returns the number of frames in the network
+  int num_frames() const;
+
   //: Returns the number of nodes in the network
   // \ note if the optional parameter \p frame is positive then the size is of that frame
   int size( int frame = -1 );
