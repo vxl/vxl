@@ -510,7 +510,7 @@ int main()
 @{
   // send string "hello world" to the standard
   // output stream cout.
-  cout << "Hello world\n";
+  vcl_cout << "Hello world\n";
 
   // Must return something from main
   return 0;
@@ -579,7 +579,7 @@ When you want a @code{std::string}, use @code{vcl_string}.
 The job of vcl is to fix your compiler.  C++ is not just a language; the
 standard also includes an extensive library of classes and functions, which
 make ISO C++ a powerful and useful tool for building computer programs.
-Unfortunately, few C++ compilers available in 2000 have a bug-free
+Unfortunately, few C++ compilers available in 2001 have a bug-free
 implementation of the standard, so we have to supply our own bug fixes.
 
 To give an example of the type of problems that vcl fixes, here are a few
@@ -601,8 +601,8 @@ Wherever you wish to include standard header @code{<foo>}, you should
 include @code{<vcl_foo.h>} instead.
 @end quotation
 
-Some compilers place STL classes such as @code{vector} and @code{vcl_string} in
-namespace @code{std}, some don't.  Yet others place them there, but do not
+Some compilers place STL classes such as @code{vector<>} and @code{string} in
+namespace @code{std::}, some don't.  Yet others place them there, but do not
 implement namespaces properly.  Therefore, it is very difficult to write
 portable code because sometimes one must say @code{std::vector}, sometimes
 one must use @code{vector}.  Again, we need a way which works on all
@@ -637,10 +637,11 @@ library has been prefixed by @code{vcl_}.  It may look like extreme
 overkill, but it works, and can be made to work on all compilers we've
 seen.
 @example
-#include <vcl_string.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
-#include <vcl_algorithm.h>
+#include <vcl_string.h>    // string
+#include <vcl_iostream.h>  // cout
+#include <vcl_vector.h>    // vector
+#include <vcl_algorithm.h> // copy
+#include <vcl_iterator.h>  // ostream_iterator
 
 int main()
 @{
@@ -667,12 +668,185 @@ not in VCL.  Remember, VCL is full, nothing else can go in there.  It
 cannot for example be ``helpfully'' modified, Microsoft-style, to send
 standard error to a window (but @pxref{vbl_redirector}).
 
+
+@comment fsm
+@section Macros and standard C++
+
+The C++ ISO standard library headers include the functionality of the C ISO standard
+library headers. For example, the declarations found in @code{<stdlib.h>} can be
+found in @code{<cstdlib>} but in namespace @code{std::}. This means that functions
+like @code{printf()} should be called using @code{std::printf()} instead; omitting
+the @code{std::} is wrong and won't work if the compiler is truly conforming. The
+exception to this (see @code{[C.2.3]} in the standard) is those names from ISO C 
+which are actually macros. The following is an incomplete list:
+
+@itemize @bullet
+@item assert
+@item setjmp
+@item NULL
+@item errno
+@item stdin, stdout, stderr
+@item va_arg, va_start, va_end
+@end itemize
+
+For example, the following code is the correct way to use C streams in VXL:
+@smallexample
+#include <vcl_cstdio.h>
+#include <vcl_cassert.h>
+
+void f(char const *file_name)
+@{
+  assert(file_name);
+  vcl_FILE *fp = vcl_fopen(file_name, "r");
+  if (! fp) @{
+    vcl_fprintf(stderr, "failed to open %s for reading.\n", file_name);
+    vcl_abort();
+  @}
+  ... other stuff ...
+@}
+@end smallexample
+Note that it uses @code{assert}, @code{stderr} and not @code{vcl_assert}, @code{vcl_stderr}
+even though it uses @code{vcl_fprintf}, @code{vcl_abort}. This may seem complicated and
+hard to remember, but it isn't the fault of VCL. If your compiler were strictly conformant
+you would still have to use @code{std::fprintf} and you couldn't use @code{std::stderr}.
+
+
+@comment fsm
+@section Which parts of standard C++ may be used in VXL?
+
+Eventually the answer to this will be "all parts" but until compilers
+catch up with the language standard, the answer is "all but the following":
+
+@itemize @bullet
+@item run-time type information (RTTI).
+@item exceptions.
+@item wide characters (not supported by FreeBSD).
+@item member templates (not supported by SGI CC 7.2.x).
+@item partial template specializations (not supported by SGI CC 7.2.x).
+@item non-type parameters in function templates (not supported by SunPro 5.0).
+@item default template parameters which depend on previous template parameters.
+@end itemize
+
+Of course, if you are just using VXL for your own purposes you may use whatever 
+C++ constructs you like, you just can't put them in the core VXL libraries.
+
+
+@comment fsm
+@section Template instantiation
+
+In C++, template instantiation is done by the compiler. In real life, it
+doesn't work as the standard says. In brief here is how template instantiation
+is supposed to work:
+
+@itemize @bullet
+
+@item The compiler must instantiate every needed template before its first use.
+
+@item The definition of a template must be in scope at the point of instantiation
+      unless the template is declared as exported.
+
+@end itemize
+
+To understand the implications of this (and the meaning of "exported") let's
+consider the following program, composed of two translation units:
+
+@smallexample
+// matrix.h
+template <typename T>
+struct matrix
+@{
+  matrix(int, int);
+  ...
+@};
+@end smallexample
+
+The class template @code{matrix<>} just declared is defined in
+
+@smallexample
+// matrix.txx
+#include "matrix.h"
+template <typename T>
+matrix<T>::matrix(int m, int n) @{ ... @}
+@end smallexample
+
+Finally we refer to the matrix class in a little program:
+
+@smallexample
+// program.cxx
+#include "matrix.h"
+int main()
+@{
+  matrix<double> P(3, 4);
+  ...
+  return 0;
+@}
+@end smallexample
+
+The program is ill-formed because the @code{matrix<double>} must be
+instantiated before its use in @code{program.cxx}, but the definition
+isn't in scope at that point.
+One way to fix this is to explicitly instantiate the required template in
+some source file and make sure to compile that source file first.
+Another is to include the definition of the template in the header file.
+A third solution is to put the keyword @code{export} in front of the declaration
+of @code{matrix<T>}, which makes it possible to implicitly instantiate
+@code{matrix<double>} even when the definition is not in scope.
+
+Unfortunately, there are at the time of writing (April 2001) no compilers
+which understand and implement @code{export} so we are currently limited to
+using two kinds of templates:
+@itemize @bullet
+@item "Inline" templates whose definitions are in scope at the point of use.
+      This includes (in most implementations) the containers and algorithms
+      from the STL. An example is @code{vcl_vector<vcl_pair<int, vcl_string> >}.
+@item "Export" templates which are explicitly instantiated in the program (despite
+      being exported). In VXL, these instantiations all live in the @code{Templates/}
+      directories in the source tree and include things like @code{vnl_svd<T>}
+      which only need to be instantiated for a handfull of types anyway.
+@end itemize
+
+Now, it gets worse. For various reasons it is sometimes advantageous to turn
+off automatic instantiation of the first kind of template. This is only really
+the case for some architectures but if you are unlucky enough to be using one
+of them, you also have to explicitly instantiate your STL container classes
+and algorithms in the @code{Templates/} directories. [You should consider skipping
+the rest of this section until you actually have a template problem. Don't read it
+just for pleasure.] To make it easier to do
+this, and to make sure it works on all platforms, explicit instantiation is
+done using preprocessor macros. The macro used to instantiate a class or function
+is obtained by capitalizing the name (of that class or function) and appending
+@code{_INSTANTIATE}. For example, here is how to instantiate a 
+@code{vcl_map<int, X>} where @code{X} is the name of some class:
+
+@smallexample
+// Templates/vcl_map+int.X-.cxx
+#include "X.h"         // declaration of class X.
+#include <vcl_map.txx> // the instantiation macro lives here.
+VCL_MAP_INSTANTIATE(int, X, vcl_less<int>);
+@end smallexample
+
+and here is how to instantiate @code{vcl_vector<X *>}:
+
+@smallexample
+// Templates/vcl_vector+X~-.cxx
+struct X; // forward declare the class.
+#include <vcl_vector.txx>
+VCL_VECTOR_INSTANTIATE(X *);
+@end smallexample
+
+The naming convention for such files is described **** where ? ****.
+
+If you are using the build system that comes with VXL and you aren't using
+implicit instantiation you should put such instantiations in the 
+@code{Templates/} directory or you @emph{will} be stuffed.
+
+
 @section Notes
 @subsection Forward Declaration of vcl Classes
 
 Do not forward declare classes in vcl. For example,
 @example
-class vcl_string;   // This is not allowed
+class vcl_string;   // This is not allowed. std::string is a typedef.
 class my_class @{
 ..
 @end example
@@ -685,8 +859,6 @@ stuff, there is an include file of froward declarations that will work.
 
 General rule: never forward declare vcl_something with "class vcl_something;"
 but either #include <vcl_something_fwd.h> or #include <vcl_something.h>
-
-
 
 @comment ------------------------------------------------------------------
 @node    vbl, vnl, vcl, Top
@@ -722,7 +894,7 @@ Parse command-line arguments conveniently.
 @end deffn
 
 @deffn class @code{vbl_redirector}
-Simplify redirection of cout/cerr
+Simplify redirection of standard output/error
 @end deffn
 
 @deffn class @code{vbl_awk}
@@ -741,9 +913,9 @@ Regular expression matching.
 @anchor{vbl_redirector}
 
 The class @code{vbl_redirector} is provided to simplify the task of
-filtering the output of @code{cerr} and @code{cout}, a common requirement
+filtering the output of @code{vcl_cerr} and @code{vcl_cout}, a common requirement
 in graphical applications.  This encapsulates some of the subtleties of
-subclassing from @code{streambuf}, providing a simpler interface.
+deriving from @code{vcl_streambuf}, providing a simpler interface.
 
 The basic usage is to subclass from @code{vbl_redirector}, implementing the
 @code{putchunk} method, which is then called whenever characters are ready
@@ -757,7 +929,7 @@ depending on the value of a global flag;
 
 bool on = true;
 
-struct my_redirector : public vbl_redirector @{
+struct my_redirector : vbl_redirector @{
   my_redirector(vcl_ostream& s): vbl_redirector(s) @{@}
   int putchunk(char const* buf, int n) @{
     if (on)
@@ -771,13 +943,13 @@ and here is a calling program which exercises the example.
 @example
 int main(int argc, char* argv[])
 @{
-  cerr << "hi\n";
+  vcl_cerr << "hi\n";
   @{
-    my_redirector redir(cerr);
+    my_redirector redir(vcl_cerr);
     on = false;
-    cerr << "magic\n";
+    vcl_cerr << "magic\n";
   @}
-  cerr << "what did I miss?\n";
+  vcl_cerr << "what did I miss?\n";
   return 0;
 @}
 @end example
@@ -790,7 +962,7 @@ what to you think @code{put_passthru} does?  What happens if you set
 
 
 @section Complex output formatting: @code{vbl_printf}
-@cindex printf
+@cindex vcl_printf
 @cindex vbl_printf
 
 While it is possible to achieve all of the functionality
@@ -950,7 +1122,7 @@ formatting, for quick testing purposes.  Here's an example
 @example
   vbl_timer tic; // Start timing
   // do stuff
-  tic.print(vcl_cerr); // Print times to cerr.
+  tic.print(vcl_cerr); // Print times to vcl_cerr.
 @end example
 
 
@@ -1004,7 +1176,7 @@ is written as follows in @vxl{}
 @example
    vbl_reg_exp re("([a-z]+)\\.h");
    re.find(filename);
-   cerr << re.match(1);
+   vcl_cerr << re.match(1);
 @end example
 
 The vbl syntax is similar to perl's, although not quite as clean.  Here are
@@ -1142,15 +1314,15 @@ decided that zero-based indexing was closer to being ``not weird''.
   vnl_matrix<double> A(3,3); // 3x3 matrix, elements not initialized
   vnl_matrix<double> B(3,3, 1.0); // 3x3 matrix, filled with ones.
   vnl_matrix<double> R(3,4); // Rectangular matrix
-  cerr << "A is " << A.@ttb{rows}() << "x" << A.@ttb{columns}() << endl;
-  cerr << "A has a total of " << A.@ttb{size}() << " elements" << endl;
+  vcl_cerr << "A is " << A.@ttb{rows}() << "x" << A.@ttb{columns}() << vcl_endl;
+  vcl_cerr << "A has a total of " << A.@ttb{size}() << " elements" << vcl_endl;
   A(0,0) = 2.0; // Set top-left component of A.
   A(3,3) = 0.0; // *** Error, (3,3) is outside the range of A.
   A.@ttb{resize}(3,4); // Change size of A, invalidating elements.
   R.@ttb{update}(A, 0, 1); // Copy A into R, starting at (0,1): last 3 cols
   R.@ttb{set_column}(0, B.@ttb{get_column}(0)); // Copy 1st col of B into R
-  cerr << R.@ttb{extract}(3,3, 0,1); // Print last 3 cols
-  cerr << R.@ttb{get_n_columns}(1, 3) const; // Ditto
+  vcl_cerr << R.@ttb{extract}(3,3, 0,1); // Print last 3 cols
+  vcl_cerr << R.@ttb{get_n_columns}(1, 3) const; // Ditto
 
   A.@ttb{fill}(0.0); // Set all elements of A to 0.0
   A.@ttb{fill_diagonal}(1.0); // Set diagonal elements to 1.0
@@ -1169,11 +1341,11 @@ decided that zero-based indexing was closer to being ``not weird''.
   vnl_matrix<double> Csqrt = C.@ttb{apply}(sqrt); // Square root all elements
   @ttb{element_product}(Csqrt, Csqrt); // Should be equal to C, modulo roundoff
 
-  cerr << A.@ttb{fro_norm}(); // Print sum of squares of elements
-  cerr << A.@ttb{min_value}(); // Print minimum element
+  vcl_cerr << A.@ttb{fro_norm}(); // Print sum of squares of elements
+  vcl_cerr << A.@ttb{min_value}(); // Print minimum element
 
-  if (A.@ttb{is_zero}(1e-8)) cerr << "Each element of A is within 1e-8 of zero\n";
-  if (A.@ttb{is_identity}(1e-8)) cerr << "(A - I) is_zero to 1e-8\n";
+  if (A.@ttb{is_zero}(1e-8)) vcl_cerr << "Each element of A is within 1e-8 of zero\n";
+  if (A.@ttb{is_identity}(1e-8)) vcl_cerr << "(A - I) is_zero to 1e-8\n";
 
   A.@ttb{read_ascii}(cin); // Read A from standard input
 
@@ -1231,7 +1403,7 @@ above sequence would be
 main() @{
   vnl_matrix_fixed<double,3,4> P;
   vnl_vector_fixed<double,4> X;
-  cerr << P*X;
+  vcl_cerr << P*X;
 @}
 @end example
 It's a bit clumsy typing these long names, so it is common to use
@@ -1245,7 +1417,7 @@ example is
 main() @{
   vnl_double_3x4 P;
   vnl_double_4 X;
-  cerr << P*X;
+  vcl_cerr << P*X;
 @}
 @end example
 Note again that in this example there will be no noticeable speedup,
@@ -1332,14 +1504,14 @@ main() @{
   @{
     vnl_svd<double> svd(D);
     vnl_vector<double> a = svd.nullvector();
-    cout << "vnl_svd<double> residual = " << (D * a).magnitude() << endl;
+    vcl_cout << "vnl_svd<double> residual = " << (D * a).magnitude() << vcl_endl;
   @}
 
   // 2. Compute using eigensystem of D'*D
   @{
     vnl_symmetric_eigensystem<double>  eig(D.transpose() * D);
     vnl_vector<double> a = eig.get_eigenvector(0);
-    cout << "Eig residual = " << (D * a).magnitude() << endl;
+    vcl_cout << "Eig residual = " << (D * a).magnitude() << vcl_endl;
   @}
 @}
 @end example
@@ -1780,7 +1952,7 @@ int main()
 @{
   vil_image img = vil_load("foo.ppm");
   vil_memory_image_of<unsigned char> buf(img);
-  vcl_cerr << "Pixel 100,100 = " << buf(100,100) << endl;
+  vcl_cerr << "Pixel 100,100 = " << buf(100,100) << vcl_endl;
 @}
 @end example
 
@@ -1813,7 +1985,7 @@ This creates a 2D array of the same size as @var{img}, and reads the image
 data from disk into it.  We can now easily access the data using the
 overloaded parenthesis operator, and print out the value.
 @example
-  cerr << "Pixel 100,100 = " << buf(100,100) << endl;
+  vcl_cerr << "Pixel 100,100 = " << buf(100,100) << vcl_endl;
 @end example
 Memory images are derived classes of vil_image, and they too can be passed
 around cheaply, always referring to the same block of pixels.  To copy a
@@ -1986,7 +2158,7 @@ main()
    vil_image img = vil_load("theimage.pgm");
    vil_byte value; // buffer into which value will be read
    img.get_section(&value, 100, 200, 1, 1);
-   cerr << "val(100,200) = " << int(value) << endl;
+   vcl_cerr << "val(100,200) = " << int(value) << vcl_endl;
 @}
 @end smallexample
 
