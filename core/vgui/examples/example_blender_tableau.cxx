@@ -17,7 +17,7 @@ int main(int argc, char ** argv)
 
   vgui::init(argc, argv);
 
-  vgui_blender_tableau_new blend(argv[1], 0.5);
+  vgui_blender_tableau_new blend(argv[1], 0, 0.5);
   vgui_image_tableau_new image(argv[2]);
 
   vgui_composite_tableau_new comp(image, blend);
