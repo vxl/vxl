@@ -115,7 +115,7 @@ class rgrl_feature_caster
 {
  public:
   rgrl_feature_caster( rgrl_feature_sptr f )
-    : data_( dynamic_cast<CastTo*>( f.as_pointer() ) ) {}
+    : data_( dynamic_cast<CastTo*>( f.as_pointer() ) ) { assert( data_ ); }
 
   operator CastTo*() const { return data_; }
   CastTo* operator ->() const { return data_; }
