@@ -345,7 +345,7 @@ void vtol_topology_object::link_superior(vtol_topology_object &superior)
   _superiors.push_back(&superior);
   i=_superiors.end();
   --i;
-  (*i).unprotect();
+//(*i).unprotect();
   touch();
 }
 
