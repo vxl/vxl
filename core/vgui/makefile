@@ -24,6 +24,7 @@ SOURCES += vgui_button.cxx
 SOURCES += vgui_modifier.cxx
 SOURCES += vgui_event.cxx
 SOURCES += vgui_command.cxx
+MANPAGE_SOURCES += vgui_command_sptr.h
 SOURCES += vgui_menu.cxx
 MANPAGE_SOURCES += vgui_popup_params.h
 MANPAGE_SOURCES += vgui_message.h
