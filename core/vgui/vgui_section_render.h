@@ -10,12 +10,20 @@
 
 #include <vgui/vgui_gl.h>
 
+//: Render the pixels onto the frame buffer
+//
+// This renders the portion of the image within (x0,y0)-(x1,y1). The
+// whole image is rendered if (x0,y0)==(0,0) and
+// (x1,y1)==(w,h). (Actually, for efficiency, only the portion
+// overlapping the viewport is ever rendered.)  \a format and \a type
+// encode the data encoding in \a pixels. \a pixels is assumed to
+// store a row-ordered set of byte-aligned values.
+//
 bool vgui_section_render(void const *pixels,
                          unsigned w, unsigned h, // Size of image.
                          float x0, float y0,  // Region of image
                          float x1, float y1,  // to render.
                          GLenum format,
-                         GLenum type,
-                         bool use_vgui_rasterpos = false);
+                         GLenum type );
 
 #endif // vgui_section_render_h_

@@ -14,11 +14,12 @@
 #include <vgui/internals/vgui_rasterpos.h>
 #include <vgui/internals/vgui_accelerate.h>
 
-static float fsm_max(float x, float y) { return x>y ? x : y; }
-static float fsm_min(float x, float y) { return x<y ? x : y; }
+static inline float fsm_max(float x, float y) { return x>y ? x : y; }
+static inline float fsm_min(float x, float y) { return x<y ? x : y; }
 
 // Set to 1 for verbose debugging.
 #if 0
+# include <stdio.h>
 # define fsm_debug printf
 #else
 static inline void fsm_debug(char const *, ...) { }
@@ -30,8 +31,7 @@ bool vgui_section_render(void const *pixels,
                          float x0, float y0,
                          float x1, float y1,
                          GLenum format,
-                         GLenum type,
-                         bool use_vgui_rasterpos)
+                         GLenum type )
 {
   assert(pixels);
   assert(x0 <= x1);
@@ -90,21 +90,12 @@ bool vgui_section_render(void const *pixels,
   float zoomx = a*vp_w/2;
   float zoomy = b*vp_h/2;
 
-  if (use_vgui_rasterpos) {
-    // New way, as worked out by pcp. This is much simpler, but the sub-pixel rendering
-    // seems to be broken for some GLs (Solaris OpenGL 1.1) : the image cannot be rendered
-    // at non-integer pixel locations. The result is that the image doesn't pan smoothly.
-    // fsm
-    vgui_rasterpos2f(0, 0); // set raster position
-    assert(vgui_rasterpos_valid());
-    glPixelZoom( zoomx, zoomy );
-    vgui_accelerate::instance()->vgui_glDrawPixels(w, h, format, type, pixels );
-    return true; // can almost do
-  }
-
-  // Clip the given region [x0, x1] x [y0, y1] to the viewport.
-  // In device coordinates, the viewport is [-1, +1] x [-1, +1] so
-  // it's easiest to start from that.
+  // Clip the given region [x0, x1] x [y0, y1] to the viewport.  In
+  // device coordinates, the viewport is [-1, +1] x [-1, +1] so it's
+  // easiest to start from that. This clipping is especially important
+  // for non-local displays, where the display clipping happens on the
+  // display server.
+  //
   if (a>0) {
     // [ (-1-u)/a, (+1-u)/a ]
     x0 = fsm_max(x0, (-1-u)/a);
@@ -130,39 +121,37 @@ bool vgui_section_render(void const *pixels,
     return true; // that's easy.
   }
 
-  // Round up and down so we only render whole pixels (i.e. we render at
-  // most the amount asked to render) and so that the raster position we
-  // set is valid :
-  int i_x0 = int(vcl_ceil (x0)), i_y0 = int(vcl_ceil (y0));
-  int i_x1 = int(vcl_floor(x1)), i_y1 = int(vcl_floor(y1));
+  // Before dumping the image, we have to set a valid raster
+  // position. However, to get a smooth panning effect, we want to
+  // render the (potentially) partial pixels at the borders, which
+  // means we must get the raster position to an "invalid" position
+  // outside the viewport. vgui_rasterpos wraps the appropriate
+  // trickery.
 
-  // Set raster position
-#if 1
-  double eps=0.001; // to foil roundoff.
-  glRasterPos2d(i_x0 + eps, i_y0 + eps);
-#else
-  glRasterPos2i(i_x0, i_y0);
-#endif
-#if defined(__sun__)
-  // Solaris GL has odd behaviour.  Sometimes a reasonable raster position is
-  // invalid, only when zoom is exactly 1, and the window is smaller than the
-  // image...  Anyway, changing the position slightly seems to fix it...
-  if (!vgui_rasterpos_valid()) {
-    ++i_x0;
-    ++i_y0;
-    glRasterPos2i(i_x0, i_y0);
-  }
-#endif
+  int i_x0 = int(vcl_floor(x0)), i_y0 = int(vcl_floor(y0));
+  int i_x1 = int(vcl_ceil (x1)), i_y1 = int(vcl_ceil (y1));
+
+  vgui_rasterpos2i( i_x0, i_y0 );
+
+  // this should never happen, but it doesn't hurt to fail gracefully.
   if (!vgui_rasterpos_valid()) {
     fsm_debug("invalid rasterpos\n");
     return false; //
   }
 
+  // Store old transfer characteristics for restoring it in a bit.
+  GLint alignment, row_length, skip_pixels, skip_rows;
+  glGetIntegerv(GL_UNPACK_ALIGNMENT,   &alignment);
+  glGetIntegerv(GL_UNPACK_ROW_LENGTH,  &row_length);
+  glGetIntegerv(GL_UNPACK_SKIP_PIXELS, &skip_pixels);
+  glGetIntegerv(GL_UNPACK_SKIP_ROWS,   &skip_rows);
+  
+
   // Set pixel transfer characteristics.
-  glPixelStorei(GL_UNPACK_ALIGNMENT  , 1);         // use byte alignment for now.
-  glPixelStorei(GL_UNPACK_ROW_LENGTH , w);         // size of image rows.
+  glPixelStorei(GL_UNPACK_ALIGNMENT,   1);         // use byte alignment for now.
+  glPixelStorei(GL_UNPACK_ROW_LENGTH,  w);         // size of image rows.
   glPixelStorei(GL_UNPACK_SKIP_PIXELS, i_x0);      // number of pixels to skip on the left.
-  glPixelStorei(GL_UNPACK_SKIP_ROWS  , i_y0);      // number of pixels to skip at the bottom.
+  glPixelStorei(GL_UNPACK_SKIP_ROWS,   i_y0);      // number of pixels to skip at the bottom.
 
   glPixelZoom( zoomx, zoomy );
   vgui_accelerate::instance()->vgui_glDrawPixels(i_x1 - i_x0, // Size of pixel rectangle
@@ -171,11 +160,11 @@ bool vgui_section_render(void const *pixels,
                                                  type,
                                                  pixels);
 
-  // Restore default values. FIXME : should restore *previous* values.
-  glPixelStorei(GL_UNPACK_ALIGNMENT , 4); // can be 1,2,4 or 8
-  glPixelStorei(GL_UNPACK_ROW_LENGTH ,0);
-  glPixelStorei(GL_UNPACK_SKIP_ROWS  ,0);
-  glPixelStorei(GL_UNPACK_SKIP_PIXELS,0);
+  // Restore previous values.
+  glPixelStorei(GL_UNPACK_ALIGNMENT,   alignment);
+  glPixelStorei(GL_UNPACK_ROW_LENGTH,  row_length);
+  glPixelStorei(GL_UNPACK_SKIP_ROWS  , skip_pixels);
+  glPixelStorei(GL_UNPACK_SKIP_PIXELS, skip_rows);
 
   return true; // could do
 }
