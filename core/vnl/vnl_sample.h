@@ -10,10 +10,16 @@
 // .INCLUDE vnl/vnl_sample.h
 // .FILE vnl_sample.cxx
 
-// uniform on [a, b)
+//: re-seed the random number generator.
+void vnl_sample_reseed();
+
+//: uniform on [a, b)
 double vnl_sample_uniform(double a, double b); 
 
-// normal distribution with given mean and standard deviation
+//: two independent samples from a standard normal distribution.
+void vnl_sample_normal_2(double *x, double *y);
+
+//: normal distribution with given mean and standard deviation
 double vnl_sample_normal(double mean, double sigma);
 
 // P(X = k) = [kth term in binomial expansion of (p + (1-p))^n]
