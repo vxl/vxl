@@ -11,7 +11,7 @@
 
 #include <vil2/vil2_image_resource.h>
 #include <vil2/vil2_file_format.h>
-#include "vil2_dicom_header.h"
+#include <vil2/file_formats/vil2_dicom_header.h>
 
 class vil2_image_view_base;
 
