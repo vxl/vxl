@@ -29,10 +29,10 @@
 
 #elif VXL_C_MATH_HAS_FINITE
 # include <math.h> // dont_vxl_filter: this is *not* supposed to be <cmath>
-# if !defined(__alpha__) && !(VXL_C_MATH_HAS_FINITEF)// on Alpha, finitef() must be used for float args instead of finite()
+# if !VXL_C_MATH_HAS_FINITEF
 #  define finitef finite
 # endif
-# if !(VXL_C_MATH_HAS_FINITEL)
+# if !VXL_C_MATH_HAS_FINITEL
 #  define finitel finite
 # endif
 
@@ -40,15 +40,13 @@
 # include <math.h> // dont_vxl_filter: this is *not* supposed to be <cmath>
 # define finite _Isfinite
 # define finitef _Isfinitef
+# define finitel _Isfinite
 
 #elif defined(SYSV)
-// needed on platforms with finite() declared in strange places, e.g. on alpha
+// needed on platforms with finite() declared in strange places
 extern "C" int finite(double);
-# ifdef __alpha__ // on Alpha, finitef() must be used for float args instead of finite()
-extern "C" int finitef(float);
-# else
-#  define finitef finite
-# endif
+# define finitef finite
+# define finitel finite
 
 #elif defined(VCL_BORLAND) 
 # include <math.h> // dont_vxl_filter: this is *not* supposed to be <cmath>
