@@ -15,7 +15,7 @@ SET(brip_sources
    brip_region_pixel.h       brip_region_pixel.cxx brip_region_pixel_sptr.h
    brip_watershed_params.h   brip_watershed_params.cxx    
    brip_watershed.h          brip_watershed.cxx    
-   brip_roi.h                brip_roi.cxx    
+   brip_roi.h                brip_roi.cxx          brip_roi_sptr.h
 )
 AUX_SOURCE_DIRECTORY(Templates brip_sources)
 
