@@ -18,7 +18,6 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl/vcl_map.h>
-//#include <vcl/vcl_memory.h>
 #include <vcl/vcl_utility.h>
 #include <vcl/vcl_iostream.h>
 
@@ -27,11 +26,7 @@
 template <class T>
 class vbl_sparse_array {
 public:
-  typedef vcl_map<unsigned, T, vcl_less<unsigned> 
-  //#ifdef VCL_SUNPRO_CC
-  //  , vcl_allocator<vcl_pair<unsigned const, T> >
-  //#endif
-  > Map;
+  typedef vcl_map<unsigned, T, vcl_less<unsigned> > Map;
 
   typedef typename Map::const_iterator const_iterator;
 

@@ -1,7 +1,7 @@
 #include "vnl_alloc.h"
 
 //#include <vcl/vcl_memory.h>
-#include <vcl/vcl_cstring.h>  // this is where ISO memcpy() lives. no, really, it's true.
+#include <vcl/vcl_cstring.h>  // this is where memcpy() lives. no, really, it's true.
 #include <vcl/vcl_cstdlib.h>
 
 char*

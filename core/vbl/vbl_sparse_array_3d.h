@@ -22,18 +22,13 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl/vcl_map.h>
-//#include <vcl/vcl_memory.h>
 #include <vcl/vcl_utility.h>
 #include <vcl/vcl_iosfwd.h>
 
 template <class T>
 class vbl_sparse_array_3d {
 public:
-  typedef vcl_map<unsigned, T, vcl_less<unsigned>
-  //#ifdef VCL_SUNPRO_CC
-  //  , vcl_allocator<vcl_pair<unsigned const, T> >
-  //#endif
-  > Map;
+  typedef vcl_map<unsigned, T, vcl_less<unsigned> > Map;
 
 // -- Construct a vbl_sparse_array_3d which can hold a maximum of (n1 x n2 x n3) elements.
 // Currently (n1*n2*n3) must be representable in 32 bits, or about 1625 per dimension.
