@@ -440,7 +440,7 @@ void sdet_tracker::fill_face(vtol_intensity_face_sptr const& face,
         continue;
 
       unsigned short v = (unsigned short)image(x, y);
-      face->IncrementMeans(x, y, v);
+      face->IncrementMeans(float(x), float(y), v);
     }
   face->InitPixelArrays();
 
@@ -461,7 +461,7 @@ void sdet_tracker::fill_face(vtol_intensity_face_sptr const& face,
         continue;
       unsigned short v = (unsigned short)image(x, y);
       model_intensity_hist_->upcount(v);
-      face->InsertInPixelArrays(x, y, v);
+      face->InsertInPixelArrays(float(x), float(y), v);
       float Ix = Ix_0_(x,y), Iy = Iy_0_(x,y);
       double ang = (deg_rad*vcl_atan2(Iy, Ix))+180.0;
       //      double mag = vcl_sqrt(Ix*Ix + Iy*Iy);
@@ -547,9 +547,9 @@ sdet_tracker::transform_face(vtol_intensity_face_sptr const& face,
   {
     double x = Xj[i], y = Yj[i];
     double xp =(x-xo)*scale, yp =(y-yo)*scale;
-    X[i] = xp*c - yp*s + xo + tx;
-    Y[i] = xp*s + yp*c + yo + ty;
-    I[i]=Ij[i];
+    X[i] = float(xp*c - yp*s + xo + tx);
+    Y[i] = float(xp*s + yp*c + yo + ty);
+    I[i] = Ij[i];
   }
   vcl_vector<vtol_vertex_sptr> verts, new_verts;
   face->vertices(verts);
@@ -741,7 +741,7 @@ compute_scale_motion(sdet_correlated_face* cf, double& sx, double& sy)
     float Ii = image_i_(x,y);
     float dI = Ii-face->I();
     float Ix = cf->Ix(i), Iy = cf->Iy(i);
-    float dx = x-xo, dy = y-yo;//local x,y
+    float dx = float(x-xo), dy = float(y-yo); // local x,y
     xxIxIx += dx*dx*Ix*Ix;
     xyIxIy += dx*dy*Ix*Iy;
     yyIyIy += dy*dy*Iy*Iy;
@@ -942,9 +942,9 @@ double sdet_tracker::compute_gradient_mutual_information(sdet_correlated_face* c
 
 void sdet_tracker::mutual_info_face(sdet_correlated_face* cf)
 {
-  cf->set_int_mutual_info(this->compute_intensity_mutual_information(cf));
+  cf->set_int_mutual_info((float)this->compute_intensity_mutual_information(cf));
   if (gradient_info_)
-    cf->set_grad_mutual_info(this->compute_gradient_mutual_information(cf));
+    cf->set_grad_mutual_info((float)this->compute_gradient_mutual_information(cf));
   else
     cf->set_grad_mutual_info(0.0);
 }
@@ -953,10 +953,10 @@ void sdet_tracker::mutual_info_face(sdet_correlated_face* cf)
 //: perform a normalized cross-correlation between the face and image
 void sdet_tracker::correlate_face(sdet_correlated_face* cf)
 {
-  double corr_thresh = 10;
-  double tx=0, ty=0, theta = 0, c = 0;
+  float corr_thresh = 10.f;
+  double tx=0, ty=0, theta = 0;
   double sx=0, sy=0;//total translations
-  c = vcl_sqrt(this->compute_correlation(cf));
+  float c = (float)vcl_sqrt(this->compute_correlation(cf));
   if (c>corr_thresh)
   {
     cf->set_correlation(c);
@@ -965,7 +965,7 @@ void sdet_tracker::correlate_face(sdet_correlated_face* cf)
 
   if (!this->compute_motion(cf, tx, ty, theta))
   {
-    cf->set_correlation(1e6);
+    cf->set_correlation(1e6f);
     return;
   }
 
@@ -982,7 +982,7 @@ void sdet_tracker::correlate_face(sdet_correlated_face* cf)
     this->transform_sample_in_place(cf, tx, ty, theta);
     if (!this->compute_motion(cf, tx, ty, theta))
     {
-      cf->set_correlation(1e6);
+      cf->set_correlation(1e6f);
       return;
     }
        vcl_cout << "t["<< 3-max_iter << "] = (" << tx << ' ' << ty << ' '
@@ -997,7 +997,7 @@ void sdet_tracker::correlate_face(sdet_correlated_face* cf)
 #ifdef DEBUG
   vcl_cout << "Final corr(" << sx << ' ' << sy << ")= " << vcl_sqrt(c) << '\n';
 #endif // DEBUG
-  cf->set_correlation(vcl_sqrt(c));
+  cf->set_correlation((float)vcl_sqrt(c));
 }
 
 //--------------------------------------------------------------------------
@@ -1005,10 +1005,10 @@ void sdet_tracker::correlate_face(sdet_correlated_face* cf)
 vtol_intensity_face_sptr
 sdet_tracker::generate_sample(vtol_intensity_face_sptr const& seed)
 {
-  float x = (2.0*search_radius_)*(rand()/(RAND_MAX+1.0)) - search_radius_;
-  float y = (2.0*search_radius_)*(rand()/(RAND_MAX+1.0)) - search_radius_;
-  float theta = (2.0*angle_range_)*(rand()/(RAND_MAX+1.0)) - angle_range_;
-  float s = (2.0*scale_range_)*(rand()/(RAND_MAX+1.0)) - scale_range_;
+  float x = (2.f*search_radius_)*float(rand()/(RAND_MAX+1.f)) - search_radius_;
+  float y = (2.f*search_radius_)*float(rand()/(RAND_MAX+1.f)) - search_radius_;
+  float theta = (2.f*angle_range_)*float(rand()/(RAND_MAX+1.f)) - angle_range_;
+  float s = (2.f*scale_range_)*float(rand()/(RAND_MAX+1.f)) - scale_range_;
   float scale = 1+s;
   return this->transform_face(seed, x, y, theta, scale);
 }
@@ -1075,8 +1075,8 @@ void sdet_tracker::transform_sample_in_place(sdet_correlated_face* sample,
   for (face->reset(); face->next();)
   {
     double x = face->X(), y = face->Y();
-    face->set_X((x-xo)*c -(y-yo)*s + xo + tx);
-    face->set_Y((x-xo)*s +(y-yo)*c + yo + ty);
+    face->set_X(float((x-xo)*c -(y-yo)*s + xo + tx));
+    face->set_Y(float((x-xo)*s +(y-yo)*c + yo + ty));
   }
 }
 
