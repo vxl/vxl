@@ -30,6 +30,7 @@
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_rgb.h>
+#include <brip/brip_roi_sptr.h>
 
 class brip_vil1_float_ops
 {
@@ -139,6 +140,11 @@ class brip_vil1_float_ops
     convert_to_short(vil1_memory_image_of<float> const & image,
                      const float min_val, const float max_val);
 
+  //: converts an float image to a color rgb image with all equal planes
+  static vil1_memory_image_of<vil1_rgb<unsigned char> >
+    convert_to_rgb(vil1_memory_image_of<float> const & image,
+                     const float min_val, const float max_val);
+
 
   //: converts a vil1_image to a float image
   static vil1_memory_image_of<float>
@@ -226,10 +232,18 @@ class brip_vil1_float_ops
                                      const double theta_deg);
 
   static bool chip(vil1_memory_image_of<float> const & input,
-                               vsol_box_2d_sptr const& roi,
-                               vil1_memory_image_of<float>& chip);
+                   vsol_box_2d_sptr const& roi,
+                   vil1_memory_image_of<float>& chip);
   
+  static bool chip(vil1_image const & input,
+                   brip_roi_sptr const& roi,
+                   vil1_image& chip);
   
+
+  static vil1_image insert_chip_in_image(vil1_image const & image,
+                                         vil1_image const & chip,
+                                         brip_roi_sptr const& roi);
+
   //:cross-correlate two images at a given sub-pixel location
   static float
   cross_correlate(vil1_memory_image_of<float> const & image1,

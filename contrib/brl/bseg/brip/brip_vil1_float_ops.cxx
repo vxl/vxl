@@ -16,6 +16,7 @@
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <bsol/bsol_algs.h>
+#include <brip/brip_roi.h>
 //------------------------------------------------------------
 //:  Convolve with a kernel
 //   It's assumed that the kernel is square with odd dimensions
@@ -730,6 +731,23 @@ brip_vil1_float_ops::convert_to_short(vil1_memory_image_of<float> const & image,
     }
   return output;
 }
+vil1_memory_image_of<vil1_rgb<unsigned char> >
+brip_vil1_float_ops::convert_to_rgb(vil1_memory_image_of<float> const & image,
+                                    const float min_val, const float max_val)
+{
+  vil1_memory_image_of<unsigned char> temp = 
+    brip_vil1_float_ops::convert_to_byte(image);
+  int w = temp.width(), h = temp.height();
+  vil1_memory_image_of<vil1_rgb<unsigned char> > out(w, h);
+  for(int r = 0; r<h; r++)
+    for(int c = 0; c<w; c++)
+      {
+        unsigned char v = temp(c,r);
+        out(c,r).r = v; out(c,r).g = v; out(c,r).b = v;
+      }
+  return out;
+}
+
 
 vil1_memory_image_of<float>
 brip_vil1_float_ops::convert_to_float(vil1_memory_image_of<unsigned char> const & image)
@@ -923,6 +941,12 @@ brip_vil1_float_ops::convert_to_float(vil1_image const & image)
   vil1_memory_image_of<float> fimg;
   if (image.components()==1)
   {
+    if(image.component_format()==VIL1_COMPONENT_FORMAT_IEEE_FLOAT)
+      //already a float image
+      {
+        fimg = vil1_memory_image_of<float>(image);
+        return fimg;
+      }
     vil1_memory_image_of<unsigned char> temp(image);
     fimg = brip_vil1_float_ops::convert_to_float(temp);
   }
@@ -1676,6 +1700,104 @@ bool brip_vil1_float_ops::chip(vil1_memory_image_of<float> const & input,
     for (int x =x_min; x<x_max; x++)
       chp(x-x_min, y-y_min) = input(x, y);
   return true;
+}
+
+//: Chipping for a general image type
+bool brip_vil1_float_ops::chip(vil1_image const & input,
+          brip_roi_sptr const& roi,
+          vil1_image& chip)
+{
+  if(!chip||!roi)
+    return false;
+  
+  int Nc = input.width(), Nr = input.height();
+  int c_min = roi->cmin(0), r_min = roi->rmin(0);
+  int c_max = roi->cmax(0), r_max = roi->rmax(0);
+  if (c_min<0)
+    c_min = 0;
+  if (r_min<0)
+    r_min = 0;
+  if (c_max>Nc-1)
+    c_max=Nc-1;
+  if (r_max>Nr-1)
+    r_max=Nc-1;
+  int CNc = c_max-c_min, CNr = r_max-r_min;
+  if (CNc<=0||CNr<=0)
+    return false;
+  
+  if (input.components()==3)
+  {
+    vil1_memory_image_of<vil1_rgb<unsigned char> > timage(input);
+    vil1_memory_image_of<vil1_rgb<unsigned char> > tchip(CNc, CNr);
+    for (int r = r_min; r<r_max; r++)
+      for (int c =c_min; c<c_max; c++)
+        tchip(c-c_min, r-r_min) = timage(c, r);
+    chip = tchip;
+    return true;
+  }
+  
+  if(input.component_format()==VIL1_COMPONENT_FORMAT_IEEE_FLOAT)
+    {
+      vil1_memory_image_of<float> timage(input);
+      vil1_memory_image_of<float> tchip(CNc, CNr);
+      for (int r = r_min; r<r_max; r++)
+        for (int c =c_min; c<c_max; c++)
+          tchip(c-c_min, r-r_min) = timage(c, r);
+      chip = tchip;
+      return true;
+    }
+  
+  if(input.get_size_bytes() ==1)
+    {
+      vil1_memory_image_of<unsigned char> timage(input);
+      vil1_memory_image_of<unsigned char> tchip(CNc, CNr);
+      for (int r = r_min; r<r_max; r++)
+        for (int c =c_min; c<c_max; c++)
+          tchip(c-c_min, r-r_min) = timage(c, r);
+      chip = tchip;
+      return true;
+    }
+
+  if(input.get_size_bytes() ==2)
+    {
+      vil1_memory_image_of<unsigned short> timage(input);
+      vil1_memory_image_of<unsigned short> tchip(CNc, CNr);
+      for (int r = r_min; r<r_max; r++)
+        for (int c =c_min; c<c_max; c++)
+          tchip(c-c_min, r-r_min) = timage(c, r);
+      chip = tchip;
+      return true;
+    }
+  return false;
+}
+
+//:assumes that the chip and image have the same pixel types.  Only works for
+// color at present.
+vil1_image brip_vil1_float_ops::insert_chip_in_image(vil1_image const & image,
+                                                     vil1_image const & chip,
+                                                     brip_roi_sptr const& roi)
+{
+  if(!chip||!roi)
+    return image;
+  //copy the input
+  vil1_image temp(image);
+  int chip_cols = chip.width(), chip_rows = chip.height();
+  int imgc = 0, imgr = 0;
+  //need to do cases
+  //but just color now
+  if (image.components()==3)
+  {
+    vil1_memory_image_of<vil1_rgb<unsigned char> > timage(image);
+    vil1_memory_image_of<vil1_rgb<unsigned char> > tchip(chip);
+    for(int cr = 0; cr<chip_rows; cr++)
+    for(int cc = 0; cc<chip_cols; cc++)
+      {
+        imgc = roi->ic(cc); imgr = roi->ir(cr);
+        timage(imgc, imgr) = tchip(cc, cr);
+      }
+  return timage;
+  }
+  return image;//no op
 }
 
 //:compute normalized cross correlation from the intensity moment sums.
