@@ -21,3 +21,4 @@
 @sqrt
 @tan
 @tanh
+@hypot
