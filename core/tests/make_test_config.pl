@@ -230,19 +230,25 @@ for $var_exp (
   '__GNUC__',           # gcc
   '__GNUG__',           # gcc
   '__GNUC_MINOR__',     # gcc
-  '__VERSION__',        # gcc
-  '__OPTIMIZE__',       # gcc
+  '__VERSION__',        # gcc, icc
+  '__OPTIMIZE__',       # gcc, icc
+  '__INTEL_COMPILER',   # icc
   '__SUNPRO_CC',        # sun
   '_MSC_VER',           # msvc++
   '_COMPILER_VERSION',  # sgi
   '__KCC',              # ???
   '__MWERKS__',         # ???
+  '__MWKS__',           # Metrowerks CodeWarrior
+  '__BORLANDC__',       # Borland C++
+  '__WATCOMC__',        # Watcom C++
 
   # OS related
   '__CYGWIN__',         # cygwin
   '_WIN32',             # windows
   '__sgi',              # sgi
+  '__alpha__',          # Alpha
   '__APPLE__',          # MacOS X
+  'macintosh',          #
 
   # other
   '__DATE__',           # gcc

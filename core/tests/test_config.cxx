@@ -1367,6 +1367,14 @@ MAIN( test_config )
 #endif
   vcl_cout << vcl_endl;
 
+  vcl_cout << "__INTEL_COMPILER ";
+#ifdef __INTEL_COMPILER
+  vcl_cout << "is set to " << quote(__INTEL_COMPILER);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
   vcl_cout << "__SUNPRO_CC ";
 #ifdef __SUNPRO_CC
   vcl_cout << "is set to " << quote(__SUNPRO_CC);
@@ -1407,6 +1415,30 @@ MAIN( test_config )
 #endif
   vcl_cout << vcl_endl;
 
+  vcl_cout << "__MWKS__ ";
+#ifdef __MWKS__
+  vcl_cout << "is set to " << quote(__MWKS__);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "__BORLANDC__ ";
+#ifdef __BORLANDC__
+  vcl_cout << "is set to " << quote(__BORLANDC__);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "__WATCOMC__ ";
+#ifdef __WATCOMC__
+  vcl_cout << "is set to " << quote(__WATCOMC__);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
   vcl_cout << "__CYGWIN__ ";
 #ifdef __CYGWIN__
   vcl_cout << "is set to " << quote(__CYGWIN__);
@@ -1431,9 +1463,25 @@ MAIN( test_config )
 #endif
   vcl_cout << vcl_endl;
 
+  vcl_cout << "__alpha__ ";
+#ifdef __alpha__
+  vcl_cout << "is set to " << quote(__alpha__);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
   vcl_cout << "__APPLE__ ";
 #ifdef __APPLE__
   vcl_cout << "is set to " << quote(__APPLE__);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "macintosh ";
+#ifdef macintosh
+  vcl_cout << "is set to " << quote(macintosh);
 #else
   vcl_cout << "is not set";
 #endif
