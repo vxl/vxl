@@ -8,6 +8,7 @@
 #include <mil/mil_image_data.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_iostream.h>
+#include <vcl_cstring.h>
 
 //: Dflt ctor
 template<class T>
