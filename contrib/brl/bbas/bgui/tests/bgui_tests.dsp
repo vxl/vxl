@@ -244,6 +244,9 @@ LINK32=link.exe
 # Begin Source File
 SOURCE=.\test_driver.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_histogram.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
