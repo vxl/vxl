@@ -56,7 +56,8 @@ class vdgl_digital_curve : public vsol_curve_2d
   double get_x( const double s) const;
   double get_y( const double s) const;
   double get_theta(const double s) const;
-
+  double get_tangent_angle(const double s) const;
+  int n_pts() const; //the number of discrete points underlying the curve
   vdgl_interpolator_sptr get_interpolator() { return interpolator_; }
 
   //***************************************************************************

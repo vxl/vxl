@@ -63,6 +63,18 @@ double vdgl_digital_curve::get_theta( const double s) const
   return interpolator_->get_theta(index);
 }
 
+double vdgl_digital_curve::get_tangent_angle(const double s) const
+{
+  int i= interpolator_->get_edgel_chain()->size() - 1;
+  double index= (s<0) ? 0.0 : (s>=1) ? i : s*i;
+  return interpolator_->get_tangent_angle(index);
+}
+
+int vdgl_digital_curve::n_pts() const
+{
+  return interpolator_->get_edgel_chain()->size();
+}
+
 vsol_point_2d_sptr vdgl_digital_curve::p0() const
 {
   return new vsol_point_2d( get_x(0), get_y(0));
