@@ -1,22 +1,20 @@
 #ifndef clsfy_mean_square_1d_builder_h_
 #define clsfy_mean_square_1d_builder_h_
-
 //:
 // \file
 // \brief Describe an concrete classifier builder for scalar data
 // \author Tim Cootes
 
-#include "clsfy/clsfy_builder_1d.h"
+#include "clsfy_builder_1d.h"
 #include <vcl_string.h>
 #include <vnl/vnl_vector.h>
 #include <vbl/vbl_triple.h>
 #include <clsfy/clsfy_classifier_1d.h>
-class clsfy_classifier_1d;
 
 //: Base for classes to build clsfy_classifier_1d objects
 class clsfy_mean_square_1d_builder : public clsfy_builder_1d
 {
-public:
+ public:
 
   // Dflt ctor
   clsfy_mean_square_1d_builder();
@@ -28,16 +26,16 @@ public:
   virtual clsfy_classifier_1d* new_classifier() const;
 
 
-   //: Build a binary_threshold classifier
+  //: Build a binary_threshold classifier
   //  Train classifier, returning weighted error
   //  Selects parameters of classifier which best separate examples from two classes,
   //  weighting examples appropriately when estimating the missclassification rate.
   //  Returns weighted sum of error, e.wts, where e_i =0 for correct classifications,
   //  e_i=1 for incorrect.
   virtual double build(clsfy_classifier_1d& classifier,
-                                  const vnl_vector<double>& egs,
-                                  const vnl_vector<double>& wts,
-                                  const vcl_vector<unsigned> &outputs) const;
+                       const vnl_vector<double>& egs,
+                       const vnl_vector<double>& wts,
+                       const vcl_vector<unsigned> &outputs) const;
 
   //: Build a mean_square classifier
   // Train classifier, returning weighted error
@@ -58,11 +56,14 @@ public:
   //  Returns weighted sum of error.
   //  Note that input "data" must be sorted to use this routine
   virtual double build_from_sorted_data(clsfy_classifier_1d& classifier,
-               const vbl_triple<double,int,int> *data,
-               const vnl_vector<double>& wts) const;
+                                        const vbl_triple<double,int,int> *data,
+                                        const vnl_vector<double>& wts) const;
 
   //: Name of the class
   virtual vcl_string is_a() const;
+
+  //: Name of the class
+  virtual bool is_class(vcl_string const& s) const;
 
   //: Version number for I/O
   short version_no() const;

@@ -29,20 +29,20 @@ class clsfy_builder_1d
   virtual clsfy_classifier_1d* new_classifier() const = 0;
 
 
-   //: Build a binary_threshold classifier
+  //: Build a binary_threshold classifier
   //  Train classifier, returning weighted error
   //  Selects parameters of classifier which best separate examples from two classes,
   //  weighting examples appropriately when estimating the missclassification rate.
   //  Returns weighted sum of error, e.wts, where e_i =0 for correct classifications,
   //  e_i=1 for incorrect.
   virtual double build(clsfy_classifier_1d& classifier,
-                                  const vnl_vector<double>& egs,
-                                  const vnl_vector<double>& wts,
-                                  const vcl_vector<unsigned> &outputs) const = 0;
+                       const vnl_vector<double>& egs,
+                       const vnl_vector<double>& wts,
+                       const vcl_vector<unsigned> &outputs) const = 0;
 
 
   //: Build a binary_threshold classifier
-  // Train classifier, returning weighted error
+  //  Train classifier, returning weighted error
   //  Selects parameters of classifier which best separate examples from two classes,
   //  weighting examples appropriately when estimating the misclassification rate.
   //  Returns weighted sum of error, e.wts, where e_i =0 for correct classifications,
@@ -53,19 +53,21 @@ class clsfy_builder_1d
                        vnl_vector<double>& egs1,
                        vnl_vector<double>& wts1) const = 0;
 
-   //: Train classifier, returning weighted error
+  //: Train classifier, returning weighted error
   //  Selects parameters of classifier which best separate examples,
   //  weighting examples appropriately when estimating the misclassification rate.
   //  data[i] is a triple, {value,class_number,weight}
   //  Returns weighted sum of error.
   //  Note that input "data" must be sorted to use this routine
   virtual double build_from_sorted_data(clsfy_classifier_1d& classifier,
-               const vbl_triple<double,int,int> *data,
-               const vnl_vector<double>& wts) const = 0;
-
+                                        const vbl_triple<double,int,int> *data,
+                                        const vnl_vector<double>& wts) const = 0;
 
   //: Name of the class
   virtual vcl_string is_a() const;
+
+  //: Name of the class
+  virtual bool is_class(vcl_string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual clsfy_builder_1d* clone() const = 0;

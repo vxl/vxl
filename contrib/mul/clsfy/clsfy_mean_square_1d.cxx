@@ -21,7 +21,7 @@
 //: Find the posterior probability of the input being in the positive class.
 // The result is is outputs(0)
 void clsfy_mean_square_1d::class_probabilities(vcl_vector<double> &outputs,
-  double input) const
+                                               double input) const
 {
   outputs.resize(1);
   outputs[0] = 1.0 / (1.0 + vcl_exp(-log_l(input)));
@@ -30,14 +30,14 @@ void clsfy_mean_square_1d::class_probabilities(vcl_vector<double> &outputs,
 
 //=======================================================================
 
-//: Log likelyhood of being in the positive class.
+//: Log likelihood of being in the positive class.
 // Class probability = 1 / (1+exp(-log_l))
 double clsfy_mean_square_1d::log_l(double input) const
 {
   double k= mean_-input;
   return k*k; // - threshold_ ;  //ie distance above threshold!
-                            // this isn't a loglihood, as lower value
-                            // indicates more likely to be pos example
+                                 // this isn't a loglikelihood, as lower value
+                                 // indicates more likely to be pos example
 }
 
 //: Return parameters defining classifier in a vector (format depends on classifier)
@@ -62,7 +62,7 @@ void clsfy_mean_square_1d::set_params(const vnl_vector<double>& p)
 //: Equality operator for 1d classifiers
 bool clsfy_mean_square_1d::operator==(const clsfy_classifier_1d& x) const
 {
-  assert( x.is_a()== "clsfy_mean_square_1d");
+  assert( x.is_class("clsfy_mean_square_1d"));
   clsfy_mean_square_1d& x2= (clsfy_mean_square_1d&) x;
   return vcl_fabs(x2.mean_ - mean_) < 0.001 &&
          vcl_fabs(x2.threshold_ - threshold_) < 0.001;
@@ -72,6 +72,11 @@ bool clsfy_mean_square_1d::operator==(const clsfy_classifier_1d& x) const
 vcl_string clsfy_mean_square_1d::is_a() const
 {
   return vcl_string("clsfy_mean_square_1d");
+}
+
+bool clsfy_mean_square_1d::is_class(vcl_string const& s) const
+{
+  return s == clsfy_mean_square_1d::is_a() || clsfy_classifier_1d::is_class(s);
 }
 
 //=======================================================================

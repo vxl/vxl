@@ -1,6 +1,5 @@
 #ifndef clsfy_binary_threshold_1d_h_
 #define clsfy_binary_threshold_1d_h_
-
 //:
 // \file
 // \brief Simplest possible 1D classifier: A single thresholding function
@@ -15,10 +14,10 @@
 
 class clsfy_binary_threshold_1d : public clsfy_classifier_1d
 {
-protected:
+ protected:
   double s_;
   double threshold_;
-public:
+ public:
 
   //: Find the posterior probability of the input being in the positive class.
   // The result is outputs(0)
@@ -55,6 +54,9 @@ public:
 
   //: Name of the class
   virtual vcl_string is_a() const;
+
+  //: Name of the class
+  virtual bool is_class(vcl_string const& s) const;
 
   //: Print class to os
   virtual void print_summary(vcl_ostream& os) const;

@@ -88,12 +88,12 @@ void clsfy_adaboost_trainer::build_strong_classifier(
   clsfy_classifier_1d* c1d = builder.new_classifier();
   clsfy_classifier_1d* best_c1d= builder.new_classifier();
 
-  unsigned n0 = egs0.size();
-  unsigned n1 = egs1.size();
+  unsigned long n0 = egs0.size();
+  unsigned long n1 = egs1.size();
   int n=max_n_clfrs;
 
   // Dimensionality of data
-  int d = egs0.current().size();
+  unsigned int d = egs0.current().size();
   strong_classifier.set_n_dims(d);
 
   // Initialise the weights on each sample
@@ -111,7 +111,7 @@ void clsfy_adaboost_trainer::build_strong_classifier(
 
     int best_j=-1;
     double min_error= 100000;
-    for (int j=0;j<d;++j)
+    for (unsigned int j=0;j<d;++j)
     {
       //vcl_cout<<"building classifier "<<j<<" of "<<d<<'\n';
       clsfy_get_elements(egs0_1d,egs0,j);
@@ -182,7 +182,7 @@ void clsfy_adaboost_trainer::build_strong_classifier(
 
 short clsfy_adaboost_trainer::version_no() const
 {
-    return 1;
+  return 1;
 }
 
 //=======================================================================
@@ -192,19 +192,25 @@ vcl_string clsfy_adaboost_trainer::is_a() const
   return vcl_string("clsfy_adaboost_trainer");
 }
 
-//=======================================================================
-
-    // required if data stored on the heap is present in this class
-#if 0
-clsfy_adaboost_trainer::clsfy_adaboost_trainer(const clsfy_adaboost_trainer& new_b):
-  data_ptr_(0)
+bool clsfy_adaboost_trainer::is_class(vcl_string const& s) const
 {
-    *this = new_b;
+  return s == clsfy_adaboost_trainer::is_a();
 }
 
 //=======================================================================
 
-    // required if data stored on the heap is present in this class
+#if 0
+
+// required if data stored on the heap is present in this class
+clsfy_adaboost_trainer::clsfy_adaboost_trainer(const clsfy_adaboost_trainer& new_b):
+  data_ptr_(0)
+{
+  *this = new_b;
+}
+
+//=======================================================================
+
+// required if data stored on the heap is present in this class
 clsfy_adaboost_trainer& clsfy_adaboost_trainer::operator=(const clsfy_adaboost_trainer& new_b)
 {
   if (&new_b==this) return *this;
@@ -220,11 +226,12 @@ clsfy_adaboost_trainer& clsfy_adaboost_trainer::operator=(const clsfy_adaboost_t
 
   return *this;
 }
-#endif
+
+#endif // 0
 
 //=======================================================================
 
-    // required if data is present in this class
+// required if data is present in this class
 void clsfy_adaboost_trainer::print_summary(vcl_ostream& /*os*/) const
 {
     // os << data_; // example of data output
@@ -233,7 +240,7 @@ void clsfy_adaboost_trainer::print_summary(vcl_ostream& /*os*/) const
 
 //=======================================================================
 
-  // required if data is present in this class
+// required if data is present in this class
 void clsfy_adaboost_trainer::b_write(vsl_b_ostream& /*bfs*/) const
 {
   //vsl_b_write(bfs, version_no());
@@ -243,7 +250,7 @@ void clsfy_adaboost_trainer::b_write(vsl_b_ostream& /*bfs*/) const
 
 //=======================================================================
 
-  // required if data is present in this class
+// required if data is present in this class
 void clsfy_adaboost_trainer::b_read(vsl_b_istream& /*bfs*/)
 {
   vcl_cerr << "clsfy_adaboost_trainer::b_read() NYI\n";

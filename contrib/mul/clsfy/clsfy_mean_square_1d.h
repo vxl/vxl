@@ -1,6 +1,5 @@
 #ifndef clsfy_mean_square_1d_h_
 #define clsfy_mean_square_1d_h_
-
 //:
 // \file
 // \brief Simplest possible 1D classifier: A single thresholding function
@@ -15,10 +14,10 @@
 
 class clsfy_mean_square_1d : public clsfy_classifier_1d
 {
-protected:
+ protected:
   double mean_;
   double threshold_;
-public:
+ public:
 
   //: Find the posterior probability of the input being in the positive class.
   // The result is outputs(0)
@@ -31,15 +30,15 @@ public:
       if (k*k<threshold_) return 1; 
       else return 0; }
 
-  //: Log likelyhood of being in the positive class/
+  //: Log likelihood of being in the positive class/
   // Class probability = 1 / (1+exp(-log_l))
   virtual double log_l(double input) const;
 
-/*
+#if 0
   //: Set the threshold and orientation.
   void set(double m, double t)
   { mean_=m; threshold_=t; }
-*/
+#endif // 0
 
   //: The number of possible output classes.
   // 1 indicates a binary classifier
@@ -59,6 +58,9 @@ public:
 
   //: Name of the class
   virtual vcl_string is_a() const;
+
+  //: Name of the class
+  virtual bool is_class(vcl_string const& s) const;
 
   //: Print class to os
   virtual void print_summary(vcl_ostream& os) const;

@@ -6,7 +6,7 @@
 // \date   Tue Mar  5 01:11:31 2002
 //
 // \verbatim
-// Modifications
+//  Modifications
 // \endverbatim
 
 #include <vcl_iostream.h>
@@ -57,9 +57,9 @@ double clsfy_binary_threshold_1d_builder::build(clsfy_classifier_1d& classifier,
                                                 const vcl_vector<unsigned> &outputs) const
 {
   // this method sorts the data and passes it to the method below
-  assert(classifier.is_a()=="clsfy_mean_square_1d");
+  assert(classifier.is_class("clsfy_mean_square_1d"));
 
-  int n= egs.size();
+  unsigned int n= egs.size();
   assert ( wts.size() == n );
   assert ( outputs.size() == n );
 
@@ -68,7 +68,7 @@ double clsfy_binary_threshold_1d_builder::build(clsfy_classifier_1d& classifier,
 
   vbl_triple<double,int,int> t;
   // add data to triples
-  for (int i=0;i<n;++i)
+  for (unsigned int i=0;i<n;++i)
   {
     t.first=egs(i);
     t.second= outputs[i];
@@ -78,7 +78,7 @@ double clsfy_binary_threshold_1d_builder::build(clsfy_classifier_1d& classifier,
 
   vbl_triple<double,int,int> *data_ptr=&data[0];
   vcl_sort(data_ptr,data_ptr+n);
-  return build_from_sorted_data(classifier,&data[0], wts);
+  return build_from_sorted_data(classifier, &data[0], wts);
 }
 
 
@@ -92,15 +92,15 @@ double clsfy_binary_threshold_1d_builder::build(clsfy_classifier_1d& classifier,
                                                 vnl_vector<double>& wts1)  const
 {
   // this method sorts the data and passes it to the method below
-  assert(classifier.is_a()=="clsfy_binary_threshold_1d");
+  assert(classifier.is_class("clsfy_binary_threshold_1d"));
 
   vcl_vector<vbl_triple<double,int,int> > data;
-  int n0 = egs0.size();
-  int n1 = egs1.size();
+  unsigned int n0 = egs0.size();
+  unsigned int n1 = egs1.size();
   vnl_vector<double> wts(n0+n1);
   vbl_triple<double,int,int> t;
   // add data for class 0
-  for (int i=0;i<n0;++i)
+  for (unsigned int i=0;i<n0;++i)
   {
     t.first=egs0[i];
     t.second=0;
@@ -110,7 +110,7 @@ double clsfy_binary_threshold_1d_builder::build(clsfy_classifier_1d& classifier,
   }
 
   // add data for class 1
-  for (int i=0;i<n1;++i)
+  for (unsigned int i=0;i<n1;++i)
   {
     t.first=egs1[i];
     t.second=1;
@@ -119,7 +119,7 @@ double clsfy_binary_threshold_1d_builder::build(clsfy_classifier_1d& classifier,
     data.push_back(t);
   }
 
-  int n=n0+n1;
+  unsigned int n=n0+n1;
 
   vbl_triple<double,int,int> *data_ptr=&data[0];
   vcl_sort(data_ptr,data_ptr+n);
@@ -143,9 +143,9 @@ double clsfy_binary_threshold_1d_builder::build_from_sorted_data(
 
 
   // calc total weights for class0 and class1 separately
-  int n=wts.size();
+  unsigned int n=wts.size();
   double tot_wts0=0.0, tot_wts1=0.0;
-  for (int i=0;i<n;++i)
+  for (unsigned int i=0;i<n;++i)
     if (data[i].second==0)
       tot_wts0+=wts(data[i].third);
     else
@@ -153,8 +153,8 @@ double clsfy_binary_threshold_1d_builder::build_from_sorted_data(
 
   double e0=0.0, e1=0.0, min_err=2.0;
   double etot0,etot1;
-  int index=-1, polarity=0;
-  for (int i=0;i<n;++i)
+  unsigned int index=n; int polarity=0;
+  for (unsigned int i=0;i<n;++i)
   {
     if (data[i].second==0)
       e0+=wts(data[i].third);
@@ -168,7 +168,7 @@ double clsfy_binary_threshold_1d_builder::build_from_sorted_data(
     {
       // i.e. class1 is maximally separated from class0 at this point
       // also members of class1 are generally greater than members of class0
-      polarity=+1;                    //indicates direction of > sign
+      polarity=+1;        //indicates direction of > sign
       index=i;            //the threshold
 
       min_err= etot0;
@@ -178,18 +178,18 @@ double clsfy_binary_threshold_1d_builder::build_from_sorted_data(
     {
       // i.e. class1 is maximally separated from class0 at this point
       // also members of class1 are generally less than members of class0
-      polarity=-1;                    //indicates direction of > sign
+      polarity=-1;        //indicates direction of > sign
       index=i;            //the threshold
 
       min_err= etot1;
     }
   }
 
-  assert ( index!=-1 );
+  assert ( index!=n );
 
   // determine threshold from data index
   double threshold;
-  if ( index==n-1 )
+  if ( index+1==n )
     threshold=data[index].first+0.01;
   else
     threshold=(data[index].first+data[index+1].first)/2;
@@ -209,10 +209,16 @@ vcl_string clsfy_binary_threshold_1d_builder::is_a() const
   return vcl_string("clsfy_binary_threshold_1d_builder");
 }
 
+bool clsfy_binary_threshold_1d_builder::is_class(vcl_string const& s) const
+{
+  return s == clsfy_binary_threshold_1d_builder::is_a() || clsfy_builder_1d::is_class(s);
+}
+
 //=======================================================================
 
-    // required if data stored on the heap is present in this derived class
 #if 0
+
+// required if data stored on the heap is present in this derived class
 clsfy_binary_threshold_1d_builder::clsfy_binary_threshold_1d_builder(
                              const clsfy_binary_threshold_1d_builder& new_b) :
   data_ptr_(0)
@@ -222,7 +228,7 @@ clsfy_binary_threshold_1d_builder::clsfy_binary_threshold_1d_builder(
 
 //=======================================================================
 
-    // required if data stored on the heap is present in this derived class
+// required if data stored on the heap is present in this derived class
 clsfy_binary_threshold_1d_builder&
 clsfy_binary_threshold_1d_builder::operator=(const clsfy_binary_threshold_1d_builder& new_b)
 {
@@ -239,6 +245,7 @@ clsfy_binary_threshold_1d_builder::operator=(const clsfy_binary_threshold_1d_bui
 
   return *this;
 }
+
 #endif // 0
 
 //=======================================================================
@@ -250,7 +257,7 @@ clsfy_builder_1d* clsfy_binary_threshold_1d_builder::clone() const
 
 //=======================================================================
 
-    // required if data is present in this base class
+// required if data is present in this base class
 void clsfy_binary_threshold_1d_builder::print_summary(vcl_ostream& /*os*/) const
 {
   // clsfy_builder_1d::print_summary(os); // Uncomment this line if it has one.
@@ -261,7 +268,7 @@ void clsfy_binary_threshold_1d_builder::print_summary(vcl_ostream& /*os*/) const
 
 //=======================================================================
 
-  // required if data is present in this base class
+// required if data is present in this base class
 void clsfy_binary_threshold_1d_builder::b_write(vsl_b_ostream& /*bfs*/) const
 {
   //vsl_b_write(bfs, version_no());

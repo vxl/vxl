@@ -34,7 +34,7 @@ class clsfy_adaboost_trainer
   clsfy_adaboost_trainer();
 
   //: Destructor
-  ~clsfy_adaboost_trainer();
+  virtual ~clsfy_adaboost_trainer();
 
   //: Build classifier composed of 1d classifiers working on individual vector elements
   //  Builds an n-component classifier, each component of which is a 1D classifier
@@ -61,6 +61,9 @@ class clsfy_adaboost_trainer
 
   //: Name of the class
   vcl_string is_a() const;
+
+  //: Name of the class
+  virtual bool is_class(vcl_string const& s) const;
 
   //: Print class to os
   void print_summary(vcl_ostream& os) const;

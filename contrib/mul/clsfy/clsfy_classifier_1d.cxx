@@ -78,6 +78,11 @@ vcl_string clsfy_classifier_1d::is_a() const
   return vcl_string("clsfy_classifier_1d");
 }
 
+bool clsfy_classifier_1d::is_class(vcl_string const& s) const
+{
+  return s == clsfy_classifier_1d::is_a();
+}
+
 //=======================================================================
 
 vcl_ostream& operator<<(vcl_ostream& os, clsfy_classifier_1d const& b)

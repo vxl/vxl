@@ -37,6 +37,11 @@ vcl_string clsfy_builder_1d::is_a() const
   return vcl_string("clsfy_builder_1d");
 }
 
+bool clsfy_builder_1d::is_class(vcl_string const& s) const
+{
+  return s == clsfy_builder_1d::is_a();
+}
+
 //=======================================================================
 
 void vsl_b_write(vsl_b_ostream& os, const clsfy_builder_1d& b)
