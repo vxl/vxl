@@ -154,61 +154,6 @@ LIB32=link.exe -lib
 # Name "vepl - Win32 RelWithDebInfo"
 
 
-# Begin Source File
-
-SOURCE=".\CMakeLists.txt"
-
-!IF  "$(CFG)" == "vepl - Win32 Release"
-USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/tbl/CMakeLists.txt"\
-	"c:/awf/src/vxl/tbl/vepl/CMakeLists.txt"
-# Begin Custom Build
-
-"vepl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/tbl/vepl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/tbl/vepl" -O"c:/awf/src/vxl/tbl/vepl" -B"c:/awf/src/vxl"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "vepl - Win32 Debug"
-USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/tbl/CMakeLists.txt"\
-	"c:/awf/src/vxl/tbl/vepl/CMakeLists.txt"
-# Begin Custom Build
-
-"vepl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/tbl/vepl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/tbl/vepl" -O"c:/awf/src/vxl/tbl/vepl" -B"c:/awf/src/vxl"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "vepl - Win32 MinSizeRel"
-USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/tbl/CMakeLists.txt"\
-	"c:/awf/src/vxl/tbl/vepl/CMakeLists.txt"
-# Begin Custom Build
-
-"vepl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/tbl/vepl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/tbl/vepl" -O"c:/awf/src/vxl/tbl/vepl" -B"c:/awf/src/vxl"
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "vepl - Win32 RelWithDebInfo"
-USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/tbl/CMakeLists.txt"\
-	"c:/awf/src/vxl/tbl/vepl/CMakeLists.txt"
-# Begin Custom Build
-
-"vepl.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/tbl/vepl/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/tbl/vepl" -O"c:/awf/src/vxl/tbl/vepl" -B"c:/awf/src/vxl"
-
-# End Custom Build
-
-!ENDIF
-
-# End Source File
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
