@@ -133,7 +133,7 @@ class frame_buffer
   vcl_map<int,unsigned char *> * buffers_;
 };
 
-struct vidl_mpegcodec_data : vo_instance_t
+struct vidl_mpegcodec_data : public vo_instance_t
 {
  public:
   enum output_format_t
