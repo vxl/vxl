@@ -1,5 +1,8 @@
-// Author: Peter@Vanroose.esat.kuleuven.ac.be
-// Date: 17 February, 2000
+//:
+// \file
+// \author Peter.Vanroose@esat.kuleuven.ac.be
+// \date 17 February, 2000
+
 #include <vcl_string.h>
 #include <vcl_cstring.h>
 #include <vcl_cstdio.h> // tmpnam()
@@ -15,8 +18,9 @@
 
 #include <vil/vil_test.h>
 
-#define DEBUG 0
+#ifndef LEAVE_IMAGES_BEHIND 
 #define LEAVE_IMAGES_BEHIND 0
+#endif
 
 #if 0
 #define ww cout << "reached " __FILE__ ":" << __LINE__ << endl
@@ -34,12 +38,16 @@ bool test_image_equal(char const* type_name,
   int planes = image.planes();
   int cell_bits = image.bits_per_component();
   int num_bits = sizex * sizey * components * planes * cell_bits;
+  int row_bytes = (sizex * components * cell_bits + 7) / 8;
+  int num_bytes = sizey * row_bytes * planes;
   int sizex2 = image2.width();
   int sizey2 = image2.height();
   int components2 = image2.components();
   int planes2 = image2.planes();
   int cell_bits2 = image2.bits_per_component();
   int num_bits2 = sizex2 * sizey2 * components2 * planes2 * cell_bits2;
+  int row_bytes2 = (sizex2 * components2 * cell_bits2 + 7) / 8;
+  int num_bytes2 = sizey2 * row_bytes2 * planes2;
 
   TEST ("Image dimensions", sizex == sizex2 && sizey == sizey2, true);
   if (sizex != sizex2 || sizey != sizey2)
@@ -62,12 +70,14 @@ bool test_image_equal(char const* type_name,
     return false;
   }
 
+  TEST ("Image bit count", num_bits, num_bits2);
   TEST ("Image byte count",
-        image.get_size_bytes() == num_bits/8 &&
-        image2.get_size_bytes() == num_bits2/8,
+        image.get_size_bytes() == num_bytes &&
+        image2.get_size_bytes() == num_bytes2,
         true);
-  if (image.get_size_bytes() != num_bits/8 ||
-      image2.get_size_bytes() != num_bits2/8 )
+  if (num_bits != num_bits2 ||
+      image.get_size_bytes() != num_bytes ||
+      image2.get_size_bytes() != num_bytes2 )
   {
     vcl_cout << type_name << num_bits2 << "bits, " << image2.get_size_bytes() << " bytes\n";
     return false;
@@ -90,9 +100,9 @@ bool test_image_equal(char const* type_name,
   {
     if(image_buf[i] != image_buf2[i])
     {
-#if DEBUG
+#ifdef DEBUG
       if (++bad < 20)
-        vcl_cout << "\n pixel " << i <<  " differs: " << (int)image_buf[i] << " --> "
+        vcl_cout << "\n byte " << i <<  " differs: " << (int)image_buf[i] << " --> "
              << (int) image_buf2[i];
 #else
       ++bad; vcl_cout << ".";
@@ -126,7 +136,7 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
   vcl_cout << "vil_test_image_type: Save to [" << fname << "]\n";
 
   // Write image to disk
-  bool tst = vil_save(image, fname./*data() does not null-terminate*/c_str(), type_name);
+  bool tst = vil_save(image, fname.c_str(), type_name);
   TEST ("write image to disk", tst, true);
   if (!tst) return; // fatal error
 
@@ -161,11 +171,16 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
 vil_image CreateTest1bitImage(int wd, int ht)
 {
   vil_memory_image image(1, wd, ht, 1, 1, VIL_COMPONENT_FORMAT_UNSIGNED_INT);
-  for(int x = 0; x < wd; x++)
-    for(int y = 0; y < ht; y+=8) {
-      unsigned char data = ((x-wd/2)*(y-ht/2)/16) % (1<<8);
-      image.put_section(&data, x, y, 1, 8);
-    }
+  for(int y = 0; y < ht; ++y) {
+    unsigned char* data = new unsigned char[(wd+7)/8];
+    for(int x = 0; x < (wd+7)/8; x++)
+      data[x] = ((8*x-wd/2)*(y-ht/2)/16) & 0xff;
+    // zero the last few bits, if wd is not a multiple of 8:
+    int s = wd&7; // = wd%8;
+    if (s) data[wd/8] &= ((1<<s)-1)<<(8-s);
+    image.put_section(data, 0, y, wd, 1);
+    delete[] data;
+  }
   return image;
 }
 
@@ -174,9 +189,9 @@ vil_image CreateTest1bitImage(int wd, int ht)
 vil_image CreateTest8bitImage(int wd, int ht)
 {
   vil_memory_image_of<unsigned char> image(wd, ht);
-  for(int x = 0; x < wd; x++)
-    for(int y = 0; y < ht; y++) {
-      unsigned char data = ((x-wd/2)*(y-ht/2)/16) % (1<<8);
+  for(int y = 0; y < ht; y++)
+    for(int x = 0; x < wd; x++) {
+      unsigned char data = ((x-wd/2)*(y-ht/2)/16) & 0xff;
       image.put_section(&data, x, y, 1, 1);
     }
   return image;
@@ -186,9 +201,9 @@ vil_image CreateTest8bitImage(int wd, int ht)
 vil_image CreateTest16bitImage(int wd, int ht)
 {
   vil_memory_image_of<unsigned short> image(wd, ht);
-  for(int x = 0; x < wd; x++)
-    for(int y = 0; y < ht; y++) {
-      unsigned short data = ((x-wd/2)*(y-ht/2)/16) % (1<<16);
+  for(int y = 0; y < ht; y++)
+    for(int x = 0; x < wd; x++) {
+      unsigned short data = ((x-wd/2)*(y-ht/2)/16) & 0xffff;
       image.put_section(&data, x, y, 1, 1);
   }
   return image;
@@ -199,8 +214,8 @@ vil_image CreateTest16bitImage(int wd, int ht)
 vil_image CreateTest32bitImage(int wd, int ht)
 {
   vil_memory_image_of<int> image(wd, ht);
-  for(int x = 0; x < wd; x++)
-    for(int y = 0; y < ht; y++)
+  for(int y = 0; y < ht; y++)
+    for(int x = 0; x < wd; x++)
       image(x, y) = x + wd*y;
   return image;
 }
@@ -258,6 +273,7 @@ void test_save_load_image() {
 
   // pnm ( = PGM / PPM )
 #if 1
+  vil_test_image_type("pnm", image1);
   vil_test_image_type("pnm", image8);
   vil_test_image_type("pnm", image16);
   vil_test_image_type("pnm", image24);
