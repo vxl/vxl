@@ -1,0 +1,2 @@
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vbl/CMakeListsLink.txt )
+LINK_LIBRARIES( vrml )
