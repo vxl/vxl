@@ -157,7 +157,7 @@ void mvl_multi_view_matches::add_track(vcl_vector<int> const& views, vcl_vector<
       }
       if (consistency_okay) {
         // Okay, we're good to merge friend_track[t] into the new track
-        new_htrack.insert(friend_track.begin(), friend_track.end());
+        new_track.insert(friend_track.begin(), friend_track.end());
       }
     }
     // All friend tracks are now merged into new track, or inconsistency has been found
