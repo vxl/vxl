@@ -1,6 +1,6 @@
+// This is mul/clsfy/clsfy_classifier_1d.h
 #ifndef clsfy_classifier_1d_h_
 #define clsfy_classifier_1d_h_
-
 //:
 // \file
 // \brief Describe an abstract classifier of 1D data
@@ -20,7 +20,7 @@
 
 class clsfy_classifier_1d
 {
-public:
+ public:
 
   // Dflt constructor
   clsfy_classifier_1d();
@@ -101,7 +101,7 @@ inline void vsl_print_summary(vcl_ostream& os, const clsfy_classifier_1d* b)
 
 //: Calculate the fraction of test samples which are classified incorrectly
 double clsfy_test_error(const clsfy_classifier_1d &classifier,
-  mbl_data_wrapper<double> & test_inputs,
-  const vcl_vector<unsigned> & test_outputs);
+                        mbl_data_wrapper<double> & test_inputs,
+                        const vcl_vector<unsigned> & test_outputs);
 
 #endif // clsfy_classifier_1d_h_

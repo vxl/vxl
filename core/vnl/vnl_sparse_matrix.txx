@@ -123,12 +123,13 @@ void vnl_sparse_matrix<T>::mult(vnl_sparse_matrix<T> const& rhs, vnl_sparse_matr
           ++result_col_iter;
 
         if ((result_col_iter == result_row.end()) ||
-            ((*result_col_iter).first != dest_col)) {
+            ((*result_col_iter).first != dest_col))
+        {
           // Add new column to the row.
-          result_col_iter = result_row.insert(result_col_iter,
-                      vnl_sparse_matrix_pair<T>(dest_col,prod));
+          result_col_iter = result_row.insert(result_col_iter, vnl_sparse_matrix_pair<T>(dest_col,prod));
         }
-        else {
+        else
+        {
           // Else add product to existing contents.
           (*result_col_iter).second += prod;
         }
@@ -168,7 +169,7 @@ void vnl_sparse_matrix<T>::mult(unsigned int prows, unsigned int pcols,
       T pval = p[rr + cc*prows];
       vcl_cout << pval << " ";
     }
-    vcl_cout << vcl_endl;
+    vcl_cout << '\n';
   }
 #endif
 
@@ -217,9 +218,9 @@ void vnl_sparse_matrix<T>::mult(unsigned int prows, unsigned int pcols,
       T pval = q[rr + cc*prows];
       vcl_cout << pval << " ";
     }
-    vcl_cout << vcl_endl;
+    vcl_cout << '\n';
   }
-  vcl_cout << "nonsparse: " << md*pd << vcl_endl;
+  vcl_cout << "nonsparse: " << md*pd << '\n';
 #endif
 }
 

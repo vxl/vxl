@@ -1,9 +1,7 @@
-#ifndef vnl_matlab_print_txx_
-#define vnl_matlab_print_txx_
-
 // This is vxl/vnl/vnl_matlab_print.txx
 // It is different from vxl/vnl/vnl_matlab_print.cxx
-
+#ifndef vnl_matlab_print_txx_
+#define vnl_matlab_print_txx_
 /*
   fsm@robots.ox.ac.uk
 */
@@ -44,7 +42,7 @@ vcl_ostream &vnl_matlab_print(vcl_ostream &s,
                               vnl_matlab_print_format format)
 {
   for (unsigned i=0; i<rows; ++i)
-    vnl_matlab_print(s, array[i], cols, format) << vcl_endl;
+    vnl_matlab_print(s, array[i], cols, format) << '\n';
   return s;
 }
 
@@ -59,10 +57,8 @@ vcl_ostream& vnl_matlab_print(vcl_ostream& s,
 
   vnl_matlab_print(s, D.begin(), D.size(), format);
 
-  if (variable_name) {
-    s << " ])";
-    s << vcl_endl;
-  }
+  if (variable_name)
+    s << " ])\n";
 
   return s;
 }
@@ -85,7 +81,7 @@ vcl_ostream& vnl_matlab_print(vcl_ostream& s,
     if (variable_name && (i == M.rows()-1))
       s << " ]";
 
-    s << vcl_endl;
+    s << '\n';
   }
 
   return s;
@@ -102,10 +98,8 @@ vcl_ostream& vnl_matlab_print(vcl_ostream& s,
 
   vnl_matlab_print(s, v.begin(), v.size(), format);
 
-  if (variable_name) {
-    s << " ]";
-    s << vcl_endl;
-  }
+  if (variable_name)
+    s << " ]\n";
 
   return s;
 }
@@ -120,4 +114,4 @@ template vcl_ostream &vnl_matlab_print(vcl_ostream &, vnl_diag_matrix<T > const 
 template vcl_ostream &vnl_matlab_print(vcl_ostream &, vnl_matrix<T > const &, char const *, vnl_matlab_print_format); \
 template vcl_ostream &vnl_matlab_print(vcl_ostream &, vnl_vector<T > const &, char const *, vnl_matlab_print_format)
 
-#endif
+#endif // vnl_matlab_print_txx_

@@ -56,28 +56,29 @@ class mil3d_gaussian_pyramid_builder_3d : public mil_image_pyramid_builder
   //: Smooth and subsample src_im to produce dest_im.
   //  Applies 1-5-8-5-1 filter and subsamples in x then y then z.
   void gauss_reduce_15851(mil3d_image_3d_of<T>& dest_im,
-                    const mil3d_image_3d_of<T>& src_im) const;
+                          mil3d_image_3d_of<T>const& src_im) const;
 
   //: Smooth and subsample src_im to produce dest_im, smoothing in x and y only
   //  Applies 1-5-8-5-1 filter and subsamples in x then y, but not z
   void gauss_reduce_xy_15851(mil3d_image_3d_of<T>& dest_im,
-                    const mil3d_image_3d_of<T>& src_im) const;
+                             mil3d_image_3d_of<T>const& src_im) const;
 
   //: Smooth and subsample src_im to produce dest_im, smoothing in x and z only
   //  Applies 1-5-8-5-1 filter and subsamples in x then z, but not y
   void gauss_reduce_xz_15851(mil3d_image_3d_of<T>& dest_im,
-                    const mil3d_image_3d_of<T>& src_im) const;
+                             mil3d_image_3d_of<T>const& src_im) const;
 
   //: Smooth and subsample src_im to produce dest_im, smoothing in y and z only
   //  Applies 1-5-8-5-1 filter and subsamples in y then z, but not x
   void gauss_reduce_yz_15851(mil3d_image_3d_of<T>& dest_im,
-                    const mil3d_image_3d_of<T>& src_im) const;
+                             mil3d_image_3d_of<T>const& src_im) const;
 
   //: Select number of levels to use
   int n_levels(const mil3d_image_3d_of<T>& base_image) const;
 
   //: Compute real world size of pixel in image
-  void get_pixel_size(double &dx, double& dy, double& dz, const mil3d_image_3d_of<T>& image) const;
+  void get_pixel_size(double &dx, double& dy, double& dz,
+                      const mil3d_image_3d_of<T>& image) const;
 
  public:
   //: Dflt ctor

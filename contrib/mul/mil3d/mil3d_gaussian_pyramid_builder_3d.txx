@@ -1,6 +1,6 @@
+// This is mul/mil3d/mil3d_gaussian_pyramid_builder_3d.txx
 #ifndef mil3d_gaussian_pyramid_builder_3d_txx_
 #define mil3d_gaussian_pyramid_builder_3d_txx_
-
 //: \file
 //  \brief Class to build gaussian pyramids of mil3d_image_3d_of<T>
 //  \author Tim Cootes
@@ -39,8 +39,8 @@ void mil3d_gaussian_pyramid_builder_3d<T>::setMaxLevels(int max_l)
 {
   if (max_l<1)
   {
-    vcl_cerr<<"mil3d_gaussian_pyramid_builder_3d<T>::setMaxLevels() ";
-    vcl_cerr<<"Must be >=1\n";
+    vcl_cerr<<"mil3d_gaussian_pyramid_builder_3d<T>::setMaxLevels() "
+            <<"Must be >=1, is " << max_l << '\n';
     vcl_abort();
   }
   max_levels_ = max_l;
@@ -138,7 +138,7 @@ void mil3d_gaussian_pyramid_builder_3d<T>::set_filter_width(unsigned w)
 //  Applies filter in x and y, then samples every other pixel.
 template<class T>
 void mil3d_gaussian_pyramid_builder_3d<T>::gauss_reduce_15851(mil3d_image_3d_of<T>& dest_im,
-                                                            const mil3d_image_3d_of<T>& src_im) const
+                                                              mil3d_image_3d_of<T>const& src_im) const
 {
   int nx = src_im.nx();
   int ny = src_im.ny();
@@ -189,7 +189,7 @@ void mil3d_gaussian_pyramid_builder_3d<T>::gauss_reduce_15851(mil3d_image_3d_of<
 //  Applies 1-5-8-5-1 filter and subsamples in x then y, but not z
 template<class T>
 void mil3d_gaussian_pyramid_builder_3d<T>::gauss_reduce_xy_15851(mil3d_image_3d_of<T>& dest_im,
-                                                            const mil3d_image_3d_of<T>& src_im) const
+                                                                 mil3d_image_3d_of<T>const& src_im) const
 {
   int nx = src_im.nx();
   int ny = src_im.ny();
@@ -235,7 +235,7 @@ void mil3d_gaussian_pyramid_builder_3d<T>::gauss_reduce_xy_15851(mil3d_image_3d_
 //  Applies 1-5-8-5-1 filter and subsamples in x then z, but not y
 template<class T>
 void mil3d_gaussian_pyramid_builder_3d<T>::gauss_reduce_xz_15851(mil3d_image_3d_of<T>& dest_im,
-                                                            const mil3d_image_3d_of<T>& src_im) const
+                                                                 mil3d_image_3d_of<T>const& src_im) const
 {
   int nx = src_im.nx();
   int ny = src_im.ny();
@@ -281,7 +281,7 @@ void mil3d_gaussian_pyramid_builder_3d<T>::gauss_reduce_xz_15851(mil3d_image_3d_
 //  Applies 1-5-8-5-1 filter and subsamples in y then z, but not x
 template<class T>
 void mil3d_gaussian_pyramid_builder_3d<T>::gauss_reduce_yz_15851(mil3d_image_3d_of<T>& dest_im,
-                                                            const mil3d_image_3d_of<T>& src_im) const
+                                                                 mil3d_image_3d_of<T>const& src_im) const
 {
   int nx = src_im.nx();
   int ny = src_im.ny();
@@ -329,13 +329,13 @@ void mil3d_gaussian_pyramid_builder_3d<T>::gauss_reduce_yz_15851(mil3d_image_3d_
 //  every other pixel.
 template<class T>
 void mil3d_gaussian_pyramid_builder_3d<T>::gauss_reduce(mil3d_image_3d_of<T>& dest_im,
-                                                      const mil3d_image_3d_of<T>& src_im) const
+                                                        mil3d_image_3d_of<T>const& src_im) const
 {
   // Assume filter width is 5 for the moment.
   if (filter_width_!=5)
   {
-    vcl_cerr<<"mil3d_gaussian_pyramid_builder_3d<T>::gauss_reduce() ";
-    vcl_cerr<<"Cannot cope with filter width of "<<filter_width_<<vcl_endl;
+    vcl_cerr<<"mil3d_gaussian_pyramid_builder_3d<T>::gauss_reduce() "
+            <<"Cannot cope with filter width of "<<filter_width_<<'\n';
     vcl_abort();
   }
 
@@ -401,7 +401,7 @@ void mil3d_gaussian_pyramid_builder_3d<T>::set_min_size(unsigned X, unsigned Y, 
 //: Build pyramid
 template<class T>
 void mil3d_gaussian_pyramid_builder_3d<T>::build(mil_image_pyramid& image_pyr,
-                                               const mil_image& im) const
+                                                 mil_image const& im) const
 {
   //  Require image mil3d_image_3d_of<T>
   assert(im.is_a()==work_im1_.is_a());
@@ -569,8 +569,8 @@ void mil3d_gaussian_pyramid_builder_3d<T>::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,filter_width_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: mil3d_gaussian_pyramid_builder_3d<T>::b_read(vsl_b_istream&)\n";
-    vcl_cerr << "           Unknown version number "<< version << "\n";
+    vcl_cerr << "I/O ERROR: mil3d_gaussian_pyramid_builder_3d<T>::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< version << "\n";
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

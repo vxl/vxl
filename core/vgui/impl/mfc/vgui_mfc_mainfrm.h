@@ -1,7 +1,6 @@
-// This is ./oxl/vgui/impl/mfc/vgui_mfc_mainfrm.h
+// This is oxl/vgui/impl/mfc/vgui_mfc_mainfrm.h
 #ifndef AFX_VGUI_MFC_MAINFRM_H__B3175B74_0F91_44DD_8EFD_41CEA35852A1__INCLUDED_
 #define AFX_VGUI_MFC_MAINFRM_H__B3175B74_0F91_44DD_8EFD_41CEA35852A1__INCLUDED_
-
 //:
 // \file
 // \author  Marko Bacic, Oxford RRG
@@ -24,13 +23,16 @@ class vgui_mfc_statusbar;
 //: Defines main window of the application.
 class vgui_mfc_mainfrm : public CFrameWnd
 {
-protected: // create from serialization only
+ protected:
+  vgui_mfc_statusbar *statusbar;
+
+ protected: // create from serialization only
   vgui_mfc_mainfrm();
   DECLARE_DYNCREATE(vgui_mfc_mainfrm)
-public:
+ public:
   virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
   virtual void process_menus(UINT nID);
-public:
+ public:
   virtual ~vgui_mfc_mainfrm();
   virtual void SetStatusBar(vgui_mfc_statusbar *sb) {statusbar = sb;}
   virtual void UpdateStatusBar(CCmdUI *sb) {OnUpdateStatusBar(sb);}
@@ -40,9 +42,7 @@ public:
 #endif
 
 // Generated message map functions
-protected:
-  vgui_mfc_statusbar *statusbar;
-
+ protected:
   // Manually added by awf
   afx_msg void OnClose();
   // Manually added by kym

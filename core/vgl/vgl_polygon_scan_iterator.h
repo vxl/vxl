@@ -1,7 +1,6 @@
-// This is ./vxl/vgl/vgl_polygon_scan_iterator.h
+// This is vxl/vgl/vgl_polygon_scan_iterator.h
 #ifndef vgl_polygon_scan_iterator_h
 #define vgl_polygon_scan_iterator_h
-
 //:
 // \file
 // \author Adapted from FillPolygon by J.L. Mundy
@@ -46,15 +45,31 @@
 // \code
 //  vgl_polygon_scan_iterator psi(mypoints);
 //  psi.set_include_boundary(true); // optional flag, default is true
-//  for(psi.reset(); psi.next(); ) {
+//  for (psi.reset(); psi.next(); ) {
 //    int y = psi.scany();
-//    for(int x = psi.startx(); x <= psi.endx(); ++x)
+//    for (int x = psi.startx(); x <= psi.endx(); ++x)
 //         ....
 //  }
 // \endcode
 class vgl_polygon_scan_iterator : public vgl_region_scan_iterator
 {
-public:
+  int boundp;       //: boolean indicating if boundary should be included or not
+  int xl;           //: left bound of current span
+  float fxl;        //: left bound of current span (float)
+  int xr;           //: right bound of current span
+  float fxr;        //: right bound of current span (float)
+  int k;            //: current index of vertices ordered by increasing y
+  int y0;           //: bottommost scan line
+  int y1;           //: topmost scan line
+  int y;            //: current scan line
+  float fy;         //: floating point value of current scan line (i.e. float(y))
+  int curcrossedge; //: crossedge marking start of next scan segment
+  vgl_box_2d<float> win; //: clipping window
+  bool have_window;
+
+  vgl_polygon poly_; //: the polygon
+
+ public:
   // Stores coordinates of a 2d point
   typedef vgl_polygon::point_t Point2;
 
@@ -112,23 +127,7 @@ public:
 
 // Internals ---------------------------------------------------------------
 
-private:
-
-  int boundp;       //: boolean indicating if boundary should be included or not
-  int xl;           //: left bound of current span
-  float fxl;        //: left bound of current span (float)
-  int xr;           //: right bound of current span
-  float fxr;        //: right bound of current span (float)
-  int k;            //: current index of vertices ordered by increasing y
-  int y0;           //: bottommost scan line
-  int y1;           //: topmost scan line
-  int y;            //: current scan line
-  float fy;         //: floating point value of current scan line (i.e. float(y))
-  int curcrossedge; //: crossedge marking start of next scan segment
-  vgl_box_2d<float> win; //: clipping window
-  bool have_window;
-
-  vgl_polygon poly_; //: the polygon
+ private:
 
   vertind * yverts;       //: array of all vertices ordered by y coordinate
   crossedge * crossedges; //: array of edges crossing current scan line

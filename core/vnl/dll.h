@@ -1,6 +1,6 @@
+// This is vxl/vnl/dll.h
 #ifndef vnl_dll_h_
 #define vnl_dll_h_
-// This is vxl/vnl/dll.h
 
 #include <vcl_compiler.h>
 

@@ -1,6 +1,6 @@
+// This is mul/clsfy/clsfy_builder_1d.h
 #ifndef clsfy_builder_1d_h_
 #define clsfy_builder_1d_h_
-
 //:
 // \file
 // \brief Describe an abstract classifier builder for scalar data
@@ -15,7 +15,7 @@ class clsfy_classifier_1d;
 //: Base for classes to build clsfy_classifier_1d objects
 class clsfy_builder_1d
 {
-public:
+ public:
 
   // Dflt ctor
   clsfy_builder_1d();
@@ -33,11 +33,11 @@ public:
   //  Returns weighted sum of error, e.wts, where e_i =0 for correct classifications,
   //  e_i=1 for incorrect.
   virtual double build(clsfy_classifier_1d& classifier,
-                                  vnl_vector<double>& egs0,
-                                  vnl_vector<double>& wts0,
-                                  vnl_vector<double>& egs1,
-                                  vnl_vector<double>& wts1) const = 0;
-  
+                       vnl_vector<double>& egs0,
+                       vnl_vector<double>& wts0,
+                       vnl_vector<double>& egs1,
+                       vnl_vector<double>& wts1) const = 0;
+
    //: Train classifier, returning weighted error
   //  Selects parameters of classifier which best separate examples,
   //  weighting examples appropriately when estimating the missclassification rate.

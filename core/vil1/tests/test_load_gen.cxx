@@ -1,11 +1,9 @@
-#include <vcl_fstream.h>
+// This is vxl/vil/tests/test_load_gen.cxx
 #include <vcl_vector.h>
-
 #include <vil/vil_load.h>
 #include <vil/vil_byte.h>
 #include <vil/vil_rgb.h>
 #include <vil/vil_image_impl.h>
-
 #include <testlib/testlib_test.h>
 
 static void test_rgb(char const *name, int w, int h,
@@ -13,11 +11,9 @@ static void test_rgb(char const *name, int w, int h,
 {
   vil_image i = vil_load(name);
 
-  vcl_cout <<
-    "vil_image_impl: size " << i.width() << "x" << i.height() <<
-    ", " << i.components() << " component" <<
-    ", " << i.bits_per_component() << " bit" <<
-    vcl_endl;
+  vcl_cout << "vil_image_impl: size " << i.width() << "x" << i.height()
+           << ", " << i.components() << " component"
+           << ", " << i.bits_per_component() << " bit\n";
 
   TEST("width", i.width(), w);
   TEST("height", i.height(), h);
@@ -46,11 +42,9 @@ static void test_gray(char const *name, int w, int h, unsigned v)
 {
   vil_image i = vil_load(name);
 
-  vcl_cout <<
-    "vil_image_impl: size " << i.width() << "x" << i.height() <<
-    ", " << i.components() << " component" <<
-    ", " << i.bits_per_component() << " bit" <<
-    vcl_endl;
+  vcl_cout << "vil_image_impl: size " << i.width() << "x" << i.height()
+           << ", " << i.components() << " component"
+           << ", " << i.bits_per_component() << " bit\n";
 
   TEST("width", i.width(), w);
   TEST("height", i.height(), h);

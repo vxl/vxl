@@ -117,9 +117,9 @@ double pdf1d_pdf::log_prob_thresh(double pass_proportion) const
   // Interpolate left and right to find value
   // check interpolation is not extrapolation.
   assert (0.0 <= pass_proportion*nSamples - n_stat &&
-    pass_proportion*nSamples - n_stat <= 1.0);
+          pass_proportion*nSamples - n_stat <= 1.0);
   return (n_stat + 1.0 - pass_proportion*nSamples) * vcl_log(left)
-    + (pass_proportion*nSamples - n_stat) * vcl_log(right);
+         + (pass_proportion*nSamples - n_stat) * vcl_log(right);
 }
 
 //=======================================================================
@@ -150,7 +150,7 @@ bool pdf1d_pdf::write_plot_file(const vcl_string& plot_file, double min_x, doubl
   for (int i=0;i<n;++i)
   {
     double x = min_x + i*dx;
-    ofs<<x<<" "<<operator()(x)<<vcl_endl;
+    ofs<<x<<" "<<operator()(x)<<'\n';
   }
   ofs.close();
 
@@ -192,8 +192,8 @@ bool pdf1d_pdf::is_class(vcl_string const& s) const
   // required if data is present in this base class
 void pdf1d_pdf::print_summary(vcl_ostream& os) const
 {
-  os <<  "  Mean: "<< mean_;
-  os <<  "  Variance: " << var_;
+  os << "  Mean: " << mean_
+     << "  Variance: " << var_;
 }
 
 //=======================================================================
@@ -222,8 +222,8 @@ void pdf1d_pdf::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,var_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_pdf &) \n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_pdf &) \n"
+               << "           Unknown version number "<< version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }

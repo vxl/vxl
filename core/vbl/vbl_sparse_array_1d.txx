@@ -1,8 +1,6 @@
-// This is ./vxl/vbl/vbl_sparse_array_1d.txx
+// This is vxl/vbl/vbl_sparse_array_1d.txx
 #ifndef vbl_sparse_array_1d_txx_
 #define vbl_sparse_array_1d_txx_
-
-
 //:
 // \file
 
@@ -15,8 +13,8 @@
 template <class T>
 vcl_ostream& vbl_sparse_array_1d<T>::print(vcl_ostream& out) const
 {
-  for(const_iterator p = begin(); p != end(); ++p)
-    out << "(" << (*p).first << "): " << (*p).second << vcl_endl;
+  for (const_iterator p = begin(); p != end(); ++p)
+    out << "(" << (*p).first << "): " << (*p).second << '\n';
   return out;
 }
 #endif

@@ -8,7 +8,6 @@
 // \date   11 Sep 99
 // \brief  See vgui_observer.h for a description of this file.
 
-
 #include "vgui_observer.h"
 #include "vgui_message.h"
 

@@ -1,7 +1,6 @@
-// This is ./oxl/xcv/xcv_display.h
+// This is oxl/xcv/xcv_display.h
 #ifndef xcv_display_h_
 #define xcv_display_h_
-
 //:
 // \file
 // \author   K.Y.McGaul
@@ -22,7 +21,7 @@ class vgui_roi_tableau_make_roi;
 
 class xcv_display
 {
-public:
+ public:
   //: Center the current image inside the frame.
   static void centre_image();
   //: Turn the magnify glass on/off.
@@ -38,10 +37,10 @@ public:
   //: Creates a menu containing all the functions in this file.
   static vgui_menu create_display_menu();
 
-private:
+ private:
   //: Generates intensity values along a line.
   static void line_profile(const vil_image&, float x0, float y0, float x1, float y1,
-    int num_points, float* xvals, float* yvals, float* ivals);
+                           int num_points, float* xvals, float* yvals, float* ivals);
   static vgui_roi_tableau_make_roi *roi_tableau_client_;
 };
 

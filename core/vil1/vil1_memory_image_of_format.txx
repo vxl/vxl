@@ -1,8 +1,6 @@
+// This is vxl/vil/vil_memory_image_of_format.txx
 #ifndef vil_memory_image_of_format_h_
 #define vil_memory_image_of_format_h_
-
-// This is vxl/vil/vil_memory_image_of_format.txx
-
 //:
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG
@@ -24,7 +22,7 @@
 //: Map from Types to image formats
 template <class T>
 struct vil_memory_image_of_format : public vil_memory_image_format {
-protected:
+ protected:
   // A protection error here means you haven't derived
   // the vil_memory_image_format<T> for a vil_memory_image_of<T>
   vil_memory_image_of_format();
@@ -165,4 +163,4 @@ struct vil_memory_image_of_format<vil_rgb<double> > : public vil_memory_image_fo
   }
 };
 
-#endif
+#endif // vil_memory_image_of_format_h_

@@ -26,12 +26,17 @@
 // attributes per tuple may be increased as needed.
 //
 template <class T1, class T2,
-  VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
-  VCL_DFL_TYPE_PARAM_STLDECL(T4,vbl_basic_optional),
-  VCL_DFL_TYPE_PARAM_STLDECL(T5,vbl_basic_optional)>
+          VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
+          VCL_DFL_TYPE_PARAM_STLDECL(T4,vbl_basic_optional),
+          VCL_DFL_TYPE_PARAM_STLDECL(T5,vbl_basic_optional)>
 class vbl_basic_tuple
 {
-public:
+  T1 first;
+  T2 second;
+  T3 third;
+  T4 fourth;
+  T5 fifth;
+ public:
   // Constructors.
   vbl_basic_tuple()
   {
@@ -48,7 +53,7 @@ public:
     : first(t1), second(t2)
   {
     if (!vbl_basic_optional_traits<T3>::IsOptional ||
-      vbl_basic_optional_traits<T2>::IsOptional)
+        vbl_basic_optional_traits<T2>::IsOptional)
       vbl_basic_optional::Error("vbl_basic_tuple constructed \
 with wrong number of arguments.");
     vbl_protection_traits<T1>::protect(first);
@@ -58,7 +63,7 @@ with wrong number of arguments.");
     : first(t1), second(t2), third(t3)
   {
     if (!vbl_basic_optional_traits<T4>::IsOptional ||
-      vbl_basic_optional_traits<T3>::IsOptional)
+        vbl_basic_optional_traits<T3>::IsOptional)
       vbl_basic_optional::Error("vbl_basic_tuple constructed \
 with wrong number of arguments.");
     vbl_protection_traits<T1>::protect(first);
@@ -69,7 +74,7 @@ with wrong number of arguments.");
     : first(t1), second(t2), third(t3), fourth(t4)
   {
     if (!vbl_basic_optional_traits<T5>::IsOptional ||
-      vbl_basic_optional_traits<T4>::IsOptional)
+        vbl_basic_optional_traits<T4>::IsOptional)
       vbl_basic_optional::Error("vbl_basic_tuple constructed \
 with wrong number of arguments.");
     vbl_protection_traits<T1>::protect(first);
@@ -240,13 +245,6 @@ with wrong number of arguments.");
         vbl_protection_traits<T5>::unprotect(t5);
       }
   }
-
-private:
-  T1 first;
-  T2 second;
-  T3 third;
-  T4 fourth;
-  T5 fifth;
 };
 
 template

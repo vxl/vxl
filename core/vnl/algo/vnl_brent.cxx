@@ -47,8 +47,8 @@ void SHFT(double* a, double* b, double* c, double d) {
 }
 
 double vnl_brent::minimize_given_bounds(double ax, double bx, double cx,
-                                       double tol,
-                                       double *xmin)
+                                        double tol,
+                                        double *xmin)
 {
   int iter;
   double a,b,d=0.0,etemp,fu,fv,fw,fx,p1,q,r,tol1,tol2,u,v,w,x,xm;
@@ -58,7 +58,7 @@ double vnl_brent::minimize_given_bounds(double ax, double bx, double cx,
   b=(ax > cx ? ax : cx);
   x=w=v=bx;
   fw=fv=fx=p->f(x);
-  if (verbose_) vcl_cerr << "vnl_brent f("<<x<<") \t= "<<fx <<vcl_endl;
+  if (verbose_) vcl_cerr << "vnl_brent f("<<x<<") \t= "<<fx <<'\n';
   for (iter=1;iter<=ITMAX;iter++) {
     xm=0.5*(a+b);
     tol1=tol*vcl_fabs(x)+ZEPS;
@@ -89,7 +89,7 @@ double vnl_brent::minimize_given_bounds(double ax, double bx, double cx,
     }
     u=(vcl_fabs(d) >= tol1 ? x+d : x + tol1 * vnl_math_sgn(d));
     fu= p->f(u);
-    if (verbose_) vcl_cerr << "vnl_brent f("<<u<<") \t= "<<fu <<vcl_endl;
+    if (verbose_) vcl_cerr << "vnl_brent f("<<u<<") \t= "<<fu <<'\n';
     if (fu <= fx) {
       if (u >= x) a=x; else b=x;
       SHFT(&v,&w,&x,u);
@@ -155,7 +155,7 @@ double vnl_brent::minimize_given_bounds_and_1st_f(double ax, double bx,
     }
     u=(vcl_fabs(d) >= tol1 ? x+d : x + tol1 * vnl_math_sgn(d));
     fu= p->f(u);
-    if (verbose_) vcl_cerr << "vnl_brent f("<<u<<") \t= "<<fu <<vcl_endl;
+    if (verbose_) vcl_cerr << "vnl_brent f("<<u<<") \t= "<<fu <<'\n';
     if (fu <= fx) {
       if (u >= x) a=x; else b=x;
       SHFT(&v,&w,&x,u);

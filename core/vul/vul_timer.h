@@ -1,7 +1,6 @@
+// This is vxl/vul/vul_timer.h
 #ifndef vul_timer_h
 #define vul_timer_h
-// This is vxl/vul/vul_timer.h
-//
 //
 // Copyright (C) 1991 Texas Instruments Incorporated.
 //
@@ -57,8 +56,11 @@ struct vul_timer_data;
 #include <vcl_iosfwd.h>
 
 //: The Timer class provides timing code for performance evaluation.
-class vul_timer {
-public:
+class vul_timer
+{
+  //: struct containing timer data
+  vul_timer_data *data;
+ public:
   //: construct and reset counter to now.
   vul_timer();
   ~vul_timer();
@@ -76,9 +78,7 @@ public:
   //: Display user and real time since the last mark.
   void print(vcl_ostream& s);
 
-private:
-  //: struct containing timer data
-  vul_timer_data *data;
+ private:
   //: disallow.
   vul_timer(vul_timer const &) { }
   //: NYI

@@ -88,7 +88,7 @@ inline double cps_green(double x, double y, const vgl_point_2d<double>& p2)
 // Sets L to be a symmetric square matrix of size n x n (n = pts.nelems)
 // with L(i,j) = cps_green(pts[i],pts[j])
 static void build_L(vnl_matrix<double>& L,
-      const vcl_vector<vgl_point_2d<double> >& pts)
+                    const vcl_vector<vgl_point_2d<double> >& pts)
 {
   unsigned int n = pts.size();
   if ( (L.rows()!=n) | (L.columns()!=n) ) L.resize(n,n);
@@ -255,16 +255,16 @@ short mbl_clamped_plate_spline_2d::version_no() const
 // Method: print
 //=======================================================================
 
-  // required if data is present in this class
+// required if data is present in this class
 void mbl_clamped_plate_spline_2d::print_summary(vcl_ostream& os) const
 {
-  os<<vcl_endl<<"fx: ";
+  os<<"\nfx:";
   for (unsigned int i=0;i<Wx_.size();++i)
-    os<<Wx_[i]<<" ";
-  os<<vcl_endl<<"fy: ";
+    os<<" "<<Wx_[i];
+  os<<"\nfy:";
   for (unsigned int i=0;i<Wy_.size();++i)
-    os<<Wy_[i]<<" ";
-  os<<vcl_endl;
+    os<<" "<<Wy_[i];
+  os<<'\n';
 }
 
 //=======================================================================
@@ -301,7 +301,7 @@ void mbl_clamped_plate_spline_2d::b_read(vsl_b_istream& bfs)
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mbl_clamped_plate_spline_2d &)\n"
-               << "           Unknown version number "<< version << vcl_endl;
+               << "           Unknown version number "<< version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
   }
 }

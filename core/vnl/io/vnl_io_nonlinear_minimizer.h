@@ -28,7 +28,7 @@ class vnl_io_nonlinear_minimizer
 
   //: Write derived class to os using vnl_nonlinear_minimizer reference
   virtual void b_write_by_base(vsl_b_ostream& os,
-      const vnl_nonlinear_minimizer& base) const;
+                               const vnl_nonlinear_minimizer& base) const;
 
   //: Write derived class to os using vnl_nonlinear_minimizer reference
   virtual void b_read_by_base(vsl_b_istream& is,
@@ -37,7 +37,7 @@ class vnl_io_nonlinear_minimizer
   //: Print summary of derived class to os
   //  using vnl_nonlinear_minimizer reference
   virtual void print_summary_by_base(vcl_ostream& os,
-      const vnl_nonlinear_minimizer& base) const;
+                                     const vnl_nonlinear_minimizer& base) const;
 
   //: Copy this object onto the heap and return a pointer
   virtual vnl_io_nonlinear_minimizer* clone() const;
@@ -65,7 +65,6 @@ void vsl_b_read(vsl_b_istream &is, vnl_nonlinear_minimizer* &b);
 
 //: Print summary to stream by vnl_nonlinear_minimizer pointer
 void vsl_print_summary(vcl_ostream &os, const vnl_nonlinear_minimizer * b);
-
 
 //: Binary save vnl_real_polynomial to stream.
 void vsl_b_write(vsl_b_ostream &os, const vnl_nonlinear_minimizer & v);

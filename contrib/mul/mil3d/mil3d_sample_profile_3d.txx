@@ -11,8 +11,8 @@
 #include <vnl/vnl_vector.h>
 
 inline bool mil3d_profile_in_image(const vgl_point_3d<double>& p0,
-                                 const vgl_point_3d<double>& p1,
-                                 const mil3d_image_3d& image)
+                                   const vgl_point_3d<double>& p1,
+                                   const mil3d_image_3d& image)
 {
   if (p0.x()<1) return false;
   if (p0.y()<1) return false;
@@ -36,10 +36,10 @@ inline bool mil3d_profile_in_image(const vgl_point_3d<double>& p0,
 //  v[0]..v[np-1] are the values from point p
 template <class imType, class vecType>
 void mil3d_sample_profile_3d(vnl_vector<vecType>& v,
-                           const mil3d_image_3d_of<imType>& image,
-                           const vgl_point_3d<double>& p,
-                           const vgl_vector_3d<double>& u,
-                           int n)
+                             const mil3d_image_3d_of<imType>& image,
+                             const vgl_point_3d<double>& p,
+                             const vgl_vector_3d<double>& u,
+                             int n)
 {
   // Check that all the profile points are within the image.
   vgl_point_3d<double> im_p0 = image.world2im()(p);
@@ -57,10 +57,10 @@ void mil3d_sample_profile_3d(vnl_vector<vecType>& v,
 //  Points outside image return zero.
 template <class imType, class vecType>
 void mil3d_sample_profile_3d_ic_safe(vnl_vector<vecType>& vec,
-                                   const mil3d_image_3d_of<imType>& image,
-                                   const vgl_point_3d<double>& p0,
-                                   const vgl_point_3d<double>& p1,
-                                   int n)
+                                     const mil3d_image_3d_of<imType>& image,
+                                     const vgl_point_3d<double>& p0,
+                                     const vgl_point_3d<double>& p1,
+                                     int n)
 {
   vgl_vector_3d<double> u;
   if (n>1) u = (p1-p0)/(n-1);
@@ -112,10 +112,10 @@ void mil3d_sample_profile_3d_ic_safe(vnl_vector<vecType>& vec,
 //  Points outside image return zero.
 template <class imType, class vecType>
 void mil3d_sample_profile_3d_ic(vnl_vector<vecType>& vec,
-                              const mil3d_image_3d_of<imType>& image,
-                              const vgl_point_3d<double>& p0,
-                              const vgl_point_3d<double>& p1,
-                              int n)
+                                const mil3d_image_3d_of<imType>& image,
+                                const vgl_point_3d<double>& p0,
+                                const vgl_point_3d<double>& p1,
+                                int n)
 {
   if (!mil3d_profile_in_image(p0,p1,image))
   {
@@ -152,19 +152,19 @@ void mil3d_sample_profile_3d_ic(vnl_vector<vecType>& vec,
 #undef MIL3D_SAMPLE_PROFILE_3D_INSTANTIATE
 #define MIL3D_SAMPLE_PROFILE_3D_INSTANTIATE( imType, vecType ) \
 template void mil3d_sample_profile_3d(vnl_vector<vecType >& v, \
-                           const mil3d_image_3d_of<imType >& image, \
-                           const vgl_point_3d<double >& p, \
-                           const vgl_vector_3d<double >& u, \
-                           int n); \
+                                      const mil3d_image_3d_of<imType >& image, \
+                                      const vgl_point_3d<double >& p, \
+                                      const vgl_vector_3d<double >& u, \
+                                      int n); \
 template void mil3d_sample_profile_3d_ic_safe(vnl_vector<vecType >& v, \
-                           const mil3d_image_3d_of<imType >& image, \
-                           const vgl_point_3d<double >& p0, \
-                           const vgl_point_3d<double >& p1, \
-                           int n); \
+                                              const mil3d_image_3d_of<imType >& image, \
+                                              const vgl_point_3d<double >& p0, \
+                                              const vgl_point_3d<double >& p1, \
+                                              int n); \
 template void mil3d_sample_profile_3d_ic(vnl_vector<vecType >& v, \
-                           const mil3d_image_3d_of<imType >& image, \
-                           const vgl_point_3d<double >& p0, \
-                           const vgl_point_3d<double >& p1, \
-                           int n)
+                                         const mil3d_image_3d_of<imType >& image, \
+                                         const vgl_point_3d<double >& p0, \
+                                         const vgl_point_3d<double >& p1, \
+                                         int n)
 
 #endif // mil3d_sample_profile_3d_txx_

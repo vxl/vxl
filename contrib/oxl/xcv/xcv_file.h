@@ -1,7 +1,6 @@
-// This is ./oxl/xcv/xcv_file.h
+// This is oxl/xcv/xcv_file.h
 #ifndef xcv_file_h_
 #define xcv_file_h_
-
 //:
 // \file
 // Creates a menu for, and provides an interface to operations for loading
@@ -24,7 +23,7 @@ class vgui_menu;
 
 class xcv_file
 {
-public:
+ public:
   //: Save image and spatial objects to specified postscript file.
   static void print_psfile();
   //: Load the selected image file into the current grid position.

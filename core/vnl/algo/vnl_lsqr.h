@@ -64,7 +64,7 @@ class vnl_lsqr
   int return_code_;
 
   static void aprod_(int* mode, int* m, int* n, double* x, double* y,
-                    int* leniw, int* lenrw, int* iw, double* rw );
+                     int* leniw, int* lenrw, int* iw, double* rw );
 
   friend class vnl_lsqr_Activate;
 };

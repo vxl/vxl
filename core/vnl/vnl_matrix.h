@@ -313,7 +313,7 @@ class vnl_matrix
   //: Extract a sub-matrix of size rows x cols, starting at (top,left)
   //  Thus it contains elements  [top,top+rows-1][left,left+cols-1]
   vnl_matrix<T> extract (unsigned rows,  unsigned cols,
-             unsigned top=0, unsigned left=0) const;
+                         unsigned top=0, unsigned left=0) const;
 
   //: Get a vector equal to the given row
   vnl_vector<T> get_row   (unsigned row) const;

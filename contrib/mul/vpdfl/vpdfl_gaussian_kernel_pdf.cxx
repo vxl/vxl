@@ -77,8 +77,8 @@ vpdfl_sampler_base* vpdfl_gaussian_kernel_pdf::new_sampler() const
 
 
 void vpdfl_gaussian_kernel_pdf::gradient(vnl_vector<double>& /*g*/,
-                              const vnl_vector<double>& /*x*/,
-                              double& /*p*/) const
+                                         vnl_vector<double>const& /*x*/,
+                                         double& /*p*/) const
 {
   vcl_cerr<<"vpdfl_gaussian_kernel_pdf::gradient() Not yet implemented.\n";
   vcl_abort();
@@ -162,9 +162,9 @@ void vpdfl_gaussian_kernel_pdf::b_read(vsl_b_istream& bfs)
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian_kernel_pdf &)\n";
-    vcl_cerr << "           Attempted to load object of type ";
-    vcl_cerr << name <<" into object of type " << is_a() << vcl_endl;
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian_kernel_pdf &)\n"
+             << "           Attempted to load object of type "
+             << name <<" into object of type " << is_a() << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -177,8 +177,8 @@ void vpdfl_gaussian_kernel_pdf::b_read(vsl_b_istream& bfs)
       vpdfl_kernel_pdf::b_read(bfs);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian_kernel_pdf &)\n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian_kernel_pdf &)\n"
+               << "           Unknown version number "<< version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }

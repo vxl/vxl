@@ -69,30 +69,40 @@ class vnl_scalar_join_iterator_indexed_pair;
 template <class T>
 class vnl_scalar_join_iterator
 {
+ protected:
+  unsigned n1;
+  unsigned n2;
+  vcl_list<vnl_scalar_join_iterator_indexed_pair<T> >* pI1;
+  vcl_list<vnl_scalar_join_iterator_indexed_pair<T> >* pI2;
+  vcl_list<vnl_scalar_join_iterator_indexed_pair<T> >& I1;
+  vcl_list<vnl_scalar_join_iterator_indexed_pair<T> >& I2;
+  typename vcl_list<vnl_scalar_join_iterator_indexed_pair<T> >::iterator index1;
+  typename vcl_list<vnl_scalar_join_iterator_indexed_pair<T> >::iterator index2;
+
  public:
 
-//: Initialize this iterator to the join of relation1(:,column1) and relation2(:,column2).
-// The algorithm sorts an array of pointers to each row and
-// traversal of the iterator runs through these to produce the join.
-// After construction the row1() and row2() methods indicate the first pair.
+  //: Initialize this iterator to the join of relation1(:,column1) and relation2(:,column2).
+  // The algorithm sorts an array of pointers to each row and
+  // traversal of the iterator runs through these to produce the join.
+  // After construction the row1() and row2() methods indicate the first pair.
   vnl_scalar_join_iterator(const vnl_matrix<T>& relation1, unsigned column1,
-                     const vnl_matrix<T>& relation2, unsigned column2);
+                           const vnl_matrix<T>& relation2, unsigned column2);
 
   ~vnl_scalar_join_iterator();
 
 
-//: Return true if all pairs have been seen.
+  //: Return true if all pairs have been seen.
   operator bool () { return !done(); }
 
-//: Advance to the next pair.  This is prefix ++.
+  //: Advance to the next pair.  This is prefix ++.
   inline vnl_scalar_join_iterator<T>& operator ++ () { next(); return *this; }
 
   bool done();
   void next();
 
-//: Return the indices of the current rows in the first and second relations.
+  //: Return the indices of the current rows in the first and second relations.
   unsigned row1();
-//: Return the indices of the current rows in the first and second relations.
+  //: Return the indices of the current rows in the first and second relations.
   unsigned row2();
 
  private:
@@ -103,16 +113,6 @@ class vnl_scalar_join_iterator
   T object1() { return *I1[index1].object; }
   T object2() { return *I2[index2].object; }
 #endif
-
- protected:
-  unsigned n1;
-  unsigned n2;
-  vcl_list<vnl_scalar_join_iterator_indexed_pair<T> >* pI1;
-  vcl_list<vnl_scalar_join_iterator_indexed_pair<T> >* pI2;
-  vcl_list<vnl_scalar_join_iterator_indexed_pair<T> >& I1;
-  vcl_list<vnl_scalar_join_iterator_indexed_pair<T> >& I2;
-  typename vcl_list<vnl_scalar_join_iterator_indexed_pair<T> >::iterator index1;
-  typename vcl_list<vnl_scalar_join_iterator_indexed_pair<T> >::iterator index2;
 };
 
 //: Helper class to hold the sorted arrays of indices.

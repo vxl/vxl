@@ -1,5 +1,6 @@
+// This is mul/clsfy/clsfy_binary_hyperplane.cxx
 // Copyright: (C) 2000 British Telecommunications PLC
-
+#include "clsfy_binary_hyperplane.h"
 //:
 // \file
 // \brief Implement a binary linear classifier
@@ -8,7 +9,6 @@
 
 //=======================================================================
 
-#include "clsfy_binary_hyperplane.h"
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
@@ -33,7 +33,7 @@ unsigned clsfy_binary_hyperplane::classify(const vnl_vector<double> &input) cons
 //: Find the posterior probability of the input being in the positive class.
 // The result is is outputs(0)
 void clsfy_binary_hyperplane::class_probabilities(vcl_vector<double> &outputs,
-  const vnl_vector<double> &input) const
+                                                  const vnl_vector<double> &input) const
 {
   outputs.resize(1);
   outputs[0] = 1.0 / (1.0 + vcl_exp(-log_l(input)));

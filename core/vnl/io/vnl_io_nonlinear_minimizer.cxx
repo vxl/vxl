@@ -27,21 +27,21 @@ vnl_nonlinear_minimizer* vnl_io_nonlinear_minimizer::new_object() const
 
 //: Write derived class to os using vnl_nonlinear_minimizer reference
 void vnl_io_nonlinear_minimizer::b_write_by_base(vsl_b_ostream& os,
-       const vnl_nonlinear_minimizer& base) const
+                                                 const vnl_nonlinear_minimizer& base) const
 {
   vsl_b_write(os,base);
 }
 
 //: Write derived class to os using vnl_nonlinear_minimizer reference
 void vnl_io_nonlinear_minimizer::b_read_by_base(vsl_b_istream& is,
-      vnl_nonlinear_minimizer& base) const
+                                                vnl_nonlinear_minimizer& base) const
 {
   vsl_b_read(is,base);
 }
 
 //: Print summary of derived class to os using vnl_nonlinear_minimizer reference
 void vnl_io_nonlinear_minimizer::print_summary_by_base(vcl_ostream& os,
-        const vnl_nonlinear_minimizer& base) const
+                                                       const vnl_nonlinear_minimizer& base) const
 {
   vsl_print_summary(os,base);
 }
@@ -59,8 +59,7 @@ vcl_string vnl_io_nonlinear_minimizer::target_classname() const
 }
 
 //: Return true if b is of class target_classname()
-bool vnl_io_nonlinear_minimizer::is_io_for
-    (const vnl_nonlinear_minimizer& b) const
+bool vnl_io_nonlinear_minimizer::is_io_for(const vnl_nonlinear_minimizer& b) const
 {
   return b.is_a()==target_classname();
 }
@@ -121,8 +120,8 @@ void vsl_b_read(vsl_b_istream &is, vnl_nonlinear_minimizer & p)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_nonlinear_minimizer&) \n";
-    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_nonlinear_minimizer&) \n"
+             << "           Unknown version number "<< ver << "\n";
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -133,11 +132,11 @@ void vsl_b_read(vsl_b_istream &is, vnl_nonlinear_minimizer & p)
 void vsl_print_summary(vcl_ostream & os,const vnl_nonlinear_minimizer & p)
 {
   os<<"Tolerance of {F, X, G}: {"<<p.get_f_tolerance() << ", "
-    << p.get_x_tolerance()<<", "<<p.get_g_tolerance() << "}\n";
-  os<<"Max Function Evals:"<<p.get_max_function_evals()<<"    Epsilon function:"
-    <<p.get_epsilon_function()<<"       Trace:"<<p.get_trace()<<vcl_endl;
-  os<<"Verbose:"<<p.get_verbose()<<"     Check Derivatives:"<<
-  p.get_check_derivatives()<<vcl_endl;
+    << p.get_x_tolerance()<<", "<<p.get_g_tolerance() << "}\n"
+    <<"Max Function Evals:"<<p.get_max_function_evals()<<"    Epsilon function:"
+    <<p.get_epsilon_function()<<"       Trace:"<<p.get_trace()<<'\n'
+    <<"Verbose:"<<p.get_verbose()<<"     Check Derivatives:"
+    <<p.get_check_derivatives()<<'\n';
 }
 
 //: Add example object to list of those that can be loaded
@@ -147,7 +146,7 @@ void vsl_print_summary(vcl_ostream & os,const vnl_nonlinear_minimizer & p)
 void vsl_add_to_binary_loader(const vnl_io_nonlinear_minimizer& b)
 {
     vsl_clipon_binary_loader<vnl_nonlinear_minimizer,
-            vnl_io_nonlinear_minimizer>::instance().add(b);
+                             vnl_io_nonlinear_minimizer>::instance().add(b);
 }
 
 
@@ -155,21 +154,21 @@ void vsl_add_to_binary_loader(const vnl_io_nonlinear_minimizer& b)
 void vsl_b_write(vsl_b_ostream &os, const vnl_nonlinear_minimizer * b)
 {
     vsl_clipon_binary_loader<vnl_nonlinear_minimizer,
-            vnl_io_nonlinear_minimizer>::instance().write_object(os,b);
+                             vnl_io_nonlinear_minimizer>::instance().write_object(os,b);
 }
 
 //: Binary read from stream by vnl_nonlinear_minimizer pointer
 void vsl_b_read(vsl_b_istream &is, vnl_nonlinear_minimizer* &b)
 {
     vsl_clipon_binary_loader<vnl_nonlinear_minimizer,
-            vnl_io_nonlinear_minimizer>::instance().read_object(is,b);
+                             vnl_io_nonlinear_minimizer>::instance().read_object(is,b);
 }
 
 //: Print summary to stream by vnl_nonlinear_minimizer pointer
 void vsl_print_summary(vcl_ostream &os, const vnl_nonlinear_minimizer * b)
 {
     vsl_clipon_binary_loader<vnl_nonlinear_minimizer,
-            vnl_io_nonlinear_minimizer>::instance().print_object_summary(os,b);
+                             vnl_io_nonlinear_minimizer>::instance().print_object_summary(os,b);
 }
 
 // Explicitly instantiate loader

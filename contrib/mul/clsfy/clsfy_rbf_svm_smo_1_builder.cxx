@@ -33,8 +33,8 @@ inline int class_to_svm_target (unsigned v) {return v==1?1:-1;};
 //: Build classifier from data
 // returns the training error, or +INF if there is an error.
 double clsfy_rbf_svm_smo_1_builder::build(clsfy_classifier_base& classifier,
-  mbl_data_wrapper<vnl_vector<double> >& inputs,
-  const vcl_vector<unsigned> &outputs) const
+                                          mbl_data_wrapper<vnl_vector<double> >& inputs,
+                                          const vcl_vector<unsigned> &outputs) const
 {
   inputs.reset();
 //const unsigned int nDims = inputs.current().size(); // unused variable
@@ -166,8 +166,8 @@ void clsfy_rbf_svm_smo_1_builder::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,rbf_width_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: clsfy_rbf_svm_smo_1_builder::b_read(vsl_b_istream&)\n";
-    vcl_cerr << "           Unknown version number "<< version << "\n";
+    vcl_cerr << "I/O ERROR: clsfy_rbf_svm_smo_1_builder::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< version << "\n";
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

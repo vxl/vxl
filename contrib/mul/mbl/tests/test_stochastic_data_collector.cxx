@@ -1,3 +1,5 @@
+// This is mul/mbl/tests/test_stochastic_data_collector.cxx
+#include <testlib/testlib_test.h>
 //:
 // \file
 // \author Ian Scott
@@ -5,11 +7,10 @@
 
 #include <vcl_iostream.h>
 #include <vcl_string.h>
-#include <mbl/mbl_stochastic_data_collector.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vnl/io/vnl_io_vector.h>
-#include <testlib/testlib_test.h>
 #include <vul/vul_printf.h>
+#include <mbl/mbl_stochastic_data_collector.h>
 
 //=======================================================================
 
@@ -61,7 +62,7 @@ void test_stochastic_data_collector()
   vcl_cout << "Histogram output, over " << n_expts << "experiments\n";
   for (i = 0; i < 10; i++)
     vul_printf(vcl_cout, "From %4d to %4d there were on average %4f items stored.\n",
-      i * 500, i*500 + 499, ((double)hist[i])/((double)n_expts))  ;
+               i * 500, i*500 + 499, ((double)hist[i])/((double)n_expts))  ;
 
   unsigned correct_hist[] = {501, 543, 499, 495, 461, 539, 490, 515, 460, 497};
 
@@ -73,7 +74,7 @@ void test_stochastic_data_collector()
   mbl_data_collector_base *collector3=0;
 
   vcl_string path = "test_stochastic_data_collector.bvl.tmp";
-  vcl_cout<<"Saving : "<<collector<<vcl_endl;
+  vcl_cout<<"Saving : "<<collector<<'\n';
   vsl_b_ofstream bfs_out(path);
   TEST (("Opened " + path + " for writing").c_str(), (!bfs_out ), false);
   vsl_b_write(bfs_out,collector);
@@ -87,7 +88,7 @@ void test_stochastic_data_collector()
   TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  vcl_cout << "Loaded : " << collector2 << vcl_endl;
+  vcl_cout << "Loaded : " << collector2 << '\n';
 
   TEST( "Loaded collector size = saved collector size",
     collector.data_wrapper().size(), collector2.data_wrapper().size());
@@ -105,7 +106,7 @@ void test_stochastic_data_collector()
   } while (w2.next() );
   TEST( "Loaded collector = saved collector", test_res, true);
 
-  vcl_cout << "Loaded by pointer: "<<collector3<<vcl_endl;
+  vcl_cout << "Loaded by pointer: "<<collector3<<'\n';
   delete collector3;
 
   vsl_delete_all_loaders();

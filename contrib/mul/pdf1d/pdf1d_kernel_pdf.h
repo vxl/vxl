@@ -50,7 +50,7 @@ class pdf1d_kernel_pdf : public pdf1d_pdf
 
   //: Initialise so all kernels have given width
   virtual void set_centres(const vnl_vector<double>& x,
-                   const vnl_vector<double>& width);
+                           const vnl_vector<double>& width);
 
   //: Position of kernel centres
   const vnl_vector<double>& centre() const { return x_; }

@@ -1,7 +1,6 @@
-// This is ./vxl/vnl/vnl_c_vector.txx
+// This is vxl/vnl/vnl_c_vector.txx
 #ifndef vnl_c_vector_txx_
 #define vnl_c_vector_txx_
-
 //:
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG
@@ -19,7 +18,7 @@ template <class T>
 T vnl_c_vector<T>::sum(T const* v, unsigned n)
 {
   T tot(0);
-  for(unsigned i = 0; i < n; ++i)
+  for (unsigned i = 0; i < n; ++i)
     tot += *v++;
   return tot;
 }
@@ -30,23 +29,23 @@ void vnl_c_vector<T>::normalize(T* v, unsigned n)
   typedef typename vnl_numeric_traits<T>::abs_t abs_t;
   typedef typename vnl_numeric_traits<abs_t>::real_t real_t;
   abs_t tmp(0);
-  for(unsigned i = 0; i < n; ++i)
+  for (unsigned i = 0; i < n; ++i)
     tmp += vnl_math_squared_magnitude(v[i]);
   tmp = abs_t(real_t(1) / vcl_sqrt(real_t(tmp)));
-  for(unsigned i = 0; i < n; ++i)
+  for (unsigned i = 0; i < n; ++i)
     v[i] = T(tmp*v[i]);
 }
 
 template <class T>
 void vnl_c_vector<T>::apply(T const* v, unsigned n, T (*f)(T const&), T* v_out)
 {
-  for(unsigned i = 0; i < n; ++i)
+  for (unsigned i = 0; i < n; ++i)
     v_out[i] = f(v[i]);
 }
 
 template <class T>
 void vnl_c_vector<T>::apply(T const* v, unsigned n, T (*f)(T), T* v_out) {
-  for(unsigned i = 0; i < n; ++i)
+  for (unsigned i = 0; i < n; ++i)
     v_out[i] = f(v[i]);
 }
 
@@ -279,7 +278,7 @@ void vnl_c_vector_two_norm_squared(T const *p, unsigned n, S *out)
   *out = val;
 #else
   *out = 0;
-  for(unsigned i=0; i<n; ++i)
+  for (unsigned i=0; i<n; ++i)
     *out += vnl_math_squared_magnitude(p[i]);
 #endif
 }
@@ -356,8 +355,7 @@ inline void* vnl_c_vector_alloc(int n, int size)
 
 inline void vnl_c_vector_dealloc(void* v, int n, int size)
 {
-  //vcl_cerr << "\ncall to vnl_c_vector_dealloc(" << v << ", " << n
-  //         << ", " << size << ")\n";
+  //vcl_cerr<<"\ncall to vnl_c_vector_dealloc("<<v<<", "<<n<<", "<<size<<")\n";
 #if VNL_C_VECTOR_USE_VNL_ALLOC
   if (v)
     vnl_alloc::deallocate(v, (n == 0) ? 8 : (n * size));

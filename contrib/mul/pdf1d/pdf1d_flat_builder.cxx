@@ -79,8 +79,8 @@ void pdf1d_flat_builder::build_from_array(pdf1d_pdf& model, const double* data, 
 {
   if (n<2)
   {
-    vcl_cerr<<"pdf1d_flat_builder::build_from_array()";
-    vcl_cerr<<" Too few examples available.\n";
+    vcl_cerr<<"pdf1d_flat_builder::build_from_array()"
+            <<" Too few examples available.\n";
     vcl_abort();
   }
 
@@ -149,8 +149,8 @@ void pdf1d_flat_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>& data)
 }
 
 void pdf1d_flat_builder::weighted_build(pdf1d_pdf& model,
-                                            mbl_data_wrapper<double>& data,
-                                            const vcl_vector<double>& wts) const
+                                        mbl_data_wrapper<double>& data,
+                                        const vcl_vector<double>& wts) const
 {
   // Ignore weights
   build(model,data);
@@ -226,8 +226,8 @@ void pdf1d_flat_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,min_var_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_flat_builder &)\n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_flat_builder &)\n"
+               << "           Unknown version number "<< version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }

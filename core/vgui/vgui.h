@@ -57,7 +57,15 @@ struct vgui_tableau_sptr;
 
 class vgui
 {
+  //: Selected toolkit instance.
+  static vgui_DLLDATA vgui_toolkit* instance_;
+
+  //: True once init() has been called.
+  static vgui_DLLDATA bool init_called;
  public:
+  //: Needed for statusbar.
+  static vgui_DLLDATA vcl_ostream out;
+
   //: Method for determining if a given toolkit is available.
   static bool exists(char const *toolkit);
 
@@ -130,16 +138,6 @@ class vgui
 
   //: Quit application.
   static void quit();
-
-  //: Needed for statusbar.
-  static vgui_DLLDATA vcl_ostream out;
-
- private:
-  //: Selected toolkit instance.
-  static vgui_DLLDATA vgui_toolkit* instance_;
-
-  //: True once init() has been called.
-  static vgui_DLLDATA bool init_called;
 };
 
 
@@ -155,7 +153,5 @@ class vgui
 // the toolkits to be registered.
 int vgui_register_all_implementations();
 static int trigger = vgui_register_all_implementations();
-
-
 
 #endif // vgui_h_

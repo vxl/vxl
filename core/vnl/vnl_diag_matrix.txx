@@ -1,7 +1,6 @@
-// This is ./vxl/vnl/vnl_diag_matrix.txx
+// This is vxl/vnl/vnl_diag_matrix.txx
 #ifndef vnl_diag_matrix_txx_
 #define vnl_diag_matrix_txx_
-
 //:
 // \file
 
@@ -17,7 +16,7 @@ vnl_vector<T> vnl_diag_matrix<T>::solve(vnl_vector<T> const& b)
 {
   unsigned len = diagonal_.size();
   vnl_vector<T> ret(len);
-  for(unsigned i = 0; i < len; ++i)
+  for (unsigned i = 0; i < len; ++i)
     ret[i] = b[i] / diagonal_[i];
   return ret;
 }
@@ -27,7 +26,7 @@ template <class T>
 void vnl_diag_matrix<T>::solve(vnl_vector<T> const& b, vnl_vector<T>* out)
 {
   unsigned len = diagonal_.size();
-  for(unsigned i = 0; i < len; ++i)
+  for (unsigned i = 0; i < len; ++i)
     (*out)[i] = b[i] / diagonal_[i];
 }
 
@@ -94,4 +93,4 @@ template vcl_ostream& operator<< (vcl_ostream& s, vnl_diag_matrix<T > const &)
 
 //template bool epsilon_equals (vnl_diag_matrix<T > const & , vnl_diag_matrix<T > const & , double)
 
-#endif
+#endif // vnl_diag_matrix_txx_

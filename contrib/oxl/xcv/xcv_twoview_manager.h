@@ -1,7 +1,6 @@
-// This is ./oxl/xcv/xcv_twoview_manager.h
+// This is oxl/xcv/xcv_twoview_manager.h
 #ifndef xcv_twoview_manager_h_
 #define xcv_twoview_manager_h_
-
 //:
 // \file
 // \author   K.Y.McGaul
@@ -32,7 +31,29 @@ class vgui_event;
 
 class xcv_twoview_manager : public xcv_mview_manager
 {
-public:
+  FMatrix* f_matrix;
+  HMatrix2D* h_matrix;
+  PairMatchSetCorner* corner_matches;
+  //: The two tableaux managed by this class.
+  vgui_tableau_sptr tabs[2];
+  //: Rubberbanders for the managed tableaux.
+  vgui_rubberband_tableau_sptr rubberbands[2];
+  //: Easy2Ds for the managed tableaux.
+  vgui_easy2D_tableau_sptr easys[2];
+  bool f_matrix_is_displayed;
+  bool h_matrix_is_displayed;
+  bool corner_matches_are_displayed;
+  //: Position in tabs where event is displayed but does not occur.
+  unsigned transfer_index;
+  //: True while mouse is being dragged (the left mouse button is pressed).
+  bool dragging;
+  float event_coord_x, event_coord_y;
+  //: Coordinates of epipolar line.
+  float line_coord_a, line_coord_b, line_coord_c;
+  float point_coord_x, point_coord_y;
+  bool use_overlays;
+
+ public:
 
   //: Constructor.
   xcv_twoview_manager();
@@ -65,29 +86,7 @@ public:
   //: Handle all events sent to this manager.
   void handle_tjunction_event(vgui_event const& e, vgui_tableau_sptr const& child_tab);
 
-private:
-  FMatrix* f_matrix;
-  HMatrix2D* h_matrix;
-  PairMatchSetCorner* corner_matches;
-  //: The two tableaux managed by this class.
-  vgui_tableau_sptr tabs[2];
-  //: Rubberbanders for the managed tableaux.
-  vgui_rubberband_tableau_sptr rubberbands[2];
-  //: Easy2Ds for the managed tableaux.
-  vgui_easy2D_tableau_sptr easys[2];
-  bool f_matrix_is_displayed;
-  bool h_matrix_is_displayed;
-  bool corner_matches_are_displayed;
-  //: Position in tabs where event is displayed but does not occur.
-  unsigned transfer_index;
-  //: True while mouse is being dragged (the left mouse button is pressed).
-  bool dragging;
-  float event_coord_x, event_coord_y;
-  //: Coordinates of epipolar line.
-  float line_coord_a, line_coord_b, line_coord_c;
-  float point_coord_x, point_coord_y;
-  bool use_overlays;
-
+ private:
   //: Draw a point and the transformed epipolar line on the display.
   void draw_f_matrix(vgui_event const& e, vgui_tableau_sptr const& child_tab, bool make_permanent);
   //: Handle overlay redraw event for FMatrix.

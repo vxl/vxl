@@ -1,8 +1,6 @@
+// This is vxl/vbl/vbl_basic_relation_where.h
 #ifndef vbl_basic_relation_where_h
 #define vbl_basic_relation_where_h
-
-// This is vxl/vbl/vbl_basic_relation_where.h
-
 //:
 // \file
 // \author Rupert W. Curwen, GE Corporate Research and Development
@@ -22,12 +20,19 @@
 //  the attributes currently selected in the relation.
 //
 template <class T1, class T2,
-  VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
-  VCL_DFL_TYPE_PARAM_STLDECL (T4, vbl_basic_optional),
-  VCL_DFL_TYPE_PARAM_STLDECL(T5,vbl_basic_optional)>
+          VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
+          VCL_DFL_TYPE_PARAM_STLDECL(T4,vbl_basic_optional),
+          VCL_DFL_TYPE_PARAM_STLDECL(T5,vbl_basic_optional)>
 class vbl_basic_relation_where : public vbl_basic_tuple<T1,T2,T3,T4,T5>
 {
-public:
+  // Wild card attributes
+  bool first_wild;
+  bool second_wild;
+  bool third_wild;
+  bool fourth_wild;
+  bool fifth_wild;
+
+ public:
   //: Constructors.
   vbl_basic_relation_where()
     : first_wild(true),
@@ -183,14 +188,6 @@ public:
     else if (!fifth_wild) return 5;
     else return 0;
   }
-
-private:
-  // Wild card attributes?
-  bool first_wild;
-  bool second_wild;
-  bool third_wild;
-  bool fourth_wild;
-  bool fifth_wild;
 };
 
 #endif // vbl_basic_relation_where_h

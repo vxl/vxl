@@ -1,7 +1,6 @@
-// This is ./vxl/vnl/vnl_vector.txx
+// This is vxl/vnl/vnl_vector.txx
 #ifndef vnl_vector_txx_
 #define vnl_vector_txx_
-
 //:
 // \file
 //
@@ -53,7 +52,7 @@
 do { \
   this->num_elmts = (size); \
   this->data = vnl_c_vector<T>::allocate_T(this->num_elmts); \
-} while(false)
+} while (false)
 
 // This macro deallocates the dynamic storage used by a vnl_vector.
 #define vnl_vector_free_blah \
@@ -305,7 +304,7 @@ bool vnl_vector<T>::read_ascii(vcl_istream& s)
 {
   bool size_known = (this->size() != 0);
   if (size_known) {
-    for(unsigned i = 0; i < this->size(); ++i)
+    for (unsigned i = 0; i < this->size(); ++i)
       s >> (*this)(i);
     return s.good() || s.eof();
   }
@@ -323,7 +322,7 @@ bool vnl_vector<T>::read_ascii(vcl_istream& s)
     ++n;
   }
   this->resize(n); //*this = vnl_vector<T>(n);
-  for(unsigned i = 0; i < n; ++i)
+  for (unsigned i = 0; i < n; ++i)
     (*this)[i] = allvals[i];
   return true;
 }
@@ -414,8 +413,7 @@ template<class T>
 vnl_vector<T>& vnl_vector<T>::operator+= (vnl_vector<T> const& rhs) {
 #ifndef NDEBUG
   if (this->num_elmts != rhs.num_elmts)
-    vnl_error_vector_dimension ("operator+=",
-                           this->num_elmts, rhs.num_elmts);
+    vnl_error_vector_dimension ("operator+=", this->num_elmts, rhs.num_elmts);
 #endif
   for (unsigned i = 0; i < this->num_elmts; i++)
     this->data[i] += rhs.data[i];
@@ -429,8 +427,7 @@ template<class T>
 vnl_vector<T>& vnl_vector<T>::operator-= (vnl_vector<T> const& rhs) {
 #ifndef NDEBUG
   if (this->num_elmts != rhs.num_elmts)
-    vnl_error_vector_dimension ("operator-=",
-                           this->num_elmts, rhs.num_elmts);
+    vnl_error_vector_dimension ("operator-=", this->num_elmts, rhs.num_elmts);
 #endif
   for (unsigned i = 0; i < this->num_elmts; i++)
     this->data[i] -= rhs.data[i];
@@ -444,8 +441,7 @@ template<class T>
 vnl_vector<T>& vnl_vector<T>::pre_multiply (vnl_matrix<T> const& m) {
 #ifndef NDEBUG
   if (m.columns() != this->num_elmts)           // dimensions do not match?
-    vnl_error_vector_dimension ("operator*=",
-                           this->num_elmts, m.columns());
+    vnl_error_vector_dimension ("operator*=", this->num_elmts, m.columns());
 #endif
   T* temp= vnl_c_vector<T>::allocate_T(m.rows()); // Temporary
   vnl_matrix<T>& mm = (vnl_matrix<T>&) m;       // Drop const for get()
@@ -501,8 +497,7 @@ vnl_vector<T> operator* (vnl_matrix<T> const& m, vnl_vector<T> const& v) {
 
 #ifndef NDEBUG
   if (m.columns() != v.size())                  // dimensions do not match?
-    vnl_error_vector_dimension ("operator*",
-                                m.columns(), v.size());
+    vnl_error_vector_dimension ("operator*", m.columns(), v.size());
 #endif
   vnl_vector<T> result(m.rows());               // Temporary
   vnl_matrix<T>& mm = (vnl_matrix<T>&) m;       // Drop const for get()
@@ -593,8 +588,7 @@ template<class T>
 vnl_vector<T> element_quotient (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
 #ifndef NDEBUG
   if (v1.size() != v2.size())
-    vnl_error_vector_dimension ("element_quotient",
-                        v1.size(), v2.size());
+    vnl_error_vector_dimension ("element_quotient", v1.size(), v2.size());
 #endif
   vnl_vector<T> result(v1.size());
   for (unsigned i = 0; i < v1.size(); i++)
@@ -624,8 +618,7 @@ template<class T>
 T dot_product (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
 #ifndef NDEBUG
   if (v1.size() != v2.size())
-    vnl_error_vector_dimension ("dot_product",
-                                v1.size(), v2.size());
+    vnl_error_vector_dimension ("dot_product", v1.size(), v2.size());
 #endif
   return vnl_c_vector<T>::dot_product(v1.begin(),
                                       v2.begin(),
@@ -638,8 +631,7 @@ template<class T>
 T inner_product (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
 #ifndef NDEBUG
   if (v1.size() != v2.size())
-    vnl_error_vector_dimension ("inner_product",
-                                v1.size(), v2.size());
+    vnl_error_vector_dimension ("inner_product", v1.size(), v2.size());
 #endif
   return vnl_c_vector<T>::inner_product(v1.begin(),
                                         v2.begin(),
@@ -751,7 +743,7 @@ double angle (vnl_vector<T> const& a, vnl_vector<T> const& b) {
 
 template <class T>
 bool vnl_vector<T>::is_finite() const {
-  for(unsigned i = 0; i < this->size();++i)
+  for (unsigned i = 0; i < this->size();++i)
     if (!vnl_math_isfinite( (*this)[i] ))
       return false;
 
@@ -762,7 +754,7 @@ template <class T>
 bool vnl_vector<T>::is_zero() const
 {
   T const zero(0);
-  for(unsigned i = 0; i < this->size();++i)
+  for (unsigned i = 0; i < this->size();++i)
     if ( !( (*this)[i] == zero) )
       return false;
 
@@ -774,15 +766,14 @@ void vnl_vector<T>::assert_finite_internal() const {
   if (this->is_finite())
     return;
 
-  vcl_cerr << __FILE__ ": *** NAN FEVER **\n";
-  vcl_cerr << *this;
+  vcl_cerr << __FILE__ ": *** NAN FEVER **\n" << *this;
   vcl_abort();
 }
 
 template <class T>
 void vnl_vector<T>::assert_size_internal(unsigned sz) const {
   if (this->size() != sz) {
-    vcl_cerr << __FILE__ ": Size is " << this->size() << ". Should be " << sz << vcl_endl;
+    vcl_cerr << __FILE__ ": Size is " << this->size() << ". Should be " << sz << '\n';
     vcl_abort();
   }
 }

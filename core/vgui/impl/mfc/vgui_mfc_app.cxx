@@ -1,5 +1,6 @@
 // This is oxl/vgui/impl/mfc/vgui_mfc_app.cxx
-
+#include "StdAfx.h"
+#include "vgui_mfc_app.h"
 //:
 // \file
 // \author  Marko Bacic, Oxford RRG
@@ -12,8 +13,6 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include "StdAfx.h"
-#include "vgui_mfc_app.h"
 #include "vgui_mfc_view.h"
 #include "vgui_mfc_doc.h"
 #include "vgui_mfc_mainfrm.h"
@@ -34,9 +33,11 @@ vgui_mfc_app::vgui_mfc_app()
 }
 /////////////////////////////////////////////////////////////////////////////
 //: The one and only vgui_mfc_app object
-class vgui_mfc_app_command_line_info : public CCommandLineInfo {
-public:
-  void ParseParam( LPCTSTR lpszParam, BOOL bFlag, BOOL bLast ) {
+class vgui_mfc_app_command_line_info : public CCommandLineInfo
+{
+ public:
+  void ParseParam( LPCTSTR lpszParam, BOOL bFlag, BOOL bLast )
+  {
     CCommandLineInfo::ParseParam(lpszParam, bFlag, bLast);
   }
 };

@@ -1,7 +1,6 @@
+// This is vxl/vil/vil_convolve.h
 #ifndef vil_convolve_h_
 #define vil_convolve_h_
-// This is vxl/vil/vil_convolve.h
-
 //:
 // \file
 // \author fsm@robots.ox.ac.uk

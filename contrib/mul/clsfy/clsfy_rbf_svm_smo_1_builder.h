@@ -1,8 +1,7 @@
+// This is mul/clsfy/clsfy_rbf_svm_smo_1_builder.h
+// Copyright: (C) 2001 British Telecommunications plc.
 #ifndef clsfy_rbf_svm_smo_1_builder_h_
 #define clsfy_rbf_svm_smo_1_builder_h_
-
-// Copyright: (C) 2001 British Telecommunications plc.
-
 //:
 // \file
 // \brief Describe an interface to an SMO SVM builder and additional logic
@@ -25,7 +24,7 @@ class clsfy_rbf_svm_smo_1_builder : public clsfy_builder_base
   //: Width of Gaussian function
   double rbf_width_;
 
-public:
+ public:
 
   //: Dflt ctor
   clsfy_rbf_svm_smo_1_builder();
@@ -41,16 +40,16 @@ public:
   // nclasses should be 1. The members of outputs() should be 0 or 1.
   // An appropriate RBF width is chosen by the algorithm.
   virtual double build(clsfy_classifier_base& classifier,
-    mbl_data_wrapper<vnl_vector<double> >& inputs,
-    unsigned nClasses,
-    const vcl_vector<unsigned> &outputs) const;
+                       mbl_data_wrapper<vnl_vector<double> >& inputs,
+                       unsigned nClasses,
+                       const vcl_vector<unsigned> &outputs) const;
 
   //: Build a classifier from data.
   // returns the empirical error rate, or +INF if there is an error.
   // The members of outputs() should be 0 or 1.
   virtual double build(clsfy_classifier_base& classifier,
-    mbl_data_wrapper<vnl_vector<double> >& inputs,
-    const vcl_vector<unsigned> &outputs) const;
+                       mbl_data_wrapper<vnl_vector<double> >& inputs,
+                       const vcl_vector<unsigned> &outputs) const;
 
   //: Radius of Gaussian function
   double rbf_width() const;

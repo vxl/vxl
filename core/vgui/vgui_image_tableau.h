@@ -1,7 +1,6 @@
-// This is ./oxl/vgui/vgui_image_tableau.h
+// This is oxl/vgui/vgui_image_tableau.h
 #ifndef vgui_image_tableau_h_
 #define vgui_image_tableau_h_
-
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
@@ -15,7 +14,6 @@
 //    09-AUG-2002 K.Y.McGaul - Added Doxygen style comments.
 // \endverbatim
 
-
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_image_tableau_sptr.h>
 
@@ -23,8 +21,12 @@ class vgui_image_renderer;
 class vil_image;
 
 //: Tableau which renders the given image using an image_renderer.
-class vgui_image_tableau : public vgui_tableau {
-public:
+class vgui_image_tableau : public vgui_tableau
+{
+  vcl_string name_;
+  bool pixels_centered;
+  vgui_image_renderer *renderer;
+ public:
   //: Constructor - don't use this, use vgui_image_tableau_new.
   //  Creates an empty image tableau.
   vgui_image_tableau();
@@ -80,14 +82,9 @@ public:
   //  this tableau.
   bool handle(vgui_event const &e);
 
-protected:
+ protected:
   //: Destructor - called by vgui_image_tableau_sptr.
   ~vgui_image_tableau();
-
-private:
-  vcl_string name_;
-  bool pixels_centered;
-  vgui_image_renderer *renderer;
 };
 
 //: Creates a smart-pointer to a vgui_image_tableau.

@@ -1,7 +1,6 @@
-// This is ./vxl/vgl/vgl_homg_line_2d.txx
+// This is vxl/vgl/vgl_homg_line_2d.txx
 #ifndef vgl_homg_line_2d_txx_
 #define vgl_homg_line_2d_txx_
-
 //:
 // \file
 

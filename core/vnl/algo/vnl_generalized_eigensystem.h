@@ -43,7 +43,7 @@ class vnl_generalized_eigensystem
 //  if $B$ is not positive definite.
 
   vnl_generalized_eigensystem(const vnl_matrix<double>& A,
-        const vnl_matrix<double>& B);
+                              const vnl_matrix<double>& B);
 
 //: Public eigenvectors.
 //  After construction, this contains the matrix of eigenvectors.

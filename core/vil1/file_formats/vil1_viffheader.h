@@ -167,7 +167,7 @@ struct vil_viff_xvimage {
                                            digitization in meters */
 
         unsigned long   location_type;  /* implied or explicit location
-                                           data (implied locations are
+                                           data -- implied locations are
                                            derived from row_size and
                                            col_size */
 

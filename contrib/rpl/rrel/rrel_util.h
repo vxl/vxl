@@ -1,6 +1,6 @@
+// This is rpl/rrel/rrel_util.h
 #ifndef rrel_util_h_
 #define rrel_util_h_
-
 //:
 //  \file
 //  \author Chuck Stewart
@@ -139,4 +139,4 @@ void rrel_util_intercept_adjust_stats_copy( InpIter first, InpIter last,
                                             T & robust_mean, T & robust_std, T & inlier_frac,
                                             int dof=1 );
 
-#endif
+#endif // rrel_util_h_

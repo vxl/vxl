@@ -1,9 +1,6 @@
-//=======================================================================
-//
-//  Copyright: (C) 1998 Victoria University of Manchester
-//
-//=======================================================================
-
+// This is mul/vpdfl/vpdfl_mixture.cxx
+// Copyright: (C) 1998 Victoria University of Manchester
+#include "vpdfl_mixture.h"
 //:
 // \file
 // \brief Implements a mixture model (a set of individual pdfs + weights)
@@ -17,7 +14,6 @@
 
 //=======================================================================
 
-#include "vpdfl_mixture.h"
 #include <vcl_cmath.h>
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
@@ -116,7 +112,7 @@ static inline void incXbyYv(vnl_vector<double> *X, const vnl_vector<double> &Y, 
 
 //: Add (Y + Z.*Z)*v to X
 static inline void incXbyYplusXXv(vnl_vector<double> *X, const vnl_vector<double> &Y,
-                               const vnl_vector<double> &Z, double v)
+                                  const vnl_vector<double> &Z, double v)
 {
   assert(X->size() == Y.size());
   int i = ((int)X->size()) - 1;
@@ -255,13 +251,13 @@ vpdfl_pdf_base* vpdfl_mixture::clone() const
 
 void vpdfl_mixture::print_summary(vcl_ostream& os) const
 {
-  os<<vcl_endl<<vsl_indent();
+  os<<'\n'<<vsl_indent();
   vpdfl_pdf_base::print_summary(os);
-  os<<vcl_endl;
+  os<<'\n';
   for (unsigned int i=0;i<component_.size();++i)
   {
-    os<<vsl_indent()<<"Component "<<i<<" :  Wt: "<<weight_[i] <<vcl_endl;
-    os<<vsl_indent()<<"PDF: " << component_[i]<<vcl_endl;
+    os<<vsl_indent()<<"Component "<<i<<" :  Wt: "<<weight_[i] <<'\n'
+      <<vsl_indent()<<"PDF: " << component_[i]<<'\n';
   }
 }
 
@@ -286,9 +282,9 @@ void vpdfl_mixture::b_read(vsl_b_istream& bfs)
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_mixture &) \n";
-    vcl_cerr << "           Attempted to load object of type ";
-    vcl_cerr << name <<" into object of type " << is_a() << vcl_endl;
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_mixture &) \n"
+             << "           Attempted to load object of type "
+             << name <<" into object of type " << is_a() << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -305,8 +301,8 @@ void vpdfl_mixture::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs, weight_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_mixture &) \n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_mixture &) \n"
+               << "           Unknown version number "<< version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
@@ -404,7 +400,7 @@ unsigned vpdfl_mixture::nearest_comp(const vnl_vector<double>& x) const
 // \param x This may be modified to the nearest plausible position.
 void vpdfl_mixture::nearest_plausible(vnl_vector<double>& /*x*/, double /*log_p_min*/) const
 {
-  vcl_cerr << "ERROR: vpdfl_mixture::nearest_plausible NYI" << vcl_endl;
+  vcl_cerr << "ERROR: vpdfl_mixture::nearest_plausible NYI\n";
   vcl_abort();
 }
 

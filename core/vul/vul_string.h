@@ -1,7 +1,6 @@
+// This is vxl/vul/vul_string.h
 #ifndef vul_string_h
 #define vul_string_h
-// This is vxl/vul/vul_string.h
-
 //:
 // \file
 // \brief Utility functions for C strings and vcl_strings

@@ -1,6 +1,6 @@
+// This is mul/mbl/mbl_thin_plate_spline_2d.h
 #ifndef mbl_thin_plate_spline_2d_h_
 #define mbl_thin_plate_spline_2d_h_
-
 //:
 // \file
 // \brief Construct thin plate spline to map 2D to 2D
@@ -23,8 +23,8 @@
 //
 // If one wishes to map a set of source points to multiple target points,
 // use set_source_pts(src_pts);  then build(target_pts); for each target set.
-class mbl_thin_plate_spline_2d {
-private:
+class mbl_thin_plate_spline_2d
+{
   vnl_vector<double> Wx_,Wy_;
   double Ax0_, AxX_, AxY_;
   double Ay0_, AyX_, AyY_;
@@ -37,7 +37,7 @@ private:
 
     //: Build from small number of points
   void build_pure_affine(const vcl_vector<vgl_point_2d<double> >& source_pts,
-        const vcl_vector<vgl_point_2d<double> >& dest_pts);
+                         const vcl_vector<vgl_point_2d<double> >& dest_pts);
 
    //: Set parameters from vectors
   void set_params(const vnl_vector<double>& W1,
@@ -52,7 +52,7 @@ private:
                   vnl_vector<double>& W2,
                   const vnl_matrix<double>& L);
 
-public:
+ public:
 
     //: Dflt ctor
   mbl_thin_plate_spline_2d();

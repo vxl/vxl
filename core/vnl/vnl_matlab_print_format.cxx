@@ -1,9 +1,7 @@
-// This is ./vxl/vnl/vnl_matlab_print_format.cxx
-
+// This is vxl/vnl/vnl_matlab_print_format.cxx
+#include "vnl_matlab_print.h"
 //:
 // \file
-
-#include "vnl_matlab_print.h"
 
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
@@ -34,7 +32,7 @@ void vnl_matlab_print_format_pop()
 {
   vnl_matlab_print_format_init();
   if (format_stack->empty())
-    vcl_cerr << __FILE__ ": format stack empty" << vcl_endl;
+    vcl_cerr << __FILE__ ": format stack empty\n";
   else {
     the_format = vnl_matlab_print_format(format_stack->back());
     format_stack->pop_back();

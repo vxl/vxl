@@ -44,9 +44,9 @@ class clsfy_parzen_builder : public clsfy_builder_base
   //: Build classifier from data
   // return the mean error over the training set.
   virtual double build(clsfy_classifier_base& model,
-    mbl_data_wrapper<vnl_vector<double> >& inputs,
-    unsigned nClasses,
-    const vcl_vector<unsigned> &outputs) const;
+                       mbl_data_wrapper<vnl_vector<double> >& inputs,
+                       unsigned nClasses,
+                       const vcl_vector<unsigned> &outputs) const;
 
   //: Name of the class
   virtual vcl_string is_a() const;

@@ -49,10 +49,10 @@ clsfy_classifier_1d* clsfy_binary_threshold_1d_builder::new_classifier() const
 // nb here egs0 are -ve examples
 // and egs1 are +ve examples
 double clsfy_binary_threshold_1d_builder::build(clsfy_classifier_1d& classifier,
-                                  vnl_vector<double>& egs0,
-                                  vnl_vector<double>& wts0,
-                                  vnl_vector<double>& egs1,
-                                  vnl_vector<double>& wts1)  const
+                                                vnl_vector<double>& egs0,
+                                                vnl_vector<double>& wts0,
+                                                vnl_vector<double>& egs1,
+                                                vnl_vector<double>& wts1)  const
 {
   // this method sorts the data and passes it to the method below
   assert(classifier.is_a()=="clsfy_binary_threshold_1d");
@@ -251,8 +251,8 @@ void clsfy_binary_threshold_1d_builder::b_read(vsl_b_istream& /*bfs*/)
     vsl_b_read(bfs,data_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_binary_threshold_1d_builder&)\n";
-    vcl_cerr << "           Unknown version number "<< version << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_binary_threshold_1d_builder&)\n"
+             << "           Unknown version number "<< version << "\n";
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

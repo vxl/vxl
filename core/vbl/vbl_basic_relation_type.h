@@ -1,8 +1,6 @@
+// This is vxl/vbl/vbl_basic_relation_type.h
 #ifndef vbl_basic_relation_type_h
 #define vbl_basic_relation_type_h
-
-// This is vxl/vbl/vbl_basic_relation_type.h
-
 //:
 // \file
 // \author Rupert Curwen, GE Corporate Research and Development
@@ -20,7 +18,7 @@
 
 class vbl_basic_relation_type
 {
-public:
+ public:
   virtual ~vbl_basic_relation_type() {}
 
   // This virtual function returns the address of a static variable

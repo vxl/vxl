@@ -1,8 +1,6 @@
+// This is vxl/vbl/vbl_br_impl.h
 #ifndef vbl_br_impl_h
 #define vbl_br_impl_h
-
-// This is vxl/vbl/vbl_br_impl.h
-
 //:
 // \file
 // \author Rupert Curwen, GE Corporate Research and Development
@@ -24,24 +22,24 @@
 #include <vbl/vbl_ref_count.h>
 
 template <class T1, class T2,
-  VCL_DFL_TYPE_PARAM_STLDECL(T3, vbl_basic_optional),
-  VCL_DFL_TYPE_PARAM_STLDECL(T4, vbl_basic_optional),
-  VCL_DFL_TYPE_PARAM_STLDECL(T5, vbl_basic_optional)>
+          VCL_DFL_TYPE_PARAM_STLDECL(T3, vbl_basic_optional),
+          VCL_DFL_TYPE_PARAM_STLDECL(T4, vbl_basic_optional),
+          VCL_DFL_TYPE_PARAM_STLDECL(T5, vbl_basic_optional)>
 class vbl_basic_relation_factory;
 
 //------------------------------------------------------------
 //: Abstract base class for implementations of easy relation iterators.
 template <class T1, class T2,
-  VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
-  VCL_DFL_TYPE_PARAM_STLDECL(T4,vbl_basic_optional),
-  VCL_DFL_TYPE_PARAM_STLDECL(T5,vbl_basic_optional)>
+          VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
+          VCL_DFL_TYPE_PARAM_STLDECL(T4,vbl_basic_optional),
+          VCL_DFL_TYPE_PARAM_STLDECL(T5,vbl_basic_optional)>
 class vbl_br_iter_impl
 {
-public:
+ public:
   typedef vbl_basic_tuple<T1,T2,T3,T4,T5> tuple;
   typedef vbl_basic_relation_where<T1,T2,T3,T4,T5> where_clause;
 
-public:
+ public:
   //: Constructor.
   vbl_br_iter_impl() {}
 
@@ -74,16 +72,18 @@ public:
 // functionality implemented here being the naming of
 // relations.
 template <class T1, class T2,
-  VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
-  VCL_DFL_TYPE_PARAM_STLDECL (T4, vbl_basic_optional),
-  VCL_DFL_TYPE_PARAM_STLDECL(T5,vbl_basic_optional)>
+          VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
+          VCL_DFL_TYPE_PARAM_STLDECL (T4, vbl_basic_optional),
+          VCL_DFL_TYPE_PARAM_STLDECL(T5,vbl_basic_optional)>
 class vbl_br_impl : public vbl_ref_count
 {
-public:
+ protected:
+  vcl_string name;
+ public:
   typedef vbl_basic_relation_where<T1,T2,T3,T4,T5> where_clause;
   typedef vbl_br_iter_impl<T1,T2,T3,T4,T5> iterator;
 
-public:
+ public:
   //: Constructor.
   vbl_br_impl(const vcl_string& n) : name(n) {}
 
@@ -121,7 +121,6 @@ public:
   virtual void SetFourthUnique(bool) {}
   virtual void SetFifthUnique(bool) {}
 
-
   // Get iterators.
   virtual vbl_br_iter_impl<T1,T2,T3,T4,T5>*
     begin(const vbl_basic_relation_where<T1,T2,T3,T4,T5>&) { return NULL; }
@@ -140,8 +139,7 @@ public:
   // Get pointer to this.
   virtual void* This() { return NULL; }
 
-protected:
-  vcl_string name;
+ protected:
   static vbl_basic_relation_factory<T1,T2,T3,T4,T5>*& factory();
 };
 
@@ -149,16 +147,16 @@ template <class T1, class T2, class T3, class T4, class T5>
 class vbl_basic_relation_factory
 // defaults for T3 T4 T5 already declared around line 80 -- PLEASE don't put them back here!! - PVr
 {
-public:
+ public:
   typedef vbl_br_impl<T1,T2,T3,T4,T5> implementation;
   typedef vbl_hash_map<vcl_string, void*> existing_map;
 
-public:
+ public:
   virtual ~vbl_basic_relation_factory() {};
   virtual vbl_br_impl<T1,T2,T3,T4,T5>* Generate(vcl_string) { return NULL; }
   virtual void CheckEmpty(vbl_br_impl<T1,T2,T3,T4,T5>*) {}
 
-protected:
+ protected:
   existing_map existing;
 };
 

@@ -1,4 +1,4 @@
-// This is ./vxl/vpl/vpl.h
+// This is vxl/vpl/vpl.h
 #ifndef vpl_h_
 #define vpl_h_
 //:

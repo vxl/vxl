@@ -1,13 +1,10 @@
+// This is mul/mbl/mbl_file_data_collector.h
 #ifndef mbl_file_data_collector_h_
 #define mbl_file_data_collector_h_
-
 //:
 // \file
 // \brief Collect data objects and store them in a file.
 // \author dac
-//
-
-
 
 #include <vsl/vsl_binary_io.h>
 #include <vcl_string.h>
@@ -17,19 +14,18 @@
 
 //: Collect data objects and store them in a file.
 template<class T>
-class mbl_file_data_collector : public mbl_data_collector<T> {
-private:
-
-    //: binary file stream where the data is stored
+class mbl_file_data_collector : public mbl_data_collector<T>
+{
+  //: binary file stream where the data is stored
   vsl_b_ofstream bfs_;
 
-    //: path to binary data stream
+  //: path to binary data stream
   vcl_string path_;
 
-    //: wrapper object point to same file (return reference to this object!)
+  //: wrapper object point to same file (return reference to this object!)
   mbl_file_data_wrapper<T>* wrapper_;
 
-public:
+ public:
  
   //: Constructor
   mbl_file_data_collector(vcl_string& path);

@@ -1,7 +1,6 @@
-// This is ./oxl/vgui/vgui_quit_tableau.h
+// This is oxl/vgui/vgui_quit_tableau.h
 #ifndef vgui_quit_tableau_h_
 #define vgui_quit_tableau_h_
-
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
@@ -20,8 +19,9 @@
 //: A tableau which quits the application on receiving 'q' or ESC
 //
 //  This is provided by default if you use a vgui_shell_tableau.
-class vgui_quit_tableau : public vgui_tableau {
-public:
+class vgui_quit_tableau : public vgui_tableau
+{
+ public:
 
   //: Handle all events used by this tableau.
   //  In particular, this is interested in 'q' and ESC key-presses.
@@ -30,7 +30,7 @@ public:
   //: Return the type of this tableau ('vgui_quit_tableau').
   vcl_string type_name() const;
 
-protected:
+ protected:
   //: Destructor - called by vgui_quit_tableau_sptr.
   ~vgui_quit_tableau() { }
 };

@@ -1,7 +1,6 @@
+// This is vxl/vul/vul_canonical_path.h
 #ifndef vul_canonical_path_h_
 #define vul_canonical_path_h_
-
-// This is vxl/vul/vul_canonical_path.h
 
 #include <vcl_deprecated_header.h>
 

@@ -1,3 +1,4 @@
+// This is vxl/vnl/examples/time_fastops.cxx
 #include <vcl_iostream.h>
 #include <vcl_cmath.h> // for vcl_sqrt()
 #include <vcl_vector.h>
@@ -18,14 +19,14 @@ double vnl_fastops_dot(const double* a, const double* b, int n);
 int main()
 {
   vcl_vector<double> x(1000000), y(1000000);
-  for(int i = 0; i < 1000000; ++i)
+  for (int i = 0; i < 1000000; ++i)
     x[i] = y[i] = 1.0/vcl_sqrt(double(i+1));
 
   vul_timer t;
-  for(int n = 0; n < 20; ++n)
+  for (int n = 0; n < 20; ++n)
     vnl_fastops_dot(&x[0], &y[0], x.size());
   vcl_cerr << "Method = " << METHOD << ", Optimized = " << OPTIMIZED << ", "
-       << "Result = " << vnl_fastops_dot(&x[0], &y[0], x.size()) << ", ";
+           << "Result = " << vnl_fastops_dot(&x[0], &y[0], x.size()) << ", ";
   t.print(vcl_cerr);
 
   return 0;
@@ -40,15 +41,15 @@ double vnl_fastops_dot(const double* a, const double* b, int n)
     accum += *a++ * *b++;
 #endif
 #if METHOD == 2
-  for(int k = 0; k < n; ++k)
+  for (int k = 0; k < n; ++k)
     accum += a[k] * b[k];
 #endif
 #if METHOD == 3
-  while(n--)
+  while (n--)
     accum += a[n] * b[n];
 #endif
 #if METHOD == 4
-  for(int k = n-1; k >= 0; --k)
+  for (int k = n-1; k >= 0; --k)
     accum += a[k] * b[k];
 #endif
   return accum;

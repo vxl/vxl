@@ -6,7 +6,7 @@
 // \brief Calculate mean and variance of 1D data.
 
 void pdf1d_calc_mean_var(double& mean, double& var,
-                       const vnl_vector<double>& d)
+                         const vnl_vector<double>& d)
 {
   pdf1d_calc_mean_var(mean,var,d.data_block(),d.size());
 }

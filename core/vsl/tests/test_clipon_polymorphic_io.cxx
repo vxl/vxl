@@ -11,9 +11,10 @@
 #include <testlib/testlib_test.h>
 
 //: Base class to test polymorphic loading
-class test2_base_class {
+class test2_base_class
+{
   void vtable_hack();
-public:
+ public:
   //: Destructor
   virtual ~test2_base_class() {};
 
@@ -29,26 +30,22 @@ public:
 
   //: Print summary
   virtual void print_summary(vcl_ostream& os) const
-  {
-    os<<is_a()<<vcl_endl;
-  };
+  { os<<is_a()<<vcl_endl; }
 };
 
 void test2_base_class::vtable_hack() { }
 
 //: Base class to test polymorphic loading
-class test2_base_class_io {
-public:
+class test2_base_class_io
+{
+ public:
   virtual test2_base_class* new_object() const =0;
 
-  virtual void b_write_by_base(
-    vsl_b_ostream& os, const test2_base_class& base) const =0;
+  virtual void b_write_by_base(vsl_b_ostream& os, const test2_base_class& base) const =0;
 
-  virtual void b_read_by_base(
-    vsl_b_istream& os, test2_base_class& base) const =0;
+  virtual void b_read_by_base(vsl_b_istream& os, test2_base_class& base) const =0;
 
-  virtual void print_summary_by_base(
-    vcl_ostream& os, const test2_base_class& base) const =0;
+  virtual void print_summary_by_base(vcl_ostream& os, const test2_base_class& base) const =0;
 
   virtual test2_base_class_io* clone() const =0;
 
@@ -90,11 +87,10 @@ void vsl_print_summary(vcl_ostream &os, const test2_base_class * b)
 }
 
 //: Derived class to test polymorphic loading
-class test2_derived_class : public test2_base_class{
-  void vtable_hack();
-private:
+class test2_derived_class : public test2_base_class
+{
   int data_;
-public:
+ public:
   test2_derived_class(int d=0) : data_(d) {}
 
   void set_data(int d) { data_=d; }
@@ -109,6 +105,9 @@ public:
 
   //: Return true if the argument matches this class' or the parent's identifier
   virtual bool is_class(vcl_string const& s) const;
+
+ private:
+  void vtable_hack();
 };
 
 void test2_derived_class::vtable_hack() { }
@@ -140,15 +139,15 @@ void vsl_b_read(vsl_b_istream& is, test2_derived_class& d)
 }
 
 //: Base class to test polymorphic loading
-class test2_derived_class_io: public test2_base_class_io {
-public:
+class test2_derived_class_io: public test2_base_class_io
+{
+ public:
   virtual test2_base_class* new_object() const
   {
     return new test2_derived_class;
   }
 
-  virtual void b_write_by_base(
-    vsl_b_ostream& os, const test2_base_class& base) const
+  virtual void b_write_by_base(vsl_b_ostream& os, const test2_base_class& base) const
   {
     vsl_b_write(os,(const test2_derived_class&) base);
   }
@@ -182,9 +181,9 @@ public:
 
 void test_clipon_polymorphic_io()
 {
-  vcl_cout << "**********************************" << vcl_endl;
-  vcl_cout << "Testing vsl clip-on polymorphic binary io" << vcl_endl;
-  vcl_cout << "**********************************" << vcl_endl;
+  vcl_cout << "*****************************************\n"
+           << "Testing vsl clip-on polymorphic binary io\n"
+           << "*****************************************\n";
 
   // Arrange that the loader knows about derived class
   vsl_add_to_binary_loader(test2_derived_class_io());

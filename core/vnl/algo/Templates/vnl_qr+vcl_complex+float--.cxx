@@ -1,7 +1,6 @@
-// This is ./vxl/vnl/algo/Templates/vnl_qr+vcl_complex+float--.cxx
+// This is vxl/vnl/algo/Templates/vnl_qr+vcl_complex+float--.cxx
 #include <vcl_complex.h>
 #include <vnl/algo/vnl_qr.txx>
-
 //:
 // \file
 
@@ -56,7 +55,7 @@ vnl_vector<vcl_complex<float>> vnl_qr<vcl_complex<float>>::solve(const vnl_vecto
                    &info);
 
   if (info > 0)
-    vcl_cerr << "vnl_qr<T>::solve() : A is rank-deficient by " << info << vcl_endl;
+    vcl_cerr << "vnl_qr<T>::solve() : A is rank-deficient by " << info << '\n';
 
   vnl_vector<vcl_complex<float>> x(p);
   vnl_copy(DOUBLE_x, x);
@@ -101,7 +100,7 @@ vnl_vector<vcl_complex<float>> vnl_qr<vcl_complex<float>>::QtB(const vnl_vector<
                    &info);
 
   if (info > 0) {
-    vcl_cerr << "vnl_qr<T>::QtB() -- A is rank-def by " << info << vcl_endl;
+    vcl_cerr << "vnl_qr<T>::QtB() -- A is rank-def by " << info << '\n';
   }
 
   vnl_vector<vcl_complex<float>> QtB(n);

@@ -42,13 +42,13 @@ class mil_gaussian_pyramid_builder_2d : public mil_image_pyramid_builder
   //  Applies 1-5-8-5-1 filter in x and y, then samples
   //  every other pixel.
   void gauss_reduce_15851(mil_image_2d_of<T>& dest_im,
-                    const mil_image_2d_of<T>& src_im) const;
+                          mil_image_2d_of<T>const& src_im) const;
 
   //: Smooth and subsample src_im to produce dest_im.
   //  Applies 1-2-1 filter in x and y, then samples
   //  every other pixel.
   void gauss_reduce_121(mil_image_2d_of<T>& dest_im,
-                    const mil_image_2d_of<T>& src_im) const;
+                        mil_image_2d_of<T>const& src_im) const;
 
  public:
   //: Dflt ctor

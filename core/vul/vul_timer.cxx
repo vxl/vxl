@@ -2,7 +2,6 @@
 
 //:
 // \file
-
 //
 // Copyright (C) 1991 Texas Instruments Incorporated.
 //
@@ -14,7 +13,6 @@
 // Texas Instruments Incorporated provides this software "as is" without
 // express or implied warranty.
 //
-
 // Created: BMK 07/14/89  Initial design and implementation
 // Updated: LGO 09/23/89  Conform to COOL coding style
 // Updated: AFM 12/31/89  OS/2 port
@@ -120,7 +118,7 @@ long vul_timer::real()
  s  = real.tv_sec    - data->real0.tv_sec;
  long us = real.tv_usec - data->real0.tv_usec;
 
- if(us < 0)
+ if (us < 0)
    {us += 1000000;
     s--;
    }
@@ -133,7 +131,7 @@ long vul_timer::real()
  s = real.time - data->real0.time;
  long ms = real.millitm - data->real0.millitm;
 
- if(ms < 0) {
+ if (ms < 0) {
    ms += 1000;
    s--;
  }

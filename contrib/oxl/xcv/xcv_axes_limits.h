@@ -1,7 +1,6 @@
-// This is ./oxl/xcv/xcv_axes_limits.h
+// This is oxl/xcv/xcv_axes_limits.h
 #ifndef xcv_axes_limits_h_
 #define xcv_axes_limits_h_
-
 //:
 // \file
 // \author   Andrew Fitzgibbon <andrewfg@ed.ac.uk>
@@ -18,8 +17,9 @@
 //     K.Y.McGaul        26-APR-2001   Converted to vxl.
 // \endverbatim
 
-class xcv_axes_limits {
-public:
+class xcv_axes_limits
+{
+ public:
   //: Lowest value to be plotted.
   double  low;
   //: Highest value to be plotted.

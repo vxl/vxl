@@ -98,8 +98,8 @@ void* vnl_alloc::refill(vcl_size_t n)
 
 void*
 vnl_alloc::reallocate(void *p,
-          vcl_size_t old_sz,
-          vcl_size_t new_sz)
+                      vcl_size_t old_sz,
+                      vcl_size_t new_sz)
 {
   void * result;
   vcl_size_t copy_sz;
@@ -135,7 +135,7 @@ int main()
 {
   char* p = (char*)vnl_alloc::allocate(10);
   vcl_strcpy(p, "fred\n");
-  vcl_cerr << p << vcl_endl;
+  vcl_cerr << p << '\n';
   vnl_alloc::deallocate(p,10);
 }
 

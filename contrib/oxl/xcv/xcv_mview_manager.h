@@ -1,7 +1,6 @@
-// This is ./oxl/xcv/xcv_mview_manager.h
+// This is oxl/xcv/xcv_mview_manager.h
 #ifndef xcv_mview_manager_h_
 #define xcv_mview_manager_h_
-
 //:
 // \file
 // \author  K.Y.McGaul
@@ -17,7 +16,7 @@ struct vgui_tableau_sptr;
 
 class xcv_mview_manager
 {
-public:
+ public:
   //: Destructor (default dtor would be non-virtual).
   virtual ~xcv_mview_manager() { }
 

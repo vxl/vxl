@@ -1,7 +1,6 @@
-// This is ./oxl/vgui/vgui_shell_tableau.h
+// This is oxl/vgui/vgui_shell_tableau.h
 #ifndef vgui_shell_tableau_h_
 #define vgui_shell_tableau_h_
-
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
@@ -38,8 +37,13 @@
 // |  1   quit_tableau
 // |  0   tview_launch_tableau <--- first child.
 // \endverbatim
-class vgui_shell_tableau : public vgui_composite_tableau {
-public:
+class vgui_shell_tableau : public vgui_composite_tableau
+{
+  bool do_quit;
+  bool enable_key_bindings;
+  vgui_clear_tableau_sptr clear;
+  vgui_tview_launcher_tableau_sptr graph;
+ public:
   vgui_shell_tableau();
   vgui_shell_tableau(vgui_tableau_sptr const &);
   vgui_shell_tableau(vgui_tableau_sptr const &,
@@ -62,16 +66,11 @@ public:
   vgui_clear_tableau_sptr get_clear() const { return clear; }
   vgui_tview_launcher_tableau_sptr get_graph() const { return graph; }
 
-protected:
+ protected:
   ~vgui_shell_tableau();
 
-private:
+ private:
   void init();
-
-  bool do_quit;
-  bool enable_key_bindings;
-  vgui_clear_tableau_sptr clear;
-  vgui_tview_launcher_tableau_sptr graph;
 };
 
 //: Create a smart-pointer to a vgui_shell_tableau.

@@ -12,8 +12,7 @@
 
 //: return true if the two linesegments meet
 template <class T>
-bool vgl_lineseg_test(T x1, T y1, T x2, T y2,
-        T x3, T y3, T x4, T y4);
+bool vgl_lineseg_test(T x1, T y1, T x2, T y2, T x3, T y3, T x4, T y4);
 
 //: return true if the two linesegments meet
 // \relates vgl_line_segment_2d

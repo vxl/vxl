@@ -1,5 +1,6 @@
-// This is ./oxl/vgui/impl/mfc/vgui_mfc_app.h
-
+// This is oxl/vgui/impl/mfc/vgui_mfc_app.h
+#ifndef AFX_VGUIMFCAPP_H__259D1B15_6A52_45B3_B335_8A7C78097A13__INCLUDED_
+#define AFX_VGUIMFCAPP_H__259D1B15_6A52_45B3_B335_8A7C78097A13__INCLUDED_
 //:
 // \file
 // \author Marko Bacic, Oxford RRG
@@ -12,9 +13,6 @@
 //  Modifications:
 //    23-AUG-2000 Marko Bacic, Oxford RRG -- Added support for scroll bars
 // \endverbatim
-
-#ifndef AFX_VGUIMFCAPP_H__259D1B15_6A52_45B3_B335_8A7C78097A13__INCLUDED_
-#define AFX_VGUIMFCAPP_H__259D1B15_6A52_45B3_B335_8A7C78097A13__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
@@ -32,12 +30,11 @@
 //   and only once in the application and initialises all the MFC stuff
 class vgui_mfc_app : public CWinApp
 {
-public:
-        vgui_mfc_app();
+ public:
+  vgui_mfc_app();
 
-        public:
-        virtual BOOL InitInstance();
-        virtual BOOL Run();
+  virtual BOOL InitInstance();
+  virtual BOOL Run();
 };
 
 

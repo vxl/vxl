@@ -1,7 +1,6 @@
-// This is ./vxl/vbl/io/vbl_io_bounding_box.txx
+// This is vxl/vbl/io/vbl_io_bounding_box.txx
 #ifndef vbl_io_bounding_box_txx_
 #define vbl_io_bounding_box_txx_
-
 //:
 // \file
 
@@ -48,8 +47,8 @@ void vsl_b_read(vsl_b_istream &is, vbl_bounding_box_base<T, DIM_> & p)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_bounding_box_base<T, DIM_>&) \n";
-    vcl_cerr << "           Unknown version number "<< v << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_bounding_box_base<T, DIM_>&) \n"
+             << "           Unknown version number "<< v << "\n";
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -61,21 +60,21 @@ void vsl_b_read(vsl_b_istream &is, vbl_bounding_box_base<T, DIM_> & p)
 template<class T, class DIM_>
 void vsl_print_summary(vcl_ostream& os,const vbl_bounding_box_base<T, DIM_> & p)
 {
-    os << vcl_endl;
+    os << '\n';
     if (p.empty())
-      os << "empty" << vcl_endl;
+      os << "empty\n";
     else {
-      for(int i=0;i<p.dimension();i++)
+      for (int i=0;i<p.dimension();i++)
       {
-        os << "min[" << i << "] = " << p.min()[i] << vcl_endl;
+        os << "min[" << i << "] = " << p.min()[i] << '\n';
       }
-      os << vcl_endl;
-      for(int i=0;i<p.dimension();i++)
+      os << '\n';
+      for (int i=0;i<p.dimension();i++)
       {
-        os << "max[" << i << "] = " << p.max()[i] << vcl_endl;
+        os << "max[" << i << "] = " << p.max()[i] << '\n';
       }
     }
-    os << vcl_endl;
+    os << '\n';
 }
 
 #define VBL_IO_BOUNDING_BOX_INSTANTIATE(T, DIM) \

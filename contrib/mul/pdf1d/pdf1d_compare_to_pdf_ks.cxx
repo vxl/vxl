@@ -37,12 +37,12 @@ pdf1d_compare_to_pdf_ks::~pdf1d_compare_to_pdf_ks()
 
 //: Test whether data came from the given distribution
 double pdf1d_compare_to_pdf_ks::compare(const double* data, int n,
-                                          const pdf1d_pdf& pdf)
+                                        const pdf1d_pdf& pdf)
 {
   if (!pdf.cdf_is_analytic())
   {
-    vcl_cerr<<"Warning: pdf1d_compare_to_pdf_ks::compare() ";
-    vcl_cerr<<"Incorrectly assuming an analytic form for CDF."<<vcl_cout;
+    vcl_cerr<<"Warning: pdf1d_compare_to_pdf_ks::compare() "
+            <<"Incorrectly assuming an analytic form for CDF.\n";
     // Should use slightly different implementation when estimating CDF using samples
     // Not yet implemented though.
   }
@@ -141,8 +141,8 @@ void pdf1d_compare_to_pdf_ks::b_read(vsl_b_istream& bfs)
     case (1):
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_compare_to_pdf_ks &) \n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_compare_to_pdf_ks &) \n"
+               << "           Unknown version number "<< version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }

@@ -52,7 +52,7 @@ void pdf1d_kernel_pdf::set_centres(const vnl_vector<double>& x, double width)
 //=======================================================================
 //: Initialise so all kernels have given width
 void pdf1d_kernel_pdf::set_centres(const vnl_vector<double>& x,
-                   const vnl_vector<double>& width)
+                                   const vnl_vector<double>& width)
 {
   assert(x.size()==width.size());
   x_ = x;
@@ -195,7 +195,7 @@ short pdf1d_kernel_pdf::version_no() const
 void pdf1d_kernel_pdf::print_summary(vcl_ostream& os) const
 {
   pdf1d_pdf::print_summary(os);
-  os << vcl_endl;
+  os << '\n';
 }
 
 //=======================================================================
@@ -219,9 +219,9 @@ void pdf1d_kernel_pdf::b_read(vsl_b_istream& bfs)
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_kernel_pdf &)\n";
-    vcl_cerr << "           Attempted to load object of type ";
-    vcl_cerr << name <<" into object of type " << is_a() << vcl_endl;
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_kernel_pdf &)\n"
+             << "           Attempted to load object of type "
+             << name <<" into object of type " << is_a() << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -236,8 +236,8 @@ void pdf1d_kernel_pdf::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,width_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_kernel_pdf &)\n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_kernel_pdf &)\n"
+               << "           Unknown version number "<< version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }

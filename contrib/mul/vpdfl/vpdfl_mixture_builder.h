@@ -1,19 +1,15 @@
+// This is mul/vpdfl/vpdfl_mixture_builder.h
+// Copyright: (C) 2000 Victoria University of Manchester
 #ifndef vpdfl_mixture_builder_h_
 #define vpdfl_mixture_builder_h_
-//=======================================================================
-//
-//      Copyright: (C) 2000 Victoria University of Manchester
-//
-//=======================================================================
-
 //:
 // \file
 // \brief Implements builder for a mixture model PDF.
 // \author Tim Cootes
 // \date 21-July-98
 //
-// Modifications
 // \verbatim
+// Modifications
 //    IMS   Converted to VXL 14 May 2000, with redesign
 // \endverbatim
 
@@ -28,8 +24,8 @@
 class vpdfl_mixture;
 
 //: Uses the EM algorithm to build vpdfl_mixture objects.
-class vpdfl_mixture_builder : public vpdfl_builder_base {
-private:
+class vpdfl_mixture_builder : public vpdfl_builder_base
+{
   vcl_vector<vpdfl_builder_base*> builder_;
   double min_var_;
   int max_its_;
@@ -40,9 +36,9 @@ private:
     //: Assumes means set up.  Estimates starting components.
     // \param mean_sep : Rough guess of mean separation between points
   void initialise_given_means(vpdfl_mixture& model,
-                  const vnl_vector<double>* data,
-                  const vcl_vector<vnl_vector<double> >& mean,
-                  const vcl_vector<double>& wts) const;
+                              const vnl_vector<double>* data,
+                              const vcl_vector<vnl_vector<double> >& mean,
+                              const vcl_vector<double>& wts) const;
 
     //: Means centred on data[i*f]
   void initialise_to_regular_samples(vpdfl_mixture& model,
@@ -73,7 +69,8 @@ private:
 
   void init();
   void delete_stuff();
-public:
+
+ public:
 
   //: Dflt ctor
   vpdfl_mixture_builder();

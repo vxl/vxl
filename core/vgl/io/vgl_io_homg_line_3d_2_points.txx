@@ -41,8 +41,8 @@ void vsl_b_read(vsl_b_istream &is, vgl_homg_line_3d_2_points<T> & p)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_homg_line_3d_2_points<T>&) \n";
-    vcl_cerr << "           Unknown version number "<< v << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_homg_line_3d_2_points<T>&) \n"
+             << "           Unknown version number "<< v << "\n";
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -63,7 +63,7 @@ void vsl_print_summary(vcl_ostream& os,const vgl_homg_line_3d_2_points<T> & p)
 
 #define VGL_IO_HOMG_LINE_3D_2_POINTS_INSTANTIATE(T) \
 template void vsl_print_summary(vcl_ostream &, \
-                                 const vgl_homg_line_3d_2_points<T > &); \
+                                const vgl_homg_line_3d_2_points<T > &); \
 template void vsl_b_read(vsl_b_istream &, vgl_homg_line_3d_2_points<T > &); \
 template void vsl_b_write(vsl_b_ostream &, vgl_homg_line_3d_2_points<T >const&)
 

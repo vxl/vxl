@@ -38,8 +38,10 @@ clsfy_adaboost_trainer::~clsfy_adaboost_trainer()
 
 
 //: Extracts the j-th element of each vector in data and puts into v
-void clsfy_adaboost_trainer::clsfy_get_elements(vnl_vector<double>& v,
-                               mbl_data_wrapper<vnl_vector<double> >& data, int j)
+void clsfy_adaboost_trainer::clsfy_get_elements(
+                              vnl_vector<double>& v,
+                              mbl_data_wrapper<vnl_vector<double> >& data,
+                              int j)
 {
   unsigned long n = data.size();
   v.resize(n);
@@ -53,11 +55,12 @@ void clsfy_adaboost_trainer::clsfy_get_elements(vnl_vector<double>& v,
 
 
 //: Correctly classified examples have weights scaled by beta
-void clsfy_adaboost_trainer::clsfy_update_weights_weak(vnl_vector<double> &wts,
-                                 const vnl_vector<double>& data,
-                                 clsfy_classifier_1d& classifier,
-                                 int class_number,
-                                 double beta)
+void clsfy_adaboost_trainer::clsfy_update_weights_weak(
+                              vnl_vector<double> &wts,
+                              const vnl_vector<double>& data,
+                              clsfy_classifier_1d& classifier,
+                              int class_number,
+                              double beta)
 {
   assert(class_number >= 0);
   unsigned int n = wts.size();
@@ -72,11 +75,11 @@ void clsfy_adaboost_trainer::clsfy_update_weights_weak(vnl_vector<double> &wts,
 //  here egs0 are -ve examples
 //  and egs1 are +ve examples
 void clsfy_adaboost_trainer::build_strong_classifier(
-                            clsfy_simple_adaboost& strong_classifier,
-                            int max_n_clfrs,
-                            clsfy_builder_1d& builder,
-                            mbl_data_wrapper<vnl_vector<double> >& egs0,
-                            mbl_data_wrapper<vnl_vector<double> >& egs1)
+                              clsfy_simple_adaboost& strong_classifier,
+                              int max_n_clfrs,
+                              clsfy_builder_1d& builder,
+                              mbl_data_wrapper<vnl_vector<double> >& egs0,
+                              mbl_data_wrapper<vnl_vector<double> >& egs1)
 {
   // remove all alphas and classifiers from strong classifier
   strong_classifier.clear();
@@ -102,21 +105,20 @@ void clsfy_adaboost_trainer::build_strong_classifier(
 
   for (int i=0;i<n;++i)
   {
-    vcl_cout<<"adaboost training round = "<<i<<vcl_endl;
+    vcl_cout<<"adaboost training round = "<<i<<'\n';
 
-    //vcl_cout<<"wts0= "<<wts0<<vcl_endl;
-    //vcl_cout<<"wts1= "<<wts1<<vcl_endl;
+    //vcl_cout<<"wts0= "<<wts0<<"\nwts1= "<<wts1<<'\n';
 
     int best_j=-1;
     double min_error= 100000;
     for (int j=0;j<d;++j)
     {
-      //vcl_cout<<"building classifier "<<j<<" of "<<d<<vcl_endl;
+      //vcl_cout<<"building classifier "<<j<<" of "<<d<<'\n';
       clsfy_get_elements(egs0_1d,egs0,j);
       clsfy_get_elements(egs1_1d,egs1,j);
 
       double error = builder.build(*c1d,egs0_1d,wts0,egs1_1d,wts1);
-      //vcl_cout<<"error= "<<error<<vcl_endl;
+      //vcl_cout<<"error= "<<error<<'\n';
       if (j==0 || error<min_error)
       {
         min_error = error;
@@ -125,8 +127,8 @@ void clsfy_adaboost_trainer::build_strong_classifier(
       }
     }
 
-    vcl_cout<<"best_j= "<<best_j<<vcl_endl;
-    vcl_cout<<"min_error= "<<min_error<<vcl_endl;
+    vcl_cout<<"best_j= "<<best_j<<'\n'
+            <<"min_error= "<<min_error<<'\n';
 
     if (min_error<1e-10)  // Hooray!
     {
@@ -256,8 +258,8 @@ void clsfy_adaboost_trainer::b_read(vsl_b_istream& /*bfs*/)
     vsl_b_read(bfs,data_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_adaboost_trainer&) \n";
-    vcl_cerr << "           Unknown version number "<< version << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_adaboost_trainer&) \n"
+             << "           Unknown version number "<< version << "\n";
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

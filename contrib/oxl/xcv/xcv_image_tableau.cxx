@@ -1,5 +1,5 @@
 // This is oxl/xcv/xcv_image_tableau.cxx
-
+#include "xcv_image_tableau.h"
 //:
 // \file
 // \author Marko Bacic (u97mb@robots.ox.ac.uk)
@@ -10,8 +10,6 @@
 //    05-AUG-2002 K.Y.McGaul - Print mouse position on status bar.
 //    06-AUG-2002 K.Y.McGaul - Print RGB value on status bar.
 // \endverbatim
-
-#include "xcv_image_tableau.h"
 
 #include <vcl_string.h>
 #include <vcl_cmath.h>

@@ -28,9 +28,9 @@
 // In particular if you let the function initialise the centres, it will
 // occur if any of the first k data samples are identical.
 unsigned mbl_k_means(mbl_data_wrapper<vnl_vector<double> > &data, unsigned k,
-                 vcl_vector<vnl_vector<double> >* cluster_centres,
-                 vcl_vector<unsigned> * partition //=0
-                 )
+                     vcl_vector<vnl_vector<double> >* cluster_centres,
+                     vcl_vector<unsigned> * partition //=0
+                    )
 {
   vcl_vector<vnl_vector<double> > & centres = *cluster_centres;
 
@@ -239,7 +239,7 @@ unsigned mbl_k_means_weighted(mbl_data_wrapper<vnl_vector<double> > &data, unsig
         if (!data.next())
         {
           vcl_cerr << "ERROR: mbl_k_means_weighted, while initialising centres from data\n"
-                   << "Not enough non-zero-weighted data" << vcl_endl;
+                   << "Not enough non-zero-weighted data\n";
           vcl_abort();
         }
 #endif //NDEBUG

@@ -1,8 +1,7 @@
+// This is mul/clsfy/clsfy_classifier_base.h
+// Copyright: (C) 2000 Britsh Telecommunications plc
 #ifndef clsfy_classifier_base_h_
 #define clsfy_classifier_base_h_
-
-// Copyright: (C) 2000 Britsh Telecommunications plc
-
 //:
 // \file
 // \brief Describe an abstract classifier
@@ -26,9 +25,9 @@
 // Derived classes with binary in the name indicates that
 // the classifier works with only two classes, 0 and 1.
 
-class clsfy_classifier_base {
-
-public:
+class clsfy_classifier_base
+{
+ public:
 
   // Dflt constructor
   clsfy_classifier_base();
@@ -106,7 +105,7 @@ inline void vsl_print_summary(vcl_ostream& os, const clsfy_classifier_base* b)
 
 //: Calculate the fraction of test samples which are classified incorrectly
 double clsfy_test_error(const clsfy_classifier_base &classifier,
-  mbl_data_wrapper<vnl_vector<double> > & test_inputs,
-  const vcl_vector<unsigned> & test_outputs);
+                        mbl_data_wrapper<vnl_vector<double> > & test_inputs,
+                        const vcl_vector<unsigned> & test_outputs);
 
 #endif // clsfy_classifier_base_h_

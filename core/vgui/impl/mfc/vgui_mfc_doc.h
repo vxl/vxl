@@ -1,7 +1,6 @@
-// This is ./oxl/vgui/impl/mfc/vgui_mfc_doc.h
+// This is oxl/vgui/impl/mfc/vgui_mfc_doc.h
 #ifndef AFX_VGUI_MFC_DOC_H__AB1D93B0_8FC7_4E71_ABD0_FA4AA666D5CD__INCLUDED_
 #define AFX_VGUI_MFC_DOC_H__AB1D93B0_8FC7_4E71_ABD0_FA4AA666D5CD__INCLUDED_
-
 //:
 // \file
 // \author  Marko Bacic, Oxford RRG
@@ -22,35 +21,31 @@ class vgui_tableau;
 //: Defines a main application document.
 class vgui_mfc_doc : public CDocument
 {
-protected: // create from serialization only
+ protected:
+  //: we store our main tableau in the document - the adaptor(s) view this tableau.
+  vgui_tableau* tableau;
+
+ protected: // create from serialization only
   vgui_mfc_doc();
   DECLARE_DYNCREATE(vgui_mfc_doc)
 
-// Attributes
-public:
-
 // Operations
-public:
- vgui_tableau* get_tableau() { return tableau; }
+ public:
+  vgui_tableau* get_tableau() { return tableau; }
 // Overrides
   // ClassWizard generated virtual function overrides
   //{{AFX_VIRTUAL(vgui_mfc_doc)
-  public:
+ public:
   virtual void Serialize(CArchive& ar);
   //}}AFX_VIRTUAL
 
-
 // Implementation
-public:
+ public:
   virtual ~vgui_mfc_doc();
 #ifdef _DEBUG
   virtual void AssertValid() const;
   virtual void Dump(CDumpContext& dc) const;
 #endif
-
-protected:
-  //: we store our main tableau in the document - the adaptor(s) view this tableau.
-  vgui_tableau* tableau;
 };
 
 /////////////////////////////////////////////////////////////////////////////

@@ -1,5 +1,6 @@
-// This is ./oxl/vgui/vgui_grid_tableau.h
-
+// This is oxl/vgui/vgui_grid_tableau.h
+#ifndef vgui_grid_tableau_h_
+#define vgui_grid_tableau_h_
 //:
 // \file
 // \author K.Y.McGaul
@@ -13,9 +14,6 @@
 //    K.Y.McGaul 11-FEB-2000 Added a clear_tableau to the empty grid positions.
 //    K.Y.McGaul 21-FEB-2002 Added comments and documentation.
 // \endverbatim
-
-#ifndef vgui_grid_tableau_h_
-#define vgui_grid_tableau_h_
 
 #include <vcl_vector.h>
 #include <vbl/vbl_array_2d.h>

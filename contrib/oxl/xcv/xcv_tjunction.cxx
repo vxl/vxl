@@ -1,12 +1,10 @@
-// This is ./oxl/xcv/xcv_tjunction.cxx
-
+// This is oxl/xcv/xcv_tjunction.cxx
+#include "xcv_tjunction.h"
 //:
 //  \file
 // See xcv_tjunction.h for a description of this file.
 //
 // \author  K.Y.McGaul
-
-#include "xcv_tjunction.h"
 
 xcv_tjunction::xcv_tjunction(xcv_mview_manager* xmm)
   : vgui_tableau()

@@ -1,7 +1,6 @@
-// This is ./vxl/vbl/vbl_smart_ptr.h
+// This is vxl/vbl/vbl_smart_ptr.h
 #ifndef vbl_smart_ptr_h_
 #define vbl_smart_ptr_h_
-
 //:
 // \file
 // \brief Contains a templated smart pointer class
@@ -51,8 +50,15 @@
 //
 // See also vbl_ref_count
 template <class T>
-class vbl_smart_ptr {
-public:
+class vbl_smart_ptr
+{
+  //: The protected flag says whether or not the object held will be unref()fed when the smart pointer goes out of scope.
+  bool protected_;
+
+  //: Pointer to object, or 0.
+  T *ptr_;
+
+ public:
   vbl_smart_ptr ()
     : protected_(true), ptr_(0) { }
 
@@ -169,19 +175,13 @@ public:
   bool operator<=(vbl_smart_ptr<T>const&p)const{return ptr_ <= p.as_pointer();}
   bool operator>=(vbl_smart_ptr<T>const&p)const{return ptr_ >= p.as_pointer();}
 
-private:
+ private:
   // These two methods should not be inlined as they call T's ref()
   // and unref() or are specializations. The big gain from that is
   // that vbl_smart_ptr<T> can be forward declared even if T is still
   // an incomplete type.
   static void ref  (T *p);
   static void unref(T *p);
-
-  //: The protected flag says whether or not the object held will be unref()fed when the smart pointer goes out of scope.
-  bool protected_;
-
-  //: Pointer to object, or 0.
-  T *ptr_;
 };
 
 

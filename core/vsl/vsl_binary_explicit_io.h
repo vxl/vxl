@@ -147,7 +147,8 @@ inline void vsl_swap_bytes_to_buffer( const char * source, char * dest, int nbyt
 // buffer should be at least as long as
 // VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned long)) * count
 inline unsigned long vsl_convert_to_arbitrary_length(const unsigned long* ints,
-  unsigned char *buffer, unsigned long count = 1)
+                                                     unsigned char *buffer,
+                                                     unsigned long count = 1)
 {
   unsigned char* ptr = buffer;
   while (count-- > 0)
@@ -199,9 +200,9 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
       if (bitsLeft <= 0 || ((b & 127) >> bitsLeft) != 0)
       {
         vcl_cerr << "\nI/O ERROR: "
-          << "vsl_convert_from_arbitrary_length(.., unsigned long*,..) has\n"
-          << "attempted to convert a number that is too large "
-          << "to fit into an unsigned long\n";
+                 << "vsl_convert_from_arbitrary_length(.., unsigned long*,..)"
+                 << " has\nattempted to convert a number that is too large"
+                 << " to fit into an unsigned long\n";
         return 0;
       }
     }
@@ -276,9 +277,9 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
               (((b & 127) >> (bitsLeft-1)) != 0) )
       {
         vcl_cerr << "\nI/O ERROR: "
-          << "vsl_convert_from_arbitrary_length(.., signed long*,..) has\n"
-          << "attempted to convert a number that is too large "
-          << "to fit into an unsigned long\n";
+                 << "vsl_convert_from_arbitrary_length(.., signed long*,..) has\n"
+                 << "attempted to convert a number that is too large "
+                 << "to fit into an unsigned long\n";
         return 0;
       }
     }
@@ -352,9 +353,9 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
       if (bitsLeft <= 0 || ((b & 127) >> bitsLeft) != 0)
       {
         vcl_cerr << "\nI/O ERROR: "
-          << "vsl_convert_from_arbitrary_length(.., unsigned int*,..) has \n"
-          << "attempted to convert a number that is too large "
-          << "to fit into an unsigned long\n";
+                 << "vsl_convert_from_arbitrary_length(.., unsigned int*,..) has \n"
+                 << "attempted to convert a number that is too large "
+                 << "to fit into an unsigned long\n";
         return 0;
       }
     }
@@ -430,9 +431,9 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
               (((b & 127) >> (bitsLeft-1)) != 0) )
       {
         vcl_cerr << "\nI/O ERROR: "
-          << "vsl_convert_from_arbitrary_length(.., signed int*,..) has \n"
-          << "attempted to convert a number that is too large "
-          << "to fit into an unsigned long\n";
+                 << "vsl_convert_from_arbitrary_length(.., signed int*,..) has \n"
+                 << "attempted to convert a number that is too large "
+                 << "to fit into an unsigned long\n";
         return 0;
       }
     }
@@ -507,9 +508,9 @@ unsigned short *ints, unsigned long count = 1)
       if (bitsLeft <= 0 || ((b & 127) >> bitsLeft) != 0)
       {
         vcl_cerr << "\nI/O ERROR: "
-          << "vsl_convert_from_arbitrary_length(.., unsigned short*,..) has\n"
-          << "attempted to convert a number that is too large "
-          << "to fit into an unsigned long\n";
+                 << "vsl_convert_from_arbitrary_length(.., unsigned short*,..) has\n"
+                 << "attempted to convert a number that is too large "
+                 << "to fit into an unsigned long\n";
         return 0;
       }
     }
@@ -586,9 +587,9 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
               (((b & 127) >> (bitsLeft-1)) != 0) )
       {
         vcl_cerr << "\nI/O ERROR: "
-          << "vsl_convert_from_arbitrary_length(.., signed short*,..) has\n"
-          << "attempted to convert a number that is too large "
-          << "to fit into an unsigned long\n";
+                 << "vsl_convert_from_arbitrary_length(.., signed short*,..) has\n"
+                 << "attempted to convert a number that is too large "
+                 << "to fit into an unsigned long\n";
         return 0;
       }
     }
@@ -761,7 +762,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, signed int* begin, unsigned nele
     if (n_bytes_converted != nbytes)
     {
       vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., signed int*,..)"
-        << " Corrupted data stream" << vcl_endl;
+               << " Corrupted data stream\n";
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     }
   }
@@ -803,7 +804,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, unsigned int* begin, unsigned ne
     if (n_bytes_converted != nbytes)
     {
       vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., unsigned int*,..)"
-        << " Corrupted data stream" << vcl_endl;
+               << " Corrupted data stream\n";
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     }
   }
@@ -845,7 +846,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, signed short* begin, unsigned ne
     if (n_bytes_converted != nbytes)
     {
       vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., signed short*,..)"
-        << " Corrupted data stream" << vcl_endl;
+               << " Corrupted data stream\n";
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     }
   }
@@ -887,7 +888,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, unsigned short* begin, unsigned 
     if (n_bytes_converted != nbytes)
     {
       vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., unsigned short*,..)"
-        << " Corrupted data stream" << vcl_endl;
+               << " Corrupted data stream\n";
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     }
   }
@@ -929,7 +930,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, signed long* begin, unsigned nel
     if (n_bytes_converted != nbytes)
     {
       vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., signed long*,..)"
-        << " Corrupted data stream" << vcl_endl;
+               << " Corrupted data stream\n";
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     }
   }
@@ -971,7 +972,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, unsigned long* begin, unsigned n
     if (n_bytes_converted != nbytes)
     {
       vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., unsigned long*,..)"
-        << " Corrupted data stream" << vcl_endl;
+               << " Corrupted data stream\n";
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     }
   }

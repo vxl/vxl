@@ -1,9 +1,9 @@
+// This is mul/clsfy/clsfy_rbf_parzen.cxx
+#include "clsfy_rbf_parzen.h"
 //:
 // \file
 // \author
 //   Copyright: (C) 2000 British Telecommunications plc
-
-#include "clsfy_rbf_parzen.h"
 
 #include <vcl_string.h>
 #include <vcl_algorithm.h>
@@ -46,7 +46,7 @@ unsigned clsfy_rbf_parzen::classify(const vnl_vector<double> &input) const
 //=======================================================================
 //: Set the training data.
 void clsfy_rbf_parzen::set(const vcl_vector<vnl_vector<double> > &inputs,
-  const vcl_vector<unsigned> &outputs)
+                           const vcl_vector<unsigned> &outputs)
 {
   assert(*vcl_max_element(outputs.begin(), outputs.end()) <= 1); // The class labels must be 0 or 1.
   assert(inputs.size() == outputs.size());

@@ -1,7 +1,8 @@
+// This is mul/mbl/mbl_read_props.cxx
+#include "mbl/mbl_read_props.h"
 //:
 //  \file
 
-#include "mbl/mbl_read_props.h"
 #include <vsl/vsl_indent.h>
 
 
@@ -11,7 +12,7 @@ void mbl_read_props_print(vcl_ostream &afs, mbl_read_props_type props)
   afs << vsl_indent() << "{\n";
   vsl_indent_inc(afs);
   for (ITER i = props.begin(); i != props.end(); ++i)
-    afs << vsl_indent() << (*i).first << ": " << (*i).second << vcl_endl;
+    afs << vsl_indent() << (*i).first << ": " << (*i).second << '\n';
   vsl_indent_dec(afs);
   afs << vsl_indent() << "}\n";
 }
@@ -75,8 +76,8 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
         {
           vcl_getline(afs, str1);
           vcl_cerr << "ERROR: mbl_read_props. Could not find colon ':'"
-            <<"separator while reading line" <<
-            label << " " << str1 << vcl_endl;
+                   <<"separator while reading line"
+                   << label << " " << str1 << '\n';
           return props;
         }
       }
@@ -86,7 +87,7 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
     }
   }
   if (need_closing_brace)
-    vcl_cerr << "ERROR: mbl_read_props. Unexpected end of file while " <<
-    "looking for '}'" <<vcl_endl;
+    vcl_cerr << "ERROR: mbl_read_props. Unexpected end of file while "
+             << "looking for '}'\n";
   return props;
 }

@@ -204,8 +204,9 @@ void mil3d_image_3d_of<T>::setFormat(const char* f)
 //=======================================================================
 template<class T>
 void mil3d_image_3d_of<T>::set(vcl_vector<T*>& planes,
-                        int nx, int ny, int nz, int xstep, int ystep, int zstep,
-                        const char* format)
+                               int nx, int ny, int nz,
+                               int xstep, int ystep, int zstep,
+                               const char* format)
 {
     release_data();
     planes_ = planes;
@@ -359,8 +360,7 @@ template<class T>
 void mil3d_image_3d_of<T>::print_summary(vcl_ostream& os) const
 {
     os<<"Format: "<<format_<<"  "
-      <<planes_.size()<<" planes, each "<<nx_<<" x "<<ny_<<" x "<<nz_
-      <<vcl_endl
+      <<planes_.size()<<" planes, each "<<nx_<<" x "<<ny_<<" x "<<nz_<<'\n'
       <<vsl_indent() << "Transform: "<<world2im_;
 }
 
@@ -372,31 +372,31 @@ void mil3d_image_3d_of<T>::print_all(vcl_ostream& os) const
 {
     os<<vsl_indent();
     print_summary(os);
-    os<<vcl_endl;
+    os<<'\n';
 
     for (int i=0;i<n_planes();++i)
     {
-        if (n_planes()>1) os<<vsl_indent()<<"Plane "<<i<<":"<<vcl_endl;
-        const T* im_data = plane(i);
-        for (int z=0;z<nz_;++z)
-        {
-        os<<vsl_indent()<<"z= "<<z<<":"<<vcl_endl;
-        os<<vsl_indent();
+      if (n_planes()>1) os<<vsl_indent()<<"Plane "<<i<<":\n";
+      const T* im_data = plane(i);
+      for (int z=0;z<nz_;++z)
+      {
+        os<<vsl_indent()<<"z= "<<z<<":\n"
+          <<vsl_indent();
 
         for (int y=ny_-1;y>=0;--y)
         {
-            os<<vsl_indent();
-            for (int x=0;x<nx_;++x)
-            {
-                int v = int(im_data[ystep_*y+x*xstep_+z*zstep_]);
-                if (v<10)  os<<" ";
-                if (v<100) os<<" ";
-                os<<v<<" ";
-            }
-            os<<vcl_endl;
+          os<<vsl_indent();
+          for (int x=0;x<nx_;++x)
+          {
+            int v = int(im_data[ystep_*y+x*xstep_+z*zstep_]);
+            if (v<10)  os<<" ";
+            if (v<100) os<<" ";
+            os<<v<<" ";
+          }
+          os<<'\n';
         }
-            os<<vcl_endl;
-            }
+        os<<'\n';
+      }
     }
 }
 
@@ -410,9 +410,9 @@ void mil3d_image_3d_of<T>::b_write(vsl_b_ostream& bfs) const
     vsl_b_write(bfs,version_no());
     if (!data_)
     {
-      vcl_cerr << "template<class T> mil3d_image_3d_of<T>::b_write() ";
-      vcl_cerr << "This image refers to external data and ";
-      vcl_cerr << "cannot be restored correctly if saved like this." << vcl_endl;
+      vcl_cerr << "template<class T> mil3d_image_3d_of<T>::b_write() "
+               << "This image refers to external data and "
+               << "cannot be restored correctly if saved like this.\n";
       vcl_abort();
     }
     vsl_b_write(bfs,data_);
@@ -461,8 +461,8 @@ void mil3d_image_3d_of<T>::b_read(vsl_b_istream& bfs)
             vsl_b_read(bfs,plane_offsets);
             break;
         default:
-            vcl_cerr << "template<class T> mil3d_image_3d_of<T>::b_read() ";
-            vcl_cerr << "Unexpected version number " << version << vcl_endl;
+            vcl_cerr << "template<class T> mil3d_image_3d_of<T>::b_read() "
+                     << "Unexpected version number " << version << '\n';
             vcl_abort();
     }
 
@@ -506,34 +506,28 @@ bool mil3d_image_3d_of<T>::deepSlice(Axis axis,int slice_number, mil_image_2d_of
     {
         case XAXIS:
             image_slice.resize(ny(),nz());
-            for (int z=0;z<nz();++z) {
-                for (int y=0;y<ny();++y) {
+            for (int z=0;z<nz();++z)
+                for (int y=0;y<ny();++y)
                     image_slice(y,z)=(*this)(slice_number,y,z);
-                }
-            }
             t.set_zoom_only(world2im_.matrix()(1,1),world2im_.matrix()(2,2),0,0);
             image_slice.setWorld2im(t);
             break;
         case YAXIS:
             image_slice.resize(nx(),nz());
-            for (int z=0;z<nz();++z) {
-                for (int x=0;x<nx();++x) {
+            for (int z=0;z<nz();++z)
+                for (int x=0;x<nx();++x)
                     image_slice(x,z)=(*this)(x,slice_number,z);
-                }
-            }
             t.set_zoom_only(world2im_.matrix()(0,0),world2im_.matrix()(2,2),0,0);
             image_slice.setWorld2im(t);
             break;
         case ZAXIS:
             image_slice.resize(nx(),ny());
-            for (int y=0;y<ny();++y) {
-                for (int x=0;x<nx();++x) {
+            for (int y=0;y<ny();++y)
+                for (int x=0;x<nx();++x)
                     image_slice(x,y)=(*this)(x,y,slice_number);
-                }
-            }
             t.set_zoom_only(world2im_.matrix()(0,0),world2im_.matrix()(1,1),0,0);
             image_slice.setWorld2im(t);
-                break;
+            break;
         default:
             result=false;
     }

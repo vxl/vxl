@@ -66,7 +66,7 @@ inline double r2lnr(double x, double y)
 // Sets L to be a symmetric square matrix of size n + 3 (n = pts.nelems)
 // with L(i,j) = Uij = r2lnr(pts(i)-pts(j)) for i,j <= n
 static void build_K_part(vnl_matrix<double>& L,
-      const vcl_vector<vgl_point_2d<double> >& pts)
+                         const vcl_vector<vgl_point_2d<double> >& pts)
 {
   unsigned int n = pts.size();
   if ( (L.rows()!=n+3) | (L.columns()!=n+3) ) L.resize(n+3,n+3);
@@ -478,15 +478,13 @@ short mbl_thin_plate_spline_2d::version_no() const
   // required if data is present in this class
 void mbl_thin_plate_spline_2d::print_summary(vcl_ostream& os) const
 {
-  os<<vcl_endl;
-  os<<"fx: "<<Ax0_<<" + "<<AxX_<<"*x + "<<AxY_<<"*y   Nonlinear terms:";
+  os<<"\nfx: "<<Ax0_<<" + "<<AxX_<<"*x + "<<AxY_<<"*y   Nonlinear terms:";
   for (unsigned int i=0;i<Wx_.size();++i)
-    os<<Wx_[i]<<" ";
-  os<<vcl_endl;
-  os<<"fy: "<<Ay0_<<" + "<<AyX_<<"*x + "<<AyY_<<"*y   Nonlinear terms:";
+    os<<" "<<Wx_[i];
+  os<<"\nfy: "<<Ay0_<<" + "<<AyX_<<"*x + "<<AyY_<<"*y   Nonlinear terms:";
   for (unsigned int i=0;i<Wy_.size();++i)
-    os<<Wy_[i]<<" ";
-  os<<vcl_endl;
+    os<<" "<<Wy_[i];
+  os<<'\n';
 }
 
 //=======================================================================
@@ -528,8 +526,8 @@ void mbl_thin_plate_spline_2d::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,L_inv_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mbl_thin_plate_spline_2d &)\n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mbl_thin_plate_spline_2d &)\n"
+               << "           Unknown version number "<< version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }

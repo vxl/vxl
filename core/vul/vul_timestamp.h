@@ -1,8 +1,6 @@
+// This is vxl/vul/vul_timestamp.h
 #ifndef vul_timestamp_h
 #define vul_timestamp_h
-
-// This is vxl/vul/vul_timestamp.h
-
 //:
 // \file
 // \brief generates a timestamp.
@@ -10,7 +8,10 @@
 //: class to generate a unique timestamp
 class vul_timestamp
 {
-public:
+  //: mark is incremented to give a unique timestamp
+  static unsigned long mark;
+
+ public:
 
   //: Constructor
   vul_timestamp();
@@ -27,14 +28,11 @@ public:
   //: Returns true if t is older than the last timestamp
   inline bool older(vul_timestamp const* t) const { return older(*t); }
 
-protected:
+ protected:
   //: last timestamp
   unsigned long timestamp_;
 
-private:
-  //: mark is incremented to give a unique timestamp
-  static unsigned long mark;
-
+ private:
   //: get a new timestamp
   static unsigned long get_unique_timestamp();
 };

@@ -17,13 +17,13 @@
 #include "vnl_netlib.h" // dgges_()
 
 VCL_DEFINE_SPECIALIZATION
-bool vnl_generalized_schur/*<double>*/(vnl_matrix<double> *A,
-                                       vnl_matrix<double> *B,
-                                       vnl_vector<double> *alphar,
-                                       vnl_vector<double> *alphai,
-                                       vnl_vector<double> *beta,
-                                       vnl_matrix<double> *L,
-                                       vnl_matrix<double> *R)
+bool vnl_generalized_schur(vnl_matrix<double> *A,
+                           vnl_matrix<double> *B,
+                           vnl_vector<double> *alphar,
+                           vnl_vector<double> *alphai,
+                           vnl_vector<double> *beta,
+                           vnl_matrix<double> *L,
+                           vnl_matrix<double> *R)
 {
   assert(A->cols() == A->cols());
   assert(A->cols() == B->rows());
@@ -82,24 +82,24 @@ bool vnl_generalized_schur/*<double>*/(vnl_matrix<double> *A,
     //*                      longer satisfy DELZTG=.TRUE.  This could also
     //*                      be caused due to scaling.
     //*                =N+3: reordering failed in DTGSEN.
-    vcl_cerr << __FILE__ ": info = " << info << ", something went wrong:" << vcl_endl;
+    vcl_cerr << __FILE__ ": info = " << info << ", something went wrong:\n";
     if (info < 0) {
-      vcl_cerr << __FILE__ ": (internal error) the " << (-info) << "th argument had an illegal value" << vcl_endl;
+      vcl_cerr << __FILE__ ": (internal error) the " << (-info) << "th argument had an illegal value\n";
     }
     else if (1 <= info && info <= n) {
-      vcl_cerr << __FILE__ ": the QZ iteration failed, but the last " << (n - info) << " eigenvalues may be correct" << vcl_endl;
+      vcl_cerr << __FILE__ ": the QZ iteration failed, but the last " << (n - info) << " eigenvalues may be correct\n";
     }
     else if (info == n+1) {
-      vcl_cerr << __FILE__ ": something went wrong in DHGEQZ" << vcl_endl;
+      vcl_cerr << __FILE__ ": something went wrong in DHGEQZ\n";
     }
     else if (info == n+2) {
-      vcl_cerr << __FILE__ ": roundoff error -- maybe due to poor scaling" << vcl_endl;
+      vcl_cerr << __FILE__ ": roundoff error -- maybe due to poor scaling\n";
     }
     else if (info == n+3) {
-      vcl_cerr << __FILE__ ": reordering failed in DTGSEN" << vcl_endl;
+      vcl_cerr << __FILE__ ": reordering failed in DTGSEN\n";
     }
     else {
-      vcl_cerr << __FILE__ ": unknown error" << vcl_endl;
+      vcl_cerr << __FILE__ ": unknown error\n";
     }
     return false;
   }

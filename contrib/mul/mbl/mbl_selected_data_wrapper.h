@@ -33,7 +33,7 @@ class mbl_selected_data_wrapper: public mbl_data_wrapper<T>
   // This will take its own copy of selection and the data wrapper,
   // but not the underlying data.
   mbl_selected_data_wrapper(const mbl_data_wrapper<T>& data,
-    const vcl_vector<unsigned> &subset);
+                            const vcl_vector<unsigned> &subset);
 
   //: Default constructor.
   mbl_selected_data_wrapper();

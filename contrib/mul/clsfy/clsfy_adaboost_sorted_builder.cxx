@@ -66,9 +66,9 @@ vcl_string clsfy_adaboost_sorted_builder::is_a() const
 // Builds an n-component classifier, each component of which is a 1D classifier
 // working on a single element of the input vector.
 double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
-                       mbl_data_wrapper<vnl_vector<double> >& inputs,
-                       unsigned nClasses,
-                       const vcl_vector<unsigned> &outputs) const
+                                            mbl_data_wrapper<vnl_vector<double> >& inputs,
+                                            unsigned nClasses,
+                                            const vcl_vector<unsigned> &outputs) const
 {
   // nb  ignore nClasses=1, ie always binary classifier
 
@@ -79,41 +79,41 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
   // check parameters are OK
   if ( max_n_clfrs_ < 0 )
   {
-    vcl_cout<<"Error: clsfy_adaboost_sorted_builder::build"<<vcl_endl;
-    vcl_cout<<"max_n_clfrs_ = "<<max_n_clfrs_<<" ie < 0 "<<vcl_endl;
-    vcl_cout<<"set using set_max_n_clfrs()"<<vcl_endl;
+    vcl_cout<<"Error: clsfy_adaboost_sorted_builder::build\n"
+            <<"max_n_clfrs_ = "<<max_n_clfrs_<<" ie < 0\n"
+            <<"set using set_max_n_clfrs()\n";
     vcl_abort();
   }
   else
   {
     vcl_cout<<"Maximum number of classifiers to be found by Adaboost ="
-        <<max_n_clfrs_<<vcl_endl;
+            <<max_n_clfrs_<<'\n';
   }
 
   if ( weak_builder_ == 0 )
   {
-    vcl_cout<<"Error: clsfy_adaboost_sorted_builder::build"<<vcl_endl;
-    vcl_cout<<"weak_builder_ pointer has not been set "<<vcl_endl;
-    vcl_cout<<"need to provide a builder to build each weak classifier"<<vcl_endl;
-    vcl_cout<<"set using set_weak_builder()"<<vcl_endl;
+    vcl_cout<<"Error: clsfy_adaboost_sorted_builder::build\n"
+            <<"weak_builder_ pointer has not been set\n"
+            <<"need to provide a builder to build each weak classifier\n"
+            <<"set using set_weak_builder()\n";
     vcl_abort();
   }
   else
   {
     vcl_cout<<"Weak learner used by AdaBoost ="
-        <<weak_builder_->is_a()<<vcl_endl;
+            <<weak_builder_->is_a()<<'\n';
   }
 
   if ( bs_ < 0 )
   {
-    vcl_cout<<"Error: clsfy_adaboost_sorted_builder::build"<<vcl_endl;
-    vcl_cout<<"bs_ = "<<bs_<<" ie < 0 "<<vcl_endl;
-    vcl_cout<<"set using set_batch_size()"<<vcl_endl;
+    vcl_cout<<"Error: clsfy_adaboost_sorted_builder::build\n"
+            <<"bs_ = "<<bs_<<" ie < 0\n"
+            <<"set using set_batch_size()\n";
     vcl_abort();
   }
   else
   {
-    vcl_cout<<"Batch size when sorting data =" <<bs_<<vcl_endl;
+    vcl_cout<<"Batch size when sorting data =" <<bs_<<'\n';
   }
 
 
@@ -128,7 +128,7 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
 
   // number of examples
   unsigned n= inputs.size();
-  //vcl_cout<<"n= "<<n<<vcl_endl;
+  //vcl_cout<<"n= "<<n<<'\n';
 
   // Dimensionality of data
   inputs.reset();
@@ -154,13 +154,13 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
 
   if (save_data_to_disk_)
   {
-    vcl_cout<<"saving data to disk! "<<vcl_endl;
+    vcl_cout<<"saving data to disk!\n";
     collector= &file_collector;
   }
   else
   {
     //bs_ = n ;
-    vcl_cout<<"saving data to ram! "<<vcl_endl;
+    vcl_cout<<"saving data to ram!\n";
     collector= &ram_collector;
   }
 
@@ -173,7 +173,7 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
   vcl_vector< vcl_vector< vbl_triple<double,int,int> > >vec(bs_);
   vbl_triple<double,int,int> t;
 
-  vcl_cout<<"d= "<<d<<vcl_endl;
+  vcl_cout<<"d= "<<d<<'\n';
   int b=0;
   while ( b+1<d )
   {
@@ -181,7 +181,7 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
     assert(r>0);
 
     vcl_cout<<"sorting weak classifiers = "<<b<<" to "
-            <<(b+r)-1<<" of "<<d<<vcl_endl;
+            <<(b+r)-1<<" of "<<d<<'\n';
 
 
     // have to resize all vectors
@@ -240,8 +240,9 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
       n1++;
     else
     {
-      vcl_cout<<"Error : clsfy_adaboost_sorted_builder "<<vcl_endl;
-      vcl_cout<<"unrecognised output value : outputs["<<i<<"]= "<<outputs[i]<<vcl_endl;
+      vcl_cout<<"Error : clsfy_adaboost_sorted_builder\n"
+              <<"unrecognised output value : outputs["<<i<<"]= "
+              <<outputs[i]<<'\n';
       vcl_abort();
     }
   }
@@ -257,8 +258,9 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
       wts(i)=0.5/n1;
     else
     {
-      vcl_cout<<"Error : clsfy_adaboost_sorted_builder "<<vcl_endl;
-      vcl_cout<<"unrecognised output value : outputs["<<i<<"]= "<<outputs[i]<<vcl_endl;
+      vcl_cout<<"Error : clsfy_adaboost_sorted_builder\n"
+              <<"unrecognised output value : outputs["<<i<<"]= "
+              <<outputs[i]<<'\n';
       vcl_abort();
     }
   }
@@ -281,23 +283,21 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
 
   for (unsigned int r=0;r<(unsigned)max_n_clfrs_;++r)
   {
-    vcl_cout<<"adaboost training round = "<<r<<vcl_endl;
+    vcl_cout<<"adaboost training round = "<<r<<'\n';
 
     new_time = vcl_clock();
 
     if (r>0)
     {
       double dt = (1.0*(new_time-old_time))/CLOCKS_PER_SEC;
-      vcl_cout<<"Time for AdaBoost round: "<<vnl_math_rnd(dt)<<"secs"<<vcl_endl;
+      vcl_cout<<"Time for AdaBoost round: "<<vnl_math_rnd(dt)<<"secs\n";
       tot_time+=dt;
-      vcl_cout<<"Total time for rounds so far: "<<vnl_math_rnd(tot_time)<<"secs"<<vcl_endl;
+      vcl_cout<<"Total time for rounds so far: "<<vnl_math_rnd(tot_time)<<"secs\n";
     }
 
     old_time = new_time;
 
-    //vcl_cout<<"wts0= "<<wts0<<vcl_endl;
-    //vcl_cout<<"wts1= "<<wts1<<vcl_endl;
-
+    //vcl_cout<<"wts0= "<<wts0<<"\nwts1= "<<wts1<<'\n';
 
     int best_i=-1;
     double min_error= 100000;
@@ -320,8 +320,8 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
 
     assert(best_i != -1);
 
-    vcl_cout<<"best_i= "<<best_i<<vcl_endl;
-    vcl_cout<<"min_error= "<<min_error<<vcl_endl;
+    vcl_cout<<"best_i= "<<best_i<<'\n'
+            <<"min_error= "<<min_error<<'\n';
 
     if (min_error<1e-10)  // Hooray!
     {
@@ -375,7 +375,7 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
   // does clsfy_test_error balk if have too much data?
   // should be OK because just passes mbl_data_wrapper and evaluates
   // one at a time, so if using mbl_file_data_wrapper should be OK!
-  vcl_cout<<"calculating training error"<<vcl_endl;
+  vcl_cout<<"calculating training error\n";
   return clsfy_test_error(strong_classifier, inputs, outputs);
 }
 
@@ -434,7 +434,7 @@ void clsfy_adaboost_sorted_builder::print_summary(vcl_ostream& os) const
   // clsfy_builder_base::print_summary(os); // Uncomment this line if it has one.
   // vsl_print_summary(os, data_); // Example of data output
 
-  vcl_cerr << "clsfy_adaboost_sorted_builder::print_summary() NYI" << vcl_endl;
+  vcl_cerr << "clsfy_adaboost_sorted_builder::print_summary() NYI\n";
 }
 
 //=======================================================================
@@ -445,7 +445,7 @@ void clsfy_adaboost_sorted_builder::b_write(vsl_b_ostream& bfs) const
   //vsl_b_write(bfs, version_no());
   //clsfy_builder_base::b_write(bfs);  // Needed if base has any data
   //vsl_b_write(bfs, data_);
-  vcl_cerr << "clsfy_adaboost_sorted_builder::b_write() NYI" << vcl_endl;
+  vcl_cerr << "clsfy_adaboost_sorted_builder::b_write() NYI\n";
 }
 
 //=======================================================================
@@ -453,7 +453,7 @@ void clsfy_adaboost_sorted_builder::b_write(vsl_b_ostream& bfs) const
   // required if data is present in this base class
 void clsfy_adaboost_sorted_builder::b_read(vsl_b_istream& bfs)
 {
-  vcl_cerr << "clsfy_adaboost_sorted_builder::b_read() NYI" << vcl_endl;
+  vcl_cerr << "clsfy_adaboost_sorted_builder::b_read() NYI\n";
 #if 0
   if (!bfs) return;
 
@@ -466,8 +466,8 @@ void clsfy_adaboost_sorted_builder::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,data_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_adaboost_sorted_builder&) \n";
-    vcl_cerr << "           Unknown version number "<< version << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_adaboost_sorted_builder&) \n"
+             << "           Unknown version number "<< version << "\n";
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

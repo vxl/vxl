@@ -1,7 +1,6 @@
-// This is ./vxl/vnl/vnl_scalar_join_iterator.txx
+// This is vxl/vnl/vnl_scalar_join_iterator.txx
 #ifndef vnl_scalar_join_iterator_txx_
 #define vnl_scalar_join_iterator_txx_
-
 //:
 // \file
 //
@@ -43,7 +42,7 @@ template <class T>
 vcl_ostream& operator<<(vcl_ostream& s,
                         const vnl_scalar_join_iterator_indexed_pair<T>& p)
 {
-  return s << p.original_index << " " << *(p.object) << vcl_endl;
+  return s << p.original_index << " " << *(p.object) << '\n';
 }
 
 template <class T>
@@ -59,12 +58,12 @@ vnl_scalar_join_iterator<T>::vnl_scalar_join_iterator
 {
   // Sort on appropriate columns
   {
-    for(unsigned i = 0; i < n1; ++i)
+    for (unsigned i = 0; i < n1; ++i)
       I1.push_back(vnl_scalar_join_iterator_indexed_pair<T>(&relation1(i, column1), i));
     I1.sort();
   }
   {
-    for(unsigned i = 0; i < n2; ++i)
+    for (unsigned i = 0; i < n2; ++i)
       I2.push_back(vnl_scalar_join_iterator_indexed_pair<T>(&relation2(i, column2), i));
     I2.sort();
   }
@@ -74,7 +73,7 @@ vnl_scalar_join_iterator<T>::vnl_scalar_join_iterator
   index2 = I2.begin();
 
   // Loop to first
-  for(;;) {
+  for (;;) {
     T star1 = *(*index1).object;
     T star2 = *(*index2).object;
     if (star1 == star2)

@@ -1,6 +1,6 @@
+// This is vxl/vgl/vgl_fwd.h
 #ifndef vgl_fwd_h_
 #define vgl_fwd_h_
-// This is vxl/vgl/vgl_fwd.h
 
 template <class T> class vgl_box_2d;
 template <class T> class vgl_box_3d;

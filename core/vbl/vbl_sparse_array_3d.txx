@@ -1,7 +1,6 @@
-// This is ./vxl/vbl/vbl_sparse_array_3d.txx
+// This is vxl/vbl/vbl_sparse_array_3d.txx
 #ifndef vbl_sparse_array_3d_txx_
 #define vbl_sparse_array_3d_txx_
-
 //:
 // \file
 
@@ -14,11 +13,11 @@ template <class T>
 vcl_ostream& vbl_sparse_array_3d<T>::print(vcl_ostream& out) const
 {
   typedef typename vbl_sparse_array_base<T,vbl_triple<unsigned,unsigned,unsigned> >::const_iterator ci;
-  for(ci p = storage_.begin(); p != storage_.end(); ++p)
+  for (ci p = storage_.begin(); p != storage_.end(); ++p)
     out << "(" << (*p).first.first
         << "," << (*p).first.second
         << "," << (*p).first.third
-        << "): " << (*p).second << vcl_endl;
+        << "): " << (*p).second << '\n';
   return out;
 }
 
@@ -28,4 +27,4 @@ VBL_SPARSE_ARRAY_BASE_INSTANTIATE(T, vbl_triple<unsigned VCL_COMMA unsigned VCL_
 template class vbl_sparse_array_3d<T >; \
 VCL_INSTANTIATE_INLINE(vcl_ostream& operator<< (vcl_ostream&, const vbl_sparse_array_3d<T > &))
 
-#endif
+#endif // vbl_sparse_array_3d_txx_

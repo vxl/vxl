@@ -1,3 +1,5 @@
+// This is mul/clsfy/clsfy_binary_threshold_1d.cxx
+#include "clsfy_binary_threshold_1d.h"
 //:
 // \file
 // \brief Simplest possible 1D classifier: A single thresholding function
@@ -5,7 +7,6 @@
 
 //=======================================================================
 
-#include "clsfy_binary_threshold_1d.h"
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
@@ -21,7 +22,7 @@
 //: Find the posterior probability of the input being in the positive class.
 // The result is is outputs(0)
 void clsfy_binary_threshold_1d::class_probabilities(vcl_vector<double> &outputs,
-  double input) const
+                                                    double input) const
 {
   outputs.resize(1);
   outputs[0] = 1.0 / (1.0 + vcl_exp(-log_l(input)));
@@ -76,7 +77,7 @@ vcl_string clsfy_binary_threshold_1d::is_a() const
 // required if data is present in this class
 void clsfy_binary_threshold_1d::print_summary(vcl_ostream& os) const
 {
-  os << "s: " << s_ << "   threshold: "<<threshold_<<vcl_endl;
+  os << "s: " << s_ << "   threshold: "<<threshold_<<'\n';
 }
 
 //=======================================================================

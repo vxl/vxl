@@ -1,7 +1,6 @@
-// This is ./vxl/vnl/vnl_file_matrix.txx
+// This is vxl/vnl/vnl_file_matrix.txx
 #ifndef vnl_file_matrix_txx_
 #define vnl_file_matrix_txx_
-
 //:
 // \file
 //
@@ -22,12 +21,12 @@ vnl_file_matrix<T>::vnl_file_matrix(char const* filename)
     vcl_ifstream o(filename);
     ok_=read_ascii(o);
     if (!ok_)
-      vcl_cerr << "vnl_file_matrix: ERROR loading " << filename << vcl_endl;
+      vcl_cerr << "vnl_file_matrix: ERROR loading " << filename << '\n';
   }
   else {
     ok_=read_ascii(vcl_cin);
     if (!ok_)
-      vcl_cerr << "vnl_file_matrix: ERROR loading from stdin " << vcl_endl;
+      vcl_cerr << "vnl_file_matrix: ERROR loading from stdin\n";
   }
 }
 

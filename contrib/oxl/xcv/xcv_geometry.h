@@ -1,7 +1,6 @@
-// This is ./oxl/xcv/xcv_geometry.h
+// This is oxl/xcv/xcv_geometry.h
 #ifndef xcv_geometry_h_
 #define xcv_geometry_h_
-
 //:
 // \file
 // \author   K.Y.McGaul
@@ -22,7 +21,7 @@ class vgui_menu;
 
 class xcv_geometry
 {
-public:
+ public:
   //: Draw a point onto the currently selected tableau.
   static void create_point();
   //: Rubberband a line on the currently selected tableau.
@@ -83,7 +82,7 @@ public:
   //: Move geometric objects apart.
   static vgui_menu create_geometry_menu();
 
-private:
+ private:
   //: Write coordinates into a file.
   static void save(const char *,const char *);
   //: Load coordinates from a file

@@ -1,7 +1,6 @@
-// This is ./vxl/vgl/vgl_homg_plane_3d.txx
+// This is vxl/vgl/vgl_homg_plane_3d.txx
 #ifndef vgl_homg_plane_3d_txx_
 #define vgl_homg_plane_3d_txx_
-
 //:
 // \file
 

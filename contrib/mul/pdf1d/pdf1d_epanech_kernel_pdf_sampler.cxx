@@ -1,3 +1,5 @@
+// This is mul/pdf1d/pdf1d_epanech_kernel_pdf_sampler.cxx
+#include "pdf1d_epanech_kernel_pdf_sampler.h"
 //:
 // \file
 // \brief Implements sampling for a Epanechnikov kernel PDF
@@ -5,7 +7,6 @@
 
 //=======================================================================
 
-#include "pdf1d_epanech_kernel_pdf_sampler.h"
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
 #include <vcl_cmath.h>
@@ -57,7 +58,7 @@ double pdf1d_epanech_kernel_pdf_sampler::epan_transform(double x)
 
 // The imaginary terms cancel out in theory, but not necessarily numerically - strip them.
   return vcl_real(-0.5 * cuberoot_z - 2.5 * recip_cuberoot_z -
-    im * root3 / 2.0 * ( cuberoot_z - 5.0 * recip_cuberoot_z));
+                  im * root3 / 2.0 * ( cuberoot_z - 5.0 * recip_cuberoot_z));
 }
 
 

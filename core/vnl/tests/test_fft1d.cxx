@@ -1,4 +1,4 @@
-// This is ./vxl/vnl/tests/test_fft1d.cxx
+// This is vxl/vnl/tests/test_fft1d.cxx
 
 //:
 // \file
@@ -75,8 +75,8 @@ void test_fft1d () {
     fImagError += vcl_fabs(vcl_imag(fTestArrayConvert(iC))/ciArraySizeX);
   }
 
-  vcl_cout << "total real absolute error = " << fRealError << " (== " << fRealError/ciArraySizeX << " per element)\n";
-  vcl_cout << "total imag absolute error = " << fImagError << " (== " << fImagError/ciArraySizeX << " per element)\n";
+  vcl_cout << "total real absolute error = " << fRealError << " (== " << fRealError/ciArraySizeX << " per element)\n"
+           << "total imag absolute error = " << fImagError << " (== " << fImagError/ciArraySizeX << " per element)\n";
   testlib_test_assert ("real error", fRealError/ciArraySizeX < maxRealErrorPrecision);
   testlib_test_assert ("imag error", fImagError/ciArraySizeX < maxImagErrorPrecision);
 }

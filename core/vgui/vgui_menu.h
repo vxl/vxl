@@ -1,7 +1,6 @@
-// This is ./oxl/vgui/vgui_menu.h
+// This is oxl/vgui/vgui_menu.h
 #ifndef vgui_menu_h_
 #define vgui_menu_h_
-
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
@@ -107,8 +106,11 @@ struct vgui_menu_item
 //     ESPECIALLY: REMOVE DUMMY "const void *" ARGUMENT !  (PVr, Apr.2002)
 //      --> look for VC++ warning C4305:
 //      'argument' : truncation from 'void (__cdecl *)(const void *)' to 'bool'
-class vgui_menu {
-public:
+class vgui_menu
+{
+  vcl_vector<vgui_menu_item> items;
+
+ public:
   //: Constructor - creates an empty menu.
   vgui_menu();
 
@@ -168,9 +170,6 @@ public:
 
   //: Get the menu item using the [] index operator.
   vgui_menu_item const & operator[](unsigned i) const;
-
-private:
-  vcl_vector<vgui_menu_item> items;
 };
 
 vcl_ostream & operator<<(vcl_ostream &,vgui_menu const &);

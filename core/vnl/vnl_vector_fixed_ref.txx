@@ -1,4 +1,3 @@
-//-*- c++ -*-
 // This is vxl/vnl/vnl_vector_fixed_ref.txx
 #ifndef vnl_vector_fixed_ref_txx_
 #define vnl_vector_fixed_ref_txx_

@@ -35,9 +35,9 @@ class mil_algo_line_filter
   //  0 = Undefined, 1 = horizontal, 2 = 45 degrees etc
   //  This version looks for light lines on a dark background only.
   void light_lines_3x3(mil_image_2d_of<unsigned char>& line_dir,
-                         mil_image_2d_of<float>& line_str,
-                         const mil_image_2d_of<Type>& image,
-                         float edge_thresh=0.1);
+                       mil_image_2d_of<float>& line_str,
+                       const mil_image_2d_of<Type>& image,
+                       float edge_thresh=0.1);
 
   //: Find line like structures in image (dark lines on light backgrounds)
   //  On exit line_str contains line strength at each pixel,
@@ -45,9 +45,9 @@ class mil_algo_line_filter
   //  0 = Undefined, 1 = horizontal, 2 = 45 degrees etc
   //  This version looks for dark lines on a light background only.
   void dark_lines_3x3(mil_image_2d_of<unsigned char>& line_dir,
-                         mil_image_2d_of<float>& line_str,
-                         const mil_image_2d_of<Type>& image,
-                         float edge_thresh=0.1);
+                      mil_image_2d_of<float>& line_str,
+                      const mil_image_2d_of<Type>& image,
+                      float edge_thresh=0.1);
 
   //: Find line like structures in image (light lines on dark backgrounds)
   //  On exit line_str contains line strength at each pixel,
@@ -56,9 +56,9 @@ class mil_algo_line_filter
   //  This version looks for light lines on a dark background only
   //  using a 5x5 filter
   void light_lines_5x5(mil_image_2d_of<unsigned char>& line_dir,
-                         mil_image_2d_of<float>& line_str,
-                         const mil_image_2d_of<Type>& image,
-                         float edge_thresh=0.1);
+                       mil_image_2d_of<float>& line_str,
+                       const mil_image_2d_of<Type>& image,
+                       float edge_thresh=0.1);
 
   //: Find line like structures in image (dark lines on light backgrounds)
   //  On exit line_str contains line strength at each pixel,
@@ -67,9 +67,9 @@ class mil_algo_line_filter
   //  This version looks for dark lines on a light background only
   //  using a 5x5 filter
   void dark_lines_5x5(mil_image_2d_of<unsigned char>& line_dir,
-                         mil_image_2d_of<float>& line_str,
-                         const mil_image_2d_of<Type>& image,
-                         float edge_thresh=0.1);
+                      mil_image_2d_of<float>& line_str,
+                      const mil_image_2d_of<Type>& image,
+                      float edge_thresh=0.1);
 };
 
 #endif // mil_algo_line_filter_h_

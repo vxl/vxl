@@ -23,7 +23,9 @@
 //:calc the weighted mean and var of kernels.
 // w is expected to sum to n.
 void pdf1d_weighted_kernel_pdf::pdf1d_weighted_kernel_mean_var(double& mean, double& var,
-  const vnl_vecd& centres, const vnl_vecd& widths, const vnl_vecd& weights)
+                                                               const vnl_vecd& centres,
+                                                               const vnl_vecd& widths,
+                                                               const vnl_vecd& weights)
 {
   const unsigned n = centres.size();
   assert(n > 1 && widths.size() == n && weights.size() ==n);
@@ -124,7 +126,7 @@ vcl_string pdf1d_weighted_kernel_pdf::is_a() const
 void pdf1d_weighted_kernel_pdf::print_summary(vcl_ostream& os) const
 {
   pdf1d_kernel_pdf::print_summary(os);
-  os << vsl_indent() << "Weights: "; vsl_print_summary(os, weight_) ; os << vcl_endl;
+  os << vsl_indent() << "Weights: "; vsl_print_summary(os, weight_) ; os << '\n';
 }
 
 //=======================================================================
@@ -155,8 +157,8 @@ void pdf1d_weighted_kernel_pdf::b_read(vsl_b_istream& bfs)
 
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_weighted_kernel_pdf&) \n";
-    vcl_cerr << "           Unknown version number "<< version << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_weighted_kernel_pdf&) \n"
+             << "           Unknown version number "<< version << "\n";
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

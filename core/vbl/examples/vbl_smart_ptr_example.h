@@ -1,4 +1,4 @@
-// This is ./vxl/vbl/examples/vbl_smart_ptr_example.h
+// This is vxl/vbl/examples/vbl_smart_ptr_example.h
 #ifndef vbl_smart_ptr_example_h_
 #define vbl_smart_ptr_example_h_
 //:
@@ -15,16 +15,14 @@
 //: An example of how to make a smart pointer class.
 // A smart pointer can be made from any class that defines the methods ref()
 // and unref(), e.g., because it is derived from vbl_ref_count.
-class example_sp : public vbl_ref_count {
-public:
-  example_sp() { vcl_cout << "example_sp constructor, refcount=" 
-    << get_references() << vcl_endl; }
+class example_sp : public vbl_ref_count
+{
+ public:
+  example_sp() { vcl_cout << "example_sp constructor, refcount=" << get_references() << '\n'; }
 
-  ~example_sp() { vcl_cout << "example_sp destructor, refcount=" 
-    << get_references() << vcl_endl; }
+  ~example_sp() { vcl_cout << "example_sp destructor, refcount=" << get_references() << '\n'; }
 
-  example_sp(example_sp const&) { vcl_cout << "example_sp copy constructor, "
-    "refcount=" << get_references() << vcl_endl; }
+  example_sp(example_sp const&) { vcl_cout << "example_sp copy constructor, refcount=" << get_references() << '\n'; }
 
   friend vcl_ostream& operator<<(vcl_ostream& os, example_sp const& e) {
     int p = e.get_references(); 
@@ -38,18 +36,19 @@ typedef vbl_smart_ptr<example_sp> example_sp_sptr;
 // Here is another example.
 
 // class bigmatrix
-class bigmatrix_impl : public vbl_ref_count {
-public:
+class bigmatrix_impl : public vbl_ref_count
+{
+ public:
   double data[256][256];
-  bigmatrix_impl() { vcl_cerr << "bigmatrix_impl ctor" << vcl_endl; }
-  ~bigmatrix_impl() { vcl_cerr << "bigmatrix_impl dtor" << vcl_endl; }
+  bigmatrix_impl() { vcl_cerr << "bigmatrix_impl ctor\n"; }
+  ~bigmatrix_impl() { vcl_cerr << "bigmatrix_impl dtor\n"; }
 };
 
-class bigmatrix {
-public:
-  double * operator[](unsigned i) { return impl->data[i]; }
-private:
+class bigmatrix
+{
   vbl_smart_ptr<bigmatrix_impl> impl;
+ public:
+  double * operator[](unsigned i) { return impl->data[i]; }
 };
 
 #endif // vbl_smart_ptr_example_h_

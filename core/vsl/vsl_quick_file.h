@@ -1,6 +1,6 @@
+// This is vxl/vsl/vsl_quick_file.h
 #ifndef vsl_quick_file_h_
 #define vsl_quick_file_h_
-
 //:
 // \file
 // \brief Functions for quickly loading and saving binary files.
@@ -23,11 +23,11 @@
 //: Load something from a file 
 template <class T>
 inline bool vsl_quick_file_load(T &data,
-  const vcl_string& path,
-  vcl_ostream* errorStream = &vcl_cerr)
+                                const vcl_string& path,
+                                vcl_ostream* errorStream = &vcl_cerr)
 {
   vsl_b_ifstream bfs(path);
-  if( !(!bfs))
+  if ( !(!bfs))
   {
     vsl_b_read(bfs,data);
     if (!(!bfs))
@@ -54,11 +54,11 @@ inline bool vsl_quick_file_load(T &data,
 //: Save something to a file 
 template <class T>
 inline bool vsl_quick_file_save(const T &data,
-  const vcl_string& path,
-  vcl_ostream* errorStream = &vcl_cerr)
+                                const vcl_string& path,
+                                vcl_ostream* errorStream = &vcl_cerr)
 {
   vsl_b_ofstream bfs(path);
-  if(!(!bfs))
+  if (!(!bfs))
   {
     vsl_b_write(bfs,data);
     if (!(!bfs))
@@ -78,13 +78,13 @@ inline bool vsl_quick_file_save(const T &data,
 // Load two objects from a file 
 template <class T, class S>
 inline bool vsl_quick_file_load(T &data1,
-  S &data2,
-  const vcl_string& path,
-  vcl_ostream* errorStream = &vcl_cerr)
+                                S &data2,
+                                const vcl_string& path,
+                                vcl_ostream* errorStream = &vcl_cerr)
 {
   vsl_b_ifstream bfs(path);
   int reason = errno;
-  if( !(!bfs))
+  if ( !(!bfs))
   {
     vsl_b_read(bfs,data1);
     vsl_b_read(bfs,data2);
@@ -112,12 +112,12 @@ inline bool vsl_quick_file_load(T &data1,
 // Save two objects to a file 
 template <class T, class S>
 inline bool vsl_quick_file_save(const T &data1,
-  S &data2,
-  const vcl_string& path,
-  vcl_ostream* errorStream = &vcl_cerr)
+                                S &data2,
+                                const vcl_string& path,
+                                vcl_ostream* errorStream = &vcl_cerr)
 {
   vsl_b_ofstream bfs(path);
-  if(!(!bfs))
+  if (!(!bfs))
   {
     vsl_b_write(bfs,data1);
     vsl_b_write(bfs,data2);
@@ -138,12 +138,12 @@ inline bool vsl_quick_file_save(const T &data1,
 // Load three objects from a file 
 template <class T, class S, class U>
 inline bool vsl_quick_file_load(T &data1,
-  S &data2, U &data3,
-  const vcl_string& path,
-  vcl_ostream* errorStream = &vcl_cerr)
+                                S &data2, U &data3,
+                                const vcl_string& path,
+                                vcl_ostream* errorStream = &vcl_cerr)
 {
   vsl_b_ifstream bfs(path);
-  if( !(!bfs))
+  if ( !(!bfs))
   {
     vsl_b_read(bfs,data1);
     vsl_b_read(bfs,data2);
@@ -171,12 +171,12 @@ inline bool vsl_quick_file_load(T &data1,
 // Save three objects to a file 
 template <class T, class S, class U>
 inline bool vsl_quick_file_save(const T &data1,
-  S &data2, U &data3,
-  const vcl_string& path,
-  vcl_ostream* errorStream = &vcl_cerr)
+                                S &data2, U &data3,
+                                const vcl_string& path,
+                                vcl_ostream* errorStream = &vcl_cerr)
 {
   vsl_b_ofstream bfs(path);
-  if(!(!bfs))
+  if (!(!bfs))
   {
     vsl_b_write(bfs,data1);
     vsl_b_write(bfs,data2);
@@ -198,12 +198,12 @@ inline bool vsl_quick_file_save(const T &data1,
 // Load two objects from a file 
 template <class T, class S, class U, class V>
 inline bool vsl_quick_file_load(T &data1,
-  S &data2, U &data3, V &data4,
-  const vcl_string& path,
-  vcl_ostream* errorStream = &vcl_cerr)
+                                S &data2, U &data3, V &data4,
+                                const vcl_string& path,
+                                vcl_ostream* errorStream = &vcl_cerr)
 {
   vsl_b_ifstream bfs(path);
-  if( !(!bfs))
+  if ( !(!bfs))
   {
     vsl_b_read(bfs,data1);
     vsl_b_read(bfs,data2);
@@ -232,12 +232,12 @@ inline bool vsl_quick_file_load(T &data1,
 // Save four objects to a file 
 template <class T, class S, class U, class V>
 inline bool vsl_quick_file_save(const T &data1,
-  S &data2, U &data3, V &data4,
-  const vcl_string& path,
-  vcl_ostream* errorStream = &vcl_cerr)
+                                S &data2, U &data3, V &data4,
+                                const vcl_string& path,
+                                vcl_ostream* errorStream = &vcl_cerr)
 {
   vsl_b_ofstream bfs(path);
-  if(!(!bfs))
+  if (!(!bfs))
   {
     vsl_b_write(bfs,data1);
     vsl_b_write(bfs,data2);
@@ -257,5 +257,4 @@ inline bool vsl_quick_file_save(const T &data1,
   return false;
 } 
 
-
-#endif
+#endif // vsl_quick_file_h_

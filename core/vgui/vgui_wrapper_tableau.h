@@ -1,16 +1,12 @@
-// This is ./oxl/vgui/vgui_wrapper_tableau.h
-
+// This is oxl/vgui/vgui_wrapper_tableau.h
+#ifndef vgui_wrapper_tableau_h_
+#define vgui_wrapper_tableau_h_
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
 // \brief  Base class tableau for tableau who want only a single child.
 //
 //  Contains classes: vgui_wrapper_tableau  vgui_wrapper_tableau_new
-
-
-#ifndef vgui_wrapper_tableau_h_
-#define vgui_wrapper_tableau_h_
-
 
 #include "vgui_wrapper_tableau_sptr.h"
 #include <vgui/vgui_tableau.h>
@@ -30,8 +26,9 @@
 // A: Because it is a tableau which "wraps" itself around another tableau.
 //    "vgui_parent" was too vague and it was needed for something else anyway.
 //    I would welcome suggestions for a better name.
-class vgui_wrapper_tableau : public vgui_tableau {
-public:
+class vgui_wrapper_tableau : public vgui_tableau
+{
+ public:
   //: Constructor - don't use this, use vgui_wrapper_tableau_new.
   //  The child tableau is added later using add_child.
   vgui_wrapper_tableau();
@@ -67,7 +64,7 @@ public:
   //: The single child of this tableau.
   vgui_parent_child_link child;
 
-protected:
+ protected:
   // Destructor - called by vgui_wrapper_tableau_sptr.
   ~vgui_wrapper_tableau();
 };

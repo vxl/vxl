@@ -1,10 +1,9 @@
+// This is mul/mil/algo/mil_algo_gaussian_filter.h
 #ifndef mil_algo_gaussian_filter_h_
 #define mil_algo_gaussian_filter_h_
-
 //: \file
 //  \brief Smooths images.
 //  \author Ian Scott
-
 
 //=======================================================================
 // inclusions
@@ -17,7 +16,6 @@
 template <class srcT, class destT>
 class mil_algo_gaussian_filter
 {
-private:
     //: the sigma width of the gaussian in pixels
     double sigma_;
     //: image workspace
@@ -67,10 +65,10 @@ private:
     //  Applies 5 element FIR filter in x and y.
     //  Assumes dest_im has suffient data allocated.
     void filter(destT* dest_im, int dest_ystep,
-                      const srcT* src_im,
-                      unsigned nx, unsigned ny,
-                      int src_ystep) const;
-public:
+                const srcT* src_im,
+                unsigned nx, unsigned ny,
+                int src_ystep) const;
+ public:
     //: Dflt ctor
     mil_algo_gaussian_filter();
 
@@ -88,8 +86,7 @@ public:
 
     //: Smooth src_im to produce dest_im.
     void filter(mil_image_2d_of<destT>& dest_im,
-                      const mil_image_2d_of<srcT>& src_im) const;
-
+                const mil_image_2d_of<srcT>& src_im) const;
 };
 
-#endif
+#endif // mil_algo_gaussian_filter_h_

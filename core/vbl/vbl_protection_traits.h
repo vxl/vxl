@@ -1,7 +1,6 @@
+// This is vxl/vbl/vbl_protection_traits.h
 #ifndef _vbl_protection_traits_h
 #define _vbl_protection_traits_h
-// This is vxl/vbl/vbl_protection_traits.h
-
 //:
 // \file
 // \brief Template to standardize protection of classes
@@ -20,7 +19,7 @@
 // to use Protect and UnProtect.
 template <class T> class vbl_protection_traits
 {
-public:
+ public:
   static void protect(T t);
   static void unprotect(T t);
   static void def(T& t);

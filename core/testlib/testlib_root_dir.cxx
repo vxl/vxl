@@ -1,11 +1,11 @@
-// This is ./vxl/testlib/testlib_root_dir.cxx
+// This is vxl/testlib/testlib_root_dir.cxx
 #include "testlib_root_dir.h"
+//:
+// \file
+
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
 
-//:
-// \file
-//
 // The following should have been created automatically by the
 // configuration scripts from vcl_where_root_dir.h.in
 // We need to check for its existence and if it doesn't exist - do something else.
@@ -34,8 +34,8 @@ vcl_string testlib_root_dir()
   if (ptr)
     return vcl_string(ptr);
 
-  vcl_cerr<<"ERROR: testlib_root_dir() Unable to retrieve directory from "<<vcl_endl;
-  vcl_cerr<<"$VCLSRC or $VXLSRC or $VXL_SRC.  Sorry."<<vcl_endl;
+  vcl_cerr<<"ERROR: testlib_root_dir() Unable to retrieve directory from\n"
+          <<"$VCLSRC or $VXLSRC or $VXL_SRC.  Sorry.\n";
   return vcl_string("");
 }
 

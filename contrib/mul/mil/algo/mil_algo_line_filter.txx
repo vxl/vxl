@@ -15,9 +15,9 @@
 //  This version looks for light lines on a dark background only.
 template <class Type>
 void mil_algo_line_filter<Type>::light_lines_3x3(mil_image_2d_of<unsigned char>& line_dir,
-                         mil_image_2d_of<float>& line_str,
-                         const mil_image_2d_of<Type>& image,
-                         float edge_thresh)
+                                                 mil_image_2d_of<float>& line_str,
+                                                 mil_image_2d_of<Type>const& image,
+                                                 float edge_thresh)
 {
   assert(image.n_planes()==1);
   int nx = image.nx();
@@ -108,9 +108,9 @@ void mil_algo_line_filter<Type>::light_lines_3x3(mil_image_2d_of<unsigned char>&
 //  0 = Undefined, 1 = horizontal, 2 = 45 degrees etc
 template <class Type>
 void mil_algo_line_filter<Type>::dark_lines_3x3(mil_image_2d_of<unsigned char>& line_dir,
-                         mil_image_2d_of<float>& line_str,
-                         const mil_image_2d_of<Type>& image,
-                         float edge_thresh)
+                                                mil_image_2d_of<float>& line_str,
+                                                mil_image_2d_of<Type>const& image,
+                                                float edge_thresh)
 {
   assert(image.n_planes()==1);
   int nx = image.nx();
@@ -202,9 +202,9 @@ void mil_algo_line_filter<Type>::dark_lines_3x3(mil_image_2d_of<unsigned char>& 
 //  This version looks for light lines on a dark background only.
 template <class Type>
 void mil_algo_line_filter<Type>::light_lines_5x5(mil_image_2d_of<unsigned char>& line_dir,
-                         mil_image_2d_of<float>& line_str,
-                         const mil_image_2d_of<Type>& image,
-                         float edge_thresh)
+                                                 mil_image_2d_of<float>& line_str,
+                                                 mil_image_2d_of<Type>const& image,
+                                                 float edge_thresh)
 {
   assert(image.n_planes()==1);
   int nx = image.nx();
@@ -310,9 +310,9 @@ void mil_algo_line_filter<Type>::light_lines_5x5(mil_image_2d_of<unsigned char>&
 //: Find line like structures in image (dark lines on light backgrounds)
 template <class Type>
 void mil_algo_line_filter<Type>::dark_lines_5x5(mil_image_2d_of<unsigned char>& line_dir,
-                         mil_image_2d_of<float>& line_str,
-                         const mil_image_2d_of<Type>& image,
-                         float edge_thresh)
+                                                mil_image_2d_of<float>& line_str,
+                                                mil_image_2d_of<Type>const& image,
+                                                float edge_thresh)
 {
   assert(image.n_planes()==1);
   int nx = image.nx();

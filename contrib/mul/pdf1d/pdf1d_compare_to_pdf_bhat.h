@@ -57,8 +57,8 @@ class pdf1d_compare_to_pdf_bhat : public pdf1d_compare_to_pdf
   //  Individual comparisons are returned in B.
   //  \return Mean of B
   virtual double bootstrap_compare_form(vnl_vector<double>& B,
-                              const double* data, int n,
-                              const pdf1d_builder& builder, int n_trials);
+                                        const double* data, int n,
+                                        const pdf1d_builder& builder, int n_trials);
 
   //: Version number for I/O
   short version_no() const;

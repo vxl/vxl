@@ -1,7 +1,6 @@
-// This is ./vxl/vnl/vnl_sym_matrix.txx
+// This is vxl/vnl/vnl_sym_matrix.txx
 #ifndef vnl_sym_matrix_txx_
 #define vnl_sym_matrix_txx_
-
 //:
 // \file
 
@@ -14,7 +13,7 @@
 // O(m*m).
 template<class T>
 vnl_sym_matrix<T>& vnl_sym_matrix<T>::update (vnl_sym_matrix<T> const& m,
-  unsigned diagonal_start)
+                                              unsigned diagonal_start)
 {
   unsigned int end = diagonal_start + m.nn_;
 #if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
@@ -82,7 +81,7 @@ vcl_ostream& operator<< (vcl_ostream& s, const vnl_sym_matrix<T>& M)
   {
     for (unsigned j=0; j<=i; ++j)
       s << M.fast(i,j) << " ";
-    s  << vcl_endl;
+    s  << '\n';
   }
   return s;
 }
@@ -135,4 +134,5 @@ template vcl_ostream& operator<< (vcl_ostream& s, vnl_sym_matrix<T > const &); \
 template bool operator==(const vnl_sym_matrix<T > &a, const vnl_sym_matrix<T > &b); \
 template bool operator==(const vnl_sym_matrix<T > &a, const vnl_matrix<T > &b); \
 template bool operator==(const vnl_matrix<T > &a, const vnl_sym_matrix<T > &b)
-#endif
+
+#endif // vnl_sym_matrix_txx_

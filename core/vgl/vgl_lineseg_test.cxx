@@ -10,8 +10,7 @@
 #include <vgl/vgl_triangle_test.h>
 
 template <class T>
-bool vgl_lineseg_test(T x1, T y1, T x2, T y2,
-        T x3, T y3, T x4, T y4)
+bool vgl_lineseg_test(T x1, T y1, T x2, T y2, T x3, T y3, T x4, T y4)
 {
   T a = vgl_triangle_test_discriminant(x1, y1, x2, y2, x3, y3);
   T b = vgl_triangle_test_discriminant(x1, y1, x2, y2, x4, y4);
