@@ -102,15 +102,9 @@ transform_scale( rgrl_transformation const& xform ) const
   double scale = 0.0;
   
   if ( this->scale_ > 0.0 && scaling.size() == dim ) {
-    // "average" them
-    if ( dim == 2 )
-      scale = vcl_sqrt( scaling[0]*scaling[1] ) * this->scale_;
-    else {
-      double prod_scale=1;
-      for ( unsigned i=0; i < dim; ++i )
-        prod_scale *= scaling[i];
-      scale = vcl_exp( vcl_log(prod_scale) / double(dim) ) * this->scale_;
-    }
+    //use the scaling factor projected onto normal direction
+    scale = dot_product( scaling, normal_ ) * this->scale_;
+    
   } else if ( this-> scale_ > 0.0 ) {
     WarningMacro( "This feature has non-zero scale value, but transformation has no scaling factors."
                   << "The scale of transformed features is NOT set." );
