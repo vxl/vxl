@@ -7,8 +7,7 @@
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
-//
-// collect together some handy preprocessor macros commonly used in vgui
+// \brief  Some handy preprocessor macros commonly used in vgui
 //
 // Do not include <vcl_iostream.h> from this file.
 

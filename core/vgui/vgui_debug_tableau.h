@@ -10,6 +10,8 @@
 // \date   08-11-99
 // \brief  Event-printing "tee" tableau.
 //
+//  Contains classes:  vgui_debug_tableau  vgui_debug_tableau_new
+//
 // \verbatim
 //  Modifications:
 //    991008 AWF Initial version.
@@ -20,22 +22,25 @@
 #include <vgui/vgui_wrapper_tableau.h>
 
 //: Event-printing "tee" tableau.
+//
 //  A vgui_tableau that prints events and then forwards them to a child.
 class vgui_debug_tableau : public vgui_wrapper_tableau
 {
  public:
-  // Public interface at the top
+  //: Constructor - don't use this, use vgui_debug_tableau_new.
+  //  Takes the only child of this tableau.
   vgui_debug_tableau(vgui_tableau_sptr const& child);
 
-  vcl_string type_name() const { return "debug_tableau"; }
+  //: Returns the type of this tableau ('vgui_debug_tableau').
+  vcl_string type_name() const { return "vgui_debug_tableau"; }
 
-  // Protected members and data
  protected:
   ~vgui_debug_tableau();
   bool handle(const vgui_event& e);
   int verbosity;
 };
 
+//: Creates a smart-pointer to a vgui_debug_tableau.
 struct vgui_debug_tableau_new : public vgui_debug_tableau_sptr
 {
   typedef vgui_debug_tableau_sptr base;

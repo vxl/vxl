@@ -9,7 +9,8 @@
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   19 Oct 99
 // \brief  Tableau for rendering text.
-//         Contains classes: vgui_text_tableau, vgui_text_tableau_new.
+//
+//  Contains classes:  vgui_text_tableau  vgui_text_tableau_new
 //
 // \verbatim
 //  Modifications:
@@ -19,6 +20,7 @@
 //                            this means the vector will never get smaller.
 //   06-AUG-2002 K.Y.McGaul - Changed to and added Doxygen comments.
 // \endverbatim
+
 
 #include <vcl_string.h>
 #include <vgui/vgui_tableau.h>

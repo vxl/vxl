@@ -13,8 +13,8 @@
 // \verbatim
 //  Modifications
 //   23-OCT-1999 P.Pritchet - Initial version.
-//   25-JAN-2000 K.Y.McGaul - Added message function to allow text messages in dialogs.
-//   27-JAN-2000 K.Y.McGaul - Added set_modal function to allow non-modal dialogs.
+//   25-JAN-2000 K.Y.McGaul - Added message() to allow text messages in dialogs.
+//   27-JAN-2000 K.Y.McGaul - Added set_modal() to allow non-modal dialogs.
 //   24-FEB-2000 K.Y.McGaul - Added file browser and color chooser.
 //   11-JUL-2000 Marko Bacic - Added inline file browser
 //   12-JUL-2000 Marko Bacic - Added inline color chooser
@@ -30,10 +30,11 @@ class vgui_dialog_impl;
 //
 // vgui_dialog allows the user to build a dialog from a collection of fields.
 // A field in this context consists of a vcl_string label and a variable.
-// The dialog is then posted using the ask() method. If ask returns true then any changes
-// to the fields in the dialog are used to update the variables.
-// Each vgui_dialog contains an instance of a concrete subclass of vgui_dialog_impl.
-// The type of the subclass will be determined by the GUI being used.
+// The dialog is then posted using the ask() method. If ask returns true then 
+// any changes to the fields in the dialog are used to update the variables.
+// Each vgui_dialog contains an instance of a concrete subclass of 
+// vgui_dialog_impl. The type of the subclass will be determined by the GUI 
+// being used.
 //
 // \par Example
 // \code

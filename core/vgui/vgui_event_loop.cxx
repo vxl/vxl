@@ -5,6 +5,7 @@
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
+// \brief  See vgui_event_loop.h for a description of this file.
 
 #include "vgui_event_loop.h"
 

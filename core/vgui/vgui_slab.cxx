@@ -5,6 +5,7 @@
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
+// \brief  See vgui_slab.h for a description of this file.
 
 #include "vgui_slab.h"
 

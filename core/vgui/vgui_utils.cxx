@@ -1,7 +1,10 @@
+// This is oxl/vgui/vgui_utils.cxx
+
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
 // \date   Oct 99
+// \brief  See vgui_utils.h for a description of this file.
 
 #include "vgui_utils.h"
 
@@ -21,7 +24,7 @@
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 void vgui_utils::dump_colour_buffer(char const *file) {
   // get viewport size
@@ -73,7 +76,7 @@ void vgui_utils::dump_colour_buffer(char const *file) {
   vil_save(colour_buffer, file);
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 // Copies the contents of the current read colour buffer into the current draw
 // colour buffer.
@@ -142,7 +145,7 @@ void vgui_utils::copy_back_to_front() {
   glDrawBuffer(GLenum(old_draw));
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 static GLint gl_old_buffer = -1;
 

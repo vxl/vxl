@@ -4,50 +4,58 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
+//:
+// \file
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date   21 Oct 99
+// \brief  Tableau which pops up tableau tree (tview) on Shift-G
+// 
+// Contains classes:  vgui_tview_launcher  vgui_tview_launcher_new
 //
-// .NAME vgui_tview_launcher - Pop up tableau tree (tview) on Shift-G
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/vgui_tview_launcher.h
-// .FILE vgui_tview_launcher.cxx
-//
-// .SECTION Description
-//
-// vgui_tview_launcher responds to the keypress "Shift-G", and pops up a picture
-// of the tableau graph of the adaptor under the mouse pointer.  It is generally
-// placed in a composite to provide debugging facilities, and is provided by default
-// if you use the vgui_shell_tableau.
-//
-// .SECTION Author
-//              Philip C. Pritchett, 21 Oct 99
-//              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications
-//
-//-----------------------------------------------------------------------------
+// \verbatim
+//  Modifications:
+//   21-OCT-1999 P.Pritchett - Initial version.
+//   10-AUG-2002 K.Y.McGaul  - Converted to Doxygen style comments.
+// \endverbatim
+
 
 #include "vgui_tview_launcher_sptr.h"
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_event_condition.h>
 
+
+//: Tableau which pops up tableau tree (tview) on Shift-G
+//
+// vgui_tview_launcher responds to the keypress "Shift-G", and pops up a picture
+// of the tableau graph of the adaptor under the mouse pointer.  It is generally
+// placed in a composite to provide debugging facilities, and is provided by 
+// default if you use the vgui_shell_tableau.
 class vgui_tview_launcher : public vgui_tableau
 {
  public:
+  //: Constructor - don't use this, use vgui_tview_launcher_new.
   vgui_tview_launcher();
+
+  //: Handle all events sent to this tableau.
   bool handle(const vgui_event&);
 
+  //: Returns the type of this tableau ('vgui_tview_launcher').
   vcl_string type_name() const;
 
+  //:
   void get_popup(const vgui_popup_params&, vgui_menu& menu);
 
+  //:
   void go(vgui_adaptor*);
 
+  //: 
   vgui_event_condition c_graph;
 
  protected:
   ~vgui_tview_launcher() { }
 };
 
+//: Creates a smart-pointer to a vgui_tview_launcher tableau.
 struct vgui_tview_launcher_new : public vgui_tview_launcher_sptr
 {
   typedef vgui_tview_launcher_sptr base;

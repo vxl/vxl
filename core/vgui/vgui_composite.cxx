@@ -6,7 +6,7 @@
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   15 Sep 99
-//-----------------------------------------------------------------------------
+// \brief  See vgui_composite.h for a description of this file.
 
 
 #include "vgui_composite.h"

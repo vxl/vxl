@@ -4,6 +4,7 @@
 // \file
 // \author K.Y.McGaul
 // \brief  Converts a string naming a colour to the RGB values.
+//
 //  e.g. "blue" is converted to "0.000 0.000 1.000".
 //
 // \verbatim

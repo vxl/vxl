@@ -5,6 +5,8 @@
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
+// \brief  See vgui_section_buffer.h for a description of this file.
+//
 // \verbatim
 // Modifications
 //  16-AUG-2000  Marko Bacic, Oxford RRG -- Added support for multiple textures
@@ -47,7 +49,7 @@ static unsigned next_power_of_two(unsigned n) {
   return k;
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 //: constructor. determine size of memory block to allocate. initialize the_rasters.
 vgui_section_buffer::vgui_section_buffer(int x_, int y_,
@@ -214,7 +216,7 @@ unsigned vgui_section_buffer::num_components() const {
     return 0;
   }
 }
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //
 // pixel format conversions
 // [The funky do-while construct is used to allow a semicolon after each macro call.]
@@ -408,7 +410,7 @@ void vgui_section_buffer::apply(vil_image const& image_in) {
     image_id_ = vgui_cache_wizard::Instance()->load_image(image);
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 //: just draw the outline of the given region.
 bool vgui_section_buffer::draw_as_rectangle(float x0, float y0,  float x1, float y1) const
@@ -845,4 +847,4 @@ bool vgui_section_buffer::draw_image_as_cached_textures(float x0, float y0,  flo
   return true;
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------

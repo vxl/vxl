@@ -1,5 +1,10 @@
+// This is oxl/vgui/vgui_tableau_sptr.h
 #ifndef vgui_tableau_sptr_h_
 #define vgui_tableau_sptr_h_
+//:
+// \file
+// \brief  Smart-pointer to a vgui_tableau
+
 
 class vgui_tableau;
 #include <vbl/vbl_smart_ptr.h>

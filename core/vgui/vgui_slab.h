@@ -4,10 +4,12 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// .NAME vgui_slab
-// .INCLUDE vgui/vgui_slab.h
-// .FILE vgui_slab.cxx
-// @author fsm@robots.ox.ac.uk
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+// \brief
+//
+//  Contains classes: vgui_slab
 
 #include <vgui/vgui_event.h>
 

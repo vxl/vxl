@@ -5,11 +5,13 @@
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
+// \brief  See vgui_pixel.h for a description of this file
+
 
 #include "vgui_pixel.h"
 #include <vgui/vgui_gl.h>
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 template <int M, int N> struct vgui_pixel_assert;
 VCL_DEFINE_SPECIALIZATION struct vgui_pixel_assert<2, 2> { };
@@ -28,7 +30,7 @@ struct generates_no_code
 #undef as
 };
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 // 200201 AWF changed from template magic to an explicit writing out of
 //            the 40 conversions.  It's not a template, because the

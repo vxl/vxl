@@ -10,9 +10,10 @@
 // \brief  Defines the abstract interface to commands.
 //
 // \verbatim
-// Modifications
-//  awf renamed derived classes to be consistent with header-file naming convention.
-//  fsm fixed everything afterwards....
+//  Modifications
+//    awf - Renamed derived classes to be consistent with header-file
+//          naming convention.
+//    fsm - Fixed everything afterwards....
 // \endverbatim
 
 #include <vbl/vbl_ref_count.h>
@@ -25,7 +26,7 @@ struct vgui_command : public vbl_ref_count
   virtual void execute() =0;
 };
 
-//: an implementation using a C callback function
+//: An implementation using a C callback function
 struct vgui_command_cfunc : public vgui_command
 {
   typedef void (*function_pv)(void const*);
@@ -40,7 +41,7 @@ struct vgui_command_cfunc : public vgui_command
   void execute();
 };
 
-//: command for toggle buttons
+//: Command for toggle buttons
 struct vgui_command_toggle : public vgui_command
 {
   bool state;
@@ -57,10 +58,12 @@ template <class receiver>
 // object/method pairs where the method is of the form
 // void receiver::method();
 // So, if you have
+// \code
 //    class myclass {
 //      void do_thing();
 //    };
 //    myclass* my_app;
+// \endcode
 // You can make a command such as
 //    vgui_command_simple<myclass>(my_app, myclass::do_thing);
 //  and pass it to a menu.
@@ -78,6 +81,7 @@ struct vgui_command_simple : public vgui_command
 template struct vgui_command_simple<receiver >
 
 template <class object_t, class data_t>
+
 //: For methods that take a single argument (fsm).
 struct vgui_command_bound_method : public vgui_command
 {

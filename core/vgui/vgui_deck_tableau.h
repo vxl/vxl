@@ -8,7 +8,9 @@
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   13 Sep 99
-// \brief  Tableau which holds many child tableau, only one of which receives events.
+// \brief  Tableau holding many child tableaux, but only one recieves events.
+//
+//  Contains classes:  vgui_deck_tableau  vgui_deck_tableau_new
 //
 // \verbatim
 //  Modifications:
@@ -22,24 +24,26 @@
 #include <vgui/vgui_slot.h>
 #include <vcl_string.h>
 
-//: Tableau which holds many child tableau, only one of which receives events.
+//:  Tableau holding many child tableaux, but only one recieves events.
 //
-//  vgui_deck_tableau holds an ordered collection of child tableaux, only one of which is
-//  passed all events that the vgui_deck_tableau receives. The effect is a flick-book of
-//  tableaux where the currently active tableau can be changed using PageUp and PageDown
-class vgui_deck_tableau : public vgui_tableau
+//  vgui_deck_tableau holds an ordered collection of child tableaux, only one 
+//  of which is passed all events that the vgui_deck_tableau receives. The 
+//  effect is a flick-book of tableaux where the currently active tableau can 
+//  be changed using PageUp and PageDown
+class vgui_deck_tableau : public vgui_tableau 
 {
- public:
-  //: Make an empty deck
+public:
+  //: Constructor - don't use this, use vgui_deck_tableau_new.
+  //  Make an empty deck
   vgui_deck_tableau();
 
-  //: Make a deck with two children, listed top to bottom
+  //: Constructor - don't use this, use vgui_deck_tableau_new.
+  //  Make a deck with two children, listed top to bottom
   vgui_deck_tableau(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1);
 
-  //: Make a deck with three children, listed top to bottom
+  //: Constructor - don't use this, use vgui_deck_tableau_new.
+  //  Make a deck with three children, listed top to bottom
   vgui_deck_tableau(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1, vgui_tableau_sptr const& child2);
-
-  // vgui_deck_tableau methods
 
   //: Add a tableau to the deck
   // It is placed on top, and made current.
@@ -73,18 +77,33 @@ class vgui_deck_tableau : public vgui_tableau
   //: Make the next higher tableau current
   void prev();
 
-  // vgui_tableau methods
+  //: Returns the file_name of the active child.
+  //  Over-rides function in vgui_tableau.
   virtual vcl_string file_name() const;
+
+  //: Returns a nice version of the name, including info on the active child.
+  //  Over-rides function in vgui_tableau.
   virtual vcl_string pretty_name() const;
+
+  //: Returns the type of this tableau ('vgui_deck_tableau').
+  //  Over-rides function in vgui_tableau.
   virtual vcl_string type_name() const;
 
+  //: Builds a popup menu for the user to select the active child.
+  //  Over-rides function in vgui_tableau.
   virtual void get_popup(const vgui_popup_params&, vgui_menu &m);
 
-  // Event handling
+  //: Send info to cerr - called when user presses '?' in the rendering area.
+  //  Over-rides function in vgui_tableau.
+  //  This function is called by the default handle() function in vgui_tableau.
   bool help();
+
+  //: Uses PageUp and PageDown events - called when user presses a key.
+  //  Over-rides function in vgui_tableau.
+  //  This function is called by the default handle() function in vgui_tableau.
   bool key_press(int x, int y, vgui_key key, vgui_modifier);
 
-  //: conceptually, this is a list on which observers can put themselves.
+  //: Conceptually, this is a list on which observers can put themselves.
   vgui_observable observers;
 
  protected:
@@ -102,6 +121,7 @@ class vgui_deck_tableau : public vgui_tableau
   int index_;
 };
 
+//: Create a smart-pointer to a vgui_deck_tableau.
 struct vgui_deck_tableau_new : public vgui_deck_tableau_sptr
 {
   typedef vgui_deck_tableau_sptr base;

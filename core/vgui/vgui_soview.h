@@ -6,15 +6,13 @@
 #endif
 //:
 // \file
-// \brief Undocumented class FIXME
+// \author  Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date    24 Mar 99
+// \brief   Spatial object view.
 //
-// Notes:
-//   We use floats instead of doubles as size is a speed issue (sic.)
+//  Contains classes: vgui_soview
+//  Notes: We use floats instead of doubles as size is a speed issue (sic.)
 //
-// \author
-//              Philip C. Pritchett, 24 Mar 99
-//              Robotics Research Group, University of Oxford
-//-----------------------------------------------------------------------------
 
 #include "dll.h"
 
@@ -26,6 +24,7 @@ class vgui_observer;
 class vgui_message;
 class vgui_style;
 
+//: Spatial object view.
 class vgui_soview /*: public vgui_observable*/
 {
  public:

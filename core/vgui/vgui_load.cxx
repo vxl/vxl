@@ -2,6 +2,10 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \author Geoffrey Cross, Oxford RRG
+// \date   03 Nov 99
+// \brief  See vgui_load.h for a description of this file.
 
 #include "vgui_load.h"
 #include <vcl_iostream.h>

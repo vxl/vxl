@@ -1,8 +1,11 @@
+// This is oxl/vgui/vgui_load_sptr.h
 #ifndef vgui_load_sptr_h_
 #define vgui_load_sptr_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
+//:
+// \file
+// \author  fsm@robots.ox.ac.uk
+// \brief   Smart-pointer to a vgui_load tableau.
+
 
 #include <vgui/vgui_tableau_sptr.h>
 

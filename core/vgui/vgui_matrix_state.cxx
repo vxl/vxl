@@ -1,9 +1,11 @@
-//:
-//  \file
+// This is oxl/vgui/vgui_matrix_state.cxx
 
-/*
-  fsm@robots.ox.ac.uk
-*/
+//:
+// \file
+// \author  fsm@robots.ox.ac.uk
+// \brief   See vgui_matrix_state.h for a description of this file.
+
+
 #include "vgui_matrix_state.h"
 #include <vcl_cstdlib.h> // vcl_abort()
 #include <vcl_iostream.h>

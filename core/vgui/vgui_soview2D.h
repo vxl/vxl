@@ -4,33 +4,29 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
+//:
+// \file
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date   24 Mar 99
+// \brief  2-dimensional spatial object view.
 //
-// .NAME vgui_soview2D - Undocumented class FIXME
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/vgui_soview2D.h
-// .FILE vgui_soview2D.cxx
+//  Contains classes:  vgui_soview2D  vgui_soview2D_point
+//                     vgui_soview2D_lineseg  vgui_soview2D_group
+//                     vgui_soview2D_infinite_line  vgui_soview2D_circle
+//                     vgui_soview2D_ellipse  vgui_soview2D_linestrip
+//                     vgui_soview2D_polygon
+// Notes:  We use floats instead of doubles as size is a speed issue (sic.)
 //
-// .SECTION Description
-//
-// vgui_soview2D is a class that Phil hasnt documented properly. FIXME
-//
-//
-// Notes:
-//   We use floats instead of doubles as size is a speed issue (sic.)
-//
-// .SECTION Author
-//              Philip C. Pritchett, 24 Mar 99
-//              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications
-// 10 Feb 2000 fsm@robots - removed dependency on MultiView
-// 04 Jul 2000 Marko Bacic - Fixed vgui_soview2D_circle
-//
-//-----------------------------------------------------------------------------
+// \verbatim
+//  Modifications
+//    10 Feb 2000 fsm@robots - removed dependency on MultiView
+//    04 Jul 2000 Marko Bacic - Fixed vgui_soview2D_circle
+// \endverbatim
+
 
 #include "vgui_soview.h"
 
+//: 2-dimensional spatial object view.
 class vgui_soview2D : public vgui_soview
 {
  public:
@@ -42,7 +38,7 @@ class vgui_soview2D : public vgui_soview
   virtual void translate(float x, float y) = 0;
 };
 
-
+//: 2-dimensional point.
 class vgui_soview2D_point : public vgui_soview2D
 {
  public:
@@ -59,7 +55,7 @@ class vgui_soview2D_point : public vgui_soview2D
   float x,y;
 };
 
-
+//: 2-dimensional line segment (finite line).
 class vgui_soview2D_lineseg : public vgui_soview2D
 {
  public:
@@ -80,7 +76,7 @@ class vgui_soview2D_lineseg : public vgui_soview2D
   float x0, y0, x1, y1;
 };
 
-
+//: Group of vgui_soview2D's.
 class vgui_soview2D_group : public vgui_soview2D
 {
  public:
@@ -99,6 +95,7 @@ class vgui_soview2D_group : public vgui_soview2D
   vcl_vector<vgui_soview2D *> ls;
 };
 
+//: 2-dimensional infinite line.
 class vgui_soview2D_infinite_line : public vgui_soview2D
 {
  public:
@@ -118,6 +115,7 @@ class vgui_soview2D_infinite_line : public vgui_soview2D
 };
 
 
+//: 2-dimensional circle.
 class vgui_soview2D_circle : public vgui_soview2D
 {
  public:
@@ -133,10 +131,12 @@ class vgui_soview2D_circle : public vgui_soview2D
 
   float x,y,r;
 
-  // compile the vcl_list
+  //: Compile the vcl_list
   static void compile();
 };
 
+
+//: 2-dimensional ellipse:
 class vgui_soview2D_ellipse : public vgui_soview2D
 {
  public:
@@ -152,10 +152,12 @@ class vgui_soview2D_ellipse : public vgui_soview2D
 
   float x, y, w, h, phi;
 
-  // compile the vcl_list
+  //: Compile the vcl_list
   static void compile();
 };
 
+
+//: 2-dimensional linestrip.
 class vgui_soview2D_linestrip : public vgui_soview2D
 {
  public:
@@ -178,6 +180,8 @@ class vgui_soview2D_linestrip : public vgui_soview2D
   //static void compile();
 };
 
+
+//: 2-dimensional polygon.
 class vgui_soview2D_polygon : public vgui_soview2D
 {
  public:

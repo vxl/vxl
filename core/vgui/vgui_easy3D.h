@@ -9,7 +9,8 @@
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   24 Sep 99
 // \brief  Tableau to display three-dimensional geometric objects.
-//         Contains classes: vgui_easy3D, vgui_easy3D_new
+//
+//  Contains classes: vgui_easy3D  vgui_easy3D_new
 //
 // \verbatim
 //  Modifications:

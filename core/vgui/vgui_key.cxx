@@ -4,6 +4,9 @@
 #endif
 #include "vgui_key.h"
 #include <vcl_iostream.h>
+//:
+// \file
+// \brief  See vgui_key.h for a description of this file.
 
 vgui_key vgui_key_CTRL(int character)
 {

@@ -1,8 +1,11 @@
 // This is oxl/vgui/vgui_listmanager2D_sptr.h
 #ifndef vgui_listmanager2D_sptr_h_
 #define vgui_listmanager2D_sptr_h_
-// Author: awf@robots.ox.ac.uk
-// Created: 10 Sep 00
+//:
+// \file
+// \author awf@robots.ox.ac.uk
+// \date   10 Sep 00
+// \brief  Smart-pointer to a vgui_listmanager2D tableau.
 
 #include <vgui/vgui_tableau_sptr.h>
 

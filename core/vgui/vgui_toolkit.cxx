@@ -5,6 +5,8 @@
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
+// \brief  See vgui_toolkit.h for a description of this file.
+
 
 #include "vgui_toolkit.h"
 

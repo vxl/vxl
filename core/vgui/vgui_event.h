@@ -8,7 +8,7 @@
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   11 Sep 99
-// \brief  The vgui_event class encapsulates the events handled by the vgui system.
+// \brief  vgui_event class encapsulates the events handled by the vgui system.
 //
 // \verbatim
 // Modifications:

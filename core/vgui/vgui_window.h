@@ -8,7 +8,8 @@
 // \file
 // \author fsm@robots.ox.ac.uk
 // \brief  An abstract representation of a system window.
-//         Contains classes: vgui_window.
+//
+//  Contains classes: vgui_window.
 //
 // \verbatim
 //  Modifications:

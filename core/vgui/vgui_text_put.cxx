@@ -2,11 +2,12 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-//
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 19 Oct 99
-//
-//-----------------------------------------------------------------------------
+//:
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   19 Oct 99
+// \brief  See vgui_text_put.h for a description of this file.
+
 
 #include "vgui_text_put.h"
 #include <vgui/vgui_gl.h>

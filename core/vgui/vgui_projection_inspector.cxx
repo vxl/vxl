@@ -1,6 +1,10 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
+// This is oxl/vgui/vgui_projection_inspector.cxx
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+// \brief  See vgui_projection_inspector.h for a description of this file.
+
 #include "vgui_projection_inspector.h"
 
 #include <vcl_cassert.h>
@@ -13,7 +17,7 @@
 
 #include <vgui/vgui_gl.h>
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 vgui_projection_inspector::vgui_projection_inspector()
   : P(4,4)
@@ -35,7 +39,7 @@ void vgui_projection_inspector::print(vcl_ostream& s) const
   s << "}\n";
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 // can be optimized for fast fast fast operation
 // vnl_svd<double> is probably not necessary; direct is good enough.
@@ -131,7 +135,7 @@ vnl_vector<double> vgui_projection_inspector::back_project(double x,double y,dou
   return back_project(xyz,p);
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 // returns true iff M has the form
 // * * * *
@@ -307,4 +311,4 @@ bool vgui_projection_inspector::image_viewport(float& a0, float& b0, float& a1, 
   return true;
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------

@@ -16,15 +16,19 @@
 
 class vgui_utils {
 public:
-  // Dump to .pnm bitmap
+  //: Dump to .pnm bitmap
   static void dump_colour_buffer(char const *file);
 
-  // Colour buffers
+  //: Copy front colour buffer to back colour buffer.
   static void copy_front_to_back();
+
+  //: Copy back colour buffer to front colour buffer.
   static void copy_back_to_front();
 
-  // Software overlay
+  //: Begin software overlay.
   static void begin_sw_overlay();
+
+  //: End software overlay.
   static void end_sw_overlay();
 
   // Selection utilities
@@ -32,6 +36,7 @@ public:
   static unsigned leave_pick_mode();
   static void process_hits(int num_hits, GLuint* ptr, vcl_vector<vcl_vector<unsigned> >& hits);
 
+  //: Returns the number of bits per pixel.
   static int bits_per_pixel(GLenum format, GLenum type);
 
 private:

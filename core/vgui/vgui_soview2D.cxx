@@ -6,7 +6,8 @@
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   24 Mar 99
-//-----------------------------------------------------------------------------
+// \brief  See vgui_soview2D.h for a description of this file.
+
 
 #include "vgui_soview2D.h"
 

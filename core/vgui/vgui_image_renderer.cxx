@@ -1,12 +1,16 @@
+// This is oxl/vgui/vgui_image_renderer.cxx
 
 //:
-//  \file
+// \file
 // \author fsm@robots.ox.ac.uk
+// \brief  See vgui_image_renderer.h for a description of this file.
+//
 // \verbatim
 //  Modifications
-//  15-AUG-2000 Marko Bacic, Oxford RRG -- Now uses new routines for image rendering via textures
-//  23-AUG-2000 Marko Bacic, Oxford RRG -- Now uses vgui_cache_wizard
-//  08-AUG-2000 Marko Bacic, Oxford RRG -- Minor changes
+//   15-AUG-2000 Marko Bacic, Oxford RRG -- Now uses new routines for image 
+//                                          rendering via textures
+//   23-AUG-2000 Marko Bacic, Oxford RRG -- Now uses vgui_cache_wizard
+//   08-AUG-2000 Marko Bacic, Oxford RRG -- Minor changes
 // \endverbatim
 
 #include "vgui_image_renderer.h"
@@ -24,7 +28,7 @@
 static bool debug = false;
 #define trace if (true) { } else vcl_cerr
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 // defined in vgui.cxx
 extern bool vgui_images_are_textures;
@@ -40,7 +44,7 @@ vgui_image_renderer::~vgui_image_renderer() {
     delete buffer;
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 void vgui_image_renderer::need_resection() const {
   // Not implemented since we use only one section buffer at the moment.
@@ -75,7 +79,7 @@ void vgui_image_renderer::reread_image()
   buffer = 0;
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 // draw the image :
 void vgui_image_renderer::render() {
@@ -132,4 +136,4 @@ void vgui_image_renderer::render() {
 }
 
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------

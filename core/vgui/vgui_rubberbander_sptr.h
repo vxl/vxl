@@ -1,8 +1,11 @@
 // This is oxl/vgui/vgui_rubberbander_sptr.h
 #ifndef vgui_rubberbander_sptr_h_
 #define vgui_rubberbander_sptr_h_
-// Author: awf@robots.ox.ac.uk
-// Created: 10 Sep 00
+//:
+// \file
+// \author awf@robots.ox.ac.uk
+// \date   10 Sep 00
+// \brief  Smart-pointer to a vgui_rubberbander tableau.
 
 #include <vgui/vgui_tableau_sptr.h>
 

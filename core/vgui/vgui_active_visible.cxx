@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_active_visable.cxx
+// This is oxl/vgui/vgui_active_visible.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -6,7 +6,7 @@
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   25 Jan 00
-// \brief  See vgui_active_visable.h for a description of this file.
+// \brief  See vgui_active_visible.h for a description of this file.
 //
 // \verbatim
 //  Modifications:

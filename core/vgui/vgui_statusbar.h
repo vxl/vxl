@@ -4,24 +4,14 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
+//:
+// \file
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date   21 Nov 99
+// \brief  vgui_statusbar is a class that Phil hasnt documented properly. FIXME
 //
-// .NAME vgui_statusbar - Undocumented class FIXME
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/vgui_statusbar.h
-// .FILE vgui_statusbar.cxx
-//
-// .SECTION Description
-//
-// vgui_statusbar is a class that Phil hasnt documented properly. FIXME
-//
-// .SECTION Author
-//              Philip C. Pritchett, 21 Nov 99
-//              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications
-//
-//-----------------------------------------------------------------------------
+//  Contains classes: vgui_statusbar
+
 
 class vgui_statusbar
 {

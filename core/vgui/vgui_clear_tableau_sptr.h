@@ -1,8 +1,10 @@
+// This is oxl/vgui/vgui_clear_tableau_sptr.h
 #ifndef vgui_clear_tableau_sptr_h_
 #define vgui_clear_tableau_sptr_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+// \brief  Smart-pointer to a vgui_clear_tableau.
 
 #include <vgui/vgui_tableau_sptr.h>
 

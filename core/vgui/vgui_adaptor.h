@@ -5,7 +5,8 @@
 // \file
 // \author fsm@robots.ox.ac.uk
 // \brief  Provides an abstract interface to an OpenGL rendering state.
-//         Contains classes: vgui_adaptor.
+//
+//  Contains classes: vgui_adaptor.
 //
 // \verbatim
 // Modifications
@@ -45,8 +46,8 @@ class vgui_adaptor_tableau;
 // to the tableau as an observer. The tableau may detach that observer if it so
 // chooses, but that would be a bad idea as it would stop post()s from tableaux
 // reaching the adaptor.
-
-class vgui_adaptor {
+class vgui_adaptor 
+{
 public:
   vgui_adaptor();
   virtual ~vgui_adaptor();

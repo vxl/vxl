@@ -1,7 +1,16 @@
-/*
-  fsm@robots.ox.ac.uk
-  15-AUG-2000 Marko Bacic,Oxford RRG -- Removed legacy ROI
-*/
+// This is ./oxl/vgui/vgui_image_tableau.cxx
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+// \brief  See vgui_image_tableau.h for a description of this file.
+//
+// \verbatim
+//  Modifications:
+//    15-AUG-2000 Marko Bacic,Oxford RRG -- Removed legacy ROI
+// \endverbatim
+
+
 #include <vcl_string.h>
 
 #include "vgui_image_tableau.h"

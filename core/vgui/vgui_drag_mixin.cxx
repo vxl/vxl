@@ -2,11 +2,12 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-//
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 11 Sep 99
-//
-//-----------------------------------------------------------------------------
+
+//:
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   11 Sep 99
+// \brief  See vgui_drag_mixin.h for a description of this file.
 
 #include "vgui_drag_mixin.h"
 

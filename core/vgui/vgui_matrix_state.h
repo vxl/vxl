@@ -1,14 +1,26 @@
+// This is oxl/vgui/vgui_matrix_state.h
 #ifndef vgui_matrix_state_h_
 #define vgui_matrix_state_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
-
-// .NAME vgui_matrix_state
-// .INCLUDE vgui/vgui_matrix_state.h
-// .FILE vgui_matrix_state.cxx
+//:
+// \file
+// \author  fsm@robots.ox.ac.uk
+// \brief   Stores and retrieves the current projection and modelview matrices.
 //
-// .SECTION Description
+//  Contains classes:  vgui_matrix_state
+//
+// \verbatim
+//  Modifications
+//    AWF Renamed store, and made it save and restore on 
+//        construction/desctruction.
+//    FSM Renamed method names for consistency with projection_inspector.
+// \endverbatim
+
+#include <vcl_iosfwd.h>
+#include <vgui/vgui_gl.h>
+template <class T> class vnl_matrix;
+
+//: Stores and retrieves the current projection and modelview matrices.
+//
 // vgui_matrix_state stores the current OpenGL projection and modelview
 // matrices when save() is called. The matrices are restored to these values
 // on the next call to restore(). Normally, the constructor calls save() and
@@ -16,15 +28,6 @@
 //
 // vgui_matrix_state also has various static convenience methods for GL matrix
 // handling.
-//
-// .SECTION Modifications
-// AWF renamed store, and made it save and restore on construction/desctruction.
-// FSM renamed method names for consistency with projection_inspector.
-
-#include <vcl_iosfwd.h>
-#include <vgui/vgui_gl.h>
-template <class T> class vnl_matrix;
-
 class vgui_matrix_state {
 public:
   vgui_matrix_state(bool save_now_restore_on_destroy = true);

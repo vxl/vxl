@@ -3,6 +3,8 @@
 //:
 // \file
 // \author VGG, Oxford University
+// \brief  See vgui_error_dialog.h for a description of this file.
+
 
 #include "vgui_error_dialog.h"
 

@@ -1,5 +1,4 @@
 // This is oxl/vgui/vgui_viewer2D.h
-
 #ifndef vgui_viewer2D_h_
 #define vgui_viewer2D_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -10,7 +9,8 @@
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   14 Sep 99
 // \brief  Tableau with functions to view 2D objects (eg, zoom, drag, centre).
-//         Contains classes: vgui_viewer2D vgui_viewer2D_new
+//
+//  Contains classes:  vgui_viewer2D  vgui_viewer2D_new
 //
 // \verbatim
 //  Modifications

@@ -1,3 +1,5 @@
+// This is oxl/vgui/vgui_register_all.cxx
+
 //:
 // \file
 // \author fsm@robots.ox.ac.uk

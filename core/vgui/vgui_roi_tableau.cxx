@@ -2,11 +2,12 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+
 //:
 // \file
 // \author Marko Bacic, RRG, University of Oxford
 // \date   18 Jul 2000
-//-----------------------------------------------------------------------------
+// \brief  See vgui_roi_tableau.h for a description of this file.
 
 #include <vcl_string.h>
 #include "vgui_roi_tableau.h"
@@ -21,7 +22,7 @@
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 vgui_roi_tableau::vgui_roi_tableau()
   : vgui_tableau()
@@ -56,7 +57,7 @@ vcl_string vgui_roi_tableau::pretty_name() const {
   return type_name() + "[" + name_ + "]";
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 vil_image vgui_roi_tableau::get_image() const {
   return cropped_image_;
@@ -80,7 +81,7 @@ void vgui_roi_tableau::set_image(char const *f) {
   set_image( vil_load(f ? f : "az32_10.tif") );
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 unsigned vgui_roi_tableau::width() const {
   return cropped_image_.width();
@@ -97,7 +98,7 @@ bool vgui_roi_tableau::get_bounding_box(float low[3], float high[3]) const {
   return true;
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 bool vgui_roi_tableau::handle(vgui_event const &e) {
 
@@ -136,4 +137,4 @@ bool vgui_roi_tableau::handle(vgui_event const &e) {
     return get_child(0)->handle(e);
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------

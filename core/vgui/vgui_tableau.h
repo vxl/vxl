@@ -9,7 +9,8 @@
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   11 Sep 99
 // \brief  Base class for all tableaux in vgui.
-//         Contains classes: vgui_tableau.
+//
+//  Contains classes: vgui_tableau.
 //
 // \verbatim
 // Modifications:

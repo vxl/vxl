@@ -9,7 +9,8 @@
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   14-SEP-1999
 // \brief  Tableau with functions to view 3D objects (eg. rotate, zoom, etc).
-//         Contains classes: vgui_viewer3D, vgui_viewer3D_new
+//
+//  Contains classes:  vgui_viewer3D  vgui_viewer3D_new
 // 
 // \verbatim
 //  Modifications:

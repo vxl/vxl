@@ -1,6 +1,10 @@
+// This is oxl/vgui/vgui_debug_tableau_sptr.h
 #ifndef vgui_debug_tableau_sptr_h_
 #define vgui_debug_tableau_sptr_h_
-
+//:
+// \file
+// \brief  Smart-pointer to vgui_debug_tableau.
+//
 // this is a generated file.
 
 #include <vgui/vgui_tableau_sptr.h>

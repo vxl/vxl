@@ -1,7 +1,11 @@
+// This is oxl/vgui/vgui_grid_tableau_sptr.h
 #ifndef vgui_grid_tableau_sptr_h_
 #define vgui_grid_tableau_sptr_h_
-
-// this is a generated file.
+//:
+// \file
+// \brief Smart-pointer to a vgui_grid_tableau.
+//
+// This is a generated file.
 
 #include <vgui/vgui_tableau_sptr.h>
 

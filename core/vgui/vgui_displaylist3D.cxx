@@ -4,10 +4,10 @@
 #endif
 //:
 // \file
-// \brief
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   14 Sep 99
-//-----------------------------------------------------------------------------
+// \brief  See vgui_displaylist3D.h for a description of this file.
+
 
 #include "vgui_displaylist3D.h"
 

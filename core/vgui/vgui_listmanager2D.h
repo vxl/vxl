@@ -6,15 +6,11 @@
 #endif
 //:
 // \file
-// \brief manages a set of vgui_displaylist2D children
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date   21 Oct 99
+// \brief  Tableau which manages a set of vgui_displaylist2D children
 //
-// A vgui_listmanager2D manages a set of vgui_displaylist2D children.
-// It behaves lilke an acetate, but is more efficient.
-//
-// \author
-//              Philip C. Pritchett, 21 Oct 99
-//              Robotics Research Group, University of Oxford
-//-----------------------------------------------------------------------------
+//  Contains classes: vgui_listmanager2D  vgui_listmanager2D_new
 
 #include <vgui/vgui_observable.h>
 #include <vgui/vgui_tableau.h>
@@ -27,9 +23,13 @@ class vgui_event;
 class vgui_displaylist2D;
 class vgui_soview2D;
 
+//: Tableau which manages a set of vgui_displaylist2D children
+//
+// It behaves like an acetate, but is more efficient.
 class vgui_listmanager2D : public vgui_tableau
 {
  public:
+  //: Constructor - don't use this, use vgui_listmanager2D_new.
   vgui_listmanager2D();
  ~vgui_listmanager2D();
 

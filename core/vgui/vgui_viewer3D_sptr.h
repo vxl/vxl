@@ -1,7 +1,11 @@
+// This is oxl/vgui/vgui_viewer3D_sptr.h
 #ifndef vgui_viewer3D_sptr_h_
 #define vgui_viewer3D_sptr_h_
-
-// this is a generated file.
+//:
+// \file
+// \brief  Smart-pointer to a vgui_viewer3D tableau.
+//
+// This is a generated file.
 
 #include <vgui/vgui_tableau_sptr.h>
 

@@ -6,7 +6,7 @@
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   08 Oct 99
-//-----------------------------------------------------------------------------
+// \brief  See vgui_debug_tableau.cxx for a description of this file.
 
 #include "vgui_debug_tableau.h"
 

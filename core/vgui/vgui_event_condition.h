@@ -8,6 +8,8 @@
 // \file
 // \author fsm@robots.ox.ac.uk
 // \brief  Represent and recognise simple event conditions.
+//
+//  Contains classes: vgui_event
 
 #include <vcl_string.h>
 #include <vgui/vgui_key.h>

@@ -9,7 +9,8 @@
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   24 Sep 1999
 // \brief  Tableau to display two-dimensional geometric objects.
-//         Contains classes: vgui_easy2D
+//
+//  Contains classes: vgui_easy2D  vgui_easy2D_new
 //
 // \verbatim
 // Modifications
@@ -45,18 +46,24 @@ class vgui_soview2D_polygon;
 //  objects on a non-black, plain coloured background use a clear_tableau 
 //  and set its colour.
 //
-//  To remove objects call remove(vgui_soview*).  The vgui_soview* is returned by add(), or
-//  you can get a list of all soviews using get_all().  To remove all objects use clear().
-//  These functions are inherited from vgui_displaybase.
+//  To remove objects call remove(vgui_soview*).  The vgui_soview* is returned 
+//  by add(), or you can get a list of all soviews using get_all().  To remove 
+//  all objects use clear().  These functions are inherited from 
+//  vgui_displaybase.
 //
-//  The geometric objects on the easy2D (and any underlying image) can be saved as PostScript
-//  by calling print_psfile. (If you just wish to save an image of your easy2D you may
-//  want to use vgui_utils::dump_colour_buffer instead).
+//  The geometric objects on the easy2D (and any underlying image) can be saved 
+//  as PostScript by calling print_psfile. (If you just wish to save an image 
+//  of your easy2D you may want to use vgui_utils::dump_colour_buffer instead).
 class vgui_easy2D : public vgui_displaylist2D
 {
  public:
+  //: Constructor - don't use this, use vgui_easy2D_new.
   vgui_easy2D(const char* n="unnamed");
+
+  //: Constructor - don't use this, use vgui_easy2D_new.
   vgui_easy2D(vgui_image_tableau_sptr const&, const char* n="unnamed");
+
+  //: Constructor - don't use this, use vgui_easy2D_new.
   vgui_easy2D(vgui_tableau_sptr const&, const char* n="unnamed");
 
   bool handle(const vgui_event& e);
@@ -126,6 +133,7 @@ class vgui_easy2D : public vgui_displaylist2D
   float point_size;
 };
 
+//: Create a smart-pointer to a vgui_easy2D tableau.
 struct vgui_easy2D_new : public vgui_easy2D_sptr
 {
   vgui_easy2D_new(char const *n="unnamed") :

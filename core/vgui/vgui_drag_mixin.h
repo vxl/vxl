@@ -10,6 +10,8 @@
 // \date   11 Sep 99
 // \brief  A tableau for drag events.
 //
+//  Contains classes:  vgui_drag_mixin
+//
 // \verbatim
 //  Modifications:
 //    11-SEP-1999 P.Pritchett - Initial version.
@@ -23,8 +25,8 @@
 //
 // vgui_drag_mixin simplifies the implementation of interactive tableaux.
 // Rather than having a switch in the tableau handle function, one implements
-// the methods mouse_down, mouse_drag etc, and calls vgui_drag_mixin::do_handle(e)
-// to dispatch to them.
+// the methods mouse_down, mouse_drag etc, and calls 
+// vgui_drag_mixin::do_handle(e) to dispatch to them.
 // 
 // The drag_mixin also records the last mouse button to be pressed and will send
 // vgui_MOTION events to the function mouse_drag() if the mouse is being moved

@@ -4,10 +4,9 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// .NAME vgui_observable
-// .INCLUDE vgui/vgui_observable.h
-// .FILE vgui_observable.cxx
-// @author fsm@robots.ox.ac.uk
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
 
 #include <vcl_vector.h>
 class vgui_observer;

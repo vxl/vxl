@@ -1,4 +1,4 @@
- // This is oxl/vgui/vgui_soview.cxx
+// This is oxl/vgui/vgui_soview.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -6,7 +6,7 @@
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   24 Mar 99
-//-----------------------------------------------------------------------------
+// \brief  See vgui_soview.h for a description of this file.
 
 #include "vgui_soview.h"
 

@@ -6,7 +6,8 @@
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   23 Oct 99
-//-----------------------------------------------------------------------------
+// \brief  See vgui_dialog.h for a description of this file.
+
 
 #include "vgui_dialog.h"
 #include <vgui/vgui.h>

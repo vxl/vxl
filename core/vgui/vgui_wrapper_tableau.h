@@ -4,7 +4,8 @@
 // \file
 // \author fsm@robots.ox.ac.uk
 // \brief  Base class tableau for tableau who want only a single child.
-//         Contains classes: vgui_wrapper_tableau, vgui_wrapper_tableau_new
+//
+//  Contains classes: vgui_wrapper_tableau  vgui_wrapper_tableau_new
 
 
 #ifndef vgui_wrapper_tableau_h_

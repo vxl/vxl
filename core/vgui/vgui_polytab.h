@@ -3,7 +3,9 @@
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
-// \brief  A tableau which renders its children into sub-rectangles of its viewport.
+// \brief  Tableau which renders its children in sub-rectangles of its viewport.
+//
+//  Contains classes: vgui_polytab  vgui_polytab_new  vgui_polytab_base
 
 #ifndef vgui_polytab_h_
 #define vgui_polytab_h_
@@ -12,9 +14,9 @@
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_slot.h>
 
-//: Base class for vgui_polytab - it is recommended to use vgui_polytab (further down the file).
+//: Base class for vgui_polytab - don't use this, use vgui_polytab.
 //
-// Class polytab_base is a tableau which renders its children into sub-rectangles
+// polytab_base is a tableau which renders its children into sub-rectangles
 // of its given viewport. The subrectangles are given as relative coordinates
 // on [0,1]x[0,1], with (0,0) being the lower left corner and (1,1) the upper
 // right corner. polytab_base has a concept of which child is 'current', meaning
@@ -49,17 +51,17 @@ public:
 
   // "handle interface"
 
-  //: add new subtableau. returns handle to child.
+  //: Add new subtableau, returns handle to child.
   int add(vgui_tableau_sptr const&, float x, float y, float w, float h);
-  //: remove subtableau, referred to by handle.
+  //: Remove subtableau, referred to by handle.
   void remove(int id);
-  //: move subtableau.
+  //: Move subtableau.
   void move(int id, float x, float y, float w, float h);
   //:
   void replace(int id, vgui_tableau_sptr const& tab);
-  //: get pointer to tableau from id.
+  //: Get pointer to tableau from id.
   vgui_tableau_sptr get(int id) const;
-  //: set color to outline tableau.
+  //: Set color to outline tableau.
   void set_outline_color(const int id, const int r, const int g, const int b);
 
 protected:
@@ -80,16 +82,15 @@ protected:
   vcl_vector<item> sub;
 };
 
-// use this class, not the base class.
 #include "vgui_polytab_sptr.h"
 
 //: A tableau which renders its children into sub-rectangles of its viewport.
 //
-// Class polytab_base is a tableau which renders its children into sub-rectangles
-// of its given viewport. The subrectangles are given as relative coordinates
-// on [0,1]x[0,1], with (0,0) being the lower left corner and (1,1) the upper
-// right corner. polytab_base has a concept of which child is 'current', meaning
-// roughly which child is getting the mouse events.
+// Class polytab_base is a tableau which renders its children into 
+// sub-rectangles of its given viewport. The subrectangles are given as 
+// relative coordinates on [0,1]x[0,1], with (0,0) being the lower left corner 
+// and (1,1) the upper right corner. polytab_base has a concept of which child 
+// is 'current', meaning roughly which child is getting the mouse events.
 //
 // Class polytab is derived from polytab_base and automatically switches current
 // child, according to where the pointer is, in a sensible way.
@@ -105,7 +106,10 @@ protected:
 // events.
 class vgui_polytab : public vgui_polytab_base {
 public:
+  //: Constructor - don't use this, use vgui_polytab_new.
   vgui_polytab();
+
+  //: Returns the type of this tableau ('vgui_polytab').
   vcl_string type_name() const;
 
   void get_popup(vgui_popup_params const &, vgui_menu &);
@@ -116,6 +120,7 @@ protected:
   bool handle(vgui_event const &);
 };
 
+//: Creates a smart-pointer to a vgui_polytab tableau.
 struct vgui_polytab_new : public vgui_polytab_sptr {
   typedef vgui_polytab_sptr base;
   vgui_polytab_new() : base(new vgui_polytab()) { }

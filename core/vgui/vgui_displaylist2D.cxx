@@ -6,6 +6,8 @@
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   14 Sep 99
+// \brief  See vgui_displaylist2D.h for a description of this file.
+
 
 #include "vgui_displaylist2D.h"
 

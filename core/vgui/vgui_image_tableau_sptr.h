@@ -1,5 +1,9 @@
+// This is oxl/vgui/vgui_image_tableau_sptr.h
 #ifndef vgui_image_tableau_sptr_h
 #define vgui_image_tableau_sptr_h
+//:
+// \file
+// \brief  Smart-pointer to a vgui_image_tableau.
 
 #include <vgui/vgui_tableau_sptr.h>
 

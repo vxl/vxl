@@ -16,6 +16,7 @@
 class vgui_image_renderer;
 class vil_image;
 
+//: Tableau to blend two images.
 class vgui_image_blender : public vgui_tableau
 {
  public:

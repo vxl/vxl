@@ -5,7 +5,18 @@
 #pragma interface
 #endif
 //:
-//  \file
+// \file
+// \author fsm@robots.ox.ac.uk
+// \brief  Holds a section of a GL image with given OpenGL buffer format and types.
+//
+//  Contains classes:  vgui_section_buffer
+
+#include <vgui/vgui_gl.h>
+class vil_image;
+
+class vgui_accelerate_cached_image;
+
+//: Holds a section of a GL image with given OpenGL buffer format and types.
 //
 // A section_buffer is an object which holds a section of a GL image
 // with given OpenGL buffer format and types. The constructor is
@@ -19,13 +30,6 @@
 // the section buffer should not be created until a GL state has been
 // created.
 //
-// \author fsm@robots.ox.ac.uk
-
-#include <vgui/vgui_gl.h>
-class vil_image;
-
-class vgui_accelerate_cached_image;
-
 // The 'format' and 'type' arguments describe the image format in
 // OpenGL terms. They are those passed to glDrawPixels(), so that
 // 'format' may be one of
@@ -37,7 +41,6 @@ class vgui_accelerate_cached_image;
 //    GL_SHORT, GL_UNSIGNED_INT, GL_INT, and GL_FLOAT
 //
 // Usually 'format'=GL_RGBA, 'type'=GL_UNSIGNED_BYTE works well.
-
 struct vgui_section_buffer
 {
   vgui_section_buffer(int x_, int y_,
@@ -91,24 +94,24 @@ struct vgui_section_buffer
   unsigned int allocw, alloch;// actual width and height allocated
   int image_id_;
 
-  // Pointer to pixel buffer, as given to glDrawPixels() or glTexImage2D().
+  //: Pointer to pixel buffer, as given to glDrawPixels() or glTexImage2D().
   void *the_pixels;
   bool is_texture;
 
  private:
-  // Pointer to array of pointers to beginning of rasters.
-  // Thus, the_rasters[0] equals the_pixels.
+  //: Pointer to array of pointers to beginning of rasters.
+  //  Thus, the_rasters[0] equals the_pixels.
   void **the_rasters;
   bool section_ok; // return value of vgui_image::get_section()
   unsigned num_components() const;
 
-  // This is the value of GL_MAX_TEXTURE_SIZE as returned by the GL.
-  // It might be something like 256, in which case the image will
-  // probably have to be rendered as several tiles.
+  //: This is the value of GL_MAX_TEXTURE_SIZE as returned by the GL.
+  //  It might be something like 256, in which case the image will
+  //  probably have to be rendered as several tiles.
   GLint texture_size;
-  // The number of tiles needed is countw*counth.
+  //: The number of tiles needed is countw*counth.
   int countw, counth;
-  // List of texture names used for the tiles.
+  //: List of texture names used for the tiles.
   GLuint *tList;
 };
 

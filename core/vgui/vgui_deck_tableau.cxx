@@ -6,7 +6,7 @@
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   13 Sep 99
-//-----------------------------------------------------------------------------
+// \brief  See vgui_deck_tableau.h for a description of this file.
 
 #include "vgui_deck_tableau.h"
 

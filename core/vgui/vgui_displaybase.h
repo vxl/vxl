@@ -8,8 +8,11 @@
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   14 Sep 99
-// \brief  General display list functionality, can use any type of soview.
-//-----------------------------------------------------------------------------
+// \brief  Tableau with display list functionality, can use any type of soview.
+//
+//  Contains classes:  vgui_displaybase  vgui_displaybase_new
+//                     vgui_displaybase_selection_callback
+
 
 #include <vcl_vector.h>
 
@@ -29,11 +32,13 @@ struct vgui_displaybase_selection_callback
 };
 
 #include "vgui_displaybase_sptr.h"
-//: General display list functionality; can use any type of soview as long as it's black.
+
+//: Tableau with display list functionality, can use any type of soview.
 class vgui_displaybase : public vgui_tableau
 {
  public:
 
+  //: Constructor - don't use this, use vgui_displaybase_new.
   vgui_displaybase();
  ~vgui_displaybase();
 
@@ -92,6 +97,7 @@ class vgui_displaybase : public vgui_tableau
   unsigned id;
 };
 
+//: Create a smart-pointer to a vgui_displaybase tableau.
 struct vgui_displaybase_new : public vgui_displaybase_sptr
 {
   typedef vgui_displaybase_sptr base;

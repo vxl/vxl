@@ -2,11 +2,11 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-//
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 21 Jan 00
-//
-//-----------------------------------------------------------------------------
+//:
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   21 Jan 00
+// \brief  See vgui_popup_params.h for a description of this file.
 
 #include "vgui_popup_params.h"
 

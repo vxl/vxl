@@ -6,7 +6,8 @@
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   21 Oct 99
-//-----------------------------------------------------------------------------
+// \brief  See vgui_listmanager2D.h for a description of this file.
+
 
 #include "vgui_listmanager2D.h"
 

@@ -1,8 +1,10 @@
+// This is oxl/vgui/vgui_tview_launcher_sptr.h
 #ifndef vgui_tview_launcher_sptr_h_
 #define vgui_tview_launcher_sptr_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
+//:
+// \file
+// \author  fsm@robots.ox.ac.uk
+// \brief   Smart-pointer to vgui_tview_launcher tableau.
 
 #include <vgui/vgui_tableau_sptr.h>
 

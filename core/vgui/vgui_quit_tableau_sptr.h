@@ -1,7 +1,11 @@
+// This is oxl/vgui/vgui_quit_tableau.h
 #ifndef vgui_quit_tableau_sptr_h_
 #define vgui_quit_tableau_sptr_h_
-
-// this is a generated file.
+//:
+// \file
+// \brief  Smart-pointer to a vgui_quit_tableau.
+//
+// This is a generated file.
 
 #include <vgui/vgui_tableau_sptr.h>
 

@@ -3,7 +3,10 @@
 #pragma implementation
 #endif
 //:
-//  \file
+// \file
+// \author K.Y.McGaul
+// \date   31-MAR-2000
+// \brief  See vgui_rubberbander.h for a description of this file.
 
 #include "vgui_rubberbander.h"
 

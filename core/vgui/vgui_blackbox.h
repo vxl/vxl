@@ -9,7 +9,8 @@
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   13 Oct 99
 // \brief  Tableau for event record and playback.
-//         Contains classes: vgui_blackbox, vgui_blackbox_new
+//
+//  Contains classes:  vgui_blackbox  vgui_blackbox_new
 //
 // \verbatim
 //  Modifications:

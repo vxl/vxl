@@ -2,11 +2,12 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-//
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 21 Oct 99
-//
-//-----------------------------------------------------------------------------
+//:
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   21 Oct 99
+// \brief
+
 
 #include "vgui_tview_launcher.h"
 #include <vcl_iostream.h>

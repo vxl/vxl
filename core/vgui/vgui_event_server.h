@@ -40,6 +40,7 @@ class vgui_event_server_interpose_tableau;
 class vgui_event_server
 {
  public:
+  //: Constructor - collects events from the given tableau.
   vgui_event_server(vgui_tableau_sptr const&);
 
   void reset();

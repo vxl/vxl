@@ -8,7 +8,7 @@
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   24 Mar 99
-// \brief  3-dimensional geometric objects.
+// \brief  3-dimensional spatial object view.
 // 
 // Contains classes:  vgui_soview3D  vgui_point3D  vgui_linseg3D
 // Notes:  We use floats instead of doubles as size is a speed issue (sic.)
@@ -16,7 +16,7 @@
 
 #include "vgui_soview.h"
 
-//: 3-dimensional geometric objects.
+//: 3-dimensional spatial object view.
 class vgui_soview3D : public vgui_soview
 {
  public:

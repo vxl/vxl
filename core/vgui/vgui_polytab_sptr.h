@@ -1,7 +1,11 @@
+// This is oxl/vgui/vgui_polytab_sptr.h
 #ifndef vgui_polytab_sptr_h_
 #define vgui_polytab_sptr_h_
-
-// this is a generated file.
+//:
+// \file
+// \brief  Smart-pointer to a vgui_polytab tableau.
+//
+// This is a generated file.
 
 #include <vgui/vgui_tableau_sptr.h>
 

@@ -4,29 +4,24 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// 
-// .NAME vgui_observer - observer base class
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/vgui_observer.h
-// .FILE vgui_observer.cxx
+//:
+// \file
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date   11 Sep 99
+// \brief  Observer base class
 //
-// .SECTION Description:
+//  Contains classes: vgui_observer
 //
-// vgui_observer is a class that Phil hasnt documented properly. FIXME
-//
-// .SECTION Author:
-//              Philip C. Pritchett, 11 Sep 99
-//              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications:
-//     <none yet>
-//
-//-----------------------------------------------------------------------------
+// \verbatim
+//  Modifications:
+//    11-Sep-1999 P.Pritchett - Initial version.
+//    14-Aug-2002 K.Y.McGaul - Converted to Doxygen style comments.
+// \endverbatim
 
 class vgui_message;
 class vgui_observable;
 
+//: Observer base class
 class vgui_observer
 {
  public:

@@ -9,7 +9,8 @@
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   11 Jan 00
 // \brief  A bare tableau which uses the vgui_drag_mixin.
-//         Contains classes: vgui_drag_tableau.
+//
+//         Contains classes: vgui_drag_tableau
 //
 // \verbatim
 //  Modifications
@@ -21,6 +22,7 @@
 #include <vgui/vgui_drag_mixin.h>
 
 //: A bare tableau which uses the vgui_drag_mixin
+//
 //  It is useful for making tableaux which have simple interaction 
 //  functionality.  It is expected that this tableau would be used 
 //  as a base class for your own derived tableau, not that this

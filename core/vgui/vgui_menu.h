@@ -33,6 +33,7 @@ typedef void (*vgui_menu_callback_no_client_data)();
 //: Representation of an item on a menu.
 //
 // Definition of vgui_menu::item = vgui_menu_item.
+// \verbatim
 // Each item is either a command :
 // . name
 // . action (command)
@@ -47,6 +48,7 @@ typedef void (*vgui_menu_callback_no_client_data)();
 // . invocation
 // or a separator :
 // . -----------
+// \endverbatim
 struct vgui_menu_item
 {
   //: Constructor - create a default menu item.

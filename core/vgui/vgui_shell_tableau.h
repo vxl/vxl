@@ -1,25 +1,20 @@
+// This is ./oxl/vgui/vgui_shell_tableau.h
 #ifndef vgui_shell_tableau_h_
 #define vgui_shell_tableau_h_
-// .NAME vgui_shell_tableau
-// .INCLUDE vgui/vgui_shell_tableau.h
-// .FILE vgui_shell_tableau.cxx
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+// \brief  Tableau to go at the top of one's tableau hierarchy.
 //
-// .SECTION Description
-// A shell tableau is a handy collection of things one often wants
-// at the very top of one's tableau hierarchy. It is essentially an
-// acetate with m utility tableaux at the bottom :
+//  Contains classes:  vgui_shell_tableau  vgui_shell_tableau_new
 //
-//    m+n your_tableau_n <--- last user added child.
-//    .   ...
-//    .   ...
-//    m=3 your_tableau_0 <--- first user added child.
-// ^  2   clear_tableau
-// |  1   quit_tableau
-// |  0   tview_launcher <--- first child.
-// @author fsm@robots.ox.ac.uk
-//
-// .SECTION Modifications
-// 18 Sept 00 capes@robots. Added set_enable_key_bindings(). Key bindings are OFF by default.
+// \verbatim
+//  Modifications
+//    18 Sept 00 capes@robots. Added set_enable_key_bindings(). 
+//                             Key bindings are OFF by default.
+//    07-Aug-2002 K.Y.McGaul - Converted to Doxygen style comments.
+// \endverbatim
 
 #include "vgui_shell_tableau_sptr.h"
 #include <vgui/vgui_composite.h>
@@ -28,6 +23,21 @@
 //class vgui_quit_tableau;
 
 
+//:  Tableau to go at the top of one's tableau hierarchy.
+//
+// A shell tableau is a handy collection of things one often wants
+// at the very top of one's tableau hierarchy. It is essentially an
+// acetate with m utility tableaux at the bottom :
+//
+// \verbatim
+//    m+n your_tableau_n <--- last user added child.
+//    .   ...
+//    .   ...
+//    m=3 your_tableau_0 <--- first user added child.
+// ^  2   clear_tableau
+// |  1   quit_tableau
+// |  0   tview_launcher <--- first child.
+// \endverbatim
 class vgui_shell_tableau : public vgui_composite {
 public:
   vgui_shell_tableau();
@@ -64,6 +74,7 @@ private:
   vgui_tview_launcher_sptr graph;
 };
 
+//: Create a smart-pointer to a vgui_shell_tableau.
 struct vgui_shell_tableau_new : public vgui_shell_tableau_sptr {
   typedef vgui_shell_tableau_sptr base;
   vgui_shell_tableau_new()

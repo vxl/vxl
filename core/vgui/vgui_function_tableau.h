@@ -9,7 +9,8 @@
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   25 Nov 99
 // \brief  Tableau where functions passed in are called for various events.
-//         Contains classes: vgui_function_tableau
+//
+//  Contains classes:  vgui_function_tableau
 //
 // \verbatim
 //  Modifications:

@@ -1,13 +1,11 @@
+// This is oxl/vgui/vgui_satellite.h
 #ifndef vgui_satellite_h_
 #define vgui_satellite_h_
-// .NAME vgui_satellite
-// .LIBRARY vgui
-// .INCLUDE vgui/vgui_satellite.h
-// .FILE    vgui_satellite.txx
-// .SECTION Author
-//  fsm@robots.ox.ac.uk
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+// \brief
 //
-// .SECTION Description
 // Purpose: To turn a non-tableau into a multi-tableau.
 //
 // Explanation: Sometimes it is handy to have a tableau with two
@@ -35,6 +33,7 @@
 // For example, an application which needs to maintain some state
 // which is used in, and responds to, two windows could use a pair
 // of vgui_satellite<>s as follows:
+// \code
 //    struct my_object
 //    {
 //      vgui_satellite_t_new<my_object, int> window_0;
@@ -53,6 +52,7 @@
 //
 //      vcl_string type_name() const { return "my_object"; }
 //    };
+// \endcode
 // All the state of this two-window application can now be held
 // in a single object, while each window's tableau interface can
 // be used independently. The satellite tableaux need not be
