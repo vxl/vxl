@@ -7,6 +7,7 @@
 #pragma implementation
 #endif
 #include "vnl_matlab_read.h"
+#include <vcl_ios.h> // for vcl_ios_cur
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h> // abort()
 #include <vcl_cstring.h> // memset()
@@ -114,7 +115,7 @@ void vnl_matlab_readhdr::read_next() {
 
     if (is_complex())
       n *= 2;
-    s.seekg(n, vcl_ios::cur);
+    s.seekg(n, vcl_ios_cur);
   }
 
   read_hdr();
