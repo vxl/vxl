@@ -160,7 +160,7 @@ foreach $f (@FILES)
   }
 
 # 12. Constant pi written as 3.1415...
-  if ($f !~ m/\b(v[cibt]l|v3p)\// && $f !~ m/\bvxl\/vnl\/vnl_math\./ && $f !~ m/\.c$/ &&
+  if ($f !~ m/\b(v[cuib]l|v3p)\// && $f !~ m/\bvxl\/vnl\/vnl_math\./ && $f !~ m/\.c$/ &&
       $file_s =~ m/\b(3\.14159\d*)/) {
     print "$f\t\# should maybe use vnl_math::pi instead of $1\n";
     $printed = 1;
@@ -234,7 +234,7 @@ foreach $f (@FILES)
         $f !~ m/\bv3p\/(netlib|tiff|png)\// && $f !~ m/\bv3p\/Qv\/vectors\.h$/ &&
         $f !~ m/\.c$/ &&
         $f !~ m/\bvnl\/vnl_complex_ops\.txx$/ &&
-        "$f.$wd" !~ m/\bvbl\/vbl_timer\.(h|cxx)\.real$/ &&
+        "$f.$wd" !~ m/\bvul\/vul_timer\.(h|cxx)\.real$/ &&
         "$f.$wd" !~ m/\bvnl\/vnl_quaternion\.h\.real$/ &&
         "$f.$wd" !~ m/\bvnl\/vnl_numeric_limits\.h\.(min|max)$/ &&
         "$f.$wd" !~ m/\bvil\/vil_rgb\.(h|txx)\.(min|max)$/ &&
