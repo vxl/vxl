@@ -6,10 +6,12 @@
 // \author Chuck Stewart
 // \date 25 Nov 2002
 
+#include <vcl_vector.h>
+
 #include "rgrl_initializer.h"
-#include "rgrl_transformation.h"
 #include "rgrl_estimator_sptr.h"
 #include "rgrl_mask.h"
+#include "rgrl_transformation_sptr.h"
 
 //: Generate initial estimates based on a single prior transformation.
 class rgrl_initializer_prior
@@ -45,9 +47,14 @@ class rgrl_initializer_prior
                            unsigned                   resolution = 0,
                            rgrl_scale_sptr            prior_scale = 0);
 
+  //: Add more potential prior transformations
+  void add_prior_xform( rgrl_transformation_sptr   xform_estimate );
+
   //: Get next initial estimate when first called, but return false thereafter.
   bool next_initial( rgrl_view_sptr           & view,
                      rgrl_scale_sptr          & prior_scale );
+
+  void reset_xform_index( ) { xform_index_ = 0; }
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_initializer_prior, rgrl_initializer );
@@ -55,7 +62,8 @@ class rgrl_initializer_prior
  protected:
   rgrl_view_sptr           init_view_;
   rgrl_scale_sptr          prior_scale_;
-  bool                     called_before_;    //  has next_initial been called yet?
+  vcl_vector< rgrl_transformation_sptr > xforms_;
+  int xform_index_;
 };
 
 #endif
