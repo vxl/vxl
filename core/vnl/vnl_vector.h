@@ -19,7 +19,7 @@
 #include <vnl/vnl_c_vector.h>
 #ifndef NDEBUG
 # include <vnl/vnl_error.h>
-# include "vnl_config.h"
+# include <vnl/vnl_config.h>
 # if VNL_CONFIG_CHECK_BOUNDS
 #  include <vcl_cassert.h>
 # endif

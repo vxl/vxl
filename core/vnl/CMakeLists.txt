@@ -1,8 +1,38 @@
-# vxl/vnl/CMakeLists.txt
+# vxl/core/vnl/CMakeLists.txt
+
+# Create vnl_config.h
+OPTION(VNL_CONFIG_CHECK_BOUNDS
+  "Whether vnl_vector/vnl_matrix accessor methods check index bounds." ON)
+OPTION(VNL_CONFIG_LEGACY_METHODS
+  "Whether backward-compatibility methods are provided by vnl." OFF)
+OPTION(VNL_CONFIG_THREAD_SAFE
+  "Whether thread-safe vnl implementations are used." ON)
+MARK_AS_ADVANCED(
+  VNL_CONFIG_CHECK_BOUNDS
+  VNL_CONFIG_LEGACY_METHODS
+  VNL_CONFIG_THREAD_SAFE
+  )
+# Need to enforce 1/0 values for configuration.
+IF(VNL_CONFIG_CHECK_BOUNDS)
+  SET(VNL_CONFIG_CHECK_BOUNDS 1)
+ELSE(VNL_CONFIG_CHECK_BOUNDS)
+  SET(VNL_CONFIG_CHECK_BOUNDS 0)
+ENDIF(VNL_CONFIG_CHECK_BOUNDS)
+IF(VNL_CONFIG_LEGACY_METHODS)
+  SET(VNL_CONFIG_LEGACY_METHODS 1)
+ELSE(VNL_CONFIG_LEGACY_METHODS)
+  SET(VNL_CONFIG_LEGACY_METHODS 0)
+ENDIF(VNL_CONFIG_LEGACY_METHODS)
+IF(VNL_CONFIG_THREAD_SAFE)
+  SET(VNL_CONFIG_THREAD_SAFE 1)
+ELSE(VNL_CONFIG_THREAD_SAFE)
+  SET(VNL_CONFIG_THREAD_SAFE 0)
+ENDIF(VNL_CONFIG_THREAD_SAFE)
+CONFIGURE_FILE(${vxl_SOURCE_DIR}/core/vnl/vnl_config.h.in
+               ${vxl_BINARY_DIR}/core/vnl/vnl_config.h @ONLY IMMEDIATE)
 
 SET( vnl_sources
   vnl_fwd.h
-  vnl_config.h
   vnl_tag.h
 
   # vector and matrix
@@ -151,17 +181,6 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
   SET_SOURCE_FILES_PROPERTIES(Templates/vnl_vector+vnl_rational-.cxx PROPERTIES COMPILE_FLAGS -O0)
   SET_SOURCE_FILES_PROPERTIES(Templates/vnl_vector_fixed+vnl_rational.3-.cxx PROPERTIES COMPILE_FLAGS -O0)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
-
-# VNL_ALLOC is a fast but currently thread-unsafe allocator
-# used in vnl_vectors. The default is to use it but to
-# use the slower, thread-safe allocation, in your
-# CMakeListsLocal.txt file add the following lines
-# SET(VNL_C_VECTOR_USE_VNL_ALLOC_DEFINED 1)
-# ADD_DEFINITIONS(-DVNL_C_VECTOR_USE_VNL_ALLOC=0)
-
-IF(NOT VNL_C_VECTOR_USE_VNL_ALLOC_DEFINED)
-  ADD_DEFINITIONS(-DVNL_C_VECTOR_USE_VNL_ALLOC=1)
-ENDIF(NOT VNL_C_VECTOR_USE_VNL_ALLOC_DEFINED)
 
 ADD_LIBRARY(vnl ${vnl_sources})
 TARGET_LINK_LIBRARIES( vnl vcl )

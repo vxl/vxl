@@ -345,16 +345,11 @@ void vnl_c_vector_inf_norm(T const *p, unsigned n, S *out)
 
 //---------------------------------------------------------------------------
 
-#ifdef VNL_C_VECTOR_USE_VNL_ALLOC
-// if set in build environment, go with that.
+#include <vnl/vnl_config.h>
+#if VNL_CONFIG_THREAD_SAFE
+# define VNL_C_VECTOR_USE_VNL_ALLOC 0
 #else
-// else, see what vnl_config.h has to say about it.
-# include "vnl_config.h"
-# if VNL_CONFIG_THREAD_SAFE
-#  define VNL_C_VECTOR_USE_VNL_ALLOC 0
-# else
-#  define VNL_C_VECTOR_USE_VNL_ALLOC 1
-# endif
+# define VNL_C_VECTOR_USE_VNL_ALLOC 1
 #endif
 
 #if VNL_C_VECTOR_USE_VNL_ALLOC
@@ -376,16 +371,20 @@ inline void* vnl_c_vector_alloc(int n, int size)
 #endif
 }
 
+#if VNL_C_VECTOR_USE_VNL_ALLOC
 inline void vnl_c_vector_dealloc(void* v, int n, int size)
 {
   //vcl_cerr<<"\ncall to vnl_c_vector_dealloc("<<v<<", "<<n<<", "<<size<<")\n";
-#if VNL_C_VECTOR_USE_VNL_ALLOC
   if (v)
     vnl_alloc::deallocate(v, (n == 0) ? 8 : (n * size));
-#else
-  delete [] static_cast<char*>(v);
-#endif
 }
+#else
+inline void vnl_c_vector_dealloc(void* v, int, int)
+{
+  //vcl_cerr<<"\ncall to vnl_c_vector_dealloc("<<v<<", "<<n<<", "<<size<<")\n";
+  delete [] static_cast<char*>(v);
+}
+#endif
 
 
 template<class T>
