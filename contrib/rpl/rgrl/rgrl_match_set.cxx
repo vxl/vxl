@@ -6,8 +6,7 @@
 // \date 14 Nov 2002
 
 #include "rgrl_feature_sptr.h"
-#include <rgrl/rgrl_transformation.h>
-#include <vnl/vnl_fastops.h>
+
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
 
@@ -183,57 +182,6 @@ remap_from_features( rgrl_transformation const& trans )
   }
 }
 
-void
-rgrl_match_set::
-update_geometric_error( rgrl_transformation_sptr const& trans )
-{
-  assert( trans );
-  
-  // save computation when transformation is identitcal
-  if( trans == prev_xform_cached_ )
-    return;
-  else
-    prev_xform_cached_ = trans;
-  
-  // valid check
-  if( from_features_.empty() ) 
-    return;
-  
-  // allow fast computation?  
-  const bool fast_computation = from_features_[0]->allow_fast_computation_on_error();
-  if( fast_computation ) {
-    // these can be resued
-    vnl_vector<double> mapped_loc, diff, proj;
-    for( from_iterator fitr=from_begin(); fitr!=from_end(); ++fitr ) 
-      if( !fitr.empty() ){
-        // map location
-        trans->map_location( fitr.from_feature()->location(), mapped_loc );
-  
-        for( from_iterator::to_iterator titr=fitr.begin(); titr!=fitr.end(); ++titr ) {
-          //borrow from rgrl_feature::geometric_error
-          diff = mapped_loc;
-          diff -= titr.to_feature()->location();
-          vnl_fastops::Ab( proj, titr.to_feature()->error_projector(), diff );
-          // set error
-          titr.set_geometric_error( proj.two_norm() );
-        }
-      }
-  }
-  else {
-    // re-map from features
-    remap_from_features( *trans );
-
-    for( from_iterator fitr=from_begin(); fitr!=from_end(); ++fitr ) 
-      if( !fitr.empty() ){
-        for( from_iterator::to_iterator titr=fitr.begin(); titr!=fitr.end(); ++titr ) {
-          // set error
-          double err = titr.to_feature()->geometric_error( *(fitr.mapped_from_feature()) );
-          titr.set_geometric_error( err );
-        }
-      }
-  }      
-}
-
 unsigned int
 rgrl_match_set::
 num_constraints_per_match() const
@@ -271,8 +219,7 @@ match_info( rgrl_feature_sptr to_feat )
   : to_feature( to_feat ),
     geometric_weight( -1.0 ),
     signature_weight( 1.0 ),
-    cumulative_weight( -1.0 ),
-    geometric_residual( 0.0 )
+    cumulative_weight( -1.0 )
 {
 }
 
@@ -281,13 +228,11 @@ rgrl_match_set::match_info::
 match_info( rgrl_feature_sptr to_feat,
             double geometric_wgt,
             double signature_wgt,
-            double cumulative_wgt,
-            double geometric_err )
+            double cumulative_wgt )
   : to_feature( to_feat ),
     geometric_weight( geometric_wgt ),
     signature_weight( signature_wgt ),
-    cumulative_weight( cumulative_wgt ),
-    geometric_residual( geometric_err )
+    cumulative_weight( cumulative_wgt )
 {
 }
 
@@ -298,8 +243,7 @@ match_info( rgrl_feature_sptr to_feat,
   : to_feature( to_feat ),
     geometric_weight( -1.0 ),
     signature_weight( signature_wgt ),
-    cumulative_weight( -1.0 ),
-    geometric_residual( 0.0 )
+    cumulative_weight( -1.0 )
 {
 }
 
