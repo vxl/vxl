@@ -20,7 +20,6 @@ endif
 # Leuven
 ifeq (1,$(USE_LEUVENVERSION))
  DEFINES += -DLEUVENVERSION
- TJWD := /freeware/bin/perl $(IUEROOT)/Scripts/Perl/tjwd
 
  ifeq ($(OS),SunOS5)
   VTK_EXTRA_LIBS += -lxgl
