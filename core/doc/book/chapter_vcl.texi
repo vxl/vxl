@@ -182,7 +182,8 @@ is supposed to work:
 @end itemize
 
 To understand the implications of this (and the meaning of "exported") let's
-consider the following program, composed of two translation units:
+consider the following program, composed of two "translation units"
+(i.e. files):
 
 @smallexample
 // matrix.h
@@ -244,8 +245,8 @@ off automatic instantiation of the first kind of template. This is only really
 the case for some architectures but if you are unlucky enough to be using one
 of them, you also have to explicitly instantiate your STL container classes
 and algorithms in the @code{Templates/} directories. [You should consider skipping
-the rest of this section until you actually have a template problem. Don't read it
-just for pleasure.] To make it easier to do
+the rest of this section until you actually have a template problem.  Don't read it
+just for pleasure.]  To make it easier to do
 this, and to make sure it works on all platforms, explicit instantiation is
 done using preprocessor macros. The macro used to instantiate a class or function
 is obtained by capitalizing the name (of that class or function) and appending
