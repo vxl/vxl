@@ -88,16 +88,16 @@ vvid_file_manager::~vvid_file_manager()
 // note that we have to get an adaptor and set the tableau to receive events
 bool vvid_file_manager::handle(const vgui_event &e)
 {
-  return this->child.handle(e); 
+  return this->child.handle(e);
 }
 //-------------------------------------------------------------
 //: Display a processed image
 //
 void vvid_file_manager::display_image()
 {
-  if(!video_process_)
+  if (!video_process_)
     return;
-  if(itab1_)
+  if (itab1_)
     itab1_->set_image(video_process_->get_output_image());
 }
 
@@ -184,7 +184,7 @@ void vvid_file_manager::cached_play()
       v2D0_->child.assign(*vit);
         //Here we can put some stuff to control the frame rate. Hard coded to
         //a delay of 10 for now
-      while(t.all()<time_interval_) ;
+      while (t.all()<time_interval_) ;
       //force the new frame to be displayed
       grid_->post_redraw();
       vgui::run_till_idle();
@@ -194,7 +194,6 @@ void vvid_file_manager::cached_play()
 
 void vvid_file_manager::un_cached_play()
 {
-  vul_timer t;
   vidl_movie::frame_iterator pframe(my_movie_);
   for (pframe=my_movie_->first(); pframe!=my_movie_->last()&&play_video_;
        ++pframe)
@@ -215,12 +214,12 @@ void vvid_file_manager::un_cached_play()
         }
       vil_image img = pframe->get_image();
       itab0_->set_image(img);
-      if(video_process_&&!pause_video_)
+      if (video_process_&&!pause_video_)
         {
           vil_memory_image_of<unsigned char> image(img);
           video_process_->add_input_image(image);
-          if(video_process_->execute())
-            if(video_process_->get_output_type()==vvid_video_process::IMAGE)
+          if (video_process_->execute())
+            if (video_process_->get_output_type()==vvid_video_process::IMAGE)
               display_image();
         }
       grid_->post_redraw();
@@ -251,8 +250,8 @@ void vvid_file_manager::play_video()
 
 //Stop the video and return to the first frame
 void vvid_file_manager::stop_video()
-{ 
-  play_video_ = false; 
+{
+  play_video_ = false;
 }
 
 //Cycle the play at the current frame
@@ -284,7 +283,7 @@ void vvid_file_manager::set_speed()
 {
   //not implemented yet
 }
-  
+
 void vvid_file_manager::easy2D_tableau_demo()
 {
   int inc = 40;
