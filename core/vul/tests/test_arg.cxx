@@ -42,13 +42,15 @@ int count_my_args(char const * const * my_argv)
 
 void test_do_vul_arg()
 {
-  vul_arg<int> int1("-int", "A help string", 1);
-  vul_arg<int> int2("-int2", "Another help string", 2);
-  vul_arg<bool> bool1("-bool1", "And another", false);
-  vul_arg<bool> bool2("-bool2", "And another", true);
-  vul_arg<bool> bool3("-bool3", "And a final help test just to finish off...", true);
-  vul_arg<vcl_list<int> > list1("-list", "List...");
-  vul_arg<char*> filename1;
+  vul_arg_info_list arglist;
+
+  vul_arg<int> int1(arglist, "-int", "A help string", 1);
+  vul_arg<int> int2(arglist, "-int2", "Another help string", 2);
+  vul_arg<bool> bool1(arglist, "-bool1", "And another", false);
+  vul_arg<bool> bool2(arglist, "-bool2", "And another", true);
+  vul_arg<bool> bool3(arglist, "-bool3", "And a final help test just to finish off...", true);
+  vul_arg<vcl_list<int> > list1(arglist, "-list", "List...");
+  vul_arg<char*> filename1(arglist);
 
   int my_argc = count_my_args(my_argv_1);
   vcl_cout << "vul_argc = " << my_argc
@@ -61,7 +63,7 @@ void test_do_vul_arg()
            << vcl_endl;
   char **my_argv = (char**) my_argv_1;
 
-  vul_arg_parse(my_argc, my_argv);
+  arglist.parse(my_argc, my_argv, true);
 
   TEST("int1", int1(), 3);
   TEST("int2", int2(), 2);

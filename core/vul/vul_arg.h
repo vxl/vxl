@@ -96,10 +96,10 @@ class vul_arg_base
 // find them, or whether there should be a local argPool which is passed to
 // each arg in order that it may add itself.  That would give a syntax like
 // \code
-//      argList args;
+//      vul_arg_info_list args;
 //      vul_arg<double> threshold(args, "-t", 1.25);
 //                                ^^^^^ passing args in
-//      args.parse(argc, argv);
+//      args.parse(argc, argv, true);
 // \endcode
 // The latter is "better" but the former is easier to use so I chose it.
 //
