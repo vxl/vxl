@@ -1,3 +1,5 @@
+// This is mul/pdf1d/pdf1d_prob_ks.cxx
+#include "pdf1d_prob_ks.h"
 //:
 // \file
 // \author Tim Cootes
