@@ -12,7 +12,7 @@ extracting the necessary classes and stuff from the Open Inventor
 
 To compile the QV parser "library":
 
-	cd src ; make
+        cd src ; make
 
 This will create QvLib.o, which contains everything in QV. (It should
 be about 400K, including debugging information from the -g flag in
@@ -22,11 +22,11 @@ the Makefile.)
 
 To test QV parsing:
 
-	cd test ; make readTest
+        cd test ; make readTest
 
 Then, run it on the data file:
 
-	./readTest < AllNodes.wrl
+        ./readTest < AllNodes.wrl
 
 The AllNodes.wrl file contains 1 of each supported node. It also has
 an extender node or two to test that capability. If the parsing was
@@ -37,11 +37,11 @@ successful, the program prints "Read was ok". Otherwise, it prints
 
 To test QV traversal:
 
-	cd test ; make travTest
+        cd test ; make travTest
 
 Then, run it on the sample data file:
 
-	./travTest < AllNodes.wrl
+        ./travTest < AllNodes.wrl
 
 This should print out each node type that is traversed and prints the
 current traversal state at each shape node. This program uses the
