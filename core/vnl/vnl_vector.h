@@ -176,24 +176,22 @@ protected:
 #if VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD
 # define v vnl_vector<T>
 # define m vnl_matrix<T>
-# define t VCL_STL_NULL_TMPL_ARGS
-  friend T      dot_product      t (v const&, v const&);
-  friend T      inner_product    t (v const&, v const&);
-  friend T      bracket          t (v const&, m const&, v const&);
-  friend T      cos_angle        t (v const&, v const&);
-  friend double angle            t (v const&, v const&);
-  friend m      outer_product    t (v const&, v const&);
-  friend v      operator+        t (T const, v const&);
-  friend v      operator-        t (T const, v const&);
-  friend v      operator*        t (T const, v const&);
-  friend v      operator*        t (m const&, v const&);
-  friend v      element_product  t (v const&, v const&);
-  friend v      element_quotient t (v const&, v const&);
-  friend T      cross_2d         t (v const&, v const&);
-  friend v      cross_3d         t (v const&, v const&); 
+  friend T      dot_product      VCL_NULL_TMPL_ARGS (v const&, v const&);
+  friend T      inner_product    VCL_NULL_TMPL_ARGS (v const&, v const&);
+  friend T      bracket          VCL_NULL_TMPL_ARGS (v const&, m const&, v const&);
+  friend T      cos_angle        VCL_NULL_TMPL_ARGS (v const&, v const&);
+  friend double angle            VCL_NULL_TMPL_ARGS (v const&, v const&);
+  friend m      outer_product    VCL_NULL_TMPL_ARGS (v const&, v const&);
+  friend v      operator+        VCL_NULL_TMPL_ARGS (T const,  v const&);
+  friend v      operator-        VCL_NULL_TMPL_ARGS (T const,  v const&);
+  friend v      operator*        VCL_NULL_TMPL_ARGS (T const,  v const&);
+  friend v      operator*        VCL_NULL_TMPL_ARGS (m const&, v const&);
+  friend v      element_product  VCL_NULL_TMPL_ARGS (v const&, v const&);
+  friend v      element_quotient VCL_NULL_TMPL_ARGS (v const&, v const&);
+  friend T      cross_2d         VCL_NULL_TMPL_ARGS (v const&, v const&);
+  friend v      cross_3d         VCL_NULL_TMPL_ARGS (v const&, v const&); 
 # undef v
 # undef m
-# undef t
 #endif
 };
 
