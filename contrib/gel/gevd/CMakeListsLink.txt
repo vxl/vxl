@@ -1,0 +1,6 @@
+INCLUDE( ${allvxl_SOURCE_DIR}/gel/vdgl/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/gel/vtol/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vil/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vbl/CMakeListsLink.txt )
+LINK_LIBRARIES( gevd )
