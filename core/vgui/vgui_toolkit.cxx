@@ -113,7 +113,7 @@ void vgui_toolkit::run_till_idle()
 
 void vgui_toolkit::flush()
 {
-  vgui_macro_warning << "no implementation of vcl_flush supplied" << vcl_endl;
+  vgui_macro_warning << "no implementation of flush supplied" << vcl_endl;
 }
 
 void vgui_toolkit::add_event(vgui_event const&)
