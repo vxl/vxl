@@ -14,4 +14,8 @@ SOURCE_FILES(clsfy_sources
   clsfy_random_classifier.h
   clsfy_rbf_parzen.h
   clsfy_simple_adaboost.h
+  clsfy_smo_base.h
+  clsfy_smo_1.h
+  clsfy_rbf_svm.h
+  clsfy_rbf_svm_smo_1_builder.h
 )

@@ -18,6 +18,10 @@ SOURCE_FILES(clsfy_sources
   clsfy_classifier_1d.cxx
   clsfy_binary_threshold_1d.cxx
   clsfy_builder_1d.cxx
+  clsfy_smo_base.cxx
+  clsfy_smo_1.cxx
+  clsfy_rbf_svm.cxx
+  clsfy_rbf_svm_smo_1_builder.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates clsfy_sources)
