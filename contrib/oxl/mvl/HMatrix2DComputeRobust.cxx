@@ -1,5 +1,5 @@
 //:
-//  \file
+// \file
 
 #include "HMatrix2DComputeRobust.h"
 #include <vcl_cmath.h>
@@ -10,6 +10,59 @@
 HMatrix2DComputeRobust::HMatrix2DComputeRobust() {}
 
 HMatrix2DComputeRobust::~HMatrix2DComputeRobust() {}
+
+
+HMatrix2D HMatrix2DComputeRobust::compute(PairMatchSetCorner& matches)
+{
+  HMatrix2D H;
+  if (compute(matches, &H))
+    return H;
+  else
+    return HMatrix2D();
+}
+
+HMatrix2D HMatrix2DComputeRobust::compute(vcl_vector<HomgPoint2D>& points1, vcl_vector<HomgPoint2D>& points2)
+{
+  if (points1.size() != points2.size())
+    vcl_cerr << __FILE__ ": Point vectors are not of equal length\n";
+  assert(points1.size() <= points2.size());
+  HomgInterestPointSet p1(points1,0);
+  HomgInterestPointSet p2(points2,0);
+  PairMatchSetCorner matches(&p1, &p2);
+  int count = matches.size();
+  vcl_vector<bool> inliers(count, true);
+  vcl_vector<int> ind1(count), ind2(count);
+  for (int i = 0; i < count; i++)  ind1[i] = ind2[i] = i;
+  matches.set(inliers, ind1, ind2);
+  
+  HMatrix2D H;
+  if (compute(matches, &H))
+    return H;
+  else
+    return HMatrix2D();
+}
+
+HMatrix2D HMatrix2DComputeRobust::compute(vcl_vector<vgl_homg_point_2d<double> >& points1,
+                                          vcl_vector<vgl_homg_point_2d<double> >& points2)
+{
+  if (points1.size() != points2.size())
+    vcl_cerr << __FILE__ ": Point vectors are not of equal length\n";
+  assert(points1.size() <= points2.size());
+  HomgInterestPointSet p1(points1,0);
+  HomgInterestPointSet p2(points2,0);
+  PairMatchSetCorner matches(&p1, &p2);
+  int count = matches.size();
+  vcl_vector<bool> inliers(count, true);
+  vcl_vector<int> ind1(count), ind2(count);
+  for (int i = 0; i < count; i++)  ind1[i] = ind2[i] = i;
+  matches.set(inliers, ind1, ind2);
+  
+  HMatrix2D H;
+  if (compute(matches, &H))
+    return H;
+  else
+    return HMatrix2D();
+}
 
 //-----------------------------------------------------------------------------
 //
