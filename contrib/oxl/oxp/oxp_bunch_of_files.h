@@ -14,7 +14,7 @@
 
 struct oxp_bunch_of_files
 {
-#ifdef VXL_HAS_INT_64
+#if VXL_HAS_INT_64
   typedef vxl_int_64 offset_t;
 #else // vcl_int_64 is typedef'd to void
   typedef long offset_t;
@@ -33,7 +33,7 @@ struct oxp_bunch_of_files
   int read(void*, unsigned int);
   bool ok() { return current_file_index != -1; }
 
-private:
+ private:
   bool fix_sizes(); // filenames has been filled
 
   int current_file_index;
