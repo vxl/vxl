@@ -159,6 +159,7 @@ bool mbl_histogram::write_probabilities(const char* path)
     ofs<<0.5*(bins_[i]+bins_[i+1])<<"  "<<double(freq_[i])/n_obs_<<vcl_endl;
   }
   ofs.close();
+  return true;
 }
 
 vcl_ostream& operator<<(vcl_ostream& os, const mbl_histogram& histo)
