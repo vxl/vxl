@@ -4,6 +4,7 @@ INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg )
 
 # determines if vgui is built and opengl is available
 INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
@@ -23,6 +24,7 @@ SET(bgui_sources
     bgui_easy2D_tableau.cxx        bgui_easy2D_tableau.h        bgui_easy2D_tableau_sptr.h
     bgui_linked_vsol_soview2D.cxx  bgui_linked_vsol_soview2D.h
     bgui_linked_vsol2D_tableau.cxx bgui_linked_vsol2D_tableau.h bgui_linked_vsol2D_tableau_sptr.h
+    bgui_bmrf_soview2D.cxx         bgui_bmrf_soview2D.h
     bgui_histogram_tableau.cxx     bgui_histogram_tableau.h     bgui_histogram_tableau_sptr.h
     bgui_selector_tableau.cxx      bgui_selector_tableau.h      bgui_selector_tableau_sptr.h
 )
