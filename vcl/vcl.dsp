@@ -1467,9 +1467,6 @@ SOURCE=.\vcl_where_root_dir.h
 SOURCE=.\vcl_config_compiler.h.in
 # End Source File
 # Begin Source File
-SOURCE=.\vcl_config_compiler_cmake.h.in
-# End Source File
-# Begin Source File
 SOURCE=.\vcl_config_headers.h.in
 # End Source File
 # Begin Source File
