@@ -1,8 +1,9 @@
 # mul/vimt/algo/CMakeLists.txt
 
 SET( vimt_algo_sources
-                        vimt_vimt_find_peaks.h
-                        vimt_vimt_find_troughs.h
+                        vimt_convolve_2d.h
+                        vimt_find_peaks.h
+                        vimt_find_troughs.h
 )
 
 
