@@ -517,7 +517,7 @@ void bmvv_recon_manager::overlapping_projections_z()
              << " images not set\n";
     return;
   }
-  double static z;
+  static double z;
   vgui_dialog image_project_dlg("Overlapping Projections at Z");
   image_project_dlg.field("Depth z value", z);
   if (!image_project_dlg.ask())
@@ -642,7 +642,7 @@ void bmvv_recon_manager::overlapping_harris_proj_z()
              << " images not set or harris not ready\n";
     return;
   }
-  double static z;
+  static double z;
   vgui_dialog image_project_dlg("Overlapping Harris Projections at Z");
   image_project_dlg.field("Depth z value", z);
   if (!image_project_dlg.ask())
