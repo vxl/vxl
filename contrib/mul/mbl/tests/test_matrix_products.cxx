@@ -17,11 +17,11 @@ void test_matrix_products()
   vnl_matrix<double> A(4,5),B(4,6);
   for (int i=0;i<A.rows();++i)
      for (int j=0;j<A.cols();++j)
-	   A(i,j) = 1+double(i+j*j);
+         A(i,j) = 1+double(i+j*j);
 
   for (int i=0;i<B.rows();++i)
      for (int j=0;j<B.cols();++j)
-	   B(i,j) = 1+i*i-double(j);
+         B(i,j) = 1+i*i-double(j);
 
   vnl_matrix<double> AtB;
   mbl_matrix_product_at_b(AtB,A,B);
@@ -46,7 +46,6 @@ void test_matrix_products()
   mbl_matrix_product_adb(CWB,C,d,B);
   vnl_matrix<double> dCWB = CWB - C * W * B;
   TEST("mbl_matrix_product_adb",dCWB.absolute_value_max()<1e-6,true);
-
 }
 
 TESTMAIN(test_matrix_products);

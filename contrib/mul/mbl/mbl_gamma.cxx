@@ -1,7 +1,7 @@
+#include "mbl_gamma.h"
 #include <vcl_iostream.h>
-#include<mbl/mbl_gamma.h>
-#include<math.h>
-#include <vcl_cstdlib.h> // abort()
+#include <vcl_cmath.h>
+#include <vcl_cstdlib.h> // vcl_abort()
 
 const int MAX_ITS = 100;
 const double EPS = 3.0e-7;
@@ -17,10 +17,10 @@ double mbl_log_gamma(double xx)
 
   y=x=xx;
   tmp=x+5.5;
-  tmp -= (x+0.5)*log(tmp);
+  tmp -= (x+0.5)*vcl_log(tmp);
   ser=1.000000000190015;
   for (j=0;j<=5;j++) ser += cof[j]/++y;
-  return -tmp+log(2.5066282746310005*ser/x);
+  return -tmp+vcl_log(2.5066282746310005*ser/x);
 }
 
 
@@ -39,9 +39,9 @@ static double mbl_gamma_ser(double a, double x)
       ++ap;
       del *= x/ap;
       sum += del;
-      if (fabs(del) < fabs(sum)*EPS)
+      if (vcl_fabs(del) < vcl_fabs(sum)*EPS)
       {
-        return sum*exp(-x+a*log(x)-(gln));
+        return sum*vcl_exp(-x+a*vcl_log(x)-(gln));
       }
     }
     vcl_cerr<<"mbl_gamma_ser : Failed to converge."<<vcl_endl;
@@ -77,20 +77,20 @@ static double NR_log_gamma_cf(double a, double x)
     an = -i*(i-a);
     b += 2.0;
     d=an*d+b;
-    if (fabs(d) < FPMIN) d=FPMIN;
+    if (vcl_fabs(d) < FPMIN) d=FPMIN;
     c=b+an/c;
-    if (fabs(c) < FPMIN) c=FPMIN;
+    if (vcl_fabs(c) < FPMIN) c=FPMIN;
     d=1.0/d;
     del=d*c;
     h *= del;
-    if (fabs(del-1.0) < EPS) break;
+    if (vcl_fabs(del-1.0) < EPS) break;
   }
   if (i > MAX_ITS)
   {
     vcl_cerr<<"NR_log_gamma_cf : Failed to converge."<<vcl_endl;
     vcl_abort();
   }
-  return -x+a*log(x)-(gln)+log(h);
+  return -x+a*vcl_log(x)-(gln)+vcl_log(h);
 }
 
 static double mbl_gamma_cf(double a, double x)
@@ -108,20 +108,20 @@ static double mbl_gamma_cf(double a, double x)
     an = -i*(i-a);
     b += 2.0;
     d=an*d+b;
-    if (fabs(d) < FPMIN) d=FPMIN;
+    if (vcl_fabs(d) < FPMIN) d=FPMIN;
     c=b+an/c;
-    if (fabs(c) < FPMIN) c=FPMIN;
+    if (vcl_fabs(c) < FPMIN) c=FPMIN;
     d=1.0/d;
     del=d*c;
     h *= del;
-    if (fabs(del-1.0) < EPS) break;
+    if (vcl_fabs(del-1.0) < EPS) break;
   }
   if (i > MAX_ITS)
   {
     vcl_cerr<<"mbl_gamma_cf : Failed to converge. a="<<a<<" x="<<x<<vcl_endl;
     return 1.0; // Arbitrary
   }
-  return exp(-x+a*log(x)-(gln))*h;
+  return vcl_exp(-x+a*vcl_log(x)-(gln))*h;
 }
 
 double mbl_gamma_p(double a, double x)
@@ -170,7 +170,7 @@ double mbl_log_gamma_q(double a, double x)
 
   if (x < (a+1.0))
   {
-    return log(1.0 - mbl_gamma_ser(a,x)); // Use series representation
+    return vcl_log(1.0 - mbl_gamma_ser(a,x)); // Use series representation
   }
   else
   {

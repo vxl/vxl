@@ -1,6 +1,7 @@
 #include <vcl_iostream.h>
 #include <vcl_ctime.h>
 #include <vcl_cmath.h>
+#include <vcl_cassert.h>
 
 #include<mbl/mbl_mz_random.h>
 
@@ -19,7 +20,11 @@ mbl_mz_random::mbl_mz_random(unsigned long seed[mbl_mz_array_size])
   : mz_array_position(0L), mz_borrow(0), mz_previous_normal_flag(0)
 {reseed(seed);}
 
-mbl_mz_random::mbl_mz_random(const mbl_mz_random& r) : linear_congruential_previous(r.linear_congruential_previous), mz_array_position(r.mz_array_position),mz_borrow(r.mz_borrow), mz_previous_normal_flag(r.mz_previous_normal_flag)
+mbl_mz_random::mbl_mz_random(const mbl_mz_random& r)
+  : linear_congruential_previous(r.linear_congruential_previous)
+  , mz_array_position(r.mz_array_position)
+  , mz_borrow(r.mz_borrow)
+  , mz_previous_normal_flag(r.mz_previous_normal_flag)
   {
   for(int i=0;i<mbl_mz_array_size;++i)
     {
@@ -85,8 +90,8 @@ void mbl_mz_random::reseed(unsigned long seed[mbl_mz_array_size])
 
   for(int i=0;i<mbl_mz_array_size;++i)
     {
-    mz_array[i] = seed[i];
-    mz_seed_array[i] = seed[i];
+      mz_array[i] = seed[i];
+      mz_seed_array[i] = seed[i];
     }
   }
 
@@ -96,7 +101,7 @@ void mbl_mz_random::restart()
 
   for(int i=0;i<mbl_mz_array_size;++i)
     {
-    mz_array[i] = mz_seed_array[i];
+      mz_array[i] = mz_seed_array[i];
     }
   }
 
@@ -117,13 +122,12 @@ double mbl_mz_random::normal()
       r2 = x*x+y*y;
     }
     while(r2 >=1.0 || r2 == 0.0);
-    double fac = sqrt(-2.0*log(r2)/r2);
+    double fac = vcl_sqrt(-2.0*vcl_log(r2)/r2);
     mz_previous_normal = x*fac;
     mz_previous_normal_flag = 1;
     return y*fac;
   }
 }
-
 
 
 //: Random value from a unit normal distribution about zero
@@ -147,35 +151,36 @@ double mbl_mz_random::normal64()
       r2 = x*x+y*y;
     }
     while(r2 >=1.0 || r2 == 0.0);
-    double fac = sqrt(-2.0*log(r2)/r2);
+    double fac = vcl_sqrt(-2.0*vcl_log(r2)/r2);
     mz_previous_normal = x*fac;
     mz_previous_normal_flag = 1;
     return y*fac;
   }
 }
+
 unsigned long mbl_mz_random::lrand32()
   {
-  unsigned long p1 = mz_array[(mbl_mz_array_size + mz_array_position - mz_previous1)%mbl_mz_array_size];
-  unsigned long p2 = p1 - mz_array[mz_array_position] - mz_borrow;
-  if (p2 < p1) mz_borrow = 0;
-  if (p2 > p1) mz_borrow = 1;
-  mz_array[mz_array_position] = p2;
-  mz_array_position = (++mz_array_position)%mbl_mz_array_size;
-  return p2;
+    unsigned long p1 = mz_array[(mbl_mz_array_size + mz_array_position - mz_previous1)%mbl_mz_array_size];
+    unsigned long p2 = p1 - mz_array[mz_array_position] - mz_borrow;
+    if (p2 < p1) mz_borrow = 0;
+    if (p2 > p1) mz_borrow = 1;
+    mz_array[mz_array_position] = p2;
+    mz_array_position = (++mz_array_position)%mbl_mz_array_size;
+    return p2;
   }
 
 int mbl_mz_random::lrand32(int lower, int upper)
   {
     assert(lower < upper);
 
-  // Note: we have to reject some numbers otherwise we get a very slight bias
-  // towards the lower part of the range lower - upper. See below
+    // Note: we have to reject some numbers otherwise we get a very slight bias
+    // towards the lower part of the range lower - upper. See below
 
-  unsigned long range = upper-lower+1;
-  unsigned long denom = 0xffffffff/range;
-  unsigned long ran;
-  while ((ran=lrand32())>=denom*range);
-  return lower + ran/denom;
+    unsigned long range = upper-lower+1;
+    unsigned long denom = 0xffffffff/range;
+    unsigned long ran;
+    while ((ran=lrand32())>=denom*range);
+    return lower + ran/denom;
   }
 
 
@@ -183,17 +188,17 @@ int mbl_mz_random::lrand32(int lower, int upper, int &count)
   {
     assert(lower < upper);
 
-  // Note: we have to reject some numbers otherwise we get a very slight bias
-  // towards the lower part of the range lower - upper. Hence this is a "count"
-  // version of the above function that returns the number of lrand32()
-  // calls made.
+    // Note: we have to reject some numbers otherwise we get a very slight bias
+    // towards the lower part of the range lower - upper. Hence this is a "count"
+    // version of the above function that returns the number of lrand32()
+    // calls made.
 
-  unsigned long range = upper-lower+1;
-  unsigned long denom = 0xffffffff/range;
-  unsigned long ran;
-  count = 1;
-  while ((ran=lrand32())>=denom*range) ++count;
-  return lower + ran/denom;
+    unsigned long range = upper-lower+1;
+    unsigned long denom = 0xffffffff/range;
+    unsigned long ran;
+    count = 1;
+    while ((ran=lrand32())>=denom*range) ++count;
+    return lower + ran/denom;
   }
 
 double mbl_mz_random::drand32(double lower = 0.0, double upper = 1.0)
@@ -205,6 +210,6 @@ double mbl_mz_random::drand32(double lower = 0.0, double upper = 1.0)
 double mbl_mz_random::drand64(double lower = 0.0, double upper = 1.0)
   {
     assert(lower < upper);
-  return  (double(lrand32())/0xffffffff + double(lrand32())/(double(0xffffffff)*double(0xffffffff)))*(upper-lower) + lower;
+    return  (double(lrand32())/0xffffffff + double(lrand32())/(double(0xffffffff)*double(0xffffffff)))*(upper-lower) + lower;
   }
 
