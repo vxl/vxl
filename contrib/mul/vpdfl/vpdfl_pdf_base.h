@@ -140,4 +140,10 @@ void vsl_print_summary(vcl_ostream& os,const vpdfl_pdf_base& b);
   //: Stream output operator for class pointer
 void vsl_print_summary(vcl_ostream& os,const vpdfl_pdf_base* b);
 
+  //: Stream output operator for class reference
+vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_pdf_base& b);
+
+  //: Stream output operator for class pointer
+vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_pdf_base* b);
+
 #endif // vpdfl_pdf_base_h

@@ -161,3 +161,18 @@ void vsl_print_summary(vcl_ostream& os,const vpdfl_pdf_base* b)
     os << "No vpdfl_pdf_base defined.";
 }
 
+  //: Stream output operator for class reference
+vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_pdf_base& b)
+{
+  vsl_print_summary(os,b);
+  return os;
+}
+
+  //: Stream output operator for class pointer
+vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_pdf_base* b)
+{
+  vsl_print_summary(os,b);
+  return os;
+}
+
+
