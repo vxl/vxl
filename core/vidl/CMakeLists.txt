@@ -22,7 +22,7 @@ IF( MPEG2_FOUND )
   SET(vidl_sources ${vidl_sources}
     vidl_mpegcodec.cxx vidl_mpegcodec.h vidl_mpegcodec_sptr.h
     vidl_mpegcodec_helper.cxx vidl_mpegcodec_helper.h
-    vidl_yuv_2_rgb.cxx vidl_yuv_2_rgb.h
+    vidl_yuv_2_rgb.h
   )
 ENDIF( MPEG2_FOUND )
 
