@@ -100,15 +100,15 @@ class bgrl_graph : public vbl_ref_count
   {
    public:
     //: Constructor
-    iterator( bgrl_graph_sptr graph, bgrl_search_func_sptr func );
+    iterator( bgrl_graph* graph, bgrl_search_func_sptr func );
     
     //: Constructor - for end iterator
-    iterator( bgrl_graph_sptr graph );
+    iterator( bgrl_graph* graph );
 
     //: Destructor
     virtual ~iterator() {}
 
-    bgrl_graph_sptr graph() const { return graph_; }
+    bgrl_graph* graph() const { return graph_; }
 
     //: Pre-Increment
     iterator& operator++ ();
@@ -127,7 +127,7 @@ class bgrl_graph : public vbl_ref_count
     bool operator != (const iterator& rhs) const;
 
    protected:
-    bgrl_graph_sptr graph_;
+    bgrl_graph* graph_;
     bgrl_search_func_sptr search_func_;
 
     bool use_internal_;
