@@ -11,7 +11,6 @@ SOURCE_FILES( gevd_sources
   gevd_pixel.h
   gevd_status_mixin.h
   gevd_step.h
-  gevd_clean_edgels.h
   gevd_xpixel.h
   gevd_edgel_regions.h
   gevd_region_edge.h
