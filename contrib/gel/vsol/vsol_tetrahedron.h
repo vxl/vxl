@@ -53,7 +53,7 @@ public:
   //: Clone `this': creation of a new object and initialization
   //: See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d* clone(void) const { return new vsol_tetrahedron(*this); }
+  virtual vsol_spatial_object_3d_sptr clone(void) const { return new vsol_tetrahedron(*this); }
 
   //***************************************************************************
   // Access
