@@ -136,7 +136,7 @@ void vidl_vil1_file_sequence::seek(offset_t to)
   assert(file_ptr >= 0);
   assert(file_ptr < (offset_t)filesizes[current_file_index]);
 
-  vcl_fseek(fps[current_file_index], file_ptr, SEEK_SET);
+  vcl_fseek(fps[current_file_index], (long)file_ptr, SEEK_SET);
 }
 
 vidl_vil1_file_sequence::offset_t vidl_vil1_file_sequence::tell() const
@@ -168,7 +168,7 @@ int vidl_vil1_file_sequence::read(void* buf, unsigned int len)
 
   // First read was OK.  Advance to next file.
   ++current_file_index;
-  vcl_fseek(fps[current_file_index], 0, SEEK_SET); // need to seek(0) since we may have read from this file before.
+  vcl_fseek(fps[current_file_index], 0L, SEEK_SET); // need to seek(0) since we may have read from this file before.
   int n2 = vcl_fread((unsigned char*)buf + n1, 1, bytes_from_next, fps[current_file_index]);
   return n1 + n2;
 }
