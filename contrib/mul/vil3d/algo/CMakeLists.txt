@@ -3,6 +3,7 @@
 SET(vil3d_algo_sources
   vil3d_gauss_reduce.h
   vil3d_algo_dummy.cxx
+  vil3d_threshold.h vil3d_threshold.txx 
 )
 
 AUX_SOURCE_DIRECTORY(Templates vil3d_algo_sources)
