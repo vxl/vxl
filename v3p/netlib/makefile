@@ -160,10 +160,6 @@ SOURCES += sorm2r.c
 SOURCES += sormr2.c
 SOURCES += stgsja.c
 
-ifneq ($(COMPILER)$(IU_COMPILER),)
-  NODEPENDS=1
-endif
-
 ##########################################
 include $(SYS_IUPACKAGES)/config/top.mk
 ##########################################
