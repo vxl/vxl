@@ -358,11 +358,11 @@ void vil3d_grad_1x3_mag_sq_1plane(const vil3d_image_view<vxl_int_32>& src_im,
       for (unsigned i=1;i<ni1;++i)
       {
         // Compute gradient in i
-        float dx = s[di1] - s[di2];
+        float dx = static_cast<float>(s[di1]) - static_cast<float>(s[di2]);
         // Compute gradient in j
-        float dy = s[dj1] - s[dj2];
+        float dy = static_cast<float>(s[dj1]) - static_cast<float>(s[dj2]);
         // Compute gradient in k
-        float dz = s[dk1] - s[dk2];
+        float dz = static_cast<float>(s[dk1]) - static_cast<float>(s[dk2]);
 
         *pg = 0.25f*(dx*dx + dy*dy + dz*dz);
 

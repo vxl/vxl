@@ -119,7 +119,7 @@ inline float l_round (double x, float )
 
 template <class T>
 void vimt_scale_pyramid_builder_2d<T>::scale_reduce(
-           T* dest_im, int dest_jstep,
+           T* dest_im, vcl_ptrdiff_t dest_jstep,
            const T* src_im,
            int src_ni, int src_nj, int dest_ni, int dest_nj,
            vcl_ptrdiff_t src_istep, vcl_ptrdiff_t src_jstep) const
