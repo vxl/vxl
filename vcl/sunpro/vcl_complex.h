@@ -21,4 +21,9 @@ inline std:: complex<double> operator*(double const& b, vcl_complex<float> const
   return vcl_complex<double>(a.real () * b, a.imag() * b);
 }
 
+#undef  vcl_abs
+#define vcl_abs vcl_abs
+inline float  vcl_abs(vcl_complex<float>  z) { return std::abs(z); }
+inline double vcl_abs(vcl_complex<double> z) { return std::abs(z); }
+
 #endif // vcl_sunpro_complex_h_
