@@ -48,6 +48,96 @@ vil2_image_view<T> vil2_transpose(const vil2_image_view<T>& v)
                                    v.ystep(),v.xstep(),v.planestep());
 }
 
+//: Compute minimum and maximum values over view
+template<class T>
+void vil2_value_range(T& min_value, T& max_value,const vil2_image_view<T>& view)
+{
+  if (view.size()==0)
+  {
+    min_value = 0;
+	max_value = 0;
+	return;
+  }
+
+  min_value = *(view.top_left_ptr());
+  max_value = min_value;
+
+  int nx = view.nx(), xstep=view.xstep();
+  int ny = view.ny(), ystep=view.ystep();
+  int np = view.nplanes(), pstep = view.planestep();
+
+  const T* plane = view.top_left_ptr();
+  for (int p=0;p<np;++p,plane += pstep)
+  {
+    const T* row = plane;
+    for (int y=0;y<ny;++y,row += ystep)
+    {
+      const T* pixel = row;
+      for (int x=0;x<nx;++x,pixel+=xstep)
+	  {
+	    if (*pixel<min_value) min_value=*pixel;
+		else if (*pixel>max_value) max_value=*pixel;
+      }
+    }
+  }
+}
+
+//: Fill view with given value
+template<class T>
+void vil2_fill(vil2_image_view<T>& view, T value)
+{
+  int nx = view.nx(), xstep=view.xstep();
+  int ny = view.ny(), ystep=view.ystep();
+  int np = view.nplanes(), pstep = view.planestep();
+
+  T* plane = view.top_left_ptr();
+  for (int p=0;p<np;++p,plane += pstep)
+  {
+    T* row = plane;
+    for (int y=0;y<ny;++y,row += ystep)
+    {
+      T* pixel = row;
+      for (int x=0;x<nx;++x,pixel+=xstep) *pixel=value;
+    }
+  }
+}
+
+//: Fill row y in view with given value
+template<class T>
+void vil2_fill_row(vil2_image_view<T>& view, unsigned y, T value)
+{
+  int nx = view.nx(), xstep=view.xstep();
+  int ny = view.ny(), ystep=view.ystep();
+  int np = view.nplanes(), pstep = view.planestep();
+
+  assert(y<ny);
+
+  T* row = view.top_left_ptr() + y*ystep;
+  for (int p=0;p<np;++p,row += pstep)
+  {
+    T* pixel = row;
+    for (int x=0;x<nx;++x,pixel+=xstep) *pixel=value;
+  }
+}
+
+//: Fill column x in view with given value
+template<class T>
+void vil2_fill_col(vil2_image_view<T>& view, unsigned x, T value)
+{
+  int nx = view.nx(), xstep=view.xstep();
+  int ny = view.ny(), ystep=view.ystep();
+  int np = view.nplanes(), pstep = view.planestep();
+
+  assert(x<nx);
+  T* col_top = view.top_left_ptr() + x*xstep;
+  for (int p=0;p<np;++p,col_top += pstep)
+  {
+    T* pixel = col_top;
+    for (int y=0;y<ny;++y,pixel+=ystep) *pixel=value;
+  }
+}
+
+
 //: How to print value in vil2_print_all(image_view)
 template<class T>
 void vil2_print_value(vcl_ostream& os, const T& value)
@@ -84,11 +174,15 @@ void vil2_print_all(vcl_ostream& os,const vil2_image_view<T>& view)
 #define VIL2_IMAGE_VIEW_FUNCTIONS_INSTANTIATE_FOR_SCALARS(T) \
 template vil2_image_view<T > vil2_view_as_planes(const vil2_image_view<vil_rgb<T > >&); \
 template vil2_image_view<vil_rgb<T > > vil2_view_as_rgb(const vil2_image_view<T >& plane_view); \
+template void vil2_value_range(T& min_value, T& max_value,const vil2_image_view<T>& view); \
 template void vil2_print_value(vcl_ostream& os, const T& value)
 
 // For everything else
 #define VIL2_IMAGE_VIEW_FUNCTIONS_INSTANTIATE(T) \
 template vil2_image_view<T> vil2_transpose(const vil2_image_view<T>& v); \
-template void vil2_print_all(vcl_ostream& os,const vil2_image_view<T >& view)
+template void vil2_print_all(vcl_ostream& os,const vil2_image_view<T >& view); \
+template void vil2_fill(vil2_image_view<T>& view, T value); \
+template void vil2_fill_row(vil2_image_view<T>& view, unsigned y, T value); \
+template void vil2_fill_col(vil2_image_view<T>& view, unsigned x, T value)
 
 #endif

@@ -81,8 +81,7 @@ for (int i=0;i<nplanes;++i)
   int nx=256;
   int ny=256;
   int nplanes=3;
-  vil2_image_view<vil2_byte> image(nx,ny,nplanes);
-  vil2_byte* plane_data = image.top_left_ptr();
+  vil2_image_view<vil_byte> image(nx,ny,nplanes);
   vil_byte* plane = image.top_left_ptr();
   for (unsigned int p=0;p<nplanes;++p,plane += image.planestep())
   {

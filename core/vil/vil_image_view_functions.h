@@ -23,6 +23,22 @@ vil2_image_view<vil_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& plane_vi
 template<class T>
 vil2_image_view<T> vil2_transpose(const vil2_image_view<T>& view);
 
+//: Fill view with given value
+template<class T>
+void vil2_fill(vil2_image_view<T>& view, T value);
+
+//: Fill row y in view with given value
+template<class T>
+void vil2_fill_row(vil2_image_view<T>& view, unsigned y, T value);
+
+//: Fill column x in view with given value
+template<class T>
+void vil2_fill_col(vil2_image_view<T>& view, unsigned x, T value);
+
+//: Compute minimum and maximum values over view
+template<class T>
+void vil2_value_range(T& min_value, T& max_value,const vil2_image_view<T>& view);
+
 //: How to print value in vil2_print_all(image_view)
 template<class T>
 void vil2_print_value(vcl_ostream& s, const T& value);
@@ -35,6 +51,14 @@ void vil2_print_value(vcl_ostream& s, const vil_rgb<unsigned char>& value);
 
 //: Explicit overload of print for rgb<float>  (truncates to int)
 void vil2_print_value(vcl_ostream& s, const vil_rgb<float>& value);
+
+//: Compute minimum and maximum values over view
+void vil2_value_range(vil_rgb<unsigned char>& min_value, vil_rgb<unsigned char>& max_value,
+                      const vil2_image_view<vil_rgb<unsigned char> >& view);
+
+//: Compute minimum and maximum values over view
+void vil2_value_range(vil_rgb<float>& min_value, vil_rgb<float>& max_value,
+                      const vil2_image_view<vil_rgb<float> >& view);
 
 //: Convenience function for loading an image into an image view.
 vil2_image_view_base * vil2_load_into_memory(const char *);

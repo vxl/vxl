@@ -25,5 +25,6 @@ macro(vil_rgb<int> )
 macro(vil_rgb<unsigned int> )
 macro(vil_rgb<short> )
 macro(vil_rgb<unsigned short> )
+macro(vil_rgb<float> )
 
 #undef macro
