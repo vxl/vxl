@@ -109,7 +109,7 @@ void
 bmrf_curve_3d::interp_gaps(const vcl_set<int>& frames)
 {
   for ( vcl_set<int>::const_iterator fitr = frames.begin();
-        fitr != frames.end();  ++fitr ) 
+        fitr != frames.end();  ++fitr )
   {
     vnl_double_2 last_point;
     iterator last_itr = this->end();
@@ -234,7 +234,7 @@ void
 bmrf_curve_3d::b_write( vsl_b_ostream& os ) const
 {
   vsl_b_write(os, version());
-  vsl_b_write(os, *((vcl_list<bmrf_curvel_3d_sptr>*)this));
+  vsl_b_write(os, *((vcl_list<bmrf_curvel_3d_sptr> const*)this));
 }
 
 
