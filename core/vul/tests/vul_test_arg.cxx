@@ -10,11 +10,7 @@
 #include <vcl_cstring.h> // needed for strcmp()
 #include <vcl_list.h>
 #include <vcl_algorithm.h>
-
-void Assert(char const* msg, bool expr)
-{
-  vcl_cout << msg << " - " << (expr?"passed":"failed") << "." << vcl_endl;
-}
+#include <vul/vul_test.h>
 
 char const * my_argv_1[] = {
   "progname",
@@ -55,7 +51,7 @@ void test_do_vul_arg()
   vul_arg<char*> filename1;
 
   int my_argc = count_my_args(my_argv_1);
-  vcl_cerr << "vul_argc = " << my_argc
+  vcl_cout << "vul_argc = " << my_argc
        << ", bool1 = " << bool1()
        << ", bool2 = " << bool2()
        << ", bool3 = " << bool3() << vcl_endl;
@@ -64,21 +60,21 @@ void test_do_vul_arg()
   vul_arg_parse(my_argc, my_argv);
   
   bool b = int1() == 3;
-  Assert("int1", b);
-  Assert("int2", int2() == 2);
-  Assert("filename == f", !vcl_strcmp(filename1(), "f"));
+  TEST("int1", b, true);
+  TEST("int2", int2(), 2);
+  TEST("filename == f", vcl_strcmp(filename1(), "f"), 0);
 
   unsigned true_list_length = sizeof list_contents / sizeof list_contents[0];
   vcl_list<int> l = list1();
-  Assert("list length", l.size() == true_list_length);
+  TEST("list length", l.size(), true_list_length);
   bool ok = true;
   for(unsigned int i = 0; i < true_list_length; ++i) {
     if (vcl_find(l.begin(), l.end(), list_contents[i]) == l.end()) {
-      vcl_cerr << "Integer [" << list_contents[i] << "] not found in list\n";
+      vcl_cout << "Integer [" << list_contents[i] << "] not found in list\n";
       ok = false;
     }
   }
-  Assert("list contents", ok);
+  TEST("list contents", ok, true);
 }
 
 extern "C"
@@ -87,9 +83,4 @@ void test_vul_arg()
   test_do_vul_arg();
 }
 
-int main()
-{
-  vcl_cout << "Running" << vcl_endl;
-  test_vul_arg();
-  return 0;
-}
+TESTMAIN(test_vul_arg);
