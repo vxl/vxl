@@ -109,14 +109,14 @@ bool FMatrixCompute7Point::compute_preconditioned(vcl_vector<HomgPoint2D>& point
   vcl_vector<double> a = FMatrixCompute7Point::GetCoef(F1, F2);
   vcl_vector<double> roots = FMatrixCompute7Point::solve_cubic(a);
 
-  for (int i = 0; i < roots.size(); i++) {
+  for (unsigned int i = 0; i < roots.size(); i++) {
     vnl_matrix<double> F_temp =
       F1.get_matrix()*roots[0] + F2.get_matrix()*(1 - roots[i]);
     F.push_back(new FMatrix(F_temp));
   }
   // Rank-truncate F
   if (rank2_truncate_) {
-    for (int h = 0; h < F.size(); ++h) {
+    for (unsigned int h = 0; h < F.size(); ++h) {
       F[h]->set_rank2_using_svd();
     }
   }
