@@ -3,7 +3,7 @@
 #
 
 IF(NOT HAS_NATIVE_MPEG)  
-  FIND_PATH( NATIVE_MPEG_INCLUDE_PATH mpeg2dec/video_out.h
+  FIND_PATH( NATIVE_MPEG_INCLUDE_PATH mpeg2dec/include
     /usr/local/include
     /usr/include
   )
