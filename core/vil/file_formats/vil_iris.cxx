@@ -2,10 +2,16 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author Joris Schouteden
+// \date 17 Feb 2000
 //
-// Author: Joris Schouteden
-// Created: 17 Feb 2000
-// Ported from vil1 by Peter Vanroose, 16 June 2003.
+// \verbatim
+//  Modifications
+//   Ported from vil1 by Peter Vanroose, 16 June 2003.
+//   12-Oct-2003 - PVr - being more careful with unsigned (bug fix for Alpha)
+// \endverbatim
 //
 //-----------------------------------------------------------------------------
 
@@ -228,14 +234,16 @@ static inline void swap(void* p,int length)
 #ifdef DEBUG
   if (length == sizeof(vxl_uint_32) && *(vxl_uint_32*)p != 0) {
     vcl_cerr << "Swapping " << *(vxl_uint_32*)p;
-    if (length == sizeof(float)) vcl_cerr << " (or " << *(float*)p << ')';
+    if (length == sizeof(float))
+      vcl_cerr << " (or " << *(float*)p << ')';
   }
 #endif
   for (int j=0;2*j<length;++j) { char c = t[j]; t[j] = t[length-j-1]; t[length-j-1] = c; }
 #ifdef DEBUG
   if (length == sizeof(vxl_uint_32) && *(vxl_uint_32*)p != 0) {
     vcl_cerr << " to " << *(vxl_uint_32*)p;
-    if (length == sizeof(float)) vcl_cerr << " (or " << *(float*)p << ')';
+    if (length == sizeof(float))
+      vcl_cerr << " (or " << *(float*)p << ')';
     vcl_cerr << '\n';
   }
 #endif
@@ -281,11 +289,11 @@ vil_image_view_base_sptr vil_iris_generic_image::get_section_verbatim(unsigned i
     for (unsigned int i=0;i<xs*ys*nplanes_;++i)
       swap(ob+i,pix_size);
 
-  // Note that jskip is negative!  Hence data ref pt is not ib but ib+xs*(ys-1)
+  // Note that jstep is negative!  Hence data ref pt is not ib but ib+xs*(ys-1)
   if (format_ == VIL_PIXEL_FORMAT_BYTE)
-    return new vil_image_view<vxl_byte>(buf,ib+xs*(ys-1),xs,ys,nplanes_,1,-xs,xs*ys);
+    return new vil_image_view<vxl_byte>(buf,ib+xs*(ys-1),xs,ys,nplanes_,1,-int(xs),xs*ys);
   else if (format_ == VIL_PIXEL_FORMAT_UINT_16)
-    return new vil_image_view<vxl_uint_16>(buf,ob+xs*(ys-1),xs,ys,nplanes_,1,-xs,xs*ys);
+    return new vil_image_view<vxl_uint_16>(buf,ob+xs*(ys-1),xs,ys,nplanes_,1,-int(xs),xs*ys);
   else
     return 0;
 }
@@ -328,9 +336,9 @@ vil_image_view_base_sptr vil_iris_generic_image::get_section_rle(unsigned int x0
   }
   delete[] exrow;
   if (format_ == VIL_PIXEL_FORMAT_BYTE)
-    return new vil_image_view<vxl_byte>(buf,ib+xs*(ys-1),xs,ys,nplanes_,1,-xs,xs*ys);
+    return new vil_image_view<vxl_byte>(buf,ib+xs*(ys-1),xs,ys,nplanes_,1,-int(xs),xs*ys);
   else if (format_ == VIL_PIXEL_FORMAT_UINT_16)
-    return new vil_image_view<vxl_uint_16>(buf,ob+xs*(ys-1),xs,ys,nplanes_,1,-xs,xs*ys);
+    return new vil_image_view<vxl_uint_16>(buf,ob+xs*(ys-1),xs,ys,nplanes_,1,-int(xs),xs*ys);
   else
     return 0;
 }
@@ -436,7 +444,7 @@ short get_short(vil_stream* file, int location)
 
   unsigned char buff[2];
   file->read(buff, 2L);
-  return (buff[0]<<8)+(buff[1]<<0);
+  return (((buff[0]&0x7f)<<8)+buff[1])*((buff[0]&0x80)?-1:1);
 }
 
 
@@ -444,7 +452,7 @@ char get_char(vil_stream* file, int location)
 {
   if (location >= 0) file->seek(location);
 
-  unsigned char buff[1];
+  char buff[1];
   file->read((void*)buff, 1L);
   return buff[0];
 }
@@ -464,7 +472,7 @@ long get_long(vil_stream* file, int location)
 
   unsigned char buff[4];
   file->read((void*)buff, 4L);
-  return (buff[0]<<24)+(buff[1]<<16)+(buff[2]<<8)+(buff[3]<<0);
+  return (((buff[0]&0x7f)<<24)+(buff[1]<<16)+(buff[2]<<8)+buff[3])*((buff[0]&0x80)?-1:1);
 }
 
 
@@ -477,8 +485,8 @@ void send_char(vil_stream* data, int s)
 void send_short(vil_stream* data, int s)
 {
   unsigned char buff[2];
-  buff[0] = (s >> 8) & 0xff;
-  buff[1] = (s >> 0) & 0xff;
+  if (s>=0) { buff[0] = (s >> 8) & 0x7f; buff[1] = s & 0xff; }
+  else      { s=-s; buff[0] = 0x80 | ((s >> 8) & 0x7f); buff[1] = s & 0xff; }
   data->write(buff, 2L);
 }
 
@@ -493,10 +501,8 @@ void send_ushort(vil_stream* data, unsigned int s)
 void send_long(vil_stream* data, long s)
 {
   unsigned char buff[4];
-  buff[0] = (unsigned char)((s >> 24) & 0xff);
-  buff[1] = (unsigned char)((s >> 16) & 0xff);
-  buff[2] = (unsigned char)((s >>  8) & 0xff);
-  buff[3] = (unsigned char)((s >>  0) & 0xff);
+  if (s>=0) { buff[0] = (s >> 24) & 0x7f; buff[1] = (s >> 16) & 0xff; buff[2]=(s>>8)&0xff; buff[3]=s&0xff; }
+  else      { s=-s;buff[0]=0x80|((s>>24)&0x7f); buff[1]=(s>>16)&0xff; buff[2]=(s>>8)&0xff; buff[3]=s&0xff; }
   data->write(buff, 4L);
 }
 
