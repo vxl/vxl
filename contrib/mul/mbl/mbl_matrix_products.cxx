@@ -169,9 +169,9 @@ void mbl_matrix_product_at_b(vnl_matrix<double>& AtB,
 //: Returns ADB = A * D * B
 //  where D is diagonal with elements d
 void mbl_matrix_product_adb(vnl_matrix<double>& ADB,
-                          const vnl_matrix<double>& A,
-                          const vnl_vector<double>& d,
-                                const vnl_matrix<double>& B)
+                            const vnl_matrix<double>& A,
+                            const vnl_vector<double>& d,
+                            const vnl_matrix<double>& B)
 {
   unsigned int nr1 = A.rows();
   unsigned int nc1 = A.cols();
