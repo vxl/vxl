@@ -69,8 +69,8 @@ void vpdfl_axis_gaussian::set(const vnl_vector<double>& m,
 
 // ====================================================================
 
-  // Probability densities:
-double vpdfl_axis_gaussian::log_p(const vnl_vector<double>& x) const
+//: Mahalanobis distance squared from the mean.
+double vpdfl_axis_gaussian::dx_sigma_dx(const vnl_vector<double> &x) const
 {
   int n = x.size();
 #ifndef NDEBUG
@@ -92,8 +92,13 @@ double vpdfl_axis_gaussian::log_p(const vnl_vector<double>& x) const
     double dx=x_data[i]-m_data[i];
     sum+=(dx*dx)/v_data[i];
   }
+  return sum;
+}
 
-  return log_k() - 0.5*sum;
+  // Probability densities:
+double vpdfl_axis_gaussian::log_p(const vnl_vector<double>& x) const
+{
+  return log_k() - 0.5*dx_sigma_dx(x);
 }
 
 void vpdfl_axis_gaussian::gradient(vnl_vector<double>& g,
@@ -142,33 +147,27 @@ double vpdfl_axis_gaussian::log_prob_thresh(double pass_proportion) const
 }
 
 
-void vpdfl_axis_gaussian::nearest_plausible(vnl_vector<double>& x, double log_p_min) const
+void vpdfl_axis_gaussian::nearest_plausible(vnl_vector<double>& x,
+  double log_p_min) const
 {
-  const double *s = sd_.data_block();
-  const double *m = mean().data_block();
-  int n = x.size();
-
-  double *x_data = x.data_block();
+  unsigned n = x.size();
 
   // calculate radius of plausible region in standard deviations.
   log_p_min -= log_k();
   assert(log_p_min <0); // Check sd_limit is positive and real.
-  const double sd_limit =
-    vcl_sqrt(-2.0*log_p_min);
+
+  const double sd_limit_sqr = -2.0*log_p_min;
+  // distance to x in standard deviations
+  const double x_dist_sqr = dx_sigma_dx(x);
+
+  if (sd_limit_sqr >= x_dist_sqr) return;
+
+  const double corrective_factor = vcl_sqrt(sd_limit_sqr / x_dist_sqr);
 
   for (int i=0;i<n;++i)
-  {
-    double limit = sd_limit * s[i];
-    double lo = m[i] - limit;
-    double hi = m[i] + limit;
-
-    if (x_data[i]<lo) x_data[i] = lo;
-    else
-      if (x_data[i]>hi) x_data[i] = hi;
-  }
+    x(i) = ((x(i)-mean()(i)) * corrective_factor) + mean()(i);
 }
-//=======================================================================
-// Method: is_a
+
 //=======================================================================
 
 vcl_string vpdfl_axis_gaussian::is_a() const
@@ -178,16 +177,12 @@ vcl_string vpdfl_axis_gaussian::is_a() const
 }
 
 //=======================================================================
-// Method: is_class
-//=======================================================================
 
 bool vpdfl_axis_gaussian::is_class(vcl_string const& s) const
 {
   return s==vpdfl_axis_gaussian::is_a() || vpdfl_pdf_base::is_class(s);
 }
 
-//=======================================================================
-// Method: version_no
 //=======================================================================
 
 short vpdfl_axis_gaussian::version_no() const
@@ -196,16 +191,12 @@ short vpdfl_axis_gaussian::version_no() const
 }
 
 //=======================================================================
-// Method: clone
-//=======================================================================
 
 vpdfl_pdf_base* vpdfl_axis_gaussian::clone() const
 {
   return new vpdfl_axis_gaussian(*this);
 }
 
-//=======================================================================
-// Method: print
 //=======================================================================
 
 void vpdfl_axis_gaussian::print_summary(vcl_ostream& os) const
@@ -215,8 +206,6 @@ void vpdfl_axis_gaussian::print_summary(vcl_ostream& os) const
 }
 
 //=======================================================================
-// Method: save
-//=======================================================================
 
 void vpdfl_axis_gaussian::b_write(vsl_b_ostream& bfs) const
 {
@@ -224,8 +213,6 @@ void vpdfl_axis_gaussian::b_write(vsl_b_ostream& bfs) const
   vpdfl_pdf_base::b_write(bfs);
 }
 
-//=======================================================================
-// Method: load
 //=======================================================================
 
 void vpdfl_axis_gaussian::b_read(vsl_b_istream& bfs)

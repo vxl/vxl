@@ -28,6 +28,9 @@ class vpdfl_axis_gaussian : public vpdfl_pdf_base
   void calcLogK();
   void calcSD();
 
+  //: Calculate (x-mu)' * Sigma^-1 * (x-mu)
+  double dx_sigma_dx(const vnl_vector<double> &x) const;
+
  public:
 
   // Dflt ctor
