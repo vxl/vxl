@@ -10,6 +10,7 @@
 
 #include <vul/vul_file.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_flip.h>
 
 // Microsoft files
 #include <windows.h>
@@ -567,41 +568,58 @@ HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
     *db = 0;
     ++db;
   }
-
-  // The byte swapping below is probabily unnecessary - use vil_flip_ud instead - FIXME
-
-  // Store the TargetJr data in a Bitmap way, DIB is a flipped upside down
-  switch (frame->get_bytes_pixel())
-  {
-   case 3:
-    for (j=frame->height()-1; j>=0;j--)
+ 
+  if(image.nplanes() == 3){
+    image = vil_flip_ud(image);
+    for (j=0; j<frame->height(); ++j)
     {
-      db = TjSection+ (j*frame->width())*frame->get_bytes_pixel();
-      byte* DIB = newbits + (frame->height()-j-1)*line_length;
+      //db = TjSection+ (j*frame->width())*frame->get_bytes_pixel();
+      byte* DIB = newbits + j*line_length;
       for (i=0; i<frame->width(); ++i, DIB+=3, db+=3) {
-        *DIB = *(db+2);
-        *(DIB+1) = *(db+1);
-        *(DIB+2) = *(db);
+        *DIB = image(i,j,2);
+        *(DIB+1) = image(i,j,1);
+        *(DIB+2) = image(i,j,0);
       }
     }
-    break;
-   case 1:
-    for (j=frame->height()-1; j>=0;j--)
+  }
+  else{
+    
+    // The byte swapping below is probabily unnecessary - use vil_flip_ud instead - FIXME
+    
+    // Store the TargetJr data in a Bitmap way, DIB is a flipped upside down
+    switch (frame->get_bytes_pixel())
     {
-      db = TjSection+ (j*frame->width())*frame->get_bytes_pixel();
-      byte* DIB = newbits + (frame->height()-j-1)*line_length;
-      for (i=0; i<frame->width(); ++i, DIB+=3, db+=1) {
-        *DIB = *(db);
-        *(DIB+1) = *(db);
-        *(DIB+2) = *(db);
+    case 3:
+      for (j=frame->height()-1; j>=0;j--)
+      {
+        db = TjSection+ (j*frame->width())*frame->get_bytes_pixel();
+        byte* DIB = newbits + (frame->height()-j-1)*line_length;
+        for (i=0; i<frame->width(); ++i, DIB+=3, db+=3) {
+          *DIB = *(db+2);
+          *(DIB+1) = *(db+1);
+          *(DIB+2) = *(db);
+        }
       }
-    }
-    break;
-   default:
-    vcl_cerr << "vidl_avicodec : Don't know how to deal with "
-             << frame->get_bytes_pixel() << " bytes per pixel.\n";
-
-  } // end switch byte per pixel
+      break;
+    case 1:
+      for (j=frame->height()-1; j>=0;j--)
+      {
+        db = TjSection+ (j*frame->width())*frame->get_bytes_pixel();
+        byte* DIB = newbits + (frame->height()-j-1)*line_length;
+        for (i=0; i<frame->width(); ++i, DIB+=3, db+=1) {
+          *DIB = *(db);
+          *(DIB+1) = *(db);
+          *(DIB+2) = *(db);
+        }
+      }
+      break;
+    default:
+      vcl_cerr << "vidl_avicodec : Don't know how to deal with "
+        << frame->get_bytes_pixel() << " bytes per pixel.\n";
+      
+    } // end switch byte per pixel
+    
+  }
 
   // 3rd, Create the Bitmap and stick the datas in it
   HDC hdc = GetDC(NULL);
