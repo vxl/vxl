@@ -45,7 +45,7 @@ ENDIF( BUILD_CONTRIB )
 OPTION(BUILD_TARGETJR "Should the TargetJr packages be built?" NO)
 
 IF(BUILD_TARGETJR)
-  SUBDIRS(Numerics COOL GeneralUtility Image SpatialObjects MultiView Segmentation)
+  SUBDIRS(COOL GeneralUtility Image SpatialObjects Photogrammetry Database MultiView Segmentation Recognition)
 ENDIF(BUILD_TARGETJR)
 
 
