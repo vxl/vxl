@@ -147,6 +147,36 @@ void vnl_fastops::AtB(vnl_vector<double>& out, const vnl_matrix<double>& A, cons
   }
 }
 
+//: Compute $A b$ for vector b. out may not be b.
+void vnl_fastops::Ab(vnl_vector<double>& out, const vnl_matrix<double>& A, const vnl_vector<double>& b)
+{
+  const unsigned int m = A.cols();
+  const unsigned int l = b.size();
+
+  // Verify matrices compatible
+  if (m != l) {
+    vcl_cerr << "vnl_fastops::Ab: argument sizes do not match: " << m << " != " << l << '\n';
+    vcl_abort();
+  }
+
+  const unsigned int n = A.rows();
+
+  // Verify output is the right size
+  if (out.size() != n)
+    out.set_size(n);
+
+  double const* const* a = A.data_array();
+  double const* bb = b.data_block();
+  double* outdata = out.data_block();
+
+  for (unsigned int i = 0; i < n; ++i) {
+    double accum = 0;
+    for (unsigned int k = 0; k < l; ++k)
+      accum += a[i][k] * bb[k];
+   outdata[i] = accum;
+  }
+}
+
 //: Compute $A B^\top$.
 void vnl_fastops::ABt(vnl_matrix<double>& out, const vnl_matrix<double>& A, const vnl_matrix<double>& B)
 {
