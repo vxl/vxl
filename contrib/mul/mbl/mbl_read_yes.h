@@ -1,15 +1,13 @@
 #ifndef mbl_read_yes_h_
 #define mbl_read_yes_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
 //:
 // \file
 // \author Tim Cootes
 // \brief Get yes or no response from keyboard
 // Converted to VXL by Louise Butcher
-
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 
 //: True if 'y' or 'Y' pressed
 //Waits for returns to be pressed.
@@ -21,5 +19,4 @@ bool mbl_read_yes();
 //Returns true if last character pressed is a N.
 bool mbl_read_no();
 
-#endif //mbl_read_yes_h_
-
+#endif // mbl_read_yes_h_
