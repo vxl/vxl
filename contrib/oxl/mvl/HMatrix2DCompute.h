@@ -1,17 +1,13 @@
-#ifndef _HMatrix2DCompute_h
-#define _HMatrix2DCompute_h
+#ifndef HMatrix2DCompute_h_
+#define HMatrix2DCompute_h_
 
-//--------------------------------------------------------------
-//
 // .NAME HMatrix2DCompute
-// .LIBRARY MViewCompute
-// .HEADER MultiView package
 // .INCLUDE mvl/HMatrix2DCompute.h
 // .FILE HMatrix2DCompute.cxx
 //
 // .SECTION Description:
-// Base class of classes to generate a plane-to-plane projectivity matrix from
-// a set of matched features.
+// Abstract interface for classes that compute plane-to-plane
+// projectivities from point and line correspondences.
 //
 // .SECTION Modifications:
 //   08-02-98 FSM
@@ -28,79 +24,43 @@ class PairMatchSetCorner;
 #include <mvl/HomgLine2D.h>
 #include <vcl_vector.h>
 
-// these make the headers easier to read (in my opinion) - fsm
-typedef vcl_vector<HomgPoint2D> PointArray;
-typedef vcl_vector<HomgLine2D>  LineArray;
-
-//
-// definition of class :
-//
 class HMatrix2DCompute {
-private:
-
-protected:
-  bool verbose_;
-
-  // Derived classes should implement as many of
-  // the following three methods as they can :
-  virtual bool compute_p (const PointArray&,// points only.
-                          const PointArray&,
-                          HMatrix2D *);
-
-  virtual bool compute_l (const LineArray&, // lines only.
-                          const LineArray&,
-                          HMatrix2D *);
-
-  virtual bool compute_pl(const PointArray&,// points and lines.
-                          const PointArray&,
-                          const LineArray&,
-                          const LineArray&,
-                          HMatrix2D *);
 public:
-  // Constructors/Initializers/Destructors----------------------------------
   HMatrix2DCompute() : verbose_(false) { }
   virtual ~HMatrix2DCompute() { }
 
-  //
-  void verbose(bool);   // set this to true for verbose run-time information
+  // set this to true for verbose run-time information
+  void verbose(bool v) { verbose_ = v; }
 
+  // fsm@robots.ox.ac.uk
+  virtual int minimum_number_of_correspondences() const = 0;
+  
+  // these reduce the size of the method signatures somewhat.
+  typedef vcl_vector<HomgPoint2D> PointArray;
+  typedef vcl_vector<HomgLine2D>  LineArray;
 
-  //
   // Compute methods :
   //
   // Some use point correspondences, some use line
   // correspondences, some use both. They are implemented
   // in terms of the compute_(p|l|pl) methods.
-  //
 
-  bool compute(const PointArray&,
-               const PointArray&,
-               HMatrix2D *);
+  bool compute(PointArray const&, PointArray const&, HMatrix2D *);
+  bool compute(LineArray const&, LineArray const&, HMatrix2D *);
+  bool compute(PointArray const&, PointArray const&, LineArray const&, LineArray const&, HMatrix2D *);
+  bool compute(PairMatchSetCorner const &, HMatrix2D *);
+  
+  HMatrix2D compute(PointArray const&, PointArray const&);
+  HMatrix2D compute(LineArray const&, LineArray const&);
+  HMatrix2D compute(PointArray const&, PointArray const&, LineArray const&, LineArray const&);
+  HMatrix2D compute(PairMatchSetCorner const &);
 
-  bool compute(const LineArray&,
-               const LineArray&,
-               HMatrix2D *);
-
-  bool compute(const PointArray&,
-               const PointArray&,
-               const LineArray&,
-               const LineArray&,
-               HMatrix2D *);
-
-  HMatrix2D compute(const PointArray&,
-                    const PointArray&);
-
-  HMatrix2D compute(const LineArray&,
-                    const LineArray&);
-
-  HMatrix2D compute(const PointArray&,
-                    const PointArray&,
-                    const LineArray&,
-                    const LineArray&);
-
-  bool compute(const PairMatchSetCorner &,
-               HMatrix2D *);
-  HMatrix2D compute(const PairMatchSetCorner &);
+protected:
+  bool verbose_;
+  
+  virtual bool compute_p (PointArray const&, PointArray const&, HMatrix2D *);
+  virtual bool compute_l (LineArray const&, LineArray const&, HMatrix2D *);
+  virtual bool compute_pl(PointArray const&, PointArray const&, LineArray const&, LineArray const&, HMatrix2D *);
 };
 
-#endif // _HMatrix2DCompute_h
+#endif // HMatrix2DCompute_h_
