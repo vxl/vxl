@@ -24,7 +24,7 @@ template void maptype<Key, T, Comp >::insert(InputIterator first, InputIterator 
 #undef VCL_MAP_INSTANTIATE
 #define VCL_MAP_INSTANTIATE(Key, T, Comp)\
 template class vcl_map<Key, T, Comp >; \
-VCL_MAP_INSTANTIATE_MT_InputIterator(vcl_map, Key, T, Comp, vcl_map<Key VCL_COMMA T VCL_COMMA Comp >::iterator); \
+VCL_MAP_INSTANTIATE_MT_InputIterator(map, Key, T, Comp, vcl_map<Key VCL_COMMA T VCL_COMMA Comp >::iterator); \
 VCL_MAP_INSTANTIATE_RB_TREE(Key, T, Comp);
 
 // Macro to instantiate vcl_multimap<Key, T, Comp>
