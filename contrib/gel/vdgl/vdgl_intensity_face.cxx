@@ -6,10 +6,15 @@
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vnl/vnl_matrix.h>
+#include <vdgl/vdgl_digital_curve.h>
+#include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vdgl/vdgl_digital_region.h>
+#include <vsol/vsol_curve_2d.h>
+#include <vsol/vsol_curve_2d_sptr.h>
 #include <vtol/vtol_one_chain.h>
 #include <vtol/vtol_one_chain_sptr.h>
 #include <vtol/vtol_edge.h>
+#include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_face_2d.h>
 
 //---------------------------------------------------------------
@@ -106,7 +111,29 @@ vnl_matrix<double> vdgl_intensity_face::MomentMatrix()
   return M;
 }
 
-#if 0
+//-----------------------------------------------------------
+//: Compute the total face boundary perimeter.
+//    Uses the length of EdgelChain(s)
+// MPP 5/9/2003
+// Resurrected from #ifdef'd block below for intensity face attributes
+float vdgl_intensity_face::perimeter()
+{
+	vcl_vector<vtol_edge_sptr>*	edges = this->edges();
+	float						p = 0;
+
+	for (vcl_vector<vtol_edge_sptr>::iterator eit = edges->begin();
+		eit != edges->end(); eit++)
+	{
+		vsol_curve_2d_sptr	c = (*eit)->cast_to_edge_2d()->curve();
+		if (c)
+		{
+			p += c->length();
+		}
+	}
+	return p;
+}
+
+#if 0 //nobody appears to call these methods
 //-----------------------------------------------
 //: The extrema of the face along a line of given orientation
 //
@@ -128,49 +155,6 @@ void vdgl_intensity_face::extrema(vcl_vector<float>& orientation,
       if (w<fmin) fmin = w;
       if (w>fmax) fmax = w;
     }
-}
-#endif
-
-#if 0 //nobody appears to call this method
-//-----------------------------------------------------------
-//: Compute the total face boundary perimeter.
-//    Uses the length of EdgelChain(s)
-float vdgl_intensity_face::perimeter()
-{
-  vcl_vector<vtol_edge_sptr>* edges = this->edges();
-  //vcl_cout << "Number of Edges = " << edges->length() << vcl_endl;
-  float p = 0;
-  for (vcl_vector<vtol_edge_sptr>::iterator eit = edges->begin();
-       eit != edges->end(); eit++)
-    {
-      vsol_curve_2d_sptr c = (*eit)->cast_to_edge_2d()->curve();
-      if (!c)
-        continue;
-      vsol_curve_2d::vsol_curve_2d_type type = c->curve_type();
-      switch(type)
-        {
-        case vsol_curve_2d::DIGITAL_CURVE:
-          {
-            vdgl_digital_curve_sptr dc = (vdgl_digital_curve_sptr)c;
-            float l = dc->length();
-            p += l;
-          }
-          break;
-        //the boundary could be fit with lines and the Edge geometry replaced
-        case GeometryObject::IMPLICITDIGITALLINE:
-          {
-            ImplicitLine* il = (ImplicitLine*)c;
-            float l = il->GetLength();
-            p += l;
-          }
-          break;
-        default:
-          vcl_cout << "In vdgl_intensity_face::perimeter() - warning:"
-                   << " Edge does not have known geometry\n";
-        break;
-        }
-    }
-  return p;
 }
 
 bool vdgl_intensity_face::TaggedTransform(CoolTransform const& t)

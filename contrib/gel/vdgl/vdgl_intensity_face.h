@@ -27,6 +27,10 @@
 //                    dependency changed to "has_a", but with cast_to semantics
 //   8-Jan-2003 - Peter Vanroose - moved compute_bounding_box() to vtol_face
 //   5-Feb-2003 - Peter Vanroose - moved IsHoleP() to vtol_face_2d
+//   9-May-2003 - Mike Petersen - intensity face attributes support:
+//                    - added get_min() & get_max() pass-throughs
+//                    - restored perimeter() API
+//                    - added topology_type() override (INTENSITYFACE)
 // \endverbatim
 //
 //-------------------------------------------------------------------------
@@ -63,6 +67,12 @@ class vdgl_intensity_face : public vtol_face_2d
 
   inline vtol_topology_object::vtol_topology_object_type
     GetTopologyType() const { return vtol_topology_object::INTENSITYFACE; }
+
+  // MPP 5/9/2003
+  // Added API consistent w/ overloaded vtol method
+  virtual vtol_topology_object::vtol_topology_object_type
+	topology_type(void) const { return GetTopologyType(); }
+
   virtual vdgl_intensity_face* CastToIntensityFace() {return this;}
   virtual vdgl_digital_region* cast_to_digital_region() const {return region_;}
   virtual vdgl_digital_region* cast_to_digital_region() {return region_;}
@@ -105,10 +115,22 @@ class vdgl_intensity_face : public vtol_face_2d
 #endif
   double Var() const { return region_->Var(); }
 
+  // MPP 5/9/2003
+  // Additional digital region pass-throughs
+  float get_min() const { return region_->get_min(); }
+  float get_max() const { return region_->get_max(); }
+
   //Accessors
   // The Face moment matrix
   virtual vnl_matrix<double> MomentMatrix();
+
   //Utility Methods
+
+  // MPP 5/9/2003
+  // Resurrected from #ifdef'd block below for intensity face attributes
+  float perimeter();
+
+// Nobody appears to call these methods
 #if 0
   // The projection of the face onto a given orientation
   virtual void extrema(vcl_vector<float>& orientation, float& min, float& max);
@@ -116,12 +138,10 @@ class vdgl_intensity_face : public vtol_face_2d
   // Only TaggedTransform can handle the shared geometry.
   virtual bool TaggedTransform(CoolTransform const& t);
 
-  float perimeter();
-
   // Computations on the adjacent Face(s)
   Histogram_ref GetAdjacentRegionHistogram();
-#endif
   float GetAdjacentRegionMean();
+#endif
 };
 
 #endif // vdgl_intensity_face_h_
