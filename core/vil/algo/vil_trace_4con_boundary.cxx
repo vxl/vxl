@@ -10,7 +10,7 @@
 //  *p is current point (i,j).
 //  On exit (i,j) and p are updated to move to neighbour
 inline void vil_next_4con_boundary_point(int& i,int& j,int& dir, const bool* &p,
-                                          int ni1, int nj1,int istep,int jstep)
+                                         int ni1, int nj1,int istep,int jstep)
 {
   for (int k=0;k<4;++k)
   {
@@ -32,13 +32,13 @@ inline int vil_first_direction(int i, int j, const vil_image_view<bool>& image)
 {
   if (!image(i,j)) return -1;
 
-	// Find first neighbour outside
-	if (i+1>=image.ni() || !image(i+1,j)) return 0;
-	if (j+1>=image.nj() || !image(i,j+1)) return 1;
-	if (i==0 || !image(i-1,j)) return 2;
-	if (j==0 || !image(i,j-1)) return 3;
+  // Find first neighbour outside
+  if (i+1>=image.ni() || !image(i+1,j)) return 0;
+  if (j+1>=image.nj() || !image(i,j+1)) return 1;
+  if (i==0 || !image(i-1,j)) return 2;
+  if (j==0 || !image(i,j-1)) return 3;
 
-	return -1; // No neighbours are outside
+  return -1; // No neighbours are outside
 }
 
 
@@ -61,7 +61,7 @@ void vil_trace_4con_boundary(vcl_vector<int>& bi, vcl_vector<int>& bj,
   // Check that p is a boundary pixel
   int dir = vil_first_direction(i,j,image);
 
-	if (dir<0) return;  // Not a boundary point!
+  if (dir<0) return;  // Not a boundary point!
 
   do
   {
