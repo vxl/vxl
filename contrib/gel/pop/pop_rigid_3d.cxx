@@ -6,8 +6,8 @@
 #include <vcl_cassert.h>
 
 //: constructor
-// the parameters for this tranform are
-// the euler angle r1 r2 r2 and the translation t1 t2 t3
+// the parameters for this transform are
+// the Euler angle r1 r2 r2 and the translation t1 t2 t3
 
 
 pop_rigid_3d::pop_rigid_3d(vcl_vector<pop_parameter*> params,

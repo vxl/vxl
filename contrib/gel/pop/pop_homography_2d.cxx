@@ -6,7 +6,7 @@
 #include <vcl_cassert.h>
 
 //: constructor
-// The parameters for this tranform are
+// The parameters for this transform are
 // the Euler angle r1 r2 r2 and the translation t1 t2 t3
 pop_homography_2d::pop_homography_2d(vcl_vector<pop_parameter*> params,
                                      pop_vertex *cs1, pop_vertex *cs2) :
