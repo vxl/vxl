@@ -26,7 +26,7 @@ void vgui_text_put(char const *str, unsigned size)
 }
 #else
 #include <vcl_iostream.h>
-void vgui_text_put(char const *str)
+void vgui_text_put(char const *str, unsigned /*size*/)
 {
   vcl_cerr << __FILE__ ":!defined(HAS_GLUT):" << str << vcl_endl;
 }
