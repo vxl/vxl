@@ -25,7 +25,7 @@
 
 //: Digital curve class, part of the vsol_curve_2d hierarchy
 // This class is more basic and "pure" than the vdgl counterpart.
-// The curve is made up of vsol point and has no addition data members
+// The curve is made up of vsol_points and has no addition data members
 
 class vsol_digital_curve_2d : public vsol_curve_2d
 {
@@ -89,7 +89,7 @@ class vsol_digital_curve_2d : public vsol_curve_2d
   //: Return point `i'
   //  REQUIRE: valid_index(i)
   //---------------------------------------------------------------------------
-  vsol_point_2d_sptr point(const int i) const;
+  vsol_point_2d_sptr point(unsigned int i) const;
 
   //---------------------------------------------------------------------------
   //: Interpolate a point on the curve given a floating point index
@@ -98,6 +98,7 @@ class vsol_digital_curve_2d : public vsol_curve_2d
   //        then interp(5.5) is interpolated half way between points
   //        at indices 5 and 6.  In general this is not at 5.5 units along
   //        the curve or even at 55% through the curve.
+  //  \note interp(i) and point(i) will return the same point if i is integer.
   //---------------------------------------------------------------------------
   vgl_point_2d<double> interp(double index) const;
 
@@ -143,7 +144,7 @@ class vsol_digital_curve_2d : public vsol_curve_2d
   //***************************************************************************
 
   //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an digital_curve, 0 otherwise
+  //: Return `this' if `this' is a digital_curve, 0 otherwise
   //---------------------------------------------------------------------------
   virtual vsol_digital_curve_2d const*cast_to_digital_curve()const{return this;}
   virtual vsol_digital_curve_2d *cast_to_digital_curve() {return this;}
@@ -164,12 +165,13 @@ class vsol_digital_curve_2d : public vsol_curve_2d
   virtual void compute_bounding_box() const;
 
   //---------------------------------------------------------------------------
-  //: Return the number of vertices
+  //: Return the number of sample points of this digital curve
   //---------------------------------------------------------------------------
   unsigned int size() const { return samples_.size(); }
 
   //---------------------------------------------------------------------------
-  //: Is `i' a valid index for the list of vertices ?
+  //: Is `i' a valid index for the list of sample points ?
+  //  This is the case if i is between 0 (inclusive) and size() (exclusive).
   //---------------------------------------------------------------------------
   bool valid_index(unsigned int i) const { return i<samples_.size(); }
 
