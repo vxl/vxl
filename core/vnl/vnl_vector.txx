@@ -703,7 +703,7 @@ istream& operator>>(istream& s, vnl_vector<T>& M) {
 // fsm: is this really necessary ?
 #if defined(VCL_SUNPRO_CC)
 # undef VCL_INSTANTIATE_INLINE
-# define VCL_INSTANTIATE_INLINE(fn_decl)  template  fn_decl ;
+# define VCL_INSTANTIATE_INLINE(fn_decl)  template  fn_decl
 #endif
 
 
@@ -734,10 +734,10 @@ template istream & operator>>(istream &, vnl_vector<T >       &); \
 ;
 
 #define VNL_VECTOR_INSTANTIATE_floating_real(T) \
-VNL_VECTOR_INSTANTIATE_internal(T);
+VNL_VECTOR_INSTANTIATE_internal(T)
 
 #define VNL_VECTOR_INSTANTIATE_floating_complex(T) \
-VNL_VECTOR_INSTANTIATE_internal(T);
+VNL_VECTOR_INSTANTIATE_internal(T)
 
 #define VNL_VECTOR_INSTANTIATE_integral(T) \
-VNL_VECTOR_INSTANTIATE_internal(T);
+VNL_VECTOR_INSTANTIATE_internal(T)

@@ -42,8 +42,8 @@
 // .NAME        vnl_math - Provide standard math functions
 // .LIBRARY     vnl
 // .HEADER	Numerics package
-// .INCLUDE     math/math.h
-// .FILE        vnl/math.ccxx
+// .INCLUDE     vnl/vnl_math.h
+// .FILE        vnl/vnl_math.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, July 13, 1996
 //

@@ -1,6 +1,3 @@
-#ifdef __GNUC__
-#pragma implementation
-#endif
 #include "vnl_matrix.h"
 
 //
@@ -1423,11 +1420,12 @@ bool epsilon_equals (vnl_matrix<T> const& m1, vnl_matrix<T> const& m2, double al
 //--------------------------------------------------------------------------------
 
 // instantiation macros.
+#include <vcl/vcl_compiler.h>
 
 // fsm: I'm not really sure this next piece of logic is necessary.
 // Why not just use VCL_INSTANTIATE_INLINE ?
 #if defined (VCL_SUNPRO_CC) || defined(VCL_GCC_27)
-# define VCL_MATRIX_INSTANTIATE_INLINE(fn_decl)  template  fn_decl ;
+# define VCL_MATRIX_INSTANTIATE_INLINE(fn_decl)  template  fn_decl
 #else
 # define VCL_MATRIX_INSTANTIATE_INLINE(fn_decl)  
 #endif
@@ -1447,21 +1445,20 @@ template vnl_matrix<T > element_quotient(vnl_matrix<T > const &, vnl_matrix<T > 
 template int inplace_transpose(T*, int*, int*, int*, int*, int*, int*); \
 template ostream & operator<<(ostream &, vnl_matrix<T > const &); \
 template istream & operator>>(istream &, vnl_matrix<T >       &); \
-VCL_MATRIX_INSTANTIATE_INLINE(bool operator!=(vnl_matrix<T > const &, vnl_matrix<T > const &)); \
-;
+VCL_MATRIX_INSTANTIATE_INLINE(bool operator!=(vnl_matrix<T > const &, vnl_matrix<T > const &))
 
 // macro for types which have no operator<(), such as bool (on SGI CC).
 #define VNL_MATRIX_INSTANTIATE_no_ordering(T) \
-VNL_MATRIX_INSTANTIATE_internal(T);
+VNL_MATRIX_INSTANTIATE_internal(T)
 
 // float, double
 #define VNL_MATRIX_INSTANTIATE_floating_real(T) \
-VNL_MATRIX_INSTANTIATE_internal(T);
+VNL_MATRIX_INSTANTIATE_internal(T)
 
 // complex<float>, complex<double>
 #define VNL_MATRIX_INSTANTIATE_floating_complex(T) \
-VNL_MATRIX_INSTANTIATE_no_ordering(T);
+VNL_MATRIX_INSTANTIATE_no_ordering(T)
 
 // (signed|unsigned) (char|short|int|long)
 #define VNL_MATRIX_INSTANTIATE_integral(T) \
-VNL_MATRIX_INSTANTIATE_internal(T);
+VNL_MATRIX_INSTANTIATE_internal(T)

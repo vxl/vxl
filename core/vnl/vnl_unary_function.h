@@ -1,20 +1,19 @@
 //-*- c++ -*-------------------------------------------------------------------
-#ifndef unary_function_h_
-#define unary_function_h_
+#ifndef vnl_unary_function_h_
+#define vnl_unary_function_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// Class : UnaryFunction
-//
-// .SECTION Description
-//    UnaryFunction is an abstract map between two types (read spaces).
-//
-// .NAME        UnaryFunction - Abstract 1D map.
+// .NAME        vnl_unary_function - Abstract 1D map.
 // .LIBRARY     vnl
 // .HEADER	Numerics Package
-// .INCLUDE     vnl/UnaryFunction.h
-// .FILE        vnl/UnaryFunction.cxx
+// .INCLUDE     vnl/vnl_unary_function.h
+// .FILE        vnl/vnl_unary_function.cxx
+//
+// .SECTION Description
+//    vnl_unary_function is an abstract map between two types (read spaces).
+//
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 28 Nov 98
 //
@@ -49,4 +48,4 @@ public:
   virtual ~vnl_unary_function() {}
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS UnaryFunction.
+#endif // vnl_unary_function_h_

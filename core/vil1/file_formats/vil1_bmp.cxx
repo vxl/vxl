@@ -106,32 +106,6 @@ vil_bmp_generic_image::~vil_bmp_generic_image()
   }
 }
   
-
-// Skip over spaces and comments; temp is the current file character
-static void SkipSpaces(vil_stream* file, signed char& temp)
-{
-  while (temp == ' ' || temp == '\t' || temp == '\n' || temp == '#')
-  {
-    if (temp == '#') // skip this line:
-      while ((temp != '\n') && (temp != -1))
-	file->read(&temp,1);
-    // skip this `whitespace' byte:
-    file->read(&temp,1);
-  }
-}
-
-// Get an integer from the file stream; temp is the current file character
-static int ReadInteger(vil_stream* file, signed char& temp)
-{
-  int n = 0;
-  while ((temp >= '0') && (temp <= '9'))
-  {
-    n *= 10; n += (temp - '0');
-    file->read(&temp,1);
-  }
-  return n;
-}
-
 bool vil_bmp_generic_image::read_header()
 {
 // I don't know why but, when I read bitmap file header with structure
@@ -549,16 +523,14 @@ bool vil_bmp_generic_image::do_put_section(void const *ib, int x0, int y0, int x
 
    vil_rekt ir = r * vil_rekt(GetSizeX(),GetSizeY());	// intersect with image extent
 
-   int rowbytes=0;
-   int bytes_to_write;
-    
-   rowbytes  = (GetSizeX() * pixsize + 3) / 4;
+   int rowbytes = (GetSizeX() * pixsize + 3) / 4;
    rowbytes *= 4;
    
-   if (ir.GetOrigX() + ir.GetSizeX() == GetSizeX())
-     bytes_to_write = ir.GetSizeX() * pixsize + rowbytes - GetSizeX() * pixsize;
-   else
-      bytes_to_write  = ir.GetSizeX() * pixsize; 
+// int bytes_to_write;
+// if (ir.GetOrigX() + ir.GetSizeX() == GetSizeX())
+//   bytes_to_write = ir.GetSizeX() * pixsize + rowbytes - GetSizeX() * pixsize;
+// else
+//    bytes_to_write  = ir.GetSizeX() * pixsize; 
     
    if (!ib)
    {

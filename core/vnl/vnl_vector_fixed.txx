@@ -24,21 +24,17 @@
 # define VCLi_TEMPLATE_FUNCTION_MARKER <>
 #endif
 
-#undef __COMMA__
-#define __COMMA__ ,
-
 #define VNL_VECTOR_FIXED_INSTANTIATE(T,n) \
 template class vnl_vector_fixed<T, n>;	     \
-VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T __COMMA__ n> operator+(const T t, const vnl_vector_fixed<T,n>& rhs)); \
-VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T __COMMA__ n> operator-(const T t, const vnl_vector_fixed<T,n>& rhs)); \
-VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T __COMMA__ n> operator*(const T t, const vnl_vector_fixed<T,n>& rhs));\
-VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T __COMMA__ n> element_product  (const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b)) \
-VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T __COMMA__ n> element_quotient (const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b));
-// #undef __COMMA__ gcc 272 doesnt see it at inst time
+VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T VCL_COMMA n> operator+(const T t, const vnl_vector_fixed<T,n>& rhs)); \
+VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T VCL_COMMA n> operator-(const T t, const vnl_vector_fixed<T,n>& rhs)); \
+VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T VCL_COMMA n> operator*(const T t, const vnl_vector_fixed<T,n>& rhs));\
+VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T VCL_COMMA n> element_product  (const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b)); \
+VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T VCL_COMMA n> element_quotient (const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b))
 
 //--------------------------------------------------------------------------------
 
-#define VCL_INSTANTIATE_NON_TEMPLATE_FIXED_CROSS_3D(T) \
+#define VNL_INSTANTIATE_NON_TEMPLATE_FIXED_CROSS_3D(T) \
 vnl_vector_fixed<T,3> cross_3d \
          (const vnl_vector_fixed<T,3>& v1, const vnl_vector_fixed<T,3>& v2) \
 { \

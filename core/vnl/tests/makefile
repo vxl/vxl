@@ -1,10 +1,10 @@
 VXL := 1
 
-################################
+#######################################
 include ${IUEROOT}/config/top-params.mk
-################################
+#######################################
 
-USES := vxl
+USES := vxl v3p/netlib
 
 SAUCES += test_math.cxx
 SAUCES += test_vector.cxx

@@ -1,9 +1,6 @@
 /*
   fsm@robots.ox.ac.uk
 */
-#ifdef __GNUC__
-#pragma implementation
-#endif
 #include "vnl_complex_ops.h"
 
 //--------------------------------------------------------------------------------
@@ -130,20 +127,16 @@ vnl_matrix<T> imag(vnl_matrix<vnl_complex<T> > const& C)
 #define VNL_COMPLEX_OPS_INSTANTIATE(T) \
 template void vnl_complexify(T const *, vnl_complex<T > *, unsigned); \
 template void vnl_complexify(T const *, T const *, vnl_complex<T > *, unsigned); \
-/* */ \
+\
 template vnl_vector<vnl_complex<T > > vnl_complexify(vnl_vector<T > const &); \
 template vnl_matrix<vnl_complex<T > > vnl_complexify(vnl_matrix<T > const &); \
-/* */ \
+\
 template vnl_vector<T> imag (vnl_vector<vnl_complex<T> > const &); \
 template vnl_vector<T> angle(vnl_vector<vnl_complex<T> > const &); \
 template vnl_vector<T> abs  (vnl_vector<vnl_complex<T> > const &); \
 template vnl_vector<T> real (vnl_vector<vnl_complex<T> > const &); \
-/* */ \
+\
 template vnl_matrix<T> imag (vnl_matrix<vnl_complex<T> > const &); \
 template vnl_matrix<T> angle(vnl_matrix<vnl_complex<T> > const &); \
 template vnl_matrix<T> abs  (vnl_matrix<vnl_complex<T> > const &); \
-template vnl_matrix<T> real (vnl_matrix<vnl_complex<T> > const &); \
-;
-
-VNL_COMPLEX_OPS_INSTANTIATE(float);
-VNL_COMPLEX_OPS_INSTANTIATE(double);
+template vnl_matrix<T> real (vnl_matrix<vnl_complex<T> > const &)

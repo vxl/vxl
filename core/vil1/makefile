@@ -51,7 +51,7 @@ SOURCES += vil_copy.cxx
 SOURCES += vil_crop.cxx
 
 # Subdirectories with makefiles
-ifneq (1, $(NOTEST))
+ifndef NOTEST
 SUBDIRS += tests 
 SUBDIRS += examples
 endif

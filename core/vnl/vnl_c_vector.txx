@@ -150,12 +150,16 @@ return_t vnl_c_vector<T>::inf_norm_aux(T const *src, unsigned n) {
 
 //--------------------------------------------------------------------------------
 
+#include <vcl/vcl_compiler.h>
+
+#undef VNL_C_VECTOR_INSTANTIATE_ordered
 #define VNL_C_VECTOR_INSTANTIATE_ordered(T) \
 VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(vnl_c_vector<T >::abs_t vnl_c_vector<T >::aux_var = 0); \
 template class vnl_c_vector<T >; \
-VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(vnl_c_vector<T >::abs_t vnl_c_vector<T >::aux_var);
+VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(vnl_c_vector<T >::abs_t vnl_c_vector<T >::aux_var)
 
 
+#undef VNL_C_VECTOR_INSTANTIATE_unordered
 #define VNL_C_VECTOR_INSTANTIATE_unordered(T) \
 VCL_DO_NOT_INSTANTIATE(T vnl_c_vector<T >::max_value(T const *, unsigned), T(0)); \
 VCL_DO_NOT_INSTANTIATE(T vnl_c_vector<T >::min_value(T const *, unsigned), T(0)); \
@@ -163,7 +167,7 @@ VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(vnl_c_vector<T >::abs_t vnl_c_vector<T >:
 template class vnl_c_vector<T >; \
 VCL_UNINSTANTIATE_SPECIALIZATION(T vnl_c_vector<T >::max_value(T const *, unsigned)); \
 VCL_UNINSTANTIATE_SPECIALIZATION(T vnl_c_vector<T >::min_value(T const *, unsigned)); \
-VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(vnl_c_vector<T >::abs_t vnl_c_vector<T >::aux_var); \
-;
+VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(vnl_c_vector<T >::abs_t vnl_c_vector<T >::aux_var)
 
-#define VNL_C_VECTOR_INSTANTIATE(T) extern "no such macro";
+#undef VNL_C_VECTOR_INSTANTIATE
+#define VNL_C_VECTOR_INSTANTIATE(T) extern "no such macro"

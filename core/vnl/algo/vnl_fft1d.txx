@@ -9,7 +9,7 @@
 #include "vnl_fft1d.h"
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_complex_ops.h>
-#include <stdlib.h> // for abort() - PVr
+#include <vcl/vcl_cstdlib.h> // for abort() - PVr
 
 //--------------------------------------------------------------------------------
 
@@ -190,6 +190,4 @@ int vnl_fft1d<T>::doFFT (const vnl_fftxd_prime_factors<T> &oPF, int iDirection)
 
 //--------------------------------------------------------------------------------
 
-#define VNL_FFT1D_INSTANTIATE(T) template class vnl_fft1d<T >;
-VNL_FFT1D_INSTANTIATE(float);
-VNL_FFT1D_INSTANTIATE(double);
+#define VNL_FFT1D_INSTANTIATE(T) template class vnl_fft1d<T >

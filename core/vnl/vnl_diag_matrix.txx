@@ -82,7 +82,7 @@ bool epsilon_equals (const vnl_diag_matrix<T>& m1, const vnl_diag_matrix<T>& m2,
 // Outside of STL, this seems to be the way to go
 #if defined(VCL_SUNPRO_CC)
 # undef VCL_INSTANTIATE_INLINE
-# define VCL_INSTANTIATE_INLINE(fn_decl)  template  fn_decl ;
+# define VCL_INSTANTIATE_INLINE(fn_decl)  template  fn_decl
 #endif
 
 #undef VNL_DIAG_MATRIX_INSTANTIATE

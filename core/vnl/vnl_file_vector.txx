@@ -21,4 +21,4 @@ vnl_file_vector<T>::vnl_file_vector(char const* filename) :
 //--------------------------------------------------------------------------------
 
 #undef VNL_FILE_VECTOR_INSTANTIATE
-#define VNL_FILE_VECTOR_INSTANTIATE(T) template class vnl_file_vector<T >;
+#define VNL_FILE_VECTOR_INSTANTIATE(T) template class vnl_file_vector<T >

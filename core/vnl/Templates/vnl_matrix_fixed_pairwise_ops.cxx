@@ -11,7 +11,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vnl/vnl_matrix_fixed.h>
+#include <vnl/vnl_matrix_fixed.txx>
 
 #if defined(WIN32) || defined(IUE_SUNPRO_CC)
 // don't do anything.

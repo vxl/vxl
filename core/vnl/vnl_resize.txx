@@ -8,6 +8,7 @@
 
 // fsm: What was wrong with obj.~T()? It's defined in the 
 // language, whereas destroy() is defined in a library header.
+// PVr: ANSI C++ does not allow you to call the destructor explicitly.
 #if defined(VCL_SUNPRO_CC_50) || defined(VCL_WIN32)
 // SunPro <algorithm> does not supply destroy() - sigh...
 // vc60 supplied allocator<T>::destroy(T *) - groan...
@@ -86,7 +87,4 @@ void vnl_assign(vnl_matrix<T> &lhs, vnl_matrix<T> const &rhs) {
 template void vnl_resize(vnl_vector<T > &, unsigned); \
 template void vnl_resize(vnl_matrix<T > &, unsigned, unsigned); \
 template void vnl_assign(vnl_vector<T > &, vnl_vector<T > const &); \
-template void vnl_assign(vnl_matrix<T > &, vnl_matrix<T > const &);
-
-VNL_RESIZE_INSTANTIATE(float);
-VNL_RESIZE_INSTANTIATE(double);
+template void vnl_assign(vnl_matrix<T > &, vnl_matrix<T > const &)

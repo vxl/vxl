@@ -136,19 +136,9 @@ inline vnl_matrix<T> operator*(const T &s, const vnl_matrix_fixed<T,m,n> &M)
     }
   return out;
  }
-
-# undef VNL_MATRIX_FIXED_PAIR_INSTANTIATE
-# ifdef WIN32
-   // vc60 barfs at this -awf
-#  define VNL_MATRIX_FIXED_PAIR_INSTANTIATE(T, M, N, O)
-# else
-#  define VNL_MATRIX_FIXED_PAIR_INSTANTIATE(T, M, N, O) \
-   template vnl_matrix_fixed<T, M, O> operator*(const vnl_matrix_fixed<T, M, N>& a, const vnl_matrix_fixed<T, N, O>& b);
-# endif
-
-#else
-# undef VNL_MATRIX_FIXED_PAIR_INSTANTIATE
-# define VNL_MATRIX_FIXED_PAIR_INSTANTIATE(T, M, N, O)
 #endif
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_matrix_fixed.
+#define VNL_MATRIX_FIXED_PAIR_INSTANTIATE(T, M, N, O) \
+extern "please include vnl/vnl_matrix_fixed.txx instead"
+
+#endif // vnl_matrix_fixed_h_

@@ -34,8 +34,8 @@ SOURCES += vnl_rnpoly_solve.cxx
 
 # fft
 SOURCES += vnl_fftxd_prime_factors.cxx
-SOURCES += vnl_fft1d.cxx
-SOURCES += vnl_fft2d.cxx
+#MANPAGE_SOURCES += vnl_fft1d.txx
+#MANPAGE_SOURCES += vnl_fft2d.txx
 
 # stuff
 SOURCES += vnl_chi_squared.cxx

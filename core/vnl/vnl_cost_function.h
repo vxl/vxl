@@ -5,19 +5,18 @@
 #pragma interface
 #endif
 //
-// Class : vnl_cost_function
+// .NAME        vnl_cost_function - Vector->Real function
+// .LIBRARY     vnl
+// .HEADER	Numerics Package
+// .INCLUDE     vnl/vnl_cost_function.h
+// .FILE        vnl/vnl_cost_function.cxx
+// .EXAMPLE     vnl/examples/vnl_amoeba.cxx
 //
 // .SECTION Description
 //    vnl_cost_function is an object that represents a function from
 //    $R^n \rightarrow R$.  It is commonly used to express the
 //    interface of a minimizer.
 //
-// .NAME        vnl_cost_function - Vector->Real function
-// .LIBRARY     vnl
-// .HEADER	Numerics Package
-// .INCLUDE     vnl/vnl_cost_function.h
-// .FILE        vnl/vnl_cost_function.cxx
-// .EXAMPLE     ../Examples/amoeba.cc
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 23 Oct 97
 //
@@ -60,5 +59,4 @@ public:
   int dim;
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_cost_function.
-
+#endif // vnl_cost_function_h_

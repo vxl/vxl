@@ -35,7 +35,7 @@ SOURCES += vnl_real_npolynomial.cxx
 # ops
 SOURCES += vnl_fastops.cxx
 SOURCES += vnl_linear_operators_3.cxx
-SOURCES += vnl_complex_ops.cxx
+#MANPAGE_SOURCES += vnl_complex_ops.txx
 
 # traits
 SOURCES += vnl_numeric_limits.cxx
@@ -72,16 +72,22 @@ SUBDIRS += algo
 # stuff
 SOURCES += vnl_unary_function.cxx
 SOURCES += vnl_transpose.cxx
-SOURCES += vnl_resize.cxx
+#MANPAGE_SOURCES += vnl_resize.txx
 
 # tests
-ifneq (1, $(NOTEST))
-SUBDIRS += test
+ifndef NOTEST
+SUBDIRS += tests
+SUBDIRS += examples
 endif
 
 IULIBS := -lvcl
 
 DEFINES += -DBUILDING_VNL_DLL
+
+##  Only needed for Templates/vnl_matrix+* and Templates/vnl_c_vector+* :
+ifeq ($(COMPILER),CC-n32)
+PRAGMA_INSTANTIATE_TEMPLATES = 1
+endif
 
 ################################
 include ${IUEROOT}/config/top-rules.mk
