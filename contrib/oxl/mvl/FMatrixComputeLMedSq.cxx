@@ -1,7 +1,6 @@
 #include "FMatrixComputeLMedSq.h"
 #include <mvl/HomgOperator2D.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
-#include <vcl_cmath.h>
 #include <vcl_algorithm.h>
 
 FMatrixComputeLMedSq::FMatrixComputeLMedSq(bool rank2_truncate, int size)
@@ -41,25 +40,17 @@ double FMatrixComputeLMedSq::calculate_residual(vgl_homg_point_2d<double>& one,
 
 double FMatrixComputeLMedSq::calculate_residual(HomgPoint2D& one, HomgPoint2D& two, FMatrix* F)
 {
-  double ret = 0.0;
-
   HomgLine2D l1 = F->image2_epipolar_line(one);
   HomgLine2D l2 = F->image1_epipolar_line(two);
-  ret += HomgOperator2D::perp_dist_squared(two, l1);
-  ret += HomgOperator2D::perp_dist_squared(one, l2);
-
-  return ret;
+  return HomgOperator2D::perp_dist_squared(two, l1)
+       + HomgOperator2D::perp_dist_squared(one, l2);
 }
 
-double FMatrixComputeLMedSq::median(vcl_vector<double> residuals) {
-  double ret = 0.0;
+double FMatrixComputeLMedSq::median(vcl_vector<double> residuals)
+{
   vcl_sort(residuals.begin(), residuals.end());
   int size = residuals.size();
-  double s2 = (double)size / 2.0;
-  if (s2 == 0.0) {
-    ret = (residuals[(int)s2] + residuals[(int)s2-1]) / 2.0;
-  } else {
-    ret = residuals[(int)vcl_floor(s2)];
-  }
-  return ret;
+  int s2 = size / 2;
+  return size == 0 ? 0.0 : size%2 ? residuals[s2] :
+         (residuals[s2] + residuals[s2-1]) * 0.5;
 }
