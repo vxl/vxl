@@ -260,9 +260,11 @@ enum vil_dicom_header_vr_type
 };
 
 // maps VR types to C++ types
-template<vil_dicom_header_vr_type>
-struct vil_dicom_header_type_of;
-// contains: typedef type = preferred C++ type for this VR
+template <int T /* enum vil_dicom_header_vr_type */>
+struct vil_dicom_header_type_of
+{
+  typedef vcl_string type; // preferred C++ type for this VR (specialised below)
+};
 
 #define vr_macro( VR, CPPT ) \
   VCL_DEFINE_SPECIALIZATION struct  vil_dicom_header_type_of<VR> { typedef CPPT type; }
@@ -459,7 +461,7 @@ class vil_dicom_header_format
  public:
 
   vil_dicom_header_format();
-  ~vil_dicom_header_format();
+ ~vil_dicom_header_format();
 
   //: True if it is known DICOM format
   bool isDicomFormat(vil_stream &);
@@ -696,6 +698,5 @@ class vil_dicom_header_format
 };
 
 void vil_dicom_header_print(vcl_ostream &os, const vil_dicom_header_info &s);
-
 
 #endif // vil_dicom_header_h_
