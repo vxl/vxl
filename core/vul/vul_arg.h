@@ -17,8 +17,8 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
-
 #include <vcl_string.h>
+#include <vcl_list.h>
 #include <vcl_iostream.h>
 
 //: forward declare all classes and their helper functions.
@@ -29,7 +29,8 @@ template <class T> void print_value (vcl_ostream &, vul_arg<T> const &);
 template <class T> int  parse       (vul_arg<T>*, char**);
 
 //: This is the base class for the templated vul_arg<T>s
-class vul_arg_base {
+class vul_arg_base
+{
 public:
   static void parse_deprecated(int& argc, char **& argv,
                bool warn_about_unrecognized_arguments = true);
@@ -107,7 +108,8 @@ void vul_arg_display_usage_and_exit(char const* msg = 0);
 
 //: parse command-line arguments
 template <class T>
-class vul_arg : public vul_arg_base {
+class vul_arg : public vul_arg_base
+{
 public:
   //friend void settype     VCL_NULL_TMPL_ARGS (vul_arg<T> &);
   //friend void print_value VCL_NULL_TMPL_ARGS (vcl_ostream &, vul_arg<T> const &);
@@ -159,7 +161,9 @@ private:
 //: vul_arg_info_list - argparse helper.
 // vul_arg_info_list is a helper for vul_arg::parse.
 // Users might need it if they wish to parse several command lines.
-class vul_arg_info_list {
+//
+class vul_arg_info_list
+{
 public:
   enum autonomy {
     subset,
@@ -197,9 +201,7 @@ declare_specialization(unsigned);
 declare_specialization(char*);
 declare_specialization(char const*);
 declare_specialization(double);
-#include <vcl_list.h>
 declare_specialization(vcl_list<int>);
-#include <vcl_string.h>
 declare_specialization(vcl_string);
 
 #undef declare_specialization
