@@ -73,8 +73,8 @@ void test_inverse() {
     TEST_NEAR("3x3 vnl_inverse", residue.array_inf_norm(), 0.0, eps);
   }
 
+  vnl_double_4x4 id4; id4.set_identity();
   {
-    vnl_double_4x4 id4; id4.set_identity();
     vnl_double_4x4 id4i = vnl_inverse(id4);
     TEST("4x4 vnl_inverse of Id", id4i, id4);
 
@@ -93,9 +93,23 @@ void test_inverse() {
   }
 
   {
-    vnl_double_4x4 id4; id4.set_identity();
     double M4[16];
     for (int i=0; i<16; ++i) M4[i] = rng.drand32(-1.0,1.0);
+    vnl_double_4x4 m4(M4);
+    vnl_double_4x4 m4i = vnl_inverse(m4);
+    vnl_double_4x4 residue = m4*m4i - id4;
+    TEST_NEAR("4x4 vnl_inverse", residue.array_inf_norm(), 0.0, eps);
+    residue = m4i*m4 - id4;
+    TEST_NEAR("4x4 vnl_inverse", residue.array_inf_norm(), 0.0, eps);
+  }
+
+  {
+    double M4[16] = {
+      0.9998, 0.0, 0.02,   0.059,
+      0.0,    1.0, 0.0,    0.0,
+     -0.02,   0.0, 0.9998, 0.0,
+      0.0,    0.0, 0.0,    1.0
+    };
     vnl_double_4x4 m4(M4);
     vnl_double_4x4 m4i = vnl_inverse(m4);
     vnl_double_4x4 residue = m4*m4i - id4;
