@@ -137,7 +137,7 @@ class sdet_contour
                  const int* junctionx, const int* junctiony,
                  vcl_vector<vtol_edge_2d_sptr>& edges);
 
-  //: Establish verticesimprove connectivity by jumping small gaps
+  //: Establish vertices; improve connectivity by jumping small gaps
   int FindJunctions(gevd_bufferxy& edgels,
                     vcl_vector<vtol_edge_2d_sptr>& edges,
                     vcl_vector<vtol_vertex_2d_sptr >& vertices);
@@ -214,7 +214,7 @@ class sdet_contour
   static void LookupTableRemove(vcl_vector<vtol_edge_2d_sptr>& set,
                                 vtol_edge_2d_sptr elmt);
 
-  //: elminate gaps in the table by removing empty entries
+  //: eliminate gaps in the table by removing empty entries
   static void LookupTableCompress(vcl_vector<vtol_edge_2d_sptr>& set);
 
 
@@ -231,7 +231,7 @@ class sdet_contour
   static void LookupTableRemove(vcl_vector<vtol_vertex_2d_sptr >& set,
                                 vtol_vertex_2d_sptr  elmt);
 
-  //: elminate gaps in the table by removing empty entries
+  //: eliminate gaps in the table by removing empty entries
   static void LookupTableCompress(vcl_vector<vtol_vertex_2d_sptr >& set);
 
   //: class members
