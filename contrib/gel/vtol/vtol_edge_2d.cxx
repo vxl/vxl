@@ -107,8 +107,8 @@ vtol_edge_2d::vtol_edge_2d(vtol_edge_2d_sptr const& other)
 //---------------------------------------------------------------------------
 //: Copy constructor. Deep copy.  Deprecated.
 //---------------------------------------------------------------------------
-// Copy constructor for an vtol_edge_2d. This methods performs a deep copy of
-// the elements of the old vtol_edge_2d, olde, and sets the corresponding member
+// Copy constructor for a vtol_edge_2d. This methods performs a deep copy of
+// the elements of the old vtol_edge_2d and sets the corresponding member
 // data of the new vtol_edge_2d.
 
 vtol_edge_2d::vtol_edge_2d(const vtol_edge_2d &other)
@@ -387,8 +387,7 @@ void vtol_edge_2d::compute_bounding_box(void) const
       vsol_box_2d_sptr dc_box = dc->get_bounding_box();
       if (!dc_box)
         {
-          vcl_cout << "In vtol_edge_2d::compute_bounding_box() - curve has null"
-                   << " bounding_box\n";
+          vcl_cout << "In vtol_edge_2d::compute_bounding_box() - curve has null bounding_box\n";
           vtol_topology_object::compute_bounding_box();
           return;
         }
