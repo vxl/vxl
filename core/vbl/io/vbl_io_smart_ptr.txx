@@ -121,7 +121,7 @@ void vsl_b_read(vsl_b_istream &is, vbl_smart_ptr<T> &p)
       if (pointer == 0)
       {
 // If you get an error in the next line, it could be because your type T
-// has no vsl_b_read(vsl_b_ostream&,T*&)  defined on it.
+// has no vsl_b_read(vsl_b_istream&,T*&)  defined on it.
 // See the documentation in the .h file to see how to add it.
         vsl_b_read(is, pointer);
         is.add_serialisation_record(id, pointer);
