@@ -1,6 +1,7 @@
 //:
 // \file
 #include <vsol/vsol_point_3d.h>
+#include <vsol/vsol_box_3d.h>
 #include <bsol/bsol_algs.h>
 #include <bsol/bsol_point_index_3d.h>
 #ifdef DEBUG
@@ -22,10 +23,10 @@ static bool flag(vsol_point_3d_sptr const& p)
   return p->get_user_flag(VSOL_FLAG1);
 }
 
+//------------------------------------------------------------------------
+// Constructors
+//------------------------------------------------------------------------
 
-//------------------------------------------------------------------------
-//: Constructors
-//------------------------------------------------------------------------
 bsol_point_index_3d::bsol_point_index_3d()
 {
   nrows_ = 0;
@@ -33,6 +34,7 @@ bsol_point_index_3d::bsol_point_index_3d()
   nslabs_ = 0;
   b_box_ = (vsol_box_3d*)0;
 }
+
 bsol_point_index_3d::bsol_point_index_3d(int nrows, int ncols, int nslabs,
                                          vsol_box_3d_sptr const& bb)
 {
@@ -95,7 +97,7 @@ bsol_point_index_3d(int nrows, int ncols, int nslabs,
   this->add_points(points);
 }
 
-//: Destructor
+// Destructor
 bsol_point_index_3d::~bsol_point_index_3d()
 {
   for (int r = 0; r<nrows_; r++)

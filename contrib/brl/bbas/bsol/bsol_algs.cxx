@@ -1,3 +1,4 @@
+#include "bsol_algs.h"
 //:
 // \file
 
@@ -12,11 +13,12 @@
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
 #include <vsol/vsol_line_2d.h>
-#include <bsol/bsol_algs.h>
 #include <vsol/vsol_box_2d.h>
+#include <vsol/vsol_box_3d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/algo/vgl_convex_hull_2d.h>
+
 //: Destructor
 bsol_algs::~bsol_algs()
 {
