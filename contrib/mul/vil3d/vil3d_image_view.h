@@ -14,10 +14,8 @@
 #include <vcl_cassert.h>
 #include <vcl_cstddef.h>
 #include <vil3d/vil3d_image_view_base.h>
-#include <vil2/vil2_smart_ptr.h>
 #include <vil2/vil2_memory_chunk.h>
 #include <vil2/vil2_pixel_format.h>
-
 
 //: Concrete view of image data of type T held in memory
 //  Views nplanes() planes of data each of size ni() x nj() x nk().
@@ -126,7 +124,7 @@ class vil3d_image_view : public vil3d_image_view_base
   inline vcl_ptrdiff_t planestep() const { return planestep_; }
 
   //: Cast to bool is true if pointing at some data.
-  operator bool () const { return top_left_ != (T*)0; }
+  operator bool() const { return top_left_ != (T*)0; }
 
   //: The number of bytes in the data
   inline unsigned size_bytes() const { return size() * sizeof(T); }
@@ -166,7 +164,6 @@ class vil3d_image_view : public vil3d_image_view_base
   inline T&       operator()(unsigned i, unsigned j, unsigned k, unsigned p) {
     assert(i<ni_); assert(j<nj_); assert(k<nk_); assert(p<nplanes_);
     return top_left_[p*planestep_ + kstep_*k + j*jstep_ + i*istep_]; }
-
 
   // image stuff
 
@@ -256,6 +253,6 @@ vcl_ostream& operator<<(vcl_ostream& s, vil3d_image_view<T> const& im)
 // \relates vil3d_image_view
 template<class T>
 bool vil3d_image_view_deep_equality(const vil3d_image_view<T> &lhs,
-                                   const vil3d_image_view<T> &rhs);
+                                    const vil3d_image_view<T> &rhs);
 
 #endif // vil3d_image_view_h_

@@ -6,7 +6,6 @@
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vnl/vnl_vector.h>
-#include <vil2/vil2_image_view.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_crop.h>
 #include <vimt/vimt_sample_profile_bilin.h>
@@ -27,7 +26,7 @@ int main(int argc, char** argv)
   image0.print_all(vcl_cout);
   vcl_cout<<vcl_endl;
 
-  vcl_cout<<"Create a 5 x 5 window with corner at (3,3)"<<vcl_endl;
+  vcl_cout<<"Create a 5 x 5 window with corner at (3,3)\n";
   vimt_image_2d_of<vxl_byte> window = vimt_crop(image0, 3,5,3,5);
   window.print_all(vcl_cout);
   vcl_cout<<vcl_endl;
@@ -35,14 +34,14 @@ int main(int argc, char** argv)
   vgl_point_2d<double> p0(4,4);
   vgl_vector_2d<double> u(0.5,0.25);
   vnl_vector<double> v;
-  vcl_cout<<"Sampling along (0.5,0.25) starting at (4,4) : "<<vcl_endl;
+  vcl_cout<<"Sampling along (0.5,0.25) starting at (4,4) :\n";
   vimt_sample_profile_bilin(v,static_cast<const vimt_image_2d_of<vxl_byte>&>(image0),p0,u,8);
   vcl_cout<<"Original Image View: "<<v<<vcl_endl;
   vimt_sample_profile_bilin(v,static_cast<const vimt_image_2d_of<vxl_byte>&>(window),p0,u,8);
   vcl_cout<<"Window on View     : "<<v<<vcl_endl;
 
-  vcl_cout<<"Notice that the projection of the world co-ordinates ";
-  vcl_cout<<"into image coordinates is all handled for us."<<vcl_endl;
-  vcl_cout<<"The end of the second profile goes beyond the window, so is set to zero."<<vcl_endl;
+  vcl_cout<<"Notice that the projection of the world coordinates "
+          <<"into image coordinates is all handled for us.\n"
+          <<"The end of the second profile goes beyond the window, so is set to zero.\n";
   return 0;
 }

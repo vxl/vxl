@@ -17,7 +17,6 @@
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vcl_ostream.h>
-#include <vil2/vil2_smart_ptr.h>
 #include <vil2/vil2_pixel_format.h>
 
 //=======================================================================

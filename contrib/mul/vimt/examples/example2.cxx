@@ -6,7 +6,6 @@
 #include <vimt/vimt_image_pyramid.h>
 #include <vimt/vimt_gaussian_pyramid_builder_2d.h>
 #include <vimt/vimt_image_2d_of.h>
-#include <vil2/vil2_image_view.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vcl_iostream.h>
 
@@ -23,7 +22,7 @@ int main(int argc, char** argv)
       for (int x=0;x<nx;++x)
         base_image.image()(x,y,p) = vxl_byte(x+10*y+100*p);
 
-  vcl_cout<<"Base image"<<vcl_endl;
+  vcl_cout<<"Base image\n";
   base_image.print_all(vcl_cout);
   vcl_cout<<vcl_endl;
 

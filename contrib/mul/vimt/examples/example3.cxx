@@ -7,7 +7,6 @@
 #include <vimt/vimt_gaussian_pyramid_builder_2d.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_sample_profile_bilin.h>
-#include <vil2/vil2_image_view.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector.h>
@@ -35,13 +34,13 @@ int main(int argc, char** argv)
   vgl_point_2d<double> p0(3,3);
   vgl_vector_2d<double> u(0.5,0.25);
   vnl_vector<double> v;
-  vcl_cout<<"Sampling along (0.5,0.25) starting at (3,3) : "<<vcl_endl;
+  vcl_cout<<"Sampling along (0.5,0.25) starting at (3,3) :\n";
   vimt_sample_profile_bilin(v,static_cast<const vimt_image_2d_of<vxl_byte>&>( image_pyr(0)),p0,u,7);
   vcl_cout<<"Level 0: "<<v<<vcl_endl;
   vimt_sample_profile_bilin(v,static_cast<const vimt_image_2d_of<vxl_byte>&>(image_pyr(1)),p0,u,7);
   vcl_cout<<"Level 1: "<<v<<vcl_endl;
 
-  vcl_cout<<"Notice that the projection of the world co-ordinates ";
-  vcl_cout<<"into image coordinates is all handled for us."<<vcl_endl;
+  vcl_cout<<"Notice that the projection of the world coordinates "
+          <<"into image coordinates is all handled for us.\n";
   return 0;
 }
