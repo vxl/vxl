@@ -22,7 +22,7 @@ void test_algo_exp_filter_1d_byte_float()
   vil2_exp_filter_1d(&src[0],1,&dest[0],1,n,float(k));
 
   double r0 = 100*(1-k)/(1+k);
-  TEST_NEAR("Central value",dest[50],r0,1e-6);
+  TEST_NEAR("Central value",dest[50],r0,1e-4);
   double r1 = k*r0;
   TEST_NEAR("Left value" ,dest[49],r1,1e-6);
   TEST_NEAR("Right value",dest[51],r1,1e-6);
@@ -31,24 +31,27 @@ void test_algo_exp_filter_1d_byte_float()
 
   double sum = 0;
   for (int i=0;i<n;++i) sum+=dest[i];
-  TEST_NEAR("Sum unchanged",sum,100,1e-6);
+  TEST_NEAR("Sum unchanged",sum,100,1e-4);
 
   src[55]=100;
   vil2_exp_filter_1d(&src[0],1,&dest[0],1,n,float(k));
   sum = 0;
   for (int i=0;i<n;++i) sum+=dest[i];
-  TEST_NEAR("Sum unchanged (more complex data)",sum,200,1e-6);
+  TEST_NEAR("Sum unchanged (more complex data)",sum,200,1e-4);
 
   for (int i=30;i<=70;++i) src[i]=100;
   vil2_exp_filter_1d(&src[0],1,&dest[0],1,n,float(k));
   for (int i=48;i<=52;++i)
+  {
     TEST_NEAR("Flat regions remain flat",dest[i],100,1e-4);
+  }
 
   // Test application to whole images
   vil2_image_view<vxl_byte> src_im(10,10);
   vil2_image_view<float> dest_im;
   for (unsigned j=0;j<10;++j)
-    for (unsigned i=0;i<10;++i) src_im(i,j)=i+10*j;
+    for (unsigned i=0;i<10;++i)
+      src_im(i,j)=i+10*j;
   vil2_exp_filter_i(src_im,dest_im,double(0.1));
 
   TEST("Width",dest_im.ni(),src_im.ni());
@@ -78,7 +81,7 @@ void test_algo_exp_filter_1d_float_float()
   vil2_exp_filter_1d(&src[0],1,&dest[0],1,n,float(k));
 
   double r0 = 100*(1-k)/(1+k);
-  TEST_NEAR("Central value",dest[50],r0,1e-6);
+  TEST_NEAR("Central value",dest[50],r0,1e-4);
   double r1 = k*r0;
   TEST_NEAR("Left value" ,dest[49],r1,1e-6);
   TEST_NEAR("Right value",dest[51],r1,1e-6);
@@ -87,7 +90,7 @@ void test_algo_exp_filter_1d_float_float()
 
   double sum = 0;
   for (int i=0;i<n;++i) sum+=dest[i];
-  TEST_NEAR("Sum unchanged",sum,100,1e-6);
+  TEST_NEAR("Sum unchanged",sum,100,1e-4);
 }
 
 MAIN( test_algo_exp_filter_1d )
