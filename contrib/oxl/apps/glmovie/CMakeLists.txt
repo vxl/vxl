@@ -6,12 +6,10 @@ INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindMPEG.cmake)
 
 IF(HAS_OPENGL)
  IF (HAS_GLUT)
-  ADD_EXECUTABLE( glmovie glmovie.cxx )
+  ADD_EXECUTABLE( glmovie glmovie.cxx make_index.cxx )
  ENDIF (HAS_GLUT)
  ADD_EXECUTABLE( vobgetframe vobgetframe.cxx )
 ENDIF(HAS_OPENGL)
-
-ADD_EXECUTABLE( glmovie glmovie.cxx make_index.cxx )
 
 IF(WIN32)
  LINK_LIBRARIES( vfw32 )
