@@ -1,6 +1,6 @@
 // This is core/vgui/internals/vgui_accelerate_mfc.cxx
 #include <vcl_compiler.h>
-#ifdef VCL_WIN32
+#ifdef VCL_VC
 #include <vgui/impl/mfc/StdAfx.h>
 #endif
 #include "vgui_accelerate_mfc.h"
