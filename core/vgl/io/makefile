@@ -6,7 +6,18 @@ IMMEDIATE_LIBS := -lvgl-io -lvgl -lvsl
 
 SOURCES += vgl_io_polygon.cxx
 
-MANPAGE_SOURCES += vgl_point_2d.txx
+MANPAGE_SOURCES += vgl_io_box_2d.txx
+MANPAGE_SOURCES += vgl_io_box_3d.txx
+MANPAGE_SOURCES += vgl_io_homg_line_2d.txx
+MANPAGE_SOURCES += vgl_io_homg_line_3d_2_points.txx
+MANPAGE_SOURCES += vgl_io_homg_plane_3d.txx
+MANPAGE_SOURCES += vgl_io_homg_point_2d.txx
+MANPAGE_SOURCES += vgl_io_homg_point_3d.txx
+MANPAGE_SOURCES += vgl_io_line_2d.txx
+MANPAGE_SOURCES += vgl_io_line_segment_2d.txx
+MANPAGE_SOURCES += vgl_io_line_segment_3d.txx
+MANPAGE_SOURCES += vgl_io_point_2d.txx
+MANPAGE_SOURCES += vgl_io_point_3d.txx
 
 ifndef NOTEST
 SUBDIRS += tests
