@@ -25,7 +25,7 @@ SOURCES += GXFileVisitor.cxx
 
 SOURCES += MovieFile.cxx
 SOURCES += MovieFileInterface.cxx
-ifeq ($(HAS_JPEG)-$(HAS_BROKEN_AS),"1-")
+ifeq ("$(HAS_JPEG)-$(HAS_BROKEN_AS)","1-")
 SOURCES += SGIMovieFile.cxx
 SOURCES += SGIMovieFilePrivates.cxx
 SOURCES += SGIMovieFileWrite.cxx
