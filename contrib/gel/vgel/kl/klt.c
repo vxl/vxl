@@ -27,9 +27,9 @@ http://www-leland.stanford.edu/group/OTL, (415) 723-0651.
 #include <stdlib.h>  /* malloc() */
 
 /* Our includes */
+#include "error.h"
 #include "base.h"
 #include "convolve.h"
-#include "error.h"
 #include "klt.h"
 #include "pyramid.h"
 

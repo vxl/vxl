@@ -10,8 +10,8 @@
 #include <math.h>       /* */
 
 /* Our includes */
-#include "base.h"
 #include "error.h"
+#include "base.h"
 #include "convolve.h"   /* for computing pyramid */
 #include "pyramid.h"
 

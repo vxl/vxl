@@ -8,8 +8,8 @@
 #include <stdlib.h>   /* malloc(), realloc() */
 
 /* Our includes */
-#include "base.h"
 #include "error.h"
+#include "base.h"
 #include "convolve.h"
 #include "klt_util.h"   /* printing */
 

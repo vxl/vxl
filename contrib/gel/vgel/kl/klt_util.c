@@ -7,8 +7,8 @@
 #include <stdlib.h>  /* malloc() */
 
 /* Our includes */
-#include "base.h"
 #include "error.h"
+#include "base.h"
 #include "pnmio.h"
 #include "klt.h"
 #include "klt_util.h"
