@@ -1198,7 +1198,7 @@ void QvIndexedLineSet::build (QvState* state)
     return;
   }
 
-  epsilon_ = 0.05;  // picking tolerance
+  epsilon_ = 0.05f;  // picking tolerance
 
   QvCoordinate3* coords = (QvCoordinate3*) attr->data;
   omin_ = coords->omin_;
@@ -1238,7 +1238,7 @@ void QvPointSet::build (QvState* state)
     return;
   }
 
-  epsilon_ = 0.05;  // picking tolerance
+  epsilon_ = 0.05f;  // picking tolerance
 
   QvCoordinate3* coords = (QvCoordinate3*) attr->data;
   omin_ = coords->omin_;

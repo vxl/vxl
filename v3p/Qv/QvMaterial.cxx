@@ -14,11 +14,11 @@ QvMaterial::QvMaterial()
     QV_NODE_ADD_FIELD(shininess);
     QV_NODE_ADD_FIELD(transparency);
 
-    ambientColor.values[0]=ambientColor.values[1]=ambientColor.values[2] = 0.2;
-    diffuseColor.values[0]=diffuseColor.values[1]=diffuseColor.values[2] = 0.2;
+    ambientColor.values[0]=ambientColor.values[1]=ambientColor.values[2] = 0.2f;
+    diffuseColor.values[0]=diffuseColor.values[1]=diffuseColor.values[2] = 0.2f;
     specularColor.values[0]=specularColor.values[1]=specularColor.values[2]=0.;
     emissiveColor.values[0]=emissiveColor.values[1]=emissiveColor.values[2]=0.;
-    shininess.values[0] = 0.2;
+    shininess.values[0] = 0.2f;
     transparency.values[0] = 0.0;
 
     // mpichler, 19951109: initialise materials

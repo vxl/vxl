@@ -15,7 +15,7 @@ int main()
   {
     int    xi = 314159265;
     long   xl = 314159265L;
-    float  xf = 13.14159265358979323846;
+    float  xf = 13.14159265358979323846f;
     double xd = 23.14159265358979323846;
     long double ld = xd;
 

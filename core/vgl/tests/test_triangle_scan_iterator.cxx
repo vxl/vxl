@@ -5,8 +5,8 @@
 
 int main(int, char **)
 {
-  float x[3] = { 10.23, 20.12, 30.73 };
-  float y[3] = { 20.54, 10.39, 30.11 };
+  float x[3] = { 10.23f, 20.12f, 30.73f };
+  float y[3] = { 20.54f, 10.39f, 30.11f };
 
   vgl_triangle_scan_iterator ti;
   ti.a.x = x[0]; ti.a.y = y[0];

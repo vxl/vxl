@@ -25,7 +25,7 @@ QvSpotLight::QvSpotLight()
     direction.value[1] = 0.0;
     direction.value[2] = -1.0;
     dropOffRate.value = 0.0;
-    cutOffAngle.value = QV_PI_4;
+    cutOffAngle.value = (float)QV_PI_4;
 }
 
 QvSpotLight::~QvSpotLight()
