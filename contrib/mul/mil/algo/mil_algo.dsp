@@ -146,6 +146,11 @@ SOURCE=.\Templates/mil_algo_grad_filter_2d+float.float-.cxx
 # Begin Source File
 
 SOURCE=.\Templates/mil_algo_grad_filter_2d+uchar.float-.cxx
+# Begin Source File
+
+SOURCE=.\mil_algo_gaussian_filter.cxx
+
+# End Source File
 
 # End Source File
 # End Group
@@ -194,6 +199,16 @@ SOURCE=.\mil_algo_grad_filter_2d.h
 # Begin Source File
 
 SOURCE=.\mil_algo_grad_filter_2d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_algo_gaussian_filter.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_algo_gaussian_filter.txx
 
 # End Source File
 # End Group
