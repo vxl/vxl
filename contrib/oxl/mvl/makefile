@@ -20,14 +20,12 @@ SOURCES += mvl_three_view_six_point_structure.cxx
 SOURCES += Homg.cxx
 SOURCES += Homg1D.cxx
 SOURCES += HomgPoint1D.cxx
-SOURCES += HomgOperator1D.cxx
 
 SOURCES += Homg2D.cxx
 SOURCES += HomgLine2D.cxx
 SOURCES += HomgLineSeg2D.cxx
 SOURCES += HomgPoint2D.cxx
 SOURCES += HomgOperator2D.cxx
-SOURCES += HomgConic.cxx
 
 SOURCES += Homg3D.cxx
 SOURCES += HomgLine3D.cxx
@@ -41,7 +39,6 @@ SOURCES += HomgPrettyPrint.cxx
 
 SOURCES += HomgInterestPoint.cxx
 SOURCES += HomgInterestPointSet.cxx
-SOURCES += LineSeg.cxx
 SOURCES += LineSegSet.cxx
 SOURCES += ProjStructure.cxx
 
