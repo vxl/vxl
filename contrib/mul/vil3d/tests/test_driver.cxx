@@ -1,5 +1,6 @@
 #include <testlib/testlib_register.h>
 
+DECLARE( test_file_format_read );
 DECLARE( test_image_view );
 DECLARE( test_math );
 DECLARE( test_trilin_interp );
@@ -18,6 +19,7 @@ DECLARE( test_algo_normalised_correlation_3d );
 void
 register_tests()
 {
+  REGISTER( test_file_format_read );
   REGISTER( test_image_resource );
   REGISTER( test_image_view );
   REGISTER( test_math );

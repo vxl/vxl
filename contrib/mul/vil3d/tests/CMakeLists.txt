@@ -3,6 +3,7 @@
 ADD_EXECUTABLE( vil3d_test_all
   test_driver.cxx
 
+  test_file_format_read.cxx
   test_image_view.cxx
   test_image_resource.cxx
   test_math.cxx
@@ -20,6 +21,8 @@ ADD_EXECUTABLE( vil3d_test_all
 )
 TARGET_LINK_LIBRARIES( vil3d_test_all vil3d_algo vil3d vil2 vil2_algo vpl vul testlib vcl )
 
+ADD_TEST( vil3d_test_file_format_read         vil3d_test_all test_file_format_read
+  ${MUL_INCLUDE_DIR}/vil3d/tests/file_read_data)
 ADD_TEST( vil3d_test_image_view               vil3d_test_all test_image_view )
 ADD_TEST( vil3d_test_math                     vil3d_test_all test_math )
 ADD_TEST( vil3d_test_trilin_interp            vil3d_test_all test_trilin_interp )
