@@ -20,20 +20,20 @@
 #include <testlib/testlib_test.h>
 
 static void fsm_assert_(int lineno, bool pass, char const *expr) {
-  vcl_cout << __FILE__ ":" << lineno << vcl_endl;
+  vcl_cout << __FILE__ " : " << lineno << vcl_endl;
   testlib_test_assert(expr, pass);
 }
 #define fsm_assert(c) fsm_assert_(__LINE__, c, #c);
 
 void test_matlab()
 {
-  vnl_vector<float> v(7);
-  vnl_vector_fixed<float,7> vf;
+  vnl_vector<float> v(4);
+  vnl_vector_fixed<float,4> vf;
   for (unsigned i=0; i<v.size(); ++i)
     vf[i] = v[i] = 0.1f*i;
 
-  vnl_matrix<double> M(6,8);
-  vnl_matrix_fixed<double,6,8> Mf;
+  vnl_matrix<double> M(3,4);
+  vnl_matrix_fixed<double,3,4> Mf;
   for (unsigned i=0; i<M.rows(); ++i)
     for (unsigned j=0; j<M.cols(); ++j)
       Mf(i,j) = M(i,j) = 0.1*i*j;
