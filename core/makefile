@@ -20,6 +20,12 @@ SUBDIRS += vnl
 # geometry
 SUBDIRS += vgl
 
+# spatial objects
+SUBDIRS += vsol
+
+# topology
+SUBDIRS += vtol
+
 # image
 ifneq (1,$(strip $(HAS_NATIVE_JPEG)))
 SUBDIRS += ../Image/JPEG
