@@ -22,7 +22,7 @@ vnl_vector<double> mvl_linear_backproject(
   // i is the view index
   for (int i=0, j=0; i < numviews; i++, j+=2)
   {
-    vnl_matrix<double> const &P = Ps[i].get_matrix();
+    vnl_double_3x4 const &P = Ps[i].get_matrix();
 
     row0[0] = imgcoords[i].x()*P(2,0) - P(0,0);
     row0[1] = imgcoords[i].x()*P(2,1) - P(0,1);
