@@ -7,6 +7,7 @@
 
 template <class Type>
 vgl_line_segment_2d<Type>::vgl_line_segment_2d(vgl_line_segment_2d<Type> const& that)
+  : point1_(that.point1_), point2_(that.point2_)
 {
 }
 
