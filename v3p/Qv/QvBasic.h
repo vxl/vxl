@@ -1,9 +1,6 @@
 #ifndef  QV_BASIC_
 #define  QV_BASIC_
 
-#include <vcl_cstdio.h>
-#include <vcl_cmath.h>
-
 #ifndef FALSE
 #   define FALSE 0
 #   define TRUE  1

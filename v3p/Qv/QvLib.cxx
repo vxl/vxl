@@ -14,12 +14,8 @@ enum Binding { goofyBinding };  // confused about QvMaterialBinding/QvNormalBind
 # include <sys/types.h>
 #endif
 
-#include <vcl_cstdlib.h>
-#include <vcl_cstddef.h>
-
 // RWMC: Had to define _strdup for linux since __PC__ set.  Hope this
 // doesn't break other systems.
-#include <vcl_cmath.h>
 #include "QvBasic.h"
 
 // mpichler, 19950802

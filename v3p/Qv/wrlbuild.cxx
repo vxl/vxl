@@ -46,6 +46,8 @@ enum Binding { goofyBinding };  // cfront confused about QvMaterialBinding/QvNor
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
 
+#include "vecutil.h"
+
 #include "QvElement.h"
 #include "QvNodes.h"
 #include "QvExtensions.h"
@@ -53,8 +55,6 @@ enum Binding { goofyBinding };  // cfront confused about QvMaterialBinding/QvNor
 #include "QvDebugError.h"
 #include "QvState.h"
 #include "Qv_pi.h" // for QV_ONE_OVER_PI
-
-#include "vecutil.h"
 
 void ge3d_pop_matrix () {}
 void ge3dPushIdentity() {}

@@ -1,5 +1,4 @@
 #include "QvMFFloat.h"
-#include <vcl_cstdlib.h>
 
 QV_MFIELD_SOURCE(QvMFFloat, float, 1, FALSE);
 

@@ -1,5 +1,4 @@
 #include "QvMFVec2f.h"
-#include <vcl_cstdlib.h>
 
 QV_MFIELD_SOURCE(QvMFVec2f, float, 2, FALSE);
 
@@ -8,6 +7,6 @@ QvMFVec2f::read1Value(QvInput *in, int index)
 {
     float *valuePtr = values + index * 2;
 
-    return (in->read(valuePtr[0]) &&
-            in->read(valuePtr[1]));
+    return in->read(valuePtr[0]) &&
+           in->read(valuePtr[1]);
 }
