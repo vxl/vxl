@@ -62,10 +62,10 @@ class rgrl_initializer_inv_indexing
   //
   //  \param nn_radius nearest-neighbors in nn_radius.
   //  \param k_nn k-nearest-neighbor(s)
-  virtual void add_data( vcl_vector<rgrl_invariant_sptr> fixed_set,
-                         vcl_vector<vcl_vector<rgrl_invariant_sptr> > moving_sets,
-                         double nn_radius = 0,
-                         unsigned int k_nn = 1);
+  virtual void add_multiple_data( vcl_vector<rgrl_invariant_sptr> fixed_set,
+						                      vcl_vector<vcl_vector<rgrl_invariant_sptr> > moving_sets,
+                                  double nn_radius = 0,
+                                  unsigned int k_nn = 1);
 
   //: Set the index of the current moving image. Default is the the 0th moving-image
   void set_current_moving_image( unsigned int moving_image_index);

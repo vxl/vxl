@@ -56,15 +56,15 @@ add_data( vcl_vector<rgrl_invariant_sptr> fixed_set,
 {
   vcl_vector<vcl_vector<rgrl_invariant_sptr> > moving_sets;
   moving_sets.push_back( moving_set );
-  add_data( fixed_set, moving_sets, nn_radius , k_nn );
+  add_multiple_data( fixed_set, moving_sets, nn_radius , k_nn );
 }
 
 void
 rgrl_initializer_inv_indexing::
-add_data( vcl_vector<rgrl_invariant_sptr> fixed_set,
-          vcl_vector<vcl_vector<rgrl_invariant_sptr> > moving_sets,
-          double nn_radius,
-          unsigned int k_nn )
+add_multiple_data( vcl_vector<rgrl_invariant_sptr> fixed_set,
+                   vcl_vector<vcl_vector<rgrl_invariant_sptr> > moving_sets,
+                   double nn_radius,
+                   unsigned int k_nn )
 {
   unsigned int num_moving_sets = moving_sets.size();
   assert (fixed_set.size() > 0);
