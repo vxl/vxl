@@ -13,6 +13,8 @@
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_1d_basis.h>
 #include <vgl/algo/vgl_homg_operators_1d.h>
+#include <vgl/algo/vgl_homg_operators_2d.h>
+#include <vnl/vnl_math.h>
 
 static void test_homg_point_1d()
 {
@@ -117,12 +119,57 @@ static void test_homg_point_2d()
   r = cross_ratio(p1,p2,c,p3);
   TEST("cross_ratio", r, 1.5);
 
-  vgl_homg_line_2d<double> l1(0,0,1), l2(0,1,0);
-  vgl_homg_point_2d<double> pi(l1,l2); // intersection
-  vgl_homg_point_2d<double> pp(1,0,0); // point at infinity
-  TEST("intersection", pi, pp);
-  TEST("ideal", pi.ideal(), true);
-  TEST("is_ideal", is_ideal(p2), false);
+  vgl_homg_point_2d<double> q1(3,7,1), q2(5,6,1), q3(7,5,1), q4(-1,9,1);
+
+  r = vgl_homg_operators_2d<double>::distance_squared(q1,q2);
+  TEST("vgl_homg_operators_2d<double>::distance_squared", r, 5);
+
+  r = vgl_homg_operators_2d<double>::cross_ratio(q1,q2,q3,q4);
+  TEST("vgl_homg_operators_2d<double>::cross_ratio", r, 3);
+
+  q4 = vgl_homg_operators_2d<double>::conjugate(q1,q2,q3);
+  TEST("vgl_homg_operators_2d<double>::conjugate", q4, vgl_homg_point_2d<double>(13,19,3));
+
+  q4 = vgl_homg_operators_2d<double>::conjugate(q1,q2,q3,3);
+  TEST("vgl_homg_operators_2d<double>::conjugate", q4, vgl_homg_point_2d<double>(-1,9,1));
+
+  vgl_homg_line_2d<double> l1(0,0,1), l2(0,1,0), l3(1,1,1); // l1 = line at inf
+  {
+   vgl_homg_point_2d<double> pi(l1,l2); // intersection
+   TEST("intersection", pi, vgl_homg_point_2d<double>(1,0,0));
+   TEST("ideal", pi.ideal(), true);
+  }
+  {
+   vgl_homg_point_2d<double> pi(l2,l3); // intersection
+   TEST("intersection", pi, vgl_homg_point_2d<double>(-1,0,1));
+   TEST("is_ideal", is_ideal(pi), false);
+  }
+
+  l1 = vgl_homg_operators_2d<double>::perp_line_through_point(l3,q1);
+  TEST("vgl_homg_operators_2d<double>::perp_line_through_point", l1, vgl_homg_line_2d<double>(1,-1,4));
+
+  q4 = vgl_homg_operators_2d<double>::perp_projection(l3,q1);
+  TEST("vgl_homg_operators_2d<double>::perp_projection", q4, vgl_homg_point_2d<double>(-5,3,2));
+
+  r = vgl_homg_operators_2d<double>::perp_distance_squared(l3,q1);
+  TEST_NEAR("vgl_homg_operators_2d<double>::perp_distance_squared", r, 60.5, 1e-12);
+
+  r = vgl_homg_operators_2d<double>::perp_dist_squared(q1,l3);
+  TEST_NEAR("vgl_homg_operators_2d<double>::perp_dist_squared", r, 60.5, 1e-12);
+
+  double pi_4 = 0.25*vnl_math::pi;
+  r = vgl_homg_operators_2d<double>::line_angle(l3);
+  TEST_NEAR("vgl_homg_operators_2d<double>::line_angle", r, pi_4, 1e-12);
+
+  r = vgl_homg_operators_2d<double>::angle_between_oriented_lines(l2,l3);
+  TEST_NEAR("vgl_homg_operators_2d<double>::angle_between_oriented_lines", r, -pi_4, 1e-12);
+  r = vgl_homg_operators_2d<double>::angle_between_oriented_lines(l3,l2);
+  TEST_NEAR("vgl_homg_operators_2d<double>::angle_between_oriented_lines", r, pi_4, 1e-12);
+
+  r = vgl_homg_operators_2d<double>::abs_angle(l2,l3);
+  TEST_NEAR("vgl_homg_operators_2d<double>::abs_angle", r, pi_4, 1e-12);
+  r = vgl_homg_operators_2d<double>::abs_angle(l3,l2);
+  TEST_NEAR("vgl_homg_operators_2d<double>::abs_angle", r, pi_4, 1e-12);
 }
 
 static void test_homg_point_3d()
