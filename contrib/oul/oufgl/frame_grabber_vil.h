@@ -9,9 +9,10 @@
 #include <fcntl.h>
 #include <sys/signal.h>
 #include <vcl_cstdio.h>
-#include <vil/vil_image_view.h>
+#include <vcl_cstdlib.h> // for exit()
+#include <vcl_cerrno.h>
 #include <vcl_iostream.h>
-#include <errno.h>
+#include <vil/vil_image_view.h>
 #include <unistd.h>
 
 // The framegrabber class. Very easy to use. Uses the video-4-linux
@@ -22,22 +23,22 @@ using namespace std;
 
 class FrameGrabberVil
 {
-public:
-    FrameGrabberVil(const string &device_name="/dev/video0",
-                 int width=320, int height=240);
-    ~FrameGrabberVil();
-    FrameGrabberVil(const FrameGrabberVil &cpy)
-    { vcl_cerr << "Can't copy framegrabber\n"; exit(-1);};
-    FrameGrabberVil &operator=(const FrameGrabberVil &cpy)
-    { vcl_cerr << "Can't copy framegrabber\n"; exit(-1);};
-    vil_image_view<vxl_byte> *grab_frame();
+ public:
+  FrameGrabberVil(const string &device_name="/dev/video0",
+                  int width=320, int height=240);
+  ~FrameGrabberVil();
+  FrameGrabberVil(const FrameGrabberVil &cpy)
+  { vcl_cerr << "Can't copy framegrabber\n"; vcl_exit(-1); }
+  FrameGrabberVil &operator=(const FrameGrabberVil &cpy)
+  { vcl_cerr << "Can't copy framegrabber\n"; vcl_exit(-1); }
+  vil_image_view<vxl_byte> *grab_frame();
 
-private:
-    int fd; // the file descriptor for the v4l device
-    struct video_mmap mm;
-    vil_image_view<vxl_byte> **frame;
-    unsigned char *bigbuf;
-    struct video_mbuf vm;
+ private:
+  int fd; // the file descriptor for the v4l device
+  struct video_mmap mm;
+  vil_image_view<vxl_byte> **frame;
+  unsigned char *bigbuf;
+  struct video_mbuf vm;
 };
 
 #endif
