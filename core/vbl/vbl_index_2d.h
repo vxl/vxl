@@ -3,7 +3,18 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// \author IMS
+// This is vxl/vbl/vbl_index_2d.h
+
+//:
+// \file
+// \brief An index for 2d arrays
+// \author Ian M. Scott, Manchester ISBE, 10 April 2001
+// \verbatim
+// Modifications:
+// 11 April 2001 Peter Vanroose - moved out of vbl_sparse_array_2d.h
+// \endverbatim
+//---------------------------------------------------------------------------
+
 
 //: An index for 2d arrays
 // Used specifically with vbl_sparse_array_2d, but can be used
@@ -11,6 +22,7 @@
 struct vbl_index_2d
 {
   vbl_index_2d() { }
+
   vbl_index_2d(unsigned index_i, unsigned index_j): i(index_i), j(index_j) {} 
   unsigned i;
   unsigned j;
@@ -35,4 +47,4 @@ inline bool operator< (const vbl_index_2d &a, const vbl_index_2d &other)
   else return (a.i < other.i);
 }
 
-#endif
+#endif // vbl_index_2d_h_
