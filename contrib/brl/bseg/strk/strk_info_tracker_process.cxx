@@ -87,15 +87,18 @@ bool strk_info_tracker_process::execute()
 
   tracker_.set_image_i(img);
   tracker_.track();
-  //  vcl_vector<vtol_face_2d_sptr> samples;
-  //  tracker_.get_samples(samples);
-  //   for (vcl_vector<vtol_face_2d_sptr>::iterator fit = samples.begin();
-  //       fit != samples.end(); fit++)
-  //   {
-  //     vtol_topology_object_sptr to =
-  //       (vtol_topology_object*)((*fit)->cast_to_face());
-  //     output_topo_objs_.push_back(to);
-  //   }
+#if 0
+  vcl_vector<vtol_face_2d_sptr> samples;
+   tracker_.get_samples(samples);
+    for (vcl_vector<vtol_face_2d_sptr>::iterator fit = samples.begin();
+        fit != samples.end(); fit++)
+    {
+      vtol_topology_object_sptr to =
+        (vtol_topology_object*)((*fit)->cast_to_face());
+      output_topo_objs_.push_back(to);
+    }
+#endif
+#if 1
   vtol_face_2d_sptr f = tracker_.get_best_sample();
   tracked_faces_.push_back(f);
   vcl_vector<vtol_edge_sptr> edges;
@@ -106,6 +109,7 @@ bool strk_info_tracker_process::execute()
     vtol_topology_object_sptr to = (*eit)->cast_to_edge();
     output_topo_objs_.push_back(to);
   }
+#endif
   return true;
 }
 
