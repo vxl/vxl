@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="vil2_algo" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="vil_algo" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -13,25 +13,25 @@
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
-# vil2_algo  == name of output library
+# vil_algo  == name of output library
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=vil2_algo - Win32 Debug
+CFG=vil_algo - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "vil2_algo.mak".
+!MESSAGE NMAKE /f "vil_algo.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "vil2_algo.mak" CFG="vil2_algo - Win32 Debug"
+!MESSAGE NMAKE /f "vil_algo.mak" CFG="vil_algo - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "vil2_algo - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "vil2_algo - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "vil_algo - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "vil_algo - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
@@ -39,7 +39,7 @@ CFG=vil2_algo - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "vil2_algo - Win32 Release"
+!IF  "$(CFG)" == "vil_algo - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -53,7 +53,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vil2_algo_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vil_algo_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -65,7 +65,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-!ELSEIF  "$(CFG)" == "vil2_algo - Win32 Debug"
+!ELSEIF  "$(CFG)" == "vil_algo - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -79,7 +79,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vil2_algo_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vil_algo_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -93,217 +93,217 @@ LIB32=link.exe -lib
 
 # Begin Target
 
-# Name "vil2_algo - Win32 Release"
-# Name "vil2_algo - Win32 Debug"
+# Name "vil_algo - Win32 Release"
+# Name "vil_algo - Win32 Debug"
 
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-SOURCE=.\vil2_sobel_1x3.cxx
+SOURCE=.\vil_sobel_1x3.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_sobel_3x3.cxx
+SOURCE=.\vil_sobel_3x3.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_gauss_reduce.cxx
+SOURCE=.\vil_gauss_reduce.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_gauss_filter.cxx
+SOURCE=.\vil_gauss_filter.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_structuring_element.cxx
+SOURCE=.\vil_structuring_element.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_binary_dilate.cxx
+SOURCE=.\vil_binary_dilate.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_binary_erode.cxx
+SOURCE=.\vil_binary_erode.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_fft+double-.cxx
+SOURCE=.\Templates/vil_fft+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_fft+float-.cxx
+SOURCE=.\Templates/vil_fft+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_gauss_reduce+byte-.cxx
+SOURCE=.\Templates/vil_gauss_reduce+byte-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_gauss_filter+byte.float-.cxx
+SOURCE=.\Templates/vil_gauss_filter+byte.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_gauss_filter+float.float-.cxx
+SOURCE=.\Templates/vil_gauss_filter+float.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_gauss_reduce+float-.cxx
+SOURCE=.\Templates/vil_gauss_reduce+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_sobel_1x3+byte.float-.cxx
+SOURCE=.\Templates/vil_sobel_1x3+byte.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_sobel_1x3+double.double-.cxx
+SOURCE=.\Templates/vil_sobel_1x3+double.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_sobel_1x3+float.float-.cxx
+SOURCE=.\Templates/vil_sobel_1x3+float.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_sobel_3x3+byte.float-.cxx
+SOURCE=.\Templates/vil_sobel_3x3+byte.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_sobel_3x3+float.float-.cxx
+SOURCE=.\Templates/vil_sobel_3x3+float.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_greyscale_dilate+byte-.cxx
+SOURCE=.\Templates/vil_greyscale_dilate+byte-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_greyscale_dilate+float-.cxx
+SOURCE=.\Templates/vil_greyscale_dilate+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_greyscale_erode+byte-.cxx
+SOURCE=.\Templates/vil_greyscale_erode+byte-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_greyscale_erode+float-.cxx
+SOURCE=.\Templates/vil_greyscale_erode+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_median+byte-.cxx
+SOURCE=.\Templates/vil_median+byte-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_median+float-.cxx
+SOURCE=.\Templates/vil_median+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_sobel_3x3+double.double-.cxx
+SOURCE=.\Templates/vil_sobel_3x3+double.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_line_filter+byte-.cxx
+SOURCE=.\Templates/vil_line_filter+byte-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_threshold+byte-.cxx
+SOURCE=.\Templates/vil_threshold+byte-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_threshold+float-.cxx
+SOURCE=.\Templates/vil_threshold+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_threshold+int-.cxx
+SOURCE=.\Templates/vil_threshold+int-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_gauss_filter+byte.byte-.cxx
+SOURCE=.\Templates/vil_gauss_filter+byte.byte-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
 # Begin Source File
-SOURCE=.\vil2_sobel_1x3.h
+SOURCE=.\vil_sobel_1x3.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_sobel_1x3.txx
+SOURCE=.\vil_sobel_1x3.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_sobel_3x3.h
+SOURCE=.\vil_sobel_3x3.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_sobel_3x3.txx
+SOURCE=.\vil_sobel_3x3.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_gauss_filter.h
+SOURCE=.\vil_gauss_filter.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_gauss_filter.txx
+SOURCE=.\vil_gauss_filter.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_gauss_reduce.h
+SOURCE=.\vil_gauss_reduce.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_gauss_reduce.txx
+SOURCE=.\vil_gauss_reduce.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_convolve_1d.h
+SOURCE=.\vil_convolve_1d.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_convolve_2d.h
+SOURCE=.\vil_convolve_2d.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_correlate_1d.h
+SOURCE=.\vil_correlate_1d.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_correlate_2d.h
+SOURCE=.\vil_correlate_2d.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_exp_filter_1d.h
+SOURCE=.\vil_exp_filter_1d.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_binary_erode.h
+SOURCE=.\vil_binary_erode.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_binary_dilate.h
+SOURCE=.\vil_binary_dilate.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_structuring_element.h
+SOURCE=.\vil_structuring_element.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_binary_closing.h
+SOURCE=.\vil_binary_closing.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_binary_opening.h
+SOURCE=.\vil_binary_opening.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_greyscale_closing.h
+SOURCE=.\vil_greyscale_closing.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_greyscale_dilate.h
+SOURCE=.\vil_greyscale_dilate.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_greyscale_dilate.txx
+SOURCE=.\vil_greyscale_dilate.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_greyscale_erode.h
+SOURCE=.\vil_greyscale_erode.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_greyscale_erode.txx
+SOURCE=.\vil_greyscale_erode.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_greyscale_opening.h
+SOURCE=.\vil_greyscale_opening.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_median.h
+SOURCE=.\vil_median.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_median.txx
+SOURCE=.\vil_median.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_normalised_correlation_2d.h
+SOURCE=.\vil_normalised_correlation_2d.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_exp_grad_filter_1d.h
+SOURCE=.\vil_exp_grad_filter_1d.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_line_filter.h
+SOURCE=.\vil_line_filter.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_line_filter.txx
+SOURCE=.\vil_line_filter.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_threshold.h
+SOURCE=.\vil_threshold.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_threshold.txx
+SOURCE=.\vil_threshold.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_grid_merge.h
+SOURCE=.\vil_grid_merge.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_find_4con_boundary.h
+SOURCE=.\vil_find_4con_boundary.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_fft.h
+SOURCE=.\vil_fft.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_fft.txx
+SOURCE=.\vil_fft.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_exp_filter_2d.h
+SOURCE=.\vil_exp_filter_2d.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_suppress_non_max.h
+SOURCE=.\vil_suppress_non_max.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"

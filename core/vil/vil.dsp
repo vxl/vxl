@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="vil2" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="vil" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -13,25 +13,25 @@
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
-# vil2  == name of output library
+# vil  == name of output library
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=vil2 - Win32 Debug
+CFG=vil - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "vil2.mak".
+!MESSAGE NMAKE /f "vil.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "vil2.mak" CFG="vil2 - Win32 Debug"
+!MESSAGE NMAKE /f "vil.mak" CFG="vil - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "vil2 - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "vil2 - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "vil - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "vil - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
@@ -39,7 +39,7 @@ CFG=vil2 - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "vil2 - Win32 Release"
+!IF  "$(CFG)" == "vil - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -53,7 +53,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vil2_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vil_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -65,7 +65,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-!ELSEIF  "$(CFG)" == "vil2 - Win32 Debug"
+!ELSEIF  "$(CFG)" == "vil - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -79,7 +79,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vil2_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vil_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -93,553 +93,553 @@ LIB32=link.exe -lib
 
 # Begin Target
 
-# Name "vil2 - Win32 Release"
-# Name "vil2 - Win32 Debug"
+# Name "vil - Win32 Release"
+# Name "vil - Win32 Debug"
 
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-SOURCE=.\file_formats/vil2_pnm.cxx
+SOURCE=.\file_formats/vil_pnm.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil2_ras.cxx
+SOURCE=.\file_formats/vil_ras.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_image_resource.cxx
+SOURCE=.\vil_image_resource.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_memory_chunk.cxx
+SOURCE=.\vil_memory_chunk.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_file_format.cxx
+SOURCE=.\vil_file_format.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil2_png.cxx
+SOURCE=.\file_formats/vil_png.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil2_tiff.cxx
+SOURCE=.\file_formats/vil_tiff.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+bool-.cxx
+SOURCE=.\Templates/vil_image_view+bool-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_smart_ptr+vil2_image_resource-.cxx
+SOURCE=.\Templates/vil_smart_ptr+vil_image_resource-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_smart_ptr+vil2_memory_chunk-.cxx
+SOURCE=.\Templates/vil_smart_ptr+vil_memory_chunk-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+float-.cxx
+SOURCE=.\Templates/vil_image_view+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+vil2_rgb+float--.cxx
+SOURCE=.\Templates/vil_image_view+vil_rgb+float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+vcl_complex+double--.cxx
+SOURCE=.\Templates/vil_image_view+vcl_complex+double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+vcl_complex+float--.cxx
+SOURCE=.\Templates/vil_image_view+vcl_complex+float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_smart_ptr+vil2_stream-.cxx
+SOURCE=.\Templates/vil_smart_ptr+vil_stream-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_crop.cxx
+SOURCE=.\vil_crop.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_image_view_base.cxx
+SOURCE=.\vil_image_view_base.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_load.cxx
+SOURCE=.\vil_load.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_decimate.cxx
+SOURCE=.\vil_decimate.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_vil1.cxx
+SOURCE=.\Templates/vil_sample_profile_bilin+float.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_sample_profile_bilin+float.double-.cxx
+SOURCE=.\Templates/vil_sample_grid_bilin+float.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_sample_grid_bilin+float.double-.cxx
+SOURCE=.\Templates/vil_smart_ptr+vil_image_view_base-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_smart_ptr+vil2_image_view_base-.cxx
+SOURCE=.\Templates/vil_image_view+byte-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+byte-.cxx
+SOURCE=.\Templates/vil_image_view+int_16-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+int_16-.cxx
+SOURCE=.\Templates/vil_image_view+int_32-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+int_32-.cxx
+SOURCE=.\Templates/vil_image_view+uint_32-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+uint_32-.cxx
+SOURCE=.\Templates/vil_image_view+vil_rgb+int_16--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+vil2_rgb+int_16--.cxx
+SOURCE=.\Templates/vil_image_view+vil_rgb+int_32--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+vil2_rgb+int_32--.cxx
+SOURCE=.\Templates/vil_image_view+vil_rgb+uint_32--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+vil2_rgb+uint_32--.cxx
+SOURCE=.\Templates/vil_sample_grid_bilin+byte.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_sample_grid_bilin+byte.double-.cxx
+SOURCE=.\Templates/vil_sample_profile_bilin+byte.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_sample_profile_bilin+byte.double-.cxx
+SOURCE=.\Templates/vil_image_view+uint_16-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+uint_16-.cxx
+SOURCE=.\Templates/vil_image_view+vil_rgb+byte--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+vil2_rgb+byte--.cxx
+SOURCE=.\Templates/vil_image_view+vil_rgb+uint_16--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+vil2_rgb+uint_16--.cxx
+SOURCE=.\Templates/vil_image_view+vil_rgb+double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+vil2_rgb+double--.cxx
+SOURCE=.\Templates/vil_image_view+vil_rgba+byte--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+vil2_rgba+byte--.cxx
+SOURCE=.\Templates/vil_image_view+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+double-.cxx
+SOURCE=.\Templates/vil_copy+bool-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_copy+bool-.cxx
+SOURCE=.\Templates/vil_copy+byte-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_copy+byte-.cxx
+SOURCE=.\Templates/vil_copy+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_copy+double-.cxx
+SOURCE=.\Templates/vil_copy+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_copy+float-.cxx
+SOURCE=.\Templates/vil_copy+int_16-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_copy+int_16-.cxx
+SOURCE=.\Templates/vil_copy+int_32-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_copy+int_32-.cxx
+SOURCE=.\Templates/vil_copy+sbyte-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_copy+sbyte-.cxx
+SOURCE=.\Templates/vil_copy+uint_16-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_copy+uint_16-.cxx
+SOURCE=.\Templates/vil_copy+uint_32-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_copy+uint_32-.cxx
+SOURCE=.\Templates/vil_copy+vil_rgb+byte--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_copy+vil2_rgb+byte--.cxx
+SOURCE=.\Templates/vil_image_view+sbyte-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+sbyte-.cxx
+SOURCE=.\Templates/vil_image_view+vil_rgb+sbyte--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+vil2_rgb+sbyte--.cxx
+SOURCE=.\Templates/vil_resample_bilin+byte.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_resample_bilin+byte.double-.cxx
+SOURCE=.\Templates/vil_resample_bilin+byte.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_resample_bilin+byte.float-.cxx
+SOURCE=.\Templates/vil_resample_bilin+float.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_resample_bilin+float.double-.cxx
+SOURCE=.\Templates/vil_sample_grid_bilin+float.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_sample_grid_bilin+float.float-.cxx
+SOURCE=.\Templates/vil_image_view+vil_rgba+float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+vil2_rgba+float--.cxx
+SOURCE=.\file_formats/vil_bmp.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil2_bmp.cxx
+SOURCE=.\file_formats/vil_bmp_core_header.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil2_bmp_core_header.cxx
+SOURCE=.\file_formats/vil_bmp_file_header.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil2_bmp_file_header.cxx
+SOURCE=.\file_formats/vil_bmp_info_header.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil2_bmp_info_header.cxx
+SOURCE=.\vil_memory_image.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_memory_image.cxx
+SOURCE=.\vil_new.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_new.cxx
+SOURCE=.\vil_pixel_format.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_pixel_format.cxx
+SOURCE=.\vil_save.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_save.cxx
+SOURCE=.\vil_clamp.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_clamp.cxx
+SOURCE=.\vil_transpose.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_transpose.cxx
+SOURCE=.\vil_flip.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_flip.cxx
+SOURCE=.\vil_plane.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_plane.cxx
+SOURCE=.\vil_print.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_print.cxx
+SOURCE=.\file_formats/vil_jpeg.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil2_jpeg.cxx
+SOURCE=.\file_formats/vil_jpeg_compressor.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil2_jpeg_compressor.cxx
+SOURCE=.\file_formats/vil_jpeg_decompressor.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil2_jpeg_decompressor.cxx
+SOURCE=.\file_formats/vil_jpeg_destination_mgr.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil2_jpeg_destination_mgr.cxx
+SOURCE=.\file_formats/vil_jpeg_source_mgr.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil2_jpeg_source_mgr.cxx
+SOURCE=.\Templates/vil_rgb+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_rgb+double-.cxx
+SOURCE=.\Templates/vil_rgb+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_rgb+float-.cxx
+SOURCE=.\Templates/vil_rgb+long-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_rgb+long-.cxx
+SOURCE=.\Templates/vil_rgb+uint-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_rgb+uint-.cxx
+SOURCE=.\Templates/vil_rgb+unsignedchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_rgb+unsignedchar-.cxx
+SOURCE=.\Templates/vil_rgb+vxl_uint_16-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_rgb+vxl_uint_16-.cxx
+SOURCE=.\Templates/vil_rgba+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_rgba+float-.cxx
+SOURCE=.\Templates/vil_rgba+unsignedchar-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_rgba+unsignedchar-.cxx
+SOURCE=.\Templates/vil_resample_bilin+byte.byte-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_resample_bilin+byte.byte-.cxx
+SOURCE=.\Templates/vil_resample_bicub+byte.byte-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_resample_bicub+byte.byte-.cxx
+SOURCE=.\Templates/vil_resample_bicub+byte.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_resample_bicub+byte.double-.cxx
+SOURCE=.\Templates/vil_resample_bicub+byte.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_resample_bicub+byte.float-.cxx
+SOURCE=.\Templates/vil_resample_bicub+float.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_resample_bicub+float.double-.cxx
+SOURCE=.\Templates/vil_sample_grid_bicub+byte.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_sample_grid_bicub+byte.double-.cxx
+SOURCE=.\Templates/vil_sample_grid_bicub+float.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_sample_grid_bicub+float.double-.cxx
+SOURCE=.\Templates/vil_sample_grid_bicub+float.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_sample_grid_bicub+float.float-.cxx
+SOURCE=.\Templates/vil_sample_profile_bicub+byte.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_sample_profile_bicub+byte.double-.cxx
+SOURCE=.\Templates/vil_sample_profile_bicub+float.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_sample_profile_bicub+float.double-.cxx
+SOURCE=.\Templates/vil_bicub_interp+byte-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_bicub_interp+byte-.cxx
+SOURCE=.\Templates/vil_bicub_interp+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_bicub_interp+double-.cxx
+SOURCE=.\Templates/vil_bicub_interp+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_bicub_interp+float-.cxx
+SOURCE=.\Templates/vil_copy+vcl_complex+double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_open.cxx
+SOURCE=.\Templates/vil_copy+vcl_complex+float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_stream.cxx
+SOURCE=.\vil_open.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_stream_read.cxx
+SOURCE=.\vil_stream.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_stream_write.cxx
+SOURCE=.\vil_stream_read.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_stream_core.cxx
+SOURCE=.\vil_stream_write.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_stream_fstream.cxx
+SOURCE=.\vil_stream_core.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_stream_section.cxx
+SOURCE=.\vil_stream_fstream.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_stream_url.cxx
+SOURCE=.\vil_stream_section.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_image_resource_plugin.cxx
+SOURCE=.\vil_stream_url.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil2_dicom.cxx
+SOURCE=.\vil_image_resource_plugin.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil2_dicom_header.cxx
+SOURCE=.\file_formats/vil_dicom.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_dicom_header.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
 # Begin Source File
-SOURCE=.\file_formats/vil2_pnm.h
+SOURCE=.\file_formats/vil_pnm.h
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil2_ras.h
+SOURCE=.\file_formats/vil_ras.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_image_resource.h
+SOURCE=.\vil_image_resource.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_image_view.h
+SOURCE=.\vil_image_view.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_image_view_base.h
+SOURCE=.\vil_image_view_base.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_smart_ptr.h
+SOURCE=.\vil_smart_ptr.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_smart_ptr.txx
+SOURCE=.\vil_smart_ptr.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_image_view.txx
+SOURCE=.\vil_image_view.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_memory_chunk.h
+SOURCE=.\vil_memory_chunk.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_file_format.h
+SOURCE=.\vil_file_format.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_load.h
+SOURCE=.\vil_load.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_crop.h
+SOURCE=.\vil_crop.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_pixel_format.h
+SOURCE=.\vil_pixel_format.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_memory_image.h
+SOURCE=.\vil_memory_image.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_new.h
+SOURCE=.\vil_new.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_sample_profile_bilin.h
+SOURCE=.\vil_sample_profile_bilin.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_bilin_interp.h
+SOURCE=.\vil_bilin_interp.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_sample_profile_bilin.txx
+SOURCE=.\vil_sample_profile_bilin.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_save.h
+SOURCE=.\vil_save.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_sample_grid_bilin.h
+SOURCE=.\vil_sample_grid_bilin.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_sample_grid_bilin.txx
+SOURCE=.\vil_sample_grid_bilin.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_copy.h
+SOURCE=.\vil_copy.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_copy.txx
+SOURCE=.\vil_copy.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_math.h
+SOURCE=.\vil_math.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_property.h
+SOURCE=.\vil_property.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_clamp.h
+SOURCE=.\vil_clamp.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_transpose.h
+SOURCE=.\vil_transpose.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_flip.h
+SOURCE=.\vil_flip.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_plane.h
+SOURCE=.\vil_plane.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_print.h
+SOURCE=.\vil_print.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_view_as.h
+SOURCE=.\vil_view_as.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_fill.h
+SOURCE=.\vil_fill.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_convert.h
+SOURCE=.\vil_convert.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_transform.h
+SOURCE=.\vil_transform.h
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil2_jpeg.h
+SOURCE=.\file_formats/vil_jpeg.h
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil2_jpeg_compressor.h
+SOURCE=.\file_formats/vil_jpeg_compressor.h
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil2_jpeg_decompressor.h
+SOURCE=.\file_formats/vil_jpeg_decompressor.h
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil2_jpeg_destination_mgr.h
+SOURCE=.\file_formats/vil_jpeg_destination_mgr.h
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil2_jpeg_source_mgr.h
+SOURCE=.\file_formats/vil_jpeg_source_mgr.h
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil2_jpeglib.h
+SOURCE=.\file_formats/vil_jpeglib.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_decimate.h
+SOURCE=.\vil_decimate.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_resample_bilin.txx
+SOURCE=.\vil_resample_bilin.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_resample_bilin.h
+SOURCE=.\vil_resample_bilin.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_bicub_interp.h
+SOURCE=.\vil_bicub_interp.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_resample_bicub.h
+SOURCE=.\vil_resample_bicub.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_resample_bicub.txx
+SOURCE=.\vil_resample_bicub.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_sample_grid_bicub.h
+SOURCE=.\vil_sample_grid_bicub.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_sample_grid_bicub.txx
+SOURCE=.\vil_sample_grid_bicub.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_sample_profile_bicub.h
+SOURCE=.\vil_sample_profile_bicub.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_sample_profile_bicub.txx
+SOURCE=.\vil_sample_profile_bicub.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_bicub_interp.txx
+SOURCE=.\vil_bicub_interp.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_vil1.h
+SOURCE=.\file_formats/vil_bmp.h
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil2_bmp.h
+SOURCE=.\file_formats/vil_bmp_core_header.h
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil2_bmp_core_header.h
+SOURCE=.\file_formats/vil_bmp_file_header.h
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil2_bmp_file_header.h
+SOURCE=.\file_formats/vil_bmp_info_header.h
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil2_bmp_info_header.h
+SOURCE=.\file_formats/vil_png.h
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil2_png.h
+SOURCE=.\file_formats/vil_tiff.h
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil2_tiff.h
+SOURCE=.\vil_pixel_traits.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_pixel_traits.h
+SOURCE=.\vil_fwd.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_fwd.h
+SOURCE=.\vil_open.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_open.h
+SOURCE=.\vil_rgb.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_rgb.h
+SOURCE=.\vil_rgb.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_rgb.txx
+SOURCE=.\vil_rgba.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_rgba.h
+SOURCE=.\vil_rgba.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_rgba.txx
+SOURCE=.\vil_stream.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_stream.h
+SOURCE=.\vil_stream_read.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_stream_read.h
+SOURCE=.\vil_stream_write.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_stream_write.h
+SOURCE=.\vil_stream_core.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_stream_core.h
+SOURCE=.\vil_stream_fstream.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_stream_fstream.h
+SOURCE=.\vil_stream_section.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_stream_section.h
+SOURCE=.\vil_stream_url.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_stream_url.h
+SOURCE=.\vil_image_resource_plugin.h
 # End Source File
 # Begin Source File
-SOURCE=.\vil2_image_resource_plugin.h
+SOURCE=.\file_formats/vil_dicom.h
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil2_dicom.h
-# End Source File
-# Begin Source File
-SOURCE=.\file_formats/vil2_dicom_header.h
+SOURCE=.\file_formats/vil_dicom_header.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"

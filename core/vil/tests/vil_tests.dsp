@@ -64,9 +64,6 @@ SOURCE=.\test_binary_erode.cxx
 SOURCE=.\test_resample_bilin.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_vil1.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_greyscale_dilate.cxx
 # End Source File
 # Begin Source File
