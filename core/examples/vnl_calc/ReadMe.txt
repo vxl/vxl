@@ -12,4 +12,4 @@ operates on the top two elements of the stack. e.g.
 
 iue_calc 2 3 + 4 / 
 
-prints (2 + 3) / 4 = 1.5
+prints (2 + 3) / 4 = 1.25
