@@ -43,16 +43,16 @@
 #include "Qv_pi.h"
 
 #include <vcl_ostream.h>
+#include <vcl_cfloat.h> // for MAXFLOAT
 
 #ifdef VCL_WIN32
-#  include <vcl_cfloat.h>
 #  ifndef MAXFLOAT
 #    define MAXFLOAT FLT_MAX
 #  endif
 // QV_PI defined in Qv_pi.h now. It's not specific to windows.
 #  define ARRAYconst  /* gorasche: causes problems with MSC */
 #else
-#  ifndef FREEBSD
+#  ifndef __FreeBSD__
 #    include <values.h>
 #  endif
 #  ifndef MAXFLOAT
