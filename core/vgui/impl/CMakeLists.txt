@@ -1,21 +1,18 @@
 # ./oxl/vgui/impl/CMakeLists.txt
 
-INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindGLUT.cmake)
-
-IF(HAS_GLUT)
+#IF(HAS_GLUT)
   SUBDIRS(glut)
-ENDIF(HAS_GLUT)
+#ENDIF(HAS_GLUT)
 
-INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindQt.cmake)
-
-IF(HAS_QT)
+#IF(HAS_QT)
   SUBDIRS(qt)
-ENDIF(HAS_QT)
+#ENDIF(HAS_QT)
 
 IF(WIN32)
   SUBDIRS(mfc)
+ENDIF(WIN32)
 
-ELSE(WIN32)
+IF(UNIX)
 
   IF(HAS_X11)
     SUBDIRS(X)
@@ -25,11 +22,9 @@ ELSE(WIN32)
     SUBDIRS(glX)
   ENDIF(HAS_GLX)
 
-  INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindGTK.cmake)
-
-  IF(HAS_GTK)
+# IF(HAS_GTK)
     SUBDIRS(gtk)
-  ENDIF(HAS_GTK)
+# ENDIF(HAS_GTK)
 
   IF(HAS_SDL)
     SUBDIRS(SDL)
@@ -43,4 +38,4 @@ ELSE(WIN32)
     SUBDIRS(Fl)
   ENDIF(HAS_FL)
 
-ENDIF(WIN32)
+ENDIF(UNIX)

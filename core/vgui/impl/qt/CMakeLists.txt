@@ -1,5 +1,10 @@
 # ./oxl/vgui/impl/qt/CMakeLists.txt
 
+INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindQt.cmake)
+
+# Build here only if Qt is available:
+IF(HAS_QT)
+
 ADD_LIBRARY(vgui_qt vgui_qt_sources vgui_qt_moc_files)
 
 SOURCE_FILES(vgui_qt_sources
@@ -26,3 +31,5 @@ IF (WIN32)
     INCLUDE(${allvxl_SOURCE_DIR}/oxl/vgui/impl/qt/CMakeListsHeaders.txt)
   ENDIF (NOT CYGWIN)
 ENDIF(WIN32)
+
+ENDIF(HAS_QT)

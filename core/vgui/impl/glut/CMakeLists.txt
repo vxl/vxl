@@ -1,5 +1,11 @@
 # ./oxl/vgui/impl/glut/CMakeLists.txt
 
+INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindGLUT.cmake)
+INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindX11.cmake)
+
+# Build here only if GLUT is available:
+IF(HAS_GLUT)
+
 ADD_LIBRARY(vgui_glut vgui_glut_sources)
 
 SOURCE_FILES(vgui_glut_sources
@@ -10,8 +16,6 @@ SOURCE_FILES(vgui_glut_sources
   vgui_glut.cxx
   vgui_glut_slab.cxx
 )
-
-INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindX11.cmake )
 
 IF(HAS_X11)
   SOURCE_FILES(vgui_glut_sources
@@ -30,3 +34,5 @@ IF (WIN32)
     INCLUDE(${allvxl_SOURCE_DIR}/oxl/vgui/impl/glut/CMakeListsHeaders.txt)
   ENDIF (NOT CYGWIN)
 ENDIF(WIN32)
+
+ENDIF(HAS_GLUT)
