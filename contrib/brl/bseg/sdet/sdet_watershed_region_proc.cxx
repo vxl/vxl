@@ -62,8 +62,7 @@ sdet_watershed_region_proc::sdet_watershed_region_proc(sdet_watershed_region_pro
 sdet_watershed_region_proc::~sdet_watershed_region_proc()
 {
   for (vcl_map<sdet_region_sptr, vcl_vector<sdet_region_sptr>* >::iterator
-         rait = region_adjacency_.begin();
-       rait != region_adjacency_.end(); rait++)
+       rait = region_adjacency_.begin(); rait != region_adjacency_.end(); ++rait)
     delete (*rait).second;
 }
 
@@ -111,11 +110,10 @@ void sdet_watershed_region_proc::scan_region_data(vbl_array_2d<unsigned int> con
   int rows = lab_array.rows(), cols = lab_array.cols();
   int n_regions = max_label_ - min_label_ +1;
   //initialize the regions
-  int imgc = 0, imgr = 0;
   for (int r = 0; r<rows; r++)
     for (int c = 0; c<cols; c++)
     {
-      imgc = c; imgr = r;
+      int imgc = c, imgr = r;
       if (roi_)
       {
         imgc = roi_->ic(c);
@@ -136,7 +134,7 @@ void sdet_watershed_region_proc::scan_region_data(vbl_array_2d<unsigned int> con
   for (int r = 0; r<rows; r++)
     for (int c = 0; c<cols; c++)
     {
-      imgc = c; imgr = r;
+      int imgc = c, imgr = r;
       if (roi_)
       {
         imgc = roi_->ic(c);
@@ -203,7 +201,6 @@ adjacent_regions(sdet_region_sptr const& reg,
   {
     vcl_vector<sdet_region_sptr> * vec = region_adjacency_[reg];
     adj_regs = *vec;
-
     return true;
   }
   return false;
@@ -289,11 +286,11 @@ bool sdet_watershed_region_proc::merge_regions()
       if (bdgl_region_algs::
           earth_mover_distance(r->cast_to_digital_region(),
                               ar->cast_to_digital_region()) > merge_tol_)
-        {
-          //will potentially be adjacent to the new region
-          temp_adj.push_back(ar);
-          continue;
-        }
+      {
+        //will potentially be adjacent to the new region
+        temp_adj.push_back(ar);
+        continue;
+      }
       //found two mergeable regions
       vdgl_digital_region_sptr temp;
       if (bdgl_region_algs::merge(rm->cast_to_digital_region(),
@@ -493,9 +490,8 @@ bool sdet_watershed_region_proc::compute_region_image()
   int w = image_.width(), h = image_.height();
   region_image_.resize(w, h);
   region_image_.fill(255);
-  for (vcl_vector<sdet_region_sptr>::iterator rit =  regions_.begin();
+  for (vcl_vector<sdet_region_sptr>::iterator rit = regions_.begin();
        rit != regions_.end(); rit++)
-  {
     for ((*rit)->reset(); (*rit)->next();)
     {
       int c = (int)(*rit)->X(), r = (int)(*rit)->Y();
@@ -504,7 +500,6 @@ bool sdet_watershed_region_proc::compute_region_image()
       unsigned char val = (unsigned char)(*rit)->I();
       region_image_(c,r) = val;
     }
-  }
   region_image_valid_ = true;
   return true;
 }
