@@ -6,7 +6,8 @@ INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR} )
 
 SET(test_brct_sources
-  test_brct_kalman.cxx
+test_brct_kalman.cxx
+#test_brct.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates test_brct_sources)
