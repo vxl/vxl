@@ -27,6 +27,10 @@
 #include <vcsl/vcsl_graph.h>
 #include <vnl/vnl_math.h> // for pi
 
+#ifdef GNU_LIBSTDCXX_V3
+# warning "this source file makes gcc 3.0 hang"
+int main() { return 0; }
+#else
 //-----------------------------------------------------------------------------
 //: Entry point of the example program
 //-----------------------------------------------------------------------------
@@ -410,3 +414,4 @@ int main(int argc,
   result=0;
   return result;
 }
+#endif
