@@ -402,7 +402,7 @@ MakeAttrHist(vcl_vector<float>& attr_vals)
 	this->ComputeSingleFaceAttributes(false);
 
 	// Set the number of bins as sqrt(n), with a minimum of 20
-	int		num_bins = vcl_max(20, (int)vcl_sqrt(attr_vals.size()));
+	int		num_bins = vcl_max(20, (int)vcl_sqrt( static_cast<float>(attr_vals.size()) ));
 
 	// Get value range
 	float	max_val = 0;
