@@ -171,7 +171,7 @@ graph can be displayed using the 'G' key-press event. The tableau
 graph for this example is shown in Figure 2.  Extra annotations have
 been added for illustration.  This graph is useful for debugging
 complex tableau configurations. If the mouse is clicked above a node in
-the graph, information about the tableau will be streamed to cout.
+the graph, information about the tableau will be streamed to vcl_cout.
 
 @figure
 @image{tableau-hierarchy-annotated,,3in}
@@ -747,7 +747,7 @@ corresponds to @code{vgui/examples/basic07_dialog.cxx}.
 @figure
 @image{dialog-example,,4in}
 @caption{10}
-The dialog menu appears when a menu item is pressed that calls a function containing a dialog.  The dialog displays names and values as well as boolean check boxes. The state of the boxes and values can be changed and when the dialog is dispatched, the altered values are bound to the variables in the dialog specification. In this simple example, the latest values are output to @code{cerr}.
+The dialog menu appears when a menu item is pressed that calls a function containing a dialog.  The dialog displays names and values as well as boolean check boxes. The state of the boxes and values can be changed and when the dialog is dispatched, the altered values are bound to the variables in the dialog specification. In this simple example, the latest values are output to @code{vcl_cerr}.
 @endcaption
 @endfigure
 The following example illustrates these points.
