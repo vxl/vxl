@@ -38,6 +38,7 @@ vul_user_info.cxx
 vul_redirector.cxx
 vul_expand_path.cxx
 vul_root_dir.cxx
+vul_url.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vul_sources)
