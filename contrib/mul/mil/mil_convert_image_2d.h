@@ -12,6 +12,12 @@
 void mil_convert_image_2d(mil_image_2d_of<float>& dest_im,
                        const mil_image_2d_of<vil_byte>& src_im);
 
+
+//: Copys src_im (of bytes) into dest_im (of float) and flips actual data
+void mil_convert_image_2d_flip(mil_image_2d_of<float>& dest_im,
+                       const mil_image_2d_of<vil_byte>& src_im);
+
+
 //: Copys src_im (of float) into dest_im (of byte)
 void mil_convert_image_2d(mil_image_2d_of<vil_byte>& dest_im,
                        const mil_image_2d_of<float>& src_im);

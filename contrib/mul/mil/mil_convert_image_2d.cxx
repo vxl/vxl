@@ -42,6 +42,46 @@ void mil_convert_image_2d(mil_image_2d_of<float>& dest,
 }
 
 
+//: Copies src_im (of bytes) into dest_im (of float) and flips actual data
+void mil_convert_image_2d_flip(mil_image_2d_of<float>& dest,
+                          const mil_image_2d_of<vil_byte>& src)
+{
+  int n = src.n_planes();
+  int nx = src.nx();
+  int ny = src.ny();
+  dest.resize(nx,ny,n);
+  int sxstep=src.xstep();
+  int systep=src.ystep();
+  int dxstep=dest.xstep();
+  int dystep=dest.ystep();
+  for (int i=0;i<n;++i)
+  {
+    const vil_byte* s_row = src.plane(i)+(ny-1)*systep;
+    float* d_row = dest.plane(i);
+
+    for (int y=0;y<ny;++y)
+    {
+      const vil_byte* s = s_row;
+      float * d = d_row;
+
+      for (int x=0;x<nx;++x)
+      {
+        *d = float(*s);
+        s+=sxstep;
+        d+=dxstep;
+      }
+
+      s_row -= systep;
+      d_row += dystep;
+    }
+  }
+  // not sure about this ???
+  dest.setWorld2im(src.world2im());
+}
+
+
+
+
 //: Converts float plane image to vil_byte and stretches to 0-255 range
 void mil_convert_image_2d_stretch(mil_image_2d_of<vil_byte>& dest,
                           const mil_image_2d_of<float>& src)
