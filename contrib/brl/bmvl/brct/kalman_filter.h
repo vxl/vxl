@@ -1,9 +1,11 @@
-// kalman_filter.h: interface for the kalman_filter class.
+//:
+// \file
+// \brief interface for the kalman_filter class.
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_KALMAN_FILTER_H__D477F484_3759_4092_8BCA_C3276CD534D9__INCLUDED_)
-#define AFX_KALMAN_FILTER_H__D477F484_3759_4092_8BCA_C3276CD534D9__INCLUDED_
+#ifndef brct_kalman_filter_h_
+#define brct_kalman_filter_h_
 
 #if _MSC_VER > 1000
 #pragma once
@@ -14,43 +16,43 @@
 #include <vnl/vnl_matrix.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 
-class kalman_filter  
+class kalman_filter
 {
-public:
+ public:
   //: initialize the kalman filter with
   //virtual kalman_state inc(double dt);
-public:
-	void read_data(char* fname);
-	void inc();
-	void update_covariant();
-	vnl_vector_fixed<double, 2> projection(vnl_double_3x4 &P, vnl_vector_fixed<double, 3> &X);
-	void prediction();
-	kalman_filter(char* fname);
-	virtual ~kalman_filter();
+ public:
+  void read_data(char* fname);
+  void inc();
+  void update_covariant();
+  vnl_vector_fixed<double, 2> projection(vnl_double_3x4 &P, vnl_vector_fixed<double, 3> &X);
+  void prediction();
+  kalman_filter(char* fname);
+  virtual ~kalman_filter();
 
-protected:
-	void init_velocity();
-	void adjust_state_vector(vnl_vector_fixed<double, 2> &pred, vnl_vector_fixed<double, 2> &meas);
-	
+ protected:
+  void init_velocity();
+  void adjust_state_vector(vnl_vector_fixed<double, 2> const& pred, vnl_vector_fixed<double, 2> const& meas);
+
   //: set linearized observation matrix
-	void set_H_matrix(vnl_double_3x4 &P, vnl_vector_fixed<double, 3> &X);
+  void set_H_matrix(vnl_double_3x4 &P, vnl_vector_fixed<double, 3> &X);
 
   //: computer projective matrix from predicted position
-  vnl_double_3x4	get_projective_matrix();
+  vnl_double_3x4 get_projective_matrix();
 
-	void init_covariant_matrix();
-	void init_cam_intrinsic();
-	void init_observes(vcl_vector<vnl_matrix<double> > &input);
-	void init_state_vector();
-	void init_transit_matrix();
+  void init_covariant_matrix();
+  void init_cam_intrinsic();
+  void init_observes(vcl_vector<vnl_matrix<double> > &input);
+  void init_state_vector();
+  void init_transit_matrix();
 
-private:
+ private:
   vcl_vector<vnl_vector_fixed<double, 3> > Xl_;
   vcl_vector<vnl_matrix<double> > observes_;
 
   //: each element of the vector represents a projection of the same 3D curves.
   vcl_vector<vdgl_digital_curve_sptr> curves_;
-  
+
   vcl_vector<vnl_double_3x4> motions_;
   //: current frame position in history pool
   int cur_pos_;
@@ -60,7 +62,7 @@ private:
 
   //: transit matrix
   vnl_matrix_fixed<double, 6, 6> A_ ;
-  
+
   //: state vector
   vnl_vector_fixed<double, 6> X_;
 
@@ -70,7 +72,7 @@ private:
   //: linearized stat vector projective matrix
   vnl_matrix_fixed<double, 2, 6> H_;
 
-  //: covariant matrix of state vector 
+  //: covariant matrix of state vector
   vnl_matrix_fixed<double, 6, 6> P_;
 
   //: constrain weighting matrix
@@ -85,7 +87,6 @@ private:
   //: camera intrinsic parameters
   vnl_matrix_fixed<double, 3, 3> M_in_;
   double dt_ ;
-
 };
 
-#endif // !defined(AFX_KALMAN_FILTER_H__D477F484_3759_4092_8BCA_C3276CD534D9__INCLUDED_)
+#endif // brct_kalman_filter_h_

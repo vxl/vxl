@@ -1,40 +1,40 @@
-//this-sets-emacs-to-*-c++-*-mode
+// This is brl/bbas/bgui/bgui_vsol_soview2D.h
 #ifndef bgui_vsol_soview2D_h_
 #define bgui_vsol_soview2D_h_
 //--------------------------------------------------------------------------------
 //:
 // \file
-// \brief A collection of vgui_soview2D objects 
+// \brief A collection of vgui_soview2D objects
 // \author
 //   J.L. Mundy
 //
 // \verbatim
 //  Modifications:
 //   J.L. Mundy June 2, 2003      Initial version.
-//	  Amir Tamrakar June 06, 2003  Added soview for vsol_polyline_2d.
+//   Amir Tamrakar June 06, 2003  Added soview for vsol_polyline_2d.
 // \endverbatim
 //--------------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vcl_iosfwd.h>
 
-#include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
-#include <vsol/vsol_conic_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
+#include <vdgl/vdgl_digital_curve_sptr.h>
+#if 0 // currently not needed
+#include <vsol/vsol_point_2d_sptr.h>
+#include <vsol/vsol_conic_2d_sptr.h>
 #include <vsol/vsol_rectangle_2d_sptr.h>
 #include <vsol/vsol_triangle_2d_sptr.h>
 #include <vsol/vsol_group_2d_sptr.h>
-#include <vdgl/vdgl_digital_curve_sptr.h>
+#endif
 
 #include <vgui/vgui_soview2D.h>
 #include <vgui/vgui_style.h>
 
-
-//: vsol_point_2d
-// This view is essentially the same as a point the only difference
-// is style. Probably move to a geometry tableau later
-class bgui_vsol_soview2D_point : public vgui_soview2D_point 
+//: This view is essentially the same as a point, the only difference is style.
+// Probably move to a geometry tableau later
+class bgui_vsol_soview2D_point : public vgui_soview2D_point
 {
  public:
   //: Constructor - creates a default vsol_point_2d view
@@ -45,7 +45,6 @@ class bgui_vsol_soview2D_point : public vgui_soview2D_point
 
   //: Returns the type of this class ('bgui_vsol_soview2D_point').
   vcl_string type_name() const { return "bgui_vsol_soview2D_point"; }
-
 };
 
 //: vsol_line_2d
@@ -79,7 +78,7 @@ class bgui_vsol_soview2D_polyline : public vgui_soview2D_linestrip
   vcl_string type_name() const { return "bgui_vsol_soview2D_polyline"; }
 };
 
-//: vsol_polygon_2d 
+//: vsol_polygon_2d
 class bgui_vsol_soview2D_polygon : public vgui_soview2D_polygon
 {
  public:
@@ -115,7 +114,7 @@ class bgui_vsol_soview2D_line_group : public vgui_soview2D_group
 
 //: vdgl_dotted_digital_curve
 // This one displays points
-class bgui_vsol_soview2D_dotted_digital_curve : public vgui_soview2D_group 
+class bgui_vsol_soview2D_dotted_digital_curve : public vgui_soview2D_group
 {
  public:
   //: Constructor - creates a default vdgl_digital_curve view
@@ -164,7 +163,5 @@ class bgui_vsol_soview2D_polygon_group : public vgui_soview2D_group
   //: Returns the type of this class ('bgui_vsol_soview2D_polygon_group').
   vcl_string type_name() const { return "bgui_vsol_soview2D_polygon_group"; }
 };
-
-
 
 #endif // bgui_vsol_soview2D_h_

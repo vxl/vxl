@@ -10,11 +10,6 @@
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
 #include <vsol/vsol_polyline_2d.h>
-#include <vsol/vsol_conic_2d.h>
-#include <vsol/vsol_polygon_2d.h>
-#include <vsol/vsol_rectangle_2d.h>
-#include <vsol/vsol_triangle_2d.h>
-#include <vsol/vsol_group_2d.h>
 
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator.h>
@@ -58,7 +53,7 @@ void bgui_vsol2D_tableau::init()
 // Provide roaming highlighting for soviews in the tableau.
 // As the mouse moves the soview closest to the mouse is
 // changed to the highlighted style.
-
+//
 // vgui_displaylist2D_tableau::motion(..) has a mechanism for
 // highlighting the nearest object but it doesn't work.
 
@@ -80,7 +75,7 @@ bool bgui_vsol2D_tableau::handle(vgui_event const &e)
 
       //get the soview that is closest to the mouse
       vgui_soview2D* high_so = (vgui_soview2D*)get_highlighted_soview();
-      
+
       if (high_so && high_so->get_style())
         {
           //replace the old soview with the currently closest view
@@ -122,7 +117,7 @@ bgui_vsol2D_tableau::add_vsol_line_2d(vsol_line_2d_sptr const& line)
   return obj;
 }
 
-bgui_vsol_soview2D_polyline* 
+bgui_vsol_soview2D_polyline*
 bgui_vsol2D_tableau::add_vsol_polyline_2d(vsol_polyline_2d_sptr const& pline)
 {
   bgui_vsol_soview2D_polyline* obj =
@@ -176,7 +171,7 @@ add_spatial_object(vsol_spatial_object_2d_sptr const& sos)
       vsol_point_2d_sptr p = sos->cast_to_point();
       this->add_vsol_point_2d(p);
     }
-  } 
+  }
 
   if (sos->cast_to_curve()) {
     if (sos->cast_to_curve()->cast_to_digital_curve())
@@ -241,8 +236,8 @@ void bgui_vsol2D_tableau::set_vsol_line_2d_style(const float r, const float g,
   style_map_[seg.type_name()]=sty;
 }
 
-void bgui_vsol2D_tableau::set_vsol_polyline_2d_style(const float r, const float g, 
-					             const float b, const float line_width)
+void bgui_vsol2D_tableau::set_vsol_polyline_2d_style(const float r, const float g,
+                                                     const float b, const float line_width)
 {
   bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
   bgui_vsol_soview2D_polyline pline;

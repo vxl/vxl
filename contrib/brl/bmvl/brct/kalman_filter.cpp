@@ -4,14 +4,16 @@
 
 #include "kalman_filter.h"
 #include <vcl_list.h>
+#include <vcl_fstream.h>
+#include <vcl_cassert.h>
+#include <vcl_cstdio.h> // for sscanf()
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <mvl/FMatrix.h>
+#include <vnl/vnl_math.h> // for pi
 #include <vnl/algo/vnl_matrix_inverse.h>
-#include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vdgl/vdgl_edgel.h>
-//#include <vdgl/vdgl_edgel_sptr.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
 #include <vdgl/vdgl_interpolator_sptr.h>
@@ -45,23 +47,22 @@ kalman_filter::kalman_filter(char* fname)
 
 kalman_filter::~kalman_filter()
 {
-
 }
 
 void kalman_filter::init_transit_matrix()
 {
-  for(int i=0; i<6; i++)
-    for(int j=0; j<6; j++)
+  for (int i=0; i<6; i++)
+    for (int j=0; j<6; j++)
       A_[i][j] = 0.0;
 
-  for(int i = 0; i<6; i++)
+  for (int i = 0; i<6; i++)
     A_[i][i] = 1;
 
-  for(int i=0; i<3; i++)
+  for (int i=0; i<3; i++)
     A_[i][i+3] = dt_;
 
-  for(int i=0; i<6; i++){
-    for(int j=0; j<6; j++)
+  for (int i=0; i<6; i++) {
+    for (int j=0; j<6; j++)
       vcl_cout<<A_[i][j]<<' ';
     vcl_cout<<'\n';
   }
@@ -70,7 +71,6 @@ void kalman_filter::init_transit_matrix()
 
 void kalman_filter::init_state_vector()
 {
-
   // initialize the velocity direction
   init_velocity();
   vnl_double_3 T;
@@ -82,12 +82,12 @@ void kalman_filter::init_state_vector()
   vnl_double_3x4 E1, E2;
   E1[0][0] = 1;       E1[0][1] = 0;        E1[0][2] = 0;          E1[0][3] = 0;
   E1[1][0] = 0;       E1[1][1] = 1;        E1[1][2] = 0;          E1[1][3] = 0;
-  E1[2][0] = 0;       E1[2][1] = 0;        E1[2][2] = 1;          E1[2][3] = 0;                         
-  
+  E1[2][0] = 0;       E1[2][1] = 0;        E1[2][2] = 1;          E1[2][3] = 0;
+
   E2[0][0] = 1;       E2[0][1] = 0;        E2[0][2] = 0;          E2[0][3] = T[0];
   E2[1][0] = 0;       E2[1][1] = 1;        E2[1][2] = 0;          E2[1][3] = T[1];
   E2[2][0] = 0;       E2[2][1] = 0;        E2[2][2] = 1;          E2[2][3] = T[2];
-  
+
   vnl_double_3x4 P1 = M_in_*E1, P2 = M_in_*E2;
 
 
@@ -111,43 +111,47 @@ void kalman_filter::init_state_vector()
   vdgl_digital_curve_sptr dc1 = curves_[1];
   vdgl_interpolator_sptr interp1 = dc1->get_interpolator();
   vdgl_edgel_chain_sptr  ec1 = interp1->get_edgel_chain();
-    
+
   int size0 = ec0->size();
   int size1 = ec1->size();
   int npts = 2* ((size0 < size1) ? size0 : size1); // interpolate 2 times more
-      
+
   vcl_vector<vgl_point_3d<double> > pts_3d;
-  for(int i=0; i<npts; i++){
+  for (int i=0; i<npts; i++)
+  {
     double index = 1.0*i/npts;
     vgl_homg_point_2d<double> p1(dc0->get_x(index),dc0->get_y(index));
     vgl_point_2d<double> x1(p1);
     int x0_index = bdgl_curve_algs:: closest_point(ec0, x1.x(), x1.y());
     double angle0 = (*ec0)[x0_index].get_theta();
-    
+
     vgl_line_2d<double> lr(FM.image2_epipolar_line(p1));
-    
-    // get rid of any point whose graident is perpendicule to the epipole line
+
+    // get rid of any point whose gradient is perpendicule to the epipole line
     double nx = lr.a(), ny = lr.b();
-    nx = nx / sqrt(nx*nx + ny*ny);
-    ny = ny / sqrt(nx*nx + ny*ny);
-    if(fabs( nx*cos(angle0*3.14/180) + ny*sin(angle0*3.14/180) )< 0.95){   
+    nx = nx / vcl_sqrt(nx*nx + ny*ny);
+    ny = ny / vcl_sqrt(nx*nx + ny*ny);
+    if (vcl_fabs( nx*vcl_cos(angle0*vnl_math::pi/180) + ny*vcl_sin(angle0*vnl_math::pi/180) )< 0.95)
+    {
       // getting the intersection point
       vgl_point_2d<double> p2;
       vcl_vector<vgl_point_2d<double> > pts;
       bdgl_curve_algs::intersect_line(dc1, lr, pts);
-      
+
       // find the correspoinding point
       double dist = 1e10; // big number
       bool flag = false;
-      for(int j=0; j<pts.size(); j++){
+      for (unsigned int j=0; j<pts.size(); j++)
+      {
         vgl_homg_point_2d<double> temp(pts[j].x(), pts[j].y());
-        vgl_point_2d<double> x2(temp);
-        
+
         int x1_index = bdgl_curve_algs:: closest_point(ec1, pts[j].x(), pts[j].y());
         double angle1 = (*ec1)[x1_index].get_theta();
-        
+
         double dist_p1p2 = vgl_homg_operators_2d<double>::distance_squared(p1, temp);
-        if(fabs(angle1-angle0)<90 && dist > dist_p1p2 && fabs(nx*cos(angle1*3.14/180) + ny*sin(angle1*3.14/180))<0.95 ){ // make sure it filted out lines parallel epipole lines.
+        if (vcl_fabs(angle1-angle0)<90 && dist > dist_p1p2 &&
+            vcl_fabs(nx*vcl_cos(angle1*vnl_math::pi/180) + ny*vcl_sin(angle1*vnl_math::pi/180))<0.95 )
+        { // make sure it filters out lines parallel to epipole lines.
           p2 = temp;
           flag = true;
           dist = dist_p1p2;
@@ -155,22 +159,20 @@ void kalman_filter::init_state_vector()
         else
           continue;
       }
-      
-      
-      if(flag){ // if have corresponding
-        vgl_point_2d<double> x2(p2);          
+
+      if (flag) { // if have corresponding
+        vgl_point_2d<double> x2(p2);
         vgl_point_3d<double> point_3d = brct_algos::triangulate_3d_point(x1, P1, x2, P2);
         pts_3d.push_back(point_3d);
-      }// end of if finding correspoinding point   
+      }
     }
   }
 
   num_points_ = pts_3d.size();
-  
 
   //get center of the point
   double xc=0, yc=0, zc=0;
-  for(int i=0; i<num_points_; i++){
+  for (int i=0; i<num_points_; i++) {
     xc += pts_3d[i].x();
     yc += pts_3d[i].y();
     zc += pts_3d[i].z();
@@ -182,17 +184,15 @@ void kalman_filter::init_state_vector()
 
   Xl_.resize(num_points_);
 
-  for(int i=0; i<num_points_; i++){
+  for (int i=0; i<num_points_; i++) {
     Xl_[i][0] = pts_3d[i].x() - xc;
     Xl_[i][1] = pts_3d[i].y() - yc;
     Xl_[i][2] = pts_3d[i].z() - zc;
   }
-  
+
   X_[0] = xc;
   X_[1] = yc;
   X_[2] = zc;
-
-
 }
 
 void kalman_filter::init_observes(vcl_vector<vnl_matrix<double> > &input)
@@ -204,34 +204,34 @@ void kalman_filter::init_observes(vcl_vector<vnl_matrix<double> > &input)
   curves_.resize(queue_size_);
   motions_.resize(queue_size_);
 
-  for(int i=0; i<queue_size_; i++)
+  for (int i=0; i<queue_size_; i++)
     observes_[i] = input[i];
 }
 
 void kalman_filter::init_covariant_matrix()
 {
   // initialize P
-  for(int i=0; i<6; i++)
-    for(int j=0; j<6; j++)
+  for (int i=0; i<6; i++)
+    for (int j=0; j<6; j++)
       P_[i][j] = 0.0;
 
-  for(int i=3; i<6; i++)
+  for (int i=3; i<6; i++)
     P_[i][i] = 1;
 
   // initialize Q
-  for(int i=0; i<6; i++)
-    for(int j=0; j<6; j++)
+  for (int i=0; i<6; i++)
+    for (int j=0; j<6; j++)
       Q_[i][j] = 0.0;
 
-  for(int i=3; i<6; i++)
+  for (int i=3; i<6; i++)
     Q_[i][i] = 1;
 
   // initialize R
-  for(int i=0; i<2; i++)
-    for(int j=0; j<2; j++)
+  for (int i=0; i<2; i++)
+    for (int j=0; j<2; j++)
       R_[i][j] = 0;
-  
-  for(int i=0; i<2; i++)
+
+  for (int i=0; i<2; i++)
     R_[i][i] = 1;
 }
 
@@ -245,25 +245,23 @@ void kalman_filter::init_cam_intrinsic()
 
 void kalman_filter::prediction()
 {
-
-
+  // TODO
 }
 
 vnl_double_3x4 kalman_filter::get_projective_matrix()
 {
   vnl_double_3x4 M_ex;
 
-  for(int i=0; i<3; i++)
-    for(int j=0; j<3; j++)
+  for (int i=0; i<3; i++)
+    for (int j=0; j<3; j++)
       M_ex[i][j] = 0;
 
-  for(int i=0; i<3; i++)
+  for (int i=0; i<3; i++)
     M_ex[i][i] = 1;
 
-
-  for(int i=0; i<3; i++)
+  for (int i=0; i<3; i++)
     M_ex[i][3] = X_pred_[i];
- 
+
   return M_in_*M_ex;
 }
 
@@ -271,38 +269,37 @@ void kalman_filter::set_H_matrix(vnl_double_3x4 &P, vnl_vector_fixed<double, 3> 
 {
   // compute \sum {P_{4k} X_k } + P_{44}
   double temp = 0;
-  for(int k = 0; k<3; k++)
+  for (int k = 0; k<3; k++)
     temp += P[3][k]*X[k];
   temp += P[3][3];
 
-  for(int i=0; i<2; i++){
-
+  for (int i=0; i<2; i++)
+  {
     // \sum{P_{ik} X_4} + P_{i4}
     double t = 0;
-    for(int k=0; k<3; k++)
+    for (int k=0; k<3; k++)
       t += P[i][k] * X[k];
     t += P[i][3];
-      
-    for(int j=0; j<3; j++)
+
+    for (int j=0; j<3; j++)
       H_[i][j] = P[i][j] / temp - t * P[3][j] / (temp*temp);
-      
-    for(int j=3; j<6; j++)
+
+    for (int j=3; j<6; j++)
         H_[i][j] = 0;
   }
-  
 }
 
 vnl_vector_fixed<double, 2> kalman_filter::projection(vnl_double_3x4 &P, vnl_vector_fixed<double, 3> &X)
 {
     vnl_vector_fixed<double, 2> z;
-    for(int i=0; i<2; i++){
-      double t0 =0;  
-      for(int k=0; k<3; k++)
+    for (int i=0; i<2; i++) {
+      double t0 =0;
+      for (int k=0; k<3; k++)
         t0 += P[i][k]*X[k];
       t0 += P[i][3];
 
       double t1 = 0;
-      for(int k=0; k<3; k++)
+      for (int k=0; k<3; k++)
         t1 += P[3][k]*X[k];
       t1 += P[3][3];
 
@@ -322,18 +319,19 @@ void kalman_filter::inc()
 {
   //
   // prediction step:
-  // 
+  //
   X_pred_ = A_*X_;
 
   // adjustion
   vnl_matrix<double> & cur_measures = observes_[cur_pos_];
 
-  for(int i=0; i<num_points_; i++){
+  for (int i=0; i<num_points_; i++)
+  {
     vnl_double_3x4 P = get_projective_matrix();
 
     vnl_vector_fixed<double, 3> X;
-    
-    for(int j=0; j<3; j++)
+
+    for (int j=0; j<3; j++)
       X[j] = Xl_[j][i] + X_[j];
 
     set_H_matrix(P, X);
@@ -341,14 +339,12 @@ void kalman_filter::inc()
     update_covariant();
 
     vnl_vector_fixed<double, 2> z;
-    
-    for(int j=0; i<2; i++)
+
+    for (int j=0; i<2; i++)
       z[j] = cur_measures[j][i];
 
     adjust_state_vector(projection(P, X), z);
-
   }
-
 
   cur_pos_ = (cur_pos_ ++) % queue_size_;
 
@@ -356,19 +352,21 @@ void kalman_filter::inc()
   motions_[cur_pos_] = get_projective_matrix();
   X_ = X_pred_;
 
-  if(memory_size_ < queue_size_)
+  if (memory_size_ < queue_size_)
     memory_size_++;
 
   // update local coordinates
   vcl_vector<vnl_double_3x4 > Ps;
   vcl_vector<vnl_vector_fixed<double, 2> > pts;
-  
+
   double xc=0, yc=0, zc=0;
-  for(int i=0; i<num_points_; i++){
+  for (int i=0; i<num_points_; i++)
+  {
     Ps.clear();
     pts.clear();
 
-    for(int j=0; j<memory_size_; j++){
+    for (int j=0; j<memory_size_; j++)
+    {
       vnl_vector_fixed<double, 2> pt;
       pt[0] = observes_[j][0][j];
       pt[1] = observes_[j][1][j];
@@ -392,53 +390,52 @@ void kalman_filter::inc()
   yc /= num_points_;
   zc /= num_points_;
 
-  for(int i=0; i<num_points_; i++){
+  for (int i=0; i<num_points_; i++)
+  {
     Xl_[i][0] -= xc;
     Xl_[i][1] -= yc;
     Xl_[i][2] -= zc;
-  }  
-  
-
+  }
 }
 
-void kalman_filter::adjust_state_vector(vnl_vector_fixed<double, 2> &pred, vnl_vector_fixed<double, 2> &meas)
+void kalman_filter::adjust_state_vector(vnl_vector_fixed<double, 2> const& pred, vnl_vector_fixed<double, 2> const& meas)
 {
-  X_pred_ += K_*(meas - pred); 
+  X_pred_ += K_*(meas - pred);
 }
 
 void kalman_filter::read_data(char *fname)
 {
   vcl_ifstream fp(fname);
-  
-  
+
   char buffer[1000];
   int MAX_LEN=1000;
   int numEdges;
-  
+
   double x,y, dir , conf;
-  while (fp.getline(buffer,MAX_LEN)) 
-  {    
+  while (fp.getline(buffer,MAX_LEN))
+  {
     //ignore comment lines and empty lines
-    if (strlen(buffer)<2 || buffer[0]=='#')
+    if (vcl_strlen(buffer)<2 || buffer[0]=='#')
       continue;
     //read the line with the contour count info
-    
+
     //read the beginning of a contour block
-    
-    if (!strncmp(buffer, "[BEGIN CONTOUR]", sizeof("[BEGIN CONTOUR]")-1)){
-      
+
+    if (!vcl_strncmp(buffer, "[BEGIN CONTOUR]", sizeof("[BEGIN CONTOUR]")-1))
+    {
       //read in the next line to get the number of edges in this contour
       fp.getline(buffer,MAX_LEN);
-      
-      sscanf(buffer,"EDGE_COUNT=%d",&(numEdges));
-      
+
+      vcl_sscanf(buffer,"EDGE_COUNT=%d",&(numEdges));
+
       //instantiate a new contour structure here
       vdgl_edgel_chain_sptr ec=new vdgl_edgel_chain;
-      
-      for (int j=0; j<numEdges;j++){
+
+      for (int j=0; j<numEdges;j++)
+      {
         //read in all the edge information
         fp.getline(buffer,MAX_LEN);
-        sscanf(buffer," [%lf, %lf]   %lf %lf  ", &(x), &(y), &(dir), &(conf));
+        vcl_sscanf(buffer," [%lf, %lf]   %lf %lf  ", &(x), &(y), &(dir), &(conf));
         vdgl_edgel e;
         //vcl_cout<<"\n " <<x;
         e.set_x(x);
@@ -447,52 +444,43 @@ void kalman_filter::read_data(char *fname)
         e.set_grad(0);
         ec->add_edgel(e);
         //add this edge to the current contour
-        
       }
 
       vdgl_interpolator_sptr intp=new vdgl_interpolator_linear(ec);
       vdgl_digital_curve_sptr curve= new vdgl_digital_curve(intp);
-      
-      vcl_cout<<"\n the length of the curve is : :"<<curve->length();	
+
+      vcl_cout<<"\n the length of the curve is : :"<<curve->length();
       curves_.push_back(curve);
       //read in the end of contour block
       fp.getline(buffer,MAX_LEN);
-      
+
       //make sure that this is the end marker
-      if (strncmp(buffer, "[END CONTOUR]", sizeof("[END CONTOUR]")-1))
-      {	
-        assert(false);
-        
-      }
-      
+      assert(!vcl_strncmp(buffer, "[END CONTOUR]", sizeof("[END CONTOUR]")-1));
+
       continue;
     }
-  }          
-  
-  
+  }
 }
 
 void kalman_filter::init_velocity()
 {
-
   vcl_list<vgl_homg_line_2d<double> > lines;
 
-/*
+#if 0
   vnl_matrix<double> &img0 = observes_[0], &img1 = observes_[1];
 
 
-  for(int i=0; i< num_points_; i++){
+  for (int i=0; i< num_points_; i++)
+  {
+    vgl_homg_line_2d<double> l(vgl_homg_point_2d<double>(img0[0][i],img0[1][i]),
+                               vgl_homg_point_2d<double>(img1[0][i],img1[1][i]));
 
-    vgl_homg_line_2d<double> l(vgl_homg_point_2d<double>(img0[0][i],img0[1][i]), \
-                              vgl_homg_point_2d<double>(img1[0][i],img1[1][i]));
- 
     lines.push_back(l);
   }
-  
-*/
+#endif // 0
 
   //
-  // This is a temporialy solution
+  // This is a temporary solution
   //
   vgl_homg_point_2d<double> mp00(179, 253), mp01(364, 254), mp02(463, 306), mp03(416, 202), mp04(402, 192);
   vgl_homg_point_2d<double> mp10(235, 267), mp11(450, 271), mp12(566, 331), mp13(505, 212), mp14(488, 202);
@@ -515,21 +503,19 @@ void kalman_filter::init_velocity()
   F[1][0] = e[2]; F[1][1] = 0;     F[1][2] = -e[0];
   F[2][0] = -e[1];  F[2][1] = e[0]; F[2][2] = 0;
 
-  FMatrix Fmat = F;
-
+//FMatrix Fmat(F);
   init_cam_intrinsic();
 
-  // get tanslation
+  // get translation
   double trans_dist = 1; // 105mm
   vnl_double_3 T = vnl_matrix_inverse<double>(M_in_) * e;
-  T /= sqrt(T[0]*T[0] + T[1]*T[1] + T[2]*T[2]);
+  T /= vcl_sqrt(T[0]*T[0] + T[1]*T[1] + T[2]*T[2]);
   T *= trans_dist;
 
   vcl_cout<<T;
 
-  //seting velocity party of the state vector
+  //setting velocity part of the state vector
   X_[3] = T[0];
   X_[4] = T[1];
   X_[5] = T[2];
-  
 }
