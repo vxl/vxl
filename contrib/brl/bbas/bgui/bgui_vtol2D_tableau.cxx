@@ -33,11 +33,16 @@ void bgui_vtol2D_tableau::init()
   //such as set_foreground.  Probably though we shouldn't use those
   //since normal users wouldn't want to change the color of standard
   //topology items.
+  bgui_style_sptr digital_curve_style = 
+    new bgui_style(0.8, 0.0, 0.8, 3.0, 0.0);
   bgui_style_sptr vertex_style = new bgui_style(1.0, 0.0, 0.0, 3.0, 0.0);
   bgui_style_sptr edge_style = new bgui_style(0.5, 0.5, 0.0, 0.0, 3.0);
   bgui_style_sptr edge_group_style = new bgui_style(0.0, 1.0, 0.0, 0.0, 3.0);
   bgui_style_sptr face_style = new bgui_style(0.0, 1.0, 0.0, 0.0, 3.0);
   //put them into the map
+  bgui_vtol_soview2D_digital_curve dc;
+  style_map_[dc.type_name()]=digital_curve_style;
+
   bgui_vtol_soview2D_vertex sv;
   style_map_[sv.type_name()]=vertex_style;
 
