@@ -25,12 +25,12 @@ SET(vvid_sources
 IF(HAS_CMU1394CAMERA)
  ADD_DEFINITIONS(-DHAS_CMU1394CAMERA)
  SET(cmu_camera_sources
-  cmu_1394_camera_params.cxx   cmu_1394_camera_params.h
-  cmu_1394_camera.cxx          cmu_1394_camera.h
-  vvid_live_video_tableau.cxx  vvid_live_video_tableau.h
-                               vvid_live_video_tableau_sptr.h
-  vvid_live_video_manager.cxx  vvid_live_video_manager.h
-  vvid_live_stereo_manager.cxx vvid_live_stereo_manager.h
+     cmu_1394_camera_params.cxx   cmu_1394_camera_params.h
+     cmu_1394_camera.cxx          cmu_1394_camera.h
+     vvid_live_video_tableau.cxx  vvid_live_video_tableau.h
+                                  vvid_live_video_tableau_sptr.h
+     vvid_live_video_manager.cxx  vvid_live_video_manager.h
+     vvid_live_stereo_manager.cxx vvid_live_stereo_manager.h
  )
 ENDIF(HAS_CMU1394CAMERA)
 
@@ -43,7 +43,7 @@ ELSE(HAS_CMU1394CAMERA)
  ADD_LIBRARY(vvid ${vvid_sources})
 ENDIF(HAS_CMU1394CAMERA)
 
-LINK_LIBRARIES( vvid vpro sdet gevd vtol brip bgui vgui vidl vbl vul vil1 bdgl )
+LINK_LIBRARIES( vvid vpro sdet gevd bgui vtol vgui bdgl brip vidl vbl vul vil1 )
 
 # the main executables
 SUBDIRS(bin)
