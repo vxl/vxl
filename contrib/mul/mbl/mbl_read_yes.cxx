@@ -8,7 +8,7 @@
 // \brief Get yes or no response from keyboard
 
 #include <vcl_iostream.h>
-#include <cstdio>
+#include <vcl_cstdio.h>
 #include <mbl/mbl_read_yes.h>
 
 bool mbl_read_yes()
@@ -21,9 +21,9 @@ bool mbl_read_yes()
       // to work properly. Without this, the
       // "Continue?" vcl_string isn't displayed
       // until return pressed.
-   char c;
+   int c;
    bool r = false;
-   while ((c=getchar())!='\n') {   /* Loop till return pressed */
+   while ((c=vcl_getchar())!='\n') {   /* Loop till return pressed */
       if (c=='y' || c=='Y')
          r = true;  /* If a Y is entered, return true */
    }
@@ -34,9 +34,9 @@ bool mbl_read_no()
 {
    vcl_cout<<" (Y) ";
    vcl_cout.flush();  // This forces display of any previous text.
-   char c;
+   int c;
    bool r = false;
-   while ((c=getchar())!='\n') {   /* Loop till return pressed */
+   while ((c=vcl_getchar())!='\n') {   /* Loop till return pressed */
       if (c=='n' || c=='N')
          r = true;  /* If a N is entered, return true */
    }
