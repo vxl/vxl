@@ -62,8 +62,8 @@ protected:
   //members
   bool debug_;//debug flag
   bool regions_valid_;      //process state flag
-  int expand_scale_;
-  int burt_adelson_factor_;
+  float expand_scale_;
+  float burt_adelson_factor_;
   vil_image image_;  //input image
   gevd_bufferxy* buf_;
   //lung_roi_proc_ref roi_proc_; //Lung roi processor
