@@ -61,14 +61,14 @@ private:
   // super and sub
   vgui_glut_adaptor *super; // 0 if none.
   vcl_vector<vgui_glut_adaptor*> sub_contexts;
-
+  
   // popup things
   friend struct vgui_glut_popup_impl;
   vgui_glut_popup_impl *popup;
   void make_popup();
   static void pre_menu_hook(int );
-  static void queue_command(vgui_command *);
-
+  //static void queue_command(vgui_command *);
+  
   // dynamic callbacks :
   virtual void         display();
   virtual void overlay_display();
@@ -99,7 +99,7 @@ private:
   static void  passive_motion_callback(int x,int y);
   static void           entry_callback(int);
   static void      visibility_callback(int state);
-  static void            idle_callback();
+  //static void            idle_callback();
   static void           timer_callback(int);
   static void         special_callback(int,int,int);
   static void     keyboard_up_callback(unsigned char,int,int);

@@ -32,4 +32,10 @@ private:
   static int count;
 };
 
+// Call this function to have a command queued for execution
+// some time in the future.
+struct vgui_command;
+struct vgui_glut_adaptor;
+void vgui_glut_queue_command(vgui_glut_adaptor *, vgui_command *);
+
 #endif // vgui_impl_glut_h_
