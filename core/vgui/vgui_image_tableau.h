@@ -44,6 +44,10 @@ public:
   //  a vil1_image, only if the filename was given to the constructor.
   vcl_string file_name() const;
 
+  //: Set the filename of the loaded image
+  //  It could be used to identify a specific image
+  void set_file_name( const vcl_string & fn ) { name_ = fn; }
+  
   //: Returns a nice version of the name, including details of the image file.
   vcl_string pretty_name() const;
 
@@ -58,6 +62,13 @@ public:
 
   //: Make the given image view, the image rendered by this tableau.
   virtual void set_image_view( vil_image_view_base const& img );
+
+  //: Make image loaded from the given file, the image rendered by this tableau.
+  //
+  // The image will be stored as a vil_image_view_base, and thus can be
+  // retrieved with get_image_view() but not with get_image().
+  //
+  virtual void set_image_view( char const* filename );
 
   //: Make image loaded from the given file, the image rendered by this tableau.
   //
