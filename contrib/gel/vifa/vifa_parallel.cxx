@@ -212,8 +212,8 @@ map_gaussian(float&  max_angle,
   // Skip histograms that are empty
   if (local_max_angle != -1.0)
   {
-    float  min_residual;
-    float  min_index;
+    float  min_residual = 0.f; // dummy initialisation
+//  int    min_index = -1; // dummy initialisation
 
     for (float j=-(n_sigma+1); j<=(n_sigma+1); j++)
     {
@@ -264,15 +264,14 @@ map_gaussian(float&  max_angle,
         }
 
         // Set min_residual the first time thru
-        if (((set_min_res_flag) || (sample_sum < min_residual)) &&
-          (sample_sum != 0))
+        if ((set_min_res_flag || sample_sum < min_residual) && sample_sum != 0)
         {
           set_min_res_flag = false;
           min_residual = sample_sum;
           std_dev = local_std_dev;
           max_angle = new_center;
           scale = local_scale;
-          min_index = i;
+//        min_index = i;
 
           // vcl_cout << "*** ";
         }
