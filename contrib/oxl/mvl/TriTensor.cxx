@@ -669,7 +669,8 @@ TriTensor TriTensor::premultiply3(const vnl_matrix<double>& M) const
 // ${\tt C}_{v} l_v = \hat l_v$ describes the transformation of each image plane under
 // a planar homography, and $l_1 = T l_2 l_3$ describes the action of this TriTensor, then
 // this routine computes $\hat T$ such that $\hat l_1 = \hat T \hat l_2 \hat l_3$.
-// \par Specifically $\hat T = T.\mbox{decondition}(C_1^{-1}, C_2, C_3)$ is the
+//
+// Specifically $\hat T = T.\mbox{decondition}(C_1^{-1}, C_2, C_3)$ is the
 // transformed tensor.  Note that unless transfer is via Hartley-Sturm, the deconditioned
 // tensor will not be covariant with the conditioned one.
 TriTensor TriTensor::condition(vnl_matrix<double> const& line_1_denorm,
