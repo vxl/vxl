@@ -1,19 +1,14 @@
 #ifndef vil_image_h_
 #define vil_image_h_
 #ifdef __GNUC__
-#pragma interface
+#pragma interface "vil_image"
 #endif
 /*
   fsm@robots.ox.ac.uk
 */
 
 #include <vcl/vcl_iosfwd.h>
-
 #include <vil/vil_image_impl.h>
-
-class vil_image;
-
-#define VIL_IMAGE_USE_SAFETY_NET (1)
 
 //: A reference-counted image object.
 // All operations are delegated to the vil_image_impl object,
@@ -54,9 +49,13 @@ public:
   bool put_section(void const *buf, int x0, int y0, int width, int height) 
     { vil_image_delegate(put_section, (buf, x0, y0, width, height), false); }
   
-  //: Extra property information
-  bool get_property(char const *tag, void *property_value_out = 0) 
-    { vil_image_delegate(get_property, (tag, property_value_out), false); }
+  //: Getting property information
+  bool get_property(char const *tag, void *property_value = 0) 
+    { vil_image_delegate(get_property, (tag, property_value), false); }
+  
+  //: Setting property information
+  bool set_property(char const *tag, void const *property_value = 0) 
+    { vil_image_delegate(set_property, (tag, property_value), false); }
   
   //: Return a string describing the file format.
   // Only file images have a format, others return 0
@@ -71,50 +70,32 @@ public:
   //: Print a 1-line summary of contents
   ostream& print(ostream&) const;
   
-  //--------------------------------- Smart pointer behaviour ---------------------------------
+  //------------ smart-pointer logic --------
 
   vil_image(vil_image_impl *p = 0) : ptr(p) {
     if (ptr)
       ptr->up_ref();
-#if VIL_IMAGE_USE_SAFETY_NET
-    xx_register(this);
-#endif
   }
 
   vil_image(vil_image const& that) : ptr(that.ptr) {
     if (ptr)
       ptr->up_ref();
-#if VIL_IMAGE_USE_SAFETY_NET
-    xx_register(this);
-#endif
   }
 
   ~vil_image() {
-#if VIL_IMAGE_USE_SAFETY_NET
-    xx_unregister(this);
-#endif
     if (ptr)
       ptr->down_ref();
     ptr = 0; // don't dangle
   }
 
   vil_image& operator=(vil_image const &that) {
-    if (that.ptr) // first ref that.ptr in case ptr == that.ptr
-      that.ptr->up_ref();
-#if VIL_IMAGE_USE_SAFETY_NET
-    // fsm: set 'ptr' to zero in *this before calling down_ref() on
-    // *ptr. else a vil_image_impl will warn about it still being
-    // reffed.
-    vil_image_impl *old = ptr;
-    ptr = 0;
-    if (old)
-      old->down_ref();
-    ptr = that.ptr;
-#else
-    if (ptr)
-      ptr->down_ref();
-    ptr = that.ptr;
-#endif
+    if (ptr != that.ptr) {
+      if (that.ptr)
+	that.ptr->up_ref();
+      if (ptr)
+	ptr->down_ref();
+      ptr = that.ptr;
+    }
     return *this;
   }
 
@@ -125,14 +106,14 @@ public:
     return *this;
   }
 
-  // use "sptr.impl()" to get a pointer to the impl object.
-  vil_image_impl *impl() const {
-    return ptr;
-  }
-  
-  // comparison
+  // equality means equality of implementation, not pixels.
   bool operator==(vil_image const &that) const {
     return ptr == that.ptr;
+  }
+
+  // needed for sorted containers of images.
+  bool operator< (vil_image const &that) const { 
+    return ptr <  that.ptr;
   }
 
   // conversion to bool
@@ -140,15 +121,13 @@ public:
     return ptr != 0;
   }
   
+  // use "sptr.impl()" to get a pointer to the impl object.
+  vil_image_impl *impl() const {
+    return ptr;
+  }
+  
 protected:
   vil_image_impl *ptr;
-
-#if VIL_IMAGE_USE_SAFETY_NET
-  friend class vil_image_impl;
-  static void xx_register(vil_image const *);
-  static void xx_unregister(vil_image const *);
-  static bool is_reffed(vil_image_impl const *);
-#endif
 };
 
 //: Print a 1-line summary of contents

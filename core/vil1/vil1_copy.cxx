@@ -16,8 +16,8 @@
 
 #include <vcl/vcl_cassert.h>
 #include <vcl/vcl_climits.h>
-#include <vcl/vcl_vector.h>
 
+#include <vil/vil_buffer.h>
 #include <vil/vil_image.h>
 
 void vil_copy(vil_image const& in, vil_image& out)
@@ -44,18 +44,18 @@ void vil_copy(vil_image const& in, vil_image& out)
 
 #if 0
   // Simple implementation copies one row at a time.
-  vcl_vector<unsigned char> buf(rowsize_bytes);
+  vil_buffer<unsigned char> buf(rowsize_bytes);
   for (int y = 0; y < height; ++y) {
-    in.get_section(buf.begin(), 0, y, width, 1);   // 0 was p
-    out.put_section(buf.end(), 0, y, width, 1);  // 0 was p
+    in .get_section(buf.data(), 0, y, width, 1);   // 0 was p
+    out.put_section(buf.data(), 0, y, width, 1);  // 0 was p
   }
 #else
   // Simple implementation copies the whole buffer at once
-  vcl_vector<unsigned char> buf(rowsize_bytes*height);
+  vil_buffer<unsigned char> buf(rowsize_bytes*height);
   //cerr << "...vil_copy() doing get_section()" << endl;
-  in.get_section(buf.begin(), 0, 0, width, height);
+  in .get_section(buf.data(), 0, 0, width, height);
   //cerr << "...vil_copy() doing put_section()" << endl;
-  out.put_section(buf.begin(), 0, 0, width, height);
+  out.put_section(buf.data(), 0, 0, width, height);
   //cerr << "...vil_copy() done" << endl;
 #endif
 }

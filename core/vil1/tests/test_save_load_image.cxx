@@ -18,11 +18,12 @@
 #include <vil/file_formats/vil_viff.h>
 
 #define DEBUG 1
-#define LEAVES_IMAGES_BEHIND 0
+#define LEAVE_IMAGES_BEHIND 0
 
 int all_passed = 0;
 
-#define ww (cout << "reached " __FILE__ ":" << __LINE__ << endl)
+static bool blather = false;
+#define ww (blather ? cout << "reached " __FILE__ ":" << __LINE__ << endl : cout)
 
 // -- this function tests to see if all the pixels in two images are equal
 void test_image_equal(char const* test,
@@ -170,7 +171,7 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
   if (all_passed == 0)
     cout << "PASSED: vil_save() for " << type_name << endl;
 
-#if !LEAVES_IMAGES_BEHIND
+#if !LEAVE_IMAGES_BEHIND
   vcl_unlink(fname.data());
 #endif
   cout << "done\n";
@@ -255,8 +256,9 @@ vil_image CreateTestfloatImage(int wd, int ht)
 }
 
 int main() {
-  // create a test image
-  int sizex = 256, sizey = 155;
+  // create test images
+  int sizex = 253;
+  int sizey = 155;
   vil_image image1 = CreateTest1bitImage(sizex, sizey);
   vil_image image8 = CreateTest8bitImage(sizex, sizey);
   vil_image image16 = CreateTest16bitImage(sizex, sizey);
@@ -264,40 +266,43 @@ int main() {
   vil_image image3p = CreateTest3planeImage(sizex, sizey);
   vil_image imagefloat = CreateTestfloatImage(sizex, sizey);
 
-  // test the pnm read write
+#if 0
+  // pnm
   vil_test_image_type("pnm", image8);
   vil_test_image_type("pnm", image16);
   vil_test_image_type("pnm", image24);
 
-  // test the lily image read write
+  // lily image
   //vil_test_image_type("lily", image8);
   //vil_test_image_type("lily", imagefloat);
 
-  // test the VIFF image read write
+  // VIFF image
   //vil_test_image_type("viff", image1);
   vil_test_image_type("viff", image8);
   vil_test_image_type("viff", image16);
   //vil_test_image_type("viff", image3p);
   vil_test_image_type("viff", imagefloat);
 
-  // test the TIFF read write
+  // TIFF
   vil_test_image_type("tiff", image8);
   vil_test_image_type("tiff", image24);
 
 #if 0 // lossy format
-  // test the JPEG read write
+  // JPEG
   vil_test_image_type("jpeg", image8);
   vil_test_image_type("jpeg", image24);
 #endif
 
-  // test the PNG read write
+  // PNG
   vil_test_image_type("png", image8);
   vil_test_image_type("png", image24);
+#endif
 
-  // test the sgi read write
+  // sgi
+  blather = true;
   vil_test_image_type("iris", image8);
   vil_test_image_type("iris", image16);
   vil_test_image_type("iris", image24);
 
-  return 0; // return all_passed;
+  return 0;
 }

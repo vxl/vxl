@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation
+#pragma implementation "vil_image"
 #endif
 
 #include "vil_image.h"
@@ -36,29 +36,3 @@ int vil_image::get_size_bytes() const
 {
   return planes() * width() * height() * components() * bits_per_component() / CHAR_BIT;
 }
-
-#if VIL_IMAGE_USE_SAFETY_NET
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_algorithm.h>
-static vcl_vector<void const *> all;
-
-void vil_image::xx_register(vil_image const *p) {
-  all.push_back(p);
-}
-void vil_image::xx_unregister(vil_image const *p) {
-  for (unsigned i=0; i<all.size(); ++i)
-    if (all[i] == p) {
-      all.erase(all.begin() + i);
-      return;
-    }
-  assert(false);
-}
-//: return true if some vil_image refers to pi.
-bool vil_image::is_reffed(vil_image_impl const *pi) {
-  for (unsigned i=0; i<all.size(); ++i)
-    if (static_cast<vil_image const*>(all[i])->impl() == pi)
-      return true;
-  return false;
-}
-#endif

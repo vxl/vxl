@@ -24,8 +24,8 @@ template <class T> class vil_memory_image_of;
 template <class I1, class I2, class AC, class O>
 void vil_convolve_simple(I1 const* const*  in1, unsigned w1, unsigned h1, // input 1
 			 I2 const* const*  in2, unsigned w2, unsigned h2, // input 2
-			 O       * const*  out,                           // ouput
-			 AC *); // dummy
+			 AC *, // dummy
+			 O       * const*  out);                          // ouput
 
 // This function performs some bounds checks on the given memory images
 // and the dispatches the convolution itself to the above function.
@@ -42,9 +42,9 @@ void vil_convolve_simple(// input 1
 			 int x1, int y1, unsigned w1, unsigned h1,
 			 vil_memory_image_of<I2> const &IN2, // input 2
 			 int x2, int y2, unsigned w2, unsigned h2,
+			 AC *, //dumyy
 			 vil_memory_image_of<O>        &OUT, // output
-			 int xo, int yo,
-			 AC *); // dummy
+			 int xo, int yo);
 
 // Like the previous function, except without bounds checking and
 // specified regions.
@@ -53,7 +53,7 @@ void vil_convolve_simple(// input 1
 template <class I1, class I2, class AC, class O>
 void vil_convolve_simple(vil_memory_image_of<I1> const &input1,
 			 vil_memory_image_of<I2> const &input2,
-			 vil_memory_image_of<O>        &output,
-			 AC *); // dummy
+			 AC *, // dummy
+			 vil_memory_image_of<O>        &output);
 
 #endif

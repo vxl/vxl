@@ -7,11 +7,11 @@
 #include "vil_image_as.h"
 
 #include <vcl/vcl_cassert.h>
-#include <vcl/vcl_vector.h>
 #include <vcl/vcl_iostream.h>
 
 #include <vil/vil_byte.h>
 #include <vil/vil_pixel.h>
+#include <vil/vil_buffer.h>
 #include <vil/vil_memory_image.h>
 #include <vil/vil_memory_image_of_format.txx>
 
@@ -42,6 +42,63 @@ public:
 
 //--------------------------------------------------------------------------------
 
+VCL_DEFINE_SPECIALIZATION // specialize for int.
+bool vil_image_as_impl<int>::get_section(void *buf, int x0, int y0, int width, int height) const {
+  // byte greyscale
+  if (vil_pixel_type(image) == VIL_BYTE) {
+    vil_buffer<vil_byte> scan(width);
+    for (unsigned j=0; j<height; ++j) {
+      if (!image.get_section(scan.data(), x0, y0+j, width, 1))
+	return false;
+      for (unsigned i=0; i<width; ++i)
+	static_cast<int*>(buf)[i + width*j] = int(scan[i]);
+    }
+    return true;
+  }
+  
+  // byte rgb
+  else if (vil_pixel_type(image) == VIL_RGB_BYTE) {
+    vil_buffer<vil_byte> scan(3*width);
+    for (unsigned j=0; j<height; ++j) {
+      if (!image.get_section(scan.data(), x0, y0+j, width, 1))
+	return false;
+      for (unsigned i=0; i<width; ++i)
+	// use different weights?
+	static_cast<int*>(buf)[i + width*j] = 
+	  (unsigned(scan[3*i+0]) + unsigned(scan[3*i+1]) + unsigned(scan[3*i+2]))/3;
+    }
+    return true;
+  }
+
+  // float
+  else if (vil_pixel_type(image) == VIL_FLOAT) {
+    vil_buffer<float> scan(width);
+    for (unsigned j=0; j<height; ++j) {
+      if (!image.get_section(scan.data(), x0, y0+j, width, 1))
+	return false;
+      for (unsigned i=0; i<width; ++i)
+	static_cast<int*>(buf)[i + width*j] = int(scan[i]);
+    }
+    return true;
+  }
+  
+  //
+  else {
+    cerr << __FILE__ ": get_section() not implemented for " << image << endl;
+    assert(false/* implement for your image type as needed */);
+    return false;
+  }
+  
+}
+// instantiate for int.
+  template class vil_image_as_impl<int>;
+
+vil_image vil_image_as_int(vil_image const &image) {
+  return vil_image(new vil_image_as_impl<int>(image));
+}
+
+//--------------------------------------------------------------------------------
+
 VCL_DEFINE_SPECIALIZATION // specialize for byte.
 bool vil_image_as_impl<vil_byte>::get_section(void *buf, int x0, int y0, int width, int height) const {
   // byte greyscale
@@ -50,9 +107,9 @@ bool vil_image_as_impl<vil_byte>::get_section(void *buf, int x0, int y0, int wid
   
   // byte rgb
   else if (vil_pixel_type(image) == VIL_RGB_BYTE) {
-    vcl_vector<vil_byte> scan(3*width);
+    vil_buffer<vil_byte> scan(3*width);
     for (unsigned j=0; j<height; ++j) {
-      if (!image.get_section(scan.begin(), x0, y0+j, width, 1))
+      if (!image.get_section(scan.data(), x0, y0+j, width, 1))
 	return false;
       for (unsigned i=0; i<width; ++i)
 	// use different weights?
@@ -64,9 +121,9 @@ bool vil_image_as_impl<vil_byte>::get_section(void *buf, int x0, int y0, int wid
 
   // float
   else if (vil_pixel_type(image) == VIL_FLOAT) {
-    vcl_vector<float> scan(width);
+    vil_buffer<float> scan(width);
     for (unsigned j=0; j<height; ++j) {
-      if (!image.get_section(scan.begin(), x0, y0+j, width, 1))
+      if (!image.get_section(scan.data(), x0, y0+j, width, 1))
 	return false;
       for (unsigned i=0; i<width; ++i)
 	static_cast<vil_byte*>(buf)[i + width*j] = vil_byte(scan[i]);
@@ -95,9 +152,9 @@ VCL_DEFINE_SPECIALIZATION // specialize for float.
 bool vil_image_as_impl<float>::get_section(void *buf, int x0, int y0, int width, int height) const {
   // byte greyscale
   if (vil_pixel_type(image) == VIL_BYTE) {
-    vcl_vector<vil_byte> scan(width);
+    vil_buffer<vil_byte> scan(width);
     for (unsigned j=0; j<height; ++j) {
-      if (!image.get_section(scan.begin(), x0, y0+j, width, 1))
+      if (!image.get_section(scan.data(), x0, y0+j, width, 1))
 	return false;
       for (unsigned i=0; i<width; ++i)
 	static_cast<float*>(buf)[i + width*j] = scan[i];
@@ -107,9 +164,9 @@ bool vil_image_as_impl<float>::get_section(void *buf, int x0, int y0, int width,
   
   // byte rgb
   else if (vil_pixel_type(image) == VIL_RGB_BYTE) {
-    vcl_vector<vil_byte> scan(3*width);
+    vil_buffer<vil_byte> scan(3*width);
     for (unsigned j=0; j<height; ++j) {
-      if (!image.get_section(scan.begin(), x0, y0+j, width, 1))
+      if (!image.get_section(scan.data(), x0, y0+j, width, 1))
 	return false;
       for (unsigned i=0; i<width; ++i)
 	static_cast<float*>(buf)[i + width*j] = 0.299*scan[3*i+0] + 0.587*scan[3*i+1] + 0.114*scan[3*i+2];
@@ -134,6 +191,49 @@ vil_image vil_image_as_float(vil_image const &image) {
 
 //--------------------------------------------------------------------------------
 
+VCL_DEFINE_SPECIALIZATION // specialize for double.
+bool vil_image_as_impl<double>::get_section(void *buf, int x0, int y0, int width, int height) const {
+  // byte greyscale
+  if (vil_pixel_type(image) == VIL_BYTE) {
+    vil_buffer<vil_byte> scan(width);
+    for (unsigned j=0; j<height; ++j) {
+      if (!image.get_section(scan.data(), x0, y0+j, width, 1))
+	return false;
+      for (unsigned i=0; i<width; ++i)
+	static_cast<double*>(buf)[i + width*j] = scan[i];
+    }
+    return true;
+  }
+  
+  // byte rgb
+  else if (vil_pixel_type(image) == VIL_RGB_BYTE) {
+    vil_buffer<vil_byte> scan(3*width);
+    for (unsigned j=0; j<height; ++j) {
+      if (!image.get_section(scan.data(), x0, y0+j, width, 1))
+	return false;
+      for (unsigned i=0; i<width; ++i)
+	static_cast<double*>(buf)[i + width*j] = 0.299*scan[3*i+0] + 0.587*scan[3*i+1] + 0.114*scan[3*i+2];
+    }
+    return true;
+  }
+  
+  //
+  else {
+    cerr << __FILE__ ": get_section() not implemented for " << image << endl;
+    assert(false/* implement for your image type as needed */);
+    return false;
+  }
+  
+}
+// instantiate for double.
+template class vil_image_as_impl<double>;
+
+vil_image vil_image_as_double(vil_image const &image) {
+  return vil_image(new vil_image_as_impl<double>(image));
+}
+
+//--------------------------------------------------------------------------------
+
 VCL_DEFINE_SPECIALIZATION // specialize for rgb.
 bool vil_image_as_impl<vil_rgb_byte>::get_section(void *buf, 
 						  int x0, int y0, 
@@ -141,9 +241,9 @@ bool vil_image_as_impl<vil_rgb_byte>::get_section(void *buf,
 {
   // byte greyscale
   if (vil_pixel_type(image) == VIL_BYTE) {
-    vcl_vector<vil_byte> scan(width);
+    vil_buffer<vil_byte> scan(width);
     for (unsigned j=0; j<height; ++j) {
-      if (!image.get_section(scan.begin(), x0, y0+j, width, 1))
+      if (!image.get_section(scan.data(), x0, y0+j, width, 1))
 	return false;
       for (unsigned i=0; i<width; ++i) {
 	static_cast<vil_byte*>(buf)[3*(i + width*j)+0] = scan[i];

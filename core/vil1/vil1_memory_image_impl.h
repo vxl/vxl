@@ -10,7 +10,7 @@
 #include <vil/vil_image_impl.h>
 #include <vil/vil_memory_image.h>
 
-//: vil_image_impl, stored entirely in RAM
+//: implementation class for vil_memory_image.
 class vil_memory_image_impl : public vil_image_impl {
 public:
   vil_memory_image_impl(int planes, int w, int h, vil_memory_image_format const& format);
@@ -32,15 +32,13 @@ public:
   virtual bool get_section(void* buf, int x0, int y0, int width, int height) const;
   virtual bool put_section(void const* buf, int x0, int y0, int width, int height);
 
-  void resize(int width, int height);
   void resize(int planes, int width, int height);
-  void* get_buffer() { return rows0_[0]; }
   
 protected:
   friend class vil_memory_image;
 
   void init(int planes, int w, int h, vil_pixel_format pixel_format);
-  void init(int planes, int w, int h, int components, int bits_per_component, vil_component_format component_format);
+  void init(int planes, int w, int h, int components, int bits_per_component, vil_component_format);
 
   int planes_;
   int width_;
@@ -53,7 +51,6 @@ protected:
   
   unsigned char* buf_;
   void*** rows_;
-  void ** rows0_;
 };
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_memory_image_impl.

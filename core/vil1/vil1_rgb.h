@@ -4,7 +4,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME    vil_rgb - Templated three-value colour cell
+// .NAME    vil_rgb<> - Templated three-value colour cell
 //
 // .SECTION Description
 //    This is the appropriate pixel type for 24-bit colour images.
@@ -41,12 +41,6 @@ struct vil_rgb {
 public:
   typedef T value_type;
   
-  // -- The rgb values
-  T R_, G_, B_;
-  inline T R() const { return R_; }
-  inline T G() const { return G_; }
-  inline T B() const { return B_; }
-  
   // -- Create (0,0,0) vil_rgb cell. We need the default ctor to do this as the STL
   // effectively mandates that T() produces a nil value.
   vil_rgb():
@@ -62,61 +56,12 @@ public:
   vil_rgb(T red, T green, T blue):
     R_(red), G_(green), B_(blue) {}
 
-
-// VC50 bombs with INTERNAL COMPILER ERROR on template member functions
-#if VCL_HAS_MEMBER_TEMPLATES
-  template <class S>
-  vil_rgb(const vil_rgb<S>& that) :
-    R_((T)that.R_),
-    G_((T)that.G_),
-    B_((T)that.B_) {}
-
-  template <class S>
-  vil_rgb<T>& operator=(const vil_rgb<S>& that) {
-    R_=((T)that.R_);
-    G_=((T)that.G_);
-    B_=((T)that.B_);
-    return *this;
-  }
-#else
-  // Special-case for dumb compilers.
-  InLine vil_rgb(const vil_rgb<double>& r);
-  InLine vil_rgb(const vil_rgb<unsigned char>& r);
-
-  vil_rgb<T>& operator=(const vil_rgb<double>& that)
-  {
-    R_=((T)that.R_);
-    G_=((T)that.G_);
-    B_=((T)that.B_);
-    return *this;
-  }
-
-  vil_rgb<T>& operator=(const vil_rgb<unsigned char>& that)
-  {
-    R_=((T)that.R_);
-    G_=((T)that.G_);
-    B_=((T)that.B_);
-    return *this;
-  }
-
-  vil_rgb<T>& operator=(const vil_rgb<int>& that)
-  {
-    R_=((T)that.R_);
-    G_=((T)that.G_);
-    B_=((T)that.B_);
-    return *this;
-  }
-
-  vil_rgb<T>& operator=(const vil_rgb<long>& that)
-  {
-    R_=((T)that.R_);
-    G_=((T)that.G_);
-    B_=((T)that.B_);
-    return *this;
-  }
-#endif
-
- 
+  // -- The rgb values
+  T R_, G_, B_;
+  inline T R() const { return R_; }
+  inline T G() const { return G_; }
+  inline T B() const { return B_; }
+  
   // -- Convert vil_rgb to gray using standard (.299, .587, .114) weighting.
   T grey() const { return int(0.5+R_*0.299+0.587*G_+0.114*B_); }
   
@@ -129,16 +74,71 @@ public:
   inline bool operator== (vil_rgb<T> const&) const;
 
   // -- operators
-  vil_rgb<T> operator+ (vil_rgb<T> const& A) const { return vil_rgb<T>(R_+A.R_,G_+A.G_,B_+A.B_); }
-  vil_rgb<T> operator- (vil_rgb<T> const& A) const { return vil_rgb<T>(R_-A.R_,G_-A.G_,B_-A.B_); }
-  vil_rgb<T> operator/ (vil_rgb<T> const& A) const { return vil_rgb<T>(R_/A.R_,G_/A.G_,B_/A.B_);}
+  vil_rgb<T>  operator+  (vil_rgb<T> const& A) const { return vil_rgb<T>(R_+A.R_,G_+A.G_,B_+A.B_); }
+  vil_rgb<T>  operator-  (vil_rgb<T> const& A) const { return vil_rgb<T>(R_-A.R_,G_-A.G_,B_-A.B_); }
+  vil_rgb<T>  operator/  (vil_rgb<T> const& A) const { return vil_rgb<T>(R_/A.R_,G_/A.G_,B_/A.B_);}
   vil_rgb<T>& operator+= (vil_rgb<T> const& A) { R_+=A.R_,G_+=A.G_,B_+=A.B_; return *this; }
   vil_rgb<T>& operator-= (vil_rgb<T> const& A) { R_-=A.R_,G_-=A.G_,B_-=A.B_; return *this; }
-  vil_rgb<T> operator* (T A) const { return vil_rgb<T>(R_*A,G_*A,B_*A); }
-  vil_rgb<T> operator/ (T A) const { return vil_rgb<T>(R_/A,G_/A,B_/A); }
+  vil_rgb<T>  operator*  (T A) const { return vil_rgb<T>(R_*A,G_*A,B_*A); }
+  vil_rgb<T>  operator/  (T A) const { return vil_rgb<T>(R_/A,G_/A,B_/A); }
   vil_rgb<T>& operator*= (T A) { R_*=A,G_*=A,B_*=A; return *this; }
   vil_rgb<T>& operator/= (T A) { R_/=A,G_/=A,B_/=A; return *this; }
+
+#define vil_rgb_call(m) \
+m(unsigned char) \
+m(int) \
+m(long) \
+m(double)
+
+// VC50 bombs with INTERNAL COMPILER ERROR on template member functions.
+#if VCL_HAS_MEMBER_TEMPLATES
+  template <class S> 
+  vil_rgb(vil_rgb<S> const& that):
+    R_(T(that.R_)),
+    G_(T(that.G_)),
+    B_(T(that.B_)) { }
+  template <class S> 
+  vil_rgb<T>& operator=(vil_rgb<S> const& that) {
+    R_=T(that.R_);
+    G_=T(that.G_);
+    B_=T(that.B_);
+    return *this;
+  }
+#else
+  // For dumb compilers, just special-case the commonly used types.
+# define macro(S) \
+  vil_rgb(vil_rgb<S > const& that) : \
+  R_(T(that.R_)), \
+  G_(T(that.G_)), \
+  B_(T(that.B_)) {}
+vil_rgb_call(macro)
+# undef macro
+
+# define macro(S) \
+  InLine vil_rgb<T>& operator=(vil_rgb<S > const& that);
+vil_rgb_call(macro)
+# undef macro
+#endif
 };
+
+// see above
+#if VCL_HAS_MEMBER_TEMPLATES
+#else
+# define macro(S) \
+vil_rgb<S > vil_rgb_gcc_272_pump_prime(S const *); \
+template <class T> \
+vil_rgb<T>& vil_rgb<T>::operator=(vil_rgb<S > const& that) { \
+  R_=T(that.R_); \
+  G_=T(that.G_); \
+  B_=T(that.B_); \
+  return *this; \
+}
+vil_rgb_call(macro)
+# undef macro
+#endif
+
+#undef vil_rgb_call
+
 
 // Assorted hackery for busted compilers
 typedef vil_rgb<double> vil_rgb_double;
@@ -148,29 +148,15 @@ extern vil_rgb<double> tickle_mi_fancy;
 #endif
 
 
-#if !VCL_HAS_MEMBER_TEMPLATES
-template <class T>
-InLine vil_rgb<T>::vil_rgb(const vil_rgb_double& r) :
-  R_((T)r.R_),
-  G_((T)r.G_),
-  B_((T)r.B_) {}
-
-template <class T>
-InLine vil_rgb<T>::vil_rgb(const vil_rgb<unsigned char>& r) :
-  R_((T)r.R_),
-  G_((T)r.G_),
-  B_((T)r.B_) {}
-#endif
-
 template <class T>
 inline
-ostream& operator<<(ostream& s, const vil_rgb<T>& rgb)
+ostream& operator<<(ostream& s, vil_rgb<T> const& rgb)
 {
   return s << '[' << rgb.R_ << ' ' << rgb.G_ << ' ' << rgb.B_ << ']';
 }
 
 // Specialization to get vil_rgb<byte> right.
-// VCL_DECxLARE_SPECIALIZATION(ostream& operator<<(ostream& s, const vil_rgb<unsigned char>& rgb))
+// VCL_DECxLARE_SPECIALIZATION(ostream& operator<<(ostream& s, vil_rgb<unsigned char> const& rgb))
 
 // ** Arithmetic operators
 
@@ -183,7 +169,7 @@ bool vil_rgb<T>::operator== (vil_rgb<T> const& o) const
 
 template <class T> 
 inline
-vil_rgb<T> max(const vil_rgb<T>& a, const vil_rgb<T>& b)
+vil_rgb<T> max(vil_rgb<T> const& a, vil_rgb<T> const& b)
 {
   return vil_rgb<T>((a.R_>b.R_)?a.R_:b.R_,
 		(a.G_>b.G_)?a.G_:b.G_,
@@ -192,7 +178,7 @@ vil_rgb<T> max(const vil_rgb<T>& a, const vil_rgb<T>& b)
 
 template <class T> 
 inline
-vil_rgb<T> min(const vil_rgb<T>& a, const vil_rgb<T>& b)
+vil_rgb<T> min(vil_rgb<T> const& a, vil_rgb<T> const& b)
 {
   return vil_rgb<T>((a.R_<b.R_)?a.R_:b.R_,
 		(a.G_<b.G_)?a.G_:b.G_,
@@ -201,14 +187,14 @@ vil_rgb<T> min(const vil_rgb<T>& a, const vil_rgb<T>& b)
 
 template <class T> 
 inline
-vil_rgb<T> average(const vil_rgb<T>& a, const vil_rgb<T>& b)
+vil_rgb<T> average(vil_rgb<T> const& a, vil_rgb<T> const& b)
 {
   return vil_rgb<T>((a.R_ + b.R_)/2, (a.G_ + b.G_)/2, (a.B_ + b.B_)/2);
 }
 
 template <class T> 
 inline
-vil_rgb<T> operator+(const vil_rgb<T>& a, const vil_rgb<T>& b)
+vil_rgb<T> operator+(vil_rgb<T> const& a, vil_rgb<T> const& b)
 {
   return vil_rgb<T>(a.R_ + b.R_, a.G_ + b.G_, a.B_ + b.B_);
 }
@@ -222,20 +208,20 @@ vil_rgb<double> operator*(double b, vil_rgb<T> const& a)
 
 template <class T> 
 inline
-vil_rgb<double> operator*(const vil_rgb<T>& a, double b)
+vil_rgb<double> operator*(vil_rgb<T> const& a, double b)
 {
   return vil_rgb<double>(a.R_ * b, a.G_ * b, a.B_ * b);
 }
 
 template <class T> 
 inline
-vil_rgb<double> operator/(const vil_rgb<T>& a, double b)
+vil_rgb<double> operator/(vil_rgb<T> const& a, double b)
 {
   return vil_rgb<double>(a.R_ / b, a.G_ / b, a.B_ / b);
 }
 
 inline
-vil_rgb<unsigned char> vil_clamp(const vil_rgb<double>& d, vil_rgb<unsigned char>* dummy)
+vil_rgb<unsigned char> vil_clamp(vil_rgb<double> const & d, vil_rgb<unsigned char>* dummy)
 {
   return vil_rgb<unsigned char>(vil_clamp(d.R_, &dummy->R_),
 				vil_clamp(d.G_, &dummy->G_),
@@ -243,7 +229,7 @@ vil_rgb<unsigned char> vil_clamp(const vil_rgb<double>& d, vil_rgb<unsigned char
 }
 
 inline
-vil_rgb<unsigned char> vil_clamp(const vil_rgb<float>& d, vil_rgb<unsigned char>* dummy)
+vil_rgb<unsigned char> vil_clamp(vil_rgb<float> const& d, vil_rgb<unsigned char>* dummy)
 {
   return vil_rgb<unsigned char>(vil_clamp(d.R_, &dummy->R_),
 				vil_clamp(d.G_, &dummy->G_),
@@ -251,8 +237,8 @@ vil_rgb<unsigned char> vil_clamp(const vil_rgb<float>& d, vil_rgb<unsigned char>
 }
 
 #define VBL_RGB_INSTANTIATE(T) \
-extern "please include vil/vil_rgb.txx instead"
+extern "you must include vil/vil_rgb.txx first."
 #define VBL_RGB_INSTANTIATE_LS(T) \
-extern "please include vil/vil_rgb.txx instead"
+extern "you must include vil/vil_rgb.txx first."
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_rgb.
+#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_rgb<>.

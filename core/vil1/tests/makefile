@@ -1,4 +1,4 @@
-USES = vxl
+USES = v3p vxl
 
 TESTS += test_assign.cxx
 

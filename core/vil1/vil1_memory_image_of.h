@@ -20,6 +20,12 @@
 //    This allows C-efficiency access with C++ notational convenience after the
 //    type has been ascertained.  Note that this should not be used for images
 //    too large to fit in memory.
+//
+//  CAVEAT PROGRAMMER:
+//    Each raster (row) is stored in a contiguous chunk of memory and the
+//    operator [] method gives a pointer to the beginning of a raster.
+//    Thus image[i][j] is the element in the ith row and jth column.
+//    However, image(x, y) is the element in the xth column and yth row.
 
 template <class T>
 class vil_memory_image_of : public vil_memory_image {
@@ -27,19 +33,31 @@ public:
   // -- The pixel type of this image
   typedef T pixel_type;
 
-//: Copy given image into a memory buffer.
+  //: Empty image.
+  vil_memory_image_of();
+
+  //: 
+  vil_memory_image_of(vil_memory_image_of const &);
+
+  //: Deprecated -- This was used to copy the ROI, which is no longer on image
+  //vil_memory_image_of(vil_image const&, bool) {}
+
+  //: Copy given image into a memory buffer.
   vil_memory_image_of(vil_image const& image);
-
-//: Construct a w x h image, pixel format is determined from T
+  
+  //: Construct a w x h image, pixel format is determined from T
   vil_memory_image_of(int sizex, int sizey);
-
-//: Make memory imagebuffer, and fill with "value"
-  vil_memory_image_of(int sizex, int sizey, const T& value);
-
-//: Clearly, this will deallocate the memory buffer
+  
+  //: Make memory imagebuffer, and fill with "value"
+  vil_memory_image_of(int sizex, int sizey, T const& value);
+  
+  //: Clearly, this will deallocate the memory buffer
   ~vil_memory_image_of() {}
-
-//: Load image.
+  
+  //: This method hides the operator= in the base class.
+  vil_memory_image_of& operator=(vil_memory_image_of const &);
+  
+  //: Load image.
   void set(vil_image const& image);
   
   // Data Access---------------------------------------------------------------
@@ -48,7 +66,7 @@ public:
   T&           operator () (int x, int y) { return ((T**)rows0_)[y][x]; }
   T const&     operator () (int x, int y) const { return ((T const* const*)rows0_)[y][x]; }
   
-  //: Return pointer to raster y. Caveat lector : image(i,j) is image[j][i].
+  //: Return pointer to raster y.
   T*           operator [] (int y) { return ((T**)rows0_)[y]; }
   T const*     operator [] (int y) const { return ((T const* const*)rows0_)[y]; }
 
@@ -75,23 +93,6 @@ public:
 
   //: Fill with given value
   void fill(T const& );
-
-public:
-  vil_memory_image_of(const vil_memory_image_of& that);
-  vil_memory_image_of& operator=(const vil_memory_image_of& that);
-private:
-  // deprecated -- This was used to copy the ROI, which is no longer on image
-  vil_memory_image_of(vil_image const&, bool) {}
 };
-
-//: This is a templated declaration of save_jpeg.  No body is provided.
-template <class T>
-void save_jpeg(vil_memory_image_of<T>& image, const char *filename);
-
-// short forms. keep consistent with vil_fwd.h
-typedef vil_memory_image_of<bool>     vil_bool_buffer;
-typedef vil_memory_image_of<vil_byte> vil_byte_buffer;
-typedef vil_memory_image_of<int>      vil_int_buffer;
-typedef vil_memory_image_of<float>    vil_float_buffer;
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_memory_image_of.

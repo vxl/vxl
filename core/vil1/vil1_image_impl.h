@@ -115,7 +115,8 @@ public:
   virtual char const* file_format() const { return 0; }
 
   //: Extra property information
-  virtual bool get_property(char const* tag, void* property_value_out = 0) const;
+  virtual bool get_property(char const* tag, void* property_value = 0) const;
+  virtual bool set_property(char const* tag, void const* property_value = 0) const;
 
   //------------------------------ convenience ------------------------------
 

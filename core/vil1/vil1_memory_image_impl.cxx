@@ -10,7 +10,6 @@
 
 #include <vil/vil_image.h>
 
-
 vil_memory_image_impl::vil_memory_image_impl(int planes, int w, int h, vil_memory_image_format const& format)
 {
   init(planes, w, h, format.components, format.bits_per_component, format.component_format);
@@ -53,9 +52,11 @@ void vil_memory_image_impl::init(int planes, int w, int h,
   component_format_ = component_format;
 
   bytes_per_pixel_ = bits_per_component_ * components_ / 8;
-  //assert(bytes_per_pixel_ * 8 == bits_per_component_ * components_); 
+  //assert(bytes_per_pixel_ * 8 == bits_per_component_ * components_);
+
   int size = planes_ * height_ * width_ * bytes_per_pixel_;
   if (size) {
+    // non-empty image
     buf_ = new unsigned char[size];
     rows_ = new void**[planes_];
     int bytes_per_row = width_ * bytes_per_pixel_;
@@ -68,12 +69,11 @@ void vil_memory_image_impl::init(int planes, int w, int h,
 	ptr += bytes_per_row;
       }
     }
-    rows0_= rows_[0];
   }
   else {
+    // empty image
     buf_ = 0;
     rows_ = 0;
-    rows0_ = 0;
   }
 }
 
@@ -91,23 +91,23 @@ void vil_memory_image_impl::init(int planes, int w, int h, vil_pixel_format pixe
 
 vil_memory_image_impl::~vil_memory_image_impl()
 {
-  for (int p = 0; p < planes_; ++p) delete[] rows_[p];
-  delete [] rows_;
+  if (rows_) {
+    for (int p = 0; p < planes_; ++p) delete[] rows_[p];
+    delete [] rows_;
+  }
   delete [] buf_;
-}
-
-void vil_memory_image_impl::resize(int width, int height)
-{
-  for (int p = 0; p < planes_; ++p) delete[] rows_[p];
-  delete [] rows_;
-  delete [] buf_;
-  init(planes_, width, height, components_, bits_per_component_, component_format_);
 }
 
 void vil_memory_image_impl::resize(int planes, int width, int height)
 {
-  for (int p = 0; p < planes_; ++p) delete[] rows_[p];
-  delete [] rows_;
+  // Resize is expensive, so only do it if the size changes.
+  if (planes == planes_ && width == width_ && height == height_)
+    return;
+  
+  if (rows_) {
+    for (int p = 0; p < planes_; ++p) delete[] rows_[p];
+    delete [] rows_;
+  }
   delete [] buf_;
   init(planes, width, height, components_, bits_per_component_, component_format_);
 }
@@ -119,7 +119,7 @@ bool vil_memory_image_impl::get_section(void* obuf, int x0, int y0, int xs, int 
     int byte_out_width = bytes_per_pixel_ * xs;
     if (width_ != xs) {
       int byte_width = bytes_per_pixel_ * width_;
-    
+      
       for (int y = 0; y < ys; ++y) {
 	memcpy((unsigned char*)obuf + y * byte_out_width, buf_ + offset + y * byte_width, byte_out_width);
       }

@@ -17,6 +17,18 @@
 #include <vil/vil_memory_image_of_format.txx>
 
 template <class T>
+vil_memory_image_of<T>::vil_memory_image_of():
+  vil_memory_image(0, 0, 0, vil_memory_image_of_format<T>())
+{
+}
+
+template <class T>
+vil_memory_image_of<T>::vil_memory_image_of(vil_memory_image_of<T> const & that):
+  vil_memory_image(that)
+{
+}
+
+template <class T>
 vil_memory_image_of<T>::vil_memory_image_of(vil_image const& image):
   vil_memory_image(image.planes(), image.width(), image.height(), vil_memory_image_of_format<T>())
 {
@@ -34,19 +46,13 @@ vil_memory_image_of<T>::vil_memory_image_of(int sizex, int sizey):
 }
 
 template <class T>
-vil_memory_image_of<T>::vil_memory_image_of(int sizex, int sizey, const T& value):
+vil_memory_image_of<T>::vil_memory_image_of(int sizex, int sizey, T const& value):
   vil_memory_image(1, sizex, sizey, vil_memory_image_of_format<T>())
 {
   T *p = (T*)get_buffer();
   T *e = p + planes() * width() * height();
   while (p != e)
     *p++ = value;
-}
-
-template <class T>
-vil_memory_image_of<T>::vil_memory_image_of(vil_memory_image_of<T> const & that):
-  vil_memory_image(that)
-{
 }
 
 template <class T>
@@ -57,24 +63,10 @@ void vil_memory_image_of<T>::set(vil_image const& image)
 }
 
 template <class T>
-vil_memory_image_of<T>& vil_memory_image_of<T>::operator=(vil_memory_image_of<T> const & /*that*/)
+vil_memory_image_of<T>& vil_memory_image_of<T>::operator=(vil_memory_image_of<T> const &that)
 {
-  abort(); return *this;
-//  planes_ = that.planes();
-//  width_ = that.width();
-//  height_ = that.height();
-//  components_ = that.components();
-//  bits_per_component_ = that.bits_per_component();
-//  component_format_ = that.component_format();
-//  bytes_per_pixel_ = that.bytes_per_pixel();
-//
-//  //assert(bytes_per_pixel_ * 8 == bits_per_component_ * components_); 
-//  int size = planes_ * width_ * height_ * bytes_per_pixel_;
-//  delete [] buf_;
-//  buf_ = new unsigned char[size];
-//
-//  memcpy(buf_, that.buf_, size);
-//  return *this;
+  vil_memory_image::operator=(that);
+  return *this;
 }
 
 template <class T>

@@ -16,12 +16,14 @@ SOURCES += vil_image.cxx
 SOURCES += vil_stream.cxx
 SOURCES += vil_file_format.cxx
 SOURCES += vil_byte_swap.cxx
+SOURCES += vil_16bit.cxx
 
 # various vil_stream classes
-SOURCES += vil_stream_fstream.cxx   # from a C++ fstream
-SOURCES += vil_stream_core.cxx      # in-core vil_stream
-SOURCES += vil_stream_FILE_ptr.cxx  # adapt a vil_stream to a FILE * using temp file
-SOURCES += vil_stream_section.cxx   # present a section of a vil_stream
+#SOURCES += vil_stream_iso_stream.cxx  # from a C++ stream
+SOURCES += vil_stream_fstream.cxx     # from a file
+SOURCES += vil_stream_core.cxx        # in-core vil_stream
+SOURCES += vil_stream_FILE_ptr.cxx    # adapt a vil_stream to a FILE * using temp file
+SOURCES += vil_stream_section.cxx     # present a section of a vil_stream
 
 # classes derived from vil_image
 SOURCES += vil_file_image.cxx
@@ -31,9 +33,9 @@ SOURCES += vil_memory_image.cxx
 SOURCES += vil_memory_image_impl.cxx
 SOURCES += vil_crop_image_impl.cxx
 SOURCES += vil_skip_image_impl.cxx
+SOURCES += vil_resample_image_impl.cxx
 SOURCES += vil_flipud_impl.cxx
 SOURCES += vil_block_cache_image_impl.cxx
-SOURCES += vil_image_as.cxx
 
 # classes derived from vil_file_format 
 SOURCES += file_formats/vil_pnm.cxx
@@ -60,17 +62,20 @@ SOURCES += file_formats/vil_tiff.cxx
 endif
 
 # Operations
+SOURCES += vil_image_as.cxx
 SOURCES += vil_new.cxx
 SOURCES += vil_load.cxx
 SOURCES += vil_save.cxx
 SOURCES += vil_copy.cxx
 SOURCES += vil_crop.cxx
 SOURCES += vil_skip.cxx
+SOURCES += vil_resample.cxx
 SOURCES += vil_flipud.cxx
 MANPAGE_SOURCES += vil_convolve.txx
 SOURCES += vil_smooth.cxx
 
-# Utilities
+# Stuff
+SOURCES += vil_pyramid.cxx
 SOURCES += vil_clamp.cxx
 SOURCES += vil_rgb_byte.cxx
 SOURCES += vil_memory_image_window.cxx

@@ -9,7 +9,6 @@
 
 #include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>
-//#include <vcl/vcl_vector.h>
 
 //: A generic_image adaptor that behaves like a cropped version of its input
 class vil_crop_image_impl : public vil_image_impl {
@@ -39,7 +38,6 @@ protected:
   int y0_;
   int width_;
   int height_;
-  //  vcl_vector<vil_crop_image_impl*> plane_crops_;
 };
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_crop_image_impl.

@@ -18,6 +18,7 @@
 #include <vil/vil_stream.h>
 #include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>
+#include <vil/vil_16bit.h>
 
 static char const* vil_mit_format_tag = "mit";
 
@@ -56,36 +57,11 @@ static char const* vil_mit_format_tag = "mit";
 // 00000010: 6D 6D 6D 6D 6D 6D 6D 6D 6D 6D 6D 6D 6D 6D 6D 6D mmmmmmmmmmmmmmmm
 
 //----------------------------------------------------------------------
-// endian issues
-
-// this will fail at compile time if sizeof(short) != 2
-template <int N> struct compile_time_assert;
-VCL_DEFINE_SPECIALIZATION struct compile_time_assert<2> { };
-compile_time_assert<sizeof(unsigned short)> clever_clogs;
-
-unsigned short read_little_endian_short(vil_stream *s)
-{
-  unsigned short tmp;
-  s->read(&tmp, sizeof(tmp));
-#if VXL_BIG_ENDIAN
-  tmp = (tmp << 8) | (tmp >> 8);
-#endif
-  return tmp;
-}
-
-void write_little_endian_short(vil_stream *s, unsigned short tmp)
-{
-#if VXL_BIG_ENDIAN
-  tmp = (tmp << 8) | (tmp >> 8);
-#endif
-  s->write(&tmp, sizeof(tmp));
-}
-//----------------------------------------------------------------------
 
 vil_image_impl* vil_mit_file_format::make_input_image(vil_stream* is)
 {
   is->seek(0);
-  int type = read_little_endian_short(is);
+  int type = vil_16bit_read_little_endian(is);
   
   if (!(type == MIT_UNSIGNED ||
 	type == MIT_RGB      ||
@@ -96,14 +72,14 @@ vil_image_impl* vil_mit_file_format::make_input_image(vil_stream* is)
 	type == MIT_EDGE      ))
     return 0;
   
-  int bits_per_pixel = read_little_endian_short(is);
+  int bits_per_pixel = vil_16bit_read_little_endian(is);
   if (bits_per_pixel > 32) {
     cerr << "vil_mit_file_format:: Thought it was MIT, but bpp = " << bits_per_pixel << endl;
     return 0;
   }
   
-  /*int width =*/ read_little_endian_short(is);
-  /*int height=*/ read_little_endian_short(is);
+  /*int width =*/ vil_16bit_read_little_endian(is);
+  /*int height=*/ vil_16bit_read_little_endian(is);
   
   //cerr << __FILE__ " : here we go:\n";
   //cerr << __FILE__ " : type_ = " << type << endl;
@@ -176,10 +152,10 @@ bool vil_mit_generic_image::read_header()
 {
   is_->seek(0);
 
-  type_ = read_little_endian_short(is_);
-  bits_per_pixel_ = read_little_endian_short(is_);
-  width_ = read_little_endian_short(is_);
-  height_ = read_little_endian_short(is_);
+  type_ = vil_16bit_read_little_endian(is_);
+  bits_per_pixel_ = vil_16bit_read_little_endian(is_);
+  width_ = vil_16bit_read_little_endian(is_);
+  height_ = vil_16bit_read_little_endian(is_);
   
   if (type_ > 7 || type_ < 1)
     return false;
@@ -194,10 +170,10 @@ bool vil_mit_generic_image::read_header()
 bool vil_mit_generic_image::write_header()
 {
   is_->seek(0);
-  write_little_endian_short(is_, type_);
-  write_little_endian_short(is_, bits_per_pixel_);
-  write_little_endian_short(is_, width_);
-  write_little_endian_short(is_, height_);
+  vil_16bit_write_little_endian(is_, type_);
+  vil_16bit_write_little_endian(is_, bits_per_pixel_);
+  vil_16bit_write_little_endian(is_, width_);
+  vil_16bit_write_little_endian(is_, height_);
   return true;
 }
 

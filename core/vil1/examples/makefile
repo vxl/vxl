@@ -3,7 +3,7 @@ include ${IUEROOT}/config/top-params.mk
 #######################################
 
 VXL := 1
-USES = vxl
+USES = v3p vxl
 
 # Examples may use vbl....
 IULIBS = -lvil -lvbl -lvcl

@@ -34,7 +34,7 @@ protected:
   virtual ~vil_stream();
 
 private: // use the methods, Luke!
-  unsigned refcount;
+  int refcount;
 };
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_stream.

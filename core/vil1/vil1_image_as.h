@@ -9,8 +9,11 @@
 
 #include <vil/vil_image.h>
 
-vil_image vil_image_as_rgb(vil_image const &); // "rgb_byte" would be more appropriate
+vil_image vil_image_as_int(vil_image const &);
 vil_image vil_image_as_byte(vil_image const &);
 vil_image vil_image_as_float(vil_image const &);
+vil_image vil_image_as_double(vil_image const &);
+
+vil_image vil_image_as_rgb(vil_image const &); // "rgb_byte" would be more appropriate
 
 #endif

@@ -5,14 +5,15 @@
 
 #include <vcl/vcl_cassert.h>
 #include <vcl/vcl_cmath.h>
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_iostream.h>
 #include <vcl/vcl_algorithm.h>
 
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_ip_traits.h>
+#define TRACE 0
+#if TRACE
+#include <vcl/vcl_iostream.h>
+#endif
 
-#define trace if (true) ; else cerr
+#include <vil/vil_buffer.h>
+//#include <vil/vil_ip_traits.h>
 
 //--------------------------------------------------------------------------------
 
@@ -27,13 +28,15 @@
 template <class I1, class I2, class AC, class O>
 void vil_convolve_simple(I1 const* const* input1, unsigned w1, unsigned h1,
 			 I2 const* const* input2, unsigned w2, unsigned h2,
-			 O       * const* out,
-			 AC *)
+			 AC *,
+			 O       * const* out)
 {
-  typedef typename vil_ip_traits<O* const*>::pixel_type OutType;
+  //?? typedef typename vil_ip_traits<O* const*>::pixel_type OutType;
 
-  trace << "w1 h1 = " << w1 << ' ' << h1 << endl;
-  trace << "w2 h2 = " << w2 << ' ' << h2 << endl;
+#if TRACE
+  cerr << "w1 h1 = " << w1 << ' ' << h1 << endl;
+  cerr << "w2 h2 = " << w2 << ' ' << h2 << endl;
+#endif
 
   // here we go : vrrrm.. vrrrm..
   for (int jo=0; jo<int(h1+h2)-1; ++jo) {
@@ -61,19 +64,29 @@ void vil_convolve_simple(I1 const* const* input1, unsigned w1, unsigned h1,
       }
       
       // assign
-      out[jo][io] = OutType(acc);
+      out[jo][io] = O/*utType*/(acc);
     }
   }
 }
+
+#define VIL_CONVOLVE_SIMPLE_INSTANTIATE0(I1, I2, AC, O) \
+template void vil_convolve_simple/*<I1, I2, AC, O >*/(I1 const * const *, unsigned, unsigned, \
+                                                      I2 const * const *, unsigned, unsigned, \
+                                                      AC *,  \
+                                                      O * const *);
+
+//----------------------------------------------------------------------
+
+#include <vil/vil_memory_image_of.h>
 
 template <class I1, class I2, class AC, class O>
 void vil_convolve_simple(vil_memory_image_of<I1> const &input1,    // input 1
 			 int x1, int y1, unsigned w1, unsigned h1,
 			 vil_memory_image_of<I2> const &input2,    // input 2
 			 int x2, int y2, unsigned w2, unsigned h2,
+			 AC *,
 			 vil_memory_image_of<O>        &output,    // ouput
-			 int xo, int yo,
-			 AC *)
+			 int xo, int yo)
 {
   // assert that the memory to be touched may be touched :
   assert( input1.in_range(x1, y1, w1, h1) );
@@ -81,80 +94,83 @@ void vil_convolve_simple(vil_memory_image_of<I1> const &input1,    // input 1
   assert( output.in_range(xo, yo, w1+w2-1, h1+h2-1) );
 
   //
-  vcl_vector<I1 const *> in1(h1);
+  vil_buffer<I1 const *> in1(h1);
   for (unsigned k=0; k<h1; ++k)
     in1[k] = input1[y1+k] + x1;
-  trace << in1.size() << " rasters in in1" << endl;
+#if TRACE
+  cerr << in1.size() << " rasters in in1" << endl;
+#endif
   
   //
-  vcl_vector<I2 const *> in2(h2);
+  vil_buffer<I2 const *> in2(h2);
   for (unsigned k=0; k<h2; ++k)
     in2[k] = input2[y2+k] + x2;
-  trace << in2.size() << " rasters in in2" << endl;
+#if TRACE
+  cerr << in2.size() << " rasters in in2" << endl;
+#endif
 
   //
-  vcl_vector<O *> out(h1+h2-1);
+  vil_buffer<O *> out(h1+h2-1);
   for (unsigned k=0; k<h1+h2-1; ++k)
     out[k] = output[yo+k] + xo;
-  trace << out.size() << " rasters in out" << endl;
-
-  // call the even simpler routine (see comment above for explanation of hack).
+#if TRACE
+  cerr << out.size() << " rasters in out" << endl;
+#endif
+  
+  // call the simpler routine (see comment above for explanation of hack).
   static void (*f)(I1 const * const *, unsigned, unsigned,
 		   I2 const * const *, unsigned, unsigned,
-		   O        * const *, AC *) = 0;
+		   AC *,
+		   O        * const *) = 0;
   if (!f)
     f = vil_convolve_simple;
-  (*f)(const_cast<I1 const * const *>(in1.begin()), w1, h1,
-       const_cast<I2 const * const *>(in2.begin()), w2, h2,
-       const_cast<O        * const *>(out.begin()),
-       (AC*)0);
+  (*f)(const_cast<I1 const * const *>(in1.data()), w1, h1,
+       const_cast<I2 const * const *>(in2.data()), w2, h2,
+       (AC*)0,
+       const_cast<O        * const *>(out.data()));
 }
+
+#define VIL_CONVOLVE_SIMPLE_INSTANTIATE1(I1, I2, AC, O) \
+template void vil_convolve_simple/*<I1, I2, AC, O >*/(vil_memory_image_of<I1> const &, \
+                                                      int, int, unsigned, unsigned, \
+                                                      vil_memory_image_of<I2> const &, \
+                                                      int, int, unsigned, unsigned, \
+                                                      AC *, \
+                                                      vil_memory_image_of<O>        &, \
+                                                      int, int);
+
+//----------------------------------------------------------------------
 
 // out_{off+k} = \sum_{i+j = k} a_{off+i} b_{off+j}
 template <class I1, class I2, class AC, class O>
 void vil_convolve_simple(vil_memory_image_of<I1> const &in1,
 			 vil_memory_image_of<I2> const &in2,
-			 vil_memory_image_of<O>        &out,
-			 AC *)
+			 AC *,
+			 vil_memory_image_of<O>        &out)
 {
   // see comment above for explanation of hack.
   static void (*f)(I1 const * const *, unsigned, unsigned,
 		   I2 const * const *, unsigned, unsigned,
-		   O        * const *, AC *) = 0;
+		   AC *,
+		   O        * const *) = 0;
   if (!f)
     f = vil_convolve_simple;
   (*f)(in1.row_array(), in1.width(), in1.height(),
        in2.row_array(), in2.width(), in2.height(),
-       out.row_array(),
-       (AC*)0);
+       (AC*)0,
+       out.row_array());
 }
  
-
-//--------------------------------------------------------------------------------
-
-#define VIL_CONVOLVE_SIMPLE_INSTANTIATE0(I1, I2, AC, O) \
-template void vil_convolve_simple/*<I1, I2, AC, O >*/(I1 const * const *, unsigned, unsigned,  \
-                                                      I2 const * const *, unsigned, unsigned,  \
-                                                      O * const *, \
-                                                      AC *);
-
-#define VIL_CONVOLVE_SIMPLE_INSTANTIATE1(I1, I2, AC, O) \
-template void vil_convolve_simple/*<I1, I2, AC, O >*/(vil_memory_image_of<I1> const &, \
-                                                      int, int, unsigned, unsigned,    \
-                                                      vil_memory_image_of<I2> const &, \
-                                                      int, int, unsigned, unsigned,    \
-                                                      vil_memory_image_of<O>        &, \
-                                                      int, int, \
-                                                      AC *);
-
 #define VIL_CONVOLVE_SIMPLE_INSTANTIATE2(I1, I2, AC, O) \
 template void vil_convolve_simple/*<I1, I2, AC, O >*/(vil_memory_image_of<I1> const &, \
                                                       vil_memory_image_of<I2> const &, \
-                                                      vil_memory_image_of<O>        &, \
-                                                      AC *);
+                                                      AC *, \
+                                                      vil_memory_image_of<O>        &);
 
-// at last, the macro we've all been waiting for :
+//--------------------------------------------------------------------------------
+
+//
 #define VIL_CONVOLVE_SIMPLE_INSTANTIATE(I1, I2, AC, O) \
 VIL_CONVOLVE_SIMPLE_INSTANTIATE0(I1, I2, AC, O); \
 VIL_CONVOLVE_SIMPLE_INSTANTIATE1(I1, I2, AC, O); \
-VIL_CONVOLVE_SIMPLE_INSTANTIATE2(I1, I2, AC, O)
+VIL_CONVOLVE_SIMPLE_INSTANTIATE2(I1, I2, AC, O);

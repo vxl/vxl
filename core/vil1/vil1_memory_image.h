@@ -34,14 +34,12 @@ public:
   void* get_buffer() { return rows0_[0]; }
 
 protected:
-  // vil_memory_image_impl* impl; stored in vil_image
-
-  // Caches these informations from the memory image
+  // The following informations are cached from the vil_memory_image_impl :
   int width_;
   int height_;
   void ** rows0_;
 
-  vil_memory_image(): vil_image(0) { }
+  //vil_memory_image(): vil_image() { }
 };
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_memory_image.
