@@ -33,6 +33,7 @@ TESTS += test_algo_find_peaks.cxx
 TESTS += test_algo_region_finder.cxx
 TESTS += test_algo_cartesian_differential_invariants.cxx
 TESTS += test_algo_corners.cxx
+TESTS += test_algo_sobel.cxx
 
 #MINI_PROG_SOURCES += vil_mil_gauss_general_timings.cxx
 
