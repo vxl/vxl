@@ -23,6 +23,9 @@ SOURCES += infcodes.c
 SOURCES += infutil.c
 SOURCES += inffast.c
 
+# With -O2 or -O3, this file segfaults at line 514 on HP:
+FLAGS_deflate.c += -O1
+
 ################################
 include ${IUEROOT}/config/top.mk
 ################################
