@@ -8,7 +8,7 @@
 // \author Ian Scott
 
 #include <clsfy/clsfy_classifier_base.h>
-#include "vpdfl/vpdfl_pdf_base.h"
+#include <vpdfl/vpdfl_pdf_base.h>
 #include <vcl_cassert.h>
 
 //:  Decisions are based on an explicit multivariate probability distribution
