@@ -231,6 +231,11 @@ SOURCE=.\mil_algo_brighten_image_2d.txx
 SOURCE=.\mil_algo_brighten_image_2d.h
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\mil_algo_convolve_1d.h
+
+# End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
