@@ -89,13 +89,13 @@ double bdgl_curve_clustering::compute_hausdorff_distance(vcl_vector<vgl_point_2d
                                                          vcl_vector<vgl_point_2d<double> > curve2)
 {
   double maxdAB=-1;
-  for (int i=0;i<curve1.size();i++)
+  for (unsigned int i=0; i<curve1.size(); ++i)
   {
     double mindxB=1e6;
     for (unsigned int j=0; j<curve2.size(); ++j)
     {
       double dxB=vcl_sqrt((curve1[i].x()-curve2[j].x())*(curve1[i].x()-curve2[j].x())
-                          +(curve1[i].y()-curve2[j].y())*(curve1[i].y()-curve2[j].y()));
+                         +(curve1[i].y()-curve2[j].y())*(curve1[i].y()-curve2[j].y()));
       if (dxB<mindxB)
         mindxB=dxB;
     }
@@ -110,7 +110,7 @@ double bdgl_curve_clustering::compute_hausdorff_distance(vcl_vector<vgl_point_2d
     for (unsigned int j=0; j<curve1.size(); ++j)
     {
       double dxA=vcl_sqrt((curve2[i].x()-curve1[j].x())*(curve2[i].x()-curve1[j].x())
-                  +(curve2[i].y()-curve1[j].y())*(curve2[i].y()-curve1[j].y()));
+                         +(curve2[i].y()-curve1[j].y())*(curve2[i].y()-curve1[j].y()));
       if (dxA<mindxA)
         mindxA=dxA;
     }
@@ -457,15 +457,13 @@ void bdgl_curve_clustering::clustering()
     f<<'\n';
   }
   f.close();
-  // some temporary variables
-  double min_cost=0;
-  //double likelihood=0;
-  int mini,minj;
 
-  int clustering_=1;
-  while (clusters_.size()>no_of_clusters_ && clustering_)
+  bool clustering_=true;
+  while (clusters_.size()>(unsigned int)no_of_clusters_ && clustering_)
   {
-    min_cost=1e6;
+    // some temporary variables
+    int mini=0,minj=0;
+    double min_cost=1e6;
     for (unsigned int i=0; i<clusters_.size(); ++i)
     {
       for (unsigned int j=i; j<clusters_.size(); ++j)
@@ -475,10 +473,8 @@ void bdgl_curve_clustering::clustering()
           double cost1=compute_cluster_dist(i,j);
           //double cost1=compute_likelihood_distance( i, j);
           if (min_cost>cost1)
-          //if (likelihood>cost1)
           {
             min_cost=cost1;
-            //likelihood=cost1;
             mini=i;
             minj=j;
           }
@@ -492,7 +488,7 @@ void bdgl_curve_clustering::clustering()
       merge_clusters(mini,minj);
     }
     else
-      clustering_=0;
+      clustering_=false;
   }
   // assigning new ids and filtering out groups with one member
   for (unsigned int i=0; i<clusters_.size(); ++i)
