@@ -101,6 +101,7 @@ macro( double , vil_rgb<vxl_int_32> )
 macro( vxl_uint_32 , vil_rgb<vxl_uint_32> )
 macro( float , vil_rgb<vxl_uint_32> )
 macro( double , vil_rgb<vxl_uint_32> )
+macro( double , vil_rgb<float> )
 #undef macro
 #define macro( in , out )\
 VCL_DEFINE_SPECIALIZATION \
@@ -124,6 +125,7 @@ macro( double , vil_rgba<vxl_int_32> )
 macro( vxl_uint_32 , vil_rgba<vxl_uint_32> )
 macro( float , vil_rgba<vxl_uint_32> )
 macro( double , vil_rgba<vxl_uint_32> )
+macro( double , vil_rgba<float> )
 #undef macro
 #define macro( inout )\
 VCL_DEFINE_SPECIALIZATION \
