@@ -83,6 +83,7 @@ contrib/rpl rsdl   rsdl_   build core/vnl core/vbl
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl contrib/brl Brown University libraries
 contrib/brl/bbas bdgl   bdgl_   build contrib/gel/vtol core/vil1 core/vbl
+contrib/brl/bbas bgrl   bgrl_   build core/vbl core/vsl
 contrib/brl/bbas bgui   bgui_   build contrib/gel/vtol core/vgui
 contrib/brl/bbas bsol   bsol_   build contrib/gel/vsol core/vil1 core/vbl
 contrib/brl/bbas btol   btol_   build contrib/gel/vtol core/vil1 core/vbl
