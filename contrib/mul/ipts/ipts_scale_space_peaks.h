@@ -10,6 +10,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vimt/vimt_image_pyramid.h>
 #include <vcl_cmath.h> // for sqrt(double)
+#include <vcl_cassert.h>
 
 //: True if value is strictly above *im and its 8 neighbours
 template <class T>
@@ -32,15 +33,16 @@ inline bool ipts_is_above_3x3(T value, const T* im,
 //  Points returned in a 3D point, given world coords + scale value
 template<class T>
 inline void ipts_scale_space_peaks_2d(vcl_vector<vgl_point_3d<double> >& peak_pts,
-                               const vimt_image_2d_of<T>& image_below,
-                               const vimt_image_2d_of<T>& image,
-                               const vimt_image_2d_of<T>& image_above,
-                               T threshold = 0,
-                               bool clear_list = true)
+                                      const vimt_image_2d_of<T>& image_below,
+                                      const vimt_image_2d_of<T>& image,
+                                      const vimt_image_2d_of<T>& image_above,
+                                      T threshold = 0,
+                                      bool clear_list = true)
 {
   if (clear_list) { peak_pts.resize(0); }
   unsigned ni=image.image().ni(),nj=image.image().nj();
   vcl_ptrdiff_t istep = image.image().istep(),jstep=image.image().jstep();
+  assert(istep!=0); // strange image if istep would be 0 ... most probably uninitialised!
   const T* row = &image.image()(1,1,0);
 
   const vil_image_view<T>& im_below = image_below.image();
@@ -97,10 +99,10 @@ inline void ipts_scale_space_peaks_2d(vcl_vector<vgl_point_3d<double> >& peak_pt
 //  those in nearby positions in image1
 template<class T>
 inline void ipts_scale_space_peaks_2d(vcl_vector<vgl_point_2d<double> >& peak_pts,
-                               vcl_vector<T>& peak_values,
-                               const vimt_image_2d_of<T>& image0,
-                               const vimt_image_2d_of<T>& image1,
-                               T threshold)
+                                      vcl_vector<T>& peak_values,
+                                      const vimt_image_2d_of<T>& image0,
+                                      const vimt_image_2d_of<T>& image1,
+                                      T threshold)
 {
   vcl_vector<vgl_point_2d<double> > peak_pts0;
   vcl_vector<T> peak_values0;
@@ -136,9 +138,9 @@ inline void ipts_scale_space_peaks_2d(vcl_vector<vgl_point_2d<double> >& peak_pt
 //  those in nearby positions in image1
 template<class T>
 inline void ipts_scale_space_peaks_2d(vcl_vector<vgl_point_3d<double> >& peak_pts,
-                               const vimt_image& image0,
-                               const vimt_image& image1,
-                               T threshold)
+                                      const vimt_image& image0,
+                                      const vimt_image& image1,
+                                      T threshold)
 {
   const vimt_image_2d_of<T>& im0 =
                 dynamic_cast<const vimt_image_2d_of<T>&>(image0);
@@ -167,8 +169,8 @@ inline void ipts_scale_space_peaks_2d(vcl_vector<vgl_point_3d<double> >& peak_pt
 //  vimt_image_2d_of<T> - threshold indicates the typing.
 template<class T>
 inline void ipts_scale_space_peaks_2d(vcl_vector<vgl_point_3d<double> >& peak_pts,
-                               const vimt_image_pyramid& image_pyr,
-                               T threshold)
+                                      const vimt_image_pyramid& image_pyr,
+                                      T threshold)
 {
   peak_pts.resize(0);
 
