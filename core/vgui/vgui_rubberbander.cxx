@@ -142,6 +142,7 @@ void vgui_rubberbander::draw_point(float x, float y)
 {
   glColor3f(1,1,1);
   glBegin(GL_POINTS);
+  // vcl_cerr << "vgui_rubberbander::draw_point(" << x << "," << y << ")\n";
   glVertex2f(x,y);
   glEnd();
 }
