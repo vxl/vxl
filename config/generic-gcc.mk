@@ -39,7 +39,8 @@ endif
 pic := -fpic
 PIC := -fPIC
 wall := -Wall -Wstrict-prototypes -Wmissing-prototypes -Wpointer-arith
-#wall += -Wnested-externs -Wcast-qual -Wcast-align -Woverloaded-virtual -Winline -Wshadow # annoying warnings
+wall += -Wwrite-strings -Wconversion -Wcast-qual -Wcast-align # -Woverloaded-virtual
+#wall += -Winline -Wshadow -Wnested-externs # annoying warnings
 
 ccflags += -fno-math-errno
 
