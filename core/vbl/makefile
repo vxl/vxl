@@ -31,6 +31,22 @@ SOURCES += vbl_qsort.cxx
 SOURCES += vbl_psfile.cxx
 SOURCES += vbl_sequence_filename_map.cxx
 
+MANPAGE_SOURCES += vbl_array.txx
+MANPAGE_SOURCES += vbl_array_2d.txx
+MANPAGE_SOURCES += vbl_array_3d.txx
+MANPAGE_SOURCES += vbl_basic_relation.txx
+MANPAGE_SOURCES += vbl_binary.txx
+MANPAGE_SOURCES += vbl_bounding_box.txx
+MANPAGE_SOURCES += vbl_br_default.txx
+MANPAGE_SOURCES += vbl_br_impl.txx
+MANPAGE_SOURCES += vbl_hash_map.txx
+MANPAGE_SOURCES += vbl_protection_traits.txx
+MANPAGE_SOURCES += vbl_smart_ptr.txx
+MANPAGE_SOURCES += vbl_sort.txx
+MANPAGE_SOURCES += vbl_sparse_array.txx
+MANPAGE_SOURCES += vbl_sparse_array_2d.txx
+MANPAGE_SOURCES += vbl_sparse_array_3d.txx
+
 # debugging
 SOURCES += vbl_trace.cxx
 

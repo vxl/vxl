@@ -18,6 +18,7 @@ SOURCES += vil_file_format.cxx
 SOURCES += vil_byte_swap.cxx
 SOURCES += vil_16bit.cxx
 SOURCES += vil_32bit.cxx
+MANPAGE_SOURCES += vil_buffer.txx
 
 # various vil_stream classes
 #SOURCES += vil_stream_iso_stream.cxx  # from a C++ stream
@@ -28,6 +29,7 @@ SOURCES += vil_stream_section.cxx     # present a section of a vil_stream
 # classes derived from vil_image
 SOURCES += vil_file_image.cxx
 SOURCES += vil_memory_image.cxx
+MANPAGE_SOURCES += vil_memory_image_of.txx
 SOURCES += vil_image_proxy.cxx
 
 # image adaptors
@@ -81,12 +83,19 @@ SOURCES += vil_skip.cxx
 SOURCES += vil_resample.cxx
 SOURCES += vil_flipud.cxx
 MANPAGE_SOURCES += vil_convolve.txx
+MANPAGE_SOURCES += vil_convolve_simple.txx
 SOURCES += vil_smooth.cxx
 SOURCES += vil_clamp.cxx
 SOURCES += vil_scale_intensities.cxx
+MANPAGE_SOURCES += vil_interpolate.txx
+MANPAGE_SOURCES += vil_resample_image.txx
+MANPAGE_SOURCES += vil_ncc.txx
+MANPAGE_SOURCES += vil_ssd.txx
 
 # Stuff
 SOURCES += vil_pyramid.cxx
+MANPAGE_SOURCES += vil_rgb.txx
+MANPAGE_SOURCES += vil_rgba.txx
 SOURCES += vil_rgb_byte.cxx
 SOURCES += vil_memory_image_window.cxx
 

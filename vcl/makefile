@@ -19,6 +19,18 @@ SOURCES += vcl_cassert.cxx
 SOURCES += $(wildcard vcl_rtti.cxx)
 SOURCES += $(wildcard vcl_debug.cxx)
 SOURCES += $(wildcard vcl_chkr.cxx)
+MANPAGE_SOURCES += vcl_algorithm.txx
+MANPAGE_SOURCES += vcl_complex.txx
+MANPAGE_SOURCES += vcl_deque.txx
+MANPAGE_SOURCES += vcl_functional.txx
+MANPAGE_SOURCES += vcl_iterator.txx
+MANPAGE_SOURCES += vcl_list.txx
+MANPAGE_SOURCES += vcl_map.txx
+MANPAGE_SOURCES += vcl_set.txx
+MANPAGE_SOURCES += vcl_stack.txx
+MANPAGE_SOURCES += vcl_string.txx
+MANPAGE_SOURCES += vcl_utility.txx
+MANPAGE_SOURCES += vcl_vector.txx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
@@ -30,6 +42,21 @@ SOURCES += emulation/vcl_hashtable.cxx
 SOURCES += emulation/vcl_string_instances.cxx
 SOURCES += emulation/vcl_alloc.cxx
 SOURCES += emulation/vcl_rbtree_instances.cxx
+MANPAGE_SOURCES += emulation/vcl_algorithm.txx
+MANPAGE_SOURCES += emulation/vcl_complex.txx
+MANPAGE_SOURCES += emulation/vcl_deque.txx
+MANPAGE_SOURCES += emulation/vcl_functional.txx
+MANPAGE_SOURCES += emulation/vcl_hash.txx
+MANPAGE_SOURCES += emulation/vcl_hash_map.txx
+MANPAGE_SOURCES += emulation/vcl_iterator.txx
+MANPAGE_SOURCES += emulation/vcl_list.txx
+MANPAGE_SOURCES += emulation/vcl_map.txx
+MANPAGE_SOURCES += emulation/vcl_multimap.txx
+MANPAGE_SOURCES += emulation/vcl_rbtree.txx
+MANPAGE_SOURCES += emulation/vcl_set.txx
+MANPAGE_SOURCES += emulation/vcl_string.txx
+MANPAGE_SOURCES += emulation/vcl_utility.txx
+MANPAGE_SOURCES += emulation/vcl_vector.txx
 endif
 
 DEFINES += -DBUILDING_VCL_DLL

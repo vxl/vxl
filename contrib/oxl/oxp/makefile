@@ -16,6 +16,7 @@ SOURCES += ByteConvertImage.cxx
 SOURCES += JPEG_Decompressor.cxx
 SOURCES += ImageSequenceName.cxx
 SOURCES += SequenceFileName.cxx
+MANPAGE_SOURCES += ImageWarp.txx
 
 SOURCES += GXFileVisitor.cxx
 
