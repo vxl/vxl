@@ -141,15 +141,15 @@ void vil_gen_generic_image::init(vcl_string const& s)
 bool vil_gen_generic_image::get_section(void* buf, int x0, int y0, int xs, int ys) const
 {
   if (type_ == vil_gen_gray) {
-    vcl_memset(buf, xs*ys, params_[0]);
+    vcl_memset(buf, xs*ys, int(params_[0]));
     return true;
   }
   if (type_ == vil_gen_rgb) {
     int n = xs*ys;
     unsigned char* p = (unsigned char*)buf;
-    unsigned char r = params_[0];
-    unsigned char g = params_[1];
-    unsigned char b = params_[2];
+    unsigned char r = (unsigned char)(params_[0]);
+    unsigned char g = (unsigned char)(params_[1]);
+    unsigned char b = (unsigned char)(params_[2]);
     while (n--) {
       *p++ = r;
       *p++ = g;
