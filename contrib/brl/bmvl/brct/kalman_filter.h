@@ -12,7 +12,12 @@
 #endif // _MSC_VER > 1000
 
 #include <vcl_vector.h>
+#include <vnl/vnl_double_2.h>
+#include <vnl/vnl_double_3.h>
+#include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3x4.h>
+#include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_matrix.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vgl/vgl_point_3d.h>
@@ -23,16 +28,16 @@ class kalman_filter
   //: initialize the kalman filter with
   //virtual kalman_state inc(double dt);
  public:
-	vcl_vector<vgl_point_2d<double> > get_pre_observes();
-	vcl_vector<vgl_point_2d<double> > get_cur_observes();
+  vcl_vector<vgl_point_2d<double> > get_pre_observes();
+  vcl_vector<vgl_point_2d<double> > get_cur_observes();
   void read_data(char* fname);
-  vcl_vector<vgl_point_3d<double> > kalman_filter::get_local_pts();
+  vcl_vector<vgl_point_3d<double> > get_local_pts();
 
   //: initialize the kalman filter states
   void init();
   void inc();
   void update_covariant();
-  vnl_vector_fixed<double, 2> projection(vnl_double_3x4 &P, vnl_vector_fixed<double, 3> &X);
+  vnl_double_2 projection(vnl_double_3x4 &P, vnl_double_3 &X);
   void prediction();
 
   //: constructors
@@ -43,10 +48,10 @@ class kalman_filter
 
  protected:
   void init_velocity();
-  void adjust_state_vector(vnl_vector_fixed<double, 2> const& pred, vnl_vector_fixed<double, 2> const& meas);
+  void adjust_state_vector(vnl_double_2 const& pred, vnl_double_2 const& meas);
 
   //: set linearized observation matrix
-  void set_H_matrix(vnl_double_3x4 &P, vnl_vector_fixed<double, 3> &X);
+  void set_H_matrix(vnl_double_3x4 &P, vnl_double_3 &X);
 
   //: computer projective matrix from predicted position
   vnl_double_3x4 get_projective_matrix();
@@ -54,14 +59,13 @@ class kalman_filter
   void init_covariant_matrix();
   void init_cam_intrinsic();
 
-
   void init_observes(vcl_vector<vnl_matrix<double> > &input);
 
   void init_state_vector();
   void init_transit_matrix();
 
  private:
-  vcl_vector<vnl_vector_fixed<double, 3> > Xl_;
+  vcl_vector<vnl_double_3> Xl_;
   vcl_vector<vnl_matrix<double> > observes_;
 
   //: each element of the vector represents a projection of the same 3D curves.
@@ -75,7 +79,7 @@ class kalman_filter
   int memory_size_;
 
   //: transit matrix
-  vnl_matrix_fixed<double, 6, 6> A_ ;
+  vnl_matrix_fixed<double, 6, 6> A_;
 
   //: state vector
   vnl_vector_fixed<double, 6> X_;
@@ -99,8 +103,8 @@ class kalman_filter
   vnl_matrix_fixed<double, 6, 6> Q_;
 
   //: camera intrinsic parameters
-  vnl_matrix_fixed<double, 3, 3> M_in_;
-  double dt_ ;
+  vnl_double_3x3 M_in_;
+  double dt_;
 };
 
 #endif // brct_kalman_filter_h_
