@@ -201,7 +201,7 @@ void vgui::uninit()
 {
   vcl_cout << "vgui::uninit called" << vcl_endl;
   // make sure uninit does something only once
-  static uninit_called = false;
+  static bool uninit_called = false;
   if( !uninit_called && init_called && instance_ ) {
     instance_->uninit();
   }
