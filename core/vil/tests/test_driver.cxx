@@ -1,6 +1,7 @@
 #include <testlib/testlib_register.h>
 
 DECLARE( test_file_format_read );
+DECLARE( test_pixel_format );
 DECLARE( test_save_load_image );
 DECLARE( test_image_view );
 DECLARE( test_bilin_interp );
@@ -13,6 +14,7 @@ DECLARE( test_algo_exp_filter_1d );
 void
 register_tests()
 {
+  REGISTER( test_pixel_format );
   REGISTER( test_save_load_image );
   REGISTER( test_file_format_read );
   REGISTER( test_image_view );

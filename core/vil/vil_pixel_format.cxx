@@ -62,8 +62,8 @@ static unsigned num_components[]={
   3,  //  VIL2_PIXEL_FORMAT_RGB_FLOAT
   3,  //  VIL2_PIXEL_FORMAT_RGB_DOUBLE
 
-  4,  //  VIL2_PIXEL_FORMAT_RGBA_UINT_42
-  4,  //  VIL2_PIXEL_FORMAT_RGBA_INT_42
+  4,  //  VIL2_PIXEL_FORMAT_RGBA_UINT_32
+  4,  //  VIL2_PIXEL_FORMAT_RGBA_INT_32
   4,  //  VIL2_PIXEL_FORMAT_RGBA_UINT_16
   4,  //  VIL2_PIXEL_FORMAT_RGBA_INT_16
   4,  //  VIL2_PIXEL_FORMAT_RGBA_BYTE
@@ -73,18 +73,60 @@ static unsigned num_components[]={
 };
 
 
+static vil2_pixel_format component_format[]={
+VIL2_PIXEL_FORMAT_UNKNOWN,  //  VIL2_PIXEL_FORMAT_UNKNOWN
+
+VIL2_PIXEL_FORMAT_UINT_32,  //  VIL2_PIXEL_FORMAT_UINT_32
+VIL2_PIXEL_FORMAT_INT_32,   //  VIL2_PIXEL_FORMAT_INT_32
+VIL2_PIXEL_FORMAT_UINT_16,  //  VIL2_PIXEL_FORMAT_UINT_16
+VIL2_PIXEL_FORMAT_INT_16,   //  VIL2_PIXEL_FORMAT_INT_16
+VIL2_PIXEL_FORMAT_BYTE,     //  VIL2_PIXEL_FORMAT_BYTE
+VIL2_PIXEL_FORMAT_INT_8,    //  VIL2_PIXEL_FORMAT_INT_8
+VIL2_PIXEL_FORMAT_FLOAT,    //  VIL2_PIXEL_FORMAT_FLOAT
+VIL2_PIXEL_FORMAT_DOUBLE,   //  VIL2_PIXEL_FORMAT_DOUBLE
+VIL2_PIXEL_FORMAT_BOOL,     //  VIL2_PIXEL_FORMAT_BOOL
+
+VIL2_PIXEL_FORMAT_UINT_32,  //  VIL2_PIXEL_FORMAT_RGB_UINT_32
+VIL2_PIXEL_FORMAT_INT_32,   //  VIL2_PIXEL_FORMAT_RGB_INT_32
+VIL2_PIXEL_FORMAT_UINT_16,  //  VIL2_PIXEL_FORMAT_RGB_UINT_16
+VIL2_PIXEL_FORMAT_INT_16,   //  VIL2_PIXEL_FORMAT_RGB_INT_16
+VIL2_PIXEL_FORMAT_BYTE,     //  VIL2_PIXEL_FORMAT_RGB_BYTE
+VIL2_PIXEL_FORMAT_INT_8,    //  VIL2_PIXEL_FORMAT_RGB_INT_8
+VIL2_PIXEL_FORMAT_FLOAT,    //  VIL2_PIXEL_FORMAT_RGB_FLOAT
+VIL2_PIXEL_FORMAT_DOUBLE,   //  VIL2_PIXEL_FORMAT_RGB_DOUBLE
+
+VIL2_PIXEL_FORMAT_UINT_32,  //  VIL2_PIXEL_FORMAT_RGBA_UINT_32
+VIL2_PIXEL_FORMAT_INT_32,   //  VIL2_PIXEL_FORMAT_RGBA_INT_32
+VIL2_PIXEL_FORMAT_UINT_16,  //  VIL2_PIXEL_FORMAT_RGBA_UINT_16
+VIL2_PIXEL_FORMAT_INT_16,   //  VIL2_PIXEL_FORMAT_RGBA_INT_16
+VIL2_PIXEL_FORMAT_BYTE,     //  VIL2_PIXEL_FORMAT_RGBA_BYTE
+VIL2_PIXEL_FORMAT_INT_8,    //  VIL2_PIXEL_FORMAT_RGBA_INT_8
+VIL2_PIXEL_FORMAT_FLOAT,    //  VIL2_PIXEL_FORMAT_RGBA_FLOAT
+VIL2_PIXEL_FORMAT_DOUBLE,   //  VIL2_PIXEL_FORMAT_RGBA_DOUBLE
+};
+
+
 //: Return the number of bytes used by each component of pixel format f
 unsigned vil2_pixel_format_sizeof_components(enum vil2_pixel_format f)
 {
-  assert (f >= 0 && f < VIL2_PIXEL_FORMAT_ENUM_END);
+  assert (f >= VIL2_PIXEL_FORMAT_UNKNOWN && f < VIL2_PIXEL_FORMAT_ENUM_END);
   return component_size[f];
 }
 //: Return the number of components in pixel format f
 unsigned vil2_pixel_format_num_components(enum vil2_pixel_format f)
 {
-  assert (f >= 0 && f < VIL2_PIXEL_FORMAT_ENUM_END);
+  assert (f >= VIL2_PIXEL_FORMAT_UNKNOWN && f < VIL2_PIXEL_FORMAT_ENUM_END);
   return num_components[f];
 }
+
+
+//: Return the number of components in pixel format f
+vil2_pixel_format vil2_pixel_format_component_format(enum vil2_pixel_format f)
+{
+  assert (f >= VIL2_PIXEL_FORMAT_UNKNOWN && f < VIL2_PIXEL_FORMAT_ENUM_END);
+  return component_format[f];
+}
+
 
 //: output a pretty string representing the pixel format.
 vcl_ostream & operator << (vcl_ostream &os, vil2_pixel_format f)

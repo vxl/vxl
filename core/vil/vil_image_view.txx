@@ -151,19 +151,24 @@ const vil2_image_view<T> & vil2_image_view<T>::operator= (const vil2_image_view_
     this->operator=(that);
     return *this
   }
+#endif
 
-  if (this is an rgb pixel type and rhs is a this pixel of the
-      same component type)
- {
-    vil2_image_view<T> that = vil2_view_as_rgb(
-      static_cast<const vil2_image_view<vil_rgb<T> >&>(rhs));
-    this->operator=(that);
+  if (vil2_pixel_format_num_components(pixel_format())== rhs.nplanes() && 
+      vil2_pixel_format_component_format(pixel_format())== rhs.pixel_format())
+  {
+// Uncommenting this causes a wierd compile error on MSVC 
+//    const vil2_image_view<vil_rgb<T> > &that2 = static_cast<const vil2_image_view<vil_rgb<T> >&>(rhs);
+//    vil2_image_view<T> that = vil2_view_as_rgb(
+//      static_cast<const vil2_image_view<vil_rgb<T> >&>(rhs));
+//    this->operator=(that);
+//    return *this;
+    set_to_memory(0, 0, 0, 0, 0, 0, 0);
     return *this;
   }
-#endif
 
   set_to_memory(0, 0, 0, 0, 0, 0, 0);
   return *this;
+
 }
 
 
