@@ -36,7 +36,7 @@
 // better behaved away from minima. 2 ranks of this matrix are updated at each
 // step. In order to reduce memory and time requirements, this limited memory
 // version of BFGS only maintains a certain number of vector corrections
-// to a diagonal estimate of the inverse hessian estimate.
+// to a diagonal estimate of the inverse Hessian estimate.
 
 class vnl_lbfgs : public vnl_nonlinear_minimizer
 {
@@ -48,7 +48,7 @@ class vnl_lbfgs : public vnl_nonlinear_minimizer
 
   //: Step accuracy/speed tradeoff.
   // Effectively the number of correction vectors to the diagonal approximation
-  // of the inverse hessian estimate that are kept.
+  // of the inverse Hessian estimate that are kept.
   //
   // Large values of M will result in excessive computing time.
   // 3<= memory <=7 is recommended.
