@@ -132,8 +132,16 @@ bmrf_network::size(int frame)
 double
 bmrf_network::probability()
 {
+  double total_prob = 1.0;
+  int count = 0;
+  for( seg_node_map::const_iterator itr = node_from_seg_.begin();
+       itr != node_from_seg_.end();  ++itr, ++count ){
+    double prob = itr->second->probability();
+    total_prob *= prob;
+    vcl_cout << count << "\t prob=" << prob << "\t total="<<total_prob<<vcl_endl;
+  }
   // We have not yet determined how to calculate this
-  return 0.0;
+  return total_prob;
 }
 
 

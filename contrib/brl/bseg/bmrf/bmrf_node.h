@@ -80,7 +80,8 @@ class bmrf_node : public vbl_ref_count
   //: Destructor
   ~bmrf_node(){}
 
-  //: Calculate the conditional probability that this node is correct given its neighbors
+  //: Return the probability of this node
+  // \note probability is computed as needed
   double probability();
 
   //: Calculate the probability given the gamma function and neighbors
@@ -117,6 +118,9 @@ class bmrf_node : public vbl_ref_count
   void print_summary(vcl_ostream &os) const;
 
  protected:
+  //: Compute the conditional probability that this node is correct given its neighbors
+  void compute_probability();
+
   //: Add \p node as a neighbor of type \p type
   // \retval true if the node was added successfully
   // \retval false if the neighbor is not valid or already exists
@@ -153,6 +157,9 @@ class bmrf_node : public vbl_ref_count
 
   //: The cached probability value
   double probability_;
+
+  //: The estimate of the gamma function
+  bmrf_gamma_func_sptr gamma_;
 
   //: The pointers to outgoing arcs
   vcl_list<bmrf_arc_sptr> out_arcs_;

@@ -113,14 +113,35 @@ bmrf_match_error( const bmrf_epi_seg_sptr& ep1, const bmrf_epi_seg_sptr& ep2 )
 }
 
 
-//: Calculate the conditional probability that this node is correct given its neighbors
+//: Return the probability of this node
 double
 bmrf_node::probability()
+{
+  if(this->num_neighbors() < 1)
+    return probability_ = 0.0;
+
+  if(probability_ <= 0.0)
+    compute_probability();
+
+  return probability_;
+}
+
+
+static bool 
+pair_dbl_arc_gt_cmp ( const vcl_pair<double,bmrf_node::arc_iterator>& lhs,
+                      const vcl_pair<double,bmrf_node::arc_iterator>& rhs )
+{
+  return lhs.first > rhs.first;
+}
+
+//: Compute the conditional probability that this node is correct given its neighbors
+void
+bmrf_node::compute_probability()
 {
   if (weight_.empty())
     this->compute_weights();
 
-  vcl_vector<vcl_pair<double,double> > pmf;
+  vcl_vector<vcl_pair<double,arc_iterator> > pmf;
   for ( arc_iterator a_itr = this->begin(TIME); a_itr != this->end(TIME); ++a_itr )
   {
     bmrf_node_sptr neighbor = (*a_itr)->to();
@@ -129,19 +150,55 @@ bmrf_node::probability()
     double gamma = (1.0 - dist_ratio) / time_step;
 
     bmrf_gamma_func_sptr gamma_func = new bmrf_const_gamma_func(gamma);
-    pmf.push_back(vcl_pair<double,double>(this->probability(gamma_func),gamma));
+    pmf.push_back(vcl_pair<double,arc_iterator>(this->probability(gamma_func),a_itr));
   }
-  vcl_sort(pmf.begin(), pmf.end());
+
+  // Sort the results by probability
+  vcl_sort(pmf.begin(), pmf.end(), pair_dbl_arc_gt_cmp);
+  // Threshold probability at 50% of the maximum
+  double thresh = pmf.front().first * 0.5;
+
+  // Remove arcs to neighbors that are below threshold 
+  // don't remove arcs back to this node
+  vcl_vector<vcl_pair<double,arc_iterator> >::iterator p_itr = pmf.begin();
+  while( p_itr != pmf.end() && p_itr->first > thresh)  ++p_itr;
+  for ( ; p_itr != pmf.end(); ++p_itr ){
+    // adjust boundaries if necessary
+    for (int type=int(TIME); type>=0 && (boundaries_[type] == p_itr->second); --type)
+      ++boundaries_[type];
+
+    out_arcs_.erase(p_itr->second); // erase the arc
+    --sizes_[TIME]; // decrease count
+  }
+  
+  // Recompute weights
+  this->compute_weights();
+
+  vcl_vector<vcl_pair<double,double> > pmf2;
+  for ( arc_iterator a_itr = this->begin(TIME); a_itr != this->end(TIME); ++a_itr )
+  {
+    bmrf_node_sptr neighbor = (*a_itr)->to();
+    double dist_ratio = avg_distance_ratio(this->epi_seg(), neighbor->epi_seg());
+    int time_step = neighbor->frame_num() - this->frame_num();
+    double gamma = (1.0 - dist_ratio) / time_step;
+
+    bmrf_gamma_func_sptr gamma_func = new bmrf_const_gamma_func(gamma);
+    pmf2.push_back(vcl_pair<double,double>(this->probability(gamma_func),gamma));
+  }
+
 #ifdef DEBUG
   vcl_cout << "Samples\n";
-  for ( vcl_vector<vcl_pair<double,double> >::iterator p_itr = pmf.begin();
-        p_itr != pmf.end();  ++p_itr )
+  for ( vcl_vector<vcl_pair<double,double> >::iterator p_itr = pmf2.begin();
+        p_itr != pmf2.end();  ++p_itr )
     vcl_cout << p_itr->second <<'\t'<< p_itr->first << vcl_endl;
   vcl_cout << vcl_endl;
 #endif
 
-  probability_ = (pmf.empty()) ? 0 : pmf.back().first;
-  return probability_;
+  // Sort the results by probability
+  vcl_sort(pmf2.begin(), pmf2.end());
+
+  probability_ = pmf2.back().first;
+  gamma_ = new bmrf_const_gamma_func(pmf2.back().second);
 }
 
 
@@ -240,6 +297,9 @@ bmrf_node::add_neighbor( bmrf_node *node, neighbor_type type )
   for (int t=type; t>=0 && (boundaries_[type+1] == boundaries_[t]); --t)
     --boundaries_[t];
 
+  // weights must be recomputed
+  weight_.clear();
+
   return true;
 }
 
@@ -272,6 +332,11 @@ bmrf_node::remove_neighbor( bmrf_node *node, neighbor_type type )
       }
     }
   }
+
+  // weights must be recomputed
+  if(removed)
+    weight_.clear();
+
   return removed;
 }
 
