@@ -1,60 +1,50 @@
-/*
- * DicomHeaderFormat.cxx
- * =====================
- *
- * The implementation of the vil2_dicom_header_format class to read
- * and write the header part of a dicom file.
- *
- * Author: Chris Wolstenholme
- * E-mail: cwolstenholme@imorphics.com
- * Copyright (c) 2001 iMorphics Ltd
- *
- */
+// DicomHeaderFormat.cxx
+// =====================
+//
+// The implementation of the vil2_dicom_header_format class to read
+// and write the header part of a dicom file.
+//
+// Author: Chris Wolstenholme
+// E-mail: cwolstenholme@imorphics.com
+// Copyright (c) 2001 iMorphics Ltd
 
 #include "vil2_dicom_header.h"
-#include <vil2/vil2_stream_fstream.h>
+#include <vil2/vil2_stream.h>
 
 //================================================================
 // Default constructor
 //================================================================
 vil2_dicom_header_format::vil2_dicom_header_format() :
-info_valid_(false), 
+info_valid_(false),
 file_endian_(VIL2_DICOM_HEADER_DEUNKNOWN),
 image_type_(VIL2_DICOM_HEADER_DITUNKNOWN)
 {
-
   // Work out the endianism of this architecture
   endian_ = calculateEndian();
-
-} 
+}
 
 //================================================================
 
 vil2_dicom_header_format::~vil2_dicom_header_format()
 {
-
   // Do Nothing
-
 }
 
 //================================================================
 
 bool vil2_dicom_header_format::isDicomFormat(vil2_stream &fs)
 {
-
   vil2_dicom_header_type dtype;
 
   dtype = determineFileType(fs);
 
-  return (dtype!=VIL2_DICOM_HEADER_DTUNKNOWN);
-
+  return dtype!=VIL2_DICOM_HEADER_DTUNKNOWN;
 }
 
 //================================================================
 
 vil2_dicom_header_info vil2_dicom_header_format::readHeader(vil2_stream &fs)
 {
-
   vil2_dicom_header_type dtype;
 
   // Clear the current header
@@ -65,15 +55,12 @@ vil2_dicom_header_info vil2_dicom_header_format::readHeader(vil2_stream &fs)
   // Check if the file is dicom first
   if (dtype != VIL2_DICOM_HEADER_DTUNKNOWN)
   {
-
     last_read_.file_type_ = dtype;
     last_read_.sys_endian_ = systemEndian();
 
     if (dtype == VIL2_DICOM_HEADER_DTPART10)
     {
-
       file_endian_ = determineMetaInfo(fs);
-
     }
 
     last_read_.file_endian_ = fileEndian();
@@ -82,78 +69,62 @@ vil2_dicom_header_info vil2_dicom_header_format::readHeader(vil2_stream &fs)
     readHeaderElements(fs);
 
     info_valid_ = true;
-
-  } // End of if (dtype...
+  } // End of if (dtype != VIL2_DICOM_HEADER_DTUNKNOWN)
   else
   {
-
     // It's not a dicom file, so can't read
-    vcl_cerr << "Unknown file type - not a DICOM file..." << vcl_endl;
-    vcl_cerr << "File header not read" << vcl_endl;
-
+    vcl_cerr << "Unknown file type - not a DICOM file...\n"
+             << "File header not read\n";
   } // End of else
 
   return last_read_;
-
 }
 
 //================================================================
 
 vil2_dicom_header_info vil2_dicom_header_format::lastHeader(void)
 {
-
   return last_read_;
-
 }
 
 //================================================================
 
 bool vil2_dicom_header_format::headerValid(void)
 {
-
 return info_valid_;
-
 }
 
 //================================================================
 
 vil2_dicom_header_endian vil2_dicom_header_format::systemEndian(void)
 {
-
   return endian_;
-
 }
 
 //================================================================
 
 vil2_dicom_header_endian vil2_dicom_header_format::fileEndian(void)
 {
-
   return file_endian_;
-
 }
 
 //================================================================
 
 vil2_dicom_header_image_type vil2_dicom_header_format::imageType(void)
 {
-
   return image_type_;
-
 }
 
 //================================================================
 
 vil2_dicom_header_type vil2_dicom_header_format::determineFileType(vil2_stream &fs)
 {
-
   vil2_dicom_header_type result = VIL2_DICOM_HEADER_DTUNKNOWN;
 
   // Check the file is open, otherwise fail - the vcl_fstream should
   // be controlled outside of this class
   if (fs.ok())
   {
-
     // There are four possibilities:
     // The file is Part10 with 128 vxl_byte pre-amble
     // The file is Part10 with no pre-amble
@@ -170,13 +141,10 @@ vil2_dicom_header_type vil2_dicom_header_format::determineFileType(vil2_stream &
 
     if (dicm_test == "DICM")
     {
-
       result = VIL2_DICOM_HEADER_DTPART10;
-
-    } // End of if(dicm_test...
+    } // End of if (dicm_test...
     else
     {
-
       // Read the first four chars and see if they are the letters
       // DICM
       fs.seek(0);
@@ -186,13 +154,10 @@ vil2_dicom_header_type vil2_dicom_header_format::determineFileType(vil2_stream &
 
       if (dicm_test == "DICM")
       {
-
         result = VIL2_DICOM_HEADER_DTPART10;
-
       } // End of if (dicm_test...
       else
       {
-
         // Some other format - test it with both little and
         // big endian
         int num_tries = 0;
@@ -202,7 +167,6 @@ vil2_dicom_header_type vil2_dicom_header_format::determineFileType(vil2_stream &
 
         while (num_tries < 2 && !known)
         {
-
           // Go back to the beginning and search for the
           // first element of the Identifying group
           fs.seek(0);
@@ -219,10 +183,9 @@ vil2_dicom_header_type vil2_dicom_header_format::determineFileType(vil2_stream &
           num_elements = 0;
 
           while (group < VIL2_DICOM_HEADER_IDENTIFYINGGROUP &&
-               num_elements < VIL2_DICOM_HEADER_MAXHEADERSIZE &&
-               fs.ok())
+                 num_elements < VIL2_DICOM_HEADER_MAXHEADERSIZE &&
+                 fs.ok())
           {
-
             // It's not what we want, so skip it and
             // get the next one
             fs.seek(data_block_size + fs.tell());
@@ -236,85 +199,63 @@ vil2_dicom_header_type vil2_dicom_header_format::determineFileType(vil2_stream &
             data_block_size = intSwap(data_block_size);
 
             num_elements++;
-
           } // End of while (group...
 
           // Check the elements read and see if it fits
           // with a known header
           if (group == VIL2_DICOM_HEADER_IDENTIFYINGGROUP)
           {
-
             // First, standard non-Part10 header
             if (element == VIL2_DICOM_HEADER_IDGROUPLENGTH &&
               data_block_size == 4)
             {
-
               // Put the file back at the beginning
               fs.seek(0);
               result = VIL2_DICOM_HEADER_DTNON_PART10;
               known = true;
-
             } // End of if (element...
             // Now a non-standard non-Part10
             else if (element == VIL2_DICOM_HEADER_IDIMAGETYPE ||
-                   element == VIL2_DICOM_HEADER_IDLENGTHTOEND ||
-                 element == VIL2_DICOM_HEADER_IDSPECIFICCHARACTER)
+                     element == VIL2_DICOM_HEADER_IDLENGTHTOEND ||
+                     element == VIL2_DICOM_HEADER_IDSPECIFICCHARACTER)
             {
-
               // Put the file back at the beginning
               fs.seek(0);
               result = VIL2_DICOM_HEADER_DTNON_PART10;
               known = true;
-
             } // End of else if (element...
-            
           } // End of if (group...
 
           if (!known)
           {
-
             file_endian_ = VIL2_DICOM_HEADER_DELITTLEENDIAN;
-
           } // End of if (!known)
 
           num_tries++;
-
-        } // End of while(num_tries...
+        } // End of while (num_tries...
 
         if (!known)
         {
-
           file_endian_ = old_endian;
-
         } // End of if (!known)
-
       } // End of else
-
     } // End of else
-
   } // End of if (fs.is_open...
   else
   {
-
-    vcl_cerr << "File not open for reading:" << vcl_endl;
-    vcl_cerr << "vil2_dicom_header_format::determineFileType()" << vcl_endl;
-
+    vcl_cerr << "File not open for reading:\n"
+             << "vil2_dicom_header_format::determineFileType()\n";
   } // End of else
 
   return result;
-
 }
 
 //================================================================
 
 void vil2_dicom_header_format::readHeaderElements(vil2_stream &fs)
 {
-
-  unsigned short group, element;  // The groups and elements read from the 
-                                  // header part of the dicom file
-  unsigned int data_block_size;   // The size of the information 
-                                  // held for this group/element
-                                  // pair
+  unsigned short group, element;  // The groups and elements read from the header part of the dicom file
+  unsigned int data_block_size;   // The size of the information held for this group/element pair
 
   // Read the first group/element pair
   fs.read((char *)&group, sizeof(short));
@@ -328,21 +269,19 @@ void vil2_dicom_header_format::readHeaderElements(vil2_stream &fs)
   // pixel data is found
   while (fs.ok() && !pixelDataFound(group, element))
   {
-
     fs.read((char *)&data_block_size, sizeof(unsigned int));
     data_block_size = intSwap(data_block_size);
     convertValueRepresentation(data_block_size, fs);
 
     switch (group)
     {
-
       // Read identifying info
     case VIL2_DICOM_HEADER_IDENTIFYINGGROUP:
       readIdentifyingElements(element, data_block_size, fs);
       break;
 
       // Read the patient info
-    case VIL2_DICOM_HEADER_PATIENTINFOGROUP: 
+    case VIL2_DICOM_HEADER_PATIENTINFOGROUP:
       readPatientElements(element, data_block_size, fs);
       break;
 
@@ -362,10 +301,9 @@ void vil2_dicom_header_format::readHeaderElements(vil2_stream &fs)
       readDelimiterElements(element, data_block_size, fs);
 
         // Nothing found, so skip this data block
-    default: 
+    default:
       fs.seek(data_block_size + fs.tell());
       break;
-
     } // End of switch
 
     // Read the next group and element
@@ -375,30 +313,26 @@ void vil2_dicom_header_format::readHeaderElements(vil2_stream &fs)
     // Swap them if necessary
     group = shortSwap(group);
     element = shortSwap(element);
-
   } // End of while
 
   // Read the final block size info - throw away!
   fs.read((char *)&data_block_size, sizeof(int));
   data_block_size = intSwap(data_block_size);
   convertValueRepresentation(data_block_size, fs);
-
 }
 
 //================================================================
 
 void vil2_dicom_header_format::readIdentifyingElements(short element,
-                              int dblock_size,
-                           vil2_stream &fs)
+                                                       int dblock_size,
+                                                       vil2_stream &fs)
 {
-
   // Pointer to any data read
   char *data_p = 0;
 
   // Check the elements
   switch (element)
   {
-
   case VIL2_DICOM_HEADER_IDIMAGETYPE :
     // It's the image type
     data_p = new char[dblock_size+1]; // Ensure room for 0
@@ -440,7 +374,7 @@ void vil2_dicom_header_format::readIdentifyingElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.study_date_ = atol(data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IDSERIESDATE :
@@ -462,7 +396,7 @@ void vil2_dicom_header_format::readIdentifyingElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.acquisition_date_ = atol(data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IDIMAGEDATE :
@@ -484,7 +418,7 @@ void vil2_dicom_header_format::readIdentifyingElements(short element,
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
       last_read_.study_time_ = atof(data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IDSERIESTIME :
@@ -495,7 +429,7 @@ void vil2_dicom_header_format::readIdentifyingElements(short element,
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
       last_read_.series_time_ = atof(data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IDACQUISITIONTIME :
@@ -506,7 +440,7 @@ void vil2_dicom_header_format::readIdentifyingElements(short element,
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
       last_read_.acquisition_time_ = atof(data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IDIMAGETIME :
@@ -539,7 +473,7 @@ void vil2_dicom_header_format::readIdentifyingElements(short element,
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
       last_read_.modality_=data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IDMANUFACTURER :
@@ -550,7 +484,7 @@ void vil2_dicom_header_format::readIdentifyingElements(short element,
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
       last_read_.manufacturer_=data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IDINSTITUTIONNAME :
@@ -561,7 +495,7 @@ void vil2_dicom_header_format::readIdentifyingElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.institution_name_=data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IDINSTITUTIONADDRESS :
@@ -572,7 +506,7 @@ void vil2_dicom_header_format::readIdentifyingElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.institution_addr_=data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IDREFERRINGPHYSICIAN :
@@ -583,7 +517,7 @@ void vil2_dicom_header_format::readIdentifyingElements(short element,
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
       last_read_.ref_phys_name_=data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IDSTATIONNAME :
@@ -594,7 +528,7 @@ void vil2_dicom_header_format::readIdentifyingElements(short element,
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
       last_read_.station_name_=data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IDSTUDYDESCRIPTION :
@@ -605,7 +539,7 @@ void vil2_dicom_header_format::readIdentifyingElements(short element,
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
       last_read_.study_desc_ = data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IDSERIESDESCRIPTION :
@@ -616,7 +550,7 @@ void vil2_dicom_header_format::readIdentifyingElements(short element,
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
       last_read_.series_desc_ = data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IDATTENDINGPHYSICIAN :
@@ -627,7 +561,7 @@ void vil2_dicom_header_format::readIdentifyingElements(short element,
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
       last_read_.att_phys_name_=data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IDOPERATORNAME :
@@ -638,7 +572,7 @@ void vil2_dicom_header_format::readIdentifyingElements(short element,
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
       last_read_.operator_name_=data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IDMANUFACTURERMODEL :
@@ -649,39 +583,33 @@ void vil2_dicom_header_format::readIdentifyingElements(short element,
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
       last_read_.model_name_=data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
-  
+
     // It's nothing we want, so skip it!
   default:
     fs.seek(dblock_size + fs.tell());
     break;
-
   } // End of switch
 
   if (data_p)
   {
-
     delete [] data_p;
-
   } // End of if (data_p)
-
 }
 
 //================================================================
 
 void vil2_dicom_header_format::readPatientElements(short element,
-                         int dblock_size,
-                         vil2_stream &fs)
+                                                   int dblock_size,
+                                                   vil2_stream &fs)
 {
-
   // Pointer to any data read
   char *data_p = 0;
 
   // Check the elements
   switch (element)
   {
-
   case VIL2_DICOM_HEADER_PIPATIENTNAME :
     // It's the patient's name
     data_p = new char[dblock_size+1]; // Ensure room for 0
@@ -690,7 +618,7 @@ void vil2_dicom_header_format::readPatientElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.patient_name_ = data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_PIPATIENTID :
@@ -701,7 +629,7 @@ void vil2_dicom_header_format::readPatientElements(short element,
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
       last_read_.patient_id_ = data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_PIPATIENTBIRTHDATE :
@@ -712,7 +640,7 @@ void vil2_dicom_header_format::readPatientElements(short element,
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
       last_read_.patient_dob_ = atol(data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_PIPATIENTSEX :
@@ -723,10 +651,10 @@ void vil2_dicom_header_format::readPatientElements(short element,
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
       last_read_.patient_sex_ = data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
-    
+
   case VIL2_DICOM_HEADER_PIPATIENTAGE :
     // It's the patient's age
     data_p = new char[dblock_size+1];
@@ -735,9 +663,9 @@ void vil2_dicom_header_format::readPatientElements(short element,
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
       last_read_.patient_age_ = data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
-    
+
   case VIL2_DICOM_HEADER_PIPATIENTWEIGHT :
     // It's the patient's weight
     data_p = new char[dblock_size+1];
@@ -746,7 +674,7 @@ void vil2_dicom_header_format::readPatientElements(short element,
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
       last_read_.patient_weight_ = atof(data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_PIPATIENTHISTORY :
@@ -757,39 +685,33 @@ void vil2_dicom_header_format::readPatientElements(short element,
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
       last_read_.patient_hist_ = data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
-    
+
     // It's nothing we want, so skip it!
   default:
     fs.seek(dblock_size + fs.tell());
     break;
-
   } // End of switch
 
   if (data_p)
   {
-
     delete [] data_p;
-
   } // End of if (data_p)
-
 }
 
 //================================================================
 
 void vil2_dicom_header_format::readAcquisitionElements(short element,
-                              int dblock_size,
-                           vil2_stream &fs)
+                                                       int dblock_size,
+                                                       vil2_stream &fs)
 {
-
   // Pointer to any data read
   char *data_p = 0;
 
   // Check the elements
   switch (element)
   {
-
   case VIL2_DICOM_HEADER_AQSCANNINGSEQUENCE :
     // It's the scanning sequence
     data_p = new char[dblock_size+1]; // Ensure room for 0
@@ -798,7 +720,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.scanning_seq_ = data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_AQSEQUENCEVARIANT :
@@ -809,7 +731,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.sequence_var_ = data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_AQSCANOPTIONS :
@@ -820,7 +742,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.scan_options_ = data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_AQMRACQUISITIONTYPE :
@@ -831,7 +753,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.mr_acq_type_ = data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_AQSEQUENCENAME :
@@ -842,7 +764,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.sequence_name_ = data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_AQANGIOFLAG :
@@ -853,7 +775,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.angio_flag_ = data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_AQSLICETHICKNESS :
@@ -864,7 +786,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.slice_thickness_ = atof(data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_AQREPETITIONTIME :
@@ -875,7 +797,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
       last_read_.repetition_time_ = atof(data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_AQECHOTIME :
@@ -886,7 +808,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
       last_read_.echo_time_= atof(data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_AQINVERSIONTIME :
@@ -897,7 +819,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.inversion_time_= atof(data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_AQNUMBEROFAVERAGES :
@@ -908,7 +830,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.number_of_averages_ = atof(data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_AQECHONUMBERS :
@@ -919,7 +841,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.echo_numbers_ = atoi(data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_AQMAGNETICFIELDSTRENGTH :
@@ -930,7 +852,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.mag_field_strength_ = atof(data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_AQSLICESPACING:
@@ -941,7 +863,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.slice_spacing_ = atof(data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_AQECHOTRAINLENGTH :
@@ -952,7 +874,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.echo_train_length_ = atoi(data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_AQPIXELBANDWIDTH :
@@ -963,7 +885,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.pixel_bandwidth_ = atof(data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_AQSOFTWAREVERSION :
@@ -974,7 +896,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.software_vers_ = data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_AQPROTOCOLNAME :
@@ -985,7 +907,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.protocol_name_ = data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_AQHEARTRATE :
@@ -996,7 +918,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.heart_rate_ = atoi(data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_AQCARDIACNUMBEROFIMAGES :
@@ -1007,7 +929,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.card_num_images_ = atoi(data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_AQTRIGGERWINDOW :
@@ -1018,7 +940,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.trigger_window_ = atoi(data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_AQRECONTRUCTIONDIAMETER :
@@ -1029,7 +951,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.reconst_diameter_ = atof(data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_AQRECEIVINGCOIL :
@@ -1040,7 +962,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.receiving_coil_ = data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_AQPHASEENCODINGDIRECTION :
@@ -1051,7 +973,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.phase_enc_dir_ = data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_AQFLIPANGLE :
@@ -1062,7 +984,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.flip_angle_ = atof(data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_AQSAR :
@@ -1073,7 +995,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.sar_ = atof(data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_AQPATIENTPOSITION:
@@ -1084,39 +1006,33 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.patient_pos_ = data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
     // It's nothing we want, so skip it!
   default:
     fs.seek(dblock_size + fs.tell());
     break;
-
   } // End of switch
 
   if (data_p)
   {
-
     delete [] data_p;
-
   } // End of if (data_p)
-
 }
 
 //================================================================
 
 void vil2_dicom_header_format::readRelationshipElements(short element,
-                             int dblock_size,
-                          vil2_stream &fs)
+                                                        int dblock_size,
+                                                        vil2_stream &fs)
 {
-
   // Pointer to any data read
   char *data_p = 0;
 
   // Check the elements
   switch (element)
   {
-
   case VIL2_DICOM_HEADER_RSSTUDYINSTANCEUID :
     // It's the study instance id
     data_p = new char[dblock_size+1]; // Ensure room for 0
@@ -1125,7 +1041,7 @@ void vil2_dicom_header_format::readRelationshipElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.stud_ins_uid_ = data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_RSSERIESINSTANCEUID :
@@ -1136,7 +1052,7 @@ void vil2_dicom_header_format::readRelationshipElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.ser_ins_uid_ = data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_RSSTUDYID :
@@ -1147,7 +1063,7 @@ void vil2_dicom_header_format::readRelationshipElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.study_id_ = data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_RSSERIESNUMBER :
@@ -1158,7 +1074,7 @@ void vil2_dicom_header_format::readRelationshipElements(short element,
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
       last_read_.series_number_ = atoi(data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_RSAQUISITIONNUMBER :
@@ -1169,7 +1085,7 @@ void vil2_dicom_header_format::readRelationshipElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.acquisition_number_ = atoi(data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_RSIMAGENUMBER :
@@ -1180,7 +1096,7 @@ void vil2_dicom_header_format::readRelationshipElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.image_number_ = atoi(data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_RSPATIENTORIENTATION :
@@ -1191,7 +1107,7 @@ void vil2_dicom_header_format::readRelationshipElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.pat_orient_ = data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_RSIMAGEPOSITION :
@@ -1202,7 +1118,7 @@ void vil2_dicom_header_format::readRelationshipElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.image_pos_ = data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_RSIMAGEORIENTATION :
@@ -1213,7 +1129,7 @@ void vil2_dicom_header_format::readRelationshipElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.image_orient_ = data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_RSFRAMEOFREFERENCEUID :
@@ -1224,7 +1140,7 @@ void vil2_dicom_header_format::readRelationshipElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.frame_of_ref_ = data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_RSIMAGESINACQUISITION:
@@ -1235,7 +1151,7 @@ void vil2_dicom_header_format::readRelationshipElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.images_in_acq_ = atoi(data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_RSPOSITIONREFERENCE :
@@ -1246,7 +1162,7 @@ void vil2_dicom_header_format::readRelationshipElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.pos_ref_ind_ = data_p;
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_RSSLICELOCATION :
@@ -1257,40 +1173,34 @@ void vil2_dicom_header_format::readRelationshipElements(short element,
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
       last_read_.slice_location_ = atof(data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
     // It's nothing we want, so skip it!
   default:
     fs.seek(dblock_size + fs.tell());
     break;
-
   } // End of switch
 
   if (data_p)
   {
-
     delete [] data_p;
-
   } // End of if (data_p)
-
 }
 
 
 //================================================================
 
 void vil2_dicom_header_format::readImageElements(short element,
-                       int dblock_size,
-                       vil2_stream &fs)
+                                                 int dblock_size,
+                                                 vil2_stream &fs)
 {
-
   // Pointer to any data read
   char *data_p = 0;
 
   // Check the elements
   switch (element)
   {
-
   case VIL2_DICOM_HEADER_IMSAMPLESPERPIXEL :
     // It's the samples per pixel
     data_p = new char[dblock_size+1];
@@ -1300,7 +1210,7 @@ void vil2_dicom_header_format::readImageElements(short element,
       data_p[dblock_size]=0;
       charSwap(data_p, sizeof(unsigned short));
       last_read_.pix_samps_ = *((unsigned short *)data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IMPHOTOMETRICINTERP :
@@ -1311,8 +1221,7 @@ void vil2_dicom_header_format::readImageElements(short element,
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
       last_read_.photo_interp_ = data_p;
-
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IMROWS :
@@ -1324,7 +1233,7 @@ void vil2_dicom_header_format::readImageElements(short element,
       data_p[dblock_size]=0;
       charSwap(data_p, sizeof(unsigned short));
       last_read_.dimx_ = *((unsigned short *)data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IMCOLUMNS :
@@ -1336,7 +1245,7 @@ void vil2_dicom_header_format::readImageElements(short element,
       data_p[dblock_size]=0;
       charSwap(data_p, sizeof(unsigned short));
       last_read_.dimy_ = *((unsigned short *)data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IMPLANES :
@@ -1348,7 +1257,7 @@ void vil2_dicom_header_format::readImageElements(short element,
       data_p[dblock_size]=0;
       charSwap(data_p, sizeof(unsigned short));
       last_read_.dimz_ = *((unsigned short *)data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IMPIXELSPACING :
@@ -1356,26 +1265,21 @@ void vil2_dicom_header_format::readImageElements(short element,
     data_p = new char[dblock_size+1];
     if (data_p)
     {
-
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
       last_read_.xsize_ = atof(data_p);
-      
+
       // The y size should come after a '\'
       // If only a 0 is found, ysize = xsize
       char gone = 'x';
       while (gone != 0 && gone != '\\')
       {
-
         gone = data_p[0];
 
         for (int i=0; i<dblock_size; i++)
         {
-
           data_p[i] = data_p[i+1];
-
         } // End of for
-
       } // End of while
 
       if (gone == '\\')
@@ -1386,8 +1290,7 @@ void vil2_dicom_header_format::readImageElements(short element,
       {
         last_read_.ysize_ = last_read_.xsize_;
       } // End of else
-
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IMBITSALLOCATED :
@@ -1399,7 +1302,7 @@ void vil2_dicom_header_format::readImageElements(short element,
       data_p[dblock_size]=0;
       charSwap(data_p, sizeof(unsigned short));
       last_read_.allocated_bits_ = *((unsigned short *)data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IMBITSSTORED :
@@ -1411,7 +1314,7 @@ void vil2_dicom_header_format::readImageElements(short element,
       data_p[dblock_size]=0;
       charSwap(data_p,sizeof(unsigned short));
       last_read_.stored_bits_ = *((unsigned short *)data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IMHIGHBIT :
@@ -1423,8 +1326,7 @@ void vil2_dicom_header_format::readImageElements(short element,
       data_p[dblock_size]=0;
       charSwap(data_p, sizeof(unsigned short));
       last_read_.high_bit_ = *((unsigned short *)data_p);
-
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IMPIXELREPRESENTATION :
@@ -1436,7 +1338,7 @@ void vil2_dicom_header_format::readImageElements(short element,
       data_p[dblock_size]=0;
       charSwap(data_p,sizeof(unsigned short));
       last_read_.pix_rep_ = *((unsigned short *)data_p);
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IMSMALLIMPIXELVALUE :
@@ -1448,8 +1350,7 @@ void vil2_dicom_header_format::readImageElements(short element,
       data_p[dblock_size]=0;
       charSwap(data_p, sizeof(short));
       last_read_.small_im_pix_val_ = *((short *)data_p);
-
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IMLARGEIMPIXELVALUE :
@@ -1461,8 +1362,7 @@ void vil2_dicom_header_format::readImageElements(short element,
       data_p[dblock_size]=0;
       charSwap(data_p, sizeof(short));
       last_read_.large_im_pix_val_ = *((short *)data_p);
-
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IMPIXELPADDINGVALUE :
@@ -1474,8 +1374,7 @@ void vil2_dicom_header_format::readImageElements(short element,
       data_p[dblock_size]=0;
       charSwap(data_p, sizeof(short));
       last_read_.pixel_padding_val_ = *((short *)data_p);
-
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IMWINDOWCENTER :
@@ -1486,8 +1385,7 @@ void vil2_dicom_header_format::readImageElements(short element,
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
       last_read_.window_centre_ = atof(data_p);
-
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IMWINDOWWIDTH :
@@ -1498,8 +1396,7 @@ void vil2_dicom_header_format::readImageElements(short element,
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
       last_read_.window_width_ = atof(data_p);
-
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IMRESCALEINTERCEPT :
@@ -1510,8 +1407,7 @@ void vil2_dicom_header_format::readImageElements(short element,
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
       last_read_.res_intercept_ = atof(data_p);
-
-    } // End of if(data_p)
+    } // End of if (data_p)
     break;
 
   case VIL2_DICOM_HEADER_IMRESCALESLOPE :
@@ -1529,29 +1425,23 @@ void vil2_dicom_header_format::readImageElements(short element,
   default:
     fs.seek(dblock_size + fs.tell());
     break;
-
   } // End of switch
 
   if (data_p)
   {
-
     delete [] data_p;
-
   } // End of if (data_p)
-
 }
 
 //================================================================
 
 void vil2_dicom_header_format::readDelimiterElements(short element,
-                         int dblock_size,
-                         vil2_stream &fs)
+                                                     int dblock_size,
+                                                     vil2_stream &fs)
 {
-
   // Check the elements
   switch (element)
   {
-
   case VIL2_DICOM_HEADER_DLITEM:
   case VIL2_DICOM_HEADER_DLITEMDELIMITATIONITEM:
   case VIL2_DICOM_HEADER_DLSEQDELIMITATIONITEM:
@@ -1561,17 +1451,14 @@ void vil2_dicom_header_format::readDelimiterElements(short element,
   default:
     fs.seek(dblock_size + fs.tell());
     break;
-
   } // End of switch
-
 }
 
 //================================================================
 
 bool vil2_dicom_header_format::convertValueRepresentation(unsigned int &dblock_size,
-                            vil2_stream &fs)
+                                                          vil2_stream &fs)
 {
-
   bool result = false;
   vcl_string first, last;
   char temp[3];
@@ -1579,15 +1466,12 @@ bool vil2_dicom_header_format::convertValueRepresentation(unsigned int &dblock_s
   // Union to convert the int to chars
   union int_char
   {
-
     unsigned int int_val;
     char char_val[4];
-
   } conv_dblock;
 
   if (last_read_.file_type_ != VIL2_DICOM_HEADER_DTUNKNOWN)
   {
-
     conv_dblock.int_val = dblock_size;
 
     // Create the strings to check (the latter two positions in
@@ -1606,153 +1490,126 @@ bool vil2_dicom_header_format::convertValueRepresentation(unsigned int &dblock_s
     // Check if VR is a nested sequence (SQ)
     if (first == VIL2_DICOM_HEADER_SEQUENCE || last == VIL2_DICOM_HEADER_SEQUENCE)
     {
-
       fs.read((char *)&dblock_size, sizeof(int));
       dblock_size = 0;
       result = true;
-
     } // End of if (first...
     else if (first == VIL2_DICOM_HEADER_OTHERBYTE ||
            first == VIL2_DICOM_HEADER_OTHERWORD ||
          last == VIL2_DICOM_HEADER_OTHERBYTE  ||
          last == VIL2_DICOM_HEADER_OTHERWORD)
     {
-
       fs.read((char *)&dblock_size, sizeof(int));
       dblock_size = shortSwap(dblock_size);
       result = true;
-
     } // End of else if (first...
     else if (dblock_size == VIL2_DICOM_HEADER_ALLSET)
     {
-
       dblock_size = 0;
       result = true;
-
-    } // End of else if(dblock_size...
-    else if(first == VIL2_DICOM_HEADER_APPLICATIONENTRY    ||
-          first == VIL2_DICOM_HEADER_AGESTRING           ||
-        first == VIL2_DICOM_HEADER_ATTRIBUTETAG        ||
-        first == VIL2_DICOM_HEADER_CODESTRING          ||
-        first == VIL2_DICOM_HEADER_DATE                ||
-        first == VIL2_DICOM_HEADER_DECIMALSTRING       ||
-        first == VIL2_DICOM_HEADER_DATETIME            ||
-        first == VIL2_DICOM_HEADER_FLOATINGPOINTDOUBLE ||
-        first == VIL2_DICOM_HEADER_FLOATINGPOINTSINGLE ||
-        first == VIL2_DICOM_HEADER_INTEGERSTRING       ||
-        first == VIL2_DICOM_HEADER_LONGSTRING          ||
-        first == VIL2_DICOM_HEADER_LONGTEXT            ||
-        first == VIL2_DICOM_HEADER_PERSONNAME          ||
-        first == VIL2_DICOM_HEADER_SHORTSTRING         ||
-        first == VIL2_DICOM_HEADER_SIGNEDLONG          ||
-        first == VIL2_DICOM_HEADER_SIGNEDSHORT         ||
-        first == VIL2_DICOM_HEADER_SHORTTEXT           ||
-        first == VIL2_DICOM_HEADER_TIME                ||
-        first == VIL2_DICOM_HEADER_UNIQUEIDENTIFIER    ||
-        first == VIL2_DICOM_HEADER_UNSIGNEDLONG        ||
-        first == VIL2_DICOM_HEADER_UNSIGNEDSHORT)
+    } // End of else if (dblock_size...
+    else if (first == VIL2_DICOM_HEADER_APPLICATIONENTRY    ||
+             first == VIL2_DICOM_HEADER_AGESTRING           ||
+             first == VIL2_DICOM_HEADER_ATTRIBUTETAG        ||
+             first == VIL2_DICOM_HEADER_CODESTRING          ||
+             first == VIL2_DICOM_HEADER_DATE                ||
+             first == VIL2_DICOM_HEADER_DECIMALSTRING       ||
+             first == VIL2_DICOM_HEADER_DATETIME            ||
+             first == VIL2_DICOM_HEADER_FLOATINGPOINTDOUBLE ||
+             first == VIL2_DICOM_HEADER_FLOATINGPOINTSINGLE ||
+             first == VIL2_DICOM_HEADER_INTEGERSTRING       ||
+             first == VIL2_DICOM_HEADER_LONGSTRING          ||
+             first == VIL2_DICOM_HEADER_LONGTEXT            ||
+             first == VIL2_DICOM_HEADER_PERSONNAME          ||
+             first == VIL2_DICOM_HEADER_SHORTSTRING         ||
+             first == VIL2_DICOM_HEADER_SIGNEDLONG          ||
+             first == VIL2_DICOM_HEADER_SIGNEDSHORT         ||
+             first == VIL2_DICOM_HEADER_SHORTTEXT           ||
+             first == VIL2_DICOM_HEADER_TIME                ||
+             first == VIL2_DICOM_HEADER_UNIQUEIDENTIFIER    ||
+             first == VIL2_DICOM_HEADER_UNSIGNEDLONG        ||
+             first == VIL2_DICOM_HEADER_UNSIGNEDSHORT)
     {
-
       if (last_read_.sys_endian_ == VIL2_DICOM_HEADER_DELITTLEENDIAN)
       {
-
         dblock_size = (unsigned int)
                     ((256*conv_dblock.char_val[3]) +
                  conv_dblock.char_val[2]);
-
       } // End of if (last_read_...
       else
       {
-
         dblock_size = (unsigned int)
                     ((256*conv_dblock.char_val[2]) +
                  conv_dblock.char_val[3]);
-
       } // End of else
 
       result = true;
-
     } // End of else if (first...
-    else if(last == VIL2_DICOM_HEADER_APPLICATIONENTRY    ||
-          last == VIL2_DICOM_HEADER_AGESTRING           ||
-        last == VIL2_DICOM_HEADER_ATTRIBUTETAG        ||
-        last == VIL2_DICOM_HEADER_CODESTRING          ||
-        last == VIL2_DICOM_HEADER_DATE                ||
-        last == VIL2_DICOM_HEADER_DECIMALSTRING       ||
-        last == VIL2_DICOM_HEADER_DATETIME            ||
-        last == VIL2_DICOM_HEADER_FLOATINGPOINTDOUBLE ||
-        last == VIL2_DICOM_HEADER_FLOATINGPOINTSINGLE ||
-        last == VIL2_DICOM_HEADER_INTEGERSTRING       ||
-        last == VIL2_DICOM_HEADER_LONGSTRING          ||
-        last == VIL2_DICOM_HEADER_LONGTEXT            ||
-        last == VIL2_DICOM_HEADER_PERSONNAME          ||
-        last == VIL2_DICOM_HEADER_SHORTSTRING         ||
-        last == VIL2_DICOM_HEADER_SIGNEDLONG          ||
-        last == VIL2_DICOM_HEADER_SIGNEDSHORT         ||
-        last == VIL2_DICOM_HEADER_SHORTTEXT           ||
-        last == VIL2_DICOM_HEADER_TIME                ||
-        last == VIL2_DICOM_HEADER_UNIQUEIDENTIFIER    ||
-        last == VIL2_DICOM_HEADER_UNSIGNEDLONG        ||
-        last == VIL2_DICOM_HEADER_UNSIGNEDSHORT)
+    else if (last == VIL2_DICOM_HEADER_APPLICATIONENTRY    ||
+             last == VIL2_DICOM_HEADER_AGESTRING           ||
+             last == VIL2_DICOM_HEADER_ATTRIBUTETAG        ||
+             last == VIL2_DICOM_HEADER_CODESTRING          ||
+             last == VIL2_DICOM_HEADER_DATE                ||
+             last == VIL2_DICOM_HEADER_DECIMALSTRING       ||
+             last == VIL2_DICOM_HEADER_DATETIME            ||
+             last == VIL2_DICOM_HEADER_FLOATINGPOINTDOUBLE ||
+             last == VIL2_DICOM_HEADER_FLOATINGPOINTSINGLE ||
+             last == VIL2_DICOM_HEADER_INTEGERSTRING       ||
+             last == VIL2_DICOM_HEADER_LONGSTRING          ||
+             last == VIL2_DICOM_HEADER_LONGTEXT            ||
+             last == VIL2_DICOM_HEADER_PERSONNAME          ||
+             last == VIL2_DICOM_HEADER_SHORTSTRING         ||
+             last == VIL2_DICOM_HEADER_SIGNEDLONG          ||
+             last == VIL2_DICOM_HEADER_SIGNEDSHORT         ||
+             last == VIL2_DICOM_HEADER_SHORTTEXT           ||
+             last == VIL2_DICOM_HEADER_TIME                ||
+             last == VIL2_DICOM_HEADER_UNIQUEIDENTIFIER    ||
+             last == VIL2_DICOM_HEADER_UNSIGNEDLONG        ||
+             last == VIL2_DICOM_HEADER_UNSIGNEDSHORT)
     {
-
       if (last_read_.sys_endian_ == VIL2_DICOM_HEADER_DELITTLEENDIAN)
       {
-
         dblock_size = (unsigned int)
                     ((256*conv_dblock.char_val[1]) +
                  conv_dblock.char_val[0]);
-
       } // End of if (last_read_...
       else
       {
-
         dblock_size = (unsigned int)
                     ((256*conv_dblock.char_val[0]) +
                  conv_dblock.char_val[1]);
-
       } // End of else
 
       result = true;
-
     } // End of else if (first...
-
   } // End of if (last_read_...
 
   return result;
-
 }
 
 //================================================================
 
 bool vil2_dicom_header_format::pixelDataFound(short group, short element)
 {
-
   bool result = false;
 
   // Check if it's the pixel data
   if (group == VIL2_DICOM_HEADER_PIXELGROUP &&
     element == VIL2_DICOM_HEADER_PXPIXELDATA)
   {
-
     result = true;
-
   }
 
   return result;
-
 }
 
 //================================================================
 
 void vil2_dicom_header_format::clearInfo(void)
 {
-
   // Clear all the elements of the info structure
 
-  /*
-   * Identity info
-   */
+  // Identity info
   last_read_.file_type_ = VIL2_DICOM_HEADER_DTUNKNOWN;
   last_read_.file_endian_ = VIL2_DICOM_HEADER_DEUNKNOWN;
   last_read_.sys_endian_ = VIL2_DICOM_HEADER_DEUNKNOWN;
@@ -1780,9 +1637,7 @@ void vil2_dicom_header_format::clearInfo(void)
   last_read_.operator_name_ = "";
   last_read_.model_name_ = "";
 
-  /*
-   * Patient info
-   */
+  // Patient info
   last_read_.patient_name_ = "";
   last_read_.patient_id_ = "";
   last_read_.patient_dob_ = VIL2_DICOM_HEADER_UNSPECIFIED;
@@ -1791,9 +1646,7 @@ void vil2_dicom_header_format::clearInfo(void)
   last_read_.patient_weight_ = VIL2_DICOM_HEADER_UNSPECIFIED;
   last_read_.patient_hist_ = "";
 
-  /*
-   * Acquisition info
-   */
+  // Acquisition info
   last_read_.scanning_seq_ = "";
   last_read_.sequence_var_ = "";
   last_read_.scan_options_ = "";
@@ -1821,9 +1674,7 @@ void vil2_dicom_header_format::clearInfo(void)
   last_read_.sar_ = VIL2_DICOM_HEADER_UNSPECIFIED;
   last_read_.patient_pos_ = "";
 
-  /*
-   * Relationship info
-   */
+  // Relationship info
   last_read_.stud_ins_uid_= "";
   last_read_.ser_ins_uid_ = "";
   last_read_.study_id_ = "";
@@ -1838,9 +1689,7 @@ void vil2_dicom_header_format::clearInfo(void)
   last_read_.pos_ref_ind_ = "";
   last_read_.slice_location_ = VIL2_DICOM_HEADER_UNSPECIFIED;
 
-  /*
-   * Image info
-   */
+  // Image info
   last_read_.pix_samps_ = VIL2_DICOM_HEADER_UNSPECIFIED;
   last_read_.photo_interp_ = "";
   last_read_.dimx_ = VIL2_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
@@ -1853,9 +1702,7 @@ void vil2_dicom_header_format::clearInfo(void)
   last_read_.window_centre_ = VIL2_DICOM_HEADER_UNSPECIFIED;
   last_read_.window_width_ = VIL2_DICOM_HEADER_UNSPECIFIED;
 
-  /*
-   * Info for loading image
-   */
+  // Info for loading image
   last_read_.xsize_ = VIL2_DICOM_HEADER_DEFAULTSIZE;
   last_read_.ysize_ = VIL2_DICOM_HEADER_DEFAULTSIZE;
   last_read_.slice_spacing_ = VIL2_DICOM_HEADER_DEFAULTSIZE;
@@ -1867,16 +1714,12 @@ void vil2_dicom_header_format::clearInfo(void)
 
   // And make it invalid
   info_valid_ = false;
-
 }
 
 //================================================================
 
 vil2_dicom_header_endian vil2_dicom_header_format::calculateEndian(void)
 {
-
-  vil2_dicom_header_endian result;
-
   // Create a union to test endian
   union int_byte
   {
@@ -1888,30 +1731,16 @@ vil2_dicom_header_endian vil2_dicom_header_format::calculateEndian(void)
   calc_endian.int_val = 1;
 
   // Test which vxl_byte has the value 1 in it
-  if (calc_endian.by_val[0] = 1)
-  {
-
-    result = VIL2_DICOM_HEADER_DELITTLEENDIAN;
-
-  }
-  else
-  {
-
-    result = VIL2_DICOM_HEADER_DEBIGENDIAN;
-
-  }
-
-  return result;
-
-} 
+  return calc_endian.by_val[0] == 1 ?
+    VIL2_DICOM_HEADER_DELITTLEENDIAN :
+    VIL2_DICOM_HEADER_DEBIGENDIAN;
+}
 
 //===============================================================
 
 vil2_dicom_header_endian vil2_dicom_header_format::determineMetaInfo(vil2_stream &fs)
 {
-
-  vil2_dicom_header_endian ret_end = VIL2_DICOM_HEADER_DELITTLEENDIAN; // Assume little if none
-                                              // found
+  vil2_dicom_header_endian ret_end = VIL2_DICOM_HEADER_DELITTLEENDIAN; // Assume little if none found
   //vil2_dicom_header_endian ret_end = VIL2_DICOM_HEADER_DEBIGENDIAN;
 
   short group, element;
@@ -1921,8 +1750,7 @@ vil2_dicom_header_endian vil2_dicom_header_format::determineMetaInfo(vil2_stream
 
   // The first section of the file header is always little endian,
   // so set the file endian
-  vil2_dicom_header_endian temp_end = file_endian_; // For setting back if true
-                                          // endian not discovered
+  vil2_dicom_header_endian temp_end = file_endian_; // For setting back if true endian not discovered
   file_endian_ = VIL2_DICOM_HEADER_DELITTLEENDIAN;
   image_type_ = VIL2_DICOM_HEADER_DITUNKNOWN;
 
@@ -1932,7 +1760,6 @@ vil2_dicom_header_endian vil2_dicom_header_format::determineMetaInfo(vil2_stream
 
   while (fs.ok() && group <= VIL2_DICOM_HEADER_METAFILEGROUP)
   {
-
     // Read the element
     fs.read((char *)&element,sizeof(short));
     element = shortSwap(element);
@@ -1942,10 +1769,9 @@ vil2_dicom_header_endian vil2_dicom_header_format::determineMetaInfo(vil2_stream
     data_block_size = intSwap(data_block_size);
     convertValueRepresentation(data_block_size,fs);
 
-    if (group == VIL2_DICOM_HEADER_METAFILEGROUP && 
+    if (group == VIL2_DICOM_HEADER_METAFILEGROUP &&
       element == VIL2_DICOM_HEADER_MFTRANSFERSYNTAX)
     {
-      
       // This tells us the transfer syntax for the file
       tfx_type = new char[data_block_size+1]; // Ensure room for 0
       if (tfx_type)
@@ -1954,128 +1780,96 @@ vil2_dicom_header_endian vil2_dicom_header_format::determineMetaInfo(vil2_stream
         tfx_type[data_block_size]=0;
 
         // Now see what it is
-          
+
         vcl_string temp = tfx_type;
 
         if (temp == VIL2_DICOM_HEADER_IMPLICITLITTLE ||
           temp == VIL2_DICOM_HEADER_EXPLICITLITTLE)
         {
-
           // Little endian
           ret_end = VIL2_DICOM_HEADER_DELITTLEENDIAN;
-
         }
         else if (temp == VIL2_DICOM_HEADER_EXPLICITBIG)
         {
-            
           // Big endian
           ret_end = VIL2_DICOM_HEADER_DEBIGENDIAN;
-            
         }
         else if (temp == VIL2_DICOM_HEADER_JPEGBASELINE_P1)
         {
-
           // Jpeg Baseline
           image_type_ = VIL2_DICOM_HEADER_DITJPEGBASE;
-
         }
         else if (temp == VIL2_DICOM_HEADER_JPEGDEFLOSSY_P2_4 ||
                temp == VIL2_DICOM_HEADER_JPEGEXTENDED_P3_5)
         {
-
           // Jpeg extended lossy
           image_type_ = VIL2_DICOM_HEADER_DITJPEGEXTLOSSY;
-
         }
         else if (temp == VIL2_DICOM_HEADER_JPEGSPECTRAL_P6_8 ||
                temp == VIL2_DICOM_HEADER_JPEGSPECTRAL_P7_9)
         {
-
-          // Jpeg spectral selection non-hierachical
+          // Jpeg spectral selection non-hierarchical
           image_type_ = VIL2_DICOM_HEADER_DITJPEGSPECNH;
-
         }
         else if (temp == VIL2_DICOM_HEADER_JPEGFULLPROG_P10_12 ||
                temp == VIL2_DICOM_HEADER_JPEGFULLPROG_P11_13)
         {
-
-          // Full progression non-hierachical
+          // Full progression non-hierarchical
           image_type_ = VIL2_DICOM_HEADER_DITJPEGFULLNH;
-
         }
         else if (temp == VIL2_DICOM_HEADER_JPEGLOSSLESS_P14 ||
                temp == VIL2_DICOM_HEADER_JPEGLOSSLESS_P15)
         {
-
-          // Lossless non-hierachical
+          // Lossless non-hierarchical
           image_type_ = VIL2_DICOM_HEADER_DITJPEGLOSSLNH;
-
         }
         else if (temp == VIL2_DICOM_HEADER_JPEGEXTHIER_P16_18 ||
                temp == VIL2_DICOM_HEADER_JPEGEXTHIER_P17_19)
         {
-
-          // Extended hierachical
+          // Extended hierarchical
           image_type_ = VIL2_DICOM_HEADER_DITJPEGEXTHIER;
-
         }
         else if (temp == VIL2_DICOM_HEADER_JPEGSPECHIER_P20_22 ||
                temp == VIL2_DICOM_HEADER_JPEGSPECHIER_P21_23)
         {
-
-          // Spectral selection hierachical
+          // Spectral selection hierarchical
           image_type_ = VIL2_DICOM_HEADER_DITJPEGSPECHIER;
-
         }
         else if (temp == VIL2_DICOM_HEADER_JPEGFULLHIER_P24_26 ||
                temp == VIL2_DICOM_HEADER_JPEGFULLHIER_P25_27)
         {
-
-          // Full progression hierachical
+          // Full progression hierarchical
           image_type_ = VIL2_DICOM_HEADER_DITJPEGFULLHIER;
-
         }
         else if (temp == VIL2_DICOM_HEADER_JPEGLLESSHIER_P28 ||
                temp == VIL2_DICOM_HEADER_JPEGLLESSHIER_P29)
         {
-
-          // Lossless hierachical
+          // Lossless hierarchical
           image_type_ = VIL2_DICOM_HEADER_DITJPEGLOSSLHIER;
-
         }
         else if (temp == VIL2_DICOM_HEADER_JPEGLLESSDEF_P14_SV1)
         {
-
           // The default for lossless jpeg
           image_type_ = VIL2_DICOM_HEADER_DITJPEGLOSSLDEF;
-
         }
         else if (temp == VIL2_DICOM_HEADER_RLELOSSLESS)
         {
-
           // RLE encapsulated
           image_type_ = VIL2_DICOM_HEADER_DITRLE;
-
-        }  
-              
-      } // End of if(tfx_type)
-      
-    } // End of if(group
-    else if (group == VIL2_DICOM_HEADER_DELIMITERGROUP &&
-           (element == VIL2_DICOM_HEADER_DLITEM ||
-          element == VIL2_DICOM_HEADER_DLITEMDELIMITATIONITEM ||
-          element == VIL2_DICOM_HEADER_DLSEQDELIMITATIONITEM))
+        }
+      } // End of if (tfx_type)
+    } // End of if (group
+    else if ((vxl_uint_16)group == VIL2_DICOM_HEADER_DELIMITERGROUP &&
+             ((vxl_uint_16)element == VIL2_DICOM_HEADER_DLITEM ||
+              (vxl_uint_16)element == VIL2_DICOM_HEADER_DLITEMDELIMITATIONITEM ||
+              (vxl_uint_16)element == VIL2_DICOM_HEADER_DLSEQDELIMITATIONITEM))
     {
-
       // Do nothing
-
     }
     else
     {
-
         // Ignore the data that's there
         fs.seek(data_block_size + fs.tell());
-
     }
 
     ret_pos = fs.tell();
@@ -2083,21 +1877,18 @@ vil2_dicom_header_endian vil2_dicom_header_format::determineMetaInfo(vil2_stream
     // Read the next group
     fs.read((char *)&group,sizeof(short));
     group = shortSwap(group);
-
   } // End of while
 
   // Reset the pointer before the last read group
   fs.seek(ret_pos);
 
   return ret_end;
-
 }
 
 //===============================================================
 
 short vil2_dicom_header_format::shortSwap(short short_in)
 {
-
   short result = short_in;
 
   // Only swap if the architecture is different to the
@@ -2105,14 +1896,11 @@ short vil2_dicom_header_format::shortSwap(short short_in)
   // if both are unknown, it doesnt)
   if (file_endian_ != endian_)
   {
-
     // Create a short unioned with two chars
     union short_char
     {
-
       short short_val;
       char byte_val[2];
-
     } short_swap;
 
     // Set the swapper
@@ -2124,18 +1912,15 @@ short vil2_dicom_header_format::shortSwap(short short_in)
     short_swap.byte_val[1]=temp;
 
     result = short_swap.short_val;
-
-  } // End of if(file_endian_...
+  } // End of if (file_endian_...
 
   return result;
-
-} 
+}
 
 //===============================================================
 
 int vil2_dicom_header_format::intSwap(int int_in)
 {
-
   int result = int_in;
 
   // Only swap if the architecture is different to the
@@ -2143,14 +1928,11 @@ int vil2_dicom_header_format::intSwap(int int_in)
   // if both are unknown, it doesnt)
   if (file_endian_ != endian_)
   {
-
     // Create an int unioned with four chars
     union int_char
     {
-
       int int_val;
       char byte_val[4];
-
     } int_swap;
 
     // Set the swapper
@@ -2167,24 +1949,20 @@ int vil2_dicom_header_format::intSwap(int int_in)
     int_swap.byte_val[2] = temp;
 
     result = int_swap.int_val;
-
-  } // End of if(file_endian_...
+  } // End of if (file_endian_...
 
   return result;
-
-} 
+}
 
 //===============================================================
 
 void vil2_dicom_header_format::charSwap(char *char_in, int val_size)
 {
-
   // Only swap if the architecture is different to the
   // file (the logic means that if one is unknown it swaps,
   // if both are unknown, it doesnt)
   if (file_endian_ != endian_)
   {
-
     // Create a char the same size to swap
     char *temp = new char [val_size];
 
@@ -2195,30 +1973,21 @@ void vil2_dicom_header_format::charSwap(char *char_in, int val_size)
       // Copy from the first vcl_string into the temp
       for (i=0; i<val_size; i++)
       {
-
         temp[i]=char_in[i];
-
       } // End of for
 
       // Now put back in reverse
       for (i=0; i<val_size; i++)
       {
-
         char_in[(val_size-i)-1] = temp[i];
-
       } // End of for
 
       delete [] temp;
-
-    } // End of if(temp)
+    } // End of if (temp)
     else
     {
-
-      vcl_cerr << "Couldn't create temp in charSwap!" << vcl_endl;
-      vcl_cerr << "Value remains unswapped!" << vcl_endl;
-
+      vcl_cerr << "Couldn't create temp in charSwap!\n"
+               << "Value remains unswapped!\n";
     }
-    
-  } // End of if(file_endian_...
-
-} 
+  } // End of if (file_endian_...
+}
