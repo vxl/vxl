@@ -395,6 +395,8 @@ static void test_box_2d()
   vgl_box_2d<double> b2(p4,p5);
   TEST("box has volume 2.25", b2.volume(), 2.25);
   TEST("!contains(b2)", b.contains(b2), false);
+  vgl_box_2d<double> b3(p5,p4);
+  TEST("boxes are equal", b3, b2);
   b.add(b2); vcl_cout << b << vcl_endl;
   TEST("union box has volume 4", b.volume(), 4.0);
   TEST("contains(b2)", b.contains(b2), true);
@@ -483,7 +485,6 @@ static void test_box_2d()
   ib.set_width(4); ib.set_height(4);
   vcl_cout << ib << ib.centroid() << vcl_endl;
   TEST("Integer box negative centroid drift", ib.centroid_x() == -10 && ib.centroid_y()==-10, true);
-
 }
 
 static void test_box_3d()
@@ -569,6 +570,8 @@ static void test_box_3d()
   vgl_box_3d<double> b2(p4,p5);
   TEST("box has volume 3.375", b2.volume(), 3.375);
   TEST("!contains(b2)", b.contains(b2), false);
+  vgl_box_3d<double> b3(p5,p4);
+  TEST("boxes are equal", b3, b2);
   b.add(b2); vcl_cout << b << vcl_endl;
   TEST("union box has volume 8", b.volume(), 8.0);
   TEST("contains(b2)", b.contains(b2), true);
@@ -623,7 +626,8 @@ static void test_box_3d()
 
 inline bool collinear(vgl_line_2d<int> const& l1,
                       vgl_line_2d<int> const& l2,
-                      vgl_line_2d<int> const& l3) {
+                      vgl_line_2d<int> const& l3)
+{
   return concurrent(l1,l2,l3);
 }
 
