@@ -1,4 +1,3 @@
-
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 
@@ -11,6 +10,8 @@
 #include <rrel/rrel_lms_obj.h>
 #include <rrel/rrel_ran_sam_search.h>
 
+#include "similarity_from_matches.h"
+
 #include <mbl/mbl_mz_random.h>
 
 #include <vbl/vbl_test.h>
@@ -22,9 +23,6 @@ double noise( double sigma )
   static mbl_mz_random rand;
   return rand.normal() * sigma;
 }
-
-#include <rrel/tests/similarity_from_matches.cxx>
-#include <rrel/tests/similarity_test.cxx>
 
 const double conv_tolerance=1.0e-5;
 

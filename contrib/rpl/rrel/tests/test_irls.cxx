@@ -15,21 +15,16 @@
 
 #include <vbl/vbl_test.h>
 
-bool close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-6; }
+static bool close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-6; }
 
-double noise( double sigma )
+static double noise( double sigma )
 {
   static mbl_mz_random rand;
   return rand.normal() * sigma;
 }
 
 //  Source code for tests
-#include <rrel/tests/similarity_from_matches.cxx>
 #include <rrel/tests/similarity_test.cxx>
-
-//  Local instantiation for tests
-#include <vcl_vector.txx>
-VCL_VECTOR_INSTANTIATE( image_point_match );
 
 
 const double conv_tolerance=1.0e-5;

@@ -1,4 +1,3 @@
-
 #ifndef similarity_from_matches_h_
 #define similarity_from_matches_h_
 
@@ -8,6 +7,8 @@
 #include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_vector_fixed.h>
+#include <rrel/rrel_estimation_problem.h>
+#include <rrel/rrel_wls_obj.h>
 
 class image_point_match {
 public:
@@ -53,4 +54,8 @@ private:
   int num_points_to_match_;
 };
 
+void
+generate_similarity_matches( const vnl_vector<double>& params,
+                             double sigma,
+                             vcl_vector<image_point_match>& matches );
 #endif
