@@ -190,7 +190,7 @@ public:
 	//: Add another point to the end of the intrinsic curve
 	void add_vertex (const vsol_point_2d_sptr &new_p, bool bRecomputeProterties=false);
 	//: Add another point to the end of the intrinsic curve
-	void add_vertex (int x, int y) {
+	void add_vertex (double x, double y) {
 		vsol_point_2d_sptr newpoint = new vsol_point_2d (x, y);
 		add_vertex (newpoint, false);
 	}
@@ -224,28 +224,5 @@ public:
 	  //strm << static_cast<vgl_conic<double> >(*this) << '\n';
 	}
 };
-
-#if 0
-
-#include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
-#include <vcl_iosfwd.h>
-
-#include <vsol/vsol_spatial_object_2d.h>
-#include <vsol/vsol_spatial_object_2d_sptr.h>
-#include <vsol/vsol_polyline_2d.h>
-#include <vsol/vsol_point_2d.h>
-#include <vsol/vsol_line_2d.h>
-
-#include <vcl_vector.h>
-#include <vcl_map.h>
-#include <vcl_string.h>
-#include <vcl_utility.h>
-
-#include <vbl/vbl_smart_ptr.h>
-
-
-#endif
 
 #endif // bdgl_intrinsic_curve_2d_h_
