@@ -32,7 +32,8 @@ void test_epi_point()
   // binary test output file stream
   vsl_b_ofstream bep_out("test_epi_point_io.tmp");
   TEST ("Created test_epi_point_io.tmp for writing",(!bep_out), false);
-  epi_point_1->b_write(bep_out);
+  //  epi_point_1->b_write(bep_out);
+  vsl_b_write(bep_out, epi_point_1);
   bep_out.close();
 
   bmrf_epi_point_sptr epi_point_in_1 = new bmrf_epi_point();
@@ -41,7 +42,8 @@ void test_epi_point()
   vsl_b_ifstream bep_in("test_epi_point_io.tmp");
   TEST ("Opened test_epi_point_io.tmp for reading",(!bep_in), false);
 
-  epi_point_in_1->b_read(bep_in);
+  //  epi_point_in_1->b_read(bep_in);
+  vsl_b_read(bep_in, epi_point_in_1);
   bep_in.close();
   vcl_cout << *epi_point_1 << "\n";
   vcl_cout << *epi_point_in_1 << "\n";
