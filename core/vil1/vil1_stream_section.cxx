@@ -21,7 +21,7 @@ vil_stream_section::vil_stream_section(vil_stream *underlying, int begin)
   , end_(-1)
   , current_(begin)
 {
-  assert(underlying);
+  assert(underlying != 0);
   assert(begin >= 0);
   underlying_->ref();
 }
@@ -32,7 +32,7 @@ vil_stream_section::vil_stream_section(vil_stream *underlying, int begin, int en
   , end_(end)
   , current_(begin)
 {
-  assert(underlying);
+  assert(underlying != 0);
   assert(begin >= 0);
   assert(begin <= end);
   underlying->ref();
@@ -45,11 +45,6 @@ vil_stream_section::~vil_stream_section()
   vil_stream *u = underlying_;
   underlying_ = 0;
   u->unref();
-}
-
-bool vil_stream_section::ok()
-{
-  return underlying_->ok();
 }
 
 int vil_stream_section::write(void const* buf, int n)
@@ -104,11 +99,6 @@ int vil_stream_section::read(void* buf, int n)
   if (nb >= 0)
     current_ += nb;
   return nb;
-}
-
-int vil_stream_section::tell()
-{
-  return current_; // regardless of what the underlying stream is doing.
 }
 
 void vil_stream_section::seek(int position)

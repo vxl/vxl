@@ -1,9 +1,9 @@
+// This is vxl/vil/vil_stream_fstream.h
 #ifndef vil_stream_fstream_h_
 #define vil_stream_fstream_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vil/vil_stream_fstream.h
 
 //:
 // \file
@@ -19,8 +19,8 @@ class vil_stream_fstream : public vil_stream {
 public:
   vil_stream_fstream(char const* filename, char const* mode);
 
-  bool ok();
-
+  // implement virtual vil_stream interface:
+  bool ok() const { return f_.good(); }
   int write(void const* buf, int n);
   int read(void* buf, int n);
   int tell();

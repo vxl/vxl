@@ -1,22 +1,21 @@
+// This is vxl/vil/vil_stream_fstream.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
 
-// This is vxl/vil/vil_stream_fstream.cxx
-
+#include "vil_stream_fstream.h"
 #include <vcl_cassert.h>
 #include <vcl_cstdio.h>    // perror()
 #include <vcl_iostream.h>
-#include <vil/vil_stream_fstream.h>
 
 static vcl_ios_openmode modeflags(char const* mode)
 {
   if (*mode == 0)
     return vcl_ios_openmode(0);
 
-  if (*mode == 'r') 
+  if (*mode == 'r')
     return vcl_ios_in | modeflags(mode+1);
-  
+
   if (*mode == 'w')
     return vcl_ios_out | modeflags(mode+1);
 
@@ -49,11 +48,6 @@ vil_stream_fstream::vil_stream_fstream(vcl_fstream& f):
 vil_stream_fstream::~vil_stream_fstream()
 {
   xerr << "vil_stream_fstream# " << id_ << " being deleted\n";
-}
-
-bool vil_stream_fstream::ok()
-{
-  return f_.good();
 }
 
 int vil_stream_fstream::write(void const* buf, int n)
@@ -127,7 +121,7 @@ void vil_stream_fstream::seek(int position)
   assert(id > 0);
   bool fi = (flags_ & vcl_ios_in)  != 0;
   bool fo = (flags_ & vcl_ios_out) != 0;
-  
+
   if (fi && fo) {
     xerr << "seekg and seekp to " << position << vcl_endl;
     if (position != f_.tellg()) {
@@ -136,7 +130,7 @@ void vil_stream_fstream::seek(int position)
       assert(f_.good());
     }
   }
-  
+
   else if (fi) {
     xerr << "seek to " << position << vcl_endl;
     if (position != f_.tellg()) {

@@ -1,9 +1,9 @@
+// This is vxl/vil/vil_stream_section.h
 #ifndef vil_stream_section_h_
 #define vil_stream_section_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vil/vil_stream_section.h
 
 //:
 // \file
@@ -21,18 +21,21 @@
 // Note however that this is *not* threadsafe.
 struct vil_stream_section : vil_stream
 {
+  //:
   // skip to position 'begin' in underlying stream and translate seeks,
   // reads and writes relative to that position into seeks, reads and
   // writes in the underlying stream.
   vil_stream_section(vil_stream *underlying, int begin);
 
+  //:
   // as above, but will not allow seeks, reads or writes past 'end'.
   vil_stream_section(vil_stream *underlying, int begin, int end);
 
-  bool ok();
+  // implement virtual vil_stream interface:
+  bool ok() const { return underlying_->ok(); }
   int write(void const* buf, int n);
   int read(void* buf, int n);
-  int  tell();
+  int  tell() { return current_; } // regardless of what the underlying stream is doing.
   void seek(int position);
 
 protected:

@@ -16,7 +16,7 @@
 
 vil_stream::vil_stream()
 {
-  refcount = 0;
+  refcount_ = 0;
 #if log_xtor
   vcl_cerr << __FILE__ ", vil_stream ctor : this = " << (void*)this << vcl_endl;
 #endif
@@ -32,12 +32,12 @@ vil_stream::~vil_stream()
 
 void vil_stream::ref()
 {
-  ++refcount; 
+  ++refcount_; 
 }
 
 void vil_stream::unref() 
 {
-  assert(refcount >= 0); // negative refcount is very serious
-  if (--refcount == 0)
+  assert(refcount_ >= 0); // negative refcount is very serious
+  if (--refcount_ == 0)
     delete this;
 }

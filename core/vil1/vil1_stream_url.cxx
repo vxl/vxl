@@ -113,26 +113,20 @@ static vcl_string encode_base64(const vcl_string& in)
 
 
 vil_stream_url::vil_stream_url(char const *url)
-  : underlying(0)
+  : u_(0)
 {
-  // split URL into auth, host, path and port number.
-  vcl_string host;
-  vcl_string path;
-  vcl_string auth;
-  int port = 80; // default
   if (vcl_strncmp(url, "http://", 7) != 0)
     return; // doesn't look like a URL to me....
 
-  char const *p = url + 7;
+  char const *p = url+7;
   while (*p && *p!='/')
-    ++ p;
-  host = vcl_string(url+7, p);
+    ++p;
 
-  if (*p)
-    path = p+1;
-  else
-    path = "";
-
+  // split URL into auth, host, path and port number.
+  vcl_string host = vcl_string(url+7, p);
+  vcl_string path = (*p) ? p+1 : "";
+  vcl_string auth;
+  int port = 80; // default
 
   //authentification
   for (unsigned int i=0; i<host.size(); ++i)
@@ -151,15 +145,11 @@ vil_stream_url::vil_stream_url(char const *url)
     }
 
   // do character translation
-  unsigned k =0;
-  while (k < path.size())
-  {
+  for (unsigned k =0; k < path.size(); ++k)
     if (path[k] == ' ')
       path.replace(k, 1, "%20");
     else if (path[k] == '%')
       path.replace(k, 1, "%25");
-    k++;
-  }
 
   // so far so good.
 #ifdef DEBUG
@@ -269,8 +259,8 @@ vil_stream_url::vil_stream_url(char const *url)
 //  vcl_ofstream test2("/test2.jpg", vcl_ios_binary);
 
   // read from socket into memory.
-  underlying = new vil_stream_core;
-  underlying->ref();
+  u_ = new vil_stream_core;
+  u_->ref();
   {
     unsigned entity_marker = 0; // count end of header CR and LFs
     int n;
@@ -285,7 +275,7 @@ vil_stream_url::vil_stream_url(char const *url)
       assert (entity_marker < 5);
       if (entity_marker==4)
       {
-        underlying->write(buffer, n);
+        u_->write(buffer, n);
 //        test2.write(buffer, n);
       }
       else
@@ -297,7 +287,7 @@ vil_stream_url::vil_stream_url(char const *url)
           else if (entity_marker==3 && buffer[i]=='\n')
           {
             entity_marker++;
-            underlying->write(buffer+i+1, n-i-1);
+            u_->write(buffer+i+1, n-i-1);
 //            test2.write(buffer+i+1, n-i-1);
             break;
           }
@@ -310,8 +300,8 @@ vil_stream_url::vil_stream_url(char const *url)
 #if (0) // useful for figuring out where the error is
   char btest[4096];
   vcl_ofstream test("/test.jpg", vcl_ios_binary);
-  underlying->seek(0);
-  while(int bn = underlying->read(btest, 4096))
+  u_->seek(0);
+  while(int bn = u_->read(btest, 4096))
     test.write(btest, bn);
   test.close();
 #endif 
@@ -327,35 +317,8 @@ vil_stream_url::vil_stream_url(char const *url)
 
 vil_stream_url::~vil_stream_url()
 {
-  if (underlying) {
-    underlying->unref();
-    underlying = 0;
+  if (u_) {
+    u_->unref();
+    u_ = 0;
   }
-}
-
-bool vil_stream_url::ok()
-{
-  return underlying && underlying->ok();
-}
-
-int vil_stream_url::write(void const *buf, int n)
-{
-  // strictly speaking, writes should fail, but that
-  // isn't useful in any way.
-  return underlying ? underlying->write(buf, n) : 0;
-}
-
-int vil_stream_url::read(void *buf, int n)
-{
-  return underlying ? underlying->read(buf, n) : 0;
-}
-
-int vil_stream_url::tell()
-{
-  return underlying ? underlying->tell() : -1;
-}
-
-void vil_stream_url::seek(int position)
-{
-  if (underlying) underlying->seek(position);
 }
