@@ -146,16 +146,6 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\Templates/vcl_vector+vgui_easy2D_sptr-.cxx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates/vcl_vector+vgui_rubberbander_sptr-.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\Templates/vcl_vector+xcv_image_tableau_sptr-.cxx
 
 # End Source File
