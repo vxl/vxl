@@ -4,13 +4,13 @@ include ${IUEROOT}/config/top-params.mk
 
 SUBDIRS += mvl
 SUBDIRS += oxp
-SUBDIRS += mvox
+SUBDIRS += ../Oxford/mvox
 SUBDIRS += vrml
 
 ifeq (1,$(strip $(HAS_OPENGL)))
 SUBDIRS += vgui
 SUBDIRS += xcv
-SUBDIRS += xcv_ox
+SUBDIRS += ../Oxford/xcv_ox
 SUBDIRS += VPLAYER
 endif
 
