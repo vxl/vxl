@@ -214,7 +214,7 @@ T  bsta_histogram<T>::value_with_area_above(const T area_fraction) const
   if (area_ == T(0))
     return 0;
   T sum = 0;
-  for (unsigned int i=nbins_-1; i>=0; i--)
+  for (unsigned int i=nbins_-1; i!=0; i--)
   {
     sum += counts_[i];
     if (sum>area_fraction*area_)
