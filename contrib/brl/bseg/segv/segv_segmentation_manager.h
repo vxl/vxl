@@ -27,6 +27,7 @@
 #include <bgui/bgui_picker_tableau_sptr.h>
 #include <bgui/bgui_vtol2D_tableau_sptr.h>
 #include <bgui/bgui_image_tableau_sptr.h>
+#include <bgui/bgui_bargraph_clipon_tableau_sptr.h>
 
 class vgui_window;
 
@@ -63,7 +64,7 @@ class segv_segmentation_manager : public vgui_wrapper_tableau
   void compute_parallel_coverage();
   void compute_watershed_regions();
   void find_vehicle();
-
+  void display_histogram_track();
 #if 0
 #ifdef HAS_XERCES
   void read_xml_edges();
@@ -105,6 +106,7 @@ class segv_segmentation_manager : public vgui_wrapper_tableau
   vgui_grid_tableau_sptr grid_;
   vtol_face_2d_sptr foreground_face_;
   vtol_face_2d_sptr background_face_;
+  bgui_bargraph_clipon_tableau_sptr bargraph_;
   static segv_segmentation_manager *instance_;
 };
 

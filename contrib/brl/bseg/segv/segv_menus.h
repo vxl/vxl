@@ -47,6 +47,7 @@ class segv_menus
   SEGV_DLL_DATA static void compute_parallel_coverage_callback();
   SEGV_DLL_DATA static void compute_watershed_regions_callback();
   SEGV_DLL_DATA static void find_vehicle_callback();
+  SEGV_DLL_DATA static void display_histogram_track_callback();
 
 #if 0
 #ifdef HAS_XERCES

@@ -152,6 +152,10 @@ void segv_menus::find_vehicle_callback()
   segv_segmentation_manager::instance()->find_vehicle();
 }
 
+void segv_menus::display_histogram_track_callback()
+{
+  segv_segmentation_manager::instance()->display_histogram_track();
+}
 //segv_menus definition
 vgui_menu segv_menus::get_menu()
 {
@@ -172,6 +176,7 @@ vgui_menu segv_menus::get_menu()
   menuview.add("Clear Display", clear_display_callback);
   menuview.add("Display IHS", display_IHS_callback);
   menuview.add("Rotate", rotate_image_callback);
+  menuview.add("Display Histogram Track File", display_histogram_track_callback);
   //edit menu entries
   menuedit.add("Region Of Interest", roi_callback);
   menuedit.add("Gaussian", gaussian_callback);
@@ -191,8 +196,7 @@ vgui_menu segv_menus::get_menu()
   menuedit.add("Compute Mutual Info",compute_mutual_info_callback);
 
 
-  menuedit.add("Compute Fore/Background entropy",compute_background_info_callback);
-  menuedit.add("Set Background Face", set_background_face_callback);
+  menuedit.add("Compute Fore/Background entropy",compute_background_info_callback);  menuedit.add("Set Background Face", set_background_face_callback);
 
   menuedit.add("Set Foreground Face", set_foreground_face_callback);
   menuedit.add("Compute parallel coverage",compute_parallel_coverage_callback);
