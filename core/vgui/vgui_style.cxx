@@ -23,3 +23,13 @@ vgui_style::vgui_style() {
   line_width = 1;
   point_size = 1;
 }
+
+vgui_style::~vgui_style() {
+  // to aid in debugging destroyed styles
+  for (int i=0; i<2; ++i)
+    rgba[i] = -1.0f;
+
+  rgba[3] = -1.0f;
+  line_width = -1.0f;
+  point_size = -1.0f;
+}

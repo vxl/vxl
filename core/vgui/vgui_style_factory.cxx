@@ -120,36 +120,46 @@ void vgui_style_factory::change_style(vgui_soview* so, vgui_style* st_new, vgui_
 
 
 void vgui_style_factory::change_style_impl(vgui_soview* so, vgui_style* st_new, vgui_style* st_old) {
-  if (!st_old) {
-    // add tuple of <st_new, so> to multimap
-    styles_map.insert(MultiMap_styles::value_type(st_new, so));
-  }
-  else {
-    // first find range having key == st_old
-    vcl_pair<MultiMap_styles::iterator, MultiMap_styles::iterator> matches =
-      styles_map.equal_range(st_old);
+  // It doesn't make sense for a single view to be associated with two
+  // styles, so delete all old associations before inserting a new
+  // one.
 
-    if (debug) vcl_cerr << "found range\n";
+  remove_style( so );
 
-    // find element with value == so
-    so_equal seq(so);
-    MultiMap_styles::iterator f_iter = vcl_find_if(matches.first, matches.second, seq);
-
-    if (debug) vcl_cerr << "found element\n";
-
-    styles_map.erase(f_iter);
-    styles_map.insert(MultiMap_styles::value_type(st_new, so));
-  }
+  // add tuple of <st_new, so> to multimap
+  styles_map.insert(MultiMap_styles::value_type(st_new, so));
 }
 
-//: clear all maps and vectors 
-void vgui_style_factory::clear()
-{
-  instance()->clear_impl();
+
+void vgui_style_factory::remove_style(vgui_soview* so) {
+  instance()->remove_style_impl(so);
 }
 
-void vgui_style_factory::clear_impl()
-{
-  styles.clear();
-  styles_map.clear();
+void vgui_style_factory::remove_style_impl(vgui_soview* so) {
+  // the standard does not guarantee that a multimap is stable under
+  // erase, so we have to do two passes.
+  // See Defect Report 371
+  // http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/lwg-active.html#371
+
+  typedef MultiMap_styles::iterator Iter;
+
+  // Find all mappings with so
+  //
+  vcl_vector<Iter> to_erase;
+  for( Iter i = styles_map.begin(); i != styles_map.end(); ++i ) {
+    if( i->second == so ) {
+      to_erase.push_back( i );
+    }
+  }
+
+  // Erase 'em. This is okay because iterators are not invalidated on
+  // erase.
+  //
+  for( vcl_vector<Iter>::iterator i = to_erase.begin(); i != to_erase.end(); ++i ) {
+    styles_map.erase( *i );
+  }
+
+  // We don't need to erase the style object, since a pointer to it is
+  // guaranteed to be in the style vector, and therefore the object
+  // will be deleted when the factory instance is deleted.
 }

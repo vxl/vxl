@@ -31,4 +31,8 @@ IF( HAS_VGUI )
   ADD_EXECUTABLE( vgui_test_include test_include.cxx )
   TARGET_LINK_LIBRARIES( vgui_test_include vgui )
 
+  ADD_EXECUTABLE( vgui_test_displaybase test_displaybase.cxx )
+  TARGET_LINK_LIBRARIES( vgui_test_displaybase vgui )
+  ADD_TEST( vgui_test_displaybase vgui_test_displaybase )
+
 ENDIF( HAS_VGUI )

@@ -29,7 +29,7 @@ class vgui_style
   vgui_style(const vgui_style& that) { *this = that; }
 
   //: Destructor.
-  ~vgui_style() { }
+  ~vgui_style();
 
   //: Style colour.
   float rgba[4];

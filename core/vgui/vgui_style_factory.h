@@ -53,8 +53,11 @@ class vgui_style_factory
   static void change_style(vgui_soview* so, vgui_style* st_new, 
     vgui_style* st_old);
 
-  //: Clear the factory 
-  static void clear();
+  //: Remove a style association.
+  //
+  // This should be done prior to destroying a soview.
+  static void remove_style(vgui_soview* so);
+
   typedef vcl_multimap<vgui_style*, vgui_soview*, vcl_less<vgui_style*> > MultiMap_styles;
 
   class so_equal
@@ -79,7 +82,8 @@ class vgui_style_factory
   void get_styles_impl(vcl_vector<vgui_style*>& styles_copy);
   void get_soviews_impl(vgui_style*, vcl_vector<vgui_soview*>& soviews);
   void change_style_impl(vgui_soview* so, vgui_style* st_new, vgui_style* st_old);
-  void clear_impl();
+  void remove_style_impl(vgui_soview* so);
+  
   //vgui_style* default_style;
   vcl_vector<vgui_style*> styles;
   MultiMap_styles styles_map;

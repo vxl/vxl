@@ -102,21 +102,14 @@ void vgui_displaybase_tableau::clear()
 {
   highlighted = 0;
   deselect_all();
-  //first delete the soviews
-  for (vcl_vector<vgui_soview*>::iterator so_iter = objects.begin();
-       so_iter != objects.end(); ++so_iter)
-    delete *so_iter;
-  //then delete the styles
-  //since the same style pointer could be in 
-  //numerous soviews
-  vcl_vector<vgui_style*> styles;
-  vgui_style_factory::get_styles(styles);
-       
-  for(vcl_vector<vgui_style*>::iterator sty_iter = styles.begin();
-      sty_iter != styles.end(); ++sty_iter)
-    delete *sty_iter;
 
-  vgui_style_factory::clear();
+  // delete the style associations and destroy the objects
+  for (vcl_vector<vgui_soview*>::iterator so_iter = objects.begin();
+       so_iter != objects.end(); ++so_iter) {
+    vgui_style_factory::remove_style( *so_iter );
+    delete *so_iter;
+  }
+
   objects.clear();
 }
 
