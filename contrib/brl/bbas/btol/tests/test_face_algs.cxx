@@ -1,12 +1,10 @@
-// This is gel/vtol/tests/test_face_algs.cxx
+// This is brl/bbas/btol/tests/test_face_algs.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_string.h>
 #include <vnl/vnl_matrix_fixed.h>
-#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_polygon.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_vertex_2d.h>
-#include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_edge_sptr.h>
 #include <vtol/vtol_one_chain_sptr.h>
@@ -16,29 +14,29 @@
 #include <btol/btol_face_algs.h>
 static void print_edges(vcl_string const& msg, vtol_face_2d_sptr const& f)
 {
-  if(!f)
+  if (!f)
     return;
   vcl_vector<vtol_edge_sptr> edges;
   f->edges(edges);
-  for(vcl_vector<vtol_edge_sptr>::iterator eit = edges.begin();
-      eit != edges.end(); eit++)
-    vcl_cout << msg << "(" 
-             << (*eit)->v1()->cast_to_vertex_2d()->x() << " "
+  for (vcl_vector<vtol_edge_sptr>::iterator eit = edges.begin();
+       eit != edges.end(); eit++)
+    vcl_cout << msg << '('
+             << (*eit)->v1()->cast_to_vertex_2d()->x() << ' '
              << (*eit)->v1()->cast_to_vertex_2d()->y() << "):("
-             << (*eit)->v2()->cast_to_vertex_2d()->x() << " "
+             << (*eit)->v2()->cast_to_vertex_2d()->x() << ' '
              << (*eit)->v2()->cast_to_vertex_2d()->y()
              << ")\n";
 }
 
 static void print_verts(vcl_string const& msg, vtol_face_2d_sptr const& f)
 {
-  if(!f)
+  if (!f)
     return;
   vcl_vector<vtol_vertex_sptr> verts;
   f->vertices(verts);
-  for(vcl_vector<vtol_vertex_sptr>::iterator vit = verts.begin();
-      vit != verts.end(); vit++)
-    vcl_cout << msg << (*vit)->cast_to_vertex_2d()->x() << " "
+  for (vcl_vector<vtol_vertex_sptr>::iterator vit = verts.begin();
+       vit != verts.end(); vit++)
+    vcl_cout << msg << (*vit)->cast_to_vertex_2d()->x() << ' '
              << (*vit)->cast_to_vertex_2d()->y() << ")\n";
 }
 
@@ -59,7 +57,6 @@ static void test_face_algs()
   vtol_vertex_2d_sptr vh4 = new vtol_vertex_2d(5.0,10.0);
 
   vcl_vector<vtol_vertex_sptr> verts, hole_verts;
-  
 
   verts.push_back(v1->cast_to_vertex());
   verts.push_back(v2->cast_to_vertex());
@@ -78,11 +75,11 @@ static void test_face_algs()
   bool all_equal = true;
   int n = chain_verts.size();
   all_equal = all_equal && n==4;
-  if(all_equal)
-    for(int i = 0; i<4; i++)
+  if (all_equal)
+    for (int i = 0; i<4; i++)
       all_equal = all_equal && (*chain_verts[i])==(*verts[i]);
 
-  TEST("vtol_face_algs::chain_constructor", all_equal, true);  
+  TEST("vtol_face_algs::chain_constructor", all_equal, true);
 
   vcl_cout << "testing simply-connected face transformation\n";
   vnl_matrix_fixed<double, 3, 3> T;
@@ -99,30 +96,27 @@ static void test_face_algs()
   print_verts("trans_simple_f_vert ", trans_simple_f);
 
   TEST("vtol_face_algs::transform_simple_face", *simple_f, *trans_simple_f);
-  
-  vcl_cout << "testing multiply-connected face transformation\n";
-  vtol_one_chain_sptr hole_chain = btol_face_algs::one_chain(hole_verts);  
-  
 
+  vcl_cout << "testing multiply-connected face transformation\n";
+  vtol_one_chain_sptr hole_chain = btol_face_algs::one_chain(hole_verts);
 
   chains.push_back(hole_chain);
   vtol_face_2d_sptr  multi_f = new vtol_face_2d(chains);
   print_edges("multi_f_edge ", multi_f);
   vcl_cout << "\n\n";
   vcl_vector<vtol_vertex_sptr>* mf_verts = multi_f->outside_boundary_vertices();
-  for(vcl_vector<vtol_vertex_sptr>::iterator vit = mf_verts->begin();
-      vit != mf_verts->end(); vit++)
-    vcl_cout << "mf_bound_v (" << (*vit)->cast_to_vertex_2d()->x() << " "
+  for (vcl_vector<vtol_vertex_sptr>::iterator vit = mf_verts->begin();
+       vit != mf_verts->end(); vit++)
+    vcl_cout << "mf_bound_v (" << (*vit)->cast_to_vertex_2d()->x() << ' '
              << (*vit)->cast_to_vertex_2d()->y() << ")\n";
   vcl_cout << "\n\n";
   vcl_vector<vtol_one_chain_sptr> *holes = multi_f->get_hole_cycles();
   vcl_vector<vtol_vertex_sptr>* mf_hole_verts = (*holes)[0]->vertices();
-  for(vcl_vector<vtol_vertex_sptr>::iterator vit = mf_hole_verts->begin();
-      vit != mf_hole_verts->end(); vit++)
-    vcl_cout << "mf_hole_v (" << (*vit)->cast_to_vertex_2d()->x() << " "
+  for (vcl_vector<vtol_vertex_sptr>::iterator vit = mf_hole_verts->begin();
+       vit != mf_hole_verts->end(); vit++)
+    vcl_cout << "mf_hole_v (" << (*vit)->cast_to_vertex_2d()->x() << ' '
              << (*vit)->cast_to_vertex_2d()->y() << ")\n";
 
-  
   vtol_face_2d_sptr trans_multi_f = btol_face_algs::transform(multi_f, T);
   print_edges("trans_multi_f_edge ", trans_multi_f);
 
@@ -132,27 +126,27 @@ static void test_face_algs()
   vgl_polygon<double> poly;
   poly.clear();
   poly.new_sheet();
-  for(vcl_vector<vtol_vertex_sptr>::iterator vit = verts.begin();
-      vit != verts.end(); ++vit)
-    {
-      vtol_vertex_2d* v = (*vit)->cast_to_vertex_2d();
-      if (v)
-        poly.push_back(v->x(), v->y());
-    }
+  for (vcl_vector<vtol_vertex_sptr>::iterator vit = verts.begin();
+       vit != verts.end(); ++vit)
+  {
+    vtol_vertex_2d* v = (*vit)->cast_to_vertex_2d();
+    if (v)
+      poly.push_back(v->x(), v->y());
+  }
   poly.new_sheet();
-  for(vcl_vector<vtol_vertex_sptr>::iterator vit = hole_verts.begin();
-      vit != hole_verts.end(); ++vit)
-    {
-      vtol_vertex_2d* v = (*vit)->cast_to_vertex_2d();
-      if (v)
-        poly.push_back(v->x(), v->y());
-    }
+  for (vcl_vector<vtol_vertex_sptr>::iterator vit = hole_verts.begin();
+       vit != hole_verts.end(); ++vit)
+  {
+    vtol_vertex_2d* v = (*vit)->cast_to_vertex_2d();
+    if (v)
+      poly.push_back(v->x(), v->y());
+  }
   vtol_face_2d_sptr poly_face;
   bool failed = !btol_face_algs::vgl_to_vtol(poly, poly_face);
-  if(!failed)
-    {
-      print_edges("poly_edge ", poly_face);
-    }
+  if (!failed)
+  {
+    print_edges("poly_edge ", poly_face);
+  }
 
   TEST("vtol_face_algs::vgl_to_vtol", failed, false);
 }
