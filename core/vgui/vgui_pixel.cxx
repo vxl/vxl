@@ -41,7 +41,7 @@ static bool dummy = tunit_init();
 //    copy_a(src+i, dst+i);
 //  }
 //}
-//#define VGUI_PIXEL_CONVERT_SPAN_INSTANTIATE(S, D) \
+//#define VGUI_PIXEL_CONVERT_SPAN_INSTANTIATE(S, D) \ 
 //template void vgui_pixel_convert_span(S const *, D *, unsigned);
 
 //: Set an int of unknown size to all-bits-one
