@@ -27,6 +27,10 @@ SOURCES += vsrl_step_diffusion.cxx
 SOURCES += vsrl_saliency_diffusion.cxx
 SOURCES += vsrl_token_saliency.cxx
 SOURCES += vsrl_parameters.cxx
+MANPAGE_SOURCES += vsrl_manager.h
+MANPAGE_SOURCES += vsrl_menus.h
+MANPAGE_SOURCES += vsrl_point_picker.h
+MANPAGE_SOURCES += vsrl_point_picker_sptr.h
 
 DEFINES += -DBUILDING_VSRL_DLL
 
