@@ -5,7 +5,6 @@
 #include <bgui/bgui_vsol_soview2D.h>
 //#include <vgui/vgui.h>
 #include <vgui/vgui_style.h>
-#include <bgui/bgui_style.h>
 #include <vsol/vsol_point_3d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_3d.h>
@@ -42,7 +41,7 @@ void bgui_vsol_camera_tableau::init()
   old_id_ = 0;
   highlight_ = true;
   //set highlight display style parameters
-  highlight_style_ = new bgui_style(0.0f, 0.0f, 1.0f, 5.0f, 5.0f);
+  highlight_style_ = new vgui_style(0.0f, 0.0f, 1.0f, 5.0f, 5.0f);
 
   //define default soview styles
   //these can be overridden by later set_*_syle commands prior to drawing.
@@ -69,10 +68,8 @@ bool bgui_vsol_camera_tableau::handle(vgui_event const &e)
       vgui_soview* old_so = vgui_soview::id_to_object(old_id_);
       if (old_so)
         {
-          bgui_style_sptr default_sty = style_map_[old_so->type_name()];
-          bgui_style* bs = (bgui_style*)default_sty.ptr();
-          vgui_style* s = (vgui_style*)bs;
-          old_so->set_style(s);
+          vgui_style_sptr default_sty = style_map_[old_so->type_name()];
+          old_so->set_style(default_sty);
         }
       //get the soview that is closest to the mouse
       vgui_soview2D* high_so = (vgui_soview2D*)get_highlighted_soview();
@@ -82,9 +79,7 @@ bool bgui_vsol_camera_tableau::handle(vgui_event const &e)
           int id = high_so->get_id();
           old_id_ = id;
           //set soview style to the highlight color and weight
-          bgui_style* bsh = (bgui_style*)highlight_style_.ptr();
-          vgui_style* sh = (vgui_style*)bsh;
-          high_so->set_style(sh);
+          high_so->set_style(highlight_style_);
           this->post_redraw();
         }
     }
@@ -95,16 +90,16 @@ bool bgui_vsol_camera_tableau::handle(vgui_event const &e)
 bgui_vsol_soview2D_point*
 bgui_vsol_camera_tableau::add_vsol_point_3d(vsol_point_3d_sptr const& p)
 {
-  bgui_vsol_soview2D_point* obj =
-    new bgui_vsol_soview2D_point();
   vgl_homg_point_3d<double> hp3d = p->homg_point();
   vgl_homg_point_2d<double> hp2d = camera_(hp3d);
-  vgl_point_2d<double> p2d(hp2d);//Get 
-  obj->x = p2d.x();
-  obj->y = p2d.y();
+  vgl_point_2d<double> p2d(hp2d);//Get
+  vsol_point_2d_sptr pt = new vsol_point_2d(p2d.x(), p2d.y());
+  
+  bgui_vsol_soview2D_point* obj =
+    new bgui_vsol_soview2D_point(pt);
   add(obj);
-   bgui_style_sptr s = style_map_[obj->type_name()];
-   obj->set_style(s.ptr());
+   vgui_style_sptr s = style_map_[obj->type_name()];
+   obj->set_style(s);
   return obj;
 }
 
@@ -121,8 +116,8 @@ bgui_vsol_camera_tableau::add_vsol_line_3d(vsol_line_3d_sptr const& line)
     new bgui_vsol_soview2D_line_seg(l2d);
   add(obj);
   //set the default style
-  bgui_style_sptr sty = style_map_[obj->type_name()];
-  obj->set_style(sty.ptr());
+  vgui_style_sptr sty = style_map_[obj->type_name()];
+  obj->set_style(sty);
   return obj;
 }
 
@@ -143,10 +138,10 @@ bgui_vsol_camera_tableau::add_vsol_polygon_3d(vsol_polygon_3d_sptr const& poly)
   bgui_vsol_soview2D_polygon* obj =
     new bgui_vsol_soview2D_polygon(poly_2d);
   //set the default style
-  bgui_style_sptr sty = style_map_[obj->type_name()];
+  vgui_style_sptr sty = style_map_[obj->type_name()];
   add(obj);
   if (obj)
-    obj->set_style(sty.ptr());
+    obj->set_style(sty);
   return obj;
 }
 
@@ -235,9 +230,9 @@ bgui_vsol_camera_tableau::add_vsol_box_3d(vsol_box_3d_sptr const& box)
   bgui_vsol_soview2D_polygon_group* obj =
     new bgui_vsol_soview2D_polygon_group(polys);
   //set the default style
-  bgui_style_sptr sty = style_map_[obj->type_name()];
+  vgui_style_sptr sty = style_map_[obj->type_name()];
   add(obj);
-  obj->set_style(sty.ptr());
+  obj->set_style(sty);
   return obj;
 }
 
@@ -325,7 +320,7 @@ bgui_vsol_camera_tableau::set_vsol_point_3d_style(const float r,
                                                   const float b,
                                                   const float point_radius)
 {
-  bgui_style_sptr sty = new bgui_style(r, g, b, point_radius, 0.0f);
+  vgui_style_sptr sty = new vgui_style(r, g, b, point_radius, 0.0f);
   bgui_vsol_soview2D_point p;
   style_map_[p.type_name()]=sty;
 }
@@ -336,7 +331,7 @@ bgui_vsol_camera_tableau::set_vsol_line_3d_style(const float r,
                                                  const float b,
                                                  const float line_width)
 {
-  bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
+  vgui_style_sptr sty = new vgui_style(r, g, b, 0.0f, line_width);
   bgui_vsol_soview2D_line_seg seg;
   style_map_[seg.type_name()]=sty;
 }
@@ -348,7 +343,7 @@ bgui_vsol_camera_tableau::set_vsol_polygon_3d_style(const float r,
                                                     const float b,
                                                     const float line_width)
 {
-  bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
+  vgui_style_sptr sty = new vgui_style(r, g, b, 0.0f, line_width);
   bgui_vsol_soview2D_polygon poly;
   style_map_[poly.type_name()]=sty;
 }
@@ -358,7 +353,7 @@ void bgui_vsol_camera_tableau::set_vsol_box_3d_style(const float r,
                                                 const float b,
                                                 const float line_width)
 {
-  bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
+  vgui_style_sptr sty = new vgui_style(r, g, b, 0.0f, line_width);
   bgui_vsol_soview2D_polygon_group pg;
   style_map_[pg.type_name()]=sty;
 }

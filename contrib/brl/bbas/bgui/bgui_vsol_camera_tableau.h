@@ -24,7 +24,7 @@
 #include <vsol/vsol_polygon_3d_sptr.h>
 #include <vsol/vsol_box_3d_sptr.h>
 #include <vgui/vgui_tableau_sptr.h>
-#include <bgui/bgui_style_sptr.h>
+#include <vgui/vgui_style_sptr.h>
 #include <vgui/vgui_image_tableau_sptr.h>
 #include <vgui/vgui_easy2D_tableau.h>
 #include <bgui/bgui_vsol_camera_tableau_sptr.h>
@@ -113,10 +113,10 @@ class bgui_vsol_camera_tableau : public vgui_easy2D_tableau
   bool highlight_;
   void init();
   vcl_map<int, vsol_spatial_object_3d_sptr> obj_map_;
-  vcl_map<vcl_string, bgui_style_sptr> style_map_;
+  vcl_map<vcl_string, vgui_style_sptr> style_map_;
   int old_id_;
-  bgui_style_sptr highlight_style_;
-  bgui_style_sptr old_style_;
+  vgui_style_sptr highlight_style_;
+  vgui_style_sptr old_style_;
   vgl_p_matrix<double> camera_;
 };
 
