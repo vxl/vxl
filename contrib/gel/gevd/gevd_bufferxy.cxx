@@ -95,11 +95,7 @@ gevd_bufferxy::gevd_bufferxy(gevd_bufferxy const& buf) : gevd_memory_mixin(buf)
 //: Write to file.  Note that this can be OS-specific!
 void gevd_bufferxy::dump(const char* filename)
 {
-#ifdef VCL_WIN32
   vcl_ofstream f(filename,vcl_ios_out|vcl_ios_binary);
-#else
-  vcl_ofstream f(filename);
-#endif
   if (!f) { vcl_cerr << "Cannot open "<< filename <<" for writing\n"; return; }
   f << "BUFFERXYDUMP "<< GetSizeX() <<" "<< GetSizeY() <<" "<< GetBitsPixel()
 #ifdef WORDS_BIGENDIAN
