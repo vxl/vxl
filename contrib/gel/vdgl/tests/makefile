@@ -1,6 +1,7 @@
 USES += vxl gel
+USE_NETLIB := 1
 
-IULIBS := -lvdgl -lvbl -lvnl-algo -lnetlib -lvnl -lvsol -lvgl 
+IULIBS := -lvdgl -lvbl -lvnl-algo -lvnl -lvsol -lvgl 
 
 MINI_PROG_SOURCES += test_vdgl.cxx
 MINI_PROG_SOURCES += test1_vdgl.cxx
