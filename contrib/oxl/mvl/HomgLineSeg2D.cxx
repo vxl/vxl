@@ -18,8 +18,8 @@
 HomgLineSeg2D::HomgLineSeg2D (const HomgPoint2D& point1,
                               const HomgPoint2D& point2):
   HomgLine2D(HomgOperator2D::join (point1, point2)),
-  _point1(point1),
-  _point2(point2)
+  point1_(point1),
+  point2_(point2)
 {
 }
 
@@ -28,8 +28,8 @@ HomgLineSeg2D::HomgLineSeg2D (const HomgPoint2D& point1,
 //: Constructor forming linesegment (x0,y0) -> (x1,y1)
 HomgLineSeg2D::HomgLineSeg2D (double x0, double y0, double x1, double y1):
   HomgLine2D(y0 - y1, x1 - x0, x0 * y1 - x1 * y0),
-  _point1(HomgPoint2D(x0, y0, 1.0)),
-  _point2(HomgPoint2D(x1, y1, 1.0))
+  point1_(HomgPoint2D(x0, y0, 1.0)),
+  point2_(HomgPoint2D(x1, y1, 1.0))
 {
 }
 
@@ -39,8 +39,8 @@ HomgLineSeg2D::HomgLineSeg2D (double x0, double y0, double x1, double y1):
 void HomgLineSeg2D::set (const HomgPoint2D& point1,
                          const HomgPoint2D& point2)
 {
-  _point1 = point1;
-  _point2 = point2;
+  point1_ = point1;
+  point2_ = point2;
   HomgLine2D::operator=(HomgOperator2D::join (point1, point2));
 }
 
@@ -49,11 +49,9 @@ void HomgLineSeg2D::set (const HomgPoint2D& point1,
 //: print to vcl_ostream
 vcl_ostream& operator<<(vcl_ostream& s, const HomgLineSeg2D& p)
 {
-  return s <<
-    "<HomgLineSeg2D " << p.get_vector() <<
-    " from " << p.get_point1() <<
-    " to " << p.get_point2() <<
-    ">";
+  return s << "<HomgLineSeg2D " << p.get_vector()
+           << " from " << p.get_point1()
+           << " to " << p.get_point2() << ">";
 }
 
 #ifdef VXL_UNDEF
@@ -66,8 +64,8 @@ ImplicitLine* HomgLineSeg2D::get_implicitline() const
   IUPoint *startpoint = get_point1().get_iupoint();
   IUPoint *endpoint = get_point2().get_iupoint();
   if (!startpoint || !endpoint) {
-    vcl_cerr << "HomgLineSeg2D::get_implicitline() -- Endpoint at infinity\n";
-    vcl_cerr << "    " << *this << vcl_endl;
+    vcl_cerr << "HomgLineSeg2D::get_implicitline() -- Endpoint at infinity\n"
+             << "    " << *this << vcl_endl;
     return 0;
   }
 

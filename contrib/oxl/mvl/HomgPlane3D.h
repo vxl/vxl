@@ -9,7 +9,6 @@
 // \brief Homogeneous 4-vector for a 3D plane
 //
 // A class to hold a homogeneous 4-vector for a 3D plane.
-//
 
 #include <mvl/Homg3D.h>
 #include <vcl_iosfwd.h>
@@ -31,7 +30,7 @@ class HomgPlane3D : public Homg3D
   HomgPoint3D closest_point(const HomgPoint3D& x) const;
   double distance(const HomgPoint3D& x) const;
 
-  vnl_vector<double> n() const { return _homg_vector.extract(3).normalize(); }
+  vnl_vector<double> n() const { return homg_vector_.extract(3).normalize(); }
 };
 
 vcl_ostream& operator<<(vcl_ostream&, const HomgPlane3D&);

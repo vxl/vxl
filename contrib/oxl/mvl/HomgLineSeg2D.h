@@ -1,18 +1,18 @@
 // This is oxl/mvl/HomgLineSeg2D.h
-#ifndef _HomgLineSeg2D_h
-#define _HomgLineSeg2D_h
+#ifndef HomgLineSeg2D_h_
+#define HomgLineSeg2D_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
-//  \file
+// \file
 // \brief Homogeneous 2D line segment
 //
 // A class to hold homogeneous 3-vectors for the two endpoints and
 // line for a 2D line segment.
 //
 // \verbatim
-// Modifications:
+//  Modifications:
 //   Peter Vanroose - 11 Mar 97 - added operator==
 // \endverbatim
 
@@ -22,8 +22,8 @@
 
 class HomgLineSeg2D : public HomgLine2D
 {
-  HomgPoint2D _point1;
-  HomgPoint2D _point2;
+  HomgPoint2D point1_;
+  HomgPoint2D point2_;
  public:
 
   // Constructors/Initializers/Destructors-------------------------------------
@@ -60,7 +60,7 @@ inline const HomgLine2D& HomgLineSeg2D::get_line () const
 //: Return the first point of the line segment
 inline const HomgPoint2D& HomgLineSeg2D::get_point1 () const
 {
-  return _point1;
+  return point1_;
 }
 
 //--------------------------------------------------------------
@@ -68,7 +68,7 @@ inline const HomgPoint2D& HomgLineSeg2D::get_point1 () const
 //: Return the second point of the line segment
 inline const HomgPoint2D& HomgLineSeg2D::get_point2 () const
 {
-  return _point2;
+  return point2_;
 }
 
-#endif // _HomgLineSeg2D_h
+#endif // HomgLineSeg2D_h_

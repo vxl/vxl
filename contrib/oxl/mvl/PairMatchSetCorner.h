@@ -5,7 +5,7 @@
 #pragma interface
 #endif
 //:
-//  \file
+// \file
 // \brief Matches between corners
 //
 //    PairMatchSetCorner is a subclass of PairMatchSet that stores matches
@@ -21,7 +21,6 @@
 //
 //-----------------------------------------------------------------------------
 
-//////////////#include <cool/decls.h>
 #include <mvl/HomgPoint2D.h>
 #include "PairMatchSet.h"
 
@@ -32,13 +31,10 @@ class PairMatchSetCorner : public PairMatchSet
   // Constructors/Destructors--------------------------------------------------
 
   PairMatchSetCorner();
-  // deprecated PairMatchSetCorner(HomgInterestPointSet const* corners1, HomgInterestPointSet const* corners2);
   PairMatchSetCorner(HomgInterestPointSet const* corners1, HomgInterestPointSet const* corners2);
   PairMatchSetCorner(const PairMatchSetCorner& that);
   PairMatchSetCorner& operator=(const PairMatchSetCorner& that);
  ~PairMatchSetCorner();
-
-  // Computations--------------------------------------------------------------
 
   // Data Access---------------------------------------------------------------
   void extract_matches(vcl_vector <HomgPoint2D>& points1, vcl_vector <int>& corner_index_1,
@@ -54,15 +50,15 @@ class PairMatchSetCorner : public PairMatchSet
   // Data Control--------------------------------------------------------------
   void set(HomgInterestPointSet const* corners1, HomgInterestPointSet const* corners2);
 
-//: Return the set of corners within which the i1 indices point
-  HomgInterestPointSet const* get_corners1() const { return _corners1; }
+  //: Return the set of corners within which the i1 indices point
+  HomgInterestPointSet const* get_corners1() const { return corners1_; }
 
-//: Return the set of corners within which the i2 indices point
-  HomgInterestPointSet const* get_corners2() const { return _corners2; }
+  //: Return the set of corners within which the i2 indices point
+  HomgInterestPointSet const* get_corners2() const { return corners2_; }
 
  private:
-  HomgInterestPointSet const* _corners1;
-  HomgInterestPointSet const* _corners2;
+  HomgInterestPointSet const* corners1_;
+  HomgInterestPointSet const* corners2_;
 };
 
 #endif // PairMatchSetCorner_h_

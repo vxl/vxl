@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //:
-//  \file
+// \file
 
 #include "PairMatchSetCorner.h"
 
@@ -13,7 +13,7 @@
 #include <mvl/HomgInterestPointSet.h>
 
 //: Constructor
-PairMatchSetCorner::PairMatchSetCorner() : _corners1(0) , _corners2(0)
+PairMatchSetCorner::PairMatchSetCorner() : corners1_(0) , corners2_(0)
 {
 }
 
@@ -22,21 +22,21 @@ PairMatchSetCorner::PairMatchSetCorner() : _corners1(0) , _corners2(0)
 // live longer than the PairMatchSetCorner (for example in an MViewDatabase).
 PairMatchSetCorner::PairMatchSetCorner(HomgInterestPointSet const* corners1,
                                        HomgInterestPointSet const* corners2)
-  : _corners1(0) , _corners2(0)
+  : corners1_(0) , corners2_(0)
 {
   set(corners1, corners2);
 }
 
 //: Copy a PairMatchSetCorner
 PairMatchSetCorner::PairMatchSetCorner(const PairMatchSetCorner& that):
-  PairMatchSet(that) , _corners1(0) , _corners2(0)
+  PairMatchSet(that) , corners1_(0) , corners2_(0)
 {
-  set(that._corners1, that._corners2);
+  set(that.corners1_, that.corners2_);
 }
 
 PairMatchSetCorner& PairMatchSetCorner::operator=(const PairMatchSetCorner&that)
 {
-  set(that._corners1, that._corners2);
+  set(that.corners1_, that.corners2_);
   PairMatchSet::operator= (that);
   return *this;
 }
@@ -53,10 +53,10 @@ PairMatchSetCorner::~PairMatchSetCorner()
 void PairMatchSetCorner::set(HomgInterestPointSet const* corners1,
                              HomgInterestPointSet const* corners2)
 {
-  _corners1 = corners1;
-  _corners2 = corners2;
-  if (_corners1)
-    set_size(_corners1->size());
+  corners1_ = corners1;
+  corners2_ = corners2;
+  if (corners1_)
+    set_size(corners1_->size());
   else
     set_size(0);
 }
@@ -73,8 +73,8 @@ void PairMatchSetCorner::extract_matches(vcl_vector<HomgPoint2D>& points1,
   points2.resize(n);
   int i = 0;
   for (iterator match = *this; match; ++match) {
-    points1[i] = _corners1->get_homg(match.get_i1());
-    points2[i] = _corners2->get_homg(match.get_i2());
+    points1[i] = corners1_->get_homg(match.get_i1());
+    points2[i] = corners2_->get_homg(match.get_i2());
     ++i;
     if (i > n) {
       vcl_cerr << "ERRRRRK!";
@@ -102,8 +102,8 @@ void PairMatchSetCorner::extract_matches(vcl_vector<HomgPoint2D>& points1,
   for (iterator match = *this; match; match.next()) {
     corner_index_1[i] = match.get_i1();
     corner_index_2[i] = match.get_i2();
-    points1[i] = _corners1->get_homg(match.get_i1());
-    points2[i] = _corners2->get_homg(match.get_i2());
+    points1[i] = corners1_->get_homg(match.get_i1());
+    points2[i] = corners2_->get_homg(match.get_i2());
     ++i;
   }
 }
