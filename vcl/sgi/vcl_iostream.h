@@ -8,7 +8,7 @@
 #define vcl_generic_iostream_STD /* */
 #include "generic/vcl_iostream.h"
 
-inline istream& operator>>(istream& s, signed char& c) 
+inline vcl_istream& operator>>(vcl_istream& s, signed char& c) 
 {
   char i;
   s >> i;
@@ -25,7 +25,7 @@ inline istream& operator>>(istream& s, signed char& c)
 // For the SGI streams the equivalent type is called ios::open_mode.
 // Moreover, the SGI compiler thinks that "enum | enum" is an int,
 // while the standard says [17.3.2.1.2] that "bitmask | bitmask" is
-// a bitmask type. So we don't use ios::open_mode but define or own:
+// a bitmask type. So we don't use ios::open_mode but define our own:
 #undef  vcl_ios_openmode
 #define vcl_ios_openmode vcl_ios_openmode
 struct vcl_ios_openmode
