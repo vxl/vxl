@@ -6,8 +6,7 @@
 #include <brip/brip_mutual_info.h>
 
 
-
-MAIN( test_mutual_info )
+static void test_mutual_info()
 {
   START ("mutual info");
 
@@ -54,11 +53,9 @@ MAIN( test_mutual_info )
 
   //vcl_cout << "MI1: " << mi1 <<  " MI2: " << mi2 << " MI3: " << mi3 << vcl_endl;
 
-  TEST("Mutual Information Commutative", mi2, mi3);
+  TEST_NEAR("Mutual Information Commutative", mi2, mi3, 1e-9);
   testlib_test_begin("Large Self Mutual Info");
   testlib_test_perform(mi2 < mi1);
-
-
-
-  SUMMARY();
 }
+
+TESTMAIN(test_mutual_info);
