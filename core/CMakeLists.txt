@@ -35,8 +35,8 @@ SUBDIRS(vgl)
 # image
 SUBDIRS(vil)
 
-# Proposed new image library
-SUBDIRS(vil2)
+# Old image library
+SUBDIRS(vil1)
 
 # video
 SUBDIRS(vidl)
