@@ -12,6 +12,7 @@
 #include <vtol/vtol_face_2d.h>
 #include <bgui/bgui_vtol_soview2D.h>
 
+
 //--------------------------------------------------------------------------
 //: vdgl_digital_curve view
 //--------------------------------------------------------------------------
@@ -55,6 +56,10 @@ vcl_ostream& bgui_vtol_soview2D_vertex::print(vcl_ostream& s) const
 {
 s << "[bgui_vtol_soview2D_vertex " << x << "," << y << " ";
 s << " "; return vgui_soview2D::print(s) << "]";
+}
+
+bgui_vtol_soview2D_vertex::bgui_vtol_soview2D_vertex()
+{
 }
 
 //--------------------------------------------------------------------------
@@ -112,6 +117,7 @@ vcl_ostream& bgui_vtol_soview2D_edge_group::print(vcl_ostream& s) const
   return vgui_soview2D_group::print(s);
 }
 
+
 bgui_vtol_soview2D_edge_group::
 bgui_vtol_soview2D_edge_group(vcl_vector<vtol_edge_2d_sptr>& edges)
 {
@@ -131,6 +137,7 @@ vcl_ostream& bgui_vtol_soview2D_face::print(vcl_ostream& s) const
   return vgui_soview2D_group::print(s);
 }
 
+
 bgui_vtol_soview2D_face::bgui_vtol_soview2D_face(vtol_face_2d_sptr& f)
 {
   if (!f)
@@ -138,6 +145,7 @@ bgui_vtol_soview2D_face::bgui_vtol_soview2D_face(vtol_face_2d_sptr& f)
       vcl_cout << "In bgui_vtol_soview2D_face(..) - null input face\n";
       return;
     }
+
   edge_list* edges = f->edges();
 
   for (edge_list::iterator eit = edges->begin(); eit != edges->end(); eit++)

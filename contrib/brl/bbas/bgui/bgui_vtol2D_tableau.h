@@ -16,6 +16,7 @@
 //--------------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vcl_map.h>
+#include <vgui/vgui_style.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
@@ -23,9 +24,11 @@
 #include <vtol/vtol_face_2d_sptr.h>
 #include <vtol/vtol_topology_object_sptr.h>
 #include <vgui/vgui_tableau_sptr.h>
+#include <bgui/bgui_style_sptr.h>
 #include <vgui/vgui_image_tableau_sptr.h>
 #include <vgui/vgui_easy2D_tableau.h>
 #include <bgui/bgui_vtol2D_tableau_sptr.h>
+
 
 class bgui_vtol_soview2D_digital_curve;
 class bgui_vtol_soview2D_vertex;
@@ -44,7 +47,10 @@ class bgui_vtol2D_tableau : public vgui_easy2D_tableau
   bgui_vtol2D_tableau(vgui_tableau_sptr const& t,
                       const char* n="unnamed");
 
-  ~bgui_vtol2D_tableau(){};
+  ~bgui_vtol2D_tableau();
+
+  //:virtual handle method for events
+  virtual bool handle(vgui_event const &);
 
   //: display for digital_curve (not vtol but often useful)
   bgui_vtol_soview2D_digital_curve* 
@@ -67,7 +73,12 @@ class bgui_vtol2D_tableau : public vgui_easy2D_tableau
   //: Methods for getting mapped objects
   vtol_edge_2d_sptr get_mapped_edge(const int id);
  protected:
+  void init();
   vcl_map<int, vtol_topology_object_sptr> obj_map_;
+  vcl_map<vcl_string, bgui_style_sptr> style_map_;
+  int old_id_;
+  bgui_style_sptr highlight_style_;
+  bgui_style_sptr old_style_;
 };
 
 //this stuff is needed to establish inheritance between tableau  smart pointers
