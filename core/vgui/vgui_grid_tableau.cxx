@@ -200,16 +200,24 @@ void vgui_grid_tableau::add_next(vgui_tableau_sptr const& tab)
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::add_at(vgui_tableau_sptr const& tab, unsigned col_pos, unsigned row_pos)
 {
-  tabs.push_back(tab);
+  // FIXME: this function leaks core because a tableau which is replaced by another
+  // is still referenced by the smart pointer in `tabs'. why do we need a separate
+  // array of tableaux? can't we just put them in the grid_data structure? -- fsm
   if (col_pos < nb_cols && row_pos < nb_rows)
   {
 //  if (debug)
 //    cerr << "add_at: adding tableau at col = "<< col_pos <<", row = "<< row_pos << endl;
+    tabs.push_back(tab);
     this->remove(grid_pos(col_pos, row_pos).handle);
     grid_pos(col_pos, row_pos).handle = this->add(tab, get_x(col_pos), get_y(row_pos), get_w(), get_h());
     grid_pos(col_pos, row_pos).tab_pos = tabs.size()-1;
     grid_pos(col_pos, row_pos).is_default = false;
     layout_grid();
+  }
+  else {
+    vcl_cerr << __FILE__ ": in add_at():" << vcl_endl;
+    vcl_cerr << __FILE__ ": nb_cols nb_rows = " << nb_cols << ' ' << nb_rows << vcl_endl;
+    vcl_cerr << __FILE__ ": col_pos row_pos = " << col_pos << ' ' << row_pos << vcl_endl;
   }
 }
 
@@ -222,15 +230,23 @@ void vgui_grid_tableau::remove_at(unsigned col_pos, unsigned row_pos)
 //if (debug)
 //  cerr << "remove_at: removing tableau at col = " << col_pos << ", row = " << row_pos << endl;
 
-  if (col_pos < nb_cols && row_pos < nb_rows && grid_pos(col_pos, row_pos).is_default == false)
+  if (col_pos < nb_cols && row_pos < nb_rows)
   {
-    this->remove(grid_pos(col_pos, row_pos).handle);
-    tabs.erase(tabs.begin() + grid_pos(col_pos, row_pos).tab_pos);
-    grid_pos(col_pos, row_pos).handle
-      = this->add(default_tab, get_x(col_pos), get_y(row_pos), get_w(), get_h());
-    grid_pos(col_pos, row_pos).tab_pos = -1;
-    grid_pos(col_pos, row_pos).is_default = true;
-    layout_grid();
+    if (grid_pos(col_pos, row_pos).is_default == false)
+    {
+      this->remove(grid_pos(col_pos, row_pos).handle);
+      tabs.erase(tabs.begin() + grid_pos(col_pos, row_pos).tab_pos);
+      grid_pos(col_pos, row_pos).handle
+        = this->add(default_tab, get_x(col_pos), get_y(row_pos), get_w(), get_h());
+      grid_pos(col_pos, row_pos).tab_pos = -1;
+      grid_pos(col_pos, row_pos).is_default = true;
+      layout_grid();
+    }
+  }
+  else {
+    vcl_cerr << __FILE__ ": in remove_at():" << vcl_endl;
+    vcl_cerr << __FILE__ ": nb_cols nb_rows = " << nb_cols << ' ' << nb_rows << vcl_endl;
+    vcl_cerr << __FILE__ ": col_pos row_pos = " << col_pos << ' ' << row_pos << vcl_endl;
   }
 }
 
@@ -250,8 +266,8 @@ vgui_tableau_sptr vgui_grid_tableau::get_tableau_at(unsigned col_pos, unsigned r
     vgui_macro_warning << "Given row number " << row_pos
                        << " is out of range, max value = " << nb_rows-1 << vcl_endl;
   else
-    vgui_macro_warning << "Only default tableau at (" << col_pos << ", " << row_pos
-    << ")." << vcl_endl;
+    ; //vgui_macro_warning << "Only default tableau at (" << col_pos << ", " << row_pos
+  //<< ")." << vcl_endl;
   return vgui_tableau_sptr();
 }
 
