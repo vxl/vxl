@@ -1,4 +1,4 @@
-# mul/vil2/CMakeLists.txt
+# core/vil2/CMakeLists.txt
 
 INCLUDE(${MODULE_PATH}/FindPNG.cmake)
 IF(PNG_FOUND)

@@ -35,6 +35,9 @@ SUBDIRS(vgl)
 # image
 SUBDIRS(vil)
 
+# Proposed new image library
+SUBDIRS(vil2)
+
 # video
 SUBDIRS(vidl)
 
