@@ -46,43 +46,35 @@ main()
 
 
   vcl_vector< vnl_vector<double> > pts(num_pts);
-  vnl_vector<double> p(3), homog_p(4);
-  homog_p[3] = 1.0;
+  vnl_vector<double> p(3);
 
   p.x() = 1.0;  p.y()=-0.5; p.z() = a0 * p.x() + a1* p.y() + a2;
   p += error[0] * norm_vect;
-  homog_p[0] = p[0];   homog_p[1] = p[1];   homog_p[2] = p[2];
-  pts[0] = homog_p;
+  pts[0] = p;
 
   p.x() = 2.0;  p.y()=4.0;  p.z() = a0 * p.x() + a1* p.y() + a2;
   p += error[1] * norm_vect;
-  homog_p[0] = p[0];   homog_p[1] = p[1];   homog_p[2] = p[2];
-  pts[1] = homog_p;
+  pts[1] = p;
 
   p.x()= 3.0;   p.y()=1.0;  p.z() = a0 * p.x() + a1* p.y() + a2;
   p += error[2] * norm_vect;
-  homog_p[0] = p[0];   homog_p[1] = p[1];   homog_p[2] = p[2];
-  pts[2] = homog_p;
+  pts[2] = p;
 
   p.x()= -2.0;  p.y()=3.0;  p.z() = a0 * p.x() + a1* p.y() + a2;
   p += error[3] * norm_vect;
-  homog_p[0] = p[0];   homog_p[1] = p[1];   homog_p[2] = p[2];
-  pts[3] = homog_p;
+  pts[3] = p;
 
   p.x()= 2.0;   p.y()=4.0;  p.z() = a0 * p.x() + a1* p.y() + a2;
   p += error[4] * norm_vect;
-  homog_p[0] = p[0];   homog_p[1] = p[1];   homog_p[2] = p[2];
-  pts[4] = homog_p;
+  pts[4] = p;
 
   p.x()= 5.0;   p.y()=-4.0; p.z() = a0 * p.x() + a1* p.y() + a2;
   p += error[5] * norm_vect;
-  homog_p[0] = p[0];   homog_p[1] = p[1];   homog_p[2] = p[2];
-  pts[5] = homog_p;
+  pts[5] = p;
 
   p.x()= 3.0;   p.y()=-2.0; p.z() = a0 * p.x() + a1* p.y() + a2;
   p += error[6] * norm_vect;
-  homog_p[0] = p[0];   homog_p[1] = p[1];   homog_p[2] = p[2];
-  pts[6] = homog_p;
+  pts[6] = p;
 
   //
   //  The first set of tests are for the constructor, and parameter access methods.
@@ -141,8 +133,8 @@ main()
   
   vbl_test_begin( "weighted_least_squares_fit (ok) ");
   vbl_test_perform( ok && err <1e-2 ); 
-  vcl_cout << "estimated params: " << par
-           << ";  true params: " << true_params << vcl_endl
+  vcl_cout << " estimated params: " << par << vcl_endl
+           << " true params: " << true_params << vcl_endl
            << " error : " << err << vcl_endl;
  
   delete lr1;
