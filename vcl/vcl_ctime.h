@@ -10,7 +10,7 @@
 
 #include <time.h>
 
-#ifndef WIN32
+#ifndef VCL_WIN32
 #include <sys/times.h>
 #endif
 

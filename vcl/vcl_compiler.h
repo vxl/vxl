@@ -119,7 +119,7 @@
 #if VCL_USE_NATIVE_STL
 # define VCL_SUNPRO_ALLOCATOR_HACK(T) T VCL_SUNPRO_CLASS_SCOPE_HACK(std::allocator<T >)
 #else
-# define VCL_SUNPRO_ALLOCATOR_HACK(T) T // FIXIT
+# define VCL_SUNPRO_ALLOCATOR_HACK(T) T // FIXME
 #endif
 
 // -------------------- template instantiation

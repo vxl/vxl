@@ -314,8 +314,8 @@ public:
     const_reference back() const { return *(--end()); }
     void swap(vcl_list<T, Alloc>& x) {
         __stl_debug_do(iter_list.swap_owners(x.iter_list));
-	__STL_NAMESPACE::vcl_swap(node, x.node);
-	__STL_NAMESPACE::vcl_swap(length, x.length);
+	vcl_swap(node, x.node);
+	vcl_swap(length, x.length);
     }
     iterator insert(iterator position, const T& x) {
         __stl_debug_check(__check_if_owner(node,position));
@@ -634,7 +634,7 @@ inline bool operator<(const vcl_list<T>& x, const vcl_list<T>& y) {
 
 template <class T, class Alloc>
 inline bool operator==(const __list__<T, Alloc>& x, const __list__<T, Alloc>& y) {
-    return x.size() == y.size() && equal(x.begin(), x.end(), y.begin());
+    return x.size() == y.size() && vcl_equal(x.begin(), x.end(), y.begin());
 }
 
 template <class T, class Alloc>

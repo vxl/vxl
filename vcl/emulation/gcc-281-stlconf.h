@@ -210,7 +210,7 @@
 #  define __FULL_NAME(X) __WORKAROUND_RENAME(X)
 # endif  /* __STL_NAMESPACES */
 
-#  define __STL_NAME(name) __STL_NAMESPACE::name  // Lo Russo Graziano <Graziano.LoRusso@CSELT.IT>
+#  define __STL_NAME(name) vcl_##name  // Lo Russo Graziano <Graziano.LoRusso@CSELT.IT>
 
 
 // advanced keywords usage

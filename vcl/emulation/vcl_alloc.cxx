@@ -32,4 +32,4 @@ void vcl_alloc_throw_bad_alloc(char const *FILE, int LINE)
   exit(1);
 }
 
-#endif
+#endif // VCL_USE_NATIVE_STL

@@ -404,7 +404,7 @@ __rb_tree_rebalance_for_erase(__rb_tree_node_base* z,
     else 
       z->parent->right = y;
     y->parent = z->parent;
-    __STL_NAMESPACE::vcl_swap(y->color, z->color);
+    vcl_swap(y->color, z->color);
     y = z;
     // y now points to node to be actually deleted
   }
@@ -652,9 +652,9 @@ public:
 
     void swap(self& t) {
         __stl_debug_do(iter_list.swap_owners(t.iter_list));
-        __STL_NAMESPACE::vcl_swap(header, t.header);
-        __STL_NAMESPACE::vcl_swap(node_count, t.node_count);
-        __STL_NAMESPACE::vcl_swap(key_compare, t.key_compare);
+        vcl_swap(header, t.header);
+        vcl_swap(node_count, t.node_count);
+        vcl_swap(key_compare, t.key_compare);
     }
     
 public:
@@ -799,7 +799,7 @@ public:
 template <class Key, class Value, class KeyOfValue, class Compare, class Alloc>
 inline bool operator==(const rb_tree<Key, Value, KeyOfValue, Compare, Alloc>& x, 
                        const rb_tree<Key, Value, KeyOfValue, Compare, Alloc>& y) {
-    return x.size() == y.size() && equal(x.begin(), x.end(), y.begin());
+    return x.size() == y.size() && vcl_equal(x.begin(), x.end(), y.begin());
 }
 
 template <class Key, class Value, class KeyOfValue, class Compare, class Alloc>

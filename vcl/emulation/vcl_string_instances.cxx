@@ -6,7 +6,7 @@
 #include <vcl_string.txx>
 
 // We only want the instances to see this
-#ifdef __SUNPRO_CC
+#ifdef VCL_SUNPRO_CC
 template <class charT, class traits>
 const size_t basic_string <charT, traits>::npos = (size_t)(-1);
 #endif
@@ -14,4 +14,4 @@ const size_t basic_string <charT, traits>::npos = (size_t)(-1);
 //template class vcl_basic_string<char, vcl_char_traits<char> >;
 //VCL_BASIC_STRING_INSTANTIATE(char, vcl_char_traits<char>);
 
-#endif
+#endif // VCL_USE_NATIVE_STL

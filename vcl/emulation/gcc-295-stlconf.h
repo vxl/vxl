@@ -18,7 +18,7 @@
 # define __SGI_STL_STLCONF_H
 
 # define __AUTO_CONFIGURED 1
-# define IUE_GCC295_EGCS
+# define VCL_GCC_EGCS
 //==========================================================
 // Getting proper values of autoconf flags
 // if you ran 'configure', __AUTO_CONFIGURED is set to 1 and
@@ -210,7 +210,7 @@
 #  define __FULL_NAME(X) __WORKAROUND_RENAME(X)
 # endif  /* __STL_NAMESPACES */
 
-#  define __STL_NAME(name) __STL_NAMESPACE::name  // Lo Russo Graziano <Graziano.LoRusso@CSELT.IT>
+#  define __STL_NAME(name) vcl_##name  // Lo Russo Graziano <Graziano.LoRusso@CSELT.IT>
 
 
 // advanced keywords usage

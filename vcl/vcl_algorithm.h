@@ -1,10 +1,10 @@
 #ifndef vcl_algorithm_h_
 #define vcl_algorithm_h_
 
-#include <vcl_compiler.h>
+#include "vcl_compiler.h"
 
 #if !VCL_USE_NATIVE_STL
-# include <emulation/vcl_algorithm.h>
+# include "emulation/vcl_algorithm.h"
 # undef vcl_algorithm_h_STD
 
 // -------------------- gcc with old library
@@ -14,7 +14,7 @@
 
 // -------------------- iso
 #else
-# include <iso/vcl_algorithm.h>
+# include "iso/vcl_algorithm.h"
 #endif
 
 
@@ -67,7 +67,7 @@ inline T vcl_min(T const& a, T const& b)
                                vcl_algorithm_h_STD lexicographical_compare
 # define vcl_lower_bound       vcl_algorithm_h_STD lower_bound
 # define vcl_make_heap 	       vcl_algorithm_h_STD make_heap
-#ifndef WIN32
+#ifndef VCL_WIN32
 # define vcl_max 	       vcl_algorithm_h_STD max
 # define vcl_min 	       vcl_algorithm_h_STD min
 #endif

@@ -397,9 +397,9 @@ public:
 	    insert_aux(end(), x);
     }
     void swap(vcl_bit_vector& x) {
-	__STL_NAMESPACE::swap(start, x.start);
-	__STL_NAMESPACE::swap(finish, x.finish);
-	__STL_NAMESPACE::swap(end_of_storage, x.end_of_storage);
+	vcl_swap(start, x.start);
+	vcl_swap(finish, x.finish);
+	vcl_swap(end_of_storage, x.end_of_storage);
     }
     iterator insert(iterator position, bool x = bool()) {
 	size_type n = position - begin();
@@ -480,7 +480,7 @@ public:
 };
 
 inline bool operator==(const vcl_bit_vector& x, const vcl_bit_vector& y) {
-    return x.size() == y.size() && equal(x.begin(), x.end(), y.begin());
+    return x.size() == y.size() && vcl_equal(x.begin(), x.end(), y.begin());
 }
 
 inline bool operator<(const vcl_bit_vector& x, const vcl_bit_vector& y) {

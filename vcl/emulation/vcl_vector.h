@@ -230,9 +230,9 @@ public:
     }
     void swap(self& x) {
         __stl_debug_do(swap_owners(x));
-        __STL_NAMESPACE::vcl_swap(start, x.start);
-        __STL_NAMESPACE::vcl_swap(finish, x.finish);
-        __STL_NAMESPACE::vcl_swap(end_of_storage, x.end_of_storage);
+        vcl_swap(start, x.start);
+        vcl_swap(finish, x.finish);
+        vcl_swap(end_of_storage, x.end_of_storage);
     }
     iterator insert(iterator position, const T& x) {
         __stl_debug_check(__check_if_owner(this,position));
@@ -475,7 +475,7 @@ template <class T>
 
 template <class T, class Alloc>
     inline bool operator==(const __vector__<T, Alloc>& x, const __vector__<T, Alloc>& y) {
-    return x.size() == y.size() && equal(x.begin_(), x.end_(), y.begin_());
+    return x.size() == y.size() && vcl_equal(x.begin_(), x.end_(), y.begin_());
 }
 
 template <class T, class Alloc>

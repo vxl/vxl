@@ -332,10 +332,10 @@ protected:
     __deque_iterator<T> start;
     __deque_iterator<T> finish;
     size_type length;
-    map_pointer vcl_map;
+    map_pointer map;
     size_type map_size;
 public:
-    __deque_data() : start(), finish(), length(0), vcl_map(0), map_size(0) {
+    __deque_data() : start(), finish(), length(0), map(0), map_size(0) {
             __stl_debug_do(safe_init(this));
             __stl_debug_do(start.safe_init(this));
             __stl_debug_do(finish.safe_init(this));
@@ -382,7 +382,7 @@ void __deque_base<T, Alloc>::deallocate_at_begin() {
       data_allocator::deallocate(*start.node, buffer_size());
     start.construct();
     finish.construct();
-    map_allocator::deallocate(__deque_data<T>::vcl_map, map_size);
+    map_allocator::deallocate(__deque_data<T>::map, map_size);
   } else
     start.construct(*start.node, start.node);
 }
@@ -526,11 +526,11 @@ public:
     if (empty()) deallocate_at_end();
   }
   void swap(vcl_deque<T, Alloc>& x) {
-    __STL_NAMESPACE::vcl_swap(start, x.start);
-    __STL_NAMESPACE::vcl_swap(finish, x.finish);
-    __STL_NAMESPACE::vcl_swap(length, x.length);
-    __STL_NAMESPACE::vcl_swap(__deque_data<T>::vcl_map, x.vcl_map);
-    __STL_NAMESPACE::vcl_swap(map_size, x.map_size);
+    vcl_swap(start, x.start);
+    vcl_swap(finish, x.finish);
+    vcl_swap(length, x.length);
+    vcl_swap(__deque_data<T>::map, x.map);
+    vcl_swap(map_size, x.map_size);
     __stl_debug_do(swap_owners(x));
   }
   IUEi_STL_INLINE iterator insert(iterator position, const T& x);
@@ -624,28 +624,28 @@ void vcl_deque<T, Alloc>::allocate_at_begin() {
   pointer p = data_allocator::allocate(buffer_size());
   IUEg__TRY {
     if (!empty()) {
-      if (start.node == __deque_data<T>::vcl_map) {
+      if (start.node == __deque_data<T>::map) {
         difference_type i = finish.node - start.node;
         size_type old_map_size = map_size;
         map_pointer tmp = map_allocator::allocate((i+1)*2);
         map_size = (i+1)*2;
         // need not worry on pointers copy
         vcl_copy(start.node, finish.node + 1, tmp + map_size / 4 + 1);
-        __deque_data<T>::vcl_map = tmp;
-        map_allocator::deallocate(__deque_data<T>::vcl_map, old_map_size);
-        __deque_data<T>::vcl_map[map_size / 4] = p;
-        start.construct(p + buffer_size(), __deque_data<T>::vcl_map + map_size / 4);
-        finish.construct(finish.current, __deque_data<T>::vcl_map + map_size / 4 + i + 1);
+        __deque_data<T>::map = tmp;
+        map_allocator::deallocate(__deque_data<T>::map, old_map_size);
+        __deque_data<T>::map[map_size / 4] = p;
+        start.construct(p + buffer_size(), __deque_data<T>::map + map_size / 4);
+        finish.construct(finish.current, __deque_data<T>::map + map_size / 4 + i + 1);
       } else {
         *--start.node = p;
         start.construct(p + buffer_size(), start.node);
       }
     } else {
       size_type new_map_size = init_map_size();
-      __deque_data<T>::vcl_map = map_allocator::allocate(new_map_size);
+      __deque_data<T>::map = map_allocator::allocate(new_map_size);
       map_size = new_map_size;
-      __deque_data<T>::vcl_map[map_size / 2] = p;
-      start.construct(p + buffer_size() / 2 + 1, __deque_data<T>::vcl_map + map_size / 2);
+      __deque_data<T>::map[map_size / 2] = p;
+      start.construct(p + buffer_size() / 2 + 1, __deque_data<T>::map + map_size / 2);
       finish.construct(start);
     }
   }
@@ -663,27 +663,27 @@ void vcl_deque<T, Alloc>::allocate_at_end() {
   pointer p = data_allocator::allocate(buffer_size());
   IUEg__TRY {
     if (!empty()) {
-      if (finish.node == __deque_data<T>::vcl_map + map_size - 1) {
+      if (finish.node == __deque_data<T>::map + map_size - 1) {
         difference_type i = finish.node - start.node;
         size_type old_map_size = map_size;
         map_pointer tmp = map_allocator::allocate((i + 1) * 2);
         map_size = (i + 1) * 2;
         vcl_copy(start.node, finish.node + 1, tmp + map_size / 4);
-        map_allocator::deallocate(__deque_data<T>::vcl_map, old_map_size);
-        __deque_data<T>::vcl_map = tmp;
-        __deque_data<T>::vcl_map[map_size / 4 + i + 1] = p;
-        start.construct(start.current, __deque_data<T>::vcl_map + map_size / 4);
-        finish.construct(p, __deque_data<T>::vcl_map + map_size / 4 + i + 1);
+        map_allocator::deallocate(__deque_data<T>::map, old_map_size);
+        __deque_data<T>::map = tmp;
+        __deque_data<T>::map[map_size / 4 + i + 1] = p;
+        start.construct(start.current, __deque_data<T>::map + map_size / 4);
+        finish.construct(p, __deque_data<T>::map + map_size / 4 + i + 1);
       } else {
         *++finish.node = p;
         finish.construct(p, finish.node);
       }
     } else {
       size_type new_map_size = init_map_size();
-      __deque_data<T>::vcl_map = map_allocator::allocate(new_map_size);
+      __deque_data<T>::map = map_allocator::allocate(new_map_size);
       map_size = new_map_size;
-      __deque_data<T>::vcl_map[map_size / 2] = p;
-      start.construct(p + buffer_size() / 2, __deque_data<T>::vcl_map + map_size / 2);
+      __deque_data<T>::map[map_size / 2] = p;
+      start.construct(p + buffer_size() / 2, __deque_data<T>::map + map_size / 2);
       finish.construct(start);
     }
   }
@@ -701,7 +701,7 @@ void vcl_deque<T, Alloc>::deallocate_at_end() {
   if (empty()) {
     start.construct();
     finish.construct();
-    map_allocator::deallocate(__deque_data<T>::vcl_map, map_size);
+    map_allocator::deallocate(__deque_data<T>::map, map_size);
   }
   else
     finish.construct(*finish.node + buffer_size(), finish.node);
@@ -922,7 +922,7 @@ operator<(const vcl_deque<T>& x, const vcl_deque<T>& y) {
 template <class T, class Alloc>
 IUEi_STL_INLINE
 bool operator==(const __deque__<T, Alloc>& x, const __deque__<T, Alloc>& y) {
-  return x.size() == y.size() && equal(x.begin(), x.end(), y.begin());
+  return x.size() == y.size() && vcl_equal(x.begin(), x.end(), y.begin());
 }
 
 template <class T, class Alloc>

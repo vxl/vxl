@@ -16,7 +16,7 @@
 // inline friend functions with global linkage, so we remove
 // all the inline's while instantiation is taking place.
 
-#if defined(__SUNPRO_CC) && defined(INSTANTIATE_TEMPLATES)
+#if defined(VCL_SUNPRO_CC) && defined(INSTANTIATE_TEMPLATES)
 # define inline
 #endif
 
@@ -430,7 +430,7 @@ vcl_istream& operator >> (vcl_istream& o, vcl_complex<FLOAT>& x)
   return o;
 }
 
-#ifdef __SUNPRO_CC
+#ifdef VCL_SUNPRO_CC
 #ifdef INSTANTIATE_TEMPLATES
 #undef inline 
 #endif

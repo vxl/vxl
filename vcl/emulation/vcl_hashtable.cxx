@@ -3,7 +3,7 @@
 
 #include "vcl_hashtable.h"
 
-#if ( __STL_STATIC_TEMPLATE_DATA > 0 ) && ! defined (WIN32)
+#if ( __STL_STATIC_TEMPLATE_DATA > 0 ) && ! defined (VCL_WIN32)
 
 //template struct __stl_prime<false>;
 
@@ -18,5 +18,4 @@ const unsigned long VCL_prime<false>::list_[] =
 };
 
 #endif
-
-#endif
+#endif // VCL_USE_NATIVE_STL

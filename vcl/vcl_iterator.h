@@ -64,7 +64,7 @@
 #endif
 
 // Needed for emulation STL with WinNT?
-#ifdef WIN32
+#ifdef VCL_WIN32
 # define vcl_iterator_category_Iter_cat
 #endif
 

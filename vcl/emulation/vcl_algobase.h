@@ -423,7 +423,7 @@ INLINE_LOOP bool vcl_equal(InputIterator1 first1, InputIterator1 last1,
 {
   __stl_debug_check(__check_range(first1, last1));
   for ( ; first1 != last1; ++first1, ++first2)
-    if (*first1 != *first2)
+    if (!(*first1 == *first2))
       return false;
   return true;
 }

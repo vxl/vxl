@@ -44,7 +44,7 @@ __BEGIN_STL_FULL_NAMESPACE
 # define  vcl_hash_set      __WORKAROUND_RENAME(vcl_hash_set)
 # define  vcl_hash_multiset __WORKAROUND_RENAME(vcl_hash_multiset)
 
-template <class Value, VCL_DFL_TMPL_PARAM_STLDECL(HashFcn,hash<Value>),
+template <class Value, VCL_DFL_TMPL_PARAM_STLDECL(HashFcn,vcl_hash<Value>),
           VCL_DFL_TMPL_PARAM_STLDECL(EqualKey,vcl_equal_to<Value>),
           VCL_DFL_TYPE_PARAM_STLDECL(Alloc,vcl_alloc) >
 class vcl_hash_set
@@ -161,7 +161,7 @@ public:
 };
 
 
-template <class Value, VCL_DFL_TMPL_PARAM_STLDECL(HashFcn,hash<Value>),
+template <class Value, VCL_DFL_TMPL_PARAM_STLDECL(HashFcn,vcl_hash<Value>),
           VCL_DFL_TMPL_PARAM_STLDECL(EqualKey,vcl_equal_to<Value>),
           VCL_DFL_TYPE_PARAM_STLDECL(Alloc,vcl_alloc) >
 class vcl_hash_multiset

@@ -35,6 +35,7 @@
 
 #include <vcl_cstddef.h>   // For ptrdiff_t
 #include <vcl_iosfwd.h> 
+#include <vcl_rel_ops.h>   // For operator!= from operator==
 
 #include "vcl_stlconf.h"
 #include "vcl_straits.h"

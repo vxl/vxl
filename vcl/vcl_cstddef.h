@@ -4,7 +4,7 @@
   Peter.Vanroose@esat.kuleuven.ac.be
 */
 
-#include <vcl_compiler.h>
+#include "vcl_compiler.h"
 
 /* This should define: sizeof(), size_t, and ptrdiff_t */
 
@@ -13,7 +13,7 @@
 #elif defined(VCL_SGI_CC_720)
 # include <stddef.h>
 #else
-# include <vcl/iso/vcl_cstddef.h>
+# include "iso/vcl_cstddef.h"
 using std::size_t;
 using std::ptrdiff_t;
 #endif

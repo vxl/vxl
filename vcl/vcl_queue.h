@@ -4,7 +4,7 @@
 #include "vcl_compiler.h"
 
 #if !VCL_USE_NATIVE_STL
-# include "emulation/vcl_queue.h"
+# include "emulation/vcl_stack.h"
 
 #elif defined(VCL_GCC_which_one_question_mark)
 // egcs and 2.95 have <queue> -- fsm

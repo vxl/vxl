@@ -13,7 +13,7 @@
 // Including emulation/complex.txx implies emulation/complex.h is included
 #include "vcl_complex.h"
 
-#ifdef __SUNPRO_CC
+#ifdef VCL_SUNPRO_CC
 #undef VCL_INSTANTIATE_INLINE
 #define VCL_INSTANTIATE_INLINE(fn_decl)  template  fn_decl ;
 #endif

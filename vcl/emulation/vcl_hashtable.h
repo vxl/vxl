@@ -278,8 +278,8 @@ private:
     typedef vcl_hashtable_node<Value> node;
     typedef vcl_simple_alloc<node, Alloc> node_allocator;
 public:	// These are public to get around restriction on protected access
-    typedef vcl_vector<VCL_SUNPRO_ALLOCATOR_HACK(node*) > vcl_buckets_type ;
-    vcl_buckets_type buckets; // awf killed optional allocator
+    typedef vcl_vector<VCL_SUNPRO_ALLOCATOR_HACK(node*) > buckets_type ;
+    buckets_type buckets; // awf killed optional allocator
     size_type num_elements;
 protected:
     IUEi_STL_INLINE void clear();
@@ -314,6 +314,11 @@ public:	// These are public to get around restriction on protected access
     ~vcl_hashtable_base() { clear(); VCL_debug_do(invalidate()); }
 };
 
+
+// forward declarations
+template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc> class vcl_hashtable;
+template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
+  bool operator== (vcl_hashtable<Value,Key,HashFcn,ExtractKey,EqualKey,Alloc>const&,vcl_hashtable<Value,Key,HashFcn,ExtractKey,EqualKey,Alloc>const&);
 
 template <class Value, class Key, class HashFcn, class ExtractKey, class EqualKey, class Alloc>
 class vcl_hashtable : protected vcl_hashtable_base<Value, Alloc> 
@@ -397,11 +402,11 @@ public:
 
   void swap(self& ht)
   {
-    __STL_NAMESPACE::swap(hashfun, ht.hashfun);
-    __STL_NAMESPACE::swap(equals, ht.equals);
-    __STL_NAMESPACE::swap(get_key, ht.get_key);
+    vcl_swap(hashfun, ht.hashfun);
+    vcl_swap(equals, ht.equals);
+    vcl_swap(get_key, ht.get_key);
     buckets.swap(ht.buckets);
-    __STL_NAMESPACE::swap(num_elements, ht.num_elements);
+    vcl_swap(num_elements, ht.num_elements);
     VCL_debug_do(swap_owners(ht));
   }
 
@@ -425,7 +430,7 @@ public:
 
   const_iterator end() const { return const_iterator((node*)0, this); }
 
-  friend IUEi_STL_INLINE bool operator== (const self&,const self&);
+  friend IUEi_STL_INLINE bool operator== VCL_NULL_TMPL_ARGS (const self&,const self&);
 
 public:
 
@@ -928,10 +933,7 @@ vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::resize(__size_t
     if (num_elements_hint > old_n) {
         const size_type n = next_size(num_elements_hint);
         if (n > old_n) {
-#if !defined(VCL_GCC_27)
-            typename // 2.7 chokes on this
-#endif
-	    vcl_buckets_type tmp(n, (node*) 0);
+	    vcl_hashtable<Value, Key, HashFcn, ExtractKey, EqualKey, Alloc>::buckets_type tmp(n, (node*)0);
             for (size_type bucket = 0; bucket < old_n; ++bucket) {
                 node* first = buckets[bucket];
                 while (first) {
