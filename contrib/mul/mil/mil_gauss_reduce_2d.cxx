@@ -291,8 +291,8 @@ void mil_gauss_reduce_121_2d(int* dest_im,
           // The following is a little inefficient - could group terms to reduce arithmetic
           // Add 0.5 so that truncating effetively rounds
           *d = int( 0.0625f * s1[-s_x_step] + 0.125f * s1[0] + 0.0625f * s1[s_x_step]
-                       + 0.1250f * s2[-s_x_step] + 0.250f * s2[0] + 0.1250f * s2[s_x_step]
-                       + 0.0625f * s3[-s_x_step] + 0.125f * s3[0] + 0.0625f * s3[s_x_step] +0.5);
+                  + 0.1250f * s2[-s_x_step] + 0.250f * s2[0] + 0.1250f * s2[s_x_step]
+                  + 0.0625f * s3[-s_x_step] + 0.125f * s3[0] + 0.0625f * s3[s_x_step] +0.5);
 
           d += d_x_step;
           s1 += sxs2;
