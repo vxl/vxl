@@ -20,6 +20,7 @@
 
 #include <vidl_vil1/vidl_vil1_io.h>
 #include <vidl_vil1/vidl_vil1_frame.h>
+#include <vidl_vil1/vidl_vil1_movie.h>
 
 //-----------------------------------------------------------
 // constructors/destructor
@@ -92,21 +93,21 @@ void jvx_manager::load_video_file()
    //reduce the display resolution
    t->zoomin(0.5f, 0, 0); // zoom out by factor 2 around pixel (0,0)
    t->center_image(width_,height_);
+#if 0
+   //Display some dots on the video that move
+   //This code demonstrates how to overlay dynamic stuff on the video
+   //It wouldn't be in this loop in the real case.
+   easy2D->set_foreground(0,1,1);
+   easy2D->set_point_radius(5);
 
-  //  //Display some dots on the video that move
-//    //This code demonstrates how to overlay dynamic stuff on the video
-//    //It wouldn't be in this loop in the real case.
-//    easy2D->set_foreground(0,1,1);
-//    easy2D->set_point_radius(5);
-
-//    if (inc>60)
-//      inc = 40;
-//    for (unsigned int j = 0; j<=height_; j+=inc)
-//      for (unsigned int k=0; k<=width_; k+=inc)
-//        easy2D->add_point(k,j);
-
+   if (inc>60)
+     inc = 40;
+   for (unsigned int j=0; j<=height_; j+=inc)
+     for (unsigned int k=0; k<=width_; k+=inc)
+       easy2D->add_point(k,j);
+#endif // 0
    ++pframe;//next video frame
-   vcl_cout << "Loading Frame[" << i << "]:(" <<width_ <<" "<<height_ << ")\n";
+   vcl_cout << "Loading Frame[" << i << "]:(" <<width_ <<' '<<height_ << ")\n";
    ++inc;
    ++i;
   }
