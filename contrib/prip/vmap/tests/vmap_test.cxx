@@ -1,19 +1,14 @@
 #include "my_map.h"
 #include "my_map_functions.txx"
 #include <vmap/vmap_set_grid_structure.h>
-
-#include <vmap/vmap_non_oriented_kernel.h>
-#include <vmap/vmap_oriented_kernel.h>
-
 #include <vcl_iostream.h>
-
 
 void tmap_test()
 {
   my_tmap map ;
-  vcl_cout<<vcl_endl<<"----------------"<<vcl_endl
-          <<"TopologialMap test."<<vcl_endl
-          <<"----------------"<<vcl_endl
+  vcl_cout<<"\n---------------------\n"
+          <<"Topological Map test.\n"
+          <<"---------------------\n"
 
           <<"Initialization of a 2X2 grid."<<vcl_endl ;
   vmap_set_grid_structure(map,2,2) ;
@@ -25,7 +20,7 @@ void tmap_test()
   map.write_structure(vcl_cout) ;
 
   // setting its elements
-  vcl_cout<<map.nb_vertices()<<" vertices,"
+  vcl_cout<<map.nb_vertices()<<" vertices, "
           <<map.nb_faces()<<" faces and "
           <<map.nb_edges()<<" edges."<<vcl_endl ;
 
