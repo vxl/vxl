@@ -54,7 +54,7 @@ void vil2_print_all(vcl_ostream& os,const vil2_image_view<T>& view)
   os<<view.is_a()<<" "<<view.nplanes()<<" planes, each "<<view.nx()<<" x "<<view.ny();
   os<<" xstep: "<<view.xstep()<<" ";
   os<<" ystep: "<<view.ystep()<<" ";
-  os<<" planestep: "<<view.planestep()<<endl;
+  os<<" planestep: "<<view.planestep()<<vcl_endl;
   for (int i=0;i<view.nplanes();++i)
   {
     if (view.nplanes()>1) os<<"Plane "<<i<<":"<<vcl_endl;
