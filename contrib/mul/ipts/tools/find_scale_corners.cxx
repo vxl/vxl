@@ -11,8 +11,8 @@
 
 void print_usage()
 {
-  vcl_cout<<"find_scale_corners -i input_image -s scale_step -o out_image -c corner_pyramid"<<vcl_endl;
-  vcl_cout<<"Generates scale pyramid, computes corners and looks for local peaks"<<vcl_endl;
+  vcl_cout<<"find_scale_corners -i input_image -s scale_step -o out_image -c corner_pyramid\n"
+          <<"Generates scale pyramid, computes corners and looks for local peaks\n";
 }
 
 template<class T>
@@ -38,7 +38,7 @@ int main( int argc, char* argv[] )
 //  vul_arg<vcl_string> smooth_path("-s","Output image file (Smooth )","smooth.pnm");
   vul_arg_parse(argc, argv);
 
-  if(in_path() == "")
+  if (in_path() == "")
   {
     print_usage();
     vul_arg_display_usage_and_exit();
@@ -47,7 +47,7 @@ int main( int argc, char* argv[] )
   vil_image_view<vxl_byte> image = vil_load(in_path().c_str());
   if (image.ni()==0)
   {
-    vcl_cout<<"Failed to load image."<<vcl_endl;
+    vcl_cout<<"Failed to load image.\n";
     return 1;
   }
 
@@ -61,7 +61,7 @@ int main( int argc, char* argv[] )
 
   // Compute corners for all levels of an image pyramid
   corner_pyramid.resize(smooth_pyramid.n_levels(),vimt_image_2d_of<float>());
-  for (unsigned i=0;i<smooth_pyramid.n_levels();++i)
+  for (int i=0;i<smooth_pyramid.n_levels();++i)
   {
     vimt_image_2d_of<float>& smooth_im
             = static_cast<vimt_image_2d_of<float>&>(smooth_pyramid(i));
@@ -73,7 +73,7 @@ int main( int argc, char* argv[] )
 
   vcl_vector<vgl_point_3d<double> > peak_pts;
   ipts_scale_space_peaks_2d(peak_pts,corner_pyramid,float());
-  vcl_cout<<"Found "<<peak_pts.size()<<" peaks."<<vcl_endl;
+  vcl_cout<<"Found "<<peak_pts.size()<<" peaks.\n";
 
   for (unsigned i=0;i<peak_pts.size();++i)
   {
@@ -97,11 +97,11 @@ int main( int argc, char* argv[] )
     vil_save(out_corners,corner_path().c_str());
     vcl_cout<<"Corner pyramid saved to "<<corner_path()<<vcl_endl;
   }
-/*
+#if 0
   vil_image_view<vxl_byte> out_smooth;
   vil_convert_stretch_range(flat_smooth.image(),out_smooth);
   vil_save(out_smooth,smooth_path().c_str());
   vcl_cout<<"Smooth pyramid saved to "<<smooth_path()<<vcl_endl;
-*/
+#endif // 0
   return 0;
 }
