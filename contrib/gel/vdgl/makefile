@@ -16,11 +16,15 @@ SOURCES += vdgl_interpolator.cxx
 
 # interpolators
 SOURCES += vdgl_interpolator_linear.cxx
+SOURCES += vdgl_interpolator_cubic.cxx
 
 # and outside interface
 SOURCES += vdgl_digital_curve.cxx
+SOURCES += vdgl_digital_region.cxx
 
 SOURCES += vdgl_fit_line.cxx
+SOURCES += vdgl_ortho_regress.cxx
+SOURCES += vdgl_OrthogRegress.cxx
 
 ifndef NOTEST
 SUBDIRS += tests examples
