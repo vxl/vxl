@@ -16,6 +16,7 @@
 // Created: xxx xx xxxx
 
 #include <vsol/vsol_curve_2d.h>
+#include <vtol/vtol_vertex_2d.h>
 #include <vdgl/vdgl_interpolator_sptr.h>
 
 class vdgl_digital_curve : public vsol_curve_2d {
@@ -32,10 +33,12 @@ public:
   vsol_point_2d_sptr p1() const;
   double length() const;
   vsol_spatial_object_2d_sptr clone(void) const;
-
   // warning: the results of these methods are undefined
   void set_p0(const vsol_point_2d_sptr &);
   void set_p1(const vsol_point_2d_sptr &);
+
+  // Split
+  bool split ( vtol_vertex_2d* v, vdgl_digital_curve*& dc1, vdgl_digital_curve*& dc2 ); 
 
   // Data Access---------------------------------------------------------------
 
@@ -46,6 +49,15 @@ public:
 
   vdgl_interpolator_sptr get_interpolator() { return interpolator_; }
 
+
+  //***************************************************************************
+  // Replaces dynamic_cast<T>
+  //***************************************************************************
+
+  //---------------------------------------------------------------------------
+  //: Return `this' if `this' is an digital_curve, 0 otherwise
+  //---------------------------------------------------------------------------
+  virtual vdgl_digital_curve *cast_to_digital_curve(void) {return this;}
 
   // Data Control--------------------------------------------------------------
 
