@@ -1,5 +1,5 @@
-#ifndef Step_h_
-#define Step_h_
+#ifndef gevd_step_h_
+#define gevd_step_h_
 //:
 // \file
 // \brief detection of step profiles in the intensity image
@@ -26,7 +26,7 @@
 //       (see Step constructor documentation in Step.C - JLM)
 //
 //    -  Non Maximum suppression in the direction of local gradient,
-//       to detect pixels with maximum local slope, above apriori
+//       to detect pixels with maximum local slope, above a priori
 //       noise response. Result is connected contours, width < 2,
 //       broken only at junctions with weaker chains.
 //       Also obtain subpixel accuracy normal to the contour.
@@ -53,7 +53,7 @@
 //  Arron Heller    (1992) translate from CLOS to C++
 //  Van-Duc Nguyen  (1995) add noise estimation, use FloatOperators.
 //  Joe Mundy       (1997) expanded comments on some methods.  Added gradient
-//                         magnitde, grad_mag,  and graident direction angle
+//                         magnitude, grad_mag,  and gradient direction angle
 //                         buffer, angle, to cache between edgel detection phases.
 // \endverbatim
 //-----------------------------------------------------------------------------
@@ -101,4 +101,4 @@ class gevd_step
   float filterFactor;                  // factor in convolution filter
 };
 
-#endif // Step_h_
+#endif // gevd_step_h_
