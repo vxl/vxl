@@ -19,6 +19,9 @@ endif
 # basic vgui classes
 SUBDIRS += bgui
 
+# uncertainty geometry library
+SUBDIRS += bugl
+
 ################################
 include ${IUEROOT}/config/top.mk
 ################################
