@@ -1,6 +1,5 @@
 #ifndef mbl_data_collector_list_h_
 #define mbl_data_collector_list_h_
-
 //:
 // \file
 // \brief Collect data and store them in an list.
@@ -8,17 +7,17 @@
 
 #include <vsl/vsl_binary_io.h>
 #include <vcl_string.h>
-#include<mbl/mbl_data_collector.h>
-#include<mbl/mbl_data_array_wrapper.h>
+#include <mbl/mbl_data_collector.h>
+#include <mbl/mbl_data_array_wrapper.h>
 
 //: Collect data and store them in an list.
 template<class T>
-class mbl_data_collector_list : public mbl_data_collector<T> {
-private:
+class mbl_data_collector_list : public mbl_data_collector<T>
+{
   vcl_vector<T> data_;
   mbl_data_array_wrapper<T> wrapper_;
 
-public:
+ public:
   //: Dflt ctor
   mbl_data_collector_list();
 
