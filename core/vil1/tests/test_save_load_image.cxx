@@ -1,8 +1,8 @@
 // Author: Peter@Vanroose.esat.kuleuven.ac.be
 // Date: 17 February, 2000
+#include <vcl/vcl_string.h>
 #include <vcl/vcl_cstdio.h> // tmpnam()
 #include <vcl/vcl_unistd.h> // vcl_unlink()
-#include <vcl/vcl_string.h>
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_vector.h>
 
