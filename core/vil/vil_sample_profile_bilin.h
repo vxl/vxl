@@ -6,7 +6,6 @@
 //  \author Tim Cootes
 
 #include <vil2/vil2_image_view.h>
-#include <vnl/vnl_fwd.h>
 
 //: Sample along profile, using bilinear interpolation
 //  Profile points are (x0+i.dx,y0+i.dy), where i=[0..n-1].

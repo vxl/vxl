@@ -154,13 +154,13 @@ public:
 
 // image stuff
 
-  //: resize current planes to width x height
+  //: resize current planes to nx x ny
   // If already correct size, this function returns quickly
-  virtual void resize(unsigned width, unsigned height);
+  virtual void resize(unsigned nx, unsigned ny);
 
-  //: resize to width x height x nplanes
+  //: resize to nx x ny x nplanes
   // If already correct size, this function returns quickly
-  virtual void resize(unsigned width, unsigned height, unsigned nplanes);
+  virtual void resize(unsigned nx, unsigned ny, unsigned nplanes);
 
   //: Make a copy of the data in src and set this to view it
   void deep_copy(const vil2_image_view<T>& src);
