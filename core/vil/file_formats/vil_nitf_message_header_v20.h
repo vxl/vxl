@@ -31,19 +31,19 @@ class vil_nitf_message_header_v20 : public vil_nitf_message_header
 {
  public:
   vil_nitf_message_header_v20();
-  vil_nitf_message_header_v20 (const vil_nitf_message_header&);
-  vil_nitf_message_header_v20 (const vil_nitf_message_header_v20&);
+  vil_nitf_message_header_v20(const vil_nitf_message_header&);
+  vil_nitf_message_header_v20(const vil_nitf_message_header_v20&);
   virtual ~vil_nitf_message_header_v20();
 
-  virtual StatusCode Read (vil_stream*);
-  virtual StatusCode Write (vil_stream*);
-  virtual bool read_version (vil_stream* file);
+  virtual StatusCode Read(vil_stream*);
+  virtual StatusCode Write(vil_stream*);
+  virtual bool read_version(vil_stream* file);
 
   //NITF test-specific
   // NITF v2.0 Message headers do not have AsciiRead/Write() methods.
   // Default implementation returns STATUS_BAD.
-  virtual StatusCode AsciiRead (vil_stream*);
-  virtual StatusCode AsciiWrite (vil_stream*);
+  virtual StatusCode AsciiRead(vil_stream*);
+  virtual StatusCode AsciiWrite(vil_stream*);
 
   virtual unsigned long GetHeaderLength() const;
 
@@ -52,15 +52,14 @@ class vil_nitf_message_header_v20 : public vil_nitf_message_header
   void Init();
 
   // Internal helper methods for method Read
-  bool read_image_info (vil_stream* file);
-//bool read_XXX_data (vil_stream* file);
-  bool read_extended_header_data (vil_stream* file);
+  bool read_image_info(vil_stream* file);
+  bool read_extended_header_data(vil_stream* file);
 };
 
 //====================================================================
 // NITF v2.0 Message headers do not have AsciiRead/Write() methods.
 //====================================================================
-inline StatusCode vil_nitf_message_header_v20::AsciiRead (vil_stream* is)  {return STATUS_BAD;}
-inline StatusCode vil_nitf_message_header_v20::AsciiWrite (vil_stream* is) {return STATUS_BAD;}
+inline StatusCode vil_nitf_message_header_v20::AsciiRead(vil_stream* )  {return STATUS_BAD;}
+inline StatusCode vil_nitf_message_header_v20::AsciiWrite(vil_stream* ) {return STATUS_BAD;}
 
 #endif
