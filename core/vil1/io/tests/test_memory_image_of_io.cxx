@@ -23,8 +23,8 @@ void test_memory_image_of_io()
   vil_memory_image_of<int> p_out(height,width);
   vil_memory_image_of<int> p_in(1,1);
   int val = 0;
-  for (int i=0;i<height;i++)
-    for (int j=0;j<width;j++)
+  for (int i=0;i<width;i++)
+    for (int j=0;j<height;j++)
     {
        p_out(i,j) = val;
        val++;
@@ -59,8 +59,8 @@ void test_memory_image_of_io()
 
    // Now get the data and compare them
   bool data_same = false;
-  for (int i=0;i<p_out.rows();i++)
-    for (int j=0;j<p_out.cols();j++)
+  for (int i=0;i<p_out.cols();i++)
+    for (int j=0;j<p_out.rows();j++)
      data_same = (p_out(i,j)==p_in(i,j));
   TEST ( "p_out == p_in (data)", data_same, true);
 

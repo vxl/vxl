@@ -83,7 +83,7 @@ void vsl_b_write(vsl_b_ostream &os, const vil_memory_image_impl & p)
   int size = nelems * p.bits_per_component() / CHAR_BIT;
   unsigned char* buf = new unsigned char[size];
   p.get_section(buf,0,0,p.width(),p.height());
-  vsl_swap_bytes((char*) buf,p.bits_per_component(),nelems);
+  vsl_swap_bytes((char*) buf,p.bits_per_component() / CHAR_BIT,nelems);
   os.os().write((const char*) buf,size);
   delete buf;
 }
@@ -112,7 +112,7 @@ void vsl_b_read(vsl_b_istream &is, vil_memory_image_impl & p)
     int size = nelems * p.bits_per_component() / CHAR_BIT;
     unsigned char* buf = new unsigned char[size];
     is.is().read((char*) buf,size);
-    vsl_swap_bytes((char *) buf,p.bits_per_component(),nelems);
+    vsl_swap_bytes((char *) buf,p.bits_per_component() / CHAR_BIT, nelems);
     p.put_section(buf,0,0,width,height);
     delete buf;
     break;
