@@ -4,9 +4,6 @@ SUBDIRS += vcl
 # POSIX layer
 SUBDIRS += vpl
 
-# abstract
-SUBDIRS += val
-
 # templates
 SUBDIRS += vtl
 
