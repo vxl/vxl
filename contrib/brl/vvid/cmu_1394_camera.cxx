@@ -15,10 +15,7 @@ cmu_1394_camera::cmu_1394_camera()
 }
 
 cmu_1394_camera::~cmu_1394_camera()
-{
-  if (camera_present_)
-    C1394Camera::ResetLink(true);
-}
+{}
 
 cmu_1394_camera::cmu_1394_camera(int node, const cmu_1394_camera_params& cp)
   : cmu_1394_camera_params(cp)
