@@ -1,6 +1,7 @@
 //:
 // \file
-// \brief A class to perform some of the functions of a Radial Basis Function Network
+// \brief A class to perform some of the functions of a Radial Basis Function Network.
+// \author Tim Cootes
 //  Given a set of n training vectors, x_i (i=0..n-1), a set of internal weights are computed.
 //  Given a new vector, x, a vector of weights, w, are computed such that
 //  if x = x_i then w(i+1) = 1, w(j !=i+1) = 0  The sum of the weights
@@ -18,7 +19,6 @@
 //  I'm not sure if this is exactly an RBF network in the original
 //  definition. I'll check one day.
 //
-// \author tfc
 
 #include <vcl_cstdlib.h>
 #include <mbl/mbl_rbf_network.h>

@@ -15,7 +15,7 @@
 #include <vnl/io/vnl_io_matrix.h>
 #include <vnl/vnl_vector.h>
 
-//: A class to perform some of the functions of a Radial Basis Function Network
+//: A class to perform some of the functions of a Radial Basis Function Network.
 //  This is a special case of a mixture model pdf, where the same
 //  (radialy symmetric) pdf kernel is used at each node.
 //  The nodes are supplied by build().
