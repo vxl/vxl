@@ -1,24 +1,23 @@
 //-*- c++ -*-------------------------------------------------------------------
 //
-// Module: matcalc
-// Purpose: Simple command-line matrix calculator.
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 23 Jan 99
-// Modifications:
+// .NAME vnl_calc - Simple command-line matrix calculator
 //
-//
+// .SECTION Description
 // Use matcalc to perform simple calculations on the command line.
 // It is reverse-polish notation, and matrices are loaded from files.
 // e.g.
 // % vnl-calc 1 2 +
 // prints 3
+//
+// \@author Andrew W. Fitzgibbon, Oxford RRG
+// Created: 23 Jan 99
 // 
 //-----------------------------------------------------------------------------
 
+#include <vcl/vcl_string.h> // C++ specific includes first
 #include <vcl/vcl_fstream.h>
 #include <vcl/vcl_iomanip.h>
 #include <vcl/vcl_vector.h>
-#include <vcl/vcl_string.h>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_svd.h>

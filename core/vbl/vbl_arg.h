@@ -14,8 +14,8 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <vcl/vcl_string.h> // C++ specific includes first
 #include <vcl/vcl_iostream.h>
-#include <vcl/vcl_string.h>
 
 //: forward declare all classes and their helper functions.
 class vbl_arg_info_list;
