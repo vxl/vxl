@@ -59,7 +59,7 @@ class vgl_polygon
   //: Construct a single-sheet polygon from a sheet, i.e., a vector of 2D points.
   //  Note: n_sheets is only there to distinguish this from the next constructor for VC6
   //  which seems to have a problem.
-  explicit vgl_polygon(sheet_t const& points, unsigned n_sheets=1) : sheets_(1,points) {}
+  explicit vgl_polygon(sheet_t const& points, unsigned n_sheets=1) : sheets_(n_sheets,points) {}
 
   //: Construct by specifying all of its sheets
   explicit vgl_polygon(vcl_vector<sheet_t> const& sheets) : sheets_(sheets) {}

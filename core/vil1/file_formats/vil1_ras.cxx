@@ -21,10 +21,9 @@
 char const* vil1_ras_format_tag = "ras";
 
 namespace {
-  inline
-  void swap_endian( vxl_uint_32& word )
-  {
 #if VXL_LITTLE_ENDIAN
+  inline void swap_endian( vxl_uint_32& word )
+  {
     vxl_uint_8* bytes = (vxl_uint_8*)&word;
     vxl_uint_8 t = bytes[0];
     bytes[0] = bytes[3];
@@ -32,8 +31,10 @@ namespace {
     t = bytes[1];
     bytes[1] = bytes[2];
     bytes[2] = t;
-#endif
   }
+#else // VXL_BIG_ENDIAN: do nothing
+  inline void swap_endian( vxl_uint_32& ) {}
+#endif
 
   // Equivalent of ntoh
   bool read_uint_32( vil1_stream* vs, vxl_uint_32& word )

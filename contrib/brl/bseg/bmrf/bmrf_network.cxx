@@ -70,11 +70,11 @@ bmrf_network::add_arc( const bmrf_node_sptr& n1, const bmrf_node_sptr& n2, neigh
 
 
 //: Add an arc \p arc of type \p type
-bool 
+bool
 bmrf_network::add_arc( const bmrf_arc_sptr& arc, neighbor_type type )
 {
   if ( !arc->from().ptr() || !arc->to().ptr() ||
-       !arc->from()->epi_seg().ptr() || !arc->to()->epi_seg().ptr() ) 
+       !arc->from()->epi_seg().ptr() || !arc->to()->epi_seg().ptr() )
     return false;
 
   const seg_node_map& map_from = nodes_from_frame_[arc->from()->frame_num()];
@@ -146,7 +146,7 @@ bmrf_network::seg_to_node(const bmrf_epi_seg_sptr& seg, int frame) const
 
 
 //: Returns the number of frames in the network
-int 
+int
 bmrf_network::num_frames() const
 {
   return nodes_from_frame_.size();
@@ -170,33 +170,33 @@ bmrf_network::probability()
 {
   double total_prob = 1.0;
   int count = 0;
-  for( seg_node_map::const_iterator itr = node_from_seg_.begin();
-       itr != node_from_seg_.end();  ++itr, ++count ){
+  for ( seg_node_map::const_iterator itr = node_from_seg_.begin();
+        itr != node_from_seg_.end();  ++itr, ++count ){
     double prob = itr->second->probability();
     total_prob += prob;
     vcl_cout << count << "\t prob=" << prob <<vcl_endl;
   }
-  
+
   return total_prob/count;
 }
 
 
 //: Remove all nodes and arcs with probability less than \p threshold
-void 
+void
 bmrf_network::prune_by_probability(double threshold, bool relative)
 {
-  for( seg_node_map::const_iterator itr = node_from_seg_.begin();
-       itr != node_from_seg_.end(); )
+  for ( seg_node_map::const_iterator itr = node_from_seg_.begin();
+        itr != node_from_seg_.end(); )
   {
-    seg_node_map::const_iterator next_itr = itr; 
+    seg_node_map::const_iterator next_itr = itr;
     ++next_itr;
-    if( itr->second->out_arcs_.empty() ){
+    if ( itr->second->out_arcs_.empty() ){
       this->remove_node(itr->second);
       itr = next_itr;
       continue;
     }
     itr->second->prune_by_probability(threshold, relative);
-    if( itr->second->out_arcs_.empty() ){
+    if ( itr->second->out_arcs_.empty() ){
       this->remove_node(itr->second);
     }
     itr = next_itr;
@@ -205,21 +205,21 @@ bmrf_network::prune_by_probability(double threshold, bool relative)
 
 
 //: Prune nodes with a mean gamma outside this range
-void 
+void
 bmrf_network::prune_by_gamma(double min_gamma, double max_gamma)
 {
-  for( seg_node_map::const_iterator itr = node_from_seg_.begin();
-       itr != node_from_seg_.end(); )
+  for ( seg_node_map::const_iterator itr = node_from_seg_.begin();
+        itr != node_from_seg_.end(); )
   {
-    seg_node_map::const_iterator next_itr = itr; 
+    seg_node_map::const_iterator next_itr = itr;
     ++next_itr;
-    if( itr->second->out_arcs_.empty() ){
+    if ( itr->second->out_arcs_.empty() ){
       this->remove_node(itr->second);
       itr = next_itr;
       continue;
     }
     itr->second->prune_by_gamma(min_gamma, max_gamma);
-    if( itr->second->out_arcs_.empty() ){
+    if ( itr->second->out_arcs_.empty() ){
       this->remove_node(itr->second);
     }
     itr = next_itr;
@@ -228,15 +228,15 @@ bmrf_network::prune_by_gamma(double min_gamma, double max_gamma)
 
 
 //: Prune directed arcs leaving the undirected subset of the network
-void 
+void
 bmrf_network::prune_directed()
 {
   vcl_cout << "pruning directed" << vcl_endl;
-  for( seg_node_map::const_iterator itr = node_from_seg_.begin();
-       itr != node_from_seg_.end(); )
+  for ( seg_node_map::const_iterator itr = node_from_seg_.begin();
+        itr != node_from_seg_.end(); )
   {
     itr->second->prune_directed();
-    if( itr->second->out_arcs_.empty() ){
+    if ( itr->second->out_arcs_.empty() ){
       seg_node_map::const_iterator next_itr = itr; ++next_itr;
       this->remove_node(itr->second);
       itr = next_itr;
@@ -247,12 +247,12 @@ bmrf_network::prune_directed()
 
 
 //: Set the epipole for frame \p frame
+// For now we assume that there is only one epipole for the
+// entire sequence.  This function should be update if this
+// assumption changes.  TODO
 void
-bmrf_network::set_epipole(const bmrf_epipole& epipole, int frame)
+bmrf_network::set_epipole(const bmrf_epipole& epipole, int /*frame*/)
 {
-  // for now we assume that there is only one epipole for the
-  // entire sequence.  This function should be update if this
-  // assumption changes
   if (epipoles_.empty())
     epipoles_.resize(1);
   epipoles_[0] = epipole;
@@ -260,12 +260,12 @@ bmrf_network::set_epipole(const bmrf_epipole& epipole, int frame)
 
 
 //: Access the epipole for frame \p frame
+// For now we assume that there is only one epipole for the
+// entire sequence.  This function should be update if this
+// assumption changes.  TODO
 const bmrf_epipole&
-bmrf_network::epipole(int frame) const
+bmrf_network::epipole(int /*frame*/) const
 {
-  // for now we assume that there is only one epipole for the
-  // entire sequence.  This function should be update if this
-  // assumption changes
   return epipoles_.front();
 }
 
@@ -331,12 +331,11 @@ bmrf_network::b_read( vsl_b_istream& is )
 
   short ver;
   vsl_b_read(is, ver);
-  switch(ver)
+  switch (ver)
   {
-  case 1:
+   case 1:
+    node_from_seg_.clear();
     {
-      node_from_seg_.clear();
-
       unsigned int num_nodes;
       vsl_b_read(is, num_nodes);
       for (unsigned int n=0; n<num_nodes; ++n) {
@@ -362,7 +361,7 @@ bmrf_network::b_read( vsl_b_istream& is )
                << "             Invalid arcs have been purged.\n";
     break;
 
-  default:
+   default:
     vcl_cerr << "I/O ERROR: bmrf_network::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream

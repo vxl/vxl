@@ -73,13 +73,13 @@ void vpyr_2_tpyramid<TLevel>::clear()
 }
 
 template <class TLevel>
-void vpyr_2_tpyramid<TLevel>::read_structure(vcl_istream & stream)
+void vpyr_2_tpyramid<TLevel>::read_structure(vcl_istream &)
 {
   vcl_cerr << "vpyr_2_tpyramid<TLevel>::read_structure NYI\n";
 }
 
 template <class TLevel>
-void vpyr_2_tpyramid<TLevel>::write_structure(vcl_ostream & stream) const
+void vpyr_2_tpyramid<TLevel>::write_structure(vcl_ostream &) const
 {
   vcl_cerr << "vpyr_2_tpyramid<TLevel>::write_structure NYI\n";
 }

@@ -448,8 +448,10 @@ double brct_algos::motion_constant(vnl_double_2 const& image_epipole,
   return gamma;
 }
 
+//: NYI
 void brct_algos::print_motion_array(vnl_matrix<double>& H)
 {
+  vcl_cerr << "brct_algos::print_motion_array(H) NYI\nH=\n" << H;
 }
 
 void brct_algos::write_vrml_header(vcl_ofstream& str)
@@ -470,8 +472,9 @@ void brct_algos::write_vrml_header(vcl_ofstream& str)
       << "}\n";
 }
 
-void brct_algos::write_vrml_trailer(vcl_ofstream& str)
+void brct_algos::write_vrml_trailer(vcl_ofstream&)
 {
+  vcl_cerr << "brct_algos::write_vrml_trailer(std::ofstream&) NYI (empty trailer)\n";
 }
 
 void brct_algos::write_vrml_points(vcl_ofstream& str,

@@ -21,16 +21,18 @@ bmrf_const_gamma_func::set_gamma(double gamma)
 
 
 //: Returns the constant gamma value
+// Here, gamma is independent of alpha and of t
 double
-bmrf_const_gamma_func::value(double alpha, double t) const
+bmrf_const_gamma_func::value(double /*alpha*/, double /*t*/) const
 {
   return gamma_;
 }
 
 
 //: Returns the constant gamma value
+// Here, this mean gamma is independent of t
 double
-bmrf_const_gamma_func::mean(double t) const
+bmrf_const_gamma_func::mean(double /*t*/) const
 {
   return gamma_;
 }
@@ -54,15 +56,17 @@ bmrf_linear_gamma_func::set_params(double m, double b)
 
 
 //: Returns the gamma value
+// Here, gamma is independent of t
 double
-bmrf_linear_gamma_func::value(double alpha, double t) const
+bmrf_linear_gamma_func::value(double alpha, double /*t*/) const
 {
   return m_*alpha + b_;
 }
 
 //: Returns the mean gamma value
+// Here, this mean gamma is independent of t
 double
-bmrf_linear_gamma_func::mean(double t) const
+bmrf_linear_gamma_func::mean(double /*t*/) const
 {
   return b_;
 }

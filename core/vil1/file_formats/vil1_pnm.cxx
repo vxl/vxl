@@ -152,10 +152,10 @@ static int ReadInteger(vil1_stream* vs, char& temp)
   return n;
 }
 
+#if VXL_LITTLE_ENDIAN
 // Convert the buffer of 16 bit words from MSB to host order
 static void ConvertMSBToHost( void* buf, int num_words )
 {
-#if VXL_LITTLE_ENDIAN
   unsigned char* ptr = (unsigned char*)buf;
   for ( int i=0; i < num_words; ++i ) {
     unsigned char t = *ptr;
@@ -163,13 +163,11 @@ static void ConvertMSBToHost( void* buf, int num_words )
     *(ptr+1) = t;
     ptr += 2;
   }
-#endif
 }
 
 // Convert the buffer of 16 bit words from host order to MSB
 static void ConvertHostToMSB( void* buf, int num_words )
 {
-#if VXL_LITTLE_ENDIAN
   unsigned char* ptr = (unsigned char*)buf;
   for ( int i=0; i < num_words; ++i ) {
     unsigned char t = *ptr;
@@ -177,9 +175,12 @@ static void ConvertHostToMSB( void* buf, int num_words )
     *(ptr+1) = t;
     ptr += 2;
   }
-#endif
 }
 
+#else // VXL_BIG_ENDIAN: do nothing
+inline static void ConvertMSBToHost( void*, int ) {}
+inline static void ConvertHostToMSB( void*, int ) {}
+#endif
 
 //: This method accepts any valid PNM file (first 3 bytes "P1\n" to "P6\n")
 bool vil1_pnm_generic_image::read_header()
@@ -351,7 +352,8 @@ bool vil1_pnm_generic_image::get_section(void* buf, int x0, int y0, int xs, int 
   return true;
 }
 
-void operator<<(vil1_stream& vs, int a) {
+void operator<<(vil1_stream& vs, int a)
+{
   char buf[128]; vcl_sprintf(buf, " %d\n", a); vs.write(buf,vcl_strlen(buf));
 }
 
