@@ -17,6 +17,8 @@ IF(HAS_VGUI)
  )
  AUX_SOURCE_DIRECTORY(Templates segv_sources)
 
+ ADD_LIBRARY(segv ${segv_sources})
+
  TARGET_LINK_LIBRARIES(segv bgui vgui strk sdet bsol brip vtol vdgl vsol vil1 vbl)
 
 ENDIF(HAS_VGUI)
