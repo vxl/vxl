@@ -104,7 +104,7 @@ bool vnl_math_isnan(double x){return bMe(&x,0x7ff00000L,sz_d)&&bMp(&x,0x000fffff
 bool vnl_math_isnan(long double x) {
   if (sizeof(long double) == 8) return bMe(&x,0x7ff00000L,sz_l) && bMp(&x,0x000fffffL,sz_l);
   else if (sizeof(long double) <= 12) return bMe(&x,0x4001ffffL,sz_l) && bMp(&x,0x40000000,sz_l-4);
-  else return bMe(&x,0x7fff0000L,sz_l) && bMp(&x,0x0000ffffL,sz_l);
+  else return bMe(&x,0x7ff70000L,sz_l) && bMp(&x,0x0008ffffL,sz_l);
 }
 #endif
 
@@ -137,7 +137,7 @@ bool vnl_math_isfinite(double x) { return !bMe(&x,0x7ff00000L,sz_d); }
 bool vnl_math_isfinite(long double x) {
   if (sizeof(long double) == 8) return !bMe(&x,0x7ff00000L,sz_l);
   else if (sizeof(long double) <= 12) return !bMe(&x,0xbfff7fffL,sz_l) && !bMe(&x,0x4001ffffL,sz_l);
-  else return !bMe(&x,0x7fff0000L,sz_l);
+  else return !bMe(&x,0x7ff70000L,sz_l);
 }
 #endif
 
@@ -157,12 +157,12 @@ bool vnl_math_isinf(double x) { return !finite(x) && !isnan(x); }
 bool vnl_math_isinf(long double x) { return !finite(x) && !isnan(x); }
 #else
 // Assume IEEE floating point number representation
-bool vnl_math_isinf(float x) { return ( bMe(&x,0x7f800000L,sz_f) && !bMp(&x,0x007fffffL,sz_f) ) || bMp(&x,0x7fffffffL,sz_f) == 0x7f7fffffL; }
+bool vnl_math_isinf(float x) {return(bMe(&x,0x7f800000L,sz_f)&&!bMp(&x,0x007fffffL,sz_f))||bMp(&x,0x7fffffffL,sz_f)==0x7f7fffffL;}
 bool vnl_math_isinf(double x) { return bMe(&x,0x7ff00000L,sz_d) && !bMp(&x,0x000fffffL,sz_d); }
 bool vnl_math_isinf(long double x) {
   if (sizeof(long double) == 8) return bMe(&x,0x7ff00000L,sz_l) && !bMp(&x,0x000fffffL,sz_l);
-  else if (sizeof(long double) <= 12) return ( bMe(&x,0xbfff7fffL,sz_l) || bMe(&x,0x4001ffffL,sz_l) ) && !bMp(&x,0x40000000,sz_l-4);
-  else return bMe(&x,0x7fff0000L,sz_l) && !bMp(&x,0x0000ffffL,sz_l);
+  else if (sizeof(long double) <= 12) return (bMe(&x,0xbfff7fffL,sz_l)||bMe(&x,0x4001ffffL,sz_l))&&!bMp(&x,0x40000000,sz_l-4);
+  else return bMe(&x,0x7ff70000L,sz_l) && !bMp(&x,0x0008ffffL,sz_l);
 }
 #endif
 
