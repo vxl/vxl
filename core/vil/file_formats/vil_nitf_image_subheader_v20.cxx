@@ -150,12 +150,27 @@ StatusCode vil_nitf_image_subheader_v20::Read(vil_stream* file)
     }
     ENCRYP = buffer[0] == '0' ? NOTENCRYPTED : ENCRYPTED;
 
-    if ((file->read(ISORCE, 42) < 42) ||
-        !get_unsigned(buffer, &NROWS, 8, file)   ||
-        !get_unsigned(buffer, &NCOLS, 8, file))
-    {
+    if (file->read(ISORCE, 42) < 42) {
       error = true;
       break;
+    }
+    if (!get_unsigned(buffer, &NROWS, 8, file)) {
+      error = true;
+      break;
+    }
+    if (debug_level > 0) {
+      vcl_cout << method_name << "NROWS string = <"
+               << buffer << ">  file position = " << file->tell()
+               << vcl_endl ;
+    }
+    if (!get_unsigned(buffer, &NCOLS, 8, file)) {
+      error = true;
+      break;
+    }
+    if (debug_level > 0) {
+      vcl_cout << method_name << "NCOLS string = <"
+               << buffer << ">  file position = " << file->tell()
+               << vcl_endl ;
     }
 
     if (file->read(buffer,  3) < 3) {
@@ -167,6 +182,7 @@ StatusCode vil_nitf_image_subheader_v20::Read(vil_stream* file)
     if (debug_level > 0) {
       vcl_cout << method_name << "PVTYPE string = <" << buffer << ">\n";
     }
+
     // MAKE SURE FLOAT AND COMPLEX BELOW SHOULD NOT BE DOUBLE.  MAL 8oct2003
     if (!nitf_strcasecmp(buffer, "B  ")) { // B = bit-mapped. TargetJr used PVTYPE_INTEGER
       PVTYPE_ = VIL_PIXEL_FORMAT_BOOL;
@@ -244,7 +260,7 @@ StatusCode vil_nitf_image_subheader_v20::Read(vil_stream* file)
     }
     buffer[2] = '\0';
 
-    if (debug_level > 1) {
+    if (debug_level > 0) {
       vcl_cout << method_name
                << "ABPP string = <" << buffer << ">  file position = "
                << file->tell() << vcl_endl;
@@ -440,10 +456,23 @@ StatusCode vil_nitf_image_subheader_v20::Read(vil_stream* file)
         !get_unsigned(buffer,&NPPBH, 4, file) ||
         (NPPBH > 9999)         ||
         !get_unsigned(buffer,&NPPBV, 4, file) ||
-        (NPPBV > 9999)         ||
-        !get_unsigned(buffer, &NBPP, 2, file) ||
-        (NBPP < 1) || (NBPP > 16)             ||
-        !GetInt(buffer, &DLVL,       3, file) ||
+        (NPPBV > 9999)) 
+    {
+      error = true;
+      break;
+    }
+    if (!get_unsigned(buffer, &NBPP, 2, file) ||
+        (NBPP < 1) || (NBPP > 16))
+    {
+      error = true;
+      break;
+    }
+    if (debug_level > 0) {
+      vcl_cout << method_name
+               << "NBPP string = <" << buffer << ">  file position = "
+               << file->tell() << vcl_endl;
+    }
+    if (!GetInt(buffer, &DLVL,       3, file) ||
         !GetInt(buffer, &ALVL,       3, file) ||
         (ALVL > 998)                          ||
         !GetInt(buffer, &LOCrow,     5, file) ||
@@ -2134,7 +2163,11 @@ StatusCode vil_nitf_image_subheader_v20::extract_stdid_extension()
   // Find out what kind of STDID tag we have...
   char tag_type;
   vcl_strncpy(&tag_type,&XSHD->XHD[offset],1);  // extract the tag type (A,B,C?)
-  vcl_cout << "STDID" << tag_type << " tag found in image's subheader.\n";
+
+  if (debug_level > 1) {
+    vcl_cout << "STDID" << tag_type << " tag found in image's subheader.\n";
+  }
+
   offset++;
 
   vcl_strncpy(work,&XSHD->XHD[offset],5); // parse out the CEL
@@ -2170,108 +2203,161 @@ StatusCode vil_nitf_image_subheader_v20::extract_stdid_extension()
   // Grab the ACQUISITION_DATE
   STRNCPY(ACQUISITION_DATE, &XSHD->XHD[offset], acq_date);
   offset += acq_date;
-  vcl_cout << "ACQUISITION_DATE = " << ACQUISITION_DATE << vcl_endl;
+
+  if (debug_level > 1) {
+    vcl_cout << "ACQUISITION_DATE = " << ACQUISITION_DATE << vcl_endl;
+  }
 
   // Grab the MISSION
   STRNCPY(MISSION, &XSHD->XHD[offset],mission);
   offset += mission;
-  vcl_cout << "MISSION = " << MISSION << vcl_endl;
+
+  if (debug_level > 1) {
+    vcl_cout << "MISSION = " << MISSION << vcl_endl;
+  }
 
   // Grab the PASS
   STRNCPY(PASS, &XSHD->XHD[offset], pass);
   offset += pass;
-  vcl_cout << "PASS = " << PASS << vcl_endl;
+
+  if (debug_level > 1) {
+    vcl_cout << "PASS = " << PASS << vcl_endl;
+  }
 
   // Grab the OP_NUM
   vcl_strncpy(temp, &XSHD->XHD[offset],op_num);
   temp[op_num]=0;
   offset += op_num;
   OP_NUM = vcl_atoi(temp);
-  vcl_cout << "OP_NUM = " << OP_NUM << vcl_endl;
+
+  if (debug_level > 1) {
+    vcl_cout << "OP_NUM = " << OP_NUM << vcl_endl;
+  }
 
   // Grab the START_SEGMENT
   STRNCPY(START_SEGMENT, &XSHD->XHD[offset],start_seg);
   offset += start_seg;
-  vcl_cout << "START_SEGMENT = " << START_SEGMENT << vcl_endl;
+
+  if (debug_level > 1) {
+    vcl_cout << "START_SEGMENT = " << START_SEGMENT << vcl_endl;
+  }
 
   // Grab the REPRO_NUM
   vcl_strncpy(temp, &XSHD->XHD[offset],repro_num);
   temp[repro_num]=0;
   offset += repro_num;
   REPRO_NUM = vcl_atoi(temp);
-  vcl_cout << "REPRO_NUM = " << REPRO_NUM << vcl_endl;
+
+  if (debug_level > 1) {
+    vcl_cout << "REPRO_NUM = " << REPRO_NUM << vcl_endl;
+  }
 
   // Grab the REPLAY_REGEN
   STRNCPY(REPLAY_REGEN, &XSHD->XHD[offset],replay_regen);
   offset += replay_regen;
-  vcl_cout << "REPLAY_REGEN = " << REPLAY_REGEN << vcl_endl;
+
+  if (debug_level > 1) {
+    vcl_cout << "REPLAY_REGEN = " << REPLAY_REGEN << vcl_endl;
+  }
 
   // Grab the BLANK_FILL
   STRNCPY(BLANK_FILL, &XSHD->XHD[offset],blank_fill);
   offset += blank_fill;
-  vcl_cout << "BLANK_FILL = " << BLANK_FILL << vcl_endl;
+
+  if (debug_level > 1) {
+    vcl_cout << "BLANK_FILL = " << BLANK_FILL << vcl_endl;
+  }
 
   // Grab the START_COLUMN
   vcl_strncpy(temp, &XSHD->XHD[offset],start_col);
   temp[start_col]=0;
   offset += start_col;
   START_COLUMN= vcl_atoi(temp);
-  vcl_cout << "START_COLUMN = " << START_COLUMN << vcl_endl;
+
+  if (debug_level > 1) {
+    vcl_cout << "START_COLUMN = " << START_COLUMN << vcl_endl;
+  }
 
   // Grab the START_ROW
   vcl_strncpy(temp, &XSHD->XHD[offset],start_row);
   temp[start_row]=0;
   offset += start_row;
   START_ROW = vcl_atoi(temp);
-  vcl_cout << "START_ROW = " << START_ROW << vcl_endl;
+
+  if (debug_level > 1) {
+    vcl_cout << "START_ROW = " << START_ROW << vcl_endl;
+  }
 
   // Grab the END_SEGMENT
   STRNCPY(END_SEGMENT, &XSHD->XHD[offset],end_seg);
   offset += end_seg;
-  vcl_cout << "END_SEGMENT = " << END_SEGMENT << vcl_endl;
+
+  if (debug_level > 1) {
+    vcl_cout << "END_SEGMENT = " << END_SEGMENT << vcl_endl;
+  }
 
   // Grab the END_COLUMN
   vcl_strncpy(temp, &XSHD->XHD[offset],end_col);
   temp[end_col]=0;
   offset += end_col;
   END_COLUMN= vcl_atoi(temp);
-  vcl_cout << "END_COLUMN = " << END_COLUMN << vcl_endl;
+
+  if (debug_level > 1) {
+    vcl_cout << "END_COLUMN = " << END_COLUMN << vcl_endl;
+  }
 
   // Grab the END_ROW
   vcl_strncpy(temp, &XSHD->XHD[offset],end_row);
   temp[end_row]=0;
   offset += end_row;
   END_ROW= vcl_atoi(temp);
-  vcl_cout << "END_ROW = " << END_ROW << vcl_endl;
+
+  if (debug_level > 1) {
+    vcl_cout << "END_ROW = " << END_ROW << vcl_endl;
+  }
 
   // Grab the COUNTRY
   STRNCPY(COUNTRY, &XSHD->XHD[offset],country);
   offset += country;
-  vcl_cout << "COUNTRY = " << COUNTRY << vcl_endl;
+
+  if (debug_level > 1) {
+    vcl_cout << "COUNTRY = " << COUNTRY << vcl_endl;
+  }
 
   // Grab the WAC
   vcl_strncpy(temp, &XSHD->XHD[offset],wac);
   temp[wac]=0;
   offset += wac;
   WAC = vcl_atoi(temp);
-  vcl_cout << "WAC = " << WAC << vcl_endl;
+
+  if (debug_level > 1) {
+    vcl_cout << "WAC = " << WAC << vcl_endl;
+  }
 
   // Grab the LOCATION
   STRNCPY(LOCATION, &XSHD->XHD[offset],loc);
   offset += loc;
-  vcl_cout << "LOCATION = " << LOCATION << vcl_endl;
+
+  if (debug_level > 1) {
+    vcl_cout << "LOCATION = " << LOCATION << vcl_endl;
+  }
 
   // Grab the RESERVED_1 field
   STRNCPY(RESERVED_1, &XSHD->XHD[offset],res1);
   offset += res1;
-  vcl_cout << "RESERVED_1 = " << RESERVED_1 << vcl_endl;
+
+  if (debug_level > 1) {
+    vcl_cout << "RESERVED_1 = " << RESERVED_1 << vcl_endl;
+  }
 
   // Grab the RESERVED_2 field
   STRNCPY(RESERVED_2, &XSHD->XHD[offset],res2);
 
 // offset += res2;
 
-  vcl_cout << "RESERVED_2 = " << RESERVED_2 << vcl_endl;
+  if (debug_level > 1) {
+    vcl_cout << "RESERVED_2 = " << RESERVED_2 << vcl_endl;
+  }
 
   // Now we fix the RPC line & sample offset if this image
   // does not have START_ROW = 0 and START_COLUMN = 0.
