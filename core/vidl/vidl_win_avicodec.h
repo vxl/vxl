@@ -1,6 +1,6 @@
 // This is core/vidl/vidl_win_avicodec.h
-#ifndef vidl_avicodec_h
-#define vidl_avicodec_h
+#ifndef vidl_win_avicodec_h
+#define vidl_win_avicodec_h
 //:
 // \file 
 // \author Andy Molnar
@@ -88,10 +88,9 @@ class vidl_avicodec : public vidl_codec
 
   bool load_avi(const char* fname, char mode);
 
-protected:
+ protected:
    bool read_header();
    bool write_header();
 };
 
-
-#endif // vidl_avicodec_h
+#endif // vidl_win_avicodec_h

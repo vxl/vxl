@@ -1,8 +1,8 @@
-// This is core/vidl/vidl_avicodec.h
-#ifndef vidl_avicodec_h
-#define vidl_avicodec_h
+// This is core/vidl/vidl_avifile_avicodec.h
+#ifndef vidl_avifile_avicodec_h
+#define vidl_avifile_avicodec_h
 //:
-// \file 
+// \file
 // \author Matt Leotta
 // \date 05/12/04
 //
@@ -29,11 +29,11 @@ class vidl_avicodec : public vidl_codec
 
   //-----------------------------------------------------
 
-  virtual vil_image_view_base_sptr  get_view(int position, 
-                                             int x0, int xs, 
+  virtual vil_image_view_base_sptr  get_view(int position,
+                                             int x0, int xs,
                                              int y0, int ys ) const;
-  virtual bool put_view(int position, 
-                        const vil_image_view_base &im, 
+  virtual bool put_view(int position,
+                        const vil_image_view_base &im,
                         int x0, int y0 );
 
   //-----------------------------------------------------
@@ -46,17 +46,15 @@ class vidl_avicodec : public vidl_codec
  protected:
   int seek(int frame_num);
   int next_frame();
-  
+
   bool load_avi(const char* fname, char mode);
- 
+
  private:
 
   int current_frame_;
   //vxl_byte* buffer_;
   IAviReadFile* moviefile_;
   IAviReadStream* moviestream_;
-
 };
 
-
-#endif // vidl_avicodec_h
+#endif // vidl_avifile_avicodec_h
