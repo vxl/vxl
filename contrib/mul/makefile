@@ -4,7 +4,7 @@
 SUBDIRS += mbl
 
 # Multivariate PDF objects, builders, samplers, etc.
-SUBDIRS += vpdfl
+SUBDIRS += vpdfl pdf1d
 
 # Manchester images 
 SUBDIRS += mil mil3d
