@@ -51,3 +51,10 @@ AUX_SOURCE_DIRECTORY(Templates vil_algo_sources)
 ADD_LIBRARY(vil_algo ${vil_algo_sources})
 
 TARGET_LINK_LIBRARIES( vil_algo vil vnl_algo vnl vcl )
+
+IF( BUILD_EXAMPLES )
+  SUBDIRS( examples )
+ENDIF( BUILD_EXAMPLES )
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )

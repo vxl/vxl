@@ -37,6 +37,10 @@ IF (BUILD_CORE_IMAGING)
   # image
   SUBDIRS(vil)
 
+  IF (BUILD_CORE_NUMERICS)
+    SUBDIRS (vil/algo)
+  ENDIF (BUILD_CORE_NUMERICS)
+
   # Old image library
   SUBDIRS(vil1)
 ENDIF (BUILD_CORE_IMAGING)

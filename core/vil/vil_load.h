@@ -17,13 +17,6 @@
 // it may or may not read the image on creation, but a disk read will take place at
 // some point before get_view() returns.
 //
-// vil_load() ensures image semantics with regard to vertical orientation:
-// the first image row is always the top pixel row of the image.
-// The disk-stored file could have a different convention, in which case
-// row swapping is performed.
-//
-// To avoid this possible row swapping, use the vil_load_raw() functions.
-//
 // \author awf@robots.ox.ac.uk
 //
 // \verbatim
@@ -35,15 +28,16 @@
 #include <vil/vil_fwd.h>
 #include <vil/vil_image_resource.h>
 
-//: Load an image data object from a file, possibly performing expected conversions.
+//: Load an image resource object from a file.
 // \relates vil_image_resource
 vil_image_resource_sptr vil_load_image_resource(char const* filename);
 
-//: Load raw from stream.
+//: Load from a stream.
+// Won't use plugins.
 vil_image_resource_sptr vil_load_image_resource_raw(vil_stream *);
 
-//: Load raw from a filename.
-// A convenience function.
+//: Load an image resource object from a file.
+// Won't use plugins.
 vil_image_resource_sptr vil_load_image_resource_raw(char const*);
 
 //: Load from a filename with a plugin.

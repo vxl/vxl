@@ -214,8 +214,6 @@ IF (SOLARIS)
   TARGET_LINK_LIBRARIES( vil nsl vil_network socket )
 ENDIF (SOLARIS)
 
-SUBDIRS(algo)
-
 IF( BUILD_EXAMPLES )
   SUBDIRS( examples )
 ENDIF( BUILD_EXAMPLES )
