@@ -178,7 +178,7 @@ class vgl_box_2d
   }
 
   //: Return true if line intersects box. If so, compute intersection points.
-  bool intersect(vgl_line_2d<Type>& line,
+  bool intersect(const vgl_line_2d<Type>& line,
                  vgl_point_2d<Type>& p0, vgl_point_2d<Type>& p1); 
                  
   //: Make the box empty

@@ -344,7 +344,7 @@ static bool vgl_near_zero(double x){return vcl_fabs(x)<1e-08;}
 static bool vgl_near_eq(double x, double y){return vgl_near_zero(x-y);}
 
 template <class Type>
-bool vgl_box_2d<Type>::intersect(vgl_line_2d<Type>& line,
+bool vgl_box_2d<Type>::intersect(const vgl_line_2d<Type>& line,
                                  vgl_point_2d<Type>& p0,
                                  vgl_point_2d<Type>& p1)
 {
@@ -360,14 +360,14 @@ bool vgl_box_2d<Type>::intersect(vgl_line_2d<Type>& line,
     // The box edge is collinear with line?
     if (vgl_near_eq(ymin,y0))
     {
-      p0.set(xmin, ymin);
-      p1.set(xmax, ymin);
+      p0.set(static_cast<Type>(xmin), static_cast<Type>(ymin));
+      p1.set(static_cast<Type>(xmax), static_cast<Type>(ymin));
       return true;
     }
     if (vgl_near_eq(ymax,y0))
     {
-      p0.set(xmin, ymax);
-      p1.set(xmax, ymax);
+      p0.set(static_cast<Type>(xmin), static_cast<Type>(ymax));
+      p1.set(static_cast<Type>(xmax), static_cast<Type>(ymax));
       return true;
     }
 
@@ -375,8 +375,8 @@ bool vgl_box_2d<Type>::intersect(vgl_line_2d<Type>& line,
       return false;
     else // The line does intersect
     {
-      p0.set(xmin, y0);
-      p1.set(xmax, y0);
+      p0.set(static_cast<Type>(xmin), static_cast<Type>(y0));
+      p1.set(static_cast<Type>(xmax), static_cast<Type>(y0));
       return true;
     }
   }
@@ -387,14 +387,14 @@ bool vgl_box_2d<Type>::intersect(vgl_line_2d<Type>& line,
     // The box edge is collinar with l?
     if (vgl_near_eq(xmin,x0))
     {
-      p0.set(xmin, ymin);
-      p1.set(xmin, ymax);
+      p0.set(static_cast<Type>(xmin), static_cast<Type>(ymin));
+      p1.set(static_cast<Type>(xmin), static_cast<Type>(ymax));
       return true;
     }
     if (vgl_near_eq(xmax,x0))
     {
-      p0.set(xmax, ymin);
-      p1.set(xmax, ymax);
+      p0.set(static_cast<Type>(xmax), static_cast<Type>(ymin));
+      p1.set(static_cast<Type>(xmax), static_cast<Type>(ymax));
       return true;
     }
 
@@ -402,8 +402,8 @@ bool vgl_box_2d<Type>::intersect(vgl_line_2d<Type>& line,
       return false;
     else // The line does intersect
     {
-      p0.set(x0, ymin);
-      p1.set(x0, ymax);
+      p0.set(static_cast<Type>(x0), static_cast<Type>(ymin));
+      p1.set(static_cast<Type>(x0), static_cast<Type>(ymax));
       return true;
     }
   }
@@ -455,8 +455,8 @@ bool vgl_box_2d<Type>::intersect(vgl_line_2d<Type>& line,
   if (inside_xmin && inside_xmax &&
       !(vgl_near_eq(y_xmin_int,ymin) && vgl_near_eq(y_xmax_int,ymax)))
   {
-    p0.set(xmin, y_xmin_int);
-    p1.set(xmax, y_xmax_int);
+    p0.set(static_cast<Type>(xmin), static_cast<Type>(y_xmin_int));
+    p1.set(static_cast<Type>(xmax), static_cast<Type>(y_xmax_int));
     return true;
   }
 
@@ -464,8 +464,8 @@ bool vgl_box_2d<Type>::intersect(vgl_line_2d<Type>& line,
   if (inside_ymin && inside_ymax &&
       !(vgl_near_eq(x_ymin_int,xmin) && vgl_near_eq(x_ymax_int,xmax)))
   {
-    p0.set(x_ymin_int, ymin);
-    p1.set(x_ymax_int, ymax);
+    p0.set(static_cast<Type>(x_ymin_int), static_cast<Type>(ymin));
+    p1.set(static_cast<Type>(x_ymax_int), static_cast<Type>(ymax));
     return true;
   }
 
@@ -473,8 +473,8 @@ bool vgl_box_2d<Type>::intersect(vgl_line_2d<Type>& line,
   if (inside_xmin && inside_ymin &&
       !(inside_xmax && inside_ymax))
   {
-    p0.set(xmin, y_xmin_int);
-    p1.set(x_ymin_int, ymin);
+    p0.set(static_cast<Type>(xmin), static_cast<Type>(y_xmin_int));
+    p1.set(static_cast<Type>(x_ymin_int), static_cast<Type>(ymin));
     return true;
   }
 
@@ -482,8 +482,8 @@ bool vgl_box_2d<Type>::intersect(vgl_line_2d<Type>& line,
   if (inside_xmin && inside_ymax &&
       !(inside_xmax && inside_ymin))
   {
-    p0.set(xmin, y_xmin_int);
-    p1.set(x_ymax_int, ymax);
+    p0.set(static_cast<Type>(xmin), static_cast<Type>(y_xmin_int));
+    p1.set(static_cast<Type>(x_ymax_int), static_cast<Type>(ymax));
     return true;
   }
 
@@ -491,8 +491,8 @@ bool vgl_box_2d<Type>::intersect(vgl_line_2d<Type>& line,
   if (inside_ymin && inside_xmax &&
       !(inside_xmin && inside_ymax))
   {
-    p0.set(x_ymin_int, ymin);
-    p1.set(xmax, y_xmax_int);
+    p0.set(static_cast<Type>(x_ymin_int), static_cast<Type>(ymin));
+    p1.set(static_cast<Type>(xmax), static_cast<Type>(y_xmax_int));
     return true;
   }
 
@@ -500,8 +500,8 @@ bool vgl_box_2d<Type>::intersect(vgl_line_2d<Type>& line,
   if (inside_ymax && inside_xmax &&
       !(inside_xmin && inside_ymin))
   {
-    p0.set(x_ymax_int, ymax);
-    p1.set(xmax, y_xmax_int);
+    p0.set(static_cast<Type>(x_ymax_int), static_cast<Type>(ymax));
+    p1.set(static_cast<Type>(xmax), static_cast<Type>(y_xmax_int));
     return true;
   }
   //Exactly p0ssing through diagonal of BB
@@ -509,14 +509,14 @@ bool vgl_box_2d<Type>::intersect(vgl_line_2d<Type>& line,
   {
     if (a>0) // 45 degrees
     {
-      p0.set(xmin, ymin);
-      p1.set(xmax, ymax);
+      p0.set(static_cast<Type>(xmin), static_cast<Type>(ymin));
+      p1.set(static_cast<Type>(xmax), static_cast<Type>(ymax));
       return true;
     }
     else // 135 degrees
     {
-      p0.set(xmin, ymax);
-      p1.set(xmax, ymin);
+      p0.set(static_cast<Type>(xmin), static_cast<Type>(ymax));
+      p1.set(static_cast<Type>(xmax), static_cast<Type>(ymin));
       return true;
     }
   }
