@@ -387,6 +387,14 @@ void vtol_face_2d::print(vcl_ostream &strm) const
   strm << "   " << (void const *) this << ">\n";
 }
 
+//: copy the geometry
+
+void vtol_face_2d::copy_geometry(const vtol_face &other)
+{
+  if (other.cast_to_face_2d())
+    surface_ = other.cast_to_face_2d()->surface();
+}
+
 //: provide a mechanism to compare geometry
 
 bool vtol_face_2d::compare_geometry(const vtol_face &other) const

@@ -343,6 +343,14 @@ void vtol_edge_2d::print(vcl_ostream &strm) const
    strm<<"<vtol_edge_2d "<<(void const *)this <<"> with id "<<get_id()<<'\n';
 }
 
+//: copy the geometry
+
+void vtol_edge_2d::copy_geometry(const vtol_edge &other)
+{
+  if (other.cast_to_edge_2d())
+    curve_ = other.cast_to_edge_2d()->curve();
+}
+
 bool vtol_edge_2d::compare_geometry(const vtol_edge &other) const
 {
   // we want to compare geometry
@@ -353,7 +361,7 @@ bool vtol_edge_2d::compare_geometry(const vtol_edge &other) const
     return false;
 }
 
-void vtol_edge_2d::compute_bounding_box(void)
+void vtol_edge_2d::compute_bounding_box(void) const
 {
   if (!this->bounding_box_)
     {

@@ -372,3 +372,16 @@ void vtol_face::print(vcl_ostream &strm) const
     strm << ' ' << (*ii)->inferiors()->size();
   strm << "   " << (void const *) this << ">\n";
 }
+
+//-------------------------------------------------------------
+//: Update the bounding box, a member of vsol_spatial_object_2d.
+//  The algorithm uses the bounding boxes of the vtol_edge(s) forming
+//  the boundary of the face.
+void vtol_face::compute_bounding_box() const
+{
+  vcl_vector<vtol_edge_sptr>* edges = const_cast<vtol_face*>(this)->edges();
+
+  for (vcl_vector<vtol_edge_sptr>::iterator eit = edges->begin();eit != edges->end(); eit++)
+    this->grow_minmax_bounds(*((*eit)->get_bounding_box()));
+  delete edges;
+}

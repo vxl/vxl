@@ -1,38 +1,39 @@
 // This is gel/vtol/vtol_face_2d.h
-#ifndef vtol_face_2d_h
-#define vtol_face_2d_h
+#ifndef vtol_face_2d_h_
+#define vtol_face_2d_h_
 //:
 // \file
-// \brief Represents the basic 2D topological entity
+// \brief Represents the basic 2D topological entity with 2d geometry (region)
 //
 //  The vtol_face_2d class is used to represent a topological face.
-//  A vtol_face_2d maintains a pointer to the Surface which describes the
+//  A vtol_face_2d maintains a pointer to the region which describes the
 //  mathematical geometry of the face.  The connectivity between
-//  faces may be obtained from the superior two_chains of the face.
-//  The boundary of the face may be obtained from the inferior vtol_one_chain_2ds
+//  faces may be obtained from the superior 2-chains of the face.
+//  The boundary of the face may be obtained from the inferior 1-chains
 //  of the face.
 //
 // \verbatim
-// Modifications:
-//    JLM Dec 1995: Added timeStamp (Touch) to
-//        operations which affect bounds.
-//    JLM Dec 1995: Added method for ComputeBoundingBox
-//        (Need to decide proper policy for curved surfaces
-//        and possibly inconsistent planar surface geometry)
-//    JSL Computed Area()
-//    JLM Sep 1996: Fixed the face copy constructor which
-//        did not handle the construction of new vtol_edge_2d(s) properly.
-//        The old implementation always constucted ImplicitLine(s)
-//        for the curve of each new edge.  See vtol_edge_2d.h for the required
-//        alterations of the vtol_edge_2d constructors.  There is still an
-//        issue with proper copying of the vtol_face_2d's Surface.  It isn't
-//        done correctly.
-//    PVR Aug 97: is_within_projection() implementation restored.
-//    AWF Jul 1998: General topology speedup by replacing calls to
-//        vertices() et al with iterators.  Benchmark: constructing
-//        40K triangles, old: 37 sec, new: 9 sec.
-//     PTU ported to vxl may-2000
-//  Dec. 2002, Peter Vanroose - interface change: vtol objects -> smart pointers
+//  Modifications:
+//   JLM Dec 1995: Added timeStamp (Touch) to
+//       operations which affect bounds.
+//   JLM Dec 1995: Added method for ComputeBoundingBox
+//       (Need to decide proper policy for curved surfaces
+//       and possibly inconsistent planar surface geometry)
+//   JSL Computed Area()
+//   JLM Sep 1996: Fixed the face copy constructor which
+//       did not handle the construction of new vtol_edge_2d(s) properly.
+//       The old implementation always constucted ImplicitLine(s)
+//       for the curve of each new edge.  See vtol_edge_2d.h for the required
+//       alterations of the vtol_edge_2d constructors.  There is still an
+//       issue with proper copying of the vtol_face_2d's Surface.  It isn't
+//       done correctly.
+//   PVR Aug 97: is_within_projection() implementation restored.
+//   AWF Jul 1998: General topology speedup by replacing calls to
+//       vertices() et al with iterators.  Benchmark: constructing
+//       40K triangles, old: 37 sec, new: 9 sec.
+//   PTU may-2000 ported to vxl
+//   Dec. 2002, Peter Vanroose -interface change: vtol objects -> smart pointers
+//   9 Jan. 2003, Peter Vanroose - added "copy_geometry()"
 // \endverbatim
 
 #include <vsol/vsol_region_2d_sptr.h>
@@ -43,9 +44,12 @@ class vtol_edge_2d;
 class vtol_one_chain_2d;
 class vtol_two_chain_2d;
 
-class vtol_face_2d
-  : public vtol_face
+class vtol_face_2d : public vtol_face
 {
+  //***************************************************************************
+  // Data members
+  //***************************************************************************
+
   vsol_region_2d_sptr surface_;
 
  public:
@@ -56,7 +60,7 @@ class vtol_face_2d
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
-  explicit vtol_face_2d(void);
+  vtol_face_2d(void);
 
   //---------------------------------------------------------------------------
   //: Constructor
@@ -136,12 +140,15 @@ class vtol_face_2d
 
   virtual void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;
 
+  //:  copy the geometry
+  virtual void copy_geometry(const vtol_face &other);
+
   //: provide a mechanism to compare geometry
   virtual bool compare_geometry(const vtol_face &other) const;
 
+ protected:
   //: this should not called by a client
-  virtual vtol_face *
-  copy_with_arrays(topology_list &verts, topology_list &edges) const;
+  virtual vtol_face* copy_with_arrays(topology_list &verts, topology_list &edges) const;
 };
 
-#endif // vtol_face_2d_h
+#endif // vtol_face_2d_h_

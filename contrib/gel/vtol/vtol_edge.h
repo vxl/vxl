@@ -1,33 +1,31 @@
 // This is gel/vtol/vtol_edge.h
-#ifndef vtol_edge_h
-#define vtol_edge_h
+#ifndef vtol_edge_h_
+#define vtol_edge_h_
 //:
 // \file
 // \brief Represents the basic 1D topological entity
 //
-//  The vtol_edge class is used to represent a topological edge.  An vtol_edge
-//  maintains a data pointer to the specific mathematical curve geometry
-//  which describes the point set that makes up the edge.  For convenience
+//  The vtol_edge class is used to represent a topological edge. For convenience
 //  in working with linear edges, pointers to the two endpoint vertices
 //  are maintained. The direction of an edge is the vector from v1_ to v2_.
-//  A OneChain is the Superior of the edge in the topological
-//  hierarchy, and a ZeroChain is the Inferior of the edge in the
+//  A 1-chain is the superior of the edge in the topological
+//  hierarchy, and a 0-chain is the inferior of the edge in the
 //  topological hierarchy.  In rare cases, an edge will be used to represent
-//  a Ray.  In this case, only v1_ will be valid and v2_ will be NULL.
+//  a ray.  In this case, only v1_ will be valid and v2_ will be NULL.
 //
 // \verbatim
-// Modifications:
-//     JLM December 1995, Added timeStamp (Touch) to
-//         operations which affect bounds.
-//     JLM December 1995 Added method for ComputeBoundingBox
-//         (Need to decide proper policy for curved edges
-//         and possibly inconsistent linear edge geometry)
+//  Modifications:
+//   JLM December 1995, Added timeStamp (Touch) to
+//       operations which affect bounds.
+//   JLM December 1995 Added method for ComputeBoundingBox
+//       (Need to decide proper policy for curved edges
+//       and possibly inconsistent linear edge geometry)
 //
-//     Samer Abdallah - 21/06/1996
-//      Robotics Research Group, Oxford
-//      Changed the constructor vtol_edge(vtol_edge &) to vtol_edge(const vtol_edge &)
+//   Samer Abdallah - 21/06/1996
+//    Robotics Research Group, Oxford
+//    Changed the constructor vtol_edge(vtol_edge &) to vtol_edge(const vtol_edge &)
 //
-//     JLM September 1996 - Added default curve argument to two vertex
+//   JLM September 1996 - Added default curve argument to two vertex
 //     constructors.  This addition is necessary because it is not
 //     always the case that one wants to construct an ImplicitLine from
 //     two vertices.  The curve might be a DigitalCurve, for example.
@@ -35,9 +33,10 @@
 //     curve endpoints can be different from the topological connections.
 //     So, it is necessary to pass in the vertices as well as the curve.
 //
-//   02-26-97 Added implementation for virtual Transform() - Peter Vanroose
-//   PTU ported to vxl may 2000.
-//  Dec. 2002, Peter Vanroose - interface change: vtol objects -> smart pointers
+//   02-26-97 - Peter Vanroose - Added implementation for virtual Transform()
+//   May 2000, PTU - ported to vxl
+//   Dec. 2002,  Peter Vanroose -interface change: vtol objects -> smart pointers
+//   9 Jan. 2003, Peter Vanroose - added pure virtual "copy_geometry()"
 // \endverbatim
 
 #include <vtol/vtol_topology_object.h>
@@ -49,10 +48,12 @@ class vtol_edge_2d;
 
 //: topological edge
 
-class vtol_edge
-  : public vtol_topology_object
+class vtol_edge : public vtol_topology_object
 {
  protected:
+  //***************************************************************************
+  // Data members
+  //***************************************************************************
 
   // Keeping vertex pointers inside of edge
   // for convenience...for now.
@@ -68,7 +69,7 @@ class vtol_edge
   //---------------------------------------------------------------------------
   //: Default constructor. Empty edge. Not a valid edge.
   //---------------------------------------------------------------------------
-  explicit vtol_edge(void):v1_(0),v2_(0){ link_inferior(new vtol_zero_chain); }
+  vtol_edge(void) : v1_(0), v2_(0){ link_inferior(new vtol_zero_chain); }
 
   //---------------------------------------------------------------------------
   //: Destructor
@@ -168,8 +169,8 @@ class vtol_edge
 
   //:
   // Inferior/Superior Accessor Methods
-  //
-  // WARNING should not be used by clients
+ protected:
+  // \warning should not be used by clients
   virtual vcl_vector<vtol_vertex*> *compute_vertices(void);
   virtual vcl_vector<vtol_edge*> *compute_edges(void);
   virtual vcl_vector<vtol_zero_chain*> *compute_zero_chains(void);
@@ -177,6 +178,7 @@ class vtol_edge
   virtual vcl_vector<vtol_face*> *compute_faces(void);
   virtual vcl_vector<vtol_two_chain*> *compute_two_chains(void);
   virtual vcl_vector<vtol_block*> *compute_blocks(void);
+ public:
 
   //: get a list of endpoints
   virtual vertex_list *endpoints(void);
@@ -202,8 +204,11 @@ class vtol_edge
   virtual void describe(vcl_ostream &strm=vcl_cout,
                         int blanking=0) const;
 
+  //: have the inherited classes copy the geometry
+  virtual void copy_geometry(const vtol_edge &other)=0;
+
   //: compare the geometry
   virtual bool compare_geometry(const vtol_edge &other) const =0;
 };
 
-#endif // vtol_edge_h
+#endif // vtol_edge_h_

@@ -53,8 +53,6 @@ static void test_edge_2d()
   TEST("vtol_edge_2d inequality", *e4==*e3, false);
   TEST("vtol_edge_2d::clone()", *e4, *(e4_clone->cast_to_topology_object()));
   TEST("vtol_edge_2d::cast_to_edge_2d()", e4->cast_to_edge_2d()==0, false);
-  TEST("vtol_edge_2d::compare_geometry()", e4->compare_geometry(*e4_clone), true);
-  TEST("vtol_edge_2d::compare_geometry()", e4->compare_geometry(*e1), false);
 
   vtol_vertex_sptr e1v1 = e1->v1();
   vtol_vertex_sptr e1v2 = e1->v2();
