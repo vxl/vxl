@@ -22,7 +22,6 @@
 //
 //-----------------------------------------------------------------------------
 
-//#include <vcl_cstdio.h> // just to ensure no clashes with weirdo stdios
 #include <vcl_iosfwd.h>
 
 // -- vbl_printf(cout, "%d\n", 12);

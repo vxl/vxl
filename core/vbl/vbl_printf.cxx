@@ -15,7 +15,7 @@
 #include <vcl_cstdio.h>
 #include <vcl_iostream.h>
  
-vcl_ostream& vbl_printf(vcl_ostream& s, const char * fmt, ...)
+vcl_ostream& vbl_printf(vcl_ostream& s, char const * fmt, ...)
 {
   char buf[65536];
   
