@@ -5,8 +5,6 @@
  * Compile this file with -DNO_DEFLATE to avoid the compression code.
  */
 
-/* @(#) Id */
-
 #include <stdio.h>
 
 #include "zutil.h"

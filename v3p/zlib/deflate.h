@@ -8,8 +8,6 @@
    subject to change. Applications should only use zlib.h.
  */
 
-/* @(#) Id */
-
 #ifndef _DEFLATE_H
 #define _DEFLATE_H
 
