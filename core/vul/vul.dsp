@@ -306,6 +306,16 @@ SOURCE=.\vul_fwd.h
 SOURCE=.\vul_whereami.h
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\vul_lru_helper.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vul_lru_helper.h
+
+# End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group

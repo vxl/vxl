@@ -1836,6 +1836,21 @@ SOURCE=.\vnl_finite.h
 SOURCE=.\vnl_random.h
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\vnl_complexify.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_imag.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_real.h
+
+# End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
