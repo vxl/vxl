@@ -18,44 +18,75 @@
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
 // \endverbatim
 
-
 #include <vcl_iosfwd.h>
 
-//: Simplest possible 2D array
-export template <class T>
+//: simple 2D array
+template <class T>
 class vbl_array_2d {
 public:
 
   //: Default constructor
-  vbl_array_2d();
+  vbl_array_2d() : rows_(0), num_rows_(0), num_cols_(0) { }
 
-  //: Construct from two integers
-  vbl_array_2d(int m, int n);
-
-  // Construct and fill
-  vbl_array_2d(int n1, int n2, T const& fill_value);
+  //: Construct m-by-n array.
+  vbl_array_2d(int m, int n) { construct(m, n); }
 
   //: Construct from a 2d array
-  vbl_array_2d(vbl_array_2d<T> const &);
+  vbl_array_2d(vbl_array_2d<T> const &that) {
+    construct(that.rows(), that.cols());
+    operator=(that);
+  }
 
 
   //: Destructor
- ~vbl_array_2d();
+  ~vbl_array_2d() { destruct(); }
 
   //: Assignment
-  vbl_array_2d& operator=(vbl_array_2d<T> const&);
-  bool operator==(vbl_array_2d<T> const&) const;
+  vbl_array_2d<T>& operator=(vbl_array_2d<T> const &that) {
+    resize(that.rows(), that.cols());
+    for (int i=0; i<num_rows_; ++i)
+      for (int j=0; j<num_cols_; ++j)
+        rows_[i][j] = that.rows_[i][j];
+    return *this;
+  }
 
-  // Operations----------------------------------------------------------------
-  void fill(T value);
-  void resize(int m, int n);
+  //: Comparison
+  bool operator==(vbl_array_2d<T> const &that) const {
+    if (num_rows_ != that.num_rows_ || num_cols_ != that.num_cols_)
+      return false;
+    for (int i=0; i<num_rows_; ++i)
+      for (int j=0; j<num_cols_; ++j)
+        if (!( rows_[i][j] == that.rows_[i][j] )) // do not assume we have operator!=
+          return false;
+    return true;
+  }
+
+  //: 
+  bool operator!=(vbl_array_2d<T> const &that) const {
+    return ! operator==(that);
+  }
+
+  //: fill with `value'
+  void fill(T value) {
+    for (int i=0; i<num_rows_; ++i)
+      for (int j=0; j<num_cols_; ++j)
+        rows_[i][j] = value;
+  }
+
+  //: change size.
+  void resize(int m, int n) {
+    if (m != num_rows_ || n != num_cols_) {
+      destruct();
+      construct(m, n);
+    }
+  }
 
   // Data Access---------------------------------------------------------------
   T const& operator() (int i, int j) const { return rows_[i][j]; }
   T      & operator() (int i, int j) { return rows_[i][j]; }
 
   void put(int i, int j, T const &x) { rows_[i][j] = x; }
-  T get(int i, int j) const { return rows_[i][j]; }
+  T    get(int i, int j) const { return rows_[i][j]; }
 
   T const* operator[] (int i) const { return rows_[i]; }
   T      * operator[] (int i) { return rows_[i]; }
@@ -88,13 +119,26 @@ private:
   T** rows_;
   int num_rows_;
   int num_cols_;
-
-  void destroy();
-  void create(int m, int n);
+  
+  void construct(int m, int n) {
+    num_rows_ = m;
+    num_cols_ = n;
+    rows_ = new T * [m];
+    T* p = new T[m * n];
+    for (int i = 0; i < m; ++i)
+      rows_[i] = p + i * n;
+  }
+  
+  void destruct() {
+    if (rows_) {
+      delete [] rows_[0];
+      delete [] rows_;
+    }
+  }
 };
 
-export template<class Type>
-vcl_ostream& operator<< (vcl_ostream& os, const vbl_array_2d<Type> &v);
+export template <class T>
+vcl_ostream& operator<<(vcl_ostream &, vbl_array_2d<T> const &);
 
 #define VBL_ARRAY_2D_INSTANTIATE \
 extern "please include vbl/vbl_array_2d.txx instead"
