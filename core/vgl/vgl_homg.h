@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \brief Private base class for homogeneous vectors
+// \brief General purpose support class for vgl_homg_ classes
 //
 // This is the private base class for homogeneous vectors.  It provides the
 // get/set interface, and also a static variable vgl_homg::infinity which is used
@@ -24,6 +24,7 @@
 //
 //-------------------------------------------------------------------------------
 
+//: General purpose support class for vgl_homg_ classes
 template <class T>
 class vgl_homg
 {
