@@ -49,7 +49,7 @@ vil_image_view<vil_rgb<vxl_byte> > rgb_image2 = three_plane_image;
 rgb_image2 = vil_view_as_rgb(three_plane_image);
 
 // If you want a greyscale image no matter whether the underlying image is rgb or grey
-vil_image_view<vxl_byte> image2 = vil_convert_to_grey_using_average<vxl_byte>("my_image.jpg",vxl_byte());
+vil_image_view<vxl_byte> image2 = vil_convert_to_grey_using_average<vxl_byte>(vil_load("my_image.jpg"),vxl_byte());
 
 \endverbatim
 *
@@ -134,14 +134,13 @@ for (unsigned p=0;p<nplanes;++p)
 * decomposable filters, as one need only write it for one direction, then can
 * apply it to the original image and its transpose.
 * \verbatim
-vil_image_view<vxl_byte> ;
-src_image = vil_load("image_file.jpg");
-vil_image_view<vxl_byte> tmp_image1,tmp_image2;
-vil_exp_filter_1d(tmp_image1,src_image,k,double());  // Apply filter to rows of src_image
-vil_exp_filter_1d(tmp_image2,tmp_image1.transpose(),k,double());  // Apply filter to cols of tmp_image1
+vil_image_view<vxl_byte> src_image = vil_load("image_file.jpg");
+vil_image_view<vxl_byte> tmp_image1, tmp_image2;
+vil_exp_filter_i(src_image, tmp_image1, 2.0);  // Apply filter to rows of src_image
+vil_exp_filter_i(vil_transpose(tmp_image1), tmp_image2, 2.0);  // Apply filter to cols of tmp_image1
 vil_image_view<vxl_byte> filtered_image = vil_transpose(tmp_image2);
 // Note that
-// vil_exp_filter_1d(vil_transpose(filtered_image),vil_transpose(tmp_image1),k,double())
+// vil_exp_filter_i(vil_transpose(tmp_image1),vil_transpose(filtered_image),2.0)
 // would only work correctly if filtered_image was already the correct size.
 // If it isn't, then the view created by vil_transpose(filtered_image) would
 // be resized, and disconnected from filtered_image itself, which would remain
