@@ -69,7 +69,7 @@ public:
   ~vgl_polygon();
 
   //: Returns true if x,y is inside the polyon, else false
-  bool contains(float x, float y);
+  bool contains(float x, float y) const;
 
   // creation
 

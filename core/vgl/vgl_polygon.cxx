@@ -136,31 +136,23 @@ void vgl_polygon::push_back(sheet_t const& s)
 }
 
 //---------------------------------------------------------------------------
-// Determine whether (x,y) is in sheet pgon
-//---------------------------------------------------------------------------
-static
-bool point_in_simple_polygon(float x, float y, vgl_polygon::sheet_t const& pgon)
-{
-  int n = pgon.size();
-
-  bool c = false;
-
-  int i = 0;
-  int j = n - 1;
-  for (; i < n; j = i++)
-    if ((((pgon[i].y()<=y) && (y<pgon[j].y())) || ((pgon[j].y()<=y) && (y<pgon[i].y()))) &&
-    (x < (pgon[j].x() - pgon[i].x()) * (y - pgon[i].y()) / (pgon[j].y() - pgon[i].y()) + pgon[i].x()))
-      c = !c;
-  return c;
-}
-
-//---------------------------------------------------------------------------
 // Determine whether (x,y) is in polygon
 //---------------------------------------------------------------------------
-bool vgl_polygon::contains(float tx, float ty)
+bool vgl_polygon::contains(float x, float y) const
 {
-  assert(sheets_.size() == 1);
-  return point_in_simple_polygon(tx, ty, sheets_[0]);
+  bool c = false;
+  for (unsigned int s=0; s < sheets_.size(); ++s) {
+    vgl_polygon::sheet_t const& pgon = sheets_[s];
+    int n = pgon.size();
+
+    int i = 0;
+    int j = n - 1;
+    for (; i < n; j = i++)
+      if ((((pgon[i].y()<=y) && (y<pgon[j].y())) || ((pgon[j].y()<=y) && (y<pgon[i].y()))) &&
+          (x < (pgon[j].x() - pgon[i].x()) * (y - pgon[i].y()) / (pgon[j].y() - pgon[i].y()) + pgon[i].x()))
+        c = !c;
+  }
+  return c;
 }
 
 
