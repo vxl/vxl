@@ -5,7 +5,7 @@
 #include "vmap_2_map.h"
 
 template <class D>
-vmap_2_map<D>::vmap_2_map(self_type const& m)
+vmap_2_map<D>::vmap_2_map(self_type const& m) : dart_sequence(m)
 {
   operator=(m) ;
 }

@@ -8,7 +8,7 @@
 
 template <class V, class E, class F, class D>
 vmap_2_tmap< V,E,F,D >::vmap_2_tmap(self_type const& tmap)
-  : Base_(tmap)
+  : Base_(tmap), vertex_sequence(tmap), edge_sequence(tmap), face_sequence(tmap)
 {
   operator=(tmap) ;
 }
@@ -90,21 +90,20 @@ vmap_2_tmap< V,E,F,D > & vmap_2_tmap< V,E,F,D >::operator=(self_type const& tmap
     vertex_sequence::operator=(tmap) ;
     edge_sequence::operator=(tmap) ;
     face_sequence::operator=(tmap) ;
-    int i ;
-    for (i=0; i<nb_darts(); i++)
+    for (int i=0; i<nb_darts(); i++)
     {
       set_dart(i,tmap.sigma(i), tmap.alpha(i), tmap.dart_associated_vertex(i),
                tmap.dart_associated_edge(i),tmap.dart_associated_face(i)) ;
     }
-    for (i=0; i<nb_vertices(); i++)
+    for (int i=0; i<nb_vertices(); i++)
     {
       vertex(i).set_begin(begin_dart()+tmap.vertex_associated_dart(i)) ;
     }
-    for (i=0; i<nb_edges(); i++)
+    for (int i=0; i<nb_edges(); i++)
     {
       edge(i).set_begin(begin_dart()+tmap.edge_associated_dart(i)) ;
     }
-    for (i=0; i<nb_faces(); i++)
+    for (int i=0; i<nb_faces(); i++)
     {
       face(i).set_begin(begin_dart()+tmap.face_associated_dart(i)) ;
     }
