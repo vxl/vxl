@@ -1,16 +1,14 @@
-
-//	Copyright: (C) 2000 Britsh Telecommunications plc
+// Copyright: (C) 2000 Britsh Telecommunications plc
 
 //:
 // \file
 // \brief Implement bits of an abstract classifier builder
 // \author Ian Scott
 // \date 2000/05/10
-// Modifications
 // \verbatim
-// 2 May 2001 IMS Converted to VXL
+//  Modifications
+//  2 May 2001 IMS Converted to VXL
 // \endverbatim
-
 
 
 //=======================================================================
@@ -76,9 +74,9 @@ vcl_ostream& operator<<(vcl_ostream& os,const clsfy_builder_base& b)
 
 vcl_ostream& operator<<(vcl_ostream& os,const clsfy_builder_base* b)
 {
-  if (b)	
+  if (b)
     return os << *b;
-  else			
+  else
     return os << "No clsfy_builder_base defined.";
 }
 
