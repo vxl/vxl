@@ -288,6 +288,66 @@ SOURCE=.\mil_image_pyramid_builder.cxx
 SOURCE=.\mil_transform_2d.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\Templates/mil_image_2d_of+char-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/mil_image_2d_of+int-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/mil_image_2d_of+short-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/mil_image_data+char-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/mil_image_data+double-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/mil_image_data+long-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vbl_io_smart_ptr+mil_image_data+char--.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vbl_io_smart_ptr+mil_image_data+long--.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vbl_smart_ptr+mil_image_data+char--.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vbl_smart_ptr+mil_image_data+double--.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vbl_smart_ptr+mil_image_data+long--.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vsl_vector_io+mil_image_2d_of+vil_byte--.cxx
+
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
