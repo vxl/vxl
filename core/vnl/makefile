@@ -105,10 +105,11 @@ ifndef NOTEST
 SUBDIRS += examples
 endif
 
-##  Only needed for Templates/vnl_matrix+* and Templates/vnl_c_vector+* :
-ifeq ($(COMPILER),CC-n32)
-PRAGMA_INSTANTIATE_TEMPLATES = 1
-endif
+# no longer needed -- fsm.
+###  Only needed for Templates/vnl_matrix+* and Templates/vnl_c_vector+* :
+#ifeq ($(COMPILER),CC-n32)
+#PRAGMA_INSTANTIATE_TEMPLATES = 1
+#endif
 
 ######################################
 include ${IUEROOT}/config/top-rules.mk

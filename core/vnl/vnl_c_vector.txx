@@ -207,44 +207,6 @@ T vnl_c_vector<T>::min_value(T const *src, unsigned n) {
 
 //--------------------------------------------------------------------------------
 
-//#define return_t vnl_c_vector<T>::abs_t
-//#define return_aux return
-#define return_t void
-#define return_aux aux_var =
-
-//
-template<class T> 
-return_t vnl_c_vector<T>::one_norm_aux(T const *src, unsigned n) {
-  abs_t sum(0);
-  
-  for (unsigned i=0; i<n; ++i)
-    sum += vnl_math_abs(src[i]);
-
-  return_aux sum;
-}
-
-//
-template<class T> 
-return_t vnl_c_vector<T>::two_nrm2_aux(T const *src, unsigned n) {
-  abs_t tot(0);
-  for(unsigned i=0; i<n; ++i)
-    tot += vnl_math_squared_magnitude(src[i]);
-  return_aux tot;
-}
-
-//
-template<class T> 
-return_t vnl_c_vector<T>::inf_norm_aux(T const *src, unsigned n) {
-  abs_t max(0);
-  
-  for (unsigned i=0; i<n; ++i) {
-    abs_t v = vnl_math_abs(src[i]);
-    if (v > max)
-      max = v;
-  }
-  return_aux max;
-}
-
 // useless... #define vnl_c_vector_use_win32_native_alloc 0
 static const int vnl_c_vector_use_vnl_alloc = 1;
 
@@ -295,27 +257,66 @@ void vnl_c_vector<T>::deallocate(T* v, int n)
   dealloc(v, n, sizeof (T));
 }
 
+//------------------------------------------------------------
+
+template <class T, class S>
+void vnl_c_vector_two_norm_squared(T const *p, unsigned n, S *out)
+{
+  *out = 0;
+  for(unsigned i=0; i<n; ++i)
+    *out += vnl_math_squared_magnitude(p[i]);
+}
+
+template <class T, class S>
+void vnl_c_vector_one_norm(T const *p, unsigned n, S *out)
+{
+  *out = 0;
+  for (unsigned i=0; i<n; ++i)
+    *out += vnl_math_abs(p[i]);
+}
+
+template <class T, class S>
+void vnl_c_vector_two_norm(T const *p, unsigned n, S *out)
+{
+  vnl_c_vector_two_norm_squared(p, n, out);
+  *out = S(sqrt(*out));
+}
+
+template <class T, class S>
+void vnl_c_vector_inf_norm(T const *p, unsigned n, S *out)
+{
+  *out = 0;
+  for (unsigned i=0; i<n; ++i) {
+    S v = vnl_math_abs(p[i]);
+    if (v > *out)
+      *out = v;
+  }
+}
 
 //--------------------------------------------------------------------------------
 
 #include <vcl/vcl_compiler.h>
 
+#define VNL_C_VECTOR_INSTANTIATE_norm(T, S)\
+template void vnl_c_vector_two_norm_squared(T const *, unsigned, S *); \
+template void vnl_c_vector_one_norm(T const *, unsigned, S *); \
+template void vnl_c_vector_two_norm(T const *, unsigned, S *); \
+template void vnl_c_vector_inf_norm(T const *, unsigned, S *);
+
 #undef VNL_C_VECTOR_INSTANTIATE_ordered
 #define VNL_C_VECTOR_INSTANTIATE_ordered(T) \
-VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(vnl_c_vector<T >::abs_t vnl_c_vector<T >::aux_var = 0); \
-template class vnl_c_vector<T >; \
-VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(vnl_c_vector<T >::abs_t vnl_c_vector<T >::aux_var)
+VNL_C_VECTOR_INSTANTIATE_norm(T, vnl_c_vector<T >::abs_t) \
+template class vnl_c_vector<T >;
 
 
 #undef VNL_C_VECTOR_INSTANTIATE_unordered
 #define VNL_C_VECTOR_INSTANTIATE_unordered(T) \
 VCL_DO_NOT_INSTANTIATE(T vnl_c_vector<T >::max_value(T const *, unsigned), T(0)); \
 VCL_DO_NOT_INSTANTIATE(T vnl_c_vector<T >::min_value(T const *, unsigned), T(0)); \
-VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(vnl_c_vector<T >::abs_t vnl_c_vector<T >::aux_var = 0); \
+VNL_C_VECTOR_INSTANTIATE_norm(T, vnl_c_vector<T >::abs_t) \
 template class vnl_c_vector<T >; \
 VCL_UNINSTANTIATE_SPECIALIZATION(T vnl_c_vector<T >::max_value(T const *, unsigned)); \
-VCL_UNINSTANTIATE_SPECIALIZATION(T vnl_c_vector<T >::min_value(T const *, unsigned)); \
-VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(vnl_c_vector<T >::abs_t vnl_c_vector<T >::aux_var)
+VCL_UNINSTANTIATE_SPECIALIZATION(T vnl_c_vector<T >::min_value(T const *, unsigned));
 
 #undef VNL_C_VECTOR_INSTANTIATE
 #define VNL_C_VECTOR_INSTANTIATE(T) extern "no such macro"
