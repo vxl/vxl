@@ -1,7 +1,6 @@
 // This is prip/vmap/vmap_kernel.h
 #ifndef vmap_kernel_h_
 #define vmap_kernel_h_
-
 //:
 // \file
 // \brief provides the base kernel classes which can be used to contract/remove edges from any map.
@@ -33,8 +32,8 @@ class vmap_sigma_permutation
   //typedef typename map_type::vmap_dart_index vmap_dart_index ;
 
    //:
-  typedef //typename map_type::
-  vmap_dart_index element_index ;
+  typedef vmap_dart_index element_index ;
+  //typedef typename map_type::vmap_dart_index element_index ;
 
   //:
   typedef typename map_type::vertex_type cycle_type ; // the linked elements
@@ -62,9 +61,7 @@ class vmap_sigma_permutation
   }
 #endif // 0
 
-  vmap_sigma_permutation(map_type & arg)
-    :_map(&arg)
-  {}
+  vmap_sigma_permutation(map_type & arg) :_map(&arg) {}
 
   cycle_index cycle_index_of(const element_iterator & arg) const
   {
@@ -154,7 +151,7 @@ class vmap_sigma_permutation
  private :
   //:
   map_type *_map ;
-} ;
+};
 
 template <class TMap>
 class vmap_phi_permutation
@@ -172,8 +169,8 @@ class vmap_phi_permutation
   typedef typename map_type::dart_pointer element_pointer ;
 
    //:
-  typedef //typename map_type::
-  vmap_dart_index element_index ;
+  typedef vmap_dart_index element_index ;
+  //typedef typename map_type::vmap_dart_index element_index ;
 
   //:
   typedef typename map_type::face_type cycle_type ; // the linked elements
@@ -201,9 +198,7 @@ class vmap_phi_permutation
   }
 #endif // 0
 
-  vmap_phi_permutation(map_type & arg)
-    :_map(&arg)
-  {}
+  vmap_phi_permutation(map_type & arg) :_map(&arg) {}
 
   cycle_index cycle_index_of(const element_iterator & arg) const
   {
@@ -290,11 +285,10 @@ class vmap_phi_permutation
     return get_cycle_pointer(opposite_cycle_index_of(arg)) ;
   }
 
-
  private :
   //:
   map_type *_map ;
-} ;
+};
 
 //:  Kernel class for contraction/removal.
 //  A kernel is a directed tree, that links elements
@@ -307,9 +301,9 @@ class vmap_phi_permutation
 //  functions. It defines just the interface, and does not
 //  check the validity of the added elements.
 //  It can be used in algorithms constructing directely trees.
- //
-//  For efficiency reasons, none of its fucntions should be virtual.
-//  That has for consequence that it must be a fully instanciated
+//
+//  For efficiency reasons, none of its functions should be virtual.
+//  That has for consequence that it must be a fully instantiated
 //  type when used or used in template fcts.
 template <class M>
 class vmap_kernel
@@ -325,8 +319,8 @@ class vmap_kernel
   typedef typename map_type::dart_pointer dart_pointer ;
 
    //:
-  typedef //typename map_type::
-  vmap_dart_index dart_index ;
+  typedef vmap_dart_index dart_index ;
+  //typedef typename map_type::vmap_dart_index dart_index ;
 
  private:
   //:
@@ -345,18 +339,16 @@ class vmap_kernel
     _map=&arg ;
   }
 
-  //: To be called before any addion/test.
+  //: To be called before any addition/test.
   // It initialises internal structures.
-  virtual void initialise()
-  {}
+  void initialise() {}
 
   //: To be called after all the additions.
   // For example, it can be used to
   //   give a representative to a non oriented tree.
   //   After the call of this function, the kernel should be a representativeed
   //   tree that can be used for contraction/removal.
-  virtual void finalise()
-  {}
+  void finalise() {}
 
   ///: Inserts a new dart pointed by "arg".
   bool add(const dart_iterator & arg)
@@ -432,7 +424,7 @@ class vmap_kernel
 
   //:
   dart_collection _dart;
-} ;
+};
 
 //: The base class for forests of vertices.
 // It can be defined only on tmaps.
@@ -476,12 +468,11 @@ class vmap_permutation_kernel : public vmap_kernel<typename TPermutation::map_ty
     _representatives.initialise(_p.nb_cycles()) ;
   }
 
-  //: Before any addion/test
+  //: Before any addition/test
   void initialise() ;
 
-  //: After addions
-  void finalise()
-  {}
+  //: After additions
+  void finalise() {}
 
   //:
   bool can_insert(const dart_iterator & arg) const ;
@@ -562,8 +553,7 @@ class vmap_permutation_kernel : public vmap_kernel<typename TPermutation::map_ty
 
   //:
   vbl_controlled_partition _representatives;
-} ;
-
+};
 
 #include "vmap_kernel.txx"
 
