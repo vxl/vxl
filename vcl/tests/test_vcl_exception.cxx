@@ -2,7 +2,8 @@
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
 
-extern "C" void abort() { vcl_cout << "abort()\n"; vcl_exit(1); }
+// You just cannot declare builtins.. 
+// extern "C" void abort() { vcl_cout << "abort()\n"; vcl_exit(1); }
 
 int main()
 {
