@@ -1,7 +1,5 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-//#include <vnl/dll.h>
+#include <vnl/vnl_fwd.h>
+
 #include <vnl/vnl_T_n.h>
 #include <vnl/vnl_alloc.h>
 #include <vnl/vnl_block.h>
@@ -33,7 +31,6 @@
 #include <vnl/vnl_float_3.h>
 #include <vnl/vnl_float_4.h>
 #include <vnl/vnl_fortran_copy.h>
-#include <vnl/vnl_fwd.h>
 #include <vnl/vnl_identity.h>
 #include <vnl/vnl_identity_3x3.h>
 #include <vnl/vnl_int_2.h>
@@ -86,9 +83,9 @@
 #include <vnl/vnl_vector_fixed_ref.h>
 #include <vnl/vnl_vector_ref.h>
 
-//#include <vnl/algo/dll.h>
-#include <vnl/algo/vnl_adjugate.h>
 #include <vnl/algo/vnl_algo_fwd.h>
+
+#include <vnl/algo/vnl_adjugate.h>
 #include <vnl/algo/vnl_amoeba.h>
 #include <vnl/algo/vnl_brent.h>
 #include <vnl/algo/vnl_chi_squared.h>
@@ -101,9 +98,9 @@
 #include <vnl/algo/vnl_discrete_diff.h>
 #include <vnl/algo/vnl_fft_1d.h>
 #include <vnl/algo/vnl_fft_2d.h>
-#include <vnl/algo/vnl_fft_prime_factors.h>
 #include <vnl/algo/vnl_gaussian_kernel_1d.h>
 #include <vnl/algo/vnl_generalized_eigensystem.h>
+#include <vnl/algo/vnl_generalized_schur.h>
 #include <vnl/algo/vnl_lbfgs.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/algo/vnl_lsqr.h>
