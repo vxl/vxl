@@ -13,7 +13,7 @@ VERSION := 1.0
 
 SOURCES += vtol_topology_object.cxx
 SOURCES += vtol_topology_cache.cxx
-SOURCES += vtol_list_functions.cxx
+MANPAGE_SOURCES += vtol_list_functions.txx
 SOURCES += vtol_chain.cxx
 SOURCES += vtol_two_chain.cxx
 SOURCES += vtol_one_chain.cxx
