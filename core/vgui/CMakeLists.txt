@@ -89,6 +89,8 @@ SET(vgui_sources
   vgui_pixel.cxx                vgui_pixel.h
   vgui_section_render.cxx       vgui_section_render.h
   vgui_section_buffer.cxx       vgui_section_buffer.h
+  vgui_range_map_params.h       vgui_range_map_params_sptr.h
+  vgui_range_map.txx            vgui_range_map.h
   vgui_texture_hacks.cxx        vgui_texture_hacks.h
   vgui_cache_wizard.cxx         vgui_cache_wizard.h
   vgui_image_renderer.cxx       vgui_image_renderer.h
