@@ -1,21 +1,19 @@
 #ifndef mil_algo_brighten_image_2d_txx_
 #define mil_algo_brighten_image_2d_txx_
 
-
 //: \file
 //  \brief Functions to change the contrast and brightness of 2d images
 //  \author Ian Scott
 
 #include "mil_algo_brighten_image_2d.h"
 
-//: creates a brighter or darker version of an input image
+//: creates a brighter or darker version of an input image.
 // dest.pixel = src.pixel * scale
 template <class OUTPIX, class INPIX, class SCALE>
 void mil_algo_brighten_image_2d(mil_image_2d_of<OUTPIX>& dest,
-                           const mil_image_2d_of<INPIX>& src,
-                           SCALE scale)
+                                const mil_image_2d_of<INPIX>& src,
+                                SCALE scale)
 {
-
   int n = src.n_planes();
   int nx = src.nx();
   int ny = src.ny();
@@ -51,14 +49,13 @@ void mil_algo_brighten_image_2d(mil_image_2d_of<OUTPIX>& dest,
   dest.setWorld2im(src.world2im());
 }
 
-//: creates a brighter or darker version of an input image
+//: creates a brighter or darker version of an input image.
 // dest.pixel = src.pixel * scale + offset
 template <class OUTPIX, class INPIX, class SCALE>
 void mil_algo_brighten_image_2d(mil_image_2d_of<OUTPIX>& dest,
-                           const mil_image_2d_of<INPIX>& src,
-                           SCALE scale, SCALE offset)
+                                const mil_image_2d_of<INPIX>& src,
+                                SCALE scale, SCALE offset)
 {
-
   int n = src.n_planes();
   int nx = src.nx();
   int ny = src.ny();
@@ -95,11 +92,11 @@ void mil_algo_brighten_image_2d(mil_image_2d_of<OUTPIX>& dest,
 }
 
 
-//: Brighten an image
+//: Brighten an image.
 // image.pixel = image.pixel * scale
 template <class PIX, class SCALE>
 void mil_algo_brighten_image_2d(mil_image_2d_of<PIX>& image,
-                           SCALE scale)
+                                SCALE scale)
 {
   int n = image.n_planes();
   int nx = image.nx();
@@ -127,13 +124,12 @@ void mil_algo_brighten_image_2d(mil_image_2d_of<PIX>& image,
   }
 }
 
-//: Brighten an image
+//: Brighten an image.
 // image.pixel = image.pixel * scale + offset
 template <class PIX, class SCALE>
 void mil_algo_brighten_image_2d(mil_image_2d_of<PIX>& image,
-                           SCALE scale, SCALE offset)
+                                SCALE scale, SCALE offset)
 {
-
   int n = image.n_planes();
   int nx = image.nx();
   int ny = image.ny();
@@ -170,6 +166,6 @@ template void mil_algo_brighten_image_2d(mil_image_2d_of<OUTPIX >& dest, \
 template void mil_algo_brighten_image_2d(mil_image_2d_of<INPIX >& image,\
                          SCALE scale); \
 template void mil_algo_brighten_image_2d(mil_image_2d_of<INPIX >& dest, \
-                         SCALE scale, SCALE offset);
+                         SCALE scale, SCALE offset)
 
 #endif // mil_algo_brighten_image_2d_txx_
