@@ -28,6 +28,9 @@ SUBDIRS += vil vil1
 # video
 SUBDIRS += vidl
 
+# video (using vil1)
+SUBDIRS += vidl_vil1
+
 # coordinate systems
 SUBDIRS += vcsl
 
