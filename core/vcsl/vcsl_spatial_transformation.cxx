@@ -1,4 +1,5 @@
 #include <vcsl/vcsl_spatial_transformation.h>
+#include <vcl/vcl_cmath.h> // for acos(), sin()
 
 #include <vcl/vcl_cassert.h>
 
