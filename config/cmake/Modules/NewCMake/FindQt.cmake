@@ -4,11 +4,15 @@
 # QT_INCLUDE_DIR, where to find qt.h, etc.
 # QT_LIBRARIES, the libraries to link against to use Qt.
 # QT_DEFINITIONS, definitions to use when compiling code that uses Qt.
-# QT_MOC_EXECUTABLE, where to find the moc tool.
-# QT_UIC_EXECUTABLE, where to find the uic tool.
 # QT_WRAP_CPP, If false, don't use QT_WRAP_CPP command.
 # QT_WRAP_UI, If false, don't use QT_WRAP_UI command.
 # QT_FOUND, If false, do try to use Qt.
+
+# also defined, but not for general use are
+# QT_MOC_EXECUTABLE, where to find the moc tool.
+# QT_UIC_EXECUTABLE, where to find the uic tool.
+# QT_QT_LIBRARY, where to find the Qt library.
+# QT_QTMAIN_LIBRARY, where to find the qtmain library. This is only required by Qt3 on Windows.
 
 IF (UNIX)
 
