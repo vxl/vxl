@@ -29,7 +29,7 @@ SET(vifa_sources
 AUX_SOURCE_DIRECTORY(Templates vifa_sources)
 
 ADD_LIBRARY(vifa ${vifa_sources})
-TARGET_LINK_LIBRARIES(vifa vdgl vsol vnl vgl vbl vul vcl)
+TARGET_LINK_LIBRARIES(vifa vdgl vsol vnl vgl vbl vul vil vcl)
 
 IF (BUILD_TESTING)
   SUBDIRS(tests)
