@@ -24,7 +24,7 @@
 // \endverbatim
 //---------------------------------------------------------------------------
 
-#include <vcl_iosfwd.h>
+#include <vcl_iostream.h>
 #include <vbl/vbl_sparse_array_base.h>
 
 //: Sparse 2D array allowing space efficient access of the form  s(300,700) =2
@@ -53,6 +53,11 @@ public:
     return vbl_sparse_array_base<T, Index_type>::operator() (vcl_make_pair(i, j));
   }
 
+  //: Erase element at location (i,j). Assertion failure if not yet filled.
+  void erase(unsigned i, unsigned j) {
+    vbl_sparse_array_base<T, Index_type>::erase(vcl_make_pair(i,j));
+  }
+
   //: Return true if location (i,j) has been filled.
   bool fullp(unsigned i, unsigned j) const
   {
@@ -66,7 +71,14 @@ public:
   }
 
   //: Print the Array to a stream in "(i,j): value" format.
-  vcl_ostream& print(vcl_ostream&) const;
+  vcl_ostream& print(vcl_ostream& out) const
+  {
+    for(const_iterator p = storage_.begin(); p != storage_.end(); ++p)
+      out << "(" << (*p).first.first
+	  << "," << (*p).first.second
+	  << "): " << (*p).second << vcl_endl;
+    return out;
+  }
 };
 
 //: Stream operator - print the Array to a stream in "(i,j): value" format.

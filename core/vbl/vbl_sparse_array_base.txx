@@ -46,6 +46,17 @@ T const & vbl_sparse_array_base<T, Index>::operator () (Index i) const
   return (*p).second;
 }
 
+//: Erase element at location (i). Assertion failure if not yet filled.
+template <class T, class Index>
+void vbl_sparse_array_base<T, Index>::erase (Index i)
+{
+  Map::iterator p = storage_.find(i);
+
+  assert(p != storage_.end());
+
+  storage_.erase(p);
+}
+
 //: Return the memory address of location (i).  0 if not yet filled.
 template <class T, class Index>
 T* vbl_sparse_array_base<T, Index>::get_addr(Index i)

@@ -52,6 +52,8 @@ public:
     //: Return contents at (i). Asserts if (i) empty.
   T const& operator () (Index i) const;
 
+    //: Erase element at location (i). Assertion failure if not yet filled.
+  void erase(Index );
 
     //: Return true if location (i) has been filled.
   bool fullp(Index ) const;
