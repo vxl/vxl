@@ -1,8 +1,7 @@
 #include "osl_fit_lines_params.h"
-#include <vcl_strstream.h>
-
+#include <vcl_iostream.h>
 //:
-//  \file
+// \file
 
 osl_fit_lines_params::osl_fit_lines_params(int min_fit_len,
                                            bool use_sqr,
@@ -22,28 +21,22 @@ osl_fit_lines_params::osl_fit_lines_params(int min_fit_len,
 
 //: Checks that parameters are within acceptable bounds
 bool osl_fit_lines_params::SanityCheck() {
-#if 0
-  vcl_strstream msg;
   bool valid = true;
 
   if (min_fit_length_ < 3) {
-    msg << "ERROR: Min fit length too short < 3" << vcl_ends;
+    vcl_cerr << "ERROR: Min fit length too short: "<< min_fit_length_<<" < 3\0";
     valid = false;
   }
 
   if (threshold_ > 1.0) {
-    msg << "ERROR: Fit error is quit large" << vcl_ends;
+    vcl_cerr << "ERROR: Fit error is quite large: " << threshold_ << " > 1\0";
     valid = false;
   }
 
   if (theta_ > 15) {
-    msg << "ERROR: Value of angle tolerance is too large >15" << vcl_ends;
+    vcl_cerr << "ERROR: Value of angle tolerance is too large: "
+             << theta_ << " > 15\0";
     valid = false;
   }
-  SetErrorMsg(msg.str());
-  //bug delete [] msg.str();
   return valid;
-#else
-  return true;
-#endif
 }
