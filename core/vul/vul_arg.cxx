@@ -412,8 +412,8 @@ static int list_parse(vcl_list<int> &out, char ** argv)
   while (str.length() > 0 && range_regexp.find(str)) {
     // the start/end positions (ref from 0) of the
     //    current ',' separated token.
-    long start= range_regexp.start(0);
-    long endp = range_regexp.end(0);
+    vcl_ptrdiff_t start= range_regexp.start(0);
+    vcl_ptrdiff_t endp = range_regexp.end(0);
     if (start != 0) {
       vcl_cerr << "vul_arg<vcl_list<int> >: Bad argument [" << argv[0] << "]\n";
       return 0; // failure

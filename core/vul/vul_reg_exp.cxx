@@ -119,6 +119,7 @@
 
 #include <vcl_iostream.h>
 #include <vcl_cstring.h> // for strcspn()
+#include <vcl_cstddef.h> // for vcl_ptrdiff_t
 
 //: Copies the given regular expression.
 
@@ -829,7 +830,7 @@ static void reginsert (char op, char* opnd) {
 static void regtail (char* p, const char* val) {
     register char* scan;
     register char* temp;
-    register long  offset;
+    register vcl_ptrdiff_t  offset;
 
     if (p == &regdummy)
         return;

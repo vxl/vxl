@@ -26,6 +26,7 @@
 // express or implied warranty.
 
 #include <vcl_string.h>
+#include <vcl_cstddef.h> // for vcl_ptrdiff_t
 
 const int vul_reg_exp_nsubexp = 10;
 
@@ -109,9 +110,9 @@ class vul_reg_exp
   //: true if regexp in char* arg
   bool find(vcl_string const&);
   //: Returns the start index of the last item found.
-  inline long start() const { return this->startp[0] - searchstring; }
+  inline vcl_ptrdiff_t start() const { return this->startp[0] - searchstring; }
   //: Returns the end index of the last item found.
-  inline long end()   const { return this->endp[0] - searchstring; }
+  inline vcl_ptrdiff_t end()   const { return this->endp[0] - searchstring; }
   //: Equality operator
   bool operator==(vul_reg_exp const&) const;
   //: Inequality operator
@@ -125,10 +126,10 @@ class vul_reg_exp
 
   //: Return start index of nth submatch.
   // start(0) is the start of the full match.
-  inline long start(long n) const { return this->startp[n] - searchstring; }
+  inline vcl_ptrdiff_t start(long n) const { return this->startp[n] - searchstring; }
   //: Return end index of nth submatch.
   // end(0) is the end of the full match.
-  inline long end(long n)   const { return this->endp[n] - searchstring; }
+  inline vcl_ptrdiff_t end(long n)   const { return this->endp[n] - searchstring; }
   //: Return nth submatch as a string.
   vcl_string match(int n) const {
     return this->endp[n] == this->startp[n] ? vcl_string("") :
