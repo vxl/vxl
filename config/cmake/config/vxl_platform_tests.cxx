@@ -775,7 +775,12 @@ int main() {
 
 #ifdef VCL_PROCESSOR_HAS_INFINITY
 // Does the processor actually have an infinity?
-#include <cfloat>
+
+// The Borland 5.5 defines DBL_MAX as _max_dble but only declares
+// _max_dble in the std namespace if we include <cfloag>.  Including
+// <float.h> moves _max_dble to the global namespace and allows the
+// DBL_MAX macro to work.
+#include <float.h>
 
 union u {  double d;  unsigned char c[8]; };
 
