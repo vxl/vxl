@@ -171,7 +171,7 @@ public:
   // There are assert style boundary checks - #define NDEBUG to turn them off.
   T       & operator() (unsigned r, unsigned c)
   {
-#if VNL_CONFIG_CHECK_BOUNDS
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
     assert(r<rows());   // Check the row index is valid
     assert(c<cols());   // Check the column index is valid
 #endif
@@ -182,7 +182,7 @@ public:
   // There are assert style boundary checks - #define NDEBUG to turn them off.
   T const & operator() (unsigned r, unsigned c) const
   {
-#if VNL_CONFIG_CHECK_BOUNDS
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
     assert(r<rows());   // Check the row index is valid
     assert(c<cols());   // Check the column index is valid
 #endif

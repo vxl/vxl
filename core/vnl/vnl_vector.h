@@ -139,7 +139,7 @@ public:
   // There are assert style boundary checks - #define NDEBUG to turn them off.
   T       & operator() (unsigned int i)
   {
-#if VNL_CONFIG_CHECK_BOUNDS
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
     assert(i<size());   // Check the index is valid.
 #endif
     return data[i];
@@ -148,7 +148,7 @@ public:
   // There are assert style boundary checks - #define NDEBUG to turn them off.
   T const & operator() (unsigned int i) const
   {
-#if VNL_CONFIG_CHECK_BOUNDS
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
     assert(i<size());   // Check the index is valid
 #endif
     return data[i];
