@@ -63,5 +63,3 @@ depend:
 clean:
 	\rm -f *.o *.a $(EXAMPLES:.c=) *.tar *.tar.gz libklt.a
 
-
-
