@@ -1,9 +1,10 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "Voxel.h"
+#pragma implementation
 #endif
-//
-// Class: Voxel
+//:
+// \file
+// \author
 // Author: Geoffrey Cross, Oxford RRG
 // Created: 20 May 99
 // Modifications:
@@ -14,20 +15,20 @@
 #include <assert.h>
 #include "Voxel.h"
 
+#if 0
+bool operator==( const Voxel &a, const Voxel &b)
+{
+  return a.depth==b.depth && a.x==b.x && a.y==b.y && a.z==b.z;
+}
+#endif
 
-// bool operator==( const Voxel &a, const Voxel &b) 
-// { 
-//   return a==b; 
-// }
-
-
-ostream &operator<<( ostream &os, const Voxel &a)
+vcl_ostream &operator<<( vcl_ostream &os, const Voxel &a)
 {
   return os << a.depth << " " << a.x << " " << a.y << " " << a.z;
 }
 
-bool operator<( Voxel &v1, Voxel &v2) 
-{ 
-  assert(0); 
-  return false; 
+bool operator<( Voxel &v1, Voxel &v2)
+{
+  assert(0);
+  return false;
 }

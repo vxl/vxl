@@ -79,31 +79,31 @@ void computeborgefors( const vbl_array_2d<bool> &edges, vbl_array_2d<short> &dis
   assert( edges.rows()== distance.rows());
   assert( edges.columns()== distance.columns());
 
-  distance.fill( short(sqrt(distance.rows()*distance.rows()+ distance.columns()*distance.columns())+1));
+  distance.fill( short(vcl_sqrt(distance.rows()*distance.rows()+ distance.columns()*distance.columns())+1));
 
   for( int i=1; i< (edges.rows()-1); i++)
     {
       for( int j=1; j< (edges.columns()-1); j++)
-	{
-	  if( edges(i,j))
-	    distance(i,j)= 0;
+        {
+          if( edges(i,j))
+            distance(i,j)= 0;
 
-	  distance(i,j)= minimum5( distance(i-1,j-1)+4,
-				   distance(i-1,j  )+3,
-				   distance(i-1,j+1)+4,
-				   distance(i  ,j-1)+3,
-				   distance(i  ,j));
+          distance(i,j)= minimum5( distance(i-1,j-1)+4,
+                                   distance(i-1,j  )+3,
+                                   distance(i-1,j+1)+4,
+                                   distance(i  ,j-1)+3,
+                                   distance(i  ,j));
 
-	}
+        }
     }
 
   for( int i=(edges.rows()-2); i> 0; i--)
     for( int j=(edges.columns()-2); j> 0; j--)
       distance(i,j)= minimum5( distance(i  ,j  )  ,
-			       distance(i  ,j+1)+3,
-			       distance(i+1,j-1)+4,
-			       distance(i+1,j  )+3,
-			       distance(i+1,j+1)+4);
+                               distance(i  ,j+1)+3,
+                               distance(i+1,j-1)+4,
+                               distance(i+1,j  )+3,
+                               distance(i+1,j+1)+4);
 
 }
 
@@ -119,13 +119,13 @@ void computeedgemap( vil_memory_image_of<vil_byte> imbuf, vbl_array_2d<bool> &ed
   for( int i=1; i< (int(imbuf.width())-1); i++)
     {
       for( int j=1; j< (int(imbuf.height())-1); j++)
-	{
-	  if( !imbuf(i,j) && 
-	      ( imbuf(i-1,j-1) || imbuf(i,j-1) || imbuf(i+1,j-1) ||
+        {
+          if( !imbuf(i,j) &&
+              ( imbuf(i-1,j-1) || imbuf(i,j-1) || imbuf(i+1,j-1) ||
                 imbuf(i-1,j  )                 || imbuf(i+1,j) ||
                 imbuf(i-1,j+1) || imbuf(i,j+1) || imbuf(i+1,j+1)))
-	    edges(i,j)= true;
-	}
+            edges(i,j)= true;
+        }
     }
 }
 
@@ -151,7 +151,7 @@ double computevoxelradius( VoxmapImagePoints &voxmap, Voxel &voxel, int imageind
   double d7  = (*c7-*centre).squared_magnitude(); if( d7> dist) dist= d7;
   double d8  = (*c8-*centre).squared_magnitude(); if( d8> dist) dist= d8;
 
-  return sqrt(dist);
+  return vcl_sqrt(dist);
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -180,11 +180,11 @@ cubetest_t DoScan( VoxmapImagePoints &voxmap, Voxel &voxel, int imageindex)
   vcl_vector<vgl_point_2d<float> > points;
   //  vgl_polygon_scan_iterator::Point2 points[cv.get_npoints()];
   vgl_box_2d<float> box( 0, imagestore[imageindex]->width()-1, 0, imagestore[imageindex]->height()-1);
-  
+
   for( int i=0; i< cv.get_npoints(); i++)
     {
       vgl_point_2d<float> f( cv.get_pointx( i),
-			     cv.get_pointy( i));
+                             cv.get_pointy( i));
 
       points.push_back( f);
     }
@@ -203,20 +203,20 @@ cubetest_t DoScan( VoxmapImagePoints &voxmap, Voxel &voxel, int imageindex)
   for( polyscan.reset() ; (polyscan.next()) && (expecting!= 3) ; )
     {
       int y= polyscan.scany();
-      
-      for( int x=polyscan.startx(); (x<= polyscan.endx()) && (expecting!=3); x++)
-	{
-	  vil_byte pix= (*imagestore[imageindex])(int(x),int(y));
-	  int t;
-	  if( pix) t= 1;
-	  else t= 2;
 
-	  if( expecting==0) 
-	    expecting= t;
-	  else
-	    if( expecting!= t) 
-	      expecting= 3;
-	}
+      for( int x=polyscan.startx(); (x<= polyscan.endx()) && (expecting!=3); x++)
+        {
+          vil_byte pix= (*imagestore[imageindex])(int(x),int(y));
+          int t;
+          if( pix) t= 1;
+          else t= 2;
+
+          if( expecting==0)
+            expecting= t;
+          else
+            if( expecting!= t)
+              expecting= 3;
+        }
     }
 
   if( expecting== 3)
@@ -256,22 +256,22 @@ int main(int argc, char ** argv)
   vul_arg<vcl_list<int> > imagenumbersarg( "-n", "Image numbers");
 
   vul_arg_parse( argc, argv);
-  
+
   // Create voxmap
   VoxmapImagePoints voxmap(iterations()-1, vnl_double_3( double(sx()), double(sy()), double(sz())), double(ss()), MAXIMAGES);
 
   ///////////////////////////////////////////////////////////////////
 
-  ofstream *fout= NULL;
+  vcl_ofstream *fout= NULL;
 
   if( ( char *)( outputfilename()))
     {
-      cerr << "Opening pipe..." << endl;
-      fout= new ofstream( outputfilename());
+      vcl_cerr << "Opening pipe..." << vcl_endl;
+      fout= new vcl_ofstream( outputfilename());
     }
   else
     {
-      cerr << "Not opening pipe..." << endl;
+      vcl_cerr << "Not opening pipe..." << vcl_endl;
     }
 
   ///////////////////////////////////////////////////////////////////
@@ -289,7 +289,7 @@ int main(int argc, char ** argv)
       imagestore[*it]= new vil_memory_image_of<vil_byte>( image);
       assert( *imagestore[*it]);
 
-      ifstream pmatrixin( vul_sprintf(( char *) pmatrixfilename(), *it));
+      vcl_ifstream pmatrixin( vul_sprintf(( char *) pmatrixfilename(), *it));
       assert( pmatrixin.good());
       pmatrixstore[*it]= new PMatrix;
       pmatrixstore[*it]->read_ascii( pmatrixin);
@@ -297,20 +297,20 @@ int main(int argc, char ** argv)
       vcl_cerr << "Computing borgefor transform..." << vcl_endl;
 
       // compute borgefors transform
-      vbl_array_2d<bool> edges( imagestore[*it]->width(), 
-			   imagestore[*it]->height());
+      vbl_array_2d<bool> edges( imagestore[*it]->width(),
+                           imagestore[*it]->height());
       computeedgemap( *imagestore[*it], edges);
-      distancestore[*it]= new vbl_array_2d<short>( imagestore[*it]->width(), 
-							       imagestore[*it]->height());
+      distancestore[*it]= new vbl_array_2d<short>( imagestore[*it]->width(),
+                                                               imagestore[*it]->height());
       computeborgefors(  edges,
-			*distancestore[*it]);
+                        *distancestore[*it]);
 
       // setup voxmap projection cache
       voxmap.SetPMatrix( *pmatrixstore[*it], *it);
     }
 
   ///////////////////////////////////////////////////////////////////
-  
+
   vcl_vector<Voxel> voxels;
   vcl_vector<Voxel> insidevoxels;
   //  CoolArray<Voxel> voxels;
@@ -321,201 +321,201 @@ int main(int argc, char ** argv)
 
     for( int x=0; x< d; x++)
       {
-	for( int y=0; y< d; y++)
-	  {
-	    for( int z=0; z< d; z++)
-	      {
-		voxels.push_back( Voxel(int(startiteration()),x,y,z));
-	      }
-	  }
+        for( int y=0; y< d; y++)
+          {
+            for( int z=0; z< d; z++)
+              {
+                voxels.push_back( Voxel(int(startiteration()),x,y,z));
+              }
+          }
       }
   }
 
   for( int count=int(startiteration()); count< int(iterations()); count++)
     {
-      cerr << "Iterations to do: " << (int(iterations())-count) << endl;
+      vcl_cerr << "Iterations to do: " << (int(iterations())-count) << vcl_endl;
 
       if( fout)
-	{
-	  (*fout) << "c" << endl;
+        {
+          (*fout) << "c" << vcl_endl;
 
-	  for( int i=0; i< voxels.size(); i++)
-	    (*fout) << "a" << voxels[i] << endl;
-	}
+          for( int i=0; i< voxels.size(); i++)
+            (*fout) << "a" << voxels[i] << vcl_endl;
+        }
 
       ///////////////////////////////////////////////////////////////////
       bool outsideobject[voxels.size()];
       bool insideimage  [voxels.size()];
       bool insideobject [voxels.size()];
-      
-      cerr << "Setting up variables... ";
-      
+
+      vcl_cerr << "Setting up variables... ";
+
       // note: this assumes that the radius of each voxel in each image is
       //       approximately the same.  Not true in general, but for the turntabl
       //       case this is 'ok'
-      Voxel tempvoxel( count, 
-		       int((1<<count)/2),
-		       int((1<<count)/2),
-		       int((1<<count)/2));
-      
+      Voxel tempvoxel( count,
+                       int((1<<count)/2),
+                       int((1<<count)/2),
+                       int((1<<count)/2));
+
       double radius = computevoxelradius( voxmap, tempvoxel,*(imagenumbers.begin()))* double(fiddlefactor());
-      //	  radius       [i]= computevoxelradius( voxmap, voxels[i], imagenumbers[0])*1.6;
-      
+      //          radius       [i]= computevoxelradius( voxmap, voxels[i], imagenumbers[0])*1.6;
+
       for( int i=0; i< voxels.size(); i++)
-	{
-	  outsideobject[i]= false;
-	  insideimage  [i]= true;
-	  insideobject [i]= true;
-	}
-      
-      cerr << "Done. " << endl;
-      
+        {
+          outsideobject[i]= false;
+          insideimage  [i]= true;
+          insideobject [i]= true;
+        }
+
+      vcl_cerr << "Done. " << vcl_endl;
+
       for( vcl_list<int>::iterator it= imagenumbers.begin(); it!= imagenumbers.end(); ++it)
-	{
-	  cerr << *it << " ";
+        {
+          vcl_cerr << *it << " ";
 
-	  if( fout)
-	    {
-	      if( ( char *) colorimagefilename())
-		{
-		  (*fout) << "i" << vul_sprintf( ( char *) colorimagefilename(), *it) << endl;
-		  (*fout) << "u" << endl;
-		}
-	    }
+          if( fout)
+            {
+              if( ( char *) colorimagefilename())
+                {
+                  (*fout) << "i" << vul_sprintf( ( char *) colorimagefilename(), *it) << vcl_endl;
+                  (*fout) << "u" << vcl_endl;
+                }
+            }
 
-	  int xsize= imagestore[*it]->width();
-	  int ysize= imagestore[*it]->height();
-	  
-	  for( int i=0; i< voxels.size(); i++)
-	    {
-	      if( !outsideobject[i] && insideimage[i])
-		{
-		  //	      double radius ( computevoxelradius( voxmap, voxels[i], *it));
-		  vnl_double_2 centre( *voxmap.GetCentreImage( voxels[i].x, 
-							  voxels[i].y, 
-							  voxels[i].z, 
-							  voxels[i].depth, 
-							  *it));
-		  
-		  // centre is outside the image
-		  if(( centre[0]< 0) || ( centre[1]< 0) || ( centre[0]>= xsize) || (centre[1]>= ysize))
-		    {
-		      double disttoim= vnl_double_2( double(xsize)/2-centre[0], double(ysize)/2-centre[1]).magnitude();
-		      
-		      // cube does actually look 'close' to the image
-		      if( disttoim< (radius+(sqrt(xsize*xsize/4+ysize*ysize/4))))
-			{
-			  cubetest_t t= DoScan( voxmap, voxels[i], *it);
-			  
-			  if( t== outsideimage)
-			    insideimage[i]= false;
-			  
-			  // outsideimage, surface, inside, outside
-			  if( t== outside)
-			    {
-			      if( fout) (*fout) << "d " << i << endl;
+          int xsize= imagestore[*it]->width();
+          int ysize= imagestore[*it]->height();
 
-			      outsideobject[i]= true;
-			    }
-			  else if( t== surface)
-			    insideobject[i] = false;
-			} // inside image, we think
-		      else
-			insideimage[i]= false;
-		      
-		    } // if centre outside image
-		  else
-		    {
-		      // either completely inside or completely outside object
-		      if( (double((*distancestore[*it])(centre[0],centre[1]))/3)> radius)
-			{
-			  // if completely outside object
-			  if( !(*imagestore[*it])(centre[0],centre[1]))
-			    {
-			      if( fout) 
-				{
-				  (*fout) << "d " << i << endl;
-				  if( updatecounter++>= (2<<count))
-				    {
-				      (*fout) << "u" << endl;
-				      updatecounter= 0;
-				    }
-				}
+          for( int i=0; i< voxels.size(); i++)
+            {
+              if( !outsideobject[i] && insideimage[i])
+                {
+                  //          double radius ( computevoxelradius( voxmap, voxels[i], *it));
+                  vnl_double_2 centre( *voxmap.GetCentreImage( voxels[i].x,
+                                                          voxels[i].y,
+                                                          voxels[i].z,
+                                                          voxels[i].depth,
+                                                          *it));
 
-			      outsideobject[i]= true;
-			    }
-			}
-		      else
-			{
-			  if( count== int(iterations())-1)
-			    {
-			      // if close to surface
-			      cubetest_t t= DoScan( voxmap, voxels[i], *it);
-			      
-			      if( t== outside)
-				{
-				  if( fout) (*fout) << "d " << i << endl;
+                  // centre is outside the image
+                  if(( centre[0]< 0) || ( centre[1]< 0) || ( centre[0]>= xsize) || (centre[1]>= ysize))
+                    {
+                      double disttoim= vnl_double_2( double(xsize)/2-centre[0], double(ysize)/2-centre[1]).magnitude();
 
-				  outsideobject[i]= true;
-				}
-			      else if( t== surface)
-				insideobject[i]= false;
-			    }
-			  else
-			    {
-			      insideobject[i]= false;
-			    }
-			}
-		    } // if centre inside image
-		} // if( !outsideobject[i])
-	    } // for( int i=0; i< voxels.length(); i++)
-	} // for( imagenumbers.reset(); imagenumbers.next(); )
+                      // cube does actually look 'close' to the image
+                      if( disttoim< (radius+(vcl_sqrt(xsize*xsize/4+ysize*ysize/4))))
+                        {
+                          cubetest_t t= DoScan( voxmap, voxels[i], *it);
 
-      cerr << endl;
+                          if( t== outsideimage)
+                            insideimage[i]= false;
+
+                          // outsideimage, surface, inside, outside
+                          if( t== outside)
+                            {
+                              if( fout) (*fout) << "d " << i << vcl_endl;
+
+                              outsideobject[i]= true;
+                            }
+                          else if( t== surface)
+                            insideobject[i] = false;
+                        } // inside image, we think
+                      else
+                        insideimage[i]= false;
+
+                    } // if centre outside image
+                  else
+                    {
+                      // either completely inside or completely outside object
+                      if( (double((*distancestore[*it])(centre[0],centre[1]))/3)> radius)
+                        {
+                          // if completely outside object
+                          if( !(*imagestore[*it])(centre[0],centre[1]))
+                            {
+                              if( fout)
+                                {
+                                  (*fout) << "d " << i << vcl_endl;
+                                  if( updatecounter++>= (2<<count))
+                                    {
+                                      (*fout) << "u" << vcl_endl;
+                                      updatecounter= 0;
+                                    }
+                                }
+
+                              outsideobject[i]= true;
+                            }
+                        }
+                      else
+                        {
+                          if( count== int(iterations())-1)
+                            {
+                              // if close to surface
+                              cubetest_t t= DoScan( voxmap, voxels[i], *it);
+
+                              if( t== outside)
+                                {
+                                  if( fout) (*fout) << "d " << i << vcl_endl;
+
+                                  outsideobject[i]= true;
+                                }
+                              else if( t== surface)
+                                insideobject[i]= false;
+                            }
+                          else
+                            {
+                              insideobject[i]= false;
+                            }
+                        }
+                    } // if centre inside image
+                } // if( !outsideobject[i])
+            } // for( int i=0; i< voxels.length(); i++)
+        } // for( imagenumbers.reset(); imagenumbers.next(); )
+
+      vcl_cerr << vcl_endl;
 
       vcl_vector<Voxel> newvoxels;
       //      CoolArray<Voxel> newvoxels;
 
-      cerr << "No voxels = " << voxels.size() << endl;
-      cerr << "Making new level..." << endl;
+      vcl_cerr << "No voxels = " << voxels.size() << vcl_endl;
+      vcl_cerr << "Making new level..." << vcl_endl;
 
       for( int i=0; i< voxels.size(); i++)
-	{
-	  //      if( !outsideobject[i] && insideimage[i] && !insideobject[i])
-	  if( !outsideobject[i] && insideimage[i] && !insideobject[i])
-	    {
-	      if( count!= (int(iterations())-1))
-		{
-		  newvoxels.push_back( Voxel( voxels[i].depth+1, voxels[i].x*2  , voxels[i].y*2  , voxels[i].z*2  )); 
-		  newvoxels.push_back( Voxel( voxels[i].depth+1, voxels[i].x*2  , voxels[i].y*2  , voxels[i].z*2+1)); 
-		  newvoxels.push_back( Voxel( voxels[i].depth+1, voxels[i].x*2  , voxels[i].y*2+1, voxels[i].z*2  )); 
-		  newvoxels.push_back( Voxel( voxels[i].depth+1, voxels[i].x*2  , voxels[i].y*2+1, voxels[i].z*2+1)); 
-		  newvoxels.push_back( Voxel( voxels[i].depth+1, voxels[i].x*2+1, voxels[i].y*2  , voxels[i].z*2  )); 
-		  newvoxels.push_back( Voxel( voxels[i].depth+1, voxels[i].x*2+1, voxels[i].y*2  , voxels[i].z*2+1)); 
-		  newvoxels.push_back( Voxel( voxels[i].depth+1, voxels[i].x*2+1, voxels[i].y*2+1, voxels[i].z*2  )); 
-		  newvoxels.push_back( Voxel( voxels[i].depth+1, voxels[i].x*2+1, voxels[i].y*2+1, voxels[i].z*2+1)); 
-		}
-	      else
-		{
-		  newvoxels.push_back( voxels[i]);
-		}
-	    }
-	  else
-	    {
-	      if(( insideobject[i]) && ( !outsideobject[i]) && ( insideimage[i]))
-		insidevoxels.push_back( voxels[i]);
+        {
+          //      if( !outsideobject[i] && insideimage[i] && !insideobject[i])
+          if( !outsideobject[i] && insideimage[i] && !insideobject[i])
+            {
+              if( count!= (int(iterations())-1))
+                {
+                  newvoxels.push_back( Voxel( voxels[i].depth+1, voxels[i].x*2  , voxels[i].y*2  , voxels[i].z*2  ));
+                  newvoxels.push_back( Voxel( voxels[i].depth+1, voxels[i].x*2  , voxels[i].y*2  , voxels[i].z*2+1));
+                  newvoxels.push_back( Voxel( voxels[i].depth+1, voxels[i].x*2  , voxels[i].y*2+1, voxels[i].z*2  ));
+                  newvoxels.push_back( Voxel( voxels[i].depth+1, voxels[i].x*2  , voxels[i].y*2+1, voxels[i].z*2+1));
+                  newvoxels.push_back( Voxel( voxels[i].depth+1, voxels[i].x*2+1, voxels[i].y*2  , voxels[i].z*2  ));
+                  newvoxels.push_back( Voxel( voxels[i].depth+1, voxels[i].x*2+1, voxels[i].y*2  , voxels[i].z*2+1));
+                  newvoxels.push_back( Voxel( voxels[i].depth+1, voxels[i].x*2+1, voxels[i].y*2+1, voxels[i].z*2  ));
+                  newvoxels.push_back( Voxel( voxels[i].depth+1, voxels[i].x*2+1, voxels[i].y*2+1, voxels[i].z*2+1));
+                }
+              else
+                {
+                  newvoxels.push_back( voxels[i]);
+                }
+            }
+          else
+            {
+              if(( insideobject[i]) && ( !outsideobject[i]) && ( insideimage[i]))
+                insidevoxels.push_back( voxels[i]);
 
-	      if( fout) (*fout) << "d " << i << endl;
-	    }
-	}
+              if( fout) (*fout) << "d " << i << vcl_endl;
+            }
+        }
 
-      cerr << "Copying..." << endl;
+      vcl_cerr << "Copying..." << vcl_endl;
 
       //      if( count!= (int(iterations)-1))
       voxels= newvoxels;
     } // for( int i=0; i< int(iterators); i++)
 
-  cerr << "Deleting images and pmatrices..." << endl;
+  vcl_cerr << "Deleting images and pmatrices..." << vcl_endl;
 
   ///////////////////////////////////////////////////////////////////
   // delete all images and pmatrices
@@ -534,56 +534,56 @@ int main(int argc, char ** argv)
       int size= 1<<(int(iterations())-1);
       BitArray3D v( size, size, size, false);
       for( int i=0; i< voxels.size(); i++)
-	{
-	  v.set( voxels[i].x, voxels[i].y, voxels[i].z, true);
-	}
+        {
+          v.set( voxels[i].x, voxels[i].y, voxels[i].z, true);
+        }
 
       for( int i=0; i< insidevoxels.size(); i++)
-	{
-	  int depth= 1<<((int(iterations())-1)-insidevoxels[i].depth);
-      
-	  int startx= insidevoxels[i].x*depth;
-	  int starty= insidevoxels[i].y*depth;
-	  int startz= insidevoxels[i].z*depth;
-	  
-	  int endx= (insidevoxels[i].x+1)*depth;
-	  int endy= (insidevoxels[i].y+1)*depth;
-	  int endz= (insidevoxels[i].z+1)*depth;
-	  
-	  for( int x=startx; x< endx; x++)
-	    {
-	      for( int y=starty; y< endy; y++)
-		{
-		  for( int z=startz; z< endz; z++)
-		    {
-		      v.flip( x,y,z);
-		    }
-		}
-	    }
-	}
+        {
+          int depth= 1<<((int(iterations())-1)-insidevoxels[i].depth);
 
-      ofstream fout(( char *) voxmapfilename());
-      fout << double(ss()) << " " << double(sx()) << " " << double(sy()) << " " << double(sz()) << endl;
-      fout << size << endl;
+          int startx= insidevoxels[i].x*depth;
+          int starty= insidevoxels[i].y*depth;
+          int startz= insidevoxels[i].z*depth;
+
+          int endx= (insidevoxels[i].x+1)*depth;
+          int endy= (insidevoxels[i].y+1)*depth;
+          int endz= (insidevoxels[i].z+1)*depth;
+
+          for( int x=startx; x< endx; x++)
+            {
+              for( int y=starty; y< endy; y++)
+                {
+                  for( int z=startz; z< endz; z++)
+                    {
+                      v.flip( x,y,z);
+                    }
+                }
+            }
+        }
+
+      vcl_ofstream fout(( char *) voxmapfilename());
+      fout << double(ss()) << " " << double(sx()) << " " << double(sy()) << " " << double(sz()) << vcl_endl;
+      fout << size << vcl_endl;
 
       for( int x=0; x< size; x++)
-	{
-	  for( int y=0; y< size; y++)
-	    {
-	      for( int z=0; z< size; z++)
-		{
-		  fout << v(x,y,z);
-		}
-	    }
-	}
-	
-      exit(0);
+        {
+          for( int y=0; y< size; y++)
+            {
+              for( int z=0; z< size; z++)
+                {
+                  fout << v(x,y,z);
+                }
+            }
+        }
+
+      vcl_exit(0);
     }
 
   ///////////////////////////////////////////////////////////////////
-  // make VRML 
+  // make VRML
 
-  cerr << "Making VRML..." << endl;
+  vcl_cerr << "Making VRML..." << vcl_endl;
 
   int size= 1<<(int(iterations())-1);
   BitArray3D edges1( size, size, size+1);
@@ -596,7 +596,7 @@ int main(int argc, char ** argv)
   edges2.fill(false);
   edges3.fill(false);
 
-  cerr << "Surface voxels..." << endl;
+  vcl_cerr << "Surface voxels..." << vcl_endl;
   for( int i=0; i< voxels.size(); i++)
     {
       voxint.set( voxels[i].x, voxels[i].y, voxels[i].z, true);
@@ -611,11 +611,11 @@ int main(int argc, char ** argv)
       edges3.flip( voxels[i].x+1, voxels[i].y, voxels[i].z);
     }
 
-  cerr << "Interior voxels..." << endl;
+  vcl_cerr << "Interior voxels..." << vcl_endl;
   for( int i=0; i< insidevoxels.size(); i++)
     {
       int depth= 1<<((int(iterations())-1)-insidevoxels[i].depth);
-      
+
       int startx= insidevoxels[i].x*depth;
       int starty= insidevoxels[i].y*depth;
       int startz= insidevoxels[i].z*depth;
@@ -625,31 +625,31 @@ int main(int argc, char ** argv)
       int endz= (insidevoxels[i].z+1)*depth;
 
       for( int x=startx; x< endx; x++)
-	{
-	  for( int y=starty; y< endy; y++)
-	    {
-	      for( int z=startz; z< endz; z++)
-		{
-		  voxint.set( x,y,z, true);
+        {
+          for( int y=starty; y< endy; y++)
+            {
+              for( int z=startz; z< endz; z++)
+                {
+                  voxint.set( x,y,z, true);
 
-		  edges1.flip(x,y,z);
-		  edges1.flip(x,y,z+1);
-		  
-		  edges2.flip(x,y,z);
-		  edges2.flip(x,y+1,z);
-		  
-		  edges3.flip(x,y,z);
-		  edges3.flip(x+1,y,z);
-		}
-	    }
-	}
+                  edges1.flip(x,y,z);
+                  edges1.flip(x,y,z+1);
+
+                  edges2.flip(x,y,z);
+                  edges2.flip(x,y+1,z);
+
+                  edges3.flip(x,y,z);
+                  edges3.flip(x+1,y,z);
+                }
+            }
+        }
     }
 
-  cerr << "Clearing up..." << endl;
+  vcl_cerr << "Clearing up..." << vcl_endl;
   voxels.clear();
   insidevoxels.clear();
 
-  cerr << "Output VRML..." << endl;
+  vcl_cerr << "Output VRML..." << vcl_endl;
 
   vbl_sparse_array_1d<int>      indexlist;
   vcl_vector<vnl_double_3 *> points;
@@ -657,223 +657,223 @@ int main(int argc, char ** argv)
   //  CoolArrayP<vnl_double_3 *> points;
   //  CoolArray<vnl_int_3>       faces;
 
-  cerr << "z - direction" << endl;
+  vcl_cerr << "z - direction" << vcl_endl;
 
   // z direction
   for( int x=0; x< size; x++)
     {
       for( int y=0; y< size; y++)
-	{
-	  for( int z=1; z< size; z++)
-	    {
-	      if( edges1(x,y,z))
-		{
-		  int i[4];
-		  int ii[4];
+        {
+          for( int z=1; z< size; z++)
+            {
+              if( edges1(x,y,z))
+                {
+                  int i[4];
+                  int ii[4];
 
-		  for( int k=0; k<4; k++)
-		    {
-		      int q1=0,q2=0,q3=0;
+                  for( int k=0; k<4; k++)
+                    {
+                      int q1=0,q2=0,q3=0;
 
-		      switch( k)
-			{
-			case 0:
-			  {
-			    break;
-			  }
-			case 1:
-			  {
-			    q1=1;
-			    break;
-			  }
-			case 2:
-			  {
-			    q1=1;q2=1;
-			    break;
-			  }
-			case 3:
-			  {
-			    q2=1;
-			    break;
-			  }
-			}
+                      switch( k)
+                        {
+                        case 0:
+                          {
+                            break;
+                          }
+                        case 1:
+                          {
+                            q1=1;
+                            break;
+                          }
+                        case 2:
+                          {
+                            q1=1;q2=1;
+                            break;
+                          }
+                        case 3:
+                          {
+                            q2=1;
+                            break;
+                          }
+                        }
 
-		      i[k]= voxmap.GetCornerIndex( x,y,z, q1,q2,q3, int(iterations())-1);
+                      i[k]= voxmap.GetCornerIndex( x,y,z, q1,q2,q3, int(iterations())-1);
 
-		      if( !indexlist.fullp( i[k]))
-			{
-			  points.push_back( voxmap.GetCorner( x,y,z, q1,q2,q3, int(iterations())-1));
-			  indexlist[ i[k]]= points.size()-1;
-			  ii[k]= points.size()-1;
-			}
-		      else
-			ii[k]= indexlist[ i[k]];		      
-		    }
+                      if( !indexlist.fullp( i[k]))
+                        {
+                          points.push_back( voxmap.GetCorner( x,y,z, q1,q2,q3, int(iterations())-1));
+                          indexlist[ i[k]]= points.size()-1;
+                          ii[k]= points.size()-1;
+                        }
+                      else
+                        ii[k]= indexlist[ i[k]];
+                    }
 
-		  if( voxint( x,y,z))
-		    {
-		      faces.push_back( vnl_int_3( ii[2], ii[1], ii[0]));
-		      faces.push_back( vnl_int_3( ii[3], ii[2], ii[0]));		    
-		    }
-		  else
-		    {
-		      faces.push_back( vnl_int_3( ii[0], ii[1], ii[2]));
-		      faces.push_back( vnl_int_3( ii[0], ii[2], ii[3]));
+                  if( voxint( x,y,z))
+                    {
+                      faces.push_back( vnl_int_3( ii[2], ii[1], ii[0]));
+                      faces.push_back( vnl_int_3( ii[3], ii[2], ii[0]));
+                    }
+                  else
+                    {
+                      faces.push_back( vnl_int_3( ii[0], ii[1], ii[2]));
+                      faces.push_back( vnl_int_3( ii[0], ii[2], ii[3]));
 
-		    }
-		}
-	    }
-	}
+                    }
+                }
+            }
+        }
     }
 
-  cerr << "y - direction" << endl;
+  vcl_cerr << "y - direction" << vcl_endl;
 
   // y direction
   for( int x=0; x< size; x++)
     {
       for( int y=1; y< size; y++)
-	{
-	  for( int z=0; z< size; z++)
-	    {
-	      if( edges2(x,y,z))
-		{
-		  int i[4];
-		  int ii[4];
+        {
+          for( int z=0; z< size; z++)
+            {
+              if( edges2(x,y,z))
+                {
+                  int i[4];
+                  int ii[4];
 
-		  for( int k=0; k<4; k++)
-		    {
-		      int q1=0,q2=0,q3=0;
+                  for( int k=0; k<4; k++)
+                    {
+                      int q1=0,q2=0,q3=0;
 
-		      switch( k)
-			{
-			case 0:
-			  {
-			    break;
-			  }
-			case 1:
-			  {
-			    q1=1;
-			    break;
-			  }
-			case 2:
-			  {
-			    q1=1;q2=1;
-			    break;
-			  }
-			case 3:
-			  {
-			    q2=1;
-			    break;
-			  }
-			}
+                      switch( k)
+                        {
+                        case 0:
+                          {
+                            break;
+                          }
+                        case 1:
+                          {
+                            q1=1;
+                            break;
+                          }
+                        case 2:
+                          {
+                            q1=1;q2=1;
+                            break;
+                          }
+                        case 3:
+                          {
+                            q2=1;
+                            break;
+                          }
+                        }
 
-		      i[k]= voxmap.GetCornerIndex( x,y,z, q1,q3,q2, int(iterations())-1);
+                      i[k]= voxmap.GetCornerIndex( x,y,z, q1,q3,q2, int(iterations())-1);
 
-		      if( !indexlist.fullp( i[k]))
-			{
-			  points.push_back( voxmap.GetCorner( x,y,z, q1,q3,q2, int(iterations())-1));
-			  indexlist[ i[k]]= points.size()-1;
-			  ii[k]= points.size()-1;
-			}
-		      else
-			ii[k]= indexlist[ i[k]];		      
-		    }
+                      if( !indexlist.fullp( i[k]))
+                        {
+                          points.push_back( voxmap.GetCorner( x,y,z, q1,q3,q2, int(iterations())-1));
+                          indexlist[ i[k]]= points.size()-1;
+                          ii[k]= points.size()-1;
+                        }
+                      else
+                        ii[k]= indexlist[ i[k]];
+                    }
 
-		  if( voxint( x,y,z))
-		    {
-		      faces.push_back( vnl_int_3( ii[0], ii[1], ii[2]));
-		      faces.push_back( vnl_int_3( ii[0], ii[2], ii[3]));
-		    }
-		  else
-		    {
-		      faces.push_back( vnl_int_3( ii[2], ii[1], ii[0]));
-		      faces.push_back( vnl_int_3( ii[3], ii[2], ii[0]));
-		    }
-		}
-	    }
-	}
+                  if( voxint( x,y,z))
+                    {
+                      faces.push_back( vnl_int_3( ii[0], ii[1], ii[2]));
+                      faces.push_back( vnl_int_3( ii[0], ii[2], ii[3]));
+                    }
+                  else
+                    {
+                      faces.push_back( vnl_int_3( ii[2], ii[1], ii[0]));
+                      faces.push_back( vnl_int_3( ii[3], ii[2], ii[0]));
+                    }
+                }
+            }
+        }
     }
 
-  cerr << "x - direction" << endl;
+  vcl_cerr << "x - direction" << vcl_endl;
 
   // x direction
   for( int x=1; x< size; x++)
     {
       for( int y=0; y< size; y++)
-	{
-	  for( int z=0; z< size; z++)
-	    {
-	      if( edges3(x,y,z))
-		{
-		  int i[4];
-		  int ii[4];
+        {
+          for( int z=0; z< size; z++)
+            {
+              if( edges3(x,y,z))
+                {
+                  int i[4];
+                  int ii[4];
 
-		  for( int k=0; k<4; k++)
-		    {
-		      int q1=0,q2=0,q3=0;
+                  for( int k=0; k<4; k++)
+                    {
+                      int q1=0,q2=0,q3=0;
 
-		      switch( k)
-			{
-			case 0:
-			  {
-			    break;
-			  }
-			case 1:
-			  {
-			    q1=1;
-			    break;
-			  }
-			case 2:
-			  {
-			    q1=1;q2=1;
-			    break;
-			  }
-			case 3:
-			  {
-			    q2=1;
-			    break;
-			  }
-			}
+                      switch( k)
+                        {
+                        case 0:
+                          {
+                            break;
+                          }
+                        case 1:
+                          {
+                            q1=1;
+                            break;
+                          }
+                        case 2:
+                          {
+                            q1=1;q2=1;
+                            break;
+                          }
+                        case 3:
+                          {
+                            q2=1;
+                            break;
+                          }
+                        }
 
-		      i[k]= voxmap.GetCornerIndex( x,y,z, q3,q2,q1, int(iterations())-1);
+                      i[k]= voxmap.GetCornerIndex( x,y,z, q3,q2,q1, int(iterations())-1);
 
-		      if( !indexlist.fullp( i[k]))
-			{
-			  points.push_back( voxmap.GetCorner( x,y,z, q3,q2,q1, int(iterations())-1));
-			  indexlist[ i[k]]= points.size()-1;
-			  ii[k]= points.size()-1;
-			}
-		      else
-			ii[k]= indexlist[ i[k]];		      
-		    }
+                      if( !indexlist.fullp( i[k]))
+                        {
+                          points.push_back( voxmap.GetCorner( x,y,z, q3,q2,q1, int(iterations())-1));
+                          indexlist[ i[k]]= points.size()-1;
+                          ii[k]= points.size()-1;
+                        }
+                      else
+                        ii[k]= indexlist[ i[k]];
+                    }
 
-		  if( voxint( x,y,z))
-		    {
-		      faces.push_back( vnl_int_3( ii[0], ii[1], ii[2]));
-		      faces.push_back( vnl_int_3( ii[0], ii[2], ii[3]));
-		    }
-		  else
-		    {
-		      faces.push_back( vnl_int_3( ii[2], ii[1], ii[0]));
-		      faces.push_back( vnl_int_3( ii[3], ii[2], ii[0]));
-		    }
-		}
-	    }
-	}
+                  if( voxint( x,y,z))
+                    {
+                      faces.push_back( vnl_int_3( ii[0], ii[1], ii[2]));
+                      faces.push_back( vnl_int_3( ii[0], ii[2], ii[3]));
+                    }
+                  else
+                    {
+                      faces.push_back( vnl_int_3( ii[2], ii[1], ii[0]));
+                      faces.push_back( vnl_int_3( ii[3], ii[2], ii[0]));
+                    }
+                }
+            }
+        }
     }
 
   ///////////////////////////////////////////////////////////////////////////
 
-  ofstream vfout(( char *) outputvrml());
+  vcl_ofstream vfout(( char *) outputvrml());
   assert( vfout.good());
-  
+
   vfout << "#VRML V1.0 ascii\n\nSeparator {\nCoordinate3 { point [\n";
 
   for( int i=0; i< points.size(); i++)
     {
       vfout << (*points[i])[0] << " "
-	    << (*points[i])[1] << " "
-	    << (*points[i])[2] << "," << endl;
+            << (*points[i])[1] << " "
+            << (*points[i])[2] << "," << vcl_endl;
     }
 
   vfout << "]}\nIndexedFaceSet { coordIndex [\n";
@@ -881,11 +881,11 @@ int main(int argc, char ** argv)
   for( int i=0; i< faces.size(); i++)
     {
       vfout << faces[i][0] << ", "
-	    << faces[i][1] << ", "
-	    << faces[i][2] << ", -1," << endl;
+            << faces[i][1] << ", "
+            << faces[i][2] << ", -1," << vcl_endl;
     }
 
-  vfout << "]}}" << endl;
+  vfout << "]}}" << vcl_endl;
 
   vfout.close();
 
