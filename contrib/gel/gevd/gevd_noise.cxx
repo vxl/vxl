@@ -35,6 +35,7 @@
 
 //#include <cool/Timer.h>
 //#include <iostream.h>
+#include <vcl_cmath.h> // for fabs()
 
 #include "gevd_pixel.h"
 #include "gevd_float_operators.h"
