@@ -134,17 +134,17 @@ class rgrl_const_cast
   //:
   operator const ToType() const
   {
-    return const_cast<const ToType>(ptr);
+    return reinterpret_cast<const ToType>(const_cast<void*>(ptr));
   }
 
   //:
   const ToType operator->() const
   {
-    return const_cast<const ToType>(ptr);
+    return reinterpret_cast<const ToType>(const_cast<void*>(ptr));
   }
 
  private:
-  const void *ptr;
+  void *ptr;
 };
 
 #endif // rgrl_cast_h_
