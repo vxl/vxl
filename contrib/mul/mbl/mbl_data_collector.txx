@@ -175,7 +175,7 @@ unsigned long MergeAllData(mbl_data_collector<T> &dest,
 }
 
 #define MBL_DATA_COLLECTOR_INSTANTIATE(T) \
-template class mbl_data_wrapper< T >; \
+/* template class mbl_data_wrapper< T >; */ \
 template void vsl_add_to_binary_loader(const mbl_data_collector<T>& b); \
 template void vsl_b_write(vsl_b_ostream& bfs, const mbl_data_collector<T>& b); \
 template void vsl_b_write(vsl_b_ostream& bfs, const mbl_data_collector<T>* b); \
