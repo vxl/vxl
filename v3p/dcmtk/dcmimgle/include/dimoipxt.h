@@ -21,10 +21,10 @@
  *
  *  Purpose: DicomMonochromeInputPixelTemplate (Header)
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:10 $
+ *  Last Update:      $Author: peter_vanroose $
+ *  Update Date:      $Date: 2004/08/04 10:36:46 $
  *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
+ *  CVS/RCS Revision: $Revision: 1.2 $
  *  Status:           $State: Exp $
  *
  *  CVS/RCS Log at end of file
@@ -65,24 +65,24 @@ class DiMonoInputPixelTemplate
       : DiMonoPixelTemplate<T3>(pixel, modality)
     {
         /* erase empty part of the buffer (=blacken the background) */
-        if ((Data != NULL) && (InputCount < Count))
-            OFBitmanipTemplate<T3>::zeroMem(Data + InputCount, Count - InputCount);
-        if ((pixel != NULL) && (Count > 0))
+        if ((this->Data != NULL) && (this->InputCount < this->Count))
+            OFBitmanipTemplate<T3>::zeroMem(this->Data + this->InputCount, this->Count - this->InputCount);
+        if ((pixel != NULL) && (this->Count > 0))
         {
             // check whether to apply any modality transform
-            if ((Modality != NULL) && Modality->hasLookupTable() && (bitsof(T1) <= MAX_TABLE_ENTRY_SIZE))
+            if ((this->Modality != NULL) && this->Modality->hasLookupTable() && (bitsof(T1) <= MAX_TABLE_ENTRY_SIZE))
             {
                 modlut(pixel);
                 // ignore modality LUT min/max values since the image does not necessarily have to use all LUT entries
-                determineMinMax();
+                this->determineMinMax();
             }
-            else if ((Modality != NULL) && Modality->hasRescaling())
+            else if ((this->Modality != NULL) && this->Modality->hasRescaling())
             {
-                rescale(pixel, Modality->getRescaleSlope(), Modality->getRescaleIntercept());
-                determineMinMax((T3)Modality->getMinValue(), (T3)Modality->getMaxValue());
+                rescale(pixel, this->Modality->getRescaleSlope(), this->Modality->getRescaleIntercept());
+                this->determineMinMax((T3)this->Modality->getMinValue(), (T3)this->Modality->getMaxValue());
             } else {
                 rescale(pixel);                     // "copy" or reference pixel data
-                determineMinMax((T3)Modality->getMinValue(), (T3)Modality->getMaxValue());
+                this->determineMinMax((T3)this->Modality->getMinValue(), (T3)this->Modality->getMaxValue());
             }
         }
     }
@@ -107,7 +107,7 @@ class DiMonoInputPixelTemplate
                                    const unsigned long ocnt)
     {
         int result = 0;
-        if ((sizeof(T1) <= 2) && (InputCount > 3 * ocnt))                     // optimization criteria
+        if ((sizeof(T1) <= 2) && (this->InputCount > 3 * ocnt))                     // optimization criteria
         {                                                                     // use LUT for optimization
             lut = new T3[ocnt];
             if (lut != NULL)
@@ -132,19 +132,19 @@ class DiMonoInputPixelTemplate
     void modlut(DiInputPixel *input)
     {
         const T1 *pixel = (const T1 *)input->getData();
-        if ((pixel != NULL) && (Modality != NULL))
+        if ((pixel != NULL) && (this->Modality != NULL))
         {
-            const DiLookupTable *mlut = Modality->getTableData();
+            const DiLookupTable *mlut = this->Modality->getTableData();
             if (mlut != NULL)
             {
-                const int useInputBuffer = (sizeof(T1) == sizeof(T3)) && (Count <= input->getCount());
+                const int useInputBuffer = (sizeof(T1) == sizeof(T3)) && (this->Count <= input->getCount());
                 if (useInputBuffer)                            // do not copy pixel data, reference them!
                 {
-                    Data = (T3 *)input->getData();
+                    this->Data = (T3 *)input->getData();
                     input->removeDataReference();              // avoid double deletion
                 } else
-                    Data = new T3[Count];
-                if (Data != NULL)
+                    this->Data = new T3[this->Count];
+                if (this->Data != NULL)
                 {
 #ifdef DEBUG
                     if (DicomImageClass::checkDebugLevel(DicomImageClass::DL_Informationals))
@@ -159,7 +159,7 @@ class DiMonoInputPixelTemplate
                     const T3 firstvalue = (T3)mlut->getFirstValue();
                     const T3 lastvalue = (T3)mlut->getLastValue();
                     register const T1 *p = pixel + input->getPixelStart();
-                    register T3 *q = Data;
+                    register T3 *q = this->Data;
                     register unsigned long i;
                     T3 *lut = NULL;
                     const unsigned long ocnt = (unsigned long)input->getAbsMaxRange();    // number of LUT entries
@@ -178,13 +178,13 @@ class DiMonoInputPixelTemplate
                                 *(q++) = (T3)mlut->getValue(value);
                         }
                         const T3 *lut0 = lut - (T2)absmin;                                // points to 'zero' entry
-                        q = Data;
-                        for (i = InputCount; i != 0; i--)                                 // apply LUT
+                        q = this->Data;
+                        for (i = this->InputCount; i != 0; i--)                                 // apply LUT
                             *(q++) = *(lut0 + (*(p++)));
                     }
                     if (lut == NULL)                                                      // use "normal" transformation
                     {
-                        for (i = InputCount; i != 0; i--)
+                        for (i = this->InputCount; i != 0; i--)
                         {
                             value = (T2)(*(p++));
                             if (value <= firstentry)
@@ -214,23 +214,23 @@ class DiMonoInputPixelTemplate
         const T1 *pixel = (const T1 *)input->getData();
         if (pixel != NULL)
         {
-            const int useInputBuffer = (sizeof(T1) == sizeof(T3)) && (Count <= input->getCount());
+            const int useInputBuffer = (sizeof(T1) == sizeof(T3)) && (this->Count <= input->getCount());
             if (useInputBuffer)
             {                                              // do not copy pixel data, reference them!
-                Data = (T3 *)input->getData();
+                this->Data = (T3 *)input->getData();
                 input->removeDataReference();              // avoid double deletion
             } else
-                Data = new T3[Count];
-            if (Data != NULL)
+                this->Data = new T3[this->Count];
+            if (this->Data != NULL)
             {
-                register T3 *q = Data;
+                register T3 *q = this->Data;
                 register unsigned long i;
                 if ((slope == 1.0) && (intercept == 0.0))
                 {
                     if (!useInputBuffer)
                     {
                         register const T1 *p = pixel + input->getPixelStart();
-                        for (i = InputCount; i != 0; i--)   // copy pixel data: can't use copyMem because T1 isn't always equal to T3
+                        for (i = this->InputCount; i != 0; i--)   // copy pixel data: can't use copyMem because T1 isn't always equal to T3
                             *(q++) = (T3)*(p++);
                     }
                 } else {
@@ -263,23 +263,23 @@ class DiMonoInputPixelTemplate
                             }
                         }
                         const T3 *lut0 = lut - (T2)absmin;                                // points to 'zero' entry
-                        q = Data;
-                        for (i = InputCount; i != 0; i--)                                 // apply LUT
+                        q = this->Data;
+                        for (i = this->InputCount; i != 0; i--)                                 // apply LUT
                             *(q++) = *(lut0 + (*(p++)));
                     }
                     if (lut == NULL)                                                      // use "normal" transformation
                     {
                         if (slope == 1.0)
                         {
-                            for (i = Count; i != 0; i--)
+                            for (i = this->Count; i != 0; i--)
                                 *(q++) = (T3)((double)*(p++) + intercept);
                         } else {
                             if (intercept == 0.0)
                             {
-                                for (i = InputCount; i != 0; i--)
+                                for (i = this->InputCount; i != 0; i--)
                                     *(q++) = (T3)((double)*(p++) * slope);
                             } else {
-                                for (i = InputCount; i != 0; i--)
+                                for (i = this->InputCount; i != 0; i--)
                                     *(q++) = (T3)((double)*(p++) * slope + intercept);
                             }
                         }
@@ -299,6 +299,10 @@ class DiMonoInputPixelTemplate
  *
  * CVS/RCS Log:
  * Log: dimoipxt.h
+ * Revision 1.1  2004/01/14 04:01:10  amithaperera
+ * Add better DICOM support by wrapping DCMTK, and add a stripped down
+ * version of DCMTK to v3p. Add more DICOM test cases.
+ *
  * Revision 1.25  2002/10/21 10:13:51  joergr
  * Corrected wrong calculation of min/max pixel value in cases where the
  * stored pixel data exceeds the expected size.

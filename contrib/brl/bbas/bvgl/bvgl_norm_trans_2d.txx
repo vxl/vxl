@@ -64,36 +64,37 @@ bvgl_norm_trans_2d<T>::~bvgl_norm_trans_2d()
 // == OPERATIONS ==
 //----------------------------------------------------------------
 //  Get the normalizing transform for a set of points
-// 1) Compute the center of gravity and form the normalizing
-//    transformation matrix
-// 2) Transform the point set to a temporary collection
-// 3) Compute the average point radius
-// 4) Complete the normalizing transform
+// - Compute the center of gravity and form the normalizing transformation matrix
+// - Transform the point set to a temporary collection
+// - Compute the average point radius
+// - Complete the normalizing transform
 template <class T>
 bool bvgl_norm_trans_2d<T>::
 compute_from_points(vcl_vector<vgl_homg_point_2d<T> > const& points)
- {
-   T cx, cy, radius;
-   this->center_of_mass(points, cx, cy);
-   t12_matrix_.set_identity();
-   t12_matrix_.put(0,2, -cx);    t12_matrix_.put(1,2, -cy);
-   vcl_vector<vgl_homg_point_2d<T> > temp;
-   typedef typename vcl_vector<vgl_homg_point_2d<T> >::const_iterator iter;
-   for (iter pit = points.begin(); pit != points.end(); pit++)
-     {
-       vgl_homg_point_2d<T> p((*this)(*pit));
-       temp.push_back(p);
-     }
-   //Points might be coincident
-   if (!this->scale_xyroot2(temp, radius))
-     return false;
-   T scale = 1/radius;
-   t12_matrix_.put(0,0, scale);
-   t12_matrix_.put(1,1, scale);
-   t12_matrix_.put(0,2, -cx*scale);
-   t12_matrix_.put(1,2, -cy*scale);
-   return true;
- }
+{
+  T cx, cy;
+  this->center_of_mass(points, cx, cy);
+  this->t12_matrix_.set_identity();
+  this->t12_matrix_.put(0,2, -cx);
+  this->t12_matrix_.put(1,2, -cy);
+  vcl_vector<vgl_homg_point_2d<T> > temp;
+  typedef typename vcl_vector<vgl_homg_point_2d<T> >::const_iterator iter;
+  for (iter pit = points.begin(); pit != points.end(); pit++)
+    {
+      vgl_homg_point_2d<T> p((*this)(*pit));
+      temp.push_back(p);
+    }
+  //Points might be coincident
+  T radius;
+  if (!this->scale_xyroot2(temp, radius))
+    return false;
+  T scale = 1/radius;
+  this->t12_matrix_.put(0,0, scale);
+  this->t12_matrix_.put(1,1, scale);
+  this->t12_matrix_.put(0,2, -cx*scale);
+  this->t12_matrix_.put(1,2, -cy*scale);
+  return true;
+}
 
 template <class T>
 bool bvgl_norm_trans_2d<T>::
@@ -134,6 +135,7 @@ center_of_mass(vcl_vector<vgl_homg_point_2d<T> > const& in, T& cx, T& cy)
   cx = cog_x;
   cy = cog_y;
 }
+
 //-------------------------------------------------------------------
 // Find the mean distance of the input pointset. Assumed to have zero mean
 //

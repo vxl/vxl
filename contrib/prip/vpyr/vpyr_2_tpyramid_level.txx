@@ -37,7 +37,7 @@ void vpyr_2_tpyramid_level<V,E,F,D>::contraction(const contraction_kernel &arg_k
   if (l!=NULL)
   {
     int level=l->index() ;
-    int ld=nb_darts(),
+    int ld=this->nb_darts(),
         lv=nb_vertices(),
         le=nb_edges(), id ;
 
@@ -58,7 +58,7 @@ void vpyr_2_tpyramid_level<V,E,F,D>::contraction(const contraction_kernel &arg_k
       id=e->sequence_index() ;
 #endif // 0
       --le ;
-      edge_sequence::swap(id,le) ;
+      this->edge_sequence::swap(id,le) ;
 
       id=arg_kernel.get_element_index(i) ;
       vertex_pointer v=get_vertex_pointer(id) ;
@@ -78,15 +78,15 @@ void vpyr_2_tpyramid_level<V,E,F,D>::contraction(const contraction_kernel &arg_k
       d->set_last_level(level) ;
       id=d->sequence_index() ;
       --ld ;
-      dart_sequence::swap(id,ld) ;
+      vpyr_2_pyramid_level<D>::dart_sequence::swap(id,ld) ;
 
       id=vmap_2_map_alpha(d)->sequence_index() ;
       --ld ;
-      dart_sequence::swap(id,ld) ;
+      vpyr_2_pyramid_level<D>::dart_sequence::swap(id,ld) ;
     }
-    dart_sequence::resize(ld) ;
-    edge_sequence::resize(le) ;
-    vertex_sequence::resize(lv) ;
+    vpyr_2_pyramid_level<D>::dart_sequence::resize(ld) ;
+    this->edge_sequence::resize(le) ;
+    this->vertex_sequence::resize(lv) ;
   }
 }
 
@@ -97,7 +97,7 @@ void vpyr_2_tpyramid_level<V,E,F,D>::removal(const removal_kernel &arg_kernel)
   if (l!=NULL)
   {
     int level=l->index() ;
-    int ld=nb_darts(),
+    int ld=this->nb_darts(),
         lv=nb_faces(),
         le=nb_edges(), id ;
 
@@ -118,7 +118,7 @@ void vpyr_2_tpyramid_level<V,E,F,D>::removal(const removal_kernel &arg_kernel)
       id=e->sequence_index() ;
 #endif // 0
       --le ;
-      edge_sequence::swap(id,le) ;
+      this->edge_sequence::swap(id,le) ;
 
       id=arg_kernel.get_element_index(i) ;
       face_pointer v=get_face_pointer(id) ;
@@ -130,7 +130,7 @@ void vpyr_2_tpyramid_level<V,E,F,D>::removal(const removal_kernel &arg_kernel)
       id=v->sequence_index() ;
 #endif // 0
       --lv ;
-      face_sequence::swap(id,lv) ;
+      this->face_sequence::swap(id,lv) ;
     }
     for (itk=arg_kernel.begin(); itk!=arg_kernel.end(); ++itk)
     {
@@ -138,11 +138,11 @@ void vpyr_2_tpyramid_level<V,E,F,D>::removal(const removal_kernel &arg_kernel)
       d->set_last_level(level) ;
       id=d->sequence_index() ;
       --ld ;
-      dart_sequence::swap(id,ld) ;
+      vpyr_2_pyramid_level<D>::dart_sequence::swap(id,ld) ;
 
       id=ad->sequence_index() ;
       --ld ;
-      dart_sequence::swap(id,ld) ;
+      vpyr_2_pyramid_level<D>::dart_sequence::swap(id,ld) ;
     }
     for (int i=le; i<nb_edges(); i++)
     {
@@ -153,9 +153,9 @@ void vpyr_2_tpyramid_level<V,E,F,D>::removal(const removal_kernel &arg_kernel)
       get_face_pointer(i)->set_last_level(level) ;
     }
 
-    dart_sequence::resize(ld) ;
-    edge_sequence::resize(le) ;
-    face_sequence::resize(lv) ;
+    vpyr_2_pyramid_level<D>::dart_sequence::resize(ld) ;
+    this->edge_sequence::resize(le) ;
+    this->face_sequence::resize(lv) ;
   }
 }
 

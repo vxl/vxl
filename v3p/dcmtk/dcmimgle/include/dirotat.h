@@ -22,9 +22,9 @@
  *  Purpose: DicomRotateTemplate (Header)
  *
  *  Last Update:      $Author: peter_vanroose $
- *  Update Date:      $Date: 2004/05/28 17:59:56 $
+ *  Update Date:      $Date: 2004/08/04 10:36:46 $
  *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.2 $
+ *  CVS/RCS Revision: $Revision: 1.3 $
  *  Status:           $State: Exp $
  *
  *  CVS/RCS Log at end of file
@@ -78,8 +78,8 @@ class DiRotateTemplate
     {
         if (pixel != NULL)
         {
-            Planes = pixel->getPlanes();
-            if ((pixel->getCount() > 0) && (Planes > 0) &&
+            this->Planes = pixel->getPlanes();
+            if ((pixel->getCount() > 0) && (this->Planes > 0) &&
                 (pixel->getCount() == (unsigned long)src_cols * (unsigned long)src_rows * frames))
             {
                 if (degree == 90)
@@ -162,21 +162,21 @@ class DiRotateTemplate
             register const T *p;
             register T *q;
             register T *r;
-            const unsigned long count = (unsigned long)Dest_X * (unsigned long)Dest_Y;
-            for (int j = 0; j < Planes; j++)
+            const unsigned long count = (unsigned long)this->Dest_X * (unsigned long)this->Dest_Y;
+            for (int j = 0; j < this->Planes; j++)
             {
                 p = src[j];
                 r = dest[j];
-                for (unsigned long f = Frames; f != 0; f--)
+                for (unsigned long f = this->Frames; f != 0; f--)
                 {
                     r += count;
-                    for (x = Dest_X; x != 0; x--)
+                    for (x = this->Dest_X; x != 0; x--)
                     {
                         q = r - x;
-                        for (y = Dest_Y; y != 0; y--)
+                        for (y = this->Dest_Y; y != 0; y--)
                         {
                             *q = *p++;
-                            q -= Dest_X;
+                            q -= this->Dest_X;
                         }
                     }
                 }
@@ -199,20 +199,20 @@ class DiRotateTemplate
             register const T *p;
             register T *q;
             register T *r;
-            const unsigned long count = (unsigned long)Dest_X * (unsigned long)Dest_Y;
-            for (int j = 0; j < Planes; j++)
+            const unsigned long count = (unsigned long)this->Dest_X * (unsigned long)this->Dest_Y;
+            for (int j = 0; j < this->Planes; j++)
             {
                 p = src[j];
                 r = dest[j];
-                for (unsigned long f = Frames; f != 0; f--)
+                for (unsigned long f = this->Frames; f != 0; f--)
                 {
-                    for (x = Dest_X; x != 0; x--)
+                    for (x = this->Dest_X; x != 0; x--)
                     {
                         q = r + x - 1;
-                        for (y = Dest_Y; y != 0; y--)
+                        for (y = this->Dest_Y; y != 0; y--)
                         {
                             *q = *p++;
-                            q += Dest_X;
+                            q += this->Dest_X;
                         }
                     }                    
                     r += count;
@@ -234,12 +234,12 @@ class DiRotateTemplate
             register unsigned long i;
             register const T *p;
             register T *q;
-            const unsigned long count = (unsigned long)Dest_X * (unsigned long)Dest_Y;
-            for (int j = 0; j < Planes; j++)
+            const unsigned long count = (unsigned long)this->Dest_X * (unsigned long)this->Dest_Y;
+            for (int j = 0; j < this->Planes; j++)
             {
                 p = src[j];
                 q = dest[j];
-                for (unsigned long f = Frames; f != 0; f--)
+                for (unsigned long f = this->Frames; f != 0; f--)
                 {
                     q += count;
                     for (i = count; i != 0; i--)
@@ -258,7 +258,7 @@ class DiRotateTemplate
     */
     inline void rotateLeft(T *data[])
     {
-        const unsigned long count = (unsigned long)Dest_X * (unsigned long)Dest_Y;
+        const unsigned long count = (unsigned long)this->Dest_X * (unsigned long)this->Dest_Y;
         T *temp = new T[count];
         if (temp != NULL)
         {
@@ -267,21 +267,21 @@ class DiRotateTemplate
             register const T *p;
             register T *q;
             register T *r;
-            for (int j = 0; j < Planes; j++)
+            for (int j = 0; j < this->Planes; j++)
             {
                 r = data[j];
-                for (unsigned long f = Frames; f != 0; f--)
+                for (unsigned long f = this->Frames; f != 0; f--)
                 {
                     OFBitmanipTemplate<T>::copyMem((const T *)r, temp, count);      // create temporary copy of current frame
                     p = temp;
                     r += count;
-                    for (x = Dest_X; x != 0; x--)
+                    for (x = this->Dest_X; x != 0; x--)
                     {
                         q = r - x;
-                        for (y = Dest_Y; y != 0; y--)
+                        for (y = this->Dest_Y; y != 0; y--)
                         {
                             *q = *p++;
-                            q -= Dest_X;
+                            q -= this->Dest_X;
                         }
                     }
                 }
@@ -296,7 +296,7 @@ class DiRotateTemplate
     */
     inline void rotateRight(T *data[])
     {
-        const unsigned long count = (unsigned long)Dest_X * (unsigned long)Dest_Y;
+        const unsigned long count = (unsigned long)this->Dest_X * (unsigned long)this->Dest_Y;
         T *temp = new T[count];
         if (temp != NULL)
         {
@@ -305,20 +305,20 @@ class DiRotateTemplate
             register const T *p;
             register T *q;
             register T *r;
-            for (int j = 0; j < Planes; j++)
+            for (int j = 0; j < this->Planes; j++)
             {
                 r = data[j];
-                for (unsigned long f = Frames; f != 0; f--)
+                for (unsigned long f = this->Frames; f != 0; f--)
                 {
                     OFBitmanipTemplate<T>::copyMem((const T *)r, temp, count);      // create temporary copy of current frame
                     p = temp;
-                    for (x = Dest_X; x != 0; x--)
+                    for (x = this->Dest_X; x != 0; x--)
                     {
                         q = r + x - 1;
-                        for (y = Dest_Y; y != 0; y--)
+                        for (y = this->Dest_Y; y != 0; y--)
                         {
                             *q = *p++;
-                            q += Dest_X;
+                            q += this->Dest_X;
                         }
                     }                    
                     r += count;
@@ -339,11 +339,11 @@ class DiRotateTemplate
         register T *q;
         register T t;
         T *s;
-        const unsigned long count = (unsigned long)Dest_X * (unsigned long)Dest_Y;
-        for (int j = 0; j < Planes; j++)
+        const unsigned long count = (unsigned long)this->Dest_X * (unsigned long)this->Dest_Y;
+        for (int j = 0; j < this->Planes; j++)
         {
             s = data[j];
-            for (unsigned long f = Frames; f != 0; f--)
+            for (unsigned long f = this->Frames; f != 0; f--)
             {               
                 p = s;
                 q = s + count;
@@ -366,6 +366,9 @@ class DiRotateTemplate
  *
  * CVS/RCS Log:
  * Log: dirotat.h
+ * Revision 1.2  2004/05/28 17:59:56  peter_vanroose
+ * typo corrected
+ *
  * Revision 1.1  2004/01/14 04:01:10  amithaperera
  * Add better DICOM support by wrapping DCMTK, and add a stripped down
  * version of DCMTK to v3p. Add more DICOM test cases.

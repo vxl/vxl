@@ -8,7 +8,8 @@
 // \date 06/05/2004
 //
 // \verbatim
-//  06 May 2004 Jocelyn Marchadier
+//  Modifications
+//   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -108,7 +109,7 @@ class vpyr_2_tpyramid : public vpyr_2_pyramid<TLevel>
   //: Returns "true" if the map empty.
   bool empty() const
   {
-    return level_.empty() ;
+    return this->level_.empty() ;
   }
 
   //: Initializes the sturcture of the combinatorial map from "stream".

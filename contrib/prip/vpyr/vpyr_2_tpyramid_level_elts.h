@@ -8,7 +8,8 @@
 // \date 06/05/2004
 //
 // \verbatim
-//  06 May 2004 Jocelyn Marchadier
+//  Modifications
+//   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
 #include "vpyr_2_pyramid_level_elts.h"
@@ -52,7 +53,7 @@ class vpyr_2_tpyramid_level_dart : public vpyr_2_pyramid_level_dart
 
  protected:
   //:
-  vpyr_2_tpyramid_base_dart* link() const {return (vpyr_2_tpyramid_base_dart*)link_ ;}
+  vpyr_2_tpyramid_base_dart* link() const {return (vpyr_2_tpyramid_base_dart*)this->link_ ;}
 };
 
 //:
@@ -87,17 +88,17 @@ class vmap_2_tpdl_dart : public vpyr_2_tpyramid_level_dart
   //:
   value_type & data()
   {
-    return link()->data(level_) ;
+    return link()->data(this->level_) ;
   }
 
   //:
   const value_type & data() const
   {
-    return link()->data(level_) ;
+    return link()->data(this->level_) ;
   }
 
   //:
-  base_type* link() const {return (base_type*)link_ ;}
+  base_type* link() const {return (base_type*)this->link_ ;}
 };
 
 //:
@@ -118,7 +119,7 @@ class vpyr_2_tpyramid_level_element_iterator : protected FD
   vpyr_2_tpyramid_level_element_iterator(const self_type &it)
     :it_(it.it_)
   {
-    level_=it.level() ;
+    this->level_=it.level() ;
     set_link() ;
   }
 
@@ -128,7 +129,7 @@ class vpyr_2_tpyramid_level_element_iterator : protected FD
   //:
   self_type & operator=(const self_type &it)
   {
-    level_=it.level() ;
+    this->level_=it.level() ;
     it_=it.reference() ;
     set_link() ;
     return *this ;
@@ -191,7 +192,7 @@ class vpyr_2_tpyramid_level_element_iterator : protected FD
   //:
   void set_link()
   {
-    link_=*it_ ;
+    this->link_=*it_ ;
   }
 
   //:
@@ -573,56 +574,56 @@ class vmap_2_tpdl_edge : public vpyr_2_tpyramid_level_edge
 inline const vpyr_2_tpyramid_level_edge vpyr_2_tpyramid_level_dart::edge() const
 {
   vpyr_2_tpyramid_level_edge tmp ;
-  tmp.set(&((vpyr_2_tpyramid_base_dart*)link_)->edge(level()),level()) ;
+  tmp.set(&((vpyr_2_tpyramid_base_dart*)this->link_)->edge(level()),level()) ;
   return tmp ;
 }
 
 inline const vpyr_2_tpyramid_level_vertex vpyr_2_tpyramid_level_dart::vertex() const
 {
   vpyr_2_tpyramid_level_vertex tmp ;
-  tmp.set(&((vpyr_2_tpyramid_base_dart*)link_)->vertex(level()),level()) ;
+  tmp.set(&((vpyr_2_tpyramid_base_dart*)this->link_)->vertex(level()),level()) ;
   return tmp ;
 }
 
 inline const vpyr_2_tpyramid_level_face vpyr_2_tpyramid_level_dart::face() const
 {
   vpyr_2_tpyramid_level_face tmp ;
-  tmp.set(&((vpyr_2_tpyramid_base_dart*)link_)->face(level()),level()) ;
+  tmp.set(&((vpyr_2_tpyramid_base_dart*)this->link_)->face(level()),level()) ;
   return tmp ;
 }
 
 inline vpyr_2_tpyramid_level_edge vpyr_2_tpyramid_level_dart::edge()
 {
   vpyr_2_tpyramid_level_edge tmp ;
-  tmp.set(&((vpyr_2_tpyramid_base_dart*)link_)->edge(level()),level()) ;
+  tmp.set(&((vpyr_2_tpyramid_base_dart*)this->link_)->edge(level()),level()) ;
   return tmp ;
 }
 
 inline vpyr_2_tpyramid_level_vertex vpyr_2_tpyramid_level_dart::vertex()
 {
   vpyr_2_tpyramid_level_vertex tmp ;
-  tmp.set(&((vpyr_2_tpyramid_base_dart*)link_)->vertex(level()),level()) ;
+  tmp.set(&((vpyr_2_tpyramid_base_dart*)this->link_)->vertex(level()),level()) ;
   return tmp ;
 }
 
 inline vpyr_2_tpyramid_level_face vpyr_2_tpyramid_level_dart::face()
 {
   vpyr_2_tpyramid_level_face tmp;
-  tmp.set(&((vpyr_2_tpyramid_base_dart*)link_)->face(level()),level()) ;
+  tmp.set(&((vpyr_2_tpyramid_base_dart*)this->link_)->face(level()),level()) ;
   return tmp ;
 }
 
 inline const vpyr_2_tpyramid_level_dart vpyr_2_tpyramid_level_edge::direct_dart() const
 {
   vpyr_2_tpyramid_level_dart tmp ;
-  tmp.set(const_cast<vpyr_2_tpyramid_base_dart*>(&link_->direct_dart(level())),level()) ;
+  tmp.set(const_cast<vpyr_2_tpyramid_base_dart*>(&this->link_->direct_dart(level())),level()) ;
   return tmp ;
 }
 
 inline const vpyr_2_tpyramid_level_dart vpyr_2_tpyramid_level_edge::inverse_dart() const
 {
   vpyr_2_tpyramid_level_dart tmp ;
-  tmp.set(const_cast<vpyr_2_tpyramid_base_dart*>(&link_->inverse_dart(level())),level()) ;
+  tmp.set(const_cast<vpyr_2_tpyramid_base_dart*>(&this->link_->inverse_dart(level())),level()) ;
   return tmp ;
 }
 

@@ -149,8 +149,8 @@ find_t(vgl_point_2d<Type> const&  p)
     return 0.5;
   }
 
-  double  x = p.x() - point1().x();
-  double  y = p.y() - point1().y();
+  double  x = p.x() - this->point1().x();
+  double  y = p.y() - this->point1().y();
   double  t = (x * dirx + y * diry) / s;
   return t;
 }
@@ -160,8 +160,8 @@ find_t(vgl_point_2d<Type> const&  p)
 template <class Type> vgl_point_2d<Type> vifa_imp_line<Type>::
 find_at_t(double  t)
 {
-  Type  x = (Type)(point1().x() + dx_ * t);
-  Type  y = (Type)(point1().y() + dy_ * t);
+  Type  x = (Type)(this->point1().x() + dx_ * t);
+  Type  y = (Type)(this->point1().y() + dy_ * t);
 
   vgl_point_2d<Type>  p(x, y);
   return p;

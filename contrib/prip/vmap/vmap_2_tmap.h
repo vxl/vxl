@@ -8,7 +8,8 @@
 // \date 06/05/2004
 //
 // \verbatim
-//  06 May 2004 Jocelyn Marchadier
+//  Modifications
+//   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -226,7 +227,7 @@ class vmap_2_tmap: public vmap_2_map<D>,
   //: Returns the index of a dart in the initial sequence
   int dart_position(vmap_dart_index i) const
   {
-    return Base_::position(dart(i)) ;
+    return Base_::position(this->dart(i)) ;
   }
 
   //: Returns the index of the vertex "arg".
@@ -446,7 +447,7 @@ class vmap_2_tmap: public vmap_2_map<D>,
   //: Returns the index of the vertex associated to the dart "arg".
   vmap_vertex_index dart_associated_vertex(vmap_dart_index arg) const
   {
-    return index(dart(arg).vertex()) ;
+    return index(this->dart(arg).vertex()) ;
   }
 
   //: Returns the index of the dart associated to the vertex "arg".
@@ -458,7 +459,7 @@ class vmap_2_tmap: public vmap_2_map<D>,
   //: Returns the index of the edge associated to the dart "arg".
   vmap_edge_index dart_associated_edge(vmap_dart_index arg) const
   {
-    return index(dart(arg).edge()) ;
+    return index(this->dart(arg).edge()) ;
   }
 
   //: Returns the index of the dart associated to the edge "arg".
@@ -470,7 +471,7 @@ class vmap_2_tmap: public vmap_2_map<D>,
   //: Returns the index of the vertex associated to the dart "arg".
   vmap_face_index dart_associated_face(vmap_dart_index arg) const
   {
-    return index(dart(arg).face()) ;
+    return index(this->dart(arg).face()) ;
   }
 
   //: Returns the index of the dart associated to the face "arg".
@@ -488,10 +489,10 @@ class vmap_2_tmap: public vmap_2_map<D>,
   //: Sets "arg_face" as the face of "arg".
   void set_face (vmap_dart_index arg, vmap_face_index arg_face) ;
 
-  //: One dart. Hard to use : alpha dart = nb_darts()-1-arg.
+  //: One dart. Hard to use : alpha dart = this->nb_darts()-1-arg.
   void set_dart(vmap_dart_index arg, vmap_dart_index arg_sigma, vmap_vertex_index arg_vertex, vmap_face_index arg_face) ;
 
-  //: One dart. Hard to use : alpha dart = nb_darts()-1-arg.
+  //: One dart. Hard to use : alpha dart = this->nb_darts()-1-arg.
   void set_dart(vmap_dart_index arg, vmap_dart_index arg_sigma, vmap_dart_index arg_alpha,
                 vmap_vertex_index arg_vertex, vmap_edge_index arg_edge, vmap_face_index arg_face) ;
 
@@ -550,22 +551,22 @@ class vmap_2_tmap: public vmap_2_map<D>,
       initialise_edges(le) ;
       initialise_faces(lf) ;
 #endif // 0
-      for (int i=0; i<nb_darts(); i++)
+      for (int i=0; i<this->nb_darts(); ++i)
       {
         set_dart(i,st.sigma(i), st.alpha(i), st.dart_associated_vertex(i),
                  st.dart_associated_edge(i),st.dart_associated_face(i)) ;
       }
       for (int i=0; i<nb_vertices(); i++)
       {
-        vertex(i).set_begin(begin_dart()+st.vertex_associated_dart(i)) ;
+        vertex(i).set_begin(this->begin_dart()+st.vertex_associated_dart(i)) ;
       }
       for (int i=0; i<nb_edges(); i++)
       {
-        edge(i).set_begin(begin_dart()+st.edge_associated_dart(i)) ;
+        edge(i).set_begin(this->begin_dart()+st.edge_associated_dart(i)) ;
       }
       for (int i=0; i<nb_faces(); i++)
       {
-        face(i).set_begin(begin_dart()+st.face_associated_dart(i)) ;
+        face(i).set_begin(this->begin_dart()+st.face_associated_dart(i)) ;
       }
     }
   }

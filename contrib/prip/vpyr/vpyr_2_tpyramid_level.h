@@ -8,7 +8,8 @@
 // \date 06/05/2004
 //
 // \verbatim
-//  06 May 2004 Jocelyn Marchadier
+//  Modifications
+//   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
 #include "vpyr_2_pyramid_level.h"
@@ -314,7 +315,7 @@ class vpyr_2_tpyramid_level: public vpyr_2_pyramid_level<D>,
   dart_type dart(vmap_dart_index arg)
   {
     dart_type tmp ;
-    tmp.set(get_dart_pointer(arg),index()) ;
+    tmp.set(this->get_dart_pointer(arg),index()) ;
     return tmp ;
   }
 
@@ -322,7 +323,7 @@ class vpyr_2_tpyramid_level: public vpyr_2_pyramid_level<D>,
   const dart_type dart(vmap_dart_index arg) const
   {
     dart_type tmp ;
-    tmp.set(get_dart_pointer(arg),index()) ;
+    tmp.set(this->get_dart_pointer(arg),index()) ;
     return tmp ;
   }
 
@@ -419,7 +420,7 @@ class vpyr_2_tpyramid_level: public vpyr_2_pyramid_level<D>,
   //: Returns the index of the vertex associated to the dart "arg".
   vmap_vertex_index dart_associated_vertex(vmap_dart_index arg) const
   {
-    return get_dart_pointer(arg)->vertex(index()).sequence_index() ;
+    return this->get_dart_pointer(arg)->vertex(index()).sequence_index() ;
   }
 
   //: Returns the index of the dart associated to the vertex "arg".
@@ -431,7 +432,7 @@ class vpyr_2_tpyramid_level: public vpyr_2_pyramid_level<D>,
   //: Returns the index of the edge associated to the dart "arg".
   vmap_edge_index dart_associated_edge(vmap_dart_index arg) const
   {
-    return get_dart_pointer(arg)->edge(index()).sequence_index() ;
+    return this->get_dart_pointer(arg)->edge(index()).sequence_index() ;
   }
 
   //: Returns the index of the dart associated to the edge "arg".
@@ -443,7 +444,7 @@ class vpyr_2_tpyramid_level: public vpyr_2_pyramid_level<D>,
   //: Returns the index of the vertex associated to the dart "arg".
   vmap_face_index dart_associated_face(vmap_dart_index arg) const
   {
-    return get_dart_pointer(arg)->face(index()).sequence_index() ;
+    return this->get_dart_pointer(arg)->face(index()).sequence_index() ;
   }
 
   //: Returns the index of the dart associated to the face "arg".
@@ -455,7 +456,7 @@ class vpyr_2_tpyramid_level: public vpyr_2_pyramid_level<D>,
   //: Returns "true" if the map is empty.
   bool empty() const
   {
-    return nb_darts ()==0 ;
+    return this->nb_darts ()==0 ;
   }
 
   //:
@@ -469,7 +470,7 @@ class vpyr_2_tpyramid_level: public vpyr_2_pyramid_level<D>,
   //:
   pyramid_type & pyramid()
   {
-    return (pyramid_type &)*pyramid_ ;
+    return (pyramid_type &)*this->pyramid_ ;
   }
 
  protected:

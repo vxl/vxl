@@ -21,10 +21,10 @@
  *
  *  Purpose: DicomMonochromeCopyTemplate (Header)
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:10 $
+ *  Last Update:      $Author: peter_vanroose $
+ *  Update Date:      $Date: 2004/08/04 10:36:46 $
  *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
+ *  CVS/RCS Revision: $Revision: 1.2 $
  *  Status:           $State: Exp $
  *
  *  CVS/RCS Log at end of file
@@ -92,9 +92,9 @@ class DiMonoCopyTemplate
     {
         if (pixel != NULL)
         {
-            Data = new T[getCount()];
-            if (Data != NULL)
-                OFBitmanipTemplate<T>::copyMem(pixel, Data, getCount());
+            this->Data = new T[this->getCount()];
+            if (this->Data != NULL)
+                OFBitmanipTemplate<T>::copyMem(pixel, this->Data, this->getCount());
         }
     }
 };
@@ -107,6 +107,10 @@ class DiMonoCopyTemplate
  *
  * CVS/RCS Log:
  * Log: dimocpt.h
+ * Revision 1.1  2004/01/14 04:01:10  amithaperera
+ * Add better DICOM support by wrapping DCMTK, and add a stripped down
+ * version of DCMTK to v3p. Add more DICOM test cases.
+ *
  * Revision 1.8  2001/06/01 15:49:44  meichel
  * Updated copyright header
  *

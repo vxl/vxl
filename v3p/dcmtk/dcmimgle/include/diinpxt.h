@@ -22,9 +22,9 @@
  *  Purpose: DicomInputPixelTemplate (Header)
  *
  *  Last Update:      $Author: peter_vanroose $
- *  Update Date:      $Date: 2004/05/28 17:59:56 $
+ *  Update Date:      $Date: 2004/08/04 10:36:46 $
  *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.2 $
+ *  CVS/RCS Revision: $Revision: 1.3 $
  *  Status:           $State: Exp $
  *
  *  CVS/RCS Log at end of file
@@ -152,7 +152,7 @@ class DiInputPixelTemplate
         MinValue[1] = 0;
         MaxValue[0] = 0;
         MaxValue[1] = 0;
-        if (isSigned())
+        if (this->isSigned())
         {
             AbsMinimum = -(double)DicomImageClass::maxval(Bits - 1, 0);
             AbsMaximum = (double)DicomImageClass::maxval(Bits - 1);
@@ -358,7 +358,7 @@ class DiInputPixelTemplate
 #ifdef DEBUG
             if (DicomImageClass::checkDebugLevel(DicomImageClass::DL_Informationals))
             {
-                ofConsole.lockCerr() << bitsAllocated << " " << bitsStored << " " << highBit << " " << isSigned() << endl;
+                ofConsole.lockCerr() << bitsAllocated << " " << bitsStored << " " << highBit << " " << this->isSigned() << endl;
                 ofConsole.unlockCerr();
             }
 #endif
@@ -592,6 +592,9 @@ class DiInputPixelTemplate
  *
  * CVS/RCS Log:
  * Log: diinpxt.h
+ * Revision 1.2  2004/05/28 17:59:56  peter_vanroose
+ * typo corrected
+ *
  * Revision 1.1  2004/01/14 04:01:10  amithaperera
  * Add better DICOM support by wrapping DCMTK, and add a stripped down
  * version of DCMTK to v3p. Add more DICOM test cases.

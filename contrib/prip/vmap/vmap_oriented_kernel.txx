@@ -7,7 +7,7 @@
 template <class vmap_kernel>
 void vmap_oriented_kernel<vmap_kernel>::initialise()
 {
-  int elts = permutation().nb_elements() ;
+  int elts = this->permutation().nb_elements() ;
   clear() ;
   Base_::initialise() ;
   mark_.reserve(elts) ;
@@ -20,7 +20,7 @@ void vmap_oriented_kernel<vmap_kernel>::initialise()
 template <class vmap_kernel>
 bool vmap_oriented_kernel<vmap_kernel>::add(const dart_iterator & arg)
 {
-  if (mark_[permutation().index_of(arg)] || !Base_::add(arg))
+  if (mark_[this->permutation().index_of(arg)] || !Base_::add(arg))
   {
     return false ;
   }
@@ -28,12 +28,12 @@ bool vmap_oriented_kernel<vmap_kernel>::add(const dart_iterator & arg)
   dart_iterator tmp=arg ;
   do
   {
-    mark_[permutation().index_of(tmp)]=true ;
-    permutation().next_on_cycle(tmp) ;
+    mark_[this->permutation().index_of(tmp)]=true ;
+    this->permutation().next_on_cycle(tmp) ;
   }
   while (tmp!=arg) ;
-  tmp=arg; permutation().opposite(tmp) ;
-  mark_[permutation().index_of(tmp)]=true ;
+  tmp=arg; this->permutation().opposite(tmp) ;
+  mark_[this->permutation().index_of(tmp)]=true ;
 
   return true ;
 }

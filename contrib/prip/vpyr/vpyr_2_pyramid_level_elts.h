@@ -109,13 +109,13 @@ class vmap_2_pdl_dart : public vpyr_2_pyramid_level_dart
   //:
   value_type & data()
   {
-    return link()->data(level_) ;
+    return link()->data(this->level_) ;
   }
 
   //:
   const value_type & data() const
   {
-    return link()->data(level_) ;
+    return link()->data(this->level_) ;
   }
 };
 
@@ -162,7 +162,7 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   //:
   self_type & operator=(const self_type &it)
   {
-    level_=it.level() ;
+    this->level_=it.level() ;
     it_=it.reference() ;
     set_link();
     return *this ;
@@ -195,7 +195,7 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   //:  Applies alpha.
   self_type & alpha()
   {
-    it_+=offset(vpyr_2_pyramid_base_alpha(link(),level())) ;
+    it_+=offset(vpyr_2_pyramid_base_alpha(this->link(),level())) ;
     set_link();
     return *this ;
   }
@@ -203,7 +203,7 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   //:  Applies phi.
   self_type & phi ()
   {
-    it_+=offset(vpyr_2_pyramid_base_phi(link(),level())) ;
+    it_+=offset(vpyr_2_pyramid_base_phi(this->link(),level())) ;
     set_link();
     return *this ;
   }
@@ -211,7 +211,7 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   //:  Applies sigma.
   self_type & sigma ()
   {
-    it_+=offset(vpyr_2_pyramid_base_sigma(link(),level())) ;
+    it_+=offset(vpyr_2_pyramid_base_sigma(this->link(),level())) ;
     set_link();
     return *this ;
   }
@@ -226,7 +226,7 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   //:  Applies phi^{-1}.
   self_type & iphi ()
   {
-    it_+=offset(vpyr_2_pyramid_base_iphi(link(),level())) ;
+    it_+=offset(vpyr_2_pyramid_base_iphi(this->link(),level())) ;
     set_link();
     return *this ;
   }
@@ -234,7 +234,7 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   //:  Applies sigma^{-1}.
   self_type & isigma ()
   {
-    it_+=offset(vpyr_2_pyramid_base_isigma(link(),level())) ;
+    it_+=offset(vpyr_2_pyramid_base_isigma(this->link(),level())) ;
     set_link();
     return *this ;
   }
@@ -281,14 +281,14 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   //:
   void set_link()
   {
-    link_=*it_ ;
+    this->link_=*it_ ;
   }
 
   //:
   template <typename D>
   int offset(D* arg) const
   {
-    return arg->sequence_index()-link_->sequence_index();
+    return arg->sequence_index()-this->link_->sequence_index();
   }
 
  private:

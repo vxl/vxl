@@ -9,7 +9,8 @@
 // \date 06/05/2004
 //
 // \verbatim
-//  06 May 2004 Jocelyn Marchadier
+//  Modifications
+//   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
 #include "vmap_kernel.h"
@@ -64,7 +65,7 @@ class vmap_non_oriented_kernel : public TKernel
   //:
   bool add(vmap_dart_index arg)
   {
-    return add(dart_iterator_on(arg)) ;
+    return add(this->dart_iterator_on(arg)) ;
   }
 
   bool add(typename map_type::edge_type & arg)

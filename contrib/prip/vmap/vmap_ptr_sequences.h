@@ -8,7 +8,8 @@
 // \date 06/05/2004
 //
 // \verbatim
-//  06 May 2004 Jocelyn Marchadier
+//  Modifications
+//   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
 #include "vmap_types.h"
@@ -279,7 +280,7 @@ class vmap_owning_sequence: public vmap_ptr_sequence<D>
   //:
   void pop_back()
   {
-    vmap_ptr_sequence<D>::resize(size()-1) ; ;
+    vmap_ptr_sequence<D>::resize(this->size()-1) ; ;
   }
 
   //:
@@ -292,7 +293,7 @@ class vmap_owning_sequence: public vmap_ptr_sequence<D>
 
     for (int i=0; i<arg_size; ++i)
     {
-      get_pointer(i)=&storage_[i] ;
+      this->get_pointer(i)=&storage_[i] ;
       storage_[i].set_sequence_index(i) ;
     }
   }
@@ -300,7 +301,7 @@ class vmap_owning_sequence: public vmap_ptr_sequence<D>
   //:
   void clear()
   {
-    delete [] begin() ;
+    delete [] this->begin() ;
     vmap_ptr_sequence<D>::clear() ;
     storage_.clear();
   }

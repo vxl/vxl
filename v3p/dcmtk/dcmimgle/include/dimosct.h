@@ -21,10 +21,10 @@
  *
  *  Purpose: DicomMonochromeScaleTemplate (Header)
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:10 $
+ *  Last Update:      $Author: peter_vanroose $
+ *  Update Date:      $Date: 2004/08/04 10:36:46 $
  *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
+ *  CVS/RCS Revision: $Revision: 1.2 $
  *  Status:           $State: Exp $
  *
  *  CVS/RCS Log at end of file
@@ -91,7 +91,7 @@ class DiMonoScaleTemplate
             if (pixel->getCount() == (unsigned long)columns * (unsigned long)rows * frames)
             {
                 scale((const T *)pixel->getData(), pixel->getBits(), interpolate, pvalue);
-                determineMinMax();
+                this->determineMinMax();
             } else {
                 if (DicomImageClass::checkDebugLevel(DicomImageClass::DL_Warnings))
                 {
@@ -125,12 +125,12 @@ class DiMonoScaleTemplate
     {
         if (pixel != NULL)
         {
-            Data = new T[getCount()];
-            if (Data != NULL)
+            this->Data = new T[this->getCount()];
+            if (this->Data != NULL)
             {
                 const T value = (T)((double)DicomImageClass::maxval(bits) * (double)pvalue /
                     (double)DicomImageClass::maxval(WIDTH_OF_PVALUES));
-                scaleData(&pixel, &Data, interpolate, value);
+                scaleData(&pixel, &this->Data, interpolate, value);
              }
         }
     }
@@ -144,6 +144,10 @@ class DiMonoScaleTemplate
  *
  * CVS/RCS Log:
  * Log: dimosct.h
+ * Revision 1.1  2004/01/14 04:01:10  amithaperera
+ * Add better DICOM support by wrapping DCMTK, and add a stripped down
+ * version of DCMTK to v3p. Add more DICOM test cases.
+ *
  * Revision 1.11  2002/12/09 13:32:54  joergr
  * Renamed parameter/local variable to avoid name clashes with global
  * declaration left and/or right (used for as iostream manipulators).

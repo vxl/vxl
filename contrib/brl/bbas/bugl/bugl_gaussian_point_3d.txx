@@ -37,9 +37,9 @@ bugl_gaussian_point_3d<T>::bugl_gaussian_point_3d()
 template<class T>
 T bugl_gaussian_point_3d<T>::prob_at(vgl_point_3d<T> &p)
 {
- if (!exists_)
+ if (!this->exists_)
   return 0;
-  vnl_vector_fixed<T, 3> d(p.x() - this->x(), p.y() - y(), p.z() - z());
+  vnl_vector_fixed<T, 3> d(p.x() - this->x(), p.y() - this->y(), p.z() - this->z());
 
   const double pi = vnl_math::pi;
   return vcl_exp(-0.5*(dot_product(d, sigma_inv_*d)))/vcl_sqrt(8*pi)/pi/det_;

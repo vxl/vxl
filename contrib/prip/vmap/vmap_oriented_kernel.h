@@ -8,7 +8,8 @@
 // \date 06/05/2004
 //
 // \verbatim
-//  06 May 2004 Jocelyn Marchadier
+//  Modifications
+//   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
 #include "vmap_kernel.h"
@@ -46,7 +47,7 @@ class vmap_oriented_kernel : public vmap_kernel
   //:
   bool can_insert(const dart_iterator & arg) const
   {
-    return !mark_(permutation().index_of(arg)) || !Base_::can_insert(arg) ;
+    return !mark_(this->permutation().index_of(arg)) || !Base_::can_insert(arg) ;
   }
 
   //:
@@ -55,7 +56,7 @@ class vmap_oriented_kernel : public vmap_kernel
   //:
   bool add(vmap_dart_index arg)
   {
-    return add(dart_iterator_on(arg)) ;
+    return add(this->dart_iterator_on(arg)) ;
   }
 
   //:

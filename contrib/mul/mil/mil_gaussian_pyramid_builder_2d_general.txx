@@ -313,21 +313,21 @@ void mil_gaussian_pyramid_builder_2d_general<T>::build(
   // than minXSize_ x minYSize_
   double s = scale_step();
   int max_levels = 1;
-  while (((unsigned int)(nx/s+0.5)>=min_x_size()) &&
-         ((unsigned int)(ny/s+0.5)>=min_y_size()))
+  while (((unsigned int)(nx/s+0.5) >= this->min_x_size()) &&
+         ((unsigned int)(ny/s+0.5) >= this->min_y_size()))
   {
     max_levels++;
     s *= scale_step();
   }
 
-  if (max_levels>maxLevels())
-    max_levels=maxLevels();
+  if (max_levels > this->maxLevels())
+    max_levels=this->maxLevels();
 
   worka_.resize(nx,ny);
   workb_.resize(nx,ny);
 
   // Set up image pyramid
-  checkPyr(im_pyr,max_levels);
+  this->checkPyr(im_pyr,max_levels);
 
   mil_image_2d_of<T>& im0 = (mil_image_2d_of<T>&) im_pyr(0);
 
@@ -377,15 +377,15 @@ void mil_gaussian_pyramid_builder_2d_general<T>::extend(mil_image_pyramid& image
   // than 5 x 5
   double s = scale_step();
   int max_levels = 1;
-  while (((unsigned int)(nx/s+0.5)>=min_x_size()) &&
-         ((unsigned int)(ny/s+0.5)>=min_y_size()))
+  while (((unsigned int)(nx/s+0.5) >= this->min_x_size()) &&
+         ((unsigned int)(ny/s+0.5) >= this->min_y_size()))
   {
      max_levels++;
      s*=scale_step();
   }
 
-  if (max_levels>maxLevels())
-      max_levels=maxLevels();
+  if (max_levels > this->maxLevels())
+    max_levels=this->maxLevels();
 
   worka_.resize(nx,ny);
   workb_.resize(nx,ny);
