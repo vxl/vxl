@@ -238,7 +238,7 @@ while (<BOOKS>)
   if ( ! /^book: / ) { next; }
 
   chomp;
-  @bits = split /\s/;
+  @bits = split /\s+/;
   $book = $bits[1];
 
   update_book($vxlsrc,$doxydir,$bookbasedir,$book,$forced,$cvsup);

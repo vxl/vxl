@@ -68,7 +68,7 @@ sub do_dirs
 
 
     chomp;
-    @bits = split /\s/;
+    @bits = split /\s+/;
 
     if ($bits[0] eq "book:") {next;}
 
@@ -77,7 +77,7 @@ sub do_dirs
     if ($bits[0] eq "package:")
     {
       # Get package name and description
-      ($label,$cvsroot,$package, @descrip) = split /\s/;
+      ($label,$cvsroot,$package, @descrip) = split /\s+/;
       if (!$firstpackage)
       {
         print OF "</blockquote>\n";
@@ -153,7 +153,7 @@ while (<CTRLFILE>)
   if ( /^search: / )
   {
     chomp;
-    ($command, $search_ref, @textlinebits) = split /\s/;
+    ($command, $search_ref, @textlinebits) = split /\s+/;
     $textline = join(' ', @textlinebits);
     print OF  '<p>';
     print_link ($textline, $search_ref);
@@ -194,7 +194,7 @@ sub print_book_index_links
     if ( ! /^book: / ) { next; }
 
     chomp;
-    ($command, $module, @textline) = split /\s/;
+    ($command, $module, @textline) = split /\s+/;
 
       $link = "books/$module/book.html";
       $ltext = join(' ',@textline);
