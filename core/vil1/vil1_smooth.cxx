@@ -25,7 +25,7 @@ vil_image vil_smooth_gaussian(vil_image const & in, double sigma)
   int radius = (lc<=0) ? 0 : 1 + int(vcl_sqrt(lc)*sigma); // sigma guaranteed >= 0
   int size = 2*radius + 1;
   vcl_vector<float> mask(size);
-  double halfnorm = 0.5;
+  double halfnorm = 0.0;
   mask[radius] = 1.0;
   for (int x=1; x<=radius; ++x) {
     double v = vcl_exp(-0.5*x*x/(sigma*sigma));
