@@ -123,9 +123,7 @@ original copyright notice.
 @titlepage
 @title V@emph{X}L
 @subtitle A collection of C++ libraries for computer vision.
-@author Andrew Fitzgibbon
-@author Visual Geometry Group
-@author University of Oxford
+@author The TargetJr Consortium
 
 @c  The following two commands start the copyright page.
 @page
