@@ -275,4 +275,15 @@ inline
 vcl_ostream& operator<<(vcl_ostream& s, vil2_image_view<T> const& im) {
   im.print(s); return s; }
 
+
+
+//: True if the actual images are identical.
+// $\bigwedge_{i,j,p} {\textstyle src}(i,j,p) == {\textstyle dest}(i,j,p)$
+// The data may be formatted differently in each memory chunk.
+//  O(size).
+// \relates vil2_image_view
+template<class T>
+bool vil2_deep_equality(const vil2_image_view<T> &lhs, const vil2_image_view<T> &rhs);
+
+
 #endif // vil_image_view_h_

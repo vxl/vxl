@@ -10,53 +10,6 @@
 #include <vil/vil_rgb.h>
 #include <vcl_cassert.h>
 
-//: True if the actual images are identical.
-// $\bigwedge_{i,j,p} {\textstyle src}(i,j,p) == {\textstyle dest}(i,j,p)$
-// The data may be formatted differently in each memory chunk.
-template<class T>
-bool vil2_deep_equality(const vil2_image_view<T> &lhs, const vil2_image_view<T> &rhs)
-{
-  if (lhs.nplanes() != rhs.nplanes() ||
-    lhs.nj() != rhs.nj() ||
-    lhs.ni() != rhs.ni()) return false;
-
-  for (unsigned p = 0; p < rhs.nplanes(); ++p)
-    for (unsigned j = 0; j < rhs.nj(); ++j)
-      for (unsigned i = 0; i < rhs.ni(); ++i)
-        if (!(rhs(i,j,p) == lhs(i,j,p))) return false;
-  return true;
-}
-
-//: Return a 3-plane view of an RGB image
-// \return an empty view if it can't do the conversion
-// (because it is already a multiplane image.)
-template<class T>
-vil2_image_view<T> vil2_view_as_planes(const vil2_image_view<vil_rgb<T> >& v)
-{
-  if (v.nplanes()!=1) return vil2_image_view<T>();
-
-  // Image is RGBRGBRGB so i step = 3*v.istep(), jstep=3*v.jstep()
-  return vil2_image_view<T>(v.memory_chunk(),(T const*) v.top_left_ptr(),
-                            v.ni(),v.nj(),3,
-                            v.istep()*3,v.jstep()*3,1);
-}
-
-//: Return an RGB component view of a 3-plane image
-// \return an empty view if it can't do the conversion
-// (because the data isn't arranged with triples of consecutive components)
-template<class T>
-vil2_image_view<vil_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& v)
-{
-  if ((v.nplanes()!=3) || (v.planestep()!=1) || (v.istep()!=3 && v.jstep()!=3))
-    return vil2_image_view<vil_rgb<T> >();
-
-  return vil2_image_view<vil_rgb<T> >(v.memory_chunk(),
-                                      (vil_rgb<T> const*) v.top_left_ptr(),
-                                      v.ni(),v.nj(),1,
-                                      v.istep()/3,v.jstep()/3,1);
-}
-
-
 
 //: Compute minimum and maximum values over view
 template<class T>
@@ -153,13 +106,10 @@ void vil2_fill_col(vil2_image_view<T>& view, unsigned i, T value)
 
 // For things which must not be composites
 #define VIL2_IMAGE_VIEW_FUNCTIONS_INSTANTIATE_FOR_SCALARS(T) \
-template vil2_image_view<T > vil2_view_as_planes(const vil2_image_view<vil_rgb<T > >&); \
-template vil2_image_view<vil_rgb<T > > vil2_view_as_rgb(const vil2_image_view<T >& plane_view); \
 template void vil2_value_range(T& min_value, T& max_value,const vil2_image_view<T >& view)
 
 // For everything else
 #define VIL2_IMAGE_VIEW_FUNCTIONS_INSTANTIATE(T) \
-template bool vil2_deep_equality(const vil2_image_view<T > &lhs, const vil2_image_view<T > &rhs); \
 template void vil2_fill(vil2_image_view<T >& view, T value); \
 template void vil2_fill_line(T * data, unsigned n, int step, T value); \
 template void vil2_fill_row(vil2_image_view<T >& view, unsigned j, T value); \

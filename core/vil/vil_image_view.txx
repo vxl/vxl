@@ -609,8 +609,31 @@ bool vil2_image_view<T>::operator==(const vil2_image_view<T> &other) const
     jstep_     == other.jstep_;
 }
 
+//=======================================================================
+//: True if the actual images are identical.
+// $\bigwedge_{i,j,p} {\textstyle src}(i,j,p) == {\textstyle dest}(i,j,p)$
+// The data may be formatted differently in each memory chunk.
+//  O(size).
+// \relates vil2_image_view
+template<class T>
+bool vil2_deep_equality(const vil2_image_view<T> &lhs, const vil2_image_view<T> &rhs)
+{
+  if (lhs.nplanes() != rhs.nplanes() ||
+    lhs.nj() != rhs.nj() ||
+    lhs.ni() != rhs.ni()) return false;
+
+  for (unsigned p = 0; p < rhs.nplanes(); ++p)
+    for (unsigned j = 0; j < rhs.nj(); ++j)
+      for (unsigned i = 0; i < rhs.ni(); ++i)
+        if (!(rhs(i,j,p) == lhs(i,j,p))) return false;
+  return true;
+}
+
+
 
 #define VIL2_IMAGE_VIEW_INSTANTIATE(T) \
-template class vil2_image_view<T >
+template class vil2_image_view<T >; \
+template bool vil2_deep_equality(const vil2_image_view<T > &lhs, const vil2_image_view<T > &rhs);
+
 
 #endif // vil2_image_view_txx_

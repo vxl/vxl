@@ -10,27 +10,6 @@
 #include <vil/vil_rgb.h>
 
 
-//: True if the actual images are identical.
-// $\bigwedge_{i,j,p} {\textstyle src}(i,j,p) == {\textstyle dest}(i,j,p)$
-// The data may be formatted differently in each memory chunk.
-//  O(size).
-// \relates vil2_image_view
-template<class T>
-bool vil2_deep_equality(const vil2_image_view<T> &lhs, const vil2_image_view<T> &rhs);
-
-//: Return a 3-plane view of an RGB image
-//  O(1).
-// \relates vil2_image_view
-template<class T>
-vil2_image_view<T> vil2_view_as_planes(const vil2_image_view<vil_rgb<T> >& rgb_view);
-
-//: Return an RGB component view of a 3-plane image.
-//  Aborts if plane image not in correct format (ie planestep()!=1)
-//  O(1).
-// \relates vil2_image_view
-template<class T>
-vil2_image_view<vil_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& plane_view);
-
 //: Fill view with given value
 //  O(size).
 // \relates vil2_image_view

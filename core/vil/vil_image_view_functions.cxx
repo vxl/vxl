@@ -8,6 +8,7 @@
 #include <vxl_config.h> // for vxl_uint_32 etc.
 #include <vil/vil_rgb.h>
 #include <vil2/vil2_plane.h>
+#include <vil2/vil2_view_as.h>
 
 
 
