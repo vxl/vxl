@@ -1,0 +1,36 @@
+# Begin Group "Source Files"
+SOURCE=.\test_vrml.cxx
+SOURCE=.\test_twowin.cxx
+SOURCE=.\test_tritab.cxx
+SOURCE=.\test_texture.cxx
+SOURCE=.\test_spinner.cxx
+SOURCE=.\test_soview.cxx
+SOURCE=.\test_smartptr.cxx
+SOURCE=.\test_rubber.cxx
+SOURCE=.\test_proj.cxx
+SOURCE=.\test_print_tableau.cxx
+SOURCE=.\test_polytab.cxx
+SOURCE=.\test_menu.cxx
+SOURCE=.\test_manipulator.cxx
+SOURCE=.\test_magnify.cxx
+SOURCE=.\test_listmanager2d.cxx
+SOURCE=.\test_image.cxx
+SOURCE=.\test_grid_tableau.cxx
+SOURCE=.\test_func.cxx
+SOURCE=.\test_event_server.cxx
+SOURCE=.\test_enhance.cxx
+SOURCE=.\test_dialog.cxx
+SOURCE=.\test_deck2d.cxx
+SOURCE=.\test_deck.cxx
+SOURCE=.\test_coop.cxx
+SOURCE=.\test_composite2d.cxx
+SOURCE=.\test_composite.cxx
+SOURCE=.\test_clear.cxx
+SOURCE=.\test_blend2.cxx
+SOURCE=.\test_blend.cxx
+SOURCE=.\test_blackbox.cxx
+SOURCE=.\test_bitab.cxx
+SOURCE=.\test_active_visible.cxx
+SOURCE=.\test_3d.cxx
+SOURCE=.\test_2d.cxx
+# End Group
