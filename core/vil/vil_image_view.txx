@@ -21,7 +21,7 @@ vil2_image_view<T>::vil2_image_view()
 
 template<class T>
 vil2_image_view<T>::vil2_image_view(unsigned nx, unsigned ny, unsigned n_planes)
-: data_(0),nx_(0),ny_(0),xstep_(1),ystep_(0)
+: top_left_(0),xstep_(1),ystep_(0)
 {
   resize(nx,ny,nplanes);
 }
@@ -36,7 +36,6 @@ void vil2_image_view<T>::deep_copy(const vil2_image_view<T>& src)
   int ystep_ = src.ystep();
   int planestep_ = src.planestep();
 
-  vil_memory_block new_data = src.ptr_->clone();
   ptr_ = src.ptr_->clone();
   top_left_ = ptr_->data();
 }
@@ -67,22 +66,21 @@ template<class T> vil2_image_view<T>::~vil2_image_view()
 
 
 template<class T>
-void vil2_image_view<T>::resize(int nx, int ny)
+void vil2_image_view<T>::resize(unsigned nx, unsigned ny)
 {
-
-  resize(nx,ny, nplanes)
+  resize(nx,ny, nplanes_);
 }
 
 //=======================================================================
 
 template<class T>
-void vil2_image_view<T>::resize(int nx, int ny, int n_planes)
+void vil2_image_view<T>::resize(unsigned nx, unsigned ny, unsigned n_planes)
 {
   if (nx==nx_ && ny==ny_ && n_planes==nplanes_) return;
 
   release_data();
 
-  data_ = new vil2_memory_block(sizeof(T)*nplanes*ny*nx);
+  ptr_ = new vil2_memory_chunk(sizeof(T)*nplanes*ny*nx);
 
   nx_ = nx;
   ny_ = ny;

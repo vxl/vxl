@@ -28,6 +28,17 @@ protected:
 
   vil2_smart_ptr<vil2_memory_chunk> ptr_;
 public:
+
+    //: Dflt ctor
+    //  Creates an empty one plane image.
+  vil2_image_view();
+
+    //: Create a n_plane plane image of nx x ny pixels
+  vil2_image_view(unsigned nx, unsigned ny, unsigned n_planes=1);
+
+	//  Destructor
+  ~vil2_image_view();
+
   // Standard container stuff
   // This assumes that the data is arranged contiguously.
   // Is this assumption good?

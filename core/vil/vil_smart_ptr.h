@@ -47,15 +47,10 @@ public:
   {
     // the strange order of events in this function is to avoid
     // heap corruption if unref() causes *this to be deleted.
-    if (protected_)
-    {
-      T *old_ptr = ptr_;
-      ptr_ = 0;
-      if (old_ptr)
-        unref(old_ptr);
-    }
-    else
-      ptr_ = 0;
+    T *old_ptr = ptr_;
+    ptr_ = 0;
+    if (old_ptr)
+      unref(old_ptr);
   }
 
   //: Assignment

@@ -35,10 +35,10 @@
 * \verbatim
 vil2_image_view<vil_rgb<vil_byte> > rgb_image;
 vil2_load(rgb_image,"my_image.jpg");
-vil2_image_view<vil_byte > 3plane_image =  rgb_image; // Creates 3 plane view of rgb
+vil2_image_view<vil_byte > three_plane_image =  rgb_image; // Creates 3 plane view of rgb
 
  // Now create rgb view of 3 plane image (note: will abort if not possible)
-vil2_image_view<vil_rgb<vil_byte> > rgb_image2 = 3plane_image;
+vil2_image_view<vil_rgb<vil_byte> > rgb_image2 = three_plane_image;
 \endverbatim
 *
 * \subsection copying Copying
@@ -114,10 +114,10 @@ for (int i=0;i<nplanes;++i)
 vil2_image_view<vil2_byte> src_image;
 vil2_load(src_image,"image_file.jpg");
 vil2_image_view<vil2_byte> tmp_image1,tmp_image2;
-vil2_filter_rows(tmp_image,src_image);  // Apply filter to rows of src_image
-vil2_filter_rows(tmp_image2,tmp_image.tranpose());  // Apply filter to cols of tmp_image
+vil2_filter_rows(tmp_image1,src_image);  // Apply filter to rows of src_image
+vil2_filter_rows(tmp_image2,tmp_image1.tranpose());  // Apply filter to cols of tmp_image1
 vil2_image_view<vil2_byte> filtered_image = tmp_image2.transpose();
-// Note that vil2_filter_rows(filtered_image.transpose(),tmp_image.tranpose())
+// Note that vil2_filter_rows(filtered_image.transpose(),tmp_image1.tranpose())
 // would only work correctly if filtered_image was already the correct size.
 // If it isn't, then the view created by filtered_image.transpose() would be resized,
 // and disconnected from filtered_image itself, which would remain unchanged.

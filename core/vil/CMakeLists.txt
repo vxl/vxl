@@ -13,7 +13,7 @@ SET( vil2_sources
 
 
   # file format readers/writers (see below for conditional ones)
-  file_formats/vil2_pnm.cxx file_formats/vil2_pnm.h
+#  file_formats/vil2_pnm.cxx file_formats/vil2_pnm.h
 
   # Operations
 
@@ -32,7 +32,7 @@ TARGET_LINK_LIBRARIES( vil2 vil vcl )
 #SUBDIRS(io)
 
 IF( BUILD_EXAMPLES )
-#  SUBDIRS( examples )
+  SUBDIRS( examples )
 ENDIF( BUILD_EXAMPLES )
 IF( BUILD_TESTING )
 #  SUBDIRS(tests)
