@@ -101,6 +101,7 @@ void vgui_displaybase::remove(vgui_soview* object)
 void vgui_displaybase::clear()
 {
   highlighted = 0;
+  deselect_all();
   objects.clear();
 }
 
@@ -347,7 +348,6 @@ bool vgui_displaybase::deselect_all()
 
     if (cb_) cb_->deselect(id);
   }
-  vcl_cerr << vcl_endl;
 
   selections.clear();
   this->post_redraw();
