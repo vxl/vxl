@@ -36,5 +36,6 @@ namespace std {
   double abs(double x) { return x >= 0 ? x : -x; }
   
   long double sqrt(long double x) { return std::sqrt(double(x)); } // ouch!
+  double pow(double x, int n) { return std::pow(x, double(n)); }
 }
 #endif
