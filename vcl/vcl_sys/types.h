@@ -1,8 +1,5 @@
-#ifndef types_h_
-#define types_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
+#ifndef vcl_sys_types_h_
+#define vcl_sys_types_h_
 /*
   fsm@robots.ox.ac.uk
 */

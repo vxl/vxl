@@ -1,8 +1,5 @@
 #ifndef vcl_unistd_h_
 #define vcl_unistd_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 /*
   fsm@robots.ox.ac.uk
 */
@@ -29,7 +26,9 @@
 #include <vcl/vcl_sys/types.h>
 #include <vxl_unistd_config.h>
 
+#ifndef vcl_size_t
 typedef size_t	    vcl_size_t;
+#endif
 // fixme this needs configging
 #ifndef _MSC_VER
 typedef ssize_t	    vcl_ssize_t;
@@ -148,11 +147,11 @@ void            vcl_swab(const void *, void *, vcl_ssize_t);
 int             vcl_symlink(const char *, const char *);
 void            vcl_sync(void);
 long int        vcl_sysconf(int);
-vcl_pid_t       vcl_vcl_tcgetpgrp(int);
-int             vcl_vcl_tcsetpgrp(int, vcl_pid_t);
-int             vcl_vcl_truncate(const char *, vcl_off_t);
-char           *vcl_vcl_ttyname(int);
-int             vcl_vcl_ttyname_r(int, char *, vcl_size_t);
+vcl_pid_t       vcl_tcgetpgrp(int);
+int             vcl_tcsetpgrp(int, vcl_pid_t);
+int             vcl_truncate(const char *, vcl_off_t);
+char           *vcl_ttyname(int);
+int             vcl_ttyname_r(int, char *, vcl_size_t);
 vcl_useconds_t  vcl_ualarm(vcl_useconds_t, vcl_useconds_t);
 int             vcl_unlink(const char *);
 int             vcl_usleep(vcl_useconds_t);

@@ -26,3 +26,8 @@ namespace {
 }
 
 #endif
+
+#ifdef VCL_GCC_295
+template
+basic_string<char, string_char_traits<char>, __default_alloc_template<0, 0> > & basic_string<char, string_char_traits<char>, __default_alloc_template<0, 0> >::replace<char *>(char *, char *, char *, char *);
+#endif
