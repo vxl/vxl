@@ -56,7 +56,7 @@ class vsol_rectangle_2d : public vsol_polygon_2d
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d_sptr clone(void) const;
+  virtual vsol_spatial_object_2d* clone(void) const;
 
   //***************************************************************************
   // Access

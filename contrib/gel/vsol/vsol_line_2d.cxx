@@ -9,6 +9,7 @@
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vnl/vnl_math.h>
+#include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsol/vsol_point_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
@@ -19,6 +20,15 @@
 //***************************************************************************
 // Initialization
 //***************************************************************************
+
+//---------------------------------------------------------------------------
+//: Default Constructor
+//---------------------------------------------------------------------------
+vsol_line_2d::vsol_line_2d()
+: p0_(new vsol_point_2d),
+  p1_(new vsol_point_2d)
+{
+}
 
 //---------------------------------------------------------------------------
 //: Constructor from the direction and the middle point
@@ -88,7 +98,7 @@ vsol_line_2d::~vsol_line_2d()
 //: Clone `this': creation of a new object and initialization
 //  See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d_sptr vsol_line_2d::clone(void) const
+vsol_spatial_object_2d* vsol_line_2d::clone(void) const
 {
   return new vsol_line_2d(*this);
 }
@@ -315,20 +325,9 @@ vgl_line_segment_2d<double> vsol_line_2d::vgl_seg_2d() const
 void vsol_line_2d::b_write(vsl_b_ostream &os) const
 {
   vsl_b_write(os, version());
-  if (!p0_){
-    vsl_b_write(os, false); // Indicate null pointer stored
-  }
-  else{
-    vsl_b_write(os,true); // Indicate non-null pointer stored
-    p0_->b_write(os);
-  }
-  if (!p1_){
-    vsl_b_write(os, false); // Indicate null pointer stored
-  }
-  else{
-    vsl_b_write(os,true); // Indicate non-null pointer stored
-    p1_->b_write(os);
-  }
+  vsol_spatial_object_2d::b_write(os);
+  vsl_b_write(os, p0_);
+  vsl_b_write(os, p1_);
 }
 
 //: Binary load self from stream. (not typically used)
@@ -342,6 +341,7 @@ void vsol_line_2d::b_read(vsl_b_istream &is)
   {
   case 1:
     {
+      vsol_spatial_object_2d::b_read(is);
       vsl_b_read(is, p0_);
       vsl_b_read(is, p1_);
     }
@@ -378,40 +378,33 @@ vcl_ostream& operator<<(vcl_ostream& s, vsol_line_2d const& l)
   return s;
 }
 
-//: Binary save vsol_line_2d_sptr to stream.
+
+
+//: Binary save vsol_line_2d to stream.
 void
-vsl_b_write(vsl_b_ostream &os, vsol_line_2d_sptr const& l)
+vsl_b_write(vsl_b_ostream &os, const vsol_line_2d* p)
 {
-  if (!l){
+  if (p==0) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
   else{
     vsl_b_write(os,true); // Indicate non-null pointer stored
-    l->b_write(os);
+    p->b_write(os);
   }
 }
 
-//: Binary load vsol_line_2d_sptr from stream.
+
+//: Binary load vsol_line_2d from stream.
 void
-vsl_b_read(vsl_b_istream &is, vsol_line_2d_sptr &l)
+vsl_b_read(vsl_b_istream &is, vsol_line_2d* &p)
 {
+  delete p;
   bool not_null_ptr;
   vsl_b_read(is, not_null_ptr);
-  if (not_null_ptr){
-    short ver;
-    vsl_b_read(is, ver);
-    switch(ver)
-      {
-      case 1:
-        {
-          vsol_point_2d_sptr p0, p1;
-          vsl_b_read(is, p0);
-          vsl_b_read(is, p1);
-          l = new vsol_line_2d(p0, p1);
-          break;
-       }
-      default:
-        l = 0;
-      }
+  if (not_null_ptr) {
+    p = new vsol_line_2d();
+    p->b_read(is);
   }
+  else
+    p = 0;
 }

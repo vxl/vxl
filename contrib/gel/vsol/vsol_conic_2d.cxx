@@ -124,7 +124,7 @@ vsol_conic_2d::~vsol_conic_2d()
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d_sptr vsol_conic_2d::clone(void) const
+vsol_spatial_object_2d* vsol_conic_2d::clone(void) const
 {
   return new vsol_conic_2d(*this);
 }

@@ -19,13 +19,23 @@
 #include <vsl/vsl_vector_io.h>
 #include <testlib/testlib_test.h>
 
+#include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_point_2d.h>
+#include <vsol/vsol_line_2d_sptr.h>
 #include <vsol/vsol_line_2d.h>
+#include <vsol/vsol_polyline_2d_sptr.h>
 #include <vsol/vsol_polyline_2d.h>
+#include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_2d.h>
 
 void test_vsol_io()
 {
+
+  vsl_add_to_binary_loader(vsol_point_2d());
+  vsl_add_to_binary_loader(vsol_line_2d());
+  vsl_add_to_binary_loader(vsol_polyline_2d());
+  vsl_add_to_binary_loader(vsol_polygon_2d());
+
   //vsol_point_2d I/O
   vcl_cout << "Testing I/O for vsol_point_2d\n";
 
@@ -293,6 +303,51 @@ void test_vsol_io()
       good = good && (*plit)->near_equal(*boxes[k], 0.01f);
     }
   TEST("Testing box vector io", good, true);
+
+
+  //Test Polymorphic I/O
+  vcl_cout << "Testing Polymorphic I/O\n";
+
+  vsol_spatial_object_2d_sptr obj1 = p0.ptr();   // A point
+  vsol_spatial_object_2d_sptr obj2 = l.ptr();    // A line
+  vsol_spatial_object_2d_sptr obj3 = poly.ptr(); // A polyline
+  vsol_spatial_object_2d_sptr obj4 = polyg.ptr();// A polygon
+
+  vsl_b_ofstream bpm_out("test_polymorph_io.tmp");
+  TEST("Created test_polymorph_io.tmp for writing",(!bpm_out), false);
+  vsl_b_write(bpm_out, obj1);
+  vsl_b_write(bpm_out, obj2);
+  vsl_b_write(bpm_out, obj3);
+  vsl_b_write(bpm_out, obj4);
+  bpm_out.close();
+  
+  if(obj1)
+    vcl_cout << "Saved object 1: "; obj1->print(vcl_cout);
+  if(obj2)
+    vcl_cout << "\nSaved object 2:"; obj2->print(vcl_cout);
+  if(obj3)
+    vcl_cout << "\nSaved object 3:"; obj3->print(vcl_cout);
+  if(obj4)
+    vcl_cout << "\nSaved object 4:"; obj4->print(vcl_cout);
+  vcl_cout << vcl_endl;
+
+  vsl_b_ifstream bpm_in("test_polymorph_io.tmp");
+  TEST("Opened test_polymorph_io.tmp for reading",(!bpm_in), false);
+
+  vsol_spatial_object_2d_sptr obj1_in, obj2_in, obj3_in, obj4_in; 
+  vsl_b_read(bpm_in, obj1_in);
+  vsl_b_read(bpm_in, obj2_in);
+  vsl_b_read(bpm_in, obj3_in);
+  vsl_b_read(bpm_in, obj4_in);
+  bpm_in.close();
+
+  vcl_cout << "Recovered object 1: "; obj1_in->print(vcl_cout);
+  vcl_cout << "\nRecovered object 2:"; obj2_in->print(vcl_cout);
+  vcl_cout << "\nRecovered object 3:"; obj3_in->print(vcl_cout);
+  vcl_cout << "\nRecovered object 4:"; obj4_in->print(vcl_cout);
+  vcl_cout << vcl_endl;
+
+  TEST("Testing polymorphic io", true, true);
 
 }
 

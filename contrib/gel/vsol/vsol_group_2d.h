@@ -59,7 +59,7 @@ class vsol_group_2d : public vsol_spatial_object_2d
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d_sptr clone(void) const;
+  virtual vsol_spatial_object_2d* clone(void) const;
 
   //***************************************************************************
   // Access
@@ -100,6 +100,11 @@ class vsol_group_2d : public vsol_spatial_object_2d
   //: Is `new_object' a child (direct or not) of `this' ?
   //---------------------------------------------------------------------------
   bool is_child(const vsol_spatial_object_2d_sptr &new_object) const;
+
+  //---------------------------------------------------------------------------
+  //: Return a platform independent string identifying the class
+  //---------------------------------------------------------------------------
+  virtual vcl_string is_a() const { return "vsol_group_2d"; }
 
   //***************************************************************************
   // Element change

@@ -49,7 +49,12 @@ class vsol_line_2d : public vsol_curve_2d
   //***************************************************************************
   // Initialization
   //***************************************************************************
-
+  
+  //---------------------------------------------------------------------------
+  //: Default Constructor
+  //---------------------------------------------------------------------------
+  vsol_line_2d();
+ 
   //---------------------------------------------------------------------------
   //: Constructor from the direction and the middle point
   //---------------------------------------------------------------------------
@@ -104,7 +109,7 @@ class vsol_line_2d : public vsol_curve_2d
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d_sptr clone(void) const;
+  virtual vsol_spatial_object_2d* clone(void) const;
 
   //***************************************************************************
   // Access
@@ -239,11 +244,12 @@ class vsol_line_2d : public vsol_curve_2d
 
 vcl_ostream&  operator<<(vcl_ostream& s, vsol_line_2d const& p);
 
-#include "vsol_line_2d_sptr.h"
+
 //: Binary save vsol_line_2d* to stream.
-void vsl_b_write(vsl_b_ostream &os, vsol_line_2d_sptr const& p);
+void vsl_b_write(vsl_b_ostream &os, const vsol_line_2d* p);
 
 //: Binary load vsol_line_2d* from stream.
-void vsl_b_read(vsl_b_istream &is, vsol_line_2d_sptr &p);
+void vsl_b_read(vsl_b_istream &is, vsol_line_2d* &p);
+
 
 #endif // vsol_line_2d_h_

@@ -153,7 +153,7 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //: Clone `this': creation of a new object and initialization
   // See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d_sptr clone(void) const;
+  virtual vsol_spatial_object_2d* clone(void) const;
 
   //***************************************************************************
   // Access
@@ -187,6 +187,11 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //***************************************************************************
   // Status report
   //***************************************************************************
+
+  //---------------------------------------------------------------------------
+  //: Return a platform independent string identifying the class
+  //---------------------------------------------------------------------------
+  virtual vcl_string is_a() const { return "vsol_conic_2d"; }
 
   //---------------------------------------------------------------------------
   //: Return the real type of a line. It is a CURVE

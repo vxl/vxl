@@ -46,6 +46,11 @@ class vsol_polygon_2d : public vsol_region_2d
   //***************************************************************************
  public:
   //---------------------------------------------------------------------------
+  //: Default constructor.
+  //---------------------------------------------------------------------------
+  vsol_polygon_2d(void);
+
+  //---------------------------------------------------------------------------
   //: Constructor from a vcl_vector (not a geometric vector but a list of points)
   //  REQUIRE: new_vertices.size()>=3
   //---------------------------------------------------------------------------
@@ -65,7 +70,7 @@ class vsol_polygon_2d : public vsol_region_2d
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d_sptr clone(void) const;
+  virtual vsol_spatial_object_2d* clone(void) const;
 
   //---------------------------------------------------------------------------
   //: Safe casting
@@ -160,23 +165,16 @@ class vsol_polygon_2d : public vsol_region_2d
   //: Return true if the argument matches the string identifying the class or any parent class
   bool is_class(const vcl_string& cls) const;
 
-  //***************************************************************************
-  // Implementation
-  //***************************************************************************
- protected:
-  //---------------------------------------------------------------------------
-  //: Default constructor. Do nothing. Just to enable inheritance.
-  //---------------------------------------------------------------------------
-  vsol_polygon_2d(void);
 };
-#include "vsol_polygon_2d_sptr.h"
+
 //: Stream operator
 vcl_ostream&  operator<<(vcl_ostream& s, vsol_polygon_2d const& p);
 
+
 //: Binary save vsol_polygon_2d* to stream.
-void vsl_b_write(vsl_b_ostream &os, vsol_polygon_2d_sptr const& p);
+void vsl_b_write(vsl_b_ostream &os, const vsol_polygon_2d* p);
 
 //: Binary load vsol_polygon_2d* from stream.
-void vsl_b_read(vsl_b_istream &is, vsol_polygon_2d_sptr &p);
+void vsl_b_read(vsl_b_istream &is, vsol_polygon_2d* &p);
 
 #endif // vsol_polygon_2d_h_

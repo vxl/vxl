@@ -51,7 +51,7 @@ vsol_polygon_2d::~vsol_polygon_2d()
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d_sptr vsol_polygon_2d::clone(void) const
+vsol_spatial_object_2d* vsol_polygon_2d::clone(void) const
 {
   return new vsol_polygon_2d(*this);
 }
@@ -202,32 +202,34 @@ bool vsol_polygon_2d::is_convex(void) const
 //: Binary save self to stream.
 void vsol_polygon_2d::b_write(vsl_b_ostream &os) const
 {
+  vsl_b_write(os, version());
+  vsol_spatial_object_2d::b_write(os);
   if(!storage_)
     vsl_b_write(os, false); // Indicate null pointer stored
   else
     {
       vsl_b_write(os, true); // Indicate non-null pointer stored
-      vsl_b_write(os, version());
       vsl_b_write(os, *storage_);
     }
 }
 //: Binary load self from stream (not typically used)
 void vsol_polygon_2d::b_read(vsl_b_istream &is)
 {
-  if(!is)
-    return;
-  delete storage_;
-  storage_ = new vcl_vector<vsol_point_2d_sptr>();
-  bool null_ptr;
-  vsl_b_read(is, null_ptr);
-  if(!null_ptr)
-    return;
+
   short ver;
   vsl_b_read(is, ver);
   switch(ver)
   {
   case 1:
     {
+      vsol_spatial_object_2d::b_read(is);
+
+      delete storage_;
+      storage_ = new vcl_vector<vsol_point_2d_sptr>();
+      bool null_ptr;
+      vsl_b_read(is, null_ptr);
+      if(!null_ptr)
+        return;
       vsl_b_read(is, *storage_);
     }
   }
@@ -268,44 +270,6 @@ vcl_ostream& operator<<(vcl_ostream& s, vsol_polygon_2d const& p)
   return s;
 }
 
-//: Binary save vsol_polygon_2d_sptr to stream.
-void
-vsl_b_write(vsl_b_ostream &os, vsol_polygon_2d_sptr const& p)
-{
-  if (!p){
-    vsl_b_write(os, false); // Indicate null pointer stored
-  }
-  else{
-    //non-null pointer will be written if internals of p are ok
-    p->b_write(os);
-  }
-}
-
-//: Binary load vsol_polygon_2d_sptr from stream.
-void
-vsl_b_read(vsl_b_istream &is, vsol_polygon_2d_sptr &p)
-{
-  bool not_null_ptr;
-  vsl_b_read(is, not_null_ptr);
-  if (not_null_ptr)
-    {
-      short ver;
-      vsl_b_read(is, ver);
-      switch(ver)
-        {
-        case 1:
-          {
-            vcl_vector<vsol_point_2d_sptr> points;
-            vsl_b_read(is, points);
-            p = new vsol_polygon_2d(points);
-            break;
-          }
-        default:
-          p = 0;
-        }
-    }
-}
-
 
 
 //***************************************************************************
@@ -313,13 +277,46 @@ vsl_b_read(vsl_b_istream &is, vsol_polygon_2d_sptr &p)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-//: Default constructor. Do nothing. Just to enable inheritance.
+//: Default constructor.
 //---------------------------------------------------------------------------
 vsol_polygon_2d::vsol_polygon_2d(void)
 {
+  storage_=new vcl_vector<vsol_point_2d_sptr>();
 }
 
 bool vsol_polygon_2d::valid_vertices(const vcl_vector<vsol_point_2d_sptr> ) const
 {
   return true;
+}
+
+
+
+
+//: Binary save vsol_polygon_2d to stream.
+void
+vsl_b_write(vsl_b_ostream &os, const vsol_polygon_2d* p)
+{
+  if (p==0) {
+    vsl_b_write(os, false); // Indicate null pointer stored
+  }
+  else{
+    vsl_b_write(os,true); // Indicate non-null pointer stored
+    p->b_write(os);
+  }
+}
+
+
+//: Binary load vsol_polygon_2d from stream.
+void
+vsl_b_read(vsl_b_istream &is, vsol_polygon_2d* &p)
+{
+  delete p;
+  bool not_null_ptr;
+  vsl_b_read(is, not_null_ptr);
+  if (not_null_ptr) {
+    p = new vsol_polygon_2d();
+    p->b_read(is);
+  }
+  else
+    p = 0;
 }

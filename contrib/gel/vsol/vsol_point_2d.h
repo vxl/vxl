@@ -48,6 +48,11 @@ class vsol_point_2d : public vsol_spatial_object_2d
   //***************************************************************************
   // Initialization
   //***************************************************************************
+  
+   //---------------------------------------------------------------------------
+  //: Default Constructor
+  //---------------------------------------------------------------------------
+  inline vsol_point_2d() : p_(0.0,0.0) {}
 
   //---------------------------------------------------------------------------
   //: Constructor from vgl_point_2d (automatic cast)
@@ -73,7 +78,7 @@ class vsol_point_2d : public vsol_spatial_object_2d
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d_sptr clone(void) const;
+  virtual vsol_spatial_object_2d* clone(void) const;
 
   //---------------------------------------------------------------------------
   //: Safe casting
@@ -200,9 +205,11 @@ class vsol_point_2d : public vsol_spatial_object_2d
 vcl_ostream&  operator<<(vcl_ostream& s, vsol_point_2d const& p);
 
 //: Binary save vsol_point_2d* to stream.
-void vsl_b_write(vsl_b_ostream &os, vsol_point_2d_sptr const& p);
+void vsl_b_write(vsl_b_ostream &os, const vsol_point_2d* p);
 
 //: Binary load vsol_point_2d* from stream.
-void vsl_b_read(vsl_b_istream &is, vsol_point_2d_sptr &p);
+void vsl_b_read(vsl_b_istream &is, vsol_point_2d* &p);
+
+
 
 #endif // vsol_point_2d_h_

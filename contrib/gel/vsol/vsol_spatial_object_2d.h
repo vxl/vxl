@@ -45,6 +45,8 @@ class vsol_spatial_object_2d;
 #include <vcl_iostream.h>
 #include <vul/vul_timestamp.h>
 #include <vbl/vbl_ref_count.h>
+#include <vsl/vsl_fwd.h>
+#include <vsl/vsl_binary_loader.h>
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_box_2d_sptr.h>
 
@@ -99,11 +101,13 @@ class vsol_spatial_object_2d : public vul_timestamp, public vbl_ref_count
   static char *SpatialTypes[];
   static const float eps;
 
- protected:
+
 
 // Constructors/Destructors--------------------------------------------------
-
+ public:
   virtual ~vsol_spatial_object_2d();
+
+ protected:
   vsol_spatial_object_2d(void);
   vsol_spatial_object_2d(const vsol_spatial_object_2d &other);
   void not_applicable(const vcl_string &message) const;
@@ -131,11 +135,25 @@ class vsol_spatial_object_2d : public vul_timestamp, public vbl_ref_count
   //: protect and unprotect
   inline void un_protect(void) { ref_count--; iu_delete(this); }
 
+// Binary I/O------------------------------------------------------------------
+
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d_sptr clone(void) const=0;
+  virtual vsol_spatial_object_2d* clone(void) const=0;
+  
+  //: Return a platform independent string identifying the class
+  virtual vcl_string is_a() const=0;
+
+  //: Return IO version number;
+  short version() const;
+
+  //: Binary save self to stream.
+  virtual void b_write(vsl_b_ostream &os) const;
+
+  //: Binary load self from stream.
+  virtual void b_read(vsl_b_istream &is);
 
   // Tag Flag and ID methods
 
@@ -313,5 +331,24 @@ inline vcl_ostream &operator<<(vcl_ostream &strm,
     strm << " NULL Spatial Object. ";
   return strm;
 }
+
+//: Stream output operator for class pointer
+inline void vsl_print_summary(vcl_ostream& os, const vsol_spatial_object_2d* so)
+{
+  os << so;
+}
+
+
+
+//: Allows derived class to be loaded by base-class pointer
+//  A loader object exists which is invoked by calls
+//  of the form "vsl_b_read(os,base_ptr)".  This loads derived class
+//  objects from the disk, places them on the heap and
+//  returns a base class pointer.
+//  In order to work the loader object requires
+//  an instance of each derived class that might be
+//  found.  This function gives the model class to
+//  the appropriate loader.
+void vsl_add_to_binary_loader(const vsol_spatial_object_2d& b);
 
 #endif // vsol_spatial_object_2d_h_

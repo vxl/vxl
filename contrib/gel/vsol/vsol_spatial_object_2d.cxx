@@ -91,3 +91,97 @@ void vsol_spatial_object_2d::grow_minmax_bounds(vsol_box_2d & comp_box) const
     bounding_box_=new vsol_box_2d;
   bounding_box_->grow_minmax_bounds(comp_box);
 }
+
+
+//: Return IO version number;
+short 
+vsol_spatial_object_2d::version() const
+{
+  return 1;
+}
+
+
+//: Binary save self to stream.
+void 
+vsol_spatial_object_2d::b_write(vsl_b_ostream &os) const
+{
+  vsl_b_write(os, this->version());
+  vsl_b_write(os, this->tag_);
+  vsl_b_write(os, this->id_);
+}
+
+
+//: Binary load self from stream.
+void 
+vsol_spatial_object_2d::b_read(vsl_b_istream &is)
+{
+  if (!is) return;
+
+  short ver;
+  vsl_b_read(is, ver);
+  switch(ver)
+  {
+  case 1:
+    vsl_b_read(is, this->tag_);
+    vsl_b_read(is, this->id_);
+    break;
+
+  default:
+    vcl_cerr << "I/O ERROR: vsol_spatial_object_2d::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< ver << '\n';
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
+  }
+}
+
+
+//==============================================
+//: Allows derived class to be loaded by base-class pointer.
+//  A loader object exists which is invoked by calls
+//  of the form "vsl_b_read(os,base_ptr);".  This loads derived class
+//  objects from the stream, places them on the heap and
+//  returns a base class pointer.
+//  In order to work the loader object requires
+//  an instance of each derived class that might be
+//  found.  This function gives the model class to
+//  the appropriate loader.
+void vsl_add_to_binary_loader(const vsol_spatial_object_2d& b)
+{
+  vsl_binary_loader<vsol_spatial_object_2d>::instance().add(b);
+}
+
+/*
+// Save with base class pointers
+void vsl_b_read(vsl_b_istream& is, vsol_spatial_object_2d * &p)
+{
+  vsol_spatial_object_2d * n = p->clone();
+  delete p;
+  bool not_null_ptr;
+  vsl_b_read(is, not_null_ptr);
+  if (not_null_ptr)
+  {
+    p = n;
+    vsl_b_read(is, *p);
+  }
+  else
+  {
+    p = 0;
+    delete n;
+  }
+}
+
+template<class T>
+void vsl_b_write(vsl_b_ostream& os, const vsol_spatial_object_2d *p)
+{
+  if (p==0)
+  {
+    vsl_b_write(os, false); // Indicate null pointer stored 
+  }
+  else
+  {
+    vsl_b_write(os,true); // Indicate non-null pointer stored 
+    p->b_write(os);
+  }
+}
+*/
+ 

@@ -23,7 +23,7 @@ vsol_point_2d::~vsol_point_2d()
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d_sptr vsol_point_2d::clone(void) const
+vsol_spatial_object_2d* vsol_point_2d::clone(void) const
 {
   return new vsol_point_2d(*this);
 }
@@ -150,6 +150,7 @@ vsol_point_2d::to_vector(const vsol_point_2d &other) const
 void vsol_point_2d::b_write(vsl_b_ostream &os) const
 {
   vsl_b_write(os, version());
+  vsol_spatial_object_2d::b_write(os);
   vsl_b_write(os, p_.x());
   vsl_b_write(os, p_.y());
 }
@@ -165,11 +166,19 @@ void vsol_point_2d::b_read(vsl_b_istream &is)
   {
   case 1:
     {
+      vsol_spatial_object_2d::b_read(is);
       double x=0, y=0;
       vsl_b_read(is, x);
       vsl_b_read(is, y);
       this->p_.set(x, y);
-    }
+    }   
+    break;
+
+  default:
+    vcl_cerr << "I/O ERROR: vsol_point_2d::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< ver << '\n';
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
 //: Return IO version number;
@@ -184,7 +193,7 @@ void vsol_point_2d::print_summary(vcl_ostream &os) const
   os << *this;
 }
 
-  //: Return a platform independent string identifying the class
+//: Return a platform independent string identifying the class
 vcl_string vsol_point_2d::is_a() const
 {
   return vcl_string("vsol_point_2d");
@@ -203,11 +212,12 @@ vcl_ostream& operator<<(vcl_ostream& s, vsol_point_2d const& p)
   return s;
 }
 
-//: Binary save vsol_point_2d_sptr to stream.
+
+//: Binary save vsol_point_2d to stream.
 void
-vsl_b_write(vsl_b_ostream &os, vsol_point_2d_sptr const& p)
+vsl_b_write(vsl_b_ostream &os, const vsol_point_2d* p)
 {
-  if (!p){
+  if (p==0) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
   else{
@@ -216,28 +226,18 @@ vsl_b_write(vsl_b_ostream &os, vsol_point_2d_sptr const& p)
   }
 }
 
-//: Binary load vsol_point_2d_sptr from stream.
+
+//: Binary load vsol_point_2d from stream.
 void
-vsl_b_read(vsl_b_istream &is, vsol_point_2d_sptr &p)
+vsl_b_read(vsl_b_istream &is, vsol_point_2d* &p)
 {
+  delete p;
   bool not_null_ptr;
   vsl_b_read(is, not_null_ptr);
-  if (not_null_ptr)
-    {
-      short ver;
-      vsl_b_read(is, ver);
-      switch(ver)
-        {
-        case 1:
-          {
-            double x=0, y=0;
-            vsl_b_read(is, x);
-            vsl_b_read(is, y);
-            p = new vsol_point_2d(x, y);
-            break;
-          }
-        default:
-          p = 0;
-        }
-    }
+  if (not_null_ptr) {
+    p = new vsol_point_2d();
+    p->b_read(is);
+  }
+  else
+    p = 0;
 }

@@ -66,7 +66,7 @@ vsol_polyline_2d::~vsol_polyline_2d()
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d_sptr vsol_polyline_2d::clone(void) const
+vsol_spatial_object_2d* vsol_polyline_2d::clone(void) const
 {
   return new vsol_polyline_2d(*this);
 }
@@ -290,55 +290,59 @@ bool vsol_polyline_2d::is_class(const vcl_string& cls) const
   return cls==vsol_polyline_2d::is_a();
 }
 
+
+//---------------------------------------------------------------------------
+//: output description to stream
+//---------------------------------------------------------------------------
+void vsol_polyline_2d::describe(vcl_ostream &strm, int blanking) const
+{
+  if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
+
+  if(!p0_||!p1_)
+    {
+      strm << "[null]";
+      return;      
+    }
+  strm << '[' << *(p0_) << " ... " << *(p1_) << ']';
+}
+
 //external functions
 //just print the endpoints 
 vcl_ostream& operator<<(vcl_ostream& s, vsol_polyline_2d const& p)
 {
-  vsol_point_2d_sptr p0 = p.p0(), p1 = p.p1();
-  if(!p0||!p1)
-    {
-      s << "[null]";
-      return s;      
-    }
-  s << '[' << *(p.p0()) << ' ' << *(p.p1()) << ']';
+  p.describe(s);
   return s;
 }
 
-//: Binary save vsol_polyline_2d_sptr to stream.
+
+
+//: Binary save vsol_polyline_2d to stream.
 void
-vsl_b_write(vsl_b_ostream &os, vsol_polyline_2d_sptr const& p)
+vsl_b_write(vsl_b_ostream &os, const vsol_polyline_2d* p)
 {
-  if (!p){
+  if (p==0) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
   else{
-    //non-null pointer will be written if internals of p are ok
+    vsl_b_write(os,true); // Indicate non-null pointer stored
     p->b_write(os);
   }
 }
 
-//: Binary load vsol_polyline_2d_sptr from stream.
+
+//: Binary load vsol_polyline_2d from stream.
 void
-vsl_b_read(vsl_b_istream &is, vsol_polyline_2d_sptr &p)
+vsl_b_read(vsl_b_istream &is, vsol_polyline_2d* &p)
 {
+  delete p;
   bool not_null_ptr;
   vsl_b_read(is, not_null_ptr);
-  if (not_null_ptr)
-    {
-      short ver;
-      vsl_b_read(is, ver);
-      switch(ver)
-        {
-        case 1:
-          {
-            vcl_vector<vsol_point_2d_sptr> points;
-            vsl_b_read(is, points);
-            p = new vsol_polyline_2d(points);
-            break;
-          }
-        default:
-          p = 0;
-        }
-    }
+  if (not_null_ptr) {
+    p = new vsol_polyline_2d();
+    p->b_read(is);
+  }
+  else
+    p = 0;
 }
+
 
