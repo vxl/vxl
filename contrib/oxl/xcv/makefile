@@ -35,6 +35,7 @@ ifeq "$(TJ_GCC295)" "1"
 FLAGS_xcv_geometry.cxx += -ftemplate-depth-100
 endif
 ifeq "$(TJ_GCC30)" "1"
+FLAGS_xcv_geometry.cxx += -O0
 FLAGS_xcv_multiview.cxx += -O0 # otherwise gcc 3.0 needs too much virtual memory
 endif
 
