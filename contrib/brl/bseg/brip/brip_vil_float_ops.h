@@ -34,7 +34,6 @@ class brip_vil_float_ops
  public:
   ~brip_vil_float_ops() {}
 
-  
   //: convolves with the specified kernel
   static vil_image_view<float>
     convolve(vil_image_view<float> const& input,
@@ -77,13 +76,10 @@ class brip_vil_float_ops
 
   //: sets absolute values greater than thresh to specified level
   static vil_image_view<float>
-
     abs_clip_to_level(vil_image_view<float> const & image,
                       const float thresh, const float level = 0.0);
-  static vil_image_view<float> 
-	  average_NxN(vil_image_view<float> const & img, int N);
-
-
+  static vil_image_view<float>
+    average_NxN(vil_image_view<float> const & img, int N);
 
   //: The gradient using a 3x3 kernel
   static void gradient_3x3(vil_image_view<float> const& input,
@@ -100,7 +96,6 @@ class brip_vil_float_ops
           vil_image_view<float> const& Ixy,
           vil_image_view<float> const& Iyy);
 
-
   //: IxIx.transpose gradient matrix elements (N = 2n+1)
   static void grad_matrix_NxN(vil_image_view<float> const& input, int n,
                               vil_image_view<float>& IxIx,
@@ -113,7 +108,6 @@ class brip_vil_float_ops
                                       vil_image_view<float> const& IyIy,
                                       double scale=0.04);
 
-
   //: computes the conditioning of the 2n+1 x 2n+1 gradient neigborhood
   static vil_image_view<float>
     sqrt_grad_singular_values(vil_image_view<float>& input, int n);
@@ -125,16 +119,13 @@ class brip_vil_float_ops
                                  vil_image_view<float>& vx,
                                  vil_image_view<float>& vy);
 
-  
   //: computes optical flow using Horn & Schunck's method
   static int  Horn_SchunckMotion(vil_image_view<float> & current_frame,
                                   vil_image_view<float> & previous_frame,
                                   vil_image_view<float> & vx,
                                   vil_image_view<float> & vy,
-                                  float alpha_coef=10000.0f, 
-								  double err_thresh=0.01f);
-
-
+                                  float alpha_coef=10000.0f,
+                                  double err_thresh=0.01f);
 
   //: fills a border of width w on left and right of image with value
   static void fill_x_border(vil_image_view<float>& image, int w, float value);
@@ -155,7 +146,6 @@ class brip_vil_float_ops
   static vil_image_view<unsigned short>
     convert_to_short(vil_image_view<float> const& image,
                      float min_val, float max_val);
-
 
   //: converts a vil_image_resource to a float image
   static vil_image_view<float>
@@ -210,7 +200,6 @@ class brip_vil_float_ops
     void resize(vil_image_view<float> const& input,
                 int width, int height,
                 vil_image_view<float>& output);
-
 
   //:resize to closest power of two larger dimensions than the input
   static
