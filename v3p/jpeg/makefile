@@ -50,12 +50,9 @@ SOURCES += jutils.c
 SOURCES += jmemmgr.c 
 SOURCES += jmemansi.c
 
-
-
-
-##########################################
+################################
 include ${IUEROOT}/config/top.mk
-##########################################
+################################
 
 ifeq ($(OS),win32)
 CFLAGS += -D_jpeg_mak
