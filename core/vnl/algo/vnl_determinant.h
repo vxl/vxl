@@ -22,7 +22,6 @@
 #include <vnl/vnl_matrix.h>
 
 
-
 //: direct evaluation for 2x2 matrix
 template <class T> T vnl_determinant(T const *row0,
                                      T const *row1);
@@ -38,12 +37,12 @@ template <class T> T vnl_determinant(T const *row0,
                                      T const *row2,
                                      T const *row3);
 
-//: evaluation using direct methods for sizes of 2x2, 3x3, and 4x4 
+//: evaluation using direct methods for sizes of 2x2, 3x3, and 4x4
 // or qr decompostion for other matrices.
 template <class T>
 T vnl_determinant(T const *const *rows, int size, bool balance = false);
 
-//: evaluation using direct methods for sizes of 2x2, 3x3, and 4x4 
+//: evaluation using direct methods for sizes of 2x2, 3x3, and 4x4
 // or qr decompostion for other matrices.
 template <class T>
 T vnl_determinant(vnl_matrix<T> const &M, bool balance = false);
