@@ -25,14 +25,6 @@ SOURCES += vifa_parallel.cxx
 SOURCES += vifa_parallel_params.cxx
 MANPAGE_SOURCES += vifa_bbox.h
 
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
-ifndef NOTEST
-SUBDIRS += tests
-endif
-
-######################################
-include ${IUEROOT}/config/top-rules.mk
-######################################
+################################
+include ${IUEROOT}/config/top.mk
+################################

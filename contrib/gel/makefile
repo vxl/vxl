@@ -20,7 +20,7 @@ SUBDIRS += gmvl
 SUBDIRS += vgel/kl vgel gkll
 
 # Dense matcher
-SUBDIRS += vsrl vmal
+SUBDIRS += vmal
 
 # Triangulation code
 SUBDIRS += gtrl
