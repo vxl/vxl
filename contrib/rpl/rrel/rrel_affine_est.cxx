@@ -161,7 +161,9 @@ rrel_affine_est::compute_residuals( const vnl_vector<double>& params,
   
   vnl_vector<double> diff;
   for( unsigned int i=0; i<num_samples_; ++i ) {
-    diff = A*from_pts_[i] + t - to_pts_[i];
+    diff = A*from_pts_[i];
+    diff += t;
+    diff -= to_pts_[i];
     residuals[i] = diff.two_norm();
   }
 }
