@@ -192,7 +192,7 @@ SOURCE=.\Templates/vcl_list+Voxel-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates/vcl_vector+Voxel-.cxx
+SOURCE=.\Templates/vcl_vector+vcl_vector+Voxel--.cxx
 
 # End Source File
 # End Group
