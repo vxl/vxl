@@ -1,19 +1,19 @@
 // This is brl/bseg/brip/brip_float_ops.h
 #ifndef brip_float_ops_h_
 #define brip_float_ops_h_
-
 //-----------------------------------------------------------------------------
 //:
 // \file
 // \author J.L. Mundy
 // \brief operations on memory_image_of<float> operands
 //
-// Thse methods are similar to the VanDuc gevd_float_ops methods. However,
+// These methods are similar to the VanDuc gevd_float_ops methods. However,
 // they use vil1_image_of<float> buffers rather than the old bufferxy
 // structure. The purpose is to provide efficient foundational
 // segmentation routines. They are not meant to be generic.
 //
 // \verbatim
+//  Modifications
 //   Initial version February 15, 2003
 // \endverbatim
 //
