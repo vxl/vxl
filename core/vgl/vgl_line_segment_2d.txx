@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_line_segment_2d.txx
+// This is core/vgl/vgl_line_segment_2d.txx
 #ifndef vgl_line_segment_2d_txx_
 #define vgl_line_segment_2d_txx_
 
@@ -23,19 +23,19 @@ vcl_istream& operator>>(vcl_istream& s, vgl_line_segment_2d<Type>& p)
 template <class Type>
 Type vgl_line_segment_2d<Type>::a() const
 {
- return (point1_.y()-point2_.y());
+  return point1_.y()-point2_.y();
 }
 
 template <class Type>
 Type vgl_line_segment_2d<Type>::b() const
 {
- return (point2_.x()-point1_.x());
+  return point2_.x()-point1_.x();
 }
 
 template <class Type>
 Type vgl_line_segment_2d<Type>::c() const
 {
-return (point1_.x()*point2_.y()-point2_.x()*point1_.y());
+  return point1_.x()*point2_.y()-point2_.x()*point1_.y();
 }
 
 template <class Type>
@@ -53,12 +53,26 @@ vgl_vector_2d<double>  vgl_line_segment_2d<Type>::normal() const
 }
 
 template <class Type>
-double vgl_line_segment_2d<Type>::tangent_angle() const
+double vgl_line_segment_2d<Type>::slope_degrees() const
 {
-  double deg_per_rad = 180/3.14159265358979323846;
+  static const double deg_per_rad = 45.0/vcl_atan2(1.0,1.0);
   double dy = point2_.y()-point1_.y();
   double dx = point2_.x()-point1_.x();
-  return deg_per_rad*vcl_atan2(dy,dx);
+  // do special cases separately, to avoid rounding errors:
+  if (dx == 0) return dy<0 ? -90.0 : 90.0;
+  if (dy == 0) return dx<0 ? 180.0 : 0.0;
+  if (dy == dx) return dy<0 ? -135.0 : 45.0;
+  if (dy+dx == 0) return dy<0 ? -45.0 : 135.0;
+  // general case:
+  return deg_per_rad * vcl_atan2(dy,dx);
+}
+
+template <class Type>
+double vgl_line_segment_2d<Type>::slope_radians() const
+{
+  double dy = point2_.y()-point1_.y();
+  double dx = point2_.x()-point1_.x();
+  return vcl_atan2(dy,dx);
 }
 
 #undef VGL_LINE_SEGMENT_2D_INSTANTIATE
