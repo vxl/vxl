@@ -129,11 +129,15 @@ vil2_image_view<vil2_byte> filtered_image = tmp_image2.transpose();
 * The vil2_image_data class is an abstract base class for image data, views of which can be
 * obtained (or changed) with the get_view()/set_view() functions.
 * The two main derived classes are
-* - vil2_file_image: Representing an image in a file
+* - vil2_filetype_image: Representing an image in a file
 * - vil2_memory_image: Representing an image in memory (essentially a wrapper around a view)
 *
 * Most instances of vil2_image_data objecst will be through smart pointers. So expect to see
 * lots of references to vil2_image_data_sptr types.
+*
+* \section Registered images
+* These meet two needs, a common base class for 2D and 3D images, and a means of
+* associating a world to image transform with an image.
 *
 * \section Examples examples
 * There are plenty of working examples in the examples subdirectory - these can be
