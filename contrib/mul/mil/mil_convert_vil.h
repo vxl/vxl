@@ -46,9 +46,9 @@ inline void mil_convert_vil_cm2cv(vil_memory_image_of<vil_rgb_byte>& vil_image,
   for (int y=0;y<ny;++y)
     for (int x=0;x<nx;++x)
       {
-        red=mil_image(x,y,0);
-        green=mil_image(x,y,1);
-        blue=mil_image(x,y,2);
+        red   = vil_byte(mil_image(x,y,0));
+        green = vil_byte(mil_image(x,y,1));
+        blue  = vil_byte(mil_image(x,y,2));
         vil_image(x,y)=vil_rgb_byte(red,green,blue);
       }
 }
