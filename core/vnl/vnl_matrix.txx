@@ -790,11 +790,8 @@ void vnl_matrix<T>::normalize_rows()
       vnl_numeric_traits<vnl_numeric_traits<T>::abs_t>::real_t scale = 1.0/sqrt(norm);
       for (unsigned j = 0; j < this->num_cols; j++) {
         // FIXME need correct rounding here
-#if defined(VCL_WIN32) || defined(VCL_SGI_CC_7) || defined(VCL_KAI)
+	// There is no *standard* no operator*(complex<float>, double).
         this->data[i][j] *= scale;
-#else
-        this->data[i][j] = T(this->data[i][j] * scale);
-#endif
       }
     }
   }
@@ -814,11 +811,8 @@ void vnl_matrix<T>::normalize_columns()
       vnl_numeric_traits<vnl_numeric_traits<T>::abs_t>::real_t scale = 1.0/sqrt(norm);
       for (unsigned i = 0; i < this->num_rows; i++) {
         // FIXME need correct rounding here
-#if defined (VCL_WIN32) || defined(VCL_SGI_CC_7) || defined(VCL_KAI)
+	// There is no *standard* no operator*(complex<float>, double).
         this->data[i][j] *= scale;
-#else
-        this->data[i][j] = T(this->data[i][j] * scale);
-#endif
       }
     }
   }
