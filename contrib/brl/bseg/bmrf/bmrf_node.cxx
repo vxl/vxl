@@ -270,7 +270,8 @@ bmrf_node::probability(const bmrf_gamma_func_sptr& gamma)
       error = bmrf_match_error(xform_seg, neighbor->epi_seg());
     }
     double alpha_range = (*a_itr)->max_alpha_ - (*a_itr)->min_alpha_;
-    prob += alpha_range * (*a_itr)->int_prob_ * vcl_exp(-error/2.0);
+    double int_var = 0.001; // intensity variance
+    prob += alpha_range * vcl_exp(-error/2.0 - (*a_itr)->avg_intensity_error_/(2.0*int_var));
     total_alpha += alpha_range;
   }
   return (prob / total_alpha) * 0.398942; // 1/sqrt(2*pi)
@@ -511,7 +512,7 @@ bmrf_node::print_summary( vcl_ostream& os ) const
 //: Constructor
 bmrf_node::bmrf_arc::bmrf_arc()
   : from_(NULL), to_(NULL), probability_(0.0),
-    min_alpha_(0.0), max_alpha_(0.0), int_prob_(0.0)
+    min_alpha_(0.0), max_alpha_(0.0), avg_intensity_error_(0.0)
 {
 }
 
@@ -519,7 +520,7 @@ bmrf_node::bmrf_arc::bmrf_arc()
 //: Constructor
 bmrf_node::bmrf_arc::bmrf_arc( const bmrf_node_sptr& f, const bmrf_node_sptr& t)
   : from_(f.ptr()), to_(t.ptr()), probability_(0.0),
-    min_alpha_(0.0), max_alpha_(0.0), int_prob_(0.0)
+    min_alpha_(0.0), max_alpha_(0.0), avg_intensity_error_(0.0)
 {
   if ( from_ && to_ ) {
     if (from_->frame_num() != to_->frame_num())
@@ -551,8 +552,6 @@ bmrf_node::bmrf_arc::time_init()
       to_->epi_seg()->n_pts() <= 0 )
     return;
 
-  double int_var = 0.001; // intensity variance
-
   bmrf_epi_seg_sptr ep1 = from_->epi_seg();
   bmrf_epi_seg_sptr ep2 = to_->epi_seg();
 
@@ -570,8 +569,7 @@ bmrf_node::bmrf_arc::time_init()
     l_error += dli*dli;
     r_error += dri*dri;
   }
-  double int_error = (l_error + r_error) * d_alpha / (alpha_range * int_var);
-  int_prob_ = vcl_exp(-int_error/2.0);
+  avg_intensity_error_ = (l_error + r_error) * d_alpha / alpha_range;
 }
 
 

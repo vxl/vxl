@@ -67,7 +67,7 @@ class bmrf_node : public vbl_ref_count
 
     double probability_;
     double min_alpha_, max_alpha_;
-    double int_prob_;
+    double avg_intensity_error_;
   };
 
   friend class bmrf_network;
