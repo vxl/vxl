@@ -83,9 +83,17 @@ bool vgl_polygon<T>::contains(T x, T y) const
     sheet_t const& pgon = sheets_[s];
     int n = pgon.size();
     for (int i = 0, j = n-1; i < n; j = i++)
+    {
+      // by definition, corner points and edge points are inside the polygon:
+      if ((pgon[j].x() - x) * (pgon[i].y() - y) == (pgon[i].x() - x) * (pgon[j].y() - y) &&
+          (((pgon[i].x()<=x) && (x<=pgon[j].x())) || ((pgon[j].x()<=x) && (x<=pgon[i].x()))) &&
+          (((pgon[i].y()<=y) && (y<=pgon[j].y())) || ((pgon[j].y()<=y) && (y<=pgon[i].y()))))
+        return true;
+      // invert c for each edge crossing:
       if ((((pgon[i].y()<=y) && (y<pgon[j].y())) || ((pgon[j].y()<=y) && (y<pgon[i].y()))) &&
           (x < (pgon[j].x() - pgon[i].x()) * (y - pgon[i].y()) / (pgon[j].y() - pgon[i].y()) + pgon[i].x()))
         c = !c;
+    }
   }
   return c;
 }
