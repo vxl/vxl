@@ -13,6 +13,9 @@
 // treated in various ways which can often be expressed in terms
 // of ways to extend the signal outside its original range.
 enum vil2_convolve_boundary_option {
+  // Do not fill destination edges at all
+  // ie leave them unchanged.
+  vil2_convolve_ignore_edge,
   // Do not to extend the signal, but pad with zeros.
   //     |                               |
   // K                       ----*-------
@@ -60,11 +63,12 @@ enum vil2_convolve_boundary_option {
 //  Fills only edge: dest[i], i=0..(1-k_lo)
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil2_algo_convolve_edge_1d(destT* dest, int d_step,
-                                       const srcT* src, int s_step,
+                                       const srcT* src, int n, int s_step,
                                        const kernelT* kernel, int k_lo, int k_hi, int kstep,
                                        accumT,
                                        vil2_convolve_boundary_option option)
 {
+  if (option==vil2_convolve_ignore_edge) return;
   if (option==vil2_convolve_no_extend)
   {
     // Initialise first elements of row to zero
@@ -72,19 +76,86 @@ inline void vil2_algo_convolve_edge_1d(destT* dest, int d_step,
       *dest = 0;
   }
   else
-	if (option==vil2_convolve_zero_extend)
-	{
-    // Assume zero outside src image
+  if (option==vil2_convolve_zero_extend)
+  {
+    // Assume src[i]==0 for i<0
     for (int i=k_lo+1;i<=0;++i,dest+=d_step,src+=s_step)
-		{
-		  accumT sum = 0;
-			const srcT* s = src;
-			const kernelT* k = kernel+i*kstep;
+    {
+      accumT sum = 0;
+      const srcT* s = src;
+      const kernelT* k = kernel+i*kstep;
       for (int j=i;j<=k_hi;++j,s+=s_step,k+=kstep) sum+= (*s)*(*k);
 			*dest=sum;
-		}
+    }
+  }
+  else
+  if (option==vil2_convolve_constant_extend)
+  {
+    // Assume src[i]=src[0] for i<0
+    int i_max = 1-k_lo;
+	for (int i=0;i<=i_max;++i)
+	{
+	  accumT sum=0;
+	  for (int j=k_lo;j<=k_hi;++j)
+	  {
+	    if ((i+j)<0) sum+=src[0]*kernel[j*kstep];
+		else         sum+=src[(i+j)*s_step]*kernel[j*kstep];
+      }
+	  dest[i]=sum;
 	}
-	else
+  }
+  else
+  if (option==vil2_convolve_periodic_extend)
+  {
+    // Assume src[i]=src[0] for i<0
+    int i_max = 1-k_lo;
+	for (int i=0;i<=i_max;++i)
+	{
+	  accumT sum=0;
+	  for (int j=k_lo;j<=k_hi;++j)
+	  {
+	    if ((i+j)<0) sum+=src[0]*kernel[j*kstep];
+		else         sum+=src[(i+j)*s_step]*kernel[j*kstep];
+      }
+	  dest[i]=sum;
+	}
+  }
+  else
+  if (option==vil2_convolve_reflect_extend)
+  {
+    // Assume src[i]=src[n+i] for i<0
+    int i_max = 1-k_lo;
+	for (int i=0;i<=i_max;++i)
+	{
+	  accumT sum=0;
+	  for (int j=k_lo;j<=k_hi;++j)
+        sum+=src[((i+j+n)%n)*s_step]*kernel[j*kstep];
+	  dest[i]=sum;
+	}
+  }
+  else
+  if (option==vil2_convolve_trim)
+  {
+    // Truncate and reweight kernel
+	accumT k_sum_all=0;
+    for (int j=k_lo;j<=k_hi;++j) k_sum_all+=kernel[j*kstep];
+
+    int i_max = 1-k_lo;
+	for (int i=0;i<=i_max;++i)
+	{
+	  accumT sum=0;
+	  accumT k_sum=0;
+	  // Sum elements which overlap src
+	  // ie i+j>=0  (so j starts at -i)
+	  for (int j=-i;j<=k_hi;++j)
+	  {
+        sum+=src[(i+j)*s_step]*kernel[j*kstep];
+		k_sum += kernel[j*kstep];
+      }
+	  dest[i]=sum*k_sum_all/k_sum;
+	}
+  }
+  else
   {
     vcl_cout<<"vil2_algo_convolve_edge_1d: ";
     vcl_cout<<"Sorry, can't deal with supplied edge option."<<vcl_endl;
@@ -103,27 +174,24 @@ inline void vil2_algo_convolve_1d(destT* dest0, int d_step,
                                   vil2_convolve_boundary_option end_option)
 {
   // Deal with start (fill elements 0..1-k_lo of dest)
-  vil2_algo_convolve_edge_1d(dest0,d_step,src0,s_step,kernel,k_lo,k_hi,1,ac,start_option);
+  vil2_algo_convolve_edge_1d(dest0,d_step,src0,nx,s_step,kernel,k_lo,k_hi,1,ac,start_option);
 
   const kernelT* k_begin = kernel+k_lo;
   const kernelT* k_end   = kernel+k_hi+1;
   const srcT* src = src0;
-  destT* dest = dest0-d_step*k_lo;
 
-  destT* end_dest = dest + d_step*(int(nx)-k_hi);
-  while (dest!=end_dest)
+  destT* end_dest = dest0 + d_step*(int(nx)-k_hi);
+  for (destT* dest = dest0-d_step*k_lo;dest!=end_dest;dest+=d_step,src+=s_step)
   {
     accumT sum = 0;
     const srcT* s= src;
     for (const kernelT *k = k_begin;k!=k_end; ++k,s+=s_step) sum+= (*k)*(*s);
     *dest = destT(sum);
-    src+=s_step;
-    dest+=d_step;
   }
 
   // Deal with end  (reflect data and kernel!)
   vil2_algo_convolve_edge_1d(dest0+(nx-1)*d_step,-d_step,
-                             src0+(nx-1)*s_step,-s_step,kernel,
+                             src0+(nx-1)*s_step,nx,-s_step,kernel,
                              -k_hi,-k_lo,-1,ac,end_option);
 }
 

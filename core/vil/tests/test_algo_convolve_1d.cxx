@@ -24,31 +24,74 @@ void test_algo_convolve_1d_byte()
   TEST_NEAR("First full value",dest[1],14.0,1e-6);
   TEST_NEAR("Last full value",dest[n-2],6*n-4,1e-6);
 
+  vcl_cout<<"Testing vil2_convolve_ignore_edge end type"<<vcl_endl;
+  for (int i=0;i<n;++i) dest[i]=999;
+
+  vil2_algo_convolve_1d(&dest[0],1, &src[0],n,1,
+                        &kernel[1],-1,1,ac,
+						vil2_convolve_ignore_edge,vil2_convolve_ignore_edge);
+
+  TEST_NEAR("Start",dest[0],999,1e-6);
+  TEST_NEAR("First full value",dest[1],14.0,1e-6);
+  TEST_NEAR("Last full value",dest[n-2],6*n-4.0,1e-6);
+  TEST_NEAR("End",dest[n-1],999,1e-6);
+
   vcl_cout<<"Testing vil2_convolve_no_extend end type"<<vcl_endl;
+  for (int i=0;i<n;++i) dest[i]=999;
+
   vil2_algo_convolve_1d(&dest[0],1, &src[0],n,1,
                         &kernel[1],-1,1,ac,
 						vil2_convolve_no_extend,vil2_convolve_no_extend);
 
   TEST_NEAR("Start",dest[0],0,1e-6);
   TEST_NEAR("First full value",dest[1],14.0,1e-6);
+  TEST_NEAR("Last full value",dest[n-2],6*n-4.0,1e-6);
   TEST_NEAR("End",dest[n-1],0,1e-6);
 
-  for (int i=0;i<n;++i) vcl_cout<<dest[i]<<" ";
-  vcl_cout<<vcl_endl;
 
   vcl_cout<<"Testing vil2_convolve_zero_extend end type"<<vcl_endl;
+  for (int i=0;i<n;++i) dest[i]=999;
   vil2_algo_convolve_1d(&dest[0],1, &src[0],n,1,
                         &kernel[1],-1,1,ac,
 						vil2_convolve_zero_extend,vil2_convolve_zero_extend);
 
   TEST_NEAR("Start",dest[0],8,1e-6);
   TEST_NEAR("First full value",dest[1],14.0,1e-6);
+  TEST_NEAR("Last full value",dest[n-2],6*n-4.0,1e-6);
   TEST_NEAR("End",dest[n-1],3*n-1,1e-6);
 
-  for (int i=0;i<n;++i) vcl_cout<<dest[i]<<" ";
-  vcl_cout<<vcl_endl;
+  vcl_cout<<"Testing vil2_convolve_constant_extend end type"<<vcl_endl;
+  for (int i=0;i<n;++i) dest[i]=999;
+  vil2_algo_convolve_1d(&dest[0],1, &src[0],n,1,
+                        &kernel[1],-1,1,ac,
+						vil2_convolve_constant_extend,vil2_convolve_constant_extend);
 
-	// *** Check for over-runs ****
+  TEST_NEAR("Start",dest[0],9,1e-6);
+  TEST_NEAR("First full value",dest[1],14.0,1e-6);
+  TEST_NEAR("Last full value",dest[n-2],6*n-4.0,1e-6);
+  TEST_NEAR("End",dest[n-1],6*n-1,1e-6);
+
+  vcl_cout<<"Testing vil2_convolve_reflect_extend end type"<<vcl_endl;
+  for (int i=0;i<n;++i) dest[i]=999;
+  vil2_algo_convolve_1d(&dest[0],1, &src[0],n,1,
+                        &kernel[1],-1,1,ac,
+						vil2_convolve_reflect_extend,vil2_convolve_reflect_extend);
+
+  TEST_NEAR("Start",dest[0],n+8,1e-6);
+  TEST_NEAR("First full value",dest[1],14.0,1e-6);
+  TEST_NEAR("Last full value",dest[n-2],6*n-4.0,1e-6);
+  TEST_NEAR("End",dest[n-1],3*n+2,1e-6);
+
+  vcl_cout<<"Testing vil2_convolve_trim end type"<<vcl_endl;
+  for (int i=0;i<n;++i) dest[i]=999;
+  vil2_algo_convolve_1d(&dest[0],1, &src[0],n,1,
+                        &kernel[1],-1,1,ac,
+						vil2_convolve_trim,vil2_convolve_trim);
+
+  TEST_NEAR("Start",dest[0],48.0/5.0,1e-6);
+  TEST_NEAR("First full value",dest[1],14.0,1e-6);
+  TEST_NEAR("Last full value",dest[n-2],6*n-4.0,1e-6);
+  TEST_NEAR("End",dest[n-1],6*n-2.0,1e-6);
 
 }
 
