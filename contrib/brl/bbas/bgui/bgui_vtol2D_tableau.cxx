@@ -254,12 +254,19 @@ add_spatial_object(vsol_spatial_object_2d_sptr const& sos)
       vsol_point_2d_sptr p = sos->cast_to_point();
       this->add_vsol_point_2d(p);
     }
-  } else if (sos->cast_to_curve()) {
+  } 
+  if (sos->cast_to_curve()) {
     if (sos->cast_to_curve()->cast_to_digital_curve())
       {
         vdgl_digital_curve_sptr dc =
           sos->cast_to_curve()->cast_to_digital_curve();
         this->add_digital_curve(dc);
+      }
+    if (sos->cast_to_curve()->cast_to_line_2d())
+      {
+        vsol_line_2d_sptr line =
+          sos->cast_to_curve()->cast_to_line_2d();
+        this->add_vsol_line_2d(line);
       }
   }
   return;
