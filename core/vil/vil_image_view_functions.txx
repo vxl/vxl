@@ -174,15 +174,15 @@ void vil2_print_all(vcl_ostream& os,const vil2_image_view<T>& view)
 #define VIL2_IMAGE_VIEW_FUNCTIONS_INSTANTIATE_FOR_SCALARS(T) \
 template vil2_image_view<T > vil2_view_as_planes(const vil2_image_view<vil_rgb<T > >&); \
 template vil2_image_view<vil_rgb<T > > vil2_view_as_rgb(const vil2_image_view<T >& plane_view); \
-template void vil2_value_range(T& min_value, T& max_value,const vil2_image_view<T>& view); \
+template void vil2_value_range(T& min_value, T& max_value,const vil2_image_view<T >& view); \
 template void vil2_print_value(vcl_ostream& os, const T& value)
 
 // For everything else
 #define VIL2_IMAGE_VIEW_FUNCTIONS_INSTANTIATE(T) \
-template vil2_image_view<T> vil2_transpose(const vil2_image_view<T>& v); \
+template vil2_image_view<T > vil2_transpose(const vil2_image_view<T >& v); \
 template void vil2_print_all(vcl_ostream& os,const vil2_image_view<T >& view); \
-template void vil2_fill(vil2_image_view<T>& view, T value); \
-template void vil2_fill_row(vil2_image_view<T>& view, unsigned y, T value); \
-template void vil2_fill_col(vil2_image_view<T>& view, unsigned x, T value)
+template void vil2_fill(vil2_image_view<T >& view, T value); \
+template void vil2_fill_row(vil2_image_view<T >& view, unsigned y, T value); \
+template void vil2_fill_col(vil2_image_view<T >& view, unsigned x, T value)
 
 #endif
