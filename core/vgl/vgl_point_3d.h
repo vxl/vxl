@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_point_3d.h
+// This is core/vgl/vgl_point_3d.h
 #ifndef vgl_point_3d_h
 #define vgl_point_3d_h
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -204,9 +204,9 @@ template <class Type> inline
 vgl_point_3d<Type> midpoint(vgl_point_3d<Type> const& p1,
                             vgl_point_3d<Type> const& p2,
                             Type f = 0.5) {
-  return vgl_point_3d<Type>((1.0-f)*p1.x() + f*p2.x(),
-                            (1.0-f)*p1.y() + f*p2.y(),
-                            (1.0-f)*p1.z() + f*p2.z());
+  return vgl_point_3d<Type>(Type((1.0-f)*p1.x() + f*p2.x()),
+                            Type((1.0-f)*p1.y() + f*p2.y()),
+                            Type((1.0-f)*p1.z() + f*p2.z()));
 }
 
 
