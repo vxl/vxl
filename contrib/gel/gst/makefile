@@ -10,8 +10,6 @@ USES := vxl
 LIBRARY := gst
 VERSION := 1.0
 
-INCDIRS = ..
-
 SOURCES += gst_vertex_2d.cxx
 SOURCES += gst_edge_2d.cxx
 SOURCES += gst_polygon_2d.cxx
