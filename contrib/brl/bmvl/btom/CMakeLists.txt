@@ -18,9 +18,4 @@ AUX_SOURCE_DIRECTORY(Templates btom_sources)
 
 ADD_LIBRARY(btom ${btom_sources})
 
-TARGET_LINK_LIBRARIES(btom vil vul vbl vcl)
-
-
-
-
-
+TARGET_LINK_LIBRARIES(btom gevd vil vul vbl vcl)
