@@ -178,7 +178,7 @@
 // using operator new.  This in turn is plausible as the point is to avoid
 // such calls.
 //
-template <class T, int m, int n>
+template <class T, unsigned m, unsigned n>
 class vnl_matrix_fixed_ref : public vnl_matrix<T>
 {
   typedef vnl_matrix<T> Base;
