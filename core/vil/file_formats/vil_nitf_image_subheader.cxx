@@ -181,7 +181,9 @@ vil_nitf_image_subheader::vil_nitf_image_subheader (const vil_nitf_image_subhead
     NBPP   = header.NBPP;
     PJUST  = header.PJUST;
     PVTYPE_ = header.PVTYPE_;
+    delete [] IREP ;
     IREP = new_strdup(header.IREP);
+    delete [] ICAT ;
     ICAT = new_strdup(header.ICAT);
 
     IMAG   = new_strdup(header.IMAG);
