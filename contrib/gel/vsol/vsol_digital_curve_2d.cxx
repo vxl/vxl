@@ -1,5 +1,4 @@
 // This is gel/vsol/vsol_digital_curve_2d.cxx
-#include <vsl/vsl_vector_io.h>
 #include "vsol_digital_curve_2d.h"
 //:
 // \file
@@ -8,6 +7,7 @@
 #include <vcl_iostream.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_distance.h>
+#include <vsl/vsl_vector_io.h>
 #include <vcl_cmath.h>
 
 //*****************************************************************************
@@ -72,9 +72,9 @@ vsol_spatial_object_2d* vsol_digital_curve_2d::clone(void) const
 //---------------------------------------------------------------------------
 vsol_point_2d_sptr vsol_digital_curve_2d::p0(void) const
 {
-  if( samples_.empty() )
+  if ( samples_.empty() )
     return NULL;
-    
+
   return samples_.front();
 }
 
@@ -83,9 +83,9 @@ vsol_point_2d_sptr vsol_digital_curve_2d::p0(void) const
 //---------------------------------------------------------------------------
 vsol_point_2d_sptr vsol_digital_curve_2d::p1(void) const
 {
-  if( samples_.empty() )
+  if ( samples_.empty() )
     return NULL;
-    
+
   return samples_.back();
 }
 
@@ -103,7 +103,7 @@ vsol_point_2d_sptr vsol_digital_curve_2d::point(const int i) const
 
 //---------------------------------------------------------------------------
 //: Interpolate a point on the curve given a floating point index
-//  linear interpolation is used for now
+//  Linear interpolation is used for now
 //---------------------------------------------------------------------------
 vgl_point_2d<double>
 vsol_digital_curve_2d::interp(double index) const
@@ -112,9 +112,9 @@ vsol_digital_curve_2d::interp(double index) const
   assert(index <= double(samples_.size()-1));
 
   int i1 = (int)vcl_floor(index);
-  if( vcl_floor(index) == index )
+  if ( vcl_floor(index) == index )
     return samples_[i1]->get_p();
-    
+
   int i2 = (int)vcl_ceil(index);
   double f = index - vcl_floor(index);
 
@@ -133,20 +133,20 @@ vsol_digital_curve_2d::interp(double index) const
 //---------------------------------------------------------------------------
 bool vsol_digital_curve_2d::operator==(const vsol_digital_curve_2d &other) const
 {
-  if(this==&other)
+  if (this==&other)
     return true;
   //check endpoint equality since that is cheaper then checking each vertex
   //and if it fails we are done
   bool epts_eq = vsol_curve_2d::endpoints_equal(other);
-  if(!epts_eq)
+  if (!epts_eq)
     return false;
   //Do the polylines have the same number of vertices?
-  if(samples_.size()!=other.samples_.size())
+  if (samples_.size()!=other.samples_.size())
     return false;
   //The easy tests are done.  Now compare each vertex
   int n = samples_.size();
-  for(int i=0; i<n; i++)
-    if(*(samples_[i])!=*(other.samples_[i]))
+  for (int i=0; i<n; i++)
+    if (*(samples_[i])!=*(other.samples_[i]))
       return false;
   return true;
 }
@@ -235,7 +235,7 @@ void vsol_digital_curve_2d::b_write(vsl_b_ostream &os) const
 }
 
 
-//: Binary load self from stream 
+//: Binary load self from stream
 void vsol_digital_curve_2d::b_read(vsl_b_istream &is)
 {
   if (!is)
@@ -243,12 +243,12 @@ void vsol_digital_curve_2d::b_read(vsl_b_istream &is)
 
   short ver;
   vsl_b_read(is, ver);
-  switch(ver)
+  switch (ver)
   {
-  case 1:
-    {
-      vsl_b_read(is, samples_);
-    }
+   default:
+    assert(!"vsol_digital_curve_2d I/O version should be 1");
+   case 1:
+    vsl_b_read(is, samples_);
   }
 }
 
@@ -331,14 +331,15 @@ double closest_index(const vgl_point_2d<double>& pt,
   double x1=curve->point(0)->x(),  y1=curve->point(0)->y(),
          x2=curve->point(1)->x(),  y2=curve->point(1)->y();
   double d = vgl_distance2_to_linesegment(x1,y1,x2,y2,pt.x(),pt.y());
-  
+
   // find the closest line segment of on the curve
-  for (int i=1; i<n-1; ++i) {
+  for (int i=1; i<n-1; ++i)
+  {
     x1=curve->point(i)->x();   y1=curve->point(i)->y(),
     x2=curve->point(i+1)->x(); y2=curve->point(i+1)->y();
-    
+
     // skip duplicate points
-    if(x1 == x2 && y1 == y2)
+    if (x1 == x2 && y1 == y2)
       continue;
 
     double e = vgl_distance2_to_linesegment(x1,y1,x2,y2,pt.x(),pt.y());
@@ -350,8 +351,8 @@ double closest_index(const vgl_point_2d<double>& pt,
   vgl_vector_2d<double> v2 = pt - curve->point(index)->get_p();
   // project the point onto the line segment
   double fraction = dot_product(normalized(v1),v2) / v1.length();
-  if(fraction < 0.0) fraction = 0.0;
-  if(fraction > 1.0) fraction = 1.0;
+  if (fraction < 0.0) fraction = 0.0;
+  if (fraction > 1.0) fraction = 1.0;
 
   return (double)index + fraction;
 }
@@ -364,16 +365,16 @@ bool split(const vsol_digital_curve_2d_sptr &input,
            vsol_digital_curve_2d_sptr &output2)
 {
   const int n = input->size();
-  if( index <= 0.0 || index >= double(n-1))
+  if (index <= 0.0 || index >= double(n-1))
     return false;
 
   vcl_vector<vsol_point_2d_sptr> vec1, vec2;
   vgl_point_2d<double> break_point = input->interp(index);
   vec2.push_back(new vsol_point_2d(break_point));
   for (int i=0; i<n; ++i) {
-    if( double(i) < index )
+    if ( double(i) < index )
       vec1.push_back(input->point(i));
-    if( double(i) > index )
+    if ( double(i) > index )
       vec2.push_back(input->point(i));
     // if index == i then ignore this point
   }
@@ -381,5 +382,5 @@ bool split(const vsol_digital_curve_2d_sptr &input,
 
   output1 = new vsol_digital_curve_2d(vec1);
   output2 = new vsol_digital_curve_2d(vec2);
-  return true;  
+  return true;
 }
