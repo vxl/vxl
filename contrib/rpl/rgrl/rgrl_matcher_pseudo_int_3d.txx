@@ -378,11 +378,10 @@ map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
       diff_floor[i] = it->pixel_[i] - origin[i] - floor[i];
     }
 
-    int i,j,k;
     double wgt;
-    for (i=floor[0]; i<=ceil[0]; i++)
-      for (j=floor[1]; j<=ceil[1]; j++)
-        for (k=floor[2]; k<=ceil[2]; k++) {
+    for (int i=floor[0]; i<=ceil[0]; i++)
+      for (int j=floor[1]; j<=ceil[1]; j++)
+        for (int k=floor[2]; k<=ceil[2]; k++) {
           // ceil(x) is not equivalent to floor(x)+1, try x=4,
           // or any integer pos
           wgt = vcl_abs( floor[0]+1-i-diff_floor(0) ) *
