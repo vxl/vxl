@@ -5,7 +5,7 @@
 //:
 //  \file
 
-#include "POX.h"
+#include "MedianReduceImage.h"
 
 #include <vcl_vector.h>
 #include <vbl/vbl_qsort.h>

@@ -6,22 +6,18 @@ SET(oxp_sources
  ImageSequenceMovieFile.cxx ImageSequenceMovieFile.h
  ImageSequenceName.cxx      ImageSequenceName.h
  Mapping_2d_2d.cxx          Mapping_2d_2d.h
- MedianReduceImage.cxx
+ MedianReduceImage.cxx      MedianReduceImage.h
  MovieFile.cxx              MovieFile.h
  MovieFileInterface.cxx     MovieFileInterface.h
  RadialLensCorrection.cxx   RadialLensCorrection.h
  SequenceFileName.cxx       SequenceFileName.h
  oxp_parse_seqname.cxx      oxp_parse_seqname.h
  oxp_bunch_of_files.cxx     oxp_bunch_of_files.h
-#vsl_conic_as_matrix.cxx    vsl_conic_as_matrix.h
-#vsl_conic_as_params.cxx    vsl_conic_as_params.h
-#vsl_conic_points.cxx       vsl_conic_points.h
  oxp_yuv_to_rgb.cxx         oxp_yuv_to_rgb.h
  oxp_vidl_moviefile.cxx     oxp_vidl_moviefile.h
 
  ImageWarp.txx              ImageWarp.h
  MapInverter.h
- POX.h
 )
 
 INCLUDE(${MODULE_PATH}/FindJPEG.cmake)

@@ -1,14 +1,14 @@
-#ifndef POX_h_
-#define POX_h_
+#ifndef MedianReduceImage_h_
+#define MedianReduceImage_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 //
-// .NAME    POX - Oxford image processing
+// .NAME    MedianReduceImage - Oxford image processing
 // .LIBRARY oxp
 // .HEADER  Oxford Package
-// .INCLUDE oxp/POX.h
-// .FILE    POX.cxx
+// .INCLUDE oxp/MedianReduceImage.h
+// .FILE    MedianReduceImage.cxx
 // .SECTION Description
 //    POX is a collection of functions which are waiting for namespaces.
 //
@@ -23,4 +23,4 @@ struct MedianReduceImage : public vil_memory_image_of<unsigned char> {
   MedianReduceImage(vil_memory_image_of<unsigned char> const& in, int SCALE);
 };
 
-#endif // POX_h_
+#endif // MedianReduceImage_h_
