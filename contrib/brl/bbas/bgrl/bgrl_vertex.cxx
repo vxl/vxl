@@ -1,14 +1,12 @@
-// This is brl/bseg/bgrl/bgrl_vertex.cxx
+// This is brl/bbas/bgrl/bgrl_vertex.cxx
+#include "bgrl_vertex.h"
 //:
 // \file
 
-#include "bgrl_vertex.h"
 #include "bgrl_edge.h"
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_set_io.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
-#include <vcl_algorithm.h>
-
 
 //: Constructor
 bgrl_vertex::bgrl_vertex()
@@ -22,7 +20,7 @@ void
 bgrl_vertex::strip()
 {
   // Iterate over all outgoing edges and remove back links
-  for ( edge_iterator out_itr = out_edges_.begin(); 
+  for ( edge_iterator out_itr = out_edges_.begin();
         out_itr != out_edges_.end(); ++out_itr)
   {
     if ((*out_itr)->to_) {
@@ -36,7 +34,7 @@ bgrl_vertex::strip()
   out_edges_.clear();
 
   // Iterate over all incoming edges and remove back links
-  for ( edge_iterator in_itr = in_edges_.begin(); 
+  for ( edge_iterator in_itr = in_edges_.begin();
         in_itr != in_edges_.end(); ++in_itr)
   {
     if ((*in_itr)->from_){
@@ -58,7 +56,7 @@ bgrl_vertex::purge()
   bool retval = false;
 
   for ( edge_iterator itr = out_edges_.begin();
-        itr != out_edges_.end(); ) 
+        itr != out_edges_.end(); )
   {
     edge_iterator next_itr = itr;
     ++next_itr;
@@ -70,7 +68,7 @@ bgrl_vertex::purge()
   }
 
   for ( edge_iterator itr = in_edges_.begin();
-        itr != in_edges_.end(); ) 
+        itr != in_edges_.end(); )
   {
     edge_iterator next_itr = itr;
     ++next_itr;
@@ -85,17 +83,17 @@ bgrl_vertex::purge()
 }
 
 
-//: Add an edge to \p vertex 
+//: Add an edge to \p vertex
 bgrl_edge_sptr
 bgrl_vertex::add_edge_to( const bgrl_vertex_sptr& vertex )
 {
-  if (!vertex.ptr() || vertex.ptr() == this)
+  if (!vertex || vertex.ptr() == this)
     return bgrl_edge_sptr(NULL);
 
   // verify that this edge is not already present
-  for ( edge_iterator itr = out_edges_.begin(); 
+  for ( edge_iterator itr = out_edges_.begin();
         itr != out_edges_.end(); ++itr )
-    if ((*itr)->to_ == vertex.ptr()) 
+    if ((*itr)->to_ == vertex.ptr())
       return bgrl_edge_sptr(NULL);
 
   // add the edge
@@ -111,11 +109,11 @@ bgrl_vertex::add_edge_to( const bgrl_vertex_sptr& vertex )
 bool
 bgrl_vertex::remove_edge_to( const bgrl_vertex_sptr& vertex )
 {
-  if (!vertex.ptr() || vertex.ptr() == this)
+  if (!vertex || vertex.ptr() == this)
     return false;
 
-  for ( edge_iterator itr = out_edges_.begin(); 
-        itr != out_edges_.end(); ++itr ) 
+  for ( edge_iterator itr = out_edges_.begin();
+        itr != out_edges_.end(); ++itr )
   {
     if ((*itr)->to() == vertex) {
       if ( vertex->in_edges_.erase(*itr) > 0 ) {
@@ -174,14 +172,14 @@ bgrl_vertex::b_read( vsl_b_istream& is )
     // read the outgoing edges
     out_edges_.clear();
     vsl_b_read(is, out_edges_);
-    for ( edge_iterator itr = out_edges_.begin(); 
+    for ( edge_iterator itr = out_edges_.begin();
           itr != out_edges_.end(); ++itr )
-      (*itr)->from_ = this; 
+      (*itr)->from_ = this;
 
     // read the incoming edges
     in_edges_.clear();
     vsl_b_read(is, in_edges_);
-    for ( edge_iterator itr = in_edges_.begin(); 
+    for ( edge_iterator itr = in_edges_.begin();
           itr != in_edges_.end(); ++itr )
       (*itr)->to_ = this;
 
@@ -210,7 +208,6 @@ bgrl_vertex::print_summary( vcl_ostream& os ) const
 {
   os << this->degree() << " degree";
 }
-
 
 
 //-----------------------------------------------------------------------------------------
@@ -256,5 +253,4 @@ vsl_print_summary(vcl_ostream &os, const bgrl_vertex* v)
   v->print_summary(os);
   os << " }";
 }
-
 
