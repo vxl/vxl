@@ -1,0 +1,76 @@
+The following @vxl{} coding standards were originally agreed at the Zurich
+meeting in March
+2001. They are mandatory for libraries in the @vxl{} module. Even if you are
+not writing code which
+you expect to enter @vxl{} proper, then it is still worth reading
+these coding standards, as they have been designed to minimise confusing
+and help avoid potential problems.
+
+@itemize @bullet
+@item All global scope identifiers are lowercase with underscores separating
+  words. (Rejected @code{vxl_Image_template} by vote Zurich, March 2001.)
+
+@item Each class, file, function and member variable should have a one
+  line Doxygen description (brief line) in addition to the optional long
+  description.
+
+@item Private member variables should have a underscore as a suffix,
+    e.g. @code{value_}. (An underscore as a prefix @code{_value} is not
+    allowed by the C++ standard. Rejected by vote: prefix "m_", e.g.
+    @code{m_value}.)
+
+@item Accessor functions for a variable @code{x_} should be
+  called @code{x()} and @code{set_x()}. In particular
+@example
+     T x;
+     ...
+     void set_x(T x); // or const T&, or whatever
+     T x();
+@end example
+  (Using @code{get_x()} is redundant and simply causes extra typing.)
+  @code{set_x()} should return void.
+  (It should never return the old value, as this
+  can be highly confusing.)
+@example
+     void x(T val) { x_ = val; }  // WRONG!
+@end example
+
+@item Forward declarations for a class in a library val should be forward
+  declared in val_fwd.h at the top level of the library. All classes
+  may not be in there; only those someone feels like forward declaring
+  (because it is difficult, etc.).
+
+@item A file may have more than one class, provided they "belong". The
+  goal of the filename=class name is to make it easy to find
+  class/function declarations and definitions. As long as this holds,
+  a file may declare more than one class.
+
+@item One tab (0x08) *always* expands to 8 spaces
+
+@item Indentation:
+  @itemize @bullet
+  @item may use any number of indent spaces (>=2), but must be consistent.
+  @item rejected proposal to fix the number of indent spaces
+  @item may only use spaces for indentation (i.e. no tab characters, which
+    means 10 spaces of indentation may *not* be replaced by one tab
+    and two spaces). (Reason: Visual Studio (and other editors) allow
+    the developer to set tab=n. Most people have done this to their
+    own taste. These environments convert TAB to n spaces, instead of 8.)
+  @item When editing other people's sources, you must use the same
+    indentation as they.
+  @end itemize
+
+@item Maximum number of characters per line: 132. (Number extracted
+  primarily from vtk guidelines). 80 character lines preferred when
+  possible.
+
+@item Source file endings:
+  @itemize @bullet
+  C source files should end @code{.c}
+  C++ ordinary source files should end in @code{.cxx}
+  Header files should end in @code{.h}
+  C++ Template implementation code should end in @code{.txx}
+  @end itemize
+  (These choices minimise problems and maximise sensible default behaviour over
+  many compilers. Agreed by consensus on vxl-maintainers May 2002.)
+@end itemize
