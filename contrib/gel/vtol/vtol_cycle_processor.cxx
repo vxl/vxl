@@ -43,20 +43,19 @@ static void pop_stacks(vcl_vector<vtol_vertex_sptr>& verts, vcl_vector<vtol_edge
   if (!edges.size()&&verts.size())
     verts.clear();
 }
+
+//: Access to flags
 //the user flags on SpatialObject are used to define the orientation
 //of vtol_edge(s) during the boundary tracing process.  In effect, FLAG1 and
 //FLAG2 define half edges. vtol_edges are used up when both half edges are used.
-// Access to flags
 static bool used(vtol_edge_2d_sptr& e)
 {
-  bool temp = e->get_user_flag(VSOL_FLAG1)&&e->get_user_flag(VSOL_FLAG2);
-  return temp;
+  return e->get_user_flag(VSOL_FLAG1)&&e->get_user_flag(VSOL_FLAG2);
 }
 
 static bool unused(vtol_edge_2d_sptr& e)
 {
-  bool temp = !e->get_user_flag(VSOL_FLAG1)&&!e->get_user_flag(VSOL_FLAG2);
-  return temp;
+  return !e->get_user_flag(VSOL_FLAG1)&&!e->get_user_flag(VSOL_FLAG2);
 }
 static bool plus_used(vtol_edge_2d_sptr& e)
 {
@@ -70,9 +69,8 @@ static bool minus_used(vtol_edge_2d_sptr& e)
 
 static bool half_used(vtol_edge_2d_sptr& e)
 {
-  unsigned dir1 = e->get_user_flag(VSOL_FLAG1);
-  unsigned dir2 = e->get_user_flag(VSOL_FLAG2);
-  return (dir1&&!dir2)||(!dir1&&dir2);
+  return e->get_user_flag(VSOL_FLAG1) ^ e->get_user_flag(VSOL_FLAG2);
+  // exclusive OR; was: return (dir1&&!dir2)||(!dir1&&dir2);
 }
 // Assignment of flags
 static void use_plus(vtol_edge_2d_sptr& e)
