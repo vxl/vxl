@@ -1,7 +1,6 @@
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // \brief  Class to perform linear discriminant analysis
@@ -21,7 +20,6 @@
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vsl/vsl_vector_io.h>
-#include <mbl/mbl_print.h>
 
 
 //=======================================================================
@@ -37,7 +35,7 @@ mbl_lda::~mbl_lda()
 }
 
 //=======================================================================
-/*
+#if 0
 static void ZeroMatrix(vnl_matrix<double>& M)
 {
   int nr=M.rows();
@@ -47,7 +45,7 @@ static void ZeroMatrix(vnl_matrix<double>& M)
     for (int j=0;j<nc;++j)
       m[i][j]=0.0;
 }
-*/
+#endif
 //=======================================================================
 
 void mbl_lda::updateCovar(vnl_matrix<double>& S, const vnl_vector<double>& V)
@@ -74,14 +72,14 @@ void mbl_lda::updateCovar(vnl_matrix<double>& S, const vnl_vector<double>& V)
 // find out how many id in the label vector
 int mbl_lda::nDistinctIDs(const int* id, const int n)
 {
-	vcl_vector<int> dids;
-	for (int i=0;i<n;++i)
-	{
-		if (vcl_find(dids.begin(), dids.end(), id[i])==dids.end())  // if (Index(dids,id[i])<0)
-       dids.push_back(id[i]);
-	}
-	
-	return dids.size();
+  vcl_vector<int> dids;
+  for (int i=0;i<n;++i)
+  {
+    if (vcl_find(dids.begin(), dids.end(), id[i])==dids.end())  // if (Index(dids,id[i])<0)
+      dids.push_back(id[i]);
+  }
+
+  return dids.size();
 }
 
 //=======================================================================
@@ -115,7 +113,7 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
   vcl_cout<<"There are "<<n_classes<<" classes to build LDA space"<<vcl_endl;
   vcl_cout<<"Mix label index is "<<hi_i<<vcl_endl;
   vcl_cout<<"Min label index is "<<lo_i<<vcl_endl;
-  
+
   int n_size=hi_i+1;
   mean_.resize(n_size);
   n_samples_.resize(n_size);
@@ -190,7 +188,7 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
   //double svd_max=wS_svd.sigma_max();
 
   wS_inv = wS_svd.inverse();
-  
+
   //vnl_matrix<double> B=withinS_*wS_inv;
   //vcl_cout<<B<<vcl_endl;
 
@@ -202,7 +200,7 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
   vnl_vector<double> evals(A.columns());
   //  NR_CalcSymEigens(A,EVecs,evals,false);
   vnl_symmetric_eigensystem_compute(A, EVecs, evals);
-  
+
   //make the eigenvector matrix (columns) and eigenvalue vector in descending order.
   evals.flip();
   EVecs.fliplr();
