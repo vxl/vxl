@@ -6,6 +6,7 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_algorithm.h>
+#include <vcl_cassert.h>
 #include <vnl/vnl_math.h> // for pi_over_2
 #include <vnl/vnl_float_3.h>
 #include <vnl/vnl_cross.h>
@@ -16,7 +17,6 @@
 #include "gevd_pixel.h"
 #include "gevd_xpixel.h"
 #include "gevd_bufferxy.h"
-//#include <ImageProcessing/xpixel.h>
 #ifdef DEBUG
 # include <vul/vul_timer.h>
 #endif
@@ -36,10 +36,13 @@ const unsigned char DIR0 = 8, DIR1 = 9, DIR2 = 10, DIR3 = 11, DIR4 = 12;
 //                     0, 1, 1, 1, 0,-1,-1,-1,
 //                     0, 1, 1, 1, 0,-1,-1,-1};
 
-//: Convolves from image with 2D filter and stores values in to image.
-// O(m*n*k). The filter kernel has odd width and height, and is either
-// even or odd along x- or y-axis.
+//: Convolves \a from image with 2D filter and stores values in \a to image.
+// O(m*n*k).
+// The filter \a kernel has odd width and height,
+// and is either even or odd along x- or y-axis.
 // Assume image data is in row-major order.
+//
+// Special care is taken when \a to and \a from are identical - Peter Vanroose.
 
 float
 gevd_float_operators::Convolve(const gevd_bufferxy& from,
@@ -50,6 +53,9 @@ gevd_float_operators::Convolve(const gevd_bufferxy& from,
   vul_timer t;
   vcl_cout << "Convolve image";
 #endif
+  bool overwrite = to == &from;
+  gevd_bufferxy*& t = to;
+  if (overwrite) to=0;
   to = gevd_float_operators::Allocate(to, from);
   const int wx = kernel.GetSizeX(), wy = kernel.GetSizeY();
   const int rx = wx/2, ry = wy/2;
@@ -68,13 +74,17 @@ gevd_float_operators::Convolve(const gevd_bufferxy& from,
 #ifdef DEBUG
   vcl_cout << " in " << t.real() << " msecs.\n";
 #endif
+  if (overwrite) { gevd_float_operators::Update(*t,*to); delete to; to = t; }
   return 1;                     // extra scaling factor
 }
 
-//: Correlate from image with 2D filter and stores values in to image.
-// O(m*n*k). The filter kernel has odd width and height, and is either
-// even or odd along x- or y-axis.
+//: Correlate \a from image with 2D filter and stores values in \a to image.
+// O(m*n*k).
+// The filter \a kernel has odd width and height,
+// and is either even or odd along x- or y-axis.
 // Assume image data is in row-major order.
+//
+// Special care is taken when \a to and \a from are identical - Peter Vanroose.
 
 float
 gevd_float_operators::Correlation(const gevd_bufferxy& from,
@@ -85,6 +95,9 @@ gevd_float_operators::Correlation(const gevd_bufferxy& from,
   vul_timer t;
   vcl_cout << "Correlate image";
 #endif
+  bool overwrite = to == &from;
+  gevd_bufferxy*& t = to;
+  if (overwrite) to=0;
   to = gevd_float_operators::Allocate(to, from);
   const int wx = kernel.GetSizeX(), wy = kernel.GetSizeY();
   const int rx = wx/2, ry = wy/2;
@@ -115,10 +128,14 @@ gevd_float_operators::Correlation(const gevd_bufferxy& from,
 #ifdef DEBUG
   vcl_cout << " in " << t.real() << " msecs.\n";
 #endif
+  if (overwrite) { gevd_float_operators::Update(*t,*to); delete to; to = t; }
   return 1;                     // extra scaling factor
 }
 
 
+//: Correlate \a from image with 2D filter and stores values in \a to image.
+//
+// Special care is taken when \a to and \a from are identical - Peter Vanroose.
 float
 gevd_float_operators::CorrelationAlongAxis(const gevd_bufferxy& from,
                                            const gevd_bufferxy& kernel,
@@ -128,6 +145,9 @@ gevd_float_operators::CorrelationAlongAxis(const gevd_bufferxy& from,
   vul_timer t;
   vcl_cout << "Correlate image";
 #endif
+  bool overwrite = to == &from;
+  gevd_bufferxy*& t = to;
+  if (overwrite) to=0;
   to = gevd_float_operators::Allocate(to, from);
   to->Clear();
   const int wx = kernel.GetSizeX(), wy = kernel.GetSizeY();
@@ -174,6 +194,7 @@ gevd_float_operators::CorrelationAlongAxis(const gevd_bufferxy& from,
 #ifdef DEBUG
   vcl_cout << " in " << t.real() << " msecs.\n";
 #endif
+  if (overwrite) { gevd_float_operators::Update(*t,*to); delete to; to = t; }
   return 1;                     // extra scaling factor
 }
 
@@ -197,13 +218,15 @@ gevd_float_operators::Read2dKernel(const char* filename)
   return kernel;
 }
 
-//: Convolves from image with two separable filters, along directions x and y, and stores values in to image.
+//: Convolves \a from image with two separable filters, along directions x and y, and stores values in \a to image.
 // O(m*n*k).
-// The filter kernel has length 2*radius + 1, and is either even or odd.
+// The filter \a kernel has length 2*radius + 1, and is either even or odd.
 // Assume image data is in row-major order.
+//
+// Special care is taken when \a to and \a from are identical - Peter Vanroose.
 
 float
-gevd_float_operators::Convolve(gevd_bufferxy& from, gevd_bufferxy*& to,
+gevd_float_operators::Convolve(const gevd_bufferxy& from, gevd_bufferxy*& to,
                                const float* xkernel, const int xradius,
                                const bool xevenp,
                                const float* ykernel, const int yradius,
@@ -214,6 +237,9 @@ gevd_float_operators::Convolve(gevd_bufferxy& from, gevd_bufferxy*& to,
   vul_timer t;
   vcl_cout << "Convolve image";
 #endif
+  bool overwrite = to == &from;
+  gevd_bufferxy*& t = to;
+  if (overwrite) to=0;
   to = gevd_float_operators::Allocate(to, from);
   const int sizeX = to->GetSizeX(), sizeY = to->GetSizeY();
   const int ylo = yradius, yhi = sizeY - yradius;
@@ -292,7 +318,9 @@ gevd_float_operators::Convolve(gevd_bufferxy& from, gevd_bufferxy*& to,
         row[x] = sum;
       }
     }
-  } else {
+  }
+  else
+  {
     int y=0;
     for (int yy = 0; y < ylo; y++, yy++) { // reflect at ymin
       row = &floatPixel(*to, 0, y); // row-major order
@@ -339,15 +367,16 @@ gevd_float_operators::Convolve(gevd_bufferxy& from, gevd_bufferxy*& to,
 #ifdef DEBUG
   vcl_cout << " in " << t.real() << " msecs.\n";
 #endif
+  if (overwrite) { gevd_float_operators::Update(*t,*to); delete to; to = t; }
   return 1;                     // assume normalized kernel
 }
 
 
-//: Convolves from image with a filter along x, and a running sum along y-axis, then stores values in to image.
+//: Convolves \a from image with a filter along x, and a running sum along y-axis, then stores values in \a to image.
 // O(m*n*k).
 
 float
-gevd_float_operators::Convolve(gevd_bufferxy& from, gevd_bufferxy*& to,
+gevd_float_operators::Convolve(const gevd_bufferxy& from, gevd_bufferxy*& to,
                                const float* xkernel, const int xradius,
                                const bool xevenp,
                                const int yradius,
@@ -457,13 +486,17 @@ gevd_float_operators::Convolve(gevd_bufferxy& from, gevd_bufferxy*& to,
 #endif
 
 //: Convolve a linear array of data, wrapping at the 2 ends.
+//
+// Special care is taken when \a to and \a from are identical - Peter Vanroose.
 
 float
-gevd_float_operators::Convolve(float* from, float*& to, const int len,
+gevd_float_operators::Convolve(const float* from, float*& to, const int len,
                                const float* kernel, const int kradius,
                                const bool evenp, const bool wrap)
 {
-  if (!to) to = new float[len];
+  bool overwrite = to == from;
+  float*& t = to;
+  if (!to || overwrite) to = new float[len];
   const int xlo = kradius, xhi = len - kradius;
   const int kborder = 2*kradius;
   float *cache, *pipeline;
@@ -472,7 +505,8 @@ gevd_float_operators::Convolve(float* from, float*& to, const int len,
 
   // Convolution along x with above pipeline
   float sum;
-  if (evenp) {
+  if (evenp)
+  {
     int x=0;
     for (int xx = 0; x < xlo; ++x, ++xx) {
       sum = kernel[kradius] * pipeline[xx];
@@ -498,7 +532,9 @@ gevd_float_operators::Convolve(float* from, float*& to, const int len,
         sum += kernel[kradius-k] * (pipeline[xx-k] + pipeline[xx+k]);
       to[x] = sum;
     }
-  } else {
+  }
+  else
+  {
     int x=0;
     for (int xx = 0; x < xlo; ++x, ++xx) {
       sum = kernel[kradius] * pipeline[xx];
@@ -526,16 +562,23 @@ gevd_float_operators::Convolve(float* from, float*& to, const int len,
     }
   }
   delete[] cache;
+  if (overwrite) {
+    for (int x=0 ; x < len; ++x) t[x] = to[x];
+    delete[] to;
+    to = t;
+  }
   return 1;                     // assume normalized kernel
 }
 
 //: For large smoothing sigma, use running sum to avoid floating multiplications.
-
+//
+// Special care is taken when \a to and \a from are identical - Peter Vanroose.
 float
 gevd_float_operators::RunningSum(float* from, float*& to, const int len,
                                  const int kradius, const bool wrap)
 {
-  if (!to) to = new float[len];
+  bool overwrite = to == from;
+  if (!to || overwrite) to = new float[len];
   const int xlo = kradius, xhi = len - kradius;
   const int kborder = 2*kradius;
   float *cache, *pipeline;
@@ -565,6 +608,11 @@ gevd_float_operators::RunningSum(float* from, float*& to, const int len,
     to[x] = sum;
   }
   delete[] cache;
+  if (overwrite) {
+    for (int x=0 ; x < len; ++x) from[x] = to[x];
+    delete[] to;
+    to = from;
+  }
   return float(2*kradius+1);            // magnification factor
 }
 
@@ -602,9 +650,8 @@ gevd_float_operators::Read1dKernel(const char* filename,
 }
 
 
-//:
-// Convolves the from image with a 2D Gaussian filter
-// with standard deviation sigma (default = 1). O(m*n*k).
+//: Convolves the \a from image with a 2D Gaussian filter with standard deviation \a sigma.
+// O(m*n*k).
 // The 2D convolution is decomposed into 2 1D convolutions:
 // Gxy * I = Gy * (Gx * I).
 // The frame with width equal to the radius of the Gaussian kernel is
@@ -619,11 +666,12 @@ gevd_float_operators::Gaussian(gevd_bufferxy& from, gevd_bufferxy*& to, const fl
   if (!gevd_float_operators::Find1dGaussianKernel(sigma, kernel, radius)) {
     to = gevd_float_operators::Allocate(to, from);
     if (to != &from)
-      gevd_float_operators::Update(*to, from);  // just a copy, no smoothing needed
+      gevd_float_operators::Update(*to, from); // just a copy, no smoothing needed
   } else {
     bool evenp = true;
-    gevd_float_operators::Convolve(from, to,    // 2 1D convolutions O(k), instead
-                                   kernel, radius, evenp,       // of a 2D convolution O(k^2).
+    // 2 1D convolutions O(k), instead of a 2D convolution O(k^2).
+    gevd_float_operators::Convolve(from, to,
+                                   kernel, radius, evenp,
                                    kernel, radius, evenp,
                                    xwrap, ywrap);
   }
@@ -634,7 +682,7 @@ gevd_float_operators::Gaussian(gevd_bufferxy& from, gevd_bufferxy*& to, const fl
 
 //:
 // Returns the kernel array for Gaussian with given standard deviation
-// sigma [pixel], and cutoff at min/max = fuzz.
+// \a sigma [pixel], and cutoff at min/max = \a fuzz.
 // The area under the discrete Gaussian is normalized to 1.
 
 bool
@@ -740,7 +788,8 @@ LocalGradient(const gevd_bufferxy& smooth, const int i, const int j,
   mag = vcl_sqrt(gx*gx + gy*gy);
 }
 
-//: Compute the gradient of the intensity surface. O(m*n).
+//: Compute the gradient of the intensity surface.
+// O(m*n).
 // The intensity surface is assumed smoothed by a Gaussian filter,
 // or convolved with a low-pass filter.
 // Return at each pixel, the magnitude, the vector (dG * I),
@@ -824,12 +873,15 @@ gevd_float_operators::Gradient(const gevd_bufferxy& smooth,
 }
 
 //: Compute slope or first-difference, in linear/circular array.
+//
+// Special care is taken when \a to and \a from are identical - Peter Vanroose.
 
 float
 gevd_float_operators::Slope(float* from, float*& to, const int len,
                             const bool wrap)
 {
-  if (!to) to = new float[len];
+  bool overwrite = to == from;
+  if (!to || overwrite) to = new float[len];
   const int xlo = 1, xhi = len - 1;
   float *cache = NULL, *pipeline;
   int p = gevd_float_operators::SetupPipeline(from, len, 1, wrap, // current pipeline and index
@@ -845,6 +897,11 @@ gevd_float_operators::Slope(float* from, float*& to, const int len,
   }
   to[xhi] = pipeline[3] - pipeline[1];
   delete[] cache;
+  if (overwrite) {
+    for (int x=0 ; x < len; ++x) from[x] = to[x];
+    delete[] to;
+    to = from;
+  }
   return 2;                     // magnification factor
 }
 
@@ -881,7 +938,8 @@ LocalHessian(const gevd_bufferxy& smooth, const int i, const int j,
   diry = (float)vcl_sin(theta); // largest eigenvalue/curvature
 }
 
-//: Compute the Hessian of the intensity surface. O(m*n).
+//: Compute the Hessian of the intensity surface.
+// O(m*n).
 // The Hessian is directional, and described by the largest absolute
 // eigenvalue, and its corresponding eigenvector.
 // The intensity surface is assumed smoothed by a Gaussian filter,
@@ -990,7 +1048,8 @@ LocalLaplacian(const gevd_bufferxy& smooth, const int i, const int j,
   diry = (float)vcl_sin(theta);   // largest eigenvalue/curvature
 }
 
-//: Compute the Laplacian of the intensity surface. O(m*n).
+//: Compute the Laplacian of the intensity surface.
+// O(m*n).
 // The Laplacian is rotational symmetric, and is the sum of the 2
 // eigenvalues/curvatures, with positive/negative sign for concave/convex.
 // The intensity surface is assumed smoothed by a Gaussian filter,
@@ -1071,12 +1130,15 @@ gevd_float_operators::Laplacian(const gevd_bufferxy& smooth,
 }
 
 //: Compute curvature, or 2nd-difference in linear/circular array.
+//
+// Special care is taken when \a to and \a from are identical - Peter Vanroose.
 
 float
 gevd_float_operators::Curvature(float* from, float*& to, const int len,
                                 const bool wrap)
 {
-  if (!to) to = new float[len];
+  bool overwrite = to == from;
+  if (!to || overwrite) to = new float[len];
   const int xlo = 1, xhi = len - 1;
   float *cache, *pipeline;
   int p = gevd_float_operators::SetupPipeline(from, len, 1, wrap, // current pipeline and index
@@ -1092,6 +1154,11 @@ gevd_float_operators::Curvature(float* from, float*& to, const int len,
   }
   to[xhi] = pipeline[3] + pipeline[1] - 2*pipeline[2];
   delete[] cache;
+  if (overwrite) {
+    for (int x=0 ; x < len; ++x) from[x] = to[x];
+    delete[] to;
+    to = from;
+  }
   return 1;                     // magnification factor
 }
 
@@ -1741,7 +1808,7 @@ gevd_float_operators::SurfaceCurvatureD(const gevd_bufferxy& normal,
 }
 
 
-//: Shrinks the from image by 2 and stores into to image, using Burt-Adelson reduction algorithm.
+//: Shrinks the \a from image by 2 and stores into \a to image, using Burt-Adelson reduction algorithm.
 // Convolution with a 5-point kernel [(0.5-ka)/2, 0.25, ka, 0.25, (0.5-ka)/2]
 // ka = 0.6  maximum decorrelation, wavelet for image compression.
 // ka = 0.5  linear interpolation,
@@ -1749,6 +1816,8 @@ gevd_float_operators::SurfaceCurvatureD(const gevd_bufferxy& normal,
 // ka = 0.359375 min aliasing, wider than Gaussian
 // The image indexes are mapped with: to.ij = from.ij / 2
 // The image sizes are related by: to.size = (from.size+1)/2.
+//
+// Special care is taken when \a to and \a from are identical - Peter Vanroose.
 
 float
 gevd_float_operators::ShrinkBy2(const gevd_bufferxy& from, gevd_bufferxy*& to,
@@ -1756,6 +1825,9 @@ gevd_float_operators::ShrinkBy2(const gevd_bufferxy& from, gevd_bufferxy*& to,
 {
   const int sizeX = (from.GetSizeX() + 1) / 2;
   const int sizeY = (from.GetSizeY() + 1) / 2;
+  bool overwrite = to == &from;
+  gevd_bufferxy*& t = to;
+  if (overwrite) to=0;
   to = gevd_float_operators::Allocate(to, from, 0, sizeX, sizeY);
   const float ka = burt_ka;
   const float kb = 0.25f;
@@ -1801,13 +1873,13 @@ gevd_float_operators::ShrinkBy2(const gevd_bufferxy& from, gevd_bufferxy*& to,
   }
   delete[] yline0; delete[] yline1; delete[] yline2;
   delete[] yline3; delete[] yline4;
+  if (overwrite) { gevd_float_operators::Update(*t,*to); delete to; to = t; }
   return 1;
 }
 
-//:
-// Shrinks the yline by 2 along the x-axis. We compute every 2 pixels,
-// the convolution of the 5 pixels along x, with the 5-point kernel.
-// [kc, kb, ka, kb, kc].
+//: Shrinks the yline by 2 along the x-axis.
+// We compute every 2 pixels, the convolution of the 5 pixels along x,
+// with the 5-point kernel [kc, kb, ka, kb, kc].
 
 float
 gevd_float_operators::ShrinkBy2AlongX(const gevd_bufferxy& from, const int y,
@@ -1856,14 +1928,15 @@ PrintAllPipes( float * y_s[],
 }
 
 
-//:
+//: Shrinks the \a from image by 2 and stores into \a to image.
 // Same as ShrinkBy2 except that it properly handles pixels that
-// have usable value ("dropouts" --- hence the appended "_D" in the
+// have unusable value ("dropouts" --- hence the appended "_D" in the
 // name).  These are pixel values "no_value".  One problem with this
 // function is that one pixel wide structures may or may not be
 // retained in the shrunken image, depending on the position of the
-// structure.  This should not be a problem for the initial
-// application.
+// structure.  This should not be a problem for the initial application.
+//
+// Special care is taken when \a to and \a from are identical - Peter Vanroose.
 
 void
 gevd_float_operators::ShrinkBy2_D(const gevd_bufferxy& from,
@@ -1873,6 +1946,9 @@ gevd_float_operators::ShrinkBy2_D(const gevd_bufferxy& from,
 {
   const int sizeX = (from.GetSizeX() + 1) / 2;
   const int sizeY = (from.GetSizeY() + 1) / 2;
+  bool overwrite = to == &from;
+  gevd_bufferxy*& t = to;
+  if (overwrite) to=0;
   to = gevd_float_operators::Allocate(to, from, 0, sizeX, sizeY);
 
   //  Build a kernel of smoothing weights.  kernel[2] is the center.
@@ -1926,7 +2002,8 @@ gevd_float_operators::ShrinkBy2_D(const gevd_bufferxy& from,
   //  value at a pixel if the summed weights are above 0.5.  After all
   //  subsampled values are created in a row, shift the pipeline down.
   //
-  for (int y=0; y<sizeY; y++ ) {
+  for (int y=0; y<sizeY; y++ )
+  {
 #ifdef DEBUG
     vcl_cout << "\nNew row:  y= " << y << "\nHere are the pipes.\n";
     PrintAllPipes( yline, wline, sizeX );
@@ -1984,6 +2061,7 @@ gevd_float_operators::ShrinkBy2_D(const gevd_bufferxy& from,
   }
   delete[] y_empty;
   delete[] w_empty;
+  if (overwrite) { gevd_float_operators::Update(*t,*to); delete to; to = t; }
 }
 
 void
@@ -2047,7 +2125,7 @@ gevd_float_operators::ShrinkBy2AlongX_D(const gevd_bufferxy& from,
 }
 
 
-//: Expands the from image by 2 and store into to image, using Burt-Adelson expansion algorithm.
+//: Expands the \a from image by 2 and store into \a to image, using Burt-Adelson expansion algorithm.
 // Convolution with a 5-point kernel [(0.5-ka), 0.5, 2*ka, 0.5, (0.5-ka)]
 // ka = 0.6  maximum decorrelation, low-pass filter for image compression.
 // ka = 0.5  linear interpolation,
@@ -2055,6 +2133,8 @@ gevd_float_operators::ShrinkBy2AlongX_D(const gevd_bufferxy& from,
 // ka = 0.3  wider than Gaussian, for more smoothing.
 // The image indexes are mapped with: to.ij = from.ij * 2
 // The image sizes are related by: to.size = from.size * 2.
+//
+// Special care is taken when \a to and \a from are identical - Peter Vanroose.
 
 float
 gevd_float_operators::ExpandBy2(const gevd_bufferxy& from, gevd_bufferxy*& to,
@@ -2062,6 +2142,9 @@ gevd_float_operators::ExpandBy2(const gevd_bufferxy& from, gevd_bufferxy*& to,
 {
   const int sizeX = 2 * from.GetSizeX();
   const int sizeY = 2 * from.GetSizeY();
+  bool overwrite = to == &from;
+  gevd_bufferxy*& t = to;
+  if (overwrite) to=0;
   to = gevd_float_operators::Allocate(to, from, 0, sizeX, sizeY);
   const float ka = burt_ka * 2;
   const float kb = 0.5f;
@@ -2094,6 +2177,7 @@ gevd_float_operators::ExpandBy2(const gevd_bufferxy& from, gevd_bufferxy*& to,
   delete[] yline0;
   delete[] yline1;
   delete[] yline2;
+  if (overwrite) { gevd_float_operators::Update(*t,*to); delete to; to = t; }
   return 1;
 }
 
@@ -2127,7 +2211,8 @@ gevd_float_operators::ExpandBy2AlongX(const gevd_bufferxy& from, const int y,
 //:
 // Compute the pyramid by shrinking data sequence
 // by 2, nlevels-1 times, and return final shrunk length,
-// and reset number of levels in pyramid. O(n) time.
+// and reset number of levels in pyramid.
+// O(n) time.
 // Coarse to fine is stored from left to right.
 // The left and right trim borders are set to 0.
 
@@ -2166,8 +2251,7 @@ gevd_float_operators::ShrinkBy2(const float* from, const int length,
                                 float*& to, const float burt_ka)
 {
   const int slength = length >> 1;
-  if (!to)
-    to = new float[slength];    // allocate or reuse space
+  if (!to) to = new float[slength];    // allocate or reuse space
   const float ka = burt_ka;
   const float kb = 0.25f;
   const float kc = (0.5f - burt_ka) / 2;
@@ -2346,7 +2430,7 @@ static float coifman15 [] =
 
 static float dual_wavelet [20] = {0};
 
-//: Looks up and stores the wavelet pair in (lo-filter, hi-filter).
+//: Looks up and stores the wavelet pair in (\a lo_filter, \a hi_filter).
 // The wavelet number is 2 for Haar wavelet, 4-20 even numbers for Daubechies
 // wavelet, and 9-15 odd numbers for symmetric Coifman wavelets.
 
@@ -2355,7 +2439,8 @@ gevd_float_operators::FindWavelet(const int waveletno,
                                   float*& lo_filter, float*& hi_filter, int& ncof)
 {
   ncof = waveletno;
-  switch (waveletno) {
+  switch (waveletno)
+  {
    case 2:
     lo_filter = haar2;
     break;
@@ -2393,7 +2478,8 @@ gevd_float_operators::FindWavelet(const int waveletno,
     return false;
   }
   // find hi-filter wavelet, dual of the lo-filter wavelet
-  if (lo_filter) {
+  if (lo_filter)
+  {
     hi_filter = dual_wavelet;
     if ((waveletno%2) == 0) {
       int sign = -1;                            // reverse and
@@ -2434,11 +2520,11 @@ gevd_float_operators::FindWavelet(const int waveletno,
 }
 
 //:
-// Convolution with wavelets (lo_filter, hi_filter) and gather results into
-// consecutive blocks, with convolution of lo-filter (resp. hi-filter)
+// Convolution with wavelets (\a lo_filter, \a hi_filter) and gather results into
+// consecutive blocks, with convolution of \a lo_filter (resp. \a hi_filter)
 // on the sides of low (resp. high) indices.
 // Wrap around edges of the array is done with modulo(n) replaced by
-// bit masking with n-1, when n is a power of 2.
+// bit masking with \a n-1, when \a n is a power of 2.
 // Assumes n >= 4.
 
 void
@@ -2458,7 +2544,7 @@ gevd_float_operators::WaveletTransformStep(float* array, const int n,
       for (int k = 0; k < ncof; k++) {          // convolution with filters
         int j = (i + k) % nmod;                 // wrap around
         // int j = (i + k) & (nmod - 1);        // when n is power of 2
-        wksp[ii] += lo_filter[k] * array[j]; // lo-filter results
+        wksp[ii] += lo_filter[k] * array[j];    // lo-filter results
         wksp[ii+nmid] += hi_filter[k] * array[j]; // hi-filter results
       }
     float scale = vcl_max(lo_filter[ncof], hi_filter[ncof]);
@@ -2611,14 +2697,16 @@ gevd_float_operators::WaveletTransformByIndex(float* array,
   for (int d = ndim-1; d >= 0; d--) {           // dimension varies most, first
     int n = dims[d];
     int nnew = n * nprev;
-    if (n >= 4) {
+    if (n >= 4)
+    {
       for (int i2 = 0; i2 < ntot; i2 += nnew)
-        for (int i1 = 0; i1 < nprev; i1++) {
+        for (int i1 = 0; i1 < nprev; i1++)
+        {
           int i3 = i1 + i2;
-          {for (int k = 0; k < n; k++) {
+          for (int k = 0; k < n; k++) {
             buffer[k] = array[i3];              // copy data to convolve
             i3 += nprev;
-          }}
+          }
           if (forwardp) {                       // forward 1d transform
             for (int nn = n, l = nlevels;
                  nn >= 4 && l > 0;
@@ -3129,7 +3217,8 @@ gevd_float_operators::ProjectWaveOntoY(const gevd_bufferxy& wave, float*& proj,
 }
 
 
-//: Project the image data in ROI onto the x- and y- axes. O(n*m).
+//: Project the image data in ROI onto the x- and y- axes.
+// O(n*m).
 // The 1d-array is returned with projections being the sum
 // normalized by the number of elements projected.
 
@@ -3212,12 +3301,10 @@ gevd_float_operators::Correlation(const float* data, const int length,
 }
 
 
-//:
-// Find correlations of given pattern to data, given maximum search
-// from index. O(|pattern|*shift). Returns the array of
-// correlation values, with positive translation starting from
-// result[search+1], and negative translation starting from
-// result[search-1].
+//: Find correlations of given pattern to data, given maximum search from index.
+// O(|pattern|*shift).
+// Returns the array of correlation values, with positive translation starting
+// from result[search+1], and negative translation starting from result[search-1].
 
 float*
 gevd_float_operators::Correlations(const float* data, const int length,
@@ -3271,7 +3358,8 @@ gevd_float_operators::BestCorrelation(const float* data, const int length,
 
 //:
 // Search for best correlation, from coarse to fine,
-// starting at a priori shift, and requiring minimum overlap. O(n) time.
+// starting at a priori shift, and requiring minimum overlap.
+// O(n) time.
 // Return last best correlation, and its corresponding shift.
 // The search is cutoff early, if no maximum is found, or
 // maximum correlation <= cutoff.
@@ -3471,7 +3559,7 @@ gevd_float_operators::Extract(const gevd_bufferxy & buf,
   return &sub;
 }
 
-//: Update a float sub-buffer of buf, from top-left corner (origX, origY), with values in sub.
+//: Update a float sub-buffer of \a buf, from top-left corner (origX, origY), with values in \a sub.
 // Faster copying can be done with read/write chunks of memory.
 
 void
@@ -3502,7 +3590,8 @@ gevd_float_operators::Fill(gevd_bufferxy& buf, const float value,
 }
 
 //: Sets all pixels in the frame region to value (default = 0).
-// O((n+m)*width). The frame region is a rectangular band with given width,
+// O((n+m)*width).
+// The frame region is a rectangular band with given width,
 // framing at two ends of x/y axes.
 
 void
@@ -3636,8 +3725,9 @@ gevd_float_operators::Threshold(gevd_bufferxy& buf, float noise,
 
 //:
 // Normalizes a float buffer so that the pixel values range
-// from lo to hi, inclusive. If the buffer has constant value,
-// the value is mapped to lo. O(n*m).
+// from \a lo to \a hi, inclusive. If the buffer has constant value,
+// the value is mapped to \a lo.
+// O(n*m).
 
 void
 gevd_float_operators::Normalize(gevd_bufferxy& buf, const float lo, const float hi)
@@ -3763,45 +3853,41 @@ gevd_float_operators::TruncateToCeiling(gevd_bufferxy& buf, float ceilng)
 bool
 gevd_float_operators::BufferToFloat(const gevd_bufferxy& from, gevd_bufferxy& to)
 {
-  if (from.GetSizeX() != to.GetSizeX() ||
-      from.GetSizeY() != to.GetSizeY() ||
-      to.GetBytesPixel() != sizeof(float))
-    return false;
+  assert (&to != &from);
+  assert (from.GetSizeX() == to.GetSizeX() && from.GetSizeY() == to.GetSizeY());
+  assert (to.GetBytesPixel() == sizeof(float));
   int size = (to.GetSizeX() * to.GetSizeY());
-  switch (from.GetBytesPixel()) {
-   case sizeof(unsigned char):
-    {
-      const unsigned char* frombuf = (const unsigned char*) from.GetBuffer();
-      float* tobuf = (float*) to.GetBuffer();
-      for (int i = 0; i < size; i++)
-        tobuf[i] = (float) frombuf[i];
-    }
+  switch (from.GetBytesPixel())
+  {
+   case sizeof(unsigned char): {
+    const unsigned char* frombuf = (const unsigned char*) from.GetBuffer();
+    float* tobuf = (float*) to.GetBuffer();
+    for (int i = 0; i < size; i++)
+      tobuf[i] = (float) frombuf[i];
     break;
-   case sizeof(short):
-    {
-      const short* frombuf = (const short*) from.GetBuffer();
-      float* tobuf = (float*) to.GetBuffer();
-      for (int i = 0; i < size; i++)
-        tobuf[i] = (float) frombuf[i];
-    }
+   }
+   case sizeof(short): {
+    const short* frombuf = (const short*) from.GetBuffer();
+    float* tobuf = (float*) to.GetBuffer();
+    for (int i = 0; i < size; i++)
+      tobuf[i] = (float) frombuf[i];
     break;
-   case 3*sizeof(unsigned char): // assume RGB, and take luminance
-    {
-      vcl_cerr << "gevd_float_operators::BufferToFloat: taking luminance of RGB buffer\n";
-      const unsigned char* frombuf = (const unsigned char*) from.GetBuffer();
-      float* tobuf = (float*) to.GetBuffer();
-      for (int i = 0; i < size; i++)
-        tobuf[i] = 0.299f*frombuf[3*i]+0.587f*frombuf[3*i+1]+0.114f*frombuf[3*i+2];
-    }
+   }
+   case 3*sizeof(unsigned char): { // assume RGB, and take luminance
+    vcl_cerr << "gevd_float_operators::BufferToFloat: taking luminance of RGB buffer\n";
+    const unsigned char* frombuf = (const unsigned char*) from.GetBuffer();
+    float* tobuf = (float*) to.GetBuffer();
+    for (int i = 0; i < size; i++)
+      tobuf[i] = 0.299f*frombuf[3*i]+0.587f*frombuf[3*i+1]+0.114f*frombuf[3*i+2];
     break;
-   case sizeof(int):
-    {
-      const unsigned int* frombuf = (const unsigned int*) from.GetBuffer();
-      float* tobuf = (float*) to.GetBuffer();
-      for (int i = 0; i < size; i++)
-        tobuf[i] = (float)frombuf[i];
-    }
+   }
+   case sizeof(int): {
+    const unsigned int* frombuf = (const unsigned int*) from.GetBuffer();
+    float* tobuf = (float*) to.GetBuffer();
+    for (int i = 0; i < size; i++)
+      tobuf[i] = (float)frombuf[i];
     break;
+   }
    default:
     vcl_cerr << "Can only convert unsigned char/short/int/RGB buffer to float\n";
     return false;
@@ -3812,36 +3898,33 @@ gevd_float_operators::BufferToFloat(const gevd_bufferxy& from, gevd_bufferxy& to
 bool
 gevd_float_operators::FloatToBuffer (const gevd_bufferxy& from, gevd_bufferxy& to)
 {
-  if (from.GetSizeX() != to.GetSizeX() ||
-      from.GetSizeY() != to.GetSizeY() ||
-      from.GetBytesPixel() != sizeof(float))
-    return false;
+  assert (&to != &from);
+  assert (from.GetSizeX() == to.GetSizeX() && from.GetSizeY() == to.GetSizeY());
+  assert (from.GetBytesPixel() == sizeof(float));
   int size = (to.GetSizeX() * to.GetSizeY());
-  switch (to.GetBytesPixel()) {
-   case sizeof(unsigned char):
-    {
-      const float* frombuf = (const float*) from.GetBuffer();
-      unsigned char* tobuf = (unsigned char*) to.GetBuffer();
-      for (int i = 0; i < size; i++)
-        tobuf[i] = (unsigned char) int(frombuf[i]);
-    }
+  switch (to.GetBytesPixel())
+  {
+   case sizeof(unsigned char): {
+    const float* frombuf = (const float*) from.GetBuffer();
+    unsigned char* tobuf = (unsigned char*) to.GetBuffer();
+    for (int i = 0; i < size; i++)
+      tobuf[i] = (unsigned char) int(frombuf[i]);
     return true;
-   case sizeof(short):
-    {
-      const float* frombuf = (const float*) from.GetBuffer();
-      short* tobuf = (short*) to.GetBuffer();
-      for (int i = 0; i < size; i++)
-        tobuf[i] = (short) int(frombuf[i]);
-    }
+   }
+   case sizeof(short): {
+    const float* frombuf = (const float*) from.GetBuffer();
+    short* tobuf = (short*) to.GetBuffer();
+    for (int i = 0; i < size; i++)
+      tobuf[i] = (short) int(frombuf[i]);
     return true;
-   case 3*sizeof(unsigned char): // assume RGB ==> restore luminance
-    {
-      const float* frombuf = (const float*) from.GetBuffer();
-      unsigned char* tobuf = (unsigned char*) to.GetBuffer();
-      for (int i = 0; i < size; i++)
-        tobuf[3*i] = tobuf[3*i+1] = tobuf[3*i+2] = (unsigned char) int(frombuf[i]);
-    }
+   }
+   case 3*sizeof(unsigned char): { // assume RGB ==> restore luminance
+    const float* frombuf = (const float*) from.GetBuffer();
+    unsigned char* tobuf = (unsigned char*) to.GetBuffer();
+    for (int i = 0; i < size; i++)
+      tobuf[3*i] = tobuf[3*i+1] = tobuf[3*i+2] = (unsigned char) int(frombuf[i]);
     return true;
+   }
    default:
     vcl_cerr << "Can only convert float to unsigned char/short/RGB buffer\n";
     return false;
