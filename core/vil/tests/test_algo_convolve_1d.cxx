@@ -35,6 +35,21 @@ void test_algo_convolve_1d_byte()
 
   for (int i=0;i<n;++i) vcl_cout<<dest[i]<<" ";
   vcl_cout<<vcl_endl;
+
+  vcl_cout<<"Testing vil2_convolve_zero_extend end type"<<vcl_endl;
+  vil2_algo_convolve_1d(&dest[0],1, &src[0],n,1,
+                        &kernel[1],-1,1,ac,
+						vil2_convolve_zero_extend,vil2_convolve_zero_extend);
+
+  TEST_NEAR("Start",dest[0],8,1e-6);
+  TEST_NEAR("First full value",dest[1],14.0,1e-6);
+  TEST_NEAR("End",dest[n-1],3*n-1,1e-6);
+
+  for (int i=0;i<n;++i) vcl_cout<<dest[i]<<" ";
+  vcl_cout<<vcl_endl;
+
+	// *** Check for over-runs ****
+
 }
 
 MAIN( test_algo_convolve_1d )

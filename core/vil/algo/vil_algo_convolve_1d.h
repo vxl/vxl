@@ -72,6 +72,19 @@ inline void vil2_algo_convolve_edge_1d(destT* dest, int d_step,
       *dest = 0;
   }
   else
+	if (option==vil2_convolve_zero_extend)
+	{
+    // Assume zero outside src image
+    for (int i=k_lo+1;i<=0;++i,dest+=d_step,src+=s_step)
+		{
+		  accumT sum = 0;
+			const srcT* s = src;
+			const kernelT* k = kernel+i*kstep;
+      for (int j=i;j<=k_hi;++j,s+=s_step,k+=kstep) sum+= (*s)*(*k);
+			*dest=sum;
+		}
+	}
+	else
   {
     vcl_cout<<"vil2_algo_convolve_edge_1d: ";
     vcl_cout<<"Sorry, can't deal with supplied edge option."<<vcl_endl;
@@ -102,7 +115,7 @@ inline void vil2_algo_convolve_1d(destT* dest0, int d_step,
   {
     accumT sum = 0;
     const srcT* s= src;
-    for (const kernelT *k = k_begin;k!=k_end; k++,s+=s_step) sum+= (*k)*(*s);
+    for (const kernelT *k = k_begin;k!=k_end; ++k,s+=s_step) sum+= (*k)*(*s);
     *dest = destT(sum);
     src+=s_step;
     dest+=d_step;
