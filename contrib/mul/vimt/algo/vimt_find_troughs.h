@@ -25,11 +25,13 @@ inline bool vimt_is_trough_3x3(const T* im, int i_step, int j_step)
 }
 
 //: Return image co-ordinates of all points in image strictly below their 8 neighbours
+// \param clear_list: If true (the default) then empty list before adding new examples
 template <class T>
 inline void vimt_find_image_troughs_3x3(vcl_vector<vgl_point_2d<int> >& troughs,
                                         const vil2_image_view<T>& image,
-                                        unsigned plane=0)
+                                        unsigned plane=0, bool clear_list=true)
 {
+  if (clear_list) troughs.resize(0);
   unsigned ni=image.ni(),nj=image.nj();
   int istep = image.istep(),jstep=image.jstep();
   const T* row = image.top_left_ptr()+plane*image.planestep()+istep+jstep;
@@ -42,11 +44,13 @@ inline void vimt_find_image_troughs_3x3(vcl_vector<vgl_point_2d<int> >& troughs,
 }
 
 //: Return world co-ordinates of all points in image strictly below their 8 neighbours
+// \param clear_list: If true (the default) then empty list before adding new examples
 template <class T>
 inline void vimt_find_world_troughs_3x3(vcl_vector<vgl_point_2d<double> >& troughs,
                                       const vimt_image_2d_of<T>& image,
-                                      unsigned plane=0)
+                                      unsigned plane=0, bool clear_list=true)
 {
+  if (clear_list) troughs.resize(0);
   const vil2_image_view<T>& im = image.image();
   vimt_transform_2d im2w = image.world2im().inverse();
   unsigned ni=im.ni(),nj=im.nj();
