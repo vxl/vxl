@@ -571,7 +571,8 @@ bool vgui_mfc_dialog_impl::ask()
   for (vcl_vector<element>::iterator e_iter4 = elements.begin(); e_iter4 != elements.end(); ++e_iter4)
   {
     element l = *e_iter4;
-    delete l.field;
+    if (l.type != inline_tabl) // no field for inline tableau.
+      delete l.field;
   }
   delete accept;
   delete cancel;
