@@ -4,6 +4,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .NAME vil_png
+// .INCLUDE vil/file_formats/vil_png.h
+// .FILE file_formats/vil_png.cxx
 // .SECTION Author
 //    awf@robots.ox.ac.uk
 // Created: 17 Feb 00

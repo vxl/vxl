@@ -1,6 +1,9 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifndef vil_tiff_file_format_h_
 #define vil_tiff_file_format_h_
+// .NAME vil_tiff
+// .INCLUDE vil/file_formats/vil_tiff.h
+// .FILE file_formats/vil_tiff.cxx
 // .SECTION Author
 //    awf@robots.ox.ac.uk
 // Created: 16 Feb 00

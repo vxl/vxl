@@ -3,6 +3,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .NAME vil_clamp_image_impl
+// .INCLUDE vil/vil_clamp_image_impl.h
+// .FILE vil_clamp_image_impl.cxx
 
 #include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>

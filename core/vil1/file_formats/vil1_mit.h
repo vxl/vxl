@@ -9,6 +9,7 @@
 // .LIBRARY vil
 // .HEADER vxl Package
 // .INCLUDE vil/file_formats/vil_mit.h
+// .FILE file_formats/vil_mit.cxx
 // .SECTION Description
 //   vil_mit is a simple image format consisting of a header
 //   of 4 shorts (type,bits_per_pixel,width,height) and the raw data.
@@ -18,6 +19,9 @@
 // .SECTION Author
 //   Alison Noble, Oxford University.
 //   Joris Schouteden, vil version
+//
+// .SECTION Modifications
+//     000218 JS  Initial version, header info from MITImage.C
  
 /*
   TYPES:

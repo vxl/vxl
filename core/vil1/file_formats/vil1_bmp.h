@@ -4,6 +4,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .NAME vil_bmp
+// .INCLUDE vil/file_formats/vil_bmp.h
+// .FILE file_formats/vil_bmp.cxx
 // .SECTION Author
 //    Don Hamilton \and Peter Tu
 // Created: 17 Feb 2000

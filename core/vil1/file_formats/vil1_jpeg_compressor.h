@@ -3,9 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vil_jpeg_compressor
+// .INCLUDE vil/file_formats/vil_jpeg_compressor.h
+// .FILE file_formats/vil_jpeg_compressor.cxx
+// @author fsm@robots.ox.ac.uk
 
 #include <vil/vil_jpeglib.h>
 class vil_stream;

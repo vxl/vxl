@@ -5,6 +5,8 @@
 #pragma interface
 #endif
 // .NAME vil_iris
+// .INCLUDE vil/file_formats/vil_iris.h
+// .FILE file_formats/vil_iris.cxx
 // .SECTION Author
 // joris.schouteden@esat.kuleuven.ac.be
 // Created: 17 Feb 2000

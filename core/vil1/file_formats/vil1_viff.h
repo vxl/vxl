@@ -4,6 +4,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .NAME vil_viff
+// .INCLUDE vil/file_formats/vil_viff.h
+// .FILE file_formats/vil_viff.cxx
 // .SECTION Author
 //    Peter.Vanroose@esat.kuleuven.ac.be
 // Created: 17 Feb 2000
