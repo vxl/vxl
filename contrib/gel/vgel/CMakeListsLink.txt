@@ -1,0 +1,8 @@
+#
+# gel/vgel/CMakeListsLink.txt
+#
+
+LINK_LIBRARIES(vgel)
+
+INCLUDE( ${allvxl_SOURCE_DIR}/gel/vgel/kl/CMakeListsLink.txt )
+
