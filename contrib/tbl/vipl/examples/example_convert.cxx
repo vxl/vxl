@@ -29,6 +29,15 @@
 
 #include <vxl_config.h> // for vxl_byte
 
+class rgbcell: public vil_rgb<vxl_byte>
+{
+public:
+  rgbcell() {};
+  rgbcell(double x): vil_rgb<vxl_byte>(vxl_byte(x)) {}
+};
+
+
+
 int
 main(int argc, char** argv)
 {
