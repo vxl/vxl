@@ -28,8 +28,8 @@ class vil_image_view_base
   //: Number of planes.
   unsigned nplanes_;
 
-  vil_image_view_base(unsigned ni, unsigned nj, unsigned nplanes):
-  ni_(ni), nj_(nj), nplanes_(nplanes), reference_count_(0) {}
+  vil_image_view_base(unsigned n_i, unsigned n_j, unsigned n_planes):
+  ni_(n_i), nj_(n_j), nplanes_(n_planes), reference_count_(0) {}
 
   //: Default is an empty one-plane image
   //  Don't set nplanes_ to zero as it confuses set_size(nx,ny) later
@@ -53,9 +53,9 @@ class vil_image_view_base
   // If already correct size, this function returns quickly
   virtual void set_size(unsigned width, unsigned height) =0;
 
-  //: resize to width x height x nplanes.
+  //: resize to width x height x n_planes.
   // If already correct size, this function returns quickly
-  virtual void set_size(unsigned width, unsigned height, unsigned nplanes) =0;
+  virtual void set_size(unsigned width, unsigned height, unsigned n_planes) =0;
 
   //: Print a 1-line summary of contents
   virtual void print(vcl_ostream&) const =0;

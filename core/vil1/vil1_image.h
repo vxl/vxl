@@ -54,12 +54,12 @@ class vil1_image
   vil1_image get_plane(unsigned int p) const { vil1_image_delegate(get_plane, (p), vil1_image()); }
 
   //: Copy from image to buf
-  bool get_section(void *buf, int x0, int y0, int width, int height) const
-    { vil1_image_delegate(get_section, (buf, x0, y0, width, height), false); }
+  bool get_section(void *buf, int x0, int y0, int wd, int ht) const
+    { vil1_image_delegate(get_section, (buf, x0, y0, wd, ht), false); }
 
   //: Copy from buf to image
-  bool put_section(void const *buf, int x0, int y0, int width, int height)
-    { vil1_image_delegate(put_section, (buf, x0, y0, width, height), false); }
+  bool put_section(void const *buf, int x0, int y0, int wd, int ht)
+    { vil1_image_delegate(put_section, (buf, x0, y0, wd, ht), false); }
 
   //: Getting property information
   bool get_property(char const *tag, void *property_value = 0) const

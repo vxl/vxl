@@ -60,9 +60,9 @@ class vil_image_resource
   // \verbatim
   // vil_reformat(data->get_view(..), window);
   //\endverbatim
-  virtual vil_image_view_base_sptr get_view(unsigned i0, unsigned ni,
-                                            unsigned j0, unsigned nj) const
-  { return get_copy_view (i0, ni, j0, nj); }
+  virtual vil_image_view_base_sptr get_view(unsigned i0, unsigned n_i,
+                                            unsigned j0, unsigned n_j) const
+  { return get_copy_view (i0, n_i, j0, n_j); }
 
   //: Create a read/write view of all the data.
   vil_image_view_base_sptr get_view() const
@@ -72,8 +72,8 @@ class vil_image_resource
   // This function will always return a
   // multi-plane scalar-pixel view of the data.
   // \return 0 if unable to get view of correct size, or if resource is write-only.
-  virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
-                                                 unsigned j0, unsigned nj) const = 0;
+  virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned n_i,
+                                                 unsigned j0, unsigned n_j) const = 0;
 
   //: Create a read/write view of a copy of all the data.
   vil_image_view_base_sptr get_copy_view() const

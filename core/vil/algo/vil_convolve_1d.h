@@ -247,12 +247,12 @@ inline void vil_convolve_1d(const vil_image_view<srcT>& src_im,
                             vil_convolve_boundary_option start_option,
                             vil_convolve_boundary_option end_option)
 {
-  unsigned ni = src_im.ni();
-  unsigned nj = src_im.nj();
-  assert(k_hi - k_lo +1 <= (int) ni);
+  unsigned n_i = src_im.ni();
+  unsigned n_j = src_im.nj();
+  assert(k_hi - k_lo +1 <= (int) n_i);
   vcl_ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep();
 
-  dest_im.set_size(ni,nj,src_im.nplanes());
+  dest_im.set_size(n_i,n_j,src_im.nplanes());
   vcl_ptrdiff_t d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
 
   for (unsigned int p=0;p<src_im.nplanes();++p)
@@ -267,23 +267,23 @@ inline void vil_convolve_1d(const vil_image_view<srcT>& src_im,
     if (s_istep == 1)
     {
       if (d_istep == 1)
-        for (unsigned int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
-          vil_convolve_1d(src_row,ni,1,  dest_row,1,
+        for (unsigned int j=0;j<n_j;++j,src_row+=s_jstep,dest_row+=d_jstep)
+          vil_convolve_1d(src_row,n_i,1,  dest_row,1,
                           kernel,k_lo,k_hi,ac,start_option,end_option);
       else
-        for (unsigned int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
-          vil_convolve_1d(src_row,ni,1,  dest_row,d_istep,
+        for (unsigned int j=0;j<n_j;++j,src_row+=s_jstep,dest_row+=d_jstep)
+          vil_convolve_1d(src_row,n_i,1,  dest_row,d_istep,
                           kernel,k_lo,k_hi,ac,start_option,end_option);
     }
     else
     {
       if (d_istep == 1)
-        for (unsigned int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
-          vil_convolve_1d(src_row,ni,s_istep,  dest_row,1,
+        for (unsigned int j=0;j<n_j;++j,src_row+=s_jstep,dest_row+=d_jstep)
+          vil_convolve_1d(src_row,n_i,s_istep,  dest_row,1,
                           kernel,k_lo,k_hi,ac,start_option,end_option);
       else
-        for (unsigned int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
-          vil_convolve_1d(src_row,ni,s_istep,  dest_row,d_istep,
+        for (unsigned int j=0;j<n_j;++j,src_row+=s_jstep,dest_row+=d_jstep)
+          vil_convolve_1d(src_row,n_i,s_istep,  dest_row,d_istep,
                           kernel,k_lo,k_hi,ac,start_option,end_option);
     }
   }
@@ -323,15 +323,15 @@ class vil_convolve_1d_resource : public vil_image_resource
     vil_convolve_boundary_option end_option);
 
  public:
-  virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
-                                                 unsigned j0, unsigned nj) const
+  virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned n_i,
+                                                 unsigned j0, unsigned n_j) const
   {
-    if (i0 + ni > src_->ni() || j0 + nj > src_->nj())  return 0;
+    if (i0 + n_i > src_->ni() || j0 + n_j > src_->nj())  return 0;
     const unsigned lsrc = (unsigned) vcl_max(0,(int)i0 + klo_); // lhs of input window
-    const unsigned hsrc = vcl_min(src_->ni(),i0 + ni - klo_ + khi_); // 1+rhs of input window.
+    const unsigned hsrc = vcl_min(src_->ni(),i0 + n_i - klo_ + khi_); // 1+rhs of input window.
     const unsigned lboundary = vcl_min((unsigned) -klo_, i0); // width of lhs boundary area.
     assert (hsrc > lsrc);
-    vil_image_view_base_sptr vs = src_->get_view(lsrc, hsrc-lsrc, j0, nj);
+    vil_image_view_base_sptr vs = src_->get_view(lsrc, hsrc-lsrc, j0, n_j);
     vil_image_view<destT> dest(vs->ni(), vs->nj(), vs->nplanes());
     switch (vs->pixel_format())
     {
@@ -339,7 +339,7 @@ class vil_convolve_1d_resource : public vil_image_resource
       case F : \
         vil_convolve_1d(static_cast<vil_image_view<T >&>(*vs),dest, \
                         kernel_, klo_, khi_, accumT(), start_option_, end_option_); \
-        return new vil_image_view<destT>(vil_crop(dest, lboundary, ni, 0, nj));
+        return new vil_image_view<destT>(vil_crop(dest, lboundary, n_i, 0, n_j));
 
       macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
       macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
