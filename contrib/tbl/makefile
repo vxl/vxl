@@ -3,7 +3,7 @@
 # and also the "easy" image processing functions for vil, using those.
 
 # image processing
-SUBDIRS += vipl vepl
+SUBDIRS += vipl vepl vepl2
 
 ################################
 include ${IUEROOT}/config/top.mk
