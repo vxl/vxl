@@ -2,7 +2,7 @@
 
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/oxl)
 
-SOURCE_FILES(vmal_sources
+SET(vmal_sources
  vmal_convert.cxx           vmal_convert.h
  vmal_dense_matching.cxx    vmal_dense_matching.h
  vmal_homog2d.cxx           vmal_homog2d.h
@@ -20,4 +20,4 @@ SOURCE_FILES(vmal_sources
 
 AUX_SOURCE_DIRECTORY(Templates vmal_sources)
 
-ADD_LIBRARY(vmal vmal_sources)
+ADD_LIBRARY(vmal ${vmal_sources})

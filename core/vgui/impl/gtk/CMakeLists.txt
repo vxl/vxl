@@ -15,7 +15,7 @@ INCLUDE_DIRECTORIES(${GTK_INCLUDE_PATH})
 
 SET(vgui_IMPL_GTK "vgui_gtk" CACHE INTERNAL "Set if vgui has GTK")
 
-SOURCE_FILES(vgui_gtk_sources
+SET(vgui_gtk_sources
  vgui_gtk.cxx             vgui_gtk.h
  vgui_gtk_adaptor.cxx     vgui_gtk_adaptor.h
  vgui_gtk_dialog_impl.cxx vgui_gtk_dialog_impl.h
@@ -27,7 +27,7 @@ SOURCE_FILES(vgui_gtk_sources
 
 AUX_SOURCE_DIRECTORY(Templates vgui_gtk_sources)
 
-ADD_LIBRARY(vgui_gtk vgui_gtk_sources)
+ADD_LIBRARY(vgui_gtk ${vgui_gtk_sources})
 TARGET_LINK_LIBRARIES(vgui_gtk vgui_base ${GTK_LIBRARIES})
 
 ENDIF(VGUI_USE_GTK)

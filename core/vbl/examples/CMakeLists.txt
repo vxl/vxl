@@ -2,7 +2,7 @@
 
 AUX_SOURCE_DIRECTORY( Templates vbl_example_templates_sources )
 
-ADD_LIBRARY( vbl_example_templates vbl_example_templates_sources )
+ADD_LIBRARY( vbl_example_templates ${vbl_example_templates_sources} )
 TARGET_LINK_LIBRARIES( vbl_example_templates vbl )
 
 ADD_EXECUTABLE( vbl_smart_ptr_example

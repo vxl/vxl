@@ -1,6 +1,6 @@
 # vxl/vgl/io/CMakeLists.txt
 
-SOURCE_FILES(vgl_io_sources
+SET(vgl_io_sources
   vgl_io_polygon.cxx vgl_io_polygon.h
 
   vgl_io_box_2d.txx vgl_io_box_2d.h
@@ -22,7 +22,7 @@ SOURCE_FILES(vgl_io_sources
 
 AUX_SOURCE_DIRECTORY(Templates vgl_io_sources)
 
-ADD_LIBRARY(vgl_io vgl_io_sources)
+ADD_LIBRARY(vgl_io ${vgl_io_sources})
 TARGET_LINK_LIBRARIES( vgl_io vgl vsl )
 
 IF( BUILD_TESTING)

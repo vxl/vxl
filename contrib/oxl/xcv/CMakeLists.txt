@@ -4,7 +4,7 @@ INCLUDE( ${allvxl_SOURCE_DIR}/oxl/vgui/UseVGUI.cmake )
 
 IF (HAS_VGUI)
 
-SOURCE_FILES(xcv_sources
+SET(xcv_sources
  xcv_image_tableau.cxx      xcv_image_tableau.h  xcv_image_tableau_sptr.h
  xcv_file.cxx               xcv_file.h
  xcv_display.cxx            xcv_display.h
@@ -31,7 +31,7 @@ IF (CMAKE_COMPILER_IS_GNUCXX)
   SET_SOURCE_FILES_PROPERTIES( xcv_geometry.cxx COMPILE_FLAGS "-ftemplate-depth-50" )
 ENDIF (CMAKE_COMPILER_IS_GNUCXX)
 
-ADD_EXECUTABLE(xcv xcv_sources)
+ADD_EXECUTABLE(xcv ${xcv_sources})
 TARGET_LINK_LIBRARIES(xcv osl mvl vgui vgl vil vnl_algo vnl vul vbl vpl vcl)
 
 ENDIF (HAS_VGUI)

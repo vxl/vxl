@@ -9,7 +9,7 @@ ADD_EXECUTABLE( rrel_test_driver
   similarity_from_matches.h  similarity_from_matches.cxx
 
   # Template instantiations
-  rrel_tests_sources
+  ${rrel_tests_sources}
 
   # The tests
   test_include.cxx

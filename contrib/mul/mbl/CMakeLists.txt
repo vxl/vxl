@@ -1,6 +1,6 @@
 # mul/mbl/CMakeLists.txt
 
-SOURCE_FILES(mbl_sources
+SET(mbl_sources
  mbl_gamma.cxx                     mbl_gamma.h
  mbl_matrix_products.cxx           mbl_matrix_products.h
  mbl_matxvec.cxx                   mbl_matxvec.h
@@ -41,7 +41,7 @@ SOURCE_FILES(mbl_sources
 
 AUX_SOURCE_DIRECTORY(Templates mbl_sources)
 
-ADD_LIBRARY(mbl mbl_sources)
+ADD_LIBRARY(mbl ${mbl_sources})
 TARGET_LINK_LIBRARIES(mbl vnl_io vnl_algo vsl vgl_io)
 
 IF (BUILD_TESTING)

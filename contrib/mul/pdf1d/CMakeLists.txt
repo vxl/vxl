@@ -5,7 +5,7 @@
 #
 
 
-SOURCE_FILES(pdf1d_sources
+SET(pdf1d_sources
   pdf1d_all.h
   pdf1d_pdf.cxx                                    pdf1d_pdf.h                                
   pdf1d_sampler.cxx                                pdf1d_sampler.h                            
@@ -47,7 +47,7 @@ SOURCE_FILES(pdf1d_sources
 
 AUX_SOURCE_DIRECTORY(Templates pdf1d_sources)
 
-ADD_LIBRARY(pdf1d pdf1d_sources)
+ADD_LIBRARY(pdf1d ${pdf1d_sources})
 TARGET_LINK_LIBRARIES( pdf1d vbl_io mbl vgl_io vnl_algo )
 
 SUBDIRS(tools)

@@ -1,6 +1,6 @@
 # tbl/vepl/CMakeLists.txt
 
-SOURCE_FILES(vepl_sources
+SET(vepl_sources
  vepl_threshold.cxx            vepl_threshold.h
  vepl_add_random_noise.cxx     vepl_add_random_noise.h
  vepl_monadic.cxx              vepl_monadic.h
@@ -22,7 +22,7 @@ SOURCE_FILES(vepl_sources
 
 AUX_SOURCE_DIRECTORY(Templates vepl_sources)
 
-ADD_LIBRARY(vepl vepl_sources)
+ADD_LIBRARY(vepl ${vepl_sources})
 TARGET_LINK_LIBRARIES(vepl vipl)
 
 IF (BUILD_EXAMPLES)

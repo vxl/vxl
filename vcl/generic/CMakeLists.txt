@@ -1,4 +1,4 @@
-SOURCE_FILES(vcl_generic
+SET(vcl_generic
   vcl_algorithm.hhh
   vcl_bitset.hhh
   vcl_blah.hhh

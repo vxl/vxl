@@ -1,8 +1,6 @@
 # ./v3p/Qv/CMakeLists.txt
 
-ADD_LIBRARY( Qv Qv_sources )
-
-SOURCE_FILES( Qv_sources
+SET( Qv_sources
   vecutil.cxx vecutil.h
   QvLib.cxx
   wrltraverse.cxx
@@ -165,6 +163,8 @@ SOURCE_FILES( Qv_sources
 )
 
 AUX_SOURCE_DIRECTORY( Templates Qv_sources )
+
+ADD_LIBRARY( Qv ${Qv_sources} )
 
 TARGET_LINK_LIBRARIES( Qv vcl )
 

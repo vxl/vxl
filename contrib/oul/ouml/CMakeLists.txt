@@ -1,6 +1,6 @@
 # ./oul/ouml/CMakeLists.txt
 
-SOURCE_FILES(ouml_sources
+SET(ouml_sources
   eigenfaces.h       eigenfaces.cxx
   image_database.h   image_database.cxx
   polygon_mesh.h     polygon_mesh.cxx
@@ -13,5 +13,5 @@ SOURCE_FILES(ouml_sources
   image_convert.txx
 )
 
-ADD_LIBRARY(ouml ouml_sources)
+ADD_LIBRARY(ouml ${ouml_sources})
 TARGET_LINK_LIBRARIES( ouml vnl_algo vil vpl )

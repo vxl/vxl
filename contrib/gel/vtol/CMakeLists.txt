@@ -1,6 +1,6 @@
 # gel/vtol/CMakeLists.txt
 
-SOURCE_FILES(vtol_sources
+SET(vtol_sources
  vtol_topology_object.cxx vtol_topology_object.h vtol_topology_object_sptr.h
  vtol_topology_cache.cxx  vtol_topology_cache.h  vtol_topology_cache_sptr.h
  vtol_list_functions.cxx  vtol_list_functions.h
@@ -24,7 +24,7 @@ SOURCE_FILES(vtol_sources
 
 AUX_SOURCE_DIRECTORY(Templates vtol_sources)
 
-ADD_LIBRARY(vtol vtol_sources)
+ADD_LIBRARY(vtol ${vtol_sources})
 TARGET_LINK_LIBRARIES(vtol vdgl vsol vbl vul vcl)
 
 IF (BUILD_EXAMPLES)

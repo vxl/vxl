@@ -2,7 +2,7 @@
 
 INCLUDE( ${MODULE_PATH}/FindMPEG.cmake )
 
-SOURCE_FILES(vidl_sources
+SET(vidl_sources
   vidl_test.cxx
 
   vidl_codec.h                vidl_codec_sptr.h
@@ -15,7 +15,7 @@ SOURCE_FILES(vidl_sources
 )
 
 IF( HAS_MPEG )
-  SOURCE_FILES(vidl_sources
+  SET(vidl_sources ${vidl_sources}
     vidl_mpegcodec.cxx vidl_mpegcodec.h vidl_mpegcodec_sptr.h
     vidl_mpegcodec_helper.cxx vidl_mpegcodec_helper.h
     vidl_yuv_2_rgb.cxx vidl_yuv_2_rgb.h
@@ -26,13 +26,13 @@ AUX_SOURCE_DIRECTORY(Templates vidl_sources)
 
 IF(WIN32)
   IF (NOT CYGWIN)
-    SOURCE_FILES(vidl_sources
+    SET(vidl_sources ${vidl_sources}
       vidl_avicodec.cxx vidl_avicodec.h vidl_avicodec_sptr.h
     )
   ENDIF (NOT CYGWIN)
 ENDIF(WIN32)
 
-ADD_LIBRARY(vidl vidl_sources)
+ADD_LIBRARY(vidl ${vidl_sources})
 TARGET_LINK_LIBRARIES( vidl vul vil vcl )
 
 IF (WIN32)

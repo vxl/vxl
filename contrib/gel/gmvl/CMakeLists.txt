@@ -1,6 +1,6 @@
 # gel/gmvl/CMakeLists.txt
 
-SOURCE_FILES(gmvl_sources
+SET(gmvl_sources
  gmvl_connection.cxx       gmvl_connection.h       gmvl_connection_sptr.h
  gmvl_connection_cache.cxx gmvl_connection_cache.h
  gmvl_corner_node.cxx      gmvl_corner_node.h
@@ -15,7 +15,7 @@ SOURCE_FILES(gmvl_sources
 
 AUX_SOURCE_DIRECTORY(Templates gmvl_sources)
 
-ADD_LIBRARY(gmvl gmvl_sources)
+ADD_LIBRARY(gmvl ${gmvl_sources})
 TARGET_LINK_LIBRARIES(gmvl vtol vil vcl)
 
 IF (BUILD_EXAMPLES)

@@ -8,7 +8,7 @@ IF (TESTLIB_VCL_WHERE_ROOT_DIR_H)
   ADD_DEFINITIONS(-DVCL_WHERE_ROOT_DIR_H_EXISTS)
 ENDIF(TESTLIB_VCL_WHERE_ROOT_DIR_H)
 
-SOURCE_FILES( testlib_sources
+SET( testlib_sources
 
   # Useful utilities for the tests
   testlib_test.h                testlib_test.cxx
@@ -23,7 +23,7 @@ SOURCE_FILES( testlib_sources
   testlib_root_dir.h            testlib_root_dir.cxx
 )
 
-ADD_LIBRARY( testlib testlib_sources )
+ADD_LIBRARY( testlib ${testlib_sources} )
 TARGET_LINK_LIBRARIES( testlib vcl )
 
 IF( BUILD_TESTING )

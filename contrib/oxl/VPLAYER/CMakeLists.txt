@@ -5,7 +5,7 @@ INCLUDE( ${allvxl_SOURCE_DIR}/oxl/vgui/UseVGUI.cmake )
 IF (HAS_VGUI)
  IF (WIN32)
   IF (NOT CYGWIN)
-    SOURCE_FILES(VPLAYER_sources
+    SET(VPLAYER_sources
      easy2D_loader.cxx    easy2D_loader.h
      easy2D_sequencer.cxx easy2D_sequencer.h
      vplayer.cxx          vplayer.h
@@ -14,7 +14,7 @@ IF (HAS_VGUI)
      vplayer_video.cxx    vplayer_video.h
     )
 
-    ADD_EXECUTABLE(VPLAYER VPLAYER_sources)
+    ADD_EXECUTABLE(VPLAYER ${VPLAYER_sources})
     TARGET_LINK_LIBRARIES(VPLAYER vfw32 osl mvl vgui vidl oxp)
   ENDIF (NOT CYGWIN)
  ENDIF (WIN32)

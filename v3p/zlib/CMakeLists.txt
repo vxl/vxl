@@ -4,9 +4,7 @@ INCLUDE( ${MODULE_PATH}/FindNativeZLIB.cmake )
 
 IF(NOT HAS_NATIVE_ZLIB)
 
-ADD_LIBRARY( zlib zlib_sources )
-
-SOURCE_FILES( zlib_sources
+SET( zlib_sources
   zlib.h
   zconf.h
 
@@ -26,5 +24,7 @@ SOURCE_FILES( zlib_sources
   inffast.c inffast.h
             inffixed.h
 )
+
+ADD_LIBRARY( zlib ${zlib_sources} )
 
 ENDIF(NOT HAS_NATIVE_ZLIB)

@@ -9,9 +9,7 @@ INCLUDE( ${MODULE_PATH}/FindZLIB.cmake )
 IF(HAS_ZLIB)
   INCLUDE_DIRECTORIES( ${ZLIB_INCLUDE_PATH} )
 
-  ADD_LIBRARY( png png_sources )
-
-  SOURCE_FILES( png_sources
+  SET( png_sources
     pngasmrd.h
     pngconf.h
 
@@ -31,6 +29,8 @@ IF(HAS_ZLIB)
     pngerror.c
     pngpread.c
   )
+
+  ADD_LIBRARY( png ${png_sources} )
 
   # With cygwin, the there are multiple user configurations
   # possible. From pngconf.h:

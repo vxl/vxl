@@ -4,9 +4,7 @@ INCLUDE(${MODULE_PATH}/FindNativeTIFF.cmake)
 
 IF(NOT HAS_NATIVE_TIFF)
 
-ADD_LIBRARY( tiff tiff_sources )
-
-SOURCE_FILES( tiff_sources
+SET( tiff_sources
   format.h
   machdep.h
   port.h
@@ -56,15 +54,17 @@ SOURCE_FILES( tiff_sources
 )
 
 IF(UNIX)
-  SOURCE_FILES( tiff_sources
+  SET( tiff_sources ${tiff_sources}
     tif_unix.c
   )
 ELSE(UNIX)
   ADD_DEFINITIONS( -DTIF_PLATFORM_CONSOLE)
 
-  SOURCE_FILES( tiff_sources
+  SET( tiff_sources ${tiff_sources}
     tif_win32.c
   )
 ENDIF(UNIX)
+
+ADD_LIBRARY( tiff ${tiff_sources} )
 
 ENDIF(NOT HAS_NATIVE_TIFF)

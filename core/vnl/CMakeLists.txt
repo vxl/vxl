@@ -1,6 +1,6 @@
 # vxl/vnl/CMakeLists.txt
 
-SOURCE_FILES( vnl_sources
+SET( vnl_sources
   vnl_fwd.h
   vnl_config.h
   vnl_test.cxx                 vnl_test.h
@@ -125,7 +125,7 @@ IF(NOT VNL_C_VECTOR_USE_VNL_ALLOC_DEFINED)
   ADD_DEFINITIONS(-DVNL_C_VECTOR_USE_VNL_ALLOC=1)
 ENDIF(NOT VNL_C_VECTOR_USE_VNL_ALLOC_DEFINED)
 
-ADD_LIBRARY(vnl vnl_sources)
+ADD_LIBRARY(vnl ${vnl_sources})
 TARGET_LINK_LIBRARIES( vnl vcl )
 
 SUBDIRS(algo)

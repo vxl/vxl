@@ -6,9 +6,7 @@ CONFIGURE_FILE(
       ${allvxl_BINARY_DIR}/vcl/vcl_where_root_dir.h ESCAPE_QUOTES
 )
 
-ADD_LIBRARY(vcl vcl_sources)
-
-SOURCE_FILES( vcl_sources
+SET( vcl_sources
   vcl_compiler.h
   vcl_deprecated.cxx vcl_deprecated.h
 
@@ -306,9 +304,9 @@ SOURCE_FILES( vcl_sources
   win32/vcl_vector.txx
 )
 
-
 AUX_SOURCE_DIRECTORY(Templates vcl_sources)
 
+ADD_LIBRARY(vcl ${vcl_sources})
 
 IF(WIN32)
   IF(NOT CYGWIN)

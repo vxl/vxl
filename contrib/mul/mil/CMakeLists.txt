@@ -1,6 +1,6 @@
 # mul/mil/CMakeLists.txt
 
-SOURCE_FILES(mil_sources
+SET(mil_sources
  mil_all.h
 
  mil_gauss_reduce_2d.cxx         mil_gauss_reduce_2d.h
@@ -33,7 +33,7 @@ SOURCE_FILES(mil_sources
 
 AUX_SOURCE_DIRECTORY(Templates mil_sources)
 
-ADD_LIBRARY(mil mil_sources)
+ADD_LIBRARY(mil ${mil_sources})
 TARGET_LINK_LIBRARIES(mil mbl vnl_algo vbl_io vnl_io vgl_io vil_io)
 
 SUBDIRS(algo)

@@ -1,6 +1,6 @@
 # gel/vgel/kl/CMakeLists.txt
 
-SOURCE_FILES(vgel_kl_sources
+SET(vgel_kl_sources
                       base.h
  convolve.c           convolve.h
  klt.c                klt.h
@@ -14,4 +14,4 @@ SOURCE_FILES(vgel_kl_sources
  writeFeatures.c
 )
 
-ADD_LIBRARY(vgel_kl vgel_kl_sources)
+ADD_LIBRARY(vgel_kl ${vgel_kl_sources})

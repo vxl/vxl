@@ -11,7 +11,7 @@ IF (HAS_OPENGL)
 
 INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_PATH})
 
-SOURCE_FILES(vgui_sources
+SET(vgui_sources
   vgui_fwd.h
 
   vgui_toolkit.cxx              vgui_toolkit.h
@@ -123,7 +123,7 @@ SOURCE_FILES(vgui_sources
 
 IF (HAS_QV)
   INCLUDE_DIRECTORIES(${QV_INCLUDE_PATH})
-  SOURCE_FILES(vgui_sources
+  SET(vgui_sources ${vgui_sources}
     vrml/vgui_vrml_draw_visitor.cxx  vrml/vgui_vrml_draw_visitor.h
     vrml/vgui_vrml_tableau.cxx       vrml/vgui_vrml_tableau.h
     vrml/vgui_vrml_texture_map.cxx   vrml/vgui_vrml_texture_map.h
@@ -131,21 +131,21 @@ IF (HAS_QV)
 ENDIF (HAS_QV)
 
 IF (HAS_MFC)
-  SOURCE_FILES(vgui_sources
+  SET(vgui_sources ${vgui_sources}
     internals/vgui_accelerate_mfc.cxx internals/vgui_accelerate_mfc.h
   )
 ENDIF (HAS_MFC)
 
 IF (HAS_X11)
   INCLUDE_DIRECTORIES(${X11_INCLUDE_PATH})
-  SOURCE_FILES(vgui_sources
+  SET(vgui_sources ${vgui_sources}
     internals/vgui_accelerate_x11.cxx internals/vgui_accelerate_x11.h
   )
 ENDIF (HAS_X11)
 
 IF (HAS_GLUT)
   INCLUDE_DIRECTORIES(${GLUT_INCLUDE_PATH})
-  SOURCE_FILES(vgui_sources
+  SET(vgui_sources ${vgui_sources}
     vgui_glut.cxx vgui_glut.h
   )
 ENDIF (HAS_GLUT)
@@ -159,7 +159,7 @@ IF (HAS_MFC)
   SET(CMAKE_MFC_FLAG 6)
 ENDIF (HAS_MFC)
 
-ADD_LIBRARY(vgui_base vgui_sources)
+ADD_LIBRARY(vgui_base ${vgui_sources})
 
 TARGET_LINK_LIBRARIES(vgui_base vnl_algo vnl vil vgl vpl vbl vul)
 IF (HAS_GLUT)

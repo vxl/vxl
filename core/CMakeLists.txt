@@ -3,7 +3,7 @@
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vcl)
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vxl)
 
-SOURCE_FILES(global_sources
+SET(global_sources
  vxl_copyright.h
  vxl_config.h.in
 )

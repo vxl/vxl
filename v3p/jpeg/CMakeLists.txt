@@ -4,7 +4,7 @@ INCLUDE( ${MODULE_PATH}/FindNativeJPEG.cmake )
 
 IF(NOT HAS_NATIVE_JPEG)
 
-SOURCE_FILES( jpeg_sources
+SET( jpeg_sources
   jconfig.h
   jdct.h
   jinclude.h
@@ -62,6 +62,6 @@ SOURCE_FILES( jpeg_sources
   jmemansi.c
 )
 
-ADD_LIBRARY( jpeg jpeg_sources )
+ADD_LIBRARY( jpeg ${jpeg_sources} )
 
 ENDIF(NOT HAS_NATIVE_JPEG)

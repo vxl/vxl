@@ -1,6 +1,6 @@
 # mul/vpdfl/CMakeLists.txt
 
-SOURCE_FILES(vpdfl_sources
+SET(vpdfl_sources
  vpdfl_all.h
  vpdfl_resample.cxx                    vpdfl_resample.h
  vpdfl_calc_mean_var.cxx               vpdfl_calc_mean_var.h
@@ -30,7 +30,7 @@ SOURCE_FILES(vpdfl_sources
 
 AUX_SOURCE_DIRECTORY(Templates vpdfl_sources)
 
-ADD_LIBRARY(vpdfl vpdfl_sources)
+ADD_LIBRARY(vpdfl ${vpdfl_sources})
 TARGET_LINK_LIBRARIES(vpdfl vnl_algo vnl_io mbl)
 
 IF (BUILD_TESTING)

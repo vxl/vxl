@@ -10,13 +10,13 @@ INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/oxl )
 IF(WIN32)
 IF (NOT CYGWIN)
 
-SOURCE_FILES( jvid_sources
+SET( jvid_sources
  jvx_manager.cxx jvx_manager.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates jvid_sources)
 
-ADD_LIBRARY(jvid jvid_sources)
+ADD_LIBRARY(jvid ${jvid_sources})
 TARGET_LINK_LIBRARIES( jvid vgui vidl vul vil )
 
 SUBDIRS(bin)

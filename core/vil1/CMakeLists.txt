@@ -1,6 +1,6 @@
 # vxl/vil/CMakeLists.txt
 
-SOURCE_FILES( vil_sources
+SET( vil_sources
   vil_fwd.h
 
   # basic things
@@ -105,14 +105,14 @@ INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
 
 IF(HAS_PNG)
   INCLUDE_DIRECTORIES( ${PNG_INCLUDE_PATH} )
-  SOURCE_FILES( vil_sources
+  SET( vil_sources ${vil_sources}
     file_formats/vil_png.cxx file_formats/vil_png.h
   )
 ENDIF(HAS_PNG)
 
 IF(HAS_JPEG)
   INCLUDE_DIRECTORIES( ${JPEG_INCLUDE_PATH} )
-  SOURCE_FILES( vil_sources
+  SET( vil_sources ${vil_sources}
     vil_jpeglib.h
     file_formats/vil_jpeg.cxx file_formats/vil_jpeg.h
     file_formats/vil_jpeg_source_mgr.cxx file_formats/vil_jpeg_source_mgr.h
@@ -124,14 +124,14 @@ ENDIF(HAS_JPEG)
 
 IF(HAS_TIFF)
   INCLUDE_DIRECTORIES( ${TIFF_INCLUDE_PATH} )
-  SOURCE_FILES( vil_sources
+  SET( vil_sources ${vil_sources}
     file_formats/vil_tiff.cxx file_formats/vil_tiff.h
   )
 ENDIF(HAS_TIFF)
 
 AUX_SOURCE_DIRECTORY(Templates vil_sources)
 
-ADD_LIBRARY(vil vil_sources)
+ADD_LIBRARY(vil ${vil_sources})
 
 IF(HAS_JPEG)
   TARGET_LINK_LIBRARIES( vil ${JPEG_LIBRARIES} )

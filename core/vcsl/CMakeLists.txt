@@ -1,6 +1,6 @@
 # vxl/vcsl/CMakeLists.txt
 
-SOURCE_FILES( vcsl_sources
+SET( vcsl_sources
   vcsl_dimension.cxx vcsl_dimension.h vcsl_dimension_sptr.h
   vcsl_length.cxx vcsl_length.h vcsl_length_sptr.h
 
@@ -54,7 +54,7 @@ SOURCE_FILES( vcsl_sources
 
 AUX_SOURCE_DIRECTORY( Templates vcsl_sources )
 
-ADD_LIBRARY( vcsl vcsl_sources )
+ADD_LIBRARY( vcsl ${vcsl_sources} )
 TARGET_LINK_LIBRARIES( vcsl vnl vbl )
 
 IF( BUILD_EXAMPLES )

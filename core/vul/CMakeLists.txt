@@ -1,6 +1,6 @@
 # ./vxl/vul/CMakeLists.txt
 
-SOURCE_FILES(vul_sources
+SET(vul_sources
   vul_fwd.h
   vul_canonical_path.h
   vul_whereami.h
@@ -28,7 +28,7 @@ SOURCE_FILES(vul_sources
 
 AUX_SOURCE_DIRECTORY(Templates vul_sources)
 
-ADD_LIBRARY(vul vul_sources)
+ADD_LIBRARY(vul ${vul_sources})
 
 IF (NOT UNIX)
   TARGET_LINK_LIBRARIES( vul ws2_32.lib )

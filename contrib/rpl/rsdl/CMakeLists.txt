@@ -1,6 +1,6 @@
 # rpl/rsdl/CMakeLists.txt
 
-SOURCE_FILES(rsdl_sources
+SET(rsdl_sources
  rsdl_fwd.h
  rsdl_test.h
 
@@ -15,7 +15,7 @@ SOURCE_FILES(rsdl_sources
 
 AUX_SOURCE_DIRECTORY(Templates rsdl_sources)
 
-ADD_LIBRARY(rsdl rsdl_sources)
+ADD_LIBRARY(rsdl ${rsdl_sources})
 TARGET_LINK_LIBRARIES(rsdl vnl vbl vil)
 
 IF (BUILD_TESTING)

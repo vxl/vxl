@@ -7,7 +7,7 @@ IF(HAS_NETLIB)
 
 INCLUDE_DIRECTORIES( ${NETLIB_INCLUDE_PATH} )
 
-SOURCE_FILES( vnl_algo_sources
+SET( vnl_algo_sources
   vnl_algo_fwd.h
   vnl_netlib.h
 
@@ -57,7 +57,7 @@ SOURCE_FILES( vnl_algo_sources
 
 AUX_SOURCE_DIRECTORY(Templates vnl_algo_sources)
 
-ADD_LIBRARY( vnl_algo vnl_algo_sources)
+ADD_LIBRARY( vnl_algo ${vnl_algo_sources})
 TARGET_LINK_LIBRARIES( vnl_algo ${NETLIB_LIBRARIES} vnl )
 
 ENDIF(HAS_NETLIB)

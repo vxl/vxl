@@ -1,6 +1,6 @@
 # gel/vsol/CMakeLists.txt
 
-SOURCE_FILES(vsol_sources
+SET(vsol_sources
  vsol_spatial_object_2d.cxx vsol_spatial_object_2d.h vsol_spatial_object_2d_sptr.h
  vsol_box_2d.cxx            vsol_box_2d.h            vsol_box_2d_sptr.h
  vsol_group_2d.cxx          vsol_group_2d.h          vsol_group_2d_sptr.h
@@ -32,7 +32,7 @@ INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vxl)
 
 AUX_SOURCE_DIRECTORY(Templates vsol_sources)
 
-ADD_LIBRARY(vsol vsol_sources)
+ADD_LIBRARY(vsol ${vsol_sources})
 TARGET_LINK_LIBRARIES(vsol vgl_algo vgl vnl vbl vul vcl)
 
 IF (BUILD_EXAMPLES)

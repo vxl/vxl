@@ -1,6 +1,6 @@
 # vxl/vgl/algo/CMakeLists.txt
 
-SOURCE_FILES( vgl_algo_sources
+SET( vgl_algo_sources
   # need at least one file for SunPro
   vgl_algo.cxx
 
@@ -12,5 +12,5 @@ SOURCE_FILES( vgl_algo_sources
 
 AUX_SOURCE_DIRECTORY(Templates vgl_algo_sources)
 
-ADD_LIBRARY(vgl_algo vgl_algo_sources)
+ADD_LIBRARY(vgl_algo ${vgl_algo_sources})
 TARGET_LINK_LIBRARIES( vgl_algo vgl vnl_algo )

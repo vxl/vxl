@@ -1,6 +1,6 @@
 # oxl/osl/CMakeLists.txt
 
-SOURCE_FILES(osl_sources
+SET(osl_sources
  osl_topology.cxx                osl_topology.h
  osl_vertex.cxx                  osl_vertex.h
  osl_edge.cxx                    osl_edge.h
@@ -41,7 +41,7 @@ SOURCE_FILES(osl_sources
 
 AUX_SOURCE_DIRECTORY(Templates osl_sources)
 
-ADD_LIBRARY(osl osl_sources)
+ADD_LIBRARY(osl ${osl_sources})
 TARGET_LINK_LIBRARIES(osl vnl_algo vnl vil  vgl vbl)
 
 IF (BUILD_EXAMPLES)

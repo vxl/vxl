@@ -7,7 +7,7 @@ ENDIF (BUILD_TESTING)
 # These are the source files in this directory.
 # Note that these are all header files, so no library is built here.
 
-SOURCE_FILES(math_sources
+SET(math_sources
  CoolMatrix_to_vnl_matrix.h
  CoolVector_to_vnl_vector.h
  IUE_matrix_to_vnl_matrix.h

@@ -10,7 +10,7 @@ IF(VGUI_USE_MFC)
 
 SET(vgui_IMPL_MFC "vgui_mfc" CACHE INTERNAL "Set if vgui has mfc")
 
-SOURCE_FILES(vgui_mfc_sources
+SET(vgui_mfc_sources
  vgui_mfc.cxx             vgui_mfc.h
  vgui_mfc_adaptor.cxx     vgui_mfc_adaptor.h
  vgui_mfc_app.cxx         vgui_mfc_app.h
@@ -26,7 +26,7 @@ SOURCE_FILES(vgui_mfc_sources
  vgui_mfc_window.cxx      vgui_mfc_window.h
 )
 
-ADD_LIBRARY(vgui_mfc vgui_mfc_sources)
+ADD_LIBRARY(vgui_mfc ${vgui_mfc_sources})
 TARGET_LINK_LIBRARIES(vgui_mfc vgui_base)
 
 ENDIF(VGUI_USE_MFC)

@@ -1,8 +1,6 @@
 # ./v3p/netlib/CMakeLists.txt
 
-ADD_LIBRARY( netlib netlib_sources )
-
-SOURCE_FILES( netlib_sources
+SET( netlib_sources
   f2c.h
   netlib.h
 
@@ -280,6 +278,8 @@ SOURCE_FILES( netlib_sources
   dtrsv.c
   i_dnnt.c
 )
+
+ADD_LIBRARY( netlib ${netlib_sources} )
 
 IF(UNIX)
   TARGET_LINK_LIBRARIES( netlib m )

@@ -7,6 +7,6 @@ ENDIF (BUILD_TESTING)
 # These are the source files in this directory.
 # Note that these are all header files, so no library is built here.
 
-SOURCE_FILES(misc_sources
+SET(misc_sources
 # none yet
 )

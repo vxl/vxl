@@ -1,6 +1,6 @@
 # mul/mil/algo/CMakeLists.txt
 
-SOURCE_FILES(mil_algo_sources
+SET(mil_algo_sources
  mil_algo_exp_filter_1d.cxx   mil_algo_exp_filter_1d.h
  mil_algo_grad_3x3.cxx        mil_algo_grad_3x3.h
  mil_algo_grad_1x3.cxx        mil_algo_grad_1x3.h
@@ -14,5 +14,5 @@ SOURCE_FILES(mil_algo_sources
 
 AUX_SOURCE_DIRECTORY(Templates mil_algo_sources)
 
-ADD_LIBRARY(mil_algo mil_algo_sources)
+ADD_LIBRARY(mil_algo ${mil_algo_sources})
 TARGET_LINK_LIBRARIES(mil_algo mil)

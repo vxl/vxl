@@ -1,6 +1,6 @@
 # tbl/vipl/CMakeLists.txt
 
-SOURCE_FILES(vipl_sources
+SET(vipl_sources
  filter/vipl_filter_abs.cxx  filter/vipl_filter_abs.h
                              filter/vipl_filter_helper.h
  filter/vipl_filter.txx      filter/vipl_filter.h
@@ -56,7 +56,7 @@ AUX_SOURCE_DIRECTORY(vipl_with_mil/Templates vipl_sources)
 # and for the latter, we need mul:
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/mul)
 
-ADD_LIBRARY(vipl vipl_sources)
+ADD_LIBRARY(vipl ${vipl_sources})
 TARGET_LINK_LIBRARIES(vipl vil)
 
 IF (BUILD_EXAMPLES)

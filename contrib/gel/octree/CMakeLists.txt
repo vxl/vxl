@@ -2,7 +2,7 @@
 
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/oxl)
 
-SOURCE_FILES(octree_sources
+SET(octree_sources
  BaseCube.cxx          BaseCube.h
  Cube.cxx              Cube.h
  VoxmapImagePoints.cxx VoxmapImagePoints.h
@@ -15,5 +15,5 @@ SOURCE_FILES(octree_sources
 
 AUX_SOURCE_DIRECTORY(Templates octree_sources)
 
-ADD_EXECUTABLE(octree octree_sources)
+ADD_EXECUTABLE(octree ${octree_sources})
 TARGET_LINK_LIBRARIES(octree mvl vil vgl vul)

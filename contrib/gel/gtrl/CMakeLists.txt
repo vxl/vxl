@@ -1,6 +1,6 @@
 # gel/gtrl/CMakeLists.txt
 
-SOURCE_FILES(gtrl_sources
+SET(gtrl_sources
                         gtrl_netlib_triangle.h
  gtrl_triangulation.cxx gtrl_triangulation.h
  gtrl_triangle.cxx      gtrl_triangle.h
@@ -10,4 +10,4 @@ SOURCE_FILES(gtrl_sources
 
 AUX_SOURCE_DIRECTORY(Templates gtrl_sources)
 
-ADD_LIBRARY(gtrl gtrl_sources)
+ADD_LIBRARY(gtrl ${gtrl_sources})
