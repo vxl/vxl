@@ -115,6 +115,7 @@ pdf1d_compare_to_pdf* pdf1d_compare_to_pdf_ks::clone() const
 
 void pdf1d_compare_to_pdf_ks::print_summary(vcl_ostream& os) const
 {
+  vcl_cerr << "pdf1d_compare_to_pdf_ks::print_summary() NYI\n";
 }
 
 //=======================================================================
