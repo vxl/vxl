@@ -48,7 +48,7 @@ void vgl_closest_point_to_linesegment(T& ret_x, T& ret_y,
   T dx = x2-x1;
   T dy = y2-y1;
   double c = dx*dx+dy*dy;
-  ret_x = T((dx*dx*x0+dy*dy*x1-dx*dy*(y0-y1))/c); // possible rounding error!
+  ret_x = T((dx*dx*x0+dy*dy*x1-dx*dy*(y1-y0))/c); // possible rounding error!
   ret_y = T((dx*dx*y1+dy*dy*y0-dx*dy*(x1-x0))/c);
 }
 
