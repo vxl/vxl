@@ -25,6 +25,7 @@ SOURCE_FILES(mbl_sources
   mbl_index_sort.h
   mbl_read_int.h
   mbl_read_double.h
+  mbl_read_str.h
   mbl_lru_cache.h
   mbl_stl.h
   mbl_arb_length_int.h
