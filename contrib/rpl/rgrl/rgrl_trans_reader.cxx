@@ -12,6 +12,7 @@
 #include <rgrl/rgrl_trans_quadratic.h>
 #include <rgrl/rgrl_trans_rigid.h>
 #include <rgrl/rgrl_trans_spline.h>
+#include <rgrl/rgrl_trans_homography2d.h>
 #include <rgrl/rgrl_util.h>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
@@ -59,6 +60,7 @@ rgrl_trans_reader( vcl_istream& is )
   READ_THIS_TRANSFORMATION("RIGID", rgrl_trans_rigid)
   READ_THIS_TRANSFORMATION("QUADRATIC", rgrl_trans_quadratic)
   READ_THIS_TRANSFORMATION("BSPLINE", rgrl_trans_spline)
+  READ_THIS_TRANSFORMATION("HOMOGRAPHY2D", rgrl_trans_spline)
 
   // default, should never reach here
   vcl_cout<< "WARNING: " << RGRL_HERE << " ( line "

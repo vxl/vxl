@@ -10,6 +10,9 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_random.h>
+#include <vnl/vnl_double_3.h>
+#include <vnl/vnl_double_2.h>
+#include <vnl/vnl_math.h>
 
 #include <rgrl/rgrl_feature_point.h>
 #include <rgrl/rgrl_feature_trace_pt.h>
@@ -29,6 +32,9 @@
 #include <rgrl/rgrl_trans_reduced_quad.h>
 #include <rgrl/rgrl_est_reduced_quad2d.h>
 #include <rgrl/rgrl_mask.h>
+#include <rgrl/rgrl_est_homography2d.h>
+#include <rgrl/rgrl_trans_homography2d.h>
+#include <rgrl/rgrl_cast.h>
 
 #include "test_util.h"
 
@@ -1438,6 +1444,131 @@ test_est_rigid()
   }
 }
 
+void test_homography2d()
+{
+  vnl_matrix<double> H(3,3,0.0), est_H(3,3,0.0);
+  vnl_matrix<double> cofact;
+  vcl_vector <int> indices;
+  vcl_vector <vnl_vector<double> > p,q;
+  vcl_vector <vnl_double_2 > d2_p,d2_q;
+  vnl_vector<double> param(9,0.0);
+  vnl_vector<double> true_param(9,0.0), est_param(9,0.0);
+  int n;
+  int i,j;
+  const double pi = vnl_math::pi;
+  const double tol = 1e-8;
+  vnl_double_3 t(0,0,1);
+  
+  p.push_back(t.as_ref());
+  
+  //first 4 points are collinear.
+  t(0) = 2; t(1) = 5;
+  p.push_back(t.as_ref());
+  
+  t(0) = 4; t(1) = 9;
+  p.push_back(t.as_ref());
+  
+  t(0) = -1; t(1) = -1;
+  p.push_back(t.as_ref());
+  
+  t(0) = -3; t(1) = -5;
+  p.push_back(t.as_ref());
+  
+  t(0) = -9; t(1) = .5;
+  p.push_back(t.as_ref());
+  
+  t(0) = 5; t(1) = -5.678;
+  p.push_back(t.as_ref());
+  
+  t(0) = 5/3; t(1) = -5.678/3;
+  p.push_back(t.as_ref());
+  
+  t(0) = 0.4/0.1; t(1) = 0.894/0.1; ;
+  p.push_back(t.as_ref());
+  
+  t(0) = 5; t(1) = -5.678; t(2) = 3;
+  p.push_back(t.as_ref());
+  
+  t(0) = 0.4; t(1) = 0.894; t(2) = 0.1;
+  p.push_back(t.as_ref());
+  
+  t(0) = 500; t(1) = -100; t(2) = 100;
+  p.push_back(t.as_ref());
+  
+  t(0) = -20; t(1) = -20; t(2) = 1;
+  p.push_back(t.as_ref());
+  
+  t(0) = 4; t(1) = 0.02; t(2) = 1.5;
+  p.push_back(t.as_ref());
+  
+  t(0) = 2.345; t(1) = -10; t(2) = 1;
+  p.push_back(t.as_ref());
+  
+  t(0) = 8.9e-4; t(1) = -3.1e-4; t(2) = -1e-4;
+  p.push_back(t.as_ref());
+  
+  t(0) = -10; t(1) = 40; t(2) = 1;
+  p.push_back(t.as_ref());
+  
+  n = p.size();
+  q.resize(n);
+  d2_q.resize(n);
+  d2_p.resize(n);
+  
+  // Test projective transform
+  H(0,2) = -4;
+  H(1,2) = 2;
+  H(2,2) = 1;
+  H(0,0) = 2*vcl_cos(pi/3);
+  H(1,0) = -H(0,1);
+  H(0,1) = -5; H(1,1) = -1.5;
+  H(2,0) = 0.5; H(2,1) = -2;
+  
+  for (i=0;i<3;i++)
+    for (j=0;j<3;j++)
+      true_param[i*3+j] = H(i,j);
+  true_param /= true_param.two_norm();
+  vcl_cout<<"Original H = "<<true_param<<vcl_endl;
+  
+  {
+    // generate the corresponding points
+    for (i=0;i<n;i++) {
+      q[i] = H *p[i];
+      d2_p[i][0] = p[i][0]/p[i][2];
+      d2_p[i][1] = p[i][1]/p[i][2];
+      d2_q[i][0] = q[i][0]/q[i][2];
+      d2_q[i][1] = q[i][1]/q[i][2];
+    } 
+    rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id());
+    
+    for ( unsigned i=0; i < n; ++i ) {
+      ms->add_feature_and_match( new rgrl_feature_point(d2_p[i]), 0, 
+                                 new rgrl_feature_point(d2_q[i]) );
+    }
+    rgrl_estimator_sptr estimator = new rgrl_est_homography2d();
+    rgrl_transformation_sptr dummy_trans = new rgrl_trans_homography2d();
+    rgrl_transformation_sptr est = estimator->estimate( ms, *dummy_trans);
+    rgrl_trans_homography2d* homo_est = rgrl_cast<rgrl_trans_homography2d*>(est);
+    est_H = homo_est->H();
+    for (i=0;i<3;i++)
+      for (j=0;j<3;j++)
+        est_param[i*3+j] = est_H(i,j);
+    est_param /= est_param.two_norm();
+    vcl_cout<<"Estimated H = "<<est_param<<vcl_endl;
+    TEST("Estimation of Projective xform", (est_param-true_param).two_norm() <tol, true);
+    
+    // Test inverse_mapping
+    bool initialize_next = false;
+    vnl_vector<double> to_delta;
+    vnl_vector<double> from(2,5);
+    vnl_vector<double> from_next_est;
+    homo_est->inv_map( d2_q[3], initialize_next, to_delta, from, from_next_est);
+    vcl_cout<<"from = "<<from<<vcl_endl;
+    TEST("Test incremental inverse mapping", (from-d2_p[3]).two_norm() <0.01, true);
+    homo_est->inv_map( d2_q[3], from);
+    TEST("Test inverse mapping", (from-d2_p[3]).two_norm() <tol, true);
+  }
+}
 } // end anonymous namespace
 
 MAIN( test_estimator )
@@ -1454,6 +1585,7 @@ MAIN( test_estimator )
   test_est_similarity2d();
   test_est_reduced_quad2d();
   test_est_rigid();
+  test_homography2d();
 
   SUMMARY();
 }
