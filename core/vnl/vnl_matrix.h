@@ -400,7 +400,7 @@ class vnl_matrix
   //: Return mean of all matrix elements
   T mean() const { return vnl_c_vector<T>::mean(begin(), size()); }
 
-#ifndef VXL_DOXYGEN_SHOULD_SKIP_THIS
+#if 0 // deprecated
   // <deprecated>
   // These two methods have been intentionally poisoned. The new equivalents are:
   //   array_one_norm() / array_inf_norm()

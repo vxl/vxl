@@ -89,7 +89,9 @@ class vnl_diag_matrix
   inline const_iterator end() const { return diagonal_.end(); }
 
   unsigned size() const { return diagonal_.size(); }
-  unsigned n() const { return diagonal_.size(); } // ** deprecated ? **
+#if 0 // deprecated
+  unsigned n() const { return diagonal_.size(); }
+#endif
   unsigned rows() const { return diagonal_.size(); }
   unsigned cols() const { return diagonal_.size(); }
   unsigned columns() const { return diagonal_.size(); }
