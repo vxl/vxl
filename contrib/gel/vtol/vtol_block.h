@@ -2,7 +2,7 @@
 #define vtol_block_h
 //-----------------------------------------------------------------------------
 //:
-//  \file
+// \file
 // \brief Highest node in a 3D topological structure
 //
 //   The vtol_block class is used to represent the highest node in a 3D topological
@@ -100,12 +100,12 @@ public:
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a block, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_block *cast_to_block(void) const;
+  virtual const vtol_block *cast_to_block(void) const { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a block, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_block *cast_to_block(void);
+  virtual vtol_block *cast_to_block(void) { return this; }
 
   //***************************************************************************
   // Status report

@@ -91,12 +91,12 @@ public:
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a zero_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_zero_chain *cast_to_zero_chain(void) const;
+  virtual const vtol_zero_chain *cast_to_zero_chain(void) const { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a zero_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_zero_chain *cast_to_zero_chain(void);
+  virtual vtol_zero_chain *cast_to_zero_chain(void) { return this; }
 
   //***************************************************************************
   // Status report

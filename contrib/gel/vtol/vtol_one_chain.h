@@ -2,7 +2,7 @@
 #define vtol_one_chain_h_
 //-----------------------------------------------------------------------------
 //:
-//  \file
+// \file
 // \brief Represents a set of edges
 //
 //  The vtol_one_chain class is used to represent a set of edges on a topological
@@ -102,12 +102,12 @@ public:
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an one_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_one_chain *cast_to_one_chain(void) const;
+  virtual const vtol_one_chain *cast_to_one_chain(void) const { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an one_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_one_chain *cast_to_one_chain(void);
+  virtual vtol_one_chain *cast_to_one_chain(void) { return this; }
 
   //***************************************************************************
   // Status report

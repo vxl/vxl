@@ -47,7 +47,7 @@ vtol_chain::chain_superiors(void) const
 
   result=new chain_list();
   result->reserve(_chain_superiors.size());
-  for(i=_chain_superiors.begin();i!=_chain_superiors.end();i++)
+  for (i=_chain_superiors.begin();i!=_chain_superiors.end();i++)
     result->push_back(*i);
   return result;
 }
@@ -65,7 +65,7 @@ vtol_chain::is_chain_inferior(const vtol_chain &chain_inferior) const
   bool result;
   vcl_vector<vtol_chain_sptr>::const_iterator i;
 
-  for(i=_chain_inferiors.begin();
+  for (i=_chain_inferiors.begin();
       (i!=_chain_inferiors.end())&&((*i).ptr()!=&chain_inferior);
       i++)
     ;
@@ -84,7 +84,7 @@ vtol_chain::is_chain_superior(const vtol_chain &chain_superior) const
   vcl_list<vtol_chain_sptr>::const_iterator i;
 
 
-  for(i=_chain_superiors.begin();
+  for (i=_chain_superiors.begin();
       (i!=_chain_superiors.end())&&((*i).ptr()!=&chain_superior);
       i++);
 
@@ -158,12 +158,9 @@ void vtol_chain::unlink_chain_inferior(vtol_chain &chain_inferior)
   assert(valid_chain_type(chain_inferior));
   assert(is_chain_inferior(chain_inferior));
 
-  vcl_vector<vtol_chain_sptr>::iterator i;
-
-  for(i=_chain_inferiors.begin();
-      (i!=_chain_inferiors.end())&&((*i).ptr()!=&chain_inferior);
-      i++)
-    ;
+  vcl_vector<vtol_chain_sptr>::iterator i=_chain_inferiors.begin();
+  while ((i!=_chain_inferiors.end())&&((*i).ptr()!=&chain_inferior))
+    ++i;
   chain_inferior.unlink_chain_superior(*this);
   _chain_inferiors.erase(i);
   touch();
@@ -174,7 +171,7 @@ void vtol_chain::unlink_chain_inferior(vtol_chain &chain_inferior)
 //---------------------------------------------------------------------------
 void vtol_chain::unlink_all_chain_inferiors(void)
 {
-  while(_chain_inferiors.size()>0)
+  while (_chain_inferiors.size()>0)
     {
       ref();
       (*_chain_inferiors.begin())->unlink_chain_superior(*this);
@@ -188,7 +185,7 @@ void vtol_chain::unlink_all_chain_inferiors(void)
 //---------------------------------------------------------------------------
 void vtol_chain::unlink(void)
 {
-  while(_chain_superiors.size()>0)
+  while (_chain_superiors.size()>0)
     (*_chain_superiors.begin())->unlink_chain_inferior(*this);
   unlink_all_chain_inferiors();
   vtol_topology_object::unlink();
@@ -233,12 +230,9 @@ void vtol_chain::unlink_chain_superior(vtol_chain &chain_superior)
   assert(valid_chain_type(chain_superior));
   assert(is_chain_superior(chain_superior));
 
-  vcl_list<vtol_chain_sptr>::iterator i;
-
-  for(i=_chain_superiors.begin();
-      (i!=_chain_superiors.end())&&((*i).ptr()!=&chain_superior);
-      i++)
-    ;
+  vcl_list<vtol_chain_sptr>::iterator i=_chain_superiors.begin();
+  while ((i!=_chain_superiors.end())&&((*i).ptr()!=&chain_superior))
+      ++i;
 
   // check
   assert((*i).ptr()==&chain_superior);

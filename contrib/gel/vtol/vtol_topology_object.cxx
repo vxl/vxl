@@ -41,124 +41,6 @@ vtol_topology_object::~vtol_topology_object()
 }
 
 //***************************************************************************
-// Replaces dynamic_cast<T>
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-//: Return `this' if `this' is a vertex, 0 otherwise
-//---------------------------------------------------------------------------
-const vtol_vertex *vtol_topology_object::cast_to_vertex(void) const
-{
-  return 0;
-}
-
-//---------------------------------------------------------------------------
-//: Return `this' if `this' is a vertex, 0 otherwise
-//---------------------------------------------------------------------------
-vtol_vertex *vtol_topology_object::cast_to_vertex(void)
-{
-  return 0;
-}
-
-//---------------------------------------------------------------------------
-//: Return `this' if `this' is a zero_chain, 0 otherwise
-//---------------------------------------------------------------------------
-const vtol_zero_chain *
-vtol_topology_object::cast_to_zero_chain(void) const
-{
-  return 0;
-}
-
-//---------------------------------------------------------------------------
-//: Return `this' if `this' is a zero_chain, 0 otherwise
-//---------------------------------------------------------------------------
-vtol_zero_chain *vtol_topology_object::cast_to_zero_chain(void)
-{
-  return 0;
-}
-
-//---------------------------------------------------------------------------
-//: Return `this' if `this' is an edge, 0 otherwise
-//---------------------------------------------------------------------------
-const vtol_edge *vtol_topology_object::cast_to_edge(void) const
-{
-  return 0;
-}
-
-//---------------------------------------------------------------------------
-//: Return `this' if `this' is an edge, 0 otherwise
-//---------------------------------------------------------------------------
-vtol_edge *vtol_topology_object::cast_to_edge(void)
-{
-  return 0;
-}
-
-//---------------------------------------------------------------------------
-//: Return `this' if `this' is an one_chain, 0 otherwise
-//---------------------------------------------------------------------------
-const vtol_one_chain *vtol_topology_object::cast_to_one_chain(void) const
-{
-  return 0;
-}
-
-//---------------------------------------------------------------------------
-//: Return `this' if `this' is an one_chain, 0 otherwise
-//---------------------------------------------------------------------------
-vtol_one_chain *vtol_topology_object::cast_to_one_chain(void)
-{
-  return 0;
-}
-
-//---------------------------------------------------------------------------
-//: Return `this' if `this' is a face, 0 otherwise
-//---------------------------------------------------------------------------
-const vtol_face *vtol_topology_object::cast_to_face(void) const
-{
-  return 0;
-}
-
-//---------------------------------------------------------------------------
-//: Return `this' if `this' is a face, 0 otherwise
-//---------------------------------------------------------------------------
-vtol_face *vtol_topology_object::cast_to_face(void)
-{
-  return 0;
-}
-
-//---------------------------------------------------------------------------
-//: Return `this' if `this' is a two_chain, 0 otherwise
-//---------------------------------------------------------------------------
-const vtol_two_chain *
-vtol_topology_object::cast_to_two_chain(void) const
-{
-  return 0;
-}
-
-//---------------------------------------------------------------------------
-//: Return `this' if `this' is a two_chain, 0 otherwise
-//---------------------------------------------------------------------------
-vtol_two_chain *vtol_topology_object::cast_to_two_chain(void)
-{
-  return 0;
-}
-
-//---------------------------------------------------------------------------
-//: Return `this' if `this' is a block, 0 otherwise
-//---------------------------------------------------------------------------
-const vtol_block *vtol_topology_object::cast_to_block(void) const
-{
-  return 0;
-}
-
-//---------------------------------------------------------------------------
-//: Return `this' if `this' is a block, 0 otherwise
-//---------------------------------------------------------------------------
-vtol_block *vtol_topology_object::cast_to_block(void)
-{
-  return 0;
-}
-
-//***************************************************************************
 // Status report
 //***************************************************************************
 
@@ -170,8 +52,8 @@ vtol_topology_object::is_inferior(const vtol_topology_object &inferior) const
 {
   vcl_vector<vtol_topology_object_sptr>::const_iterator i;
 
-  for (i=_inferiors.begin(); i!=_inferiors.end(); ++i)
-    if((*i).ptr()== &inferior)
+  for (i=inferiors()->begin(); i!=inferiors()->end(); ++i)
+    if ((*i).ptr()== &inferior)
       return true;
 
   return false;
@@ -196,7 +78,7 @@ vtol_topology_object::is_superior(const vtol_topology_object &superior) const
 //---------------------------------------------------------------------------
 int vtol_topology_object::numinf(void) const
 {
-  return _inferiors.size();
+  return inferiors()->size();
 }
 
 //---------------------------------------------------------------------------
@@ -218,7 +100,7 @@ vtol_topology_object::superiors(void) const
 
   result=new vcl_vector<vtol_topology_object_sptr>();
   result->reserve(_superiors.size());
-  for(i=_superiors.begin();i!=_superiors.end();++i)
+  for (i=_superiors.begin();i!=_superiors.end();++i)
     result->push_back(*i);
 
   // check
@@ -230,6 +112,12 @@ vtol_topology_object::superiors(void) const
 //---------------------------------------------------------------------------
 //: Return the inferiors list
 //---------------------------------------------------------------------------
+vcl_vector<vtol_topology_object_sptr> *
+vtol_topology_object::inferiors(void)
+{
+  return &_inferiors;
+}
+
 const vcl_vector<vtol_topology_object_sptr> *
 vtol_topology_object::inferiors(void) const
 {
@@ -270,10 +158,10 @@ void vtol_topology_object::link_inferior(vtol_topology_object &inferior)
 
   // Is this true?
   if ( is_inferior ( inferior ) ) { return; }
-  
+
   assert(!is_inferior(inferior));
 
-  _inferiors.push_back(&inferior);
+  inferiors()->push_back(&inferior);
 
   ref();
   inferior.link_superior(*this);
@@ -293,17 +181,16 @@ void vtol_topology_object::unlink_inferior(vtol_topology_object &inferior)
 
   // Is this true?
   if ( !is_inferior ( inferior ) ) { return; }
-  
+
   assert(is_inferior(inferior));
 
   vcl_vector<vtol_topology_object_sptr>::iterator i;
 
-  // for(i=_inferiors.begin();(i!=_inferiors.end())&&(*(*i)!=inferior); ++i);
-  for(i=_inferiors.begin();(i!=_inferiors.end())&&
-        ((*i).ptr()!=&inferior); ++i);
+  // for (i=inferiors()->begin();(i!=inferiors()->end())&&(*(*i)!=inferior); ++i);
+  for (i=inferiors()->begin();(i!=inferiors()->end())&& ((*i).ptr()!=&inferior); ++i);
     ;
   inferior.unlink_superior(*this);
-  _inferiors.erase(i);
+  inferiors()->erase(i);
   touch();
 }
 
@@ -312,10 +199,10 @@ void vtol_topology_object::unlink_inferior(vtol_topology_object &inferior)
 //---------------------------------------------------------------------------
 void vtol_topology_object::unlink_all_inferiors(void)
 {
-  while(_inferiors.size()>0)
+  while (inferiors()->size()>0)
     {
-      (*_inferiors.begin())->unlink_superior(*this);
-      _inferiors.erase(_inferiors.begin());
+      (*inferiors()->begin())->unlink_superior(*this);
+      inferiors()->erase(inferiors()->begin());
     }
   touch();
 }
@@ -325,7 +212,7 @@ void vtol_topology_object::unlink_all_inferiors(void)
 //---------------------------------------------------------------------------
 void vtol_topology_object::unlink(void)
 {
-  while(_superiors.size()>0)
+  while (_superiors.size()>0)
     (*_superiors.begin())->unlink_inferior(*this);
   unlink_all_inferiors();
 }
@@ -367,8 +254,8 @@ void vtol_topology_object::unlink_superior(vtol_topology_object &superior)
 
   vcl_list<vtol_topology_object_sptr>::iterator i;
 
-  // for(i=_superiors.begin();(i!=_superiors.end())&&(*(*i)!=superior); ++i)
-  for(i=_superiors.begin();(i!=_superiors.end())&&
+  // for (i=_superiors.begin();(i!=_superiors.end())&&(*(*i)!=superior); ++i)
+  for (i=_superiors.begin();(i!=_superiors.end())&&
         ((*i).ptr()!=&superior); ++i)
    ;
   // check
@@ -507,12 +394,12 @@ void vtol_topology_object::describe_inferiors(vcl_ostream &strm,
   vcl_vector<vtol_topology_object_sptr>::const_iterator i;
 
   for (int n=0; n<blanking; ++n) strm << ' ';
-  if(_inferiors.size()==0)
+  if (inferiors()->size()==0)
     strm<<"**INFERIORS:  Empty"<<vcl_endl;
   else
     strm<<"**INFERIORS:"<<vcl_endl;
 
-  for(i=_inferiors.begin();i!=_inferiors.end();++i) {
+  for (i=inferiors()->begin();i!=inferiors()->end();++i) {
     for (int n=0; n<blanking; ++n) strm << ' ';
     (*i)->print();
   }
@@ -524,12 +411,12 @@ void vtol_topology_object::describe_superiors(vcl_ostream &strm,
   vcl_list<vtol_topology_object_sptr>::const_iterator i;
 
   for (int n=0; n<blanking; ++n) strm << ' ';
-  if(_superiors.size()==0)
+  if (_superiors.size()==0)
     strm<<"**SUPERIORS:  Empty"<<vcl_endl;
   else
     strm<<"**SUPERIORS:"<<vcl_endl;
 
-  for(i=_superiors.begin();i!= _superiors.end();++i) {
+  for (i=_superiors.begin();i!= _superiors.end();++i) {
     for (int n=0; n<blanking; ++n) strm << ' ';
     (*i)->print();
   }

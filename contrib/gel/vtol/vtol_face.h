@@ -89,22 +89,22 @@ public:
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_face *cast_to_face(void) const;
+  virtual const vtol_face *cast_to_face(void) const { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_face *cast_to_face(void);
+  virtual vtol_face *cast_to_face(void) { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_face_2d *cast_to_face_2d(void) const {return NULL;}
+  virtual const vtol_face_2d *cast_to_face_2d(void) const {return 0;}
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_face_2d *cast_to_face_2d(void) {return NULL;}
+  virtual vtol_face_2d *cast_to_face_2d(void) {return 0;}
 
 
   //***************************************************************************

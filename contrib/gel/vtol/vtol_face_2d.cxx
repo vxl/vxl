@@ -1,4 +1,3 @@
-
 //:
 //  \file
 
@@ -20,7 +19,7 @@
 // Default constructor
 //---------------------------------------------------------------------------
 vtol_face_2d::vtol_face_2d(void)
-  :_surface(0)
+  :surface_(0)
 {
 }
 
@@ -30,7 +29,7 @@ vtol_face_2d::vtol_face_2d(void)
 // This is the Copy Constructor for vtol_face_2d. It performs a deep copy of
 // all vtol_face_2d inferior one_chains.
 vtol_face_2d::vtol_face_2d(const vtol_face_2d &other)
-  : _surface(0)
+  : surface_(0)
 {
   vtol_face_2d *oldf=(vtol_face_2d *)(&other); // const violation
   edge_list *edgs=oldf->edges();
@@ -41,7 +40,7 @@ vtol_face_2d::vtol_face_2d(const vtol_face_2d &other)
 
   int i=0;
   vcl_vector<vtol_vertex_sptr>::iterator vi;
-  for(vi=verts->begin();vi!=verts->end();++vi,++i)
+  for (vi=verts->begin();vi!=verts->end();++vi,++i)
     {
       vtol_vertex_sptr v=(*vi);
       newverts[i]=v->clone().ptr()->cast_to_topology_object();
@@ -49,13 +48,13 @@ vtol_face_2d::vtol_face_2d(const vtol_face_2d &other)
     }
   int j=0;
   vcl_vector<vtol_edge_sptr>::iterator ei;
-  for(ei=edgs->begin();ei!= edgs->end();++ei,++j)
+  for (ei=edgs->begin();ei!= edgs->end();++ei,++j)
     {
       vtol_edge_sptr e=(*ei);
 
       vtol_topology_object_sptr V1 = newverts[e->v1()->get_id()];
       vtol_topology_object_sptr V2 = newverts[e->v2()->get_id()];
-      if(!V1 || !V2)
+      if (!V1 || !V2)
         {
            vcl_cerr << "Inconsistent topology in vtol_face_2d copy constructor\n";
            vtol_one_chain_sptr inf = new vtol_one_chain();
@@ -73,8 +72,8 @@ vtol_face_2d::vtol_face_2d(const vtol_face_2d &other)
     }
   // This is a deep copy of the vtol_face_2d.
 
-  topology_list::iterator ii;
-  for(ii=oldf->_inferiors.begin();ii!= oldf->_inferiors.end();++ii)
+  topology_list::const_iterator ii;
+  for (ii=oldf->inferiors()->begin();ii!= oldf->inferiors()->end();++ii)
     {
       vtol_one_chain_sptr onech=(*ii)->cast_to_one_chain()->copy_with_arrays(newverts,newedges);
       link_inferior(*onech);
@@ -82,8 +81,8 @@ vtol_face_2d::vtol_face_2d(const vtol_face_2d &other)
   delete edgs;
   delete verts;
   set_surface(0);
-  if(oldf->_surface)
-    set_surface((vsol_region_2d*)(oldf->_surface->clone().ptr()));
+  if (oldf->surface_)
+    set_surface((vsol_region_2d*)(oldf->surface_->clone().ptr()));
 }
 
 //---------------------------------------------------------------------------
@@ -104,7 +103,7 @@ vsol_spatial_object_3d_sptr vtol_face_2d::clone(void) const
 
 vsol_region_2d_sptr vtol_face_2d::surface(void) const
 {
-  return _surface;
+  return surface_;
 }
 
 //: copy with an array
@@ -115,41 +114,21 @@ vtol_face_2d::copy_with_arrays(vcl_vector<vtol_topology_object_sptr> &verts,
 {
   vtol_face_2d *newface=new vtol_face_2d();
   topology_list::const_iterator i;
-  for(i=newface->_inferiors.begin();i!= newface->_inferiors.end();++i )
+  for (i=newface->inferiors()->begin();i!= newface->inferiors()->end();++i )
     {
       vtol_topology_object_sptr obj=(*i);
       newface->unlink_inferior(*obj);
     }
-  newface->_inferiors.clear();
-  for(i=_inferiors.begin();i!=_inferiors.end();++i)
+  newface->inferiors()->clear();
+  for (i=inferiors()->begin();i!=inferiors()->end();++i)
     {
       vtol_one_chain *onech=(*i)->cast_to_one_chain()->copy_with_arrays(verts,edges);
       assert(*onech == *(*i));
       newface->link_inferior(*onech);
     }
-  if(_surface)
-    newface->set_surface((vsol_region_2d*)(_surface->clone().ptr()));
+  if (surface_)
+    newface->set_surface((vsol_region_2d*)(surface_->clone().ptr()));
   return newface;
-}
-
-//***************************************************************************
-// Replaces dynamic_cast<T>
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-//: Return `this' if `this' is a face, 0 otherwise
-//---------------------------------------------------------------------------
-const vtol_face_2d *vtol_face_2d::cast_to_face_2d(void) const
-{
-  return this;
-}
-
-//---------------------------------------------------------------------------
-//: Return `this' if `this' is a face, 0 otherwise
-//---------------------------------------------------------------------------
-vtol_face_2d *vtol_face_2d::cast_to_face_2d(void)
-{
-  return this;
 }
 
 //---------------------------------------------------------------------------
@@ -160,8 +139,8 @@ vtol_face *vtol_face_2d::shallow_copy_with_no_links(void) const
   vtol_face_2d *result;
   result=new vtol_face_2d;
   result->set_surface(0);
-  if(_surface)
-    result->set_surface((vsol_region_2d*)(_surface->clone().ptr()));
+  if (surface_)
+    result->set_surface((vsol_region_2d*)(surface_->clone().ptr()));
   return result;
 }
 
@@ -171,7 +150,7 @@ vtol_face *vtol_face_2d::shallow_copy_with_no_links(void) const
 // Require: verts.size()>2
 
 vtol_face_2d::vtol_face_2d(vertex_list &verts)
-  :_surface(0)
+  :surface_(0)
 {
   // require
   assert(verts.size()>2);
@@ -201,13 +180,13 @@ vtol_face_2d::vtol_face_2d(vertex_list &verts)
   vi=verts.begin();
   v01=(*vi);
 
-  while(!done)
+  while (!done)
     {
       // if no next vertex, then use the first vertex by calling
       // verts->end() again to wrap around  This will close the loop
       ++vi;
 
-      if(vi==verts.end())
+      if (vi==verts.end())
         {
           vi=verts.begin();
           done=true;
@@ -218,7 +197,7 @@ vtol_face_2d::vtol_face_2d(vertex_list &verts)
       newedge=v01->new_edge(*v02);
       elist.push_back(newedge);
 
-      if(*v02 == *(newedge->v2()))
+      if (*v02 == *(newedge->v2()))
         directions.push_back((signed char)1);
       else
         directions.push_back((signed char)(-1));
@@ -236,14 +215,14 @@ vtol_face_2d::vtol_face_2d(vertex_list &verts)
 // on the face.
 
 vtol_face_2d::vtol_face_2d(one_chain_list &onechs)
-  :_surface(0)
+  :surface_(0)
 {
   // 1)  Add one chains to the inferiors list.
   //     Assume that the first vtol_one_chain on the
   //     list is the outside boundary...the
   //     remaining one_chains are holes.
 
-  if(onechs.size()>0)
+  if (onechs.size()>0)
     link_inferior(*(onechs[0]));
 
   vtol_one_chain *onech=get_boundary_cycle();
@@ -261,9 +240,9 @@ vtol_face_2d::vtol_face_2d(one_chain_list &onechs)
                                     new vsol_point_2d(xmax,ymin),
                                     new vsol_point_2d(xmax,ymax)));
 
-  if(onech!=0)
+  if (onech!=0)
     {
-      for(unsigned int i = 1; i < onechs.size(); ++i)
+      for (unsigned int i = 1; i < onechs.size(); ++i)
         onech->link_chain_inferior(*(onechs[i]));
     }
 }
@@ -272,7 +251,7 @@ vtol_face_2d::vtol_face_2d(one_chain_list &onechs)
 //  This method uses the vtol_one_chain, edgeloop, as the outside boundary of the face.
 
 vtol_face_2d::vtol_face_2d(vtol_one_chain &edgeloop)
-  : _surface(0)
+  : surface_(0)
 {
   link_inferior(edgeloop);
   topology_list faces;
@@ -293,7 +272,7 @@ vtol_face_2d::vtol_face_2d(vtol_one_chain &edgeloop)
 
 //: Constructor requiring only the underlying geometric surface
 vtol_face_2d::vtol_face_2d (vsol_region_2d &facesurf)
-  : _surface(0)
+  : surface_(0)
 {
   set_surface(&facesurf);
 
@@ -302,9 +281,9 @@ vtol_face_2d::vtol_face_2d (vsol_region_2d &facesurf)
 
 
 //: Set the underlying geometric surface.
-void vtol_face_2d::set_surface(vsol_region_2d *const newsurf)
+void vtol_face_2d::set_surface(vsol_region_2d_sptr const& newsurf)
 {
-  _surface=newsurf;
+  surface_=newsurf;
   touch();
 }
 
@@ -313,12 +292,12 @@ bool vtol_face_2d::operator==(const vtol_face_2d &other) const
   if (this==&other) return true;
 
 
-  if ( (_surface.ptr() && other._surface.ptr()==0)
-     ||(other._surface.ptr() && _surface.ptr()==0))
+  if ( (surface_.ptr() && other.surface_.ptr()==0)
+     ||(other.surface_.ptr() && surface_.ptr()==0))
     return false;
 
 
-  if(_surface.ptr() && *_surface!=*(other._surface))
+  if (surface_.ptr() && *surface_!=*(other.surface_))
     return false;
 
 
@@ -328,9 +307,7 @@ bool vtol_face_2d::operator==(const vtol_face_2d &other) const
   topology_list::const_iterator ti1;
   topology_list::const_iterator ti2;
 
-  for(ti1=_inferiors.begin(),ti2=other._inferiors.begin();
-      ti1!=_inferiors.end();
-      ++ti1,++ti2)
+  for (ti1=inferiors()->begin(),ti2=other.inferiors()->begin(); ti1!=inferiors()->end(); ++ti1,++ti2)
     {
       if (!(*(*ti1)== *(*ti2)))
         return false;
@@ -368,9 +345,9 @@ void vtol_face_2d::describe(vcl_ostream &strm,
 {
   for (int j=0; j<blanking; ++j) strm << ' ';
   print();
-  for (unsigned int i=0;i<_inferiors.size();++i)
+  for (unsigned int i=0;i<inferiors()->size();++i)
     {
-      if((_inferiors[i])->cast_to_one_chain()!=0)
+      if ((_inferiors[i])->cast_to_one_chain()!=0)
         (_inferiors[i])->cast_to_one_chain()->describe(strm,blanking);
       else
         vcl_cout << "*** Odd inferior for a face" << vcl_endl;
@@ -385,7 +362,7 @@ void vtol_face_2d::print(vcl_ostream &strm) const
   strm << "<vtol_face_2d  ";
   topology_list::const_iterator ii;
 
-  for(ii=_inferiors.begin();ii!= _inferiors.end();++ii)
+  for (ii=inferiors()->begin();ii!= inferiors()->end();++ii)
     strm << " " << (*ii)->inferiors()->size();
   strm << "   " << (void const *) this << '>' << vcl_endl;
 }
@@ -394,8 +371,8 @@ void vtol_face_2d::print(vcl_ostream &strm) const
 
 bool vtol_face_2d::compare_geometry(const vtol_face &other) const
 {
-  if(other.cast_to_face_2d()){
-    return (*_surface)== *(other.cast_to_face_2d()->surface());
-  }
-  return false;
+  if (other.cast_to_face_2d())
+    return (*surface_)== *(other.cast_to_face_2d()->surface());
+  else
+    return false;
 }

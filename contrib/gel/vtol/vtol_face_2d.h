@@ -99,7 +99,7 @@ public:
   // Accessors
 
   virtual vsol_region_2d_sptr surface(void) const;
-  virtual void set_surface(vsol_region_2d *const newsurf);
+  virtual void set_surface(vsol_region_2d_sptr const& newsurf);
 
 
   //***************************************************************************
@@ -109,12 +109,12 @@ public:
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_face_2d *cast_to_face_2d(void) const;
+  virtual const vtol_face_2d *cast_to_face_2d(void) const { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_face_2d *cast_to_face_2d(void);
+  virtual vtol_face_2d *cast_to_face_2d(void) { return this; }
 
   //***************************************************************************
   // Status report
@@ -144,7 +144,7 @@ public:
                    vcl_vector<vtol_topology_object_sptr> &edges) const;
 
 private:
-  vsol_region_2d_sptr _surface;
+  vsol_region_2d_sptr surface_;
 };
 
 #endif // vtol_face_2d_h

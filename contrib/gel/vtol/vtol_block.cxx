@@ -38,7 +38,7 @@ vtol_block::vtol_block(vtol_two_chain &faceloop)
 //---------------------------------------------------------------------------
 vtol_block::vtol_block(two_chain_list &faceloops)
 {
-  if(faceloops.size()>0)
+  if (faceloops.size()>0)
   {
     vtol_two_chain_sptr tc = *((faceloops).begin());
 
@@ -47,8 +47,8 @@ vtol_block::vtol_block(two_chain_list &faceloops)
 
   vtol_two_chain *twoch=get_boundary_cycle();
 
-  if(twoch!=0)
-    for(unsigned int i=1;i<faceloops.size();++i)
+  if (twoch!=0)
+    for (unsigned int i=1;i<faceloops.size();++i)
       twoch->link_chain_inferior(*(faceloops[i]));
 }
 
@@ -76,7 +76,7 @@ vtol_block::vtol_block(const vtol_block &other)
 
   int i=0;
   vcl_vector<vtol_vertex_sptr>::iterator vi;
-  for(vi=verts->begin();vi!=verts->end();++vi,++i)
+  for (vi=verts->begin();vi!=verts->end();++vi,++i)
     {
       vtol_vertex_sptr v= *vi;
       newverts[i]=v->clone()->cast_to_topology_object();
@@ -85,7 +85,7 @@ vtol_block::vtol_block(const vtol_block &other)
 
   int j=0;
   vcl_vector<vtol_edge_sptr>::iterator ei;
-  for(ei=edgs->begin();ei!=edgs->end();++ei,++j)
+  for (ei=edgs->begin();ei!=edgs->end();++ei,++j)
     {
       vtol_edge_sptr e = *ei;
 
@@ -98,7 +98,7 @@ vtol_block::vtol_block(const vtol_block &other)
   const topology_list *old2chains = oldblock->inferiors();
   topology_list::const_iterator tci;
 
-  for(tci=old2chains->begin();tci != old2chains->end();tci++)
+  for (tci=old2chains->begin();tci != old2chains->end();tci++)
     {
       vtol_two_chain_sptr new2ch=(*tci)->cast_to_two_chain()->copy_with_arrays(newverts,newedges);
 
@@ -142,26 +142,6 @@ vtol_block::topology_type(void) const
 }
 
 //***************************************************************************
-// Replaces dynamic_cast<T>
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-//: Return `this' if `this' is a block, 0 otherwise
-//---------------------------------------------------------------------------
-const vtol_block *vtol_block::cast_to_block(void) const
-{
-  return this;
-}
-
-//---------------------------------------------------------------------------
-//: Return `this' if `this' is a block, 0 otherwise
-//---------------------------------------------------------------------------
-vtol_block *vtol_block::cast_to_block(void)
-{
-  return this;
-}
-
-//***************************************************************************
 // Status report
 //***************************************************************************
 
@@ -196,7 +176,7 @@ vertex_list *vtol_block::outside_boundary_vertices(void)
   ptr_list=outside_boundary_compute_vertices();
   // copy the lists
 
-  for(i=ptr_list->begin();i!=ptr_list->end();++i)
+  for (i=ptr_list->begin();i!=ptr_list->end();++i)
     result->push_back(*i);
   delete ptr_list;
 
@@ -226,7 +206,7 @@ zero_chain_list *vtol_block::outside_boundary_zero_chains(void)
  ptr_list=outside_boundary_compute_zero_chains();
   // copy the lists
 
-  for(i=ptr_list->begin();i!=ptr_list->end();++i)
+  for (i=ptr_list->begin();i!=ptr_list->end();++i)
     result->push_back(*i);
   delete ptr_list;
 
@@ -260,7 +240,7 @@ edge_list *vtol_block::outside_boundary_edges(void)
   ptr_list=outside_boundary_compute_edges();
   // copy the lists
 
-  for(i=ptr_list->begin();i!=ptr_list->end();++i)
+  for (i=ptr_list->begin();i!=ptr_list->end();++i)
     result->push_back(*i);
   delete ptr_list;
 
@@ -290,7 +270,7 @@ one_chain_list *vtol_block::outside_boundary_one_chains(void)
 
   result=new one_chain_list;
   ptr_list=outside_boundary_compute_one_chains();
-  for(i=ptr_list->begin();i!=ptr_list->end();++i)
+  for (i=ptr_list->begin();i!=ptr_list->end();++i)
     result->push_back(*i);
   delete ptr_list;
   return result;
@@ -320,7 +300,7 @@ face_list *vtol_block::outside_boundary_faces(void)
 
   result=new face_list();
   ptr_list=outside_boundary_compute_faces();
-  for(i=ptr_list->begin();i!=ptr_list->end();++i)
+  for (i=ptr_list->begin();i!=ptr_list->end();++i)
     result->push_back(*i);
   delete ptr_list;
   return result;
@@ -349,7 +329,7 @@ two_chain_list *vtol_block::outside_boundary_two_chains(void)
 
   result=new two_chain_list();
   ptr_list=outside_boundary_compute_two_chains();
-  for(i=ptr_list->begin();i!=ptr_list->end();++i)
+  for (i=ptr_list->begin();i!=ptr_list->end();++i)
     result->push_back(*i);
   delete ptr_list;
   return result;
@@ -393,23 +373,21 @@ bool vtol_block::operator==(const vtol_block &other) const
   topology_list::const_iterator bi2;
 
 
-  if(this==&other)
+  if (this==&other)
     return true;
 
 
-  if(numinf()!=other.numinf())
+  if (numinf()!=other.numinf())
     return false;
   else
     {
-      for(bi1=_inferiors.begin(),bi2=other._inferiors.begin();
-          bi1!=_inferiors.end();
-          ++bi1,++bi2)
+      for (bi1=inferiors()->begin(),bi2=other.inferiors()->begin(); bi1!=inferiors()->end(); ++bi1,++bi2)
         {
           twoch1=(*bi1)->cast_to_two_chain();
 
           twoch2=(*bi2)->cast_to_two_chain();
 
-          if(!(*twoch1 == *twoch2))
+          if (!(*twoch1 == *twoch2))
             return false;
         }
     }
@@ -438,12 +416,12 @@ two_chain_list *vtol_block::hole_cycles(void) const
 
   result=new vcl_vector<vtol_two_chain_sptr>();
 
-  for(ti=_inferiors.begin();ti!=_inferiors.end();++ti)
+  for (ti=inferiors()->begin();ti!=inferiors()->end();++ti)
     {
       templist=(*ti)->cast_to_two_chain()->inferior_two_chains();
       // new_list->insert_after(*templist);
       // new_list->insert(new_list->end(),templist->begin(),templist->end());
-      for(ii=templist->begin();ii!=templist->end();++ii)
+      for (ii=templist->begin();ii!=templist->end();++ii)
         result->push_back(*ii);
       delete templist;
     }
@@ -471,7 +449,7 @@ bool vtol_block::add_hole_cycle(vtol_two_chain &new_hole)
 
 void vtol_block::print(vcl_ostream &strm) const
 {
-  strm<<"<vtol_block "<<_inferiors.size()<<"  "<<(void const*)this<<">"<<vcl_endl;
+  strm<<"<vtol_block "<<inferiors()->size()<<"  "<<(void const*)this<<">"<<vcl_endl;
 }
 
 void vtol_block::describe(vcl_ostream &strm,

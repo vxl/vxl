@@ -2,7 +2,7 @@
 #define vtol_two_chain_h
 //-----------------------------------------------------------------------------
 //:
-//  \file
+// \file
 // \brief Represents a set of vtol_face
 //
 //  The vtol_two_chain class is used to represent a set of vtol_faces on a topological
@@ -120,12 +120,12 @@ public:
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a two_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_two_chain *cast_to_two_chain(void) const;
+  virtual const vtol_two_chain *cast_to_two_chain(void) const { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a two_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_two_chain *cast_to_two_chain(void);
+  virtual vtol_two_chain *cast_to_two_chain(void) { return this; }
 
   //***************************************************************************
   // Status report

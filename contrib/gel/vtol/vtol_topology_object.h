@@ -131,80 +131,77 @@ public:
   //***************************************************************************
   // Replaces dynamic_cast<T>
   //***************************************************************************
-
-  virtual vtol_topology_object *cast_to_topology_object(void)
-  {
-    return this;
-  }
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is a vertex, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual const vtol_vertex *cast_to_vertex(void) const;
+  virtual vtol_topology_object *cast_to_topology_object(void) { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a vertex, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_vertex *cast_to_vertex(void);
+  virtual const vtol_vertex *cast_to_vertex(void) const { return 0; }
+
+  //---------------------------------------------------------------------------
+  //: Return `this' if `this' is a vertex, 0 otherwise
+  //---------------------------------------------------------------------------
+  virtual vtol_vertex *cast_to_vertex(void) { return 0; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a zero_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_zero_chain *cast_to_zero_chain(void) const;
+  virtual const vtol_zero_chain *cast_to_zero_chain(void) const { return 0; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a zero_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_zero_chain *cast_to_zero_chain(void);
+  virtual vtol_zero_chain *cast_to_zero_chain(void) { return 0; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_edge *cast_to_edge(void) const;
+  virtual const vtol_edge *cast_to_edge(void) const { return 0; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_edge *cast_to_edge(void);
+  virtual vtol_edge *cast_to_edge(void) { return 0; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an one_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_one_chain *cast_to_one_chain(void) const;
+  virtual const vtol_one_chain *cast_to_one_chain(void) const { return 0; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an one_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_one_chain *cast_to_one_chain(void);
+  virtual vtol_one_chain *cast_to_one_chain(void) { return 0; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_face *cast_to_face(void) const;
+  virtual const vtol_face *cast_to_face(void) const { return 0; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_face *cast_to_face(void);
+  virtual vtol_face *cast_to_face(void) { return 0; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a two_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_two_chain *cast_to_two_chain(void) const;
+  virtual const vtol_two_chain *cast_to_two_chain(void) const { return 0; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a two_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_two_chain *cast_to_two_chain(void);
+  virtual vtol_two_chain *cast_to_two_chain(void) { return 0; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a block, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_block *cast_to_block(void) const;
+  virtual const vtol_block *cast_to_block(void) const { return 0; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a block, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_block *cast_to_block(void);
+  virtual vtol_block *cast_to_block(void) { return 0; }
 
   //***************************************************************************
   // Status report
@@ -252,6 +249,7 @@ public:
   //---------------------------------------------------------------------------
   //: Return the inferiors list
   //---------------------------------------------------------------------------
+  virtual       vcl_vector<vtol_topology_object_sptr> *inferiors(void);
   virtual const vcl_vector<vtol_topology_object_sptr> *inferiors(void) const;
 
   //---------------------------------------------------------------------------

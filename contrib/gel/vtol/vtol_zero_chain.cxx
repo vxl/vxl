@@ -46,7 +46,7 @@ vtol_zero_chain::vtol_zero_chain(const vcl_vector<vtol_vertex_sptr> &new_vertice
   assert(new_vertices.size()>0);
 
   vcl_vector<vtol_vertex_sptr>::const_iterator i;
-  for(i=new_vertices.begin();i!=new_vertices.end();++i )
+  for (i=new_vertices.begin();i!=new_vertices.end();++i )
     link_inferior(*(*i));
 }
 
@@ -58,7 +58,7 @@ vtol_zero_chain::vtol_zero_chain(const vtol_zero_chain &other)
   vtol_vertex_sptr new_vertex;
   vcl_vector<vtol_topology_object_sptr>::const_iterator i;
 
-  for(i=other.inferiors()->begin();i!=other.inferiors()->end();++i)
+  for (i=other.inferiors()->begin();i!=other.inferiors()->end();++i)
     {
       new_vertex = (*i)->clone()->cast_to_topology_object()->cast_to_vertex();
 
@@ -98,31 +98,10 @@ vtol_zero_chain::topology_type(void) const
 //---------------------------------------------------------------------------
 vtol_vertex_sptr vtol_zero_chain::v0(void) const
 {
-  if(numinf()>0)
+  if (numinf()>0)
     return (vtol_vertex*)(inferiors()->begin()->ptr());
   else
     return 0;
-}
-
-//***************************************************************************
-// Replaces dynamic_cast<T>
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-//: Return `this' if `this' is a zero_chain, 0 otherwise
-//---------------------------------------------------------------------------
-const vtol_zero_chain *
-vtol_zero_chain::cast_to_zero_chain(void) const
-{
-  return this;
-}
-
-//---------------------------------------------------------------------------
-//: Return `this' if `this' is a zero_chain, 0 otherwise
-//---------------------------------------------------------------------------
-vtol_zero_chain *vtol_zero_chain::cast_to_zero_chain(void)
-{
-  return this;
 }
 
 //***************************************************************************
@@ -205,8 +184,6 @@ vcl_vector<vtol_block*>* vtol_zero_chain::compute_blocks(void)
 
 bool vtol_zero_chain::operator==(const vtol_zero_chain &other) const
 {
-  bool result;
-
   const vcl_vector<vtol_topology_object_sptr> *inf1=inferiors();
   const vcl_vector<vtol_topology_object_sptr> *inf2=other.inferiors();
   //vtol_topology_object_sptr v1;
@@ -214,22 +191,14 @@ bool vtol_zero_chain::operator==(const vtol_zero_chain &other) const
   vcl_vector<vtol_topology_object_sptr>::const_iterator i1;
   vcl_vector<vtol_topology_object_sptr>::const_iterator i2;
 
-  result=this==&other;
+  bool result=this==&other;
 
-  if(!result)
+  if (!result)
     {
       result=inf1->size()==inf2->size();
-      if(result)
-        {
-          for(i1=inf1->begin(),i2=inf2->begin();
-              i1!=inf1->end()&&result;
-              ++i1,++i2)
-            {
-              //v1=(*i1);
-              //v2=(*i2);
-              result=*(*i1)==*(*i2);
-            }
-        }
+      if (result)
+        for (i1=inf1->begin(),i2=inf2->begin(); i1!=inf1->end()&&result; ++i1,++i2)
+          result=*(*i1)==*(*i2);
     }
   return result;
 }
@@ -253,11 +222,11 @@ bool vtol_zero_chain::operator==(const vsol_spatial_object_3d& obj) const
 
 void vtol_zero_chain::print(vcl_ostream &strm) const
 {
-  strm << "<vtol_zero_chain " << _inferiors.size() << " " << (void const *)this << ">" << vcl_endl;
+  strm << "<vtol_zero_chain " << inferiors()->size() << " " << (void const *)this << ">" << vcl_endl;
 }
 
 void vtol_zero_chain::describe(vcl_ostream &strm,
-                                  int blanking) const
+                               int blanking) const
 {
   for (int j=0; j<blanking; ++j) strm << ' ';
   print(strm);

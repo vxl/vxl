@@ -31,7 +31,7 @@ vtol_vertex::vtol_vertex(const vtol_vertex &other)
 {
   copy_geometry(other);
 
-  //_point=new vsol_point(*other._point);
+  //point_=new vsol_point(*other.point_);
 }
 #endif
 
@@ -113,26 +113,6 @@ vcl_vector<vtol_block*>* vtol_vertex::compute_blocks(void)
 
 
 //***************************************************************************
-// Replaces dynamic_cast<T>
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-//: Return `this' if `this' is a vertex, 0 otherwise
-//---------------------------------------------------------------------------
-const vtol_vertex *vtol_vertex::cast_to_vertex(void) const
-{
-  return this;
-}
-
-//---------------------------------------------------------------------------
-//: Return `this' if `this' is a vertex, 0 otherwise
-//---------------------------------------------------------------------------
-vtol_vertex *vtol_vertex::cast_to_vertex(void)
-{
-  return this;
-}
-
-//***************************************************************************
 // Status report
 //***************************************************************************
 
@@ -191,8 +171,8 @@ bool vtol_vertex::is_connected(const vtol_vertex &v2)
 {
   edge_list *vertedges=edges();
   edge_list::const_iterator i;
-  for(i=vertedges->begin();i!=vertedges->end();++i)
-    if((*i)->is_endpoint(v2))
+  for (i=vertedges->begin();i!=vertedges->end();++i)
+    if ((*i)->is_endpoint(v2))
       {
         delete vertedges;
         return true;
@@ -217,11 +197,11 @@ bool vtol_vertex::is_endpoint(const vtol_edge &edg)
 //---------------------------------------------------------------------------
 vtol_vertex &vtol_vertex::operator=(const vtol_vertex &other)
 {
-  if(this!=&other)
+  if (this!=&other)
     {
       this->copy_geometry(other);
-      // _point->set_x(other._point->x());
-      // _point->set_y(other._point->y());
+      // point_->set_x(other.point_->x());
+      // point_->set_y(other.point_->y());
 
       touch();
     }
@@ -248,9 +228,9 @@ bool vtol_vertex::operator== (const vtol_vertex &other) const
   bool result;
 
   result=this==&other;
-  if(!result)
+  if (!result)
     result= compare_geometry(other);
-    // (*_point)==(*(other._point));
+    // (*point_)==(*(other.point_));
   return result;
 }
 
@@ -277,9 +257,9 @@ void vtol_vertex::explore_vertex(vertex_list &verts)
     {
       vtol_edge_sptr e=*i;
       vtol_vertex_sptr vv;
-      if(e->v1()==this)
+      if (e->v1()==this)
         vv=e->v2();
-      else if(e->v2()==this)
+      else if (e->v2()==this)
         vv=e->v1();
       else
         {
@@ -288,7 +268,7 @@ void vtol_vertex::explore_vertex(vertex_list &verts)
           continue;
         }
 
-      if(vcl_find(verts.begin(),verts.end(),vv)==verts.end())
+      if (vcl_find(verts.begin(),verts.end(),vv)==verts.end())
         {
           verts.push_back(vv);
           vv->explore_vertex(verts);

@@ -28,25 +28,6 @@ vtol_face::~vtol_face()
 }
 
 
-// Replaces dynamic_cast<T>
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-//: Return `this' if `this' is a face, 0 otherwise
-//---------------------------------------------------------------------------
-const vtol_face *vtol_face::cast_to_face(void) const
-{
-  return this;
-}
-
-//---------------------------------------------------------------------------
-//: Return `this' if `this' is a face, 0 otherwise
-//---------------------------------------------------------------------------
-vtol_face *vtol_face::cast_to_face(void)
-{
-  return this;
-}
-
 //***************************************************************************
 // Status report
 //***************************************************************************
@@ -100,8 +81,8 @@ vertex_list *vtol_face::outside_boundary_vertices(void)
   vcl_vector<vtol_vertex*>* ptr_list = this->outside_boundary_compute_vertices();
   // copy the lists
 
-  for(vcl_vector<vtol_vertex*>::iterator ti = ptr_list->begin();
-      ti != ptr_list->end(); ++ti){
+  for (vcl_vector<vtol_vertex*>::iterator ti = ptr_list->begin(); ti != ptr_list->end(); ++ti)
+  {
     new_ref_list->push_back(*ti);
   }
   delete ptr_list;
@@ -144,8 +125,8 @@ zero_chain_list *vtol_face::outside_boundary_zero_chains(void)
   vcl_vector<vtol_zero_chain*>* ptr_list = this->outside_boundary_compute_zero_chains();
   // copy the lists
 
-  for(vcl_vector<vtol_zero_chain*>::iterator ti = ptr_list->begin();
-      ti != ptr_list->end(); ++ti){
+  for (vcl_vector<vtol_zero_chain*>::iterator ti = ptr_list->begin(); ti != ptr_list->end(); ++ti)
+  {
     new_ref_list->push_back(*ti);
   }
   delete ptr_list;
@@ -179,8 +160,8 @@ edge_list *vtol_face::outside_boundary_edges(void)
   vcl_vector<vtol_edge*>* ptr_list = this->outside_boundary_compute_edges();
   // copy the lists
 
-  for(vcl_vector<vtol_edge*>::iterator ti = ptr_list->begin();
-      ti != ptr_list->end(); ++ti){
+  for (vcl_vector<vtol_edge*>::iterator ti = ptr_list->begin(); ti != ptr_list->end(); ++ti)
+  {
     new_ref_list->push_back(*ti);
   }
   delete ptr_list;
@@ -202,7 +183,7 @@ one_chain_list *vtol_face::outside_boundary_one_chains(void)
   one_chain_list *ref_list= new one_chain_list();
 
   vcl_vector<vtol_one_chain*>::iterator i;
-  for(i=ptr_list->begin();i!=ptr_list->end();++i){
+  for (i=ptr_list->begin();i!=ptr_list->end();++i){
     ref_list->push_back(*i);
   }
   delete ptr_list;
@@ -258,12 +239,12 @@ bool vtol_face::shares_edge_with(vtol_face &f)
   vcl_vector<vtol_edge_sptr>::const_iterator ei2;
 
   result=this==&f;
-  if(!result)
+  if (!result)
     {
       thisedges=edges();
       fedges=f.edges();
-      for(ei1=thisedges->begin();!result&&ei1!=thisedges->end();++ei1)
-        for(ei2= fedges->begin();!result&&ei2!=fedges->end();++ei2)
+      for (ei1=thisedges->begin();!result&&ei1!=thisedges->end();++ei1)
+        for (ei2= fedges->begin();!result&&ei2!=fedges->end();++ei2)
           result=(*ei1)==(*ei2);
       delete thisedges;
       delete fedges;
@@ -290,15 +271,14 @@ bool vtol_face::operator==(const vtol_face &other) const
 {
   if (this==&other) return true;
 
-  if(!compare_geometry(other)){
+  if (!compare_geometry(other))
     return false;
-  }
 
 #if 0
-  if ( (_surface.ptr()&&other._surface.ptr()==0)
-     ||(other._surface.ptr()&&_surface.ptr()!=0))
+  if ( (surface_.ptr()&&other.surface_.ptr()==0)
+     ||(other.surface_.ptr()&&surface_.ptr()!=0))
     return false;
-  if(_surface.ptr() && *_surface!=*(other._surface))
+  if (surface_.ptr() && *surface_!=*(other.surface_))
     return false;
 #endif
 
@@ -310,14 +290,9 @@ bool vtol_face::operator==(const vtol_face &other) const
   topology_list::const_iterator ti2;
 
 
-  for(ti1=_inferiors.begin(),ti2=other._inferiors.begin();
-      ti1!=_inferiors.end();
-      ++ti1,++ti2)
-    {
-      if (!(*(*ti1)== *(*ti2))){
+  for (ti1=inferiors()->begin(),ti2=other.inferiors()->begin(); ti1!=inferiors()->end(); ++ti1,++ti2)
+      if (!(*(*ti1)== *(*ti2)))
         return false;
-      }
-    }
 
   return true;
 }
@@ -338,7 +313,7 @@ bool vtol_face::operator==(const vsol_spatial_object_3d& obj) const
 
 vtol_one_chain *vtol_face::get_one_chain(int which)
 {
-  if ((unsigned int)which < _inferiors.size())
+  if ((unsigned int)which < inferiors()->size())
     return (_inferiors[which])->cast_to_one_chain();
   else
     {
@@ -364,7 +339,7 @@ bool vtol_face::add_hole_cycle(vtol_one_chain &new_hole)
 {
   vtol_one_chain *onech=get_boundary_cycle();
 
-  if(onech!=0)
+  if (onech!=0)
     {
       onech->link_chain_inferior(new_hole);
       return true;
@@ -376,19 +351,16 @@ bool vtol_face::add_hole_cycle(vtol_one_chain &new_hole)
 
 vcl_vector<vtol_one_chain_sptr> *vtol_face::get_hole_cycles(void)
 {
-  vcl_vector<vtol_one_chain_sptr> *result;
-  topology_list::iterator ii;
-  vcl_vector<vtol_one_chain_sptr> *templist;
-  vcl_vector<vtol_one_chain_sptr>::iterator oi;
+  vcl_vector<vtol_one_chain_sptr> * result=new vcl_vector<vtol_one_chain_sptr>();
 
-  result=new vcl_vector<vtol_one_chain_sptr>();
-
-  for(ii=_inferiors.begin();ii!=_inferiors.end();++ii)
+  topology_list::const_iterator ii;
+  for (ii=inferiors()->begin();ii!=inferiors()->end();++ii)
     {
-      templist=(*ii)->cast_to_one_chain()->inferior_one_chains();
+      vcl_vector<vtol_one_chain_sptr> * templist=(*ii)->cast_to_one_chain()->inferior_one_chains();
 
       // new_list->insert(new_list->end(),templist->begin(),templist->end());
-      for(oi=templist->begin();oi!=templist->end();++oi)
+      vcl_vector<vtol_one_chain_sptr>::iterator oi;
+      for (oi=templist->begin();oi!=templist->end();++oi)
         result->push_back(*oi);
       delete templist;
     }
@@ -404,7 +376,7 @@ int vtol_face::get_num_edges(void) const
   int result=0;
   topology_list::const_iterator ii;
 
-  for(ii=_inferiors.begin();ii!=_inferiors.end();++ii)
+  for (ii=inferiors()->begin();ii!=inferiors()->end();++ii)
     result+=((*ii)->cast_to_one_chain())->numinf();
   return result;
 }
@@ -415,33 +387,33 @@ int vtol_face::get_num_edges(void) const
 void vtol_face::reverse_normal(void)
 {
   topology_list::iterator ti;
-  for(ti=_inferiors.begin();ti!=_inferiors.end();++ti)
+  for (ti=inferiors()->begin();ti!=inferiors()->end();++ti)
     ((vtol_one_chain *)(ti->ptr()))->reverse_directions();
   // compute_normal();
 }
 
 //-----------------------------------------------------------------
-//: Compute bounds from the geometry of _surface.
+//: Compute bounds from the geometry of surface_.
 //  If the surface is not fully bounded, then use the vertices.
 //
 void vtol_face::compute_bounding_box()
 {
   // TODO
 #if 0
-  if(_surface && _surface->GetGeometryType() != GeometryObject::IMPLICITPLANE)
+  if (surface_ && surface_->GetGeometryType() != GeometryObject::IMPLICITPLANE)
      {
       // Get bounds from surface.
       // But are bounds consistent with face vertices? -JLM
       // Anyway, this is what was done in get_min_max on vtol_edge.
-       if(_surface->GetExtent() == vsol_region::FULLY_BOUNDED)
+       if (surface_->GetExtent() == vsol_region::FULLY_BOUNDED)
          {
-           this->set_minX(_surface->GetMinX());
-           this->set_minY(_surface->GetMinY());
-           this->set_minZ(_surface->GetMinZ());
+           this->set_minX(surface_->GetMinX());
+           this->set_minY(surface_->GetMinY());
+           this->set_minZ(surface_->GetMinZ());
 
-           this->set_maxX(_surface->GetMaxX());
-           this->set_maxY(_surface->GetMaxY());
-           this->set_maxZ(_surface->GetMaxZ());
+           this->set_maxX(surface_->GetMaxX());
+           this->set_maxY(surface_->GetMaxY());
+           this->set_maxZ(surface_->GetMaxZ());
          }
      }
   else  // Just use the generic method computing bounds from vertices
@@ -461,9 +433,9 @@ void vtol_face::describe(vcl_ostream &strm,
 {
   for (int j=0; j<blanking; ++j) strm << ' ';
   print();
-  for (unsigned int i=0;i<_inferiors.size();++i)
+  for (unsigned int i=0;i<inferiors()->size();++i)
     {
-      if((_inferiors[i])->cast_to_one_chain()!=0)
+      if ((_inferiors[i])->cast_to_one_chain()!=0)
         (_inferiors[i])->cast_to_one_chain()->describe(strm,blanking);
       else
         vcl_cout << "*** Odd inferior for a face" << vcl_endl;
@@ -478,7 +450,7 @@ void vtol_face::print(vcl_ostream &strm) const
   strm << "<vtol_face  ";
   topology_list::const_iterator ii;
 
-  for(ii=_inferiors.begin();ii!= _inferiors.end();++ii)
+  for (ii=inferiors()->begin();ii!= inferiors()->end();++ii)
     strm << " " << (*ii)->inferiors()->size();
   strm << "   " << (void const *) this << '>' << vcl_endl;
 }

@@ -81,22 +81,22 @@ public:
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a vertex, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_vertex *cast_to_vertex(void) const;
+  virtual const vtol_vertex *cast_to_vertex(void) const { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a vertex, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_vertex *cast_to_vertex(void);
+  virtual vtol_vertex *cast_to_vertex(void) { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a 2D vertex, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_vertex_2d *cast_to_vertex_2d(void) const {return NULL;}
+  virtual const vtol_vertex_2d *cast_to_vertex_2d(void) const {return 0;}
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a 2D vertex, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_vertex_2d *cast_to_vertex_2d(void) {return NULL;}
+  virtual vtol_vertex_2d *cast_to_vertex_2d(void) {return 0;}
 
 
   //***************************************************************************
