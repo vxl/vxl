@@ -205,7 +205,7 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
   vcl_size_t bytes_per_row = t * sizeof(double);
   for (int i=0;i<m;++i)
   {
-    memcpy(b[i]+1,E[i]+1,bytes_per_row);
+    memcpy(b[i],E[i],bytes_per_row);
   }
 
   evals_.resize(t);
@@ -277,7 +277,7 @@ void mbl_lda::build(const vnl_matrix<double>& M, const vcl_vector<int>& label)
   {
     v[i] = M.get_column(i);
   }
-  build(&v.front(),&label.front()+1,n_egs,vnl_matrix<double>(),true);
+  build(&v.front(),&label.front(),n_egs,vnl_matrix<double>(),true);
 }
 
 //=======================================================================
@@ -296,7 +296,7 @@ void mbl_lda::build(const vnl_matrix<double>& M, const vcl_vector<int>& label,
   {
     v[i] = M.get_column(i);
   }
-  build(&v.front(),&label.front()+1,n_egs,wS,false);
+  build(&v.front(),&label.front(),n_egs,wS,false);
 }
 
 
