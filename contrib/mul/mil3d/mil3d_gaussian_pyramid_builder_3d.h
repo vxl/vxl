@@ -19,6 +19,9 @@
 //  Note that if set_uniform_reduction(false) and width of z pixels much more
 //  than that in x and y,  then only smooth and sub-sample in x and y.
 //  This is useful for images with non-isotropic sampling (eg MR images)
+//  Similarly, if either x or y has significantly larger sample spacing,
+//  the others will be smoothed first.  Note, currently only works for one
+//  dimension being significantly larger than the other two.
 template <class T>
 class mil3d_gaussian_pyramid_builder_3d : public mil_image_pyramid_builder
 {
@@ -58,6 +61,16 @@ class mil3d_gaussian_pyramid_builder_3d : public mil_image_pyramid_builder
   //: Smooth and subsample src_im to produce dest_im, smoothing in x and y only
   //  Applies 1-5-8-5-1 filter and subsamples in x then y, but not z
   void gauss_reduce_xy_15851(mil3d_image_3d_of<T>& dest_im,
+                    const mil3d_image_3d_of<T>& src_im) const;
+
+  //: Smooth and subsample src_im to produce dest_im, smoothing in x and z only
+  //  Applies 1-5-8-5-1 filter and subsamples in x then z, but not y
+  void gauss_reduce_xz_15851(mil3d_image_3d_of<T>& dest_im,
+                    const mil3d_image_3d_of<T>& src_im) const;
+
+  //: Smooth and subsample src_im to produce dest_im, smoothing in y and z only
+  //  Applies 1-5-8-5-1 filter and subsamples in y then z, but not x
+  void gauss_reduce_yz_15851(mil3d_image_3d_of<T>& dest_im,
                     const mil3d_image_3d_of<T>& src_im) const;
 
   //: Select number of levels to use

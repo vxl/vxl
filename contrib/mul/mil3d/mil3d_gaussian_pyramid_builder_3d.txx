@@ -67,18 +67,36 @@ int mil3d_gaussian_pyramid_builder_3d<T>::n_levels(const mil3d_image_3d_of<T>& b
   int max_levels = 0;
   while ((nx>=int(min_x_size_)) && (ny>=int(min_y_size_)) && (nz>=int(min_z_size_)))
   {
-    if (uniform_reduction_  || (dz*dz/(dx*dx)<=2.0))
+    if (uniform_reduction_)
 	{
       nx = (nx+1)/2; dx*=2;
       ny = (ny+1)/2; dy*=2;
       nz = (nz+1)/2; dz*=2;
     }
-	else
+	else if (dz*dz/(dx*dx)>2.0)
 	{
 	  // Pixels large in z, so don't smooth them
       nx = (nx+1)/2; dx*=2;
       ny = (ny+1)/2; dy*=2;
 	}
+	else if (dy*dy/(dx*dx)>2.0)
+	{
+	  // Pixels large in y, so don't smooth them
+      nx = (nx+1)/2; dx*=2;
+      nz = (nz+1)/2; dz*=2;
+	}
+	else if (dx*dx/(dy*dy)>2.0)
+	{
+	  // Pixels large in x, so don't smooth them
+      ny = (ny+1)/2; dy*=2;
+      nz = (nz+1)/2; dz*=2;
+	}
+	else
+	{
+      nx = (nx+1)/2; dx*=2;
+      ny = (ny+1)/2; dy*=2;
+      nz = (nz+1)/2; dz*=2;
+    }
     max_levels++;
   }
   if (max_levels<1) max_levels = 1;
@@ -213,6 +231,97 @@ void mil3d_gaussian_pyramid_builder_3d<T>::gauss_reduce_xy_15851(mil3d_image_3d_
   dest_im.setWorld2im(scaling * src_im.world2im());
 }
 
+//: Smooth and subsample src_im to produce dest_im, smoothing in x and z only
+//  Applies 1-5-8-5-1 filter and subsamples in x then z, but not y
+template<class T>
+void mil3d_gaussian_pyramid_builder_3d<T>::gauss_reduce_xz_15851(mil3d_image_3d_of<T>& dest_im,
+                                                            const mil3d_image_3d_of<T>& src_im) const
+{
+  int nx = src_im.nx();
+  int ny = src_im.ny();
+  int nz = src_im.nz();
+  int n_planes = src_im.n_planes();
+
+  // Output image size
+  int nx2 = (nx+1)/2;
+  int ny2 = ny;
+  int nz2 = (nz+1)/2;
+
+  if (dest_im.n_planes()!=n_planes)
+    dest_im.set_n_planes(n_planes);
+  dest_im.resize(nx2,ny2,nz2);
+
+  if (work_im1_.nx()<nx2 || work_im1_.ny()<ny || work_im1_.nz()<nz)
+    work_im1_.resize(nx2,ny,nz);
+
+  if (work_im2_.nx()<nx2 || work_im2_.ny()<ny2 || work_im2_.nz()<nz)
+    work_im2_.resize(nx2,ny2,nz);
+
+  // Reduce plane-by-plane
+  for (int i=0;i<n_planes;++i)
+  {
+    // Smooth and subsample in x, result in work_im1_
+    mil3d_gauss_reduce_3d(work_im1_.plane(0),work_im1_.xstep(),work_im1_.ystep(),work_im1_.zstep(),
+      src_im.plane(i),nx,ny,nz,
+      src_im.xstep(),src_im.ystep(),src_im.zstep());
+
+    // Smooth and subsample in z (by implicitly transposing)
+    mil3d_gauss_reduce_3d(dest_im.plane(0),dest_im.zstep(),dest_im.xstep(),dest_im.ystep(),
+      work_im1_.plane(0),nz,nx2,ny,
+      work_im1_.zstep(),work_im1_.xstep(),work_im1_.ystep());
+  }
+
+  // Sort out world to image transformation for destination image
+  mil3d_transform_3d scaling;
+  scaling.set_zoom_only(0.5,1.0,0.5,0,0,0);
+  dest_im.setWorld2im(scaling * src_im.world2im());
+}
+//: Smooth and subsample src_im to produce dest_im, smoothing in y and z only
+//  Applies 1-5-8-5-1 filter and subsamples in y then z, but not x
+template<class T>
+void mil3d_gaussian_pyramid_builder_3d<T>::gauss_reduce_yz_15851(mil3d_image_3d_of<T>& dest_im,
+                                                            const mil3d_image_3d_of<T>& src_im) const
+{
+  int nx = src_im.nx();
+  int ny = src_im.ny();
+  int nz = src_im.nz();
+  int n_planes = src_im.n_planes();
+
+  // Output image size
+  int nx2 = nx;
+  int ny2 = (ny+1)/2;
+  int nz2 = (nz+1)/2;
+
+  if (dest_im.n_planes()!=n_planes)
+    dest_im.set_n_planes(n_planes);
+  dest_im.resize(nx2,ny2,nz2);
+
+  if (work_im1_.nx()<nx2 || work_im1_.ny()<ny || work_im1_.nz()<nz)
+    work_im1_.resize(nx2,ny,nz);
+
+  if (work_im2_.nx()<nx2 || work_im2_.ny()<ny2 || work_im2_.nz()<nz)
+    work_im2_.resize(nx2,ny2,nz);
+
+  // Reduce plane-by-plane
+  for (int i=0;i<n_planes;++i)
+  {
+    // Smooth and subsample in y, result in work_im1_
+    mil3d_gauss_reduce_3d(work_im1_.plane(0),work_im1_.ystep(),work_im1_.xstep(),work_im1_.zstep(),
+      src_im.plane(i),ny,nx,nz,
+      src_im.ystep(),src_im.xstep(),src_im.zstep());
+
+    // Smooth and subsample in z (by implicitly transposing)
+    mil3d_gauss_reduce_3d(dest_im.plane(0),dest_im.zstep(),dest_im.xstep(),dest_im.ystep(),
+      work_im1_.plane(0),nz,nx,ny2,
+      work_im1_.zstep(),work_im1_.xstep(),work_im1_.ystep());
+  }
+
+  // Sort out world to image transformation for destination image
+  mil3d_transform_3d scaling;
+  scaling.set_zoom_only(1.0,0.5,0.5,0,0,0);
+  dest_im.setWorld2im(scaling * src_im.world2im());
+}
+
 //=======================================================================
 //: Smooth and subsample src_im to produce dest_im
 //  Applies 1-5-8-5-1 filter in x and y, then samples
@@ -240,6 +349,10 @@ void mil3d_gaussian_pyramid_builder_3d<T>::gauss_reduce(mil3d_image_3d_of<T>& de
   // If dz is much larger than dx, then don't subsample in that direction
   if (dz*dz/(dx*dx)>2.0)
     gauss_reduce_xy_15851(dest_im,src_im);
+  else if (dy*dy/(dx*dx)>2.0)
+    gauss_reduce_xz_15851(dest_im,src_im);
+  else if (dx*dx/(dy*dy)>2.0)
+    gauss_reduce_yz_15851(dest_im,src_im);
   else
     gauss_reduce_15851(dest_im,src_im);
 

@@ -101,6 +101,98 @@ void test_gaussian_pyramid_builder_3d_build_xy(mil3d_gaussian_pyramid_builder_3d
   TEST("Corner pixel",vcl_fabs(image0(nx2*2-2,ny2*2-2,nz2-1)-image1(nx2-1,ny2-1,nz2-1))<1e-6,true);
 }
 
+// Check in-homogeneous smoothing option (ie only smooth in x,z but not y on some levels)
+void test_gaussian_pyramid_builder_3d_build_xz(mil3d_gaussian_pyramid_builder_3d<float>& builder)
+{
+  int nx = 20, ny = 10, nz = 20;
+  vcl_cout<<"Filter Width: "<<builder.filter_width()<<vcl_endl;
+  vcl_cout<<"Image Size: "<<nx<<" x "<<ny<<" x "<<nz<<vcl_endl;
+
+  mil3d_image_3d_of<float> image0;
+  image0.resize(nx,ny,nz);
+
+  for (int z=0;z<image0.nz();++z)
+    for (int y=0;y<image0.ny();++y)
+      for (int x=0;x<image0.nx();++x)
+        image0(x,y,z) = x+y*10+z*100;
+
+  mil3d_transform_3d w2i;
+  w2i.set_zoom_only(1,0.5,1,0,0,0);
+  image0.setWorld2im(w2i);
+
+  int default_n_levels = builder.maxLevels();
+  builder.setMaxLevels(3);
+  mil_image_pyramid image_pyr;
+
+  builder.set_min_size(4,4,4);
+  builder.build(image_pyr,image0);
+
+  vcl_cout<<"Resulting pyramid: "<<image_pyr<<vcl_endl;
+
+//   vcl_cout<<"Result:\n";
+//   image_pyr.print_all(vcl_cout);
+
+  TEST("Found correct number of levels", image_pyr.n_levels(), 3);
+
+  int nx2 = (nx+1)/2;
+  int ny2 = ny;   // Shouldn't change first level
+  int nz2 = (nz+1)/2;
+  const mil3d_image_3d_of<float>& image1 = (const mil3d_image_3d_of<float>&) image_pyr(1);
+  TEST("Level 1 size x",image1.nx(),nx2);
+  TEST("Level 1 size y",image1.ny(),ny2);
+  TEST("Level 1 size z",image1.nz(),nx2);
+  TEST("Pixel (0,0,0)",vcl_fabs(image0(0,0,0)-image1(0,0,0))<1e-6,true);
+  TEST("Pixel (1,1,1)",vcl_fabs(image0(2,2,2)-image1(1,2,1))<1e-6,true);
+  TEST("Pixel (2,3,3)",vcl_fabs(image1(2,3,3)-634)<1e-6,true);
+  TEST("Corner pixel",vcl_fabs(image0(nx2*2-2,ny2-1,nz2*2-2)-image1(nx2-1,ny2-1,nz2-1))<1e-6,true);
+}
+
+// Check in-homogeneous smoothing option (ie only smooth in y,z but not x on some levels)
+void test_gaussian_pyramid_builder_3d_build_yz(mil3d_gaussian_pyramid_builder_3d<float>& builder)
+{
+  int nx = 10, ny = 20, nz = 20;
+  vcl_cout<<"Filter Width: "<<builder.filter_width()<<vcl_endl;
+  vcl_cout<<"Image Size: "<<nx<<" x "<<ny<<" x "<<nz<<vcl_endl;
+
+  mil3d_image_3d_of<float> image0;
+  image0.resize(nx,ny,nz);
+
+  for (int z=0;z<image0.nz();++z)
+    for (int y=0;y<image0.ny();++y)
+      for (int x=0;x<image0.nx();++x)
+        image0(x,y,z) = x+y*10+z*100;
+
+  mil3d_transform_3d w2i;
+  w2i.set_zoom_only(0.5,1,1,0,0,0);
+  image0.setWorld2im(w2i);
+
+  int default_n_levels = builder.maxLevels();
+  builder.setMaxLevels(3);
+  mil_image_pyramid image_pyr;
+
+  builder.set_min_size(4,4,4);
+  builder.build(image_pyr,image0);
+
+  vcl_cout<<"Resulting pyramid: "<<image_pyr<<vcl_endl;
+
+//   vcl_cout<<"Result:\n";
+//   image_pyr.print_all(vcl_cout);
+
+  TEST("Found correct number of levels", image_pyr.n_levels(), 3);
+
+  int nx2 = nx;    // Shouldn't change first level
+  int ny2 = (ny+1)/2;
+  int nz2 = (nz+1)/2;
+  const mil3d_image_3d_of<float>& image1 = (const mil3d_image_3d_of<float>&) image_pyr(1);
+  TEST("Level 1 size x",image1.nx(),nx2);
+  TEST("Level 1 size y",image1.ny(),ny2);
+  TEST("Level 1 size z",image1.nz(),nx2);
+  TEST("Pixel (0,0,0)",vcl_fabs(image0(0,0,0)-image1(0,0,0))<1e-6,true);
+  TEST("Pixel (1,1,1)",vcl_fabs(image0(2,2,2)-image1(2,1,1))<1e-6,true);
+  TEST("Pixel (2,3,3)",vcl_fabs(image1(2,3,3)-662)<1e-6,true);
+  TEST("Corner pixel",vcl_fabs(image0(nx2-1,ny2*2-2,nz2*2-2)-image1(nx2-1,ny2-1,nz2-1))<1e-6,true);
+}
+
 void test_gaussian_pyramid_builder_3d()
 {
   vcl_cout << "\n\n************************************************\n";
@@ -111,6 +203,8 @@ void test_gaussian_pyramid_builder_3d()
   builder.set_filter_width(5);
   test_gaussian_pyramid_builder_3d_build(builder);
   test_gaussian_pyramid_builder_3d_build_xy(builder);
+  test_gaussian_pyramid_builder_3d_build_xz(builder);
+  test_gaussian_pyramid_builder_3d_build_yz(builder);
 
   vcl_cout<<"\n\n======== TESTING I/O ===========\n";
 
