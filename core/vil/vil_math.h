@@ -252,6 +252,7 @@ public:
   int operator()(int x)       { double r=s_*x; return int(r<0?r-0.5:r+0.5); }
   float operator()(float x)       { return float(s_*x); }
   double operator()(double x)     { return s_*x; }
+  vcl_complex<double> operator()(vcl_complex<double> x) { return s_*x; }
 };
 
 //: Multiply values in-place in image view by scale
