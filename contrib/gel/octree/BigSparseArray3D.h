@@ -54,6 +54,8 @@
 #include <vcl_utility.h>
 #include <vcl_map.h>
 
+#include <vcl_iostream.h>
+
 template <class T>
 class BigSparseArray3D {
 public:
