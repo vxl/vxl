@@ -13,36 +13,36 @@
 
 
 //--------------------------------------------------------------
-// 
-// -- Constructor
+//
+//: Constructor
 HomgPlane3D::HomgPlane3D ()
 {
 }
 
 //--------------------------------------------------------------
-// 
-// -- Constructor
+//
+//: Constructor
 HomgPlane3D::HomgPlane3D (double x, double y, double z, double w)
     : Homg3D (x, y, z, w)
 {
 }
 
 //--------------------------------------------------------------
-// 
-// -- Constructor
+//
+//: Constructor
 HomgPlane3D::HomgPlane3D (const vnl_vector<double>& n, double d)
   : Homg3D (n[0], n[1], n[2], -d)
 {
 }
 
 //--------------------------------------------------------------
-// 
-// -- Destructor
+//
+//: Destructor
 HomgPlane3D::~HomgPlane3D ()
 {
 }
 
-// -- closest point
+//: closest point
 HomgPoint3D HomgPlane3D::closest_point(const HomgPoint3D& x) const
 {
   vnl_double_3 n(_homg_vector[0], _homg_vector[1], _homg_vector[2]);
@@ -56,17 +56,17 @@ HomgPoint3D HomgPlane3D::closest_point(const HomgPoint3D& x) const
   vnl_double_3 x3 = x.get_double3();
 
   double dp = dot_product(x3, n) - d;
-  
+
   vnl_double_3 px = x3 - dp * n;
 
   return HomgPoint3D(px[0], px[1], px[2], 1.0);
 }
 
-// -- Distance point to plane
+//: Distance point to plane
 double HomgPlane3D::distance(const HomgPoint3D& x) const
 {
   vnl_double_3 n(_homg_vector[0], _homg_vector[1], _homg_vector[2]);
-  
+
   double s = 1.0/n.magnitude();
   double d = -_homg_vector[3];
 
@@ -75,7 +75,7 @@ double HomgPlane3D::distance(const HomgPoint3D& x) const
   return (dot_product(x3, n) - d)*s;
 }
 
-// -- print
+//: print
 vcl_ostream& operator<<(vcl_ostream& s, const HomgPlane3D& P)
 {
   return s << P.get_vector();

@@ -137,14 +137,14 @@ public:
   void get_constraint_lines_image2(const HomgPoint2D& p1, const HomgPoint2D& p3, vcl_vector<HomgLine2D>* lines) const;
   void get_constraint_lines_image1(const HomgPoint2D& p2, const HomgPoint2D& p3, vcl_vector<HomgLine2D>* lines) const;
 
-  // -- Contract Tensor axis tensor_axis with first component of Matrix M.
+  //: Contract Tensor axis tensor_axis with first component of Matrix M.
   // That is:
   // For tensor_axis = 1,  Compute T_ijk = T_pjk M_pi
   // For tensor_axis = 2,  Compute T_ijk = T_ipk M_pj
   // For tensor_axis = 3,  Compute T_ijk = T_ijp M_pk
   TriTensor postmultiply(unsigned tensor_axis, const vnl_matrix<double>& M) const;
 
-  // -- Contract Tensor axis tensor_axis with second component of Matrix M.
+  //: Contract Tensor axis tensor_axis with second component of Matrix M.
   // That is:
   // For tensor_axis = 1,  Compute T_ijk = M_ip T_pjk
   // For tensor_axis = 2,  Compute T_ijk = M_jp T_ipk
@@ -170,7 +170,7 @@ public:
 
   // INTERNALS---------------------------------------------------------------
 
-  // -- C123 are line conditioning matrices.
+  //: C123 are line conditioning matrices.
   // If C * l = lhat, and l1 = T l2 l3, then lhat1 = That lhat2 lhat3
   TriTensor condition(const vnl_matrix<double>& line_1_denorm,
                       const vnl_matrix<double>& line_2_norm,

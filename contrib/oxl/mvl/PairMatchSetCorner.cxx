@@ -7,12 +7,12 @@
 #include <vcl_vector.h>
 #include <mvl/HomgInterestPointSet.h>
 
-// -- Constructor
+//: Constructor
 PairMatchSetCorner::PairMatchSetCorner() : _corners1(0) , _corners2(0)
 {
 }
 
-// -- Construct a PairMatchSetCorner that will contain matches between the
+//: Construct a PairMatchSetCorner that will contain matches between the
 // given HomgInterestPointSets.
 // These objects are held by reference in the MatchSet and must therefore
 // live longer than the PairMatchSetCorner (for example in an MViewDatabase).
@@ -23,7 +23,7 @@ PairMatchSetCorner::PairMatchSetCorner(HomgInterestPointSet const* corners1,
   set(corners1, corners2);
 }
 
-// -- Copy a PairMatchSetCorner
+//: Copy a PairMatchSetCorner
 PairMatchSetCorner::PairMatchSetCorner(const PairMatchSetCorner& that):
   PairMatchSet(that) , _corners1(0) , _corners2(0)
 {
@@ -37,14 +37,14 @@ PairMatchSetCorner& PairMatchSetCorner::operator=(const PairMatchSetCorner&that)
   return *this;
 }
 
-// -- Destructor
+//: Destructor
 PairMatchSetCorner::~PairMatchSetCorner()
 {
 }
 
 // Data Control--------------------------------------------------------------
 
-// -- Set the pair of HomgInterestPointSets to which matches refer.
+//: Set the pair of HomgInterestPointSets to which matches refer.
 // See the constructor for constraints.
 void PairMatchSetCorner::set(HomgInterestPointSet const* corners1,
                              HomgInterestPointSet const* corners2)
@@ -57,7 +57,7 @@ void PairMatchSetCorner::set(HomgInterestPointSet const* corners1,
     set_size(0);
 }
 
-// -- Extract the point vectors for only the valid matches.
+//: Extract the point vectors for only the valid matches.
 // For example, given a set of matches between corner features,
 // this function copies the inliers to a pair of arrays which
 // can then be fed to a non-robust matcher.
@@ -76,7 +76,7 @@ void PairMatchSetCorner::extract_matches(vcl_vector<HomgPoint2D>& points1,
   assert(i == n);
 }
 
-// -- Extract the point vectors for only the valid matches.
+//: Extract the point vectors for only the valid matches.
 // In addition, return the corresponding point indices in corner_index_[12].
 // Thus, points1[0] = corner_set_1()[corner_index_1[0]].
 // This is useful with procedures such as RANSAC.
@@ -100,7 +100,7 @@ void PairMatchSetCorner::extract_matches(vcl_vector<HomgPoint2D>& points1,
   }
 }
 
-// -- Clear all matches and then set only those for which the corresponding
+//: Clear all matches and then set only those for which the corresponding
 // inliers flag is set.  For example, if inliers[5] == true, then the match
 // (corner_index_1[5], corner_index_2[5]) is added to the set.
 void PairMatchSetCorner::set(const vcl_vector<bool>& inliers,

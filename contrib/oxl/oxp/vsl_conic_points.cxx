@@ -24,7 +24,7 @@ struct theta_pair {
   double theta2;
 };
 
-// -- Intersect a line with the unit circle.
+//: Intersect a line with the unit circle.
 static theta_pair inter_line_circle(vnl_vector<double> const& l)
 {
   double a=l(0);
@@ -53,7 +53,7 @@ static theta_pair inter_line_circle(vnl_vector<double> const& l)
 
 /*------------------------------------------------------------------*/
 
-// -- Sample the unit circle, with rate determined by distance to $l_\infty$.
+//: Sample the unit circle, with rate determined by distance to $l_\infty$.
 static int
 spaced_angles(double alpha1,
               double alpha2,

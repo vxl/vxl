@@ -80,7 +80,7 @@ public:
   void set(const PMatrix& P2);
   void set(const FMatrix&);
 
-  // -- Return a const reference to the internal vnl_matrix.
+  //: Return a const reference to the internal vnl_matrix.
   const vnl_matrix<double>& get_matrix () const { return _f_matrix; }
 
   // vnl_matrix<double>& get_matrix () { return _f_matrix; }

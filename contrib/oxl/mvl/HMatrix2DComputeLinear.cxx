@@ -6,7 +6,7 @@
 #include "HomgNorm2D.h"
 #include "HMatrix2DComputeLinear.h"
 
-// -- Construct a HMatrix2DComputeLinear object.
+//: Construct a HMatrix2DComputeLinear object.
 // The allow_ideal_points flag is described below.
 HMatrix2DComputeLinear::HMatrix2DComputeLinear(bool allow_ideal_points):
   _allow_ideal_points(allow_ideal_points)
@@ -26,7 +26,7 @@ const double DEGENERACY_THRESHOLD = 0.00001;  // FSM. see below.
 
 //-----------------------------------------------------------------------------
 //
-// -- @{ Compute a plane-plane projectivity using linear least squares.
+//: @{ Compute a plane-plane projectivity using linear least squares.
 // Returns false if the calculation fails or there are fewer than four point
 // matches in the list.  The algorithm finds the nullvector of the $2 n \times 9$ design
 // matrix:

@@ -12,7 +12,7 @@ HomgInterestPoint::HomgInterestPoint()
 {
 }
 
-// -- Create from HomgPoint2D in conditioned coordinates, using the given metric
+//: Create from HomgPoint2D in conditioned coordinates, using the given metric
 // to convert back to image coords.
 HomgInterestPoint::HomgInterestPoint(const HomgPoint2D& h, const HomgMetric& metric, float mean_intensity):
   _homg(h),
@@ -65,7 +65,7 @@ HomgInterestPoint::~HomgInterestPoint()
 {
 }
 
-vcl_ostream& operator<<(vcl_ostream& s, const HomgInterestPoint&) 
+vcl_ostream& operator<<(vcl_ostream& s, const HomgInterestPoint&)
 {
   return s;
 }

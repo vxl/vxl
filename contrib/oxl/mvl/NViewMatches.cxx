@@ -21,7 +21,7 @@ vcl_ostream& operator<<(vcl_ostream& s, const NViewMatch& c)
   return s;
 }
 
-// -- Return true if B is consistent with this match.  Matches are consistent if
+//: Return true if B is consistent with this match.  Matches are consistent if
 // they are identical in all non-wildcard positions.  However, it additionally
 // requires that they share at least min_overlap non-wildcard positions.
 bool NViewMatch::matches(const NViewMatch& b, int min_overlap) const
@@ -43,7 +43,7 @@ bool NViewMatch::matches(const NViewMatch& b, int min_overlap) const
   return overlap >= min_overlap;
 }
 
-// -- Fill any wildcard positions with the corresponding position in B.
+//: Fill any wildcard positions with the corresponding position in B.
 void NViewMatch::incorporate(const NViewMatch& b)
 {
   unsigned l = size();
@@ -52,7 +52,7 @@ void NViewMatch::incorporate(const NViewMatch& b)
       (*this)[i] = b[i];
 }
 
-// -- Check for any inconsistencies between matches
+//: Check for any inconsistencies between matches
 bool NViewMatch::is_consistent(const NViewMatch& b) const
 {
   unsigned l = size();
@@ -63,7 +63,7 @@ bool NViewMatch::is_consistent(const NViewMatch& b) const
   return true;
 }
 
-// -- Count how many non-wildcard entries are in this NViewMatch
+//: Count how many non-wildcard entries are in this NViewMatch
 int NViewMatch::count_observations() const
 {
   unsigned l = size();
@@ -160,7 +160,7 @@ bool NViewMatches::save(const char* filename)
   return save(o);
 }
 
-// -- Count how many matches are consistent with \argfont{match}
+//: Count how many matches are consistent with \argfont{match}
 int NViewMatches::count_matches(const NViewMatch& match)
 {
   int nmatches = 0;
@@ -170,7 +170,7 @@ int NViewMatches::count_matches(const NViewMatch& match)
   return nmatches;
 }
 
-// -- Return an array of the indices that match the given match
+//: Return an array of the indices that match the given match
 vcl_vector<int> NViewMatches::get_matches(const NViewMatch& match)
 {
   vcl_vector<int> ret;
@@ -180,7 +180,7 @@ vcl_vector<int> NViewMatches::get_matches(const NViewMatch& match)
   return ret;
 }
 
-// -- Add a new nview match to the set.   If it is just an update
+//: Add a new nview match to the set.   If it is just an update
 // of an existing match (filling in a wildcard), merge it.  Otherwise
 // add it at the end.
 //
@@ -237,7 +237,7 @@ int NViewMatches::incorporate(const NViewMatch& newtrack)
   return merged - begin();
 }
 
-// -- Build an NViewMatch from the triplet (base_view..base_view+2)
+//: Build an NViewMatch from the triplet (base_view..base_view+2)
 NViewMatch NViewMatches::make_triplet_match(int base_view, int c1, int c2, int c3)
 {
   assert(base_view+2 < _nviews);
@@ -248,7 +248,7 @@ NViewMatch NViewMatches::make_triplet_match(int base_view, int c1, int c2, int c
   return newtrack;
 }
 
-// -- Build an NViewMatch from the triplet (base_view..base_view+2), and incorporate.
+//: Build an NViewMatch from the triplet (base_view..base_view+2), and incorporate.
 int NViewMatches::incorporate_triplet(int base_view, int c1, int c2, int c3)
 {
   assert(base_view+2 < _nviews);

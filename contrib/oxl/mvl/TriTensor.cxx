@@ -52,7 +52,7 @@ static bool tt_verbose = false;
 //--------------------------------------------------------------
 
 
-// -- Default constructor.
+//: Default constructor.
 TriTensor::TriTensor ():
   T (3, 3, 3)
 {
@@ -60,7 +60,7 @@ TriTensor::TriTensor ():
 }
 
 //
-// -- Construct a TriTensor from a linear array of doubles.
+//: Construct a TriTensor from a linear array of doubles.
 // The doubles are stored in ``matrix'' order, with the last index
 // increasing fastest.
 TriTensor::TriTensor (const double *tritensor_array)
@@ -69,14 +69,14 @@ TriTensor::TriTensor (const double *tritensor_array)
   init_caches();
 }
 
-// -- Copy constructor.
+//: Copy constructor.
 TriTensor::TriTensor (const TriTensor& that):
   T(that.T)
 {
   init_caches();
 }
 
-// -- Construct from 3 projection matrices.
+//: Construct from 3 projection matrices.
 TriTensor::TriTensor (const PMatrix& P1, const PMatrix& P2, const PMatrix& P3):
   T (3, 3, 3)
 {
@@ -84,7 +84,7 @@ TriTensor::TriTensor (const PMatrix& P1, const PMatrix& P2, const PMatrix& P3):
   set(P1, P2, P3);
 }
 
-// -- Construct from 2 projection matrices, as described in set.
+//: Construct from 2 projection matrices, as described in set.
 TriTensor::TriTensor (const PMatrix& P2, const PMatrix& P3):
   T (3, 3, 3)
 {
@@ -92,7 +92,7 @@ TriTensor::TriTensor (const PMatrix& P2, const PMatrix& P3):
   set(P2, P3);
 }
 
-// -- Construct from 3 matrices.
+//: Construct from 3 matrices.
 TriTensor::TriTensor (const vnl_matrix<double>& T1, const vnl_matrix<double>& T2, const vnl_matrix<double>& T3):
   T (3, 3, 3)
 {
@@ -100,7 +100,7 @@ TriTensor::TriTensor (const vnl_matrix<double>& T1, const vnl_matrix<double>& T2
   set(T1, T2, T3);
 }
 
-// -- Assignment
+//: Assignment
 TriTensor& TriTensor::operator = (const TriTensor& that)
 {
   T = that.T;
@@ -109,7 +109,7 @@ TriTensor& TriTensor::operator = (const TriTensor& that)
   return *this;
 }
 
-// -- Destructor
+//: Destructor
 TriTensor::~TriTensor()
 {
   delete_caches();
@@ -138,7 +138,7 @@ void TriTensor::delete_caches()
   init_caches();
 }
 
-// -- Convert T to 27x1 matrix. Out is assumed to have been appropriately resized.
+//: Convert T to 27x1 matrix. Out is assumed to have been appropriately resized.
 void TriTensor::convert_to_vector(vnl_matrix<double> * out) const
 {
   // tr_convert_tensor_to_vector
@@ -146,7 +146,7 @@ void TriTensor::convert_to_vector(vnl_matrix<double> * out) const
   T.get(out->data_block());
 }
 
-// -- Convert from 27x1 matrix.
+//: Convert from 27x1 matrix.
 void TriTensor::set(const vnl_matrix<double>& in)
 {
   assert (in.rows() == 27 && in.columns() == 1);
@@ -156,7 +156,7 @@ void TriTensor::set(const vnl_matrix<double>& in)
 
 // @{ BUILDING @}
 
-// -- Construct from 3 projection matrices.
+//: Construct from 3 projection matrices.
 void
 TriTensor::set(const PMatrix& P1, const PMatrix& P2, const PMatrix& P3)
 {
@@ -180,7 +180,7 @@ TriTensor::set(const PMatrix& P1, const PMatrix& P2, const PMatrix& P3)
   delete_caches();
 }
 
-// -- Construct from 2 projection matrices, P2 and P3.  The first is assumed to
+//: Construct from 2 projection matrices, P2 and P3.  The first is assumed to
 // be the canonical [I | 0].
 void
 TriTensor::set(const PMatrix& P2, const PMatrix& P3)
@@ -199,7 +199,7 @@ TriTensor::set(const PMatrix& P2, const PMatrix& P3)
   delete_caches();
 }
 
-// -- Construct from 3 T matrices.
+//: Construct from 3 T matrices.
 void
 TriTensor::set(const vnl_matrix<double>& T1, const vnl_matrix<double>& T2, const vnl_matrix<double>& T3)
 {
@@ -222,7 +222,7 @@ TriTensor::set(const vnl_matrix<double>& T1, const vnl_matrix<double>& T2, const
 
 //-----------------------------------------------------------------------------
 //
-// -- For the specified points in image 1/2, return the transferred point in image 3.
+//: For the specified points in image 1/2, return the transferred point in image 3.
 // Transfer is via optimal backprojection.
 //
 
@@ -240,7 +240,7 @@ TriTensor::image3_transfer (const HomgPoint2D& point1, const HomgPoint2D& point2
 
 //-----------------------------------------------------------------------------
 //
-// -- For the specified points in image 1/3, return the transferred point in image 2.
+//: For the specified points in image 1/3, return the transferred point in image 2.
 //
 
 HomgPoint2D
@@ -257,7 +257,7 @@ TriTensor::image2_transfer (const HomgPoint2D& point1, const HomgPoint2D& point3
 
 //-----------------------------------------------------------------------------
 //
-// -- For the specified points in image 2/3, return the transferred point in image 1.
+//: For the specified points in image 2/3, return the transferred point in image 1.
 //
 
 HomgPoint2D
@@ -276,7 +276,7 @@ TriTensor::image1_transfer (const HomgPoint2D& point2, const HomgPoint2D& point3
 
 //-----------------------------------------------------------------------------
 //
-// -- For the specified points in image 1/2, return the transferred point in image 3.
+//: For the specified points in image 1/2, return the transferred point in image 3.
 //
 
 HomgPoint2D
@@ -290,7 +290,7 @@ TriTensor::image3_transfer_qd (const HomgPoint2D& point1, const HomgPoint2D& poi
 
 //-----------------------------------------------------------------------------
 //
-// -- For the specified points in image 1/3, return the transferred point in image 2.
+//: For the specified points in image 1/3, return the transferred point in image 2.
 //
 
 HomgPoint2D
@@ -303,7 +303,7 @@ TriTensor::image2_transfer_qd (const HomgPoint2D& point1, const HomgPoint2D& poi
 
 //-----------------------------------------------------------------------------
 //
-// -- For the specified points in image 2/3, return the transferred point in image 1.
+//: For the specified points in image 2/3, return the transferred point in image 1.
 //
 
 HomgPoint2D
@@ -316,7 +316,7 @@ TriTensor::image1_transfer_qd (const HomgPoint2D& point2, const HomgPoint2D& poi
 
 //-----------------------------------------------------------------------------
 //
-// -- For the specified lines in image 2/3, return the transferred line in image 1.
+//: For the specified lines in image 2/3, return the transferred line in image 1.
 //
 
 HomgLine2D
@@ -336,7 +336,7 @@ TriTensor::image1_transfer (const HomgLine2D& line2, const HomgLine2D& line3) co
 
 //-----------------------------------------------------------------------------
 //
-// -- For the specified lines in image 2/3, return the transferred line in image 1.
+//: For the specified lines in image 2/3, return the transferred line in image 1.
 //
 
 HomgLine2D
@@ -347,7 +347,7 @@ TriTensor::image2_transfer (const HomgLine2D& line1, const HomgLine2D& line3) co
 
 //-----------------------------------------------------------------------------
 //
-// -- For the specified lines in image 1/2, return the transferred line in image 3.
+//: For the specified lines in image 1/2, return the transferred line in image 3.
 //
 
 HomgLine2D
@@ -364,13 +364,13 @@ TriTensor::image3_transfer (const HomgLine2D& line1, const HomgLine2D& line2) co
 //  return HMatrix2D(dot1(line1.get_vector()));
 //}
 
-// -- Return the planar homography between views 3 and 1 induced by line 2
+//: Return the planar homography between views 3 and 1 induced by line 2
 HMatrix2D TriTensor::get_hmatrix_31(const HomgLine2D& line2) const
 {
   return HMatrix2D(dot2(line2.get_vector()));
 }
 
-// -- Return the planar homography between views 2 and 1 induced by line 3
+//: Return the planar homography between views 2 and 1 induced by line 3
 HMatrix2D TriTensor::get_hmatrix_21(const HomgLine2D& line3) const
 {
   return HMatrix2D(dot3(line3.get_vector()));
@@ -378,7 +378,7 @@ HMatrix2D TriTensor::get_hmatrix_21(const HomgLine2D& line3) const
 
 // @{ CONTRACTION WITH VECTORS @}
 
-// -- @{ Compute ${\tt M}_{jk} = T_{ijk} v_i$. @}
+//: @{ Compute ${\tt M}_{jk} = T_{ijk} v_i$. @}
 vnl_double_3x3 TriTensor::dot1(const vnl_vector<double>& v) const
 {
   vnl_double_3x3 answer; answer.fill(0.0);
@@ -389,7 +389,7 @@ vnl_double_3x3 TriTensor::dot1(const vnl_vector<double>& v) const
   return answer;
 }
 
-// -- @{ Compute ${\tt M}_{ik} = T_{ijk} v_j$. @}
+//: @{ Compute ${\tt M}_{ik} = T_{ijk} v_j$. @}
 vnl_double_3x3 TriTensor::dot2(const vnl_vector<double>& v) const
 {
   vnl_double_3x3 answer; answer.fill(0.0);
@@ -400,7 +400,7 @@ vnl_double_3x3 TriTensor::dot2(const vnl_vector<double>& v) const
   return answer;
 }
 
-// -- @{ Compute ${\tt M}_{ij} = T_{ijk} v_k$. @}
+//: @{ Compute ${\tt M}_{ij} = T_{ijk} v_k$. @}
 vnl_double_3x3 TriTensor::dot3(const vnl_vector<double>& v) const
 {
   vnl_double_3x3 answer; answer.fill(0.0);
@@ -411,7 +411,7 @@ vnl_double_3x3 TriTensor::dot3(const vnl_vector<double>& v) const
   return answer;
 }
 
-// -- @{ Compute ${\tt M}_{kj} = T_{ijk} v_i$. (The transpose of dot1). @}
+//: @{ Compute ${\tt M}_{kj} = T_{ijk} v_i$. (The transpose of dot1). @}
 vnl_double_3x3 TriTensor::dot1t(const vnl_vector<double>& v) const
 {
   vnl_double_3x3 answer; answer.fill(0.0);
@@ -422,7 +422,7 @@ vnl_double_3x3 TriTensor::dot1t(const vnl_vector<double>& v) const
   return answer;
 }
 
-// -- @{ Compute ${\tt M}_{ki} = T_{ijk} v_j$. @}
+//: @{ Compute ${\tt M}_{ki} = T_{ijk} v_j$. @}
 vnl_double_3x3 TriTensor::dot2t(const vnl_vector<double>& v) const
 {
   vnl_double_3x3 answer; answer.fill(0.0);
@@ -433,7 +433,7 @@ vnl_double_3x3 TriTensor::dot2t(const vnl_vector<double>& v) const
   return answer;
 }
 
-// -- @{ Compute ${\tt M}_{ji} = T_{ijk} v_k$. @}
+//: @{ Compute ${\tt M}_{ji} = T_{ijk} v_k$. @}
 vnl_double_3x3 TriTensor::dot3t(const vnl_vector<double>& v) const
 {
   vnl_double_3x3 answer; answer.fill(0.0);
@@ -480,7 +480,7 @@ TriTensor TriTensor::premultiply(unsigned tensor_axis, const vnl_matrix<double>&
   }
 }
 
-// -- Compute @{$ S_{ijk} = T_{pjk} M_{pi} $@}
+//: Compute @{$ S_{ijk} = T_{pjk} M_{pi} $@}
 TriTensor TriTensor::postmultiply1(const vnl_matrix<double>& M) const
 {
   TriTensor S;
@@ -495,7 +495,7 @@ TriTensor TriTensor::postmultiply1(const vnl_matrix<double>& M) const
   return S;
 }
 
-// -- Compute @{$ S_{ijk} = T_{ipk} M_{pj} $@}
+//: Compute @{$ S_{ijk} = T_{ipk} M_{pj} $@}
 TriTensor TriTensor::postmultiply2(const vnl_matrix<double>& M) const
 {
   TriTensor S;
@@ -510,7 +510,7 @@ TriTensor TriTensor::postmultiply2(const vnl_matrix<double>& M) const
   return S;
 }
 
-// -- Compute @{$ S_{ijk} = T_{ijp} M_{pk} $@}
+//: Compute @{$ S_{ijk} = T_{ijp} M_{pk} $@}
 TriTensor TriTensor::postmultiply3(const vnl_matrix<double>& M) const
 {
   TriTensor S;
@@ -525,7 +525,7 @@ TriTensor TriTensor::postmultiply3(const vnl_matrix<double>& M) const
   return S;
 }
 
-// -- Compute @{$ S_{ijk} = M_{ip} T_{pjk} $@}
+//: Compute @{$ S_{ijk} = M_{ip} T_{pjk} $@}
 TriTensor TriTensor::premultiply1(const vnl_matrix<double>& M) const
 {
   TriTensor S;
@@ -540,7 +540,7 @@ TriTensor TriTensor::premultiply1(const vnl_matrix<double>& M) const
   return S;
 }
 
-// -- Compute @{$ S_{ijk} = M_{jp} T_{ipk} $@}
+//: Compute @{$ S_{ijk} = M_{jp} T_{ipk} $@}
 TriTensor TriTensor::premultiply2(const vnl_matrix<double>& M) const
 {
   TriTensor S;
@@ -555,7 +555,7 @@ TriTensor TriTensor::premultiply2(const vnl_matrix<double>& M) const
   return S;
 }
 
-// -- Compute @{$ S_{ijk} = M_{kp} T_{ijp} $@}
+//: Compute @{$ S_{ijk} = M_{kp} T_{ijp} $@}
 TriTensor TriTensor::premultiply3(const vnl_matrix<double>& M) const
 {
   TriTensor S;
@@ -574,7 +574,7 @@ TriTensor TriTensor::premultiply3(const vnl_matrix<double>& M) const
 
 // @{ TRANSFORMATION @}
 
-// -- @{ The ${\tt C}_{123}$ are line transformation matrices.  If
+//: @{ The ${\tt C}_{123}$ are line transformation matrices.  If
 // $ {\tt C}_v l_v = \hat l_v$ describes the transformation of each image plane under
 // a planar homography, and $l_1 = T l_2 l_3$ describes the action of this TriTensor, then
 // this routine computes $\hat T$ such that $\hat l_1 = \hat T \hat l_2 \hat l_3$.
@@ -606,7 +606,7 @@ void TriTensor::get_constraint_lines_image3(const HomgPoint2D& p1, const HomgPoi
   //ma2_static_multiply_3x3_trivec (tritensor_ptr-> corner1_norm_matrix, trivec1_ptr, &mapped_trivec1);
   //ma2_static_multiply_3x3_trivec (tritensor_ptr-> corner2_norm_matrix, trivec2_ptr, &mapped_trivec2);
 
-  /* use the same notation as the output of tr_hartley_equation. */
+  // use the same notation as the output of tr_hartley_equation.
 
   double x1 = p1.get_x();
   double y1 = p1.get_y();
@@ -778,9 +778,8 @@ void TriTensor::get_constraint_lines_image3(const HomgPoint2D& p1, const HomgPoi
   return;
 
 #if 0
-  /*
   *trivec3_ptr = ho_trivec_orthog (line_table_ptr);
-  ma2_static_multiply_3x3_trivec (_point_invnorm_matrix3, trivec3_ptr, trivec3_ptr); */
+  ma2_static_multiply_3x3_trivec (_point_invnorm_matrix3, trivec3_ptr, trivec3_ptr);
 
   // Decondition lines
   if (false)
@@ -788,7 +787,7 @@ void TriTensor::get_constraint_lines_image3(const HomgPoint2D& p1, const HomgPoi
       ma2_static_multiply_3x3_trivec (_line_invnorm_matrix3, lines[line_index], lines[line_index]);
 
 
-  /* ho_triveccam_aspect_lines_to_point (line_table_ptr, trivec3_ptr);*/
+  ho_triveccam_aspect_lines_to_point (line_table_ptr, trivec3_ptr);
 #endif
 }
 
@@ -962,7 +961,7 @@ void TriTensor::get_constraint_lines_image2(const HomgPoint2D& p1, const HomgPoi
 
 void TriTensor::get_constraint_lines_image1(const HomgPoint2D& p2, const HomgPoint2D& p3, vcl_vector<HomgLine2D>* lines) const
 {
-  /* use the same notation as the output of tr_hartley_equation. */
+  // use the same notation as the output of tr_hartley_equation.
 
   double x2 = p2.get_x();
   double y2 = p2.get_y();
@@ -1189,7 +1188,7 @@ void TriTensor::get_constraint_lines_image1(const HomgPoint2D& p2, const HomgPoi
 // @{ INPUT/OUTPUT @}
 
 //-----------------------------------------------------------------------------
-// -- Read from ASCII istream
+//: Read from ASCII istream
 vcl_istream& operator >> (vcl_istream& s, TriTensor& T)
 {
   for(int i = 0; i < 3; ++i)
@@ -1200,7 +1199,7 @@ vcl_istream& operator >> (vcl_istream& s, TriTensor& T)
 }
 
 //-----------------------------------------------------------------------------
-// -- Print in ASCII to ostream
+//: Print in ASCII to ostream
 vcl_ostream& operator << (vcl_ostream& s, const TriTensor& T)
 {
   for(int i = 0; i < 3; ++i) {
@@ -1225,7 +1224,7 @@ struct Column3x3 : public vnl_double_3x3 {
 
 // @{ FUNDAMENTAL MATRICES AND EPIPOLES @}
 
-// -- Compute and cache the two epipoles from image 1.
+//: Compute and cache the two epipoles from image 1.
 bool TriTensor::compute_epipoles()
 {
   vnl_double_3x3 T1 = dot1(vnl_double_3(1,0,0));
@@ -1267,7 +1266,7 @@ bool TriTensor::compute_epipoles()
   return _e12 && _e13;
 }
 
-// -- Return epipoles e2 and e3, from image 1 into images 2 and 3 respectively.
+//: Return epipoles e2 and e3, from image 1 into images 2 and 3 respectively.
 // There is no longer any need to use this routine as they are cached in the TriTensor.
 bool TriTensor::get_epipoles(HomgPoint2D* e2, HomgPoint2D* e3) const
 {
@@ -1280,28 +1279,28 @@ bool TriTensor::get_epipoles(HomgPoint2D* e2, HomgPoint2D* e3) const
   return true;
 }
 
-// -- Return epipole12.
+//: Return epipole12.
 HomgPoint2D TriTensor::get_epipole_12() const
 {
   get_epipoles(0,0);
   return *_e12;
 }
 
-// -- Return epipole13.
+//: Return epipole13.
 HomgPoint2D TriTensor::get_epipole_13() const
 {
   get_epipoles(0,0);
   return *_e13;
 }
 
-// -- Return F12, the fundamental matrix between images 1 and 2
+//: Return F12, the fundamental matrix between images 1 and 2
 FMatrix TriTensor::get_fmatrix_12() const
 {
   get_epipoles(0,0);
   return get_fmatrix_12(*_e12, *_e13);
 }
 
-// -- Return F13, the fundamental matrix between images 1 and 3
+//: Return F13, the fundamental matrix between images 1 and 3
 FMatrix TriTensor::get_fmatrix_13() const
 {
   get_epipoles(0,0);
@@ -1330,7 +1329,7 @@ FMatrix TriTensor::compute_fmatrix_23() const
   return FMatrix(P2, P3);
 }
 
-// -- Return a manifold-projector for the Fundamental matrix between 1 and 2.
+//: Return a manifold-projector for the Fundamental matrix between 1 and 2.
 // The projector is cached until the next time T is changed.
 FManifoldProject* TriTensor::get_fmp12() const
 {
@@ -1339,7 +1338,7 @@ FManifoldProject* TriTensor::get_fmp12() const
   return _fmp12;
 }
 
-// -- Return a manifold-projector as above, between 1 and 3.
+//: Return a manifold-projector as above, between 1 and 3.
 FManifoldProject* TriTensor::get_fmp13() const
 {
   // If not cached, compute it.
@@ -1347,7 +1346,7 @@ FManifoldProject* TriTensor::get_fmp13() const
   return _fmp13;
 }
 
-// -- Return a manifold-projector as above, between 2 and 3.
+//: Return a manifold-projector as above, between 2 and 3.
 FManifoldProject* TriTensor::get_fmp23() const
 {
   // If not cached, compute it.
@@ -1363,7 +1362,7 @@ FManifoldProject* TriTensor::get_fmp23() const
   return _fmp23;
 }
 
-// -- Compute one of the family of P matrix triplets consistent with this T
+//: Compute one of the family of P matrix triplets consistent with this T
 void TriTensor::compute_P_matrices(const vnl_vector<double>& x, double alpha, double beta, PMatrix* P2, PMatrix* P3) const
 {
   HomgPoint2D e2 = get_epipole_12();
@@ -1448,7 +1447,7 @@ static bool check_same(const TriTensor& T1, const TriTensor& T2) {
   return true;
 }
 
-// -- Check that another trifocal tensor is equal to this one up to scale.
+//: Check that another trifocal tensor is equal to this one up to scale.
 // Finds largest component of this, scales both tritensors so that this
 // component is one, and checks that fronorm of difference is small.
 // Prints a message if not.

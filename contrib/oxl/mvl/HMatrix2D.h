@@ -30,7 +30,7 @@ class HMatrix2D {
   // PUBLIC INTERFACE----------------------------------------------------------
 public:
 
-// -- Flags for reduced H matrices
+//: Flags for reduced H matrices
   enum Type {
     Euclidean,
     Similarity,
@@ -69,7 +69,7 @@ public:
   // HomgPoint2D transform_to_plane1(const HomgPoint2D& x2) const;
   // HomgLine2D transform_to_plane2(const HomgLine2D& l1) const;
 
-  // -- Composition
+  //: Composition
   HMatrix2D operator*(const HMatrix2D& H2) { return HMatrix2D(_t12_matrix * H2._t12_matrix); }
 
   // Data Access---------------------------------------------------------------

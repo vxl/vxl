@@ -14,7 +14,7 @@
 
 //-----------------------------------------------------------------------------
 //
-// -- @{ Compute a plane-plane projectivity using 4 point correspondences.
+//: @{ Compute a plane-plane projectivity using 4 point correspondences.
 // Returns false if the calculation fails or there are fewer than four point
 // matches in the list.
 //

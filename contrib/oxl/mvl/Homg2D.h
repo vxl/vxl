@@ -33,22 +33,22 @@ public:
 
   // Constructors/Initializers/Destructors-----------------------------------
 
-// -- Default constructor
+//: Default constructor
   Homg2D () {}
 
-// -- Copy constructor
+//: Copy constructor
   Homg2D (const Homg2D& that) { *this = that; }
 
-// -- Construct a Homg2D from three doubles.
+//: Construct a Homg2D from three doubles.
   Homg2D (double px, double py, double pw) { set(px,py,pw); }
 
-// -- Construct from 3-vector.
+//: Construct from 3-vector.
   Homg2D (const vnl_vector<double>& v) { set(v); }
 
-// -- Destructor
+//: Destructor
  ~Homg2D () {}
 
-// -- Assignment
+//: Assignment
   Homg2D& operator=(const Homg2D& that) {
     vnl_double_3::operator=(that);
     return *this;
@@ -58,33 +58,33 @@ public:
 
   const vnl_double_3& get_vector() const { return *this; }
 
-// -- Retrieve components.
+//: Retrieve components.
   void get (double *x_ptr, double *y_ptr, double *w_ptr) const {
     *x_ptr = data[0];
     *y_ptr = data[1];
     *w_ptr = data[2];
   }
 
-// -- Return x
+//: Return x
   double get_x () const { return data[0]; }
 
-// -- Return y
+//: Return y
   double get_y () const { return data[1]; }
 
-// -- Return w
+//: Return w
   double get_w () const { return data[2]; }
 
-// -- Set x,y,w.
+//: Set x,y,w.
   void set (double px, double py, double pw) {
     data[0] = px;
     data[1] = py;
     data[2] = pw;
   }
 
-// -- Set from vector
+//: Set from vector
   void set (const vnl_vector<double>& v) { vnl_double_3::operator = (v); }
 
-// -- Set element.
+//: Set element.
   void set (unsigned int element_index, double element) {
     data[element_index] = element;
   }
@@ -93,19 +93,19 @@ public:
 
 // @{ ACCESS TO COMPONENTS: @}
 
-// -- @{\vspace{-1.5\baselineskip} @}
+//: @{\vspace{-1.5\baselineskip} @}
   double& x() { return data[0]; }
-// -- @{\vspace{-\baselineskip} @}
+//: @{\vspace{-\baselineskip} @}
   double  x() const { return data[0]; }
 
-// -- @{\vspace{-1.5\baselineskip} @}
+//: @{\vspace{-1.5\baselineskip} @}
   double& y() { return data[1]; }
-// -- @{\vspace{-\baselineskip} @}
+//: @{\vspace{-\baselineskip} @}
   double  y() const { return data[1]; }
 
-// -- @{\vspace{-1.5\baselineskip} @}
+//: @{\vspace{-1.5\baselineskip} @}
   double& w() { return data[2]; }
-// --
+//: @{\vspace{-\baselineskip} @}
   double  w() const { return data[2]; }
 };
 

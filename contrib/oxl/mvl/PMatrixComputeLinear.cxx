@@ -9,9 +9,9 @@
 
 //-----------------------------------------------------------------------------
 //
-// -- Compute a projection matrix using linear least squares.
+//: Compute a projection matrix using linear least squares.
 // Input is a list of 3D-2D point correspondences.
-// 
+//
 // Return false if the calculation fails or there are fewer than six point
 // matches in the list.
 //
@@ -42,7 +42,7 @@ PMatrixComputeLinear::compute (vcl_vector<HomgPoint2D> const& points1, vcl_vecto
   for (unsigned i = 0; i < npts; i++) {
     HomgPoint2D const& u = points1[i];
     HomgPoint3D const& X = points2[i];
-    
+
     unsigned row_index = i * 2;
     a_matrix(row_index,  0) = X.get_x() * u.get_w();
     a_matrix(row_index,  1) = X.get_y() * u.get_w();

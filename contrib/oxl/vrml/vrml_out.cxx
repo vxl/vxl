@@ -20,14 +20,14 @@ vrml_out::vrml_out()
   own_ostream_ = false;
 }
 
-// -- Point vrml output to this stream
+//: Point vrml output to this stream
 vrml_out::vrml_out(vcl_ostream& s)
 {
   s_ = &s;
   own_ostream_ = false;
 }
 
-// -- Open filename for writing, write prologue, and on closure write epilogue
+//: Open filename for writing, write prologue, and on closure write epilogue
 vrml_out::vrml_out(char const* filename)
 {
   s_ = new vcl_ofstream(filename);
@@ -39,7 +39,7 @@ vrml_out::vrml_out(char const* filename)
   else prologue();
 }
 
-// -- Destructor.  If we own the ostream, write the epilogue
+//: Destructor.  If we own the ostream, write the epilogue
 vrml_out::~vrml_out()
 {
   if (own_ostream_) {
@@ -50,7 +50,7 @@ vrml_out::~vrml_out()
 
 #define SETUP if (s_ == 0) { vcl_cerr << "vrml_out -- vcl_ostream not set!\n"; return; } vcl_ostream& f = *s_
 
-// -- Write vrml_out header and an opening "Separator {"
+//: Write vrml_out header and an opening "Separator {"
 void vrml_out::prologue()
 {
   SETUP;
@@ -77,7 +77,7 @@ void vrml_out::verbatim(char const* msg)
   f << msg << vcl_endl;
 }
 
-// -- Write closing "}"
+//: Write closing "}"
 void vrml_out::epilogue()
 {
   SETUP;
@@ -117,7 +117,7 @@ struct VRML_IO_VertexRememberer {
   int vertex_id(void*);
 };
 
-// -- Return true if it was a new vertex.
+//: Return true if it was a new vertex.
 bool VRML_IO_VertexRememberer::send_vertex(void* v)
 {
   Map::iterator p = vertex_ids.find(v);

@@ -55,7 +55,7 @@ HMatrix2DAffineCompute::compute_p(const PointArray &pts1,
 }
 
 //
-// -- Compute the 2D affine transformation
+//: Compute the 2D affine transformation
 //
 bool
 HMatrix2DAffineCompute::tmp_fun(const PointArray &pts1,

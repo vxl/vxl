@@ -15,12 +15,12 @@
 
 //--------------------------------------------------------------
 //
-// -- Default constructor
+//: Default constructor
 HMatrix3D::HMatrix3D()
 {
 }
 
-// -- Copy constructor
+//: Copy constructor
 HMatrix3D::HMatrix3D(const HMatrix3D& M):
   Base(M)
 {
@@ -28,7 +28,7 @@ HMatrix3D::HMatrix3D(const HMatrix3D& M):
 
 //--------------------------------------------------------------
 //
-// -- Constructor
+//: Constructor
 HMatrix3D::HMatrix3D(const vnl_matrix<double>& M):
   Base(M)
 {
@@ -36,7 +36,7 @@ HMatrix3D::HMatrix3D(const vnl_matrix<double>& M):
 
 //--------------------------------------------------------------
 //
-// -- Load H from ASCII istream.
+//: Load H from ASCII istream.
 HMatrix3D::HMatrix3D(vcl_istream& s)
 {
   load(s);
@@ -45,7 +45,7 @@ HMatrix3D::HMatrix3D(vcl_istream& s)
 
 //--------------------------------------------------------------
 //
-// -- @{ Construct an affine HMatrix3D from 3x3 M and 3x1 m.
+//: @{ Construct an affine HMatrix3D from 3x3 M and 3x1 m.
 // \[H = \pmatrix{ M & m\cr
 //                0 & 1}\]
 // @}
@@ -54,7 +54,7 @@ HMatrix3D::HMatrix3D(const vnl_matrix<double>& M, const vnl_vector<double>& m)
   assert(M.rows() == 3);
   assert(M.columns() == 3);
   assert(m.size() == 3);
-  
+
   for(int r = 0; r < 3; ++r) {
     for(int c = 0; c < 3; ++c)
       (*this)(r, c) = M(r,c);
@@ -67,13 +67,13 @@ HMatrix3D::HMatrix3D(const vnl_matrix<double>& M, const vnl_vector<double>& m)
 
 //--------------------------------------------------------------
 //
-// -- Construct from a 16-element row-storage array of double.
+//: Construct from a 16-element row-storage array of double.
 HMatrix3D::HMatrix3D (const double* t_matrix) :
   Base(t_matrix)
 {
 }
 
-// -- Destructor
+//: Destructor
 HMatrix3D::~HMatrix3D()
 {
 }
@@ -91,11 +91,11 @@ HomgPoint3D HMatrix3D::transform(const HomgPoint3D& x1) const
 
 //-----------------------------------------------------------------------------
 //
-// -- Return the transformed line given by @{$ l_2 = T \ast l_1 $@}
+//: Return the transformed line given by @{$ l_2 = T \ast l_1 $@}
 
 HomgLine3D HMatrix3D::transform(const HomgLine3D& l1) const
 {
-  // transform the two points defining the line and then 
+  // transform the two points defining the line and then
   // create/trurn the transformed line
   HomgPoint3D p1((*this) * l1.get_point_finite().get_vector());
   HomgPoint3D p2((*this) * l1.get_point_infinite().get_vector());
@@ -104,23 +104,23 @@ HomgLine3D HMatrix3D::transform(const HomgLine3D& l1) const
 }
 
 //-----------------------------------------------------------------------------
-// -- Print H on ostream
+//: Print H on ostream
 vcl_ostream& operator<<(vcl_ostream& s, const HMatrix3D& h)
 {
-  if (HomgPrettyPrint::pretty) 
+  if (HomgPrettyPrint::pretty)
     return vnl_matlab_print(s, (vnl_matrix<double> const &/*2.7 needs*/) h.get_matrix(), "");
   else
     return s << h.get_matrix();
 }
 
-// -- Load H from ASCII file.
+//: Load H from ASCII file.
 bool HMatrix3D::load(vcl_istream& s)
 {
   (*this).read_ascii(s);
   return (s.good() || s.eof());
 }
 
-// -- Load H from ASCII file.
+//: Load H from ASCII file.
 vcl_istream& operator>>(vcl_istream& s, HMatrix3D& H)
 {
   H.load(s);
@@ -130,14 +130,14 @@ vcl_istream& operator>>(vcl_istream& s, HMatrix3D& H)
 // @{ DATA ACCESS @}
 
 //-----------------------------------------------------------------------------
-// -- Get matrix element at (row_index, col_index)
+//: Get matrix element at (row_index, col_index)
 double HMatrix3D::get (unsigned int row_index, unsigned int col_index) const
 {
   return (*this). get (row_index, col_index);
 }
-  
+
 //-----------------------------------------------------------------------------
-// -- Fill t_matrix with contents of H
+//: Fill t_matrix with contents of H
 void HMatrix3D::get (double *t_matrix) const
 {
   for (int row_index = 0; row_index < 4; row_index++)
@@ -146,14 +146,14 @@ void HMatrix3D::get (double *t_matrix) const
 }
 
 //-----------------------------------------------------------------------------
-// -- Fill t_matrix with contents of H
+//: Fill t_matrix with contents of H
 void HMatrix3D::get (vnl_matrix<double>* t_matrix) const
 {
   *t_matrix = (*this);
 }
 
 //-----------------------------------------------------------------------------
-// -- Return the inverse of this HMatrix3D.  Computed using vnl_svd<double>.
+//: Return the inverse of this HMatrix3D.  Computed using vnl_svd<double>.
 HMatrix3D HMatrix3D::Inverse () const
 {
   vnl_svd<double> svd((*this));

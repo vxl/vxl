@@ -21,7 +21,7 @@ GXFileVisitor::GXFileVisitor()
   line_width = 0;
 }
 
-// -- Open ".gx" file specified by filename, parse, and
+//: Open ".gx" file specified by filename, parse, and
 // call the various virtuals.
 bool GXFileVisitor::visit(char const* filename)
 {

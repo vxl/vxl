@@ -13,7 +13,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 
-// -- The moviefile constructor takes the given filename, and opens it at a movie
+//: The moviefile constructor takes the given filename, and opens it at a movie
 // file.  The possible values for filename are:
 //   blah.mv                The name of an SGI movie file.
 //   blah.###.jpg           The pattern for an image sequence.
@@ -38,7 +38,7 @@ MovieFile::MovieFile(char const* filename, int start, int step, int end):
   // Attempt to open for reading.  If it exists, assume it's a movie file.
   // not on windows, it will create it if it doesn't exist...
   vcl_ifstream fd(fn.c_str());
-  if (fd.good()) 
+  if (fd.good())
     {
       qt = new SGIMovieFile(fn.c_str());
     }
@@ -82,12 +82,12 @@ int MovieFile::GetNumFrames()
 }
 
 vil_image MovieFile::GetImage(int frame_index)
-{ 
+{
   return qt->GetImage(index(frame_index));
 }
 
 int MovieFile::GetSizeX(int frame_index)
-{ 
+{
   return qt->GetSizeX(index(frame_index));
 }
 
@@ -113,7 +113,7 @@ void MovieFile::GetFrame(int frame_index, vil_memory_image_of<vil_rgb<unsigned c
   frame.resize(sx,sy);
   GetFrame(frame_index, (vil_rgb<unsigned char> *)frame.get_buffer());
 }
-  
+
 void MovieFile::GetFrame(int frame_index, vil_memory_image_of<vil_byte>& frame)
 {
   int sx = GetSizeX(frame_index);
@@ -121,7 +121,7 @@ void MovieFile::GetFrame(int frame_index, vil_memory_image_of<vil_byte>& frame)
   frame.resize(sx,sy);
   GetFrame(frame_index, (vil_byte*)frame.get_buffer());
 }
-  
+
 void MovieFile::GetFrameRGB(int frame_index, vil_byte* frame)
 {
   GetFrame(frame_index, (vil_rgb<unsigned char> *)frame);
@@ -161,9 +161,9 @@ void MovieFile::GetFrame(int frame_index, vil_byte* frame)
     // Grab colour into temp buffer
     if (!tmp_buf_)
       tmp_buf_ = new vil_memory_image_of<vil_rgb<unsigned char> >(sx, sy);
-    else 
+    else
       tmp_buf_->resize(sx, sy);
-    
+
     qt->GetFrame(index(frame_index), (vil_byte*)tmp_buf_->get_buffer());
     int size = sx * sy;
     vil_rgb<unsigned char> * rgb_ptr = (vil_rgb<unsigned char> *)tmp_buf_->get_buffer();

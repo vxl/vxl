@@ -16,7 +16,7 @@
 
 //--------------------------------------------------------------
 //
-// -- Default constructor.
+//: Default constructor.
 
 FMatrixSkew::FMatrixSkew()
 {
@@ -25,7 +25,7 @@ FMatrixSkew::FMatrixSkew()
 
 //--------------------------------------------------------------
 //
-// -- Constructor.
+//: Constructor.
 
 FMatrixSkew::FMatrixSkew(const double* f_matrix)
 {
@@ -35,7 +35,7 @@ FMatrixSkew::FMatrixSkew(const double* f_matrix)
 
 //--------------------------------------------------------------
 //
-// -- Constructor.
+//: Constructor.
 
 FMatrixSkew::FMatrixSkew(const vnl_matrix<double>& f_matrix)
 {
@@ -44,10 +44,9 @@ FMatrixSkew::FMatrixSkew(const vnl_matrix<double>& f_matrix)
 }
 
 
-
 //--------------------------------------------------------------
 //
-// -- Destructor.
+//: Destructor.
 
 FMatrixSkew::~FMatrixSkew()
 {
@@ -56,7 +55,7 @@ FMatrixSkew::~FMatrixSkew()
 
 //--------------------------------------------------------------
 //
-// -- Compute the epipole which is the same in each image.
+//: Compute the epipole which is the same in each image.
 //  Returns true as FMatrixSkew is always Rank 2.
 
 bool
@@ -75,7 +74,7 @@ FMatrixSkew::get_epipoles(HomgPoint2D *epipole1_ptr, HomgPoint2D *epipole2_ptr) 
 
 //-----------------------------------------------------------------------------
 //
-// -- Decompose F to the product of a skew-symmetric matrix and a Rank 3 matrix.
+//: Decompose F to the product of a skew-symmetric matrix and a Rank 3 matrix.
 //    Actually returns current matrix and identity matrix.
 
 void
@@ -89,7 +88,7 @@ FMatrixSkew::decompose_to_skew_rank3(vnl_matrix<double> *skew_matrix_ptr,
 
 //-------------------------------------------------------------------
 //
-// -- Null function as already Rank 2.
+//: Null function as already Rank 2.
 
 inline void
 FMatrixSkew::set_rank2_using_svd (void)
@@ -98,7 +97,7 @@ FMatrixSkew::set_rank2_using_svd (void)
 
 //-----------------------------------------------------------------------------
 //
-// -- Returns current matrix which is already Rank 2.
+//: Returns current matrix which is already Rank 2.
 
 inline FMatrixSkew
 FMatrixSkew::get_rank2_truncated()
@@ -109,7 +108,7 @@ FMatrixSkew::get_rank2_truncated()
 
 //-----------------------------------------------------------------------------
 //
-// -- For a specified pair of matching points, find the nearest (minimum sum
+//: For a specified pair of matching points, find the nearest (minimum sum
 // of squared image distances) match which is in perfect agreement with
 // the epipolar geometry of the F matrix.
 // For skew symmetric matrix a reduced form with only a quadratic equation
@@ -121,7 +120,6 @@ FMatrixSkew::find_nearest_perfect_match(const HomgPoint2D& point1,
                                             HomgPoint2D *perfect_point1_ptr,
                                             HomgPoint2D *perfect_point2_ptr) const
 {
-
      // get the epipole
      HomgPoint2D e1,e2;
      get_epipoles(&e1,&e2);
@@ -176,15 +174,12 @@ FMatrixSkew::find_nearest_perfect_match(const HomgPoint2D& point1,
                              v1+dist11*ctheta1+e1.get_y()/e1.get_w(),1);
      perfect_point2_ptr->set(u2-dist12*stheta1+e2.get_x()/e2.get_w(),
                              v2+dist12*ctheta1+e2.get_y()/e2.get_w(),1);
-
 }
-
-
 
 
 //--------------------------------------------------------------
 //
-// -- Set the fundamental matrix using the two-dimensional
+//: Set the fundamental matrix using the two-dimensional
 // array f_matrix. Only returns true if f_matrix contained a
 // skew matrix, not an approximation to one.
 // The test is against a 0.0 tolerance.
@@ -192,8 +187,7 @@ FMatrixSkew::find_nearest_perfect_match(const HomgPoint2D& point1,
 
 bool FMatrixSkew::set (const double* f_matrix )
 {
-     int
-          row_index, col_index;
+     int row_index, col_index;
 
      // should be set to 0.0
      const double tolerance=0.0;
@@ -211,7 +205,6 @@ bool FMatrixSkew::set (const double* f_matrix )
           return false;
      }
 
-
      for (row_index = 0; row_index < 3; row_index++)
           for (col_index = 0; col_index < 3; col_index++)
           {
@@ -219,7 +212,6 @@ bool FMatrixSkew::set (const double* f_matrix )
                _f_matrix. put (row_index, col_index,v);
                _ft_matrix. put (col_index, row_index,v);
           }
-
 
      // set rank flag true
 
@@ -231,7 +223,7 @@ bool FMatrixSkew::set (const double* f_matrix )
 
 //--------------------------------------------------------------
 //
-// -- Set the fundamental matrix using the vnl_matrix<double>
+//: Set the fundamental matrix using the vnl_matrix<double>
 // f_matrix. Only returns true if f_matrix contained a
 // skew matrix, not an approximation to one.
 // Otherwise returns false and the matrix is not set.
@@ -246,7 +238,7 @@ FMatrixSkew::set (const vnl_matrix<double>& f_matrix )
 
 //----------------------------------------------------------------
 //
-// -- Returns the _rank2_flag which is always true for FMatrixSkew.
+//: Returns the _rank2_flag which is always true for FMatrixSkew.
 
 inline bool
 FMatrixSkew::get_rank2_flag (void) const
@@ -256,7 +248,7 @@ FMatrixSkew::get_rank2_flag (void) const
 
 //----------------------------------------------------------------
 //
-// -- Set the _rank2_flag. Null function as always set true.
+//: Set the _rank2_flag. Null function as always set true.
 
 inline void
 FMatrixSkew::set_rank2_flag (bool)

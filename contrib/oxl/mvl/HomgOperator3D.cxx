@@ -15,7 +15,7 @@
 
 // -----------------------------------------------------------------------------
 
-// -- Given collinear 3D points in random order, sort them.
+//: Given collinear 3D points in random order, sort them.
 void
 HomgOperator3D::sort_points(HomgPoint3D* points, int n)
 {
@@ -76,30 +76,6 @@ HomgOperator3D::sort_points(HomgPoint3D* points, int n)
 
   vcl_sort(sort_table.begin(), sort_table.end());
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   for (int sort_index = 0; sort_index < n; sort_index++) {
     pair_float_int* sort = &sort_table[sort_index];
     tempoints[sort_index] = points[sort->second];
@@ -111,7 +87,7 @@ HomgOperator3D::sort_points(HomgPoint3D* points, int n)
 
 //-----------------------------------------------------------------------------
 //
-// -- Return the angle between the (oriented) lines (in radians)
+//: Return the angle between the (oriented) lines (in radians)
 //
 double
 HomgOperator3D::angle_between_oriented_lines (const HomgLine3D& l1, const HomgLine3D& l2)
@@ -128,7 +104,7 @@ HomgOperator3D::angle_between_oriented_lines (const HomgLine3D& l1, const HomgLi
 
 //-----------------------------------------------------------------------------
 //
-// -- Return the squared distance between the points
+//: Return the squared distance between the points
 //
 double
 HomgOperator3D::distance_squared (const HomgPoint3D& point1, const HomgPoint3D& point2)
@@ -138,7 +114,7 @@ HomgOperator3D::distance_squared (const HomgPoint3D& point1, const HomgPoint3D& 
 
 //-----------------------------------------------------------------------------
 //
-// -- Return the intersection point of the line and plane
+//: Return the intersection point of the line and plane
 //
 HomgPoint3D
 HomgOperator3D::intersect_line_and_plane (const HomgLine3D &line, const HomgPlane3D& plane)
@@ -220,7 +196,7 @@ HomgOperator3D::perp_projection (const HomgLine3D& , const HomgPoint3D& )
 
 //-----------------------------------------------------------------------------
 //
-// -- Return the intersection line of the planes
+//: Return the intersection line of the planes
 //
 HomgLine3D
 HomgOperator3D::planes_to_line (const HomgPlane3D& plane1, const HomgPlane3D& plane2)
@@ -293,7 +269,7 @@ HomgOperator3D::points_to_plane (const vcl_vector<HomgPoint3D>&)
   return HomgPlane3D();
 }
 
-// -- Compute best-fit intersection of planes in a point.
+//: Compute best-fit intersection of planes in a point.
 
 HomgPoint3D
 HomgOperator3D::intersection_point (const HomgPlane3D& plane1, const HomgPlane3D& plane2, const HomgPlane3D& plane3)
@@ -336,7 +312,7 @@ HomgOperator3D::intersection_point (const vcl_vector<HomgPlane3D>& planes)
 }
 
 //-----------------------------------------------------------------------------
-// -- Calculates the crossratio of four collinear points p1, p2, p3 and p4.
+//: Calculates the crossratio of four collinear points p1, p2, p3 and p4.
 // This number is projectively invariant, and it is the coordinate of p4
 // in the reference frame where p2 is the origin (coordinate 0), p3 is
 // the unity (coordinate 1) and p1 is the point at infinity.

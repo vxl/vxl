@@ -13,31 +13,31 @@
 
 //--------------------------------------------------------------
 //
-// -- Default constructor
+//: Default constructor
 HMatrix1D::HMatrix1D()
 {
 }
 
-// -- Copy constructor
+//: Copy constructor
 HMatrix1D::HMatrix1D(const HMatrix1D& M)
   : _t12_matrix(M._t12_matrix)
   , _t21_matrix(M._t21_matrix)
 {
 }
 
-/*
-  // -- Copy constructor
+#if 0
+  //: Copy constructor
   HMatrix1D::HMatrix1D(vcl_istream& s)
   {
   _t12_matrix.read_ascii(s);
   vnl_svd<double> svd(_t12_matrix);
   _t21_matrix = svd.inverse();
   }
-*/
+#endif
 
 //--------------------------------------------------------------
 //
-// -- Constructor
+//: Constructor
 HMatrix1D::HMatrix1D(const vnl_matrix<double>& M)
   : _t12_matrix (M)
   , _t21_matrix(vnl_svd<double>(_t12_matrix).inverse())
@@ -46,7 +46,7 @@ HMatrix1D::HMatrix1D(const vnl_matrix<double>& M)
 
 //--------------------------------------------------------------------------------
 
-HMatrix1D::HMatrix1D(const HMatrix1D&A,const HMatrix1D&B) 
+HMatrix1D::HMatrix1D(const HMatrix1D&A,const HMatrix1D&B)
   : _t12_matrix(A._t12_matrix * B._t12_matrix)
   , _t21_matrix(B._t21_matrix * A._t21_matrix)
 {
@@ -54,7 +54,7 @@ HMatrix1D::HMatrix1D(const HMatrix1D&A,const HMatrix1D&B)
 
 //--------------------------------------------------------------
 //
-// -- Constructor
+//: Constructor
 HMatrix1D::HMatrix1D (const double* H)
   : _t12_matrix (H)
 {
@@ -69,7 +69,7 @@ HMatrix1D::HMatrix1D (vcl_istream &is)
   _t21_matrix = svd.inverse();
 }
 
-// -- Destructor
+//: Destructor
 HMatrix1D::~HMatrix1D()
 {
 }
@@ -78,7 +78,7 @@ HMatrix1D::~HMatrix1D()
 
 //-----------------------------------------------------------------------------
 //
-// -- Return the transformed point given by @{ $x_2 = {\tt H} x_1$ @}
+//: Return the transformed point given by @{ $x_2 = {\tt H} x_1$ @}
 
 HomgPoint1D HMatrix1D::transform_to_plane2(const HomgPoint1D& x1) const
 {
@@ -86,7 +86,7 @@ HomgPoint1D HMatrix1D::transform_to_plane2(const HomgPoint1D& x1) const
 }
 
 //
-// -- Return the transformed point given by @{ $x_1 = {\tt H}^{-1} x_2$ @}
+//: Return the transformed point given by @{ $x_1 = {\tt H}^{-1} x_2$ @}
 
 HomgPoint1D HMatrix1D::transform_to_plane1(const HomgPoint1D& x2) const
 {
@@ -99,7 +99,7 @@ HomgPoint1D HMatrix1D::operator()(const HomgPoint1D& x1) const
 }
 
 //
-// -- Return the transformed point given by @{ $x_1 = {\tt H}^{-1} x_2$ @}
+//: Return the transformed point given by @{ $x_1 = {\tt H}^{-1} x_2$ @}
 
 HomgPoint1D HMatrix1D::preimage(const HomgPoint1D& x2) const
 {
@@ -107,27 +107,27 @@ HomgPoint1D HMatrix1D::preimage(const HomgPoint1D& x2) const
 }
 
 //-----------------------------------------------------------------------------
-// -- Print H on ostream
+//: Print H on ostream
 vcl_ostream& operator<<(vcl_ostream& s, const HMatrix1D& h)
 {
   return s << h.get_matrix();
 }
 
-// -- Read H from istream
+//: Read H from istream
 vcl_istream& operator >> (vcl_istream& s, HMatrix1D& H)
 {
   H = HMatrix1D(s);
   return s;
 }
 
-// -- Read H from istream
+//: Read H from istream
 HMatrix1D HMatrix1D::read(vcl_istream& s)
 {
   return HMatrix1D(s);
 }
 
 
-// -- Read H from file
+//: Read H from file
 HMatrix1D HMatrix1D::read(char const* filename)
 {
   vcl_ifstream f(filename);
@@ -139,13 +139,13 @@ HMatrix1D HMatrix1D::read(char const* filename)
 // @{ DATA ACCESS @}
 
 //-----------------------------------------------------------------------------
-// -- Get matrix element at (row_index, col_index)
+//: Get matrix element at (row_index, col_index)
 double HMatrix1D::get (unsigned int row_index, unsigned int col_index) const
 {
   return _t12_matrix. get (row_index, col_index);
 }
-  
-// -- Fill H with contents of this
+
+//: Fill H with contents of this
 void HMatrix1D::get (double *H) const
 {
   for (int row_index = 0; row_index < 2; row_index++)
@@ -153,13 +153,13 @@ void HMatrix1D::get (double *H) const
       *H++ = _t12_matrix. get (row_index, col_index);
 }
 
-// -- Fill H with contents of this
+//: Fill H with contents of this
 void HMatrix1D::get (vnl_matrix<double>* H) const
 {
   *H = _t12_matrix;
 }
 
-// -- Set to 2x2 row-stored matrix, and cache inverse.
+//: Set to 2x2 row-stored matrix, and cache inverse.
 void HMatrix1D::set (const double *H)
 {
   for (int row_index = 0; row_index < 2; row_index++)
@@ -170,7 +170,7 @@ void HMatrix1D::set (const double *H)
   _t21_matrix = svd.inverse();
 }
 
-// -- Set to given vnl_matrix, and cache inverse
+//: Set to given vnl_matrix, and cache inverse
 void HMatrix1D::set (const vnl_matrix<double>& H)
 {
   _t12_matrix = H;
@@ -179,7 +179,7 @@ void HMatrix1D::set (const vnl_matrix<double>& H)
   _t21_matrix = svd.inverse();
 }
 
-// -- Set to inverse of given vnl_matrix, and cache inverse.
+//: Set to inverse of given vnl_matrix, and cache inverse.
 void HMatrix1D::set_inverse (const vnl_matrix<double>& H)
 {
   _t21_matrix = H;

@@ -29,7 +29,7 @@ vcl_multimap_double_int::iterator vcl_multimap_double_int::insert(double key, in
 void vcl_multimap_double_int::clear() { base::erase(begin(), end()); }
 
 
-// -- Initialize to allow fast lookups of corners in the given set.
+//: Initialize to allow fast lookups of corners in the given set.
 ClosestImagePointFinder::ClosestImagePointFinder(const HomgInterestPointSet& corners):
   px_(corners.size()),
   py_(corners.size())
@@ -74,7 +74,7 @@ void ClosestImagePointFinder::get_all_within_search_region(const vgl_box_2d<doub
   }
 }
 
-// -- Returns number that were within range.
+//: Returns number that were within range.
 int ClosestImagePointFinder::get_closest_within_region(double cx, double cy, double w, double h, int* out, double mindist_sq)
 {
   // setup_checklist_disparity
@@ -118,7 +118,7 @@ int ClosestImagePointFinder::get_closest_within_region(double cx, double cy, dou
   return get_closest_within_region(cx, cy, w, h, out, d*d);
 }
 
-// -- Returns number that were within range.
+//: Returns number that were within range.
 int ClosestImagePointFinder::get_closest_within_distance(double cx, double cy, double r, int* out)
 {
   return get_closest_within_region(cx, cy, r*2, r*2, out, r*r);

@@ -31,24 +31,24 @@ void UtSolve(const vnl_double_3x3& T, vnl_vector<double>& x)
   x[0] = (b[0] - T(0,1)*x[1] - T(0,2)*x[2])/T(0,0);
 }
 
-// -- Decompose P
+//: Decompose P
 void PMatrixDecompCR::compute(const vnl_matrix<double>& p, bool scale_C)
 {
   // P = [H t]
-  // 
+  //
   vnl_double_3x3 PermHtPerm;
 
   for(int i = 0; i < 3; ++i)
     for(int j = 0; j < 3; ++j)
       PermHtPerm(i,j) = p(2-j,2-i);
-    
+
   vnl_qr<double> qr(PermHtPerm);
-    
+
   vnl_double_3x3 Q = qr.Q();
   vnl_double_3x3 R = qr.R();
 
   // Ensure 1st and last diagonal component of C are positive
-  // Must insert a det(1) mx between, i.e. two -1s 
+  // Must insert a det(1) mx between, i.e. two -1s
   bool r0pos = R(0,0) > 0;
   bool r2pos = R(2,2) > 0;
   typedef double d3[3];
@@ -60,7 +60,7 @@ void PMatrixDecompCR::compute(const vnl_matrix<double>& p, bool scale_C)
   };
   int d = r0pos * 2 + r2pos;
   double* diag = &diags[d][0];
-  
+
   for(int i = 0; i < 3; ++i)
     for(int j = 0; j < 3; ++j) {
       C(j,i)  = diag[2-i] * R(2-i,2-j);
@@ -74,9 +74,9 @@ void PMatrixDecompCR::compute(const vnl_matrix<double>& p, bool scale_C)
   UtSolve(C, t);
   for(int i = 0; i < 3; ++i)
     Po(i,3) = t[i];
-  
-  if (((C * Po - p).fro_norm() > 1e-4) || 
-      (C(0,0) < 0) || 
+
+  if (((C * Po - p).fro_norm() > 1e-4) ||
+      (C(0,0) < 0) ||
       (C(2,2) < 0)) {
     vcl_cerr << "PMatrixDecompCR: AIEEE!\n";
     MATLABPRINT(p);

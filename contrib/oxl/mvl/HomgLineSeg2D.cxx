@@ -11,7 +11,7 @@
 
 //--------------------------------------------------------------
 //
-// -- Constructor forming linesegment from start and end points
+//: Constructor forming linesegment from start and end points
 HomgLineSeg2D::HomgLineSeg2D (const HomgPoint2D& point1,
                               const HomgPoint2D& point2):
   HomgLine2D(HomgOperator2D::join (point1, point2)),
@@ -22,7 +22,7 @@ HomgLineSeg2D::HomgLineSeg2D (const HomgPoint2D& point1,
 
 //--------------------------------------------------------------
 //
-// -- Constructor forming linesegment (x0,y0) -> (x1,y1)
+//: Constructor forming linesegment (x0,y0) -> (x1,y1)
 HomgLineSeg2D::HomgLineSeg2D (double x0, double y0, double x1, double y1):
   HomgLine2D(y0 - y1, x1 - x0, x0 * y1 - x1 * y0),
   _point1(HomgPoint2D(x0, y0, 1.0)),
@@ -32,7 +32,7 @@ HomgLineSeg2D::HomgLineSeg2D (double x0, double y0, double x1, double y1):
 
 //--------------------------------------------------------------
 //
-// -- Set the line segment given two points
+//: Set the line segment given two points
 void HomgLineSeg2D::set (const HomgPoint2D& point1,
                          const HomgPoint2D& point2)
 {
@@ -43,7 +43,7 @@ void HomgLineSeg2D::set (const HomgPoint2D& point1,
 
 //-----------------------------------------------------------------------------
 //
-// -- print to ostream
+//: print to ostream
 vcl_ostream& operator<<(vcl_ostream& s, const HomgLineSeg2D& p)
 {
   return s <<
@@ -56,7 +56,7 @@ vcl_ostream& operator<<(vcl_ostream& s, const HomgLineSeg2D& p)
 #ifdef VXL_UNDEF
 //-----------------------------------------------------------------------------
 //
-// -- Convert the segment to an ImplicitLine, allocated using new.
+//: Convert the segment to an ImplicitLine, allocated using new.
 // Return 0 if either endpoint is at infinity.
 ImplicitLine* HomgLineSeg2D::get_implicitline() const
 {
@@ -76,7 +76,7 @@ ImplicitLine* HomgLineSeg2D::get_implicitline() const
 #include <mvl/HomgLineSeg2D.h>
 #include <vnl/vnl_double_2.h>
 
-// -- Return distance to nearest point contained in lineseg
+//: Return distance to nearest point contained in lineseg
 double HomgLineSeg2D::picking_distance(const HomgPoint2D& hp) const
 {
   const HomgLineSeg2D& l = *this;

@@ -16,21 +16,21 @@
 
 //--------------------------------------------------------------
 //
-// -- Constructor
+//: Constructor
 FMatrixAffine::FMatrixAffine ()
 {
 }
 
 //--------------------------------------------------------------
 //
-// -- Destructor
+//: Destructor
 FMatrixAffine::~FMatrixAffine()
 {
 }
 
 //--------------------------------------------------------------
-// 
-// -- Set the fundamental matrix using the two-dimensional (C-storage)
+//
+//: Set the fundamental matrix using the two-dimensional (C-storage)
 // array f_matrix. Only returns true if f_matrix contained a Fundamental
 // matrix in the affine form, and not an approximation to one.
 // Otherwise returns false and the matrix is not set.

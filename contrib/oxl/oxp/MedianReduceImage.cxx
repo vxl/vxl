@@ -9,7 +9,7 @@
 
 typedef unsigned char byte;
 
-// -- Make an image which is a SCALE * SCALE subsampling of \argfont{in},
+//: Make an image which is a SCALE * SCALE subsampling of \argfont{in},
 // where each output pixel O(x,y) is the median of values in the SCALE * SCALE
 // window with top left corner at I(x*SCALE, y*SCALE).
 MedianReduceImage::MedianReduceImage(vil_memory_image_of<byte> const& in, int SCALE):

@@ -21,7 +21,7 @@ vcl_multimap_uint_uint::iterator vcl_multimap_uint_uint::insert(unsigned key, un
 
 void vcl_multimap_uint_uint::clear() { base::erase(begin(), end()); }
 
-// -- Default constructor
+//: Default constructor
 PairMatchMulti::PairMatchMulti()
 {
   _scores = 0;
@@ -34,14 +34,14 @@ PairMatchMulti::PairMatchMulti(vcl_istream& f)
   f >> *this;
 }
 
-// -- Copy ctor
+//: Copy ctor
 PairMatchMulti::PairMatchMulti(const PairMatchMulti& that)
 {
   _scores = 0;
   operator=(that);
 }
 
-// -- Assignment
+//: Assignment
 PairMatchMulti& PairMatchMulti::operator=(const PairMatchMulti& that)
 {
   _matches12 = that._matches12;
@@ -51,7 +51,7 @@ PairMatchMulti& PairMatchMulti::operator=(const PairMatchMulti& that)
   return *this;
 }
 
-// -- Destructor
+//: Destructor
 PairMatchMulti::~PairMatchMulti()
 {
   delete _scores;
@@ -194,7 +194,7 @@ bool PairMatchMulti::is_superset(PairMatchSet& matches)
   }
 }
 
-// -- load from ascii file
+//: load from ascii file
 bool PairMatchMulti::load(char const* filename)
 {
   vcl_ifstream f(filename);

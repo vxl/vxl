@@ -20,7 +20,7 @@ TripleMatchSetCorner::TripleMatchSetCorner():
 {
 }
 
-// -- Construct a TripleMatchSetCorner that is associated with the given HomgInterestPointSets.
+//: Construct a TripleMatchSetCorner that is associated with the given HomgInterestPointSets.
 TripleMatchSetCorner::TripleMatchSetCorner(HomgInterestPointSet const* lines1,
                                            HomgInterestPointSet const* lines2,
                                            HomgInterestPointSet const* lines3):
@@ -29,7 +29,7 @@ TripleMatchSetCorner::TripleMatchSetCorner(HomgInterestPointSet const* lines1,
 {
 }
 
-// -- Construct a TripleMatchSetCorner from two pairwise match sets.
+//: Construct a TripleMatchSetCorner from two pairwise match sets.
 TripleMatchSetCorner::TripleMatchSetCorner(const PairMatchSetCorner& match12,
                                            const PairMatchSetCorner& match23):
   TripleMatchSet(new PairMatchSetCorner(match12.get_corners1(), match12.get_corners2()),
@@ -39,7 +39,7 @@ TripleMatchSetCorner::TripleMatchSetCorner(const PairMatchSetCorner& match12,
   set_from_pairwise_matches(match12, match23);
 }
 
-// -- Copy ctor
+//: Copy ctor
 TripleMatchSetCorner::TripleMatchSetCorner(const TripleMatchSetCorner& that):
   TripleMatchSet(new PairMatchSetCorner(that.get_corners1(), that.get_corners2()),
                  new PairMatchSetCorner(that.get_corners2(), that.get_corners3()))
@@ -48,8 +48,7 @@ TripleMatchSetCorner::TripleMatchSetCorner(const TripleMatchSetCorner& that):
 }
 
 
-
-// -- Copy the inliers from the TripleMatchSetCorner into the given arrays
+//: Copy the inliers from the TripleMatchSetCorner into the given arrays
 // of corners and corner indices.
 void TripleMatchSetCorner::extract_matches(vcl_vector<HomgPoint2D> &points1, vcl_vector<int> &indices1,
                                            vcl_vector<HomgPoint2D> &points2, vcl_vector<int> &indices2,
@@ -79,7 +78,7 @@ void TripleMatchSetCorner::extract_matches(vcl_vector<HomgPoint2D> &points1, vcl
   }
 }
 
-// -- Copy the inliers from the TripleMatchSetCorner into the given arrays.
+//: Copy the inliers from the TripleMatchSetCorner into the given arrays.
 void TripleMatchSetCorner::extract_matches(vcl_vector <HomgPoint2D>& points1,
                                            vcl_vector <HomgPoint2D>& points2,
                                            vcl_vector <HomgPoint2D>& points3) const

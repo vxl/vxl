@@ -7,7 +7,7 @@
 #include <mvl/FMPlanarComputeNonLinear.h>
 #include <mvl/FMPlanarNonLinFun.h>
 
-// -- Constructor.  The parameter outlier_threshold is not currently used, but
+//: Constructor.  The parameter outlier_threshold is not currently used, but
 // may be in future if this is converted to a Huber function.
 FMPlanarComputeNonLinear::FMPlanarComputeNonLinear(const ImageMetric* image_metric1,
                                                    const ImageMetric* image_metric2,
@@ -19,14 +19,14 @@ FMPlanarComputeNonLinear::FMPlanarComputeNonLinear(const ImageMetric* image_metr
   _outlier_distance_squared = outlier_threshold * outlier_threshold;
 }
 
-// -- Compute from given PairMatchSetCorner
+//: Compute from given PairMatchSetCorner
 bool FMPlanarComputeNonLinear::compute_planar(PairMatchSetCorner& matches, FMatrixPlanar* F)
 {
   PairSetCorner inliers(matches);
   return compute_planar(inliers.points1, inliers.points2, F);
 }
 
-// -- Compute from given pair of vcl_vector<HomgPoint2D>
+//: Compute from given pair of vcl_vector<HomgPoint2D>
 bool FMPlanarComputeNonLinear::compute_planar(vcl_vector<HomgPoint2D>& points1,
                                               vcl_vector<HomgPoint2D>& points2,
                                               FMatrixPlanar* F)

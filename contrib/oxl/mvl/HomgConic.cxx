@@ -10,19 +10,19 @@
 #include <mvl/HomgPoint2D.h>
 #include <mvl/HomgLine2D.h>
 
-// -- @{ Construct from implicit parameters. @}
+//: @{ Construct from implicit parameters. @}
 HomgConic::HomgConic(double Axx, double Axy, double Ayy, double Ax, double Ay, double Ao)
 {
   set(Axx, Axy, Ayy, Ax, Ay, Ao);
 }
 
-// -- @{ Construct from SpatialObjects conic. Not implemented. @}
+//: @{ Construct from SpatialObjects conic. Not implemented. @}
 HomgConic::HomgConic(const Conic&)
 {
   assert(!"I am undone!");
 }
 
-// -- @{ Set from implicit parameters. @}
+//: @{ Set from implicit parameters. @}
 void HomgConic::set(double Axx, double Axy, double Ayy, double Ax, double Ay, double Ao)
 {
   _matrix(0,0) = Axx;   _matrix(0,1) = Axy/2;    _matrix(0,2) = Ax/2;
@@ -30,7 +30,7 @@ void HomgConic::set(double Axx, double Axy, double Ayy, double Ax, double Ay, do
   _matrix(2,0) = Ax /2; _matrix(2,1) = Ay /2;    _matrix(2,2) = Ao;
 }
 
-// -- Extract the implict parameters from the matrix.
+//: Extract the implict parameters from the matrix.
 void HomgConic::get(double& A, double& B, double& C, double& D, double& E, double& F)
 {
   A = _matrix(0,0);
@@ -41,16 +41,16 @@ void HomgConic::get(double& A, double& B, double& C, double& D, double& E, doubl
   F = _matrix(2,2);
 }
 
-// -- Set from matrix M.  M is assumed to be symmetric, although this is not
+//: Set from matrix M.  M is assumed to be symmetric, although this is not
 // enforced.
 void HomgConic::set(const vnl_matrix<double>& M)
 {
   _matrix = M;
 }
 
-// -- Copy parameter matrix into matrix M.
+//: Copy parameter matrix into matrix M.
 void HomgConic::get(vnl_matrix<double>& M)
-{ 
+{
   M = _matrix;
 }
 
@@ -58,13 +58,13 @@ void HomgConic::get(vnl_matrix<double>& M)
 
 // @{ OPERATIONS @}
 
-// -- @{ Return algebraic distance from point to conic $D_{\cal A} = q(p)$. @}
+//: @{ Return algebraic distance from point to conic $D_{\cal A} = q(p)$. @}
 double HomgConic::F(const HomgPoint2D& p)
 {
   double x = p.get_x();
   double y = p.get_y();
   double w = p.get_w();
-  
+
   double A = _matrix(0,0);
   double B = _matrix(1,0) + _matrix(0,1);
   double C = _matrix(1,1);
@@ -75,20 +75,20 @@ double HomgConic::F(const HomgPoint2D& p)
   return A*x*x + B*x*y + C*y*y + D*x*w + E*y*w + F*w*w;
 }
 
-// -- @{ Return polar as homogeneous line $\matx M \vect p$.
+//: @{ Return polar as homogeneous line $\matx M \vect p$.
 // If $\vect p$ is on the conic, this is the tangent at $\vect p$. @}
 HomgLine2D HomgConic::polar(const HomgPoint2D& p)
 {
   return HomgLine2D(_matrix * p.get_vector());
 }
 
-// -- @{ Return approximate geometric distance $q(\vect p) / \| \nabla_x q(\vect p) \| $ @}
+//: @{ Return approximate geometric distance $q(\vect p) / \| \nabla_x q(\vect p) \| $ @}
 double HomgConic::sampson_distance(const HomgPoint2D& p)
 {
   return F(p) / (4*(_matrix * p.get_vector()).magnitude());
 }
 
-// -- Return geometric distance of point to conic.
+//: Return geometric distance of point to conic.
 double HomgConic::distance(const HomgPoint2D& p)
 {
   double d;
@@ -96,7 +96,7 @@ double HomgConic::distance(const HomgPoint2D& p)
   return d;
 }
 
-// -- Return closest point on conic.
+//: Return closest point on conic.
 HomgPoint2D HomgConic::closest_point(const HomgPoint2D& p)
 {
   HomgPoint2D d;
@@ -106,9 +106,9 @@ HomgPoint2D HomgConic::closest_point(const HomgPoint2D& p)
 
 // @{ HELPER FUNCTIONS @}
 
-// -- @{Return closest point {\bf x}, distance to {\bf x} and gradient $\nabla q_x$, at {\bf x}.
+//: @{Return closest point {\bf x}, distance to {\bf x} and gradient $\nabla q_x$, at {\bf x}.
 // If any of the output pointers are null, do not compute the corresponding quantity.
-// @} 
+// @}
 void HomgConic::closest_point(const HomgPoint2D& p, HomgPoint2D* pout, double *dout, vnl_vector<double>* gout)
 {
   // *** Canonicalize to Axx x^2 + Ayy y^2 = 1
@@ -132,7 +132,7 @@ void HomgConic::closest_point(const HomgPoint2D& p, HomgPoint2D* pout, double *d
   double Avv = Axx * sin2 + Ayy * cos2 - Axy * sint * cost;
   double Au =   Ax * cost + Ay * sint;
   double Av = - Ax * sint + Ay * cost;
-    
+
   // calculate translation
   double tu = Au/(2*Auu);
   double tv = Av/(2*Avv);
@@ -141,24 +141,24 @@ void HomgConic::closest_point(const HomgPoint2D& p, HomgPoint2D* pout, double *d
   // rotate and translate start point
   double x0 = p.get_x() / p.get_w();
   double y0 = p.get_y() / p.get_w();
-  
+
   double u0 = cost * x0 + sint * y0 + tu;
   double v0 =-sint * x0 + cost * y0 + tv;
-    
+
   // scale to C == -1
   Auu = -Auu / C;
   Avv = -Avv / C;
-  
+
   // temps
   double u02 = u0*u0;   double v02 = v0*v0;
   double ai = 1 / Auu;  double bi = 1 / Avv;
-    
+
   // set up quartic polynomial
   vnl_vector<double> poly(5);
   poly[0] = 1;
-  poly[1] = -2.0*(ai+bi); 
-  poly[2] = -(u02*ai+v02*bi-ai*ai-4.0*ai*bi-bi*bi); 
-  poly[3] = 2.0*(u02+v02-ai-bi)*ai*bi; 
+  poly[1] = -2.0*(ai+bi);
+  poly[2] = -(u02*ai+v02*bi-ai*ai-4.0*ai*bi-bi*bi);
+  poly[3] = 2.0*(u02+v02-ai-bi)*ai*bi;
   poly[4] = -(u02*bi+v02*ai-ai*bi)*ai*bi;
   vnl_rpoly_roots roots(poly);
 
@@ -169,13 +169,13 @@ void HomgConic::closest_point(const HomgPoint2D& p, HomgPoint2D* pout, double *d
       if (vnl_math_abs(roots.imag(i)) < 1e-10)
         ans[nsols++] = roots.real(i);
   }
-  
+
   // Find closest.  length = sqrt(lambda|G|)
   double minu=0,minv=0; // needs some initialisation, to make the compiler happy - PVR
   double distance = 1e20; // large enough to be sure it will be lowered
   for(int k = 0; k < nsols; k++) {
     double lambda = ans[k];
-    
+
     // Calculate point and gradient
     double u = u0 / (1 - lambda*Auu);
     double v = v0 / (1 - lambda*Avv);
@@ -247,7 +247,7 @@ int HomgConic::closest_points(const HomgPoint2D& p, HomgPoint2D pout[4])
   double Avv = Axx * sin2 + Ayy * cos2 - Axy * sint * cost;
   double Au =   Ax * cost + Ay * sint;
   double Av = - Ax * sint + Ay * cost;
-    
+
   // calculate translation
   double tu = Au/(2*Auu);
   double tv = Av/(2*Avv);
@@ -256,24 +256,24 @@ int HomgConic::closest_points(const HomgPoint2D& p, HomgPoint2D pout[4])
   // rotate and translate start point
   double x0 = p.get_x() / p.get_w();
   double y0 = p.get_y() / p.get_w();
-  
+
   double u0 = cost * x0 + sint * y0 + tu;
   double v0 =-sint * x0 + cost * y0 + tv;
-    
+
   // scale to C == -1
   Auu = -Auu / C;
   Avv = -Avv / C;
-  
+
   // temps
   double u02 = u0*u0;   double v02 = v0*v0;
   double ai = 1 / Auu;  double bi = 1 / Avv;
-    
+
   // set up quartic polynomial
   vnl_vector<double> poly(5);
   poly[0] = 1;
-  poly[1] = -2.0*(ai+bi); 
-  poly[2] = -(u02*ai+v02*bi-ai*ai-4.0*ai*bi-bi*bi); 
-  poly[3] = 2.0*(u02+v02-ai-bi)*ai*bi; 
+  poly[1] = -2.0*(ai+bi);
+  poly[2] = -(u02*ai+v02*bi-ai*ai-4.0*ai*bi-bi*bi);
+  poly[3] = 2.0*(u02+v02-ai-bi)*ai*bi;
   poly[4] = -(u02*bi+v02*ai-ai*bi)*ai*bi;
   vnl_rpoly_roots roots(poly);
 
@@ -284,11 +284,11 @@ int HomgConic::closest_points(const HomgPoint2D& p, HomgPoint2D pout[4])
       if (vnl_math_abs(roots.imag(i)) < 1e-10)
         ans[nsols++] = roots.real(i);
   }
-  
+
   // Find closest.  length = sqrt(lambda|G|)
   for(int k = 0; k < nsols; k++) {
     double lambda = ans[k];
-    
+
     // Calculate point and gradient
     double u = u0 / (1 - lambda*Auu);
     double v = v0 / (1 - lambda*Avv);
@@ -296,7 +296,7 @@ int HomgConic::closest_points(const HomgPoint2D& p, HomgPoint2D pout[4])
     // Translate back
     u = u - tu;
     v = v - tv;
-    
+
     // Rotate point and gradient back onto conic
     double x = cost * u - sint * v;
     double y = sint * u + cost * v;

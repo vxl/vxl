@@ -8,7 +8,7 @@
 
 //---------------------------------------------------------------
 //
-// -- Construct an FMatrixCompute which points to the given list
+//: Construct an FMatrixCompute which points to the given list
 // of 2D point matches.  The list is owned by the caller, and must
 // remain in scope at least as long as the FMatrixCompute.
 //
@@ -18,7 +18,7 @@ FMatrixCompute::FMatrixCompute ()
 
 //---------------------------------------------------------------
 //
-// -- Destructor.
+//: Destructor.
 //
 FMatrixCompute::~FMatrixCompute()
 {
@@ -27,7 +27,7 @@ FMatrixCompute::~FMatrixCompute()
 // @{COMPUTATIONS@}
 
 //-----------------------------------------------------------------------------
-// -- Compute fundamental matrix using given matchlist.  This is implemented in terms
+//: Compute fundamental matrix using given matchlist.  This is implemented in terms
 // of compute(FMatrix*).  This circular dependency means that only one of these two
 // functions need be implemented for both to work.
 //
@@ -40,7 +40,7 @@ bool FMatrixCompute::compute (PairMatchSetCorner& matches, FMatrix* F_out)
   return compute(inliers.points1, inliers.points2, F_out);
 }
 
-// -- Compute fundamental matrix using given matchlist and return an
+//: Compute fundamental matrix using given matchlist and return an
 // FMatrix object.  This is implemented in terms of compute(MatchList*, FMatrix*)
 
 FMatrix FMatrixCompute::compute (PairMatchSetCorner& matches)

@@ -22,7 +22,7 @@
 #include <mvl/FMatrix.h>
 #include <mvl/HomgOperator2D.h>
 
-// -- Construct an FManifoldProject object which will
+//: Construct an FManifoldProject object which will
 // use the given F to correct point pairs.
 FManifoldProject::FManifoldProject(const FMatrix& Fobj):
   _coeffs(7)
@@ -30,14 +30,14 @@ FManifoldProject::FManifoldProject(const FMatrix& Fobj):
   set_F(Fobj);
 }
 
-// -- Construct an FManifoldProject object with the intention
+//: Construct an FManifoldProject object with the intention
 // of later setting its F.
 FManifoldProject::FManifoldProject():
   _coeffs(7)
 {
 }
 
-// -- Use the given F to correct point pairs.
+//: Use the given F to correct point pairs.
 void FManifoldProject::set_F(const FMatrix& Fobj)
 {
   F_ = Fobj.get_matrix();
@@ -111,7 +111,7 @@ void FManifoldProject::set_F(const FMatrix& Fobj)
   }
 }
 
-// -- Find the points out1, out2 which minimize d(out1,p1) + d(out2,p2) subject to
+//: Find the points out1, out2 which minimize d(out1,p1) + d(out2,p2) subject to
 // out1'*F*out2 = 0.  Returns the minimum distance squared: ||x[1..4] - p[1..4]||^2.
 double FManifoldProject::correct(const HomgPoint2D& p1, const HomgPoint2D& p2, HomgPoint2D* out1, HomgPoint2D* out2) const
 {

@@ -30,7 +30,7 @@
 
 //--------------------------------------------------------------
 //
-// -- Constructor. Set up a canonical P matrix.
+//: Constructor. Set up a canonical P matrix.
 //
 
 PMatrix::PMatrix ():
@@ -46,7 +46,7 @@ PMatrix::PMatrix ():
 
 //--------------------------------------------------------------
 //
-// -- Construct by loading from istream
+//: Construct by loading from istream
 // <pre>
 //   PMatrix P(cin);
 // </pre>
@@ -58,7 +58,7 @@ PMatrix::PMatrix (vcl_istream& i) :
 
 //--------------------------------------------------------------
 //
-// -- Construct from 3x4 matrix
+//: Construct from 3x4 matrix
 
 PMatrix::PMatrix (const vnl_matrix<double>& pmatrix) :
   _p_matrix (pmatrix),
@@ -68,7 +68,7 @@ PMatrix::PMatrix (const vnl_matrix<double>& pmatrix) :
 
 //--------------------------------------------------------------
 //
-// -- Construct from 3x3 matrix A and vector a. P = [A a].
+//: Construct from 3x3 matrix A and vector a. P = [A a].
 
 PMatrix::PMatrix (const vnl_matrix<double>& A, const vnl_vector<double>& a) :
   _svd(0)
@@ -78,7 +78,7 @@ PMatrix::PMatrix (const vnl_matrix<double>& A, const vnl_vector<double>& a) :
 
 //--------------------------------------------------------------
 //
-// -- Construct from row-stored array of 12 doubles
+//: Construct from row-stored array of 12 doubles
 
 PMatrix::PMatrix (const double *c_matrix) :
   _p_matrix (c_matrix),
@@ -116,7 +116,7 @@ PMatrix::~PMatrix()
 
 //-----------------------------------------------------------------------------
 //
-// -- Return the image point which is the projection of the specified 3D point X
+//: Return the image point which is the projection of the specified 3D point X
 HomgPoint2D PMatrix::project (const HomgPoint3D& X) const
 {
   vnl_double_3 x = _p_matrix * X.get_vector();
@@ -126,7 +126,7 @@ HomgPoint2D PMatrix::project (const HomgPoint3D& X) const
 
 //-----------------------------------------------------------------------------
 //
-// -- Return the image line which is the projection of the specified 3D line L
+//: Return the image line which is the projection of the specified 3D line L
 HomgLine2D PMatrix::project (const HomgLine3D& L) const
 {
   return HomgOperator2D::join(project(L.get_point_finite()), project(L.get_point_infinite()));
@@ -134,7 +134,7 @@ HomgLine2D PMatrix::project (const HomgLine3D& L) const
 
 //-----------------------------------------------------------------------------
 //
-// -- Return the image linesegment which is the projection of the specified 3D linesegment L
+//: Return the image linesegment which is the projection of the specified 3D linesegment L
 HomgLineSeg2D PMatrix::project (const HomgLineSeg3D& L) const
 {
   return HomgLineSeg2D(project(L.get_point1()), project(L.get_point2()));
@@ -142,7 +142,7 @@ HomgLineSeg2D PMatrix::project (const HomgLineSeg3D& L) const
 
 //-----------------------------------------------------------------------------
 //
-// -- @{ Return the 3D point $\vect X$ which is $\vect X = \matx P^+ \vect x $.
+//: @{ Return the 3D point $\vect X$ which is $\vect X = \matx P^+ \vect x $.
 // Equivalently, the 3D point of smallest norm such that $\matx P \vect X = \vect x$.
 // @} Uses svd().
 
@@ -153,7 +153,7 @@ HomgPoint3D PMatrix::backproject_pseudoinverse (const HomgPoint2D& x) const
 
 //-----------------------------------------------------------------------------
 //
-// -- Return the 3D line which is the backprojection of the specified image point, x.
+//: Return the 3D line which is the backprojection of the specified image point, x.
 // Uses svd().
 
 HomgLine3D PMatrix::backproject (const HomgPoint2D& x) const
@@ -163,7 +163,7 @@ HomgLine3D PMatrix::backproject (const HomgPoint2D& x) const
 
 //-----------------------------------------------------------------------------
 //
-// -- Return the 3D plane which is the backprojection of the specified
+//: Return the 3D plane which is the backprojection of the specified
 // line in the image, l
 HomgPlane3D PMatrix::backproject (const HomgLine2D& l) const
 {
@@ -171,7 +171,7 @@ HomgPlane3D PMatrix::backproject (const HomgLine2D& l) const
 }
 
 //-----------------------------------------------------------------------------
-// -- Print p on ostream
+//: Print p on ostream
 vcl_ostream& operator<<(vcl_ostream& s, const PMatrix& p)
 {
   if (HomgPrettyPrint::pretty)
@@ -181,7 +181,7 @@ vcl_ostream& operator<<(vcl_ostream& s, const PMatrix& p)
 }
 
 //-----------------------------------------------------------------------------
-// -- Load p from ascii istream
+//: Load p from ascii istream
 vcl_istream& operator>>(vcl_istream& i, PMatrix& p)
 {
   p.read_ascii(i);
@@ -190,7 +190,7 @@ vcl_istream& operator>>(vcl_istream& i, PMatrix& p)
 
 static bool ok(vcl_istream& f) { return f.good() || f.eof(); }
 
-// -- Load from file
+//: Load from file
 // <pre>
 // P.read_ascii("file.P");
 // </pre>
@@ -207,7 +207,7 @@ bool PMatrix::read_ascii(vcl_istream& f)
   return true;
 }
 
-// -- Load from file.  Static method, so you can say
+//: Load from file.  Static method, so you can say
 // <pre>
 // PMatrix P = PMatrix::read("file.P");
 // </pre>
@@ -226,7 +226,7 @@ PMatrix PMatrix::read(const char* filename)
   return P;
 }
 
-// -- Load from istream
+//: Load from istream
 PMatrix PMatrix::read(vcl_istream& s)
 {
   PMatrix P;
@@ -238,7 +238,7 @@ PMatrix PMatrix::read(vcl_istream& s)
 
 //-----------------------------------------------------------------------------
 //
-// -- Compute the svd of this P and cache it, so that future operations that
+//: Compute the svd of this P and cache it, so that future operations that
 // require it need not recompute it.
 vnl_svd<double>* PMatrix::svd() const
 {
@@ -251,7 +251,7 @@ vnl_svd<double>* PMatrix::svd() const
   return _svd;
 }
 
-// -- Discredit the cached svd.  This is necessary only in order to recover
+//: Discredit the cached svd.  This is necessary only in order to recover
 // the space used by it if the PMatrix is not being deleted.
 void PMatrix::clear_svd()
 {
@@ -263,7 +263,7 @@ void PMatrix::clear_svd()
 
 //-----------------------------------------------------------------------------
 //
-// -- Return the 3D point representing the focal point of the camera.
+//: Return the 3D point representing the focal point of the camera.
 // Uses svd().
 HomgPoint3D PMatrix::get_focal_point() const
 {
@@ -286,7 +286,7 @@ HomgPoint3D PMatrix::get_focal_point() const
                      nullspace(3,0));
 }
 
-// -- Return the HMatrix3D s.t. P * H = [I 0];
+//: Return the HMatrix3D s.t. P * H = [I 0];
 // If P = [A a], then H = [inv(A) -inv(A)*a; 0 0 0 1];
 HMatrix3D PMatrix::get_canonical_H() const
 {
@@ -300,7 +300,7 @@ HMatrix3D PMatrix::get_canonical_H() const
   return HMatrix3D(svd.inverse(), -svd.solve(p.a));
 }
 
-// -- Return true iff P is [I 0]. Equality is assumed if the
+//: Return true iff P is [I 0]. Equality is assumed if the
 // max abs diff is less than tol.
 bool PMatrix::is_canonical(double tol) const
 {
@@ -313,7 +313,7 @@ bool PMatrix::is_canonical(double tol) const
   return true;
 }
 
-// -- Postmultiply PMatrix by HMatrix3D
+//: Postmultiply PMatrix by HMatrix3D
 PMatrix operator*(const PMatrix& P, const HMatrix3D& H)
 {
   return PMatrix(P.get_matrix() * H.get_matrix());
@@ -323,7 +323,7 @@ PMatrix operator*(const PMatrix& P, const HMatrix3D& H)
 
 //-----------------------------------------------------------------------------
 //
-// -- Return the element of the matrix at the specified indices
+//: Return the element of the matrix at the specified indices
 inline double
 PMatrix::get (unsigned int row_index, unsigned int col_index) const
 {
@@ -332,7 +332,7 @@ PMatrix::get (unsigned int row_index, unsigned int col_index) const
 
 //-----------------------------------------------------------------------------
 //
-// -- Return the 3x4 projection matrix in the array, p_matrix
+//: Return the 3x4 projection matrix in the array, p_matrix
 void
 PMatrix::get (double* c_matrix) const
 {
@@ -343,7 +343,7 @@ PMatrix::get (double* c_matrix) const
 
 //----------------------------------------------------------------
 //
-// -- Return the 3x4 projection matrix in the vnl_matrix<double>,
+//: Return the 3x4 projection matrix in the vnl_matrix<double>,
 // p_matrix
 void
 PMatrix::get (vnl_matrix<double>* p_matrix) const
@@ -353,7 +353,7 @@ PMatrix::get (vnl_matrix<double>* p_matrix) const
 
 //----------------------------------------------------------------
 //
-// -- Return the 3x3 matrix and 3x1 column vector of P = [A a].
+//: Return the 3x3 matrix and 3x1 column vector of P = [A a].
 void
 PMatrix::get (vnl_matrix<double>* A, vnl_vector<double>* a) const
 {
@@ -376,7 +376,7 @@ PMatrix::get (vnl_matrix<double>* A, vnl_vector<double>* a) const
 
 //----------------------------------------------------------------
 //
-// -- Return the rows of P = [a b c]'.
+//: Return the rows of P = [a b c]'.
 void
 PMatrix::get (vnl_vector<double>* a, vnl_vector<double>* b, vnl_vector<double>* c) const
 {
@@ -398,7 +398,7 @@ PMatrix::get (vnl_vector<double>* a, vnl_vector<double>* b, vnl_vector<double>* 
 
 //-----------------------------------------------------------------------------
 //
-// -- Set the 3x4 projective matrix with the matrix in the array, p_matrix
+//: Set the 3x4 projective matrix with the matrix in the array, p_matrix
 void
 PMatrix::set (const double p_matrix [3][4])
 {
@@ -410,7 +410,7 @@ PMatrix::set (const double p_matrix [3][4])
 
 //-----------------------------------------------------------------------------
 //
-// -- Set the 3x4 projective matrix with the matrix in the array, p_matrix
+//: Set the 3x4 projective matrix with the matrix in the array, p_matrix
 void
 PMatrix::set (const double *p)
 {
@@ -423,7 +423,7 @@ PMatrix::set (const double *p)
 
 //--------------------------------------------------------------
 //
-// -- Set the fundamental matrix using the vnl_matrix<double> p_matrix.
+//: Set the fundamental matrix using the vnl_matrix<double> p_matrix.
 void
 PMatrix::set (const vnl_matrix<double>& p_matrix)
 {
@@ -434,7 +434,7 @@ PMatrix::set (const vnl_matrix<double>& p_matrix)
 
 //----------------------------------------------------------------
 //
-// -- Set from 3x3 matrix and 3x1 column vector of P = [A a].
+//: Set from 3x3 matrix and 3x1 column vector of P = [A a].
 void
 PMatrix::set (const vnl_matrix<double>& A, const vnl_vector<double>& a)
 {
@@ -455,7 +455,7 @@ PMatrix::set (const vnl_matrix<double>& A, const vnl_vector<double>& a)
   _p_matrix(2,3) = a[2];
 }
 
-// -- Scale P so determinant of first 3x3 is 1.
+//: Scale P so determinant of first 3x3 is 1.
 void
 PMatrix::fix_cheirality()
 {
@@ -480,7 +480,7 @@ PMatrix::fix_cheirality()
     _svd->W() *= scale;
 }
 
-// -- Return true if the 3D point X is behind the camera represented by this P.
+//: Return true if the 3D point X is behind the camera represented by this P.
 // This depends on the overall sign of the P matrix having been set correctly, a
 // la Hartley cheirality paper.
 bool
@@ -497,7 +497,7 @@ PMatrix::is_behind_camera(const HomgPoint3D& hX)
   return sign * dot_product(plane, X) < 0;
 }
 
-// -- Change the overall sign of the P matrix.
+//: Change the overall sign of the P matrix.
 void
 PMatrix::flip_sign()
 {
@@ -506,7 +506,7 @@ PMatrix::flip_sign()
     _svd->W() *= -1;
 }
 
-// -- Splendid hack that tries to detect if the P is an image-coords P or a normalized P.
+//: Splendid hack that tries to detect if the P is an image-coords P or a normalized P.
 bool
 PMatrix::looks_conditioned()
 {
@@ -515,25 +515,25 @@ PMatrix::looks_conditioned()
   return cond < 100;
 }
 
-// -- Apply 3-space homography to P.
+//: Apply 3-space homography to P.
 PMatrix PMatrix::postmultiply(const HMatrix3D& H) const
 {
   return postmultiply(H.get_matrix());
 }
 
-// -- Postmultiply by 4x4 matrix.
+//: Postmultiply by 4x4 matrix.
 PMatrix PMatrix::postmultiply(const vnl_matrix<double>& H) const
 {
   return PMatrix(_p_matrix * H);
 }
 
-// -- Apply 2-space homography to P.
+//: Apply 2-space homography to P.
 PMatrix PMatrix::premultiply(const HMatrix2D& H) const
 {
   return premultiply(H.get_matrix());
 }
 
-// -- Premultiply by 3x3 matrix.
+//: Premultiply by 3x3 matrix.
 PMatrix PMatrix::premultiply(const vnl_matrix<double>& H) const
 {
   return PMatrix(H * _p_matrix);

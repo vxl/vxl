@@ -37,7 +37,7 @@ public:
   int base_index;
 };
 
-// -- Ctor
+//: Ctor
 ImageSequenceMovieFile::ImageSequenceMovieFile(char const* filepattern, int frame_index_to_search_for_extension):
   p(new ImageSequenceMovieFilePrivates(filepattern, frame_index_to_search_for_extension))
 {
@@ -48,7 +48,7 @@ ImageSequenceMovieFile::~ImageSequenceMovieFile()
   delete p;
 }
 
-// -- Will need to search...
+//: Will need to search...
 int ImageSequenceMovieFile::GetLength()
 {
   return p->seqname.n();
@@ -75,7 +75,7 @@ int ImageSequenceMovieFile::GetBitsPixel()
   return animage.components() * animage.bits_per_component();
 }
 
-// -- Assumes disk-stored images are never interlaced
+//: Assumes disk-stored images are never interlaced
 bool ImageSequenceMovieFile::IsInterlaced()
 {
   return false;

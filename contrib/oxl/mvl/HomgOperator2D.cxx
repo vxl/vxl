@@ -18,7 +18,7 @@
 // @{ BASICS @}
 
 //-----------------------------------------------------------------------------
-// -- Cross product of two Homg2Ds
+//: Cross product of two Homg2Ds
 void HomgOperator2D::cross(const Homg2D& a, const Homg2D& b, Homg2D* a_cross_b)
 {
   double x1 = a.get_x();
@@ -35,7 +35,7 @@ void HomgOperator2D::cross(const Homg2D& a, const Homg2D& b, Homg2D* a_cross_b)
 }
 
 //-----------------------------------------------------------------------------
-// -- Dot product of two Homg2Ds
+//: Dot product of two Homg2Ds
 double HomgOperator2D::dot(const Homg2D& a, const Homg2D& b)
 {
   double x1 = a.get_x();
@@ -50,7 +50,7 @@ double HomgOperator2D::dot(const Homg2D& a, const Homg2D& b)
 }
 
 //-----------------------------------------------------------------------------
-// -- Normalize Homg2D to unit magnitude
+//: Normalize Homg2D to unit magnitude
 
 void HomgOperator2D::unitize(Homg2D* a)
 {
@@ -71,7 +71,7 @@ void HomgOperator2D::unitize(Homg2D* a)
 
 // @{ DISTANCE MEASUREMENTS IN IMAGE COORDINATES @}
 
-// -- Get the square of the 2D distance between the two points.
+//: Get the square of the 2D distance between the two points.
 double HomgOperator2D::distance_squared (const HomgPoint2D& point1,
                                          const HomgPoint2D& point2)
 {
@@ -97,7 +97,7 @@ double HomgOperator2D::distance_squared (const HomgPoint2D& point1,
 
 //-----------------------------------------------------------------------------
 //
-// -- Get the square of the perpendicular distance to a line.
+//: Get the square of the perpendicular distance to a line.
 // This is just the homogeneous form of the familiar
 // @{ $ \frac{a x + b y + c}{\sqrt{a^2+b^2}} $ @}:
 // @{ \[ d = \frac{(l^\top p)}{p_z\sqrt{l_x^2 + l_y^2}} \] @}
@@ -118,7 +118,7 @@ double HomgOperator2D::perp_dist_squared (const HomgPoint2D& point, const HomgLi
   return numerator / denominator;
 }
 
-// -- Return the distance of a line segment to a line.  This is defined as the maximum of the
+//: Return the distance of a line segment to a line.  This is defined as the maximum of the
 // distances of the two endpoints to the line.
 double HomgOperator2D::distance_squared(const HomgLineSeg2D& segment, const HomgLine2D& line)
 {
@@ -127,7 +127,7 @@ double HomgOperator2D::distance_squared(const HomgLineSeg2D& segment, const Homg
 }
 
 
-// -- Return distance between line segments.
+//: Return distance between line segments.
 double HomgOperator2D::distance(const HomgLineSeg2D& ls, const HomgLineSeg2D& ll, double OVERLAP_THRESH)
 {
   double norm = sqrt(ll.get_line().get_x()*ll.get_line().get_x()+ll.get_line().get_y()*ll.get_line().get_y());
@@ -193,7 +193,7 @@ double HomgOperator2D::distance(const HomgLineSeg2D& ls, const HomgLineSeg2D& ll
 }
 
 
-// -- Return the "Schmid distance" from a point to a line segment.  This is the
+//: Return the "Schmid distance" from a point to a line segment.  This is the
 // distance to the closest point on the segment, be it endpoint or interior.
 // UNTESTED.
 double HomgOperator2D::distance_squared (const HomgLineSeg2D& lineseg, const HomgPoint2D& p)
@@ -227,14 +227,14 @@ double HomgOperator2D::distance_squared (const HomgLineSeg2D& lineseg, const Hom
 // @{ ANGLES @}
 
 //-----------------------------------------------------------------------------
-// -- Get the anticlockwise angle between a line and the x axis.
+//: Get the anticlockwise angle between a line and the x axis.
 double HomgOperator2D::line_angle(const HomgLine2D& line)
 {
   return atan2 (line.get_y(), line.get_x());
 }
 
 //-----------------------------------------------------------------------------
-// -- Get the 0 to pi/2 angle between two lines
+//: Get the 0 to pi/2 angle between two lines
 double HomgOperator2D::abs_angle(const HomgLine2D& line1, const HomgLine2D& line2)
 {
   double angle1 = line_angle (line1);
@@ -253,7 +253,7 @@ double HomgOperator2D::abs_angle(const HomgLine2D& line1, const HomgLine2D& line
 
 //-----------------------------------------------------------------------------
 //
-// -- Get the angle between two lines.  Although homogeneous coordinates are
+//: Get the angle between two lines.  Although homogeneous coordinates are
 // only defined up to scale, here it is assumed that a line with homogeneous
 // coordinates (m) is at 180 degrees to a line (-m), and this is why the term
 // "oriented_line" is used.  However, the overall scale (apart from sign) is
@@ -281,7 +281,7 @@ double HomgOperator2D::angle_between_oriented_lines (const HomgLine2D& line1,
 
 //-----------------------------------------------------------------------------
 //
-// -- Get the line through two points (the cross-product).
+//: Get the line through two points (the cross-product).
 //
 
 HomgLine2D HomgOperator2D::join (const HomgPoint2D& point1, const HomgPoint2D& point2)
@@ -293,7 +293,7 @@ HomgLine2D HomgOperator2D::join (const HomgPoint2D& point1, const HomgPoint2D& p
 
 //-----------------------------------------------------------------------------
 //
-// -- Get the line through two points (the cross-product).  In this case, we assume
+//: Get the line through two points (the cross-product).  In this case, we assume
 // that the points are oriented, and ensure the cross is computed with positive point
 // omegas.
 //
@@ -318,7 +318,7 @@ HomgLine2D HomgOperator2D::join_oriented (const HomgPoint2D& point1, const HomgP
 
 //-----------------------------------------------------------------------------
 //
-// -- Get the intersection point of two lines (the cross-product).
+//: Get the intersection point of two lines (the cross-product).
 //
 
 HomgPoint2D HomgOperator2D::intersection (const HomgLine2D& line1, const HomgLine2D& line2)
@@ -330,7 +330,7 @@ HomgPoint2D HomgOperator2D::intersection (const HomgLine2D& line1, const HomgLin
 
 //-----------------------------------------------------------------------------
 //
-// -- @{ Get the perpendicular line to line which passes through point.
+//: @{ Get the perpendicular line to line which passes through point.
 // Params are line $(a,b,c)$ and point $(x,y,1)$.
 // Then the cross product of $(x,y,1)$ and the line's direction $(a,b,0)$,
 // called $(p,q,r)$ satisfies
@@ -352,7 +352,7 @@ HomgLine2D HomgOperator2D::perp_line_through_point (const HomgLine2D& line,
 
 //-----------------------------------------------------------------------------
 //
-// -- Get the perpendicular projection of point onto line.
+//: Get the perpendicular projection of point onto line.
 //
 
 HomgPoint2D HomgOperator2D::perp_projection (const HomgLine2D& line,
@@ -365,7 +365,7 @@ HomgPoint2D HomgOperator2D::perp_projection (const HomgLine2D& line,
   return answer;
 }
 
-// -- Return the midpoint of the line joining two homogeneous points
+//: Return the midpoint of the line joining two homogeneous points
 HomgPoint2D HomgOperator2D::midpoint (const HomgPoint2D& p1, const HomgPoint2D& p2)
 {
   return p1 * (1/(2*p1[2])) + p2*(1/(2*p2[2]));
@@ -401,7 +401,7 @@ static vnl_vector<double> most_orthogonal_vector_svd(const vcl_vector<HomgLine2D
 
 bool lines_to_point_use_svd = false;
 
-// -- Intersect a set of 2D lines to find the least-square point of intersection.
+//: Intersect a set of 2D lines to find the least-square point of intersection.
 // @{ This finds the point $\bf x$ that minimizes $\|\tt L \bf x\|$, where $\tt L$ is the matrix whose
 // rows are the lines. The current implementation uses the vnl_scatter_3x3<double> class from
 // Numerics to accumulate and compute the nullspace of $\tt L^\top \tt L$  @}
@@ -418,7 +418,7 @@ HomgPoint2D HomgOperator2D::lines_to_point(const vcl_vector<HomgLine2D>& lines)
 
 // @{ MISCELLANEOUS @}
 //
-// -- Clip line to lineseg.
+//: Clip line to lineseg.
 // The infinite line is clipped against the viewport with
 // lower left corner (x0,y0) and upper right corner (x1,y1)
 
@@ -451,7 +451,7 @@ double HomgOperator2D::perp_distance_squared (const HomgLine2D& line, const Homg
 }
 
 //-----------------------------------------------------------------------------
-// -- Calculates the crossratio of four collinear points p1, p2, p3 and p4.
+//: Calculates the crossratio of four collinear points p1, p2, p3 and p4.
 // This number is projectively invariant, and it is the coordinate of p4
 // in the reference frame where p2 is the origin (coordinate 0), p3 is
 // the unity (coordinate 1) and p1 is the point at infinity.
@@ -482,7 +482,7 @@ double HomgOperator2D::CrossRatio(const Homg2D& a, const Homg2D& b, const Homg2D
   return n/m;
 }
 
-// -- Conjugate point of three given colinear points.
+//: Conjugate point of three given colinear points.
 // If cross ratio cr is given (default: -1), the generalized conjugate point
 // returned is such that ((x1,x2;x3,answer)) = cr.
 Homg2D HomgOperator2D::Conjugate(const Homg2D& a, const Homg2D& b, const Homg2D& c, double cr)

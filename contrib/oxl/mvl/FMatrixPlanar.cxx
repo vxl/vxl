@@ -21,7 +21,7 @@
 
 //--------------------------------------------------------------
 //
-// -- Default constructor.
+//: Default constructor.
 
 FMatrixPlanar::FMatrixPlanar()
 {
@@ -30,7 +30,7 @@ FMatrixPlanar::FMatrixPlanar()
 
 //--------------------------------------------------------------
 //
-// -- Constructor.
+//: Constructor.
 
 FMatrixPlanar::FMatrixPlanar(const double* f_matrix)
 {
@@ -40,7 +40,7 @@ FMatrixPlanar::FMatrixPlanar(const double* f_matrix)
 
 //--------------------------------------------------------------
 //
-// -- Constructor.
+//: Constructor.
 
 FMatrixPlanar::FMatrixPlanar(const vnl_matrix<double>& f_matrix)
 {
@@ -49,10 +49,9 @@ FMatrixPlanar::FMatrixPlanar(const vnl_matrix<double>& f_matrix)
 }
 
 
-
 //--------------------------------------------------------------
 //
-// -- Destructor.
+//: Destructor.
 
 FMatrixPlanar::~FMatrixPlanar()
 {
@@ -61,7 +60,7 @@ FMatrixPlanar::~FMatrixPlanar()
 
 //-------------------------------------------------------------------
 //
-// -- Null function as already Rank 2.
+//: Null function as already Rank 2.
 
 inline void
 FMatrixPlanar::set_rank2_using_svd (void)
@@ -70,7 +69,7 @@ FMatrixPlanar::set_rank2_using_svd (void)
 
 //-----------------------------------------------------------------------------
 //
-// -- Returns current matrix which is already Rank 2.
+//: Returns current matrix which is already Rank 2.
 
 inline  FMatrixPlanar
 FMatrixPlanar::get_rank2_truncated()
@@ -79,11 +78,9 @@ FMatrixPlanar::get_rank2_truncated()
 }
 
 
-
-
 //--------------------------------------------------------------
 //
-// -- Set the fundamental matrix using the two-dimensional
+//: Set the fundamental matrix using the two-dimensional
 // array f_matrix. Only returns true if f_matrix contained a
 // planar matrix, not an approximation to one.
 // Otherwise returns false and the matrix is not set.
@@ -98,7 +95,7 @@ bool FMatrixPlanar::set (const double* f_matrix )
 
 //--------------------------------------------------------------
 //
-// -- Set the fundamental matrix using the vnl_matrix<double>
+//: Set the fundamental matrix using the vnl_matrix<double>
 // f_matrix. Only returns true if f_matrix contained a
 // planar matrix, not an approximation to one.
 // The test is against a Rank 2 constraint for
@@ -150,7 +147,6 @@ FMatrixPlanar::set (const vnl_matrix<double>& f_matrix )
                _ft_matrix. put (col_index, row_index,f_matrix.get(row_index,col_index));
           }
 
-
      // set rank flag true
 
      this->set_rank2_flag(true);
@@ -161,7 +157,7 @@ FMatrixPlanar::set (const vnl_matrix<double>& f_matrix )
 
 //----------------------------------------------------------------
 //
-// -- Returns the _rank2_flag which is always true for FMatrixPlanar.
+//: Returns the _rank2_flag which is always true for FMatrixPlanar.
 
 inline bool
 FMatrixPlanar::get_rank2_flag (void) const
@@ -171,7 +167,7 @@ FMatrixPlanar::get_rank2_flag (void) const
 
 //----------------------------------------------------------------
 //
-// -- Set the _rank2_flag. Null function as always set true.
+//: Set the _rank2_flag. Null function as always set true.
 
 inline void
 FMatrixPlanar::set_rank2_flag (bool) const
@@ -180,7 +176,7 @@ FMatrixPlanar::set_rank2_flag (bool) const
 
 //----------------------------------------------------------------
 //
-// -- Initilises the FMatrixPlanar using a general fundamental matrix F
+//: Initilises the FMatrixPlanar using a general fundamental matrix F
 // by finding the nearest planar fundamental matrix to F.
 // This should be used prior to FMPlanarComputeNonLinear to give
 // a initial value for the non-linear minimisation.
@@ -244,7 +240,6 @@ void FMatrixPlanar::init(const FMatrix& F)
      else
           ls_theta = -acos(ls.x()/sin(ls_thi));
 
-
      double ls1 = cos(ls_theta)*sin(ls_thi);
      double ls2 = sin(ls_theta)*sin(ls_thi);
      double ls3 = cos(ls_thi);
@@ -265,5 +260,4 @@ void FMatrixPlanar::init(const FMatrix& F)
 
      // store the corrected fmatrix
      set(fmat);
-
 }

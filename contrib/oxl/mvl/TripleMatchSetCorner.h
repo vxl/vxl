@@ -36,15 +36,15 @@ public:
   TripleMatchSetCorner(const TripleMatchSetCorner& that);
   TripleMatchSetCorner& operator=(const TripleMatchSetCorner& that);
 
-  // -- Copy triplet matches out of two pairwise match sets.
+  //: Copy triplet matches out of two pairwise match sets.
   TripleMatchSetCorner(const PairMatchSetCorner& matches12, const PairMatchSetCorner& matches23);
 
-  // -- Copy inliers to three arrays, and record the original indices.
+  //: Copy inliers to three arrays, and record the original indices.
   void extract_matches(vcl_vector <HomgPoint2D>& points1, vcl_vector <int>& corner_index_1,
                        vcl_vector <HomgPoint2D>& points2, vcl_vector <int>& corner_index_2,
                        vcl_vector <HomgPoint2D>& points3, vcl_vector <int>& corner_index_3) const;
 
-  // -- Copy inliers to three arrays
+  //: Copy inliers to three arrays
   void extract_matches(vcl_vector <HomgPoint2D>& points1,
                        vcl_vector <HomgPoint2D>& points2,
                        vcl_vector <HomgPoint2D>& points3) const;

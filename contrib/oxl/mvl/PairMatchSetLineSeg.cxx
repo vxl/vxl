@@ -26,7 +26,7 @@ PairMatchSetLineSeg::~PairMatchSetLineSeg()
 {
 }
 
-// -- Extract the point vectors for only the valid matches.
+//: Extract the point vectors for only the valid matches.
 void PairMatchSetLineSeg::extract_matches(vcl_vector <HomgLineSeg2D>& linesegs1,
                                           vcl_vector <HomgLineSeg2D>& linesegs2) const
 {
@@ -42,7 +42,7 @@ void PairMatchSetLineSeg::extract_matches(vcl_vector <HomgLineSeg2D>& linesegs1,
 }
 
 
-// -- Set the pair of LineSegSets to which matches refer.
+//: Set the pair of LineSegSets to which matches refer.
 void PairMatchSetLineSeg::set(LineSegSet* linesegs1, LineSegSet* linesegs2)
 {
   _linesegs1 = linesegs1;

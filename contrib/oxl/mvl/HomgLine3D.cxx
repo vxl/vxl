@@ -11,14 +11,14 @@
 
 //--------------------------------------------------------------
 //
-// -- Constructor
+//: Constructor
 HomgLine3D::HomgLine3D()
 {
 }
 
 //--------------------------------------------------------------
 //
-// -- Constructor
+//: Constructor
 HomgLine3D::HomgLine3D( const HomgLine3D &that)
   : point_finite_(that.point_finite_)
   , point_infinite_(that.point_infinite_)
@@ -27,7 +27,7 @@ HomgLine3D::HomgLine3D( const HomgLine3D &that)
 
 //--------------------------------------------------------------
 //
-// -- Constructor, initialise using the specified distinct points
+//: Constructor, initialise using the specified distinct points
 // on the line.
 HomgLine3D::HomgLine3D (const HomgPoint3D& start,
                         const HomgPoint3D& end)
@@ -61,25 +61,25 @@ HomgLine3D::HomgLine3D (const HomgPoint3D& start,
 
 //--------------------------------------------------------------
 //
-// -- Destructor
+//: Destructor
 HomgLine3D::~HomgLine3D()
 {
 }
 
 //-----------------------------------------------------------------------------
 //
-// -- print to ostream
+//: print to ostream
 vcl_ostream& operator<<(vcl_ostream& s, const HomgLine3D& l)
 {
   return s << "<HomgLine3D " << l.get_point_finite() << " dir " << l.get_point_infinite() << ">";
 }
 
-// -- Push point2 off to infinity
+//: Push point2 off to infinity
 void HomgLine3D::force_point2_infinite()
 {
 }
 
-// -- Return line direction as a 3-vector
+//: Return line direction as a 3-vector
 vnl_double_3 HomgLine3D::dir() const
 {
   const vnl_vector<double>& d = point_infinite_.get_vector();

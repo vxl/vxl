@@ -10,7 +10,7 @@
 
 #include <mvl/HomgPoint2D.h>
 
-// -- Construct and AffineMetric from the matrix A.
+//: Construct and AffineMetric from the matrix A.
 // The last row of A should be (0,0,lambda).
 AffineMetric::AffineMetric()
 {
@@ -19,8 +19,7 @@ AffineMetric::AffineMetric()
 }
 
 
-
-// -- Construct and AffineMetric from the matrix A.
+//: Construct and AffineMetric from the matrix A.
 // The last row of A should be (0,0,lambda).
 AffineMetric::AffineMetric(const vnl_matrix<double>& A):
   A_(A),
@@ -38,7 +37,7 @@ void AffineMetric::set(const vnl_matrix<double>& A)
   assert(A(2,1) == 0);
 }
 
-// -- set [a11  0 a13; 0 a22 a23; 0 0 a33]
+//: set [a11  0 a13; 0 a22 a23; 0 0 a33]
 void AffineMetric::set(double a11, double a13,
                        double a22, double a23,
                        double a33)
@@ -58,13 +57,13 @@ void AffineMetric::set(double a11, double a13,
 
 // @{ Implementation of ImageMetric @}
 
-// -- Transform p
+//: Transform p
 HomgPoint2D AffineMetric::homg_to_imagehomg(const HomgPoint2D& p)
 {
   return A_ * p.get_vector();
 }
 
-// -- Inverse-transform p
+//: Inverse-transform p
 HomgPoint2D AffineMetric::imagehomg_to_homg(const HomgPoint2D& p)
 {
   return A_inverse_ * p.get_vector();
@@ -80,7 +79,7 @@ HomgPoint2D AffineMetric::image_to_homg(double x, double y)
   return HomgPoint2D(h1, h2, h3);
 }
 
-// -- Convert conditioned point p to image coordinates
+//: Convert conditioned point p to image coordinates
 vnl_double_2 AffineMetric::homg_to_image(const HomgPoint2D& p)
 {
   vnl_double_3 x = A_ * p.get_vector();
@@ -89,33 +88,33 @@ vnl_double_2 AffineMetric::homg_to_image(const HomgPoint2D& p)
   return vnl_double_2(x[0] * s, x[1] * s);
 }
 
-/*
-// -- Return forward transformation matrix
+#if 0
+//: Return forward transformation matrix
 const vnl_matrix<double>& AffineMetric::get_C() const
 {
   return A_;
 }
 
-// -- Return inverse transformation matrix
+//: Return inverse transformation matrix
 const vnl_matrix<double>& AffineMetric::get_C_inverse() const
 {
   return A_inverse_;
 }
 
-// -- Declare that this is a linear transformation
+//: Declare that this is a linear transformation
 bool AffineMetric::is_linear() const
 {
   return true;
 }
 
-// -- Declare that this is not an isometry
+//: Declare that this is not an isometry
 bool AffineMetric::can_invert_distance() const
 {
   return false;
 }
-*/
+#endif
 
-// -- print to ostream
+//: print to ostream
 vcl_ostream& AffineMetric::print(vcl_ostream& s) const
 {
   return s << "AffineMetric [" << A_.get_row(0) << ";" << A_.get_row(1) << ";" << A_.get_row(2) << "]";

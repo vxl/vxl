@@ -4,7 +4,7 @@
 
 #include "FDesignMatrix.h"
 
-// -- Construct a design matrix for the fundamental matrix least
+//: Construct a design matrix for the fundamental matrix least
 // squares problem. Specifically, it constructs the matrix
 // @{\[
 // D = \mmatrix{9}{ m_{11} m'_{11} & m_{12} m_{11}'  & m_{13} m'_{11} &

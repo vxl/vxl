@@ -57,23 +57,23 @@ public:
     *w_ptr = _homg_vector[3];
   }
 
-// -- Get x.
+//: Get x.
   double get_x() const { return _homg_vector[0]; }
   double x() const { return _homg_vector[0]; }
 
-// -- Get y.
+//: Get y.
   double get_y() const { return _homg_vector[1]; }
   double y() const { return _homg_vector[1]; }
 
-// -- Get z.
+//: Get z.
   double get_z() const { return _homg_vector[2]; }
   double z() const { return _homg_vector[2]; }
 
-// -- Get w.
+//: Get w.
   double get_w() const { return _homg_vector[3]; }
   double w() const { return _homg_vector[3]; }
 
-// -- Set x,y,z,w.
+//: Set x,y,z,w.
   void set (double px, double py, double pz, double pw = 1) {
     _homg_vector[0] = px;
     _homg_vector[1] = py;

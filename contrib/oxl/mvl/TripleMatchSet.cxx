@@ -7,7 +7,7 @@
 #include "TripleMatchSet.h"
 #include <mvl/PairMatchSet.h>
 
-// -- Initialize a TripleMatchSet from a pair of PairMatchSets.
+//: Initialize a TripleMatchSet from a pair of PairMatchSets.
 // The PairMatchSets are adopted by the TripleMatchSet, which will
 // delete them.
 TripleMatchSet::TripleMatchSet(PairMatchSet* match12, PairMatchSet* match23)
@@ -16,7 +16,7 @@ TripleMatchSet::TripleMatchSet(PairMatchSet* match12, PairMatchSet* match23)
   _match23 = match23;
 }
 
-// -- Initialize a TripleMatchSet, by specifying the maximum i1, i2, i3 values.
+//: Initialize a TripleMatchSet, by specifying the maximum i1, i2, i3 values.
 // Keep these conservative, as arrays of that length will be made.  Currently
 // the i3 value is ignored.
 TripleMatchSet::TripleMatchSet(int i1_max, int i2_max, int)
@@ -25,14 +25,14 @@ TripleMatchSet::TripleMatchSet(int i1_max, int i2_max, int)
   _match23 = new PairMatchSet(i2_max);
 }
 
-// -- Delete the PairMatchSets
+//: Delete the PairMatchSets
 TripleMatchSet::~TripleMatchSet()
 {
   delete _match12;
   delete _match23;
 }
 
-// -- Destroy current PairMatchSets and adopt two new ones.
+//: Destroy current PairMatchSets and adopt two new ones.
 void TripleMatchSet::set(PairMatchSet* match12, PairMatchSet* match23)
 {
   delete _match12;
@@ -41,7 +41,7 @@ void TripleMatchSet::set(PairMatchSet* match12, PairMatchSet* match23)
   _match23 = match23;
 }
 
-// -- Join two PairMatchSets on their 2nd and 1st columns respectively.
+//: Join two PairMatchSets on their 2nd and 1st columns respectively.
 // I.e. make the TripleMatchSet which contains (i1,i2,i3) iff
 //
 // matches12.contains(i1, i2) and matches23.contains(i2, i3)
@@ -58,7 +58,7 @@ void TripleMatchSet::set_from_pairwise_matches(const PairMatchSet& matches12,
   vcl_cout << "TripleMatchSet: " << count() << " triplet matches." << vcl_endl;
 }
 
-// -- Write as three ascii columns.
+//: Write as three ascii columns.
 void TripleMatchSet::write_ascii(vcl_ostream & s) const
 {
   for (iterator match = begin(); match; ++match) {
@@ -68,7 +68,7 @@ void TripleMatchSet::write_ascii(vcl_ostream & s) const
   }
 }
 
-// -- Read from ascii istream
+//: Read from ascii istream
 bool TripleMatchSet::read_ascii(vcl_istream& s)
 {
   vnl_matrix<double> m;
@@ -101,7 +101,7 @@ bool TripleMatchSet::read_ascii(vcl_istream& s)
   return true;
 }
 
-// -- Write to ostream with header
+//: Write to ostream with header
 vcl_ostream& operator << (vcl_ostream& s, const TripleMatchSet& matches)
 {
   s << "# TripleMatchSet: " << matches.count() << " triplet matches." << vcl_endl;
@@ -117,7 +117,7 @@ vcl_istream& operator >> (vcl_istream& s, TripleMatchSet& matches)
 
 // @{ TRIPLET ACCESS @}
 
-// -- Add triplet (i1, i2, i3) to the matchset.  Any existing matches
+//: Add triplet (i1, i2, i3) to the matchset.  Any existing matches
 // of the form (i1, *, *) are removed. O(1).
 bool TripleMatchSet::add_match(int i1, int i2, int i3)
 {
@@ -138,7 +138,7 @@ bool TripleMatchSet::add_match(int i1, int i2, int i3)
   return (_match12->add_match(i1, i2) && _match23->add_match(i2, i3));
 }
 
-// -- Return the number of triplets. O(n).
+//: Return the number of triplets. O(n).
 int TripleMatchSet::count() const
 {
   int c = 0;
@@ -147,7 +147,7 @@ int TripleMatchSet::count() const
   return c;
 }
 
-// -- Remove all tuples.
+//: Remove all tuples.
 void TripleMatchSet::clear_matches()
 {
   _match12->clear();
@@ -155,45 +155,45 @@ void TripleMatchSet::clear_matches()
 }
 
 // -----------------------------------------------------------------------------
-// -- Select(1 = i1).2, meaning take the 2nd component of the tuples
+//: Select(1 = i1).2, meaning take the 2nd component of the tuples
 // in which the first component equals i1.  Complexity O(1).
 int TripleMatchSet::get_match_12(int i1) const
 {
   return _match12->get_match_12(i1);
 }
 
-// -- Select(1 = i1).3
+//: Select(1 = i1).3
 // Complexity O(1)
 int TripleMatchSet::get_match_13(int i1) const
 {
   return get_match_23(get_match_12(i1));
 }
 
-// -- Select(2 = i2).3 Complexity O(1)
+//: Select(2 = i2).3 Complexity O(1)
 int TripleMatchSet::get_match_23(int i2) const
 {
   return _match23->get_match_12(i2);
 }
 
-// -- Select(2 = i2).1 Complexity O(n)
+//: Select(2 = i2).1 Complexity O(n)
 int TripleMatchSet::get_match_21(int i2) const
 {
   return _match12->get_match_21(i2);
 }
 
-// -- Select(3 = i3).1 Complexity O(n)
+//: Select(3 = i3).1 Complexity O(n)
 int TripleMatchSet::get_match_31(int i3) const
 {
   return get_match_21(get_match_32(i3));
 }
 
-// -- Select(3 = i3).2 Complexity O(n)
+//: Select(3 = i3).2 Complexity O(n)
 int TripleMatchSet::get_match_32(int i3) const
 {
   return _match23->get_match_21(i3);
 }
 
-// -- Select({1,2} = {i1, i2}).3 Complexity O(1);
+//: Select({1,2} = {i1, i2}).3 Complexity O(1);
 int TripleMatchSet::get_match_123(int i1, int i2) const
 {
   int ii = _match12->get_match_12(i1);
@@ -203,7 +203,7 @@ int TripleMatchSet::get_match_123(int i1, int i2) const
     return get_match_23(i2);
 }
 
-// -- Select(1 = c).{1,2,3}  Complexity O(1).  Returns true
+//: Select(1 = c).{1,2,3}  Complexity O(1).  Returns true
 // iff a match was found.
 bool TripleMatchSet::get_1(int c, int* i1, int* i2, int* i3) const
 {
@@ -217,13 +217,13 @@ bool TripleMatchSet::get_1(int c, int* i1, int* i2, int* i3) const
   return true;
 }
 
-// -- Select(2 = c).{1,2,3}  Complexity O(n).
+//: Select(2 = c).{1,2,3}  Complexity O(n).
 bool TripleMatchSet::get_2(int c, int* i1, int* i2, int* i3) const
 {
   return get_1(get_match_21(c), i1, i2, i3);
 }
 
-// -- Select(3 = c).{1,2,3}  Complexity O(n).
+//: Select(3 = c).{1,2,3}  Complexity O(n).
 bool TripleMatchSet::get_3(int c, int* i1, int* i2, int* i3) const
 {
   return get_1(get_match_31(c), i1, i2, i3);
@@ -314,7 +314,7 @@ TripleMatchSet::iterator::iterator(bool)
 }
 #endif
 
-// -- Construct an iterator that points to the first triplet of "ccc".
+//: Construct an iterator that points to the first triplet of "ccc".
 // The full_only flag is of interest only to developers.
 TripleMatchSet::iterator::iterator(const TripleMatchSet& ccc, bool full_only):
   _c(&ccc),
@@ -325,20 +325,7 @@ TripleMatchSet::iterator::iterator(const TripleMatchSet& ccc, bool full_only):
   next();
 }
 
-/* inlines documented here
-
-// -- Return the i1 of the pointed-to match
-int TripleMatchSet::get_i1() const { return i1; }
-
-// -- Return the i2 of the pointed-to match
-int TripleMatchSet::get_i2() const { return i2; }
-
-// -- Return the i3 of the pointed-to match
-int TripleMatchSet::get_i3() const { return i3; }
-
-*/
-
-// -- Advance to point to the next triplet.
+//: Advance to point to the next triplet.
 bool TripleMatchSet::iterator::next()
 {
   if (_full_only) {
@@ -350,7 +337,7 @@ bool TripleMatchSet::iterator::next()
   return _c->get_match(++_match_index, &i1, &i2, &i3);
 }
 
-// -- Return true if there are still unseen matches
+//: Return true if there are still unseen matches
 TripleMatchSet::iterator::operator bool () const
 {
   return _match_index < _c->size();
@@ -364,8 +351,7 @@ bool TripleMatchSet::iterator::isfull() const
 }
 
 
-
-/*
+#if 0
 MA_MATCH_TABLE_STR* TripleMatchSet::make_matchtable()
 {
   return mt_3image_affinity_to_match (_match12->get_table(), _match23->get_table());
@@ -387,5 +373,5 @@ void TripleMatchSet::update_from(MA_MATCH_TABLE_STR* matchtable)
 {
   mt_3image_match_to_affinity (matchtable, _match12->get_table(), _match23->get_table());
 }
-*/
+#endif
 

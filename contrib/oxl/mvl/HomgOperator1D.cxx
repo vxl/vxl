@@ -7,7 +7,7 @@
 #include <vcl_iostream.h>
 
 //-----------------------------------------------------------------------------
-// -- Calculates the crossratio of four collinear points p1, p2, p3 and p4.
+//: Calculates the crossratio of four collinear points p1, p2, p3 and p4.
 // This number is projectively invariant, and it is the coordinate of p4
 // in the reference frame where p2 is the origin (coordinate 0), p3 is
 // the unity (coordinate 1) and p1 is the point at infinity.
@@ -37,7 +37,7 @@ double HomgOperator1D::CrossRatio(const Homg1D& a, const Homg1D& b, const Homg1D
 }
 
 //-----------------------------------------------------------------------------
-// -- Cross product of two Homg1Ds
+//: Cross product of two Homg1Ds
 double HomgOperator1D::cross(const Homg1D& a, const Homg1D& b)
 {
   double x1 = a.get_x(), w1 = a.get_w();
@@ -46,7 +46,7 @@ double HomgOperator1D::cross(const Homg1D& a, const Homg1D& b)
 }
 
 //-----------------------------------------------------------------------------
-// -- Dot product of two Homg1Ds
+//: Dot product of two Homg1Ds
 double HomgOperator1D::dot(const Homg1D& a, const Homg1D& b)
 {
   double x1 = a.get_x(), w1 = a.get_w();
@@ -55,7 +55,7 @@ double HomgOperator1D::dot(const Homg1D& a, const Homg1D& b)
 }
 
 //-----------------------------------------------------------------------------
-// -- Normalize Homg1D to unit magnitude
+//: Normalize Homg1D to unit magnitude
 
 void HomgOperator1D::unitize(Homg1D* a)
 {
@@ -69,7 +69,7 @@ void HomgOperator1D::unitize(Homg1D* a)
   a->set(x*norm, w*norm);
 }
 
-// -- Get the distance between the two points.
+//: Get the distance between the two points.
 double HomgOperator1D::distance (const HomgPoint1D& a,
                                  const HomgPoint1D& b)
 {
@@ -82,7 +82,7 @@ double HomgOperator1D::distance (const HomgPoint1D& a,
   return (x1 / w1 - x2 / w2);
 }
 
-// -- Get the square of the distance between the two points.
+//: Get the square of the distance between the two points.
 double HomgOperator1D::distance_squared (const HomgPoint1D& point1,
                                          const HomgPoint1D& point2)
 {
@@ -90,7 +90,7 @@ double HomgOperator1D::distance_squared (const HomgPoint1D& point1,
   return d*d;
 }
 
-// -- Return the midpoint of two homogeneous points
+//: Return the midpoint of two homogeneous points
 HomgPoint1D HomgOperator1D::midpoint (const HomgPoint1D& a, const HomgPoint1D& b)
 {
   double x1 = a.get_x(), w1 = a.get_w();
@@ -98,7 +98,7 @@ HomgPoint1D HomgOperator1D::midpoint (const HomgPoint1D& a, const HomgPoint1D& b
   return HomgPoint1D(x1*w2+x2*w1, 2*w1*w2);
 }
 
-// -- Calculate the projective conjugate point, or more generally, the point
+//: Calculate the projective conjugate point, or more generally, the point
 // with a given crossratio w.r.t. three other points:
 // The cross ratio ((x1,x2;x3,answer)) is cr (default -1). When cr is -1,
 // the returned value and x3 are conjugate points w.r.t. the pair (x1,x2).

@@ -21,27 +21,27 @@ public:
     vcl_vector<HomgInterestPoint>(n, HomgInterestPoint())
   {}
   ~HomgInterestPointSetData() { }
-  
+
 };
 
-// -- Construct an empty corner set.
+//: Construct an empty corner set.
 HomgInterestPointSet::HomgInterestPointSet()
 {
   _data = new HomgInterestPointSetData;
-  
+
   init_conditioner(0);
 }
 
-// -- Construct an empty corner set which will use the given conditioner to
+//: Construct an empty corner set which will use the given conditioner to
 // convert from image to homogeneous coordinates.
 HomgInterestPointSet::HomgInterestPointSet(const HomgMetric& c)
 {
   _data = new HomgInterestPointSetData;
-  
+
   init_conditioner(c);
 }
 
-// -- Load corners from ASCII disk file
+//: Load corners from ASCII disk file
 HomgInterestPointSet::HomgInterestPointSet(const char* filename, const HomgMetric& c)
 {
   _data = 0;
@@ -49,7 +49,7 @@ HomgInterestPointSet::HomgInterestPointSet(const char* filename, const HomgMetri
   init_conditioner(c);
 }
 
-// -- Construct corner set from container of HomgPoint2D, and set the conditioner.
+//: Construct corner set from container of HomgPoint2D, and set the conditioner.
 // The HomgPoint2Ds are assumed to already be in conditioned coordinates.
 HomgInterestPointSet::HomgInterestPointSet(const vcl_vector<HomgPoint2D>& points, ImageMetric* conditioner)
 {
@@ -58,10 +58,10 @@ HomgInterestPointSet::HomgInterestPointSet(const vcl_vector<HomgPoint2D>& points
     _data = new HomgInterestPointSetData(n);
   else
     _data = new HomgInterestPointSetData();
-  
+
   for(unsigned i = 0; i < n; ++i)
     (*_data)[i] = HomgInterestPoint(points[i], conditioner, 0.0f);
-  
+
   _conditioner = conditioner;
 }
 
@@ -97,7 +97,7 @@ HomgInterestPointSet& HomgInterestPointSet::operator=(const HomgInterestPointSet
   return *this;
 }
 
-// -- Set conditioner
+//: Set conditioner
 void HomgInterestPointSet::set_conditioner(const HomgMetric& c)
 {
   delete_conditioner();
@@ -113,7 +113,7 @@ void HomgInterestPointSet::delete_conditioner()
 {
 }
 
-// -- Clear corner set.
+//: Clear corner set.
 void HomgInterestPointSet::clear()
 {
   delete _data;
@@ -121,7 +121,7 @@ void HomgInterestPointSet::clear()
   set_conditioner(0);
 }
 
-// -- Destructor
+//: Destructor
 HomgInterestPointSet::~HomgInterestPointSet()
 {
   delete _data;
@@ -129,7 +129,7 @@ HomgInterestPointSet::~HomgInterestPointSet()
 
 // Operations----------------------------------------------------------------
 //
-// -- Add a corner to the end of the list
+//: Add a corner to the end of the list
 bool HomgInterestPointSet::add(const HomgPoint2D& c)
 {
   double x, y;
@@ -141,14 +141,14 @@ bool HomgInterestPointSet::add(const HomgInterestPoint& c)
   return add(c._homg);
 }
 //
-// -- Add corner (x, y), using ImageMetric to convert to homogeneous.
+//: Add corner (x, y), using ImageMetric to convert to homogeneous.
 bool HomgInterestPointSet::add(double x, double y)
 {
   _data->push_back(HomgInterestPoint(x, y, _conditioner));
   return true;
 }
 
-// -- Add a corner which has already been preconditioned by this cornerset's
+//: Add a corner which has already been preconditioned by this cornerset's
 // imagemetric.
 bool HomgInterestPointSet::add_preconditioned(const HomgPoint2D& h)
 {
@@ -157,7 +157,7 @@ bool HomgInterestPointSet::add_preconditioned(const HomgPoint2D& h)
   return add(x, y);
 }
 
-// -- Return the number of corners in the set.
+//: Return the number of corners in the set.
 unsigned HomgInterestPointSet::size() const
 {
   return _data->size();
@@ -165,7 +165,7 @@ unsigned HomgInterestPointSet::size() const
 
 // @{ACCESSORS@}
 
-// -- Return a reference to the i'th corner structure
+//: Return a reference to the i'th corner structure
 const HomgInterestPoint& HomgInterestPointSet::get(int i) const
 {
   return (*_data)[i];
@@ -176,26 +176,26 @@ HomgInterestPoint& HomgInterestPointSet::get(int i)
   return (*_data)[i];
 }
 
-// -- Return the i'th corner as a 2D point
+//: Return the i'th corner as a 2D point
 vnl_double_2 const& HomgInterestPointSet::get_2d(int i) const
 {
   return (*_data)[i]._double2;
 }
 
-// -- Return the i'th corner as a 2D point
+//: Return the i'th corner as a 2D point
 vnl_vector_fixed<int,2> const& HomgInterestPointSet::get_int(int i) const
 {
   return (*_data)[i]._int2;
 }
 
-// -- Return the i'th corner as a HomgPoint2D
+//: Return the i'th corner as a HomgPoint2D
 const HomgPoint2D& HomgInterestPointSet::get_homg(int i) const
 {
   assert(i >= 0 && i < int(_data->size()));
   return (*_data)[i]._homg;
 }
 
-// -- Return the i'th mean intensity
+//: Return the i'th mean intensity
 float HomgInterestPointSet::get_mean_intensity(int i) const
 {
   assert(i >= 0 && i < int(_data->size()));
@@ -210,7 +210,7 @@ float HomgInterestPointSet::get_mean_intensity(int i) const
 
 // @{ INPUT/OUTPUT @}
 
-// -- Load a corner set from a simple ASCII file of x y pairs.
+//: Load a corner set from a simple ASCII file of x y pairs.
 // If ImageMetric is supplied, it is used to convert image coordinates to
 // homogeneous form.
 bool HomgInterestPointSet::read(const char* filename, const HomgMetric& c)
@@ -241,7 +241,7 @@ bool HomgInterestPointSet::read(vcl_istream& f, const ImageMetric* c)
   return true;
 }
 
-// -- Load a corner set from a simple ASCII file of x y pairs,
+//: Load a corner set from a simple ASCII file of x y pairs,
 // and use Image to compute mean_intensities.
 // If ImageMetric is supplied, it is used to convert image coordinates to
 // homogeneous form.
@@ -268,7 +268,7 @@ bool HomgInterestPointSet::read(const char* filename, vil_image const& src, cons
   return true;
 }
 
-// -- Save a corner set as a simple ASCII file of x y pairs.
+//: Save a corner set as a simple ASCII file of x y pairs.
 bool HomgInterestPointSet::write(const char* filename) const
 {
   vcl_ofstream fout(filename);
@@ -277,7 +277,7 @@ bool HomgInterestPointSet::write(const char* filename) const
     return false;
   }
   vcl_cerr << "HomgInterestPointSet: Saving corners to \"" << filename << "\"\n";
-  return write(fout, get_conditioner()); 
+  return write(fout, get_conditioner());
 }
 
 bool HomgInterestPointSet::write(vcl_ostream& f, ImageMetric const*) const

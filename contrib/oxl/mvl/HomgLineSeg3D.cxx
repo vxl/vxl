@@ -13,14 +13,14 @@
 
 //--------------------------------------------------------------
 //
-// -- Default constructor
+//: Default constructor
 HomgLineSeg3D::HomgLineSeg3D ()
 {
 }
 
 //--------------------------------------------------------------
 //
-// -- Constructor forming line segment from start and end points
+//: Constructor forming line segment from start and end points
 HomgLineSeg3D::HomgLineSeg3D (const HomgPoint3D& point1, const HomgPoint3D& point2):
   HomgLine3D(point1, point2)
 {
@@ -31,7 +31,7 @@ HomgLineSeg3D::HomgLineSeg3D (const HomgPoint3D& point1, const HomgPoint3D& poin
 
 //--------------------------------------------------------------
 //
-// -- Destructor
+//: Destructor
 HomgLineSeg3D::~HomgLineSeg3D()
 {
 }
@@ -39,7 +39,7 @@ HomgLineSeg3D::~HomgLineSeg3D()
 
 //--------------------------------------------------------------
 //
-// -- Return the line through the two points.
+//: Return the line through the two points.
 const HomgLine3D& HomgLineSeg3D::get_line () const
 {
   return *this;
@@ -47,7 +47,7 @@ const HomgLine3D& HomgLineSeg3D::get_line () const
 
 //--------------------------------------------------------------
 //
-// -- Return the first point of the line segment
+//: Return the first point of the line segment
 const HomgPoint3D& HomgLineSeg3D::get_point1 () const
 {
   return _point1;
@@ -55,7 +55,7 @@ const HomgPoint3D& HomgLineSeg3D::get_point1 () const
 
 //--------------------------------------------------------------
 //
-// -- Return the second point of the line segment
+//: Return the second point of the line segment
 const HomgPoint3D& HomgLineSeg3D::get_point2 () const
 {
   return _point2;
@@ -65,7 +65,7 @@ const HomgPoint3D& HomgLineSeg3D::get_point2 () const
 //--------------------------------------------------------------
 //
 // Set the line segment given two points
-void HomgLineSeg3D::set (const HomgPoint3D& point1, const HomgPoint3D& point2) 
+void HomgLineSeg3D::set (const HomgPoint3D& point1, const HomgPoint3D& point2)
 {
   _point1 = point1;
   _point2 = point2;

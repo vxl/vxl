@@ -49,12 +49,12 @@ public:
   LineSegSet const* get_linesegs2() const { return get_matches12()->get_linesegs2(); }
   LineSegSet const* get_linesegs3() const { return get_matches23()->get_linesegs2(); }
 
-  // -- Copy inliers to three arrays, and record the original indices.
+  //: Copy inliers to three arrays, and record the original indices.
   void extract_matches(vcl_vector <HomgLineSeg2D>& linesegs1, vcl_vector <int>& lineseg_index_1,
                        vcl_vector <HomgLineSeg2D>& linesegs2, vcl_vector <int>& lineseg_index_2,
                        vcl_vector <HomgLineSeg2D>& linesegs3, vcl_vector <int>& lineseg_index_3) const;
 
-  // -- Copy inliers to three arrays
+  //: Copy inliers to three arrays
   void extract_matches(vcl_vector <HomgLineSeg2D>& linesegs1,
                        vcl_vector <HomgLineSeg2D>& linesegs2,
                        vcl_vector <HomgLineSeg2D>& linesegs3) const;

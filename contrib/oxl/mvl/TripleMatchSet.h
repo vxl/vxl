@@ -79,8 +79,11 @@ public:
 //  iterator(bool full_only);
     iterator(const TripleMatchSet& ccc, bool full_only = true);
     iterator& operator=(const TripleMatchSet& ccc);
+    //: Return the i1 of the pointed-to match
     int get_i1() const { return i1; }
+    //: Return the i2 of the pointed-to match
     int get_i2() const { return i2; }
+    //: Return the i3 of the pointed-to match
     int get_i3() const { return i3; }
     bool next();
     iterator& operator ++ (/*prefix*/) { next(); return *this; }

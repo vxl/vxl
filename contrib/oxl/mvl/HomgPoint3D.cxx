@@ -28,7 +28,7 @@ HomgPoint3D::HomgPoint3D (double x, double y, double z)
 {
 }
 
-// -- Constructor. The homogeneous parameter w defaults to 1.
+//: Constructor. The homogeneous parameter w defaults to 1.
 HomgPoint3D::HomgPoint3D (double x, double y, double z, double w)
     : Homg3D (x, y, z, w)
 {
@@ -42,7 +42,7 @@ HomgPoint3D::~HomgPoint3D ()
 
 //--------------------------------------------------------------
 //
-// -- Return true if the point is at infinity
+//: Return true if the point is at infinity
 bool
 HomgPoint3D::check_infinity(void) const
 {
@@ -51,7 +51,7 @@ HomgPoint3D::check_infinity(void) const
 
 //--------------------------------------------------------------
 //
-// -- Return true if the point is at infinity.
+//: Return true if the point is at infinity.
 // Check that max(|x|, |y|, |z|) < tol * |w|
 bool
 HomgPoint3D::check_infinity(double tol) const
@@ -60,17 +60,17 @@ HomgPoint3D::check_infinity(double tol) const
   double hy = fabs(get_y());
   double hz = fabs(get_z());
   double hw = fabs(get_w());
-  
+
   double max = hx;
   if (hy > max) max = hy;
   if (hz > max) max = hz;
-  
+
   return max < tol * hw;
 }
 
 //--------------------------------------------------------------
 //
-// -- Return the non-homogeneous coordinates of the point.
+//: Return the non-homogeneous coordinates of the point.
 // If the point is at infinity, return false and set the
 // output values to Homg::infinity.
 bool
@@ -90,12 +90,12 @@ HomgPoint3D::get_nonhomogeneous(double& x, double& y, double& z) const
   y = hy * hw;
   z = hz * hw;
 
-  return true;  
+  return true;
 }
 
 //--------------------------------------------------------------
 //
-// -- Return the non-homogeneous coordinates of the point as a vector of doubles
+//: Return the non-homogeneous coordinates of the point as a vector of doubles
 // If the point is at infinity, return a vector of Homg::infinity
 vnl_double_3
 HomgPoint3D::get_double3() const
@@ -107,7 +107,7 @@ HomgPoint3D::get_double3() const
 
 //-----------------------------------------------------------------------------
 //
-// -- Print to ostream
+//: Print to ostream
 vcl_ostream& operator<<(vcl_ostream& s, const HomgPoint3D& p)
 {
   return s << "<HomgPoint3D " << p.get_vector() << ">";

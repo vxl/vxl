@@ -9,7 +9,7 @@
 #include <vcl_cstdlib.h>
 
 //--------------------------------------------------------------
-// -- Constructor
+//: Constructor
 
 PMatrixDec::PMatrixDec(const vnl_matrix<double>& p_matrix)
   : PMatrix(p_matrix), _j_matrix(3,3), _d_matrix(4,4)
@@ -21,27 +21,27 @@ PMatrixDec::PMatrixDec(const vnl_matrix<double>& p_matrix)
 
 
 //--------------------------------------------------------------
-// -- Destructor
+//: Destructor
 
 PMatrixDec::~PMatrixDec() {}
 
 
 //--------------------------------------------------------------
-// -- Auxiliar Constructor
+//: Auxiliar Constructor
 
 void PMatrixDec::Init()
 {
-    double u0 = _p_matrix(0,0)*_p_matrix(2,0) 
+    double u0 = _p_matrix(0,0)*_p_matrix(2,0)
               + _p_matrix(0,1)*_p_matrix(2,1)
               + _p_matrix(0,2)*_p_matrix(2,2);
-    double v0 = _p_matrix(1,0)*_p_matrix(2,0) 
+    double v0 = _p_matrix(1,0)*_p_matrix(2,0)
               + _p_matrix(1,1)*_p_matrix(2,1)
               + _p_matrix(1,2)*_p_matrix(2,2);
 
-    double a_u = _p_matrix(0,0)*_p_matrix(0,0) 
+    double a_u = _p_matrix(0,0)*_p_matrix(0,0)
                + _p_matrix(0,1)*_p_matrix(0,1)
                + _p_matrix(0,2)*_p_matrix(0,2);
-    double a_v = _p_matrix(1,0)*_p_matrix(1,0) 
+    double a_v = _p_matrix(1,0)*_p_matrix(1,0)
                + _p_matrix(1,1)*_p_matrix(1,1)
                + _p_matrix(1,2)*_p_matrix(1,2);
     a_u = a_u-u0*u0;
@@ -55,55 +55,55 @@ void PMatrixDec::Init()
 
       // INTRINSIC parameters => J
       _j_matrix(0,0) = a_u;
-      _j_matrix(0,1) = 0.0; 
-      _j_matrix(0,2) = u0; 
-    
-      _j_matrix(1,0) = 0.0; 
-      _j_matrix(1,1) = a_v;  
-      _j_matrix(1,2) = v0;  
-      
-      _j_matrix(2,0) = 0.0; 
-      _j_matrix(2,1) = 0.0; 
+      _j_matrix(0,1) = 0.0;
+      _j_matrix(0,2) = u0;
+
+      _j_matrix(1,0) = 0.0;
+      _j_matrix(1,1) = a_v;
+      _j_matrix(1,2) = v0;
+
+      _j_matrix(2,0) = 0.0;
+      _j_matrix(2,1) = 0.0;
       _j_matrix(2,2) = 1.0; // last diagonal element = 1
 
       // EXTRINSIC parameters => D
-      _d_matrix(0,0) = (_p_matrix(0,0) - u0*_p_matrix(2,0))/a_u; 
-      _d_matrix(0,1) = (_p_matrix(0,1) - u0*_p_matrix(2,1))/a_u; 
-      _d_matrix(0,2) = (_p_matrix(0,2) - u0*_p_matrix(2,2))/a_u; 
-      _d_matrix(0,3) = (_p_matrix(0,3) - u0*_p_matrix(2,3))/a_u; 
-    
-      _d_matrix(1,0) = (_p_matrix(1,0) - v0*_p_matrix(2,0))/a_v; 
-      _d_matrix(1,1) = (_p_matrix(1,1) - v0*_p_matrix(2,1))/a_v; 
-      _d_matrix(1,2) = (_p_matrix(1,2) - v0*_p_matrix(2,2))/a_v; 
-      _d_matrix(1,3) = (_p_matrix(1,3) - v0*_p_matrix(2,3))/a_v;
-    
-      _d_matrix(2,0) = _p_matrix(2,0); 
-      _d_matrix(2,1) = _p_matrix(2,1); 
-      _d_matrix(2,2) = _p_matrix(2,2); 
-      _d_matrix(2,3) = _p_matrix(2,3); 
+      _d_matrix(0,0) = (_p_matrix(0,0) - u0*_p_matrix(2,0))/a_u;
+      _d_matrix(0,1) = (_p_matrix(0,1) - u0*_p_matrix(2,1))/a_u;
+      _d_matrix(0,2) = (_p_matrix(0,2) - u0*_p_matrix(2,2))/a_u;
+      _d_matrix(0,3) = (_p_matrix(0,3) - u0*_p_matrix(2,3))/a_u;
 
-      _d_matrix(3,0) = 0.0; 
-      _d_matrix(3,1) = 0.0; 
-      _d_matrix(3,2) = 0.0; 
+      _d_matrix(1,0) = (_p_matrix(1,0) - v0*_p_matrix(2,0))/a_v;
+      _d_matrix(1,1) = (_p_matrix(1,1) - v0*_p_matrix(2,1))/a_v;
+      _d_matrix(1,2) = (_p_matrix(1,2) - v0*_p_matrix(2,2))/a_v;
+      _d_matrix(1,3) = (_p_matrix(1,3) - v0*_p_matrix(2,3))/a_v;
+
+      _d_matrix(2,0) = _p_matrix(2,0);
+      _d_matrix(2,1) = _p_matrix(2,1);
+      _d_matrix(2,2) = _p_matrix(2,2);
+      _d_matrix(2,3) = _p_matrix(2,3);
+
+      _d_matrix(3,0) = 0.0;
+      _d_matrix(3,1) = 0.0;
+      _d_matrix(3,2) = 0.0;
       _d_matrix(3,3) = 1.0; // last diagonal element = 1
     }
 }
 
 
 //---------------------------------------------------------------
-// -- Print to ostream
-vcl_ostream& operator<<(vcl_ostream& s, const PMatrixDec& P) 
+//: Print to ostream
+vcl_ostream& operator<<(vcl_ostream& s, const PMatrixDec& P)
 {
-  s << "PROJECTION MATRIX = [" << vcl_endl << P.get_matrix() << "]" << vcl_endl 
+  s << "PROJECTION MATRIX = [" << vcl_endl << P.get_matrix() << "]" << vcl_endl
     << "DECOMPOSITION: " << vcl_endl
-    << "Intrinsic Parameters = [" << vcl_endl << P._j_matrix << "]" << vcl_endl 
+    << "Intrinsic Parameters = [" << vcl_endl << P._j_matrix << "]" << vcl_endl
     << "Extrinsic Parameters = [" << vcl_endl << P._d_matrix << "]" << vcl_endl;
   return s;
 }
 
 
 //---------------------------------------------------------------
-// -- Test --
+//: Test --
 
 void PMatrixDec::Test()
 {
@@ -121,7 +121,7 @@ void PMatrixDec::Test()
   J.update(pmat1.IntrinsicParameters(), 0, 0); // Copy columns 0,1 and 2
   J(0,3) = 0.0; // Last column = 0
   J(1,3) = 0.0;
-  J(2,3) = 0.0;  
+  J(2,3) = 0.0;
   vcl_cout << "P = [J O_3]*D = [" << vcl_endl
        << J * pmat1.ExtrinsicParameters() << "]" << vcl_endl;
   vcl_cout << "AlphaU=" << pmat1.GetAlphaU() << vcl_endl;
@@ -133,7 +133,7 @@ void PMatrixDec::Test()
   int i,j;
   for (j=0; j<4; j++)
     for (i=0; i<4; i++)
-      matrix2(i,j)= 1.0;  
+      matrix2(i,j)= 1.0;
 
   vcl_cout << "Another Incorrect Matrix: " << vcl_endl;
   vcl_cout << matrix2 << vcl_endl;
@@ -143,7 +143,7 @@ void PMatrixDec::Test()
   vnl_matrix<double> matrix3(2, 2);
   for (j=0; j<2; j++)
     for (i=0; i<2; i++)
-      matrix3(i,j)= 2.0;  
+      matrix3(i,j)= 2.0;
 
   vcl_cout << "Incorrect Matrix: " << vcl_endl;
   vcl_cout << matrix3 << vcl_endl;

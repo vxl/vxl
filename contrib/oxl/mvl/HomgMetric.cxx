@@ -31,10 +31,10 @@ HomgMetric::~HomgMetric()
   // _metric;
 }
 
-// -- Print HomgMetric to ostream.
+//: Print HomgMetric to ostream.
 vcl_ostream& HomgMetric::print(vcl_ostream & s) const
 {
-  if (_metric) 
+  if (_metric)
     s << "[HomgMetric: " << *_metric << "]";
   else
     s << "[HomgMetric: Null ImageMetric]";
@@ -80,7 +80,7 @@ HomgPoint2D HomgMetric::image_to_homg(double x, double y) const
 {
   if (_metric) return _metric->image_to_homg(x, y);
   else return HomgPoint2D(x, y, 1.0);
-}  
+}
 
 HomgPoint2D HomgMetric::imagehomg_to_homg(const HomgPoint2D& p) const
 {
@@ -146,7 +146,7 @@ bool HomgMetric::is_within_distance(const HomgPoint2D& p1, const HomgPoint2D& p2
 
 // @{ SPEEDUPS AVAILABLE FOR CERTAIN SYSTEMS. @}
 
-// -- Return true if the conditioner's action can be described by a planar homography.
+//: Return true if the conditioner's action can be described by a planar homography.
 bool HomgMetric::is_linear() const
 {
   if (_metric) return _metric->is_linear();
@@ -155,14 +155,14 @@ bool HomgMetric::is_linear() const
 
 static vnl_identity_3x3 I;
 
-// -- Return the planar homography C s.t. C x converts x from conditioned to image coordinates.
+//: Return the planar homography C s.t. C x converts x from conditioned to image coordinates.
 const vnl_matrix<double>& HomgMetric::get_C() const
 {
   if (_metric) return _metric->get_C();
   else return I;
 }
 
-// -- Return $C^{-1}$.
+//: Return $C^{-1}$.
 const vnl_matrix<double>& HomgMetric::get_C_inverse() const
 {
   if (_metric) return _metric->get_C_inverse();
@@ -171,7 +171,7 @@ const vnl_matrix<double>& HomgMetric::get_C_inverse() const
 
 // @{ CONVERTING DISTANCES @}
 
-// -- Return true if the metric is rotationally symmetric, i.e. can invert
+//: Return true if the metric is rotationally symmetric, i.e. can invert
 // distances.
 bool HomgMetric::can_invert_distance() const
 {
@@ -179,7 +179,7 @@ bool HomgMetric::can_invert_distance() const
   else return true;
 }
 
-// -- Given that can_invert_distance is true, convert an image distance (in
+//: Given that can_invert_distance is true, convert an image distance (in
 // pixels) to a conditioned distance.
 double HomgMetric::image_to_homg_distance(double image_distance) const
 {
@@ -187,14 +187,14 @@ double HomgMetric::image_to_homg_distance(double image_distance) const
   else return image_distance;
 }
 
-// -- Convert a conditioned distance to an image distance.
+//: Convert a conditioned distance to an image distance.
 double HomgMetric::homg_to_image_distance(double image_distance) const
 {
   if (_metric) return _metric->homg_to_image_distance(image_distance);
   else return image_distance;
 }
 
-// -- As above, but for squared distances
+//: As above, but for squared distances
 double HomgMetric::image_to_homg_distance_sqr(double image_distance_2) const
 {
   if (_metric)
@@ -203,7 +203,7 @@ double HomgMetric::image_to_homg_distance_sqr(double image_distance_2) const
     return image_distance_2;
 }
 
-// -- 
+// --
 double HomgMetric::homg_to_image_distance_sqr(double image_distance) const
 {
   if (_metric)
@@ -218,7 +218,7 @@ static vcl_ostream& warning(char const * fn) {
 
 // Static functions to condition/decondition image relations-----------------
 
-// -- Convert a P matrix to image coords if possible.
+//: Convert a P matrix to image coords if possible.
 PMatrix HomgMetric::homg_to_image_P(const PMatrix& P, const HomgMetric& c)
 {
   if (!c.is_linear()) warning("homg_to_image_P") << "ImageMetric for image 1 is nonlinear\n";
@@ -231,70 +231,70 @@ PMatrix HomgMetric::image_to_homg_P(const PMatrix& P, const HomgMetric& c)
   return PMatrix(c.get_C_inverse() * P.get_matrix());
 }
 
-// -- Decondition a fundamental matrix (convert it from conditioned to image
+//: Decondition a fundamental matrix (convert it from conditioned to image
 // coordinates) if possible.  If not possible, print a warning and do it
 // approximately.
 FMatrix HomgMetric::homg_to_image_F(const FMatrix& F, const HomgMetric& c1, const HomgMetric& c2)
 {
   if (!c1.is_linear()) warning("homg_to_image_F") << "ImageMetric for image 1 is nonlinear\n";
   if (!c2.is_linear()) warning("homg_to_image_F") << "ImageMetric for image 2 is nonlinear\n";
-  
+
   vnl_double_3x3 C1inv = c1.get_C_inverse();
   vnl_double_3x3 C2inv = c2.get_C_inverse();
   return FMatrix(C2inv.transpose() * F.get_matrix() * C1inv);
 }
 
-// -- Condition a fundamental matrix.
+//: Condition a fundamental matrix.
 FMatrix HomgMetric::image_to_homg_F(const FMatrix& F, const HomgMetric& c1, const HomgMetric& c2)
 {
   if (!c1.is_linear()) warning("image_to_homg_F") << "ImageMetric for image 1 is nonlinear\n";
   if (!c2.is_linear()) warning("image_to_homg_F") << "ImageMetric for image 2 is nonlinear\n";
-  
+
   vnl_double_3x3 C1 = c1.get_C();
   vnl_double_3x3 C2 = c2.get_C();
   return FMatrix(C2.transpose() * F.get_matrix() * C1);
 }
 
-// -- Decondition a planar homogaphy.
+//: Decondition a planar homogaphy.
 HMatrix2D HomgMetric::homg_to_image_H(const HMatrix2D& H, const HomgMetric& c1, const HomgMetric& c2)
 {
   if (!c1.is_linear()) warning("homg_to_image_H") << "ImageMetric for image 1 is nonlinear\n";
   if (!c2.is_linear()) warning("homg_to_image_H") << "ImageMetric for image 2 is nonlinear\n";
-  
+
   vnl_double_3x3 C1i = c1.get_C_inverse();
   vnl_double_3x3 C2 = c2.get_C();
   return HMatrix2D(C2 * H.get_matrix() * C1i);
 }
 
-// -- Condition a planar homogaphy.
+//: Condition a planar homogaphy.
 HMatrix2D HomgMetric::image_to_homg_H(const HMatrix2D& H, const HomgMetric& c1, const HomgMetric& c2)
 {
   if (!c1.is_linear()) warning("image_to_homg_H") << "ImageMetric for image 1 is nonlinear\n";
   if (!c2.is_linear()) warning("image_to_homg_H") << "ImageMetric for image 2 is nonlinear\n";
-  
+
   vnl_double_3x3 C1 = c1.get_C();
   vnl_double_3x3 C2i = c2.get_C_inverse();
   return HMatrix2D(C2i * H.get_matrix() * C1);
 }
 
-// -- Decondition a trifocal tensor.
+//: Decondition a trifocal tensor.
 TriTensor HomgMetric::homg_to_image_T(const TriTensor& T, const HomgMetric& c1, const HomgMetric& c2, const HomgMetric& c3)
 {
   // Need line conditioners, so it's inverse transpose
   vnl_double_3x3 C1i = c1.get_C_inverse();
   vnl_double_3x3 C2 = c2.get_C();
   vnl_double_3x3 C3 = c3.get_C();
-  
+
   return T.decondition(C1i.transpose(), C2.transpose(), C3.transpose());
 }
 
-// -- Condition a trifocal tensor.
+//: Condition a trifocal tensor.
 TriTensor HomgMetric::image_to_homg_T(const TriTensor& T, const HomgMetric& c1, const HomgMetric& c2, const HomgMetric& c3)
 {
   // Need line conditioners, so it's inverse transpose
   vnl_double_3x3 C1 = c1.get_C();
   vnl_double_3x3 C2i = c2.get_C_inverse();
   vnl_double_3x3 C3i = c3.get_C_inverse();
-  
+
   return T.decondition(C1.transpose(), C2i.transpose(), C3i.transpose());
 }
