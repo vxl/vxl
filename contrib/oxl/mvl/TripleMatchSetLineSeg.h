@@ -5,17 +5,16 @@
 #pragma interface
 #endif
 //:
-//  \file
+// \file
 // \brief Three-view line matches
 //
-//    TripleMatchSetLineSeg is a TripleMatchSet that holds matches
-//    between corners in three LineSegSets.
+//  TripleMatchSetLineSeg is a TripleMatchSet that holds matches
+//  between corners in three LineSegSets.
 //
 // \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 09 Aug 96
 //-----------------------------------------------------------------------------
 
-//////////////#include <cool/decls.h>
 #include "PairMatchSetLineSeg.h"
 #include "TripleMatchSet.h"
 
