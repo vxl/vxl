@@ -4,11 +4,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// Author(s): Don Hamilton \and Peter Tu
+// .SECTION Author
+//    Don Hamilton \and Peter Tu
 // Created: 17 Feb 2000
-// Modification: 
-// 27 May 2000 fsm@robots.ox.ac.uk Numerous endianness and structure-packing
-//             bugs fixed.
+// .SECTION Modifications
+// 27 May 2000 fsm@robots.ox.ac.uk Numerous endianness and structure-packing bugs fixed.
 
 #include <vcl/vcl_iosfwd.h>
 class vil_stream;
@@ -85,8 +85,7 @@ private:
   vil_bmp_core_header core_hdr;
   vil_bmp_info_header info_hdr;
   long bit_map_start; // position in file of bitmap raw data.
-  typedef unsigned char uchar;
-  uchar **freds_colormap;
+  //uchar **freds_colormap;
   
   //xBITMAPINFOHEADER header;
   //xBITMAPFILEHEADER fbmp;

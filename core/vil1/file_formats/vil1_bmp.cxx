@@ -56,7 +56,7 @@ char const* vil_bmp_generic_image::file_format() const
 vil_bmp_generic_image::vil_bmp_generic_image(vil_stream* is)
   : is_(is)
   , bit_map_start(-1L)
-  , freds_colormap(0)
+  //, freds_colormap(0)
   //, local_color_map_(0)
 {
   read_header();
@@ -71,7 +71,7 @@ vil_bmp_generic_image::vil_bmp_generic_image(vil_stream* is,
 					     vil_component_format format) 
   : is_(is)
   , bit_map_start(-1L)
-  , freds_colormap(0)
+  //, freds_colormap(0)
   //, local_color_map_(0)
 {
   is_->ref();
@@ -104,7 +104,6 @@ vil_bmp_generic_image::~vil_bmp_generic_image()
     delete [] local_color_map_[2];
     delete local_color_map_;
   }
-#endif
 
   if (freds_colormap) {
     delete [] freds_colormap[0];
@@ -114,6 +113,7 @@ vil_bmp_generic_image::~vil_bmp_generic_image()
     delete [] freds_colormap;
     freds_colormap = 0;
   }
+#endif
   
   is_->unref();
 }
@@ -127,12 +127,15 @@ bool vil_bmp_generic_image::read_header()
     where <<  "File is not a valid BMP file" << endl;
     return false;
   }
+#ifdef DEBUG
   file_hdr.print(cerr); // blather
-  
+#endif
 
   // read core header
   core_hdr.read(is_);
+#ifdef DEBUG
   core_hdr.print(cerr); // blather
+#endif
   
   // determine whether or not there is an info header from
   // the size field.
@@ -142,7 +145,9 @@ bool vil_bmp_generic_image::read_header()
   else if (core_hdr.header_size == vil_bmp_core_header::disk_size + vil_bmp_info_header::disk_size) {
     // probably an info header. read it now.
     info_hdr.read(is_);
+#ifdef DEBUG
     info_hdr.print(cerr); // blather
+#endif
     if (info_hdr.compression) {
       where << "cannot cope with compression at the moment" << endl;
       assert(false);
@@ -154,14 +159,18 @@ bool vil_bmp_generic_image::read_header()
     return false;
   }
 
+  // skip colormap info
+  is_->seek(file_hdr.bitmap_offset); // === seek(is_->tell()+info_hdr.colormapsize);
+#if 0
   // color map nonsense
   if (info_hdr.colormapsize ==0 && info_hdr.colorcount == 0) {
     // phew! no colour map.
   }
-  else if (info_hdr.colormapsize == 256 && info_hdr.colorcount == 256 && core_hdr.bitsperpixel == 8) {
+  else if (info_hdr.colormapsize == 256 && core_hdr.bitsperpixel == 8) {
     // In this case I know how to read the colormap because I have hexdumped an example.
     // But I ignore the color map in the get_section() routine because I don't care.
     // -- fsm
+    typedef unsigned char uchar;
     freds_colormap = new uchar *[4];
     freds_colormap[0] = new uchar[256];
     freds_colormap[1] = new uchar[256];
@@ -180,7 +189,7 @@ bool vil_bmp_generic_image::read_header()
     // dunno about this.
     assert(false); // FIXIT
   }
-  
+#endif
 
   // old colormap reading code. it's not clear whether or not it worked -- fsm.
 #if 0  
@@ -224,12 +233,8 @@ bool vil_bmp_generic_image::read_header()
     
   }
   
-  // SetOffset(file->Tell());
-  start_of_data_ = is_->tell();
-  
   // TODO not obvious where the magic number is read 
 #endif
-
 
   // remember the position of the start of the bitmap data
   bit_map_start = is_->tell();
@@ -241,10 +246,6 @@ bool vil_bmp_generic_image::read_header()
 
 bool vil_bmp_generic_image::write_header()
 {
-#if 0
-  assert(false); // FIXIT
-#else
-
 #ifdef DEBUG
   cerr << "Writing BMP header" << endl;
   cerr << width() << 'x' << height() << '@'
@@ -255,8 +256,9 @@ bool vil_bmp_generic_image::write_header()
   rowlen += (3-(rowlen-1)%4); // round up to multiple of 4
   int data_size = height() * rowlen;
 
-  file_hdr.bitmap_offset = bit_map_start = 54;
-  file_hdr.file_size = 54+data_size;
+  if (components() == 1) info_hdr.colorcount = info_hdr.colormapsize = 1<<bits_per_component();
+  file_hdr.bitmap_offset = bit_map_start = 54 + 4 * info_hdr.colormapsize;
+  file_hdr.file_size = bit_map_start+data_size;
   core_hdr.header_size = 40;
   core_hdr.width = width();
   core_hdr.height = height();
@@ -267,8 +269,13 @@ bool vil_bmp_generic_image::write_header()
   file_hdr.write(is_);
   core_hdr.write(is_);
   info_hdr.write(is_);
-
-#endif
+  if (components() == 1) // Need to write a colourmap in this case
+    for (int i=0; i<(1<<bits_per_component()); ++i)
+      for (int j=0; j<4; ++j)
+      {
+        unsigned char c = i;
+        is_->write(&c,1);
+      }
 
   return true;
 }
@@ -317,18 +324,10 @@ bool vil_bmp_generic_image::put_section(void const *ib, int x0, int y0, int xs, 
 
   int skip_rows = height()-y0-ys;
 
-  for (int y=y0+ys-1; y>=y0; --y,++skip_rows)
+  for (int y=0; y<ys; ++y,++skip_rows)
   {
     is_->seek(bit_map_start+skip_rows*rowlen+x0*bypp);
-    if (components() == 1)
-      is_->write(((char const*)ib)+(y-y0)*xs*bypp, xs*bypp);
-    else // component order must be switched: RGB -> BGR
-    {
-      int bypc = bypp/components();
-      for (int x=0; x<xs; ++x)
-        for (int b=0; b<components(); ++b)
-          is_->write(((char const*)ib)+(y-y0)*xs*bypp+x*bypp+(components()-b-1)*bypc, bypc);
-    }
+    is_->write(((char const*)ib)+y*xs*bypp, xs*bypp);
   }
 
   return true;

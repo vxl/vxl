@@ -114,10 +114,10 @@ info header: (only for Windows-bmp; size: 24 bytes)
  4   A4 E9 09 00   14 52 03 00   no. bytes of bitmap data (= file_size - offset_to_bitmap)
  4   6D 0B 00 00   6D 0B 00 00   horizontal pixels per meter (0xB6D = 2925 = 74.3 pixels/inch)
  4   6D 0B 00 00   6D 0B 00 00   vertical pixels per meter
- 4   00 00 00 00   00 01 00 00   size of colourmap table
- 4   00 00 00 00   00 01 00 00   important colour count
+ 4   00 00 00 00   00 01 00 00   size of colourmap table (ctsz) (= 256) (can be up to 1<<bpp)
+ 4   00 00 00 00   00 01 00 00   important colour count (= ctsz)
 
-colormap table: (size: up to 2**bpp * 4 (or * 3 for OS2-bmp), often 256*4=1024)
+colormap table: (size: ctsz * 4 (or 256 * 3 for OS2-bmp))
  ...... appears to be b,g,r,a for Windows-bmp and b,g,r for OS2-bmp
 
 bitmap: (bottom row first, top row last; rows are padded to have multiple of 4 bytes per row)
