@@ -116,9 +116,8 @@ void vsl_b_read(vsl_b_istream &is,int& n )
     if (ptr-buf >= (vcl_ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(int)))
     {
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, int& )\n"
-               << "           Integer too big. Likely cause either file "
-               << "corruption, or\n           file was created on platform"
-               << " with larger integer sizes.\n";
+               << "           Integer too big. Likely cause either file corruption, or\n"
+               << "           file was created on platform with larger integer sizes.\n";
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
     }
@@ -146,10 +145,9 @@ void vsl_b_read(vsl_b_istream &is,unsigned int& n )
     vsl_b_read(is, *ptr);
     if (ptr-buf >= (vcl_ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned int)))
     {
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, unsigned int& )"
-               << "\n           Integer too big. Likely cause either file "
-               << "corruption, or\n           file was created on platform"
-               << " with larger integer sizes.\n";
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, unsigned int& )\n"
+               << "           Integer too big. Likely cause either file corruption, or\n"
+               << "           file was created on platform with larger integer sizes.\n";
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
     }
@@ -176,10 +174,9 @@ void vsl_b_read(vsl_b_istream &is,short& n )
 
     if (ptr-buf >= (vcl_ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(short)))
     {
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, short& )"
-               << "\n           Integer too big. Likely cause either file "
-               << "corruption, or\n           file was created on platform"
-               << " with larger integer sizes.\n";
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, short& )\n"
+               << "           Integer too big. Likely cause either file corruption, or\n"
+               << "           file was created on platform with larger integer sizes.\n";
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
     }
@@ -206,10 +203,9 @@ void vsl_b_read(vsl_b_istream &is, unsigned short& n )
     vsl_b_read(is, *ptr);
     if (ptr-buf >= (vcl_ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short)))
     {
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, unsigned short& )"
-               << "\n           Integer too big. Likely cause either file "
-               << "corruption, or\n           file was created on platform"
-               << " with larger integer sizes.\n";
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, unsigned short& )\n"
+               << "           Integer too big. Likely cause either file corruption, or\n"
+               << "           file was created on platform with larger integer sizes.\n";
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
     }
@@ -235,10 +231,9 @@ void vsl_b_read(vsl_b_istream &is,long& n )
     vsl_b_read(is, *ptr);
     if (ptr-buf >= (vcl_ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(long)))
     {
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, long& )"
-               << "\n           Integer too big. Likely cause either file "
-               << "corruption, or\n           file was created on platform"
-               << " with larger integer sizes.\n";
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, long& )\n"
+               << "           Integer too big. Likely cause either file corruption, or\n"
+               << "           file was created on platform with larger integer sizes.\n";
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
     }
@@ -265,10 +260,9 @@ void vsl_b_read(vsl_b_istream &is,unsigned long& n )
     vsl_b_read(is, *ptr);
     if (ptr-buf >= (vcl_ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned long)))
     {
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, unsigned long& )"
-               << "\n           Integer too big. Likely cause either file "
-               << "corruption, or\n           file was created on platform"
-               << " with larger integer sizes.\n";
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, unsigned long& )\n"
+               << "           Integer too big. Likely cause either file corruption, or\n"
+               << "           file was created on platform with larger integer sizes.\n";
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
     }
@@ -300,11 +294,10 @@ void vsl_b_read(vsl_b_istream &is, vcl_ptrdiff_t& n )
     vsl_b_read(is, *ptr);
     if (ptr-buf >= (vcl_ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vcl_ptrdiff_t)))
     {
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, vcl_ptrdiff_t& )"
-               << "\n           Integer too big. Likely cause either file "
-               << "corruption, or\n           file was created on platform"
-               << " with larger integer sizes and represents a very large"
-               << " data structure.\n";
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, vcl_ptrdiff_t& )\n"
+               << "           Integer too big. Likely cause either file corruption, or\n"
+               << "           file was created on platform with larger integer sizes\n"
+               << "           and represents a very large data structure.\n";
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
     }
@@ -312,7 +305,11 @@ void vsl_b_read(vsl_b_istream &is, vcl_ptrdiff_t& n )
   while (!(*(ptr++) & 128));
   vsl_convert_from_arbitrary_length(buf, &n);
 }
+#endif // 0
 
+#if 0
+// When the macro is ready, this test will be
+// #if ! VCL_SIZE_T_IS_A_STANDARD_TYPE
 
 void vsl_b_write(vsl_b_ostream& os, vcl_size_t n )
 {
@@ -332,11 +329,10 @@ void vsl_b_read(vsl_b_istream &is, vcl_size_t& n )
     vsl_b_read(is, *ptr);
     if (ptr-buf >= (vcl_ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vcl_size_t)))
     {
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, vcl_size_t& )"
-               << "\n           Integer too big. Likely cause either file "
-               << "corruption, or\n           file was created on platform"
-               << " with larger integer sizes and represents a very large"
-               << " data structure.\n";
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, vcl_size_t& )\n"
+               << "           Integer too big. Likely cause either file corruption, or\n"
+               << "           file was created on platform with larger integer sizes\n"
+               << "           and represents a very large data structure.\n";
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
     }
@@ -344,7 +340,7 @@ void vsl_b_read(vsl_b_istream &is, vcl_size_t& n )
   while (!(*(ptr++) & 128));
   vsl_convert_from_arbitrary_length(buf, &n);
 }
-#endif
+#endif // 0
 
 
 void vsl_b_write(vsl_b_ostream& os,float n )
@@ -471,7 +467,7 @@ int vsl_b_ostream::set_serialisation_other_data
     serialisation_records_.find(pointer);
   if (entry == serialisation_records_.end())
   {
-    vcl_cerr << "vsl_b_ostream::set_serialisation_other_data(): "
+    vcl_cerr << "vsl_b_ostream::set_serialisation_other_data():\n"
              << "No such value " << pointer << "in records.\n";
     vcl_abort();
   }
@@ -512,9 +508,8 @@ vsl_b_istream::vsl_b_istream(vcl_istream *is): is_(is)
   if (m2 != vsl_magic_number_part_2 || m1 != vsl_magic_number_part_1)
   {
     vcl_cerr << "\nI/O ERROR: vsl_b_istream::vsl_b_istream(vcl_istream *is)\n"
-             << "             The input stream does not appear to be"
-             << " a Binary VXL stream.\n"
-             << "             Can't find correct magic number.\n";
+             <<   "           The input stream does not appear to be a binary VXL stream.\n"
+             <<   "           Can't find correct magic number.\n";
     is_->clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
   }
 
@@ -607,8 +602,8 @@ int vsl_b_istream::set_serialisation_other_data
     serialisation_records_.find(serial_number);
   if (entry == serialisation_records_.end())
   {
-    vcl_cerr << "vsl_b_istream::set_serialisation_other_data(): "
-             << "No such value " << serial_number << "in records.\n";
+    vcl_cerr << "vsl_b_istream::set_serialisation_other_data():\n"
+             << "  No such value " << serial_number << "in records.\n";
     vcl_abort();
   }
   return (*entry).second.second;

@@ -233,11 +233,10 @@ inline unsigned long vsl_convert_from_arbitrary_length_signed_impl(
               (((signed char)b >> (bitsLeft-1)) != -1) :
               (((b & 127) >> (bitsLeft-1)) != 0) )
       {
-        vcl_cerr << "\nI/O ERROR: "
-                 << "vsl_convert_from_arbitrary_length(.., "
-                 << vsl_type_string(T()) << "*,..) has\n"
-                 << "attempted to convert a number that is too large "
-                 << "to fit into a " << vsl_type_string(T()) << "\n";
+        vcl_cerr << "\nI/O ERROR: vsl_convert_from_arbitrary_length(.., "
+                 << vsl_type_string(T()) << "*,..)\n"
+                 << "has attempted to convert a number that is too large to fit into a "
+                 << vsl_type_string(T()) << '\n';
         return 0;
       }
     }
@@ -278,11 +277,10 @@ inline unsigned long vsl_convert_from_arbitrary_length_unsigned_impl(
     {
       if (bitsLeft <= 0 || ((b & 127) >> bitsLeft) != 0)
       {
-        vcl_cerr << "\nI/O ERROR: "
-                 << "vsl_convert_from_arbitrary_length(.., "
-                 << vsl_type_string(T()) << "*,..) has\n"
-                 << "attempted to convert a number that is too large "
-                 << "to fit into a " << vsl_type_string(T()) << "\n";
+        vcl_cerr << "\nI/O ERROR: vsl_convert_from_arbitrary_length(.., "
+                 << vsl_type_string(T()) << "*,..)\n"
+                 << "has attempted to convert a number that is too large to fit into a "
+                 << vsl_type_string(T()) << '\n';
         return 0;
       }
     }
@@ -601,7 +599,6 @@ inline void vsl_b_read_int_16(vsl_b_istream& is, long& n )
     n &= 65535l;
   }
 }
-
 
 
 #endif // vsl_binary_explicit_io_h_
