@@ -99,7 +99,7 @@ sub update_book
         else
         {
           $ppmfile = $_;
-          $pngfile =~ s/eps$/ppm/;
+          $ppmfile =~ s/eps$/ppm/;
           xec("pstopnm -portrait -stdout $booksrcdir/$_ > $ppmfile");
           $pngfile = $_;
           $pngfile =~ s/eps$/png/;
