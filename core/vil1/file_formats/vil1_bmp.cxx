@@ -11,7 +11,7 @@
 #include <vil/vil_stream.h>
 #include <vil/vil_image.h>
 
-#define where (cerr << __FILE__ ":" << __LINE__ << " : ")
+#define where (vcl_cerr << __FILE__ ":" << __LINE__ << " : ")
 
 //--------------------------------------------------------------------------------
 
@@ -124,17 +124,17 @@ bool vil_bmp_generic_image::read_header()
   is_->seek(0);
   file_hdr.read(is_);
   if( ! file_hdr.signature_valid() ) {
-    where <<  "File is not a valid BMP file" << endl;
+    where <<  "File is not a valid BMP file" << vcl_endl;
     return false;
   }
 #ifdef DEBUG
-  file_hdr.print(cerr); // blather
+  file_hdr.print(vcl_cerr); // blather
 #endif
 
   // read core header
   core_hdr.read(is_);
 #ifdef DEBUG
-  core_hdr.print(cerr); // blather
+  core_hdr.print(vcl_cerr); // blather
 #endif
   
   // determine whether or not there is an info header from
@@ -146,16 +146,16 @@ bool vil_bmp_generic_image::read_header()
     // probably an info header. read it now.
     info_hdr.read(is_);
 #ifdef DEBUG
-    info_hdr.print(cerr); // blather
+    info_hdr.print(vcl_cerr); // blather
 #endif
     if (info_hdr.compression) {
-      where << "cannot cope with compression at the moment" << endl;
+      where << "cannot cope with compression at the moment" << vcl_endl;
       assert(false);
     }
   }
   else {
     // urgh!
-    where << "dunno about header_size " << core_hdr.header_size << endl;
+    where << "dunno about header_size " << core_hdr.header_size << vcl_endl;
     return false;
   }
 
@@ -212,7 +212,7 @@ bool vil_bmp_generic_image::read_header()
     
     vil_buffer<uchar> cmap(cmap_size, 0); // use vil_buffer<> to avoid coreleak
     if (is_->read(cmap.data(),1024) != 1024) {
-      cerr << "Error reading image palette" << endl;
+      vcl_cerr << "Error reading image palette" << vcl_endl;
       return false;
     }
     
@@ -238,7 +238,7 @@ bool vil_bmp_generic_image::read_header()
 
   // remember the position of the start of the bitmap data
   bit_map_start = is_->tell();
-  where << "bit_map_start = " << bit_map_start << endl; // blather
+  where << "bit_map_start = " << bit_map_start << vcl_endl; // blather
   assert(bit_map_start == file_hdr.bitmap_offset); // I think they're supposed to be the same -- fsm.
 
   return true;
@@ -247,9 +247,9 @@ bool vil_bmp_generic_image::read_header()
 bool vil_bmp_generic_image::write_header()
 {
 #ifdef DEBUG
-  cerr << "Writing BMP header" << endl;
-  cerr << width() << 'x' << height() << '@'
-       << components() << 'x' << bits_per_component() << endl;
+  vcl_cerr << "Writing BMP header" << vcl_endl;
+  vcl_cerr << width() << 'x' << height() << '@'
+       << components() << 'x' << bits_per_component() << vcl_endl;
 #endif
 
   int rowlen = width() * components() * bits_per_component() / 8;

@@ -44,28 +44,28 @@ bool test_image_equal(char const* test,
 
   if (sizex != sizex2 || sizey != sizey2)
   {
-    cout << "\nFAILED: test <" << test << "> for " << type_name
+    vcl_cout << "\nFAILED: test <" << test << "> for " << type_name
          << " -- Image dimensions differ: "
-         << sizex2 << " x " << sizey2 << endl;
+         << sizex2 << " x " << sizey2 << vcl_endl;
     return false;
   }
 //ww;
 
   if (cell_bits != cell_bits2)
   {
-    cout << "\nFAILED: test <" << test << "> for " << type_name
+    vcl_cout << "\nFAILED: test <" << test << "> for " << type_name
          << " -- Image pixel sizes differ: "
-         << cell_bits2 << " instead of " << cell_bits << endl;
+         << cell_bits2 << " instead of " << cell_bits << vcl_endl;
     return false;
   }
 //ww;
 
   if (image.component_format() != image2.component_format())
   {
-    cout << "\nFAILED: test <" << test << "> for " << type_name
+    vcl_cout << "\nFAILED: test <" << test << "> for " << type_name
          << " -- Image formats differ: "
 	 << image2.component_format() << " instead of "
-	 << image.component_format() << endl;
+	 << image.component_format() << vcl_endl;
     return false;
   }
 //ww;
@@ -73,9 +73,9 @@ bool test_image_equal(char const* test,
   if (image.get_size_bytes() != num_bits/8 ||
       image2.get_size_bytes() != num_bits2/8 )
   {
-    cout << "\nFAILED: test <" << test << "> for " << type_name
+    vcl_cout << "\nFAILED: test <" << test << "> for " << type_name
          << " -- Image sizes differ: "
-	 << num_bits2 << "bits, " << image2.get_size_bytes() << endl;
+	 << num_bits2 << "bits, " << image2.get_size_bytes() << vcl_endl;
     return false;
   }
 //ww;
@@ -83,8 +83,8 @@ bool test_image_equal(char const* test,
   vil_buffer<unsigned char> image_buf(image.get_size_bytes());
   if (!image.get_section(image_buf.data(), 0, 0, sizex, sizey))
   {
-    cout << "\nFAILED: test <" << test << "> for " << type_name
-         << " -- image::do_get_section() on first image returned false!" << endl;
+    vcl_cout << "\nFAILED: test <" << test << "> for " << type_name
+         << " -- image::do_get_section() on first image returned false!" << vcl_endl;
     return false;
   }
 //ww;
@@ -92,15 +92,15 @@ bool test_image_equal(char const* test,
   vil_buffer<unsigned char> image_buf2(image2.get_size_bytes());
   if (!image2.get_section(image_buf2.data(), 0, 0, sizex2, sizey2))
   {
-    cout << "\nFAILED: test <" << test << "> for " << type_name
-         << " -- image::do_get_section() on second image returned false!" << endl;
+    vcl_cout << "\nFAILED: test <" << test << "> for " << type_name
+         << " -- image::do_get_section() on second image returned false!" << vcl_endl;
     return false;
   }
 //ww;
   if (!exact) // no exact pixel match wanted
   {
-    cout << "\nPASSED: test <" << test << "> for " << type_name
-         <<  " -- image headers are identical" << endl;
+    vcl_cout << "\nPASSED: test <" << test << "> for " << type_name
+         <<  " -- image headers are identical" << vcl_endl;
     return true;
   }
 
@@ -111,24 +111,24 @@ bool test_image_equal(char const* test,
     {
       if (++bad < 20)
 #if DEBUG
-        cout << "\n pixel " << i <<  " differs: " << (int)image_buf[i] << " --> "
+        vcl_cout << "\n pixel " << i <<  " differs: " << (int)image_buf[i] << " --> "
              << (int) image_buf2[i];
 #else
-        cout << ".";
+        vcl_cout << ".";
 #endif
     }
   }
 
   if (bad)
   {
-    cout << "\nFAILED: test <" << test << "> for " << type_name
-         << " -- number of unequal pixels: "  << bad << endl;
+    vcl_cout << "\nFAILED: test <" << test << "> for " << type_name
+         << " -- number of unequal pixels: "  << bad << vcl_endl;
     return false;
   }
   else
   {
-    cout << "\nPASSED: test <" << test << "> for " << type_name
-         <<  " -- images are identical" << endl;
+    vcl_cout << "\nPASSED: test <" << test << "> for " << type_name
+         <<  " -- images are identical" << vcl_endl;
     return true;
   }
 }
@@ -149,14 +149,14 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
   fname += ".";
   if (type_name) fname += type_name;
 
-  cout << "vil_test_image_type: Save to [" << fname << "], ";
+  vcl_cout << "vil_test_image_type: Save to [" << fname << "], ";
 
   
   // Write image to disk
   if (!vil_save(image, fname./*data() does not null-terminate*/c_str(), type_name))
   {
     ++nr_failures;
-    cout << "\nvil_save() FAILED ***\n";
+    vcl_cout << "\nvil_save() FAILED ***\n";
     return; // fatal error
   }
   
@@ -165,21 +165,21 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
 #endif
 
   // STEP 2) Read the image that was just saved to file
-  cout << "load, ";
+  vcl_cout << "load, ";
   vil_image image2 = vil_load(fname.c_str());
   if (!image2)
   {
     ++nr_failures;
-    cout << "\nvil_load() FAILED ***\n";
+    vcl_cout << "\nvil_load() FAILED ***\n";
     return; // fatal error
   }
 
   // make sure saved image has the same pixels as the original image
-  cout << "compare, ";
+  vcl_cout << "compare, ";
   if(strcmp(type_name,image2.file_format()))
   {
-    cout << "\n***FAILED***: read back image type is " << image2.file_format()
-         << " instead of written " << type_name << endl;
+    vcl_cout << "\n***FAILED***: read back image type is " << image2.file_format()
+         << " instead of written " << type_name << vcl_endl;
     passed = false; // non-fatal error
   }
   else
@@ -187,14 +187,14 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
 
   // if we have made it this far then report save as a success
   if (passed)
-    cout << "PASSED: vil_save() for " << type_name << endl;
+    vcl_cout << "PASSED: vil_save() for " << type_name << vcl_endl;
   else
     ++nr_failures;
 
 #if !LEAVE_IMAGES_BEHIND
   vpl_unlink(fname.c_str());
 #endif
-  cout << "done\n";
+  vcl_cout << "done\n";
   return;
 }
 
@@ -359,13 +359,13 @@ int main() {
   vil_test_image_type("mit", image24);
 #endif
 
-  cout << "Summary: ";
+  vcl_cout << "Summary: ";
   if (nr_failures > 1)
-    cout << "*** " << nr_failures << " failures\n";
+    vcl_cout << "*** " << nr_failures << " failures\n";
   else if (nr_failures > 0)
-    cout << "*** " << nr_failures << " failure\n";
+    vcl_cout << "*** " << nr_failures << " failure\n";
   else
-    cout << "all tests passed\n";
+    vcl_cout << "all tests passed\n";
 
   return nr_failures;
 }

@@ -21,14 +21,14 @@ char const* vil_tiff_format_tag = "tiff";
 // Functions
 static bool xxproblem(char const* linefile, char const* msg)
 {
-  cerr << linefile << "[PROBLEM " <<msg << "]";
+  vcl_cerr << linefile << "[PROBLEM " <<msg << "]";
   return false;
 }
 #define xproblem(x, l) xxproblem(__FILE__ ":" #l ":", x)
 #define yxproblem(x, l) xproblem(x, l)
 #define problem(x) yxproblem(x, __LINE__)
 
-#define trace if (true) { } else cerr
+#define trace if (true) { } else vcl_cerr
 
 bool vil_tiff_file_format_probe(vil_stream* is)
 {
@@ -68,7 +68,7 @@ bool vil_tiff_file_format_probe(vil_stream* is)
 
   else if ( ((hdr[0]==0x4D && hdr[1]==0x4D) || (hdr[1]==0x49 && hdr[1]==0x49)) &&
 	    ((hdr[2]==0x00 && hdr[3]==0x2A) || (hdr[2]==0x2A && hdr[3]==0x00)) ) {
-    cerr << __FILE__ ": suspicious TIFF header" << endl;
+    vcl_cerr << __FILE__ ": suspicious TIFF header" << vcl_endl;
     return true; // allow it.
   }
   
@@ -167,13 +167,13 @@ static tsize_t vil_tiff_writeproc(thandle_t h, tdata_t buf, tsize_t n)
   int s = p->vs->tell();
   if (s > p->filesize) 
     p->filesize = s;
-  trace << "writeproc: ret=" << ret << "/" << n << " , filesize = " << p->filesize << "   " << s << endl;
+  trace << "writeproc: ret=" << ret << "/" << n << " , filesize = " << p->filesize << "   " << s << vcl_endl;
   return ret;
 }
 
 static toff_t vil_tiff_seekproc(thandle_t h, toff_t offset, int whence)
 {
-    trace << "seek " << offset << " w = " << whence << endl;
+    trace << "seek " << offset << " w = " << whence << vcl_endl;
   vil_tiff_structures* p = (vil_tiff_structures*)h;
   if (whence == SEEK_SET) {
     p->vs->seek(offset);
@@ -324,7 +324,7 @@ bool vil_tiff_generic_image::read_header()
       if(!TIFFIsTiled(p->tif)) {
 	// section_tiff_image = new ForeignImage(GetDescription(), 'r', GetSizeX(), GetSizeY(), GetBitsPixel(), 8);
 #ifdef RIH_DEBUG
-	cerr << "vil_tiff: Treating Tiff image as uncompressed ForeignImage" << endl;
+	vcl_cerr << "vil_tiff: Treating Tiff image as uncompressed ForeignImage" << vcl_endl;
 #endif		   
       }
     }
@@ -335,7 +335,7 @@ bool vil_tiff_generic_image::read_header()
 	{
 	  // section_tiff_image = new ForeignImage(GetDescription(), 'r', GetSizeX(), GetSizeY(), GetBitsPixel(), 8);
 #ifdef RIH_DEBUG
-	  cerr << "Treating Tiff image as uncompressed ForeignImage" << endl;
+	  vcl_cerr << "Treating Tiff image as uncompressed ForeignImage" << vcl_endl;
 #endif		   
 	}
       
@@ -587,7 +587,7 @@ bool vil_tiff_generic_image::get_section(void* buf, int x0, int y0, int xs, int 
 {
   if (!p->jumbo_strips) {
     if (p->tiled)
-      cerr << "vil_tiff_generic_image: TILED TIFF: may be wrongly read?\n";
+      vcl_cerr << "vil_tiff_generic_image: TILED TIFF: may be wrongly read?\n";
     
     // Random access only to strips.
     // Get the nearby strips...

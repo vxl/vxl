@@ -72,7 +72,7 @@ vil_image_impl* vil_mit_file_format::make_input_image(vil_stream* is)
   
   int bits_per_pixel = vil_16bit_read_little_endian(is);
   if (bits_per_pixel > 32) {
-    cerr << "vil_mit_file_format:: Thought it was MIT, but bpp = " << bits_per_pixel << endl;
+    vcl_cerr << "vil_mit_file_format:: Thought it was MIT, but bpp = " << bits_per_pixel << vcl_endl;
     return 0;
   }
   
@@ -136,13 +136,13 @@ vil_mit_generic_image::vil_mit_generic_image(vil_stream* is, int planes,
   {
     if (components_ == 3) type_ = 2;
     else if (components_ == 1) type_ = 1;
-    else cerr << __FILE__ " : Can only write RGB or grayscale\n";
+    else vcl_cerr << __FILE__ " : Can only write RGB or grayscale\n";
   }
   else 
   { 
     if (components_ == 1) type_ = 6; 
     else  
-      cerr << __FILE__ " : Ah can only write 8 or 16 bit images\n";
+      vcl_cerr << __FILE__ " : Ah can only write 8 or 16 bit images\n";
   }
 
   write_header();

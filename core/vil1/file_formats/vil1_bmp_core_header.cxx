@@ -41,11 +41,11 @@ void vil_bmp_core_header::write(vil_stream *s) const
 
 void vil_bmp_core_header::print(ostream &s) const
 {
-  s << "vil_bmp_core_header:" << endl
-    << "  header_size  : " << header_size  << endl
-    << "  width        : " << width        << endl
-    << "  height       : " << height       << endl
-    << "  planes       : " << planes       << endl
-    << "  bitsperpixel : " << bitsperpixel << endl
-    << endl;
+  s << "vil_bmp_core_header:" << vcl_endl
+    << "  header_size  : " << header_size  << vcl_endl
+    << "  width        : " << width        << vcl_endl
+    << "  height       : " << height       << vcl_endl
+    << "  planes       : " << planes       << vcl_endl
+    << "  bitsperpixel : " << bitsperpixel << vcl_endl
+    << vcl_endl;
 }

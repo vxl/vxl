@@ -106,7 +106,7 @@ vil_pnm_generic_image::vil_pnm_generic_image(vil_stream* vs, int planes,
   } else if (bits_per_component_ <= 32) {
     maxval_ = 0xFFFFFFFF;
   } else { 
-    cerr << "vil_pnm_generic_image: cannot make  " << bits_per_component_ << " bit x " << components_ << " image\n";
+    vcl_cerr << "vil_pnm_generic_image: cannot make  " << bits_per_component_ << " bit x " << components_ << " image\n";
   }
 
   write_header();
@@ -234,7 +234,7 @@ bool operator>>(vil_stream& vs, int& a) {
 bool vil_pnm_generic_image::get_section(void* buf, int x0, int y0, int xs, int ys) const
 {
   if (bits_per_component_ < 8) {
-    cerr << "vil_pnm_generic_image: cannot load " << bits_per_component_ << " bit x " << components_ << " image\n";
+    vcl_cerr << "vil_pnm_generic_image: cannot load " << bits_per_component_ << " bit x " << components_ << " image\n";
     return false;
   }
 
@@ -282,7 +282,7 @@ void operator<<(vil_stream& vs, int a) {
 bool vil_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs, int ys)
 {
   if (bits_per_component_ < 8) {
-    cerr << "vil_pnm_generic_image: cannot save " << bits_per_component_ << " bit x " << components_ << " image\n";
+    vcl_cerr << "vil_pnm_generic_image: cannot save " << bits_per_component_ << " bit x " << components_ << " image\n";
     return false;
   }
 

@@ -162,8 +162,8 @@ bool vil_viff_generic_image::read_header()
       bits_per_component_ = 128;
       break;
     default:
-      cout << "vil_viff: non supported data type: VFF_TYP " 
-	   <<   header_.data_storage_type << endl;      
+      vcl_cout << "vil_viff: non supported data type: VFF_TYP " 
+	   <<   header_.data_storage_type << vcl_endl;      
       format_ = VIL_COMPONENT_FORMAT_UNKNOWN;
       return false;
   }
@@ -191,7 +191,7 @@ bool vil_viff_generic_image::write_header()
       case 16: type=VFF_TYP_2_BYTE; break;
       case 32: type=VFF_TYP_4_BYTE; break;
       default:
-        cerr << "vil_viff: non supported data type: " << bits_per_component_ << " bit pixels\n";
+        vcl_cerr << "vil_viff: non supported data type: " << bits_per_component_ << " bit pixels\n";
         return false;
     }
   }
@@ -202,7 +202,7 @@ bool vil_viff_generic_image::write_header()
       case 32: type=VFF_TYP_FLOAT; break;
       case 64: type=VFF_TYP_DOUBLE; break;
       default:
-        cerr << "vil_viff: non supported data type: " << bits_per_component_ << " bit float pixels\n";
+        vcl_cerr << "vil_viff: non supported data type: " << bits_per_component_ << " bit float pixels\n";
         return false;
     }
   }
@@ -213,13 +213,13 @@ bool vil_viff_generic_image::write_header()
       case 64: type=VFF_TYP_COMPLEX; break;
       case 128: type=VFF_TYP_DCOMPLEX; break;
       default:
-        cerr << "vil_viff: non supported data type: " << bits_per_component_ << " bit complex pixels\n";
+        vcl_cerr << "vil_viff: non supported data type: " << bits_per_component_ << " bit complex pixels\n";
         return false;
     }
   }
   else
   {
-    cout << "vil_viff: non supported data type: " << component_format() << endl;
+    vcl_cout << "vil_viff: non supported data type: " << component_format() << vcl_endl;
     return false;
   }
 
@@ -284,21 +284,21 @@ bool vil_viff_generic_image::check_endian()
 
   endian_consistent_ = ((dst & 0xff) != 0);
   if (endian_consistent_)
-    cout << "Endian is Consistent" << endl;
+    vcl_cout << "Endian is Consistent" << vcl_endl;
   else
-    cout << "Endian is NOT Consistent" << endl;
+    vcl_cout << "Endian is NOT Consistent" << vcl_endl;
   return endian_consistent_;
 }
 
 vil_image vil_viff_generic_image::get_plane(int plane) const 
 {
-  cerr << "FIXME: this should be an adapter that shifts to the plane asked for\n";
+  vcl_cerr << "FIXME: this should be an adapter that shifts to the plane asked for\n";
   return const_cast<vil_viff_generic_image*>(this);
 }
 
 bool vil_viff_generic_image::get_section_rgb_byte(void* buf, int x0, int y0, int width, int height) const
 {
-  cerr << "FIXME: vil_viff_generic_image::get_section_rgb_byte() not yet implemented\n";
+  vcl_cerr << "FIXME: vil_viff_generic_image::get_section_rgb_byte() not yet implemented\n";
   return false;
 }
 

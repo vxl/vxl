@@ -43,12 +43,12 @@ void vil_bmp_info_header::write(vil_stream *s) const
 
 void vil_bmp_info_header::print(ostream &s) const
 {
-  s << "vil_bmp_info_header:" << endl
-    << "  compression  : " << compression << endl
-    << "  bitmap_size  : " << bitmap_size << endl
-    << "  horiz_res    : " << horiz_res << endl
-    << "  verti_res    : " << verti_res << endl
-    << "  colormapsize : " << colormapsize << endl
-    << "  colorcount   : " << colorcount << endl
-    << endl;
+  s << "vil_bmp_info_header:" << vcl_endl
+    << "  compression  : " << compression << vcl_endl
+    << "  bitmap_size  : " << bitmap_size << vcl_endl
+    << "  horiz_res    : " << horiz_res << vcl_endl
+    << "  verti_res    : " << verti_res << vcl_endl
+    << "  colormapsize : " << colormapsize << vcl_endl
+    << "  colorcount   : " << colorcount << vcl_endl
+    << vcl_endl;
 }

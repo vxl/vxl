@@ -10,7 +10,7 @@
 #include <vcl/vcl_cassert.h>
 #include <vcl/vcl_iostream.h>
 
-#define trace if (true) { } else cerr
+#define trace if (true) { } else vcl_cerr
 
 // using jpeg decompressor objects :
 // 0. supply an error manager, eg with jpeg_std_err().
@@ -70,7 +70,7 @@ JSAMPLE const *vil_jpeg_decompressor::read_scanline(unsigned line) {
     return biffer;
   
   if (ready && line<jobj.output_scanline) {
-    trace << "...aborting" << endl;
+    trace << "...aborting" << vcl_endl;
     // bah! have to restart
     jpeg_abort_decompress(&jobj);
     
@@ -80,7 +80,7 @@ JSAMPLE const *vil_jpeg_decompressor::read_scanline(unsigned line) {
   }
 
   if (!ready) {
-    trace << "...restarting" << endl;
+    trace << "...restarting" << vcl_endl;
 
     // rewind stream
     vil_jpeg_stream_src_rewind(&jobj, stream);
@@ -98,7 +98,7 @@ JSAMPLE const *vil_jpeg_decompressor::read_scanline(unsigned line) {
   
   // allocate scanline buffer, if necessary.
   if (!biffer) {
-    trace << "...allocate buffer" << endl;
+    trace << "...allocate buffer" << vcl_endl;
     unsigned row_size = jobj.output_width * jobj.output_components;
     biffer = new JSAMPLE[row_size];
   }
@@ -122,7 +122,7 @@ JSAMPLE const *vil_jpeg_decompressor::read_scanline(unsigned line) {
 
   // end reached ?
   if (jobj.output_scanline >= jobj.image_height) {
-    trace << "...reached end" << endl;
+    trace << "...reached end" << vcl_endl;
     jpeg_finish_decompress(&jobj); // this will call vil_jpeg_term_source()
     ready = false;
   }

@@ -25,7 +25,7 @@ char const* vil_png_format_tag = "png";
 // Functions
 static bool problem(char const* msg)
 {
-  cerr << "[vil_png: PROBLEM " <<msg << "]";
+  vcl_cerr << "[vil_png: PROBLEM " <<msg << "]";
   return false;
 }
 
@@ -111,7 +111,7 @@ static void pngtopnm_error_handler (png_structp png_ptr, png_const_charp msg)
 
   if (!jmpbuf_ok) {
     // Someone called the error handler when the setjmp was wrong
-    cerr << "vil_png: jmpbuf is pretty far from ok.  returning\n";
+    vcl_cerr << "vil_png: jmpbuf is pretty far from ok.  returning\n";
     // abort();
     return;
   }

@@ -27,7 +27,7 @@ bool vil_jpeg_file_probe(vil_stream *vs) {
   int n = vs->read(magic, sizeof(magic));
   
   if (n != sizeof(magic)) {
-    cerr << __FILE__ << " : vil_stream::read() failed" << endl;
+    vcl_cerr << __FILE__ << " : vil_stream::read() failed" << vcl_endl;
     return false;
   }
   
@@ -89,7 +89,7 @@ vil_jpeg_generic_image::vil_jpeg_generic_image(vil_stream *s,
   stream->ref();
   // warn
   if (planes != 1)
-    cerr << __FILE__ " : prototype has != 1 planes. ignored" << endl;
+    vcl_cerr << __FILE__ " : prototype has != 1 planes. ignored" << vcl_endl;
   
   // use same number of components as prototype, obviously.
   jc->jobj.input_components = components;
@@ -121,7 +121,7 @@ vil_jpeg_generic_image::~vil_jpeg_generic_image() {
 //: decompressing from the vil_stream to a section buffer.
 bool vil_jpeg_generic_image::get_section(void *buf, int x0, int y0, int w, int h) const {
   if (!jd) {
-    cerr << "attempted put_section() failed -- no jpeg decompressor" << endl;
+    vcl_cerr << "attempted put_section() failed -- no jpeg decompressor" << vcl_endl;
     return false;
   }
   //cerr << "get_section " << buf << ' ' << x0 << ' ' << y0 << ' ' << w << ' ' << h << endl;
@@ -145,7 +145,7 @@ bool vil_jpeg_generic_image::get_section(void *buf, int x0, int y0, int w, int h
 //: compressing a section onto the vil_stream.
 bool vil_jpeg_generic_image::put_section(void const *buf, int x0, int y0, int w, int h) {
   if (!jc) {
-    cerr << "attempted get_section() failed -- no jpeg compressor" << endl;
+    vcl_cerr << "attempted get_section() failed -- no jpeg compressor" << vcl_endl;
     return false;
   }
 
@@ -153,11 +153,11 @@ bool vil_jpeg_generic_image::put_section(void const *buf, int x0, int y0, int w,
   // Relaxed slightly.. awf.
   // It will work if you send entire scan lines sequentially
   if (x0 != 0 || w != jc->jobj.image_width) {
-    cerr << __FILE__ << " : Can only compress complete scanlines" << endl;
+    vcl_cerr << __FILE__ << " : Can only compress complete scanlines" << vcl_endl;
     return false;
   }
   if (y0 != jc->jobj.next_scanline) {
-    cerr << __FILE__ << " : Scanlines must be sent sequentially " << endl;
+    vcl_cerr << __FILE__ << " : Scanlines must be sent sequentially " << vcl_endl;
     return false;
   }
 

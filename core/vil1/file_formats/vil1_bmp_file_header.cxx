@@ -27,15 +27,15 @@ vil_bmp_file_header::vil_bmp_file_header()
 
 void vil_bmp_file_header::print(ostream &s) const
 {
-  s << "vil_bmp_file_header:" << endl
+  s << "vil_bmp_file_header:" << vcl_endl
     << "  magic   : " << vcl_hex 
     << "0x" << unsigned(magic[0]) << ' '
-    << "0x" << unsigned(magic[1]) << endl
-    << "  filesize: 0x" << file_size << endl
-    << "  reserved: 0x" << reserved1 << endl
-    << "  reserved: 0x" << reserved2 << endl
-    << "  offset  : 0x" << bitmap_offset << endl
-    << vcl_dec << endl;
+    << "0x" << unsigned(magic[1]) << vcl_endl
+    << "  filesize: 0x" << file_size << vcl_endl
+    << "  reserved: 0x" << reserved1 << vcl_endl
+    << "  reserved: 0x" << reserved2 << vcl_endl
+    << "  offset  : 0x" << bitmap_offset << vcl_endl
+    << vcl_dec << vcl_endl;
 }
 
 void vil_bmp_file_header::read(vil_stream *s)

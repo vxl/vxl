@@ -26,9 +26,9 @@ void p(vil_image& m)
     for(int x = 0; x < m.width(); ++x) {
       unsigned char val = 0;
       m.get_section(&val, x, y, 1, 1);
-      cout << "\t" << (int)val;
+      vcl_cout << "\t" << (int)val;
     }
-    cout << endl;
+    vcl_cout << vcl_endl;
   }
 }
 

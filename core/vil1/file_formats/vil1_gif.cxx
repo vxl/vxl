@@ -27,7 +27,7 @@ bool vil_gif_probe(vil_stream *s)
   if (magic[3] != 0x38 ||
       magic[4] != 0x37 ||
       magic[5] != 0x61 ) {
-    cerr << __FILE__ ": file format may be GIF, but is not v87" << endl;
+    vcl_cerr << __FILE__ ": file format may be GIF, but is not v87" << vcl_endl;
     // may be GIF, but not GIF87a
     return false;
   }
@@ -53,7 +53,7 @@ vil_gif_loader_saver::vil_gif_loader_saver(vil_stream *s_) : s(s_)
   // read screen descriptor
   screen_width_  = vil_16bit_read_little_endian(s);
   screen_height_ = vil_16bit_read_little_endian(s);
-  cerr << "screen width and height : " << screen_width_ << ' ' << screen_height_ << endl;
+  vcl_cerr << "screen width and height : " << screen_width_ << ' ' << screen_height_ << vcl_endl;
   
   unsigned char b;
   
@@ -61,75 +61,75 @@ vil_gif_loader_saver::vil_gif_loader_saver(vil_stream *s_) : s(s_)
 
   {
     s->read(&b, 1);
-    cerr << "b = 0x" << hex << int(b) << dec << endl;
+    vcl_cerr << "b = 0x" << vcl_hex << int(b) << vcl_dec << vcl_endl;
 
     int bits_of_colour_res;
     if (b & 0x80) {
-      cerr << "screen has global colour map" << endl;
+      vcl_cerr << "screen has global colour map" << vcl_endl;
       bits_of_colour_res = 1 + ((b & 0x70)>>4);
-      cerr << "screen has " << bits_of_colour_res << " bits of colour resolution" << endl;
+      vcl_cerr << "screen has " << bits_of_colour_res << " bits of colour resolution" << vcl_endl;
     }
     else
       bits_of_colour_res = 0;
 
     // bit 3 should be zero    
     if (b & 0x08) {
-      cerr << "bit 3 is not zero" << endl;
+      vcl_cerr << "bit 3 is not zero" << vcl_endl;
       assert(false);
     }
     
     int bits_per_pixel = 1 + (b & 0x07);
-    cerr << "screen has " << bits_per_pixel << " bits per pixel" << endl;
+    vcl_cerr << "screen has " << bits_per_pixel << " bits per pixel" << vcl_endl;
     if (bits_per_pixel != 8) {
-      cerr << "cannot read GIF with != 8 bits per pixel." << endl;
+      vcl_cerr << "cannot read GIF with != 8 bits per pixel." << vcl_endl;
       assert(false);
     }
 
     // create global colour map, if needed.
     if (bits_of_colour_res > 0) {
       global_color_map = new vil_gif_color_map( 0x1 << bits_per_pixel );
-      cerr << "global colour map has size " << global_color_map->size << endl;
+      vcl_cerr << "global colour map has size " << global_color_map->size << vcl_endl;
     }
     
     // colour index of background.
     s->read(&b, 1);
     background_index = b;
-    cerr << "background has colour index " << background_index << endl;
+    vcl_cerr << "background has colour index " << background_index << vcl_endl;
     
     // should be zero
     s->read(&b, 1);
     if (b) {
-      cerr << "not zero" << endl;
+      vcl_cerr << "not zero" << vcl_endl;
       assert(false);
     }
   }
 
   // ---------- read global colourmap
   
-  cerr << "position is 0x" << hex << s->tell() << dec << endl;
+  vcl_cerr << "position is 0x" << vcl_hex << s->tell() << vcl_dec << vcl_endl;
   if (global_color_map) {
-    cerr << "read global colour map" << endl;
+    vcl_cerr << "read global colour map" << vcl_endl;
     s->read(global_color_map->cmap, 3*global_color_map->size);
 
     for (int i=0; i<16; ++i)
-      cerr << setw(3) << i << ' ' 
+      vcl_cerr << vcl_setw(3) << i << ' ' 
 	   << int((unsigned char) global_color_map->cmap[3*i+0]) << ' '
 	   << int((unsigned char) global_color_map->cmap[3*i+1]) << ' '
-	   << int((unsigned char) global_color_map->cmap[3*i+2]) << endl;
+	   << int((unsigned char) global_color_map->cmap[3*i+2]) << vcl_endl;
   }
   
   // ---------- read image descriptors
   
   while (true) {
     int offset = s->tell();
-    cerr << "position is 0x" << hex << offset << dec << endl;
+    vcl_cerr << "position is 0x" << vcl_hex << offset << vcl_dec << vcl_endl;
 
     // read image separator or GIF terminator
     s->read(&b, 1);
     if (b == ';')   // terminator
       break; 
     if (b != ',') { // separator
-      cerr << "unexpected character \'" << char(b) << "\' (0x" << hex << int(b) << dec << ") in GIF stream" << endl;
+      vcl_cerr << "unexpected character \'" << char(b) << "\' (0x" << vcl_hex << int(b) << vcl_dec << ") in GIF stream" << vcl_endl;
       assert(false);
     }
     
@@ -140,47 +140,47 @@ vil_gif_loader_saver::vil_gif_loader_saver(vil_stream *s_) : s(s_)
     ir->y0 = vil_16bit_read_little_endian(s);
     ir->w  = vil_16bit_read_little_endian(s);
     ir->h  = vil_16bit_read_little_endian(s);
-    cerr << "x0 y0 w h = " << ir->x0 << ' ' << ir->y0 << ' ' << ir->w << ' ' << ir->h << endl;
+    vcl_cerr << "x0 y0 w h = " << ir->x0 << ' ' << ir->y0 << ' ' << ir->w << ' ' << ir->h << vcl_endl;
 
-    cerr << "position is 0x" << hex << s->tell() << dec << endl;
+    vcl_cerr << "position is 0x" << vcl_hex << s->tell() << vcl_dec << vcl_endl;
 
     s->read(&b, 1);
-    cerr << "b = 0x" << hex << int(b) << dec << endl;
+    vcl_cerr << "b = 0x" << vcl_hex << int(b) << vcl_dec << vcl_endl;
 
-    cerr << "position is 0x" << hex << s->tell() << dec << endl;
+    vcl_cerr << "position is 0x" << vcl_hex << s->tell() << vcl_dec << vcl_endl;
     if (b & 0x80) { // local colour map?
-      cerr << "image has local colour map" << endl;
+      vcl_cerr << "image has local colour map" << vcl_endl;
       int bits = 1 + (b & 0x07);
-      cerr << "read local colour map (" << bits << " bits per pixel)" << endl;
+      vcl_cerr << "read local colour map (" << bits << " bits per pixel)" << vcl_endl;
       ir->color_map = new vil_gif_color_map(0x1 << bits);
       s->read(ir->color_map->cmap, 3*ir->color_map->size);
     }
     else {
-      cerr << "no local colour map" << endl;
+      vcl_cerr << "no local colour map" << vcl_endl;
       ir->color_map = 0;
     }
-    cerr << "position is 0x" << hex << s->tell() << dec << endl;
+    vcl_cerr << "position is 0x" << vcl_hex << s->tell() << vcl_dec << vcl_endl;
     
     // interlaced or sequential?
     ir->interlaced = b & 0x40;
-    cerr << "image is " << (ir->interlaced ? "interlaced" : "sequential") << endl;
+    vcl_cerr << "image is " << (ir->interlaced ? "interlaced" : "sequential") << vcl_endl;
     if (ir->interlaced) {
-      cerr << "can't read interlaced GIFs yet" << endl;
+      vcl_cerr << "can't read interlaced GIFs yet" << vcl_endl;
       assert(false);
     }
 
     // bits 543 should be zero
     if (b & 0x38) {
-      cerr << "bits 543 are not zero" << endl;
+      vcl_cerr << "bits 543 are not zero" << vcl_endl;
       assert(false);
     }
 
     //
     if (ir->color_map) {
       ir->bits_per_pixel = 1 + (b & 0x07);
-      cerr << "image has " << ir->bits_per_pixel << " bits per pixel" << endl;
+      vcl_cerr << "image has " << ir->bits_per_pixel << " bits per pixel" << vcl_endl;
       if (ir->bits_per_pixel != 8) {
-	cerr << "cannot cope with that" << endl;
+	vcl_cerr << "cannot cope with that" << vcl_endl;
 	assert(false);
       }
     }
@@ -197,8 +197,8 @@ vil_gif_loader_saver::vil_gif_loader_saver(vil_stream *s_) : s(s_)
     break;
   }
 
-  cerr << "read " << images.size() << " image descriptors" << endl;
-  cerr << "------------ done : position = " << hex << s->tell() << dec << endl;
+  vcl_cerr << "read " << images.size() << " image descriptors" << vcl_endl;
+  vcl_cerr << "------------ done : position = " << vcl_hex << s->tell() << vcl_dec << vcl_endl;
 }
 
 vil_gif_loader_saver::~vil_gif_loader_saver()

@@ -45,7 +45,7 @@ bool vil_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const *scanline)
       jobj.in_color_space = JCS_RGB;
       break;
     default:
-      cerr << __FILE__ " : urgh!" << endl;
+      vcl_cerr << __FILE__ " : urgh!" << vcl_endl;
       return false;
     }
     
@@ -61,7 +61,7 @@ bool vil_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const *scanline)
 
   //
   if (line != jobj.next_scanline) {
-    cerr << "scanlines must be written in order" << endl;
+    vcl_cerr << "scanlines must be written in order" << vcl_endl;
     return false;
   }
 

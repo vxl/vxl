@@ -6,7 +6,7 @@
 #include <vil/vil_image_impl.h>
 
 #define AssertEq(fred, x) {\
-cout << "TEST [" << fred << "] == [" << x << "] : "; bool b = (fred) == (x); cout << (b?"PASSED":"FAILED") << endl; }
+vcl_cout << "TEST [" << fred << "] == [" << x << "] : "; bool b = (fred) == (x); vcl_cout << (b?"PASSED":"FAILED") << vcl_endl; }
 
 void test(char const* magic, int comps, int bits)
 {
@@ -19,7 +19,7 @@ void test(char const* magic, int comps, int bits)
 
   vil_image i = vil_load(FNAME);
   
-  cout <<
+  vcl_cout <<
     "vil_image_impl: size " << i.width() << "x" << i.height() <<
     ", " << i.components() << " component" <<
     ", " << i.bits_per_component() << " bit" << 

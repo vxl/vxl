@@ -6,7 +6,7 @@ int main(int argc, char **argv)
   vil_image image;
   for (int i=1; i<argc; ++i) {
     vil_image tmp( vil_load(argv[i]) );
-    cerr << "tmp = " << tmp << endl;
+    vcl_cerr << "tmp = " << tmp << vcl_endl;
     image = tmp;
   }
     

@@ -135,10 +135,10 @@ vil_iris_generic_image::vil_iris_generic_image(vil_stream* is, int planes,
 		planes_ = 4;
 		dimension_ = 3;
 	 }
-	 else cerr << "Cannot write iris image, they can do but grayscale or RGB(A)\n";
+	 else vcl_cerr << "Cannot write iris image, they can do but grayscale or RGB(A)\n";
     write_header();
   }
-  else cerr << "Cannot write iris image, they want 8 or 16 bits per component\n";
+  else vcl_cerr << "Cannot write iris image, they want 8 or 16 bits per component\n";
 }
 
 vil_iris_generic_image::~vil_iris_generic_image()
@@ -174,26 +174,26 @@ bool vil_iris_generic_image::read_header()
 
   if (magic_ != 474) 
   {
-    cerr << "This is not an Iris RGB file: magic number is incorrect: " 
-	 << magic_ << endl;
+    vcl_cerr << "This is not an Iris RGB file: magic number is incorrect: " 
+	 << magic_ << vcl_endl;
     return false; 
   }
   
   if (storage_ != 0 && storage_ != 1) 
   {
-    cerr << "This is not an Iris RGB file: storage must be RLE or VERBATIM\n";
+    vcl_cerr << "This is not an Iris RGB file: storage must be RLE or VERBATIM\n";
     return false; 
   }
   
   if (colormap_ == 3) 
   {
-    cerr << "This is not an ordinary Iris RGB image but a colormap file\n";
+    vcl_cerr << "This is not an ordinary Iris RGB image but a colormap file\n";
     return false; 
   }
   
   if (dimension_ == 3 && colormap_ != 0) 
   {
-    cerr << "Cannot handle Iris RGB file with colormap other than NORMAL\n";
+    vcl_cerr << "Cannot handle Iris RGB file with colormap other than NORMAL\n";
     return false; 
   }
 
@@ -207,21 +207,21 @@ bool vil_iris_generic_image::read_header()
 bool vil_iris_generic_image::write_header()
 {
 #ifdef DEBUG
-  cerr << "vil_iris_generic_image::write_header()\n";
-  cerr << "Here we go : \n";
-  cerr << "magic_      = " << magic_    << endl;
-  cerr << "storage_    = " << storage_ << endl;
-  cerr << "bytes_per_c = " << bytes_per_component_ << endl;
-  cerr << "dimension_  = " << dimension_ << endl;
-  cerr << "width_      = " << width_ << endl;
-  cerr << "height_     = " << height_ << endl;
-  cerr << "planes_     = " << planes_ << endl;
-  cerr << "pixmin_     = " << pixmin_ << endl;
-  cerr << "pixmax_     = " << pixmax_ << endl;
-  cerr << "colormap_   = " << colormap_ << endl;
-  cerr << "components_ = " << components_ << endl;
-  cerr << "imagename_  = " << imagename_ << endl;
-  cerr << endl;
+  vcl_cerr << "vil_iris_generic_image::write_header()\n";
+  vcl_cerr << "Here we go : \n";
+  vcl_cerr << "magic_      = " << magic_    << vcl_endl;
+  vcl_cerr << "storage_    = " << storage_ << vcl_endl;
+  vcl_cerr << "bytes_per_c = " << bytes_per_component_ << vcl_endl;
+  vcl_cerr << "dimension_  = " << dimension_ << vcl_endl;
+  vcl_cerr << "width_      = " << width_ << vcl_endl;
+  vcl_cerr << "height_     = " << height_ << vcl_endl;
+  vcl_cerr << "planes_     = " << planes_ << vcl_endl;
+  vcl_cerr << "pixmin_     = " << pixmin_ << vcl_endl;
+  vcl_cerr << "pixmax_     = " << pixmax_ << vcl_endl;
+  vcl_cerr << "colormap_   = " << colormap_ << vcl_endl;
+  vcl_cerr << "components_ = " << components_ << vcl_endl;
+  vcl_cerr << "imagename_  = " << imagename_ << vcl_endl;
+  vcl_cerr << vcl_endl;
 #endif
   
   char dummy[410];
@@ -250,7 +250,7 @@ bool vil_iris_generic_image::write_header()
 vil_image vil_iris_generic_image::get_plane(int plane) const
 {
   assert(plane < planes_); // should this be 'plane <= planes_'? planes start at 0.
-  cerr << "do something for vil_iris_generic_image::get_plane\n";
+  vcl_cerr << "do something for vil_iris_generic_image::get_plane\n";
   return 0;
 }
 
@@ -282,7 +282,7 @@ bool vil_iris_generic_image::get_section_verbatim(void* ib, int x0, int y0, int 
 
   for (int channel=0; channel<planes_; ++channel) {
 #ifdef DEBUG
-    cerr << "c" << channel;
+    vcl_cerr << "c" << channel;
 #endif
     unsigned char* cbi = dp;
     // skip cbi to point at last row of section
@@ -310,7 +310,7 @@ bool vil_iris_generic_image::get_section_verbatim(void* ib, int x0, int y0, int 
     }
   }
 #ifdef DEBUG
-  cerr << endl;
+  vcl_cerr << vcl_endl;
 #endif
   return true;
 }//GetSectionVERBATIM

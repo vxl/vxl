@@ -23,7 +23,7 @@ void save_writable(vil_image const &m, char const *file)
 int main()
 {
   {
-    cout << "unsigned char" << endl;
+    vcl_cout << "unsigned char" << vcl_endl;
     vil_memory_image_of<unsigned char> image(W,H);
     
     for(int y = 0; y < image.height(); ++y)
@@ -35,7 +35,7 @@ int main()
   }
   
   {
-    cout << "vil_rgb_byte" << endl;
+    vcl_cout << "vil_rgb_byte" << vcl_endl;
     vil_memory_image_of<vil_rgb<unsigned char> > image(W,H);
     
     for(int y = 0; y < image.height(); ++y)
@@ -50,7 +50,7 @@ int main()
   }
   
   {
-    cout << "bool" << endl;
+    vcl_cout << "bool" << vcl_endl;
     vil_memory_image_of<bool> map(451, 349);
     for (unsigned x=0; x<map.width(); ++x)
       for (unsigned y=0; y<map.height(); ++y)

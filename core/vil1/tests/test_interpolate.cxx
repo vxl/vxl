@@ -37,7 +37,7 @@ int main(int, char **)
   double c = 4.3;
   
   for (int d=0; d<=4; ++d) {
-    cerr << "d=" << d << endl;
+    vcl_cerr << "d=" << d << vcl_endl;
     
     for (int i=0; i<I.rows(); ++i)
       for (int j=0; j<I.cols(); ++j)
@@ -45,19 +45,19 @@ int main(int, char **)
     
 #define dn(u) int(floor(u))
 #define up(u) int(ceil (u))
-    cerr << "  " << I[dn(r)][dn(c)] << ' ' << I[up(r)][dn(c)] << endl
-	 << "  " << I[dn(r)][up(c)] << ' ' << I[up(r)][up(c)] << endl;
+    vcl_cerr << "  " << I[dn(r)][dn(c)] << ' ' << I[up(r)][dn(c)] << vcl_endl
+	 << "  " << I[dn(r)][up(c)] << ' ' << I[up(r)][up(c)] << vcl_endl;
 #undef dn
 #undef up
     
     double out = f(r, c, d);
-    cerr << "  true    : " << out << endl;
+    vcl_cerr << "  true    : " << out << vcl_endl;
     
     vil_interpolate_bilinear(I, c, r, &out);
-    cerr << "  bilinear: " << out << endl;
+    vcl_cerr << "  bilinear: " << out << vcl_endl;
     
     vil_interpolate_bicubic (I, c, r, &out);
-    cerr << "  bicubic : " << out << endl;
+    vcl_cerr << "  bicubic : " << out << vcl_endl;
   }
 
   return 0;
