@@ -227,8 +227,11 @@ void vil2_gauss_reduce_general(const vil2_image_view<T>& src,
     (unsigned) (src.nj()/params.scale_step()+0.5), src.nplanes());
 
   // Reduce plane-by-plane
-  for (unsigned p=0;p<src.nplanes();++p)
-    vil2_gauss_reduce_general_plane(vil2_plane(src,p), vil2_plane(dest,p), worka, workb, params);
+  for (unsigned p=0;p<src.nplanes();++p) {
+    vil2_image_view<T> src_plane  = vil2_plane(src,p);
+    vil2_image_view<T> dest_plane = vil2_plane(dest,p);
+    vil2_gauss_reduce_general_plane(src_plane, dest_plane, worka, workb, params);
+  }
 #if 0
   vsl_indent_inc(vcl_cout);
   vcl_cout << vsl_indent() << "Work image B\n";
