@@ -38,6 +38,7 @@
 #include <mbl/mbl_stochastic_data_collector.h>
 #include <mbl/mbl_sum_1d.h>
 #include <mbl/mbl_thin_plate_spline_2d.h>
+#include <mbl/mbl_thin_plate_spline_3d.h>
 #include <mbl/mbl_parse_block.h>
 
 int main() { return 0; }
