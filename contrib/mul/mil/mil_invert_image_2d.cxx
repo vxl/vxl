@@ -1,6 +1,6 @@
 //: \file
-//  \brief Function to invert 2d float plane images
-//  \author David Cristinacce
+//  \brief Function to invert 2d float plane images (black->white, white->black)
+//  \author dac
 
 #include <mil/mil_invert_image_2d.h>
 #include <vcl_cmath.h>

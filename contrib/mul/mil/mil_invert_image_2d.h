@@ -8,7 +8,7 @@
 #include <mil/mil_image_2d_of.h>
 
 
-//: creates an inverted version of an input image  
+//: creates an inverted version of an input image  (ie white->black, black->white) 
 void mil_invert_image_2d(mil_image_2d_of<float>& dest,
                          const mil_image_2d_of<float>& src);
 
