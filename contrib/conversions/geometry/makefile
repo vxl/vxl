@@ -3,12 +3,14 @@
 USES := vxl gel oxl
 IMMEDIATE_LIBS := -losl -lvdgl -vbl
 
-SUBDIRS := tests
-
 ifneq (,$(wildcard $(IUEROOT)/SpatialObjects))
 USES += COOL GeneralUtility SpatialObjects Numerics
 IMMEDIATE_LIBS += -lDigitalGeometry -lSpatialBasics -lBasics
 MANPAGE_SOURCES += DigitalCurve_to_vdgl.h
+endif
+
+ifndef NOTEST
+SUBDIRS := tests
 endif
 
 ################################

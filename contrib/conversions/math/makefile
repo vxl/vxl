@@ -3,8 +3,6 @@
 USES := vxl
 IMMEDIATE_LIBS := -lvbl -lvnl
 
-SUBDIRS := tests
-
 MANPAGE_SOURCES += vnl_matrix_to_vbl_array.h
 MANPAGE_SOURCES += vbl_array_to_vnl_matrix.h
 MANPAGE_SOURCES += vnl_vector_to_vbl_array.h
@@ -23,6 +21,10 @@ MANPAGE_SOURCES += vnl_matrix_to_IUE_matrix.h
 MANPAGE_SOURCES += IUE_matrix_to_vnl_matrix.h
 MANPAGE_SOURCES += vnl_vector_to_IUE_vector.h
 MANPAGE_SOURCES += IUE_vector_to_vnl_vector.h
+endif
+
+ifndef NOTEST
+SUBDIRS := tests
 endif
 
 ################################
