@@ -1,14 +1,14 @@
 //:
 // \file
-#include <vul/vul_timer.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>   // for vcl_abs(int)
 #include <vcl_cassert.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h> // for vcl_max()
 #include "gevd_contour.h"
+#include <vul/vul_timer.h>
 #include <vil/vil_byte.h>
-#include <vnl/vnl_math.h>     // for sqrt(2)
+#include <vnl/vnl_math.h> // for sqrt(2)
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator.h>
@@ -252,7 +252,7 @@ next_pixel(int& i, int& j, const vbl_array_2d<vtol_vertex_2d_sptr>& vertexMap)
     for (dir = 1; dir < TWOPI; dir += HALFPI) // 8-connected next
       if (vertexMap.get(i+DIS[dir], j+DJS[dir])) {
         maxdir = dir+TWOPI;
-	break;
+        break;
       }
   }
   if (maxdir)                   // update next strongest pixel
@@ -1019,12 +1019,12 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
     return 0;
   }
   vcl_vector<vtol_edge_2d_sptr>::iterator eit;
-  
+
   for (eit= edges.begin(); eit!=edges.end(); eit++) {
     (*eit)->describe(vcl_cout, 2);
   }
   vcl_vector<vtol_vertex_2d_sptr>::iterator vit;
-  
+
   for (vit= vertices.begin(); vit!=vertices.end(); vit++) {
     (*vit)->describe(vcl_cout, 2);
   }

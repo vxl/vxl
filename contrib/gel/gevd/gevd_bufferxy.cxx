@@ -1,36 +1,3 @@
-// <begin copyright notice>
-// ---------------------------------------------------------------------------
-//
-//                   Copyright (c) 1997 TargetJr Consortium
-//               GE Corporate Research and Development (GE CRD)
-//                             1 Research Circle
-//                            Niskayuna, NY 12309
-//                            All Rights Reserved
-//              Reproduction rights limited as described below.
-//
-//      Permission to use, copy, modify, distribute, and sell this software
-//      and its documentation for any purpose is hereby granted without fee,
-//      provided that (i) the above copyright notice and this permission
-//      notice appear in all copies of the software and related documentation,
-//      (ii) the name TargetJr Consortium (represented by GE CRD), may not be
-//      used in any advertising or publicity relating to the software without
-//      the specific, prior written permission of GE CRD, and (iii) any
-//      modifications are clearly marked and summarized in a change history
-//      log.
-//
-//      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
-//      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
-//      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
-//      IN NO EVENT SHALL THE TARGETJR CONSORTIUM BE LIABLE FOR ANY SPECIAL,
-//      INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND OR ANY
-//      DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
-//      WHETHER OR NOT ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR ON
-//      ANY THEORY OF LIABILITY ARISING OUT OF OR IN CONNECTION WITH THE
-//      USE OR PERFORMANCE OF THIS SOFTWARE.
-//
-// ---------------------------------------------------------------------------
-// <end copyright notice>
-
 //:
 // \file
 
@@ -39,7 +6,6 @@
 #include <vcl_cstring.h>
 
 #include "gevd_bufferxy.h"
-#include <vcl_cstdio.h> // For sscanf()
 
 #include <vcl_compiler.h>
 #if defined(VCL_VC) || defined(VCL_SUNPRO_CC_50) || defined(VCL_SGI_CC) || defined(VCL_GCC_30)
@@ -60,10 +26,10 @@ void gevd_bufferxy::Init(int x, int y, int b)
   typedef unsigned char * byteptr;
   yra = new byteptr[y];
   xra = new unsigned int[x];
-  for(int i=0; i < x; i++)
+  for (int i=0; i < x; i++)
     xra[i] = i * GetBytesPixel();
 
-  for(int j=0; j < y; j++)
+  for (int j=0; j < y; j++)
     yra[j] = GetBufferPtr() + j*x*GetBytesPixel();
 }
 
@@ -90,7 +56,7 @@ gevd_bufferxy::gevd_bufferxy(vil_image &image) : gevd_memory_mixin( image.get_si
   gevd_bufferxy image_buf(sizex, sizey, image.bits_per_component());
 
   image.get_section(GetBufferPtr(),     // copy bytes image into buf
-		    0, 0, sizex, sizey);
+                    0, 0, sizex, sizey);
 }
 
 gevd_bufferxy::~gevd_bufferxy()
