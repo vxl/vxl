@@ -14,17 +14,18 @@ MAIN( test_copy )
 {
   START("vil_copy");
 
-  char* filename = argv[1];
+  const char* filename = argv[1];
   if ( argc<2 ) {
     filename = default_filename;
     vcl_cerr << "Using default input image " << filename << vcl_endl;
   }
 
-  vil_memory_image_of<vxl_uint_8> a( vil_load( filename ) );
-  if ( !a ) {
+  vil_image img = vil_load( filename );
+  if ( !img ) {
     vcl_cerr << "Could not load image " << filename << vcl_endl;
     return 1;
   }
+  vil_memory_image_of<vxl_uint_8> a( img );
   vil_memory_image_of<vxl_uint_8> b( a.width(), a.height() );
   vil_copy( a, b );
   vil_memory_image_of<vxl_uint_8> c( vil_copy(a) );

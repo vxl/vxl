@@ -32,31 +32,36 @@ static void test(char const* magic, int comps, int bits, int maxval)
 
   vil_image i = vil_load(file);
 
-  vcl_cout << "test vil_load: size " << i.width() << "x" << i.height() << ", "
-           << i.components() << " component(s)" << ", "
-           << i.bits_per_component() << " bits\n";
+  if (i) {
+    vcl_cout << "test vil_load: size " << i.width() << "x" << i.height() << ", "
+             << i.components() << " component(s)" << ", "
+             << i.bits_per_component() << " bits\n";
 
-  TEST("width", i.width(), 2);
-  TEST("height", i.height(), 3);
-  TEST("planes", i.planes(), 1);
-  TEST("components", i.components(), comps);
-  TEST("bits per component", i.bits_per_component(), bits);
-  TEST("get_property(\"memory\")", i.get_property("memory"), false); 
-  TEST("get_property(\"top row first\")", i.get_property("top row first"), true); 
-  TEST("get_property(\"left first\")", i.get_property("left first"), true); 
-  TEST("get_property(\"component order is B,G,R\")", i.get_property("component order is B,G,R"), false); 
-  char buf[24];
-  TEST("get_plane(0)", i.get_plane(0), i); 
-  TEST("get_section()", i.get_section(buf, 0, 0, 2, 3) != 0, true); 
-  if (magic[1] > '3')
-  {
-    int j=0; for (; 8*j < 6*i.bits_per_component(); ++j) if (buf[j] != j+'A') break;
-    vcl_cout << j << '\n';
-  }
-  else
-  {
-    int j=0; for (; 8*j < 6*i.bits_per_component(); ++j) if (buf[j] != 5+7*j+9*j*j) break;
-    vcl_cout << j << '\n';
+    TEST("width", i.width(), 2);
+    TEST("height", i.height(), 3);
+    TEST("planes", i.planes(), 1);
+    TEST("components", i.components(), comps);
+    TEST("bits per component", i.bits_per_component(), bits);
+    TEST("get_property(\"memory\")", i.get_property("memory"), false); 
+    TEST("get_property(\"top row first\")", i.get_property("top row first"), true); 
+    TEST("get_property(\"left first\")", i.get_property("left first"), true); 
+    TEST("get_property(\"component order is B,G,R\")", i.get_property("component order is B,G,R"), false); 
+    char buf[24];
+    TEST("get_plane(0)", i.get_plane(0), i); 
+    TEST("get_section()", i.get_section(buf, 0, 0, 2, 3) != 0, true); 
+    if (magic[1] > '3')
+    {
+      int j=0; for (; 8*j < 6*i.bits_per_component(); ++j) if (buf[j] != j+'A') break;
+      vcl_cout << j << '\n';
+    }
+    else
+    {
+      int j=0; for (; 8*j < 6*i.bits_per_component(); ++j) if (buf[j] != 5+7*j+9*j*j) break;
+      vcl_cout << j << '\n';
+    }
+  } else {
+    TEST("loading temp file", false, true);
+	vcl_cerr << "Failed to load " << file << vcl_endl;
   }
 
 #ifndef LEAVE_IMAGES_BEHIND
