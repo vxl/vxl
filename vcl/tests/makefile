@@ -1,6 +1,7 @@
 USES = vxl
 
 TESTS += test_vcl_compiler.cxx
+TESTS += test_vcl_long_double.cxx
 TESTS += test_vcl_rel_ops.cxx
 TESTS += test_vcl_iterator.cxx
 TESTS += test_vcl_iostream.cxx
@@ -14,6 +15,7 @@ TESTS += test_vcl_set.cxx
 TESTS += test_vcl_deque.cxx
 TESTS += test_vcl_complex.cxx
 TESTS += test_vcl_algorithm.cxx
+TESTS += test_vcl_new.cxx
 TESTS += test_vcl_unistd.cxx
 TESTS += $(wildcard test_vcl_rtti.cxx)
 
