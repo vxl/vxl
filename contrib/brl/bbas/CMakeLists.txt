@@ -12,3 +12,6 @@ SUBDIRS(bxml)
 
 # basic vgui classes
 SUBDIRS(bgui)
+
+# staged vgl development area
+SUBDIRS(bvgl)
