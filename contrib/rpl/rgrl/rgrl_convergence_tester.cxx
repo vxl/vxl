@@ -81,18 +81,38 @@ compute_status_helper( double new_error,
 
     if ( !converged ) {
       // look for oscillation
-      if ( error_diff * prev_status->error_diff() < 0.0 ) {
-        oscillation_count = prev_status->oscillation_count() + 1;
-        DebugMacro_abv(1, "Oscillation. Count="<<oscillation_count<<'\n' );
-
+      // There are two kinds of oscillation:
+      // 1. the error increases and decreases in turn
+      // 2. Once it is good enough, the error increases slightly 
+      // 
+      
+      // first situation
+      if( !good_enough ) {
+        if ( error_diff * prev_status->error_diff() < 0.0 ) {
+          oscillation_count = prev_status->oscillation_count() + 1;
+          DebugMacro_abv(1, "Oscillation. Count="<<oscillation_count<<'\n' );
+  
+        } else {
+          if ( prev_status->oscillation_count() > 0 )
+            oscillation_count = prev_status->oscillation_count() - 1;
+        }
+        if ( oscillation_count > 10 ) {
+          stagnated = true;
+        }
       } else {
-        if ( prev_status->oscillation_count() > 0 )
-          oscillation_count = prev_status->oscillation_count() - 1;
-      }
-      if ( oscillation_count > 10 ) {
-        stagnated = true;
+        
+        // second situation 
+        if( error_diff > 0 )  { // error increases again
+          oscillation_count = prev_status->oscillation_count() + 1;
+          DebugMacro_abv(1, "Good Oscillation. Count="<<oscillation_count<<'\n' );
+        }
+        
+        // check for oscillation, call convergence
+        if( oscillation_count > 3 )
+          converged = true;
       }
     }
+
   } else {
     converged = false;
   }
