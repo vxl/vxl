@@ -22,12 +22,11 @@ bool vnl_generalized_schur/*<double>*/(vnl_matrix<double> *A,
                                        vnl_matrix<double> *L,
                                        vnl_matrix<double> *R)
 {
-  int n = A->rows();
+  assert(A->cols() == A->cols());
+  assert(A->cols() == B->rows());
+  assert(A->cols() == B->cols());
 
-//assert(n == A->rows());
-  assert(n == A->cols());
-  assert(n == B->rows());
-  assert(n == B->cols());
+  int n = A->rows();
   assert(alphar!=0); alphar->resize(n);    alphar->fill(0);
   assert(alphai!=0); alphai->resize(n);    alphai->fill(0);
   assert(beta!=0);   beta  ->resize(n);    beta  ->fill(0);

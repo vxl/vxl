@@ -34,15 +34,14 @@ bool vnl_symmetric_eigensystem_compute(vnl_matrix<double> const & A,
 {
   A.assert_finite();
 
+  // The fortran code does not like it if V or D are
+  // undersized. I expect they probably should not be
+  // oversized either. - IMS
+  assert(V.rows() == A.rows());
+  assert(V.cols() == A.rows());
+  assert(D.size() == A.rows());
+
   int n = A.rows();
-
-// The fortran code does not like it if V or D are
-// undersized. I expect they probably should not be
-// oversized either. - IMS
-  assert(V.rows() == n);
-  assert(V.cols() == n);
-  assert(D.size() == n);
-
   vnl_vector<double> work1(n);
   vnl_vector<double> work2(n);
   vnl_vector<double> Vvec(n*n);
@@ -61,8 +60,8 @@ bool vnl_symmetric_eigensystem_compute(vnl_matrix<double> const & A,
 
   // Transpose-copy into V
   double *vptr = &Vvec[0];
-  for(unsigned int c = 0; c < n; ++c)
-    for(unsigned int r = 0; r < n; ++r)
+  for (int c = 0; c < n; ++c)
+    for (int r = 0; r < n; ++r)
       V(r,c) = *vptr++;
 
   return true;
@@ -80,7 +79,7 @@ vnl_symmetric_eigensystem<T>::vnl_symmetric_eigensystem(vnl_matrix<T> const& A)
   vnl_symmetric_eigensystem_compute(A, V, Dvec);
 
   // Copy Dvec into diagonal of D
-  for(int i = 0; i < n_; ++i)
+  for (int i = 0; i < n_; ++i)
     D(i,i) = Dvec[i];
 }
 

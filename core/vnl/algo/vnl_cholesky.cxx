@@ -51,19 +51,20 @@ vnl_cholesky::vnl_cholesky(vnl_matrix<double> const & M, Operation mode):
 //  which will give a fractional increase in speed.
 void vnl_cholesky::solve(vnl_vector<double> const& b, vnl_vector<double>* x) const
 {
-  int n = A_.columns();
-  assert(b.size() == n);
+  assert(b.size() == A_.columns());
 
   *x = b;
+  int n = A_.columns();
   dposl_(A_.data_block(), &n, &n, x->data_block());
 }
 
 //: Solve least squares problem M x = b.
 vnl_vector<double> vnl_cholesky::solve(vnl_vector<double> const& b) const
 {
-  vnl_vector<double> ret = b;
+  assert(b.size() == A_.columns());
+
   int n = A_.columns();
-  assert(b.size() == n);
+  vnl_vector<double> ret = b;
   dposl_(A_.data_block(), &n, &n, ret.data_block());
   return ret;
 }
