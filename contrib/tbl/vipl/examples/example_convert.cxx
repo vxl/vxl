@@ -28,7 +28,6 @@
 #include <vcl_iostream.h>
 
 #include <vxl_config.h> // for vxl_byte
-typedef vil_rgb<vxl_byte> rgbcell;
 
 int
 main(int argc, char** argv)
@@ -41,98 +40,122 @@ main(int argc, char** argv)
   // The output image:
   vil_image_view<vxl_byte> out(in->ni(),in->nj(),in->nplanes());
 
-  if (in->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
-  {
-    if (in->nplanes() == 1) { // monochrome
-      // no conversion necessary
-      out = in;
-      vcl_cout << "vipl_converted ubyte image to PGM image " << argv[2] << vcl_endl;
-    } else if (in->nplanes() == 3) { // colour (RGB)
+  if (in->nplanes() == 3) { // colour (RGB)
+    if (in->pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
       vipl_convert<vil_image_view<vxl_byte>,vil_image_view<vxl_byte>,vxl_byte,vxl_byte> op;
-      vil_image_view<rgbcell> tmp = in; vil_image_view<vxl_byte> tmp2 = tmp;
+      vil_image_view<vil_rgb<vxl_byte> > tmp = in; vil_image_view<vxl_byte> tmp2 = tmp;
       op.put_in_data_ptr(&tmp2); op.put_out_data_ptr(&out); op.filter();
-      vcl_cout << "vipl_converted RGB image to PGM image " << argv[2] << vcl_endl;
+      vcl_cout << "vipl_converted ubyte RGB image to PGM image " << argv[2] << vcl_endl;
     }
     else {
-      vcl_cerr << "Cannot currently convert image with "<< in->nplanes() <<" planes\n";
+      vcl_cerr<<"Not yet implemented conversion for non-8-bit colour pixels\n";
       return 1;
     }
   }
-  if (in->pixel_format() == VIL_PIXEL_FORMAT_UINT_16)
-  {
-    if (in->nplanes() == 1) { // monochrome
-      vipl_convert<vil_image_view<short>,vil_image_view<vxl_byte>,short,vxl_byte> op;
-      vil_image_view<short> tmp = in;
-      op.put_in_data_ptr(&tmp); op.put_out_data_ptr(&out); op.filter();
-      vcl_cout << "vipl_converted short image to PGM image " << argv[2] << vcl_endl;
-    } else if (in->nplanes() == 3) { // colour (RGB)
-      vcl_cerr<<"Not yet implemented conversion for 16-bit colour pixels\n";
-      return 1;
-    }
-    else {
-      vcl_cerr << "Cannot currently convert image with "<< in->nplanes() <<" planes\n";
-      return 1;
-    }
-  }
-  if (in->pixel_format() == VIL_PIXEL_FORMAT_UINT_32)
-  {
-    if (in->nplanes() == 1) { // monochrome
-      vipl_convert<vil_image_view<int>,vil_image_view<vxl_byte>,int,vxl_byte> op;
-      vil_image_view<int> tmp = in;
-      op.put_in_data_ptr(&tmp); op.put_out_data_ptr(&out); op.filter();
-      vcl_cout << "vipl_converted int image to PGM image " << argv[2] << vcl_endl;
-    } else if (in->nplanes() == 3) { // colour (RGB)
-      vcl_cerr<<"Not yet implemented conversion for 32-bit colour pixels\n";
-      return 1;
-    }
-    else {
-      vcl_cerr << "Cannot currently convert image with "<< in->nplanes() <<" planes\n";
-      return 1;
-    }
-  }
-  if (in->pixel_format() == VIL_PIXEL_FORMAT_UINT_64)
-  {
-    vcl_cerr << "Please instantiate the vipl_convert IP filter for type long\n";
+  else if (in->nplanes() != 1) { // not monochrome nore RGB
+    vcl_cerr << "Cannot currently convert image with "<< in->nplanes() <<" planes\n";
     return 1;
   }
-  else if (in->pixel_format() == VIL_PIXEL_FORMAT_FLOAT)
-  {
-    if (in->nplanes() == 1) { // monochrome
-      vipl_convert<vil_image_view<float>,vil_image_view<vxl_byte>,float,vxl_byte> op;
-      vil_image_view<float> tmp = in;
-      op.put_in_data_ptr(&tmp); op.put_out_data_ptr(&out); op.filter();
-      vcl_cout << "vipl_converted float image to PGM image " << argv[2] << vcl_endl;
-    } else {
-      vcl_cerr << "Cannot currently convert float image with "<< in->nplanes() <<" planes\n";
+  else if (in->pixel_format() == VIL_PIXEL_FORMAT_COMPLEX_FLOAT ||
+           in->pixel_format() == VIL_PIXEL_FORMAT_COMPLEX_DOUBLE) {
+    vcl_cerr << "Cannot currently convert complex pixel type images\n";
+    return 1;
+  }
+  else if (vil_pixel_format_component_format(in->pixel_format()) != in->pixel_format()) { // RGB or RGBA
+    if (in->pixel_format() == VIL_PIXEL_FORMAT_RGB_BYTE) {
+      vipl_convert<vil_image_view<vxl_byte>,vil_image_view<vxl_byte>,vxl_byte,vxl_byte> op;
+      vil_image_view<vil_rgb<vxl_byte> > tmp = in; vil_image_view<vxl_byte> tmp2 = tmp;
+      op.put_in_data_ptr(&tmp2); op.put_out_data_ptr(&out); op.filter();
+      vcl_cout << "vipl_converted ubyte RGB image to PGM image " << argv[2] << vcl_endl;
+    }
+    else {
+      vcl_cerr<<"Not yet implemented conversion for non-8-bit colour pixels\n";
       return 1;
     }
+  }
+  else if (in->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
+  {
+    // no conversion necessary
+    out = in;
+    vcl_cout << "vipl_converted ubyte image to PGM image "<< argv[2] <<" (no conversion was necessary)\n";
+  }
+  else if (in->pixel_format() == VIL_PIXEL_FORMAT_SBYTE)
+  {
+    vipl_convert<vil_image_view<vxl_sbyte>,vil_image_view<vxl_byte>,vxl_sbyte,vxl_byte> op;
+    vil_image_view<vxl_sbyte> tmp = in;
+    op.put_in_data_ptr(&tmp); op.put_out_data_ptr(&out); op.filter();
+    vcl_cout << "vipl_converted sbyte image to PGM image "<< argv[2] << vcl_endl;
+  }
+  else if (in->pixel_format() == VIL_PIXEL_FORMAT_UINT_16)
+  {
+    vipl_convert<vil_image_view<vxl_uint_16>,vil_image_view<vxl_byte>,vxl_uint_16,vxl_byte> op;
+    vil_image_view<vxl_uint_16> tmp = in;
+    op.put_in_data_ptr(&tmp); op.put_out_data_ptr(&out); op.filter();
+    vcl_cout << "vipl_converted uint_16 image to PGM image "<< argv[2] << vcl_endl;
+  }
+  else if (in->pixel_format() == VIL_PIXEL_FORMAT_UINT_16)
+  {
+    vipl_convert<vil_image_view<vxl_int_16>,vil_image_view<vxl_byte>,vxl_int_16,vxl_byte> op;
+    vil_image_view<vxl_int_16> tmp = in;
+    op.put_in_data_ptr(&tmp); op.put_out_data_ptr(&out); op.filter();
+    vcl_cout << "vipl_converted int_16 image to PGM image "<< argv[2] << vcl_endl;
+  }
+  else if (in->pixel_format() == VIL_PIXEL_FORMAT_UINT_32)
+  {
+    vipl_convert<vil_image_view<vxl_uint_32>,vil_image_view<vxl_byte>,vxl_uint_32,vxl_byte> op;
+    vil_image_view<vxl_uint_32> tmp = in;
+    op.put_in_data_ptr(&tmp); op.put_out_data_ptr(&out); op.filter();
+    vcl_cout << "vipl_converted uint_32 image to PGM image "<< argv[2] << vcl_endl;
+  }
+  else if (in->pixel_format() == VIL_PIXEL_FORMAT_UINT_32)
+  {
+    vipl_convert<vil_image_view<vxl_int_32>,vil_image_view<vxl_byte>,vxl_int_32,vxl_byte> op;
+    vil_image_view<vxl_int_32> tmp = in;
+    op.put_in_data_ptr(&tmp); op.put_out_data_ptr(&out); op.filter();
+    vcl_cout << "vipl_converted int_32 image to PGM image "<< argv[2] << vcl_endl;
+  }
+#if VXL_HAS_INT_64
+  else if (in->pixel_format() == VIL_PIXEL_FORMAT_UINT_64)
+  {
+    vipl_convert<vil_image_view<vxl_uint_64>,vil_image_view<vxl_byte>,vxl_uint_64,vxl_byte> op;
+    vil_image_view<vxl_uint_64> tmp = in;
+    op.put_in_data_ptr(&tmp); op.put_out_data_ptr(&out); op.filter();
+    vcl_cout << "vipl_converted uint_64 image to PGM image "<< argv[2] << vcl_endl;
+  }
+  else if (in->pixel_format() == VIL_PIXEL_FORMAT_UINT_64)
+  {
+    vipl_convert<vil_image_view<vxl_int_64>,vil_image_view<vxl_byte>,vxl_int_64,vxl_byte> op;
+    vil_image_view<vxl_int_64> tmp = in;
+    op.put_in_data_ptr(&tmp); op.put_out_data_ptr(&out); op.filter();
+    vcl_cout << "vipl_converted int_64 image to PGM image "<< argv[2] << vcl_endl;
+  }
+#endif
+  else if (in->pixel_format() == VIL_PIXEL_FORMAT_FLOAT)
+  {
+    vipl_convert<vil_image_view<float>,vil_image_view<vxl_byte>,float,vxl_byte> op;
+    vil_image_view<float> tmp = in;
+    op.put_in_data_ptr(&tmp); op.put_out_data_ptr(&out); op.filter();
+    vcl_cout << "vipl_converted float image to PGM image "<< argv[2] << vcl_endl;
   }
   else if (in->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE)
   {
-    if (in->nplanes() == 1) { // monochrome
-      vipl_convert<vil_image_view<double>,vil_image_view<vxl_byte>,double,vxl_byte> op;
-      vil_image_view<double> tmp = in;
-      op.put_in_data_ptr(&tmp); op.put_out_data_ptr(&out); op.filter();
-      vcl_cout << "vipl_converted double image to PGM image " << argv[2] << vcl_endl;
-    } else {
-      vcl_cerr << "Cannot currently convert float image with "<< in->nplanes() <<" planes\n";
-      return 1;
-    }
-  } else if (in->pixel_format() == VIL_PIXEL_FORMAT_COMPLEX_FLOAT ||
-             in->pixel_format() == VIL_PIXEL_FORMAT_COMPLEX_DOUBLE) {
-      vcl_cerr << "Cannot currently convert complex pixel type images\n";
-      return 1;
-#if 0
-  } else if (in->pixel_format() == VIL_PIXEL_FORMAT_PYRAMID) {
-      vcl_cerr << "Cannot currently convert pyramid images\n";
-      return 1;
-  } else if (in->pixel_format() == VIL_PIXEL_FORMAT_BANDED) {
-      vcl_cerr << "Cannot currently convert banded images\n";
-      return 1;
-#endif
+    vipl_convert<vil_image_view<double>,vil_image_view<vxl_byte>,double,vxl_byte> op;
+    vil_image_view<double> tmp = in;
+    op.put_in_data_ptr(&tmp); op.put_out_data_ptr(&out); op.filter();
+    vcl_cout << "vipl_converted double image to PGM image "<< argv[2]<<vcl_endl;
   }
+#if 0
+  else if (in->pixel_format() == VIL_PIXEL_FORMAT_PYRAMID) {
+    vcl_cerr << "Cannot currently convert pyramid images\n";
+    return 1;
+  }
+  else if (in->pixel_format() == VIL_PIXEL_FORMAT_BANDED) {
+    vcl_cerr << "Cannot currently convert banded images\n";
+    return 1;
+  }
+#endif
   else {
-    vcl_cerr << "Never heared of image format " << int(in->pixel_format()) << vcl_endl;
+    vcl_cerr << "Never heared of image format "<< int(in->pixel_format())<<'\n';
     return 1;
   }
 
