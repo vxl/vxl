@@ -36,20 +36,14 @@ vgl_point_3d<Type> intersection(vgl_line_3d_2_points<Type> const& l1,
   Type a0=l1.point1().x(), a1=l1.point2().x(), a2=l2.point1().x(), a3=l2.point2().x(),
        b0=l1.point1().y(), b1=l1.point2().y(), b2=l2.point1().y(), b3=l2.point2().y(),
        c0=l1.point1().z(), c1=l1.point2().z(), c2=l2.point1().z(), c3=l2.point2().z();
-  Type t1 = b3*a1-a3*b1, t2 = (a2-a0)*b3-(b2-b0)*a3;
-  if (t1==0 && t2==0)
-    t1 = c3*a1-a3*c1, t2 = (a2-a0)*c3-(c2-c0)*a3;
-  if (t1==0 && t2==0)
-    t1 = a1-a3, t2 = a2-a0;
-  if (t1==0 && t2==0)
-    t1 = c3*b1-b3*c1, t2 = (b2-b0)*c3-(c2-c0)*b3;
-  if (t1==0 && t2==0)
-    t1 = b1-b3, t2 = b2-b0;
-  if (t1==0 && t2==0)
-    t1 = c1-c3, t2 = c2-c0;
-  return vgl_point_3d<Type>((t1*a0+t2*a1)/(t1+t2),
-                            (t1*b0+t2*b1)/(t1+t2),
-                            (t1*c0+t2*c1)/(t1+t2));
+  Type t1 = (b3-b2)*(a1-a0)-(a3-a2)*(b1-b0), t2 = (b0-b2)*(a1-a0)-(a0-a2)*(b1-b0);
+  if (t1 == 0)
+       t1 = (c3-c2)*(a1-a0)-(a3-a2)*(c1-c0), t2 = (c0-c2)*(a1-a0)-(a0-a2)*(c1-c0);
+  if (t1 == 0)
+       t1 = (c3-c2)*(b1-b0)-(b3-b2)*(c1-c0), t2 = (c0-c2)*(b1-b0)-(b0-b2)*(c1-c0);
+  return vgl_point_3d<Type>(((t1-t2)*a2+t2*a3)/t1,
+                            ((t1-t2)*b2+t2*b3)/t1,
+                            ((t1-t2)*c2+t2*c3)/t1);
 }
 
 //*****************************************************************************
