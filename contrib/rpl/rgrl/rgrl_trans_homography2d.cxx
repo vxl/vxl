@@ -170,6 +170,26 @@ inv_map( const vnl_vector<double>& to,
   }
 }
 
+//: Return an inverse transformation of the uncentered transform
+rgrl_transformation_sptr 
+rgrl_trans_homography2d::
+inverse_transform() const
+{
+  vnl_svd<double> svd_h(H_);
+  vnl_matrix<double> H_inv = svd_h.inverse();
+  rgrl_transformation_sptr result = new rgrl_trans_homography2d( H_inv );
+
+  const unsigned m = scaling_factors_.size();
+  if( m > 0 ) {
+    vnl_vector<double> scaling( m );
+    for( unsigned int i=0; i<m; ++i )
+      scaling[i] = 1.0 / scaling_factors_[i];
+    result->set_scaling_factors( scaling );
+  }
+
+  return result;
+}
+
 //: Return the jacobian of the transform.
 vnl_matrix<double>
 rgrl_trans_homography2d::
@@ -275,10 +295,3 @@ scale_by( double scale ) const
   return 0;
 }
 
-rgrl_transformation_sptr
-rgrl_trans_homography2d::
-inverse_transform( ) const
-{
-  assert ( ! "rgrl_trans_homography2d::inverse_transform() is not defined" );
-  return 0;
-}

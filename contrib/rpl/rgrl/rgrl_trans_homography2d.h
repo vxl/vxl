@@ -42,8 +42,8 @@ class rgrl_trans_homography2d
   vnl_matrix<double> const& H() const {return H_;}
 
   //: Inverse map using pseudo-inverse of H_.
-  virtual void inv_map( const vnl_vector<double>& to,
-                        vnl_vector<double>& from ) const;
+  void inv_map( const vnl_vector<double>& to,
+                vnl_vector<double>& from ) const;
 
   //:  Inverse map with an initial guess
   void inv_map( const vnl_vector<double>& to,
@@ -51,6 +51,12 @@ class rgrl_trans_homography2d
                 const vnl_vector<double>& to_delta,
                 vnl_vector<double>& from,
                 vnl_vector<double>& from_next_est) const;
+
+  //: is this an invertible transformation?
+  bool is_invertible() const { return true; }
+
+  //: Return an inverse transformation of the uncentered transform
+  rgrl_transformation_sptr inverse_transform() const;
 
   //: Return the jacobian of the transform. This is a 2x3 matrix
   vnl_matrix<double> jacobian( vnl_vector<double> const& from_loc ) const;
@@ -74,9 +80,6 @@ class rgrl_trans_homography2d
   void map_dir( vnl_vector<double> const& from_loc,
                 vnl_vector<double> const& from_dir,
                 vnl_vector<double>      & to_dir    ) const;
-
-  // TODO - pure virtual function of rgrl_transformation
-  virtual rgrl_transformation_sptr inverse_transform() const;
 
  private:
   vnl_matrix<double> H_;
