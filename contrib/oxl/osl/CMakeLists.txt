@@ -10,7 +10,7 @@ SOURCE_FILES(osl_sources
  osl_OrthogRegress          osl_edge_detector
  osl_break_edge             osl_edge_detector_params
  osl_canny_base             osl_edgel_chain
- osl_canny_gradient         osl_fit_lines
+ osl_canny_gradient         osl_fit_lines             osl_fit_circle
  osl_canny_nms              osl_fit_lines_params
  osl_canny_ox               osl_harris
  osl_canny_ox_params        osl_harris_params
