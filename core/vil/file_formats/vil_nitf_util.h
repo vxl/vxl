@@ -194,7 +194,26 @@ inline char* new_strdup(const char* str)
     return ret;
 }
 
-// case insensitive string comparison
+//: case insensitive string comparison
 int nitf_strcasecmp( const char* s1, const char* s2 );
+
+//: Copy n characters from y to x, but delete x first and recreate with exactly right length.
+inline void nitf_strncpy (char * x, const char * y, int n) 
+{
+    delete[] x ;
+    x = new char[n+1] ;
+    x[n] = 0 ;
+
+    // NOTE: OLD MACRO STRNCPY USED 'y?y:""' AS SECOND PARAMETER
+    // TO vcl_strncpy.  IF y WAS A CONSTANT, THIS CAUSED WARNINGS
+    // ON INTEL COMPILER.  USE EXPLICIT TEST FOR y EQUAL NULL TO
+    // AVOID THESE WARNINGS.  5jan2003  MAL.
+    if (y != 0) {
+      vcl_strncpy (x, y, n) ;
+    }
+    else {
+      vcl_strncpy (x, "", n) ;
+    }
+}
 
 #endif // vil_nitf_util_h_
