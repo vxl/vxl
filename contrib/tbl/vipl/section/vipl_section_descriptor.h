@@ -27,7 +27,9 @@ class vipl_section_descriptor {
                           vipl_section_container< DataType >* container) ;
 
   //  Deep-copies the pointers
-  vipl_section_descriptor( const vipl_section_descriptor< DataType >* desc , const vipl_section_container< DataType >* container , int t) ;
+  vipl_section_descriptor(
+      const vipl_section_descriptor< DataType >* desc ,
+      const vipl_section_container< DataType >* container , int t) ;
 
  public:
     // A simple section_descriptor useful for filter
