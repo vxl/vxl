@@ -83,7 +83,7 @@ void mil3d_sample_profile_3d_ic_safe(vnl_vector<vecType>& vec,
     for (int i=0;i<n;++i)
     {
       v[i] = mil3d_safe_trilin_interp_3d(p.x(),p.y(),p.z(),
-			                                  plane0,nx,ny,nz,xstep,ystep,zstep);
+                                         plane0,nx,ny,nz,xstep,ystep,zstep);
       p+=u;
     }
   }
@@ -94,8 +94,8 @@ void mil3d_sample_profile_3d_ic_safe(vnl_vector<vecType>& vec,
       for (int j=0;j<np;++j)
       {
         *v = mil3d_safe_trilin_interp_3d(p.x(),p.y(),p.z(),
-				                                image.plane(j),nx,ny,nz,
-																				xstep,ystep,zstep);
+                                         image.plane(j),nx,ny,nz,
+                                         xstep,ystep,zstep);
         v++;
       }
       p+=u;
@@ -138,27 +138,17 @@ void mil3d_sample_profile_3d_ic(vnl_vector<vecType>& vec,
   if (np==1)
   {
     const imType* plane0 = image.plane(0);
-    for (int i=0;i<n;++i)
-    {
+    for (int i=0;i<n;++i,p+=u)
       v[i] = mil3d_trilin_interp_3d(p.x(),p.y(),p.z(),plane0,xstep,ystep,zstep);
-      p+=u;
-    }
   }
   else
-  {
-    for (int i=0;i<n;++i)
-    {
-      for (int j=0;j<np;++j)
-      {
+    for (int i=0;i<n;++i,p+=u)
+      for (int j=0;j<np;++j,++v)
         *v = mil3d_trilin_interp_3d(p.x(),p.y(),p.z(),
-				                           image.plane(j),xstep,ystep,zstep);
-        v++;
-      }
-      p+=u;
-    }
-  }
+                                    image.plane(j),xstep,ystep,zstep);
 }
 
+#undef MIL3D_SAMPLE_PROFILE_3D_INSTANTIATE
 #define MIL3D_SAMPLE_PROFILE_3D_INSTANTIATE( imType, vecType ) \
 template void mil3d_sample_profile_3d(vnl_vector<vecType >& v, \
                            const mil3d_image_3d_of<imType >& image, \

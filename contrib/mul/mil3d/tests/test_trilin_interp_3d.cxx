@@ -5,7 +5,6 @@
 #include <vnl/vnl_test.h>
 #include <mil3d/mil3d_image_3d_of.h>
 #include <mil3d/mil3d_trilin_interp_3d.h>
-#include <vil/vil_byte.h>
 #include <vcl_cmath.h> // for fabs()
 
 void test_trilin_interp_3d_float()

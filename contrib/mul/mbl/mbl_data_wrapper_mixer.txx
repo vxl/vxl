@@ -1,6 +1,5 @@
 #ifndef mbl_data_wrapper_mixer_txx_
 #define mbl_data_wrapper_mixer_txx_
-
 //:
 //  \file
 
@@ -41,8 +40,6 @@ mbl_data_wrapper_mixer<T>::mbl_data_wrapper_mixer(mbl_data_wrapper<T>& wrapper1,
   set(&w[0],w.size());
 }
 
-
-
 //: Initialise to return elements from data[i]
 template<class T>
 void mbl_data_wrapper_mixer<T>::set(mbl_data_wrapper<T> **wrapper, unsigned long n_wrappers)
@@ -53,7 +50,7 @@ void mbl_data_wrapper_mixer<T>::set(mbl_data_wrapper<T> **wrapper, unsigned long
   for (int i=0;i<n_wrappers;++i)
   {
     wrapper_[i] = wrapper[i];
-	n_ += wrapper[i]->size();
+    n_ += wrapper[i]->size();
   }
   current_wrapper_ = 0;
   wrapper_[0]->reset();
@@ -99,15 +96,15 @@ bool mbl_data_wrapper_mixer<T>::next()
   if (index_<n_ && !wrapper_[current_wrapper_]->next())
   {
     // Find next non-empty wrapper
-	if (current_wrapper_<(wrapper_.size()-1)) current_wrapper_++;
+    if (current_wrapper_<(wrapper_.size()-1)) current_wrapper_++;
 
-	while (current_wrapper_<(wrapper_.size()-1) && wrapper_[current_wrapper_]->size()==0)
-	  current_wrapper_++;
+    while (current_wrapper_<(wrapper_.size()-1) && wrapper_[current_wrapper_]->size()==0)
+      current_wrapper_++;
 
     wrapper_[current_wrapper_]->reset();
   }
 
-  return (index_<n_);
+  return index_<n_;
 }
 
 //: Return current index
@@ -116,7 +113,6 @@ unsigned long mbl_data_wrapper_mixer<T>::index() const
 {
   return index_;
 }
-
 
 //: Create copy on heap and return base pointer
 template<class T>
@@ -156,7 +152,8 @@ vcl_string mbl_data_wrapper_mixer<T>::is_a() const
 }
 
 
+#undef MBL_DATA_WRAPPER_MIXER_INSTANTIATE
 #define MBL_DATA_WRAPPER_MIXER_INSTANTIATE(T) \
 template class mbl_data_wrapper_mixer< T >
 
-#endif
+#endif // mbl_data_wrapper_mixer_txx_

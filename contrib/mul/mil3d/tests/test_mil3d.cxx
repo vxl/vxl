@@ -17,8 +17,8 @@ void run_test_mil()
 {
   test_image_3d_of();
   test_transform_3d();
-	test_trilin_interp_3d();
-	test_sample_profile_3d();
+  test_trilin_interp_3d();
+  test_sample_profile_3d();
 }
 
 TESTMAIN(run_test_mil);

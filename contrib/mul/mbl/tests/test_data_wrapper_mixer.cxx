@@ -17,12 +17,12 @@ void test_data_wrapper_pair_mixer(unsigned n1, unsigned n2)
   for (unsigned i=0;i<n1;++i)
   {
     data1[i].resize(1);
-	data1[i][0] = i;
+    data1[i][0] = i;
   }
   for (unsigned i=0;i<n2;++i)
   {
     data2[i].resize(1);
-	data2[i][0] = i+n1;
+    data2[i][0] = i+n1;
   }
 
   mbl_data_array_wrapper<vnl_vector<double> > w1(data1);
