@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_plane.h
+// This is core/vil2/vil2_plane.h
 #ifndef vil2_plane_h_
 #define vil2_plane_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -32,16 +32,17 @@ inline vil2_image_view<T> vil2_plane(const vil2_image_view<T> &im, unsigned p)
 //  O(1).
 template<class T>
 inline vil2_image_view<T> vil2_planes(const vil2_image_view<T> &im,
-                                     unsigned first, int skip,
-                                     unsigned n)
+                                      unsigned first, int skip,
+                                      unsigned n)
 {
   assert(first<im.nplanes());
-  assert(first + n*skip <= im.nplanes());
-  assert(first + n*skip >= 0);
+  int end = first + n*skip;
+  assert(end <= im.nplanes());
+  assert(end >= 0);
   return vil2_image_view<T>(im.memory_chunk(),
-    im.top_left_ptr()+first*im.planestep(),
-    im.ni(),im.nj(),n,
-    im.istep(),im.jstep(),skip*im.planestep());
+                            im.top_left_ptr()+first*im.planestep(),
+                            im.ni(),im.nj(),n,
+                            im.istep(),im.jstep(),skip*im.planestep());
 }
 
 
