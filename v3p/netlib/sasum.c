@@ -12,7 +12,7 @@ integer *incx;
 {
     /* System generated locals */
     integer i__1, i__2;
-    real ret_val, r__1, r__2, r__3, r__4, r__5, r__6;
+    real ret_val;
 
     /* Local variables */
     static integer i, m, nincx;
@@ -46,7 +46,7 @@ integer *incx;
     i__1 = nincx;
     i__2 = *incx;
     for (i = 1; i__2 < 0 ? i >= i__1 : i <= i__1; i += i__2) {
-        stemp += (r__1 = sx[i], dabs(r__1));
+        stemp += dabs(sx[i]);
 /* L10: */
     }
     ret_val = stemp;
@@ -64,7 +64,7 @@ L20:
     }
     i__2 = m;
     for (i = 1; i <= i__2; ++i) {
-        stemp += (r__1 = sx[i], dabs(r__1));
+        stemp += dabs(sx[i]);
 /* L30: */
     }
     if (*n < 6) {
@@ -74,10 +74,7 @@ L40:
     mp1 = m + 1;
     i__2 = *n;
     for (i = mp1; i <= i__2; i += 6) {
-        stemp = stemp + (r__1 = sx[i], dabs(r__1)) + (r__2 = sx[i + 1], dabs(
-                r__2)) + (r__3 = sx[i + 2], dabs(r__3)) + (r__4 = sx[i + 3],
-                dabs(r__4)) + (r__5 = sx[i + 4], dabs(r__5)) + (r__6 = sx[i +
-                5], dabs(r__6));
+        stemp = stemp + dabs(sx[i]) + dabs(sx[i + 1]) + dabs(sx[i + 2]) + dabs(sx[i + 3]) + dabs(sx[i + 4]) + dabs(sx[i + 5]);
 /* L50: */
     }
 L60:
