@@ -24,8 +24,8 @@
 vil1_image vil1_clamp(vil1_image src, double range_min, double range_max);
 
 //: Convenience templated functions for clamping of a single pixel.
-//    (vil1_byte)vil1_clamp_pixel(g, 0, 255);
-//    (vil1_rgb<vil1_byte>)vil1_clamp_pixel(rgb, 0, 255);
+//    (vxl_byte)vil1_clamp_pixel(g, 0, 255);
+//    (vil1_rgb<vxl_byte>)vil1_clamp_pixel(rgb, 0, 255);
 template <class V>
 inline
 V vil1_clamp_pixel(V const& b, double range_min, double range_max)

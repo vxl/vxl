@@ -6,7 +6,7 @@
 #include "vil1_clamp_image.h"
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_rgb.h>
-#include <vil1/vil1_byte.h>
+#include <vxl_config.h>
 
 #undef VIL1_CLAMP_IMAGE_THRESHOLD
 #define VIL1_CLAMP_IMAGE_THRESHOLD(V, L, H) \
@@ -51,10 +51,10 @@ bool vil1_clamp_image(vil1_image const& base, double low, double high, \
   return true; \
 }
 
-VIL1_INSTANTIATE_CLAMP_IMAGE(vil1_byte);
+VIL1_INSTANTIATE_CLAMP_IMAGE(vxl_byte);
 VIL1_INSTANTIATE_CLAMP_IMAGE(float);
 VIL1_INSTANTIATE_CLAMP_IMAGE(double);
 
-VIL1_SPECIALIZE_CLAMP_IMAGE_RGB(vil1_byte);
+VIL1_SPECIALIZE_CLAMP_IMAGE_RGB(vxl_byte);
 VIL1_SPECIALIZE_CLAMP_IMAGE_RGB(float);
 VIL1_SPECIALIZE_CLAMP_IMAGE_RGB(double);

@@ -8,9 +8,9 @@
 
 #include "vil1_resample_image_impl.h"
 #include <vil1/vil1_resample_image.h>
-#include <vil1/vil1_byte.h>
 #include <vil1/vil1_rgb.h>
 #include <vil1/vil1_pixel.h>
+#include <vxl_config.h>
 #include <vcl_climits.h> // CHAR_BIT
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
@@ -69,11 +69,11 @@ bool vil1_resample_image_impl::get_section(void *buf, int x0, int y0, int w, int
   switch ( vil1_pixel_format(base) ) {
   case VIL1_BYTE:
     return vil1_resample_image(base, new_width, new_height,
-                               (vil1_byte*)buf, (unsigned*)0,
+                               (vxl_byte*)buf, (unsigned*)0,
                                x0, y0, w, h);
   case VIL1_RGB_BYTE:
     return vil1_resample_image(base, new_width, new_height,
-                               (vil1_rgb<vil1_byte>*)buf, (vil1_rgb<int>*)0,
+                               (vil1_rgb<vxl_byte>*)buf, (vil1_rgb<int>*)0,
                                x0, y0, w, h);
 
   default:

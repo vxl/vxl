@@ -12,12 +12,12 @@
 //\verbatim
 //  Modifications
 //     000217 AWF Initial version.
-//     001206 FSM make this identical to vil1_rgb<vil1_byte> to avoid confusion
+//     001206 FSM make this identical to vil1_rgb<vxl_byte> to avoid confusion
 //\endverbatim
 
-#include <vil1/vil1_byte.h>
+#include <vxl_config.h>
 #include <vil1/vil1_rgb.h>
 
-typedef vil1_rgb<vil1_byte> vil1_rgb_byte;
+typedef vil1_rgb<vxl_byte> vil1_rgb_byte;
 
 #endif // vil1_rgb_byte_h_

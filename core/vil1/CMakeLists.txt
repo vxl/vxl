@@ -9,7 +9,6 @@ SET( vil1_sources
   vil1_image.cxx                             vil1_image.h
   vil1_stream.cxx                            vil1_stream.h
   vil1_file_format.cxx                       vil1_file_format.h
-  vil1_byte.h
   vil1_byte_swap.cxx                         vil1_byte_swap.h
   vil1_16bit.cxx                             vil1_16bit.h
   vil1_32bit.cxx                             vil1_32bit.h

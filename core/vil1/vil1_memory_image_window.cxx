@@ -12,7 +12,7 @@
 #include <vcl_cmath.h>
 
 vil1_memory_image_window::vil1_memory_image_window(
-           const vil1_memory_image_of<vil1_byte>& image,
+           const vil1_memory_image_of<vxl_byte>& image,
            int centre_x, int centre_y, int mask_size):
   image1_(image)
 {
@@ -43,7 +43,7 @@ inline int labs(int x) { return (x > 0) ? x : -x; }
 // This is a useful check to have anyway as the default arg of MAXINT avoids
 // accumulator overflow which can easily happen on certain medical and range
 // images.
-int vil1_memory_image_window::sum_abs_diff(const vil1_memory_image_of<vil1_byte>& image2,
+int vil1_memory_image_window::sum_abs_diff(const vil1_memory_image_of<vxl_byte>& image2,
                                            int centre2_x, int centre2_y,
                                            int early_exit_level)
 {
@@ -85,7 +85,7 @@ int vil1_memory_image_window::sum_abs_diff(const vil1_memory_image_of<vil1_byte>
 // This is a useful check to have anyway as the default arg of MAXINT avoids
 // accumulator overflow which can easily happen on certain medical and range
 // images.
-int vil1_memory_image_window::sum_sqr_diff(const vil1_memory_image_of<vil1_byte>& image2,
+int vil1_memory_image_window::sum_sqr_diff(const vil1_memory_image_of<vxl_byte>& image2,
                                            int centre2_x, int centre2_y,
                                            int early_exit_level)
 {
@@ -124,7 +124,7 @@ int vil1_memory_image_window::sum_sqr_diff(const vil1_memory_image_of<vil1_byte>
 }
 
 
-int vil1_memory_image_window::normalised_sum_abs_diff(const vil1_memory_image_of<vil1_byte>& image2,
+int vil1_memory_image_window::normalised_sum_abs_diff(const vil1_memory_image_of<vxl_byte>& image2,
                                                       int centre2_x, int centre2_y,
                                                       double normalise_ratio,
                                                       int early_exit_level)
@@ -148,7 +148,7 @@ int vil1_memory_image_window::normalised_sum_abs_diff(const vil1_memory_image_of
 }
 
 
-double vil1_memory_image_window::normalised_cross_correlation(const vil1_memory_image_of<vil1_byte>& image2,
+double vil1_memory_image_window::normalised_cross_correlation(const vil1_memory_image_of<vxl_byte>& image2,
                                                               int centre2_x, int centre2_y)
 {
   // set mask size

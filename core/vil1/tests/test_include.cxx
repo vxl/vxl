@@ -3,7 +3,6 @@
 #include <vil1/vil1_16bit.h>
 #include <vil1/vil1_32bit.h>
 //#include <vil1/vil1_block_cache_image_impl.h>
-#include <vil1/vil1_byte.h>
 #include <vil1/vil1_byte_swap.h>
 #include <vil1/vil1_clamp.h>
 #include <vil1/vil1_clamp_image.h>

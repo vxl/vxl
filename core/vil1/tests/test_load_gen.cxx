@@ -1,7 +1,7 @@
 // This is core/vil1/tests/test_load_gen.cxx
 #include <vcl_vector.h>
+#include <vxl_config.h>
 #include <vil1/vil1_load.h>
-#include <vil1/vil1_byte.h>
 #include <vil1/vil1_rgb.h>
 #include <vil1/vil1_image_impl.h>
 #include <testlib/testlib_test.h>
@@ -22,14 +22,14 @@ static void test_rgb(char const *name, int w, int h,
   TEST("# bits per component", i.bits_per_component(), 8);
   TEST("component format", i.component_format(), VIL1_COMPONENT_FORMAT_UNSIGNED_INT);
 
-  vcl_vector<vil1_rgb<vil1_byte> > image_buf(w*h);
+  vcl_vector<vil1_rgb<vxl_byte> > image_buf(w*h);
   TEST("get_section() on image", i.get_section(&image_buf[0], 0, 0, w, h), true);
 
   bool result = true;
 
-  for (vcl_vector<vil1_rgb<vil1_byte> >::iterator
+  for (vcl_vector<vil1_rgb<vxl_byte> >::iterator
        it= image_buf.begin(); it!=image_buf.end(); ++it)
-    if (!(*it == vil1_rgb<vil1_byte>(r, g, b)))
+    if (!(*it == vil1_rgb<vxl_byte>(r, g, b)))
     {
       result = false; break;
     }
@@ -52,12 +52,12 @@ static void test_gray(char const *name, int w, int h, unsigned v)
   TEST("# bits per component", i.bits_per_component(), 8);
   TEST("component format", i.component_format(), VIL1_COMPONENT_FORMAT_UNSIGNED_INT);
 
-  vcl_vector<vil1_byte> image_buf(w*h);
+  vcl_vector<vxl_byte> image_buf(w*h);
   TEST ("get_section() on image", i.get_section(&image_buf[0], 0, 0, w, h), true);
 
   bool result = true;
 
-  for (vcl_vector<vil1_byte>::iterator
+  for (vcl_vector<vxl_byte>::iterator
        it= image_buf.begin(); it!=image_buf.end(); ++it)
     if (*it != v)
     {

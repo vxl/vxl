@@ -6,7 +6,6 @@
 #include "vil1_scale_intensities_image.h"
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_rgb.h>
-#include <vil1/vil1_byte.h>
 #include <vxl_config.h>
 
 template <class T>
@@ -43,12 +42,12 @@ bool vil1_scale_intensities_image(vil1_image const& base, double scale, double s
   return true; \
 }
 
-VIL1_INSTANTIATE_SCALE_INTENSITIES_IMAGE(vil1_byte);
+VIL1_INSTANTIATE_SCALE_INTENSITIES_IMAGE(vxl_byte);
 VIL1_INSTANTIATE_SCALE_INTENSITIES_IMAGE(vxl_uint_16);
 VIL1_INSTANTIATE_SCALE_INTENSITIES_IMAGE(float);
 VIL1_INSTANTIATE_SCALE_INTENSITIES_IMAGE(double);
 
-VIL1_SPECIALIZE_SCALE_INTENSITIES_IMAGE_RGB(vil1_byte);
+VIL1_SPECIALIZE_SCALE_INTENSITIES_IMAGE_RGB(vxl_byte);
 VIL1_SPECIALIZE_SCALE_INTENSITIES_IMAGE_RGB(vxl_uint_16);
 VIL1_SPECIALIZE_SCALE_INTENSITIES_IMAGE_RGB(float);
 VIL1_SPECIALIZE_SCALE_INTENSITIES_IMAGE_RGB(double);
