@@ -7,18 +7,18 @@
 //:
 // \file
 // \author Don Hamilton, Peter Tu, Peter Vanroose, François BERTEL, Franck Bettinger
+// \date   2000/02/16 Don HAMILTON, Peter TU - Creation
 //
 // \verbatim
-// Modifications :
-// 2001/07/06 Peter Vanroose         Added concurrent(), added assertions
-// 2001/07/05 Peter Vanroose         direction, normal in terms of vgl_vector_2d
-// 2001/06/27 Peter Vanroose         Added operator==
-// 2001/03/19 Franck Bettinger       added Manchester binary IO code
-// 2000/12/01 Peter Vanroose         moved dist_origin() to vgl_distance.h
-// 2000/05/09 Peter Vanroose         dist_origin() re-implemented
-// 2000/05/05 François BERTEL        Several minor bugs fixed
-// 2000/02/29 Peter Vanroose         Several minor fixes
-// 2000/02/16 Don HAMILTON, Peter TU Creation
+//  Modifications
+//   2000/02/29 Peter Vanroose    Several minor fixes
+//   2000/05/05 François BERTEL   Several minor bugs fixed
+//   2000/05/09 Peter Vanroose    dist_origin() re-implemented
+//   2000/12/01 Peter Vanroose    moved dist_origin() to vgl_distance.h
+//   2001/03/19 Franck Bettinger  added Manchester binary IO code
+//   2001/06/27 Peter Vanroose    Added operator==
+//   2001/07/05 Peter Vanroose    direction, normal in terms of vgl_vector_2d
+//   2001/07/06 Peter Vanroose    Added concurrent(), added assertions
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -26,7 +26,7 @@
 #include <vgl/vgl_fwd.h> // forward declare vgl_point_2d and vgl_homg_line_2d
 #include <vgl/vgl_vector_2d.h>
 
-//: Represents a Euclidian 2D line
+//: Represents a Euclidean 2D line
 // An interface for the line coefficients, [a,b,c], is provided in terms of the
 // standard implicit line equation: a*x + b*y + c = 0
 template <class Type>
@@ -103,7 +103,7 @@ class vgl_line_2d
   inline vgl_vector_2d<double> normal() const
   { return normalized(vgl_vector_2d<double>(a_,b_)); }
 
-  //: normalize the line coefficents s.t. a^2 + b^2 = 1
+  //: normalize the line coefficients s.t. a^2 + b^2 = 1
   bool normalize();
 
   //: Set a b c.
