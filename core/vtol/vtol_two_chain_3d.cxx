@@ -54,7 +54,6 @@ vtol_two_chain_3d::vtol_two_chain_3d (vcl_vector<vtol_face_3d*>& faces, vcl_vect
   _cycle_p = cyc;
 }
 
-//:
 // Copy Constructor
 vtol_two_chain_3d::vtol_two_chain_3d (vtol_two_chain_3d const& two_chain)
 {
@@ -110,8 +109,7 @@ vtol_two_chain_3d::vtol_two_chain_3d (vtol_two_chain_3d const& two_chain)
 }
 
 
-//:
-// copy with arrays
+// -- copy with arrays
 vtol_two_chain_3d* vtol_two_chain_3d::copy_with_arrays(vcl_vector<vtol_topology_object_3d*>& newverts,
                                    vcl_vector<vtol_topology_object_3d*>& newedges)
 {
@@ -140,7 +138,6 @@ vtol_two_chain_3d* vtol_two_chain_3d::copy_with_arrays(vcl_vector<vtol_topology_
 }
 
 
-//:
 // destructor 
 vtol_two_chain_3d::~vtol_two_chain_3d()
 {
@@ -148,17 +145,15 @@ vtol_two_chain_3d::~vtol_two_chain_3d()
 }
 
 //---------------------------------------------------------------------------
-// Name: clone
-// Task: Clone `this': creation of a new object and initialization
-//       See Prototype pattern
+// -- Clone `this': creation of a new object and initialization
+// See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_3d_ref vtol_two_chain_3d::clone(void) const
 {
   return new vtol_two_chain_3d(*this);
 }
 
-//:
-// shallow copy with no links
+// -- shallow copy with no links
 vtol_topology_object_3d * vtol_two_chain_3d::shallow_copy_with_no_links( void )
 {
     vtol_two_chain_3d * newvtol_two_chain_3d = new vtol_two_chain_3d();    
@@ -171,8 +166,7 @@ vtol_topology_object_3d * vtol_two_chain_3d::shallow_copy_with_no_links( void )
 }
 
 //---------------------------------------------------------------------------
-// Name: topology_type
-// Task: Return the topology type
+// -- Return the topology type
 //---------------------------------------------------------------------------
 vtol_two_chain_3d::vtol_topology_object_3d_type
 vtol_two_chain_3d::topology_type(void) const
@@ -184,8 +178,7 @@ vtol_two_chain_3d::topology_type(void) const
 //   Editing Functions
 //*****************************************************
 
-//:
-// add the superiors from the parent
+// -- add the superiors from the parent
 
 void vtol_two_chain_3d::add_superiors_from_parent(vcl_vector<vtol_topology_object_3d*>& sups)
 {
@@ -262,8 +255,7 @@ void vtol_two_chain_3d::update_superior_list_p_from_hierarchy_parent()
     }
 }
 
-//:
-// add an inferior two chain
+// -- add an inferior two chain
 void vtol_two_chain_3d::add_inferior_two_chain(vtol_two_chain_3d* vtol_two_chain_3d )
 {
   // Add it to the hierarchy.
@@ -271,8 +263,7 @@ void vtol_two_chain_3d::add_inferior_two_chain(vtol_two_chain_3d* vtol_two_chain
 
 }
 
-//:
-// remove an inferior two chain
+// -- remove an inferior two chain
 void vtol_two_chain_3d::remove_inferior_two_chain(vtol_two_chain_3d* vtol_two_chain_3d )
 {
   // Remove vtol_two_chain_3d from hierarchy.
@@ -280,8 +271,7 @@ void vtol_two_chain_3d::remove_inferior_two_chain(vtol_two_chain_3d* vtol_two_ch
 
 }
 
-//:
-//    This method removes the object from the topological structure
+// -- This method removes the object from the topological structure
 //    by unlinking it.  The removal of the object may recursively cause
 //    the removal of some of the object's superiors if these superiors
 //    are no longer valid.  In addition, inferiors of the object are
@@ -344,8 +334,7 @@ bool vtol_two_chain_3d::disconnect( vcl_vector< vtol_topology_object_3d * > & ch
   return true;
 }
 
-//:
-//    Removes the face from the two chain.  The removal of
+// -- Removes the face from the two chain.  The removal of
 //    the face may invalidate superior blocks, so the two chain
 //    is recursively removed its superior blocks.
 //    For more details, see vtol_edge_3d::disconnect( changes, deleted )
@@ -464,8 +453,7 @@ bool vtol_two_chain_3d::remove( vtol_face_3d * face,
     }
 }
 
-//:
-//    For each inferior, this method unlinks the inferior
+// -- For each inferior, this method unlinks the inferior
 //    from this object.  If the inferior now has zero superiors,
 //    the function is called recursively on it.  Finally, this
 //    object is pushed onto the list removed. (RYF 7-16-98)
@@ -500,7 +488,7 @@ void vtol_two_chain_3d::deep_remove( vcl_vector< vtol_topology_object_3d * > & r
   //cout << "      Exiting vtol_two_chain_3d::DeepDeleteInferiors\n";
 }
 
-//:
+// --
 // If the invoking object consists of more than 1 connected components,
 // this method determines the connected components 
 // and creates a new topological object for each component.
@@ -668,16 +656,14 @@ void vtol_two_chain_3d::clear()
 //    Accessor Functions
 //*****************************************************
 
-//: 
-// outside boundary vertices
+// -- outside boundary vertices
 
 vcl_vector<vtol_vertex_3d*>* vtol_two_chain_3d::outside_boundary_vertices()
 {
   SEL_INF_3d(vtol_vertex_3d,vertices);
 }
 
-//:
-// list of vertices
+// -- list of vertices
 
 vcl_vector<vtol_vertex_3d*>* vtol_two_chain_3d::vertices()
 {
@@ -690,16 +676,14 @@ vcl_vector<vtol_vertex_3d*>* vtol_two_chain_3d::vertices()
   SUBCHAIN_INF_3d(verts, vtol_two_chain_3d, vtol_vertex_3d, vertices);
 }
 
-//:
-// outside boundary zero chains
+// -- outside boundary zero chains
 
 vcl_vector<vtol_zero_chain_3d*>* vtol_two_chain_3d::outside_boundary_zero_chains()
 {
   SEL_INF_3d(vtol_zero_chain_3d,zero_chains);
 }
 
-//:
-//list of zero chains
+// --list of zero chains
 vcl_vector<vtol_zero_chain_3d*>* vtol_two_chain_3d::zero_chains()
 {
   vcl_vector<vtol_zero_chain_3d*> *zchs;
@@ -707,16 +691,14 @@ vcl_vector<vtol_zero_chain_3d*>* vtol_two_chain_3d::zero_chains()
   SUBCHAIN_INF_3d(zchs, vtol_two_chain_3d, vtol_zero_chain_3d, zero_chains);
 }
 
-//:
-// outside boundary edges
+// -- outside boundary edges
 vcl_vector<vtol_edge_3d*>* vtol_two_chain_3d::outside_boundary_edges()
 {
   SEL_INF_3d(vtol_edge_3d,edges);
 }
 
 
-//:
-// list of edges 
+// -- list of edges 
 vcl_vector<vtol_edge_3d*>* vtol_two_chain_3d::edges()
 {
   vcl_vector<vtol_edge_3d*> *edges;
@@ -724,16 +706,14 @@ vcl_vector<vtol_edge_3d*>* vtol_two_chain_3d::edges()
   SUBCHAIN_INF_3d(edges, vtol_two_chain_3d, vtol_edge_3d, edges);
 }
 
-//:
-// outside one chains
+// -- outside one chains
 vcl_vector<vtol_one_chain_3d*>* vtol_two_chain_3d::outside_boundary_one_chains()
 {
   SEL_INF_3d(vtol_one_chain_3d,one_chains);
 }
 
 
-//:
-// one chains
+// -- one chains
 vcl_vector<vtol_one_chain_3d*>* vtol_two_chain_3d::one_chains()
 {
   vcl_vector<vtol_one_chain_3d*> *onechs;
@@ -741,15 +721,13 @@ vcl_vector<vtol_one_chain_3d*>* vtol_two_chain_3d::one_chains()
   SUBCHAIN_INF_3d(onechs, vtol_two_chain_3d, vtol_one_chain_3d, one_chains);
 }
 
-//:
-// outside faces 
+// -- outside faces 
 vcl_vector<vtol_face_3d*>* vtol_two_chain_3d::outside_boundary_faces()
 {
   COPY_INF_3d(vtol_face_3d);
 }
 
-//:
-// faces 
+// -- faces 
 vcl_vector<vtol_face_3d*>* vtol_two_chain_3d::faces()
 {
   vcl_vector<vtol_face_3d*> *faces;
@@ -757,8 +735,7 @@ vcl_vector<vtol_face_3d*>* vtol_two_chain_3d::faces()
   SUBCHAIN_INF_3d(faces, vtol_two_chain_3d, vtol_face_3d, faces);
 }
 
-//:
-// list of blocks
+// -- list of blocks
 vcl_vector<vtol_block_3d*>* vtol_two_chain_3d::blocks()
 {
   if(this->is_sub_chain())
@@ -793,8 +770,7 @@ vcl_vector<vtol_block_3d*>* vtol_two_chain_3d::blocks()
 
 }
 
-//:
-// list of two chains 
+// -- list of two chains 
 
 vcl_vector<vtol_two_chain_3d*>* vtol_two_chain_3d::two_chains()
 {
@@ -843,8 +819,7 @@ vcl_vector<vtol_two_chain_3d*>* vtol_two_chain_3d::outside_boundary_two_chains()
 //    Operator Functions
 //*****************************************************
 
-//:
-// equality operator 
+// -- equality operator 
 
 bool vtol_two_chain_3d::operator==(const vtol_two_chain_3d& obj) const
 {
@@ -875,8 +850,7 @@ bool vtol_two_chain_3d::operator==(const vtol_two_chain_3d& obj) const
 }
 
 
-//:
-// spatial object equality
+// -- spatial object equality
 
 bool vtol_two_chain_3d::operator==(const vsol_spatial_object_3d& obj) const
 {
@@ -891,8 +865,7 @@ bool vtol_two_chain_3d::operator==(const vsol_spatial_object_3d& obj) const
 //    Utility Functions
 //*****************************************************
 
-//:
-// correct the chain directions
+// -- correct the chain directions
 void vtol_two_chain_3d::correct_chain_directions()
 {
   // TO DO

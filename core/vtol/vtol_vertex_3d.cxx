@@ -11,15 +11,13 @@
 #include <vcl/vcl_cassert.h>
 #include <vsol/vsol_point_3d.h>
 
-//:
 // Default Constructor.
 vtol_vertex_3d::vtol_vertex_3d(void)
 {
   _point=new vsol_point_3d(0,0,0);
 }
 
-//:
-// Constructor from an vsol_point_3d.
+// -- Constructor from an vsol_point_3d.
 vtol_vertex_3d::vtol_vertex_3d(const vsol_point_3d_ref pt)
 {
 #if 0
@@ -31,29 +29,25 @@ vtol_vertex_3d::vtol_vertex_3d(const vsol_point_3d_ref pt)
   _point=pt;
 }
 
-//:
-// Constructor from a vtol_vertex_3d.
+// -- Constructor from a vtol_vertex_3d.
 vtol_vertex_3d::vtol_vertex_3d(const vtol_vertex_3d &other)
 {
   _point=new vsol_point_3d(*other._point);
 }
 
-//:
-// Constructor from a vector_3d.
+// -- Constructor from a vector_3d.
 vtol_vertex_3d::vtol_vertex_3d (const vector_3d &vect) 
 {
   _point=new vsol_point_3d(vect[0],vect[1],vect[2]);
 }
 
-//:
-// Constructor from an vsol_point_3d.
+// -- Constructor from an vsol_point_3d.
 vtol_vertex_3d::vtol_vertex_3d (const vsol_point_3d &pt)
 {
   _point=new vsol_point_3d(pt);
 }
 
-//:
-// Constructor from three doubles.
+// -- Constructor from three doubles.
 vtol_vertex_3d::vtol_vertex_3d(double newx,
                                double newy,
                                double newz)
@@ -61,8 +55,7 @@ vtol_vertex_3d::vtol_vertex_3d(double newx,
   _point=new vsol_point_3d(newx,newy,newz);	
 }
 
-//:
-// shallow copy with no links 
+// -- shallow copy with no links 
 
 vtol_topology_object_3d *vtol_vertex_3d::shallow_copy_with_no_links(void)
 {
@@ -77,9 +70,8 @@ vtol_vertex_3d::~vtol_vertex_3d()
 }
 
 //---------------------------------------------------------------------------
-// Name: clone
-// Task: Clone `this': creation of a new object and initialization
-//       See Prototype pattern
+// -- Clone `this': creation of a new object and initialization
+// See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_3d_ref vtol_vertex_3d::clone(void) const
 {
@@ -93,8 +85,7 @@ vsol_spatial_object_3d_ref vtol_vertex_3d::clone(void) const
  */
 
 //---------------------------------------------------------------------------
-// Name: topology_type
-// Task: Return the topology type
+// -- Return the topology type
 //---------------------------------------------------------------------------
 vtol_vertex_3d::vtol_topology_object_3d_type
 vtol_vertex_3d::topology_type(void) const
@@ -111,51 +102,44 @@ void vtol_vertex_3d::set_point(vsol_point_3d_ref pt)
 {
   _point=pt;
 }
-//:
-// Returns a list of Vertices which only contains a pointer to itself.
+// -- Returns a list of Vertices which only contains a pointer to itself.
 vertex_list_3d *vtol_vertex_3d::vertices(void)
 {
   LIST_SELF_3d(vtol_vertex_3d);
 }
 
-//:
-// Returns a list of ZeroChains that contain the vertex. This is the vertex superiors list.
+// -- Returns a list of ZeroChains that contain the vertex. This is the vertex superiors list.
 zero_chain_list_3d *vtol_vertex_3d::zero_chains(void)
 {
   SEL_SUP_3d(vtol_zero_chain_3d,zero_chains);
 }
 
 
-//:
-// Returns a list of Edges which contain the vertex.
+// -- Returns a list of Edges which contain the vertex.
 edge_list_3d *vtol_vertex_3d::edges(void)
 {
   SEL_SUP_3d(vtol_edge_3d,edges);
 }
 
-//:
-// Returns a list of OneChains which contain the vertex.
+// -- Returns a list of OneChains which contain the vertex.
 one_chain_list_3d* vtol_vertex_3d::one_chains(void)
 {
   SEL_SUP_3d(vtol_one_chain_3d,one_chains);
 }
 
-//:
-// Returns a list of Faces which contain the vertex.
+// -- Returns a list of Faces which contain the vertex.
 face_list_3d* vtol_vertex_3d::faces(void)
 {
   SEL_SUP_3d(vtol_face_3d,faces);
 }
 
-//:
-// Returns a list of TwoChains which contain the vertex.
+// -- Returns a list of TwoChains which contain the vertex.
 two_chain_list_3d* vtol_vertex_3d::two_chains(void)
 {
   SEL_SUP_3d(vtol_two_chain_3d,two_chains);
 }
 
-//:
-// Returns a list of Blocks which contain the vertex.
+// -- Returns a list of Blocks which contain the vertex.
 block_list_3d* vtol_vertex_3d::blocks(void)
 {
   SEL_SUP_3d(vtol_block_3d,blocks);
@@ -216,9 +200,7 @@ vsol_spatial_object_3d *vtol_vertex_3d::spatial_copy(void)
  *
  *    Print Functions
  */
-//:
-// This method outputs a simple text representation of the vertex including its
-// address in memory.
+// -- This method outputs a simple text representation of the vertex including its address in memory.
 void vtol_vertex_3d::print(ostream &strm) const
 {
   strm<<"<vtol_vertex_3d "<<x()<<","<<y()<<"," << z() << "," <<(void *)this<<"> with id ";
@@ -226,9 +208,7 @@ void vtol_vertex_3d::print(ostream &strm) const
 }
 
 
-//:
-// This method outputs a detailed description of the vertex including the
-// inferiors and superiors.
+// -- This method outputs a detailed description of the vertex including the inferiors and superiors.
 void vtol_vertex_3d::describe(ostream &strm,
                               int blanking) const
 {
@@ -245,9 +225,7 @@ void vtol_vertex_3d::describe(ostream &strm,
  *    Implementor Functions
  */
 
-//:
-// This method returns an implicitline edge created from the vertex and the
-// other_vtol_vertex_3d.
+// -- This method returns an implicitline edge created from the vertex and the other_vtol_vertex_3d.
 
 vtol_edge_3d *vtol_vertex_3d::new_edge(vtol_vertex_3d *other_vert)
 {
@@ -268,8 +246,7 @@ vtol_edge_3d *vtol_vertex_3d::new_edge(vtol_vertex_3d *other_vert)
   return new vtol_edge_3d(this,other_vert);
 }
 
-//:
-// Returns the squared distance from the vertex and the vector location, v.
+// -- Returns the squared distance from the vertex and the vector location, v.
 double vtol_vertex_3d::distance_from(const vector_3d &v)
 {
   //  return _point->distance_from(v);
@@ -277,9 +254,7 @@ double vtol_vertex_3d::distance_from(const vector_3d &v)
   return -1; // TO DO
 }
 
-//:
-// This method returns the distance, not the squared distance,
-// from this vertex and another vertex.
+// -- This method returns the distance, not the squared distance, from this vertex and another vertex.
 double vtol_vertex_3d::euclidean_distance(vtol_vertex_3d& v)
 {
   //  return _point->euclidean_distance(*v.get_point());
@@ -287,16 +262,13 @@ double vtol_vertex_3d::euclidean_distance(vtol_vertex_3d& v)
   return -1; // TO DO
 }
 
-//:
-// This method returns the number of superiors of the vertex.
+// -- This method returns the number of superiors of the vertex.
 int vtol_vertex_3d::order(void)
 {
   return _superiors.size();
 }
 
-//:
-// This method returns true if a superior of the vertex contains the vertex,
-// v2 as an inferior.
+// -- This method returns true if a superior of the vertex contains the vertex, v2 as an inferior.
 bool vtol_vertex_3d::is_connected(vtol_vertex_3d *v2)
 {
   edge_list_3d *vertedges=this->edges();
@@ -331,8 +303,7 @@ for (face_list_3d::iterator i = faces.begin();
 }
 #endif
 
-//:
-// This method returns a new Vertex whose location is the vector difference of the vertex and diffvert.
+// -- This method returns a new Vertex whose location is the vector difference of the vertex and diffvert.
 vtol_vertex_3d *vtol_vertex_3d::vertex_diff(vtol_vertex_3d& diffvert)
 {
   // return new vtol_vertex_3d((*_point) - (*(diffvert._point)));
@@ -340,8 +311,7 @@ vtol_vertex_3d *vtol_vertex_3d::vertex_diff(vtol_vertex_3d& diffvert)
   return 0; // TO DO
 }
 
-//:
-// This method returns true if the Edge, edg, is on the superior list of the vertex.
+// -- This method returns true if the Edge, edg, is on the superior list of the vertex.
 bool vtol_vertex_3d::is_endpointp(const vtol_edge_3d &edg)
 {
   vcl_vector<vtol_edge_3d*> *edge_list = this->edges();
@@ -356,8 +326,7 @@ bool vtol_vertex_3d::is_endpointp(const vtol_edge_3d &edg)
 }
 
 
-//:
-// Assign X,Y,Z values only
+// -- Assign X,Y,Z values only
 vtol_vertex_3d &vtol_vertex_3d::operator=(const vtol_vertex_3d &rhs)
 {
   
@@ -371,15 +340,13 @@ vtol_vertex_3d &vtol_vertex_3d::operator=(const vtol_vertex_3d &rhs)
 }
 
 
-//:
-// This method returns true if the vertex is equivalent to the
+// -- This method returns true if the vertex is equivalent to the
 bool vtol_vertex_3d::eq(vtol_vertex_3d &overtex)
 {
   return *this==overtex;
 }
 
-//:
-// spatial object equality
+// -- spatial object equality
 
 bool vtol_vertex_3d::operator==(const vsol_spatial_object_3d& obj) const
 {
@@ -391,8 +358,7 @@ bool vtol_vertex_3d::operator==(const vsol_spatial_object_3d& obj) const
 }
 
 
-//:
-// This method returns true if the vertex is equivalent to v2.
+// -- This method returns true if the vertex is equivalent to v2.
 bool vtol_vertex_3d::operator== (const vtol_vertex_3d &v2) const
 {
   
@@ -412,8 +378,7 @@ bool vtol_vertex_3d::operator== (const vtol_vertex_3d &v2) const
   
 }
 
-//:
-// This function shouldn't be in here....pav January 93.
+// -- This function shouldn't be in here....pav January 93.
 // It substitutes vertex, v1 for vertex, v2 on Edge, edge.
 
 void subst_vertex_on_edge(vtol_vertex_3d *v1,
@@ -449,7 +414,6 @@ void vtol_vertex_3d::merge_references(vtol_vertex_3d *v2)
  *    Functions
  */
 
-//:
 // TO DO
 vtol_vertex_3d* min_z_vertex(vertex_list_3d* Verts)
 {
@@ -501,16 +465,14 @@ vertex_list_3d *merge_vertices_listwise(vertex_list_3d *Verts)
   return newl;
 }
 
-//:
 // Should not be a method....not tested.
 vertex_list_3d *merge_vertices_all(vertex_list_3d *Verts)
 {
   return merge_vertices_listwise(Verts);
 }
 
-//:
 //-----------------------------------------------------------------------------
-//
+// --
 // Determine which other vertices share edges with this. Add any of these which
 // are not in the list to it, and recursively call ExploreVertex on them. The
 // method is intended to recover all of the vertices in a single topological
@@ -544,8 +506,7 @@ void vtol_vertex_3d::explore_vertex(vertex_list_3d &verts)
   delete edges_;
 }
 
-//:
-//    This method removes the object from the topological structure
+// -- This method removes the object from the topological structure
 //    by unlinking it.  The removal of the object may recursively cause
 //    the removal of some of the object's superiors if these superiors
 //    are no longer valid.  In addition, inferiors of the object are
@@ -578,8 +539,7 @@ bool vtol_vertex_3d::disconnect(topology_list_3d  &changes,
   return true;
 }
 
-//:
-//    For each inferior, this method unlinks the inferior
+// -- For each inferior, this method unlinks the inferior
 //    from this object.  If the inferior now has zero superiors,
 //    the method is invoked recursively by it.  Finally, this
 //    object is pushed onto the list removed.

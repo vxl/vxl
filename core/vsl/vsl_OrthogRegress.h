@@ -3,9 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vsl_OrthogRegress
+// .INCLUDE vsl/vsl_OrthogRegress.h
+// .FILE vsl_OrthogRegress.cxx
+// \author fsm@robots.ox.ac.uk
 
 #include <vcl/vcl_cmath.h>
 #include <vsl/vsl_hacks.h>

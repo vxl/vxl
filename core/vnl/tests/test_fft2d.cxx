@@ -8,7 +8,6 @@
 // Class: testvnl_fft2d
 // Author: Veit U.B. Schenk, Oxford RRG
 // Created: 20 Mar 1998
-// Modifications:
 //
 //-----------------------------------------------------------------------------
 #include <vcl/vcl_cstdlib.h>

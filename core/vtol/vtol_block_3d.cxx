@@ -11,14 +11,12 @@
 #include <vcl/vcl_vector.h>
 //#include <vtol/some_stubs.h>
 #include <vtol/vtol_two_chain_3d.h>
-//:
 // default constructor
 vtol_block_3d::vtol_block_3d()
 {
 }
 
-//: 
-// copy copnstructor
+// copy constructor
 // This is a deep copy of
 // the old block to the new block...
 vtol_block_3d::vtol_block_3d(vtol_block_3d const& block)
@@ -67,15 +65,14 @@ vtol_block_3d::vtol_block_3d(vtol_block_3d const& block)
   delete old2chains;
 }
 
-//:
-//constructor with a two chain
+// -- constructor with a two-chain
 vtol_block_3d::vtol_block_3d (vtol_two_chain_3d* faceloop)
 {	
    link_inferior(faceloop);
 }
 
 
-//:
+// --
 // This method assumes that the first faceloop
 // is the outside boundary. The remaining
 // two_chains are considered holes inside the
@@ -96,8 +93,7 @@ vtol_block_3d::vtol_block_3d (vcl_vector<vtol_two_chain_3d*> &faceloops)
 }
 
 
-//: 
-//constructor using face list
+// -- Constructor using face list
 
 vtol_block_3d::vtol_block_3d (vcl_vector<vtol_face_3d*> &new_face_list) 
  {
@@ -113,9 +109,8 @@ vtol_block_3d::~vtol_block_3d()
 }
 
 //---------------------------------------------------------------------------
-// Name: clone
-// Task: Clone `this': creation of a new object and initialization
-//       See Prototype pattern
+// -- Clone `this': creation of a new object and initialization
+// See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_3d_ref vtol_block_3d::clone(void) const
 {
@@ -129,8 +124,7 @@ vsol_spatial_object_3d_ref vtol_block_3d::clone(void) const
  */
 
 //---------------------------------------------------------------------------
-// Name: topology_type
-// Task: Return the topology type
+// -- Return the topology type
 //---------------------------------------------------------------------------
 vtol_block_3d::vtol_topology_object_3d_type
 vtol_block_3d::topology_type(void) const
@@ -138,16 +132,14 @@ vtol_block_3d::topology_type(void) const
   return BLOCK;
 }
 
-//:
-// outside boundary vertices 
+// -- outside boundary vertices 
 
 vcl_vector<vtol_vertex_3d*>* vtol_block_3d::outside_boundary_vertices()
 {
   OUTSIDE_BOUNDARY_3d(vtol_vertex_3d, vtol_two_chain_3d, vertices);
 }
 
-//:
-// get vertex list 
+// -- get vertex list 
 
 vcl_vector<vtol_vertex_3d*>* vtol_block_3d::vertices()
 {
@@ -155,86 +147,75 @@ vcl_vector<vtol_vertex_3d*>* vtol_block_3d::vertices()
 }
 
 
-//:
-// get outside boundary zero chains
+// -- get outside boundary zero chains
 
 vcl_vector<vtol_zero_chain_3d*>* vtol_block_3d::outside_boundary_zero_chains()
 {
   OUTSIDE_BOUNDARY_3d(vtol_zero_chain_3d, vtol_two_chain_3d, zero_chains);
 }
 
-//:
-// get zero chains
+// -- get zero chains
 
 vcl_vector<vtol_zero_chain_3d*>* vtol_block_3d::zero_chains()
 {
   SEL_INF_3d(vtol_zero_chain_3d, zero_chains);
 }
 
-//:
-// outside boundary edges
+// -- outside boundary edges
 
 vcl_vector<vtol_edge_3d*>* vtol_block_3d::outside_boundary_edges()
 {
   OUTSIDE_BOUNDARY_3d(vtol_edge_3d, vtol_two_chain_3d, edges);
 }
 
-//:
-// get edges 
+// -- get edges 
 vcl_vector<vtol_edge_3d*>* vtol_block_3d::edges()
 {
   SEL_INF_3d(vtol_edge_3d, edges);
 }
 
 
-//:
-// get outside boundary one chains
+// -- get outside boundary one chains
 
 vcl_vector<vtol_one_chain_3d*>* vtol_block_3d::outside_boundary_one_chains()
 {
   OUTSIDE_BOUNDARY_3d(vtol_one_chain_3d, vtol_two_chain_3d, one_chains);
 }
 
-//: 
-// get the one chains
+// -- get the one chains
 vcl_vector<vtol_one_chain_3d*>* vtol_block_3d::one_chains()
 {
   SEL_INF_3d(vtol_one_chain_3d,one_chains);
 }
 
-//:
-// get the outside boundary faces
+// -- get the outside boundary faces
 
 vcl_vector<vtol_face_3d*>* vtol_block_3d::outside_boundary_faces()
 {
   OUTSIDE_BOUNDARY_3d(vtol_face_3d, vtol_two_chain_3d, faces);
 }
 
-//:
-// get the faces 
+// -- get the faces 
 vcl_vector<vtol_face_3d*>* vtol_block_3d::faces()
 {
  SEL_INF_3d(vtol_face_3d,faces);
 }
 
-//:
-// get the outside boundary two chains
+// -- get the outside boundary two chains
 
 vcl_vector<vtol_two_chain_3d*>* vtol_block_3d::outside_boundary_two_chains()
 {
   OUTSIDE_BOUNDARY_3d(vtol_two_chain_3d, vtol_two_chain_3d, two_chains);
 }
 
-//:
-// get the two chains
+// -- get the two chains
 
 vcl_vector<vtol_two_chain_3d*>* vtol_block_3d::two_chains()
 {
   SEL_INF_3d(vtol_two_chain_3d, two_chains);
 }
 
-//:
-// get
+// -- get the blocks
 vcl_vector<vtol_block_3d*>* vtol_block_3d::blocks()
 {
   LIST_SELF_3d(vtol_block_3d);
@@ -247,7 +228,6 @@ vcl_vector<vtol_block_3d*>* vtol_block_3d::blocks()
  *    Operators Functions
  */
 
-//:
 // This is hardly an equality test...but we`ll leave it for now....pav
 // June 1992.
 
@@ -278,8 +258,7 @@ bool vtol_block_3d::operator==(const vtol_block_3d& bl) const
   return true;
 }
 
-//:
-// spatial object equality
+// -- spatial object equality
 
 bool vtol_block_3d::operator==(const vsol_spatial_object_3d& obj) const
 {
@@ -297,8 +276,7 @@ bool vtol_block_3d::operator==(const vsol_spatial_object_3d& obj) const
  */
 
 
-//:
-// deep copy 
+// -- deep copy 
 vtol_block_3d* vtol_block_3d::copy()
 {
   // This is a deep copy of
@@ -318,22 +296,21 @@ vtol_block_3d* vtol_block_3d::copy()
 }
 
 
-//: shallow copy
+// -- shallow copy
 vtol_topology_object_3d * vtol_block_3d::shallow_copy_with_no_links( void )
 {
     vtol_block_3d * newblock = new vtol_block_3d;
     return newblock;
 }
 
-//:
-// add a face loop
+// -- add a face loop
 bool vtol_block_3d::add_face_loop(vtol_two_chain_3d* new_face_loop)
 {
   this->touch();
   return link_inferior(new_face_loop);
 }
 
-//:
+// --
 //    This method removes the object from the topological structure
 //    by unlinking it.  The removal of the object may recursively cause
 //    the removal of some of the object's superiors if these superiors
@@ -355,7 +332,7 @@ bool vtol_block_3d::disconnect( vcl_vector< vtol_topology_object_3d * > &,
   return true;
 }
 
-//:
+// --
 //    Removes the two chain from the block by unlinking it.  If 
 //    the two chain is not a hole, its removal invalidates the
 //    the block and the block is unlinked from the topological
@@ -406,7 +383,7 @@ bool vtol_block_3d::remove( vtol_two_chain_3d * two_chain,
   return false;
 }
 
-//:
+// --
 //    For each inferior, this method unlinks the inferior
 //    from this object.  If the inferior now has zero superiors,
 //    the function is called recursively on it.  Finally, this
@@ -471,8 +448,7 @@ void vtol_block_3d::deep_remove( vcl_vector< vtol_topology_object_3d * > & remov
   //cout << "   Exiting vtol_block_3d::DeepDeleteInferiors\n";
 }
 
-//:
-// get a hole cycle
+// -- get a hole cycle
 vcl_vector< vtol_two_chain_3d* > * vtol_block_3d::get_hole_cycles()
 {
   vcl_vector<vtol_two_chain_3d*>* new_list = new vcl_vector<vtol_two_chain_3d*>();
@@ -495,8 +471,7 @@ vcl_vector< vtol_two_chain_3d* > * vtol_block_3d::get_hole_cycles()
 }
 
 
-//:
-//add a hole cycle
+// --add a hole cycle
 
 bool vtol_block_3d::add_hole_cycle( vtol_two_chain_3d * new_hole ) 
 {
@@ -510,8 +485,7 @@ bool vtol_block_3d::add_hole_cycle( vtol_two_chain_3d * new_hole )
       return false;
 }
 
-//:
-// add a two chain
+// -- add a two chain
 
 bool vtol_block_3d::add_two_chain(vtol_two_chain_3d* new_face_loop)
 {
@@ -519,8 +493,7 @@ bool vtol_block_3d::add_two_chain(vtol_two_chain_3d* new_face_loop)
   return link_inferior(new_face_loop);
 }
 
-//:
-// remove a face loop
+// -- remove a face loop
 
 bool vtol_block_3d::remove_face_loop(vtol_two_chain_3d* doomed_face_loop)
 {
@@ -528,8 +501,7 @@ bool vtol_block_3d::remove_face_loop(vtol_two_chain_3d* doomed_face_loop)
   return unlink_inferior(doomed_face_loop);
 }
 
-//:
-// remove a two chain 
+// -- remove a two chain 
 bool vtol_block_3d::remove_two_chain(vtol_two_chain_3d* doomed_face_loop)
 {
   this->touch();
@@ -544,8 +516,7 @@ bool vtol_block_3d::remove_two_chain(vtol_two_chain_3d* doomed_face_loop)
  */
   
 
-//:
-// print data 
+// -- print data 
  
 void vtol_block_3d::print(ostream& strm) const
 {

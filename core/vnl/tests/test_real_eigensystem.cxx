@@ -1,7 +1,6 @@
 // test_real_eigensystem
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 23 Jan 96
-// Modifications:
 //
 //-----------------------------------------------------------------------------
 #include <vcl/vcl_iostream.h>

@@ -20,6 +20,9 @@
 // .SECTION Author
 //     David Capel, capes@robots, July 2000
 //
+// .SECTION Modifications
+//     000705 capes@robots initial version.
+//
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_vector.h>

@@ -3,9 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vsl_1d_half_kernel
+// .INCLUDE vsl/vsl_1d_half_kernel.h
+// .FILE vsl_1d_half_kernel.cxx
+// \author fsm@robots.ox.ac.uk
 
 //: This structure holds half of a symmetric convolution kernel.
 // The centre of the kernel is array[0].

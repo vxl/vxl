@@ -3,9 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vsl_canny_port
+// .INCLUDE vsl/vsl_canny_port.h
+// .FILE vsl_canny_port.cxx
+// \author fsm@robots.ox.ac.uk
 
 #include <vcl/vcl_cmath.h>
 #include <vcl/vcl_list.h>

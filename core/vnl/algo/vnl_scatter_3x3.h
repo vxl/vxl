@@ -9,7 +9,7 @@
 // .LIBRARY     vnl
 // .HEADER	vxl package
 // .INCLUDE     vnl/algo/vnl_scatter_3x3.h
-// .FILE        vnl_scatter_3x3.cxx
+// .FILE        vnl_scatter_3x3.txx
 //
 // .SECTION Description
 //    vnl_scatter_3x3 is a class that awf hasn't documented properly. DOCME
@@ -18,7 +18,7 @@
 //     Andrew W. Fitzgibbon, Oxford RRG, 02 Oct 96
 //
 // .SECTION Modifications:
-//     <none yet>
+//     18 Feb 2000. fsm: templated.
 //
 //-----------------------------------------------------------------------------
 

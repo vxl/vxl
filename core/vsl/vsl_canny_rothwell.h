@@ -1,6 +1,10 @@
 #ifndef _vsl_canny_rothwell_h
 #define _vsl_canny_rothwell_h
 
+// .NAME vsl_canny_rothwell
+// .INCLUDE vsl/vsl_canny_rothwell.h
+// .FILE vsl_canny_rothwell.cxx
+//
 // .SECTION Description
 //
 // A class for performing traditional Canny edge detection. The basic

@@ -3,9 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vsl_canny_smooth
+// .INCLUDE vsl/vsl_canny_smooth.h
+// .FILE vsl_canny_smooth.cxx
+// \author fsm@robots.ox.ac.uk
 
 #include <vil/vil_memory_image_of.h>
 

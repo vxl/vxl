@@ -7,6 +7,14 @@
 // .SECTION Author
 //    awf@robots.ox.ac.uk
 // Created: 16 Feb 00
+//
+// .SECTION Modifications
+//     960916 AWF Added save_pgm and more comments.
+//     961209 Peter Vanroose added operator=() and copy constructor
+//     980710 FSM Changed constructor to take a const Image *, not Image *
+//     981105 AWF Made bilinear/bicubic return double.
+//     990211 Peter Vanroose moved save_pgm() to Templates/ (EGCS complained)
+//     990421 FSM Added constructor from a const fast_array<T> &
 
 #include <vil/vil_byte.h>
 #include <vil/vil_image.h>

@@ -1,8 +1,10 @@
 #ifndef vil_convolve_h_
 #define vil_convolve_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vil_convolve
+// .INCLUDE vil/vil_convolve.h
+// .FILE vil_convolve.txx
+// @author fsm@robots.ox.ac.uk
+
 #include <vcl/vcl_compiler.h>
 
 // When convolving a finite signal the boundaries may be

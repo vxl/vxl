@@ -3,8 +3,6 @@
 // Class: vnl_c_vector
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 12 Feb 98
-// Modifications:
-//   980212 AWF Initial version.
 //
 //-----------------------------------------------------------------------------
 

@@ -15,7 +15,6 @@ MANPAGE_SOURCES += vnl_vector_fixed.txx
 MANPAGE_SOURCES += vnl_matrix_fixed.txx
 MANPAGE_SOURCES += vnl_file_vector.txx
 MANPAGE_SOURCES += vnl_file_matrix.txx
-MANPAGE_SOURCES += vnl_scatter_3x3.txx
 MANPAGE_SOURCES += vnl_resize.txx
 SOURCES += $(wildcard vnl_block.cxx)
 FLAGS_vnl_block.cxx += $(optimize)

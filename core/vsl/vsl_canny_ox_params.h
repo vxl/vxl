@@ -3,9 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vsl_canny_ox_params
+// .INCLUDE vsl/vsl_canny_ox_params.h
+// .FILE vsl_canny_ox_params.cxx
+// \author fsm@robots.ox.ac.uk
 
 class vsl_canny_ox_params {
 public:

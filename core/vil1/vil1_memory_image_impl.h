@@ -4,6 +4,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .NAME vil_memory_image_impl
+// .INCLUDE vil/vil_memory_image_impl.h
+// .FILE vil_memory_image_impl.cxx
 // .SECTION Author
 //    awf@robots.ox.ac.uk
 // Created: 16 Mar 00

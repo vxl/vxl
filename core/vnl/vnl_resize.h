@@ -1,8 +1,9 @@
 #ifndef vnl_resize_h_
 #define vnl_resize_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vnl_resize
+// .INCLUDE vnl/vnl_resize.h
+// .FILE vnl_resize.txx
+// @author fsm@robots.ox.ac.uk
 
 template <class T> class vnl_vector;
 template <class T> class vnl_matrix;

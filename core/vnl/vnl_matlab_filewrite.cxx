@@ -2,12 +2,11 @@
 #pragma implementation
 #endif
 
+#include <vcl/vcl_iostream.h> // must be first
 #include "vnl_matlab_filewrite.h"
 
-#include <vcl/vcl_iostream.h>
 #include <vcl/vcl_fstream.h>
 #include <vcl/vcl_strstream.h>
-#include <vcl/vcl_string.h>
 
 #include <vnl/vnl_complex.h>
 #include <vnl/vnl_vector.h>

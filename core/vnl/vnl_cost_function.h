@@ -20,6 +20,9 @@
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 23 Oct 97
 //
+// .SECTION Modifications
+//     971023 AWF Initial version.
+//
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_matops.h>

@@ -3,9 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vil_image_as
+// .INCLUDE vil/vil_image_as.h
+// .FILE vil_image_as.cxx
+// @author fsm@robots.ox.ac.uk
 
 #include <vil/vil_image.h>
 

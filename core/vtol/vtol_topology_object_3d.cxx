@@ -8,15 +8,13 @@
 //#include <vtol/some_stubs.h>
 
 
-//:
-//  This is the destructor for topology_object_3d.
+// -- This is the destructor for topology_object_3d.
 vtol_topology_object_3d::~vtol_topology_object_3d()
 {
   delete inf_sup_cache;
 }
 
 
-//:
 // constructor
 vtol_topology_object_3d::vtol_topology_object_3d(int num_inferiors, int num_superiors) :
   vtol_topology_hierarchy_node_3d(num_inferiors, num_superiors)
@@ -24,8 +22,7 @@ vtol_topology_object_3d::vtol_topology_object_3d(int num_inferiors, int num_supe
   inf_sup_cache = 0;
 }
 
-//:
-// method to delete object if under the right conditions
+// -- method to delete object if under the right conditions
 
 void vtol_topology_object_3d::protected_destroy()
 {
@@ -45,7 +42,7 @@ void vtol_topology_object_3d::protected_destroy()
 }
 
 
-//:
+// --
 // Recursively traverse the inferiors of objects to
 // delete the entire hierarchy of a topological entity
 // if 1) the object is not protected from outside
@@ -112,8 +109,7 @@ vtol_topology_object_3d::spatial_type(void) const
 }
 
 //---------------------------------------------------------------------------
-// Name: topology_type
-// Task: Return the topology type
+// -- Return the topology type
 //---------------------------------------------------------------------------
 vtol_topology_object_3d::vtol_topology_object_3d_type
 vtol_topology_object_3d::topology_type(void) const
@@ -121,8 +117,7 @@ vtol_topology_object_3d::topology_type(void) const
   return TOPOLOGY_NO_TYPE;
 }
 
-//:
-// Get list of vertices 
+// -- Get list of vertices 
 
 vertex_list_3d* vtol_topology_object_3d::vertices()
 {
@@ -131,8 +126,7 @@ vertex_list_3d* vtol_topology_object_3d::vertices()
 }
 
 
-//:
-// set list of vertices 
+// -- set list of vertices 
 
 void vtol_topology_object_3d::vertices(vertex_list_3d& verts)
 {
@@ -141,8 +135,7 @@ void vtol_topology_object_3d::vertices(vertex_list_3d& verts)
   inf_sup_cache->vertices(verts); 
 }
 
-//:
-// Get list of zero_chains 
+// -- Get list of zero_chains 
 zero_chain_list_3d* vtol_topology_object_3d::zero_chains()
 {
   cerr << "Error: vtol_topology_object_3d::zero_chains() not implemented for this topology object\n";
@@ -150,8 +143,7 @@ zero_chain_list_3d* vtol_topology_object_3d::zero_chains()
 }
 
 
-//:
-// set list of zero chains
+// -- set list of zero chains
 void vtol_topology_object_3d::zero_chains( zero_chain_list_3d& zerochains)
 {
   if(!inf_sup_cache)
@@ -159,8 +151,7 @@ void vtol_topology_object_3d::zero_chains( zero_chain_list_3d& zerochains)
   inf_sup_cache->zero_chains(zerochains);
 }
 
-//:
-// get list of one chains
+// -- get list of one chains
 
 one_chain_list_3d* vtol_topology_object_3d::one_chains()
 {
@@ -168,8 +159,7 @@ one_chain_list_3d* vtol_topology_object_3d::one_chains()
   return new one_chain_list_3d;
 }
 
-//:
-// set list of one chains
+// -- set list of one chains
 
 void vtol_topology_object_3d::one_chains( one_chain_list_3d& onechains)
 {
@@ -178,8 +168,7 @@ void vtol_topology_object_3d::one_chains( one_chain_list_3d& onechains)
   inf_sup_cache->one_chains(onechains);
 }
 
-//:
-// get list of edges
+// -- get list of edges
 
 edge_list_3d* vtol_topology_object_3d::edges()
 {
@@ -187,8 +176,7 @@ edge_list_3d* vtol_topology_object_3d::edges()
   return new edge_list_3d;
 }
 
-//:
-// set list of edges
+// -- set list of edges
 
 void vtol_topology_object_3d::edges(edge_list_3d& edges)
 {
@@ -197,8 +185,7 @@ void vtol_topology_object_3d::edges(edge_list_3d& edges)
   inf_sup_cache->edges(edges);
 }
 
-//:
-// print the object
+// -- print the object
 void vtol_topology_object_3d::print (ostream& strm) const
 {
   strm << "<vtol_topology_object_3d " << (void *)this << ">" << endl;

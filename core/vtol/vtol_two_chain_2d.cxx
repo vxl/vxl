@@ -17,8 +17,7 @@
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// Name: vtol_two_chain_2d
-// Task: Default constructor
+// Default constructor
 //---------------------------------------------------------------------------
 vtol_two_chain_2d::vtol_two_chain_2d(void)
 {
@@ -26,8 +25,7 @@ vtol_two_chain_2d::vtol_two_chain_2d(void)
 }
 
 //---------------------------------------------------------------------------
-// Name: vtol_two_chain_2d
-// Task: Constructor
+// -- Constructor
 //---------------------------------------------------------------------------
 vtol_two_chain_2d::vtol_two_chain_2d(int num_faces)
 {
@@ -35,8 +33,7 @@ vtol_two_chain_2d::vtol_two_chain_2d(int num_faces)
 }
 
 //---------------------------------------------------------------------------
-// Name: vtol_two_chain_2d
-// Task: Constructor
+// -- Constructor
 //---------------------------------------------------------------------------
 vtol_two_chain_2d::vtol_two_chain_2d(face_list_2d &faces,
                                      bool new_is_cycle) 
@@ -53,8 +50,7 @@ vtol_two_chain_2d::vtol_two_chain_2d(face_list_2d &faces,
 }
 
 //---------------------------------------------------------------------------
-// Name: vtol_two_chain_2d
-// Task: Constructor
+// -- Constructor
 //---------------------------------------------------------------------------
 vtol_two_chain_2d::vtol_two_chain_2d(face_list_2d &faces,
                                      vcl_vector<signed char> &dirs,
@@ -76,8 +72,7 @@ vtol_two_chain_2d::vtol_two_chain_2d(face_list_2d &faces,
 }
 
 //---------------------------------------------------------------------------
-// Name: vtol_two_chain_2d
-// Task: Copy constructor
+// Copy constructor
 //---------------------------------------------------------------------------
 vtol_two_chain_2d::vtol_two_chain_2d(const vtol_two_chain_2d &other)
 {
@@ -145,8 +140,6 @@ vtol_two_chain_2d::vtol_two_chain_2d(const vtol_two_chain_2d &other)
   delete verts;
 }
 
-//:
-// copy with arrays
 vtol_two_chain_2d *
 vtol_two_chain_2d::copy_with_arrays(vcl_vector<vtol_topology_object_2d_ref> &newverts,
                                     vcl_vector<vtol_topology_object_2d_ref> &newedges) const
@@ -183,8 +176,7 @@ vtol_two_chain_2d::copy_with_arrays(vcl_vector<vtol_topology_object_2d_ref> &new
 }
 
 //---------------------------------------------------------------------------
-// Name: ~vtol_two_chain_2d
-// Task: Destructor
+// Destructor
 //---------------------------------------------------------------------------
 vtol_two_chain_2d::~vtol_two_chain_2d()
 {
@@ -194,9 +186,8 @@ vtol_two_chain_2d::~vtol_two_chain_2d()
 }
 
 //---------------------------------------------------------------------------
-// Name: clone
-// Task: Clone `this': creation of a new object and initialization
-//       See Prototype pattern
+// -- Clone `this': creation of a new object and initialization
+// See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_2d_ref vtol_two_chain_2d::clone(void) const
 {
@@ -204,8 +195,7 @@ vsol_spatial_object_2d_ref vtol_two_chain_2d::clone(void) const
 }
 
 //---------------------------------------------------------------------------
-// Name: shallow_copy_with_no_links
-// Task: Shallow copy with no links
+// -- Shallow copy with no links
 //---------------------------------------------------------------------------
 vtol_topology_object_2d *
 vtol_two_chain_2d::shallow_copy_with_no_links(void) const
@@ -221,8 +211,7 @@ vtol_two_chain_2d::shallow_copy_with_no_links(void) const
 }
 
 //---------------------------------------------------------------------------
-// Name: topology_type
-// Task: Return the topology type
+// -- Return the topology type
 //---------------------------------------------------------------------------
 vtol_two_chain_2d::vtol_topology_object_2d_type
 vtol_two_chain_2d::topology_type(void) const
@@ -234,8 +223,7 @@ vtol_two_chain_2d::topology_type(void) const
 //   Editing Functions
 //***************************************************************************
 
-//:
-// add the superiors from the parent
+// -- add the superiors from the parent
 
 void vtol_two_chain_2d::add_superiors_from_parent(vcl_vector<vtol_topology_object_2d_ref> &sups)
 {
@@ -444,8 +432,7 @@ void vtol_two_chain_2d::remove_block(vtol_block_2d &doomed_block)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// Name: cast_to_two_chain
-// Task: Return `this' if `this' is a two_chain, 0 otherwise
+// -- Return `this' if `this' is a two_chain, 0 otherwise
 //---------------------------------------------------------------------------
 const vtol_two_chain_2d *
 vtol_two_chain_2d::cast_to_two_chain(void) const
@@ -454,8 +441,7 @@ vtol_two_chain_2d::cast_to_two_chain(void) const
 }
 
 //---------------------------------------------------------------------------
-// Name: cast_to_two_chain
-// Task: Return `this' if `this' is a two_chain, 0 otherwise
+// -- Return `this' if `this' is a two_chain, 0 otherwise
 //---------------------------------------------------------------------------
 vtol_two_chain_2d *vtol_two_chain_2d::cast_to_two_chain(void)
 {
@@ -467,8 +453,7 @@ vtol_two_chain_2d *vtol_two_chain_2d::cast_to_two_chain(void)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// Name: valid_inferior_type
-// Task: Is `inferior' type valid for `this' ?
+// -- Is `inferior' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_two_chain_2d::valid_inferior_type(const vtol_topology_object_2d &inferior) const
@@ -477,8 +462,7 @@ vtol_two_chain_2d::valid_inferior_type(const vtol_topology_object_2d &inferior) 
 }
 
 //---------------------------------------------------------------------------
-// Name: valid_superior_type
-// Task: Is `superior' type valid for `this' ?
+// -- Is `superior' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_two_chain_2d::valid_superior_type(const vtol_topology_object_2d &superior) const
@@ -487,8 +471,7 @@ vtol_two_chain_2d::valid_superior_type(const vtol_topology_object_2d &superior) 
 }
 
 //---------------------------------------------------------------------------
-// Name: valid_chain_type
-// Task: Is `chain_inf_sup' type valid for `this' ?
+// -- Is `chain_inf_sup' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_two_chain_2d::valid_chain_type(const vtol_chain_2d &chain_inf_sup) const
@@ -500,8 +483,7 @@ vtol_two_chain_2d::valid_chain_type(const vtol_chain_2d &chain_inf_sup) const
 //    Accessor Functions
 //***************************************************************************
 
-//: 
-// outside boundary vertices
+// -- outside boundary vertices
 
 vertex_list_2d *vtol_two_chain_2d::outside_boundary_vertices(void)
 {
@@ -525,8 +507,7 @@ vtol_two_chain_2d::outside_boundary_compute_vertices(void)
   SEL_INF_2d(vtol_vertex_2d,compute_vertices);
 }
 
-//:
-// list of vertices
+// -- list of vertices
 
 vcl_vector<vtol_vertex_2d *> *vtol_two_chain_2d::compute_vertices(void)
 {
@@ -539,8 +520,7 @@ vcl_vector<vtol_vertex_2d *> *vtol_two_chain_2d::compute_vertices(void)
   SUBCHAIN_INF_2d(verts,vtol_two_chain_2d,vtol_vertex_2d,compute_vertices);
 }
 
-//:
-// outside boundary zero chains
+// -- outside boundary zero chains
 
 zero_chain_list_2d *vtol_two_chain_2d::outside_boundary_zero_chains(void)
 {
@@ -564,8 +544,7 @@ vcl_vector<vtol_zero_chain_2d*> *vtol_two_chain_2d::outside_boundary_compute_zer
   SEL_INF_2d(vtol_zero_chain_2d,compute_zero_chains);
 }
 
-//:
-//list of zero chains
+// --list of zero chains
 vcl_vector<vtol_zero_chain_2d*> *vtol_two_chain_2d::compute_zero_chains(void)
 {
   vcl_vector<vtol_zero_chain_2d*> *zchs;
@@ -575,8 +554,7 @@ vcl_vector<vtol_zero_chain_2d*> *vtol_two_chain_2d::compute_zero_chains(void)
   SUBCHAIN_INF_2d(zchs,vtol_two_chain_2d,vtol_zero_chain_2d,compute_zero_chains);
 }
 
-//:
-// outside boundary edges
+// -- outside boundary edges
 edge_list_2d *vtol_two_chain_2d::outside_boundary_edges(void)
 {
   edge_list_2d *new_ref_list = new edge_list_2d();
@@ -592,16 +570,14 @@ edge_list_2d *vtol_two_chain_2d::outside_boundary_edges(void)
   return new_ref_list;
 }
 
-//:
-// outside boundary edges
+// -- outside boundary edges
 vcl_vector<vtol_edge_2d*> *vtol_two_chain_2d::outside_boundary_compute_edges(void)
 {
 
   SEL_INF_2d(vtol_edge_2d,compute_edges);
 }
 
-//:
-// list of edges 
+// -- list of edges 
 vcl_vector<vtol_edge_2d*> *vtol_two_chain_2d::compute_edges(void)
 {
   vcl_vector<vtol_edge_2d*> *edgs;
@@ -610,8 +586,7 @@ vcl_vector<vtol_edge_2d*> *vtol_two_chain_2d::compute_edges(void)
   SUBCHAIN_INF_2d(edgs, vtol_two_chain_2d, vtol_edge_2d, compute_edges);
 }
 
-//:
-// outside one chains
+// -- outside one chains
 one_chain_list_2d *vtol_two_chain_2d::outside_boundary_one_chains(void)
 {
   vcl_vector<vtol_one_chain_2d*>* ptr_list= outside_boundary_compute_one_chains();
@@ -629,8 +604,7 @@ vcl_vector<vtol_one_chain_2d*> *vtol_two_chain_2d::outside_boundary_compute_one_
 {
  SEL_INF_2d(vtol_one_chain_2d,compute_one_chains);
 }
-//:
-// one chains
+// -- one chains
 vcl_vector<vtol_one_chain_2d*> *vtol_two_chain_2d::compute_one_chains(void)
 {
   vcl_vector<vtol_one_chain_2d*> *onechs;
@@ -638,8 +612,7 @@ vcl_vector<vtol_one_chain_2d*> *vtol_two_chain_2d::compute_one_chains(void)
   SUBCHAIN_INF_2d(onechs, vtol_two_chain_2d, vtol_one_chain_2d, compute_one_chains);
 }
 
-//:
-// outside faces 
+// -- outside faces 
 face_list_2d *vtol_two_chain_2d::outside_boundary_faces(void)
 {
   vcl_vector<vtol_face_2d*>* ptr_list= outside_boundary_compute_faces();
@@ -659,8 +632,7 @@ vcl_vector<vtol_face_2d*> *vtol_two_chain_2d::outside_boundary_compute_faces(voi
  COPY_INF_2d(vtol_face_2d);
 }
 
-//:
-// faces 
+// -- faces 
 vcl_vector<vtol_face_2d*> *vtol_two_chain_2d::compute_faces(void)
 {
   vcl_vector<vtol_face_2d*> *facs;
@@ -668,8 +640,7 @@ vcl_vector<vtol_face_2d*> *vtol_two_chain_2d::compute_faces(void)
   SUBCHAIN_INF_2d(facs, vtol_two_chain_2d, vtol_face_2d, compute_faces);
 }
 
-//:
-// list of blocks
+// -- list of blocks
 vcl_vector<vtol_block_2d*> *vtol_two_chain_2d::compute_blocks(void)
 {
   vcl_vector<vtol_block_2d*>*result;
@@ -701,8 +672,7 @@ vcl_vector<vtol_block_2d*> *vtol_two_chain_2d::compute_blocks(void)
 
 }
 
-//:
-// list of two chains 
+// -- list of two chains 
 
 vcl_vector<vtol_two_chain_2d*> *vtol_two_chain_2d::compute_two_chains(void)
 {
@@ -763,8 +733,7 @@ vcl_vector<vtol_two_chain_2d*>  *vtol_two_chain_2d::outside_boundary_compute_two
 //     Operator Functions
 //***************************************************************************
 
-//:
-// equality operator 
+// -- equality operator 
 
 bool vtol_two_chain_2d::operator==(const vtol_two_chain_2d &other) const
 {
@@ -798,8 +767,7 @@ bool vtol_two_chain_2d::operator==(const vtol_two_chain_2d &other) const
   return true;
 }
 
-//:
-// spatial object equality
+// -- spatial object equality
 
 bool vtol_two_chain_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
@@ -815,8 +783,7 @@ bool vtol_two_chain_2d::operator==(const vsol_spatial_object_2d& obj) const
 //    Utility Functions
 //***************************************************************************
 
-//:
-// correct the chain directions
+// -- correct the chain directions
 void vtol_two_chain_2d::correct_chain_directions(void)
 {
   cerr << "vtol_two_chain_2d::correct_chain_directions() not yet implemented\n";

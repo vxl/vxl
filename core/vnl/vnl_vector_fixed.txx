@@ -2,7 +2,6 @@
 // Class: vnl_vector_fixed
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 05 Aug 96
-// Modifications:
 //
 #include "vnl_vector_fixed.h"
 #include <vcl/vcl_cassert.h>

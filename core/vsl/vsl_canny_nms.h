@@ -3,9 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vsl_canny_nms
+// .INCLUDE vsl/vsl_canny_nms.h
+// .FILE vsl_canny_nms.cxx
+// \author fsm@robots.ox.ac.uk
 
 
 int vsl_canny_nms(int _xsize, int _ysize, 

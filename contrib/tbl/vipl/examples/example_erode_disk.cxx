@@ -1,3 +1,4 @@
+// .NAME example_erode_disk
 // .SECTION Description
 //  This example program shows a typical use of a morphological IP class on
 //  a ubyte image.  The input image (argv[1]) must be ubyte, and in that

@@ -16,8 +16,7 @@ vtol_edge_2d *vtol_one_chain_2d::edge(int i) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// Name: vtol_one_chain_2d
-// Task: Default constructor
+// Default constructor
 //---------------------------------------------------------------------------
 vtol_one_chain_2d::vtol_one_chain_2d(void)
 {
@@ -25,8 +24,7 @@ vtol_one_chain_2d::vtol_one_chain_2d(void)
 }
 
 //---------------------------------------------------------------------------
-// Name: vtol_one_chain_2d
-// Task: Constructor from an array of edges
+// -- Constructor from an array of edges
 //---------------------------------------------------------------------------
 vtol_one_chain_2d::vtol_one_chain_2d(edge_list_2d &edgs,
                                      bool new_is_cycle)
@@ -45,8 +43,7 @@ vtol_one_chain_2d::vtol_one_chain_2d(edge_list_2d &edgs,
 }
 
 //---------------------------------------------------------------------------
-// Name: vtol_one_chain_2d
-// Task: Constructor from an array of edges and an array of directions
+// -- Constructor from an array of edges and an array of directions
 //---------------------------------------------------------------------------
 vtol_one_chain_2d::vtol_one_chain_2d(edge_list_2d &edgs,
                                      vcl_vector<signed char> &dirs,
@@ -65,8 +62,7 @@ vtol_one_chain_2d::vtol_one_chain_2d(edge_list_2d &edgs,
 }
 
 //---------------------------------------------------------------------------
-// Name: vtol_one_chain_2d
-// Task: Copy constructor
+// Copy constructor
 //---------------------------------------------------------------------------
 //  Copy Constructor....does a deep copy.
 vtol_one_chain_2d::vtol_one_chain_2d(const vtol_one_chain_2d &other)
@@ -119,8 +115,7 @@ vtol_one_chain_2d::vtol_one_chain_2d(const vtol_one_chain_2d &other)
 }
 
 //---------------------------------------------------------------------------
-// Name: ~vtol_one_chain_2d
-// Task: Destructor
+// Destructor
 //---------------------------------------------------------------------------
 vtol_one_chain_2d::~vtol_one_chain_2d()
 {
@@ -129,9 +124,8 @@ vtol_one_chain_2d::~vtol_one_chain_2d()
 }
 
 //---------------------------------------------------------------------------
-// Name: clone
-// Task: Clone `this': creation of a new object and initialization
-//       See Prototype pattern
+// -- Clone `this': creation of a new object and initialization
+// See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_2d_ref vtol_one_chain_2d::clone(void) const
 {
@@ -173,8 +167,7 @@ vtol_one_chain_2d::copy_with_arrays(vcl_vector<vtol_topology_object_2d_ref> &ver
 // **********************************
 
 //---------------------------------------------------------------------------
-// Name: topology_type
-// Task: Return the topology type
+// -- Return the topology type
 //---------------------------------------------------------------------------
 vtol_one_chain_2d::vtol_topology_object_2d_type
 vtol_one_chain_2d::topology_type(void) const
@@ -182,8 +175,7 @@ vtol_one_chain_2d::topology_type(void) const
   return ONECHAIN;
 }
 
-//:
-// Get the direction of the edge "e" in the onechain.
+// -- Get the direction of the edge "e" in the onechain.
 signed char vtol_one_chain_2d::direction(const vtol_edge_2d &e) const
 {
   vcl_vector<signed char>::const_iterator dit;
@@ -205,8 +197,7 @@ signed char vtol_one_chain_2d::direction(const vtol_edge_2d &e) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// Name: cast_to_one_chain
-// Task: Return `this' if `this' is an one_chain, 0 otherwise
+// -- Return `this' if `this' is an one_chain, 0 otherwise
 //---------------------------------------------------------------------------
 const vtol_one_chain_2d *vtol_one_chain_2d::cast_to_one_chain(void) const
 {
@@ -214,8 +205,7 @@ const vtol_one_chain_2d *vtol_one_chain_2d::cast_to_one_chain(void) const
 }
 
 //---------------------------------------------------------------------------
-// Name: cast_to_one_chain
-// Task: Return `this' if `this' is an one_chain, 0 otherwise
+// -- Return `this' if `this' is an one_chain, 0 otherwise
 //---------------------------------------------------------------------------
 vtol_one_chain_2d *vtol_one_chain_2d::cast_to_one_chain(void)
 {
@@ -227,8 +217,7 @@ vtol_one_chain_2d *vtol_one_chain_2d::cast_to_one_chain(void)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// Name: valid_inferior_type
-// Task: Is `inferior' type valid for `this' ?
+// -- Is `inferior' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_one_chain_2d::valid_inferior_type(const vtol_topology_object_2d &inferior) const
@@ -237,8 +226,7 @@ vtol_one_chain_2d::valid_inferior_type(const vtol_topology_object_2d &inferior) 
 }
 
 //---------------------------------------------------------------------------
-// Name: valid_superior_type
-// Task: Is `superior' type valid for `this' ?
+// -- Is `superior' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_one_chain_2d::valid_superior_type(const vtol_topology_object_2d &superior) const
@@ -247,7 +235,7 @@ vtol_one_chain_2d::valid_superior_type(const vtol_topology_object_2d &superior) 
 }
 
 //---------------------------------------------------------------------------
-//: Is `chain_inf_sup' type valid for `this' ?
+// -- Is `chain_inf_sup' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_one_chain_2d::valid_chain_type(const vtol_chain_2d &chain_inf_sup) const
@@ -257,8 +245,7 @@ vtol_one_chain_2d::valid_chain_type(const vtol_chain_2d &chain_inf_sup) const
 
 
 
-//:
-// Get the outside boundary vertices 
+// -- Get the outside boundary vertices 
 
 vcl_vector<vtol_vertex_2d *> *
 vtol_one_chain_2d::outside_boundary_compute_vertices(void)
@@ -299,8 +286,7 @@ vtol_one_chain_2d::outside_boundary_compute_vertices(void)
   return result;
 }
 
-//:
-// Get the outside boundary vertices 
+// -- Get the outside boundary vertices 
 
 vertex_list_2d *vtol_one_chain_2d::outside_boundary_vertices(void)
 {
@@ -316,8 +302,7 @@ vertex_list_2d *vtol_one_chain_2d::outside_boundary_vertices(void)
   return result;
 }
 
-//:
-// Get the vertices of this object
+// -- Get the vertices of this object
 
 vcl_vector<vtol_vertex_2d*> *vtol_one_chain_2d::compute_vertices(void)
 {
@@ -334,8 +319,7 @@ vcl_vector<vtol_vertex_2d*> *vtol_one_chain_2d::compute_vertices(void)
 }
 
 
-//:
-// Get the outside boundary zero chains
+// -- Get the outside boundary zero chains
 
 vcl_vector<vtol_zero_chain_2d *> *
 vtol_one_chain_2d::outside_boundary_compute_zero_chains(void)
@@ -343,8 +327,7 @@ vtol_one_chain_2d::outside_boundary_compute_zero_chains(void)
   SEL_INF_2d(vtol_zero_chain_2d,compute_zero_chains);
 }
 
-//:
-// Get the outside boundary zero chains
+// -- Get the outside boundary zero chains
 
 zero_chain_list_2d *vtol_one_chain_2d::outside_boundary_zero_chains(void)
 {
@@ -364,8 +347,7 @@ zero_chain_list_2d *vtol_one_chain_2d::outside_boundary_zero_chains(void)
 }
 
 
-//:
-// Get the zero chains of this object
+// -- Get the zero chains of this object
 
 vcl_vector<vtol_zero_chain_2d*> *vtol_one_chain_2d::compute_zero_chains(void)
 {
@@ -377,8 +359,7 @@ vcl_vector<vtol_zero_chain_2d*> *vtol_one_chain_2d::compute_zero_chains(void)
   SUBCHAIN_INF_2d(zchs,vtol_one_chain_2d,vtol_zero_chain_2d,compute_zero_chains);
 }
 
-//:
-// get the outside boundary edges
+// -- get the outside boundary edges
 
 vcl_vector<vtol_edge_2d*> *vtol_one_chain_2d::outside_boundary_compute_edges(void)
 {
@@ -387,8 +368,7 @@ vcl_vector<vtol_edge_2d*> *vtol_one_chain_2d::outside_boundary_compute_edges(voi
 }
 
 
-//:
-// get the outside boundary edges
+// -- get the outside boundary edges
 
 edge_list_2d *vtol_one_chain_2d::outside_boundary_edges(void)
 {
@@ -410,8 +390,7 @@ edge_list_2d *vtol_one_chain_2d::outside_boundary_edges(void)
 
 
 
-//:
-// Get the edges 
+// -- Get the edges 
 
 vcl_vector<vtol_edge_2d*> *vtol_one_chain_2d::compute_edges(void)
 {
@@ -425,8 +404,7 @@ vcl_vector<vtol_edge_2d*> *vtol_one_chain_2d::compute_edges(void)
 
 
 
-//:
-// Get the one chains
+// -- Get the one chains
 
 vcl_vector<vtol_one_chain_2d*> *vtol_one_chain_2d::compute_one_chains(void)
 {
@@ -440,8 +418,7 @@ vcl_vector<vtol_one_chain_2d*> *vtol_one_chain_2d::compute_one_chains(void)
 
   //(vtol_one_chain_2d *)((*hi)->clone().ptr());
 
-//:
-// Get the inferior one chains
+// -- Get the inferior one chains
 
 one_chain_list_2d *vtol_one_chain_2d::inferior_one_chains(void)
 {
@@ -455,8 +432,7 @@ one_chain_list_2d *vtol_one_chain_2d::inferior_one_chains(void)
   return result;
 }
 
-//:
-// Get the superior one chains
+// -- Get the superior one chains
 
 one_chain_list_2d *vtol_one_chain_2d::superior_one_chains(void)
 {
@@ -470,8 +446,7 @@ one_chain_list_2d *vtol_one_chain_2d::superior_one_chains(void)
   return result;
 }
 
-//:
-// get the outside boundary one chains
+// -- get the outside boundary one chains
 
 one_chain_list_2d *vtol_one_chain_2d::outside_boundary_one_chains(void)
 {
@@ -489,8 +464,7 @@ one_chain_list_2d *vtol_one_chain_2d::outside_boundary_one_chains(void)
 
 
 
-//:
-// get the outside boundary one chains
+// -- get the outside boundary one chains
 
 vcl_vector<vtol_one_chain_2d*> *vtol_one_chain_2d::outside_boundary_compute_one_chains(void)
 {
@@ -499,8 +473,7 @@ vcl_vector<vtol_one_chain_2d*> *vtol_one_chain_2d::outside_boundary_compute_one_
 }
 
 
-//:
-// get the faces
+// -- get the faces
 
 vcl_vector<vtol_face_2d*> *vtol_one_chain_2d::compute_faces(void)
 {
@@ -536,8 +509,7 @@ vcl_vector<vtol_face_2d*> *vtol_one_chain_2d::compute_faces(void)
     }
 }
 
-//:
-// get the two chains
+// -- get the two chains
 
 vcl_vector<vtol_two_chain_2d*> *vtol_one_chain_2d::compute_two_chains(void)
 {
@@ -573,8 +545,7 @@ vcl_vector<vtol_two_chain_2d*> *vtol_one_chain_2d::compute_two_chains(void)
     }
 }
 
-//:
-// Get the blocks
+// -- Get the blocks
 
 vcl_vector<vtol_block_2d*> *vtol_one_chain_2d::compute_blocks(void)
 {
@@ -610,8 +581,7 @@ vcl_vector<vtol_block_2d*> *vtol_one_chain_2d::compute_blocks(void)
     }
 }
 
-//:
-//    Computes the bounding box of a vtol_one_chain_2d from the Edges
+// -- Computes the bounding box of a vtol_one_chain_2d from the Edges
 //    Just get the bounding box for each Edge and update this's
 //    box accordingly.
 
@@ -669,8 +639,7 @@ void vtol_one_chain_2d::compute_bounding_box(void)
 }
 
 //---------------------------------------------------------------------------
-// Name: determine_edge_directions
-// Task : Redeterming the directions of all edges in the onechain.
+// -- Redeterming the directions of all edges in the onechain.
 // Require: is_cycle()
 //---------------------------------------------------------------------------
 void vtol_one_chain_2d::determine_edge_directions(void)
@@ -751,8 +720,7 @@ void vtol_one_chain_2d::determine_edge_directions(void)
     _directions.push_back((signed char)1);
 }
 
-//:
-// add an edge
+// -- add an edge
 
 void vtol_one_chain_2d::add_edge(vtol_edge_2d &new_edge,
                                  bool dir)
@@ -764,8 +732,7 @@ void vtol_one_chain_2d::add_edge(vtol_edge_2d &new_edge,
   link_inferior(new_edge);
 }
 
-//:
-// remove an edge
+// -- remove an edge
 
 void vtol_one_chain_2d::remove_edge(vtol_edge_2d &doomed_edge,
                                     bool force_it)
@@ -794,8 +761,7 @@ void vtol_one_chain_2d::remove_edge(vtol_edge_2d &doomed_edge,
     }
 }
 
-//:
-// comparison operator
+// -- comparison operator
 
 bool vtol_one_chain_2d::operator==(const vtol_one_chain_2d &other) const
 {
@@ -870,8 +836,7 @@ bool vtol_one_chain_2d::operator==(const vtol_one_chain_2d &other) const
 }
 
 
-//:
-// reverse the direction of the one chain
+// -- reverse the direction of the one chain
 
 void vtol_one_chain_2d::reverse_directions(void)
 {
@@ -921,8 +886,7 @@ void vtol_one_chain_2d::reverse_directions(void)
     ((vtol_one_chain_2d *)((*hi)->clone().ptr()))->reverse_directions();
 }
 
-//:
-// spatial object equality
+// -- spatial object equality
 
 bool vtol_one_chain_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
@@ -933,16 +897,14 @@ bool vtol_one_chain_2d::operator==(const vsol_spatial_object_2d& obj) const
   : false;
 }
 
-//:
-// Print Methods
+// -- Print Methods
 
 void vtol_one_chain_2d::print(ostream &strm) const
 {
   strm << "<one_chain_2d " << _inferiors.size() << "  " << (void *) this << ">"  << endl;
 }
 
-//:
-// Describe the directions
+// -- Describe the directions
 
 void vtol_one_chain_2d::describe_directions(ostream &strm,
                                             int blanking) const
@@ -956,8 +918,7 @@ void vtol_one_chain_2d::describe_directions(ostream &strm,
   strm << endl;
 }
 
-//:
-// Describe the one chain 
+// -- Describe the one chain 
 
 void vtol_one_chain_2d::describe(ostream &strm,
                                  int blanking) const
@@ -970,8 +931,7 @@ void vtol_one_chain_2d::describe(ostream &strm,
 }
 
 #if 0
-//:
-//    For each inferior, this method unlinks the inferior
+// -- For each inferior, this method unlinks the inferior
 //    from this object.  If the inferior now has zero superiors,
 //    the function is called recursively on it.  Finally, this
 //    object is pushed onto the list removed. (RYF 7-16-98)

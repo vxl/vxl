@@ -1,3 +1,4 @@
+// .NAME example_convert
 // .SECTION Description
 //  This example program shows a typical use of the vipl_convert IP class on
 //  any image.  The input image (argv[1]) is converted to a ubyte image

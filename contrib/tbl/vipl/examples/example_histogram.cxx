@@ -1,3 +1,4 @@
+// .NAME example_histogram
 // .SECTION Description
 //  This example program shows a typical use of the vipl_histogram IP class on
 //  an int image.  The input image (argv[1]) can be any scalar type (i.e.,

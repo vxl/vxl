@@ -4,9 +4,15 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .NAME vil_rgb_byte
+// .INCLUDE vil/vil_rgb_byte.h
+// .FILE vil_rgb_byte.cxx
 // .SECTION Author
 //    awf@robots.ox.ac.uk
 // Created: 17 Feb 00
+//
+// .SECTION Modifications
+//     000217 AWF Initial version.
 
 #include <vil/vil_byte.h>
 

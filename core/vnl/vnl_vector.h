@@ -4,6 +4,10 @@
 #pragma interface
 #endif
 
+// .NAME vnl_vector
+// .INCLUDE vnl/vnl_vector.h
+// .FILE vnl_vector.txx
+//
 // .SECTION Description
 // The vnl_vector<T> class implements one-dimensional arithmetic
 // vectors to be used with the vnl_matrix<T> class. vnl_vector<T>

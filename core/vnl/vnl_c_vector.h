@@ -17,6 +17,9 @@
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 12 Feb 98
 //
+// .SECTION Modifications
+//     980212 AWF Initial version.
+//
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_numeric_traits.h>

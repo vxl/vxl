@@ -3,9 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vsl_save_topology
+// .INCLUDE vsl/vsl_save_topology.h
+// .FILE vsl_save_topology.cxx
+// \author fsm@robots.ox.ac.uk
 
 #include <vcl/vcl_iosfwd.h>
 #include <vsl/vsl_edge.h>

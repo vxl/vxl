@@ -1,3 +1,4 @@
+// .NAME example_median
 // .SECTION Description
 //  This example program shows a typical use of the median filter on
 //  a ubyte image.  The input image (argv[1]) must be ubyte, and in that

@@ -2,8 +2,6 @@
 // Class: vnl_scatter_3x3
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 02 Oct 96
-// Modifications:
-//  18 Feb 2000. fsm: templated.
 //-----------------------------------------------------------------------------
 
 #include "vnl_scatter_3x3.h"

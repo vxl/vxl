@@ -18,6 +18,9 @@
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 22 Aug 99
 //
+// .SECTION Modifications
+//     990822 AWF Initial version.
+//
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_matrix.h>

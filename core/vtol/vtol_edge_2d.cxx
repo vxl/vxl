@@ -13,8 +13,7 @@
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// Name: vtol_edge_2d
-// Task: Default constructor. Empty edge. Not a valid edge.
+// -- Default constructor. Empty edge. Not a valid edge.
 //---------------------------------------------------------------------------
 vtol_edge_2d::vtol_edge_2d(void) 
 {
@@ -24,10 +23,9 @@ vtol_edge_2d::vtol_edge_2d(void)
 }
 
 //---------------------------------------------------------------------------
-// Name: vtol_edge_2d
-// Task: Constructor from the two endpoints `new_v1', `new_v2' and from a
-//       curve `new_curve'. If `new_curve' is 0, a line is created from
-//       `new_v1' and `new_v2'.
+// -- Constructor from the two endpoints `new_v1', `new_v2' and from a
+//    curve `new_curve'. If `new_curve' is 0, a line is created from
+//    `new_v1' and `new_v2'.
 //---------------------------------------------------------------------------
 vtol_edge_2d::vtol_edge_2d(vtol_vertex_2d &new_v1,
                            vtol_vertex_2d &new_v2,
@@ -46,11 +44,10 @@ vtol_edge_2d::vtol_edge_2d(vtol_vertex_2d &new_v1,
 }
 
 //---------------------------------------------------------------------------
-// Name: vtol_edge_2d
-// Task: Copy constructor
+// Copy constructor
 //---------------------------------------------------------------------------
 
-//:
+// --
 // Copy constructor for an vtol_edge_2d. This methods performs a deep copy of
 // the elements of the old vtol_edge_2d, olde, and sets the corresponding member
 // data of the new vtol_edge_2d.
@@ -85,11 +82,10 @@ vtol_edge_2d::vtol_edge_2d(const vtol_edge_2d &other)
 }
 
 //---------------------------------------------------------------------------
-// Name: vtol_edge_2d
-// Task: Constructor from a zero-chain.
+// -- Constructor from a zero-chain.
 //---------------------------------------------------------------------------
 
-//:
+// --
 // Constructor for an vtol_edge_2d. If the vtol_zero_chain_2d has two vertices , then the
 // first and last vertices of the vtol_zero_chain_2d are used for endpoints and
 // an ImplicitLine is assumed to be the curve.  Otherwise, the all data
@@ -111,7 +107,7 @@ vtol_edge_2d::vtol_edge_2d(vtol_zero_chain_2d &new_zero_chain)
   touch();
 }
 
-//:
+// --
 // Constructor for an vtol_edge_2d. The list of zero_chains, newchains, is
 // assumed to be ordered along an edge. This method assigns the first
 // vertex in the chain list to _v1, and assigns the last vertex in the
@@ -132,7 +128,7 @@ vtol_edge_2d::vtol_edge_2d(zero_chain_list_2d &newchains)
   _curve=0;
 }
 
-//:
+// --
 // Constructor for a Linear vtol_edge_2d.  The coordinates, (x1, y1, z1),
 // determine vtol_vertex_2d, _v1.  The coordinates, (x2, y2, z2), determine _v2.
 // If curve is NULL, an ImplicitLine is generated for the vtol_edge_2d.
@@ -156,7 +152,7 @@ vtol_edge_2d::vtol_edge_2d(double x1,
   link_inferior(*inf);
 }
 
-//:
+// --
 // Constructor for an vtol_edge_2d from a Curve. If edgecurve is of ImplicitLine
 // type, vertex locations for endpoints, _v1 and _v2, are computed from
 // the ImplicitLine parameters.  If edgecurve is of any other type, _v1
@@ -181,9 +177,8 @@ vtol_edge_2d::vtol_edge_2d(vsol_curve_2d &edgecurve)
 }
 
 //---------------------------------------------------------------------------
-// Name: clone
-// Task: Clone `this': creation of a new object and initialization
-//       See Prototype pattern
+// -- Clone `this': creation of a new object and initialization
+// See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_2d_ref vtol_edge_2d::clone(void) const
 {
@@ -191,8 +186,7 @@ vsol_spatial_object_2d_ref vtol_edge_2d::clone(void) const
 }
 
 //---------------------------------------------------------------------------
-// Name: curve
-// Task: Return the curve associated to `this'
+// -- Return the curve associated to `this'
 //---------------------------------------------------------------------------
 vsol_curve_2d_ref vtol_edge_2d::curve(void) const
 {
@@ -201,8 +195,7 @@ vsol_curve_2d_ref vtol_edge_2d::curve(void) const
 
 
 //---------------------------------------------------------------------------
-// Name: zero_chain
-// Task: Return the first zero-chain of `this'
+// -- Return the first zero-chain of `this'
 //---------------------------------------------------------------------------
 vtol_zero_chain_2d_ref vtol_edge_2d::zero_chain(void) const
 {
@@ -210,8 +203,7 @@ vtol_zero_chain_2d_ref vtol_edge_2d::zero_chain(void) const
 }
  
 //---------------------------------------------------------------------------
-// Name: set_curve
-// Task: Set the curve with `new_curve'
+// -- Set the curve with `new_curve'
 //---------------------------------------------------------------------------
 void vtol_edge_2d::set_curve(vsol_curve_2d &new_curve)
 {
@@ -220,8 +212,7 @@ void vtol_edge_2d::set_curve(vsol_curve_2d &new_curve)
 }
 
 //---------------------------------------------------------------------------
-// Name: ~vtol_edge_2d
-// Task: Destructor
+// Destructor
 //---------------------------------------------------------------------------
 vtol_edge_2d::~vtol_edge_2d()
 {
@@ -229,8 +220,7 @@ vtol_edge_2d::~vtol_edge_2d()
 }
 
 //---------------------------------------------------------------------------
-// Name: set_v1
-// Task: Set the first endpoint.
+// -- Set the first endpoint.
 //---------------------------------------------------------------------------
 void vtol_edge_2d::set_v1(vtol_vertex_2d *new_v1)
 {
@@ -242,8 +232,7 @@ void vtol_edge_2d::set_v1(vtol_vertex_2d *new_v1)
 }
 
 //---------------------------------------------------------------------------
-// Name: set_v2
-// Task: Set the last endpoint.
+// -- Set the last endpoint.
 //---------------------------------------------------------------------------
 void vtol_edge_2d::set_v2(vtol_vertex_2d *new_v2)
 {
@@ -255,12 +244,11 @@ void vtol_edge_2d::set_v2(vtol_vertex_2d *new_v2)
 }
 
 //---------------------------------------------------------------------------
-// Name: set_end_points
-// Task: Set the first and last endpoints
+// -- Set the first and last endpoints
 // Require: vertex_of_edge(new_v1) and vertex_of_edge(new_v2)
 //---------------------------------------------------------------------------
 
-//:
+// --
 //  This function sets the edge endpoints to endpt1 and endpt2.  
 //  Both endp1 and endpt2 must be vertices on the edge.
 //
@@ -284,7 +272,7 @@ void vtol_edge_2d::set_end_points(vtol_vertex_2d &endpt1,
 #endif
 }
 
-//:
+// --
 //     This function removes curendpt from the edge and replaces it with
 //     newendpt.  Both curendpt and newendpt must be non-NULL pointers, 
 //     curendpt must point to an endpoint of the edge (either _v1 or
@@ -309,8 +297,7 @@ void vtol_edge_2d::replace_end_point(vtol_vertex_2d &curendpt,
 }
 
 //---------------------------------------------------------------------------
-// Name: set_vertices_from_zero_chains
-// Task: Determine the endpoints of an edge from its inferiors
+// -- Determine the endpoints of an edge from its inferiors
 //---------------------------------------------------------------------------
 void vtol_edge_2d::set_vertices_from_zero_chains(void)
 {
@@ -370,7 +357,7 @@ void vtol_edge_2d::set_vertices_from_zero_chains(void)
   touch();
 }
 
-//:
+// --
 // This is a utility method that adds new_edge_loop to the vtol_edge_2d's
 // superior list.  It returns a boolean value reflecting the success of
 // linking.
@@ -380,7 +367,7 @@ void vtol_edge_2d::add_edge_loop(vtol_one_chain_2d &new_edge_loop)
   new_edge_loop.link_inferior(*this);
 }
 
-//:
+// --
 // This is a utility method that removes doomed_edge_loop from the
 // vtol_edge_2d's superior list. It returns a boolean value reflecting the
 // success of removing.
@@ -395,8 +382,7 @@ void vtol_edge_2d::remove_edge_loop(vtol_one_chain_2d &doomed_edge_loop)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// Name: cast_to_edge
-// Task: Return `this' if `this' is an edge, 0 otherwise
+// -- Return `this' if `this' is an edge, 0 otherwise
 //---------------------------------------------------------------------------
 const vtol_edge_2d * vtol_edge_2d::cast_to_edge(void) const
 {
@@ -404,8 +390,7 @@ const vtol_edge_2d * vtol_edge_2d::cast_to_edge(void) const
 }
 
 //---------------------------------------------------------------------------
-// Name: cast_to_edge
-// Task: Return `this' if `this' is an edge, 0 otherwise
+// -- Return `this' if `this' is an edge, 0 otherwise
 //---------------------------------------------------------------------------
 vtol_edge_2d * vtol_edge_2d::cast_to_edge(void)
 {
@@ -417,8 +402,7 @@ vtol_edge_2d * vtol_edge_2d::cast_to_edge(void)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// Name: valid_inferior_type
-// Task: Is `inferior' type valid for `this' ?
+// -- Is `inferior' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_edge_2d::valid_inferior_type(const vtol_topology_object_2d &inferior) const
@@ -427,8 +411,7 @@ vtol_edge_2d::valid_inferior_type(const vtol_topology_object_2d &inferior) const
 }
 
 //---------------------------------------------------------------------------
-// Name: valid_superior_type
-// Task: Is `superior' type valid for `this' ?
+// -- Is `superior' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_edge_2d::valid_superior_type(const vtol_topology_object_2d &superior) const
@@ -442,7 +425,6 @@ vtol_edge_2d::valid_superior_type(const vtol_topology_object_2d &superior) const
  *    Operators
  */
 
-//:
 // operators
 
 bool vtol_edge_2d::operator==(const vtol_edge_2d &other) const
@@ -466,8 +448,7 @@ bool vtol_edge_2d::operator==(const vtol_edge_2d &other) const
   return *zc1==*zc2;
 }
 
-//:
-// spatial object equality
+// -- spatial object equality
 
 bool vtol_edge_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
@@ -484,64 +465,52 @@ bool vtol_edge_2d::operator==(const vsol_spatial_object_2d& obj) const
  *    Inferior/Superior Accessor Functions
  */
 
-//:
-// Returns a list of vertices on the vtol_edge_2d.
+// -- Returns a list of vertices on the vtol_edge_2d.
 
 vcl_vector<vtol_vertex_2d *> *vtol_edge_2d::compute_vertices(void)
 {
   SEL_INF_2d(vtol_vertex_2d,compute_vertices);
 }
 
-//:
-// Returns the vtol_zero_chain_2d list of the vtol_edge_2d. This list is the Inferiors
-// of the edge.
+// -- Returns the vtol_zero_chain_2d list of the vtol_edge_2d. This list is the Inferiors of the edge.
 vcl_vector<vtol_zero_chain_2d *> *vtol_edge_2d::compute_zero_chains(void)
 {
   COPY_INF_2d(vtol_zero_chain_2d);
 }
 
-//:
-// Returns a list with itself as the only element. This utility is used
-// in Inferior/Superior accessing methods.
+// -- Returns a list with itself as the only element. This utility is used in Inferior/Superior accessing methods.
 vcl_vector<vtol_edge_2d *> *vtol_edge_2d::compute_edges(void)
 { 
   LIST_SELF_2d(vtol_edge_2d);
 }
 
-//:
-// Returns a list of one_chains which contain the vtol_edge_2d. This list is the
-// Superiors of the edge.
+// -- Returns a list of one_chains which contain the vtol_edge_2d. This list is the Superiors of the edge.
 vcl_vector<vtol_one_chain_2d *> *vtol_edge_2d::compute_one_chains(void)
 {
   SEL_SUP_2d(vtol_one_chain_2d,compute_one_chains);
 }
 
 
-//:
-// Returns a list of the faces which contain the vtol_edge_2d.
+// -- Returns a list of the faces which contain the vtol_edge_2d.
 vcl_vector<vtol_face_2d *> *vtol_edge_2d::compute_faces(void)
 { 
   SEL_SUP_2d(vtol_face_2d,compute_faces);
 }
 
-//:
-//  Returns the list of two_chains which contain the vtol_edge_2d.
+// -- Returns the list of two_chains which contain the vtol_edge_2d.
 vcl_vector<vtol_two_chain_2d *> *vtol_edge_2d::compute_two_chains(void)
 {
   SEL_SUP_2d(vtol_two_chain_2d,compute_two_chains);
 }
 
-//:
-//  Returns the list of blocks which contain the vtol_edge_2d.
+// -- Returns the list of blocks which contain the vtol_edge_2d.
 vcl_vector<vtol_block_2d *> *vtol_edge_2d::compute_blocks(void)
 {
   SEL_SUP_2d(vtol_block_2d,compute_blocks);
 }
 
-//:
-// Returns a list of vertices containing the endpoints of the edge.
-// These vertices are _v1 and _v2 in that
-// order.
+// -- Returns a list of vertices containing the endpoints of the edge.
+// These vertices are _v1 and _v2 in that order.
 vertex_list_2d *vtol_edge_2d::endpoints(void)
 {
   vertex_list_2d *newl=new vcl_vector<vtol_vertex_2d_ref>();
@@ -552,7 +521,7 @@ vertex_list_2d *vtol_edge_2d::endpoints(void)
   return newl;
 }
 
-//:
+// --
 //  Returns true if the invoking edge has a vertex in common with
 //  vtol_edge_2d `other'.  The method determines if the two edges share a vertex
 //  by comparing pointer values, not the vertex geometry.
@@ -572,7 +541,7 @@ bool vtol_edge_2d::share_vertex_with(vtol_edge_2d &other)
   return false;
 }
 
-//:
+// --
 // This method adds newvert to the vtol_edge_2d by linking it to one of the
 // zero_chains of the vtol_edge_2d Inferiors. (Method needs work.)
 
@@ -591,7 +560,7 @@ bool vtol_edge_2d::add_vertex(vtol_vertex_2d &newvert)
   return true;
 }
 
-//:
+// --
 // This method removes uglyvert from the vtol_edge_2d by removing it from the
 // inferior zero_chains.  (Method needs work.)
 
@@ -613,23 +582,20 @@ bool vtol_edge_2d::is_endpoint(const vtol_vertex_2d &v) const
 }
 
 
-//:
-// Returns True if v is equal to the first vtol_edge_2d endpoint,_v1.
+// -- Returns True if v is equal to the first vtol_edge_2d endpoint,_v1.
 bool vtol_edge_2d::is_endpoint1(const vtol_vertex_2d &v) const
 {
   return *_v1==v;
 }
 
-//:
-// Returns True if v is equal to the second vtol_edge_2d endpoint, _v2.
+// -- Returns True if v is equal to the second vtol_edge_2d endpoint, _v2.
 bool vtol_edge_2d::is_endpoint2(const vtol_vertex_2d &v) const
 {
   return *_v2 ==v;
 }
 
 
-//:
-// This method works only for ImplicitLine edges.
+// -- This method works only for ImplicitLine edges.
 vtol_vertex_2d_ref vtol_edge_2d::other_endpoint(const vtol_vertex_2d &overt) const
 {
   if (overt==*_v1)
@@ -640,9 +606,8 @@ vtol_vertex_2d_ref vtol_edge_2d::other_endpoint(const vtol_vertex_2d &overt) con
     return 0;
 }
 
-//:
 //-----------------------------------------------------------------
-// :  Compute bounds from the geometry of _curve. If the curve is
+// -- Compute bounds from the geometry of _curve. If the curve is
 //    not fully bounded, then use the vertices.
 //
 void vtol_edge_2d::compute_bounding_box(void)
@@ -677,7 +642,7 @@ void vtol_edge_2d::compute_bounding_box(void)
  *    I/O methods
  */
 
-//:
+// --
 // This method outputs all edge information to the ostream, strm.  It
 // indents various levels of output by the number given in blanking.
 void vtol_edge_2d::describe(ostream &strm,
@@ -699,7 +664,7 @@ void vtol_edge_2d::describe(ostream &strm,
   }
 }
 
-//:
+// --
 // This method outputs a brief vtol_edge_2d info with vtol_edge_2d object address.
 void vtol_edge_2d::print(ostream &strm) const
 {

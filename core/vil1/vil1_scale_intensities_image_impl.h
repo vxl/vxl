@@ -3,6 +3,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .NAME vil_scale_intensities_image_impl
+// .INCLUDE vil/vil_scale_intensities_image_impl.h
+// .FILE vil_scale_intensities_image_impl.cxx
 
 #include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>

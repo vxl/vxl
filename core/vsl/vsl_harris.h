@@ -1,6 +1,10 @@
 #ifndef vsl_harris_h
 #define vsl_harris_h
-//: The harris corner detector.
+// .NAME vsl_harris - The harris corner detector
+// .INCLUDE vsl/vsl_harris.h
+// .FILE vsl_harris.cxx
+//
+// .SECTION Description
 // Parameters :
 //   corner_count_max - maximum no of corners required.
 //   gauss_sigma      - sigma for the Gaussian smoothing.

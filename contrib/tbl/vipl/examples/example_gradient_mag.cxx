@@ -1,3 +1,4 @@
+// .NAME example_gradient_mag
 // .SECTION Description
 //  This example program shows a typical use of an IP filter, namely
 //  the gradient magnitude operator on a greyscale image.  The input image

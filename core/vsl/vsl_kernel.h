@@ -3,9 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vsl_kernel
+// .INCLUDE vsl/vsl_kernel.h
+// .FILE vsl_kernel.cxx
+// \author fsm@robots.ox.ac.uk
 
 //: Compute one half of the 1st Derivative Of a Gaussian.
 // '_k_size' is the actual size of the array pointed to by '_kernel'.

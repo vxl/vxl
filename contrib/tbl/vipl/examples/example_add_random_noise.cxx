@@ -1,3 +1,4 @@
+// .NAME example_add_random_noise
 // .SECTION Description
 //  This example program shows a typical use of the vipl_add_random_noise IP class
 //  on a ubyte image.  The input image (argv[1]) must be ubyte, and in that

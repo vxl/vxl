@@ -4,6 +4,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .NAME vil_crop_image_impl
+// .INCLUDE vil/vil_crop_image_impl.h
+// .FILE vil_crop_image_impl.cxx
 // .SECTION Author
 //    awf@robots.ox.ac.uk
 // Created: 16 Feb 00

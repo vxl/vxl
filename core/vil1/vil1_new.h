@@ -4,9 +4,15 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .NAME vil_new
+// .INCLUDE vil/vil_new.h
+// .FILE vil_new.cxx
 // .SECTION Author
 //    awf@robots.ox.ac.uk
 // Created: 26 Feb 00
+//
+// .SECTION Modifications
+//     000216 AWF Initial version.
 
 #include <vil/vil_fwd.h>
 #include <vil/vil_image_impl.h>

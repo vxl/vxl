@@ -23,7 +23,7 @@ vtol_face_3d::vtol_face_3d(void)
   link_inferior(inf);
 }
 
-//:
+// --
 // This is the Copy Constructor for vtol_face_3d. It performs a deep copy of
 // all vtol_face_3d inferior one_chains.
 
@@ -93,16 +93,14 @@ vtol_face_3d::vtol_face_3d(const vtol_face_3d &other)
     set_surface((vsol_surface_3d*)(oldf->_surface->clone().ptr()));
 }
 
-//: 
 // destructor 
 vtol_face_3d::~vtol_face_3d()
 {
 }
 
 //---------------------------------------------------------------------------
-// Name: clone
-// Task: Clone `this': creation of a new object and initialization
-//       See Prototype pattern
+// -- Clone `this': creation of a new object and initialization
+// See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_3d_ref vtol_face_3d::clone(void) const
 {
@@ -114,8 +112,7 @@ vsol_surface_3d_ref vtol_face_3d::get_surface(void) const
   return _surface;
 }
 
-//: 
-// copy with an array
+// -- copy with an array
 
 vtol_face_3d* vtol_face_3d::copy_with_arrays(vcl_vector<vtol_topology_object_3d*>& verts,
                            vcl_vector<vtol_topology_object_3d*>& edges)
@@ -139,8 +136,7 @@ vtol_face_3d* vtol_face_3d::copy_with_arrays(vcl_vector<vtol_topology_object_3d*
   return newface;
 }
 
-//:
-// copy with no links 
+// -- copy with no links 
 vtol_topology_object_3d * vtol_face_3d::shallow_copy_with_no_links( void )
 {  
     vtol_face_3d * newface = new vtol_face_3d;
@@ -159,7 +155,7 @@ vtol_topology_object_3d * vtol_face_3d::shallow_copy_with_no_links( void )
     return newface;
 }
 
-//:
+// --
 //  Constructor for a planar vtol_face_3d from an ordered list of vertices.
 // edges are constructed by connecting vtol_vertex_3d[i] to
 // vtol_vertex_3d[(i+1)mod L]. L is the length of the vertex list, verts, and
@@ -224,7 +220,7 @@ vtol_face_3d::vtol_face_3d(vcl_vector<vtol_vertex_3d *> *verts)
 }
 
 
-//:
+// --
 // Constructor for a Planar face from a list of one_chains.  This
 // method assumes that the first vtol_one_chain_3d on the list is the outside
 // boundary vtol_one_chain_3d.  The remaining one_chains are holes boundaries
@@ -269,7 +265,7 @@ vtol_face_3d::vtol_face_3d (vcl_vector<vtol_one_chain_3d *> &onechs)
     }
 }
 
-//:
+// --
 // Constructor of a Planar face from a vtol_one_chain_3d.  This method uses
 // the vtol_one_chain_3d, edgeloop, as the outside boundary of the face.
 
@@ -299,8 +295,7 @@ vtol_face_3d::vtol_face_3d(vtol_one_chain_3d *edgeloop)
 
 }
 
-//:
-// Constructor requiring only the underlying geometric surface
+// -- Constructor requiring only the underlying geometric surface
 vtol_face_3d::vtol_face_3d (vsol_surface_3d_ref facesurf)
   : _surface(0)
 {
@@ -310,8 +305,7 @@ vtol_face_3d::vtol_face_3d (vsol_surface_3d_ref facesurf)
 }
 
 //---------------------------------------------------------------------------
-// Name: topology_type
-// Task: Return the topology type
+// -- Return the topology type
 //---------------------------------------------------------------------------
 vtol_face_3d::vtol_topology_object_3d_type
 vtol_face_3d::topology_type(void) const
@@ -319,15 +313,14 @@ vtol_face_3d::topology_type(void) const
   return FACE;
 }
 
-//:
-// Set the underlying geometric surface.
+// -- Set the underlying geometric surface.
 void vtol_face_3d::set_surface(vsol_surface_3d_ref newsurf)
 {
   _surface = newsurf;
   this->touch();
 }
 
-//:
+// --
 // Returns an ordered list of vertices of the outside boundary of the
 // face.  All vertices on any holes of the face are *not* included.
 // This vertex list is ordered such that a positive normal is
@@ -339,7 +332,7 @@ vcl_vector<vtol_vertex_3d*> *vtol_face_3d::outside_boundary_vertices()
   OUTSIDE_BOUNDARY_3d(vtol_vertex_3d, vtol_one_chain_3d , vertices);		
 }									
 
-//:
+// --
 // Returns a vtol_vertex_3d list of all the vertices on the face.
 // If the face does not have any holes, this vertex list is ordered
 // in the direction of a positive normal using the Right Hand rule.
@@ -349,7 +342,7 @@ vcl_vector<vtol_vertex_3d*> *vtol_face_3d::vertices()
   SEL_INF_3d(vtol_vertex_3d,vertices);
 }
 
-//:
+// --
 // Returns a list of the zero_chains on the outside boundary of the face.
 // All zero_chains on any hole boundaries of the face are *not* included.
 
@@ -358,15 +351,14 @@ vcl_vector<vtol_zero_chain_3d*> *vtol_face_3d::outside_boundary_zero_chains()
   OUTSIDE_BOUNDARY_3d(vtol_zero_chain_3d, vtol_one_chain_3d,zero_chains);
 }
 
-//:
-// Returns a list of zero_chains of the face.
+// -- Returns a list of zero_chains of the face.
 
 vcl_vector<vtol_zero_chain_3d*> *vtol_face_3d::zero_chains()
 {
   SEL_INF_3d(vtol_zero_chain_3d,zero_chains);
 }
 
-//:
+// --
 // Returns a list of edges that make up the outside boundary of the
 // face. All edges on any hole boundaries are *not* included.
 
@@ -376,8 +368,7 @@ vcl_vector<vtol_edge_3d*>* vtol_face_3d::outside_boundary_edges()
 }
 
 
-//:
-// Returns a list of edges on the face.
+// -- Returns a list of edges on the face.
 
 
 vcl_vector<vtol_edge_3d*>* vtol_face_3d::edges()
@@ -385,9 +376,7 @@ vcl_vector<vtol_edge_3d*>* vtol_face_3d::edges()
   SEL_INF_3d(vtol_edge_3d,edges);
 }
 
-//:
-// Returns a list of one_chains that make up the outside boundary of
-// the face.
+// -- Returns a list of one_chains that make up the outside boundary of the face.
 
 vcl_vector<vtol_one_chain_3d*>* vtol_face_3d::outside_boundary_one_chains()
 {
@@ -395,15 +384,14 @@ vcl_vector<vtol_one_chain_3d*>* vtol_face_3d::outside_boundary_one_chains()
 }
 
 
-//:
-// Returns a list of all Onechains of the face.
+// -- Returns a list of all Onechains of the face.
 
 vcl_vector<vtol_one_chain_3d*>* vtol_face_3d::one_chains()
 {
   SEL_INF_3d(vtol_one_chain_3d,one_chains);
 }
 
-//:
+// --
 // Returns a list of that has itself as the only element.  This method
 // is needed for traversing the model hierarchy consistently.
 
@@ -412,8 +400,7 @@ vcl_vector<vtol_face_3d*>* vtol_face_3d::faces()
   LIST_SELF_3d(vtol_face_3d);
 }
 
-//:
-//  Returns a list of all the two_chains which contain the vtol_face_3d.
+// -- Returns a list of all the two_chains which contain the vtol_face_3d.
 
 
 vcl_vector<vtol_two_chain_3d*>* vtol_face_3d::two_chains()
@@ -421,8 +408,7 @@ vcl_vector<vtol_two_chain_3d*>* vtol_face_3d::two_chains()
   SEL_SUP_3d(vtol_two_chain_3d,two_chains);
 }
 
-//:
-// Returns a list of all the blocks that contain the vtol_face_3d.
+// -- Returns a list of all the blocks that contain the vtol_face_3d.
 
 
 vcl_vector<vtol_block_3d*>* vtol_face_3d::blocks()
@@ -431,7 +417,7 @@ vcl_vector<vtol_block_3d*>* vtol_face_3d::blocks()
 }
 
 
-//:
+// --
 // Links new_vtol_one_chain_3d as an inferior of the vtol_face_3d.  This function will
 // be deleted and replaced soon....pav
 
@@ -441,7 +427,7 @@ bool vtol_face_3d::add_edge_loop(vtol_one_chain_3d* new_vtol_one_chain_3d)
   return link_inferior(new_vtol_one_chain_3d);
 }
 
-//:
+// --
 //    This method removes the object from the topological structure
 //    by unlinking it.  The removal of the object may recursively cause
 //    the removal of some of the object's superiors if these superiors
@@ -479,7 +465,7 @@ bool vtol_face_3d::disconnect( vcl_vector< vtol_topology_object_3d * > & changes
   return true;
 }
 
-//:
+// --
 //    Removes the one chain from the face by unlinking it.  If 
 //    the one chain is not a hole, its removal invalidates the
 //    the face and the face is unlinked from the topological
@@ -545,7 +531,7 @@ bool vtol_face_3d::remove( vtol_one_chain_3d * one_chain,
 }
 
 
-//:
+// --
 //    For each inferior, this method unlinks the inferior
 //    from this object.  If the inferior now has zero superiors,
 //    the function is called recursively on it.  Finally, this
@@ -609,7 +595,7 @@ void vtol_face_3d::deep_remove( vcl_vector< vtol_topology_object_3d * > & remove
   //cout << "         Exiting vtol_face_3d::DeepDeleteInferiors\n";
 }
 
-//:
+// --
 //  Returns true if the invoking face has an edge in common with
 //  vtol_face_3d f.  The method determines if the two faces share an edge
 //  by comparing pointer values, not the edge geometry.
@@ -627,7 +613,7 @@ bool vtol_face_3d::shares_edge_with( vtol_face_3d * f )
     return false;
 }
 
-//:
+// --
 // Links new_vtol_one_chain_3d as an inferior of the vtol_face_3d and returns True if
 // successful. This method will be replacing all calls to add_edge_lop()o.
 
@@ -644,7 +630,7 @@ bool vtol_face_3d::add_one_chain(vtol_one_chain_3d* new_vtol_one_chain_3d)
     return false;
 }
 
-//:
+// --
 // Removes the vtol_one_chain_3d, doomedvtol_one_chain_3d, from the inferiors list of the vtol_face_3d.
 // This function will be deleted and replaced soon.
 
@@ -654,7 +640,7 @@ bool vtol_face_3d::remove_edge_loop(vtol_one_chain_3d* doomed_vtol_one_chain_3d)
   return unlink_inferior(doomed_vtol_one_chain_3d);
 }
 
-//:
+// --
 //  Removes the vtol_one_chain_3d, doomedvtol_one_chain_3d, from the inferiors list of the vtol_face_3d.
 // This function will be replacing all calls to remove_edge_loop().
 
@@ -666,7 +652,7 @@ bool vtol_face_3d::remove_one_chain(vtol_one_chain_3d* doomed_vtol_one_chain_3d)
 
 
 
-//:
+// --
 //  Adds the vtol_two_chain_3d, new_vtol_two_chain_3d, to the superiors list of the vtol_face_3d.
 // This function will be deleted and replaced soon.
 bool vtol_face_3d::add_face_loop(vtol_two_chain_3d* new_vtol_two_chain_3d)
@@ -675,7 +661,7 @@ bool vtol_face_3d::add_face_loop(vtol_two_chain_3d* new_vtol_two_chain_3d)
 }
 
 
-//:
+// --
 // Adds the vtol_two_chain_3d, new_vtol_two_chain_3d, to the superiors list of the vtol_face_3d.
 // This function will replace all calls to add_face_loop().
 
@@ -684,7 +670,7 @@ bool vtol_face_3d::add_two_chain(vtol_two_chain_3d* new_vtol_two_chain_3d)
   return link_superior(new_vtol_two_chain_3d);
 }
 
-//:
+// --
 // Removes the vtol_two_chain_3d, doomed_vtol_two_chain_3d, from the superiors list of the vtol_face_3d.
 // This function will be deleted and replaced soon.
 
@@ -694,7 +680,7 @@ bool vtol_face_3d::remove_face_loop(vtol_two_chain_3d* doomed_vtol_two_chain_3d)
 }
 
 
-//:
+// --
 //  Removes the vtol_two_chain_3d, doomed_vtol_two_chain_3d, from the superiors list of the vtol_face_3d.
 // This function will replace all calls to remove_face_loop().
 
@@ -703,8 +689,7 @@ bool vtol_face_3d::remove_two_chain(vtol_two_chain_3d* doomed_vtol_two_chain_3d)
   return unlink_superior(doomed_vtol_two_chain_3d);
 }
 
-//:
-// deep equality check on faces.  uses fuzzy equal on vertices.
+// -- deep equality check on faces.  uses fuzzy equal on vertices.
 //
 
 bool vtol_face_3d::operator==(const vtol_face_3d& otherf) const
@@ -738,8 +723,7 @@ bool vtol_face_3d::operator==(const vtol_face_3d& otherf) const
 }
 
 
-//:
-// spatial object equality
+// -- spatial object equality
 
 bool vtol_face_3d::operator==(const vsol_spatial_object_3d& obj) const
 {
@@ -750,8 +734,7 @@ bool vtol_face_3d::operator==(const vsol_spatial_object_3d& obj) const
   : false;
 }
 
-//:
-// Returns the ith inferior vtol_one_chain_3d of the vtol_face_3d.
+// -- Returns the ith inferior vtol_one_chain_3d of the vtol_face_3d.
 
 vtol_one_chain_3d* vtol_face_3d::get_one_chain(int which)
 
@@ -767,8 +750,7 @@ vtol_one_chain_3d* vtol_face_3d::get_one_chain(int which)
 }
 
 
-//:
-// Returns the first inferior vtol_one_chain_3d of the vtol_face_3d (the boundary onechain).
+// -- Returns the first inferior vtol_one_chain_3d of the vtol_face_3d (the boundary onechain).
 
 vtol_one_chain_3d* vtol_face_3d::get_boundary_cycle()
 {
@@ -778,8 +760,7 @@ vtol_one_chain_3d* vtol_face_3d::get_boundary_cycle()
   return get_one_chain(0);
 }
 
-//:
-// Adds a new hole to the face
+// -- Adds a new hole to the face
 
 bool vtol_face_3d::add_hole_cycle( vtol_one_chain_3d * new_hole ) 
 {
@@ -793,7 +774,7 @@ bool vtol_face_3d::add_hole_cycle( vtol_one_chain_3d * new_hole )
       return false;
 }
 
-//: Returns a list of the one_chains that make up the holes of the vtol_face_3d.
+// -- Returns a list of the one_chains that make up the holes of the vtol_face_3d.
 
 vcl_vector<vtol_one_chain_3d*>* vtol_face_3d::get_hole_cycles()
 {
@@ -819,8 +800,7 @@ vcl_vector<vtol_one_chain_3d*>* vtol_face_3d::get_hole_cycles()
   return new_list;
 }
 
-//:
-// Returns the number of edges on the vtol_face_3d.
+// -- Returns the number of edges on the vtol_face_3d.
 //
 
 int vtol_face_3d::get_num_edges()
@@ -835,8 +815,7 @@ int vtol_face_3d::get_num_edges()
   return sum;
 }
 
-//:
-// reverse the direction of the face 
+// -- reverse the direction of the face 
 void vtol_face_3d::reverse_normal()
 {
   for (topology_list_3d::iterator ti=_inferiors.begin(); ti!=_inferiors.end(); ++ti )
@@ -849,9 +828,8 @@ void vtol_face_3d::reverse_normal()
 
 
 
-//:
 //-----------------------------------------------------------------
-//    Compute bounds from the geometry of _surface. If the surface is
+// -- Compute bounds from the geometry of _surface. If the surface is
 //    not fully bounded, then use the vertices.
 //
 void vtol_face_3d::compute_bounding_box()
@@ -881,7 +859,7 @@ void vtol_face_3d::compute_bounding_box()
 }
 
 
-//:
+// --
 //  This method describes the data members of the vtol_face_3d including the
 // Inferiors.  The blanking argument is used to indent the output in
 // a clear fashion.
@@ -902,7 +880,7 @@ void vtol_face_3d::describe(ostream& strm,int blanking) const
   }
 }
 
-//:
+// --
 // This method prints out a simple text representation for the vtol_face_3d which
 // includes its address in memory.
 

@@ -22,6 +22,10 @@
 //
 // .SECTION Author:
 //    Andrew W. Fitzgibbon, Oxford RRG, 31 Aug 96
+//
+// .SECTION Modifications
+//    RWMC 001097 Added verbose flag to get rid of all that blathering.
+//    AWF  151197 Added trace flag to increase blather.
 
 #include <vcl/vcl_iosfwd.h>
 #include <vnl/vnl_vector.h>

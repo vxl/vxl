@@ -1,3 +1,4 @@
+// .NAME example_x_gradient
 // .SECTION Description
 //  This example program shows a typical use of a gradient IP class on
 //  a colour image.  The input image (argv[1]) must be 24 bit (colour), and in

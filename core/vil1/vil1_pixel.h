@@ -3,11 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  awf@robots.ox.ac.uk
-*/
-
-//: Convenient descriptions of format combinations.
+// .NAME vil_pixel_format - Convenient descriptions of format combinations
+// .INCLUDE vil/vil_pixel.h
+// .FILE vil_pixel.cxx
+// \author awf@robots.ox.ac.uk
 
 // Common combinations of component format, bits, planes and components.
 enum vil_pixel_format {
@@ -26,7 +25,7 @@ enum vil_pixel_format {
 
 class vil_image;
 
-// Returns one of the `vil_pixel_format's. 
+//: Returns one of the `vil_pixel_format's. 
 // A standard RGB RGB RGB image has pixel_type() == VIL_RGB_BYTE
 vil_pixel_format vil_pixel_type(vil_image const &);
 

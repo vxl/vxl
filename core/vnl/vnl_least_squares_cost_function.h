@@ -17,6 +17,9 @@
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 20 Aug 99
 //
+// .SECTION Modifications
+//     990820 AWF Initial version.
+//
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_cost_function.h>

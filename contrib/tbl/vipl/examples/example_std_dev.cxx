@@ -1,3 +1,4 @@
+// .NAME example_std_dev
 // .SECTION Description
 //  This example program shows a typical use of the vipl_moment IP class on
 //  a ubyte image.  The input image (argv[1]) must be ubyte, and in that

@@ -1,6 +1,8 @@
 #ifndef vsl_fit_lines_params_h_
 #define vsl_fit_lines_params_h_
-// The parameter mixin for Charlie's FitLines
+// .NAME vsl_fit_lines_params - The parameter mixin for Charlie's FitLines
+// .INCLUDE vsl/vsl_fit_lines_params.h
+// .FILE vsl_fit_lines_params.cxx
 //
 // .SECTION Author:
 //             Joseph L. Mundy - December 1997

@@ -1,7 +1,6 @@
 // Class: vnl_file_matrix
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 23 Dec 96
-// Modifications:
 //
 //-----------------------------------------------------------------------------
 

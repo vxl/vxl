@@ -3,9 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vsl_roi_window
+// .INCLUDE vsl/vsl_roi_window.h
+// .FILE vsl_roi_window.cxx
+// \author fsm@robots.ox.ac.uk
 
 // some sort of bounding box.
 struct vsl_roi_window {

@@ -1,8 +1,6 @@
 // -*- c++ -*-
 // Class: vnl_fft2d
-// .SECTION Author
-// Veit U.B. Schenk, Oxford RRG, 19 Mar 98
-// .SECTION Modifications:
+// Author: Veit U.B. Schenk, Oxford RRG, 19 Mar 98
 //
 //-----------------------------------------------------------------------------
 

@@ -9,6 +9,9 @@
 // Texas Instruments Incorporated provides this software "as is" without
 // express or implied warranty.
 //
+// .NAME vnl_test
+// .INCLUDE vnl/vnl_test.h
+// .FILE vnl_test.cxx
 
 #ifndef vnl_test_h_
 #define vnl_test_h_

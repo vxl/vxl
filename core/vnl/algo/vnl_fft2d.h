@@ -1,7 +1,10 @@
 // -*- c++ -*-
 //
-// .SECTION Description
+// .NAME vnl_fft2d - templated 2D FFT class based on Temperton FFT routines
+// .INCLUDE vnl/algo/vnl_fft2d.h
+// .FILE vnl_fft2d.txx
 //
+// .SECTION Description
 //  templated 2D FFT class based on Temperton FFT routines:
 //
 //  C TEMPERTON 

@@ -4,9 +4,15 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .NAME vil_save
+// .INCLUDE vil/vil_save.h
+// .FILE vil_save.cxx
 // .SECTION Author
 //    awf@robots.ox.ac.uk
 // Created: 16 Feb 00
+//
+// .SECTION Modifications
+//     000216 AWF Initial version.
 
 class vil_stream;
 #include <vil/vil_image.h>

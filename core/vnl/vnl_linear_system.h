@@ -24,7 +24,7 @@
 //
 // .SECTION Modifications:
 
-#include <vcl/vcl_string.h>
+#include <vcl/vcl_string.h> // C++ specific includes first
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 

@@ -31,6 +31,9 @@
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, July 13, 1996
 //
+// .SECTION Modifications
+//     210598 AWF Removed conditional VCL_IMPLEMENT_STATIC_CONSTS, sometimes gcc needs them.
+//
 
 #include <vcl/vcl_cmath.h>
 #include "dll.h"

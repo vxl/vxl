@@ -14,6 +14,11 @@
 // .SECTION Author
 //     Geoffrey Cross, Oxford RRG, 15 Feb 99
 //
+// .SECTION Modifications
+//     990215 Geoff Initial version.
+//   000628 David Capel - Major rewrite. Now derived from vnl_nonlinear_minimizer
+//                        and operates on a vnl_cost_function.
+//
 //-----------------------------------------------------------------------------
 
 #include <vcl/vcl_iostream.h>

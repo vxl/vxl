@@ -1,6 +1,9 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifndef _vsl_edge_detector_params_h_
 #define _vsl_edge_detector_params_h_
+// .NAME vsl_edge_detector_params
+// .INCLUDE vsl/vsl_edge_detector_params.h
+// .FILE vsl_edge_detector_params.cxx
 //
 // .SECTION Description
 //

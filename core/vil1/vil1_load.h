@@ -4,6 +4,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .NAME vil_load
+// .INCLUDE vil/vil_load.h
+// .FILE vil_load.cxx
 // .SECTION Author
 //    awf@robots.ox.ac.uk
 // Created: 16 Feb 00

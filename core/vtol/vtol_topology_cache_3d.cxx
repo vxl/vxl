@@ -2,8 +2,7 @@
 #include <vtol/vtol_topology_cache_3d.h>
 
 
-//:
-// Set up the cache 
+// -- Set up the cache 
 vtol_topology_cache_3d::vtol_topology_cache_3d(vtol_topology_object_3d * to_be_cached)
 {
   source_ = to_be_cached;
@@ -13,15 +12,13 @@ vtol_topology_cache_3d::vtol_topology_cache_3d(vtol_topology_object_3d * to_be_c
   onechains_ = 0;
 }
 
-//:
 // destructor
 vtol_topology_cache_3d::~vtol_topology_cache_3d()
 {
   this->clear_cache();
 }
 
-//:
-// reset the list pointers
+// -- reset the list pointers
 void vtol_topology_cache_3d::clear_cache()
 {
   delete vertices_; vertices_ = 0;
@@ -31,7 +28,6 @@ void vtol_topology_cache_3d::clear_cache()
 
 }
 
-//:
 // -- If cache is out of date as compared to its source object,
 //    then clear the cache.
 
@@ -55,8 +51,7 @@ void vtol_topology_cache_3d::validate_cache()
 }
 
 
-//:
-// Get the vertex lists
+// -- Get the vertex lists
 void vtol_topology_cache_3d::vertices(vertex_list_3d& verts)
 {
   this->validate_cache();
@@ -65,8 +60,7 @@ void vtol_topology_cache_3d::vertices(vertex_list_3d& verts)
   verts = *vertices_;
 }
 
-//:
-// Get the zero chain lists
+// -- Get the zero chain lists
 void vtol_topology_cache_3d::zero_chains(zero_chain_list_3d& zchains)
 {  
   this->validate_cache();
@@ -76,8 +70,7 @@ void vtol_topology_cache_3d::zero_chains(zero_chain_list_3d& zchains)
 }
 
 
-//:
-// Get the edge lists 
+// -- Get the edge lists 
 void vtol_topology_cache_3d::edges(edge_list_3d& oedges)
 {
   this->validate_cache();
@@ -86,8 +79,7 @@ void vtol_topology_cache_3d::edges(edge_list_3d& oedges)
   oedges = *edges_;
 }
 
-//:
-// get the one chain lists
+// -- get the one chain lists
 void vtol_topology_cache_3d::one_chains(one_chain_list_3d& ochains)
 {  
   this->validate_cache();

@@ -3,9 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vsl_canny_gradient
+// .INCLUDE vsl/vsl_canny_gradient.h
+// .FILE vsl_canny_gradient.cxx
+// \author fsm@robots.ox.ac.uk
 
 //: compute x,y-derivatives and absolute value of gradient.
 // _xsize is the number of rows [sic] and

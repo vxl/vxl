@@ -3,9 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vsl_hacks
+// .INCLUDE vsl/vsl_hacks.h
+// .FILE vsl_hacks.cxx
+// \author fsm@robots.ox.ac.uk
 
 // FIXME FIXME FIXME FIXME FIXME
 #define IUDelete(p) /* delete p */

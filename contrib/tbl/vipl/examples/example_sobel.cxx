@@ -1,3 +1,4 @@
+// .NAME example_sobel
 // .SECTION Description
 //  This example program shows a typical use of a convolution filter, namely
 //  the vipl_sobel (gradient) operator on a greyscale image.  The input image

@@ -1,6 +1,11 @@
 #ifndef vnl_alloc_h_
 #define vnl_alloc_h_
 
+// .NAME vnl_alloc
+// .INCLUDE vnl/vnl_alloc.h
+// .FILE vnl_alloc.cxx
+//
+// .SECTION Description
 // Default node allocator.
 // With a reasonable compiler, this should be roughly as fast as the
 // original STL class-specific allocators, but with less fragmentation.
@@ -15,7 +20,7 @@
 //    information that we can return the object to the proper free li*st
 //    without permanently losing part of the object.
 //
-    
+//
 // The first template parameter specifies whether more than one thread
 // may use this allocator.  It is safe to allocate an object from
 // one instance of a default_alloc and deallocate it with another

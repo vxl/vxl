@@ -7,16 +7,14 @@
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// Name: vtol_chain_2d
-// Task: Default constructor
+// Default constructor
 //---------------------------------------------------------------------------
 vtol_chain_2d::vtol_chain_2d(void)
 {
 }
 
 //---------------------------------------------------------------------------
-// Name: ~vtol_chain_2d
-// Task: Destructor
+// Destructor
 //---------------------------------------------------------------------------
 vtol_chain_2d::~vtol_chain_2d()
 {
@@ -27,8 +25,7 @@ vtol_chain_2d::~vtol_chain_2d()
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// Name: chain_inferiors
-// Task: Return a pointer to the inferiors (no copy)
+// -- Return a pointer to the inferiors (no copy)
 //---------------------------------------------------------------------------
 const chain_list_2d *
 vtol_chain_2d::chain_inferiors(void) const
@@ -37,8 +34,7 @@ vtol_chain_2d::chain_inferiors(void) const
 }
 
 //---------------------------------------------------------------------------
-// Name: chain_superiors
-// Task: Return a pointer to the superiors (no copy)
+// -- Return a pointer to the superiors (no copy)
 //---------------------------------------------------------------------------
 const chain_list_2d *
 vtol_chain_2d::chain_superiors(void) const
@@ -58,8 +54,7 @@ vtol_chain_2d::chain_superiors(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// Name: is_chain_inferior
-// Task: Is `inferior' already an inferior of `this' ?
+// -- Is `inferior' already an inferior of `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_chain_2d::is_chain_inferior(const vtol_chain_2d &chain_inferior) const
@@ -77,7 +72,7 @@ vtol_chain_2d::is_chain_inferior(const vtol_chain_2d &chain_inferior) const
 }
 
 //---------------------------------------------------------------------------
-//: Is `superior' already a superior of `this' ?
+// -- Is `superior' already a superior of `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_chain_2d::is_chain_superior(const vtol_chain_2d &chain_superior) const
@@ -95,8 +90,7 @@ vtol_chain_2d::is_chain_superior(const vtol_chain_2d &chain_superior) const
 }
 
 //---------------------------------------------------------------------------
-// Name: num_chain_superiors
-// Task: Return the number of superiors
+// -- Return the number of superiors
 //---------------------------------------------------------------------------
 int vtol_chain_2d::num_chain_superiors(void) const
 {
@@ -104,8 +98,7 @@ int vtol_chain_2d::num_chain_superiors(void) const
 }
 
 //---------------------------------------------------------------------------
-// Name: num_chain_inferiors
-// Task: Return the number of inferiors
+// -- Return the number of inferiors
 //---------------------------------------------------------------------------
 int vtol_chain_2d::num_chain_inferiors(void) const
 {
@@ -113,8 +106,7 @@ int vtol_chain_2d::num_chain_inferiors(void) const
 }
 
 //---------------------------------------------------------------------------
-// Name: contains_sub_chains
-// Task: Does `this' contain some sub chains ?
+// -- Does `this' contain some sub chains ?
 //---------------------------------------------------------------------------
 bool vtol_chain_2d::contains_sub_chains(void) const
 {
@@ -122,8 +114,7 @@ bool vtol_chain_2d::contains_sub_chains(void) const
 }
 
 //---------------------------------------------------------------------------
-// Name: is_sub_chain
-// Task: Is `this' a sub chain ?
+// -- Is `this' a sub chain ?
 //---------------------------------------------------------------------------
 bool vtol_chain_2d::is_sub_chain(void) const
 {
@@ -135,8 +126,7 @@ bool vtol_chain_2d::is_sub_chain(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// Name: link_chain_inferior
-// Task: Link `this' with an inferior `chain_inferior'
+// -- Link `this' with an inferior `chain_inferior'
 // Require: valid_chain_type(chain_inferior)
 //          and !is_chain_inferior(chain_inferior)
 //---------------------------------------------------------------------------
@@ -154,8 +144,7 @@ void vtol_chain_2d::link_chain_inferior(vtol_chain_2d &chain_inferior)
 }
 
 //---------------------------------------------------------------------------
-// Name: unlink_chain_inferior
-// Task: Unlink `this' with the chain_inferior `chain_inferior'
+// -- Unlink `this' with the chain_inferior `chain_inferior'
 // Require: valid_chain_type(chain_inferior)
 //          and is_chain_inferior(chain_inferior)
 //---------------------------------------------------------------------------
@@ -177,8 +166,7 @@ void vtol_chain_2d::unlink_chain_inferior(vtol_chain_2d &chain_inferior)
 }
   
 //---------------------------------------------------------------------------
-// Name: unlink_all_chain_inferiors
-// Task: Unlink `this' with all its chain inferiors
+// -- Unlink `this' with all its chain inferiors
 //---------------------------------------------------------------------------
 void vtol_chain_2d::unlink_all_chain_inferiors(void)
 {
@@ -192,8 +180,7 @@ void vtol_chain_2d::unlink_all_chain_inferiors(void)
 }
 
 //---------------------------------------------------------------------------
-// Name: unlink
-// Task: Unlink `this' of the network
+// -- Unlink `this' of the network
 //---------------------------------------------------------------------------
 void vtol_chain_2d::unlink(void)
 {
@@ -211,8 +198,7 @@ void vtol_chain_2d::unlink(void)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// Name: link_chain_superior
-// Task: Link `this' with a chain superior `chain_superior'
+// -- Link `this' with a chain superior `chain_superior'
 // Require: valid_chain_type(chain_superior)
 //          and !is_chain_superior(chain_superior)
 //---------------------------------------------------------------------------
@@ -232,9 +218,8 @@ void vtol_chain_2d::link_chain_superior(vtol_chain_2d &chain_superior)
 }
 
 //---------------------------------------------------------------------------
-//: Unlink `this' with its chain superior `chain_superior'
-//: REQUIRE: valid_chain_type(chain_superior)
-//:          and is_chain_superior(chain_superior)
+// -- Unlink `this' with its chain superior `chain_superior'
+// Require: valid_chain_type(chain_superior) and is_chain_superior(chain_superior)
 //---------------------------------------------------------------------------
 void vtol_chain_2d::unlink_chain_superior(vtol_chain_2d &chain_superior)
 {
@@ -257,8 +242,7 @@ void vtol_chain_2d::unlink_chain_superior(vtol_chain_2d &chain_superior)
 }
 
 //---------------------------------------------------------------------------
-// Name: is_cycle
-// Task: Is `this' a connected chain ?
+// -- Is `this' a connected chain ?
 //---------------------------------------------------------------------------
 bool vtol_chain_2d::is_cycle(void) const
 {
@@ -266,8 +250,7 @@ bool vtol_chain_2d::is_cycle(void) const
 }
 
 //---------------------------------------------------------------------------
-// Name: set_cycle
-// Task: Set if `this' is a connected chain
+// -- Set if `this' is a connected chain
 //---------------------------------------------------------------------------
 void vtol_chain_2d::set_cycle(bool new_is_cycle)
 {
@@ -275,8 +258,7 @@ void vtol_chain_2d::set_cycle(bool new_is_cycle)
 }
 
 //---------------------------------------------------------------------------
-// Name: directions
-// Task: Return the directions
+// -- Return the directions
 //---------------------------------------------------------------------------
 const vcl_vector<signed char> *vtol_chain_2d::directions(void) const
 {
@@ -284,8 +266,7 @@ const vcl_vector<signed char> *vtol_chain_2d::directions(void) const
 }
 
 //---------------------------------------------------------------------------
-// Name: directions
-// Task: Return the directions
+// -- Return the directions
 //---------------------------------------------------------------------------
 vcl_vector<signed char> *vtol_chain_2d::directions(void)
 {
@@ -293,8 +274,7 @@ vcl_vector<signed char> *vtol_chain_2d::directions(void)
 }
 
 //---------------------------------------------------------------------------
-// Name: dir
-// Task: Return the direction `i'
+// -- Return the direction `i'
 //---------------------------------------------------------------------------
 int vtol_chain_2d::dir(int i) const
 {
@@ -302,8 +282,7 @@ int vtol_chain_2d::dir(int i) const
 }
 
 //---------------------------------------------------------------------------
-// Name: clear
-// Task: Reset the chain
+// -- Reset the chain
 //---------------------------------------------------------------------------
 void vtol_chain_2d::clear(void)
 {

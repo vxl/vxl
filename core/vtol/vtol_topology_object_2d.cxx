@@ -7,8 +7,7 @@
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// Name: vtol_topology_object_2d
-// Task: Default constructor
+// Default constructor
 //---------------------------------------------------------------------------
 vtol_topology_object_2d::vtol_topology_object_2d(void)
   :_superiors(0),
@@ -19,8 +18,7 @@ vtol_topology_object_2d::vtol_topology_object_2d(void)
 }
 
 //---------------------------------------------------------------------------
-// Name: vtol_topology_object_2d
-// Task: Constructor with given sizes for arrays of inferiors and superiors
+// -- Constructor with given sizes for arrays of inferiors and superiors
 //---------------------------------------------------------------------------
 vtol_topology_object_2d::vtol_topology_object_2d(const int num_inferiors,
                                                  const int num_superiors)
@@ -32,8 +30,7 @@ vtol_topology_object_2d::vtol_topology_object_2d(const int num_inferiors,
 }
 
 //---------------------------------------------------------------------------
-// Name: ~vtol_topology_object_2d
-// Task: Destructor
+// Destructor
 //---------------------------------------------------------------------------
 vtol_topology_object_2d::~vtol_topology_object_2d()
 {
@@ -45,8 +42,7 @@ vtol_topology_object_2d::~vtol_topology_object_2d()
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// Name: cast_to_vertex
-// Task: Return `this' if `this' is a vertex, 0 otherwise
+// -- Return `this' if `this' is a vertex, 0 otherwise
 //---------------------------------------------------------------------------
 const vtol_vertex_2d *vtol_topology_object_2d::cast_to_vertex(void) const
 {
@@ -54,8 +50,7 @@ const vtol_vertex_2d *vtol_topology_object_2d::cast_to_vertex(void) const
 }
 
 //---------------------------------------------------------------------------
-// Name: cast_to_vertex
-// Task: Return `this' if `this' is a vertex, 0 otherwise
+// -- Return `this' if `this' is a vertex, 0 otherwise
 //---------------------------------------------------------------------------
 vtol_vertex_2d *vtol_topology_object_2d::cast_to_vertex(void)
 {
@@ -63,8 +58,7 @@ vtol_vertex_2d *vtol_topology_object_2d::cast_to_vertex(void)
 }
 
 //---------------------------------------------------------------------------
-// Name: cast_to_zero_chain
-// Task: Return `this' if `this' is a zero_chain, 0 otherwise
+// -- Return `this' if `this' is a zero_chain, 0 otherwise
 //---------------------------------------------------------------------------
 const vtol_zero_chain_2d *
 vtol_topology_object_2d::cast_to_zero_chain(void) const
@@ -73,8 +67,7 @@ vtol_topology_object_2d::cast_to_zero_chain(void) const
 }
 
 //---------------------------------------------------------------------------
-// Name: cast_to_zero_chain
-// Task: Return `this' if `this' is a zero_chain, 0 otherwise
+// -- Return `this' if `this' is a zero_chain, 0 otherwise
 //---------------------------------------------------------------------------
 vtol_zero_chain_2d *vtol_topology_object_2d::cast_to_zero_chain(void)
 {
@@ -82,8 +75,7 @@ vtol_zero_chain_2d *vtol_topology_object_2d::cast_to_zero_chain(void)
 }
 
 //---------------------------------------------------------------------------
-// Name: cast_to_edge
-// Task: Return `this' if `this' is an edge, 0 otherwise
+// -- Return `this' if `this' is an edge, 0 otherwise
 //---------------------------------------------------------------------------
 const vtol_edge_2d *vtol_topology_object_2d::cast_to_edge(void) const
 {
@@ -91,8 +83,7 @@ const vtol_edge_2d *vtol_topology_object_2d::cast_to_edge(void) const
 }
 
 //---------------------------------------------------------------------------
-// Name: cast_to_edge
-// Task: Return `this' if `this' is an edge, 0 otherwise
+// -- Return `this' if `this' is an edge, 0 otherwise
 //---------------------------------------------------------------------------
 vtol_edge_2d *vtol_topology_object_2d::cast_to_edge(void)
 {
@@ -100,8 +91,7 @@ vtol_edge_2d *vtol_topology_object_2d::cast_to_edge(void)
 }
 
 //---------------------------------------------------------------------------
-// Name: cast_to_one_chain
-// Task: Return `this' if `this' is an one_chain, 0 otherwise
+// -- Return `this' if `this' is an one_chain, 0 otherwise
 //---------------------------------------------------------------------------
 const vtol_one_chain_2d *vtol_topology_object_2d::cast_to_one_chain(void) const
 {
@@ -109,8 +99,7 @@ const vtol_one_chain_2d *vtol_topology_object_2d::cast_to_one_chain(void) const
 }
 
 //---------------------------------------------------------------------------
-// Name: cast_to_one_chain
-// Task: Return `this' if `this' is an one_chain, 0 otherwise
+// -- Return `this' if `this' is an one_chain, 0 otherwise
 //---------------------------------------------------------------------------
 vtol_one_chain_2d *vtol_topology_object_2d::cast_to_one_chain(void)
 {
@@ -118,8 +107,7 @@ vtol_one_chain_2d *vtol_topology_object_2d::cast_to_one_chain(void)
 }
 
 //---------------------------------------------------------------------------
-// Name: cast_to_face
-// Task: Return `this' if `this' is a face, 0 otherwise
+// -- Return `this' if `this' is a face, 0 otherwise
 //---------------------------------------------------------------------------
 const vtol_face_2d *vtol_topology_object_2d::cast_to_face(void) const
 {
@@ -127,8 +115,7 @@ const vtol_face_2d *vtol_topology_object_2d::cast_to_face(void) const
 }
 
 //---------------------------------------------------------------------------
-// Name: cast_to_face
-// Task: Return `this' if `this' is a face, 0 otherwise
+// -- Return `this' if `this' is a face, 0 otherwise
 //---------------------------------------------------------------------------
 vtol_face_2d *vtol_topology_object_2d::cast_to_face(void)
 {
@@ -136,8 +123,7 @@ vtol_face_2d *vtol_topology_object_2d::cast_to_face(void)
 }
 
 //---------------------------------------------------------------------------
-// Name: cast_to_two_chain
-// Task: Return `this' if `this' is a two_chain, 0 otherwise
+// -- Return `this' if `this' is a two_chain, 0 otherwise
 //---------------------------------------------------------------------------
 const vtol_two_chain_2d *
 vtol_topology_object_2d::cast_to_two_chain(void) const
@@ -146,8 +132,7 @@ vtol_topology_object_2d::cast_to_two_chain(void) const
 }
 
 //---------------------------------------------------------------------------
-// Name: cast_to_two_chain
-// Task: Return `this' if `this' is a two_chain, 0 otherwise
+// -- Return `this' if `this' is a two_chain, 0 otherwise
 //---------------------------------------------------------------------------
 vtol_two_chain_2d *vtol_topology_object_2d::cast_to_two_chain(void)
 {
@@ -155,8 +140,7 @@ vtol_two_chain_2d *vtol_topology_object_2d::cast_to_two_chain(void)
 }
 
 //---------------------------------------------------------------------------
-// Name: cast_to_block
-// Task: Return `this' if `this' is a block, 0 otherwise
+// -- Return `this' if `this' is a block, 0 otherwise
 //---------------------------------------------------------------------------
 const vtol_block_2d *vtol_topology_object_2d::cast_to_block(void) const
 {
@@ -164,8 +148,7 @@ const vtol_block_2d *vtol_topology_object_2d::cast_to_block(void) const
 }
 
 //---------------------------------------------------------------------------
-// Name: cast_to_block
-// Task: Return `this' if `this' is a block, 0 otherwise
+// -- Return `this' if `this' is a block, 0 otherwise
 //---------------------------------------------------------------------------
 vtol_block_2d *vtol_topology_object_2d::cast_to_block(void)
 {
@@ -177,8 +160,7 @@ vtol_block_2d *vtol_topology_object_2d::cast_to_block(void)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// Name: is_inferior
-// Task: Is `inferior' already an inferior of `this' ?
+// -- Is `inferior' already an inferior of `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_topology_object_2d::is_inferior(const vtol_topology_object_2d &inferior) const
@@ -191,8 +173,7 @@ vtol_topology_object_2d::is_inferior(const vtol_topology_object_2d &inferior) co
 }
 
 //---------------------------------------------------------------------------
-// Name: is_superior
-// Task: Is `superior' already an superior of `this' ?
+// -- Is `superior' already an superior of `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_topology_object_2d::is_superior(const vtol_topology_object_2d &superior) const
@@ -205,8 +186,7 @@ vtol_topology_object_2d::is_superior(const vtol_topology_object_2d &superior) co
 }
 
 //---------------------------------------------------------------------------
-// Name: numinf
-// Task: Number of inferiors
+// -- Number of inferiors
 //---------------------------------------------------------------------------
 int vtol_topology_object_2d::numinf(void) const
 {
@@ -214,7 +194,7 @@ int vtol_topology_object_2d::numinf(void) const
 }
 
 //---------------------------------------------------------------------------
-//: Number of superiors
+// -- Number of superiors
 //---------------------------------------------------------------------------
 int vtol_topology_object_2d::numsup(void) const
 {
@@ -222,8 +202,7 @@ int vtol_topology_object_2d::numsup(void) const
 }
 
 //---------------------------------------------------------------------------
-// Name: superiors
-// Task: Return the superiors list
+// -- Return the superiors list
 //---------------------------------------------------------------------------
 const vcl_vector<vtol_topology_object_2d_ref> *
 vtol_topology_object_2d::superiors(void) const
@@ -243,8 +222,7 @@ vtol_topology_object_2d::superiors(void) const
 }
 
 //---------------------------------------------------------------------------
-// Name: inferiors
-// Task: Return the inferiors list
+// -- Return the inferiors list
 //---------------------------------------------------------------------------
 const vcl_vector<vtol_topology_object_2d_ref> *
 vtol_topology_object_2d::inferiors(void) const
@@ -263,8 +241,7 @@ vtol_topology_object_2d::spatial_type(void) const
 }
 
 //---------------------------------------------------------------------------
-// Name: topology_type
-// Task: Return the topology type
+// -- Return the topology type
 //---------------------------------------------------------------------------
 vtol_topology_object_2d::vtol_topology_object_2d_type
 vtol_topology_object_2d::topology_type(void) const
@@ -277,8 +254,7 @@ vtol_topology_object_2d::topology_type(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// Name: link_inferior
-// Task: Link `this' with an inferior `inferior'
+// -- Link `this' with an inferior `inferior'
 // Require: valid_inferior_type(inferior) and !is_inferior(inferior)
 //---------------------------------------------------------------------------
 void vtol_topology_object_2d::link_inferior(vtol_topology_object_2d &inferior)
@@ -295,8 +271,7 @@ void vtol_topology_object_2d::link_inferior(vtol_topology_object_2d &inferior)
 }
 
 //---------------------------------------------------------------------------
-// Name: unlink_inferior
-// Task: Unlink `this' with the inferior `inferior'
+// -- Unlink `this' with the inferior `inferior'
 // Require: valid_inferior_type(inferior) and is_inferior(inferior)
 //---------------------------------------------------------------------------
 void vtol_topology_object_2d::unlink_inferior(vtol_topology_object_2d &inferior)
@@ -315,8 +290,7 @@ void vtol_topology_object_2d::unlink_inferior(vtol_topology_object_2d &inferior)
 }
 
 //---------------------------------------------------------------------------
-// Name: unlink_all_inferiors
-// Task: Unlink `this' with all its inferiors
+// -- Unlink `this' with all its inferiors
 //---------------------------------------------------------------------------
 void vtol_topology_object_2d::unlink_all_inferiors(void)
 {
@@ -329,8 +303,7 @@ void vtol_topology_object_2d::unlink_all_inferiors(void)
 }
 
 //---------------------------------------------------------------------------
-// Name: unlink
-// Task: Unlink `this' of the network
+// -- Unlink `this' of the network
 //---------------------------------------------------------------------------
 void vtol_topology_object_2d::unlink(void)
 {
@@ -347,8 +320,7 @@ void vtol_topology_object_2d::unlink(void)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// Name: link_superior
-// Task: Link `this' with a superior `superior'
+// -- Link `this' with a superior `superior'
 // Require: valid_superior_type(superior) and !is_superior(superior)
 //---------------------------------------------------------------------------
 void vtol_topology_object_2d::link_superior(vtol_topology_object_2d &superior)
@@ -366,8 +338,7 @@ void vtol_topology_object_2d::link_superior(vtol_topology_object_2d &superior)
 }
 
 //---------------------------------------------------------------------------
-// Name: unlink_superior
-// Task: Unlink `this' with its superior `superior'
+// -- Unlink `this' with its superior `superior'
 // Require: valid_superior_type(superior) and is_superior(superior)
 //---------------------------------------------------------------------------
 void vtol_topology_object_2d::unlink_superior(vtol_topology_object_2d &superior)
@@ -389,8 +360,7 @@ void vtol_topology_object_2d::unlink_superior(vtol_topology_object_2d &superior)
 }
 
 
-//:
-// get list of vertices 
+// -- get list of vertices 
 
 vertex_list_2d* vtol_topology_object_2d::vertices(void) 
 {
@@ -400,16 +370,14 @@ vertex_list_2d* vtol_topology_object_2d::vertices(void)
   
 }
 
-//:
-// get list of vertices 
+// -- get list of vertices 
 
 void vtol_topology_object_2d::vertices(vertex_list_2d& verts) 
 {
   inf_sup_cache->vertices(verts); 
 }
 
-//:
-// get list of zero_chains 
+// -- get list of zero_chains 
 zero_chain_list_2d* vtol_topology_object_2d::zero_chains(void) 
 {
   zero_chain_list_2d* new_list=new zero_chain_list_2d;
@@ -418,15 +386,13 @@ zero_chain_list_2d* vtol_topology_object_2d::zero_chains(void)
 }
 
 
-//:
-// get list of zero chains
+// -- get list of zero chains
 void vtol_topology_object_2d::zero_chains(zero_chain_list_2d &zerochains) 
 {
   inf_sup_cache->zero_chains(zerochains);
 }
 
-//:
-// get list of edges
+// -- get list of edges
 
 edge_list_2d* vtol_topology_object_2d::edges(void) 
 {
@@ -435,16 +401,14 @@ edge_list_2d* vtol_topology_object_2d::edges(void)
   return new_list;
 }
 
-//:
-// get list of edges
+// -- get list of edges
 
 void vtol_topology_object_2d::edges(edge_list_2d &edges) 
 {
   inf_sup_cache->edges(edges);
 }
 
-//:
-// get list of one chains
+// -- get list of one chains
 
 one_chain_list_2d* vtol_topology_object_2d::one_chains(void) 
 {
@@ -454,16 +418,14 @@ one_chain_list_2d* vtol_topology_object_2d::one_chains(void)
 
 }
 
-//:
-// get list of one chains
+// -- get list of one chains
 
 void vtol_topology_object_2d::one_chains(one_chain_list_2d &onechains) 
 {
   inf_sup_cache->one_chains(onechains);
 }
 
-//:
-// get list of faces
+// -- get list of faces
 
 face_list_2d *vtol_topology_object_2d::faces(void) 
 {
@@ -472,16 +434,14 @@ face_list_2d *vtol_topology_object_2d::faces(void)
   return new_list;
 }
 
-//:
-// get list of faces
+// -- get list of faces
 
 void vtol_topology_object_2d::faces(face_list_2d &face_list)
 {
   inf_sup_cache->faces(face_list);
 }
 
-//:
-// get list of two chains 
+// -- get list of two chains 
 
 two_chain_list_2d *vtol_topology_object_2d::two_chains(void) 
 {
@@ -491,8 +451,7 @@ two_chain_list_2d *vtol_topology_object_2d::two_chains(void)
 
 }
 
-//:
-// get list of two chains 
+// -- get list of two chains 
 
 void vtol_topology_object_2d::two_chains(two_chain_list_2d &new_list) 
 {
@@ -500,8 +459,7 @@ void vtol_topology_object_2d::two_chains(two_chain_list_2d &new_list)
 }
 
 
-//:
-// get list of blocks
+// -- get list of blocks
 
 block_list_2d *vtol_topology_object_2d::blocks(void) 
 {
@@ -511,8 +469,7 @@ block_list_2d *vtol_topology_object_2d::blocks(void)
 }
 
 
-//:
-// get list of blocks
+// -- get list of blocks
 
 void vtol_topology_object_2d::blocks(block_list_2d &new_list) 
 {
@@ -520,8 +477,7 @@ void vtol_topology_object_2d::blocks(block_list_2d &new_list)
 }
 
 
-//:
-// print the object
+// -- print the object
 void vtol_topology_object_2d::print(ostream &strm) const
 {
   strm<<"<vtol_topology_object_2d "<<(void *)this<<">"<<endl;
@@ -575,8 +531,7 @@ void vtol_topology_object_2d::describe(ostream &strm,
 
 
 //---------------------------------------------------------------------------
-// Name: compute_vertices
-// Task: Compute lists of vertices 
+// -- Compute lists of vertices 
 //---------------------------------------------------------------------------
 vcl_vector<vtol_vertex_2d *> *vtol_topology_object_2d::compute_vertices(void)
 {       
@@ -586,8 +541,7 @@ vcl_vector<vtol_vertex_2d *> *vtol_topology_object_2d::compute_vertices(void)
 
 
 //---------------------------------------------------------------------------
-// Name: compute_zero_chains
-// Task: Compute lists of zero chains 
+// -- Compute lists of zero chains 
 //---------------------------------------------------------------------------
 vcl_vector<vtol_zero_chain_2d *> *
 vtol_topology_object_2d::compute_zero_chains(void)
@@ -597,8 +551,7 @@ vtol_topology_object_2d::compute_zero_chains(void)
 }
 
 //---------------------------------------------------------------------------
-// Name: compute_edges
-// Task: compute lists of edges 
+// -- compute lists of edges 
 //---------------------------------------------------------------------------
 
 vcl_vector<vtol_edge_2d *> *vtol_topology_object_2d::compute_edges(void)
@@ -608,8 +561,7 @@ vcl_vector<vtol_edge_2d *> *vtol_topology_object_2d::compute_edges(void)
 }
 
 //---------------------------------------------------------------------------
-// Name: compute_one_chains
-// Task: compute lists of one chains 
+// -- compute lists of one chains 
 //---------------------------------------------------------------------------
 vcl_vector<vtol_one_chain_2d *> *
 vtol_topology_object_2d::compute_one_chains(void)
@@ -619,8 +571,7 @@ vtol_topology_object_2d::compute_one_chains(void)
 }
 
 //---------------------------------------------------------------------------
-// Name: compute_faces
-// Task: compute lists of faces 
+// -- compute lists of faces 
 //---------------------------------------------------------------------------
 vcl_vector<vtol_face_2d *> *vtol_topology_object_2d::compute_faces(void)
 {       
@@ -629,8 +580,7 @@ vcl_vector<vtol_face_2d *> *vtol_topology_object_2d::compute_faces(void)
 }
 
 //---------------------------------------------------------------------------
-// Name: compute_two_chains
-// Task: compute lists of two chains 
+// -- compute lists of two chains 
 //---------------------------------------------------------------------------
 vcl_vector<vtol_two_chain_2d *> *
 vtol_topology_object_2d::compute_two_chains(void)
@@ -640,8 +590,7 @@ vtol_topology_object_2d::compute_two_chains(void)
 }
 
 //---------------------------------------------------------------------------
-// Name: compute_blocks
-// Task: compute lists of blocks 
+// -- compute lists of blocks 
 //---------------------------------------------------------------------------
 vcl_vector<vtol_block_2d *> *vtol_topology_object_2d::compute_blocks(void)
 {       

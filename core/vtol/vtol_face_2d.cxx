@@ -13,21 +13,19 @@
 #include <vsol/vsol_point_2d.h>
 
 //---------------------------------------------------------------------------
-// Name: vtol_face_2d
-// Task: Default constructor
+// Default constructor
 //---------------------------------------------------------------------------
 vtol_face_2d::vtol_face_2d(void) 
   :_surface(0)
 {
 }
 
-//:
+// --
 // This is the Copy Constructor for vtol_face_2d. It performs a deep copy of
 // all vtol_face_2d inferior one_chains.
 
 //---------------------------------------------------------------------------
-// Name: vtol_face_2d
-// Task: Copy constructor
+// Copy constructor
 //---------------------------------------------------------------------------
 vtol_face_2d::vtol_face_2d(const vtol_face_2d &other)
   : _surface(0)
@@ -92,8 +90,7 @@ vtol_face_2d::vtol_face_2d(const vtol_face_2d &other)
 }
 
 //---------------------------------------------------------------------------
-// Name: ~vtol_face_2d
-// Task: Destructor 
+// Destructor 
 //---------------------------------------------------------------------------
 vtol_face_2d::~vtol_face_2d()
 {
@@ -101,9 +98,8 @@ vtol_face_2d::~vtol_face_2d()
 }
 
 //---------------------------------------------------------------------------
-// Name: clone
-// Task: Clone `this': creation of a new object and initialization
-//       See Prototype pattern
+// -- Clone `this': creation of a new object and initialization
+// See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_2d_ref vtol_face_2d::clone(void) const
 {
@@ -115,8 +111,7 @@ vsol_region_2d_ref vtol_face_2d::surface(void) const
   return _surface;
 }
 
-//: 
-// copy with an array
+// -- copy with an array
 
 vtol_face_2d *
 vtol_face_2d::copy_with_arrays(vcl_vector<vtol_topology_object_2d_ref> &verts,
@@ -145,8 +140,7 @@ vtol_face_2d::copy_with_arrays(vcl_vector<vtol_topology_object_2d_ref> &verts,
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// Name: cast_to_face
-// Task: Return `this' if `this' is a face, 0 otherwise
+// -- Return `this' if `this' is a face, 0 otherwise
 //---------------------------------------------------------------------------
 const vtol_face_2d *vtol_face_2d::cast_to_face(void) const
 {
@@ -154,8 +148,7 @@ const vtol_face_2d *vtol_face_2d::cast_to_face(void) const
 }
 
 //---------------------------------------------------------------------------
-// Name: cast_to_face
-// Task: Return `this' if `this' is a face, 0 otherwise
+// -- Return `this' if `this' is a face, 0 otherwise
 //---------------------------------------------------------------------------
 vtol_face_2d *vtol_face_2d::cast_to_face(void)
 {
@@ -167,8 +160,7 @@ vtol_face_2d *vtol_face_2d::cast_to_face(void)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// Name: valid_inferior_type
-// Task: Is `inferior' type valid for `this' ?
+// -- Is `inferior' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_face_2d::valid_inferior_type(const vtol_topology_object_2d &inferior) const
@@ -177,8 +169,7 @@ vtol_face_2d::valid_inferior_type(const vtol_topology_object_2d &inferior) const
 }
 
 //---------------------------------------------------------------------------
-// Name: valid_superior_type
-// Task: Is `superior' type valid for `this' ?
+// -- Is `superior' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_face_2d::valid_superior_type(const vtol_topology_object_2d &superior) const
@@ -187,8 +178,7 @@ vtol_face_2d::valid_superior_type(const vtol_topology_object_2d &superior) const
 }
 
 //---------------------------------------------------------------------------
-// Name: shallow_copy_with_no_links
-// Task: Copy with no links. Only copy the surface if it exists
+// -- Copy with no links. Only copy the surface if it exists
 //---------------------------------------------------------------------------
 vtol_face_2d *vtol_face_2d::shallow_copy_with_no_links(void) const
 {
@@ -200,7 +190,7 @@ vtol_face_2d *vtol_face_2d::shallow_copy_with_no_links(void) const
   return result;
 }
 
-//:
+// --
 //  Constructor for a planar vtol_face_2d from an ordered list of vertices.
 // edges are constructed by connecting vtol_vertex_2d[i] to
 // vtol_vertex_2d[(i+1)mod L]. L is the length of the vertex list, verts, and
@@ -263,7 +253,7 @@ vtol_face_2d::vtol_face_2d(vertex_list_2d &verts)
   link_inferior(*eloop);
 }
 
-//:
+// --
 // Constructor for a Planar face from a list of one_chains.  This
 // method assumes that the first vtol_one_chain_2d on the list is the outside
 // boundary vtol_one_chain_2d.  The remaining one_chains are holes boundaries
@@ -302,7 +292,7 @@ vtol_face_2d::vtol_face_2d(one_chain_list_2d &onechs)
     }
 }
 
-//: Constructor of a Planar face from a vtol_one_chain_2d.  This method uses
+// -- Constructor of a Planar face from a vtol_one_chain_2d.  This method uses
 // the vtol_one_chain_2d, edgeloop, as the outside boundary of the face.
 
 vtol_face_2d::vtol_face_2d(vtol_one_chain_2d &edgeloop)
@@ -325,8 +315,7 @@ vtol_face_2d::vtol_face_2d(vtol_one_chain_2d &edgeloop)
                                     new vsol_point_2d(xmax,ymax)));
 }
 
-//:
-// Constructor requiring only the underlying geometric surface
+// -- Constructor requiring only the underlying geometric surface
 vtol_face_2d::vtol_face_2d (vsol_region_2d &facesurf)
   : _surface(0)
 {
@@ -336,8 +325,7 @@ vtol_face_2d::vtol_face_2d (vsol_region_2d &facesurf)
 }
 
 //---------------------------------------------------------------------------
-// Name: topology_type
-// Task: Return the topology type
+// -- Return the topology type
 //---------------------------------------------------------------------------
 vtol_face_2d::vtol_topology_object_2d_type
 vtol_face_2d::topology_type(void) const
@@ -345,15 +333,14 @@ vtol_face_2d::topology_type(void) const
   return FACE;
 }
 
-//:
-// Set the underlying geometric surface.
+// -- Set the underlying geometric surface.
 void vtol_face_2d::set_surface(vsol_region_2d *const newsurf)
 {
   _surface=newsurf;
   touch();
 }
 
-//:
+// --
 // Returns an ordered list of vertices of the outside boundary of the
 // face.  All vertices on any holes of the face are *not* included.
 // This vertex list is ordered such that a positive normal is
@@ -382,7 +369,7 @@ vcl_vector<vtol_vertex_2d*> *vtol_face_2d::outside_boundary_compute_vertices(voi
   OUTSIDE_BOUNDARY_2d(vtol_vertex_2d,vtol_one_chain_2d,compute_vertices);
 }							
 
-//:
+// --
 // Returns a vtol_vertex_2d list of all the vertices on the face.
 // If the face does not have any holes, this vertex list is ordered
 // in the direction of a positive normal using the Right Hand rule.
@@ -393,7 +380,7 @@ vcl_vector<vtol_vertex_2d*> *vtol_face_2d::compute_vertices(void)
   SEL_INF_2d(vtol_vertex_2d,compute_vertices);
 }
 
-//:
+// --
 // Returns a list of the zero_chains on the outside boundary of the face.
 // All zero_chains on any hole boundaries of the face are *not* included.
 
@@ -404,7 +391,7 @@ vcl_vector<vtol_zero_chain_2d*> *vtol_face_2d::outside_boundary_compute_zero_cha
 }
 
 
-//:
+// --
 // Returns a list of the zero_chains on the outside boundary of the face.
 // All zero_chains on any hole boundaries of the face are *not* included.
 
@@ -424,8 +411,7 @@ zero_chain_list_2d *vtol_face_2d::outside_boundary_zero_chains(void)
 }
 
 
-//:
-// Returns a list of zero_chains of the face.
+// -- Returns a list of zero_chains of the face.
 
 vcl_vector<vtol_zero_chain_2d*> *vtol_face_2d::compute_zero_chains(void)
 {
@@ -433,7 +419,7 @@ vcl_vector<vtol_zero_chain_2d*> *vtol_face_2d::compute_zero_chains(void)
   SEL_INF_2d(vtol_zero_chain_2d,compute_zero_chains);
 }
 
-//:
+// --
 // Returns a list of edges that make up the outside boundary of the
 // face. All edges on any hole boundaries are *not* included.
 
@@ -443,8 +429,7 @@ vcl_vector<vtol_edge_2d*> *vtol_face_2d::outside_boundary_compute_edges(void)
   OUTSIDE_BOUNDARY_2d(vtol_edge_2d,vtol_one_chain_2d, compute_edges);
 }
 
-//:
-// get the outside boundary edges
+// -- get the outside boundary edges
 
 edge_list_2d *vtol_face_2d::outside_boundary_edges(void)
 {
@@ -462,17 +447,14 @@ edge_list_2d *vtol_face_2d::outside_boundary_edges(void)
   return new_ref_list;
 }
 
-//:
-// Returns a list of edges on the face.
+// -- Returns a list of edges on the face.
 vcl_vector<vtol_edge_2d*> *vtol_face_2d::compute_edges(void)
 {
   
   SEL_INF_2d(vtol_edge_2d,compute_edges);
 }
 
-//:
-// Returns a list of one_chains that make up the outside boundary of
-// the face.
+// -- Returns a list of one_chains that make up the outside boundary of the face.
 
 one_chain_list_2d *vtol_face_2d::outside_boundary_one_chains(void)
 {
@@ -495,8 +477,7 @@ vcl_vector<vtol_one_chain_2d*> *vtol_face_2d::outside_boundary_compute_one_chain
 }
 
 
-//:
-// Returns a list of all Onechains of the face.
+// -- Returns a list of all Onechains of the face.
 
 vcl_vector<vtol_one_chain_2d*> *vtol_face_2d::compute_one_chains(void)
 {
@@ -504,7 +485,7 @@ vcl_vector<vtol_one_chain_2d*> *vtol_face_2d::compute_one_chains(void)
   SEL_INF_2d(vtol_one_chain_2d,compute_one_chains);
 }
 
-//:
+// --
 // Returns a list of that has itself as the only element.  This method
 // is needed for traversing the model hierarchy consistently.
 
@@ -514,16 +495,14 @@ vcl_vector<vtol_face_2d*>  *vtol_face_2d::compute_faces(void)
   LIST_SELF_2d(vtol_face_2d);
 }
 
-//:
-//  Returns a list of all the two_chains which contain the vtol_face_2d.
+// -- Returns a list of all the two_chains which contain the vtol_face_2d.
 vcl_vector<vtol_two_chain_2d*>  *vtol_face_2d::compute_two_chains(void)
 {
  
   SEL_SUP_2d(vtol_two_chain_2d,compute_two_chains);
 }
 
-//:
-// Returns a list of all the blocks that contain the vtol_face_2d.
+// -- Returns a list of all the blocks that contain the vtol_face_2d.
 
 vcl_vector<vtol_block_2d*> *vtol_face_2d::compute_blocks(void)
 {
@@ -532,8 +511,7 @@ vcl_vector<vtol_block_2d*> *vtol_face_2d::compute_blocks(void)
 }
 
 //---------------------------------------------------------------------------
-// Name: shares_edge_with
-// Task: Does `this' share an edge with `f' ? Comparison of edge pointers,
+// -- Does `this' share an edge with `f' ? Comparison of edge pointers,
 //       not geometric values
 //---------------------------------------------------------------------------
 bool vtol_face_2d::shares_edge_with(vtol_face_2d &f)
@@ -556,7 +534,7 @@ bool vtol_face_2d::shares_edge_with(vtol_face_2d &f)
   return result;
 }
 
-//:
+// --
 // Links new_vtol_one_chain_2d as an inferior of the vtol_face_2d and returns True if
 // successful. This method will be replacing all calls to add_edge_lop()o.
 
@@ -568,8 +546,7 @@ void vtol_face_2d::add_one_chain(vtol_one_chain_2d &new_vtol_one_chain_2d)
   link_inferior(new_vtol_one_chain_2d);
 }
 
-//:
-// deep equality check on faces.  uses fuzzy equal on vertices.
+// -- deep equality check on faces.  uses fuzzy equal on vertices.
 //
 
 bool vtol_face_2d::operator==(const vtol_face_2d &other) const
@@ -598,8 +575,7 @@ bool vtol_face_2d::operator==(const vtol_face_2d &other) const
   return true;
 }
 
-//:
-// spatial object equality
+// -- spatial object equality
 
 bool vtol_face_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
@@ -610,8 +586,7 @@ bool vtol_face_2d::operator==(const vsol_spatial_object_2d& obj) const
   : false;
 }
 
-//:
-// Returns the ith inferior vtol_one_chain_2d of the vtol_face_2d.
+// -- Returns the ith inferior vtol_one_chain_2d of the vtol_face_2d.
 
 vtol_one_chain_2d *vtol_face_2d::get_one_chain(int which)
 {
@@ -624,8 +599,7 @@ vtol_one_chain_2d *vtol_face_2d::get_one_chain(int which)
     }
 }
 
-//:
-// Returns the first inferior vtol_one_chain_2d of the vtol_face_2d (the boundary onechain).
+// -- Returns the first inferior vtol_one_chain_2d of the vtol_face_2d (the boundary onechain).
 
 vtol_one_chain_2d *vtol_face_2d::get_boundary_cycle(void)
 {
@@ -635,8 +609,7 @@ vtol_one_chain_2d *vtol_face_2d::get_boundary_cycle(void)
   return get_one_chain(0);
 }
 
-//:
-// Adds a new hole to the face
+// -- Adds a new hole to the face
 
 bool vtol_face_2d::add_hole_cycle(vtol_one_chain_2d &new_hole)
 {
@@ -674,8 +647,7 @@ vcl_vector<vtol_one_chain_2d_ref> *vtol_face_2d::get_hole_cycles(void)
   return result;
 }
 
-//:
-// Returns the number of edges on the vtol_face_2d.
+// -- Returns the number of edges on the vtol_face_2d.
 //
 
 int vtol_face_2d::get_num_edges(void) const
@@ -688,8 +660,7 @@ int vtol_face_2d::get_num_edges(void) const
   return result;
 }
 
-//:
-// reverse the direction of the face 
+// -- reverse the direction of the face 
 void vtol_face_2d::reverse_normal(void)
 {
   topology_list_2d::iterator ti;
@@ -698,9 +669,8 @@ void vtol_face_2d::reverse_normal(void)
   // compute_normal();
 }
 
-//:
 //-----------------------------------------------------------------
-// Compute bounds from the geometry of _surface. If the surface is
+// -- Compute bounds from the geometry of _surface. If the surface is
 //    not fully bounded, then use the vertices.
 //
 void vtol_face_2d::compute_bounding_box()
@@ -729,7 +699,7 @@ void vtol_face_2d::compute_bounding_box()
 }
 
 
-//:
+// --
 //  This method describes the data members of the vtol_face_2d including the
 // Inferiors.  The blanking argument is used to indent the output in
 // a clear fashion.
@@ -748,7 +718,7 @@ void vtol_face_2d::describe(ostream &strm,
     }
 }
 
-//:
+// --
 // This method prints out a simple text representation for the vtol_face_2d which
 // includes its address in memory.
 void vtol_face_2d::print(ostream &strm) const

@@ -4,6 +4,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .NAME vil_stream - Stream interface for VIL image loaders
+// .INCLUDE vil/vil_stream.h
+// .FILE vil_stream.cxx
 // .SECTION Author
 //    awf@robots.ox.ac.uk
 // Created: 16 Feb 00

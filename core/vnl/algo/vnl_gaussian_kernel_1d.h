@@ -18,6 +18,9 @@
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 07 Aug 97
 //
+// .SECTION Modifications
+//     970807 AWF Initial version.
+//
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_vector.h>

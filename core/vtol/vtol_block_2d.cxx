@@ -13,16 +13,14 @@
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// Name: vtol_block_2d
-// Task: Default constructor
+// Default constructor
 //---------------------------------------------------------------------------
 vtol_block_2d::vtol_block_2d(void)
 {
 }
 
 //---------------------------------------------------------------------------
-// Name: vtol_block_2d
-// Task: Constructor from a two-chain (inferior)
+// -- Constructor from a two-chain (inferior)
 //---------------------------------------------------------------------------
 vtol_block_2d::vtol_block_2d(vtol_two_chain_2d &faceloop)
 {	
@@ -30,10 +28,9 @@ vtol_block_2d::vtol_block_2d(vtol_two_chain_2d &faceloop)
 }
 
 //---------------------------------------------------------------------------
-// Name: vtol_block_2d
-// Task: Constructor from a list of two-chains. The first two-chain is the
-//       outside boundary. The remaining two-chains are considered holes
-//       inside the the outside volume.
+// -- Constructor from a list of two-chains. The first two-chain is the
+//    outside boundary. The remaining two-chains are considered holes
+//    inside the the outside volume.
 //---------------------------------------------------------------------------
 vtol_block_2d::vtol_block_2d(two_chain_list_2d &faceloops)
 {
@@ -49,8 +46,7 @@ vtol_block_2d::vtol_block_2d(two_chain_list_2d &faceloops)
 }
 
 //---------------------------------------------------------------------------
-// Name: vtol_block_2d
-// Task: Constructor from a list of faces
+// -- Constructor from a list of faces
 //---------------------------------------------------------------------------
 vtol_block_2d::vtol_block_2d(face_list_2d &new_face_list) 
 {
@@ -59,8 +55,7 @@ vtol_block_2d::vtol_block_2d(face_list_2d &new_face_list)
 }
 
 //---------------------------------------------------------------------------
-// Name: vtol_block_2d
-// Task: Copy constructor. Deep copy.
+// -- Copy constructor. Deep copy.
 //---------------------------------------------------------------------------
 vtol_block_2d::vtol_block_2d(const vtol_block_2d &other)
 {
@@ -102,8 +97,7 @@ vtol_block_2d::vtol_block_2d(const vtol_block_2d &other)
 }
 
 //---------------------------------------------------------------------------
-// Name: ~vtol_block_2d
-// Task: Destructor
+// Destructor
 //---------------------------------------------------------------------------
 vtol_block_2d::~vtol_block_2d()
 {
@@ -111,9 +105,8 @@ vtol_block_2d::~vtol_block_2d()
 }
 
 //---------------------------------------------------------------------------
-// Name: clone
-// Task: Clone `this': creation of a new object and initialization
-//       See Prototype pattern
+// -- Clone `this': creation of a new object and initialization
+// See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_2d_ref vtol_block_2d::clone(void) const
 {
@@ -127,8 +120,7 @@ vsol_spatial_object_2d_ref vtol_block_2d::clone(void) const
  */
 
 //---------------------------------------------------------------------------
-// Name: topology_type
-// Task: Return the topology type
+// -- Return the topology type
 //---------------------------------------------------------------------------
 vtol_block_2d::vtol_topology_object_2d_type
 vtol_block_2d::topology_type(void) const
@@ -141,8 +133,7 @@ vtol_block_2d::topology_type(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// Name: cast_to_block
-// Task: Return `this' if `this' is a block, 0 otherwise
+// -- Return `this' if `this' is a block, 0 otherwise
 //---------------------------------------------------------------------------
 const vtol_block_2d *vtol_block_2d::cast_to_block(void) const
 {
@@ -150,8 +141,7 @@ const vtol_block_2d *vtol_block_2d::cast_to_block(void) const
 }
 
 //---------------------------------------------------------------------------
-// Name: cast_to_block
-// Task: Return `this' if `this' is a block, 0 otherwise
+// -- Return `this' if `this' is a block, 0 otherwise
 //---------------------------------------------------------------------------
 vtol_block_2d *vtol_block_2d::cast_to_block(void)
 {
@@ -163,8 +153,7 @@ vtol_block_2d *vtol_block_2d::cast_to_block(void)
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-// Name: valid_inferior_type
-// Task: Is `inferior' type valid for `this' ?
+// -- Is `inferior' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_block_2d::valid_inferior_type(const vtol_topology_object_2d &inferior) const
@@ -173,8 +162,7 @@ vtol_block_2d::valid_inferior_type(const vtol_topology_object_2d &inferior) cons
 }
 
 //---------------------------------------------------------------------------
-// Name: valid_superior_type
-// Task: Is `superior' type valid for `this' ?
+// -- Is `superior' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
 vtol_block_2d::valid_superior_type(const vtol_topology_object_2d &superior)
@@ -183,8 +171,7 @@ const
   return false;
 }
 
-//:
-// outside boundary vertices 
+// -- outside boundary vertices 
 
 vertex_list_2d *vtol_block_2d::outside_boundary_vertices(void)
 {
@@ -208,16 +195,14 @@ vcl_vector<vtol_vertex_2d *> *vtol_block_2d::outside_boundary_compute_vertices(v
   OUTSIDE_BOUNDARY_2d(vtol_vertex_2d, vtol_two_chain_2d, compute_vertices);
 }
 
-//:
-// get vertex list 
+// -- get vertex list 
 
 vcl_vector<vtol_vertex_2d *> *vtol_block_2d::compute_vertices(void)
 {
   SEL_INF_2d(vtol_vertex_2d,compute_vertices);
 }
 
-//:
-// get outside boundary zero chains
+// -- get outside boundary zero chains
 
 zero_chain_list_2d *vtol_block_2d::outside_boundary_zero_chains(void)
 {
@@ -243,16 +228,14 @@ vtol_block_2d::outside_boundary_compute_zero_chains(void)
                       compute_zero_chains);
 }
 
-//:
-// get zero chains
+// -- get zero chains
 
 vcl_vector<vtol_zero_chain_2d *> *vtol_block_2d::compute_zero_chains(void)
 {
  SEL_INF_2d(vtol_zero_chain_2d,compute_zero_chains);
 }
 
-//:
-// outside boundary edges
+// -- outside boundary edges
 
 edge_list_2d *vtol_block_2d::outside_boundary_edges(void)
 {
@@ -271,23 +254,20 @@ edge_list_2d *vtol_block_2d::outside_boundary_edges(void)
   return result;
 }
 
-//:
-// outside boundary edges
+// -- outside boundary edges
 
 vcl_vector<vtol_edge_2d *> *vtol_block_2d::outside_boundary_compute_edges(void)
 {
  OUTSIDE_BOUNDARY_2d(vtol_edge_2d,vtol_two_chain_2d,compute_edges);
 }
 
-//:
-// get edges 
+// -- get edges 
 vcl_vector<vtol_edge_2d *> *vtol_block_2d::compute_edges(void)
 {
   SEL_INF_2d(vtol_edge_2d,compute_edges);
 }
 
-//:
-// get outside boundary one chains
+// -- get outside boundary one chains
 
 one_chain_list_2d *vtol_block_2d::outside_boundary_one_chains(void)
 { 
@@ -303,8 +283,7 @@ one_chain_list_2d *vtol_block_2d::outside_boundary_one_chains(void)
   return result;
 }
 
-//:
-// get outside boundary one chains
+// -- get outside boundary one chains
 
 vcl_vector<vtol_one_chain_2d *> *
 vtol_block_2d::outside_boundary_compute_one_chains(void)
@@ -312,15 +291,13 @@ vtol_block_2d::outside_boundary_compute_one_chains(void)
   OUTSIDE_BOUNDARY_2d(vtol_one_chain_2d,vtol_two_chain_2d,compute_one_chains);
 }
 
-//: 
-// get the one chains
+// -- get the one chains
 vcl_vector<vtol_one_chain_2d *> *vtol_block_2d::compute_one_chains(void)
 {
   SEL_INF_2d(vtol_one_chain_2d,compute_one_chains);
 }
 
-//:
-// get the outside boundary faces
+// -- get the outside boundary faces
 
 face_list_2d *vtol_block_2d::outside_boundary_faces(void)
 {
@@ -336,23 +313,20 @@ face_list_2d *vtol_block_2d::outside_boundary_faces(void)
   return result;
 }
 
-//:
-// get the outside boundary faces
+// -- get the outside boundary faces
 
 vcl_vector<vtol_face_2d *> *vtol_block_2d::outside_boundary_compute_faces(void)
 {
   OUTSIDE_BOUNDARY_2d(vtol_face_2d,vtol_two_chain_2d,compute_faces);
 }
 
-//:
-// get the faces 
+// -- get the faces 
 vcl_vector<vtol_face_2d *> *vtol_block_2d::compute_faces(void)
 {
   SEL_INF_2d(vtol_face_2d,compute_faces);
 }
 
-//:
-// get the outside boundary two chains
+// -- get the outside boundary two chains
 
 two_chain_list_2d *vtol_block_2d::outside_boundary_two_chains(void)
 {
@@ -368,8 +342,7 @@ two_chain_list_2d *vtol_block_2d::outside_boundary_two_chains(void)
   return result;
 }
 
-//:
-// get the outside boundary two chains
+// -- get the outside boundary two chains
 
 vcl_vector<vtol_two_chain_2d *> *
 vtol_block_2d::outside_boundary_compute_two_chains(void)
@@ -377,16 +350,14 @@ vtol_block_2d::outside_boundary_compute_two_chains(void)
   OUTSIDE_BOUNDARY_2d(vtol_two_chain_2d,vtol_two_chain_2d,compute_two_chains);
 }
 
-//:
-// get the two chains
+// -- get the two chains
 
 vcl_vector<vtol_two_chain_2d *> *vtol_block_2d::compute_two_chains(void)
 {
   SEL_INF_2d(vtol_two_chain_2d,compute_two_chains);
 }
 
-//:
-// get blocks
+// -- get blocks
 vcl_vector<vtol_block_2d *> *vtol_block_2d::compute_blocks(void)
 {
   LIST_SELF_2d(vtol_block_2d);
@@ -399,7 +370,6 @@ vcl_vector<vtol_block_2d *> *vtol_block_2d::compute_blocks(void)
  *    Operators Functions
  */
 
-//:
 // This is hardly an equality test...but we`ll leave it for now....pav
 // June 1992.
 
@@ -432,8 +402,7 @@ bool vtol_block_2d::operator==(const vtol_block_2d &other) const
   return true;
 }
 
-//:
-// spatial object equality
+// -- spatial object equality
 
 bool vtol_block_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
@@ -444,8 +413,7 @@ bool vtol_block_2d::operator==(const vsol_spatial_object_2d& obj) const
   : false;
 }
 
-//:
-// get a hole cycle
+// -- get a hole cycle
 two_chain_list_2d *vtol_block_2d::hole_cycles(void) const
 {
   two_chain_list_2d *result;
@@ -468,8 +436,7 @@ two_chain_list_2d *vtol_block_2d::hole_cycles(void) const
 }
 
 
-//:
-//add a hole cycle
+// --add a hole cycle
 
 bool vtol_block_2d::add_hole_cycle(vtol_two_chain_2d &new_hole) 
 {
@@ -486,8 +453,7 @@ bool vtol_block_2d::add_hole_cycle(vtol_two_chain_2d &new_hole)
  */
   
 
-//:
-// print data 
+// -- print data 
  
 void vtol_block_2d::print(ostream &strm) const
 {

@@ -9,8 +9,8 @@
 // Created: 17 Feb 2000
 // Purpose: turn a vil_stream * into a FILE *
 
+#include <vcl/vcl_string.h> // C++ specific includes first
 #include <vcl/vcl_cstdio.h>
-#include <vcl/vcl_string.h>
 #include <vil/vil_stream.h>
 
 //: this adapts a vil_stream * into a FILE * by creating a tmpfile().

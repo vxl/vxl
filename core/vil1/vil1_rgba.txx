@@ -3,9 +3,6 @@
 // Class: vil_rgba
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 12 Nov 99
-// Modifications:
-//   
-// See vil_rgba.h
 //
 //-----------------------------------------------------------------------------
 

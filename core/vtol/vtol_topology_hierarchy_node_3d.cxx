@@ -2,7 +2,6 @@
 #include <vtol/vtol_topology_object_3d.h>
 #include <vcl/vcl_algorithm.h>
 
-//:
 // constructor
 vtol_topology_hierarchy_node_3d::vtol_topology_hierarchy_node_3d()
   :  _inferiors(0), _superiors(0)
@@ -10,14 +9,12 @@ vtol_topology_hierarchy_node_3d::vtol_topology_hierarchy_node_3d()
  
 }
 
-//:
 // constructor
 vtol_topology_hierarchy_node_3d::vtol_topology_hierarchy_node_3d
 (int num_inferiors, int num_superiors):_inferiors(num_inferiors),_superiors(num_superiors)
 {
 }
 
-//:
 // destructor
 vtol_topology_hierarchy_node_3d::~vtol_topology_hierarchy_node_3d()
 {
@@ -32,7 +29,7 @@ vtol_topology_hierarchy_node_3d::~vtol_topology_hierarchy_node_3d()
 *  Linking Functions
 */
 
-//:
+// --
 // Static variable.  When true, fast updates are done (superiors are not
 // linked) under the understanding that they will be completed later.
 
@@ -60,8 +57,7 @@ vtol_topology_hierarchy_node_3d::link_inferior (vtol_topology_object_3d *parent,
     return false;
 }
 
-//:
-// link in a superior
+// -- link in a superior
 bool
 vtol_topology_hierarchy_node_3d::link_superior (vtol_topology_object_3d *parent, vtol_topology_object_3d* child)
 {
@@ -82,7 +78,7 @@ vtol_topology_hierarchy_node_3d::link_superior (vtol_topology_object_3d *parent,
     return false;
 }
 
-//: 
+// -- 
 // Creates a link from the calling object to superior by adding
 // superior to the calling object's _superiors list.  The link
 // is one way in that the calling object is not added to 
@@ -108,7 +104,7 @@ vtol_topology_hierarchy_node_3d::link_superior_oneway( vtol_topology_object_3d *
     return false;
 }
 
-//:
+// --
 // Creates a link from the calling object to inferior by adding
 // inferior to the calling object's _inferiors list.  The link
 // is one way in that the calling object is not added to 
@@ -141,8 +137,7 @@ vtol_topology_hierarchy_node_3d::link_inferior_oneway( vtol_topology_object_3d *
  *   Unlinking functions
  */
 
-//:
-// unlink an inferior
+// -- unlink an inferior
 
 bool
 vtol_topology_hierarchy_node_3d::unlink_inferior (vtol_topology_object_3d* parent, vtol_topology_object_3d* child)
@@ -159,8 +154,7 @@ vtol_topology_hierarchy_node_3d::unlink_inferior (vtol_topology_object_3d* paren
 }
 
 
-//:
-// unlink a superior
+// -- unlink a superior
 
 bool
 vtol_topology_hierarchy_node_3d::unlink_superior (vtol_topology_object_3d* parent, vtol_topology_object_3d* child)
@@ -178,8 +172,7 @@ vtol_topology_hierarchy_node_3d::unlink_superior (vtol_topology_object_3d* paren
 }
 
 
-//:
-// unlink a superior
+// -- unlink a superior
 
 bool
 vtol_topology_hierarchy_node_3d::unlink_superior_simple (vtol_topology_object_3d* link)
@@ -195,8 +188,7 @@ vtol_topology_hierarchy_node_3d::unlink_superior_simple (vtol_topology_object_3d
 }
 
 
-//:
-// unlink ab inferior
+// -- unlink an inferior
 
 bool
 vtol_topology_hierarchy_node_3d::unlink_inferior_simple (vtol_topology_object_3d* link)
@@ -210,8 +202,7 @@ vtol_topology_hierarchy_node_3d::unlink_inferior_simple (vtol_topology_object_3d
   else  return false;
 }
 
-//:
-// unlink all superiors
+// -- unlink all superiors
 
 void
 vtol_topology_hierarchy_node_3d::unlink_all_superiors (vtol_topology_object_3d * child)
@@ -232,8 +223,7 @@ vtol_topology_hierarchy_node_3d::unlink_all_superiors (vtol_topology_object_3d *
 }
 
 
-//:
-// unlink all inferiors
+// -- unlink all inferiors
 
 void
 vtol_topology_hierarchy_node_3d::unlink_all_inferiors (vtol_topology_object_3d *parent)
@@ -254,7 +244,7 @@ vtol_topology_hierarchy_node_3d::unlink_all_inferiors (vtol_topology_object_3d *
   _inferiors.clear();
 }
 
-//:
+// --
 // Removes the two way links between the calling object
 // and all its inferiors.  In other words, for each 
 // inferior of thisobj (the invoking object), the pointer 
@@ -279,7 +269,7 @@ vtol_topology_hierarchy_node_3d::unlink_all_inferiors_twoway( vtol_topology_obje
     _inferiors.clear();  // remove all down links
 }
 
-//: 
+// -- 
 // Removes the two way links between the calling object
 // and all its superiors.  In other words, for each 
 // superior of thisobj (the invoking object), the pointer 
@@ -305,8 +295,7 @@ vtol_topology_hierarchy_node_3d::unlink_all_superiors_twoway( vtol_topology_obje
     _superiors.clear();  // remove all up links
 }
 
-//:
-// find function defined 
+// -- find function defined 
 bool vtol_topology_hierarchy_node_3d::find(topology_list_3d &list, 
 					vtol_topology_object_3d *object)
 {
@@ -322,8 +311,7 @@ bool vtol_topology_hierarchy_node_3d::find(topology_list_3d &list,
   return false;
 }
 
-//:
-// remove an element from the list
+// -- remove an element from the list
 
 void vtol_topology_hierarchy_node_3d::remove(topology_list_3d &list, 
 					vtol_topology_object_3d *object)
@@ -353,8 +341,7 @@ void vtol_topology_hierarchy_node_3d::remove(topology_list_3d &list,
 // list traversal.
 
 
-//:
-// print the node
+// -- print the node
 void vtol_topology_hierarchy_node_3d::print(ostream& strm) const
 {
   strm << "<vtol_topology_hierarchy_node_3d " << (void *)this << ">" << endl;

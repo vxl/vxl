@@ -1,5 +1,10 @@
 #ifndef vsl_fit_lines_h
 #define vsl_fit_lines_h
+// .NAME vsl_fit_lines
+// .INCLUDE vsl/vsl_fit_lines.h
+// .FILE vsl_fit_lines.cxx
+//
+// .SECTION Description
 // Definition of a class for fitting lines to Canny edge data
 // using orthognal regression and incremental fitting.
 // The input data comes from a DigitalCurve pointed to by an edge.

@@ -31,7 +31,7 @@
 //     20 Apr 1999 FSM
 //            Added failure flag so that f() and grad() may signal failure to the caller.
 //
-#include <vcl/vcl_string.h>
+#include <vcl/vcl_string.h> // C++ specific includes first
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 

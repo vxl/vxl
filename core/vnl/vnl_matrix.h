@@ -4,6 +4,10 @@
 #pragma interface
 #endif
 
+// .NAME vnl_matrix
+// .INCLUDE vnl/vnl_matrix.h
+// .FILE vnl_matrix.txx
+//
 // .SECTION Description
 // The vnl_matrix<T> class implements two-dimensional arithmetic
 // matrices  for  a user-specified numeric data type. Using the

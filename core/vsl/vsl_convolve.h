@@ -1,5 +1,8 @@
 #ifndef vsl_convolve_h_
 #define vsl_convolve_h_
+// .NAME vsl_convolve
+// .INCLUDE vsl/vsl_convolve.h
+// .FILE vsl_convolve.cxx
 
 #include <vsl/vsl_1d_half_kernel.h>
 #include <vsl/vsl_roi_window.h>

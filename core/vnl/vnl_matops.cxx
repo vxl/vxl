@@ -5,7 +5,6 @@
 // Class: vnl_matops
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 05 Aug 96
-// Modifications:
 //
 //-----------------------------------------------------------------------------
 

@@ -1,4 +1,3 @@
-
 //#include <vtol/some_stubs.h>
 #include <vtol/vtol_zero_chain_3d.h>
 #include <vtol/vtol_macros_3d.h>
@@ -24,8 +23,7 @@ vtol_zero_chain_3d::vtol_zero_chain_3d(vcl_vector<vtol_vertex_3d*> & newvertices
 }
 
 
-//:
-// Copy Constructor....does a deep copy.
+// -- Copy Constructor....does a deep copy.
 vtol_zero_chain_3d::vtol_zero_chain_3d (vtol_zero_chain_3d const& zchain)
 {
   vtol_zero_chain_3d* zc = (vtol_zero_chain_3d*)(&zchain);
@@ -40,32 +38,28 @@ vtol_zero_chain_3d::vtol_zero_chain_3d (vtol_zero_chain_3d const& zchain)
 }
 
 //---------------------------------------------------------------------------
-// Name: clone
-// Task: Clone `this': creation of a new object and initialization
-//       See Prototype pattern
+// -- Clone `this': creation of a new object and initialization
+// See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_3d_ref vtol_zero_chain_3d::clone(void) const
 {
   return new vtol_zero_chain_3d(*this);
 }
 
-//:
-// perfrom a shallow copy 
+// -- perfrom a shallow copy 
 
 vtol_topology_object_3d* vtol_zero_chain_3d::shallow_copy_with_no_links ( void )  
 {
     return new vtol_zero_chain_3d;
 }
 
-//:
 // destructor
 vtol_zero_chain_3d::~vtol_zero_chain_3d() 
 {
 }
 
 //---------------------------------------------------------------------------
-// Name: topology_type
-// Task: Return the topology type
+// -- Return the topology type
 //---------------------------------------------------------------------------
 vtol_zero_chain_3d::vtol_topology_object_3d_type
 vtol_zero_chain_3d::topology_type(void) const
@@ -73,53 +67,46 @@ vtol_zero_chain_3d::topology_type(void) const
   return ZEROCHAIN;
 }
 
-//:
-// get list of vertices
+// -- get list of vertices
 vcl_vector<vtol_vertex_3d*>* vtol_zero_chain_3d::vertices()
 {
   COPY_INF_3d(vtol_vertex_3d);
 }
 
-//:
-// get list of zero chains
+// -- get list of zero chains
 vcl_vector<vtol_zero_chain_3d*>* vtol_zero_chain_3d::zero_chains()
 {
   LIST_SELF_3d(vtol_zero_chain_3d);
 }
 
-//: 
-// get list of edges 
+// -- get list of edges 
 vcl_vector<vtol_edge_3d*>* vtol_zero_chain_3d::edges()
 {
   SEL_SUP_3d(vtol_edge_3d, edges);
 }
 
-//:
-// get list of one chains
+// -- get list of one chains
 
 vcl_vector<vtol_one_chain_3d*>* vtol_zero_chain_3d::one_chains() 
 {
   SEL_SUP_3d(vtol_one_chain_3d, one_chains);
 }
 
-//: 
-// get list of faces 
+// -- get list of faces 
 
 vcl_vector<vtol_face_3d*>* vtol_zero_chain_3d::faces()
 {
   SEL_SUP_3d(vtol_face_3d, faces);
 }
 
-//:
-// get list of two chain
+// -- get list of two chain
 
 vcl_vector<vtol_two_chain_3d*>* vtol_zero_chain_3d::two_chains()
 {
   SEL_SUP_3d(vtol_two_chain_3d, two_chains);
 }
 
-//:
-// get list of blocks 
+// -- get list of blocks 
 vcl_vector<vtol_block_3d*>* vtol_zero_chain_3d::blocks()
 {
   SEL_SUP_3d(vtol_block_3d, blocks);
@@ -129,8 +116,7 @@ vcl_vector<vtol_block_3d*>* vtol_zero_chain_3d::blocks()
 
 /*******  Utility Methods   *************/
 
-//:
-// copy the zero chain
+// -- copy the zero chain
 
 vtol_zero_chain_3d* vtol_zero_chain_3d::copy()
 {
@@ -148,7 +134,6 @@ vtol_zero_chain_3d* vtol_zero_chain_3d::copy()
 }
 
 
-//:
 // operators
 
 bool vtol_zero_chain_3d::operator== (const vtol_zero_chain_3d & z2) const 
@@ -186,8 +171,7 @@ bool vtol_zero_chain_3d::operator== (const vtol_zero_chain_3d & z2) const
 
 
 
-//:
-// spatial object equality
+// -- spatial object equality
 
 bool vtol_zero_chain_3d::operator==(const vsol_spatial_object_3d& obj) const
 {
@@ -201,8 +185,7 @@ bool vtol_zero_chain_3d::operator==(const vsol_spatial_object_3d& obj) const
 
 /*******  Print Methods   *************/
 
-//:
-// print the object 
+// -- print the object 
 
 void vtol_zero_chain_3d::print(ostream& strm) const
 {
@@ -218,7 +201,7 @@ void vtol_zero_chain_3d::describe(ostream& strm, int blanking) const
 }
 
 
-//:
+// --
 //    This method removes the object from the topological structure
 //    by unlinking it.  The removal of the object may recursively cause
 //    the removal of some of the object's superiors if these superiors
@@ -256,7 +239,7 @@ bool vtol_zero_chain_3d::disconnect( vcl_vector< vtol_topology_object_3d * > & c
   return true;
 }
 
-//:
+// --
 //    Removes the vertex from the zero chain.  If the removal of
 //    the vertex invalidates the superior edge, then the zero
 //    chain is recursively removed from the superior edge.
@@ -314,7 +297,7 @@ bool vtol_zero_chain_3d::remove( vtol_vertex_3d * vertex,
 
 }
 
-//:
+// --
 //    For each inferior, this method unlinks the inferior
 //    from this object.  If the inferior now has zero superiors,
 //    the function is called recursively on it.  Finally, this

@@ -3,9 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk, from awf's MatOps code.
-*/
+// .NAME vnl_matlab_print
+// .INCLUDE vnl/vnl_matlab_print.h
+// .FILE vnl_matlab_print.cxx
+// @author fsm@robots.ox.ac.uk, from awf's MatOps code.
+
 template <class T> class vnl_vector;
 template <class T> class vnl_matrix;
 template <class T> class vnl_diag_matrix;

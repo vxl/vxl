@@ -3,6 +3,8 @@
 #define _vsl_canny_ox_h
 //
 // .NAME vsl_canny_ox - The `Sheffield' Canny edge detector
+// .INCLUDE vsl/vsl_canny_ox.h
+// .FILE vsl_canny_ox.cxx
 //
 // .SECTION Description
 //

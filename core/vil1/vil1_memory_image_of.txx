@@ -1,13 +1,6 @@
 // Class: vil_memory_image_of
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 19 Aug 96
-// Modifications:
-//     960916 AWF Added save_pgm and more comments.
-//     961209 Peter Vanroose added operator=() and copy constructor
-//     980710 FSM Changed constructor to take a const Image *, not Image *
-//     981105 AWF Made bilinear/bicubic return double.
-//     990211 Peter Vanroose moved save_pgm() to Templates/ (EGCS complained)
-//     990421 FSM Added constructor from a const fast_array<T> &
 //
 //-----------------------------------------------------------------------------
 

@@ -3,9 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vnl_complex_ops
+// .INCLUDE vnl/vnl_complex_ops.h
+// .FILE vnl_complex_ops.txx
+// @author fsm@robots.ox.ac.uk
 
 #include <vnl/vnl_complex.h>
 #include <vnl/vnl_vector.h>

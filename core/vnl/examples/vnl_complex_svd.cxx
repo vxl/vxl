@@ -3,7 +3,6 @@
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 09 May 97
 // Converted to vxl by Peter Vanroose, February 2000
-// Modifications:
 //-----------------------------------------------------------------------------
 
 #include <vcl/vcl_iostream.h>

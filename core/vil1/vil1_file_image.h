@@ -4,11 +4,14 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .NAME vil_file_image
+// .INCLUDE vil/vil_file_image.h
+// .FILE vil_file_image.cxx
 // .SECTION Author
 //    awf@robots.ox.ac.uk
 // Created: 15 Mar 00
 
-#include <vcl/vcl_string.h>
+#include <vcl/vcl_string.h> // C++ specific includes first
 #include <vil/vil_image.h>
 
 //: Load an image from disk

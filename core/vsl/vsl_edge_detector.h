@@ -3,6 +3,8 @@
 #define _vsl_edge_detector_h
 //
 // .NAME vsl_edge_detector - Charlie's topological edge detector:
+// .INCLUDE vsl/vsl_edge_detector.h
+// .FILE vsl_edge_detector.cxx
 //
 // .SECTION Description
 // A class for performing topologically-accurate edgel detection.  NB: this
