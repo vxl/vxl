@@ -12,6 +12,9 @@
 //
 //
 
+#ifndef NDEBUG
+#include <vcl_iostream.h>
+#endif
 
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
