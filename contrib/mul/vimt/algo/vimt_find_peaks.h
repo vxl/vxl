@@ -135,6 +135,7 @@ inline void vimt_find_image_peaks(vcl_vector<vgl_point_2d<unsigned> >& peaks,
         { 
           peaks.push_back(vgl_point_2d<unsigned>(i,j));
           peak_value.push_back(*pixel);
+
         }
       }
     }
