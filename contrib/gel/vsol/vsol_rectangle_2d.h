@@ -1,5 +1,5 @@
-#ifndef VSOL_RECTANGLE_2D_H
-#define VSOL_RECTANGLE_2D_H
+#ifndef vsol_rectangle_2d_h
+#define vsol_rectangle_2d_h
 //*****************************************************************************
 //
 // .NAME vsol_rectangle_2d - Rectangle of a 2D space
@@ -34,9 +34,9 @@ class vsol_rectangle_2d
 public:
   //---------------------------------------------------------------------------
   //: Constructor from 3 points.
-  //: `new_p0' is the origin of the rectangle. `new_p1' defines the abscissa
-  //: axis and the width. `new_p2' defines the ordinate axis and the height.
-  //: REQUIRE: valid_vertices(new_p0,new_p1,new_p2)
+  //  `new_p0' is the origin of the rectangle. `new_p1' defines the abscissa
+  //  axis and the width. `new_p2' defines the ordinate axis and the height.
+  //  REQUIRE: valid_vertices(new_p0,new_p1,new_p2)
   //---------------------------------------------------------------------------
   explicit vsol_rectangle_2d(const vsol_point_2d_sptr &new_p0,
                              const vsol_point_2d_sptr &new_p1,
@@ -54,7 +54,7 @@ public:
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
-  //: See Prototype pattern
+  //  See Prototype pattern
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_2d_sptr clone(void) const;
 
@@ -123,4 +123,4 @@ public:
   virtual bool valid_vertices(const vcl_vector<vsol_point_2d_sptr> new_vertices) const;
 };
 
-#endif // #ifndef VSOL_RECTANGLE_2D_H
+#endif // vsol_rectangle_2d_h

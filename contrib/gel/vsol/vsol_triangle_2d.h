@@ -1,5 +1,5 @@
-#ifndef VSOL_TRIANGLE_2D_H
-#define VSOL_TRIANGLE_2D_H
+#ifndef vsol_triangle_2d_h
+#define vsol_triangle_2d_h
 //*****************************************************************************
 //
 // .NAME vsol_triangle_2d - Triangle of a 2D space.
@@ -49,7 +49,7 @@ public:
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
-  //: See Prototype pattern
+  //  See Prototype pattern
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_2d_sptr clone(void) const;
 
@@ -112,4 +112,4 @@ public:
   virtual void set_p2(const vsol_point_2d_sptr &new_p2);
 };
 
-#endif // #ifndef VSOL_TRIANGLE_2D_H
+#endif // vsol_triangle_2d_h

@@ -40,7 +40,7 @@ class vsol_polyhedron
 public:
   //---------------------------------------------------------------------------
   //: Constructor from a vcl_vector (i.e., a list of points)
-  //: REQUIRE: new_vertices.size()>=4
+  //  REQUIRE: new_vertices.size()>=4
   //---------------------------------------------------------------------------
   explicit vsol_polyhedron(vcl_vector<vsol_point_3d_sptr> const& new_vertices);
 
@@ -56,7 +56,7 @@ public:
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
-  //: See Prototype pattern
+  //  See Prototype pattern
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_3d_sptr clone(void) const { return new vsol_polyhedron(*this); }
 
@@ -66,7 +66,7 @@ public:
 
   //---------------------------------------------------------------------------
   //: Return vertex `i'
-  //: REQUIRE: valid_index(i)
+  //  REQUIRE: valid_index(i)
   //---------------------------------------------------------------------------
   vsol_point_3d_sptr vertex(int i) const { return valid_index(i)?storage_[i]:(vsol_point_3d_sptr)0; }
 

@@ -99,8 +99,6 @@ protected:
 
 // Constructors/Destructors--------------------------------------------------
 
-  //: \brief constructors and destructors
-
   virtual ~vsol_spatial_object_2d();
   explicit vsol_spatial_object_2d(void);
   vsol_spatial_object_2d(const vsol_spatial_object_2d &other);
@@ -108,34 +106,26 @@ protected:
 public:
 
 // Data Access---------------------------------------------------------------
-  //: \brief get the spatial type
 
+  //: get the spatial type
   virtual vsol_spatial_object_2d::vsol_spatial_object_2d_type
   spatial_type(void) const=0;
 
   virtual const char *get_name(void) const;
 
-  //---------------------------------------------------------------------------
   //: compute bounding box, do nothing in this case
-  //---------------------------------------------------------------------------
   virtual void compute_bounding_box(void);
 
-  //: \brief get bounding box
-
+  //: get bounding box
   virtual vsol_box_2d *get_bounding_box(void);
 
-  //: \brief get set id
-  virtual int get_id(void) const
-  {
-    return _id;
-  }
-  virtual void set_id(int i)
-  {
-    _id = i;
-  }
+  //: get id
+  virtual int get_id(void) const { return _id; }
 
-  //: \brief protect and unprotect
+  //: set id
+  virtual void set_id(int i) { _id = i; }
 
+  //: protect and unprotect
   virtual void un_protect(void)
   {
     ref_count--;
@@ -144,15 +134,16 @@ public:
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
-  //: See Prototype pattern
+  //  See Prototype pattern
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_2d_sptr clone(void) const=0;
 #if 0
   virtual vsol_spatial_object_2d* SpatialCopy() { return (vsol_spatial_object_2d*) NULL; }
 #endif
+
   // Tag Flag and ID methods
 
-  //: \brief  set user flag 1-6
+  //: set user flag 1-6
   inline void set_user_flag(unsigned int flag);
   inline unsigned int get_user_flag(unsigned int flag);
   inline void unset_user_flag(unsigned int flag);
@@ -167,8 +158,7 @@ public:
   // virtual SpatialGroup *  CastToSpatialGroup()   { return NULL;}
   // virtual SpatialGroup const* CastToSpatialGroup() const { return NULL;}
 
-  //: \brief cast to topology object
-
+  //: cast to topology object
   virtual vtol_topology_object_2d* cast_to_topology_object_2d() { return NULL;}
 
   //virtual GeometryObject* CastToGeometryObject() { return NULL;}
@@ -176,26 +166,14 @@ public:
 
 public:
 
-  //: \brief  protected destroy
+  //: protected destroy
   virtual void protected_destroy(void);
 
-  //: \brief  Geometry Accessors
-  virtual vcl_vector<double> *GetLocation(void)
-  {
-    return 0;
-  }
-  virtual vcl_vector<double> *GetOrientation(void)
-  {
-    return 0;
-  }
-  virtual vcl_vector<double> *GetSize(void)
-  {
-    return 0;
-  }
-  virtual vcl_vector<double> *GetScalar(void)
-  {
-    return 0;
-  }
+  //: Geometry Accessors
+  virtual vcl_vector<double> *GetLocation(void) { return 0; }
+  virtual vcl_vector<double> *GetOrientation(void) { return 0; }
+  virtual vcl_vector<double> *GetSize(void) { return 0; }
+  virtual vcl_vector<double> *GetScalar(void) { return 0; }
 
   const vcl_vector<double> *GetLocation(void) const
   {
@@ -278,7 +256,8 @@ public:
   virtual bool Shear(float);    // leaving GetOrientation() fixed
 #endif
 
-  //: \brief bounding box accessors
+  // bounding box accessors
+
   inline void check_update_bounding_box(void);  // Test consistency of bound
   // inline void get_min_location(vcl_vector<double>& min_loc);
   // inline void get_max_location(vcl_vector<double>& max_loc);
@@ -291,7 +270,7 @@ public:
   virtual void set_min_y(float ymin);
   virtual void set_max_y(float ymax);
 
-  //: \brief operators
+  // operators
 
   virtual bool operator==(const vsol_spatial_object_2d &obj) const
   {
@@ -305,8 +284,8 @@ public:
   //-------------------------------------------------------------------------
 
   //---------------------------------------------------------------------------
-  //: The same behavior than dynamic_cast<>. Needed because VXL is not
-  //: compiled with -frtti :-(
+  //: The same behavior than dynamic_cast<>.
+  // Needed because VXL is not compiled with -frtti :-(
   //---------------------------------------------------------------------------
   virtual const vsol_group_2d *cast_to_group(void) const;
 
@@ -328,10 +307,11 @@ inline void vsol_spatial_object_2d::set_tag_id(int id)
   _tag = ( (id & VSOL_DEXID_BITS)     |  ( _tag & VSOL_FLAG_BITS ));
 }
 
-//: Bounds Accessors:  min_ and max_ are provided as methods on vsol_spatial_object_2d
-//                    to be consistent with the previous interface
-//                    Additional bounds accessors are available directly
-//                    on vsol_box_2d.  - JLM
+//: Bounds Accessors:
+// min_ and max_ are provided as methods on vsol_spatial_object_2d
+// to be consistent with the previous interface
+// Additional bounds accessors are available directly
+// on vsol_box_2d.  - JLM
 
 inline void vsol_spatial_object_2d::check_update_bounding_box(void)  // Test consistency of bound
 {
@@ -429,8 +409,8 @@ inline unsigned int  vsol_spatial_object_2d::get_user_flag(unsigned int flag)
   return (_tag & flag) ? 1 : 0;
 }
 
-//: set_ a flag for a spatialObject, flag can be VSOL_FLAG[1-6] value is
-//    set to zero.
+//: set_ a flag for a spatialObject,
+//    flag can be VSOL_FLAG[1-6] value is set to zero.
 inline void vsol_spatial_object_2d::unset_user_flag(unsigned int flag)
 {
   _tag = ( _tag & (~flag) );

@@ -1,5 +1,5 @@
-#ifndef VSOL_POLYGON_2D_H
-#define VSOL_POLYGON_2D_H
+#ifndef vsol_polygon_2d_h
+#define vsol_polygon_2d_h
 //*****************************************************************************
 //
 // .NAME vsol_polygon_2d - Polygon of a 2D space
@@ -36,9 +36,8 @@ class vsol_polygon_2d
   //***************************************************************************
 public:
   //---------------------------------------------------------------------------
-  //: Constructor from a vcl_vector (not a geometric vector but a list of
-  //: points)
-  //: REQUIRE: new_vertices.size()>=3
+  //: Constructor from a vcl_vector (not a geometric vector but a list of points)
+  //  REQUIRE: new_vertices.size()>=3
   //---------------------------------------------------------------------------
   explicit vsol_polygon_2d(const vcl_vector<vsol_point_2d_sptr> &new_vertices);
 
@@ -54,7 +53,7 @@ public:
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
-  //: See Prototype pattern
+  //  See Prototype pattern
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_2d_sptr clone(void) const;
 
@@ -64,7 +63,7 @@ public:
 
   //---------------------------------------------------------------------------
   //: Return vertex `i'
-  //: REQUIRE: valid_index(i)
+  //  REQUIRE: valid_index(i)
   //---------------------------------------------------------------------------
   virtual vsol_point_2d_sptr vertex(const int i) const;
 
@@ -132,4 +131,4 @@ protected:
   vcl_vector<vsol_point_2d_sptr> *storage_;
 };
 
-#endif // #ifndef VSOL_POLYGON_2D_H
+#endif // vsol_polygon_2d_h

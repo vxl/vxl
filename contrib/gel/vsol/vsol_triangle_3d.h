@@ -1,5 +1,5 @@
-#ifndef VSOL_TRIANGLE_3D_H
-#define VSOL_TRIANGLE_3D_H
+#ifndef vsol_triangle_3d_h
+#define vsol_triangle_3d_h
 //*****************************************************************************
 //
 // .NAME vsol_triangle_3d - Triangle of a 3D space.
@@ -52,7 +52,7 @@ public:
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
-  //: See Prototype pattern
+  //  See Prototype pattern
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_3d_sptr clone(void) const;
 
@@ -125,12 +125,12 @@ public:
 
   //---------------------------------------------------------------------------
   //: Return the unit normal vector at point `p'.
-  //: Has to be deleted manually. Depends on the vertices order. If some
-  //: vertices are aligned, the normal is the null vector.
-  //: REQUIRE: in(p)
+  //  Has to be deleted manually. Depends on the vertices order. If some
+  //  vertices are aligned, the normal is the null vector.
+  //  REQUIRE: in(p)
   //---------------------------------------------------------------------------
   virtual vnl_vector_fixed<double,3> *
   normal_at_point(const vsol_point_3d_sptr &p) const;
 };
 
-#endif // #ifndef VSOL_TRIANGLE_3D_H
+#endif // vsol_triangle_3d_h

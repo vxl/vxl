@@ -1,5 +1,5 @@
-#ifndef VSOL_SURFACE_3D_H
-#define VSOL_SURFACE_3D_H
+#ifndef vsol_surface_3d_h
+#define vsol_surface_3d_h
 //*****************************************************************************
 //
 // .NAME vsol_surface_3d - Abstract surface in a 3D space
@@ -48,10 +48,10 @@ public:
 
   //---------------------------------------------------------------------------
   //: Return the unit normal vector at point `p'. Have to be deleted manually
-  //: REQUIRE: in(p)
+  //  REQUIRE: in(p)
   //---------------------------------------------------------------------------
   virtual vnl_vector_fixed<double,3> *
   normal_at_point(const vsol_point_3d_sptr &p) const=0;
 };
 
-#endif // #ifndef VSOL_SURFACE_3D_H
+#endif // vsol_surface_3d_h

@@ -1,5 +1,5 @@
-#ifndef VSOL_POINT_3D_H
-#define VSOL_POINT_3D_H
+#ifndef vsol_point_3d_h
+#define vsol_point_3d_h
 //*****************************************************************************
 //
 // .NAME vsol_point_3d - Point of a 3D space
@@ -54,7 +54,7 @@ public:
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
-  //: See Prototype pattern
+  //  See Prototype pattern
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_3d_sptr clone(void) const;
 
@@ -87,10 +87,12 @@ public:
   virtual bool operator==(const vsol_point_3d &other) const;
   virtual bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object_3d
 
-//  //---------------------------------------------------------------------------
-//  //: Has `this' not the same coordinates than `other' ?
-//  //---------------------------------------------------------------------------
-//  virtual bool operator!=(const vsol_point_3d &other) const;
+#if 0
+  //---------------------------------------------------------------------------
+  //: Has `this' not the same coordinates than `other' ?
+  //---------------------------------------------------------------------------
+  virtual bool operator!=(const vsol_point_3d &other) const;
+#endif
 
   //***************************************************************************
   // Status report
@@ -167,4 +169,4 @@ private:
   vgl_point_3d<double> *p_;
 };
 
-#endif // #ifndef VSOL_POINT_3D_H
+#endif // vsol_point_3d_h

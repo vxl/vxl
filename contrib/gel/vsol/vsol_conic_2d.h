@@ -6,8 +6,9 @@
 // .LIBRARY vsol
 // .INCLUDE vsol/vsol_conic_2d.h
 // .FILE    vsol/vsol_conic_2d.cxx
-//
-// .SECTION Description
+
+//:
+// \file
 // The conic is defined by its cartesian equation
 // a x^2 +b xy +c y^2 +d x +e y +f
 //
@@ -65,7 +66,7 @@ public:
 
   //---------------------------------------------------------------------------
   //: Constructor from coefficient of the cartesian equation
-  //: `new_a'x^2+`new_b'xy+`new_c'y^2+`new_d'x+`new_e'y+`new_f'
+  //  `new_a'x^2+`new_b'xy+`new_c'y^2+`new_d'x+`new_e'y+`new_f'
   //---------------------------------------------------------------------------
   explicit vsol_conic_2d(double new_a,
                          double new_b,
@@ -86,7 +87,7 @@ public:
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
-  //: See Prototype pattern
+  // See Prototype pattern
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_2d_sptr clone(void) const;
 
@@ -209,10 +210,11 @@ public:
   virtual bool is_coincident_lines(void) const;
 
   //---------------------------------------------------------------------------
-  //: Return 3 ellipse parameters: centre (`cx',`cy'),
-  //:                              orientation `phi',
-  //:                              size (`width',`height')
-  //: REQUIRE: is_real_ellipse()
+  //: Return 3 ellipse parameters:
+  //  -                            centre (`cx',`cy'),
+  //  -                            orientation `phi',
+  //  -                            size (`width',`height')
+  //  REQUIRE: is_real_ellipse()
   //---------------------------------------------------------------------------
   virtual void ellipse_parameters(double &cx,
                                   double &cy,
@@ -221,9 +223,10 @@ public:
                                   double &height) const;
 
   //---------------------------------------------------------------------------
-  //: Return 2 parabola parameters: top (`cx',`cy'),
-  //                                orientation (`cosphi',`sinphi')
-  //: REQUIRE: is_parabola()
+  //: Return 2 parabola parameters:
+  //  -                             top (`cx',`cy'),
+  //  -                             orientation (`cosphi',`sinphi')
+  //  REQUIRE: is_parabola()
   //---------------------------------------------------------------------------
   virtual void parabola_parameters(double &cx,
                                    double &cy,
@@ -236,8 +239,8 @@ public:
   virtual double length(void) const;
 
   //---------------------------------------------------------------------------
-  //: Return the matrix associated to the coefficients. Has to be deleted
-  //: manually
+  //: Return the matrix associated to the coefficients.
+  //  Has to be deleted manually
   //---------------------------------------------------------------------------
   virtual vnl_double_3x3 *matrix(void) const;
 
@@ -247,13 +250,13 @@ public:
 
   //---------------------------------------------------------------------------
   //: Set the first point of the curve
-  //: REQUIRE: in(new_p0)
+  //  REQUIRE: in(new_p0)
   //---------------------------------------------------------------------------
   virtual void set_p0(const vsol_point_2d_sptr &new_p0);
 
   //---------------------------------------------------------------------------
   //: Set the last point of the curve
-  //: REQUIRE: in(new_p1)
+  //  REQUIRE: in(new_p1)
   //---------------------------------------------------------------------------
   virtual void set_p1(const vsol_point_2d_sptr &new_p1);
 
@@ -273,7 +276,7 @@ private:
 
   //---------------------------------------------------------------------------
   //: Are `x' and `y' almost equal ?
-  //: the comparison uses an adaptative epsilon
+  //  the comparison uses an adaptative epsilon
   //---------------------------------------------------------------------------
   inline static bool are_equal(double x, double y) {
     // epsilon is a fixed fraction of the absolute average of x and y
@@ -284,8 +287,8 @@ private:
 
   //---------------------------------------------------------------------------
   //: Is `x' almost zero ?
-  //: the comparison uses a fixed epsilon, as the adaptive one from
-  //: are_equal() makes no sense here.
+  //  the comparison uses a fixed epsilon, as the adaptive one from
+  //  are_equal() makes no sense here.
   //---------------------------------------------------------------------------
   static bool is_zero(double x) { return vnl_math_abs(x)<=1e-6; }
 

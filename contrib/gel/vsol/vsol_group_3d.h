@@ -1,5 +1,5 @@
-#ifndef VSOL_GROUP_3D_H
-#define VSOL_GROUP_3D_H
+#ifndef vsol_group_3d_h
+#define vsol_group_3d_h
 //*****************************************************************************
 //
 // .NAME vsol_group_3d - Group of Spatial object in a 3D space
@@ -38,19 +38,19 @@ public:
 
   //---------------------------------------------------------------------------
   //: Copy constructor.
-  //: The objects of the group are not duplicated
+  //  The objects of the group are not duplicated
   //---------------------------------------------------------------------------
   vsol_group_3d(const vsol_group_3d &other);
 
   //---------------------------------------------------------------------------
   //: Destructor
-  //: The objects of the group are not deleted
+  //  The objects of the group are not deleted
   //---------------------------------------------------------------------------
   virtual ~vsol_group_3d();
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
-  //: See Prototype pattern
+  //  See Prototype pattern
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_3d_sptr clone(void) const;
 
@@ -60,7 +60,7 @@ public:
 
   //---------------------------------------------------------------------------
   //: Return the object `i'
-  //: REQUIRE: i>=0 and i<size()
+  //  REQUIRE: i>=0 and i<size()
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_3d_sptr object(const int i) const;
 
@@ -75,7 +75,7 @@ public:
 
   //---------------------------------------------------------------------------
   //: Compute the bounding box of `this'
-  //: REQUIRE: size()>0
+  //  REQUIRE: size()>0
   //---------------------------------------------------------------------------
   virtual void compute_bounding_box(void);
 
@@ -109,13 +109,13 @@ public:
 
   //---------------------------------------------------------------------------
   //: Remove object `i' of `this' (not delete it)
-  //: REQUIRE: i>=0 and i<size()
+  //  REQUIRE: i>=0 and i<size()
   //---------------------------------------------------------------------------
   virtual void remove_object(const int i);
 
   //---------------------------------------------------------------------------
-  //: The same behavior than dynamic_cast<>. Needed because VXL is not
-  //: compiled with -frtti :-(
+  //: The same behavior than dynamic_cast<>.
+  //  Needed because VXL is not compiled with -frtti :-(
   //---------------------------------------------------------------------------
   virtual const vsol_group_3d *cast_to_group(void) const;
 
@@ -129,4 +129,4 @@ private:
   vcl_list<vsol_spatial_object_3d_sptr> *storage_;
 };
 
-#endif // #ifndef VSOL_GROUP_3D_H
+#endif // vsol_group_3d_h

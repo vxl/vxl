@@ -1,5 +1,5 @@
-#ifndef VSOL_LINE_2D_H
-#define VSOL_LINE_2D_H
+#ifndef vsol_line_2d_h
+#define vsol_line_2d_h
 //*****************************************************************************
 //
 // .NAME vsol_line_2d - Straight line segment in a 2D space.
@@ -52,7 +52,7 @@ public:
 
   //---------------------------------------------------------------------------
   //: Copy constructor
-  //: no duplication of the points
+  //  no duplication of the points
   //---------------------------------------------------------------------------
   vsol_line_2d(const vsol_line_2d &other);
 
@@ -68,7 +68,7 @@ public:
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
-  //: See Prototype pattern
+  //  See Prototype pattern
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_2d_sptr clone(void) const;
 
@@ -146,8 +146,8 @@ public:
 
   //---------------------------------------------------------------------------
   //: Set the length of `this'. Doesn't change middle point and orientation.
-  //: If p0 and p1 are equal then the direction is set to (1,0)
-  //: REQUIRE: new_length>=0
+  //  If p0 and p1 are equal then the direction is set to (1,0)
+  //  REQUIRE: new_length>=0
   //---------------------------------------------------------------------------
   virtual void set_length(const double new_length);
 
@@ -162,7 +162,7 @@ public:
 
   //---------------------------------------------------------------------------
   //: Return the tangent to `this' at `p'. Has to be deleted manually
-  //: REQUIRE: in(p)
+  //  REQUIRE: in(p)
   //---------------------------------------------------------------------------
   virtual vgl_homg_line_2d<double> *
   tangent_at_point(const vsol_point_2d_sptr &p) const;
@@ -183,4 +183,4 @@ private:
   vsol_point_2d_sptr p1_;
 };
 
-#endif // #ifndef VSOL_LINE_2D_H
+#endif // vsol_line_2d_h

@@ -1,5 +1,5 @@
-#ifndef VSOL_POLYGON_3D_H
-#define VSOL_POLYGON_3D_H
+#ifndef vsol_polygon_3d_h
+#define vsol_polygon_3d_h
 //*****************************************************************************
 //
 // .NAME vsol_polygon_3d - Polygon of a 3D space
@@ -36,9 +36,8 @@ class vsol_polygon_3d
   //***************************************************************************
 public:
   //---------------------------------------------------------------------------
-  //: Constructor from a vcl_vector (not a geometric vector but a list of
-  //: points)
-  //: REQUIRE: new_vertices.size()>=3 and valid_vertices(new_vertices)
+  //: Constructor from a vcl_vector (not a geometric vector but a list of points)
+  //  REQUIRE: new_vertices.size()>=3 and valid_vertices(new_vertices)
   //---------------------------------------------------------------------------
   explicit vsol_polygon_3d(const vcl_vector<vsol_point_3d_sptr> &new_vertices);
 
@@ -54,7 +53,7 @@ public:
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
-  //: See Prototype pattern
+  //  See Prototype pattern
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_3d_sptr clone(void) const;
 
@@ -64,7 +63,7 @@ public:
 
   //---------------------------------------------------------------------------
   //: Return vertex `i'
-  //: REQUIRE: valid_index(i)
+  //  REQUIRE: valid_index(i)
   //---------------------------------------------------------------------------
   virtual vsol_point_3d_sptr vertex(const int i) const;
 
@@ -118,8 +117,8 @@ public:
   virtual bool valid_index(const int i) const;
 
   //---------------------------------------------------------------------------
-  //: Are `new_vertices' valid vertices ? That is are all vertices in the same
-  //: plane ?
+  //: Are `new_vertices' valid vertices ?
+  //  That is are all vertices in the same plane ?
   //---------------------------------------------------------------------------
   virtual bool valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_vertices) const;
 
@@ -134,7 +133,7 @@ public:
 
   //---------------------------------------------------------------------------
   //: Return the unit normal vector at point `p'. Have to be deleted manually
-  //: REQUIRE: in(p)
+  //  REQUIRE: in(p)
   //---------------------------------------------------------------------------
   virtual vnl_vector_fixed<double,3> *
   normal_at_point(const vsol_point_3d_sptr &p) const;
@@ -154,4 +153,4 @@ protected:
   vcl_vector<vsol_point_3d_sptr> *storage_;
 };
 
-#endif // #ifndef VSOL_POLYGON_3D_H
+#endif // vsol_polygon_3d_h

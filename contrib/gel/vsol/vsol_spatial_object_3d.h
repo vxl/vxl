@@ -70,7 +70,7 @@ const unsigned int VSOL_FLAG_BITS      = 0xFF000000;
 
 #endif
 
-//: \brief base class for spatial object
+//: base class for spatial object
 
 class vsol_spatial_object_3d
   : public vbl_timestamp,
@@ -102,7 +102,7 @@ protected:
 
 protected:
 
-//: \brief Constructors/Destructors
+// Constructors/Destructors
 
   virtual ~vsol_spatial_object_3d();
   inline vsol_spatial_object_3d(void);
@@ -116,18 +116,18 @@ public:
 
 // Data Access---------------------------------------------------------------
 
-  //: \brief data description
+  //: data description
   virtual vsol_spatial_object_3d::vsol_spatial_object_3d_type
   spatial_type(void) const=0;
   const char *get_name(void) const;
 
-  //: \brief bounding box stuff
+  //: bounding box stuff
 
   inline virtual void compute_bounding_box(void);
 
   vsol_box_3d *get_bounding_box(void);
 
-  //: \brief get set id of objects
+  //: get set id of objects
 
   int get_id(void) const
   {
@@ -138,8 +138,7 @@ public:
     _id = i;
   }
 
-  //: \brief unprotect the object
-
+  //: unprotect the object
   virtual void un_protect(void)
   {
     ref_count--;
@@ -148,7 +147,7 @@ public:
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
-  //: See Prototype pattern
+  //  See Prototype pattern
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_3d_sptr clone(void) const=0;
 #if 0
@@ -159,7 +158,7 @@ public:
 #endif
   // Tag Flag and ID methods
 
-  //: \brief  set user flag 1-6
+  //: set user flag 1-6
   inline void set_user_flag(unsigned int flag);
   inline unsigned int  get_user_flag(unsigned int flag);
   inline void unset_user_flag(unsigned int flag);
@@ -186,23 +185,11 @@ public:
 
   virtual void protected_destroy(void);
 
-//: \brief  Geometry Accessors
-  virtual vcl_vector<double> *GetLocation(void)
-  {
-    return 0;
-  }
-  virtual vcl_vector<double> *GetOrientation(void)
-  {
-    return 0;
-  }
-  virtual vcl_vector<double> *GetSize(void)
-  {
-    return 0;
-  }
-  virtual vcl_vector<double> *GetScalar(void)
-  {
-    return 0;
-  }
+//: Geometry Accessors
+  virtual vcl_vector<double> *GetLocation(void) { return 0; }
+  virtual vcl_vector<double> *GetOrientation(void) { return 0; }
+  virtual vcl_vector<double> *GetSize(void) { return 0; }
+  virtual vcl_vector<double> *GetScalar(void) { return 0; }
 
   const vcl_vector<double> *GetLocation(void) const
   {
@@ -289,7 +276,7 @@ public:
   virtual bool Shear(float);    // leaving GetOrientation() fixed
 #endif
 
-  //: \brief bounding box accessors
+  //: bounding box accessors
 
   inline void check_update_bounding_box(void);  // Test consistency of bound
   // inline void get_min_location(vcl_vector<double>& min_loc);
@@ -307,22 +294,18 @@ public:
   virtual void set_min_z(float zmin);
   virtual void set_max_z(float zmax);
 
-  //: \brief Operators
+  //: Operators
 
   virtual bool operator==(vsol_spatial_object_3d const& obj) const
   {
     return this==&obj;
   }
-//  bool operator!=(vsol_spatial_object_3d const& obj) const
-//  {
-//    return !(*this==obj);
-//  }
 
   //-------------------------------------------------------------------------
 
   //---------------------------------------------------------------------------
-  //: The same behavior than dynamic_cast<>. Needed because VXL is not
-  //: compiled with -frtti :-(
+  //: The same behavior than dynamic_cast<>.
+  // Needed because VXL is not compiled with -frtti :-(
   //---------------------------------------------------------------------------
   virtual const vsol_group_3d *cast_to_group(void) const;
 
@@ -417,7 +400,6 @@ inline float vsol_spatial_object_3d::get_min_x(void)
   this->check_update_bounding_box();
   return _bounding_box->get_min_x();
 }
-
 
 
 inline float vsol_spatial_object_3d::get_max_x(void)

@@ -1,5 +1,5 @@
-#ifndef VSOL_RECTANGLE_3D_H
-#define VSOL_RECTANGLE_3D_H
+#ifndef vsol_rectangle_3d_h
+#define vsol_rectangle_3d_h
 //*****************************************************************************
 //
 // .NAME vsol_rectangle_3d - Rectangle of a 3D space
@@ -37,9 +37,9 @@ class vsol_rectangle_3d
 public:
   //---------------------------------------------------------------------------
   //: Constructor from 3 points.
-  //: `new_p0' is the origin of the rectangle. `new_p1' defines the abscissa
-  //: axis and the width. `new_p2' defines the ordinate axis and the height.
-  //: REQUIRE: valid_vertices(new_p0,new_p1,new_p2)
+  //  `new_p0' is the origin of the rectangle. `new_p1' defines the abscissa
+  //  axis and the width. `new_p2' defines the ordinate axis and the height.
+  //  REQUIRE: valid_vertices(new_p0,new_p1,new_p2)
   //---------------------------------------------------------------------------
   explicit vsol_rectangle_3d(const vsol_point_3d_sptr &new_p0,
                              const vsol_point_3d_sptr &new_p1,
@@ -57,7 +57,7 @@ public:
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
-  //: See Prototype pattern
+  //  See Prototype pattern
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_3d_sptr clone(void) const;
 
@@ -136,10 +136,10 @@ public:
 
   //---------------------------------------------------------------------------
   //: Return the unit normal vector at point `p'. Have to be deleted manually
-  //: REQUIRE: in(p)
+  //  REQUIRE: in(p)
   //---------------------------------------------------------------------------
   virtual vnl_vector_fixed<double,3> *
   normal_at_point(const vsol_point_3d_sptr &p) const;
 };
 
-#endif // #ifndef VSOL_RECTANGLE_3D_H
+#endif // vsol_rectangle_3d_h
