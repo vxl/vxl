@@ -30,7 +30,7 @@ extern "C" {
     static real sum1, sum2;
     static integer done;
     static real srvec[11];
-    extern /* Subroutine */ int srule_(U_fp, real *, real *, real *, real *), 
+    extern /* Subroutine */ int srule_(E_fp, real *, real *, real *, real *), 
 	    refine_(U_fp, integer *, real *, integer *, integer *);
 
     /* Parameter adjustments */
@@ -39,7 +39,7 @@ extern "C" {
     /* Function Body */
     iterating = 0;
     done = 1;
-    srule_((U_fp)f, a, b, tol, srvec);
+    srule_((E_fp)f, a, b, tol, srvec);
     for (k = 1; k <= 11; ++k) {
 	srmat[k * 101 + 1] = srvec[k - 1];
     }
@@ -78,7 +78,7 @@ extern "C" {
     static real s2, fa, fb, fc, err, tol, tol2;
     static integer done;
     static real check;
-    extern /* Subroutine */ int srule_(U_fp, real *, real *, real *, real *);
+    extern /* Subroutine */ int srule_(E_fp, real *, real *, real *, real *);
     static real sr0vec[11], sr1vec[11], sr2vec[11];
 
     /* Parameter adjustments */
@@ -106,8 +106,8 @@ extern "C" {
 	return 0;
     }
     tol2 = tol / 2;
-    srule_((U_fp)f, &a, &c__, &tol2, sr1vec);
-    srule_((U_fp)f, &c__, &b, &tol2, sr2vec);
+    srule_((E_fp)f, &a, &c__, &tol2, sr1vec);
+    srule_((E_fp)f, &c__, &b, &tol2, sr2vec);
     err = (r__1 = sr0vec[6] - sr1vec[6] - sr2vec[6], dabs(r__1)) / 10;
     if (err < tol) {
 	sr0vec[10] = (float)1.;
