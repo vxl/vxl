@@ -14,6 +14,8 @@
 
 vcl_ostream& vil_image::print(vcl_ostream& s) const
 {
+  if (! *this) return s << "[vil_image: empty]";
+
   s << "[vil_image: size " << width() << " x " << height();
   char const *fmt = file_format();
   s << ", file format " << (fmt ? fmt : "unknown");
