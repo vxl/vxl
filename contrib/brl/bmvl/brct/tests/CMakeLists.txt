@@ -7,6 +7,7 @@ INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas)
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg)
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bmvl)
+
 SET(BUILD_VGUI_TEST "NO")
 IF(BUILD_VGUI_TEST)
 # determines if vgui is built and opengl is available
@@ -20,13 +21,11 @@ SET(brct_test_sources
   test_brct_kalman.cxx
 )
 
-
 ADD_EXECUTABLE(brct_test_vgui ${brct_test_sources})
 TARGET_LINK_LIBRARIES(brct_test_vgui vcl vgui brct bugl bgui)
 
 ENDIF(HAS_VGUI)
 ENDIF(BUILD_VGUI_TEST)
-
 
 ADD_EXECUTABLE(brct_test_all 
   test_driver.cxx
@@ -34,3 +33,9 @@ ADD_EXECUTABLE(brct_test_all
   brct_test_synthetic_data.cxx
 )
 TARGET_LINK_LIBRARIES(brct_test_all brct bugl bgui testlib)	
+
+ADD_TEST(brct_test_synthetic_data brct_test_all brct_test_synthetic_data)
+ADD_TEST(brct_test_compute_P      brct_test_all brct_test_compute_P)
+
+ADD_EXECUTABLE(brct_test_include test_include.cxx)
+TARGET_LINK_LIBRARIES(brct_test_include brct)
