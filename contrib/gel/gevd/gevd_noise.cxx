@@ -119,7 +119,7 @@ gevd_noise::EdgelsInCenteredROI(const gevd_bufferxy& magnitude,
   const int xmax = xmin + sx;
   const int ymin = (magnitude.GetSizeY() - sy) / 2;
   const int ymax = ymin + sy;
-  int i, j; float strength, _s, s_, dx, dy, r;
+  int i, j; float strength, x_s, s_x, dx, dy, r;
   for (j = ymin; j < ymax; j++)
     for (i = xmin; i < xmax; i++) {
       strength = floatPixel(magnitude, i, j);
@@ -130,34 +130,34 @@ gevd_noise::EdgelsInCenteredROI(const gevd_bufferxy& magnitude,
         if (dx > 0) {           // which octant?
           if (dx > dy) {        // 0-45 degree
             r = dy / dx;
-            _s = (r*floatPixel(magnitude, i-1, j-1) +
-                  (1-r)*floatPixel(magnitude, i-1, j));
-            s_ = (r*floatPixel(magnitude, i+1, j+1) +
-                  (1-r)*floatPixel(magnitude, i+1, j));
+            x_s = (r*floatPixel(magnitude, i-1, j-1) +
+                   (1-r)*floatPixel(magnitude, i-1, j));
+            s_x = (r*floatPixel(magnitude, i+1, j+1) +
+                   (1-r)*floatPixel(magnitude, i+1, j));
           } else {              // 45-90 degree
             r = dx / dy;
-            _s = (r*floatPixel(magnitude, i-1, j-1) +
-                  (1-r)*floatPixel(magnitude, i, j-1));
-            s_ = (r*floatPixel(magnitude, i+1, j+1) +
-                  (1-r)*floatPixel(magnitude, i, j+1));
+            x_s = (r*floatPixel(magnitude, i-1, j-1) +
+                   (1-r)*floatPixel(magnitude, i, j-1));
+            s_x = (r*floatPixel(magnitude, i+1, j+1) +
+                   (1-r)*floatPixel(magnitude, i, j+1));
           }
         } else {
           dx = -dx;             // absolute value
           if (dy > dx) {        // 90-135 degree
             r = dx / dy;
-            _s = (r*floatPixel(magnitude, i-1, j+1) +
-                  (1-r)*floatPixel(magnitude, i, j+1));
-            s_ = (r*floatPixel(magnitude, i+1, j-1) +
-                  (1-r)*floatPixel(magnitude, i, j-1));
+            x_s = (r*floatPixel(magnitude, i-1, j+1) +
+                   (1-r)*floatPixel(magnitude, i, j+1));
+            s_x = (r*floatPixel(magnitude, i+1, j-1) +
+                   (1-r)*floatPixel(magnitude, i, j-1));
           } else {              // 135-180 degree
             r = dy / dx;
-            _s = (r*floatPixel(magnitude, i+1, j-1) +
-                  (1-r)*floatPixel(magnitude, i+1, j));
-            s_ = (r*floatPixel(magnitude, i-1, j+1) +
-                  (1-r)*floatPixel(magnitude, i-1, j));
+            x_s = (r*floatPixel(magnitude, i+1, j-1) +
+                   (1-r)*floatPixel(magnitude, i+1, j));
+            s_x = (r*floatPixel(magnitude, i-1, j+1) +
+                   (1-r)*floatPixel(magnitude, i-1, j));
           }
         }
-        if (_s < strength && strength > s_)  // strict local maximum
+        if (x_s < strength && strength > s_x)  // strict local maximum
           edgels[nedgel++] = strength;
       }
     }
@@ -180,9 +180,9 @@ gevd_noise::EstimateSensorTexture(float& sensor, float& texture) const
 {
   // 1. Compute derivative of histogram, dh(x)
   float* dhist = new float[nbin];
+#ifdef TRACE_DEBUG
   float mag = gevd_float_operators::Slope(hist, dhist, nbin);
   mag *= gevd_float_operators::RunningSum(dhist, dhist, nbin, KRADIUS);
-#ifdef TRACE_DEBUG
   for (int i = 0; i < nbin; i++)        // points of smoothed dh(x)
     vcl_cout << dhist[i]/mag << ' ';
   vcl_cout << vcl_endl << vcl_endl;
