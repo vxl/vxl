@@ -6,21 +6,24 @@
 #include <bxml/bxml_vtol_vertex_2d_input_converter.h>
 #include <bxml/bxml_vtol_zero_chain_2d_input_converter.h>
 
-
-bxml_vtol_zero_chain_2d_input_converter::bxml_vtol_zero_chain_2d_input_converter() {
+bxml_vtol_zero_chain_2d_input_converter::bxml_vtol_zero_chain_2d_input_converter()
+{
   class_name_ = "vtol_zero_chain_2d";
   tag_name_ = "zero_chain_3d";
   ref_tag_name_ = "zero_chain_3d_ref";
 }
 
-bxml_vtol_zero_chain_2d_input_converter::~bxml_vtol_zero_chain_2d_input_converter() {
+bxml_vtol_zero_chain_2d_input_converter::~bxml_vtol_zero_chain_2d_input_converter()
+{
 }
 
-vcl_string bxml_vtol_zero_chain_2d_input_converter::get_id(DOM_Node& node) {
+vcl_string bxml_vtol_zero_chain_2d_input_converter::get_id(DOM_Node& node)
+{
   return get_string_attr(node,"id");
 }
 
-bool bxml_vtol_zero_chain_2d_input_converter::extract_from_dom(DOM_Node& node) {
+bool bxml_vtol_zero_chain_2d_input_converter::extract_from_dom(DOM_Node& node)
+{
   new_or_ref = check_tag(node);
 
   if (new_or_ref == 0) {
@@ -42,13 +45,15 @@ bool bxml_vtol_zero_chain_2d_input_converter::extract_from_dom(DOM_Node& node) {
 
   int num_children=0;
   DOM_Node child = node.getFirstChild();
-  while (child != 0) {
+  while (child != 0)
+  {
     int cnode_type = child.getNodeType();
-    if (cnode_type == DOM_Node::ELEMENT_NODE) {
+    if (cnode_type == DOM_Node::ELEMENT_NODE)
+    {
       bxml_vtol_vertex_2d_input_converter conv;
       if (conv.extract_from_dom(child)) {
         bxml_generic_ptr gp_pt = conv.construct_object();
-        vtol_vertex_2d* vert = (vtol_vertex_2d*) gp_pt.get_vsol_spatial_object();
+        vtol_vertex_2d* vert = gp_pt.get_vsol_spatial_object()->cast_to_topology_object()->cast_to_vertex()->cast_to_vertex_2d();
         if (!vert) {
           vcl_cout << "Error vtol_zero_chain_2d unable to read vertex_3d\n";
           break;

@@ -5,11 +5,10 @@
 #include <vtol/vtol_vertex_2d.h>
 #include <bxml/bxml_vsol_point_2d_input_converter.h>
 #include <bxml/bxml_vtol_vertex_2d_input_converter.h>
-
 #include <bxml/bxml_io.h>
 
-
-bxml_vtol_vertex_2d_input_converter::bxml_vtol_vertex_2d_input_converter() {
+bxml_vtol_vertex_2d_input_converter::bxml_vtol_vertex_2d_input_converter()
+{
   class_name_ = "vtol_vertex_2d";
   tag_name_ = "vertex_3d";
   ref_tag_name_ = "vertex_3d_ref";
@@ -17,10 +16,12 @@ bxml_vtol_vertex_2d_input_converter::bxml_vtol_vertex_2d_input_converter() {
   pt_ = 0;
 }
 
-bxml_vtol_vertex_2d_input_converter::~bxml_vtol_vertex_2d_input_converter() {
+bxml_vtol_vertex_2d_input_converter::~bxml_vtol_vertex_2d_input_converter()
+{
 }
 
-vcl_string bxml_vtol_vertex_2d_input_converter::get_id(DOM_Node& node) {
+vcl_string bxml_vtol_vertex_2d_input_converter::get_id(DOM_Node& node)
+{
   char* tag_name = ((DOM_Element*)&node)->getTagName().transcode();
   vcl_string tname(tag_name);
   if (debug_)
@@ -29,7 +30,8 @@ vcl_string bxml_vtol_vertex_2d_input_converter::get_id(DOM_Node& node) {
   return get_string_attr(node,"id");
 }
 
-bool bxml_vtol_vertex_2d_input_converter::extract_from_dom(DOM_Node& node) {
+bool bxml_vtol_vertex_2d_input_converter::extract_from_dom(DOM_Node& node)
+{
   new_or_ref = check_tag(node);
 
   if (new_or_ref == 0) {
@@ -49,13 +51,15 @@ bool bxml_vtol_vertex_2d_input_converter::extract_from_dom(DOM_Node& node) {
 
   int num_children=0;
   DOM_Node child = node.getFirstChild();
-  while (child != 0) {
+  while (child != 0)
+  {
     int cnode_type = child.getNodeType();
-    if (cnode_type == DOM_Node::ELEMENT_NODE) {
+    if (cnode_type == DOM_Node::ELEMENT_NODE)
+    {
       bxml_vsol_point_2d_input_converter conv;
       if (conv.extract_from_dom(child)) {
         bxml_generic_ptr gp_pt = conv.construct_object();
-        pt_ = (vsol_point_2d*) gp_pt.get_vsol_spatial_object();
+        pt_ = gp_pt.get_vsol_spatial_object()->cast_to_point();
         if (!pt_) {
           vcl_cout << "Error vertex_3d unable to read point_3d\n";
           break;
@@ -97,14 +101,16 @@ bxml_generic_ptr bxml_vtol_vertex_2d_input_converter::construct_object()
   }
 }
 
-bool bxml_vtol_vertex_2d_input_converter::extract_object_atrs(DOM_Node& node) {
+bool bxml_vtol_vertex_2d_input_converter::extract_object_atrs(DOM_Node& node)
+{
   id_ = get_string_attr(node,"id");
 
   return true;
 }
 
 #if 0
-void bxml_vtol_vertex_2d_input_converter::WriteDEXAttributes(int index,DEX_object& obj,DOM_Node& node) {
+void bxml_vtol_vertex_2d_input_converter::WriteDEXAttributes(int index,DEX_object& obj,DOM_Node& node)
+{
   if ( !(id_ == null_id_) ) {
     id_map_[id_] = index;
   }
