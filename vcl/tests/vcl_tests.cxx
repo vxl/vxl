@@ -94,9 +94,6 @@ int main(int argc, char* argv[])
   testname( "test_vcl_new" );
   testresult( test_vcl_new_main() );
 
-  testname( "test_vcl_rel_ops" );
-  testresult( test_vcl_rel_ops_main() );
-
   testname( "test_vcl_set" );
   testresult( test_vcl_set_main() );
 

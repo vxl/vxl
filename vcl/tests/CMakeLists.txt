@@ -26,7 +26,6 @@ ADD_EXECUTABLE( vcl_tests
      test_vcl_map.cxx
      test_vcl_multimap.cxx
      test_vcl_new.cxx
-     test_vcl_rel_ops.cxx
      test_vcl_set.cxx
      test_vcl_stlfwd.cxx
      test_vcl_string.cxx
