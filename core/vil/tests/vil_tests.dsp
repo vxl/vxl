@@ -9,6 +9,7 @@ SOURCE=.\test_sample_profile_bilin.cxx
 SOURCE=.\test_algo_convolve_1d.cxx
 SOURCE=.\test_sample_grid_bilin.cxx
 SOURCE=.\test_algo_exp_filter_1d.cxx
+SOURCE=.\test_pixel_format.cxx
 # End Group
 # Begin Group "Header Files"
 # End Group

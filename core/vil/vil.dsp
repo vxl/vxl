@@ -117,40 +117,10 @@ SOURCE=.\vil2_file_format.cxx
 SOURCE=.\vil2_image_view_functions.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+uchar-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil2_image_view+vil_rgb+uchar--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil2_image_view_functions+uchar-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil2_image_view_functions+vil_rgb+uchar--.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vil2_image_view+bool-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+uint-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil2_image_view+ushort-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vil2_image_view_functions+bool-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil2_image_view_functions+int-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil2_image_view_functions+short-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil2_image_view_functions+uint-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil2_image_view_functions+ushort-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil2_smart_ptr+vil2_image_data-.cxx
@@ -162,25 +132,7 @@ SOURCE=.\Templates/vil2_smart_ptr+vil2_memory_chunk-.cxx
 SOURCE=.\Templates/vil2_image_view+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+int-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil2_image_view+short-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vil2_image_view+vil_rgb+float--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil2_image_view+vil_rgb+int--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil2_image_view+vil_rgb+short--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil2_image_view+vil_rgb+uint--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil2_image_view+vil_rgb+ushort--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil2_image_view_functions+float-.cxx
@@ -198,19 +150,73 @@ SOURCE=.\vil2_image_view_base.cxx
 SOURCE=.\vil2_load.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_sample_profile_bilin+uchar.double-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vil2_sample_profile_bilin+float.double-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil2_sample_grid_bilin+float.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_sample_grid_bilin+uchar.double-.cxx
+SOURCE=.\Templates/vil2_smart_ptr+vil2_image_view_base-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_smart_ptr+vil2_image_view_base-.cxx
+SOURCE=.\Templates/vil2_image_view+byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_image_view+int_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_image_view+int_32-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_image_view+uint_32-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_image_view+vil_rgb+int_16--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_image_view+vil_rgb+int_32--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_image_view+vil_rgb+uint_32--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_image_view_functions+byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_image_view_functions+int_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_image_view_functions+int_32-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_image_view_functions+uint_32-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_image_view_functions+vil_rgb+uint_16--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_sample_grid_bilin+byte.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_sample_profile_bilin+byte.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_image_view+uint_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_image_view+vil_rgb+byte--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_image_view+vil_rgb+uint_16--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_image_view+vil_rgb+vxl_int_32--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_image_view_functions+uint_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_image_view_functions+vil_rgb+byte--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_memory_image.cxx

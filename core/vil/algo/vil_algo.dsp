@@ -102,10 +102,10 @@ LIB32=link.exe -lib
 SOURCE=.\Templates/vil2_algo_sobel_3x3+float.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_algo_sobel_3x3+uchar.float-.cxx
+SOURCE=.\Templates/vil2_algo_gauss_reduce+byte-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_algo_gauss_reduce+uchar-.cxx
+SOURCE=.\Templates/vil2_algo_sobel_3x3+byte.float-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_algo_sobel_3x3.cxx
@@ -130,6 +130,9 @@ SOURCE=.\vil2_algo_gauss_reduce.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_algo_convolve_1d.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_algo_exp_filter_1d.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
