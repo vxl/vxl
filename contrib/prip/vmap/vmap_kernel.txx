@@ -42,8 +42,8 @@ void vmap_permutation_kernel<TPermutation>::add_1_cycles()
   {
     if (!markV[_p.index_of(v)])
     {
-      dart_iterator d=v->begin(), sd ;
-      _p.next_on_cycle(sd=d) ;
+      dart_iterator d=v->begin(), sd=d ;
+      _p.next_on_cycle(sd) ;
       while (d==sd)
       {
         int e1 ;
@@ -83,10 +83,12 @@ void vmap_permutation_kernel<TPermutation>::add_2_cycles()
         {
           if (!mark[_p.index_of(d)])
           {
-            dart_iterator a=d, na, nna ;
+            dart_iterator a=d ;
             _p.opposite(a) ;
-            _p.next_on_cycle(na = a) ;
-            _p.next_on_cycle(nna=na) ;
+            dart_iterator na = a;
+            _p.next_on_cycle(na) ;
+            dart_iterator nna = na;
+            _p.next_on_cycle(nna) ;
             while (a==nna)
             {
               a=na ;
@@ -97,8 +99,10 @@ void vmap_permutation_kernel<TPermutation>::add_2_cycles()
               _p.opposite(a) ;
               _representatives.union_of(_p.cycle_index_of(a),e1) ;
               mark[_p.index_of(a)]=true ;
-              _p.next_on_cycle(na = a) ;
-              _p.next_on_cycle(nna=na) ;
+              na = a;
+              _p.next_on_cycle(na) ;
+              nna = na;
+              _p.next_on_cycle(nna) ;
             }
           }
           _p.next_on_cycle(d) ;
@@ -115,11 +119,13 @@ void vmap_permutation_kernel<TPermutation>::add_2_cycles()
       _p.next_on_cycle(nnd) ;
       if (d==nnd)
       {
-        dart_iterator a=d, na, nna ;
+        dart_iterator a=d ;
         _p.opposite(a) ;
         _p.previous_on_cycle(d) ;
-        _p.next_on_cycle(na = a) ;
-        _p.next_on_cycle(nna=na) ;
+        dart_iterator na = a;
+        _p.next_on_cycle(na) ;
+        dart_iterator nna = na;
+        _p.next_on_cycle(nna) ;
         while (a==nna && a!=d)
         {
           a=na ;
@@ -130,8 +136,10 @@ void vmap_permutation_kernel<TPermutation>::add_2_cycles()
           _p.opposite(a) ;
           _representatives.union_of(_p.cycle_index_of(a),e1) ;
           mark[_p.index_of(a)]=true ;
-          _p.next_on_cycle(na = a) ;
-          _p.next_on_cycle(nna=na) ;
+          na = a;
+          _p.next_on_cycle(na) ;
+          nna = na;
+          _p.next_on_cycle(nna) ;
         }
       }
     }
