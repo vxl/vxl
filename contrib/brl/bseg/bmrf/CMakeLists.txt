@@ -8,6 +8,7 @@ SET(bmrf_sources
     bmrf_epipole.cxx                bmrf_epipole.h
     bmrf_epi_point.cxx              bmrf_epi_point.h      bmrf_epi_point_sptr.h
     bmrf_epi_seg.cxx                bmrf_epi_seg.h        bmrf_epi_seg_sptr.h
+    bmrf_epi_seg_compare.cxx        bmrf_epi_seg_compare.h
     bmrf_gamma_func.cxx             bmrf_gamma_func.h     bmrf_gamma_func_sptr.h
     bmrf_epi_transform.cxx          bmrf_epi_transform.h
     bmrf_arc.cxx                    bmrf_arc.h            bmrf_arc_sptr.h
