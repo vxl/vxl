@@ -18,6 +18,7 @@
 #  include <vcl_cassert.h>
 # endif
 #else
+# undef VNL_CONFIG_CHECK_BOUNDS
 # define VNL_CONFIG_CHECK_BOUNDS 0
 #endif
 
