@@ -1,16 +1,10 @@
-##########################################
-include ${IUEROOT}/config/usr_params.mk
-##########################################
-
 # Packages used by this package 
 USES += oxl vxl
 
-ifeq ($(OS),hpux10.20)
-pic = $(PIC)
-endif
-
 LIBRARY := mvl
 VERSION := 1.0
+
+IMMEDIATE_LIBS += -lvnl-algo -lvnl -lvbl -lvcl
 
 SUBDIRS = examples
 
@@ -65,8 +59,8 @@ SOURCES += PMatrix.cxx
 SOURCES += PMatrixDecompAa.cxx
 SOURCES += PMatrixDec.cxx
 SOURCES += PMatrixDecompCR.cxx
-#SOURCES += PMatrixAffine
-#SOURCES += PMatrixEuclidean
+#SOURCES += PMatrixAffine.cxx
+#SOURCES += PMatrixEuclidean.cxx
 
 SOURCES += TriTensor.cxx
 SOURCES += ProjectiveBasis2D.cxx
@@ -121,8 +115,10 @@ SOURCES += HMatrix2DEuclideanCompute.cxx
 SOURCES += PMatrixCompute.cxx
 SOURCES += PMatrixComputeLinear.cxx
 
-IULIBS += -lvnl-algo -lvnl -lvbl -lvcl
+################################
+include ${IUEROOT}/config/top.mk
+################################
 
-##########################################
-include ${IUEROOT}/config/usr_rules.mk
-##########################################
+ifeq ($(OS),hpux10.20)
+pic = $(PIC)
+endif

@@ -3,20 +3,12 @@
 #   This is the vbl (Vision Basics) library.
 #
 #   DEPENDENCIES:  libvcl
-##########################################
-include ${IUEROOT}/config/usr_params.mk
-##########################################
 
 USES += vxl
-IULIBS := -lvcl
+IMMEDIATE_LIBS := -lvcl
 
 LIBRARY := vbl
 VERSION := 1.0
-
-ifndef NOTEST
-SUBDIRS += tests
-SUBDIRS += examples
-endif
 
 SOURCES += vbl_arg.cxx  # if this is in a .txx file, gcc 2.95 will not generate any code.
 SOURCES += vbl_awk.cxx
@@ -45,6 +37,15 @@ SOURCES += $(wildcard vbl_get_argc_argv.cxx)
 
 DEFINES += -DBUILDING_VBL_DLL
 
-##########################################
-include ${IUEROOT}/config/usr_rules.mk
-##########################################
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+SUBDIRS += examples
+endif
+
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################
