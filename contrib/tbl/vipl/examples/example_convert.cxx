@@ -21,7 +21,7 @@
 // for I/O:
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
-#include <iostream.h>
+#include <vcl/vcl_iostream.h>
 
 typedef unsigned char ubyte;
 typedef vil_rgb<ubyte> rgbcell;

@@ -23,7 +23,7 @@
 #include <vil/vil_memory_image_of.h>
 
 #include <vipl/vipl_add_random_noise.h>
-#include <iostream.h>
+#include <vcl/vcl_iostream.h>
 
 typedef unsigned char ubyte;
 

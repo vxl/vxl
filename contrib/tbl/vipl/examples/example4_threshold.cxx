@@ -22,7 +22,7 @@ typedef vil_image img_type;
 // for I/O:
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
-#include <iostream.h>
+#include <vcl/vcl_iostream.h>
 
 int
 main(int argc, char** argv) {
