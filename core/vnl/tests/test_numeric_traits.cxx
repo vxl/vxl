@@ -167,7 +167,7 @@ void test_numeric_traits()
   int nr_of_ones = 0;
   vcl_cout << "vnl_numeric_traits<float>::maxval has internal representation ";
 #if VXL_BIG_ENDIAN
-  for (int i=0; i<sizeof(float); ++i)
+  for (unsigned int i=0; i<sizeof(float); ++i)
 #else
   for (int i=sizeof(float)-1; i>=0; --i)
 #endif
@@ -184,7 +184,7 @@ void test_numeric_traits()
   nr_of_ones = 0;
   vcl_cout << "vnl_numeric_traits<double>::maxval has internal representation ";
 #if VXL_BIG_ENDIAN
-  for (int i=0; i<sizeof(double); ++i)
+  for (unsigned int i=0; i<sizeof(double); ++i)
 #else
   for (int i=sizeof(double)-1; i>=0; --i)
 #endif
@@ -201,7 +201,7 @@ void test_numeric_traits()
   nr_of_ones = 0;
   vcl_cout << "vnl_numeric_traits<long double>::maxval has internal representation ";
 #if VXL_BIG_ENDIAN
-  for (int i=0; i<sizeof(long double); ++i)
+  for (unsigned int i=0; i<sizeof(long double); ++i)
 #else
   for (int i=sizeof(long double)-1; i>=0; --i)
 #endif
