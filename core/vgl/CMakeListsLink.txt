@@ -1,3 +1,5 @@
 LINK_LIBRARIES( vgl )
+LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/vxl/vgl )
 
+# Immediate dependencies
 INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )
