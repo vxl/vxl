@@ -104,7 +104,8 @@ void test_adaboost()
                                         );
 
 
-  b_thresh_clsfr->print_summary(vcl_cout);  
+  vcl_cout<<*b_thresh_clsfr<<vcl_endl;
+  //b_thresh_clsfr->print_summary(vcl_cout);  
   vcl_cout<<"error1= "<<error1<<vcl_endl;
   
 
