@@ -19,23 +19,23 @@
 // .SECTION Author
 //   fsm@robots.ox.ac.uk
 //
-#include <vnl/vnl_complex.h>
+#include <vcl_complex.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 
 //: find all the roots of a univariate polynomial with complex coefficients.
 class vnl_cpoly_roots {
 public:
-  vnl_cpoly_roots(vnl_vector<vnl_double_complex> const & a);
+  vnl_cpoly_roots(vnl_vector<vcl_complex<double> > const & a);
   vnl_cpoly_roots(vnl_vector<double> const & a_real,
 		  vnl_vector<double> const & a_imag);
   
   // the roots can be found in here :
-  vnl_vector<vnl_double_complex> solns;
+  vnl_vector<vcl_complex<double> > solns;
 
 private:
   unsigned N; //degree
-  void compute(vnl_vector<vnl_double_complex> const & a); // this does the actual work
+  void compute(vnl_vector<vcl_complex<double> > const & a); // this does the actual work
 };
 
 #endif // vnl_cpoly_roots_h_
