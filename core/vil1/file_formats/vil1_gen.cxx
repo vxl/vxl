@@ -7,7 +7,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h> // vcl_abort()
-#include <vcl_cassert.h>
 #include <vcl_cstdio.h>  // sprintf()
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
