@@ -84,6 +84,7 @@ double vnl_cholesky::determinant() const
 //: Compute inverse.  Not efficient.
 vnl_matrix<double> vnl_cholesky::inverse() const
 {
+  assert(!"Completely wrong -- see awf@robots.ox.ac.uk");
   int n = A_.columns();
   vnl_matrix<double> I = A_;
   int job = 01;
