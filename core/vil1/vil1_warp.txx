@@ -27,8 +27,8 @@ void vil_warp_output_driven(vil_memory_image_of<PixelType> const& in,
 			    Mapper const& map,
 			    vil_warp_interpolation_type interpolation)
 {
-  int w = in.width();
-  int h = in.height();
+  //int w = in.width();
+  //int h = in.height();
 
   int out_w = out.width();
   int out_h = out.height();
