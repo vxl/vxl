@@ -23,6 +23,7 @@
 #include <vcl_vector.h>
 
 #include <vil/vil_image.h>
+#include <vil/vil_memory_image.h>
 
 void vil_copy(vil_image const& in, vil_image& out)
 {
@@ -57,4 +58,13 @@ void vil_copy(vil_image const& in, vil_image& out)
 #ifdef DEBUG
   vcl_cerr << "...vil_copy() done" << vcl_endl;
 #endif
+}
+
+vil_memory_image
+vil_copy(vil_image const& src)
+{
+  vil_memory_image dst( src.planes(), src.width(), src.height(), src.components(),
+                        src.bits_per_component(), src.component_format() );
+  vil_copy( src, dst );
+  return dst;
 }

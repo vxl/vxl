@@ -55,7 +55,7 @@ int vil_stream_core::m_transfer(char *buf, int pos, int n, bool read)
   }
   else
     // chunk up to the required size :
-    while (int(blocksize_)*block_.size() < pos+n)
+    while (int(blocksize_)*int(block_.size()) < pos+n)
       block_.push_back(new char [blocksize_]);
 
   // transfer data

@@ -23,4 +23,7 @@
 // Images must be exactly the same dimensions, but datatype isn't matched
 void vil_copy(vil_image const& src, vil_image& DST);
 
+//: Return a memory image copy of SRC.
+vil_memory_image vil_copy(vil_image const& src);
+
 #endif // vil_copy_h_

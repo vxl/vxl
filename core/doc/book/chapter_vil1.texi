@@ -195,7 +195,7 @@ out of functions efficiently.  It also means that modifying the data in one
 vil_image might change that in another.  Take this example
 @example
 ...
-vil_memory_image_of<float> a = vil_load("x");
+vil_memory_image_of<float> a( vil_load("x") );
 vil_memory_image_of<float> b = a;
 b(100,100) = 12;
 ...
@@ -205,9 +205,17 @@ are set to the value 12.  On the other hand, if we had used
 @code{vil_copy}, thus:
 @example
 ...
-vil_memory_image_of<float> a = vil_load("x");
+vil_memory_image_of<float> a( vil_load("x") );
 vil_memory_image_of<float> b(a.width(), a.height());
 vil_copy(a, b);
+b(100,100) = 12;
+...
+@end example
+or
+@example
+...
+vil_memory_image_of<float> a( vil_load("x") );
+vil_memory_image_of<float> b( vil_copy(a) );
 b(100,100) = 12;
 ...
 @end example
