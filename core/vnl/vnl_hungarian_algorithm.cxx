@@ -27,11 +27,7 @@ vcl_vector<unsigned> vnl_hungarian_algorithm( vnl_matrix<double> const& cost_in 
   vnl_matrix<double> cost( N, N, 0 );
 
   // Copy in the pieces of the original matrix
-  for ( unsigned i = 0; i < cost_in.rows(); ++i ) {
-    for ( unsigned j = 0; j < cost_in.cols(); ++j ) {
-      cost(i,j) = cost_in(i,j);
-    }
-  }
+  cost.update( cost_in, 0, 0 );
 
   // The steps of the algorithm described below are taken from
   // http://www.public.iastate.edu/~ddoty/HungarianAlgorithm.html
