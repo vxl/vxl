@@ -31,7 +31,10 @@ class vdgl_edgel_chain : public vul_timestamp,
   // Constructors/Destructors--------------------------------------------------
   vdgl_edgel_chain();
   vdgl_edgel_chain( const vcl_vector<vdgl_edgel> edgels);
-
+  //: make a straight edgel chain from p0 to p1
+  //  useful for boundary filling and debugging
+  vdgl_edgel_chain( const double x0, const double y0, 
+                    const double x1, const double y1);
   ~vdgl_edgel_chain();
 
   // Operators----------------------------------------------------------------
@@ -58,6 +61,11 @@ class vdgl_edgel_chain : public vul_timestamp,
 
   // INTERNALS-----------------------------------------------------------------
  protected:
+
+  // Utility functions
+  //: a digital 
+  bool line_gen(float xs, float ys, float xe, float ye,
+                 bool& init, bool& done, unsigned int& x, unsigned int& y);
   // Data Members--------------------------------------------------------------
 
   vcl_vector<vdgl_edgel> es_;

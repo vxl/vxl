@@ -6,7 +6,8 @@
 #include "vdgl_edgel_chain.h"
 #include <vgl/vgl_distance.h>
 #include <vcl_cassert.h>
-
+#include <vcl_algorithm.h>
+#include <vcl_cmath.h>
 vdgl_edgel_chain::vdgl_edgel_chain()
 {
 }
@@ -14,6 +15,15 @@ vdgl_edgel_chain::vdgl_edgel_chain()
 vdgl_edgel_chain::vdgl_edgel_chain( const vcl_vector<vdgl_edgel> edgels)
   : es_( edgels)
 {
+}
+
+vdgl_edgel_chain::vdgl_edgel_chain( const double x0, const double y0, 
+                                    const double x1, const double y1)
+{
+  bool init = true, done = false;//should be internal statics but seems not to work
+  unsigned int x, y; // the intermediate pixels
+  while (this->line_gen(x0, y0, x1, y1, init, done, x, y))
+    es_.push_back(vdgl_edgel( x, y));
 }
 
 vdgl_edgel_chain::~vdgl_edgel_chain()
@@ -124,4 +134,58 @@ bool vdgl_edgel_chain::split( double x, double y,
   if (split_index > 0) ec1 = this->extract_subchain(0, split_index-1);
   if (split_index < n) ec2 = this->extract_subchain(split_index, n-1);
   return split_index > 0 && split_index < n;
+}
+//
+//:Advance along a line and generate continguous pixels on the line.
+//
+bool vdgl_edgel_chain::line_gen(float xs, float ys, float xe, float ye,
+                                bool& init, bool& done,
+                                unsigned int& x, unsigned int& y)
+{
+  assert(xs >= 0.0f); assert(ys >= 0.0f);
+  const float pix_edge = 1.0f; //We are working at scale = 1.0
+  static float xi=0, yi=0;
+  if (init)
+    {
+      xi = xs;
+      yi = ys;
+      x = (unsigned int)(xi/pix_edge);
+      y = (unsigned int)(yi/pix_edge);
+      init = false;
+      return true;
+    }
+  if (done) return false;
+  float dx = xe-xs;
+  float dy = ye-ys;
+  float mag = vcl_sqrt(dx*dx + dy*dy);
+  if (mag<pix_edge)//Can't reach the next pixel under any circumstances
+    {             //so just output the target, xe, ye.
+      x = (unsigned int)xe; y = (unsigned int)ye;
+      done = true;
+      return true;
+    }
+  float delta = (0.5f*pix_edge)/mag; //move in 1/2 pixel increments
+  //Previous pixel location
+  int xp = int(xi/pix_edge);
+  int yp = int(yi/pix_edge);
+  //Increment along the line until the motion is greater than one pixel
+  for (int i = 0; i<3; i++)
+    {
+      xi += dx*delta;
+      yi += dy*delta;
+      //Check for end of segment, make sure we emit the end of the segment
+      if ((xe>=xs&&xi>xe)||(xe<=xs&&xi<xe)||(ye>=ys&&yi>ye)||(ye<=ys&&yi<ye))
+        {
+          x = (unsigned int)xe; y = (unsigned int)ye;
+          done = true;
+          return true;
+        }
+      //Check if we have advanced by more than .5 pixels
+      x = (unsigned int)(xi/pix_edge);
+      y = (unsigned int)(yi/pix_edge);
+      if (vcl_abs(int(x)-xp)>(.5*pix_edge)||vcl_abs(int(y)-yp)>(.5*pix_edge))
+        return true;
+    }
+  vcl_cout << "in vdgl_edgel_chain::line_gen(..) - shouldn't happen\n";
+  return false;
 }
