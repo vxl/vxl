@@ -548,6 +548,8 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_perform(CheckFile(CompareGrey<vxl_uint_8>(), "ff_grey8bit_true.txt", "ff_grey8bit_uncompressed.dcm" ) );
   testlib_test_begin( "  16-bit greyscale uncompressed 3" );
   testlib_test_perform(CheckFile(CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit_uncompressed3.dcm" ) );
+  testlib_test_begin( "  12-bit greyscale float uncompressed" );
+  testlib_test_perform(CheckFile(CompareGreyFloat<float>(), "ff_grey_float_true_for_dicom.txt", "ff_grey_float_12bit_uncompressed.dcm" ) );
 #endif // HAS_DCMTK
 
 #if 0 // these are broken too
