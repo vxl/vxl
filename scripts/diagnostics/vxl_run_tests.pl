@@ -111,7 +111,7 @@ sub run_test
       if (! /Test Summary: All/)
       {
         $n_fail = $_;
-        $n_fail =~ s/(.*succeeded\, )([0-9]+)( tests did.*)/$2/;
+        $n_fail =~ s/(.*succeeded\, )([0-9]+)( tests.*)/$2/;
         $nt = $n_ok + $n_fail;
       }
 
