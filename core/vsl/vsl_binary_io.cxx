@@ -377,7 +377,7 @@ void vsl_b_read(vsl_b_istream &is,double& n )
     {
       vcl_cerr << "vsl_b_ostream::set_serialisation_other_data(): "
                << "No such value " << pointer << "in records." <<vcl_endl;
-      vcl_abort();
+      vcl_abort(); return -1;
     }
     else
     {
@@ -518,7 +518,7 @@ void vsl_b_read(vsl_b_istream &is,double& n )
       vcl_cerr << "vsl_b_istream::set_serialisation_other_data(): "
                << "No such value " << serial_number << "in records."
                << vcl_endl;
-      vcl_abort();
+      vcl_abort(); return -1;
     }
     else
     {
