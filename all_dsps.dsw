@@ -3,7 +3,7 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "zlib"=.\v3p\zlib\zlib.dsp - Package Owner=<4>
+Project: "2d_example"=".\oxl\vgui\examples\kym\2d-example.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -15,7 +15,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "tiff"=.\v3p\tiff\tiff.dsp - Package Owner=<4>
+Project: "3d_example"=".\oxl\vgui\examples\kym\3d-example.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -27,7 +27,367 @@ Package=<4>
 
 ###############################################################################
 
-Project: "png"=.\v3p\png\png.dsp - Package Owner=<4>
+Project: "Qv"=.\v3p\Qv\Qv.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "Qvtest"=.\v3p\Qv\Qvtest.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "VPLAYER"=.\oxl\VPLAYER\vplayer.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "awfmfc"=.\oxl\vgui\examples\awf\awfmfc\awfmfc.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "break_lines"=.\oxl\osl\examples\break_lines.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "clsfy"=.\mul\clsfy\clsfy.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "compute_FMatrix_example"=.\oxl\mvl\examples\compute_FMatrix_example.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "container"=.\conversions\container\container.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "dense_matcher_full"=.\gel\vsrl\examples\dense_matcher_full.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "dialog_example"=".\oxl\vgui\examples\kym\dialog-example.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "display-canny"=".\oxl\vgui\examples\fsm\display-canny.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "display-images"=".\oxl\vgui\examples\fsm\display-images.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "display-points"=".\oxl\vgui\examples\fsm\display-points.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "display-pyramid"=".\oxl\vgui\examples\fsm\display-pyramid.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "display_image"=".\oxl\vgui\examples\kym\display-image.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "example1"=.\vxl\vcsl\examples\example1.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "example2d"=.\gel\vtol\examples\example2d.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "expand_path"=.\vxl\vul\examples\expand_path.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "gel"=.\gel\gel.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "geml"=.\gel\geml\geml.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "geometry"=.\conversions\geometry\geometry.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "gevd"=.\gel\gevd\gevd.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "gkll"=.\gel\gkll\gkll.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "glmovie"=.\oxl\apps\glmovie\glmovie.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "glmovie_example"=.\oxl\vgui\examples\awf\glmovie.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "gmvl"=.\gel\gmvl\gmvl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "gmvl_examples"=.\gel\gmvl\examples\gmvl_examples.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "gst"=.\gel\gst\gst.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "gtrl"=.\gel\gtrl\gtrl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "harris-moments"=".\oxl\vgui\examples\fsm\harris-moments.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "image"=.\conversions\image\image.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -51,6 +411,186 @@ Package=<4>
 
 ###############################################################################
 
+Project: "kl_tracker"=.\gel\vgel\examples\kl_tracker.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "lbfgs-example"=".\v3p\netlib\tests\lbfgs-example.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "lsqr-test"=".\v3p\netlib\tests\lsqr-test.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "make_3d_output"=.\gel\vsrl\examples\make_3d_output.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "math"=.\conversions\math\math.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "mbl"=.\mul\mbl\mbl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "menubar_example"=".\oxl\vgui\examples\kym\menubar-example.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "mil"=.\mul\mil\mil.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "mil3d"=.\mul\mil3d\mil3d.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "mil_algo"=.\mul\mil\algo\mil_algo.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "mouse_draw_line"=".\oxl\vgui\examples\kym\mouse-draw-line.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "mouse_position"=".\oxl\vgui\examples\kym\mouse-position.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "multiple-windows"=".\oxl\vgui\examples\capes\multiple-windows.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "mvl"=.\oxl\mvl\mvl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "mvl_multi_view_matches_example"=.\oxl\mvl\examples\mvl_multi_view_matches_example.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "netlib"=.\v3p\netlib\netlib.dsp - Package Owner=<4>
 
 Package=<5>
@@ -63,7 +603,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vcl"=.\vcl\vcl.dsp - Package Owner=<4>
+Project: "octree"=.\gel\octree\octree.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -75,7 +615,1387 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vcl_tests"=.\vcl\tests\vcl_tests.dsp - Package Owner=<4>
+Project: "osl"=.\oxl\osl\osl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "osl_harris"=.\oxl\osl\examples\osl_harris.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "oxl"=.\oxl\oxl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "oxltest"=.\oxl\oxltest\oxltest.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "oxp"=.\oxl\oxp\oxp.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "png"=.\v3p\png\png.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "polygon-scan"=".\oxl\vgui\examples\fsm\polygon-scan.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "popup_example"=".\oxl\vgui\examples\kym\popup-example.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "printing_example"=.\oxl\vgui\examples\kym\printing_example.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "raw-glut1"=".\oxl\vgui\examples\fsm\raw-glut1.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "raw-glut2"=".\oxl\vgui\examples\fsm\raw-glut2.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "rubberband"=.\oxl\vgui\examples\kym\rubberband.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "run_osl_canny"=.\oxl\osl\examples\run_osl_canny.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "satellite"=.\oxl\vgui\examples\fsm\satellite.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "slab-glut"=".\oxl\vgui\examples\fsm\slab-glut.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_COOL_container"=.\conversions\container\tests\test_COOL_container.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_CoolMatrix_conversions"=.\conversions\math\tests\test_CoolMatrix_conversions.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_DigitalCurve_to_vdgl"=.\conversions\geometry\tests\test_DigitalCurve_to_vdgl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_IUE_matrix_conversions"=.\conversions\math\tests\test_IUE_matrix_conversions.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_allvxl"=.\vxl\test_allvxl\test_allvxl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_arbitrary_length_int_conversion"=.\vxl\vsl\tests\test_arbitrary_length_int_conversion.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_assign"=.\vxl\vil\tests\test_assign.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_binary_hyperplane"=.\mul\clsfy\tests\test_binary_hyperplane.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_binary_io"=.\vxl\vsl\tests\test_binary_io.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_binary_pdf_classifier"=.\mul\clsfy\tests\test_binary_pdf_classifier.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_block"=.\gel\vtol\tests\test_block.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_cartesian"=.\vxl\vgl\tests\test_cartesian.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_cartesian_2d"=.\vxl\vcsl\tests\test_cartesian_2d.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_cartesian_3d"=.\vxl\vcsl\tests\test_cartesian_3d.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_clipon_polymorphic_io"=.\vxl\vsl\tests\test_clipon_polymorphic_io.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_complex"=.\vxl\vnl\tests\test_complex.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_complex_eigensystem"=.\vxl\vnl\tests\test_complex_eigensystem.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_complex_io"=.\vxl\vsl\tests\test_complex_io.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_composition"=.\vxl\vcsl\tests\test_composition.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_conic"=.\vxl\vgl\tests\test_conic.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_container"=.\conversions\container\tests\test_container.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_convolve"=.\vxl\vnl\tests\test_convolve.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_cpoly_roots"=.\vxl\vnl\tests\test_cpoly_roots.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_cylindrical"=.\vxl\vcsl\tests\test_cylindrical.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_degree"=.\vxl\vcsl\tests\test_degree.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_deque_io"=.\vxl\vsl\tests\test_deque_io.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_determinant"=.\vxl\vnl\tests\test_determinant.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_displacement"=.\vxl\vcsl\tests\test_displacement.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_edge_2d"=.\gel\vtol\tests\test_edge_2d.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_ellipse_scan_iterator"=.\vxl\vgl\tests\test_ellipse_scan_iterator.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_events"=.\oxl\vgui\tests\test_events.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_face_2d"=.\gel\vtol\tests\test_face_2d.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_fft"=.\vxl\vnl\tests\test_fft.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_fft1d"=.\vxl\vnl\tests\test_fft1d.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_fft2d"=.\vxl\vnl\tests\test_fft2d.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_file_matrix"=.\vxl\vnl\tests\test_file_matrix.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_flipud"=.\vxl\vil\tests\test_flipud.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_front_back"=.\oxl\vgui\tests\test_front_back.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_functions"=.\vxl\vnl\tests\test_functions.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_generalized_eigensystem"=.\vxl\vnl\tests\test_generalized_eigensystem.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_homg"=.\vxl\vgl\tests\test_homg.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_image_conversions"=.\conversions\image\tests\test_image_conversions.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_indent"=.\vxl\vsl\tests\test_indent.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_interpolate"=.\vxl\vil\tests\test_interpolate.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_k_nearest_neighbour"=.\mul\clsfy\tests\test_k_nearest_neighbour.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_levenberg_marquardt"=.\vxl\vnl\tests\test_levenberg_marquardt.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_list_io"=.\vxl\vsl\tests\test_list_io.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_load"=.\vxl\vil\tests\test_load.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_map_io"=.\vxl\vsl\tests\test_map_io.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_math"=.\vxl\vnl\tests\test_math.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_matlab"=.\vxl\vnl\tests\test_matlab.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_matrix"=.\vxl\vnl\tests\test_matrix.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_matrix_conversions"=.\conversions\math\tests\test_matrix_conversions.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_matrix_exp"=.\vxl\vnl\tests\test_matrix_exp.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_matrix_fixed"=.\vxl\vnl\tests\test_matrix_fixed.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_mbl"=.\mul\mbl\tests\test_mbl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_memory_image"=.\vxl\vil\tests\test_memory_image.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_memory_image_of"=.\vxl\vil\tests\test_memory_image_of.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_meter"=.\vxl\vcsl\tests\test_meter.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_mil"=.\mul\mil\tests\test_gauss_reduce_2d.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_mil"=.\mul\mil\tests\test_mil.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_mil3d"=.\mul\mil3d\tests\test_mil3d.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_minimizers"=.\vxl\vnl\tests\test_minimizers.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_numeric_limits"=.\vxl\vnl\tests\test_numeric_limits.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_one_chain"=.\gel\vtol\tests\test_one_chain.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_osl_to_vdgl"=.\conversions\geometry\tests\test_osl_to_vdgl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_pixels"=.\oxl\vgui\tests\test_pixels.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_polar"=.\vxl\vcsl\tests\test_polar.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_polygon"=.\vxl\vgl\tests\test_polygon.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_polymorphic_io"=.\vxl\vsl\tests\test_polymorphic_io.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_popup"=.\oxl\vgui\tests\test_popup.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_qr"=.\vxl\vnl\tests\test_qr.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_qsvd"=.\vxl\vnl\tests\test_qsvd.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_radian"=.\vxl\vcsl\tests\test_radian.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_rational"=.\vxl\vnl\tests\test_rational.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_rbf_svm_smo"=.\mul\clsfy\tests\test_rbf_svm_smo.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_real_eigensystem"=.\vxl\vnl\tests\test_real_eigensystem.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_resize"=.\vxl\vnl\tests\test_resize.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_rnpoly_roots"=.\vxl\vnl\tests\test_rnpoly_roots.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_rotation"=.\vxl\vcsl\tests\test_rotation.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_rpoly_roots"=.\vxl\vnl\tests\test_rpoly_roots.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_sample"=.\vxl\vnl\tests\test_sample.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_save_load_image"=.\vxl\vil\tests\test_save_load_image.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_scale"=.\vxl\vcsl\tests\test_scale.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_set_io"=.\vxl\vsl\tests\test_set_io.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_smo_1"=.\mul\clsfy\tests\test_smo_1.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_sparse_matrix"=.\vxl\vnl\tests\test_sparse_matrix.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_spherical"=.\vxl\vcsl\tests\test_spherical.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_stack_io"=.\vxl\vsl\tests\test_stack_io.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_string_io"=.\vxl\vsl\tests\test_string_io.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_svd"=.\vxl\vnl\tests\test_svd.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_symmetric_eigensystem"=.\vxl\vnl\tests\test_symmetric_eigensystem.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_timer"=.\oxl\vgui\tests\test_timer.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_transformation_graph"=.\vxl\vcsl\tests\test_transformation_graph.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_translation"=.\vxl\vcsl\tests\test_translation.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_transpose"=.\vxl\vnl\tests\test_transpose.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_triangle_scan_iterator"=.\vxl\vgl\tests\test_triangle_scan_iterator.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_two_chain"=.\gel\vtol\tests\test_two_chain.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_unistd"=.\vxl\vpl\tests\test_unistd.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_user_info_io"=.\vxl\vul\io\tests\test_user_info_io.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "test_vbl_io"=.\vxl\vbl\io\tests\test_vbl_io.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -315,1255 +2235,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "Qv"=.\v3p\Qv\Qv.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "Qvtest"=.\v3p\Qv\Qvtest.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vsl"=.\vxl\vsl\vsl.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_arbitrary_length_int_conversion"=.\vxl\vsl\tests\test_arbitrary_length_int_conversion.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_binary_io"=.\vxl\vsl\tests\test_binary_io.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_clipon_polymorphic_io"=.\vxl\vsl\tests\test_clipon_polymorphic_io.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_complex_io"=.\vxl\vsl\tests\test_complex_io.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_deque_io"=.\vxl\vsl\tests\test_deque_io.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_indent"=.\vxl\vsl\tests\test_indent.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_list_io"=.\vxl\vsl\tests\test_list_io.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_map_io"=.\vxl\vsl\tests\test_map_io.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_polymorphic_io"=.\vxl\vsl\tests\test_polymorphic_io.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_set_io"=.\vxl\vsl\tests\test_set_io.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_stack_io"=.\vxl\vsl\tests\test_stack_io.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_string_io"=.\vxl\vsl\tests\test_string_io.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_vector_io"=.\vxl\vsl\tests\test_vector_io.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_vsl_io"=.\vxl\vsl\tests\test_vsl_io.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vbl"=.\vxl\vbl\vbl.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vbl_smart_ptr_example"=.\vxl\vbl\examples\vbl_smart_ptr_example.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_vbl_io"=.\vxl\vbl\io\tests\test_vbl_io.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vbl_io"=.\vxl\vbl\io\vbl_io.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vbl_test_all"=.\vxl\vbl\tests\vbl_test_all.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vbl_test_array"=.\vxl\vbl\tests\vbl_test_array.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vbl_test_classes"=.\vxl\vbl\tests\vbl_test_classes.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vbl_test_smart_ptr"=.\vxl\vbl\tests\vbl_test_smart_ptr.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vbl_test_sparse_array_2d"=.\vxl\vbl\tests\vbl_test_sparse_array_2d.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vbl_test_sparse_array_3d"=.\vxl\vbl\tests\vbl_test_sparse_array_3d.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vgl_algo"=.\vxl\vgl\algo\vgl_algo.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vgl_conic_example"=.\vxl\vgl\examples\vgl_conic_example.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_vgl_io"=.\vxl\vgl\io\tests\test_vgl_io.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vgl_io"=.\vxl\vgl\io\vgl_io.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_cartesian"=.\vxl\vgl\tests\test_cartesian.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_conic"=.\vxl\vgl\tests\test_conic.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_ellipse_scan_iterator"=.\vxl\vgl\tests\test_ellipse_scan_iterator.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_homg"=.\vxl\vgl\tests\test_homg.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_polygon"=.\vxl\vgl\tests\test_polygon.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_triangle_scan_iterator"=.\vxl\vgl\tests\test_triangle_scan_iterator.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vgl"=.\vxl\vgl\vgl.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vidl"=.\vxl\vidl\vidl.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vil_clamp_example"=.\vxl\vil\examples\vil_clamp_example.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vil_convert"=.\vxl\vil\examples\vil_convert.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vil_convolve"=.\vxl\vil\examples\vil_convolve.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vil_convolve_1d"=.\vxl\vil\examples\vil_convolve_1d.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vil_crop"=.\vxl\vil\examples\vil_crop.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vil_flipud"=.\vxl\vil\examples\vil_flipud.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vil_info"=.\vxl\vil\examples\vil_info.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vil_print_section"=.\vxl\vil\examples\vil_print_section.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vil_rgb_example"=.\vxl\vil\examples\vil_rgb_example.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vil_scale"=.\vxl\vil\examples\vil_scale.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vil_scale_intensities_example"=.\vxl\vil\examples\vil_scale_intensities_example.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_vil_io"=.\vxl\vil\io\tests\test_vil_io.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vil_io"=.\vxl\vil\io\vil_io.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vil_test_all"=.\vxl\vil\tests\vil_test_all.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_assign"=.\vxl\vil\tests\test_assign.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_flipud"=.\vxl\vil\tests\test_flipud.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_interpolate"=.\vxl\vil\tests\test_interpolate.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_load"=.\vxl\vil\tests\test_load.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_memory_image"=.\vxl\vil\tests\test_memory_image.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_memory_image_of"=.\vxl\vil\tests\test_memory_image_of.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_save_load_image"=.\vxl\vil\tests\test_save_load_image.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_write_endian"=.\vxl\vil\tests\test_write_endian.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vil"=.\vxl\vil\vil.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vnl_algo"=.\vxl\vnl\algo\vnl_algo.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "time_fastops"=.\vxl\vnl\examples\time_fastops.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vnl_amoeba"=.\vxl\vnl\examples\vnl_amoeba.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vnl_complex_svd"=.\vxl\vnl\examples\vnl_complex_svd.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vnl_lsqr_test"=.\vxl\vnl\examples\vnl_lsqr_test.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vnl_planefit"=.\vxl\vnl\examples\vnl_planefit.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vnl_polyroots"=.\vxl\vnl\examples\vnl_polyroots.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vnl_rosenbrock"=.\vxl\vnl\examples\vnl_rosenbrock.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vnl_svd"=.\vxl\vnl\examples\vnl_svd.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_vnl_io"=.\vxl\vnl\io\tests\test_vnl_io.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vnl_io"=.\vxl\vnl\io\vnl_io.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vnl_test_all"=.\vxl\vnl\tests\vnl_test_all.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_complex"=.\vxl\vnl\tests\test_complex.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_complex_eigensystem"=.\vxl\vnl\tests\test_complex_eigensystem.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_convolve"=.\vxl\vnl\tests\test_convolve.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_cpoly_roots"=.\vxl\vnl\tests\test_cpoly_roots.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_determinant"=.\vxl\vnl\tests\test_determinant.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_fft"=.\vxl\vnl\tests\test_fft.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_fft1d"=.\vxl\vnl\tests\test_fft1d.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_fft2d"=.\vxl\vnl\tests\test_fft2d.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_file_matrix"=.\vxl\vnl\tests\test_file_matrix.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_functions"=.\vxl\vnl\tests\test_functions.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_generalized_eigensystem"=.\vxl\vnl\tests\test_generalized_eigensystem.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_levenberg_marquardt"=.\vxl\vnl\tests\test_levenberg_marquardt.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_math"=.\vxl\vnl\tests\test_math.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_matlab"=.\vxl\vnl\tests\test_matlab.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_matrix"=.\vxl\vnl\tests\test_matrix.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_matrix_exp"=.\vxl\vnl\tests\test_matrix_exp.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_matrix_fixed"=.\vxl\vnl\tests\test_matrix_fixed.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_minimizers"=.\vxl\vnl\tests\test_minimizers.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_numeric_limits"=.\vxl\vnl\tests\test_numeric_limits.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_qr"=.\vxl\vnl\tests\test_qr.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_qsvd"=.\vxl\vnl\tests\test_qsvd.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_rational"=.\vxl\vnl\tests\test_rational.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_real_eigensystem"=.\vxl\vnl\tests\test_real_eigensystem.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_resize"=.\vxl\vnl\tests\test_resize.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_rnpoly_roots"=.\vxl\vnl\tests\test_rnpoly_roots.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_rpoly_roots"=.\vxl\vnl\tests\test_rpoly_roots.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_sample"=.\vxl\vnl\tests\test_sample.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_sparse_matrix"=.\vxl\vnl\tests\test_sparse_matrix.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_svd"=.\vxl\vnl\tests\test_svd.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_symmetric_eigensystem"=.\vxl\vnl\tests\test_symmetric_eigensystem.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_transpose"=.\vxl\vnl\tests\test_transpose.dsp - Package Owner=<4>
+Project: "test_vdgl"=.\gel\vdgl\examples\test_vdgl.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -1587,7 +2259,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vnl"=.\vxl\vnl\vnl.dsp - Package Owner=<4>
+Project: "test_vector_io"=.\vxl\vsl\tests\test_vector_io.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -1599,7 +2271,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "test_unistd"=.\vxl\vpl\tests\test_unistd.dsp - Package Owner=<4>
+Project: "test_vertex_2d"=.\gel\vtol\tests\test_vertex_2d.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -1611,7 +2283,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vpl"=.\vxl\vpl\vpl.dsp - Package Owner=<4>
+Project: "test_vgl_io"=.\vxl\vgl\io\tests\test_vgl_io.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -1623,7 +2295,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "expand_path"=.\vxl\vul\examples\expand_path.dsp - Package Owner=<4>
+Project: "test_vil_io"=.\vxl\vil\io\tests\test_vil_io.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -1635,7 +2307,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vul_sequence_filename_example"=.\vxl\vul\examples\vul_sequence_filename_example.dsp - Package Owner=<4>
+Project: "test_vil_vbl_conversions"=.\conversions\image\tests\test_vil_vbl_conversions.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -1647,7 +2319,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "test_user_info_io"=.\vxl\vul\io\tests\test_user_info_io.dsp - Package Owner=<4>
+Project: "test_vnl_io"=.\vxl\vnl\io\tests\test_vnl_io.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -1659,7 +2331,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vul"=.\vxl\vul\vul.dsp - Package Owner=<4>
+Project: "test_vpdfl"=.\mul\vpdfl\tests\test_vpdfl.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -1671,499 +2343,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vul_io"=.\vxl\vul\io\vul_io.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vul_test_all"=.\vxl\vul\tests\vul_test_all.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vul_test_arg"=.\vxl\vul\tests\vul_test_arg.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vul_test_root_dir"=.\vxl\vul\tests\vul_test_root_dir.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vul_test_sprintf"=.\vxl\vul\tests\vul_test_sprintf.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vcsl"=.\vxl\vcsl\vcsl.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vcgl"=.\vxl\vcgl\vcgl.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "example1"=.\vxl\vcsl\examples\example1.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_cartesian_2d"=.\vxl\vcsl\tests\test_cartesian_2d.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_cartesian_3d"=.\vxl\vcsl\tests\test_cartesian_3d.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_composition"=.\vxl\vcsl\tests\test_composition.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_cylindrical"=.\vxl\vcsl\tests\test_cylindrical.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_degree"=.\vxl\vcsl\tests\test_degree.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_displacement"=.\vxl\vcsl\tests\test_displacement.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_meter"=.\vxl\vcsl\tests\test_meter.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_polar"=.\vxl\vcsl\tests\test_polar.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_radian"=.\vxl\vcsl\tests\test_radian.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_rotation"=.\vxl\vcsl\tests\test_rotation.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_scale"=.\vxl\vcsl\tests\test_scale.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_spherical"=.\vxl\vcsl\tests\test_spherical.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_transformation_graph"=.\vxl\vcsl\tests\test_transformation_graph.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_translation"=.\vxl\vcsl\tests\test_translation.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "geml"=.\gel\geml\geml.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "gevd"=.\gel\gevd\gevd.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "gkll"=.\gel\gkll\gkll.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "gmvl_examples"=.\gel\gmvl\examples\gmvl_examples.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "gmvl"=.\gel\gmvl\gmvl.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "gst"=.\gel\gst\gst.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "gtrl"=.\gel\gtrl\gtrl.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vpgl"=.\gel\mrc\vpgl\vpgl.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vpgl_tests"=.\gel\mrc\vpgl_tests\vpgl_tests.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "octree"=.\gel\octree\octree.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_vdgl"=.\gel\vdgl\examples\test_vdgl.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vdgl_tests"=.\gel\vdgl\tests\vdgl_tests.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vdgl"=.\gel\vdgl\vdgl.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "kl_tracker"=.\gel\vgel\examples\kl_tracker.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vgel_kl"=.\gel\vgel\kl\vgel_kl.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vgel"=.\gel\vgel\vgel.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vmal"=.\gel\vmal\vmal.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vsol_conic_example"=.\gel\vsol\examples\vsol_conic_example.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vsol_point_example"=.\gel\vsol\examples\vsol_point_example.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vsol_spatial_object_example"=.\gel\vsol\examples\vsol_spatial_object_example.dsp - Package Owner=<4>
+Project: "test_vsl_io"=.\vxl\vsl\tests\test_vsl_io.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -2343,127 +2523,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vsol"=.\gel\vsol\vsol.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "dense_matcher_full"=.\gel\vsrl\examples\dense_matcher_full.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "make_3d_output"=.\gel\vsrl\examples\make_3d_output.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vsrl"=.\gel\vsrl\vsrl.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "example2d"=.\gel\vtol\examples\example2d.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_block"=.\gel\vtol\tests\test_block.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_edge_2d"=.\gel\vtol\tests\test_edge_2d.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_face_2d"=.\gel\vtol\tests\test_face_2d.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_one_chain"=.\gel\vtol\tests\test_one_chain.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_two_chain"=.\gel\vtol\tests\test_two_chain.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_vertex_2d"=.\gel\vtol\tests\test_vertex_2d.dsp - Package Owner=<4>
+Project: "test_write_endian"=.\vxl\vil\tests\test_write_endian.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -2487,7 +2547,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vtol"=.\gel\vtol\vtol.dsp - Package Owner=<4>
+Project: "tiff"=.\v3p\tiff\tiff.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -2499,151 +2559,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "mbl"=.\mul\mbl\mbl.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_mbl"=.\mul\mbl\tests\test_mbl.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "mil"=.\mul\mil\mil.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_mil"=.\mul\mil\tests\test_mil.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_vpdfl"=.\mul\vpdfl\tests\test_vpdfl.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vpdfl"=.\mul\vpdfl\vpdfl.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vplayer"=.\oxl\VPLAYER\vplayer.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vxl_vrml_viewer"=.\oxl\apps\vxl_vrml_viewer\vxl_vrml_viewer.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "mvl_multi_view_matches_example"=.\oxl\mvl\examples\mvl_multi_view_matches_example.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "mvl"=.\oxl\mvl\mvl.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "break_lines"=.\oxl\osl\examples\break_lines.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "osl_harris"=.\oxl\osl\examples\osl_harris.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "run_osl_canny"=.\oxl\osl\examples\run_osl_canny.dsp - Package Owner=<4>
+Project: "time_fastops"=.\vxl\vnl\examples\time_fastops.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -2667,7 +2583,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "osl"=.\oxl\osl\osl.dsp - Package Owner=<4>
+Project: "vbl"=.\vxl\vbl\vbl.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -2679,7 +2595,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "oxltest"=.\oxl\oxltest\oxltest.dsp - Package Owner=<4>
+Project: "vbl_io"=.\vxl\vbl\io\vbl_io.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -2691,7 +2607,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "oxp"=.\oxl\oxp\oxp.dsp - Package Owner=<4>
+Project: "vbl_io_test_all"=.\vxl\vbl\io\tests\vbl_io_test_all.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -2703,7 +2619,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "awfmfc"=.\oxl\vgui\examples\awf\awfmfc\awfmfc.dsp - Package Owner=<4>
+Project: "vbl_smart_ptr_example"=.\vxl\vbl\examples\vbl_smart_ptr_example.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -2715,7 +2631,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "glmovie"=.\oxl\vgui\examples\awf\glmovie.dsp - Package Owner=<4>
+Project: "vbl_test_all"=.\vxl\vbl\tests\vbl_test_all.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -2727,7 +2643,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "multiple-windows"=.\oxl\vgui\examples\capes\multiple-windows.dsp - Package Owner=<4>
+Project: "vbl_test_array"=.\vxl\vbl\tests\vbl_test_array.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -2739,7 +2655,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "display-canny"=.\oxl\vgui\examples\fsm\display-canny.dsp - Package Owner=<4>
+Project: "vbl_test_classes"=.\vxl\vbl\tests\vbl_test_classes.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -2751,7 +2667,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "display-images"=.\oxl\vgui\examples\fsm\display-images.dsp - Package Owner=<4>
+Project: "vbl_test_smart_ptr"=.\vxl\vbl\tests\vbl_test_smart_ptr.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -2763,7 +2679,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "display-points"=.\oxl\vgui\examples\fsm\display-points.dsp - Package Owner=<4>
+Project: "vbl_test_sparse_array_2d"=.\vxl\vbl\tests\vbl_test_sparse_array_2d.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -2775,7 +2691,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "display-pyramid"=.\oxl\vgui\examples\fsm\display-pyramid.dsp - Package Owner=<4>
+Project: "vbl_test_sparse_array_3d"=.\vxl\vbl\tests\vbl_test_sparse_array_3d.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -2787,7 +2703,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "harris-moments"=.\oxl\vgui\examples\fsm\harris-moments.dsp - Package Owner=<4>
+Project: "vcgl"=.\vxl\vcgl\vcgl.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -2799,7 +2715,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "polygon-scan"=.\oxl\vgui\examples\fsm\polygon-scan.dsp - Package Owner=<4>
+Project: "vcl"=.\vcl\vcl.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -2811,7 +2727,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "raw-glut1"=.\oxl\vgui\examples\fsm\raw-glut1.dsp - Package Owner=<4>
+Project: "vcl_tests"=.\vcl\tests\vcl_tests.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -2823,7 +2739,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "raw-glut2"=.\oxl\vgui\examples\fsm\raw-glut2.dsp - Package Owner=<4>
+Project: "vcsl"=.\vxl\vcsl\vcsl.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -2835,7 +2751,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "satellite"=.\oxl\vgui\examples\fsm\satellite.dsp - Package Owner=<4>
+Project: "vcsl_test_all"=.\vxl\vcsl\tests\vcsl_test_all.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -2847,7 +2763,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "slab-glut"=.\oxl\vgui\examples\fsm\slab-glut.dsp - Package Owner=<4>
+Project: "vcsl_tutor"=.\vxl\vcsl\examples\vcsl_tutor.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -2859,7 +2775,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vgui_testbed"=.\oxl\vgui\examples\geoff\vgui_testbed\vgui_testbed.dsp - Package Owner=<4>
+Project: "vdgl"=.\gel\vdgl\vdgl.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -2871,7 +2787,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "2d-example"=.\oxl\vgui\examples\kym\2d-example.dsp - Package Owner=<4>
+Project: "vdgl_tests"=.\gel\vdgl\tests\vdgl_tests.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -2883,235 +2799,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "3d-example"=.\oxl\vgui\examples\kym\3d-example.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "dialog-example"=.\oxl\vgui\examples\kym\dialog-example.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "display-image"=.\oxl\vgui\examples\kym\display-image.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "menubar-example"=.\oxl\vgui\examples\kym\menubar-example.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "mouse-draw-line"=.\oxl\vgui\examples\kym\mouse-draw-line.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "mouse-position"=.\oxl\vgui\examples\kym\mouse-position.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "popup-example"=.\oxl\vgui\examples\kym\popup-example.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "printing_example"=.\oxl\vgui\examples\kym\printing_example.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "rubberband"=.\oxl\vgui\examples\kym\rubberband.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vgui_example_mfc"=.\oxl\vgui\examples\vgui_example_mfc\vgui_example_mfc.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vgui_glut"=.\oxl\vgui\impl\glut\vgui_glut.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vgui_mfc"=.\oxl\vgui\impl\mfc\vgui_mfc.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_events"=.\oxl\vgui\tests\test_events.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_front_back"=.\oxl\vgui\tests\test_front_back.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_pixels"=.\oxl\vgui\tests\test_pixels.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_popup"=.\oxl\vgui\tests\test_popup.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "test_timer"=.\oxl\vgui\tests\test_timer.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vgui"=.\oxl\vgui\vgui.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "vrml"=.\oxl\vrml\vrml.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "xcv"=.\oxl\xcv\xcv.dsp - Package Owner=<4>
+Project: "vepl"=.\tbl\vepl\vepl.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -3315,7 +3003,355 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vepl"=.\tbl\vepl\vepl.dsp - Package Owner=<4>
+Project: "vgel"=.\gel\vgel\vgel.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vgel_kl"=.\gel\vgel\kl\vgel_kl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vgl"=.\vxl\vgl\vgl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vgl_algo"=.\vxl\vgl\algo\vgl_algo.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vgl_conic_example"=.\vxl\vgl\examples\vgl_conic_example.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vgl_io"=.\vxl\vgl\io\vgl_io.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vgl_io_test_all"=.\vxl\vgl\io\tests\vgl_io_test_all.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vgl_test_all"=.\vxl\vgl\tests\vgl_test_all.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vgui"=.\oxl\vgui\vgui.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vgui_example_mfc"=.\oxl\vgui\examples\vgui_example_mfc\vgui_example_mfc.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vgui_glut"=.\oxl\vgui\impl\glut\vgui_glut.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vgui_mfc"=.\oxl\vgui\impl\mfc\vgui_mfc.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vgui_qt"=.\oxl\vgui\impl\qt\vgui_qt.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vgui_testbed"=.\oxl\vgui\examples\geoff\vgui_testbed\vgui_testbed.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vidl"=.\vxl\vidl\vidl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vil"=.\vxl\vil\vil.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vil_clamp_example"=.\vxl\vil\examples\vil_clamp_example.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vil_convert"=.\vxl\vil\examples\vil_convert.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vil_convolve"=.\vxl\vil\examples\vil_convolve.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vil_convolve_1d"=.\vxl\vil\examples\vil_convolve_1d.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vil_crop"=.\vxl\vil\examples\vil_crop.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vil_flipud"=.\vxl\vil\examples\vil_flipud.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vil_info"=.\vxl\vil\examples\vil_info.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vil_io"=.\vxl\vil\io\vil_io.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vil_print_section"=.\vxl\vil\examples\vil_print_section.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vil_rgb_example"=.\vxl\vil\examples\vil_rgb_example.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vil_scale"=.\vxl\vil\examples\vil_scale.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vil_scale_intensities_example"=.\vxl\vil\examples\vil_scale_intensities_example.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vil_test_all"=.\vxl\vil\tests\vil_test_all.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vipl"=.\tbl\vipl\vipl.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -3519,7 +3555,43 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vipl"=.\tbl\vipl\vipl.dsp - Package Owner=<4>
+Project: "vmal"=.\gel\vmal\vmal.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vnl"=.\vxl\vnl\vnl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vnl_algo"=.\vxl\vnl\algo\vnl_algo.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vnl_amoeba"=.\vxl\vnl\examples\vnl_amoeba.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -3543,7 +3615,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "test_allvxl"=.\vxl\test_allvxl\test_allvxl.dsp - Package Owner=<4>
+Project: "vnl_complex_svd"=.\vxl\vnl\examples\vnl_complex_svd.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -3555,7 +3627,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "test_container"=.\conversions\container\tests\test_container.dsp - Package Owner=<4>
+Project: "vnl_io"=.\vxl\vnl\io\vnl_io.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -3567,7 +3639,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "test_osl_to_vdgl"=.\conversions\geometry\tests\test_osl_to_vdgl.dsp - Package Owner=<4>
+Project: "vnl_lsqr_test"=.\vxl\vnl\examples\vnl_lsqr_test.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -3579,7 +3651,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "test_DigitalCurve_to_vdgl"=.\conversions\geometry\tests\test_DigitalCurve_to_vdgl.dsp - Package Owner=<4>
+Project: "vnl_planefit"=.\vxl\vnl\examples\vnl_planefit.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -3591,7 +3663,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "test_COOL_container"=.\conversions\container\tests\test_COOL_container.dsp - Package Owner=<4>
+Project: "vnl_polyroots"=.\vxl\vnl\examples\vnl_polyroots.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -3603,7 +3675,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "test_image_conversions"=.\conversions\image\tests\test_image_conversions.dsp - Package Owner=<4>
+Project: "vnl_rosenbrock"=.\vxl\vnl\examples\vnl_rosenbrock.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -3615,7 +3687,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "test_mil_conversions"=.\conversions\image\tests\test_mil_conversions.dsp - Package Owner=<4>
+Project: "vnl_svd"=.\vxl\vnl\examples\vnl_svd.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -3627,7 +3699,283 @@ Package=<4>
 
 ###############################################################################
 
-Project: "test_matrix_conversions"=.\conversions\math\tests\test_matrix_conversions.dsp - Package Owner=<4>
+Project: "vnl_test_all"=.\vxl\vnl\tests\vnl_test_all.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vobgetframe"=.\oxl\apps\glmovie\vobgetframe.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vpdfl"=.\mul\vpdfl\vpdfl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vpgl"=.\gel\mrc\vpgl\vpgl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vpgl_tests"=.\gel\mrc\vpgl_tests\vpgl_tests.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vpl"=.\vxl\vpl\vpl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vrml"=.\oxl\vrml\vrml.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vsl"=.\vxl\vsl\vsl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vsol"=.\gel\vsol\vsol.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vsol_conic_example"=.\gel\vsol\examples\vsol_conic_example.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vsol_point_example"=.\gel\vsol\examples\vsol_point_example.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vsol_spatial_object_example"=.\gel\vsol\examples\vsol_spatial_object_example.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vsrl"=.\gel\vsrl\vsrl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vtol"=.\gel\vtol\vtol.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vul"=.\vxl\vul\vul.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vul_io"=.\vxl\vul\io\vul_io.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vul_sequence_filename_example"=.\vxl\vul\examples\vul_sequence_filename_example.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vul_test_all"=.\vxl\vul\tests\vul_test_all.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vul_test_arg"=.\vxl\vul\tests\vul_test_arg.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vul_test_root_dir"=.\vxl\vul\tests\vul_test_root_dir.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vul_test_sprintf"=.\vxl\vul\tests\vul_test_sprintf.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vxl_vrml_viewer"=.\oxl\apps\vxl_vrml_viewer\vxl_vrml_viewer.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "xcv"=.\oxl\xcv\xcv.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "zlib"=.\v3p\zlib\zlib.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
