@@ -1,6 +1,7 @@
 #include <vcl_iostream.h>
 #include <bnl/bnl_analytic_integrant.h>
 #include <bnl/algo/bnl_simpson_integral.h>
+#include <bnl/algo/bnl_adaptsimpson_integral.h>
 
 class my_test_integrant : public bnl_analytic_integrant
 {
@@ -17,7 +18,12 @@ int main()
   double a = 0;
   double b = 1;
 
-  vcl_cout << "integral of x/(1+x^2) from "<< a << " to " << b << " is : "<< 
+  vcl_cout << "simpson integral of x/(1+x^2) from "<< a << " to " << b << " is : "<< 
     simpson_integral.integral(&f, a, b, 100) << "\n";
-  
+
+  bnl_adaptsimpson_integral adaptsimpson_integral;
+
+  vcl_cout << "adaptive simpson integral of x/(1+x^2) from "<< a << " to " << b << " is : "<< 
+    adaptsimpson_integral.integral(&f, a, b, 1e-13) << "\n";
+   
 }
