@@ -129,7 +129,91 @@ LINK32=link.exe
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-SOURCE=.\test_mbl.cxx
+SOURCE=.\test_driver.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_ar_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_clamped_plate_spline_2d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_combination.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_correspond_points.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_data_wrapper_mixer.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_file_data_wrapper.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_gamma.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_histogram.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_index_sort.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_jarque_bera.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_k_means.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_lda.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_lru_cache.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_matrix_products.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_matxvec.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_parse_block.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_priority_bounded_queue.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_random_n_from_m.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_rbf_network.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_read_props.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_select_n_from_m.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_selected_data_wrapper.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_stats_1d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_stochastic_data_collector.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_sum_1d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_thin_plate_spline_2d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_thin_plate_spline_3d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_thin_plate_spline_weights_3d.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_include.cxx
@@ -137,4 +221,3 @@ SOURCE=.\test_include.cxx
 # End Group
 # End Target
 # End Project
-
