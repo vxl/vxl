@@ -1,4 +1,4 @@
-// This is mul/vil2/tests/test_file_format_read.cxx
+// This is mul/vil3d/tests/test_file_format_read.cxx
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_vector.h>
@@ -117,7 +117,7 @@ test( const char* true_data_file, const CheckPixel& check )
 
   vcl_ifstream fin( true_data_file );
   if ( !( fin >> num_planes >> num_comp >> width >> height >> depth) ) {
-    vcl_cout << "[couldn't read header from " << true_data_file << "]";
+    vcl_cout << "[couldn't read header from " << true_data_file << ']';
     return false;
   }
 
@@ -129,8 +129,8 @@ test( const char* true_data_file, const CheckPixel& check )
         for ( int i=0; i < width; ++i ) {
           for ( int c=0; c < num_comp; ++c ) {
             if ( !( fin >> pixel[c] ) ) {
-              vcl_cout << "[couldn't read value at " << p << "," << i << "," << j << "," << c
-                << " from " << true_data_file << "]";
+              vcl_cout << "[couldn't read value at " << p << ',' << i << ',' << j << ',' << c
+                       << " from " << true_data_file << ']';
               return false;
             }
           }
@@ -140,7 +140,7 @@ test( const char* true_data_file, const CheckPixel& check )
               ", k=" << k << ", j=" << j << ", i=" << i <<
               ", is wrong. Should be {" << pixel[0];
             for ( int c=1; c < num_comp; ++c )
-              vcl_cout << "," << pixel[c];
+              vcl_cout << ',' << pixel[c];
             vcl_cout << "} ]";
 
             return false;
@@ -166,7 +166,8 @@ int test_file_format_read_main( int argc, char* argv[] )
 
   vcl_cout << "List of slices)\n";
   testlib_test_begin( "  List of ppm slices" );
-  testlib_test_perform( test( "ff_3planes8bit_true.txt", CheckColourPlanes<vxl_byte>( "ff_rgb8bit_ascii.1.ppm:ff_rgb8bit_ascii.2.ppm" ) ) );
+  testlib_test_perform( test( "ff_3planes8bit_true.txt",
+                              CheckColourPlanes<vxl_byte>( "ff_rgb8bit_ascii.1.ppm:ff_rgb8bit_ascii.2.ppm" ) ) );
 
   if (res==cwd) vpl_chdir(cwd);
   return testlib_test_summary();
