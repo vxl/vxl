@@ -22,6 +22,7 @@
 #include "test_data_wrapper_mixer.cxx"
 #include "test_file_data_wrapper.cxx"
 #include "test_combination.cxx"
+#include "test_ar_process.cxx"
 
 #undef TESTLIB_DEFINE_MAIN
 #define TESTLIB_DEFINE_MAIN(x) int main() \
@@ -47,6 +48,7 @@ void run_test_mbl()
   test_histogram();
   test_data_wrapper_mixer();
   test_combination();
+  test_ar_process();
 }
 
 TESTLIB_DEFINE_MAIN(run_test_mbl);
