@@ -1,6 +1,13 @@
-// calibrate_object.h: interface for the calibrate_object class.
-//
-//////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------
+// FileName             : E:\...\bcam\calibrate_object.h
+// Author               : Kongbin Kang (kk@lems.brown.edu)
+// Company              : Brown University
+// Purpose              : To represent calibration object
+// Date Of Creation     : 3/23/2003
+// Modification History :
+// Date             Modifications
+//------------------------------------------------------------------------------
+
 
 #ifndef AFX_CALIBRATIONOBJECT_H__FDECCBAC_345C_4A9A_BB15_3975763F8F2F__INCLUDED_
 #define AFX_CALIBRATIONOBJECT_H__FDECCBAC_345C_4A9A_BB15_3975763F8F2F__INCLUDED_
