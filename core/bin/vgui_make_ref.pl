@@ -121,7 +121,7 @@ sub find_class_def {
       my $rest = $2;
       if    ($rest =~ m/\s*\;/) { }
       else {
-	if (($i > 0) && ($lines[$i-1] =~ m/\btemplate\s*\<([\w\s]*)\>/)) {
+	if (($i > 0) && ($lines[$i-1] =~ m/\btemplate\s*\<(.*)\>/)) {
 	  $def_begin = $i-1;
 	  $template_clause = $1;
 	}
@@ -185,7 +185,15 @@ sub do_ref {
   die "$me: failed to open $file\n" unless open(FD, "$file");
   my (@line) = <FD>;
   close(FD);
-  
+
+  ##############################
+  # look for // no vgui_make_ref
+  for (my $i=0; $i<=$#line; ++$i) {
+    if ($line[$i] =~ m/\/\/\s+no\s+vgui_make_ref\b/) {
+      print STDERR "saw 'no vgui_make_ref' -- aborting\n";
+      return;
+    }
+  }
   
   ##############################
   # scan through the source file:
@@ -194,7 +202,6 @@ sub do_ref {
   my ($struct_or_class, $blah_begin, $blah_end, $template_clause) = &find_class_def($blah, @line);
   die "$me: definition of '$blah' not found\n" if (($blah_begin < 0) || ($blah_end < 0));
   die "$me: no class-key found\n" if ($struct_or_class eq "");
-  print STDERR "$me: found definition of 'template <$template_clause> $struct_or_class $blah':\n";
   #print STDERR "$me:   begin line: $blah_begin\n";
   #print STDERR "$me:   end   line: $blah_end\n";
   my $template_args = "";
@@ -207,6 +214,14 @@ sub do_ref {
       $template_args .= ", " if ($i > 0);
       $template_args .= $tmp[$i];
     }
+  }
+  if ($template_clause eq "") {
+    print STDERR "$me: found definition of '$struct_or_class $blah':\n";
+  }
+  else {
+    print STDERR "$me: template_clause = '$template_clause'\n";
+    print STDERR "$me: template_args = '$template_args'\n";
+    print STDERR "$me: found definition of 'template <${template_clause}> $struct_or_class $blah':\n";
   }
   
   # collect list of blah's constructor signatures:
