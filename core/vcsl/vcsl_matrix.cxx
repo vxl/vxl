@@ -4,7 +4,7 @@
 #endif
 #include "vcsl_matrix.h"
 #include <vcl_cassert.h>
-#include <vcl_cmath.h> // for vcl_cos(), vcl_sin()
+#include <vcl_cmath.h> // for cos(), sin()
 #include <vcl_iostream.h>
 
 //***************************************************************************
@@ -68,7 +68,7 @@ vnl_vector<double> vcsl_matrix::execute(const vnl_vector<double> &v,
   assert(is_valid());
   assert(v.size()==3);
 
-  vnl_vector<double> temp(4, v(0),v(1),v(2),1.0);
+  vnl_vector_fixed<double,4> temp(v(0),v(1),v(2),1.0);
 
   vnl_matrix<double> value=matrix_value(time,true);
   return value*temp;
@@ -85,7 +85,7 @@ vnl_vector<double> vcsl_matrix::inverse(const vnl_vector<double> &v,
   assert(is_valid());
   assert(v.size()==3);
 
-  vnl_vector<double> temp(4, v(0),v(1),v(2),1.0);
+  vnl_vector_fixed<double,4> temp(v(0),v(1),v(2),1.0);
 
   vnl_matrix<double> value=matrix_value(time,false);
   return value*temp;
@@ -109,10 +109,10 @@ vnl_matrix<double> vcsl_matrix::matrix_value(double time, bool type) const
         case vcsl_linear:
           return lmi(param_to_matrix(matrix_[i],type),param_to_matrix(matrix_[i+1],type),i,time);
         case vcsl_cubic:
-          assert(!"vcsl_cubic net yet implemented");
+          assert(!"vcsl_cubic not yet implemented");
           break;
         case vcsl_spline:
-          assert(!"vcsl_spline net yet implemented");
+          assert(!"vcsl_spline not yet implemented");
           break;
         default:
           assert(!"This is impossible");

@@ -114,24 +114,26 @@ vnl_vector<double> vgui_projection_inspector::back_project(vnl_vector<double> co
 vnl_vector<double> vgui_projection_inspector::back_project(double x,double y,
                                                            vnl_vector_fixed<double,4> const &p) const
 {
-  vnl_vector<double> xy(2, x,y);
+  vnl_vector_fixed<double,2> xy(x,y);
   return back_project(xy,p);
 }
 
 vnl_vector<double> vgui_projection_inspector::back_project(double x,double y,double z,
                                                            vnl_vector_fixed<double,4> const &p) const
 {
-  vnl_vector<double> xyz(3, x,y,z);
+  vnl_vector_fixed<double,3> xyz(x,y,z);
   return back_project(xyz,p);
 }
 
 //------------------------------------------------------------------------------
-
+//:
 // returns true iff M has the form
-// * * * *
-// * * * *
-// * * * *
-// 0 0 0 *
+// \verbatim
+//  * * * *
+//  * * * *
+//  * * * *
+//  0 0 0 *
+// \endverbatim
 static bool is_affine(const vnl_matrix_fixed<double,4,4> &M)
 {
   return M(3,0)==0 && M(3,1)==0 && M(3,2)==0 && M(3,3)!=0;
@@ -155,10 +157,12 @@ void vgui_projection_inspector::inspect()
   vnl_matrix_fixed<double,4,4> T = P*M;
 
   // if projection is scaling parallel to axes :
+  // \verbatim
   // [ *     * ]
   // [   *   * ]
   // [     * * ]
   // [       * ]
+  // \endverbatim
   if (is_affine(T) &&
       T(1,0)==0 && T(0,1)==0 &&
       T(2,0)==0 && T(0,2)==0 &&
@@ -217,7 +221,7 @@ void vgui_projection_inspector::window_to_image_coordinates(int x,int y,
   //
   xi = ((winx-x)*x1 + (     x)*x2)/winx;
   yi = ((winy-y)*y1 + (     y)*y2)/winy;
-  //yi = ((     y)*y1 + (winy-y)*y2)/winy;
+//yi = ((     y)*y1 + (winy-y)*y2)/winy;
 }
 
 // This method computes the viewport coordinates of the projection of the point (ix, iy, 0, 1).
@@ -246,22 +250,6 @@ void vgui_projection_inspector::image_to_window_coordinates(float ix,float iy,fl
   wx = vp[0] + (nx - -1)/2 * vp[2];
   wy = vp[1] + (ny - -1)/2 * vp[3];
 }
-
-// fsm: what does this compute?
-// pcp: why a token2D of course! see vgui_token2D for what that is,.
-// fsm: ok, a vgui_token2D represents a coordinate transformation with
-//      translation and scaling along the axis. but I don't understand
-//      if I'm supposed to apply the scaling first, then the translation
-//      or vice versa. as for the method, exactly which coordinate
-//      transformation does it compute? that's what I wanted to know.
-// pcp: what am i ? a mind reader ? here's what you wanted
-//      to transform from window coordinates (x,y) to image coordinates (ix,iy)
-//
-//        ix = (x - token.offsetX) / token.scaleX;
-//        iy = (y - token.offsetY) / token.scaleY;
-// fsm: thank you.
-//
-//vgui_token2D is now deprecated.
 
 //-----------------------------------------------------------------------------
 bool vgui_projection_inspector::compute_as_2d_affine(int width, int height,

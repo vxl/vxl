@@ -1,5 +1,6 @@
 #include <vcl_iostream.h>
 #include <vnl/vnl_real_npolynomial.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vnl/algo/vnl_rnpoly_solve.h>
 #include <testlib/testlib_test.h>
 
@@ -7,11 +8,11 @@ static void test_rnpoly_roots()
 {
   // Intersection of two unit circles, centered in (0,0) and in (1,0):
 
-  vnl_vector<double> f1(3, 1.0,1.0,-1.0);
+  vnl_vector_fixed<double,3> f1(1.0,1.0,-1.0);
   vnl_matrix<unsigned int> p1(3,2, 0); p1(0,0) = 2; p1(1,1) = 2;
   vnl_real_npolynomial poly1(f1,p1); vcl_cout << poly1; // X^2 +Y^2 -1
 
-  vnl_vector<double> f2(2, 1.0,-1.0);
+  vnl_vector_fixed<double,2> f2(1.0,-1.0);
   vnl_matrix<unsigned int> p2(2,2, 0); p2(0,0) = 1;
   vnl_real_npolynomial monom1(f2,p2); vcl_cout << monom1; // X-1
 

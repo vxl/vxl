@@ -4,12 +4,13 @@
 // \file
 // \brief Functions to smooth an image
 // \author Ian Scott
+
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
 #include <vcl_algorithm.h>
 #include <vcl_functional.h>
 #include <vnl/vnl_erf.h>
-#include <vnl/vnl_vector.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_real_polynomial.h>
 
 vil_gauss_filter_5tap_params::vil_gauss_filter_5tap_params(double sigma)
@@ -100,11 +101,13 @@ void vil_gauss_filter_gen_ntap(double sd, unsigned diff,
     const double offset = filter.size() % 2 == 0 ? 0.0 : -0.5;
     vnl_real_polynomial poly(1.0);
     const double eta = -0.5/(sd*sd);
-    const vnl_real_polynomial d_gauss(vnl_vector<double>(2, eta, 0.0));
+    const vnl_real_polynomial d_gauss(vnl_vector_fixed<double,2>(eta, 0.0));
     for (unsigned i=1; i<diff; ++i)
+    {
       // Evaluate d/dx (poly * gauss) where gauss = exp(-0.5*x^2/sd^2)
       // n.b. d/dx gauss = d_gauss * gauss
       poly = poly * d_gauss + poly.derivative();
+    }
 
     for (int i=-centre ; i+centre<filter.size(); ++i)
     {

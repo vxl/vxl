@@ -2,6 +2,7 @@
 #include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_cross.h>
 #include <testlib/testlib_test.h>
@@ -174,7 +175,7 @@ void vnl_vector_test_float()
   TEST("(v0 == v2)", (v0 == v2), false);
   TEST("v1.fill(3)", (v1.fill(3), (v1.get(0)==3 && v1.get(1)==3)), true);
   TEST("v2.fill(2)", (v2.fill(2), (v2.get(0)==2 && v2.get(1)==2)), true);
-  vnl_vector<float> v3(3, 1.f,2.f,3.f);
+  vnl_vector<float> v3 = vnl_vector_fixed<float,3>(1.f,2.f,3.f).as_vector();
   TEST("v3(3)",(v3.get(0)==1 && v3.get(1)==2 && v3.get(2)==3), true);
   vnl_vector<float> v4(v3);
   TEST("vnl_vector<float> v4(v3)", v3, v4);
@@ -273,7 +274,7 @@ void vnl_vector_test_float()
   }
 
   {
-    vnl_vector<float> v(3, 1.f,2.f,3.f);
+    vnl_vector_fixed<float,3> v(1.f,2.f,3.f);
     vnl_matrix<float> m = outer_product(v, v);
     TEST("outer_product",
          (m(0,0)==1 && m(0,1)==2 && m(0,2)==3 &&
@@ -281,11 +282,9 @@ void vnl_vector_test_float()
           m(2,0)==3 && m(2,1)==6 && m(2,2)==9), true);
   }
   {
-    vnl_vector<float> v(3, 1.f,2.f,3.f);
-    TEST("vnl_vector<float> v(3, 1.f,2.f,3.f)", v.size(), 3);
-    v.x() = 1.f;
-    v.y() = 2.f;
-    v.z() = 3.f;
+    vnl_vector_fixed<float,3> v(1.f,2.f,3.f);
+    TEST("vnl_vector_fixed<float> v(1.f,2.f,3.f)", v.size(), 3);
+    v[0] = 1.f; v[1] = 2.f; v[2] = 3.f;
     TEST("v.set_x(1) and v[0]", v[0], 1);
     TEST("v.set_y(2) and v[1]", v[1], 2);
     TEST("v.set_z(3) and v[2]", v[2], 3);
@@ -366,16 +365,15 @@ void vnl_vector_test_matrix()
 
 void vnl_vector_test_conversion()
 {
-  int i, d;
   bool check;
   {
     // convert from a vnl_vector to a block array:
-    int v1values [] = {1,2,3, 4,5,6, 7,8,9, 10,11,12};
+    int v1values[] = {1,2,3, 4,5,6, 7,8,9, 10,11,12};
     vnl_vector<int> v1 (12, 12, v1values);
     const int* data = v1.data_block();
     {
       check = true;
-      for (d = 0; d < 12; d++)
+      for (int d = 0; d < 12; d++)
         if (data[d] != d+1)
           check = false;
     }
@@ -385,7 +383,7 @@ void vnl_vector_test_conversion()
     const block& v2 = *((const block*) data);
     {
       check = true;
-      for (i = 0; i < 12; i++)
+      for (int i = 0; i < 12; i++)
         if (v1(i) != v2[i])
           check = false;
     }
@@ -393,12 +391,12 @@ void vnl_vector_test_conversion()
 
     // convert from a block array to a vnl_vector:
     block b1;
-    for (i = 0; i < 12; i++)
+    for (int i = 0; i < 12; i++)
       b1[i] = i;
     data = ((const int*) b1);
     {
       check = true;
-      for (d = 0; d < 12; d++)
+      for (int d = 0; d < 12; d++)
         if (data[d] != d)
           check = false;
     }
@@ -406,7 +404,7 @@ void vnl_vector_test_conversion()
     vnl_vector<int> b2(data, 12);
     {
       check = true;
-      for (i = 0; i < 12; i++)
+      for (int i = 0; i < 12; i++)
         if (b1[i] != b2(i))
           check = false;
     }
@@ -416,12 +414,12 @@ void vnl_vector_test_conversion()
   {
     // convert from a vnl_vector to a block array:
     vnl_vector<double> v1 (12, 12,
-                          1.0,2.0,3.0, 4.0,5.0,6.0,
-                          7.0,8.0,9.0, 10.0,11.0,12.0);
+                           1.0,2.0,3.0, 4.0,5.0,6.0,
+                           7.0,8.0,9.0, 10.0,11.0,12.0);
     const double* data = v1.data_block();
     {
       check = true;
-      for (d = 0; d < 12; d++)
+      for (int d = 0; d < 12; d++)
      if (data[d] != d+1)
        check = false;
     }
@@ -431,20 +429,20 @@ void vnl_vector_test_conversion()
     block& v2 = *((block*) data);
     {
       check = true;
-      for (i = 0; i < 12; i++)
-     if (v1(i) != v2[i])
-       check = false;
+      for (int i = 0; i < 12; i++)
+        if (v1(i) != v2[i])
+          check = false;
     }
     TEST("matrix(i)==block[i]", check, true);
 
     // convert from a block array to a vnl_vector:
     block b1;
-    for (i = 0; i < 12; i++)
+    for (int i = 0; i < 12; i++)
       b1[i] = i;
     data = ((const double*) b1);             // & in ((const double*) &b1)
     {                                                // is not needed
       check = true;
-      for (d = 0; d < 12; d++)
+      for (int d = 0; d < 12; d++)
      if (data[d] != d)
        check = false;
     }
@@ -452,7 +450,7 @@ void vnl_vector_test_conversion()
     vnl_vector<double> b2(data, 12);
     {
       check = true;
-    for (i = 0; i < 12; i++)
+    for (int i = 0; i < 12; i++)
       if (b1[i] != b2(i))
      check = false;
     }
