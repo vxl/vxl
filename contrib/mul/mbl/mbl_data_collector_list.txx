@@ -54,6 +54,37 @@ mbl_data_wrapper<T >& mbl_data_collector_list<T>::data_wrapper()
   return wrapper_;
 }
 
+template <class T>
+void mbl_data_collector_list<T>::print_summary(vcl_ostream& os) const
+{
+  os<<"Number stored: "<<data_.size()<<vcl_endl;
+}
+
+template <class T>
+void mbl_data_collector_list<T>::b_write(vsl_b_ostream& bfs) const
+{
+  vsl_b_write(bfs, version_no());
+  vsl_b_write(bfs, data_());
+}
+
+template <class T>
+void mbl_data_collector_list<T>::b_read(vsl_b_istream& bfs)
+{
+  short version;
+  vsl_b_read(bfs,version);
+  switch (version)
+  {
+  case (1):
+    vsl_b_read(bfs, data_);
+    break;
+  default:
+    vcl_cerr << "mbl_data_collector_list<T>::b_read() ";
+    vcl_cerr << "Unexpected version number " << version << vcl_endl;
+    vcl_abort();
+  }
+}
+
+
 #define MBL_DATA_COLLECTOR_LIST_INSTANTIATE(T) \
 template class mbl_data_collector_list< T >
 #endif // mbl_data_collector_list_txx_

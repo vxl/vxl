@@ -176,7 +176,6 @@ void mbl_stochastic_data_collector<T>::print_summary(vcl_ostream& os) const
 template <class T>
 void mbl_stochastic_data_collector<T>::b_write(vsl_b_ostream& bfs) const
 {
-  vsl_b_write(bfs, is_a());
   vsl_b_write(bfs, version_no());
 
   vsl_b_write(bfs, samples_);
@@ -188,16 +187,6 @@ void mbl_stochastic_data_collector<T>::b_write(vsl_b_ostream& bfs) const
 template <class T>
 void mbl_stochastic_data_collector<T>::b_read(vsl_b_istream& bfs)
 {
-  vcl_string name;
-  vsl_b_read(bfs,name);
-  if (name != is_a())
-  {
-    vcl_cerr << "mbl_stochastic_data_collector<T>::load : ";
-    vcl_cerr << "Attempted to load object of type ";
-    vcl_cerr << name <<" into object of type " << is_a() << vcl_endl;
-    vcl_abort();
-  }
-
   short version;
   vsl_b_read(bfs,version);
   switch (version)

@@ -36,6 +36,17 @@ public:
 
   //: Return object describing stored data
   virtual mbl_data_wrapper<T >& data_wrapper();
+
+
+    //: Print class to os
+  virtual void print_summary(vcl_ostream& os) const;
+
+    //: Save class to binary file stream
+  virtual void b_write(vsl_b_ostream& bfs) const;
+
+    //: Load class from binary file stream
+  virtual void b_read(vsl_b_istream& bfs);
+
 };
 
 #endif // mbl_data_collector_list_h_
