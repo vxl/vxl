@@ -1,3 +1,0 @@
-SOURCE_FILES(ouel_sources
-  kalman_filter.h
-)
