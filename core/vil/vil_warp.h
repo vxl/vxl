@@ -33,7 +33,7 @@
 //
 // Note that if you want to store a warp with an image to create a registered image,
 // the vimt library (in contrib/mul/vimt) provides efficient registered images
-// with transforms upto projective.
+// with transforms up to projective.
 template <class sType, class dType, class MapFunctor, class InterpFunctor>
 void vil_warp(const vil_image_view<sType>& in,
               vil_image_view<dType>& out,
@@ -54,7 +54,7 @@ void vil_warp(const vil_image_view<sType>& in,
         // *** Find (ix, iy) from (ox,oy)
         double ix, iy;
         mapper(double(ox), double(oy), ix, iy);
-        out(ox, oy) = dType(interp(in, ix, iy, p));
+        out(ox, oy, p) = dType(interp(in, ix, iy, p));
       }
     }
   }
