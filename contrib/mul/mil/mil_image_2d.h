@@ -23,7 +23,6 @@ private:
     virtual void resize3(int nx, int ny, int n_planes) = 0;
 
 public:
-
     //: Dflt ctor
     mil_image_2d() {};
 
@@ -53,8 +52,8 @@ public:
     virtual int nz() const { return 1; }
 
     //: Does the name of the class match the argument?
-	virtual bool is_class(vcl_string const& s) const
-	{ return (s=="mil_image_2d"); }
+    virtual bool is_class(vcl_string const& s) const
+    { return (s=="mil_image_2d"); }
 };
 
 #endif // mil_image_2d_h_
