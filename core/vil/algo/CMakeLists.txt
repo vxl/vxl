@@ -20,6 +20,7 @@ SET( vil2_algo_sources
                                vil2_exp_filter_1d.h
                                vil2_normalised_correlation_2d.h
                                vil2_exp_grad_filter_1d.h
+  vil2_line_filter.txx         vil2_line_filter.h
 )
 
 

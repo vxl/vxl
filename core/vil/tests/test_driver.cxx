@@ -24,6 +24,7 @@ DECLARE( test_binary_erode );
 DECLARE( test_greyscale_dilate );
 DECLARE( test_greyscale_erode );
 DECLARE( test_median );
+DECLARE( test_algo_line_filter );
 
 void
 register_tests()
@@ -52,6 +53,7 @@ register_tests()
   REGISTER( test_greyscale_dilate );
   REGISTER( test_greyscale_erode );
   REGISTER( test_median );
+  REGISTER( test_algo_line_filter );
 }
 
 DEFINE_MAIN;
