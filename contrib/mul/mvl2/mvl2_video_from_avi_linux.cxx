@@ -110,8 +110,8 @@ bool mvl2_video_from_avi::get_frame(vimt_image_2d_of<vxl_byte>& image)
     {
     image.image().set_size(im24->Width(),im24->Height(),1);
       // takes the Y componant in the YUV space
-    for (int y=0;y<image.image().nj();++y)
-      for (int x=0;x<image.image().ni();++x)
+    for (unsigned int y=0;y<image.image().nj();++y)
+      for (unsigned int x=0;x<image.image().ni();++x)
         image.image()(x,y,0) = (int)(0.299*(double)im24->At(x,y)[1]+
             0.587*(double)im24->At(x,y)[2]+
             0.114*(double)im24->At(x,y)[0]);
@@ -160,7 +160,8 @@ int mvl2_video_from_avi::length()
 
 int mvl2_video_from_avi::seek(int frame_number)
 {
-  if (!is_initialized_ || frame_number>moviestream_->GetLength()) return -1;
+  if (!is_initialized_ || frame_number<0 || frame_number>moviestream_->GetLength())
+    return -1;
   if (frame_number==0)
   {
     reset_frame();
@@ -178,7 +179,7 @@ int mvl2_video_from_avi::seek(int frame_number)
   key_frame=moviestream_->GetPos();
   vcl_cout << "[mvl2_video_from_avi::seek] key frame ";
   vcl_cout << key_frame << "  -> uncomppress ";
-  vcl_cout << frame_number-key_frame << " frames" << vcl_endl;
+  vcl_cout << frame_number-key_frame << " frames\n";
   for (int i=key_frame;i<=frame_number;i++)
   {
     //current_frame_=moviestream_->GetPos();
