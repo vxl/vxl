@@ -6,7 +6,7 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl_iostream.h>
-#include <vnl/vnl_double_2.h>
+#include <vnl/vnl_vector.h>
 #include <vnl/vnl_cost_function.h>
 #include <vnl/algo/vnl_amoeba.h>
 
@@ -38,7 +38,7 @@ int main()
   vnl_amoeba::minimize(f, x);
 
   // Summarize the results
-  vcl_cout << "Rosenbrock min at " << x << vcl_endl;
+  vcl_cout << "Rosenbrock min at " << x << '\n';
 
   return 0;
 }
