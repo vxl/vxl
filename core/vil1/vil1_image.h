@@ -20,10 +20,17 @@
 // vbl_smart_ptr<vil_image_impl>, but with some extra convenience
 // methods.  These methods might traditionally be attached to the ABC
 // image_impl, but this avoids cluttering that interface.
+class vil_image;
 
-class vil_image {
+//: You should not derive from vil_image to make a new image type.
+// Derive from vil_image_impl instead.
+// The trick used here to inhibit derivation is to derive from a 
+// virtual base class 
+struct vil_image_inhibit_derivation {vil_image_inhibit_derivation(int) {}};
+
+class vil_image : public virtual vil_image_inhibit_derivation {
 public:
-  //undoc delegation macro for consistency, not convenience.
+// use this delegation macro for consistency, not convenience.
 #define vil_image_delegate(m, args, default) { return ptr ? ptr->m args : default; }
   
   //: Dimensions:  Planes x W x H x Components
@@ -57,7 +64,7 @@ public:
     { vil_image_delegate(put_section, (buf, x0, y0, width, height), false); }
   
   //: Getting property information
-  bool get_property(char const *tag, void *property_value = 0) 
+  bool get_property(char const *tag, void *property_value = 0) const
     { vil_image_delegate(get_property, (tag, property_value), false); }
   
   //: Setting property information
@@ -83,12 +90,12 @@ public:
   
   //------------ smart-pointer logic --------
 
-  vil_image(vil_image_impl *p = 0) : ptr(p) {
+  vil_image(vil_image_impl *p = 0) : vil_image_inhibit_derivation(0), ptr(p) {
     if (ptr)
       ptr->up_ref();
   }
 
-  vil_image(vil_image const& that) : ptr(that.ptr) {
+  vil_image(vil_image const& that) : vil_image_inhibit_derivation(0), ptr(that.ptr) {
     if (ptr)
       ptr->up_ref();
   }

@@ -829,7 +829,7 @@ void vsl_canny_ox::Final_followOX(int x,
     xc->push_front(x_p);  xc->push_front(x_c);
     yc->push_front(y_p);  yc->push_front(y_c);
     int xNew, yNew;
-    if (Join_dotsOX(x, y, dx, dy, xNew, yNew) == true)
+    if (Join_dotsOX(x, y, dx, dy, xNew, yNew))
       Final_followOX(xNew,yNew,xc,yc,grad,0);
   }
 }

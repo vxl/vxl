@@ -17,9 +17,11 @@
 class vil_stream;
 #include <vil/vil_image.h>
 
-//: Send vil_image_impl to disk, given filename
+//: Send vil_image to disk, deducing format from filename
+bool vil_save(vil_image const&, char const* filename);
+
+//: Send vil_image to disk, given filename
 bool vil_save(vil_image const&, char const* filename, char const* file_format);
-bool vil_save(vil_image const&, char const* filename); // deduce format from filename
 
 //: Send vil_image_impl to outstream
 bool vil_save(vil_image const &, vil_stream* outstream, char const* file_format = "pnm");

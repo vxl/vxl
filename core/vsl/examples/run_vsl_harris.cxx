@@ -10,7 +10,8 @@
 
 // ** please don't make this program interactive. it must be
 // usable in a script, as a filter. **
-int main(int argc,char **argv) {
+int main(int argc,char **argv) 
+{
   vbl_arg<vcl_string> infile ("-in"   ,"input image file"    ,"-"); // default is stdin.
   vbl_arg<vcl_string> outfile("-out"  ,"output corner file (default is stdout)"  ,"");
   vbl_arg<double>     sigma  ("-sigma","gauss sigma"         ,0.7);

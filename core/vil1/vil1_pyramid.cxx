@@ -28,7 +28,7 @@ vil_image vil_pyramid::operator[](unsigned i)
     I = vil_resample(I, I.width()/2, I.height()/2);
     switch (cs) {
     case none: break;
-    case memory: I = vil_memory_image(I, "silly hack"); break;
+    case memory: I = vil_memory_image(I /*, "silly hack"*/); break;
     case blocked: /* not implemented yet */
     default: assert(false); break;
     }

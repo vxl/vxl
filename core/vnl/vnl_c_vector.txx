@@ -206,12 +206,11 @@ T vnl_c_vector<T>::min_value(T const *src, unsigned n) {
 
 //--------------------------------------------------------------------------------
 
-// useless... #define vnl_c_vector_use_win32_native_alloc 0
 static const int vnl_c_vector_use_vnl_alloc = 1;
 
 #include <vnl/vnl_alloc.h>
 
-static inline void* alloc(int n, int size)
+inline void* vnl_c_vector_alloc(int n, int size)
 {
   //#if vnl_c_vector_use_win32_native_alloc
   // native was:  return (T**)std::allocator<T*>().allocate(n, 0);
@@ -222,7 +221,7 @@ static inline void* alloc(int n, int size)
     return new char[n * size];
 } 
 
-static inline void dealloc(void* v, int n, int size)
+inline void vnl_c_vector_dealloc(void* v, int n, int size)
 { 
   if (vnl_c_vector_use_vnl_alloc) {
     if (v) 
@@ -235,25 +234,25 @@ static inline void dealloc(void* v, int n, int size)
 template<class T> 
 T** vnl_c_vector<T>::allocate_Tptr(int n)
 {
-  return (T**)alloc(n, sizeof (T*));
+  return (T**)vnl_c_vector_alloc(n, sizeof (T*));
 }
 
 template<class T> 
 T* vnl_c_vector<T>::allocate_T(int n)
 {
-  return (T*)alloc(n, sizeof (T));
+  return (T*)vnl_c_vector_alloc(n, sizeof (T));
 }
 
 template<class T> 
 void vnl_c_vector<T>::deallocate(T** v, int n)
 {
-  dealloc(v, n, sizeof (T*));
+  vnl_c_vector_dealloc(v, n, sizeof (T*));
 }
 
 template<class T> 
 void vnl_c_vector<T>::deallocate(T* v, int n)
 {
-  dealloc(v, n, sizeof (T));
+  vnl_c_vector_dealloc(v, n, sizeof (T));
 }
 
 //------------------------------------------------------------

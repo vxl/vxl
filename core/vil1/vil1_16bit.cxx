@@ -28,15 +28,15 @@ vxl_uint16 vil_16bit_read_little_endian(vil_stream *s)
 void vil_16bit_write_big_endian(vil_stream *s, vxl_uint16 w)
 {
   word8 bytes[2];
-  bytes[0] = w >> 8;
-  bytes[1] = w;
+  bytes[0] = word8(w >> 8);
+  bytes[1] = word8(w & 0xff);
   s->write(bytes, sizeof bytes);
 }
 
 void vil_16bit_write_little_endian(vil_stream *s, vxl_uint16 w)
 {
   word8 bytes[2];
-  bytes[0] = w;
-  bytes[1] = w >> 8;
+  bytes[0] = word8(w & 0xff);
+  bytes[1] = word8(w >> 8);
   s->write(bytes, sizeof bytes);
 }

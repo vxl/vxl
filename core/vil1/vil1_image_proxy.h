@@ -10,16 +10,14 @@
 
 #include <vil/vil_image.h>
 
-struct vil_image_proxy_impl;
-
 struct vil_image_proxy : public vil_image
 {
   vil_image_proxy(char const *file);
   ~vil_image_proxy() { }
   
 private:
-  vil_image_proxy(vil_image const &) { }
-  vil_image_proxy(vil_image_proxy const &) { }
+  vil_image_proxy(vil_image const &) : vil_image_inhibit_derivation(0) { }
+  vil_image_proxy(vil_image_proxy const &) : vil_image_inhibit_derivation(0) { }
 };
 
 #endif

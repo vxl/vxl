@@ -20,7 +20,7 @@ int main(int argc, char **argv) {
       continue;
     }
 
-    I = vil_memory_image(I, "bah"); // close file
+    I = vil_memory_image(I /*, "bah"*/); // close file
     cerr << "I : " << I << endl;
     
     I = vil_flipud(I);

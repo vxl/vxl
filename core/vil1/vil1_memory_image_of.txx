@@ -11,29 +11,33 @@
 
 template <class T>
 vil_memory_image_of<T>::vil_memory_image_of():
+  vil_image_inhibit_derivation(1),
   vil_memory_image()
 {
 }
 
 template <class T>
 vil_memory_image_of<T>::vil_memory_image_of(vil_memory_image_of<T> const & that):
+  vil_image_inhibit_derivation(1),
   vil_memory_image(that)
 {
 }
 
 template <class T>
 vil_memory_image_of<T>::vil_memory_image_of(vil_image const& image):
-  vil_memory_image(image.planes(), image.width(), image.height(), vil_memory_image_of_format<T>())
+  vil_image_inhibit_derivation(1),
+  vil_memory_image(image)
 {
   assert(image.components() == components());
   assert(image.bits_per_component() == bits_per_component());
   assert(image.component_format() == component_format());
-
-  set(image);
+  // because of asserts, format is fine
+  //  set(image); 
 }
 
 template <class T>
 vil_memory_image_of<T>::vil_memory_image_of(int sizex, int sizey):
+  vil_image_inhibit_derivation(1),
   vil_memory_image(1, sizex, sizey, vil_memory_image_of_format<T>())
 {
 }
@@ -41,6 +45,7 @@ vil_memory_image_of<T>::vil_memory_image_of(int sizex, int sizey):
 #if 0 // this method was removed
 template <class T>
 vil_memory_image_of<T>::vil_memory_image_of(int sizex, int sizey, T const& value):
+  vil_image_inhibit_derivation(1),
   vil_memory_image(1, sizex, sizey, vil_memory_image_of_format<T>())
 {
   T *p = (T*)get_buffer();

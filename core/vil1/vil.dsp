@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)/vxl" /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "VCL_USE_NATIVE_STL" /YX /FD /c
+# ADD CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vxl\config.win32-VC60" /I "$(IUEROOT)/vxl" /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "VCL_USE_NATIVE_STL" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -91,6 +91,10 @@ SOURCE=.\vil_16bit.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vil_32bit.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\vil_block_cache_image_impl.cxx
 # End Source File
 # Begin Source File
@@ -99,20 +103,19 @@ SOURCE=.\file_formats\vil_bmp.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vil_byte_swap.cxx
+SOURCE=.\file_formats\vil_bmp_core_header.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vil_convolve.cxx
+SOURCE=.\file_formats\vil_bmp_file_header.cxx
+# End Source File
+# Begin Source File
 
-!IF  "$(CFG)" == "vil - Win32 Release"
+SOURCE=.\file_formats\vil_bmp_info_header.cxx
+# End Source File
+# Begin Source File
 
-!ELSEIF  "$(CFG)" == "vil - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ENDIF 
-
+SOURCE=.\vil_byte_swap.cxx
 # End Source File
 # Begin Source File
 
@@ -125,14 +128,6 @@ SOURCE=".\Templates\vil_convolve_simple+byte.byte.int.int-.cxx"
 # Begin Source File
 
 SOURCE=".\Templates\vil_convolve_simple+byte.float.float.byte-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vil_convolve_simple+byte.float.float.int-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vil_convolve_simple+byte.float.float.short-.cxx"
 # End Source File
 # Begin Source File
 
@@ -336,11 +331,27 @@ SOURCE=.\vil_16bit.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\vil_32bit.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\vil_block_cache_image_impl.h
 # End Source File
 # Begin Source File
 
 SOURCE=.\file_formats\vil_bmp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats\vil_bmp_core_header.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats\vil_bmp_file_header.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats\vil_bmp_info_header.h
 # End Source File
 # Begin Source File
 

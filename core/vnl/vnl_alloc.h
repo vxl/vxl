@@ -34,7 +34,7 @@
 #include <vcl/vcl_cstdlib.h>
 
 const int VNL_ALLOC_ALIGN = 8;
-const int VNL_ALLOC_MAX_BYTES = 128;
+const int VNL_ALLOC_MAX_BYTES = 256;
 const int VNL_ALLOC_NFREELISTS = VNL_ALLOC_MAX_BYTES/VNL_ALLOC_ALIGN;
 
 class vnl_alloc {

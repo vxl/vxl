@@ -87,6 +87,7 @@ public:
   //   component_format() == VIL_COMPONENT_FORMAT_UNSIGNED_INT
   //   \endverbatim
   virtual int bits_per_component() const = 0;
+
   //: Format.
   // \verbatim
   //   A standard RGB RGB RGB image has
@@ -107,6 +108,7 @@ public:
   //   i.e. rounding to the next multiple of 8 bits (only correct if 1 byte = 8 bits)
   // \endverbatim
   virtual bool get_section(void* buf, int x0, int y0, int width, int height) const = 0;
+
   //: Copy plane PLANE of BUF to this.
   // The buffer should look like this for each pixel: 
   // component0(plane0,plane1,plane2,...),component1(plane0,plane1,plane2,...),...

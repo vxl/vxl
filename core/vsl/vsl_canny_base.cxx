@@ -262,7 +262,7 @@ int vsl_canny_base::Junction_neighbour(int const * const *junction, int x, int y
 
 // -- Returns an m*n array of Ts.
 template <class T>
-T **vsl_canny_base_make_raw_image(int m, int n, T */*dummy*/) {
+T **vsl_canny_base_make_raw_image(int m, int n, T * /*dummy*/) {
   T *array = new T[m*n];
   T **data = new T* [m];
   for (int i =0; i < m; ++i)

@@ -29,10 +29,13 @@ public:
   vil_memory_image(int planes, int w, int h, vil_pixel_format);
   vil_memory_image(int w, int h, int components, int bits_per_component, vil_component_format);
   vil_memory_image(int w, int h, vil_pixel_format );
-  vil_memory_image(vil_image const &, char const *silly_hack);
+  vil_memory_image(vil_image const &);
   vil_memory_image(vil_memory_image const&);
 
   vil_memory_image& operator=(vil_memory_image const&);
+
+  virtual ~vil_memory_image() { }
+  virtual bool get_property(char const *tag, void *property_value = 0);
 
   void resize(int width, int height);
   void resize(int planes, int width, int height);

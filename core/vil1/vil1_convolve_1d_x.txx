@@ -31,7 +31,7 @@ void vil_convolve_1d_x(vil_convolve_signal_1d<I1 const> const &kernel,
     total_weight += AC(value1d(kernel, i));
 
 
-  // this is not very efficient at the moment, buy my main 
+  // this is not very efficient at the moment, but my main 
   // concern for now is that it works correctly.
   for (int y=y0; y<y1; ++y) {
     

@@ -125,9 +125,9 @@ public:
   vnl_vector_fixed<T,n>& normalize()	 // v /= sqrt(dot(v,v))
     { return (vnl_vector_fixed<T,n>&) vnl_vector<T>::normalize(); }
 
-  friend vnl_vector_fixed<T,n> element_product VCL_STL_NULL_TMPL_ARGS (vnl_vector_fixed<T,n> const&,
+  friend vnl_vector_fixed<T,n> element_product VCL_NULL_TMPL_ARGS (vnl_vector_fixed<T,n> const&,
 								       vnl_vector_fixed<T,n> const&);
-  friend vnl_vector_fixed<T,n> element_quotient VCL_STL_NULL_TMPL_ARGS (vnl_vector_fixed<T,n> const&,
+  friend vnl_vector_fixed<T,n> element_quotient VCL_NULL_TMPL_ARGS (vnl_vector_fixed<T,n> const&,
 									vnl_vector_fixed<T,n> const&);
 
 public:

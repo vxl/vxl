@@ -61,4 +61,7 @@ struct vil_image_proxy_impl : public vil_image_impl
 };
 
 vil_image_proxy::vil_image_proxy(char const *file)
-  : vil_image(new vil_image_proxy_impl(file)) { }
+  : vil_image_inhibit_derivation(0)
+  , vil_image(new vil_image_proxy_impl(file))
+{
+}
