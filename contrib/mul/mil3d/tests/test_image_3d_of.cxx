@@ -12,30 +12,30 @@
 bool deepEquality(const mil3d_image_3d_of<vil_byte>& im0,
            const mil3d_image_3d_of<vil_byte>& im1)
 {
-	bool ret=false;
+  bool ret=false;
 
-	if (im0.world2im()==im1.world2im() && im0.n_planes()==im1.n_planes()
+  if (im0.world2im()==im1.world2im() && im0.n_planes()==im1.n_planes()
       && im0.nx() == im1.nx()
       && im0.ny() == im1.ny()
-      && im0.nz() == im1.nz()) 
-	{
-		bool ok=true;
-		for (int i=0;i<im0.nx();++i) {
-			for (int j=0;j<im0.ny();++j) {
-				for (int k=0;k<im0.nz();++k) {
-					if (im0(i,j,k)!=im1(i,j,k)) {
-						ok=false;
-					}
-				}
-			}
-		}
-		ret=ok;
-	}
-	
-	return ret;
+      && im0.nz() == im1.nz())
+  {
+    bool ok=true;
+    for (int i=0;i<im0.nx();++i) {
+      for (int j=0;j<im0.ny();++j) {
+        for (int k=0;k<im0.nz();++k) {
+          if (im0(i,j,k)!=im1(i,j,k)) {
+            ok=false;
+          }
+        }
+      }
+    }
+    ret=ok;
+  }
+
+  return ret;
 }
 
-void test_image_3d_of_byte() 
+void test_image_3d_of_byte()
 {
   vcl_cout << "***********************" << vcl_endl;
   vcl_cout << " Testing mil3d_image_3d_of " << vcl_endl;
@@ -50,12 +50,12 @@ void test_image_3d_of_byte()
 
   // gets range
   int val=100;
-  vil_byte a,b;	
+  vil_byte a,b;
   image.fill(val);
   image.getRange(a,b,0);
-  TEST("Filling with 100 and checking range: ",a==val&&b==val,true);	
+  TEST("Filling with 100 and checking range: ",a==val&&b==val,true);
 
-  // set up image 
+  // set up image
   image(0,0,0)=0;
   image(0,0,1)=1;
   image(0,1,0)=2;
@@ -64,7 +64,7 @@ void test_image_3d_of_byte()
   image(1,0,1)=5;
   image(1,1,0)=6;
   image(1,1,1)=7;
-    
+
   mil3d_image_3d_of<vil_byte> image2;
   image2.deepCopy(image);
   image.print_all(vcl_cout);
@@ -73,19 +73,19 @@ void test_image_3d_of_byte()
   // check slicing
   image.deepSlice(mil3d_image_3d_of<vil_byte>::XAXIS,0,slice);
   bool data_ok = slice(0,0)==0 && slice(0,1)==1 && slice(1,0)==2 && slice(1,1)==3;
-  TEST("Extracting a slice from the X axis: ",data_ok,true);	
+  TEST("Extracting a slice from the X axis: ",data_ok,true);
 
   image.deepSlice(mil3d_image_3d_of<vil_byte>::YAXIS,0,slice);
   data_ok = slice(0,0)==0 && slice(0,1)==1 && slice(1,0)==4 && slice(1,1)==5;
-  TEST("Extracting a slice from the Y axis: ",data_ok,true);	
+  TEST("Extracting a slice from the Y axis: ",data_ok,true);
 
   image.deepSlice(mil3d_image_3d_of<vil_byte>::ZAXIS,0,slice);
   data_ok = slice(0,0)==0 && slice(0,1)==2 && slice(1,0)==4 && slice(1,1)==6;
-  TEST("Extracting a slice from the Z axis: ",data_ok,true);	
+  TEST("Extracting a slice from the Z axis: ",data_ok,true);
 
   // loading and saving
   mil3d_image_3d_of<vil_byte> im_in;
- 
+
   vsl_b_ofstream bfs_out("test_image_3d_of.bvl.tmp");
   TEST ("Opened test_image_3d_of.bvl.tmp for writing",
            (!bfs_out), false);
@@ -101,7 +101,6 @@ void test_image_3d_of_byte()
   bfs_in.close();
 
   TEST("Image IO deep equality", deepEquality(image,im_in),true);
-
 }
 
 

@@ -14,7 +14,7 @@ class mil3d_transform_3d;
 //  world2im() gives transformation from world to image co-ordinates
 class mil3d_image_3d : public mil_image {
 public:
-	enum Axis { XAXIS=0, YAXIS, ZAXIS };
+    enum Axis { XAXIS=0, YAXIS, ZAXIS };
 
 private:
     //: Resize current planes to [0..nx-1][0..ny-1][0..nz-1]

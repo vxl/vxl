@@ -47,22 +47,21 @@ void test_products(const mil3d_transform_3d& trans1)
 
 void test_the_transform(mil3d_transform_3d& t)
 {
-	
    mil3d_transform_3d t_inv = t.inverse();
    vgl_point_3d<double> p0(5,7,0);
    vgl_point_3d<double> p1 = t(p0);
    TEST("Inverse correct",vgl_distance(t_inv(p1),p0)<1e-6,true);
-  
+
    vnl_matrix<double> I = t.matrix() * t_inv.matrix();
    vnl_matrix<double> I0(4,4);
    I0.fill(0);
    I0.fill_diagonal(1);
 
    TEST("matrix() correct",(I-I0).absolute_value_max()<1e-6,true);
- 
+
    test_products(t);
 }
- 
+
 void test_transform_3d()
 {
   vcl_cout << "***********************" << vcl_endl;
@@ -92,11 +91,11 @@ void test_transform_3d()
   vcl_cout<<"== Testing RigidBody =="<<vcl_endl;
   trans0.set_rigid_body(1.2,1,5,1,2,3);
   test_the_transform(trans0);
-         
+
   vcl_cout<<"== Testing Similarity =="<<vcl_endl;
   trans0.set_similarity(0.51,2,3,4,0.2,1,-4);
   test_the_transform(trans0);
- 
+
    vcl_cout<<"== Testing Affine =="<<vcl_endl;
    trans0.set_affine(0.2,-0.3,4,2,1,4,5,0.1,-0.21);
    test_the_transform(trans0);

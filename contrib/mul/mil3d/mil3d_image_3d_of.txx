@@ -51,20 +51,20 @@ void mil3d_image_3d_of<T>::deepCopy(const mil3d_image_3d_of& src)
     // Do a deep copy - inefficient for now
     for (int i=0;i<n_planes();++i)
     {
-		const T* sdata = src.plane(i);
-		T* ddata = plane(i);
+        const T* sdata = src.plane(i);
+        T* ddata = plane(i);
         for (int z=0;z<nz_;++z)
-		{
-	        for (int y=0;y<ny_;++y)
-		    {
-				for (int x=0;x<nx_;++x)
-				{
-				 int sindex = x*xstep_+ystep_*y+z*zstep_;
-				 int dindex = x*s_xstep+s_ystep*y+z*s_zstep;
-				 ddata[dindex]=sdata[sindex];	
-				}
+        {
+            for (int y=0;y<ny_;++y)
+            {
+                for (int x=0;x<nx_;++x)
+                {
+                 int sindex = x*xstep_+ystep_*y+z*zstep_;
+                 int dindex = x*s_xstep+s_ystep*y+z*s_zstep;
+                 ddata[dindex]=sdata[sindex];
+                }
             }
-		}
+        }
     }
 }
 
@@ -108,7 +108,7 @@ void mil3d_image_3d_of<T>::resize2(int nx, int ny, int nz)
     nz_ = nz;
     xstep_ = 1;
     ystep_ = nx;
-	zstep_ = nx*ny;
+    zstep_ = nx*ny;
 }
 
 //=======================================================================
@@ -138,10 +138,10 @@ void mil3d_image_3d_of<T>::set_n_planes(int n)
 
     nx_ = 0;
     ny_ = 0;
-	nz_=0;
+    nz_=0;
     xstep_ = 0;
     ystep_ = 0;
-	zstep_ = 0;
+    zstep_ = 0;
 }
 
 //=======================================================================
@@ -165,20 +165,20 @@ void mil3d_image_3d_of<T>::setValidRegion(int xlo, int xhi, int ylo, int yhi, in
 template<class T>
 void mil3d_image_3d_of<T>::fill(T b)
 {
-	for (int p=0;p<planes_.size();++p) {
-	 T* data = planes_[p];
-	 // inefficient for now
+    for (int p=0;p<planes_.size();++p) {
+     T* data = planes_[p];
+     // inefficient for now
     for (int z=0;z<nz_;++z)
-	{
+    {
         for (int y=0;y<ny_;++y)
-	    {
-			for (int x=0;x<nx_;++x)
-			{
-     			 int index = x*xstep_+ystep_*y+z*zstep_;
-				 data[index]=b; 
-			}
+        {
+            for (int x=0;x<nx_;++x)
+            {
+                  int index = x*xstep_+ystep_*y+z*zstep_;
+                 data[index]=b;
+            }
         }
-	 }	
+     }
     }
 }
 
@@ -212,7 +212,7 @@ void mil3d_image_3d_of<T>::set(vcl_vector<T*>& planes,
     nz_ = nz;
     xstep_ = xstep;
     ystep_ = ystep;
-	zstep_ = zstep;
+    zstep_ = zstep;
 
     format_ = format;
 }
@@ -269,19 +269,18 @@ void mil3d_image_3d_of<T>::getRange(T& min_f, T& max_f, int p) const
     max_f = min_f;
     // inefficient for now
     for (int z=0;z<nz_;++z)
-	{
+    {
         for (int y=0;y<ny_;++y)
-	    {
-			for (int x=0;x<nx_;++x)
-			{
-     			 int index = x*xstep_+ystep_*y+z*zstep_;
-				 T val=data[index]; 
-				 if (val<min_f) min_f=val;
-				 else
-				 if (val>max_f) max_f=val;
-			}
+        {
+            for (int x=0;x<nx_;++x)
+            {
+                  int index = x*xstep_+ystep_*y+z*zstep_;
+                 T val=data[index];
+                 if (val<min_f) min_f=val;
+                 else
+                 if (val>max_f) max_f=val;
+            }
         }
-		
     }
 }
 
@@ -378,7 +377,7 @@ void mil3d_image_3d_of<T>::print_all(vcl_ostream& os) const
         if (n_planes()>1) os<<vsl_indent()<<"Plane "<<i<<":"<<vcl_endl;
         const T* im_data = plane(i);
         for (int z=0;z<nz_;++z)
-		{
+        {
         os<<vsl_indent()<<"z= "<<z<<":"<<vcl_endl;
         os<<vsl_indent();
 
@@ -395,7 +394,7 @@ void mil3d_image_3d_of<T>::print_all(vcl_ostream& os) const
             os<<vcl_endl;
         }
             os<<vcl_endl;
-			}
+            }
     }
 }
 
@@ -488,8 +487,8 @@ bool mil3d_image_3d_of<T>::operator==(const mil3d_image_3d_of<T> &other) const
     xstep_ == other.xstep_ &&
     ystep_ == other.ystep_ &&
     zstep_ == other.zstep_ &&
-    format_ == other.format_ && 
-	world2im_ == other.world2im_;
+    format_ == other.format_ &&
+    world2im_ == other.world2im_;
 }
 
 //=======================================================================
@@ -498,46 +497,46 @@ bool mil3d_image_3d_of<T>::operator==(const mil3d_image_3d_of<T> &other) const
 template<class T>
 bool mil3d_image_3d_of<T>::deepSlice(Axis axis,int slice_number, mil_image_2d_of<T> &image_slice) const
 {
-	assert(world2im().isIdentity() || world2im().form()==mil3d_transform_3d::ZoomOnly);
-	bool result = true;
-	mil_transform_2d t;
-	switch(axis)
-	{
-		case XAXIS:
-			image_slice.resize(ny(),nz());
-			for (int z=0;z<nz();++z) {
-				for (int y=0;y<ny();++y) {
-					image_slice(y,z)=(*this)(slice_number,y,z);			
-				}
-			}
-			t.set_zoom_only(world2im_.matrix()(1,1),world2im_.matrix()(2,2),0,0);
-			image_slice.setWorld2im(t);
-			break;
-		case YAXIS:
-			image_slice.resize(nx(),nz());
-			for (int z=0;z<nz();++z) {
-				for (int x=0;x<nx();++x) {
-					image_slice(x,z)=(*this)(x,slice_number,z);			
-				}
-			}
-			t.set_zoom_only(world2im_.matrix()(0,0),world2im_.matrix()(2,2),0,0);
-			image_slice.setWorld2im(t);
-			break;
-		case ZAXIS:
-			image_slice.resize(nx(),ny());
-			for (int y=0;y<ny();++y) {
-				for (int x=0;x<nx();++x) {
-					image_slice(x,y)=(*this)(x,y,slice_number);			
-				}
-			}
-			t.set_zoom_only(world2im_.matrix()(0,0),world2im_.matrix()(1,1),0,0);
-			image_slice.setWorld2im(t);
-				break;
-		default:
-			result=false;
-	}
+    assert(world2im().isIdentity() || world2im().form()==mil3d_transform_3d::ZoomOnly);
+    bool result = true;
+    mil_transform_2d t;
+    switch(axis)
+    {
+        case XAXIS:
+            image_slice.resize(ny(),nz());
+            for (int z=0;z<nz();++z) {
+                for (int y=0;y<ny();++y) {
+                    image_slice(y,z)=(*this)(slice_number,y,z);
+                }
+            }
+            t.set_zoom_only(world2im_.matrix()(1,1),world2im_.matrix()(2,2),0,0);
+            image_slice.setWorld2im(t);
+            break;
+        case YAXIS:
+            image_slice.resize(nx(),nz());
+            for (int z=0;z<nz();++z) {
+                for (int x=0;x<nx();++x) {
+                    image_slice(x,z)=(*this)(x,slice_number,z);
+                }
+            }
+            t.set_zoom_only(world2im_.matrix()(0,0),world2im_.matrix()(2,2),0,0);
+            image_slice.setWorld2im(t);
+            break;
+        case ZAXIS:
+            image_slice.resize(nx(),ny());
+            for (int y=0;y<ny();++y) {
+                for (int x=0;x<nx();++x) {
+                    image_slice(x,y)=(*this)(x,y,slice_number);
+                }
+            }
+            t.set_zoom_only(world2im_.matrix()(0,0),world2im_.matrix()(1,1),0,0);
+            image_slice.setWorld2im(t);
+                break;
+        default:
+            result=false;
+    }
 
-	return result;
+    return result;
 }
 
 #endif // mil3d_image_3d_of_txx_
