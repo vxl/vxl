@@ -1,11 +1,9 @@
-// This is mul/vil2/vil2_vil1.h
+// This is core/vil2/vil2_vil1.h
 #ifndef vil2_vil1_h_
 #define vil2_vil1_h_
 //:
 // \file
 // \brief Provide vil2 wrappers of vil1 and vice-versa.
-//
- 
 
 #include <vil/vil_fwd.h>
 #include <vil/vil_image.h>
@@ -31,8 +29,8 @@ vil2_image_view<T> vil2_vil1_to_image_view(const vil_memory_image_of<T> &vil1_im
     planestep = &((vil_memory_image_of<T>((vil1_im.get_plane(1)))).operator()(0,0)) - tl;
 
   return vil2_image_view<T>(tl,
-    vil1_im.cols(), vil1_im.rows(), vil1_im.planes(),
-    &vil1_im(1,0) - tl, &vil1_im(0,1) - tl, planestep);
+                            vil1_im.cols(), vil1_im.rows(), vil1_im.planes(),
+                            &vil1_im(1,0) - tl, &vil1_im(0,1) - tl, planestep);
 }
 
 
@@ -44,12 +42,13 @@ vil_memory_image_of<T> vil2_vil1_from_image_view(const vil2_image_view<T> &vil2_
 {
   if (!vil2_im.is_contiguous() || vil2_im.nplanes() != 1)
   {
-    vcl_cerr << "WARNING vil2_vil1_from_image_view():"
-      "Unable to create vil_memory_image_of<T>" << vcl_endl;
+    vcl_cerr << "WARNING vil2_vil1_from_image_view(): "
+             << "Unable to create vil_memory_image_of<T>\n";
     return vil_memory_image_of<T>();
   }
 
-  return vil_memory_image_of<T>(const_cast<T *>(vil2_im.top_left_ptr()), vil2_im.ni(), vil2_im.nj());
+  return vil_memory_image_of<T>(const_cast<T*>(vil2_im.top_left_ptr()),
+                                               vil2_im.ni(), vil2_im.nj());
 }
 
 //: Create a vil2_image_resource from a vil1 vil_image.
@@ -70,10 +69,10 @@ public:
   virtual unsigned nj() const;
   virtual unsigned nplanes() const;
 
-  virtual bool get_property (char const *tag, void *property_value=0) const;
-  virtual vil2_image_view_base_sptr get_copy_view (unsigned i0, unsigned ni, unsigned j0, unsigned nj) const;
+  virtual bool get_property(char const *tag, void *property_value=0) const;
+  virtual vil2_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni, unsigned j0, unsigned nj) const;
 
-  virtual bool put_view (const vil2_image_view_base &im, unsigned i0, unsigned j0);
+  virtual bool put_view(const vil2_image_view_base &im, unsigned i0, unsigned j0);
 };
 
 #endif // vil2_vil1_h_

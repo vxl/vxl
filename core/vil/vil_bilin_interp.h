@@ -1,10 +1,10 @@
-// This is mul/vil2/vil2_bilin_interp.h
+// This is core/vil2/vil2_bilin_interp.h
 #ifndef vil2_bilin_interp_h_
 #define vil2_bilin_interp_h_
 //:
-//  \file
-//  \brief Bilinear interpolation functions for 2D images
-//  \author Tim Cootes
+// \file
+// \brief Bilinear interpolation functions for 2D images
+// \author Tim Cootes
 
 #include <vcl_cassert.h>
 #include <vcl_cstddef.h>
@@ -14,7 +14,7 @@
 //  No bound checks are done.
 template<class T>
 inline double vil2_bilin_interp_unsafe(double x, double y, const T* data,
-                                    vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+                                       vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 {
     int p1x=int(x);
     double normx = x-p1x;
@@ -144,6 +144,5 @@ inline double vil2_bilin_interp_safe_extend(const vil2_image_view<T> &view,
                                          view.ni(), view.nj(),
                                          view.istep(), view.jstep());
 }
-
 
 #endif // vil2_bilin_interp_h_
