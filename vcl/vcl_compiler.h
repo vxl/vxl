@@ -74,7 +74,9 @@
 # define VCL_WIN32
 # if defined(_MSC_VER)
 #  define VCL_VC
-#  if _MSC_VER >= 1200
+#  if _MSC_VER >= 1300
+#   define VCL_VC70 1
+#  elif _MSC_VER >= 1200
 #   define VCL_VC60 1
 #  else
 #   define VCL_VC50 1
@@ -85,8 +87,17 @@
 // win32 or vc++ ?
 // awf hack alert:
 #ifdef VCL_VC
-#pragma warning(disable:4786 4660 4661)
-#pragma warning(disable:4786 4660 4355 4390)
+#  ifdef VCL_VC60
+#    pragma warning(disable:4786 4660 4661)
+#    pragma warning(disable:4786 4660 4355 4390)
+#  elif VCL_VC70
+// 4786: 'identifier' : identifier was truncated to 'number' characters in the debug information
+// 4018: signed/unsigned mismatch
+// 4146: unary minus operator applied to unsigned type, result still unsigned
+// 4267: conversion related to size_t
+// 4355: 'this' : used in base member initializer list
+#    pragma warning(disable:4786 4018 4146 4267 4355)
+#  endif
 #endif
 
 #if defined(__KCC)

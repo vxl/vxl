@@ -12,7 +12,7 @@
 #endif
 
 
-#ifdef VCL_VC60
+#ifdef VCL_VC
 # undef  vcl_max
 # define vcl_max vcl_max
 # undef  vcl_min
