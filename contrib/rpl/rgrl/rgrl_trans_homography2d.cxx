@@ -289,9 +289,9 @@ map_dir( vnl_vector<double> const& from_loc,
 
 rgrl_transformation_sptr
 rgrl_trans_homography2d::
-scale_by( double scale ) const
+scale_by( double /*scale*/ ) const
 {
-  assert(false);
+  assert(!"rgrl_trans_homography2d::scale_by() is not implemented");
   return 0;
 }
 

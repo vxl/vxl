@@ -34,7 +34,7 @@ rgrl_feature::signature_error_dimension( vcl_type_info const& ) const
 }
 
 void 
-rgrl_feature::set_scale( double scale )
+rgrl_feature::set_scale( double /*scale*/ )
 {
   assert( ! "This rgrl_feature doesn't implement set_scale()" );
 }
