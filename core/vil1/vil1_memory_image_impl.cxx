@@ -61,9 +61,9 @@ void vil_memory_image_impl::init(int planes, int w, int h,
     int bytes_per_row = width_ * bytes_per_pixel_;
     
     unsigned char* ptr = buf_;
-    for(int p = 0; p < planes_; ++p) {
+    for (int p = 0; p < planes_; ++p) {
       rows_[p] = new void*[height_];
-      for(int y = 0; y < height_; ++y) {
+      for (int y = 0; y < height_; ++y) {
 	rows_[p][y] = ptr;
 	ptr += bytes_per_row;
       }
@@ -91,14 +91,14 @@ void vil_memory_image_impl::init(int planes, int w, int h, vil_pixel_format pixe
 
 vil_memory_image_impl::~vil_memory_image_impl()
 {
-  for(int p = 0; p < planes_; ++p) delete[] rows_[p];
+  for (int p = 0; p < planes_; ++p) delete[] rows_[p];
   delete [] rows_;
   delete [] buf_;
 }
 
 void vil_memory_image_impl::resize(int width, int height)
 {
-  for(int p = 0; p < planes_; ++p) delete[] rows_[p];
+  for (int p = 0; p < planes_; ++p) delete[] rows_[p];
   delete [] rows_;
   delete [] buf_;
   init(planes_, width, height, components_, bits_per_component_, component_format_);
@@ -106,7 +106,7 @@ void vil_memory_image_impl::resize(int width, int height)
 
 void vil_memory_image_impl::resize(int planes, int width, int height)
 {
-  for(int p = 0; p < planes_; ++p) delete[] rows_[p];
+  for (int p = 0; p < planes_; ++p) delete[] rows_[p];
   delete [] rows_;
   delete [] buf_;
   init(planes, width, height, components_, bits_per_component_, component_format_);
@@ -120,7 +120,7 @@ bool vil_memory_image_impl::get_section(void* obuf, int x0, int y0, int xs, int 
     if (width_ != xs) {
       int byte_width = bytes_per_pixel_ * width_;
     
-      for(int y = 0; y < ys; ++y) {
+      for (int y = 0; y < ys; ++y) {
 	memcpy((unsigned char*)obuf + y * byte_out_width, buf_ + offset + y * byte_width, byte_out_width);
       }
     } else {
@@ -140,7 +140,7 @@ bool vil_memory_image_impl::put_section(void const* ibuf, int x0, int y0, int xs
     if (width_ != xs) {
       int byte_width = bytes_per_pixel_ * width_;
     
-      for(int y = 0; y < ys; ++y) {
+      for (int y = 0; y < ys; ++y) {
 	memcpy(buf_ + offset + y * byte_width, (unsigned char const*)ibuf + y * byte_in_width, byte_in_width);
       }
     } else {

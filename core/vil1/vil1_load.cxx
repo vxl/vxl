@@ -12,7 +12,7 @@ vil_image vil_load(char const* filename)
     return 0;
   }
   
-  for(vil_file_format** p = vil_file_format::all(); *p; ++p) {
+  for (vil_file_format** p = vil_file_format::all(); *p; ++p) {
 #if 0 // debugging
     cerr << __FILE__ " : trying \'" << (*p)->tag() << "\'" << endl;
 #endif

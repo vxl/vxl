@@ -45,7 +45,7 @@ void vil_copy(vil_image const& in, vil_image& out)
 #if 0
   // Simple implementation copies one row at a time.
   vcl_vector<unsigned char> buf(rowsize_bytes);
-  for(int y = 0; y < height; ++y) {
+  for (int y = 0; y < height; ++y) {
     in.get_section(buf.begin(), 0, y, width, 1);   // 0 was p
     out.put_section(buf.end(), 0, y, width, 1);  // 0 was p
   }
