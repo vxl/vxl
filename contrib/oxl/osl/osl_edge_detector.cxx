@@ -75,7 +75,7 @@ osl_edge_detector::~osl_edge_detector() {
 //-----------------------------------------------------------------------------
 
 void osl_edge_detector::detect_edges(vil_image const &image,
-                                     vcl_list<osl_Edge*> *edges,
+                                     vcl_list<osl_edge*> *edges,
                                      bool maintain_topology)
 {
   assert(edges);
@@ -365,7 +365,7 @@ void osl_edge_detector::Thicken_threshold(int x, int y) {
 // the moment.
 //
 // The histogram calculation was added to support
-// osl_Edgel change detection-JLM May 1995
+// edgel change detection-JLM May 1995
 //
 void osl_edge_detector::Set_thresholds()
 {
@@ -442,7 +442,7 @@ void osl_edge_detector::Set_thresholds()
       }
     }
   }
-  // Noticed that all gradient values are used in osl_Edgel Strength Histogram - May 1997
+  // Noticed that all gradient values are used in edgel Strength Histogram - May 1997
   // So defer to actual edgel chain formation.
 #if 0 // commented out
   if (_gradient_histogram)
@@ -528,7 +528,7 @@ void osl_edge_detector::Thin_edges() {
     // To assist in setting the thresholds:
     if (  do_output && (edgel_array_len > 0) ) {
 
-      vcl_cerr << "osl_Edgel strengths range from "
+      vcl_cerr << "edgel strengths range from "
            << edgel_array[0].thin << " to "
            << edgel_array[edgel_array_len-1].thin << vcl_endl;
       do_output = false;
@@ -606,7 +606,7 @@ extern osl_Vertex *osl_find(vcl_list<osl_Vertex*> const *l, osl_Vertex const &v)
 //: Follow all edgel chains that have pixel values above their corresponding
 // threshold values (_thin[x][y] > _thresh[x][y]).
 //
-void osl_edge_detector::Follow_curves(vcl_list<osl_Edge*> *edges)
+void osl_edge_detector::Follow_curves(vcl_list<osl_edge*> *edges)
 {
   //  //Added May 1997 to restrict histogram to actual detected edgels -JLM
   //  if (_gradient_histogram)
@@ -657,14 +657,14 @@ void osl_edge_detector::Follow_curves(vcl_list<osl_Edge*> *edges)
       if ( count < 2 )
         continue;
 
-      // Create an osl_EdgelChain
-      osl_EdgelChain *dc = new osl_EdgelChain(count);
+      // Create an osl_edgel_chain
+      osl_edgel_chain *dc = new osl_edgel_chain(count);
       float *px = dc->GetX();
       float *py = dc->GetY();
       float *pg = dc->GetGrad();
       float *pt = dc->GetTheta();
 
-      // Write the points to the osl_EdgelChain
+      // Write the points to the osl_edgel_chain
       while (count) {
         int tmpx = xcoords.front(); xcoords.pop_front();
         int tmpy = ycoords.front(); ycoords.pop_front();
@@ -737,7 +737,7 @@ void osl_edge_detector::Follow_curves(vcl_list<osl_Edge*> *edges)
           else
             osl_IUDelete(v2);
         }
-        //edge = new osl_Edge(V1,V2);
+        //edge = new osl_edge(V1,V2);
 
         // Note that the edge can start and end in the same place.
         // However, if this is so the DigitalCurve has positive length
@@ -745,7 +745,7 @@ void osl_edge_detector::Follow_curves(vcl_list<osl_Edge*> *edges)
         //dc->SetEnd(dc->GetX(dc->size()-1), dc->GetY(dc->size()-1));
 
         //edge->SetCurve(dc);
-        edges->push_front(new osl_Edge(*dc, V1, V2));
+        edges->push_front(new osl_edge(*dc, V1, V2));
         delete dc;
       }
     }
@@ -801,7 +801,7 @@ void osl_edge_detector::Follow(int x, int y,
 
   // Else see if there is a junction nearby, and record it. The _chain_no
   // variable is used to prevent the same junction being inserted at both
-  // ends of the osl_EdgelChains when reversal occurs next to the junction
+  // ends of the edgel chains when reversal occurs next to the junction
   // (in that case there will only be two stored points: the edge and the junction)
 #define smoo(a, b) \
   else if ( _junction[a][b] && ((xc->size()>2) || (_junction[a][b]!=_chain_no)) ) { \
