@@ -1,4 +1,4 @@
-#!/bin/sh
+#! /bin/sh
 # -*- perl -*-
 exec perl -w -x $0 ${1+"$@"}
 #!perl
