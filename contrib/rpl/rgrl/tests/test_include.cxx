@@ -29,7 +29,6 @@
 #include <rgrl/rgrl_converge_status_nas.h>
 #include <rgrl/rgrl_convergence_on_median_error.h>
 #include <rgrl/rgrl_convergence_on_weighted_error.h>
-#include <rgrl/rgrl_convergence_on_weighted_nas.h>
 #include <rgrl/rgrl_convergence_tester.h>
 #include <rgrl/rgrl_copyright.h>
 #include <rgrl/rgrl_data_manager.h>
