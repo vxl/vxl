@@ -1,5 +1,6 @@
 USES += oxl vxl
 include ${IUEROOT}/oxl/vgui/config.mk
+include ${IUEROOT}/vxl/vidl/config.mk
 
 MINI_PROG_SOURCES += basic01_display_image.cxx
 MINI_PROG_SOURCES += basic02_display_line.cxx
