@@ -13,8 +13,11 @@
 # VXL_USING_NATIVE_ZLIB  - True if we are using a ZLIB library provided outside vxl (or v3p)
 
 
-INCLUDE( ${MODULE_PATH}/NewCMake/FindZLIB.cmake )
-  
+IF( VXL_FORCE_V3P_ZLIB )
+ELSE( VXL_FORCE_V3P_ZLIB )
+  INCLUDE( ${MODULE_PATH}/NewCMake/FindZLIB.cmake )
+ENDIF( VXL_FORCE_V3P_ZLIB )
+
 IF(NOT ZLIB_FOUND)
 
   #

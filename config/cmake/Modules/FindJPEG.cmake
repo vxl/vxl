@@ -13,8 +13,10 @@
 # Additionally
 # VXL_USING_NATIVE_JPEG  - True if we are using a JPEG library provided outside vxl (or v3p)
 
-
-INCLUDE( ${MODULE_PATH}/NewCMake/FindJPEG.cmake )
+IF( VXL_FORCE_V3P_JPEG )
+ELSE( VXL_FORCE_V3P_JPEG )
+  INCLUDE( ${MODULE_PATH}/NewCMake/FindJPEG.cmake )
+ENDIF( VXL_FORCE_V3P_JPEG )
 
 IF(NOT JPEG_FOUND)
 

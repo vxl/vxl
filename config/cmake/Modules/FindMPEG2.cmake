@@ -13,9 +13,16 @@
 # Additionally
 # VXL_USING_NATIVE_MPEG2  - True if we are using a MPEG2 library provided outside vxl (or v3p)
 
-INCLUDE( ${MODULE_PATH}/NewCMake/FindMPEG2.cmake )
+IF( VXL_FORCE_V3P_MPEG2 )
+ELSE( VXL_FORCE_V3P_MPEG2 )
+  INCLUDE( ${MODULE_PATH}/NewCMake/FindMPEG2.cmake )
+ENDIF( VXL_FORCE_V3P_MPEG2 )
 
-IF(NOT MPEG2_FOUND)
+IF( MPEG2_FOUND )
+
+  SET(VXL_USING_NATIVE_MPEG2 "YES")
+
+ELSE( MPEG2_FOUND )
 
   #
   # At some point, in a "release" version, it is possible that someone
@@ -30,8 +37,4 @@ IF(NOT MPEG2_FOUND)
 
   ENDIF(EXISTS ${allvxl_SOURCE_DIR}/v3p/mpeg2/include/mpeg2.h)
 
-ENDIF(NOT MPEG2_FOUND)
-
-IF(MPEG2_LIBRARY)
-  SET(VXL_USING_NATIVE_MPEG2 "YES")
-ENDIF(MPEG2_LIBRARY)
+ENDIF( MPEG2_FOUND )
