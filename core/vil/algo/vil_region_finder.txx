@@ -52,26 +52,12 @@ same_int_region( unsigned i, unsigned j,
                  vcl_vector<unsigned>& ri,
                  vcl_vector<unsigned>& rj )
 {
-  // early stop if this pixel has already been processed
-  if ( processed_(i,j) )
-    return;
 
-  // otherwise, add this pixel's coordinates and process neighbours
-  // with the same intensity
+  // get the pixel intensity
   pix_type p = image_(i,j);
-  processed_(i,j) = true;
-  ri.push_back( i );
-  rj.push_back( j );
 
-  for ( unsigned c = 0; c < num_nbrs_; ++c ) {
-    unsigned nbr_i = i + nbr_delta_[c][0];
-    unsigned nbr_j = j + nbr_delta_[c][1];
-    if (nbr_i < image_.ni() &&
-        nbr_j < image_.nj() &&
-        predi_( image_( nbr_i, nbr_j ),  p ) ) {
-      same_int_region( nbr_i, nbr_j, p, ri, rj );
-    }
-  }
+  // call the real function
+  same_int_region( i, j, p, ri, rj );
 }
 
 
@@ -89,19 +75,37 @@ same_int_region( unsigned i, unsigned j, pix_type p,
   if ( processed_(i,j) )
     return;
 
-  // otherwise, add this pixel's coordinates and process neighbours
-  // with the same intensity
+  // use ri, rj as storage space
+  ri.resize( 0 );
+  rj.resize( 0 );
+
+  // mark the initial position
   processed_(i,j) = true;
   ri.push_back( i );
   rj.push_back( j );
+  
+  for( unsigned cur_pos = 0; cur_pos<ri.size(); ++cur_pos ) {
 
-  for ( unsigned c = 0; c < num_nbrs_; ++c ) {
-    unsigned nbr_i = i + nbr_delta_[c][0];
-    unsigned nbr_j = j + nbr_delta_[c][1];
-    if (nbr_i < image_.ni() &&
-        nbr_j < image_.nj() &&
-        predi_( image_( nbr_i, nbr_j ),  p ) ) {
-      same_int_region( nbr_i, nbr_j, p, ri, rj );
+    // get pixel coordinate
+    i = ri[cur_pos];
+    j = rj[cur_pos];
+    
+    // examine the neighbors
+    for ( unsigned c = 0; c < num_nbrs_; ++c ) {
+
+      unsigned nbr_i = (unsigned)( (signed)i + nbr_delta_[c][0] );
+      unsigned nbr_j = (unsigned)( (signed)j + nbr_delta_[c][1] );
+
+      if (nbr_i < image_.ni() &&
+          nbr_j < image_.nj() &&
+          !processed_(nbr_i, nbr_j) &&
+          predi_( image_( nbr_i, nbr_j ),  p ) ) {
+
+        // add this pixel to current region
+        processed_(nbr_i, nbr_j) = true;
+        ri.push_back( nbr_i );
+        rj.push_back( nbr_j );
+      }
     }
   }
 }
@@ -116,6 +120,14 @@ vil_region_finder<pix_type, predicate_type>::
 image() const
 {
   return image_;
+}
+
+template <class pix_type, class predicate_type>
+vil_image_view<bool> const& 
+vil_region_finder<pix_type, predicate_type>::
+boolean_region_image() const
+{
+  return processed_;
 }
 
 #endif // vil_region_finder_txx_

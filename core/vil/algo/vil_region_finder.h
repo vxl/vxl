@@ -69,6 +69,9 @@ class vil_region_finder
   image_view const&
   image() const;
 
+  //: boolean mask on the region
+  vil_image_view<bool> const&  boolean_region_image() const;
+  
  private:
   //:
   // Marks all pixels as unprocessed, and sets the neighbour deltas
