@@ -9,21 +9,17 @@
 // \brief  Solves the generalized eigenproblem det(t A - s B) = 0.
 // \author fsm, Oxford RRG
 // \date   2 Oct 2001
-//
-// \verbatim
-//  Modifications
-//   none
-// \endverbatim
 
 #include <vnl/vnl_matrix.h>
 
+//:
 // For a *real* scalar type T, this function uses orthogonal
 // matrices L, R to reduce the (square) matrices A, B to generalized
 // (real) Schur form. This means that B is upper triangular and A is
 // block upper triangular with blocks of size at most 2x2 such that
 // the 2x2 blocks B corresponding to 2x2 blocks of A are diagonal.
 // E.g.:
-//
+// \verbatim
 //                [ * * * * * ]
 //                [   * * * * ]
 // A <- L^* A R = [   * * * * ]
@@ -35,6 +31,7 @@
 // B <- L^* B R = [     * * * ]
 //                [       *   ]
 //                [         * ]
+// \endverbatim
 //
 // In addition, the function computes the generalized eigenvalues
 // (alphar(k) + i alphai(k) : beta(k) for k = 0, 1, 2,...
@@ -84,11 +81,11 @@ inline bool vnl_generalized_schur(vnl_matrix<T> *A,
   vcl_copy(A_.begin(), A_.end(), A->begin());
   vcl_copy(B_.begin(), B_.end(), B->begin());
 
-  alphar->resize(alphar_.size()); vcl_copy(alphar_.begin(), alphar_.end(), alphar->begin());
-  alphai->resize(alphai_.size()); vcl_copy(alphai_.begin(), alphai_.end(), alphai->begin());
-  beta  ->resize(beta_  .size()); vcl_copy(beta_  .begin(), beta_  .end(), beta  ->begin());
-  L->resize(L_.rows(), L_.cols()); vcl_copy(L_.begin(), L_.end(), L->begin());
-  R->resize(R_.rows(), R_.cols()); vcl_copy(R_.begin(), R_.end(), R->begin());
+  alphar->set_size(alphar_.size()); vcl_copy(alphar_.begin(), alphar_.end(), alphar->begin());
+  alphai->set_size(alphai_.size()); vcl_copy(alphai_.begin(), alphai_.end(), alphai->begin());
+  beta  ->set_size(beta_  .size()); vcl_copy(beta_  .begin(), beta_  .end(), beta  ->begin());
+  L->set_size(L_.rows(), L_.cols()); vcl_copy(L_.begin(), L_.end(), L->begin());
+  R->set_size(R_.rows(), R_.cols()); vcl_copy(R_.begin(), R_.end(), R->begin());
 
   return true;
 }
