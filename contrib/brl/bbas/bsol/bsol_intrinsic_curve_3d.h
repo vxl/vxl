@@ -112,7 +112,7 @@ class bsol_intrinsic_curve_3d : public vsol_curve_3d
     return p1_;
   }
   //: Is `i' a valid index for the list of vertices ?
-  bool valid_index(unsigned int i) const { return i<storage_->size(); }
+  bool valid_index(unsigned int i) const { return i<size(); }
   //: Return vertex `i'
   vsol_point_3d_sptr vertex(const int i) const {
     assert(valid_index(i));
@@ -134,7 +134,7 @@ class bsol_intrinsic_curve_3d : public vsol_curve_3d
     return (*storage_)[i]->z();
   }
   //: Return the number of vertices
-  int size(void) const {
+  unsigned int size(void) const {
     return storage_->size();
   }
   //: Return the total length of the intrinsic curve
@@ -404,7 +404,7 @@ class bsol_intrinsic_curve_3d : public vsol_curve_3d
   //: output description to stream
   inline void describe(vcl_ostream &strm, int blanking=0) const {
     if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
-    strm << "<bsol_intrinsic_curve_3d " << (isOpen_?"open":"closed")
+    strm << "<bsol_intrinsic_curve_3d " << ( isOpen_ ? "open" : "closed" )
          << ", total curvature=" << totalCurvature_
          << ", total angle change=" << totalAngleChange_ << ">\n";
   }

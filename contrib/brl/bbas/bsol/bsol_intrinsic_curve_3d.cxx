@@ -43,7 +43,7 @@ bsol_intrinsic_curve_3d::bsol_intrinsic_curve_3d(const vcl_vector<vsol_point_3d_
 bsol_intrinsic_curve_3d::bsol_intrinsic_curve_3d(const bsol_intrinsic_curve_3d &other)
 {
   storage_=new vcl_vector<vsol_point_3d_sptr>(*other.storage_);
-  for (unsigned int i=0;i<storage_->size();++i)
+  for (unsigned int i=0; i<storage_->size(); ++i)
     (*storage_)[i]=new vsol_point_3d(*((*other.storage_)[i]));
   computeProperties();
 }
@@ -74,29 +74,30 @@ vsol_spatial_object_3d_sptr bsol_intrinsic_curve_3d::clone(void) const
 //---------------------------------------------------------------------------
 bool bsol_intrinsic_curve_3d::operator==(const bsol_intrinsic_curve_3d &other) const
 {
-  bool result = (this==&other);
+  // quick return if possible:
+  if (this==&other)
+    return true;
+  if (size() != other.size())
+    return false;
 
-  if (!result) {
-    result = (storage_->size()==other.storage_->size());
-    if (result) {
-      vsol_point_3d_sptr p=(*storage_)[0];
+  // run through other list to find the point matching the first point of this:
+  vcl_vector<vsol_point_3d_sptr>::const_iterator i1 = storage_->begin(),
+                                                 i2 = other.storage_->begin();
+  while (i2!=other.storage_->end() && *(*i1)!=*(*i2))
+    ++i2;
+  if (i2==other.storage_->end())
+    return false;
 
-      unsigned int i=0;
-      for (result=false;i<storage_->size()&&!result;++i)
-        result = (*p==*(*other.storage_)[i]);
-      if (result) {
-        for (int j=1;j<size()&&result;++i,++j) {
-          if (i>=storage_->size()) i=0;
-          result = ((*storage_)[i]==(*storage_)[j]);
-        }
-      }
-    }
+  // now run through both lists in sync and compare points:
+  while (++i2,++i1!=storage_->end()) {
+    if (i2==other.storage_->end()) i2 = other.storage_->begin();
+    if (*(*i1)!=*(*i2)) return false;
   }
-  return result;
+
+  return true;
 }
 
 //: spatial object equality
-
 bool bsol_intrinsic_curve_3d::operator==(const vsol_spatial_object_3d& obj) const
 {
   return
@@ -162,7 +163,8 @@ void bsol_intrinsic_curve_3d::computeProperties()
   double prev_y = (*storage_)[0]->y();
   double prev_z = (*storage_)[0]->z();
   double length = 0;
-  for (int i=1; i<size(); i++) {
+  for (unsigned int i=1; i<size(); ++i)
+  {
     double cur_x=(*storage_)[i]->x();
     double cur_y=(*storage_)[i]->y();
     double cur_z=(*storage_)[i]->z();
@@ -197,7 +199,8 @@ void bsol_intrinsic_curve_3d::computeProperties()
   // 4) Compute the second derivative: phi_s, theta_s, normal, binormal, curvature
   totalCurvature_ = 0;
   totalAngleChange_ = 0;
-  for (int i=2; i<size(); i++) {
+  for (unsigned int i=2; i<size(); ++i)
+  {
     double phis = (phi_[i] - phi_[i-1])/s_[i];
     phis_.push_back(phis);
     double thetas = (theta_[i] - theta_[i-1])/s_[i];
@@ -232,7 +235,7 @@ void bsol_intrinsic_curve_3d::computeProperties()
   assert (Binormal_.size() == size());
 
   // 5) Compute the third derivative: phi_ss, theta_ss, torsion
-  for (int i=3; i<size(); i++) {
+  for (unsigned int i=3; i<size(); ++i) {
     double phiss = (phis_[i] - phis_[i-1])/s_[i];
     phiss_.push_back(phiss);
     double thetass = (thetas_[i] - thetas_[i-1])/s_[i];
@@ -299,7 +302,8 @@ void bsol_intrinsic_curve_3d::computeProperties_old()
   double prev_dz = 0;
   double prev_dL = 0;
 
-  for (int i=1; i<size(); i++) {
+  for (unsigned int i=1; i<size(); ++i)
+  {
     double cur_x=(*storage_)[i]->x();
     double cur_y=(*storage_)[i]->y();
     double cur_z=(*storage_)[i]->z();
@@ -354,7 +358,7 @@ void bsol_intrinsic_curve_3d::computeProperties_old()
 
   // 4) Compute the Normal vector. Note that N_i = T_i+1 - T_i
   vgl_vector_3d<double>* normal;
-  for (int i=0; i<size()-1; i++) {
+  for (unsigned int i=0; i+1<size(); ++i) {
     normal = new vgl_vector_3d<double>(*Tangent_[i+1] - *Tangent_[i]);
     Normal_.push_back(normal);
   }
@@ -362,7 +366,7 @@ void bsol_intrinsic_curve_3d::computeProperties_old()
   Normal_.push_back(normal);
 
   // 5) Compute the Binormal vector. B_i = T_i * N_i
-  for (int i=0; i<size(); i++) {
+  for (unsigned int i=0; i<size(); ++i) {
     vgl_vector_3d<double>* binormal = new vgl_vector_3d<double>(cross_product(*Tangent_[i], *Normal_[i]));
     Binormal_.push_back(binormal);
   }
@@ -372,7 +376,7 @@ void bsol_intrinsic_curve_3d::computeProperties_old()
   if (size() > 1) {
     Tangent_[0] = Tangent_[1];
     angle_[0] = angle_[1];
-    for (int i=1; i<size(); i++)
+    for (unsigned int i=1; i<size(); ++i)
       totalAngleChange_ += vcl_fabs(angle_[i]-angle_[i-1]);
 
     // 5-2)Deal with the ending part of the curve.
@@ -387,7 +391,7 @@ void bsol_intrinsic_curve_3d::computeProperties_old()
 
 void bsol_intrinsic_curve_3d::clear(void)
 {
-  for (int i=0; i<size(); i++) {
+  for (unsigned int i=0; i<size(); ++i) {
     delete Tangent_[i];
   }
 
@@ -429,10 +433,13 @@ bool bsol_intrinsic_curve_3d::LoadCON3File(vcl_string fileName)
     isOpen_ = true;
   else //"CLOSE"
     isOpen_ = false;
-  int numPoints;
+  int numPoints=0;
   vcl_fscanf(fp, "%d\n", &numPoints);
+  if (numPoints<=0)
+    vcl_fprintf(stderr, "WARNING: First line of file %s (number of points) should be strictly positive.\n",
+                fileName.c_str());
 
-  for (int i=0; i<numPoints; i++) {
+  for (int i=0; i<numPoints; ++i) {
     double x, y, z;
     vcl_fscanf(fp, "%lf", &x);
     vcl_fscanf(fp, "%lf", &y);
@@ -465,7 +472,7 @@ bool bsol_intrinsic_curve_3d::SaveCON3File(vcl_string fileName)
 
   vcl_fprintf(fp, "%d\n", size());
 
-  for (int i=0; i<size(); i++) {
+  for (unsigned int i=0; i<size(); ++i) {
     vcl_fprintf(fp, "%.10lf %.10lf %.10lf\n", x(i), y(i), z(i));
   }
 
@@ -479,7 +486,6 @@ bool bsol_intrinsic_curve_3d::SaveCON3File(vcl_string fileName)
 void bsol_intrinsic_curve_3d::compute_bounding_box(void) const
 {
   set_bounding_box((*storage_)[0]->x(), (*storage_)[0]->y(), (*storage_)[0]->z());
-  for (unsigned int i=1;i<storage_->size();++i)
+  for (unsigned int i=1; i<storage_->size(); ++i)
     add_to_bounding_box((*storage_)[i]->x(), (*storage_)[i]->y(), (*storage_)[i]->z());
 }
-
