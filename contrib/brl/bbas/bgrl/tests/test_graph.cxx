@@ -10,9 +10,8 @@
 #include <bgrl/bgrl_graph.h>
 
 //: Test the graph class
-void test_graph()
+void test_graph(const bgrl_vertex_sptr& vertex_1)
 {
-  bgrl_vertex_sptr vertex_1 = new bgrl_vertex();
   bgrl_vertex_sptr vertex_2 = new bgrl_vertex();
   bgrl_vertex_sptr vertex_3 = new bgrl_vertex();
   bgrl_vertex_sptr vertex_4 = new bgrl_vertex();
@@ -115,9 +114,19 @@ void test_graph()
 }
 
 
+void test_memory_leak(const bgrl_vertex_sptr& v1)
+{
+  // This smart pointer should be the only thing left referencing this vertex
+  TEST("Testing for memory leaks", v1->get_references(), 1);
+}
+
+
 MAIN( test_graph )
 {
   START( "bgrl_graph" );
-  test_graph();
+
+  bgrl_vertex_sptr v1 = new bgrl_vertex();
+  test_graph(v1);
+  test_memory_leak(v1);
   SUMMARY();
 }

@@ -226,6 +226,14 @@ bgrl_graph::iterator::iterator( bgrl_graph_sptr graph, bgrl_search_func_sptr fun
 }
 
 
+//: Constructor - for end iterator
+bgrl_graph::iterator::iterator( bgrl_graph_sptr graph )
+ : graph_(graph),  search_func_(NULL),
+   use_internal_(true), internal_(graph->vertices_.end())
+{
+}
+
+
 //: Pre-Increment
 bgrl_graph::iterator& 
 bgrl_graph::iterator::operator++ ()
@@ -259,10 +267,10 @@ bgrl_graph::iterator::operator -> () const
 //: Dereference
 bgrl_vertex_sptr 
 bgrl_graph::iterator::operator * () const 
-{ 
+{
   if(use_internal_)
     if(internal_ == this->graph_->vertices_.end())
-      return NULL;
+      return NULL; 
     else
       return *internal_;
   else

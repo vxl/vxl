@@ -118,7 +118,7 @@ bgrl_vertex::add_edge_to( const bgrl_vertex_sptr& vertex,
     new_edge = new bgrl_edge;
   
   new_edge->from_ = this;
-  new_edge->to_ = vertex;
+  new_edge->to_ = vertex.ptr();
   this->out_edges_.insert(new_edge);
   vertex->in_edges_.insert(new_edge);
 
@@ -268,4 +268,14 @@ bgrl_vertex::print_summary( vcl_ostream& os ) const
 void vsl_add_to_binary_loader(const bgrl_vertex& v)
 {
   vsl_binary_loader<bgrl_vertex>::instance().add(v);
+}
+
+
+//: Print an ASCII summary to the stream
+void
+vsl_print_summary(vcl_ostream &os, const bgrl_vertex* v)
+{
+  os << "bgrl_vertex{ ";
+  v->print_summary(os);
+  os << " }";
 }

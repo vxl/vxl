@@ -71,3 +71,13 @@ void vsl_add_to_binary_loader(const bgrl_edge& e)
   vsl_binary_loader<bgrl_edge>::instance().add(e);
 }
 
+
+//: Print an ASCII summary of a bgrl_edge to the stream
+void
+vsl_print_summary(vcl_ostream &os, const bgrl_edge* e)
+{
+  os << "bgrl_edge{ ";
+  e->print_summary(os);
+  os << " }";
+}
+

@@ -101,6 +101,9 @@ class bgrl_graph : public vbl_ref_count
    public:
     //: Constructor
     iterator( bgrl_graph_sptr graph, bgrl_search_func_sptr func );
+    
+    //: Constructor - for end iterator
+    iterator( bgrl_graph_sptr graph );
 
     //: Destructor
     virtual ~iterator() {}
@@ -121,7 +124,7 @@ class bgrl_graph : public vbl_ref_count
     bool operator == (const iterator& rhs) const;
 
     //: Inequality comparison
-    bool operator != (const iterator& rhs) const ;
+    bool operator != (const iterator& rhs) const;
 
    protected:
     bgrl_graph_sptr graph_;
@@ -136,7 +139,7 @@ class bgrl_graph : public vbl_ref_count
   //: Depth first search begin iterator
   iterator begin(const bgrl_search_func_sptr& func = NULL) { return iterator(this, func); }
   //: Depth first search end iterator
-  iterator end()   { return iterator(this, NULL); }
+  iterator end()   { return iterator(this); }
 };
 
 

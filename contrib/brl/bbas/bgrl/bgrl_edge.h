@@ -32,10 +32,10 @@ class bgrl_edge : public vbl_ref_count
   virtual ~bgrl_edge() {}
 
   //: Smart pointer to the vertex where this edge originates
-  bgrl_vertex_sptr from() const { return from_; }
+  bgrl_vertex_sptr from() const { return bgrl_vertex_sptr(from_); }
 
   //: Smart pointer to the vertex where this edge ends
-  bgrl_vertex_sptr to() const { return to_; }
+  bgrl_vertex_sptr to() const { return bgrl_vertex_sptr(to_); }
 
   //: Return a platform independent string identifying the class
   virtual vcl_string is_a() const;
@@ -56,11 +56,17 @@ class bgrl_edge : public vbl_ref_count
  protected:
   //: initialize the edge
   virtual void init() {}
+
+  // The following pointers are only used to point back to the vertices
+  // which own them.  The vertices are responsible for keeping these
+  // pointers valid.
   
   //: The starting vertex
-  bgrl_vertex_sptr from_;
+  // \note This must not be a smart pointer to prevent memory leaks
+  bgrl_vertex* from_;
   //: The ending vertex
-  bgrl_vertex_sptr to_;
+  // \note This must not be a smart pointer to prevent memory leaks
+  bgrl_vertex* to_;
 };
 
 
@@ -75,5 +81,8 @@ class bgrl_edge : public vbl_ref_count
 //  the appropriate loader.
 void vsl_add_to_binary_loader(const bgrl_edge& e);
 
+//: Print an ASCII summary to the stream
+//  \relates bgrl_edge
+void vsl_print_summary(vcl_ostream &os, const bgrl_edge* e);
 
 #endif // bgrl_edge_h_

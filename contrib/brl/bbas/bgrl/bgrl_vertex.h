@@ -115,5 +115,7 @@ class bgrl_vertex : public vbl_ref_count
 //  the appropriate loader.
 void vsl_add_to_binary_loader(const bgrl_vertex& v);
 
+//: Print an ASCII summary to the stream
+void vsl_print_summary(vcl_ostream &os, const bgrl_vertex* v);
 
 #endif // bgrl_vertex_h_
