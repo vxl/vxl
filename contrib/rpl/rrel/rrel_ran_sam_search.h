@@ -46,7 +46,7 @@ class rrel_ran_sam_search
   //: Constructor using a given random-sampling seed.
   rrel_ran_sam_search( int seed );
 
-  ~rrel_ran_sam_search( );
+  virtual ~rrel_ran_sam_search();
 
   //  Parameters to control the search technique.  The default set
   //  when the constructor is called is to sample as in generate
@@ -66,7 +66,7 @@ class rrel_ran_sam_search
   // ----------------------------------------
 
   //: \brief Estimation for an "ordinary" estimation problem.
-  virtual bool 
+  virtual bool
   estimate( const rrel_estimation_problem* problem,
             const rrel_objective* obj_fcn );
 
@@ -104,11 +104,11 @@ class rrel_ran_sam_search
   // ------------------------------------------------------------
 
   //: Calculate number of samples --- non-unique matching estimation problems
-  virtual void 
+  virtual void
   calc_num_samples( const rrel_estimation_problem* problem );
 
   //: Determine the next random sample, filling in the "sample" vector.
-  virtual void 
+  virtual void
   next_sample( unsigned int taken, unsigned int num_points, vcl_vector<int>& sample,
                unsigned int points_per_sample );
 
