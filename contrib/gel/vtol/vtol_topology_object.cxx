@@ -1,7 +1,7 @@
 // This is gel/vtol/vtol_topology_object.cxx
 #include "vtol_topology_object.h"
 //:
-//  \file
+// \file
 
 #include <vtol/vtol_topology_cache.h>
 #include <vtol/vtol_vertex.h>
@@ -26,7 +26,7 @@ vtol_topology_object::vtol_topology_object(void)
 //: Constructor with given sizes for arrays of inferiors and superiors
 //---------------------------------------------------------------------------
 vtol_topology_object::vtol_topology_object(const int num_inferiors,
-                                                 const int num_superiors)
+                                           const int num_superiors)
   :_superiors(num_superiors),
    _inferiors(num_inferiors)
 {
@@ -385,7 +385,7 @@ void vtol_topology_object::blocks(block_list &new_list)
 //: print the object
 void vtol_topology_object::print(vcl_ostream &strm) const
 {
-  strm<<"<vtol_topology_object "<<(void const *)this<<">"<<vcl_endl;
+  strm<<"<vtol_topology_object "<<(void const *)this<<">\n";
   strm<<"number of inferiors "<<numinf()<<vcl_endl;
   strm<<"number of superiors "<<numsup()<<vcl_endl;
 }
@@ -397,9 +397,9 @@ void vtol_topology_object::describe_inferiors(vcl_ostream &strm,
 
   for (int n=0; n<blanking; ++n) strm << ' ';
   if (inferiors()->size()==0)
-    strm<<"**INFERIORS:  Empty"<<vcl_endl;
+    strm<<"**INFERIORS:  Empty\n";
   else
-    strm<<"**INFERIORS:"<<vcl_endl;
+    strm<<"**INFERIORS:\n";
 
   for (i=inferiors()->begin();i!=inferiors()->end();++i) {
     for (int n=0; n<blanking; ++n) strm << ' ';
@@ -414,9 +414,9 @@ void vtol_topology_object::describe_superiors(vcl_ostream &strm,
 
   for (int n=0; n<blanking; ++n) strm << ' ';
   if (_superiors.size()==0)
-    strm<<"**SUPERIORS:  Empty"<<vcl_endl;
+    strm<<"**SUPERIORS:  Empty\n";
   else
-    strm<<"**SUPERIORS:"<<vcl_endl;
+    strm<<"**SUPERIORS:\n";
 
   for (i=_superiors.begin();i!= _superiors.end();++i) {
     for (int n=0; n<blanking; ++n) strm << ' ';
@@ -440,7 +440,7 @@ void vtol_topology_object::describe(vcl_ostream &strm,
 //---------------------------------------------------------------------------
 vcl_vector<vtol_vertex *> *vtol_topology_object::compute_vertices(void)
 {
-  vcl_cout << "Compute vertices" << vcl_endl;
+  vcl_cout << "Compute vertices\n";
   return 0;
 }
 
@@ -451,7 +451,7 @@ vcl_vector<vtol_vertex *> *vtol_topology_object::compute_vertices(void)
 vcl_vector<vtol_zero_chain *> *
 vtol_topology_object::compute_zero_chains(void)
 {
-  vcl_cout << "Compute zero_chains" << vcl_endl;
+  vcl_cout << "Compute zero_chains\n";
   return 0;
 }
 
@@ -461,7 +461,7 @@ vtol_topology_object::compute_zero_chains(void)
 
 vcl_vector<vtol_edge *> *vtol_topology_object::compute_edges(void)
 {
-  vcl_cout << "Compute edges" << vcl_endl;
+  vcl_cout << "Compute edges\n";
   return 0;
 }
 
@@ -471,7 +471,7 @@ vcl_vector<vtol_edge *> *vtol_topology_object::compute_edges(void)
 vcl_vector<vtol_one_chain *> *
 vtol_topology_object::compute_one_chains(void)
 {
-  vcl_cout << "Compute one chains" << vcl_endl;
+  vcl_cout << "Compute one chains\n";
   return 0;
 }
 
@@ -480,7 +480,7 @@ vtol_topology_object::compute_one_chains(void)
 //---------------------------------------------------------------------------
 vcl_vector<vtol_face *> *vtol_topology_object::compute_faces(void)
 {
-  vcl_cout << "Compute faces" << vcl_endl;
+  vcl_cout << "Compute faces\n";
   return 0;
 }
 
@@ -490,7 +490,7 @@ vcl_vector<vtol_face *> *vtol_topology_object::compute_faces(void)
 vcl_vector<vtol_two_chain *> *
 vtol_topology_object::compute_two_chains(void)
 {
-  vcl_cout << "Compute two chains" << vcl_endl;
+  vcl_cout << "Compute two chains\n";
   return 0;
 }
 
@@ -499,32 +499,32 @@ vtol_topology_object::compute_two_chains(void)
 //---------------------------------------------------------------------------
 vcl_vector<vtol_block *> *vtol_topology_object::compute_blocks(void)
 {
-  vcl_cout << "Compute blocks" << vcl_endl;
+  vcl_cout << "Compute blocks\n";
   return 0;
 }
 
 //---------------------------------------------------------------------------
-//: compute the bounding box from the set of vertices.  A generic method that
-//  applies to all topology_object(s)
+//: compute the bounding box from the set of vertices.
+//  A generic method that applies to all topology_object(s)
 //---------------------------------------------------------------------------
 void vtol_topology_object::compute_bounding_box()
 {
-    if(!this->bounding_box_)
-    {
-      vcl_cout << "In void vtol_topology_object::compute_bounding_box() -"
-               << " shouldn't happen" << vcl_endl;
-      return;
-    }
-    vcl_vector<vtol_vertex_sptr> *verts= this->vertices();
-    if(!verts->size())
-      {
-      vcl_cout << "In void vtol_topology_object::compute_bounding_box() -"
-               << " no vertices " << vcl_endl;
-      return;
-      }
-    this->bounding_box_->reset_bounds();
-    for(vcl_vector<vtol_vertex_sptr>::iterator vit = verts->begin();
-        vit != verts->end(); vit++)
-      this->bounding_box_->grow_minmax_bounds(*(*vit)->get_bounding_box());
-    delete verts;
+  if (!this->bounding_box_)
+  {
+    vcl_cout << "In void vtol_topology_object::compute_bounding_box() -"
+             << " shouldn't happen\n";
+    return;
+  }
+  vcl_vector<vtol_vertex_sptr> *verts= this->vertices();
+  if (!verts->size())
+  {
+    vcl_cout << "In void vtol_topology_object::compute_bounding_box() -"
+             << " no vertices\n";
+    return;
+  }
+  this->bounding_box_->reset_bounds();
+  for (vcl_vector<vtol_vertex_sptr>::iterator vit = verts->begin();
+       vit != verts->end(); vit++)
+    this->bounding_box_->grow_minmax_bounds(*(*vit)->get_bounding_box());
+  delete verts;
 }
