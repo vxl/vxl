@@ -244,6 +244,9 @@ LINK32=link.exe
 SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\bvgl_test_h_matrix_1d.cxx
 # End Source File
 # Begin Source File
