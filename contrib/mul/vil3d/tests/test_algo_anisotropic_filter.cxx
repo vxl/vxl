@@ -26,7 +26,7 @@ static void test_anisotropic_gaussian_filter()
   
   vgl_vector_3d<double> vox(1.0, 1.0, 1.0);
   vgl_vector_3d<double> sd(1.0, 1.0, 1.0);
-  anisotropic_gaussian_filter(src_im, dst_im, vox, sd);
+  vil3d_anisotropic_gaussian_filter(src_im, dst_im, vox, sd);
 
 //  vcl_cout << "Source image: \n";
 //  vil3d_print_all(vcl_cout, src_im);
