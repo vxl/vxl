@@ -11,9 +11,6 @@
 #include <vil2/vil2_image_resource.h>
 #include <vil2/vil2_image_view.h>
 
-template<class T>
-vil2_image_view<T> vil2_flip_lr(const vil2_image_view<T>& view);
-
 
 //: Create a reflected view in which i -> ni-1-i.
 //  i.e vil2_flip_lr(view)(i,j,p) = view(ni-1-i,j,p)
@@ -49,8 +46,9 @@ vil2_image_resource_sptr vil2_flip_lr(const vil2_image_resource_sptr &src);
 //: A generic_image adaptor that behaves like a flipped left to right version of its input
 class vil2_flip_lr_image_resource : public vil2_image_resource
 {
- public:
   vil2_flip_lr_image_resource(vil2_image_resource_sptr const&);
+  friend vil2_image_resource_sptr vil2_flip_lr(const vil2_image_resource_sptr &src);
+ public:
 
   virtual unsigned nplanes() const { return src_->nplanes(); }
   virtual unsigned ni() const { return src_->ni(); }
@@ -94,8 +92,9 @@ vil2_image_resource_sptr vil2_flip_ud(const vil2_image_resource_sptr &src);
 //: A generic_image adaptor that behaves like a flipped left to right version of its input
 class vil2_flip_ud_image_resource : public vil2_image_resource
 {
- public:
   vil2_flip_ud_image_resource(vil2_image_resource_sptr const&);
+  friend vil2_image_resource_sptr vil2_flip_ud(const vil2_image_resource_sptr &src);
+ public:
 
   virtual unsigned nplanes() const { return src_->nplanes(); }
   virtual unsigned ni() const { return src_->ni(); }

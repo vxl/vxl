@@ -32,8 +32,9 @@ vil2_image_resource_sptr vil2_transpose(const vil2_image_resource_sptr &src);
 //: A generic_image adaptor that behaves like a transposed version of its input
 class vil2_transpose_image_resource : public vil2_image_resource
 {
- public:
   vil2_transpose_image_resource(vil2_image_resource_sptr const&);
+  friend vil2_image_resource_sptr vil2_transpose(const vil2_image_resource_sptr &src);
+ public:
 
   virtual unsigned nplanes() const { return src_->nplanes(); }
   virtual unsigned ni() const { return src_->nj(); }
