@@ -232,6 +232,16 @@ void vnl_vector<T>::destroy()
 }
 
 template<class T> 
+void vnl_vector<T>::clear()
+{
+  if (data) {
+    destroy();
+    num_elmts = 0;
+    data = 0;
+  }
+}
+
+template<class T> 
 bool vnl_vector<T>::resize(unsigned n)
 {
   if (this->data) {

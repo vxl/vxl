@@ -74,16 +74,14 @@
 
 #include "vnl_matrix.h"
 
+#include <vcl_cassert.h>
+#include <vcl_cstdlib.h>  // abort()
 #include <vcl_cstdio.h>   // sprintf()
 #include <vcl_cctype.h>   // isspace()
 #include <vcl_cstring.h>  // strcpy()
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
-#include <vcl_cassert.h>
-
-// conflicts with operator!= for std::vector<vcl_complex<double> >::iterator.
-// # include <vcl_rel_ops.h>  // inline operator!= function template
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
@@ -329,6 +327,17 @@ template<class T>
 void vnl_matrix<T>::destroy()
 {
   vnl_matrix_free_blah;
+}
+
+template<class T> 
+void vnl_matrix<T>::clear()
+{
+  if (data) {
+    destroy();
+    num_rows = 0;
+    num_cols = 0;
+    data = 0;
+  }
 }
 
 // resize // Resizes the data arrays of THIS matrix to (rows x cols). O(m*n).
@@ -1045,7 +1054,7 @@ void vnl_matrix<T>::assert_finite() const
 
   vcl_cerr << "*** NAN FEVER **\n";
   vcl_cerr << *this;
-  abort();
+  vcl_abort();
 }
 
 // -- Abort unless M has the given size.
@@ -1055,7 +1064,7 @@ void vnl_matrix<T>::assert_size(unsigned rs,unsigned cs) const
   if (this->rows()!=rs || this->cols()!=cs) {
     vcl_cerr << "vnl_matrix : has size " << this->rows() << 'x' << this->cols() 
 	 << ". Should be " << rs << 'x' << cs << vcl_endl;
-    abort();
+    vcl_abort();
   }
 }
 
@@ -1065,7 +1074,7 @@ template <class T>
 bool vnl_matrix<T>::read_ascii(vcl_istream& s)
 {
   if (!s.good()) {
-    vcl_cerr << "vnl_matrix<T>::read_ascii: Called with bad vcl_istream\n";
+    vcl_cerr << "vnl_matrix<T>::read_ascii: Called with bad stream\n";
     return false;
   }
 
@@ -1193,7 +1202,7 @@ template <class T>
 void vnl_matrix<T>::set_print_format(char const* x)
 {
   delete [] print_format;
-  print_format = strcpy(new char[strlen(x)+1], x);
+  print_format = vcl_strcpy(new char[strlen(x)+1], x);
 }
 
 template <class T>
@@ -1514,13 +1523,13 @@ char * vnl_matrix<T>::print_format = 0;
 
 //--------------------------------------------------------------------------------
 
-// complain to fsm@robots.ox.ac.uk about this.
-#if defined(__sgi) && (_COMPILER_VERSION == 721)
-# undef VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER
-# undef VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER
-# define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) /* */
-# define VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(x) /* */
-#endif
+//// complain to fsm@robots.ox.ac.uk about this.
+//#if defined(__sgi) && (_COMPILER_VERSION == 721)
+//# undef VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER
+//# undef VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER
+//# define VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(x) /* */
+//# define VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(x) /* */
+//#endif
 
 
 #define VNL_MATRIX_INSTANTIATE(T) \
