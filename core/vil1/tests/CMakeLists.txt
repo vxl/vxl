@@ -18,7 +18,7 @@ ADD_EXECUTABLE( vil1_test_all
   test_file_format_read.cxx
   test_resample.cxx
 )
-TARGET_LINK_LIBRARIES( vil1_test_all vil1 vpl vul testlib vcl )
+TARGET_LINK_LIBRARIES( vil1_test_all vil1 vil vpl vul testlib vcl )
 
 ADD_TEST( vil1_test_flipud            vil1_test_all test_flipud )
 ADD_TEST( vil1_test_assign            vil1_test_all test_assign )
@@ -36,4 +36,4 @@ ADD_TEST( vil1_test_resample          vil1_test_all test_resample ${CMAKE_CURREN
 ADD_TEST( vil1_test_vil               vil1_test_all test_vil ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
 
 ADD_EXECUTABLE( vil1_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( vil1_test_include vil1 vil )
+TARGET_LINK_LIBRARIES( vil1_test_include vil1 )
