@@ -20,7 +20,6 @@
 #include <vbl/vbl_ref_count.h>
 #include <vil/vil_image_view_base.h>
 
-#include <vil/vil_new.h>
 #include <vil/vil_image_resource_sptr.h>
 
 class vidl_movie;

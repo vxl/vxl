@@ -12,7 +12,7 @@
 #ifdef HAS_AVI
 #include <vidl/vidl_avicodec.h>
 #endif
-
+#include <vil/vil_new.h>
 
 //: Local class to hold the codec list
 // Clears list on deletion.
@@ -50,10 +50,10 @@ vidl_codec_sptr* vidl_codec::all_codecs()
 
 
 //: Return the resource to the image
-vil_image_resource_sptr 
+vil_image_resource_sptr
 vidl_codec::get_resource(int position) const
-{ 
+{
   // Create a new resource of a view by default
-  // since a resource is not always available 
-  return vil_new_image_resource_of_view(*(this->get_view(position))); 
+  // since a resource is not always available
+  return vil_new_image_resource_of_view(*(this->get_view(position)));
 }
