@@ -47,10 +47,10 @@ void vil2_sobel_1x3_1plane(const unsigned char* src,
   //     o2
   //  o4    o5
   //     o7
-  const int o2 = s_jstep;
-  const int o4 = -s_istep;
-  const int o5 = s_istep;
-  const int o7 = -s_jstep;
+  const vcl_ptrdiff_t o2 = s_jstep;
+  const vcl_ptrdiff_t o4 = -s_istep;
+  const vcl_ptrdiff_t o5 = s_istep;
+  const vcl_ptrdiff_t o7 = -s_jstep;
 
   const unsigned ni1 = ni-1;
   const unsigned nj1 = nj-1;
@@ -145,10 +145,10 @@ void vil2_sobel_1x3_1plane(const float* src,
   //     o2
   //  o4    o5
   //     o7
-  const int o2 = s_jstep;
-  const int o4 = -s_istep;
-  const int o5 = s_istep;
-  const int o7 = -s_jstep;
+  const vcl_ptrdiff_t o2 = s_jstep;
+  const vcl_ptrdiff_t o4 = -s_istep;
+  const vcl_ptrdiff_t o5 = s_istep;
+  const vcl_ptrdiff_t o7 = -s_jstep;
 
   const unsigned ni1 = ni-1;
   const unsigned nj1 = nj-1;
@@ -241,10 +241,10 @@ void vil2_sobel_1x3_1plane(const double* src,
   //     o2
   //  o4    o5
   //     o7
-  int o2 = s_jstep;
-  int o4 = -s_istep;
-  int o5 = s_istep;
-  int o7 = -s_jstep;
+  const vcl_ptrdiff_t o2 = s_jstep;
+  const vcl_ptrdiff_t o4 = -s_istep;
+  const vcl_ptrdiff_t o5 = s_istep;
+  const vcl_ptrdiff_t o7 = -s_jstep;
 
   const unsigned ni1 = ni-1;
   const unsigned nj1 = nj-1;

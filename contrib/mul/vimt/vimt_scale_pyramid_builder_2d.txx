@@ -51,8 +51,8 @@ void vimt_scale_pyramid_builder_2d<T>::scale_reduce(
   int src_nj = src_im.image().nj();
   int dest_ni = dest_im.image().ni();
   int dest_nj = dest_im.image().nj();
-  int istep = src_im.image().istep();
-  int jstep = src_im.image().jstep();
+  vcl_ptrdiff_t istep = src_im.image().istep();
+  vcl_ptrdiff_t jstep = src_im.image().jstep();
   int n_planes = src_im.image().nplanes();
 
   // Reduce plane-by-plane
@@ -134,7 +134,7 @@ void vimt_scale_pyramid_builder_2d<T>::scale_reduce(
     for (int xi=0; xi<dest_ni; xi++)
     {
       dest_row[xi] = l_round (vil2_bilin_interp_safe_extend(x, y,
-                              src_im,  src_ni, src_nj, src_istep, src_jstep), (T)0);
+                              src_im, src_ni, src_nj, src_istep, src_jstep), (T)0);
       x += scale_step_;
     }
     y+= scale_step_;
