@@ -37,6 +37,9 @@ class vsol_box_2d
   double get_min_y(void);
   double get_max_y(void);
 
+  inline double width() { return get_max_x() - get_min_x(); }
+  inline double height() { return get_max_y() - get_min_y(); }
+
   void set_min_x(const double &v);
   void set_max_x(const double &v);
 
@@ -46,9 +49,14 @@ class vsol_box_2d
   //: Compare this' bounds to comp_box and grow to the maximum bounding box
   void grow_minmax_bounds(vsol_box_2d & comp_box);
 
+  bool operator< (vsol_box_2d& b);  // a<b means a is inside b
+
+  // is box about the same as this?
+  bool near_equal(vsol_box_2d& b, float tolerance);
+
  protected:
 
-  vbl_bounding_box<double,2> _box;
+  vbl_bounding_box<double,2> box_;
 };
 
 #endif // vsol_box_2d_H
