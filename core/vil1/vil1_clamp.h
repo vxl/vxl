@@ -3,7 +3,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME    vil_clamp - Templated vil_clamping functions to ensure value is in range 0-255
+// .NAME    vil_clamp - Templated vil_clamping functions to ensure value is in given range
 // .HEADER  Basics Package
 // .LIBRARY vil
 // .INCLUDE vil/vil_clamp.h
@@ -12,9 +12,22 @@
 // .SECTION Author
 //    Andrew Fitzgibbon and David Capel 
 
-#include <vcl/vcl_compiler.h>
+//#include <vcl/vcl_compiler.h>
 
-//:
+#include <vil/vil_image.h>
+
+//: Adaptor which returns a vil_image with pixel components clamped to given range.
+vil_image vil_clamp(vil_image src, double range_min, double range_max);
+
+// capes@robots : The functions below are deprecated. The new adaptor style fits nicely
+// into the functional composition and lazy evaluation scheme provided by the 
+// other vil adaptors.
+// Old code can be implemented in the new style as
+//   vil_image_as_byte(vil_clamp(img, 0, 255));
+//   vil_image_as_rgb_byte(vil_clamp(img, 0, 255));
+
+#if 0
+//: 
 // Default behaviour just returns value. Clamping of double to return byte is
 // also defined here. Other clamps, such as vil_rgb<double> to vil_rgb<byte>
 // may be defined in the appropriate places.
@@ -49,5 +62,6 @@ unsigned char vil_clamp(const double& d, unsigned char *)
   else
     return (unsigned char)d; 
 }
+#endif
 
 #endif // vil_clamp_h_
