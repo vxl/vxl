@@ -114,10 +114,11 @@ transform_region( rgrl_transformation const& xform ) const
   vnl_vector< double > point_along_dir( this -> location_ . size() );
   double sum_radii = 0;
 
+  double this_region_radius = this->region_radius_; // Work-around for Borland C++ 5.
   for( unsigned int i=0; i < this -> location_ . size() - 1; ++i )
   {
     point_along_dir = this -> location();
-    point_along_dir += this -> region_radius_ * nullspace . get_column( i );
+    point_along_dir += this_region_radius * nullspace . get_column( i );
     xform . map_location( point_along_dir, end_point );
     sum_radii += ( end_point - trace_ptr -> location_ ) . magnitude();
   }
