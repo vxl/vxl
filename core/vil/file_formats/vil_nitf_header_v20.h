@@ -84,8 +84,8 @@ inline const char* GetVersion20Date()
     // We must fool SCCS, otherwise it will try to
     // be smart and interpret the percents in the string.
     //
-    vcl_time_t clock = time(NULL);
-    struct tm *tm_ = localtime(&clock);
+    vcl_time_t clock = vcl_time(NULL);
+    struct tm *tm_ = vcl_localtime(&clock);
     // char* format = "%d%H%M%SZ%h%y";
 
     vcl_strncpy(rval, "              ", 15);
