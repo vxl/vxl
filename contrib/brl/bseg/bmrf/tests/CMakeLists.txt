@@ -4,15 +4,17 @@ INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg )
 
 ADD_EXECUTABLE ( bmrf_test_driver
   test_driver.cxx
-  test_node.cxx
   test_epi_point.cxx
   test_epi_seg.cxx
+  test_node.cxx
+  test_network.cxx
 )
 TARGET_LINK_LIBRARIES( bmrf_test_driver bmrf testlib vpl )
 
-ADD_TEST( bmrf_node                      bmrf_test_driver test_node)
 ADD_TEST( bmrf_epi_point                 bmrf_test_driver test_epi_point)
 ADD_TEST( bmrf_epi_seg                   bmrf_test_driver test_epi_seg)
+ADD_TEST( bmrf_node                      bmrf_test_driver test_node)
+ADD_TEST( bmrf_network                   bmrf_test_driver test_network)
 
 #this is for test_includes
 ADD_EXECUTABLE( bmrf_test_include test_include.cxx)
