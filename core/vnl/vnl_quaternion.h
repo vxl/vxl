@@ -45,7 +45,7 @@
 //            the very reasonable forward declaration
 //            template <class T> class vnl_quaternion;
 
-#include <vcl/vcl_functional.h>
+//what was this for? #include <vcl/vcl_functional.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
 
