@@ -177,6 +177,10 @@ SOURCE=.\vnl_amoeba.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vnl_brent.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\vnl_chi_squared.cxx
 # End Source File
 # Begin Source File
@@ -330,6 +334,10 @@ SOURCE=.\vnl_algo_fwd.h
 # Begin Source File
 
 SOURCE=.\vnl_amoeba.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_brent.h
 # End Source File
 # Begin Source File
 
