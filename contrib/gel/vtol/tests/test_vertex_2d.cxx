@@ -43,35 +43,54 @@ int main(int, char **)
   Assert(v1->x()==2.0);
   Assert(v1->y()==3.0);
 
-  // try to clone these the vertex
+  // try to clone this vertex
 
   vsol_spatial_object_3d_sptr so = v1->clone();
 
-  vtol_vertex_2d_sptr v2 = so->cast_to_topology_object()->cast_to_vertex()->
-    cast_to_vertex_2d();
+  vtol_topology_object_sptr to = so->cast_to_topology_object();
+  Assert(to);
+  vtol_vertex_sptr ve = to->cast_to_vertex();
+  Assert(ve);
+  vtol_vertex_2d_sptr v2 = ve->cast_to_vertex_2d();
+  Assert(v2);
 
   Assert(v2->x()==2.0);
   Assert(v2->y()==3.0);
 
-  // try the point accessor
+  // try the point() accessor
 
   vsol_point_2d_sptr p = v2->point();
   Assert(p->x()==2.0);
   Assert(p->y()==3.0);
 
-  // the == operator for spatial_object and vertex_2d
+  // the == operator for spatial_object, topology_object, vertex and vertex_2d
 
-  Assert((*v1)==(*so));
   Assert((*v1)==(*v2));
+  Assert((*v1)==(*so));
+  Assert((*so)==(*v1));
+  Assert((*v1)==(*to));
+  Assert((*to)==(*v1));
+  Assert((*v1)==(*ve));
+  Assert((*ve)==(*v1));
+  Assert((*ve)==(*to));
+  Assert((*to)==(*ve));
+  Assert((*so)==(*ve));
+  Assert((*ve)==(*so));
+  Assert((*so)==(*to));
+  Assert((*to)==(*so));
 
-  // change the point with set point
+  // change the point with set_point() and verify it's different
   vsol_point_2d_sptr np = new vsol_point_2d(4.0,5.0);
   v2->set_point(*np);
   Assert(v2->x()==4.0 && v2->y()==5.0);
 
-
-  Assert(!((*v1)==(*so)));
   Assert(!((*v1)==(*v2)));
+  Assert(!((*v1)==(*so)));
+  Assert(!((*so)==(*v1)));
+  Assert(!((*v1)==(*to)));
+  Assert(!((*to)==(*v1)));
+  Assert(!((*v1)==(*ve)));
+  Assert(!((*ve)==(*v1)));
 
   // check casting
 
@@ -92,14 +111,21 @@ int main(int, char **)
 
   // checking the vertex side of things
 
-
   Assert(v1->topology_type()==vtol_topology_object::VERTEX);
 
   vtol_edge_sptr new_edge = v1->new_edge(*v2);
+  edge_list* e_list=v1->edges();
+  Assert(e_list->size()==1);
+  Assert((*e_list)[0]->v1()==v1);
+  Assert((*e_list)[0]->v2()==v2);
+  delete e_list;
 
   vertex_list v_list;
 
   v1->explore_vertex(v_list);
+  vcl_cout << "List size: " << v_list.size() << vcl_endl;
+  for (int i=0; i<v_list.size(); ++i)
+    vcl_cout << *(v_list[i]) << vcl_endl;
   Assert(v_list.size()==2);
 
   vtol_vertex_sptr v1v = v1->cast_to_vertex();
