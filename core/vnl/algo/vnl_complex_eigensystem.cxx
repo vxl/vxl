@@ -19,9 +19,9 @@ void vnl_complex_eigensystem::compute(vnl_matrix<vcl_complex<double> > const & A
   assert(! A.is_zero());
 
   if (right)
-    R.resize(N, N);
+    R.set_size(N, N);
   if (left)
-    L.resize(N, N);
+    L.set_size(N, N);
 
   //
   // Remember that fortran matrices and C matrices are transposed

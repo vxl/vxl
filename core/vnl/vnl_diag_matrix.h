@@ -48,7 +48,7 @@ class vnl_diag_matrix
   vnl_diag_matrix(vnl_vector<T> const& that): diagonal_(that) {}
  ~vnl_diag_matrix() {}
 
-  vnl_diag_matrix& operator=(vnl_diag_matrix<T> const& that) {
+  inline vnl_diag_matrix& operator=(vnl_diag_matrix<T> const& that) {
     this->diagonal_ = that.diagonal_;
     return *this;
   }
@@ -56,9 +56,9 @@ class vnl_diag_matrix
   // Operations----------------------------------------------------------------
 
   //: In-place arithmetic operation
-  vnl_diag_matrix<T>& operator*=(T v) { diagonal_ *= v; return *this; }
+  inline vnl_diag_matrix<T>& operator*=(T v) { diagonal_ *= v; return *this; }
   //: In-place arithmetic operation
-  vnl_diag_matrix<T>& operator/=(T v) { diagonal_ /= v; return *this; }
+  inline vnl_diag_matrix<T>& operator/=(T v) { diagonal_ /= v; return *this; }
 
   // Computations--------------------------------------------------------------
 
@@ -69,32 +69,32 @@ class vnl_diag_matrix
 
   // Data Access---------------------------------------------------------------
 
-  T operator () (unsigned i, unsigned j) const {
+  inline T operator () (unsigned i, unsigned j) const {
     return (i != j) ? T(0) : diagonal_[i];
   }
 
-  T& operator () (unsigned i, unsigned j) {
+  inline T& operator () (unsigned i, unsigned j) {
     assert(i == j);
     return diagonal_[i];
   }
-  T& operator() (unsigned i) { return diagonal_[i]; }
-  T const& operator() (unsigned i) const { return diagonal_[i]; }
+  inline T& operator() (unsigned i) { return diagonal_[i]; }
+  inline T const& operator() (unsigned i) const { return diagonal_[i]; }
 
-  T& operator[] (unsigned i) { return diagonal_[i]; }
-  T const& operator[] (unsigned i) const { return diagonal_[i]; }
+  inline T& operator[] (unsigned i) { return diagonal_[i]; }
+  inline T const& operator[] (unsigned i) const { return diagonal_[i]; }
 
   //: set element with boundary checks.
-  void put (unsigned r, unsigned c, T const& v) {
+  inline void put (unsigned r, unsigned c, T const& v) {
     assert(r == c); assert (r<size()); diagonal_[r] = v;
   }
 
   //: get element with boundary checks.
-  T get (unsigned r, unsigned c) const {
+  inline T get (unsigned r, unsigned c) const {
     assert(r == c); assert (r<size()); return diagonal_[r];
   }
 
   //: Set all diagonal elements of matrix to specified value.
-  void fill_diagonal (T const& v) { diagonal_.fill(v); }
+  inline void fill_diagonal (T const& v) { diagonal_.fill(v); }
 
   // iterators
 
@@ -105,10 +105,10 @@ class vnl_diag_matrix
   inline const_iterator begin() const { return diagonal_.begin(); }
   inline const_iterator end() const { return diagonal_.end(); }
 
-  unsigned size() const { return diagonal_.size(); }
-  unsigned rows() const { return diagonal_.size(); }
-  unsigned cols() const { return diagonal_.size(); }
-  unsigned columns() const { return diagonal_.size(); }
+  inline unsigned size() const { return diagonal_.size(); }
+  inline unsigned rows() const { return diagonal_.size(); }
+  inline unsigned cols() const { return diagonal_.size(); }
+  inline unsigned columns() const { return diagonal_.size(); }
 
   // Need this until we add a vnl_diag_matrix ctor to vnl_matrix;
   inline vnl_matrix<T> asMatrix() const;
@@ -118,19 +118,23 @@ class vnl_diag_matrix
   // This is as good as a vnl_diag_matrix ctor for vnl_matrix:
   inline operator vnl_matrix<T> () const { return asMatrix(); }
 
-  void resize(int n) { diagonal_.resize(n); }
-  void clear() { diagonal_.clear(); }
-  void fill(T const &x) { diagonal_.fill(x); }
+  inline void set_size(int n) { diagonal_.set_size(n); }
+ private:
+  // deprecated:
+  inline void resize(int n) { set_size(n); }
+ public:
+  inline void clear() { diagonal_.clear(); }
+  inline void fill(T const &x) { diagonal_.fill(x); }
 
   //: Return pointer to the diagonal elements as a contiguous 1D C array;
-  T*       data_block()       { return diagonal_.data_block(); }
-  T const* data_block() const { return diagonal_.data_block(); }
+  inline T*       data_block()       { return diagonal_.data_block(); }
+  inline T const* data_block() const { return diagonal_.data_block(); }
 
   //: Return diagonal elements as a vector
-  vnl_vector<T> const& diagonal() const { return diagonal_; }
+  inline vnl_vector<T> const& diagonal() const { return diagonal_; }
 
   //: Set diagonal elements using vector
-  void set(vnl_vector<T> const& v)  { diagonal_=v; }
+  inline void set(vnl_vector<T> const& v)  { diagonal_=v; }
 
  private:
   #if VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD

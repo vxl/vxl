@@ -109,21 +109,21 @@ void print_pointers(const vcl_vector<vnl_vector<T> >&va, const vcl_vector<vnl_ve
   unsigned i;
   vcl_ofstream os(file.c_str());
   os << "Data values\n"
-     << "\nva:" << &va.front() << " " << &va.back() << '\n';
+     << "\nva:" << &va.front() << ' ' << &va.back() << '\n';
   for (i=0;i<va.size();++i)
   { os << va[i].data_block() << va[i].size() << '\n'; }
 
-  os << "\n\nvb:" << &vb.front() << " " << &vb.back() << '\n';
+  os << "\n\nvb:" << &vb.front() << ' ' << &vb.back() << '\n';
   for (i=0;i<vb.size();++i)
   { os << vb[i].data_block() << vb[i].size() << '\n'; }
 
-  os << "\n\nvc:" << &vc.front() << " " << &vc.back() << '\n';
+  os << "\n\nvc:" << &vc.front() << ' ' << &vc.back() << '\n';
   for (i=0;i<vc.size();++i)
   { os << vc[i].data_block() << vc[i].size() << '\n'; }
 
-  os << "\n\nna:" << &na.front() << " " << &na.back() << '\n'
+  os << "\n\nna:" << &na.front() << ' ' << &na.back() << '\n'
 
-     << "\n\nma:" << ma.data_block() << " " << ma.rows() << " " << ma.cols() << '\n';
+     << "\n\nma:" << ma.data_block() << ' ' << ma.rows() << ' ' << ma.cols() << '\n';
   for (i=0;i<ma.rows();++i)
   { os << ma[i] << '\n'; }
 }
@@ -138,9 +138,9 @@ void run_for_size(unsigned m, unsigned n, T /*dummy*/, const char * type, const 
 
   for (unsigned k=0;k<n_data;++k)
   {
-    x[k].resize(n);
-    z[k].resize(m);
-    y[k].resize(m);
+    x[k].set_size(n);
+    z[k].set_size(m);
+    y[k].set_size(m);
     vnl_sample_uniform(x[k].begin(), x[k].end(), -10000,10000);
     vnl_sample_uniform(y[k].begin(), y[k].end(), -10000,10000);
     vnl_sample_uniform(z[k].begin(), z[k].end(), -10000,10000);
@@ -148,7 +148,7 @@ void run_for_size(unsigned m, unsigned n, T /*dummy*/, const char * type, const 
   vnl_sample_uniform(A.begin(), A.end(), -10000,10000);
 
   int n_loops = 1000000/m;
-  vcl_cout<<"\nTimes to operator on "<<type<<" "<<m<<"-d vectors and "
+  vcl_cout<<"\nTimes to operator on "<<type<<' '<<m<<"-d vectors and "
           <<m<<" x "<<n<<" matrices, size " << size << '\n'
           <<"Sum of square differences       " << vcl_flush;
   distance_squared(z,y,v,n_loops);

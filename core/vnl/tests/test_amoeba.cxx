@@ -29,9 +29,9 @@ struct testlib_test_amoeba_cost1 : public vnl_cost_function {
 
 void test_amoeba()
 {
-  vcl_cout<<" ================== test_amoeba =============== "<<vcl_endl;
+  vcl_cout<<" ================== test_amoeba ===============\n";
 
-  vcl_cout<<"Testing on 1D cubic"<<vcl_endl;
+  vcl_cout<<"Testing on 1D cubic\n";
   testlib_test_amoeba_cubic c;
   vnl_amoeba amoeba1(c);
   vnl_vector<double> x(1);
@@ -41,8 +41,8 @@ void test_amoeba()
   TEST("amoeba1", vcl_fabs(x[0] - 2) < 1e-5, true);
 
   int n = 4;
-  vcl_cout<<"Testing on "<<n<<"-D quadratic"<<vcl_endl;
-  x.resize(n);
+  vcl_cout<<"Testing on "<<n<<"-D quadratic\n";
+  x.set_size(n);
   x.fill(1);
   testlib_test_amoeba_cost1 cost1(n);
   vnl_amoeba amoeba2(cost1);
@@ -70,7 +70,7 @@ void test_amoeba()
   TEST("Quadratic, starting at (0,0,0...) using minimise(x,dx)",err<1e-5,true);
   vcl_cout<<"Number of evaluations: "<<amoeba2.get_num_evaluations()<<vcl_endl;
 
-  vcl_cout<<"Test static functions"<<vcl_endl;
+  vcl_cout<<"Test static functions\n";
   x.fill(0);
   vnl_amoeba::minimize(cost1,x,dx);
   err=0;

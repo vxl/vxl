@@ -4,14 +4,8 @@
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
-#if 0
-# include <vnl/vnl_resize.h>
-# define vnl_resize_v vnl_resize
-# define vnl_resize_m vnl_resize
-#else
-# define vnl_resize_v(v, n) (v).resize(n)
-# define vnl_resize_m(A, m, n) (A).resize(m, n)
-#endif
+#define vnl_resize_v(v, n) (v).set_size(n)
+#define vnl_resize_m(A, m, n) (A).set_size(m, n)
 
 void test_resize()
 {
