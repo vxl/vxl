@@ -106,7 +106,7 @@ class vnl_c_vector
   //: The standard deviation 
   // This method uses the 1/(n-1) normalisation, assuming that your
   // data is a sample of a population.
-  static inline T std(T const *p, unsigned n) {
+  static inline real_t std(T const *p, unsigned n) {
     return vcl_sqrt(real_t(sum_sq_diff_means(p, n))/real_t(n-1));}
 
   //: The sum of squared differences from the mean
