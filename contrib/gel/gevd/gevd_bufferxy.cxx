@@ -39,10 +39,17 @@ gevd_bufferxy::gevd_bufferxy(int x, int y, int b) : gevd_memory_mixin(x*y*(int)(
   Init(x, y, b);
 }
 
-//: Construct a gevd_bufferxy of width x, height y, and b bits per entry, and load data from memptr.
+//: Construct a gevd_bufferxy of width x, height y, and b bits per entry, and load data from memptr.  The object will not free memptr.
 gevd_bufferxy::gevd_bufferxy(int x, int y, int b, void* memptr) : gevd_memory_mixin(x*y*(int)((b+7)/8),memptr)
 {
   Init(x, y, b);
+  // Don't delete the buffer when destructing.  MM_PROTECTED should be
+  // avoided, but with this constructor we do not know how memptr was
+  // allocated, so we should not attempt to free or delete or delete[]
+  // it.  If required, the interface could be expanded so the caller
+  // has a way of telling the object whether to and how to free
+  // memptr.
+  SetStatus(MM_PROTECTED);
 }
 
 //: Construct a gevd_bufferxy from a vil_image
