@@ -1,6 +1,5 @@
 #ifndef rsdl_bins_h_
 #define rsdl_bins_h_
-
 //:
 // \file
 // \author Amitha Perera
@@ -20,7 +19,6 @@ template<unsigned N, typename C, typename V>
 struct rsdl_bins_point_dist_entry;
 template<unsigned N, typename C, typename V>
 struct rsdl_bins_bin_entry_type;
-
 
 
 //: N-dimensional bin structure for fast point retrieval.
@@ -54,12 +52,11 @@ class rsdl_bins
   typedef vnl_vector_fixed<CoordType,N>   point_type;
 
  public:
-
   //:
   // Construct bins of size \a bin_sizes with enough bins to span \a
   // min_coord to \a max_coord.
   //
-  // The equality comparision tolerance is set to 0.
+  // The equality comparison tolerance is set to 0.
   //
   rsdl_bins( point_type const& min_coord,
              point_type const& max_coord,
@@ -70,14 +67,14 @@ class rsdl_bins
 
   //: Update the tolerance used in equality checking.
   //
-  // Two points with Eucledian distance <= \a tol will comare equal.
+  // Two points with Eucledean distance <= \a tol will compare equal.
   //
   void set_distance_tolerance( coord_type const& tol );
 
   //: Adds the point \a pt with value \a val.
   void add_point( point_type const& pt, value_type const& val );
 
-  //: Retreives the value at \a pt, if possible.
+  //: Retrieves the value at \a pt, if possible.
   //
   // If the a point equal to \a pt, to within the current tolerance,
   // is found, \a val will be set to the associated value, and the
