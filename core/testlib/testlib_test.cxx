@@ -34,8 +34,7 @@ void testlib_test_start(const char* name) {
   vcl_cout << "-----------------------------------------------------------------------------\n"
            << "Start Testing";
   if (test_name != NULL) vcl_cout << ' ' << test_name;
-  vcl_cout << ":\n-----------------------------------------------------------------------------\n";
-  vcl_cout.flush();
+  vcl_cout << ":\n-----------------------------------------------------------------------------\n" << vcl_flush;
  }
 
 void testlib_test_begin(const char* msg) {
@@ -52,10 +51,10 @@ void testlib_test_begin(const char* msg) {
 void testlib_test_perform(bool success) {
   if (success) {
     tests_passed++;
-    vcl_cout << "  PASSED\n";
+    vcl_cout << "  PASSED\n" << vcl_flush;
   } else {
     tests_failed++;
-    vcl_cout << "**FAILED**\n";
+    vcl_cout << "**FAILED**\n" << vcl_flush;
   }
 }
 
@@ -84,58 +83,58 @@ int testlib_test_summary() {
     else
       vcl_cout<<"Test succeeded";
   }
-  vcl_cout << "\n-----------------------------------------------------------------------------\n";
+  vcl_cout << "\n-----------------------------------------------------------------------------\n" << vcl_flush;
   return tests_failed;
 }
 
 void testlib_test_assert(const vcl_string& msg, bool expr)
 {
-  vcl_cout << msg << " - ";
+  vcl_cout << msg << " - " << vcl_flush;
   testlib_test_perform(expr);
 }
 
 void testlib_test_assert_near(const vcl_string& msg, double expr, double target, double tol)
 {
-  vcl_cout << msg << " should be " << target << ", is " << expr << ", ";
+  vcl_cout << msg << " should be " << target << ", is " << expr << ", " << vcl_flush;
   double diff = vcl_abs(expr - target);
   if (target != 0.0 && diff != 0.0)
-    vcl_cout << "difference " << diff << ", ";
+    vcl_cout << "difference " << diff << ", " << vcl_flush;
   testlib_test_perform(diff <= tol);
 }
 
 void testlib_test_assert_near(const vcl_string& msg, vcl_complex<double> expr, vcl_complex<double> target, double tol)
 {
-  vcl_cout << msg << " should be " << target << ", is " << expr << ", ";
+  vcl_cout << msg << " should be " << target << ", is " << expr << ", " << vcl_flush;
   double diff = vcl_abs(expr - target);
   if (target != vcl_complex<double>(0,0) && diff != 0.0)
-    vcl_cout << "difference " << diff << ", ";
+    vcl_cout << "difference " << diff << ", " << vcl_flush;
   testlib_test_perform(diff <= tol);
 }
 
 void testlib_test_assert_far(const vcl_string& msg, double expr, double target, double tol)
 {
-  vcl_cout << msg << " should not be " << target << ", is " << expr << ", ";
+  vcl_cout << msg << " should not be " << target << ", is " << expr << ", " << vcl_flush;
   double diff = vcl_abs(expr - target);
   if (target != 0.0 && diff != 0.0)
-    vcl_cout << "difference " << diff << ", ";
+    vcl_cout << "difference " << diff << ", " << vcl_flush;
   testlib_test_perform(diff > tol);
 }
 
 void testlib_test_assert_far(const vcl_string& msg, vcl_complex<double> expr, vcl_complex<double> target, double tol)
 {
-  vcl_cout << msg << " should not be " << target << ", is " << expr << ", ";
+  vcl_cout << msg << " should not be " << target << ", is " << expr << ", " << vcl_flush;
   double diff = vcl_abs(expr - target);
   if (target != vcl_complex<double>(0,0) && diff != 0.0)
-    vcl_cout << "difference " << diff << ", ";
+    vcl_cout << "difference " << diff << ", " << vcl_flush;
   testlib_test_perform(diff > tol);
 }
 
 void testlib_test_assert_equal(const vcl_string& msg, long expr, long target)
 {
-  vcl_cout << msg << " should be " << target << ", is " << expr << ", ";
+  vcl_cout << msg << " should be " << target << ", is " << expr << ", " << vcl_flush;
   long diff = vcl_abs(expr - target);
   if (target != 0 && diff != 0)
-    vcl_cout << "difference " << diff << ", ";
+    vcl_cout << "difference " << diff << ", " << vcl_flush;
   testlib_test_perform(diff == 0);
 }
 
