@@ -36,12 +36,24 @@ template <class T>
 class vil2_image_view : public vil2_image_view_base
 {
 protected:
+  //: Pointer to pixel at origin.
   T * top_left_;
+  //: Add this to a pixel pointer to move one column left.
   int istep_;
+  //: Add this to a pixel pointer to move one row down.
   int jstep_;
+  //: Add this to a pixel pointer to move one plane back.
   int planestep_;
 
+  //: Reference to actual image data.
   vil2_memory_chunk_sptr ptr_;
+
+  //: Disconnect this view from the underlying data,
+  void release_memory()
+  { ptr_ = 0; }
+
+
+
 public:
 
     //: Dflt ctor
@@ -178,8 +190,13 @@ public:
   //: Make a copy of the data in src and set this to view it
   void deep_copy(const vil2_image_view<T>& src);
 
-  //: Disconnect this view from the underlying data.
-  void release_data();
+  //: Make empty.
+  // Disconnects view from underlying data.
+  void clear()
+  {
+    release_memory();
+    ni_=nj_=nplanes_=0;
+  }
 
   //: Set this view to look at someone else's memory data.
   //  If the data goes out of scope then this view could be invalid, and
@@ -243,7 +260,11 @@ public:
   // as many components as the rhs has planes. O(1).
   // If the view types are not compatible this object will be set to empty.
   const vil2_image_view<T> & operator = (const vil2_image_view_base_sptr & rhs)
-  { *this = *rhs; return *this; }
+  {
+    if (!rhs) clear();
+    else *this = *rhs;
+    return *this;
+  }
 
 };
 

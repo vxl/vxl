@@ -435,12 +435,6 @@ const vil2_image_view<T> & vil2_image_view<T>::operator= (const vil2_image_view_
 
 //=======================================================================
 
-template<class T>
-void vil2_image_view<T>::release_data()
-{
-  ptr_=0;
-}
-
 template<class T> vil2_image_view<T>::~vil2_image_view()
 {
   // release_data();
@@ -484,7 +478,7 @@ void vil2_image_view<T>::resize(unsigned ni, unsigned nj, unsigned nplanes)
 {
   if (ni==ni_ && nj==nj_ && nplanes==nplanes_) return;
 
-  release_data();
+  release_memory();
 
   ptr_ = new vil2_memory_chunk(sizeof(T)*nplanes*nj*ni);
 
@@ -505,7 +499,7 @@ void vil2_image_view<T>::set_to_memory(const T* top_left,
                                        unsigned ni, unsigned nj, unsigned nplanes,
                                        int istep, int jstep, int planestep)
 {
-  release_data();
+  release_memory();
   top_left_ = (T*) top_left;  // Remove const, as view may end up manipulating data
 
   ni_ = ni;
@@ -530,7 +524,7 @@ void vil2_image_view<T>::set_to_window(const vil2_image_view& im,
   assert(j0<im.nj()); assert(j0+nj<=im.nj());
   assert(p0<im.nplanes()); assert(p0+np<=im.nplanes());
 
-  release_data();
+  release_memory();
 
   // Take smart pointer to im's data to keep it in scope
   ptr_ = im.ptr_;
