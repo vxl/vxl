@@ -129,15 +129,30 @@ vcl_string vul_file::basename(char const* fn, char const * suffix)
 }
 
 
-
+#ifdef VCL_WIN32
+//: replace instances of 'from' in 's' with 'to' 
+static unsigned replace(char from, char to, vcl_string &s)
+{
+  unsigned c = 0;
+  for (unsigned i=0; i<s.size(); ++i)
+    if (s[i] == from)
+    {
+      c++;
+      s[i] = to;
+    }
+    return c;
+}
+#endif
 
 //: Delete 1 or more files using the Local OS prefered globbing.
 // e.g. \c delete_file_glob("*"); will delete all the files in the
 // current directory on most operating systems.
+// Takes Posix path separators i.e. '/'
 bool vul_file::delete_file_glob(char const* file_glob)
 {
   vcl_string command = file_glob;
 #ifdef VCL_WIN32
+  replace('/', '\\', command);
   command = "del " + command;
 #else
   command = "rm " + command;
