@@ -394,7 +394,7 @@ inline void vsol_spatial_object_2d::set_user_flag(unsigned int flag)
 //: check if a flag is set for a spatial object; flag can be VSOL_FLAG[1-6]
 inline bool vsol_spatial_object_2d::get_user_flag(unsigned int flag)
 {
-  return (tag_ & flag) ? true : false;
+  return bool(tag_ & flag);
 }
 
 //: un-set a flag for a spatial object; flag can be VSOL_FLAG[1-6]
