@@ -1,14 +1,12 @@
+#include <vxl_config.h>
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-#include <vcl_cmath.h>
 #include <testlib/testlib_test.h>
 #include <vil2/algo/vil2_find_4con_boundary.h>
 #include <vil2/vil2_crop.h>
 
 void show_boundary(const vcl_vector<int>& bi,const vcl_vector<int>& bj)
 {
-  for (int i=0;i<bi.size();++i)
+  for (unsigned int i=0;i<bi.size();++i)
     vcl_cout<<"("<<bi[i]<<","<<bj[i]<<")";
   vcl_cout<<vcl_endl;
 }
