@@ -161,11 +161,6 @@ SOURCE=.\gtrl_triangulation.h
 SOURCE=.\gtrl_vertex.h
 
 # End Source File
-# Begin Source File
-
-SOURCE=.\gtrl_netlib_triangle.h
-
-# End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
