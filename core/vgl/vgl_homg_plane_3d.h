@@ -28,13 +28,13 @@
 template <class Type>
 class vgl_homg_plane_3d {
 public:
-  vgl_homg_plane_3d () {}
+  inline vgl_homg_plane_3d () {}
 
   //: Construct from four Types.
-  vgl_homg_plane_3d (Type nx, Type ny, Type nz, Type d) : a_(nx), b_(ny), c_(nz), d_(d) {}
+  inline vgl_homg_plane_3d (Type nx, Type ny, Type nz, Type d) : a_(nx), b_(ny), c_(nz), d_(d) {}
 
   //: Construct from 4-vector.
-  vgl_homg_plane_3d (const Type v[4]) : a_(v[0]), b_(v[1]), c_(v[2]), d_(v[3]) {}
+  inline vgl_homg_plane_3d (const Type v[4]) : a_(v[0]), b_(v[1]), c_(v[2]), d_(v[3]) {}
 
   //: Construct from non-homogeneous plane.
   vgl_homg_plane_3d (vgl_plane_3d<Type> const& pl);
@@ -65,17 +65,17 @@ public:
   //: Set equation a*x+b*y+c*z+d*w=0
   inline void set(Type a,Type b,Type c,Type d){assert(a||b||c||d);a_=a;b_=b;c_=c;d_=d;}
 
-  //: the equality operator
-  bool operator==( vgl_homg_plane_3d<Type> const & pl) const;
-  bool operator!=( vgl_homg_plane_3d<Type> const & pl) const { return !operator==(pl); }
+  //: the comparison operator
+  bool operator==( vgl_homg_plane_3d<Type> const& pl) const;
+  inline bool operator!=( vgl_homg_plane_3d<Type>const& pl)const{return !operator==(pl);}
 
   //: Return true iff the plane is the plane at infinity.
-  // The method checks that max(|nx|,|ny|,|nz|) <= tol * |d|
-  bool ideal(Type tol = Type(0)) const {
+  // The method checks that max(|a|,|b|,|c|) <= tol * |d|
+  inline bool ideal(Type tol = Type(0)) const {
 #define vgl_Abs(x) (x<0?-x:x) // avoid #include of vcl_cmath.h AND vcl_cstdlib.h
-    return vgl_Abs(nx()) <= tol * vgl_Abs(d()) &&
-           vgl_Abs(ny()) <= tol * vgl_Abs(d()) &&
-           vgl_Abs(nz()) <= tol * vgl_Abs(d());
+    return vgl_Abs(a()) <= tol * vgl_Abs(d()) &&
+           vgl_Abs(b()) <= tol * vgl_Abs(d()) &&
+           vgl_Abs(c()) <= tol * vgl_Abs(d());
 #undef vgl_Abs
   }
 
@@ -90,8 +90,9 @@ private:
 };
 
 //: Return true iff p is the plane at infinity
+// The method checks that max(|a|,|b|,|c|) <= tol * |d|
 template <class Type>
-bool is_ideal(vgl_homg_plane_3d<Type> const& p, Type tol = Type(0)) { return p.ideal(tol); }
+inline bool is_ideal(vgl_homg_plane_3d<Type> const& p, Type tol=Type(0)){return p.ideal(tol);}
 
 // stream operators
 

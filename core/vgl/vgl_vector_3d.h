@@ -33,31 +33,33 @@ public:
   T x_; // Data is public
   T y_;
   T z_;
-  T x() const { return x_; }
-  T y() const { return y_; }
-  T z() const { return z_; }
+  inline T x() const { return x_; }
+  inline T y() const { return y_; }
+  inline T z() const { return z_; }
 
   //: Creates the vector (0,0) of zero length.
-  vgl_vector_3d () : x_(0) , y_(0) , z_(0) {}
+  inline vgl_vector_3d () : x_(0) , y_(0) , z_(0) {}
 
   //: Creates the vector (x,y,z).
-  vgl_vector_3d (T x, T y, T z) : x_(x) , y_(y) , z_(z) {}
+  inline vgl_vector_3d (T x, T y, T z) : x_(x) , y_(y) , z_(z) {}
 
 #if 0 // The defaults do exactly what they should do...
   //: Copy constructor
-  vgl_vector_3d (vgl_vector_3d<T> const& v) : x_(v.x()) , y_(v.y()) , z_(v.z()) {}
+  inline vgl_vector_3d (vgl_vector_3d<T>const&v):x_(v.x()),y_(v.y()),z_(v.z()){}
   //: Assignment operator
-  vgl_vector_3d<T>& operator=(vgl_vector_3d<T> const& v) {x_=v.x(); y_=v.y(); z_=v.z(); return *this; }
+  inline vgl_vector_3d<T>& operator=(vgl_vector_3d<T> const& v) {
+    x_=v.x(); y_=v.y(); z_=v.z(); return *this; }
   //: Destructor
-  ~vgl_vector_3d () {}
+  inline ~vgl_vector_3d () {}
 #endif
 
   //: Assignment
-  void set(T x, T y, T z) { x_=x; y_=y; z_=z; }
+  inline void set(T x, T y, T z) { x_=x; y_=y; z_=z; }
 
   //: Comparison
-  bool operator==(vgl_vector_3d<T> const& v) const { return x_==v.x() && y_==v.y() && z_==v.z(); }
-  bool operator!=(vgl_vector_3d<T> const& v) const { return !operator==(v); }
+  inline bool operator==(vgl_vector_3d<T>const& v) const {
+    return x_==v.x() && y_==v.y() && z_==v.z(); }
+  inline bool operator!=(vgl_vector_3d<T>const& v)const{return !operator==(v);}
 
   //: Return the length of this vector.
   double length() const; // return sqrt( x()*x()+y()*y()+z()*z() );
@@ -121,7 +123,7 @@ template <class T> inline T      dot_product(v const& a, v const& b) { return a.
 template <class T> inline T      inner_product(v const& a, v const& b) { return a.x()*b.x()+a.y()*b.y()+a.z()*b.z(); }
 
 //: cross product of two vectors (is orthogonal to both)
-template <class T> inline v      cross_product(v const& a, v const& b) { 
+template <class T> inline v      cross_product(v const& a, v const& b) {
   return v(a.y()*b.z()-a.z()*b.y(), a.z()*b.x()-a.x()*b.z(), a.x()*b.y()-a.y()*b.x()); }
 
 //: cosine of the angle between two vectors.

@@ -50,7 +50,7 @@ class vgl_box_3d {
 public:
 
   //: Default constructor (creates undefined box)
-  vgl_box_3d() {}
+  inline vgl_box_3d() {}
 
   //: Construct from min corner and max corner
   vgl_box_3d(Type const min_position[3],
@@ -74,19 +74,19 @@ public:
 
 #if 0
   // default copy constructor:
-  vgl_box_3d(vgl_box_3d const& that) {
+  inline vgl_box_3d(vgl_box_3d const& that) {
     this->min_pos_[0] = that.min_pos_[0]; this->max_pos_[0] = that.max_pos_[0];
     this->min_pos_[1] = that.min_pos_[1]; this->max_pos_[1] = that.max_pos_[1];
     this->min_pos_[2] = that.min_pos_[2]; this->max_pos_[2] = that.max_pos_[2];
   }
   // default destructor:
-  ~vgl_box_3d() {}
+  inline ~vgl_box_3d() {}
 #endif
 
   // Operators----------------------------------------------------------------
   // Default assignment operator:
 #if 0
-  vgl_box_3d& operator=(vgl_box_3d const& that){
+  inline vgl_box_3d& operator=(vgl_box_3d const& that){
     this->min_pos_[0] = that.min_pos_[0]; this->max_pos_[0] = that.max_pos_[0];
     this->min_pos_[1] = that.min_pos_[1]; this->max_pos_[1] = that.max_pos_[1];
     this->min_pos_[2] = that.min_pos_[2]; this->max_pos_[2] = that.max_pos_[2];

@@ -51,7 +51,7 @@
 //                      |            |
 //                      |            |
 //                      O------------O
-//                               MaxPosition     
+//                               MaxPosition
 // \endverbatim
 
 
@@ -64,7 +64,7 @@ public:
   // Constructors/Destructor---------------------------------------------------
 
   //: Default constructor (creates undefined box)
-  vgl_box_2d() {}
+  inline vgl_box_2d() {}
 
   //: Construct using lower-left and upper-right co-ordinates
   vgl_box_2d(const Type min_position[2],
@@ -86,13 +86,13 @@ public:
   vgl_box_2d(const vgl_point_2d<Type>& min_position, Type width, Type height);
 
   //: Copy constructor
-  vgl_box_2d(const vgl_box_2d& that) { *this = that; }
+  inline vgl_box_2d(const vgl_box_2d& that) { *this = that; }
 
   //: Destructor
-  ~vgl_box_2d() {}
+  inline ~vgl_box_2d() {}
 
   //: Copy operator
-  vgl_box_2d& operator=(const vgl_box_2d& that){
+  inline vgl_box_2d& operator=(const vgl_box_2d& that){
     // gcc 2.95 does not allow :
     //this->min_pos_ = that.min_pos_;
     //this->max_pos_ = that.max_pos_;
@@ -170,7 +170,7 @@ public:
   // Data Control--------------------------------------------------------------
 
   //: Return true if (x,y) inside box, ie x_min<=x<=x_max etc
-  bool contains(Type const& x, Type const& y) const {
+  inline bool contains(Type const& x, Type const& y) const {
     return (x >= min_pos_[0] &&
       x <= max_pos_[0] &&
       y >= min_pos_[1] &&

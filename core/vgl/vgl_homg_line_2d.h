@@ -33,18 +33,18 @@ public:
   // Constructors/Initializers/Destructor------------------------------------
 
   //: Default constructor (Line 1.y==0, the X axis)
-  vgl_homg_line_2d () : a_(0), b_(1), c_(0) {}
+  inline vgl_homg_line_2d () : a_(0), b_(1), c_(0) {}
 
   // Default copy constructor
-  vgl_homg_line_2d (const vgl_homg_line_2d<Type>& l) : a_(l.a()), b_(l.c()), c_(l.c()) {}
+  inline vgl_homg_line_2d (const vgl_homg_line_2d<Type>& l) : a_(l.a()), b_(l.c()), c_(l.c()) {}
 
   //: Construct from three Types.
   //  The three given numbers should not be all 0
-  vgl_homg_line_2d (Type a, Type b, Type c) : a_(a), b_(b), c_(c) {assert(a||b||c);}
+  inline vgl_homg_line_2d (Type a, Type b, Type c) : a_(a), b_(b), c_(c) {assert(a||b||c);}
 
   //: Construct from 3-vector.
   //  The three given numbers should not be all 0
-  vgl_homg_line_2d (const Type v[3]) : a_(v[0]), b_(v[1]), c_(v[2]) {assert(a_||b_||c_);}
+  inline vgl_homg_line_2d (const Type v[3]) : a_(v[0]), b_(v[1]), c_(v[2]) {assert(a_||b_||c_);}
 
   //: Construct from non-homogeneous line
   vgl_homg_line_2d<Type> (vgl_line_2d<Type> const& p);
@@ -55,17 +55,20 @@ public:
 
 #if 0
   // Default destructor
-  ~vgl_homg_line_2d () {}
+  inline ~vgl_homg_line_2d () {}
 
   // Default assignment operator
-  vgl_homg_line_2d<Type>& operator=(const vgl_homg_line_2d<Type>& that){
-    set(that.a(),that.b(),that.c()); return *this;
+  inline vgl_homg_line_2d<Type>& operator=(const vgl_homg_line_2d<Type>& l){
+    set(l.a(),l.b(),l.c()); return *this;
   }
 #endif
 
-  //: the equality operator
-  bool operator==(vgl_homg_line_2d<Type> const& other) const;
-  bool operator!=(vgl_homg_line_2d<Type> const& other) const { return ! operator==(other); }
+  //: the comparison operator
+  inline bool operator==(vgl_homg_line_2d<Type> const& l) const {
+    return (this==&l) ||
+      (a()*l.c()==c()*l.a() && b()*l.c()==c()*l.b() && b()*l.a()==a()*l.b()); }
+
+  inline bool operator!=(vgl_homg_line_2d<Type> const& other)const{return !operator==(other);}
 
   // Data Access-------------------------------------------------------------
 
@@ -103,7 +106,7 @@ public:
 
   //: Return true iff this line is the line at infinity
   //  This version checks (max(|a|,|b|) <= tol * |c|
-  bool ideal(Type tol = Type(0)) const {
+  inline bool ideal(Type tol = Type(0)) const {
 #define vgl_Abs(x) (x<0?-x:x) // avoid #include of vcl_cmath.h AND vcl_cstdlib.h
     return vgl_Abs(a()) <= tol*vgl_Abs(c()) && vgl_Abs(b()) <= tol*vgl_Abs(c());
 #undef vgl_Abs
@@ -130,8 +133,9 @@ private:
 #define l vgl_homg_line_2d<Type>
 
 //: Return true iff line is the line at infinity
+//  This version checks (max(|a|,|b|) <= tol * |c|
 template <class Type>
-bool is_ideal(l const& line, Type tol = Type(0)) { return line.ideal(tol); }
+inline bool is_ideal(l const& line, Type tol = Type(0)) { return line.ideal(tol); }
 
 //: Are three lines concurrent, i.e., do they pass through a common point?
 template <class Type>

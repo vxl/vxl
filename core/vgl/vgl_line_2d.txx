@@ -38,15 +38,6 @@ void vgl_line_2d<Type>::get_two_points(vgl_point_2d<Type> &p1, vgl_point_2d<Type
   else                p2.set(-c()/a(), 0);
 }
 
-template <class Type>
-bool vgl_line_2d<Type>::operator==(vgl_line_2d<Type> const& other) const
-{
-  return (this==&other) ||
-         (   a()*other.b() == b()*other.a()
-          && a()*other.c() == c()*other.a()
-          && b()*other.c() == c()*other.b());
-}
-
 //: Write line description to stream: "<vgl_line_2d ax+by+c>"
 template <class Type>
 vcl_ostream&  operator<<(vcl_ostream& s, vgl_line_2d<Type> const& line) {

@@ -32,30 +32,31 @@ class vgl_vector_2d {
 public:
   T x_; // Data is public
   T y_;
-  T x() const { return x_; }
-  T y() const { return y_; }
+  inline T x() const { return x_; }
+  inline T y() const { return y_; }
 
   //: Creates the vector (0,0) of zero length.
-  vgl_vector_2d () : x_(0) , y_(0) {}
+  inline vgl_vector_2d () : x_(0) , y_(0) {}
 
   //: Creates the vector (x,y).
-  vgl_vector_2d (T x, T y) : x_(x) , y_(y) {}
+  inline vgl_vector_2d (T x, T y) : x_(x) , y_(y) {}
 
 #if 0 // The defaults do exactly what they should do...
   //: Copy constructor
-  vgl_vector_2d (vgl_vector_2d<T> const& v) : x_(v.x()) , y_(v.y()) {}
+  inline vgl_vector_2d (vgl_vector_2d<T> const& v) : x_(v.x()) , y_(v.y()) {}
   //: Assignment operator
-  vgl_vector_2d<T>& operator=(vgl_vector_2d<T> const& v) {x_=v.x(); y_=v.y(); return *this; }
+  inline vgl_vector_2d<T>& operator=(vgl_vector_2d<T> const& v) {
+    x_=v.x(); y_=v.y(); return *this; }
   //: Destructor
-  ~vgl_vector_2d () {}
+  inline ~vgl_vector_2d () {}
 #endif
 
   //: Assignment
-  void set(T x, T y) { x_=x; y_=y; }
+  inline void set(T x, T y) { x_=x; y_=y; }
 
   //: Comparison
-  bool operator==(vgl_vector_2d<T> const& v) const { return x_==v.x() && y_==v.y(); }
-  bool operator!=(vgl_vector_2d<T> const& v) const { return !operator==(v); }
+  inline bool operator==(vgl_vector_2d<T>const& v)const{return x_==v.x()&&y_==v.y();}
+  inline bool operator!=(vgl_vector_2d<T>const& v)const{return !operator==(v);}
 
   //: Return the length of this vector.
   double length() const; // return sqrt( x()*x()+y()*y() );

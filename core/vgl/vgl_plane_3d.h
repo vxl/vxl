@@ -38,19 +38,21 @@ public:
   // Constructors/Initializers/Destructor------------------------------------
 
   // Default constructor: XY-plane (1.z = 0)
-  vgl_plane_3d () : a_(0), b_(0), c_(1), d_(0) {}
+  inline vgl_plane_3d () : a_(0), b_(0), c_(1), d_(0) {}
 
 #if 0
   // Default copy constructor
-  vgl_plane_3d (vgl_plane_3d<Type> const& that)
-    : a_(that.a()), b_(that.b()), c_(that.c()), d_(that.d()) {}
+  inline vgl_plane_3d (vgl_plane_3d<Type> const& pl)
+    : a_(pl.a()), b_(pl.b()), c_(pl.c()), d_(pl.d()) {}
 #endif
 
   //: Construct a vgl_plane_3d from its equation, four Types.
-  vgl_plane_3d (Type a,Type b,Type c,Type d):a_(a),b_(b),c_(c),d_(d){assert(a||b||c||d);}
+  inline vgl_plane_3d (Type a,Type b,Type c,Type d)
+    : a_(a), b_(b), c_(c), d_(d) { assert(a||b||c); }
 
   //: Construct from its equation, a 4-vector.
-  vgl_plane_3d (const Type v[4]):a_(v[0]),b_(v[1]),c_(v[2]),d_(v[3]){assert(a_||b_||c_||d_);}
+  inline vgl_plane_3d (const Type v[4])
+    : a_(v[0]), b_(v[1]), c_(v[2]), d_(v[3]) { assert(a_||b_||c_); }
 
   //: Construct from a homogeneous plane
   vgl_plane_3d (vgl_homg_plane_3d<Type> const& p);
@@ -66,11 +68,11 @@ public:
 
 #if 0
   // Default destructor
-  ~vgl_plane_3d () {}
+  inline ~vgl_plane_3d () {}
 
   // Default assignment operator
-  vgl_plane_3d<Type>& operator=(vgl_plane_3d<Type> const& that) {
-    a_ = that.a(); b_ = that.b(); c_ = that.c(); d_ = that.d(); return *this; }
+  inline vgl_plane_3d<Type>& operator=(vgl_plane_3d<Type> const& pl) {
+    a_ = pl.a(); b_ = pl.b(); c_ = pl.c(); d_ = pl.d(); return *this; }
 #endif
 
   // Data Access-------------------------------------------------------------
@@ -90,15 +92,16 @@ public:
   //: Set equation a*x+b*y+c*z+d=0
   inline void set(Type a,Type b,Type c,Type d){assert(a||b||c);a_=a;b_=b;c_=c;d_=d;}
 
-  //: the equality operator
+  //: the comparison operator
   bool operator==( vgl_plane_3d<Type> const& p) const;
-  bool operator!=( vgl_plane_3d<Type> const& p) const { return !operator==(p); }
+  inline bool operator!=( vgl_plane_3d<Type>const& p)const{return !operator==(p);}
 
   //: Return true iff the plane is the plane at infinity.
   //  Always returns false
-  bool ideal(Type = Type(0)) const { return false; }
+  inline bool ideal(Type = Type(0)) const { return false; }
 
-  inline vgl_vector_3d<Type> normal() const { return normalized(vgl_vector_3d<Type>(a(),b(),c())); }
+  inline vgl_vector_3d<Type> normal() const {
+    return normalized(vgl_vector_3d<Type>(a(),b(),c())); }
 
   // INTERNALS---------------------------------------------------------------
 
@@ -112,8 +115,9 @@ private:
 
 
 //: Return true iff p is the plane at infinity
-template <class Type>
-bool is_ideal(vgl_plane_3d<Type> const&, Type = Type(0)) { return false; }
+//  Always returns false
+template <class Type> inline
+bool is_ideal(vgl_plane_3d<Type> const&, Type=Type(0)) {return false;}
 
 // stream operators
 

@@ -33,33 +33,33 @@ class vgl_homg_line_3d_2_points
   //+**************************************************************************
 public:
   //: Default constructor with (0,0,0,1) and (1,0,0,0), which is the line y=z=0
-  explicit vgl_homg_line_3d_2_points(void)
+  inline vgl_homg_line_3d_2_points(void)
   : point_finite_(0,0,0,1), point_infinite_(1,0,0,0) {}
 
   //: Copy constructor
-  vgl_homg_line_3d_2_points(const vgl_homg_line_3d_2_points<Type> &that)
+  inline vgl_homg_line_3d_2_points(const vgl_homg_line_3d_2_points<Type> &that)
   : point_finite_(that.point_finite_), point_infinite_(that.point_infinite_) {}
 
   //: Construct from two points
-  vgl_homg_line_3d_2_points(vgl_homg_point_3d<Type> const& point_1,
-                            vgl_homg_point_3d<Type> const& point_2)
+  inline vgl_homg_line_3d_2_points(vgl_homg_point_3d<Type> const& point_1,
+                                   vgl_homg_point_3d<Type> const& point_2)
   : point_finite_(point_1), point_infinite_(point_2) {force_point2_infinite();}
 
 #if 0
   //: Destructor (does nothing)
-  ~vgl_homg_line_3d_2_points() {}
+  inline ~vgl_homg_line_3d_2_points() {}
 #endif
 
   //: comparison
   bool operator==(vgl_homg_line_3d_2_points<Type> const& l) const;
-  bool operator!=(vgl_homg_line_3d_2_points<Type> const& l) const{return !operator==(l);}
+  inline bool operator!=(vgl_homg_line_3d_2_points<Type> const& l) const{return !operator==(l);}
 
   // Data access
 
   //: Finite point (Could be an ideal point, if the whole line is at infinity.)
-  vgl_homg_point_3d<Type> point_finite() const {return point_finite_;}
+  inline vgl_homg_point_3d<Type> point_finite() const {return point_finite_;}
   //: Infinite point: the intersection of the line with the plane at infinity
-  vgl_homg_point_3d<Type> point_infinite()const{return point_infinite_;}
+  inline vgl_homg_point_3d<Type> point_infinite()const{return point_infinite_;}
 
   //: Assignment
   inline void set(vgl_homg_point_3d<Type> const& p1, vgl_homg_point_3d<Type> const& p2)
@@ -67,7 +67,8 @@ public:
 
   // Utility methods
 
-  bool ideal(Type tol = Type(0)) { return point_finite_.ideal(tol); }
+  //: Return true iff line is at infinity
+  inline bool ideal(Type tol = Type(0)) { return point_finite_.ideal(tol); }
 
 protected:
   //: force the point point_infinite_ to infinity, without changing the line
@@ -86,7 +87,8 @@ private:
 
 //: Return true iff line is at infinity
 template <class Type>
-bool is_ideal(vgl_homg_line_3d_2_points<Type> const& line, Type tol = Type(0)) { return line.ideal(tol); }
+inline bool is_ideal(vgl_homg_line_3d_2_points<Type> const& line, Type tol=Type(0))
+{ return line.ideal(tol); }
 
 //+****************************************************************************
 // stream operators

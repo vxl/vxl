@@ -21,15 +21,15 @@ struct vgl_triangle_scan_iterator : public vgl_region_scan_iterator
   struct pt { double x; double y; } a, b, c;
 
 #if use_polygon_scan_iterator
-  vgl_triangle_scan_iterator() : data(0) { }
+  inline vgl_triangle_scan_iterator() : data(0) { }
   ~vgl_triangle_scan_iterator();
 #endif
 
   void reset();
   bool next();
-  int  scany() const { return scany_; }
-  int  startx() const { return startx_; }
-  int  endx() const { return endx_; }
+  inline int  scany() const { return scany_; }
+  inline int  startx() const { return startx_; }
+  inline int  endx() const { return endx_; }
 
 private:
   int scany_;

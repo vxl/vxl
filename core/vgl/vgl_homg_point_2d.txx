@@ -16,14 +16,6 @@ vgl_homg_point_2d<Type>::vgl_homg_point_2d (vgl_homg_line_2d<Type> const& l1,
       l1.a()*l2.b()-l1.b()*l2.a());
 }
 
-template <class Type>
-bool vgl_homg_point_2d<Type>::operator==(vgl_homg_point_2d<Type> const& other) const
-{
-  return (this==&other) ||
-         (   this->x()*other.w() == this->w()*other.x()
-          && this->y()*other.w() == this->w()*other.y());
-}
-
 template <class T>
 double cross_ratio(vgl_homg_point_2d<T>const& p1, vgl_homg_point_2d<T>const& p2,
                    vgl_homg_point_2d<T>const& p3, vgl_homg_point_2d<T>const& p4)

@@ -13,6 +13,7 @@
 //
 // \verbatim
 // Modifications
+// Peter Vanroose -  9 July 2001 - Inlined constructors
 // Peter Vanroose - 27 June 2001 - Added operator==
 // \endverbatim
 
@@ -23,20 +24,32 @@
 template <class Type>
 class vgl_line_segment_3d {
 public:
+  //: Default constructor - does not initialise!
+  inline vgl_line_segment_3d() {}
 
-  vgl_line_segment_3d() {}
-  vgl_line_segment_3d(vgl_line_segment_3d<Type> const& that);
-  vgl_line_segment_3d(vgl_point_3d<Type> const &, vgl_point_3d<Type> const &);
- ~vgl_line_segment_3d();
+  //: Copy constructor
+  inline vgl_line_segment_3d(vgl_line_segment_3d<Type> const& l)
+    : point1_(l.point1()), point2_(l.point2()) {}
 
-  //: the equality operator
-  bool operator==(vgl_line_segment_3d<Type> const& other) const;
-  bool operator!=(vgl_line_segment_3d<Type> const& other) const { return ! operator==(other); }
+  //: Construct from two end points
+  inline vgl_line_segment_3d(vgl_point_3d<Type> const& p1,
+                             vgl_point_3d<Type> const& p2)
+    : point1_(p1), point2_(p2) {}
 
-  vgl_point_3d<Type> const & get_point1() const { return point1_; }
-  vgl_point_3d<Type>       & get_point1() { return point1_; }
-  vgl_point_3d<Type> const & get_point2() const { return point2_; }
-  vgl_point_3d<Type>       & get_point2() { return point2_; }
+  inline ~vgl_line_segment_3d() {}
+
+  inline vgl_point_3d<Type> point1() const { return point1_; } // return a copy
+  inline vgl_point_3d<Type> point2() const { return point2_; } // return a copy
+
+  //: the comparison operator
+  inline bool operator==(vgl_line_segment_3d<Type> const& l) const {
+    return (this==&l) || (point1() == l.point1() && point2() == l.point2()); }
+
+  inline bool operator!=(vgl_line_segment_3d<Type>const& other)const{return !operator==(other);}
+
+  //: assignment
+  inline void set(vgl_point_3d<Type> const& p1, vgl_point_3d<Type> const& p2) {
+    point1_ = p1; point2_ = p2; }
 
 private:
   vgl_point_3d<Type> point1_;

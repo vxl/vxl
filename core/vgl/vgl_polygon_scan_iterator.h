@@ -82,22 +82,22 @@ public:
   bool next();
 
     //: Returns current scan line
-  int scany() const { return (y-1); }
+  inline int scany() const { return (y-1); }
 
     //: Returns start of current span
-  int startx() const { return xl; }
+  inline int startx() const { return xl; }
 
     //: Returns end of current span
-  int endx() const { return xr; }
+  inline int endx() const { return xr; }
 
     //: Returns start of current span (float)
-  float fstartx() { return fxl; }
+  inline float fstartx() { return fxl; }
 
     //: Returns end of current span (float)
-  float fendx() { return fxr; }
+  inline float fendx() { return fxr; }
 
     //: Returns current scan line (float)
-  float fscany() { return fy; }
+  inline float fscany() { return fy; }
 
     //: Vertex index - uniquely identifies a vertex in the array chains
 
@@ -140,13 +140,13 @@ private:
   int numverts;           // total number of vertices comprising face
 
   // Returns x coord of vertex v
-  float get_x( vertind v ) const {return (poly_[v.chainnum][v.vertnum]).x();}
+  inline float get_x(vertind v)const{return poly_[v.chainnum][v.vertnum].x();}
 
   // Returns y coord of vertex v
-  float get_y( vertind v ) const {return (poly_[v.chainnum][v.vertnum]).y();}
+  inline float get_y(vertind v)const{return poly_[v.chainnum][v.vertnum].y();}
 
   // Returns vertex v
-  Point2 get_pt( vertind v ) {return (poly_[v.chainnum][v.vertnum]);}
+  inline Point2 get_pt( vertind v ) {return poly_[v.chainnum][v.vertnum];}
 
   // assumes poly_, win, have_window, boundp are set
   void init();

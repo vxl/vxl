@@ -12,7 +12,7 @@
 //: Abstract base class for iterating over the pixels in a region of image.
 struct vgl_region_scan_iterator
 {
-  vgl_region_scan_iterator() { }
+  inline vgl_region_scan_iterator() { }
   virtual ~vgl_region_scan_iterator();
 
   virtual void reset() =0;

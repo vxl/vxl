@@ -25,30 +25,30 @@ class vgl_homg_point_1d
 {
 public:
   //: Default constructor with (0,1)
-  vgl_homg_point_1d() : x_(0), w_(T(1)) {}
+  inline vgl_homg_point_1d() : x_(0), w_(T(1)) {}
 
   //: Construct from one (nonhomogeneous) or two (homogeneous) T's.
-  vgl_homg_point_1d(T px, T pw = T(1)) : x_(px), w_(pw) {}
+  inline vgl_homg_point_1d(T px, T pw = T(1)) : x_(px), w_(pw) {}
 
   //: Construct from homogeneous 2-array.
-  vgl_homg_point_1d(const T v[2]) : x_(v[0]), w_(v[1]) {}
+  inline vgl_homg_point_1d(const T v[2]) : x_(v[0]), w_(v[1]) {}
 
 #if 0
   // Default copy constructor
-  vgl_homg_point_1d(const vgl_homg_point_1d<T>& that) : x_(p.x()), w_(p.w()) {}
+  inline vgl_homg_point_1d(const vgl_homg_point_1d<T>& that) : x_(p.x()), w_(p.w()) {}
 
   // Destructor
-  ~vgl_homg_point_1d() {}
+  inline ~vgl_homg_point_1d() {}
 
   // Default assignment operator
-  vgl_homg_point_1d<T>& operator=(const vgl_homg_point_1d<T>& p) {
+  inline vgl_homg_point_1d<T>& operator=(const vgl_homg_point_1d<T>& p) {
     set(p.x(),p.w()); return *this; }
 #endif
 
   //: comparison
-  bool operator==(vgl_homg_point_1d<T> const& p) const {
+  inline bool operator==(vgl_homg_point_1d<T> const& p) const {
     return this==&p || x()*p.w() == w()*p.x(); }
-  bool operator!=(vgl_homg_point_1d<T> const& p) const {return !operator==(p);}
+  inline bool operator!=(vgl_homg_point_1d<T> const& p)const{return !operator==(p);}
 
   // Data Access-------------------------------------------------------------
 
@@ -87,14 +87,14 @@ vcl_istream& operator>>(vcl_istream& s, vgl_homg_point_1d<T>& p);
 
 //: Return true iff the point is at infinity (an ideal point).
 // The method checks whether |w| <= tol * |x|
-template <class T>
-inline bool is_ideal(vgl_homg_point_1d<T> const& p, T tol = T(0)) { return p.ideal(); }
+template <class T> inline
+bool is_ideal(vgl_homg_point_1d<T> const& p, T tol = T(0)) { return p.ideal(); }
 
 //: The difference of two points is the distance between the two.
 // This function is only valid if the points are not at infinity.
-template <class T>
-inline T operator-(vgl_homg_point_1d<T> const& p1,
-                   vgl_homg_point_1d<T> const& p2) {
+template <class T> inline
+T operator-(vgl_homg_point_1d<T> const& p1,
+            vgl_homg_point_1d<T> const& p2) {
   assert(p1.w() && p2.w());
   return p1.x()/p1.w()-p2.x()/p2.w();
 }
@@ -102,27 +102,27 @@ inline T operator-(vgl_homg_point_1d<T> const& p1,
 //: Adding a number to a 1-D point translates that point.
 // If the point is at infinity, nothing happens.
 // Note that number + point is not defined!  It's always point + number.
-template <class T>
-inline vgl_homg_point_1d<T> operator+(vgl_homg_point_1d<T> const& p, T v) {
+template <class T> inline
+vgl_homg_point_1d<T> operator+(vgl_homg_point_1d<T> const& p, T v) {
   return vgl_homg_point_1d<T>(p.x()+v*p.w(), p.w());
 }
 
 //: Adding a number to a 1-D point translates that point.
 // If the point is at infinity, nothing happens.
-template <class T>
-inline vgl_homg_point_1d<T>& operator+=(vgl_homg_point_1d<T>& p, T v) {
+template <class T> inline
+vgl_homg_point_1d<T>& operator+=(vgl_homg_point_1d<T>& p, T v) {
   p.set(p.x()+v*p.w(), p.w()); return p;
 }
 
 //: Subtracting a number from a point is the same as adding the inverse number
-template <class T>
-inline vgl_homg_point_1d<T> operator-(vgl_homg_point_1d<T> const& p, T v) {
+template <class T> inline
+vgl_homg_point_1d<T> operator-(vgl_homg_point_1d<T> const& p, T v) {
   return p + (-v);
 }
 
 //: Subtracting a number from a point is the same as adding the inverse number
-template <class T>
-inline vgl_homg_point_1d<T>& operator-=(vgl_homg_point_1d<T>& p, T v) {
+template <class T> inline
+vgl_homg_point_1d<T>& operator-=(vgl_homg_point_1d<T>& p, T v) {
   return p += (-v);
 }
 
@@ -155,46 +155,43 @@ double cross_ratio(vgl_homg_point_1d<T>const& p1, vgl_homg_point_1d<T>const& p2,
 //  The mid point of p1 and p2 has ratio 0.5.
 //  Note that the return type is double, not T, since the ratio of e.g.
 //  two int's need not be an int.
-template <class T>
-inline double ratio(vgl_homg_point_1d<T> const& p1,
-                    vgl_homg_point_1d<T> const& p2,
-                    vgl_homg_point_1d<T> const& p3) {
+template <class T> inline
+double ratio(vgl_homg_point_1d<T> const& p1,
+             vgl_homg_point_1d<T> const& p2,
+             vgl_homg_point_1d<T> const& p3) {
   return (p3-p1)/(p2-p1);
 }
 
 //: Are three points collinear?  This is always true.
-template <class T>
-inline bool collinear(vgl_homg_point_1d<T> const&,
-                      vgl_homg_point_1d<T> const&,
-                      vgl_homg_point_1d<T> const&) { return true; }
+template <class T> inline
+bool collinear(vgl_homg_point_1d<T> const&,
+               vgl_homg_point_1d<T> const&,
+               vgl_homg_point_1d<T> const&) { return true; }
 
 //: Return the point at a given ratio wrt two other points.
 //  By default, the mid point (ratio=0.5) is returned.
 //  Note that the third argument is T, not double, so the midpoint of e.g.
 //  two vgl_homg_point_1d<int> is not a valid concept.  But the reflection point
 //  of p2 wrt p1 is: in that case f=-1.
-template <class T>
-inline vgl_homg_point_1d<T> midpoint(vgl_homg_point_1d<T> const& p1,
-                                     vgl_homg_point_1d<T> const& p2,
-                                     T f = 0.5) {
-  return p1 + f*(p2-p1);
-}
-
+template <class T> inline
+vgl_homg_point_1d<T> midpoint(vgl_homg_point_1d<T> const& p1,
+                              vgl_homg_point_1d<T> const& p2,
+                              T f = 0.5) { return p1 + f*(p2-p1); }
 
 //: Return the point at the centre of gravity of two given points.
 // Identical to midpoint(p1,p2).
 // If one point or both points are at infinity, that point is returned.
-template <class T>
-inline vgl_homg_point_1d<T> centre(vgl_homg_point_1d<T> const& p1,
-                                   vgl_homg_point_1d<T> const& p2) {
+template <class T> inline
+vgl_homg_point_1d<T> centre(vgl_homg_point_1d<T> const& p1,
+                            vgl_homg_point_1d<T> const& p2) {
   if (p1 == p2) return p1;
   return vgl_homg_point_1d<T> (p1.x()*p2.w() + p2.x()*p1.w(), p1.w()*p2.w()*2);
 }
 
 //: Return the point at the centre of gravity of a set of given points.
 // There are no rounding errors when T is e.g. int, if all w() are 1.
-template <class T>
-inline vgl_homg_point_1d<T> centre(vcl_vector<vgl_homg_point_1d<T> > const& v) {
+template <class T> inline
+vgl_homg_point_1d<T> centre(vcl_vector<vgl_homg_point_1d<T> > const& v) {
   int n=v.size();
   assert(n>0); // it is *not* correct to return the point (0,1) when n==0.
   T x = 0;

@@ -38,15 +38,15 @@ class vgl_line_2d {
 
 public:
   //: Default constructor (Line 1.y==0, the X axis)
-  vgl_line_2d() : a_(0), b_(1), c_(0) {}
+  inline vgl_line_2d() : a_(0), b_(1), c_(0) {}
 
   //: Construct a vgl_line_2d from its equation, three Types.
   //  The values of a and b should not be both zero.
-  vgl_line_2d (Type a, Type b, Type c) : a_(a), b_(b), c_(c) {assert(a||b);}
+  inline vgl_line_2d(Type a, Type b, Type c) :a_(a),b_(b),c_(c){assert(a||b);}
 
   //: Construct from its equation, a 3-vector.
   //  The values v[0] and v[1] should not be both zero.
-  vgl_line_2d (const Type v[3]) : a_(v[0]), b_(v[1]), c_(v[2]) {assert(a_||b_);}
+  inline vgl_line_2d(const Type v[3]):a_(v[0]),b_(v[1]),c_(v[2]){assert(a_||b_);}
 
   //: Construct from homogeneous description of line
   //  The line l should not be the line at infinity.
@@ -58,17 +58,20 @@ public:
 
 #if 0
   // Default destructor
-  ~vgl_line_2d () {}
+  inline ~vgl_line_2d () {}
 
   // Default assignment operator
-  vgl_line_2d<Type>& operator=(const vgl_line_2d<Type>& that){
-    set(that.a(),that.b(),that.c()); return *this;
+  inline vgl_line_2d<Type>& operator=(const vgl_line_2d<Type>& l) {
+    set(l.a(),l.b(),l.c()); return *this;
   }
 #endif
 
-  //: the equality operator
-  bool operator==(vgl_line_2d<Type> const& other) const;
-  bool operator!=(vgl_line_2d<Type> const& other) const { return ! operator==(other); }
+  //: the comparison operator
+  inline bool operator==(vgl_line_2d<Type> const& l) const {
+    return (this==&l) ||
+      (a()*l.c()==c()*l.a() && b()*l.c()==c()*l.b() && b()*l.a()==a()*l.b()); }
+
+  inline bool operator!=(vgl_line_2d<Type>const& other)const{return !operator==(other);}
 
   // Data Access-------------------------------------------------------------
 
@@ -80,10 +83,12 @@ public:
   inline Type c() const {return c_;}
 
   //: unit vector describing line direction
-  inline vgl_vector_2d<double> direction() const { return normalized(vgl_vector_2d<double>(b_,-a_)); }
+  inline vgl_vector_2d<double> direction() const
+  { return normalized(vgl_vector_2d<double>(b_,-a_)); }
 
   //: unit vector orthogonal to line
-  inline vgl_vector_2d<double> normal() const { return normalized(vgl_vector_2d<double>(a_,b_)); }
+  inline vgl_vector_2d<double> normal() const
+  { return normalized(vgl_vector_2d<double>(a_,b_)); }
 
 protected: // \deprecated
   //: x component of unit vector describing direction of line
@@ -102,11 +107,11 @@ public:
   //: Set a b c.
   //  The values of a and b should not be both zero.
   //  Note that it does not make sense to set a, b or c separately
-  void set (Type a, Type b, Type c){ assert(a||b); a_ = a; b_ = b; c_ = c; }
+  inline void set (Type a, Type b, Type c){ assert(a||b); a_=a; b_=b; c_=c; }
 
   //: Return true iff this line is the line at infinity
   //  This always returns "false"
-  bool ideal(Type = Type(0)) const { return false; }
+  inline bool ideal(Type = Type(0)) const { return false; }
 
   //: Get two points on the line; normally the intersection with X and Y axes.
   // When the line is parallel to one of these,
@@ -126,12 +131,12 @@ private:
 #define l vgl_line_2d<Type>
 
 //: Return true iff line is the line at infinity
-template <class Type>
+template <class Type> inline
 bool is_ideal(l const&, Type = Type(0)) { return false; }
 
 //: Are three lines concurrent, i.e., do they pass through a common point?
-template <class Type>
-inline bool concurrent(l const& l1, l const& l2, l const& l3) {
+template <class Type> inline
+bool concurrent(l const& l1, l const& l2, l const& l3) {
   return l1.a()*(l2.b()*l3.c()-l3.b()*l2.c())
         +l2.a()*(l3.b()*l1.c()-l1.b()*l3.c())
         +l3.a()*(l1.b()*l2.c()-l2.b()*l1.c())==0;

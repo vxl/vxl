@@ -57,7 +57,7 @@ public:
   vgl_polygon(vcl_pair<double, double> const p[], int n);
 
   //: Construct setting single sheet of points
-  vgl_polygon(vcl_vector<point_t> const& points);
+  vgl_polygon(sheet_t const& points);
 
   //: Construct setting a number of sheets
   vgl_polygon(vcl_vector<sheet_t> const& sheets);
@@ -85,16 +85,16 @@ public:
   //: Add a new point to the current sheet
   void push_back(point_t const&);
 
-  //: Add a pre-existing sheet to the ploygon
+  //: Add a pre-existing sheet to the polygon
   void push_back(sheet_t const&);
 
-  int num_sheets() const { return sheets_.size(); }
+  inline int num_sheets() const { return sheets_.size(); }
 
   //: Get the ith sheet
-  sheet_t & operator[](int i) { return sheets_[i]; }
+  inline sheet_t & operator[](int i) { return sheets_[i]; }
 
   //: Get the ith sheet
-  sheet_t const& operator[](int i) const { return sheets_[i]; }
+  inline sheet_t const& operator[](int i) const { return sheets_[i]; }
 
   //: Pretty print
   vcl_ostream& print(vcl_ostream&) const;
