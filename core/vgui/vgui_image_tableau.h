@@ -33,7 +33,6 @@ struct vgui_image_tableau_new;
 class vgui_image_tableau
   : public vgui_tableau
 {
-
   vcl_string name_;
   bool pixels_centered_;
   vgui_range_map_params_sptr rmp_;
@@ -66,7 +65,7 @@ class vgui_image_tableau
   virtual vil_image_resource_sptr get_image_resource() const;
 
   //: Make the given image, the image rendered by this tableau.
-  virtual void set_image( vil1_image const &img, 
+  virtual void set_image( vil1_image const &img,
                           vgui_range_map_params_sptr const& rmp = 0);
 
   //: Make the given image view, the image rendered by this tableau.
@@ -78,18 +77,14 @@ class vgui_image_tableau
                                    vgui_range_map_params_sptr const& rmp = 0);
 
   //: Make image loaded from the given file, the image rendered by this tableau.
-  //
   // The image will be stored as a vil_image_view_base, and thus can be
   // retrieved with get_image_view() but not with get_image().
-  //
   virtual void set_image_view( char const* filename,
                                vgui_range_map_params_sptr const& rmp = 0);
 
   //: Make image loaded from the given file, the image rendered by this tableau.
-  //
   // The image will be stored as a vil1_image, and thus can be
   // retrieved with get_image() but not with get_image_view().
-  //
   virtual void set_image( char const* filename,
                           vgui_range_map_params_sptr const& rmp = 0);
 
@@ -110,14 +105,15 @@ class vgui_image_tableau
   //  corner of pixel (i, j) or in the middle.
   void center_pixels( bool v = true ) { pixels_centered_ = v; }
 
-  //: set the range mapping parameters - image (if it exists) is re-rendered with the map
+  //: set the range mapping parameters.
+  // image (if it exists) is re-rendered with the map.
   // the mapping is defined on the input pixel domain [min, max]
   // gamma is the usual photometric non-linear correction
   // invert reverses the map (a negative version of the image)
   // set_mapping should be called before set_image methods to insure
   // the first image display has the requested mapping parameters
-
   virtual void set_mapping(const vgui_range_map_params_sptr rmp);
+
   vgui_range_map_params_sptr map_params(){return rmp_;}
 
   //: Handle all events sent to this tableau.
@@ -159,8 +155,9 @@ class vgui_image_tableau
 };
 
 //: Creates a smart-pointer to a vgui_image_tableau.
-struct vgui_image_tableau_new : public vgui_image_tableau_sptr {
-
+struct vgui_image_tableau_new
+  : public vgui_image_tableau_sptr
+{
   //: Constructor - creates an empty image tableau.
   vgui_image_tableau_new()
     : vgui_image_tableau_sptr( new vgui_image_tableau )
@@ -185,10 +182,8 @@ struct vgui_image_tableau_new : public vgui_image_tableau_sptr {
     { }
 
   //: Creates a tableau which loads and displays an image from the given file.
-  //
   // The image will be stored as a vil1_image, and thus can be
   // retrieved with get_image() but not with get_image_view().
-  //
   vgui_image_tableau_new(char const *f,
                          vgui_range_map_params_sptr const& rmp = 0)
     : vgui_image_tableau_sptr( new vgui_image_tableau(f, rmp) )
