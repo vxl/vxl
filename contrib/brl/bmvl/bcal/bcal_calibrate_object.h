@@ -15,11 +15,11 @@
 
 #include <vcsl/vcsl_spatial.h>
 
-class calibrate_object : public vcsl_spatial
+class bcal_calibrate_object : public vcsl_spatial
 {
  public:
-  calibrate_object();
-  virtual ~calibrate_object();
+  bcal_calibrate_object();
+  virtual ~bcal_calibrate_object();
 };
 
 #endif // AFX_CALIBRATIONOBJECT_H__FDECCBAC_345C_4A9A_BB15_3975763F8F2F__INCLUDED_
