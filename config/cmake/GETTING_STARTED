@@ -4,7 +4,7 @@ CMake website is at http://public.kitware.com/CMake/. I recommend
 getting the sources via CVS: (see the section on "downloading" on the
 webpage)
    cvs -d :pserver:anonymous@public.kitware.com:/CMake/cvsroot login
-(respond with password cmake) 
+(respond with password cmake)
    cvs -d :pserver:anonymous@public.kitware.com:/CMake/cvsroot co CMake
 
 Under Visual C++, load CMakeSetup.dsw and compile the projects in
@@ -49,6 +49,23 @@ run "make"--the dependent libraries should be automatically
 built. Although the generated makefiles will work with most make
 programs, it works best with GNU make.
 
+If you are using Solaris you should build with this option
+  $CMAKE -DSOLARIS:STRING=1 $VXLSRC
+CMake does not automatically detect that that you are using Solaris.
+Some CMakeListsLink.txt files (vxl/vil/CMakeListsLink.txt for one) in
+VXL use the SOLARIS variable to control the use of the socket library.
+
+If you are using Cygwin and have installed the Cygwin OpenGL package,
+you probably want to build with this option
+  $CMAKE -DX11_INCLUDE_PATH:PATH=IGNORE $VXLSRC
+This prevents CMake from using the X11 headers and libraries.  The
+OpenGL package puts its header files in /usr/include/GL/ and the
+XFree86 package puts some header files in /usr/X11R6/include/GL/.  If
+you configure to use header files from /usr/X11R6/include then the
+XFree86 GL/*.h files will be used instead of the OpenGL package GL/*.h
+files.  These two sets of header files are not compatible.  Using the
+wrong ones will lead to linking problems involving mismatched suffixes
+like @4, @8, and @12.
 
 3. The CMakeCache.txt
 
@@ -63,7 +80,6 @@ these if everything compiles and runs fine.  However, running $CMAKE
 from a directory that already contains a CMakeCache.txt will use the
 values in there, so it is worth having a look at the settings in that
 file, e.g. for the location of JPEG, TIFF, etc.
-
 
 4. Doing an in-place build
 
