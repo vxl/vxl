@@ -1,10 +1,10 @@
-// This is vil/algo/vil_find_peaks.h
+// This is core/vil/algo/vil_find_peaks.h
 #ifndef vil_find_peaks_h_
 #define vil_find_peaks_h_
 //:
-//  \file
-//  \brief Find peaks in image
-//  \author Tim Cootes
+// \file
+// \brief Find peaks in image
+// \author Tim Cootes
 
 #include <vil/vil_image_view.h>
 #include <vcl_vector.h>
@@ -30,10 +30,10 @@ inline bool vil_is_peak_3x3(const T* im, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_s
 // \param clear_list: If true (the default) then empty lists before adding new examples
 template <class T>
 inline void vil_find_peaks_3x3(vcl_vector<unsigned>& pi,
-                                     vcl_vector<unsigned>& pj,
-                                     const vil_image_view<T>& image,
-                                     const T& min_thresh,
-                                     bool clear_list=true)
+                               vcl_vector<unsigned>& pj,
+                               const vil_image_view<T>& image,
+                               const T& min_thresh,
+                               bool clear_list=true)
 {
   if (clear_list) {
     pi.resize(0);
