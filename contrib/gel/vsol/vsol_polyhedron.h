@@ -162,10 +162,11 @@ class vsol_polyhedron : public vsol_volume_3d
   void print_summary(vcl_ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  vcl_string is_a() const { return vcl_string("vsol_polyhedron"); }
+  virtual vcl_string is_a() const { return vcl_string("vsol_polyhedron"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  bool is_class(const vcl_string& cls) const { return cls==is_a(); }
+  virtual bool is_class(vcl_string const& cls) const
+  { return cls==is_a() || vsol_volume_3d::is_class(cls); }
 
   //---------------------------------------------------------------------------
   //: output description to stream
