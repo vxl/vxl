@@ -25,7 +25,7 @@ class vimt_scale_pyramid_builder_2d : public vimt_image_pyramid_builder
   unsigned max_levels_;
 
   //: Checks pyramid has at least n levels of correct type
-  void checkPyr(vimt_image_pyramid& im_pyr,  int n_levels) const;
+  void checkPyr(vimt_image_pyramid& im_pyr, int n_levels) const;
 
   //: Deletes all data in im_pyr
   void emptyPyr(vimt_image_pyramid& im_pyr) const;
@@ -36,7 +36,7 @@ class vimt_scale_pyramid_builder_2d : public vimt_image_pyramid_builder
  public:
 
   //: Set the minimum size of the top layer of the pyramid
-  void set_min_size(unsigned X, unsigned Y) { min_y_size_ = Y; min_x_size_ = X;}
+  void set_min_size(unsigned X, unsigned Y) { min_y_size_=Y; min_x_size_=X; }
 
   //: Create new (empty) pyramid on heap.
   //  Caller responsible for its deletion
@@ -65,7 +65,7 @@ class vimt_scale_pyramid_builder_2d : public vimt_image_pyramid_builder
   ~vimt_scale_pyramid_builder_2d();
 
   //: get the current scale step;
-  virtual double scale_step() const { return scale_step_; };
+  virtual double scale_step() const { return scale_step_; }
 
   //: Set the Scale step
   void set_scale_step(double scale_step);
@@ -83,7 +83,7 @@ class vimt_scale_pyramid_builder_2d : public vimt_image_pyramid_builder
   //: Smooth and subsample src_im to produce dest_im
   //  Applies 5 element FIR filter in x and y, then samples
   //  Assumes dest_im has sufficient data allocated
-  void scale_reduce(T* dest_im, int dest_ystep,
+  void scale_reduce(T* dest_im, vcl_ptrdiff_t dest_ystep,
                     const T* src_im,
                     int src_nx, int src_ny,
                     int dest_nx, int dest_ny,
@@ -92,10 +92,10 @@ class vimt_scale_pyramid_builder_2d : public vimt_image_pyramid_builder
   vimt_image_pyramid_builder* clone() const;
 
   //: Version number for I/O
-  short version_no() const ;
+  short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const ;
+  virtual vcl_string is_a() const;
 
   //: Does the name of the class match the argument?
   virtual bool is_class(vcl_string const& s) const;
