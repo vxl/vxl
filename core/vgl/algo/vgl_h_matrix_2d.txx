@@ -217,54 +217,39 @@ void vgl_h_matrix_2d<T>::set(vnl_matrix_fixed<T,3,3> const& H)
 {
   t12_matrix_ = H;
 }
+
 //-------------------------------------------------------------------
-// Compute the homography that take the input set of points to the
-// canonical frame.  The points act the projective basis for
-// the canonical coordinate system.  In the canonical frame the points
-// have coordinates:
-//   p[0]p[1]p[2]p[3]
-//     1   0   0   1
-//     0   1   0   1
-//     0   0   1   1
-//
 template <class T>
 bool vgl_h_matrix_2d<T>::
-projective_basis(vcl_vector<vgl_homg_point_2d<T> > const & four_points)
+projective_basis(vcl_vector<vgl_homg_point_2d<T> > const& points)
 {
-  if (four_points.size()!=4)
+  if (points.size()!=4)
     return false;
+  vnl_vector_fixed<T, 3> p0(points[0].x(), points[0].y(), points[0].w());
+  vnl_vector_fixed<T, 3> p1(points[1].x(), points[1].y(), points[1].w());
+  vnl_vector_fixed<T, 3> p2(points[2].x(), points[2].y(), points[2].w());
+  vnl_vector_fixed<T, 3> p3(points[3].x(), points[3].y(), points[3].w());
   vnl_matrix_fixed<T, 3, 4> point_matrix;
-  vnl_vector_fixed<T, 3> p0(four_points[0].x(),
-                            four_points[0].y(),
-                            four_points[0].w());
-  vnl_vector_fixed<T, 3> p1(four_points[1].x(),
-                            four_points[1].y(),
-                            four_points[1].w());
-  vnl_vector_fixed<T, 3> p2(four_points[2].x(),
-                            four_points[2].y(),
-                            four_points[2].w());
-  vnl_vector_fixed<T, 3> p3(four_points[3].x(),
-                            four_points[3].y(),
-                            four_points[3].w());
   point_matrix.set_column(0, p0);
   point_matrix.set_column(1, p1);
   point_matrix.set_column(2, p2);
   point_matrix.set_column(3, p3);
 
-    if (! point_matrix.is_finite() || point_matrix.has_nans()) {
-      vcl_cerr << "vgl_h_matrix_2d<T>::projective_basis():\n"
-               << " given matrix has infinite or NaN values\n";
-      this->set_identity();
-      return false;
-    }
-    vnl_svd<T> svd1(point_matrix, 1e-8);
-    if (svd1.rank() < 3)
-      {
-        vcl_cerr << "vgl_h_matrix_2d<T>::projective_basis():\n"
-                 << " At least three out of the four points are nearly collinear\n";
-        this->set_identity();
-        return false;
-      }
+  if (! point_matrix.is_finite() || point_matrix.has_nans())
+  {
+    vcl_cerr << "vgl_h_matrix_2d<T>::projective_basis():\n"
+             << " given points have infinite or NaN values\n";
+    this->set_identity();
+    return false;
+  }
+  vnl_svd<T> svd1(point_matrix, 1e-8);
+  if (svd1.rank() < 3)
+  {
+    vcl_cerr << "vgl_h_matrix_2d<T>::projective_basis():\n"
+             << " At least three out of the four points are nearly collinear\n";
+    this->set_identity();
+    return false;
+  }
 
   vnl_matrix_fixed<T, 3, 3> back_matrix;
   back_matrix.set_column(0, p0);
@@ -279,15 +264,74 @@ projective_basis(vcl_vector<vgl_homg_point_2d<T> > const & four_points)
   back_matrix.set_column(1, scales_vector[1] * p1);
   back_matrix.set_column(2, scales_vector[2] * p2);
 
-  if (! back_matrix.is_finite() || back_matrix.has_nans()) {
+  if (! back_matrix.is_finite() || back_matrix.has_nans())
+  {
     vcl_cerr << "vgl_h_matrix_2d<T>::projective_basis():\n"
-             <<" back matrix has infinite or NaN values\n";
+             << " back matrix has infinite or NaN values\n";
     this->set_identity();
     return false;
   }
   this->set(vnl_inverse(back_matrix));
   return true;
 }
+
+//-------------------------------------------------------------------
+template <class T>
+bool vgl_h_matrix_2d<T>::
+projective_basis(vcl_vector<vgl_homg_line_2d<T> > const& lines)
+{
+  if (lines.size()!=4)
+    return false;
+  vnl_vector_fixed<T,3> l0(lines[0].a(), lines[0].b(), lines[0].c());
+  vnl_vector_fixed<T,3> l1(lines[1].a(), lines[1].b(), lines[1].c());
+  vnl_vector_fixed<T,3> l2(lines[2].a(), lines[2].b(), lines[2].c());
+  vnl_vector_fixed<T,3> l3(lines[3].a(), lines[3].b(), lines[3].c());
+  vnl_matrix_fixed<T,3,4> line_matrix;
+  line_matrix.set_column(0, l0);
+  line_matrix.set_column(1, l1);
+  line_matrix.set_column(2, l2);
+  line_matrix.set_column(3, l3);
+
+  if (! line_matrix.is_finite() || line_matrix.has_nans())
+  {
+    vcl_cerr << "vgl_h_matrix_2d<T>::projective_basis():\n"
+             << " given lines have infinite or NaN values\n";
+    this->set_identity();
+    return false;
+  }
+  vnl_svd<T> svd1(line_matrix, 1e-8);
+  if (svd1.rank() < 3)
+  {
+    vcl_cerr << "vgl_h_matrix_2d<T>::projective_basis():\n"
+             << " At least three out of the four lines are nearly concurrent\n";
+    this->set_identity();
+    return false;
+  }
+
+  vnl_matrix_fixed<T,3,3> back_matrix;
+  back_matrix.set_column(0, l0);
+  back_matrix.set_column(1, l1);
+  back_matrix.set_column(2, l2);
+
+  vnl_svd<T> svd(back_matrix);
+
+  vnl_vector_fixed<T, 3> scales_vector = svd.solve(l3);
+
+  back_matrix.set_row(0, scales_vector[0] * l0);
+  back_matrix.set_row(1, scales_vector[1] * l1);
+  back_matrix.set_row(2, scales_vector[2] * l2);
+
+  if (! back_matrix.is_finite() || back_matrix.has_nans())
+  {
+    vcl_cerr << "vgl_h_matrix_2d<T>::projective_basis():\n"
+             << " back matrix has infinite or NaN values\n";
+    this->set_identity();
+    return false;
+  }
+  this->set(back_matrix);
+  return true;
+}
+
 //: Return the inverse
 template <class T>
 const vgl_h_matrix_2d<T> vgl_h_matrix_2d<T>::get_inverse() const

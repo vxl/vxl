@@ -13,6 +13,7 @@
 //   22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
 //   23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
 //   22 Mar 2003 - J.L. Mundy - preparing for upgrade to vgl
+//   24 Jun 2003 - Peter Vanroose - added projective_basis() from 4 lines
 // \endverbatim
 
 #include <vcl_vector.h>
@@ -78,7 +79,24 @@ class vgl_h_matrix_2d
   void set(vnl_matrix_fixed<T,3,3> const& t_matrix);
 
   //: transformation to projective basis (canonical frame)
-  bool projective_basis(vcl_vector<vgl_homg_point_2d<T> > const & four_points);
+  // Compute the homography that takes the input set of points to the
+  // canonical frame.  The points act as the projective basis for
+  // the canonical coordinate system.  In the canonical frame the points
+  // have coordinates:
+  // \verbatim
+  //   p[0]p[1]p[2]p[3]
+  //     1   0   0   1
+  //     0   1   0   1
+  //     0   0   1   1
+  // \endverbatim
+  bool projective_basis(vcl_vector<vgl_homg_point_2d<T> > const& four_points);
+
+  //: transformation to projective basis (canonical frame)
+  // Compute the homography that takes the input set of lines to the canonical
+  // frame.  The lines act as the dual projective basis for the canonical
+  // coordinate system.  In the canonical frame the lines have equations:
+  // x=0; y=0; w=0; x+y+w=0.  (The third line is the line at infinity.)
+  bool projective_basis(vcl_vector<vgl_homg_line_2d<T> > const& four_lines);
 
   bool read(vcl_istream& s);
   bool read(char const* filename);
