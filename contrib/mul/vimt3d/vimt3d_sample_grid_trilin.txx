@@ -7,7 +7,7 @@
 //  \author Graham Vincent
 
 #include "vimt3d_sample_grid_trilin.h"
-#include <vimt3d/vimt3d_trilin_interp_3d.h>
+#include <vimt3d/vimt3d_trilin_interp.h>
 #include <vnl/vnl_vector.h>
 
 //: True if p clearly inside the image
@@ -25,6 +25,7 @@ inline bool vimt3d_point_in_image(const vgl_point_3d<double>& p, const vil3d_ima
 
 //: True if grid of size nu * nv * nw (in steps of u,v,w) is entirely in the image.
 //  p defines centre of one size.
+template<class T>
 inline bool vimt3d_grid_in_image_ic(const vgl_point_3d<double>& im_p,
                                   const vgl_vector_3d<double>& im_u,
                                   const vgl_vector_3d<double>& im_v,
@@ -134,7 +135,7 @@ void vimt3d_sample_grid_trilin_ic_no_checks(vnl_vector<vecType>& vec,
         vgl_point_3d<double> p = p2;
         // Sample each row (along w)
         for (int k=0;k<nw;++k,p+=w,++vc)
-          *vc = vimt3d_trilin_interp_3d(p.x(),p.y(),p.z(),
+          *vc = vil3d_trilin_interp_raw(p.x(),p.y(),p.z(),
 					                              plane0,istep,jstep,kstep);
       }
     }
@@ -150,7 +151,7 @@ void vimt3d_sample_grid_trilin_ic_no_checks(vnl_vector<vecType>& vec,
         // Sample each row (along w)
         for (int l=0;l<nw;++l,p+=w)
           for (int k=0;k<np;++k,++vc)
-            *vc = vimt3d_trilin_interp_3d(p.x(),p.y(),p.z(),
+            *vc = vil3d_trilin_interp_raw(p.x(),p.y(),p.z(),
 						                   image.origin_ptr()+k*pstep,istep,jstep,kstep);
       }
     }
@@ -197,7 +198,7 @@ void vimt3d_sample_grid_trilin_ic_safe(vnl_vector<vecType>& vec,
         vgl_point_3d<double> p = p2;
         // Sample each row (along w)
         for (int k=0;k<nw;++k,p+=w,++vc)
-          *vc = vimt3d_safe_trilin_interp_3d(p.x(),p.y(),p.z(),plane0,ni,nj,nk,istep,jstep,kstep);
+          *vc = vil3d_trilin_interp_safe(p.x(),p.y(),p.z(),plane0,ni,nj,nk,istep,jstep,kstep);
       }
     }
   }
@@ -212,7 +213,7 @@ void vimt3d_sample_grid_trilin_ic_safe(vnl_vector<vecType>& vec,
         // Sample each row (along w)
         for (int l=0;l<nw;++l,p+=w)
           for (int k=0;k<np;++k,++vc)
-            *vc = vimt3d_safe_trilin_interp_3d(p.x(),p.y(),p.z(),
+            *vc = vil3d_trilin_interp_safe(p.x(),p.y(),p.z(),
 						                image.origin_ptr()+k*pstep,ni,nj,nk,istep,jstep,kstep);
       }
     }
@@ -220,7 +221,7 @@ void vimt3d_sample_grid_trilin_ic_safe(vnl_vector<vecType>& vec,
 }
 
 
-#define MIL3D_SAMPLE_GRID_3D_INSTANTIATE( imType, vecType ) \
+#define VIMT3D_SAMPLE_GRID_TRILIN_INSTANTIATE( imType, vecType ) \
 template void vimt3d_sample_grid_trilin(vnl_vector<vecType >& vec, \
                                  const vimt3d_image_3d_of<imType >& image, \
                                  const vgl_point_3d<double >& p, \

@@ -236,10 +236,17 @@ template<class T>
 void vimt3d_gaussian_pyramid_builder_3d<T>::build(vimt_image_pyramid& image_pyr,
                                                  vimt_image const& im) const
 {
-  //  Require image vimt3d_image_3d_of<T>
-  assert(im.is_a()==work_im1_.is_a());
 
-  const vimt3d_image_3d_of<T>& base_image = (const vimt3d_image_3d_of<T>&) im;
+  // Check that the image is a 3d image
+  assert(im.is_class("vimt3d_image_3d"));
+
+  // Cast to the appropriate class
+  const vimt3d_image_3d &im3d = (const vimt3d_image_3d &) im;
+
+  //  Require image vimt3d_image_3d_of<T>
+  assert(im3d.image_base().is_a()==work_im1_.is_a());
+
+  const vimt3d_image_3d_of<T>& base_image = (const vimt3d_image_3d_of<T>&) im3d;
 
   int ni = base_image.image().ni();
   int nj = base_image.image().nj();
