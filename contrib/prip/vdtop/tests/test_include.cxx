@@ -10,7 +10,6 @@
 #include <vdtop/vdtop_construct_well_composed.h>
 #include <vdtop/vdtop_draw_digital_graph.h>
 #include <vdtop/vdtop_freeman_code.h>
-#include <vdtop/vdtop_image_view.h>
 #include <vdtop/vdtop_kernel.h>
 #include <vdtop/vdtop_neighborhood.h>
 #include <vdtop/vdtop_pixel.h>

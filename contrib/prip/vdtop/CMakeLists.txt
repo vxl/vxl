@@ -13,7 +13,6 @@ SET(vdtop_sources
     vdtop_construct_well_composed.h
     vdtop_draw_digital_graph.h
     vdtop_freeman_code.cxx vdtop_freeman_code.h
-    vdtop_image_view.h
     vdtop_kernel.h
     vdtop_misc.txx
     vdtop_neighborhood.h
