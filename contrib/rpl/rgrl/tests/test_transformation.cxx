@@ -61,7 +61,6 @@ test_trans_affine()
   testlib_test_perform( xformed_point == true_point );
   TEST( "Transform 3D location, 2nd interface", xform->map_location(point), true_point );
 
-
   testlib_test_begin( "Transform 3D direc" );
 
   vnl_vector<double> direction( 3 );
@@ -156,7 +155,6 @@ test_trans_quadratic()
   testlib_test_begin("Transform 2D location, 2nd interface");
   testlib_test_perform( close(xform->map_location(point), true_point) );
 
-
   testlib_test_begin( "Transform 2D direc" );
 
   vnl_vector<double> direction( 2 );
@@ -197,12 +195,17 @@ test_trans_spline()
     vcl_vector< rgrl_spline_sptr > splines;
     rgrl_spline_sptr spline = new rgrl_spline( vnl_vector< unsigned > ( 1, 1 ) );
     vnl_vector< double > c( spline->num_of_control_points() );
-//  for ( unsigned i=0; i<c.size(); ++i )
-//    c[ i ] = random.drand32( 0, 10 );
-    c[ 0 ] = 1.0;
-    c[ 1 ] = 2.0;
-    c[ 2 ] = 2.0;
-    c[ 3 ] = 1.0;
+#if 0
+    vnl_random randomizer;
+    randomizer.reseed();
+    for ( unsigned i=0; i<c.size(); ++i )
+      c[i] = randomizer.drand32( 0, 10 );
+#else
+    c[0] = 1.0;
+    c[1] = 2.0;
+    c[2] = 2.0;
+    c[3] = 1.0;
+#endif // 0
     spline->set_control_points( c );
     splines.push_back( spline );
     vnl_vector< double > x0( 1, 0.0 );
@@ -236,7 +239,6 @@ void test_trans_rigid()
   bool statusdet = true;
 
   const int NUM_TRIALS = 1000;
-
 
   for (int qqq=0; qqq<NUM_TRIALS; qqq++)
   {
@@ -298,11 +300,7 @@ void test_trans_rigid()
   testlib_test_begin(" Determinant of 3d rotation is unity ");
   testlib_test_perform(statusdet);
 
-
   vnl_matrix<double> A;
-
-  rgrl_transformation_sptr xform;
-  rgrl_trans_rigid* rigid;
 
   double phi = randomizer.drand32(-vnl_math::pi/2,vnl_math::pi/2);
   double alpha = randomizer.drand32(-vnl_math::pi/2,vnl_math::pi/2);
@@ -313,11 +311,10 @@ void test_trans_rigid()
   double ttzz = randomizer.drand32(-1000,1000);
 
   testlib_test_begin( "Construct 3D rigid transform object" );
-  xform = new rgrl_trans_rigid(3);
+  rgrl_transformation_sptr xform = new rgrl_trans_rigid(3);
   testlib_test_perform( xform );
 
-  rigid = rgrl_cast<rgrl_trans_rigid*>(xform);
-
+  rgrl_trans_rigid* rigid = rgrl_cast<rgrl_trans_rigid*>(xform);
   rigid->set_rotation(theta,alpha,phi);
   rigid->set_translation(ttxx,ttyy,ttzz);
 
@@ -345,7 +342,6 @@ void test_trans_rigid()
 
   TEST( "Transform 3D location, 2nd interface", xform->map_location(point), A*point+t );
 
-
   testlib_test_begin( "Transform 3D direction" );
 
   vnl_vector<double> direction( 3 );
@@ -367,7 +363,6 @@ void test_trans_rigid()
   xform->map_location(inv_map_pt,inv_inv_map_pt);
   testlib_test_perform( close(point, inv_inv_map_pt, 1e-8) );
 }
-
 
 } // end anonymous namespace
 
