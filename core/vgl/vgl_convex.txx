@@ -4,7 +4,7 @@
 
 #include "vgl_convex.h"
 
-template <class T> vgl_polygon<T> convex_hull(vcl_vector<vgl_point_2d<T> > const& points)
+template <class T> vgl_polygon<T> vgl_convex_hull(vcl_vector<vgl_point_2d<T> > const& points)
 {
   // TODO
   "not yet implemented";
