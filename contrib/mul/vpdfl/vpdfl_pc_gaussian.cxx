@@ -131,7 +131,7 @@ void vpdfl_pc_gaussian::calcPartLogK()
   double log_v_sum = 0.0;
   const unsigned& n = partition_;
 
-  for (int i=0;i<n;i++) log_v_sum+=vcl_log(v_data[i]);
+  for (unsigned int i=0;i<n;i++) log_v_sum+=vcl_log(v_data[i]);
 
   log_k_principal_ = -0.5 * (n*vcl_log(2 * vnl_math::pi) + log_v_sum);
 }
