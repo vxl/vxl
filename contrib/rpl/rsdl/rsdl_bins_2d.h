@@ -28,63 +28,67 @@ vcl_ostream& operator<< ( vcl_ostream& ostr,
 template  < class COORD_T, class VALUE_T >
 class rsdl_bins_2d {
 public:
+  typedef vnl_vector_fixed< COORD_T, 2 >  point_type;
+  typedef VALUE_T value_type;
+
+public:
   rsdl_bins_2d();
-  rsdl_bins_2d( const vnl_vector_fixed< COORD_T, 2 > & min_pt,
-                const vnl_vector_fixed< COORD_T, 2 > & max_pt,
-                const vnl_vector_fixed< COORD_T, 2 > & bin_sizes );
+  rsdl_bins_2d( const point_type & min_pt,
+                const point_type & max_pt,
+                const point_type & bin_sizes );
   ~rsdl_bins_2d();
 
   void set_distance_tolerance( COORD_T tolerance )
     { dist_tolerance_sqr_ = tolerance * tolerance; }
 
-  void reset( const vnl_vector_fixed< COORD_T, 2 > & min_pt,
-              const vnl_vector_fixed< COORD_T, 2 > & max_pt,
-              const vnl_vector_fixed< COORD_T, 2 > & bin_sizes );
+  void reset( const point_type & min_pt,
+              const point_type & max_pt,
+              const point_type & bin_sizes );
   void remove_all_points( );
 
-  void add_point( const vnl_vector_fixed< COORD_T,  2 > & pt, const VALUE_T& value );
-  bool get_value( const vnl_vector_fixed< COORD_T,  2 > & pt, VALUE_T& value );
-  bool change_point( const vnl_vector_fixed< COORD_T, 2 > & pt, const VALUE_T& value );
-  bool change_point( const vnl_vector_fixed< COORD_T, 2 > & pt, const VALUE_T& old_val, const VALUE_T& new_val );
-  bool remove_point( const vnl_vector_fixed< COORD_T, 2 > & pt );
-  bool remove_point( const vnl_vector_fixed< COORD_T, 2 > & pt, const VALUE_T& value );
+  void add_point( const point_type & pt, const value_type& value );
+  bool get_value( const point_type & pt, value_type& value );
+  bool change_point( const point_type & pt, const value_type& value );
+  bool change_point( const point_type & pt, const value_type& old_val, const value_type& new_val );
+  bool remove_point( const point_type & pt );
+  bool remove_point( const point_type & pt, const value_type& value );
 
-  void n_nearest( const vnl_vector_fixed< COORD_T, 2 > & query_pt,
+  void n_nearest( const point_type & query_pt,
                   int n,
-                  vcl_vector< VALUE_T >& values ) const;
+                  vcl_vector< value_type >& values ) const;
 
-  void n_nearest( const vnl_vector_fixed< COORD_T, 2 > & query_pt,
+  void n_nearest( const point_type & query_pt,
                   int n,
-                  vcl_vector< vnl_vector_fixed< COORD_T, 2 > > & points,
-                  vcl_vector< VALUE_T > & values ) const;
+                  vcl_vector< point_type > & points,
+                  vcl_vector< value_type > & values ) const;
 
-  bool is_any_point_within_radius( const vnl_vector_fixed< COORD_T, 2 > & query_pt,
+  bool is_any_point_within_radius( const point_type & query_pt,
                                    COORD_T radius ) const;
 
-  void points_within_radius( const vnl_vector_fixed< COORD_T, 2 > & query_pt,
+  void points_within_radius( const point_type & query_pt,
                              COORD_T radius,
-                             vcl_vector< VALUE_T >& values ) const;
+                             vcl_vector< value_type >& values ) const;
 
-  void points_within_radius( const vnl_vector_fixed< COORD_T, 2 > & query_pt,
+  void points_within_radius( const point_type & query_pt,
                              COORD_T radius,
-                             vcl_vector< vnl_vector_fixed< COORD_T, 2 > > & points,
-                             vcl_vector< VALUE_T >& values ) const;
+                             vcl_vector< point_type > & points,
+                             vcl_vector< value_type >& values ) const;
 
-  bool is_any_point_in_bounding_box(  const vnl_vector_fixed< COORD_T, 2 > & min_query_pt,
-                                      const vnl_vector_fixed< COORD_T, 2 > & max_query_pt ) const;
+  bool is_any_point_in_bounding_box(  const point_type & min_query_pt,
+                                      const point_type & max_query_pt ) const;
 
-  void points_in_bounding_box( const vnl_vector_fixed< COORD_T, 2 > & min_query_pt,
-                               const vnl_vector_fixed< COORD_T, 2 > & max_query_pt,
-                               vcl_vector< VALUE_T  >& values ) const;
+  void points_in_bounding_box( const point_type & min_query_pt,
+                               const point_type & max_query_pt,
+                               vcl_vector< value_type  >& values ) const;
 
-  void points_in_bounding_box( const vnl_vector_fixed< COORD_T, 2 > & min_query_pt,
-                               const vnl_vector_fixed< COORD_T, 2 > & max_query_pt,
-                               vcl_vector< vnl_vector_fixed< COORD_T, 2 > > & points,
-                               vcl_vector< VALUE_T > & values ) const;
+  void points_in_bounding_box( const point_type & min_query_pt,
+                               const point_type & max_query_pt,
+                               vcl_vector< point_type > & points,
+                               vcl_vector< value_type > & values ) const;
 
-  void change_value( const VALUE_T& old_val, const VALUE_T& new_val );
+  void change_value( const value_type& old_val, const value_type& new_val );
 
-  vnl_vector_fixed<COORD_T, 2> max_pt() {return max_pt_ ;}
+  point_type max_pt() {return max_pt_ ;}
 
 private:
   void point_to_bin( COORD_T x, COORD_T y, int& bin_x, int& bin_y ) const;
@@ -97,9 +101,9 @@ public:
 private:
   vbl_array_2d< bin_vector_type_ > bins_;
 
-  vnl_vector_fixed< COORD_T, 2 > min_pt_;
-  vnl_vector_fixed< COORD_T, 2 > max_pt_;
-  vnl_vector_fixed< COORD_T, 2 > bin_sizes_;
+  point_type min_pt_;
+  point_type max_pt_;
+  point_type bin_sizes_;
 
   int num_bins_x_, num_bins_y_;
 
