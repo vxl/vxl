@@ -2,6 +2,7 @@
 #define vipl_accessors_vcl_vector_h_
 #include <vcl_vector.h>
 
+#undef FILTER_IMPTR_DEC_REFCOUNT
 #define FILTER_IMPTR_DEC_REFCOUNT(v) {delete (v); (v)=0;}
 #define FILTER_IMPTR_INC_REFCOUNT(v)
 #define FILTER_KERNPTR_DEC_REFCOUNT(v)
