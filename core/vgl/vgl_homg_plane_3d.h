@@ -16,7 +16,7 @@
 // CJB (Manchester) 16/03/2001: Tidied up the documentation
 // \endverbatim
 
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <vcl_cmath.h> // for vcl_abs(double) etc
 #include <vcl_cstdlib.h> // for vcl_abs(int) etc
 #include <vcl_string.h>
@@ -89,17 +89,9 @@ protected:
 // stream operators
 
 template <class Type>
-inline vcl_ostream&  operator<<(vcl_ostream& s, const vgl_homg_plane_3d<Type>& p) {
-  return s << " <vgl_homg_plane_3d "
-           << p.data_[0] << " x + "
-           << p.data_[1] << " y + "
-           << p.data_[2] << " z + "
-           << p.data_[3] << " = 0 >";
-}
+inline vcl_ostream&  operator<<(vcl_ostream& s, const vgl_homg_plane_3d<Type>& p);
 
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& is, vgl_homg_plane_3d<Type>& p) {
-  return is >> p.data_[0] >> p.data_[1] >> p.data_[2] >> p.data_[3];
-}
+vcl_istream&  operator>>(vcl_istream& is, vgl_homg_plane_3d<Type>& p);
 
 #endif // vgl_homg_plane_3d_h

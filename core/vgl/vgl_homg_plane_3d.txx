@@ -2,6 +2,7 @@
 #ifndef vgl_homg_plane_3d_txx_
 #define vgl_homg_plane_3d_txx_
 
+#include <vcl_iostream.h>
 #include "vgl_homg_plane_3d.h"
 #include <vgl/vgl_homg_point_3d.h>
 
@@ -32,6 +33,20 @@ bool vgl_homg_plane_3d<Type>::operator==(vgl_homg_plane_3d<Type> const & other) 
   return (this==&other) ||
          (   (this->nx()==other.nx()) && (this->ny()==other.ny())
           && (this->nz()==other.nz()) && (this->d() ==other.d()));
+}
+
+template <class Type>
+inline vcl_ostream&  operator<<(vcl_ostream& s, const vgl_homg_plane_3d<Type>& p) {
+  return s << " <vgl_homg_plane_3d "
+           << p.data_[0] << " x + "
+           << p.data_[1] << " y + "
+           << p.data_[2] << " z + "
+           << p.data_[3] << " = 0 >";
+}
+
+template <class Type>
+vcl_istream&  operator>>(vcl_istream& is, vgl_homg_plane_3d<Type>& p) {
+  return is >> p.data_[0] >> p.data_[1] >> p.data_[2] >> p.data_[3];
 }
 
 #endif // vgl_homg_plane_3d_txx_

@@ -2,6 +2,7 @@
 #ifndef vgl_homg_line_2d_txx_
 #define vgl_homg_line_2d_txx_
 
+#include <vcl_iostream.h>
 #include "vgl_homg_line_2d.h"
 #include <vgl/vgl_homg_point_2d.h>
 
@@ -58,6 +59,23 @@ bool vgl_homg_line_2d<Type>::operator==(vgl_homg_line_2d<Type> const& other) con
   return (this==&other) ||
          (   this->a()*other.c() == this->c()*other.a()
           && this->b()*other.c() == this->c()*other.b());
+}
+
+//: Print line equation to stream
+template <class Type>
+vcl_ostream&  operator<<(vcl_ostream& s, const vgl_homg_line_2d<Type>& p) {
+  return s << " <vgl_homg_line_2d "
+           << p.a() << " x + " << p.b() << " y + "
+           << p.c() << " z = 0>";
+}
+
+//: Load in line parameters from stream
+template <class Type>
+vcl_istream&  operator>>(vcl_istream& is,  vgl_homg_line_2d<Type>& p) {
+  Type a,b,c;
+  is >> a >> b >> c;
+  p.set(a,b,c);
+  return is;
 }
 
 #define VGL_HOMG_LINE_2D_INSTANTIATE(T) \

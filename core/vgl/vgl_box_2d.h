@@ -16,7 +16,7 @@
 //  IMS (Manchester) 14/03/2001: Tidied up the documentation + added binary_io
 // \endverbatim
 
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_point_2d
 
 //: Represents a 2D box
@@ -197,15 +197,11 @@ private:
 
 //: Print to stream
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, const vgl_box_2d<Type>& p) {
-  return p.print(s);
-}
+vcl_ostream&  operator<<(vcl_ostream& s, const vgl_box_2d<Type>& p);
 
 //: Read from stream
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& is,  vgl_box_2d<Type>& p) {
-  return p.read(is);
-}
+vcl_istream&  operator>>(vcl_istream& is,  vgl_box_2d<Type>& p);
 
 //: Return box defining intersection between in1 and in2
 //  Empty box (0,0,0,0) returned if no intersection.

@@ -10,6 +10,7 @@
 
 #include "vgl_box_2d.h"
 
+#include <vcl_iostream.h>
 #include <vcl_algorithm.h>
 #include <vcl_cmath.h>
 #include <vgl/vgl_point_2d.h>
@@ -250,6 +251,18 @@ vgl_box_2d<Type> intersect(vgl_box_2d<Type> const& a, vgl_box_2d<Type> const& b)
               vcl_min(a.get_max_y(), b.get_max_y())
               );
 #endif
+}
+
+//: Print to stream
+template <class Type>
+vcl_ostream&  operator<<(vcl_ostream& s, const vgl_box_2d<Type>& p) {
+  return p.print(s);
+}
+
+//: Read from stream
+template <class Type>
+vcl_istream&  operator>>(vcl_istream& is,  vgl_box_2d<Type>& p) {
+  return p.read(is);
 }
 
 #undef VGL_BOX_2D_INSTANTIATE

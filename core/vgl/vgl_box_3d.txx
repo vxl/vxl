@@ -2,6 +2,7 @@
 #ifndef vgl_box_3d_txx_
 #define vgl_box_3d_txx_
 
+#include <vcl_iostream.h>
 #include "vgl_box_3d.h"
 #include <vgl/vgl_point_3d.h>
 
@@ -188,7 +189,21 @@ vcl_istream& vgl_box_3d<Type>::read(vcl_istream& s)
        >> max_pos_[0] >> max_pos_[1] >> max_pos_[2];
 }
 
+//: Write box to stream
+template <class Type>
+vcl_ostream&  operator<<(vcl_ostream& s, vgl_box_3d<Type> const& p) {
+  return p.print(s);
+}
+
+//: Read box from stream
+template <class Type>
+vcl_istream&  operator>>(vcl_istream& is,  vgl_box_3d<Type>& p) {
+  return p.read(is);
+}
+
 #define VGL_BOX_3D_INSTANTIATE(Type) \
-template class vgl_box_3d<Type >
+template class vgl_box_3d<Type >;\
+template vcl_ostream& operator<<(vcl_ostream& s, vgl_box_3d<Type > const& p);\
+template vcl_istream& operator>>(vcl_istream& is,  vgl_box_3d<Type >& p)
 
 #endif // vgl_box_3d_txx_

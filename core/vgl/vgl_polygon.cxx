@@ -11,6 +11,7 @@
 #endif
 
 #include "vgl_polygon.h"
+#include <vcl_iostream.h>
 #include <vcl_cassert.h>
 
 // Constructors/Destructors--------------------------------------------------
@@ -171,6 +172,10 @@ vcl_ostream& vgl_polygon::print(vcl_ostream& os) const {
     os << vcl_endl;
   }
   return os;
+}
+
+vcl_ostream& operator<< (vcl_ostream& os, vgl_polygon const& p) {
+  return p.print(os);
 }
 
 

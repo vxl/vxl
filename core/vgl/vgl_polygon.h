@@ -15,7 +15,7 @@
 // Binary IO added and documentation tidied up NPC, 20/03/01
 // \endverbatim
 
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <vgl/vgl_point_2d.h> // needed for vcl_vector instantiations
 #include <vcl_vector.h>
 #include <vcl_string.h>
@@ -118,11 +118,6 @@ struct vgl_polygon_sheet_as_array {
   ~vgl_polygon_sheet_as_array();
 };
 
-
-inline
-vcl_ostream& operator<< (vcl_ostream& os, vgl_polygon const& p) {
-  return p.print(os);
-}
-
+vcl_ostream& operator<< (vcl_ostream& os, vgl_polygon const& p);
 
 #endif // vgl_polygon_h_

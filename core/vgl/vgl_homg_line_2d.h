@@ -16,7 +16,7 @@
 // Peter Vanroose - 27 June 2001 - Added operator==
 // \endverbatim
 
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <vcl_cmath.h> // for vcl_abs(double) etc
 #include <vcl_cstdlib.h> // for vcl_abs(int) etc
 #include <vgl/vgl_fwd.h> // forward declare vgl_homg_point_2d and vgl_line_2d
@@ -113,19 +113,10 @@ protected:
 
 //: Print line equation to stream
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, const vgl_homg_line_2d<Type>& p) {
-  return s << " <vgl_homg_line_2d "
-           << p.a() << " x + " << p.b() << " y + "
-           << p.c() << " z = 0>";
-}
+vcl_ostream&  operator<<(vcl_ostream& s, const vgl_homg_line_2d<Type>& p);
 
 //: Load in line parameters from stream
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& is,  vgl_homg_line_2d<Type>& p) {
-  Type a,b,c;
-  is >> a >> b >> c;
-  p.set(a,b,c);
-  return is;
-}
+vcl_istream&  operator>>(vcl_istream& is,  vgl_homg_line_2d<Type>& p);
 
 #endif //  vgl_homg_line_2d_h

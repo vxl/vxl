@@ -17,7 +17,7 @@
 //  NPC (Manchester) 14/03/2001: Tidied up the documentation + added binary_io
 // \endverbatim
 
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <vcl_string.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_point_3d
 
@@ -193,14 +193,10 @@ protected:
 
 //: Write box to stream
 template <class Type>
-inline vcl_ostream&  operator<<(vcl_ostream& s, vgl_box_3d<Type> const& p) {
-  return p.print(s);
-}
+vcl_ostream&  operator<<(vcl_ostream& s, vgl_box_3d<Type> const& p);
 
 //: Read box from stream
 template <class Type>
-inline vcl_istream&  operator>>(vcl_istream& is,  vgl_box_3d<Type>& p) {
-  return p.read(is);
-}
+vcl_istream&  operator>>(vcl_istream& is,  vgl_box_3d<Type>& p);
 
 #endif // vgl_box_3d_h

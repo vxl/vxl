@@ -17,7 +17,7 @@
 #pragma interface
 #endif
 
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <vgl/vgl_homg_point_3d.h> // data member of this class
 
 //:Represents a homogeneous 3D line using two points
@@ -81,12 +81,10 @@ private:
 
 //: Write to stream (verbose)
 template <class Type>
-vcl_ostream &operator<<(vcl_ostream &s,
-                    const vgl_homg_line_3d_2_points<Type> &p);
+vcl_ostream &operator<<(vcl_ostream&s, vgl_homg_line_3d_2_points<Type>const&p);
 
 //: Read parameters from stream
 template <class Type>
-vcl_istream &operator>>(vcl_istream &is,
-                    vgl_homg_line_3d_2_points<Type> &p);
+vcl_istream &operator>>(vcl_istream &is, vgl_homg_line_3d_2_points<Type> &p);
 
 #endif // vgl_homg_line_3d_2_points_h_

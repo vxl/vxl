@@ -7,9 +7,6 @@
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_point_2d.h>
 
-#include <vcl_iostream.h>
-#include <vcl_string.h>
-
 //:
 // \file
 // \author Adapted from FillPolygon by J.L. Mundy

@@ -2,6 +2,7 @@
 #ifndef vgl_homg_line_3d_2_points_txx_
 #define vgl_homg_line_3d_2_points_txx_
 
+#include <vcl_iostream.h>
 #include "vgl_homg_line_3d_2_points.h"
 
 //***************************************************************************
