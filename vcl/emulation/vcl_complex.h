@@ -369,24 +369,19 @@ operator / (FLOAT x, const vcl_complex<FLOAT>& y)
 template <class FLOAT> inline vcl_complex<FLOAT>
 vcl_pow (const vcl_complex<FLOAT>& xin, int y)
 {
-  if (y == 0)
-    return vcl_complex<FLOAT> (1.0);
-  vcl_complex<FLOAT> r (1.0);
-  vcl_complex<FLOAT> x (xin);
+  vcl_complex<FLOAT> r = 1.0;
+  vcl_complex<FLOAT> x = xin;
   if (y < 0)
     {
       y = -y;
-      x = ((FLOAT)1.0)/x;
+      x = ((FLOAT)1)/x;
     }
-  for (;;)
+  while (y)
     {
-      if (y & 1)
-        r *= x;
-      if (y >>= 1)
-        x *= x;
-      else
-        return r;
+      if (y & 1)   r *= x;
+      if (y >>= 1) x *= x;
     }
+  return r;
 }
 
 template <class FLOAT> inline vcl_complex<FLOAT>
