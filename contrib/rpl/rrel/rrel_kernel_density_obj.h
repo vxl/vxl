@@ -59,6 +59,9 @@ public:
   virtual bool requires_prior_scale() const
   { if (scale_type_ == RREL_KERNEL_PRIOR) return true; return false; }
 
+  //: x is set to 0;
+  void fix_x() { fix_x_ = true; }
+
   //: The mode of the density estimate which maximizes the estimated kernel density.
   //  The value can be used to shift the estimated parameters.
   double best_x( vect_const_iter res_begin, vect_const_iter res_end,
@@ -77,6 +80,8 @@ private:
   double kernel_function(double u) const;
 
   rrel_kernel_scale_type scale_type_;
+
+  bool fix_x_;
 };
 
 #endif

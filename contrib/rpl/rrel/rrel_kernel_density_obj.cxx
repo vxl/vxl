@@ -22,7 +22,8 @@ namespace {
 }
 
 rrel_kernel_density_obj::rrel_kernel_density_obj(rrel_kernel_scale_type scale_type)
-  : scale_type_(scale_type)
+  : scale_type_(scale_type),
+    fix_x_( false )
 {
 }
 
@@ -36,125 +37,80 @@ rrel_kernel_density_obj::fcn(vect_const_iter res_begin, vect_const_iter res_end,
 }
 
 double
-rrel_kernel_density_obj::fcn(vect_const_iter res_begin, vect_const_iter res_end,
+rrel_kernel_density_obj::fcn(vect_const_iter res_begin, 
+                             vect_const_iter res_end,
                              double prior_scale,
                              vnl_vector<double>* ) const
 {
-  double h = bandwidth ( res_begin, res_end, prior_scale );
-  assert(h!=0);
+  double h = bandwidth ( res_begin, res_end, prior_scale ); 
+  assert ( h != 0 );
   double x = best_x ( res_begin, res_end, prior_scale );
-  double f = kernel_density( res_begin, res_end, x, h );
-  return -f;
+
+  return -1 * kernel_density( res_begin, res_end, x, h );
 }
 
 double
-rrel_kernel_density_obj::best_x(vect_const_iter res_begin, vect_const_iter res_end,
+rrel_kernel_density_obj::best_x(vect_const_iter res_begin, 
+                                vect_const_iter res_end,
                                 double prior_scale) const
 {
+  if (fix_x_)
+    return 0;
+
   //Golden Section Search is adapted from "Numerical Recipes in C++"
-  //to find x that minimumizes -1*kernel_density.
+  //to find x that maximizes kernel_density.
   const double R = 0.61803399, C = 1.0 - R; //The golden ratios.
   double f1, f2, x0, x1, x2, x3;
   double tol = 1.0e-9;
+  double f0 = 0;
 
-  unsigned int n = res_end - res_begin;
   double h = bandwidth(res_begin, res_end, prior_scale);
   assert(h!=0);
 
-  vect_const_iter mloc = vcl_min_element(res_begin, res_end);
-  double min = *mloc - h;
-  mloc = vcl_max_element(res_begin, res_end);
-  double max = *mloc + h;
-  vcl_vector<double> res(res_begin, res_end);
-  vcl_vector<double>::iterator loc = res.begin() + n / 2;
-  vcl_nth_element(res.begin(), loc, res.end());
-  double median = *loc;
+  vcl_vector<double> sort_res( res_begin, res_end );
+  sort( sort_res.begin(), sort_res.end() );
 
-  x0 = min;
-  x3 = max;
-  if ( vnl_math_abs( max - median ) > vnl_math_abs( min - median ) ) {
-    x1 = median;
-    x2 = median + C * ( max - median );
+  unsigned int loc = 0;
+  unsigned int i = 0;
+  for ( ; i<sort_res.size(); ++i ) {
+    double x = sort_res[i];
+    double f = kernel_density( res_begin, res_end, x, h );
+    if (f > f0) {
+      f0 = f;
+      loc = i;
+    }
+  }
+
+  x0 = sort_res[loc-1];
+  x3 = sort_res[loc+1];
+
+  if ( vnl_math_abs( x3 - sort_res[loc] ) > vnl_math_abs( sort_res[loc] - x0 ) ) {
+    x1 = sort_res[loc];
+    x2 = sort_res[loc] + C * ( x3 - sort_res[loc] );
   }
   else {
-    x2 = median;
-    x1 = median - C * ( median - min );
+    x2 = sort_res[loc];
+    x1 = sort_res[loc] - C * ( sort_res[loc] - x0 );
   }
 
-  f1 = -kernel_density( res_begin, res_end, x1, h );
-  f2 = -kernel_density( res_begin, res_end, x2, h );
-  while ( vnl_math_abs( x3 - x0 ) > tol * vnl_math_abs( x1 ) + vnl_math_abs( x2 ) ) {
-    if ( f2 < f1 ) {
+  f1 = kernel_density( res_begin, res_end, x1, h );
+  f2 = kernel_density( res_begin, res_end, x2, h );
+  while ( vnl_math_abs( x3 - x0 ) > 
+          tol * vnl_math_abs( x1 ) + vnl_math_abs( x2 ) ) {
+    if ( f2 > f1 ) {
       shft3( x0, x1, x2, R * x2 + C * x3 );
-      shft2( f1, f2, -kernel_density( res_begin, res_end, x2, h ) );
+      shft2( f1, f2, kernel_density( res_begin, res_end, x2, h ) );
     }
     else {
       shft3( x3, x2, x1, R * x1 + C * x0 );
-      shft2( f2, f1, -kernel_density( res_begin, res_end, x1, h ) );
+      shft2( f2, f1, kernel_density( res_begin, res_end, x1, h ) );
     }
   }
   if (f1 < f2)
-    return x1;
-  else
     return x2;
+  else
+    return x1;
 }
-
-#if 0 // commented out
-{
-  unsigned int n = res_end - res_begin;
-  double h = bandwidth(res_begin, res_end, prior_scale);
-  assert(h!=0);
-
-  const unsigned int IMAX = 100;
-  const double eps = 1.0e-09;
-  unsigned int count = 0;
-
-  vect_const_iter mloc = vcl_min_element(res_begin, res_end);
-  double min = *mloc - h;
-  mloc = vcl_max_element(res_begin, res_end);
-  double max = *mloc + h;
-  vcl_vector<double> res(res_begin, res_end);
-  vcl_vector<double>::iterator loc = res.begin() + n / 2;
-  vcl_nth_element(res.begin(), loc, res.end());
-  double median = *loc;
-
-  //initial guess
-  double x = median;
-  double dx = 0;
-
-  double rtn;
-  while ( count < IMAX ) {
-    ++count;
-    double f = 0;
-    double f_prime = 0;
-    double f_double_prime = 0;
-    for ( vect_const_iter begin=res_begin; begin != res_end; ++begin ) {
-      f += kernel_function ( ( *begin - x ) / h );
-      f_prime += kernel_prime ( ( *begin - x ) / h , h );
-      f_double_prime += kernel_double_prime ( ( *begin - x ) / h , h );
-    }
-
-    if (f_double_prime == 0) {
-      vcl_cerr << "f_double_prime=0, x=" << x << ", min=" << min << ", max=" << max << vcl_endl;
-    }
-    if (f > max_f) {
-      max_f = f;
-      rtn = x;
-    }
-    assert(f_double_prime!=0);
-    //maximize f
-    dx = f_prime / vnl_math_abs(f_double_prime);
-    if (vnl_math_abs(dx) < eps) return x;
-    x += dx;
-
-    // Out of the range [min, max], f, f_prime, and f_double_prime are zero.
-    if (x > max)  { vcl_cerr << x << " > " << max << vcl_endl; x = 0.5*(min+median); }
-    if (x < min)  { vcl_cerr << x << " < " << min << vcl_endl; x = 0.5*(max+median); }
-  }
-  vcl_cerr << "Warning : rrel_kernel_density_obj : maximum number of iterations exceeded. " << vcl_endl;
-  return x;
-}
-#endif
 
 double
 rrel_kernel_density_obj::bandwidth(vect_const_iter res_begin, vect_const_iter res_end,
@@ -205,8 +161,10 @@ rrel_kernel_density_obj::bandwidth(vect_const_iter res_begin, vect_const_iter re
 }
 
 double
-rrel_kernel_density_obj::kernel_density(vect_const_iter res_begin, vect_const_iter res_end,
-                                        double x, double h) const
+rrel_kernel_density_obj::kernel_density(vect_const_iter res_begin, 
+                                        vect_const_iter res_end,
+                                        double x, 
+                                        double h) const
 {
   double f=0;
   unsigned int n = res_end - res_begin;
