@@ -59,7 +59,7 @@ public:
 
   //: The weight of the residual.
   //  \a u is a normalised residual (i.e. u=r/scale). wgt(u) is
-  //  normally \f$ (1/u) (\partial{rho} / \partial{u}) \f$.
+  //  normally \f$ (1/u) (\partial{\rho} / \partial{u}) \f$.
   virtual double wgt( double u ) const = 0;
 
   //: The weight of the residual.
