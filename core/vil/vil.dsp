@@ -207,6 +207,9 @@ SOURCE=.\Templates/vil2_copy+bool-.cxx
 SOURCE=.\Templates/vil2_copy+byte-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil2_copy+rgb+byte--.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil2_copy+double-.cxx
 # End Source File
 # Begin Source File
