@@ -17,7 +17,20 @@
 #include <vil2/vil2_memory_chunk.h>
 #include <vil2/vil2_pixel_format.h>
 
-//: Concrete view of image data held in memory
+//: Concrete view of image data of type T held in memory
+//  Each plane is nx() x ny() Ts, with the (x,y) element
+//  of the p'th plane accessable using
+//  im.top_left_ptr()[x*im.xstep() + y*im.ystep() + p*im.planestep]
+//  The actual image data is either allocated by the class
+//  (using resize), in which case it is deleted
+//  only when it has no views observing it, or is allocated outside (and is not deleted on
+//  destruction).  This allows external images to be accessed
+//  without a deep copy.
+//
+//  Note that copying one vil2_image_view<T> to another takes a shallow
+//  copy by default - it copies the view, not the raw image data.
+//  Use the explicit deep_copy() call to take a deep copy.
+
 template <class T>
 class vil2_image_view : public vil2_image_view_base
 {
