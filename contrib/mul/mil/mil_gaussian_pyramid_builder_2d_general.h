@@ -108,7 +108,9 @@ public:
     //: Version number for I/O
     short version_no() const ;
     //: Name of the class
-    vcl_string is_a() const ;
+    virtual vcl_string is_a() const ;
+    //: Does the name of the class match the argument?
+    virtual bool is_class(vcl_string const& s) const;
     //: Print class to os
     void print_summary(vcl_ostream&) const;
     //: Save class to binary file stream
