@@ -137,6 +137,9 @@ SOURCE=.\test_closest_point.cxx
 # Begin Source File
 SOURCE=.\test_window_scan_iterator.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_convex.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
