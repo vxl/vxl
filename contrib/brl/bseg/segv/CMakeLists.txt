@@ -1,6 +1,6 @@
 # segmentation view library
 # brl/segv/CMakeLists.txt
-
+IF(HAS_XERCES)
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg )
@@ -25,3 +25,4 @@ ADD_LIBRARY(segv ${segv_sources})
 TARGET_LINK_LIBRARIES(segv sdet bxml gevd vdgl vtol vsol vil vnl vbl)
 
 ENDIF(HAS_VGUI)
+ENDIF(HAS_XERCES)
