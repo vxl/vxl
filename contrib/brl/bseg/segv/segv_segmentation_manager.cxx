@@ -10,7 +10,9 @@
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_edgel_chain.h>
+#ifdef HAS_XERCES
 #include <bxml/bxml_vtol_io.h>
+#endif
 #include <sdet/sdet_detector_params.h>
 #include <sdet/sdet_detector.h>
 #include <gevd/gevd_clean_edgels.h>
@@ -240,6 +242,7 @@ void segv_segmentation_manager::regions()
     }
 }
 
+#ifdef HAS_XERCES
 void segv_segmentation_manager::read_xml_edges()
 {
   vgui_dialog load_image_dlg("Load XML edges");
@@ -252,3 +255,4 @@ void segv_segmentation_manager::read_xml_edges()
   if (bxml_vtol_io::read_edges(xml_filename, edges))
     this->draw_edges(edges, true);
 }
+#endif

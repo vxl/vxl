@@ -39,7 +39,9 @@ class segv_segmentation_manager : public vgui_grid_tableau
   void clear_display();
   void vd_edges();
   void regions();
+#ifdef HAS_XERCES
   void read_xml_edges();
+#endif
   //: access to the window
   vgui_window* get_window(){return win_;}
   void set_window(vgui_window* win){win_=win;}

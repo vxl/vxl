@@ -2,6 +2,7 @@
 # brl/bseg/sbin/
 
 INCLUDE( ${VXLCORE_INCLUDE_DIR}/vgui/UseVGUI.cmake )
+INCLUDE( ${BRL_INCLUDE_DIR}/bmods/find_xerces.cmake )
 
 IF( HAS_VGUI )
 
@@ -12,6 +13,10 @@ INCLUDE_DIRECTORIES( ${OXL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
 
 SOURCE_FILES(sbin_sources segv_menus.cxx segv_menus.h)
+
+IF(HAS_XERCES)
+ ADD_DEFINITIONS(-DHAS_XERCES)
+ENDIF(HAS_XERCES)
 
 ADD_EXECUTABLE (seg seg.cxx sbin_sources)
 

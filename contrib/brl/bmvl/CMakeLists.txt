@@ -9,10 +9,4 @@ SUBDIRS(bcal)
 SUBDIRS(brct)
 
 # multi-view gui stuff , xerces is required to read stuff in from Tjr
-IF(HAS_XERCES)
 SUBDIRS(bmvv)
-ENDIF(HAS_XERCES)
-
-
-
-
