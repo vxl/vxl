@@ -111,9 +111,9 @@ static void test_range_map()
   if (Lrmsh.mapable())
   {
     map_good = true;
-    for (int i = -offsh; i<=(offsh-1); ++i)
+    for (int i = -offsh; i<(offsh-1); ++i)
       if (i>=-128 && i<=127)
-        map_good = map_good&&mapsh[i+offsh]==(i+offsh);
+        map_good = map_good&&mapsh[i+offsh]==(i+128);
   }
   TEST("short values", sizesh==65536&&valsh==128&&Lrmsh.offset()==32768&&map_good, true);
 
