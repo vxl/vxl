@@ -8,7 +8,6 @@ SOURCE_FILES( vnl_sources
   vnl_complex.h
   vnl_complex_ops.h
   vnl_complex_traits.h
-  vnl_complexify.h
   vnl_config.h
   vnl_copy.h
   vnl_cost_function.h
@@ -25,6 +24,7 @@ SOURCE_FILES( vnl_sources
   vnl_double_4.h
   vnl_double_4x3.h
   vnl_double_4x4.h
+  vnl_double_5.h
   vnl_error.h
   vnl_fastops.h
   vnl_file_matrix.h
@@ -37,7 +37,6 @@ SOURCE_FILES( vnl_sources
   vnl_fwd.h
   vnl_identity.h
   vnl_identity_3x3.h
-  vnl_imag.h
   vnl_int_2.h
   vnl_int_3.h
   vnl_int_4.h
@@ -69,7 +68,6 @@ SOURCE_FILES( vnl_sources
   vnl_quaternion.h
   vnl_rational.h
   vnl_random.h
-  vnl_real.h
   vnl_real_npolynomial.h
   vnl_real_polynomial.h
   vnl_rotation_matrix.h
