@@ -39,7 +39,6 @@ ADD_EXECUTABLE( mbl_test_all
 TARGET_LINK_LIBRARIES(mbl_test_all mbl vbl vul vpl testlib )
 
 
-
 ADD_TEST( mbl_test_jarque_bera mbl_test_all test_jarque_bera )
 ADD_TEST( mbl_test_parse_block mbl_test_all test_parse_block )
 ADD_TEST( mbl_test_lda mbl_test_all test_lda )
@@ -70,6 +69,7 @@ ADD_TEST( mbl_test_read_props mbl_test_all test_read_props )
 ADD_TEST( mbl_test_correspond_points mbl_test_all test_correspond_points )
 ADD_TEST( mbl_test_rbf_network mbl_test_all test_rbf_network )
 ADD_TEST( mbl_test_table mbl_test_all test_table )
+ADD_TEST( mbl_test_cloneables_factory mbl_test_all test_cloneables_factory )
 
 
 ADD_EXECUTABLE( mbl_test_include test_include.cxx )
