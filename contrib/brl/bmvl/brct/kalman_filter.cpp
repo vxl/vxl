@@ -12,7 +12,7 @@
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <mvl/FMatrix.h>
 #include <vnl/vnl_math.h> // for pi
-#include <vnl/algo/vnl_matrix_inverse.h>
+#include <vnl/vnl_inverse.h>
 #include <vdgl/vdgl_edgel.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
@@ -508,7 +508,7 @@ void kalman_filter::init_velocity()
 
   // get translation
   double trans_dist = 1; // 105mm
-  vnl_double_3 T = vnl_matrix_inverse<double>(M_in_) * e;
+  vnl_double_3 T = vnl_inverse(M_in_) * e;
   T /= vcl_sqrt(T[0]*T[0] + T[1]*T[1] + T[2]*T[2]);
   T *= trans_dist;
 
