@@ -1,6 +1,7 @@
 IF(BUILD_TESTING)
-  LINK_LIBRARIES(png)
-
-  ADD_EXECUTABLE(pngtest pngtest.c)
-  ADD_TEST(pngtest pngtest)
+  IF(VXL_FORCE_V3P_PNG)
+    LINK_LIBRARIES(png)
+    ADD_EXECUTABLE(pngtest pngtest.c)
+    ADD_TEST(pngtest pngtest)
+  ENDIF(VXL_FORCE_V3P_PNG)
 ENDIF(BUILD_TESTING)
