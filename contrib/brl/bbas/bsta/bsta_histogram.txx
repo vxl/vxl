@@ -11,41 +11,48 @@
 template <class T>
 bsta_histogram<T>::bsta_histogram(const T range, const unsigned int nbins,
                                   const T min_prob)
-  : area_valid_(false), area_(0), nbins_(nbins), range_(range), delta_(0),
-    min_(0), max_(range)
+  : area_valid_(false), area_(0), nbins_(nbins), range_(range),
+    delta_(0),min_prob_(min_prob), min_(0), max_(range)
 {
   if (nbins>0)
   {
     delta_ = range_/nbins;
     counts_.resize(nbins, T(0));
   }
-  min_prob_ = min_prob;
 }
 
 template <class T>
 bsta_histogram<T>::bsta_histogram(const T min, const T max,
                                   const unsigned int nbins,
                                   const T min_prob)
-  : area_valid_(false), area_(0), nbins_(nbins), delta_(0), min_prob_(min_prob),
-    min_ (min), max_(max), range_(max-min)
+  : area_valid_(false), area_(0), nbins_(nbins), delta_(0),
+    min_prob_(min_prob), min_ (min), max_(max) 
 {
   if (nbins>0)
-  {
+    {
+    range_ = max-min;
     delta_ = range_/nbins;
     counts_.resize(nbins, T(0));
-  }
-  min_prob_ = min_prob;
+    }
+  else
+    {
+      range_ = 0;
+      delta_ = 0;
+    }
 }
 
 template <class T>
 bsta_histogram<T>::bsta_histogram(const T min, const T max,
                                   vcl_vector<T> const& data, const T min_prob)
   : area_valid_(false), area_(0), delta_(0), min_prob_(min_prob),
-    min_ (min), max_(max), range_(max-min), counts_(data)
+    min_ (min), max_(max), counts_(data)
 {
   nbins_ = data.size();
+  range_ = max-min;
   if (nbins_>0)
     delta_ = range_/nbins_;
+  else
+    delta_ = 0;
 }
 
 template <class T>
