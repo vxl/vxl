@@ -32,7 +32,8 @@ class vil2_image_resource_plugin : vil2_image_resource
     //: Name of the class
   virtual vcl_string is_a() const;
 
-  virtual vil2_pixel_format pixel_format() const {};
+  virtual vil2_pixel_format pixel_format() const 
+      { return VIL2_PIXEL_FORMAT_UNKNOWN; };
  
   virtual unsigned ni() const { return 0; };
   virtual unsigned nj() const { return 0; };
