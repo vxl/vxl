@@ -327,6 +327,7 @@ foreach $f (@FILES)
     elsif ($j eq "vil1/vil1_warp.h") { $i="$i(|_mapping|_interpolation_type|_output_driven)"; }
     # VIL/FILE_FORMATS
     elsif ($j eq "vil/file_formats/vil_dicom_header.h") { $i = "($i(_type|_endian|_image_type|_info|_format))|VIL_DICOM_HEADER_[A-Z0-9_]+"; }
+    elsif ($j =~ m"vil/file_formats/vil_nitf_") {} # keep $i
     elsif ($j =~ m"vil1?/(file_formats/|)vil1?_jpeglib\.h$") { $i="jpeg(|1|2)_[a-z_]+"; }
     elsif ($j =~ m"vil1?/file_formats/(.*)\.h") { $i="$1_file_format"; }
     # VIL/ALGO
