@@ -684,6 +684,12 @@ SOURCE=.\Templates/vnl_vector_fixed_ref+double.3-.cxx
 SOURCE=.\Templates/vnl_vector_fixed_ref+float.3-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vnl_matrix_fixed+double.2.9-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matrix_fixed+double.3.9-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vnl_erf.cxx
 # End Source File
 # Begin Source File

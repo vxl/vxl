@@ -117,6 +117,12 @@ SOURCE=.\vil3d_histogram.cxx
 SOURCE=.\vil3d_histogram_equalise.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vil3d_distance_transform.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_fill_boundary.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil3d_grad_1x3+byte.float-.cxx
 # End Source File
 # Begin Source File
@@ -181,6 +187,12 @@ SOURCE=.\vil3d_histogram.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil3d_histogram_equalise.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_distance_transform.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_fill_boundary.h
 # End Source File
 # End Group
 # End Target
