@@ -1,4 +1,5 @@
 # This is the matrix/vector conversions directory makefile
+ifneq (,$(wildcard $(IUEROOT)/cool))
 
 USES := Numerics vxl
 IMMEDIATE_LIBS := -liue-math -lvnl
@@ -17,6 +18,7 @@ MANPAGE_SOURCES += vnl_vector_to_CoolVector.h
 MANPAGE_SOURCES += IUE_vector_to_vnl_vector.h
 MANPAGE_SOURCES += vbl_array_to_vnl_vector.h
 MANPAGE_SOURCES += CoolVector_to_vnl_vector.h
+endif
 
 ################################
 include ${IUEROOT}/config/top.mk
