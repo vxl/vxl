@@ -495,9 +495,9 @@ protected:
     T value;
     bool end_marker;
     void read() {
-        end_marker = (*stream) ? true : false;
+        end_marker = bool(*stream);
         if (end_marker) *stream >> value;
-        end_marker = (*stream) ? true : false;
+        end_marker = bool(*stream);
     }
 public:
     vcl_istream_iterator() : stream(&vcl_cin), end_marker(false) {}
