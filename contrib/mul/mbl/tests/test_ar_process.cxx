@@ -63,14 +63,16 @@ void test_ar_process()
   B(1,0)=mz_random.normal()/2.0;
   B(0,1)=mz_random.normal()/2.0;
   B(1,1)=mz_random.normal()/2.0;
-  /*A(0,0)=mz_random.normal()/3.0;
+#if 0 // was:
+  A(0,0)=mz_random.normal()/3.0;
   A(1,0)=mz_random.normal()/3.0;
   A(0,1)=mz_random.normal()/3.0;
   A(1,1)=mz_random.normal()/3.0;
   B(0,0)=mz_random.normal()/3.0;
   B(1,0)=mz_random.normal()/3.0;
   B(0,1)=mz_random.normal()/3.0;
-  B(1,1)=mz_random.normal()/3.0;*/
+  B(1,1)=mz_random.normal()/3.0;
+#endif
   C(0,0)=mz_random.normal()/20.0;
   C(1,0)=mz_random.normal()/20.0;
   C(0,1)=mz_random.normal()/20.0;
