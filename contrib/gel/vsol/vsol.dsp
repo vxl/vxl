@@ -195,6 +195,12 @@ SOURCE=.\Templates/vcl_vector+vsol_spatial_object_3d~-.cxx
 SOURCE=.\Templates/vcl_deque+vcl_vector+vsol_spatial_object_2d_sptr--.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vcl_vector+vcl_vector+vsol_line_2d_sptr--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vcl_vector+vsol_line_2d_sptr-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vsol_box_2d.cxx
 # End Source File
 # Begin Source File

@@ -272,6 +272,9 @@ SOURCE=.\file_formats/vil3d_dicom.h
 # Begin Source File
 SOURCE=.\file_formats/vil3d_slice_list.h
 # End Source File
+# Begin Source File
+SOURCE=.\vil3d_property.h
+# End Source File
 # End Group
 # End Target
 # End Project
