@@ -16,4 +16,6 @@ SOURCE_FILES(vsrl_sources
 
 AUX_SOURCE_DIRECTORY(Templates vsrl_sources)
 
+IF( BUILD_TESTS)
 SUBDIRS(examples)
+ENDIF( BUILD_TESTS)

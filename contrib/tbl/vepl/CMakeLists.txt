@@ -21,4 +21,6 @@ vepl_histogram
 
 AUX_SOURCE_DIRECTORY(Templates vepl_sources)
 
+IF(BUILD_TESTS)
 SUBDIRS(tests examples)
+ENDIF(BUILD_TESTS)

@@ -32,4 +32,6 @@ INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/vxl )
 
 AUX_SOURCE_DIRECTORY( Templates vsol_sources )
 
+IF( BUILD_TESTS)
 SUBDIRS( tests examples )
+ENDIF( BUILD_TESTS)

@@ -13,4 +13,7 @@ AUX_SOURCE_DIRECTORY(Templates vgel_sources)
 
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/oxl)
 
-SUBDIRS(kl examples)
+SUBDIRS(kl)
+IF( BUILD_TESTS)
+  SUBDIRS(examples)
+ENDIF( BUILD_TESTS)
