@@ -52,3 +52,24 @@ VNL_ALGO_DETERMINANT_INSTANTIATE(float);
 VNL_ALGO_DETERMINANT_INSTANTIATE(double);
 VNL_ALGO_DETERMINANT_INSTANTIATE(vcl_complex<float>);
 VNL_ALGO_DETERMINANT_INSTANTIATE(vcl_complex<double>);
+
+#ifdef VCL_GCC_295
+#include <vnl/vnl_copy.h>
+// FIXME
+template <>
+long double vnl_determinant(vnl_matrix<long double> const &M)
+{
+  vnl_matrix<double> M_(M.rows(), M.cols());
+  vnl_copy(M, M_);
+  double z = vnl_determinant(M_);
+  return z;
+}
+template <>
+vcl_complex<long double> vnl_determinant(vnl_matrix<vcl_complex<long double> > const &M)
+{
+  vnl_matrix<vcl_complex<double> > M_(M.rows(), M.cols());
+  vnl_copy(M, M_);
+  vcl_complex<double> z = vnl_determinant(M_);
+  return vcl_complex<long double>(z.real(), z.imag());
+}
+#endif
