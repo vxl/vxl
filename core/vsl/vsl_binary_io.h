@@ -123,7 +123,7 @@ class vsl_b_ofstream: public vsl_b_ostream
   //: Create this adaptor from a file.
   // The adapter will delete the internal stream automatically on destruction.
   vsl_b_ofstream(const char *filename,
-    vcl_ios_openmode mode = vcl_ios_out | vcl_ios_trunc):
+                 vcl_ios_openmode mode = vcl_ios_out | vcl_ios_trunc) :
     vsl_b_ostream(new vcl_ofstream(filename, mode | vcl_ios_binary)) {}
 
   //: Virtual destructor.
@@ -177,7 +177,7 @@ class vsl_b_istream
   // You can also store a single integer as other data.
   // Interpretation of this data is entirely up to the client code.
   virtual void add_serialisation_record(unsigned long serial_number,
-    void *pointer, int other_data = 0);
+                                        void *pointer, int other_data = 0);
 
   //: Returns the pointer to the object identified by the unique serial number.
   // Returns 0 if no record has been added.
@@ -190,7 +190,7 @@ class vsl_b_istream
   //: Modify the user-defined data associated with the unique serial number
   // If there is no record of the object, this function will abort.
   virtual int set_serialisation_other_data(unsigned long serial_number,
-    int other_data);
+                                           int other_data);
 
 
   //: Return the version number of the IO format of the file being read.
@@ -297,7 +297,7 @@ inline void vsl_print_summary(vcl_ostream& os, const char* s )
 //             to be used. A new version of MS .NET compiler required this change.
 //             Add compilers as needed. This could be moved to vcl_compiler.h. 
 //             [Nils Krahnstoever]
-#if defined(VCL_WIN32) && (defined(VCL_VC70) || defined(VCL_VC71))
+#ifdef VCL_VC_DOTNET
 # define VCL_64BIT_ATTR __w64
 #else
 # define VCL_64BIT_ATTR /* */

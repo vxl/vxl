@@ -12,7 +12,7 @@
 #include <vil3d/vil3d_image_view.h>
 #include <vcl_iostream.h>
 
-#if defined(VCL_VC70) || defined(VCL_VC71)
+#ifdef VCL_VC_DOTNET
 #  pragma warning( push )
 #  pragma warning( disable: 4244 )  // conversion from ptrdiff_t to int, possible loss of data
 #endif
@@ -22,7 +22,7 @@
 template <class T>
 inline void vil3d_print_all(vcl_ostream& os,const vil3d_image_view<T>& view)
 {
-  os<<view.is_a()<<" "<<view.nplanes()
+  os<<view.is_a()<<' '<<view.nplanes()
     <<" planes, each "<<view.ni()<<" x "<<view.nj()<<" x "<<view.nk()
     <<" istep: "<<view.istep()<<' '
     <<" jstep: "<<view.jstep()<<' '
@@ -30,24 +30,24 @@ inline void vil3d_print_all(vcl_ostream& os,const vil3d_image_view<T>& view)
     <<" planestep: "<<view.planestep()<<'\n' << vcl_flush;
   for (unsigned int p=0;p<view.nplanes();++p)
   {
-   if (view.nplanes()>1) os<<"Plane "<<p<<'\n';
-   for (unsigned int k=0;k<view.nk();++k)
-   {
-    if (view.nk()>1) os<<"Slice "<<k<<":\n";
-    for (unsigned int j=0;j<view.nj();++j)
+    if (view.nplanes()>1) os<<"Plane "<<p<<'\n';
+    for (unsigned int k=0;k<view.nk();++k)
     {
-      for (unsigned int i=0;i<view.ni();++i)
+      if (view.nk()>1) os<<"Slice "<<k<<":\n";
+      for (unsigned int j=0;j<view.nj();++j)
       {
-        vil_print_value(os,view(i,j,k,p));
-        os<<" ";
+        for (unsigned int i=0;i<view.ni();++i)
+        {
+          vil_print_value(os,view(i,j,k,p));
+          os<<' ';
+        }
+        os<<'\n' << vcl_flush;
       }
-      os<<'\n' << vcl_flush;
     }
-   }
   }
 }
 
-#if defined(VCL_VC70) || defined(VCL_VC71)
+#ifdef VCL_VC_DOTNET
 #  pragma warning( pop )
 #endif
 
