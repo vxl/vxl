@@ -98,6 +98,7 @@ public:
 
   void resize(int n) { diagonal_.resize(n); }
   void clear() { diagonal_.clear(); }
+  void fill(T const &x) { diagonal_.fill(x); }
 
   //: Return pointer to the diagonal elements as a contiguous 1D C array;
   T*       data_block()       { return diagonal_.data_block(); }
