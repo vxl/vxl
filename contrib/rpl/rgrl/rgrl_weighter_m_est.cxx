@@ -178,22 +178,27 @@ aux_sum_rho_values( rgrl_scale const&  scale,
       if ( fitr.size() == 0 )  continue;
       
       rgrl_feature_sptr mapped_from = fitr.from_feature()->transform( xform );
-      for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
+      to_iter titr = fitr.begin();
+      double min_val = titr.to_feature()->geometric_error( *mapped_from );
+      
+      for ( ++titr; titr != fitr.end(); ++titr ) {
         //  for each match with a "to" image feature
         rgrl_feature_sptr to_feature = titr.to_feature();
         double geometric_err = to_feature->geometric_error( *mapped_from );
 
         // signature weight
         //
-        double signature_wgt = 1.0;
         //GY: don't know how to handle this in a correct way
+        // double signature_wgt = 1.0;
         //if ( signature_precomputed_ ) {
         //  signature_wgt = titr . signature_weight( );
         //}
-
-        // sum of rho is weighted by signature
-        sum_rho += signature_wgt * m_est_->rho(geometric_err, scale.geometric_scale());
+        
+        if( min_val > geometric_err )
+          min_val = geometric_err;
       }
+      // sum of rho is weighted by signature??
+      sum_rho += m_est_->rho(min_val, scale.geometric_scale());
   }
   
   return sum_rho;
