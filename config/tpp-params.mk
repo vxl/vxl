@@ -214,11 +214,19 @@ ifeq "$(HAS_QGL)" "1"
 endif
 
 # Add GTK
-ifneq "$(GTKCONFIGLIBS)" ""
+ifneq "$(GTKCONFIG)" ""
  HAS_GTK        := 1
- GTK_INC_DIRS   := $(patsubst -I%,%,$(filter -I%,$(GTKCONFIGCFLAGS)))
- GTK_LIB_DIRS   := $(patsubst -L%,%,$(filter -L%,$(GTKCONFIGLIBS)))
- GTK_LIBS       := $(filter -l%,$(GTKCONFIGLIBS))
+ GTK_INC_DIRS   := $(patsubst -I%,%,$(filter -I%,$(GTKCONFIG))) $(GTK_INC_DIR)
+ GTK_LIB_DIRS   := $(patsubst -L%,%,$(filter -L%,$(GTKCONFIG)))
+ GTK_LIBS       := $(filter -l%,$(GTKCONFIG))
+endif
+
+# Add GTK2
+ifneq "$(GTK2CONFIG)" ""
+ HAS_GTK2       := 1
+ GTK2_INC_DIRS  := $(patsubst -I%,%,$(filter -I%,$(GTK2CONFIG))) $(GTK2_INC_DIR)
+ GTK2_LIB_DIRS  := $(patsubst -L%,%,$(filter -L%,$(GTK2CONFIG)))
+ GTK2_LIBS      := $(filter -l%,$(GTK2CONFIG))
 endif
 
 # backwards compat
