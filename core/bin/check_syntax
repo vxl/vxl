@@ -103,6 +103,8 @@ foreach $f (@FILES)
     if ($printed && $file =~ m/(\S+)\s*\<\<[^;]*(..)\"\s*\<\<\s*\"/ && $2 ne "\\n");
   print "$f\t\# consider replacing \"$2\" with \'$2\' in output for $1\n"
     if ($printed && $file =~ m/(\S+)\s*\<\<[^;]+\"(.|\\.)\"/);
+  print "$f\t\# consider removing space before \\n\n"
+    if ($printed && $file =~ m/(\s|\\t)\\n/);
 
 # 4. Consecutive comment blocks, separated by blank lines
   if ($file =~ m!\n\s*//:.*\n( *// .*\n)*\s*\n\s*// !)
@@ -274,10 +276,10 @@ foreach $f (@FILES)
     elsif ($j =~ m/vil1?\/vil1?_\d+bit\.h$/) { $i="($i)(|_(read|write)_(big|little)_endian)"; }
     elsif ($j =~ m/vil[12]?\/vil[12]?_stream_(read|write)\.h$/) { $i="($i)_(big|little)_endian_[a-z0-9_]+"; }
     elsif ($j =~ m/vil2?\/vil2?_bi(lin|cub)_interp\.h$/) { $i="($i)(|_safe|_unsafe|_raw|_safe_extend)"; }
-    elsif ($j eq "vil/vil_clamp.h") { $i="$i(|_pixel)"; }
-    elsif ($j eq "vil/vil_colour_space.h") { $i="($i)_(RGB|HSV)_to_(YIQ|HSV|RGB)"; }
+    elsif ($j eq "vil1/vil1_clamp.h") { $i="$i(|_pixel)"; }
+    elsif ($j eq "vil1/vil1_colour_space.h") { $i="($i)_(RGB|HSV)_to_(YIQ|HSV|RGB)"; }
     elsif ($j =~ m/vil2?\/vil2?_convert\.h$/) { $i="($i)_((cast|round)(_pixel)?|(rgb|planes)_to_grey|stretch_range|to_[a-z_]+)"; }
-    elsif ($j eq "vil/vil_convolve.h") { $i="$i(|_[a-z_]+)"; }
+    elsif ($j eq "vil1/vil1_convolve.h") { $i="$i(|_[a-z_]+)"; }
     elsif ($j =~ m/vil2?\/algo\/vil2?_convolve_1d.h$/) { $i="vil2\?_convolve_(1d|edge_1d|boundary_option)"; }
     elsif ($j =~ m/vil2?\/vil2?_copy\.h$/) { $i="($i)(|_deep|_to_window|_reformat)"; }
     elsif ($j =~ m/vil2?\/algo\/vil2?_exp_filter_1d.h$/) { $i="vil2\?_exp_filter_(1d|i|j)"; }
@@ -292,21 +294,21 @@ foreach $f (@FILES)
     elsif ($j =~ m/vil2?\/vil2?_image_view\.h$/) { $i="$i(|_deep_equality)"; }
     elsif ($j =~ m/vil2?\/vil2?_image_view_base\.h$/) { $i="$i(|_sptr)"; }
     elsif ($j =~ m/vil2?\/vil2?_math\.h$/) { $i="($i)_([a-z_]+)"; }
-    elsif ($j =~ m/vil2\/vil2_new\.h$/) { $i="($i)_image_(resource|view_j_i_plane|view_plane_i_j)"; }
+    elsif ($j =~ m/vil2?\/vil2?_new\.h$/) { $i="($i)_image_(resource|view_j_i_plane|view_plane_i_j)"; }
     elsif ($j =~ m/vil2?\/vil2?_(image_resource|memory_chunk)\.h$/) { $i="$i(|_sptr)"; }
-    elsif ($j =~ m/vil2?\/io\/vil2?_io_memory_chunk\.h$/) { $i="($i|vsl_b_write|VIL2_IO_SMART_PTR_INSTANTIATE.vil2?_memory_chunk)"; }
-    elsif ($j eq "vil/vil_image_as.h") { $i="$i(_[a-z16_]+)?"; }
-    elsif ($j eq "vil/vil_interpolate.h") { $i="$i(|_[a-z_]+)"; }
-    elsif ($j eq "vil/vil_warp.h") { $i="$i(|_mapping|_interpolation_type|_output_driven)"; }
+    elsif ($j =~ m/vil2?\/io\/vil2?_io_memory_chunk\.h$/) { $i="($i|vsl_b_write|VIL2\?_IO_SMART_PTR_INSTANTIATE.vil2\?_memory_chunk)"; }
+    elsif ($j eq "vil1/vil1_image_as.h") { $i="$i(_[a-z16_]+)?"; }
+    elsif ($j eq "vil1/vil1_interpolate.h") { $i="$i(|_[a-z_]+)"; }
+    elsif ($j eq "vil1/vil1_warp.h") { $i="$i(|_mapping|_interpolation_type|_output_driven)"; }
     elsif ($j =~ m/vil[12]?\/(file_formats\/|)vil[12]?_jpeglib\.h$/) { $i="jpeg[12]?_[a-z_]+"; }
-    elsif ($j eq "vil/vil_memory_image.h") { $i="$i(|_format)"; }
+    elsif ($j eq "vil1/vil1_memory_image.h") { $i="$i(|_format)"; }
     elsif ($j =~ m/vil[12]?\/vil[12]?_pixel\.h$/) { $i="($i)_format(|_t|_component_format)"; }
     elsif ($j =~ m/vil[12]?\/vil[12]?_pixel_format\.h$/) { $i="($i(|_of|_component_format|_sizeof_components|_num_components)|VIL2?_PIXEL_FORMAT_\\S+)"; }
     elsif ($j =~ m/vil2?\/vil2?_print\.h$/) { $i="($i)(|_value|_all)"; }
     elsif ($j =~ m/vil[12]?\/vil[12]?_property\.h$/) { $i="$i(|_[a-z_]+)"; }
-    elsif ($j eq "vil/vil_smooth.h") { $i="($i)_(gaussian|byte_separable_symmetric)"; }
+    elsif ($j eq "vil1/vil1_smooth.h") { $i="($i)_(gaussian|byte_separable_symmetric)"; }
     elsif ($j =~ m/vil2?\/vil2?_transform\.h$/) { $i="($i)2?"; }
-    elsif ($j =~ m/vil2?\/vil2?_view_as\.h$/) { $i="($i)(|_planes|_rgb)|vil2_view_(real|imag)_part"; }
+    elsif ($j =~ m/vil2?\/vil2?_view_as\.h$/) { $i="($i)(|_planes|_rgb)|vil2\?_view_(real|imag)_part"; }
     elsif ($j =~ m/vil2?\/vil2?_vil1\.h$/) { $i="($i)_(to_|from_)?image_(resource|view)"; }
     elsif ($j =~ m/vil2?\/file_formats\/(vil2?_dicom_header)\.h/) { $i = "($1(_type|_endian|_image_type|_info|_format))|VIL2?_DICOM_HEADER_[A-Z0-9_]+"; }
     elsif ($j =~ m/vil[12]?\/file_formats\/(.*)\.h$/) { $i="$1_file_format"; }
