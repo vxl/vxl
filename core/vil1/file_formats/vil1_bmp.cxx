@@ -252,7 +252,7 @@ bool vil_bmp_generic_image::read_header()
 #ifdef DEBUG
   where << "bit_map_start = " << bit_map_start << vcl_endl; // blather
 #endif
-  assert(bit_map_start == file_hdr.bitmap_offset); // I think they're supposed to be the same -- fsm.
+  assert(bit_map_start == (int)file_hdr.bitmap_offset); // I think they're supposed to be the same -- fsm.
 
   return true;
 }
@@ -302,13 +302,9 @@ bool vil_bmp_generic_image::get_section(void* ib, int x0, int y0, int w, int h) 
   char *bp = static_cast<char*>(ib);
 
   //
-  unsigned bytes_per_pixel;
-  if (core_hdr.bitsperpixel == 8)
-    bytes_per_pixel = 1;
-  else if (core_hdr.bitsperpixel == 24)
-    bytes_per_pixel = 3;
-  else
-    assert(false); // FIXME - add support for 1, 4, 16 and 32 bpp
+  unsigned bytes_per_pixel = core_hdr.bitsperpixel / 8;
+  assert(core_hdr.bitsperpixel == 8 || core_hdr.bitsperpixel == 24);
+  // FIXME - add support for 1, 4, 16 and 32 bpp
 
   // actual number of bytes per raster in file.
   unsigned have_bytes_per_raster = ((bytes_per_pixel * core_hdr.width + 3)>>2)<<2;
