@@ -1,6 +1,8 @@
 // The following text is included in the main documentation page by doxygen
 /*! \mainpage vil1 : Imaging Library
 *
+* NOTE: This library has now been superceeded by the new vil.
+*
 * vil1 provides flexible and powerful  access to all 2D images,
 * including those too large to fit in the address space of a single program or process.
 *
