@@ -49,7 +49,7 @@ public:
   //---------------------------------------------------------------------------
   //: Constructor from a vector
   //---------------------------------------------------------------------------
-  explicit vtol_vertex_2d::vtol_vertex_2d(const vnl_double_2 &v);
+  explicit vtol_vertex_2d(const vnl_double_2 &v);
 
   //---------------------------------------------------------------------------
   //: Constructor from abscissa `new_x' and ordinate `new_y' of the point
@@ -183,9 +183,8 @@ public:
   //  void calculate_average_normal(IUE_vector<double>&);
 
 
-  void print(ostream &strm=cout);
-  void describe(ostream &strm=cout,
-                int blanking=0);
+  void print(ostream &strm=cout) const;
+  void describe(ostream &strm=cout, int blanking=0) const;
 
 protected:
   //---------------------------------------------------------------------------
