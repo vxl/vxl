@@ -30,7 +30,7 @@ struct GLUTwindow
   int num;              /* Small integer window id (0-based). */
 
   /* Window system related state. */
-#if defined(_WIN32)
+#if defined(_WIN32) && !defined(__CYGWIN__)
   int pf;               /* Pixel format. */
   HDC hdc;              /* Window's Win32 device context. */
 #endif

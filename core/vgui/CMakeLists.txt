@@ -116,11 +116,11 @@ SOURCE_FILES(vgui_sources
   vrml/vgui_vrml_texture_map.cxx
 )
 
-IF(WIN32)
+IF(HAS_MFC)
   SOURCE_FILES(vgui_sources
     internals/vgui_accelerate_mfc.cxx
   )
-ENDIF(WIN32)
+ENDIF(HAS_MFC)
 
 IF(HAS_X11)
   SOURCE_FILES(vgui_sources
@@ -131,14 +131,16 @@ ENDIF(HAS_X11)
 AUX_SOURCE_DIRECTORY(Templates vgui_sources)
 AUX_SOURCE_DIRECTORY(vrml/Templates vgui_sources)
 
-IF (WIN32)
-  IF (NOT CYGWIN)
-    # add stuff to use MFC in this executable
-    ADD_DEFINITIONS(-D_AFXDLL)
-    SET(CMAKE_MFC_FLAG 6)
+IF(HAS_MFC)
+  # add stuff to use MFC in this executable
+  ADD_DEFINITIONS(-D_AFXDLL)
+  SET(CMAKE_MFC_FLAG 6)
+ENDIF(HAS_MFC)
 
+IF(WIN32)
+  IF(NOT CYGWIN)
     INCLUDE(${allvxl_SOURCE_DIR}/oxl/vgui/CMakeListsHeaders.txt)
-  ENDIF (NOT CYGWIN)
+  ENDIF(NOT CYGWIN)
 ENDIF(WIN32)
 
 SUBDIRS(impl)

@@ -51,7 +51,7 @@ inline int vgui_linker_hack()
 #if VGUI_MESA
   vgui_accelerate_x11_tag_function();
 #endif
-#ifdef VCL_WIN32
+#ifdef HAS_MFC
   vgui_mfc_tag_function();
   vgui_accelerate_mfc_tag_function();
 #endif
@@ -79,7 +79,7 @@ inline int vgui_linker_hack()
 
 static int vgui_linker_hack_init = vgui_linker_hack();
 
-#ifdef VCL_WIN32
+#ifdef HAS_MFC
 # include <vgui/impl/mfc/vgui_mfc_app_init.h>
 vgui_mfc_app_init theAppinit;
 #endif

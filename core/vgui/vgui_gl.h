@@ -6,7 +6,7 @@
 
 #include <vcl_compiler.h>
 
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
 // fix windows gl.h :
 # include <windows.h>
 # pragma warning (disable:4244) // disable bogus conversion warnings

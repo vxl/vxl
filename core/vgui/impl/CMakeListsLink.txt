@@ -16,9 +16,11 @@ IF(HAS_QT)
   INCLUDE(${allvxl_SOURCE_DIR}/oxl/vgui/impl/qt/CMakeListsLink.txt)
 ENDIF(HAS_QT)
 
-IF(WIN32)
+IF(HAS_MFC)
   INCLUDE(${allvxl_SOURCE_DIR}/oxl/vgui/impl/mfc/CMakeListsLink.txt)
-ELSE(WIN32)
+ENDIF(HAS_MFC)
+
+IF(UNIX)
 
   INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindGTK.cmake)
 
@@ -26,4 +28,4 @@ ELSE(WIN32)
     INCLUDE(${allvxl_SOURCE_DIR}/oxl/vgui/impl/gtk/CMakeListsLink.txt)
   ENDIF(HAS_GTK)
 
-ENDIF(WIN32)
+ENDIF(UNIX)

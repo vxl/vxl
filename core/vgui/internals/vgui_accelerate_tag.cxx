@@ -18,7 +18,7 @@ vgui_tag(accelerate_x11) {
   return 0;
 }
 #endif
-#ifdef VCL_WIN32
+#ifdef HAS_MFC
 vgui_tag(accelerate_mfc) {
   vul_trace;
   vgui_accelerate::register_accelerator(new vgui_accelerate_mfc, 1);

@@ -28,7 +28,7 @@ xcv_twoview_manager::xcv_twoview_manager()
   , transfer_index(0)
   , dragging(false)
 {
-#ifdef VCL_WIN32
+#ifdef HAS_MFC
   // Until somebody implements overlays for mfc, this
   // is the default for windows (see also vgui_rubberbander).
   use_overlays = false;

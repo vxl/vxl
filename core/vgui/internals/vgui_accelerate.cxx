@@ -10,7 +10,7 @@
 
 #include <vcl_iostream.h>
 
-#ifdef VCL_WIN32
+#ifdef HAS_MFC
 #include <vgui/impl/mfc/StdAfx.h>
 extern CDC *vgui_mfc_adaptor_global_dc;
 #endif

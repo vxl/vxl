@@ -53,7 +53,7 @@ void vgui_rubberbander::init(vgui_rubberbander_client* the_client)
   client_ = the_client;
   active = false;
   obj_type = none_enum;
-#ifdef VCL_WIN32
+#ifdef HAS_MFC
   // Until somebody implements overlays for mfc, this
   // is the default for windows.
   use_overlays = false;
