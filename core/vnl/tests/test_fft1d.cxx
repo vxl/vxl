@@ -92,15 +92,15 @@ void test_fft1d () {
   //  vnl_fft1d<fsm_real> oFFTcomplDTwiddle(complArray, ciArraySizeX, oPFx, +1);
 
   // now compare all the results against oFFTSimple
-  Assert ("test forward 1", oFFTSimple == oFFTSimpleComplex);
-  Assert ("test forward 2", oFFTSimple == oFFTRealMTwiddle);
-  Assert ("test forward 3", oFFTSimple == oFFTRIMTwiddle);
+  vnl_test_assert ("test forward 1", oFFTSimple == oFFTSimpleComplex);
+  vnl_test_assert ("test forward 2", oFFTSimple == oFFTRealMTwiddle);
+  vnl_test_assert ("test forward 3", oFFTSimple == oFFTRIMTwiddle);
 #ifndef VCL_VC
-  Assert ("test forward 4", oFFTSimple == oFFTComplMTwiddle);
+  vnl_test_assert ("test forward 4", oFFTSimple == oFFTComplMTwiddle);
 #endif
-  Assert ("test forward 5", oFFTSimple == oFFTrealDTwiddle);
-  Assert ("test forward 6", oFFTSimple == oFFTimagDTwiddle);
-  //awfasabove; Assert ("test forward 7", oFFTSimple == oFFTcomplDTwiddle);
+  vnl_test_assert ("test forward 5", oFFTSimple == oFFTrealDTwiddle);
+  vnl_test_assert ("test forward 6", oFFTSimple == oFFTimagDTwiddle);
+  //awfasabove; vnl_test_assert ("test forward 7", oFFTSimple == oFFTcomplDTwiddle);
 
   /*
    * the whole thing backwards
@@ -131,12 +131,12 @@ void test_fft1d () {
   // complex data
   vnl_fft1d<fsm_real> oFFTBackcomplDTwiddle(complBackArray, ciArraySizeX, oPFx, -1);
 
-  Assert ("test 1 back", oFFTBackSimpleComplex == oFFTBackRIMTwiddle);
+  vnl_test_assert ("test 1 back", oFFTBackSimpleComplex == oFFTBackRIMTwiddle);
 #ifndef VCL_VC
-  Assert ("test 2 back", oFFTBackSimpleComplex == oFFTBackComplMTwiddle);
+  vnl_test_assert ("test 2 back", oFFTBackSimpleComplex == oFFTBackComplMTwiddle);
 #endif
-  Assert ("test 3 back", oFFTBackSimpleComplex == oFFTBackimagDTwiddle);
-  Assert ("test 4 back", oFFTBackSimpleComplex == oFFTBackcomplDTwiddle);
+  vnl_test_assert ("test 3 back", oFFTBackSimpleComplex == oFFTBackimagDTwiddle);
+  vnl_test_assert ("test 4 back", oFFTBackSimpleComplex == oFFTBackcomplDTwiddle);
 
   fsm_real fRealError = 0.0;
   fsm_real fImagError = 0.0;
@@ -151,8 +151,8 @@ void test_fft1d () {
 
   vcl_cout << "total real absolute error = " << fRealError << " (== " << fRealError/ciArraySizeX << " per element)\n";
   vcl_cout << "total imag absolute error = " << fImagError << " (== " << fImagError/ciArraySizeX << " per element)\n";
-  Assert ("real error", fRealError/ciArraySizeX < maxRealErrorPrecision);
-  Assert ("imag error", fImagError/ciArraySizeX < maxImagErrorPrecision);
+  vnl_test_assert ("real error", fRealError/ciArraySizeX < maxRealErrorPrecision);
+  vnl_test_assert ("imag error", fImagError/ciArraySizeX < maxImagErrorPrecision);
 }
 
 TESTMAIN (test_fft1d);
