@@ -62,19 +62,23 @@ private:
   // to free this in-class memory.
   // Therefore disallow newing of these -- if you're paying for
   // one malloc, you can afford three.
-#if !defined(VCL_GCC_295)
-  void* operator new(size_t) { return 0; }
-#endif
-
+// fsm: This was wrong for two reasons:
+//  1. operator new may not return a null pointer.
+//  2. it should be enabled for compilers that need it,
+//     not disabled for compilers that don't need it.
+//#if !defined(VCL_GCC_295)
+//  void* operator new(size_t) { return 0; }
+//#endif
+  
   // Disallow resizing
-  bool resize (unsigned int, unsigned int) { return 0; }
+  bool resize (unsigned int, unsigned int) { return false; }
 
   // Disallow this as it would create a non-const alias to the Matrix
-  vnl_matrix_ref(const vnl_matrix<T>&) {}
+  vnl_matrix_ref(vnl_matrix<T> const &) {}
 
   // You can't assign one of these from a matrix, cos' you don't have any space
-  vnl_matrix_ref(const vnl_matrix_ref<T>&) {}
-  vnl_matrix_ref<T>& operator=(const vnl_matrix<T>&) { return *this; }
+  vnl_matrix_ref(vnl_matrix_ref<T> const &) {}
+  vnl_matrix_ref<T>& operator=(vnl_matrix<T> const &) { return *this; }
 };
 
 #endif // vnl_matrix_ref_h_
