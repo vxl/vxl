@@ -764,6 +764,12 @@ SOURCE=.\file_formats/vil_viff_support.h
 # Begin Source File
 SOURCE=.\file_formats/vil_viffheader.h
 # End Source File
+# Begin Source File
+SOURCE=.\vil_nearest_neighbour_interp.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_warp.h
+# End Source File
 # End Group
 # End Target
 # End Project
