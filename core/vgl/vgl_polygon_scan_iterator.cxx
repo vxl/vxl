@@ -82,8 +82,8 @@ void vgl_polygon_scan_iterator::vertind::display( char const* str)
 //===============================================================
 vgl_polygon_scan_iterator::~vgl_polygon_scan_iterator()
 {
-  if( crossedges ) delete [] crossedges;
-  if( yverts ) delete [] yverts;
+  delete [] crossedges;
+  delete [] yverts;
 }
 
 //===============================================================
