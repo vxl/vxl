@@ -1,13 +1,13 @@
-// This is vxl/vul/vul_timer.cxx
+// This is core/vul/vul_timer.cxx
 
+#include <vcl_ctime.h>
 #if defined(como4301) && defined(__linux__)
-# include <time.h>
 # include <sys/types.h>
 # include <sys/select.h>
 # define __USE_BSD
-# include <sys/time.h>
-# undef __USE_BSD
 #endif
+#include <vcl_sys/time.h>
+# undef __USE_BSD
 
 //:
 // \file
@@ -40,9 +40,6 @@
 //
 
 #include "vul_timer.h"
-
-#include <vcl_sys/time.h>
-#include <vcl_ctime.h>
 
 struct vul_timer_data
 {
