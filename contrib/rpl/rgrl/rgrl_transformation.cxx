@@ -292,6 +292,7 @@ void
 rgrl_transformation::
 read( vcl_istream& is )
 {
+  vcl_streampos pos;
   vcl_string tag_str;
 
   // skip any empty lines
@@ -300,6 +301,7 @@ read( vcl_istream& is )
     return;   // reach the end of stream
   
   tag_str="";
+  pos = is.tellg();
   vcl_getline( is, tag_str );
 
   if( tag_str.find("COVARIANCE") == 0 ) {
@@ -329,6 +331,7 @@ read( vcl_istream& is )
       return;   // reach the end of stream
     
     tag_str="";
+    pos = is.tellg();
     vcl_getline( is, tag_str );
   } 
   
@@ -345,5 +348,10 @@ read( vcl_istream& is )
     
     scaling_factors_.set_size( m );
     is >> scaling_factors_;
+    
+    return;
   }
+  
+  // reset the stream pos
+  is.seekg( pos );
 }
