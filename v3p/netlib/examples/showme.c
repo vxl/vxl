@@ -2405,9 +2405,9 @@ REAL yoffset;
 {
   int i, j;
   int index;
-  REAL shiftx, shifty;
+  REAL shiftx = 0.0, shifty = 0.0;
   REAL *prevpoint, *nowpoint;
-  XPoint *vertices;
+  XPoint *vertices = (XPoint *) NULL;
 
   if (color && fillelem && (partition != (int *) NULL)) {
     vertices = (XPoint *) malloc(3 * sizeof(XPoint));
@@ -3114,11 +3114,11 @@ int main(argc, argv)
 int argc;
 char **argv;
 {
-  REAL xmin, ymin, xmax, ymax;
+  REAL xmin = 0.0, ymin = 0.0, xmax = 0.0, ymax = 0.0;
   REAL xptr, yptr, xspan, yspan;
   int past_image;
-  int new_image;
-  int new_inc;
+  int new_image = 0;
+  int new_inc = 0;
 
   parsecommandline(argc, argv);
   showme_init();
