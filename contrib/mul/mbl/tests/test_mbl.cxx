@@ -38,7 +38,6 @@
 void run_test_mbl()
 {
   test_parse_block();
-/*
   test_lda();
   test_file_data_wrapper();
   test_selected_data_wrapper();
@@ -63,7 +62,6 @@ void run_test_mbl()
   test_thin_plate_spline_2d();
   test_thin_plate_spline_3d();
   test_thin_plate_spline_weights_3d();
-*/
   test_read_props();
 }
 
