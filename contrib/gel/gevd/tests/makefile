@@ -6,6 +6,7 @@ include $(IUEROOT)/core/vpl/config.mk
 TESTS += test_gevd_bufferxy.cxx
 TESTS += test_gevd_memory_mixin.cxx
 TESTS += test_gevd_param_mixin.cxx
+TESTS += test_gevd_noise.cxx
 TESTS += test_gevd_float_operators.cxx
 
 #########################################
