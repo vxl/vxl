@@ -15,8 +15,8 @@
 // \relates vil2_image_view
 template <class imType, class vecType>
 void vil2_sample_profile_bilin(vecType* v,
-                           const vil2_image_view<imType>& image,
-                           double x0, double y0, double dx, double dy,
-                           int n);
+                               const vil2_image_view<imType>& image,
+                               double x0, double y0, double dx, double dy,
+                               int n);
 
 #endif // vil2_sample_profile_bilin_h_

@@ -28,7 +28,7 @@
 
 //: Make a new image of given format.
 vil2_image_data_sptr vil2_new_image_data(unsigned ni, unsigned nj, unsigned nplanes,
-                    vil2_pixel_format format)
+                                         vil2_pixel_format format)
 {
   return new vil2_memory_image(ni, nj, nplanes, format);
 }
@@ -37,16 +37,16 @@ vil2_image_data_sptr vil2_new_image_data(unsigned ni, unsigned nj, unsigned npla
 vil2_image_data_sptr vil2_new_image_data(unsigned ni, unsigned nj, vil2_image_data_sptr const& prototype)
 {
   return vil2_new_image_data(ni, nj, prototype->nplanes(),
-    prototype->pixel_format()); 
+                             prototype->pixel_format()); 
 }
 
 
 vil2_image_data_sptr vil2_new_image_data(vil_stream* os,
-                  unsigned ni,
-                  unsigned nj,
-                  unsigned nplanes,
-                  vil2_pixel_format format,
-                  char const* file_format)
+                                         unsigned ni,
+                                         unsigned nj,
+                                         unsigned nplanes,
+                                         vil2_pixel_format format,
+                                         char const* file_format)
 {
   if (!file_format) // avoid segfault in strcmp()
     file_format = "pnm";
@@ -69,27 +69,27 @@ vil2_image_data_sptr vil2_new_image_data(vil_stream* os,
 
 //: Make a new vil2_image_impl, writing to stream "os", size ni x nj, copying pixel format etc from "prototype".
 vil2_image_data_sptr vil2_new_image_data(vil_stream* os,
-                  unsigned ni, unsigned nj,
-                  vil2_image_data_sptr const& prototype,
-                  char const* file_format)
+                                         unsigned ni, unsigned nj,
+                                         vil2_image_data_sptr const& prototype,
+                                         char const* file_format)
 {
   return vil2_new_image_data(os,
-                 prototype->nplanes(),
-                 ni, nj,
-                 prototype->pixel_format(),
-                 file_format ? file_format : prototype->file_format());
+                             prototype->nplanes(),
+                             ni, nj,
+                             prototype->pixel_format(),
+                             file_format ? file_format : prototype->file_format());
 }
 
 //: Make a new vil2_image_impl, writing to file "filename", size "w" x "h", copying pixel format etc from "prototype".
 vil2_image_data_sptr vil2_new_image_data(char const* filename,
-                  unsigned ni, unsigned nj,
-                  vil2_image_data_sptr const& prototype,
-                  char const* file_format)
+                                         unsigned ni, unsigned nj,
+                                         vil2_image_data_sptr const& prototype,
+                                         char const* file_format)
 {
   vil_stream_fstream* os = new vil_stream_fstream(filename, "w");
   return vil2_new_image_data(os,
-                 ni, nj,
-                 prototype->nplanes(),
-                 prototype->pixel_format(),
-                 file_format ? file_format : prototype->file_format());
+                             ni, nj,
+                             prototype->nplanes(),
+                             prototype->pixel_format(),
+                             file_format ? file_format : prototype->file_format());
 }

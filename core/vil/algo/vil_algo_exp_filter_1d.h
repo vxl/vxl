@@ -13,8 +13,8 @@
 //  Uses fast recursive implementation.
 template <class srcT, class destT, class accumT>
 inline void vil2_algo_exp_filter_1d(const srcT* src, int sstep,
-                            destT* dest, int dstep,
-                            int n, double k, accumT)
+                                    destT* dest, int dstep,
+                                    int n, double k, accumT)
 {
   const srcT* s = src;
   const srcT* src_end = src + n*sstep;

@@ -7,10 +7,10 @@
 //: Compute gradients of single plane of 2D data using 3x3 Sobel filters
 //  Computes both i and j gradients of an ni x nj plane of data
 void vil2_algo_sobel_3x3_1plane(const unsigned char* src,
-                       int s_istep, int s_jstep,
-                       float* gi, int gi_istep, int gi_jstep,
-                       float* gj, int gj_istep, int gj_jstep,
-                       unsigned ni, unsigned nj)
+                                int s_istep, int s_jstep,
+                                float* gi, int gi_istep, int gi_jstep,
+                                float* gj, int gj_istep, int gj_jstep,
+                                unsigned ni, unsigned nj)
 {
   const unsigned char* s_data = src;
   float *gi_data = gi;

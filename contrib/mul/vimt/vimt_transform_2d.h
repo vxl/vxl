@@ -147,7 +147,7 @@ class vimt_transform_2d
     vgl_vector_2d<double>  delta(const vgl_point_2d<double> & p, const vgl_vector_2d<double> & dp) const;
 
     friend vimt_transform_2d operator*(const vimt_transform_2d&,
-                                      const vimt_transform_2d&);
+                                       const vimt_transform_2d&);
 
     short version_no() const;
     void print_summary(vcl_ostream&) const;

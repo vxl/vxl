@@ -14,8 +14,9 @@
 //  v[0]..v[np-1] are the values from point p
 template <class imType, class vecType>
 void vimt_sample_profile_bilin(vnl_vector<vecType>& v,
-                           const vimt_image_2d_of<imType>& image,
-                           const vgl_point_2d<double>& p,
-                           const vgl_vector_2d<double>& u,
-                           int n);
+                               const vimt_image_2d_of<imType>& image,
+                               const vgl_point_2d<double>& p,
+                               const vgl_vector_2d<double>& u,
+                               int n);
+
 #endif // vimt_sample_profile_bilin_h_
