@@ -59,7 +59,7 @@ vnl_matrix<vcl_complex<T> > vnl_complexify(vnl_matrix<T> const &re, vnl_matrix<T
 #if 0 // fsm
 //: Vector of absolute values of vnl_complex_vector_t<REAL>.
 template <class T>
-vnl_vector<T> vcnl_abs(vnl_vector<vcl_complex<T> > const & C)
+vnl_vector<T> vnl_abs(vnl_vector<vcl_complex<T> > const & C)
 {
   vnl_vector<T> ret(C.size());
   for (unsigned i = 0; i < C.size(); ++i)
