@@ -72,7 +72,7 @@ vgl_polygon::vgl_polygon(float const* x, float const* y, int n):
 //---------------------------------------------------------------------------
 // Construct with points in the first sheet
 //---------------------------------------------------------------------------
-vgl_polygon::vgl_polygon(vcl_vector<point_t> const& points):
+vgl_polygon::vgl_polygon(sheet_t const& points):
   sheets_(1)
 {
   sheets_[0] = points;
