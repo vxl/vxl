@@ -20,7 +20,7 @@
 
 //: Concrete view of image data of type T held in memory
 //  Views nplanes() planes of data each of size ni() x nj().
-//  The with the (i,j) element of the p'th plane is given by
+//  The (i,j) element of the p'th plane is given by
 //  im.top_left_ptr()[i*im.istep() + j*im.jstep() + p*im.planestep]
 //  The actual image data is either allocated by the class
 //  (using resize), in which case it is deleted
@@ -221,9 +221,6 @@ class vil2_image_view : public vil2_image_view_base
 
   //: Print a 1-line summary of contents
   virtual void print(vcl_ostream&) const;
-
-  //: print all image data to os in a grid (rounds output to int)
-  virtual void print_all(vcl_ostream& os) const;
 
   //: Return class name
   virtual vcl_string is_a() const;

@@ -10,8 +10,9 @@
 // \brief Some standard conversion functions.
 // \author Ian Scott.
 
-#include <vil2/vil2_transform.h>
 #include <vcl_cassert.h>
+#include <vil2/vil2_transform.h>
+#include <vil2/vil2_math.h>
 
 //: Performs conversion between different pixel types.
 // For floating point types to integers it performs rounding.
@@ -78,6 +79,8 @@ inline vxl_int_32 vil2_convert_cast_pixel<double, vxl_int_32>::operator () (doub
 template <class inP, class outP>
 inline void vil2_convert_cast(const vil2_image_view<inP >&src, vil2_image_view<outP >&dest)
 {
+  if (vil2_pixel_format_of(inP()) == vil2_pixel_format_of(outP()))
+    dest = src;
   vil2_transform(src, dest, vil2_convert_cast_pixel<inP, outP>());
 }
 
@@ -147,6 +150,127 @@ inline void vil2_convert_grey_to_rgba(const vil2_image_view<inP >&src, vil2_imag
   assert(src.nplanes() == 1);
   vil2_transform(src, dest, vil2_convert_grey_to_rgba_pixel<inP, outP>());
 }
+
+//: Convert first three planes of src image to grey, assuming rgb.
+// Pixel types can be different. Rounding will take place if appropriate.
+//
+// Default weights convert from linear RGB to CIE luminance assuming a
+// modern monitor.  See Charles Pontyon's Colour FAQ
+// http://www.inforamp.net/~poynton/notes/colour_and_gamma/ColorFAQ.html
+template <class inP, class outP>
+inline void vil2_convert_planes_to_grey(const vil2_image_view<inP>&src,
+                                        vil2_image_view<outP>&dest,
+                                        double rw=0.2125, double gw=0.7154,
+                                        double bw = 0.0721)
+{
+  assert(src.nplanes() >= 3);
+  assert(vil2_pixel_format_num_components(src.pixel_format()) == 1);
+  assert(vil2_pixel_format_num_components(dest.pixel_format()) == 1);
+  dest.resize(src.ni(), src.nj(), 1);
+  for (unsigned j = 0; j < src.nj(); ++j)
+    for (unsigned i = 0; i < src.ni(); ++i)
+      dest(i,j) = vil2_convert_cast_pixel<double,outP>()(
+        src(i,j,0)*rw + src(i,j,1)*gw + src(i,j,2)*bw);
+}
+
+
+//: Create a greyscale image of specified pixel type from any image src.
+// The output may be a reconfigured view of the input.
+// \relates vil2_image_view
+template <class outP>
+inline vil2_image_view<outP> vil2_convert_to_grey_using_average(
+  const vil2_image_view_base_sptr &src, outP dummy)
+{
+  // Check output is scalar component image.
+  assert (vil2_pixel_format_num_components(vil2_pixel_format_of(outP())) == 1);
+
+  // try to do it quickly
+  if (vil2_pixel_format_of(outP()) == src->pixel_format() && src->nplanes() == 1)
+    return vil2_image_view<outP>(src);
+
+  // create output view
+  if (!src) return vil2_image_view<outP>();
+  vil2_image_view<outP> dest;
+
+  // convert via vil2_image_view<double>
+  switch (vil2_pixel_format_component_format(src->pixel_format()))
+  {
+#define macro( F , T ) \
+  case F: { \
+      vil2_image_view<T > src1 = *src; \
+      vil2_image_view<double> dest1; \
+      vil2_math_mean_over_planes(src1, dest1); \
+      vil2_convert_cast(dest1,dest); \
+      break; }
+macro(VIL2_PIXEL_FORMAT_BYTE, vxl_byte )
+macro(VIL2_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+macro(VIL2_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+macro(VIL2_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+macro(VIL2_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+macro(VIL2_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+macro(VIL2_PIXEL_FORMAT_FLOAT , float )
+macro(VIL2_PIXEL_FORMAT_DOUBLE , double )
+#undef macro
+  default:
+    dest.clear();
+  }
+  return dest;
+}
+
+
+//: Create a greyscale image of specified pixel type from any image src.
+// The output may be a reconfigured view of the input.
+// \relates vil2_image_view
+//
+// Default weights convert from linear RGB to CIE luminance assuming a
+// modern monitor.  See Charles Pontyon's Colour FAQ
+// http://www.inforamp.net/~poynton/notes/colour_and_gamma/ColorFAQ.html
+template <class outP>
+inline vil2_image_view<outP> vil2_convert_to_grey_using_rgb_weighting(
+                          const vil2_image_view_base_sptr &src,
+                          outP dummy,
+                          double rw=0.2125,
+                          double gw=0.7154,
+                          double bw=0.0721)
+{
+  // Check output is scalar component image.
+  assert (vil2_pixel_format_num_components(vil2_pixel_format_of(outP())) == 1);
+
+
+  // try to do it quickly
+  if (vil2_pixel_format_of(outP()) == src->pixel_format() && src->nplanes() == 1)
+    return vil2_image_view<outP>(src);
+
+  // create output view
+  if (!src) return vil2_image_view<outP>();
+  vil2_image_view<outP> dest;
+
+  // convert via vil2_image_view<double>
+  switch (vil2_pixel_format_component_format(src->pixel_format()))
+  {
+#define macro( F , T ) \
+  case F: { \
+      vil2_image_view<T > src1 = src; \
+      vil2_image_view<double> dest1; \
+      vil2_convert_planes_to_grey(src1, dest1); \
+      vil2_convert_cast(dest1,dest); \
+      break; }
+macro(VIL2_PIXEL_FORMAT_BYTE, vxl_byte )
+macro(VIL2_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+macro(VIL2_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+macro(VIL2_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+macro(VIL2_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+macro(VIL2_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+macro(VIL2_PIXEL_FORMAT_FLOAT , float )
+macro(VIL2_PIXEL_FORMAT_DOUBLE , double )
+#undef macro
+  default:
+    dest.clear();
+  }
+  return dest;
+}
+
+
 
 
 #endif // vil2_convert_h_

@@ -40,7 +40,7 @@ void test_image_view_byte()
      for (unsigned int x=0;x<image0.ni();++x)
        image0(x,y) = x+y;
 
-  image0.print_all(vcl_cout);
+  vil2_print_all(vcl_cout, image0);
 
   {
     // Test the shallow copy

@@ -50,7 +50,18 @@ vil2_image_view<vil_rgb<vxl_byte> > rgb_image2 = three_plane_image;
   // or explicitly
 rgb_image2 = vil2_view_as_rgb(three_plane_image);
 
+  // If you want a greyscale image no matter whether the underlying image is rgb or grey
+vil2_image_view<vxl_byte> image2 = vil2_convert_to_gray_using_average("my_image.jpg");
+
 \endverbatim
+*
+* There are some conversions that will try a fast view conversion only.
+* - vil2_view_as_planes(view): Create a multi-plane view from a multi-component view.
+* - vil2_view_as_rgb(view): Create an rgb pixel view from a multi-plane view.
+*
+* There are some conversions that will process each pixel to do a conversion.
+* - vil2_convert_to_grey_using_average(view, new_pixel_type): Create an greyscale view from any image.
+* - vil2_convert_cast(source, dest): Convert, for example, a byte image to float image
 *
 * \subsection copying Copying
 * Since the vil2_image_view<T> is a `view' of the actual image data, copying one
@@ -70,8 +81,8 @@ rgb_image2 = vil2_view_as_rgb(three_plane_image);
 * Example of loading, copying then processing:
 * \verbatim
 vil2_image_view<vxl_byte> image;
-image = *vil2_load("test_image.jpg");
-vil2_image_view<vxl_byte> image2 = image.deep_copy();
+image = vil2_load("test_image.jpg");
+vil2_image_view<vxl_byte> image2 = vil2_copy_deep(image);
 vil2_invert_image(image2);
 vil2_save(image2,"output_image.jpg");
 \endverbatim
@@ -82,14 +93,13 @@ unsigned ni=256;
 unsigned nj=256;
 unsigned nplanes=3;
 vil2_image_view<vxl_byte> image(ni,nj,nplanes);
-vxl_byte* plane_data = image.top_left_ptr();
 for (unsigned p=0;p<nplanes;++p)
   for (unsigned j=0;j<nj;++j)
     for (unsigned i=0;i<ni;++i)
       image(i,j,p) = vxl_byte(i+j+p);
 \endverbatim
 *
-* Example of creating an image in memory, using fast pointer arithmetic
+* Example of creating an image in memory, using pointer arithmetic
 * \verbatim
   unsigned ni=256;
   unsigned nj=256;
@@ -126,7 +136,7 @@ for (unsigned p=0;p<nplanes;++p)
 * its transpose.
 * \verbatim
 vil2_image_view<vxl_byte> ;
-src_image = *vil2_load("image_file.jpg");
+src_image = vil2_load("image_file.jpg");
 vil2_image_view<vxl_byte> tmp_image1,tmp_image2;
 vil2_algo_exp_filter_1d(tmp_image1,src_image,k,double());  // Apply filter to rows of src_image
 vil2_algo_exp_filter_1d(tmp_image2,tmp_image1.tranpose(),k,double());  // Apply filter to cols of tmp_image1
@@ -151,7 +161,7 @@ vil2_image_view<vxl_byte> filtered_image = vil2_transpose(tmp_image2);
 * - vil2_fill_row(view,j,value) : Fills row j with value
 * - vil2_fill_col(view,i,value) : Fills col i with value
 *
-* \section image_src Image sources
+* \section image_src Image resources
 * The vil2_image_resource class is an abstract base class for image data, views of which can be
 * obtained (or changed) with the get_view()/put_view() functions.
 * The types of derived classes are

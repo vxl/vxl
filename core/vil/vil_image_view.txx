@@ -581,16 +581,6 @@ void vil2_image_view<T>::print(vcl_ostream& os) const
   os<<nplanes_<<" planes, each "<<ni_<<" x "<<nj_;
 }
 
-//: print all data to os
-template<class T>
-void vil2_image_view<T>::print_all(vcl_ostream& os) const
-{
-  print(os);
-  os<<"  istep: "<<istep_<<" jstep: "<<jstep_<<" planestep: "<<planestep_<<vcl_endl;
-  vcl_cout<<"vil2_image_view<T>::print_all Not complete!"<<vcl_endl;
-}
-
-
 //=======================================================================
 //: True if they share same view of same image data.
 //  This does not do a deep equality on image data. If the images point

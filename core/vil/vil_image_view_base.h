@@ -21,8 +21,11 @@
 class vil2_image_view_base
 {
 protected:
+  //: Number of columns.
   unsigned ni_;
+  //: Number of rasters.
   unsigned nj_;
+  //: Number of planes.
   unsigned nplanes_;
 
   vil2_image_view_base(unsigned ni, unsigned nj, unsigned nplanes):
@@ -46,11 +49,11 @@ public:
   //: The number of pixels.
   unsigned size() const { return ni_ * nj_ * nplanes_; }
 
-  //: resize current planes to width x height
+  //: resize current planes to width x height.
   // If already correct size, this function returns quickly
   virtual void resize(unsigned width, unsigned height) =0;
 
-  //: resize to width x height x nplanes
+  //: resize to width x height x nplanes.
   // If already correct size, this function returns quickly
   virtual void resize(unsigned width, unsigned height, unsigned nplanes) =0;
 
