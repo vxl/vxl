@@ -26,7 +26,7 @@ vnl_matrix<double> arp_covar(const vcl_vector<vnl_vector<double> >& v)
 
 void test_ar_process()
 {
-  const int SIZE = 100;
+  const unsigned int SIZE = 100;
   vcl_cout << "************************\n"
            << " Testing mbl_ar_process\n"
            << "************************\n";
