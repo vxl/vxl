@@ -58,7 +58,7 @@ class vgui_wrapper_tableau : public vgui_tableau
   bool handle(vgui_event const &);
 
   //: Get the bounding box for this tableau.
-  //  Defaults to gettting the bounding box of the child.
+  //  Defaults to getting the bounding box of the child.
   bool get_bounding_box(float low[3], float high[3]) const;
 
   //: The single child of this tableau.
