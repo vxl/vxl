@@ -31,16 +31,12 @@ struct my_tab : public vgui_easy2D_tableau
       vgui_soview* my_so = get_highlighted_soview();
       if (my_so)
       {
-        if (my_so != old_so
-          && my_so->type_name()
-          == "vgui_soview2D_lineseg")
-       {
-         vgui_soview2D_lineseg* my_line =
-           (vgui_soview2D_lineseg*)my_so;
-         // cout its startpoint
-         vcl_cout << my_line->x0 << ","
-           << my_line->y0 << vcl_endl;
-         old_so = my_so;
+        if (my_so != old_so && my_so->type_name() == "vgui_soview2D_lineseg")
+        {
+          vgui_soview2D_lineseg* my_line = (vgui_soview2D_lineseg*)my_so;
+          // cout its startpoint
+          vcl_cout << my_line->x0 << "," << my_line->y0 << vcl_endl;
+          old_so = my_so;
         }
       }
     }
