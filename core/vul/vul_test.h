@@ -41,25 +41,26 @@ void vul_test_assert_near(const vcl_string& msg, double expr,
 #define START(s) vul_test_start(s);
 
 //: TEST function, s is message, test to see if p==v
-#define TEST(s,p,v)   \
- {  \
-  vul_test_begin(s);  \
-  vul_test_perform(p==v); \
+#define TEST(s,p,v) \
+ { \
+  vul_test_begin(s); \
+  vul_test_perform((p)==(v)); \
  }
 
 //: run x, s is message, then test to see if p==v
 #define TEST_RUN(s,x,p,v) \
- {  \
-  x;\
-  vul_test_begin(s);      \
-  vul_test_perform(p==v); \
+ { \
+  x; \
+  vul_test_begin(s); \
+  vul_test_perform((p)==(v)); \
  }
 
 //: summarise test
 #define SUMMARY() vul_test_summary();
 
 //: main test program
-#define TESTMAIN(x) int main() \
-{ vul_test_start(#x); x(); return vul_test_summary(); }
+#undef TESTMAIN
+#define TESTMAIN(x) \
+int main() { vul_test_start(#x); x(); return vul_test_summary(); }
 
 #endif // vul_test_h_
