@@ -202,6 +202,12 @@ void vgui_composite::remove(vgui_tableau_sptr const& t) {
     vcl_cerr << __FILE__ " : no such child tableau" << vcl_endl;
 }
 
+void vgui_composite::clear() {
+  children.clear();
+  active.clear();
+  notify();
+}
+
 // virtual
 bool vgui_composite::remove_child(vgui_tableau_sptr const &t) {
   vcl_vector<bool>::iterator ia = active.begin();
