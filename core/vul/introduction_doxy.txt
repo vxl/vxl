@@ -13,4 +13,7 @@
 * - vul_awk : Read text files, breaking each line into fields.
 * - vul_reg_exp : Regular expression matching.
 *
+* \section Lead Developer
+* Fred Wheeler is responsible for co-ordinating significant changes to vul.
+* http://sourceforge.net/sendmessage.php?touser=360434
 */

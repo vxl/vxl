@@ -10,4 +10,8 @@
 * - vsl_b_write(os,object);
 * - vsl_b_read(is,object&);
 *
+* \section Lead Developer
+* Ian Scott is responsible for co-ordinating significant changes to vsl.
+* http://sourceforge.net/sendmessage.php?touser=261110
+*
 */

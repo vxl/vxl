@@ -74,4 +74,7 @@
 * - vnl_bignum
 * - vnl_finite
 *
+* \section Lead Developer
+* Amitha Perera is responsible for co-ordinating significant changes to vnl.
+* http://sourceforge.net/sendmessage.php?touser=237910
 */

@@ -302,10 +302,13 @@ vil_image_view<vxl_byte> filtered_image = vil_transpose(tmp_image2);
 * - Specifying a pixel  - func(i,j) assumes plane 0 or func(i,j,p)
 * - Specifying a window - func(i0,ni,j0,nj) window includes all planes.
 *
-* \section Examples examples
+* \section Examples Examples
 * There are plenty of working examples in the examples subdirectory - these can
 * be treated as a mini-tutorial.
 *
+* \section Lead Developer
+* Ian Scott is responsible for co-ordinating significant changes to vil.
+* http://sourceforge.net/sendmessage.php?touser=261110
 */
 
 

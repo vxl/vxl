@@ -1,4 +1,8 @@
 // The following text is included in the main documentation page by doxygen
 /*! \mainpage vpl : Posix Compatability Library
-* A set of functions which should ensure Posix compliance across platforms.
+* A set of Posix compliant functions which should work across platforms.
+*
+* \section Lead Developer
+* Fred Wheeler is responsible for co-ordinating significant changes to vpl.
+* http://sourceforge.net/sendmessage.php?touser=360434
 */

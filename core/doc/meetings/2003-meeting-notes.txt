@@ -96,9 +96,10 @@ Everyone is happy with the new CMake package export mechanism and
 try-compile configuration process.  Nobody has any concern about VXL
 relying entirely on CMake for configuration.
 
-Ian Scott had some concern/issue about text substitution affecting the
-CMake config files wholly and the autoconf files partially that we
-cannot fully recall. (fixme)
+Ian Scott noted that there are still some files in vcl and the root
+that are used by the configure system. When editing the cmake files,
+it is easy to mistakenly edit these ones as well, so breaking any build
+that uses configure.
 
 Agreed that unless someone is willing to maintain autoconf
 configuration, support for it may be dropped.
@@ -129,13 +130,17 @@ code markup to do this.  The process is mostly automatic.  By-hand
 configuration is required to do special conversions, like vnl vectors
 to Matlab vectors.
 
+Manchester has done some work on automating matlab wrapping using
+CABLE, and are happy to release it if someone wants to carry on
+the work.
+
 ----------------------------------------------------------------------------
 
 6. Moving netlib from LINPACK to LAPACK
 
 In the numerical processing community there is no contesting that
 LAPACK is superior to LINPACK.  LAPACK is faster and more accurate.
-It is possible that LAPACK is reentrant, but that needs confirmation.
+Someone should check LAPACK really is thread safe.
 
 It is desirable for vnl to use LAPACK instead of LINPACK.  This
 transition could be done incrementally.  Ian will write this up in the

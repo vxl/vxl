@@ -15,4 +15,8 @@
 * - vbl_sparse_array_2d : A simple two dimensional sparse array
 * - vbl_sparse_array_3d : A simple three dimensional sparse array
 *
+* \section Lead Developer
+* Fred Wheeler is responsible for co-ordinating significant changes to vbl.
+* http://sourceforge.net/sendmessage.php?touser=360434
+*
 */

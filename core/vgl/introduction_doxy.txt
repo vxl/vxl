@@ -21,4 +21,8 @@
 * and separate for cartesian and homogeneous representations.
 *
 * All representation classes are templated on the computational numeric type.
+*
+* \section Lead Developer
+* Peter Vanroose is responsible for co-ordinating significant changes to vgl.
+* http://sourceforge.net/sendmessage.php?touser=290414
 */

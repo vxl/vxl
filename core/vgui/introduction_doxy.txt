@@ -59,4 +59,8 @@
 *
 * There are more examples for VGUI on the VXL webpage and in oxl/vgui/examples.
 * Also xcv uses VGUI and you can find its code in oxl/xcv.
+*
+* \section Lead Developer
+* Amitha Perera is responsible for co-ordinating significant changes to vgui.
+* http://sourceforge.net/sendmessage.php?touser=237910
 */
