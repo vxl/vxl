@@ -121,6 +121,20 @@ void test_determinant() {
     testlib_test_assert_near("4x4 vnl_determinant(double, ...)", vnl_determinant(N4[0],N4[1],N4[2],N4[3]), d4, eps);
     vnl_matrix_fixed<double,4,4> n_4 = n4;
     testlib_test_assert_near("vnl_det(vnl_matrix_fixed<double,4,4>)", vnl_det(n_4), d4, eps);
+
+    double N5[5][5] = {
+      { 1, 0,        0,         0,        0       },
+      { 0, N4[0][0], N4[0][1], N4[0][2], N4[0][3] },
+      { 0, N4[1][0], N4[1][1], N4[1][2], N4[1][3] },
+      { 0, N4[2][0], N4[2][1], N4[2][2], N4[2][3] },
+      { 0, N4[3][0], N4[3][1], N4[3][2], N4[3][3] }
+    };
+    vnl_matrix<double> n5(&N5[0][0],5,5);
+    double d5 = qr_det(n5);
+    testlib_test_assert_near("5x5 qr_det equals 4x4 one", d5, d4, eps);
+    testlib_test_assert_near("5x5 vnl_determinant(vnl_matix<double>)", vnl_determinant(n5), d5, eps);
+    vnl_matrix_fixed<double,5,5> n_5 = n5;
+    testlib_test_assert_near("vnl_determinant(vnl_matrix_fixed<double,5,5>)", vnl_determinant(n_5), d5, eps);
   }
 }
 
