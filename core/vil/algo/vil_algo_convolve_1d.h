@@ -62,7 +62,7 @@ enum vil2_convolve_boundary_option {
 };
 
 //: Convolve edge with kernel[x*kstep] x in [k_lo,k_hi] (k_lo<=0)
-//  Fills only edge: dest[i], i=0..(1-k_lo)
+//  Fills only edge: dest[i], i=0..(-k_lo-1)
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil2_algo_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
                                        destT* dest, int d_step,
@@ -103,14 +103,14 @@ inline void vil2_algo_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
         if ((i+j)<0) sum+=src[0]*kernel[j*kstep];
         else         sum+=src[(i+j)*s_step]*kernel[j*kstep];
       }
-      dest[i]=sum;
+      dest[i*d_step]=sum;
     }
   }
   else
   if (option==vil2_convolve_periodic_extend)
   {
     // Assume src[i]=src[0] for i<0
-    int i_max = 1-k_lo;
+    int i_max = -1-k_lo;
     for (int i=0;i<=i_max;++i)
     {
       accumT sum=0;
@@ -119,20 +119,20 @@ inline void vil2_algo_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
         if ((i+j)<0) sum+=src[0]*kernel[j*kstep];
         else         sum+=src[(i+j)*s_step]*kernel[j*kstep];
       }
-      dest[i]=sum;
+      dest[i*d_step]=sum;
     }
   }
   else
   if (option==vil2_convolve_reflect_extend)
   {
     // Assume src[i]=src[n+i] for i<0
-    int i_max = 1-k_lo;
+    int i_max = -1-k_lo;
     for (int i=0;i<=i_max;++i)
     {
       accumT sum=0;
       for (int j=k_lo;j<=k_hi;++j)
         sum+=src[((i+j+n)%n)*s_step]*kernel[j*kstep];
-      dest[i]=sum;
+      dest[i*d_step]=sum;
     }
   }
   else
@@ -142,7 +142,7 @@ inline void vil2_algo_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
     accumT k_sum_all=0;
     for (int j=k_lo;j<=k_hi;++j) k_sum_all+=kernel[j*kstep];
 
-    int i_max = 1-k_lo;
+    int i_max = -1-k_lo;
     for (int i=0;i<=i_max;++i)
     {
       accumT sum=0;
@@ -154,7 +154,7 @@ inline void vil2_algo_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
         sum+=src[(i+j)*s_step]*kernel[j*kstep];
         k_sum += kernel[j*kstep];
       }
-      dest[i]=sum*k_sum_all/k_sum;
+      dest[i*d_step]=sum*k_sum_all/k_sum;
     }
   }
   else
