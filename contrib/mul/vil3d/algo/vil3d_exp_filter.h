@@ -63,7 +63,7 @@ inline void vil3d_exp_filter(const vil3d_image_view<srcT>& src_im,
     // Note that smooth_j is nj * ni * nk
 
   // Smooth along k axis
-	dest_im.set_size(src_im.nj(),src_im.ni(),src_im.nk(),src_im.nplanes());
+	dest_im.set_size(src_im.ni(),src_im.nj(),src_im.nk(),src_im.nplanes());
   vil3d_image_view<destT> dest_kij = vil3d_switch_axes_kij(dest_im);
 
 	// Use of vil3d_switch_axes_kji ensures axes are nk*ni*nj to match dest_kij
