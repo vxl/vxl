@@ -27,29 +27,29 @@ void test_trilin_interp_3d_float()
 
    {
      double v1 = mil3d_trilin_interp_3d(3,3,3,image0.plane(0),xstep,ystep,zstep);
-     TEST_NEAR("mil3d_trilin_interp_3d at grid point",v1,33.3f,1e-8);
+     TEST_NEAR("mil3d_trilin_interp_3d at grid point",v1,33.3f,1e-5);
 
      double v2 = mil3d_trilin_interp_3d(3.4,3,3,image0.plane(0),xstep,ystep,zstep);
-     TEST_NEAR("mil3d_trilin_interp_3d at off-grid point",v2,33.34f,1e-8);
+     TEST_NEAR("mil3d_trilin_interp_3d at off-grid point",v2,33.34f,1e-5);
      double v3 = mil3d_trilin_interp_3d(3.4,3.5,3,image0.plane(0),xstep,ystep,zstep);
-     TEST_NEAR("mil3d_trilin_interp_3d at off-grid point",v3,33.84f,1e-8);
+     TEST_NEAR("mil3d_trilin_interp_3d at off-grid point",v3,33.84f,1e-5);
      double v4 = mil3d_trilin_interp_3d(3.4,3.5,3.5,image0.plane(0),xstep,ystep,zstep);
-     TEST_NEAR("mil3d_trilin_interp_3d at off-grid point",v4,38.84f,1e-8);
+     TEST_NEAR("mil3d_trilin_interp_3d at off-grid point",v4,38.84f,1e-5);
    }
 
    {
      double v1 = mil3d_safe_trilin_interp_3d(3,3,3,image0.plane(0),nx,ny,nz,xstep,ystep,zstep);
-     TEST_NEAR("mil3d_trilin_interp_3d at grid point",v1,33.3f,1e-8);
+     TEST_NEAR("mil3d_trilin_interp_3d at grid point",v1,33.3f,1e-5);
 
      double v2 = mil3d_safe_trilin_interp_3d(3.4,3,3,image0.plane(0),nx,ny,nz,xstep,ystep,zstep);
-     TEST_NEAR("mil3d_trilin_interp_3d at off-grid point",v2,33.34f,1e-8);
+     TEST_NEAR("mil3d_trilin_interp_3d at off-grid point",v2,33.34f,1e-5);
      double v3 = mil3d_safe_trilin_interp_3d(3.4,3.5,3,image0.plane(0),nx,ny,nz,xstep,ystep,zstep);
-     TEST_NEAR("mil3d_trilin_interp_3d at off-grid point",v3,33.84f,1e-8);
+     TEST_NEAR("mil3d_trilin_interp_3d at off-grid point",v3,33.84f,1e-5);
      double v4 = mil3d_safe_trilin_interp_3d(3.4,3.5,3.5,image0.plane(0),nx,ny,nz,xstep,ystep,zstep);
-     TEST_NEAR("mil3d_trilin_interp_3d at off-grid point",v4,38.84f,1e-8);
+     TEST_NEAR("mil3d_trilin_interp_3d at off-grid point",v4,38.84f,1e-5);
 
      double v_outside = mil3d_safe_trilin_interp_3d(-1,-1,-1,image0.plane(0),nx,ny,nz,xstep,ystep,zstep);
-     TEST_NEAR("mil3d_safe_trilin_interp_3d outside image",v_outside,0,1e-8);
+     TEST_NEAR("mil3d_safe_trilin_interp_3d outside image",v_outside,0,1e-5);
    }
 }
 

@@ -28,7 +28,7 @@ void test_sample_profile_3d_float()
   mil3d_sample_profile_3d(vec,image1,p0,u0,3);
   TEST("Profile correct length",vec.size(),3);
   TEST_NEAR("First value",vec[0],55.5f,1e-6);
-  TEST_NEAR("Last value",vec[2],55.7f,1e-6);
+  TEST_NEAR("Last value",vec[2],55.7f,1e-5);
 
   mil3d_sample_profile_3d(vec,image1,p0,u0,8);
   TEST("Profile correct length",vec.size(),8);

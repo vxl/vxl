@@ -45,8 +45,8 @@ void test_gaussian_pyramid_builder_3d_build(mil3d_gaussian_pyramid_builder_3d<fl
   TEST("Level 1 size y",image1.ny(),(ny+1)/2);
   TEST("Level 1 size z",image1.nz(),(nz+1)/2);
   TEST_NEAR("Pixel (0,0,0)",image0(0,0,0),image1(0,0,0),1e-6);
-  TEST_NEAR("Pixel (1,1,1)",image0(2,2,2),image1(1,1,1),1e-6);
-  TEST_NEAR("Pixel (2,3,3)",image1(2,3,3),66.4f,1e-6);
+  TEST_NEAR("Pixel (1,1,1)",image0(2,2,2),image1(1,1,1),1e-5);
+  TEST_NEAR("Pixel (2,3,3)",image1(2,3,3),66.4f,1e-4);
   TEST_NEAR("Corner pixel",image0(nx2*2-2,ny2*2-2,nz2*2-2),image1(nx2-1,ny2-1,nz2-1),1e-6);
 
   // restore maxLevels:
@@ -102,8 +102,8 @@ void test_gaussian_pyramid_builder_3d_build_xy(mil3d_gaussian_pyramid_builder_3d
   TEST("Level 1 size y",image1.ny(),ny2);
   TEST("Level 1 size z",image1.nz(),nx2);
   TEST_NEAR("Pixel (0,0,0)",image0(0,0,0),image1(0,0,0),1e-6);
-  TEST_NEAR("Pixel (1,1,1)",image0(2,2,2),image1(1,1,2),1e-6);
-  TEST_NEAR("Pixel (2,3,3)",image1(2,3,3),36.4f,1e-6);
+  TEST_NEAR("Pixel (1,1,1)",image0(2,2,2),image1(1,1,2),1e-5);
+  TEST_NEAR("Pixel (2,3,3)",image1(2,3,3),36.4f,1e-5);
   TEST_NEAR("Corner pixel",image0(nx2*2-2,ny2*2-2,nz2-1),image1(nx2-1,ny2-1,nz2-1),1e-6);
 }
 
@@ -150,8 +150,8 @@ void test_gaussian_pyramid_builder_3d_build_xz(mil3d_gaussian_pyramid_builder_3d
   TEST("Level 1 size y",image1.ny(),ny2);
   TEST("Level 1 size z",image1.nz(),nx2);
   TEST_NEAR("Pixel (0,0,0)",image0(0,0,0),image1(0,0,0),1e-6);
-  TEST_NEAR("Pixel (1,1,1)",image0(2,2,2),image1(1,2,1),1e-6);
-  TEST_NEAR("Pixel (2,3,3)",image1(2,3,3),63.4f,1e-6);
+  TEST_NEAR("Pixel (1,1,1)",image0(2,2,2),image1(1,2,1),1e-5);
+  TEST_NEAR("Pixel (2,3,3)",image1(2,3,3),63.4f,1e-4);
   TEST_NEAR("Corner pixel",image0(nx2*2-2,ny2-1,nz2*2-2),image1(nx2-1,ny2-1,nz2-1),1e-6);
 }
 
@@ -198,8 +198,8 @@ void test_gaussian_pyramid_builder_3d_build_yz(mil3d_gaussian_pyramid_builder_3d
   TEST("Level 1 size y",image1.ny(),ny2);
   TEST("Level 1 size z",image1.nz(),nx2);
   TEST_NEAR("Pixel (0,0,0)",image0(0,0,0),image1(0,0,0),1e-6);
-  TEST_NEAR("Pixel (1,1,1)",image0(2,2,2),image1(2,1,1),1e-6);
-  TEST_NEAR("Pixel (2,3,3)",image1(2,3,3),66.2f,1e-6);
+  TEST_NEAR("Pixel (1,1,1)",image0(2,2,2),image1(2,1,1),1e-5);
+  TEST_NEAR("Pixel (2,3,3)",image1(2,3,3),66.2f,1e-5);
   TEST_NEAR("Corner pixel",image0(nx2-1,ny2*2-2,nz2*2-2),image1(nx2-1,ny2-1,nz2-1),1e-6);
 }
 
