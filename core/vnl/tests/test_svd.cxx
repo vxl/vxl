@@ -28,12 +28,11 @@ template <class T, class S>
 void test_hilbert(T /*dummy*/, char const* type, S residual)
 {
   typedef typename vnl_numeric_traits<T>::abs_t abs_t;
-  typedef typename vnl_numeric_traits<T>::real_t real_t;
   // Test inversion and recomposition of 5x5 hilbert matrix
   vnl_matrix<T> H(5,5);
   for (int i = 0; i < 5; ++i)
     for (int j = 0; j < 5; ++j)
-      H(i,j) = T(1) / real_t(abs_t(i+j+1)); // sic, because i,j are zero based
+      H(i,j) = T(1) / T(abs_t(i+j+1)); // sic, because i,j are zero based
 
   vcl_cout << "H = <"<<type<<">[ " << H << "]\n";
 
