@@ -11,6 +11,7 @@ exec perl -w -x $0 ${1+"$@"}
 
 use Cwd;
 use Getopt::Std;
+use File:Basename;
 
 #---------------------------------------------------------------------
 #   update_webserver.pl -v vxlsrc -s script_dir -l ctrl_file [-o outputdir] -u -f
@@ -95,10 +96,13 @@ if (! -e $doxyoutputdir)
 # Update the data directory
 if ($cvsupflag)
 {
-  chdir $data_dir || die "Unable to chdir to $data_dir\n";
+  my $ctrl_list_dir = dirname($ctrl_list);
+  my $ctrl_list_file = filename($ctrl_list);
+
+  chdir $ctrl_list_dir || die "Unable to chdir to $ctrl_list_dir\n";
 
   print "Checking for update of library lists etc.\n";
-  $changes = `cvs -q up -d`;
+  $changes = `cvs -q up -d $ctrl_list_file`;
 
   if ($changes)
   {
