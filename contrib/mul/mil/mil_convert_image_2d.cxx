@@ -83,3 +83,88 @@ void mil_convert_image_2d(mil_image_2d_of<vil_byte>& dest,
   }
   dest.setWorld2im(src.world2im());
 }
+
+//: Convert 3plane RGB image to 1 plane greyscale image
+void mil_rgb_to_greyscale(mil_image_2d_of<vil_byte>& g_im,
+                          const mil_image_2d_of<vil_byte>& rgb_im)
+{
+  assert(rgb_im.n_planes()==3);
+
+  int nx = rgb_im.nx();
+  int ny = rgb_im.ny();
+  g_im.resize(nx,ny);
+  int cxstep=rgb_im.xstep();
+  int cystep=rgb_im.ystep();
+  int gxstep=g_im.xstep();
+  int gystep=g_im.ystep();
+
+	const vil_byte* c0_row = rgb_im.plane(0);
+	const vil_byte* c1_row = rgb_im.plane(1);
+	const vil_byte* c2_row = rgb_im.plane(2);
+  vil_byte* grey_row = g_im.plane(0);
+
+  for (int y=0;y<ny;++y)
+  {
+    const vil_byte* c0 = c0_row;
+    const vil_byte* c1 = c1_row;
+    const vil_byte* c2 = c2_row;
+    vil_byte * g = grey_row;
+
+    for (int x=0;x<nx;++x)
+    {
+      *g = vil_byte((int(*c0)+int(*c1)+int(*c2))/3);
+      g+=gxstep;
+      c0+=cxstep;
+      c1+=cxstep;
+      c2+=cxstep;
+    }
+    grey_row += gystep;
+    c0_row += cystep;
+    c1_row += cystep;
+    c2_row += cystep;
+  }
+  g_im.setWorld2im(rgb_im.world2im());
+}
+
+//: Convert 3plane RGB image to 1 plane greyscale image
+void mil_rgb_to_greyscale(mil_image_2d_of<float>& g_im,
+                          const mil_image_2d_of<float>& rgb_im)
+{
+  assert(rgb_im.n_planes()==3);
+
+  int nx = rgb_im.nx();
+  int ny = rgb_im.ny();
+  g_im.resize(nx,ny);
+  int cxstep=rgb_im.xstep();
+  int cystep=rgb_im.ystep();
+  int gxstep=g_im.xstep();
+  int gystep=g_im.ystep();
+
+	const float* c0_row = rgb_im.plane(0);
+	const float* c1_row = rgb_im.plane(1);
+	const float* c2_row = rgb_im.plane(2);
+  float* grey_row = g_im.plane(0);
+
+  for (int y=0;y<ny;++y)
+  {
+    const float* c0 = c0_row;
+    const float* c1 = c1_row;
+    const float* c2 = c2_row;
+    float * g = grey_row;
+
+    for (int x=0;x<nx;++x)
+    {
+      *g = ((*c0)+(*c1)+(*c2))/3;
+      g+=gxstep;
+      c0+=cxstep;
+      c1+=cxstep;
+      c2+=cxstep;
+    }
+    grey_row += gystep;
+    c0_row += cystep;
+    c1_row += cystep;
+    c2_row += cystep;
+  }
+  g_im.setWorld2im(rgb_im.world2im());
+}
+

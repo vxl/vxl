@@ -23,4 +23,13 @@ void mil_convert_image_2d(mil_image_2d_of<vil_byte>& dest_im,
                           const mil_image_2d_of<float>& src_im,
                           double scale, double offset);
 
+//: Convert 3plane RGB image to 1 plane greyscale image
+void mil_rgb_to_greyscale(mil_image_2d_of<vil_byte>& g_im,
+                          const mil_image_2d_of<vil_byte>& rgb_im);
+
+//: Convert 3plane RGB image to 1 plane greyscale image
+void mil_rgb_to_greyscale(mil_image_2d_of<float>& g_im,
+                          const mil_image_2d_of<float>& rgb_im);
+
+
 #endif // mil_convert_image_2d_h_
