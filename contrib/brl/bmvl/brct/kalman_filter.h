@@ -1,7 +1,7 @@
 //:
 // \file
 // \author Kongbin Kang
-// \brief interface for the kalman_filter class.
+// \brief A class to attack structure from motion problem
 //
 //////////////////////////////////////////////////////////////////////
 
