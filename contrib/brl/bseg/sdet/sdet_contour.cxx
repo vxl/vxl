@@ -815,6 +815,7 @@ void fill_cycle_gap(vdgl_edgel_chain_sptr const & ec)
                                        sdet_contour::debug_);
 }
 
+#if 0 // unused local function
 static bool
 ConfirmJunctionOnCycle(int index, float threshold,
                        vtol_edge_2d& cycle, const gevd_bufferxy& edgels)
@@ -846,7 +847,7 @@ ConfirmJunctionOnCycle(int index, float threshold,
   return false;
 #endif // 1
 }
-
+#endif // 0
 
 //:
 // Break the cycle at given index, and create new cycle from/to
@@ -915,7 +916,7 @@ void sdet_contour::BreakCycle(vtol_vertex_2d_sptr const& junction,
   //  btol_edge_algs::unlink_all_inferiors_twoway(stronger); done in lookup tab
 }
 
-
+#if 0 // unused local function
 //: Confirm there is a strong jump in response near a junction.
 // The location of this jump is however inaccurate, and so junctions
 // can not be localized accurately along the stronger chain.
@@ -957,6 +958,7 @@ ConfirmJunctionOnChain(int index, float threshold,
   return false;
 #endif // 1
 }
+#endif // 0
 
 vtol_vertex_2d_sptr get_vertex_at_index(vtol_edge_2d_sptr& e, int index)
 {
