@@ -25,6 +25,11 @@ struct {
 /* Table of constant values */
 static doublereal c_b41 = 1.;
 
+#ifdef _MSC_VER
+// This needs to be before the start of the function that contains the offending code
+# pragma warning ( disable : 4756)
+#endif
+
 /* ====================================================================== */
 /* NIST Guide to Available Math Software.                                 */
 /* Fullsource for module 493 from package TOMS.                           */
