@@ -21,16 +21,17 @@ rgrl_est_reduced_quad2d( unsigned int dimension,
                          double condition_num_thrd )
   : condition_num_thrd_( condition_num_thrd )
 {
+  assert (dimension == 2);
   // Derive the parameter_dof from the dimension
   //
-  unsigned int param_dof = 6; //It is always for 2D 
+  unsigned int param_dof = 3*dimension; //It is always for 2D
 
   // Pass the two variable to the parent class, where they're stored
   //
   rgrl_estimator::set_param_dof( param_dof );
 }
 
-rgrl_transformation_sptr 
+rgrl_transformation_sptr
 rgrl_est_reduced_quad2d::
 estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
           rgrl_transformation const& /*cur_transform*/ ) const
@@ -44,10 +45,10 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // looking at the dimension of one of the data points.
   //
   unsigned ms = 0;
-  while( ms < matches.size() &&
-         matches[ms]->from_begin() == matches[ms]->from_end() )
+  while ( ms < matches.size() &&
+          matches[ms]->from_begin() == matches[ms]->from_end() )
     ++ms;
-  if( ms == matches.size() ) {
+  if ( ms == matches.size() ) {
     DebugMacro( 0, "No data!\n" );
     return 0; // no data!
   }
@@ -77,10 +78,10 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   vnl_vector<double> from_pt( m );
   vnl_vector<double> to_pt( m );
   double sum_wgt = 0.0;
-  for( unsigned ms=0; ms < matches.size(); ++ms ) {
+  for ( unsigned ms=0; ms < matches.size(); ++ms ) {
     rgrl_match_set const& match_set = *matches[ms];
-    for( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
-      for( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {
+    for ( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
+      for ( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {
         double const wgt = ti.cumulative_weight();
         from_pt = fi.from_feature()->location();
         from_centre += from_pt * wgt;
@@ -98,10 +99,10 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // Since XtWX is symmetric, we only compute the upper triangle, and
   // copy it later into the lower triangle.
   unsigned count=0;
-  for( unsigned ms=0; ms < matches.size(); ++ms ) {
+  for ( unsigned ms=0; ms < matches.size(); ++ms ) {
     rgrl_match_set const& match_set = *matches[ms];
-    for( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
-      for( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {
+    for ( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
+      for ( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {
         from_pt = fi.from_feature()->location();
         from_pt -= from_centre;
         to_pt = ti.to_feature()->location();
@@ -117,7 +118,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
         // For each constraint, add w*XtBX to XtWX
         //
         // X  = [px^2+py^2 0 px -py 1 0; 0 px^2+py^2 py px 0 1]
-        vnl_matrix<double> D( 2, 6, 0.0 ); 
+        vnl_matrix<double> D( 2, 6, 0.0 );
         D(0,0) = D(1,1) = vnl_math_sqr(from_pt[0]) + vnl_math_sqr(from_pt[1]);
         D(0,2) = D(1,3) = from_pt[0];
         D(0,3) = -from_pt[1];
@@ -161,17 +162,17 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // look non-zero, so we correct for that.
   svd.zero_out_relative();
 
-  if( (unsigned)svd.rank() < 6) {
+  if ( (unsigned)svd.rank() < 6) {
     DebugMacro(1, "rank ("<<svd.rank()<<") < "<<6<<"; no solution." );
     DebugMacro_abv(1, "(used " << count << " correspondences)\n" );
     return 0; // no solution
   }
   double cond_num = svd.well_condition();
   if ( condition_num_thrd_ > cond_num ) {
-    DebugMacro(1, "Unstable xform with condition number = "<<cond_num<<"\n" );
+    DebugMacro(1, "Unstable xform with condition number = "<<cond_num<<'\n' );
     return 0; //no solution
   }
-  
+
   // Compute the solution into XtWy
   //
   vnl_matrix<double> covar = svd.inverse();

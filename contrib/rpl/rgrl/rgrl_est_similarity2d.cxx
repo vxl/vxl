@@ -14,9 +14,10 @@
 rgrl_est_similarity2d::
 rgrl_est_similarity2d( unsigned int dimension )
 {
+  assert (dimension == 2);
   // Derive the parameter_dof from the dimension
   //
-  unsigned int param_dof = 4; //It is always for 2D 
+  unsigned int param_dof = 2*dimension; //It is always for 2D 
 
   // Pass the two variable to the parent class, where they're stored
   //
@@ -37,10 +38,10 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // looking at the dimension of one of the data points.
   //
   unsigned ms = 0;
-  while( ms < matches.size() &&
-         matches[ms]->from_begin() == matches[ms]->from_end() )
+  while ( ms < matches.size() &&
+          matches[ms]->from_begin() == matches[ms]->from_end() )
     ++ms;
-  if( ms == matches.size() ) {
+  if ( ms == matches.size() ) {
     DebugMacro( 0, "No data!\n" );
     return 0; // no data!
   }
@@ -70,10 +71,10 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   vnl_vector<double> from_pt( m );
   vnl_vector<double> to_pt( m );
   double sum_wgt = 0.0;
-  for( unsigned ms=0; ms < matches.size(); ++ms ) {
+  for ( unsigned ms=0; ms < matches.size(); ++ms ) {
     rgrl_match_set const& match_set = *matches[ms];
-    for( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
-      for( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {
+    for ( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
+      for ( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {
         double const wgt = ti.cumulative_weight();
         from_pt = fi.from_feature()->location();
         from_centre += from_pt * wgt;
@@ -92,10 +93,10 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // Compute XtWX is symmetric.
   //
   unsigned count=0;  //for debugging
-  for( unsigned ms=0; ms < matches.size(); ++ms ) {
+  for ( unsigned ms=0; ms < matches.size(); ++ms ) {
     rgrl_match_set const& match_set = *matches[ms];
-    for( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
-      for( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {
+    for ( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
+      for ( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {
         from_pt = fi.from_feature()->location();
         from_pt -= from_centre;
         to_pt = ti.to_feature()->location();
@@ -146,7 +147,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // look non-zero, so we correct for that.
   svd.zero_out_relative();
 
-  if( (unsigned)svd.rank() < 4) {
+  if ( (unsigned)svd.rank() < 4) {
     DebugMacro(1, "rank ("<<svd.rank()<<") < 4; no solution." );
     DebugMacro_abv(1, "(used " << count << " correspondences)\n" );
     return 0; // no solution
