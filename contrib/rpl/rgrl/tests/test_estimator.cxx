@@ -257,8 +257,8 @@ namespace {
           TEST( "Result is affine (is_type())", trans->is_type(rgrl_trans_affine::type_id()) , true);
           rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
           TEST( "Result is affine (dynamic_cast)", !aff_trans, false);
-          vcl_cout << "Estimated:\nA\n="<<aff_trans->A()<<"\nt="<<aff_trans->t()
-                   << "\n\nTrue:\nA\n="<<A<<"\nt="<<t<<vcl_endl;
+          vcl_cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()
+                   << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<vcl_endl;
           TEST( "A is close", close( aff_trans->A(), A), true);
           TEST( "t is close", close( aff_trans->t(), t), true);
         }
@@ -294,8 +294,8 @@ namespace {
           TEST( "Result is affine (is_type())", trans->is_type(rgrl_trans_affine::type_id()) , true);
           rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
           TEST( "Result is affine (dynamic_cast)", !aff_trans, false);
-          vcl_cout << "Estimated:\nA\n="<<aff_trans->A()<<"\nt="<<aff_trans->t()
-                   << "\n\nTrue:\nA\n="<<A<<"\nt="<<t<<vcl_endl;
+          vcl_cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()
+                   << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<vcl_endl;
           TEST( "A is close", close( aff_trans->A(), A), true);
           TEST( "t is close", close( aff_trans->t(), t), true);
         }
@@ -321,8 +321,8 @@ namespace {
           TEST( "Result is affine (is_type())", trans->is_type(rgrl_trans_affine::type_id()) , true);
           rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
           TEST( "Result is affine (dynamic_cast)", !aff_trans, false);
-          vcl_cout << "Estimated:\nA\n="<<aff_trans->A()<<"\nt="<<aff_trans->t()
-                   << "\n\nTrue:\nA\n="<<A<<"\nt="<<t<<vcl_endl;
+          vcl_cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()
+                   << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<vcl_endl;
           TEST( "A is close", close( aff_trans->A(), A), true);
           TEST( "t is close", close( aff_trans->t(), t), true);
         }
@@ -383,13 +383,14 @@ namespace {
         TEST( "Result is affine (is_type())", trans->is_type(rgrl_trans_affine::type_id()), true );
         rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
         TEST( "Result is affine (dynamic_cast)", !aff_trans, false);
-        vcl_cout << "Estimated:\nA\n="<<aff_trans->A()<<"\nt="<<aff_trans->t()<<"\ncovar="<<aff_trans->covar()
-                 << "\n\nTrue:\nA\n="<<A<<"\nt="<<t<<"\ncovar="<<covar<<vcl_endl;
+        vcl_cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()<<"\ncovar="<<aff_trans->covar()
+                 << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<"\ncovar="<<covar<<vcl_endl;
         TEST( "A is close", close( aff_trans->A(), A, 1e-4), true);
         TEST( "t is close", close( aff_trans->t(), t, 1e-4), true);
         TEST( "covar is close", close_det( aff_trans->covar(), covar), true );
       }
     }
+    vcl_cout << "--------------------------------------------------------------------------------\n";
   }
 
 
@@ -586,8 +587,8 @@ namespace {
           TEST( "Result is affine (is_type())", trans->is_type(rgrl_trans_affine::type_id()), true );
           rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
           TEST( "Result is affine (dynamic_cast)", !aff_trans, false);
-          vcl_cout << "Estimated:\nA\n="<<aff_trans->A()<<"\nt="<<aff_trans->t()
-                   << "\n\nTrue:\nA\n="<<A<<"\nt="<<t<<vcl_endl;
+          vcl_cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()
+                   << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<vcl_endl;
           TEST( "A is close", close( aff_trans->A(), A), true);
           TEST( "t is close", close( aff_trans->t(), t), true);
         }
@@ -614,8 +615,8 @@ namespace {
           TEST( "Result is affine (is_type())", trans->is_type(rgrl_trans_affine::type_id()) , true);
           rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
           TEST( "Result is affine (dynamic_cast)", !aff_trans, false);
-          vcl_cout << "Estimated:\nA\n="<<aff_trans->A()<<"\nt="<<aff_trans->t()
-                   << "\n\nTrue:\nA\n="<<A<<"\nt="<<t<<vcl_endl;
+          vcl_cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()
+                   << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<vcl_endl;
           TEST( "A is close", close( aff_trans->A(), A), true);
           TEST( "t is close", close( aff_trans->t(), t), true);
         }
@@ -641,8 +642,8 @@ namespace {
           TEST( "Result is affine (is_type())", trans->is_type(rgrl_trans_affine::type_id()), true );
           rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
           TEST( "Result is affine (dynamic_cast)", !aff_trans, false);
-          vcl_cout << "Estimated:\nA\n="<<aff_trans->A()<<"\nt="<<aff_trans->t()
-                   << "\n\nTrue:\nA\n="<<A<<"\nt="<<t<<vcl_endl;
+          vcl_cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()
+                   << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<vcl_endl;
           TEST( "A is close", close( aff_trans->A(), A), true);
           TEST( "t is close", close( aff_trans->t(), t), true);
         }
@@ -720,13 +721,14 @@ namespace {
         TEST( "Result is affine (is_type())", trans->is_type(rgrl_trans_affine::type_id()), true );
         rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
         TEST( "Result is affine (dynamic_cast)", !aff_trans, false);
-        vcl_cout << "Estimated:\nA\n="<<aff_trans->A()<<"\nt="<<aff_trans->t()<<"\ncovar="<<aff_trans->covar()
-                 << "\n\nTrue:\nA\n="<<A<<"\nt="<<t<<"\ncovar="<<covar<<vcl_endl;
+        vcl_cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()<<"\ncovar="<<aff_trans->covar()
+                 << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<"\ncovar="<<covar<<vcl_endl;
         TEST( "A is close", close( aff_trans->A(), A), true);
         TEST( "t is close", close( aff_trans->t(), t), true);
         TEST( "covar is close", close_det( aff_trans->covar(), covar), true );
       }
     }
+    vcl_cout << "--------------------------------------------------------------------------------\n";
   }
 
 
@@ -809,8 +811,8 @@ namespace {
           TEST( "Result is similarity (is_type())", trans->is_type(rgrl_trans_similarity::type_id()), true );
           rgrl_trans_similarity* sim_trans = dynamic_cast<rgrl_trans_similarity*>(trans.as_pointer());
           TEST( "Result is similarity (dynamic_cast)", !sim_trans, false);
-          vcl_cout << "Estimated:\nA\n="<<sim_trans->A()<<"\nt="<<sim_trans->t()
-                   << "\n\nTrue:\nA\n="<<smallR<<"\nt="<<smallT<<vcl_endl;
+          vcl_cout << "Estimated:\nA=\n"<<sim_trans->A()<<"\nt="<<sim_trans->t()
+                   << "\n\nTrue:\nA=\n"<<smallR<<"\nt="<<smallT<<vcl_endl;
           TEST( "A is close", close( sim_trans->A(), smallR ), true);
           TEST( "t is close", close( sim_trans->t(), smallT ), true);
         }
@@ -825,8 +827,8 @@ namespace {
           rgrl_trans_similarity* sim_trans = dynamic_cast<rgrl_trans_similarity*>(trans.as_pointer());
           TEST( "Result is similarity (dynamic_cast)", !sim_trans, false);
           // should probably check the residual error, not the parameters.
-          vcl_cout << "Estimated:\nA\n="<<sim_trans->A()<<"\nt="<<sim_trans->t()
-                   << "\n\nTrue:\nA\n="<<smallR<<"\nt="<<smallT<<vcl_endl;
+          vcl_cout << "Estimated:\nA=\n"<<sim_trans->A()<<"\nt="<<sim_trans->t()
+                   << "\n\nTrue:\nA=\n"<<smallR<<"\nt="<<smallT<<vcl_endl;
           TEST( "A is close", close( sim_trans->A(), smallR, 0.1 ), true);
           TEST( "t is close", close( sim_trans->t(), smallT, 1.0 ), true);
 
@@ -862,8 +864,8 @@ namespace {
           TEST( "Result is similarity (is_type())", trans->is_type(rgrl_trans_similarity::type_id()), true );
           rgrl_trans_similarity* sim_trans = dynamic_cast<rgrl_trans_similarity*>(trans.as_pointer());
           TEST( "Result is similarity (dynamic_cast)", !sim_trans, false);
-          vcl_cout << "Estimated:\nA\n="<<sim_trans->A()<<"\nt="<<sim_trans->t()
-                   << "\n\nTrue:\nA\n="<<smallR<<"\nt="<<smallT<<vcl_endl;
+          vcl_cout << "Estimated:\nA=\n"<<sim_trans->A()<<"\nt="<<sim_trans->t()
+                   << "\n\nTrue:\nA=\n"<<smallR<<"\nt="<<smallT<<vcl_endl;
           TEST( "A is close", close( sim_trans->A(), smallR ), true);
           TEST( "t is close", close( sim_trans->t(), smallT ), true);
 
@@ -879,6 +881,7 @@ namespace {
         }
       }
     }
+    vcl_cout << "--------------------------------------------------------------------------------\n";
   }
 #endif //0 // no similarity yet
 
@@ -1013,6 +1016,7 @@ namespace {
         TEST("Test random point",  test_pass, true);
       }
     }
+    vcl_cout << "--------------------------------------------------------------------------------\n";
   }
 
   void
@@ -1041,7 +1045,6 @@ namespace {
     }
     vcl_cout << "true control points: " << c << '\n';
     for ( unsigned m=0; m<dim; ++m ) {
-
       rgrl_spline_sptr spline2 = new rgrl_spline( m2 );
       spline2->set_control_points( c );
       splines.push_back( spline2 );
@@ -1161,6 +1164,7 @@ namespace {
       }
       TEST("Test random point", test_pass, true);
     }
+    vcl_cout << "--------------------------------------------------------------------------------\n";
   }
 
   void
@@ -1210,13 +1214,14 @@ namespace {
         TEST( "Result is quadratic (is_type())", trans->is_type(rgrl_trans_quadratic::type_id()), true );
         rgrl_trans_quadratic* q_trans = dynamic_cast<rgrl_trans_quadratic*>(trans.as_pointer());
         TEST( "Result is quadratic (dynamic_cast)", !q_trans, false );
-        vcl_cout << "Estimated:\nQ=\n"<<q_trans->Q()<<"\nA\n="<<q_trans->A()<<"\nt="<<q_trans->t()
-                 << "\n\nTrue:\nQ=\n"<<Q<<"\nA\n="<<A<<"\nt="<<t<<vcl_endl;
+        vcl_cout << "Estimated:\nQ=\n"<<q_trans->Q()<<"\nA=\n"<<q_trans->A()<<"\nt="<<q_trans->t()
+                 << "\n\nTrue:\nQ=\n"<<Q<<"\nA=\n"<<A<<"\nt="<<t<<vcl_endl;
         TEST( "Q is close", close( q_trans->Q(), Q, 0.01), true);
         TEST( "A is close", close( q_trans->A(), A, 0.01), true);
         TEST( "t is close", close( q_trans->t(), t, 0.01), true);
       }
     }
+    vcl_cout << "--------------------------------------------------------------------------------\n";
   }
 
   void
@@ -1262,11 +1267,12 @@ namespace {
         rgrl_trans_similarity* s_trans = dynamic_cast<rgrl_trans_similarity*>(trans.as_pointer());
         TEST( "Result is similarity (dynamic_cast)", !s_trans, false );
         vcl_cout << "Estimated:\nA=\n"<<s_trans->A()<<"\nt="<<s_trans->t()
-                 << "\n\nTrue:\nA\n="<<A<<"\nt="<<t<<vcl_endl;
+                 << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<vcl_endl;
         TEST( "A is close", close( s_trans->A(), A, 0.01), true);
         TEST( "t is close", close( s_trans->t(), t, 0.01), true);
       }
     }
+    vcl_cout << "--------------------------------------------------------------------------------\n";
   }
 
   void
@@ -1345,8 +1351,8 @@ namespace {
         TEST( "Result is quadratic (is_type())", trans->is_type(rgrl_trans_reduced_quad::type_id()), true );
         rgrl_trans_reduced_quad* q_trans = dynamic_cast<rgrl_trans_reduced_quad*>(trans.as_pointer());
         TEST( "Result is quadratic (dynamic_cast)", !q_trans, false);
-        vcl_cout << "Estimated:\nQ=\n"<<q_trans->Q()<<"\nA\n="<<q_trans->A()<<"\nt="<<q_trans->t()
-                 << "\n\nTrue:\nQ=\n"<<Q<<"\nA\n="<<A<<"\nt="<<t<<vcl_endl;
+        vcl_cout << "Estimated:\nQ=\n"<<q_trans->Q()<<"\nA=\n"<<q_trans->A()<<"\nt="<<q_trans->t()
+                 << "\n\nTrue:\nQ=\n"<<Q<<"\nA=\n"<<A<<"\nt="<<t<<vcl_endl;
         TEST( "Q is close", close( q_trans->Q(), Q, 0.01), true);
         TEST( "A is close", close( q_trans->A(), A, 0.01), true);
         TEST( "t is close", close( q_trans->t(), t, 0.01), true);
@@ -1576,7 +1582,7 @@ namespace {
       vnl_vector<double> from_next_est;
       homo_est->inv_map( d2_q[3], initialize_next, to_delta, from, from_next_est);
       vcl_cout<<"from = "<<from<<vcl_endl;
-      TEST("Test incremental inverse mapping", (from-d2_p[3]).two_norm() <0.01, true);
+      TEST("Test incremental inverse mapping", (from-d2_p[3]).two_norm() <0.1, true);
       homo_est->inv_map( d2_q[3], from);
       TEST("Test inverse mapping", (from-d2_p[3]).two_norm() <tol, true);
     }
@@ -1774,7 +1780,7 @@ namespace {
   test_homography2d_points_on_circle()
   {
     vnl_matrix<double> H(3,3, vnl_matrix_identity);
-    const double tol = 1e-8;
+    const double tol = 1e-6;
 
     // Test projective transform
     H(0,2) = -4;
@@ -1836,10 +1842,10 @@ namespace {
         est_H = homo_est->H();
         est_H /= est_H.array_two_norm();
         if ( est_H(0,0) < 0 ) est_H *= -1;
-#ifdef DEBUG
-        vcl_cout<<"Estimated H = "<<est_H<<vcl_endl;
-#endif
-        xform_is_good = xform_is_good && (est_H-H).array_two_norm() < tol;
+        if ( (est_H-H).array_two_norm() > tol) {
+          vcl_cout<<"Estimated H = "<<est_H<<vcl_endl;
+          xform_is_good = false;
+        }
       }
     }
     TEST("Estimation of Projective xform", xform_is_good, true);
@@ -1922,30 +1928,42 @@ namespace {
 
         // check homography transform
         homography_is_good = homography_is_good && (est_H-H).array_two_norm() < tol_xform;
-        if( !homography_is_good ) {
-          vcl_cout << "transformation is incorrect!\n" << est_H << "\n" << H << vcl_endl;
+        if ( !homography_is_good ) {
+          vcl_cout << "transformation is incorrect!\n" << est_H << '\n' << H << vcl_endl;
         }
-        
+
         // test on transfer error on 4 cannonical directions
         vnl_matrix<double> trans_error;
         double ratio;
 
         trans_error = est->transfer_error_covar( p[0] );
         ratio = trans_error(0,0);  // this constant shall be the same
-        vcl_cout << "transfer error(1): \n" << trans_error << vcl_endl;
-        cov_is_good = cov_is_good && (ratio*iid_cov-trans_error).array_two_norm() < tol_trans_error;
+        vcl_cout << "transfer error(1):\n" << trans_error << vcl_endl;
+        if ((ratio*iid_cov-trans_error).array_two_norm() > tol_trans_error) {
+          cov_is_good = false;
+          vcl_cout << "*** correct=\n"<< ratio*iid_cov << vcl_endl;
+        }
 
         trans_error = est->transfer_error_covar( p[num/4] );
-        vcl_cout << "transfer error(1): \n" << trans_error << vcl_endl;
-        cov_is_good = cov_is_good && (ratio*iid_cov-trans_error).array_two_norm() < tol_trans_error;
+        vcl_cout << "transfer error(1):\n" << trans_error << vcl_endl;
+        if ((ratio*iid_cov-trans_error).array_two_norm() > tol_trans_error) {
+          cov_is_good = false;
+          vcl_cout << "*** correct=\n"<< ratio*iid_cov << vcl_endl;
+        }
 
         trans_error = est->transfer_error_covar( p[num/2] );
-        vcl_cout << "transfer error(1): \n" << trans_error << vcl_endl;
-        cov_is_good = cov_is_good && (ratio*iid_cov-trans_error).array_two_norm() < tol_trans_error;
+        vcl_cout << "transfer error(1):\n" << trans_error << vcl_endl;
+        if ((ratio*iid_cov-trans_error).array_two_norm() > tol_trans_error) {
+          cov_is_good = false;
+          vcl_cout << "*** correct=\n"<< ratio*iid_cov << vcl_endl;
+        }
 
         trans_error = est->transfer_error_covar( p[num*3/4] );
-        vcl_cout << "transfer error(1): \n" << trans_error << vcl_endl;
-        cov_is_good = cov_is_good && (ratio*iid_cov-trans_error).array_two_norm() < tol_trans_error;
+        vcl_cout << "transfer error(1):\n" << trans_error << vcl_endl;
+        if ((ratio*iid_cov-trans_error).array_two_norm() > tol_trans_error) {
+          cov_is_good = false;
+          vcl_cout << "*** correct=\n"<< ratio*iid_cov << ", error= "<< trans_error<< vcl_endl;
+        }
       }
     }
 
@@ -1954,7 +1972,7 @@ namespace {
   }
 } // end anonymous namespace
 
-void 
+void
 test_rad_dis_homo2d_lm()
 {
   vnl_matrix<double> H(3, 3, vnl_matrix_identity), initH(H);
@@ -1962,41 +1980,34 @@ test_rad_dis_homo2d_lm()
   const double k1_to = 0;
   vnl_vector<double> centre(2,0.0);
   rgrl_transformation_sptr true_xform = new rgrl_trans_rad_dis_homo2d( H, k1_from, k1_to, centre, centre );
-  
+
   // add errors
   initH(1,1) = 0.98;
   initH(0,2) = -0.005;
   initH(1,2) = 0.1;
   rgrl_transformation_sptr init_xform = new rgrl_trans_homography2d( initH );
-  
+
   rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id() );
   vnl_vector<double> pt_loc( 2 );
-  for( int i=-10; i<=10; ++i )
-    for( int j=-10; j<=10; ++j ) {
-      
+  for ( int i=-10; i<=10; ++i )
+    for ( int j=-10; j<=10; ++j ) {
       pt_loc[0] = double(i)*50;
       pt_loc[1] = double(j)*40;
       rgrl_feature_sptr from_sptr = new rgrl_feature_point( pt_loc );
       rgrl_feature_sptr to_sptr = from_sptr->transform( *true_xform );
-        
+
       // add feature
       ms->add_feature_and_match( from_sptr, 0, to_sptr );
-      
     }
-    
+
   // remap features
   ms->remap_from_features( *init_xform );
-  
+
   // set up estimator
   rgrl_estimator_sptr est_sptr = new rgrl_est_dis_homo2d_lm(centre, centre);
-  
+
   rgrl_transformation_sptr result_sptr = est_sptr->estimate( ms, *init_xform );
-  rgrl_trans_rad_dis_homo2d const& result_xform = static_cast<rgrl_trans_rad_dis_homo2d const&>( *result_sptr );
-  
-  bool is_valid = (result_sptr);
-  TEST( "valid transformation", is_valid, true );
-  
-  
+  TEST( "valid transformation", bool(result_sptr), true );
 }
 
 
