@@ -148,7 +148,7 @@ void brct_windows_frame::add_curve2d(vcl_vector<vgl_point_2d<double> > &pts)
 {
   int size = pts.size();
   assert(size > 1);
-  curves_2d_.resize(size-1);
+  curves_2d_.resize(size);
   instance_->easy_2d_->set_foreground(1, 0, 0);
   for (int i=0; i<size; i++)
   {
