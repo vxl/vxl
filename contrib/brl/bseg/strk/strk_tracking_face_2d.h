@@ -166,28 +166,11 @@ class strk_tracking_face_2d : public vbl_ref_count
 
  private:
   // local functions
-#if 0
-  void init_face_info(vil1_memory_image_of<float> const& image,
-                      vil1_memory_image_of<float> const& Ix,
-                      vil1_memory_image_of<float> const& Iy);
-
-
-  void init(vtol_face_2d_sptr const& face, vil1_memory_image_of<float> const& image,
-            vil1_memory_image_of<float> const& Ix,
-            vil1_memory_image_of<float> const& Iy);
-#endif
   void set_gradient(vil1_memory_image_of<float> const& Ix,
                     vil1_memory_image_of<float> const& Iy);
   void set_color(vil1_memory_image_of<float> const& hue,
                  vil1_memory_image_of<float> const& sat);
-#if 0
-  void init(vtol_face_2d_sptr const& face,
-            vil1_memory_image_of<float> const& image,
-            vil1_memory_image_of<float> const& Ix = 0,
-            vil1_memory_image_of<float> const& Iy = 0,
-            vil1_memory_image_of<float> const& hue = 0,
-            vil1_memory_image_of<float> const& sat = 0);
-#endif
+
   void init_intensity_info(vtol_face_2d_sptr const& face,
                            vil1_memory_image_of<float> const& image);
 
