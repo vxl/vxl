@@ -13,8 +13,8 @@
 #include <vcl_cstdarg.h>
 #include <vcl_cstring.h>
 //FreeBSD4 #include <vcl_cwctype.h>
-#include <vcl_cfloat.h>
 #include <vcl_cmath.h>
+#include <vcl_cfloat.h>
 #include <vcl_cstddef.h>
 #include <vcl_algorithm.h>
 #include <vcl_iomanip.h>
