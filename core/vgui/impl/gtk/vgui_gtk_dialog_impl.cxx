@@ -6,7 +6,7 @@
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   28 Dec 99
-//-----------------------------------------------------------------------------
+// \brief  See vgui_gtk_dialog_impl.h for a description of this file.
 
 #define private public // hack ...
 #include "vgui_gtk_dialog_impl.h"

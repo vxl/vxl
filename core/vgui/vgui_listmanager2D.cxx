@@ -39,7 +39,7 @@ vgui_listmanager2D::~vgui_listmanager2D()
 
 vcl_string vgui_listmanager2D::type_name() const
 {
-  return "vgui_composite";
+  return "vgui_listmanager2D";
 }
 
 //: Add a child to the end of the vcl_list

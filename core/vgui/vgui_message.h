@@ -4,6 +4,9 @@
 //:
 // \file
 // \author  fsm@robots.ox.ac.uk
+// \brief   Used to send messages from observables to observers.
+//
+//  Contains classes:  vgui_message
 //
 // \verbatim
 // Modifications
@@ -28,7 +31,8 @@
 //fsm - now I've done it.
 // \endverbatim
 
-
+//: Used to send messages from observables to observers.
+//
 // example :
 //
 // \code

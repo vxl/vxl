@@ -6,7 +6,7 @@
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   18 Dec 99
-//-----------------------------------------------------------------------------
+// \brief  See vgui_gtk_window.h for a description of this file.
 
 #include "vgui_gtk_window.h"
 

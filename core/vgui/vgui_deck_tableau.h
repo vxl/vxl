@@ -8,7 +8,7 @@
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   13 Sep 99
-// \brief  Tableau holding many child tableaux, but only one recieves events.
+// \brief  Tableau holding many child tableaux, but only one receives events.
 //
 //  Contains classes:  vgui_deck_tableau  vgui_deck_tableau_new
 //
@@ -24,7 +24,7 @@
 #include <vgui/vgui_slot.h>
 #include <vcl_string.h>
 
-//:  Tableau holding many child tableaux, but only one recieves events.
+//: Tableau holding many child tableaux, but only one receives events.
 //
 //  vgui_deck_tableau holds an ordered collection of child tableaux, only one 
 //  of which is passed all events that the vgui_deck_tableau receives. The 
@@ -125,9 +125,17 @@ public:
 struct vgui_deck_tableau_new : public vgui_deck_tableau_sptr
 {
   typedef vgui_deck_tableau_sptr base;
+
+  //: Constructor - creates a pointer to an empty vgui_deck_tableau.
   vgui_deck_tableau_new() : base(new vgui_deck_tableau()) { }
+
+  //: Constructor - creates a pointer to a vgui_deck_tableau with two children.
+  //  Children are given top to bottom.
   vgui_deck_tableau_new(vgui_tableau_sptr const& child0,vgui_tableau_sptr const& child1)
     : base(new vgui_deck_tableau(child0, child1)) { }
+
+  //: Constructor - creates a pointer to a vgui_deck_tableau with 3 children.
+  //  Children are given top to bottom.
   vgui_deck_tableau_new(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1, vgui_tableau_sptr const& child2)
     : base(new vgui_deck_tableau(child0, child1, child2)) { }
 };

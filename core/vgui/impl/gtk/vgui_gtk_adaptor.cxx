@@ -6,7 +6,7 @@
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   19 Dec 99
-//-----------------------------------------------------------------------------
+// \brief  See vgui_gtk_adaptor.h for a description of this file.
 
 #include "vgui_gtk_adaptor.h"
 #include <vcl_cstdlib.h>

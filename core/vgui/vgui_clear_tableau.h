@@ -70,6 +70,8 @@ class vgui_clear_tableau : public vgui_tableau
 struct vgui_clear_tableau_new : public vgui_clear_tableau_sptr
 {
   typedef vgui_clear_tableau_sptr base;
+
+  //: Create a smart-pointer to a vgui_clear_tableau.
   vgui_clear_tableau_new() : base(new vgui_clear_tableau()) { }
 };
 

@@ -13,7 +13,7 @@
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_statusbar.h>
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 vgui_window::vgui_window() {
 }
@@ -21,13 +21,13 @@ vgui_window::vgui_window() {
 vgui_window::~vgui_window() {
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 void vgui_window::set_menubar(vgui_menu const &) {
   vgui_macro_warning << "set_menubar() not implemented for this window\n";
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 void vgui_window::set_adaptor(vgui_adaptor*) {
   vgui_macro_warning << "set_adaptor() not implementated for this window\n";
@@ -43,7 +43,7 @@ vgui_statusbar* vgui_window::get_statusbar() {
   return 0;
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 
 void vgui_window::show() {
@@ -76,4 +76,4 @@ void vgui_window::set_title(vcl_string const&) {
   vgui_macro_warning << "vgui_window::set_title() dummy implementation\n";
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------

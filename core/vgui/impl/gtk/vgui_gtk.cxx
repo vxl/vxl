@@ -6,7 +6,8 @@
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   16 Sep 99
-//-----------------------------------------------------------------------------
+// \brief  See vgui_gtk.h for a description of this file.
+
 
 #include "vgui_gtk.h"
 #include <vgui/vgui_gl.h> // glFlush()

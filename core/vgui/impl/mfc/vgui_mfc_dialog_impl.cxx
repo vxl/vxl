@@ -36,7 +36,7 @@ BEGIN_MESSAGE_MAP(vgui_mfc_dialog_impl, CWnd)
         ON_CONTROL_RANGE(BN_CLICKED,ID_CHOOSE_COLOUR,ID_CHOOSE_COLOUR+100,OnChooseColour)
 END_MESSAGE_MAP()
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //: Constructor
 vgui_mfc_dialog_impl::vgui_mfc_dialog_impl(const char* name)
   : CWnd(),vgui_dialog_impl(name)
@@ -49,26 +49,26 @@ vgui_mfc_dialog_impl::vgui_mfc_dialog_impl(const char* name)
   ok_clicked = false;
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //: Destructor
 vgui_mfc_dialog_impl::~vgui_mfc_dialog_impl() 
 {
 }
 
 //: Structure to contain data for a choice field.
-struct mfc_choice 
+struct vgui_mfc_dialog_choice 
 {
   vcl_vector<vcl_string> names;
   int index;
 };
 
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //: Make a choice widget
 void* vgui_mfc_dialog_impl::choice_field_widget(const char* /*txt*/,
                                           const vcl_vector<vcl_string>& labels, int& val) {
 
-  mfc_choice *ch = new mfc_choice;
+  vgui_mfc_dialog_choice *ch = new vgui_mfc_dialog_choice;
   ch->names = labels;
   ch->index = val;
 
@@ -76,19 +76,19 @@ void* vgui_mfc_dialog_impl::choice_field_widget(const char* /*txt*/,
 }
 
 //: Structure to contain data for a inline tableau.
-struct inline_tableau_data
+struct vgui_mfc_dialog_inline_tab
 {
   vgui_tableau_sptr tab;
   float height;
   float width;
 };
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //: Make a tableau widget.
 void* vgui_mfc_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr tab,
   unsigned width, unsigned height)
 {
-  inline_tableau_data* tab_data = new inline_tableau_data;
+  vgui_mfc_dialog_inline_tab* tab_data = new vgui_mfc_dialog_inline_tab;
   tab_data->tab = tab;
   tab_data->height = height;
   tab_data->width = width;
@@ -197,7 +197,7 @@ bool vgui_mfc_dialog_impl::ask()
     }
     else if (l.type == inline_tabl)
     {
-      inline_tableau_data* tab_data = (inline_tableau_data*)l.widget;
+      vgui_mfc_dialog_inline_tab* tab_data = (vgui_mfc_dialog_inline_tab*)l.widget;
       if (max_length < tab_data->width/8 + 5)
         max_length = tab_data->width/8 + 5;
       height += tab_data->height + 20;
@@ -376,7 +376,7 @@ bool vgui_mfc_dialog_impl::ask()
       r.left = width-2*8-20*8;
       r.left = 2*4+max_length*8+2*8;
       r.right = width-2*8;//r.left+20*8;
-      mfc_choice *ch = (mfc_choice*)l.widget;
+      vgui_mfc_dialog_choice *ch = (vgui_mfc_dialog_choice*)l.widget;
       r.bottom+=__min(ch->names.size(),4)*32;
       CComboBox *combobox = new CComboBox();
       combobox->CreateEx(WS_EX_CLIENTEDGE,_T("COMBOBOX"),NULL,
@@ -497,7 +497,8 @@ bool vgui_mfc_dialog_impl::ask()
     }
     else if (l.type == inline_tabl)
     {
-      inline_tableau_data* tab_data = (inline_tableau_data*)l.widget;
+      vgui_mfc_dialog_inline_tab* tab_data 
+        = (vgui_mfc_dialog_inline_tab*)l.widget;
       vgui_mfc_adaptor *widg = new vgui_mfc_adaptor();
       widg->set_tableau(tab_data->tab);
       // because this adaptor is not in the main window we need to call setup_adaptor:

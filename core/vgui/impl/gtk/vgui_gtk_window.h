@@ -4,26 +4,22 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
+//:
+// \file
+// \author  Robotics Research Group, University of Oxford
+// \date    18 Dec 99
+// \brief   Specialization of vgui_window for GTK.
 //
-// .NAME vgui_gtk_window - specialization of vgui_window for GTK
-// .LIBRARY vgui-gtk
-// .HEADER vxl Package
-// .INCLUDE vgui/impl/gtk/vgui_gtk_window.h
-// .FILE vgui_gtk_window.cxx
+//  Contains classes: vgui_gtk_window
 //
-// .SECTION Description:
-//   Specialization of vgui_window for GTK.
-//   Provides functions for manipulating a window.
-//
-// .SECTION Author:
-//              Philip C. Pritchett, 18 Dec 99
-//              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications
-//  13-JUL-00   Marko Bacic, Oxford RRG -- Added support for menu shortcuts
-//  21-SEP-00   capes@robots -- Changed destructor to actually destroy the widgets
+// \verbatim
+//  Modifications
+//   13-JUL-00   Marko Bacic, Oxford RRG -- Added support for menu shortcuts
+//   21-SEP-00   capes@robots -- Changed destructor to actually destroy the widgets
 //                              Facilitates the post_destroy() adaptor method.
-//-----------------------------------------------------------------------------
+//   13-SEP-2002 K.Y.McGaul - Changed to Doxygen style comments.
+// \endverbatim
+
 
 #ifdef __SUNPRO_CC
 // <string> breaks if NULL is defined to "(void*)0".
@@ -37,6 +33,8 @@ class vgui_gtk_adaptor;
 #include <gtk/gtk.h>
 #include "vgui_gtk_statusbar.h"
 
+//: Specialization of vgui_window for GTK.
+//  Provides functions for manipulating a window.
 class vgui_gtk_window : public vgui_window
 {
  public:
@@ -70,8 +68,8 @@ class vgui_gtk_window : public vgui_window
   GtkWidget *menubar;
 
  private:
-  // This is a place to store any menu passed in, so that it doesn't go out of scope
-  // while the popup is on screen.
+  // This is a place to store any menu passed in, so that it doesn't go out 
+  // of scope while the popup is on screen.
   vgui_menu* last_menubar; // <-- ask fsm about this.
 };
 

@@ -35,25 +35,23 @@
 
 #define debug if (true) { } else vcl_cerr
 
-//--------------------------------------------------------------------------------
-
-// class vgui_vp_sc_snapshot :
-// The constructor takes a snapshot of the current viewport and scissor areas.
-// The destructor restores that state.
-class vgui_vp_sc_snapshot {
+//------------------------------------------------------------------------------
+//: The constructor takes a snapshot of the current viewport and scissor areas.
+//  The destructor restores that state.
+class vgui_polytab_vp_sc_snapshot {
 public:
   GLint vp[4];
   GLint sc[4];
   bool sc_was_enabled;
 
-  vgui_vp_sc_snapshot() {
+  vgui_polytab_vp_sc_snapshot() {
     glGetIntegerv(GL_VIEWPORT, vp);
 
     glGetIntegerv(GL_SCISSOR_BOX, sc);
     sc_was_enabled = glIsEnabled(GL_SCISSOR_TEST) == GL_TRUE;
   }
 
-  ~vgui_vp_sc_snapshot() {
+  ~vgui_polytab_vp_sc_snapshot() {
     // restore viewport :
     glViewport(vp[0], vp[1], vp[2], vp[3]);
 
@@ -67,7 +65,7 @@ public:
   }
 };
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 // class vgui_popup_params::item
 vgui_polytab_base::item::item(vgui_tableau* p, vgui_tableau_sptr const&c,
@@ -105,7 +103,7 @@ bool vgui_polytab_base::item::inside(GLint const vp[4],int vx, int vy) const {
   return ans;
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 vgui_polytab_base::vgui_polytab_base()
   : vgui_tableau()
@@ -206,7 +204,7 @@ int vgui_polytab_base::add(vgui_tableau_sptr const& t, float x, float y, float w
   return counter;
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 //: Gets the index of the child currently under the pointer's position.
 int vgui_polytab_base::get_active(GLint const vp[4], int wx, int wy) const {
@@ -317,13 +315,13 @@ bool vgui_polytab_base::handle(GLint const vp[4], vgui_event const &e) {
 
 bool vgui_polytab_base::handle(vgui_event const &e) {
   // Take snapshot of the viewport and scissor areas.
-  vgui_vp_sc_snapshot snap;
+  vgui_polytab_vp_sc_snapshot snap;
   glEnable(GL_SCISSOR_TEST);
 
   return  handle(snap.vp, e);
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 // class vgui_polytab
 
@@ -339,7 +337,7 @@ vcl_string vgui_polytab::type_name() const {
 
 bool vgui_polytab::handle(vgui_event const &e) {
   // Take snapshot of the viewport and scissor areas
-  vgui_vp_sc_snapshot snap;
+  vgui_polytab_vp_sc_snapshot snap;
   glEnable(GL_SCISSOR_TEST);
 
   // pointer motion

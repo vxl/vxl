@@ -58,10 +58,13 @@ class vgui_blackbox : public vgui_wrapper_tableau
   vcl_vector<vgui_event> events;
 };
 
-//: Create a pointer to a vgui_blackbox.
+//: Create a smart-pointer to a vgui_blackbox.
 struct vgui_blackbox_new : public vgui_blackbox_sptr
 {
   typedef vgui_blackbox_sptr base;
+  
+  //: Constructor - creates a smart-pointer to a vgui_blackbox.
+  //  Takes the single child tableau as a parameter.
   vgui_blackbox_new(vgui_tableau_sptr const& a) : base(new vgui_blackbox(a)) { }
 };
 

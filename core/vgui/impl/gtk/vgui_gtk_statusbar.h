@@ -4,25 +4,16 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-//
-// .NAME vgui_gtk_statusbar - Undocumented class FIXME
-// .LIBRARY vgui-gtk
-// .HEADER vxl Package
-// .INCLUDE vgui/impl/gtk/vgui_gtk_statusbar.h
-// .FILE vgui_gtk_statusbar.cxx
-//
-// .SECTION Description:
-//
-// vgui_gtk_statusbar is a class that Phil hasnt documented properly. FIXME
-//
-// .SECTION Author:
-//              Philip C. Pritchett, 21 Nov 99
-//              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications:
-//     <none yet>
-//
-//-----------------------------------------------------------------------------
+//:
+// \file
+// \author Robotics Research Group, University of Oxford
+// \date   21 Nov 99
+// \brief  GTK status bar for the main window of the application.
+// 
+// \verbatim
+//  Modifications:
+//    13-SEP-2002 K.Y.McGaul - Changed to Doxygen style documentation.
+// \endverbatim
 
 #include <vcl_string.h>
 #include <vcl_iosfwd.h>
@@ -30,16 +21,21 @@
 #include <vgui/vgui_statusbuf.h>
 #include <vgui/vgui_statusbar.h>
 
+//: GTK status bar for the main window of the application.
 class vgui_gtk_statusbar : public vgui_statusbar
 {
  public:
 
-  // Constructors/Destructors--------------------------------------------------
-
+  //: Constructor, creates a GTK status bar and displays it.
   vgui_gtk_statusbar();
+ 
+  //: Destructor.
  ~vgui_gtk_statusbar();
 
+  //: Append given text (of given length) to the status bar.
   int write(const char* text, int n);
+
+  //: Append given text to the status bar.
   int write(const char* text);
 
   GtkWidget *widget;

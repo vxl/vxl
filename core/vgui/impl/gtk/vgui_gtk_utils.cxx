@@ -3,10 +3,10 @@
 #pragma implementation
 #endif
 //
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 19 Dec 99
-//
-//-----------------------------------------------------------------------------
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   19 Dec 99
+// \brief  See vgui_gtk_utils.h for a description of this file.
+
 
 #include "vgui_gtk_utils.h"
 

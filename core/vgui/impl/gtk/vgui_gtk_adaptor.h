@@ -6,12 +6,9 @@
 #endif
 //:
 // \file
-// \brief Specialization of vgui_adaptor for GTK.
-//
-// \author
-//              Philip C. Pritchett, 19 Dec 99
-//              Robotics Research Group, University of Oxford
-//-----------------------------------------------------------------------------
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date   19 Dec 99
+// \brief  Specialization of vgui_adaptor for GTK.
 
 #ifdef __SUNPRO_CC
 // <string> breaks if NULL is defined to "(void*)0".
@@ -26,6 +23,7 @@
 struct vgui_overlay_helper;
 class vgui_gtk_window;
 
+//: Specialization of vgui_adaptor for GTK.
 class vgui_gtk_adaptor : public vgui_adaptor, public vgui_adaptor_mixin
 {
  public:

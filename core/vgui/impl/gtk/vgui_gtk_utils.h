@@ -4,30 +4,27 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
+//:
+// \file
+// \author Robotics Research Group, University of Oxford
+// \date   19-DEC-1999
+// \brief  GTK version of vgui_utils - provides support for menus.
 //
-// .NAME vgui_gtk_utils - Undocumented class FIXME
-// .LIBRARY vgui-gtk
-// .HEADER vxl Package
-// .INCLUDE vgui/impl/gtk/vgui_gtk_utils.h
-// .FILE vgui_gtk_utils.cxx
+//  Contains classes: vgui_gtk_utils
 //
-// .SECTION Description
-// vgui_gtk_utils is a class that Phil hasnt documented properly. FIXME
-//
-// .SECTION Author
-//              Philip C. Pritchett, 19 Dec 99
-//              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications
-//   13-JUL-00  Marko Bacic, Oxford RRG -- Added support for menu accelerators
-//
-//-----------------------------------------------------------------------------
+// \verbatim
+//  Modifications
+//   13-JUL-2000 Marko Bacic, Oxford RRG -- Added support for menu accelerators
+//   13-SEP-2002 
+// \endverbatim
+
 
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_menu.h>
 #include <gtk/gtk.h>
 
 
+//: GTK version of vgui_utils - provides support for menus.
 class vgui_gtk_utils
 {
  public:

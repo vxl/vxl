@@ -3,6 +3,7 @@
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
+// \brief  Useful static functions for vgui.
 //
 // \verbatim
 //  Modifications

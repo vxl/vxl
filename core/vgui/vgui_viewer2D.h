@@ -55,14 +55,22 @@ class vgui_viewer2D : public vgui_wrapper_tableau, public vgui_drag_mixin
   //: Find the image (if it exists) and center it inside the tableau.
   void center_event();
 
-  // drag mixin methods
+  //: Called when the user presses a mouse button in the rendering area.
   bool mouse_down(int x, int y, vgui_button button, vgui_modifier modifier);
+
+  //: Called when the user drags a mouse inside the rendering area.
   bool mouse_drag(int x, int y,  vgui_button button, vgui_modifier modifier);
+
+  //: Called when the user releases a mouse button in the rendering area.
   bool mouse_up(int x, int y,  vgui_button button, vgui_modifier modifier);
+
+  //: Called when the user presses the '?' key.
   bool help();
+
+  //: Called when the user presses a key.
   bool key_press(int x, int y, vgui_key key, vgui_modifier);
 
-  // data
+  //: Data for vgui_viewer2D
   struct token_t
   {
     float scaleX;
@@ -97,6 +105,8 @@ class vgui_viewer2D : public vgui_wrapper_tableau, public vgui_drag_mixin
 //: Create a smart-pointer to a vgui_viewer2D tableau.
 struct vgui_viewer2D_new : public vgui_viewer2D_sptr
 {
+  //: Create a smart-pointer to a vgui_viewer2D tableau.
+  //  Takes a child tableau as parameter.
   vgui_viewer2D_new(vgui_tableau_sptr const& that) :
     vgui_viewer2D_sptr(new vgui_viewer2D(that)) { }
 };

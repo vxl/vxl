@@ -18,12 +18,12 @@ struct vgui_tableau_sptr : public vbl_smart_ptr<vgui_tableau> {
   void vertical_cast(vgui_tableau* t) { *this = t; }
 };
 
-template <class T, class Base = vgui_tableau_sptr>
-struct vgui_tableau_sptr_t : public Base {
-  vgui_tableau_sptr_t(): Base() {}
-  vgui_tableau_sptr_t(T* p): Base(p) {}
-  vgui_tableau_sptr_t(vgui_tableau_sptr_t<T> const& r): Base(r) {}
-  void operator=(vgui_tableau_sptr_t<T> const& r) { Base::operator=(r); }
+template <class T, class B = vgui_tableau_sptr>
+struct vgui_tableau_sptr_t : public B {
+  vgui_tableau_sptr_t(): B() {}
+  vgui_tableau_sptr_t(T* p): B(p) {}
+  vgui_tableau_sptr_t(vgui_tableau_sptr_t<T> const& r): B(r) {}
+  void operator=(vgui_tableau_sptr_t<T> const& r) { B::operator=(r); }
   T* operator->() const { return (T*)as_pointer(); }
   //  typedef vgui_tableau_sptr_t<T> self_or_base;
 };

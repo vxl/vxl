@@ -8,7 +8,7 @@
 // \file
 // \author  Marko Bacic, Oxford RRG
 // \date    4 August 2000
-// \brief   Provides support for menus 
+// \brief   MFC version of vgui_utils - provides support for menus.
 //
 // \verbatim
 //  Modifications:
@@ -32,30 +32,41 @@ class vgui_mfc_utils
 {
   //: Number of menu items.
   int item_count;
+
   //: Singleton instance of this class.
   static vgui_mfc_utils *instance_;
+
   //: List of commands to be called by menus.
   vcl_vector<vgui_command *> callbacks;
+
   //: List of menu accelerators.
   vcl_vector<ACCEL> accels;
-  //: Add keyboard shortcut for this menu item to our accelerator table (accels).
+
+  //: Add keyboard shortcut for this menu item to accelerator table (accels).
   void add_menu_accelerator(const vgui_menu_item item, const WORD function_id, vcl_string& the_menu_name);
 
  public:
   //: (Create if necessary and) return singleton instance of this class.
   static vgui_mfc_utils *instance();
+
   //: Constructor.
   vgui_mfc_utils();
+
   //: Destructor.
   ~vgui_mfc_utils();
+
   //: Create a MFC sub-menu from the given vgui_menu.
   HMENU add_submenu(const vgui_menu& menu);
+
   //: Sets the menu of the application window
   void set_menu(const vgui_menu& menu);
+
   //: Create popup menu. 
   CMenu *set_popup_menu(const vgui_menu & menu);
+
   //: Called within message service routine of vgui_mfc_mainfrm.
   virtual void menu_dispatcher(UINT nID);
+
   //: Menu accelerator table - this defines menu shortcuts
   HACCEL AccelTable;
 

@@ -4,21 +4,17 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-//
-// .NAME vgui_vrml_tableau
-// .LIBRARY vgui-vrml
-// .HEADER vxl Package
-// .INCLUDE vgui/vgui/vgui_vrml_tableau.h
-// .FILE vgui_vrml_tableau.cxx
-//
-// .SECTION Author:
-//              Philip C. Pritchett, 17 Sep 99
-//              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications:
-//     <none yet>
-//
-//-----------------------------------------------------------------------------
+//:
+// \file
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date   17 Sep 99
+// \brief 
+// 
+// \verbatim
+//  Modifications:
+//    17-SEP-1999 P.Pritchett - Initial version.
+//    13-SEP-1999 K.Y.McGaul - Changed to Doxygen style comments.
+// \endverbatim
 
 #include <vgui/vgui_tableau.h>
 

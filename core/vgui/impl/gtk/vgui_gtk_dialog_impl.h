@@ -4,22 +4,14 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
+//:
+// \file
+// \author Robotics Research Group, University of Oxford
+// \date   28 Dec 99
+// \brief  Specialization of vgui_dialog_impl for GTK. Creates a GTK dialog box.
 //
-// .NAME vgui_gtk_dialog_impl - Undocumented class FIXME
-// .LIBRARY vgui-gtk
-// .HEADER vxl Package
-// .INCLUDE vgui/impl/gtk/vgui_gtk_dialog_impl.h
-// .FILE vgui_gtk_dialog_impl.cxx
-//
-// .SECTION Description:
-//
-//   Specialization of vgui_dialog_impl for GTK. Creates a GTK dialog box.
-//
-// .SECTION Author:
-//              Philip C. Pritchett, 28 Dec 99
-//              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications:
+// \verbatim
+//  Modifications:
 //   K.Y.McGaul  25-JAN-00  Moved all field functions to vgui_dialog_impl.
 //                          Added choice_field_widget function.
 //   Marko Bacic 11-JUL-00  Added support for inline file dialog box
@@ -28,12 +20,13 @@
 //   Marko Bacic 20-JUL-00  Fixed bug in inline file dialog box. Now returns
 //                          the full pathname
 //   K.Y.McGaul  31-MAY-01  Added set_ok/cancel_button.
-//-----------------------------------------------------------------------------
+// \endverbatim
 
 #include <vgui/internals/vgui_dialog_impl.h>
 #include <gtk/gtk.h>
 class vgui_tableau_sptr;
 
+//: Specialization of vgui_dialog_impl for GTK. Creates a GTK dialog box.
 class vgui_gtk_dialog_impl : public vgui_dialog_impl
 {
  public:

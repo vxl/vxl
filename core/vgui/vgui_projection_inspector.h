@@ -4,7 +4,7 @@
 //: 
 // \file
 // \author fsm@robots.ox.ac.uk
-// \brief
+// \brief  
 // 
 //  Contains classes:  vgui_projection_inspector
 //
@@ -16,6 +16,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 
+//: 
 class vgui_projection_inspector 
 {
 public:
@@ -53,22 +54,42 @@ public:
   // world and s,t will contain the nonzero entries.
   bool diagonal_scale_3d;
 
-  float x1,y1; // bottom left of viewport
-  float x2,y2; // top right of viewport
+  // Bottom left of viewport - x coord.
+  float x1;
+  // Bottom left of viewport - y coord.
+  float y1;
+  // Top right of viewport - x coord.
+  float x2; 
+  // Top right of viewport - y coord.
+  float y2; 
+
   float s[3], t[3];
 
-  // conversions
+  //: Convert window coords (eg. from vgui_event) to image coords.
   void window_to_image_coordinates(int, int, float &,float &) const;
+
+  //: Convert image coords to window coords.
   void image_to_window_coordinates(float, float, float &,float &) const;
-  bool image_viewport(float&, float&, float&, float&);
+
+  //: Returns the corners of the backprojection of the viewport onto z=0.
+  bool image_viewport(float& bottom_left_x, float& bottom_left_y, 
+                      float& top_right_x, float& top_right_y);
+
+  //: Offset and scaling to transform window (x,y) to image (ix, iy) coords.
+  //        ix = (x - token.offsetX) / token.scaleX;
+  //        iy = (y - token.offsetY) / token.scaleY;
   bool compute_as_2d_affine(int width, int height,
                             float* offsetX, float* offsetY,
                             float* scaleX, float* scaleY);
 
-  // some people prefer to put &s on "return value" parameters.
+  //: Convert window coords (eg. from vgui_event) to image coords.
+  //  Some people prefer to put &s on "return value" parameters.
   void window_to_image_coordinates(int wx, int wy, float *ix,float *iy) const
   { window_to_image_coordinates(wx, wy, *ix, *iy); }
-  void image_to_window_coordinates(float ix, float iy, float *wx,float *wy) const
+
+  //: Convert image coords to window coords.
+  //  Some people prefer to put &s on "return value" parameters.
+  void image_to_window_coordinates(float ix,float iy,float *wx,float *wy) const
   { image_to_window_coordinates(ix, iy, *wx, *wy); }
 
   //: Back-projection of a given point onto a given plane p.

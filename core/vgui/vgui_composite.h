@@ -12,8 +12,9 @@
 //
 // \verbatim
 //  Modifications:
-//   18 Sep 00 capes@robots. Added set_enable_key_bindings. Key bindings are OFF by default.
-//    9 Feb 01 awf@robots. Add Alt-C to re-enable key bindings.
+//   18-Sep-2000 capes@robots - Added set_enable_key_bindings. 
+//                             Key bindings are OFF by default.
+//   09-Feb-2001 awf@robots - Add Alt-C to re-enable key bindings.
 //   26-APR-2002 K.Y.McGaul - Converted to doxygen style comments.
 // \endverbatim
 
@@ -54,7 +55,7 @@ public:
   vgui_composite(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1, vgui_tableau_sptr const& child2);
 
   //: Constructor - don't use this, use vgui_composite_new.
-  //  Takes a list of child tableaux.
+  //  Takes a vector of child tableaux.
   vgui_composite(vcl_vector<vgui_tableau_sptr> const& children);
 
   //: Handle all events sent to this tableau.
@@ -129,11 +130,20 @@ public:
 struct vgui_composite_new : public vgui_composite_sptr
 {
   typedef vgui_composite_sptr base;
+
+  //: Constructor - creates a pointer to an empty vgui_composite.
   vgui_composite_new() : base(new vgui_composite()) { }
+
+  //: Constructor - creates a pointer to a vgui_composite with two children.
   vgui_composite_new(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1)
     : base(new vgui_composite(child0, child1)) { }
+
+  //: Constructor - creates a pointer to a vgui_composite with three children.
   vgui_composite_new(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1, vgui_tableau_sptr const& child2)
     : base(new vgui_composite(child0, child1, child2)) { }
+
+  //: Constructor - creates pointer to a vgui_composite with the given children.
+  //  Takes a vector of child tableaux.
   vgui_composite_new(vcl_vector<vgui_tableau_sptr> const& children): base(new vgui_composite(children)) {}
 };
 

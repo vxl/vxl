@@ -28,6 +28,7 @@ public:
   vcl_string type_name() const;
 
   // "iterator interface"
+  //: The position, colour, etc of the child tableau.
   struct item {
     vgui_slot tab;
     float x,y,w,h;
@@ -53,14 +54,19 @@ public:
 
   //: Add new subtableau, returns handle to child.
   int add(vgui_tableau_sptr const&, float x, float y, float w, float h);
+
   //: Remove subtableau, referred to by handle.
   void remove(int id);
+
   //: Move subtableau.
   void move(int id, float x, float y, float w, float h);
-  //:
+
+  //: Replace the tableau with the given ID, with the given tableau.
   void replace(int id, vgui_tableau_sptr const& tab);
+
   //: Get pointer to tableau from id.
   vgui_tableau_sptr get(int id) const;
+
   //: Set color to outline tableau.
   void set_outline_color(const int id, const int r, const int g, const int b);
 
@@ -69,8 +75,7 @@ protected:
   bool handle(vgui_event const &);
   bool handle(GLint const vp[4], vgui_event const &e);
 
-  // misnomer. returns the index of the child currently under
-  // the pointer's position.
+  //: Misnomer - returns the index of child under the pointer's position.
   int get_active(GLint const vp[4], int wx, int wy) const;
 
   int get_current() const { return current; }
@@ -123,6 +128,8 @@ protected:
 //: Creates a smart-pointer to a vgui_polytab tableau.
 struct vgui_polytab_new : public vgui_polytab_sptr {
   typedef vgui_polytab_sptr base;
+  
+  //: Constructor - create a smart-pointer to an empty vgui_polytab.
   vgui_polytab_new() : base(new vgui_polytab()) { }
 };
 
