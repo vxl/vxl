@@ -36,4 +36,4 @@ ADD_TEST( vil1_test_resample          vil1_test_all test_resample ${CMAKE_CURREN
 ADD_TEST( vil1_test_vil               vil1_test_all test_vil ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
 
 ADD_EXECUTABLE( vil1_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( vil1_test_include vil1 )
+TARGET_LINK_LIBRARIES( vil1_test_include vil1 vil )
