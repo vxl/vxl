@@ -23,10 +23,6 @@
 
 //=======================================================================
 
-
-
-
-
 //: Generate losts of samples using pdf, build new pdf with builder
 //  and compare the two
 void test_mixture()
@@ -35,7 +31,6 @@ void test_mixture()
   vcl_cout << " Testing vpdfl_mixture" << vcl_endl;
   vcl_cout << "**************************" << vcl_endl;
 
-  
   vsl_add_to_binary_loader(vpdfl_axis_gaussian());
   vsl_add_to_binary_loader(vpdfl_axis_gaussian_builder());
   vsl_add_to_binary_loader(vpdfl_mixture());
@@ -49,7 +44,7 @@ void test_mixture()
   // Initialise builder for 2 gaussian components
   vpdfl_mixture_builder builder;
   builder.init(g_builder,n_comp);
-	builder.set_weights_fixed(false);
+  builder.set_weights_fixed(false);
 
   // Initialise default pdf using 2 5D gaussians
   vpdfl_mixture pdf;
@@ -103,8 +98,8 @@ void test_mixture()
       &test_wts[0], n_comp) < 0.01,
     true);
 
-  if (vnl_vector_ssd(gmm.component(0).mean(), mean[0]) < 
-    vnl_vector_ssd(gmm.component(0).mean(), mean[1]) )
+  if (vnl_vector_ssd(gmm.component(0).mean(), mean[0]) <
+      vnl_vector_ssd(gmm.component(0).mean(), mean[1]) )
   {
     TEST("Means are about correct",
       (vnl_vector_ssd(gmm.component(0).mean(), mean[0]) < 0.05 &&
