@@ -66,13 +66,14 @@ vil_memory_image::vil_memory_image(int w, int h, vil_pixel_format pixel_format)
 
 vil_image make_memory_image(vil_image const * thatp)
 {
-  cerr << thatp << " ptr ";
   vil_image const& that = *thatp;
-  cerr << that.impl() << "  ";
+#if 1
+  //noblather cerr << thatp << " ptr ";
+  //noblather cerr << that.impl() << "  ";
   if (that.get_property("memory"))
     return that;
   //vcl_cerr << "copying " << that.impl() << endl;
-
+#endif
   vil_memory_image mem(that.planes(), 
 		       that.width(), 
 		       that.height(),

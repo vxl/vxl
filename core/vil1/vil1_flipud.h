@@ -7,7 +7,7 @@
   fsm@robots.ox.ac.uk
 */
 
-// purpose: image adaptor which turns an image upside-down.
+// purpose: turn an image upside-down.
 
 #include <vil/vil_image.h>
 

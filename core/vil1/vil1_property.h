@@ -37,6 +37,33 @@
 // not to clutter it. All property tags described in this file should
 // begin with "vil_property_" and that chunk of the namespace is reserved.
 
+//: packing of rgb(a) colours in the data produced by get_section().
+// tags: "vil_property_r_packing"
+//       "vil_property_g_packing"
+//       "vil_property_b_packing"
+//       "vil_property_a_packing"
+// type: three ints
+// If supported, the returned values describe the index of the
+// red/green/blue/alpha part of the pixel in plane p, row i, column j
+// of the whole image. E.g. to fill a 256x256 3-plane memory image from
+// a 256x256 disk image which supports r,g,b packing:
+//
+//   char buf[3][256][256]
+//   char bif[3*256*256];
+//   image.get_section(bif, 0, 0, 256, 256);
+//   int a[3];
+//   char const *tag[] = {
+//     "vil_propery_r_packing",
+//     "vil_propery_g_packing",
+//     "vil_propery_b_packing"
+//   };
+//   for (int p=0; p<3; ++p) {
+//     image.get_property(, a);
+//     for (int i=0; i<256; ++i)
+//       for (int j=0; j<256; ++j)
+//         buf[p][i][j] = bif[ a[0]*p + a[1]*i + a[2]*j ];
+//   }
+
 //: preferred direction for access.
 // tags: "vil_property_preferred_x_direction"
 //       "vil_property_preferred_y_direction"
