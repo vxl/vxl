@@ -299,6 +299,7 @@ foreach $f (@FILES)
     elsif ($j eq "vil/algo/vil_cartesian_differential_invariants.h") { $i="($i)_3"; }
     elsif ($j eq "vil/algo/vil_convolve_1d.h") { $i="vil_convolve_(1d|edge_1d|boundary_option)"; }
     elsif ($j eq "vil/algo/vil_find_peaks.h") { $i="vil_(find_peaks_3x3|is_peak_3x3)"; }
+    elsif ($j eq "vil/algo/vil_find_4con_boundary.h") { $i="$i(_below|_above)_threshold"; }
     elsif ($j eq "vil/algo/vil_histogram.h") { $i="$i(|_byte)"; }
     elsif ($j eq "vil/vil_copy.h") { $i="($i)(|_deep|_to_window|_reformat)"; }
     elsif ($j eq "vil/algo/vil_exp_filter_1d.h") { $i="vil_exp_filter_(1d|i|j)"; }
