@@ -6,6 +6,7 @@
 
 typedef unsigned char ubyte;
 
+#if 0 // currently no dilation of colour images
 #ifdef __GNUC__
 # if VCL_ALLOWS_NAMESPACE_STD
 namespace std { static inline vil_rgb<ubyte> max
@@ -28,6 +29,7 @@ static inline bool operator<(vil_rgb<ubyte> const& a, vil_rgb<ubyte> const& b)
   return a.r<b.r || (a.r==b.r && a.g<b.g) || (a.r==b.r && a.g==b.g && a.b<b.b);
 }
 #endif
+#endif // 0
 
 vil_image vepl_dilate_disk(vil_image const& image, float radius)
 {
@@ -42,6 +44,7 @@ vil_image vepl_dilate_disk(vil_image const& image, float radius)
     return out;
   }
 
+#if 0 // currently no dilation of colour images
   // byte rgb
   else if (vil_pixel_format(image) == VIL_RGB_BYTE) {
     vil_memory_image_of<vil_rgb<ubyte> > mem(image); // load in memory to pass to filter
@@ -52,6 +55,7 @@ vil_image vepl_dilate_disk(vil_image const& image, float radius)
     op.filter();
     return out;
   }
+#endif
 
   // float
   else if (vil_pixel_format(image) == VIL_FLOAT) {
@@ -63,6 +67,19 @@ vil_image vepl_dilate_disk(vil_image const& image, float radius)
     op.filter();
     return out;
   }
+
+#if 0 // currently no dilation for unsigned short
+  // short
+  else if (vil_pixel_format(image) == VIL_UINT16) {
+    vil_memory_image_of<unsigned short> mem(image); // load in memory to pass to filter
+    vil_memory_image_of<unsigned short> out(image);
+    vipl_dilate_disk<vil_image,vil_image,unsigned short,unsigned short,vipl_trivial_pixeliter> op(radius);
+    op.put_in_data_ptr(&mem);
+    op.put_out_data_ptr(&out);
+    op.filter();
+    return out;
+  }
+#endif
 
   // double
   else if (vil_pixel_format(image) == VIL_DOUBLE) {

@@ -8,9 +8,9 @@
 // \date   12 sept. 2000
 //
 #include <vil/vil_memory_image_of.h>
-#include <vil/vil_rgb_byte.h>
+//#include <vil/vil_rgb_byte.h>
 #include <vepl/vepl_erode_disk.h>
-#include <iostream.h>
+#include <vcl_iostream.h>
 #include <vcl_cmath.h>
 #include <vcl_cstdlib.h>
 typedef unsigned char ubyte;
@@ -39,7 +39,7 @@ vil_image CreateTest16bitImage(int wd, int ht)
   return image;
 }
 
-
+#if 0 // no colour erosion for the moment
 // create a 24 bit color test image
 vil_image CreateTest24bitImage(int wd, int ht)
 {
@@ -51,7 +51,7 @@ vil_image CreateTest24bitImage(int wd, int ht)
     }
   return image;
 }
-
+#endif
 
 // create a 24 bit color test image, with 3 planes
 vil_image CreateTest3planeImage(int wd, int ht)
@@ -126,19 +126,19 @@ static bool difference(vil_image const& a, vil_image const& b, int v, const char
   if (difference(i,r,0)) vcl_cout<<m<<m2<<"FAILED: input image changed!\n"; }
 #define ALL_TESTS(d,v,m) \
   TEST(byte_img,byte_ori,d,unsigned char,v,m,"_byte"); \
-/*TEST(shrt_img,shrt_ori,d,unsigned short,v,m,"_short");*/ \
-/*TEST(flot_img,flot_ori,d,float,v,m,"_float");*/ \
+  TEST(shrt_img,shrt_ori,d,unsigned short,v,m,"_short"); \
+//TEST(flot_img,flot_ori,d,float,v,m,"_float"); \
 /*TEST(colr_img,colr_ori,d,vil_rgb_byte,v,m,"_colour")*/
 
 int main() {
   vil_image byte_img = CreateTest8bitImage(32,32),  byte_ori = CreateTest8bitImage(32,32);
   vil_image shrt_img = CreateTest16bitImage(32,32), shrt_ori = CreateTest16bitImage(32,32);
-  vil_image colr_img = CreateTest24bitImage(32,32), colr_ori = CreateTest24bitImage(32,32);
+//vil_image colr_img = CreateTest24bitImage(32,32), colr_ori = CreateTest24bitImage(32,32);
   vil_image flot_img = CreateTestfloatImage(32,32), flot_ori = CreateTestfloatImage(32,32);
-  vil_memory_image_of<float> flot_out(32, 32);
   vil_memory_image_of<unsigned char> byte_out(32, 32);
   vil_memory_image_of<unsigned short> shrt_out(32, 32);
-  vil_memory_image_of<vil_rgb_byte> colr_out(32, 32);
+  vil_memory_image_of<float> flot_out(32, 32);
+//vil_memory_image_of<vil_rgb_byte> colr_out(32, 32);
 
   ALL_TESTS(0,0,"vepl_erode_disk");
   return 0;
