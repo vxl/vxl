@@ -1,2 +1,2 @@
 ADD_EXECUTABLE( triangulate triangulate.cxx )
-LINK_LIBRARIES( gtrl )
+TARGET_LINK_LIBRARIES( triangulate gtrl )
