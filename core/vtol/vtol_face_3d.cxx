@@ -754,7 +754,7 @@ bool vtol_face_3d::operator==(vsol_spatial_object_3d& obj)
 //:
 // -- Returns the ith inferior vtol_one_chain_3d of the vtol_face_3d.
 
-vtol_one_chain_3d* vtol_face_3d::get_one_chain(int which = 0)
+vtol_one_chain_3d* vtol_face_3d::get_one_chain(int which)
 
 {
  

@@ -199,7 +199,7 @@ void vtol_topology_object_2d::edges(edge_list_2d& edges)
 
 //:
 // print the object
-void vtol_topology_object_2d::print (ostream& strm =cout)
+void vtol_topology_object_2d::print (ostream& strm)
 {
   strm << "<vtol_topology_object_2d " << (void *)this << ">" << endl;
 }
