@@ -50,7 +50,7 @@ bool FMatrixCompute::compute (PairMatchSetCorner& matches, FMatrix* F_out)
 
 bool FMatrixCompute::compute (vcl_vector<vgl_homg_point_2d<double> >& points1,
                               vcl_vector<vgl_homg_point_2d<double> >& points2,
-                              FMatrix* F_out)
+                              FMatrix& F_out)
 {
   if (points1.size() != points2.size())
     vcl_cerr << "FMatrixCompute::compute(): Point vectors are not of equal length\n";
@@ -64,7 +64,7 @@ bool FMatrixCompute::compute (vcl_vector<vgl_homg_point_2d<double> >& points1,
   vcl_vector<int> ind1(count), ind2(count);
   for (int i = 0; i < count; i++)  ind1[i] = ind2[i] = i;
   matches.set(inliers, ind1, ind2);
-  return compute(matches, F_out);
+  return compute(matches, &F_out);
 }
 
 bool FMatrixCompute::compute (vcl_vector<HomgPoint2D>& points1,

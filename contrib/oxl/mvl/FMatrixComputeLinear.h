@@ -63,7 +63,7 @@ class FMatrixComputeLinear : public FMatrixCompute
   //  Makes a PairMatchSetCorner, and then calls the compute method above.
   bool compute(vcl_vector<vgl_homg_point_2d<double> >&,
                vcl_vector<vgl_homg_point_2d<double> >&,
-               FMatrix* F);
+               FMatrix& F);
 
   //: Interface to above using preconditioned points
   bool compute_preconditioned(vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&, FMatrix* F);
@@ -71,7 +71,7 @@ class FMatrixComputeLinear : public FMatrixCompute
   //: Interface to above using preconditioned points
   bool compute_preconditioned(vcl_vector<vgl_homg_point_2d<double> >&,
                               vcl_vector<vgl_homg_point_2d<double> >&,
-                              FMatrix* F);
+                              FMatrix& F);
 
   inline FMatrix compute(PairMatchSetCorner& p) { return FMatrixCompute::compute(p); }
   inline FMatrix compute(vcl_vector<HomgPoint2D>& p1, vcl_vector<HomgPoint2D>& p2)

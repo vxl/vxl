@@ -20,9 +20,13 @@
 // \author
 //   Martin Armstrong, Oxford 21/11/96
 //
+// \verbatim
+//  Modifications
+//   22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
+// \endverbatim
+//
 //-----------------------------------------------------------------------------
 
-#include <mvl/HomgMetric.h>
 #include <mvl/FMatrixCompute.h>
 
 class ImageMetric;
@@ -46,17 +50,17 @@ class FMPlanarComputeNonLinear : public FMatrixCompute
 
   // Computations--------------------------------------------------------------
 
-  bool compute_planar(PairMatchSetCorner& matches, FMatrixPlanar* F);
   bool compute_planar(vcl_vector<vgl_homg_point_2d<double> >& points1,
                       vcl_vector<vgl_homg_point_2d<double> >& points2,
-                      FMatrixPlanar* F);
+                      FMatrixPlanar& F);
+  bool compute_planar(PairMatchSetCorner& matches, FMatrixPlanar* F);
   bool compute_planar(vcl_vector<HomgPoint2D>& points1,
                       vcl_vector<HomgPoint2D>& points2, FMatrixPlanar* F);
 
   // FMatrixCompute virtuals
-  bool compute(PairMatchSetCorner& matches, FMatrix* F);
   bool compute(vcl_vector<vgl_homg_point_2d<double> >& points1,
-               vcl_vector<vgl_homg_point_2d<double> >& points2, FMatrix* F);
+               vcl_vector<vgl_homg_point_2d<double> >& points2, FMatrix& F);
+  bool compute(PairMatchSetCorner& matches, FMatrix* F);
   bool compute(vcl_vector<HomgPoint2D>& points1,
                vcl_vector<HomgPoint2D>& points2, FMatrix* F);
 };

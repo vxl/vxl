@@ -38,7 +38,7 @@ class FMatrixComputeRobust : public FMatrixCompute
     { return FMatrixCompute::compute(p1,p2,F); }
   bool compute(vcl_vector<vgl_homg_point_2d<double> >& p1,
                vcl_vector<vgl_homg_point_2d<double> >& p2,
-               FMatrix* F)
+               FMatrix& F)
     { return FMatrixCompute::compute(p1,p2,F); }
 
   inline FMatrix compute(PairMatchSetCorner& p) { return FMatrixCompute::compute(p); }

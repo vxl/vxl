@@ -52,7 +52,7 @@ class FMatrixCompute
   virtual bool compute(vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&, FMatrix* f_matrix_ptr);
   virtual bool compute(vcl_vector<vgl_homg_point_2d<double> >&,
                        vcl_vector<vgl_homg_point_2d<double> >&,
-                       FMatrix* f_matrix_ptr);
+                       FMatrix& f_matrix_ptr);
 
   //: Compute fundamental matrix using given matchlist and return an FMatrix object.
   //  This is implemented in terms of compute(MatchList*, FMatrix*)
@@ -63,7 +63,7 @@ class FMatrixCompute
     { FMatrix ret; compute(pts1, pts2, &ret); return ret; }
   inline FMatrix compute(vcl_vector<vgl_homg_point_2d<double> >& pts1,
                          vcl_vector<vgl_homg_point_2d<double> >& pts2)
-    { FMatrix ret; compute(pts1, pts2, &ret); return ret; }
+    { FMatrix ret; compute(pts1, pts2, ret); return ret; }
 };
 
 #endif // _FMatrixCompute_h
