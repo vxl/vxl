@@ -9,7 +9,7 @@
 
 USES := vxl gel
 
-IULIBS += -lvsol -lvgl -lvnl -lvbl
+IULIBS += -lvsol -lvgl -lvnl -lvbl -lvul
 
 MINI_PROG_SOURCES += vsol_spatial_object_example.cxx
 MINI_PROG_SOURCES += vsol_point_example.cxx
