@@ -28,7 +28,12 @@ enum vgui_key {
   vgui_DELETE, vgui_INSERT  // other things
 };
 
-//: Use vgui_key_CTRL('A') to signify control A
+//: Given a letter character, this function returns the control character.
+//
+//  Use vgui_key_CTRL('a') or vgui_key_CTRL('A') to signify control+A.
+//  Note, the vgui_key in a vgui_event is always a lower case letter (see
+//  vgui_event.h), so don't compare event.key to a vgui_key_CTRL'ed letter.
+//  You may compare a vgui_key_CTRL'ed to an event.ascii_key.
 vgui_key vgui_key_CTRL(int character);
 
 vcl_ostream& operator<<(vcl_ostream& s, vgui_key k);

@@ -23,7 +23,7 @@ void vgui_event::init() {
   type = vgui_EVENT_NULL;
   button = vgui_BUTTON_NULL;
   key = vgui_KEY_NULL;
-  ascii_char = 0;
+  ascii_char = vgui_KEY_NULL;
   modifier = vgui_MODIFIER_NULL;
   wx = 0;
   wy = 0;

@@ -436,19 +436,41 @@ void vgui_mfc_adaptor::OnSize(UINT nType, int cx, int cy)
 }
 
 //: Convert MFC key character into an int suitable for vgui.
-int mfc_key(UINT nChar, UINT nFlags)
+void mfc_key(UINT nChar, UINT nFlags, int *the_key, int *the_ascii_char)
 {
-  if (nFlags & 256) {
+  if (nFlags & 256) 
+  {
     // Extended code
     switch (nChar)
     {
-    case VK_NEXT: return vgui_PAGE_DOWN;
-    case VK_PRIOR: return vgui_PAGE_UP;
-    case VK_LEFT: return vgui_CURSOR_LEFT;
-    case VK_UP: return vgui_CURSOR_UP;
-    case VK_RIGHT: return vgui_CURSOR_RIGHT;
-    case VK_DOWN: return vgui_CURSOR_DOWN;
-    default: return vgui_key(0);
+      case VK_NEXT: 
+        *the_key = vgui_PAGE_DOWN;
+        *the_ascii_char = vgui_PAGE_DOWN;
+        return;
+      case VK_PRIOR: 
+        *the_key = vgui_PAGE_UP;
+        *the_ascii_char = vgui_PAGE_UP;
+        return;
+      case VK_LEFT: 
+        *the_key = vgui_CURSOR_LEFT;
+        *the_ascii_char = vgui_CURSOR_LEFT;
+        return;
+      case VK_UP: 
+        *the_key = vgui_CURSOR_UP;
+        *the_ascii_char = vgui_CURSOR_UP;
+        return;
+      case VK_RIGHT:
+        *the_key = vgui_CURSOR_RIGHT;
+        *the_ascii_char = vgui_CURSOR_RIGHT;
+        return;
+      case VK_DOWN:
+        *the_key = vgui_CURSOR_DOWN;
+        *the_ascii_char = vgui_CURSOR_DOWN;
+        return;
+      default:
+        *the_key = vgui_key(0);
+        *the_ascii_char = vgui_key(0);
+        return;
     };
   }
   else
@@ -458,21 +480,21 @@ int mfc_key(UINT nChar, UINT nFlags)
     vcl_memset(lpKeyState, 0, 256);
     vcl_memset(buf, 0, 256);
 
+    int is_ok = ToAscii(nChar, nFlags & 0xff, lpKeyState, buf, 0);
+    if (is_ok == 1)
+      *the_key = buf[0]; 
+    else
+      *the_key = nChar;
+
+    // Add modifiers to character:
     lpKeyState[VK_SHIFT] = GetKeyState(VK_SHIFT);
+    lpKeyState[VK_CONTROL] = GetKeyState(VK_CONTROL);
 
-    // kym - don't specify the CTRL key - this returns the wrong
-    // ASCII character.  On other toolkits we expect, for example,
-    // CTRL+j to produce: modifier=vgui_CTRL, key='j'.
-    // By adding CTRL here we get key='^J'.
-    //lpKeyState[VK_CONTROL] = GetKeyState(VK_CONTROL);
-
-    int k= ToAscii(nChar, nFlags & 0xff, lpKeyState, buf, 0);
-
-    int c = nChar;
-    if (k == 1)
-      c = buf[0];
-
-    return c;
+    is_ok = ToAscii(nChar, nFlags & 0xff, lpKeyState, buf, 0);
+    if (is_ok == 1)
+      *the_ascii_char = buf[0]; 
+    else
+      *the_ascii_char = nChar;
   }
 }
 
@@ -484,13 +506,15 @@ vgui_event vgui_mfc_adaptor::generate_vgui_event(UINT nChar, UINT nRepCnt, UINT 
     evt.modifier = vgui_SHIFT;
   if (GetKeyState(VK_CONTROL) & 0x8000)
     evt.modifier = vgui_CTRL;
-  //if (GetKeyState(VK_MENU) & 0x8000)
-  //  evt.modifier = vgui_ALT;
+  if (GetKeyState(VK_MENU) & 0x8000)
+    evt.modifier = vgui_ALT;
   // kym - VK_MENU (alt key) doesn't seem to reach here - it is used
   // by the menu, so, it seems, there will be no vgui_ALT events for MFC.
 
-  int k = mfc_key(nChar, nFlags);
-  evt.set_key(k);
+  int the_key, the_ascii_char;
+  mfc_key(nChar, nFlags, &the_key, &the_ascii_char);
+  evt.set_key(the_key);
+  evt.ascii_char = vgui_key(the_ascii_char);
   return evt;
 }
 

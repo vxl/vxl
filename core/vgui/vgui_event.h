@@ -94,7 +94,7 @@ class vgui_event
   vgui_modifier modifier;
 
   //: The actual key stroke pressed by the user.
-  char ascii_char;
+  vgui_key ascii_char;
 
   //: Position of the mouse pointer in viewport coordinates when event occurred.
   int wx,wy;

@@ -16,6 +16,8 @@
 //   04-OCT-2002 K.Y.McGaul - Added doxygen style documentation.
 //                          - Check for impossible events in new init function.
 //                          - key is now always lower case.
+//    22-OCT-2002 A.Fitzibbon & K.Y.McGaul - Added constructor for ascii_char
+//                           event conditions.
 // \verbatim
 
 #include <vcl_string.h>
@@ -32,31 +34,33 @@ class vgui_event;
 //  The key is now always lower case to save confusion.  
 struct vgui_event_condition
 {
-  // We use bitfields to avoid the charge that these things take
-  // up space. Everything should fit into a 32bit word. In any
-  // case, the machine code needed to check for the condition
-  // represented would be much longer than four 32bit words. To
-  // save even more space, delete any comments and unnecessary
-  // blanks that remain in your code.
-  bool on : 1;
-  bool pressed : 1;
-  vgui_key key : 16;
-  vgui_button button : 3;
-  vgui_modifier modifier : 4;
+  enum event_types { null_event, mouse_event, ascii_char_event, key_event };
+
+  bool on;
+  bool pressed;
+  vgui_key key;
+  vgui_key ascii_char;
+  vgui_button button;
+  vgui_modifier modifier;
+  event_types how_checked;
 
   //: Initialise event condition and check for impossible events.
-  void init(vgui_key k, vgui_button b, vgui_modifier m, bool p, bool is_on);
+  void init(vgui_key k, vgui_key ascii_char, vgui_button b,
+    vgui_modifier m, bool is_pressed, bool is_on, event_types use_event);
 
   //: Constructor - create a default event condition.
   vgui_event_condition();
 
-  //: Constructor for a key press event condition.
-  vgui_event_condition(vgui_key k, vgui_modifier m = vgui_MODIFIER_NULL, 
-    bool p = true);
+  //: Constructor for a key press event condition (using ascii char).
+  vgui_event_condition(vgui_key ascii_code, bool is_pressed = true);
 
-  //: Constructor for a button press event condition.
+  //: Constructor for a key press event condition (using key and modifier).
+  vgui_event_condition(vgui_key k, vgui_modifier m, 
+  bool is_pressed = true);
+
+  //: Constructor for a mouse button press event condition.
   vgui_event_condition(vgui_button b, vgui_modifier m = vgui_MODIFIER_NULL, 
-    bool p = true);
+    bool is_pressed = true);
 
   void enable(bool v = true) { on = v; }
   void disable(bool v = true) { on = !v; }
