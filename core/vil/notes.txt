@@ -22,10 +22,39 @@ There are some fundamental divisions
 What does the single vil_image hierarchy actually give you?
 
 
+Good points about existing vil:
+
+The functional notation vil_image im = vil_load("filename") is very nice
+
+Support for processing very large images on disk.
 
 
 
-Questions with suggested answers.
+Philosophy:
+
+We want a single "normal" and "easy" image class that we can point new users at.
+This should also be the default class for doing actual pixel manipulation.
+
+We want to keep the type proliferation down. So we enforce the following idea
+vil2_image_data is used when you don't know an image's pixel type,
+and you can't immediately access the pixels. vil2_image_view is used when you know the type,
+you know the structure and you can immediately access the pixels. By keeping this
+division clean we can avoid type proliferation. There are limited exceptional cases. One is
+when you absolutely must have a function that works on a view without knowing its pixel type - e.g.
+vil2_image_data::get_view(). This means that all functions that actually work with pixels should
+take a concrete vil_image_view<T>.
+
+If you really want to mess around with an image without knowing
+its type, then you should use an vil2_image_data_sptr object. Anyone who wants to write super-duper
+size-no-problem image processing code, should write functions that take vil2_image_data_sptr.
+However they will do the actual pixel processing with a vil2_image_view.
+
+To get the functional style, most operations on a vil2_image_data, should be
+on a vil2_image_data_sptr. Again consistency is good. vil2_image_data_sptr is very like
+the old vil_image. However, here the smart pointer stuff is explict, and simple.
+
+
+Questions with suggested answers:
 
 Should vil_image_view::resize be virtual and in the base class? (It is in mil_image_2d)
 Yes: it might be useful.
@@ -101,19 +130,24 @@ Notes:
 
 ToDo: - in order of priority.
 
-Go through existing examples and VXL book and see if there are any idioms we have missed.
+Go through existing examples and VXL book and see if there are any idioms we have missed. - Done TFC
 
-Add a set_view function to fill someone's existing view with data (which will probably be useful for implementing vil_crop style filters)
-
-Add vil_crop style filter example for vil2_image_data.
+Add vil_crop style filter example for vil2_image_data. - Done IMS
 
 Decide where to put world to image transforms and write it.
 
-Write vil_memory_image
+Write vil2_save
+
+Write vil2_memory_image
 
 Write some example standard image processing code.
+
+Add a set_view function to fill someone's existing view with data (which will probably be useful for implementing vil_clamp style filters)
 
 Convert rest of file_images
 
 Convert rest of vil2_image_data filters
 
+
+
+Philosophy
