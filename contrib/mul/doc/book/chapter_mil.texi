@@ -2,8 +2,12 @@
 Set of image classes which use pointers to act as views of other images.
 @endchapsummary
 
-@section Introduction
+@section CAVEAT user
+mil will never enter core VXL in its current form. We hope to port some
+of the mil functionality into vil, and then use mil just to provide
+registration information, and interface similarity between 2, 3 and 4D images.
 
+@section Introduction
 mil and mil3d contains a set of image classes, derived from @code{mil_image}, which can be
 used as `views' on actual image data.
 
