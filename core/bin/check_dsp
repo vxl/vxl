@@ -189,16 +189,16 @@ foreach $dir (@DIRS)
         @sources = ($1);
         $testmain = "$1";
       }
-      if (m/^\s*(SOURCES|MINI_PROG_SOURCES|TESTS|TESTMAIN)\s*\:?\=\s*(\S+)/) {
-        $file = "$2";
+      while (m/^\s*(SOURCES|MINI_PROG_SOURCES|TESTS|TESTMAIN)\s*\:?\=\s*(\S+)/) {
+        @tests = ($2) if ($1 eq "TESTS");
+        $file = "$2"; s/^(\s*[A-Z_]+\s*\:?\=\s*)\S+/$1/;
         print "$file\tspecified in $makef does not exist\n" unless (-f "$dir/$file");
         @sources = ($file);
-        @tests = ($file) if ($1 eq "TESTS");
         $file =~ s/\.(c|cxx|cc|cpp|C)$/.h/;
         push @hsources, $file if (-f "$dir/$file" && $file =~ m/\.h$/);
       }
-      if (m/^\s*(MANPAGE_SOURCES)\s*\:?\=\s*(\S+)/) {
-        $file = "$2";
+      while (m/^\s*(MANPAGE_SOURCES)\s*\:?\=\s*(\S+)/) {
+        $file = "$2"; s/^(\s*[A-Z_]+\s*\:?\=\s*)\S+/$1/;
         print "$file\tspecified in $makef does not exist\n" unless (-f "$dir/$file");
         push @hsources, $file;
         if ($file =~ m/\.txx$/) {
@@ -206,8 +206,9 @@ foreach $dir (@DIRS)
           push @hsources, $file if (-f "$dir/$file");
         }
       }
-      if (m/^\s*(SOURCES|MINI_PROG_SOURCES|TESTS)\s*\+\=\s*(\S+)/) {
-        $file = "$2";
+      while (m/^\s*(SOURCES|MINI_PROG_SOURCES|TESTS)\s*\+\=\s*(\S+)/) {
+        push @tests, $2 if ($1 eq "TESTS");
+        $file = "$2"; s/^(\s*[A-Z_]+\s*\+\=\s*)\S+/$1/;
         if ($file eq "\$\{MOCSOURCES\}") {
           @tmp_list = @sources;
           foreach $x (@tmp_list) {
@@ -217,14 +218,13 @@ foreach $dir (@DIRS)
         else {
           print "$file\tspecified in $makef does not exist\n" unless (-f "$dir/$file");
           push @sources, $file;
-          push @tests, $file if ($1 eq "TESTS");
           $file =~ s/\.(c|cxx|cc|cpp|C)$/.h/;
           push @hsources, $file if (-f "$dir/$file" && $file =~ m/\.h$/ && grep(/^$file$/, @hsources) == 0);
           # I.e.: .h files which are not explicitly present in makefile are added only once.
         }
       }
-      if (m/^\s*(MANPAGE_SOURCES)\s*\+\=\s*(\S+)/) {
-        $file = "$2";
+      while (m/^\s*(MANPAGE_SOURCES)\s*\+\=\s*(\S+)/) {
+        $file = "$2"; s/^(\s*[A-Z_]+\s*\+\=\s*)\S+/$1/;
         print "$file\tspecified in $makef does not exist\n" unless (-f "$dir/$file");
         push @hsources, $file;
         if ($file =~ m/\.txx$/) {
@@ -301,6 +301,7 @@ foreach $dir (@DIRS)
       elsif (-f "$dir/$x.C") { printf "Should replace $x by $x.C in $cmakef\n"; push @source_files, "$x.C"; }
       elsif (-f "$dir/$x.cpp") { printf "Should replace $x by $x.cpp in $cmakef\n"; push @source_files, "$x.cpp"; }
       else { printf "No source file $x.* found in $dir\n"; }
+      if ($x =~ m/^(.*\.h)\.in$/) { $y=$1; push @hsource_files, "$y" if (-f "$dir/$y"); }
     }
   }
   while ($cmakefile =~ s/\bADD_EXECUTABLE\s*\(\s*(\S+)((\s+[^\s()]+)+)\s*\)//) {
@@ -325,6 +326,7 @@ foreach $dir (@DIRS)
       elsif (-f "$dir/$y.C") { printf "Should replace $y by $y.C in $cmakef\n"; push @source_files, "$y.C"; }
       elsif (-f "$dir/$y.cpp") { printf "Should replace $y by $y.cpp in $cmakef\n"; push @source_files, "$y.cpp"; }
       else { printf "No source file $y.* found in $dir\n" unless ($y eq "WIN32"); }
+      if ($y =~ m/^(.*\.h)\.in$/) { $z=$1; push @hsource_files, "$z" if (-f "$dir/$z"); }
     }
   }
   while ($cmakefile =~ s/\bADD_TEST\s*\(\s*\S+\s+(\S+)\s*(([^\s()]+)?)((\s+[^()]+)?)\s*\)//) {
