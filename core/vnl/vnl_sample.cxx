@@ -36,6 +36,15 @@ void vnl_sample_reseed()
 # endif
 }
 
+void vnl_sample_reseed(int seed)
+{
+# if VXL_STDLIB_HAS_DRAND48
+  srand48( seed );
+# else
+  vnl_sample_seed = seed;
+# endif
+}
+
 //: return a random number uniformly drawn on [a, b)
 double vnl_sample_uniform(double a, double b)
 {

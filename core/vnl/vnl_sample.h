@@ -13,6 +13,9 @@
 //: re-seed the random number generator.
 void vnl_sample_reseed();
 
+//: re-seed the random number generator given a seed.
+void vnl_sample_reseed(int seed);
+
 //: uniform on [a, b)
 double vnl_sample_uniform(double a, double b);
 
