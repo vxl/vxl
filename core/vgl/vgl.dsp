@@ -285,6 +285,11 @@ SOURCE=.\Templates/vgl_line_2d+double-.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\Templates/vgl_line_2d+int-.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/vgl_line_2d+float-.cxx
 
 # End Source File
