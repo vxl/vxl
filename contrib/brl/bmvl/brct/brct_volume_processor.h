@@ -39,8 +39,8 @@ class brct_volume_processor : public brct_volume_processor_params
   int nrows_;
   int nslabs_;
   vsol_box_3d_sptr box_;
-  bsol_point_index_3d index_;
-  bsol_point_index_3d change_index_;
+  bsol_point_index_3d* index_;
+  bsol_point_index_3d* change_index_;
   vcl_vector<vsol_box_3d_sptr> change_volumes_;
 };
 

@@ -16,12 +16,14 @@ brct_volume_processor::brct_volume_processor(brct_volume_processor_params const&
   if (cube_edge_length_&&cube_edge_length_>0)
     r = 1.0/cube_edge_length_;
   ncols_ = w*r, nrows_ = h*r, nslabs_ = d*r;
-  index_ = bsol_point_index_3d(ncols_, nrows_, nslabs_, b);
-  change_index_ = bsol_point_index_3d(ncols_, nrows_, nslabs_, b);
+  index_ = new bsol_point_index_3d(ncols_, nrows_, nslabs_, b);
+  change_index_ = new bsol_point_index_3d(ncols_, nrows_, nslabs_, b);
 }
 
 brct_volume_processor::~brct_volume_processor()
 {
+  delete index_;
+  delete change_index_;
 }
 
 bool brct_volume_processor::read_points_3d_vrml(vcl_string const& filename)
@@ -37,11 +39,11 @@ bool brct_volume_processor::read_points_3d_vrml(vcl_string const& filename)
   brct_algos::read_vrml_points(is, pts3d);
   int npts = pts3d.size(),nin = 0;
   for (int i = 0; i<npts; i++)
-    if (index_.add_point(pts3d[i]))
+    if ((*index_).add_point(pts3d[i]))
       nin++;
   vcl_cout << "Added " << nin << "out of " << npts << " points\n"
            << "Point Bounds\n";
-  bsol_algs::print(index_.point_bounds());
+  bsol_algs::print((*index_).point_bounds());
   return true;
 }
 
@@ -55,7 +57,7 @@ bool brct_volume_processor::write_prob_volumes_vrml(vcl_string const&  filename)
     return false;
   }
   brct_algos::write_vrml_header(os);
-  int total_pts = index_.n_points();
+  int total_pts = (*index_).n_points();
   vcl_vector<vsol_point_3d_sptr> points;
   float scal = 1.0f;
   if (total_pts)
@@ -65,8 +67,8 @@ bool brct_volume_processor::write_prob_volumes_vrml(vcl_string const&  filename)
     for (int c = 0; c<ncols_; c++)
       for (int s = 0; s<nslabs_; s++)
       {
-        int n_points = index_.n_points(r, c, s);
-        vsol_box_3d_sptr box = index_.index_cell(r, c, s);
+        int n_points = (*index_).n_points(r, c, s);
+        vsol_box_3d_sptr box = (*index_).index_cell(r, c, s);
         float f = 1;
         if (n_points>0)
           f = 0.5;
@@ -85,12 +87,12 @@ bool brct_volume_processor::read_change_data_vrml(vcl_string const&  filename)
              << " could not open file " << filename << '\n';
     return false;
   }
-  change_index_.clear();
+  (*change_index_).clear();
   vcl_vector<vsol_point_3d_sptr> pts3d;
   brct_algos::read_vrml_points(is, pts3d);
   int npts = pts3d.size(),nin = 0;
   for (int i = 0; i<npts; i++)
-    if (change_index_.add_point(pts3d[i]))
+    if ((*change_index_).add_point(pts3d[i]))
        nin++;
   if (!npts||!nin)
   {
@@ -108,10 +110,10 @@ bool brct_volume_processor::compute_change()
     for (int c = 0; c<ncols_; c++)
       for (int s = 0; s<nslabs_; s++)
       {
-        float ni = index_.n_points(r, c, s);
-        float nc = change_index_.n_points(r, c, s);
+        float ni = (*index_).n_points(r, c, s);
+        float nc = (*change_index_).n_points(r, c, s);
         if (nc>cell_thresh_&&ni<cell_thresh_)
-          change_volumes_.push_back(index_.index_cell(r, c, s));
+          change_volumes_.push_back((*index_).index_cell(r, c, s));
       }
   vcl_cout << "Found " << change_volumes_.size() << " change cells\n";
  return true;
