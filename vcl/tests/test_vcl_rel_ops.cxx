@@ -23,7 +23,7 @@ int function()
   return 0;
 }
 
-int main()
+int test_vcl_rel_ops_main()
 {
   function();
   return 0;

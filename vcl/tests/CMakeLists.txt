@@ -7,11 +7,30 @@ INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )
 # Try to follow one of the other tests, like test_vcl_algorithm.cxx,
 # and add the test into vcl_tests.cxx.
 
-ADD_EXECUTABLE( vcl_tests vcl_tests.cxx)
-
-# Rel_ops conflicts with vector::iterator under GCC 3.0, so it can't
-# be put into the main test.
-ADD_EXECUTABLE( vcl_test_rel_ops test_vcl_rel_ops.cxx)
+ADD_EXECUTABLE( vcl_tests
+ # Driver
+     vcl_tests.cxx
+ # The actual tests
+     test_vcl_algorithm.cxx
+     test_vcl_cctype.cxx
+     test_vcl_cmath.cxx
+     test_vcl_compiler.cxx
+     test_vcl_complex.cxx
+     test_vcl_deque.cxx
+     test_vcl_exception.cxx
+     test_vcl_fstream.cxx
+     test_vcl_headers.cxx
+     test_vcl_iostream.cxx
+     test_vcl_iterator.cxx
+     test_vcl_list.cxx
+     test_vcl_map.cxx
+     test_vcl_multimap.cxx
+     test_vcl_new.cxx
+     test_vcl_rel_ops.cxx
+     test_vcl_set.cxx
+     test_vcl_stlfwd.cxx
+     test_vcl_string.cxx
+     test_vcl_vector.cxx
+)
 
 ADD_TEST( vcl_tests vcl_tests)
-ADD_TEST( vcl_test_rel_ops vcl_test_rel_ops)

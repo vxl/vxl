@@ -4,31 +4,28 @@
 //  I think this is preferable to having many vcl_test_* projects.
 // \author awf, mar 2000
 
-#include "test_vcl_algorithm.cxx"
-#include "test_vcl_cctype.cxx"
-#include "test_vcl_cmath.cxx"
-#include "test_vcl_compiler.cxx"
-#include "test_vcl_complex.cxx"
-#include "test_vcl_deque.cxx"
-#include "test_vcl_exception.cxx"
-#include "test_vcl_fstream.cxx"
-#include "test_vcl_headers.cxx"
-#include "test_vcl_iostream.cxx"
-#include "test_vcl_iterator.cxx"
-#include "test_vcl_list.cxx"
-#include "test_vcl_map.cxx"
-#include "test_vcl_multimap.cxx"
-#include "test_vcl_new.cxx"
-#include "test_vcl_set.cxx"
-#include "test_vcl_stlfwd.cxx"
-#include "test_vcl_string.cxx"
-#include "test_vcl_vector.cxx"
+#include <vcl_iostream.h>
 
-// rel_ops conflicts with vector::iterator with GCC 3.0
-// rel_ops are bad. Don't use them.
-#if 0
-#include "test_vcl_rel_ops.cxx"
-#endif
+int test_vcl_algorithm_main();
+int test_vcl_cctype_main();
+int test_vcl_cmath_main();
+int test_vcl_compiler_main();
+int test_vcl_complex_main();
+int test_vcl_deque_main();
+int test_vcl_exception_main();
+int test_vcl_fstream_main();
+int test_vcl_headers_main(int, char**);
+int test_vcl_iostream_main();
+int test_vcl_iterator_main();
+int test_vcl_list_main();
+int test_vcl_map_main();
+int test_vcl_multimap_main();
+int test_vcl_new_main();
+int test_vcl_rel_ops_main();
+int test_vcl_set_main();
+int test_vcl_stlfwd_main();
+int test_vcl_string_main();
+int test_vcl_vector_main();
 
 int result;
 
@@ -96,6 +93,9 @@ int main(int argc, char* argv[])
 
   testname( "test_vcl_new" );
   testresult( test_vcl_new_main() );
+
+  testname( "test_vcl_rel_ops" );
+  testresult( test_vcl_rel_ops_main() );
 
   testname( "test_vcl_set" );
   testresult( test_vcl_set_main() );
