@@ -1,0 +1,8 @@
+correlation_range 10
+inner_cost 1.0 	
+outer_cost 0.5
+continuity_cost 0.1	
+correlation_window_width 20
+correlation_window_height 20 
+bias_cost 0.2
+common_intensity_diff 0.0
