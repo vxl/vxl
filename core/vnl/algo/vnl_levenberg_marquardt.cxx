@@ -50,16 +50,22 @@ void vnl_levenberg_marquardt::init(vnl_least_squares_function* f)
   int n = f_->get_number_of_unknowns();         // I     Number of unknowns
 
   set_covariance_ = false;
-  fdjac_ = new vnl_matrix<double>(n,m);
-  ipvt_ = new vnl_vector<int>(n);
-  covariance_ = new vnl_matrix<double>(n,n);
+  fdjac_.set_size(n,m);
+  fdjac_.fill(0.0);
+  ipvt_.set_size(n);
+  ipvt_.fill(0);
+  inv_covar_.set_size(n,n);
+  inv_covar_.fill(0.0);
+  //fdjac_ = new vnl_matrix<double>(n,m);
+  //ipvt_ = new vnl_vector<int>(n);
+  //covariance_ = new vnl_matrix<double>(n,n);
 }
 
 vnl_levenberg_marquardt::~vnl_levenberg_marquardt()
 {
-  delete covariance_;
-  delete fdjac_;
-  delete ipvt_;
+  //delete covariance_;
+  //delete fdjac_;
+  //delete ipvt_;
 }
 
 
@@ -192,7 +198,7 @@ bool vnl_levenberg_marquardt::minimize_without_gradient(vnl_vector<double>& x)
          &diag[0],
          &user_provided_scale_factors, &factor, &nprint,
          &info, &num_evaluations_,
-         fdjac_->data_block(), &m, ipvt_->data_block(),
+         fdjac_.data_block(), &m, ipvt_.data_block(),
          &qtf[0],
          &wa1[0], &wa2[0], &wa3[0], &wa4[0],
          errors);
@@ -332,10 +338,10 @@ bool vnl_levenberg_marquardt::minimize_using_gradient(vnl_vector<double>& x)
   lmder1_(lmder_lsqfun, &m, &n,
           x.data_block(),
           fx.data_block(),
-          fdjac_->data_block(), &m,
+          fdjac_.data_block(), &m,
           &ftol,
           &info,
-          ipvt_->data_block(),
+          ipvt_.data_block(),
           wa1.data_block(),
           &size);
   num_evaluations_ = num_iterations_; // for lmder, these are the same.
@@ -430,16 +436,28 @@ void vnl_levenberg_marquardt::diagnose_outcome(vcl_ostream& s) const
 
 // fdjac is target m*n
 
-//: Get covariance at last minimum.
+//: Get INVERSE of covariance at last minimum.
 // Code thanks to Joss Knight (joss@robots.ox.ac.uk)
 vnl_matrix<double> const& vnl_levenberg_marquardt::get_JtJ()
 {
   if (!set_covariance_)
   {
     vcl_cerr << __FILE__ ": get_covariance() not confirmed tested  yet\n";
-    int n = fdjac_->rows ();
+    int n = fdjac_.rows ();
+
+    // matrix in FORTRAN is column-wise.
+    // transpose it to get C style order
+    vnl_matrix<double> r = fdjac_.extract(n,n).transpose();
+    // r is upper triangular matrix according to documentation.
+    // But the lower part has non-zeros somehow.
+    // clear the lower part
+    for( int i=0; i<n; i++ )
+      for( int j=0; j<i; j++ )
+        r(i,j) = 0.0;
+
+    // compute r^T * r
     vnl_matrix<double> rtr;
-    vnl_fastops::AtA(rtr, fdjac_->extract(n,n));
+    vnl_fastops::AtA(rtr, r);
     vnl_matrix<double> rtrpt (n, n);
 
     // Permute. First order columns.
@@ -448,7 +466,7 @@ vnl_matrix<double> const& vnl_levenberg_marquardt::get_JtJ()
     for (int j = 0; j < n; j++) {
       int i = 0;
       for (; i < n; i++) {
-        if ((*ipvt_)[i] == j+1) {
+        if (ipvt_[i] == j+1) {
           jpvt (j) = i;
           break;
         }
@@ -458,10 +476,10 @@ vnl_matrix<double> const& vnl_levenberg_marquardt::get_JtJ()
 
     // Now order rows
     for (int j = 0; j < n; j++) {
-      covariance_->set_row (j, rtrpt.get_row (jpvt(j)));
+      inv_covar_.set_row (j, rtrpt.get_row (jpvt(j)));
     }
 
     set_covariance_ = true;
   }
-  return *covariance_;
+  return inv_covar_;
 }
