@@ -19,7 +19,7 @@ static void test_identity_transform()
   vnl_matrix_fixed<double, 3, 3> M;
   M.set_identity();
   vgl_h_matrix_2d<double> Id(M);
-  vgl_homg_point_2d<double> p(3,2,1), pp, ppp;
+  vgl_homg_point_2d<double> p(3,2,1), pp;
   pp = Id(p);
   vcl_cout << "Id \n" << Id << "\n"
            << "p" << p << " , Id(p) = pp " << pp << "\n";
