@@ -148,7 +148,6 @@ main()
   //  Set true parameter estimate.
   double a[] = { 10.0, 0.02, -0.1 };
   vnl_vector<double> true_params(3, 3, a);
-  vnl_vector<double> est_params;
 
   //  Create the linear regression problem and an m_estimator objective
   //  function.

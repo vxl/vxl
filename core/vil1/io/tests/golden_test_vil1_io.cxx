@@ -119,7 +119,6 @@ void golden_test_vil_io(bool save_file)
       bfs_out.close();
     }
 
-    vil_io_memory_image_impl io_impl;
     vsl_add_to_binary_loader(vil_io_memory_image_impl());
 
     // Read in file to each class in turn
