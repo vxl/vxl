@@ -324,6 +324,9 @@ SOURCE=.\Templates/vnl_matrix_fixed+double.4.3-.cxx
 SOURCE=.\Templates/vnl_matrix_fixed+double.4.4-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vnl_matrix_fixed+double.6.2-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vnl_matrix_fixed+double.6.6-.cxx
 # End Source File
 # Begin Source File

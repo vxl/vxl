@@ -348,15 +348,6 @@ SOURCE=.\Templates/vbl_smart_ptr+rgrl_view-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+rgrl_weighter-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vnl_matrix_fixed+double.2.6-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vnl_matrix_fixed+double.6.2-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vnl_matrix_fixed+double.6.6-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\rgrl_est_homography2d.cxx
 # End Source File
 # Begin Source File
