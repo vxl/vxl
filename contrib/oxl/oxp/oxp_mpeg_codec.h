@@ -1,11 +1,11 @@
 #ifndef oxp_mpeg_codec_h
 #define oxp_mpeg_codec_h
-
 //:
 // \file 
 // \author awf
 // \date Dec 2001
 
+#include <vcl_string.h>
 struct oxp_mpeg_codec_data;
 
 //: Allows user to load MPEG files as vxl video.
@@ -21,9 +21,9 @@ public:
   int    put_section(int position, void* ib, int x0, int y0, int xs, int ys);
 
   //-----------------------------------------------------
-  bool probe(const char* fname);
-  bool load(const char* fname, char mode = 'r' );
-  // bool save(movie* movie, const char* fname);
+  bool probe(vcl_string const& fname);
+  bool load(vcl_string const& fname, char mode = 'r' );
+  // bool save(movie* movie, vcl_string const& fname);
 
   void close();
 

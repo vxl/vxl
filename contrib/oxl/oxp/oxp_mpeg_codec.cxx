@@ -493,13 +493,13 @@ int oxp_mpeg_codec::put_section(int position,
 //-----------------------------------------------------------------------------
 //: probe the file fname, open it as an MPEG file. If this works, close it and return true. False otherwise.
 
-bool oxp_mpeg_codec::probe(const char* fname)
+bool oxp_mpeg_codec::probe(vcl_string const& fname)
 {
   if (verbose)
     vcl_cerr << "oxp_mpeg_codec::probe[" << fname << "]\n";
 
   // 1st try to open
-  if (vcl_FILE* fp = vcl_fopen(fname, "rb"))
+  if (vcl_FILE* fp = vcl_fopen(fname.c_str(), "rb"))
   {
     unsigned int buf = 0xffffffffu;
     vcl_fread(&buf, 1, 4, fp);
@@ -523,13 +523,13 @@ bool oxp_mpeg_codec::probe(const char* fname)
   return p;
 }
 
-bool oxp_mpeg_codec::load(const char* fname, char mode)
+bool oxp_mpeg_codec::load(vcl_string const& fname, char mode)
 {
   // 1st try to open
   bool is_mpeg = false;
   bool is_vob = false;
   {
-    vcl_FILE* fp = vcl_fopen(fname, "rb");
+    vcl_FILE* fp = vcl_fopen(fname.c_str(), "rb");
     if (fp)
     {
       unsigned int buf = 0xffffffffu;
@@ -545,12 +545,12 @@ bool oxp_mpeg_codec::load(const char* fname, char mode)
 
   if (is_mpeg || is_vob)
   {
-    impl_->fp.open_1(fname);
+    impl_->fp.open_1(fname.c_str());
     impl_->decode_at_least_one();
 
     // Try to find an idx
     char buf[1024];
-    vcl_strcpy(buf, fname);
+    vcl_strcpy(buf, fname.c_str());
     char* p = vcl_strrchr(buf, '.');
     if (!p) // No . in filename
       p = buf + vcl_strlen(buf)-1;

@@ -28,9 +28,9 @@ class oxp_vidl_mpeg_codec : public vidl_vil1_codec
   }
 
   //-----------------------------------------------------
-  virtual bool probe(const char* fname) { return p.probe(fname); }
-  virtual vidl_vil1_codec_sptr load(const char* fname, char mode = 'r' );
-  virtual bool save(vidl_vil1_movie* movie, const char* fname);
+  virtual bool probe(vcl_string const& fname) { return p.probe(fname); }
+  virtual vidl_vil1_codec_sptr load(vcl_string const& fname, char mode = 'r' );
+  virtual bool save(vidl_vil1_movie* movie, vcl_string const& fname);
   virtual vcl_string type() const { return "MPEG"; }
 
   // Call before destruction to a void segv on exit

@@ -3,7 +3,7 @@
 #include "oxp_vidl_mpeg_codec.h"
 
 vidl_vil1_codec_sptr
-oxp_vidl_mpeg_codec::load(const char* fname, char mode)
+oxp_vidl_mpeg_codec::load(vcl_string const& fname, char mode)
 {
   if (!p.load(fname, mode))
     return 0;
@@ -25,8 +25,8 @@ oxp_vidl_mpeg_codec::load(const char* fname, char mode)
 }
 
 bool
-oxp_vidl_mpeg_codec::save(vidl_vil1_movie* movie, const char* fname)
+oxp_vidl_mpeg_codec::save(vidl_vil1_movie* movie, vcl_string const& fname)
 {
-  assert(0);
+  assert (false);
   return false;
 }
