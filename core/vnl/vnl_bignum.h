@@ -1,7 +1,6 @@
-// This is ./vxl/vnl/vnl_bignum.h
+// This is vxl/vnl/vnl_bignum.h
 #ifndef vnl_bignum_h_
 #define vnl_bignum_h_
-
 //:
 // \file
 // \brief Infinite precision integers
@@ -24,7 +23,8 @@
 // capabilities.
 //
 // The vnl_bignum class supports the parsing of character string
-// representations of all the literal number formats. The following
+// representations of all the literal number formats, PLUS the
+// strings "Infinity", "+Infinity" and "-Infinity".  The following
 // table shows an example of a character string
 // representation on the left and a brief description of the
 // interpreted meaning on the right:
@@ -43,6 +43,7 @@
 // 123.4             123 (value truncated)
 // 1.234e2           123 (exponent expanded/truncated)
 // 1.234e-5          0 (truncated value less than 1)
+// Infinity          +Inf ("maxval", obeying all conventional arithmetic)
 //
 // \author
 // Copyright (C) 1991 Texas Instruments Incorporated.
@@ -58,10 +59,10 @@
 // \verbatim
 // Modifications
 //  Peter Vanroose, 24 January 2002: ported to vnl from COOL
+//  Peter Vanroose, 7 September 2002: added "Infinity" (incl. all arithmetic)
 // \endverbatim
 
 #include <vcl_iostream.h>
-#include <vcl_cmath.h> // for sqrt(double)
 #include <vcl_string.h>
 
 class vnl_bignum;
@@ -107,7 +108,8 @@ vcl_istream& operator>>(vcl_istream& s, vnl_bignum& r);
 // capabilities.
 //
 // The vnl_bignum class supports the parsing of character string
-// representations of all the literal number formats. The following
+// representations of all the literal number formats, PLUS the
+// strings "Infinity", "+Infinity" and "-Infinity".  The following
 // table shows an example of a character string
 // representation on the left and a brief description of the
 // interpreted meaning on the right:
@@ -126,8 +128,12 @@ vcl_istream& operator>>(vcl_istream& s, vnl_bignum& r);
 // 123.4             123 (value truncated)
 // 1.234e2           123 (exponent expanded/truncated)
 // 1.234e-5          0 (truncated value less than 1)
+// Infinity          +Inf ("maxval", obeying all conventional arithmetic)
 //
 class vnl_bignum {
+  unsigned short count; // Number of data elements (never 0 except for "0")
+  int sign;             // Sign of vnl_bignum (+1 or -1, nothing else!!)
+  unsigned short* data; // Pointer to data value
 public:
   vnl_bignum();                        // Void constructor
   vnl_bignum(long);                    // Long constructor
@@ -212,6 +218,11 @@ public:
 
   inline vnl_bignum abs() const { return operator<(0L) ? operator-() : *this; }
 
+  // "+/-Inf" is represented as: count=1, data[0]=0, sign=+/-1 :
+  inline bool is_infinity() const { return count==1 && data[0]==0; }
+  inline bool is_plus_infinity() const { return is_infinity() && sign==1; }
+  inline bool is_minus_infinity() const { return is_infinity() && sign==-1; }
+
   void dump(vcl_ostream& = vcl_cout) const;     // Dump contents of vnl_bignum
 
   friend int magnitude_cmp(const vnl_bignum&, const vnl_bignum&);
@@ -231,10 +242,6 @@ public:
   friend vnl_bignum& vnl_bignum_from_string (vnl_bignum& b, const vcl_string& s);
 
 private:
-  unsigned short count; // Number of data elements
-  int sign;    // Sign of vnl_bignum (+,-,or 0)
-  unsigned short* data;     // Pointer to data value
-
   void xtoBigNum(const char *s);       // convert hex to vnl_bignum
   int  dtoBigNum(const char *s);       // convert decimal to vnl_bignum
   void otoBigNum(const char *s);       // convert octal to vnl_bignum
@@ -335,10 +342,10 @@ inline vnl_bignum operator%(vnl_bignum const& r1, vnl_bignum const& r2) {
   vnl_bignum result(r1); return result %= r2;
 }
 inline vnl_bignum operator%(vnl_bignum const& r1, long r2) {
-  vnl_bignum result(r1); return result %= r2;
+  vnl_bignum result(r1); return result %= vnl_bignum(r2);
 }
 inline vnl_bignum operator%(vnl_bignum const& r1, int r2) {
-  vnl_bignum result(r1); return result %= (long)r2;
+  vnl_bignum result(r1); return result %= vnl_bignum((long)r2);
 }
 inline vnl_bignum operator%(long r1, vnl_bignum const& r2) {
   vnl_bignum result(r1); return result %= r2;
@@ -356,95 +363,10 @@ inline bool operator> (long r1, vnl_bignum const& r2) { return r2< r1; }
 inline bool operator<=(long r1, vnl_bignum const& r2) { return r2>=r1; }
 inline bool operator>=(long r1, vnl_bignum const& r2) { return r2<=r1; }
 
-#if defined(VCL_SUNPRO_CC) || defined(VCL_SGI_CC) || defined(VCL_METRO_WERKS)
-inline vnl_bignum vcl_sqrt(vnl_bignum const& x) { return vnl_bignum(vcl_sqrt(double(x))); }
-#elif defined(VCL_VC)
-inline vnl_bignum sqrt(vnl_bignum const& x) { return vnl_bignum(sqrt(double(x))); }
-#else
-namespace std {
-  inline vnl_bignum sqrt(vnl_bignum const& x) { return vnl_bignum(vcl_sqrt(double(x))); }
-}
-#endif
-
-#if defined(VCL_SUNPRO_CC) || defined(VCL_SGI_CC) || defined(VCL_METRO_WERKS)
-inline vnl_bignum vcl_abs(vnl_bignum const& x) { return x.abs(); }
-#elif defined(VCL_VC)
-inline vnl_bignum abs(vnl_bignum const& x) { return x.abs(); }
-#else
-namespace std {
-  inline vnl_bignum abs(vnl_bignum const& x) { return x.abs(); }
-}
-#endif
-
 inline vnl_bignum vnl_math_abs(vnl_bignum const& x) { return x.abs(); }
 inline vnl_bignum vnl_math_squared_magnitude(vnl_bignum const& x) { return x*x; }
 inline vnl_bignum vnl_math_sqr(vnl_bignum const& x) { return x*x; }
 inline bool vnl_math_isnan(vnl_bignum const& ) { return false; }
-inline bool vnl_math_isfinite(vnl_bignum const& ) { return true; } 
-
-#include <vnl/vnl_numeric_traits.h>
-
-VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<vnl_bignum> {
-public:
-  //: Additive identity
-  static const vnl_bignum zero; // = 0L
-  //: Multiplicative identity
-  static const vnl_bignum one; // = 1L
-  //: Return value of abs()
-  typedef vnl_bignum abs_t;
-  //: Name of a type twice as long as this one for accumulators and products.
-  typedef vnl_bignum double_t;
-  //: Name of type which results from multiplying this type with a double
-  typedef double real_t;
-};
-
-#include <vnl/vnl_complex_traits.h>
-
-VCL_DEFINE_SPECIALIZATION
-struct vnl_complex_traits<vnl_bignum>
-{
-  enum { isreal = true };
-  static vnl_bignum conjugate(vnl_bignum x) { return x; }
-  static vcl_complex<vnl_bignum> complexify(vnl_bignum x)
-  { return vcl_complex<vnl_bignum>(x,vnl_bignum(0L)); }
-};
-
-#include <vcl_complex.h>
-
-inline bool vnl_math_isnan(vcl_complex<vnl_bignum> const& ) { return false; }
-inline bool vnl_math_isfinite(vcl_complex<vnl_bignum> const&) { return true; }
-inline vnl_bignum vnl_math_squared_magnitude(vcl_complex<vnl_bignum> const& z) { return vcl_norm(z); }
-inline vnl_bignum vnl_math_abs(vcl_complex<vnl_bignum> const& z) { return vcl_sqrt(vcl_norm(z)); }
-inline vcl_complex<vnl_bignum> vnl_math_sqr(vcl_complex<vnl_bignum> const& z) { return z*z; }
-inline vcl_ostream& operator<<(vcl_ostream& s, vcl_complex<vnl_bignum> const& z) {
-  return s << '(' << z.real() << "," << z.imag() << ')'; }
-inline vcl_istream& operator>>(vcl_istream& s, vcl_complex<vnl_bignum>& z) {
-  vnl_bignum r, i; s >> r >> i; z=vcl_complex<vnl_bignum>(r,i); return s; }
-
-
-VCL_DEFINE_SPECIALIZATION
-struct vnl_complex_traits<vcl_complex<vnl_bignum> >
-{
-  enum { isreal = false };
-  static vcl_complex<vnl_bignum> conjugate(vcl_complex<vnl_bignum> x)
-  { return vcl_complex<vnl_bignum>(x.real(),-x.imag()); }
-  static vcl_complex<vnl_bignum> complexify(vcl_complex<vnl_bignum> x) { return x; }
-};
-
-VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<vcl_complex<vnl_bignum> > {
-public:
-  //: Additive identity
-  static const vcl_complex<vnl_bignum> zero; // = 0L
-  //: Multiplicative identity
-  static const vcl_complex<vnl_bignum> one; // = 1L
-  //: Return value of abs()
-  typedef vnl_bignum abs_t;
-  //: Name of a type twice as long as this one for accumulators and products.
-  typedef vcl_complex<vnl_bignum> double_t;
-  //: Name of type which results from multiplying this type with a double
-  typedef vcl_complex<vnl_bignum> real_t;
-};
+inline bool vnl_math_isfinite(vnl_bignum const& x) { return ! x.is_infinity(); }
 
 #endif // vnl_bignum_h_

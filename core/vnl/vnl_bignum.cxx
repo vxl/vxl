@@ -10,6 +10,7 @@
 #include <vcl_algorithm.h> // for vcl_copy
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
+#include <vnl/vnl_math.h> // for vnl_math_isfinite(double)
 
 typedef unsigned short Counter;
 typedef unsigned short Data;
@@ -18,15 +19,16 @@ typedef unsigned short Data;
 //: Creates a zero vnl_bignum.
 
 vnl_bignum::vnl_bignum ()
-: count(0), sign(1), data(0) {
+: count(0), sign(1), data(0)
+{
 }
 
 //: Creates a vnl_bignum from a long integer.
 
-vnl_bignum::vnl_bignum (long l) {
-  if (l >= 0)                   // Get correct sign
-    this->sign = 1;
-  else {
+vnl_bignum::vnl_bignum (long l)
+: count(0), sign(1), data(0)
+{
+  if (l < 0) {                  // Get correct sign
     l = -l;                     // Get absolute value of l
     this->sign = -1;
   }
@@ -36,23 +38,21 @@ vnl_bignum::vnl_bignum (long l) {
     assert(i < sizeof(l));      // no more buffer space
     buf[i] = Data(l);           // Peel off lower order bits
     l >>= 16;   // Shift next bits into place
-    i++;
+    ++i;
   }
-  this->data = ((this->count = i) > 0 ? new Data[i] : 0); // Allocate permanent data
+  if (i > 0)
+    this->data = new Data[this->count=i]; // Allocate permanent data
 
-  i = 0;
-  while (i < this->count) {     // Save buffer into perm. data
+  while (i--)     // Save buffer into perm. data
     this->data[i] = buf[i];
-    i++;
-  }
 }
 
 //: Creates a vnl_bignum from an integer.
 
-vnl_bignum::vnl_bignum (int l) {
-  if (l >= 0)                   // Get correct sign
-    this->sign = 1;
-  else {
+vnl_bignum::vnl_bignum (int l)
+: count(0), sign(1), data(0)
+{
+  if (l < 0) {                 // Get correct sign
     l = -l;                     // Get absolute value of l
     this->sign = -1;
   }
@@ -64,19 +64,18 @@ vnl_bignum::vnl_bignum (int l) {
     l >>= 16;   // Shift next bits into place
     i++;
   }
-  this->data = ((this->count = i) > 0 ? new Data[i] : 0); // Allocate permanent data
+  if (i > 0)
+    this->data = new Data[this->count=i]; // Allocate permanent data
 
-  i = 0;
-  while (i < this->count) {     // Save buffer into perm. data
+  while (i--)     // Save buffer into perm. data
     this->data[i] = buf[i];
-    i++;
-  }
 }
 
 //: Creates a vnl_bignum from an unsigned long integer.
 
-vnl_bignum::vnl_bignum (unsigned long l) {
-  this->sign = 1;
+vnl_bignum::vnl_bignum (unsigned long l)
+: count(0), sign(1), data(0)
+{
   Data buf[sizeof(l)];          // Temp buffer to store l in
   Counter i = 0;                // buffer index
   while (l) {                   // While more bits in l
@@ -85,19 +84,18 @@ vnl_bignum::vnl_bignum (unsigned long l) {
     l >>= 16;   // Shift next bits into place
     i++;
   }
-  this->data = ((this->count = i) > 0 ? new Data[i] : 0); // Allocate permanent data
+  if (i > 0)
+    this->data = new Data[this->count=i]; // Allocate permanent data
 
-  i = 0;
-  while (i < this->count) {     // Save buffer into perm. data
+  while (i--)     // Save buffer into perm. data
     this->data[i] = buf[i];
-    i++;
-  }
 }
 
 //: Creates a vnl_bignum from an unsigned integer.
 
-vnl_bignum::vnl_bignum (unsigned int l) {
-  this->sign = 1;
+vnl_bignum::vnl_bignum (unsigned int l)
+: count(0), sign(1), data(0)
+{
   Data buf[sizeof(l)];          // Temp buffer to store l in
   Counter i = 0;                // buffer index
   while (l) {                   // While more bits in l
@@ -106,62 +104,76 @@ vnl_bignum::vnl_bignum (unsigned int l) {
     l >>= 16;   // Shift next bits into place
     i++;
   }
-  this->data = ((this->count = i) > 0 ? new Data[i] : 0); // Allocate permanent data
+  if (i > 0)
+    this->data = new Data[this->count=i]; // Allocate permanent data
 
-  i = 0;
-  while (i < this->count) {     // Save buffer into perm. data
+  while (i--)     // Save buffer into perm. data
     this->data[i] = buf[i];
-    i++;
-  }
 }
 
 //: Creates a vnl_bignum from a double floating point number.
 
-vnl_bignum::vnl_bignum (double d) {
-  if (d >= 0)                   // Get sign of d
-    this->sign = 1;
-  else {
+vnl_bignum::vnl_bignum (double d)
+: count(0), sign(1), data(0)
+{
+  if (d < 0.0) {                // Get sign of d
     d = -d;                     // Get absolute value of d
     this->sign = -1;
   }
 
-  // Note: 0x10000L == 1 >> 16: the (assumed) size of unsigned short is 16 bits.
-  vcl_vector<Data> buf;
-  while (d >= 1.0) {
-    buf.push_back( Data(vcl_fmod(d,0x10000L)) );  // Get next data "digit" from d
-    d /= 0x10000L;                                // Shift d right 1 data "digit"
+  if (!vnl_math_isfinite(d)) {
+    // Infinity is represented as: count=1, data[0]=0.
+    // This is an otherwise unused representation, since 0 is represented as count=0.
+    this->count = 1;
+    this->data = new Data[1];
+    this->data[0] = 0;
+  } else if (d >= 1.0) {
+    // Note: 0x10000L == 1 >> 16: the (assumed) size of unsigned short is 16 bits.
+    vcl_vector<Data> buf;
+    while (d >= 1.0) {
+      buf.push_back( Data(vcl_fmod(d,0x10000L)) );  // Get next data "digit" from d
+      d /= 0x10000L;                                // Shift d right 1 data "digit"
+    }
+    // Allocate and copy into permanent buffer
+    this->data = buf.size()>0 ? new Data[buf.size()] : 0;
+    this->count = buf.size();
+    vcl_copy( buf.begin(), buf.end(), data );
   }
-  // Allocate and copy into permanent buffer
-  this->data = (buf.size()>0 ? new Data[buf.size()] : 0);
-  this->count = buf.size();
-  vcl_copy( buf.begin(), buf.end(), data );
 }
-
 
 //: Creates a vnl_bignum from a "long double" floating point number.
 
-vnl_bignum::vnl_bignum (long double d) {
-  if (d >= 0)                   // Get sign of d
-    this->sign = 1;
-  else {
+vnl_bignum::vnl_bignum (long double d)
+: count(0), sign(1), data(0)
+{
+  if (d < 0.0) {                // Get sign of d
     d = -d;                     // Get absolute value of d
     this->sign = -1;
   }
 
-  // Note: 0x10000L == 1 >> 16: the (assumed) size of unsigned short is 16 bits.
-  vcl_vector<Data> buf;
-  while (d >= 1.0) {
-    buf.push_back( Data(vcl_fmod(d,0x10000L)) );  // Get next data "digit" from d
-    d /= 0x10000L;                                // Shift d right 1 data "digit"
+  if (!vnl_math_isfinite(d)) {
+    // Infinity is represented as: count=1, data[0]=0.
+    // This is an otherwise unused representation, since 0 is represented as count=0.
+    this->count = 1;
+    this->data = new Data[1];
+    this->data[0] = 0;
+  } else if (d >= 1.0) {
+    // Note: 0x10000L == 1 >> 16: the (assumed) size of unsigned short is 16 bits.
+    vcl_vector<Data> buf;
+    while (d >= 1.0) {
+      buf.push_back( Data(vcl_fmod(d,0x10000L)) );  // Get next data "digit" from d
+      d /= 0x10000L;                                // Shift d right 1 data "digit"
+    }
+    // Allocate and copy into permanent buffer
+    this->data = (buf.size()>0 ? new Data[buf.size()] : 0);
+    this->count = buf.size();
+    vcl_copy( buf.begin(), buf.end(), data );
   }
-  // Allocate and copy into permanent buffer
-  this->data = (buf.size()>0 ? new Data[buf.size()] : 0);
-  this->count = buf.size();
-  vcl_copy( buf.begin(), buf.end(), data );
 }
 
 
-#if 0 // original implementation - PVr
+#if 0 // old, original Texas Instruments implementation - PVr
+
 static bool is_decimal(const char *s)
 {
   if (*s == '+' || *s == '-') ++s;
@@ -205,7 +217,8 @@ static bool is_octal(const char *s)
   if (*s == 'l' || *s == 'L') ++s;
   return *s == '\0';
 }
-#else // new implementation, also to be used for operator>>
+
+#else // new implementation, also to be used for operator>> - PVr
 
 static char rt[4096];
 static int rt_pos = 0;
@@ -279,18 +292,59 @@ static bool is_octal(const char* s, vcl_istream** is = 0)
   if (rt_pos > 0) rt[++rt_pos] = '\0';
   return is ? true : c == '\0';
 }
-#endif
+static bool is_plus_inf(const char* s, vcl_istream** is = 0)
+{
+  rt_pos = 0;
+  char c = next(s,is);
+  while (c == ' ' || c == '\t' || c == '\n' || c == '\r') c = next(s,is);
+  if (c == '+') c = next(s,is);
+  if (c != 'I') return false; c = next(s,is);
+  if (c != 'n') return false; c = next(s,is);
+  if (c != 'f') return false; c = next(s,is);
+  if (c == 'i') c = next(s,is);
+  if (c == 'n') c = next(s,is);
+  if (c == 'i') c = next(s,is);
+  if (c == 't') c = next(s,is);
+  if (c == 'y') c = next(s,is);
+  if (rt_pos > 0) rt[++rt_pos] = '\0';
+  return is ? true : c == '\0';
+}
+static bool is_minus_inf(const char* s, vcl_istream** is = 0)
+{
+  rt_pos = 0;
+  char c = next(s,is);
+  while (c == ' ' || c == '\t' || c == '\n' || c == '\r') c = next(s,is);
+  if (c != '-') return false; c = next(s,is);
+  if (c != 'I') return false; c = next(s,is);
+  if (c != 'n') return false; c = next(s,is);
+  if (c != 'f') return false; c = next(s,is);
+  if (c == 'i') c = next(s,is);
+  if (c == 'n') c = next(s,is);
+  if (c == 'i') c = next(s,is);
+  if (c == 't') c = next(s,is);
+  if (c == 'y') c = next(s,is);
+  if (rt_pos > 0) rt[++rt_pos] = '\0';
+  return is ? true : c == '\0';
+}
+
+#endif // new implementation - PVr
 
 //: Creates a vnl_bignum from the character string representation.
 
 vnl_bignum::vnl_bignum (const char *s)
-: count(0), sign(1), data(0) {
+: count(0), sign(1), data(0)
+{
   // decimal:     "^ *[-+]?[1-9][0-9]*$"
   // exponential: "^ *[-+]?[1-9][0-9]*[eE][+]?[0-9]+$"
   // hexadecimal: "^ *[-+]?0[xX][0-9a-fA-F]+$"
   // octal:       "^ *[-+]?0[0-7]*$"
+  // infinity:    "^ *[-+]?Inf(inity)?$"
 
-  if (is_decimal(s))                    // If string is decimal
+  if (is_plus_inf(s))
+    sign=1,count=1,data=new Data[1],data[0]=0;
+  else if (is_minus_inf(s))
+    sign=-1,count=1,data=new Data[1],data[0]=0;
+  else if (is_decimal(s))               // If string is decimal
     this->dtoBigNum(s);                 // convert decimal to vnl_bignum
   else if (is_exponential(s))           // If string is exponential
     this->exptoBigNum(s);               // convert exp. to vnl_bignum
@@ -314,6 +368,10 @@ vcl_istream& operator>> (vcl_istream& is, vnl_bignum& x)
   vcl_istream* isp = &is;
   rt[0] = '\0';
 
+  if (is_plus_inf(rt,&isp))
+    x.sign=1,x.count=1,x.data=new Data[1],x.data[0]=0;
+  else if (is_minus_inf(rt,&isp))
+    x.sign=-1,x.count=1,x.data=new Data[1],x.data[0]=0;
   if (is_exponential(rt,&isp))          // If input stream string is exponential
     x.exptoBigNum(rt);                  // convert exp. to vnl_bignum
   else if (is_decimal(rt,&isp))         // If string is decimal
@@ -332,29 +390,30 @@ vcl_istream& operator>> (vcl_istream& is, vnl_bignum& x)
 //: Copies the contents of vnl_bignum b.
 
 vnl_bignum::vnl_bignum (const vnl_bignum& b)
-: count(b.count), sign(b.sign) {
-  this->data =                                  // Allocate data if necessary
-    (b.count > 0 ? new Data[b.count] : 0);
-  for (Counter i = 0; i < this->count; i++)     // Copy b data
+: count(b.count), sign(b.sign)
+{
+  this->data = b.data ? new Data[b.count] : 0;  // Allocate data if necessary
+  for (Counter i = 0; i < this->count; ++i)     // Copy b data
     this->data[i] = b.data[i];
 }
 
 
 //: Frees space for vnl_bignum.
 
-vnl_bignum::~vnl_bignum () {
-  delete [] this->data;                         // Delete any allocated data
+vnl_bignum::~vnl_bignum ()
+{
+  delete [] this->data; this->count = 0;        // Delete any allocated data
 }
 
 //: Copies rhs vnl_bignum to lhs vnl_bignum.
 
-vnl_bignum& vnl_bignum::operator= (const vnl_bignum& rhs) {
+vnl_bignum& vnl_bignum::operator= (const vnl_bignum& rhs)
+{
   if (this != &rhs) {                           // Avoid self-assignment
     delete [] this->data;                       // Delete existing data
     this->count = rhs.count;                    // Copy rhs's count
-    this->data =                                // Allocate data if necessary
-      (this->count > 0 ? new Data[this->count] : 0);
-    for (Counter i = 0; i < this->count; i++)   // Copy rhs's data
+    this->data = rhs.data ? new Data[rhs.count] : 0; // Allocate data if necessary
+    for (Counter i = 0; i < rhs.count; ++i)     // Copy rhs's data
       this->data[i] = rhs.data[i];
     this->sign = rhs.sign;                      // Copy rhs's sign
   }
@@ -363,30 +422,40 @@ vnl_bignum& vnl_bignum::operator= (const vnl_bignum& rhs) {
 
 //: Returns the negation of a vnl_bignum.
 
-vnl_bignum vnl_bignum::operator- () const {
+vnl_bignum vnl_bignum::operator- () const
+{
   vnl_bignum neg(*this);
   if (neg.count)                // So long as this is non-zero
-    neg.sign *= -1;             // Flip its sign
+    neg.sign = -neg.sign;       // Flip its sign
   return neg;
 }
 
 
 //: Prefix increment. Increments a vnl_bignum by 1, and returns it.
 
-vnl_bignum& vnl_bignum::operator++ () {
+vnl_bignum& vnl_bignum::operator++ ()
+{
   return *this = *this + 1L;
 }
 
 
 //: Prefix decrement. Decrements a vnl_bignum by 1, and returns it.
 
-vnl_bignum& vnl_bignum::operator-- () {
+vnl_bignum& vnl_bignum::operator-- ()
+{
   return *this = *this - 1L;
 }
 
 //: Adds two vnl_bignums, and returns new sum.
 
-vnl_bignum vnl_bignum::operator+(const vnl_bignum& b) const {
+vnl_bignum vnl_bignum::operator+(const vnl_bignum& b) const
+{
+  // Infinity arithmetic:
+  assert (! b.is_minus_infinity() || ! this->is_plus_infinity() ); // +Inf-Inf
+  assert (! b.is_plus_infinity() || ! this->is_minus_infinity() ); // -Inf+Inf
+  if (b.is_infinity()) { return b; }
+  if (this->is_infinity()) { return *this; }
+
   vnl_bignum sum;                       // Init sum to zero
   if (this->sign == b.sign) {           // If both have same sign
     add(*this,b,sum);                   //   Do simple addition
@@ -409,7 +478,14 @@ vnl_bignum vnl_bignum::operator+(const vnl_bignum& b) const {
 
 //: Multiplies this with a vnl_bignum
 
-vnl_bignum& vnl_bignum::operator*= (const vnl_bignum& b) {
+vnl_bignum& vnl_bignum::operator*= (const vnl_bignum& b)
+{
+  // Infinity arithmetic:
+  assert (! b.is_infinity() || this->count != 0 ); // multiplication 0*Inf
+  assert (! this->is_infinity() || b.count != 0 ); // multiplication Inf*0
+  if (b.is_infinity()) return (*this) = (this->sign<0 ? -b : b);
+  if (this->is_infinity()) return (*this) = (b.sign<0 ? -(*this) : *this);
+
   if (b.count == 0 || this->count == 0)
     return (*this)=0L;
   vnl_bignum prod;
@@ -424,45 +500,47 @@ vnl_bignum& vnl_bignum::operator*= (const vnl_bignum& b) {
 
 //: Divides this by a vnl_bignum
 
-vnl_bignum& vnl_bignum::operator/= (const vnl_bignum& b) {
-  vnl_bignum quot;                      // Quotient
-  if (b.count == 0) {                   // If b is zero
-    if (this->count == 0) {             // If this == zero
-      assert(!"division 0/0");
-    }
-    else if (this->sign > 0) {          // If this > zero
-      assert(!"division +1/0");
-    }
-    else if (this->sign < 0) {          // If this < zero
-      assert(!"division -1/0");
-    }
-  }
-  else {
-    vnl_bignum r;                       // Remainder
-    divide(*this,b,quot,r);             // Call divide fn
-  }
-  return (*this)=quot;
+vnl_bignum& vnl_bignum::operator/= (const vnl_bignum& b)
+{
+  // Infinity arithmetic:
+  assert (! b.is_infinity() || ! this->is_infinity() ); // division Inf/Inf
+  if (b.is_infinity()) return (*this)=0L;
+  if (this->is_infinity()) return (*this) = (b.sign<0 ? -(*this) : *this);
+  assert (b.count!=0 || this->count != 0); // division 0/0
+  if (b.count == 0)
+    return (*this) = (this->sign < 0 ? vnl_bignum("-Inf") : vnl_bignum("+Inf"));
+
+  vnl_bignum quot, r;          // Quotient and remainder
+  divide(*this,b,quot,r);      // Call divide fn
+  return (*this) = quot;
 }
 
-// Divides this by a vnl_bignum and replaces this by remainder.
+//: Divides this by a vnl_bignum and replaces this by remainder.
 
-vnl_bignum& vnl_bignum::operator%= (const vnl_bignum& b) {
-  vnl_bignum remain,q;                  // Quotient and remainder
-  if (b.count == 0) {                   // if b == 0
-    assert(!"division 1/0");
-  }
-  else {                                // otherwise,
-    divide(*this,b,q,remain);           // divide b1 by b and save remainder
-  }
-  return (*this)=remain;                // shallow swap on return
+vnl_bignum& vnl_bignum::operator%= (const vnl_bignum& b)
+{
+  // Infinity arithmetic:
+  assert (! b.is_infinity() || ! this->is_infinity() ); // division Inf/Inf
+  if (b.is_infinity()) return *this;                    // remainder of x/Inf is x.
+  if (this->is_infinity()) return (*this) = 0L;         // convention: remainder is 0
+  assert (b.count!=0 || this->count != 0);              // division 0/0
+  if (b.count == 0) return (*this) = 0L;                // convention: remainder is 0
+
+  vnl_bignum remain, q;        // Quotient and remainder
+  divide(*this,b,q,remain);    // divide by b and save remainder
+  return (*this) = remain;     // shallow swap on return
 }
 
 
-//:
+//: Shifts bignum to the left l digits.
 
-vnl_bignum vnl_bignum::operator<< (int l) const {
+vnl_bignum vnl_bignum::operator<< (int l) const
+{
+  // Infinity arithmetic:
+  if (this->is_infinity()) return *this;
+
   if (l == 0 || *this == 0L)            // if either arg is zero
-    return vnl_bignum(*this);
+    return *this;
   if (l < 0)                            // if shift amt is negative
     return right_shift(*this,-l);       //   do an actual right shift
   else                                  // otherwise
@@ -470,11 +548,15 @@ vnl_bignum vnl_bignum::operator<< (int l) const {
 }
 
 
-//: Shifts bignum to the left/right l digits.
+//: Shifts bignum to the right l digits.
 
-vnl_bignum vnl_bignum::operator>> (int l) const {
+vnl_bignum vnl_bignum::operator>> (int l) const
+{
+  // Infinity arithmetic:
+  if (this->is_infinity()) return *this;
+
   if (l == 0 || *this == 0L)            // if either arg is zero
-    return vnl_bignum(*this);
+    return *this;
   if (l < 0)                            // if shift amt is negative
     return left_shift(*this,-l);        //   do an actual left shift
   else                                  // else
@@ -484,7 +566,8 @@ vnl_bignum vnl_bignum::operator>> (int l) const {
 
 //: Two vnl_bignums are equal if and only if they have the same integer representation.
 
-bool vnl_bignum::operator== (const vnl_bignum& rhs) const {
+bool vnl_bignum::operator== (const vnl_bignum& rhs) const
+{
   if (this != &rhs) {                           // Check address
     if (this->sign != rhs.sign) return false;   // Different sign implies !=
     if (this->count != rhs.count) return false; // Different size implies !=
@@ -497,7 +580,8 @@ bool vnl_bignum::operator== (const vnl_bignum& rhs) const {
 
 //: Compares two vnl_bignums.
 
-bool vnl_bignum::operator< (const vnl_bignum& rhs) const {
+bool vnl_bignum::operator< (const vnl_bignum& rhs) const
+{
   if (this->sign < rhs.sign) return true;       // Different signs?
   if (this->sign > rhs.sign) return false;
   if (this->sign == 1)                          // Both signs == 1
@@ -509,12 +593,14 @@ bool vnl_bignum::operator< (const vnl_bignum& rhs) const {
 
 //: Formatted output for bignum.
 
-vcl_ostream& operator<< (vcl_ostream& os, const vnl_bignum& b) {
+vcl_ostream& operator<< (vcl_ostream& os, const vnl_bignum& b)
+{
   vnl_bignum d = b;                     // Copy the input vnl_bignum
   if (d.sign == -1) {                   // If it's negative
-    os.put('-');                  //   Output leading minus sign
+    os << '-';                          //   Output leading minus sign
     d.sign = 1;                         //   Make d positive for divide
   }
+  if (d.is_infinity()) return os<<"Inf";
   vnl_bignum q,r;                       // Temp quotient and remainder
   char *cbuf = new char[5 * (b.count+1)];   // Temp character buffer
   Counter i = 0;
@@ -525,7 +611,7 @@ vcl_ostream& operator<< (vcl_ostream& os, const vnl_bignum& b) {
     q = r = 0L;                         //   Prep for next divide
   } while (d != 0L);                    // until no more one's digits
   do {                                  // repeat;
-    os.put(cbuf[--i]);                  //   output char buf in reverse
+    os << cbuf[--i];                    //   output char buf in reverse
   } while (i);                          // until no more chars
   delete [] cbuf;                       // delete temp char buf
   return os;                            // return output stream
@@ -543,6 +629,7 @@ vcl_string& vnl_bignum_to_string (vcl_string& s, const vnl_bignum& b)
     d.sign = 1;                         //   Make d positive for divide
     ++insert_point;                     // keep record of location of first number.
   }
+  if (d.is_infinity()) return s+="Inf";
   vnl_bignum q,r;                       // Temp quotient and remainder
   do {                                  // repeat:
     divide(d,10L,q,r);                  //   Divide vnl_bignum by ten
@@ -557,14 +644,21 @@ vcl_string& vnl_bignum_to_string (vcl_string& s, const vnl_bignum& b)
 vnl_bignum& vnl_bignum_from_string (vnl_bignum& b, const vcl_string& s)
 {
   // decimal:     "^ *[-+]?[1-9][0-9]*$"
+  // Infinity:    "^ *[-+]?Inf(inity)?$"
 
-  b.dtoBigNum(s.c_str());                    // convert decimal to vnl_bignum
+  if (is_plus_inf(s.c_str()))
+    b=vnl_bignum("+Inf");
+  else if (is_minus_inf(s.c_str()))
+    b=vnl_bignum("-Inf");
+  else
+    b.dtoBigNum(s.c_str());             // convert decimal to vnl_bignum
   return b; 
 }
 
 
 //: Implicit conversion from a vnl_bignum to a short.
-vnl_bignum::operator short () const {
+vnl_bignum::operator short () const
+{
   short s = 0;
   for (Counter i = this->count; i > 0; )
     s = short(s*0x10000 + this->data[--i]);
@@ -573,7 +667,8 @@ vnl_bignum::operator short () const {
 
 
 //: Implicit conversion from a vnl_bignum to an int.
-vnl_bignum::operator int () const {
+vnl_bignum::operator int () const
+{
   int j = 0;
   for (Counter i = this->count; i > 0; )
     j = int(j*0x10000 + this->data[--i]);
@@ -582,7 +677,8 @@ vnl_bignum::operator int () const {
 
 
 //: Implicit conversion from a vnl_bignum to a long.
-vnl_bignum::operator long () const {
+vnl_bignum::operator long () const
+{
   long l = 0;
   for (Counter i = this->count; i > 0; )
     l = l*0x10000L + this->data[--i];
@@ -591,44 +687,51 @@ vnl_bignum::operator long () const {
 
 
 //: Implicit conversion from a vnl_bignum to a float.
-vnl_bignum::operator float () const {
+vnl_bignum::operator float () const
+{
   float f = 0.0f;
   for (Counter i = this->count; i > 0; )
     f = f*0x10000 + this->data[--i];
+  if (this->is_infinity()) f = +1e50f; // on purpose too large to fit in float
   return this->sign*f;
 }
 
 
 //: Implicit conversion from a vnl_bignum to a double.
 
-vnl_bignum::operator double () const {
+vnl_bignum::operator double () const
+{
   double d = 0.0;
   for (Counter i = this->count; i > 0; )
     d = d*0x10000 + this->data[--i];
+  if (this->is_infinity()) d = +1e500; // on purpose too large to fit in double
   return this->sign*d;
 }
 
 //: Implicit conversion from a vnl_bignum to a long double.
 
-vnl_bignum::operator long double () const {
+vnl_bignum::operator long double () const
+{
   long double d = 0.0;
   for (Counter i = this->count; i > 0; )
     d = d*0x10000 + this->data[--i];
+  if (this->is_infinity()) d = +1e500; // on purpose too large to fit in double
   return this->sign*d;
 }
 
 //: dump the contents of a vnl_bignum to a stream, default cout.
 
-void vnl_bignum::dump (vcl_ostream& os) const {
+void vnl_bignum::dump (vcl_ostream& os) const
+{
   os << "{count=" << this->count       // output count field
      << ", sign=" << this->sign        // output sign field
      << ", data=" << this->data        // output data pointer
      << ", value=" << *this
      << ", {";
-// format string == "%04X%s" or "%02X%s", etc.
-//  static char format_str[10] =
-//    {'%','0',char(2*2 + '0'),'X','%','s'};
-//  format_str[2] = char(2*2 + '0');
+  // format string == "%04X%s" or "%02X%s", etc.
+  //  static char format_str[10] =
+  //    {'%','0',char(2*2 + '0'),'X','%','s'};
+  //  format_str[2] = char(2*2 + '0');
   if (this->count > 0) { // output data array
     for (Counter i = this->count; i > 1; i--)
       os << (this->data[i - 1]) << ",";
@@ -638,9 +741,10 @@ void vnl_bignum::dump (vcl_ostream& os) const {
 }
 
 
-// dtoBigNum // Converts decimal string to a vnl_bignum.
+//: Converts decimal string to a vnl_bignum.
 
-int vnl_bignum::dtoBigNum (const char *s) {
+int vnl_bignum::dtoBigNum (const char *s)
+{
   Counter len = 0;                      // No chars converted yet
   while (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r') ++s; // skip whitespace
   if (s[0] == '-' || s[0] == '+') len++;// Skip over leading +,-
@@ -652,9 +756,10 @@ int vnl_bignum::dtoBigNum (const char *s) {
   return len;                           // Return # of chars processed
 }
 
-// exptoBigNum // convert exponential string to a vnl_bignum
+//: convert exponential string to a vnl_bignum
 
-void vnl_bignum::exptoBigNum (const char *s) {
+void vnl_bignum::exptoBigNum (const char *s)
+{
   while (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r') ++s; // skip whitespace
   Counter pos = this->dtoBigNum(s) + 1; // Convert the base, skip [eE]
   long pow = atol(s + pos);             // Convert the exponent to long
@@ -663,11 +768,12 @@ void vnl_bignum::exptoBigNum (const char *s) {
 }
 
 
-// ctox // convert hex character to integer hex value (ASCII or EBCDIC)
-// Inputs:  character representation of a hex number
-// Outputs:  integer value of the hex number
+//: convert hex character to integer hex value (ASCII or EBCDIC)
+// - Inputs:  character representation of a hex number
+// - Outputs: integer value of the hex number
 
-unsigned int ctox (int c) {
+unsigned int ctox (int c)
+{
   if ('0' <= c && c <= '9')
     return c - '0';
   if ('a' <= c && c <= 'f')
@@ -675,9 +781,10 @@ unsigned int ctox (int c) {
   return c - 'A' + 10;
 }
 
-// xtoBigNum // convert hex string to vnl_bignum
+//: convert hex string to vnl_bignum
 
-void vnl_bignum::xtoBigNum (const char *s) {
+void vnl_bignum::xtoBigNum (const char *s)
+{
   while (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r') ++s; // skip whitespace
   Counter size = vcl_strlen(s);
   Counter len = 2;                      // skip leading "0x"
@@ -688,9 +795,10 @@ void vnl_bignum::xtoBigNum (const char *s) {
 }
 
 
-// otoBigNum // convert octal string to vnl_bignum
+//: convert octal string to vnl_bignum
 
-void vnl_bignum::otoBigNum (const char *s) {
+void vnl_bignum::otoBigNum (const char *s)
+{
   while (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r') ++s; // skip whitespace
   Counter size = vcl_strlen(s);
   Counter len = 0;                      // No chars converted yet
@@ -702,7 +810,8 @@ void vnl_bignum::otoBigNum (const char *s) {
 
 //: change the data allotment for a vnl_bignum
 
-void vnl_bignum::resize (short new_count) {
+void vnl_bignum::resize (short new_count)
+{
   assert(new_count >= 0);
   if (new_count == this->count) return;
   Data *new_data = (new_count > 0 ? new Data[new_count] : 0); // Allocate data if necessary
@@ -725,9 +834,10 @@ void vnl_bignum::resize (short new_count) {
 }
 
 
-// trim // trim vnl_bignum of excess data allotment
+//: trim non-infinite vnl_bignum of excess data allotment
 
-vnl_bignum& vnl_bignum::trim () {
+vnl_bignum& vnl_bignum::trim ()
+{
   Counter i = this->count;
   for (; i > 0; i--)                    // Skip over high-order words
     if (this->data[i - 1] != 0) break;  //   that are zero
@@ -743,9 +853,10 @@ vnl_bignum& vnl_bignum::trim () {
 }
 
 
-// add // add two vnl_bignum values and save their sum
+//: add two non-infinite vnl_bignum values and save their sum
 
-void add (const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& sum) {
+void add (const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& sum)
+{
   const vnl_bignum *bmax, *bmin;        // Determine which of the two
   if (b1.count >= b2.count) {           //   addends has the most
     bmax = &b1;                         //   data.
@@ -755,8 +866,8 @@ void add (const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& sum) {
     bmax = &b2;
     bmin = &b1;
   }
-  sum.data = ((sum.count = bmax->count) > 0 ?   // Allocate data for their sum
-              new Data[sum.count] : 0);
+  sum.data = (sum.count = bmax->count) > 0 ?   // Allocate data for their sum
+             new Data[sum.count] : 0;
   unsigned long temp, carry = 0;
   Counter i = 0;
   while (i < bmin->count) {             // Add, element by element.
@@ -779,9 +890,10 @@ void add (const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& sum) {
 }
 
 
-// subtract // subtract min vnl_bignum from max vnl_bignum (unsigned), result in diff
+//: subtract bmin from bmax (unsigned, non-infinite), result in diff
 
-void subtract (const vnl_bignum& bmax, const vnl_bignum& bmin, vnl_bignum& diff) {
+void subtract (const vnl_bignum& bmax, const vnl_bignum& bmin, vnl_bignum& diff)
+{
   diff.data = new Data[diff.count = bmax.count];// Allocate data for difference
   unsigned long temp;
   int borrow = 0;
@@ -801,12 +913,15 @@ void subtract (const vnl_bignum& bmax, const vnl_bignum& bmin, vnl_bignum& diff)
 }
 
 
-// magnitude_cmp // compare absolute values of two vnl_bignums
+//: compare absolute values of two vnl_bignums
 // Outputs:  result of comparison:  -1 if abs(b1) < abs(b2)
 //                                   0 if abs(b1) == abs(b2)
 //                                  +1 if abs(b1) > abs(b2)
 
-int magnitude_cmp (const vnl_bignum& b1, const vnl_bignum& b2) {
+int magnitude_cmp (const vnl_bignum& b1, const vnl_bignum& b2)
+{
+  if (b1.is_infinity()) return b2.is_infinity() ? 0 : 1;
+  if (b2.is_infinity()) return -1;
   if (b1.count > b2.count) return 1;    // If one has more data than
   if (b2.count > b1.count) return -1;   //   the other, it wins
   Counter i = b1.count;                 // Else same number of elmts
@@ -821,11 +936,12 @@ int magnitude_cmp (const vnl_bignum& b1, const vnl_bignum& b2) {
 }
 
 
-// multiply_aux // multiply a vnl_bignum by a "single digit"
-// Inputs:  vnl_bignum reference, single word multiplier, reference to the product,
-//          and index of starting storage location to use in product
+//: multiply a non-infinite vnl_bignum by a "single digit"
+// - Inputs:  vnl_bignum reference, single word multiplier, reference to the product,
+//            and index of starting storage location to use in product
 
-void multiply_aux (const vnl_bignum& b, Data d, vnl_bignum& prod, Counter i) {
+void multiply_aux (const vnl_bignum& b, Data d, vnl_bignum& prod, Counter i)
+{
   // this function works just like normal multiplication by hand, in that the
   // top number is multiplied by the first digit of the bottom number, then the
   // second digit, and so on.  The only difference is that instead of doing all
@@ -853,13 +969,14 @@ void multiply_aux (const vnl_bignum& b, Data d, vnl_bignum& prod, Counter i) {
   }
 }
 
-// normalize // normalize two vnl_bignums  (Refer to Knuth, V.2, Section 4.3.1,
-//              Algorithm D for details.  A digit here is one data element in
-//              the radix 2**2.)
-// Inputs:  references to two vnl_bignums b1, b2, and their normalized counterparts
-// Outputs:  the integral normalization factor used
+//: normalize two vnl_bignums
+// (Refer to Knuth, V.2, Section 4.3.1, Algorithm D for details.
+//  A digit here is one data element in the radix 2**2.)
+// - Inputs:  references to two vnl_bignums b1, b2, and their normalized counterparts
+// - Outputs: the integral normalization factor used
 
-Data normalize (const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& u, vnl_bignum& v) {
+Data normalize (const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& u, vnl_bignum& v)
+{
   Data d = Data(0x10000L/(long(b2.data[b2.count - 1]) + 1)); // Calculate normalization factor.
   u.data = new Data[u.count = b1.count + 1];    // Get data for u (plus extra)
   v.data = new Data[v.count = b2.count];        // Get data for v
@@ -870,13 +987,14 @@ Data normalize (const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& u, vnl_b
 }
 
 
-// divide_aux // divide a vnl_bignum by a "single digit" (Refer to Knuth, V.2,
-//               Section 4.3.2, exercise 16 for details.  A digit here is one
-//               data element in the radix 2**2.)
-// Inputs:  reference to vnl_bignum dividend, single digit divisor d, vnl_bignum
-//          quotient, and single digit remainder r
+//: divide a vnl_bignum by a "single digit"
+// (Refer to Knuth, V.2, Section 4.3.2, exercise 16 for details.
+//  A digit here is one data element in the radix 2**2.)
+// - Inputs:  reference to vnl_bignum dividend, single digit divisor d, vnl_bignum
+//            quotient, and single digit remainder r
 
-void divide_aux (const vnl_bignum& b1, Data d, vnl_bignum& q, Data& r) {
+void divide_aux (const vnl_bignum& b1, Data d, vnl_bignum& q, Data& r)
+{
   r = 0;                                        // init remainder to zero
   unsigned long temp;
   for (Counter j = b1.count; j > 0; j--) {
@@ -888,17 +1006,16 @@ void divide_aux (const vnl_bignum& b1, Data d, vnl_bignum& q, Data& r) {
 }
 
 
-//: estimate next dividend (Refer to Knuth, V.2, Section
-//  4.3.1, Algorithm D for details.  This function estimates
-//  how many times v goes into u, starting at u's jth digit.
-//  A digit here is actually a data element, thought of as
+//: estimate next dividend
+// (Refer to Knuth, V.2, Section 4.3.1, Algorithm D for details.
+//  This function estimates how many times v goes into u, starting at u's
+//  jth digit.  A digit here is actually a data element, thought of as
 //  being in the radix 2**2.)
-//
-// Inputs:  reference to vnl_bignum dividend and divisor and starting digit j
-//
-// Outputs:  estimated number of times v goes into u
+// - Inputs:  reference to vnl_bignum dividend and divisor and starting digit j
+// - Outputs: estimated number of times v goes into u
 
-Data estimate_q_hat (const vnl_bignum& u, const vnl_bignum& v, Counter j) {
+Data estimate_q_hat (const vnl_bignum& u, const vnl_bignum& v, Counter j)
+{
   Data q_hat,
        v1 = v.data[v.count - 1],                // localize frequent data
        v2 = v.data[v.count - 2],
@@ -946,17 +1063,15 @@ Data estimate_q_hat (const vnl_bignum& u, const vnl_bignum& v, Counter j) {
 }
 
 
-//: calculate u - v*q_hat (Refer to Knuth, V. 2, Section
-//  4.3.1, Algorithm D for details.  A digit here is a
-//  data element, thought of as being in the radix
-//  2**2.)
-//
-// Inputs:  reference to vnl_bignum dividend, divisor, estimated result, and index
-//          into jth digit of dividend
-//
-// Outputs:  true number of times v goes into u
+//: calculate u - v*q_hat
+// (Refer to Knuth, V. 2, Section 4.3.1, Algorithm D for details.
+//  A digit here is a data element, thought of as being in the radix 2**2.)
+// - Inputs:  reference to vnl_bignum dividend, divisor, estimated result, and index
+//            into jth digit of dividend
+// - Outputs: true number of times v goes into u
 
-Data multiply_subtract (vnl_bignum& u, const vnl_bignum& v, Data q_hat, Counter j) {
+Data multiply_subtract (vnl_bignum& u, const vnl_bignum& v, Data q_hat, Counter j)
+{
   // At this point it has been estimated that v goes into the jth and higher
   // digits of u about q_hat times, and in fact that q_hat is either the
   // correct number of times or one too large.
@@ -1009,13 +1124,16 @@ Data multiply_subtract (vnl_bignum& u, const vnl_bignum& v, Data q_hat, Counter 
 }
 
 
-// divide // divide b2 into b1, getting quotient q and remainder r.  (Refer to
-//          Knuth, V.2, Seciton 4.3.1, Algorithm D for details.  This function
-//          implements Algorithm D.)
-// Inputs:  references to a vnl_bignum dividend b1, divisor b2, quotient q, and
-//          remainder r.
+//: divide b2 into b1, getting quotient q and remainder r.
+// (Refer to Knuth, V.2, Seciton 4.3.1, Algorithm D for details.
+//  This function implements Algorithm D.)
+// - Inputs:  references to a vnl_bignum dividend b1, divisor b2, quotient q, and
+//            remainder r.
 
-void divide (const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& q, vnl_bignum& r) {
+void divide (const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& q, vnl_bignum& r)
+{
+  // Note that q or r may *not* be identical to either b1 or b2 !
+  assert(&b1 != &q && &b2 != &q && &b1 != &r && &b2 != &r);
   q = r = 0L;
   if (b1 == 0L)                      // If divisor is zero
     return;                          //   return zero quotient and remainder
@@ -1051,11 +1169,12 @@ void divide (const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& q, vnl_bign
 }
 
 
-// left_shift // left shift (arithmetic) vnl_bignum by positive number.
-// Inputs:  reference to vnl_bignum, positive shift value
-// Outputs:  vnl_bignum, multiplied by the corresponding power of two
+//: left shift (arithmetic) non-infinite vnl_bignum by positive number.
+// - Inputs:  reference to vnl_bignum, positive shift value
+// - Outputs: vnl_bignum, multiplied by the corresponding power of two
 
-vnl_bignum left_shift (const vnl_bignum& b1, int l) {
+vnl_bignum left_shift (const vnl_bignum& b1, int l)
+{
   // to carry out this arithmetic left shift, we cheat.  Instead of physically
   // shifting the data array l bits to the left, we shift just enough to get
   // the correct word alignment, and then pad the array on the right with as
@@ -1086,15 +1205,16 @@ vnl_bignum left_shift (const vnl_bignum& b1, int l) {
                    + (b1.data[i - 1 - growth] >> rshift);
   }
   vnl_bignum& result = *((vnl_bignum*) &rslt);// same physical object
-  return result;                                // shallow swap on return
+  return result;                              // shallow swap on return
 }
 
 
-// right_shift // right shift (arithmetic) vnl_bignum by positive number.
-// Inputs:  reference to vnl_bignum, positive shift value
-// Outputs:  vnl_bignum, divided by the corresponding power of two
+//: right shift (arithmetic) non-infinite vnl_bignum by positive number.
+// - Inputs:  reference to vnl_bignum, positive shift value
+// - Outputs: vnl_bignum, divided by the corresponding power of two
 
-vnl_bignum right_shift (const vnl_bignum& b1, int l) {
+vnl_bignum right_shift (const vnl_bignum& b1, int l)
+{
   vnl_bignum rslt;                              // result of shift
   Counter shrinkage = Counter(l / 16);          // # of words rslt will shrink
   Data shift = Data(l % 16);                    // amount to actually shift
@@ -1120,10 +1240,3 @@ vnl_bignum right_shift (const vnl_bignum& b1, int l) {
   vnl_bignum& result = *((vnl_bignum*) &rslt);  // same physical object
   return result;                                // shallow swap on return
 }
-
-#ifdef VCL_GCC_EGCS // this includes egcs, gcc 2.8 and gcc 2.95
-#include <std/complext.cc>
-template complex<vnl_bignum>& __doadv<vnl_bignum>(complex<vnl_bignum>*, complex<vnl_bignum> const&);
-template complex<vnl_bignum> operator/(complex<vnl_bignum> const&, complex<vnl_bignum> const&);
-template complex<vnl_bignum> sqrt(complex<vnl_bignum> const&);
-#endif
