@@ -63,18 +63,8 @@ public://protected:
   virtual vcl_ostream& print_value(vcl_ostream&) = 0;
 };
 
-//: Parse the list of arguments....
-void vul_arg_parse(int& argc, char **& argv,
-                          bool warn_about_unrecognized_arguments = true);
-
-//: Add an externally supplied list of args to the global list.
-void vul_arg_include(vul_arg_info_list& l);
-
-//: Print all args, and usage messages.
-void vul_arg_display_usage_and_exit(char const* msg = 0);
-
 //: parse command-line arguments
-// vul_arg::parse simplifies the parsing of command-line arguments by combining
+// vul_arg_parse simplifies the parsing of command-line arguments by combining
 // the variables with the option specifications.  To get a variable, you
 // simply name it along with its flag, a help string, and an optional
 // default value:
@@ -106,6 +96,16 @@ void vul_arg_display_usage_and_exit(char const* msg = 0);
 // program call with something like aprog -? will display usage info derived
 // from the argument list.  Note: default is -? but can be anything.
 //
+void vul_arg_parse(int& argc, char **& argv,
+                          bool warn_about_unrecognized_arguments = true);
+
+//: Add an externally supplied list of args to the global list.
+void vul_arg_include(vul_arg_info_list& l);
+
+//: Print all args, and usage messages.
+void vul_arg_display_usage_and_exit(char const* msg = 0);
+
+//: parse command-line arguments
 template <class T>
 class vul_arg : public vul_arg_base {
 public:
