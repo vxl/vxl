@@ -44,17 +44,15 @@ rgrl_trans_homography2d( vnl_matrix<double> const& H,
 {
   //Uncenter the H_ = to_matrix^-1 * H * from_matrix
   //
-  vnl_matrix<double> to_matrix(3,3, vnl_matrix_identity);
-  to_matrix(0,2) = -to_centre[0];
-  to_matrix(1,2) = -to_centre[1];
+  vnl_matrix<double> to_inv(3,3, vnl_matrix_identity);
+  to_inv(0,2) = to_centre[0];
+  to_inv(1,2) = to_centre[1];
 
   vnl_matrix<double> from_matrix(3,3, vnl_matrix_identity);
   from_matrix(0,2) = -from_centre[0];
   from_matrix(1,2) = -from_centre[1];
 
-  vnl_svd<double> svd_to( to_matrix );
-  assert( svd_to.rank() == 3 );
-  H_ = svd_to.inverse() * H * from_matrix;
+  H_ = to_inv * H * from_matrix;
   from_centre_ = from_centre;
 }
 
