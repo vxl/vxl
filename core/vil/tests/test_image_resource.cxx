@@ -60,7 +60,7 @@ void test_image_resource(vcl_string type, vil2_pixel_format format, T dummy)
 
 
   view2.resize(1,1,1);
-  view2.fill(20.0);
+  view2.fill(20);
   vil2_image_resource_sptr trans = vil2_transpose(mem);
   TEST("Transpose::put_view",trans->put_view(view2,3,0), true);
   view1 = mem->get_view(0, mem->ni(), 0, mem->nj());
