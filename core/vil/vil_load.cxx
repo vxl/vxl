@@ -84,5 +84,5 @@ vil_image_view_base_sptr vil_load(const char *file)
 {
   vil_image_resource_sptr data = vil_load_image_resource(file);
   if (!data) return 0;
-  return data -> get_view(0, data->ni(), 0, data->nj());
+  return data -> get_view();
 }
