@@ -1,3 +1,11 @@
+## this little rule overrides the "all: tests" rule
+## found in config/static-tests.mk and is necessary
+## to get the vbl-test library built before the test
+## programs are linked. the vbl-test library is needed
+## in order that the instantiations for it can be put
+## in the Templates/ directory.
+orl: xall tests
+
 USES = vxl
 
 LIBRARY := vbl-test
