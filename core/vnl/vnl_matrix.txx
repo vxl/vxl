@@ -811,7 +811,7 @@ void vnl_matrix<T>::normalize_rows()
 
     if (norm != 0) {
       typedef typename vnl_numeric_traits<abs_t>::real_t real_t;
-      real_t scale = 1.0/vcl_sqrt((real_t)norm);
+      real_t scale = real_t(1)/vcl_sqrt((real_t)norm);
       for (unsigned int j = 0; j < this->num_cols; j++) {
         // FIXME need correct rounding here
         // There is no *standard* no operator*(complex<float>, double).
@@ -834,7 +834,7 @@ void vnl_matrix<T>::normalize_columns()
 
     if (norm != 0) {
       typedef typename vnl_numeric_traits<abs_t>::real_t real_t;
-      real_t scale = 1.0/vcl_sqrt((real_t)norm);
+      real_t scale = real_t(1)/vcl_sqrt((real_t)norm);
       for (unsigned int i = 0; i < this->num_rows; i++) {
         // FIXME need correct rounding here
         // There is no *standard* no operator*(complex<float>, double).
@@ -1064,9 +1064,23 @@ void vnl_matrix<T>::assert_finite() const
 {
   if (is_finite())
     return;
-
-  vcl_cerr << "*** NAN FEVER **\n";
-  vcl_cerr << *this;
+  
+  vcl_cerr << vcl_endl << vcl_endl;
+  vcl_cerr << __FILE__ ":" << __LINE__ << ": matrix has non-finite elements" << vcl_endl;
+  if (rows() <= 20 && cols() <= 20) {
+    vcl_cerr << __FILE__ ": here it is:" << vcl_endl;
+    vcl_cerr << *this;
+  }
+  else {
+    vcl_cerr << __FILE__ ": it is quite big (" << rows() << 'x' << cols() << ")" << vcl_endl;
+    vcl_cerr << __FILE__ ": in the following picture - means finite and * means non-finite:" << vcl_endl;
+    for (int i=0; i<rows(); ++i) {
+      for (int j=0; j<cols(); ++j)
+        vcl_cerr << char(vnl_math_isfinite((*this)(i, j)) ? '-' : '*');
+      vcl_cerr << vcl_endl;
+    }
+  }
+  vcl_cerr << __FILE__ ": calling abort()" << vcl_endl;
   vcl_abort();
 }
 
@@ -1075,7 +1089,7 @@ template <class T>
 void vnl_matrix<T>::assert_size(unsigned rs,unsigned cs) const
 {
   if (this->rows()!=rs || this->cols()!=cs) {
-    vcl_cerr << "vnl_matrix : has size " << this->rows() << 'x' << this->cols()
+    vcl_cerr << __FILE__ "vnl_matrix : has size " << this->rows() << 'x' << this->cols()
              << ". Should be " << rs << 'x' << cs << vcl_endl;
     vcl_abort();
   }
