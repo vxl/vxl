@@ -11,7 +11,7 @@
 
 #include <vsl/vsl_binary_io.h>
 #include <vcl_string.h>
-#include <vnl/vnl_fwd.h>
+#include <vnl/vnl_vector.h> // HACK: IMS: don't replace this with vnl_fwd.h
 
 //=======================================================================
 
