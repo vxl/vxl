@@ -11,7 +11,7 @@
 
 void test_write_endian()
 {
-  vcl_string tmp_nam = vul_temp_filename();
+  vcl_string tmp_nam = vul_temp_filename() + ".bin";
   char const *file = tmp_nam!="" ? tmp_nam.c_str() : "smoo.bin";
   vil_stream *s = 0;
 

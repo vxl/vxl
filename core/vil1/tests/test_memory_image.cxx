@@ -20,9 +20,9 @@ void p(vil_image const& m)
 
 int main()
 {
-  vcl_string tmp_nam = vul_temp_filename();
+  vcl_string tmp_nam = vul_temp_filename() + ".pgm";
   char const *file1 = tmp_nam!="" ? tmp_nam.c_str() : "vil_test_memory_image_1.pgm";
-  tmp_nam = vul_temp_filename();
+  tmp_nam = vul_temp_filename() + ".pgm";
   char const *file2 = tmp_nam!="" ? tmp_nam.c_str() : "vil_test_memory_image_2.pgm";
 
   {

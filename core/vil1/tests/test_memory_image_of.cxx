@@ -14,7 +14,7 @@ const int H = 256;
 
 void test_vil_memory_image_of()
 {
-  vcl_string tmp_nam = vul_temp_filename();
+  vcl_string tmp_nam = vul_temp_filename() + ".pgm";
   char const *file_name_2 = tmp_nam!="" ? tmp_nam.c_str() : "vil_test_memory_image_of.pgm";
   {
     vcl_cout << "unsigned char" << vcl_endl;
@@ -37,7 +37,7 @@ void test_vil_memory_image_of()
   vpl_unlink(file_name_2);
 #endif
 
-  tmp_nam = vul_temp_filename();
+  tmp_nam = vul_temp_filename() + ".ppm";
   char const* file_name_1 = tmp_nam!="" ? tmp_nam.c_str() : "vil_test_memory_image_of.ppm";
 
   {

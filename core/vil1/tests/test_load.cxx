@@ -10,7 +10,7 @@
 
 static void test(char const* magic, int comps, int bits)
 {
-  vcl_string tmp_nam = vul_temp_filename();
+  vcl_string tmp_nam = vul_temp_filename() + ".pgm";
   char const *file = tmp_nam!="" ? tmp_nam.c_str() : "t.pgm";
   {
     vcl_ofstream f(file);
