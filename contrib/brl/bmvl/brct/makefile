@@ -5,6 +5,7 @@ VERSION := 1.0
 
 SOURCES += kalman_filter.cpp
 SOURCES += brct_algos.cpp
+SOURCES += brct_structure_estimator.cxx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
