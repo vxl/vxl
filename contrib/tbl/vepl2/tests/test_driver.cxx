@@ -74,6 +74,17 @@ vil2_image_view_base_sptr CreateTest16bitImage(int wd, int ht)
   return image;
 }
 
+// create a 32 bit test image
+vil2_image_view_base_sptr CreateTest32bitImage(int wd, int ht)
+{
+  vil2_image_resource_sptr im = vil2_new_image_resource(wd, ht, 1, VIL2_PIXEL_FORMAT_UINT_32);
+  vil2_image_view<vxl_uint_32>* image = new vil2_image_view<vxl_uint_32>(im->get_view(0,wd,0,ht));
+  for (int x = 0; x < wd; x++)
+    for (int y = 0; y < ht; y++)
+      (*image)(x, y) = vxl_uint_32 (((x-wd/2)*(y-ht/2)/16) & 0xffff);
+  return image;
+}
+
 // create a 24 bit color test image
 vil2_image_view_base_sptr CreateTest24bitImage(int wd, int ht)
 {
@@ -123,7 +134,9 @@ vil2_image_view_base_sptr CreateTestdoubleImage(int wd, int ht)
 }
 
 // Compare two images and return true if their difference is not v
-bool difference(vil2_image_view_base_sptr const& a, vil2_image_view_base_sptr const& b, long v, vcl_string const& m)
+bool difference(vil2_image_view_base_sptr const& a,
+                vil2_image_view_base_sptr const& b,
+                vxl_int_32 v, vcl_string const& m, bool exact)
 {
   unsigned int sx = a->ni(),  sy = a->nj(), sp = a->nplanes();
   TEST("# rows match", sx, b->ni());
@@ -131,11 +144,13 @@ bool difference(vil2_image_view_base_sptr const& a, vil2_image_view_base_sptr co
   TEST("# planes match", sp, b->nplanes());
   TEST("Image formats match", a->pixel_format(), b->pixel_format());
 
-  long ret = 0;
+  if (!exact) return false;
+
+  vxl_int_32 ret = 0;
   // run over all pixels except for an outer border of 1 pixel:
   // The ABSX parameter is used to suppress compiler warnings by not computing
   // the absolute value of unsigned types.
-#define DIFF(T) /* for non-integral types line float and double */ {\
+#define DIFF(T) /* for non-integral types like float and double */ {\
   T r = (T)0; \
   vil2_image_view<T >& v1 = (vil2_image_view<T >&)(*a); \
   vil2_image_view<T >& v2 = (vil2_image_view<T >&)(*b); \
@@ -148,7 +163,7 @@ bool difference(vil2_image_view_base_sptr const& a, vil2_image_view_base_sptr co
              -(*(it2+i*v2.istep()+j*v2.jstep()+p*v2.planestep())); \
         r += x<0?-x:x; \
       } \
-  ret = (long)(r+0.5); \
+  ret = (vxl_int_32)(r+0.5); \
 }
 #define DIFI(T) /* for integral and for very short types like e.g. bool */ {\
   ret = 0; \
@@ -159,8 +174,8 @@ bool difference(vil2_image_view_base_sptr const& a, vil2_image_view_base_sptr co
   for (unsigned int p=0; p<sp; ++p) \
     for (unsigned int j=1; j+1<sy; ++j) \
       for (unsigned int i=1; i+1<sx; ++i) { \
-        long x = (long)(*(it1+i*v1.istep()+j*v1.jstep()+p*v1.planestep())) \
-                -(long)(*(it2+i*v2.istep()+j*v2.jstep()+p*v2.planestep())); \
+        vxl_int_32 x = (vxl_int_32)(*(it1+i*v1.istep()+j*v1.jstep()+p*v1.planestep())) \
+                      -(vxl_int_32)(*(it2+i*v2.istep()+j*v2.jstep()+p*v2.planestep())); \
         ret += x<0?-x:x; \
       } \
 }
