@@ -58,10 +58,10 @@ vdgl_digital_region::vdgl_digital_region(vdgl_digital_region const& r)
   this->init();
   for (int i = 0; i<r.Npix(); ++i)
     this->IncrementMeans(r.Xj()[i], r.Yj()[i], r.Zj()[i], r.Ij()[i]);
-  this->ComputeIntensityStdev();
   this->InitPixelArrays();
   for (int i = 0; i<r.Npix(); i++)
     this->InsertInPixelArrays(r.Xj()[i], r.Yj()[i], r.Zj()[i], r.Ij()[i]);
+  this->ComputeIntensityStdev();
 }
 vdgl_digital_region::vdgl_digital_region(int npts, const float* xp, const float* yp,
                                          const unsigned short *pix)
@@ -70,10 +70,10 @@ vdgl_digital_region::vdgl_digital_region(int npts, const float* xp, const float*
   this->init();
   for (int i = 0; i<npts; i++)
     this->IncrementMeans(xp[i], yp[i], pix[i]);
-  this->ComputeIntensityStdev();
   this->InitPixelArrays();
   for (int i = 0; i<npts_; i++)
     this->InsertInPixelArrays(xp[i], yp[i], pix[i]);
+  this->ComputeIntensityStdev();
 }
 vdgl_digital_region::vdgl_digital_region(int npts, const float* xp, const float* yp,
                                          const float* zp, const unsigned short *pix)
@@ -82,10 +82,10 @@ vdgl_digital_region::vdgl_digital_region(int npts, const float* xp, const float*
   this->init();
   for (int i = 0; i<npts; i++)
     this->IncrementMeans(xp[i], yp[i], zp[i], pix[i]);
-  this->ComputeIntensityStdev();
   this->InitPixelArrays();
   for (int i = 0; i<npts_; i++)
     this->InsertInPixelArrays(xp[i], yp[i], zp[i], pix[i]);
+  this->ComputeIntensityStdev();
 }
 //-------------------------------------------------------------------------
 //
