@@ -23,6 +23,10 @@
 #include "vil_nitf_version_v20.h"
 #include "vil_nitf_header_v20.h"
 
+#ifdef WIN32
+#define strcasecmp _stricmp
+#endif
+
 static const vcl_string VALID_ICORDS_CODES = "CGNUcgnu";
 
 vil_nitf_image_subheader_v20::vil_nitf_image_subheader_v20()
@@ -60,8 +64,8 @@ vil_nitf_image_subheader_v20::~vil_nitf_image_subheader_v20()
 bool vil_nitf_image_subheader_v20::IsCompressed() const
 {
     bool rval = false;
-    if (!vcl_strcmp (IC, "C0") || !vcl_strcmp (IC, "C1")
-        || !vcl_strcmp (IC, "C2") || !vcl_strcmp (IC, "C3")) {
+    if (!vcl_strcmp(IC, "C0") || !vcl_strcmp(IC, "C1") ||
+        !vcl_strcmp(IC, "C2") || !vcl_strcmp(IC, "C3")) {
         rval = true;
     }
     return rval;
@@ -108,45 +112,45 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
     {
         buffer[1] = 0;  // For when ISCLAS is read in.
 
-        if ((file->read (IM,      2) <  2) ||
-            (vcl_strcmp (IM, "IM"))                 ||
-            (file->read (IID,    10) < 10) ||
-            (file->read (IDATIM_, 14) < 14) ||
-            (file->read (TGTID,  17) < 17) ||
-            (file->read (ITITLE, 80) < 80) ||
-            (file->read (buffer,  1) <  1) ||
-            (!ValidClassification (buffer))) {
+        if ((file->read(IM,      2) <  2) ||
+            (vcl_strcmp(IM, "IM"))                 ||
+            (file->read(IID,    10) < 10) ||
+            (file->read(IDATIM_, 14) < 14) ||
+            (file->read(TGTID,  17) < 17) ||
+            (file->read(ITITLE, 80) < 80) ||
+            (file->read(buffer,  1) <  1) ||
+            (!ValidClassification(buffer))) {
             error = true;
             break;
         }
-        ISCLAS = ConvertClassification (buffer);
+        ISCLAS = ConvertClassification(buffer);
 
         buffer[1] = 0;                // For when ENCRYP is read in.
 
-        if ((file->read (ISCODE, 40) < 40) ||
-            (file->read (ISCTLH, 40) < 40) ||
-            (file->read (ISREL,  40) < 40) ||
-            (file->read (ISCAUT, 20) < 20) ||
-            (file->read (ISCTLN, 20) < 20) ||
-            (file->read (ISDWNG,  6) <  6) ||
-            (!vcl_strcmp (ISDWNG, "999998") &&
-             file->read (ISDEVT, 40) < 40) ||
-            (file->read (buffer,  1) <  1) ||
-            (!vcl_strpbrk (buffer, "01")))
+        if ((file->read(ISCODE, 40) < 40) ||
+            (file->read(ISCTLH, 40) < 40) ||
+            (file->read(ISREL,  40) < 40) ||
+            (file->read(ISCAUT, 20) < 20) ||
+            (file->read(ISCTLN, 20) < 20) ||
+            (file->read(ISDWNG,  6) <  6) ||
+            (!vcl_strcmp(ISDWNG, "999998") &&
+             file->read(ISDEVT, 40) < 40) ||
+            (file->read(buffer,  1) <  1) ||
+            (!vcl_strpbrk(buffer, "01")))
         {
             error = true;
             break;
         }
         ENCRYP = buffer[0] == '0' ? NOTENCRYPTED : ENCRYPTED;
 
-        if ((file->read (ISORCE, 42) < 42) ||
-            !get_unsigned (buffer, &NROWS, 8, file)   ||
-            !get_unsigned (buffer, &NCOLS, 8, file)) {
+        if ((file->read(ISORCE, 42) < 42) ||
+            !get_unsigned(buffer, &NROWS, 8, file)   ||
+            !get_unsigned(buffer, &NCOLS, 8, file)) {
           error = true;
           break;
         }
 
-        if (file->read (buffer,  3) < 3) {
+        if (file->read(buffer,  3) < 3) {
           error = true;
           break;
         }
@@ -154,17 +158,17 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
         vcl_cout << method_name << "PVTYPE string = <" << buffer << ">\n";
 
   // MAKE SURE FLOAT AND COMPLEX BELOW SHOULD NOT BE DOUBLE.  MAL 8oct2003
-        if (!strncasecmp (buffer, "B  ", 3))  // B = bit-mapped. TargetJr. used PVTYPE_INTEGER
+        if (!strcasecmp(buffer, "B  ", 3))  // B = bit-mapped. TargetJr. used PVTYPE_INTEGER
           PVTYPE_ = VIL_PIXEL_FORMAT_UINT_16;
-        else if (!strncasecmp (buffer, "C  ", 3))  // C = complex (2 32 bit values)
+        else if (!strcasecmp(buffer, "C  ", 3))  // C = complex (2 32 bit values)
           PVTYPE_ = VIL_PIXEL_FORMAT_COMPLEX_FLOAT;  // Should this be COMPLEX_DOUBLE ?
-        else if (!strncasecmp (buffer, "INT", 3))
+        else if (!strcasecmp(buffer, "INT", 3))
           PVTYPE_ = VIL_PIXEL_FORMAT_UINT_16;  // INT and SI are 16 bit values
-        else if (!strncasecmp (buffer, "R  ", 3))
+        else if (!strcasecmp(buffer, "R  ", 3))
           PVTYPE_ = VIL_PIXEL_FORMAT_FLOAT;  // 32 bit IEEE floating point number.
-        else if (!strncasecmp (buffer, "SI ", 3))
+        else if (!strcasecmp(buffer, "SI ", 3))
             PVTYPE_ = VIL_PIXEL_FORMAT_INT_16;  // INT and SI are 16 bit values
-        else if (!strncasecmp (buffer, "U  ", 3))
+        else if (!strcasecmp(buffer, "U  ", 3))
             PVTYPE_ = VIL_PIXEL_FORMAT_UNKNOWN;
         else
         {
@@ -172,7 +176,7 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
             break;
         }
 
-        if (file->read (IREP, 8) < 8) {
+        if (file->read(IREP, 8) < 8) {
             error = true;
             break;
         }
@@ -181,17 +185,17 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
                  << "IREP string = <" << IREP << ">  file position = "
                  << file->tell() << vcl_endl;
 
-        if (strcasecmp (IREP, "MONO    ") &&
-            strcasecmp (IREP, "RGB     ") &&
-            strcasecmp (IREP, "NODISPLY") &&
-            strcasecmp (IREP, "RGB/LUT ") &&
-            strcasecmp (IREP, "MULTI   ") &&
-            strcasecmp (IREP, "YCbCr601")) {
+        if (strcasecmp(IREP, "MONO    ") &&
+            strcasecmp(IREP, "RGB     ") &&
+            strcasecmp(IREP, "NODISPLY") &&
+            strcasecmp(IREP, "RGB/LUT ") &&
+            strcasecmp(IREP, "MULTI   ") &&
+            strcasecmp(IREP, "YCbCr601")) {
           error = true;
           break;
         }
 
-        if (file->read (ICAT, 8) < 8) {
+        if (file->read(ICAT, 8) < 8) {
             error = true;
             break;
         }
@@ -199,22 +203,21 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
                  << "ICAT string = <" << ICAT << ">  file position = "
                  << file->tell() << vcl_endl;
 
-        if (strcasecmp (ICAT, "VIS     ") &&
-            strcasecmp (ICAT, "MAP     ") &&
-            strcasecmp (ICAT, "SAR     ") &&
-            strcasecmp (ICAT, "IR      ") &&
-            strcasecmp (ICAT, "FP      ") &&
-            strcasecmp (ICAT, "MRI     ") &&
-            strcasecmp (ICAT, "XRAY    ") &&
-            strcasecmp (ICAT, "CAT     ") &&
-            strcasecmp (ICAT, "MS      ") &&
-            vcl_strcmp (ICAT, "        ")) {
+        if (strcasecmp(ICAT, "VIS     ") &&
+            strcasecmp(ICAT, "MAP     ") &&
+            strcasecmp(ICAT, "SAR     ") &&
+            strcasecmp(ICAT, "IR      ") &&
+            strcasecmp(ICAT, "FP      ") &&
+            strcasecmp(ICAT, "MRI     ") &&
+            strcasecmp(ICAT, "XRAY    ") &&
+            strcasecmp(ICAT, "CAT     ") &&
+            strcasecmp(ICAT, "MS      ") &&
+            vcl_strcmp(ICAT, "        ")) {
           error = true;
           break;
         }
 
-        if (!get_unsigned (buffer, &ABPP, 2, file) ||
-            (ABPP < 1 || ABPP > 32)) {
+        if (!get_unsigned(buffer, &ABPP, 2, file) || (ABPP < 1 || ABPP > 32)) {
           error = true;
           break;
         }
@@ -223,7 +226,7 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
                  << "ABPP string = <" << buffer << ">  file position = "
                  << file->tell() << vcl_endl;
 
-        if (file->read (buffer, 1) < 1) {
+        if (file->read(buffer, 1) < 1) {
           error = true;
           break;
         }
@@ -237,7 +240,7 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
         // Read single character for ICORDS code.  Check against valid values.
         // If value is C, G, or U, read in 60 characters for IGEOLO field.
 
-        if (file->read (buffer, 1) <  1) {
+        if (file->read(buffer, 1) <  1) {
             error = true;
             break;
         }
@@ -259,14 +262,14 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
               break;
         }
         if (ICORDS != NONE) {
-          if (file->read (IGEOLO, 60) < 60) {
+          if (file->read(IGEOLO, 60) < 60) {
               error = true;
               break;
           }
         }
 
         unsigned int NICOM, n;
-        if (!get_unsigned (buffer, &NICOM, 1, file))
+        if (!get_unsigned(buffer, &NICOM, 1, file))
         {
             error = true;
             break;
@@ -285,7 +288,7 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
 
         for (n = 0; n < NICOM; n++)
         {
-            if (file->read (tmpc, 80) < 80)
+            if (file->read(tmpc, 80) < 80)
             {
                 error = true;
                 break;
@@ -294,15 +297,15 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
                      << "ICOM[" << n << "] = <" << tmpc << ">  file position = "
                      << file->tell() << vcl_endl;
             temp_str = tmpc;
-            ICOM_.push_back (temp_str);
+            ICOM_.push_back(temp_str);
         }
 
-        if ((file->read (IC, 2) < 2)    ||
-            (vcl_strcmp (IC, "NC") && vcl_strcmp (IC, "C0")&&
-             vcl_strcmp (IC, "C3") &&
-             vcl_strcmp (IC, "C1") && vcl_strcmp (IC, "C2"))  ||
-            (vcl_strcmp (IC, "NC") &&
-             file->read (COMRAT, 4) < 4))
+        if ((file->read(IC, 2) < 2)    ||
+            (vcl_strcmp(IC, "NC") && vcl_strcmp(IC, "C0")&&
+             vcl_strcmp(IC, "C3") &&
+             vcl_strcmp(IC, "C1") && vcl_strcmp(IC, "C2"))  ||
+            (vcl_strcmp(IC, "NC") &&
+             file->read(COMRAT, 4) < 4))
         {
             error = true;
             break;
@@ -312,7 +315,7 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
         delete bands;
         bands = 0;
         NBANDS = 0;
-        if (!get_unsigned (buffer, &NBANDS, 1, file) || NBANDS == 0)
+        if (!get_unsigned(buffer, &NBANDS, 1, file) || NBANDS == 0)
         {
             error = true;
             break;
@@ -328,11 +331,11 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
             vcl_cout << method_name << "read data for band[" << n << "]\n";
 
             bands[n] = version_->newImageHeaderBand();
-            if ((file->read (bands[n]->ITYPE, 8) < 8) ||
-                (file->read (bands[n]->IFC,   1) < 1) ||
+            if ((file->read(bands[n]->ITYPE, 8) < 8) ||
+                (file->read(bands[n]->IFC,   1) < 1) ||
                 ((bands[n]->IFC[0] != 'N') && (bands[n]->IFC[0] != ' ')) ||
-                (file->read (bands[n]->IMFLT, 3) < 3) ||
-                (!get_unsigned (buffer, &bands[n]->NLUTS, 1, file)) ||
+                (file->read(bands[n]->IMFLT, 3) < 3) ||
+                (!get_unsigned(buffer, &bands[n]->NLUTS, 1, file)) ||
                 (bands[n]->NLUTS > 4)) {
               bands[n]->NLUTS = 0;
               error = true;
@@ -357,8 +360,7 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
                 for (nn = 0; nn < bands[n]->NLUTS; nn++)
                 {
                     bands[n]->LUTD[nn] = new unsigned char[bands[n]->NELUT];
-                    if (file->read (bands[n]->LUTD[nn],
-                                        bands[n]->NELUT) < bands[n]->NELUT)
+                    if (file->read(bands[n]->LUTD[nn], bands[n]->NELUT) < bands[n]->NELUT)
                     {
                         error = true;
                         break;
@@ -371,8 +373,8 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
         if (error) break;
 
         if (!GetInt (buffer, &ISYNC, 1, file) ||
-            (file->read (buffer,     1) < 1)  ||
-            (!vcl_strpbrk (buffer, "BSPbsp")))
+            (file->read(buffer,     1) < 1)  ||
+            (!vcl_strpbrk(buffer, "BSPbsp")))
         {
             error = true;
             break;
@@ -391,22 +393,22 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
             assert(unrecognizedInterleaveType == false);
         }
 
-        if (!get_unsigned (buffer, &NBPR, 4, file) ||
+        if (!get_unsigned(buffer, &NBPR, 4, file) ||
             (NBPR < 1)                            ||
-            !get_unsigned (buffer, &NBPC, 4, file) ||
+            !get_unsigned(buffer, &NBPC, 4, file) ||
             (NBPC < 1)                            ||
-            !get_unsigned (buffer, &NPPBH, 4, file) ||
+            !get_unsigned(buffer, &NPPBH, 4, file) ||
             (NPPBH > 9999)         ||
-            !get_unsigned (buffer, &NPPBV, 4, file) ||
+            !get_unsigned(buffer, &NPPBV, 4, file) ||
             (NPPBV > 9999)         ||
-            !get_unsigned (buffer, &NBPP, 2, file) ||
+            !get_unsigned(buffer, &NBPP, 2, file) ||
             (NBPP < 1) || (NBPP > 16)             ||
             !GetInt (buffer, &DLVL,       3, file) ||
             !GetInt (buffer, &ALVL,       3, file) ||
             (ALVL > 998)                          ||
             !GetInt (buffer, &LOCrow,     5, file) ||
             !GetInt (buffer, &LOCcolumn,  5, file) ||
-            (file->read (IMAG,       4) < 4))
+            (file->read(IMAG,       4) < 4))
         {
             error = true;
             break;
@@ -428,7 +430,7 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
         {
             UDID_ = new char[UDIDL_ + 1];
             UDID_[UDIDL_] = 0;
-            if (file->read (UDID_, UDIDL_) < UDIDL_)
+            if (file->read(UDID_, UDIDL_) < UDIDL_)
             {
                 error = true;
                 break;
@@ -462,7 +464,7 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
         done = true;
     }  // end while (!done)
 
-    if (error) file->seek (curr_pos);
+    if (error) file->seek(curr_pos);
 
     // PMP (8/14/97)
     //
@@ -509,7 +511,7 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
 // PMP added the following 48 lines for aggregation mode processing
       // Look for the MPD26A tag. (Look for the union label...)
 
-      char *mpd_tag = XSHD->XHD ? vcl_strstr (XSHD->XHD, "MPD26A") : 0;
+      char *mpd_tag = XSHD->XHD ? vcl_strstr(XSHD->XHD, "MPD26A") : 0;
 
       // Check if there is MPD26A tag in the subheader.
       if (mpd_tag == NULL) {
@@ -520,14 +522,14 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
         int map_off = mpd_tag - XSHD->XHD;
         vcl_cout << "MPD26A tag found in image's subheader.\n";
 
-        map_off += vcl_strlen ("MPD26A"); // advance over extension type identifier
+        map_off += vcl_strlen("MPD26A"); // advance over extension type identifier
 
         // First off, check if the length of the CEDATA field is
         // favorable to our cause.
-        vcl_strncpy (work, &XSHD->XHD[map_off], 5); // grab length of CEDATA field
+        vcl_strncpy(work, &XSHD->XHD[map_off], 5); // grab length of CEDATA field
         work[5] = 0;                         // ensure NULL terminator
         map_off += 5;                        // advance over length of CEDATA field
-        int map_size = vcl_atoi (work);           // get size in bytes
+        int map_size = vcl_atoi(work);           // get size in bytes
 
         // If the length of the data is incorrect, the MPD26A data is suspect
         //  and cannot be used.
@@ -542,7 +544,7 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
           vcl_cout << "MPD26A data determined to be valid -- using it.\n";
 
           // Let's copy the whole MPD26A tag contents into our working space.
-          vcl_strncpy (mpd,&XSHD->XHD[map_off],map_size);  // copy all data
+          vcl_strncpy(mpd,&XSHD->XHD[map_off],map_size);  // copy all data
           mpd[map_size] = 0;                          // ensure NULL terminator
 
           // check for isotropic image aggregation mode
@@ -551,9 +553,9 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
             vcl_cout << "This image is anamorphic!\n";
             char tmp_ana[2]; tmp_ana[1]=0; //Null terminated string
             tmp_ana[0] = mpd[45];
-            ANAMRPH[0] = vcl_atoi (&tmp_ana[0]);
+            ANAMRPH[0] = vcl_atoi(&tmp_ana[0]);
             tmp_ana[0] = mpd[47];
-            ANAMRPH[1] = vcl_atoi (&tmp_ana[0]);
+            ANAMRPH[1] = vcl_atoi(&tmp_ana[0]);
             vcl_cout << "Anamorphic ratio: " << ANAMRPH[0] << 'x' << ANAMRPH[1] << ".\n";
             if ((ANAMRPH[0] == 5) || (ANAMRPH[0] > 6) || (ANAMRPH[0] == 0)) {
               vcl_cout << "Anamorphic coefficients determined to be invalid!\n"
@@ -576,7 +578,7 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
       // PMP added the above 48 lines for aggregation mode processing
 
       // Look for the I2MAPD tag. (Look for the union label...)
-      char *map_tag = UDID_ ?  vcl_strstr (UDID_, "I2MAPD") : 0;
+      char *map_tag = UDID_ ?  vcl_strstr(UDID_, "I2MAPD") : 0;
 
       // If there is no I2MAPD tag in the subheader, our job is done and we
       //  return the 'error' variable to the caller.
@@ -595,14 +597,14 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
         int map_off = map_tag - UDID_;
         vcl_cout << "I2MAPD tag found in image's subheader.\n";
 
-        map_off += vcl_strlen ("I2MAPD"); // advance over extension type identifier
+        map_off += vcl_strlen("I2MAPD"); // advance over extension type identifier
 
         // First off, check if the length of the REDATA field is
         // favorable to our cause.
-        vcl_strncpy (work, &UDID_[map_off], 5);     // grab length of REDATA field
-        work[5] = 0;                        // ensure NULL terminator
-        map_off += 5;                       // advance over length of REDATA field
-        int map_size = vcl_atoi (work);          // get size in bytes
+        vcl_strncpy(work, &UDID_[map_off], 5);  // grab length of REDATA field
+        work[5] = 0;                            // ensure NULL terminator
+        map_off += 5;                           // advance over length of REDATA field
+        int map_size = vcl_atoi(work);          // get size in bytes
 
         // If the length of the data is incorrect, the I2MAPD data is suspect
         //  and should not be used.
@@ -615,45 +617,45 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
         vcl_cout << "I2MAPD data determined to be valid -- using it.\n";
         I2MAPD_present = true;
         // Let's copy the whole I2MAPD tag contents into our working space.
-        vcl_strncpy (i2mapd, &UDID_[map_off], map_size);  // copy all data
+        vcl_strncpy(i2mapd, &UDID_[map_off], map_size);  // copy all data
         i2mapd[map_size] = 0;                     // ensure NULL terminator
 
         map_off = 0;  // Let's start clean at the beginning.
 
         // Grab output product size, line direction
-        vcl_strncpy (temp,&i2mapd[map_off],6); // grab string from buffer
-        temp[6] = 0;                      // ensure NULL terminator
-        map_off += 6;                     // advance to next field
-        itemp = vcl_atoi (temp);               // ASCII -> number
+        vcl_strncpy(temp,&i2mapd[map_off],6); // grab string from buffer
+        temp[6] = 0;                          // ensure NULL terminator
+        map_off += 6;                         // advance to next field
+        itemp = vcl_atoi(temp);               // ASCII -> number
         vcl_cout << "Lines in output product: " << itemp << vcl_endl;
 
         // Grab output product size, sample direction
-        vcl_strncpy (temp,&i2mapd[map_off],6); // grab string from buffer
-        temp[6] = 0;                      // ensure NULL terminator
-        map_off += 6;                     // advance to next field
-        itemp = vcl_atoi (temp);               // ASCII -> number
+        vcl_strncpy(temp,&i2mapd[map_off],6); // grab string from buffer
+        temp[6] = 0;                          // ensure NULL terminator
+        map_off += 6;                         // advance to next field
+        itemp = vcl_atoi(temp);               // ASCII -> number
         vcl_cout << "Samples in output product: " << itemp << vcl_endl;
 
         // Grab reduced resolution data set (RRDS) and STORE IT!
-        vcl_strncpy (temp,&i2mapd[map_off],2); // grab string from buffer
-        temp[2] = 0;                      // ensure NULL terminator
-        map_off += 2;                     // advance to next field
-        itemp = vcl_atoi (temp);               // ASCII -> number
-        RRDSset = itemp;                  // store in global data
+        vcl_strncpy(temp,&i2mapd[map_off],2); // grab string from buffer
+        temp[2] = 0;                          // ensure NULL terminator
+        map_off += 2;                         // advance to next field
+        itemp = vcl_atoi(temp);               // ASCII -> number
+        RRDSset = itemp;                      // store in global data
         vcl_cout << "RRDS of output product: " << itemp << vcl_endl;
 
         // Grab downsampling factor relative to the full image
-        vcl_strncpy (temp,&i2mapd[map_off],8); // grab string from buffer
-        temp[8] = 0;                      // ensure NULL terminator
-        map_off += 8;                     // advance to next field
-        ftemp = vcl_atof (temp);               // ASCII -> number
+        vcl_strncpy(temp,&i2mapd[map_off],8); // grab string from buffer
+        temp[8] = 0;                          // ensure NULL terminator
+        map_off += 8;                         // advance to next field
+        ftemp = vcl_atof(temp);               // ASCII -> number
         vcl_cout << "Reciprocal of RRDS magnification: " << ftemp << vcl_endl;
 
         // Grab dewarp flag (it damn well better not be set!)
-        vcl_strncpy (temp,&i2mapd[map_off],2); // grab string from buffer
-        temp[2] = 0;                      // ensure NULL terminator
-        map_off += 2;                     // advance to next field
-        itemp = vcl_atoi (temp);               // ASCII -> number
+        vcl_strncpy(temp,&i2mapd[map_off],2); // grab string from buffer
+        temp[2] = 0;                          // ensure NULL terminator
+        map_off += 2;                         // advance to next field
+        itemp = vcl_atoi(temp);               // ASCII -> number
         vcl_cout << "Dewarp flag of output product: " << itemp << vcl_endl;
 
         // Leave if the image has been dewarped (we can't use [u,v] values!).
@@ -678,67 +680,67 @@ StatusCode vil_nitf_image_subheader_v20::Read (vil_stream* file)
         map_off += 12; // spacing between grid points, sample direction
 
         // Grab line index of upper left corner and STORE IT!
-        vcl_strncpy (temp, &i2mapd[map_off], 12); // grab string from buffer
-        temp[12] = 0;                      // ensure NULL terminator
-        map_off += 12;                     // advance to next field
-        ftemp = vcl_atof (temp);                // ASCII -> number
-        ULl = ((int)(ftemp+0.5)) - 1;      // store in global data
+        vcl_strncpy(temp, &i2mapd[map_off], 12); // grab string from buffer
+        temp[12] = 0;                          // ensure NULL terminator
+        map_off += 12;                         // advance to next field
+        ftemp = vcl_atof(temp);                // ASCII -> number
+        ULl = ((int)(ftemp+0.5)) - 1;          // store in global data
         vcl_cout << "Upper left corner (L): " << ULl << vcl_endl;
 
         // Grab sample index of upper left corner and STORE IT!
-        vcl_strncpy (temp, &i2mapd[map_off], 12); // grab string from buffer
-        temp[12] = 0;                      // ensure NULL terminator
-        map_off += 12;                     // advance to next field
-        ftemp = vcl_atof (temp);                 // ASCII -> number
-        ULs = ((int)(ftemp+0.5)) - 1;      // store in global data
+        vcl_strncpy(temp, &i2mapd[map_off], 12); // grab string from buffer
+        temp[12] = 0;                          // ensure NULL terminator
+        map_off += 12;                         // advance to next field
+        ftemp = vcl_atof(temp);                // ASCII -> number
+        ULs = ((int)(ftemp+0.5)) - 1;          // store in global data
         vcl_cout << "Upper left corner (S): " << ULs << vcl_endl;
 
         // Grab line index of upper right corner and STORE IT!
-        vcl_strncpy (temp, &i2mapd[map_off], 12); // grab string from buffer
-        temp[12] = 0;                      // ensure NULL terminator
-        map_off += 12;                     // advance to next field
-        ftemp = vcl_atof (temp);                // ASCII -> number
-        URl = ((int)(ftemp+0.5)) - 1;      // store in global data
+        vcl_strncpy(temp, &i2mapd[map_off], 12); // grab string from buffer
+        temp[12] = 0;                          // ensure NULL terminator
+        map_off += 12;                         // advance to next field
+        ftemp = vcl_atof(temp);                // ASCII -> number
+        URl = ((int)(ftemp+0.5)) - 1;          // store in global data
         vcl_cout << "Upper right corner (L): " << URl << vcl_endl;
 
         // Grab sample index of upper right corner and STORE IT!
-        vcl_strncpy (temp, &i2mapd[map_off], 12); // grab string from buffer
-        temp[12] = 0;                      // ensure NULL terminator
-        map_off += 12;                     // advance to next field
-        ftemp = vcl_atof (temp);                // ASCII -> number
-        URs = ((int)(ftemp+0.5)) - 1;      // store in global data
+        vcl_strncpy(temp, &i2mapd[map_off], 12); // grab string from buffer
+        temp[12] = 0;                          // ensure NULL terminator
+        map_off += 12;                         // advance to next field
+        ftemp = vcl_atof(temp);                // ASCII -> number
+        URs = ((int)(ftemp+0.5)) - 1;          // store in global data
         vcl_cout << "Upper right corner (S): " << URs << vcl_endl;
 
         // Grab line index of lower left corner and STORE IT!
-        vcl_strncpy (temp, &i2mapd[map_off], 12); // grab string from buffer
-        temp[12] = 0;                      // ensure NULL terminator
-        map_off += 12;                     // advance to next field
-        ftemp = vcl_atof (temp);                // ASCII -> number
-        LLl = ((int)(ftemp+0.5)) - 1;      // store in global data
+        vcl_strncpy(temp, &i2mapd[map_off], 12); // grab string from buffer
+        temp[12] = 0;                          // ensure NULL terminator
+        map_off += 12;                         // advance to next field
+        ftemp = vcl_atof(temp);                // ASCII -> number
+        LLl = ((int)(ftemp+0.5)) - 1;          // store in global data
         vcl_cout << "Lower left corner (L): " << LLl << vcl_endl;
 
         // Grab sample index of lower left corner and STORE IT!
-        vcl_strncpy (temp,&i2mapd[map_off],12); // grab string from buffer
-        temp[12] = 0;                      // ensure NULL terminator
-        map_off += 12;                     // advance to next field
-        ftemp = vcl_atof (temp);                // ASCII -> number
-        LLs = ((int)(ftemp+0.5)) - 1;      // store in global data
+        vcl_strncpy(temp,&i2mapd[map_off],12); // grab string from buffer
+        temp[12] = 0;                          // ensure NULL terminator
+        map_off += 12;                         // advance to next field
+        ftemp = vcl_atof(temp);                // ASCII -> number
+        LLs = ((int)(ftemp+0.5)) - 1;          // store in global data
         vcl_cout << "Lower left corner (S): " << LLs << vcl_endl;
 
         // Grab line index of lower right corner and STORE IT!
-        vcl_strncpy (temp, &i2mapd[map_off], 12); // grab string from buffer
-        temp[12] = 0;                      // ensure NULL terminator
-        map_off += 12;                     // advance to next field
-        ftemp = vcl_atof (temp);                // ASCII -> number
-        LRl = ((int)(ftemp+0.5)) - 1;      // store in global data
+        vcl_strncpy(temp, &i2mapd[map_off], 12); // grab string from buffer
+        temp[12] = 0;                          // ensure NULL terminator
+        map_off += 12;                         // advance to next field
+        ftemp = vcl_atof(temp);                // ASCII -> number
+        LRl = ((int)(ftemp+0.5)) - 1;          // store in global data
         vcl_cout << "Lower right corner (L): " << LRl << vcl_endl;
 
         // Grab sample index of lower right corner and STORE IT!
-        vcl_strncpy (temp, &i2mapd[map_off], 12); // grab string from buffer
-        temp[12] = 0;                      // ensure NULL terminator
-        map_off += 12;                     // advance to next field
-        ftemp = vcl_atof (temp);                // ASCII -> number
-        LRs = ((int)(ftemp+0.5)) - 1;      // store in global data
+        vcl_strncpy(temp, &i2mapd[map_off], 12); // grab string from buffer
+        temp[12] = 0;                          // ensure NULL terminator
+        map_off += 12;                         // advance to next field
+        ftemp = vcl_atof(temp);                // ASCII -> number
+        LRs = ((int)(ftemp+0.5)) - 1;          // store in global data
         vcl_cout << "Lower right corner (S): " << LRs << vcl_endl;
 
         // Whew!
@@ -776,7 +778,7 @@ StatusCode vil_nitf_image_subheader_v20::extract_user_defined_record_extensions(
     return error ? STATUS_BAD : STATUS_GOOD;
 }
 
-StatusCode vil_nitf_image_subheader_v20::Write (vil_stream* file)
+StatusCode vil_nitf_image_subheader_v20::Write(vil_stream* file)
 {
         if (!file || !file->ok()) return STATUS_BAD;
 
@@ -814,38 +816,38 @@ StatusCode vil_nitf_image_subheader_v20::Write (vil_stream* file)
                 imap << " 256 ";
 
                 // Write output product size, line direction
-                imap << vcl_setw (6) << (LLl - ULl);
+                imap << vcl_setw(6) << (LLl - ULl);
                 // Write output product size, sample direction
-                imap << vcl_setw (6) << (URs - ULs);
+                imap << vcl_setw(6) << (URs - ULs);
                 // Write reduced resolution data set (RRDS) and STORE IT!
-                imap << vcl_setw (2) << RRDSset;
+                imap << vcl_setw(2) << RRDSset;
                 // Write downsampling factor relative to the full image
-                imap << vcl_setw (8) << (1.0/vcl_pow(2.0,RRDSset));
+                imap << vcl_setw(8) << (1.0/vcl_pow(2.0,RRDSset));
                 // Write dewarp flag (it damn well better not be set!)
-                imap << vcl_setw (2) << (int)0;
+                imap << vcl_setw(2) << (int)0;
                 // Write in image geographic location (it's same as IGEOLO)
-                imap << vcl_setw (60) << IGEOLO;
+                imap << vcl_setw(60) << IGEOLO;
                 // Write other size fields we don't need to look at.
-                imap << vcl_setw (6) << (int)0
-                     << vcl_setw (6) << (int)0
-                     << vcl_setw (6) << (LLl - ULl)
-                     << vcl_setw (6) << (URs - ULs)
-                     << vcl_setw (2) << (int)0
-                     << vcl_setw (2) << (int)0
-                     << vcl_setw (12) << (int)0
-                     << vcl_setw (12) << (int)0
-                     << vcl_setw (12) << (int)0
-                     << vcl_setw (12) << (int)0;
+                imap << vcl_setw(6) << (int)0
+                     << vcl_setw(6) << (int)0
+                     << vcl_setw(6) << (LLl - ULl)
+                     << vcl_setw(6) << (URs - ULs)
+                     << vcl_setw(2) << (int)0
+                     << vcl_setw(2) << (int)0
+                     << vcl_setw(12) << (int)0
+                     << vcl_setw(12) << (int)0
+                     << vcl_setw(12) << (int)0
+                     << vcl_setw(12) << (int)0;
 
                 // Write corners.
-                imap << vcl_setw (12) << ULl+0.5
-                     << vcl_setw (12) << ULs+0.5
-                     << vcl_setw (12) << URl+0.5
-                     << vcl_setw (12) << URs+0.5
-                     << vcl_setw (12) << LLl+0.5
-                     << vcl_setw (12) << LLs+0.5
-                     << vcl_setw (12) << LRl+0.5
-                     << vcl_setw (12) << LRs+0.5;
+                imap << vcl_setw(12) << ULl+0.5
+                     << vcl_setw(12) << ULs+0.5
+                     << vcl_setw(12) << URl+0.5
+                     << vcl_setw(12) << URs+0.5
+                     << vcl_setw(12) << LLl+0.5
+                     << vcl_setw(12) << LLs+0.5
+                     << vcl_setw(12) << LRl+0.5
+                     << vcl_setw(12) << LRs+0.5;
 
                 // Now set the user defined record extensions.
                 vcl_string temp_str = imap.str();
@@ -856,19 +858,19 @@ StatusCode vil_nitf_image_subheader_v20::Write (vil_stream* file)
 
                 // Encode the RPC extension
                 vcl_ostringstream rpc_buf;
-                encode_rpc00a_extension (rpc_buf);
+                encode_rpc00a_extension(rpc_buf);
 
                 // Copy the generated string into the extended subheader.
                 temp_str = rpc_buf.str();
                 int len_rpc = temp_str.size();
-                vcl_memcpy (cur_XHD_pos, temp_str.c_str(), len_rpc);
+                vcl_memcpy(cur_XHD_pos, temp_str.c_str(), len_rpc);
                 cur_XHD_pos += len_rpc;
 
                 // The more standard way than I2MAPD is ICHIPB
                 if (ICHIPB_present)
                 {
                   vcl_ostringstream  ichipb_buf;
-                  encode_ichipb_extension (ichipb_buf);
+                  encode_ichipb_extension(ichipb_buf);
 
                   // MPP 4/15/2001
                   // Changed len_ichipb computation to vcl_ostringstream query
@@ -878,7 +880,7 @@ StatusCode vil_nitf_image_subheader_v20::Write (vil_stream* file)
 
                   temp_str = ichipb_buf.str();
                   int len_ichipb = temp_str.size();
-                  vcl_memcpy (cur_XHD_pos, temp_str.c_str(), len_ichipb);
+                  vcl_memcpy(cur_XHD_pos, temp_str.c_str(), len_ichipb);
                   cur_XHD_pos += len_ichipb;
                 }
         }
@@ -888,12 +890,12 @@ StatusCode vil_nitf_image_subheader_v20::Write (vil_stream* file)
         if (PIAIMC_present)
         {
                 vcl_ostringstream  piaimc_buf;
-                encode_piaimc_extension (piaimc_buf);
+                encode_piaimc_extension(piaimc_buf);
 
                 vcl_string temp_str = piaimc_buf.str();
                 int len_piaimc = temp_str.size();
 
-                vcl_memcpy (cur_XHD_pos, temp_str.c_str(), len_piaimc);
+                vcl_memcpy(cur_XHD_pos, temp_str.c_str(), len_piaimc);
                 cur_XHD_pos += len_piaimc;
         }
 
@@ -1006,9 +1008,9 @@ StatusCode vil_nitf_image_subheader_v20::Write (vil_stream* file)
         }
 
         if ((file->write(IC, 2) < 2)    ||
-            (vcl_strcmp(IC, "NC") && vcl_strcmp (IC, "C0") &&
+            (vcl_strcmp(IC, "NC") && vcl_strcmp(IC, "C0") &&
              vcl_strcmp(IC, "C3")&&
-             vcl_strcmp(IC, "C1")&& vcl_strcmp (IC,"C2"))  ||
+             vcl_strcmp(IC, "C1")&& vcl_strcmp(IC,"C2"))  ||
             (vcl_strcmp(IC, "NC") &&
              file->write(COMRAT,4) < 4))
         {
@@ -1123,9 +1125,9 @@ vil_nitf_image_subheader_v20::GetHeaderLength() const
     int length = 426 + ICOM_.size() * 80 + NBANDS*13 +
                  UDIDL_ + XSHD->GetHeaderLength();
 
-    if (!vcl_strcmp (ISDWNG, "999998")) length += 40;
+    if (!vcl_strcmp(ISDWNG, "999998")) length += 40;
     if (ICORDS == GEOCENTRIC || ICORDS == GEOGRAPHIC || ICORDS == UTM) length += 60;
-    if (vcl_strcmp (COMRAT, "NC")) length += 4;
+    if (vcl_strcmp(COMRAT, "NC")) length += 4;
     for (unsigned int n = 0; n < NBANDS; n++)
         if (bands[n]->NLUTS > 0) {
             length += 5;
@@ -1144,11 +1146,11 @@ void vil_nitf_image_subheader_v20::init()
     IREP = 0;
     ICAT = 0;
 
-    setVersion (vil_nitf_version_v20::GetVersion());
+    setVersion(vil_nitf_version_v20::GetVersion());
 
     char initstr[80];                   // Will be filled with spaces.
 
-    vcl_memset (initstr,' ',80);
+    vcl_memset(initstr,' ',80);
 
     STRNCPY (IM,  "IM",     2);
     STRNCPY (IID, initstr, 10);
@@ -1164,7 +1166,7 @@ void vil_nitf_image_subheader_v20::init()
     // char* format = "%d%H%M%SZ%h%y";
 
     STRNCPY (IDATIM_, initstr, 14);
-    strftime (IDATIM_, 15, date_format, tm);
+    strftime(IDATIM_, 15, date_format, tm);
 
     STRNCPY(TGTID,  initstr, 17);
     STRNCPY(ITITLE, initstr, 80);
@@ -1223,7 +1225,7 @@ void vil_nitf_image_subheader_v20::init()
     delete UDID_;
     UDID_ = 0;
     delete XSHD;
-    XSHD = new vil_nitf_extended_subheader (0);
+    XSHD = new vil_nitf_extended_subheader(0);
 
     //set up some defaults for the 2.0 specifics
     STRCPY (IREP, "MONO    ");
@@ -1242,7 +1244,7 @@ StatusCode vil_nitf_image_subheader_v20::extract_rpc00x_extension()
   // Look for the RPC tag. (Look for the union label...)
   // It can be an A or a B tag so we just look for RPC00
   //      char *rpc_tag = XSHD->XHD ? vcl_strstr(XSHD->XHD,"RPC00A") : 0;
-  char * rpc_tag = XSHD->XHD ? vcl_strstr (XSHD->XHD, "RPC00") : 0;
+  char * rpc_tag = XSHD->XHD ? vcl_strstr(XSHD->XHD, "RPC00") : 0;
 
       // If there is no RPC tag in the subheader, our job is done and we
       //  return the 'error' variable to the caller.
@@ -1259,14 +1261,14 @@ StatusCode vil_nitf_image_subheader_v20::extract_rpc00x_extension()
       // DON'T advance over the RPC00A tag; we need to know if it's A or B type
 
       // Parse the A or B from the RPC00x tag. GWB 13Nov2003
-      vcl_strncpy (work, &XSHD->XHD[offset], 6); // Grab the RPC00x tag
+      vcl_strncpy(work, &XSHD->XHD[offset], 6); // Grab the RPC00x tag
       work[6] = 0;  // ensure NULL terminator
       offset += 6;    // increment the offset past the tag.
-      if (vcl_strncmp (work, "RPC00A", 6) == 0) {
+      if (vcl_strncmp(work, "RPC00A", 6) == 0) {
         RPC_TYPE = RPC00A;
         vcl_cout << "RPC Tag is RPC00A\n";
       }
-      else if (vcl_strncmp (work, "RPC00B", 6) == 0) {
+      else if (vcl_strncmp(work, "RPC00B", 6) == 0) {
         RPC_TYPE = RPC00B;
         vcl_cout << "RPC Tag is RPC00B\n";
       }
@@ -1278,12 +1280,12 @@ StatusCode vil_nitf_image_subheader_v20::extract_rpc00x_extension()
 
       // First off, check if the length of the CEDATA field and
       //  reject/success flag are all favorable to our cause.
-      vcl_strncpy (work, &XSHD->XHD[offset], 5); // grab length of CEDATA field
+      vcl_strncpy(work, &XSHD->XHD[offset], 5); // grab length of CEDATA field
       work[5] = 0;                        // ensure NULL terminator
       offset += 5;                        // advance over length of CEDATA field
       // If the length of the data is incorrect or the reject/success flag
       //  is set to 'reject', the RPC data is suspect and should not be used.
-      if ((vcl_atoi (work) != 1041) || (XSHD->XHD[offset] != '1')) {
+      if ((vcl_atoi(work) != 1041) || (XSHD->XHD[offset] != '1')) {
         vcl_cout << "RPC data determined to be invalid -- ignoring it.\n";
         error = true;
         return error ? STATUS_BAD : STATUS_GOOD;
@@ -1294,93 +1296,93 @@ StatusCode vil_nitf_image_subheader_v20::extract_rpc00x_extension()
       offset++;           // advance over reject/success flag
 
       // Let's copy the whole RPC tag contents into our working space.
-      vcl_strncpy (work, &XSHD->XHD[offset], 1041);  // copy all RPC data
+      vcl_strncpy(work, &XSHD->XHD[offset], 1041);  // copy all RPC data
       work[1041] = 0;                         // ensure NULL terminator
 
       offset = 0;  // Let's start clean at the beginning.
 
       // Grab ERR_BIAS
-      vcl_strncpy (temp, &work[offset], 7); // grab string from buffer
+      vcl_strncpy(temp, &work[offset], 7); // grab string from buffer
       temp[7] = 0;                   // ensure NULL terminator
       offset += 7;                   // advance to next field
-      ERR_BIAS = vcl_atof (temp);         // store value into data structure
+      ERR_BIAS = vcl_atof(temp);         // store value into data structure
       vcl_cout << "Error bias (meters): " << ERR_BIAS << vcl_endl;
 
       // Grab ERR_RAND
-      vcl_strncpy (temp, &work[offset], 7); // grab string from buffer
+      vcl_strncpy(temp, &work[offset], 7); // grab string from buffer
       temp[7] = 0;                   // ensure NULL terminator
       offset += 7;                   // advance to next field
-      ERR_RAND = vcl_atof (temp);         // store value into data structure
+      ERR_RAND = vcl_atof(temp);         // store value into data structure
       vcl_cout << "Error random (meters): " << ERR_RAND << vcl_endl;
 
       // Grab LINE_OFF
       vcl_strncpy(temp,&work[offset],6); // grab string from buffer
       temp[6] = 0;                   // ensure NULL terminator
       offset += 6;                   // advance to next field
-      LINE_OFF = vcl_atof (temp);         // store value into data structure
+      LINE_OFF = vcl_atof(temp);         // store value into data structure
       vcl_cout << "Line offset (pixels): " << LINE_OFF << vcl_endl;
 
       // Grab SAMP_OFF
       vcl_strncpy(temp,&work[offset],5); // grab string from buffer
       temp[5] = 0;                   // ensure NULL terminator
       offset += 5;                   // advance to next field
-      SAMP_OFF = vcl_atof (temp);         // store value into data structure
+      SAMP_OFF = vcl_atof(temp);         // store value into data structure
       vcl_cout << "Sample offset (pixels): " << SAMP_OFF << vcl_endl;
 
       // Grab LAT_OFF
       vcl_strncpy(temp,&work[offset],8); // grab string from buffer
       temp[8] = 0;                   // ensure NULL terminator
       offset += 8;                   // advance to next field
-      LAT_OFF = vcl_atof (temp);          // store value into data structure
+      LAT_OFF = vcl_atof(temp);          // store value into data structure
       vcl_cout << "Latitude offset (degrees): " << LAT_OFF << vcl_endl;
 
       // Grab LONG_OFF
       vcl_strncpy(temp,&work[offset],9); // grab string from buffer
       temp[9] = 0;                   // ensure NULL terminator
       offset += 9;                   // advance to next field
-      LONG_OFF = vcl_atof (temp);         // store value into data structure
+      LONG_OFF = vcl_atof(temp);         // store value into data structure
       vcl_cout << "Longitude offset (degrees): " << LONG_OFF << vcl_endl;
 
       // Grab HEIGHT_OFF
       vcl_strncpy(temp,&work[offset],5); // grab string from buffer
       temp[5] = 0;                   // ensure NULL terminator
       offset += 5;                   // advance to next field
-      HEIGHT_OFF = vcl_atof (temp);       // store value into data structure
+      HEIGHT_OFF = vcl_atof(temp);       // store value into data structure
       vcl_cout << "Height offset (meters): " << HEIGHT_OFF << vcl_endl;
 
       // Grab LINE_SCALE
       vcl_strncpy(temp,&work[offset],6); // grab string from buffer
       temp[6] = 0;                   // ensure NULL terminator
       offset += 6;                   // advance to next field
-      LINE_SCALE = vcl_atof (temp);       // store value into data structure
+      LINE_SCALE = vcl_atof(temp);       // store value into data structure
       vcl_cout << "Line scale (pixels): " << LINE_SCALE << vcl_endl;
 
       // Grab SAMP_SCALE
       vcl_strncpy(temp,&work[offset],5); // grab string from buffer
       temp[5] = 0;                   // ensure NULL terminator
       offset += 5;                   // advance to next field
-      SAMP_SCALE = vcl_atof (temp);       // store value into data structure
+      SAMP_SCALE = vcl_atof(temp);       // store value into data structure
       vcl_cout << "Sample scale (pixels): " << SAMP_SCALE << vcl_endl;
 
       // Grab LAT_SCALE
       vcl_strncpy(temp,&work[offset],8); // grab string from buffer
       temp[8] = 0;                   // ensure NULL terminator
       offset += 8;                   // advance to next field
-      LAT_SCALE = vcl_atof (temp);        // store value into data structure
+      LAT_SCALE = vcl_atof(temp);        // store value into data structure
       vcl_cout << "Latitude scale (degrees): " << LAT_SCALE << vcl_endl;
 
       // Grab LONG_SCALE
       vcl_strncpy(temp,&work[offset],9); // grab string from buffer
       temp[9] = 0;                   // ensure NULL terminator
       offset += 9;                   // advance to next field
-      LONG_SCALE = vcl_atof (temp);       // store value into data structure
+      LONG_SCALE = vcl_atof(temp);       // store value into data structure
       vcl_cout << "Longitude scale (degrees): " << LONG_SCALE << vcl_endl;
 
       // Grab HEIGHT_SCALE
       vcl_strncpy(temp,&work[offset],5); // grab string from buffer
       temp[5] = 0;                   // ensure NULL terminator
       offset += 5;                   // advance to next field
-      HEIGHT_SCALE = vcl_atof (temp);     // store value into data structure
+      HEIGHT_SCALE = vcl_atof(temp);     // store value into data structure
       vcl_cout << "Height scale (meters): " << HEIGHT_SCALE << vcl_endl;
 
       int c; // Will need this to loop through the RPC coefficients...
@@ -1390,7 +1392,7 @@ StatusCode vil_nitf_image_subheader_v20::extract_rpc00x_extension()
          vcl_strncpy(temp,&work[offset],12); // grab string from buffer
          temp[12] = 0;                   // ensure NULL terminator
          offset += 12;                   // advance to next field
-         LINE_NUM[c] = vcl_atof (temp);       // store value into data structure
+         LINE_NUM[c] = vcl_atof(temp);       // store value into data structure
          //vcl_cout << "Line numerator #" << c << ": " << LINE_NUM[c] << vcl_endl;
       }// line numerator coefficients
 
@@ -1399,7 +1401,7 @@ StatusCode vil_nitf_image_subheader_v20::extract_rpc00x_extension()
          vcl_strncpy(temp,&work[offset],12); // grab string from buffer
          temp[12] = 0;                   // ensure NULL terminator
          offset += 12;                   // advance to next field
-         LINE_DEN[c] = vcl_atof (temp);       // store value into data structure
+         LINE_DEN[c] = vcl_atof(temp);       // store value into data structure
          //vcl_cout << "Line denominator #" << c << ": " << LINE_DEN[c] << vcl_endl;
       }// line denominator coefficients
 
@@ -1408,7 +1410,7 @@ StatusCode vil_nitf_image_subheader_v20::extract_rpc00x_extension()
          vcl_strncpy(temp,&work[offset],12); // grab string from buffer
          temp[12] = 0;                   // ensure NULL terminator
          offset += 12;                   // advance to next field
-         SAMP_NUM[c] = vcl_atof (temp);       // store value into data structure
+         SAMP_NUM[c] = vcl_atof(temp);       // store value into data structure
          //vcl_cout << "Sample numerator #" << c << ": " << SAMP_NUM[c] << vcl_endl;
       }// sample numerator coefficients
 
@@ -1417,7 +1419,7 @@ StatusCode vil_nitf_image_subheader_v20::extract_rpc00x_extension()
          vcl_strncpy(temp,&work[offset],12); // grab string from buffer
          temp[12] = 0;                   // ensure NULL terminator
          offset += 12;                   // advance to next field
-         SAMP_DEN[c] = vcl_atof (temp);       // store value into data structure
+         SAMP_DEN[c] = vcl_atof(temp);       // store value into data structure
          //vcl_cout << "Sample denominator #" << c << ": " << SAMP_DEN[c] << vcl_endl;
       }// sample denominator coefficients
 
@@ -1459,7 +1461,7 @@ StatusCode vil_nitf_image_subheader_v20::extract_ichipb_extension()
 
   // If the length of the data is incorrect or the reject/success flag
   //  is set to 'reject',the ICHIPB data is suspect and should not be used.
-  if (vcl_atoi (work) != 224)
+  if (vcl_atoi(work) != 224)
 {
       vcl_cout << "ICHIPB data determined to be invalid -- ignoring it.\n";
       error = true;
@@ -1479,154 +1481,154 @@ StatusCode vil_nitf_image_subheader_v20::extract_ichipb_extension()
       vcl_strncpy(temp,&work[offset],2); // grab string from buffer
       temp[2] = 0;                   // ensure NULL terminator
       offset += 2;                   // advance to next field
-      XFRM_FLAG = vcl_atoi (temp);         // store value into data structure
+      XFRM_FLAG = vcl_atoi(temp);         // store value into data structure
       vcl_cout << "xfrm flag: " << XFRM_FLAG << vcl_endl;
 
       // Grab SCALE_FACTOR
       vcl_strncpy(temp,&work[offset],10); // grab string from buffer
       temp[10] = 0;                   // ensure NULL terminator
       offset += 10;                   // advance to next field
-      SCALE_FACTOR = vcl_atof (temp);         // store value into data structure
+      SCALE_FACTOR = vcl_atof(temp);         // store value into data structure
       vcl_cout << "Scale Factor: " << SCALE_FACTOR << vcl_endl;
 
       // Grab ANAMRPH_CORR
       vcl_strncpy(temp,&work[offset],2); // grab string from buffer
       temp[2] = 0;                   // ensure NULL terminator
       offset += 2;                   // advance to next field
-      ANAMRPH_CORR = vcl_atoi (temp);         // store value into data structure
+      ANAMRPH_CORR = vcl_atoi(temp);         // store value into data structure
       vcl_cout << "Anamorphic Correction: " << ANAMRPH_CORR << vcl_endl;
 
       // Grab SCANBLK_NUM
       vcl_strncpy(temp,&work[offset],2); // grab string from buffer
       temp[2] = 0;                   // ensure NULL terminator
       offset += 2;                   // advance to next field
-      SCANBLK_NUM = vcl_atoi (temp);         // store value into data structure
+      SCANBLK_NUM = vcl_atoi(temp);         // store value into data structure
       vcl_cout << "Scan Block Number: " << SCANBLK_NUM << vcl_endl;
 
       // Grab OP_ROW_11
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      OP_ROW_11 = vcl_atof (temp);         // store value into data structure
+      OP_ROW_11 = vcl_atof(temp);         // store value into data structure
       vcl_cout << "Output Product Row Number (1, 1): " << OP_ROW_11 << vcl_endl;
 
       // Grab OP_COL_11
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      OP_COL_11 = vcl_atof (temp);         // store value into data structure
+      OP_COL_11 = vcl_atof(temp);         // store value into data structure
       vcl_cout << "Output Product Col Number(1, 1): " << OP_COL_11 << vcl_endl;
 
       // Grab OP_ROW_12
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      OP_ROW_12 = vcl_atof (temp);         // store value into data structure
+      OP_ROW_12 = vcl_atof(temp);         // store value into data structure
       vcl_cout << "Output Product Row Number(1, 2): " << OP_ROW_12 << vcl_endl;
 
       // Grab OP_COL_12
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      OP_COL_12 = vcl_atof (temp);         // store value into data structure
+      OP_COL_12 = vcl_atof(temp);         // store value into data structure
       vcl_cout << "Output Product Col Number(1, 2): " << OP_COL_12 << vcl_endl;
 
       // Grab OP_ROW_21
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      OP_ROW_21 = vcl_atof (temp);         // store value into data structure
+      OP_ROW_21 = vcl_atof(temp);         // store value into data structure
       vcl_cout << "Output Product Row Number(2, 1): " << OP_ROW_21 << vcl_endl;
 
       // Grab OP_COL_21
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      OP_COL_21 = vcl_atof (temp);         // store value into data structure
+      OP_COL_21 = vcl_atof(temp);         // store value into data structure
       vcl_cout << "Output Product Col Number(2, 1): " << OP_COL_21 << vcl_endl;
 
       // Grab OP_ROW_22
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      OP_ROW_22 = vcl_atof (temp);         // store value into data structure
+      OP_ROW_22 = vcl_atof(temp);         // store value into data structure
       vcl_cout << "Output Product Row Number(2, 2): " << OP_ROW_22 << vcl_endl;
 
       // Grab OP_COL_22
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      OP_COL_22 = vcl_atof (temp);         // store value into data structure
+      OP_COL_22 = vcl_atof(temp);         // store value into data structure
       vcl_cout << "Output Product Col Number(2, 2): " << OP_COL_22 << vcl_endl;
 
       // Grab FI_ROW_11
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      FI_ROW_11 = vcl_atof (temp);         // store value into data structure
+      FI_ROW_11 = vcl_atof(temp);         // store value into data structure
       vcl_cout << "Full Image Row(1, 1): " << FI_ROW_11 << vcl_endl;
 
       // Grab FI_COL_11
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      FI_COL_11 = vcl_atof (temp);         // store value into data structure
+      FI_COL_11 = vcl_atof(temp);         // store value into data structure
       vcl_cout << "Full Image Col(1, 1): " << FI_COL_11 << vcl_endl;
 
       // Grab FI_ROW_12
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      FI_ROW_12 = vcl_atof (temp);         // store value into data structure
+      FI_ROW_12 = vcl_atof(temp);         // store value into data structure
       vcl_cout << "Full Image Row(1, 2): " << FI_ROW_12 << vcl_endl;
 
       // Grab FI_COL_12
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      FI_COL_12 = vcl_atof (temp);         // store value into data structure
+      FI_COL_12 = vcl_atof(temp);         // store value into data structure
       vcl_cout << "Full Image Col(1, 2): " << FI_COL_12 << vcl_endl;
 
       // Grab FI_ROW_21
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      FI_ROW_21 = vcl_atof (temp);         // store value into data structure
+      FI_ROW_21 = vcl_atof(temp);         // store value into data structure
       vcl_cout << "Full Image Row(2, 1): " << FI_ROW_21 << vcl_endl;
 
       // Grab FI_COL_21
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      FI_COL_21 = vcl_atof (temp);         // store value into data structure
+      FI_COL_21 = vcl_atof(temp);         // store value into data structure
       vcl_cout << "Full Image Col(2, 1): " << FI_COL_21 << vcl_endl;
 
       // Grab FI_ROW_22
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      FI_ROW_22 = vcl_atof (temp);         // store value into data structure
+      FI_ROW_22 = vcl_atof(temp);         // store value into data structure
       vcl_cout << "Full Image Row(2, 2): " << FI_ROW_22 << vcl_endl;
 
       // Grab FI_COL_22
       vcl_strncpy(temp,&work[offset],12); // grab string from buffer
       temp[12] = 0;                   // ensure NULL terminator
       offset += 12;                   // advance to next field
-      FI_COL_22 = vcl_atof (temp);         // store value into data structure
+      FI_COL_22 = vcl_atof(temp);         // store value into data structure
       vcl_cout << "Full Image Col(2, 2): " << FI_COL_22 << vcl_endl;
 
       // Grab FI_ROW
       vcl_strncpy(temp,&work[offset],8); // grab string from buffer
       temp[8] = 0;                   // ensure NULL terminator
       offset += 8;                   // advance to next field
-      FI_ROW = vcl_atoi (temp);         // store value into data structure
+      FI_ROW = vcl_atoi(temp);         // store value into data structure
       vcl_cout << ":Full Image Row " << FI_ROW << vcl_endl;
 
       // Grab FI_COL
       vcl_strncpy(temp,&work[offset],8); // grab string from buffer
       temp[8] = 0;                   // ensure NULL terminator
       offset += 8;                   // advance to next field
-      FI_COL = vcl_atoi (temp);         // store value into data structure
+      FI_COL = vcl_atoi(temp);         // store value into data structure
       vcl_cout << ":Full Image Col " << FI_COL << vcl_endl;
 
       // Whew!
@@ -1667,7 +1669,7 @@ StatusCode vil_nitf_image_subheader_v20::extract_piaimc_extension()
 
         // If the length of the data is incorrect, the PIAIMC
         // data is suspect and should not be used.
-        if (vcl_atoi (work) != PIAIMC_CEL)
+        if (vcl_atoi(work) != PIAIMC_CEL)
         {
           vcl_cout << "PIAIMC data determined to be invalid -- ignoring it.\n";
           error = true;
@@ -1685,14 +1687,14 @@ StatusCode vil_nitf_image_subheader_v20::extract_piaimc_extension()
         offset = 0;  // Let's start clean at the beginning.
 
         // Grab CLOUDCVR
-        vcl_strncpy(temp, &work[offset], 3);               // grab string from buffer
+        vcl_strncpy(temp, &work[offset], 3);           // grab string from buffer
         temp[3] = 0;                                   // ensure NULL terminator
         offset += 3;                                   // advance to next field
-        CLOUDCVR = vcl_atoi (temp);                         // store value
+        CLOUDCVR = vcl_atoi(temp);                     // store value
         vcl_cout << ":Cloud Cover " << CLOUDCVR << vcl_endl;
 
         // Grab SRP
-        vcl_strncpy(temp, &work[offset], 1);               // grab string from buffer
+        vcl_strncpy(temp, &work[offset], 1);           // grab string from buffer
         temp[1] = 0;                                   // ensure NULL terminator
         offset += 1;                                   // advance to next field
         SRP = (strcasecmp(temp, "N") ? false : true);  // store value
@@ -1714,10 +1716,10 @@ StatusCode vil_nitf_image_subheader_v20::extract_piaimc_extension()
         vcl_cout << ":Source " << SOURCE << vcl_endl;
 
         // Grab COMGEN
-        vcl_strncpy(temp, &work[offset], 2);               // grab string from buffer
+        vcl_strncpy(temp, &work[offset], 2);           // grab string from buffer
         temp[2] = 0;                                   // ensure NULL terminator
         offset += 2;                                   // advance to next field
-        COMGEN = vcl_atoi (temp);                           // store value
+        COMGEN = vcl_atoi(temp);                           // store value
         vcl_cout << ":Compression Generation " << COMGEN << vcl_endl;
 
         // Grab SUBQUAL
@@ -1743,14 +1745,14 @@ StatusCode vil_nitf_image_subheader_v20::extract_piaimc_extension()
         vcl_cout << ":Project ID Code " << PROJID << vcl_endl;
 
         // Grab GENERATION
-        vcl_strncpy(temp, &work[offset], 1);               // grab string from buffer
+        vcl_strncpy(temp, &work[offset], 1);           // grab string from buffer
         temp[1] = 0;                                   // ensure NULL terminator
         offset += 1;                                   // advance to next field
-        GENERATION = vcl_atoi (temp);                       // store value
+        GENERATION = vcl_atoi(temp);                   // store value
         vcl_cout << ":Generation " << GENERATION << vcl_endl;
 
         // Grab ESD
-        vcl_strncpy(temp, &work[offset], 1);               // grab string from buffer
+        vcl_strncpy(temp, &work[offset], 1);           // grab string from buffer
         temp[1] = 0;                                   // ensure NULL terminator
         offset += 1;                                   // advance to next field
         ESD = (strcasecmp(temp, "N") ? false : true);  // store value
@@ -1762,10 +1764,10 @@ StatusCode vil_nitf_image_subheader_v20::extract_piaimc_extension()
         vcl_cout << ":Other Conditions " << OTHERCOND << vcl_endl;
 
         // Grab MEANGSD
-        vcl_strncpy(temp, &work[offset], 7);               // grab string from buffer
+        vcl_strncpy(temp, &work[offset], 7);           // grab string from buffer
         temp[7] = 0;                                   // ensure NULL terminator
         offset += 7;                                   // advance to next field
-        MEANGSD = vcl_atof (temp);                          // store value
+        MEANGSD = vcl_atof(temp);                          // store value
         vcl_cout << ":Mean GSD " << MEANGSD << vcl_endl;
 
         // Grab IDATUM
@@ -1792,14 +1794,14 @@ StatusCode vil_nitf_image_subheader_v20::extract_piaimc_extension()
         vcl_strncpy(temp, &work[offset], 4);               // grab string from buffer
         temp[4] = 0;                                   // ensure NULL terminator
         offset += 4;                                   // advance to next field
-        SATTRACK_PATH = vcl_atoi (temp);                    // store value
+        SATTRACK_PATH = vcl_atoi(temp);                    // store value
         vcl_cout << ":Satellite Track PATH " << SATTRACK_PATH << vcl_endl;
 
         // Grab SATTRACK_ROW
         vcl_strncpy(temp, &work[offset], 4);               // grab string from buffer
         temp[4] = 0;                                   // ensure NULL terminator
         offset += 4;                                   // advance to next field
-        SATTRACK_ROW = vcl_atoi (temp);                     // store value
+        SATTRACK_ROW = vcl_atoi(temp);                     // store value
         vcl_cout << ":Satellite Track ROW " << SATTRACK_ROW << vcl_endl;
 
         // Whew!
@@ -1819,7 +1821,7 @@ StatusCode vil_nitf_image_subheader_v20::extract_stdid_extension()
     // Look for the STDIDx tag.  We only look for the STDID string, in case
     // there are variants of this tag (STDIDx).
 
-    char *STDID_tag = XSHD->XHD ? vcl_strstr (XSHD->XHD, "STDID") : 0;
+    char *STDID_tag = XSHD->XHD ? vcl_strstr(XSHD->XHD, "STDID") : 0;
 
     // If there is not STDID tag in the subheader, exit and return "False".
     if (STDID_tag == NULL) {
@@ -1887,7 +1889,7 @@ StatusCode vil_nitf_image_subheader_v20::extract_stdid_extension()
     vcl_strncpy(temp, &XSHD->XHD[offset],op_num);
     temp[op_num]=0;
     offset += op_num;
-    OP_NUM = vcl_atoi (temp);
+    OP_NUM = vcl_atoi(temp);
     vcl_cout << "OP_NUM = " << OP_NUM << vcl_endl;
 
     // Grab the START_SEGMENT
@@ -1899,7 +1901,7 @@ StatusCode vil_nitf_image_subheader_v20::extract_stdid_extension()
     vcl_strncpy(temp, &XSHD->XHD[offset],repro_num);
     temp[repro_num]=0;
     offset += repro_num;
-    REPRO_NUM = vcl_atoi (temp);
+    REPRO_NUM = vcl_atoi(temp);
     vcl_cout << "REPRO_NUM = " << REPRO_NUM << vcl_endl;
 
     // Grab the REPLAY_REGEN
@@ -1916,14 +1918,14 @@ StatusCode vil_nitf_image_subheader_v20::extract_stdid_extension()
     vcl_strncpy(temp, &XSHD->XHD[offset],start_col);
     temp[start_col]=0;
     offset += start_col;
-    START_COLUMN= vcl_atoi (temp);
+    START_COLUMN= vcl_atoi(temp);
     vcl_cout << "START_COLUMN = " << START_COLUMN << vcl_endl;
 
     // Grab the START_ROW
     vcl_strncpy(temp, &XSHD->XHD[offset],start_row);
     temp[start_row]=0;
     offset += start_row;
-    START_ROW = vcl_atoi (temp);
+    START_ROW = vcl_atoi(temp);
     vcl_cout << "START_ROW = " << START_ROW << vcl_endl;
 
     // Grab the END_SEGMENT
@@ -1935,14 +1937,14 @@ StatusCode vil_nitf_image_subheader_v20::extract_stdid_extension()
     vcl_strncpy(temp, &XSHD->XHD[offset],end_col);
     temp[end_col]=0;
     offset += end_col;
-    END_COLUMN= vcl_atoi (temp);
+    END_COLUMN= vcl_atoi(temp);
     vcl_cout << "END_COLUMN = " << END_COLUMN << vcl_endl;
 
     // Grab the END_ROW
     vcl_strncpy(temp, &XSHD->XHD[offset],end_row);
     temp[end_row]=0;
     offset += end_row;
-    END_ROW= vcl_atoi (temp);
+    END_ROW= vcl_atoi(temp);
     vcl_cout << "END_ROW = " << END_ROW << vcl_endl;
 
     // Grab the COUNTRY
@@ -1954,7 +1956,7 @@ StatusCode vil_nitf_image_subheader_v20::extract_stdid_extension()
     vcl_strncpy(temp, &XSHD->XHD[offset],wac);
     temp[wac]=0;
     offset += wac;
-    WAC = vcl_atoi (temp);
+    WAC = vcl_atoi(temp);
     vcl_cout << "WAC = " << WAC << vcl_endl;
 
     // Grab the LOCATION
@@ -2025,15 +2027,15 @@ static void es(vcl_ostringstream& s, double v)
     ss.setf(vcl_ios_fixed, vcl_ios_floatfield);  //fixed floating point
     ss.setf(vcl_ios_showpos);  //leading +-
     ss.setf(vcl_ios_showpoint);  //fill in trailing zeros
-    ss << vcl_setw (9) << vcl_setprecision (6) << x << 'E';  //use up 6 digits after the .
+    ss << vcl_setw(9) << vcl_setprecision(6) << x << 'E';  //use up 6 digits after the .
     ss.setf(vcl_ios_dec, vcl_ios_basefield);  //integer
     ss.setf(vcl_ios_showpos);  //with leading +-
-    ss << vcl_setw (2) << exp << vcl_ends;  //force to E+x
+    ss << vcl_setw(2) << exp << vcl_ends;  //force to E+x
 
     s << ss.str();
 }
 
-void vil_nitf_image_subheader_v20::encode_rpc00a_extension (vcl_ostringstream& rpc_buf)
+void vil_nitf_image_subheader_v20::encode_rpc00a_extension(vcl_ostringstream& rpc_buf)
 {
         // Put the tag into the header.
         rpc_buf << "RPC00A";
@@ -2045,51 +2047,51 @@ void vil_nitf_image_subheader_v20::encode_rpc00a_extension (vcl_ostringstream& r
         rpc_buf << '1';
 
         // Write ERR_BIAS
-        rpc_buf << vcl_setw (7) << ERR_BIAS;
+        rpc_buf << vcl_setw(7) << ERR_BIAS;
 
         // Write ERR_RAND
-        rpc_buf << vcl_setw (7) << ERR_RAND;
+        rpc_buf << vcl_setw(7) << ERR_RAND;
 
         // Write OFFSETS
-        rpc_buf << vcl_setw (6) << LINE_OFF
-                << vcl_setw (5) << SAMP_OFF
-                << vcl_setw (8) << LAT_OFF
-                << vcl_setw (9) << LONG_OFF
-                << vcl_setw (5) << HEIGHT_OFF;
+        rpc_buf << vcl_setw(6) << LINE_OFF
+                << vcl_setw(5) << SAMP_OFF
+                << vcl_setw(8) << LAT_OFF
+                << vcl_setw(9) << LONG_OFF
+                << vcl_setw(5) << HEIGHT_OFF;
 
         // Write SCALES.
-        rpc_buf << vcl_setw (6) << LINE_SCALE
-                << vcl_setw (5) << SAMP_SCALE
-                << vcl_setw (8) << vcl_setprecision (3) << LAT_SCALE
-                << vcl_setw (9) << vcl_setprecision (4) << LONG_SCALE
-                << vcl_setw (5) << HEIGHT_SCALE;
+        rpc_buf << vcl_setw(6) << LINE_SCALE
+                << vcl_setw(5) << SAMP_SCALE
+                << vcl_setw(8) << vcl_setprecision(3) << LAT_SCALE
+                << vcl_setw(9) << vcl_setprecision(4) << LONG_SCALE
+                << vcl_setw(5) << HEIGHT_SCALE;
 
         int c; // Will need this to loop through the RPC coefficients...
 
         // Write LINE_NUMs
         for (c=0; c<20; c++) {
-    //    rpc_buf << vcl_setw (12) << vcl_setprecision (6) << LINE_NUM[c];
+    //    rpc_buf << vcl_setw(12) << vcl_setprecision(6) << LINE_NUM[c];
           es (rpc_buf, LINE_NUM[c]);
         }
         // Write LINE_DENs
         for (c=0; c<20; c++) {
-    //    rpc_buf << vcl_setw (12) << vcl_setprecision (6) << LINE_DEN[c];
+    //    rpc_buf << vcl_setw(12) << vcl_setprecision(6) << LINE_DEN[c];
           es (rpc_buf, LINE_DEN[c]);
         }
         // Write SAMP_NUMs
         for (c=0; c<20; c++) {
-    //    rpc_buf << vcl_setw (12) << vcl_setprecision (6) << SAMP_NUM[c];
+    //    rpc_buf << vcl_setw(12) << vcl_setprecision(6) << SAMP_NUM[c];
           es (rpc_buf, SAMP_NUM[c]);
         }
         // Write SAMP_DENs
         for (c=0; c<20; c++) {
-    //    rpc_buf << vcl_setw (12) << vcl_setprecision (6) << SAMP_DEN[c];
+    //    rpc_buf << vcl_setw(12) << vcl_setprecision(6) << SAMP_DEN[c];
           es (rpc_buf, SAMP_DEN[c]);
         }
         rpc_buf << vcl_ends;
 }
 
-void vil_nitf_image_subheader_v20::encode_ichipb_extension (vcl_ostringstream& ichipb_buf)
+void vil_nitf_image_subheader_v20::encode_ichipb_extension(vcl_ostringstream& ichipb_buf)
 {
         // Put the tag into the header.
         ichipb_buf << "ICHIPB";
@@ -2098,141 +2100,141 @@ void vil_nitf_image_subheader_v20::encode_ichipb_extension (vcl_ostringstream& i
         ichipb_buf << "224  ";
 
         // Write XFRM_FLAG
-        ichipb_buf << vcl_setw (2) << XFRM_FLAG;
+        ichipb_buf << vcl_setw(2) << XFRM_FLAG;
 
         // Write SCALE_FACTOR
-        ichipb_buf << vcl_setw (10) << SCALE_FACTOR;
+        ichipb_buf << vcl_setw(10) << SCALE_FACTOR;
 
         // Write ANAMRPH_CORR
-        ichipb_buf << vcl_setw (2) << ANAMRPH_CORR;
+        ichipb_buf << vcl_setw(2) << ANAMRPH_CORR;
 
         // Write SCANBLK_NUM
-        ichipb_buf << vcl_setw (2) << SCANBLK_NUM;
+        ichipb_buf << vcl_setw(2) << SCANBLK_NUM;
 
         // Write OP_ROW_11
-        ichipb_buf << vcl_setw (12) << OP_ROW_11;
+        ichipb_buf << vcl_setw(12) << OP_ROW_11;
 
         // Write OP_COL_11
-        ichipb_buf << vcl_setw (12) << OP_COL_11;
+        ichipb_buf << vcl_setw(12) << OP_COL_11;
 
         // Write OP_ROW_12
-        ichipb_buf << vcl_setw (12) << OP_ROW_12;
+        ichipb_buf << vcl_setw(12) << OP_ROW_12;
 
         // Write OP_COL_12
-        ichipb_buf << vcl_setw (12) << OP_COL_12;
+        ichipb_buf << vcl_setw(12) << OP_COL_12;
 
         // Write OP_ROW_21
-        ichipb_buf << vcl_setw (12) << OP_ROW_21;
+        ichipb_buf << vcl_setw(12) << OP_ROW_21;
 
         // Write OP_COL_21
-        ichipb_buf << vcl_setw (12) << OP_COL_21;
+        ichipb_buf << vcl_setw(12) << OP_COL_21;
 
         // Write OP_ROW_22
-        ichipb_buf << vcl_setw (12) << OP_ROW_22;
+        ichipb_buf << vcl_setw(12) << OP_ROW_22;
 
         // Write OP_COL_22
-        ichipb_buf << vcl_setw (12) << OP_COL_22;
+        ichipb_buf << vcl_setw(12) << OP_COL_22;
 
 
         // Write FI_ROW_11
-        ichipb_buf << vcl_setw (12) << FI_ROW_11;
+        ichipb_buf << vcl_setw(12) << FI_ROW_11;
 
         // Write FI_COL_11
-        ichipb_buf << vcl_setw (12) << FI_COL_11;
+        ichipb_buf << vcl_setw(12) << FI_COL_11;
 
         // Write FI_ROW_12
-        ichipb_buf << vcl_setw (12) << FI_ROW_12;
+        ichipb_buf << vcl_setw(12) << FI_ROW_12;
 
         // Write FI_COL_12
-        ichipb_buf << vcl_setw (12) << FI_COL_12;
+        ichipb_buf << vcl_setw(12) << FI_COL_12;
 
         // Write FI_ROW_21
-        ichipb_buf << vcl_setw (12) << FI_ROW_21;
+        ichipb_buf << vcl_setw(12) << FI_ROW_21;
 
         // Write FI_COL_12
-        ichipb_buf << vcl_setw (12) << FI_COL_21;
+        ichipb_buf << vcl_setw(12) << FI_COL_21;
 
         // Write FI_ROW_22
-        ichipb_buf << vcl_setw (12) << FI_ROW_22;
+        ichipb_buf << vcl_setw(12) << FI_ROW_22;
 
         // Write FI_COL_22
-        ichipb_buf << vcl_setw (12) << FI_COL_22;
+        ichipb_buf << vcl_setw(12) << FI_COL_22;
 
         // Write FI_ROW
-        ichipb_buf << vcl_setw (8) << FI_ROW;
+        ichipb_buf << vcl_setw(8) << FI_ROW;
 
         // Write FI_COL
-        ichipb_buf << vcl_setw (8) << FI_COL << vcl_ends;
+        ichipb_buf << vcl_setw(8) << FI_COL << vcl_ends;
 }
 
 // MPP 4/15/2001
 // Added support for PIAIMC extension
-void vil_nitf_image_subheader_v20::encode_piaimc_extension (vcl_ostringstream& piaimc_buf)
+void vil_nitf_image_subheader_v20::encode_piaimc_extension(vcl_ostringstream& piaimc_buf)
 {
         // Write CETAG
         piaimc_buf << "PIAIMC";
 
         // Write CEL
-        piaimc_buf << vcl_setw (5) << PIAIMC_CEL;
+        piaimc_buf << vcl_setw(5) << PIAIMC_CEL;
 
         // Write CLOUDCVR
-        piaimc_buf << vcl_setw (3) << vcl_setfill ('0') << CLOUDCVR;
+        piaimc_buf << vcl_setw(3) << vcl_setfill('0') << CLOUDCVR;
 
         // Write SRP
-        piaimc_buf << vcl_setw (1) << (SRP ? 'Y' : 'N');
+        piaimc_buf << vcl_setw(1) << (SRP ? 'Y' : 'N');
 
         // Write SENSMODE
-        piaimc_buf << vcl_setw (12) << SENSMODE;
+        piaimc_buf << vcl_setw(12) << SENSMODE;
 
         // Write SENSNAME
-        piaimc_buf << vcl_setw (18) << SENSNAME;
+        piaimc_buf << vcl_setw(18) << SENSNAME;
 
         // Write SOURCE
-        piaimc_buf << vcl_setw (255) << SOURCE;
+        piaimc_buf << vcl_setw(255) << SOURCE;
 
         // Write COMGEN
-        piaimc_buf << vcl_setw (2) << vcl_setfill ('0') << COMGEN;
+        piaimc_buf << vcl_setw(2) << vcl_setfill('0') << COMGEN;
 
         // Write SUBQUAL
-        piaimc_buf << vcl_setw (1) << SUBQUAL;
+        piaimc_buf << vcl_setw(1) << SUBQUAL;
 
         // Write PIAMSNNUM
-        piaimc_buf << vcl_setw (7) << PIAMSNNUM;
+        piaimc_buf << vcl_setw(7) << PIAMSNNUM;
 
         // Write CAMSPECS
-        piaimc_buf << vcl_setw (32) << CAMSPECS;
+        piaimc_buf << vcl_setw(32) << CAMSPECS;
 
         // Write PROJID
-        piaimc_buf << vcl_setw (2) << PROJID;
+        piaimc_buf << vcl_setw(2) << PROJID;
 
         // Write GENERATION
-        piaimc_buf << vcl_setw (1) << GENERATION;
+        piaimc_buf << vcl_setw(1) << GENERATION;
 
         // Write ESD
-        piaimc_buf << vcl_setw (1) << (ESD ? 'Y' : 'N');
+        piaimc_buf << vcl_setw(1) << (ESD ? 'Y' : 'N');
 
         // Write OTHERCOND
-        piaimc_buf << vcl_setw (5) << OTHERCOND;
+        piaimc_buf << vcl_setw(5) << OTHERCOND;
 
         // Write MEANGSD
-        piaimc_buf << vcl_setw (7) << vcl_setfill ('0') << MEANGSD;
+        piaimc_buf << vcl_setw(7) << vcl_setfill('0') << MEANGSD;
 
         // Write IDATUM
-        piaimc_buf << vcl_setw (3) << IDATUM;
+        piaimc_buf << vcl_setw(3) << IDATUM;
 
         // Write IELLIP
-        piaimc_buf << vcl_setw (3) << IELLIP;
+        piaimc_buf << vcl_setw(3) << IELLIP;
 
         // Write PREPROC
-        piaimc_buf << vcl_setw (2) << PREPROC;
+        piaimc_buf << vcl_setw(2) << PREPROC;
 
         // Write IPROJ
-        piaimc_buf << vcl_setw (2) << IPROJ;
+        piaimc_buf << vcl_setw(2) << IPROJ;
 
         // Write SATTRACK_PATH
-        piaimc_buf << vcl_setw (4) << vcl_setfill ('0') << SATTRACK_PATH;
+        piaimc_buf << vcl_setw(4) << vcl_setfill('0') << SATTRACK_PATH;
 
         // Write SATTRACK_ROW
-        piaimc_buf << vcl_setw (4) << vcl_setfill ('0') << SATTRACK_ROW
+        piaimc_buf << vcl_setw(4) << vcl_setfill('0') << SATTRACK_ROW
                    << vcl_ends;
 }  // end method encode_piaimc_extension
