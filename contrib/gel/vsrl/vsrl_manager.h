@@ -47,6 +47,7 @@ class vsrl_manager : public vgui_wrapper_tableau
   void set_params();
   void draw_north_arrow();
   void test_func();
+  void region_disparity();
   vgui_soview2D_lineseg* draw_vector_at(vgl_vector_2d<float>* vec, float x, float y, float theta);
   vil1_image scale_image(vil1_memory_image_of<unsigned char> img);
   vil1_image scale_image(vil1_memory_image_of<double> img);

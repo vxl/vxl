@@ -39,6 +39,7 @@
 #include <vsrl/vsrl_point_picker.h>
 #include <vsrl/vsrl_results_dense_matcher.h>
 #include <vsrl/vsrl_3d_output.h>
+#include <vsrl/vsrl_region_disparity.h>
 
 // static manager instance
 vsrl_manager* vsrl_manager::instance_=0;
@@ -696,4 +697,44 @@ vsrl_manager::make_3d()
   itabR_->set_image(scaled_image);  // put the image in the viewer
   this->post_redraw();
   return output.range_image_;
+}
+
+void vsrl_manager::region_disparity()
+{
+  // This method is currently ifdef'd out because of its
+  // dependency on JSEG.  Later this method will be included by
+  // either including the JSEG algorithm or by proving out
+  // the use of other region segmentation algorithms.
+#ifdef INCLUDE_JSEG
+  // First do segmentation - one way or another
+  vcl_vector<vdgl_digital_region*> dregs = run_jseg(imgL_);  // JSEG method
+
+  // Next, find disparity on a pixel-by-pixel basis
+  // raw correlation is used because the region segmentation should obviate
+  // the dynamic program.
+  this->raw_correlation();
+
+  // Find disparity using regions
+  vsrl_region_disparity r_disp(&imgL_, &imgR_);
+  vil1_memory_image_of<unsigned char> disp(disp_img_);
+  vcl_cout << "vsrl_manager::region_disparity" << vcl_endl;
+  r_disp.SetDisparityImage(&disp);
+  r_disp.SetRegions(&dregs);
+  r_disp.Execute();
+
+  // Display results
+  vil1_memory_image_of<double>* d2 = r_disp.GetRegionDisparities();
+  // As nice as it is to have these floating point results, the rest of the code
+  // assumes everything is <unsigned char> **sigh**.  So we convert...
+  //
+  for (int c=0; c<disp_img_.width(); c++) {
+    for (int r=0; r<disp_img_.height(); r++) {
+      disp(c,r)= (*d2)(c,r);
+    }
+  }
+
+  dimg_tab_->set_image(scale_image(disp));
+  this->post_redraw();
+#endif
+  return;
 }
