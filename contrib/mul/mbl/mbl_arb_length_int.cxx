@@ -69,6 +69,145 @@ mbl_arb_length_int& mbl_arb_length_int::operator/= (unsigned char rhs)
   return *this;
 }
 
+
+bool abs_less(const mbl_arb_length_int &lhs, const mbl_arb_length_int &rhs)
+{
+  unsigned sl = lhs.val_.size();
+  const unsigned sr = rhs.val_.size();
+  if (sl < sr) return true;
+  if (sl > sr) return false;
+  while (sl-- > 0)
+  {
+    if (lhs.val_[sl] < rhs.val_[sl]) return true;
+    if (lhs.val_[sl] > rhs.val_[sl]) return false;
+  }
+  return false; // they're equal
+}
+
+mbl_arb_length_int& mbl_arb_length_int::operator+= (const mbl_arb_length_int &rhs)
+{
+  if (sign_ == rhs.sign_)
+  {
+    unsigned carry=0, i=0;
+    while (i < val_.size() || i < rhs.val_.size() || carry != 0)
+    {
+      if (i == val_.size()) val_.push_back(0);
+      carry += val_[i] + ((i < rhs.val_.size())?rhs.val_[i]:0);
+      val_[i] = carry & 0xff;
+      carry >>= 8;
+      ++i;
+    }
+  }
+  else
+  {
+    if (abs_less (rhs, *this))
+    {
+      unsigned carry=0, i=0;
+      while (i < val_.size() || i < rhs.val_.size() || carry != 0)
+      {
+        if (i == val_.size()) val_.push_back(0);
+        if (val_[i] < ((i < rhs.val_.size())?rhs.val_[i]:0) + carry)
+        {
+          val_[i] = val_[i] + 0x100 - ((i < rhs.val_.size())?rhs.val_[i]:0) - carry;
+          carry = 1;
+        }
+        else
+        {
+          val_[i] = val_[i] - ((i < rhs.val_.size())?rhs.val_[i]:0) - carry;
+          carry = 0;
+        }
+        ++i;
+      }
+    }
+    else
+    {
+      sign_ = ! sign_;
+
+      unsigned carry=0, i=0;
+      while (i < val_.size() || i < rhs.val_.size() || carry != 0)
+      {
+        if (i == val_.size()) val_.push_back(0);
+        if (((i < rhs.val_.size())?rhs.val_[i]:0) < val_[i] + carry)
+        {
+          val_[i] = ((i < rhs.val_.size())?rhs.val_[i]:0) + 0x100 - val_[i] - carry;
+          carry = 1;
+        }
+        else
+        {
+          val_[i] = ((i < rhs.val_.size())?rhs.val_[i]:0) - val_[i] - carry;
+          carry = 0;
+        }
+        ++i;
+      }
+    }
+    normalise();
+  }
+  return *this;
+}
+
+mbl_arb_length_int& mbl_arb_length_int::operator-= (const mbl_arb_length_int &rhs)
+{
+  if (sign_ != rhs.sign_)
+  {
+    unsigned carry=0, i=0;
+    while (i < val_.size() || i < rhs.val_.size() || carry != 0)
+    {
+      if (i == val_.size()) val_.push_back(0);
+      carry += val_[i] + ((i < rhs.val_.size())?rhs.val_[i]:0);
+      val_[i] = carry & 0xff;
+      carry >>= 8;
+      ++i;
+    }
+  }
+  else
+  {
+    if (abs_less (rhs, *this))
+    {
+      unsigned carry=0, i=0;
+      while (i < val_.size() || i < rhs.val_.size() || carry != 0)
+      {
+        if (i == val_.size()) val_.push_back(0);
+        if (val_[i] < ((i < rhs.val_.size())?rhs.val_[i]:0) + carry)
+        {
+          val_[i] = val_[i] + 0x100 - ((i < rhs.val_.size())?rhs.val_[i]:0) - carry;
+          carry = 1;
+        }
+        else
+        {
+          val_[i] = val_[i] - ((i < rhs.val_.size())?rhs.val_[i]:0) - carry;
+          carry = 0;
+        }
+        ++i;
+      }
+    }
+    else
+    {
+      sign_ = ! sign_;
+
+      unsigned carry=0, i=0;
+      while (i < val_.size() || i < rhs.val_.size() || carry != 0)
+      {
+        if (i == val_.size()) val_.push_back(0);
+        if (((i < rhs.val_.size())?rhs.val_[i]:0) < val_[i] + carry)
+        {
+          val_[i] = ((i < rhs.val_.size())?rhs.val_[i]:0) + 0x100 - val_[i] - carry;
+          carry = 1;
+        }
+        else
+        {
+          val_[i] = ((i < rhs.val_.size())?rhs.val_[i]:0) - val_[i] - carry;
+          carry = 0;
+        }
+        ++i;
+      }
+    }
+    normalise();
+  }
+  return *this;
+}
+
+
+
 unsigned char mbl_arb_length_int::operator %  (unsigned char rhs)const
 {
   if (rhs == 0) {vcl_cerr << "mbl_arb_length_int& divide by zero"<<vcl_endl; vcl_abort();}
