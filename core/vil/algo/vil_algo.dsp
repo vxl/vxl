@@ -189,6 +189,9 @@ SOURCE=.\Templates/vil_threshold+int-.cxx
 SOURCE=.\Templates/vil_gauss_filter+byte.byte-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil_cartesian_differential_invariants+float.float-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vil_histogram.cxx
 # End Source File
 # Begin Source File
@@ -355,6 +358,12 @@ SOURCE=.\vil_region_finder.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vil_region_finder.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_cartesian_differential_invariants.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_cartesian_differential_invariants.txx
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"

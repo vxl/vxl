@@ -144,6 +144,9 @@ SOURCE=.\test_algo_find_peaks.cxx
 # Begin Source File
 SOURCE=.\test_algo_region_finder.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_algo_cartesian_differential_invariants.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
