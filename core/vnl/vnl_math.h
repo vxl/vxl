@@ -135,8 +135,12 @@ inline long vnl_math_rnd(float x) { return (x>=0.0)?(int)(x + 0.5):(int)(x - 0.5
 inline int  vnl_math_rnd(double x) { return (x>=0.0)?(int)(x + 0.5):(int)(x - 0.5); }
 
 // abs
+inline unsigned char vnl_math_abs(char x) { return x < 0 ? -x : x; }
+inline unsigned char vnl_math_abs(unsigned char x) { return x; }
+inline unsigned short vnl_math_abs(short x) { return x < 0 ? -x : x; }
+inline unsigned short vnl_math_abs(unsigned short x) { return x; }
 inline int      vnl_math_abs(int x) { return x < 0 ? -x : x; }
-inline unsigned vnl_math_abs(unsigned x) { return x; } // to avoid SunPro4.2 float/double conflict
+inline unsigned vnl_math_abs(unsigned x) { return x; }
 inline long     vnl_math_abs(long x) { return x < 0 ? -x : x; }
 inline unsigned long vnl_math_abs(unsigned long x) { return x; }
 inline float    vnl_math_abs(float x) { return x < 0.0 ? -x : x; }
@@ -179,6 +183,8 @@ inline int vnl_math_sgn0(float x) { return (x>=0)?1:-1; }
 inline int vnl_math_sgn0(double x) { return (x>=0)?1:-1; }
 
 // squared_magnitude
+inline unsigned int vnl_math_squared_magnitude(char x) { return int(x)*int(x); }
+inline unsigned int vnl_math_squared_magnitude(unsigned char x) { return int(x)*int(x); }
 inline int      vnl_math_squared_magnitude(int x) { return x*x; }
 inline unsigned vnl_math_squared_magnitude(unsigned x) { return x*x; }
 inline long     vnl_math_squared_magnitude(long x) { return x*x; }
