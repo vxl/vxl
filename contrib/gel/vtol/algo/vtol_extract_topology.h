@@ -22,6 +22,10 @@
 #include <vil/algo/vil_region_finder.h>
 
 #include <vdgl/vdgl_edgel_chain_sptr.h>
+#include <vsol/vsol_curve_2d_sptr.h>
+
+#include <vdgl/vdgl_digital_region.h>
+
 
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_intensity_face_sptr.h>
