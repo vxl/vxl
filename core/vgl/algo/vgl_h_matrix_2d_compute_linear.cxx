@@ -296,7 +296,7 @@ compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
 {
   //number of lines must be the same
   assert(lines1.size() == lines2.size());
-  int n = lines1.size();
+//int n = lines1.size();
   //compute the normalizing transforms. By convention, these are point
   //transformations.
   vgl_norm_trans_2d<double> tr1, tr2;
