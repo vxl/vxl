@@ -1,21 +1,18 @@
-
+#ifndef bdgl_curve_clustering_h_
+#define bdgl_curve_clustering_h_
+//:
 // \file 
 // \brief to cluster the curves based on their transformations
 // \author vj (vj@lems.brown.edu)
 // \date   8/20/2003
 // \verbatim
-// Modifications
+//  Modifications
 // \endverbatim
-// Input : list of curves matched to the previous frame and computed their 
-// transformation
+// Input : list of curves matched to the previous frame and computed their transformation
 // Output : clusters of curves have similar transformation.
 
-#ifndef bdgl_curve_clustering_h_
-#define bdgl_curve_clustering_h_
-
-#include<bdgl/bdgl_tracker_curve.h>
-#include<vcl_utility.h>
-
+#include <bdgl/bdgl_tracker_curve.h>
+#include <vcl_utility.h>
 
 class bdgl_curve_clustering_params
 {
@@ -95,8 +92,7 @@ class bdgl_curve_clustering
 	void cluster_curves(vcl_vector<bdgl_tracker_curve_sptr> * curve_sets);
 	// computes the distance between two clusters using the effect of transformation
 	double compute_cluster_dist(int i,int j);
-	//computes the distance between two curves after they are transformed using \
-	each others transformation
+	//computes the distance between two curves after they are transformed using each others transformation
 	double compute_euclidean_dist(int i,int j);
 	// get the moving object clusters
 	void get_moving_objects(int frame_no,vcl_vector<vcl_vector<bdgl_tracker_curve_sptr> > & curves_on_objects);
