@@ -2,7 +2,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "zhang_camera_node.h"
+#include "bcal_zhang_camera_node.h"
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 
@@ -10,7 +10,7 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-zhang_camera_node::zhang_camera_node(int id) : camera_node(id)
+bcal_zhang_camera_node::bcal_zhang_camera_node(int id) : bcal_camera_node(id)
 {
   // build lens distortion model
   vcl_vector<bool> flags(7, false);
@@ -22,14 +22,14 @@ zhang_camera_node::zhang_camera_node(int id) : camera_node(id)
   point_lists_ptr_ = 0;
 }
 
-zhang_camera_node::~zhang_camera_node()
+bcal_zhang_camera_node::~bcal_zhang_camera_node()
 {
   removeData();
 }
 
-void zhang_camera_node::set_beat(vcl_vector<double> const& new_beat)
+void bcal_zhang_camera_node::set_beat(vcl_vector<double> const& new_beat)
 {
-  camera_node::set_beat(new_beat);
+  bcal_camera_node::set_beat(new_beat);
 
   // allocate space to store data
   if (point_lists_ptr_)
@@ -38,7 +38,7 @@ void zhang_camera_node::set_beat(vcl_vector<double> const& new_beat)
   point_lists_ptr_ = new vcl_vector< vgl_homg_point_2d<double> > [num_views_];
 }
 
-int zhang_camera_node::readData(const char *fname, int iView)
+int bcal_zhang_camera_node::readData(const char *fname, int iView)
 {
   vcl_ifstream  in(fname);
 
@@ -70,7 +70,7 @@ int zhang_camera_node::readData(const char *fname, int iView)
   return 0;
 }
 
-int zhang_camera_node::removeData()
+int bcal_zhang_camera_node::removeData()
 {
   if (point_lists_ptr_)
     delete [] point_lists_ptr_;

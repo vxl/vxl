@@ -1,7 +1,7 @@
-// zhang_linear_calibrate.cpp: implementation of the zhang_linear_calibrate class.
+// bcal_zhang_linear_calibrate.cpp: implementation of the bcal_zhang_linear_calibrate class.
 //
 //////////////////////////////////////////////////////////////////////
-#include "zhang_linear_calibrate.h"
+#include "bcal_zhang_linear_calibrate.h"
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_double_3.h> // for cross_3d
 #include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
@@ -13,25 +13,25 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-zhang_linear_calibrate::zhang_linear_calibrate()
+bcal_zhang_linear_calibrate::bcal_zhang_linear_calibrate()
 {
   cam_graph_ptr_ = 0;
 }
 
-zhang_linear_calibrate::~zhang_linear_calibrate()
+bcal_zhang_linear_calibrate::~bcal_zhang_linear_calibrate()
 {
 }
 
 
-void zhang_linear_calibrate::
-setCameraGraph(camera_graph<calibrate_plane, zhang_camera_node, euclidean_transformation> *pG)
+void bcal_zhang_linear_calibrate::
+setCameraGraph(bcal_camera_graph<bcal_calibrate_plane, bcal_zhang_camera_node, bcal_euclidean_transformation> *pG)
 {
   cam_graph_ptr_ = pG;
   initialize();
 }
 
 
-int zhang_linear_calibrate::compute_homography()
+int bcal_zhang_linear_calibrate::compute_homography()
 {
   if (!cam_graph_ptr_){
     vcl_cerr<<"empty graphy, need to set graph first\n";
@@ -47,7 +47,7 @@ int zhang_linear_calibrate::compute_homography()
 
 
   for (int i=0; i<size; i++) {// for each camera
-    zhang_camera_node *cam = cam_graph_ptr_->get_vertex_from_pos(i);
+    bcal_zhang_camera_node *cam = cam_graph_ptr_->get_vertex_from_pos(i);
     assert(cam);
     // compute homography
     int nViews = cam->num_views();
@@ -59,7 +59,7 @@ int zhang_linear_calibrate::compute_homography()
   return 0;
 }
 
-int zhang_linear_calibrate::initialize()
+int bcal_zhang_linear_calibrate::initialize()
 {
   // resize h_matrice_
   int num_camera = cam_graph_ptr_->num_vertice();
@@ -68,7 +68,7 @@ int zhang_linear_calibrate::initialize()
 
   // allocate vgl_h_matrix_2d<double> for each views
   for (int i=0; i<num_camera; i++){ // from camera 1 to camera n
-    zhang_camera_node *cam = cam_graph_ptr_->get_vertex_from_pos(i);
+    bcal_zhang_camera_node *cam = cam_graph_ptr_->get_vertex_from_pos(i);
     assert(cam);
 
     int nViews = cam->num_views();
@@ -80,7 +80,7 @@ int zhang_linear_calibrate::initialize()
   return 0;
 }
 
-int zhang_linear_calibrate::clear()
+int bcal_zhang_linear_calibrate::clear()
 {
   int size = h_matrice_.size();
 
@@ -92,7 +92,7 @@ int zhang_linear_calibrate::clear()
 }
 
 
-vnl_vector_fixed<double, 6> zhang_linear_calibrate::homg_constrain(const vgl_h_matrix_2d<double> &hm, int i, int j)
+vnl_vector_fixed<double, 6> bcal_zhang_linear_calibrate::homg_constrain(const vgl_h_matrix_2d<double> &hm, int i, int j)
 {
   vnl_vector_fixed<double, 6> v;
 
@@ -109,7 +109,7 @@ vnl_vector_fixed<double, 6> zhang_linear_calibrate::homg_constrain(const vgl_h_m
   return v;
 }
 
-int zhang_linear_calibrate::calibrate()
+int bcal_zhang_linear_calibrate::calibrate()
 {
   this->clear();
   this->initialize();
@@ -124,7 +124,7 @@ int zhang_linear_calibrate::calibrate()
   return 0;
 }
 
-vnl_double_3x3 zhang_linear_calibrate::compute_intrinsic(vgl_h_matrix_2d<double> *hm_list, int n_hm)
+vnl_double_3x3 bcal_zhang_linear_calibrate::compute_intrinsic(vgl_h_matrix_2d<double> *hm_list, int n_hm)
 {
   assert(n_hm > 3);
 
@@ -191,7 +191,7 @@ vnl_double_3x3 zhang_linear_calibrate::compute_intrinsic(vgl_h_matrix_2d<double>
   return k;
 }
 
-vgl_h_matrix_3d<double> zhang_linear_calibrate::
+vgl_h_matrix_3d<double> bcal_zhang_linear_calibrate::
 compute_extrinsic(vgl_h_matrix_2d<double> const &H, vnl_double_3x3 const &A)
 {
   // let A = the intrinsic parameters;
@@ -279,7 +279,7 @@ compute_extrinsic(vgl_h_matrix_2d<double> const &H, vnl_double_3x3 const &A)
   return vgl_h_matrix_3d<double>(R, t);
 }
 
-vnl_double_3x3 zhang_linear_calibrate::get_closest_rotation(const vnl_double_3x3 &Q)
+vnl_double_3x3 bcal_zhang_linear_calibrate::get_closest_rotation(const vnl_double_3x3 &Q)
 {
   // let Q = U S V^T
   // it turns out that R = UV^T is the closest valid rotation matrix;
@@ -291,11 +291,11 @@ vnl_double_3x3 zhang_linear_calibrate::get_closest_rotation(const vnl_double_3x3
   return R;
 }
 
-void zhang_linear_calibrate::calibrate_intrinsic()
+void bcal_zhang_linear_calibrate::calibrate_intrinsic()
 {
   int num_camera = cam_graph_ptr_->num_vertice();  
   for (int i= 0; i<num_camera; i++){
-    zhang_camera_node *cam = cam_graph_ptr_->get_vertex_from_pos(i);
+    bcal_zhang_camera_node *cam = cam_graph_ptr_->get_vertex_from_pos(i);
     assert(cam);
     vnl_double_3x3 K = compute_intrinsic(h_matrice_[i], num_views_[i]);
     cam->set_intrinsic(K);
@@ -304,18 +304,18 @@ void zhang_linear_calibrate::calibrate_intrinsic()
 
 }
 
-int zhang_linear_calibrate::calibrate_extrinsic()
+int bcal_zhang_linear_calibrate::calibrate_extrinsic()
 {
 
   int num_camera = cam_graph_ptr_->num_vertice();
 
   for (int i= 0; i<num_camera; i++){// for each camera
     // get edge
-    zhang_camera_node *cam = cam_graph_ptr_->get_vertex_from_pos(i);
+    bcal_zhang_camera_node *cam = cam_graph_ptr_->get_vertex_from_pos(i);
     assert(cam);
     int source_id = cam_graph_ptr_->get_source_id();
     int vertex_id = cam_graph_ptr_->get_vertex_id(i);
-    euclidean_transformation *e = cam_graph_ptr_->get_edge(source_id, vertex_id);
+    bcal_euclidean_transformation *e = cam_graph_ptr_->get_edge(source_id, vertex_id);
     assert(e != 0) ;
 
     // compute and set extrinsic parameter 

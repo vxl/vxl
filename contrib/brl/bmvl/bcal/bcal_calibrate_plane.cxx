@@ -1,8 +1,8 @@
-// calibrate_plane.cpp: implementation of the calibrate_plane class.
+// bcal_calibrate_plane.cpp: implementation of the bcal_calibrate_plane class.
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "calibrate_plane.h"
+#include "bcal_calibrate_plane.h"
 #include <vcl_fstream.h>
 #include <vcl_iostream.h>
 
@@ -10,16 +10,16 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-calibrate_plane::calibrate_plane()
+bcal_calibrate_plane::bcal_calibrate_plane()
 {
 }
 
-calibrate_plane::~calibrate_plane()
+bcal_calibrate_plane::~bcal_calibrate_plane()
 {
 }
 
 
-int calibrate_plane::readData(const char *fname)
+int bcal_calibrate_plane::readData(const char *fname)
 {
   vcl_ifstream  in(fname);
 

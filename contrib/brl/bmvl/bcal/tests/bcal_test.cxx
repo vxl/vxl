@@ -1,15 +1,15 @@
-#include <bmvl/bcal/bcam/zhang_camera_node.h>
-#include <bmvl/bcal/bcam/zhang_linear_calibrate.h>
-#include <bmvl/bcal/bcam/calibrate_plane.h>
-#include <bmvl/bcal/bcam/camera_graph.h>
-#include <bmvl/bcal/bcam/euclidean_transformation.h>
+#include <bmvl/bcal/bcal_zhang_camera_node.h>
+#include <bmvl/bcal/bcal_zhang_linear_calibrate.h>
+#include <bmvl/bcal/bcal_calibrate_plane.h>
+#include <bmvl/bcal/bcal_camera_graph.h>
+#include <bmvl/bcal/bcal_euclidean_transformation.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 
 void testing_graph()
 {
   vcl_cout<<"\n--------------testing graph -------------\n";
-  camera_graph<calibrate_plane, zhang_camera_node, euclidean_transformation> cg;
+  bcal_camera_graph<bcal_calibrate_plane, bcal_zhang_camera_node, bcal_euclidean_transformation> cg;
 
   // add three vertex from source point.
   int source_id = cg.get_source_id();
@@ -24,7 +24,7 @@ void testing_linear_calibration(vcl_string const& directory)
 {
   vcl_cout<<"\n--------------testing calibration -------------\n";
 
-  camera_graph<calibrate_plane, zhang_camera_node, euclidean_transformation> cg;
+  bcal_camera_graph<bcal_calibrate_plane, bcal_zhang_camera_node, bcal_euclidean_transformation> cg;
 
   // initialize the template plane
   cg.get_source()->readData((directory+"/Model.txt").c_str());
@@ -45,7 +45,7 @@ void testing_linear_calibration(vcl_string const& directory)
   cg.get_vertex(camID)->set_beat(t_beats);
 
   // set beats on translation
-  euclidean_transformation *trans = cg.get_edge(source_id, camID);
+  bcal_euclidean_transformation *trans = cg.get_edge(source_id, camID);
   assert(trans);
   trans->set_beat(t_beats);
 
@@ -60,7 +60,7 @@ void testing_linear_calibration(vcl_string const& directory)
 
   // do the calibration
   vcl_cout<<"\n\nlinear calibration..............\n\n ";
-  zhang_linear_calibrate lc;
+  bcal_zhang_linear_calibrate lc;
   lc.setCameraGraph(&cg);
   lc.calibrate();
 
