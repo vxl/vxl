@@ -226,7 +226,7 @@ vnl_matrix_fixed <double, 3,3> M;
 //define M somehow
 ...
 vgl_h_matrix_2d <double> H(M);
-vgl_point_2d<double> X(1.0, 0.0, 1.0), x1, x2;
+vgl_homg_point_2d<double> X(1.0, 0.0, 1.0), x1, x2;
 x1 = H(X);
 x2 = H*X;
 ...
@@ -240,7 +240,7 @@ The method @code{preimage} effects the
 inverse transformation.  So continuing with our example,
 @example
 ...
-vgl_point_2d <double> Xpre;
+vgl_homg_point_2d <double> Xpre;
 Xpre = H.preimage(x1);
 ..
 @end example
@@ -276,8 +276,8 @@ based on a given axis of rotation:
 vgl_h_matrix_3d <double> Hrot, Htrans, H;
 
 //Setup the rotation transformation
-vnl_vector_fixed<double, 3> axis(0.0,0.0,1.0);
-double angle = vnl_math::pi/4.0;
+vnl_vector_fixed<double, 3> axis(0.0,0.0,1.0);//The z axis
+double angle = vnl_math::pi/4.0;//45 degree rotation
 Hrot.set_rotation_about_axis(axis, angle);
 
 //Set up the translation transformation
@@ -286,8 +286,12 @@ Htrans.set_translation(1.0, 2.0, 3.0);
 //compose the two. The rotation is applied first and then the translation
 H = Htrans*Hrot;
 ...
-// do something with H
-
+// Transform a 3-d homogeneous point
+vgl_homg_point_3d<double> X(1.0, 0.0, 0.0, 1.0), x;
+x = H(X);                          
+//
+//The resulting transformed point
+// x = (1.707, 2.707, 3.0, 1.0)
 @end example
 In 3-d projective space, points and planes hold the same dual relationship as points and lines do in 2-d projective space. In 3-d, planes are transformed by H^-t, where H is a 3-d projective transformation on points.
 
