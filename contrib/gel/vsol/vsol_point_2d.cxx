@@ -141,3 +141,92 @@ vsol_point_2d::to_vector(const vsol_point_2d &other) const
 {
   return vgl_vector_2d<double>(other.x() - x(), other.y() - y());
 }
+
+//----------------------------------------------------------------
+// ================   Binary I/O Methods ========================
+//----------------------------------------------------------------
+
+//: Binary save self to stream.
+void vsol_point_2d::b_write(vsl_b_ostream &os) const
+{
+  vsl_b_write(os, version());
+  vsl_b_write(os, p_.x());
+  vsl_b_write(os, p_.y());
+}
+
+//: Binary load self from stream.
+void vsol_point_2d::b_read(vsl_b_istream &is)
+{
+  if(!is)
+    return;
+  short ver;
+  vsl_b_read(is, ver);
+  switch(ver)
+  {
+  case 1:
+    {
+      double x=0, y=0;
+      vsl_b_read(is, x);
+      vsl_b_read(is, y);
+      this->p_.set(x, y);
+    }
+  }
+}
+//: Return IO version number;
+short vsol_point_2d::version() const
+{
+  return 1;
+}
+
+//: Print an ascii summary to the stream
+void vsol_point_2d::print_summary(vcl_ostream &os) const
+{
+  os << *this;
+}
+
+  //: Return a platform independent string identifying the class
+vcl_string vsol_point_2d::is_a() const
+{
+  return vcl_string("vsol_point_2d");
+}
+
+  //: Return true if the argument matches the string identifying the class or any parent class
+bool vsol_point_2d::is_class(const vcl_string& cls) const
+{
+  return cls==vsol_point_2d::is_a();
+}
+
+//external functions
+vcl_ostream& operator<<(vcl_ostream& s, vsol_point_2d const& p)
+{
+  s << '(' << (int)p.x() << ' ' << (int)p.y() << ")\n";
+  return s;
+}
+
+//: Binary save vsol_point_2d_sptr to stream.
+void
+vsl_b_write(vsl_b_ostream &os, vsol_point_2d_sptr const& p)
+{
+  if (!p){
+    vsl_b_write(os, false); // Indicate null pointer stored
+  }
+  else{
+    vsl_b_write(os,true); // Indicate non-null pointer stored
+    p->b_write(os);
+  }
+}
+
+//: Binary load vsol_point_2d_sptr from stream.
+void
+vsl_b_read(vsl_b_istream &is, vsol_point_2d_sptr &p)
+{
+  bool not_null_ptr;
+  vsl_b_read(is, not_null_ptr);
+  if (not_null_ptr){
+    p = new vsol_point_2d(0, 0);
+    p->b_read(is);
+  }
+  else
+    p = 0;
+}
+

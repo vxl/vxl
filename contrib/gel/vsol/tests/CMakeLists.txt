@@ -1,6 +1,6 @@
 # gel/vsol/tests/CMakeLists.txt
 
-LINK_LIBRARIES( vsol vgl testlib )
+LINK_LIBRARIES( vsol vgl vpl vsl vbl testlib )
 
 ADD_EXECUTABLE( vsol_test_all
   test_driver.cxx
@@ -18,6 +18,7 @@ ADD_EXECUTABLE( vsol_test_all
   test_vsol_rectangle_3d.cxx
   test_vsol_polygon_3d.cxx
   test_vsol_tetrahedron.cxx
+  test_vsol_io.cxx
 )
 
 ADD_TEST(vsol_test_point_2d     vsol_test_all test_vsol_point_2d)
@@ -34,6 +35,7 @@ ADD_TEST(vsol_test_triangle_3d  vsol_test_all test_vsol_triangle_3d)
 ADD_TEST(vsol_test_rectangle_3d vsol_test_all test_vsol_rectangle_3d)
 ADD_TEST(vsol_test_polygon_3d   vsol_test_all test_vsol_polygon_3d)
 ADD_TEST(vsol_test_tetrahedron  vsol_test_all test_vsol_tetrahedron)
+ADD_TEST(vsol_test_io           vsol_test_all test_vsol_io)
 
 ADD_EXECUTABLE( vsol_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vsol_test_include vsol )

@@ -14,6 +14,7 @@ DECLARE(test_vsol_rectangle_3d);
 DECLARE(test_vsol_tetrahedron);
 DECLARE(test_vsol_triangle_2d);
 DECLARE(test_vsol_triangle_3d);
+DECLARE(test_vsol_io);
 
 void
 register_tests()
@@ -32,6 +33,7 @@ register_tests()
   REGISTER(test_vsol_tetrahedron);
   REGISTER(test_vsol_triangle_2d);
   REGISTER(test_vsol_triangle_3d);
+  REGISTER(test_vsol_io);
 }
 
 DEFINE_MAIN;
