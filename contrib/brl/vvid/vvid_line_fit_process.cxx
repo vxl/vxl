@@ -1,6 +1,7 @@
 // This is brl/vvid/vvid_line_fit_process.cxx
 #include <vcl_iostream.h>
 #include <vul/vul_timer.h>
+#include <vsol/vsol_line_2d.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vtol/vtol_edge_2d.h>
 #include <sdet/sdet_fit_lines.h>
