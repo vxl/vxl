@@ -1,13 +1,11 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "vbl_file.h"
+#pragma implementation
 #endif
 //
 // Class: vbl_file
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 02 Nov 98
-// Modifications:
-//   981102 AWF Initial version.
 //
 //-----------------------------------------------------------------------------
 

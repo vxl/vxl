@@ -1,5 +1,5 @@
 #ifdef __GNUC__
-#pragma implementation "vbl_redirector"
+#pragma implementation
 #endif
 
 #include <vcl/vcl_compiler.h>

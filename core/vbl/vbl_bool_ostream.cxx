@@ -1,6 +1,6 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "vbl_bool_ostream.h"
+#pragma implementation
 #endif
 #include "vbl_bool_ostream.h"
 

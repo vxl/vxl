@@ -1,13 +1,11 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "vbl_user_info.h"
+#pragma implementation
 #endif
 //
 // Class: vbl_user_info
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 08 Apr 99
-// Modifications:
-//   990408 AWF Initial version.
 //
 //-----------------------------------------------------------------------------
 

@@ -1,13 +1,11 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "vbl_qsort.h"
+#pragma implementation
 #endif
 //
 // Class: vbl_qsort
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 19 Nov 97
-// Modifications:
-//   971119 AWF Initial version.
 //
 //-----------------------------------------------------------------------------
 

@@ -1,5 +1,5 @@
 #ifdef __GNUG__
-#pragma implementation "vcl_straits.h"
+#pragma implementation
 #endif
 
 #include "vcl_straits.h"

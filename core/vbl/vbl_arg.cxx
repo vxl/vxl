@@ -11,13 +11,12 @@
 // and then instantiate the class vbl_arg<T> as usual (in myarg.cxx).
 
 #ifdef __GNUC__
-#pragma implementation "vbl_arg.h"
+#pragma implementation
 #endif
 
 #include <vcl/vcl_cassert.h>
 #include <vcl/vcl_cstdio.h>
 #include <vcl/vcl_cmath.h>   // floor()
-#include <vcl/vcl_string.h>
 #include <vcl/vcl_vector.h>
 #include <vcl/vcl_list.h>
 #include <vcl/vcl_iostream.h>

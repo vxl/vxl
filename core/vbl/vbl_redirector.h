@@ -2,8 +2,11 @@
 #ifndef vbl_redirector_h_
 #define vbl_redirector_h_
 #ifdef __GNUC__
-#pragma interface "vbl_redirector"
+#pragma interface
 #endif
+// .NAME vbl_redirector
+// .INCLUDE vbl/vbl_redirector.h
+// .FILE vbl_redirector.cxx
 // .SECTION Author
 //    awf@robots.ox.ac.uk
 // Created: 05 Jul 00

@@ -1,7 +1,7 @@
 #ifndef vbl_array_h_
 #define vbl_array_h_
 #ifdef __GNUC__
-#pragma interface "vbl_array"
+#pragma interface
 #endif
 /*
   fsm@robots.ox.ac.uk

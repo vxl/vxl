@@ -1,8 +1,11 @@
 #ifndef vcl_cstdlib_h_
 #define vcl_cstdlib_h_
+// .NAME vcl_cstdlib.h
+// .INCLUDE vcl/vcl_cstdlib.h
+// .FILE vcl_cstdlib.cxx
 
 #ifdef __GNUG__
-#pragma interface "vcl_cstdlib.h"
+#pragma interface
 #endif
 
 // [26.5.4] In addition to the signatures from <stdlib.h> the C++

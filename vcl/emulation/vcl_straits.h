@@ -29,10 +29,14 @@
 #define vcl_emulation_straits_h
 
 #include "vcl_stlconf.h"
+// .NAME vcl_alloc
+// .INCLUDE vcl/emulation/vcl_straits.h
+// .FILE emulation/vcl_straits.cxx
+//
 
 #ifdef __GNUG__
 // For vcl_char_traits <char>
-#pragma interface "vcl_straits.h"
+#pragma interface
 #endif
 
 #include <vcl/vcl_cctype.h>

@@ -1,8 +1,11 @@
 #ifndef vcl_cmath_h_
 #define vcl_cmath_h_
+// .NAME vcl_cmath.h
+// .INCLUDE vcl/vcl_cmath.h
+// .FILE vcl_cmath.cxx
 
 #ifdef __GNUG__
-#pragma interface "vcl_cstdlib.h"
+#pragma interface
 #endif
 
 // [26.5.6] In addition to the signatures from the C header

@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vcl_cstdlib.h"
+#pragma implementation
 #endif
 
 #include "vcl_cstdlib.h"

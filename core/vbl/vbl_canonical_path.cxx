@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vbl_canonical_path"
+#pragma implementation
 #endif
 #include "vbl_canonical_path.h"
 
@@ -12,7 +12,6 @@ vcl_string vbl_canonical_path(char const *path_) { return vcl_string(path_); }
 
 #include <vcl/vcl_functional.h>
 #include <vcl/vcl_vector.h>
-#include <vcl/vcl_string.h>
 #include <vcl/vcl_map.h>
 
 #include <sys/types.h>

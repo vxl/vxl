@@ -1,12 +1,15 @@
 #ifndef vbl_canonical_path_h_
 #define vbl_canonical_path_h_
 #ifdef __GNUC__
-#pragma interface "vbl_canonical_path"
+#pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
-
+//
+// .NAME vbl_canonical_path
+// .INCLUDE vbl/vbl_canonical_path.h
+// .FILE vbl_canonical_path.cxx
+// @author fsm@robots.ox.ac.uk
+//
+// .SECTION Description
 // Given a path in the file system, compute a canonical form.
 // A canonical path is one which does not
 //  - involve any symbolic links
