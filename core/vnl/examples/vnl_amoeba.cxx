@@ -4,8 +4,10 @@
 // Created: 31 Aug 96
 // Converted to vxl by Peter Vanroose, February 2000
 //-----------------------------------------------------------------------------
-
 #include <vcl_iostream.h>
+#ifdef VCL_VC60
+#include <vcl_limits.h> // The order of some vcl_files can cause problems: IMS
+#endif
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_cost_function.h>
 #include <vnl/algo/vnl_amoeba.h>
