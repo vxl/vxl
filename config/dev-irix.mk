@@ -12,18 +12,18 @@
 # CC -32 (or -o32), CC -n32 and CC -64
 # The last two use the new SGI ABI and also have slightly
 #  different front ends. e.g. bool is not a predefined data type
-#  under the old ABI. 
+#  under the old ABI.
 #
-# There is some confusion between what is supported under 
+# There is some confusion between what is supported under
 # the old ABI in MIPSpro 7.2 and older compilers - particularly
-# pre version 7.0. We don't have access to any except 
+# pre version 7.0. We don't have access to any except
 # version 4.0 and I am loathe to even try using that.
 #
 # MIPSpro 7.2.1  now supports standard conforming libraries
-#		 and the ANSI standard string class 
+#		 and the ANSI standard string class
 #
 # MIPSpro 7.2    Oxford standard SGI compiler
-#                
+#
 # MIPSpro 7.1    does not have following keywords "typename",
 #                "explicit", "namespace", and "mutable"
 #
@@ -31,7 +31,7 @@
 #
 #
 # From the relnotes for MIPSpro 7.2
-# 
+#
 # The n32 and 64-bit versions are based on release 2.34 of the
 # Edison frontend.
 #
@@ -41,7 +41,7 @@
 #
 # o32 bugs
 #--------------------------
-#   ld crashes with -multigot 
+#   ld crashes with -multigot
 #
 #
 #
@@ -53,14 +53,14 @@
 #
 # Version 7.1 bugs
 #--------------------------
-#   Having a templated operator declaration, and a 
+#   Having a templated operator declaration, and a
 #   separatate definition in the same (header)
-#   file causes the compiler front-end to crash 
+#   file causes the compiler front-end to crash
 #   when the definition is declared inline and but the
-#   initial declaration is not. 
+#   initial declaration is not.
 #
 #
-# 
+#
 #
 
 ########################
@@ -70,15 +70,15 @@
 ########################
 
 # these include the compiler versions and the
-# specification of the cpu (e.g. MIPS R4000) and 
+# specification of the cpu (e.g. MIPS R4000) and
 # the instruction code to be generated
 # (e.g. MIPS III).
 
-# Not all combinations of flags are valid 
-# for example : 
+# Not all combinations of flags are valid
+# for example :
 #   CC-o32 will only accept MIPS = 1 or 2
 #   CC-n32 and CC-64 will only accept MIPS = 3 or 4
-#  
+#
 
 SGI_CC_MAJOR = 7
 SGI_CC_MINOR = 2
@@ -122,7 +122,7 @@ ifeq ($(COMPILER),CC-o32)
   COMPILER_FLAG = -o32
 else
   ABI = new
-endif  
+endif
 
 ########################
 #
@@ -130,13 +130,13 @@ endif
 #
 ########################
 
-# fsm@robots : the old way worked for me, but the new one doesn't. The symptom is this 
+# fsm@robots : the old way worked for me, but the new one doesn't. The symptom is this
 # error message which appears for the first time when depending in VRML_IO. what goes
-# wrong is that Qv/QvString.C #includes QvString.h between <..> and not "..". but the 
-# real question is why it was trying to preprocess a .C file when making dependencies 
+# wrong is that Qv/QvString.C #includes QvString.h between <..> and not "..". but the
+# real question is why it was trying to preprocess a .C file when making dependencies
 # for another .C file.
 #-- Making dependencies for VRML_IO_read_topology.C       ........ due to VRML_IO_read_topology.C
-#"/data/target/46/dev/target/SpatialObjects/Qv/QvString.C", line 1: error(1005): 
+#"/data/target/46/dev/target/SpatialObjects/Qv/QvString.C", line 1: error(1005):
 #          could not open source file "QvString.h"
 #  #include <QvString.h>
 #                       ^
@@ -146,9 +146,9 @@ endif
 
 ifeq ($(ABI), new)
   CPP_MAKEDEPEND = 1
-  MAKEDEPEND = $(IUE_PERL) $(IUEROOT)/Scripts/Perl/depend.pl -obj_ext o -relobj $(RELOBJDIR) -compiler '$(C++)' -E 
+  MAKEDEPEND = $(IUE_PERL) $(IUEROOT)/Scripts/Perl/depend.pl -obj_ext o -relobj $(RELOBJDIR) -compiler '$(C++)' -E
 else
-  MAKEDEPEND = $(C++) -M 
+  MAKEDEPEND = $(C++) -M
 endif
 
 ########################
@@ -196,8 +196,8 @@ IUE_PASS_TO_LINKER := -Wl,
 
 ### --> Please document below any warning which you turn off here!
 ifeq ($(ABI),new)
-  wall := -fullwarn -woff 1007,1188,1209,1257,1314,1355,1373,1375,1498,1506,1682,1201,1468,1555,3201,3150,1234#,1116,1681,1174
-else 
+  wall := -fullwarn -woff 1007,1188,1209,1257,1314,1355,1373,1375,1498,1506,1682,1201,1468,1555,3201,3150,1234,1174,1681#,1116
+else
   wall := -fullwarn -woff 3108,3672,3937,3577,3209,3461#,3161
 endif
 
@@ -216,7 +216,6 @@ OS_DEFINES += -D__SGI_CC_7 -D__SGI_CC -DNOREPOS -DSVR4 -DSYSV
 ####################
 # MACH_SPEC flags
 
-
 ifeq ($(ABI),new)
   ifeq ($(MIPS),4)
     MACH_SPEC = -mips4
@@ -229,13 +228,11 @@ ifeq ($(ABI),new)
   endif
   ifeq ($(PROCESSOR),R8000)
     MACH_SPEC += -r8000
-  endif 
+  endif
   ifeq ($(PROCESSOR),R10000)
     MACH_SPEC += -r10000
-  endif 
+  endif
 endif
-
-
 
 
 ########################
@@ -269,7 +266,7 @@ MAKE_SHLIB := $(C++) -shared -update_registry $(IUELOCALROOT)/so_locations.$(OS)
 MAKE_EXE = $(PURIFY) $(LINKER)
 FORCE_LOAD := -force_load
 MAKE_ARLIB = rm -f $@ && ar qcv $@
-MAKE_ARLIB_CMD := ar qcv $@ 
+MAKE_ARLIB_CMD := ar qcv $@
 
 LINK_INTO_TMP := 1  # IRIX linker is incredibly slow over NFS.
 
@@ -280,7 +277,7 @@ soname_opt = -soname $(shlibname)
 
 link-static := -Wl,-B,static
 link-dynamic := -Wl,-B,dynamic
-no-link-dynamic := 
+no-link-dynamic :=
 IUE_LD_ALLEXTRACT = -all
 IUE_LD_ALLEXTRACT_OFF = -notall
 
@@ -303,23 +300,23 @@ endif
 
 
 ifeq ($(COMPILER),CC-n32)
-  ifeq ($(MIPS),3) 
+  ifeq ($(MIPS),3)
     mach_link_start += -mips3
     ifeq ($(PROCESSOR),R5000)
-      mach_link_path += -L/usr/lib32/mips3/r5000 
+      mach_link_path += -L/usr/lib32/mips3/r5000
     endif
     ifeq ($(PROCESSOR),R8000)
-      mach_link_path += -L/usr/lib32/mips3/r8000 
+      mach_link_path += -L/usr/lib32/mips3/r8000
     endif
     ifeq ($(PROCESSOR),R10000)
-      mach_link_path += -L/usr/lib32/mips3/r10000 
+      mach_link_path += -L/usr/lib32/mips3/r10000
     endif
     mach_link_start += /usr/lib32/mips3/crt1.o /usr/lib32/c++init.o
     mach_link_path += -L/usr/lib32/mips3 -L/usr/lib32
     mach_link_end += /usr/lib32/mips3/crtn.o
   endif
-  ifeq ($(MIPS),4) 
-    mach_link_start += -mips4    
+  ifeq ($(MIPS),4)
+    mach_link_start += -mips4
     ifeq ($(PROCESSOR),R5000)
       mach_link_path += -L/usr/lib32/mips4/r5000
     endif
@@ -336,8 +333,8 @@ ifeq ($(COMPILER),CC-n32)
 endif
 
 ifeq ($(COMPILER),CC-64)
-  ifeq ($(MIPS),3) 
-    mach_link_start += -mips3    
+  ifeq ($(MIPS),3)
+    mach_link_start += -mips3
     ifeq ($(PROCESSOR),R5000)
       mach_link_path += -L/usr/lib64/mips3/r5000
     endif
@@ -351,8 +348,8 @@ ifeq ($(COMPILER),CC-64)
     mach_link_path += -L/usr/lib64/mips3 -L/usr/lib64
     mach_link_end += /usr/lib64/mips3/crtn.o
   endif
-  ifeq ($(MIPS),4) 
-    mach_link_start += -mips4    
+  ifeq ($(MIPS),4)
+    mach_link_start += -mips4
     ifeq ($(PROCESSOR),R5000)
       mach_link_path += -L/usr/lib64/mips4/r5000
     endif
@@ -380,7 +377,7 @@ ifeq ($(OS),IRIX5)
 lib_dl := -ldl
 lib_c := -lsun -lmalloc -lc
 else
-lib_dl := 
+lib_dl :=
 lib_c := -lc -lmalloc
 endif
 
@@ -390,12 +387,13 @@ endif
 # just causes problems like failure to link shared libraries because
 # of missing search paths. We don't need it on UNIX.
 
-# Warnings for -n32 and -64 compilers 
+# Warnings for -n32 and -64 compilers
 #
+# -woff sets the warnings *not* to be printed.
 # 1007: unrecognized token ... for "@" in template-decls
-# 1116: non-void function should return a value. 
+# 1116: non-void function should return a value.
 #        turning this off is a bit dodgy but alloc.h causes
-#        it to pop-up everywhere. tedious. 
+#        it to pop-up everywhere. tedious.
 # 1174: variable "i" was declared but never referenced
 # 1188: type qualifier is meaningless on cast type
 # 1201: trailing comma is nonstandard
@@ -415,9 +413,9 @@ endif
 # 1681: f does not match "Base::f" -- virtual function override intended?
 # 1682: overloaded virtual function "Image::GetSection" is only partially overridden in class "BandedImage"
 # 3150: class "x" has no copy assignment operator; bitwise copy operator added
-# 3201: parameter "x" was never referenced 
+# 3201: parameter "x" was never referenced
 
-# Warnings for -o32 compiler 
+# Warnings for -o32 compiler
 #
 # -woff sets the warnings *not* to be printed.
 # 3108: unrecognized preprocessing directive
