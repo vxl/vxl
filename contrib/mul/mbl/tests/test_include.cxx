@@ -21,6 +21,7 @@
 #include <mbl/mbl_matrix_products.h>
 #include <mbl/mbl_matxvec.h>
 #include <mbl/mbl_mz_random.h>
+#include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_print.h>
 #include <mbl/mbl_priority_bounded_queue.h>
 #include <mbl/mbl_random_n_from_m.h>
@@ -39,6 +40,6 @@
 #include <mbl/mbl_sum_1d.h>
 #include <mbl/mbl_thin_plate_spline_2d.h>
 #include <mbl/mbl_thin_plate_spline_3d.h>
-#include <mbl/mbl_parse_block.h>
+#include <mbl/mbl_thin_plate_spline_weights_3d.h>
 
 int main() { return 0; }
