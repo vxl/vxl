@@ -124,7 +124,7 @@ void test_network()
   bfs_in.close();
 
   // remove the temporary file
-  vpl_unlink ("test_node_io.tmp");
+  vpl_unlink ("test_network_io.tmp");
 
   TEST("Testing size() on loaded network",
        network_in->size() == the_network->size() &&
