@@ -7,7 +7,7 @@
 // \author fsm
 // \verbatim
 //  Modifications
-//     11 Oct 2002 Ian Scott - converted to vil22
+//     11 Oct 2002 Ian Scott - converted to vil
 //\endverbatim
 
 #include "vil_jpeg_destination_mgr.h"

@@ -33,7 +33,7 @@ ADD_TEST( vil1_test_colour_space      vil1_test_all test_colour_space )
 ADD_TEST( vil1_test_copy              vil1_test_all test_copy ${VXLCORE_INCLUDE_DIR}/vil1/tests/square.pgm )
 ADD_TEST( vil1_test_file_format_read  vil1_test_all test_file_format_read ${VXLCORE_INCLUDE_DIR}/vil1/tests/file_read_data )
 ADD_TEST( vil1_test_resample          vil1_test_all test_resample ${VXLCORE_INCLUDE_DIR}/vil1/tests/square.pgm )
-ADD_TEST( vil_test_vil1               vil1_test_all test_vil ${VXLCORE_INCLUDE_DIR}/vil1/tests/file_read_data)
+ADD_TEST( vil1_test_vil               vil1_test_all test_vil ${VXLCORE_INCLUDE_DIR}/vil1/tests/file_read_data)
 
 ADD_EXECUTABLE( vil1_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vil1_test_include vil1 )

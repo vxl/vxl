@@ -9,7 +9,7 @@
 // \author fsm
 // \verbatim
 //  Modifications
-//     11 Oct 2002 Ian Scott - converted to vil22
+//     11 Oct 2002 Ian Scott - converted to vil
 //\endverbatim
 
 #include <vil/file_formats/vil_jpeglib.h>

@@ -14,7 +14,7 @@
 // \verbatim
 //  Modifications:
 //  3 October 2001 Peter Vanroose - Implemented get_property("top_row_first")
-//     11 Oct 2002 Ian Scott - converted to vil22
+//     11 Oct 2002 Ian Scott - converted to vil
 //\endverbatim
 
 #include <vil/vil_file_format.h>

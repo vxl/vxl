@@ -44,7 +44,7 @@ foreach $dir (@DIRS)
       closedir(TMP);
     }
   }
-  if ($dir =~ m/\bvil2?$/) {
+  if ($dir =~ m/\bvil?$/) {
     opendir(TMP,"$dir/file_formats");
     foreach $x (readdir(TMP)) { push @tmp_list, "file_formats/$x"; }
     closedir(TMP);

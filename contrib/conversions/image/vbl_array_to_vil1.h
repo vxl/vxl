@@ -1,5 +1,5 @@
-#ifndef vbl_array_to_vil_h_
-#define vbl_array_to_vil_h_
+#ifndef vbl_array_to_vil1_h_
+#define vbl_array_to_vil1_h_
 
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_memory_image.h>
@@ -14,4 +14,4 @@ inline vil1_image vbl_array_to_vil(vbl_array_2d<unsigned char> const& im)
   return imo;
 }
 
-#endif // vbl_array_to_vil_h_
+#endif // vbl_array_to_vil1_h_
