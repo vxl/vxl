@@ -1,17 +1,14 @@
 #ifndef ComputeGRIC_h
 #define ComputeGRIC_h
 
-/**
-  *@author root
-  */
-#include <mvl/HomgPoint2D.h>
 #include <mvl/PairMatchSetCorner.h>
 #include <mvl/FMatrix.h>
 #include <mvl/HMatrix2D.h>
 #include <vcl_vector.h>
 
-class ComputeGRIC {
-public:
+class ComputeGRIC
+{
+ public:
   ComputeGRIC(double std);
   ~ComputeGRIC();
 
@@ -29,13 +26,13 @@ public:
   bool degenerate() { return degenerate_; }
 
   // Return inliers after the computation
-  vcl_vector<bool>& get_inliers() { return (degenerate_ ? inliersH_ : inliersF_); }
+  vcl_vector<bool>& get_inliers() { return degenerate_ ? inliersH_ : inliersF_; }
 
   // Get the 4 and 7 points bases for the resulting relations
   vcl_vector<int>& get_basisF() { return basisF_; }
   vcl_vector<int>& get_basisH() { return basisH_; }
 
-protected:
+ protected:
   double std_;
   FMatrix* F_;
   HMatrix2D* H_;
