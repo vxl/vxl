@@ -1,4 +1,4 @@
-// This is mul/mbl/tests/test_gamma.cxx
+// This is mul/mbl/tests/test_combination.cxx
 #include <vcl_iostream.h>
 #include <mbl/mbl_combination.h>
 

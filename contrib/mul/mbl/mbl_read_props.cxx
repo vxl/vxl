@@ -4,7 +4,41 @@
 //  \file
 
 #include <vsl/vsl_indent.h>
+#include <vcl_string.h>
+#include <vcl_algorithm.h>
+#include <vcl_functional.h>
+#include <vcl_iterator.h>
+#include <vcl_cctype.h>
 
+static bool NotSpace(char a)
+{
+  return !vcl_isspace(a);
+}
+
+static bool myequals(vcl_string::const_iterator b1, vcl_string::const_iterator e1,
+                     const char * b2, const char * e2)
+{
+  for (;b1 != e1 && b2 != e2; ++b1, ++b2)
+    if (vcl_toupper(*b1) != *b2) return false;
+  if (b1 == e1 && b2 == e2) return true;
+  return false;
+}
+
+bool mbl_read_props_str_to_bool(const vcl_string &str)
+{
+  vcl_string::const_iterator begin = vcl_find_if(str.begin(), str.end(), NotSpace);
+  const vcl_string::const_reverse_iterator rend(begin); 
+  vcl_string::const_iterator end = vcl_find_if(str.rbegin(), rend, NotSpace).base();
+  const char syes[] = "YES";
+  const char strue[] = "TRUE";
+  const char s1[] = "1";
+  const char son[] = "ON";
+  if (myequals(begin, end, syes, syes+3)) return true;
+  if (myequals(begin, end, strue, strue+4)) return true;
+  if (myequals(begin, end, s1, s1+1)) return true;
+  if (myequals(begin, end, son, son+2)) return true;
+  return false;
+}
 
 void mbl_read_props_print(vcl_ostream &afs, mbl_read_props_type props)
 {

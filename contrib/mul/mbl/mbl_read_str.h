@@ -4,31 +4,21 @@
 //:
 // \file
 // \brief  Asks question and waits for an answer.
-//         If the answer is a non-empty string, returns it.
-//         If the answer is an empty vcl_string (return)
-//         then returns default.
-//
-// ===========================================================================
-// 
-//   Copyright: (C) 1994 Victoria University of Manchester
-// 
-//   Function Name:  mbl_read_str
-//   Synopsis: char* mbl_read_str(char *reply, int max_str_len, 
-//           const char *q_str, const char *default_str)
-//   Inputs:   reply: Space for reply
-//       max_str_len: length of space for reply
-//       q_str: A question 
-//       default_str: Default answer
-//   Outputs:  reply: The answer or a default
-//   Returns:   reply.
-//   Description:  Asks question and waits for an answer.
+// \author Tim
+
+//: Asks question and waits for an answer from standard input.
 //       If the answer is a non-empty string, returns it.
 //       If the answer is an empty vcl_string (return)
 //       then returns default.
-//   References: -
+// \param reply Space for reply
+// \param max_str_len Length of space for reply
+// \param q_str A question 
+// \param default_str Default answer
+// \return reply: The answer or a default
+
 //   Example: 
+// \verbatim 
 // a)
-// 
 // const int N_max_len = 20;
 // char* Name[N_max_len];
 // mbl_read_str(Name,N_max_len,"Enter Name","Fred");
@@ -41,13 +31,14 @@
 // char* Name[N_max_len];
 // strcpy(Name,"Freddy");
 // mbl_read_str(Name,N_max_len,"Enter Name",Name);
-// 
+// \endverbatim
+//
+// Modifications
+// \verbatim 
 //   1.1   Tim   New version 4-Nov-98
 //
-// \author Tim
 // Converted to vxl by gvw, soblamemewhydontcha!
-// 
-// =================================================================
+// \endverbatim
 
 char* mbl_read_str(char *reply, int max_str_len, 
                    const char *q_str, const char *default_str);
