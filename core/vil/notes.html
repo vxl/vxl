@@ -100,8 +100,8 @@ when you absolutely must have a function that works on a view without knowing it
 take a concrete <code>vil_image_view&lt;T&gt;</code>.</li>
   <li>If someone wants a super-duper <code>vil_image_process_func() </code>(size-no-problem,
     runtime pixel-polymorphic, etc) then write a function that takes 
-<code>vil_image_resource_sptr</code>. However sub-contract the actual pixel processing with
-    tp <code>vil_image_process_func(vil_image_view&lt;T&gt;)</code>.</li>
+<code>vil_image_resource_sptr</code>. However sub-contract the actual pixel processing
+    to <code>vil_image_process_func(vil_image_view&lt;T&gt;)</code>.</li>
 </ul>
 <p>A <code>vil_image_view&lt;T&gt;</code>  is a <i>view</i> in the sense that it
 provides a <i>view</i> of some image data. You can make concrete copies of views
@@ -206,11 +206,11 @@ vil_image_view&lt;T&gt;</code>, and functions on
 for <code>vil_image_resource</code> objects. Decision IMS and TFC</p>
 <h4><code>vil_image_view&lt;T&gt;::set_size(ni, nj)</code> will make no changes if size is same.
 It will detach from original underlying data and create new data if different.</h4>
-<p>This has some odd effects. If you have multiple views to the same data then 
-set_size may or may not move view to different data. However, it is very useful 
+<p>This has some odd effects. If you have multiple views to the same data then <code> 
+set_size</code> may or may not move view to different data. However, it is very useful 
 when treating views as ordinary images, and allows very efficient use of 
 workspace images. For example multiple calls to an image processing class often 
-need identically sized image workspaces. Using this set_size means that it doesn't 
+need identically sized image workspaces. Using this <code> set_size</code> means that it doesn't 
 have to reallocate memory on a regular basis. <code>mil_image</code> has been 
 using this design for 18 months with no problems. Decision at Providence meeting.</p>
 <h4><code>vil_image_view&lt;T&gt;::operator=()</code> can be smart but should do fast view transforms only.</h4>
@@ -258,6 +258,10 @@ Decision confirmed at Providence meeting.</p>
 world to image transforms will be provided in a separate level2 library - vimt.</h4>
 <p>vimt benefits from being able to use both vil and vgl (and possibly vnl). 
 Decision TFC.</p>
+<h4>Deal with const pointer data issues pragmatically inside vil.</h4>
+<p>Pointers to data are often passed in as const, but may have the const removed.
+This is because it is rather complicated to keep track of whether the data is going to be
+changed or not.  Just try to be sensible, OK? Decision TFC.</p>
 <h4>All standard image processing algorithms will go into vil/algo</h4>
 <p>We will dump the vipl interface. All image processing code would be written 
 in terms of <code>vil_image_view&lt;T&gt;</code> first. Then write another function 
@@ -322,11 +326,30 @@ already in memory, no new <code>vil_memory_chunk</code> is allocated. If the
 image isn't already in memory, the cost of the new memory chunk is smaller than
 the disk access time. Note, one alternative may be to bring back the <code>
 vil_image_resource::fill_view(...)</code> which modifies the contents of an existing
-view and doesn't allocate any memory.</p>
-<h2>Miscellaneous Notes</h2>
-<p>Pointers to data are often passed in as const, but may have the const removed.
-This is because it is rather complicated to keep track of whether the data is going to be
-changed or not.  Just try to be sensible, OK?</p>
+view and doesn't allocate any memory. IMS.</p>
+<h4>Add block processing implementation to the <code>vil_image_resource</code>
+derivatives for very large images.</h4>
+<p>The basic idea of dealing with large images was designed into vil1. It
+deferred loading the whole image into memory until actually needed. You could
+then load only one block of the image as required. This basic idea has been
+passed into vil2/vil. However, as with vil1, this is only a design outline and
+API. A lot of implementation to do block-by-block processing efficiently is
+missing.</p>
+<p> The first step is to add <code>preferred_block_size</code>
+and <code>preferred_block_origin</code> to <code>vil_property.h</code>. Both of
+these <code>unsigned[2]</code> properties would be provided by file resources
+and used by the processing resources to do the work one block at a time. I guess
+many of the existing file resources will specify blocks that are one or more
+full rasters. Those file formats designed to deal with large images (including
+TIFF) can store their pixels in rectangular tiles. The processing resources should be able to use several of their
+supplier's blocks together up to some locally decided (or globally specified)
+limit. The processing resources would need to export these properties including
+any modification (e.g. <code>vil_transpose()</code>.)&nbsp;</p>
+<p>Quite how <code>vil_convolve_1d_resource</code><code> </code>should deal with
+a single column for a preferred block size (when <code>vil_convolve_1d_resource</code>
+operates on rows) - I don't know. It would take some experimentation to get an
+efficient solution. Until then we can always rely on the fact that the <code>preferred_block_size</code>,
+etc are just hints and can safely be ignored at the loss of efficiency. IMS.</p>
 <p>&nbsp;</p>
 </body>
 </html>
