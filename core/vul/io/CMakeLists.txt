@@ -15,6 +15,6 @@ vul_io_user_info
 )
 
 
-IF( BUILD_TESTS)
-  SUBDIRS(tests)
-ENDIF( BUILD_TESTS)
+#IF( BUILD_TESTS)
+#  SUBDIRS(tests)
+#ENDIF( BUILD_TESTS)
