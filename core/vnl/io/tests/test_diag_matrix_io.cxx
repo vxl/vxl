@@ -18,17 +18,18 @@ void test_diag_matrix_double_io()
     vcl_cout << "*************************" << vcl_endl;  
     //// test constructors, accessors
     const int n = 50;
-    vnl_vector<double> v_out(n), v_in;
+    vnl_vector<double> v_out(n), v_in(n);
 
     for (int i=0; i<n; i++)
     {
+        v_in(i) = (double)(i);	// Different to check things change
         v_out(i) = (double)(i*i);
     }
 
-    vnl_diag_matrix<double> diag_mat_out(v_out), diag_mat_in(n);
+    vnl_diag_matrix<double> diag_mat_out(v_out), diag_mat_in(v_in);
     
     vsl_print_summary(vcl_cout, diag_mat_out);
-  vcl_cout << vcl_endl;
+    vcl_cout << vcl_endl;
 
     vsl_b_ofstream bfs_out("vnl_diag_matrix_test_io.bvl.tmp");
     TEST ("Created vnl_diag_matrix_test_io.bvl.tmp for writing", 

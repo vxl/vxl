@@ -21,7 +21,7 @@ void test_real_polynomial_io()
         v(i) = (double)(i*i);
     }
     
-  vnl_real_polynomial poly_out(v), poly_in(0);
+  vnl_real_polynomial poly_out(v), poly_in0(0),poly_in1(v*2.0);
 
     
     
@@ -29,20 +29,24 @@ void test_real_polynomial_io()
     TEST ("Created vnl_real_polynomial_test_io.bvl.tmp for writing",
              (!bfs_out), false);
     vsl_b_write(bfs_out, poly_out);
-    bfs_out.close();        
+    vsl_b_write(bfs_out, poly_out);
+    bfs_out.close();
         
     vsl_b_ifstream bfs_in("vnl_real_polynomial_test_io.bvl.tmp");
     TEST ("Opened vnl_real_polynomial_test_io.bvl.tmp for reading",
              (!bfs_in), false);
-    vsl_b_read(bfs_in, poly_in);
-    bfs_in.close();     
+    vsl_b_read(bfs_in, poly_in0);
+    vsl_b_read(bfs_in, poly_in1);
+    bfs_in.close();
         
     
     
-    TEST ("poly_out.coefficients() == poly_in.coefficients()",
-             poly_out.coefficients() == poly_in.coefficients(), true);
-    
-  vsl_print_summary(vcl_cout, poly_in);
+    TEST ("poly_out.coefficients() == poly_in0.coefficients()",
+             poly_out.coefficients() == poly_in0.coefficients(), true);
+    TEST ("poly_out.coefficients() == poly_in1.coefficients()",
+             poly_out.coefficients() == poly_in1.coefficients(), true);
+
+  vsl_print_summary(vcl_cout, poly_in0);
   vcl_cout << vcl_endl;
 }
 
