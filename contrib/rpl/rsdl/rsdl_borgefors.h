@@ -14,7 +14,6 @@
 
 #include <vcl_vector.h>
 #include <vbl/vbl_array_2d.h>
-#include <vil/vil_fwd.h>
 
 //: Defines functions associated with a templated borgefors distance map.
 //  The data based on which the map is built is a vector
