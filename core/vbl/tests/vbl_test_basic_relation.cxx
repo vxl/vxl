@@ -75,118 +75,118 @@ bool CheckRelation(vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2 >& r
   // Check each inserted tuple.
   bool passed = true;
   for (int i=0; i<ntest; i++)
+  {
+    int len = r.where_second(i).size();
+    if (len != 3)
     {
-      int len = r.where_second(i).size();
-      if (len != 3)
-        {
-          vcl_cout << "Failed: where_second(" << i << ").size() returns " << len
-                   << ", should be 3\n";
-          passed = false;
-        }
-      vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2>::iterator j;
-      int count = 0;
-      vcl_string s1("");
-      vcl_string s2("");
-      for (j = r.where_second(i).begin(); j!= r.end(); j++, count++)
-        {
-          if ((*j).GetSecond() != i)
-            {
-              vcl_cout << "Failed: where_second(" << i << ") returns tuple " << *j << vcl_endl;
-              passed = false;
-            }
-          if (! ((*j).GetFirst() == (*j).GetThird()) )
-            {
-              s1 = (*j).GetFirst();
-              s2 = (*j).GetThird();
-            }
-        }
-      if (count != 3)
-        {
-          vcl_cout << "Failed: where_second(" << i << ") returns " << count
-                   << " tuples, should be 3.\n";
-          passed = false;
-        }
-      bool case1found = false;
-      bool case2found = false;
-      bool case3found = false;
-      for (j = r.where_second(i).begin(); j!= r.end(); j++)
-        {
-          if ((*j).GetFirst() == (*j).GetThird())
-            {
-              if ((*j).GetFirst() == s1)
-                case1found = true;
-              else if ((*j).GetFirst() == s2)
-                case2found = true;
-            }
-          else if (((*j).GetFirst() == s1) && ((*j).GetThird() == s2))
-            case3found = true;
-        }
-      if (!case1found || !case2found || !case3found)
-        {
-          vcl_cout << "Failed: where_second(" << i << ") returns wrong three tuples.\n";
-          passed = false;
-        }
-
-      // Now check for these s1 and s2.
-      int l1 = r.where_first(s1).size();
-      if (l1 != 2)
-        {
-          vcl_cout << "Failed: where_first(" << s1 << ") has size " << l1
-                   << ", expected 2\n";
-          passed = false;
-        }
-      int l2 = r.where_third(s2).size();
-      if (l2 != 2)
-        {
-          vcl_cout << "Failed: where_third(" << s2 << ") has size " << l2
-                   << ", expected 2\n";
-          passed = false;
-        }
-
-      // And check consistency.
-      int l12 = r.where_first(s1).where_third(s2).size();
-      if (l12 != 1)
-        {
-          vcl_cout << "Failed: where_first(" << s1 << ").where_third(" << s2 << ") has size " << l12
-                   << ", expected 1\n";
-          passed = false;
-        }
-      int l11 = r.where_first(s1).where_third(s1).size();
-      if (l11 != 1)
-        {
-          vcl_cout << "Failed: where_first(" << s1 << ").where_third(" << s1 << ") has size " << l11
-                   << ", expected 1\n";
-          passed = false;
-        }
-      int l22 = r.where_first(s2).where_third(s2).size();
-      if (l22 != 1)
-        {
-          vcl_cout << "Failed: where_first(" << s2 << ").where_third(" << s2 << ") has size " << l22
-                   << ", expected 1\n";
-          passed = false;
-        }
-      int li12 = r.where_first(s1).where_second(i).where_third(s2).size();
-      if (li12 != 1)
-        {
-          vcl_cout << "Failed: where_first(" << s1 << ").where_second(" << i << ").where_third("
-                   << s2 << ") has size " << li12 << ", expected 1\n";
-          passed = false;
-        }
-      int li11 = r.where_first(s1).where_second(i).where_third(s1).size();
-      if (li11 != 1)
-        {
-          vcl_cout << "Failed: where_first(" << s1 << ").where_second(" << i << ").where_third("
-                   << s1 << ") has size " << li11 << ", expected 1\n";
-          passed = false;
-        }
-      int li22 = r.where_first(s2).where_second(i).where_third(s2).size();
-      if (li22 != 1)
-        {
-          vcl_cout << "Failed: where_first(" << s2 << ").where_second(" << i << ").where_third("
-                   << s2 << ") has size " << li22 << ", expected 1\n";
-          passed = false;
-        }
+      vcl_cout << "Failed: where_second(" << i << ").size() returns " << len
+               << ", should be 3\n";
+      passed = false;
     }
+    vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2>::iterator j;
+    int count = 0;
+    vcl_string s1("");
+    vcl_string s2("");
+    for (j = r.where_second(i).begin(); j!= r.end(); j++, count++)
+    {
+      if ((*j).GetSecond() != i)
+      {
+        vcl_cout << "Failed: where_second(" << i << ") returns tuple " << *j << vcl_endl;
+        passed = false;
+      }
+      if (! ((*j).GetFirst() == (*j).GetThird()) )
+      {
+        s1 = (*j).GetFirst();
+        s2 = (*j).GetThird();
+      }
+    }
+    if (count != 3)
+    {
+      vcl_cout << "Failed: where_second(" << i << ") returns " << count
+               << " tuples, should be 3.\n";
+      passed = false;
+    }
+    bool case1found = false;
+    bool case2found = false;
+    bool case3found = false;
+    for (j = r.where_second(i).begin(); j!= r.end(); j++)
+    {
+      if ((*j).GetFirst() == (*j).GetThird())
+      {
+        if ((*j).GetFirst() == s1)
+          case1found = true;
+        else if ((*j).GetFirst() == s2)
+          case2found = true;
+      }
+      else if (((*j).GetFirst() == s1) && ((*j).GetThird() == s2))
+        case3found = true;
+    }
+    if (!case1found || !case2found || !case3found)
+    {
+      vcl_cout << "Failed: where_second(" << i << ") returns wrong three tuples.\n";
+      passed = false;
+    }
+
+    // Now check for these s1 and s2.
+    int l1 = r.where_first(s1).size();
+    if (l1 != 2)
+    {
+      vcl_cout << "Failed: where_first(" << s1 << ") has size " << l1
+               << ", expected 2\n";
+      passed = false;
+    }
+    int l2 = r.where_third(s2).size();
+    if (l2 != 2)
+    {
+      vcl_cout << "Failed: where_third(" << s2 << ") has size " << l2
+               << ", expected 2\n";
+      passed = false;
+    }
+
+    // And check consistency.
+    int l12 = r.where_first(s1).where_third(s2).size();
+    if (l12 != 1)
+    {
+      vcl_cout << "Failed: where_first(" << s1 << ").where_third(" << s2 << ") has size " << l12
+               << ", expected 1\n";
+      passed = false;
+    }
+    int l11 = r.where_first(s1).where_third(s1).size();
+    if (l11 != 1)
+    {
+      vcl_cout << "Failed: where_first(" << s1 << ").where_third(" << s1 << ") has size " << l11
+               << ", expected 1\n";
+      passed = false;
+    }
+    int l22 = r.where_first(s2).where_third(s2).size();
+    if (l22 != 1)
+    {
+      vcl_cout << "Failed: where_first(" << s2 << ").where_third(" << s2 << ") has size " << l22
+               << ", expected 1\n";
+      passed = false;
+    }
+    int li12 = r.where_first(s1).where_second(i).where_third(s2).size();
+    if (li12 != 1)
+    {
+      vcl_cout << "Failed: where_first(" << s1 << ").where_second(" << i << ").where_third("
+               << s2 << ") has size " << li12 << ", expected 1\n";
+      passed = false;
+    }
+    int li11 = r.where_first(s1).where_second(i).where_third(s1).size();
+    if (li11 != 1)
+    {
+      vcl_cout << "Failed: where_first(" << s1 << ").where_second(" << i << ").where_third("
+               << s1 << ") has size " << li11 << ", expected 1\n";
+      passed = false;
+    }
+    int li22 = r.where_first(s2).where_second(i).where_third(s2).size();
+    if (li22 != 1)
+    {
+      vcl_cout << "Failed: where_first(" << s2 << ").where_second(" << i << ").where_third("
+               << s2 << ") has size " << li22 << ", expected 1\n";
+      passed = false;
+    }
+  }
   return passed;
 }
 
@@ -199,15 +199,14 @@ void testStringIntString()
   vcl_cout << r << vcl_endl;
 
   // Do a stress test.
-  int i;
-  for (i=0; i<ntest; i++)
-    {
-      vcl_string s1 = NewString();
-      vcl_string s2 = NewString();
-      r.insert(s1,i,s1);
-      r.insert(s1,i,s2);
+  for (int i=0; i<ntest; i++)
+  {
+    vcl_string s1 = NewString();
+    vcl_string s2 = NewString();
+    r.insert(s1,i,s1);
+    r.insert(s1,i,s2);
       r.insert(s2,i,s2);
-    }
+  }
 
   // Test length;
   if (r.size() == 3 + 3*ntest)
@@ -234,45 +233,44 @@ void testStringIntString()
   // Test random insert/delete.
   vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2> temp_rel("holding_relation");
   passed = true;
-  for (i=0; i<ntest; i++)
+  for (int i=0; i<ntest; i++)
+  {
+    int n = (rand()/256) % ntest;
+    int m = (rand()/256) % 3;
+    int count = 0;
+    if ((rand()/1024)%2 == 0)
     {
-      int n = (rand()/256) % ntest;
-      int m = (rand()/256) % 3;
-      int count = 0;
-      if ((rand()/1024)%2 == 0)
+      vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2>::iterator j;
+      for (j = r.where_second(n).begin(); j != r.end(); j++, count++)
+      {
+        if (count == m)
         {
-          vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2>::iterator j;
-          for (j = r.where_second(n).begin(); j != r.end(); j++, count++)
-            {
-              if (count == m)
-                {
-                  temp_rel.insert(*j);
-                  vcl_cout << "Removing " << *j << vcl_endl;
-                  r.remove(*j);
-                  break;
-                }
-            }
+          temp_rel.insert(*j);
+          vcl_cout << "Removing " << *j << vcl_endl;
+          r.remove(*j);
+          break;
         }
-      else
-        {
-          vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2>::iterator j = temp_rel.begin();
-          if (j != temp_rel.end())
-            {
-              r.insert(*j);
-              vcl_cout << "inserting " << *j << vcl_endl;
-              temp_rel.remove(*j);
-            }
-        }
+      }
     }
+    else
+    {
+      vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2>::iterator j = temp_rel.begin();
+      if (j != temp_rel.end())
+      {
+        r.insert(*j);
+        vcl_cout << "inserting " << *j << vcl_endl;
+        temp_rel.remove(*j);
+      }
+    }
+  }
 
   // insert all remaining removed.
   for (vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2>::iterator j = temp_rel.begin();
-       j != temp_rel.end();
-       j++)
-    {
-      r.insert(*j);
-      vcl_cout << "inserting " << *j << vcl_endl;
-    }
+       j != temp_rel.end(); ++j)
+  {
+    r.insert(*j);
+    vcl_cout << "inserting " << *j << vcl_endl;
+  }
 
   temp_rel.clear();
 
