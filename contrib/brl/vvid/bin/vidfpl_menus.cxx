@@ -128,10 +128,6 @@ void vidfpl_menus::compute_grid_match_callback()
   vvid_file_manager::instance()->compute_grid_match();
 }
 
-void vidfpl_menus::compute_curve_tracking_callback()
-{
-  vvid_file_manager::instance()->compute_curve_tracking();
-}
 
 void vidfpl_menus::compute_corr_tracking_callback()
 {
@@ -281,7 +277,6 @@ vgui_menu vidfpl_menus::get_menu()
   menuprocess.add( "Spatial Filter ", spatial_filter_callback);
 
   //Tracking menu entries
-  menutrack.add( "Compute Curve Tracking", compute_curve_tracking_callback);
   menutrack.add( "Compute Corr Tracking", compute_corr_tracking_callback);
   menutrack.add( "Compute Info Tracking", compute_info_tracking_callback);
   menutrack.add( "Exercise Art Model", exercise_art_model_callback);

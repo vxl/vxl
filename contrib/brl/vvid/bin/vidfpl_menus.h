@@ -38,7 +38,6 @@ class vidfpl_menus
   static void compute_vd_edges_callback();
   static void compute_line_fit_callback();
   static void compute_grid_match_callback();
-  static void compute_curve_tracking_callback();
   static void compute_corr_tracking_callback();
   static void compute_info_tracking_callback();
   static void display_poly_track_callback();
