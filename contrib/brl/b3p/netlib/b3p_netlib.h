@@ -1,11 +1,12 @@
 #ifndef B3P_NETLIB_H_
 #define B3P_NETLIB_H_
 
-// \:
-//  \file
+/*
+//:  \file
 //  \author Kongbin Kang
 //  \date Jan 5, 2005
 //  \brief declearations for netlib functions
+*/
 
 #ifdef __cplusplus
 extern "C" {
