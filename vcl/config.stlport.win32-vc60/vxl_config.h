@@ -44,7 +44,7 @@ typedef void             vxl_sint64;   /* ! */
 #define VXL_STDLIB_HAS_DRAND48    0
 #define VXL_IEEEFP_HAS_FINITE     0 /* ? */
 #define VXL_MATH_HAS_FINITE       0 /* ? */
-#define VXL_MATH_HAS_SQRTF        1 /* ? */
+#define VXL_MATH_HAS_SQRTF        0 /* ? */
 #define VXL_HAS_IEEEFP_H          1
 
 #endif
