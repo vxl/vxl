@@ -8,7 +8,6 @@
 @afourlatex
 @end iftex
 
-
 @ifset makeinfo
 @macro anchor{label}
 @end macro
@@ -109,7 +108,5 @@ inputclass \name\
 @end macro
 @end ifnottex
 
-@c make backslashes normal characters (used in eg "\brief")
-@catcode92=12
 
 @c %**end of header

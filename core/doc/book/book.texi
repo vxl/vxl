@@ -3,6 +3,13 @@
 
 @include book_header.texi
 
+@c make backslashes normal characters (used in eg "\brief")
+@iftex
+@catcode92=12
+@end iftex
+
+
+
 @c -----------------------------------------------------------------------------
 
 @node Top, Introduction, (dir), (dir)
