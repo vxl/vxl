@@ -11,6 +11,9 @@
 #include <vil2/vil2_file_format.h>
 #include <vil2/vil2_stream.h>
 #include <vil2/vil2_image_resource.h>
+#include <vil2/vil2_image_resource_plugin.h>
+#include <vil2/vil2_memory_image.h>
+#include <vil2/vil2_image_view.h>
 
 vil2_image_resource_sptr vil2_load_image_resource_raw(vil2_stream *is)
 {
@@ -48,8 +51,34 @@ vil2_image_resource_sptr vil2_load_image_resource_raw(char const* filename)
 
 vil2_image_resource_sptr vil2_load_image_resource(char const* filename)
 {
-  vil2_image_resource_sptr im = vil2_load_image_resource_raw(filename);
+  vil2_image_resource_sptr im = vil2_load_image_resource_plugin(filename);
+  if (!im)
+    {
+    im=vil2_load_image_resource_raw(filename);
+    }
   return im;
+}
+
+
+vil2_image_resource_sptr vil2_load_image_resource_plugin(char const* filename)
+{
+  vil2_image_resource_plugin im_ressource_plugin;
+  if (im_ressource_plugin.can_be_loaded(filename))
+    {
+    vil2_image_view_base* img=new vil2_image_view<vxl_byte>(640,480,3);
+    vil2_image_resource_sptr im;
+    vil2_image_view_base_sptr im_view(img);
+    if (im_ressource_plugin.load_the_image(im_view,filename))
+      {
+      im=vil2_new_image_resource(im_view->ni(),im_view->nj(),
+          im_view->nplanes(),im_view->pixel_format());
+      if (im->put_view((const vil2_image_view_base&)*im_view,0,0))
+        {
+        return im;
+        }
+      }
+    }
+  return vil2_image_resource_sptr(0);
 }
 
 

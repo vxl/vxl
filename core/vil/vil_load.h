@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_load.h
+// This is core/vil2/vil2_load.h
 #ifndef vil2_load_h_
 #define vil2_load_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -45,6 +45,9 @@ vil2_image_resource_sptr vil2_load_image_resource_raw(vil2_stream *);
 //: Load raw from a filename.
 // A convenience function.
 vil2_image_resource_sptr vil2_load_image_resource_raw(char const*);
+
+//: Load from a filename with a plugin.
+vil2_image_resource_sptr vil2_load_image_resource_plugin(char const*);
 
 //: Convenience function for loading an image into an image view.
 // \relates vil2_image_view
