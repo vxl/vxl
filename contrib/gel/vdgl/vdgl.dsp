@@ -105,6 +105,9 @@ SOURCE=.\Templates/vbl_smart_ptr+vdgl_digital_curve-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+vdgl_edgel_chain-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+vdgl_fit_lines_params-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+vdgl_interpolator-.cxx
 # End Source File
 # Begin Source File
@@ -127,6 +130,12 @@ SOURCE=.\vdgl_edgel_chain.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vdgl_fit_line.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vdgl_fit_lines.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vdgl_fit_lines_params.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vdgl_interpolator.cxx
@@ -160,6 +169,12 @@ SOURCE=.\vdgl_edgel_chain.h
 # End Source File
 # Begin Source File
 SOURCE=.\vdgl_fit_line.h
+# End Source File
+# Begin Source File
+SOURCE=.\vdgl_fit_lines.h
+# End Source File
+# Begin Source File
+SOURCE=.\vdgl_fit_lines_params.h
 # End Source File
 # Begin Source File
 SOURCE=.\vdgl_interpolator.h

@@ -92,6 +92,9 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_vdgl.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test1_vdgl.cxx
 # End Source File
 # End Group
