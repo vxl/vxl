@@ -27,6 +27,7 @@ using std :: cout;
 using std :: cerr;
 using std :: endl;
 using std :: streampos;
+using std :: streambuf; // added by Peter Vanroose
 #else
 
 #include <iostream.h>
@@ -82,14 +83,17 @@ inline istream& operator>>(istream& s, signed char& c) {
 #endif
 
 // moved here from vil_stream_fstream.cxx. streamsize added
-#if defined(VCL_SUNPRO_CC)
+#if defined(VCL_SUNPRO_CC) || defined(VCL_WIN32)
 # define vcl_streampos  std::streampos
+# define vcl_streambuf  std::streambuf
 # define vcl_streamsize std::streamsize
 #elif defined(VCL_SGI_CC)
 # define vcl_streampos  streampos
+# define vcl_streambuf  streambuf
 # define vcl_streamsize unsigned
 #else
 # define vcl_streampos  streampos
+# define vcl_streambuf  streambuf
 # define vcl_streamsize streamsize
 #endif
 
