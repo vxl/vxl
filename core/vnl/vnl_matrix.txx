@@ -1092,7 +1092,7 @@ void vnl_matrix<T>::assert_finite_internal() const
 {
   if (is_finite())
     return;
-  
+
   vcl_cerr << vcl_endl << vcl_endl;
   vcl_cerr << __FILE__ ":" << __LINE__ << ": matrix has non-finite elements" << vcl_endl;
 
@@ -1342,7 +1342,7 @@ int vnl_inplace_transpose(doublereal *a, unsigned m, unsigned n, char* move, uns
 // *****
 //  A IS A ONE-DIMENSIONAL ARRAY OF LENGTH MN=M*N, WHICH
 //  CONTAINS THE MXN MATRIX TO BE TRANSPOSED (STORED
-//  COLUMWISE). MOVE IS A ONE-DIMENSIONAL ARRAY O F LENGTH IWRK
+//  COLUMWISE). MOVE IS A ONE-DIMENSIONAL ARRAY OF LENGTH IWRK
 //  USED TO STORE INFORMATION TO SPEED UP THE PROCESS.  THE
 //  VALUE IWRK=(M+N)/2 IS RECOMMENDED. IOK INDICATES THE
 //  SUCCESS OR FAILURE OF THE ROUTINE.
