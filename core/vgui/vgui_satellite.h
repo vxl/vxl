@@ -73,11 +73,12 @@
 // The 'object' type must have a method type_name(); it is used to
 // implement the type_name() methods on the satellites.
 
+#include <vgui/vgui_menu.h>
 #include <vgui/vgui_tableau.h>
 
 // satellite with client data.
 template <class object, class data>
-struct vgui_satellite_t : public vgui_tableau
+struct vgui_satellite_t : vgui_tableau
 {
   typedef bool (object::*method)(vgui_event const &, data );
 
@@ -94,14 +95,17 @@ struct vgui_satellite_t : public vgui_tableau
     return
       vcl_string("vgui_satellite_t[") + (p ? p->type_name() : vcl_string("null")) + vcl_string("]");
   }
-
+  
+  vgui_menu a_menu;
+  void add_popup(vgui_menu &m) { m.include(a_menu); }
+  
 protected:
   ~vgui_satellite_t() { p = 0; m = 0; }
 };
 
 // satellite without client data.
 template <class object>
-struct vgui_satellite : public vgui_tableau
+struct vgui_satellite : vgui_tableau
 {
   typedef bool (object::*method)(vgui_event const &);
 
