@@ -12,10 +12,12 @@
 //
 // \verbatim
 // Modifications
-// 960926 AWF Converted to non-fascist C++ :-)
-// 970218 AWF Templated
-// 01 Mar 2001 fsm. Converted to fascist C++
-// PDA (Manchester) 21/03/2001: Tidied up the documentation
+//  960926 AWF Converted to non-fascist C++ :-)
+//  970218 AWF Templated
+//  01 Mar 2001 fsm. Converted to fascist C++
+//  PDA (Manchester) 21/03/2001: Tidied up the documentation
+//  Peter Vanroose 3 Jan. 2002 added operator==
+//  Peter Vanroose 4 Jan. 2002 bug fix: 3rd arg row2_count_ --> row3_count_
 // \endverbatim
 
 
@@ -56,21 +58,32 @@ class vbl_array_3d
 
   vbl_array_3d(vbl_array_3d<T> const& that)
   {
-    construct(that.row1_count_,that.row2_count_,that.row2_count_);
+    construct(that.row1_count_,that.row2_count_,that.row3_count_);
     set(that.data_block());
   }
 
   ~vbl_array_3d () { destruct(); }
-  vbl_array_3d<T>& operator = (vbl_array_3d<T> const& that) {
-#if 0
-    assert(row1_count_ == that.row1_count_);
-    assert(row2_count_ == that.row2_count_);
-    assert(row3_count_ == that.row3_count_);
-#else
-    resize(that.row1_count_, that.row2_count_, that.row2_count_);
-#endif
+  vbl_array_3d<T>& operator=(vbl_array_3d<T> const& that) {
+    resize(that.row1_count_, that.row2_count_, that.row3_count_);
     set(that.data_block());
     return *this;
+  }
+
+  //: Comparison
+  bool operator==(vbl_array_3d<T> const& that) const {
+    if (row1_count_ != that.row1_count_ ||
+        row2_count_ != that.row2_count_ ||
+        row3_count_ != that.row3_count_)
+      return false;
+    vbl_array_3d<T>::const_iterator i = this->begin();
+    vbl_array_3d<T>::const_iterator j = that.begin();
+    while (i != this->end())
+    {
+      if (!(*i == *j)) // do not assume we have operator!=(T)
+        return false;
+      ++i; ++j;
+    }
+    return true;
   }
 
   // Data Access---------------------------------------------------------------
