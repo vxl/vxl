@@ -54,5 +54,13 @@
 #include <vsol/vsol_triangle_3d_sptr.h>
 #include <vsol/vsol_volume_3d.h>
 #include <vsol/vsol_volume_3d_sptr.h>
+#include <vsol/vsol_box.h>
+#include <vsol/vsol_box_sptr.h>
+#include <vsol/vsol_digital_curve_3d.h>
+#include <vsol/vsol_digital_curve_3d_sptr.h>
+#include <vsol/vsol_flags_id.h>
+#include <vsol/vsol_flags_id_sptr.h>
+#include <vsol/vsol_spatial_object.h>
+#include <vsol/vsol_spatial_object_sptr.h>
 
 int main() { return 0; }
