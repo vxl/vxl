@@ -12,23 +12,24 @@
 //   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
-#include "vmap_kernel.h"
+#include "vmap_types.h" // for vmap_dart_index
+#include <vcl_vector.h>
 
 //: Wrapper to avoid having non rooted hierarchies while constructing a kernel.
-template <class vmap_kernel>
-class vmap_oriented_kernel : public vmap_kernel
+template <class TKernel>
+class vmap_oriented_kernel : public TKernel
 {
  public:
 
   //:
-  typedef vmap_kernel Base_ ;
+  typedef TKernel Base_ ;
 
   //:
   typedef typename Base_::map_type map_type ;
 
   //:
   typedef typename Base_::dart_iterator dart_iterator ;
-#if 0
+#if 0 // vmap_dart_index is typedef'd in vmap_types.h
   typedef typename map_type::vmap_dart_index vmap_dart_index ;
 #endif // 0
 
@@ -69,7 +70,7 @@ class vmap_oriented_kernel : public vmap_kernel
  private :
 
   //:
-  typedef std::vector<int> Mark ;
+  typedef vcl_vector<int> Mark ;
 
   //:
   Mark mark_ ;

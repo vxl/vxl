@@ -5,18 +5,18 @@
 #include "vmap_non_oriented_kernel.h"
 #include <vcl_list.h>
 
-template <class vmap_kernel>
+template <class TKernel>
 void
-vmap_non_oriented_kernel<vmap_kernel>::initialise()
+vmap_non_oriented_kernel<TKernel>::initialise()
 {
   clear() ;
   Base_::initialise() ;
   graph_.resize(this->permutation().nb_cycles()) ;
 }
 
-template <class vmap_kernel>
+template <class TKernel>
 void
-vmap_non_oriented_kernel<vmap_kernel>::finalise()
+vmap_non_oriented_kernel<TKernel>::finalise()
 {
   int nbel=this->permutation().nb_cycles() ;
   this->representatives_.initialise(nbel) ;
@@ -30,8 +30,8 @@ vmap_non_oriented_kernel<vmap_kernel>::finalise()
   }
 }
 
-template <class vmap_kernel>
-bool vmap_non_oriented_kernel<vmap_kernel>::add(const dart_iterator & arg)
+template <class TKernel>
+bool vmap_non_oriented_kernel<TKernel>::add(const dart_iterator & arg)
 {
   element_index e1=this->permutation().cycle_index_of(arg),
                 e2=this->permutation().opposite_cycle_index_of(arg) ;
@@ -49,8 +49,8 @@ bool vmap_non_oriented_kernel<vmap_kernel>::add(const dart_iterator & arg)
   return true ;
 }
 
-template <class vmap_kernel>
-void vmap_non_oriented_kernel<vmap_kernel>::add_from(element_index elt, vcl_vector<int> & visited)
+template <class TKernel>
+void vmap_non_oriented_kernel<TKernel>::add_from(element_index elt, vcl_vector<int> & visited)
 {
   vcl_list<int> fifo ;
   fifo.push_back(elt) ;

@@ -4,8 +4,8 @@
 
 #include "vmap_oriented_kernel.h"
 
-template <class vmap_kernel>
-void vmap_oriented_kernel<vmap_kernel>::initialise()
+template <class TKernel>
+void vmap_oriented_kernel<TKernel>::initialise()
 {
   int elts = this->permutation().nb_elements() ;
   clear() ;
@@ -17,8 +17,8 @@ void vmap_oriented_kernel<vmap_kernel>::initialise()
   }
 }
 
-template <class vmap_kernel>
-bool vmap_oriented_kernel<vmap_kernel>::add(const dart_iterator & arg)
+template <class TKernel>
+bool vmap_oriented_kernel<TKernel>::add(const dart_iterator & arg)
 {
   if (mark_[this->permutation().index_of(arg)] || !Base_::add(arg))
   {
