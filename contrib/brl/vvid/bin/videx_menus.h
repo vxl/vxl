@@ -23,6 +23,7 @@ class videx_menus
   static void no_op_callback();
   static void start_live_video_callback();
   static void stop_live_video_callback();
+  static void toggle_histogram_callback();
   static void capture_sequence_callback();
   static void init_capture_callback();
   static void stop_capture_callback();

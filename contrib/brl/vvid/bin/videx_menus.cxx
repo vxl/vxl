@@ -38,6 +38,11 @@ void videx_menus::stop_live_video_callback()
   vvid_live_video_manager::instance()->stop_live_video();
 }
 
+void videx_menus::toggle_histogram_callback()
+{
+  vvid_live_video_manager::instance()->toggle_histogram();
+}
+
 void videx_menus::capture_sequence_callback()
 {
   vvid_live_video_manager::instance()->capture_sequence();
@@ -70,6 +75,7 @@ vgui_menu videx_menus::get_menu()
   //view menu entries
   menuview.add( "Start Live Video", start_live_video_callback);
   menuview.add( "Stop Live Video", stop_live_video_callback);
+  menuview.add( "Toggle Histogram", toggle_histogram_callback, (vgui_key)'h');
 
   //edit menu entries
   menuedit.add("Camera Settings", set_camera_params_callback);
