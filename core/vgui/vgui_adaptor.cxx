@@ -220,9 +220,10 @@ bool vgui_adaptor::dispatch_to_tableau(vgui_event const &e) {
 }
 
 //-----------------------------------------------------------------------------
-vgui_window *vgui_adaptor::get_window() const {
-  vgui_macro_warning << "get_window() not implemented" << vcl_endl;
-  return 0;
+// The window is assumed to be set on initialization,
+// e.g. during vgui_toolkit::produce_window(..)
+vgui_window *vgui_adaptor::get_window() {
+  return the_window;
 }
 
 //-----------------------------------------------------------------------------

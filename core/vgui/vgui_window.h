@@ -14,6 +14,7 @@
 // \verbatim
 //  Modifications:
 //    07-AUG-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
+//    23-DEC-2002 J.L. Mundy - added set methods for scroll bars
 // \endverbatim
 
 class vgui_menu;
@@ -81,6 +82,13 @@ class vgui_window
  
   //: Use the given text as the window title (if the window has a title).
   virtual void set_title(vcl_string const &);
+
+  //: Set the position of the horizontal scrollbar, returns old position
+  virtual int set_hscrollbar(int pos);
+
+  //: Set the position of the vertical scrollbar, returns old position
+  virtual int set_vscrollbar(int pos);
+
 };
 
 #endif // vgui_window_h_

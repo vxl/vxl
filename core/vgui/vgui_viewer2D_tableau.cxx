@@ -17,6 +17,8 @@
 #include <vgui/vgui_glu.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_event.h>
+#include <vgui/vgui_window.h>
+#include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_event_condition.h>
 #include <vgui/vgui_drag_mixin.h>
 #include <vgui/vgui_matrix_state.h>
@@ -49,6 +51,7 @@ vgui_viewer2D_tableau::vgui_viewer2D_tableau(vgui_tableau_sptr const& s) :
   sweep_next(false),
   prev_x(0), prev_y(0),
   zoom_x(0), zoom_y(0),
+  npos_x(0), npos_y(0),
   zoom_factor(1.5)
 {
 }
@@ -120,7 +123,6 @@ void vgui_viewer2D_tableau::center_image(int w, int h)
 
   token.offsetX =  width/2 - token.scaleX*(float(w)/2.0);
   token.offsetY = height/2 - token.scaleY*(float(h)/2.0);
-
   post_redraw();
 }
 
@@ -178,21 +180,35 @@ bool vgui_viewer2D_tableau::handle(const vgui_event& e)
 
     return child->handle(e);
   }
+  //center the scroll bars if the image is centered
+  //normally this would be in the key press event 
+  //routine, but we need to get our hands on the window
+  //and the event is not passed into the key_press method.
+  if(e.type ==vgui_KEY_PRESS)
+    if(e.key=='c')
+      {
+        vgui_adaptor* adap = e.origin;
+        vgui_window* win = adap->get_window();
+        //current scroll pos range is [0,100]
+        int cpos = 50;
+        win->set_hscrollbar(cpos);
+        win->set_vscrollbar(cpos);
+        npos_x = cpos;
+        npos_y = cpos;
+      }
   // This deals with horizontal scroll message
   if (e.type == vgui_HSCROLL)
   {
-        static int npos = 0;
-        this->token.offsetX -= *((const int *)e.data)-npos;
+        this->token.offsetX -= this->token.scaleX*(*((const int *)e.data)-npos_x);
     this->post_redraw();
-        npos = *((const int *)e.data);
+        npos_x = *((const int *)e.data);
   }
   // This deals with vertical scroll message
   if (e.type == vgui_VSCROLL)
   {
-        static int npos = 0;
-        this->token.offsetY -= *((const int *)e.data)-npos;
+        this->token.offsetY -= this->token.scaleY*(*((const int *)e.data)-npos_y);
         this->post_redraw();
-        npos = *((const int *)e.data);
+        npos_y = *((const int *)e.data);
   }
   setup_gl_matrices();
 

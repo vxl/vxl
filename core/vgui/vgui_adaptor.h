@@ -24,6 +24,7 @@
 // 20 Sept     2000 capes@robots. added post_destroy() method.
 // Feb.2002         Peter Vanroose - brief doxygen comment placed on single line
 // 08-OCT-2002 K.Y.McGaul - Added use_double_buffering.
+// 23-DEC-2002 J.L.Mundy - Added access for the window
 // \endverbatim
 
 #include "dll.h"
@@ -124,7 +125,8 @@ public:
   virtual void get_popup_bindings(vgui_modifier &, vgui_button &) const;
  
   // getting the window.
-  virtual vgui_window *get_window() const;
+  void set_window(vgui_window* win){the_window = win;}
+  virtual vgui_window *get_window();
 
   // various buffer behaviour.
   virtual void swap_buffers();
@@ -141,7 +143,7 @@ protected:
 
 private:
   vgui_adaptor_tableau *the_tableau;
-
+  vgui_window* the_window;
 
   //: this menu is put before the tableau's popup menu.
   vgui_menu menu;

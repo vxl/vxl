@@ -17,6 +17,8 @@
 //    23-AUG-2000 Marko Bacic, Oxford RRG -- Added support for scroll bars
 //    07-AUG-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
 //    01-OCT-2002 K.Y.McGaul - Moved vgui_viewer2D to vgui_viewer2D_tableau.
+//    23-DEC-2002 J.L. Mundy - Modified scrollbar support to reflect scale
+//                             and centering.
 // \endverbatim
 
 #include <vgui/vgui_drag_mixin.h>
@@ -100,7 +102,8 @@ class vgui_viewer2D_tableau : public vgui_wrapper_tableau, public vgui_drag_mixi
   float zoom_x,zoom_y;
   float new_x,new_y;
   float zoom_factor;
-
+  int npos_x;
+  int npos_y;
  protected:
   //: Destructor - called by vgui_viewer2D_tableau_sptr.
  ~vgui_viewer2D_tableau();
