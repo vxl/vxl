@@ -98,11 +98,13 @@ public:
     //: Smooth and subsample src_im to produce dest_im
     //  Applies 5 element FIR filter in x and y, then samples
     //  Assumes dest_im has sufficient data allocated
-    void gauss_reduce(T* dest_im, int dest_ystep,
+    static void gauss_reduce(T* dest_im, int dest_ystep,
                       const T* src_im,
                       int src_nx, int src_ny,
                       int dest_nx, int dest_ny,
-                      int src_ystep) const;
+                      int src_ystep,
+                      T* worka_im, T* workb_im, int work_ystep,
+                      const mil_gaussian_pyramid_builder_2d_general<T>* that);
 
     mil_image_pyramid_builder* clone() const;
     //: Version number for I/O

@@ -87,7 +87,6 @@ void vimt_gaussian_pyramid_builder_2d_general<T>::build(
   {
     vimt_image_2d_of<T>& dest = static_cast<vimt_image_2d_of<T>&>(im_pyr(i));
     const vimt_image_2d_of<T>& src = static_cast<const vimt_image_2d_of<T>&>(im_pyr(i-1));
-    dest.image().resize((unsigned) (ni/s+0.5), (unsigned) (nj/s+0.5), src.image().nplanes());
 
     s*=scale_step();
     gauss_reduce_general(src.image(), dest.image(), worka_, workb_, scale_params_);

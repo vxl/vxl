@@ -113,7 +113,7 @@ inline float l_round (double x, float )
 //  Assumes dest_im has sufficient data allocated
 
 template <class T>
-void gauss_reduce_general_plane(const vil2_image_view<T>& src,
+void vil2_gauss_reduce_general_plane(const vil2_image_view<T>& src,
                                 vil2_image_view<T>& dest,
                                 vil2_image_view<T>& worka,
                                 vil2_image_view<T>& workb,
@@ -122,6 +122,8 @@ void gauss_reduce_general_plane(const vil2_image_view<T>& src,
   assert(src.ni() >= 5 && src.nj() >= 5);
   // Convolve src with a 5 x 1 gaussian filter,
   // placing result in worka
+
+
 
   // First perform horizontal smoothing
   for (unsigned y=0;y<src.nj();y++)
@@ -210,16 +212,22 @@ void gauss_reduce_general_plane(const vil2_image_view<T>& src,
 
 
 template <class T>
-void gauss_reduce_general(const vil2_image_view<T>& src_im,
-                          vil2_image_view<T>& dest_im,
+void vil2_gauss_reduce_general(const vil2_image_view<T>& src,
+                          vil2_image_view<T>& dest,
                           vil2_image_view<T>& worka,
                           vil2_image_view<T>& workb,
                           const vil2_gauss_reduce_params &params)
 {
-  // Reduce plane-by-plane
+  if (worka.ni() < src.ni() || worka.nj() < src.nj())
+    worka.resize(src.ni(), src.nj());
+  if (workb.ni() < src.ni() || workb.nj() < src.nj())
+    workb.resize(src.ni(), src.nj());
+  dest.resize((unsigned) (src.ni()/params.scale_step()+0.5),
+    (unsigned) (src.nj()/params.scale_step()+0.5), src.nplanes());
 
-  for (unsigned p=0;p<src_im.nplanes();++p)
-    gauss_reduce_general_plane(src_im, dest_im, worka, workb, params);
+  // Reduce plane-by-plane
+  for (unsigned p=0;p<src.nplanes();++p)
+    vil2_gauss_reduce_general_plane(src, dest, worka, workb, params);
 #if 0
   vsl_indent_inc(vcl_cout);
   vcl_cout << vsl_indent() << "Work image B\n";
@@ -236,7 +244,7 @@ template void vil2_gauss_reduce(const vil2_image_view<T >& src, \
                                 vil2_image_view<T >& work_im); \
 template void vil2_gauss_reduce_121(const vil2_image_view<T >& src, \
                                     vil2_image_view<T >& dest); \
-template void gauss_reduce_general(const vil2_image_view<T >& src_im, \
+template void vil2_gauss_reduce_general(const vil2_image_view<T >& src_im, \
                                    vil2_image_view<T >& dest_im, \
                                    vil2_image_view<T >& worka, \
                                    vil2_image_view<T >& workb, \

@@ -85,13 +85,24 @@ public:
 //: Smooth and subsample src_im by an arbitrary factor to produce dest_im
 // \param worka provide workspace to avoid repetitive memory alloc and free
 // \param workb provide workspace to avoid repetitive memory alloc and free
-// \relates vil2_image_view
 template <class T>
-void gauss_reduce_general(const vil2_image_view<T>& src_im,
+void vil2_gauss_reduce_general(const vil2_image_view<T>& src_im,
                           vil2_image_view<T>& dest_im,
                           vil2_image_view<T>& worka,
                           vil2_image_view<T>& workb,
                           const vil2_gauss_reduce_params& params);
+
+
+//: Smooth and subsample src_im by an arbitrary factor to produce dest_im
+// \relates vil2_image_view
+template <class T>
+inline void vil2_gauss_reduce_general(const vil2_image_view<T>& src_im,
+                          vil2_image_view<T>& dest_im,
+                          const vil2_gauss_reduce_params& params)
+{
+  vil2_image_view<T> tempA, tempB;
+  vil2_gauss_reduce_general(src_im, dest_im, tempA, tempB, params);
+}
 
 
 //: Smooth and subsample single plane src_im in x to produce dest_im

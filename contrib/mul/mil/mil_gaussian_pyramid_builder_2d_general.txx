@@ -60,10 +60,17 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
   double init_x = 0.5 * (src_nx - 1 - (dest_nx-1)*scale_step());
   double init_y = 0.5 * (src_ny - 1 - (dest_ny-1)*scale_step());
 
+  T* worka_im = worka_.plane(0);
+  T* workb_im = workb_.plane(0);
+  int work_ystep = worka_.ystep();
+  assert (work_ystep == workb_.ystep());
+
 
   for (int i=0;i<n_planes;++i)
     gauss_reduce(dest_im.plane(i),dest_im.ystep(),
-                 src_im.plane(i),src_nx,src_ny,dest_nx,dest_ny,ystep);
+                 src_im.plane(i),src_nx,src_ny,dest_nx,dest_ny,ystep,
+                 worka_im, workb_im, work_ystep,
+                 this);
 #if 0
   vsl_indent_inc(vcl_cout);
   vcl_cout << vsl_indent() << "Work image B\n";
@@ -119,15 +126,14 @@ template <class T>
 void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
            T* dest_im, int dest_ystep,
            const T* src_im,
-           int src_nx, int src_ny, int dest_nx, int dest_ny, int src_ystep) const
+           int src_nx, int src_ny, int dest_nx, int dest_ny, int src_ystep,
+           T* worka_im, T* workb_im, int work_ystep,
+           const mil_gaussian_pyramid_builder_2d_general<T>* that)
 {
   // Convolve src with a 5 x 1 Gaussian filter,
   // placing result in work_
 
-  T* worka_im = worka_.plane(0);
-  T* workb_im = workb_.plane(0);
-  int work_ystep = worka_.ystep();
-  assert (work_ystep == workb_.ystep());
+
 
   // First perform horizontal smoothing
   for (int y=0;y<src_ny;y++)
@@ -142,31 +148,31 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
     int x;
     int nx2 = src_nx-2;
     for (x=2;x<nx2;x++)
-      worka_row[x] = l_round(  filt2_ * src_col1[x]
-                             + filt1_ * src_col2[x]
-                             + filt0_ * src_col3[x]
-                             + filt1_ * src_col4[x]
-                             + filt2_ * src_col5[x], (T)0);
+      worka_row[x] = l_round(  that->filt2_ * src_col1[x]
+                             + that->filt1_ * src_col2[x]
+                             + that->filt0_ * src_col3[x]
+                             + that->filt1_ * src_col4[x]
+                             + that->filt2_ * src_col5[x], (T)0);
 
     // Now deal with edge effects :
-    worka_row[0] = l_round( filt_edge0_ * src_col3[0]
-                          + filt_edge1_ * src_col4[0]
-                          + filt_edge2_ * src_col5[0], (T)0);
+    worka_row[0] = l_round( that->filt_edge0_ * src_col3[0]
+                          + that->filt_edge1_ * src_col4[0]
+                          + that->filt_edge2_ * src_col5[0], (T)0);
 
-    worka_row[1] = l_round( filt_pen_edge_n1_ * src_col2[1]
-                          + filt_pen_edge0_ * src_col3[1]
-                          + filt_pen_edge1_ * src_col4[1]
-                          + filt_pen_edge2_ * src_col5[1], (T)0);
+    worka_row[1] = l_round( that->filt_pen_edge_n1_ * src_col2[1]
+                          + that->filt_pen_edge0_ * src_col3[1]
+                          + that->filt_pen_edge1_ * src_col4[1]
+                          + that->filt_pen_edge2_ * src_col5[1], (T)0);
 
-    worka_row[src_nx-2] = l_round( filt_pen_edge2_ * src_col1[x]
-                                 + filt_pen_edge1_ * src_col2[x]
-                                 + filt_pen_edge0_ * src_col3[x]
-                                 + filt_pen_edge_n1_ * src_col4[x], (T)0);
+    worka_row[src_nx-2] = l_round( that->filt_pen_edge2_ * src_col1[x]
+                                 + that->filt_pen_edge1_ * src_col2[x]
+                                 + that->filt_pen_edge0_ * src_col3[x]
+                                 + that->filt_pen_edge_n1_ * src_col4[x], (T)0);
 
     x++;
-    worka_row[src_nx-1] = l_round( filt_edge2_ * src_col1[x]
-                                 + filt_edge1_ * src_col2[x]
-                                 + filt_edge0_ * src_col3[x], (T)0);
+    worka_row[src_nx-1] = l_round( that->filt_edge2_ * src_col1[x]
+                                 + that->filt_edge1_ * src_col2[x]
+                                 + that->filt_edge0_ * src_col3[x], (T)0);
   }
 
 //  worka_.print_all(vcl_cout);
@@ -182,11 +188,11 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
     const T* worka_row5  = worka_row3 + 2 * work_ystep;
 
     for (int x=0; x<src_nx; x++)
-      workb_row[x] = l_round(  filt2_ * worka_row1[x]
-                             + filt1_ * worka_row2[x]
-                             + filt0_ * worka_row3[x]
-                             + filt1_ * worka_row4[x]
-                             + filt2_ * worka_row5[x], (T)0);
+      workb_row[x] = l_round(  that->filt2_ * worka_row1[x]
+                             + that->filt1_ * worka_row2[x]
+                             + that->filt0_ * worka_row3[x]
+                             + that->filt1_ * worka_row4[x]
+                             + that->filt2_ * worka_row5[x], (T)0);
   }
 
   // Now deal with edge effects :
@@ -208,33 +214,33 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
 
   for (int x=0;x<src_nx;x++)
   {
-    workb_row_top[x] = l_round(  filt_edge0_ * worka_row_top_5[x]
-                               + filt_edge1_ * worka_row_top_4[x]
-                               + filt_edge2_ * worka_row_top_3[x], (T)0);
+    workb_row_top[x] = l_round(  that->filt_edge0_ * worka_row_top_5[x]
+                               + that->filt_edge1_ * worka_row_top_4[x]
+                               + that->filt_edge2_ * worka_row_top_3[x], (T)0);
 
-    workb_row_next_top[x] = l_round( filt_pen_edge2_ * worka_row_top_2[x]
-                                   + filt_pen_edge1_ * worka_row_top_3[x]
-                                   + filt_pen_edge0_ * worka_row_top_4[x]
-                                   + filt_pen_edge_n1_ * worka_row_top_5[x], (T)0);
+    workb_row_next_top[x] = l_round( that->filt_pen_edge2_ * worka_row_top_2[x]
+                                   + that->filt_pen_edge1_ * worka_row_top_3[x]
+                                   + that->filt_pen_edge0_ * worka_row_top_4[x]
+                                   + that->filt_pen_edge_n1_ * worka_row_top_5[x], (T)0);
 
-    workb_row_next_bottom[x] = l_round(  filt_pen_edge2_ * worka_row_bottom_4[x]
-                                       + filt_pen_edge1_ * worka_row_bottom_3[x]
-                                       + filt_pen_edge0_ * worka_row_bottom_2[x]
-                                       + filt_pen_edge_n1_ * worka_row_bottom_1[x], (T)0); 
+    workb_row_next_bottom[x] = l_round(  that->filt_pen_edge2_ * worka_row_bottom_4[x]
+                                       + that->filt_pen_edge1_ * worka_row_bottom_3[x]
+                                       + that->filt_pen_edge0_ * worka_row_bottom_2[x]
+                                       + that->filt_pen_edge_n1_ * worka_row_bottom_1[x], (T)0); 
 
-    workb_row_bottom[x] = l_round(   filt_edge2_ * worka_row_bottom_3[x]
-                                   + filt_edge1_ * worka_row_bottom_2[x]
-                                   + filt_edge0_ * worka_row_bottom_1[x], (T)0);
+    workb_row_bottom[x] = l_round(   that->filt_edge2_ * worka_row_bottom_3[x]
+                                   + that->filt_edge1_ * worka_row_bottom_2[x]
+                                   + that->filt_edge0_ * worka_row_bottom_1[x], (T)0);
   }
 
 //  workb_.print_all(vcl_cout);
 
   T* dest_row = dest_im;
 
-//  assert (dest_nx*scale_step() <= src_nx && dest_ny*scale_step() <= src_ny);
+//  assert (dest_nx*scale_step() <= src_nx && dest_ny*that->scale_step() <= src_ny);
 
-  const double init_x = 0.5 * (src_nx-1 - (dest_nx-1)*scale_step());
-  double y = 0.5 * (src_ny -1 - (dest_ny-1)*scale_step());
+  const double init_x = 0.5 * (src_nx-1 - (dest_nx-1)*that->scale_step());
+  double y = 0.5 * (src_ny -1 - (dest_ny-1)*that->scale_step());
   for (int yi=0; yi<dest_ny; yi++)
   {
     double x=init_x;
@@ -242,9 +248,9 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
     {
       dest_row[xi] = l_round (mil_safe_extend_bilin_interp_2d(x, y,
                                 workb_im,  src_nx, src_ny, work_ystep), (T)0);
-      x += scale_step_;
+      x += that->scale_step_;
     }
-    y+= scale_step_;
+    y+= that->scale_step_;
     dest_row += dest_ystep;
   }
 }
