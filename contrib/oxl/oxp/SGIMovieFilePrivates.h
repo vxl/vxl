@@ -14,7 +14,6 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl_functional.h>
-#include <vcl_utility.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_map.h>

@@ -24,7 +24,6 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_utility.h> //vxl_filter
 #include <vcl_cstdlib.h> // for vcl_abort()
 #include <vcl_functional.h>
 #include <vcl_map.h>
