@@ -1,3 +1,8 @@
+#
+# ./vxl/vil/file_formats/CMakeLists.txt
+#
+#   geoff.cross@crd.ge.com
+#
 
 ADD_LIBRARY(vil_file_formats vil_file_formats_sources)
 

@@ -1,3 +1,8 @@
+#
+# ./vxl/vgl/CMakeLists.txt
+#
+#   geoff.cross@crd.ge.com
+#
 
 ADD_LIBRARY(vgl vgl_sources)
 

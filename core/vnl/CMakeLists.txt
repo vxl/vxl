@@ -1,3 +1,8 @@
+#
+# ./vxl/vnl/CMakeLists.txt
+#
+#   geoff.cross@crd.ge.com
+#
 
 ADD_LIBRARY(vnl vnl_sources)
 

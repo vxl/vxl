@@ -1,3 +1,8 @@
+#
+# ./vxl/vnl/algo/CMakeLists.txt
+#
+#   geoff.cross@crd.ge.com
+#
 
 ADD_LIBRARY( vnl_algo vnl_algo_sources)
 

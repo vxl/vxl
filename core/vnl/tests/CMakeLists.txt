@@ -1,3 +1,8 @@
+#
+# ./vxl/vnl/tests/CMakeLists.txt
+#
+#   geoff.cross@crd.ge.com
+#
 LINK_DIRECTORIES(
 ${allvxl_BINARY_DIR}/vxl/vnl 
 ${allvxl_BINARY_DIR}/vxl/vnl/algo 

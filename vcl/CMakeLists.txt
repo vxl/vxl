@@ -1,3 +1,8 @@
+#
+# ./vcl/CMakeLists.txt
+#
+#   geoff.cross@crd.ge.com
+#
 
 SOURCE_FILES( vcl_common
 vcl_cmath

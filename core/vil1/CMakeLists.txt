@@ -1,3 +1,8 @@
+#
+# ./vxl/vil/CMakeLists.txt
+#
+#   geoff.cross@crd.ge.com
+#
 
 ADD_LIBRARY(vil vil_sources)
 

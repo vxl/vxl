@@ -1,3 +1,8 @@
+#
+# ./vcl/tests/CMakeLists.txt
+#
+#   geoff.cross@crd.ge.com
+#
 
 LINK_DIRECTORIES(
 ${allvxl_BINARY_DIR}/vcl

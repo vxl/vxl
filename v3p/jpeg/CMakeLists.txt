@@ -1,3 +1,8 @@
+#
+# ./v3p/jpeg/CMakeLists.txt
+#
+#   geoff.cross@crd.ge.com
+#
 ADD_LIBRARY( jpeg jpeg_sources )
 
 SOURCE_FILES( jpeg_sources

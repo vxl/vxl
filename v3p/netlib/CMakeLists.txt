@@ -1,3 +1,8 @@
+#
+# ./v3p/netlib/CMakeLists.txt
+#
+#   geoff.cross@crd.ge.com
+#
 ADD_LIBRARY(netlib netlib_sources)
 
 SOURCE_FILES( netlib_sources

@@ -1,3 +1,8 @@
+#
+# ./vxl/vil/tests/CMakeLists.txt
+#
+#   geoff.cross@crd.ge.com
+#
 
 
 EXECUTABLES(
