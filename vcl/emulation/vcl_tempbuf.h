@@ -1,3 +1,5 @@
+#ifndef vcl_emulation_tempbuf_h
+#define vcl_emulation_tempbuf_h
 /*
  *
  * Copyright (c) 1994
@@ -47,9 +49,6 @@
  *
  */
 
-#ifndef vcl_emulation_tempbuf_h
-#define vcl_emulation_tempbuf_h
-
 #include <vcl/vcl_climits.h>
 #include <vcl/vcl_cstddef.h>
 #include <vcl/vcl_cstdlib.h>
@@ -78,7 +77,7 @@ inline void return_temporary_buffer(T* p) {
 // extension : an object describing (possibly partially filled 
 // with constructed objects) temporary buffer
 // useful for convenient exception cleanup, also greatly reduces the
-// parameters count of functions in vcl_algo.h
+// parameters count of functions in vcl_algorithm.h
 
 template <class T, VCL_DFL_TYPE_PARAM_STLDECL(Distance,ptrdiff_t)>
 struct __stl_tempbuf
@@ -96,7 +95,7 @@ public:
     ~__stl_tempbuf()
     { 
         if (capacity()!=0) {
-            destroy(begin(), end());
+            vcl_destroy(begin(), end());
             return_temporary_buffer(begin());
         }
     }

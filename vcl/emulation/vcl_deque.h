@@ -365,7 +365,7 @@ public:
     __deque_base() {}
     ~__deque_base() { clear(); }
     void pop_front() {
-        destroy(start.current);
+      vcl_destroy(start.current);
         ++start.current;
         --length;
         if ((length == 0) || start.current == start.last)
@@ -493,7 +493,7 @@ public:
     void push_back(const T& x) {
         if (empty()) allocate_at_end();
         push_back_protector protector(this);
-        construct(finish.current, x);
+        vcl_construct(finish.current, x);
         protector.constructed();
         ++finish.current;
         ++length;
@@ -506,7 +506,7 @@ public:
         if (alloc_at_begin) allocate_at_begin();
         push_front_protector protector(this, alloc_at_begin);
         --start.current;
-        construct(start.current, x);
+        vcl_construct(start.current, x);
         protector.constructed();
         ++length;
         if (finish.current == finish.last) allocate_at_end();
@@ -521,16 +521,16 @@ public:
         __stl_debug_do(invalidate_iterator(finish));
         if (finish.current == finish.first) deallocate_at_end();
         --finish.current;
-        destroy(finish.current);
+        vcl_destroy(finish.current);
         --length; 
         if (empty()) deallocate_at_end();
     }
     void swap(vcl_deque<T, Alloc>& x) {
-        __STL_NAMESPACE::swap(start, x.start);
-        __STL_NAMESPACE::swap(finish, x.finish);
-        __STL_NAMESPACE::swap(length, x.length);
-        __STL_NAMESPACE::swap(__deque_data<T>::vcl_map, x.vcl_map);
-        __STL_NAMESPACE::swap(map_size, x.map_size);
+        __STL_NAMESPACE::vcl_swap(start, x.start);
+        __STL_NAMESPACE::vcl_swap(finish, x.finish);
+        __STL_NAMESPACE::vcl_swap(length, x.length);
+        __STL_NAMESPACE::vcl_swap(__deque_data<T>::vcl_map, x.vcl_map);
+        __STL_NAMESPACE::vcl_swap(map_size, x.map_size);
         __stl_debug_do(swap_owners(x));
     }
     IUEi_STL_INLINE iterator insert(iterator position, const T& x);
@@ -558,21 +558,21 @@ public:
     }
 //  template <class Iterator> vcl_deque(Iterator first, Iterator last);
     vcl_deque(const T* first, const T* last) {
-        copy(first, last, back_inserter(*this));
+        vcl_copy(first, last, back_inserter(*this));
     }
     vcl_deque(const_iterator first, const_iterator last) {
-        copy(first, last, back_inserter(*this));
+        vcl_copy(first, last, back_inserter(*this));
     }
     vcl_deque(const self& x)  {
-        copy(x.begin(), x.end(), back_inserter(*this));
+        vcl_copy(x.begin(), x.end(), back_inserter(*this));
     }
     self& operator=(const self& x) {
         if (this != &x) {
             if (size() >= x.size()) 
-                erase(copy(x.begin(), x.end(), begin()), end());
+                erase(vcl_copy(x.begin(), x.end(), begin()), end());
             else 
-                copy(x.begin() + size(), x.end(),
-                     inserter(*this, copy(x.begin(), x.begin() + size(),
+                vcl_copy(x.begin() + size(), x.end(),
+                     inserter(*this, vcl_copy(x.begin(), x.begin() + size(),
                                           begin())));
             __stl_debug_do(invalidate_all());
         }
@@ -597,7 +597,7 @@ inline void
 vcl_deque<T, Alloc>::push_front_cleanup(int steps_remaining, bool allocated_at_begin)
 {
     if (steps_remaining == 1) {	// construct succeeded?
-        destroy(start.current);
+      destroy(start.current);
         --length; 
     }
     ++start.current;
@@ -630,7 +630,7 @@ void vcl_deque<T, Alloc>::allocate_at_begin() {
                 map_pointer tmp = map_allocator::allocate((i+1)*2);
                 map_size = (i+1)*2;
                 // need not worry on pointers copy
-                copy(start.node, finish.node + 1, tmp + map_size / 4 + 1);
+                vcl_copy(start.node, finish.node + 1, tmp + map_size / 4 + 1);
                 __deque_data<T>::vcl_map = tmp;
                 map_allocator::deallocate(__deque_data<T>::vcl_map, old_map_size);
                 __deque_data<T>::vcl_map[map_size / 4] = p;
@@ -668,7 +668,7 @@ void vcl_deque<T, Alloc>::allocate_at_end() {
                 size_type old_map_size = map_size;
                 map_pointer tmp = map_allocator::allocate((i + 1) * 2);
                 map_size = (i + 1) * 2;
-                copy(start.node, finish.node + 1, tmp + map_size / 4);
+                vcl_copy(start.node, finish.node + 1, tmp + map_size / 4);
                 map_allocator::deallocate(__deque_data<T>::vcl_map, old_map_size);
                 __deque_data<T>::vcl_map = tmp;
                 __deque_data<T>::vcl_map[map_size / 4 + i + 1] = p;
@@ -720,10 +720,10 @@ vcl_deque<T, Alloc>::insert(iterator position, const T& x) {
 	difference_type index = position - begin();
 	if ((size_type)index < length / 2) {
 	    push_front(*begin());
-	    copy(begin() + 2, begin() + index + 1, begin() + 1); 
+	    vcl_copy(begin() + 2, begin() + index + 1, begin() + 1); 
 	} else {
 	    push_back(*(end() - 1));
-	    copy_backward(begin() + index, end() - 2, end() - 1); 
+	    vcl_copy_backward(begin() + index, end() - 2, end() - 1); 
         }
         *(begin() + index) = x;
         return begin() + index;
@@ -741,12 +741,12 @@ void vcl_deque<T, Alloc>::insert(iterator position, size_type n, const T& x) {
 	    while (m-- > 0) push_front(x);
 	    difference_type i = index;
 	    while (i--) push_front(*(begin() + n - 1));
-	    fill(begin() + n, begin() + n + index, x);
+	    vcl_fill(begin() + n, begin() + n + index, x);
 	} else {
 	    difference_type i = n;
 	    while (i--) push_front(*(begin() + n - 1));
-	    copy(begin() + n + n, begin() + n + index, begin() + n);
-	    fill(begin() + index, begin() + n + index, x);
+	    vcl_copy(begin() + n + n, begin() + n + index, begin() + n);
+	    vcl_fill(begin() + index, begin() + n + index, x);
 	}
     } else {
 	difference_type orig_len = index + remainder;
@@ -755,13 +755,13 @@ void vcl_deque<T, Alloc>::insert(iterator position, size_type n, const T& x) {
 	    while (m-- > 0) push_back(x);
 	    difference_type i = 0;
 	    while (i < remainder) push_back(*(begin() + index + i++));
-	    fill(begin() + index, begin() + orig_len, x);
+	    vcl_fill(begin() + index, begin() + orig_len, x);
 	} else {
 	    difference_type i = 0;
 	    while ((size_type)i < n) push_back(*(begin() + orig_len - n + i++));
-	    copy_backward(begin() + index, begin() + orig_len - n, 
+	    vcl_copy_backward(begin() + index, begin() + orig_len - n, 
 			  begin() + orig_len);
-	    fill(begin() + index, begin() + index + n, x);
+	    vcl_fill(begin() + index, begin() + index + n, x);
 	}
     }
 }
@@ -773,19 +773,19 @@ void vcl_deque<T, Alloc>::insert(iterator position, const T* first, const T* las
     difference_type index = position - begin();
     difference_type remainder = length - index;
     size_type n = 0;
-    distance(first, last, n);
+    vcl_distance(first, last, n);
     if (remainder > index) {
 	if (n > (size_type)index) {
 	    const T* m = last - index;
 	    while (m != first) push_front(*--m);
 	    difference_type i = index;
 	    while (i--) push_front(*(begin() + n - 1));
-	    copy(last - index, last, begin() + n);
+	    vcl_copy(last - index, last, begin() + n);
 	} else {
 	    difference_type i = n;
 	    while (i--) push_front(*(begin() + n - 1));
-	    copy(begin() + n + n, begin() + n + index, begin() + n);
-	    copy(first, last, begin() + index);
+	    vcl_copy(begin() + n + n, begin() + n + index, begin() + n);
+	    vcl_copy(first, last, begin() + index);
 	}
     } else {
 	difference_type orig_len = index + remainder;
@@ -794,13 +794,13 @@ void vcl_deque<T, Alloc>::insert(iterator position, const T* first, const T* las
 	    while (m != last) push_back(*m++);
 	    difference_type i = 0;
 	    while (i < remainder) push_back(*(begin() + index + i++));
-	    copy(first, first + remainder, begin() + index);
+	    vcl_copy(first, first + remainder, begin() + index);
 	} else {
 	    difference_type i = 0;
 	    while ((size_type)i < n) push_back(*(begin() + orig_len - n + i++));
-	    copy_backward(begin() + index, begin() + orig_len - n, 
+	    vcl_copy_backward(begin() + index, begin() + orig_len - n, 
 			  begin() + orig_len);
-	    copy(first, last, begin() + index);
+	    vcl_copy(first, last, begin() + index);
 	}
     }
 }
@@ -812,19 +812,19 @@ void vcl_deque<T, Alloc>::insert(iterator position, const_iterator first, const_
     difference_type index = position - begin();
     difference_type remainder = length - index;
     size_type n = 0;
-    distance(first, last, n);
+    vcl_distance(first, last, n);
     if (remainder > index) {
 	if (n > (size_type)index) {
 	    const_iterator m = last - index;
 	    while (m != first) push_front(*--m);
 	    difference_type i = index;
 	    while (i--) push_front(*(begin() + n - 1));
-	    copy(last - index, last, begin() + n);
+	    vcl_copy(last - index, last, begin() + n);
 	} else {
 	    difference_type i = n;
 	    while (i--) push_front(*(begin() + n - 1));
-	    copy(begin() + n + n, begin() + n + index, begin() + n);
-	    copy(first, last, begin() + index);
+	    vcl_copy(begin() + n + n, begin() + n + index, begin() + n);
+	    vcl_copy(first, last, begin() + index);
 	}
     } else {
 	difference_type orig_len = index + remainder;
@@ -833,13 +833,13 @@ void vcl_deque<T, Alloc>::insert(iterator position, const_iterator first, const_
 	    while (m != last) push_back(*m++);
 	    difference_type i = 0;
 	    while (i < remainder) push_back(*(begin() + index + i++));
-	    copy(first, first + remainder, begin() + index);
+	    vcl_copy(first, first + remainder, begin() + index);
 	} else {
 	    difference_type i = 0;
 	    while ((size_type)i < n) push_back(*(begin() + orig_len - n + i++));
-	    copy_backward(begin() + index, begin() + orig_len - n, 
+	    vcl_copy_backward(begin() + index, begin() + orig_len - n, 
 			  begin() + orig_len);
-	    copy(first, last, begin() + index);
+	    vcl_copy(first, last, begin() + index);
 	}
     }
 }
@@ -848,10 +848,10 @@ template <class T , class Alloc>
 void vcl_deque<T, Alloc>::erase(iterator position) {
     __stl_debug_check(__check_range(position,begin(), end()-1));    
     if (end() - position > position - begin()) {
-        copy_backward(begin(), position, position + 1);
+        vcl_copy_backward(begin(), position, position + 1);
         pop_front();
     } else {
-        copy(position + 1, end(), position);
+        vcl_copy(position + 1, end(), position);
         pop_back();
     }
 }
@@ -861,10 +861,10 @@ void vcl_deque<T, Alloc>::erase(iterator first, iterator last) {
     __stl_debug_check(__check_range(first,last, start, finish));    
     difference_type n = last - first;
     if (end() - last > first - begin()) {
-        copy_backward(begin(), first, last);
+        vcl_copy_backward(begin(), first, last);
         while(n-- > 0) pop_front();
     } else   {
-        copy(last, end(), first);
+        vcl_copy(last, end(), first);
         while(n-- > 0) pop_back();
     }
 }
@@ -929,7 +929,7 @@ bool operator<(const __deque__<T, Alloc>& x, const __deque__<T, Alloc>& y) {
 
 # if defined (__STL_CLASS_PARTIAL_SPECIALIZATION )
 template <class T, class Alloc>
-inline void swap(__deque__<T,Alloc>& a, __deque__<T,Alloc>& b) { a.swap(b); }
+inline void vcl_swap(__deque__<T,Alloc>& a, __deque__<T,Alloc>& b) { a.swap(b); }
 # endif
 
 // KYM: moved to vcl/vcl_deque.h

@@ -37,7 +37,7 @@
  */
 
 #ifndef vcl_emulation_map_h
-# define vcl_emulation_map_h
+#define vcl_emulation_map_h
 
 #include <vcl/emulation/vcl_tree.h>
 
@@ -198,8 +198,8 @@ inline bool operator<(const __map__<Key, T, Compare, Alloc>& x,
 
 # if defined (__STL_CLASS_PARTIAL_SPECIALIZATION )
 template <class Key, class T, class Compare, class Alloc>
-inline void swap(__map__<Key, T, Compare, Alloc>& a,
-                 __map__<Key, T, Compare, Alloc>& b) { a.swap(b); }
+inline void vcl_swap(__map__<Key, T, Compare, Alloc>& a,
+		     __map__<Key, T, Compare, Alloc>& b) { a.swap(b); }
 # endif
 
 // provide a way to access full functionality 

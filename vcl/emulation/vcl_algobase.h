@@ -64,12 +64,12 @@
 # endif
 
 template <class T>
-inline void swap(T& a, T& b) { T tmp = a; a = b; b = tmp; }
+inline void vcl_swap(T& a, T& b) { T tmp = a; a = b; b = tmp; }
 
 template <class ForwardIterator1, class ForwardIterator2, class T>
 inline void __iter_swap(const ForwardIterator1& a, const ForwardIterator2& b, T*)
 {
-  swap((T&)*a,(T&)*b);
+  vcl_swap((T&)*a,(T&)*b);
 }
 
 template <class ForwardIterator1, class ForwardIterator2>
@@ -81,17 +81,17 @@ inline void iter_swap(const ForwardIterator1& a, const ForwardIterator2& b)
 # if !( defined ( __STL_NO_NAMESPACES ) && defined ( __MINMAX_DEFINED ) )
 # define __MINMAX_DEFINED
 template <class T>
-inline const T& min(const T& a, const T& b) { return b < a ? b : a; }
+inline const T& vcl_min(const T& a, const T& b) { return b < a ? b : a; }
 
 template <class T>
-inline const T& max(const T& a, const T& b) { return  a < b ? b : a; }
+inline const T& vcl_max(const T& a, const T& b) { return  a < b ? b : a; }
 # endif
 
 template <class T, class Compare>
-inline const T& min(const T& a, const T& b, Compare comp) { return comp(b, a) ? b : a; }
+inline const T& vcl_min(const T& a, const T& b, Compare comp) { return comp(b, a) ? b : a; }
 
 template <class T, class Compare>
-inline const T& max(const T& a, const T& b, Compare comp) { return comp(a, b) ? b : a; }
+inline const T& vcl_max(const T& a, const T& b, Compare comp) { return comp(a, b) ? b : a; }
 
 template <class InputIterator, class Distance>
 INLINE_LOOP void __distance(InputIterator first, const InputIterator& last, 
@@ -125,7 +125,7 @@ inline void __distance(const RandomAccessIterator& first,
 }
 
 template <class InputIterator, class Distance>
-inline void distance(InputIterator first, InputIterator last, Distance& n)
+inline void vcl_distance(InputIterator first, InputIterator last, Distance& n)
 {
   __distance(first, last, n, iterator_category(first));
 }
@@ -157,17 +157,18 @@ inline void __advance(RandomAccessIterator& i, Distance n,
 }
 
 template <class InputIterator, class Distance>
-inline void advance(InputIterator& i, Distance n)
+inline void vcl_advance(InputIterator& i, Distance n)
 {
   __advance(i, n, iterator_category(i));
 }
+
 #ifdef _MSC_VER
 #if _MSC_VER == 1100
 #define VC50_DESTRUCTOR_BUG
 #endif
 #endif
 template <class T>
-inline void destroy(T* pointer)
+inline void vcl_destroy(T* pointer)
 {
 // horrible VC50 compiler will leak with stl containers
 // of objects, upgrade to VC60
@@ -178,15 +179,15 @@ inline void destroy(T* pointer)
   pointer->~T();
 #endif
 #ifdef __STL_SHRED_BYTE
-  fill_n((char*)pointer, sizeof(T), STL_SHRED_BYTE);
+  vcl_fill_n((char*)pointer, sizeof(T), STL_SHRED_BYTE);
 #endif
 }
 
 template <class T1, class T2>
-inline void construct(T1* p, const T2& value)
+inline void vcl_construct(T1* p, const T2& value)
 {
 #ifdef __STL_SHRED_BYTE
-  fill_n((char*)p, sizeof(T1), STL_SHRED_BYTE);
+  vcl_fill_n((char*)p, sizeof(T1), STL_SHRED_BYTE);
 #endif
   new (p) T1(value);
 }
@@ -195,19 +196,19 @@ template <class T>
 inline void __default_construct(T* p)
 {
 #ifdef __STL_SHRED_BYTE
-  fill_n((char*)p, sizeof(T), STL_SHRED_BYTE);
+  vcl_fill_n((char*)p, sizeof(T), STL_SHRED_BYTE);
 #endif
   new (p) T();
 }
 
 template <class ForwardIterator>
-INLINE_LOOP void destroy(ForwardIterator first, ForwardIterator last)
+INLINE_LOOP void vcl_destroy(ForwardIterator first, ForwardIterator last)
 {
-  while (first != last) { destroy(&*first); ++first; }
+  while (first != last) { vcl_destroy(&*first); ++first; }
 }
 
 template <class InputIterator, class ForwardIterator>
-INLINE_LOOP ForwardIterator uninitialized_copy(InputIterator first, 
+INLINE_LOOP ForwardIterator vcl_uninitialized_copy(InputIterator first, 
                                                InputIterator last,
                                                ForwardIterator result)
 {
@@ -218,12 +219,12 @@ INLINE_LOOP ForwardIterator uninitialized_copy(InputIterator first,
 	IUEg__TRY
 	{
     for ( ;first != last; ++result, ++first )
-        construct(&*result, *first);
+        vcl_construct(&*result, *first);
 	}
 #  if defined ( __STL_USE_EXCEPTIONS )
 	catch(...)
 	{
-		destroy( resultBase, result );
+		vcl_destroy( resultBase, result );
 		throw;
 	}
 #  endif
@@ -232,7 +233,7 @@ INLINE_LOOP ForwardIterator uninitialized_copy(InputIterator first,
 
 template <class ForwardIterator, class T>
 INLINE_LOOP void 
-uninitialized_fill(ForwardIterator first, ForwardIterator last, 
+vcl_uninitialized_fill(ForwardIterator first, ForwardIterator last, 
                    const T& x)
 {
     __stl_debug_check(__check_range(first, last));
@@ -242,19 +243,19 @@ uninitialized_fill(ForwardIterator first, ForwardIterator last,
     IUEg__TRY
     {
     for ( ;first != last; ++first )
-        construct( &*first, x );
+        vcl_construct( &*first, x );
     }
 #  if defined ( __STL_USE_EXCEPTIONS )
    catch(...)
    {
-    	destroy(saveFirst, first);
+    	vcl_destroy(saveFirst, first);
     	throw;
     }
 #  endif
 }
 
 template <class ForwardIterator, class Size, class T>
-INLINE_LOOP ForwardIterator uninitialized_fill_n(ForwardIterator first, Size n,
+INLINE_LOOP ForwardIterator vcl_uninitialized_fill_n(ForwardIterator first, Size n,
                                                  const T& x)
 {
 #  if defined ( __STL_USE_EXCEPTIONS )
@@ -262,12 +263,12 @@ INLINE_LOOP ForwardIterator uninitialized_fill_n(ForwardIterator first, Size n,
 #  endif	
     IUEg__TRY
     {
-    while (n--) { construct(&*first, x); ++first; }
+    while (n--) { vcl_construct(&*first, x); ++first; }
     }
 #  if defined ( __STL_USE_EXCEPTIONS )
     catch(...)
     {
-    	destroy(saveFirst, first);
+    	vcl_destroy(saveFirst, first);
     	throw;
     }
 #  endif
@@ -291,7 +292,7 @@ __default_initialize(ForwardIterator first, ForwardIterator last)
 #  if defined ( __STL_USE_EXCEPTIONS )
    catch(...)
    {
-    	destroy(saveFirst, first);
+    	vcl_destroy(saveFirst, first);
     	throw;
     }
 #  endif
@@ -310,7 +311,7 @@ INLINE_LOOP ForwardIterator __default_initialize_n(ForwardIterator first, Size n
 #  if defined ( __STL_USE_EXCEPTIONS )
     catch(...)
     {
-    	destroy(saveFirst, first);
+    	vcl_destroy(saveFirst, first);
     	throw;
     }
 #  endif
@@ -359,7 +360,7 @@ __copy(RandomAccessIterator first, RandomAccessIterator last,
 }
 
 template <class InputIterator, class OutputIterator>
-inline OutputIterator copy(InputIterator first, InputIterator last,
+inline OutputIterator vcl_copy(InputIterator first, InputIterator last,
                            OutputIterator result)
 {
   __stl_debug_check(__check_range(first, last));
@@ -367,7 +368,7 @@ inline OutputIterator copy(InputIterator first, InputIterator last,
 }
 
 template <class BidirectionalIterator1, class BidirectionalIterator2>
-INLINE_LOOP BidirectionalIterator2 copy_backward(BidirectionalIterator1 first, 
+INLINE_LOOP BidirectionalIterator2 vcl_copy_backward(BidirectionalIterator1 first, 
 				     BidirectionalIterator1 last, 
 				     BidirectionalIterator2 result)
 {
@@ -378,7 +379,7 @@ INLINE_LOOP BidirectionalIterator2 copy_backward(BidirectionalIterator1 first,
 
 template <class ForwardIterator, class T>
 INLINE_LOOP void 
-fill(ForwardIterator first, ForwardIterator last, const T& value)
+vcl_fill(ForwardIterator first, ForwardIterator last, const T& value)
 {
   __stl_debug_check(__check_range(first, last));
   for ( ; first != last; ++first)
@@ -387,7 +388,7 @@ fill(ForwardIterator first, ForwardIterator last, const T& value)
 
 template <class OutputIterator, class Size, class T>
 INLINE_LOOP OutputIterator 
-fill_n(OutputIterator first, Size n, const T& value)
+vcl_fill_n(OutputIterator first, Size n, const T& value)
 {
   for ( ; n > 0; --n, ++first)
     *first = value;
@@ -416,7 +417,7 @@ INLINE_LOOP vcl_pair<InputIterator1, InputIterator2> mismatch(InputIterator1 fir
 }
 
 template <class InputIterator1, class InputIterator2>
-INLINE_LOOP bool equal(InputIterator1 first1, InputIterator1 last1,
+INLINE_LOOP bool vcl_equal(InputIterator1 first1, InputIterator1 last1,
 		  InputIterator2 first2)
 {
   __stl_debug_check(__check_range(first1, last1));
@@ -427,7 +428,7 @@ INLINE_LOOP bool equal(InputIterator1 first1, InputIterator1 last1,
 }
 
 template <class InputIterator1, class InputIterator2, class BinaryPredicate>
-INLINE_LOOP bool equal(InputIterator1 first1, InputIterator1 last1,
+INLINE_LOOP bool vcl_equal(InputIterator1 first1, InputIterator1 last1,
 		  InputIterator2 first2, BinaryPredicate binary_pred)
 {
   __stl_debug_check(__check_range(first1, last1));
@@ -439,7 +440,7 @@ INLINE_LOOP bool equal(InputIterator1 first1, InputIterator1 last1,
 
 template <class InputIterator1, class InputIterator2>
 INLINE_LOOP bool 
-lexicographical_compare(InputIterator1 first1, InputIterator1 last1,
+vcl_lexicographical_compare(InputIterator1 first1, InputIterator1 last1,
                         InputIterator2 first2, InputIterator2 last2)
 {
   __stl_debug_check(__check_range(first1, last1));
@@ -454,7 +455,7 @@ lexicographical_compare(InputIterator1 first1, InputIterator1 last1,
 
 template <class InputIterator1, class InputIterator2, class Compare>
 INLINE_LOOP bool 
-lexicographical_compare(InputIterator1 first1, InputIterator1 last1,
+vcl_lexicographical_compare(InputIterator1 first1, InputIterator1 last1,
                         InputIterator2 first2, InputIterator2 last2,
 			Compare comp)
 {
@@ -469,27 +470,27 @@ lexicographical_compare(InputIterator1 first1, InputIterator1 last1,
 }
 
 inline bool 
-lexicographical_compare(unsigned char* first1, unsigned char* last1,
+vcl_lexicographical_compare(unsigned char* first1, unsigned char* last1,
                         unsigned char* first2, unsigned char* last2)
 {
   __stl_debug_check(__check_range(first1, last1));
   __stl_debug_check(__check_range(first2, last2));
   size_t len1 = last1 - first1;  // awf removed const
   size_t len2 = last2 - first2;
-  const int result = memcmp(first1, first2, min(len1, len2));
+  const int result = memcmp(first1, first2, vcl_min(len1, len2));
   return result != 0 ? result < 0 : len1 < len2;
 }
 
-inline bool lexicographical_compare(char* first1, char* last1,
+inline bool vcl_lexicographical_compare(char* first1, char* last1,
                                     char* first2, char* last2)
 {
   __stl_debug_check(__check_range(first1, last1));
   __stl_debug_check(__check_range(first2, last2));
 #if CHAR_MAX == SCHAR_MAX
-  return lexicographical_compare((signed char*) first1, (signed char*) last1,
+  return vcl_lexicographical_compare((signed char*) first1, (signed char*) last1,
                                  (signed char*) first2, (signed char*) last2);
 #else
-  return lexicographical_compare((unsigned char*) first1,
+  return vcl_lexicographical_compare((unsigned char*) first1,
                                  (unsigned char*) last1,
                                  (unsigned char*) first2,
                                  (unsigned char*) last2);

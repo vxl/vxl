@@ -52,6 +52,7 @@
 #ifndef vcl_emulation_list_h
 #define vcl_emulation_list_h
 
+#include <vcl/vcl_new.h>
 #include <vcl/vcl_cstddef.h>
 #include <vcl/emulation/vcl_algobase.h>
 #include <vcl/emulation/vcl_iterator.h>
@@ -247,7 +248,7 @@ void __list_base<T, Alloc>::clear()
   while (cur != node) {
 	link_type tmp = cur;
 	cur = (link_type) cur->next;
-	destroy(&(tmp->data));
+	vcl_destroy(&(tmp->data));
 	put_node(tmp);
   }
   __stl_debug_do(invalidate_all());
@@ -284,7 +285,7 @@ protected:
     link_type make_node(const T& x) {
         link_type tmp = get_node();
         IUEg__TRY {
-            construct(&((*tmp).data), x);
+            vcl_construct(&((*tmp).data), x);
         } 
 #  if defined ( __STL_USE_EXCEPTIONS )
         catch(...) {
@@ -313,8 +314,8 @@ public:
     const_reference back() const { return *(--end()); }
     void swap(vcl_list<T, Alloc>& x) {
         __stl_debug_do(iter_list.swap_owners(x.iter_list));
-	__STL_NAMESPACE::swap(node, x.node);
-	__STL_NAMESPACE::swap(length, x.length);
+	__STL_NAMESPACE::vcl_swap(node, x.node);
+	__STL_NAMESPACE::vcl_swap(length, x.length);
     }
     iterator insert(iterator position, const T& x) {
         __stl_debug_check(__check_if_owner(node,position));
@@ -338,7 +339,7 @@ public:
         __stl_verbose_assert(position.node!=node, __STL_MSG_ERASE_PAST_THE_END);
 	(*(link_type((*position.node).prev))).next = (*position.node).next;
 	(*(link_type((*position.node).next))).prev = (*position.node).prev;
-	destroy(&(*position.node).data);
+	vcl_destroy(&(*position.node).data);
 	put_node(position.node);
 	--length;
         __stl_debug_do(invalidate_iterator(position));
@@ -418,7 +419,7 @@ public:
 	if (first != last) {
 	    if (&x != this) {
 		difference_type n = 0;
-	    	distance(first, last, n);
+	    	vcl_distance(first, last, n);
 	    	x.length -= n;
 	    	length += n;
 	    }
@@ -467,11 +468,11 @@ void vcl_list<T, Alloc>::resize(size_type new_size, const T& x)
     iterator f;
     if (new_size < size() / 2) {
       f = begin();
-      advance(f, new_size);
+      vcl_advance(f, new_size);
     }
     else {
       f = end();
-      advance(f, difference_type(size()) - difference_type(new_size));
+      vcl_advance(f, difference_type(size()) - difference_type(new_size));
     }
     erase(f, end());
   }
@@ -643,7 +644,7 @@ inline bool operator<(const __list__<T, Alloc>& x, const __list__<T, Alloc>& y) 
 
 # if defined (__STL_CLASS_PARTIAL_SPECIALIZATION )
 template <class T, class Alloc>
-inline void swap(__list__<T,Alloc>& a, __list__<T,Alloc>& b) { a.swap(b); }
+inline void vcl_swap(__list__<T,Alloc>& a, __list__<T,Alloc>& b) { a.swap(b); }
 # endif
 
 //KYM: moved to vcl/vcl_list.h

@@ -52,6 +52,7 @@
 #ifndef vcl_emulation_vector_h
 #define vcl_emulation_vector_h
 
+#include <vcl/vcl_new.h>
 #include <vcl/vcl_cstddef.h>
 #include <vcl/emulation/vcl_algobase.h>
 #include <vcl/emulation/vcl_alloc.h>
@@ -90,7 +91,7 @@ public:
     }
 
     ~__vector_base() { 
-        destroy(start, finish);
+        vcl_destroy(start, finish);
         deallocate();
         __stl_debug_do(invalidate());
     }
@@ -166,21 +167,21 @@ public:
     }
     vcl_vector() {}
     vcl_vector(size_type n, const T& value) : super(n) {
-        finish = uninitialized_fill_n(start, n, value);
+        finish = vcl_uninitialized_fill_n(start, n, value);
     }
     explicit vcl_vector(size_type n) : super(n) {
         finish = __default_initialize_n(start, n);
     }
     vcl_vector(const self& x) : super(x.end_() - x.begin_()) {
-        finish = uninitialized_copy(x.begin_(), x.end_(), start);
+        finish = vcl_uninitialized_copy(x.begin_(), x.end_(), start);
     }
     vcl_vector(const_iterator first, const_iterator last) {
         __stl_debug_check(__check_range(first,last));
         size_type n = 0;
-        distance(__ptr(first), __ptr(last), n);
+        vcl_distance(__ptr(first), __ptr(last), n);
         start = finish = data_allocator::allocate(n);
         end_of_storage = start+n;
-        finish = uninitialized_copy(__ptr(first), __ptr(last), start);        
+        finish = vcl_uninitialized_copy(__ptr(first), __ptr(last), start);        
     }
     ~vcl_vector() {}
     IUEi_STL_INLINE self& operator=(const self& x);
@@ -189,8 +190,8 @@ public:
         if (capacity() < n) {
             pointer tmp = data_allocator::allocate(n);
             IUEg__TRY {
-                uninitialized_copy(begin_(), end_(), tmp);
-                destroy(start, finish);
+                vcl_uninitialized_copy(begin_(), end_(), tmp);
+                vcl_destroy(start, finish);
                 deallocate();
                 finish = tmp + old_size;
                 start = tmp;
@@ -222,22 +223,22 @@ public:
     }
     void push_back(const T& x) {
         if (finish != end_of_storage) {
-            construct(finish, x);
+            vcl_construct(finish, x);
             ++finish;
         } else
             insert_aux(end_(), x);
     }
     void swap(self& x) {
         __stl_debug_do(swap_owners(x));
-        __STL_NAMESPACE::swap(start, x.start);
-        __STL_NAMESPACE::swap(finish, x.finish);
-        __STL_NAMESPACE::swap(end_of_storage, x.end_of_storage);
+        __STL_NAMESPACE::vcl_swap(start, x.start);
+        __STL_NAMESPACE::vcl_swap(finish, x.finish);
+        __STL_NAMESPACE::vcl_swap(end_of_storage, x.end_of_storage);
     }
     iterator insert(iterator position, const T& x) {
         __stl_debug_check(__check_if_owner(this,position));
         size_type n = __ptr(position) - begin_();
         if (finish != end_of_storage && __ptr(position) == end_()) {
-            construct(finish, x);
+            vcl_construct(finish, x);
             ++finish;
         } else
             insert_aux(__ptr(position), x);
@@ -250,22 +251,22 @@ public:
     void pop_back() {
         __stl_verbose_assert(!empty(), __STL_MSG_EMPTY_CONTAINER);
         --finish;
-        destroy(finish);
+        vcl_destroy(finish);
     }
     void erase(iterator position) {
         __stl_debug_check(__check_if_owner(this,position));
         __stl_verbose_assert(__ptr(position)!=finish,__STL_MSG_ERASE_PAST_THE_END);
         if (__ptr(position) + 1 != end_())
-            copy(__ptr(position) + 1, end_(), __ptr(position));
+            vcl_copy(__ptr(position) + 1, end_(), __ptr(position));
         __stl_debug_do(invalidate(__ptr(position),finish));
         --finish;
-        destroy(finish);
+        vcl_destroy(finish);
     }
     void erase(iterator first, iterator last) {
         __stl_debug_check(__check_if_owner(this,first)
                           &&__check_range(first,last));
-        pointer i = copy(__ptr(last), end_(), __ptr(first));
-        destroy(i, finish);
+        pointer i = vcl_copy(__ptr(last), end_(), __ptr(first));
+        vcl_destroy(i, finish);
         __stl_debug_do(invalidate(__ptr(first),finish));
         finish = finish - (__ptr(last) - __ptr(first)); 
     }
@@ -284,18 +285,18 @@ vcl_vector<T, Alloc>& vcl_vector<T, Alloc>::operator=(const vcl_vector<T, Alloc>
     if (&x == this) return *this;
     __stl_debug_do(invalidate_all());
     if (x.size() > capacity()) {
-        destroy(start, finish);
+        vcl_destroy(start, finish);
         deallocate();
         start = finish = 0;
         start = finish = data_allocator::allocate(x.size());
         end_of_storage = start + (x.size());
-        uninitialized_copy(x.begin_(), x.end_(), start);
+        vcl_uninitialized_copy(x.begin_(), x.end_(), start);
     } else if (size() >= x.size()) {
-        pointer i = copy(x.begin_(), x.end_(), begin_());
-        destroy(i, finish);
+        pointer i = vcl_copy(x.begin_(), x.end_(), begin_());
+        vcl_destroy(i, finish);
     } else {
-        copy(x.begin_(), x.begin_() + size(), begin_());
-        uninitialized_copy(x.begin_() + size(), x.end_(), begin_() + size());
+        vcl_copy(x.begin_(), x.begin_() + size(), begin_());
+        vcl_uninitialized_copy(x.begin_() + size(), x.end_(), begin_() + size());
     }
     finish = begin_() + x.size();
     return *this;
@@ -304,10 +305,10 @@ vcl_vector<T, Alloc>& vcl_vector<T, Alloc>::operator=(const vcl_vector<T, Alloc>
 template <class T, class Alloc>
 void vcl_vector<T, Alloc>::insert_aux(__pointer__ position, const T& x) {
     if (finish != end_of_storage) {
-        construct(finish, *(finish - 1));
+        vcl_construct(finish, *(finish - 1));
         ++finish;
         T x_copy = x;
-        copy_backward(position, finish - 2, finish-1);
+        vcl_copy_backward(position, finish - 2, finish-1);
         *position = x_copy;
     } else {
         const size_type old_size = size();
@@ -315,11 +316,11 @@ void vcl_vector<T, Alloc>::insert_aux(__pointer__ position, const T& x) {
         pointer tmp = data_allocator::allocate(len);
         pointer tmp_end = tmp;
         IUEg__TRY {
-            tmp_end = uninitialized_copy(begin_(), position, tmp);
-            construct(tmp_end, x);
+            tmp_end = vcl_uninitialized_copy(begin_(), position, tmp);
+            vcl_construct(tmp_end, x);
             ++tmp_end;
-            tmp_end = uninitialized_copy(position, end_(), tmp_end);
-            destroy(begin_(), end_());
+            tmp_end = vcl_uninitialized_copy(position, end_(), tmp_end);
+            vcl_destroy(begin_(), end_());
             deallocate();
             end_of_storage = tmp + len;
             finish = tmp_end;
@@ -327,7 +328,7 @@ void vcl_vector<T, Alloc>::insert_aux(__pointer__ position, const T& x) {
         }
 # if defined (__STL_USE_EXCEPTIONS)
         catch(...) {
-            destroy(tmp, tmp_end);
+            vcl_destroy(tmp, tmp_end);
             data_allocator::deallocate(tmp, len);
             throw;
         }
@@ -342,28 +343,28 @@ void vcl_vector<T, Alloc>::insert(__iterator__ position, __size_type__ n, const 
         pointer old_end = end_();
         size_type distance_to_end = end_() - position;
         if (distance_to_end > n) {
-            uninitialized_copy(end_() - n, end_(), end_());
+            vcl_uninitialized_copy(end_() - n, end_(), end_());
             finish += n;
-            copy_backward(position, old_end - n, old_end);
-            fill(position, position + n, x);
+            vcl_copy_backward(position, old_end - n, old_end);
+            vcl_fill(position, position + n, x);
         } else {
-            uninitialized_fill_n(end_(), n - distance_to_end, x);
+            vcl_uninitialized_fill_n(end_(), n - distance_to_end, x);
             finish += n - distance_to_end;
-            uninitialized_copy(position, old_end, end());
+            vcl_uninitialized_copy(position, old_end, end());
             finish += distance_to_end;
-            fill(position, old_end, x);
+            vcl_fill(position, old_end, x);
         }
         __stl_debug_do(invalidate(position,old_end));
     } else {
         const size_type old_size = size();        
-        const size_type len = old_size + max(old_size, n);
+        const size_type len = old_size + vcl_max(old_size, n);
         pointer tmp = data_allocator::allocate(len);
         pointer tmp_end = tmp;
         IUEg__TRY {
-            tmp_end = uninitialized_copy(begin_(), position, tmp);
-            tmp_end = uninitialized_fill_n(tmp_end, n, x);
-            tmp_end = uninitialized_copy(position, end_(), tmp_end);
-            destroy(begin_(), end_());
+            tmp_end = vcl_uninitialized_copy(begin_(), position, tmp);
+            tmp_end = vcl_uninitialized_fill_n(tmp_end, n, x);
+            tmp_end = vcl_uninitialized_copy(position, end_(), tmp_end);
+            vcl_destroy(begin_(), end_());
             deallocate();
             end_of_storage = tmp + len;
             finish = tmp_end;
@@ -371,7 +372,7 @@ void vcl_vector<T, Alloc>::insert(__iterator__ position, __size_type__ n, const 
         } 
 # if defined (__STL_USE_EXCEPTIONS)
         catch(...) {
-            destroy(tmp, tmp_end);
+            vcl_destroy(tmp, tmp_end);
             data_allocator::deallocate(tmp, len);
             throw;
         }
@@ -384,33 +385,33 @@ void vcl_vector<T, Alloc>::insert(__iterator__ position, __const_iterator__ firs
                               __const_iterator__ last) {
     if (first == last) return;
     size_type n = 0;
-    distance(first, last, n);
+    vcl_distance(first, last, n);
     if (end_of_storage - finish >= (difference_type)n) {
         pointer old_end = end_();
         size_type distance_to_end = end_() - position;
         if (end_() - position > (difference_type)n) {
-            uninitialized_copy(end_() - n, end_(), end_());
+            vcl_uninitialized_copy(end_() - n, end_(), end_());
             finish += n;
-            copy_backward(position, old_end - n, old_end);
-            copy(first, last, position);
+            vcl_copy_backward(position, old_end - n, old_end);
+            vcl_copy(first, last, position);
         } else {
-            uninitialized_copy(first + distance_to_end, last, end_());
+            vcl_uninitialized_copy(first + distance_to_end, last, end_());
             finish += n - distance_to_end;
-            uninitialized_copy(position, old_end, end_());
+            vcl_uninitialized_copy(position, old_end, end_());
             finish += distance_to_end;
-            copy(first, first + distance_to_end, position);
+            vcl_copy(first, first + distance_to_end, position);
         }
         __stl_debug_do(invalidate(position,old_end));
     } else {
         const size_type old_size = size();
-        const size_type len = old_size + max(old_size, n);
+        const size_type len = old_size + vcl_max(old_size, n);
         pointer tmp = data_allocator::allocate(len);
         pointer tmp_end = tmp;
         IUEg__TRY {
-            tmp_end = uninitialized_copy(begin_(), position, tmp);
-            tmp_end = uninitialized_copy(first, last, tmp_end);
-            tmp_end = uninitialized_copy(position, end_(), tmp_end);
-            destroy(begin_(), end_());
+            tmp_end = vcl_uninitialized_copy(begin_(), position, tmp);
+            tmp_end = vcl_uninitialized_copy(first, last, tmp_end);
+            tmp_end = vcl_uninitialized_copy(position, end_(), tmp_end);
+            vcl_destroy(begin_(), end_());
             deallocate();
             end_of_storage = tmp + len;
             finish = tmp_end;
@@ -418,7 +419,7 @@ void vcl_vector<T, Alloc>::insert(__iterator__ position, __const_iterator__ firs
         }
 # if defined (__STL_USE_EXCEPTIONS)
         catch(...) {
-            destroy(tmp, tmp_end);
+            vcl_destroy(tmp, tmp_end);
             data_allocator::deallocate(tmp, len);
             throw;
         }
@@ -484,7 +485,7 @@ template <class T, class Alloc>
 
 # if defined (__STL_CLASS_PARTIAL_SPECIALIZATION )
 template <class T, class Alloc>
-    inline void swap(__vector__<T,Alloc>& a, __vector__<T,Alloc>& b) { a.swap(b); }
+    inline void vcl_swap(__vector__<T,Alloc>& a, __vector__<T,Alloc>& b) { a.swap(b); }
 # endif
 
 // KYM: don't do this, this is already defined in ../vcl_vector.h

@@ -1,3 +1,7 @@
+#ifndef vcl_emulation_functional_h
+#define vcl_emulation_functional_h
+#define FUNCTION_H // why?
+
 /*
  *
  * Copyright (c) 1994
@@ -36,14 +40,11 @@
  *
  */
 
-#ifndef vcl_emulation_function_h
-#define vcl_emulation_function_h
-#define FUNCTION_H
-
+#include <vcl/vcl_compiler.h> // needed for VCL_DFL_TMPL_PARAM_STLDECL
 #include <vcl/vcl_cstddef.h>
 #include <vcl/emulation/vcl_bool.h>
-#include <vcl/vcl_compiler.h> // needed for VCL_DFL_TMPL_PARAM_STLDECL
 
+//namespace std { namespace rel_ops {
 template <class T>
 inline bool operator!=(const T& x, const T& y) { return !(x == y); }
 
@@ -55,6 +56,7 @@ inline bool operator<=(const T& x, const T& y) { return !(y < x); }
 
 template <class T>
 inline bool operator>=(const T& x, const T& y) { return !(x < y); }
+//} }
 
 template <class Arg, class Result>
 struct vcl_unary_function
@@ -65,9 +67,9 @@ struct vcl_unary_function
 
 template <class Arg1, class Arg2, class Result>
 struct vcl_binary_function {
-    typedef Arg1 first_argument_type;
-    typedef Arg2 second_argument_type;
-    typedef Result result_type;
+  typedef Arg1 first_argument_type;
+  typedef Arg2 second_argument_type;
+  typedef Result result_type;
 };      
 
 template <class T>
@@ -156,22 +158,22 @@ struct vcl_logical_not : public vcl_unary_function<T, bool> {
 // of the form 'name1::name2', where name1 is itself a type parameter.
 
 template <class Operation>
-struct __unary_fun_aux : private Operation
+struct vcl__unary_fun_aux : private Operation
 {
 	typedef typename Operation::argument_type argument_type;
 	typedef typename Operation::result_type result_type;
 };
 
 template <class Operation>
-struct __binary_fun_aux : private Operation
+struct vcl__binary_fun_aux : private Operation
 {
 	typedef typename Operation::first_argument_type first_argument_type;
 	typedef typename Operation::second_argument_type second_argument_type;
 	typedef typename Operation::result_type result_type;
 };
 
-#  define __UNARY_ARG(Operation,type)  __unary_fun_aux<Operation>::type
-#  define __BINARY_ARG(Operation,type)  __binary_fun_aux<Operation>::type
+#  define __UNARY_ARG(Operation,type)  vcl__unary_fun_aux<Operation>::type
+#  define __BINARY_ARG(Operation,type)  vcl__binary_fun_aux<Operation>::type
 # else
 #  define __UNARY_ARG(Operation,type)  Operation::type
 #  define __BINARY_ARG(Operation,type) Operation::type
@@ -426,14 +428,14 @@ inline vcl_constant_binary_fun<Result
 
 // Note: this code assumes that T is 32-bit unsigned integer.
 template < class T >
-class __subtractive_rng_t : public vcl_unary_function<T, T> {
+class vcl__subtractive_rng_t : public vcl_unary_function<T, T> {
 private:
   T table[55];
   size_t index1;
   size_t index2;
 public:
-  __subtractive_rng_t(T seed) { initialize(seed); }
-  __subtractive_rng_t() { initialize(161803398u); }
+  vcl__subtractive_rng_t(T seed) { initialize(seed); }
+  vcl__subtractive_rng_t() { initialize(161803398u); }
 
   T operator()(T limit) {
     index1 = (index1 + 1) % 55;
@@ -445,7 +447,7 @@ public:
 };
 
 template <class T>
-void __subtractive_rng_t<T>::initialize(T seed) {
+void vcl__subtractive_rng_t<T>::initialize(T seed) {
     T k = 1;
     table[54] = seed;
     size_t i;
@@ -463,7 +465,7 @@ void __subtractive_rng_t<T>::initialize(T seed) {
     index2 = 31;
   }
 
-typedef __subtractive_rng_t<__STL_UINT32_T> subtractive_rng;
+typedef vcl__subtractive_rng_t<__STL_UINT32_T> vcl_subtractive_rng;
 
 
 // 20.3.8  Adaptors for pointers to members [lib.member.pointer.adaptors]       
@@ -556,4 +558,4 @@ mem_fun1_ref(Result (Class::*ptr)(Arg)) {
 
 # endif
 
-#endif // vcl_emulation_function_h
+#endif

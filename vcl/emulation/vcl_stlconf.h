@@ -1,6 +1,7 @@
-// TargetJr and the IUE use abbreviated STL class names:
-# define  __STL_USE_ABBREVS 1
 #define VCL_EMULATION_STLCONF_H_INCLUDED
+
+// TargetJr and the IUE use abbreviated STL class names:
+#define  __STL_USE_ABBREVS 1
 
 #if defined(__sgi) && !defined(__GNUC__)
 #   if (_COMPILER_VERSION >= 700)

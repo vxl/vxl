@@ -78,8 +78,8 @@ public:
     }
     // CD2 requires that
     static T* allocate(size_t n, const void* ) { return (T*)super::allocate(n * sizeof(T));}
-    void construct(pointer p, const value_type& val) { construct(p, val); }
-    void destroy(pointer p) { destroy(p); }
+    void construct(pointer p, const value_type& val) { vcl_construct(p, val); }
+    void destroy(pointer p) { vcl_destroy(p); }
 };
 
 template<class T1, class T2> inline

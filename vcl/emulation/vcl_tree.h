@@ -404,7 +404,7 @@ __rb_tree_rebalance_for_erase(__rb_tree_node_base* z,
     else 
       z->parent->right = y;
     y->parent = z->parent;
-    __STL_NAMESPACE::swap(y->color, z->color);
+    __STL_NAMESPACE::vcl_swap(y->color, z->color);
     y = z;
     // y now points to node to be actually deleted
   }
@@ -557,7 +557,7 @@ protected:
     static link_type __new_node(const value_type& v) {
         link_type z = get_node();
         IUEg__TRY {
-        construct(&(value(z)), v);
+        vcl_construct(&(value(z)), v);
         left(z) = 0;
         right(z) = 0;
         }
@@ -652,9 +652,9 @@ public:
 
     void swap(self& t) {
         __stl_debug_do(iter_list.swap_owners(t.iter_list));
-        __STL_NAMESPACE::swap(header, t.header);
-        __STL_NAMESPACE::swap(node_count, t.node_count);
-        __STL_NAMESPACE::swap(key_compare, t.key_compare);
+        __STL_NAMESPACE::vcl_swap(header, t.header);
+        __STL_NAMESPACE::vcl_swap(node_count, t.node_count);
+        __STL_NAMESPACE::vcl_swap(key_compare, t.key_compare);
     }
     
 public:
@@ -874,7 +874,7 @@ rb_tree<Key, Value, KeyOfValue, Compare, Alloc>::erase(__iterator__
                                                           header->parent,
                                                           header->left,
                                                           header->right);
-  destroy(&(value(y)));
+  vcl_destroy(&(value(y)));
   put_node(y);
   --node_count;
 }
@@ -884,7 +884,7 @@ __size_type__
 rb_tree<Key, Value, KeyOfValue, Compare, Alloc>::erase(const __key_type__& x) {
     vcl_pair<iterator,iterator> p = equal_range(x);
     size_type n = 0;
-    distance(p.first, p.second, n);
+    vcl_distance(p.first, p.second, n);
     erase(p.first, p.second);
     return n;
 }
@@ -941,7 +941,7 @@ void __rb_tree_base<Value, Alloc>::__erase(__rb_tree_node<Value>* x) {
     while (x != 0) {
        __erase(right(x));
        link_type y = left(x);
-       destroy(&(value(x)));
+       vcl_destroy(&(value(x)));
        put_node(x);
        x = y;
     }
@@ -998,7 +998,7 @@ __size_type__
 rb_tree<Key, Value, KeyOfValue, Compare, Alloc>::count(const __key_type__& k) const {
     vcl_pair<const_iterator, const_iterator> p = equal_range(k);
     size_type n = 0;
-    distance(p.first, p.second, n);
+    vcl_distance(p.first, p.second, n);
     return n;
 }
 
