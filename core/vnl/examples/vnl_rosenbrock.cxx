@@ -67,13 +67,15 @@ int main()
   // Make a Levenberg Marquardt minimizer, attach f to it, and
   // run the minimization
   x = x0;
-  vnl_levenberg_marquardt levmarq(f, x);
+  vnl_levenberg_marquardt levmarq(f);
+  levmarq.minimize(x);
 
-  // Summarize the results
-  vcl_cout << "** LevenbergMarquardt default **" << vcl_endl
-           << "Rosenbrock min of " << levmarq.get_end_error() << " at " << x << vcl_endl
-           << "Iterations: " << levmarq.get_num_iterations() << "    "
-           << "Evaluations: " << levmarq.get_num_evaluations() << vcl_endl;
+  // Summarize the results, by querying the levmarq object.
+  vcl_cout << "** LevenbergMarquardt default **" << vcl_endl;
+  vcl_cout << "Rosenbrock min of " << levmarq.get_end_error() << " at " << x << vcl_endl;
+  vcl_cout << "Iterations: " << levmarq.get_num_iterations() << "    ";
+  vcl_cout << "Evaluations: " << levmarq.get_num_evaluations() << vcl_endl;
+
   levmarq.diagnose_outcome();
 
   // Now rerun the optimizer with a new, looser, X tolerance.
