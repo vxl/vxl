@@ -1,4 +1,4 @@
-// This is vxl/vil/file_formats/vil_viff.h
+// This is core/vil/file_formats/vil_viff.h
 #ifndef vil_viff_h_
 #define vil_viff_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -9,6 +9,7 @@
 // \brief Loader for 1-banded Khoros 1.0 images
 // \author    Peter.Vanroose@esat.kuleuven.ac.be
 // \date 17 Feb 2000
+// VIFF is the "Visualization Image File Format" used by Khoros 1.0.
 //
 //\verbatim
 //  Modifications
