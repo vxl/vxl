@@ -1,4 +1,4 @@
-// This is vxl/vgl/io/vgl_io_box_2d.txx
+// This is core/vgl/io/vgl_io_box_2d.txx
 #ifndef vgl_io_box_2d_txx_
 #define vgl_io_box_2d_txx_
 //:
@@ -48,8 +48,8 @@ void vsl_b_read(vsl_b_istream &is, vgl_box_2d<T> & p)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_box_2d<T>&) \n";
-    vcl_cerr << "           Unknown version number "<< v << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_box_2d<T>&)\n"
+             << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -61,10 +61,10 @@ template<class T>
 void vsl_print_summary(vcl_ostream& os,const vgl_box_2d<T> & p)
 {
   if (p.is_empty())
-    os<<"Empty 2d box"<<vcl_endl;
+    os<<"Empty 2d box\n";
   else
-    os<<"2d box with opposite corners at (" <<p.min_x() << "," << p.min_y()
-      <<") and (" << p.max_x() << "," << p.max_y() << ")";
+    os<<"2d box with opposite corners at (" <<p.min_x() << ',' << p.min_y()
+      <<") and (" << p.max_x() << ',' << p.max_y() << ")\n";
 }
 
 #define VGL_IO_BOX_2D_INSTANTIATE(T) \

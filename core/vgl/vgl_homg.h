@@ -1,6 +1,6 @@
-// This is vxl/vgl/vgl_homg.h
-#ifndef _vgl_homg_h
-#define _vgl_homg_h
+// This is core/vgl/vgl_homg.h
+#ifndef vgl_homg_h_
+#define vgl_homg_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -44,4 +44,4 @@ class vgl_homg
   static void set_infinitesimal_tol(T tol);
 };
 
-#endif // _vgl_homg_h
+#endif // vgl_homg_h_

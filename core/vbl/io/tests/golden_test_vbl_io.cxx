@@ -1,5 +1,5 @@
-// This is vxl/vbl/io/tests/golden_test_vbl_io.cxx
-
+// This is core/vbl/io/tests/golden_test_vbl_io.cxx
+#include <testlib/testlib_test.h>
 //:
 // \file
 // \brief Read in a golden data file, and check the values are correct.
@@ -25,7 +25,6 @@
 
 #include <vcl_string.h>
 #include <testlib/testlib_root_dir.h>
-#include <testlib/testlib_test.h>
 
 void golden_test_vbl_io(bool save_file)
 {
@@ -36,11 +35,9 @@ void golden_test_vbl_io(bool save_file)
   // for comparison to the values read in.
   //------------------------------------------------------------------------
 
-
-  vcl_cout << "*********************************************************\n";
-  vcl_cout << "Testing a golden data file for cross platform consistency\n";
-  vcl_cout << "*********************************************************\n";
-
+  vcl_cout << "*********************************************************\n"
+           << "Testing a golden data file for cross platform consistency\n"
+           << "*********************************************************\n";
 
   // vbl_bounding_box
   vbl_bounding_box<double,2> b_box_in, b_box_out;
@@ -103,7 +100,7 @@ void golden_test_vbl_io(bool save_file)
   // Save if option set
   if (save_file)
   {
-    vcl_cout << "Going to create the golden test file" << vcl_endl;
+    vcl_cout << "Going to create the golden test file\n";
     vsl_b_ofstream bfs_out("golden_test_vbl_io.bvl");
     TEST("Opened golden_test_vbl_io.bvl for writing ", ! bfs_out, false);
 
@@ -120,7 +117,7 @@ void golden_test_vbl_io(bool save_file)
 
   // Read in file to each class in turn
 
-  vcl_cout << "Did we get this far ?" << vcl_endl;
+  vcl_cout << "Did we get this far ?\n";
 
   vcl_string gold_path=testlib_root_dir()+"/core/vbl/io/tests/golden_test_vbl_io.bvl";
   vsl_b_ifstream bfs_in(gold_path.c_str());

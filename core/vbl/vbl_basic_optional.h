@@ -1,7 +1,6 @@
-// This is vxl/vbl/vbl_basic_optional.h
+// This is core/vbl/vbl_basic_optional.h
 #ifndef vbl_basic_optional_h
 #define vbl_basic_optional_h
-
 //:
 // \file
 // \author Rupert Curwen GE Corporate Research and Development
@@ -27,7 +26,7 @@
 //
 class vbl_basic_optional
 {
-public:
+ public:
   vbl_basic_optional() {}
   vbl_basic_optional(const vbl_basic_optional&) {}
   inline static void Error(const char* message)
@@ -41,7 +40,7 @@ public:
 template <class T>
 class vbl_basic_optional_traits
 {
-public:
+ public:
   enum Enum { IsOptional = false };
 };
 
@@ -49,7 +48,7 @@ public:
 // vbl_basic_optional_traits<vbl_basic_optional>::IsOptional == true.
 class vbl_basic_optional_traits<vbl_basic_optional>
 {
-public:
+ public:
   enum Enum { IsOptional = true };
 };
 
@@ -69,7 +68,8 @@ inline bool operator!=(const vbl_basic_optional&, const vbl_basic_optional&)
 }
 
 #include <vcl_hash.h>
-struct vcl_hash<vbl_basic_optional> {
+struct vcl_hash<vbl_basic_optional>
+{
   vcl_size_t operator()(const vbl_basic_optional& /*s*/) const { return 0; }
 };
 

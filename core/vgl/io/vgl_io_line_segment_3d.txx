@@ -1,4 +1,4 @@
-// This is vxl/vgl/io/vgl_io_line_segment_3d.txx
+// This is core/vgl/io/vgl_io_line_segment_3d.txx
 #ifndef vgl_io_line_segment_3d_txx_
 #define vgl_io_line_segment_3d_txx_
 //:
@@ -6,7 +6,6 @@
 
 #include "vgl_io_line_segment_3d.h"
 #include <vgl/io/vgl_io_point_3d.h>
-
 
 //============================================================================
 //: Binary save self to stream.
@@ -39,8 +38,8 @@ void vsl_b_read(vsl_b_istream &is, vgl_line_segment_3d<T> & p)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_line_segment_3d<T>&) \n";
-    vcl_cerr << "           Unknown version number "<< v << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_line_segment_3d<T>&)\n"
+             << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

@@ -1,4 +1,4 @@
-// This is vxl/vbl/io/vbl_io_array_3d.txx
+// This is core/vbl/io/vbl_io_array_3d.txx
 #ifndef vbl_io_array_3d_txx_
 #define vbl_io_array_3d_txx_
 //:
@@ -54,8 +54,8 @@ void vsl_b_read(vsl_b_istream &is, vbl_array_3d<T> &p)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_array_3d<T>&) \n";
-    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_array_3d<T>&)\n"
+             << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -66,28 +66,27 @@ void vsl_b_read(vsl_b_istream &is, vbl_array_3d<T> &p)
 template<class T>
 void vsl_print_summary(vcl_ostream & os,const vbl_array_3d<T> & p)
 {
-  os << "Row1 count: " << p.get_row1_count() << vcl_endl;
-  os << "Row2 count: " << p.get_row2_count() << vcl_endl;
-  os << "Row3 count: " << p.get_row3_count() << vcl_endl;
+  os << "Row1 count: " << p.get_row1_count() << vcl_endl
+     << "Row2 count: " << p.get_row2_count() << vcl_endl
+     << "Row3 count: " << p.get_row3_count() << vcl_endl;
   for (int i =0; i<p.get_row1_count() && i<5; i++)
   {
     for (int j=0; j<p.get_row2_count() && j<5; j++)
     {
       for (int k=0; k<p.get_row3_count() && k<5; k++)
       {
-        os << " ";
+        os << ' ';
         vsl_print_summary(os, p(i,j,k));
       }
       if (p.get_row3_count() > 5)
-        os << " ..." << vcl_endl;
+        os << " ...\n";
     }
     if (p.get_row2_count() > 5)
       os << " ...";
-    os << vcl_endl;
-    os << vcl_endl;
+    os << vcl_endl << vcl_endl;
   }
   if (p.get_row1_count() > 5)
-    os << " ..." << vcl_endl;
+    os << " ...\n";
 }
 
 #define VBL_IO_ARRAY_3D_INSTANTIATE(T) \

@@ -1,4 +1,4 @@
-// This is vxl/vbl/vbl_basic_relation.h
+// This is core/vbl/vbl_basic_relation.h
 #ifndef vbl_basic_relation_h
 #define vbl_basic_relation_h
 //:
@@ -11,7 +11,6 @@
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
-//
 
 #include <vcl_string.h>
 #include <vcl_cassert.h>
@@ -42,7 +41,7 @@ template <class T1, class T2,
   VCL_DFL_TYPE_PARAM_STLDECL(T5,vbl_basic_optional)>
 class vbl_basic_relation_iterator
 {
-public:
+ public:
   typedef vbl_basic_tuple<T1,T2,T3,T4,T5> tuple;
   typedef vbl_basic_relation_iterator<T1,T2,T3,T4,T5> iterator;
   typedef vbl_br_iter_impl<T1,T2,T3,T4,T5> implementation;
@@ -68,7 +67,7 @@ public:
   vbl_basic_relation_iterator<T1,T2,T3,T4,T5>&
     operator=(vbl_basic_relation_iterator<T1,T2,T3,T4,T5> const& it);
 
-protected:
+ protected:
   implementation* impl;
 };
 
@@ -87,13 +86,13 @@ class vbl_basic_relation : public vbl_basic_relation_type
 {
   friend class vbl_basic_relation_iterator<T1,T2,T3,T4,T5>;
 
-public:
+ public:
   typedef vbl_basic_tuple<T1,T2,T3,T4,T5> tuple;
   typedef vbl_basic_relation_iterator<T1,T2,T3,T4,T5> iterator;
   typedef vbl_br_impl<T1,T2,T3,T4,T5> implementation;
   typedef vbl_basic_relation_where<T1,T2,T3,T4,T5> where_clause;
 
-public:
+ public:
   //: Constructor.
   vbl_basic_relation(const vcl_string& name);
 
@@ -175,7 +174,7 @@ public:
   static void* get_static_type();
   static vbl_basic_relation<T1,T2,T3,T4,T5>* cast(vbl_basic_relation_type* r);
 
-protected:
+ protected:
   implementation* impl;
   where_clause* where;
 };

@@ -1,4 +1,4 @@
-// This is vxl/vbl/io/vbl_io_array_2d.txx
+// This is core/vbl/io/vbl_io_array_2d.txx
 #ifndef vbl_io_array_2d_txx_
 #define vbl_io_array_2d_txx_
 //:
@@ -53,8 +53,8 @@ void vsl_b_read(vsl_b_istream &is, vbl_array_2d<T> &p)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_array_2d<T>&) \n";
-    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_array_2d<T>&)\n"
+             << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -65,13 +65,13 @@ void vsl_b_read(vsl_b_istream &is, vbl_array_2d<T> &p)
 template<class T>
 void vsl_print_summary(vcl_ostream & os,const vbl_array_2d<T> & p)
 {
-  os << "Rows: " << p.rows() << vcl_endl;
-  os << "Columns: " << p.cols() << vcl_endl;
+  os << "Rows: " << p.rows() << vcl_endl
+     << "Columns: " << p.cols() << vcl_endl;
   for (int i =0; i<p.rows() && i<5; i++)
   {
     for (int j=0; j<p.cols() && j<5; j++)
     {
-      os << " ";
+      os << ' ';
       vsl_print_summary(os, p(i,j));
     }
     if (p.cols() > 5)
@@ -79,7 +79,7 @@ void vsl_print_summary(vcl_ostream & os,const vbl_array_2d<T> & p)
     os << vcl_endl;
   }
   if (p.rows() > 5)
-    os << " ..." << vcl_endl;
+    os << " ...\n";
 }
 
 #define VBL_IO_ARRAY_2D_INSTANTIATE(T) \

@@ -1,4 +1,4 @@
-// This is vxl/vbl/io/vbl_io_array_1d.txx
+// This is core/vbl/io/vbl_io_array_1d.txx
 #ifndef vbl_io_array_1d_txx_
 #define vbl_io_array_1d_txx_
 //:
@@ -9,7 +9,6 @@
 #include "vbl_io_array_1d.h"
 #include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_array_1d.h>
-
 
 //====================================================================
 //: Binary save self to stream.
@@ -53,8 +52,8 @@ void vsl_b_read(vsl_b_istream &is, vbl_array_1d<T> & p)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_array_1d<T>&) \n";
-    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_array_1d<T>&)\n"
+             << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -69,12 +68,12 @@ void vsl_print_summary(vcl_ostream & os,const vbl_array_1d<T> & p)
   os<<"Length: "<<p.size()<<vcl_endl;
   for (unsigned int i =0; i < p.size() && i < 5; i++ )
   {
-    os << " " << i << ": ";
+    os << ' ' << i << ": ";
     vsl_print_summary(os, p[i]);
     os << vcl_endl;
   }
   if (p.size() > 5)
-    os << " ..." << vcl_endl;
+    os << " ...\n";
 }
 
 #define VBL_IO_ARRAY_1D_INSTANTIATE(T) \

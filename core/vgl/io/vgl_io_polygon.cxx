@@ -1,4 +1,4 @@
-// This is vxl/vgl/io/vgl_io_polygon.cxx
+// This is core/vgl/io/vgl_io_polygon.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -51,8 +51,8 @@ void vsl_b_read(vsl_b_istream &is, vgl_polygon & p)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_polygon&) \n";
-    vcl_cerr << "           Unknown version number "<< v << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_polygon&)\n"
+             << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -62,11 +62,11 @@ void vsl_b_read(vsl_b_istream &is, vgl_polygon & p)
 //: Output a human readable summary to the stream
 void vsl_print_summary(vcl_ostream& os,const vgl_polygon & p)
 {
-  os<<"Polygon with points defined by sheets : \n";
+  os<<"Polygon with points defined by sheets :\n";
   for (int i=0;i<p.num_sheets();i++)
   {
       for (unsigned int j=0;j<p[i].size();j++)
-          os << p[i][j].x()<<","<<p[i][j].y()<<vcl_endl;
+          os << p[i][j].x()<<','<<p[i][j].y()<<vcl_endl;
       os<<vcl_endl;
   }
 }

@@ -1,4 +1,4 @@
-// This is vxl/vgl/io/vgl_io_vector_3d.txx
+// This is core/vgl/io/vgl_io_vector_3d.txx
 #ifndef vgl_io_vector_3d_txx_
 #define vgl_io_vector_3d_txx_
 //:
@@ -40,8 +40,8 @@ void vsl_b_read(vsl_b_istream &is, vgl_vector_3d<T> & vec)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_vector_3d<T>&) \n";
-    vcl_cerr << "           Unknown version number "<< v << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_vector_3d<T>&)\n"
+             << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -53,7 +53,7 @@ void vsl_b_read(vsl_b_istream &is, vgl_vector_3d<T> & vec)
 template<class T>
 void vsl_print_summary(vcl_ostream& os,const vgl_vector_3d<T> & v)
 {
-    os<<"("<<v.x()<<","<<v.y()<<","<<v.z()<<")";
+    os<<'('<<v.x()<<','<<v.y()<<','<<v.z()<<')';
 }
 
 #define VGL_IO_VECTOR_3D_INSTANTIATE(T) \

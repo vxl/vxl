@@ -1,4 +1,4 @@
-// This is vxl/vbl/vbl_br_default.h
+// This is core/vbl/vbl_br_default.h
 #ifndef vbl_br_default_h
 #define vbl_br_default_h
 //:
@@ -13,7 +13,6 @@
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
-
 
 #ifdef _MSC_VER
 // disable annoying MSC warning about symbols greater than 255
@@ -44,7 +43,7 @@ template <class T1, class T2,
   VCL_DFL_TYPE_PARAM_STLDECL(T5,vbl_basic_optional)>
 class vbl_br_default_iter : public vbl_br_iter_impl<T1,T2,T3,T4,T5>
 {
-public:
+ public:
   typedef vbl_br_iter_impl<T1,T2,T3,T4,T5> base;
   typedef vbl_basic_relation_where<T1,T2,T3,T4,T5> where_clause;
   typedef vbl_br_default<T1,T2,T3,T4,T5> implementation;
@@ -52,7 +51,7 @@ public:
 
   typedef vbl_basic_tuple<T1,T2,T3,T4,T5> tuple;
 
-public:
+ public:
   vbl_br_default_iter();
   vbl_br_default_iter(vbl_br_default<T1,T2,T3,T4,T5>* i,
                       vbl_basic_relation_where<T1,T2,T3,T4,T5> const* w);
@@ -71,11 +70,11 @@ public:
   //: Compare.
   virtual bool compare(vbl_br_iter_impl<T1,T2,T3,T4,T5> const& i) const;
 
-protected:
+ protected:
   void FindMatch();
   bool AtEnd() const;
 
-protected:
+ protected:
   where_clause* where;
   tuple_list* tlist;
   tuple_list::iterator iter;
@@ -89,14 +88,14 @@ template <class T1, class T2,
   VCL_DFL_TYPE_PARAM_STLDECL(T5,vbl_basic_optional)>
 class vbl_br_default_wild_iter : public vbl_br_iter_impl<T1,T2,T3,T4,T5>
 {
-public:
+ public:
   typedef vbl_basic_relation_where<T1,T2,T3,T4,T5> where_clause;
   typedef vbl_br_default<T1,T2,T3,T4,T5> implementation;
   typedef vbl_basic_tuple<T1,T2,T3,T4,T5> tuple;
   typedef vcl_list<void*> tuple_list;
   typedef vbl_hash_map<T1, tuple_list> first_map;
 
-public:
+ public:
   vbl_br_default_wild_iter(vbl_br_default<T1,T2,T3,T4,T5>* i,
                            vbl_basic_relation_where<T1,T2,T3,T4,T5> const* w);
   vbl_br_default_wild_iter(vbl_br_default_wild_iter<T1,T2,T3,T4,T5> const& it);
@@ -114,7 +113,7 @@ public:
   //: Compare.
   virtual bool compare(vbl_br_iter_impl<T1,T2,T3,T4,T5> const& i) const;
 
-protected:
+ protected:
   first_map::iterator i1;
   implementation* impl;
   tuple_list::iterator i2;
@@ -133,7 +132,7 @@ class vbl_br_default : public vbl_br_impl<T1,T2,T3,T4,T5>
   friend class vbl_br_default_iter<T1,T2,T3,T4,T5>;
   friend class vbl_br_default_wild_iter<T1,T2,T3,T4,T5>;
 
-public:
+ public:
   typedef vcl_list<void*> tuple_list;
   typedef vbl_basic_relation_where<T1,T2,T3,T4,T5> where_clause;
   typedef vbl_br_iter_impl<T1,T2,T3,T4,T5> iterator;
@@ -145,7 +144,7 @@ public:
   typedef vbl_hash_map<T4, tuple_list> fourth_map;
   typedef vbl_hash_map<T5, tuple_list> fifth_map;
 
-public:
+ public:
   //: Constructor.
   vbl_br_default(vcl_string const& n);
 
@@ -189,11 +188,11 @@ public:
   // Get pointer to this for downcasts.
   virtual void* This();
 
-protected:
+ protected:
   // Really add a tuple.
   bool DoInsert(vbl_basic_tuple<T1,T2,T3,T4,T5> const& t);
 
-protected:
+ protected:
   first_map i1;
   second_map i2;
   third_map i3;
@@ -214,7 +213,7 @@ template <class T1, class T2,
 class vbl_br_default_factory :
       public vbl_basic_relation_factory<T1,T2,T3,T4,T5>
 {
-public:
+ public:
   virtual ~vbl_br_default_factory();
   virtual vbl_br_impl<T1,T2,T3,T4,T5>* Generate(vcl_string name);
   virtual void CheckEmpty(vbl_br_impl<T1,T2,T3,T4,T5>* impl);

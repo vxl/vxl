@@ -1,6 +1,6 @@
-// This is vxl/vbl/vbl_protection_traits.h
-#ifndef _vbl_protection_traits_h
-#define _vbl_protection_traits_h
+// This is core/vbl/vbl_protection_traits.h
+#ifndef vbl_protection_traits_h_
+#define vbl_protection_traits_h_
 //:
 // \file
 // \brief Template to standardize protection of classes
@@ -25,4 +25,4 @@ template <class T> class vbl_protection_traits
   static void def(T& t);
 };
 
-#endif // _vbl_protection_traits_h
+#endif // vbl_protection_traits_h_

@@ -1,4 +1,4 @@
-// This is vxl/examples/vnl_calc/vnl_calc.cxx
+// This is core/examples/vnl_calc/vnl_calc.cxx
 
 //:
 // \file
@@ -28,8 +28,9 @@
 #include <vnl/algo/vnl_svd.h>
 
 template <class T>
-class mystack : public vcl_vector<T> {
-public:
+class mystack : public vcl_vector<T>
+{
+ public:
   void push(const T& t) {
     push_back(t);
   }

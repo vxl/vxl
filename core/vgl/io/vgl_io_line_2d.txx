@@ -1,4 +1,4 @@
-// This is vxl/vgl/io/vgl_io_line_2d.txx
+// This is core/vgl/io/vgl_io_line_2d.txx
 #ifndef vgl_io_line_2d_txx_
 #define vgl_io_line_2d_txx_
 //:
@@ -38,8 +38,8 @@ void vsl_b_read(vsl_b_istream &is, vgl_line_2d<T>& v)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_line_2d<T>&) \n";
-    vcl_cerr << "           Unknown version number "<< v << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_line_2d<T>&)\n"
+             << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

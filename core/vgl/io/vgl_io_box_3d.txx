@@ -1,4 +1,4 @@
-// This is vxl/vgl/io/vgl_io_box_3d.txx
+// This is core/vgl/io/vgl_io_box_3d.txx
 #ifndef vgl_io_box_3d_txx_
 #define vgl_io_box_3d_txx_
 //:
@@ -48,8 +48,8 @@ void vsl_b_read(vsl_b_istream &is, vgl_box_3d<T> & p)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_box_3d<T>&) \n";
-    vcl_cerr << "           Unknown version number "<< v << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_box_3d<T>&)\n"
+             << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -61,11 +61,11 @@ template<class T>
 void vsl_print_summary(vcl_ostream& os,const vgl_box_3d<T> & p)
 {
   if (p.is_empty())
-    os<<"Empty 3d box"<<vcl_endl;
+    os<<"Empty 3d box\n";
   else
     os<<"3d box with opposite corners at ("
-      <<p.min_x() << "," << p.min_y() << "," << p.min_z() <<") and ("
-      <<p.max_x() << "," << p.max_y() << "," << p.max_z() <<")\n";
+      <<p.min_x() << ',' << p.min_y() << ',' << p.min_z() <<") and ("
+      <<p.max_x() << ',' << p.max_y() << ',' << p.max_z() <<")\n";
 }
 
 #define VGL_IO_BOX_3D_INSTANTIATE(T) \

@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_conic.h
+// This is core/vgl/vgl_conic.h
 #ifndef vgl_conic_h_
 #define vgl_conic_h_
 //:
@@ -66,7 +66,7 @@
 template <class T>
 class vgl_conic
 {
-public:
+ public:
    enum vgl_conic_type {
      no_type=0,
      real_ellipse,
@@ -83,7 +83,7 @@ public:
      num_conic_types // is here to enable iterating through this list
    };
 
-private:
+ private:
   // DATA MEMBERS
 
   vgl_conic_type type_;
@@ -94,8 +94,7 @@ private:
   T e_; //: coefficient of \a yw
   T f_; //: coefficient of \a w^2
 
-
-public:
+ public:
   inline vgl_conic::vgl_conic_type type() const { return type_; }
 
   //: Returns the type of the conic as a string.
@@ -254,7 +253,7 @@ public:
   //: Modify this conic by translating it over distance \a x in the \a X direction and distance \a y in the \a Y direction.
   void translate_by(T x, T y);
 
-private:
+ private:
   //--------------------------------------------------------------------------
   //: set conic type from polynomial coefficients and store in member type_
   // This method must be called by all constructors (except the default

@@ -1,4 +1,4 @@
-// This is vxl/vbl/io/vbl_io_smart_ptr.txx
+// This is core/vbl/io/vbl_io_smart_ptr.txx
 #ifndef vbl_io_smart_ptr_txx_
 #define vbl_io_smart_ptr_txx_
 //:
@@ -98,8 +98,8 @@ void vsl_b_read(vsl_b_istream &is, vbl_smart_ptr<T> &p)
 
       if (first_time && !is_protected)  // This should have been
       {                                  //checked during saving
-        vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_smart_ptr<T>&)\n";
-        vcl_cerr << "           De-serialisation failure of non-protected smart_ptr\n";
+        vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_smart_ptr<T>&)\n"
+                 << "           De-serialisation failure of non-protected smart_ptr\n";
         is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
         return;
       }
@@ -112,8 +112,8 @@ void vsl_b_read(vsl_b_istream &is, vbl_smart_ptr<T> &p)
         // This checks that the saving stream and reading stream
         // both agree on whether or not this is the first time they
         // have seen this object.
-        vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_smart_ptr<T>&)\n";
-        vcl_cerr << "           De-serialisation failure\n";
+        vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_smart_ptr<T>&)\n"
+                 << "           De-serialisation failure\n";
         is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
         return;
       }
@@ -134,8 +134,8 @@ void vsl_b_read(vsl_b_istream &is, vbl_smart_ptr<T> &p)
     }
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_smart_ptr<T>&) \n";
-    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_smart_ptr<T>&)\n"
+             << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
