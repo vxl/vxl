@@ -67,6 +67,9 @@ foreach $f (@FILES)
   $file=<FILE>;
   close FILE;
   next unless (defined($file));
+  $file =~ s!\$\{FILESTEM\}!classtemplate_emacs!g;
+  $file =~ s!libname/classname!config/classtemplate!g;
+  $file =~ s!\@\(eval \(file-name-nondirectory \(file-name-directory-noslash dirname\)\)\)/\@\(eval dirbase\)!config!g;
   $printed = $full;
 
   $cpp_file = ($f !~ m!\.c$! &&
@@ -456,14 +459,14 @@ foreach $f (@FILES)
   &msg(1, "local $2 should come before global $1")
     if ($file =~ m!(\#\s*include\s*\<[^\>]*\>).*(\#\s*include\s*\"[^\"]*\")!);
 
-# 6. //: inside a comment block, or \file not after //:
+# 7. //: inside a comment block, or \file not after //:
   &msg(1, "\\file is not preceeded by //:")
     if ($file =~ m!\n\s*(//[^:]|[^\s/]).*\n *// *\\file\b!);
   $file =~ s!//\s*[-=_]{40,}\n!//\n!g;
   &msg(1, "contains //: inside a comment block")
     if ($file =~ m!\n\s*//[ :].*\n *//:!);
 
-# 7. Comments: long /* ... */ and old-style // -- docs; RCS indications; mistypings
+# 8. Comments: long /* ... */ and old-style // -- docs; RCS indications; mistypings
   $file =~ s/ +\n/\n/g;
   $file =~ s!/\*!\001!g; $file =~ s!/\001!//\*!g;
   $file =~ s!\*/!\002!g;
@@ -490,12 +493,12 @@ foreach $f (@FILES)
   &msg(1, "probably a mistyping: $1")
     if ($file =~ m/\b(octover|milisecond|destuct[a-z]*|constuct[a-z]*|detruct[a-z]*|contruct[a-z]*|continou[a-z]*|defaut|condtion|intial[a-z]*|hierach[a-z]*|implemen[^t][a-z]*|ouput|outputing|supres[a-z]*|judicous|posible|begining|decend[a-z]*|verticies|matricies|vertexes|assignement|auxiliar\b|distingish|documenation|Eucl[ie]dian|independant|initialli\S+|initili\S+|measurment|miscelaneous|receipe|(re)?determing|retreive|seciton|thse|utilitites|accomodate|accpet|accurary|adaptative|addresss|alement|alife|anj\b|appication|arangement|arbitar\S+|aready|argree|assembing|authentification|auxilary|auxillary|aynchronous|azimutha|blted|bondary|borgefor\b|chaching|changeble|cicurmstance|cirle|coefficent|coeficient|colinear|colum\b|columnn|comparision|compatibilty|compilant|conjuction|continguous|controled|coordiate|corespondence|decompostion|desctruction|despatch|difuse|difusion|digtial|dimensinal|dimensionnal|documenation|doen|efficents|eigenvale|elment|elminate|encapsuate|encounterd|enquiries|eqivalence|estiamte|expalin|exression|filname|fomatted|fractino|frequence|functon|gettt\S+|graident|hasnt|highlighed|homegenous|homogaphy|homogenious|homogenous|idential|implementatation|incredibably|indentical|indicies|inherance|inhert|initilization|intepolat\S*|intitial|lable|magnitde|maxium|minimially|mininated|neccessary|necesary|nonhomogenous|objet|occured|occurence|oor|openned|orientarion|parallal|parameteric|parametesr|paramters|parapraph|parbolic|perimit|posistion|potetially|preceeding|prefered|progam\S*|protocal|refernce|regualr|reponsib\S+|represet|repsonsib\S+|rreuiqred|samping|severla|simulataneously|singlton|staight|subsitution|succesful\b|suppy|symetric|symmetic|sytem|tableaus|tableax|tableu|talbeau|techinques|tesselate|tesselation|toggeling|tolerence|tranform|tranpose|traveral|unecess\S+|verfication|verson|vlolume|whan|whould|wil\b|wraping|writted|yeild|bandwith|comare|containins|contrain|contor|corrdinate|dependant|dependending|exprimed|hight|heirachy|interator|labled|likelyhood|liklihood|maximun|messsage|minmum|objects\'s|perfrom|polyon|postion|repending|seting|singletion|substract|tablea\b|transfrom|valuse|wether|argumement|epiplar|lenth)/i);
 
-# 8. spurious #pragma interface or #pragma implementation
+# 9. spurious #pragma interface or #pragma implementation
   &msg(1, "contains $1 without #ifdef VCL_NEEDS_PRAGMA_INTERFACE")
     if ($file !~ m/\#ifdef VCL_NEEDS_PRAGMA_INTERFACE\n(\#pragma (interface|implementation)).*\n#endif\n/ &&
         $file =~ m/(\#\s*pragma\s+(interface|implementation))\b/);
 
-# 9. Now remove comments and string constants before checking further:
+# Now remove comments and string constants before checking further:
   $file_s = "\n" . $file;
   # continuation lines:
   $file_s =~ s/\\\n//g;
@@ -550,7 +553,7 @@ foreach $f (@FILES)
     while ($file_ =~ m!/\./!) { $file_ =~ s!/\./!/!g; }
     $file_ =~ s!^.*/(config|vcl|v3p|core|contrib)/!$1/!; $file_ =~ s!^contrib/!!;
     &msg(1, "has // This is $filename, should be $file_")
-      unless ("$filename" eq "$file_" || !$printed);
+      unless ("$filename" eq "$file_");
   }
 
 # 12. Constant pi written as 3.1415...
@@ -727,7 +730,7 @@ foreach $f (@FILES)
 
 # 15. Multiple empty lines, empty line before } or after {, return (...), indentation,
 #   if/for/while without space, variable name starting with underscore
-#   (mentioned only if something else is already printed, or is -f given)
+#   (mentioned only if something else is already printed, or when -f given)
   &msg(1, "contains multiple (>2) empty lines")
     if ($printed && $file =~ m/\n\n\n\n/);
   &msg(1, "has lines ending in spaces")
@@ -738,6 +741,10 @@ foreach $f (@FILES)
     if ($printed && $file =~ m/\n[ \t]*\{\s*\n\n/);
   &msg(1, "has empty lines after function header")
     if ($printed && $file =~ m/\n[ \t]*\n\{/);
+  &msg(1, "Replace \"$1 (0)\" by \"$1 (false)\"")
+    if ($printed && $cpp_file && $file =~ m/\b(if|while)\s*\(\s*0\s*\)/);
+  &msg(1, "Replace \"$1 (1)\" by \"$1 (true)\"")
+    if ($printed && $cpp_file && $file =~ m/\b(if|while)\s*\(\s*1\s*\)/);
   $f_=$fl;
   while ($printed && $f_ =~ s/\n([^()\'\";\n]*\( *)((\([^();\n]*\))*[^();\n]+(\([^();\n]*\)[^();\n]*)*)\n( +)//)
   {
