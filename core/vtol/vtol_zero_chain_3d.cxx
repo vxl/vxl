@@ -199,8 +199,6 @@ bool vtol_zero_chain_3d::operator==(const vsol_spatial_object_3d& obj) const
 }
 
 
-}
-
 /*******  Print Methods   *************/
 
 //:

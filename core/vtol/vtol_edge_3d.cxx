@@ -544,8 +544,6 @@ bool vtol_edge_3d::operator==(const vsol_spatial_object_3d& obj) const
   : false;
 }
 
-}
-
 
 /*
  ******************************************************
