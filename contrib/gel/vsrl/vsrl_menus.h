@@ -9,7 +9,7 @@
 
 class vsrl_menus
 {
-public:
+ public:
   static void quit_callback();
   static void load_left_image_callback();
   static void load_right_image_callback();
@@ -24,8 +24,8 @@ public:
   static void draw_north_callback();
   static void test_func_callback();
   static vgui_menu get_menus();
-private:
+ private:
   vsrl_menus(){};
 };
 
-#endif vsrl_menus_h_
+#endif // vsrl_menus_h_
