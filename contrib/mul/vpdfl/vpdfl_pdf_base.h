@@ -1,5 +1,5 @@
-#ifndef vpdfl_pdf_instance_base_h
-#define vpdfl_pdf_instance_base_h
+#ifndef vpdfl_pdf_base_h
+#define vpdfl_pdf_base_h
 #ifdef __GNUC__
 #pragma interface
 #endif
@@ -15,8 +15,6 @@
 #include <vcl_string.h>
 
 //=======================================================================
-
-class vpdfl_pdf_instance_base;
 
 //: Base class for Multi-Variate Probability Density Function classes.
 // Functions are available to test the plausibility of a vector or
@@ -144,6 +142,6 @@ ostream& operator<<(ostream& os,const vpdfl_pdf_base& b);
 	//: Stream output operator for class pointer
 ostream& operator<<(ostream& os,const vpdfl_pdf_base* b);
 
-#endif // vpdfl_pdf_instance_base_h
+#endif // vpdfl_pdf_base_h
 
 
