@@ -36,9 +36,12 @@ class projection_lsqf : public vnl_least_squares_function
     
     {
       n_ = from_points.size();
-      from_points_=from_points;
       assert(n_==to_points.size());
-      to_points_ = to_points;
+      for(unsigned i = 0; i<n_; ++i)
+        {
+          from_points_[i]=from_points[i];
+          to_points_[i] = to_points[i];
+        }
     }
   ~projection_lsqf() { }
   //compute the projection error given a set of h parameters
