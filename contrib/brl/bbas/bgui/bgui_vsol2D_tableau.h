@@ -27,7 +27,9 @@
 #include <vsol/vsol_spatial_object_2d_sptr.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_line_2d_sptr.h>
+#include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
+#include <vsol/vsol_digital_curve_2d_sptr.h>
 
 #include <vdgl/vdgl_digital_curve_sptr.h>
 
@@ -36,12 +38,13 @@
 #include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_style_sptr.h>
 #include <bgui/bgui_vsol2D_tableau_sptr.h>
-#include <bgui/bgui_vsol_soview2D.h>
 
 class bgui_vsol_soview2D_point;
 class bgui_vsol_soview2D_line_seg;
 class bgui_vsol_soview2D_polyline;
+class bgui_vsol_soview2D_polygon;
 class bgui_vsol_soview2D_digital_curve;
+class bgui_vsol_soview2D_edgel_curve;
 
 class bgui_vsol2D_tableau : public vgui_easy2D_tableau
 {
@@ -79,14 +82,24 @@ class bgui_vsol2D_tableau : public vgui_easy2D_tableau
     add_vsol_polygon_2d(vsol_polygon_2d_sptr const& pline,
                         const vgui_style_sptr& style = NULL);
 
-  //: display for digital_curve
+  //: display for vsol_digital_curve_2d
   bgui_vsol_soview2D_digital_curve*
-    add_digital_curve(vdgl_digital_curve_sptr const& dc,
+    add_digital_curve(vsol_digital_curve_2d_sptr const& dc,
                       const vgui_style_sptr& style = NULL);
 
-  //: display for digital_curve (dotted)
+  //: display for vsol_digital_curve_2d (dotted)
   bgui_vsol_soview2D_digital_curve*
-    add_dotted_digital_curve(vdgl_digital_curve_sptr const& dc,
+    add_dotted_digital_curve(vsol_digital_curve_2d_sptr const& dc,
+                             const vgui_style_sptr& style = NULL);
+                             
+  //: display for vdgl_digital_curve
+  bgui_vsol_soview2D_edgel_curve*
+    add_edgel_curve(vdgl_digital_curve_sptr const& dc,
+                      const vgui_style_sptr& style = NULL);
+
+  //: display for vdgl_digital_curve (dotted)
+  bgui_vsol_soview2D_edgel_curve*
+    add_dotted_edgel_curve(vdgl_digital_curve_sptr const& dc,
                              const vgui_style_sptr& style = NULL);
 
   void add_spatial_object(vsol_spatial_object_2d_sptr const& sos,
@@ -105,6 +118,8 @@ class bgui_vsol2D_tableau : public vgui_easy2D_tableau
   void set_vsol_polyline_2d_style(const vgui_style_sptr& style);
   void set_digital_curve_style(const vgui_style_sptr& style);
   void set_dotted_digital_curve_style(const vgui_style_sptr& style);
+  void set_edgel_curve_style(const vgui_style_sptr& style);
+  void set_dotted_edgel_curve_style(const vgui_style_sptr& style);
 
  protected:
 
@@ -114,6 +129,8 @@ class bgui_vsol2D_tableau : public vgui_easy2D_tableau
   vgui_style_sptr polyline_style_;
   vgui_style_sptr digital_curve_style_;
   vgui_style_sptr dotted_digital_curve_style_;
+  vgui_style_sptr edgel_curve_style_;
+  vgui_style_sptr dotted_edgel_curve_style_;
 
   void init();
 };

@@ -39,6 +39,8 @@ void bgui_vsol2D_tableau::init()
   polyline_style_             = vgui_style::new_style(0.8f, 0.2f, 0.9f, 1.0f, 3.0f);
   digital_curve_style_        = vgui_style::new_style(0.8f, 0.0f, 0.8f, 1.0f, 3.0f);
   dotted_digital_curve_style_ = vgui_style::new_style(0.8f, 0.0f, 0.8f, 3.0f, 3.0f);
+  edgel_curve_style_          = vgui_style::new_style(0.0f, 0.5f, 0.8f, 1.0f, 3.0f);
+  dotted_edgel_curve_style_   = vgui_style::new_style(0.0f, 0.5f, 0.8f, 3.0f, 3.0f);
 }
 
 
@@ -103,8 +105,8 @@ bgui_vsol2D_tableau::add_vsol_polygon_2d(vsol_polygon_2d_sptr const& pline,
 
 
 bgui_vsol_soview2D_digital_curve*
-bgui_vsol2D_tableau::add_digital_curve(vdgl_digital_curve_sptr const& dc,
-                                              const vgui_style_sptr& style)
+bgui_vsol2D_tableau::add_digital_curve(vsol_digital_curve_2d_sptr const& dc,
+                                       const vgui_style_sptr& style)
 {
   bgui_vsol_soview2D_digital_curve* obj =
     new bgui_vsol_soview2D_digital_curve(dc);
@@ -118,8 +120,8 @@ bgui_vsol2D_tableau::add_digital_curve(vdgl_digital_curve_sptr const& dc,
 
 
 bgui_vsol_soview2D_digital_curve*
-bgui_vsol2D_tableau::add_dotted_digital_curve(vdgl_digital_curve_sptr const& dc,
-                                                     const vgui_style_sptr& style)
+bgui_vsol2D_tableau::add_dotted_digital_curve(vsol_digital_curve_2d_sptr const& dc,
+                                              const vgui_style_sptr& style)
 {
   bgui_vsol_soview2D_digital_curve* obj =
       new bgui_vsol_soview2D_digital_curve(dc, true);
@@ -128,6 +130,36 @@ bgui_vsol2D_tableau::add_dotted_digital_curve(vdgl_digital_curve_sptr const& dc,
     obj->set_style( style );
   else
     obj->set_style( dotted_digital_curve_style_ );
+  return obj;
+}
+
+
+bgui_vsol_soview2D_edgel_curve*
+bgui_vsol2D_tableau::add_edgel_curve(vdgl_digital_curve_sptr const& dc,
+                                              const vgui_style_sptr& style)
+{
+  bgui_vsol_soview2D_edgel_curve* obj =
+    new bgui_vsol_soview2D_edgel_curve(dc);
+  add(obj);
+  if (style)
+    obj->set_style( style );
+  else
+    obj->set_style( edgel_curve_style_ );
+  return obj;
+}
+
+
+bgui_vsol_soview2D_edgel_curve*
+bgui_vsol2D_tableau::add_dotted_edgel_curve(vdgl_digital_curve_sptr const& dc,
+                                            const vgui_style_sptr& style)
+{
+  bgui_vsol_soview2D_edgel_curve* obj =
+      new bgui_vsol_soview2D_edgel_curve(dc, true);
+  add(obj);
+  if (style)
+    obj->set_style( style );
+  else
+    obj->set_style( dotted_edgel_curve_style_ );
   return obj;
 }
 
@@ -156,11 +188,17 @@ add_spatial_object(vsol_spatial_object_2d_sptr const& sos,
   }
 
   if (sos->cast_to_curve()) {
+    if (sos->cast_to_curve()->cast_to_digital_curve_2d())
+      {
+        vsol_digital_curve_2d_sptr dc =
+          sos->cast_to_curve()->cast_to_digital_curve_2d();
+        this->add_digital_curve(dc , style);
+      }
     if (sos->cast_to_curve()->cast_to_digital_curve())
       {
         vdgl_digital_curve_sptr dc =
           sos->cast_to_curve()->cast_to_digital_curve();
-        this->add_digital_curve(dc , style);
+        this->add_edgel_curve(dc , style);
       }
     if (sos->cast_to_curve()->cast_to_line_2d())
       {
@@ -244,4 +282,25 @@ void bgui_vsol2D_tableau::set_dotted_digital_curve_style(const vgui_style_sptr& 
   dotted_digital_curve_style_->rgba[2] = style->rgba[2];
   dotted_digital_curve_style_->point_size = style->point_size;
   dotted_digital_curve_style_->line_width = style->line_width;
+}
+
+
+
+void bgui_vsol2D_tableau::set_edgel_curve_style(const vgui_style_sptr& style)
+{
+  edgel_curve_style_->rgba[0] = style->rgba[0];
+  edgel_curve_style_->rgba[1] = style->rgba[1];
+  edgel_curve_style_->rgba[2] = style->rgba[2];
+  edgel_curve_style_->point_size = style->point_size;
+  edgel_curve_style_->line_width = style->line_width;
+}
+
+
+void bgui_vsol2D_tableau::set_dotted_edgel_curve_style(const vgui_style_sptr& style)
+{
+  dotted_edgel_curve_style_->rgba[0] = style->rgba[0];
+  dotted_edgel_curve_style_->rgba[1] = style->rgba[1];
+  dotted_edgel_curve_style_->rgba[2] = style->rgba[2];
+  dotted_edgel_curve_style_->point_size = style->point_size;
+  dotted_edgel_curve_style_->line_width = style->line_width;
 }

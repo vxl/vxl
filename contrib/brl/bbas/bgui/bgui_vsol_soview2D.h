@@ -27,6 +27,7 @@
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
+#include <vsol/vsol_digital_curve_2d_sptr.h>
 
 #include <vgui/vgui_soview2D.h>
 
@@ -183,23 +184,23 @@ class bgui_vsol_soview2D_polygon : public bgui_vsol_soview2D
 };
 
 
-//: vdgl_digital_curve
-class bgui_vsol_soview2D_digital_curve : public vgui_soview2D
+//: vsol_digital_curve_2d
+class bgui_vsol_soview2D_digital_curve : public bgui_vsol_soview2D
 {
  public:
-  //: Constructor - creates a view of a vdgl_digital_curve
-  bgui_vsol_soview2D_digital_curve(vdgl_digital_curve_sptr const& e, bool dotted = false)
-  : dc_(e), draw_dotted_(dotted) {}
+  //: Constructor - creates a view of a vsol_digital_curve_2d
+  bgui_vsol_soview2D_digital_curve(vsol_digital_curve_2d_sptr const& dc, bool dotted = false);
 
   //: Destructor - does nothing, smart pointers pass out of scope automatically
   ~bgui_vsol_soview2D_digital_curve() {}
 
-  //: Print details about this vdgl_digital_curve to the given stream.
-  virtual vcl_ostream& print(vcl_ostream&) const;
-
   //: Returns the type of this class ('bgui_vsol_soview2D_digital_curve').
   static vcl_string type_name_() { return "bgui_vsol_soview2D_digital_curve"; }
   vcl_string type_name() const { return type_name_(); }
+  
+  // Returns a smart pointer to the digital curve
+  // \note cast from a vsol_spatial_object_2d_sptr in the base class
+  vsol_digital_curve_2d_sptr sptr() const;
 
   //: Render this 2D digital_curve on the display.
   void draw() const;
@@ -213,14 +214,46 @@ class bgui_vsol_soview2D_digital_curve : public vgui_soview2D
   //: Translate this 2D digital_curve by the given x and y distances.
   void translate(float x, float y);
 
-  //: Smart pointer to vdgl_digital_curve member
-  vdgl_digital_curve_sptr digital_curve() const { return dc_; }
-
  protected:
-  //: Smart pointer to vdgl_digital_curve
-  vdgl_digital_curve_sptr dc_;
-
+  //: draw the sample points over the line segments
   bool draw_dotted_;
 };
+
+
+//: vdgl_digital_curve (chain of edgels)
+class bgui_vsol_soview2D_edgel_curve : public bgui_vsol_soview2D
+{
+ public:
+  //: Constructor - creates a view of a vdgl_digital_curve
+  bgui_vsol_soview2D_edgel_curve(vdgl_digital_curve_sptr const& e, bool dotted = false);
+
+  //: Destructor - does nothing, smart pointers pass out of scope automatically
+  ~bgui_vsol_soview2D_edgel_curve() {}
+
+  //: Returns the type of this class ('bgui_vsol_soview2D_edgel_curve').
+  static vcl_string type_name_() { return "bgui_vsol_soview2D_edgel_curve"; }
+  vcl_string type_name() const { return type_name_(); }
+
+  // Returns a smart pointer to the digital edgel curve
+  // \note cast from a vsol_spatial_object_2d_sptr in the base class
+  vdgl_digital_curve_sptr sptr() const;
+
+  //: Render this 2D digital_curve on the display.
+  void draw() const;
+
+  //: Returns the distance squared from this 2D digital_curve to the given position.
+  virtual float distance_squared(float x, float y) const;
+
+  //: Returns the centroid of this 2D digital_curve.
+  void get_centroid(float* x, float* y) const;
+
+  //: Translate this 2D digital_curve by the given x and y distances.
+  void translate(float x, float y);
+
+ protected:
+  bool draw_dotted_;
+};
+
+
 
 #endif // bgui_vsol_soview2D_h_
