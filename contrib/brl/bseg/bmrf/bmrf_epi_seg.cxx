@@ -591,7 +591,10 @@ void bmrf_epi_seg::b_read(vsl_b_istream &is)
       break;
     }
    default:
-    assert(!"unknown version");
+     vcl_cerr << "I/O ERROR: bmrf_epi_seg::b_read(vsl_b_istream&)\n"
+              << "           Unknown version number "<< ver << '\n';
+     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+     return;
   }
 }
 //: Return IO version number;
