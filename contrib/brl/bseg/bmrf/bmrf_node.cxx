@@ -232,10 +232,15 @@ bmrf_node::probability(const bmrf_gamma_func_sptr& gamma, int time_step)
     double error = bmrf_match_error(trans_seg, neighbor->epi_seg());
 
     double alpha_range = (*a_itr)->max_alpha_ - (*a_itr)->min_alpha_;
-    double int_var = 0.001; // intensity variance
+    const double int_var = 0.001; // intensity variance
     prob += alpha_range * vcl_exp(-error/2.0 - (*a_itr)->avg_intensity_error_/(2.0*int_var));
     total_alpha += alpha_range;
   }
+
+  // no neighbors found in this frame
+  if(total_alpha == 0.0)
+    return 1.0;
+
   return (prob / total_alpha);
 }
 
