@@ -16,6 +16,7 @@
 //
 
 #include <vcl_cmath.h>
+#include <vcl_cstdlib.h> // for abs(long)
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h> // for setfill, setw
 #include <vcl_complex.h>
