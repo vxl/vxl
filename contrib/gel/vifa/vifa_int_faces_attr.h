@@ -140,7 +140,7 @@ class vifa_int_faces_attr : public vifa_int_face_attr_common
   // a hack for weird linking problems on Windows with attr_get_funcs[]
   static float  CallAttrFunction(vifa_int_face_attr* seed, int i);
 
-  static const char* const  GetBaseAttrName(int i) ;
+  static const char*  GetBaseAttrName(int i);
 
  protected:
   virtual void  init();

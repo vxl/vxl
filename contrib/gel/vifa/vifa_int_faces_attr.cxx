@@ -383,7 +383,7 @@ GetAttributeNames(vcl_vector<vcl_string>& names)
   }
 }
 
-const char* const vifa_int_faces_attr::
+const char* vifa_int_faces_attr::
 GetBaseAttrName(int i)
 {
   return vifa_int_faces_attr::attr_names[i];
