@@ -30,6 +30,9 @@ MANPAGE_SOURCES += vgui_message.h
 SOURCES += vgui_observer.cxx
 SOURCES += vgui_observable.cxx
 MANPAGE_SOURCES += vgui_satellite_tableau.txx
+MANPAGE_SOURCES += vgui_range_map.txx
+MANPAGE_SOURCES += vgui_range_map_params.h
+MANPAGE_SOURCES += vgui_range_map_params_sptr.h
 
 # utility
 SOURCES += vgui_find.cxx
