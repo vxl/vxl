@@ -85,7 +85,7 @@ bool vnl_math_isinf(double);
 bool vnl_math_isinf(long double);
 
 // isfinite
-template <class T> inline bool vnl_math_isfinite(T ) { return false; }
+template <class T> inline bool vnl_math_isfinite(T ) { return true; }
 bool vnl_math_isfinite(float);
 bool vnl_math_isfinite(double);
 bool vnl_math_isfinite(long double);
