@@ -11,7 +11,6 @@
 #include <vcl_cstring.h>
 
 #include <vil3d/vil3d_file_format.h>
-#include <vil2/vil2_stream_fstream.h>
 #include <vil3d/vil3d_image_resource.h>
 #include <vil3d/vil3d_memory_image.h>
 
