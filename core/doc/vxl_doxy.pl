@@ -8,27 +8,23 @@ exec perl -w -x $0 ${1+"$@"}
 # Authors:
 #         Dave Cooper
 #         Maarten Vergauwen
-# Date:
+# Date:   
 #      17/02/2000
+# Modified:
+# 11 April 2001 Ian Scott.   Remove support for old perceps commands
+#  5 May   2001 Geoff Cross. Correctly handle end of verbatim blocks. Allow two contiguous comments
+#  10 May  2001 Ian Scott. Merged Geoffs and my changes
 
-# get the filename from the args
-$filename = $ARGV[0];
 
 # patterns to be matched
-$verbpatt = '\\\\verbatim';
-$endverbpatt = '\\\\endverbatim';
-$namepatt = '^\s*// \\.NAME';
-$authorpatt = '^\s*// \\.SECTION Author';
-$modificationpatt = '^\s*// \\.SECTION Modifications?';
-$descriptionpatt = '^\s*// \\.SECTION Description';
-$headerpatt = '^\s*// \\.[A-Z]+\s';
-$slashslashpatt = '^\s*//';
-$slashslashcolonpatt = '^\s*//:';
-$slashslashspacedashdashpatt = '^\s*// --';
-$slashstarstarpatt = '/**';
-$spacespacepatt = '  ';
-$starpatt = '*';
-$starslashpatt = '*/';
+$verbpatt = "\\\\verbatim";
+$endverbpatt = "\\\\endverbatim";
+$slashslashpatt = "^\s*//";
+$slashslashcolonpatt = "^\s*//:";
+$slashstarstarpatt = "/**";
+$spacespacepatt = "  ";
+$starpatt = "*";
+$starslashpatt = "*/";
 
 # variables that keep state:
 
@@ -37,35 +33,23 @@ $comment = 0;
 
 # verbatim found -> lines should not start with * (visible in Doxygen)
 $verbatim = 0;
+# finish verbatim mode at the end of this line.
 $should_end_verbatim = 0;
 
-# file-header found -> we have to deal with .SECTION NAME etc
-$weareinfile = 0;
-
-# .SECTION Author found -> search following lines for names until eol found
-$gotonextlineauthor = 0;
-
-# list of authornames
-@authornames = ();
-
-# .SECTION Description found -> search following lines for description until .SECTION or //----eol found
-$gotonextlinedescription = 0;
-
-# list of descriptions
-@descriptions = ();
-
-# .SECTION Modifications found -> search following lines for modifications until //-----eol found
-$gotonextlinemod = 0;
 
 
-# mainloop
+
+
+
+
+# mainloop     
 while (<>)
-  {
+{
     if ( $should_end_verbatim )
-      {
-	$verbatim = 0;
-	$should_end_verbatim = 0;
-      }
+    {
+        $verbatim = 0;
+        $should_end_verbatim = 0;
+    }
 
     # found verbatim ?
     if ( m/$verbpatt/ ) { $verbatim = 1; };
@@ -73,218 +57,49 @@ while (<>)
     # found endverbatim ?
     if ( m/$endverbpatt/ ) { $should_end_verbatim = 1; };
 
-    # in header and found end ( "//---------eol") -> stop header
-    if ( $weareinfile && ( m/^\s*\/\/\s*-+$/ || ( ! m/^\s*\/\// && ! m/^\s*$/ ) || m!$slashslashcolonpatt! || m!$slashslashspacedashdashpatt! ) )
-      {
-        print " *\/ \n";
-        $weareinfile = 0;
-        $gotonextlinemod = 0;
-        $gotonextlineauthor = 0;
-        $gotonextlinedescription = 0;
-      }
-
-    # found start of comment: either "//:" or "// --" ?
-    if ( s!$slashslashcolonpatt!$slashstarstarpatt! || s!$slashslashspacedashdashpatt!$slashstarstarpatt! )
-      {
+    # found start of comment: "//:"  ?
+    if ( s/$slashslashcolonpatt/$slashstarstarpatt/ )
+    {
         chomp;
         # escape all dots, and add a dot at the end:
         s/\./\\\./g; s/\\\.\s*$//; s/$/.\n/;
-	if ($comment)
-	  {
-	    # Previous comment hasn't ended--two contiguous comment blocks. (Happens at the top of .txx
-	    # files, for example.)
-	    print "*\/ \n";
-	  }
+        if ($comment)
+        {
+            # Previous comment hasn't ended--two contiguous comment blocks. (Happens at the top of .txx
+            # files, for example.)
+            print "*\/ \n";
+        }
         $comment = 1;
-        if ($weareinfile) { $weareinfile = 0; print " *\/ \n"; }
         print; next;
-      }
+    }
 
     # found continuation of comment WITH verbatim -> no "*"
-    if ( ( m!$slashslashpatt! || m/^\s*$/ ) && $verbatim && $comment)
-      {
-        s!$slashslashpatt!$spacespacepatt!;
+    if ( /$slashslashpatt/ && $verbatim && $comment)
+    {
+        s/$slashslashpatt/$spacespacepatt/;
         print; next;
-      }
+    }
 
     # found continuation of comment WITHOUT verbatim -> start line with "*"
-    if ( ( m!$slashslashpatt! || m/^\s*$/ ) && $comment )
-      {
-        s!^!$starpatt\n! if (m/^\s*$/);
-        s!$slashslashpatt!$starpatt!;
-        print; next;
-      }
+    if ( /$slashslashpatt/ && $comment )
+    {
+        s/$slashslashpatt/$starpatt/;
+        print;
+        next;
+    }
 
     # found end of comment -> start line with */
-    if ( $comment && ! m!$slashslashpatt! && ! m/^\s*$/ )
-      {
+    if ( $comment && ! /$slashslashpatt/  )
+    {
         print "$starslashpatt\n";
         $comment = 0;
-      }
-
-    # found .NAME -> header found !
-    if ( m/$namepatt/ && !$weareinfile)
-      {
-        $weareinfile = 1;
-        @listname = split /\s+/;
-        shift @listname;
-        shift @listname;
-        shift @listname;
-        $brief = "";
-        foreach $name ( @listname )
-          {
-            $brief .= "$name ";
-          }
-        print "/** \\file \"$filename\"\n";
-        print " * \\brief $brief\n" unless ($brief =~ m/^\s*$/);
-        next;
-      }
-
-    # in header and found AUTHOR -> start scanning lines for authors
-    if ( $weareinfile && m/$authorpatt/ && !$gotonextlinedescription)
-      {
-        $gotonextlineauthor = 1;
-        next;
-      }
-
-    # scan lines for authors
-    if ($gotonextlineauthor)
-      {
-        # end of authors by "//eol" -> print authors
-        if (m/^\s*\/\/\s*$/)
-          {
-            foreach $name ( @authornames )
-              {
-                print " * \\author $name\n";
-              }
-            print " * \n";
-            $gotonextlineauthor = 0;
-            next;
-          }
-        # end of authors by ".SECTION Description -> print authors and start searching for Description
-        if (m/$descriptionpatt/)
-          {
-            foreach $name ( @authornames )
-              {
-                print " * \\author $name,\n";
-              }
-            print " *\n";
-            $gotonextlineauthor = 0;
-            $gotonextlinedescription = 1;
-            next;
-          }
-
-        # end of authors by ".SECTION Modifications -> print authors and start searching for Modifications
-        if (m/$modificationpatt/)
-          {
-            foreach $name ( @authornames )
-              {
-                print " * \\author $name\n";
-              }
-            print " * \n";
-            $gotonextlineauthor = 0;
-            $gotonextlinemod = 1;
-            next;
-          }
-
-        # get authorname(s) on this line and add to authornamelist
-        if (($f,$authorname) = ($_ =~ m/^\s*(\S+)\s+(.*)/))
-          {
-            $f = ""; # to avoid warning of unused variable
-            push (@authornames,$authorname);
-            next;
-          }
-      }
-
-    # in header and found MODIFICATION -> start scanning lines for modifications
-    if ( $weareinfile && m/$modificationpatt/)
-      {
-        $gotonextlinemod = 1;
-        print " * \\bug\n";
-        next;
-      }
-
-    # scan lines for modifications
-    if ($gotonextlinemod)
-      {
-        # end of modifications because "//---eol" -> print */ and end header
-        if (m/^\s*\/\/\s*-*$/)
-          {
-            print " *\/ \n";
-            $gotonextlinemod = 0;
-            $weareinfile = 0;
-            next;
-          }
-        else
-          # strip "//" from line and print line
-          {
-           s!/*!!;
-           print " * ";
-           print;
-           next;
-          }
-      }
-
-    # .SECTION Description found
-    if ( $weareinfile && m/$descriptionpatt/)
-      {
-        $gotonextlinedescription = 1;
-        next;
-      }
-
-    # scan lines for description
-    if ($gotonextlinedescription)
-      {
-        # end of description by ".SECTION Modifications -> print description and start searching for Modifications
-        if (m/$modificationpatt/)
-          {
-            print " * \n";
-            foreach $name ( @descriptions )
-              {
-                print " * $name\n";
-              }
-            print " * \n";
-            $gotonextlinedescription = 0;
-            $gotonextlinemod = 1;
-            next;
-          }
-
-        # end of description by ".SECTION Author -> print description and start searching for Authors
-        if (m/$authorpatt/)
-          {
-            print " * \n";
-            foreach $name ( @descriptions )
-              {
-                print " * $name\n";
-              }
-            print " * \n";
-            $gotonextlinedescription = 0;
-            $gotonextlineauthor = 1;
-            next;
-          }
-
-        # get description on this line and add to descriptionlist
-        if (($f,$des) = ($_ =~ m/^\s*(\S+)\s+(.*)/))
-          {
-            $f = ""; # to avoid warning of unused variable
-            push (@descriptions,$des);
-            next;
-          }
-      }
-
-    # in header and found MODIFICATION -> start scanning lines for modifications
-    if (  $weareinfile && m/$modificationpatt/)
-      {
-        $gotonextlinemod = 1;
-        print " * \\bug\n";
-        next;
-      }
-
-    # scan lines for modifications
-
-    # ignore other lines of the form // .SOMETHING
-    next if (m/$headerpatt/);
+        print; next;
+    }
 
     # just print line if not in comment or in file
-    print; # if ( !$comment && !$weareinfile);
-  }
+    if ( !$comment ) { print; next; }
+
+    # debug - print unpocessed lines (s.b. none)
+    #print "LNP:"; print;
+
+}
