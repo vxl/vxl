@@ -271,7 +271,7 @@ void vsl_b_read(vsl_b_istream &is,unsigned long& n )
   vsl_convert_from_arbitrary_length(buf, &n);
 }
 
-#if VXL_HAS_INT_64 && !defined(__alpha__)
+#if VXL_HAS_INT_64 && !VXL_INT_64_IS_LONG
 
 void vsl_b_write(vsl_b_ostream& os, vxl_int_64 n )
 {

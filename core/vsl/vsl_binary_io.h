@@ -354,7 +354,7 @@ void vsl_b_read(vsl_b_istream& is,unsigned long& n );
 inline void vsl_print_summary(vcl_ostream& os, unsigned long n )
 {  os << n; }
 
-#if VXL_HAS_INT_64 && !defined(__alpha__)
+#if VXL_HAS_INT_64 && !VXL_INT_64_IS_LONG
 
 //: Write  to vsl_b_ostream
 void vsl_b_write(vsl_b_ostream& os,vxl_int_64 n );

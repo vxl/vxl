@@ -137,7 +137,7 @@ macro (int);
 macro (unsigned int);
 macro (long);
 macro (unsigned long);
-#if VXL_HAS_INT_64 && !defined(__alpha__)
+#if VXL_HAS_INT_64 && !VXL_INT_64_IS_LONG
 macro (vxl_int_64);
 macro (vxl_uint_64);
 #endif
@@ -481,7 +481,7 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
 
 /////////////////////////////////////////////////////////////////////////
 
-#if VXL_HAS_INT_64
+#if VXL_HAS_INT_64 && !VXL_INT_64_IS_LONG
 
 //: Decode a buffer of arbitrary length integers
 // Converts from the integers from the arbitrary length format into
@@ -533,7 +533,7 @@ inline unsigned long vsl_convert_to_arbitrary_length(const vxl_uint_64* ints,
   return vsl_convert_to_arbitrary_length_unsigned_impl(ints, buffer, count);
 }
 
-#endif
+#endif // VXL_HAS_INT_64
 
 /////////////////////////////////////////////////////////////////////////
 
