@@ -200,7 +200,7 @@ bool vgui_viewer3D::handle(const vgui_event& e)
 
   if (this->allow_spinning && this->spinning && event.user == &vgui_viewer3D::SPIN_EVENT) {
 
-    vgui_viewer3D_spin *spin_data = (vgui_viewer3D_spin*)event.data;
+    vgui_viewer3D_spin const* spin_data = (vgui_viewer3D_spin const*)event.data;
 
     if (spin_data->viewer == this) {
 

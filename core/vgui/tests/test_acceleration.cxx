@@ -112,8 +112,8 @@ int main (int /*argc*/, char** /*argv*/)
 
   bool little_endian = (ImageByteOrder(display) == LSBFirst);
 
-  vcl_cerr << "GL_VERSION : " <<  (char *) glGetString(GL_VERSION) << vcl_endl;
-  vcl_cerr << "GL_RENDERER : " << (char *) glGetString(GL_RENDERER) << vcl_endl;
+  vcl_cerr << "GL_VERSION : " <<  (const char *) glGetString(GL_VERSION) << vcl_endl;
+  vcl_cerr << "GL_RENDERER : " << (const char *) glGetString(GL_RENDERER) << vcl_endl;
   vcl_cerr << vcl_endl;
   vcl_cerr << "X Display - " << vcl_endl;
   vcl_cerr << "      byte-order : " << (little_endian ? "little-endian" : "big-endian") << vcl_endl;

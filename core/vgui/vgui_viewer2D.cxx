@@ -182,17 +182,17 @@ bool vgui_viewer2D::handle(const vgui_event& e) {
   if(e.type == vgui_HSCROLL)
   {
         static int npos = 0;
-        this->token.offsetX -= *((int *)e.data)-npos;
+        this->token.offsetX -= *((const int *)e.data)-npos;
     this->post_redraw();
-        npos = *((int *)e.data);
+        npos = *((const int *)e.data);
   }
   // This deals with vertical scroll message
   if(e.type == vgui_VSCROLL)
   {
         static int npos = 0;
-        this->token.offsetY -= *((int *)e.data)-npos;
+        this->token.offsetY -= *((const int *)e.data)-npos;
         this->post_redraw();
-        npos = *((int *)e.data);
+        npos = *((const int *)e.data);
   }
   setup_gl_matrices();
 
