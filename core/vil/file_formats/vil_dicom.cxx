@@ -12,6 +12,7 @@
 #include <vcl_cstring.h>
 #include <vcl_cstdlib.h>
 #include <vcl_vector.h>
+#include <vcl_memory.h>
 
 #include <vxl_config.h> // for vxl_byte and such
 
@@ -28,6 +29,7 @@
 #include <dctagkey.h>
 #include <dcdeftag.h>
 #include <dcstack.h>
+#include <diinpxt.h>
 
 #include "vil_dicom_stream.h"
 
@@ -89,7 +91,7 @@ read_header( DcmObject* dataset, vil_dicom_header_info& i );
 
 static
 void
-read_pixels_into_buffer( DcmElement* pixels,
+read_pixels_into_buffer( DcmPixelData* pixels,
                          unsigned num_samples,
                          Uint16 alloc,
                          Uint16 stored,
@@ -170,7 +172,7 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
   // First, read in the bytes and interpret them appropriately
   //
   {
-    DcmElement* pixels = 0;
+    DcmPixelData* pixels = 0;
     DcmStack stack;
     if ( dset.search( DCM_PixelData, stack, ESM_fromHere, true ) == EC_Normal )
     {
@@ -178,11 +180,8 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
         vcl_cerr << "vil_dicom ERROR: no pixel data found\n";
         return;
       } else {
-        pixels = static_cast<DcmElement*>(stack.top());
-        if ( pixels->getVM() != 1 ) {
-          vcl_cerr << "vil_dicom ERROR: no pixel data has VM != 1. Can't handle\n";
-          return;
-        }
+        assert( stack.top()->ident() == EVR_PixelData );
+        pixels = static_cast<DcmPixelData*>(stack.top());
       }
     }
     unsigned num_samples = ni() * nj() * nplanes();
@@ -191,23 +190,6 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
                              slope, intercept,
                              pixel_buf, pixel_format );
   }
-
-#if 0 // plane_step, i_step and j_step are not being used
-  // Determine the plane order
-  //
-  Uint16 planar_config;
-  vcl_ptrdiff_t plane_step, i_step, j_step;
-  if ( dset.findAndGetUint16( DCM_PlanarConfiguration, planar_config ) == EC_Normal &&
-       planar_config == 1 ) {
-    i_step = 1;
-    j_step = ni();
-    plane_step = ni() * nj();
-  } else {
-    i_step = nplanes();
-    j_step = ni() * nplanes();
-    plane_step = 1;
-  }
-#endif // 0
 
   // Create an image resource to manage the pixel buffer
   //
@@ -786,103 +768,35 @@ read_header( DcmObject* f, vil_dicom_header_info& i )
 // start anonymous namespace for helpers
 namespace
 {
-  template<class InType, class OutType>
-  void
-  convert_unsigned_int(
-        InType const* in_buf_begin,
-        InType const* in_buf_end,
-        OutType* out_buf,
-        Uint16 alloc, Uint16 stored, Uint16 high,
-        Uint16 rep )
-  {
-    assert( stored <= sizeof(OutType)*8 );
-    assert( alloc <= sizeof(InType)*8 );
-    assert( rep == 0 );
-
-    Uint16 right_shift = high + 1 - stored;
-    InType mask = 0xFFFF >> ( alloc - stored );
-
-    InType const* inp = in_buf_begin;
-    OutType* outp = out_buf;
-    for ( ; inp != in_buf_end; ++inp, ++outp ) {
-        *outp = ( *inp >> right_shift ) & mask;
-    }
-  }
-
-  template<class InType, class OutType>
-  void
-  convert_signed_int(
-        InType const* in_buf_begin,
-        InType const* in_buf_end,
-        OutType* out_buf,
-        Uint16 alloc, Uint16 stored, Uint16 high,
-        Uint16 rep )
-  {
-    assert( stored <= sizeof(OutType)*8 );
-    assert( alloc <= sizeof(InType)*8 );
-    assert( rep == 1 );
-
-    Uint16 right_shift = high + 1 - stored;
-    InType mask = 0xFFFF >> ( alloc - stored );
-    InType sign_bit = 1 << (stored-1);
-
-    InType const* inp = in_buf_begin;
-    OutType* outp = out_buf;
-    for ( ; inp != in_buf_end; ++inp, ++outp ) {
-      InType v = *inp >> right_shift;
-      if ( (v & sign_bit) == 0 )
-        *outp = v & mask;
-      else
-        // DICOM signed values are stored as 2s complement
-        *outp = - ( ( ~v & mask ) + 1 );
-    }
-  }
-
-  template<class SrcType>
-  void
-  convert_src_type( SrcType const* src_buf_begin,
+  template<class InT>
+  vcl_auto_ptr<DiInputPixel>
+  convert_src_type( InT const*,
+                    DcmPixelData* pixels,
                     unsigned num_samples,
                     Uint16 alloc,
                     Uint16 stored,
                     Uint16 high,
                     Uint16 rep,
-                    vil_memory_chunk_sptr& act_buf,
                     vil_pixel_format& act_format )
   {
-    SrcType const* src_buf_end   = src_buf_begin + num_samples;
-
-    unsigned act_bytes_per_samp = ( stored+7 ) / 8;
-    act_buf = new vil_memory_chunk( num_samples * act_bytes_per_samp, VIL_PIXEL_FORMAT_BYTE );
-
-    if ( rep == 0 )
-    {
-      if ( act_bytes_per_samp == 1 ) {
-        convert_unsigned_int( src_buf_begin, src_buf_end,
-                              static_cast<vxl_byte*>( act_buf->data() ),
-                              alloc, stored, high, rep );
-        act_format = VIL_PIXEL_FORMAT_BYTE;
-      } else {
-        assert( act_bytes_per_samp == 2 );
-        convert_unsigned_int( src_buf_begin, src_buf_end,
-                              static_cast<vxl_uint_16*>( act_buf->data() ),
-                              alloc, stored, high, rep );
-        act_format = VIL_PIXEL_FORMAT_UINT_16;
-      }
+    typedef vcl_auto_ptr<DiInputPixel> OutType;
+    if( rep == 0 && stored <= 8 ) {
+      act_format = VIL_PIXEL_FORMAT_BYTE;
+      return OutType( new DiInputPixelTemplate<InT,Uint8>( pixels, alloc, stored, high, 0, num_samples ) );
+    } else if( rep == 0 && stored <= 16 ) {
+      act_format = VIL_PIXEL_FORMAT_UINT_16;
+      return OutType( new DiInputPixelTemplate<InT,Uint16>( pixels, alloc, stored, high, 0, num_samples ) );
+    } else if( rep == 1 && stored <= 8 ) {
+      act_format = VIL_PIXEL_FORMAT_SBYTE;
+      return OutType( new DiInputPixelTemplate<InT,Sint8>( pixels, alloc, stored, high, 0, num_samples ) );
+    } else if( rep == 1 && stored <= 16 ) {
+      act_format = VIL_PIXEL_FORMAT_INT_16;
+      return OutType( new DiInputPixelTemplate<InT,Sint16>( pixels, alloc, stored, high, 0, num_samples ) );
     } else {
-      if ( act_bytes_per_samp == 1 ) {
-        convert_signed_int( src_buf_begin, src_buf_end,
-                            static_cast<vxl_sbyte*>( act_buf->data() ),
-                            alloc, stored, high, rep );
-        act_format = VIL_PIXEL_FORMAT_SBYTE;
-      } else {
-        assert( act_bytes_per_samp == 2 );
-        convert_signed_int( src_buf_begin, src_buf_end,
-                            static_cast<vxl_sint_16*>( act_buf->data() ),
-                            alloc, stored, high, rep );
-        act_format = VIL_PIXEL_FORMAT_INT_16;
-      }
+      return OutType();
     }
   }
+
 
   template<class IntType, class OutType>
   void
@@ -899,9 +813,11 @@ namespace
 } // anonymous namespace
 
 
+
+
 static
 void
-read_pixels_into_buffer( DcmElement* pixels,
+read_pixels_into_buffer( DcmPixelData* pixels,
                          unsigned num_samples,
                          Uint16 alloc,
                          Uint16 stored,
@@ -912,45 +828,49 @@ read_pixels_into_buffer( DcmElement* pixels,
                          vil_memory_chunk_sptr& out_buf,
                          vil_pixel_format& out_format )
 {
-  // This will be the "true" pixel buffer after the overlay planes are
-  // removed and the pixel bits shifted to the lowest bits of the
-  // bytes.
+  // This will be the "true" pixel buffer type after the overlay
+  // planes are removed and the pixel bits shifted to the lowest bits
+  // of the bytes.
   //
   vil_pixel_format act_format = VIL_PIXEL_FORMAT_UNKNOWN;
-  vil_memory_chunk_sptr act_buf = 0;
 
   // First convert from the stored src pixels to the actual
   // pixels. This is an integral type to integral type conversion.
   //
-  if ( pixels->getVR() == EVR_OW ) {
-    Uint16* src_buf;
-    if ( pixels->getUint16Array( src_buf ) != EC_Normal )
-      return;
-    convert_src_type( src_buf, num_samples, alloc, stored, high, rep, act_buf, act_format );
+  vcl_auto_ptr<DiInputPixel> pixel_data;
+  if( pixels->getVR() == EVR_OW ) {
+    pixel_data = convert_src_type( (Uint16*)0, pixels, num_samples, alloc, stored, high, rep, act_format );
   } else {
-    // assume OB
-    Uint8* src_buf;
-    if ( pixels->getUint8Array( src_buf ) != EC_Normal )
-      return;
-    convert_src_type( src_buf, num_samples, alloc, stored, high, rep, act_buf, act_format );
+    pixel_data = convert_src_type( (Uint8*)0, pixels, num_samples, alloc, stored, high, rep, act_format );
   }
 
-  // We've copied and converted the data. Release the source.
+  // On error, return without doing anything
+  if( pixel_data.get() == 0 ) {
+    return;
+  }
+
+  // The data has been copied and converted. Release the source.
   pixels->clear();
 
   // Now, the actual buffer is good, or else we need to rescale
   //
   if ( slope == 1 && intercept == 0 ) {
     out_format = act_format;
-    out_buf = act_buf;
+
+    // There isn't an easy way to wrap a vil_memory_chunk around the
+    // converted pixel data, since we don't know the array type. If we
+    // could pass a void* to vil_memory_chunk, it will call the delete
+    // the buffer assuming a char[] array, which it may not be. This
+    // causes undefined behaviour. For the moment, we take the hit and
+    // do a memcpy.
+    //
+    out_buf = new vil_memory_chunk( num_samples * ((stored+7)/8), VIL_PIXEL_FORMAT_BYTE );
+    vcl_memcpy( out_buf->data(), pixel_data->getData(), out_buf->size() );
   } else {
-    if ( act_buf->size() == sizeof(float) * num_samples )
-      out_buf = act_buf;
-    else
-      out_buf = new vil_memory_chunk( num_samples * sizeof(float), VIL_PIXEL_FORMAT_FLOAT );
+    out_buf = new vil_memory_chunk( num_samples * sizeof(float), VIL_PIXEL_FORMAT_FLOAT );
     out_format = VIL_PIXEL_FORMAT_FLOAT;
 
-    char* in_begin = static_cast<char*>( act_buf->data() );
+    void* in_begin = pixel_data->getData();
     float* out_begin = static_cast<float*>( out_buf->data() );
 
     switch( act_format ) {
@@ -968,7 +888,6 @@ read_pixels_into_buffer( DcmElement* pixels,
         break;
       default:
         vcl_cerr << "vil_dicom ERROR: unexpected internal pixel format\n";
-        return;
     }
   }
 }

@@ -545,6 +545,8 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_perform(CheckFile(CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit_uncompressed2.dcm" ) );
   testlib_test_begin( "  8-bit greyscale uncompressed" );
   testlib_test_perform(CheckFile(CompareGrey<vxl_uint_8>(), "ff_grey8bit_true.txt", "ff_grey8bit_uncompressed.dcm" ) );
+  testlib_test_begin( "  8-bit greyscale uncompressed 2" );
+  testlib_test_perform(CheckFile(CompareGrey<vxl_uint_8>(), "ff_grey8bit_true.txt", "ff_grey8bit_uncompressed2.dcm" ) );
   testlib_test_begin( "  16-bit greyscale uncompressed 3" );
   testlib_test_perform(CheckFile(CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit_uncompressed3.dcm" ) );
   testlib_test_begin( "  12-bit greyscale float uncompressed" );
