@@ -55,7 +55,13 @@ foreach $f (@FILES)
 # 2. spaces at end of line
   $has_end_spaces = ($file =~ m/ +\n/);
 
-# 3. Comments: long /* ... */ and old-style // -- docs
+# 3. Lines longer than 132 characters
+  if ($file =~ m/[^\n]{133,}/) {
+    print "$f\t\# has lines of more than 132 characters\n";
+    $printed = 1;
+  }
+
+# 4. Comments: long /* ... */ and old-style // -- docs
   $file =~ s/ +\n/\n/g;
   $file =~ s/\/\*/\001/g; $file =~ s/\/\001/\/\/\*/g;
   $file =~ s/\*\//\002/g;
@@ -67,28 +73,44 @@ foreach $f (@FILES)
   }
   if ($f !~ m/\.c$/ &&
       $f !~ m/_mocced\.cxx$/ &&
-      $f !~ m/\/v3p\/(tiff|netlib|jpeg|png|zlib|Qv)\// &&
-      $f !~ m/\/file_formats\/vil_viff(header|_support)/ &&
-      $f !~ m/\/vgui\/internals\/trackball/ &&
-      $f !~ m/\/vcl\/vcl_c/ &&
-      $f !~ m/\/vcl\/emulation\// &&
-      $file =~ m/\001[^\001\002]{100,}/)
+      $f !~ m/\bv3p\/(tiff|netlib|jpeg|png|zlib|Qv)\// &&
+      $f !~ m/\bfile_formats\/vil_viff(header|_support)/ &&
+      $f !~ m/\bvgui\/internals\/trackball/ &&
+      $f !~ m/\bvcl\/vcl_c/ &&
+      $f !~ m/\bvcl\/emulation\// &&
+      $file =~ m/\001[^\001\002]{111,}/)
   {
     print "$f\t\# contains long /*...*/ comments\n";
     $printed = 1;
   }
 
-# 4. Now remove comments before checking further:
+# 5. RCS indications
+  if ($file =~ m/(\$RCSfile)/) {
+    print "$f\t\# contains RCS indication $1\n";
+    $printed = 1;
+  }
+
+# 6. Now remove comments and string constants before checking further:
   $file_s = "\n" . $file;
   $file_s =~ s/\n\#if\s+0\s*\n.*?\n\#endif\s*\n/\n/g;
+  # remove string constants, incl. multiline string constants with "correct syntax":
+  $file_s =~ s/\\\n//g; $file_s =~ s/([^\\])\\\"/$1/g;
+  $file_s =~ s/\".*?\"/\003/g;
+  # remove // comments
   $file_s =~ s/\/\/[^\n]*\n/\n/g;
+  # remove /* ... */ comments
   $file_s =~ s/\001[^\001\002]*\002//g;
 # if ($file_s =~ m/[\001\002]/) {
 #   print "$f\t\# contains nested comments\n";
 #   $printed = 1;
 # }
 
-# 5. Inclusion guard
+# 7. Multi-line string constant
+  if ($file_s =~ m/\"/) {
+    print "$f\t\# contains multi-line string constant\n";
+    $printed = 1;
+  }
+# 8. Inclusion guard
   if ($file_s =~ m/^\s*\#ifndef\s+(\S+)\n#define\s+\1\n/) {
     $guard = $1;
     if (defined($inclusion_guards{"$guard"})) {
@@ -101,35 +123,86 @@ foreach $f (@FILES)
     undef $guard;
   }
   else {
-    unless ($f =~ m/\.cxx$/ || $f =~ m/\.cpp$/ || $f =~ m/\.c$/ ||
+    unless ($f !~ m/\.(txx|h)$/ ||
             $f =~ m/vcl\/emulation\/.*stlco(nf|mp)\.h$/ ||
             $f =~ m/vcl\/vcl_typeinfo\.h$/ ||
             $f =~ m/v3p\/(jpeg|tiff|zlib)\// ||
             $f =~ m/\/resource\.h$/i ||
-            $f =~ m/vcl(\/win32)?\/vcl_c(assert|string)/)
+            $f =~ m/vcl(\/win32)?\/vcl_c(assert|string)/ ||
+            $file_s eq "")
     {
       print "$f\t\# has no (valid) inclusion guard\n";
       $printed = 1;
     }
   }
 
-# 6. Multiple empty lines, empty line before } or after {
+# 9. Constant pi written as 3.1415...
+  if ($file_s =~ m/\b(3\.14159\d*)/) {
+    print "$f\t\# should maybe use vnl_math::pi instead of $1\n";
+    $printed = 1;
+  }
+
+# 9. Instantiation macro ends with ;
+  if ($file_s =~ m/\#define\s+(\S*INSTANTIATE\S*)[^\n]+;\s*\n/) {
+    print "$f\t\# definition of $1 ends with ;\n";
+    $printed = 1;
+  }
+
+# 10. Missing vcl_
+  foreach $wd (split(' ',"abort exit")) {
+    if ($f !~ m/\bv3p\/(netlib|jpeg|png|zlib)\// &&
+        $f !~ m/\.c$/ &&
+        $file_s =~ m/\b$wd\s*(\s*)\(/) {
+      print "$f\t\# $wd$1() must be vcl_$wd()\n";
+      $printed = 1;
+    }
+  }
+  foreach $wd (split(' ',"complex real imag conj arg polar abs acos asin atan atan2 ceil cos exp fabs floor log min max pow sin sqrt")) {
+    if ($f !~ m/\bvcl(\/[^\/]+)?\/vcl_(cmath|complex|cstdlib)\./ &&
+        $f !~ m/\bv3p\/(netlib|tiff|png)\// && $f !~ m/\bv3p\/Qv\/vectors\.h$/ &&
+        $f !~ m/\.c$/ &&
+        $f !~ m/\bvnl\/vnl_complex_ops\.txx$/ &&
+        "$f.$wd" !~ m/\bvbl\/vbl_timer\.(h|cxx)\.real$/ &&
+        "$f.$wd" !~ m/\boxl\/mvl\/HomgConic\.(h|cxx)\.polar$/ &&
+        "$f.$wd" !~ m/\bvnl\/algo\/vnl_rn?poly_(solve|roots)\.h\.(real|imag)$/ &&
+        $file_s =~ m/[^.]\b$wd\s*(\s*)\(/) {
+      print "$f\t\# $wd$1() must be vcl_$wd()\n";
+      $printed = 1;
+    }
+  }
+  foreach $wd (split(' ',"cin cout cerr clog endl istream ostream fstream ifstream ofstream")) {
+    if ($f !~ m/\bvcl(\/iso|\/generic|\/sgi)?\/vcl_(iosfwd|[iof]+stream)\.h/ &&
+        $f !~ m/\bvcl\/Templates\/stream-instances\.cxx$/ &&
+        $file_s =~ m/\b$wd\b/) {
+      print "$f\t\# $wd must be vcl_$wd\n";
+      $printed = 1;
+    }
+  }
+  foreach $wd (split(' ',"size_t ptrdiff_t clock_t time_t")) {
+    if ($f !~ m/\bvcl(\/generic|\/sgi|\/win32)?\/vcl_c(stddef|stdio|time)\./ &&
+        $f !~ m/\bv3p\/(jpeg|tiff|png)\// &&
+        $f !~ m/\.c$/ &&
+        $file_s =~ m/\b$wd\b/) {
+      print "$f\t\# $wd must be vcl_$wd\n";
+      $printed = 1;
+    }
+  }
+
+# 11. Multiple empty lines, empty line before } or after {
 #   (mentioned only if something else is already printed, or is -f given)
   if ($printed && $file =~ m/\n\n\n\n/) {
     print "$f\t\# contains multiple (>=3) empty lines\n";
-    $printed = 1;
   }
   print "$f\t\# has lines ending in spaces\n"
     if ($printed && $has_end_spaces);
   print "$f\t\# has empty lines before closing brace\n"
-    if ($printed && $file =~ m/\n\n[ \t]*\}\n/);
+    if ($printed && $file =~ m/\n\n[ \t]*\};*\s*\n/);
   print "$f\t\# has empty lines after opening brace\n"
-    if ($printed && $file =~ m/\n[ \t]*\{\n\n/);
-}
+    if ($printed && $file =~ m/\n[ \t]*\{\s*\n\n/);
 
-# 7. no end-of-line at end-of-file
+# 12. no end-of-line at end-of-file
   $file =~ s/.*(.)//;
-  unless ($file =~ m/\n/) {
+  unless ($file =~ m/\n/ || $file eq "") {
     print "$f\t\# has no final end-of-line\n";
   }
-
+}
