@@ -4,7 +4,7 @@
 // \file
 //  Test of the vepl_threshold templated IP classes
 //  vepl_threshold<vil1_image,vil1_image,T,T>
-//  for T in { unsigned char, unsigned short, float }.
+//  for T in { vxl_byte, vxl_uint_16, float }.
 //
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   12 Sept. 2000
@@ -12,10 +12,11 @@
 #include <vepl/vepl_threshold.h>
 //#include <vil1/vil1_rgb_byte.h>
 #include "test_driver.h"
+#include <vxl_config.h> // for vxl_byte
 
 #define ALL_TESTS(x,v,m) \
-  ONE_TEST(x,byte_img,byte_ori,unsigned char,v,m+"_byte"); \
-  ONE_TEST(x,shrt_img,shrt_ori,unsigned short,v,m+"_short"); \
+  ONE_TEST(x,byte_img,byte_ori,vxl_byte,v,m+"_byte"); \
+  ONE_TEST(x,shrt_img,shrt_ori,vxl_uint_16,v,m+"_short"); \
 /*ONE_TEST(x,flot_img,flot_ori,float,v,m+"_float"); */ \
 /*ONE_TEST(x,colr_img,colr_ori,vil1_rgb_byte,v,m+"_colour") */
 

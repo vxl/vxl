@@ -5,20 +5,19 @@
 #include <vil1/vil1_memory_image_of.h>
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
+#include <vxl_config.h> // for vxl_byte
 
-typedef unsigned char ubyte;
-typedef unsigned short ushort;
 float abs_float(float const& a) { return (a<0) ? -a : a; }
 double abs_double(double const& a) { return vcl_fabs(a); }
 float sqrt_float(float const& a) { return (a<0) ? -vcl_sqrt(a) : vcl_sqrt(a); }
 double sqrt_double(double const& a) { return (a<0) ? -vcl_sqrt(a) : vcl_sqrt(a); }
-ubyte sqr_ubyte(ubyte const& a) { return a*a; }
-ushort sqr_ushort(ushort const& a) { return a*a; }
+vxl_byte sqr_ubyte(vxl_byte const& a) { return a*a; }
+vxl_uint_16 sqr_ushort(vxl_uint_16 const& a) { return a*a; }
 float sqr_float(float const& a) { return a*a; }
 double sqr_double(double const& a) { return a*a; }
 static double shift_=0.0, scale_=1.0;
-ubyte shear_ubyte(ubyte const& a) { return ubyte((a+shift_)*scale_); }
-ushort shear_ushort(ushort const& a) { return ushort((a+shift_)*scale_); }
+vxl_byte shear_ubyte(vxl_byte const& a) { return vxl_byte((a+shift_)*scale_); }
+vxl_uint_16 shear_ushort(vxl_uint_16 const& a) { return vxl_uint_16((a+shift_)*scale_); }
 float shear_float(float const& a) { return float((a+shift_)*scale_); }
 double shear_double(double const& a) { return (a+shift_)*scale_; }
 
@@ -27,17 +26,17 @@ vil1_image vepl_monadic_abs(vil1_image const& image)
 {
   // byte greyscale
   if (vil1_pixel_format(image) == VIL1_BYTE) {
-    return image; // ubyte is unsigned so nothing happens
+    return image; // vxl_byte is unsigned so nothing happens
   }
 
   // byte rgb
   else if (vil1_pixel_format(image) == VIL1_RGB_BYTE) {
-    return image; // ubyte is unsigned so nothing happens
+    return image; // vxl_byte is unsigned so nothing happens
   }
 
   // 16-bit greyscale
   else if (vil1_pixel_format(image) == VIL1_UINT16) {
-    return image; // ushort is unsigned so nothing happens
+    return image; // vxl_uint_16 is unsigned so nothing happens
   }
 
   // float
@@ -104,9 +103,9 @@ vil1_image vepl_monadic_sqr(vil1_image const& image)
 {
   // byte greyscale
   if (vil1_pixel_format(image) == VIL1_BYTE) {
-    vil1_memory_image_of<ubyte> mem(image); // load in memory to pass to filter
-    vil1_memory_image_of<ubyte> out(image);
-    vipl_monadic<vil1_image,vil1_image,ubyte,ubyte> op(sqr_ubyte);
+    vil1_memory_image_of<vxl_byte> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<vxl_byte> out(image);
+    vipl_monadic<vil1_image,vil1_image,vxl_byte,vxl_byte> op(sqr_ubyte);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -115,9 +114,9 @@ vil1_image vepl_monadic_sqr(vil1_image const& image)
 
   // 16-bit greyscale
   else if (vil1_pixel_format(image) == VIL1_UINT16) {
-    vil1_memory_image_of<ushort> mem(image); // load in memory to pass to filter
-    vil1_memory_image_of<ushort> out(image);
-    vipl_monadic<vil1_image,vil1_image,ushort,ushort> op(sqr_ushort);
+    vil1_memory_image_of<vxl_uint_16> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<vxl_uint_16> out(image);
+    vipl_monadic<vil1_image,vil1_image,vxl_uint_16,vxl_uint_16> op(sqr_ushort);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -159,9 +158,9 @@ vil1_image vepl_monadic_shear(vil1_image const& image, double shift, double scal
 
   // byte greyscale
   if (vil1_pixel_format(image) == VIL1_BYTE) {
-    vil1_memory_image_of<ubyte> mem(image); // load in memory to pass to filter
-    vil1_memory_image_of<ubyte> out(image);
-    vipl_monadic<vil1_image,vil1_image,ubyte,ubyte> op(shear_ubyte);
+    vil1_memory_image_of<vxl_byte> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<vxl_byte> out(image);
+    vipl_monadic<vil1_image,vil1_image,vxl_byte,vxl_byte> op(shear_ubyte);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -170,9 +169,9 @@ vil1_image vepl_monadic_shear(vil1_image const& image, double shift, double scal
 
   // 16-bit greyscale
   else if (vil1_pixel_format(image) == VIL1_UINT16) {
-    vil1_memory_image_of<ushort> mem(image); // load in memory to pass to filter
-    vil1_memory_image_of<ushort> out(image);
-    vipl_monadic<vil1_image,vil1_image,ushort,ushort> op(shear_ushort);
+    vil1_memory_image_of<vxl_uint_16> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<vxl_uint_16> out(image);
+    vipl_monadic<vil1_image,vil1_image,vxl_uint_16,vxl_uint_16> op(shear_ushort);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();

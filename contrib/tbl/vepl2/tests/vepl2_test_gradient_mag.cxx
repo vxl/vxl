@@ -11,6 +11,7 @@
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include "test_driver.h"
+#include <vxl_config.h> // for vxl_byte
 
 int vepl2_test_gradient_mag() {
   vcl_cout << "Starting vepl2_gradient_mag tests\n"
@@ -31,8 +32,8 @@ int vepl2_test_gradient_mag() {
   FUZ_TEST(vepl2_gradient_mag,int__img,int__ori,vxl_uint_32,1957900120,m+"_int",args);
   ONE_TEST(vepl2_gradient_mag,flot_img,flot_ori,float,288,m+"_float",args);
   ONE_TEST(vepl2_gradient_mag,dble_img,dble_ori,double,288,m+"_double",args);
-  ONE_TEST(vepl2_gradient_mag,colr_img,colr_ori,vil_rgb<unsigned char>,101614,m+"_colour",args);
-  ONE_TEST(vepl2_gradient_mag,colp_img,colp_ori,unsigned char,101614,m+"_planar",args);
+  ONE_TEST(vepl2_gradient_mag,colr_img,colr_ori,vil_rgb<vxl_byte>,101614,m+"_colour",args);
+  ONE_TEST(vepl2_gradient_mag,colp_img,colp_ori,vxl_byte,101614,m+"_planar",args);
 
   return 0;
 }

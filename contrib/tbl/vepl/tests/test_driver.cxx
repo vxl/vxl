@@ -4,6 +4,7 @@
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_rgb_byte.h>
 #include <vcl_string.h>
+#include <vxl_config.h> // for vxl_byte
 
 DECLARE( vepl_test_erode_disk );
 DECLARE( vepl_test_threshold );
@@ -20,10 +21,10 @@ DEFINE_MAIN;
 // create an 8 bit test image
 vil1_image CreateTest8bitImage(int wd, int ht)
 {
-  vil1_memory_image_of<unsigned char> image(wd, ht);
+  vil1_memory_image_of<vxl_byte> image(wd, ht);
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++) {
-      unsigned char data = ((x-wd/2)*(y-ht/2)/16) % (1<<8);
+      vxl_byte data = ((x-wd/2)*(y-ht/2)/16) % (1<<8);
       image.put_section(&data, x, y, 1, 1);
     }
   return image;
@@ -32,10 +33,10 @@ vil1_image CreateTest8bitImage(int wd, int ht)
 // create a 16 bit test image
 vil1_image CreateTest16bitImage(int wd, int ht)
 {
-  vil1_memory_image_of<unsigned short> image(wd, ht);
+  vil1_memory_image_of<vxl_uint_16> image(wd, ht);
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++) {
-      unsigned short data = ((x-wd/2)*(y-ht/2)/16) % (1<<16);
+      vxl_uint_16 data = ((x-wd/2)*(y-ht/2)/16) % (1<<16);
       image.put_section(&data, x, y, 1, 1);
   }
   return image;
@@ -47,7 +48,7 @@ vil1_image CreateTest24bitImage(int wd, int ht)
   vil1_memory_image_of<vil1_rgb_byte> image(wd, ht);
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++) {
-      unsigned char data[3] = { x%(1<<8), ((x-wd/2)*(y-ht/2)/16) % (1<<8), ((y/3)%(1<<8)) };
+      vxl_byte data[3] = { x%(1<<8), ((x-wd/2)*(y-ht/2)/16) % (1<<8), ((y/3)%(1<<8)) };
       image.put_section(data, x, y, 1, 1);
     }
   return image;
@@ -59,7 +60,7 @@ vil1_image CreateTest3planeImage(int wd, int ht)
   vil1_memory_image image(3, wd, ht, 1, 8, VIL1_COMPONENT_FORMAT_UNSIGNED_INT);
   for (int x = 0; x < wd; x++)
     for (int y = 0; y < ht; y++) {
-      unsigned char data[3] = { x%(1<<8), ((x-wd/2)*(y-ht/2)/16) % (1<<8), ((y/3)%(1<<8)) };
+      vxl_byte data[3] = { x%(1<<8), ((x-wd/2)*(y-ht/2)/16) % (1<<8), ((y/3)%(1<<8)) };
       image.put_section(data, x, y, 1, 1);
     }
   return image;
@@ -103,9 +104,9 @@ bool difference(vil1_image const& a, vil1_image const& b, int v, vcl_string cons
       }
     else
       switch (a.bits_per_component()) {
-        case 1: DIFF(unsigned char); break;
-        case 2: DIFF(unsigned short); break;
-        case 3: DIFF(unsigned char); break;
+        case 1: DIFF(vxl_byte); break;
+        case 2: DIFF(vxl_uint_16); break;
+        case 3: DIFF(vxl_byte); break;
         case 4: DIFF(int); break;
         default: d = 0;
       }

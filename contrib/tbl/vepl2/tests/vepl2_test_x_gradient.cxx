@@ -10,6 +10,7 @@
 #include <vepl2/vepl2_x_gradient.h>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
+#include <vxl_config.h> // for vxl_byte
 
 int vepl2_test_x_gradient()
 {
@@ -26,13 +27,13 @@ int vepl2_test_x_gradient()
 
   vcl_string m = "vepl2_x_gradient";
 #define args
-  ONE_TEST(vepl2_x_gradient,byte_img,byte_ori,unsigned char,90104,m+"_byte",args);
-  ONE_TEST(vepl2_x_gradient,shrt_img,shrt_ori,unsigned short,23199224,m+"_short",args);
-  ONE_TEST(vepl2_x_gradient,int__img,int__ori,unsigned int,21757994,m+"_int",args);
+  ONE_TEST(vepl2_x_gradient,byte_img,byte_ori,vxl_byte,90104,m+"_byte",args);
+  ONE_TEST(vepl2_x_gradient,shrt_img,shrt_ori,vxl_uint_16,23199224,m+"_short",args);
+  ONE_TEST(vepl2_x_gradient,int__img,int__ori,vxl_uint_32,21757994,m+"_int",args);
   ONE_TEST(vepl2_x_gradient,flot_img,flot_ori,float,282,m+"_float",args);
   ONE_TEST(vepl2_x_gradient,dble_img,dble_ori,double,282,m+"_double",args);
-  ONE_TEST(vepl2_x_gradient,colr_img,colr_ori,vil_rgb<unsigned char>,107504,m+"_colour",args);
-  ONE_TEST(vepl2_x_gradient,colp_img,colp_ori,unsigned char,107504,m+"_planar",args);
+  ONE_TEST(vepl2_x_gradient,colr_img,colr_ori,vil_rgb<vxl_byte>,107504,m+"_colour",args);
+  ONE_TEST(vepl2_x_gradient,colp_img,colp_ori,vxl_byte,107504,m+"_planar",args);
 
   return 0;
 }

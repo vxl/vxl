@@ -14,15 +14,14 @@
 #include <vil1/vil1_memory_image_of.h>
 
 #include <vepl/vepl_threshold.h>
-#include <vcl_cstdlib.h> // for atoi()
+#include <vxl_config.h> // for vxl_byte
 #include <vcl_vector.h>
-
-typedef unsigned char ubyte;
 
 // for I/O:
 #include <vil1/vil1_load.h>
 #include <vil1/vil1_save.h>
 #include <vcl_iostream.h>
+#include <vcl_cstdlib.h> // for atoi()
 
 int
 main(int argc, char** argv) {
@@ -35,13 +34,13 @@ main(int argc, char** argv) {
   int ys = in.height();
 
   // In-memory version:
-  vil1_memory_image_of<ubyte> out(in);
-  vcl_vector<ubyte> buf(in.get_size_bytes());
+  vil1_memory_image_of<vxl_byte> out(in);
+  vcl_vector<vxl_byte> buf(in.get_size_bytes());
   in.get_section(&buf[0],0,0,xs,ys);
   out.put_section(&buf[0],0,0,xs,ys);
 
   // The threshold value:
-  ubyte threshold = (argc < 4) ? 64 : vcl_atoi(argv[3]);
+  vxl_byte threshold = (argc < 4) ? 64 : vcl_atoi(argv[3]);
 
   // perform thresholding:
   out = vepl_threshold(out,threshold,0,255); // NOTE THAT dst == src

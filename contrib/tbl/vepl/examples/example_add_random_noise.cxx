@@ -20,8 +20,7 @@
 #include <vepl/vepl_add_random_noise.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h> // for atof()
-
-typedef unsigned char ubyte;
+#include <vxl_config.h> // for vxl_byte
 
 int
 main(int argc, char** argv) {
@@ -31,7 +30,7 @@ main(int argc, char** argv) {
   vil1_image in = vil1_load(argv[1]);
   vil1_image& src = in;
 #ifndef NO_MEMORY_IMAGE // otherwise get_pixel() would be very slow!!
-  vil1_memory_image_of<ubyte> mem (in);
+  vil1_memory_image_of<vxl_byte> mem(in);
   src = mem;
 #endif
 

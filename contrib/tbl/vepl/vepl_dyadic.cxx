@@ -4,26 +4,25 @@
 #include <vipl/vipl_dyadic.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_rgb.h>
+#include <vxl_config.h> // for vxl_byte
 
-typedef unsigned char ubyte;
-typedef unsigned short ushort;
-#define r_g_b vil1_rgb<ubyte> // cannot use typedef since that may cause ambiguous overload problems
-void sum_ubyte(ubyte& a, ubyte const& b) { a += b; }
-void sum_ushort(ushort& a, ushort const& b) { a += b; }
+#define r_g_b vil1_rgb<vxl_byte> // cannot use typedef since that may cause ambiguous overload problems
+void sum_ubyte(vxl_byte& a, vxl_byte const& b) { a += b; }
+void sum_ushort(vxl_uint_16& a, vxl_uint_16 const& b) { a += b; }
 void sum_rgb(r_g_b& a, r_g_b const& b) { a.r += b.r; a.g += b.g; a.b += b.b; }
 void sum_float(float& a, float const& b) { a += b; }
 void sum_double(double& a, double const& b) { a += b; }
-void dif_ubyte(ubyte& a, ubyte const& b) { a -= b; }
-void dif_ushort(ushort& a, ushort const& b) { a -= b; }
+void dif_ubyte(vxl_byte& a, vxl_byte const& b) { a -= b; }
+void dif_ushort(vxl_uint_16& a, vxl_uint_16 const& b) { a -= b; }
 void dif_rgb(r_g_b& a, r_g_b const& b) { a.r -= b.r; a.g -= b.g; a.b -= b.b; }
 void dif_float(float& a, float const& b) { a -= b; }
 void dif_double(double& a, double const& b) { a -= b; }
-void min_ubyte(ubyte& a, ubyte const& b) { if (b<a) a = b; }
-void min_ushort(ushort& a, ushort const& b) { if (b<a) a = b; }
+void min_ubyte(vxl_byte& a, vxl_byte const& b) { if (b<a) a = b; }
+void min_ushort(vxl_uint_16& a, vxl_uint_16 const& b) { if (b<a) a = b; }
 void min_float(float& a, float const& b) { if (b<a) a = b; }
 void min_double(double& a, double const& b) { if (b<a) a = b; }
-void max_ubyte(ubyte& a, ubyte const& b) { if (a<b) a = b; }
-void max_ushort(ushort& a, ushort const& b) { if (a<b) a = b; }
+void max_ubyte(vxl_byte& a, vxl_byte const& b) { if (a<b) a = b; }
+void max_ushort(vxl_uint_16& a, vxl_uint_16 const& b) { if (a<b) a = b; }
 void max_float(float& a, float const& b) { if (a<b) a = b; }
 void max_double(double& a, double const& b) { if (a<b) a = b; }
 
@@ -31,9 +30,9 @@ void vepl_dyadic_sum(vil1_image im_out, vil1_image const& image)
 {
   // byte greyscale
   if (vil1_pixel_format(image) == VIL1_BYTE) {
-    vil1_memory_image_of<ubyte> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<vxl_byte> mem(image); // load in memory to pass to filter
     im_out = mem;
-    vipl_dyadic<vil1_image,vil1_image,ubyte,ubyte> op(sum_ubyte);
+    vipl_dyadic<vil1_image,vil1_image,vxl_byte,vxl_byte> op(sum_ubyte);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&im_out);
     op.filter();
@@ -51,10 +50,9 @@ void vepl_dyadic_sum(vil1_image im_out, vil1_image const& image)
 
   // 16-bit greyscale
   else if (vil1_pixel_format(image) == VIL1_UINT16) {
-    typedef unsigned short ushort;
-    vil1_memory_image_of<ushort> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<vxl_uint_16> mem(image); // load in memory to pass to filter
     im_out = mem;
-    vipl_dyadic<vil1_image,vil1_image,ushort,ushort> op(sum_ushort);
+    vipl_dyadic<vil1_image,vil1_image,vxl_uint_16,vxl_uint_16> op(sum_ushort);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&im_out);
     op.filter();
@@ -90,9 +88,9 @@ void vepl_dyadic_dif(vil1_image im_out, vil1_image const& image)
 {
   // byte greyscale
   if (vil1_pixel_format(image) == VIL1_BYTE) {
-    vil1_memory_image_of<ubyte> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<vxl_byte> mem(image); // load in memory to pass to filter
     im_out = mem;
-    vipl_dyadic<vil1_image,vil1_image,ubyte,ubyte> op(dif_ubyte);
+    vipl_dyadic<vil1_image,vil1_image,vxl_byte,vxl_byte> op(dif_ubyte);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&im_out);
     op.filter();
@@ -110,10 +108,9 @@ void vepl_dyadic_dif(vil1_image im_out, vil1_image const& image)
 
   // 16-bit greyscale
   else if (vil1_pixel_format(image) == VIL1_UINT16) {
-    typedef unsigned short ushort;
-    vil1_memory_image_of<ushort> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<vxl_uint_16> mem(image); // load in memory to pass to filter
     im_out = mem;
-    vipl_dyadic<vil1_image,vil1_image,ushort,ushort> op(dif_ushort);
+    vipl_dyadic<vil1_image,vil1_image,vxl_uint_16,vxl_uint_16> op(dif_ushort);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&im_out);
     op.filter();
@@ -149,9 +146,9 @@ void vepl_dyadic_min(vil1_image im_out, vil1_image const& image)
 {
   // byte greyscale
   if (vil1_pixel_format(image) == VIL1_BYTE) {
-    vil1_memory_image_of<ubyte> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<vxl_byte> mem(image); // load in memory to pass to filter
     im_out = mem;
-    vipl_dyadic<vil1_image,vil1_image,ubyte,ubyte> op(min_ubyte);
+    vipl_dyadic<vil1_image,vil1_image,vxl_byte,vxl_byte> op(min_ubyte);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&im_out);
     op.filter();
@@ -159,10 +156,9 @@ void vepl_dyadic_min(vil1_image im_out, vil1_image const& image)
 
   // 16-bit greyscale
   else if (vil1_pixel_format(image) == VIL1_UINT16) {
-    typedef unsigned short ushort;
-    vil1_memory_image_of<ushort> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<vxl_uint_16> mem(image); // load in memory to pass to filter
     im_out = mem;
-    vipl_dyadic<vil1_image,vil1_image,ushort,ushort> op(min_ushort);
+    vipl_dyadic<vil1_image,vil1_image,vxl_uint_16,vxl_uint_16> op(min_ushort);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&im_out);
     op.filter();
@@ -198,9 +194,9 @@ void vepl_dyadic_max(vil1_image im_out, vil1_image const& image)
 {
   // byte greyscale
   if (vil1_pixel_format(image) == VIL1_BYTE) {
-    vil1_memory_image_of<ubyte> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<vxl_byte> mem(image); // load in memory to pass to filter
     im_out = mem;
-    vipl_dyadic<vil1_image,vil1_image,ubyte,ubyte> op(max_ubyte);
+    vipl_dyadic<vil1_image,vil1_image,vxl_byte,vxl_byte> op(max_ubyte);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&im_out);
     op.filter();
@@ -208,10 +204,9 @@ void vepl_dyadic_max(vil1_image im_out, vil1_image const& image)
 
   // 16-bit greyscale
   else if (vil1_pixel_format(image) == VIL1_UINT16) {
-    typedef unsigned short ushort;
-    vil1_memory_image_of<ushort> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<vxl_uint_16> mem(image); // load in memory to pass to filter
     im_out = mem;
-    vipl_dyadic<vil1_image,vil1_image,ushort,ushort> op(max_ushort);
+    vipl_dyadic<vil1_image,vil1_image,vxl_uint_16,vxl_uint_16> op(max_ushort);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&im_out);
     op.filter();

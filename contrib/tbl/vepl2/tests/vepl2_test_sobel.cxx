@@ -10,6 +10,7 @@
 #include <vepl2/vepl2_sobel.h>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
+#include <vxl_config.h> // for vxl_byte
 
 int vepl2_test_sobel()
 {
@@ -26,13 +27,13 @@ int vepl2_test_sobel()
 
   vcl_string m = "vepl2_sobel";
 #define args
-  ONE_TEST(vepl2_sobel,byte_img,byte_ori,unsigned char,95634,m+"_byte",args);
-  ONE_TEST(vepl2_sobel,shrt_img,shrt_ori,unsigned short,24640914,m+"_short",args);
-  ONE_TEST(vepl2_sobel,int__img,int__ori,unsigned int,26738762,m+"_int",args);
+  ONE_TEST(vepl2_sobel,byte_img,byte_ori,vxl_byte,95634,m+"_byte",args);
+  ONE_TEST(vepl2_sobel,shrt_img,shrt_ori,vxl_uint_16,24640914,m+"_short",args);
+  ONE_TEST(vepl2_sobel,int__img,int__ori,vxl_uint_32,26738762,m+"_int",args);
   ONE_TEST(vepl2_sobel,flot_img,flot_ori,float,301,m+"_float",args);
   ONE_TEST(vepl2_sobel,dble_img,dble_ori,double,301,m+"_double",args);
-  ONE_TEST(vepl2_sobel,colr_img,colr_ori,vil_rgb<unsigned char>,186894,m+"_colour",args);
-  ONE_TEST(vepl2_sobel,colp_img,colp_ori,unsigned char,186894,m+"_planar",args);
+  ONE_TEST(vepl2_sobel,colr_img,colr_ori,vil_rgb<vxl_byte>,186894,m+"_colour",args);
+  ONE_TEST(vepl2_sobel,colp_img,colp_ori,vxl_byte,186894,m+"_planar",args);
 
   return 0;
 }

@@ -10,6 +10,7 @@
 #include <vepl2/vepl2_dilate_disk.h>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
+#include <vxl_config.h> // for vxl_byte
 
 int vepl2_test_dilate_disk()
 {
@@ -26,13 +27,13 @@ int vepl2_test_dilate_disk()
 
   vcl_string m = "vepl2_dilate_disk";
 #define args ,5
-  ONE_TEST(vepl2_dilate_disk,byte_img,byte_ori,unsigned char,70355,m+"_byte",args);
-  ONE_TEST(vepl2_dilate_disk,shrt_img,shrt_ori,unsigned short,17565395,m+"_short",args);
-  ONE_TEST(vepl2_dilate_disk,int__img,int__ori,unsigned int,17565395,m+"_int",args);
+  ONE_TEST(vepl2_dilate_disk,byte_img,byte_ori,vxl_byte,70355,m+"_byte",args);
+  ONE_TEST(vepl2_dilate_disk,shrt_img,shrt_ori,vxl_uint_16,17565395,m+"_short",args);
+  ONE_TEST(vepl2_dilate_disk,int__img,int__ori,vxl_uint_32,17565395,m+"_int",args);
   ONE_TEST(vepl2_dilate_disk,flot_img,flot_ori,float,338,m+"_float",args);
   ONE_TEST(vepl2_dilate_disk,dble_img,dble_ori,double,338,m+"_double",args);
-  ONE_TEST(vepl2_dilate_disk,colr_img,colr_ori,vil_rgb<unsigned char>,4200,m+"_colour",args);
-  ONE_TEST(vepl2_dilate_disk,colp_img,colp_ori,unsigned char,4200,m+"_planar",args);
+  ONE_TEST(vepl2_dilate_disk,colr_img,colr_ori,vil_rgb<vxl_byte>,4200,m+"_colour",args);
+  ONE_TEST(vepl2_dilate_disk,colp_img,colp_ori,vxl_byte,4200,m+"_planar",args);
 
   return 0;
 }

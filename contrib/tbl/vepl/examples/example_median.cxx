@@ -12,8 +12,6 @@
 //
 #include <vepl/vepl_median.h>
 
-typedef unsigned char ubyte;
-
 // for I/O:
 #include <vil1/vil1_load.h>
 #include <vil1/vil1_save.h>

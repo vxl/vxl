@@ -4,15 +4,15 @@
 #include <vipl/accessors/vipl_accessors_vil1_image.h>
 #include <vipl/vipl_gradient_dir.h>
 #include <vil1/vil1_memory_image_of.h>
+#include <vxl_config.h> // for vxl_byte
 
 vil1_image vepl_gradient_dir(vil1_image const& image, double scale, double shift)
 {
   // byte greyscale
   if (vil1_pixel_format(image) == VIL1_BYTE) {
-    typedef unsigned char ubyte;
-    vil1_memory_image_of<ubyte> mem(image); // load in memory to pass to filter
-    vil1_memory_image_of<ubyte> out(image);
-    vipl_gradient_dir<vil1_image,vil1_image,ubyte,ubyte> op(scale, shift);
+    vil1_memory_image_of<vxl_byte> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<vxl_byte> out(image);
+    vipl_gradient_dir<vil1_image,vil1_image,vxl_byte,vxl_byte> op(scale, shift);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -27,10 +27,9 @@ vil1_image vepl_gradient_dir(vil1_image const& image, double scale, double shift
 
   // 16-bit greyscale
   else if (vil1_pixel_format(image) == VIL1_UINT16) {
-    typedef unsigned short ushort;
-    vil1_memory_image_of<ushort> mem(image); // load in memory to pass to filter
-    vil1_memory_image_of<ushort> out(image);
-    vipl_gradient_dir<vil1_image,vil1_image,ushort,ushort> op(scale, shift);
+    vil1_memory_image_of<vxl_uint_16> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<vxl_uint_16> out(image);
+    vipl_gradient_dir<vil1_image,vil1_image,vxl_uint_16,vxl_uint_16> op(scale, shift);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();

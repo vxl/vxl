@@ -9,11 +9,7 @@
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   15 May 2001, from vipl/examples
 //
-#include <vil1/vil1_rgb.h>
 #include <vepl/vepl_x_gradient.h>
-
-typedef unsigned char ubyte;
-typedef vil1_rgb<ubyte> rgbcell;
 
 // for I/O:
 #include <vil1/vil1_load.h>

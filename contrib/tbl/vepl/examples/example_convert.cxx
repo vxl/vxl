@@ -20,8 +20,8 @@
 #include <vil1/vil1_save.h>
 #include <vcl_iostream.h>
 
-typedef unsigned char ubyte;
-typedef vil1_rgb<ubyte> rgbcell;
+#include <vxl_config.h> // for vxl_byte
+typedef vil1_rgb<vxl_byte> rgbcell;
 
 int
 main(int argc, char** argv)
@@ -32,18 +32,18 @@ main(int argc, char** argv)
   vil1_image in = vil1_load(argv[1]);
 
   // The output image:
-  vil1_memory_image_of<ubyte> out_grey(in);
+  vil1_memory_image_of<vxl_byte> out_grey(in);
   vil1_memory_image_of<rgbcell> out_rgb(in);
 
   if (in.planes() == 1 && in.components() == 1) { // monochrome
-    ubyte dummy = 0;
+    vxl_byte dummy = 0;
     if (in.bits_per_component() == 8)
       vcl_cerr<<"Warning: no conversion necessary\n";
     out_grey = vepl_convert(in, dummy);
     vil1_save(out_grey, argv[2], "pnm");
     vcl_cout << "vepl_convert()ed grey image to PGM image " << argv[2] << vcl_endl;
   } else if (in.planes() == 1 && in.components() == 3) { // colour (RGB)
-    vepl_convert(in,rgbcell());
+    out_rgb = vepl_convert(in,rgbcell());
     vil1_save(out_rgb, argv[2], "pnm");
     vcl_cout << "vepl_convert()ed RGB image to PPM image " << argv[2] << vcl_endl;
   }

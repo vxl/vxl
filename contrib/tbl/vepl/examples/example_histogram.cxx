@@ -15,8 +15,6 @@
 #include <vil1/vil1_image.h>
 #include <vcl_iostream.h>
 
-typedef unsigned char ubyte;
-
 int
 main(int argc, char** argv) {
   if (argc < 2)

@@ -5,15 +5,15 @@
 #include <vipl/accessors/vipl_accessors_vil1_image.h>
 #include <vipl/vipl_histogram.h>
 #include <vil1/vil1_memory_image_of.h>
+#include <vxl_config.h> // for vxl_byte
 
 vcl_vector<unsigned int> vepl_histogram(vil1_image const& image)
 {
   // byte greyscale
   if (vil1_pixel_format(image) == VIL1_BYTE) {
-    typedef unsigned char ubyte;
-    vil1_memory_image_of<ubyte> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<vxl_byte> mem(image); // load in memory to pass to filter
     vcl_vector<unsigned int> out(256);
-    vipl_histogram<vil1_image,vcl_vector<unsigned int>, ubyte,unsigned int> op;
+    vipl_histogram<vil1_image,vcl_vector<unsigned int>, vxl_byte,unsigned int> op;
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -22,9 +22,9 @@ vcl_vector<unsigned int> vepl_histogram(vil1_image const& image)
 
   // short greyscale
   if (vil1_pixel_format(image) == VIL1_UINT16) {
-    vil1_memory_image_of<unsigned short> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<vxl_uint_16> mem(image); // load in memory to pass to filter
     vcl_vector<unsigned int> out(65536);
-    vipl_histogram<vil1_image,vcl_vector<unsigned int>, unsigned short,unsigned int> op;
+    vipl_histogram<vil1_image,vcl_vector<unsigned int>, vxl_uint_16,unsigned int> op;
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();

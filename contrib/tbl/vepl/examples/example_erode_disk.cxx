@@ -6,15 +6,11 @@
 //  a ubyte image.  The input image (argv[1]) must be ubyte, and in that
 //  case is eroded (circular kernel, default 3x3 square) to argv[2]
 //  which is always a PGM file image.
-//  The conversion between vil1_image and the in-memory section<ubyte,2>
-//  is done explicitly.
 //
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   15 May 2001, from vipl/examples
 //
 #include <vepl/vepl_erode_disk.h>
-
-typedef unsigned char ubyte;
 
 // for I/O:
 #include <vil1/vil1_load.h>

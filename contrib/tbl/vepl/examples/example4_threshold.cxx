@@ -12,7 +12,7 @@
 #include <vil1/vil1_pixel.h>
 #include <vepl/vepl_threshold.h>
 
-typedef unsigned char ubyte;
+#include <vxl_config.h> // for vxl_byte
 typedef vil1_image img_type;
 
 // for I/O:
@@ -32,13 +32,13 @@ main(int argc, char** argv) {
   int ys = in.height();
 
   // The output image:
-  vil1_memory_image_of<ubyte> out(in);
-  ubyte* buf = new ubyte[in.get_size_bytes()];
+  vil1_memory_image_of<vxl_byte> out(in);
+  vxl_byte* buf = new vxl_byte[in.get_size_bytes()];
   in.get_section(buf,0,0,xs,ys);
   out.put_section(buf,0,0,xs,ys);
 
   // The threshold value:
-  ubyte threshold = (argc < 4) ? 64 : vcl_atoi(argv[3]);
+  vxl_byte threshold = (argc < 4) ? 64 : vcl_atoi(argv[3]);
 
   // perform thresholding:
   vepl_threshold(out,threshold,0,255); // NOTE THAT dst == src

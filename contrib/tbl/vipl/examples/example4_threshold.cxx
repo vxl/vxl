@@ -19,7 +19,7 @@
 #include <vipl/accessors/vipl_accessors_vil1_image.h>
 #include <vipl/vipl_threshold.h>
 
-typedef unsigned char ubyte;
+#include <vxl_config.h> // for vxl_byte
 typedef vil1_image img_type;
 
 // for I/O:
@@ -37,24 +37,24 @@ main(int argc, char** argv) {
   if (vil1_pixel_format(in) != VIL1_BYTE) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
 
   // The output image:
-  vil1_memory_image_of<ubyte> out(in);
+  vil1_memory_image_of<vxl_byte> out(in);
 
   // The image sizes:
   int xs = in.width();
   int ys = in.height();
 
   // The threshold value:
-  ubyte threshold = (argc < 4) ? 64 : vcl_atoi(argv[3]);
+  vxl_byte threshold = (argc < 4) ? 64 : vcl_atoi(argv[3]);
 
-  vil1_memory_image_of<ubyte> src(in); // in-memory vil1_image
-  ubyte* buf = new ubyte[in.get_size_bytes()];
+  vil1_memory_image_of<vxl_byte> src(in); // in-memory vil1_image
+  vxl_byte* buf = new vxl_byte[in.get_size_bytes()];
 
   // set the input image:
   in.get_section(buf,0,0,xs,ys);
   src.put_section(buf,0,0,xs,ys);
 
   // perform thresholding:
-  vipl_threshold<img_type,img_type,ubyte,ubyte VCL_DFL_TMPL_ARG(vipl_trivial_pixeliter)> op(threshold,0,255);
+  vipl_threshold<img_type,img_type,vxl_byte,vxl_byte> op(threshold,0,255);
   op.put_in_data_ptr(&src);
   op.put_out_data_ptr(&src); // NOTE THAT dst == src
   op.filter();

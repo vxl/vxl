@@ -11,6 +11,7 @@
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include "test_driver.h"
+#include <vxl_config.h> // for vxl_byte
 
 int vepl2_test_gaussian_convolution() {
   vcl_cout << "Starting vepl2_gaussian_convolution tests\n"
@@ -26,13 +27,13 @@ int vepl2_test_gaussian_convolution() {
 
   vcl_string m = "vepl2_gaussian_convolution";
 #define args ,9
-  ONE_TEST(vepl2_gaussian_convolution,byte_img,byte_ori,unsigned char,84375,m+"_byte",args);
-  ONE_TEST(vepl2_gaussian_convolution,shrt_img,shrt_ori,unsigned short,22181967,m+"_short",args);
-  ONE_TEST(vepl2_gaussian_convolution,int__img,int__ori,unsigned int,22181967,m+"_int",args);
+  ONE_TEST(vepl2_gaussian_convolution,byte_img,byte_ori,vxl_byte,84375,m+"_byte",args);
+  ONE_TEST(vepl2_gaussian_convolution,shrt_img,shrt_ori,vxl_uint_16,22181967,m+"_short",args);
+  ONE_TEST(vepl2_gaussian_convolution,int__img,int__ori,vxl_uint_32,22181967,m+"_int",args);
   ONE_TEST(vepl2_gaussian_convolution,flot_img,flot_ori,float,223,m+"_float",args);
   ONE_TEST(vepl2_gaussian_convolution,dble_img,dble_ori,double,223,m+"_double",args);
-  ONE_TEST(vepl2_gaussian_convolution,colr_img,colr_ori,vil_rgb<unsigned char>,92365,m+"_colour",args);
-  ONE_TEST(vepl2_gaussian_convolution,colp_img,colp_ori,unsigned char,92365,m+"_planar",args);
+  ONE_TEST(vepl2_gaussian_convolution,colr_img,colr_ori,vil_rgb<vxl_byte>,92365,m+"_colour",args);
+  ONE_TEST(vepl2_gaussian_convolution,colp_img,colp_ori,vxl_byte,92365,m+"_planar",args);
 
   return 0;
 }

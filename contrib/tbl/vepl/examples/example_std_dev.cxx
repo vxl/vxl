@@ -21,7 +21,7 @@
 #include <vil1/vil1_save.h>
 #include <vcl_iostream.h>
 
-typedef unsigned char ubyte;
+#include <vxl_config.h> // for vxl_byte
 
 int
 main(int argc, char** argv) {
@@ -52,7 +52,7 @@ main(int argc, char** argv) {
   out = vepl_monadic_sqrt(out);
 
   // vepl_convert to ubyte and write to PGM file:
-  ubyte dummy = 0;
+  vxl_byte dummy = 0;
   out = vepl_convert(out, dummy);
   vil1_save(out, argv[2], "pnm");
   vcl_cout << "Written image of type PGM to " << argv[2] << vcl_endl;

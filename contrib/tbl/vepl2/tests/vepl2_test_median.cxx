@@ -10,6 +10,7 @@
 #include <vepl2/vepl2_median.h>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
+#include <vxl_config.h> // for vxl_byte
 
 int vepl2_test_median()
 {
@@ -26,13 +27,13 @@ int vepl2_test_median()
 
   vcl_string m = "vepl2_median";
 #define args ,5
-  ONE_TEST(vepl2_median,byte_img,byte_ori,unsigned char,2632,m+"_byte",args);
-  ONE_TEST(vepl2_median,shrt_img,shrt_ori,unsigned short,524872,m+"_short",args);
-  ONE_TEST(vepl2_median,int__img,int__ori,unsigned int,524872,m+"_int",args);
+  ONE_TEST(vepl2_median,byte_img,byte_ori,vxl_byte,2632,m+"_byte",args);
+  ONE_TEST(vepl2_median,shrt_img,shrt_ori,vxl_uint_16,524872,m+"_short",args);
+  ONE_TEST(vepl2_median,int__img,int__ori,vxl_uint_32,524872,m+"_int",args);
   ONE_TEST(vepl2_median,flot_img,flot_ori,float,51,m+"_float",args);
   ONE_TEST(vepl2_median,dble_img,dble_ori,double,51,m+"_double",args);
-  ONE_TEST(vepl2_median,colr_img,colr_ori,vil_rgb<unsigned char>,2946,m+"_colour",args);
-  ONE_TEST(vepl2_median,colp_img,colp_ori,unsigned char,2946,m+"_planar",args);
+  ONE_TEST(vepl2_median,colr_img,colr_ori,vil_rgb<vxl_byte>,2946,m+"_colour",args);
+  ONE_TEST(vepl2_median,colp_img,colp_ori,vxl_byte,2946,m+"_planar",args);
 
   return 0;
 }

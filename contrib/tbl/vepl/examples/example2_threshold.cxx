@@ -14,7 +14,7 @@
 
 #include <vepl/vepl_threshold.h>
 
-typedef unsigned char ubyte;
+#include <vxl_config.h> // for vxl_byte
 
 // for I/O:
 #include <vil1/vil1_load.h>
@@ -39,7 +39,7 @@ main(int argc, char** argv) {
   }
 
   // The threshold value:
-  ubyte threshold = (argc < 4) ? 128 : vcl_atoi(argv[3]);
+  vxl_byte threshold = (argc < 4) ? 128 : vcl_atoi(argv[3]);
 
   // perform thresholding:
   vil1_image out = vepl_threshold(in,threshold,0,255);

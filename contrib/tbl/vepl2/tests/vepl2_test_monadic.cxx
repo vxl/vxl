@@ -10,6 +10,7 @@
 #include <vepl2/vepl2_monadic.h>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
+#include <vxl_config.h> // for vxl_byte
 
 int vepl2_test_monadic()
 {
@@ -26,17 +27,17 @@ int vepl2_test_monadic()
 
   vcl_string m = "vepl2_monadic";
 #define args
-  ONE_TEST(vepl2_monadic_abs,byte_img,byte_ori,unsigned char,0,m+"_abs_byte",args);
-  ONE_TEST(vepl2_monadic_abs,shrt_img,shrt_ori,unsigned short,0,m+"_abs_short",args);
-  ONE_TEST(vepl2_monadic_abs,int__img,int__ori,unsigned int,0,m+"_abs_int",args);
+  ONE_TEST(vepl2_monadic_abs,byte_img,byte_ori,vxl_byte,0,m+"_abs_byte",args);
+  ONE_TEST(vepl2_monadic_abs,shrt_img,shrt_ori,vxl_uint_16,0,m+"_abs_short",args);
+  ONE_TEST(vepl2_monadic_abs,int__img,int__ori,vxl_uint_32,0,m+"_abs_int",args);
   ONE_TEST(vepl2_monadic_abs,flot_img,flot_ori,float,276,m+"_abs_float",args);
   ONE_TEST(vepl2_monadic_abs,dble_img,dble_ori,double,276,m+"_abs_double",args);
-  ONE_TEST(vepl2_monadic_abs,colr_img,colr_ori,vil_rgb<unsigned char>,0,m+"_abs_colour",args);
-  ONE_TEST(vepl2_monadic_abs,colp_img,colp_ori,unsigned char,0,m+"_abs_planar",args);
+  ONE_TEST(vepl2_monadic_abs,colr_img,colr_ori,vil_rgb<vxl_byte>,0,m+"_abs_colour",args);
+  ONE_TEST(vepl2_monadic_abs,colp_img,colp_ori,vxl_byte,0,m+"_abs_planar",args);
 
-  ONE_TEST(vepl2_monadic_sqr,byte_img,byte_ori,unsigned char,82410,m+"_sqr_byte",args);
-  ONE_TEST(vepl2_monadic_sqr,shrt_img,shrt_ori,unsigned short,21755370,m+"_sqr_short",args);
-  ONE_TEST(vepl2_monadic_sqr,int__img,int__ori,unsigned int,202896874,m+"_sqr_int",args);
+  ONE_TEST(vepl2_monadic_sqr,byte_img,byte_ori,vxl_byte,82410,m+"_sqr_byte",args);
+  ONE_TEST(vepl2_monadic_sqr,shrt_img,shrt_ori,vxl_uint_16,21755370,m+"_sqr_short",args);
+  ONE_TEST(vepl2_monadic_sqr,int__img,int__ori,vxl_uint_32,202896874,m+"_sqr_int",args);
   ONE_TEST(vepl2_monadic_sqr,flot_img,flot_ori,float,282,m+"_sqr_float",args);
   ONE_TEST(vepl2_monadic_sqr,dble_img,dble_ori,double,282,m+"_sqr_double",args);
 
@@ -44,9 +45,9 @@ int vepl2_test_monadic()
   FUZ_TEST(vepl2_monadic_sqrt,dble_img,dble_ori,double,203,m+"_sqrt_double",args);
 #undef args
 #define args ,10,20
-  ONE_TEST(vepl2_monadic_shear,byte_img,byte_ori,unsigned char,127886,m+"_shear_byte",args);
-  ONE_TEST(vepl2_monadic_shear,shrt_img,shrt_ori,unsigned short,21071502,m+"_shear_short",args);
-  ONE_TEST(vepl2_monadic_shear,int__img,int__ori,unsigned int,413581354,m+"_shear_int",args);
+  ONE_TEST(vepl2_monadic_shear,byte_img,byte_ori,vxl_byte,127886,m+"_shear_byte",args);
+  ONE_TEST(vepl2_monadic_shear,shrt_img,shrt_ori,vxl_uint_16,21071502,m+"_shear_short",args);
+  ONE_TEST(vepl2_monadic_shear,int__img,int__ori,vxl_uint_32,413581354,m+"_shear_int",args);
   ONE_TEST(vepl2_monadic_shear,flot_img,flot_ori,float,180027,m+"_shear_float",args);
   ONE_TEST(vepl2_monadic_shear,dble_img,dble_ori,double,180027,m+"_shear_double",args);
 

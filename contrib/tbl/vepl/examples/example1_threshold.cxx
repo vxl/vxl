@@ -18,7 +18,7 @@
 #include <vepl/vepl_threshold.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h> // for atoi()
-typedef unsigned char ubyte;
+#include <vxl_config.h> // for vxl_byte
 
 int
 main(int argc, char** argv) {
@@ -28,13 +28,13 @@ main(int argc, char** argv) {
   vil1_image in = vil1_load(argv[1]);
   if (!in) return 2;
 #ifndef NO_MEMORY_IMAGE // otherwise get_pixel() would be very slow!!
-  vil1_memory_image_of<ubyte> mem(in);
+  vil1_memory_image_of<vxl_byte> mem(in);
   if (!mem) { vcl_cerr << "This is not a ubyte image\n"; return 3; }
   in = mem;
 #endif
 
   // The threshold value:
-  ubyte threshold = (argc < 4) ? 127 : vcl_atoi(argv[3]);
+  vxl_byte threshold = (argc < 4) ? 127 : vcl_atoi(argv[3]);
 
   // The filter:
   vil1_image out = vepl_threshold(in,threshold,0);

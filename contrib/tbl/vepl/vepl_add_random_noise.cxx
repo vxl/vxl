@@ -7,16 +7,16 @@
 #include <vipl/vipl_add_random_noise.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_rgb.h>
+#include <vxl_config.h> // for vxl_byte
 
 vil1_image vepl_add_random_noise(vil1_image const& image, double maxdev)
 {
   // byte greyscale
   if (vil1_pixel_format(image) == VIL1_BYTE)
   {
-    typedef unsigned char ubyte;
-    vil1_memory_image_of<ubyte> mem(image); // load in memory to pass to filter
-    vil1_memory_image_of<ubyte> out(image);
-    vipl_add_random_noise<vil1_image,vil1_image,ubyte,ubyte>
+    vil1_memory_image_of<vxl_byte> mem(image); // load in memory to pass to filter
+    vil1_memory_image_of<vxl_byte> out(image);
+    vipl_add_random_noise<vil1_image,vil1_image,vxl_byte,vxl_byte>
       op(GAUSSIAN_NOISE,maxdev);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
@@ -27,12 +27,11 @@ vil1_image vepl_add_random_noise(vil1_image const& image, double maxdev)
   // byte rgb
   else if (vil1_pixel_format(image) == VIL1_RGB_BYTE)
   {
-    typedef unsigned char ubyte;
-    vil1_memory_image_of<vil1_rgb<ubyte> > in(image); // load in memory to pass to filter
-    vil1_memory_image_of<vil1_rgb<ubyte> > out(image);
-    vil1_memory_image_of<ubyte> mem((ubyte*)(in.get_buffer()),3*in.width(),in.height()); // reinterpret as ubyte
-    vil1_memory_image_of<ubyte> mout((ubyte*)(out.get_buffer()),3*in.width(),in.height());
-    vipl_add_random_noise<vil1_image,vil1_image,ubyte,ubyte>
+    vil1_memory_image_of<vil1_rgb<vxl_byte> > in(image); // load in memory to pass to filter
+    vil1_memory_image_of<vil1_rgb<vxl_byte> > out(image);
+    vil1_memory_image_of<vxl_byte> mem((vxl_byte*)(in.get_buffer()),3*in.width(),in.height()); // reinterpret as vxl_byte
+    vil1_memory_image_of<vxl_byte> mout((vxl_byte*)(out.get_buffer()),3*in.width(),in.height());
+    vipl_add_random_noise<vil1_image,vil1_image,vxl_byte,vxl_byte>
       op(GAUSSIAN_NOISE,maxdev);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&mout);
