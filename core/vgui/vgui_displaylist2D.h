@@ -28,8 +28,6 @@
 #include <vgui/vgui_drag_mixin.h>
 #include <vgui/vgui_displaylist2D_ref.h>
 
-class vgui_soview2D;
-
 class vgui_displaylist2D : public vgui_displaybase { 
 public:
   vgui_displaylist2D();
