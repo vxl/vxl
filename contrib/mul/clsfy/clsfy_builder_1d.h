@@ -10,6 +10,7 @@
 #include <vcl_string.h>
 #include <vnl/vnl_vector.h>
 class clsfy_classifier_1d;
+#include <vbl/vbl_triple.h>
 
 //: Base for classes to build clsfy_classifier_1d objects
 class clsfy_builder_1d
@@ -36,6 +37,17 @@ public:
                                   vnl_vector<double>& wts0,
                                   vnl_vector<double>& egs1,
                                   vnl_vector<double>& wts1) const = 0;
+  
+   //: Train classifier, returning weighted error
+  //  Selects parameters of classifier which best separate examples,
+  //  weighting examples appropriately when estimating the missclassification rate.
+  //  data[i] is a triple, {value,class_number,weight}
+  //  Returns weighted sum of error.
+  //  Note that input "data" must be sorted to use this routine
+  virtual double build_from_sorted_data(clsfy_classifier_1d& classifier,
+               const vbl_triple<double,int,int> *data,
+               const vnl_vector<double>& wts) const = 0;
+
 
   //: Name of the class
   virtual vcl_string is_a() const;

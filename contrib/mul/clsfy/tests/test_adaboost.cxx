@@ -11,12 +11,12 @@
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
 #include <clsfy/clsfy_simple_adaboost.h>
-#include <clsfy/clsfy_binary_threshold_1d_sorted_builder.h>
 #include <clsfy/clsfy_binary_threshold_1d_builder.h>
 #include <clsfy/clsfy_binary_threshold_1d.h>
 #include <clsfy/clsfy_adaboost_trainer.h>
-#include <clsfy/clsfy_adaboost_sorted_trainer.h>
-#include <clsfy/clsfy_adaboost_sorted_trainer2.h>
+//#include <clsfy/clsfy_adaboost_sorted_trainer.h>
+//#include <clsfy/clsfy_adaboost_sorted_trainer2.h>
+#include <clsfy/clsfy_adaboost_sorted_builder.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>
 #include <mbl/mbl_data_array_wrapper.h>
@@ -109,6 +109,22 @@ void test_adaboost()
   mbl_data_array_wrapper< vnl_vector<double> > egs1(&pos_samples[0],n_pos);
   mbl_data_array_wrapper< vnl_vector<double> > egs0(&neg_samples[0],n_neg);
 
+  //create inputs and outputs (so can train using clsfy_adaboost_sorted_builder)
+  vcl_vector< vnl_vector<double> > inputs_vec(0);
+  vcl_vector< unsigned > outputs(0);
+  for (int j=0; j<n_pos; ++j)
+  { 
+    inputs_vec.push_back( pos_samples[j] );
+    outputs.push_back( 1 );
+  }
+
+  for (int j=0; j<n_neg; ++j)
+  { 
+    inputs_vec.push_back( neg_samples[j] );
+    outputs.push_back( 0 );
+  }
+  mbl_data_array_wrapper< vnl_vector<double> > inputs(&inputs_vec[0],n_pos+n_neg);
+
   // build clsfy_simple_adaboost
   vcl_cout<<"*************normal classifier************\n";
   clsfy_simple_adaboost *pClassifier = new clsfy_simple_adaboost;
@@ -118,13 +134,16 @@ void test_adaboost()
   adab_trainer.build_strong_classifier(*pClassifier, n_rounds, b_thresh_builder,
                                        egs0, egs1 );
 
+/*
+
+  // OLD sorted method has been removed !!
 
   pClassifier->print_summary(vcl_cout);
 
   // build clsfy_simple_adaboost using sorted method
   vcl_cout<<"*************sorted classifier************\n";
   clsfy_simple_adaboost *pClassifier2 = new clsfy_simple_adaboost;
-  clsfy_binary_threshold_1d_sorted_builder b_thresh_sorted_builder;
+  clsfy_binary_threshold_1d_builder b_thresh_sorted_builder;
   clsfy_adaboost_sorted_trainer adab_sorted_trainer;
   adab_sorted_trainer.build_strong_classifier(*pClassifier2, n_rounds, b_thresh_sorted_builder,
                                           egs0, egs1 );
@@ -135,14 +154,28 @@ void test_adaboost()
    // build clsfy_simple_adaboost using sorted method 2
   vcl_cout<<"*************sorted classifier2************\n";
   clsfy_simple_adaboost *pClassifier3 = new clsfy_simple_adaboost;
-  clsfy_binary_threshold_1d_sorted_builder b_thresh_sorted_builder3;
+  clsfy_binary_threshold_1d_builder b_thresh_sorted_builder3;
   clsfy_adaboost_sorted_trainer2 adab_sorted_trainer3;
   adab_sorted_trainer3.build_strong_classifier(*pClassifier3, n_rounds, b_thresh_sorted_builder3,
                                           egs0, egs1, 2 );
 
   pClassifier3->print_summary(vcl_cout);
-  
+*/
 
+   // build clsfy_simple_adaboost using sorted method 3
+  vcl_cout<<"*************sorted classifier4************\n";
+  clsfy_simple_adaboost *pClassifier4 = new clsfy_simple_adaboost;
+  clsfy_binary_threshold_1d_builder b_thresh_sorted_builder4;
+  clsfy_adaboost_sorted_builder adab_sorted_builder;
+  adab_sorted_builder.set_batch_size( 20 );
+  adab_sorted_builder.set_max_n_clfrs( n_rounds );
+  adab_sorted_builder.set_save_data_to_disk( false );
+  adab_sorted_builder.set_weak_builder( b_thresh_sorted_builder4 );
+  adab_sorted_builder.build( *pClassifier4, inputs, 1, outputs);
+
+  pClassifier4->print_summary(vcl_cout);
+  
+/*
   // compare alpha values for classifier2 (with classifier1)
   double diff=0;
   int na= vcl_min(pClassifier->alphas().size(), pClassifier2->alphas().size() );
@@ -151,11 +184,12 @@ void test_adaboost()
 
   vcl_cout<<"diff= "<<diff<<vcl_endl;
 
-  TEST( "sorted classifier == normal classifier",
+  TEST( "sorted classifier2 == normal classifier",
         diff< 0.001,
         true );
+*/
 
-
+/*
    // compare alpha values for classifier3 (with classifier1)
   diff=0;
   na= vcl_min(pClassifier->alphas().size(), pClassifier3->alphas().size() );
@@ -164,7 +198,20 @@ void test_adaboost()
 
   vcl_cout<<"diff= "<<diff<<vcl_endl;
 
-  TEST( "sorted classifier2 == normal classifier",
+  TEST( "sorted classifier3 == normal classifier",
+        diff< 0.001,
+        true );
+*/
+
+   // compare alpha values for classifier4 (with classifier1)
+  double diff=0;
+  double na= vcl_min(pClassifier->alphas().size(), pClassifier4->alphas().size() );
+  for (int k=0; k<na; ++k)
+    diff+= vcl_fabs( pClassifier->alphas()[k]-pClassifier4->alphas()[k] );
+
+  vcl_cout<<"diff= "<<diff<<vcl_endl;
+
+  TEST( "sorted classifier4 == normal classifier",
         diff< 0.001,
         true );
 
