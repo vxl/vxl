@@ -32,6 +32,7 @@ ADD_EXECUTABLE( mbl_test_all
   test_read_props.cxx
   test_correspond_points.cxx
   test_rbf_network.cxx
+  test_table.cxx
 )
 
 TARGET_LINK_LIBRARIES(mbl_test_all mbl vbl vul vpl testlib )
@@ -67,6 +68,7 @@ ADD_TEST( mbl_test_thin_plate_spline_weights_3d mbl_test_all test_thin_plate_spl
 ADD_TEST( mbl_test_read_props mbl_test_all test_read_props )
 ADD_TEST( mbl_test_correspond_points mbl_test_all test_correspond_points )
 ADD_TEST( mbl_test_rbf_network mbl_test_all test_rbf_network )
+ADD_TEST( mbl_test_table mbl_test_all test_table )
 
 
 ADD_EXECUTABLE( mbl_test_include test_include.cxx )

@@ -29,7 +29,7 @@ DECLARE( test_thin_plate_spline_weights_3d );
 DECLARE( test_read_props );
 DECLARE( test_correspond_points );
 DECLARE( test_rbf_network );
-
+DECLARE( test_table );
 
 void
 register_tests()
@@ -63,6 +63,7 @@ register_tests()
   REGISTER( test_read_props );
   REGISTER( test_correspond_points );
   REGISTER( test_rbf_network );
+  REGISTER( test_table );
 }
 
 DEFINE_MAIN;
