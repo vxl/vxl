@@ -454,7 +454,9 @@ void vnl_vector_test_conversion() {
 #endif
 }
 
-#define TIMING 1
+#ifndef TIMING
+#define TIMING 0
+#endif
 
 #if TIMING
 #include <vul/vul_timer.h>
