@@ -16,6 +16,7 @@ TESTS += test_ellipse_scan_iterator.cxx
 TESTS += test_window_scan_iterator.cxx
 TESTS += test_area.cxx
 TESTS += test_clip.cxx
+TESTS += test_h_matrix_1d.cxx
 TESTS += test_h_matrix_2d.cxx
 TESTS += test_h_matrix_3d.cxx
 TESTS += test_fit_lines_2d.cxx
