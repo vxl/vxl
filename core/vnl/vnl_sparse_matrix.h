@@ -151,6 +151,9 @@ public:
   //: Get the number of columns in the matrix.
   unsigned int columns() const { return cs_; }
 
+  //: Get the number of columns in the matrix.
+  unsigned int cols() const { return cs_; }
+
   //: Return whether a given row is empty
   bool empty_row(unsigned int r) const { return elements[r].empty(); }
 
