@@ -607,7 +607,9 @@ void osl_canny_ox::FollowerOX(vcl_list<osl_edge*> *edges)
 
       int count=xcoords.size();
       if (count < min_length_OX_ || count < 1)
-        // vcl_cerr << "short list found in Final_followOX\n";
+#ifdef DEBUG
+        vcl_cerr << "short list found in Final_followOX\n";
+#endif
         continue;
 
       // Create an osl_edgel_chain and add to the list
@@ -619,10 +621,9 @@ void osl_canny_ox::FollowerOX(vcl_list<osl_edge*> *edges)
 
       // Write the points to the osl_edgel_chain and the end points to the Curve
       //dc->SetStart(xcoords.front()+xstart_, ycoords.front()+ystart_);
-      int tmpx=0,tmpy=0;// dummy initialization, as count is always > 0.
       while (count--) {
-        tmpx = xcoords.front(); xcoords.pop_front();
-        tmpy = ycoords.front(); ycoords.pop_front();
+        int tmpx = xcoords.front(); xcoords.pop_front();
+        int tmpy = ycoords.front(); ycoords.pop_front();
         float val = grad.front(); grad.pop_front();
         // If we are not at a junction use sub-pixel value
         if ( val != jval_ ) {
@@ -636,15 +637,17 @@ void osl_canny_ox::FollowerOX(vcl_list<osl_edge*> *edges)
           *(pg++) = 0.0f; // Mark the gradient as zero at a junction
         }
         *(pt++) = theta_[tmpx][tmpy];
+//      dc->SetEndX(tmpx+xstart_, tmpy+ystart_);
       }
-      //dc->SetEndX(tmpx+xstart_, tmpy+ystart_);
 
       // Just check whether we have created a trivial edgechain
       // can happen if min_length_OX_ = 2
       if ( (dc->size()==2) &&
            (dc->GetX(0)==dc->GetX(1)) &&
            (dc->GetY(0)==dc->GetY(1)) ) {
-        //vcl_cerr << "trivial edgechain\n";
+#ifdef DEBUG
+        vcl_cerr << "trivial edgechain\n";
+#endif
         delete dc;
         dc = 0;
         continue;
@@ -698,13 +701,17 @@ void osl_canny_ox::FollowerOX(vcl_list<osl_edge*> *edges)
         //dc->SetStart(dc->GetX(0), dc->GetY(0));
         //dc->SetEnd(dc->GetX(dc->size()-1),dc->GetY(dc->size()-1));
 
-        //vcl_cerr << __FILE__ ": push\n";
+#ifdef DEBUG
+        vcl_cerr << __FILE__ ": push\n";
+#endif
         edges->push_front(new osl_edge(*dc, v1, v2));
         delete dc;
       }
     }
   }
-  //vcl_cerr << "edges->size() : " << edges->size() << vcl_endl;
+#ifdef DEBUG
+  vcl_cerr << "edges->size() : " << edges->size() << vcl_endl;
+#endif
 }
 
 

@@ -421,10 +421,9 @@ void osl_canny_rothwell::Final_hysteresis(vcl_list<osl_edge*> *edges) {
 
       // Write the edgels and end points to the osl_edgel_chain
       //dc->SetStart(xcoords.front()+xstart_, ycoords.front()+ystart_);
-      int tmpx=0, tmpy=0;// dummy initialization, as count is always > 0.
       while (count) {
-        tmpx = xcoords.front(); xcoords.pop_front();
-        tmpy = ycoords.front(); ycoords.pop_front();
+        int tmpx = xcoords.front(); xcoords.pop_front();
+        int tmpy = ycoords.front(); ycoords.pop_front();
         val = grad.front(); grad.pop_front();
         if ( val != dummy_ ) {
           --count;
@@ -451,8 +450,8 @@ void osl_canny_rothwell::Final_hysteresis(vcl_list<osl_edge*> *edges) {
 
           *(pt++) = theta_[tmpx][tmpy];
         }
+//      dc->SetEnd(tmpx+xstart_, tmpy+ystart_);
       }
-      //dc->SetEnd(tmpx+xstart_, tmpy+ystart_);
 
       // Just check whether we have created a trivial edgechain
       // (can happen due to the presence of dummy points)
