@@ -37,6 +37,7 @@ IF(NOT HAS_GTK)
         /usr/include/gtk-1.2
         /usr/local/include/glib12
         /usr/lib/glib/include
+	/usr/include/glib-1.2
       )
 
       FIND_PATH( GTK_gtkgl_INCLUDE_PATH gtkgl/gtkglarea.h
