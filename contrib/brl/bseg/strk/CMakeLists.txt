@@ -21,6 +21,8 @@ SET(strk_sources
     strk_track_display_process.cxx   strk_track_display_process.h
     strk_region_info_params.cxx      strk_region_info_params.h
     strk_region_info.cxx             strk_region_info.h
+    strk_io.cxx			     strk_io.h
+    strk_feature_capture_process.cxx strk_feature_capture_process.h
 )
 AUX_SOURCE_DIRECTORY(Templates strk_sources)
 

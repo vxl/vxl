@@ -34,8 +34,6 @@ class strk_info_tracker_process : public vpro_video_process
   // for display
   vcl_vector<unsigned char> color_index(){return color_index_;}
  private:
-  bool write_track_file();
-  bool write_hist_file();
   //members
   bool write_tracked_faces_;
   bool write_tracked_hist_;
