@@ -24,8 +24,7 @@ class vpgl_matrix_camera;
 
 class vpgl_basic_camera : public vbl_ref_count
 {
-public:
-
+ public:
  // Constructors
   vpgl_basic_camera();
  // Destructors
@@ -45,9 +44,9 @@ public:
   virtual void image_to_world(vnl_vector<double>& ray3d_origin,
                               vnl_vector<double>& world, double u, double v);
 
-  //: A function to set the initilization point
+  //: A function to set the initialization point
   virtual void set_init_pt(const vnl_vector<double>& pt);
-  //: A function to get the initilization point
+  //: A function to get the initialization point
   virtual void get_init_pt(vnl_vector<double>& pt);
 
   virtual void get_matrix(vnl_matrix<double>&) const;
@@ -59,8 +58,7 @@ public:
     {if (obj) obj->Print(os); else os << "NULL Camera"; return os;}
 #endif
 
-protected:
-
+ protected:
   //: Holds a 3D point used for Levenberg Marquardt initialization in ImageToSurface
   vnl_vector<double> init_pt;
 };
