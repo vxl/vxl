@@ -248,11 +248,6 @@ SOURCE=.\vsl_binary_loader_base.cxx
 SOURCE=.\vsl_indent.cxx
 
 # End Source File
-# Begin Source File
-
-SOURCE=.\vsl_test.cxx
-
-# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -374,11 +369,6 @@ SOURCE=.\vsl_string_io.h
 # Begin Source File
 
 SOURCE=.\vsl_string_io.txx
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vsl_test.h
 
 # End Source File
 # Begin Source File
