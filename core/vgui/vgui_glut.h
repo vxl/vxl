@@ -15,34 +15,84 @@
 # include <vgui/vgui_glu.h>
 # include <GL/glut.h>
 
-// Workaround for a "bug" in GL/glut.h, where the signature of glutAddMenuEntry
-// and some others is (char*,int) instead of (const char*,long).
-// GLUT on Win32 does not have this problem. So make it specific based on platforms.
-#if defined(VCL_WIN32)
-inline void glutAddMenuEntry(const char* label, long value) { glutAddMenuEntry(label,int(value)); }
-inline void glutAddSubMenu(const char* label, long sub) { glutAddSubMenu(label,int(sub)); }
-inline void glutChangeToMenuEntry(long item, const char* label, long value) {
-  glutChangeToMenuEntry(int(item),label,int(value)); }
-inline void glutChangeToSubMenu(long item, const char* label, long sub) {
-  glutChangeToSubMenu(int(item),label,int(sub)); }
-#else
-inline void glutAddMenuEntry(const char* label, int value) { glutAddMenuEntry(const_cast<char*>(label),value); }
-inline void glutAddMenuEntry(const char* label, long value) { glutAddMenuEntry(const_cast<char*>(label),int(value)); }
-inline int glutCreateWindow(const char* title) { return glutCreateWindow(const_cast<char*>(title)); }
-inline void glutSetWindowTitle(const char* title) { glutSetWindowTitle(const_cast<char*>(title)); }
-inline void glutSetIconTitle(const char* title) { glutSetIconTitle(const_cast<char*>(title)); }
-inline void glutAddSubMenu(const char* label, int sub) { glutAddSubMenu(const_cast<char*>(label),sub); }
-inline void glutAddSubMenu(const char* label, long sub) { glutAddSubMenu(const_cast<char*>(label),int(sub)); }
-inline void glutChangeToMenuEntry(int item, const char* label, int value) {
-  glutChangeToMenuEntry(item,const_cast<char*>(label),value); }
-inline void glutChangeToMenuEntry(long item, const char* label, long value) {
-  glutChangeToMenuEntry(int(item),const_cast<char*>(label),int(value)); }
-inline void glutChangeToSubMenu(int item, const char* label, int sub) {
-  glutChangeToSubMenu(item,const_cast<char*>(label),sub); }
-inline void glutChangeToSubMenu(long item, const char* label, long sub) {
-  glutChangeToSubMenu(int(item),const_cast<char*>(label),int(sub)); }
-inline int glutExtensionSupported(const char* name) { return glutExtensionSupported(const_cast<char*>(name)); }
+// Workaround for a "bug" in GL/glut.h on Leuven's alpha, where the
+// prototypes of some functions is declared as char* instead of const
+// char*. Note that we cannot (should not) overload these functions
+// since they are C functions. Instead we define the local functions
+// with the correct prototypes (lifted from the GLUT 3.7 sources), and
+// call the system ones to do the actual work. We then use the
+// pre-processor to use our functions instead of the incorrect system
+// declarations.
+//
+// We expect and hope that the broken implementations don't attempt to
+// modify the constant strings.
+//
+// The "fixing functions" have C++ linkage, but that's okay, since
+// vgui is a C++ library anyway.
+
+// The #ifdef test below is based on one
+// sample. GLUT_XLIB_IMPLEMENTATION==5 is circa 1995. Most modern GLUT
+// libraries are probably 11 or greater.
+#if GLUT_XLIB_IMPLEMENTATION <= 5 // fix glut function declarations
+
+inline int vgui_glutCreateWindow( const char* title )
+{
+  return glutCreateWindow( const_cast<char*>(title) );
+}
+#undef glutCreateWindow
+#define glutCreateWindow   vgui_glutCreateWindow
+
+inline void vgui_glutSetWindowTitle( const char* title )
+{
+  glutSetWindowTitle( const_cast<char*>(title) );
+}
+#undef glutSetWindowTitle
+#define glutSetWindowTitle vgui_glutSetWindowTitle
+
+inline void vgui_glutSetIconTitle( const char* title )
+{
+  glutSetIconTitle( const_cast<char*>(title) );
+}
+#undef glutSetIconTitle
+#define glutSetIconTitle   vgui_glutSetIconTitle
+
+inline void vgui_glutAddMenuEntry( const char* label, int value )
+{
+  glutAddMenuEntry( const_cast<char*>(label), value );
+}
+#undef glutAddMenuEntry
+#define glutAddMenuEntry   vgui_glutAddMenuEntry
+
+inline void vgui_glutAddSubMenu( const char* label, int sub )
+{
+  glutAddSubMenu( const_cast<char*>(label), sub );
+}
+#undef glutAddSubMenu
+#define glutAddSubMenu     vgui_glutAddSubMenu
+
+inline void vgui_glutChangeToMenuEntry( int item, const char* label, int value )
+{
+  glutChangeToMenuEntry( item, const_cast<char*>(label), value );
+}
+#undef glutChangeToMenuEntry
+#define glutChangeToMenuEntry vgui_glutChangeToMenuEntry
+
+inline void vgui_glutChangeToSubMenu( int item, const char* label, int sub )
+{
+  glutChangeToSubMenu( item, const_cast<char*>(label), sub );
+}
+#define glutChangeToSubMenu vgui_glutChangeToSubMenu
+
+#if (GLUT_API_VERSION >= 2)
+inline int vgui_glutExtensionSupported( const char* name )
+{
+  return glutExtensionSupported( const_cast<char*>(name) );
+}
+#undef glutExtensionSupported
+#define glutExtensionSupported vgui_glutExtensionSupported
 #endif
+
+#endif // fix glut function declarations
 
 #else // HAS_GLUT
 # error "Trying to use vgui_glut when HAS_GLUT is not defined."
@@ -50,7 +100,7 @@ inline int glutExtensionSupported(const char* name) { return glutExtensionSuppor
 // source without determining if your system has glut. If you are
 // using CMake to build, then look at the FindGLUT module. Something like
 //
-//   INCLUDE(${MODULE_PATH}/NewCMake/FindGLUT.cmake)
+//   INCLUDE(${CMAKE_ROOT}/Modules/FindGLUT.cmake)
 //   IF( GLUT_FOUND )
 //     INCLUDE_DIRECTORIES(${GLUT_INCLUDE_DIR})
 //     ADD_DEFINITIONS( -DHAS_GLUT)
