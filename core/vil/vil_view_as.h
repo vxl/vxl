@@ -17,7 +17,7 @@
 #include <vil/vil_rgba.h>
 
 
-//: Return a 3-plane view of an RGB image.
+//: Return a 3-plane view of an RGB image (or a 4-plane view if RGBA)
 // \return an empty view if it can't do the conversion.
 //  O(1).
 // \relates vil2_image_view
@@ -26,11 +26,12 @@ template<class T>
 inline vil2_image_view<typename T::value_type> vil2_view_as_planes(const vil2_image_view<T >& v)
 {
   if (v.nplanes()!=1) return vil2_image_view<T>();
+  const unsigned ncomponents = sizeof(T) / sizeof(T::value_type);
 
-  // Image is RGBRGBRGB so i step = 3*v.istep(), jstep=3*v.jstep()
-  return vil2_image_view<T>(v.memory_chunk(),(T const*) v.top_left_ptr(),
-                            v.ni(),v.nj(),3,
-                            v.istep()*3,v.jstep()*3,1);
+  // Image is RGBRGBRGB so i step = 3ncomponents*v.istep(), jstep=ncomponents*v.jstep()
+  return vil2_image_view<T::value_type>(v.memory_chunk(),(T::value_type const*) v.top_left_ptr(),
+                            v.ni(),v.nj(),ncomponents,
+                            v.istep()*ncomponents,v.jstep()*ncomponents,1);
 }
 
 //: Return an RGB component view of a 3-plane image.
