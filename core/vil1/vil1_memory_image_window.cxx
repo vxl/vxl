@@ -2,12 +2,10 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
-
 //:
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   19 Aug 96
-//
 //-----------------------------------------------------------------------------
 
 #include "vil_memory_image_window.h"
@@ -46,8 +44,8 @@ inline int labs(int x) { return (x > 0) ? x : -x; }
 // accumulator overflow which can easily happen on certain medical and range
 // images.
 int vil_memory_image_window::sum_abs_diff(const vil_memory_image_of<vil_byte>& image2,
-					  int centre2_x, int centre2_y,
-					  int early_exit_level)
+                                          int centre2_x, int centre2_y,
+                                          int early_exit_level)
 {
   int mask2_col_index = centre2_x - mask_size_ / 2;
   int mask2_row_index = centre2_y - mask_size_ / 2;
@@ -67,8 +65,9 @@ int vil_memory_image_window::sum_abs_diff(const vil_memory_image_of<vil_byte>& i
   if (col_end >= int(image2.width())-mask2_col_index) col_end = image2.width()-mask2_col_index-1;
 
   int difference_total = 0;
-  for (int row_index = row_start; row_index < row_end; row_index++) {
-    for (int col_index = col_start; col_index < col_end; col_index++) {
+  for (int row_index = row_start; row_index < row_end; row_index++)
+    for (int col_index = col_start; col_index < col_end; col_index++)
+    {
       int p1 = image1_(mask1_col_index_ + col_index, mask1_row_index_ + row_index);
       int p2 =  image2( mask2_col_index + col_index,  mask2_row_index + row_index);
 
@@ -79,7 +78,6 @@ int vil_memory_image_window::sum_abs_diff(const vil_memory_image_of<vil_byte>& i
       if (difference_total > early_exit_level)
         return difference_total;
     }
-  }
   return difference_total;
 }
 
@@ -88,8 +86,8 @@ int vil_memory_image_window::sum_abs_diff(const vil_memory_image_of<vil_byte>& i
 // accumulator overflow which can easily happen on certain medical and range
 // images.
 int vil_memory_image_window::sum_sqr_diff(const vil_memory_image_of<vil_byte>& image2,
-					  int centre2_x, int centre2_y,
-					  int early_exit_level)
+                                          int centre2_x, int centre2_y,
+                                          int early_exit_level)
 {
   int mask2_col_index = centre2_x - mask_size_ / 2;
   int mask2_row_index = centre2_y - mask_size_ / 2;
@@ -109,8 +107,9 @@ int vil_memory_image_window::sum_sqr_diff(const vil_memory_image_of<vil_byte>& i
   if (col_end >= int(image2.width())-mask2_col_index) col_end = image2.width()-mask2_col_index-1;
 
   int difference_total = 0;
-  for (int row_index = row_start; row_index < row_end; row_index++) {
-    for (int col_index = col_start; col_index < col_end; col_index++) {
+  for (int row_index = row_start; row_index < row_end; row_index++)
+    for (int col_index = col_start; col_index < col_end; col_index++)
+    {
       int p1 = image1_(mask1_col_index_ + col_index, mask1_row_index_ + row_index);
       int p2 =  image2( mask2_col_index + col_index,  mask2_row_index + row_index);
 
@@ -121,22 +120,22 @@ int vil_memory_image_window::sum_sqr_diff(const vil_memory_image_of<vil_byte>& i
       if (difference_total > early_exit_level)
         return difference_total;
     }
-  }
   return difference_total;
 }
 
 
 int vil_memory_image_window::normalised_sum_abs_diff(const vil_memory_image_of<vil_byte>& image2,
-					       int centre2_x, int centre2_y,
-					       double normalise_ratio,
-					       int early_exit_level)
+                                                     int centre2_x, int centre2_y,
+                                                     double normalise_ratio,
+                                                     int early_exit_level)
 {
   int mask2_col_index = centre2_x - mask_size_ / 2;
   int mask2_row_index = centre2_y - mask_size_ / 2;
 
   int difference_total = 0;
   for (int row_index = 0; row_index < mask_size_; row_index++)
-    for (int col_index = 0; col_index < mask_size_; col_index++) {
+    for (int col_index = 0; col_index < mask_size_; col_index++)
+    {
       int p1 = image1_(mask1_col_index_ + col_index, mask1_row_index_ + row_index);
       int p2 =  image2( mask2_col_index + col_index,  mask2_row_index + row_index);
       difference_total += labs (p1 - (int) (normalise_ratio * (float) p2));
@@ -219,32 +218,31 @@ double vil_memory_image_window::normalised_cross_correlation(const vil_memory_im
     }
   }
 
-
   std_dev_I1_uv = vcl_sqrt(result_I1);
   std_dev_I2_uv = vcl_sqrt(result_I2);
 
+  ///////////////////////////////////////
+  // calculate the correlation score
+  // again using result as a temporary
+  //  variable
 
-   ///////////////////////////////////////
-   // calculate the correlation score
-   // again using result as a temporary
-   //  variable
+  double result = 0;
 
-   double result = 0;
+  for (i = -n; i < n+1; i++)
+  {
+    for (j = -m; j < m+1; j++)
+    {
+      double I1_uv;
+      double I2_uv;
 
-   for (i = -n; i < n+1; i++) {
-     for (j = -m; j < m+1; j++) {
+      I1_uv = image1_(u1+i,v1+j);
+      I2_uv =  image2(u2+i,v2+j);
 
-       double I1_uv;
-       double I2_uv;
+      result += (I1_uv - average_I1_uv)*(I2_uv - average_I2_uv);
+    }
+  }
 
-       I1_uv = image1_(u1+i,v1+j);
-       I2_uv =  image2(u2+i,v2+j);
+  result /= vcl_sqrt(std_dev_I1_uv*std_dev_I1_uv*std_dev_I2_uv*std_dev_I2_uv);
 
-       result += (I1_uv - average_I1_uv)*(I2_uv - average_I2_uv);
-     }
-   }
-
-   result /= vcl_sqrt(std_dev_I1_uv*std_dev_I1_uv*std_dev_I2_uv*std_dev_I2_uv);
-
-   return result;
+  return result;
 }
