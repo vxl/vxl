@@ -18,10 +18,10 @@
 class vil_stream;
 #include <vxl_misc_config.h>
 
-unsigned vxl_int16 vil_16bit_read_big_endian(vil_stream *);
-unsigned vxl_int16 vil_16bit_read_little_endian(vil_stream *);
+vxl_uint16 vil_16bit_read_big_endian(vil_stream *);
+vxl_uint16 vil_16bit_read_little_endian(vil_stream *);
 
-void vil_16bit_write_big_endian(vil_stream *, unsigned vxl_int16);
-void vil_16bit_write_little_endian(vil_stream *, unsigned vxl_int16);
+void vil_16bit_write_big_endian(vil_stream *, vxl_uint16);
+void vil_16bit_write_little_endian(vil_stream *, vxl_uint16);
 
 #endif

@@ -8,24 +8,24 @@
 #include <vil/vil_stream.h>
 #include <vxl_compiler_config.h>
 
-typedef unsigned vxl_int8  word8;
-typedef unsigned vxl_int32 word32;
+typedef vxl_uint8  word8;
+typedef vxl_uint32 word32;
 
-unsigned vxl_int32 vil_32bit_read_big_endian(vil_stream *s)
+vxl_uint32 vil_32bit_read_big_endian(vil_stream *s)
 {
   word8 bytes[4];
   s->read(bytes, sizeof bytes);
   return (word32(bytes[0])<<24) + (word32(bytes[1])<<16) + (word32(bytes[2])<<8) + (word32(bytes[3]));
 }
 
-unsigned vxl_int32 vil_32bit_read_little_endian(vil_stream *s)
+vxl_uint32 vil_32bit_read_little_endian(vil_stream *s)
 {
   word8 bytes[4];
   s->read(bytes, sizeof bytes);
   return (word32(bytes[3])<<24) + (word32(bytes[2])<<16) + (word32(bytes[1])<<8) + (word32(bytes[0]));
 }
 
-void vil_32bit_write_big_endian(vil_stream *s, unsigned vxl_int32 w)
+void vil_32bit_write_big_endian(vil_stream *s, vxl_uint32 w)
 {
   word8 bytes[4];
   bytes[0] = w >> 24;
@@ -35,7 +35,7 @@ void vil_32bit_write_big_endian(vil_stream *s, unsigned vxl_int32 w)
   s->write(bytes, sizeof bytes);
 }
 
-void vil_32bit_write_little_endian(vil_stream *s, unsigned vxl_int32 w)
+void vil_32bit_write_little_endian(vil_stream *s, vxl_uint32 w)
 {
   word8 bytes[4];
   bytes[0] = w >> 0;
