@@ -254,6 +254,9 @@ SOURCE=.\show_local_entropy.cxx
 # Begin Source File
 SOURCE=.\show_orientation_entropy.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\find_scale_orient_entropy_peaks.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
