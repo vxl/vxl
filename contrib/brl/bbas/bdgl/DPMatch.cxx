@@ -1,6 +1,8 @@
 #include "DPMatch.h"
 #include <vcl_iostream.h>
 #include <vcl_cstdio.h>
+#include <vcl_cmath.h> // for sqrt() and fabs()
+#include <vcl_algorithm.h> // for max(int,int)
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_2x2.h>
 #include <vnl/algo/vnl_svd.h>
@@ -401,8 +403,8 @@ void DPMatch::computeDPCosts()
 
   for (int sum = 2; sum<n_+m_; ++sum)
   {
-    int start=(int)maxof(0,sum-m_,-10000);
-    for (int i=start; i<n_ && i<sum ;++i)
+    int start=vcl_max(0,sum-m_);
+    for (int i=start; i<n_ && i<sum; ++i)
     {
       int j=sum-i-1;
       for (int k=0;k<9;k++)
