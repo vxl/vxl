@@ -3,9 +3,10 @@
 // fsm
 #include "vcl_compiler.h"
 
-#if (defined(VCL_GCC) && !VCL_CXX_HAS_HEADER_SSTREAM) || defined(VCL_SGI_CC_720)
-// this is to get the vcl_ios_* macros.
-# include "vcl_iostream.h"
+#if VCL_CXX_HAS_HEADER_SSTREAM
+# include "iso/vcl_sstream.h"
+#else // assuming <strstream.h> exists
+# include "vcl_iostream.h" // this is to get the vcl_ios_* macros.
 # include <strstream.h>
 # include <vcl_string.h>
 
@@ -42,8 +43,6 @@ struct vcl_ostringstream : public ostrstream
   //FIXME void str(vcl_string const &s);
 };
 
-#else
-# include "iso/vcl_sstream.h"
-#endif
+#endif // VCL_CXX_HAS_HEADER_SSTREAM
 
 #endif // vcl_sstream_h_
