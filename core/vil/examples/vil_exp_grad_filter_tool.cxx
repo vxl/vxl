@@ -32,7 +32,7 @@ int main(int argc, char** argv)
 
   vil2_image_view<float> grad_x;
 
-  vil2_exp_grad_filter_i(src_im,grad_x,k,double());
+  vil2_exp_grad_filter_i(src_im,grad_x,double(k));
 
   // Stretch range to [0,255]
   float min_v,max_v;
