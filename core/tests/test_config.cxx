@@ -1184,9 +1184,25 @@ MAIN( test_config )
 #endif
   vcl_cout << vcl_endl;
 
+  vcl_cout << "VCL_SUNPRO_CC_5 ";
+#ifdef VCL_SUNPRO_CC_5
+  vcl_cout << "is set to " << quote(VCL_SUNPRO_CC_5);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
   vcl_cout << "VCL_SUNPRO_CC_50 ";
 #ifdef VCL_SUNPRO_CC_50
   vcl_cout << "is set to " << quote(VCL_SUNPRO_CC_50);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VCL_SUNPRO_CC_56 ";
+#ifdef VCL_SUNPRO_CC_56
+  vcl_cout << "is set to " << quote(VCL_SUNPRO_CC_56);
 #else
   vcl_cout << "is not set";
 #endif

@@ -8,7 +8,7 @@
 # include "emulation/vcl_vector.h"
 
 // -------------------- sunpro 5.0
-#elif defined(VCL_SUNPRO_CC_50) && !defined(VCL_SUNPRO_CC_56)
+#elif defined(VCL_SUNPRO_CC_50)
 # include "sunpro/vcl_vector.h"
 
 // -------------------- iso

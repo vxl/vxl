@@ -455,7 +455,7 @@ void test_matrix_fixed()
 
 void* operator new(vcl_size_t s)
   // [18.4.1] lib.new.delete
-#if defined(VCL_SUNPRO_CC_50) || defined(GNU_LIBSTDCXX_V3) || defined(VCL_KAI)
+#if defined(VCL_SUNPRO_CC_5) || defined(GNU_LIBSTDCXX_V3) || defined(VCL_KAI)
   throw(std::bad_alloc)
 #endif
 {
@@ -470,7 +470,7 @@ void* operator new(vcl_size_t s)
 }
 
 void operator delete(void* s)
-#if defined(GNU_LIBSTDCXX_V3) || defined(VCL_SUNPRO_CC_50)
+#if defined(GNU_LIBSTDCXX_V3) || defined(VCL_SUNPRO_CC_5)
   throw()
 #endif
 {

@@ -57,7 +57,7 @@ extern "C" int finite(double);
 # define VNL_HAS_NO_FINITE
 #endif
 
-#ifdef VCL_SUNPRO_CC_50
+#ifdef VCL_SUNPRO_CC_5
 # include <math.h> // dont_vxl_filter: no HUGE_VAL or isnan() in <cmath>
 #endif
 

@@ -29,12 +29,16 @@
 #if defined(__SUNPRO_CC)
 # define VCL_SUNPRO_CC
 # if (__SUNPRO_CC>=0x500)
-#  define VCL_SUNPRO_CC_50
+#  if (__SUNPRO_CC>=0x560)
+#   define VCL_SUNPRO_CC_56
+#   undef VCL_SUNPRO_CC_50
+#  else
+#   define VCL_SUNPRO_CC_50
+#   undef VCL_SUNPRO_CC_56
+#  endif
+#  define VCL_SUNPRO_CC_5
 # else
-#  undef VCL_SUNPRO_CC_50
-# endif
-# if (__SUNPRO_CC>=0x560)
-#  define VCL_SUNPRO_CC_56
+#  undef VCL_SUNPRO_CC_5
 # endif
 # ifdef INSTANTIATE_TEMPLATES
 #  define _RWSTD_COMPILE_INSTANTIATE

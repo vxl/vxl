@@ -41,7 +41,7 @@ class vul_redirector_streambuf : public vcl_streambuf
 #if defined(VCL_SGI_CC)
 # define xsputn_const const
 # define xsputn_sizet int
-#elif defined(__INTEL_COMPILER) || defined(VCL_SUNPRO_CC_50) || defined(VCL_KAI) || defined(VCL_BORLAND) || defined(VCL_GCC_30)
+#elif defined(__INTEL_COMPILER) || defined(VCL_SUNPRO_CC_5) || defined(VCL_KAI) || defined(VCL_BORLAND) || defined(VCL_GCC_30)
   // RogueWave or ISO?
 # define xsputn_const const
 # define xsputn_sizet vcl_streamsize
