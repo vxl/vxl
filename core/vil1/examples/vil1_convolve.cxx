@@ -100,7 +100,7 @@ int main(int argc, char ** argv)
 	  kernelimg[y][x] *= power;
     }
   if (kernelimg.width() == 0) {
-    cerr << "vil_convolve: unknown kernel [" << kernel << "]\n";
+    vcl_cerr << "vil_convolve: unknown kernel [" << kernel << "]\n";
     return -1;
   }
 

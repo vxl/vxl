@@ -22,16 +22,16 @@ int main(int /*argc*/, char** /*argv*/)
   unsigned char orange_grey = orange.grey();
 
   // Write to an ostream: the output as the format [R G B].
-  cout << "/* XPM */\n/* " << orange << black << white << grey
-       << (int)orange_grey << " */" << endl;
+  vcl_cout << "/* XPM */\n/* " << orange << black << white << grey
+       << (int)orange_grey << " */" << vcl_endl;
 
   // And now an .xpm file using these vil_rgb_cells, and the function as_hex:
-  cout << "static char* example_rgb[] = {\n\"20 8 4 1\",\n";
-  cout << "\" \tc " << as_hex(white) << "\",\n";
-  cout << "\"*\tc " << as_hex(black) << "\",\n";
-  cout << "\".\tc " << as_hex(orange)<< "\",\n";
-  cout << "\"/\tc " << as_hex(grey)  << "\",\n";
-  cout << "\"/ /.*** / /.* /.* / \",\n"
+  vcl_cout << "static char* example_rgb[] = {\n\"20 8 4 1\",\n";
+  vcl_cout << "\" \tc " << as_hex(white) << "\",\n";
+  vcl_cout << "\"*\tc " << as_hex(black) << "\",\n";
+  vcl_cout << "\".\tc " << as_hex(orange)<< "\",\n";
+  vcl_cout << "\"/\tc " << as_hex(grey)  << "\",\n";
+  vcl_cout << "\"/ /.*** / /.* /.* / \",\n"
        << "\" /.* /.* / .*/.* / /\",\n"
        << "\"/.* / /.* /.*.* / / \",\n"
        << "\" .*/ / .*/ .** / / /\",\n"

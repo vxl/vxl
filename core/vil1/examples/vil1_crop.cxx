@@ -12,7 +12,7 @@
 int main(int argc, char ** argv)
 {
   if (argc != 7) {
-    cerr << "usage: vil_crop in out x0 y0 width height\n";
+    vcl_cerr << "usage: vil_crop in out x0 y0 width height\n";
     return -1;
   }
   char const* input_filename = argv[1];

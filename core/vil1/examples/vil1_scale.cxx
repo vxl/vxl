@@ -14,7 +14,7 @@ void vil_scale(vil_image in, int newxsize, int newysize, vil_image out);
 int main(int argc, char ** argv)
 {
   if (argc != 6) {
-    cerr << "usage: vil_scale w h in out format\n";
+    vcl_cerr << "usage: vil_scale w h in out format\n";
     return -1;
   }
   int w = atoi(argv[1]);
@@ -46,7 +46,7 @@ struct pnmscale {
   }
 
   void pm_error(char const* msg) {
-    cerr <<"vil_scale: ERROR: " << msg << endl;
+    vcl_cerr <<"vil_scale: ERROR: " << msg << vcl_endl;
     abort();
   }
 

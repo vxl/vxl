@@ -8,7 +8,7 @@
 int main(int argc, char ** argv)
 {
   if (argc != 4) {
-    cerr << "usage: vil_convert in out format\n";
+    vcl_cerr << "usage: vil_convert in out format\n";
     return -1;
   }
   char const* input_filename = argv[1];

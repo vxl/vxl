@@ -10,7 +10,7 @@
 int main (int argc, char** argv) {
 
   if (argc != 5) {
-    cerr << __FILE__ " : low_clamp high_clamp in_image out_image" << endl;
+    vcl_cerr << __FILE__ " : low_clamp high_clamp in_image out_image" << vcl_endl;
     abort();
   }
 

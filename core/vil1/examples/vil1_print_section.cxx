@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
   unsigned w = atoi(argv[4]);
   unsigned h = atoi(argv[5]);
   
-  cerr << "image is " << I.width() << 'x' << I.height() << endl;
+  vcl_cerr << "image is " << I.width() << 'x' << I.height() << vcl_endl;
   assert(0<=x0 && 0<=y0 && x0+w<=I.width() && y0+h<=I.height());
   
   typedef unsigned char byte;
@@ -36,32 +36,32 @@ int main(int argc, char **argv) {
     
     bool f = I.get_section(buf.data(), x0, y0, w, h);
     if (f) {
-      cerr << "get_section succeeded." << endl;
-      cout << "red values:" << endl;
+      vcl_cerr << "get_section succeeded." << vcl_endl;
+      vcl_cout << "red values:" << vcl_endl;
       for (unsigned r=0; r<h; ++r) {
 	for (unsigned c=0; c<w; ++c)
-	  dec(cout, buf[3*(w*r+c)+0]) << ' ';
-	cout << endl;
+	  dec(vcl_cout, buf[3*(w*r+c)+0]) << ' ';
+	vcl_cout << vcl_endl;
       }
-      cout << "green values:" << endl;
+      vcl_cout << "green values:" << vcl_endl;
       for (unsigned r=0; r<h; ++r) {
 	for (unsigned c=0; c<w; ++c)
-	  dec(cout, buf[3*(w*r+c)+1]) << ' ';
-	cout << endl;
+	  dec(vcl_cout, buf[3*(w*r+c)+1]) << ' ';
+	vcl_cout << vcl_endl;
       }
-      cout << "blue values:" << endl;
+      vcl_cout << "blue values:" << vcl_endl;
       for (unsigned r=0; r<h; ++r) {
 	for (unsigned c=0; c<w; ++c)
-	  dec(cout, buf[3*(w*r+c)+2]) << ' ';
-	cout << endl;
+	  dec(vcl_cout, buf[3*(w*r+c)+2]) << ' ';
+	vcl_cout << vcl_endl;
       }
     }
     else {
-      cerr << "get_section failed" << endl;
+      vcl_cerr << "get_section failed" << vcl_endl;
     }
   }
   else
-    cerr << "what kind of image is this???" << endl;
+    vcl_cerr << "what kind of image is this???" << vcl_endl;
   
   return 0;
 }

@@ -13,21 +13,21 @@
 int main(int argc, char **argv) {
   for (int i=1; i<argc; ++i) {
     vil_image I = vil_load(argv[i]);
-    cerr << "I : " << I << endl;
+    vcl_cerr << "I : " << I << vcl_endl;
     
     if (!I) {
-      cerr << "ignore " << argv[i] << endl;
+      vcl_cerr << "ignore " << argv[i] << vcl_endl;
       continue;
     }
 
     I = vil_memory_image(I /*, "bah"*/); // close file
-    cerr << "I : " << I << endl;
+    vcl_cerr << "I : " << I << vcl_endl;
     
     I = vil_flipud(I);
-    cerr << "I : " << I << endl;
+    vcl_cerr << "I : " << I << vcl_endl;
     
     vil_save(I, argv[i], "jpeg");
-    cerr << "I : " << I << endl;
+    vcl_cerr << "I : " << I << vcl_endl;
   }
   return 0;
 }
