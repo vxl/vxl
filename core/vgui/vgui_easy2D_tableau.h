@@ -166,10 +166,12 @@ class vgui_easy2D_tableau : public vgui_displaylist2D_tableau
   void print_psfile(vcl_string filename, int reduction_factor,
                     bool print_geom_objs, int wd=-1, int ht=-1);
 
-  // deprecated. This used to work without a segfault if you were
-  // lucky. The newer versions that take a image parameter will work
-  // more reliably.
+#if 0 // deprecated method
+  // \deprecated in favour of the overloaded versions with an image parameter.
+  // This used to work without a segfault if you were lucky.
+  // The newer versions that take a image parameter will work more reliably.
   vgui_soview2D_image* add_image(float x, float y, float w, float h, char *data, unsigned int format, unsigned int type);
+#endif
 
   //: Add an image at the given position to the display.
   //

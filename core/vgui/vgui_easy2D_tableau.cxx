@@ -125,7 +125,6 @@ void vgui_easy2D_tableau::set_child(vgui_tableau_sptr const& i)
 //: Add the given two-dimensional object to the display.
 void vgui_easy2D_tableau::add(vgui_soview2D* object)
 {
-
   vgui_style *style = vgui_style_factory::instance()->get_style(fg[0], fg[1], fg[2], point_size, line_width);
   object->set_style(style);
 
@@ -393,6 +392,7 @@ vgui_soview2D_image* vgui_easy2D_tableau::add_image( float x, float y,
   return obj;
 }
 
+#if 0 // deprecated method
 vgui_soview2D_image* vgui_easy2D_tableau::add_image( float x, float y,
                                                      float width, float height,
                                                      char *data,
@@ -423,3 +423,4 @@ vgui_soview2D_image* vgui_easy2D_tableau::add_image( float x, float y,
   }
   return this->add_image( x, y, img );
 }
+#endif // 0
