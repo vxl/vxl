@@ -328,7 +328,7 @@ SOURCE=.\MapInverter.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\POX.h
+SOURCE=.\MedianReduceImage.h
 
 # End Source File
 # Begin Source File
