@@ -4,43 +4,57 @@
 // Created: 05 Aug 96
 // Modifications:
 //
-//-----------------------------------------------------------------------------
+#include "vnl_vector_fixed.h"
+#include <vcl/vcl_cassert.h>
 
-#include <vcl/vcl_compiler.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_c_vector.h>
-#include <vnl/vnl_numeric_traits.h>
-#include <vnl/vnl_vector_fixed.h>
+template<class T, int n>
+vnl_vector<T>& vnl_vector_fixed<T,n>::pre_multiply (vnl_matrix<T> const& ) {
+    // cannot use pre_multiply on vnl_vector_fixed<T,n>, since it deallocates the
+    // data storage
+    assert(false);
+    return *this;
+}
 
-//--------------------------------------------------------------------------------
+template<class T, int n>
+vnl_vector<T>& vnl_vector_fixed<T,n>::post_multiply (vnl_matrix<T> const& ) {
+    // cannot use post_multiply on vnl_vector_fixed<T,n>, since it deallocates the
+    // data storage
+    assert(false);
+    return *this;
+}
 
-//
+template<class T, int n>
+vnl_vector<T>& vnl_vector_fixed<T,n>::operator*= (vnl_matrix<T> const& ) {
+    // cannot use pre_multiply on vnl_vector_fixed<T,n>, since it deallocates the
+    // data storage
+    assert(false);
+    return *this;
+}
+
+//------------------------------------------------------------
+
 // instantiation macros for vnl_vector_fixed<T,int> :
-//
 
-#define VCLi_TEMPLATE_FUNCTION_MARKER 
-#ifdef VC50
-# undef  VCLi_TEMPLATE_FUNCTION_MARKER 
-# define VCLi_TEMPLATE_FUNCTION_MARKER <>
-#endif
-
-#undef __COMMA__
-#define __COMMA__ ,
-
+#ifndef VCL_GCC_27
 #define VNL_VECTOR_FIXED_INSTANTIATE(T,n) \
-template class vnl_vector_fixed<T, n>;	     \
-VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T __COMMA__ n> operator+(const T t, const vnl_vector_fixed<T,n>& rhs)); \
-VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T __COMMA__ n> operator-(const T t, const vnl_vector_fixed<T,n>& rhs)); \
-VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T __COMMA__ n> operator*(const T t, const vnl_vector_fixed<T,n>& rhs));\
-VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T __COMMA__ n> element_product  (const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b)) \
-VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T __COMMA__ n> element_quotient (const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b)) \
-VCL_INSTANTIATE_INLINE(ostream &operator<<(ostream & __COMMA__ vnl_vector_fixed<T __COMMA__ n> const &))
+template class vnl_vector_fixed<T, n>; \
+VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T VCL_COMMA n> operator+(T const, vnl_vector_fixed<T,n> const&)); \
+VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T VCL_COMMA n> operator-(T const, vnl_vector_fixed<T,n> const&)); \
+VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T VCL_COMMA n> operator*(T const, vnl_vector_fixed<T,n> const&));\
+VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T VCL_COMMA n> element_product (vnl_vector_fixed<T,n> const&, vnl_vector_fixed<T,n> const&)) \
+VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T VCL_COMMA n> element_quotient(vnl_vector_fixed<T,n> const&, vnl_vector_fixed<T,n> const&)) \
+VCL_INSTANTIATE_INLINE(ostream &operator<<(ostream & VCL_COMMA vnl_vector_fixed<T VCL_COMMA n> const &))
+#else
+#define VNL_VECTOR_FIXED_INSTANTIATE(T,n) \
+template class vnl_vector_fixed<T, n>; \
+VCL_INSTANTIATE_INLINE(ostream &operator<<(ostream & VCL_COMMA vnl_vector_fixed<T VCL_COMMA n> const &))
+#endif
 
 //--------------------------------------------------------------------------------
 
 #define VNL_NON_TEMPLATE_FIXED_CROSS_3D_INSTANTIATE(T) \
-vnl_vector_fixed<T,3> cross_3d(const vnl_vector_fixed<T,3>& v1, \
-			       const vnl_vector_fixed<T,3>& v2) \
+vnl_vector_fixed<T,3> cross_3d(vnl_vector_fixed<T,3> const& v1, \
+			       vnl_vector_fixed<T,3> const& v2) \
 { \
   vnl_vector_fixed<T,3> result; \
    \
@@ -52,30 +66,3 @@ vnl_vector_fixed<T,3> cross_3d(const vnl_vector_fixed<T,3>& v1, \
   result.z() = vv1.x() * vv2.y() - vv1.y() * vv2.x(); \
   return result;				  \
 } 
-
-//--------------------------------------------------------------------------------
-
-template<class T, int n>
-vnl_vector<T>& vnl_vector_fixed<T,n>::pre_multiply (const vnl_matrix<T>& ) {
-    // cannot use pre_multiply on vnl_vector_fixed<T,n>, since it deallocates the
-    // data storage
-    assert(false);
-    return *this;
-}
-
-template<class T, int n>
-vnl_vector<T>& vnl_vector_fixed<T,n>::post_multiply (const vnl_matrix<T>& ) {
-    // cannot use post_multiply on vnl_vector_fixed<T,n>, since it deallocates the
-    // data storage
-    assert(false);
-    return *this;
-}
-
-template<class T, int n>
-vnl_vector<T>& vnl_vector_fixed<T,n>::operator*= (const vnl_matrix<T>& ) {
-    // cannot use pre_multiply on vnl_vector_fixed<T,n>, since it deallocates the
-    // data storage
-    assert(false);
-    return *this;
-}
-
