@@ -4,12 +4,22 @@ SUBDIRS(netlib)
 
 SUBDIRS(Qv)
 
+OPTION( VXL_FORCE_V3P_ZLIB "Use V3P instead of any native ZLIB library?" NO)
+MARK_AS_ADVANCED( VXL_FORCE_V3P_ZLIB )
 SUBDIRS(zlib)
 
+OPTION( VXL_FORCE_V3P_JPEG "Use V3P instead of any native JPEG library?" NO)
+MARK_AS_ADVANCED( VXL_FORCE_V3P_JPEG )
 SUBDIRS(jpeg)
 
+OPTION( VXL_FORCE_V3P_TIFF "Use V3P instead of any native TIFF library?" NO)
+MARK_AS_ADVANCED( VXL_FORCE_V3P_TIFF )
 SUBDIRS(tiff)
 
+OPTION( VXL_FORCE_V3P_PNG "Use V3P instead of any native PNG library?" NO)
+MARK_AS_ADVANCED( VXL_FORCE_V3P_PNG )
 SUBDIRS(png)
 
+OPTION( VXL_FORCE_V3P_MPEG2 "Use V3P instead of any native MPEG2 library?" NO)
+MARK_AS_ADVANCED( VXL_FORCE_V3P_MPEG2 )
 SUBDIRS(mpeg2)
