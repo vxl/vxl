@@ -9,6 +9,7 @@ ADD_LIBRARY(mil mil_sources )
 SOURCE_FILES(mil_sources
 mil_gauss_reduce_2d
 mil_gaussian_pyramid_builder_2d
+mil_gaussian_pyramid_builder_2d_general
 mil_image
 mil_image_2d_of
 mil_image_data
