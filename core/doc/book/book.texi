@@ -54,6 +54,9 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 * vcsl::
 * vgui::
 * Conclusion::
+* structure::
+* build::
+* templates::
 * Concept Index::
 @end menu
 
@@ -145,33 +148,40 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 @include chapter_vsl.texi
 
 @comment ------------------------------------------------------------------
-@node    vcsl,      Concept Index,     vsl,      top
-@comment node-name, next,    previous, up
+@node    vcsl,      structure, vsl,      top
+@comment node-name, next,      previous, up
 @chapter vcsl: Co-ordinate systems
 @cindex co-ordinate systems
 
 @include chapter_vcsl.texi
 
 @comment ------------------------------------------------------------------
+@node    structure, build,    vcsl,     top
+@comment node-name, next,     previous, up
 @appendix  Filenames and structure
 @cindex directories
+
 @include appendix_structure.texi
 
 @comment ------------------------------------------------------------------
+@node    build,     templates, structure, top
+@comment node-name, next,      previous,  up
 @appendix  Build Systems
-@cindex CMake
+@cindex Makefiles
+@cindex MSVS Project Files
 
 @include appendix_build.texi
 
 @comment ------------------------------------------------------------------
+@node    templates, Concept Index, build,    top
+@comment node-name, next,          previous, up
 @appendix  On The Use of Templates
 
 @include appendix_templates.texi
 
-
 @comment ------------------------------------------------------------------
-@node    Concept Index,  , vcsl, Top
-@c        node-name,    next, previous,        up
+@node    Concept Index,  top,  templates, top
+@comment node-name,      next, previous,  up
 @unnumbered Concept Index
 
 @printindex cp

@@ -1,38 +1,26 @@
-VXL is designed to work with any build system. However, we do have a
-@emph{default} build system - CMake. CMake is a cross platform tool
-which takes its control files (@samp{CMakeLists.txt}) and produces
-makefiles for Unix systems and dsp files for users of Microsoft's
-Developer Studio. You can find out more about CMake at
-@uref{http://www.cmake.org/}.
-
-VXL is designed to work with the latest @emph{released} CMake. At the
-time of writing, this is version 1.4.3. You can choose not to build
-certain portions of the source tree by setting the options in the CMake
-GUI.
-
-@section CMake 1.4
-
-@quotation
-I'm adding this new information in its own section for now.  I want to
-make sure I'm using @command{texinfo} in a satisfactory way before I
-alter other parts of the documentation.  -Fred Wheeler
-@end quotation
-
-This section describes the new style of @file{CMakeLists.txt} files
-that take advantage of new CMake 1.4 features.  The new CMake 1.4
-features make the @file{CMakeLists.txt} configuration files
-considerably more simple.
-
-@subsection Overview
+@section CMake
+@cindex CMake
+@cindex CMakeLists.txt files
 
 VXL uses the CMake configuration system to generate Makefiles and MSVS
-Project files.  Actually, there are other build systems as well, but
-most users use CMake.  This section shows by example how to construct
-the necessary CMakeLists.txt configuration files for VXL.  The intent
-here is to show how to write these configuration files and to give
-detailed reasons for the various methods used in these files in VXL.
-This section should be used in conjunction with the CMake User's
-Manual (@uref{http://www.cmake.org}).
+Project files.  There are other build systems as well, but most users
+use CMake.  This section shows by example how to write
+@file{CMakeLists.txt} CMake files for VXL.  The intent here is to show
+how to write these configuration files and to give detailed reasons
+for the various methods used in these files in VXL.  This section
+should be used in conjunction with the CMake User's Manual
+(@uref{http://www.cmake.org}).
+
+CMake is available from @uref{http://www.cmake.org} where you'll find
+pre-compiled versions and instructions for getting the source code
+from an anonymous CVS server.  VXL is designed to be configured by the
+latest released version of CMake.  At the time of writing, this is
+version 1.4.3.  From CVS, you can use the tag @code{LatestRelease}.
+Cmake documentation can be found at
+@uref{http://www.cmake.org/HTML/Documentation.html}.
+
+You can choose not to build certain portions of the source tree by
+setting the options in CMake.
 
 Examples given below are for simple applications and libraries.
 Guidelines for the top level VXL @file{CMakeLists.txt} file and
@@ -45,32 +33,6 @@ this document to show how the @file{CMakeLists.txt} files should be
 constructed and to be verbose about the reasons, and to also be a
 style guide for these files.
 
-CMake is available from @uref{http://www.cmake.org} where you'll find
-pre-compiled versions and instructions for getting the source code
-from an anonymous CVS server.  VXL is designed to be configured by the
-latest released version of CMake.  From CVS, you can use the tag
-@code{LatestRelease}.  Cmake documentation can be found at
-@uref{http://www.cmake.org/HTML/Documentation.html}.
-
-@subsection History
-
-VXL used to have @file{CMakeListsLink.txt} files to handle library
-dependencies.  The library dependency problem is now dealt with by
-CMake (since version 1.4) and the use of @file{CMakeListsLink.txt}
-files is deprecated.
-
-In the past, VXL used @file{CMakeListsHeaders.txt} files that were only
-included for Win32 builds, but this is no longer needed and is
-deprecated.  The reason for having a @file{CMakeListsHeaders.txt} file
-was that older versions of CMake did not like having .h or .txx files
-in a build rule (except with MSVS), but this has been fixed now (CMake
-versions 1.2 and later).  It is better to have everything in a single
-file, since that makes the whole system more manageable.
-
-New VXL source code directories for executables and libraries
-will need a @file{CMakeLists.txt} file, but not a
-@file{CMakeListsLink.txt} and not a @file{CMakeListsHeaders.txt} file.
-
 @subsection Example 1: An application that uses VXL libraries
 
 A single, complete @file{CMakeLists.txt} file follows, for a fictional
@@ -82,11 +44,11 @@ prefixed by '#' in CMake.
 # This sample CMakeLists.txt file will configure an application named
 # foobar that is built from foo.cxx, bar.cxx and some header files.
 
-# The ADD_EXECUTABLE configures a new executable.  The first argument
-# to ADD_EXECUTABLE is the name of the executable file (without the
-# possible .exe suffix) that you want to generate.  The rest of the
-# arguments, up to the closing ")", are file names, where spaces,
-# comments and newlines may be used at will.
+# The ADD_EXECUTABLE command configures a new executable.  The first
+# argument to ADD_EXECUTABLE is the name of the executable file
+# (without the possible .exe suffix) that you want to generate.  The
+# rest of the arguments, up to the closing ")", are file names, where
+# spaces, comments and newlines may be used at will.
 
 # Always give the filename suffix for source files in the
 # ADD_EXECUTABLE and ADD_LIBRARY commands.  CMake will try to guess
@@ -99,8 +61,8 @@ prefixed by '#' in CMake.
 # project in MS Visual Studio.  List all header files for this
 # application, but not headers from other libraries you are using.
 # The reason for this is that users of a GUI build system like MSVS
-# will then see every editable source file in the file list, so that
-# they can click on it and possibly edit the file.
+# will then see every source file in the file list, and can click on
+# them to view and possibly edit them.
 
 # Every source file (except for template instantiation files residing
 # in Templates subdirectories) should be present in exactly one build
@@ -110,7 +72,7 @@ prefixed by '#' in CMake.
 # parent directory, cf. vxl/vil/file_formats).  Template instantiation
 # files residing in Templates subdirectories are not included
 # specifically in any CMakeLists.txt file, but are included via the
-# AUX_SOURCE_DIRECTORY CMake command (used example 2, below).
+# AUX_SOURCE_DIRECTORY CMake command (used in example 2, below).
 
 # Finally, we get to an actual CMake command.
 
@@ -131,7 +93,7 @@ INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/gel )
 # For INCLUDE_DIRECTORIES, the preferred practice is to specify a
 # directory one level below ${allvxl_SOURCE_DIR} as an include
 # directory, and then the further qualify include files in the source
-# code with commands like "#include <vsol/vsol_box_2d.h>".  Do not do
+# code with commands like #include <vsol/vsol_box_2d.h>.  Do not do
 # the following.
 
 # NO # INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/gel/vsol )
@@ -141,7 +103,7 @@ INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/gel )
 # directly used by this application.  Do not include libraries that
 # are subsequently used by the libraries that are directly used.
 # CMake will automatically handle the tree of dependencies so the link
-# with have all required libraries.
+# command will have all required libraries.
 
 # The libraries can be listed in any order.  However, if library "A"
 # depends on library "B", then it is best to list library "A" before
@@ -172,11 +134,11 @@ INCLUDE( ${MODULE_PATH}/FindZLIB.cmake )
 
 # For this library the list of source files will be built up with SET
 # commands.  Before CMake 1.4 the SOURCE_FILES command was used for
-# this purpose, but the SET command is now preferred.  The SET command
-# can be used to create source file lists for use with both the
-# ADD_EXECUTABLE and ADD_LIBRARY commands.  This is necessary when
-# certain sources are conditionally included, as we see here, and
-# preferred for long source file lists.
+# this purpose, but SOURCE_FILES is now deprecated and the SET command
+# is preferred.  The SET command can be used to create source file
+# lists for use with both the ADD_EXECUTABLE and ADD_LIBRARY commands.
+# This is necessary when certain sources are conditionally included,
+# as we see here, and preferred for long source file lists.
 
 # The SET commands for a source list variable must come before the
 # ADD_LIBRARY or ADD_EXECUTABLE command that uses them.  Because we
@@ -266,6 +228,8 @@ ENDIF( BUILD_EXAMPLES )
 @end example
 
 @subsection CMake Variables and Preprocessor Macros
+@cindex CMake variables
+@cindex Preprocessor macros, build related
 
 Listed below are CMake variables commonly used in VXL CMake files and
 associated preprocessor macros.  The CMake variable are prefixed by
@@ -298,7 +262,7 @@ The Cygwin API is present.
 @itemx @bullet{} Preprocessor: [???]
 The Borland C++ compiler is being used.
 
-@item  @bullet{} CMake: @code{SOLARIS} (VXL top level CMakeLists.txt file)
+@item  @bullet{} CMake: @code{SOLARIS} (VXL top level @file{CMakeLists.txt} file)
 @itemx @bullet{} Preprocessor: [???]
 The OS is Solaris.  This variable is set in the top level
 @file{CMakeLists.txt} file.
@@ -307,8 +271,8 @@ The OS is Solaris.  This variable is set in the top level
 @itemx @bullet{} Preprocessor: (none)
 Directory holding the VXL versions of the @file{FindXXX.cmake} files.
 
-@item  @bullet{} CMake: @code{HAS_MFC} (VXL top level CMakeLists.txt file)
-@itemx @bullet{} Preprocessor: @code{HAS_MFC} (VXL top level CMakeLists.txt file)
+@item  @bullet{} CMake: @code{HAS_MFC} (VXL top level @file{CMakeLists.txt} file)
+@itemx @bullet{} Preprocessor: @code{HAS_MFC} (VXL top level @file{CMakeLists.txt} file)
 Microsoft Foundation Classes are available.
 
 @item  @bullet{} CMake: @code{HAS_GLUT} (Module file @file{FindGLUT.cmake})
@@ -360,10 +324,29 @@ The X11 library is available.
 The ZLIB library is available.
 @end table
 
-@section Other Build Systems
+@subsection Historical CMake Include Files
+@cindex CMakeListsLink.txt files
+@cindex CMakeListsHeaders.txt files
 
-@cindex makefile
-@cindex .dsp file
+VXL used to have @file{CMakeListsLink.txt} include files to handle
+library dependencies.  The library dependency problem is now dealt
+with by CMake (since version 1.4) and the use of
+@file{CMakeListsLink.txt} files is deprecated.
+
+In the past, VXL used @file{CMakeListsHeaders.txt} include files that
+were only included for Win32 builds, but this is no longer needed and
+is deprecated.  The reason for having a @file{CMakeListsHeaders.txt}
+file was that older versions of CMake did not allow .h or .txx files
+in a build rule (except with MSVS), but this has been fixed now (CMake
+versions 1.2 and later).  It is better to have everything in a single
+file, since that makes the whole system more manageable.
+
+New VXL source code directories for executables and libraries
+will need a @file{CMakeLists.txt} file, but not a
+@file{CMakeListsLink.txt} and not a @file{CMakeListsHeaders.txt} file.
+
+@section Other Build Systems
+@cindex .dsp files
 
 Your copy of VXL may contain control files for other build systems
 such as make or Developer Studio. Copies of these control files
