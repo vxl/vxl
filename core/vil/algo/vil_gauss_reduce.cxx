@@ -1,9 +1,9 @@
 // This is mul/vil2/algo/vil2_gauss_reduce.cxx
 #include "vil2_gauss_reduce.h"
 //:
-//  \file
-//  \brief Functions to smooth and sub-sample image in one direction
-//  \author Tim Cootes
+// \file
+// \brief Functions to smooth and sub-sample image in one direction
+// \author Tim Cootes
 
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
@@ -21,7 +21,7 @@ void vil2_gauss_reduce(const vxl_byte* src_im,
 {
     vxl_byte* d_row = dest_im;
     const vxl_byte* s_row = src_im;
-    int sxs2 = s_x_step*2;
+    vcl_ptrdiff_t sxs2 = s_x_step*2;
     unsigned ni2 = (src_ni-3)/2;
     for (unsigned y=0;y<src_nj;++y)
     {
@@ -57,7 +57,7 @@ void vil2_gauss_reduce(const float* src_im,
 {
     float* d_row = dest_im;
     const float* s_row = src_im;
-    int sxs2 = s_x_step*2;
+    vcl_ptrdiff_t sxs2 = s_x_step*2;
     unsigned ni2 = (src_ni-3)/2;
     for (unsigned y=0;y<src_nj;++y)
     {
@@ -94,7 +94,7 @@ void vil2_gauss_reduce(const int* src_im,
 {
     int* d_row = dest_im;
     const int* s_row = src_im;
-    int sxs2 = s_x_step*2;
+    vcl_ptrdiff_t sxs2 = s_x_step*2;
     unsigned ni2 = (src_ni-3)/2;
     for (unsigned y=0;y<src_nj;++y)
     {
@@ -128,8 +128,8 @@ void vil2_gauss_reduce_121(const vxl_byte* src_im,
                            vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
                            vxl_byte* dest_im, vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
 {
-  int sxs2 = s_x_step*2;
-  int sys2 = s_y_step*2;
+  vcl_ptrdiff_t sxs2 = s_x_step*2;
+  vcl_ptrdiff_t sys2 = s_y_step*2;
   vxl_byte* d_row = dest_im+d_y_step;
   const vxl_byte* s_row1 = src_im + s_y_step;
   const vxl_byte* s_row2 = s_row1 + s_y_step;
@@ -200,8 +200,8 @@ void vil2_gauss_reduce_121(const float* src_im,
                            float* dest_im,
                            vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
 {
-  int sxs2 = s_x_step*2;
-  int sys2 = s_y_step*2;
+  vcl_ptrdiff_t sxs2 = s_x_step*2;
+  vcl_ptrdiff_t sys2 = s_y_step*2;
   float* d_row = dest_im+d_y_step;
   const float* s_row1 = src_im + s_y_step;
   const float* s_row2 = s_row1 + s_y_step;
@@ -271,8 +271,8 @@ void vil2_gauss_reduce_121(const int* src_im,
                            int* dest_im,
                            vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
 {
-  int sxs2 = s_x_step*2;
-  int sys2 = s_y_step*2;
+  vcl_ptrdiff_t sxs2 = s_x_step*2;
+  vcl_ptrdiff_t sys2 = s_y_step*2;
   int* d_row = dest_im+d_y_step;
   const int* s_row1 = src_im + s_y_step;
   const int* s_row2 = s_row1 + s_y_step;
