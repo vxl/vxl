@@ -1,4 +1,4 @@
-// This is vxl/vnl/tests/test_vector.cxx
+// This is core/vnl/tests/test_vector.cxx
 #include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
@@ -6,10 +6,11 @@
 #include <vnl/vnl_cross.h>
 #include <testlib/testlib_test.h>
 
-void vnl_vector_test_int() {
-  vcl_cout << "*******************\n"
-           << "Testing Vector<int>\n"
-           << "*******************\n";
+void vnl_vector_test_int()
+{
+  vcl_cout << "***********************\n"
+           << "Testing vnl_vector<int>\n"
+           << "***********************\n";
   //// test constructors, accessors
   vnl_vector<int> v0;
   TEST("vnl_vector<int> v0()", v0.size(), 0);
@@ -144,10 +145,11 @@ bool float_equal(const float& f1, const float& f2){
   return vcl_fabs(f1 - f2) < 1.0e-6;
 }
 
-void vnl_vector_test_float() {
-  vcl_cout << "*********************\n"
-           << "Testing Vector<float>\n"
-           << "*********************\n";
+void vnl_vector_test_float()
+{
+  vcl_cout << "*************************\n"
+           << "Testing vnl_vector<float>\n"
+           << "*************************\n";
   //// test constructors, accessors
   vnl_vector<float> v0;
   TEST("vnl_vector<float> v0()", v0.size(), 0);
@@ -172,9 +174,8 @@ void vnl_vector_test_float() {
   TEST("(v0 == v2)", (v0 == v2), false);
   TEST("v1.fill(3)", (v1.fill(3), (v1.get(0)==3 && v1.get(1)==3)), true);
   TEST("v2.fill(2)", (v2.fill(2), (v2.get(0)==2 && v2.get(1)==2)), true);
-//  vnl_vector<float> v3(3,3,1,2,3); var args do not work with floats
-  vnl_vector<float> v3(1.f,2.f,3.f);
-  TEST("v3(1,2,3)",(v3.get(0)==1 && v3.get(1)==2 && v3.get(2)==3), true);
+  vnl_vector<float> v3(3); v3[0]=1.f; v3[1]=2.f; v3[2]=3.f;
+  TEST("v3(3)",(v3.get(0)==1 && v3.get(1)==2 && v3.get(2)==3), true);
   vnl_vector<float> v4(v3);
   TEST("vnl_vector<float> v4(v3)", v3, v4);
   TEST("v0=v2", (v0=v2, (v0==v2)), true);
@@ -256,9 +257,9 @@ void vnl_vector_test_float() {
           v(1)==v[1] && v[1]==0 &&
           v(2)==v[2] && v[2]==0 &&
           v(3)==v[3] && v[3]==0), true);
-    vnl_vector<float> v1(1.f,0.f,0.f);
-    vnl_vector<float> v2(0.f,1.f,0.f);
-    vnl_vector<float> v3(0.f,0.f,1.f);
+    vnl_vector<float> v1(3,0.f); v1[0] = 1.f;
+    vnl_vector<float> v2(3,0.f); v2[1] = 1.f;
+    vnl_vector<float> v3(3,0.f); v3[2] = 1.f;
     TEST("dot_product(v1,v2)",
          (dot_product(v1,v2)==0 && dot_product(v1,v3)==0 && dot_product(v2,v3)==0), true);
     TEST("4d-v=3d-v", ((v = v3), v.size()==3 && v==v3), true);
@@ -272,7 +273,7 @@ void vnl_vector_test_float() {
   }
 
   {
-    vnl_vector<float> v (1.f, 2.f, 3.f);
+    vnl_vector<float> v(3); v[0]=1.f; v[1] = 2.f; v[2] = 3.f;
     vnl_matrix<float> m = outer_product(v, v);
     TEST("outer_product",
          (m(0,0)==1 && m(0,1)==2 && m(0,2)==3 &&
@@ -280,7 +281,7 @@ void vnl_vector_test_float() {
           m(2,0)==3 && m(2,1)==6 && m(2,2)==9), true);
   }
   {
-    vnl_vector<float> v (1.f, 2.f, 3.f);
+    vnl_vector<float> v(3); v[0]=1.f; v[1] = 2.f; v[2] = 3.f;
     TEST("vnl_vector<float> v (1.f, 2.f, 3.f)", v.size(), 3);
     v.x() = 1.f;
     v.y() = 2.f;
@@ -288,11 +289,11 @@ void vnl_vector_test_float() {
     TEST("v.set_x(1) and v[0]", v[0], 1);
     TEST("v.set_y(2) and v[1]", v[1], 2);
     TEST("v.set_z(3) and v[2]", v[2], 3);
-    vnl_vector<float> v1(1.f, 0.f, 0.f);
+    vnl_vector<float> v1(3, 0.f); v1[0]=1.f;
     vcl_cout << "v1 = " << v1 << vcl_endl;
-    vnl_vector<float> v2(0.f, 1.f, 0.f);
+    vnl_vector<float> v2(3, 0.f); v2[1]=1.f;
     vcl_cout << "v2 = " << v2 << vcl_endl;
-    vnl_vector<float> v3(-0.5f, 0.f, 0.5f);
+    vnl_vector<float> v3(3, 0.f); v3[0]=-0.5f; v3[2]=0.5f;
     vcl_cout << "v3 = " << v3 << vcl_endl;
     vcl_cout << "v1 - v2 = " << v1 - v2 << vcl_endl;
     double ang = angle(v1,v2);
@@ -332,8 +333,8 @@ void vnl_vector_test_float() {
        4.0);
 }
 
-
-void vnl_vector_test_matrix() {
+void vnl_vector_test_matrix()
+{
   int mvalues[] = {1,2,3,
                    4,5,6};                      // product with matrices
   vnl_matrix<int> m(2,3,6, mvalues);
@@ -361,7 +362,8 @@ void vnl_vector_test_matrix() {
         (v.size()==2 && v(0)==1 && v(1)==4)), true);
 }
 
-void vnl_vector_test_conversion() {
+void vnl_vector_test_conversion()
+{
   int i, d;
   bool check;
   {
@@ -518,6 +520,10 @@ void vnl_vector_test_leak()           // use top4.1 to watch for memory.
     vnl_vector_test_conversion();
   }
 }
+
+#ifndef LEAK
+#define LEAK 0
+#endif
 
 void test_vector()
 {
