@@ -170,5 +170,5 @@ void vsl_print_summary(vcl_ostream &os, const vnl_nonlinear_minimizer * b)
 
 // Explicitly instantiate loader
 VSL_CLIPON_BINARY_LOADER_INSTANTIATE(vnl_nonlinear_minimizer, \
-                                      vnl_io_nonlinear_minimizer)
+                                     vnl_io_nonlinear_minimizer);
 
