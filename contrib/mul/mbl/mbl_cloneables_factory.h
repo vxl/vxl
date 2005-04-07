@@ -97,7 +97,7 @@ class mbl_cloneables_factory
         while ( ++it != end)
           ss << ", " << it->first;
       }
-      mbl_exception_warning(mbl_exception_no_name_in_factory(name, ss.str()));
+      mbl_exception_error(mbl_exception_no_name_in_factory(name, ss.str()));
       return vcl_auto_ptr<BASE >();
     }
     return vcl_auto_ptr<BASE >(found->second->clone());
