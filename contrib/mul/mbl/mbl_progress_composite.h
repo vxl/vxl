@@ -46,7 +46,7 @@ class mbl_progress_composite : public mbl_progress
   virtual vcl_string is_a() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const {};
+  virtual void print_summary(vcl_ostream& ) const {};
 
  protected:
 

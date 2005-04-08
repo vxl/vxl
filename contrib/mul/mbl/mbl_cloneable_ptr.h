@@ -207,7 +207,8 @@ class mbl_cloneable_nzptr
   //: Load from binary stream
   void b_read(vsl_b_istream& bfs)
   {
-    deleteObject();
+    delete ptr_;
+    ptr_ = 0;
     vsl_b_read(bfs,ptr_);
   }
 };
@@ -224,9 +225,9 @@ void vsl_b_read(vsl_b_istream& bfs, mbl_cloneable_nzptr<BaseClass>& p)
 template class mbl_cloneable_ptr< T >; \
 template void vsl_b_write(vsl_b_ostream& bfs, const mbl_cloneable_ptr< T >& p);\
 template void vsl_b_read(vsl_b_istream& bfs, mbl_cloneable_ptr< T >& p);\
-template class mbl_cloneable_ptr< T >; \
-template void vsl_b_write(vsl_b_ostream& bfs, const mbl_cloneable_ptr< T >& p);\
-template void vsl_b_read(vsl_b_istream& bfs, mbl_cloneable_ptr< T >& p);
+template class mbl_cloneable_nzptr< T >; \
+template void vsl_b_write(vsl_b_ostream& bfs, const mbl_cloneable_nzptr< T >& p);\
+template void vsl_b_read(vsl_b_istream& bfs, mbl_cloneable_nzptr< T >& p);
 
 
 #endif  // mbl_cloneable_ptr_h
