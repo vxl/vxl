@@ -99,6 +99,9 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
+SOURCE=.\vgl_io_polygon.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vgl_io_vector_3d+double-.cxx
 # End Source File
 # Begin Source File
@@ -246,13 +249,7 @@ SOURCE=.\Templates/vsl_vector_io+vgl_vector_3d+double--.cxx
 SOURCE=.\Templates/vsl_vector_io+vcl_vector+vgl_line_2d+double---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_pair_io+vgl_point_2d+double--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vsl_vector_io+vcl_pair+vgl_point_2d+double---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vgl_io_polygon.cxx
+SOURCE=.\Templates/vsl_vector_io+vcl_pair+vgl_point_2d+double-.vgl_point_2d+double---.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
