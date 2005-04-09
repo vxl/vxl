@@ -38,7 +38,7 @@ foreach $dir (@DIRS)
   @tmp_list = readdir(TMP);
   closedir(TMP);
   if ($dir =~ m/\bvcl$/) {
-    foreach $sd ( ("vcl_sys","iso","generic","gcc","egcs","gcc-295","gcc-libstdcxx-v3","sgi","sunpro","win32","emulation") ) {
+    foreach $sd ( ("vcl_sys","iso","generic","gcc","egcs","gcc-295","gcc-libstdcxx-v3","sgi","sunpro","win32-vc60","win32-vc70","emulation","borland55","borland56","mwerks","stlport") ) {
       opendir(TMP,"$dir/$sd");
       foreach $x (readdir(TMP)) { push @tmp_list, "$sd/$x"; }
       closedir(TMP);
@@ -327,7 +327,6 @@ foreach $dir (@DIRS)
     push @subdirs2, @tmpl_list;
   }
   # add Templates to source_files, if asked
-  $cmakefile .= "\nAUX_SOURCE_DIRECTORY(Templates vcl_sources)" if ($dir =~ m/\/vcl$/);
   while ($cmakefile =~ s/\bAUX_SOURCE_DIRECTORY\s*\(\s*(\S+)\s+\S+sources\s*\)//) {
     $file = "$1";
     if (opendir(TMPL,"$dir/$file")) {
