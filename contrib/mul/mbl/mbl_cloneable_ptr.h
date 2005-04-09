@@ -2,7 +2,7 @@
 #ifndef mbl_cloneable_ptr_h
 #define mbl_cloneable_ptr_h
 //:
-//  \file
+// \file
 
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_cassert.h>
@@ -101,11 +101,11 @@ class mbl_cloneable_ptr
 
 template <class BaseClass>
 void vsl_b_write(vsl_b_ostream& bfs, const mbl_cloneable_ptr<BaseClass>& p)
-{ p.b_write(bfs);  }
+{ p.b_write(bfs); }
 
 template <class BaseClass>
 void vsl_b_read(vsl_b_istream& bfs, mbl_cloneable_ptr<BaseClass>& p)
-{ p.b_read(bfs);  }
+{ p.b_read(bfs); }
 
 
 //=======================================================================
@@ -215,11 +215,11 @@ class mbl_cloneable_nzptr
 
 template <class BaseClass>
 void vsl_b_write(vsl_b_ostream& bfs, const mbl_cloneable_nzptr<BaseClass>& p)
-{ p.b_write(bfs);  }
+{ p.b_write(bfs); }
 
 template <class BaseClass>
 void vsl_b_read(vsl_b_istream& bfs, mbl_cloneable_nzptr<BaseClass>& p)
-{ p.b_read(bfs);  }
+{ p.b_read(bfs); }
 
 #define MBL_CLONEABLE_PTR_INSTANTIATE(T) \
 template class mbl_cloneable_ptr< T >; \
@@ -227,7 +227,6 @@ template void vsl_b_write(vsl_b_ostream& bfs, const mbl_cloneable_ptr< T >& p);\
 template void vsl_b_read(vsl_b_istream& bfs, mbl_cloneable_ptr< T >& p);\
 template class mbl_cloneable_nzptr< T >; \
 template void vsl_b_write(vsl_b_ostream& bfs, const mbl_cloneable_nzptr< T >& p);\
-template void vsl_b_read(vsl_b_istream& bfs, mbl_cloneable_nzptr< T >& p);
-
+template void vsl_b_read(vsl_b_istream& bfs, mbl_cloneable_nzptr< T >& p)
 
 #endif  // mbl_cloneable_ptr_h
