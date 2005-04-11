@@ -53,14 +53,20 @@ static void test_resample_trilinear()
            << " Testing vil3d_resample_trilinear\n"
            << "**********************************\n";
 
-  int sni=3;
-  int snj=3;
-  int snk=3;
+  unsigned sni=3;
+  unsigned snj=3;
+  unsigned snk=3;
   vil3d_image_view<int> src(sni, snj, snk);
-  for (int i=0; i<sni; ++i)
-    for (int j=0; j<snj; ++j)
-      for (int k=0; k<snk; ++k)
+  for (unsigned i=0; i<sni; ++i)
+  {
+    for (unsigned j=0; j<snj; ++j)
+    {
+      for (unsigned k=0; k<snk; ++k)
+      {
         src(i,j,k) = 10*k;
+      }
+    }
+  }
 
   vil3d_image_view<int> dst;
   vil3d_resample_trilinear(src, dst, 1.9, 2.1, 2.3);
@@ -76,11 +82,11 @@ static void test_resample_trilinear()
 
   
   bool all_voxs_correct = true;
-  for (int i=0; i<dni; ++i)
+  for (unsigned i=0; i<dni; ++i)
   {
-    for (int j=0; j<dnj; ++j)
+    for (unsigned j=0; j<dnj; ++j)
     {
-      for (int k=0; k<dnk; ++k)
+      for (unsigned k=0; k<dnk; ++k)
       {
         // NO TESTING DONE!
       }
