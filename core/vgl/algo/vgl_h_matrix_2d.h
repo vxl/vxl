@@ -78,6 +78,13 @@ class vgl_h_matrix_2d
   void set(const T *t_matrix);
   void set(vnl_matrix_fixed<T,3,3> const& t_matrix);
 
+  //:various transformations that set the corresponding parts of the matrix
+  void set_translation(const T tx, const T ty);
+  //: theta is in radians, the upper 2x2 part of the matrix is replaced
+  void set_rotation(const T theta);
+  //: tranform is composed with a scaling transform (only upper 2x2 affected)
+  void set_scale(const T scale);
+
   //: transformation to projective basis (canonical frame)
   // Compute the homography that takes the input set of points to the
   // canonical frame.  The points act as the projective basis for

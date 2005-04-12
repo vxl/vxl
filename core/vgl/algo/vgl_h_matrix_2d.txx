@@ -345,6 +345,38 @@ const vgl_h_matrix_2d<T> vgl_h_matrix_2d<T>::get_inverse() const
 }
 
 
+//: Set the (0,2) and (1,2) elements of the transform matrix
+template <class T>
+void vgl_h_matrix_2d<T>::set_translation(const T tx, const T ty)
+{
+  t12_matrix_[0][2] = tx;   t12_matrix_[1][2] = ty;
+}
+
+//: Set the upper 2x2 submatrix to a rotation matrix defined by theta
+template <class T>
+void vgl_h_matrix_2d<T>::set_rotation(const T theta)
+{
+  double theta_d = (double)theta;
+  double c = vcl_cos(theta_d), s = vcl_sin(theta_d);
+  t12_matrix_[0][0] = (T)c;   t12_matrix_[0][1] = -(T)s;
+  t12_matrix_[1][0] = (T)s;   t12_matrix_[1][1] = (T)c;
+}
+
+//: Compose the existing matrix with a uniform scale transformation
+//        _     _
+//       |s  0  0|
+//  Hs = |0  s  0| Hinitial
+//       |0  0  1|
+//        -     -
+//
+template <class T>
+void vgl_h_matrix_2d<T>::set_scale(const T scale)
+{
+  for(unsigned r = 0; r<2; ++r)
+    for(unsigned c = 0; c<3; ++c)
+      t12_matrix_[r][c]*=scale;
+}
+
 //----------------------------------------------------------------------------
 #undef VGL_H_MATRIX_2D_INSTANTIATE
 #define VGL_H_MATRIX_2D_INSTANTIATE(T) \
