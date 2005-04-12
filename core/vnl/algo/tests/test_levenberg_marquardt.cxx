@@ -37,10 +37,10 @@ struct linear_est : public vnl_least_squares_function
     y = A_*x -b_;
   }
 
-  void gradf(vnl_vector<double> const& x, vnl_matrix<double> &J) {
+  void gradf(vnl_vector<double> const& /*x*/, vnl_matrix<double> &J) {
     J=A_;
   }
-  
+
   vnl_matrix<double> A_;
   vnl_vector<double> b_;
 };
@@ -68,26 +68,26 @@ void do_rosenbrock_test(bool with_grad)
   testlib_test_assert("converged to (1, 1)", err <= 1e-10);
 }
 
-static 
+static
 void do_linear_test( bool with_grad )
 {
   vnl_matrix<double> A(6,2,1.0);
   vnl_vector<double> b(6);
-  
+
   A(0,1) = 10;
   A(1,1) = 15;
   A(2,1) = 5.1;
   A(3,1) = 20.2;
   A(4,1) = -0.3;
   A(5,1) = 25;
-  
+
   b(0) = 10;
   b(1) = 15.5;
   b(2) = 4.5;
   b(3) = 21;
   b(4) = 1;
   b(5) = 24.3;
-  
+
   linear_est f(A, b, with_grad);
   vnl_levenberg_marquardt lm(f);
   vnl_vector<double> x(2,-1000.0);   // init can be far off
@@ -96,18 +96,18 @@ void do_linear_test( bool with_grad )
   lm.set_x_tolerance(1e-12);
   lm.set_f_tolerance(1e-12);
   lm.set_g_tolerance(1e-12);
-  
+
   if (f.has_gradient())
     lm.minimize_using_gradient(x);
   else
     lm.minimize_without_gradient(x);
   lm.diagnose_outcome(vcl_cout);
   vcl_cout << "x = " << x << vcl_endl;
-  
+
   vnl_vector<double> true_x(2);
   true_x[1]=0.969684757298943;
   true_x[0]=0.595607200429874;
-  
+
   TEST_NEAR( "converged to true estimate", (true_x-x).two_norm(), 0, 1e-6 );
 
   // now check (inverse of) covariance approximation
@@ -116,10 +116,10 @@ void do_linear_test( bool with_grad )
   true_cov(1,0)=75;
   true_cov(0,1)=75;
   true_cov(1,1)=1384.14;
-  
+
   vnl_matrix<double> covar = lm.get_JtJ();
-  vcl_cout << "Cov(x) =  \n" << covar << vcl_endl;
-  TEST_NEAR( "covariance approximation", (true_cov-covar).array_two_norm(), 0, 1e-5 ); 
+  vcl_cout << "Cov(x) =\n" << covar << vcl_endl;
+  TEST_NEAR( "covariance approximation", (true_cov-covar).array_two_norm(), 0, 1e-5 );
 }
 
 static

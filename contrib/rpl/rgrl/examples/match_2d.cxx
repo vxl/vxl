@@ -67,7 +67,7 @@ class command_iteration_update: public rgrl_command
     execute( (const rgrl_object*) caller, event );
   }
 
-  void execute(const rgrl_object* caller, const rgrl_event & event )
+  void execute(const rgrl_object* caller, const rgrl_event & /*event*/ )
   {
     const rgrl_feature_based_registration* reg_engine =
       dynamic_cast<const rgrl_feature_based_registration*>(caller);
@@ -76,11 +76,11 @@ class command_iteration_update: public rgrl_command
 
     if ( trans->is_type( rgrl_trans_affine::type_id() ) ) {
       rgrl_trans_affine* final = rgrl_cast<rgrl_trans_affine*>(trans);
-      vcl_cout << final->A() << final->t() << "\n" << vcl_endl;
+      vcl_cout << final->A() << final->t() << vcl_endl << vcl_endl;
     }
     else {
       rgrl_trans_quadratic* final = rgrl_cast<rgrl_trans_quadratic*>(trans);
-      vcl_cout << final->Q() << final->A() << final->t() << "\n" << vcl_endl;
+      vcl_cout << final->Q() << final->A() << final->t() << vcl_endl << vcl_endl;
     }
   }
 };
@@ -210,7 +210,7 @@ read_feature_file( char const* filename,
 void
 read_affine_trans_2d( const char* trans_file, vnl_matrix< double > & A, vnl_vector< double > & T )
 {
-  vcl_cerr << "reading transformation file " << trans_file << "\n";
+  vcl_cerr << "reading transformation file " << trans_file << '\n';
   A.set_size( 2, 2 );
   T.set_size( 2 );
 
@@ -225,11 +225,11 @@ read_affine_trans_2d( const char* trans_file, vnl_matrix< double > & A, vnl_vect
       ifs >> A( i, j ) ;
     }
   }
-  vcl_cerr << A << "\n";
+  vcl_cerr << A << '\n';
   for ( unsigned i=0; i<T.size(); ++i ) {
     ifs >> T( i );
   }
-  vcl_cerr << T << "\n";
+  vcl_cerr << T << '\n';
 
   ifs.close();
 }
@@ -247,7 +247,7 @@ main( int argc, char* argv[] )
   vul_arg< const char* > model( "-model", "Final model (affine, quadratic)", "quadratic" );
 
   vul_arg_parse( argc, argv );
-  vcl_cout << feature_file() << "\n" << from_files() << "\n" << to_files() << vcl_endl;
+  vcl_cout << feature_file() << vcl_endl << from_files() << vcl_endl << to_files() << vcl_endl;
 
   // Don't allow Visual Studio to open critical error dialog boxes
   testlib_enter_stealth_mode();
@@ -262,15 +262,15 @@ main( int argc, char* argv[] )
       vcl_cerr << "reading from images failed\n";
       return 1;
     }
-    vcl_cout << "from image size: " << from_image.ni() << " " << from_image.nj() << " " << from_image.nplanes() << "\n";
+    vcl_cout << "from image size: " << from_image.ni() << ' ' << from_image.nj() << ' ' << from_image.nplanes() << '\n'
 
-    vcl_cout << "reading to images..." << vcl_endl;
+             << "reading to images..." << vcl_endl;
     to_image = vil_load( to_files() );
     if ( !to_image ) {
       vcl_cerr << "reading to images failed\n";
       return 1;
     }
-    vcl_cout << "to image size: " << to_image.ni() << " " << to_image.nj() << " " << to_image.nplanes() << "\n";
+    vcl_cout << "to image size: " << to_image.ni() << ' ' << to_image.nj() << ' ' << to_image.nplanes() << vcl_endl;
   }
 
   // load the mask image. If not supplied, assume valid in image dimension
@@ -300,7 +300,7 @@ main( int argc, char* argv[] )
     // "From" feature set
     vcl_vector<rgrl_feature_sptr> from_pts, to_pts( 1 );
     read_feature_file( feature_file(), from_pts, from_roi, spacing() );
-    vcl_cout << "Num from_pts = " << from_pts.size() << "\n";
+    vcl_cout << "Num from_pts = " << from_pts.size() << vcl_endl;
 
     // "To" feature set. We leave to_pts to be generated in pseudo matcher
     //
@@ -423,33 +423,33 @@ main( int argc, char* argv[] )
   rgrl_transformation_sptr final_trans = reg.final_transformation();
   rgrl_scale_sptr final_scale = reg.final_scale();
 
-  vcl_cout << "Final objective = " << reg.final_status()->objective_value() << "\n";
+  vcl_cout << "Final objective = " << reg.final_status()->objective_value() << vcl_endl;
 
   if ( output_xform.set() ) {
     vcl_ofstream ofs( output_xform() );
 
     if ( final_trans->is_type( rgrl_trans_affine::type_id() ) ) {
       rgrl_trans_affine* final = rgrl_cast<rgrl_trans_affine*>(final_trans);
-      ofs << final->A() << final->t() << "\n" << vcl_endl;
+      ofs << final->A() << final->t() << vcl_endl << vcl_endl;
     }
     else {
       rgrl_trans_quadratic* final = rgrl_cast<rgrl_trans_quadratic*>(final_trans);
-      ofs << final->Q() << final->A() << final->t() << "\n" << vcl_endl;
+      ofs << final->Q() << final->A() << final->t() << vcl_endl << vcl_endl;
     }
 
-    ofs << final_scale->geometric_scale() << "\n" << 0 ;
+    ofs << final_scale->geometric_scale() << '\n' << 0 ;
     ofs.close();
   }
   else { // output_xform not set, so dump to the std output
-    vcl_cout << "Final transform: " << vcl_endl;
+    vcl_cout << "Final transform:" << vcl_endl;
 
     if ( final_trans->is_type( rgrl_trans_affine::type_id() ) ) {
       rgrl_trans_affine* final = rgrl_cast<rgrl_trans_affine*>(final_trans);
-      vcl_cout << final->A() << final->t() << "\n" << vcl_endl;
+      vcl_cout << final->A() << final->t() << vcl_endl << vcl_endl;
     }
     else {
       rgrl_trans_quadratic* final = rgrl_cast<rgrl_trans_quadratic*>(final_trans);
-      vcl_cout << final->Q() << final->A() << final->t() << "\n" << vcl_endl;
+      vcl_cout << final->Q() << final->A() << final->t() << vcl_endl << vcl_endl;
     }
 
     vcl_cout << final_scale->geometric_scale() << "\n\n";
@@ -480,7 +480,7 @@ main( int argc, char* argv[] )
     vcl_nth_element( d.begin(), d.begin()+d.size()/2, d.end() );
     e = d[d.size()/2];
 
-    vcl_cout << "CP match set from size = " << ms.from_size() << "\n"
+    vcl_cout << "CP match set from size = " << ms.from_size() << vcl_endl
              << "Final median of alignment error: " << e << vcl_endl
              << "Final average of alignment error: " << sum / num << vcl_endl;
   }

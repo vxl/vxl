@@ -49,7 +49,7 @@ class command_iteration_update: public rgrl_command
     execute( (const rgrl_object*) caller, event );
   }
 
-  void execute(const rgrl_object* caller, const rgrl_event & event )
+  void execute(const rgrl_object* caller, const rgrl_event & /*event*/ )
   {
     const rgrl_feature_based_registration* reg_engine =
       dynamic_cast<const rgrl_feature_based_registration*>(caller);
@@ -63,9 +63,8 @@ int
 main( int argc, char* argv[] )
 {
   if ( argc < 2 ) {
-    vcl_cerr << "Missing Parameters " << vcl_endl
-             << "Usage: " << argv[0]
-             << " ImageFeatureFile\n";
+    vcl_cerr << "Missing Parameters\n"
+             << "Usage: " << argv[0] << " ImageFeatureFile\n";
     return 1;
   }
 
@@ -291,7 +290,7 @@ main( int argc, char* argv[] )
 
   // BeginCodeSnippet
   if ( reg.has_final_transformation() ) {
-    vcl_cout<<"Final xform: "<<vcl_endl;
+    vcl_cout<<"Final xform:"<<vcl_endl;
     rgrl_transformation_sptr trans = reg.final_transformation();
     rgrl_trans_translation* a_xform = rgrl_cast<rgrl_trans_translation*>(trans);
     vcl_cout<<"t = "<<a_xform->t()<<vcl_endl

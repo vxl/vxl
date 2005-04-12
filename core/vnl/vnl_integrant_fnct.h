@@ -13,7 +13,7 @@ class vnl_integrant_fnct
   vnl_integrant_fnct() {}
   virtual ~vnl_integrant_fnct() {}
 
-  virtual double f_(double x) { return 0; }
+  virtual double f_(double /*x*/) = 0;
 };
 
 #endif

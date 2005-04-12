@@ -104,7 +104,7 @@ class command_iteration_update: public rgrl_command
     execute( (const rgrl_object*) caller, event );
   }
 
-  void execute(const rgrl_object* caller, const rgrl_event & event )
+  void execute(const rgrl_object* caller, const rgrl_event & /*event*/ )
   {
     const rgrl_feature_based_registration* reg_engine =
       dynamic_cast<const rgrl_feature_based_registration*>(caller);
@@ -194,7 +194,7 @@ main( int argc, char* argv[] )
 
   // Output Results
   if ( reg.has_final_transformation() ) {
-    vcl_cout<<"Final xform: "<<vcl_endl;
+    vcl_cout<<"Final xform:"<<vcl_endl;
     rgrl_transformation_sptr trans = reg.final_transformation();
     rgrl_trans_quadratic* q_xform = rgrl_cast<rgrl_trans_quadratic*>(trans);
     vcl_cout<<"Q\n"<<q_xform->Q()<<"A = "<<q_xform->A()

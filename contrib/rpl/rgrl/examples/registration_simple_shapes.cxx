@@ -46,7 +46,7 @@ class command_iteration_update: public rgrl_command
     execute( (const rgrl_object*) caller, event );
   }
 
-  void execute(const rgrl_object* caller, const rgrl_event & event )
+  void execute(const rgrl_object* caller, const rgrl_event & /*event*/ )
   {
     const rgrl_feature_based_registration* reg_engine =
       dynamic_cast<const rgrl_feature_based_registration*>(caller);
@@ -222,7 +222,7 @@ main()
   reg.run( image_roi, estimator, init_transform );
 
   if ( reg.has_final_transformation() ) {
-    vcl_cout<<"Final xform: "<<vcl_endl;
+    vcl_cout<<"Final xform:"<<vcl_endl;
     rgrl_transformation_sptr trans = reg.final_transformation();
     rgrl_trans_affine* a_xform = rgrl_cast<rgrl_trans_affine*>(trans);
     vcl_cout<<"A = "<<a_xform->A()<<vcl_endl

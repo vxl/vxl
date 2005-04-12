@@ -121,7 +121,7 @@ class command_iteration_update: public rgrl_command
     execute( (const rgrl_object*) caller, event );
   }
 
-  void execute(const rgrl_object* caller, const rgrl_event & event )
+  void execute(const rgrl_object* caller, const rgrl_event & /*event*/ )
   {
     const rgrl_feature_based_registration* reg_engine =
       dynamic_cast<const rgrl_feature_based_registration*>(caller);
@@ -136,7 +136,8 @@ class command_iteration_update: public rgrl_command
       vcl_cout<<"xform: Q\n"<<q_xform->Q()<<"A = "<<q_xform->A()<<
         "t = "<<q_xform->t()<<vcl_endl;
     }
-    else vcl_cout<<"Unknown type"<<vcl_endl;
+    else
+      vcl_cout<<"Unknown type"<<vcl_endl;
   }
 };
 

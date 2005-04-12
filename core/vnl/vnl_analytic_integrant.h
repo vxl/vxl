@@ -10,14 +10,13 @@
 
 class vnl_analytic_integrant : public vnl_integrant_fnct 
 {
-  public:
-    vnl_analytic_integrant() {}
-    ~vnl_analytic_integrant() {}
+ public:
+  vnl_analytic_integrant() {}
+  ~vnl_analytic_integrant() {}
 
-    // the function every derived class has to implement, which is evalutate
-    // the function value at point x
-    virtual double f_(double x) { return 0;}
+  // the function every derived class has to implement, which is evalutate
+  // the function value at point x
+  virtual double f_(double /*x*/) = 0;
 };
 
 #endif
-
