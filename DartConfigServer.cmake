@@ -17,7 +17,7 @@ SET (EMAIL_FROM "perera@cs.rpi.edu")
 SET (SMTP_MAILHOST "mail.cs.rpi.edu")
 SET (CVS_IDENT_TO_EMAIL "\\
   {vxl_robots DO_NOT_EMAIL} \\
-  {vanroose DO_NOT_EMAIL} \\
+  {^vanroose DO_NOT_EMAIL} \\
   {uid1820 DO_NOT_EMAIL} \\
   {targetjr DO_NOT_EMAIL} \\
   {remcvs_tu_crd DO_NOT_EMAIL} \\
@@ -34,7 +34,7 @@ SET (CVS_IDENT_TO_EMAIL "\\
   {remcvs_fsm_oxford DO_NOT_EMAIL} \\
   {remcvs_awf_oxford DO_NOT_EMAIL} \\
   {remcvs_depot_balltown DO_NOT_EMAIL} \\
-  {perera DO_NOT_EMAIL} \\
+  {^perera DO_NOT_EMAIL} \\
   {iscott DO_NOT_EMAIL} \\
   {jhoulihan DO_NOT_EMAIL} \\
   {.* {\\0@users.sourceforge.net}} \\
