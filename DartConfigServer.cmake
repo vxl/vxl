@@ -44,7 +44,7 @@ SET (EMAIL_PROJECT_NAME "VXL")
 SET (BUILD_MONITORS "\\
   {cs\\.rpi\\.edu .* amithaperera@users.sourceforge.net} \\
   {esat\\.kuleuven\\.ac\\.be .* peter_vanroose@users.sourceforge.net} \\
-  {wheeler.*\\.crd\\.ge\\.com .* fred_wheeler@users.sourceforge.net} \\
+  {crd\\.ge\\.com .* fred_wheeler@users.sourceforge.net} \\
 ")
 
 SET (PROJECT_URL http://vxl.sourceforge.net/)
@@ -62,7 +62,6 @@ SET (EXPECTED_BUILDS "\\
   {esat.kuleuven.ac.be Linux64-2.6-gcc-3.4-O3} \\
   {crd.ge.com MinGW-3.7_gcc-3.3.3_-Wall_-O2_static} \\
   {esat.kuleuven.ac.be OSF1-V5.1-gcc-3.4} \\
-  {crd.ge.com Playstation2-Linux-2.2.1_gcc-2.95.2_-Wall_static} \\
   {crd.ge.com Solaris-2.8_gcc-3.4.3_static} \\
   {esat.kuleuven.ac.be SunOS-5.8-gcc-3.4-O2} \\
   {crd.ge.com Win2k_bcc-5.5.1_Release} \\
