@@ -129,10 +129,18 @@ verify( rgrl_transformation_sptr         const& xform_estimate,
 
   double error = compute_alignment_error( current_match_sets );
 
-  bool good_enough = error < tolerance_;
-  rgrl_converge_status_sptr status = new rgrl_converge_status( true, false, good_enough, !good_enough, error, 0, 0 );
-  if ( good_enough ) {
+  bool good_enough_to_terminate = error < tolerance_;
+  rgrl_converge_status_sptr status = new rgrl_converge_status( true, false, good_enough_to_terminate, !good_enough_to_terminate, error, 0, 0 );
+  if ( good_enough_to_terminate ) {
+    
     status -> set_current_status( rgrl_converge_status::good_and_terminate );
+
+  } else {
+    
+    // immitate the previous behavior
+    // if it is not good enough to terminate
+    // it is still good result
+    status -> set_current_status( rgrl_converge_status::good_enough );
   }
 
   return status;
