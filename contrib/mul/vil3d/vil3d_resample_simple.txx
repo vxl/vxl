@@ -1,23 +1,24 @@
 // This is mul/vil3d/vil3d_resample_simple.txx
 #ifndef vil3d_resample_simple_txx_
 #define vil3d_resample_simple_txx_
+
 //:
 // \file
-// \brief Resample a 3D image by an integer factor in each dimension
+// \brief Resample a 3D image by a different factor in each dimension
 // \author Kevin de Souza
 
 #include <vil3d/vil3d_resample_simple.h>
 
-//: Resample a 3D image by an integer factor in each dimension.
+//: Resample a 3D image by a different factor in each dimension.
 //  dst_image resized by factors dx, dy, dz.
 //  dst_image(i, j, k, p) is sampled from src_image(i/dx, j/dy, k/dz, p).
 //  No interpolation is performed.
 template <class T >
 void vil3d_resample_simple(const vil3d_image_view< T >& src_image,
                            vil3d_image_view< T >& dst_image,
-                           const unsigned dx,
-                           const unsigned dy,
-                           const unsigned dz)
+                           const double dx,
+                           const double dy,
+                           const double dz)
 {
   // Assume planes are the same for both images
   const unsigned np = src_image.nplanes();
@@ -25,17 +26,11 @@ void vil3d_resample_simple(const vil3d_image_view< T >& src_image,
   const unsigned sni = src_image.ni();
   const unsigned snj = src_image.nj();
   const unsigned snk = src_image.nk();
-#if 0 // these 5 variables are not used:
-  const vcl_ptrdiff_t s_istep = src_image.istep();
-  const vcl_ptrdiff_t s_jstep = src_image.jstep();
-  const vcl_ptrdiff_t s_kstep = src_image.kstep();
-  const vcl_ptrdiff_t s_pstep = src_image.planestep();
-  const T* s_plane = src_image.origin_ptr();
-#endif // 0
 
   const unsigned dni = sni*dx;
   const unsigned dnj = snj*dy;
   const unsigned dnk = snk*dz;
+  
   dst_image.set_size(dni, dnj, dnk, np);
   const vcl_ptrdiff_t d_istep = dst_image.istep();
   const vcl_ptrdiff_t d_jstep = dst_image.jstep();
@@ -56,7 +51,10 @@ void vil3d_resample_simple(const vil3d_image_view< T >& src_image,
         T* d_pix = d_row;
         for (unsigned i=0; i<dni; ++i, d_pix+=d_istep)
         {
-          *d_pix = src_image(i/dx, j/dy, k/dz, p);
+          *d_pix = src_image(static_cast<unsigned>(i/dx), 
+                             static_cast<unsigned>(j/dy), 
+                             static_cast<unsigned>(k/dz), 
+                             p);
         }
       }
     }
@@ -67,9 +65,9 @@ void vil3d_resample_simple(const vil3d_image_view< T >& src_image,
 #define VIL3D_RESAMPLE_SIMPLE_INSTANTIATE( T ) \
 template void vil3d_resample_simple(const vil3d_image_view< T >& src_image, \
                                     vil3d_image_view< T >& dst_image, \
-                                    const unsigned dx, \
-                                    const unsigned dy, \
-                                    const unsigned dz)
+                                    const double dx, \
+                                    const double dy, \
+                                    const double dz)
 
 
 #endif // vil3d_resample_simple_txx_
