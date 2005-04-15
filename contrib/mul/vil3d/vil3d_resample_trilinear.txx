@@ -9,6 +9,7 @@
 
 #include <vil3d/vil3d_resample_trilinear.h>
 #include <vil3d/vil3d_trilin_interp.h>
+#include <vil/vil_convert.h>
 #include <vcl_cassert.h>
 
 // Resample a 3D image by a different factor in each dimension.
@@ -43,6 +44,9 @@ void vil3d_resample_trilinear(const vil3d_image_view< T >& src_image,
   const vcl_ptrdiff_t d_pstep = dst_image.planestep();
   T* d_plane = dst_image.origin_ptr();
 
+  // Use this to convert from double to T with appropriate rounding
+  vil_convert_round_pixel<double, T > cr;
+
   // Loop over all voxels in the destination image
   // and sample from the corresponding point in the source image
   // (except near upper boundaries).
@@ -57,17 +61,19 @@ void vil3d_resample_trilinear(const vil3d_image_view< T >& src_image,
         T* d_pix = d_row;
         for (unsigned i=0; i<static_cast<unsigned>(dni-dx); ++i, d_pix+=d_istep)
         {
-          *d_pix = static_cast<T>(vil3d_trilin_interp_raw(i/dx, j/dy, k/dz,
-                                                          s_plane,
-                                                          s_istep, s_jstep, s_kstep));
+          cr(vil3d_trilin_interp_raw(i/dx, j/dy, k/dz,
+                                     s_plane,
+                                     s_istep, s_jstep, s_kstep),
+             *d_pix);
         }
         // Process the pixels near the upper i boundary - safe_extend interpolation
         for (unsigned i=static_cast<unsigned>(dni-dx); i<dni; ++i, d_pix+=d_istep)
         {
-          *d_pix = static_cast<T>(vil3d_trilin_interp_safe_extend(i/dx, j/dy, k/dz,
-                                                                  s_plane,
-                                                                  sni, snj, snk,
-                                                                  s_istep, s_jstep, s_kstep));
+          cr(vil3d_trilin_interp_safe_extend(i/dx, j/dy, k/dz,
+                                             s_plane,
+                                             sni, snj, snk,
+                                             s_istep, s_jstep, s_kstep),
+             *d_pix);
         }
       }
 
@@ -77,10 +83,11 @@ void vil3d_resample_trilinear(const vil3d_image_view< T >& src_image,
         T* d_pix = d_row;
         for (unsigned i=0; i<dni; ++i, d_pix+=d_istep)
         {
-          *d_pix = static_cast<T>(vil3d_trilin_interp_safe_extend(i/dx, j/dy, k/dz,
-                                                                  s_plane,
-                                                                  sni, snj, snk,
-                                                                  s_istep, s_jstep, s_kstep));
+          cr(vil3d_trilin_interp_safe_extend(i/dx, j/dy, k/dz,
+                                             s_plane,
+                                             sni, snj, snk,
+                                             s_istep, s_jstep, s_kstep),
+                                             *d_pix);
         }
       }
     }
@@ -94,10 +101,11 @@ void vil3d_resample_trilinear(const vil3d_image_view< T >& src_image,
         T* d_pix = d_row;
         for (unsigned i=0; i<dni; ++i, d_pix+=d_istep)
         {
-          *d_pix = static_cast<T>(vil3d_trilin_interp_safe_extend(i/dx, j/dy, k/dz,
-                                                                  s_plane,
-                                                                  sni, snj, snk,
-                                                                  s_istep, s_jstep, s_kstep));
+          cr(vil3d_trilin_interp_safe_extend(i/dx, j/dy, k/dz,
+                                             s_plane,
+                                             sni, snj, snk,
+                                             s_istep, s_jstep, s_kstep),
+             *d_pix);
         }
       }
     }
