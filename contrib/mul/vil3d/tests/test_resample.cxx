@@ -21,7 +21,8 @@ static void test_resample_simple()
   for (int i=0; i<sni; ++i)
     for (int j=0; j<snj; ++j)
       for (int k=0; k<snk; ++k)
-        src(i,j,k) = k*snj + j*sni + i;
+        src(i,j,k) = 10*k;
+      //src(i,j,k) = k*snj + j*sni + i;
 
   int dni=6;
   int dnj=6;
@@ -29,6 +30,11 @@ static void test_resample_simple()
   vil3d_image_view<int> dst(dni, dnj, dnj);
 
   vil3d_resample_simple(src, dst, 2, 2, 2);
+
+  // Testing
+  vil3d_print_all(vcl_cout, src);
+  vil3d_print_all(vcl_cout, dst);
+  ///
 
   bool all_voxs_correct = true;
   for (int i=0; i<dni; ++i)
@@ -63,13 +69,13 @@ static void test_resample_trilinear()
     {
       for (unsigned k=0; k<snk; ++k)
       {
-        src(i,j,k) = 10*k;
+        src(i,j,k) = 10*(k);
       }
     }
   }
 
   vil3d_image_view<int> dst;
-  vil3d_resample_trilinear(src, dst, 1.9, 2.1, 2.3);
+  vil3d_resample_trilinear(src, dst, 2.0, 2.0, 2.0);
   unsigned dni = dst.ni();
   unsigned dnj = dst.nj();
   unsigned dnk = dst.nk();
