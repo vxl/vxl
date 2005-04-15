@@ -27,9 +27,9 @@ void vil3d_resample_simple(const vil3d_image_view< T >& src_image,
   const unsigned snj = src_image.nj();
   const unsigned snk = src_image.nk();
 
-  const unsigned dni = sni*dx;
-  const unsigned dnj = snj*dy;
-  const unsigned dnk = snk*dz;
+  const unsigned dni = static_cast<unsigned>(sni*dx);
+  const unsigned dnj = static_cast<unsigned>(snj*dy);
+  const unsigned dnk = static_cast<unsigned>(snk*dz);
   
   dst_image.set_size(dni, dnj, dnk, np);
   const vcl_ptrdiff_t d_istep = dst_image.istep();
