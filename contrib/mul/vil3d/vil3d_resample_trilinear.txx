@@ -1,9 +1,10 @@
 // This is mul/vil3d/vil3d_resample_trilinear.txx
 #ifndef vil3d_resample_trilinear_txx_
 #define vil3d_resample_trilinear_txx_
+
 //:
 // \file
-// \brief Resample a 3D image by an integer factor in each dimension
+// \brief Resample a 3D image by a different factor in each dimension
 // \author Kevin de Souza
 
 #include <vil3d/vil3d_resample_trilinear.h>
@@ -104,9 +105,9 @@ void vil3d_resample_trilinear(const vil3d_image_view< T >& src_image,
 }
 
 
-#define VIL3D_RESAMPLE_TRILINEAR_INSTANTIATE(T) \
-template void vil3d_resample_trilinear(const vil3d_image_view<T >& src_image, \
-                                       vil3d_image_view<T >& dst_image, \
+#define VIL3D_RESAMPLE_TRILINEAR_INSTANTIATE( T ) \
+template void vil3d_resample_trilinear(const vil3d_image_view< T >& src_image, \
+                                       vil3d_image_view< T >& dst_image, \
                                        const double dx, \
                                        const double dy, \
                                        const double dz)
