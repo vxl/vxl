@@ -76,7 +76,6 @@ compute_alignment_error( rgrl_set_of<rgrl_match_set_sptr> const& current_match_s
       }
     }
   }
-
   return error_sum/weight_sum;
 }
 
@@ -112,9 +111,9 @@ compute_alignment_error( rgrl_match_set_sptr const& current_match_set ) const
   return error_sum/weight_sum;
 }
 
+//: verify the final alignment
 rgrl_converge_status_sptr
 rgrl_convergence_on_weighted_error::
-  //: verify the final alignment
 verify( rgrl_transformation_sptr         const& xform_estimate,
         rgrl_set_of<rgrl_match_set_sptr> const& current_match_sets,
         rgrl_set_of<rgrl_scale_sptr>     const& current_scales )const
@@ -130,13 +129,14 @@ verify( rgrl_transformation_sptr         const& xform_estimate,
   double error = compute_alignment_error( current_match_sets );
 
   bool good_enough_to_terminate = error < tolerance_;
-  rgrl_converge_status_sptr status = new rgrl_converge_status( true, false, good_enough_to_terminate, !good_enough_to_terminate, error, 0, 0 );
-  if ( good_enough_to_terminate ) {
-    
+  rgrl_converge_status_sptr status = new rgrl_converge_status( true, false, good_enough_to_terminate,
+                                                               !good_enough_to_terminate, error, 0, 0 );
+  if ( good_enough_to_terminate )
+  {
     status -> set_current_status( rgrl_converge_status::good_and_terminate );
-
-  } else {
-    
+  }
+  else
+  {
     // immitate the previous behavior
     // if it is not good enough to terminate
     // it is still good result
