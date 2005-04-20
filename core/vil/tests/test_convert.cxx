@@ -181,12 +181,32 @@ static void test_convert_to_n_planes()
 //  vil_print_all(vcl_cout, u16_image_expected);
 }
 
+static void test_simple_pixel_conversions()
+{
+  {
+    vil_convert_round_pixel<float, int> op;
+    int out;
+    op(5.5f, out);
+    vcl_cout << out << vcl_endl;
+    TEST("round_pixel float->int", out, 5);
+  }
+  {
+    vil_convert_round_pixel<double, unsigned short> op;
+    unsigned short out;
+    op(5.5f, out);
+    vcl_cout << out << vcl_endl;
+    TEST("round_pixel double->ushort", out, 5);
+  }
+}
+
+
 static void test_convert(int argc, char* argv[])
 {
   test_convert_to_n_planes();
   test_convert1(argc>1 ? argv[1] : "file_read_data");
   test_convert_stretch_range();
   test_convert_diff_types(argc>1 ? argv[1] : "file_read_data");
+  test_simple_pixel_conversions();
 }
 
 TESTMAIN_ARGS(test_convert);
