@@ -172,7 +172,7 @@ vil_image_view<vxl_byte> filtered_image = vil_transpose(tmp_image2);
 * - vil_histogram_equalise(image)  : Apply histogram equalisation
 *
 * \subsection vil_image_view_base_sptr
-* These are used internally by vil, and are not intended for users of vil.
+* vil_image_view_base_sptr is used internally by vil, and is not intended for users of vil.
 * Anywhere you see a function returning one of
 * these, (e.g. vil_load() ) you can assign it directly to a vil_image_view<T>. If
 * you want a pixel-type independent image container, see vil_memory_image below.
