@@ -188,12 +188,18 @@ static void test_simple_pixel_conversions()
     int out;
     op(5.5f, out);
     vcl_cout << out << vcl_endl;
+    TEST("round_pixel float->int", out, 6);
+    op(5.4f, out);
+    vcl_cout << out << vcl_endl;
     TEST("round_pixel float->int", out, 5);
   }
   {
     vil_convert_round_pixel<double, unsigned short> op;
     unsigned short out;
     op(5.5f, out);
+    vcl_cout << out << vcl_endl;
+    TEST("round_pixel double->ushort", out, 6);
+    op(5.4f, out);
     vcl_cout << out << vcl_endl;
     TEST("round_pixel double->ushort", out, 5);
   }
