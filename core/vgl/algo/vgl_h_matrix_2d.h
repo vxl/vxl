@@ -82,7 +82,7 @@ class vgl_h_matrix_2d
   void set_translation(const T tx, const T ty);
   //: theta is in radians, the upper 2x2 part of the matrix is replaced
   void set_rotation(const T theta);
-  //: tranform is composed with a scaling transform (only upper 2x2 affected)
+  //: transform is composed with a scaling transform (only upper 2x2 affected)
   void set_scale(const T scale);
 
   //: transformation to projective basis (canonical frame)
@@ -115,7 +115,6 @@ class vgl_h_matrix_2d
 
 template <class T> vcl_ostream& operator<<(vcl_ostream& s, const vgl_h_matrix_2d<T>& h);
 template <class T> vcl_istream& operator>>(vcl_istream& s, vgl_h_matrix_2d<T>& h);
-
 
 #define VGL_H_MATRIX_2D_INSTANTIATE(T) extern "please include vgl/algo/vgl_h_matrix_2d.txx first"
 
