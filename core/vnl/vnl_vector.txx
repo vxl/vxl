@@ -539,7 +539,7 @@ vnl_vector<T> vnl_vector<T>::operator* (vnl_matrix<T> const&m) const {
   // "cannot lookup method in incomplete type `const vnl_matrix<double>`"
   // For some reason, instantiating the following function prior to vnl_vector
   // also avoids the error.
-  // template vnl_matrix<double > outer_product (const vnl_vector<double >&,const vnl_vector<dou
+  // template vnl_matrix<double> outer_product(vnl_vector<double> const&, vnl_vector<double> const&)
 
 #ifndef NDEBUG
   if (num_elmts != m.rows())                    // dimensions do not match?
