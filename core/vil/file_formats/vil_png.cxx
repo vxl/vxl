@@ -389,6 +389,8 @@ bool vil_png_image::write_header()
     color_type = PNG_COLOR_TYPE_RGB_ALPHA;
   else if (components_ == 3)
     color_type = PNG_COLOR_TYPE_RGB;
+  else if (components_ == 2)
+    color_type = PNG_COLOR_TYPE_GRAY_ALPHA;
   else
     color_type = PNG_COLOR_TYPE_GRAY;
 
@@ -495,6 +497,15 @@ bool vil_png_image::put_view(const vil_image_view_base &view,
       for (unsigned y = 0; y < view.nj(); ++y)
         for (unsigned x=0; x < view.ni(); ++x)
           rows[y0+y][x0+x] = view2(x,y);
+    }
+    else if (nplanes()==2)
+    {
+      for (unsigned y = 0; y < view.nj(); ++y)
+        for (unsigned x=0; x < view.ni(); ++x)
+        {
+          rows[y0+y][(x0+x)*2] = view2(x,y,0);
+          rows[y0+y][(x0+x)*2+1] = view2(x,y,1);
+        }
     }
     else if (nplanes()==3)
     {
