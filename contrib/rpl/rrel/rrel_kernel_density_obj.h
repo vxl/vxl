@@ -8,6 +8,9 @@
 
 #include <rrel/rrel_objective.h>
 
+enum rrel_kernel_scale_type { RREL_KERNEL_MAD, RREL_KERNEL_PRIOR, RREL_KERNEL_MUSE };
+
+
 //: Kernel Density objective function.
 //  Implements the Kernel Density Estimation as presented in the
 //  paper "Robust Computer Vision through Kernel Density" by Chen
@@ -20,8 +23,6 @@
 //  K(u) = 1.09375 * (1 - u^2)^3
 //  h = [243 * R(K) / 35 / Mu(K)^2 / n]^0.2 * scale
 //  The scale can be provided as a prior scale, or computed by MAD or MUSE.
-
-enum rrel_kernel_scale_type { RREL_KERNEL_MAD, RREL_KERNEL_PRIOR, RREL_KERNEL_MUSE };
 
 class rrel_kernel_density_obj : public rrel_objective
 {
