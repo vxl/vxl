@@ -14,6 +14,18 @@ static double d(double x0, double x1, double y0, double y1)
   return vcl_sqrt((x0-x1)*(x0-x1) + (y0-y1)*(y0-y1));
 }
 
+static void test_homog_product()
+{
+  vgl_p_matrix<double> P;
+  vgl_h_matrix_3d<double> H;
+  P.set_identity();
+  H.set_identity();
+
+  vgl_p_matrix<double> P2 = P * H;
+
+  TEST( "Projection * homography", P2.get_matrix(), P.get_matrix() );
+}
+
 static void test_identity_projection()
 {
   vcl_cout << "Testing identity projection for points\n";
@@ -81,6 +93,7 @@ static void test_p_matrix()
 {
   test_identity_projection();
   test_general_projection();
+  test_homog_product();
 }
 
 TESTMAIN(test_p_matrix);

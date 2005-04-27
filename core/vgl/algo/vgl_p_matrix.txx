@@ -532,6 +532,7 @@ vgl_p_matrix<T> vgl_p_matrix<T>::premultiply(vnl_matrix_fixed<T,3,3> const& H) c
 #undef VGL_P_MATRIX_INSTANTIATE
 #define VGL_P_MATRIX_INSTANTIATE(T) \
 template class vgl_p_matrix<T >; \
+template vgl_p_matrix<T> operator*(const vgl_p_matrix<T>& P, const vgl_h_matrix_3d<T>& H); \
 template vcl_ostream& operator << (vcl_ostream& s, const vgl_p_matrix<T >& h); \
 template vcl_istream& operator >> (vcl_istream& s, vgl_p_matrix<T >& h)
 
