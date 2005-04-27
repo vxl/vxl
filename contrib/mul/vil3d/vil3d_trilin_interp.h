@@ -7,7 +7,7 @@
 // \author Tim Cootes
 
 #include <vcl_cassert.h>
-
+#include <vcl_cstddef.h>
 //: Compute trilinear interpolation at (x,y,z), no bound checks
 //  Image is nx * ny * nz array of T. x,y,z element is data[z*zstep+ystep*y+x*xstep]
 //  No bound checks are done.
