@@ -11,7 +11,9 @@
 #include <vcl_string.h>
 
 //: The type of the property dictionary
-typedef vcl_map<vcl_string, vcl_string > mbl_read_props_type;
+class mbl_read_props_type : public vcl_map<vcl_string, vcl_string >
+{
+};
 
 //: Read properties from a text stream.
 // The function will terminate on an eof. If one of
