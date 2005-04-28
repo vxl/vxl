@@ -31,6 +31,7 @@ DECLARE( test_correspond_points );
 DECLARE( test_rbf_network );
 DECLARE( test_table );
 DECLARE( test_cloneables_factory );
+DECLARE( test_rvm_regression_builder );
 
 void
 register_tests()
@@ -66,6 +67,7 @@ register_tests()
   REGISTER( test_rbf_network );
   REGISTER( test_table );
   REGISTER( test_cloneables_factory );
+  REGISTER( test_rvm_regression_builder );
 }
 
 DEFINE_MAIN;

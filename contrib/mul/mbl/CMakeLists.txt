@@ -48,6 +48,8 @@ SET(mbl_sources
   mbl_progress_null.cxx                 mbl_progress_null.h
   mbl_progress_composite.cxx            mbl_progress_composite.h
 
+  mbl_rvm_regression_builder.cxx        mbl_rvm_regression_builder.h
+  
   mbl_chord.h
   mbl_cloneable_ptr.h
   mbl_cloneables_factory.h
