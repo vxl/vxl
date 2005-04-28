@@ -59,13 +59,13 @@ void mbl_rvm_regression_builder::design_matrix(const vnl_matrix<double>& K,
 // \param targets[i] gives value at vector i
 // \param index returns indices of selected vectors
 // \param weights returns weights for selected vectors
-// \param sqr_width returns variance term for gaussian kernel
+// \param error_var returns variance term for gaussian kernel
 void mbl_rvm_regression_builder::gauss_build(
              mbl_data_wrapper<vnl_vector<double> >& data,
              double var, const vnl_vector<double>& targets,
              vcl_vector<int>& index,
              vnl_vector<double>& weights,
-             double &sqr_width)
+             double &error_var)
 {
   assert(data.size()==targets.size());
   unsigned n = data.size();
@@ -85,7 +85,7 @@ void mbl_rvm_regression_builder::gauss_build(
   }
   for (unsigned i=0;i<n;++i) K(i,i)=1.0;
 
-  build(K,targets,index,weights,sqr_width);
+  build(K,targets,index,weights,error_var);
 }
 
 //: Perform one iteration of optimisation
@@ -93,17 +93,17 @@ bool mbl_rvm_regression_builder::update_step(const vnl_matrix<double>& F,
                    const vnl_vector<double>& targets,
                    const vcl_vector<int>& index0,
                    const vcl_vector<double>& alpha0,
-                   double sqr_width0,
+                   double error_var0,
                    vcl_vector<int>& index,
                    vcl_vector<double>& alpha,
-                   double &sqr_width)
+                   double &error_var)
 {
   unsigned n0 = alpha0.size();
   assert(F.rows()==targets.size());
   assert(F.cols()==n0+1);
   vnl_matrix<double> K_inv;
   mbl_matrix_product_at_b(K_inv,F,F);  // K_inv=F'F
-  K_inv/=sqr_width0;
+  K_inv/=error_var0;
   for (unsigned i=0;i<n0;++i) K_inv(i+1,i+1)+=alpha0[i];
   // K_inv = F'F/var + diag(alpha0)
 
@@ -113,7 +113,7 @@ bool mbl_rvm_regression_builder::update_step(const vnl_matrix<double>& F,
   vnl_vector<double> t2(n0+1);
   mbl_matxvec_prod_vm(targets,F,t2);  // t2=F'targets  (n+1)
   mbl_matxvec_prod_mv(S_,t2,mean_wts_);     // mean=S*t2 (n+1)
-  mean_wts_/=sqr_width0;
+  mean_wts_/=error_var0;
 
 
 //   // ---------------------
@@ -123,7 +123,7 @@ bool mbl_rvm_regression_builder::update_step(const vnl_matrix<double>& F,
 //   for (unsigned i=0;i<n0;++i) a_inv[i+1]=1.0/alpha0[i];
 //   vnl_matrix<double> FAF;
 //   mbl_matrix_product_adb(FAF,F,a_inv,F.transpose());
-//   for (unsigned i=0;i<FAF.rows();++i) FAF(i,i)+=1.0/sqr_width0;
+//   for (unsigned i=0;i<FAF.rows();++i) FAF(i,i)+=1.0/error_var0;
 //   vnl_svd<double> FAFsvd(FAF);
 //   vnl_matrix<double> FAFinv=FAFsvd.inverse();
 //   vnl_vector<double> Xt=FAFinv*targets;
@@ -151,13 +151,13 @@ bool mbl_rvm_regression_builder::update_step(const vnl_matrix<double>& F,
     index.push_back(index0[i]);
     change+=vcl_fabs(a-alpha0[i]);
   }
-  // Update estimate of sqr_width
+  // Update estimate of error_var
   vnl_vector<double> Fm;
   mbl_matxvec_prod_mv(F,mean_wts_,Fm);     // Fm=F*mean
   double sum_sqr_error=vnl_vector_ssd(targets,Fm);
-  sqr_width = sum_sqr_error/(targets.size()-sum);
+  error_var = sum_sqr_error/(targets.size()-sum);
 // vcl_cout<<"Sum sqr error = "<<sum_sqr_error<<vcl_endl;
-  change+=vcl_fabs(sqr_width-sqr_width0);
+  change+=vcl_fabs(error_var-error_var0);
 
   // Decide if optimisation completed
   if (alpha.size()!=alpha0.size()) return true;
@@ -169,13 +169,13 @@ bool mbl_rvm_regression_builder::update_step(const vnl_matrix<double>& F,
 // \param targets[i] gives value at vector i
 // \param index returns indices of selected vectors
 // \param weights returns weights for selected vectors
-// \param sqr_width returns variance term for gaussian kernel
+// \param error_var returns variance term for gaussian kernel
 void mbl_rvm_regression_builder::build(
              const vnl_matrix<double>& kernel_matrix,
              const vnl_vector<double>& targets,
              vcl_vector<int>& index,
              vnl_vector<double>& weights,
-             double &sqr_width)
+             double &error_var)
 {
   unsigned n0=targets.size();
   assert(kernel_matrix.rows()==n0);
@@ -186,19 +186,19 @@ void mbl_rvm_regression_builder::build(
   vcl_vector<double> alpha(n0),new_alpha;
   vcl_vector<int> new_index;
   for (unsigned i=0;i<n0;++i)  { index[i]=i; alpha[i]=1e-4; }
-  sqr_width = 0.01;
-  double new_sqr_width;
+  error_var = 0.01;
+  double new_error_var;
 
   vnl_matrix<double> F;
   design_matrix(kernel_matrix,index,F);
   int max_its=500;
   int n_its=0;
-  while (update_step(F,targets,index,alpha,sqr_width,
-                     new_index,new_alpha,new_sqr_width)  && n_its<max_its)
+  while (update_step(F,targets,index,alpha,error_var,
+                     new_index,new_alpha,new_error_var)  && n_its<max_its)
   {
     index    = new_index;
     alpha    = new_alpha;
-    sqr_width= new_sqr_width;
+    error_var= new_error_var;
     design_matrix(kernel_matrix,index,F);
     n_its++;
   }

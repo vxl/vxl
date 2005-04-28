@@ -38,7 +38,7 @@ private:
                    double sqr_width0,
                    vcl_vector<int>& index,
                    vcl_vector<double>& alpha,
-                   double &sqr_width);
+                   double &error_var);
 public:
     //: Dflt ctor
   mbl_rvm_regression_builder();
@@ -47,29 +47,43 @@ public:
   virtual ~mbl_rvm_regression_builder();
 
     //: Train RVM given a set of vectors and set of target values
+    //  Resulting RVM has form f(x)=w[0]+sum w[i+1]K(x,data[index[i]])
+    //  where K(x,y)=exp(-|x-y|^2/2var), and index.size() gives
+    //  the number of the selected vectors.
+    //  Note that on exit, weights.size()==index.size()+1
+    //  weights[0] is the constant offset, and weights[i+1]
+    //  corresponds to selected input vector index[i].
     // \param data[i] training vectors
     // \param targets[i] gives value at vector i
     // \param index returns indices of selected vectors
     // \param weights returns weights for selected vectors
-    // \param sqr_width returns variance term for gaussian kernel
+    // \param error_var returns estimated error variance for resulting function
   void gauss_build(mbl_data_wrapper<vnl_vector<double> >& data,
              double var,
              const vnl_vector<double>& targets,
              vcl_vector<int>& index,
              vnl_vector<double>& weights,
-             double &sqr_width);
+             double &error_var);
 
     //: Train RVM given a distance matrix and set of target values
+    //  Resulting RVM has form f(x)=w[0]+sum w[i+1]K(x,vec[index[i]])
+    //  where K(x,y) is the kernel function, and index.size() gives
+    //  the number of the selected vectors.
+    //  Assuming the original data is vec[i], then on input we should
+    //  have kernel_matrix(i,j)=K(vec[i],vec[j])
+    //  Note that on exit, weights.size()==index.size()+1
+    //  weights[0] is the constant offset, and weights[i+1]
+    //  corresponds to selected input vector index[i].
     // \param kernel_matrix (i,j) element gives kernel function between i and j training vectors
     // \param targets[i] gives value at vector i
     // \param index returns indices of selected vectors
     // \param weights returns weights for selected vectors
-    // \param sqr_width returns variance term for gaussian kernel
+    // \param error_var returns estimated error variance for resulting function
   void build(const vnl_matrix<double>& kernel_matrix,
              const vnl_vector<double>& targets,
              vcl_vector<int>& index,
              vnl_vector<double>& weights,
-             double &sqr_width);
+             double &error_var);
 
 };
 

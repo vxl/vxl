@@ -31,13 +31,13 @@ void test_rvm_regression_builder()
 
   vcl_vector<int> index;
   vnl_vector<double> weights;
-  double sqr_width;
+  double error_var;
 
   double var = 0.2;
-  builder.gauss_build(data,var,target,index,weights,sqr_width);
+  builder.gauss_build(data,var,target,index,weights,error_var);
 
   vcl_cout<<"Number of kernels chosen: "<<index.size()<<" from "<<ns<<vcl_endl;
-  vcl_cout<<"Variance: "<<sqr_width<<vcl_endl;
+  vcl_cout<<"Variance: "<<error_var<<vcl_endl;
   vcl_cout<<"Centred on:"<<vcl_endl;
   for (unsigned i=0;i<index.size();++i)
     vcl_cout<<samples[index[i]][0]<<" wt: "<<weights[i+1]<<vcl_endl;
@@ -45,9 +45,9 @@ void test_rvm_regression_builder()
   TEST("var=0.2 Select 5 vectors",index.size(),5);
 
   var=1.0;
-  builder.gauss_build(data,var,target,index,weights,sqr_width);
+  builder.gauss_build(data,var,target,index,weights,error_var);
   vcl_cout<<"Number of kernels chosen: "<<index.size()<<" from "<<ns<<vcl_endl;
-  vcl_cout<<"Variance: "<<sqr_width<<vcl_endl;
+  vcl_cout<<"Variance: "<<error_var<<vcl_endl;
   TEST("var=1.0 Select 10 vectors",index.size(),10);
 
 }
