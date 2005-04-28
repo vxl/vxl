@@ -44,7 +44,7 @@ SET (EMAIL_PROJECT_NAME "VXL")
 SET (BUILD_MONITORS "\\
   {cs\\.rpi\\.edu .* amithaperera@users.sourceforge.net} \\
   {esat\\.kuleuven\\.ac\\.be .* peter_vanroose@users.sourceforge.net} \\
-  {crd\\.ge\\.com .* fred_wheeler@users.sourceforge.net} \\
+  {crd\\.ge\\.com_DISABLED .* fred_wheeler@users.sourceforge.net} \\
 ")
 
 SET (PROJECT_URL http://vxl.sourceforge.net/)
