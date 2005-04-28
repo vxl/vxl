@@ -7,6 +7,7 @@
 // \author Tim Cootes
 
 #include <vil3d/vil3d_trilin_interp.h>
+#include <vil3d/vil3d_image_view.h>
 
 //: Compute trilinear interpolation at (x,y,z) in world coordinates
 //  Interpolates given plane of image.image() at image.world2im(p)
