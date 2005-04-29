@@ -240,6 +240,20 @@ vsol_polygon_2d_sptr bsol_algs::poly_from_vgl(vgl_polygon<double> const& poly)
   out = new vsol_polygon_2d(pts);
   return out;
 }
+vgl_polygon<double>  
+bsol_algs::vgl_from_poly(vsol_polygon_2d_sptr const& poly)
+{
+  vgl_polygon<double> vp(1);
+  if(!poly)
+    return vp;
+  unsigned nverts = poly->size();
+  for(unsigned i = 0; i<nverts; ++i)
+    {
+      double x = poly->vertex(i)->x(), y = poly->vertex(i)->y();
+      vp.push_back(x, y);
+    }
+  return vp;
+}
 
 //:find the closest point to p in a set of points
 vsol_point_2d_sptr

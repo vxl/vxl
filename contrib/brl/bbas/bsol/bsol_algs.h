@@ -75,6 +75,8 @@ class bsol_algs
   //:construct a vsol_polygon from a vgl_polygon
   static vsol_polygon_2d_sptr poly_from_vgl(vgl_polygon<double> const& poly);
 
+  //:construct a vgl_polygon from a vsol_polygon 
+  static vgl_polygon<double>  vgl_from_poly(vsol_polygon_2d_sptr const& poly);
 
   //:construct a vsol_polygon from a vsol_box
   static vsol_polygon_2d_sptr poly_from_box(vsol_box_2d_sptr const& box);
