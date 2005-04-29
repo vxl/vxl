@@ -177,11 +177,12 @@ void mbl_rvm_regression_builder::build(
              vnl_vector<double>& weights,
              double &error_var)
 {
-  unsigned n0=targets.size();
-  assert(kernel_matrix.rows()==n0);
-  assert(kernel_matrix.cols()==n0);
+  unsigned ns=targets.size();
+  assert(kernel_matrix.rows()==ns);
+  assert(kernel_matrix.cols()<=ns);
+  unsigned n0=kernel_matrix.cols();
 
-  // Initialise to use all samples with equal weights
+  // Initialise to use all n0 samples with equal weights
   index.resize(n0);
   vcl_vector<double> alpha(n0),new_alpha;
   vcl_vector<int> new_index;

@@ -74,6 +74,14 @@ public:
     //  Note that on exit, weights.size()==index.size()+1
     //  weights[0] is the constant offset, and weights[i+1]
     //  corresponds to selected input vector index[i].
+    //
+    // The algorithm involves inverting an (n+1)x(n+1) matrix,
+    // where n is the number of vectors to consider as relevant
+    // vectors.  This doesn't have to be all the samples.
+    // For efficiency, one can provide the kernel matrix as an
+    // m x n matrix, where m is the number of samples to test
+    // against (targets.size()==m) but n<=m samples are to be
+    // considered as potential relevant vectors (ie the first n).
     // \param kernel_matrix (i,j) element gives kernel function between i and j training vectors
     // \param targets[i] gives value at vector i
     // \param index returns indices of selected vectors
