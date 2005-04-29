@@ -61,8 +61,11 @@ void bsta_histogram<T>::upcount(T x, T mag)
   if (x<min_||x>max_)
     return;
   for (unsigned int i = 0; i<nbins_; i++)
-    if ((i+1)*delta_>(x-min_))
-      { counts_[i] += mag; break; }
+    if ((i+1)*delta_>=(x-min_))
+      { 
+        counts_[i] += mag; 
+        break; 
+      }
   area_valid_ = false;
 }
 

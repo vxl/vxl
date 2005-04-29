@@ -33,13 +33,13 @@ void bsta_joint_histogram<T>::upcount(T a, T mag_a,
     return;
   int bin_a =0, bin_b = 0;
   for (unsigned int i = 0; i<nbins_; i++)
-    if ((i+1)*delta_>a)
+    if ((i+1)*delta_>=a)
     {
       bin_a = i;
       break;
     }
   for (unsigned int i = 0; i<nbins_; i++)
-    if ((i+1)*delta_>b)
+    if ((i+1)*delta_>=b)
     {
       bin_b = i;
       break;
