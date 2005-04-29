@@ -1,7 +1,7 @@
 #include <vsol/vsol_box_2d.h>
 #include <brip/brip_roi.h>
 
-brip_roi::brip_roi(const int n_image_cols, const int n_image_rows)
+brip_roi::brip_roi(const unsigned n_image_cols, const unsigned n_image_rows)
 {
   n_image_cols_ = n_image_cols;
   n_image_rows_ = n_image_rows;
@@ -14,6 +14,38 @@ void brip_roi::set_image_bounds(const int n_image_cols,
   n_image_rows_ = n_image_rows;
 }
 
+//:expand (or contract) each region of the roi by delta, creating a new roi.
+// If delta is too large for a given region, the region is left unchanged
+brip_roi::brip_roi(brip_roi const& roi, float delta)
+  : vbl_ref_count(), n_image_cols_(roi.n_image_cols_),
+    n_image_rows_(roi.n_image_rows_), regions_(roi.regions_)
+{
+  for (vcl_vector<vsol_box_2d_sptr>::iterator rit = regions_.begin();
+       rit != regions_.end(); rit++)
+    {
+      int xmin = (int)(*rit)->get_min_x();
+      int ymin = (int)(*rit)->get_min_y();
+      int xmax = (int)(*rit)->get_max_x();
+      int ymax = (int)(*rit)->get_max_y();
+      int dxmin = (int)(xmin-delta), dymin = (int)(ymin - delta);
+      int dxmax = (int)(xmax+delta), dymax = (int)(ymax + delta);
+      if(dxmin <0 || dxmin >= n_image_cols_)
+        continue;
+      if(dymin <0 || dymin >= n_image_rows_)
+        continue;
+      if(dxmax <0 || dxmax >= n_image_cols_)
+        continue;
+      if(dymax <0 || dymax >= n_image_rows_)
+        continue;
+      vsol_box_2d_sptr dbox = new vsol_box_2d();
+      dbox->add_point(dxmin, dymin);
+      dbox->add_point(dxmax, dymin);
+      dbox->add_point(dxmax, dymax);
+      dbox->add_point(dxmin, dymax);
+      (*rit)=dbox;
+    }
+}
+
 vsol_box_2d_sptr brip_roi::clip_to_image_bounds(vsol_box_2d_sptr box)
 {
   if (!box||!n_image_cols_||!n_image_rows_)
@@ -21,7 +53,7 @@ vsol_box_2d_sptr brip_roi::clip_to_image_bounds(vsol_box_2d_sptr box)
   int x0 = (int)box->get_min_x();
   int y0 = (int)box->get_min_y();
   int xm = (int)box->get_max_x();
-  int ym = (int)box->get_max_y();
+  int ym= (int)box->get_max_y();
   //clip to image bounds
   if (x0 < 0)
     x0 = 0;
@@ -119,31 +151,31 @@ void brip_roi::clip_to_image_bounds()
   regions_ = temp;
 }
 
-int brip_roi::cmin(int i)
+unsigned brip_roi::cmin(const unsigned i) const
 {
-  if (i<0||i>=int(regions_.size()))
+  if (i>=int(regions_.size()))
     return 0;
   else
     return (int)regions_[i]->get_min_x();
 }
 
-int brip_roi::cmax(int i)
+unsigned brip_roi::cmax(const unsigned i) const
 {
-  if (i<0||i>=int(regions_.size()))
+  if (i>=int(regions_.size()))
     return 0;
   else
     return (int)regions_[i]->get_max_x();
 }
 
-int brip_roi::rmin(int i)
+unsigned brip_roi::rmin(const unsigned i) const
 {
-  if (i<0||i>=int(regions_.size()))
+  if (i>=int(regions_.size()))
     return 0;
   else
-    return (int)regions_[i]->get_min_y();
+    return (unsigned)regions_[i]->get_min_y();
 }
 
-int brip_roi::rmax(int i)
+unsigned brip_roi::rmax(const unsigned i) const
 {
   if (i<0||i>=int(regions_.size()))
     return 0;
@@ -151,17 +183,55 @@ int brip_roi::rmax(int i)
     return (int)regions_[i]->get_max_y();
 }
 
-int brip_roi::ic(int col, int i)
+unsigned brip_roi::csize(const unsigned i) const
 {
-  return col + cmin(i);
+  int temp = cmax(i)-cmin(i) + 1;
+  if(temp<0)
+    return 0;
+  return (unsigned)temp;
 }
 
-int brip_roi::ir(int row, int i)
+unsigned brip_roi::rsize(const unsigned i) const 
 {
-  return row + rmin(i);
+  int temp = rmax(i)-rmin(i) + 1;
+  if(temp<0)
+    return 0;
+  return (unsigned)temp;
 }
 
-bool brip_roi::remove_region(int i)
+unsigned brip_roi::ic(int local_col, unsigned i) const
+{
+  int temp = cmin(i) + local_col;
+  if(temp<0)
+    temp = 0;
+  return (unsigned)temp;
+}
+
+unsigned brip_roi::ir(int local_row, unsigned i) const
+{
+  int temp = rmin(i) + local_row;
+  if(temp<0)
+    temp = 0;
+  return (unsigned)temp;
+}
+
+unsigned brip_roi::lc(unsigned global_col, unsigned i) const
+{
+ int temp = global_col - cmin(i); 
+  if(temp<0)
+    temp = 0;
+  return (unsigned)temp;
+}
+
+unsigned brip_roi::lr(unsigned global_row, unsigned i) const
+{
+ int temp = global_row - rmin(i); 
+  if(temp<0)
+    temp = 0;
+  return (unsigned)temp;
+}
+
+bool brip_roi::remove_region(unsigned i)
 {
   vcl_cerr << "brip_roi::remove_region(" << i << ") NYI\n";
   return false;

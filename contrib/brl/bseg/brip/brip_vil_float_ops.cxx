@@ -15,10 +15,12 @@
 #include <vil/vil_math.h>
 #include <vnl/vnl_inverse.h>
 #include <vil/algo/vil_convolve_1d.h>
+#include <vil/vil_new.h>
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <bsol/bsol_algs.h>
+#include <brip/brip_roi.h>
 
 
 //------------------------------------------------------------
@@ -158,12 +160,20 @@ static double brip_vil_gaussian(double x, double sigma)
   return (double)vcl_exp(- x_on_sigma * x_on_sigma / 2);
 }
 
+unsigned brip_vil_float_ops::gaussian_radius(const double sigma,
+                                             const double fuzz)
+{
+  unsigned radius;
+  for (radius = 0; (float)brip_vil_gaussian((double)radius, sigma) > fuzz; ++radius)
+    ;                                         
+  return radius;
+}
+
 //:generate a 1-d Gaussian kernel  fuzz=0.02 is a good value
 static void brip_1d_gaussian_kernel(double sigma, double fuzz,
                                     int& radius, double*& kernel)
 {
-  for (radius = 0; brip_vil_gaussian(double(radius), sigma) > fuzz; radius++)
-    ;                                         // find radius
+	radius = brip_vil_float_ops::gaussian_radius(sigma, fuzz);
 
   kernel = new double[2*radius + 1];
   if (!radius)
@@ -2015,6 +2025,67 @@ bool brip_vil_float_ops::chip(vil_image_view<float> const& input,
       chip(x-x_min, y-y_min) = input(x, y);
   return true;
 }
+
+//:convert image resource to float view according to a roi
+// currently only handles byte, short and byte color images
+bool brip_vil_float_ops::chip(vil_image_resource_sptr const& image,
+                              brip_roi_sptr const& roi,
+                              vil_image_resource_sptr & chip)
+{
+  //image bounds
+  unsigned ni = image->ni(), nj = image->nj();
+
+  //image bounds for the chip
+  unsigned cm = roi->cmin(0), rm = roi->rmin(0);
+  unsigned niv = roi->csize(0), njv = roi->rsize(0);
+
+  //check bounds
+  if(cm>ni-1||rm>nj-1||cm+niv>ni||rm+njv>nj)
+    return false;
+  vil_pixel_format pix_format = image->pixel_format();
+  // get an appropriate image view for scalar images we care about
+  if(image->nplanes()==1)
+    if(pix_format==VIL_PIXEL_FORMAT_BYTE)
+      {
+        vil_image_view<unsigned char> temp = 
+          image->get_view(cm, niv, rm, njv);
+        if(temp)
+          chip = vil_new_image_resource_of_view(temp);
+        return true;
+      }
+    else if
+      (pix_format==VIL_PIXEL_FORMAT_UINT_16)
+      {
+        vil_image_view<unsigned short> temp = 
+          image->get_view(cm, niv, rm, njv);
+        if(temp.size())
+          chip = vil_new_image_resource_of_view(temp);
+        return true;
+      }
+    else if
+      (pix_format==VIL_PIXEL_FORMAT_FLOAT)
+      {
+        vil_image_view<float> temp = 
+          image->get_view(cm, niv, rm, njv);
+        if(temp.size())
+          chip = vil_new_image_resource_of_view(temp);
+        return true;
+      }
+
+  //color data convert to float (maybe vil does this anyway?)
+  if(image->nplanes()==3)
+    if(pix_format=VIL_PIXEL_FORMAT_BYTE)//the only way now
+      {
+        //extract view corresponding to region of interest
+        vil_image_view<vil_rgb<vxl_byte> > color_image = 
+          image->get_view(cm, niv, rm, njv);
+        if(color_image.size())
+          chip = vil_new_image_resource_of_view(color_image);
+        return true;
+      }
+  return false;
+}
+
 
 //:compute normalized cross correlation from the intensity moment sums.
 static float cross_corr(double area, double si1, double si2,

@@ -29,6 +29,7 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_rgb.h>
 #include <vsol/vsol_box_2d_sptr.h>
+#include <brip/brip_roi_sptr.h>
 class brip_vil_float_ops
 {
  public:
@@ -38,6 +39,9 @@ class brip_vil_float_ops
   static vil_image_view<float>
     convolve(vil_image_view<float> const& input,
              vbl_array_2d<float> const& kernel);
+
+  //:helper to determine processing border required by Gaussian smoothing
+  static unsigned gaussian_radius(const double sigma, const double fuzz=0.02);
 
   //: convolves with a Gaussian kernel
   static vil_image_view<float> gaussian(vil_image_view<float> const& input,
@@ -239,6 +243,13 @@ class brip_vil_float_ops
   //:extract a region of interest. If roi does not overlap input, return false
   static bool chip(vil_image_view<float> const& input,
                    vsol_box_2d_sptr const& roi, vil_image_view<float>& chip);
+
+  //:convert image resource to a chip of equivalent pixel type
+  static  bool chip(vil_image_resource_sptr const& image,
+                    brip_roi_sptr const& roi,
+                    vil_image_resource_sptr & chip);
+
+
 
   //:cross-correlate two images at a given sub-pixel location
   static float
