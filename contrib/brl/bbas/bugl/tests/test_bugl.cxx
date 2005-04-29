@@ -47,4 +47,4 @@ void test_bugl()
   TEST("p3d.z()==5", p3d_ptr->z(), 5.0);
 }
 
-TESTLIB_DEFINE_MAIN(test_bugl);
+TESTMAIN(test_bugl);
