@@ -13,6 +13,7 @@
 #include <mbl/mbl_matxvec.h>
 #include <mbl/mbl_matrix_products.h>
 #include <vcl_iostream.h>
+#include <vcl_cassert.h>
 
 //=======================================================================
 // Note on indexing
@@ -79,7 +80,7 @@ void mbl_rvm_regression_builder::gauss_build(
     for (unsigned j=0;j<i;++j)
     {
       data.set_index(j);
-      double d = exp(k*vnl_vector_ssd(vi,data.current()));
+      double d = vcl_exp(k*vnl_vector_ssd(vi,data.current()));
       K(i,j)=d; K(j,i)=d;
     }
   }
@@ -115,22 +116,23 @@ bool mbl_rvm_regression_builder::update_step(const vnl_matrix<double>& F,
   mbl_matxvec_prod_mv(S_,t2,mean_wts_);     // mean=S*t2 (n+1)
   mean_wts_/=error_var0;
 
-
-//   // ---------------------
-//   // Estimate p(t|alpha,var)
-//   vnl_vector<double> a_inv(n0+1);
-//   a_inv[0]=0.0;
-//   for (unsigned i=0;i<n0;++i) a_inv[i+1]=1.0/alpha0[i];
-//   vnl_matrix<double> FAF;
-//   mbl_matrix_product_adb(FAF,F,a_inv,F.transpose());
-//   for (unsigned i=0;i<FAF.rows();++i) FAF(i,i)+=1.0/error_var0;
-//   vnl_svd<double> FAFsvd(FAF);
-//   vnl_matrix<double> FAFinv=FAFsvd.inverse();
-//   vnl_vector<double> Xt=FAFinv*targets;
-//   double M = dot_product(Xt,targets);
-//   double det=FAFsvd.determinant_magnitude();
-//   vcl_cout<<"M="<<M<<"  -log(p)="<<M+vcl_log(det)<<vcl_endl;
-//   // ---------------------
+#if 0
+  // ---------------------
+  // Estimate p(t|alpha,var)
+  vnl_vector<double> a_inv(n0+1);
+  a_inv[0]=0.0;
+  for (unsigned i=0;i<n0;++i) a_inv[i+1]=1.0/alpha0[i];
+  vnl_matrix<double> FAF;
+  mbl_matrix_product_adb(FAF,F,a_inv,F.transpose());
+  for (unsigned i=0;i<FAF.rows();++i) FAF(i,i)+=1.0/error_var0;
+  vnl_svd<double> FAFsvd(FAF);
+  vnl_matrix<double> FAFinv=FAFsvd.inverse();
+  vnl_vector<double> Xt=FAFinv*targets;
+  double M = dot_product(Xt,targets);
+  double det=FAFsvd.determinant_magnitude();
+  vcl_cout<<"M="<<M<<"  -log(p)="<<M+vcl_log(det)<<vcl_endl;
+  // ---------------------
+#endif // 0
 
   // Compute new alphas and elliminate very large values
   alpha.resize(0);
@@ -161,7 +163,7 @@ bool mbl_rvm_regression_builder::update_step(const vnl_matrix<double>& F,
 
   // Decide if optimisation completed
   if (alpha.size()!=alpha0.size()) return true;
-  return (change/n0>1e-2);
+  return change/n0 > 0.01;
 }
 
 //: Train RVM given a distance matrix and set of target values
@@ -205,7 +207,7 @@ void mbl_rvm_regression_builder::build(
   }
 
   if (n_its>=max_its)
-    vcl_cerr<<"mbl_rvm_regression_builder::build() Too many iterations. Convergence failure."<<vcl_endl;
+    vcl_cerr<<"mbl_rvm_regression_builder::build() Too many iterations. Convergence failure.\n";
 
   weights=mean_wts_;
 }
