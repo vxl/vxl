@@ -90,11 +90,11 @@ template <unsigned num_cols, unsigned num_rows, class T>
 class vnl_matrix_fixed_fake_base
 {
 };
+
 #define VNL_MATRIX_FIXED_VCL60_WORKAROUND : public vnl_matrix_fixed_fake_base<num_cols,num_rows,T>
 #else
 #define VNL_MATRIX_FIXED_VCL60_WORKAROUND /* no workaround. Phew. */
 #endif
-
 
 //: Fixed size, stack-stored, space-efficient matrix.
 // vnl_matrix_fixed is a fixed-length, stack storage vector. It has
@@ -500,6 +500,7 @@ class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
     assert_size_internal(nr_rows, nr_cols);
 #endif
   }
+
   //: abort if matrix contains any INFs or NANs.
   // This function does or tests nothing if NDEBUG is defined
   void assert_finite() const
@@ -792,7 +793,7 @@ vnl_matrix_fixed<T, M, O> operator*(const vnl_matrix_fixed<T, M, N>& a, const vn
 {
   return vnl_matrix_fixed_mat_mat_mult(a,b);
 }
-#endif // ! VCL_VC60
+#endif // VCL_VC60
 
 
 // These overloads for the common case of mixing a fixed with a
@@ -872,7 +873,7 @@ vcl_istream& operator>> (vcl_istream& is, vnl_matrix_fixed<T,m,n>& mat)
 // compile time constant when used in the return parameter. So, we
 // have to introduce a helper class to do it.
 //
-#if VCL_VC60
+#ifdef VCL_VC60
 
 template<class T, unsigned m, class FixedVector>
 struct outer_product_fixed_type_helper
