@@ -244,7 +244,13 @@ LINK32=link.exe
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_driver.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_bugl.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_random_transform_set_2d.cxx
 # End Source File
 # End Group
 # End Target
