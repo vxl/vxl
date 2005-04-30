@@ -39,6 +39,7 @@
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_read_str.h>
 #include <mbl/mbl_read_yes.h>
+#include <mbl/mbl_rvm_regression_builder.h>
 #include <mbl/mbl_screen_counter.h>
 #include <mbl/mbl_selected_data_wrapper.h>
 #include <mbl/mbl_select_n_from_m.h>
