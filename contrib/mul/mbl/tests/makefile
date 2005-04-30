@@ -38,6 +38,7 @@ TESTS += test_rbf_network.cxx
 TESTS += test_stats_nd.cxx
 TESTS += test_table.cxx
 TESTS += test_cloneables_factory.cxx
+TESTS += test_rvm_regression_builder.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

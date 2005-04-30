@@ -35,6 +35,7 @@ SOURCES += mbl_progress.cxx
 SOURCES += mbl_progress_composite.cxx
 SOURCES += mbl_progress_null.cxx
 SOURCES += mbl_progress_text.cxx
+SOURCES += mbl_rvm_regression_builder.cxx
 
 # Additional files to document:
 MANPAGE_SOURCES += mbl_cloneables_factory.h
