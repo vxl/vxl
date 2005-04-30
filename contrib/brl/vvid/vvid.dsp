@@ -13,6 +13,9 @@ SOURCE=.\cmu_1394_camera.cxx
 SOURCE=.\cmu_1394_camera_params.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vvid_vil_file_manager.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vvid_file_manager.cxx
 # End Source File
 # Begin Source File
@@ -38,6 +41,9 @@ SOURCE=.\cmu_1394_camera.h
 # End Source File
 # Begin Source File
 SOURCE=.\cmu_1394_camera_params.h
+# End Source File
+# Begin Source File
+SOURCE=.\vvid_vil_file_manager.h
 # End Source File
 # Begin Source File
 SOURCE=.\vvid_file_manager.h
