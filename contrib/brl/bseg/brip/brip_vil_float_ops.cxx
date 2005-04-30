@@ -165,7 +165,7 @@ unsigned brip_vil_float_ops::gaussian_radius(const double sigma,
 {
   unsigned radius;
   for (radius = 0; (float)brip_vil_gaussian((double)radius, sigma) > fuzz; ++radius)
-    ;                                         
+    ;
   return radius;
 }
 
@@ -173,7 +173,7 @@ unsigned brip_vil_float_ops::gaussian_radius(const double sigma,
 static void brip_1d_gaussian_kernel(double sigma, double fuzz,
                                     int& radius, double*& kernel)
 {
-	radius = brip_vil_float_ops::gaussian_radius(sigma, fuzz);
+  radius = brip_vil_float_ops::gaussian_radius(sigma, fuzz);
 
   kernel = new double[2*radius + 1];
   if (!radius)
@@ -2026,8 +2026,8 @@ bool brip_vil_float_ops::chip(vil_image_view<float> const& input,
   return true;
 }
 
-//:convert image resource to float view according to a roi
-// currently only handles byte, short and byte color images
+//:convert image resource to float view according to a roi.
+// Currently only handles byte, short, float and byte color images
 bool brip_vil_float_ops::chip(vil_image_resource_sptr const& image,
                               brip_roi_sptr const& roi,
                               vil_image_resource_sptr & chip)
@@ -2040,49 +2040,47 @@ bool brip_vil_float_ops::chip(vil_image_resource_sptr const& image,
   unsigned niv = roi->csize(0), njv = roi->rsize(0);
 
   //check bounds
-  if(cm>ni-1||rm>nj-1||cm+niv>ni||rm+njv>nj)
+  if (cm>ni-1||rm>nj-1||cm+niv>ni||rm+njv>nj)
     return false;
   vil_pixel_format pix_format = image->pixel_format();
   // get an appropriate image view for scalar images we care about
-  if(image->nplanes()==1)
-    if(pix_format==VIL_PIXEL_FORMAT_BYTE)
-      {
-        vil_image_view<unsigned char> temp = 
-          image->get_view(cm, niv, rm, njv);
-        if(temp)
-          chip = vil_new_image_resource_of_view(temp);
-        return true;
-      }
-    else if
-      (pix_format==VIL_PIXEL_FORMAT_UINT_16)
-      {
-        vil_image_view<unsigned short> temp = 
-          image->get_view(cm, niv, rm, njv);
-        if(temp.size())
-          chip = vil_new_image_resource_of_view(temp);
-        return true;
-      }
-    else if
-      (pix_format==VIL_PIXEL_FORMAT_FLOAT)
-      {
-        vil_image_view<float> temp = 
-          image->get_view(cm, niv, rm, njv);
-        if(temp.size())
-          chip = vil_new_image_resource_of_view(temp);
-        return true;
-      }
+  if (image->nplanes()==1)
+  {
+    if (pix_format==VIL_PIXEL_FORMAT_BYTE)
+    {
+      vil_image_view<unsigned char> temp = image->get_view(cm, niv, rm, njv);
+      if (!temp) return false;
+      chip = vil_new_image_resource_of_view(temp);
+      return true;
+    }
+    else if (pix_format==VIL_PIXEL_FORMAT_UINT_16)
+    {
+      vil_image_view<unsigned short> temp = image->get_view(cm, niv, rm, njv);
+      if (!temp) return false;
+      chip = vil_new_image_resource_of_view(temp);
+      return true;
+    }
+    else if (pix_format==VIL_PIXEL_FORMAT_FLOAT)
+    {
+      vil_image_view<float> temp = image->get_view(cm, niv, rm, njv);
+      if (!temp) return false;
+      chip = vil_new_image_resource_of_view(temp);
+      return true;
+    }
+  }
 
   //color data convert to float (maybe vil does this anyway?)
-  if(image->nplanes()==3)
-    if(pix_format=VIL_PIXEL_FORMAT_BYTE)//the only way now
-      {
-        //extract view corresponding to region of interest
-        vil_image_view<vil_rgb<vxl_byte> > color_image = 
-          image->get_view(cm, niv, rm, njv);
-        if(color_image.size())
-          chip = vil_new_image_resource_of_view(color_image);
-        return true;
-      }
+  if (image->nplanes()==3)
+  {
+    if (pix_format==VIL_PIXEL_FORMAT_BYTE) //the only way now
+    {
+      //extract view corresponding to region of interest
+      vil_image_view<vil_rgb<vxl_byte> > temp = image->get_view(cm, niv, rm, njv);
+      if (!temp) return false;
+      chip = vil_new_image_resource_of_view(temp);
+      return true;
+    }
+  }
   return false;
 }
 
