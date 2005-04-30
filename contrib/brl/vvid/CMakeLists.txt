@@ -12,6 +12,7 @@ IF(HAS_VGUI)
  SET(vvid_sources
      vvid_frame_trail.cxx          vvid_frame_trail.h
      vvid_file_manager.cxx         vvid_file_manager.h
+     vvid_vil_file_manager.cxx     vvid_vil_file_manager.h
      vvid_command_line_player.cxx  vvid_command_line_player.h
  )
 
@@ -39,7 +40,7 @@ IF(HAS_VGUI)
   ADD_LIBRARY(vvid ${vvid_sources})
  ENDIF(HAS_CMU1394CAMERA)
 
- TARGET_LINK_LIBRARIES(vvid vpro strk sdet btol vtol vsol brip bgui vgui vidl_vil1 vul vil1)
+ TARGET_LINK_LIBRARIES(vvid vpro strk sdet btol vtol vsol brip bgui vgui vidl vidl_vil1 vul vil vil1)
 
  # the main executables
  SUBDIRS(bin)
