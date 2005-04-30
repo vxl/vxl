@@ -7,6 +7,8 @@ ifdef HAS_CMU1394CAMERA
 SOURCES += videx_menus.cxx
 SOURCES += vidster_menus.cxx
 endif
+SOURCES += vidfpl_vil.cxx
+SOURCES += vidfpl_vil_menus.cxx
 
 MINI_PROG_SOURCES += vidfpl.cxx
 MINI_PROG_SOURCES += command_line_grid_finder.cxx
