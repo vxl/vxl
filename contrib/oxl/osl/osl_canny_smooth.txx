@@ -1,7 +1,7 @@
 #ifndef osl_canny_smooth_txx_
 #define osl_canny_smooth_txx_
 //:
-//  \file
+// \file
 //
 // Notes
 // -  if this file is not in Templates, gcc 2.7 does not instantiate.
@@ -218,7 +218,6 @@ template void osl_canny_smooth_rothwell_adaptive(T const * const *in, int xsize_
 template void osl_canny_smooth(T const * const *image_in, int xsize_, int ysize_, \
                                float const *kernel_, int width_, float const *sub_area_, \
                                float * unpro_const * image_out)
-
-//VCL_INSTANTIATE_INLINE(float as_float(T const &)); \
+//VCL_INSTANTIATE_INLINE(float as_float(T const &));
 
 #endif // osl_canny_smooth_txx_
