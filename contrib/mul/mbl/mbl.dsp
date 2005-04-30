@@ -266,6 +266,9 @@ SOURCE=.\mbl_progress_null.cxx
 # Begin Source File
 SOURCE=.\mbl_progress_text.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\mbl_rvm_regression_builder.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -466,6 +469,9 @@ SOURCE=.\mbl_cloneables_factory.h
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_exception.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_rvm_regression_builder.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
