@@ -669,7 +669,7 @@ double pythag_(const double *a, const double *b);
   int trapru_(double f(double*), double *a, double *b, int *m, double *trule);
   int simpru_(double f(double*), double *a, double *b, int *m, double *srule);
   /*: computes integral; input: f=integrand a,b=endpoints tol=tolerance; output: errbdd=error_estimation m=substates */
-  int adaptquad_(double f(double*), double *a, double *b, double *tol, double *srmat, double *integral, double *errbdd, int *m, int*state);
+  int adaptquad_(double f(double*), double*a, double*b, double*tol, double*srmat, double*integral, double*errbdd, int*m, int*state);
 
 #ifdef __cplusplus
 }
