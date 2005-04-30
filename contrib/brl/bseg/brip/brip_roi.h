@@ -49,12 +49,12 @@ class brip_roi : public vbl_ref_count
   vsol_box_2d_sptr clip_to_image_bounds(vsol_box_2d_sptr box);
   //:clips all existing regions, doesn't affect existing image bounds
   void clip_to_image_bounds();
-  bool empty();
-  unsigned int n_regions() { return regions_.size(); }
-  unsigned cmin(const unsigned i) const; //!< column minimum for region_i
-  unsigned cmax(const unsigned i) const; //!< column maximum for region_i
-  unsigned rmin(const unsigned i) const; //!< row minimum for region_i
-  unsigned rmax(const unsigned i) const; //!< row maximum for region_i
+  bool empty() const;
+  unsigned int n_regions() const { return regions_.size(); }
+  int cmin(const unsigned i) const; //!< column minimum for region_i
+  int cmax(const unsigned i) const; //!< column maximum for region_i
+  int rmin(const unsigned i) const; //!< row minimum for region_i
+  int rmax(const unsigned i) const; //!< row maximum for region_i
   unsigned csize(const unsigned i) const; //!< number of cols for region_i
   unsigned rsize(const unsigned i) const; //!< number of rows for region_i
 
@@ -66,7 +66,7 @@ class brip_roi : public vbl_ref_count
   unsigned lc(unsigned global_col, unsigned i = 0) const;
   unsigned lr(unsigned global_row, unsigned i = 0) const;
 
-  vsol_box_2d_sptr region(unsigned i){return regions_[i];}
+  vsol_box_2d_sptr region(unsigned i) { return regions_[i]; }
   bool remove_region(unsigned i);
 
  protected:
