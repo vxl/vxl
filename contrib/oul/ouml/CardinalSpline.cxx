@@ -173,10 +173,9 @@ double CardinalSpline::closest_point_t(const Vector3D &point) const
     else t2 = 1.0;
   }
 
-  // now do a newton's iteration until we converge
+  // now do a Newton's iteration until we converge
   // do a simple interpolation
-  double totaldist = d1+d2;
-  double t = t1; //(d2*t1+d1*t2)/totaldist;
+  double t = t1; // = (d2*t1+d1*t2)/(d1+d2);
   delta = 1.0;
   int numloops=0;
   delta = distanceFunctionFirstDerivative(t, point)/
@@ -186,10 +185,10 @@ double CardinalSpline::closest_point_t(const Vector3D &point) const
     t -= delta;
     if (t<0.0) t += 1.0;
     if (t>1.0) t -= 1.0;
-    // if the following condition is true, then the newton's
-    // method is not converging (or at least not my
-    // implementation), so just return the closest point found so far
     double dist = (point-getPoint(t)).magnitude();
+    // if the following condition is true, then Newton's method
+    // is not converging (or at least not my implementation),
+    // so just return the closest point found so far
     if (dist>d1)
     {
       t = t1;
