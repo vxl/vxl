@@ -22,7 +22,8 @@ brip_roi::brip_roi(brip_roi const& roi, float delta)
   : vbl_ref_count(), n_image_cols_(roi.n_image_cols_),
     n_image_rows_(roi.n_image_rows_), regions_(roi.regions_)
 {
-  if (delta < 0) delta *= -1.0f; // to guarantee dxmin <= dxmax.
+  float tdelta = delta;//error in const
+  if (tdelta < 0) tdelta *= -1.0f; // to guarantee dxmin <= dxmax.
   for (vcl_vector<vsol_box_2d_sptr>::iterator rit = regions_.begin();
        rit != regions_.end(); rit++)
   {
@@ -30,10 +31,10 @@ brip_roi::brip_roi(brip_roi const& roi, float delta)
     int ymin = (int)(*rit)->get_min_y();
     int xmax = (int)(*rit)->get_max_x();
     int ymax = (int)(*rit)->get_max_y();
-    unsigned int dxmin = (unsigned int)(xmin-delta), // overflows when negative,
-                 dymin = (unsigned int)(ymin-delta), // but this is no problem
-                 dxmax = (unsigned int)(xmax+delta), // since the test below
-                 dymax = (unsigned int)(ymax+delta); // will skip these cases:
+    unsigned int dxmin = (unsigned int)(xmin-tdelta), // overflows when negative,
+                 dymin = (unsigned int)(ymin-tdelta), // but this is no problem
+                 dxmax = (unsigned int)(xmax+tdelta), // since the test below
+                 dymax = (unsigned int)(ymax+tdelta); // will skip these cases:
     if (dxmin >= n_image_cols_ || dymin >= n_image_rows_ ||
         dxmax >= n_image_cols_ || dymax >= n_image_rows_)
       continue;
