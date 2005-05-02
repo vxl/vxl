@@ -320,9 +320,9 @@ set_rotation_roll_pitch_yaw(T yaw, T pitch, T roll)
   typedef typename vnl_numeric_traits<T>::real_t real_t;
   real_t ax = yaw/2, ay = pitch/2, az = roll/2;
 
-  vnl_quaternion<T> qx(vcl_sin(ax),0,0,vcl_cos(ax));
-  vnl_quaternion<T> qy(0,vcl_sin(ay),0,vcl_cos(ay));
-  vnl_quaternion<T> qz(0,0,vcl_sin(az),vcl_cos(az));
+  vnl_quaternion<T> qx(T(vcl_sin(ax)),0,0,T(vcl_cos(ax)));
+  vnl_quaternion<T> qy(0,T(vcl_sin(ay)),0,T(vcl_cos(ay)));
+  vnl_quaternion<T> qz(0,0,T(vcl_sin(az)),T(vcl_cos(az)));
   vnl_quaternion<T> q = qz*qy*qx;
 
   vnl_matrix_fixed<T,3,3> R = q.rotation_matrix_transpose();
@@ -341,9 +341,9 @@ set_rotation_euler(T rz1, T ry, T rz2)
   typedef typename vnl_numeric_traits<T>::real_t real_t;
   real_t az1 = rz1/2, ay = ry/2, az2 = rz2/2;
 
-  vnl_quaternion<T> qz1(0,0,vcl_sin(az1),vcl_cos(az1));
-  vnl_quaternion<T> qy(0,vcl_sin(ay),0,vcl_cos(ay));
-  vnl_quaternion<T> qz2(0,0,vcl_sin(az2),vcl_cos(az2));
+  vnl_quaternion<T> qz1(0,0,T(vcl_sin(az1)),T(vcl_cos(az1)));
+  vnl_quaternion<T> qy(0,T(vcl_sin(ay)),0,T(vcl_cos(ay)));
+  vnl_quaternion<T> qz2(0,0,T(vcl_sin(az2)),T(vcl_cos(az2)));
   vnl_quaternion<T> q = qz2*qy*qz1;
 
   vnl_matrix_fixed<T,3,3> R = q.rotation_matrix_transpose();
@@ -361,8 +361,8 @@ vgl_h_matrix_3d<T>::get_upper_3x3() const
   double u = (double)t12_matrix_[3][3];
   assert(vcl_fabs(u)>1e-9);
   vnl_matrix_fixed<T,4,4> m(0.0);
-  for(unsigned r = 0; r<3; r++)
-    for(unsigned c = 0; c<3; c++)
+  for (unsigned r = 0; r<3; r++)
+    for (unsigned c = 0; c<3; c++)
       m[r][c] = t12_matrix_[r][c]/t12_matrix_[3][3];
   m[3][3]=1.0;
   return vgl_h_matrix_3d<T>(m);

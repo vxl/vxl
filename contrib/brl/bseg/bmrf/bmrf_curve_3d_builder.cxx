@@ -61,7 +61,7 @@ bmrf_curve_3d_builder::init_cameras(const vnl_double_3x4& C0, double scale)
     return;
   vcl_set<int> frames = network_->frame_numbers();
   const vgl_point_2d<double>& ep = network_->epipole(1).location();
-  if(offsets_.empty())
+  if (offsets_.empty())
     compute_camera_offsets();
 
   vnl_double_3x3 M = C0.extract(3,3);
@@ -77,7 +77,7 @@ bmrf_curve_3d_builder::init_cameras(const vnl_double_3x4& C0, double scale)
 
   // compute the cameras
   vcl_set<int>::const_iterator fitr = frames.begin();
-  if(fitr != frames.end()){
+  if (fitr != frames.end()){
     C_[*fitr] = C0;
     double dt = scale;
     vnl_double_3x4 Ef = C0;
@@ -96,7 +96,7 @@ bmrf_curve_3d_builder::compute_camera_offsets()
 {
   offsets_.clear();
   vcl_set<int> frames = network_->frame_numbers();
-  
+
   for ( vcl_set<int>::const_iterator fitr = frames.begin();
         fitr != frames.end();  ++fitr ) {
     double cross_ratio_sum = 0.0;
@@ -110,7 +110,7 @@ bmrf_curve_3d_builder::compute_camera_offsets()
       {
         bmrf_curvel_3d_sptr curvel = *itr2;
         double val = 0.0;
-        if(curvel->cross_ratio(*fitr,val)){
+        if (curvel->cross_ratio(*fitr,val)){
           cross_ratio_sum += val;
           cr_moment2 += val*val;
           ++count;
@@ -119,23 +119,23 @@ bmrf_curve_3d_builder::compute_camera_offsets()
     }
 
     double offset = 1.0;
-    if(fitr == frames.begin())
+    if (fitr == frames.begin())
       offset = 0.0;
-    if(count>0){
+    if (count>0){
       double avg_ratio = cross_ratio_sum/count;
       double var = 0.0;
-      if(count>1)
+      if (count>1)
         var = (cr_moment2 - avg_ratio*avg_ratio*count)/(count-1);
       vcl_cerr << "Frame "<< *fitr << ":\tmean = "<< avg_ratio << " \tstdev = " << vcl_sqrt(var) <<vcl_endl;
       offset = avg_ratio/(1.0 - avg_ratio);
     }
     offsets_[*fitr] = offset;
   }
-  
-  vcl_cerr << "All offsets" << vcl_endl;
+
+  vcl_cerr << "All offsets\n";
   for ( vcl_set<int>::const_iterator fitr = frames.begin();
         fitr != frames.end();  ++fitr ) {
-    vcl_cerr << offsets_[*fitr] << " ";
+    vcl_cerr << offsets_[*fitr] << ' ';
   }
   vcl_cerr << vcl_endl;
 }
@@ -203,10 +203,10 @@ bmrf_curve_3d_builder::compute_bounding_box(const float *inlier_fractions, bool 
   if (curves_.empty())
     return false;
 
-  
   vnl_double_3x3 rot = vnl_identity_3x3();
 
-  if( align_ep ){
+  if ( align_ep )
+  {
     vnl_double_3 base_axis(1.0, 0.0, 0.0);
     vnl_double_3 rot_axis(0.0, 1.0, 0.0);
     vnl_double_3 xz_proj(direction_.x(), 0.0, direction_.z());
@@ -221,11 +221,12 @@ bmrf_curve_3d_builder::compute_bounding_box(const float *inlier_fractions, bool 
     ang = angle(xy_proj, base_axis);
     rot_axis *= ang;
     vnl_double_3x3 rot_z = vnl_rotation_matrix(rot_axis);
-    
+
     rot = rot_z*rot_y;
   }
   // rotate only about the z-axis
-  else{
+  else
+  {
     vnl_double_3 x_axis(1.0, 0.0, 0.0);
     vnl_double_3 xy_proj(direction_.x(), direction_.y(), 0.0);
     xy_proj.normalize();
@@ -253,15 +254,12 @@ bmrf_curve_3d_builder::compute_bounding_box(const float *inlier_fractions, bool 
   vcl_vector<vnl_double_3> pts_x;
 
   // only consider points in x and y above 0.5 feet
-  for(vcl_vector<vnl_double_3>::const_iterator itr = pts_z.begin();
-      itr != pts_z.end();  ++itr)
+  for ( vcl_vector<vnl_double_3>::const_iterator itr = pts_z.begin();
+        itr != pts_z.end();  ++itr)
   {
-    if((*itr)[2] > 0.5){
-      pts_x.push_back(*itr);
-    }
+    if ((*itr)[2] > 0.5) { pts_x.push_back(*itr); }
   }
-  if(pts_x.empty())
-    pts_x = pts_z;
+  if (pts_x.empty()) { pts_x = pts_z; }
 
   vcl_vector<vnl_double_3> pts_y = pts_x;
 
@@ -270,16 +268,16 @@ bmrf_curve_3d_builder::compute_bounding_box(const float *inlier_fractions, bool 
 
   unsigned int min_ind_x = 0, min_ind_y = 0, min_ind_z = 0;
   unsigned int max_ind_x = pts_x.size()-1, max_ind_y = pts_y.size()-1, max_ind_z = pts_z.size()-1;
-  if(inlier_fractions){
-    float fraction_out = (1.0 - inlier_fractions[0])/2.0;
+  if (inlier_fractions) {
+    float fraction_out = (1.f - inlier_fractions[0])*.5f;
     min_ind_x = (unsigned int)(max_ind_x*fraction_out);
-    max_ind_x = (unsigned int)(max_ind_x*(1.0-fraction_out));
-    fraction_out = (1.0 - inlier_fractions[1])/2.0;
+    max_ind_x = (unsigned int)(max_ind_x*(1.f-fraction_out));
+    fraction_out = (1.f - inlier_fractions[1])*.5f;
     min_ind_y = (unsigned int)(max_ind_y*fraction_out);
-    max_ind_y = (unsigned int)(max_ind_y*(1.0-fraction_out));
-    fraction_out = (1.0 - inlier_fractions[2])/2.0;
+    max_ind_y = (unsigned int)(max_ind_y*(1.f-fraction_out));
+    fraction_out = (1.f - inlier_fractions[2])*.5f;
     min_ind_z = (unsigned int)(max_ind_z*fraction_out);
-    max_ind_z = (unsigned int)(max_ind_z*(1.0-fraction_out));
+    max_ind_z = (unsigned int)(max_ind_z*(1.f-fraction_out));
   }
 
   vnl_double_3 min_point(pts_x[min_ind_x][0], pts_y[min_ind_y][1], pts_z[min_ind_z][2]);
@@ -335,7 +333,7 @@ bmrf_curve_3d_builder::build(int min_prj, int min_len)
     curves_.insert(new_curve);
     growing_curves.insert(new_curve);
   }
-  
+
   // Sweep through alpha
   double da = 0.001; // step size in alpha
   for ( double alpha = min_alpha_+da; alpha < max_alpha_; alpha += da ) {
@@ -366,13 +364,13 @@ bmrf_curve_3d_builder::build(int min_prj, int min_len)
 
 
 //: Reconstruct the 3D curves from the curvel chains
-void 
+void
 bmrf_curve_3d_builder::reconstruct(float sigma)
 {
   for ( vcl_set<bmrf_curve_3d_sptr >::iterator itr = curves_.begin();
         itr != curves_.end();  ++itr)
   {
-    (*itr)->reconstruct(C_, sigma);  
+    (*itr)->reconstruct(C_, sigma);
   }
 }
 
@@ -665,7 +663,7 @@ bmrf_curve_3d_builder::append_correct( const bmrf_curvel_3d_sptr& new_c,
   unsigned int total_cover = 0;
   unsigned int total_equal = 0;
   for ( vcl_set<int>::const_iterator fitr = frames.begin();
-        fitr != frames.end();  ++fitr ) 
+        fitr != frames.end();  ++fitr )
   {
     bmrf_node_sptr p_node = prev_c->node_at_frame(*fitr);
     bmrf_node_sptr n_node = new_c->node_at_frame(*fitr);
