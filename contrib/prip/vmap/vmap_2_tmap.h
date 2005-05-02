@@ -537,7 +537,7 @@ class vmap_2_tmap: public vmap_2_map<D>,
   //:
   //  Had to move the implementation here, to avoid MSVC compiler error
   template <class M>
-  void set_structure(M const& st, vmap_2_tmap_tag tag)
+  void set_structure(M const& st, vmap_2_tmap_tag /*tag*/)
   {
     if ((self_type const*)&st != this)
     {

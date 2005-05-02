@@ -235,8 +235,8 @@ transfer_error_covar( vnl_vector<double> const& from  ) const
 //: Inverse map using pseudo-inverse of H_.
 void
 rgrl_trans_rad_dis_homo2d::
-inv_map( const vnl_vector<double>& to,
-         vnl_vector<double>& from ) const
+inv_map( const vnl_vector<double>& /*to*/,
+         vnl_vector<double>& /*from*/ ) const
 {
   assert( ! "rgrl_trans_rad_dis_homo2d::inv_map( to, from ) is not implemented!!!" );
 }

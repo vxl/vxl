@@ -114,9 +114,9 @@ compute_alignment_error( rgrl_match_set_sptr const& current_match_set ) const
 //: verify the final alignment
 rgrl_converge_status_sptr
 rgrl_convergence_on_weighted_error::
-verify( rgrl_transformation_sptr         const& xform_estimate,
+verify( rgrl_transformation_sptr         const& /*xform_estimate*/,
         rgrl_set_of<rgrl_match_set_sptr> const& current_match_sets,
-        rgrl_set_of<rgrl_scale_sptr>     const& current_scales )const
+        rgrl_set_of<rgrl_scale_sptr>     const& /*current_scales*/ )const
 {
   //
   // this should be penalized by the scaling as well.

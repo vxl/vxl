@@ -27,7 +27,7 @@ rgrl_trans_couple::
 {
 }
 
-void 
+void
 rgrl_trans_couple::
 map_loc( vnl_vector<double> const& from,
          vnl_vector<double>      & to    ) const
@@ -36,7 +36,7 @@ map_loc( vnl_vector<double> const& from,
   forward_xform_ -> map_location( from, to );
 }
 
-void 
+void
 rgrl_trans_couple::
 map_dir( vnl_vector<double> const& from_loc,
          vnl_vector<double> const& from_dir,
@@ -44,7 +44,7 @@ map_dir( vnl_vector<double> const& from_loc,
 {
   assert( forward_xform_ );
   forward_xform_ -> map_direction( from_loc, from_dir, to_dir );
-}  
+}
 
 void
 rgrl_trans_couple::
@@ -77,44 +77,44 @@ map_normal( vnl_vector<double> const  & from_loc,
   forward_xform_ -> map_normal( from_loc, from_dir, tangent_subspace, to_dir );
 }
 
-vnl_matrix<double> 
+vnl_matrix<double>
 rgrl_trans_couple::
 transfer_error_covar( vnl_vector<double> const& p ) const
 {
   assert( forward_xform_ );
   return forward_xform_ -> transfer_error_covar( p );
-}  
+}
 
-void 
+void
 rgrl_trans_couple::
 jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& from_loc ) const
 {
   assert( forward_xform_ );
   forward_xform_ -> jacobian_wrt_loc( jac, from_loc );
-}  
+}
 
-rgrl_transformation_sptr 
+rgrl_transformation_sptr
 rgrl_trans_couple::
 scale_by( double scale ) const
 {
   assert( forward_xform_ );
   return forward_xform_ -> scale_by( scale );
-}  
+}
 
 //: output transformation
-void 
+void
 rgrl_trans_couple::
-write( vcl_ostream& os ) const
+write( vcl_ostream& /*os*/ ) const
 {
-  assert( ! "rgrl_trans_couple::write() is not implemented." );  
+  assert( ! "rgrl_trans_couple::write() is not implemented." );
 }
 
 //: input transformation
-void 
+void
 rgrl_trans_couple::
-read( vcl_istream& is )
+read( vcl_istream& /*is*/ )
 {
-  assert( ! "rgrl_trans_couple::read() is not implemented." );  
+  assert( ! "rgrl_trans_couple::read() is not implemented." );
 }
 
 
@@ -131,27 +131,25 @@ inv_map( const vnl_vector<double>& to,
   forward_xform_ -> inv_map( to, initialize_next, to_delta, from, from_next_est );
 }
 
-void 
+void
 rgrl_trans_couple::
 inv_map( const vnl_vector<double>& to,
                vnl_vector<double>& from ) const
 {
   assert( forward_xform_ );
   forward_xform_ -> inv_map( to, from );
-}  
+}
 
-bool 
+bool
 rgrl_trans_couple::
 is_invertible() const
 {
-  return ( backward_xform_ );
+  return backward_xform_;
 }
 
-rgrl_transformation_sptr 
+rgrl_transformation_sptr
 rgrl_trans_couple::
 inverse_transform() const
 {
   return backward_xform_;
 }
-
-  

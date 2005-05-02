@@ -75,9 +75,9 @@ verify( rgrl_transformation_sptr    const& xform_estimate,
 
 rgrl_converge_status_sptr
 rgrl_convergence_tester::
-verify( rgrl_transformation_sptr         const& xform_estimate,
-        rgrl_set_of<rgrl_match_set_sptr> const& current_match_sets,
-        rgrl_set_of<rgrl_scale_sptr>     const& current_scales )const
+verify( rgrl_transformation_sptr         const& /*xform_estimate*/,
+        rgrl_set_of<rgrl_match_set_sptr> const& /*current_match_sets*/,
+        rgrl_set_of<rgrl_scale_sptr>     const& /*current_scales*/ )const
 {
   assert( !"should never call rgrl_convergence_tester::verify()" );
   return 0;
@@ -109,9 +109,9 @@ initialize_status( rgrl_view       const& init_view,
 
 rgrl_converge_status_sptr
 rgrl_convergence_tester::
-init_status( rgrl_view       const& init_view,
-             rgrl_scale_sptr const& prior_scale,
-             bool                   penalize_scaling ) const
+init_status( rgrl_view       const& /*init_view*/,
+             rgrl_scale_sptr const& /*prior_scale*/,
+             bool                   /*penalize_scaling*/ ) const
 {
   // nothing to initialize
   return 0;
