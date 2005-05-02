@@ -36,6 +36,20 @@ inline double vil_bilin_interp_unsafe(double x, double y, const T* data,
   return i1+(i2-i1)*normx;
 }
 
+
+//: Compute bilinear interpolation at (x,y), no bound checks. Requires 0<x<ni-2, 0<y<nj-2
+//  Image is nx * ny array of Ts. x,y element is data[xstep*x+ystep*y]
+//  No bound checks are done.
+//  This is a version of vil_bilin_interp_unsafe with the same function
+//  signature as vil_bilin_interp_safe.
+template<class T>
+inline double vil_bilin_interp_unsafe(double x, double y, const T* data,
+                                      int /*nx*/, int /*ny*/,
+                                      vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+{
+  vil_bilin_interp_unsafe(x, y, data, xstep, ystep);
+}
+
 //: Compute bilinear interpolation at (x,y), no bound checks
 //  Image is nx * ny array of Ts. x,y element is data[xstep*x+ystep*y]
 //  No bound checks are done.
@@ -60,6 +74,19 @@ inline double vil_bilin_interp_raw(double x, double y, const T* data,
   double i2 = pix1[xstep]+(pix1[xstep+ystep]-pix1[xstep])*normy;
 
   return i1+(i2-i1)*normx;
+}
+
+//: Compute bilinear interpolation at (x,y), no bound checks.
+//  Image is nx * ny array of Ts. x,y element is data[xstep*x+ystep*y]
+//  No bound checks are done.
+//  This is a version of vil_bilin_interp_raw with the same function
+//  signature as vil_bilin_interp_safe.
+template<class T>
+inline double vil_bilin_interp_raw(double x, double y, const T* data,
+                                   int /*nx*/, int /*ny*/,
+                                   vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+{
+  vil_bilin_interp_raw(x, y, data, xstep, ystep);
 }
 
 //: Compute bilinear interpolation at (x,y), with bound checks
