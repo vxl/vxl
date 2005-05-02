@@ -126,8 +126,8 @@ vcl_vector<unsigned> vnl_hungarian_algorithm( vnl_matrix<double> const& cost_in 
   // This loop will exit with a goto step_five or step_six.
   while ( true )
   {
-    unsigned i=0, j=0; // row and column of the uncovered zero, if any.
-    for ( ; i < N; ++i ) {
+    unsigned i, j; // row and column of the uncovered zero, if any.
+    for (i = 0 ; i < N; ++i ) {
       if ( ! R_cov[i] ) {
         for ( j = 0; j < N; ++j ) {
           if ( cost(i,j) == 0.0 && ! C_cov[j] ) {

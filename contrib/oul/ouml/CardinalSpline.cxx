@@ -176,7 +176,6 @@ double CardinalSpline::closest_point_t(const Vector3D &point) const
   // now do a Newton's iteration until we converge
   // do a simple interpolation
   double t = t1; // = (d2*t1+d1*t2)/(d1+d2);
-  delta = 1.0;
   int numloops=0;
   delta = distanceFunctionFirstDerivative(t, point)/
           distanceFunctionSecondDerivative(t, point);
