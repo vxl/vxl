@@ -30,7 +30,7 @@ class FrameGrabberVil
   FrameGrabberVil(const FrameGrabberVil &cpy)
   { vcl_cerr << "Can't copy framegrabber\n"; vcl_exit(-1); }
   FrameGrabberVil &operator=(const FrameGrabberVil &cpy)
-  { vcl_cerr << "Can't copy framegrabber\n"; vcl_exit(-1); }
+  { vcl_cerr << "Can't copy framegrabber\n"; vcl_exit(-1); return *this; }
   vil_image_view<vxl_byte> *grab_frame();
 
  private:
