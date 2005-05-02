@@ -19,7 +19,7 @@ class rgrl_transformation;
 class rgrl_weighter
   : public rgrl_object
 {
-public:
+ public:
   virtual ~rgrl_weighter();
 
   //:  based on the scales, compute the weights for the matches.
@@ -35,17 +35,17 @@ public:
 
   // Auxiliary functions related to the m_est
   virtual double 
-  aux_sum_weighted_residuals( rgrl_scale const&  scale,
-                              rgrl_match_set&    match_set,
-                              rgrl_transformation const&  xform ){ assert(0); return 0;}
+  aux_sum_weighted_residuals( rgrl_scale const&           /*scale*/,
+                              rgrl_match_set&             /*match_set*/,
+                              rgrl_transformation const&  /*xform*/ ){ assert(!"NYI"); return 0;}
   virtual double
-  aux_sum_rho_values( rgrl_scale const&  scale,
-                      rgrl_match_set&    match_set,
-                      rgrl_transformation const&  xform){ assert(0); return 0 ;}
+  aux_sum_rho_values( rgrl_scale const&           /*scale*/,
+                      rgrl_match_set&             /*match_set*/,
+                      rgrl_transformation const&  /*xform*/){ assert(!"NYI"); return 0 ;}
   virtual double 
-  aux_neg_log_likelihood( rgrl_scale const&  scale,
-                          rgrl_match_set&    match_set,
-                          rgrl_transformation const&  xform ){ assert(0); return 0;}
+  aux_neg_log_likelihood( rgrl_scale const&           /*scale*/,
+                          rgrl_match_set&             /*match_set*/,
+                          rgrl_transformation const&  /*xform*/ ){ assert(!"NYI"); return 0;}
 };
 
 #endif

@@ -69,12 +69,12 @@ class vil3d_image_resource
   vil3d_image_view_base_sptr get_view() const
   { return get_view (0, ni(), 0, nj(), 0, nk()); }
 
-  
+
   //: Set the size of the each voxel in the i,j,k directions.
   // You can get the voxel sizes via get_properties().
   // \return false if underlying image doesn't store pixel sizes.
-  virtual bool set_voxel_size(float i, float j, float k) {return false;}
-  
+  virtual bool set_voxel_size(float/*i*/,float/*j*/,float/*k*/) {return false;}
+
   //: Create a read/write view of a copy of this data.
   // This function will always return a
   // multi-plane scalar-pixel view of the data.
