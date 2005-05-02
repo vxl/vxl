@@ -38,7 +38,7 @@ in_range( vil_image_view< PixelType > const& image,
 template <class PixelType>
 inline
 bool
-in_range( vil_image_view< PixelType > const& image,
+in_range( vil_image_view< PixelType > const& image, // FIXME: unused
           rgrl_mask_sptr const& mask,
           vnl_vector< double > const& location )
 {
@@ -109,17 +109,14 @@ compute_matches( rgrl_feature_set const&    from_set,
 
     { // Begin debugging
       if ( (*fitr)->is_type( rgrl_feature_trace_region::type_id() ) )
-        DebugMacro_abv(1, "\n\nfrom :\n" << (*fitr)->location()
-                       << " normal: "
+        DebugMacro_abv(1, "\n\nfrom :\n" << (*fitr)->location() << " normal: "
                        << rgrl_cast<rgrl_feature_trace_region *> ( *fitr )->normal_subspace().get_column(0)
                        << "\nmapped :\n" << mapped_feature->location()
                        << rgrl_cast<rgrl_feature_trace_region *> ( mapped_feature )->normal_subspace().get_column(0) <<'\n' );
       else if ( (*fitr)->is_type( rgrl_feature_face_region::type_id() ) )
-        DebugMacro_abv(1, "\n\nfrom :\n" << (*fitr)->location()
-                       << " normal: "
+        DebugMacro_abv(1, "\n\nfrom :\n" << (*fitr)->location() << " normal: "
                        << rgrl_cast<rgrl_feature_face_region *> ( *fitr )->normal()
-                       << "\nmapped :\n" << mapped_feature->location()
-                       << " normal: "
+                       << "\nmapped :\n" << mapped_feature->location() << " normal: "
                        << rgrl_cast<rgrl_feature_face_region *> ( mapped_feature )->normal()<<'\n');
       else if ( (*fitr)->is_type( rgrl_feature_point_region::type_id() ) )
         DebugMacro_abv(1, "\n\nfrom :\n" << (*fitr)->location()
@@ -571,12 +568,11 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
     //  peak occurrence is on the boundary, compute the second
     //  derivative based on one step in from the boundary.
 
-    int idx1 = 0, idx2 = 0;   // indices into the array of responses
     int deriv_loc1 = best_off1;
     if ( deriv_loc1 == -max_offset ) ++deriv_loc1;
     else if ( deriv_loc1 == max_offset ) --deriv_loc1;
-    idx1 = deriv_loc1 + max_offset;
-    idx2 = best_off2 + max_offset;
+    int idx1 = deriv_loc1 + max_offset;   // indices into the array of responses
+    int idx2 = best_off2 + max_offset;
 
     // The best_offset so far is constrained on the discrete space.
     // Now we use a parabola to model the similarity error
@@ -687,7 +683,7 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
 template <class PixelType>
 double
 rgrl_matcher_pseudo<PixelType> ::
-compute_response( vnl_double_2                  const& mapped_location,
+compute_response( vnl_double_2                  const& mapped_location, // FIXME: unused
                   rgrl_mapped_pixel_vector_type const& mapped_pixels,
                   vnl_double_2                  const& shift ) const
 {

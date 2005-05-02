@@ -563,12 +563,11 @@ match_mapped_region( rgrl_feature_sptr         mapped_feature,
     //  peak occurrence is on the boundary, compute the second
     //  derivative based on one step in from the boundary.
 
-    int idx1 = 0, idx2 = 0;   // indices into the array of responses
     int deriv_loc1 = best_off1;
     if ( deriv_loc1 == -max_offset ) ++deriv_loc1;
     else if ( deriv_loc1 == max_offset ) --deriv_loc1;
-    idx1 = deriv_loc1 + max_offset;
-    idx2 = best_off2 + max_offset;
+    int idx1 = deriv_loc1 + max_offset;   // indices into the array of responses
+    int idx2 = best_off2 + max_offset;
 
     // The best_offset so far is constrained on the discrete space.
     // Now we use a parabola to model the similarity error
@@ -668,7 +667,7 @@ match_mapped_region( rgrl_feature_sptr         mapped_feature,
 template <class PixelType>
 double
 rgrl_matcher_pseudo_3d<PixelType> ::
-compute_response( vnl_double_3                  const& mapped_location,
+compute_response( vnl_double_3                  const& mapped_location, // FIXME: unused
                   rgrl_mapped_pixel_vector_type const& mapped_pixels,
                   vnl_double_3                  const& shift ) const
 {
