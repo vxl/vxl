@@ -103,7 +103,7 @@ gevd_fold::DetectEdgels(const gevd_bufferxy& image,
   {
     mag = gevd_float_operators::SimilarBuffer(image);
     angle = gevd_float_operators::SimilarBuffer(image);
-    const float kdeg = 180.0/vnl_math::pi;
+    const float kdeg = 180.f*float(vnl_math::one_over_pi);
     for (int j = 0; j < image.GetSizeY(); j++)
       for (int i = 0; i < image.GetSizeX(); i++)
         if ((floatPixel(*mag, i, j) = floatPixel(*curvature, i, j)))
@@ -411,7 +411,7 @@ gevd_fold::NoiseResponseToFilter(float noiseSigma,
 {
   return noiseSigma /          // white noise
          (float)vcl_pow((double)smoothSigma, 2.5) * // size of filter ddG
-         ((float)vcl_sqrt(0.375 / vcl_sqrt(vnl_math::pi))) *
+         ((float)vcl_sqrt(0.1875 * vnl_math::two_over_sqrtpi)) *
          filterFactor;        // factor in Hessian image
 }
 
