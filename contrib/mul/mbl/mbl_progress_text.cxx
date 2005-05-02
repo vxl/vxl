@@ -20,7 +20,7 @@ vcl_string mbl_progress_text::is_a() const
 
 
 void mbl_progress_text::on_set_estimated_iterations(const vcl_string& identifier,
-                                           const int total_iterations)
+                                                    const int total_iterations) // FIXME: unused
 { vcl_cout << "Starting " << identifier << vcl_endl; }
 
 
@@ -28,7 +28,7 @@ void mbl_progress_text::on_set_progress(const vcl_string& identifier,
                                const int progress)
 {
   vcl_cout << "Progress for " << identifier << " is " << progress
-           << " (out of " << estimated_iterations(identifier) << ")"
+           << " (out of " << estimated_iterations(identifier) << ')'
            << vcl_endl;
 }
 
