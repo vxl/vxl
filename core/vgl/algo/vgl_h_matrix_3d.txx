@@ -320,9 +320,9 @@ set_rotation_roll_pitch_yaw(T yaw, T pitch, T roll)
   typedef typename vnl_numeric_traits<T>::real_t real_t;
   real_t ax = yaw/2, ay = pitch/2, az = roll/2;
 
-  vnl_quaternion<T> qx(T(vcl_sin(ax)),0,0,T(vcl_cos(ax)));
-  vnl_quaternion<T> qy(0,T(vcl_sin(ay)),0,T(vcl_cos(ay)));
-  vnl_quaternion<T> qz(0,0,T(vcl_sin(az)),T(vcl_cos(az)));
+  vnl_quaternion<T> qx((T)vcl_sin(ax),0,0,(T)vcl_cos(ax));
+  vnl_quaternion<T> qy(0,(T)vcl_sin(ay),0,(T)vcl_cos(ay));
+  vnl_quaternion<T> qz(0,0,(T)vcl_sin(az),(T)vcl_cos(az));
   vnl_quaternion<T> q = qz*qy*qx;
 
   vnl_matrix_fixed<T,3,3> R = q.rotation_matrix_transpose();
