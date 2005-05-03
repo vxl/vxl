@@ -1,7 +1,7 @@
 # mul/vil3d/algo/CMakeLists.txt
 
 SET(vil3d_algo_sources
-  vil3d_gauss_reduce.h
+  vil3d_gauss_reduce.h		vil3d_gauss_reduce.txx
   vil3d_threshold.h           vil3d_threshold.txx
   vil3d_grad_1x3.h            vil3d_grad_1x3.cxx           vil3d_grad_1x3.txx
   vil3d_structuring_element.h vil3d_structuring_element.cxx
