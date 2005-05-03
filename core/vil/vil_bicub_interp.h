@@ -32,7 +32,7 @@ inline double vil_bicub_interp_unsafe(double x, double y, const T* data,
                                       int /*nx*/, int /*ny*/,
                                       vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 {
-  vil_bicub_interp_unsafe(x, y, data, xstep, ystep);
+  return vil_bicub_interp_unsafe(x, y, data, xstep, ystep);
 }
 
 
@@ -55,7 +55,7 @@ inline double vil_bicub_interp_raw(double x, double y, const T* data,
                                    int /*nx*/, int /*ny*/,
                                    vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 {
-  vil_bicub_interp_raw(x, y, data, xstep, ystep);
+  return vil_bicub_interp_raw(x, y, data, xstep, ystep);
 }
                             
 //: Compute bicubic interpolation at (x,y), with bound checks

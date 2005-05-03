@@ -47,7 +47,7 @@ inline double vil_bilin_interp_unsafe(double x, double y, const T* data,
                                       int /*nx*/, int /*ny*/,
                                       vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 {
-  vil_bilin_interp_unsafe(x, y, data, xstep, ystep);
+  return vil_bilin_interp_unsafe(x, y, data, xstep, ystep);
 }
 
 //: Compute bilinear interpolation at (x,y), no bound checks
@@ -86,7 +86,7 @@ inline double vil_bilin_interp_raw(double x, double y, const T* data,
                                    int /*nx*/, int /*ny*/,
                                    vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 {
-  vil_bilin_interp_raw(x, y, data, xstep, ystep);
+  return vil_bilin_interp_raw(x, y, data, xstep, ystep);
 }
 
 //: Compute bilinear interpolation at (x,y), with bound checks

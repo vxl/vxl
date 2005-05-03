@@ -17,10 +17,10 @@
 inline bool vil_grid_corner_in_image(double x0, double y0,
                                      const vil_image_view_base& image)
 {
-  if (x0<2) return false;
-  if (y0<2) return false;
-  if (x0>image.ni()-3) return false;
-  if (y0>image.nj()-3) return false;
+  if (x0<1) return false;
+  if (y0<1) return false;
+  if (x0>image.ni()-2) return false;
+  if (y0>image.nj()-2) return false;
   return true;
 }
 
@@ -69,7 +69,7 @@ void vil_resample_bicub(const vil_image_view<sType>& src_image,
         double x=x1, y=y1;  // Start of j-th row
         dType *dpt = row;
         for (int i=0;i<n1;++i,x+=dx1,y+=dy1,dpt+=d_istep)
-          *dpt = (dType) vil_bicub_interp_raw(x,y,plane0,istep,jstep);
+          *dpt = (dType) vil_bicub_interp_raw(x,y,plane0,ni,nj,istep,jstep);
       }
     }
     else
@@ -82,7 +82,7 @@ void vil_resample_bicub(const vil_image_view<sType>& src_image,
         for (int i=0;i<n1;++i,x+=dx1,y+=dy1,dpt+=d_istep)
         {
           for (unsigned int p=0;p<np;++p)
-            dpt[p*d_pstep] = (dType) vil_bicub_interp_raw(x,y,plane0+p*pstep,istep,jstep);
+            dpt[p*d_pstep] = (dType) vil_bicub_interp_raw(x,y,plane0+p*pstep,ni,nj,istep,jstep);
         }
       }
     }
