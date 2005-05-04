@@ -140,6 +140,18 @@ SOURCE=.\Templates/vil3d_threshold+int-.cxx
 # Begin Source File
 SOURCE=.\Templates/vil3d_grad_1x3+int_32.float-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_gauss_reduce+byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_gauss_reduce+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_gauss_reduce+int-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_gauss_reduce+int_16-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -196,6 +208,9 @@ SOURCE=.\vil3d_fill_boundary.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil3d_anisotropic_filter.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_gauss_reduce.txx
 # End Source File
 # End Group
 # End Target
