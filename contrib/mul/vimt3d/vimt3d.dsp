@@ -120,9 +120,6 @@ SOURCE=.\Templates/vimt3d_image_3d_of+float-.cxx
 SOURCE=.\Templates/vimt3d_image_3d_of+int-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vimt3d_image_3d_of+short-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vimt3d_sample_grid_trilin+float.double-.cxx
 # End Source File
 # Begin Source File
