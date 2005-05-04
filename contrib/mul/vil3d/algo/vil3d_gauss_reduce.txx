@@ -1,7 +1,6 @@
 // This is mul/vil3d/algo/vil3d_gauss_reduce.txx
 #ifndef vil3d_gauss_reduce_txx_
 #define vil3d_gauss_reduce_txx_
-
 //:
 // \file
 // \brief Functions to smooth and sub-sample 3D images in one direction
@@ -44,9 +43,9 @@ void vil3d_gauss_reduce_i(const T* src_im,
 //  Resulting image is (ni+1)/2 x (nj+1)/2 x (nk+1)/2
 template<class T>
 void vil3d_gauss_reduce(const vil3d_image_view<T>& src_im,
-                               vil3d_image_view<T>& dest_im,
-                               vil3d_image_view<T>& work_im1,
-                               vil3d_image_view<T>& work_im2)
+                              vil3d_image_view<T>& dest_im,
+                              vil3d_image_view<T>& work_im1,
+                              vil3d_image_view<T>& work_im2)
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
@@ -95,8 +94,8 @@ void vil3d_gauss_reduce(const vil3d_image_view<T>& src_im,
 //  Resulting image is (ni+1)/2 x (nj+1)/2 x nk
 template<class T>
 void vil3d_gauss_reduce_ij(const vil3d_image_view<T>& src_im,
-                                  vil3d_image_view<T>& dest_im,
-                                  vil3d_image_view<T>& work_im1)
+                                 vil3d_image_view<T>& dest_im,
+                                 vil3d_image_view<T>& work_im1)
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
@@ -136,8 +135,8 @@ void vil3d_gauss_reduce_ij(const vil3d_image_view<T>& src_im,
 //  Resulting image is (ni+1)/2 x nj x (nk+1)/2
 template<class T>
 void vil3d_gauss_reduce_ik(const vil3d_image_view<T>& src_im,
-                                  vil3d_image_view<T>& dest_im,
-                                  vil3d_image_view<T>& work_im1)
+                                 vil3d_image_view<T>& dest_im,
+                                 vil3d_image_view<T>& work_im1)
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
@@ -177,8 +176,8 @@ void vil3d_gauss_reduce_ik(const vil3d_image_view<T>& src_im,
 //  Resulting image is ni x (nj+1)/2 x (nk+1)/2
 template<class T>
 void vil3d_gauss_reduce_jk(const vil3d_image_view<T>& src_im,
-                                  vil3d_image_view<T>& dest_im,
-                                  vil3d_image_view<T>& work_im1)
+                                 vil3d_image_view<T>& dest_im,
+                                 vil3d_image_view<T>& work_im1)
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
@@ -216,24 +215,24 @@ void vil3d_gauss_reduce_jk(const vil3d_image_view<T>& src_im,
 #undef VIL3D_GAUSS_REDUCE_INSTANTIATE
 #define VIL3D_GAUSS_REDUCE_INSTANTIATE(T) \
 template void vil3d_gauss_reduce_i(const T* src_im,   \
-                                 unsigned src_ni, unsigned src_nj, unsigned src_nk, \
-                                 vcl_ptrdiff_t s_i_step, vcl_ptrdiff_t s_j_step,  \
-                                 vcl_ptrdiff_t s_k_step,  \
-                                 T* dest_im,  \
-                                 vcl_ptrdiff_t d_i_step,  \
-                                 vcl_ptrdiff_t d_j_step, vcl_ptrdiff_t d_k_step); \
-template void vil3d_gauss_reduce(const vil3d_image_view<T>& src_im, \
-                               vil3d_image_view<T>& dest_im,  \
-                               vil3d_image_view<T>& work_im1, \
-                               vil3d_image_view<T>& work_im2);  \
-template void vil3d_gauss_reduce_ij(const vil3d_image_view<T>& src_im,  \
-                                  vil3d_image_view<T>& dest_im, \
-                                  vil3d_image_view<T>& work_im1); \
-template void vil3d_gauss_reduce_ik(const vil3d_image_view<T>& src_im,  \
-                                  vil3d_image_view<T>& dest_im, \
-                                  vil3d_image_view<T>& work_im1); \
-template void vil3d_gauss_reduce_jk(const vil3d_image_view<T>& src_im,  \
-                                  vil3d_image_view<T>& dest_im, \
-                                  vil3d_image_view<T>& work_im1)
+                                   unsigned src_ni, unsigned src_nj, unsigned src_nk, \
+                                   vcl_ptrdiff_t s_i_step, vcl_ptrdiff_t s_j_step,  \
+                                   vcl_ptrdiff_t s_k_step,  \
+                                   T* dest_im,  \
+                                   vcl_ptrdiff_t d_i_step,  \
+                                   vcl_ptrdiff_t d_j_step, vcl_ptrdiff_t d_k_step); \
+template void vil3d_gauss_reduce(const vil3d_image_view<T >& src_im, \
+                                 vil3d_image_view<T >& dest_im,  \
+                                 vil3d_image_view<T >& work_im1, \
+                                 vil3d_image_view<T >& work_im2);  \
+template void vil3d_gauss_reduce_ij(const vil3d_image_view<T >& src_im,  \
+                                    vil3d_image_view<T >& dest_im, \
+                                    vil3d_image_view<T >& work_im1); \
+template void vil3d_gauss_reduce_ik(const vil3d_image_view<T >& src_im,  \
+                                    vil3d_image_view<T >& dest_im, \
+                                    vil3d_image_view<T >& work_im1); \
+template void vil3d_gauss_reduce_jk(const vil3d_image_view<T >& src_im,  \
+                                    vil3d_image_view<T >& dest_im, \
+                                    vil3d_image_view<T >& work_im1)
 
 #endif // vil3d_gauss_reduce_txx_
