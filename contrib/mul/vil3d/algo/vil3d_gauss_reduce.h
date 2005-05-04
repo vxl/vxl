@@ -63,4 +63,6 @@ void vil3d_gauss_reduce_jk(const vil3d_image_view<T>& src_im,
                                   vil3d_image_view<T>& dest_im,
                                   vil3d_image_view<T>& work_im1);
 
+#define VIL3D_GAUSS_REDUCE_INSTANTIATE(T) extern "please include vil3d/vil3d_gauss_reduce.txx instead"
+
 #endif // vil3d_gauss_reduce_h_
