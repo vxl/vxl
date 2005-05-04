@@ -214,7 +214,7 @@ void vil3d_gauss_reduce_jk(const vil3d_image_view<T>& src_im,
 }
 
 #undef VIL3D_GAUSS_REDUCE_INSTANTIATE
-#define VIL3D_GAUSS_REDUCE_INSTANTIATE(T ) \
+#define VIL3D_GAUSS_REDUCE_INSTANTIATE(T) \
 template void vil3d_gauss_reduce_i(const T* src_im,   \
                                  unsigned src_ni, unsigned src_nj, unsigned src_nk, \
                                  vcl_ptrdiff_t s_i_step, vcl_ptrdiff_t s_j_step,  \
