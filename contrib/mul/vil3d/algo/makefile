@@ -20,6 +20,7 @@ SOURCES += vil3d_histogram_equalise.cxx
 SOURCES += vil3d_distance_transform.cxx
 SOURCES += vil3d_fill_boundary.cxx
 MANPAGE_SOURCES += vil3d_anisotropic_filter.h
+MANPAGE_SOURCES += vil3d_gauss_reduce.txx
 
 ################################
 include ${IUEROOT}/config/top.mk
