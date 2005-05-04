@@ -19,7 +19,7 @@ SET(vimt3d_sources
 AUX_SOURCE_DIRECTORY(Templates vimt3d_sources)
 
 ADD_LIBRARY(vimt3d ${vimt3d_sources})
-TARGET_LINK_LIBRARIES(vimt3d vil3d vimt vnl)
+TARGET_LINK_LIBRARIES(vimt3d vil3d vil3d_algo vimt vnl)
 
 IF (BUILD_TESTING)
   SUBDIRS(tests)
