@@ -139,6 +139,8 @@ SET(vgui_sources
   vgui_viewer3D_tableau.cxx vgui_viewer3D_tableau.h         vgui_viewer3D_tableau_sptr.h
   internals/trackball.c              internals/trackball.h
 
+  vgui_slider_tableau.cxx       vgui_slider_tableau.h       vgui_slider_tableau_sptr.h
+
   # dialog classes
   vgui_dialog.cxx                    vgui_dialog.h
   internals/vgui_dialog_impl.cxx     internals/vgui_dialog_impl.h

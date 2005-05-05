@@ -33,6 +33,8 @@ ADD_EXECUTABLE( example_text_windows example_text_windows.cxx)
 ADD_EXECUTABLE( example_sprite example_sprite.cxx )
 TARGET_LINK_LIBRARIES( example_sprite vgui vil vul )
 ADD_EXECUTABLE( example_idle_processing example_idle_processing.cxx )
+ADD_EXECUTABLE( example_slider example_slider.cxx)
+
 
 SET(basic_sources
     basic_app.cxx
