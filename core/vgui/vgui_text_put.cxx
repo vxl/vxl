@@ -11,6 +11,7 @@
 
 #include "vgui_text_put.h"
 #include <vgui/vgui_gl.h>
+#include <vgui/vgui_config.h>
 
 #if defined(HAS_GLUT) && defined(VGUI_USE_GLUT)
 #include <vgui/vgui_glut.h>

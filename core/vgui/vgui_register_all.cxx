@@ -39,6 +39,8 @@
 // linked in and initialised. However, you're on your own if you
 // attempt this. -- Amitha Perera.
 
+#include <vgui/vgui_config.h>
+
 extern int vgui_gtk_tag_function();
 extern int vgui_gtk2_tag_function();
 extern int vgui_glut_tag_function();

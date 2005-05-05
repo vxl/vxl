@@ -1,0 +1,44 @@
+// This is core/vgui/vgui_config.h.in
+#ifndef vgui_config_h_in_
+#define vgui_config_h_in_
+//:
+// \file
+// This source file is configured from vxl-SOURCE/core/vgui/vgui_config.h.in to
+// vxl-BUILD/core/vgui/vgui_config.h by vxl's configuration process.
+//
+// Lists the configuration flags used when building vgui
+
+#cmakedefine GLUT_FOUND
+#ifdef GLUT_FOUND
+#  define HAS_GLUT
+#endif
+#undef GLUT_FOUND
+
+#cmakedefine OPENGL_XMESA_FOUND
+#ifdef OPENGL_XMESA_FOUND
+#  define VGUI_MESA 1
+#else
+#  define VGUI_MESA 0
+#endif
+#undef OPENGL_XMESA_FOUND
+
+#cmakedefine MFC_FOUND
+#ifdef MFC_FOUND
+#  define VGUI_MFC
+#endif
+#undef MFC_FOUND
+
+#cmakedefine X11_FOUND
+#ifdef X11_FOUND
+#  define HAS_X11
+#endif
+#undef X11_FOUND
+
+#cmakedefine VGUI_USE_GLUT
+#cmakedefine VGUI_USE_QT
+#cmakedefine VGUI_USE_MFC
+#cmakedefine VGUI_USE_GTK
+#cmakedefine VGUI_USE_GTK2
+
+
+#endif // vgui_config_h_in_

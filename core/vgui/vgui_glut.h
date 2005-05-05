@@ -1,7 +1,8 @@
 #ifndef vgui_glut_h
 #define vgui_glut_h
 
-#if HAS_GLUT
+#include <vgui/vgui_config.h>
+#ifdef HAS_GLUT
 
 // See vgui_glu.h
 // There used to be logic here to deal issues related to GLUT's use of

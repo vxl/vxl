@@ -37,18 +37,10 @@ IF (OPENGL_FOUND)
     INCLUDE(${CMAKE_ROOT}/Modules/FindMFC.cmake)
   ENDIF(NOT MINGW)
 
-  ADD_DEFINITIONS( -DHAS_OPENGL)
   INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
   IF( GLUT_FOUND )
     INCLUDE_DIRECTORIES(${GLUT_INCLUDE_DIR})
-    ADD_DEFINITIONS( -DHAS_GLUT)
   ENDIF( GLUT_FOUND )
-
-  IF( OPENGL_XMESA_FOUND )
-    ADD_DEFINITIONS( -DVGUI_MESA=1 )
-  ELSE( OPENGL_XMESA_FOUND )
-    ADD_DEFINITIONS( -DVGUI_MESA=0 )
-  ENDIF( OPENGL_XMESA_FOUND )
 
 SET(vgui_sources
   vgui_fwd.h
@@ -193,14 +185,12 @@ IF (QV_FOUND)
 ENDIF (QV_FOUND)
 
 IF (MFC_FOUND)
-  ADD_DEFINITIONS(-DHAS_MFC)
   #SET(vgui_sources ${vgui_sources}
   #  internals/vgui_accelerate_mfc.cxx internals/vgui_accelerate_mfc.h
   #)
 ENDIF (MFC_FOUND)
 
 IF (X11_FOUND)
-  ADD_DEFINITIONS(-DHAS_X11)
   INCLUDE_DIRECTORIES(${X11_INCLUDE_DIR})
   SET(vgui_sources ${vgui_sources}
     internals/vgui_accelerate_x11.cxx internals/vgui_accelerate_x11.h
@@ -228,8 +218,6 @@ IF (GLUT_FOUND)
   OPTION(VGUI_USE_GLUT "Should Glut support be compiled into vgui?" YES)
 
   IF(VGUI_USE_GLUT)
-
-    ADD_DEFINITIONS( "-DVGUI_USE_GLUT" )
 
     INCLUDE_DIRECTORIES(${GLUT_INCLUDE_DIR})
 
@@ -268,8 +256,6 @@ IF (QT_FOUND)
   OPTION(VGUI_USE_QT "Should Qt support be compiled into vgui?" YES)
 
   IF(VGUI_USE_QT)
-
-    ADD_DEFINITIONS( ${QT_DEFINITIONS} "-DVGUI_USE_QT" )
 
     INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR})
     ADD_DEFINITIONS(${QT_DEFINITIONS})
@@ -311,8 +297,6 @@ IF (MFC_FOUND)
 
   IF(VGUI_USE_MFC)
 
-    ADD_DEFINITIONS( "-DVGUI_USE_MFC" )
-
     SET(vgui_mfc_sources
       impl/mfc/vgui_mfc.cxx             impl/mfc/vgui_mfc.h
       impl/mfc/vgui_mfc_adaptor.cxx     impl/mfc/vgui_mfc_adaptor.h
@@ -343,8 +327,6 @@ IF (GTK_GL_FOUND)
   OPTION(VGUI_USE_GTK "Should GTK support be compiled into vgui?" YES)
 
   IF(VGUI_USE_GTK)
-
-    ADD_DEFINITIONS( "-DVGUI_USE_GTK" )
 
     INCLUDE_DIRECTORIES(${GTK_INCLUDE_DIR})
 
@@ -381,8 +363,6 @@ IF (GTK2_FOUND)
     ENDIF(VGUI_USE_GTK)
 
 
-    ADD_DEFINITIONS( "-DVGUI_USE_GTK2" )
-
     # This puts the include directories and whatever compiler flags
     # are necessary for GTK2
     ADD_DEFINITIONS( ${GTK2_DEFINITIONS} )
@@ -407,11 +387,14 @@ ENDIF (GTK2_FOUND)
 # END TOOLKIT IMPLEMENTATIONS
 ######################################################################
 
+# Store chosen configuration in to the config file. This allows files
+# that depend on these configuration parameters to be automatically
+# recompiled when the config changes.
 
-# This file uses the -DVGUI_USE_* preprocessor definitions set by
-# the implementations to register each toolkit that was compiled
-# in.
+CONFIGURE_FILE( ${vxl_SOURCE_DIR}/core/vgui/vgui_config.h.in
+                ${vxl_BINARY_DIR}/core/vgui/vgui_config.h @ONLY IMMEDIATE )
 
+# Register each toolkit that was compiled in.
 SET( vgui_sources ${vgui_sources}
   vgui_register_all.cxx
 )
