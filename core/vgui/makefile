@@ -10,7 +10,11 @@ IMMEDIATE_LIBS += -lvil1 -lvil -lvbl -lvnl -lvul
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
+# This is where configure will put vgui/vgui_config.h
+INCDIRS += $(RELOBJDIR)/include
+
 # basic classes
+MANPAGE_SOURCES += vgui_config.h.in
 SOURCES += vgui.cxx
 SOURCES += vgui_toolkit.cxx
 SOURCES += vgui_tag.cxx
@@ -103,6 +107,8 @@ SOURCES += vgui_rubberband_tableau.cxx
 MANPAGE_SOURCES += vgui_rubberband_tableau_sptr.h
 SOURCES += vgui_loader_tableau.cxx
 MANPAGE_SOURCES += vgui_loader_tableau_sptr.h
+SOURCES += vgui_slider_tableau.cxx
+MANPAGE_SOURCES += vgui_slider_tableau_sptr.h
 SOURCES += vgui_color_text.cxx
 SOURCES += vgui_event_server.cxx
 SOURCES += vgui_error_dialog.cxx
@@ -143,7 +149,7 @@ SOURCES += internals/vgui_dialog_impl.cxx
 SOURCES += vgui_statusbuf.cxx
 MANPAGE_SOURCES += vgui_statusbar.h
 
-# vil2 support
+# vil support
 SOURCES += vgui_vil_image_renderer.cxx
 
 # internals
@@ -168,7 +174,7 @@ MANPAGE_SOURCES += vgui_glx.h
 SOURCES += internals/vgui_accelerate.cxx
 SOURCES += internals/vgui_accelerate_tag.cxx
 MANPAGE_SOURCES += internals/vgui_gl_selection_macros.h
-ifeq (1,$(HAS_X11))
+ifeq ($(HAS_X11),1)
 SOURCES += internals/vgui_accelerate_x11.cxx
 endif
 
@@ -221,7 +227,7 @@ AUX_SOURCE_DIRECTORY += impl/gtk/Templates
 endif
 endif
 
-ifeq ($(HAS_QGL), 1)
+ifeq ($(HAS_QGL),1)
 SOURCES += impl/qt/vgui_qt.cxx
 SOURCES += impl/qt/vgui_qt_adaptor.cxx
 SOURCES += impl/qt/vgui_qt_dialog_impl.cxx
@@ -239,14 +245,9 @@ MOCSOURCES := $(MOCHEADERS:.$(HPPEXT)=_mocced.$(CPPEXT))
 SOURCES += ${MOCSOURCES}
 DEFINES += -DQT_NO_STL
 
-ifeq ($(OS),OSF1V4)
-FLAGS_impl/qt/vgui_qt_adaptor_mocced.cxx := -O0
-# because of an "internal compile error" of gcc2.95 whenever optimisation is on, even -O1
 endif
 
-endif
-
-ifeq ($(HAS_MFC), 1)
+ifeq ($(HAS_MFC),1)
 SOURCES += impl/mfc/vgui_mfc.cxx
 SOURCES += impl/mfc/vgui_mfc_adaptor.cxx
 SOURCES += impl/mfc/vgui_mfc_app.cxx
@@ -290,12 +291,46 @@ endif
 include ${IUEROOT}/config/top-rules.mk
 ######################################
 
+# configure stuff:
+ifeq ($(HAS_GLUT),1)
+SUBS += -e /GLUT_FOUND/s/cmake//
+endif
+ifeq ($(OPENGL_IS_MESA),1)
+SUBS += -e /OPENGL_XMESA_FOUND/s/cmake//
+endif
+ifeq ($(HAS_MFC),1)
+SUBS += -e /MFC_FOUND/s/cmake//
+endif
+ifeq ($(HAS_X11),1)
+SUBS += -e /X11_FOUND/s/cmake//
+endif
+ifeq ($(USE_GLUT),1)
+SUBS += -e /VGUI_USE_GLUT/s/cmake//
+endif
+ifeq ($(USE_QT),1)
+SUBS += -e /VGUI_USE_QT/s/cmake//
+endif
+ifeq ($(USE_MFC),1)
+SUBS += -e /VGUI_USE_MFC/s/cmake//
+endif
+ifeq ($(HAS_GTK2),1)
+SUBS += -e /VGUI_USE_GTK2/s/cmake//
+else
+ifeq ($(HAS_GTKGLAREA),1)
+SUBS += -e /VGUI_USE_GTK$$/s/cmake//
+endif
+endif
+xall:: $(RELOBJDIR)/include/vgui/vgui_config.h
+$(RELOBJDIR)/include/vgui/vgui_config.h: vgui_config.h.in
+	mkdir -p $(RELOBJDIR)/include/vgui
+	sed $(SUBS) -e 's/cmakedefine/undef/' $^ > $@
+
 # on HP unix, this library has become too big, so it needs -fPIC
 ifeq "HP-UX" "$(findstring HP-UX,$(OS))"
 pic = $(PIC)
 endif
 
-ifeq ($(HAS_QGL), 1)
+ifeq ($(HAS_QGL),1)
 %_mocced.$(CPPEXT): %.$(HPPEXT)
 	@echo "--- Moccing $<"
 	$(MOC) $< -o $@

@@ -9,6 +9,7 @@ include ${IUEROOT}/core/vgl/config.mk
 include ${IUEROOT}/core/vpl/config.mk
 include ${IUEROOT}/core/vbl/config.mk
 include ${IUEROOT}/core/vul/config.mk
+INCDIRS += ${IUEROOT}/core/vgui/$(RELOBJDIR)/include
 
 # from vgui/impl:
 
