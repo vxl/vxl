@@ -22,7 +22,6 @@
 #include <bsol/bsol_algs.h>
 #include <brip/brip_roi.h>
 
-
 //------------------------------------------------------------
 //:  Convolve with a kernel
 //   It's assumed that the kernel is square with odd dimensions
@@ -1055,7 +1054,34 @@ brip_vil_float_ops::convert_to_float(vil_image_view<unsigned char> const& image)
       output(x,y) = (float)image(x,y);
   return output;
 }
-
+vil_image_view<bool>
+    brip_vil_float_ops::convert_to_bool(vil_image_view<unsigned char> const& image)
+{
+    vil_image_view<bool> output;
+    int w = image.ni(), h = image.nj();
+    output.set_size(w,h);
+    for (int y = 0; y<h; y++)
+        for (int x = 0; x<w; x++)
+            if(image(x,y) >128)
+                output(x,y)=true;
+            else
+                output(x,y)=false;
+    return output;
+}
+vil_image_view<bool>
+ brip_vil_float_ops::convert_float_to_bool(vil_image_view<float> const& image)
+{
+    vil_image_view<bool> output;
+    int w = image.ni(), h = image.nj();
+    output.set_size(w,h);
+    for (int y = 0; y<h; y++)
+        for (int x = 0; x<w; x++)
+            if(image(x,y) >128.0)
+                output(x,y)=true;
+            else
+                output(x,y)=false;
+    return output;
+}
 vil_image_view<float>
 brip_vil_float_ops::convert_to_float(vil_image_view<vil_rgb<vxl_byte> > const& image)
 {

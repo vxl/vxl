@@ -159,6 +159,14 @@ class brip_vil_float_ops
   static vil_image_view<float>
     convert_to_float(vil_image_view<unsigned char> const& image);
 
+   //: converts a byte image to a bool image
+  static vil_image_view<bool>
+    convert_to_bool(vil_image_view<unsigned char> const& image);
+
+  static vil_image_view<bool> 
+      convert_float_to_bool(vil_image_view<float> const& image);
+
+
   //: converts an RGB image to a float image
   static vil_image_view<float>
     convert_to_float(vil_image_view<vil_rgb<vxl_byte> > const& image);
