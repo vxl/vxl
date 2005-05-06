@@ -44,6 +44,7 @@ IF (OPENGL_FOUND)
 
 SET(vgui_sources
   vgui_fwd.h
+  vgui_config.h.in
 
   # basic classes
   vgui.cxx                      vgui.h
