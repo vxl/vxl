@@ -91,6 +91,8 @@
 #include <vgui/vgui_section_render.h>
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_shell_tableau_sptr.h>
+#include <vgui/vgui_slider_tableau.h>
+#include <vgui/vgui_slider_tableau_sptr.h>
 #include <vgui/vgui_soview.h>
 #include <vgui/vgui_soview2D.h>
 #include <vgui/vgui_soview3D.h>
@@ -120,6 +122,5 @@
 #include <vgui/vgui_window.h>
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_wrapper_tableau_sptr.h>
-
 
 int main() { return 0; }
