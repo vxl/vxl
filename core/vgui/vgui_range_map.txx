@@ -105,10 +105,8 @@ compute_byte_table(const Type min, const Type max, const float gamma,
     //The values have to be shifted by min
     Type mint = vil_pixel_traits<Type>::minval();
     Type maxt = vil_pixel_traits<Type>::maxval();
-    for (Type i = mint; i <= maxt; ++i)
-    {
-      bmap[i-mint] = map_pixel_byte(i, min, max, gamma, ratio);
-    }
+    for (unsigned int i = 0; i <= (unsigned int)(maxt-mint); ++i)
+      bmap[i] = map_pixel_byte(mint+i, min, max, gamma, ratio);
   }
   return bmap;
 }
@@ -124,10 +122,8 @@ compute_float_table(const Type min, const Type max, const float gamma,
     return null;
   vbl_array_1d<float> fmap(size_, 0);
   Type maxt = vil_pixel_traits<Type>::maxval();
-  for (Type i = 0; i <= maxt; ++i)
-  {
-    fmap[i] = map_pixel_float(i, min, max, gamma, ratio);
-  }
+  for (unsigned int i = 0; i <= (unsigned int)maxt; ++i)
+    fmap[i] = map_pixel_float(Type(i), min, max, gamma, ratio);
   return fmap;
 }
 
