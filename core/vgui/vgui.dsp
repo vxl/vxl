@@ -563,6 +563,9 @@ SOURCE=.\impl/gtk2/vgui_gtk2_window.cxx
 # Begin Source File
 SOURCE=.\vgui_vil_image_renderer.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vgui_slider_tableau.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -1093,6 +1096,15 @@ SOURCE=.\vgui_range_map_params_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\vgui_command_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgui_slider_tableau.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgui_slider_tableau_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgui_config.h.in
 # End Source File
 # End Group
 # End Target
