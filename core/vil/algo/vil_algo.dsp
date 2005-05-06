@@ -234,6 +234,9 @@ SOURCE=.\Templates/vil_histogram+unsigned_short-.cxx
 SOURCE=.\Templates/vil_abs_shuffle_distance+byte.byte-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil_gauss_reduce+int_16-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vil_histogram.cxx
 # End Source File
 # Begin Source File
