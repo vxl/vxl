@@ -4,6 +4,7 @@
 // \file
 
 #include <vcl_compiler.h>
+#include <vgui/vgui_config.h>
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
 // fix windows gl.h :
