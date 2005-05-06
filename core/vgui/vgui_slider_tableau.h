@@ -1,6 +1,5 @@
 #ifndef vgui_slider_tableau_h_
 #define vgui_slider_tableau_h_
-
 //:
 // \file
 // \author Amitha Perera
@@ -19,7 +18,7 @@
 // to provide platform-independent scrollbar-like capabilities. (It
 // may be stretching the design parameters of vgui, but hey...)
 //
-// One use of it is in conjuction with vgui_poly_tableau to place the
+// One use of it is in conjunction with vgui_poly_tableau to place the
 // slider somewhere. For example:
 // \code
 //   vgui_tableau_sptr main_tab; // some tableau
@@ -34,7 +33,7 @@
 class vgui_slider_tableau
   : public vgui_tableau
 {
-public:
+ public:
   //: Direction of slider
   enum slider_type { horiz, vert };
 
@@ -105,7 +104,7 @@ public:
 
   virtual bool handle(const vgui_event&);
 
-private:
+ private:
   //: Draw the slider at the current position
   void draw_bar() const;
 
