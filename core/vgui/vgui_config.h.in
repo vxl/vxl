@@ -9,12 +9,14 @@
 // Lists the configuration flags used when building vgui
 
 #cmakedefine GLUT_FOUND
+#undef HAS_GLUT
 #ifdef GLUT_FOUND
 #  define HAS_GLUT
 #endif
 #undef GLUT_FOUND
 
 #cmakedefine OPENGL_XMESA_FOUND
+#undef VGUI_MESA
 #ifdef OPENGL_XMESA_FOUND
 #  define VGUI_MESA 1
 #else
@@ -23,21 +25,28 @@
 #undef OPENGL_XMESA_FOUND
 
 #cmakedefine MFC_FOUND
+#undef VGUI_MFC
 #ifdef MFC_FOUND
 #  define VGUI_MFC
 #endif
 #undef MFC_FOUND
 
 #cmakedefine X11_FOUND
+#undef HAS_X11
 #ifdef X11_FOUND
 #  define HAS_X11
 #endif
 #undef X11_FOUND
 
+#undef VGUI_USE_GLUT
 #cmakedefine VGUI_USE_GLUT
+#undef VGUI_USE_QT
 #cmakedefine VGUI_USE_QT
+#undef VGUI_USE_MFC
 #cmakedefine VGUI_USE_MFC
+#undef VGUI_USE_GTK
 #cmakedefine VGUI_USE_GTK
+#undef VGUI_USE_GTK2
 #cmakedefine VGUI_USE_GTK2
 
 
