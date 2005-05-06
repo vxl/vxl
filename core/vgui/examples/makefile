@@ -30,6 +30,7 @@ MINI_PROG_SOURCES += example_vgui_observer.cxx
 MINI_PROG_SOURCES += example_sprite.cxx
 MINI_PROG_SOURCES += example_idle_processing.cxx
 MINI_PROG_SOURCES += example_text_windows.cxx
+MINI_PROG_SOURCES += example_slider.cxx
 
 PROGRAM := basic_app
 SOURCES += basic_app.cxx
