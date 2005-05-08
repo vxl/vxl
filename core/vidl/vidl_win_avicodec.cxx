@@ -124,10 +124,11 @@ vil_image_view_base_sptr vidl_avicodec::get_view(
   // Size of a row in number of bytes in the DIB structure
   // (a row contains a multiple of 4 bytes)
   int line_length = (width()*BitsPerPixel+31)/32*4;
-
-  vxl_byte *db = new byte[xs*ys*get_bytes_pixel()]; // current output data
+  vil_pixel_format fmt = vil_pixel_format_of(vxl_byte());
+  unsigned long nbytes = xs*ys*get_bytes_pixel();
+  vil_memory_chunk_sptr chunk_db = new vil_memory_chunk(nbytes, fmt);
+  vxl_byte *db = (vxl_byte*)(chunk_db->data());
   vxl_byte *ib = db;
-
   // The byte swapping below is probabily unnecessary - use vil_flip_ud instead - FIXME
 
   // Store the DIB datas into ib (db).
@@ -168,8 +169,9 @@ vil_image_view_base_sptr vidl_avicodec::get_view(
              << BitsPerPixel << " bits per pixel AVI File.\n";
   } // end switch Bits per pixel
 
-  vil_image_view_base_sptr image_sptr(new vil_image_view<vxl_byte>(ib, xs, ys, 3,
+  vil_image_view_base_sptr image_sptr(new vil_image_view<vxl_byte>(chunk_db, ib, xs, ys, 3,
                                                                    3, ((xs*3+3)& -4), 1));
+
   return image_sptr;
 }
 
