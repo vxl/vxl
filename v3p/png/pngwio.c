@@ -1,9 +1,9 @@
 
 /* pngwio.c - functions for data output
  *
- * libpng 1.2.5 - October 3, 2002
+ * libpng 1.2.8rc5 - November 29, 2004
  * For conditions of distribution and use, see copyright notice in png.h
- * Copyright (c) 1998-2002 Glenn Randers-Pehrson
+ * Copyright (c) 1998-2004 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
  * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
  *
@@ -156,7 +156,7 @@ png_default_flush(png_structp png_ptr)
                    arguments a pointer to a png_struct.  After a call to
                    the flush function, there should be no data in any buffers
                    or pending transmission.  If the output method doesn't do
-                   any buffering of output, a function prototype must still be
+                   any buffering of ouput, a function prototype must still be
                    supplied although it doesn't have to do anything.  If
                    PNG_WRITE_FLUSH_SUPPORTED is not defined at libpng compile
                    time, output_flush_fn will be ignored, although it must be
@@ -206,10 +206,10 @@ void *png_far_to_near(png_structp png_ptr,png_voidp ptr, int check)
    void FAR *far_ptr;
    FP_OFF(near_ptr) = FP_OFF(ptr);
    far_ptr = (void FAR *)near_ptr;
-   if (check != 0)
-      if (FP_SEG(ptr) != FP_SEG(far_ptr))
+   if(check != 0)
+      if(FP_SEG(ptr) != FP_SEG(far_ptr))
          png_error(png_ptr,"segment lost in conversion");
-   return near_ptr;
+   return(near_ptr);
 }
 #  else
 void *png_far_to_near(png_structp png_ptr,png_voidp ptr, int check)
@@ -218,10 +218,10 @@ void *png_far_to_near(png_structp png_ptr,png_voidp ptr, int check)
    void FAR *far_ptr;
    near_ptr = (void FAR *)ptr;
    far_ptr = (void FAR *)near_ptr;
-   if (check != 0)
-      if (far_ptr != ptr)
+   if(check != 0)
+      if(far_ptr != ptr)
          png_error(png_ptr,"segment lost in conversion");
-   return near_ptr;
+   return(near_ptr);
 }
 #   endif
 #   endif
