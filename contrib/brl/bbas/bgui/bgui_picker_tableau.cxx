@@ -63,7 +63,28 @@ bool bgui_picker_tableau::pick_point(float* x, float* y)
   return point_ret;
 }
 
-//========================================================================
+void bgui_picker_tableau::pick_box(float* x1, float* y1, float *x2, float* y2)
+{
+  obj_type = box_enum;
+  picking_completed = false;
+  point_ret = true;
+  vgui::flush();  // handle any pending events before we grab the event loop.
+
+  // Grab event loop until picking is completed:
+  while (picking_completed == false)
+    next();
+
+  *x1 = pointx1;
+  *y1 = pointy1;
+  *x2 = pointx2;
+  *y2 = pointy2;
+
+  //reset everything for the next pick
+  FIRSTPOINT=true;
+  post_redraw();
+  obj_type = none_enum;
+}//========================================================================
+
 //: Draw a line to help the user pick it.
 void bgui_picker_tableau::draw_line()
 {
@@ -78,6 +99,24 @@ void bgui_picker_tableau::draw_line()
     glEnd();
   }
 }
+
+//: Draw a box to help the user pick it.
+void bgui_picker_tableau::draw_box()
+{
+  if (!FIRSTPOINT)  // there is no point in drawing till we have a first point
+  {
+    glLineWidth(w);
+    glColor3f(r,g,b);
+
+    glBegin(GL_LINE_LOOP);
+    glVertex2f(pointx1, pointy1);
+    glVertex2f(pointx2, pointy1);
+    glVertex2f(pointx2, pointy2);
+    glVertex2f(pointx1, pointy2);
+    glEnd();
+  }
+}
+
 
 //========================================================================
 //: Draw a line to help the user pick it.
@@ -200,6 +239,35 @@ bool bgui_picker_tableau::handle(const vgui_event& event)
       }
     }
   }
+
+  // ---- Object type is box ----
+  if (obj_type == box_enum)
+  {
+    if (event.type == vgui_DRAW)
+      draw_box();
+    else if (event.type == vgui_MOTION)
+    {
+      vgui_projection_inspector p_insp;
+      p_insp.window_to_image_coordinates(event.wx, event.wy, pointx2, pointy2);
+      post_redraw();
+    }
+    else if (event.type == vgui_BUTTON_DOWN)
+    {
+      if (FIRSTPOINT)
+      {
+        vgui_projection_inspector p_insp;
+        p_insp.window_to_image_coordinates(event.wx,event.wy, pointx1,pointy1);
+        pointx2 = pointx1;
+        pointy2 = pointy1;
+        FIRSTPOINT=false;
+      }
+      else
+      {
+        picking_completed = true;
+      }
+    }
+  }
+
   // ---- Object type is anchor line ----
   if (obj_type == anchor_enum)
   {

@@ -19,6 +19,7 @@
 //  Modifications
 //   K.Y.McGaul - 23-MAR-2001 - Initial version.
 //   J. Mundy - Jan 9, 2005 - Added anchored pick point
+//   K. Kang - May 9, 2005 - Added pick box
 // \endverbatim
 
 #include <vgui/vgui_tableau.h>
@@ -42,6 +43,9 @@ class bgui_picker_tableau : public vgui_tableau
   //: Gets a user selected line.
   void pick_line(float* x1, float* y1, float* x2, float* y2);
 
+  //: Gets a user selected box specified by corner points)
+  void pick_box(float* x1, float* y1, float *x2, float* y2);
+
   //: Pick a point with an anchored line indicator
   void anchored_pick_point(const float anch_x,
                            const float anch_y,
@@ -63,17 +67,20 @@ class bgui_picker_tableau : public vgui_tableau
   void draw_line();
   void draw_anchor_line();
 
+  //: draw box
+  void draw_box();
+
   //: Get next event in the event loop.
   bool next();
   //: List of possible objects to pick.
-  enum object_type {none_enum, point_enum, line_enum, anchor_enum};
+  enum object_type {none_enum, point_enum, line_enum, anchor_enum, box_enum};
   //: Type of object we are picking.
   static object_type obj_type;
 
   //: Used in next() to indicate when the event has been used.
   bool use_event_;
 
-  //: Start and end points for line:
+  //: Start and end points for line and box:
   float pointx1, pointy1, pointx2, pointy2;
 
   //: Anchor point coordinates
