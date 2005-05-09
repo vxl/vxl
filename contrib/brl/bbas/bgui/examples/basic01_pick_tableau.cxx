@@ -12,11 +12,11 @@
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_rubberband_tableau.h>
 #include <bgui/bgui_picker_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 //global pointer to the rubberband tableau
 static bgui_picker_tableau_sptr picker = 0;
+static vgui_easy2D_tableau_sptr easy = 0;
 
 //the meunu callback functions
 static void create_box()
@@ -27,6 +27,12 @@ static void create_box()
   picker->pick_box(&x1, &y1, &x2, &y2);
 
   vcl_cerr << "corner points are (" << x1 << ", " << y1 << ") and (" << x2 << ", " << y2 << ")\n"; 
+
+  //: draw the box in easy2D tableau
+  float x[4], y[4];
+  x[0]=x[3] = x1; x[1]=x[2]=x2;
+  y[0]=y[1] = y1; y[2]=y[3]=y2;
+  easy->add_polygon(4, x, y);
 }
 
 
@@ -51,16 +57,9 @@ int main(int argc, char ** argv)
 
   // Make the tableau hierarchy.
   vgui_image_tableau_new image(argv[1]);
-  picker = bgui_picker_tableau_new(image);
+  easy = vgui_easy2D_tableau_new(image);
+  picker = bgui_picker_tableau_new(easy);
   vgui_viewer2D_tableau_new viewer(picker);
-#if 0 
-  vgui_easy2D_tableau_new easy(image);
-  vgui_rubberband_easy2D_client* r_client =
-    new vgui_rubberband_easy2D_client(easy);
-  vgui_rubberband_tableau_new rubber(r_client);
-  vgui_composite_tableau_new comp(picker, rubber);
-  vgui_viewer2D_tableau_new viewer(comp);
-#endif  
   vgui_shell_tableau_new shell(viewer);
 
   // Create and run the window
