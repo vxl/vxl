@@ -1,10 +1,9 @@
-//: 
-// \file  basic01_pick_tableau.cxx
-// \brief This example pick a line, box or a point with a pick tableau
-// \author    Kongbin Kang
-// \date        2005-05-09
-// 
-
+//:
+// \file
+// \brief  This example pick a line, box or a point with a pick tableau
+// \author Kongbin Kang
+// \date   2005-05-09
+//
 
 #include <vcl_iostream.h>
 #include <vgui/vgui.h>
@@ -26,7 +25,7 @@ static void create_box()
   picker->set_color(0, 1, 0);
   picker->pick_box(&x1, &y1, &x2, &y2);
 
-  vcl_cerr << "corner points are (" << x1 << ", " << y1 << ") and (" << x2 << ", " << y2 << ")\n"; 
+  vcl_cerr << "corner points are (" << x1 << ", " << y1 << ") and (" << x2 << ", " << y2 << ")\n";
 
   //: draw the box in easy2D tableau
   float x[4], y[4];
