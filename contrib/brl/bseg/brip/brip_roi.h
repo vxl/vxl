@@ -18,6 +18,7 @@
 //
 //-----------------------------------------------------------------------------
 #include <vcl_vector.h>
+#include <vcl_ostream.h>
 #include <vbl/vbl_ref_count.h>
 #include <vsol/vsol_box_2d_sptr.h>
 
@@ -66,7 +67,7 @@ class brip_roi : public vbl_ref_count
   unsigned lc(unsigned global_col, unsigned i = 0) const;
   unsigned lr(unsigned global_row, unsigned i = 0) const;
 
-  vsol_box_2d_sptr region(unsigned i) { return regions_[i]; }
+  vsol_box_2d_sptr region(unsigned i) const { return regions_[i]; }
   bool remove_region(unsigned i);
 
  protected:
@@ -74,6 +75,8 @@ class brip_roi : public vbl_ref_count
   unsigned n_image_rows_;
   vcl_vector<vsol_box_2d_sptr> regions_;
 };
+
+vcl_ostream&  operator<<(vcl_ostream& s, brip_roi const& r);
 
 #include <brip/brip_roi_sptr.h>
 

@@ -208,3 +208,10 @@ bool brip_roi::remove_region(unsigned i)
   return false;
 }
 
+vcl_ostream&  operator<<(vcl_ostream& s, brip_roi const& r)
+{
+  s << "brip_roi (regions) \n";
+  for(unsigned i = 0; i< r.n_regions(); ++i)
+    s << *(r.region(i)) <<'\n';
+  return s;
+}
