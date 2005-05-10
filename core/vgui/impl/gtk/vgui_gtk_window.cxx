@@ -20,6 +20,8 @@
 #include "vgui_gtk_utils.h"
 #include "vgui_gtk_statusbar.h"
 
+#include <vcl_compiler.h>
+
 static bool debug = false;
 
 extern "C" {
@@ -56,7 +58,7 @@ vgui_gtk_window::vgui_gtk_window(int w, int h, const char* title)
 
   adaptor = new vgui_gtk_adaptor(this);
 
-#ifndef __SGI_CC // SGI's iostream does not allow re-initialising
+#ifndef VCL_SGI_CC // SGI's iostream does not allow re-initialising
   vgui::out.rdbuf(static_cast<vgui_gtk_statusbar*>(statusbar)->statusbuf);
 #endif
 
@@ -84,7 +86,7 @@ vgui_gtk_window::vgui_gtk_window(int w, int h, const vgui_menu& menu, const char
 
   set_menubar(menu);
 
-#ifndef __SGI_CC // SGI's iostream does not allow re-initialising
+#ifndef VCL_SGI_CC // SGI's iostream does not allow re-initialising
   vgui::out.rdbuf(static_cast<vgui_gtk_statusbar*>(statusbar)->statusbuf);
 #endif
 
