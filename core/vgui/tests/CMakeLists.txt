@@ -42,4 +42,6 @@ IF( HAS_VGUI )
   ADD_EXECUTABLE( vgui_test_include test_include.cxx )
   TARGET_LINK_LIBRARIES( vgui_test_include vgui )
 
+  ADD_EXECUTABLE( vgui_test_drawpix_speed2 test_drawpix_speed2.cxx )
+
 ENDIF( HAS_VGUI )

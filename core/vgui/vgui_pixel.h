@@ -39,6 +39,18 @@ struct vgui_pixel_rgb<8,8,8>
 };
 typedef vgui_pixel_rgb<8,8,8> vgui_pixel_rgb888;
 
+VCL_DEFINE_SPECIALIZATION
+struct vgui_pixel_rgb<16,16,16>
+{
+  GLushort R;
+  GLushort G;
+  GLushort B;
+  vgui_pixel_rgb<16,16,16>() { }
+  vgui_pixel_rgb<16,16,16>( vxl_byte red, vxl_byte green, vxl_byte blue, vxl_byte /*alpha*/ = 0 )
+  : R(red), G(green), B(blue) {}
+};
+typedef vgui_pixel_rgb<16,16,16> vgui_pixel_rgb161616;
+
 // For 16bit X display.
 // With any luck, this will pack into a 16bit word. It works on gcc 2.95,
 // but only because we're using 'short' (which is 2 bytes) as the bitfield
@@ -158,6 +170,9 @@ struct vgui_pixel_rgbfloat
   float R;
   float G;
   float B;
+  vgui_pixel_rgbfloat() {}
+  vgui_pixel_rgbfloat( vxl_byte red, vxl_byte green, vxl_byte blue, vxl_byte alpha )
+    : R(red), G(green), B(blue) {}
 };
 
 
