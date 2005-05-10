@@ -30,7 +30,7 @@ png_write_info_before_PLTE(png_structp png_ptr, png_infop info_ptr)
    {
    png_write_sig(png_ptr); /* write PNG signature */
 #if defined(PNG_MNG_FEATURES_SUPPORTED)
-   if((png_ptr->mode&PNG_HAVE_PNG_SIGNATURE)&&(png_ptr->mng_features_permitted))
+   if ((png_ptr->mode&PNG_HAVE_PNG_SIGNATURE)&&(png_ptr->mng_features_permitted))
    {
       png_warning(png_ptr,"MNG features are not allowed in a PNG datastream\n");
       png_ptr->mng_features_permitted=0;
@@ -424,8 +424,8 @@ png_create_write_struct(png_const_charp user_png_ver, png_voidp error_ptr,
                         png_error_ptr error_fn, png_error_ptr warn_fn)
 {
 #ifdef PNG_USER_MEM_SUPPORTED
-   return (png_create_write_struct_2(user_png_ver, error_ptr, error_fn,
-      warn_fn, png_voidp_NULL, png_malloc_ptr_NULL, png_free_ptr_NULL));
+   return png_create_write_struct_2(user_png_ver, error_ptr, error_fn,
+               warn_fn, png_voidp_NULL, png_malloc_ptr_NULL, png_free_ptr_NULL);
 }
 
 /* Alternate initialize png_ptr structure, and allocate any memory needed */
@@ -450,7 +450,7 @@ png_create_write_struct_2(png_const_charp user_png_ver, png_voidp error_ptr,
    png_ptr = (png_structp)png_create_struct(PNG_STRUCT_PNG);
 #endif /* PNG_USER_MEM_SUPPORTED */
    if (png_ptr == NULL)
-      return (NULL);
+      return NULL;
 
 #if !defined(PNG_1_0_X)
 #ifdef PNG_ASSEMBLER_CODE_SUPPORTED
@@ -474,7 +474,7 @@ png_create_write_struct_2(png_const_charp user_png_ver, png_voidp error_ptr,
       png_free(png_ptr, png_ptr->zbuf);
       png_ptr->zbuf=NULL;
       png_destroy_struct(png_ptr);
-      return (NULL);
+      return NULL;
    }
 #ifdef USE_FAR_KEYWORD
    png_memcpy(png_ptr->jmpbuf,jmpbuf,png_sizeof(jmp_buf));
@@ -489,8 +489,8 @@ png_create_write_struct_2(png_const_charp user_png_ver, png_voidp error_ptr,
    i=0;
    do
    {
-     if(user_png_ver[i] != png_libpng_ver[i])
-        png_ptr->flags |= PNG_FLAG_LIBRARY_MISMATCH;
+     if (user_png_ver[i] != png_libpng_ver[i])
+       png_ptr->flags |= PNG_FLAG_LIBRARY_MISMATCH;
    } while (png_libpng_ver[i++]);
 
    if (png_ptr->flags & PNG_FLAG_LIBRARY_MISMATCH)
@@ -550,7 +550,7 @@ png_create_write_struct_2(png_const_charp user_png_ver, png_voidp error_ptr,
       PNG_ABORT();
 #endif
 #endif
-   return (png_ptr);
+   return png_ptr;
 }
 
 /* Initialize png_ptr structure, and allocate any memory needed */
@@ -568,8 +568,8 @@ png_write_init_2(png_structp png_ptr, png_const_charp user_png_ver,
 {
    /* We only come here via pre-1.0.12-compiled applications */
 #if !defined(PNG_NO_STDIO) && !defined(_WIN32_WCE)
-   if(png_sizeof(png_struct) > png_struct_size ||
-      png_sizeof(png_info) > png_info_size)
+   if (png_sizeof(png_struct) > png_struct_size ||
+       png_sizeof(png_info) > png_info_size)
    {
       char msg[80];
       png_ptr->warning_fn=NULL;
@@ -584,7 +584,7 @@ png_write_init_2(png_structp png_ptr, png_const_charp user_png_ver,
       png_warning(png_ptr, msg);
    }
 #endif
-   if(png_sizeof(png_struct) > png_struct_size)
+   if (png_sizeof(png_struct) > png_struct_size)
      {
        png_ptr->error_fn=NULL;
 #ifdef PNG_ERROR_NUMBERS_SUPPORTED
@@ -593,7 +593,7 @@ png_write_init_2(png_structp png_ptr, png_const_charp user_png_ver,
        png_error(png_ptr,
        "The png struct allocated by the application for writing is too small.");
      }
-   if(png_sizeof(png_info) > png_info_size)
+   if (png_sizeof(png_info) > png_info_size)
      {
        png_ptr->error_fn=NULL;
 #ifdef PNG_ERROR_NUMBERS_SUPPORTED
@@ -710,7 +710,7 @@ png_write_image(png_structp png_ptr, png_bytepp image)
 
    png_debug(1, "in png_write_image\n");
 #if defined(PNG_WRITE_INTERLACING_SUPPORTED)
-   /* intialize interlace handling.  If image is not interlaced,
+   /* initialize interlace handling.  If image is not interlaced,
       this will set pass to 1 */
    num_pass = png_set_interlace_handling(png_ptr);
 #else
@@ -885,7 +885,7 @@ png_write_row(png_structp png_ptr, png_bytep row)
     * 4. The filter_method is 64 and
     * 5. The color_type is RGB or RGBA
     */
-   if((png_ptr->mng_features_permitted & PNG_FLAG_MNG_FILTER_64) &&
+   if ((png_ptr->mng_features_permitted & PNG_FLAG_MNG_FILTER_64) &&
        (png_ptr->filter_type == PNG_INTRAPIXEL_DIFFERENCING))
    {
       /* Intrapixel differencing */
@@ -946,7 +946,7 @@ png_write_flush(png_structp png_ptr)
          png_ptr->zstream.avail_out = (uInt)png_ptr->zbuf_size;
          wrote_IDAT = 1;
       }
-   } while(wrote_IDAT == 1);
+   } while (wrote_IDAT == 1);
 
    /* If there is any data left to be output, write it into a new IDAT */
    if (png_ptr->zbuf_size != png_ptr->zstream.avail_out)
@@ -1093,7 +1093,7 @@ png_set_filter(png_structp png_ptr, int method, int filters)
 {
    png_debug(1, "in png_set_filter\n");
 #if defined(PNG_MNG_FEATURES_SUPPORTED)
-   if((png_ptr->mng_features_permitted & PNG_FLAG_MNG_FILTER_64) &&
+   if ((png_ptr->mng_features_permitted & PNG_FLAG_MNG_FILTER_64) &&
        (method == PNG_INTRAPIXEL_DIFFERENCING))
          method = PNG_FILTER_TYPE_BASE;
 #endif
@@ -1457,7 +1457,7 @@ png_write_png(png_structp png_ptr, png_infop info_ptr,
    /* It is REQUIRED to call this to finish writing the rest of the file */
    png_write_end(png_ptr, info_ptr);
 
-   if(transforms == 0 || params == NULL)
+   if (transforms == 0 || params == NULL)
       /* quiet compiler warnings */ return;
 }
 #endif

@@ -334,7 +334,7 @@
 #define PNG_LIBPNG_BUILD_RC       3
 #define PNG_LIBPNG_BUILD_STABLE   4
 #define PNG_LIBPNG_BUILD_RELEASE_STATUS_MASK 7
-  
+
 /* Release-Specific Flags */
 #define PNG_LIBPNG_BUILD_PATCH    8 /* Can be OR'ed with
                                        PNG_LIBPNG_BUILD_STABLE only */
@@ -365,12 +365,12 @@
 /* Ref MSDN: Private as priority over Special
  * VS_FF_PRIVATEBUILD File *was not* built using standard release
  * procedures. If this value is given, the StringFileInfo block must
- * contain a PrivateBuild string. 
+ * contain a PrivateBuild string.
  *
  * VS_FF_SPECIALBUILD File *was* built by the original company using
  * standard release procedures but is a variation of the standard
  * file of the same version number. If this value is given, the
- * StringFileInfo block must contain a SpecialBuild string. 
+ * StringFileInfo block must contain a SpecialBuild string.
  */
 
 #if defined(PNG_USER_PRIVATEBUILD)
@@ -882,7 +882,6 @@ defined(PNG_READ_BACKGROUND_SUPPORTED)
    png_fixed_point int_x_blue;
    png_fixed_point int_y_blue;
 #endif
-
 } png_info;
 
 typedef png_info FAR * png_infop;
@@ -1193,7 +1192,7 @@ struct png_struct_def
 #endif
 
 #if defined(PNG_READ_SHIFT_SUPPORTED) || defined(PNG_WRITE_SHIFT_SUPPORTED)
-   png_color_8 shift;         /* shift for significant bit tranformation */
+   png_color_8 shift;         /* shift for significant bit transformation */
 #endif
 
 #if defined(PNG_tRNS_SUPPORTED) || defined(PNG_READ_BACKGROUND_SUPPORTED) \
@@ -1347,7 +1346,6 @@ struct png_struct_def
    png_uint_32 user_width_max;
    png_uint_32 user_height_max;
 #endif
-
 };
 
 
