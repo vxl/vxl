@@ -1054,6 +1054,17 @@ brip_vil_float_ops::convert_to_float(vil_image_view<unsigned char> const& image)
       output(x,y) = (float)image(x,y);
   return output;
 }
+vil_image_view<float>
+brip_vil_float_ops::convert_to_float(vil_image_view<unsigned short> const& image)
+{
+  vil_image_view<float> output;
+  int w = image.ni(), h = image.nj();
+  output.set_size(w,h);
+  for (int y = 0; y<h; y++)
+    for (int x = 0; x<w; x++)
+      output(x,y) = (float)image(x,y);
+  return output;
+}
 vil_image_view<bool>
     brip_vil_float_ops::convert_to_bool(vil_image_view<unsigned char> const& image)
 {
@@ -1068,20 +1079,7 @@ vil_image_view<bool>
                 output(x,y)=false;
     return output;
 }
-vil_image_view<bool>
- brip_vil_float_ops::convert_float_to_bool(vil_image_view<float> const& image)
-{
-    vil_image_view<bool> output;
-    int w = image.ni(), h = image.nj();
-    output.set_size(w,h);
-    for (int y = 0; y<h; y++)
-        for (int x = 0; x<w; x++)
-            if(image(x,y) >128.0)
-                output(x,y)=true;
-            else
-                output(x,y)=false;
-    return output;
-}
+
 vil_image_view<float>
 brip_vil_float_ops::convert_to_float(vil_image_view<vil_rgb<vxl_byte> > const& image)
 {
@@ -1290,8 +1288,16 @@ brip_vil_float_ops::convert_to_float(vil_image_resource const& image)
   vil_image_view<float> fimg;
   if (vil_pixel_format_num_components(image.pixel_format())==1)
   {
-    vil_image_view<unsigned char> temp=image.get_view();
-    fimg = brip_vil_float_ops::convert_to_float(temp);
+    if(image.pixel_format()==VIL_PIXEL_FORMAT_UINT_16)
+    {
+        vil_image_view<unsigned short> temp=image.get_view();
+        fimg = brip_vil_float_ops::convert_to_float(temp);
+    }
+    else if(image.pixel_format()==VIL_PIXEL_FORMAT_BYTE)
+    {
+        vil_image_view<unsigned char> temp=image.get_view();
+        fimg = brip_vil_float_ops::convert_to_float(temp);
+    }
   }
   else if (vil_pixel_format_num_components(image.pixel_format())==3)
   {
