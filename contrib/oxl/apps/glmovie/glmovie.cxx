@@ -99,14 +99,14 @@ int gx_list_base = 10; // Display lists for gx files start here
 ImageSequenceName* gx_basename;
 ImageSequenceName* output_basename;
 
-void output(void* font, float x, float y, char const* s)
+static void output(void* font, float x, float y, char const* s)
 {
   glRasterPos2f(x, y);
   for (;*s;++s)
     glutBitmapCharacter(font, *s);
 }
 
-inline void output(float x, float y, char const* s)
+inline static void output(float x, float y, char const* s)
 {
   output(GLUT_BITMAP_HELVETICA_18, x, y, s);
 }
