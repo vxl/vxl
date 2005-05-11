@@ -3,6 +3,7 @@
 #   This is the vsrl (dense matcher) library.
 
 USES += contrib/gel contrib/brl/bseg contrib/tbl contrib/oxl contrib/rpl core
+include ${IUEROOT}/core/vgui/config.mk
 
 IMMEDIATE_LIBS := -lvtol -lvdgl -lvgui -lvepl -lvgl -lvil1 -lvnl -lvgel -lrsdl
 

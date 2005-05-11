@@ -1,4 +1,5 @@
 USES += contrib/gel core
+include config.mk
 USE_OPENGL:= 1
 TRY_MPEG2 := 1
 

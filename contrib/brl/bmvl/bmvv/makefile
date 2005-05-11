@@ -1,4 +1,5 @@
 USES += contrib/brl contrib/brl/bmvl contrib/brl/bbas contrib/brl/bseg contrib/gel contrib/oxl core
+include ${IUEROOT}/core/vgui/config.mk
 
 LIBRARY := bmvv
 VERSION := 1.0

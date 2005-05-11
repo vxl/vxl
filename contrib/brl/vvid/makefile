@@ -1,4 +1,5 @@
 USES += contrib/brl contrib/gel contrib/brl/bbas contrib/brl/bseg core
+include ${IUEROOT}/core/vgui/config.mk
 USE_OPENGL:= 1
 TRY_MPEG2 := 1
 

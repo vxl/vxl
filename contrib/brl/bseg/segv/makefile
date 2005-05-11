@@ -1,4 +1,5 @@
 USES += contrib/brl contrib/brl/bbas contrib/brl/bseg contrib/gel core
+include ${IUEROOT}/core/vgui/config.mk
 
 LIBRARY := segv
 VERSION := 1.0
