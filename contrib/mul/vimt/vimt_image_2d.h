@@ -8,7 +8,7 @@
 #include <vimt/vimt_image.h>
 #include <vimt/vimt_transform_2d.h>
 #include <vil/vil_image_view_base.h>
-
+#include <vgl/vgl_box_2d.h>
 class mil_transform_2d;
 
 //: A base class for arbitrary 2D images
@@ -40,7 +40,9 @@ class vimt_image_2d : public vimt_image
   virtual void world_bounds(vcl_vector<double>& b_lo,
                             vcl_vector<double>& b_hi) const;
 
-
+ //: Return bounding box containing image in world co-ords, but more conveniently as a box
+  vgl_box_2d<double> world_bounding_box() const;
+  
   //: Current world-to-image transformation
   const vimt_transform_2d& world2im() const { return world2im_; }
 

@@ -36,3 +36,12 @@ void vimt_image_2d::world_bounds(vcl_vector<double>& b_lo,
       else if (p.y()>b_hi[1]) b_hi[1]=p.y();
     }
 }
+//: Return bounding box containing image in world co-ords as a box
+vgl_box_2d<double> vimt_image_2d::world_bounding_box() const
+{
+          
+    vcl_vector<double> b_lo(2,0.0);
+    vcl_vector<double> b_hi(2,0.0);
+    world_bounds(b_lo,b_hi);      
+    return vgl_box_2d<double>(b_lo[0],b_hi[0],b_lo[1],b_hi[1]);
+}
