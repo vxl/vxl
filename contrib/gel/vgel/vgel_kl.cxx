@@ -562,6 +562,7 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil_image_resource_sptr &image)
       vil_convert_planes_to_grey (imgv, imgg);
   else
       imgg = imgv;
+  if (!imgg) vil_convert_cast(imgv,imgg); // if all else fails, try this.
 
   assert ( 1 == imgg.nplanes() );
 
@@ -590,6 +591,7 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil_image_view<vxl_byte>* image)
     vil_convert_planes_to_grey (imgv, imgg);
   else
     imgg = imgv;
+  if (!imgg) vil_convert_cast(imgv,imgg); // if all else fails, try this.
 
   assert ( 1 == imgg.nplanes() );
 
