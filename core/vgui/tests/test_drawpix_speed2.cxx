@@ -1,4 +1,4 @@
-// This is core/vgui/tests/test_drawpix_speed.cxx
+// This is core/vgui/tests/test_drawpix_speed2.cxx
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
 #include <vcl_cstring.h>
@@ -16,7 +16,6 @@
 #include <vgui/vgui_pixel.h>
 #include <vgui/vgui_macro.h>
 
-
 #if VGUI_MESA
 #  include <GL/xmesa.h>
 #endif
@@ -24,7 +23,6 @@
 // Size of test image
 unsigned const ni = 512;
 unsigned const nj = 512;
-
 
 float g_scale = 1.0f;
 float g_bias  = 0.0f;
@@ -47,9 +45,10 @@ struct result_type
   // fps just for moving the dot
   double pixmove;
 };
+
 vcl_ostream& operator<<( vcl_ostream& ostr, result_type const& r )
 {
-  return ostr << "(" << vcl_fixed << vcl_setprecision(2)
+  return ostr << '(' << vcl_fixed << vcl_setprecision(2)
               << vcl_setw(7) << r.draw << " draw fps, "
               << vcl_setw(7) << r.total << " total fps)";
 }
@@ -86,22 +85,24 @@ convert_pixel_scale_bias_and_map( InPix const& p, FramePix& fp )
 
 template<class InPix, class FramePix>
 void
-convert_and_draw( InPix* buffer, GLenum pack_type, GLenum pix_type, FramePix* dummy = 0 )
+convert_and_draw( InPix* buffer, GLenum pack_type, GLenum pix_type, FramePix* /*dummy*/ )
 {
   unsigned size = ni*nj;
   FramePix* framebuf = new FramePix[size];
   InPix* p = buffer;
   FramePix* fp = framebuf;
-  if( g_scale == 1.0 && g_bias == 0.0 && !g_use_color_maps ) {
-    for( unsigned cnt = 0 ; cnt < size; ++cnt, ++p, ++fp ) {
+  if ( g_scale == 1.0 && g_bias == 0.0 && !g_use_color_maps ) {
+    for ( unsigned cnt = 0 ; cnt < size; ++cnt, ++p, ++fp ) {
       convert_pixel( *p, *fp );
     }
-  } else if ( !g_use_color_maps ) {
-    for( unsigned cnt = 0 ; cnt < size; ++cnt, ++p, ++fp ) {
+  }
+  else if ( !g_use_color_maps ) {
+    for ( unsigned cnt = 0 ; cnt < size; ++cnt, ++p, ++fp ) {
       convert_pixel_scale_and_bias( *p, *fp );
     }
-  } else {
-    for( unsigned cnt = 0 ; cnt < size; ++cnt, ++p, ++fp ) {
+  }
+  else {
+    for ( unsigned cnt = 0 ; cnt < size; ++cnt, ++p, ++fp ) {
       convert_pixel_scale_bias_and_map( *p, *fp );
     }
   }
@@ -110,21 +111,20 @@ convert_and_draw( InPix* buffer, GLenum pack_type, GLenum pix_type, FramePix* du
 }
 
 
-
 template<class PixType>
 void create_pattern( PixType*& buf, PixType*& buf_copy )
 {
   buf = new PixType[ni*ni];
   buf_copy = new PixType[ni*ni];
-  for( unsigned j = 0; j < nj; ++j ) {
+  for ( unsigned j = 0; j < nj; ++j ) {
     unsigned i = 0;
-    for( ; i < ni/3; ++i ) {
+    for ( ; i < ni/3; ++i ) {
       buf[j*ni+i] = PixType(255-j*255/nj,0,0,0);
     }
-    for( ; i < ni*2/3; ++i ) {
+    for ( ; i < ni*2/3; ++i ) {
       buf[j*ni+i] = PixType(0,255-j*255/nj,0,0);
     }
-    for( ; i < ni; ++i ) {
+    for ( ; i < ni; ++i ) {
       buf[j*ni+i] = PixType(0,0,255-j*255/nj,0);
     }
   }
@@ -137,21 +137,21 @@ void
 move_dot( unsigned &i, unsigned &j,
           PixType* buffer, PixType* buffer_copy )
 {
-  for( unsigned jp = j; jp < j+5; ++jp ) {
-    for( unsigned ip = i; ip < i+5; ++ip ) {
+  for ( unsigned jp = j; jp < j+5; ++jp ) {
+    for ( unsigned ip = i; ip < i+5; ++ip ) {
       buffer[jp*ni+ip] = buffer_copy[jp*ni+ip];
     }
   }
   ++i;
-  if( i > ni-12 ) {
+  if ( i > ni-12 ) {
     i = 10;
     ++j;
-    if( j > nj-12 ) {
+    if ( j > nj-12 ) {
       j = 10;
     }
   }
-  for( unsigned jp = 0; jp < 5; ++jp ) {
-    for( unsigned ip = 0; ip < 5; ++ip ) {
+  for ( unsigned jp = 0; jp < 5; ++jp ) {
+    for ( unsigned ip = 0; ip < 5; ++ip ) {
       buffer[(jp+j)*ni+(ip+i)] = buffer_copy[(nj/2-jp-1)*ni+(ni-i+ip)];
     }
   }
@@ -161,12 +161,12 @@ move_dot( unsigned &i, unsigned &j,
 vcl_string
 option_string( unsigned option )
 {
-  switch( option ) {
-  case 0:  return " direct:           ";
-  case 1:  return " as 8,8,8 RGB:     ";
-  case 2:  return " as 8,8,8,8 RGBA:  ";
-  case 3:  return " as 5,6,5 RGB:     ";
-  default: return "UNKNOWN";
+  switch ( option ) {
+   case 0:  return " direct:           ";
+   case 1:  return " as 8,8,8 RGB:     ";
+   case 2:  return " as 8,8,8,8 RGBA:  ";
+   case 3:  return " as 5,6,5 RGB:     ";
+   default: return "UNKNOWN";
   }
 }
 
@@ -186,7 +186,6 @@ struct test_it
   test_it( vcl_string const& name, GLenum pack_type, GLenum pix_type );
   ~test_it();
   void test_pattern( unsigned option );
-
 };
 
 
@@ -232,18 +231,19 @@ test_pattern( unsigned option )
   long elapsed;
   vgui_macro_report_errors;
   timer.mark();
-  do {
+  do
+  {
     move_dot( i, j, buffer, buffer_copy );
 
-    switch( option ) {
-    case 0:
+    switch ( option ) {
+     case 0:
       glPixelTransferf( GL_RED_SCALE, g_scale );
       glPixelTransferf( GL_RED_BIAS,  g_bias/255 );
       glPixelTransferf( GL_GREEN_SCALE, g_scale );
       glPixelTransferf( GL_GREEN_BIAS,  g_bias/255 );
       glPixelTransferf( GL_BLUE_SCALE, g_scale );
       glPixelTransferf( GL_BLUE_BIAS,  g_bias/255 );
-      if( g_use_color_maps ) {
+      if ( g_use_color_maps ) {
         glPixelMapfv( GL_PIXEL_MAP_R_TO_R, 256, g_mapRfloat );
         glPixelMapfv( GL_PIXEL_MAP_G_TO_G, 256, g_mapGfloat );
         glPixelMapfv( GL_PIXEL_MAP_B_TO_B, 256, g_mapBfloat );
@@ -251,13 +251,13 @@ test_pattern( unsigned option )
       }
       glDrawPixels(ni,nj,pack_type,pix_type,buffer);
       break;
-    case 1:
+     case 1:
       convert_and_draw(buffer,GL_RGB,GL_UNSIGNED_BYTE, (vgui_pixel_rgb888*)0 );
       break;
-    case 2:
+     case 2:
       convert_and_draw(buffer,GL_RGBA, GL_UNSIGNED_BYTE, (vgui_pixel_rgba8888*)0 );
       break;
-    case 3:
+     case 3:
       convert_and_draw(buffer, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, (vgui_pixel_rgb565*)0 );
       break;
     }
@@ -271,7 +271,7 @@ test_pattern( unsigned option )
   timer.mark();
   i = 10;
   j = 10;
-  for( unsigned long cnt = 0; cnt < draws; ++cnt ) {
+  for ( unsigned long cnt = 0; cnt < draws; ++cnt ) {
     move_dot( i, j, buffer, buffer_copy );
   }
   long elapsed_pix = timer.real();
@@ -284,7 +284,7 @@ test_pattern( unsigned option )
   r.pixmove = draws*1000.0 / elapsed_pix;
   r.draw    = draws*1000.0 / (elapsed-elapsed_pix);
 
-  if( best_option == -1u || r.draw < best_result.draw ) {
+  if ( best_option == -1u || r.draw < best_result.draw ) {
     best_option = option;
     best_result = r;
   }
@@ -367,7 +367,6 @@ run_tests( void(*test_func)() )
   glPixelZoom(1.0f,1.0f);
   vcl_cout << "Pixel zoom 1, scaling, color map\n";
   test_func();
-
 }
 
 int main( int argc, char** argv )
@@ -410,10 +409,9 @@ int main( int argc, char** argv )
   glDisable(GL_DEPTH_TEST);
   glDrawBuffer( GL_FRONT );
 
-
   // Generate color maps
   {
-    for( unsigned i = 0; i < 256; ++i ) {
+    for ( unsigned i = 0; i < 256; ++i ) {
       g_mapRfloat[i] = vcl_sqrt( (i-128.0)*(i-128.0) ) / 128;
       g_mapGfloat[i] = vcl_sqrt( (i-128.0)*(i-128.0) ) / 128;
       g_mapBfloat[i] = ( 128 - vcl_sqrt( (i-128.0)*(i-128.0) ) ) / 128;
@@ -422,7 +420,6 @@ int main( int argc, char** argv )
       g_mapBbyte[i] = GLubyte( g_mapBfloat[i]*255 );
     }
   }
-
 
   vcl_cout << "\n\n8-BIT RGB\n\n";
   run_tests( &run_8bit_rgb );
