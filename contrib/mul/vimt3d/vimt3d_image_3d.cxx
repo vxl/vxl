@@ -42,3 +42,15 @@ void vimt3d_image_3d::world_bounds(vcl_vector<double>& b_lo,
         else if (p.z()>b_hi[2]) b_hi[2]=p.z();
       }
 }
+
+//Related Functions
+//: Return bounding box containing image in world co-ords as a box
+vgl_box_3d<double> world_bounding_box(const vimt3d_image_3d& img) 
+{
+          
+    vcl_vector<double> b_lo(3,0.0);
+    vcl_vector<double> b_hi(3,0.0);
+    img.world_bounds(b_lo,b_hi);
+    //Use C-stlye vector interface for corner points, passing address of data as the C-style vector
+    return vgl_box_3d<double>(&(b_lo[0]),&(b_hi[0])); 
+}
