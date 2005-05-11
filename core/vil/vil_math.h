@@ -379,7 +379,7 @@ void vil_math_rms(const vil_image_view<srcT>& src,
         destT sum2 = 0;
         const srcT* p=pixelA;
         for (unsigned k=0;k<np;++k,p+=pstepA) sum2 += destT(*p)*destT(*p);
-        *pixelB = vcl_sqrt(sum2/np);
+        *pixelB = destT(vcl_sqrt(sum2/np));
       }
   }
 }
