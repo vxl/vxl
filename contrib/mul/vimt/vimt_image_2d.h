@@ -39,9 +39,6 @@ class vimt_image_2d : public vimt_image
   //: Return vectors defining bounding box containing image in world co-ords
   virtual void world_bounds(vcl_vector<double>& b_lo,
                             vcl_vector<double>& b_hi) const;
-
- //: Return bounding box containing image in world co-ords, but more conveniently as a box
-  vgl_box_2d<double> world_bounding_box() const;
   
   //: Current world-to-image transformation
   const vimt_transform_2d& world2im() const { return world2im_; }
@@ -59,5 +56,12 @@ class vimt_image_2d : public vimt_image
   virtual bool is_class(vcl_string const& s) const
   { return s=="vimt_image_2d" || vimt_image::is_class(s); }
 };
+
+
+//: Related Functions
+//: Return bounding box containing input image in world co-ords, but more conveniently as a box
+// This may be more convenient than the similar class method in generic vector form,
+// as the latter is for a general number of dimensions
+vgl_box_2d<double> world_bounding_box(const vimt_image_2d& img);
 
 #endif // vimt_image_2d_h_
