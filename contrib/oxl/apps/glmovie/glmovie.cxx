@@ -99,16 +99,16 @@ int gx_list_base = 10; // Display lists for gx files start here
 ImageSequenceName* gx_basename;
 ImageSequenceName* output_basename;
 
-static void output(void* font, float x, float y, char const* s)
+static void glmovie_outp(void* font, float x, float y, char const* s)
 {
   glRasterPos2f(x, y);
   for (;*s;++s)
     glutBitmapCharacter(font, *s);
 }
 
-inline static void output(float x, float y, char const* s)
+inline static void glmovie_outp(float x, float y, char const* s)
 {
-  output(GLUT_BITMAP_HELVETICA_18, x, y, s);
+  glmovie_outp(GLUT_BITMAP_HELVETICA_18, x, y, s);
 }
 
 void init()
@@ -176,7 +176,7 @@ struct GXFileVisitor_OpenGL : public GXFileVisitor {
 
   virtual bool text(float x, float y, char const* text) {
     if (!gx_notext())
-      output(GLUT_BITMAP_HELVETICA_10, x, y, text);
+      glmovie_outp(GLUT_BITMAP_HELVETICA_10, x, y, text);
     return true; //gsgs
   }
 
@@ -321,7 +321,7 @@ bool drawframe(int frame)
                 (mouse_x - pixel_zoom_tx) / pixel_zoom,
                 (mouse_y - pixel_zoom_ty) / pixel_zoom);
 
-    output(2,20,msg);
+    glmovie_outp(2,20,msg);
   }
 
   glutSwapBuffers();
