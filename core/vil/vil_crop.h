@@ -57,7 +57,7 @@ class vil_crop_image_resource : public vil_image_resource
                                             unsigned j0, unsigned n_j) const
   {
     if (i0 + n_i > ni() || j0 + n_j > nj()) return 0;
-    return src_->get_view(j0+j0_, n_i, j0+j0_, n_j);
+    return src_->get_view(i0+i0_, n_i, j0+j0_, n_j);
   }
 
 
