@@ -287,6 +287,7 @@ class vil_image_view : public vil_image_view_base
   // as many components as the rhs has planes. O(1).
   // If the view types are not compatible this object will be set to empty.
   // If the pointer is null, this object will be set to empty.
+  // See also vil_convert_to_component_order().
   inline const vil_image_view<T>& operator=(const vil_image_view_base_sptr& rhs)
   {
     if (!rhs) clear();
