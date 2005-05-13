@@ -183,6 +183,9 @@ SOURCE=.\Templates/mbl_ar_process+double-.cxx
 SOURCE=.\mbl_data_collector_base.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\mbl_exception.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\mbl_gamma.cxx
 # End Source File
 # Begin Source File
