@@ -192,6 +192,15 @@ vxl_byte vgui_pixel_clamp( T in )
 
 //: Clamps the given type into [0,255].
 //
+// This overload stretches (0,1) bool images to (0,255) byte images.
+inline
+vxl_byte vgui_pixel_clamp( bool in )
+{
+  return in*255;
+}
+
+//: Clamps the given type into [0,255].
+//
 // This overload is the null operation, and is provided for efficiency.
 inline
 vxl_byte vgui_pixel_clamp( vxl_byte in )

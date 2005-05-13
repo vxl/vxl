@@ -316,17 +316,18 @@ apply( vil_image_resource_sptr const& image_in,
 
   switch ( component_format ) {
     DoCase( VIL_PIXEL_FORMAT_UINT_32 )
-      DoCase( VIL_PIXEL_FORMAT_INT_32 )
-      DoCase( VIL_PIXEL_FORMAT_UINT_16 )
-      DoCase( VIL_PIXEL_FORMAT_INT_16 )
-      DoCase( VIL_PIXEL_FORMAT_BYTE )
-      DoCase( VIL_PIXEL_FORMAT_SBYTE )
-      DoCase( VIL_PIXEL_FORMAT_FLOAT )
-      DoCase( VIL_PIXEL_FORMAT_DOUBLE )
-      default:
-    vcl_cerr << __FILE__ << ": " << __LINE__
-             << ": can't handle image pixel format "
-             << component_format << '\n';
+    DoCase( VIL_PIXEL_FORMAT_INT_32 )
+    DoCase( VIL_PIXEL_FORMAT_UINT_16 )
+    DoCase( VIL_PIXEL_FORMAT_INT_16 )
+    DoCase( VIL_PIXEL_FORMAT_BYTE )
+    DoCase( VIL_PIXEL_FORMAT_SBYTE )
+    DoCase( VIL_PIXEL_FORMAT_FLOAT )
+    DoCase( VIL_PIXEL_FORMAT_DOUBLE )
+    DoCase( VIL_PIXEL_FORMAT_BOOL )
+    default:
+      vcl_cerr << __FILE__ << ": " << __LINE__
+               << ": can't handle image pixel format "
+               << component_format << '\n';
   }
 
 #undef DoCase
