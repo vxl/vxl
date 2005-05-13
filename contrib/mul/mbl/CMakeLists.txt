@@ -47,7 +47,7 @@ SET(mbl_sources
   mbl_progress_text.cxx                 mbl_progress_text.h
   mbl_progress_null.cxx                 mbl_progress_null.h
   mbl_progress_composite.cxx            mbl_progress_composite.h
-
+  mbl_exception.h                       mbl_exception.cxx
   mbl_rvm_regression_builder.cxx        mbl_rvm_regression_builder.h
   
   mbl_chord.h
@@ -62,7 +62,6 @@ SET(mbl_sources
   mbl_jarque_bera.h
   mbl_stl_pred.h
   mbl_test.h
-  mbl_exception.h
 )
 AUX_SOURCE_DIRECTORY(Templates mbl_sources)
 
