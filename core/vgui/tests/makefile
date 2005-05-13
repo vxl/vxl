@@ -18,6 +18,7 @@ MINI_PROG_SOURCES += test_events.cxx     #TESTS += test_events.cxx
 MINI_PROG_SOURCES += test_front_back.cxx #TESTS += test_front_back.cxx
 ifeq (1,$(HAS_X11))
 MINI_PROG_SOURCES += test_drawpix_speed.cxx #TESTS += test_drawpix_speed.cxx
+MINI_PROG_SOURCES += test_drawpix_speed2.cxx#TESTS += test_drawpix_speed2.cxx
 MINI_PROG_SOURCES += test_acceleration.cxx  #TESTS += test_acceleration.cxx
 endif
 
