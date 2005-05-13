@@ -37,13 +37,13 @@ static void test_anisotropic_gaussian_filter()
   // Generate and apply the filters
   vil3d_anisotropic_gaussian_filter(src_im, dst_im, sd, work1, work2, work3);
 
-#if 0
+#ifdef DEBUG
   vcl_cout << "Source image:\n";
   vil3d_print_all(vcl_cout, src_im);
 
   vcl_cout << "\n\nDestination image:\n";
   vil3d_print_all(vcl_cout, dst_im);
-#endif // 0
+#endif // DEBUG
 
   double src_sum = 0;
   vil3d_math_sum(src_sum, src_im, 0);
@@ -51,7 +51,7 @@ static void test_anisotropic_gaussian_filter()
   double dst_sum = 0;
   vil3d_math_sum(dst_sum, dst_im, 0);
 
-  TEST("Sum of destination image", dst_sum==894, true);
+  TEST_NEAR("Sum of destination image", dst_sum, 1002, 1e-9);
 }
 
 
