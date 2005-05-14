@@ -13,7 +13,6 @@
 #endif
 
 
-
 //: Throw an exception indicating a real problem.
 // If exceptions have been disabled, this function
 // may abort.
@@ -51,7 +50,6 @@ void mbl_exception_look_for_unused_props(
   const mbl_read_props_type &ignore);
 
 
-
 #if !VCL_HAS_EXCEPTIONS
 
   //: Indicates that mbl_cloneables_factory has not heard of value name.
@@ -74,7 +72,7 @@ void mbl_exception_look_for_unused_props(
     mbl_exception_no_name_in_factory(const vcl_string& failed_name, const vcl_string& valid_names):
       vcl_logic_error(vcl_string("No such value: ") +failed_name + "\nValid values are: ["+valid_names+"]"),
         failed_value(failed_name), valid_values(valid_names) {}
-//    virtual ~mbl_exception_no_name_in_factory() throw() {};
+    virtual ~mbl_exception_no_name_in_factory() throw() {}
   };
 
 #endif
@@ -88,7 +86,7 @@ void mbl_exception_look_for_unused_props(
     vcl_string msg_;
    public:
     mbl_exception_unused_props(const vcl_string &function_name, const vcl_string &unused_props)
-      : msg_(function_name + ": Unused properties found: \n" + unused_props) {}
+      : msg_(function_name + ": Unused properties found:\n" + unused_props) {}
     const char * what() const {return msg_.c_str();}
   };
 
@@ -100,9 +98,9 @@ void mbl_exception_look_for_unused_props(
    public:
     vcl_string function_name, unused_properties;
     mbl_exception_unused_props(const vcl_string &fn_name, const vcl_string &unused_props)
-      : vcl_logic_error(function_name + ": Unused properties found: \n" + unused_props),
+      : vcl_logic_error(function_name + ": Unused properties found:\n" + unused_props),
         function_name(fn_name), unused_properties(unused_props) {}
-//    virtual ~mbl_exception_unused_props() throw() {};
+    virtual ~mbl_exception_unused_props() throw() {}
   };
 
 #endif
