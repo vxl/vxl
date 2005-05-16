@@ -54,16 +54,16 @@ SET (EXPECTED_BUILDS "\\
   {cs.rpi.edu FreeBSD-4.9-gcc-2.95.4-static} \\
   {cs.rpi.edu FreeBSD-4.9-gcc-3.3} \\
   {crd.ge.com FreeBSD-5.0_gcc-3.2.1_-Wall_-O_shared} \\
-  {esat.kuleuven.ac.be HP-UX-B.11.00-gcc-3.4-O1} \\
-  {esat.kuleuven.ac.be IRIX-6.5-CC-n32} \\
+  {esat.kuleuven.be HP-UX-B.11.00-gcc-3.4-O1} \\
+  {esat.kuleuven.be IRIX-6.5-CC-n32} \\
   {crd.ge.com Linux-2.4.18_gcc-3.2_-Wall_profile_static} \\
   {crd.ge.com Linux-2.4.9_icc-8.0_-w1_-O2_shared} \\
-  {esat.kuleuven.ac.be Linux-2.6-gcc-3.4-O3} \\
-  {esat.kuleuven.ac.be Linux64-2.6-gcc-3.4-O3} \\
+  {esat.kuleuven.be Linux-2.6-gcc-3.4-O3} \\
+  {esat.kuleuven.be Linux64-2.6-gcc-3.4-O3} \\
   {crd.ge.com MinGW-3.7_gcc-3.3.3_-Wall_-O2_static} \\
-  {esat.kuleuven.ac.be OSF1-V5.1-gcc-3.4} \\
+  {esat.kuleuven.be OSF1-V5.1-gcc-3.4} \\
   {crd.ge.com Solaris-2.8_gcc-3.4.3_static} \\
-  {esat.kuleuven.ac.be SunOS-5.8-gcc-3.4-O2} \\
+  {esat.kuleuven.be SunOS-5.8-gcc-3.4-O2} \\
   {crd.ge.com Win2k_bcc-5.5.1_Release} \\
   {crd.ge.com Win2k_msvc-6.0sp5_Release} \\
   {crd.ge.com Win2k_msvc-7.0_Release} \\
