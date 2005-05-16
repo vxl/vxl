@@ -1,4 +1,4 @@
-# oxl/vgui/CMakeLists.txt
+# core/vgui/CMakeLists.txt
 
 # Default the dashboard builds to "YES" so that
 # we have some clients that try to compile vgui
@@ -7,6 +7,10 @@ IF( DART_ROOT )
 ELSE( DART_ROOT )
   OPTION( BUILD_VGUI "Build VGUI" "NO" )
 ENDIF( DART_ROOT )
+
+# Flag that determines if we were able to successfully build vgui.
+# Initialize to NO. Change below if yes.
+SET( VGUI_FOUND "NO" CACHE INTERNAL "Was vgui successfully built?" )
 
 IF( BUILD_VGUI )
 
@@ -401,6 +405,7 @@ SET( vgui_sources ${vgui_sources}
 )
 
 ADD_LIBRARY(vgui ${vgui_sources})
+SET( VGUI_FOUND "YES" CACHE INTERNAL "Was vgui successfully built?" )
 
 # Dependencies on other vxl libraries
 TARGET_LINK_LIBRARIES(vgui vnl_algo vnl vil1 vil vgl vpl vbl vul)
