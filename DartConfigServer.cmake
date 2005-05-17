@@ -67,7 +67,6 @@ SET (EXPECTED_BUILDS "\\
   {crd.ge.com Win2k_bcc-5.5.1_Release} \\
   {crd.ge.com Win2k_msvc-6.0sp5_Release} \\
   {crd.ge.com Win2k_msvc-7.0_Release} \\
-  {nk.crd.ge.com Win2k_msvc-7.1_Release} \\
   {imorphics Win2k-msvc-6sp5-Debug} \\
   {imorphics Win2k-msvc-6sp5-iMorphicsRelDeb} \\
 ")
