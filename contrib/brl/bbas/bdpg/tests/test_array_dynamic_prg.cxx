@@ -56,10 +56,10 @@ void test_array_dynamic_prg()
   unsigned i = 0;
   bool good_assign = true;
   for (vcl_vector<unsigned>::iterator ait = assign.begin();
-       ait !=assign.end() && i<6; ++ait, ++i)
+       ait !=assign.end(); ++ait, ++i)
   {
     vcl_cout << " c["<< i << "]=" << *ait;
-    good_assign = good_assign && i==*ait;
+    good_assign = good_assign && i/2 == *ait/2;
   }
   vcl_cout << '\n';
   TEST("assignment", good_assign, true);
