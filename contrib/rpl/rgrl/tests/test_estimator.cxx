@@ -1932,7 +1932,7 @@ namespace {
           vcl_cout << "transformation is incorrect!\n" << est_H << '\n' << H << vcl_endl;
         }
 
-        // test on transfer error on 4 cannonical directions
+        // test on transfer error on 4 canonical directions
         vnl_matrix<double> trans_error;
         double ratio;
 
@@ -2029,7 +2029,7 @@ MAIN( test_estimator )
   test_homography2d();
   test_homography2d_lm();
   test_homography2d_points_on_circle();
-  test_homography2d_points_on_circle_w_noise( 0.0, 1e-13, 1e-9  );
-  test_homography2d_points_on_circle_w_noise( 0.1, 0.1, 0.005);
+  test_homography2d_points_on_circle_w_noise(0.0, 1e-10, 1e-9);
+  test_homography2d_points_on_circle_w_noise(0.1, 0.1, 0.005);
   SUMMARY();
 }
