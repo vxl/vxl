@@ -346,7 +346,10 @@ rgrl_util_geometric_scaling_factors( rgrl_set_of<rgrl_match_set_sptr> const& cur
   for ( unsigned i=0; i<m; ++i ) {
     sv_from = svd_from.W(i);
     sv_mapped = vnl_math_max( svd_mapped.W(i), 1e-16 );
-    factors[i] = sv_mapped / sv_from;
+    // As the scatter matrix essentially squared the 
+    // underlying scaling factors, 
+    // take square-root to get the real factor
+    factors[i] = vcl_sqrt( sv_mapped / sv_from );
   }
 
   return true;
