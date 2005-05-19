@@ -27,7 +27,8 @@ DECLARE( test_random );
 DECLARE( test_arithmetic );
 DECLARE( test_hungarian_algorithm );
 DECLARE( test_integrant );
-  
+DECLARE( test_bessel );
+
 void
 register_tests()
 {
@@ -58,6 +59,7 @@ register_tests()
   REGISTER( test_arithmetic );
   REGISTER( test_hungarian_algorithm );
   REGISTER( test_integrant );
+  REGISTER( test_bessel );
 }
 
 DEFINE_MAIN;

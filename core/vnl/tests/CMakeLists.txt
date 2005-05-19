@@ -32,6 +32,7 @@ ADD_EXECUTABLE( vnl_test_all
   test_arithmetic.cxx  test_arithmetic_body.h
   test_hungarian_algorithm.cxx
   test_integrant.cxx
+  test_bessel.cxx
 )
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
@@ -72,6 +73,7 @@ ADD_TEST( vnl_test_gamma                vnl_test_all test_gamma                )
 ADD_TEST( vnl_test_arithmetic           vnl_test_all test_arithmetic           )
 ADD_TEST( vnl_test_hungarian_algorithm  vnl_test_all test_hungarian_algorithm  )
 ADD_TEST( vnl_test_integrant            vnl_test_all test_integrant            )
+ADD_TEST( vnl_test_bessel               vnl_test_all test_bessel               )
 
 ADD_EXECUTABLE(vnl_test_include test_include.cxx)
 TARGET_LINK_LIBRARIES(vnl_test_include vnl)
