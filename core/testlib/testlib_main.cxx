@@ -3,6 +3,9 @@
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
+#if VCL_HAS_EXCEPTIONS
+#include <vcl_exception.h>
+#endif
 
 #if defined(VCL_VC) || defined(VCL_BORLAND)
 #  include <crtdbg.h>
@@ -57,6 +60,7 @@ list_test_names( vcl_ostream& ostr )
     ostr << "   " << testlib_test_name_[i] << '\n';
   ostr << "\nOmitting a test name, or specifying the name \"all\" will run all the tests.\n";
 }
+
 
 void
 testlib_enter_stealth_mode()
@@ -120,12 +124,27 @@ testlib_main( int argc, char* argv[] )
   {
     --argc; ++argv; test_name_given = false;
   }
-
   if ( test_name_given )
   {
     for ( vec_size_t i = 0; i < testlib_test_name_.size(); ++i )
       if ( testlib_test_name_[i] == argv[1] )
-        return testlib_test_func_[i]( argc-1, argv+1 );
+      {
+#if VCL_HAS_EXCEPTIONS
+        try{
+#endif
+          return testlib_test_func_[i]( argc-1, argv+1 );
+#if VCL_HAS_EXCEPTIONS
+        }
+        catch (const vcl_exception &e)
+        {
+          vcl_cerr << "\nTOP-LEVEL EXCEPTION HANDLER                                        **FAILED**\n"
+            << e.what() << "\n\n";
+          return 1;
+        }
+    // Leave MS structured exceptions to the SE handler.
+#endif
+      }
+
 
     vcl_cerr << "Test " << argv[1] << " not registered.\n";
     list_test_names( vcl_cerr );
@@ -142,7 +161,22 @@ testlib_main( int argc, char* argv[] )
       vcl_cout << "----------------------------------------\n"
                << "Running: " << testlib_test_name_[i] << '\n'
                << "----------------------------------------\n" << vcl_flush;
-      int result = testlib_test_func_[i]( argc, argv );
+      int result;
+#if VCL_HAS_EXCEPTIONS
+      try{
+#endif
+        result = testlib_test_func_[i]( argc, argv );
+#if VCL_HAS_EXCEPTIONS
+      }
+      catch (const vcl_exception &e)
+      {
+        vcl_cerr << "\nTOP-LEVEL EXCEPTION HANDLER                                        **FAILED**\n"
+          << e.what() << "\n\n";
+        result = 1;
+      }
+  // Leave MS structured exceptions to the SE handler.
+#endif
+      
       vcl_cout << "----------------------------------------\n"
                << testlib_test_name_[i] << " returned " << result << ' '
                << ( result==0 ? "(PASS)" : "(FAIL)" ) << '\n'
