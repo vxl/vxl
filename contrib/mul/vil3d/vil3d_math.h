@@ -117,6 +117,77 @@ inline void vil3d_math_value_range_percentile(const vil3d_image_view<T>& im,
 }
 
 
+//: Compute value corresponding to several percentiles of the range of im.
+// Percentiles expressed as fraction, e.g. 0.05, or 0.95.
+// \param im The image to examine.
+// \param fraction The fraction of the data range (from the lower end).
+// \retval value The image data value corresponding to the specified percentiles.
+// \relates vil3d_image_view
+// \note This function requires the sorting of large parts of the image data
+// and can be very expensive in terms of both processing and memory.
+template <class T>
+inline void vil3d_math_value_range_percentiles(const vil3d_image_view<T>& im,
+                                               const vcl_vector<double> fraction,
+                                               vcl_vector<T>& value)
+{
+  value.clear();
+  
+  // Test for invalid inputs
+  if (im.size()==0)
+  {
+    return;
+  }
+  unsigned nfrac = fraction.size();
+  for (unsigned f=0; f<nfrac; ++f)
+  {
+    if (fraction[f]<0.0 || fraction[f]>1.0)
+      return;
+  }
+    
+  // Copy the pixel values into a local list.
+  unsigned ni = im.ni();
+  unsigned nj = im.nj();
+  unsigned nk = im.nk();
+  unsigned np = im.nplanes();
+  vcl_ptrdiff_t istep = im.istep(); 
+  vcl_ptrdiff_t jstep=im.jstep();
+  vcl_ptrdiff_t kstep=im.kstep();
+  vcl_ptrdiff_t pstep = im.planestep();
+  vcl_vector<T> data(ni*nj*nk*np);
+  
+  typename vcl_vector<T>::iterator it = data.begin();
+  const T* plane = im.origin_ptr();
+  for (unsigned int p=0;p<np;++p, plane += pstep)
+  {
+    const T* slice = plane;
+    for (unsigned int k=0;k<nk;++k, slice += kstep)
+    {
+      const T* row = slice;
+      for (unsigned int j=0;j<nj;++j, row += jstep)
+      {
+        const T* pixel = row;
+        for (unsigned int i=0;i<ni;++i, pixel+=istep)
+        {
+          *it = *pixel;
+          it++;
+        }
+      }
+    }
+  }
+  unsigned npix = data.size();
+  
+  // Get the nth_element corresponding to the specified fractions
+  value.resize(nfrac);
+  for (unsigned f=0; f<nfrac; ++f)
+  {
+    unsigned index = static_cast<unsigned>(fraction[f]*npix - 0.5);
+    typename vcl_vector<T>::iterator index_it = data.begin() + index;
+    vcl_nth_element(data.begin(), index_it, data.end());
+    value[f] = *index_it;
+  }
+}
+
+
 //: Calc the mean of each pixel over all the planes.
 // \relates vil3d_image_view
 template<class aT, class sumT>

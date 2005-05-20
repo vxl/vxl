@@ -1,6 +1,7 @@
 // This is mul/vil3d/tests/test_math.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
+#include <vcl_iomanip.h>
 #include <vil3d/vil3d_math.h>
 
 
@@ -83,7 +84,32 @@ static void test_math_value_range()
   vil3d_math_value_range_percentile(img, 0.311, val);
   TEST("vil3d_math_value_range_percentile(): 31.1 %", val==311, true);
   vil3d_math_value_range_percentile(img, 0.737, val);
-  TEST("vil3d_math_value_range_percentile(): 73.7 %", val==737, true);  
+  TEST("vil3d_math_value_range_percentile(): 73.7 %", val==737, true); 
+  
+  // Test several percentiles at once
+  int nfrac = 9;
+  vcl_vector<double> fraction(nfrac);
+  vcl_vector<double> true_value(nfrac);
+  fraction[0] = 0.000;  true_value[0] =    1;
+  fraction[1] = 0.050;  true_value[1] =   50;
+  fraction[2] = 0.100;  true_value[2] =  100;
+  fraction[3] = 0.311;  true_value[3] =  311;
+  fraction[4] = 0.500;  true_value[4] =  500;
+  fraction[5] = 0.737;  true_value[5] =  737;
+  fraction[6] = 0.900;  true_value[6] =  900;
+  fraction[7] = 0.950;  true_value[7] =  950;
+  fraction[8] = 1.000;  true_value[8] = 1000;
+  vcl_vector<int> value;
+  vil3d_math_value_range_percentiles(img, fraction, value);
+  bool all_correct = true;
+  for (unsigned f=0; f<nfrac; ++f)
+  {
+    if (value[f] != true_value[f]) 
+    {
+      all_correct = false;
+    }
+  }  
+  TEST("vil3d_math_value_range_percentiles(): all correct", all_correct, true);
 }
 
 
