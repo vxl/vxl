@@ -65,55 +65,16 @@ inline void vil3d_math_value_range(const vil3d_image_view<T>& im,
 // \relates vil3d_image_view
 // \note This function requires the sorting of large parts of the image data
 // and can be very expensive in terms of both processing and memory.
+// \sa vil3d_math_value_range_percentiles()
 template <class T>
 inline void vil3d_math_value_range_percentile(const vil3d_image_view<T>& im,
                                               const double fraction,
                                               T& value)
 {
-  // Test for invalid inputs
-  if (im.size()==0 || fraction<0.0 || fraction>=1.0)
-  {
-    value = 0;
-    return;
-  }
-  
-  // Accumulate the pixel values into a list.
-  unsigned ni = im.ni();
-  unsigned nj = im.nj();
-  unsigned nk = im.nk();
-  unsigned np = im.nplanes();
-  vcl_ptrdiff_t istep = im.istep(); 
-  vcl_ptrdiff_t jstep=im.jstep();
-  vcl_ptrdiff_t kstep=im.kstep();
-  vcl_ptrdiff_t pstep = im.planestep();
-  vcl_vector<T> data(ni*nj*nk*np);
-  
-  typename vcl_vector<T>::iterator it = data.begin();
-  const T* plane = im.origin_ptr();
-  for (unsigned int p=0;p<np;++p, plane += pstep)
-  {
-    const T* slice = plane;
-    for (unsigned int k=0;k<nk;++k, slice += kstep)
-    {
-      const T* row = slice;
-      for (unsigned int j=0;j<nj;++j, row += jstep)
-      {
-        const T* pixel = row;
-        for (unsigned int i=0;i<ni;++i, pixel+=istep)
-        {
-          *it = *pixel;
-          it++;
-        }
-      }
-    }
-  }
-  unsigned npix = data.size();
-
-  // Get the nth_element corresponding to the specified fraction
-  int index = int (fraction*npix - 0.5);
-  typename vcl_vector<T>::iterator index_it = data.begin() + index;
-  vcl_nth_element(data.begin(), index_it, data.end());
-  value = *index_it;
+  vcl_vector<double> fractions(1, fraction);
+  vcl_vector<T> values;
+  vil3d_math_value_range_percentiles(im, fractions, values);
+  value = values.at(0); // Bounds-checked access in case previous line failed.
 }
 
 
