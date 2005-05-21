@@ -174,6 +174,9 @@ SOURCE=.\test_hungarian_algorithm.cxx
 # Begin Source File
 SOURCE=.\test_integrant.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_bessel.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "txx;h"
