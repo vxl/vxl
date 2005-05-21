@@ -41,7 +41,7 @@ static void test_image_view_maths_float()
 static void test_math_value_range()
 {
   vcl_cout << "********************************\n"
-           << " Testing vil3d_math_value_range \n"
+           << " Testing vil3d_math_value_range\n"
            << "********************************\n";
 
   // Create a test image with values 1...1000
@@ -60,7 +60,7 @@ static void test_math_value_range()
   }
 
   // Check the min/max values
-  int min=2000; 
+  int min=2000;
   int max=-2000;
   vil3d_math_value_range(img, min, max);
   TEST("vil3d_math_value_range(): min", min==1, true);
@@ -72,22 +72,22 @@ static void test_math_value_range()
   vil3d_math_value_range_percentile(img, 0.05, val);
   TEST("vil3d_math_value_range_percentile():  5  %", val==50, true);
   vil3d_math_value_range_percentile(img, 0.95, val);
-  TEST("vil3d_math_value_range_percentile(): 95  %", val==950, true);  
+  TEST("vil3d_math_value_range_percentile(): 95  %", val==950, true);
 
   // Test a likely pair of percentiles
   vil3d_math_value_range_percentile(img, 0.10, val);
   TEST("vil3d_math_value_range_percentile(): 10  %", val==100, true);
   vil3d_math_value_range_percentile(img, 0.90, val);
-  TEST("vil3d_math_value_range_percentile(): 90  %", val==900, true);  
-  
+  TEST("vil3d_math_value_range_percentile(): 90  %", val==900, true);
+
   // Test an unlikely pair of percentiles
   vil3d_math_value_range_percentile(img, 0.311, val);
   TEST("vil3d_math_value_range_percentile(): 31.1 %", val==311, true);
   vil3d_math_value_range_percentile(img, 0.737, val);
-  TEST("vil3d_math_value_range_percentile(): 73.7 %", val==737, true); 
-  
+  TEST("vil3d_math_value_range_percentile(): 73.7 %", val==737, true);
+
   // Test several percentiles at once
-  int nfrac = 9;
+  unsigned int nfrac = 9;
   vcl_vector<double> fraction(nfrac);
   vcl_vector<double> true_value(nfrac);
   fraction[0] = 0.000;  true_value[0] =    1;
@@ -104,11 +104,11 @@ static void test_math_value_range()
   bool all_correct = true;
   for (unsigned f=0; f<nfrac; ++f)
   {
-    if (value[f] != true_value[f]) 
+    if (value[f] != true_value[f])
     {
       all_correct = false;
     }
-  }  
+  }
   TEST("vil3d_math_value_range_percentiles(): all correct", all_correct, true);
 }
 
