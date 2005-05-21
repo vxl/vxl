@@ -35,7 +35,7 @@ void vnl_bessel(unsigned n_max, double x, vnl_vector<double>& J)
   for (int m=2;m<=nhi;m+=2) sum+=2*j[m];
 
   J.set_size(1+n_max);
-  for (int m=0;m<=n_max;++m) J[m]=j[m]/sum;
+  for (unsigned int m=0; m<=n_max; ++m) J[m]=j[m]/sum;
 }
 
 //: Returns J_0(x), the value of the Bessel function of order 0 at x
@@ -78,7 +78,7 @@ double vnl_bessel(unsigned n, double x)
   double j0,j1;
   double even_sum=j2;
   double jn;
-  for (int i=nhi;i>=0;i-=2)
+  for (int i=nhi; i>=0; i-=2)
   {
     // j0 is i-th term, j1 is i+1-th etc
     j1=2*(i+2)*j2/x - j3;
@@ -86,8 +86,8 @@ double vnl_bessel(unsigned n, double x)
     even_sum+=j0;
     j3=j1;
     j2=j0;
-    if (i==n) jn=j0;
-    else if (i+1==n) jn=j1;
+    if ((unsigned int)i==n) jn=j0;
+    else if ((unsigned int)i+1==n) jn=j1;
   }
   return jn/(2*even_sum-j0);
 }
