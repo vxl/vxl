@@ -74,7 +74,8 @@ inline void vil3d_math_value_range_percentile(const vil3d_image_view<T>& im,
   vcl_vector<double> fractions(1, fraction);
   vcl_vector<T> values;
   vil3d_math_value_range_percentiles(im, fractions, values);
-  value = values.at(0); // Bounds-checked access in case previous line failed.
+  if (values.size() > 0)
+    value = values(0); // Bounds-checked access in case previous line failed.
 }
 
 
@@ -92,7 +93,7 @@ inline void vil3d_math_value_range_percentiles(const vil3d_image_view<T>& im,
                                                vcl_vector<T>& value)
 {
   value.clear();
-  
+
   // Test for invalid inputs
   if (im.size()==0)
   {
@@ -104,18 +105,18 @@ inline void vil3d_math_value_range_percentiles(const vil3d_image_view<T>& im,
     if (fraction[f]<0.0 || fraction[f]>1.0)
       return;
   }
-    
+
   // Copy the pixel values into a local list.
   unsigned ni = im.ni();
   unsigned nj = im.nj();
   unsigned nk = im.nk();
   unsigned np = im.nplanes();
-  vcl_ptrdiff_t istep = im.istep(); 
+  vcl_ptrdiff_t istep = im.istep();
   vcl_ptrdiff_t jstep=im.jstep();
   vcl_ptrdiff_t kstep=im.kstep();
   vcl_ptrdiff_t pstep = im.planestep();
   vcl_vector<T> data(ni*nj*nk*np);
-  
+
   typename vcl_vector<T>::iterator it = data.begin();
   const T* plane = im.origin_ptr();
   for (unsigned int p=0;p<np;++p, plane += pstep)
@@ -136,7 +137,7 @@ inline void vil3d_math_value_range_percentiles(const vil3d_image_view<T>& im,
     }
   }
   unsigned npix = data.size();
-  
+
   // Get the nth_element corresponding to the specified fractions
   value.resize(nfrac);
   for (unsigned f=0; f<nfrac; ++f)
