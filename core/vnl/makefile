@@ -131,6 +131,7 @@ MANPAGE_SOURCES += vnl_cross_product_matrix.h
 MANPAGE_SOURCES += vnl_identity_3x3.h
 
 # special functions
+SOURCES += vnl_bessel.cxx
 MANPAGE_SOURCES += vnl_cross.h
 SOURCES += vnl_erf.cxx
 SOURCES += vnl_gamma.cxx
