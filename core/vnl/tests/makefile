@@ -32,6 +32,7 @@ TESTS += test_gamma.cxx
 TESTS += test_arithmetic.cxx
 TESTS += test_hungarian_algorithm.cxx
 TESTS += test_integrant.cxx
+TESTS += test_bessel.cxx
 
 MANPAGE_SOURCES += test_arithmetic_body.h
 
