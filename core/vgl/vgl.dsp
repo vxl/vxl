@@ -333,6 +333,9 @@ SOURCE=.\Templates/vgl_distance+float-.cxx
 SOURCE=.\Templates/vgl_convex+double-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vgl_convex+float-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vgl_box_2d+unsigned-.cxx
 # End Source File
 # Begin Source File

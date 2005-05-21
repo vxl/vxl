@@ -393,6 +393,9 @@ SOURCE=.\Templates/vgui_range_map+vxl_byte-.cxx
 SOURCE=.\Templates/vgui_range_map+vxl_uint_16-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vgui_range_map+bool-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\impl/gtk/vgui_gtk.cxx
 # End Source File
 # Begin Source File

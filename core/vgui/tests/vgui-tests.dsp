@@ -148,6 +148,9 @@ SOURCE=.\test_image_tableau.cxx
 # Begin Source File
 SOURCE=.\test_range_map.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_drawpix_speed2.cxx
+# End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
