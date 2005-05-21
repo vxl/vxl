@@ -707,6 +707,9 @@ SOURCE=.\vnl_hungarian_algorithm.cxx
 # Begin Source File
 SOURCE=.\vnl_definite_integral.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vnl_bessel.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -1108,6 +1111,9 @@ SOURCE=.\vnl_definite_integral.h
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_integrant_fnct.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_bessel.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
