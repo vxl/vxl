@@ -48,11 +48,11 @@ map_pixel_byte(const Type pix, const Type min, const Type max,
       return 0;
   //the type with largest dynamic range
   long double y = pix;
-  y = (y < min) ?  min: (y > max) ? max : y;
+  y = (y < (long double)min) ?  (long double)min : (y > (long double)max) ? (long double)max : y;
   if (invert_)
-    y = max - y;
+    y = (long double)max - y;
   else
-    y -= min;
+    y -= (long double)min;
   // y will now be in the range 0 to (max - min)
   // we now put y in that range
   y *= ratio;
@@ -76,11 +76,11 @@ map_pixel_float(const Type pix, const Type min, const Type max,
       return 0.0f;
   //the type with largest dynamic range
   long double y = pix;
-  y = (y < min) ?  min: (y > max) ? max : y;
+  y = (y < (long double)min) ?  (long double)min: (y > (long double)max) ? (long double)max : y;
   if (invert_)
-    y = max - y;
+    y = (long double)max - y;
   else
-    y -= min;
+    y -= (long double)min;
   // y will now be in the range 0 to (max - min)
   // we now put y in that range
   y *=ratio;
@@ -161,11 +161,9 @@ template <class Type>
 int vgui_range_map<Type>::offset()
 {
   if (table_mapable_)
-  {
-    int min = (int)vil_pixel_traits<Type>::minval();
-    return -min;
-  }
-  return 0;
+    return - (int)vil_pixel_traits<Type>::minval();
+  else
+    return 0;
 }
 
 #undef VGUI_RANGE_MAP_INSTANTIATE
