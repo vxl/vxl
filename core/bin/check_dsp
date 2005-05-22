@@ -34,6 +34,9 @@ foreach $dir (@DIRS)
 {
   # make that the embedding directory, if this is a file name:
   $dir =~ s!/[^/]+$!! if -f $dir;
+  # temporarily skip this directory -- it gives useless messages:
+  next if ($dir =~ m!bmvl/brct/tests/?$!);
+  # Now read directory content and open relevant files (like CMakeLists.txt, makefile and *.dsp)
   opendir(TMP,"$dir");
   @tmp_list = readdir(TMP);
   closedir(TMP);
@@ -124,7 +127,7 @@ foreach $dir (@DIRS)
       last if ($updir_files eq "~END" && $inc_files eq "~END");
       while ($inc_files lt $updir_files) {
         print STDOUT "#include <$inc_files>\tmust be removed from $dir/test_include.cxx\n"
-          unless ($inc_files eq "vxl_config.h" || $inc_files eq "vcl_compiler.h");
+          unless ($inc_files eq "vxl_config.h" || $inc_files eq "vgui/vgui_config.h" || $inc_files eq "vcl_compiler.h");
         $inc_files = shift(@inc_files);
       }
       last if ($updir_files eq "~END" && $inc_files eq "~END");
