@@ -75,7 +75,7 @@ inline void vil3d_math_value_range_percentile(const vil3d_image_view<T>& im,
   vcl_vector<T> values;
   vil3d_math_value_range_percentiles(im, fractions, values);
   if (values.size() > 0)
-    value = values(0); // Bounds-checked access in case previous line failed.
+    value = values[0]; // Bounds-checked access in case previous line failed.
 }
 
 
