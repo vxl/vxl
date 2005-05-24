@@ -93,6 +93,30 @@ testlib_enter_stealth_mode()
 
 }
 
+
+int testlib_run_test_unit(vcl_vector<vcl_string>::size_type i, int argc, char *argv[])
+{
+#if VCL_HAS_EXCEPTIONS
+  char * env_var1 = getenv("DART_TEST_FROM_DART");
+  char * env_var2 = getenv("DASHBOARD_TEST_FROM_CTEST");  // DART Client built in CMake
+  if ( env_var1 || env_var2 ) {
+    try { 
+      return testlib_test_func_[i]( argc-1, argv+1 );
+    }
+    catch (const vcl_exception &e)
+    {
+      vcl_cerr << "\nTOP-LEVEL EXCEPTION HANDLER                                        **FAILED**\n"
+        << e.what() << "\n\n";
+      return 1;
+    }
+  }
+// Leave MS structured exceptions to the SE handler.
+  else
+#endif
+  return testlib_test_func_[i]( argc-1, argv+1 );
+}
+
+
 int
 testlib_main( int argc, char* argv[] )
 {
@@ -128,22 +152,7 @@ testlib_main( int argc, char* argv[] )
   {
     for ( vec_size_t i = 0; i < testlib_test_name_.size(); ++i )
       if ( testlib_test_name_[i] == argv[1] )
-      {
-#if VCL_HAS_EXCEPTIONS
-        try{
-#endif
-          return testlib_test_func_[i]( argc-1, argv+1 );
-#if VCL_HAS_EXCEPTIONS
-        }
-        catch (const vcl_exception &e)
-        {
-          vcl_cerr << "\nTOP-LEVEL EXCEPTION HANDLER                                        **FAILED**\n"
-            << e.what() << "\n\n";
-          return 1;
-        }
-    // Leave MS structured exceptions to the SE handler.
-#endif
-      }
+        return testlib_run_test_unit(i, argc, argv);
 
 
     vcl_cerr << "Test " << argv[1] << " not registered.\n";
@@ -161,21 +170,8 @@ testlib_main( int argc, char* argv[] )
       vcl_cout << "----------------------------------------\n"
                << "Running: " << testlib_test_name_[i] << '\n'
                << "----------------------------------------\n" << vcl_flush;
-      int result;
-#if VCL_HAS_EXCEPTIONS
-      try{
-#endif
-        result = testlib_test_func_[i]( argc, argv );
-#if VCL_HAS_EXCEPTIONS
-      }
-      catch (const vcl_exception &e)
-      {
-        vcl_cerr << "\nTOP-LEVEL EXCEPTION HANDLER                                        **FAILED**\n"
-          << e.what() << "\n\n";
-        result = 1;
-      }
-  // Leave MS structured exceptions to the SE handler.
-#endif
+
+      int result = testlib_run_test_unit(i, argc, argv);
       
       vcl_cout << "----------------------------------------\n"
                << testlib_test_name_[i] << " returned " << result << ' '
