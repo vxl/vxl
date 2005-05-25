@@ -101,7 +101,7 @@ int testlib_run_test_unit(vcl_vector<vcl_string>::size_type i, int argc, char *a
   char * env_var2 = getenv("DASHBOARD_TEST_FROM_CTEST");  // DART Client built in CMake
   if ( env_var1 || env_var2 ) {
     try { 
-      return testlib_test_func_[i]( argc-1, argv+1 );
+      return testlib_test_func_[i]( argc, argv );
     }
     catch (const vcl_exception &e)
     {
@@ -113,7 +113,7 @@ int testlib_run_test_unit(vcl_vector<vcl_string>::size_type i, int argc, char *a
 // Leave MS structured exceptions to the SE handler.
   else
 #endif
-  return testlib_test_func_[i]( argc-1, argv+1 );
+  return testlib_test_func_[i]( argc, argv );
 }
 
 
@@ -152,7 +152,7 @@ testlib_main( int argc, char* argv[] )
   {
     for ( vec_size_t i = 0; i < testlib_test_name_.size(); ++i )
       if ( testlib_test_name_[i] == argv[1] )
-        return testlib_run_test_unit(i, argc, argv);
+        return testlib_run_test_unit(i, argc-1, argv+1);
 
 
     vcl_cerr << "Test " << argv[1] << " not registered.\n";
