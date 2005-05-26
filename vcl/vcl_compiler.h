@@ -88,7 +88,10 @@
 #  define VCL_VC
 #  if _MSC_VER >= 1300
 #   define VCL_VC_DOTNET 1 // VC is at least version >= 7.0
-#   if _MSC_VER >= 1310
+#   if _MSC_VER >= 1400    // .NET 2005 = Version 8.0
+#    define _CRT_SECURE_NO_DEPRECATE 1
+#    define VCL_VC80 1     // .NET 2003 = Version 7.1
+#   elif _MSC_VER >= 1310
 #    define VCL_VC71 1     // .NET 2003 = Version 7.1
 #   else
 #    define VCL_VC70 1     // earlier .NET versions = Version 7.0
@@ -120,7 +123,7 @@
 // 4146: unary minus operator applied to unsigned type, result still unsigned
 // 4267: conversion related to size_t
 // 4355: 'this' : used in base member initializer list
-#    pragma warning(disable:4786 4018 4146 4267 4355)
+#    pragma warning(disable:4786 4355)
 #  endif
 #endif
 
