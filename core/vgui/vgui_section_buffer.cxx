@@ -8,18 +8,18 @@
 // \brief  See vgui_section_buffer.h for a description of this file.
 //
 // \verbatim
-// Modifications
-//  16-AUG-2000  Marko Bacic, Oxford RRG -- Added support for multiple textures
+//  Modifications
+//   16-AUG-2000 Marko Bacic, Oxford RRG -- Added support for multiple textures
 //               Many cheap graphics cards do not support texture
 //               maps bigger than 256x256. To support images greater then 256x256
 //               it was necessary to add support for multiple textures. Hence an
 //               image is rendered by tiling together several textures containing
 //               different parts of it.
 //
-//  the_same_day fsm
+//   16-AUG-2000 fsm
 //               Imposed my rigid ways on Marko's changes.
 //               Fixes for SolarisGL.
-//  05-AUG-2003  Amitha Perera
+//   05-AUG-2003 Amitha Perera
 //               Added support for rendering vil_image_views, and cleaned up
 //               the macros for selecting the pixel types and doing the data
 //               conversion.
@@ -71,7 +71,7 @@ namespace
       if (rm.table_mapable())
       {
         //offset for signed types
-        InT O = rm.offset();
+        int O = rm.offset();
         switch ( in.nplanes() )
         {
          case 1: {
