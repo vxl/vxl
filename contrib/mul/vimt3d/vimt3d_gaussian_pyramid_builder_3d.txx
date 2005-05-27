@@ -10,6 +10,7 @@
 
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
+#include <vcl_sstream.h>
 
 #include <vimt/vimt_image_pyramid.h>
 #include <vil3d/algo/vil3d_gauss_reduce.h>
