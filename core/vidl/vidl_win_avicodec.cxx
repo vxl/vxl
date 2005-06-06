@@ -129,8 +129,9 @@ vil_image_view_base_sptr vidl_avicodec::get_view(
   vil_memory_chunk_sptr chunk_db = new vil_memory_chunk(nbytes, fmt);
   vxl_byte *db = (vxl_byte*)(chunk_db->data());
   vxl_byte *ib = db;
-  // The byte swapping below is probabily unnecessary - use vil_flip_ud instead - FIXME
 
+  unsigned bytes_pixel = BitsPerPixel/8;
+  unsigned nplanes = 1;
   // Store the DIB datas into ib (db).
   // Note : DIB is a flipped upside down
   switch (BitsPerPixel)
@@ -138,7 +139,7 @@ vil_image_view_base_sptr vidl_avicodec::get_view(
    case 24:
     for (int j=height()-y0-1; j>=height()-y0-ys; j--)
     {
-      DIB = StartDIB+ (j*line_length)+x0*(BitsPerPixel/8);
+      DIB = StartDIB+ j*line_length + x0*bytes_pixel;
       for (int i=0; i<xs; i++)
       {
         *db = *(DIB+2);
@@ -148,11 +149,12 @@ vil_image_view_base_sptr vidl_avicodec::get_view(
         DIB+=3;
       }
     }
+    nplanes = 3;
     break;
    case 16:
     for (int j=height()-y0-1; j>=height()-y0-ys; j--)
     {
-      DIB = StartDIB + (j*line_length) + x0*(BitsPerPixel/8);
+      DIB = StartDIB + (j*line_length) + x0*bytes_pixel;
       for (int i=0; i<xs; i++)
       {
         WORD* Pixel16 = (WORD*) DIB; // the current 16 bits pixel
@@ -163,15 +165,17 @@ vil_image_view_base_sptr vidl_avicodec::get_view(
         DIB+=2;
       }
     }
+    nplanes = 2;
     break;
    default:
     vcl_cerr << "vidl_avicodec : Don't know how to process a "
              << BitsPerPixel << " bits per pixel AVI File.\n";
   } // end switch Bits per pixel
+  //Note that istep and jstep are in bytes (not pixels)
 
-  vil_image_view_base_sptr image_sptr(new vil_image_view<vxl_byte>(chunk_db, ib, xs, ys, 3,
-                                                                   3, ((xs*3+3)& -4), 1));
-
+  vil_image_view_base_sptr 
+    image_sptr(new vil_image_view<vxl_byte>(chunk_db, ib, xs, ys, nplanes,
+                                            bytes_pixel, bytes_pixel*xs, 1));
   return image_sptr;
 }
 
