@@ -180,6 +180,63 @@ static void test_image_view_maths_byte()
   TEST_NEAR("vil_math_sqrt (4)",bim_sqrt(1,1),2,1e-6);
   TEST_NEAR("vil_math_sqrt (9)",bim_sqrt(3,4),3,1e-6);
   TEST_NEAR("vil_math_sqrt (8)",bim_sqrt(1,2),3,1e-6);
+
+  // Testing max function (vxl_byte)
+  vil_image_view<vxl_byte> bim_max1(5,5);
+  vil_image_view<vxl_byte> bim_max2(5,5);
+  vil_image_view<vxl_byte> bim_max_out(5,5);
+  bim_max1.fill(4);
+  bim_max1(2,3) = 0;
+  bim_max2.fill(8);
+  bim_max2(1,2) = 4;
+  bim_max2(2,3) = 1;
+  vil_math_image_max(bim_max1, bim_max2, bim_max_out);  
+  TEST_NEAR("vil_math_image_max (a)",bim_max_out(1,2),4,1e-6);
+  TEST_NEAR("vil_math_image_max (b)",bim_max_out(2,2),8,1e-6);
+  TEST_NEAR("vil_math_image_max (c)",bim_max_out(2,3),1,1e-6);
+
+  // Testing max function (float)
+  vil_image_view<float> fim_max1(5,5);
+  vil_image_view<float> fim_max2(5,5);
+  vil_image_view<float> fim_max_out(5,5);
+  fim_max1.fill(4.2f);
+  fim_max1(2,3) = -1.5f;
+  fim_max2.fill(25.f);
+  fim_max2(1,2) = 4.25f;
+  fim_max2(2,3) = -3.f;
+  vil_math_image_max(fim_max1, fim_max2, fim_max_out);  
+  TEST_NEAR("vil_math_image_max (d)",fim_max_out(1,2),4.25f,1e-6);
+  TEST_NEAR("vil_math_image_max (e)",fim_max_out(2,2),25.f,1e-6);
+  TEST_NEAR("vil_math_image_max (f)",fim_max_out(2,3),-1.5f,1e-6);
+
+
+  // Testing min function (vxl_byte)
+  vil_image_view<vxl_byte> bim_min1(5,5);
+  vil_image_view<vxl_byte> bim_min2(5,5);
+  vil_image_view<vxl_byte> bim_min_out(5,5);
+  bim_min1.fill(4);
+  bim_min1(2,3) = 0;
+  bim_min2.fill(8);
+  bim_min2(1,2) = 4;
+  bim_min2(2,3) = 1;
+  vil_math_image_min(bim_min1, bim_min2, bim_min_out);  
+  TEST_NEAR("vil_math_image_min (a)",bim_min_out(1,2),4,1e-6);
+  TEST_NEAR("vil_math_image_min (b)",bim_min_out(2,2),4,1e-6);
+  TEST_NEAR("vil_math_image_min (c)",bim_min_out(2,3),0,1e-6);
+
+  // Testing min function (float)
+  vil_image_view<float> fim_min1(5,5);
+  vil_image_view<float> fim_min2(5,5);
+  vil_image_view<float> fim_min_out(5,5);
+  fim_min1.fill(4.2f);
+  fim_min1(2,3) = -1.5f;
+  fim_min2.fill(25.f);
+  fim_min2(1,2) = 4.25f;
+  fim_min2(2,3) = -3.f;
+  vil_math_image_min(fim_min1, fim_min2, fim_min_out);  
+  TEST_NEAR("vil_math_image_min (d)",fim_min_out(1,2),4.2f,1e-6);
+  TEST_NEAR("vil_math_image_min (e)",fim_min_out(2,2),4.2f,1e-6);
+  TEST_NEAR("vil_math_image_min (f)",fim_min_out(2,3),-3.f,1e-6);
 }
 
 static void test_image_view_maths()

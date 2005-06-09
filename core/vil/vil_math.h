@@ -459,6 +459,72 @@ inline void vil_math_image_product(const vil_image_view<aT>& imA,
   }
 }
 
+//: Compute the max of two images (im_max = max(imA, imB))
+// \relates vil_image_view
+template<class aT, class bT, class maxT>
+inline void vil_math_image_max(const vil_image_view<aT>& imA,
+                               const vil_image_view<bT>& imB,
+                               vil_image_view<maxT>& im_max)
+{
+  unsigned ni = imA.ni(),nj = imA.nj(),np = imA.nplanes();
+  assert(imB.ni()==ni && imB.nj()==nj && imB.nplanes()==np);
+  im_max.set_size(ni,nj,np);
+
+  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
+  vcl_ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
+  vcl_ptrdiff_t istepS=im_max.istep(),jstepS=im_max.jstep(),pstepS = im_max.planestep();
+  const aT* planeA = imA.top_left_ptr();
+  const bT* planeB = imB.top_left_ptr();
+  maxT* planeS     = im_max.top_left_ptr();
+  for (unsigned p=0;p<np;++p,planeA += pstepA,planeB += pstepB,planeS += pstepS)
+  {
+    const aT* rowA   = planeA;
+    const bT* rowB   = planeB;
+    maxT* rowS = planeS;
+    for (unsigned j=0;j<nj;++j,rowA += jstepA,rowB += jstepB,rowS += jstepS)
+    {
+      const aT* pixelA = rowA;
+      const bT* pixelB = rowB;
+      maxT* pixelS = rowS;
+      for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelB+=istepB,pixelS+=istepS)
+        *pixelS = maxT(vcl_max(*pixelA, *pixelB));
+    }
+  }
+}
+
+//: Compute the min of two images (im_min = min(imA, imB))
+// \relates vil_image_view
+template<class aT, class bT, class minT>
+inline void vil_math_image_min(const vil_image_view<aT>& imA,
+                               const vil_image_view<bT>& imB,
+                               vil_image_view<minT>& im_min)
+{
+  unsigned ni = imA.ni(),nj = imA.nj(),np = imA.nplanes();
+  assert(imB.ni()==ni && imB.nj()==nj && imB.nplanes()==np);
+  im_min.set_size(ni,nj,np);
+
+  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
+  vcl_ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
+  vcl_ptrdiff_t istepS=im_min.istep(),jstepS=im_min.jstep(),pstepS = im_min.planestep();
+  const aT* planeA = imA.top_left_ptr();
+  const bT* planeB = imB.top_left_ptr();
+  minT* planeS     = im_min.top_left_ptr();
+  for (unsigned p=0;p<np;++p,planeA += pstepA,planeB += pstepB,planeS += pstepS)
+  {
+    const aT* rowA   = planeA;
+    const bT* rowB   = planeB;
+    minT* rowS = planeS;
+    for (unsigned j=0;j<nj;++j,rowA += jstepA,rowB += jstepB,rowS += jstepS)
+    {
+      const aT* pixelA = rowA;
+      const bT* pixelB = rowB;
+      minT* pixelS = rowS;
+      for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelB+=istepB,pixelS+=istepS)
+        *pixelS = minT(vcl_min(*pixelA, *pixelB));
+    }
+  }
+}
+
 //: Compute pixel-wise ratio of two images : im_ratio(i,j) = imA(i,j)/imB(i,j)
 //  Pixels cast to type sumT before calculation.
 //  If imB(i,j,p)==0, im_ration(i,j,p)=0
