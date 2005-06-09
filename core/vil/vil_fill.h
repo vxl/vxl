@@ -16,6 +16,15 @@
 template<class T>
 void vil_fill(vil_image_view<T>& view, T value)
 {
+
+  if (is_contiguous())
+  {
+    iterator it = begin();
+    const_iterator end_it = end();
+    while (it!=end_it) {*it = value; ++it; }
+    return;
+  }
+
   unsigned ni = view.ni(), istep=view.istep();
   unsigned nj = view.nj(), jstep=view.jstep();
   unsigned np = view.nplanes(), pstep = view.planestep();
