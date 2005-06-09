@@ -26,6 +26,7 @@
 #include <vcl_ostream.h>
 #include <vil/vil_pixel_format.h>
 #include <vcl_cstring.h>
+#include <vcl_algorithm.h>
 
 //=======================================================================
 
@@ -656,12 +657,7 @@ void vil_image_view<T>::fill(T value)
   T* plane = top_left_;
 
   if (is_contiguous())
-  {
-    iterator it = begin();
-    const_iterator end_it = end();
-    while (it!=end_it) {*it = value; ++it; }
-    return;
-  }
+    vcl_fill(begin(), end(), value);
 
   if (istep_==1)
   {
