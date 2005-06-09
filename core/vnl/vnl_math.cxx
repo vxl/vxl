@@ -63,7 +63,7 @@ extern "C" int finite(double);
 
 #if defined(__APPLE__)
 # include <math.h> // dont_vxl_filter: this is *not* supposed to be <cmath>
-# define isnan __isnan
+# define isnan(x) __isnand((double)x)
 #endif
 
 //--------------------------------------------------------------------------------
