@@ -61,6 +61,9 @@ compute_matches( rgrl_feature_set const&       from_set,
     if( to_use[k] ) {
 
     rgrl_feature_sptr mapped = (*fitr)->transform( current_xform );
+    if( !validate( mapped ) )
+      continue;   // feature is invalid
+
     feat_vector matching_features = to_set.k_nearest_features( mapped, k_ );
 
     // prune the matches to satisfy the threshold

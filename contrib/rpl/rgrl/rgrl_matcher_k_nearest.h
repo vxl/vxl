@@ -44,6 +44,9 @@ class rgrl_matcher_k_nearest
 
  protected:
 
+  //: validate the mapped feature
+  bool validate( rgrl_feature_sptr const& mapped ) const;
+
   // nodes to be sorted based on distance
   struct internal_dist_node{
     double geo_err_;

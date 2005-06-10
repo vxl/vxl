@@ -58,7 +58,11 @@ compute_matches( rgrl_feature_set const&       from_set,
 
   //  generate the matches for each feature of this feature type in the current region
   for ( feat_iter fitr = from.begin(); fitr != from.end(); ++fitr ) {
+    
     rgrl_feature_sptr mapped = (*fitr)->transform( current_xform );
+    if( !validate( mapped ) )
+      continue;   // feature is invalid
+      
     feat_vector matching_features = to_set.k_nearest_features( mapped, k_ );
 
     // prune the matches to satisfy the threshold
@@ -148,4 +152,28 @@ add_one_flipped_match( rgrl_match_set_sptr&      inv_set,
   // add matches
   if( ! matching_tos.empty() )
     inv_set->add_feature_matches_and_weights( from, mapped, matching_tos, sig_wgts );
+}
+
+
+bool 
+rgrl_matcher_k_nearest::
+validate( rgrl_feature_sptr const& mapped ) const
+{
+  // Suppose scale=1 is the lowest scale, or the finest resolution
+  // Any mapped scale below 1 cannot find any correspondence
+  // due to the pixel discrtetization. 
+  // In practice, the threshold is a number less than one, 
+  // as feature of real scale=0.9 is still likely to be detected.
+  
+  const double scale = mapped->scale();
+  
+  // if the scale is too small to be detected on the other image
+  if( scale && scale<0.8 ) {
+    
+    return false;
+    
+  }
+  
+  // by default, 
+  return true;
 }

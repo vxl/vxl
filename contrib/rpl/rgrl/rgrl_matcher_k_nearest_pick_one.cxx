@@ -51,6 +51,9 @@ compute_matches( rgrl_feature_set const&       from_set,
   for ( feat_iter fitr = from.begin(); fitr != from.end(); ++fitr )
   {
     rgrl_feature_sptr mapped = (*fitr)->transform( current_xform );
+    if( !validate( mapped ) )
+      continue;   // feature is invalid
+
     feat_vector matching_features = to_set.k_nearest_features( mapped, k_ );
 
     // find the one most similar
