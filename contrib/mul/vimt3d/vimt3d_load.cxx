@@ -8,8 +8,7 @@
 
 //: Create a transform from the properties of image resource.
 // The transform will be from world co-ordinates in metres to image co-ordinates (or mm if requested).
-// The image origin will be as specified by the image format (or (0,0,0) if requested).
-vimt3d_transform_3d vimt3d_load_transform(const vil3d_image_resource_sptr &im, bool use_millimetres, bool use_000_as_origin)
+vimt3d_transform_3d vimt3d_load_transform(const vil3d_image_resource_sptr &im, bool use_millimetres)
 {
   float width[3] = { 1.0f, 1.0f, 1.0f };
   bool valid_width = im->get_property(vil3d_property_voxel_size, width);
@@ -23,14 +22,6 @@ vimt3d_transform_3d vimt3d_load_transform(const vil3d_image_resource_sptr &im, b
 
   float offset[3] = { 0.0f, 0.0f, 0.0f };
   bool valid_offset = im->get_property(vil3d_property_origin_offset, offset);
-
-  // force to use 000 as the origin
-  if (use_000_as_origin)
-  {
-      offset[0] = 0.0f;
-      offset[1] = 0.0f;
-      offset[2] = 0.0f;
-  }
 
   vimt3d_transform_3d t;
 
