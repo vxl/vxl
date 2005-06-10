@@ -14,6 +14,8 @@
 // Tolerance used to determine whether table entries are equal
 static double tolerance_ = 1e-15;
 
+// Whether the tolerance is applied as a fractional difference
+static bool fractional_tolerance_ = false;
 
 // Level of verbosity used for error output.
 static int verbosity_ = 0;
@@ -540,6 +542,10 @@ bool mbl_table::operator==(const mbl_table& rhs) const
     for (unsigned r=0; r<nrows; ++r)
     {
       double diff = columns_[c][r] - rhs.columns_[c][r];
+      if (fractional_tolerance_)
+      {
+        diff /= columns_[c][r];
+      }
       if (vcl_fabs(diff) > tolerance_)
       {
         if (verbosity_>0)
@@ -576,9 +582,11 @@ bool mbl_table::operator!=(const mbl_table& rhs) const
 //========================================================================
 // Set the tolerance used to determine whether table entries are equal.
 //========================================================================
-void mbl_table::set_tolerance(const double& tol)
+void mbl_table::set_tolerance(const double& tol, 
+                              const bool& fract/*=false*/)
 {
   tolerance_ = tol;
+  fractional_tolerance_ = fract;
 }
 
 

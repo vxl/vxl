@@ -147,7 +147,9 @@ public:
 
   //: Set the tolerance used to determine whether table entries are equal.
   // \param tol The tolerance should be a small positive number, eg 1e-19.
-  static void set_tolerance(const double& tol);
+  // \param frac Whether the tolerance is applied as a fractional difference.
+  static void set_tolerance(const double& tol,
+                            const bool& fract=false);
 
 
   //: Set the level of verbosity used for error output.
