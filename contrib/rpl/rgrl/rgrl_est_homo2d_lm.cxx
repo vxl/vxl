@@ -11,8 +11,10 @@
 
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>
+#include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_det.h>
 #include <vnl/vnl_fastops.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
@@ -337,8 +339,15 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   h2H( p, init_H );
   vnl_vector<double> centre(2,0.0);
 
+  // check rank of H
+  vnl_double_3x3 tmpH(init_H);
+  if( vcl_abs(vnl_det(tmpH)) < 1e-8 ) 
+    return 0;
+
+
   // compute covariance
   // JtJ is INVERSE of jacobian
+  //
   // vnl_svd<double> svd( lm.get_JtJ(), 1e-4 );
   // Cannot use get_JtJ() because it is affected by the
   // scale in homography parameter vector

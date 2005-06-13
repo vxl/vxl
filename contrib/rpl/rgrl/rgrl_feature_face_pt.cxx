@@ -86,8 +86,32 @@ transform( rgrl_transformation const& xform ) const
   face_ptr->error_proj_ = outer_product( face_ptr->normal_, face_ptr->normal_ );
 
   // transform scale
-  if( this->scale_ > 0.0 )
-    face_ptr->scale_ = this->transform_scale( xform );
+  //if( this->scale_ > 0.0 )
+  //  face_ptr->scale_ = this->transform_scale( xform );
+
+  // NOTE:
+  // Because the scaling factors is computed using PCA,
+  // it is invariant to rotation.  As a result, 
+  // the scaling factors are not with respect to x, y, or z anymore. 
+  // If there is different scaling on x, y, (or z) axis, 
+  // the scale of the mapped face point can be  different
+  // depending on the orientation. 
+
+  // Current solution is to approximate this by transforming 
+  // a vector whose magnitude is the original scale. 
+  // the after scale is the magnitude of the transformed vector as 
+  
+  vnl_vector<double> loc(normal_), xformed_loc(location_.size());
+  loc *= scale_;
+  loc += location_;
+  
+  // map the end point
+  xform.map_location( loc, xformed_loc );
+  
+  // substract the starting point
+  xformed_loc -= face_ptr->location_;
+  
+  face_ptr->scale_ = xformed_loc.magnitude();
 
   return result_sptr;
 }
@@ -96,6 +120,8 @@ double
 rgrl_feature_face_pt::
 transform_scale( rgrl_transformation const& xform ) const
 {
+  assert( !"should not use this function. The reason is above in the tranform() function." );
+  
   // transform scale
   vnl_vector<double> const& scaling = xform.scaling_factors();
   const unsigned dim = this->location_.size();

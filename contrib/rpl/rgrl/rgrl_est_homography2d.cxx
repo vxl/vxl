@@ -4,6 +4,9 @@
 
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_double_3x3.h>
+#include <vnl/vnl_det.h>
+
 
 rgrl_est_homography2d::
 rgrl_est_homography2d( double condition_num_thrd )
@@ -53,6 +56,11 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     for ( int r=0; r<3; ++r )
       for ( int c=0; c<3; ++c )
         normH( r, c ) = nparams( 3*r + c );
+
+    // check rank of H
+    vnl_double_3x3 tmpH(normH);
+    if( vcl_abs(vnl_det(tmpH)) < 1e-8 ) 
+      return 0;
 
     vnl_matrix<double> to_scale_matrix_inv(3,3,vnl_matrix_identity);
     vnl_matrix<double> from_scale_matrix(3,3,vnl_matrix_identity);
