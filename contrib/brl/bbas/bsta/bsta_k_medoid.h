@@ -35,7 +35,7 @@ class bsta_k_medoid
   ~bsta_k_medoid(){}
 
   //:insert a distance into the array, the entry j, i is automatically added
-  inline void insert_distance(const i, const j, double d)
+  inline void insert_distance(const unsigned i, const unsigned j, double d)
   {assert((i<n_elements_)&&(j<n_elements_));
   distance_array_[i][j] = d; distance_array_[j][i] = d;}
 
