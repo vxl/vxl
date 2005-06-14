@@ -26,7 +26,8 @@ rgrl_util_estimate_global_region( rgrl_mask_box const&         from_image_roi,
                                   rgrl_mask_box const&         to_image_roi,
                                   rgrl_mask_box const&         current_region,
                                   rgrl_transformation const&   curr_xform,
-                                  bool                         union_with_curr)
+                                  bool                         union_with_curr,
+                                  double                       drastic_change_ratio)
 {
   // Forward map 9 points - 4 corners, 4 side centers and 1 image center (27
   // points in 3D) of the from_image_roi. For each corner point q of the to_image_roi,
@@ -48,10 +49,10 @@ rgrl_util_estimate_global_region( rgrl_mask_box const&         from_image_roi,
   rgrl_mask_box region = current_region;
 
   pt_vector from_pts;
-  for (double i = from_x0[0]; i<= from_x1[0]; i+= (from_x1[0]-from_x0[0])/2) {
-    for (double j = from_x0[1]; j<= from_x1[1]; j+= (from_x1[1]-from_x0[1])/2) {
+  for (double i = from_x0[0]; i<= from_x1[0]; i+= (from_x1[0]-from_x0[0])/10) {
+    for (double j = from_x0[1]; j<= from_x1[1]; j+= (from_x1[1]-from_x0[1])/10) {
       if (m == 3) {
-        for (double k = from_x0[2]; k<= from_x1[2]; k+= (from_x1[2]-from_x0[2])/2) {
+        for (double k = from_x0[2]; k<= from_x1[2]; k+= (from_x1[2]-from_x0[2])/10) {
           vnl_vector<double> pt(3);
           pt[0] = i;
           pt[1] = j;
@@ -79,10 +80,10 @@ rgrl_util_estimate_global_region( rgrl_mask_box const&         from_image_roi,
   vnl_vector<double> to_x0 =  to_image_roi.x0();
   vnl_vector<double> to_x1 =  to_image_roi.x1();
   pt_vector to_corner_pts;
-  for (double i = to_x0[0]; i<= to_x1[0]; i+= to_x1[0]-to_x0[0]) {
-    for (double j = to_x0[1]; j<= to_x1[1]; j+= to_x1[1]-to_x0[1]) {
+  for (double i = to_x0[0]; i<= to_x1[0]; i+= (to_x1[0]-to_x0[0])/10 ) {
+    for (double j = to_x0[1]; j<= to_x1[1]; j+= (to_x1[1]-to_x0[1])/10 ) {
       if (m == 3) {
-        for (double k = to_x0[2]; k<= to_x1[2]; k+= to_x1[2]-to_x0[2]) {
+        for (double k = to_x0[2]; k<= to_x1[2]; k+= (to_x1[2]-to_x0[2])/10 ) {
           vnl_vector<double> pt(3);
           pt[0] = i;
           pt[1] = j;
@@ -101,33 +102,51 @@ rgrl_util_estimate_global_region( rgrl_mask_box const&         from_image_roi,
 
   //4. For each corner point q of the to_image_roi, find the closest
   //   forward_xformed point for initialized inverse_map for q.
+  //
   vnl_vector<double> inv_mapped_x0 = from_x1;
   vnl_vector<double> inv_mapped_x1 = from_x0;
-  for ( pt_iter pitr = to_corner_pts.begin();  pitr != to_corner_pts.end(); ++pitr ) {
-    double min_sqr_dist =  vnl_vector_ssd(to_pts[0], (*pitr));
-    unsigned int min_index = 0;
-    for (unsigned int i = 1; i<to_pts.size(); ++i) {
-      double sqr_dist = vnl_vector_ssd(to_pts[i], (*pitr));
-      if (sqr_dist < min_sqr_dist) {
-        min_sqr_dist = sqr_dist;
-        min_index = i;
+  if( curr_xform.is_invertible() ) {
+    
+    rgrl_transformation_sptr inv_xform = curr_xform.inverse_transform();
+    vnl_vector<double> inv_mapped_pt( m );
+    for ( pt_iter pitr = to_corner_pts.begin();  pitr != to_corner_pts.end(); ++pitr ) {
+
+      inv_xform->map_location( *pitr,  inv_mapped_pt );
+      
+      //update the inv_mapped bounding box
+      for ( unsigned d=0; d < m; ++d ) {
+        if (inv_mapped_pt[d] < inv_mapped_x0[d]) inv_mapped_x0[d] = inv_mapped_pt[d];
+        if (inv_mapped_pt[d] > inv_mapped_x1[d]) inv_mapped_x1[d] = inv_mapped_pt[d];
+      }
+    }        
+  } else {
+
+    for ( pt_iter pitr = to_corner_pts.begin();  pitr != to_corner_pts.end(); ++pitr ) {
+      double min_sqr_dist =  vnl_vector_ssd(to_pts[0], (*pitr));
+      unsigned int min_index = 0;
+      for (unsigned int i = 1; i<to_pts.size(); ++i) {
+        double sqr_dist = vnl_vector_ssd(to_pts[i], (*pitr));
+        if (sqr_dist < min_sqr_dist) {
+          min_sqr_dist = sqr_dist;
+          min_index = i;
+        }
+      }
+      // use from_pts[min_index] as the initial guess for the inverse_mapped q
+      vnl_vector<double> to_delta, from_next_est; //not used;
+      vnl_vector<double> inv_mapped_pt = from_pts[min_index];
+      curr_xform.inv_map(*pitr, false, to_delta, inv_mapped_pt, from_next_est);
+      vnl_vector<double> fwd_mapp_pt = curr_xform.map_location(inv_mapped_pt);
+      if (vnl_vector_ssd(fwd_mapp_pt, *pitr) > eps_squared) //didn't converge
+        return region;
+  
+      //update the inv_mapped bounding box
+      for ( unsigned d=0; d < m; ++d ) {
+        if (inv_mapped_pt[d] < inv_mapped_x0[d]) inv_mapped_x0[d] = inv_mapped_pt[d];
+        if (inv_mapped_pt[d] > inv_mapped_x1[d]) inv_mapped_x1[d] = inv_mapped_pt[d];
       }
     }
-    // use from_pts[min_index] as the initial guess for the inverse_mapped q
-    vnl_vector<double> to_delta, from_next_est; //not used;
-    vnl_vector<double> inv_mapped_pt = from_pts[min_index];
-    curr_xform.inv_map(*pitr, false, to_delta, inv_mapped_pt, from_next_est);
-    vnl_vector<double> fwd_mapp_pt = curr_xform.map_location(inv_mapped_pt);
-    if (vnl_vector_ssd(fwd_mapp_pt, *pitr) > eps_squared) //didn't converge
-      return region;
-
-    //update the inv_mapped bounding box
-    for ( unsigned d=0; d < m; ++d ) {
-      if (inv_mapped_pt[d] < inv_mapped_x0[d]) inv_mapped_x0[d] = inv_mapped_pt[d];
-      if (inv_mapped_pt[d] > inv_mapped_x1[d]) inv_mapped_x1[d] = inv_mapped_pt[d];
-    }
   }
-
+  
   //5. Take the intersection of the from_image_roi and the inverse_xformed to_image_roi
   //   as the maximum region.
   vnl_vector<double> region_x0(m);
@@ -163,7 +182,7 @@ rgrl_util_estimate_global_region( rgrl_mask_box const&         from_image_roi,
     prev_space *= prev_space_dim[d];
     new_space  *= new_space_dim[d];
   }
-  if ( union_with_curr && new_space/prev_space > 1.75 ) {
+  if ( union_with_curr && new_space/prev_space > drastic_change_ratio ) {
     drastic_changed = true;
   }
 

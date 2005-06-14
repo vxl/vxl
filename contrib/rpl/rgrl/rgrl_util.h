@@ -28,7 +28,8 @@ rgrl_util_estimate_global_region( rgrl_mask_box const&         from_image_roi,
                                   rgrl_mask_box const&         to_image_roi,
                                   rgrl_mask_box const&         current_region,
                                   rgrl_transformation const&   curr_xform,
-                                  bool                         union_with_curr = false );
+                                  bool                         union_with_curr = false,
+                                  double                       drastic_change_ratio = 1.75 );
 
 //: Estimate the change between the spreads of the from_feature_set and mapped_feature_set
 double
