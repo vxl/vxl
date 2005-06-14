@@ -230,7 +230,7 @@ void bsta_k_medoid::do_clustering(const unsigned nk)
   //We are done if there are no non-medoids
   if(nk==n_elements_)
     {
-      for(i = 0; i<nk; ++i)
+      for(unsigned i = 0; i<nk; ++i)
         clusters_[i].push_back(i);
       return;
     }

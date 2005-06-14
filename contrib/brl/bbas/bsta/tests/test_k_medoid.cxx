@@ -30,7 +30,7 @@ void test_k_medoid()
     {
       vcl_cout << "Medoid[" << i << "] = " << km.medoid(i) << '\n';
       vcl_cout << "with cluster \n";
-      vcl_vector<unsigned>& elements = km.elements(i);
+      const vcl_vector<unsigned>& elements = km.elements(i);
       for(unsigned j = 0; j<km.size(i); ++j)
         vcl_cout << elements[j] << ' ' ;
       vcl_cout << '\n';
@@ -71,7 +71,7 @@ void test_k_medoid()
     {
       vcl_cout << "Medoid[" << i << "] = " << km2.medoid(i) << '\n';
       vcl_cout << "with cluster \n";
-      vcl_vector<unsigned>& elements = km2.elements(i);
+      const vcl_vector<unsigned>& elements = km2.elements(i);
       for(unsigned j = 0; j<km2.size(i); ++j)
         vcl_cout << elements[j] << ' ' ;
       vcl_cout << '\n';
@@ -179,7 +179,7 @@ void test_k_medoid()
     {
       vcl_cout << "Medoid[" << i << "] = " << km3.medoid(i) << '\n';
       vcl_cout << "with cluster \n";
-      vcl_vector<unsigned>& elements = km3.elements(i);
+      const vcl_vector<unsigned>& elements = km3.elements(i);
       for(unsigned j = 0; j<km3.size(i); ++j)
         vcl_cout << elements[j] << ' ' ;
       vcl_cout << '\n';

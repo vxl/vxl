@@ -40,7 +40,7 @@ class bsta_k_medoid
   distance_array_[i][j] = d; distance_array_[j][i] = d;}
 
   //:The distance between two elements
-  inline double distance(const i, const j) const
+  inline double distance(const unsigned i, const unsigned j) const
     {assert((i<n_elements_)&&(j<n_elements_)); return distance_array_[i][j];}
   
   //:cluster the elements using k medoids
