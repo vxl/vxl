@@ -285,6 +285,9 @@ rgrl_util_geometric_scaling_factors( rgrl_match_set const& match_set,
       outer_product(fi.mapped_from_feature()->location() - mapped_centre,
                     fi.mapped_from_feature()->location() - mapped_centre);
   }
+  if( match_set.from_size()<m+1 ) 
+    return false;
+
   cov_matrix_from /= match_set.from_size();
   cov_matrix_mapped /=  match_set.from_size();
 
@@ -296,7 +299,7 @@ rgrl_util_geometric_scaling_factors( rgrl_match_set const& match_set,
   double sv_from, sv_mapped;
   factors.set_size( m );
   for ( unsigned i=0; i<m; ++i ) {
-    sv_from = vcl_sqrt( svd_from.W(i) );
+    sv_from = vcl_sqrt( vnl_math_max( svd_from.W(i), 1e-16 ) );
     sv_mapped = vcl_sqrt( vnl_math_max( svd_mapped.W(i), 1e-16 ) );
     factors[i] = sv_mapped / sv_from;
   }
@@ -334,6 +337,9 @@ rgrl_util_geometric_scaling_factors( rgrl_set_of<rgrl_match_set_sptr> const& cur
       mapped_centre += fi.mapped_from_feature()->location();
     }
   }
+  if( num<m+1 ) 
+    return false;
+  
   from_centre /= double(num);
   mapped_centre /=  double(num);
 
@@ -363,7 +369,7 @@ rgrl_util_geometric_scaling_factors( rgrl_set_of<rgrl_match_set_sptr> const& cur
   double sv_from, sv_mapped;
   factors.set_size( m );
   for ( unsigned i=0; i<m; ++i ) {
-    sv_from = svd_from.W(i);
+    sv_from = vnl_math_max( svd_from.W(i), 1e-16 );
     sv_mapped = vnl_math_max( svd_mapped.W(i), 1e-16 );
     // As the scatter matrix essentially squared the 
     // underlying scaling factors, 
