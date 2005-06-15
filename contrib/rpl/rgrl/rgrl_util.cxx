@@ -674,9 +674,12 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
     // Step 1.5 Update scaling factors in transformation
     if ( rgrl_util_geometric_scaling_factors( match_sets, scaling ) )
       new_estimate->set_scaling_factors( scaling );
-    else
+    else {
+      // use the previous ones
+      new_estimate->set_scaling_factors( estimate->scaling_factors() );
       vcl_cout << "WARNING in " << __FILE__ << __LINE__ << "cannot compute scaling factors!!!" << vcl_endl;
-
+    }
+    
     //  Step 2.  Map matches and calculate weights
     //
     for ( unsigned ms=0; ms < match_sets.size(); ++ms ) {
