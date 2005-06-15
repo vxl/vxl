@@ -58,7 +58,7 @@ void vil_suppress_non_max_edges(const vil_image_view<srcT>& grad_i,
     for (unsigned i=1;i<ni1;++i, pgi+=gi_istep, pgj+=gj_istep,
                                 pgm+=gm_istep)
     {
-      double gmag=vcl_sqrt(pgi[0]*pgi[0] + pgj[0]*pgj[0]);
+      double gmag=vcl_sqrt(double(pgi[0]*pgi[0] + pgj[0]*pgj[0]));
       if (gmag<grad_mag_threshold) *pgm=0;
       else
       {
