@@ -99,6 +99,10 @@ compute_geometric_scale( rgrl_match_set const& match_set,
   vcl_cout << " number of zers : " << zeros << " out of " << error_distances.size() << vcl_endl;
 #endif // 0
 
+  // empty set
+  if( error_distances.empty() )
+    return 1.0e30;
+    
   double epsilon = 1e-16;
   double return_scale = scaling * vnl_math_max( obj_->scale( error_distances.begin(), error_distances.end() ), epsilon );
 
