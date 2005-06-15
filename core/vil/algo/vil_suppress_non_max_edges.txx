@@ -75,7 +75,7 @@ void vil_suppress_non_max_edges(const vil_image_view<srcT>& grad_i,
           double gy2=vil_bilin_interp_unsafe(i-dx,j-dy,gj_data,gj_istep,gj_jstep);
           if (dx*gx2+dy*gy2>gmag) *pgm=0;
           else
-            *pgm = gmag;  // This is a maximal edge!
+            *pgm = destT(gmag);  // This is a maximal edge!
         }
       }
     }
