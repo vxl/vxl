@@ -33,6 +33,7 @@ ADD_EXECUTABLE( vil_algo_test_all
   test_suppress_non_max.cxx
   test_algo_sobel.cxx
   test_algo_abs_shuffle_distance.cxx
+  test_algo_suppress_non_max_edges.cxx
 )
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
@@ -74,6 +75,7 @@ ADD_TEST( vil_algo_test_median              vil_algo_test_all test_median)
 ADD_TEST( vil_algo_test_suppress_non_max    vil_algo_test_all test_suppress_non_max )
 ADD_TEST( vil_algo_test_algo_sobel          vil_algo_test_all test_algo_sobel)
 ADD_TEST( vil_algo_abs_shuffle_distance     vil_algo_test_all test_algo_abs_shuffle_distance)
+ADD_TEST( vil_algo_suppress_non_max_edges   vil_algo_test_all test_algo_suppress_non_max_edges)
 
 #ADD_EXECUTABLE( vil_mil_gauss_general_timings vil_mil_gauss_general_timings.cxx)
 #TARGET_LINK_LIBRARIES( vil_mil_gauss_general_timings vil_algo mil vpl vul mbl testlib vcl )

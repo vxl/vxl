@@ -26,6 +26,7 @@ SET( vil_algo_sources
                               vil_exp_grad_filter_1d.h
                               vil_exp_filter_2d.h
                               vil_suppress_non_max.h
+  vil_suppress_non_max_edges.txx vil_suppress_non_max_edges.h
   vil_line_filter.txx         vil_line_filter.h
   vil_threshold.txx           vil_threshold.h
                               vil_grid_merge.h
