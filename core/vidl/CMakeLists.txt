@@ -1,11 +1,17 @@
 # vxl/vidl/CMakeLists.txt
 
 INCLUDE( ${MODULE_PATH}/FindMPEG2.cmake )
+INCLUDE( ${MODULE_PATH}/NewCMake/FindFFMPEG.cmake )
 
 IF( MPEG2_FOUND )
   INCLUDE_DIRECTORIES(${MPEG2_INCLUDE_DIR})
   ADD_DEFINITIONS(-DHAS_MPEG2)
 ENDIF( MPEG2_FOUND )
+
+IF( FFMPEG_FOUND )
+  INCLUDE_DIRECTORIES(${FFMPEG_INCLUDE_DIR})
+  ADD_DEFINITIONS(-DHAS_FFMPEG)
+ENDIF( FFMPEG_FOUND )
 
 SET(vidl_sources
   vidl_vob_frame_index.cxx    vidl_vob_frame_index.h
@@ -14,6 +20,7 @@ SET(vidl_sources
   vidl_clip.cxx  vidl_clip.h  vidl_clip_sptr.h
   vidl_movie.cxx vidl_movie.h vidl_movie_sptr.h
   vidl_frame.cxx vidl_frame.h vidl_frame_sptr.h
+  vidl_frame_resource.cxx     vidl_frame_resource.h
   vidl_image_list_codec.cxx vidl_image_list_codec.h vidl_image_list_codec_sptr.h
   vidl_io.cxx    vidl_io.h
 )
@@ -25,6 +32,12 @@ IF( MPEG2_FOUND )
     vidl_yuv_2_rgb.h
   )
 ENDIF( MPEG2_FOUND )
+
+IF( FFMPEG_FOUND )
+  SET(vidl_sources ${vidl_sources}
+    vidl_ffmpeg_codec.cxx vidl_ffmpeg_codec.h
+  )
+ENDIF( FFMPEG_FOUND )
 
 AUX_SOURCE_DIRECTORY(Templates vidl_sources)
 
@@ -71,6 +84,9 @@ TARGET_LINK_LIBRARIES( vidl vbl vul vil vcl )
 IF( MPEG2_FOUND )
   TARGET_LINK_LIBRARIES( vidl ${MPEG2_LIBRARIES} )
 ENDIF( MPEG2_FOUND )
+IF( FFMPEG_FOUND )
+  TARGET_LINK_LIBRARIES( vidl ${FFMPEG_LIBRARIES} )
+ENDIF( FFMPEG_FOUND )
 IF( AVI_FOUND )
   TARGET_LINK_LIBRARIES( vidl ${AVI_LIBRARIES} )
 ENDIF( AVI_FOUND )
