@@ -173,3 +173,31 @@ vcl_ostream& operator<<(vcl_ostream& os, const rgrl_mask_box& box)
 {
   return os<<box.x0()<<' '<<box.x1();
 }
+
+//--------------------------------
+//               Utility functions
+
+//: Intersection Box A with Box B (make it within the range of B). Then Box A has the result
+rgrl_mask_box
+rgrl_mask_box_intersection( rgrl_mask_box const& a, rgrl_mask_box const& b )
+{
+  assert( a.x0().size() == b.x0().size() );
+  assert( a.x1().size() == b.x1().size() );
+  
+  const unsigned m = a.x0().size();
+  vnl_vector<double> new_x0=a.x0();
+  vnl_vector<double> new_x1=a.x1();
+  const vnl_vector<double>& b_x0=b.x0();
+  const vnl_vector<double>& b_x1=b.x1();
+  
+  for ( unsigned d=0; d < m; ++d ) {
+ 
+    if ( new_x0[d] < b_x0[d] )  new_x0[d] = b_x0[d];
+    if ( new_x0[d] > b_x1[d] )  new_x0[d] = b_x1[d];
+
+    if ( new_x1[d] > b_x1[d] )  new_x1[d] = b_x1[d];
+    if ( new_x1[d] < b_x0[d] )  new_x1[d] = b_x0[d];
+  }
+
+  return rgrl_mask_box( new_x0, new_x1 );
+}    

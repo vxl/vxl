@@ -148,4 +148,12 @@ class rgrl_mask_box
 //: An output operator for displaying a mask_box
 vcl_ostream& operator<<(vcl_ostream& os, const rgrl_mask_box& box);
 
+//--------------------------------
+//               Utility functions
+
+//: Intersection Box A with Box B (make it within the range of B).
+rgrl_mask_box
+rgrl_mask_box_intersection( rgrl_mask_box const& a, rgrl_mask_box const& b );
+
+
 #endif
