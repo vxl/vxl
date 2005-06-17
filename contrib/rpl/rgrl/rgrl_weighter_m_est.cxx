@@ -145,6 +145,9 @@ aux_sum_weighted_residuals( rgrl_scale const&  scale,
   
   double weighted_sum = 0;
   
+  // As the objective function is formulated as weighted Least-Square problem,
+  // the obj function value is indeed weighted sum of SQUARED residuals
+  //
   for ( from_iter fitr = match_set.from_begin(); fitr != match_set.from_end(); ++fitr ){
       if ( fitr.size() == 0 )  continue;
       
@@ -229,4 +232,30 @@ aux_neg_log_likelihood( rgrl_scale const&  scale,
   const double geometric_scale = scale.geometric_scale();
   //vcl_cout << "    rho_value: " << sum_rho_values << vcl_endl;
   return n*vcl_log(geometric_scale) + sum_rho_values;
+}
+
+double 
+rgrl_weighter_m_est::
+aux_avg_neg_log_likelihood( rgrl_scale const&  scale,
+                            rgrl_match_set&    match_set,
+                            rgrl_transformation const&  xform )
+{
+  typedef rgrl_match_set::from_iterator  from_iter;
+  typedef from_iter::to_iterator         to_iter;
+
+  int n = 0;
+
+  for ( from_iter fitr = match_set.from_begin(); fitr != match_set.from_end(); ++fitr )
+    if( fitr.size() > 0 ) {
+      // multi-match counts as one constraint
+      n ++;
+    }
+
+  if( !n ) 
+    return 0;
+    
+  double sum_rho_values = aux_sum_rho_values(scale, match_set, xform);
+  const double geometric_scale = scale.geometric_scale();
+  //vcl_cout << "    rho_value: " << sum_rho_values << vcl_endl;
+  return vcl_log(geometric_scale) + sum_rho_values/double(n);
 }

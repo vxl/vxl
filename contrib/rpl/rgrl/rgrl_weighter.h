@@ -46,6 +46,11 @@ class rgrl_weighter
   aux_neg_log_likelihood( rgrl_scale const&           /*scale*/,
                           rgrl_match_set&             /*match_set*/,
                           rgrl_transformation const&  /*xform*/ ){ assert(!"NYI"); return 0;}
+  virtual
+  double 
+  aux_avg_neg_log_likelihood( rgrl_scale const&  scale,
+                              rgrl_match_set&    match_set,
+                              rgrl_transformation const&  xform ){ assert(!"NYI"); return 0;}
 };
 
 #endif

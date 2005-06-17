@@ -62,6 +62,11 @@ class rgrl_weighter_m_est
                           rgrl_match_set&    match_set,
                           rgrl_transformation const&  xform );
 
+  double 
+  aux_avg_neg_log_likelihood( rgrl_scale const&  scale,
+                              rgrl_match_set&    match_set,
+                              rgrl_transformation const&  xform );
+
  protected:
   vcl_auto_ptr<rrel_m_est_obj> m_est_;
   bool use_signature_error_;
