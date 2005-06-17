@@ -41,6 +41,7 @@ rgrl_util_estimate_global_region( rgrl_mask_box const&         from_image_roi,
   typedef pt_vector::iterator pt_iter;
   const double epsilon = 1;
   const double eps_squared = epsilon*epsilon;
+  const double step_eps=1e-10;            // use in step control
 
   //1. compute the set of points from from_image_roi for forward mapping
   vnl_vector<double> from_x0 =  from_image_roi.x0();
@@ -49,10 +50,10 @@ rgrl_util_estimate_global_region( rgrl_mask_box const&         from_image_roi,
   rgrl_mask_box region = current_region;
 
   pt_vector from_pts;
-  for (double i = from_x0[0]; i<= from_x1[0]; i+= (from_x1[0]-from_x0[0])/10) {
-    for (double j = from_x0[1]; j<= from_x1[1]; j+= (from_x1[1]-from_x0[1])/10) {
+  for (double i = from_x0[0]; i<= from_x1[0]; i+= (from_x1[0]-from_x0[0])/10-step_eps) {
+    for (double j = from_x0[1]; j<= from_x1[1]; j+= (from_x1[1]-from_x0[1])/10-step_eps) {
       if (m == 3) {
-        for (double k = from_x0[2]; k<= from_x1[2]; k+= (from_x1[2]-from_x0[2])/10) {
+        for (double k = from_x0[2]; k<= from_x1[2]; k+= (from_x1[2]-from_x0[2])/10-step_eps) {
           vnl_vector<double> pt(3);
           pt[0] = i;
           pt[1] = j;
@@ -80,10 +81,10 @@ rgrl_util_estimate_global_region( rgrl_mask_box const&         from_image_roi,
   vnl_vector<double> to_x0 =  to_image_roi.x0();
   vnl_vector<double> to_x1 =  to_image_roi.x1();
   pt_vector to_corner_pts;
-  for (double i = to_x0[0]; i<= to_x1[0]; i+= (to_x1[0]-to_x0[0])/10 ) {
-    for (double j = to_x0[1]; j<= to_x1[1]; j+= (to_x1[1]-to_x0[1])/10 ) {
+  for (double i = to_x0[0]; i<= to_x1[0]; i+= (to_x1[0]-to_x0[0])/4-step_eps ) {
+    for (double j = to_x0[1]; j<= to_x1[1]; j+= (to_x1[1]-to_x0[1])/4-step_eps ) {
       if (m == 3) {
-        for (double k = to_x0[2]; k<= to_x1[2]; k+= (to_x1[2]-to_x0[2])/10 ) {
+        for (double k = to_x0[2]; k<= to_x1[2]; k+= (to_x1[2]-to_x0[2])/4-step_eps ) {
           vnl_vector<double> pt(3);
           pt[0] = i;
           pt[1] = j;
@@ -156,7 +157,7 @@ rgrl_util_estimate_global_region( rgrl_mask_box const&         from_image_roi,
     region_x0[d] = (inv_mapped_x0[d] > from_x0[d])? inv_mapped_x0[d]:from_x0[d];
     region_x1[d] = (inv_mapped_x1[d] < from_x1[d])? inv_mapped_x1[d]:from_x1[d];
     if ( region_x0[d] > from_x1[d] )  region_x0[d] = from_x1[d];
-    if ( region_x1[d] < from_x0[d] )  region_x0[d] = from_x0[d];
+    if ( region_x1[d] < from_x0[d] )  region_x1[d] = from_x0[d];
   }
   if (region_x0 == region_x1) //no overlap
     return region;
