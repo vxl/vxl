@@ -81,12 +81,12 @@ class rgrl_convergence_tester
   //: verify the final alignment
   virtual
   rgrl_converge_status_sptr 
-  verify( rgrl_transformation_sptr         const& xform_estimate,
+  verify( rgrl_view                        const& view,
           rgrl_set_of<rgrl_match_set_sptr> const& current_match_sets,
           rgrl_set_of<rgrl_scale_sptr>     const& current_scales )const;
 
   rgrl_converge_status_sptr 
-  verify( rgrl_transformation_sptr    const& xform_estimate,
+  verify( rgrl_view                   const& view,
           rgrl_match_set_sptr         const& current_match_sets,
           rgrl_scale_sptr             const& current_scales )const;
 
