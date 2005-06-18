@@ -200,4 +200,4 @@ rgrl_mask_box_intersection( rgrl_mask_box const& a, rgrl_mask_box const& b )
   }
 
   return rgrl_mask_box( new_x0, new_x1 );
-}    
+}
