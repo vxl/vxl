@@ -349,8 +349,8 @@ read( vcl_istream& is )
       }
       
       sig_wgts.push_back( sig );
-      geo_wgts.push_back( sig );
-      cum_wgts.push_back( sig );
+      geo_wgts.push_back( geo );
+      cum_wgts.push_back( cum );
       
       one = rgrl_feature_reader( is );
       if( !is || !one ) {
