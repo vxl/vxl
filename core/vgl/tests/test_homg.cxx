@@ -1,6 +1,6 @@
 //:
 // \file
-// \author Peter.Vanroose@esat.kuleuven.ac.be
+// \author Peter Vanroose, ESAT, KULeuven.
 // \date  4 July, 2001
 
 #include <testlib/testlib_test.h>

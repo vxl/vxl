@@ -7,7 +7,7 @@
 //:
 // \file
 // \brief swap the "R" and "B" colour components of an image
-// \author Peter.Vanroose@esat.kuleuven.ac.be
+// \author Peter Vanroose, ESAT, KULeuven.
 
 #include <vil1/vil1_image.h>
 

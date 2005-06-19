@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author Peter.Vanroose@esat.kuleuven.ac.be
+// \author Peter Vanroose, ESAT, KULeuven.
 
 #include <vil1/vil1_image.h>
 #include <vcl_string.h>

@@ -7,7 +7,7 @@
 //:
 // \file
 // \brief Loader for 1-banded Khoros 1.0 images
-// \author    Peter.Vanroose@esat.kuleuven.ac.be
+// \author Peter Vanroose, ESAT, KULeuven.
 // \date 17 Feb 2000
 // VIFF is the "Visualization Image File Format" used by Khoros 1.0.
 //

@@ -30,7 +30,7 @@
 //   Samer Abdallah - 18/05/96 - Cleared some compiler warnings
 //   Samer Abdallah - 24/05/96 - Fixed theta_[x][y] in Non_maximal_supressionOX
 //                               theta_[x][y] now stores the edge normal
-//   Maarten Vergauwen (vergauwe@esat.kuleuven.ac.be) - 08/10/98 - Added AdjustForMask method
+//   Maarten Vergauwen (ESAT, KULeuven) - 08/10/98 - Added AdjustForMask method
 //   Peter Vanroose - 30/12/99 - Link_edgelsOX rewritten and documented
 //   F. Schaffaliztky 2-apr-99   converted from Segmentation to osl
 

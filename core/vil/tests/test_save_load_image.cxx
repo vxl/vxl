@@ -2,7 +2,7 @@
 #include <testlib/testlib_test.h>
 //:
 // \file
-// \author Peter.Vanroose@esat.kuleuven.ac.be
+// \author Peter Vanroose, ESAT, KULeuven.
 // \date 17 February, 2000
 //
 // \verbatim

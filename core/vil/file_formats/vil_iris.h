@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author joris.schouteden@esat.kuleuven.ac.be
+// \author Joris Schouteden, ESAT, KULeuven
 // \date 17 Feb 2000
 //
 // \verbatim

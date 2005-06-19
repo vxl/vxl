@@ -12,12 +12,14 @@
 
 #include <testlib/testlib_test.h>
 
-//: inverse cosine for complex numbers, by Peter.Vanroose@esat.kuleuven.ac.be
+//: inverse cosine for complex numbers.
 // The implementation is at the bottom of this file.
+// \author Peter Vanroose, ESAT, KULeuven.
 vcl_complex<double> tc_acos(vcl_complex<double> x);
 
 // make a vector with random, complex entries :
-static void fill_rand(vcl_complex<double> *b, vcl_complex<double> *e, vnl_random &rng) {
+static void fill_rand(vcl_complex<double> *b, vcl_complex<double> *e, vnl_random &rng)
+{
   for (vcl_complex<double> *p=b; p<e; ++p)
     (*p) = vcl_complex<double>( rng.drand64(-1.0, +1.0), rng.drand64(-1.0, +1.0) );
 }
@@ -96,7 +98,7 @@ void test_complex()
 TESTMAIN(test_complex);
 
 //: inverse cosine for complex numbers.
-// implementation by Peter.Vanroose@esat.kuleuven.ac.be
+// implementation by Peter Vanroose, ESAT, KULeuven.
 vcl_complex<double> tc_acos(vcl_complex<double> x)
 {
   double a = vcl_real(x), b = vcl_imag(x);
