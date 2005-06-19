@@ -5,9 +5,7 @@
 #include <vil/vil_crop.h>
 #include <vul/vul_file.h>
 
-
-
-//: Constructor
+// Constructor
 vidl_ffmpeg_codec::vidl_ffmpeg_codec()
  : fmt_cxt_( NULL ),
    vid_index_( -1 ),
@@ -21,7 +19,7 @@ vidl_ffmpeg_codec::vidl_ffmpeg_codec()
 }
 
 
-//: Destructor
+// Destructor
 vidl_ffmpeg_codec::~vidl_ffmpeg_codec()
 {
   close();
@@ -32,7 +30,7 @@ void
 vidl_ffmpeg_codec::initialize()
 {
   static bool initialized = false;
-  if( ! initialized ) {
+  if ( ! initialized ) {
     av_register_all();
     av_log_set_level(AV_LOG_ERROR);
     initialized = true;
@@ -49,25 +47,25 @@ bool vidl_ffmpeg_codec::probe(vcl_string const& fname)
 
   // Open the file
   int err;
-  if( ( err = av_open_input_file( &fmt_cxt_, fname.c_str(), NULL, 0, NULL ) ) != 0 ) {
+  if ( ( err = av_open_input_file( &fmt_cxt_, fname.c_str(), NULL, 0, NULL ) ) != 0 ) {
     return false;
   }
 
   // Get the stream information by reading a bit of the file
-  if( av_find_stream_info( fmt_cxt_ ) < 0 ) {
+  if ( av_find_stream_info( fmt_cxt_ ) < 0 ) {
     return false;
   }
 
   // Find a video stream. Use the first one we find.
   vid_index_ = -1;
-  for( int i = 0; i < fmt_cxt_->nb_streams; ++i ) {
+  for ( int i = 0; i < fmt_cxt_->nb_streams; ++i ) {
     AVCodecContext *enc = &fmt_cxt_->streams[i]->codec;
-    if( enc->codec_type == CODEC_TYPE_VIDEO ) {
+    if ( enc->codec_type == CODEC_TYPE_VIDEO ) {
       vid_index_ = i;
       break;
     }
   }
-  if( vid_index_ == -1 ) {
+  if ( vid_index_ == -1 ) {
     return false;
   }
 
@@ -77,10 +75,10 @@ bool vidl_ffmpeg_codec::probe(vcl_string const& fname)
   avcodec_string(buf, 100, enc, 0);
   vcl_cout<< "ffmpeg codec: " << buf<<vcl_endl;
   AVCodec* codec = avcodec_find_decoder(enc->codec_id);
-  if( !codec || avcodec_open( enc, codec ) < 0 ) {
+  if ( !codec || avcodec_open( enc, codec ) < 0 ) {
     return false;
   }
-  
+
   dump_format( fmt_cxt_, 0, fname.c_str(), 0 );
   close();
 
@@ -115,25 +113,25 @@ vidl_ffmpeg_codec::open(vcl_string const& fname, char mode )
 
   // Open the file
   int err;
-  if( ( err = av_open_input_file( &fmt_cxt_, fname.c_str(), NULL, 0, NULL ) ) != 0 ) {
+  if ( ( err = av_open_input_file( &fmt_cxt_, fname.c_str(), NULL, 0, NULL ) ) != 0 ) {
     return false;
   }
 
   // Get the stream information by reading a bit of the file
-  if( av_find_stream_info( fmt_cxt_ ) < 0 ) {
+  if ( av_find_stream_info( fmt_cxt_ ) < 0 ) {
     return false;
   }
 
   // Find a video stream. Use the first one we find.
   vid_index_ = -1;
-  for( int i = 0; i < fmt_cxt_->nb_streams; ++i ) {
+  for ( int i = 0; i < fmt_cxt_->nb_streams; ++i ) {
     AVCodecContext *enc = &fmt_cxt_->streams[i]->codec;
-    if( enc->codec_type == CODEC_TYPE_VIDEO ) {
+    if ( enc->codec_type == CODEC_TYPE_VIDEO ) {
       vid_index_ = i;
       break;
     }
   }
-  if( vid_index_ == -1 ) {
+  if ( vid_index_ == -1 ) {
     return false;
   }
 
@@ -142,11 +140,11 @@ vidl_ffmpeg_codec::open(vcl_string const& fname, char mode )
   // Open the stream
   AVCodecContext* enc = &fmt_cxt_->streams[vid_index_]->codec;
   AVCodec* codec = avcodec_find_decoder(enc->codec_id);
-  if( !codec || avcodec_open( enc, codec ) < 0 ) {
+  if ( !codec || avcodec_open( enc, codec ) < 0 ) {
     return false;
   }
 
-  if(enc->frame_rate>1000 && enc->frame_rate_base==1)
+  if (enc->frame_rate>1000 && enc->frame_rate_base==1)
     enc->frame_rate_base=1000;
 
   vid_str_ = fmt_cxt_->streams[ vid_index_ ];
@@ -165,7 +163,6 @@ vidl_ffmpeg_codec::open(vcl_string const& fname, char mode )
 
   //frame_rate_=(double)moviestream_->GetLength()/moviestream_->GetLengthTime();
 
-
   return true;
 }
 
@@ -173,17 +170,17 @@ vidl_ffmpeg_codec::open(vcl_string const& fname, char mode )
 void
 vidl_ffmpeg_codec::close()
 {
-  if( frame_ ) {
+  if ( frame_ ) {
     av_free( frame_ );
     frame_ = 0;
   }
 
   vid_index_ = -1;
-  if( vid_str_ ) {
+  if ( vid_str_ ) {
     avcodec_close( &vid_str_->codec );
     vid_str_ = 0;
   }
-  if( fmt_cxt_ ) {
+  if ( fmt_cxt_ ) {
     av_close_input_file( fmt_cxt_ );
     fmt_cxt_ = 0;
   }
@@ -196,9 +193,9 @@ vidl_ffmpeg_codec::get_view( int position,
                          int y0, int ys ) const
 {
   int current = cur_frame_num();
-  
-  if(position == current);
-  else if(position == current+1)
+
+  if (position == current);
+  else if (position == current+1)
     advance();
   else
     seek(position);
@@ -212,12 +209,12 @@ vil_image_view<vxl_byte>
 vidl_ffmpeg_codec::cur_frame() const
 {
   // If we've already converted this frame, try to convert it
-  if( !cur_img_ && frame_->data[0] != 0 ){
+  if ( !cur_img_ && frame_->data[0] != 0 ){
     int width = vid_str_->codec.width;
     int height = vid_str_->codec.height;
 
     // Deinterlace if requested
-    if( deinterlace_ ) {
+    if ( deinterlace_ ) {
       avpicture_deinterlace( (AVPicture*)frame_, (AVPicture*)frame_,
                              vid_str_->codec.pix_fmt, width, height );
     }
@@ -227,7 +224,7 @@ vidl_ffmpeg_codec::cur_frame() const
     AVPicture out_pict;
     out_pict.data[0] = cur_img_.top_left_ptr();
     out_pict.linesize[0] = cur_img_.ni() * 3;
-    if( img_convert( &out_pict, PIX_FMT_RGB24,
+    if ( img_convert( &out_pict, PIX_FMT_RGB24,
                      (AVPicture*)frame_, vid_str_->codec.pix_fmt,
                      width, height ) == -1 ) {
       cur_img_ = 0;
@@ -237,13 +234,12 @@ vidl_ffmpeg_codec::cur_frame() const
   // The MPEG 2 codec has a latency of 1 frame, so the dts of the last
   // packet (stored in last_dts) is actually the next frame's
   // dts.
-  if( vid_str_->codec.codec_id == CODEC_ID_MPEG2VIDEO &&
+  if ( vid_str_->codec.codec_id == CODEC_ID_MPEG2VIDEO &&
       vcl_string("avi") == fmt_cxt_->iformat->name ) {
     frame_number_offset_ = 1;
   }
 
   return cur_img_;
-
 }
 
 
@@ -257,8 +253,9 @@ vidl_ffmpeg_codec::put_view( int /*position*/,
 }
 
 
-//: \returns The frame number of the frame returned by cur_frame().
-//  \warning This number is meaningful only if cur_frame() is valid.
+//:
+// \returns The frame number of the frame returned by cur_frame().
+// \warning This number is meaningful only if cur_frame() is valid.
 int
 vidl_ffmpeg_codec::cur_frame_num() const
 {
@@ -268,12 +265,11 @@ vidl_ffmpeg_codec::cur_frame_num() const
 }
 
 
-
-//: count the number of frames in the video
-// scan through the video counting frames, but don't decode
+//: count the number of frames in the video.
+// Scan through the video counting frames, but don't decode.
 int
 vidl_ffmpeg_codec::count_frames() const
-{ 
+{
   // remember the current video position
   int64_t timestamp = vid_str_->cur_dts;
   // seek back to the first frame
@@ -281,8 +277,8 @@ vidl_ffmpeg_codec::count_frames() const
   AVPacket pkt;
   int frame_count=0;
 
-  while( av_read_frame( fmt_cxt_, &pkt ) >= 0) {
-    if(pkt.stream_index==vid_index_)
+  while ( av_read_frame( fmt_cxt_, &pkt ) >= 0) {
+    if (pkt.stream_index==vid_index_)
       ++frame_count;
     av_free_packet( &pkt );
   }
@@ -294,28 +290,29 @@ vidl_ffmpeg_codec::count_frames() const
 }
 
 
-//: \return \c false if the end of the video is reached.
+//:
+// \return \c false if the end of the video is reached.
 bool
 vidl_ffmpeg_codec::advance() const
 {
   // Quick return if the file isn't open.
-  if( !frame_ ) {
+  if ( !frame_ ) {
     return false;
   }
 
   AVPacket pkt;
   int got_picture = 0;
 
-  while( got_picture == 0 ) {
-    if( av_read_frame( fmt_cxt_, &pkt ) < 0 ) {
+  while ( got_picture == 0 ) {
+    if ( av_read_frame( fmt_cxt_, &pkt ) < 0 ) {
       break;
     }
     last_dts = pkt.dts;
 
     // Make sure that the packet is from the actual video stream.
-    if(pkt.stream_index==vid_index_)
+    if (pkt.stream_index==vid_index_)
     {
-      if( vid_str_->codec.codec_id == CODEC_ID_RAWVIDEO ) {
+      if ( vid_str_->codec.codec_id == CODEC_ID_RAWVIDEO ) {
         avpicture_fill( (AVPicture*)frame_, pkt.data,
           vid_str_->codec.pix_fmt,
           vid_str_->codec.width,
@@ -334,7 +331,7 @@ vidl_ffmpeg_codec::advance() const
   // From ffmpeg apiexample.c: some codecs, such as MPEG, transmit the
   // I and P frame with a latency of one frame. You must do the
   // following to have a chance to get the last frame of the video.
-  if( !got_picture ) {
+  if ( !got_picture ) {
       avcodec_decode_video( &vid_str_->codec,
                             frame_, &got_picture,
                             NULL, 0 );
@@ -345,15 +342,14 @@ vidl_ffmpeg_codec::advance() const
   // frame or not.
   cur_img_ = 0;
 
-  if( ! got_picture ) {
+  if ( ! got_picture ) {
     frame_->data[0] = NULL;
   }
 
   return got_picture != 0;
 }
 
-//: The frame numbers are zero-based, so the first frame of the
-//  video is frame 0.
+//: The frame numbers are zero-based, so the first frame of the video is frame 0.
 //
 //  \param frame Seek so that the next cur_frame() returns frame \arg frame.
 //  \return Returns \c false if the seek was unsuccessful.
@@ -362,24 +358,25 @@ bool
 vidl_ffmpeg_codec::seek( unsigned frame ) const
 {
   int64_t half_frame = int64_t(AV_TIME_BASE) * vid_str_->r_frame_rate_base / vid_str_->r_frame_rate / 2;
-  int64_t req_timestamp = int64_t(frame) * AV_TIME_BASE * vid_str_->r_frame_rate_base / vid_str_->r_frame_rate + vid_str_->start_time;
- 
-  if( req_timestamp > half_frame )
+  int64_t req_timestamp = int64_t(frame)*AV_TIME_BASE * vid_str_->r_frame_rate_base / vid_str_->r_frame_rate + vid_str_->start_time;
+
+  if ( req_timestamp > half_frame )
     req_timestamp -= half_frame;
   else
     req_timestamp = 0;
-  
+
   int seek = av_seek_frame( fmt_cxt_, vid_index_, frame, 0 );
-  if( seek < 0 )
+  if ( seek < 0 )
     return false;
 
   // We got to a key frame. Forward until we get to the frame we want.
-  while( 1 ) {
-    if( ! advance() ) {
+  while ( true )
+  {
+    if ( ! advance() ) {
       return false;
     }
-    if( last_dts >= req_timestamp ) {
-      if( last_dts >= req_timestamp + 2*half_frame ) {
+    if ( last_dts >= req_timestamp ) {
+      if ( last_dts >= req_timestamp + 2*half_frame ) {
         vcl_cerr << "Warning: seek went into the future!\n";
         return false;
       }
