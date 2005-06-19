@@ -1,4 +1,4 @@
-// This is core/vidl/vidl_frame_resource.h
+// This is core/vidl/vidl_frame_resource.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -15,11 +15,8 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_property.h>
 
-
 #include <vcl_cstdlib.h> // for vcl_exit()
-
 #include <vxl_config.h>
-
 
 
 vidl_frame_resource::vidl_frame_resource(const vidl_codec_sptr& codec, int frame)
