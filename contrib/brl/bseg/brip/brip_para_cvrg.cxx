@@ -608,22 +608,25 @@ vil1_memory_image_of<unsigned char>  brip_para_cvrg::get_dir_image()
 //------------------------------------------------------------
 //: Get the combination of coverage and direction as a color image
 //
-vil1_memory_image_of<vil1_rgb<unsigned char> > 
+vil1_memory_image_of<vil1_rgb<unsigned char> >
 brip_para_cvrg::get_combined_image()
 {
-  //arbitrary color assignments
-  int r[4] ={0, 1, 0, 1}; // cyan, magenta, green, red
-  int g[4] ={1, 0, 1, 0};
-  int b[4] ={1, 1, 0, 0};
+  //"arbitrary" color assignments to the 4 directions: cyan,yellow,green,red:
+  unsigned char r[4] ={0, 1, 0, 1};
+  unsigned char g[4] ={1, 0, 1, 0};
+  unsigned char b[4] ={1, 1, 0, 0};
   vil1_memory_image_of<unsigned char> cvrg_image = this->get_detection_image();
   vil1_memory_image_of<unsigned char> dir_image = this->get_dir_image();
   vil1_memory_image_of<vil1_rgb<unsigned char> > out(xsize_, ysize_);
   for (int y = 0; y<ysize_; y++)
     for (int x = 0; x<xsize_; x++)
     {
-      int direct = ((int)dir_image(x,y))/45;
-      unsigned char c = cvrg_image(x,y);
-      unsigned char red = r[direct]*c, green = g[direct]*c, blue = b[direct]*c;
+      unsigned int direct = ((unsigned int)dir_image(x,y))/45;
+      assert (direct<=3);
+      unsigned char c = cvrg_image(x,y),
+                    red  = r[direct]*c,
+                    green= g[direct]*c,
+                    blue = b[direct]*c;
       out(x, y) = vil1_rgb<unsigned char>(red, green, blue);
     }
   return out;
