@@ -5,9 +5,11 @@
 #include <vidl/vidl_clip_sptr.h>
 #include <vidl/vidl_codec.h>
 #include <vidl/vidl_codec_sptr.h>
+#include <vidl/vidl_ffmpeg_codec.h>
 #include <vidl/vidl_file_sequence.h>
 #include <vidl/vidl_frame.h>
 #include <vidl/vidl_frame_sptr.h>
+#include <vidl/vidl_frame_resource.h>
 #include <vidl/vidl_image_list_codec.h>
 #include <vidl/vidl_image_list_codec_sptr.h>
 #include <vidl/vidl_io.h>
