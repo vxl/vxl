@@ -237,6 +237,9 @@ SOURCE=.\Templates/vil_abs_shuffle_distance+byte.byte-.cxx
 SOURCE=.\Templates/vil_gauss_reduce+int_16-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil_suppress_non_max_edges+float.float-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vil_histogram.cxx
 # End Source File
 # Begin Source File
@@ -436,6 +439,12 @@ SOURCE=.\vil_abs_shuffle_distance.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vil_colour_space.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_suppress_non_max_edges.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_suppress_non_max_edges.txx
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"

@@ -148,6 +148,12 @@ SOURCE=.\vidl_file_sequence.cxx
 # Begin Source File
 SOURCE=.\vidl_vob_frame_index.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vidl_ffmpeg_codec.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl_frame_resource.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -210,6 +216,12 @@ SOURCE=.\vidl_file_sequence.h
 # End Source File
 # Begin Source File
 SOURCE=.\vidl_vob_frame_index.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl_ffmpeg_codec.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl_frame_resource.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"

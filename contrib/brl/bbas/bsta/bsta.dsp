@@ -113,6 +113,9 @@ SOURCE=.\Templates/bsta_joint_histogram+float-.cxx
 # Begin Source File
 SOURCE=.\bsta_gauss.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bsta_k_medoid.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -130,6 +133,9 @@ SOURCE=.\bsta_joint_histogram.h
 # End Source File
 # Begin Source File
 SOURCE=.\bsta_joint_histogram.txx
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_k_medoid.h
 # End Source File
 # End Group
 # End Target

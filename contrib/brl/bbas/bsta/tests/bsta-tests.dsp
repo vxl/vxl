@@ -179,6 +179,9 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\test_bsta_histogram.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_k_medoid.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

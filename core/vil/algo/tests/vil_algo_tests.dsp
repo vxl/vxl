@@ -102,6 +102,9 @@ SOURCE=.\test_algo_sobel.cxx
 # Begin Source File
 SOURCE=.\test_algo_abs_shuffle_distance.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_algo_suppress_non_max_edges.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
