@@ -369,6 +369,9 @@ SOURCE=.\Templates/rgrl_matcher_pseudo_int_3d+vxl_sint_16-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+rgrl_evaluator-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/rgrl_feature_caster+rgrl_feature_trace_pt-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\rgrl_est_homography2d.cxx
 # End Source File
 # Begin Source File
