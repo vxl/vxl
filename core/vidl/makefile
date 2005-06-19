@@ -26,6 +26,7 @@ SOURCES += vidl_movie.cxx
 MANPAGE_SOURCES += vidl_movie_sptr.h
 SOURCES += vidl_frame.cxx
 MANPAGE_SOURCES += vidl_frame_sptr.h
+SOURCES += vidl_frame_resource.cxx
 SOURCES += vidl_image_list_codec.cxx
 MANPAGE_SOURCES += vidl_image_list_codec_sptr.h
 SOURCES += vidl_io.cxx
@@ -35,6 +36,10 @@ SOURCES += vidl_mpegcodec.cxx
 MANPAGE_SOURCES += vidl_mpegcodec_sptr.h
 SOURCES += vidl_mpegcodec_helper.cxx
 MANPAGE_SOURCES += vidl_yuv_2_rgb.h
+endif
+
+ifdef HAS_FFMPEG
+SOURCES += vidl_ffmpeg_codec.cxx
 endif
 
 ifdef HAS_AVI

@@ -4,6 +4,7 @@ include ${IUEROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 TESTS += test_bsta_histogram.cxx
+TESTS += test_k_medoid.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
