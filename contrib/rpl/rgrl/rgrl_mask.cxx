@@ -1,5 +1,6 @@
 #include "rgrl_mask.h"
-
+//:
+// \file
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
 
@@ -183,15 +184,15 @@ rgrl_mask_box_intersection( rgrl_mask_box const& a, rgrl_mask_box const& b )
 {
   assert( a.x0().size() == b.x0().size() );
   assert( a.x1().size() == b.x1().size() );
-  
+
   const unsigned m = a.x0().size();
   vnl_vector<double> new_x0=a.x0();
   vnl_vector<double> new_x1=a.x1();
   const vnl_vector<double>& b_x0=b.x0();
   const vnl_vector<double>& b_x1=b.x1();
-  
-  for ( unsigned d=0; d < m; ++d ) {
- 
+
+  for ( unsigned d=0; d < m; ++d )
+  {
     if ( new_x0[d] < b_x0[d] )  new_x0[d] = b_x0[d];
     if ( new_x0[d] > b_x1[d] )  new_x0[d] = b_x1[d];
 
