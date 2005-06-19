@@ -5,7 +5,7 @@
 #include <vcl_cmath.h>
 #include <brip/brip_vil1_float_ops.h>
 #include <brip/brip_para_cvrg.h>
-
+#include <vcl_cassert.h>
 
 //-----------------------------------------------------------------------
 //: Variable Initialization

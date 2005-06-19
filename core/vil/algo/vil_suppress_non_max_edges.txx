@@ -10,6 +10,7 @@
 #include <vil/vil_bilin_interp.h>
 #include <vil/vil_fill.h>
 #include <vcl_cmath.h>
+#include <vcl_cassert.h>
 
 //: Given gradient images, computes magnitude image containing maximal edges
 //  Computes magnitude image.  Zeros any below a threshold.
@@ -85,9 +86,9 @@ void vil_suppress_non_max_edges(const vil_image_view<srcT>& grad_i,
 
 #undef VIL_SUPPRESS_NON_MAX_EDGES_INSTANTIATE
 #define VIL_SUPPRESS_NON_MAX_EDGES_INSTANTIATE(srcT, destT) \
-template void vil_suppress_non_max_edges(const vil_image_view<srcT>& grad_i,\
-                                const vil_image_view<srcT>& grad_j,\
+template void vil_suppress_non_max_edges(const vil_image_view<srcT >& grad_i,\
+                                const vil_image_view<srcT >& grad_j,\
                                 double grad_mag_threshold,\
-                                vil_image_view<destT>& grad_mag);
+                                vil_image_view<destT >& grad_mag)
 
-#endif // vil_sobel_3x3_txx_
+#endif // vil_suppress_non_max_edges_txx_
