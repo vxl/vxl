@@ -51,6 +51,9 @@ public:
   // \retval column A vector containing the values of the requested column.
   bool get_column(const vcl_string& header,
                   vcl_vector<double>& column) const;
+
+  //: Returns true if column exists
+  bool column_exists(const vcl_string& header);
   
 
   //: Get a specified row of data.

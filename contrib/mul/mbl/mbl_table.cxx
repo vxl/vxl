@@ -73,6 +73,18 @@ unsigned mbl_table::num_rows() const
 
 
 //========================================================================
+// Returns true if column exists
+//========================================================================
+bool mbl_table::column_exists(const vcl_string& header)
+{
+    // Does the map contain this header?
+    vcl_map<vcl_string, unsigned>::const_iterator iter =
+        header_to_column_index_.find(header);
+
+    return  (iter != header_to_column_index_.end());
+}
+
+//========================================================================
 // Get the column of data corresponding to a particular heading.
 //========================================================================
 bool mbl_table::get_column(const vcl_string& header,
