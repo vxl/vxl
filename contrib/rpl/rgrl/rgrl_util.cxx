@@ -39,6 +39,7 @@ rgrl_util_estimate_global_region( rgrl_mask_box const&         from_image_roi,
 
   typedef vcl_vector<vnl_vector<double> > pt_vector;
   typedef pt_vector::iterator pt_iter;
+  const int debug_flag = 0;
   const double epsilon = 1;
   const double eps_squared = epsilon*epsilon;
   const double step_eps=1e-10;            // use in step control
@@ -148,6 +149,9 @@ rgrl_util_estimate_global_region( rgrl_mask_box const&         from_image_roi,
     }
   }
   
+  DebugFuncMacro( debug_flag, 1, "Global Region after inv-mapping: " 
+                  << inv_mapped_x0 << " - " << inv_mapped_x1 << vcl_endl );
+                  
   //5. Take the intersection of the from_image_roi and the inverse_xformed to_image_roi
   //   as the maximum region.
   vnl_vector<double> region_x0(m);
@@ -162,6 +166,9 @@ rgrl_util_estimate_global_region( rgrl_mask_box const&         from_image_roi,
   if (region_x0 == region_x1) //no overlap
     return region;
 
+  DebugFuncMacro( debug_flag, 1, "Global Region after intersecting with ROI: " 
+                  << region_x0 << " - " << region_x1 << vcl_endl );
+
   //6. If union_with_curr set, union region and current_region to prevent oscillation
   if (union_with_curr) {
     for ( unsigned d=0; d < m; ++d ) {
@@ -169,6 +176,9 @@ rgrl_util_estimate_global_region( rgrl_mask_box const&         from_image_roi,
       if (region_x1[d] < current_region.x1()[d]) region_x1[d] = current_region.x1()[d];
     }
   }
+
+  DebugFuncMacro( debug_flag, 1, "Global Region after union with prev region: " 
+                  << region_x0 << " - " << region_x1 << vcl_endl );
 
   //7. If the changes from current_region is insignificant, or the change is too
   //   drastic, set region to be same ascurrent_region
@@ -191,6 +201,9 @@ rgrl_util_estimate_global_region( rgrl_mask_box const&         from_image_roi,
     region_x0 = current_region.x0();
     region_x1 = current_region.x1();
   }
+
+  DebugFuncMacro( debug_flag, 1, "Global Region finalized: " 
+                  << region_x0 << " - " << region_x1 << vcl_endl );
 
   region.set_x0(region_x0);
   region.set_x1(region_x1);
