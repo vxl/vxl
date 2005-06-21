@@ -168,6 +168,19 @@ static void test_conic()
   TEST("centre", c.centre(), centre);
   TEST_NEAR("ellipse equality", cc,c, 1e-6);
 
+  // Test ellipse geometry for an ellipse a = 2, b = 1 at 45 degrees
+  // centered at (1, 2);  
+
+  vcl_cout << "Test ellipse geometry \n";
+  vgl_conic<double> cg(0.492577, -0.591093, 0.492577, 0.197032, -1.37921, 0.492813);
+  double xc, yc, major_axis, minor_axis, angle;
+  bool good = cg.ellipse_geometry(xc, yc, major_axis, minor_axis, angle);
+  vcl_cout << "ellipse(" << xc << ' ' << yc << ' ' << major_axis
+           << ' ' << minor_axis << ' ' << angle*180.0/3.14159 << ")\n";
+  TEST_NEAR("ellipse geometry", (xc-1)*(yc-2)*(major_axis-2)*(minor_axis-1)*(angle-0.785398), 0, 1e-10);
+
+  //End ellipse geometry test
+
   vgl_homg_point_2d<double> startp(7, 10, 1); // rightmost top on the long axis
   vgl_homg_point_2d<double> endp  (5, -1, 1); // downmost top on the short axis
   vgl_homg_point_2d<double> top   (-3, 5, 1); // upmost top on the short axis

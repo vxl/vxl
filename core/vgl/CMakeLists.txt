@@ -27,6 +27,7 @@ SET( vgl_sources
 
   # Other curves
   vgl_conic.h                    vgl_conic.txx
+  vgl_conic_segment_2d.h         vgl_conic_segment_2d.txx
   vgl_polygon.h                  vgl_polygon.txx
 
   # Planes

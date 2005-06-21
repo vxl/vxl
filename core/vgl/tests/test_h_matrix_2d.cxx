@@ -14,6 +14,7 @@
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
+#include <vgl/algo/vgl_norm_trans_2d.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_4point.h>
 #include <vgl/algo/vgl_h_matrix_2d_optimize_lmq.h>
@@ -116,6 +117,44 @@ static void test_projective_basis_from_lines()
   vgl_h_matrix_2d<double> concurrent_basis;
   TEST("concurrent degeneracy",
        concurrent_basis.projective_basis(concurrent_lines), false);
+}
+
+static void test_norm_trans()
+{
+  vcl_cout << "\n=== Test the computation of normalizing transform \n";
+
+  vcl_vector<vgl_homg_point_2d<double> > points1;
+  //setup points in frame 1
+  vgl_homg_point_2d<double> p10(1.414, 1.414, 1.0), p11(-0.707, 0.707, 1.0);
+  vgl_homg_point_2d<double> p12(-1.414, -1.414, 1.0), p13(0.707, -0.707, 1.0);
+  vgl_homg_point_2d<double> p14(0, 1.263, 1.0), p15(0, -1.263, 1.0);
+  points1.push_back(p10); points1.push_back(p11); points1.push_back(p12);
+  points1.push_back(p13); points1.push_back(p14); points1.push_back(p15);
+
+  
+  vgl_norm_trans_2d<double> nt;
+  bool good = nt.compute_from_points(points1, false);
+  vcl_cout << "The resulting transform\n";
+  vnl_matrix_fixed<double,3,3> M=nt.get_matrix();
+  vcl_cout << M ;
+  vcl_cout << "Normalized Points \n";
+  unsigned n = 0;
+  double Sxx = 0, Sxy = 0, Syy=0;
+  for(vcl_vector<vgl_homg_point_2d<double> >::iterator pit = points1.begin();
+      pit != points1.end(); ++pit,++n)
+  {
+	  vgl_homg_point_2d<double> p = nt(*pit);
+    double x = p.x()/p.w(), y = p.y()/p.w();
+    vcl_cout << "p[" << n << "]=(" << x
+		<< ' ' << y << ")\n";
+    Sxx += x*x; Sxy+= x*y; Syy += y*y;
+  }
+  vcl_cout << "Sxx = " << vcl_sqrt(Sxx/5.0) << " Sxy = " 
+           << vcl_sqrt(Sxy/5.0) << " Syy = " << vcl_sqrt(Syy/5.0) << '\n';
+
+  double sigma_x = vcl_sqrt(Sxx/5.0), sigma_y = vcl_sqrt(Syy/5.0);
+  double error = (sigma_x-1)*(sigma_y-1);
+  TEST_NEAR("Transformed Variances", error, 0.0, 1e-02);
 }
 
 static void test_compute_linear_points()
@@ -235,6 +274,26 @@ static void test_compute_4point()
   vcl_cout << "The normalized upper diagonal "<< hdiag << '\n';
   TEST_NEAR("recover 2x scale matrix", length(hdiag-p23), 0.0, 1e-06);
 }
+static void test_set_transform()
+{
+  vcl_cout << "\n=== Test setting basic transforms =======\n";
+  vgl_h_matrix_2d<double> H;
+  vgl_homg_point_2d<double> p(1.0, 0.0);//point on the x axis
+  H.set_identity();
+  H.set_rotation(vnl_math::pi/2.0);
+  vgl_homg_point_2d<double> rp, sp , tp;
+  rp = H(p);
+  vcl_cout << "rotated point " << rp << '\n';
+  H.set_scale(2.0);
+  sp = H(p);
+  vcl_cout << "rotated and scaled point " << sp << '\n';
+  H.set_translation(1.0, 3.0);
+  tp = H(p);
+  vcl_cout << "rotated, scaled and translated point " << tp << '\n';
+  TEST_NEAR("rotation", rp.y(), 1.0, 1e-06);
+  TEST_NEAR("scale and rotation", sp.y(), 2.0, 1e-06);
+  TEST_NEAR("scale, rotation and translation", tp.x()+tp.y(), 6.0, 1e-06);
+}
 
 static void test_h_matrix_2d()
 {
@@ -242,9 +301,11 @@ static void test_h_matrix_2d()
   test_perspective_transform();
   test_projective_basis();
   test_projective_basis_from_lines();
+  test_norm_trans();
   test_compute_linear_points();
   test_compute_linear_lines();
   test_compute_4point();
+  test_set_transform();
 }
 
 TESTMAIN(test_h_matrix_2d);

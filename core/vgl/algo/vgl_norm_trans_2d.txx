@@ -72,9 +72,10 @@ vgl_norm_trans_2d<T>::~vgl_norm_trans_2d()
 // 4) Complete the normalizing transform
 template <class T>
 bool vgl_norm_trans_2d<T>::
-compute_from_points(vcl_vector<vgl_homg_point_2d<T> > const& points)
+compute_from_points(vcl_vector<vgl_homg_point_2d<T> > const& points,
+                    bool isotropic)
 {
-  T cx, cy, radius;
+  T cx, cy;
   this->center_of_mass(points, cx, cy);
   this->t12_matrix_.set_identity();
   this->t12_matrix_.put(0,2, -cx);    this->t12_matrix_.put(1,2, -cy);
@@ -85,14 +86,29 @@ compute_from_points(vcl_vector<vgl_homg_point_2d<T> > const& points)
     vgl_homg_point_2d<T> p((*this)(*pit));
     temp.push_back(p);
   }
-  //Points might be coincident
-  if (!this->scale_xyroot2(temp, radius))
+  
+  if (isotropic){
+    T radius = 1;
+    //Points might be coincident
+    if(!this->scale_xyroot2(temp, radius))
+      return false;
+    T scale = 1/radius;
+    this->t12_matrix_.put(0,0, scale);
+    this->t12_matrix_.put(1,1, scale);
+    this->t12_matrix_.put(0,2, -cx*scale);
+    this->t12_matrix_.put(1,2, -cy*scale);
+    return true;
+  }
+  T sdx = 1, sdy = 1, c = 1, s = 0;
+  if(!this->scale_aniostropic(temp, sdx, sdy, c, s))
     return false;
-  T scale = 1/radius;
-  this->t12_matrix_.put(0,0, scale);
-  this->t12_matrix_.put(1,1, scale);
-  this->t12_matrix_.put(0,2, -cx*scale);
-  this->t12_matrix_.put(1,2, -cy*scale);
+  T scx = 1/sdx, scy = 1/sdy;
+  this->t12_matrix_.put(0, 0, c*scx);
+  this->t12_matrix_.put(0, 1, -s*scx);
+  this->t12_matrix_.put(0, 2, (-c*scx*cx+s*scx*cy));
+  this->t12_matrix_.put(1, 0, s*scy);
+  this->t12_matrix_.put(1, 1, c*scy);
+  this->t12_matrix_.put(1, 2, (-s*scy*cx-c*scy*cy));
   return true;
 }
 
@@ -107,7 +123,8 @@ compute_from_points(vcl_vector<vgl_homg_point_2d<T> > const& points)
 //
 template <class T>
 bool vgl_norm_trans_2d<T>::
-compute_from_lines(vcl_vector<vgl_homg_line_2d<T> > const& lines)
+compute_from_lines(vcl_vector<vgl_homg_line_2d<T> > const& lines,
+                   bool isotropic)
 {
   vcl_vector<vgl_homg_point_2d<T> > points;
   for (typename vcl_vector<vgl_homg_line_2d<T> >::const_iterator lit=lines.begin();
@@ -117,7 +134,7 @@ compute_from_lines(vcl_vector<vgl_homg_line_2d<T> > const& lines)
     vgl_homg_point_2d<T> p(-l.a()*l.c(), -l.b()*l.c(), l.a()*l.a()+l.b()*l.b());
     points.push_back(p);
   }
-  return this->compute_from_points(points);
+  return this->compute_from_points(points, isotropic);
 }
 
 //-----------------------------------------------------------------
@@ -128,7 +145,8 @@ compute_from_lines(vcl_vector<vgl_homg_line_2d<T> > const& lines)
 template <class T>
 bool vgl_norm_trans_2d<T>::
 compute_from_points_and_lines(vcl_vector<vgl_homg_point_2d<T> > const& pts,
-                              vcl_vector<vgl_homg_line_2d< T> > const& lines)
+                              vcl_vector<vgl_homg_line_2d< T> > const& lines,
+                              bool isotropic)
 {
   vcl_vector<vgl_homg_point_2d<T> > points = pts;
   for (typename vcl_vector<vgl_homg_line_2d<T> >::const_iterator lit=lines.begin();
@@ -138,7 +156,7 @@ compute_from_points_and_lines(vcl_vector<vgl_homg_point_2d<T> > const& pts,
     vgl_homg_point_2d<T> p(-l.a()*l.c(), -l.b()*l.c(), l.a()*l.a()+l.b()*l.b());
     points.push_back(p);
   }
-  return this->compute_from_points(points);
+  return this->compute_from_points(points, isotropic);
 }
 
 //-------------------------------------------------------------------
@@ -201,6 +219,54 @@ scale_xyroot2(vcl_vector<vgl_homg_point_2d<T> > const& in, T& radius)
     return radius>=tol;
   }
   return false;
+}
+//------------------------------------------------------------
+// Anisotropic scaling of the point set around the center of gravity.
+// Determines the principal axes and standard deviations along the principal
+// axes.  Assumes that the pointset has zero mean, so ::center_of_mass should
+// be removed before calling this function.
+template <class T>
+bool vgl_norm_trans_2d<T>::
+scale_aniostropic(vcl_vector<vgl_homg_point_2d<T> > const& in,
+                       T& sdx, T& sdy, T& c, T& s)
+{
+  T tol = T(1e-06);
+  unsigned count = 0;
+  unsigned n = in.size();
+  //The point scatter matrix coefficients
+  double Sx2=0, Sxy=0, Sy2=0;
+  for (unsigned i = 0; i < n; ++i)
+  {
+    if (in[i].ideal(tol))
+      continue;
+    ++count;
+    vgl_point_2d<T> p(in[i]);
+    T x = p.x();
+    T y = p.y();
+    Sx2 += (double)x*x;
+    Sxy += (double)x*y;
+    Sy2 += (double)y*y;
+  }
+  if(!count)
+    return false;
+
+  double t =0.0;
+  // Compute the rotation that makes Sxy zero
+  if( Sx2 != Sy2 )
+    t = 0.5*vcl_atan( -2.0*Sxy/(Sx2-Sy2) );
+
+  double dc = vcl_cos(t),  ds = vcl_sin(t);
+  double tSxy = dc*ds*(Sx2 - Sy2) + Sxy*(dc*dc - ds*ds);
+  /* determine the standard deviations in the rotated frame */
+  double sddx = vcl_sqrt( (dc*dc*Sx2-2.0*dc*ds*Sxy+ds*ds*Sy2)/count );
+  double sddy = vcl_sqrt( (ds*ds*Sx2+2.0*dc*ds*Sxy+dc*dc*Sy2)/count );
+  
+  //cast back to T
+  sdx = static_cast<T>(sddx);
+  sdy = static_cast<T>(sddy);
+  c = static_cast<T>(dc);
+  s = static_cast<T>(ds);
+  return (sdx>tol && sdy >tol);
 }
 
 //----------------------------------------------------------------------------

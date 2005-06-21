@@ -56,10 +56,11 @@ class vgl_h_matrix_2d
   vgl_homg_point_2d<T> correlation(vgl_homg_line_2d<T> const& l) const;
 
   //: assumed to be a point conic
-  vgl_conic<T> operator() (vgl_conic<T> const& c) const;
+  vgl_conic<T> operator() (vgl_conic<T> const& C) const;
 
   // these operations require taking an inverse
   vgl_homg_point_2d<T> preimage(vgl_homg_point_2d<T> const& p) const;
+  vgl_conic<T> preimage(vgl_conic<T> const& C) const;
   vgl_homg_line_2d<T> operator()(vgl_homg_line_2d<T> const& l) const;
   vgl_homg_line_2d<T> operator*(vgl_homg_line_2d<T> const& l) const { return (*this)(l);}
 

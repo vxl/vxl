@@ -119,6 +119,19 @@ vgl_conic<T> vgl_h_matrix_2d<T>::operator() (vgl_conic<T> const& C) const
   return   vgl_conic<T>(Mp(0,0),(Mp(0,1)+Mp(1,0)),Mp(1,1),(Mp(0,2)+Mp(2,0)),
                         (Mp(1,2)+Mp(2,1)), Mp(2,2));
 }
+template <class T>
+vgl_conic<T> vgl_h_matrix_2d<T>::preimage(vgl_conic<T> const& C) const
+{
+  T a=C.a(), b=C.b()/2, c = C.c(), d = C.d()/2, e = C.e()/2, f = C.f();
+  vnl_matrix_fixed<T, 3, 3> M, Mp;
+  M(0,0) = a;  M(0,1) = b;  M(0,2) = d;
+  M(1,0) = b;  M(1,1) = c;  M(1,2) = e;
+  M(2,0) = d;  M(2,1) = e;  M(2,2) = f;
+  Mp = vnl_inverse_transpose(t12_matrix_)*M*vnl_inverse(t12_matrix_);
+  return   vgl_conic<T>(Mp(0,0),(Mp(0,1)+Mp(1,0)),Mp(1,1),(Mp(0,2)+Mp(2,0)),
+                        (Mp(1,2)+Mp(2,1)), Mp(2,2));
+}
+
 
 template <class T>
 vgl_homg_point_2d<T>

@@ -188,7 +188,7 @@ class vgl_conic
 
   //: Returns true if this conic is degenerate, i.e., if it consists of 2 lines.
   bool is_degenerate() const;
-
+  
   //: Returns true if a central conic, i.e., an ellipse, circle, or hyperbola.
   //  Also the degenerate versions of these return true.
   //  Returns false if a parabola or two parallel or coinciding lines.
@@ -238,6 +238,12 @@ class vgl_conic
   // When two intersecting or parallel lines, returns their intersection point.
   // In all cases this is the polar point of the line at infinity.
   vgl_homg_point_2d<T> centre() const { return polar_point(vgl_homg_line_2d<T>(0,0,1)); }
+
+  //: Converts the coefficients to a geometric description of an ellipse. 
+  //  Returns false if the conic is not an ellipse. Double is appropriate
+  //  since integer coefficients can produce non-integer ellipse parameters.
+  bool ellipse_geometry(double& xc, double& yc, double& major_axis_length,
+                        double& minor_axis_length, double& angle_in_radians);
 
   // Functions related to dual space ---------------------------------
 

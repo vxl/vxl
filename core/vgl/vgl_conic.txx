@@ -190,8 +190,47 @@ bool vgl_conic<T>::is_degenerate() const
 {
   T A = a_, B = b_/2, C = c_, D = d_/2, E = e_/2, F = f_;
   T det = A*(C*F - E*E) - B*(B*F - D*E) + D*(B*E - C*D);
-  return det == 0;
+  return det==0;
 }
+
+//: return a geometric description of the conic if an ellipse
+// The centre of the ellipse is (xc, yc)
+template <class T> 
+bool vgl_conic<T>::
+ellipse_geometry(double& xc, double& yc, double& major_axis_length,
+                 double& minor_axis_length, double& angle_in_radians)
+{
+  if(type_!=real_ellipse)
+    return false;
+ 
+  // Cast to double
+  double A = static_cast<double>(a_), B = static_cast<double>(b_),
+    C = static_cast<double>(c_), D = static_cast<double>(d_),
+    E = static_cast<double>(e_), F = static_cast<double>(f_);
+
+  
+  double det = A*(C*F - E*E/4.0) - B*(B*F- D*E/2.0)/4.0 + D*(B*E/2.0-C*D)/4.0;
+  if(det<0)
+    det = -det;
+   double D2 =  A*C - B*B/4.0;
+  xc = (E*B - 2.0*C*D)/(4.0*D2);
+  yc = (D*B - 2.0*A*E)/(4.0*D2);
+
+  double trace,disc, cmaj, cmin;
+  trace = A + C;
+  disc = vcl_sqrt(trace*trace - 4.0*D2);
+  cmaj = (trace+disc)*D2/(2.0*det);
+  cmin = (trace-disc)*D2/(2.0*det);
+  major_axis_length = 1/vcl_sqrt(cmin);  minor_axis_length = 1/vcl_sqrt(cmaj);
+  
+  //Find the angle that diagonalizes the upper 2x2 sub-matrix
+  double den = C - A;
+  angle_in_radians  = -0.5 * vcl_atan2(B, den);
+  //                  ^
+  // and return the negative of this angle
+  return true;
+}
+
 
 //: Returns the list of component lines, when degenerate and real components.
 //  Otherwise returns an empty list.
@@ -350,3 +389,4 @@ template vcl_ostream& operator<<(vcl_ostream&, const vgl_conic<T >&); \
 template vcl_istream& operator>>(vcl_istream&, vgl_conic<T >&)
 
 #endif // vgl_conic_txx_
+
