@@ -112,7 +112,7 @@ test_inv_indexing()
   moving_set2.push_back(new simple_invariant_feature(location4 + t,
                                                      loc2_cart_inv,
                                                      zero_vec) );
-  rgrl_mask_box roi(2);
+  rgrl_mask_sptr roi = new rgrl_mask_box(2);
   rgrl_initializer_inv_indexing* initializer = new rgrl_initializer_inv_indexing( roi, roi, 0, 0, false);
 
   initializer->add_data(fixed_set1, moving_set1, 0, 1);
@@ -159,11 +159,11 @@ test_single_prior()
 
   rgrl_estimator_sptr est = new rgrl_est_affine;
 
-  rgrl_mask_box roi(3);
+  rgrl_mask_sptr roi = new rgrl_mask_box(3);
   rgrl_view_sptr view = new rgrl_view( roi,
                                        roi,
-                                       roi,
-                                       roi,
+                                       roi->bounding_box(),
+                                       roi->bounding_box(),
                                        est,
                                        trans,
                                        0 );

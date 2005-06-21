@@ -5,12 +5,18 @@
 // \brief  Represent a "view" of the registration problem.
 // \author Chuck Stewart
 // \date 12 Nov 2002
+// \verbatim
+// Modifications
+//   June.2005 - Gehua Yang - change image ROI from rgrl_mask_box to rgrl_mask_sptr
+// \endverbatim
 
-#include "rgrl_transformation_sptr.h"
-#include "rgrl_estimator_sptr.h"
-#include "rgrl_mask.h"
 
-#include "rgrl_view_sptr.h"
+#include <rgrl/rgrl_transformation_sptr.h>
+#include <rgrl/rgrl_estimator_sptr.h>
+#include <rgrl/rgrl_mask.h>
+#include <rgrl/rgrl_mask_sptr.h>
+
+#include <rgrl/rgrl_view_sptr.h>
 
 //: Represents a "view" of the registration problem.
 //
@@ -26,8 +32,8 @@ class rgrl_view
   rgrl_view();
   
   //:  Build a view for registration estimation problem.
-  rgrl_view( rgrl_mask_box       const& from_image_roi,
-             rgrl_mask_box       const& to_image_roi,
+  rgrl_view( rgrl_mask_sptr      const& from_image_roi,
+             rgrl_mask_sptr      const& to_image_roi,
              rgrl_mask_box       const& region,
              rgrl_mask_box       const& global_region,
              rgrl_estimator_sptr        xform_estimator,
@@ -38,10 +44,10 @@ class rgrl_view
   // default copy and assignment are good.
 
   //:  Access "from" image region of interest
-  rgrl_mask_box const& from_image_roi() const;
+  rgrl_mask_sptr const& from_image_roi() const;
 
   //:  Access "to" image region of interest
-  rgrl_mask_box const& to_image_roi() const;
+  rgrl_mask_sptr const& to_image_roi() const;
 
   //:  Access current transformation region in "from" image coords
   rgrl_mask_box const& region() const;
@@ -90,8 +96,8 @@ class rgrl_view
   rgrl_type_macro( rgrl_view, rgrl_object );
 
  private:
-  rgrl_mask_box                   from_image_roi_;
-  rgrl_mask_box                   to_image_roi_;
+  rgrl_mask_sptr                  from_image_roi_;
+  rgrl_mask_sptr                  to_image_roi_;
 
   rgrl_mask_box                   current_region_;
   rgrl_mask_box                   global_region_; //The estimated overlap region

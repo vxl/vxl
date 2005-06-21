@@ -247,8 +247,8 @@ main( int argc, char* argv[] )
   fixed_feature_set =
     new rgrl_feature_set_location_masked<dimension>(fixed_set,
                                                     mask);
-  rgrl_mask_box moving_image_region = moving_feature_set->bounding_box();
-  rgrl_mask_box fixed_image_region  = fixed_feature_set->bounding_box();
+  rgrl_mask_sptr moving_image_region = new rgrl_mask_box( moving_feature_set->bounding_box() );
+  rgrl_mask_sptr fixed_image_region  = new rgrl_mask_box( fixed_feature_set->bounding_box() );
 
   // Create the initializer
   //

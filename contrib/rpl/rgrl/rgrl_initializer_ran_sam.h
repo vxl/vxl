@@ -62,8 +62,8 @@ class rgrl_initializer_ran_sam
   //: Initialize with a set of information without packing everything into a vie
   void set_data(rgrl_match_set_sptr                init_match_set,
                 rgrl_scale_estimator_unwgted_sptr  scale_est,
-                rgrl_mask_box       const&         from_image_roi,
-                rgrl_mask_box       const&         to_image_roi,
+                rgrl_mask_sptr      const&         from_image_roi,
+                rgrl_mask_sptr      const&         to_image_roi,
                 rgrl_mask_box       const&         initial_from_image_roi,
                 rgrl_estimator_sptr                xform_estimator,
                 unsigned                           initial_resolution = 0,
@@ -72,8 +72,8 @@ class rgrl_initializer_ran_sam
   //: Initialize with a set of information, assuming that registration applies to \a from_image_roi always.
   void set_data(rgrl_match_set_sptr                init_match_set,
                 rgrl_scale_estimator_unwgted_sptr  scale_est,
-                rgrl_mask_box       const&         from_image_roi,
-                rgrl_mask_box       const&         to_image_roi,
+                rgrl_mask_sptr      const&         from_image_roi,
+                rgrl_mask_sptr      const&         to_image_roi,
                 rgrl_estimator_sptr                xform_estimator,
                 unsigned                           initial_resolution = 0);
 
@@ -81,7 +81,7 @@ class rgrl_initializer_ran_sam
   //  And \a from_image_roi and \a to_image_roi are the same
   void set_data(rgrl_match_set_sptr                init_match_set,
                 rgrl_scale_estimator_unwgted_sptr  scale_est,
-                rgrl_mask_box       const&         from_image_roi,
+                rgrl_mask_sptr      const&         from_image_roi,
                 rgrl_estimator_sptr                xform_estimator,
                 unsigned                           initial_resolution = 0);
 

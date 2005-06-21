@@ -5,8 +5,8 @@
 // \author Chuck Stewart
 // \date   25 Nov 2002
 
-#include "rgrl_estimator.h"
-
+#include <rgrl/rgrl_estimator.h>
+#include <vcl_cstdlib.h>
 rgrl_view::
 rgrl_view()
   : from_image_roi_(0),
@@ -18,8 +18,8 @@ rgrl_view()
 }
 
 rgrl_view::
-rgrl_view( rgrl_mask_box           const& from_image_roi,
-           rgrl_mask_box           const& to_image_roi,
+rgrl_view( rgrl_mask_sptr          const& from_image_roi,
+           rgrl_mask_sptr          const& to_image_roi,
            rgrl_mask_box           const& region,
            rgrl_mask_box           const& global_region,
            rgrl_estimator_sptr       xform_estimator,
@@ -35,10 +35,18 @@ rgrl_view( rgrl_mask_box           const& from_image_roi,
     inverse_estimate_( inverse_estimate ),
     current_resolution_( resolution )
 {
+  if( !from_image_roi || !to_image_roi ) {
+    
+    WarningMacro( "ERROR: invlid From/To image ROI. \n"
+               << "       In the simplest case, supply an instance of rgrl_mask_box."
+               << vcl_endl );
+    assert( 0 ) ;
+  }
+  
 }
 
 
-rgrl_mask_box const&
+rgrl_mask_sptr const&
 rgrl_view::
 from_image_roi() const
 {
@@ -46,7 +54,7 @@ from_image_roi() const
 }
 
 
-rgrl_mask_box const&
+rgrl_mask_sptr const&
 rgrl_view::
 to_image_roi() const
 {
@@ -128,12 +136,10 @@ regions_converged_to(const rgrl_view& other) const
     ( (this->global_region_.x0() - other.global_region_.x0()).inf_norm() > 1 ||
       (this->global_region_.x1() - other.global_region_.x1()).inf_norm() > 1);
 
-  return this->from_image_roi_.x0() == other.from_image_roi_.x0() &&
-         this->from_image_roi_.x1() == other.from_image_roi_.x1() &&
-         this->to_image_roi_.x0() == other.to_image_roi_.x0() &&
-         this->to_image_roi_.x1() == other.to_image_roi_.x1() &&
-         !current_region_changed &&
+  return !current_region_changed &&
          !current_global_region_changed &&
+         this->from_image_roi_ == other.from_image_roi_ &&
+         this->to_image_roi_ == other.to_image_roi_ &&
          this->xform_estimator_->transformation_type() == other.xform_estimator_->transformation_type() &&
          this->current_resolution_ == other.current_resolution_;
 }

@@ -14,6 +14,7 @@
 #include <rgrl/rgrl_scale_sptr.h>
 #include <rgrl/rgrl_match_set_sptr.h>
 #include <rgrl/rgrl_estimator_sptr.h>
+#include <rgrl/rgrl_mask_sptr.h>
 
 #include <vnl/vnl_vector.h>
 #include <vcl_iosfwd.h>
@@ -24,12 +25,24 @@ class rgrl_match_set;
 
 //: Estimate the maximum overlap region/volumn based on the curr_xform
 rgrl_mask_box
-rgrl_util_estimate_global_region( rgrl_mask_box const&         from_image_roi,
-                                  rgrl_mask_box const&         to_image_roi,
-                                  rgrl_mask_box const&         current_region,
-                                  rgrl_transformation const&   curr_xform,
-                                  bool                         union_with_curr = false,
-                                  double                       drastic_change_ratio = 1.75 );
+rgrl_util_estimate_global_region( 
+          rgrl_mask_sptr      const&   from_image_roi,
+          rgrl_mask_sptr      const&   to_image_roi,
+          rgrl_mask_box       const&   current_region,
+          rgrl_transformation const&   curr_xform,
+          bool                         union_with_curr = false,
+          double                       drastic_change_ratio = 1.75 );
+
+//: Estimate the maximum overlap region/volumn based on the inverse xfrom
+//  The inverse xform transforms points on Fixed image coordinate to Moving image
+rgrl_mask_box
+rgrl_util_estimate_global_region_with_inv_xform( 
+          rgrl_mask_sptr      const&   from_image_roi,
+          rgrl_mask_sptr      const&   to_image_roi,
+          rgrl_mask_box       const&   current_region,
+          rgrl_transformation const&   inv_xform,
+          bool                         union_with_curr = false,
+          double                       drastic_change_ratio = 1.75 );
 
 //: Estimate the change between the spreads of the from_feature_set and mapped_feature_set
 double

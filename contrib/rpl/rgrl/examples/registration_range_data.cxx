@@ -211,8 +211,8 @@ main( int argc, char* argv[] )
   //Initializer
   vector_3d x0(-1,-1,-1);           //upper left corner
   vector_3d x1(1,1,1);              //bottom right corner
-  rgrl_mask_box moving_image_region(x0, x1);
-  rgrl_mask_box fixed_image_region(x0, x1);
+  rgrl_mask_sptr moving_image_region = new rgrl_mask_box(x0, x1);
+  rgrl_mask_sptr fixed_image_region = moving_image_region;  // assume two are identical
   rgrl_initializer_sptr initializer =
     new rgrl_initializer_prior( moving_image_region,
                                 fixed_image_region,

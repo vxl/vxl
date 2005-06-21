@@ -17,8 +17,8 @@ rgrl_initializer_prior( rgrl_view_sptr           prior_view,
 }
 
 rgrl_initializer_prior::
-rgrl_initializer_prior( rgrl_mask_box              const& from_image_roi,
-                        rgrl_mask_box              const& to_image_roi,
+rgrl_initializer_prior( rgrl_mask_sptr             const& from_image_roi,
+                        rgrl_mask_sptr             const& to_image_roi,
                         rgrl_mask_box              const& initial_from_image_roi,
                         rgrl_estimator_sptr        xform_estimator,
                         rgrl_transformation_sptr   xform_estimate,
@@ -27,17 +27,18 @@ rgrl_initializer_prior( rgrl_mask_box              const& from_image_roi,
   : prior_scale_( prior_scale ),
     xform_index_( 0 )
 {
+  rgrl_mask_box global_region( from_image_roi->bounding_box() );
   init_view_ = new rgrl_view( from_image_roi, to_image_roi,
                               initial_from_image_roi,
-                              from_image_roi, xform_estimator,
+                              global_region, xform_estimator,
                               xform_estimate,
                               initial_resolution );
   xforms_.push_back( xform_estimate );
 }
 
 rgrl_initializer_prior::
-rgrl_initializer_prior( rgrl_mask_box              const& from_image_roi,
-                        rgrl_mask_box              const& to_image_roi,
+rgrl_initializer_prior( rgrl_mask_sptr             const& from_image_roi,
+                        rgrl_mask_sptr             const& to_image_roi,
                         rgrl_estimator_sptr        xform_estimator,
                         rgrl_transformation_sptr   xform_estimate,
                         unsigned                   initial_resolution,
@@ -45,14 +46,16 @@ rgrl_initializer_prior( rgrl_mask_box              const& from_image_roi,
   : prior_scale_( prior_scale ),
     xform_index_( 0 )
 {
-  init_view_ = new rgrl_view( from_image_roi, to_image_roi, from_image_roi,
-                              from_image_roi, xform_estimator, xform_estimate,
+  rgrl_mask_box global_region( from_image_roi->bounding_box() );
+  init_view_ = new rgrl_view( from_image_roi, to_image_roi, 
+                              global_region, global_region,
+                              xform_estimator, xform_estimate,
                               initial_resolution );
   xforms_.push_back( xform_estimate );
 }
 
 rgrl_initializer_prior::
-rgrl_initializer_prior( rgrl_mask_box              const& from_image_roi,
+rgrl_initializer_prior( rgrl_mask_sptr             const& from_image_roi,
                         rgrl_estimator_sptr        xform_estimator,
                         rgrl_transformation_sptr   xform_estimate,
                         unsigned                   initial_resolution,
@@ -60,8 +63,9 @@ rgrl_initializer_prior( rgrl_mask_box              const& from_image_roi,
   : prior_scale_( prior_scale ),
     xform_index_( 0 )
 {
-  init_view_ = new rgrl_view( from_image_roi, from_image_roi, from_image_roi,
-                              from_image_roi, xform_estimator, xform_estimate,
+  rgrl_mask_box global_region( from_image_roi->bounding_box() );
+  init_view_ = new rgrl_view( from_image_roi, from_image_roi, 
+                              global_region, global_region, xform_estimator, xform_estimate,
                               initial_resolution );
   xforms_.push_back( xform_estimate );
 }

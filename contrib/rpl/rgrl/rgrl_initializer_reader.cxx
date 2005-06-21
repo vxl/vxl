@@ -12,8 +12,8 @@
 
 rgrl_initializer_reader::
 rgrl_initializer_reader(vcl_istream& istr,
-                        rgrl_mask_box              const& from_image_roi,
-                        rgrl_mask_box              const& to_image_roi,
+                        rgrl_mask_sptr             const& from_image_roi,
+                        rgrl_mask_sptr             const& to_image_roi,
                         rgrl_scale_sptr            const& prior_scale,
                         rgrl_estimator_sptr        const& estimator,
                         unsigned int                      resolution )
@@ -114,7 +114,7 @@ rgrl_initializer_reader(vcl_istream& istr,
       global_region =
         rgrl_util_estimate_global_region(from_image_roi_,
                                          to_image_roi_,
-                                         from_image_roi_,
+                                         from_image_roi_->bounding_box(),
                                          *one.xform_);
     }
     

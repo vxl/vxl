@@ -182,8 +182,8 @@ main( int argc, char* argv[] )
   rgrl_feature_set_sptr fixed_feature_set =
     new rgrl_feature_set_location_masked<dimension>(fixed_landmark_set,
                                                     mask);
-  rgrl_mask_box moving_image_region = moving_feature_set->bounding_box();
-  rgrl_mask_box fixed_image_region  = fixed_feature_set->bounding_box();
+  rgrl_mask_sptr moving_image_region = new rgrl_mask_box( moving_feature_set->bounding_box() );
+  rgrl_mask_sptr fixed_image_region  = new rgrl_mask_box( fixed_feature_set->bounding_box() );
 
   // BeginLatex
   //
@@ -212,7 +212,7 @@ main( int argc, char* argv[] )
     cp_matcher->compute_matches(*moving_feature_set,
                                 *fixed_feature_set,
                                 *init_translation,
-                                moving_image_region,
+                                moving_image_region->bounding_box(),
                                 *dummy_scale);
   // EndCodeSnippet
 

@@ -37,9 +37,9 @@ namespace {
 
     rgrl_transformation_sptr trans = new rgrl_trans_affine(A, t, covar);
 
-    rgrl_mask_box roi(vnl_double_2(0, -50), vnl_double_2(50, 50));
+    rgrl_mask_sptr roi = new rgrl_mask_box(vnl_double_2(0, -50), vnl_double_2(50, 50));
     rgrl_estimator_sptr est_p = new rgrl_est_affine;
-    rgrl_view_sptr view = new rgrl_view( roi, roi, roi, roi, est_p, trans, 0 );
+    rgrl_view_sptr view = new rgrl_view( roi, roi, roi->bounding_box(), roi->bounding_box(), est_p, trans, 0 );
     rgrl_scale_sptr scale = new rgrl_scale();
 
     // Create a vector of rgrl_features of the appropriate type.

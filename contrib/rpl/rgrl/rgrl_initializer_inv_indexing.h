@@ -31,8 +31,8 @@ class rgrl_initializer_inv_indexing
                                  bool should_estimate_global_region = true,
                                  int max_num_matches_tried = -1);
 
-  rgrl_initializer_inv_indexing( rgrl_mask_box  const&     from_image_roi,
-                                 rgrl_mask_box  const&     to_image_roi,
+  rgrl_initializer_inv_indexing( rgrl_mask_sptr const&     from_image_roi,
+                                 rgrl_mask_sptr const&     to_image_roi,
                                  rgrl_estimator_sptr xform_estimator = 0,
                                  unsigned             initial_resolution = 0,
                                  bool should_estimate_global_region = true,

@@ -3,6 +3,11 @@
 //:
 // \file
 // \brief  hierarchy of mask of various shapes.
+//         Disregarding the shape, each mask also provides 
+//         a bounding box.  Denoting the upper left corner as x0,
+//         and bottom right as x1 (in 2D case), the bounding box 
+//         is defined by a tight interval [x0, x1] on all dimensions.
+// 
 // \author Charlene Tsai
 // \date   Oct 2003
 
@@ -17,12 +22,15 @@
 // Defines a ROI (termed mask) which is required by certain feature_set
 // to outline region where operations are performed (e.g. registration).
 
+class rgrl_mask_box;
+
 //: base class of roi which is a pure virtual class
 class rgrl_mask
   : public rgrl_object
 {
  public:
-  rgrl_mask(){}
+  rgrl_mask( unsigned dim=0 ) : x0_(dim, 0.0), x1_(dim, 0.0) { }
+  
   virtual ~rgrl_mask(){}
 
   //: True if a point is inside the region
@@ -30,6 +38,19 @@ class rgrl_mask
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_mask, rgrl_object );
+
+  //: The lower coordinate of the bounding box.
+  vnl_vector<double> const& x0() const
+  { return x0_; }
+  
+  //: The upper coordinate of the bounding box.
+  vnl_vector<double> const& x1() const
+  { return x1_; }
+  
+  rgrl_mask_box bounding_box() const;
+  
+ protected:
+  vnl_vector<double> x0_, x1_; 
 };
 
 
@@ -46,6 +67,9 @@ class rgrl_mask_2d_image
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_mask_2d_image, rgrl_mask );
+
+ private:
+  void update_bounding_box();
 
  private:
   vil_image_view<vxl_byte> mask_image_;
@@ -65,6 +89,9 @@ class rgrl_mask_3d_image
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_mask_3d_image, rgrl_mask );
+
+ private:
+  void update_bounding_box();
 
  private:
   vil3d_image_view< vxl_byte > mask_image_;
@@ -97,6 +124,9 @@ class rgrl_mask_sphere
   rgrl_type_macro( rgrl_mask_sphere, rgrl_mask );
 
  private:
+  void update_bounding_box();
+  
+ private:
   vnl_vector<double> center_;
   double radius_sqr_;
 };
@@ -119,12 +149,6 @@ class rgrl_mask_box
   //: True if a point is inside the region
   bool inside( vnl_vector<double> const& pt ) const;
 
-  //: The lower coordinate of the box.
-  vnl_vector<double> const& x0() const;
-
-  //: The upper coordinate of the box.
-  vnl_vector<double> const& x1() const;
-
   //: Set the lower coordinate of the box.
   void set_x0( vnl_vector<double> const& v );
 
@@ -140,9 +164,6 @@ class rgrl_mask_box
   // Defines type-related functions
   rgrl_type_macro( rgrl_mask_box, rgrl_mask );
 
- private:
-  vnl_vector<double> x0_;
-  vnl_vector<double> x1_;
 };
 
 //: An output operator for displaying a mask_box

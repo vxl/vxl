@@ -35,7 +35,8 @@ compute_status( rgrl_converge_status_sptr               prev_status,
                 bool                                    penalize_scaling )const
 {
   rgrl_mask_box   dummy_image_region(0);
-  rgrl_view view( dummy_image_region, dummy_image_region,
+  rgrl_mask_sptr  dummy_roi = new rgrl_mask_box( 0 );
+  rgrl_view view( dummy_roi, dummy_roi,
                   dummy_image_region, dummy_image_region,
                   xform_estimator, xform_estimate, 0);
   return compute_status( prev_status, view, view,
@@ -91,7 +92,8 @@ initialize_status( rgrl_transformation_sptr                xform_estimate,
                    bool                                    penalize_scaling )const
 {
   rgrl_mask_box   dummy_image_region(0);
-  rgrl_view view( dummy_image_region, dummy_image_region,
+  rgrl_mask_sptr  dummy_roi = new rgrl_mask_box( 0 );
+  rgrl_view view( dummy_roi, dummy_roi,
                   dummy_image_region, dummy_image_region,
                   xform_estimator, xform_estimate, 0);
   return this->init_status( view, prior_scale, penalize_scaling );

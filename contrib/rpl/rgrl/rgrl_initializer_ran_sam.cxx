@@ -98,16 +98,17 @@ void
 rgrl_initializer_ran_sam::
 set_data(rgrl_match_set_sptr                init_match_set,
          rgrl_scale_estimator_unwgted_sptr  scale_est,
-         rgrl_mask_box            const&    from_image_roi,
-         rgrl_mask_box            const&    to_image_roi,
+         rgrl_mask_sptr           const&    from_image_roi,
+         rgrl_mask_sptr           const&    to_image_roi,
          rgrl_mask_box            const&    initial_from_image_roi,
          rgrl_estimator_sptr                xform_estimator,
          unsigned                           initial_resolution,
          bool should_estimate_global_region)
 {
+  rgrl_mask_box global_region( from_image_roi->bounding_box() );
   rgrl_view_sptr  prior_view  = new rgrl_view( from_image_roi, to_image_roi,
                                                initial_from_image_roi,
-                                               from_image_roi, xform_estimator,
+                                               global_region, xform_estimator,
                                                0, initial_resolution );
   set_data( init_match_set, scale_est, prior_view, should_estimate_global_region );
 }
@@ -116,13 +117,14 @@ void
 rgrl_initializer_ran_sam::
 set_data(rgrl_match_set_sptr                init_match_set,
          rgrl_scale_estimator_unwgted_sptr  scale_est,
-         rgrl_mask_box       const&         from_image_roi,
-         rgrl_mask_box       const&         to_image_roi,
+         rgrl_mask_sptr      const&         from_image_roi,
+         rgrl_mask_sptr      const&         to_image_roi,
          rgrl_estimator_sptr                xform_estimator,
          unsigned                           initial_resolution )
 {
+  rgrl_mask_box global_region( from_image_roi->bounding_box() );
   rgrl_view_sptr  prior_view  = new rgrl_view( from_image_roi, to_image_roi,
-                                               from_image_roi, from_image_roi,
+                                               global_region, global_region,
                                                xform_estimator, 0,
                                                initial_resolution );
   set_data( init_match_set, scale_est, prior_view, false );
@@ -132,12 +134,13 @@ void
 rgrl_initializer_ran_sam::
 set_data(rgrl_match_set_sptr                init_match_set,
          rgrl_scale_estimator_unwgted_sptr  scale_est,
-         rgrl_mask_box       const&         from_image_roi,
+         rgrl_mask_sptr      const&         from_image_roi,
          rgrl_estimator_sptr                xform_estimator,
          unsigned                           initial_resolution )
 {
+  rgrl_mask_box global_region( from_image_roi->bounding_box() );
   rgrl_view_sptr  prior_view  = new rgrl_view( from_image_roi, from_image_roi,
-                                               from_image_roi, from_image_roi,
+                                               global_region, global_region,
                                                xform_estimator, 0,
                                                initial_resolution );
   set_data( init_match_set, scale_est, prior_view, false );
@@ -152,7 +155,7 @@ next_initial( rgrl_view_sptr           & view,
 
   if (!estimate()) return false;
 
-  int dim = init_view_->from_image_roi().x0().size();
+  int dim = init_view_->from_image_roi()->x0().size();
   rgrl_mask_box global_region( dim );
 
   if ( should_estimate_global_region_ )
@@ -161,7 +164,10 @@ next_initial( rgrl_view_sptr           & view,
                                        init_view_->to_image_roi(),
                                        init_view_->global_region(),
                                        *xform_);
-  else global_region = init_view_->from_image_roi();
+  else {
+    global_region.set_x0( init_view_->from_image_roi()->x0() );
+    global_region.set_x1( init_view_->from_image_roi()->x1() );
+  }
 
   view = new rgrl_view(init_view_->from_image_roi(), init_view_->to_image_roi(),
                        init_view_->region(), global_region,

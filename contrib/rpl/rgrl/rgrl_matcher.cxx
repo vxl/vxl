@@ -36,7 +36,8 @@ compute_matches( rgrl_feature_set const&    from_features,
                  rgrl_mask_box const&       region,
                  rgrl_scale const&          current_scale )
 {
-  rgrl_view view( region, region, region, region, 0, 0, 0);
+  rgrl_mask_sptr roi = new rgrl_mask_box( region.x0(), region.x1() );
+  rgrl_view view( roi, roi, region, region, 0, 0, 0);
 
   return this->compute_matches(from_features,
                                to_features,

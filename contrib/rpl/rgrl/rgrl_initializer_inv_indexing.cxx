@@ -25,8 +25,8 @@ rgrl_initializer_inv_indexing( rgrl_view_sptr prior_view,
 }
 
 rgrl_initializer_inv_indexing::
-rgrl_initializer_inv_indexing( rgrl_mask_box  const&     from_image_roi,
-                               rgrl_mask_box  const&     to_image_roi,
+rgrl_initializer_inv_indexing( rgrl_mask_sptr const&     from_image_roi,
+                               rgrl_mask_sptr const&     to_image_roi,
                                rgrl_estimator_sptr xform_estimator,
                                unsigned             initial_resolution,
                                bool should_estimate_global_region,
@@ -38,12 +38,14 @@ rgrl_initializer_inv_indexing( rgrl_mask_box  const&     from_image_roi,
 {
   // If xform_estimator is not set, assign the simplest estimator possible.
   if ( !xform_estimator ) {
-    unsigned dim = from_image_roi.x0().size();
+    unsigned dim = from_image_roi->x0().size();
     xform_estimator = new rgrl_est_translation(dim);
   }
 
-  view_ = new rgrl_view( from_image_roi, to_image_roi, from_image_roi,
-                         from_image_roi, xform_estimator, 0,
+  rgrl_mask_box global_region( from_image_roi->bounding_box() );
+  view_ = new rgrl_view( from_image_roi, to_image_roi, 
+                         global_region, global_region, 
+                         xform_estimator, 0,
                          initial_resolution );
 }
 
@@ -160,16 +162,16 @@ next_initial( rgrl_view_sptr           & view,
 
   // Determine the global region
   //
-  rgrl_mask_box global_region = view_->from_image_roi();
+  rgrl_mask_box global_region ( view_->from_image_roi()->bounding_box() );
   if ( should_estimate_global_region_ )
     global_region =
       rgrl_util_estimate_global_region(view_->from_image_roi(),
                                        view_->to_image_roi(),
-                                       view_->from_image_roi(),
+                                       view_->from_image_roi()->bounding_box(),
                                        *best_match->transform());
   // Determine the initial region
   //
-  rgrl_mask_box initial_region = view_->from_image_roi();
+  rgrl_mask_box initial_region( view_->from_image_roi()->bounding_box() );
   if ( best_match->has_initial_region() )
     initial_region = best_match->initial_region();
 

@@ -509,13 +509,17 @@ main( int argc, char* argv[] )
     prior_scale->set_geometric_scale( geometric_scale );
 
     // set mask_box to image size
-    rgrl_mask_box box(2);
-    box.set_x0( vnl_double_2(0, 0).as_ref() );
+    rgrl_mask_box* box_ptr = new rgrl_mask_box(2);
+    box_ptr->set_x0( vnl_double_2(0, 0).as_ref() );
     const unsigned ni = from_images[num_stages].ni();
     const unsigned nj = from_images[num_stages].nj();
-    box.set_x1( vnl_double_2( double(ni-1), double(nj-1) ).as_ref() );
+    box_ptr->set_x1( vnl_double_2( double(ni-1), double(nj-1) ).as_ref() );
+    
+    // set smart pointer
+    rgrl_mask_sptr roi = box_ptr;
+    box_ptr = 0;
 
-    initializer = new rgrl_initializer_prior( box, box, affine_sptr, init_trans, num_stages, prior_scale );
+    initializer = new rgrl_initializer_prior( roi, roi, affine_sptr, init_trans, num_stages, prior_scale );
   }
 
   // 7. Convergence: how to determine when we are done

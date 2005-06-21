@@ -23,8 +23,8 @@ class rgrl_initializer_prior
                           rgrl_scale_sptr           prior_scale = 0);
 
   //: Initialize with a set of information without packing everything into a view
-  rgrl_initializer_prior(  rgrl_mask_box              const& from_image_roi,
-                           rgrl_mask_box              const& to_image_roi,
+  rgrl_initializer_prior(  rgrl_mask_sptr             const& from_image_roi,
+                           rgrl_mask_sptr             const& to_image_roi,
                            rgrl_mask_box              const& init_from_region_roi,
                            rgrl_estimator_sptr        xform_estimator,
                            rgrl_transformation_sptr   xform_estimate,
@@ -32,8 +32,8 @@ class rgrl_initializer_prior
                            rgrl_scale_sptr            prior_scale = 0);
 
   //: Initialize with a set of information, assuming that registration applies to \a from_image_roi always
-  rgrl_initializer_prior(  rgrl_mask_box              const& from_image_roi,
-                           rgrl_mask_box              const& to_image_roi,
+  rgrl_initializer_prior(  rgrl_mask_sptr             const& from_image_roi,
+                           rgrl_mask_sptr             const& to_image_roi,
                            rgrl_estimator_sptr        xform_estimator,
                            rgrl_transformation_sptr   xform_estimate,
                            unsigned                   resolution = 0,
@@ -41,7 +41,7 @@ class rgrl_initializer_prior
 
   //: Initialize with a set of information, assuming that registration applies to \a from_image_roi always;
   //  And \a from_image_roi and \a to_image_roi are the same
-  rgrl_initializer_prior(  rgrl_mask_box              const& from_image_roi,
+  rgrl_initializer_prior(  rgrl_mask_sptr             const& from_image_roi,
                            rgrl_estimator_sptr        xform_estimator,
                            rgrl_transformation_sptr   xform_estimate,
                            unsigned                   resolution = 0,

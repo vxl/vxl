@@ -121,7 +121,7 @@ make_mask_box_hold( rgrl_mask_box& box,
 void
 read_feature_file( char const* filename,
                    vcl_vector< rgrl_feature_sptr >& features,
-                   rgrl_mask_box &roi,
+                   rgrl_mask_sptr &roi,
                    unsigned spacing )
 {
   // when spacing==1, it means every other point
@@ -192,13 +192,13 @@ read_feature_file( char const* filename,
   }
 
   // update mask box
-  vnl_vector<double> p(2, 0.0);
-  p[0] = box.xmin();
-  p[1] = box.ymin();
-  roi.set_x0( p );
-  p[0] = box.xmax();
-  p[1] = box.ymax();
-  roi.set_x1( p );
+  vnl_vector<double> p0(2, 0.0), p1(2, 0.0);
+  p0[0] = box.xmin();
+  p0[1] = box.ymin();
+  p1[0] = box.xmax();
+  p1[1] = box.ymax();
+
+  roi = new rgrl_mask_box( p0, p1 );
 }
 
 // Read the initial 2D affine transform. The contents of the file is
@@ -295,7 +295,7 @@ main( int argc, char* argv[] )
   // ROI for each data set.
   //
   rgrl_feature_set_sptr from_set, to_set;
-  rgrl_mask_box from_roi(2), to_roi(2);
+  rgrl_mask_sptr from_roi, to_roi;
   {
     // "From" feature set
     vcl_vector<rgrl_feature_sptr> from_pts, to_pts( 1 );

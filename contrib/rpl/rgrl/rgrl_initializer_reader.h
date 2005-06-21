@@ -12,6 +12,7 @@
 #include <rgrl/rgrl_initializer.h>
 #include <rgrl/rgrl_scale_sptr.h>
 #include <rgrl/rgrl_mask.h>
+#include <rgrl/rgrl_mask_sptr.h>
 #include <rgrl/rgrl_transformation_sptr.h>
 
 //: Generate initial estimates based on a single prior transformation.
@@ -21,8 +22,8 @@ class rgrl_initializer_reader
  public:
   //: Initialize with a view
   rgrl_initializer_reader( vcl_istream& istr,
-                           rgrl_mask_box              const& from_image_roi,
-                           rgrl_mask_box              const& to_image_roi,
+                           rgrl_mask_sptr             const& from_image_roi,
+                           rgrl_mask_sptr             const& to_image_roi,
                            rgrl_scale_sptr            const& prior_scale=0,
                            rgrl_estimator_sptr        const& estimator = 0,
                            unsigned int                      resolution = 0 );
@@ -50,8 +51,8 @@ class rgrl_initializer_reader
   vcl_vector< init_record >           init_records_;
   unsigned int xform_index_;
 
-  rgrl_mask_box       from_image_roi_;
-  rgrl_mask_box       to_image_roi_;
+  rgrl_mask_sptr       from_image_roi_;
+  rgrl_mask_sptr       to_image_roi_;
   rgrl_scale_sptr     prior_scale_;
   rgrl_estimator_sptr estimator_;
   unsigned int        res_;

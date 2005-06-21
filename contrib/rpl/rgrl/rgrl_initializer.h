@@ -11,12 +11,13 @@
 //   Jan 2004 Charlene: Added other non-virtual functions to hide view.
 // \endverbatim
 
-#include "rgrl_transformation_sptr.h"
-#include "rgrl_estimator_sptr.h"
-#include "rgrl_view_sptr.h"
-#include "rgrl_scale_sptr.h"
-#include "rgrl_initializer_sptr.h"
-#include "rgrl_mask.h"
+#include <rgrl/rgrl_transformation_sptr.h>
+#include <rgrl/rgrl_estimator_sptr.h>
+#include <rgrl/rgrl_view_sptr.h>
+#include <rgrl/rgrl_scale_sptr.h>
+#include <rgrl/rgrl_initializer_sptr.h>
+#include <rgrl/rgrl_mask.h>
+#include <rgrl/rgrl_mask_sptr.h>
 
 //: Interface for initial estimate generators.
 class rgrl_initializer
@@ -37,8 +38,8 @@ class rgrl_initializer
 
   //: Get next set of initial iniformation without the notion of a view.
   //
-  bool next_initial( rgrl_mask_box            & from_image_roi,
-                     rgrl_mask_box            & to_image_roi,
+  bool next_initial( rgrl_mask_sptr           & from_image_roi,
+                     rgrl_mask_sptr           & to_image_roi,
                      rgrl_mask_box            & current_region,
                      rgrl_mask_box            & global_region,
                      rgrl_estimator_sptr      & xform_estimator,

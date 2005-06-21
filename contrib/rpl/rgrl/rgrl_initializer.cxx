@@ -3,8 +3,8 @@
 // \author Amitha Perera
 // \date   Feb 2003
 
-#include "rgrl_initializer.h"
-#include "rgrl_view.h"
+#include <rgrl/rgrl_initializer.h>
+#include <rgrl/rgrl_view.h>
 
 rgrl_initializer::
 ~rgrl_initializer()
@@ -13,8 +13,8 @@ rgrl_initializer::
 
 bool 
 rgrl_initializer::
-next_initial( rgrl_mask_box            & from_image_roi,
-              rgrl_mask_box            & to_image_roi,
+next_initial( rgrl_mask_sptr           & from_image_roi,
+              rgrl_mask_sptr           & to_image_roi,
               rgrl_mask_box            & current_region,
               rgrl_mask_box            & global_region,
               rgrl_estimator_sptr      & xform_estimator,
