@@ -67,8 +67,10 @@ void vgl_conic_2d_regression<T>::set_sampson_error(const double a,
                                                    ) 
 {
   double sum = 0;
-  for(vcl_vector<vgl_point_2d<T> >::iterator pit = points_.begin();
-      pit != points_.end(); ++pit)
+  //remove warnings on implicit typename
+  typedef vcl_vector<vgl_point_2d<T> >::iterator point_iterator;
+  point_iterator pit;
+  for(pit = points_.begin(); pit != points_.end(); ++pit)
     {
       double x = static_cast<double>(pit->x()),
         y = static_cast<double>(pit->y());
@@ -97,7 +99,9 @@ void vgl_conic_2d_regression<T>::add_point(vgl_point_2d<T> const& p)
 template <class T>
 void vgl_conic_2d_regression<T>::remove_point(vgl_point_2d<T> const& p)
 {
-  vcl_vector<vgl_point_2d<T> >::iterator result;
+  //remove warnings on implicit typename
+  typedef vcl_vector<vgl_point_2d<T> >::iterator point_iterator;
+  point_iterator result;
   result = vcl_find(points_.begin(), points_.end(), p);
   if(result != points_.end())
     points_.erase(result);
@@ -118,16 +122,18 @@ void vgl_conic_2d_regression<T>::compute_partial_sums()
   hnorm_points_.clear();
   //Compute the normalizing transformation
   vcl_vector<vgl_homg_point_2d<double> > hpoints;
-  for(vcl_vector<vgl_point_2d<T> >::iterator pit = points_.begin();
-      pit != points_.end(); ++pit)
+  //remove warnings on implicit typename
+  typedef vcl_vector<vgl_point_2d<T> >::iterator point_iterator;
+  point_iterator pit;
+  for(pit = points_.begin(); pit != points_.end(); ++pit)
     {
       vgl_homg_point_2d<double> hp(static_cast<double>((*pit).x()),
                                    static_cast<double>((*pit).y()));
       hpoints.push_back(hp);
     }
   trans_.compute_from_points(hpoints, false); 
+
   //Transform the input pointset
-  //  vcl_vector<vgl_homg_point_2d<double> > hnorm_points;
   for(vcl_vector<vgl_homg_point_2d<double> >::iterator pit = hpoints.begin();
       pit != hpoints.end(); ++pit)
     hnorm_points_.push_back(trans_(*pit));
@@ -233,8 +239,10 @@ template <class T>
 void vgl_conic_2d_regression<T>::print_pointset(vcl_ostream& str)
 {
   str << "Current Pointset has " << npts_ << " points\n";
-  for(vcl_vector<vgl_point_2d<T> >::iterator pit = points_.begin();
-      pit != points_.end(); ++pit)
+  //remove warnings on implicit typename
+  typedef vcl_vector<vgl_point_2d<T> >::iterator point_iterator;
+  point_iterator pit;
+  for(pit = points_.begin(); pit != points_.end(); ++pit)
     str << *pit << '\n';
 }
 

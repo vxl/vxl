@@ -256,7 +256,7 @@ scale_aniostropic(vcl_vector<vgl_homg_point_2d<T> > const& in,
     t = 0.5*vcl_atan( -2.0*Sxy/(Sx2-Sy2) );
 
   double dc = vcl_cos(t),  ds = vcl_sin(t);
-  double tSxy = dc*ds*(Sx2 - Sy2) + Sxy*(dc*dc - ds*ds);
+
   /* determine the standard deviations in the rotated frame */
   double sddx = vcl_sqrt( (dc*dc*Sx2-2.0*dc*ds*Sxy+ds*ds*Sy2)/count );
   double sddy = vcl_sqrt( (ds*ds*Sx2+2.0*dc*ds*Sxy+dc*dc*Sy2)/count );
