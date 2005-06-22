@@ -21,6 +21,7 @@
 #include "frame_grabber_v4l.h"
 #include <vcl_cstring.h> // for memcpy()
 #include <vcl_cstdlib.h> // for exit()
+#include <vcl_cstdio.h>
 
 FrameGrabberV4lGrey::FrameGrabberV4lGrey(int width_, int height_, 
                                          bool debug_, char *devname)
@@ -33,6 +34,7 @@ FrameGrabberV4lGrey::FrameGrabberV4lGrey(int width_, int height_,
   if (fd<0)
   {
     vcl_cerr << "Error: couldn't open device " << devname << vcl_endl;
+    vcl_perror("Couldn't open device");
     vcl_exit(-1);
   }
   // check the video capability stuff

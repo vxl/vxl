@@ -8,7 +8,7 @@
 template <class T>
 vcl_ostream &operator <<(vcl_ostream &os, const vnl_vector<T> &vec)
 {
-  vnl_vector<T>::const_iterator iter, end_iter;
+  typename vnl_vector<T>::const_iterator iter, end_iter;
 
   end_iter = vec.end();
   vcl_cout << "<Vector: ";
@@ -24,7 +24,7 @@ vcl_ostream &operator <<(vcl_ostream &os, const vnl_vector<T> &vec)
 template <class T>
 vcl_ostream &operator <<(vcl_ostream &os, const vcl_vector<T> &vec)
 {
-  vcl_vector<T>::const_iterator iter, end_iter;
+  typename vcl_vector<T>::const_iterator iter, end_iter;
 
   end_iter = vec.end();
   vcl_cout << "<Vector: ";
@@ -40,7 +40,7 @@ vcl_ostream &operator <<(vcl_ostream &os, const vcl_vector<T> &vec)
 template <class T, class S>
 vcl_ostream &operator<<(vcl_ostream &os, const vcl_map<T, S> &omap)
 {
-  vcl_map<T, S>::const_iterator iter, end_iter;
+  typename vcl_map<T, S>::const_iterator iter, end_iter;
 
   end_iter = omap.end();
   os << "<Map: ";
@@ -56,7 +56,7 @@ vcl_ostream &operator<<(vcl_ostream &os, const vcl_map<T, S> &omap)
 template <class T>
 vcl_ostream &operator <<(vcl_ostream &os, const vcl_set<T> &vec)
 {
-  vcl_set<T>::const_iterator iter, end_iter;
+  typename vcl_set<T>::const_iterator iter, end_iter;
 
   end_iter = vec.end();
   os << "<Set: ";
@@ -72,8 +72,8 @@ vcl_ostream &operator <<(vcl_ostream &os, const vcl_set<T> &vec)
 
 vcl_ostream &operator<<(vcl_ostream &os, const vil1_rgb<unsigned char> &colour)
 {
-  os << "<RGB = " << (int)colour.R_ << ", " << (int)colour.G_ << ", "
-     << (int)colour.B_ << ">\n";
+  os << "<RGB = " << (int)colour.R() << ", " << (int)colour.G() << ", "
+     << (int)colour.B() << ">\n";
   return os;
 }
 
