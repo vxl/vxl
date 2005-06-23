@@ -18,7 +18,7 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 
-#if defined(unix) || defined(__unix)
+#if defined(unix) || defined(__unix) || defined(__APPLE__)
 
 # include <unistd.h>       // read(), write(), close()
 # include <netdb.h>        // gethostbyname(), sockaddr_in()
