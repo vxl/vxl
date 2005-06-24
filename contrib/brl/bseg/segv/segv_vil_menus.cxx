@@ -42,6 +42,11 @@ void segv_vil_menus::fit_lines_callback()
   segv_vil_segmentation_manager::instance()->fit_lines();
 }
 
+void segv_vil_menus::fit_conics_callback()
+{
+  segv_vil_segmentation_manager::instance()->fit_conics();
+}
+
 void segv_vil_menus::regions_callback()
 {
   segv_vil_segmentation_manager::instance()->regions();
@@ -50,6 +55,10 @@ void segv_vil_menus::regions_callback()
 void segv_vil_menus::test_inline_viewer_callback()
 {
   segv_vil_segmentation_manager::instance()->test_inline_viewer();
+}
+void segv_vil_menus::test_ellipse_draw_callback()
+{
+  segv_vil_segmentation_manager::instance()->test_ellipse_draw();
 }
 
 
@@ -68,10 +77,13 @@ vgui_menu segv_vil_menus::get_menu()
   menuview.add("Clear Display", clear_display_callback);
   menuview.add("Set Range Params", set_range_params_callback);
   menuview.add("Test Inline Viewer", test_inline_viewer_callback);
+  menuview.add("Test Draw Conic", test_ellipse_draw_callback);
+
   //edit menu entries
   menuedit.add("Harris", harris_corners_callback);
   menuedit.add("VD Edges", vd_edges_callback);
   menuedit.add("Line Segments", fit_lines_callback);
+  menuedit.add("Conic Segments", fit_conics_callback);
   menuedit.add("Edgel Regions", regions_callback);
   //Top level menu layout
   menubar.add( "File", menufile);

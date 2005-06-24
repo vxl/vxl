@@ -15,6 +15,7 @@
 #include <vcl_vector.h>
 #include <vil/vil_image_resource.h>
 #include <vsol/vsol_line_2d_sptr.h>
+#include <vsol/vsol_conic_2d_sptr.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vsol/vsol_point_2d_sptr.h>
@@ -42,11 +43,12 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void harris_corners();
   void vd_edges();
   void fit_lines();
+  void fit_conics();
   void regions();
 
   //: tests and development only
     void test_inline_viewer();
-
+    void test_ellipse_draw();
   //:internals
   void clear_display();
   void init();
@@ -59,6 +61,10 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges, bool verts=false);
   void draw_lines(vcl_vector<vsol_line_2d_sptr> const & line_segs,
                   const vgui_style_sptr& style = NULL);
+
+  void draw_conics(vcl_vector<vsol_conic_2d_sptr> const & conic_segs,
+                  const vgui_style_sptr& style = NULL);
+
   void draw_polylines(vcl_vector<vsol_polyline_2d_sptr> const & polys);
   void draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions,
                     bool verts=false);

@@ -25,6 +25,7 @@
 #include <sdet/sdet_harris_detector.h>
 #include <sdet/sdet_fit_lines_params.h>
 #include <sdet/sdet_fit_lines.h>
+#include <sdet/sdet_fit_conics.h>
 #include <sdet/sdet_grid_finder_params.h>
 #include <sdet/sdet_grid_finder.h>
 #include <vgui/vgui.h>
@@ -47,6 +48,7 @@
 #include <bgui/bgui_range_adjuster_tableau.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
+#include <vsol/vsol_conic_2d.h>
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_curve_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
@@ -352,6 +354,34 @@ draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines,
 }
 
 //-----------------------------------------------------------------------------
+//: Draw conic segments on the tableau
+//-----------------------------------------------------------------------------
+void segv_vil_segmentation_manager::
+draw_conics(vcl_vector<vsol_conic_2d_sptr > const& conics,
+           const vgui_style_sptr& style)
+{
+  bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
+  if (!t2D)
+    return;
+  //this->clear_display();
+#if 0
+  vgui_image_tableau_sptr itab = t2D->get_image_tableau();
+  if (!itab)
+  {
+    vcl_cout << "In segv_vil_segmentation_manager::draw_edges - null image tab\n";
+    return;
+  }
+#endif
+  for (vcl_vector<vsol_conic_2d_sptr>::const_iterator lit = conics.begin();
+       lit != conics.end(); lit++)
+  {
+    t2D->add_vsol_conic_2d(*lit,style);
+  }
+
+  t2D->post_redraw();
+}
+
+//-----------------------------------------------------------------------------
 //: Draw points on the tableau
 //-----------------------------------------------------------------------------
 void segv_vil_segmentation_manager::
@@ -597,6 +627,56 @@ void segv_vil_segmentation_manager::fit_lines()
   vcl_vector<vsol_line_2d_sptr> lines = fl.get_line_segs();
   this->draw_lines(lines);
 }
+void segv_vil_segmentation_manager::fit_conics()
+{
+  this->clear_display();
+  static sdet_detector_params dp;
+  static bool agr = true;
+  static float nm = 2.0;
+
+  static sdet_fit_conics_params fcp;
+
+  vgui_dialog lf_dialog("Fit Conics");
+  lf_dialog.field("Gaussian sigma", dp.smooth);
+  lf_dialog.field("Noise Threshold", nm);
+  lf_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
+  lf_dialog.checkbox("Agressive Closure", agr);
+  lf_dialog.checkbox("Compute Junctions", dp.junctionp);
+  lf_dialog.field("Min Fit Length", fcp.min_fit_length_);
+  lf_dialog.field("RMS Distance", fcp.rms_distance_);
+
+  if (!lf_dialog.ask())
+    return;
+  dp.noise_multiplier=nm;
+  if (agr)
+    dp.aggressive_junction_closure=1;
+  else
+    dp.aggressive_junction_closure=0;
+  dp.borderp = false;
+  sdet_detector det(dp);
+
+  vil_image_resource_sptr img = selected_image();
+  if (!img||!img->ni()||!img->nj())
+  {
+    vcl_cout << "In segv_vil_segmentation_manager::vd_edges() - no image\n";
+    return;
+  }
+
+  det.SetImage(img);
+
+  det.DoContour();
+  vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
+  if (!edges)
+  {
+    vcl_cout << "No edges to fit conics\n";
+    return;
+  }
+  sdet_fit_conics fl(fcp);
+  fl.set_edges(*edges);
+  fl.fit_conics();
+  vcl_vector<vsol_conic_2d_sptr> conics = fl.get_conic_segs();
+  this->draw_conics(conics);
+}
 
 void segv_vil_segmentation_manager::regions()
 {
@@ -675,4 +755,40 @@ void segv_vil_segmentation_manager::test_inline_viewer()
   test_inline.inline_tableau(s, 280, 200);
   if (!test_inline.ask())
     return;
+}
+void segv_vil_segmentation_manager::test_ellipse_draw()
+{
+  vsol_conic_2d_sptr c0 = new vsol_conic_2d(0.01, 0.0,
+                                           0.01, 0.0,
+                                           0.0, -1.0);  
+  vsol_point_2d_sptr pc0 = new vsol_point_2d(10.0, 0.0);
+  c0->set_p0(pc0);
+
+  vsol_point_2d_sptr pc1 = new vsol_point_2d(0.0, -10.0);
+  c0->set_p1(pc1);
+  //rotated 2:1 conic at 45
+  vsol_conic_2d_sptr c = new vsol_conic_2d(0.492577, -0.591093,
+                                           0.492577, 0.197032,
+                                           -1.37921, 0.492813);
+  vsol_point_2d_sptr inp0 = new vsol_point_2d(2.414, 3.414);
+  double d0 = c->distance(inp0);
+  vsol_point_2d_sptr onp0 = c->closest_point_on_curve(inp0);
+  c->set_p0(onp0);
+  vsol_point_2d_sptr inp1 = new vsol_point_2d(1.0, 2.0-1.26472);
+  double d1 = c->distance(inp1);
+  vsol_point_2d_sptr onp1 = c->closest_point_on_curve(inp1);
+  c->set_p1(onp1);
+
+  bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
+  if (!t2D)
+    return;  
+  t2D->add_vsol_conic_2d(c0);
+  t2D->add_vsol_point_2d(c0->p0());
+  t2D->add_vsol_point_2d(c0->p1());
+  
+  t2D->add_vsol_conic_2d(c);
+  t2D->add_vsol_point_2d(c->p0());
+  t2D->add_vsol_point_2d(c->p1());
+  
+  t2D->post_redraw();
 }
