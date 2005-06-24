@@ -5,6 +5,7 @@
 // \file
 
 #include "vgl_fit_conics_2d.h"
+#include <vgl/vgl_vector_2d.h>
 #include <vgl/algo/vgl_conic_2d_regression.h>
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
@@ -51,8 +52,38 @@ void vgl_fit_conics_2d<T>::output(const unsigned start_index,
                                   vgl_conic<T> const& conic)
 {
   assert(start_index < curve_.size() && end_index <= curve_.size());
-  vgl_conic_segment_2d<T> e_seg(curve_[start_index], curve_[end_index-1],
-                                  conic);
+
+  vgl_homg_point_2d<T> center = conic.centre();
+  if(center.ideal(static_cast<T>(1e-06)))
+    {
+      vcl_cout << "Can't output a conic at infinity in vgl_fit_conics<T>\n";
+      return;
+    }
+  T cx = center.x()/center.w(), cy = center.y()/center.w();
+  //Need to establish the sense of the fitted curve
+  //The curve should proceed in a counter-clockwise direction from p1 to p2.
+  // construct a vector at p1
+  vgl_vector_2d<T> v1(curve_[start_index].x()-cx, curve_[start_index].y()-cy);
+  //choose a point in the middle of the curve
+  int middle_index = (end_index-1-start_index)/2 + start_index;
+  if(middle_index == start_index)
+    middle_index = end_index-1;
+  //construct a vector at that point
+  vgl_vector_2d<T> v(curve_[middle_index].x()-cx, curve_[middle_index].y()-cy);
+  //The cross product should be positive
+  T cp = cross_product(v1, v);
+
+  //If not, exchange p1 and p2
+  unsigned i1=start_index, i2 = end_index-1;
+  if(cp< static_cast<T>(0))
+    {
+      i1 = end_index-1;
+      i2 = start_index;
+    }
+
+  //   unsigned i1=start_index, i2 = end_index-1;
+  vgl_conic_segment_2d<T> e_seg(curve_[i1], curve_[i2],
+                                conic);
 #ifdef DEBUG
   vcl_cout << "output " << e_seg << '\n';
 #endif
