@@ -35,9 +35,10 @@
 
 #include <vgl/vgl_fwd.h>
 #include <vgl/vgl_conic.h> // parent class
+#include <vgl/vgl_conic_segment_2d.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsol/vsol_curve_2d.h>
-#include <vsol/vsol_point_2d_sptr.h>
+#include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vnl/vnl_double_3x3.h>
@@ -144,6 +145,12 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //---------------------------------------------------------------------------
   void set_parabola_parameters(vgl_vector_2d<double> const& dir,
                                vsol_point_2d const& top, double theta);
+
+  //---------------------------------------------------------------------------
+  //: Constructor from vgl_conic_segment_2d
+  //---------------------------------------------------------------------------
+  vsol_conic_2d(vgl_conic_segment_2d<double> & cs) : vsol_curve_2d(), vgl_conic<double>(cs.conic()),
+     p0_(new vsol_point_2d(cs.point1())), p1_(new vsol_point_2d(cs.point2())){}
 
   //---------------------------------------------------------------------------
   //: Copy constructor
@@ -256,6 +263,15 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
                           double &phi,
                           double &width,
                           double &height) const;
+
+  //---------------------------------------------------------------------------
+  //: Return ellipse angular position
+  //  -   input pt  , a point on the ellipse
+  //  -   output angle
+  //  -  
+  //  REQUIRE: is_real_ellipse()
+  //---------------------------------------------------------------------------
+  double ellipse_angular_position(vsol_point_2d_sptr const& pt) const;
 
   //---------------------------------------------------------------------------
   //: Return 3 hyperbola parameters:

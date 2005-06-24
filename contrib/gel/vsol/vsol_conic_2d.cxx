@@ -2,6 +2,7 @@
 #include "vsol_conic_2d.h"
 //:
 // \file
+#include <vnl/vnl_math.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsol/vsol_point_2d.h>
 #include <vgl/io/vgl_io_conic.h>
@@ -281,7 +282,31 @@ void vsol_conic_2d::ellipse_parameters(double &cx,
   width =vcl_sqrt(1.0/(a0*cosphi*cosphi+2*b0*cosphi*sinphi+c0*sinphi*sinphi));
   height=vcl_sqrt(1.0/(a0*sinphi*sinphi-2*b0*cosphi*sinphi+c0*cosphi*cosphi));
 }
+//-----------------------------------------------------------------------
+// Return the angular position given a point on the ellipse 
+double vsol_conic_2d::ellipse_angular_position(vsol_point_2d_sptr const& pt) const
+{
+  // require
+  assert(is_real_ellipse());
+  
+  // Find the closest point to pt on the ellipse
+  vsol_point_2d_sptr closest = this->closest_point_on_curve(pt);
+  double x = closest->x(), y = closest->y();
 
+  // Extract the ellipse parameters  
+  double cx, cy, major_axis, minor_axis, angle;
+  this->ellipse_parameters(cx, cy, angle, major_axis, minor_axis);
+  
+  x -= cx; y -= cy;
+
+  //In this shifted frame:
+  double phi = 
+    vcl_atan2(major_axis*(vcl_cos(angle)*y-vcl_sin(angle)*x),
+              minor_axis*(vcl_cos(angle)*x + vcl_sin(angle)*y));
+  if(phi<0.0)
+    phi += 2.0*vnl_math::pi;
+  return phi;
+}
 //---------------------------------------------------------------------------
 //: Return 3 hyperbola parameters: centre (`cx',`cy'), orientation `phi', size (`half-axis',`half-secondary-axis')
 // Require: is_hyperbola()
