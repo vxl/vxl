@@ -17,6 +17,8 @@ SET(sdet_sources
     sdet_harris_detector.cxx     sdet_harris_detector.h
     sdet_fit_lines.cxx           sdet_fit_lines.h
     sdet_fit_lines_params.cxx    sdet_fit_lines_params.h
+    sdet_fit_conics.cxx           sdet_fit_conics.h
+    sdet_fit_conics_params.cxx    sdet_fit_conics_params.h
     sdet_grid_finder_params.cxx  sdet_grid_finder_params.h
     sdet_grid_finder.cxx         sdet_grid_finder.h
     sdet_region.cxx    sdet_region.h sdet_region_sptr.h
