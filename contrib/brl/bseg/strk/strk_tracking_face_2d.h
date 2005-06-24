@@ -19,6 +19,8 @@
 // \verbatim
 //  Modifications
 //   10-sep-2004 Peter Vanroose Added copy ctor with explicit vbl_ref_count init
+//   15-june-2005 Ozge Can Ozcanli Added methods to calculate mutual information 
+//                                 with known pixel correspondences of two faces 
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -30,6 +32,8 @@
 #include <vtol/vtol_intensity_face.h>
 #include <strk/strk_tracking_face_2d_sptr.h>
 #include <bsta/bsta_histogram.h>
+#include <vgl/vgl_point_2d.h>
+#include <vcl_utility.h>
 //
 //========================TRACKING_FACE_2D==================================
 //
@@ -112,6 +116,14 @@ class strk_tracking_face_2d : public vbl_ref_count
   float total_info_diff();
   //: utilities
   bool compute_mutual_information(vil1_memory_image_of<float> const& image,
+                                  vil1_memory_image_of<float> const& Ix,
+                                  vil1_memory_image_of<float> const& Iy,
+                                  vil1_memory_image_of<float> const& hue,
+                                  vil1_memory_image_of<float> const& sat);
+  
+  bool compute_mutual_information(vcl_vector <vcl_vector< vgl_point_2d<int> > > region_map,
+                                  int base_x, int base_y,
+                                  vil1_memory_image_of<float> const& image,
                                   vil1_memory_image_of<float> const& Ix,
                                   vil1_memory_image_of<float> const& Iy,
                                   vil1_memory_image_of<float> const& hue,
@@ -211,13 +223,29 @@ class strk_tracking_face_2d : public vbl_ref_count
   float
     compute_intensity_mutual_information(vil1_memory_image_of<float> const& image);
 
+  float 
+    compute_intensity_mutual_information(vcl_vector <vcl_vector< vgl_point_2d<int> > > region_map,
+                                         int base_x, int base_y,
+                                         vil1_memory_image_of<float> const& image);
+
   float
     compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
                                         vil1_memory_image_of<float> const& Iy);
 
+  float
+    compute_gradient_mutual_information(vcl_vector <vcl_vector< vgl_point_2d<int> > > region_map,
+                                        int base_x, int base_y,
+                                        vil1_memory_image_of<float> const& Ix,
+                                        vil1_memory_image_of<float> const& Iy);
 
   float
     compute_color_mutual_information(vil1_memory_image_of<float> const& hue,
+                                     vil1_memory_image_of<float> const& sat);
+
+  float
+    compute_color_mutual_information(vcl_vector <vcl_vector< vgl_point_2d<int> > > region_map,
+                                     int base_x, int base_y,
+                                     vil1_memory_image_of<float> const& hue,
                                      vil1_memory_image_of<float> const& sat);
 
   float

@@ -624,6 +624,75 @@ compute_intensity_mutual_information(vil1_memory_image_of<float> const& image)
 }
 
 float strk_tracking_face_2d::
+compute_intensity_mutual_information(vcl_vector <vcl_vector< vgl_point_2d<int> > > region_map,
+                                     int base_x, int base_y,
+                                     vil1_memory_image_of<float> const& image)
+{
+  if (!intf_)
+    return 0;
+  int width = image.width(), height = image.height();
+  bsta_histogram<float> image_hist(255, intensity_hist_bins_);
+  bsta_joint_histogram<float> joint_hist(255, intensity_hist_bins_);
+  unsigned int npix = intf_->Npix();
+  if (npix == 0)
+    return 0;
+  unsigned int n = 0;
+  for (intf_->reset(); intf_->next();)
+  {
+    int x = int(intf_->X()), y = int(intf_->Y());
+    
+    //: region_map starts from (0,0) 
+    x = x - base_x; y = y - base_y;
+    if (x < 0 || x >= region_map.size() || 
+        y < 0 || y >= region_map[x].size()) continue;
+
+    //: read corresponding region 2 pixel from map
+    vgl_point_2d<int> p = region_map[x][y];
+    if (p.x() < 0 || p.y() < 0 || p.x() >= width || p.y() >= height) continue;
+
+    float Ii = image(p.x(),p.y());
+    float Im = intf_->I();
+    image_hist.upcount(Ii, 1.0f);
+    joint_hist.upcount(Im, 1.0f, Ii, 1.0f);
+#ifdef DEBUG
+    //    vcl_cout << '(' << x << ' ' << y << "):[" << Im << ' ' << Ii << ']' << vcl_endl;
+#endif
+    n++;
+  }
+
+#ifdef DEBUG
+  vcl_cout << "n: " << n << " 0.9*npix: " << 0.9*npix << " (n should be larger than 0.9*npix)\n";
+#endif
+
+  //if (n<0.9*npix)          // we don't know the relation of number of pixels in second region
+  //  return 0;              // to the number of pixels in the first region (maybe a constant can be put)
+
+//   vcl_cout << "Itensity Hist\n";
+//   image_hist.print();
+#ifdef DEBUG
+  vcl_cout << "Itensity Hist\n";
+  image_hist.print();
+  vcl_cout << "Joint Intensity Hist\n";
+  joint_hist.print();
+#endif
+  //apply parzen windows
+  image_hist.parzen(parzen_sigma_);
+  joint_hist.parzen(parzen_sigma_);
+
+  //compute the mutual information
+  intensity_entropy_= image_hist.entropy();
+  intensity_joint_entropy_ = renyi_joint_entropy_ ? joint_hist.renyi_entropy() : joint_hist.entropy();
+
+  float mi = float(model_intensity_entropy_ + intensity_entropy_ - intensity_joint_entropy_);
+
+#ifdef DEBUG
+  vcl_cout << "Entropies:(M,I,J, MI)=(" << model_intensity_entropy_ << ' '
+           << intensity_entropy_ << ' ' << intensity_joint_entropy_ << ' ' << mi <<")\n";
+#endif
+  return mi;
+}
+
+float strk_tracking_face_2d::
 compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
                                     vil1_memory_image_of<float> const& Iy)
 {
@@ -662,6 +731,82 @@ compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
   }
   if (n<0.9*npix)
     return 0;
+#ifdef DEBUG
+  vcl_cout << "Image Dir Hist\n";
+  image_dir_hist.print();
+  vcl_cout << "Joint Dir Hist\n";
+  joint_dir_hist.print();
+#endif
+
+  //apply parzen windows
+  image_dir_hist.parzen(parzen_sigma_);
+  joint_dir_hist.parzen(parzen_sigma_);
+
+  gradient_dir_entropy_ = image_dir_hist.entropy();
+  gradient_joint_entropy_ = renyi_joint_entropy_ ? joint_dir_hist.renyi_entropy() : joint_dir_hist.entropy();
+
+  float mi = float(model_gradient_dir_entropy_ + gradient_dir_entropy_ - gradient_joint_entropy_);
+#ifdef DEBUG
+  vcl_cout << "Dir Entropies:(M,I,J, MI)=(" << model_gradient_dir_entropy_ << ' '
+           << gradient_dir_entropy_ << ' ' << gradient_joint_entropy_ << ' ' << mi <<")\n";
+#endif
+  return mi;
+}
+
+float strk_tracking_face_2d::
+compute_gradient_mutual_information(vcl_vector <vcl_vector< vgl_point_2d<int> > > region_map,
+                                    int base_x, int base_y,
+                                    vil1_memory_image_of<float> const& Ix,
+                                    vil1_memory_image_of<float> const& Iy)
+{
+  if (!intf_||!Ix||!Iy)
+    return 0;
+  int width = Ix.width(), height = Iy.height();
+  bsta_histogram<float> image_dir_hist(360, gradient_dir_hist_bins_);
+  bsta_joint_histogram<float> joint_dir_hist(360, gradient_dir_hist_bins_);
+
+  unsigned int npix = intf_->Npix();
+  if (npix == 0)
+    return 0;
+  double deg_rad = 180.0/vnl_math::pi;
+  unsigned int i = 0, n = 0;
+  for (intf_->reset(); intf_->next(); ++i)
+  {
+    int x = int(intf_->X()), y = int(intf_->Y());
+
+    x = x - base_x; y = y - base_y;
+    if (x < 0 || x >= region_map.size() || 
+        y < 0 || y >= region_map[x].size()) continue;
+
+    vgl_point_2d<int> p = region_map[x][y];
+    if (p.x() < 0 || p.y() < 0 || p.x() >= width || p.y() >= height) continue;
+
+    n++;
+    float Ix0 = this->Ix(i), Iy0 = this->Iy(i);
+    float ang0 = float(deg_rad*vcl_atan2(Iy0, Ix0))+180.f;
+    float mag0 = vcl_abs(Ix0)+vcl_abs(Iy0); // was: vcl_sqrt(Ix0*Ix0 + Iy0*Iy0);
+
+    float Ixi = Ix(p.x(),p.y()), Iyi = Iy(p.x(),p.y());
+    float angi = float(deg_rad*vcl_atan2(Iyi, Ixi))+180.f;
+    float magi = vcl_abs(Ixi)+vcl_abs(Iyi); // was: vcl_sqrt(Ixi*Ixi + Iyi*Iyi);
+#ifdef DEBUG
+    vcl_cout << "ang0, mag0 " << ang0 << ' ' << mag0 << '\n'
+             << "Ixi, Iyi " << Ixi << ' ' << Iyi << '\n'
+             << "angi, magi " << angi << ' ' << magi << '\n';
+#endif
+    if (mag0>min_gradient_&&magi>min_gradient_)
+    {
+      image_dir_hist.upcount(angi, magi);
+      joint_dir_hist.upcount(ang0,mag0,angi,magi);
+    }
+  }
+  
+#ifdef DEBUG
+  vcl_cout << "n: " << n << " 0.9*npix: " << 0.9*npix << " (n should be larger than 0.9*npix)\n";
+#endif
+  //if (n<0.9*npix)
+  //  return 0;
+
 #ifdef DEBUG
   vcl_cout << "Image Dir Hist\n";
   image_dir_hist.print();
@@ -727,6 +872,62 @@ compute_color_mutual_information(vil1_memory_image_of<float> const& hue,
   return mi;
 }
 
+float strk_tracking_face_2d::
+compute_color_mutual_information(vcl_vector <vcl_vector< vgl_point_2d<int> > > region_map,
+                                 int base_x, int base_y,
+                                 vil1_memory_image_of<float> const& hue,
+                                 vil1_memory_image_of<float> const& sat)
+{
+  if (!intf_||!hue||!sat)
+    return 0;
+  int width = hue.width(), height = hue.height();
+  bsta_histogram<float> color_hist(360, color_hist_bins_);
+  bsta_joint_histogram<float> joint_color_hist(360, color_hist_bins_);
+
+  unsigned int npix = intf_->Npix();
+  if (npix == 0)
+    return 0;
+
+  unsigned int i = 0, n = 0;
+  for (intf_->reset(); intf_->next(); ++i, ++n)
+  {
+    int x = int(intf_->X()), y = int(intf_->Y());
+    
+    x = x - base_x; y = y - base_y;
+    if (x < 0 || x >= region_map.size() || 
+        y < 0 || y >= region_map[x].size()) continue;
+
+    vgl_point_2d<int> p = region_map[x][y];
+    if (p.x() < 0 || p.y() < 0 || p.x() >= width || p.y() >= height) continue;
+
+    float hue0 = this->hue(i), sat0 = this->sat(i);
+    float hue_i = hue(p.x(),p.y()), sat_i = sat(p.x(),p.y());
+
+    if (sat_i>0)
+      color_hist.upcount(hue_i, sat_i);
+    if (sat0>0&&sat_i>0)
+      joint_color_hist.upcount(hue0, sat0, hue_i, sat_i);
+  }
+
+#ifdef DEBUG
+  vcl_cout << "n: " << n << " 0.9*npix: " << 0.9*npix << " (n should be larger than 0.9*npix)\n";
+#endif
+  //if (n<0.9*npix)
+  //  return 0;
+
+  //apply parzen windows
+  color_hist.parzen(parzen_sigma_);
+  joint_color_hist.parzen(parzen_sigma_);
+
+  //compute entropies
+  color_entropy_ = color_hist.entropy();
+  color_joint_entropy_ = renyi_joint_entropy_? joint_color_hist.renyi_entropy() : joint_color_hist.entropy();
+
+  float mi = float(model_color_entropy_ + color_entropy_ - color_joint_entropy_);
+
+  return mi;
+}
+
 bool strk_tracking_face_2d::
 compute_mutual_information(vil1_memory_image_of<float> const& image,
                            vil1_memory_image_of<float> const& Ix,
@@ -750,6 +951,36 @@ compute_mutual_information(vil1_memory_image_of<float> const& image,
 
   if (color_info_)
     this->set_color_mutual_info(this->compute_color_mutual_information(hue, sat));
+
+  return true;
+}
+
+//: take a map from pixels of face in image_0_ to the pixels of face in image_i_
+bool strk_tracking_face_2d::
+compute_mutual_information(vcl_vector <vcl_vector< vgl_point_2d<int> > > region_map,
+                           int base_x, int base_y,
+                           vil1_memory_image_of<float> const& image,
+                           vil1_memory_image_of<float> const& Ix,
+                           vil1_memory_image_of<float> const& Iy,
+                           vil1_memory_image_of<float> const& hue,
+                           vil1_memory_image_of<float> const& sat)
+{
+  if (!image)
+    return false;
+
+  if ((!Ix || !Iy) && gradient_info_)
+    return false;
+
+  if ((!hue || !sat) && color_info_)
+    return false;
+
+  this->set_int_mutual_info(this->compute_intensity_mutual_information(region_map, base_x, base_y, image));
+
+  if (gradient_info_)
+    this->set_grad_mutual_info(this->compute_gradient_mutual_information(region_map, base_x, base_y, Ix, Iy));
+
+  if (color_info_)
+    this->set_color_mutual_info(this->compute_color_mutual_information(region_map, base_x, base_y, hue, sat));
 
   return true;
 }
