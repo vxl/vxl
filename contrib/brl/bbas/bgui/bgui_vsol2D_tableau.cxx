@@ -34,6 +34,7 @@ void bgui_vsol2D_tableau::init()
   //
   point_style_                = vgui_style::new_style(0.0f, 1.0f, 0.0f, 3.0f, 1.0f);
   line_style_                 = vgui_style::new_style(0.8f, 0.2f, 0.9f, 1.0f, 3.0f);
+  conic_style_                 = vgui_style::new_style(0.2f, 0.8f, 0.1f, 1.0f, 3.0f);
   polyline_style_             = vgui_style::new_style(0.8f, 0.2f, 0.9f, 1.0f, 3.0f);
   digital_curve_style_        = vgui_style::new_style(0.8f, 0.0f, 0.8f, 1.0f, 3.0f);
   dotted_digital_curve_style_ = vgui_style::new_style(0.8f, 0.0f, 0.8f, 3.0f, 3.0f);
@@ -68,6 +69,21 @@ bgui_vsol2D_tableau::add_vsol_line_2d(vsol_line_2d_sptr const& line,
     obj->set_style( style );
   else
     obj->set_style( line_style_ );
+  return obj;
+}
+
+
+bgui_vsol_soview2D_conic_seg*
+bgui_vsol2D_tableau::add_vsol_conic_2d(vsol_conic_2d_sptr const& conic,
+                                      const vgui_style_sptr& style)
+{
+  bgui_vsol_soview2D_conic_seg* obj =
+      new bgui_vsol_soview2D_conic_seg(conic);
+  add(obj);
+  if (style)
+    obj->set_style( style );
+  else
+    obj->set_style( conic_style_ );
   return obj;
 }
 

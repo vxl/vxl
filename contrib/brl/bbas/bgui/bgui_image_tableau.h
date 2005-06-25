@@ -51,6 +51,10 @@ class bgui_image_tableau : public vgui_image_tableau
   //: Return the vil_image_resource
   vil_image_resource_sptr get_image_resource() const ;
 
+  //: set handle_motion true
+  void set_handle_motion(){handle_motion_ = true;}
+  void unset_handle_motion(){handle_motion_ = false;}
+  bool handle_motion(){return handle_motion_;}
 
  protected:
   //: Handle all events for this tableau.
@@ -63,6 +67,8 @@ class bgui_image_tableau : public vgui_image_tableau
   //: Get pixel info from the image (rather than frame buffer)
   void get_pixel_info_from_image(const int x, const int y,
                                  vgui_event const &e, char* msg);
+  //: If false this tableau stops handling motion
+  bool handle_motion_;
 };
 
 //: Creates a smart-pointer to a bgui_image_tableau.

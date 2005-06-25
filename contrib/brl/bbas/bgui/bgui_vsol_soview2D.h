@@ -24,6 +24,7 @@
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vsol/vsol_spatial_object_2d_sptr.h>
 #include <vsol/vsol_line_2d_sptr.h>
+#include <vsol/vsol_conic_2d_sptr.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
@@ -71,19 +72,19 @@ class bgui_vsol_soview2D_point : public bgui_vsol_soview2D
   static vcl_string type_name_() { return "bgui_vsol_soview2D_point"; }
   vcl_string type_name() const { return type_name_(); }
 
-  //: Render this 2D digital_curve on the display.
+  //: Render this 2D point on the display.
   void draw() const;
 
   // Returns vsol_point_2d_sptr of the vsol_spatial_object_2d_sptr
   vsol_point_2d_sptr sptr() const;
 
-  //: Returns the distance squared from this 2D digital_curve to the given position.
+  //: Returns the distance squared from this 2D point to the given position.
   virtual float distance_squared(float x, float y) const;
 
-  //: Returns the centroid of this 2D digital_curve.
+  //: Returns the centroid of this point (the point location).
   void get_centroid(float* x, float* y) const;
 
-  //: Translate this 2D digital_curve by the given x and y distances.
+  //: Translate this 2D point by the given x and y distances.
   void translate(float x, float y);
 };
 
@@ -92,8 +93,8 @@ class bgui_vsol_soview2D_point : public bgui_vsol_soview2D
 class bgui_vsol_soview2D_line_seg : public bgui_vsol_soview2D
 {
  public:
-  //: Constructor - creates a view of a given vtol_edge_2d
-  bgui_vsol_soview2D_line_seg( vsol_line_2d_sptr const & pt);
+  //: Constructor - creates a view of a given vsol_line_2d
+  bgui_vsol_soview2D_line_seg( vsol_line_2d_sptr const & line);
 
   //: Destructor - does nothing, smart pointers pass out of scope automatically
   ~bgui_vsol_soview2D_line_seg() {}
@@ -102,14 +103,14 @@ class bgui_vsol_soview2D_line_seg : public bgui_vsol_soview2D
   static vcl_string type_name_() { return "bgui_vsol_soview2D_line_seg"; }
   vcl_string type_name() const { return type_name_(); }
 
-  //: Render this 2D digital_curve on the display.
+  //: Render this curve on the display.
   virtual void draw() const;
 
   // Returns a smart pointer to the line
   // \note cast from a vsol_spatial_object_2d_sptr in the base class
   vsol_line_2d_sptr sptr() const;
 
-  //: Returns the distance squared from this 2D digital_curve to the given position.
+  //: Returns the distance squared from this 2D curve to the given position.
   virtual float distance_squared(float x, float y) const;
 
   //: Returns the centroid of this 2D digital_curve.
@@ -117,6 +118,53 @@ class bgui_vsol_soview2D_line_seg : public bgui_vsol_soview2D
 
   //: Translate this 2D digital_curve by the given x and y distances.
   virtual void translate(float x, float y);
+};
+
+
+//: vsol_conic_2d
+// The current implementation is restricted to conics that are a real ellipse
+class bgui_vsol_soview2D_conic_seg : public bgui_vsol_soview2D
+{
+ public:
+  //: Constructor - creates a view of a given vsol_conic_2d
+  bgui_vsol_soview2D_conic_seg( vsol_conic_2d_sptr const & conic);
+
+  //: Destructor - does nothing, smart pointers pass out of scope automatically
+  ~bgui_vsol_soview2D_conic_seg() {}
+
+  //: Returns the type of this class ('bgui_vsol_soview2D_conic_seg').
+  static vcl_string type_name_() { return "bgui_vsol_soview2D_conic_seg"; }
+  vcl_string type_name() const { return type_name_(); }
+
+  //: Render this 2D digital_curve on the display.
+  virtual void draw() const;
+
+  // Returns a smart pointer to the line
+  // \note cast from a vsol_spatial_object_2d_sptr in the base class
+  vsol_conic_2d_sptr sptr() const;
+
+  //: Returns the distance squared from this curve to the given position.
+  virtual float distance_squared(float x, float y) const;
+
+  //: Returns the centroid of the conic
+  void get_centroid(float* x, float* y) const;
+
+  //: Translate this conic  by the given x and y distances.
+  virtual void translate(float x, float y);
+
+ protected:
+  //: the center of the ellipse
+  double xc_, yc_;
+  //: the major_axis
+  double major_axis_;
+  //: the minor_axis
+  double minor_axis_;
+  //: the orientation angle
+  double angle_;
+  //: parametric angle at p0;
+  double start_angle_;
+  //: parametric angle at p1;
+  double end_angle_;
 };
 
 

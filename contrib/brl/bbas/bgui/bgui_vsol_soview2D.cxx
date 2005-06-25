@@ -3,6 +3,7 @@
 #include "bgui_vsol_soview2D.h"
 
 #include <vcl_iostream.h>
+#include <vnl/vnl_math.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_soview2D.h>
@@ -16,6 +17,7 @@
 #include <vsol/vsol_spatial_object_2d.h>
 #include <vsol/vsol_line_2d.h>
 #include <vsol/vsol_point_2d.h>
+#include <vsol/vsol_conic_2d.h>
 #include <vsol/vsol_polyline_2d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_digital_curve_2d.h>
@@ -79,8 +81,8 @@ void bgui_vsol_soview2D_point::translate(float tx, float ty)
 //: vsol_line_2d view
 //--------------------------------------------------------------------------
 
-bgui_vsol_soview2D_line_seg::bgui_vsol_soview2D_line_seg( vsol_line_2d_sptr const & pt)
-  : bgui_vsol_soview2D(pt.ptr())
+bgui_vsol_soview2D_line_seg::bgui_vsol_soview2D_line_seg( vsol_line_2d_sptr const & line)
+  : bgui_vsol_soview2D(line.ptr())
 {
 }
 
@@ -116,6 +118,83 @@ void bgui_vsol_soview2D_line_seg::translate(float tx, float ty)
   sptr()->p0()->set_y( sptr()->p0()->y() + ty );
   sptr()->p1()->set_x( sptr()->p1()->x() + tx );
   sptr()->p1()->set_y( sptr()->p1()->y() + ty );
+}
+
+//--------------------------------------------------------------------------
+//: vsol_conic_2d view - currently restricted to type: real ellipse
+//--------------------------------------------------------------------------
+
+bgui_vsol_soview2D_conic_seg::bgui_vsol_soview2D_conic_seg( vsol_conic_2d_sptr const & conic)
+  : bgui_vsol_soview2D(conic.ptr())
+{
+  if(!conic||!conic->is_real_ellipse())
+    {
+      xc_ = 0; yc_ =0;
+      major_axis_ = 0; minor_axis_ = 0;
+      angle_ = 0;
+      start_angle_ = 0;
+      end_angle_ = 0;
+      return;
+    }
+  conic->ellipse_parameters(xc_, yc_, angle_, major_axis_, minor_axis_);
+
+  // compute the angle at p0
+  vsol_point_2d_sptr p0 = conic->p0();
+  start_angle_ = conic->ellipse_angular_position(p0);
+
+  // compute the angle at p1
+  vsol_point_2d_sptr p1 = conic->p1();
+  end_angle_ = conic->ellipse_angular_position(p1);
+  if(end_angle_<=start_angle_)
+	  end_angle_ = 2.0*vnl_math::pi + end_angle_;
+}
+
+vsol_conic_2d_sptr bgui_vsol_soview2D_conic_seg::sptr() const
+{
+  return sptr_->cast_to_curve()->cast_to_conic();
+}
+// the convention is that the segment extends from p0 to p1 in a 
+// counter-clockwise angular sense, i.e. positive phi.
+void bgui_vsol_soview2D_conic_seg::draw() const
+{
+  if(start_angle_==end_angle_)
+    return;
+
+  // Increments of 1 degree should be adequate
+  double one_degree = vnl_math::pi/180;
+  
+  double px, py;
+  glBegin(GL_LINE_STRIP);
+  for (double phi = start_angle_; phi<=end_angle_; phi+=one_degree)
+  {
+    px = major_axis_*vcl_cos(angle_)*vcl_cos(phi) 
+      - minor_axis_*vcl_sin(angle_)*vcl_sin(phi);
+
+    py = minor_axis_*vcl_cos(angle_)*vcl_sin(phi) 
+      + major_axis_*vcl_sin(angle_)*vcl_cos(phi);
+
+    glVertex2d(xc_+px, yc_+py);
+  }
+  glEnd();
+}
+
+float bgui_vsol_soview2D_conic_seg::distance_squared(float x, float y) const
+{
+  vsol_point_2d_sptr p = new vsol_point_2d(x, y);
+  double d = sptr()->distance(p);
+  return static_cast<float>(d*d);
+}
+
+void bgui_vsol_soview2D_conic_seg::get_centroid(float* x, float* y) const
+{
+  *x = xc_;
+  *y = yc_;
+}
+
+void bgui_vsol_soview2D_conic_seg::translate(float tx, float ty)
+{
+  //for now do nothing
+  // NOT IMPLEMENTED FIX ME JLM
 }
 
 //--------------------------------------------------------------------------

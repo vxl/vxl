@@ -19,23 +19,23 @@
 //--------------------------------------------------------------------------------
 
 bgui_image_tableau::bgui_image_tableau()
-  { }
+  { handle_motion_ = true;}
 
 bgui_image_tableau::bgui_image_tableau(vil_image_resource_sptr const & img,
                                        vgui_range_map_params_sptr const& rmp)
-  : base(img, rmp) { }
+  : base(img, rmp) { handle_motion_ = true;}
 
 bgui_image_tableau::bgui_image_tableau(vil_image_view_base const & img,
                                        vgui_range_map_params_sptr const& rmp)
-  : base(img, rmp) { }
+  : base(img, rmp) { handle_motion_ = true;}
 
 bgui_image_tableau::bgui_image_tableau(vil1_image const & img,
                                        vgui_range_map_params_sptr const& rmp)
-  : base(img, rmp) { }
+  : base(img, rmp) { handle_motion_ = true;}
 
 bgui_image_tableau::bgui_image_tableau(char const *f,
                                        vgui_range_map_params_sptr const& rmp)
-  : base(f, rmp) { }
+  : base(f, rmp) { handle_motion_ = true;}
 
 //--------------------------------------------------------------------------------
 
@@ -254,17 +254,25 @@ get_pixel_info_from_image(const int x, const int y,
 bool bgui_image_tableau::handle(vgui_event const &e)
 {
   static bool button_down = false;
+  if (e.type == vgui_DRAW)
+    {
+      base::handle(e);
+      return true;
+    }
+
   if (e.type == vgui_BUTTON_DOWN)
-  {
+    {
     button_down = true;
-    vgui::out << ' ' << vcl_endl;
+    if(handle_motion_)
+      vgui::out << ' ' << vcl_endl;
   }
   else if (e.type == vgui_BUTTON_UP)
   {
     button_down = false;
   }
-  else if (e.type == vgui_MOTION && button_down == false)
+  else if (e.type == vgui_MOTION && handle_motion_&&button_down == false)
   {
+
     // Get X,Y position to display on status bar:
     float pointx, pointy;
     vgui_projection_inspector p_insp;
@@ -277,7 +285,6 @@ bool bgui_image_tableau::handle(vgui_event const &e)
     // Display on status bar:
     vgui::out << msg << vcl_endl;
   }
-
   return base::handle(e);
 }
 

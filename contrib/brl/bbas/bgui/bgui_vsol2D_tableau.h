@@ -27,6 +27,7 @@
 #include <vsol/vsol_spatial_object_2d_sptr.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_line_2d_sptr.h>
+#include <vsol/vsol_conic_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
 #include <vsol/vsol_digital_curve_2d_sptr.h>
@@ -41,6 +42,7 @@
 
 class bgui_vsol_soview2D_point;
 class bgui_vsol_soview2D_line_seg;
+class bgui_vsol_soview2D_conic_seg;
 class bgui_vsol_soview2D_polyline;
 class bgui_vsol_soview2D_polygon;
 class bgui_vsol_soview2D_digital_curve;
@@ -71,6 +73,11 @@ class bgui_vsol2D_tableau : public vgui_easy2D_tableau
   bgui_vsol_soview2D_line_seg*
     add_vsol_line_2d(vsol_line_2d_sptr const& line,
                      const vgui_style_sptr& style = NULL);
+
+  //: display for vsol_conic_2d
+  bgui_vsol_soview2D_conic_seg*
+    add_vsol_conic_2d(vsol_conic_2d_sptr const& conic,
+                      const vgui_style_sptr& style = NULL);
 
   //: display for vsol_polyline_2d
   bgui_vsol_soview2D_polyline*
@@ -115,6 +122,7 @@ class bgui_vsol2D_tableau : public vgui_easy2D_tableau
                                         const vgui_style_sptr& style);
   void set_vsol_point_2d_style(const vgui_style_sptr& style);
   void set_vsol_line_2d_style(const vgui_style_sptr& style);
+  void set_vsol_conic_2d_style(const vgui_style_sptr& style);
   void set_vsol_polyline_2d_style(const vgui_style_sptr& style);
   void set_digital_curve_style(const vgui_style_sptr& style);
   void set_dotted_digital_curve_style(const vgui_style_sptr& style);
@@ -126,6 +134,7 @@ class bgui_vsol2D_tableau : public vgui_easy2D_tableau
   //: Default styles
   vgui_style_sptr point_style_;
   vgui_style_sptr line_style_;
+  vgui_style_sptr conic_style_;
   vgui_style_sptr polyline_style_;
   vgui_style_sptr digital_curve_style_;
   vgui_style_sptr dotted_digital_curve_style_;
