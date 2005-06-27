@@ -105,11 +105,12 @@ vil_image_resource_sptr
                                           unsigned nplanes,
                                           enum vil_pixel_format format)
 {
-  if (nplanes==1 && vil_pixel_format_sizeof_components(format)>1)
+  vcl_cout<<"\n the format of the file is "<<format<< " and no of components are"<<vil_pixel_format_sizeof_components(format)<<"\n";
+  if (nplanes==1 && vil_pixel_format_sizeof_components(format)>1 && format!=VIL_PIXEL_FORMAT_UINT_16)
   {
-    vcl_cerr << "ERROR with vil_tiff_file_format::make_output_image():\n"
-             << "Can't deal with greyscale images with pixel widths other than 8 bits\n";
-    return 0;
+      vcl_cerr << "ERROR with vil_tiff_file_format::make_output_image():\n"
+          << "Can't deal with greyscale images with pixel widths other than 8 bits\n";
+      return 0;
   }
   return new vil_tiff_image(vs, nx, ny, nplanes, format);
 }
@@ -495,7 +496,7 @@ bool vil_tiff_image::write_header()
   p->filesize = 0;
 
   // TIFF does not support > 8-bit grayscale
-  if (bits_per_component_>8 && components_ == 1){
+  if ((bits_per_component_>16 && components_ == 1) ){
     TIFFError("TIFFImageWH: ", "TIFF6.0 does not support greater than 8-bit grayscale");
     return false;
   }
