@@ -155,6 +155,7 @@ vidl_ffmpeg_codec::open(vcl_string const& fname, char mode )
   //moviestream_->GetVideoFormat(&bh, sizeof(bh));
   this->set_width(vid_str_->codec.width);
   this->set_height(vid_str_->codec.height);
+  this->set_bits_pixel(24); // always decodes to RGB byte images
   this->set_number_frames(count_frames());
   //this->set_format('L');
   //this->set_image_class('C');
