@@ -66,7 +66,7 @@ void vgl_fit_conics_2d<T>::output(const unsigned start_index,
   vgl_vector_2d<T> v1(curve_[start_index].x()-cx, curve_[start_index].y()-cy);
   //choose a point in the middle of the curve
   int middle_index = (end_index-1-start_index)/2 + start_index;
-  if(middle_index == start_index)
+  if(middle_index == static_cast<int>(start_index))
     middle_index = end_index-1;
   //construct a vector at that point
   vgl_vector_2d<T> v(curve_[middle_index].x()-cx, curve_[middle_index].y()-cy);

@@ -134,6 +134,9 @@ static void test_norm_trans()
   
   vgl_norm_trans_2d<double> nt;
   bool good = nt.compute_from_points(points1, false);
+  double dg = 0.0;
+  if(!good)
+    dg = 1.0;
   vcl_cout << "The resulting transform\n";
   vnl_matrix_fixed<double,3,3> M=nt.get_matrix();
   vcl_cout << M ;
@@ -154,7 +157,7 @@ static void test_norm_trans()
 
   double sigma_x = vcl_sqrt(Sxx/5.0), sigma_y = vcl_sqrt(Syy/5.0);
   double error = (sigma_x-1)*(sigma_y-1);
-  TEST_NEAR("Transformed Variances", error, 0.0, 1e-02);
+  TEST_NEAR("Transformed Variances", error + dg, 0.0, 1e-02);
 }
 
 static void test_compute_linear_points()

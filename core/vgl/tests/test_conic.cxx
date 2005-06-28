@@ -177,7 +177,10 @@ static void test_conic()
   bool good = cg.ellipse_geometry(xc, yc, major_axis, minor_axis, angle);
   vcl_cout << "ellipse(" << xc << ' ' << yc << ' ' << major_axis
            << ' ' << minor_axis << ' ' << angle*180.0/3.14159 << ")\n";
-  TEST_NEAR("ellipse geometry", (xc-1)*(yc-2)*(major_axis-2)*(minor_axis-1)*(angle-0.785398), 0, 1e-10);
+  double gd = 0.0;
+  if(!good)
+    gd = 1.0;
+  TEST_NEAR("ellipse geometry", gd + (xc-1)*(yc-2)*(major_axis-2)*(minor_axis-1)*(angle-0.785398), 0, 1e-10);
 
   //End ellipse geometry test
 
