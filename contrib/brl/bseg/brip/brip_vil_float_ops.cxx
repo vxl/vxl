@@ -759,7 +759,7 @@ brip_vil_float_ops::Horn_SchunckMotion(vil_image_view<float> & current_frame,
   vil_image_view<float> average_of_vx;
   vil_image_view<float> average_of_vy;
   vil_image_view<float> emptyimg;
-  vil_image_view<float>  average_of_prev;INCLUDE_DIRECTORIES(${VXL_GEL_INCLUDE_DIR} )
+  vil_image_view<float>  average_of_prev;
   vil_image_view<float>  average_of_cur;
 
   //Size Init
