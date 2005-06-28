@@ -17,27 +17,29 @@ void brip_roi::set_image_bounds(const int n_image_cols,
 }
 
 //:expand (or contract) each region of the roi by delta, creating a new roi.
-// If delta is too large for a given region, the region is left unchanged
 brip_roi::brip_roi(brip_roi const& roi, float delta)
   : vbl_ref_count(), n_image_cols_(roi.n_image_cols_),
     n_image_rows_(roi.n_image_rows_), regions_(roi.regions_)
 {
-  float tdelta = delta;//error in const
+  float tdelta = delta;
   if (tdelta < 0) tdelta *= -1.0f; // to guarantee dxmin <= dxmax.
   for (vcl_vector<vsol_box_2d_sptr>::iterator rit = regions_.begin();
        rit != regions_.end(); rit++)
   {
-    int xmin = (int)(*rit)->get_min_x();
-    int ymin = (int)(*rit)->get_min_y();
-    int xmax = (int)(*rit)->get_max_x();
-    int ymax = (int)(*rit)->get_max_y();
-    unsigned int dxmin = (unsigned int)(xmin-tdelta), // overflows when negative,
-                 dymin = (unsigned int)(ymin-tdelta), // but this is no problem
-                 dxmax = (unsigned int)(xmax+tdelta), // since the test below
-                 dymax = (unsigned int)(ymax+tdelta); // will skip these cases:
-    if (dxmin >= n_image_cols_ || dymin >= n_image_rows_ ||
-        dxmax >= n_image_cols_ || dymax >= n_image_rows_)
-      continue;
+    double xmin = (*rit)->get_min_x();
+    double ymin = (*rit)->get_min_y();
+    double xmax = (*rit)->get_max_x();
+    double ymax = (*rit)->get_max_y();
+
+    double dxmin = (xmin-tdelta), dymin = (ymin-tdelta), 
+      dxmax = (xmax+tdelta),  dymax = (ymax+tdelta); 
+
+    //Check image bounds and crop appropriately
+    if (dxmin < 0) dxmin = 0;
+    if (dymin < 0) dymin = 0;
+    if (dxmax >= n_image_cols_) dxmax = n_image_cols_-1;
+    if (dymax >= n_image_rows_) dymax = n_image_cols_-1;
+    
     vsol_box_2d_sptr dbox = new vsol_box_2d();
     dbox->add_point(dxmin, dymin);
     dbox->add_point(dxmax, dymax);

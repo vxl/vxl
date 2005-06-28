@@ -1737,6 +1737,7 @@ bool brip_vil1_float_ops::chip(vil1_memory_image_of<float> const & input,
 {
   if (!input||!roi)
     return false;
+
   const int w = input.width(), h = input.height();
   int x_min = (int)roi->get_min_x(), y_min = (int)roi->get_min_y();
   int x_max = (int)roi->get_max_x(), y_max = (int)roi->get_max_y();
@@ -1765,7 +1766,6 @@ bool brip_vil1_float_ops::chip(vil1_image const & input,
 {
   if (!input||!roi)
     return false;
-
   const int Nc = input.width(), Nr = input.height();
   int c_min = roi->cmin(0), r_min = roi->rmin(0);
   int c_max = roi->cmax(0), r_max = roi->rmax(0);
@@ -1803,17 +1803,6 @@ bool brip_vil1_float_ops::chip(vil1_image const & input,
     return true;
   }
 
-  if (input.get_size_bytes() ==1)
-  {
-    vil1_memory_image_of<unsigned char> timage(input);
-    vil1_memory_image_of<unsigned char> tchip(CNc, CNr);
-    for (int r = r_min; r<r_max; r++)
-      for (int c =c_min; c<c_max; c++)
-        tchip(c-c_min, r-r_min) = timage(c, r);
-    chip = tchip;
-    return true;
-  }
-
   if (input.get_size_bytes() ==2)
   {
     vil1_memory_image_of<unsigned short> timage(input);
@@ -1824,6 +1813,19 @@ bool brip_vil1_float_ops::chip(vil1_image const & input,
     chip = tchip;
     return true;
   }
+  //BAD but for now force to byte output regardless FIX FIX FIX!
+  //if (input.get_size_bytes() ==1)
+  if(true)
+  {
+    vil1_memory_image_of<unsigned char> timage(input);
+    vil1_memory_image_of<unsigned char> tchip(CNc, CNr);
+    for (int r = r_min; r<r_max; r++)
+      for (int c =c_min; c<c_max; c++)
+        tchip(c-c_min, r-r_min) = timage(c, r);
+    chip = tchip;
+    return true;
+  }
+
   return false;
 }
 

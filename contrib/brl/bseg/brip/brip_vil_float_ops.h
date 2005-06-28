@@ -116,6 +116,7 @@ class brip_vil_float_ops
   static vil_image_view<float>
     sqrt_grad_singular_values(vil_image_view<float>& input, int n);
 
+
   //: computes Lucas-Kanade optical flow on a 2n+1 neighborhood
   static void Lucas_KanadeMotion(vil_image_view<float>& current_frame,
                                  vil_image_view<float>& previous_frame,
@@ -132,10 +133,10 @@ class brip_vil_float_ops
                                   double err_thresh=0.01f);
 
   //: fills a border of width w on left and right of image with value
-  static void fill_x_border(vil_image_view<float>& image, int w, float value);
+  static void fill_x_border(vil_image_view<float>& image, unsigned w, float value);
 
   //: fills a border of width h on top and bottom of image with value
-  static void fill_y_border(vil_image_view<float>& image, int h, float value);
+  static void fill_y_border(vil_image_view<float>& image, unsigned h, float value);
 
   //: converts a float image to a byte value range
   static vil_image_view<unsigned char>
@@ -146,6 +147,11 @@ class brip_vil_float_ops
     convert_to_byte(vil_image_view<float> const& image,
                     float min_val, float max_val);
 
+  //: converts an unsigned short image to a byte value range within a specified range
+  static vil_image_view<unsigned char>
+    convert_to_byte(vil_image_view<unsigned short> const& image,
+                    unsigned short min_val, unsigned short max_val)
+;
   //: converts an float image to an unsigned short image within a range
   static vil_image_view<unsigned short>
     convert_to_short(vil_image_view<float> const& image,
@@ -216,7 +222,7 @@ class brip_vil_float_ops
   //:resize to specified dimensions, fill with zeros if output is larger
   static
     void resize(vil_image_view<float> const& input,
-                int width, int height,
+                unsigned width, unsigned height,
                 vil_image_view<float>& output);
 
   //:resize to closest power of two larger dimensions than the input
@@ -288,7 +294,7 @@ class brip_vil_float_ops
                                  float& dx, float& dy);
 
   //: sub-sample a 1-d array using the Bert-Adelson algorithm
-  static void half_resolution_1d(const float* input, int n,
+  static void half_resolution_1d(const float* input, unsigned n,
                                  float k0, float k1, float k2, float* output);
 
   //:One dimensional fft
