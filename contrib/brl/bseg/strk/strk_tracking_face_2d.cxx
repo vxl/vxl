@@ -643,8 +643,8 @@ compute_intensity_mutual_information(vcl_vector <vcl_vector< vgl_point_2d<int> >
     
     //: region_map starts from (0,0) 
     x = x - base_x; y = y - base_y;
-    if (x < 0 || x >= region_map.size() || 
-        y < 0 || y >= region_map[x].size()) continue;
+    if (x < 0 || x >= static_cast<int>(region_map.size()) || 
+        y < 0 || y >= static_cast<int>(region_map[x].size())) continue;
 
     //: read corresponding region 2 pixel from map
     vgl_point_2d<int> p = region_map[x][y];
@@ -775,8 +775,8 @@ compute_gradient_mutual_information(vcl_vector <vcl_vector< vgl_point_2d<int> > 
     int x = int(intf_->X()), y = int(intf_->Y());
 
     x = x - base_x; y = y - base_y;
-    if (x < 0 || x >= region_map.size() || 
-        y < 0 || y >= region_map[x].size()) continue;
+    if (x < 0 || x >= static_cast<int>(region_map.size()) || 
+        y < 0 || y >= static_cast<int>(region_map[x].size())) continue;
 
     vgl_point_2d<int> p = region_map[x][y];
     if (p.x() < 0 || p.y() < 0 || p.x() >= width || p.y() >= height) continue;
@@ -894,8 +894,8 @@ compute_color_mutual_information(vcl_vector <vcl_vector< vgl_point_2d<int> > > r
     int x = int(intf_->X()), y = int(intf_->Y());
     
     x = x - base_x; y = y - base_y;
-    if (x < 0 || x >= region_map.size() || 
-        y < 0 || y >= region_map[x].size()) continue;
+    if (x < 0 || x >= static_cast<int>(region_map.size()) || 
+        y < 0 || y >= static_cast<int>(region_map[x].size())) continue;
 
     vgl_point_2d<int> p = region_map[x][y];
     if (p.x() < 0 || p.y() < 0 || p.x() >= width || p.y() >= height) continue;
