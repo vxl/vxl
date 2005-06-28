@@ -90,6 +90,15 @@ static void test_image_view_maths_byte()
   vil_math_add_image_fraction(im_sum,0.77,imA,0.23);
   TEST_NEAR("add_fraction",im_sum(4,5),0.77*is45+0.23*imA(4,5),1e-5);
 
+  //vector magnitude
+  vil_image_view<float> im_mag(n, m, 1);
+  vil_math_image_vector_mag(imA, imB, im_mag);
+  unsigned n2 = n/2, m2 = m/2;
+  vcl_cout << "vector mag at (" << n2 << ' ' << m2 << ")(" << static_cast<float>(imA(n2, m2))
+           << ' ' << static_cast<float>(imB(n2, m2)) << ")= " << im_mag(n2, m2) << '\n'; 
+TEST_NEAR("vector magnitude", im_mag(n2, m2),71.7008,1e-4);
+
+ 
   double sumA,sum_sqrA;
   vil_math_sum_squares(sumA,sum_sqrA,imA,0);
   vil_math_integral_image(imA,im_sum);

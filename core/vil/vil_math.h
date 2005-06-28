@@ -640,6 +640,43 @@ inline void vil_math_image_abs_difference(const vil_image_view<aT>& imA,
     }
   }
 }
+//: Compute magnitude of two images taken as vector components, sqrt(A^2 + B^2)
+// \relates vil_image_view
+template<class aT, class bT, class magT>
+inline void vil_math_image_vector_mag(const vil_image_view<aT>& imA,
+                                      const vil_image_view<bT>& imB,
+                                      vil_image_view<magT>& im_mag)
+{
+  unsigned ni = imA.ni(),nj = imA.nj(),np = imA.nplanes();
+  assert(imB.ni()==ni && imB.nj()==nj && imB.nplanes()==np);
+  im_mag.set_size(ni,nj,np);
+
+  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
+  vcl_ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
+  vcl_ptrdiff_t istepM=im_mag.istep(),jstepM=im_mag.jstep(),pstepM = im_mag.planestep();
+  const aT* planeA = imA.top_left_ptr();
+  const bT* planeB = imB.top_left_ptr();
+  magT* planeM     = im_mag.top_left_ptr();
+  for (unsigned p=0;p<np;++p,planeA += pstepA,planeB += pstepB,planeM += pstepM)
+  {
+    const aT* rowA   = planeA;
+    const bT* rowB   = planeB;
+    magT* rowM = planeM;
+    for (unsigned j=0;j<nj;++j,rowA += jstepA,rowB += jstepB,rowM += jstepM)
+    {
+      const aT* pixelA = rowA;
+      const bT* pixelB = rowB;
+      magT* pixelM = rowM;
+      for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelB+=istepB,pixelM+=istepM)
+      {
+        // The following construction works for all types, including unsigned
+        magT mag_sqr = static_cast<magT>((*pixelA)*(*pixelA) + (*pixelB)*(*pixelB));
+        magT mag = vil_math_sqrt_functor()(mag_sqr);
+        *pixelM = mag;
+      }
+    }
+  }
+}
 
 //: imA = fa*imA + fb*imB  (Useful for moving averages!)
 // Can do running sum using vil_add_image_fraction(running_mean,1-f,new_im,f)
