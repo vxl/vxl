@@ -123,7 +123,7 @@ T bsta_histogram<T>::mean() const
 
   //: Mean of distribution between bin indices
 template <class T>
-T bsta_histogram<T>::mean(const unsigned lowbin, const unsigned highbin) const
+T bsta_histogram<T>::mean(const unsigned int lowbin, const unsigned int highbin) const
 {
   assert(lowbin<=highbin);
   assert(highbin<nbins_);
@@ -150,7 +150,7 @@ return variance(0, nbins_-1);
   //: Variance of distribution between bin indices
 template <class T>
 T bsta_histogram<T>::
-variance(const unsigned lowbin, const unsigned highbin) const
+variance(const unsigned int lowbin, const unsigned int highbin) const
 {
   assert(lowbin<=highbin);
   assert(highbin<nbins_);

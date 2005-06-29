@@ -65,13 +65,13 @@ template <class T> class bsta_histogram
   T mean() const;
 
   //: Mean of distribution between bin indices
-  T mean(const unsigned lowbin, const unsigned highbin) const;
+  T mean(const unsigned int lowbin, const unsigned int highbin) const;
 
   //: Variance of distribution
   T variance() const;
 
   //: Variance of distribution between bin indices
-  T variance(const unsigned lowbin, const unsigned highbin) const;
+  T variance(const unsigned int lowbin, const unsigned int highbin) const;
 
   
   //: Fraction of area less than val
