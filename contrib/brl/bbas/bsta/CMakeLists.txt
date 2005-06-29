@@ -9,6 +9,7 @@ SET(bsta_sources
  bsta_histogram.txx        bsta_histogram.h
  bsta_joint_histogram.txx  bsta_joint_histogram.h
  bsta_k_medoid.cxx         bsta_k_medoid.h
+ bsta_otsu_threshold.txx   bsta_otsu_threshold.h
 )
 AUX_SOURCE_DIRECTORY(Templates bsta_sources)
 

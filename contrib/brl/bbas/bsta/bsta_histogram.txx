@@ -102,7 +102,7 @@ T bsta_histogram<T>::p(const T val) const
     return 0;
   else
     for (unsigned int i = 0; i<nbins_; i++)
-      if ((i+1)*delta_>(val-min_))
+      if ((i+1)*delta_>=(val-min_))
         return counts_[i]/area_;
 return 0;
 }
@@ -113,6 +113,60 @@ T bsta_histogram<T>::area() const
   if (!area_valid_)
     compute_area();
   return area_;
+}
+  //: Mean of distribution
+template <class T>
+T bsta_histogram<T>::mean() const
+{
+  return mean(0, nbins_-1);
+}
+
+  //: Mean of distribution between bin indices
+template <class T>
+T bsta_histogram<T>::mean(const unsigned lowbin, const unsigned highbin) const
+{
+  assert(lowbin<=highbin);
+  assert(highbin<nbins_);
+  T sum = 0;
+  T sumx = 0;
+  for(unsigned i = lowbin; i<=highbin; ++i)
+    {
+      sum += counts_[i];
+      sumx += (i*delta_ + min_)*counts_[i];
+    }
+  if(sum==0)
+    return 0;
+  T result = sumx/sum;
+  return result;
+}
+
+  //: Variance of distribution
+template <class T>
+T bsta_histogram<T>::variance() const
+{
+return variance(0, nbins_-1);
+}
+
+  //: Variance of distribution between bin indices
+template <class T>
+T bsta_histogram<T>::
+variance(const unsigned lowbin, const unsigned highbin) const
+{
+  assert(lowbin<=highbin);
+  assert(highbin<nbins_);
+  T mean = this->mean(lowbin, highbin);
+  mean -= min_;
+  T sum = 0;
+  T sumx2 = 0;
+  for(unsigned i = lowbin; i<=highbin; ++i)
+    {
+      sum += counts_[i];
+      sumx2 += (i*delta_-mean)*(i*delta_-mean)*counts_[i];
+    }
+  if(sum==0)
+    return 0;
+  T result = sumx2/sum;
+  return result;
 }
 
 template <class T>

@@ -14,7 +14,7 @@
 // \endverbatim
 
 #include <vcl_vector.h>
-
+#include <vcl_cassert.h>
 template <class T> class bsta_histogram
 {
  public:
@@ -36,12 +36,24 @@ template <class T> class bsta_histogram
  // The number of bins in the histogram
   unsigned int nbins() const { return nbins_; }
 
-  //: min,max of range
-  T min(){return min_;}
-  T max(){return max_;}
+  //: min,max of total range
+  T min() const {return min_;}
+  T max() const {return max_;}
 
+  //: The value range for a bin
+  void value_range(const unsigned int bin, T& vmin, T& vmax)
+    {assert(bin<nbins_); vmin = bin*delta_+min_; vmax = (bin+1)*delta_+min_;}
+  
+  //: The average value for a bin
+  T avg_bin_value(const unsigned int bin)
+    {assert(bin<nbins_); return (min_ + bin*delta_ + delta_/2);}
+
+  //: The counts in a given bin
+  T counts(const unsigned int bin) const
+    {assert(bin<nbins_); return counts_[bin];}
+  
   //: probability of a given bin
-  T p(unsigned int bin) const;
+  T p(const unsigned int bin) const;
 
   //: probability of a value in the range
   T p(const T value) const;
@@ -49,6 +61,19 @@ template <class T> class bsta_histogram
   //: Total area under the histogram
   T area() const;
 
+  //: Mean of distribution
+  T mean() const;
+
+  //: Mean of distribution between bin indices
+  T mean(const unsigned lowbin, const unsigned highbin) const;
+
+  //: Variance of distribution
+  T variance() const;
+
+  //: Variance of distribution between bin indices
+  T variance(const unsigned lowbin, const unsigned highbin) const;
+
+  
   //: Fraction of area less than val
   T fraction_below(const T value) const;
 
