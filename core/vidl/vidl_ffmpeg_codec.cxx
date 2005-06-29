@@ -274,8 +274,11 @@ vidl_ffmpeg_codec::count_frames() const
   // remember the current video position
   int64_t timestamp = vid_str_->cur_dts;
   // seek back to the first frame
-  // in newer ffmpeg code use: av_seek_frame( fmt_cxt_, vid_index_, 0, 0 );
+#if LIBAVFORMAT_BUILD <= 4616
   av_seek_frame( fmt_cxt_, vid_index_, 0);
+#else
+  av_seek_frame( fmt_cxt_, vid_index_, 0, 0 );
+#endif
   AVPacket pkt;
   int frame_count=0;
 
@@ -286,8 +289,11 @@ vidl_ffmpeg_codec::count_frames() const
   }
   vcl_cout << "counted "<<frame_count<<" frames"<<vcl_endl;
   // seek back to last active position
-  // add AVSEEK_FLAG_BACKWARD as a 4th argument in newer ffmpeg code
+#if LIBAVFORMAT_BUILD <= 4616
   av_seek_frame( fmt_cxt_, vid_index_, timestamp);
+#else
+  av_seek_frame( fmt_cxt_, vid_index_, timestamp, AVSEEK_FLAG_BACKWARD);
+#endif
 
   return frame_count;
 }
@@ -369,7 +375,11 @@ vidl_ffmpeg_codec::seek( unsigned frame ) const
     req_timestamp = 0;
   
   // newer releases of ffmpeg may require a 4th argument to av_seek_frame
+#if LIBAVFORMAT_BUILD <= 4616
   int seek = av_seek_frame( fmt_cxt_, vid_index_, frame );
+#else
+  int seek = av_seek_frame( fmt_cxt_, vid_index_, frame, 0 );
+#endif
   if ( seek < 0 )
     return false;
 
