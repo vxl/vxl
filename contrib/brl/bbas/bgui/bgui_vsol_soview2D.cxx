@@ -193,8 +193,20 @@ void bgui_vsol_soview2D_conic_seg::get_centroid(float* x, float* y) const
 
 void bgui_vsol_soview2D_conic_seg::translate(float tx, float ty)
 {
-  //for now do nothing
-  // NOT IMPLEMENTED FIX ME JLM
+  double txd = static_cast<double>(tx), tyd = static_cast<double>(ty);
+  //first translate the endpoints
+  vsol_point_2d_sptr p0 = sptr()->p0();
+  p0->set_x(p0->x()+tx);   p0->set_y(p0->y()+ty); 
+  vsol_point_2d_sptr p1 = sptr()->p1();
+  p1->set_x(p1->x()+tx);   p1->set_y(p1->y()+ty); 
+
+  //compute new d, e, f coefficients for the conic
+  double a = sptr()->a(), b = sptr()->b(), c = sptr()->c(),
+    d = sptr()->d(), e = sptr()->e(), f = sptr()->f();
+  double dp = ( d + 2.0*a*txd + b*ty );
+  double ep = ( e + 2.0*c*tyd + b*tx );
+  double fp = ( f + a*txd*txd + b*txd*tyd + c*tyd*tyd + d*tx + e*ty);
+  sptr()->set(a, b, c, dp, ep, fp);
 }
 
 //--------------------------------------------------------------------------
