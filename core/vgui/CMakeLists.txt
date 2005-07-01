@@ -237,9 +237,16 @@ IF (GLUT_FOUND)
     )
     IF (X11_FOUND)
       INCLUDE_DIRECTORIES(${X11_INCLUDE_DIR})
-      SET(vgui_glut_sources ${vgui_glut_sources}
-        impl/glut/menu_hack_X11.cxx
-      )
+      # FreeGLUT does not support this menu hack
+      IF(EXISTS ${GLUT_INCLUDE_DIR}/GL/freeglut.h)
+        SET(vgui_glut_sources ${vgui_glut_sources}
+          impl/glut/menu_hack_none.cxx
+        )
+      ELSE(EXISTS ${GLUT_INCLUDE_DIR}/GL/freeglut.h)
+        SET(vgui_glut_sources ${vgui_glut_sources}
+          impl/glut/menu_hack_X11.cxx
+        )
+      ENDIF(EXISTS ${GLUT_INCLUDE_DIR}/GL/freeglut.h)
     ELSE (X11_FOUND)
       SET(vgui_glut_sources ${vgui_glut_sources}
         impl/glut/menu_hack_none.cxx
