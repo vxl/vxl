@@ -57,10 +57,6 @@ vil_file_format::~vil_file_format()
 #include <vil/file_formats/vil_gen.h>
 #endif
 
-#if HAS_NITF
-#include <vil/file_formats/vil_nitf.h>
-#endif
-
 #if HAS_DCMTK
 #include <vil/file_formats/vil_dicom.h>
 #endif
@@ -108,11 +104,6 @@ struct vil_file_format_storage
 #endif
 #if HAS_GEN
     l[c++] = new vil_gen_file_format;
-#endif
-// NOTE: Put NITF before DICOM.  Otherwise,
-//    DICOM read fails, but outputs bogus error message.
-#if HAS_NITF
-    l[c++] = new vil_nitf_file_format;
 #endif
 // the DCMTK based reader is more complete, so use try that
 // before the vil implementation
