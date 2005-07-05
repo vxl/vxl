@@ -111,6 +111,12 @@ SOURCE=.\Templates/bsta_joint_histogram+double-.cxx
 SOURCE=.\Templates/bsta_joint_histogram+float-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/bsta_otsu_threshold+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_otsu_threshold+float-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\bsta_gauss.cxx
 # End Source File
 # Begin Source File
@@ -136,6 +142,12 @@ SOURCE=.\bsta_joint_histogram.txx
 # End Source File
 # Begin Source File
 SOURCE=.\bsta_k_medoid.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_otsu_threshold.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_otsu_threshold.txx
 # End Source File
 # End Group
 # End Target

@@ -152,6 +152,18 @@ SOURCE=.\Templates/vgl_h_matrix_2d+float-.cxx
 SOURCE=.\Templates/vgl_h_matrix_3d+float-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vgl_conic_2d_regression+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_conic_2d_regression+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_fit_conics_2d+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_fit_conics_2d+float-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vgl_h_matrix_1d_compute_3point.cxx
 # End Source File
 # Begin Source File
@@ -279,6 +291,18 @@ SOURCE=.\vgl_norm_trans_3d.h
 # End Source File
 # Begin Source File
 SOURCE=.\vgl_norm_trans_3d.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_conic_2d_regression.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_conic_2d_regression.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_fit_conics_2d.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_fit_conics_2d.txx
 # End Source File
 # End Group
 # End Target

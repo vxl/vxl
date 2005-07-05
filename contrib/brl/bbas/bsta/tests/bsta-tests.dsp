@@ -182,6 +182,9 @@ SOURCE=.\test_bsta_histogram.cxx
 SOURCE=.\test_k_medoid.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_otsu_threshold.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

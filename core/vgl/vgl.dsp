@@ -344,6 +344,12 @@ SOURCE=.\Templates/vgl_homg_point_2d+unsigned-.cxx
 # Begin Source File
 SOURCE=.\Templates/vgl_point_2d+unsigned-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_conic_segment_2d+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_conic_segment_2d+float-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -550,6 +556,12 @@ SOURCE=.\vgl_convex.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vgl_convex.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_conic_segment_2d.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_conic_segment_2d.txx
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"

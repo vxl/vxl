@@ -195,6 +195,9 @@ SOURCE=.\Templates/vbl_triple+int.int.int-.cxx
 SOURCE=.\Templates/vbl_triple+uint.uint.uint-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vbl_array_2d+float-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vbl_bool_ostream.cxx
 # End Source File
 # Begin Source File

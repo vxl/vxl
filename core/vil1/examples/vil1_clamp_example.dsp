@@ -86,7 +86,7 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=.\vil_clamp_example.cxx
+SOURCE=.\vil1_clamp_example.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

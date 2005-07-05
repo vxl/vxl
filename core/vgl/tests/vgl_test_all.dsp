@@ -146,6 +146,9 @@ SOURCE=.\test_convex.cxx
 # Begin Source File
 SOURCE=.\test_convex_hull_2d.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_fit_conics_2d.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
