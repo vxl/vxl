@@ -8,6 +8,7 @@ TESTMAIN := test_driver.cxx
 TESTS += test_homg.cxx
 TESTS += test_cartesian.cxx
 TESTS += test_conic.cxx
+TESTS += test_fit_conics_2d.cxx
 TESTS += test_distance.cxx
 TESTS += test_polygon.cxx
 TESTS += test_polygon_scan_iterator.cxx

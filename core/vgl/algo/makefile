@@ -27,6 +27,8 @@ SOURCES += vgl_h_matrix_2d_optimize_lmq.cxx
 MANPAGE_SOURCES += vgl_fit_lines_2d.txx
 MANPAGE_SOURCES += vgl_line_2d_regression.txx
 MANPAGE_SOURCES += vgl_convex_hull_2d.txx
+MANPAGE_SOURCES += vgl_conic_2d_regression.txx
+MANPAGE_SOURCES += vgl_fit_conics_2d.txx
 
 ################################
 include ${IUEROOT}/config/top.mk

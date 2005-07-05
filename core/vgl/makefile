@@ -32,6 +32,7 @@ MANPAGE_SOURCES += vgl_line_segment_3d.txx
 # Other curves
 MANPAGE_SOURCES += vgl_conic.txx
 MANPAGE_SOURCES += vgl_polygon.txx
+MANPAGE_SOURCES += vgl_conic_segment_2d.txx
 
 # Planes
 MANPAGE_SOURCES += vgl_plane_3d.txx

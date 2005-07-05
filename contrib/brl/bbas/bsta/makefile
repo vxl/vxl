@@ -7,6 +7,7 @@ SOURCES += bsta_gauss.cxx
 MANPAGE_SOURCES += bsta_histogram.txx
 MANPAGE_SOURCES += bsta_joint_histogram.txx
 SOURCES += bsta_k_medoid.cxx
+MANPAGE_SOURCES += bsta_otsu_threshold.txx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
