@@ -35,7 +35,8 @@ void test_bsta_histogram()
   hdata.upcount(32,1);
   vcl_cout << "Bins\n";
   hdata.print();
-  TEST_NEAR("test data constructor p(32.0)", hdata.p(32.0), 2/34.0, 1e-6);
+  vcl_cout << "p(32) " << hdata.p(32.0) << '\n';
+  TEST_NEAR("test data constructor p(32.0)", hdata.p(32.0), 0.117647, 1e-6);
 
   //Test entropy
   double ent = h.entropy();
