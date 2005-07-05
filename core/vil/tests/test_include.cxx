@@ -5,6 +5,7 @@
 #include <vil/vil_copy.h>
 #include <vil/vil_crop.h>
 #include <vil/vil_decimate.h>
+#include <vil/vil_exception.h>
 #include <vil/vil_file_format.h>
 #include <vil/vil_fill.h>
 #include <vil/vil_flip.h>

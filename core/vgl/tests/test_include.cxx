@@ -8,6 +8,7 @@
 #include <vgl/vgl_clip.h>
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_conic.h>
+#include <vgl/vgl_conic_segment_2d.h>
 #include <vgl/vgl_convex.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_ellipse_scan_iterator.h>
@@ -35,7 +36,9 @@
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_window_scan_iterator.h>
+#include <vgl/algo/vgl_conic_2d_regression.h>
 #include <vgl/algo/vgl_convex_hull_2d.h>
+#include <vgl/algo/vgl_fit_conics_2d.h>
 #include <vgl/algo/vgl_fit_lines_2d.h>
 #include <vgl/algo/vgl_homg_operators_1d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>

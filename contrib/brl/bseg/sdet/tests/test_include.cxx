@@ -3,6 +3,8 @@
 #include <bseg/sdet/sdet_detector_params.h>
 #include <bseg/sdet/sdet_edge_champher.h>
 #include <bseg/sdet/sdet_edgel_regions.h>
+#include <bseg/sdet/sdet_fit_conics.h>
+#include <bseg/sdet/sdet_fit_conics_params.h>
 #include <bseg/sdet/sdet_fit_lines.h>
 #include <bseg/sdet/sdet_fit_lines_params.h>
 #include <bseg/sdet/sdet_grid_finder.h>
