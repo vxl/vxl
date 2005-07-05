@@ -127,6 +127,7 @@ SET( vil_sources ${vil_sources}
   vil_smart_ptr.txx                     vil_smart_ptr.h
   vil_property.h
   vil_pixel_format.cxx                  vil_pixel_format.h
+  vil_exception.h
   vil_pixel_traits.h
   vil_rgb.txx                           vil_rgb.h
   vil_rgba.txx                          vil_rgba.h
