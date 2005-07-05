@@ -10,7 +10,6 @@ void test_otsu_threshold()
 {
   double range = 128.0;
   int bins = 16;
-  double delta = range/bins;
   bsta_histogram<double> h(range, bins);
   h.upcount(0, 0);
   h.upcount(8, 10);
