@@ -235,7 +235,6 @@ void test_read_props_ws()
          props[ "a" ] == "" && !ss.fail(), true);
   }
 
-#if 0 // This one won't work because the { } should be on their own lines
   {
     vcl_cout << "\nCase 2\n";
     vcl_istringstream ss("{ a: a }");
@@ -244,7 +243,6 @@ void test_read_props_ws()
     TEST("Case 2: props[ \"a\" ] == \"a\"",
          props[ "a" ] == "a" && !ss.fail(), true);
   }
-#endif // 0
 
   {
     vcl_cout << "\nCase 3\n";
