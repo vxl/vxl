@@ -13,6 +13,7 @@
 #include "vil_jpeg_source_mgr.h"
 #include <vcl_cassert.h>
 #include <vcl_cstddef.h> // for vcl_size_t
+#include <vcl_limits.h> //for vcl_numeric_limits
 #include <vil/vil_stream.h>
 
 #define STATIC /*static*/
@@ -84,7 +85,7 @@ vil_jpeg_fill_input_buffer (j_decompress_ptr cinfo)
 {
   vil_jpeg_srcptr src = ( vil_jpeg_srcptr )( cinfo->src );
 
-  int nbytes = src->stream->read(src->buffer, vil_jpeg_INPUT_BUF_SIZE);
+  vil_streampos nbytes = src->stream->read(src->buffer, vil_jpeg_INPUT_BUF_SIZE);
 
   if (nbytes <= 0) {
     if (src->start_of_file) // Treat empty input file as fatal error
@@ -97,7 +98,10 @@ vil_jpeg_fill_input_buffer (j_decompress_ptr cinfo)
   }
 
   src->base.next_input_byte = src->buffer;
-  src->base.bytes_in_buffer = nbytes;
+  //original JPEG (non-j2k) files aren't usually very big
+  //so this assert should be no problem
+  assert( nbytes < vcl_numeric_limits< size_t >::max() );
+  src->base.bytes_in_buffer = (size_t)nbytes;
   src->start_of_file = FALSE;
 
   return TRUE;

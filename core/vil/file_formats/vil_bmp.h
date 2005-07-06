@@ -31,6 +31,7 @@ class vil_stream;
 
 #include <vil/vil_file_format.h>
 #include <vil/vil_image_resource.h>
+#include <vil/vil_stream.h>
 #include "vil_bmp_file_header.h"
 #include "vil_bmp_core_header.h"
 #include "vil_bmp_info_header.h"
@@ -88,7 +89,7 @@ class vil_bmp_image : public vil_image_resource
   vil_bmp_file_header file_hdr;
   vil_bmp_core_header core_hdr;
   vil_bmp_info_header info_hdr;
-  long bit_map_start; // position in file of bitmap raw data.
+  vil_streampos bit_map_start; // position in file of bitmap raw data.
 #if 0
   uchar **freds_colormap;
 

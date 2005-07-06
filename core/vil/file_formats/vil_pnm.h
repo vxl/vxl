@@ -18,6 +18,7 @@
 
 #include <vil/vil_image_resource.h>
 #include <vil/vil_file_format.h>
+#include <vil/vil_stream.h>
 
 class vil_image_view_base;
 
@@ -65,7 +66,7 @@ class vil_pnm_image : public vil_image_resource
   unsigned nj_;
   unsigned long int maxval_;
 
-  int start_of_data_;
+  vil_streampos start_of_data_;
   unsigned ncomponents_;
   unsigned bits_per_component_;
 

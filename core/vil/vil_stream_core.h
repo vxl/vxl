@@ -23,11 +23,10 @@ class vil_stream_core : public vil_stream
   vil_streampos tailpos_; // size of file so far
 
  public:
-  vil_stream_core(unsigned block_size = 16384)
-    : curpos_(0), blocksize_(block_size), tailpos_(0) {}
+  vil_stream_core(unsigned block_size = 16384);
 
   //: get current file size
-  unsigned size() const { return tailpos_; }
+  vil_streampos size() const { return tailpos_; }
 
   //: Read or write n bytes at position pos.
   // This does not change the current position.

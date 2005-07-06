@@ -343,7 +343,7 @@ vil_image_view_base_sptr vil_pnm_image::get_copy_view(
   {
     unsigned bytes_per_sample = (bits_per_component_+7)/8;
     unsigned bytes_per_pixel = nplanes() * bytes_per_sample;
-    unsigned byte_start = start_of_data_ + (y0 * ni_ + x0) * bytes_per_pixel;
+    vil_streampos byte_start = start_of_data_ + (y0 * ni_ + x0) * bytes_per_pixel;
     unsigned byte_width = ni_ * bytes_per_pixel;
     unsigned byte_out_width = ni * bytes_per_pixel;
 

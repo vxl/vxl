@@ -30,7 +30,7 @@
 bool vil_jpeg_file_probe(vil_stream *vs) {
   char magic[2];
   vs->seek(0L);
-  int n = vs->read(magic, sizeof(magic));
+  vil_streampos n = vs->read(magic, sizeof(magic));
 
   if (n != sizeof(magic)) {
     vcl_cerr << __FILE__ << " : vil_stream::read() failed\n";

@@ -10,7 +10,12 @@
 // \author  awf@robots.ox.ac.uk
 // \date 16 Feb 00
 
-typedef long int vil_streampos; // should be identical to vcl_istream::streampos
+#include <vxl_config.h>
+#if VXL_HAS_INT_64
+typedef long long vil_streampos;
+#else //VXL_HAS_INT_64
+typedef long int vil_streampos;
+#endif //VXL_HAS_INT_64
 
 //: Stream interface for VIL image loaders
 // This allows the loaders to be used with any type of stream.

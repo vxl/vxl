@@ -15,7 +15,7 @@
 //    5 June 2003 Peter Vanroose - bug fix for 64-bit platforms: data is 32-bit
 //   14 June 2003 Peter Vanroose - ported from vil1
 // \endverbatim
-
+#include <vil/vil_stream.h>
 #include <vil/vil_file_format.h>
 #include <vil/vil_image_resource.h>
 #include "vil_viffheader.h"
@@ -42,7 +42,7 @@ class vil_viff_image : public vil_image_resource
   unsigned int nj_;
   unsigned int nplanes_;
 
-  int start_of_data_;
+  vil_streampos start_of_data_;
   enum vil_pixel_format format_;
 
   bool endian_consistent_;

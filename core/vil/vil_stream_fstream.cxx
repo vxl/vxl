@@ -5,6 +5,7 @@
 
 #include "vil_stream_fstream.h"
 #include <vcl_cassert.h>
+#include <vcl_limits.h>
 #include <vcl_iostream.h>
 #include <vcl_ios.h>
 
@@ -65,6 +66,9 @@ vil_stream_fstream::~vil_stream_fstream()
 vil_streampos vil_stream_fstream::write(void const* buf, vil_streampos n)
 {
   assert(id > 0);
+  //assures that cast (below) will be ok
+  assert( n < vcl_numeric_limits< vcl_streamoff >::max() );
+
   if (!(flags_ & vcl_ios_out)) {
     vcl_cerr << "vil_stream_fstream: write failed, not an vcl_ostream\n";
     return 0;
@@ -72,7 +76,7 @@ vil_streampos vil_stream_fstream::write(void const* buf, vil_streampos n)
 
   vil_streampos a = tell();
   xerr << "write " << n << vcl_endl;
-  f_.write((char const*)buf, n);
+  f_.write((char const*)buf, (vcl_streamoff)n);
   if (!f_.good())
     vcl_cerr << ("vil_stream_fstream: ERROR: write failed!\n");
   vil_streampos b = tell();
@@ -84,13 +88,15 @@ vil_streampos vil_stream_fstream::write(void const* buf, vil_streampos n)
 vil_streampos vil_stream_fstream::read(void* buf, vil_streampos n)
 {
   assert(id > 0);
+  //assures that cast (below) will be ok
+  assert( n < vcl_numeric_limits< vcl_streamoff >::max() );
 
   if (!(flags_ & vcl_ios_in))
     return 0;
 
   vil_streampos a = tell();
   xerr << "read " << n << vcl_endl;
-  f_.read((char *)buf, n);
+  f_.read((char *)buf, (vcl_streamoff)n);
 
   // fsm  This is for gcc 2.95 :
   // If we try to read more data than is in the file, the good()
@@ -131,14 +137,17 @@ vil_streampos vil_stream_fstream::tell() const
 void vil_stream_fstream::seek(vil_streampos position)
 {
   assert(id > 0);
+  //assures that cast (below) will be ok
+  assert( position < vcl_numeric_limits< vcl_streamoff >::max() );
+
   bool fi = (flags_ & vcl_ios_in)  != 0;
   bool fo = (flags_ & vcl_ios_out) != 0;
 
   if (fi && fo) {
     xerr << "seekg and seekp to " << position << vcl_endl;
     if (position != vil_streampos(f_.tellg())) {
-      f_.seekg(position);
-      f_.seekp(position);
+      f_.seekg((vcl_streamoff)position);
+      f_.seekp((vcl_streamoff)position);
       assert(f_.good());
     }
   }
@@ -146,7 +155,7 @@ void vil_stream_fstream::seek(vil_streampos position)
   else if (fi) {
     xerr << "seek to " << position << vcl_endl;
     if (position != vil_streampos(f_.tellg())) {
-      f_.seekg(position);
+      f_.seekg((vcl_streamoff)position);
       assert(f_.good());
     }
   }
@@ -156,7 +165,7 @@ void vil_stream_fstream::seek(vil_streampos position)
     int at = f_.tellp();
     if (position != at) {
       xerr << "seekp to " << position << ", at " << (long)f_.tellp() << vcl_endl;
-      f_.seekp(position);
+      f_.seekp((vcl_streamoff)position);
       assert(f_.good());
     }
   }

@@ -370,7 +370,7 @@ bool vil_mit_image::put_view(vil_image_view_base const& buf, unsigned int x0, un
   {
     if (buf_is_planar && components_ > 1) // have to interleave pixels
     {
-      vil_streampos sz = bytes_per_pixel();
+      unsigned int sz = bytes_per_pixel();
       vxl_byte* tempbuf = new vxl_byte[components_*sz];
       for (unsigned int y = y0; y < y0+nj; ++y)
         for (unsigned int x = x0; x < x0+ni; ++x)

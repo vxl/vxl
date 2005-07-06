@@ -21,6 +21,7 @@
 
 #include <vil/vil_file_format.h>
 #include <vil/vil_image_resource.h>
+#include <vil/vil_stream.h>
 
 //: Loader for RGB files (sgi iris)
 class vil_iris_file_format : public vil_file_format
@@ -80,7 +81,7 @@ class vil_iris_generic_image : public vil_image_resource
   int dimension_;
   int colormap_;
   char imagename_[81];
-  int start_of_data_;
+  vil_streampos start_of_data_;
 
   bool read_offset_tables();
 

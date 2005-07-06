@@ -361,7 +361,7 @@ get_copy_view( unsigned i0, unsigned ni,
   unsigned buff_bytes_per_pixel = components_ * ( (bits_per_component_+7)/8 );
   unsigned file_byte_width = width_ * file_bytes_per_pixel;
   file_byte_width += ( file_byte_width % 2 ); // each scan line ends on a 16bit boundary
-  unsigned file_byte_start = start_of_data_ + j0 * file_byte_width + i0 * file_bytes_per_pixel;
+  vil_streampos file_byte_start = start_of_data_ + j0 * file_byte_width + i0 * file_bytes_per_pixel;
   unsigned buff_byte_width = ni * buff_bytes_per_pixel;
 
   vil_memory_chunk_sptr buf = new vil_memory_chunk(ni * nj * components_, VIL_PIXEL_FORMAT_BYTE );
@@ -447,7 +447,7 @@ put_view( const vil_image_view_base& view, unsigned i0, unsigned j0 )
   unsigned buff_bytes_per_pixel = components_ * ( (bits_per_component_+7)/8 );
   unsigned file_byte_width = width_ * file_bytes_per_pixel;
   file_byte_width += ( file_byte_width % 2 ); // each scan line ends on a 16bit boundary
-  unsigned file_byte_start = start_of_data_ + j0 * file_byte_width + i0 * file_bytes_per_pixel;
+  vil_streampos file_byte_start = start_of_data_ + j0 * file_byte_width + i0 * file_bytes_per_pixel;
   unsigned buff_byte_width = view.ni() * buff_bytes_per_pixel;
 
   assert( file_bytes_per_pixel == buff_bytes_per_pixel );

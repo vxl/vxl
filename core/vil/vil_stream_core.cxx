@@ -8,6 +8,13 @@
 
 #include "vil_stream_core.h"
 #include <vcl_cassert.h>
+#include <vcl_limits.h> 
+
+vil_stream_core::vil_stream_core(unsigned block_size)
+    : curpos_(0), blocksize_(block_size), tailpos_(0) 
+{ }
+
+//--------------------------------------------------------------------------------
 
 vil_stream_core::~vil_stream_core()
 {
@@ -26,6 +33,8 @@ vil_streampos vil_stream_core::read (void *buf, vil_streampos n)
   curpos_ += rv;
   return rv;
 }
+
+//--------------------------------------------------------------------------------
 
 vil_streampos vil_stream_core::write(void const *buf, vil_streampos n)
 {
@@ -67,7 +76,10 @@ vil_streampos vil_stream_core::m_transfer(char *buf, vil_streampos pos, vil_stre
       vil_streampos bl = tpos/(long)blocksize_;     // which block
       vil_streampos s = tpos - (long)blocksize_*bl; // start index in block_
       vil_streampos z = ((tn+s > (long)blocksize_) ? (long)blocksize_-s : tn); // number of bytes to write
-      char *tmp = block_[bl];
+      //it would take a very large in-memory stream for this assert to fail (>2GB).
+      //That should not happen.  If it does, then we have to think of plan b.
+      assert( bl < vcl_numeric_limits< size_t >::max() );
+      char *tmp = block_[(size_t)bl];
       if (read)
         for (vil_streampos k=0; k<z; ++k)
           tbuf[k] = tmp[s+k]; // prefer memcpy ?

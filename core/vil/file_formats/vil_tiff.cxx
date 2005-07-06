@@ -60,7 +60,7 @@ bool vil_tiff_file_format_probe(vil_stream* is)
     return 0;
 #else
   char hdr[4];
-  unsigned int read = is->read(hdr, sizeof hdr);
+  vil_streampos read = is->read(hdr, sizeof hdr);
   if (read < sizeof hdr)
     return false;
 
@@ -130,7 +130,7 @@ struct vil_tiff_structures {
 
   TIFF* tif;
   vil_stream* vs;
-  int filesize;
+  vil_streampos filesize;
 
   unsigned long tilewidth;
   unsigned long tileheight;
@@ -169,7 +169,9 @@ static tsize_t vil_tiff_readproc(thandle_t h, tdata_t buf, tsize_t n)
 {
   vil_tiff_structures* p = (vil_tiff_structures*)h;
   if (n > p->filesize) p->filesize= n;
-  tsize_t ret = p->vs->read(buf, n);
+  //there should be no problem with this case because n
+  //is also of type tsize_t
+  tsize_t ret = (tsize_t)p->vs->read(buf, n);
   trace << "readproc, n = " << n << ", ret = " << ret << '\n';
   return ret;
 }
@@ -177,7 +179,9 @@ static tsize_t vil_tiff_readproc(thandle_t h, tdata_t buf, tsize_t n)
 static tsize_t vil_tiff_writeproc(thandle_t h, tdata_t buf, tsize_t n)
 {
   vil_tiff_structures* p = (vil_tiff_structures*)h;
-  tsize_t ret = p->vs->write(buf, n);
+  //there should be no problem with this case because n
+  //is also of type tsize_t
+  tsize_t ret = (tsize_t)p->vs->write(buf, n);
   vil_streampos s = p->vs->tell();
   if (s > p->filesize)
     p->filesize = s;
@@ -195,7 +199,7 @@ static toff_t vil_tiff_seekproc(thandle_t h, toff_t offset, int whence)
   vil_streampos s = p->vs->tell();
   if (s > p->filesize)
     p->filesize = s;
-  return s;
+  return (toff_t)s;
 }
 
 static int vil_tiff_closeproc(thandle_t h)

@@ -287,8 +287,9 @@ bool vil_bmp_image::write_header()
   if (nplanes() == 1)
     info_hdr.colorcount = info_hdr.colormapsize = 1<<
       vil_pixel_format_sizeof_components(pixel_format()) * 8;
-  file_hdr.bitmap_offset = bit_map_start = 54L + 4 * info_hdr.colormapsize;
-  file_hdr.file_size = bit_map_start+data_size;
+  file_hdr.bitmap_offset = 54L + 4 * info_hdr.colormapsize;
+  bit_map_start = file_hdr.bitmap_offset;
+  file_hdr.file_size = file_hdr.bitmap_offset+data_size;
   core_hdr.header_size = 40;
   core_hdr.width = ni();
   core_hdr.height = nj();
