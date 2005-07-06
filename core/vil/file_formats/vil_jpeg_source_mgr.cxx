@@ -100,7 +100,7 @@ vil_jpeg_fill_input_buffer (j_decompress_ptr cinfo)
   src->base.next_input_byte = src->buffer;
   //original JPEG (non-j2k) files aren't usually very big
   //so this assert should be no problem
-  assert( nbytes < vcl_numeric_limits< size_t >::max() );
+  assert( nbytes <= vcl_numeric_limits< size_t >::max() );
   src->base.bytes_in_buffer = (size_t)nbytes;
   src->start_of_file = FALSE;
 

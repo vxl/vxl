@@ -78,7 +78,7 @@ vil_streampos vil_stream_core::m_transfer(char *buf, vil_streampos pos, vil_stre
       vil_streampos z = ((tn+s > (long)blocksize_) ? (long)blocksize_-s : tn); // number of bytes to write
       //it would take a very large in-memory stream for this assert to fail (>2GB).
       //That should not happen.  If it does, then we have to think of plan b.
-      assert( bl < vcl_numeric_limits< size_t >::max() );
+      assert( bl <= vcl_numeric_limits< size_t >::max() );
       char *tmp = block_[(size_t)bl];
       if (read)
         for (vil_streampos k=0; k<z; ++k)
