@@ -14,12 +14,15 @@
 // \endverbatim
 #include<vcl_vector.h>
 #include<bsta/bsta_histogram.h>
+#include<vil/vil_image_view.h>
+
 template <class T> class bsta_otsu_threshold{
 
 public:
     //: constructor
     bsta_otsu_threshold(bsta_histogram<T> const& hist);
-
+    //: takes vector of data as input
+    bsta_otsu_threshold(vcl_vector<T> data, T low , T high);
     //: destructor
     ~bsta_otsu_threshold();
 

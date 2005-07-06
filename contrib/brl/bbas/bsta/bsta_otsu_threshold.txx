@@ -5,14 +5,18 @@
 #include <bsta/bsta_otsu_threshold.h>
 #include <vcl_cmath.h>
 
-
 template <class T>
 bsta_otsu_threshold<T>::bsta_otsu_threshold(bsta_histogram<T> const& hist)
 : distribution_1d_(hist)
 {
  
 }
-
+template <class T>
+bsta_otsu_threshold<T>::bsta_otsu_threshold(vcl_vector<T> data, T low , T high)
+:distribution_1d_(low,high,data)
+{
+	 
+}
 template <class T>
 bsta_otsu_threshold<T>::~bsta_otsu_threshold()
 {
