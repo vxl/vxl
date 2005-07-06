@@ -12,9 +12,9 @@
 
 #include <vxl_config.h>
 #if VXL_HAS_INT_64
-typedef long long vil_streampos;
+typedef vxl_int_64 vil_streampos;
 #else //VXL_HAS_INT_64
-typedef long int vil_streampos;
+typedef vxl_int_32 vil_streampos;
 #endif //VXL_HAS_INT_64
 
 //: Stream interface for VIL image loaders
