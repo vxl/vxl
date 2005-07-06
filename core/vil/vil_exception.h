@@ -49,10 +49,10 @@ void vil_exception_warning(T exception)
   {
    public:
     enum vil_pixel_format src_type, dest_type;
-    vil_exception_assignment_pixel_types_incompatible(
+    vil_exception_assignment_pixel_formats_incompatible(
       enum vil_pixel_format src, enum vil_pixel_format dest)
       : src_type(src), dest_type(dest) {}
-    const char * what() const {return "Pixel formats incompatible during assignment operation."}
+    const char * what() const {return "Pixel formats incompatible during assignment operation.";}
   };
 
 #else
@@ -62,11 +62,11 @@ void vil_exception_warning(T exception)
   {
    public:
     enum vil_pixel_format src_type, dest_type;
-    vil_exception_assignment_pixel_types_incompatible(
+    vil_exception_assignment_pixel_formats_incompatible(
       enum vil_pixel_format src, enum vil_pixel_format dest)
-      : vcl_logic_error("Pixel formats incompatible during assignment operation."),
+      : vcl_logic_error(vcl_string("Pixel formats incompatible during assignment operation.")),
       src_type(src), dest_type(dest) {}
-    virtual ~vil_exception_unused_props() throw() {}
+    virtual ~vil_exception_assignment_pixel_formats_incompatible() throw() {}
   };
 
 #endif
