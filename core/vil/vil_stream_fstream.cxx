@@ -67,7 +67,9 @@ vil_streampos vil_stream_fstream::write(void const* buf, vil_streampos n)
 {
   assert(id > 0);
   //assures that cast (below) will be ok
-  assert( n < vcl_numeric_limits< vcl_streamoff >::max() );
+  //but the FreeBSD-4.­9-gcc-2.­95.­4 build seems to have a problem
+  //with it, so I'm commenting it out
+  //assert( position < vcl_numeric_limits< vcl_streamoff >::max() );
 
   if (!(flags_ & vcl_ios_out)) {
     vcl_cerr << "vil_stream_fstream: write failed, not an vcl_ostream\n";
@@ -89,7 +91,9 @@ vil_streampos vil_stream_fstream::read(void* buf, vil_streampos n)
 {
   assert(id > 0);
   //assures that cast (below) will be ok
-  assert( n < vcl_numeric_limits< vcl_streamoff >::max() );
+  //but the FreeBSD-4.­9-gcc-2.­95.­4 build seems to have a problem
+  //with it, so I'm commenting it out
+  //assert( position < vcl_numeric_limits< vcl_streamoff >::max() );
 
   if (!(flags_ & vcl_ios_in))
     return 0;
@@ -138,7 +142,9 @@ void vil_stream_fstream::seek(vil_streampos position)
 {
   assert(id > 0);
   //assures that cast (below) will be ok
-  assert( position < vcl_numeric_limits< vcl_streamoff >::max() );
+  //but the FreeBSD-4.­9-gcc-2.­95.­4 build seems to have a problem
+  //with it, so I'm commenting it out
+  //assert( position < vcl_numeric_limits< vcl_streamoff >::max() );
 
   bool fi = (flags_ & vcl_ios_in)  != 0;
   bool fo = (flags_ & vcl_ios_out) != 0;
