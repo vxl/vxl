@@ -43,6 +43,11 @@ void test_parse_block()
   }
 
   {
+    vcl_istringstream ss("{ a:\n {\n b: {\n c: cv\n d: dv { e: ev }\n }\n } \n}");
+    TEST("Multi-level case 2", mbl_parse_block(ss) == "{ a:\n {\n b: {\n c: cv\n d: dv { e: ev }\n }\n } \n}" && !ss.fail(), true);
+  }
+
+  {
     vcl_istringstream ss("{ a\n {b\n  // wibble }\n}c }");
     TEST("Comment case 1", mbl_parse_block(ss) == "{ a\n {b\n}c }" && !ss.fail(), true);
   }
