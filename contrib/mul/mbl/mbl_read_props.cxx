@@ -241,8 +241,14 @@ mbl_read_props_type mbl_read_props_ws(vcl_istream &afs)
 
   vcl_string last_label( label );
 
+  // This is to catch a problem in VC6 in which the code fails to detect
+  // end of stream, and goes into an infinite loop
+  int label_empty_count=0;
   do
   {
+    if (label.size()>0) label_empty_count=0;
+    else                label_empty_count++;
+
     if ( label.substr(0,2) =="//" )
     {
       // Comment line, so read to end
@@ -321,7 +327,7 @@ mbl_read_props_type mbl_read_props_ws(vcl_istream &afs)
     afs >> vcl_ws >> label;
   }
 
-  while ( !afs.eof() );
+  while ( !afs.eof() && label_empty_count<2);
 
   if ( need_closing_brace && label != "}" )
     vcl_cerr << "ERROR: mbl_read_props_ws. Unexpected end of file while "
