@@ -39,7 +39,7 @@ SET (CVS_IDENT_TO_EMAIL "\\
   {jhoulihan DO_NOT_EMAIL} \\
   {.* {\\0@users.sourceforge.net}} \\
 ")
-SET (DARTBOARD_BASE_URL "http://www.cs.rpi.edu/research/vision/vxl/Testing")
+SET (DARTBOARD_BASE_URL "http://www.cs.rpi.edu/research/groups/vxl/Testing")
 SET (EMAIL_PROJECT_NAME "VXL")
 SET (BUILD_MONITORS "\\
   {cs\\.rpi\\.edu .* amithaperera@users.sourceforge.net} \\
