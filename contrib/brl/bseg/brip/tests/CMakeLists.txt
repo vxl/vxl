@@ -8,6 +8,7 @@ ADD_EXECUTABLE( brip_test_all
   test_fourier.cxx
   test_homography.cxx
   test_lucas_kanade.cxx
+  test_Horn_Schunck.cxx
 )
 
 TARGET_LINK_LIBRARIES( brip_test_all brip testlib vgl vil)
@@ -18,6 +19,7 @@ ADD_TEST( brip_test_watershed         brip_test_all test_watershed )
 ADD_TEST( brip_test_fourier           brip_test_all test_fourier )
 ADD_TEST( brip_test_homography        brip_test_all test_homography )
 ADD_TEST( brip_test_lucas_kanade      brip_test_all test_lucas_kanade )
+ADD_TEST( brip_test_Horn_Schunck      brip_test_all test_Horn_Schunck )
 
 ADD_EXECUTABLE( brip_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( brip_test_include brip )
