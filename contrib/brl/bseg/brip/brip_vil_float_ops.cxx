@@ -194,10 +194,13 @@ vil_image_view<float>
 brip_vil_float_ops::gaussian(vil_image_view<float> const& input, float sigma)
 {
   vil_image_view<float> dest(input.ni(), input.nj());
+  dest.fill(0.0);
   unsigned r;
   double* ker;
   brip_1d_gaussian_kernel(sigma, 0.02, r, ker);
   vil_image_view<float> work(input.ni(), input.nj());
+    work.fill(0.0);
+
   // filter horizontal
   int ksize = 2*r + 1 ;
   float accum=0;
@@ -215,7 +218,7 @@ brip_vil_float_ops::gaussian(vil_image_view<float> const& input, float sigma)
                   vil_convolve_ignore_edge);
 
   delete ker;
-  return dest;
+  return vil_transpose(dest_t);
 }
 
 #ifdef VIL_CONVOLVE_WITH_MASK_EXISTS // TODO
@@ -734,12 +737,14 @@ brip_vil_float_ops::Lucas_KanadeMotion(vil_image_view<float> & current_frame,
 //     -1  -  current_frame and previous_frame are equal 
 //     -2  -  at least one input frame or internal process image is all zeros
 //      0  -  routine was successful
+
 int
 brip_vil_float_ops::Horn_SchunckMotion(vil_image_view<float> & current_frame,
                                        vil_image_view<float> & previous_frame,
                                        vil_image_view<float>& vx,
                                        vil_image_view<float>& vy,
-                                       float alpha_coef, double err_thresh)
+                                       float alpha_coef, 
+                                       int no_of_iterations)
 {
   //Check for equal images
   if (vil_image_view_deep_equality (previous_frame, current_frame ) )
@@ -751,35 +756,33 @@ brip_vil_float_ops::Horn_SchunckMotion(vil_image_view<float> & current_frame,
   //Declarations
   unsigned w = current_frame.ni(), h = current_frame.nj();
   double area = w*h;
+  
   vil_image_view<float> grad_x, grad_y, diff;
-  vil_image_view<float> grad_xpf, grad_ypf;
-  vil_image_view<float> grad_xcf, grad_ycf;
+  
+  
+  
 
-  vil_image_view<float> vxx, vxy, vyy;
-  vil_image_view<float> average_of_vx;
-  vil_image_view<float> average_of_vy;
+
+  vil_image_view<float> temp1;
+  vil_image_view<float> temp2;
+
+
   vil_image_view<float> emptyimg;
-  vil_image_view<float>  average_of_prev;
-  vil_image_view<float>  average_of_cur;
 
   //Size Init
 
-  grad_xpf.set_size(w,h);
-  grad_ypf.set_size(w,h);
-  grad_xcf.set_size(w,h);
-  grad_ycf.set_size(w,h);
+  
   grad_x.set_size(w,h);
   grad_y.set_size(w,h);
   diff.set_size(w,h);
-
-  vxx.set_size(w,h);
-  vxy.set_size(w,h);
-  vyy.set_size(w,h);
-  average_of_vx.set_size(w,h);
-  average_of_vy.set_size(w,h);
-  average_of_prev.set_size(w,h);
-  average_of_cur.set_size(w,h);
+  temp1.set_size(w,h);
+  temp2.set_size(w,h);
+ 
+ 
   emptyimg.set_size(w,h);
+
+  temp1.fill(0.0);
+  temp2.fill(0.0);
 
   //Initialization
   for (unsigned y = 0; y<h; y++)
@@ -788,47 +791,40 @@ brip_vil_float_ops::Horn_SchunckMotion(vil_image_view<float> & current_frame,
       vx(x,y)=0.0f;
       vy(x,y)=0.0f;
       diff (x,y)=0.0f;
-      grad_xpf (x,y)=0.0f;
-      grad_xcf (x,y)=0.0f;
-      grad_ypf (x,y)=0.0f;
-      grad_ycf (x,y)=0.0f;
       grad_x (x, y)= 0.0f;
       grad_y (x, y)= 0.0f;
-      vxx (x, y)=0.0f;
-      vxy (x, y)=0.0f;
-      vyy (x, y)=0.0f;
-      average_of_vx (x, y) = 0.0f;
-      average_of_vy (x, y) = 0.0f;
-      average_of_prev (x , y) = 0.0f;
-      average_of_cur (x , y) = 0.0f;
+   
+     
       emptyimg (x, y) = 0.0f;
     }
 
-  //compute the gradient vector for current and previous
-  brip_vil_float_ops::gradient_3x3 (current_frame , grad_x , grad_y);
-  brip_vil_float_ops::gradient_3x3 (previous_frame , grad_xpf , grad_ypf);
-
   //Check for empty images
-  if ( (vil_image_view_deep_equality (emptyimg, current_frame )) || (vil_image_view_deep_equality(emptyimg, previous_frame)) ||
-     (vil_image_view_deep_equality (emptyimg, grad_x )) || (vil_image_view_deep_equality(emptyimg, grad_y)) )
+  if ( (vil_image_view_deep_equality (emptyimg, current_frame )) || (vil_image_view_deep_equality(emptyimg, previous_frame)))
   {
     vcl_cout<<"Image is empty";
     return -2;
   }
+  
+  //compute the gradient vector for current and previous
+  brip_vil_float_ops::gradient_3x3 (current_frame , grad_x , grad_y);
+  brip_vil_float_ops::gradient_3x3 (previous_frame , temp1 , temp2);
 
   //  Grad = 0.5* Grad(current) + 0.5 * Grad(previous)
-  vil_math_add_image_fraction(grad_x, 0.5, grad_xpf, 0.5);
-  vil_math_add_image_fraction(grad_y, 0.5, grad_ypf, 0.5);
+  vil_math_add_image_fraction(grad_x, 0.5, temp1, 0.5);
+  vil_math_add_image_fraction(grad_y, 0.5, temp2, 0.5);
   if ( (vil_image_view_deep_equality (emptyimg, grad_x )) || (vil_image_view_deep_equality(emptyimg, grad_y)) )
   {
     vcl_cout<<"Gradient Image is empty";
     return -2;
   }
 
+  temp1.fill(0.0);
+  temp2.fill(0.0);
+
   //Averge the local intensites over 3x3 region
-  average_of_prev = brip_vil_float_ops::average_NxN (previous_frame, 3);
-  average_of_cur = brip_vil_float_ops::average_NxN (current_frame, 3);
-  if (vil_image_view_deep_equality (emptyimg, average_of_prev ) || vil_image_view_deep_equality(emptyimg, average_of_cur))
+  temp1 = brip_vil_float_ops::average_NxN (previous_frame, 3);
+  temp2 = brip_vil_float_ops::average_NxN (current_frame, 3);
+  if (vil_image_view_deep_equality (emptyimg, temp1 ) || vil_image_view_deep_equality(emptyimg, temp2))
   {
     vcl_cout<<"Averaged Image is empty";
     return -2;
@@ -836,42 +832,32 @@ brip_vil_float_ops::Horn_SchunckMotion(vil_image_view<float> & current_frame,
 
   //Compute the time derivative (difference of local average intensities)
   // diff = dI/dt
-  diff = brip_vil_float_ops::difference(average_of_prev , average_of_cur);
+  diff = brip_vil_float_ops::difference(temp1 , temp2);
   if (vil_image_view_deep_equality (emptyimg, diff ) )
   {
     vcl_cout<<"Difference Image is empty";
     return -2;
   }
+
+  temp1.fill(0.0);
+  temp2.fill(0.0);
   //Iterate
   vul_timer t;
-  //iteration counter
-  int count = 0;
-  double err;
-  double preverr = 0.0f;
-  double differr = err_thresh+1;
-  do {
-    //velocity derivatives
-    for (unsigned y = 0; y<h; y++)
-      for (unsigned x = 0; x<w; x++)
-      {
-        vxx (x, y)=0.0f;
-        vxy (x, y)=0.0f;
-        vyy (x, y)=0.0f;
-      }
+  
+  for(int i=0;i<no_of_iterations;i++)
+  {
     
-    err = 0.00;
-
     //Update vx and vy
 
     //Smoothed velocities on 3x3 region
-    average_of_vx = brip_vil_float_ops::average_NxN (vx,  3);
-    average_of_vy = brip_vil_float_ops::average_NxN (vy,  3);
+    temp1 = brip_vil_float_ops::average_NxN (vx,  3);
+    temp2 = brip_vil_float_ops::average_NxN (vy,  3);
 
     for (unsigned y = 1; y<h-1;y++)
       for (unsigned x = 1; x<w-1;x++)
       {
-        float tempx = average_of_vx(x,y);
-        float tempy = average_of_vy(x,y);
+        float tempx = temp1(x,y);
+        float tempy = temp2(x,y);
 
         float gx = grad_x(x, y), gy = grad_y(x, y);
 
@@ -888,59 +874,15 @@ brip_vil_float_ops::Horn_SchunckMotion(vil_image_view<float> & current_frame,
         vx(x,y) = tempx - (gx *  term);
         vy(x,y) = tempy - (gy *  term);
       }
-    vcl_cout << "Iteration No " << count << '\n';
-
-    //Calc error term
-    // 
-    brip_vil_float_ops::gradient_3x3(vx, vxx, vxy);
-    brip_vil_float_ops::gradient_3x3(vy, vxy, vyy);
-
-    for (unsigned y = 1; y<h-1;y++)
-      for (unsigned x = 1; x<w-1;x++)
-      {
-        float gx = grad_x(x, y), gy = grad_y(x, y);
-        float dt = diff(x, y);
-        float tempx= vx(x, y);
-        float tempy= vy(x, y);
-#if 0
-        float tempx = average_of_vx(x,y);
-        float tempy = average_of_vy(x,y);
-#endif
-        // err = |(v(x,y).Grad(x,y) + dI/dt(x,y))|^2
-        err +=  ((gx * tempx ) + (gy * tempy) + dt )*( (gx * tempx ) + (gy * tempy) + dt ) ;
-        //  vcl_cout << "err1:" << err << '\n';
-
-        // err += alpha*((d(vx)/dx)^2 + (d(vy)/dy)^2 - 2*(d(vx)/dy)*(d(vy)/dx))
-        err += (alpha_coef*(vxx(x , y)*vxx(x , y) + 2* vxy(x , y)*vxy(x , y) + vyy(x , y)*vyy(x , y) ) );
-        if (count != 0)
-          differr=vnl_math_abs(err-preverr)/preverr;
-        else
-          differr = 1.0f;
-#if 0
-
-         //Eliminate small motion factors
-        float dif = diff(x,y);
-        float motion_factor = vcl_fabs(det*dif);
-        if (motion_factor<thresh)
-        {
-          vx(x,y) = 0.0f;
-          vy(x,y) = 0.0f;
-          continue;
-        }
-#endif
-      }
-    vcl_cout << "\nAmount of error " << err/area <<'\n';
-
+    
+    vcl_cout << "Iteration No " << i << '\n';
     brip_vil_float_ops::fill_x_border(vx, 1, 0.0f);
     brip_vil_float_ops::fill_y_border(vx, 1, 0.0f);
     brip_vil_float_ops::fill_x_border(vy, 1, 0.0f);
     brip_vil_float_ops::fill_y_border(vy, 1, 0.0f);
-    vcl_cout << "\nCompute Horn-Schunck iteration in " << t.real() << " msecs.\n";
-    preverr = err;
-    ++count;
   }
-  while (differr > err_thresh);
-  vcl_cout << "Finish Horn-Schunck in "  << count << "iterations\n";
+    vcl_cout << "\nCompute Horn-Schunck iteration in " << t.real() << " msecs.\n";
+
   return 0;
 }
 

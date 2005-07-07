@@ -125,12 +125,14 @@ class brip_vil_float_ops
                                  vil_image_view<float>& vy);
 
   //: computes optical flow using Horn & Schunck's method
-  static int  Horn_SchunckMotion(vil_image_view<float> & current_frame,
-                                  vil_image_view<float> & previous_frame,
-                                  vil_image_view<float> & vx,
-                                  vil_image_view<float> & vy,
-                                  float alpha_coef=10000.0f,
-                                  double err_thresh=0.01f);
+ 
+
+  static int Horn_SchunckMotion(vil_image_view<float> & current_frame,
+                                       vil_image_view<float> & previous_frame,
+                                       vil_image_view<float>& vx,
+                                       vil_image_view<float>& vy,
+                                       float alpha_coef=10000.0f, 
+                                       int no_of_iterations=5);
 
   //: fills a border of width w on left and right of image with value
   static void fill_x_border(vil_image_view<float>& image, unsigned w, float value);
