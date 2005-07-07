@@ -9,7 +9,7 @@
 #include "gevd_bufferxy.h"
 
 #include <vcl_compiler.h>
-#if defined(VCL_VC) || defined(VCL_SUNPRO_CC_5) || defined(VCL_SGI_CC) || defined(VCL_GCC_30) || defined(__INTEL_COMPILER)
+#if defined(VCL_VC) || defined(VCL_SUNPRO_CC_5) || defined(VCL_SGI_CC) || defined(VCL_GCC_30) || defined(VCL_GCC_40) || defined(__INTEL_COMPILER)
 #define iostream_char char
 #else
 #define iostream_char unsigned char
