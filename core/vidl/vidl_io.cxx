@@ -25,7 +25,7 @@ void (* vidl_io::load_mpegcodec_callback)(vidl_codec*) = 0;
 static bool looks_like_a_file_list(const char* fname);
 static vidl_clip_sptr load_from_file_list(vcl_string const& fname);
 
-static vidl_clip_sptr load_from_directory(vcl_string const& fname)
+static vidl_clip_sptr load_from_directory(vcl_string const& fname, int start, int end, int increment)
 {
   vcl_list<vcl_string> filenames;
 
@@ -39,7 +39,7 @@ static vidl_clip_sptr load_from_directory(vcl_string const& fname)
   }
 
   // Call load_images and return the result
-  return vidl_io::load_images(filenames, 'r');
+  return vidl_io::load_images(filenames, start, end, increment, 'r');
 }
 
 
@@ -123,8 +123,8 @@ vidl_clip_sptr  vidl_io::load_clip(
 
   // test if fname is a directory
   if (vul_file::is_directory(fname))
-    return load_from_directory(fname);
-    //    return load_from_directory(fname);
+    //return load_from_directory(fname);
+    return load_from_directory(fname, start, end, increment);
   else if (looks_like_a_file_list(fname.c_str()))
     return load_from_file_list(fname);
 
