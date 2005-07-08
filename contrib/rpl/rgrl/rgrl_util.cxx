@@ -253,10 +253,10 @@ rgrl_util_estimate_global_region( rgrl_mask_sptr const&        from_image_roi,
   
     const double step = 30;
     for (double i = to_x0[ind[0]]; i<= to_x1[ind[0]]; i+=step) {
-      for (double j = to_x0[ind[1]]; j<= to_x1[ind[1]]; j+=step) {
+      for (double j = to_x0[ind[1]]; j<= to_x1[ind[1]]&&j>= to_x0[ind[1]]; j+=(to_x1[ind[1]]-to_x0[ind[1]])) {
       
         if (m == 3) {
-          for (double k = to_x0[ind[2]]; k<= to_x1[ind[2]]; k+=step) {
+          for (double k = to_x0[ind[2]]; k<= to_x1[ind[2]]&&k>= to_x0[ind[2]]; k+=(to_x1[ind[2]]-to_x0[ind[2]])) {
             pt[ind[0]] = i;
             pt[ind[1]] = j;
             pt[ind[2]] = k;
