@@ -72,7 +72,7 @@ class vil3d_gipl_image: public vil3d_image_resource
 
   float interslice_gap_;
 
-  int start_of_data_;
+  vil_streampos start_of_data_;
 
  public:
   vil3d_gipl_image(vil_stream* os, unsigned);
