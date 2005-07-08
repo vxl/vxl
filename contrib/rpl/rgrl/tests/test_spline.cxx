@@ -191,7 +191,7 @@ test_3d_spline()
   // test boundary and other points
   for (double u=0; u<=2.0; u+=0.5 ) {
     for (double v=0; v<=2.0; v+= 0.5 ) {
-      for (double w=0; w<=2.0; w+= 0.5 ) {
+      for (double w=0; w<=1.0; w+= 0.25 ) {
         vnl_vector<double> pt(3); pt[0] = u; pt[1] = v; pt[2] = w;
         vcl_cout << pt << vcl_endl;
         double return_spline_value = spline_3d.f_x( pt );
