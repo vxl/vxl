@@ -10,6 +10,7 @@
 #include "rgrl_invariant_sptr.h"
 #include "rgrl_feature_sptr.h"
 #include "rgrl_feature_set_sptr.h"
+#include "rgrl_mask_sptr.h"
 #include <vcl_cassert.h>
 
 //: Cast down the hierarchy.
@@ -73,6 +74,13 @@ class rgrl_cast
   ToType operator->() const
   {
     return reinterpret_cast<ToType>(ptr);
+  }
+
+  //: Downcast a mask object
+  rgrl_cast( rgrl_mask_sptr mask )
+  {
+    ptr = dynamic_cast<ToType>( mask.as_pointer() );
+    assert ( ptr );
   }
 
  private:
