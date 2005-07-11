@@ -1,8 +1,10 @@
 #ifndef bsta_histogram_txx_
 #define bsta_histogram_txx_
-
+//:
+// \file
 #include <vcl_cmath.h> // for log()
 #include <vcl_iostream.h>
+#include <vcl_cassert.h>
 #include <bsta/bsta_gauss.h>
 #include <bsta/bsta_histogram.h>
 #include <vnl/vnl_numeric_traits.h>
@@ -29,16 +31,16 @@ bsta_histogram<T>::bsta_histogram(const T min, const T max,
     min_prob_(min_prob), min_ (min), max_(max) 
 {
   if (nbins>0)
-    {
+  {
     range_ = max-min;
     delta_ = range_/nbins;
     counts_.resize(nbins, T(0));
-    }
+  }
   else
-    {
-      range_ = 0;
-      delta_ = 0;
-    }
+  {
+    range_ = 0;
+    delta_ = 0;
+  }
 }
 
 template <class T>
@@ -62,10 +64,10 @@ void bsta_histogram<T>::upcount(T x, T mag)
     return;
   for (unsigned int i = 0; i<nbins_; i++)
     if ((i+1)*delta_>=(x-min_))
-      { 
-        counts_[i] += mag; 
-        break; 
-      }
+    { 
+      counts_[i] += mag; 
+      break; 
+    }
   area_valid_ = false;
 }
 
@@ -129,12 +131,12 @@ T bsta_histogram<T>::mean(const unsigned int lowbin, const unsigned int highbin)
   assert(highbin<nbins_);
   T sum = 0;
   T sumx = 0;
-  for(unsigned i = lowbin; i<=highbin; ++i)
-    {
-      sum += counts_[i];
-      sumx += (i*delta_ + min_)*counts_[i];
-    }
-  if(sum==0)
+  for (unsigned i = lowbin; i<=highbin; ++i)
+  {
+    sum += counts_[i];
+    sumx += (i*delta_ + min_)*counts_[i];
+  }
+  if (sum==0)
     return 0;
   T result = sumx/sum;
   return result;
@@ -144,7 +146,7 @@ T bsta_histogram<T>::mean(const unsigned int lowbin, const unsigned int highbin)
 template <class T>
 T bsta_histogram<T>::variance() const
 {
-return variance(0, nbins_-1);
+  return variance(0, nbins_-1);
 }
 
   //: Variance of distribution between bin indices
@@ -158,12 +160,12 @@ variance(const unsigned int lowbin, const unsigned int highbin) const
   mean -= min_;
   T sum = 0;
   T sumx2 = 0;
-  for(unsigned i = lowbin; i<=highbin; ++i)
-    {
-      sum += counts_[i];
-      sumx2 += (i*delta_-mean)*(i*delta_-mean)*counts_[i];
-    }
-  if(sum==0)
+  for (unsigned i = lowbin; i<=highbin; ++i)
+  {
+    sum += counts_[i];
+    sumx2 += (i*delta_-mean)*(i*delta_-mean)*counts_[i];
+  }
+  if (sum==0)
     return 0;
   T result = sumx2/sum;
   return result;
