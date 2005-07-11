@@ -315,6 +315,46 @@ class vil_math_scale_functor
   vcl_complex<double> operator()(vcl_complex<double> x) const { return s_*x; }
 };
 
+
+//: Functor class to scale by s and translate (offset) by t.
+// \note Watch out for overflow, especially for smaller types.
+// \sa vil_math_scale_and_offset_values()
+class vil_math_scale_and_translate_functor
+{
+public:
+  //: Constructor
+  // \param s Scaling.
+  // \param t Translation (offset).
+  vil_math_scale_and_translate_functor(const double s, const double t) 
+    : s_(s), t_(t) {}
+  
+  vxl_byte operator()(vxl_byte x) const { return vxl_byte(0.5+s_*x+t_); }
+  unsigned operator()(unsigned x) const { return unsigned(0.5+s_*x+t_); }
+  short operator()(short x)       const { double r=s_*x+t_; return short(r<0?r-0.5:r+0.5); }
+  int operator()(int x)           const { double r=s_*x+t_; return int(r<0?r-0.5:r+0.5); }
+  float operator()(float x)       const { return float(s_*x+t_); }
+  double operator()(double x)     const { return s_*x+t_; }
+  vcl_complex<double> operator()(vcl_complex<double> x) const { return s_*x+t_; } // Not sure if this one makes sense
+  
+private:
+  double s_;
+  double t_;
+};
+
+
+//: Functor class to compute logarithms (returns zero if x<=0)
+class vil_math_log_functor
+{
+public:
+  vxl_byte operator()(vxl_byte x) const { return vxl_byte(0.5+vcl_log(float(x))); }
+  unsigned operator()(unsigned x) const { return unsigned(0.5+vcl_log(float(x))); }
+  int operator()(int x)           const { return x>0?int(0.5+vcl_log(float(x))):0; }
+  short operator()(short x)       const { return x>0?short(0.5+vcl_log(float(x))):0; }
+  float operator()(float x)       const { return x>0?vcl_log(x):0.0f; }
+  double operator()(double x)     const { return x>0?vcl_log(x):0.0; }
+};
+
+
 //: Multiply values in-place in image view by scale
 // \relates vil_image_view
 template<class T>
