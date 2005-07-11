@@ -51,7 +51,7 @@ SET( tiff_sources
 
 IF(UNIX)
   SET( tiff_sources ${tiff_sources}
-    tif_unix.c
+    tif_unix.c tif_fax3sm.c
   )
 ELSE(UNIX)
   ADD_DEFINITIONS( -DTIF_PLATFORM_CONSOLE)
