@@ -347,7 +347,7 @@ WriteTable(FILE* fd, const TIFFFaxTabEnt* T, int Size, const char* name)
     if (packoutput) {
 	sep = "\n";
 	for (i = 0; i < Size; i++) {
-	    fprintf(fd, "%s%s%d,%d,%d%s",
+	    fprintf(fd, "%s%s{%d,%d,%d}%s",
 		sep, prebrace, T->State, T->Width, (int) T->Param, postbrace);
 	    if (((i+1) % 12) == 0)
 		    sep = ",\n";
@@ -358,7 +358,7 @@ WriteTable(FILE* fd, const TIFFFaxTabEnt* T, int Size, const char* name)
     } else {
 	sep = "\n ";
 	for (i = 0; i < Size; i++) {
-	    fprintf(fd, "%s%s%3d,%3d,%4d%s",
+	    fprintf(fd, "%s%s{%3d,%3d,%4d}%s",
 		sep, prebrace, T->State, T->Width, (int) T->Param, postbrace);
 	    if (((i+1) % 6) == 0)
 		    sep = ",\n ";
