@@ -403,6 +403,23 @@ brip_vil_float_ops::difference(vil_image_view<float> const& image_1,
       out(x,y) = image_2(x,y)-image_1(x,y);
   return out;
 }
+vil_image_view<float>
+brip_vil_float_ops::threshold(vil_image_view<float> const & image,
+                              const float thresh, const float level)
+{
+  vil_image_view<float> out;
+  unsigned w = image.ni(), h = image.nj();
+  out.set_size(w, h);
+  for (unsigned y = 0; y<h; y++)
+    for (unsigned x = 0; x<w; x++)
+    {
+      if (image(x,y)>thresh)
+        out(x,y) = level;
+      else
+        out(x,y) = 0;
+    }
+  return out;
+}
 
 vil_image_view<float>
 brip_vil_float_ops::abs_clip_to_level(vil_image_view<float> const& image,
@@ -738,13 +755,13 @@ brip_vil_float_ops::Lucas_KanadeMotion(vil_image_view<float> & current_frame,
 //     -2  -  at least one input frame or internal process image is all zeros
 //      0  -  routine was successful
 
-int
-brip_vil_float_ops::Horn_SchunckMotion(vil_image_view<float> & current_frame,
-                                       vil_image_view<float> & previous_frame,
-                                       vil_image_view<float>& vx,
-                                       vil_image_view<float>& vy,
-                                       float alpha_coef, 
-                                       int no_of_iterations)
+int brip_vil_float_ops::
+Horn_SchunckMotion(vil_image_view<float> const& current_frame,
+                   vil_image_view<float> const& previous_frame,
+                   vil_image_view<float>& vx,
+                   vil_image_view<float>& vy,
+                   const float alpha_coef, 
+                   const int no_of_iterations)
 {
   //Check for equal images
   if (vil_image_view_deep_equality (previous_frame, current_frame ) )
@@ -985,7 +1002,6 @@ convert_to_byte(vil_image_view<unsigned short> const& image,
                 unsigned short min_val, unsigned short max_val)
 {
   unsigned ni = image.ni(), nj = image.nj();
-  unsigned max_short = 65355;
   vil_image_view<unsigned char> output;
   output.set_size(ni, nj);
   float range = static_cast<float>(max_val-min_val);
