@@ -5,6 +5,8 @@ aren't documented here, unless the bug-fix has a major observable
 effect. If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
+VXL 1.2.0 - July 2005
+
       - Added an implementation of the Mukres or Hungarian algorithm for
         finding a minimum cost assignment.
 
