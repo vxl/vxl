@@ -772,7 +772,6 @@ Horn_SchunckMotion(vil_image_view<float> const& current_frame,
 
   //Declarations
   unsigned w = current_frame.ni(), h = current_frame.nj();
-  double area = w*h;
   
   vil_image_view<float> grad_x, grad_y, diff;
   
@@ -2248,7 +2247,7 @@ static bool collapse_slice(vbl_array_2d<double> const& SI1,
 {
   //sanity check
   unsigned w = SI1.cols(), h = SI1.rows();
-  int dw = SI1.cols();
+  unsigned dw = dSI1.size();
   if (dw!=w)
     return false;
 
