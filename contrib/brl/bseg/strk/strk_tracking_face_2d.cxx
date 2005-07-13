@@ -62,13 +62,15 @@ strk_tracking_face_2d(vtol_face_2d_sptr const& face,
                       const float parzen_sigma,
                       const unsigned int intensity_hist_bins,
                       const unsigned int gradient_dir_hist_bins,
-                      const unsigned int color_hist_bins)
+                      const unsigned int color_hist_bins,
+                      const float max_intensity)
 {
   intensity_hist_bins_ = intensity_hist_bins;
   gradient_dir_hist_bins_=gradient_dir_hist_bins;
   color_hist_bins_=color_hist_bins;
   min_gradient_ = min_gradient;
   parzen_sigma_ = parzen_sigma;
+  max_intensity_ = max_intensity;
   intf_ = 0;
   Ix_ = 0;
   Iy_ = 0;
@@ -105,11 +107,13 @@ strk_tracking_face_2d(vtol_face_2d_sptr const& face,
 strk_tracking_face_2d::strk_tracking_face_2d(vtol_intensity_face_sptr const& intf,
                                              const unsigned int intensity_hist_bins,
                                              const unsigned int gradient_dir_hist_bins,
-                                             const unsigned int color_hist_bins)
+                                             const unsigned int color_hist_bins,
+                                             const float max_intensity)
 {
   intensity_hist_bins_ = intensity_hist_bins;
   gradient_dir_hist_bins_=gradient_dir_hist_bins;
   color_hist_bins_=color_hist_bins;
+  max_intensity_ = max_intensity;
   if (!intf)
     return;
   intf_ = intf;
@@ -194,6 +198,7 @@ strk_tracking_face_2d::strk_tracking_face_2d(strk_tracking_face_2d_sptr const& t
   min_gradient_ = tf->min_gradient_;
   parzen_sigma_ = tf->parzen_sigma_;
   trans_ = tf->trans_;
+  max_intensity_ = tf->max_intensity_;
 }
 
 strk_tracking_face_2d::strk_tracking_face_2d(strk_tracking_face_2d const& tf)
@@ -255,6 +260,7 @@ strk_tracking_face_2d::strk_tracking_face_2d(strk_tracking_face_2d const& tf)
   intensity_hist_bins_=tf.intensity_hist_bins_;
   gradient_dir_hist_bins_=tf.gradient_dir_hist_bins_;
   color_hist_bins_=tf.color_hist_bins_;
+  max_intensity_ = tf.max_intensity_;
 }
 
 strk_tracking_face_2d::~strk_tracking_face_2d()
@@ -326,7 +332,7 @@ init_intensity_info(vtol_face_2d_sptr const& face,
   }
   intf_->InitPixelArrays();
 
-  bsta_histogram<float> model_intensity_hist(255, intensity_hist_bins_);
+  bsta_histogram<float> model_intensity_hist(max_intensity_, intensity_hist_bins_);
   intensity_hist_bins_ = model_intensity_hist.nbins();
 
   //Got through the pixels again to actually set the face arrays X(), Y() etc
@@ -576,8 +582,8 @@ compute_intensity_mutual_information(vil1_memory_image_of<float> const& image)
   if (!intf_)
     return 0;
   int width = image.width(), height = image.height();
-  bsta_histogram<float> image_hist(255, intensity_hist_bins_);
-  bsta_joint_histogram<float> joint_hist(255, intensity_hist_bins_);
+  bsta_histogram<float> image_hist(max_intensity_, intensity_hist_bins_);
+  bsta_joint_histogram<float> joint_hist(max_intensity_, intensity_hist_bins_);
   unsigned int npix = intf_->Npix();
   if (npix == 0)
     return 0;
@@ -631,8 +637,8 @@ compute_intensity_mutual_information(vcl_vector <vcl_vector< vgl_point_2d<int> >
   if (!intf_)
     return 0;
   int width = image.width(), height = image.height();
-  bsta_histogram<float> image_hist(255, intensity_hist_bins_);
-  bsta_joint_histogram<float> joint_hist(255, intensity_hist_bins_);
+  bsta_histogram<float> image_hist(max_intensity_, intensity_hist_bins_);
+  bsta_joint_histogram<float> joint_hist(max_intensity_, intensity_hist_bins_);
   unsigned int npix = intf_->Npix();
   if (npix == 0)
     return 0;
@@ -1059,7 +1065,7 @@ compute_intensity_joint_entropy(strk_tracking_face_2d_sptr const& other,
   if (!intf_||!other||!image)
     return 0;
   int width = image.width(), height = image.height();
-  bsta_joint_histogram<float> joint_hist(255, intensity_hist_bins_);
+  bsta_joint_histogram<float> joint_hist(max_intensity_, intensity_hist_bins_);
   unsigned int npix = intf_->Npix();
   unsigned int mpix = other->face()->Npix();
   if (npix == 0)
@@ -1099,7 +1105,7 @@ compute_model_intensity_joint_entropy(strk_tracking_face_2d_sptr const& other)
   if (!intf_||!other)
     return 0;
 
-  bsta_joint_histogram<float> joint_hist(255, intensity_hist_bins_);
+  bsta_joint_histogram<float> joint_hist(max_intensity_, intensity_hist_bins_);
   int npix = intf_->Npix();
   if (npix == 0)
     return 0;
@@ -1379,8 +1385,8 @@ print_intensity_histograms(vil1_memory_image_of<float> const& image)
   if (!intf_||!image)
     return;
   int width = image.width(), height = image.height();
-  bsta_histogram<float> model_image_hist(255, intensity_hist_bins_);
-  bsta_histogram<float> obs_image_hist(255, intensity_hist_bins_);
+  bsta_histogram<float> model_image_hist(max_intensity_, intensity_hist_bins_);
+  bsta_histogram<float> obs_image_hist(max_intensity_, intensity_hist_bins_);
   if (intf_->Npix() == 0)
     return;
   for (intf_->reset(); intf_->next();)
@@ -1472,7 +1478,7 @@ print_color_histograms(vil1_memory_image_of<float> const& hue,
 bsta_histogram<float> strk_tracking_face_2d::
 intensity_histogram(vil1_memory_image_of<float> const& image)
 {
-  bsta_histogram<float> image_hist(255, intensity_hist_bins_);
+  bsta_histogram<float> image_hist(max_intensity_, intensity_hist_bins_);
   if (!intf_||!image)
     return image_hist;
   int width = image.width(), height = image.height();

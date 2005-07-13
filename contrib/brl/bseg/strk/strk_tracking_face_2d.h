@@ -21,6 +21,8 @@
 //   10-sep-2004 Peter Vanroose Added copy ctor with explicit vbl_ref_count init
 //   15-june-2005 Ozge Can Ozcanli Added methods to calculate mutual information 
 //                                 with known pixel correspondences of two faces 
+//   13-july-2005 Ozge Can Ozcanli Added max_intensity_ variable to support images 
+//                                 with larger range than 8 bits
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -50,13 +52,15 @@ class strk_tracking_face_2d : public vbl_ref_count
                         const float parzen_sigma,
                         const unsigned int intensity_hist_bins,
                         const unsigned int gradient_dir_hist_bins,
-                        const unsigned int color_hist_bins
+                        const unsigned int color_hist_bins,
+                        const float max_intensity = 255.0f
                         );
 
   strk_tracking_face_2d(vtol_intensity_face_sptr const& intf,
                         const unsigned int intensity_hist_bins,
                         const unsigned int gradient_dir_hist_bins,
-                        const unsigned int color_hist_bins
+                        const unsigned int color_hist_bins,
+                        const float max_intensity = 255.0f
                         );
   strk_tracking_face_2d(strk_tracking_face_2d_sptr const& tf);
   strk_tracking_face_2d(strk_tracking_face_2d const& tf);
@@ -84,6 +88,7 @@ class strk_tracking_face_2d : public vbl_ref_count
   void set_int_mutual_info(float mi);
   void set_grad_mutual_info(float mi);
   void set_color_mutual_info(float mi);
+  void set_max_intensity(const float max_intensity){max_intensity_=max_intensity;}
   //:controls
   void set_renyi_joint_entropy(){renyi_joint_entropy_=true;}
   void unset_renyi_joint_entropy(){renyi_joint_entropy_=false;}
@@ -292,6 +297,7 @@ float
   float intensity_info_diff_;
   float color_info_diff_;
   vnl_matrix_fixed<double, 3, 3> trans_;
+  float max_intensity_;
 };
 
 #endif // strk_tracking_face_2d_h_
