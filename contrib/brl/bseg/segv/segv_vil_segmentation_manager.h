@@ -39,7 +39,9 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   static segv_vil_segmentation_manager *instance();
   void quit();
   void load_image();
+  void save_image();
   void set_range_params();
+  void threshold_image();
   void harris_corners();
   void vd_edges();
   void fit_lines();

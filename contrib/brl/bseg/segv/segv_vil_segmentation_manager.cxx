@@ -11,6 +11,8 @@
 #include <vbl/vbl_array_2d.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
+#include <vil/vil_save.h>
+#include <vil/vil_new.h>
 #include <vil/vil_decimate.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
@@ -61,6 +63,7 @@
 #include <vtol/vtol_intensity_face.h>
 #include <bsol/bsol_algs.h>
 #include <brip/brip_vil1_float_ops.h>
+#include <brip/brip_vil_float_ops.h>
 #include <brip/brip_para_cvrg_params.h>
 #include <brip/brip_para_cvrg.h>
 #include <brip/brip_watershed_params.h>
@@ -448,14 +451,7 @@ void segv_vil_segmentation_manager::load_image()
   if (!load_image_dlg.ask())
     return;
 
-  vil_image_resource_sptr image =
-    vil_load_image_resource(image_filename.c_str());
-  if (!image)
-  {
-    vcl_cout << "Null image resource - couldn't load from "
-             << image_filename << '\n';
-    return;
-  }
+  vil_image_resource_sptr image = vil_load_image_resource(image_filename.c_str());
 
 
 #if 0
@@ -471,6 +467,26 @@ void segv_vil_segmentation_manager::load_image()
   }
   else
     this->add_image(image);
+}
+void segv_vil_segmentation_manager::save_image()
+{
+  vgui_dialog file_dialog("Save Image");
+  static vcl_string image_file;
+  static vcl_string ext = "tif";
+  file_dialog.file("Image Filename:", ext, image_file);
+  if (!file_dialog.ask())
+    return;
+  vil_image_resource_sptr img = this->selected_image();
+  if(!img)
+    {
+      vcl_cout << "Null image in save_image\n";
+      return;
+    }
+  if(!vil_save_image_resource(img, image_file.c_str(), "tiff"))
+    {
+      vcl_cout << "Image save operation failed\n";
+      return;
+    }
 }
 
 void segv_vil_segmentation_manager::set_range_params()
@@ -506,6 +522,27 @@ void segv_vil_segmentation_manager::set_range_params()
                                 gl_map, cache);
 
   itab->set_mapping(rmps);
+}
+
+void segv_vil_segmentation_manager::threshold_image()
+{
+  
+  vil_image_resource_sptr img = selected_image();
+  if (!img)
+  {
+    vcl_cout << "In segv_segmentation_manager::threshold_image - no image\n";
+    return;
+  }
+  static float thresh = 128.0f;
+  vgui_dialog thresh_dlg("Set Range Map Params");
+  thresh_dlg.field("Threshold", thresh);
+  if (!thresh_dlg.ask())
+    return;
+  vil_image_view<float> fimage = brip_vil_float_ops::convert_to_float(*img);
+  vil_image_view<float> timage = 
+    brip_vil_float_ops::threshold(fimage, thresh, 255);
+  vil_image_view<unsigned char> cimage = brip_vil_float_ops::convert_to_byte(timage, 0, 255);
+  this->add_image(vil_new_image_resource_of_view(cimage));  
 }
 
 void segv_vil_segmentation_manager::harris_corners()

@@ -17,6 +17,11 @@ void segv_vil_menus::load_image_callback()
   segv_vil_segmentation_manager::instance()->load_image();
 }
 
+void segv_vil_menus::save_image_callback()
+{
+  segv_vil_segmentation_manager::instance()->save_image();
+}
+
 void segv_vil_menus::set_range_params_callback()
 {
   segv_vil_segmentation_manager::instance()->set_range_params();
@@ -25,6 +30,11 @@ void segv_vil_menus::set_range_params_callback()
 void segv_vil_menus::clear_display_callback()
 {
   segv_vil_segmentation_manager::instance()->clear_display();
+}
+
+void segv_vil_menus::threshold_image_callback()
+{
+  segv_vil_segmentation_manager::instance()->threshold_image();
 }
 
 void segv_vil_menus::harris_corners_callback()
@@ -72,6 +82,7 @@ vgui_menu segv_vil_menus::get_menu()
   //file menu entries
   menufile.add( "Quit", quit_callback,(vgui_key)'q', vgui_CTRL);
   menufile.add( "Load Image", load_image_callback,(vgui_key)'l', vgui_CTRL);
+  menufile.add( "Save Image", save_image_callback);
 
   //view menu entries
   menuview.add("Clear Display", clear_display_callback);
@@ -80,6 +91,8 @@ vgui_menu segv_vil_menus::get_menu()
   menuview.add("Test Draw Conic", test_ellipse_draw_callback);
 
   //edit menu entries
+
+  menuedit.add("Threshold", threshold_image_callback);
   menuedit.add("Harris", harris_corners_callback);
   menuedit.add("VD Edges", vd_edges_callback);
   menuedit.add("Line Segments", fit_lines_callback);

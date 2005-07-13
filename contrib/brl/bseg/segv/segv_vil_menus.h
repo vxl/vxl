@@ -24,8 +24,10 @@ class segv_vil_menus
  public:
   SEGV_VIL_DLL_DATA static void quit_callback();
   SEGV_VIL_DLL_DATA static void load_image_callback();
+  SEGV_VIL_DLL_DATA static void save_image_callback();
   SEGV_VIL_DLL_DATA static void set_range_params_callback();
   SEGV_VIL_DLL_DATA static void clear_display_callback();
+  SEGV_VIL_DLL_DATA static void threshold_image_callback();
   SEGV_VIL_DLL_DATA static void harris_corners_callback();
   SEGV_VIL_DLL_DATA static void vd_edges_callback();
   SEGV_VIL_DLL_DATA static void fit_lines_callback();
