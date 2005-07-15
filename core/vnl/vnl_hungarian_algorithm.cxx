@@ -268,7 +268,7 @@ vcl_vector<unsigned> vnl_hungarian_algorithm( vnl_matrix<double> const& cost_in 
   // associated with column j.
   step_done:
   {
-    vcl_vector<unsigned> assign( cost_in.rows(), -1u );
+    vcl_vector<unsigned> assign( cost_in.rows(), (int)-1u );
 
     // Find the stars and generate the resulting assignment. Only
     // check the sub-matrix of cost that corresponds to the input cost
