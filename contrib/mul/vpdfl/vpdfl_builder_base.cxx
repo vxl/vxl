@@ -13,18 +13,11 @@
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 
-//=======================================================================
-
-vpdfl_builder_base::vpdfl_builder_base()
-{
-}
-
-//=======================================================================
-
-vpdfl_builder_base::~vpdfl_builder_base()
-{
-}
-
+#include <mbl/mbl_exception.h>
+#include <mbl/mbl_read_props.h>
+#include <vpdfl/vpdfl_axis_gaussian_builder.h>
+#include <vpdfl/vpdfl_gaussian_kernel_pdf_builder.h>
+#include <vpdfl/vpdfl_gaussian_builder.h>
 //=======================================================================
 
 short vpdfl_builder_base::version_no() const
@@ -51,6 +44,43 @@ vcl_string vpdfl_builder_base::is_a() const
 bool vpdfl_builder_base::is_class(vcl_string const& s) const
 {
   return s==vpdfl_builder_base::is_a();
+}
+
+//: Create a vpdfl_builder_base object given a config steram
+// \throw vcl_runtime_exception if parse error.
+vcl_auto_ptr<vpdfl_builder_base> vpdfl_builder_base::new_builder_from_stream(vcl_istream &is)
+{
+  // This function should really be replaced by a general loader scheme
+  // Ask Ian for examples from Manchester's private code base.
+
+  //: This will store the constructed limiter.
+  vcl_auto_ptr<vpdfl_builder_base> builder;
+
+  vcl_string type;
+  is >> type;
+
+  if (type == "vpdfl_axis_gaussian_builder")
+  {
+    builder = vcl_auto_ptr<vpdfl_builder_base>(new vpdfl_axis_gaussian_builder());
+  }
+  else if (type == "vpdfl_gaussian_kernel_pdf_builder")
+  {
+    builder = vcl_auto_ptr<vpdfl_builder_base>(new vpdfl_gaussian_kernel_pdf_builder());
+  }
+  else if (type == "vpdfl_gaussian_builder")
+  {
+    builder = vcl_auto_ptr<vpdfl_builder_base>(new vpdfl_gaussian_builder());
+  }
+  else
+    mbl_exception_error(mbl_exception_no_name_in_factory(type,
+      "vpdfl_axis_gaussian_builder, vpdfl_gaussian_kernel_pdf_builder, vpdfl_gaussian_builder"));
+
+  //: Incoming properties
+  mbl_read_props_type props(mbl_read_props(is));
+  // which should be empty (until we add some relevent parameters)
+  mbl_exception_look_for_unused_props("vpdfl_builder_base::new_builder_from_stream", props, mbl_read_props_type());
+  return builder;
+
 }
 
 //=======================================================================

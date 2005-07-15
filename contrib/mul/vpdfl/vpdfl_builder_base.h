@@ -13,6 +13,7 @@
 
 #include <vcl_vector.h>
 #include <vcl_string.h>
+#include <vcl_memory.h>
 #include <vnl/vnl_vector.h>
 #include <vsl/vsl_binary_io.h>
 #include <mbl/mbl_data_wrapper.h>
@@ -34,10 +35,10 @@ class vpdfl_builder_base
 {
  public:
   //: Dflt ctor
-  vpdfl_builder_base();
+  vpdfl_builder_base() {}
 
   //: Destructor
-  virtual ~vpdfl_builder_base();
+  virtual ~vpdfl_builder_base() {}
 
   //: Create empty model
   virtual vpdfl_pdf_base* new_model() const = 0;
@@ -81,6 +82,10 @@ class vpdfl_builder_base
 
   //: Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs) = 0;
+
+  //: Create a vpdfl_builder_base object given a config steram
+  // \throw mbl_exception if parse error.
+  static vcl_auto_ptr<vpdfl_builder_base> new_builder_from_stream(vcl_istream &is);
 };
 
 //: Allows derived class to be loaded by base-class pointer
