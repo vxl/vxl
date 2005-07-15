@@ -109,7 +109,7 @@ void vil_gauss_filter_gen_ntap(double sd, unsigned diff,
       poly = poly * d_gauss + poly.derivative();
     }
 
-    for (int i=-centre ; i+centre<filter.size(); ++i)
+    for (int i=-(int)centre ; i+centre<filter.size(); ++i)
     {
       tap = poly.evaluate(i+1.0+offset)*vcl_exp(eta*(i+1.0+offset)*(i+1.0+offset))
           - poly.evaluate(i+    offset)*vcl_exp(eta*(i+    offset)*(i+    offset));
