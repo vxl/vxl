@@ -36,7 +36,7 @@ global_region_from_inv_xformed_points(
   vnl_vector<double> from_x0 =  from_image_roi->x0();
   vnl_vector<double> from_x1 =  from_image_roi->x1();
   const unsigned m = from_x0.size();
-  const int debug_flag = 1;
+  const int debug_flag = 0;
   
   vnl_vector<double> inv_mapped_x0 = from_image_roi->x1();
   vnl_vector<double> inv_mapped_x1 = from_image_roi->x0();
