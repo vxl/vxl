@@ -51,6 +51,7 @@ SET(mbl_sources
   mbl_rvm_regression_builder.cxx        mbl_rvm_regression_builder.h
   
   mbl_chord.h
+  mbl_chord_3d.h
   mbl_cloneable_ptr.h
   mbl_cloneables_factory.h
   mbl_combination.h
