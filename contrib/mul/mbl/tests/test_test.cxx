@@ -1,5 +1,6 @@
 // This is mul/mbl/tests/test_gamma.cxx
 #include <vcl_iostream.h>
+#include <vcl_fstream.h>
 #include <vul/vul_file.h>
 #include <vpl/vpl.h>
 #include <mbl/mbl_test.h>
