@@ -34,7 +34,7 @@
 #include <vnl/vnl_float_3x3.h>
 #include <vnl/vnl_float_2.h>
 #include <vsol/vsol_region_2d.h>
-
+#include <vsol/vsol_point_2d.h>
 class vdgl_digital_region : public vsol_region_2d
 {
  public:
@@ -102,9 +102,14 @@ class vdgl_digital_region : public vsol_region_2d
   // Quantities computable from the region scatter matrix
   float Diameter() const;
   float AspectRatio() const;
+
   // distinguish from vtol_face::area()
   virtual double area() const { return npts_*pixel_size_*pixel_size_; }
-
+  
+  //: The centroid of the pointset 
+  virtual vsol_point_2d_sptr centroid() const
+    {return new vsol_point_2d(this->Xo(), this->Yo());}
+  
   //: transform this region using the given 3x3 projective transformation matrix
   bool transform(vnl_float_3x3 const& t);
 
