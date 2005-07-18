@@ -8,6 +8,7 @@ CONFIGURE_FILE(
   ${vxl_SOURCE_DIR}/contrib/mul/mbl/mbl_config.h.in
   ${vxl_BINARY_DIR}/contrib/mul/mbl/mbl_config.h ESCAPE_QUOTES
 )
+INCLUDE_DIRECTORIES( ${vxl_BINARY_DIR}/contrib/mul )
 
 
 SET(mbl_sources
