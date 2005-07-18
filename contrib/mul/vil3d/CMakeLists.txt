@@ -30,12 +30,13 @@ SET(vil3d_sources
     file_formats/vil3d_gipl_format.h file_formats/vil3d_gipl_format.cxx
     file_formats/vil3d_dicom.h       file_formats/vil3d_dicom.cxx
     file_formats/vil3d_slice_list.h  file_formats/vil3d_slice_list.cxx
+    file_formats/vil3d_analyze_format.h  file_formats/vil3d_analyze_format.cxx
 )
 AUX_SOURCE_DIRECTORY(Templates vil3d_sources)
 
 ADD_LIBRARY(vil3d ${vil3d_sources})
 
-TARGET_LINK_LIBRARIES( vil3d vil vul vgl vcl )
+TARGET_LINK_LIBRARIES( vil3d vil vul vgl vsl vcl )
 
 SUBDIRS(algo io)
 
