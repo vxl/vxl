@@ -61,6 +61,16 @@ bool vul_file::is_directory(char const* fn)
   return stat(fn, &fs) == 0 && (fs.st_mode & S_IFMT) == S_IFDIR;
 }
 
+//: Make a writable directory, including any necessary parents.
+// Returns true if successful, or if the directory alredy exists.
+bool vul_file::make_directory_path(char const* filename)
+{
+  if (is_directory(filename)) return true;
+  if (!make_directory_path(dirname(filename))) return false;
+  return make_directory(filename);
+}
+
+
 unsigned long vul_file::size(char const* fn)
 {
   struct stat fs;

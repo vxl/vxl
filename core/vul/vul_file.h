@@ -41,6 +41,13 @@ struct vul_file
     return make_directory(filename.c_str());
   }
 
+  //: Make a writable directory, including any necessary parents.
+  // Returns true if successful, or if the directory alredy exists.
+  static bool make_directory_path(char const* filename);
+  static bool make_directory_path(vcl_string const& filename) {
+    return make_directory_path(filename.c_str());
+  }
+
   //: Return true iff filename is a directory.
   static bool is_directory(char const* filename);
   static bool is_directory(const vcl_string& filename) {
