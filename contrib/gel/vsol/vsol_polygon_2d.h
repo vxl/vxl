@@ -138,6 +138,11 @@ class vsol_polygon_2d : public vsol_region_2d
   virtual double area(void) const; // virtual of vsol_region_2d
 
   //---------------------------------------------------------------------------
+  //: Return the centroid of `this'
+  //---------------------------------------------------------------------------
+  virtual vsol_point_2d_sptr centroid(void) const;
+  
+  //---------------------------------------------------------------------------
   //: Is `this' convex ?
   //---------------------------------------------------------------------------
   virtual bool is_convex(void) const;

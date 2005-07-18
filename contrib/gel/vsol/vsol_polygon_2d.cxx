@@ -176,6 +176,58 @@ double vsol_polygon_2d::area(void) const
 }
 
 //---------------------------------------------------------------------------
+//: Return the centroid of `this'
+//---------------------------------------------------------------------------
+// The centroid is computed by using Green's theorem to compute the 
+// area-weighted 1st moments of the polygon.
+//  Green's theorem relates the surface integral to the line integral around
+//  the boundary as:  
+//     Int(surface) x dxdy = 0.5 * Int(boundary) x*x dy
+//     Int(surface) y dxdy = 0.5 * Int(boundary) y*y dx
+//  The centroid is given by
+//     xc = Int(surface) x dxdy / Int(surface) dxdy  = Int(surface) x dxdy/area
+//     yc = Int(surface) y dxdy / Int(surface) dxdy  = Int(surface) y dxdy/area
+// 
+//  For a polygon: with vertices x[i], y[i]
+//   0.5 * Int(boundary) x*x dy = 
+//   1/6 * Sum(i)( x[i+1] + x[i] ) * ( x[i] * y[i+1] - x[i+1] * y[i] )
+// 
+//   0.5 * Int(boundary) y*y dx = 
+//   1/6 * Sum(i)( y[i+1] + y[i] ) * ( x[i] * y[i+1] - x[i+1] * y[i] )
+// 
+vsol_point_2d_sptr vsol_polygon_2d::centroid(void) const
+{
+  unsigned int nverts = storage_->size();
+  assert(nverts>0);
+  double sx = 0, sy = 0;
+  double area = 0;
+   //fill in edge from last point to first point
+  vsol_point_2d_sptr pi = (*storage_)[nverts-1];
+  vsol_point_2d_sptr pi1 = (*storage_)[0];
+  double xi = pi->x(), yi = pi->y();
+  double xi1 = pi1->x(), yi1 = pi1->y();
+  double temp = xi*yi1 - xi1*yi;
+  area += temp;
+  sx += temp*(xi1 + xi);
+  sy += temp*(yi1 + yi);
+  for (unsigned int i=0; i<nverts-1; ++i)
+    {
+      pi = (*storage_)[i];
+      pi1 = (*storage_)[i+1];
+      xi = pi->x(), yi = pi->y();
+      xi1 = pi1->x(), yi1 = pi1->y();
+      temp = xi*yi1 - xi1*yi;
+      area += temp;
+      sx += temp*(xi1 + xi);
+      sy += temp*(yi1 + yi);
+    }
+  area /= 2.0;
+  assert(vcl_fabs(area)>0.0);
+  double xc = sx/(6.0*area), yc = sy/(6.0*area);
+  return new vsol_point_2d(xc, yc);
+}
+
+//---------------------------------------------------------------------------
 //: Is `this' convex ?
 // A polygon is convex if the direction of "turning" at every vertex is
 // the same.  This is checked by calculating the cross product of two

@@ -88,6 +88,28 @@ void test_vsol_polygon_2d()
   poly=new vsol_polygon_2d(vertices);
 
   TEST("!vsol_polygon_2d::is_convex()", poly->is_convex(), false);
+
+  // Test polygon centroid for a square
+  vcl_vector<vsol_point_2d_sptr> verts(4);  
+  verts[0]=new vsol_point_2d(0,0);
+  verts[1]=new vsol_point_2d(2,0);
+  verts[2]=new vsol_point_2d(2,2);
+  verts[3]=new vsol_point_2d(0,2);
+  poly = new vsol_polygon_2d(verts);
+  vsol_point_2d_sptr c = poly->centroid();
+  vcl_cout << "centroid " << *c << '\n';
+  TEST_NEAR("centroid of a square " , (c->x()-1)*(c->y()-1) ,0.0, 1e-05);
+  // Test non-convex polygon centroid
+  vcl_vector<vsol_point_2d_sptr> vnon(5);  
+  vnon[0]=new vsol_point_2d(0,0);
+  vnon[1]=new vsol_point_2d(2,0);
+  vnon[2]=new vsol_point_2d(2,2);
+  vnon[3]=new vsol_point_2d(1,1);
+  vnon[4]=new vsol_point_2d(0,2);
+  poly = new vsol_polygon_2d(vnon);
+  c = poly->centroid();
+  vcl_cout << "non-convex centroid " << *c << '\n';
+  TEST_NEAR("non-convex centroid " , (c->x()-1)*(c->y()-(2+(1/3))/3) ,0.0, 1e-05);
 }
 
 TESTMAIN(test_vsol_polygon_2d);

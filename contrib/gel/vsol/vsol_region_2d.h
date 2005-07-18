@@ -19,7 +19,7 @@
 //*****************************************************************************
 
 #include <vsol/vsol_spatial_object_2d.h>
-
+#include <vsol/vsol_point_2d_sptr.h>
 class vsol_polygon_2d;
 
 class vsol_region_2d : public vsol_spatial_object_2d
@@ -69,6 +69,11 @@ class vsol_region_2d : public vsol_spatial_object_2d
   //: Return the area of `this'
   //---------------------------------------------------------------------------
   virtual double area(void) const=0;
+
+  //---------------------------------------------------------------------------
+  //: Return the centroid of `this'
+  //---------------------------------------------------------------------------
+  virtual vsol_point_2d_sptr centroid(void) const=0;
 
   //---------------------------------------------------------------------------
   //: Return true if this region is convex
