@@ -1,5 +1,15 @@
 # mul/mbl/CMakeLists.txt
 
+SET( VXL_MBL_TEST_SAVE_MEASUREMENT_ROOT  CACHE PATH "Where to store historical measurements")
+MARK_AS_ADVANCED(VXL_MBL_TEST_SAVE_MEASUREMENT_ROOT)
+
+# Set up mbl_config.h for VXL_MBL_TEST_SAVE_MEASUREMENT_ROOT, etc.
+CONFIGURE_FILE(
+  ${vxl_SOURCE_DIR}/contrib/mul/mbl/mbl_config.h.in
+  ${vxl_BINARY_DIR}/contrib/mul/mbl/mbl_config.h ESCAPE_QUOTES
+)
+
+
 SET(mbl_sources
   mbl_add_all_loaders.cxx               mbl_add_all_loaders.h
   mbl_gamma.cxx                         mbl_gamma.h
@@ -49,6 +59,7 @@ SET(mbl_sources
   mbl_progress_composite.cxx            mbl_progress_composite.h
   mbl_exception.h                       mbl_exception.cxx
   mbl_rvm_regression_builder.cxx        mbl_rvm_regression_builder.h
+  mbl_test.h							mbl_test.cxx
   
   mbl_chord.h
   mbl_chord_3d.h
@@ -62,7 +73,8 @@ SET(mbl_sources
   mbl_stl.h
   mbl_jarque_bera.h
   mbl_stl_pred.h
-  mbl_test.h
+  
+  mbl_config.h.in
 )
 AUX_SOURCE_DIRECTORY(Templates mbl_sources)
 

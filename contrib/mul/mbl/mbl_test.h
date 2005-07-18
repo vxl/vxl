@@ -54,4 +54,12 @@ bool mbl_test_summaries_are_equal(const S &a, const S &b, const char **exception
   return true;
 }
 
+
+//: A historical measurement recording framework.
+// Currently the function will append the measurement to the file specified
+// by ${MBL_TEST_SAVE_MEASUREMENT_PATH}/measurement_path.
+// In the longer term it may save the value via Dart2.
+void mbl_test_save_measurement( const vcl_string &measurement_path, double value);
+
+
 #endif // mbl_test_h_
