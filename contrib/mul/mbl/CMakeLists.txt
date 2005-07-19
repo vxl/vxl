@@ -84,7 +84,7 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(mbl ${mbl_sources})
-TARGET_LINK_LIBRARIES(mbl vnl_io vnl_algo vnl vgl_io vsl)
+TARGET_LINK_LIBRARIES(mbl vul vnl_io vnl_algo vnl vgl_io vsl)
 
 IF (BUILD_TESTING)
   SUBDIRS(tests)
