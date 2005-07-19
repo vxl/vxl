@@ -14,6 +14,7 @@ ADD_EXECUTABLE( vil3d_test_all
   test_convert.cxx
   test_from_image_2d.cxx
   test_resample.cxx
+  test_analyze_format.cxx
 
   test_algo_threshold.cxx
   test_algo_structuring_element.cxx
@@ -41,6 +42,7 @@ ADD_TEST( vil3d_test_image_resource           vil3d_test_all test_image_resource
 ADD_TEST( vil3d_test_convert                  vil3d_test_all test_convert ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
 ADD_TEST( vil3d_test_from_image_2d            vil3d_test_all test_from_image_2d )
 ADD_TEST( vil3d_test_resample                 vil3d_test_all test_resample )
+ADD_TEST( vil3d_test_analyze_format           vil3d_test_all test_analyze_format ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data/analyze)
 
 ADD_TEST( vil3d_test_algo_threshold                   vil3d_test_all  test_algo_threshold )
 ADD_TEST( vil3d_test_algo_structuring_element         vil3d_test_all  test_algo_structuring_element )

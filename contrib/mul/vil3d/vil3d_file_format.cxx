@@ -10,6 +10,7 @@
 #include "vil3d_file_format.h"
 #include <vcl_vector.h>
 #include <vil/vil_open.h>
+#include <vil3d/file_formats/vil3d_analyze_format.h>
 #include <vil3d/file_formats/vil3d_gipl_format.h>
 #include <vil3d/file_formats/vil3d_slice_list.h>
 
@@ -52,6 +53,7 @@ class vil3d_file_formats
   vcl_vector<vil3d_file_format *> v;
   vil3d_file_formats()
   {
+    v.push_back(new vil3d_analyze_format);
     v.push_back(new vil3d_gipl_format);
     v.push_back(new vil3d_slice_list_format);
   }

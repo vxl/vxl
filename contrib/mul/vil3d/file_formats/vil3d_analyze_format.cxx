@@ -35,7 +35,6 @@
 
 // ---- Utility functions for dealing with byte ordering ----
 // (Note: The use of this is currently guessed - need to check format)
-#if VXL_LITTLE_ENDIAN
 inline void swap16_for_big_endian(char *a, unsigned n)
 {
   for (unsigned i = 0; i < n * 2; i += 2)
@@ -63,7 +62,6 @@ inline void swap64_for_big_endian(char *a, unsigned n)
     c = a[i+3]; a[i+3] = a[i+4]; a[i+4] = c;
   }
 }
-#endif //VXL_LITTLE_ENDIAN
 
 /*=========== Analyze header stuff ==========*/
 #define RD_AH_MAXHEADERSIZE         0xFFFF
@@ -196,7 +194,6 @@ bool vil3d_analyze_header::write_file(const vcl_string& path) const
 
 bool vil3d_analyze_header::read_file(const vcl_string& path)
 {
-vcl_cout<<"vil3d_analyze_header Reading "<<path<<vcl_endl;
   vcl_ifstream bfs(path.c_str(),vcl_ios_binary);
   if(!bfs) return false;
 
@@ -410,11 +407,11 @@ void vil3d_analyze_header::set_pixel_format(enum vil_pixel_format format)
 {
   switch (format)
   {
-    case VIL_PIXEL_FORMAT_BYTE :   dim.datatype=2;
-    case VIL_PIXEL_FORMAT_INT_16 : dim.datatype=4;
-    case VIL_PIXEL_FORMAT_INT_32 : dim.datatype=8;
-    case VIL_PIXEL_FORMAT_FLOAT :  dim.datatype=16;
-    case VIL_PIXEL_FORMAT_DOUBLE : dim.datatype=64;
+    case VIL_PIXEL_FORMAT_BYTE :   dim.datatype=2; break;
+    case VIL_PIXEL_FORMAT_INT_16 : dim.datatype=4; break;
+    case VIL_PIXEL_FORMAT_INT_32 : dim.datatype=8; break;
+    case VIL_PIXEL_FORMAT_FLOAT :  dim.datatype=16; break;
+    case VIL_PIXEL_FORMAT_DOUBLE : dim.datatype=64; break;
     default: dim.datatype=0;
   }
 }
@@ -439,7 +436,7 @@ void vil3d_analyze_header::print_summary(vcl_ostream& os) const
   vsl_indent_inc(os);
   os<<vsl_indent()<<"Size: "<<dim.dim[1]<<" x "<<dim.dim[2]<<" x "<<dim.dim[3]<<vcl_endl;
   os<<vsl_indent()<<"Voxel widths: "<<dim.pixdim[1]<<" x "<<dim.pixdim[2]<<" x "<<dim.pixdim[3]<<vcl_endl;
-  os<<vsl_indent()<<"Format type: "<<dim.datatype<<vcl_endl;
+  os<<vsl_indent()<<"Format type: "<<pixel_format()<<" (Code="<<dim.datatype<<")"<<vcl_endl;
   vsl_indent_dec(os);
 }
 
@@ -473,8 +470,8 @@ vil3d_image_resource_sptr vil3d_analyze_format::make_input_image(const char *fil
     base_filename = filename;
 
   if (!header.read_file(vcl_string(base_filename)+".hdr")) return 0;
-  vcl_cout<<header<<vcl_endl;
-  
+  vcl_cout<<"vil3d_analyze_format::make_input_image() Header: "<<header<<vcl_endl;
+
   return new vil3d_analyze_image(header,base_filename);
 }
 
@@ -483,7 +480,7 @@ vil3d_image_resource_sptr vil3d_analyze_format::make_input_image(const char *fil
 // The file may be opened immediately for writing so that a header can be written.
 // The width/height etc are explicitly specified, so that file_format implementors
 // know what they need to do...
-vil3d_image_resource_sptr vil3d_analyze_format::make_output_image(const char* filename,
+vil3d_image_resource_sptr vil3d_analyze_format::make_output_image(const char* filename1,
                                  unsigned ni, unsigned nj,
                                  unsigned nk, unsigned nplanes,
                                  enum vil_pixel_format format) const
@@ -501,34 +498,30 @@ vil3d_image_resource_sptr vil3d_analyze_format::make_output_image(const char* fi
   vil3d_analyze_header header;
   header.set_image_size(ni,nj,nk);
   header.set_pixel_format(format);
+  header.set_voxel_size(1.0f,1.0f,1.0f);
+  header.set_pixel_format(format);
 
-//  return new vil3d_analyze_image(header,base_filename);  ** THis reads header, not writes it!!
-
-  {
-    vcl_cerr << "vil3d_analyze_format::make_output_image() Not implemented."<<vcl_endl;
-    return 0;
-  }
+  vcl_string filename(filename1);
+  vcl_string base_filename;
+  int n=filename.size();
+  if (n>=4 && filename.substr(n-4,4)==".hdr" || filename.substr(n-4,4)==".img")
+    base_filename = filename.substr(0,n-4);
+  else
+    base_filename = filename;
+  if (!header.write_file(vcl_string(base_filename)+".hdr")) return 0;
+  return new vil3d_analyze_image(header,base_filename);
 }
 
 // ==================================================================
 // =================== vil3d_analyze_image ==========================
 // ==================================================================
 
-vil3d_analyze_image::vil3d_analyze_image(vil3d_analyze_header& header,
+vil3d_analyze_image::vil3d_analyze_image(const vil3d_analyze_header& header,
                                          const vcl_string& base_path)
 {
   header_ = header;
   base_path_ = base_path;
-
-  // Set up local convenience values
-  dim1_ = header_.dim.dim[1];
-  dim2_ = header_.dim.dim[2];
-  dim3_ = header_.dim.dim[3];
-  vox_width1_ = header_.dim.pixdim[1];
-  vox_width2_ = header_.dim.pixdim[2];
-  vox_width3_ = header_.dim.pixdim[3];
 }
-
 
 vil3d_analyze_image::~vil3d_analyze_image()
 {
@@ -607,57 +600,51 @@ vil3d_image_view_base_sptr vil3d_analyze_image::get_copy_view(
     case VIL_PIXEL_FORMAT_INT_16:
     {
       macro(vxl_int_16);
-#if VXL_LITTLE_ENDIAN
-      swap16_for_big_endian((char *)(im.origin_ptr()), ni*nj*nk);
-#endif //VXL_LITTLE_ENDIAN
+      if (header_.needSwap())
+        swap16_for_big_endian((char *)(im.origin_ptr()), ni*nj*nk);
       return new vil3d_image_view<vxl_int_16>(im);
     }
     case VIL_PIXEL_FORMAT_UINT_16:
     {
       macro(vxl_uint_16);
-#if VXL_LITTLE_ENDIAN
+      if (header_.needSwap())
       swap16_for_big_endian((char *)(im.origin_ptr()), ni*nj*nk);
-#endif //VXL_LITTLE_ENDIAN
       return new vil3d_image_view<vxl_uint_16>(im);
     }
     case VIL_PIXEL_FORMAT_UINT_32:
     {
       macro(vxl_uint_32);
-#if VXL_LITTLE_ENDIAN
+      if (header_.needSwap())
       swap32_for_big_endian((char *)(im.origin_ptr()), ni*nj*nk);
-#endif //VXL_LITTLE_ENDIAN
       return new vil3d_image_view<vxl_uint_32>(im);
     }
     case VIL_PIXEL_FORMAT_INT_32:
     {
       macro(vxl_int_32);
-#if VXL_LITTLE_ENDIAN
+      if (header_.needSwap())
       swap32_for_big_endian((char *)(im.origin_ptr()), ni*nj*nk);
-#endif //VXL_LITTLE_ENDIAN
       return new vil3d_image_view<vxl_int_32>(im);
     }
     case VIL_PIXEL_FORMAT_FLOAT:
     {
       macro(float);
-#if VXL_LITTLE_ENDIAN
+      if (header_.needSwap())
       swap32_for_big_endian((char *)(im.origin_ptr()), ni*nj*nk);
-#endif //VXL_LITTLE_ENDIAN
       return new vil3d_image_view<float>(im);
     }
     case VIL_PIXEL_FORMAT_DOUBLE:
     {
       macro(double);
-#if VXL_LITTLE_ENDIAN
+      if (header_.needSwap())
       swap64_for_big_endian((char *)(im.origin_ptr()), ni*nj*nk);
-#endif //VXL_LITTLE_ENDIAN
       return new vil3d_image_view<double>(im);
     }
     case VIL_PIXEL_FORMAT_BOOL:
-    vcl_cout<<"ERROR: vil3d_analyze_format::get_image_data()"
+    vcl_cout<<"ERROR: vil3d_analyze_format::get_copy_view()"
             <<pixel_format() << " pixel type not yet implemented\n";
     return 0;
     default:
-    vcl_cout<<"ERROR: vil3d_analyze_format::get_image_data()\n"
+    vcl_cout<<"ERROR: vil3d_analyze_format::get_copy_view()\n"
             <<"Can't deal with pixel type " << pixel_format() << vcl_endl;
     return 0;
   }
@@ -671,9 +658,9 @@ bool vil3d_analyze_image::get_property(char const *key, void * value) const
   {
     float* array = static_cast<float*>(value);
     // analyze stores data in mm
-    array[0] = vox_width1_ / 1000.0f;
-    array[1] = vox_width2_ / 1000.0f;
-    array[2] = vox_width3_ / 1000.0f;
+    array[0] = header_.voxel_width_i() / 1000.0f;
+    array[1] = header_.voxel_width_j() / 1000.0f;
+    array[2] = header_.voxel_width_k() / 1000.0f;
     return true;
   }
 
@@ -731,9 +718,9 @@ bool vil3d_analyze_image::put_view(const vil3d_image_view_base& view,
     {
       vil3d_image_view<vxl_int_16> view_copy(ni(),nj(),nk(),nplanes());
       vil3d_copy_reformat(static_cast<const vil3d_image_view<vxl_int_16>&>(view),view_copy);
-#if VXL_LITTLE_ENDIAN
-      swap16_for_big_endian((char *)(view_copy.origin_ptr()), ni()*nj()*nk());
-#endif //VXL_LITTLE_ENDIAN
+      if (header_.needSwap())
+        swap16_for_big_endian((char *)(view_copy.origin_ptr()), ni()*nj()*nk());
+
       os->write(view_copy.origin_ptr(),ni()*nj()*nk());
       // Should check that write was successful
       return true;
@@ -742,9 +729,9 @@ bool vil3d_analyze_image::put_view(const vil3d_image_view_base& view,
     {
       vil3d_image_view<vxl_int_32> view_copy(ni(),nj(),nk(),nplanes());
       vil3d_copy_reformat(static_cast<const vil3d_image_view<vxl_int_32>&>(view),view_copy);
-#if VXL_LITTLE_ENDIAN
-      swap32_for_big_endian((char *)(view_copy.origin_ptr()), ni()*nj()*nk());
-#endif //VXL_LITTLE_ENDIAN
+      if (header_.needSwap())
+        swap32_for_big_endian((char *)(view_copy.origin_ptr()), ni()*nj()*nk());
+
       os->write(view_copy.origin_ptr(),ni()*nj()*nk());
       // Should check that write was successful
       return true;
@@ -753,9 +740,9 @@ bool vil3d_analyze_image::put_view(const vil3d_image_view_base& view,
     {
       vil3d_image_view<float> view_copy(ni(),nj(),nk(),nplanes());
       vil3d_copy_reformat(static_cast<const vil3d_image_view<float>&>(view),view_copy);
-#if VXL_LITTLE_ENDIAN
-      swap32_for_big_endian((char *)(view_copy.origin_ptr()), ni()*nj()*nk());
-#endif //VXL_LITTLE_ENDIAN
+      if (header_.needSwap())
+        swap32_for_big_endian((char *)(view_copy.origin_ptr()), ni()*nj()*nk());
+
       os->write(view_copy.origin_ptr(),ni()*nj()*nk());
       // Should check that write was successful
       return true;
@@ -764,18 +751,28 @@ bool vil3d_analyze_image::put_view(const vil3d_image_view_base& view,
     {
       vil3d_image_view<double> view_copy(ni(),nj(),nk(),nplanes());
       vil3d_copy_reformat(static_cast<const vil3d_image_view<double>&>(view),view_copy);
-#if VXL_LITTLE_ENDIAN
-      swap32_for_big_endian((char *)(view_copy.origin_ptr()), ni()*nj()*nk());
-#endif //VXL_LITTLE_ENDIAN
+      if (header_.needSwap())
+        swap32_for_big_endian((char *)(view_copy.origin_ptr()), ni()*nj()*nk());
+
       os->write(view_copy.origin_ptr(),ni()*nj()*nk());
       // Should check that write was successful
       return true;
     }
     default:
-    vcl_cout<<"ERROR: vil3d_analyze_format::get_image_data()\n"
+    vcl_cout<<"ERROR: vil3d_analyze_format::put_view()\n"
             <<"Can't deal with pixel type " << pixel_format() << vcl_endl;
     return 0;
   }
 
   return false;
 }
+
+//: Set the size of the each voxel in the i,j,k directions.
+// You can get the voxel sizes via get_properties().
+// \return false if underlying image doesn't store pixel sizes.
+bool vil3d_analyze_image::set_voxel_size(float si,float sj,float sk)
+{
+  header_.set_voxel_size(si,sj,sk);
+  return true;
+}
+

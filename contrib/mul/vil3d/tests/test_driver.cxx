@@ -10,6 +10,7 @@ DECLARE( test_switch_axes );
 DECLARE( test_convert );
 DECLARE( test_from_image_2d );
 DECLARE( test_resample );
+DECLARE( test_analyze_format );
 
 DECLARE( test_algo_threshold );
 DECLARE( test_algo_structuring_element );
@@ -38,6 +39,7 @@ register_tests()
   REGISTER( test_convert );
   REGISTER( test_from_image_2d );
   REGISTER( test_resample );
+  REGISTER( test_analyze_format );
 
   REGISTER( test_algo_threshold );
   REGISTER( test_algo_structuring_element );

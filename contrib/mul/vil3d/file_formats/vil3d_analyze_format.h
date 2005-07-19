@@ -108,7 +108,7 @@ private:
   bool swap_bytes_; // True if bytes need to be swapped
 
 public:
-  vil3d_analyze_header() {}
+  vil3d_analyze_header() : swap_bytes_(false) {}
   ~vil3d_analyze_header() {}
 
   void reset();
@@ -126,8 +126,12 @@ public:
   short int nj() const { return dim.dim[2]; }
   short int nk() const { return dim.dim[3]; }
 
+  float voxel_width_i() const { return dim.pixdim[1]; }
+  float voxel_width_j() const { return dim.pixdim[2]; }
+  float voxel_width_k() const { return dim.pixdim[3]; }
+
   //: Define width of voxels in each dimension
-  void vil3d_analyze_header::set_voxel_size(float si, float sj, float sk);
+  void set_voxel_size(float si, float sj, float sk);
 
   //: Read in header from given file
   bool read_file(const vcl_string& path);
@@ -136,7 +140,7 @@ public:
   bool write_file(const vcl_string& path) const;
 
   void swapBytes(char *data, int size);
-  bool needSwap() { return swap_bytes_; }
+  bool needSwap() const { return swap_bytes_; }
 
   //: Print out some parts of header
   void print_summary(vcl_ostream& os) const;
@@ -166,7 +170,7 @@ class vil3d_analyze_format : public vil3d_file_format
 
 
   //: default filename tag for this image.
-  virtual const char * tag() const {return "analyze";}
+  virtual const char * tag() const {return "hdr";}
 };
 
 //: Object which acts as an interface to an analyze format file
@@ -190,10 +194,10 @@ class vil3d_analyze_image: public vil3d_image_resource
   float vox_width1_, vox_width2_, vox_width3_;
 
 public:
-  //: Create object with given header and base_path
-  //  Doesn't actually load/save anything until get_copy_view()
-  //  or put_view() called.
-  vil3d_analyze_image(vil3d_analyze_header& header,
+  //: Create object with given header and base_path, ready for reading/writing
+  //  Doesn't actually load/save anything until get_copy_view() or put_view() called.
+  //  Header is assumed to have been loaded/saved by the calling function.
+  vil3d_analyze_image(const vil3d_analyze_header& header,
                       const vcl_string& base_path);
 
   virtual ~vil3d_analyze_image();
@@ -237,6 +241,11 @@ public:
   // assigning it to a multi-plane scalar pixel view.)
   virtual bool put_view(const vil3d_image_view_base& im,
                         unsigned i0, unsigned j0, unsigned k0);
+
+  //: Set the size of the each voxel in the i,j,k directions.
+  // You can get the voxel sizes via get_properties().
+  // \return false if underlying image doesn't store pixel sizes.
+  virtual bool set_voxel_size(float/*i*/,float/*j*/,float/*k*/);
 
   //: Return a string describing the file format.
   // Only file images have a format, others return 0
