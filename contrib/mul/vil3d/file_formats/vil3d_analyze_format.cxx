@@ -377,11 +377,13 @@ bool vil3d_analyze_header::read_file(const vcl_string& path)
 }
 
 //: Define number of pixels in each dimension
-void vil3d_analyze_header::set_image_size(unsigned ni, unsigned nj, unsigned nk)
+void vil3d_analyze_header::set_image_size(unsigned ni, unsigned nj,
+                                          unsigned nk, unsigned np)
 {
   dim.dim[1]=(short int)(ni);
   dim.dim[2]=(short int)(nj);
   dim.dim[3]=(short int)(nk);
+  dim.dim[4]=(short int)(np);
 }
 //: Define width of voxels in each dimension
 void vil3d_analyze_header::set_voxel_size(float si, float sj, float sk)
@@ -496,7 +498,7 @@ vil3d_image_resource_sptr vil3d_analyze_format::make_output_image(const char* fi
   }
 
   vil3d_analyze_header header;
-  header.set_image_size(ni,nj,nk);
+  header.set_image_size(ni,nj,nk,nplanes);
   header.set_pixel_format(format);
   header.set_voxel_size(1.0f,1.0f,1.0f);
   header.set_pixel_format(format);
@@ -527,11 +529,10 @@ vil3d_analyze_image::~vil3d_analyze_image()
 {
 }
 
-//: Dimensions:  nplanes x ni x nj x nk.
-// This concept is treated as a synonym to components.
+//: Number of planes (or time points in an image sequence).
 unsigned vil3d_analyze_image::nplanes() const
 {
-  return 1;
+  return header_.nplanes();
 }
 
 //: Dimensions:  nplanes x ni x nj x nk.
@@ -576,65 +577,42 @@ vil3d_image_view_base_sptr vil3d_analyze_image::get_copy_view(
   if (!is->ok()) return 0;
 
 // NOTE: See GIPL loader for more general data reading
-#define macro(type) \
+#define read_data_of_type(type) \
   vil3d_image_view< type > im = \
-         vil3d_new_image_view_plane_k_j_i(ni, nj, nk, 1, type()); \
-  for (unsigned k=0; k<nk; ++k) \
-  { \
-    for (unsigned j=0; j<nj; ++j) \
-      is->read(&im(0,j,k), ni * sizeof(type)); \
-  }
+         vil3d_new_image_view_plane_k_j_i(ni, nj, nk, nplanes(), type()); \
+  is->read(&im(0,0,0,0), ni * nj * nk * nplanes() * sizeof(type));
 
   switch (pixel_format())
   {
-    case VIL_PIXEL_FORMAT_SBYTE:
-    {
-      macro(vxl_sbyte);
-      return new vil3d_image_view<vxl_sbyte>(im);
-    }
     case VIL_PIXEL_FORMAT_BYTE:
     {
-      macro(vxl_byte);
+      read_data_of_type(vxl_byte);
       return new vil3d_image_view<vxl_byte>(im);
     }
     case VIL_PIXEL_FORMAT_INT_16:
     {
-      macro(vxl_int_16);
+      read_data_of_type(vxl_int_16);
       if (header_.needSwap())
         swap16_for_big_endian((char *)(im.origin_ptr()), ni*nj*nk);
       return new vil3d_image_view<vxl_int_16>(im);
     }
-    case VIL_PIXEL_FORMAT_UINT_16:
-    {
-      macro(vxl_uint_16);
-      if (header_.needSwap())
-      swap16_for_big_endian((char *)(im.origin_ptr()), ni*nj*nk);
-      return new vil3d_image_view<vxl_uint_16>(im);
-    }
-    case VIL_PIXEL_FORMAT_UINT_32:
-    {
-      macro(vxl_uint_32);
-      if (header_.needSwap())
-      swap32_for_big_endian((char *)(im.origin_ptr()), ni*nj*nk);
-      return new vil3d_image_view<vxl_uint_32>(im);
-    }
     case VIL_PIXEL_FORMAT_INT_32:
     {
-      macro(vxl_int_32);
+      read_data_of_type(vxl_int_32);
       if (header_.needSwap())
       swap32_for_big_endian((char *)(im.origin_ptr()), ni*nj*nk);
       return new vil3d_image_view<vxl_int_32>(im);
     }
     case VIL_PIXEL_FORMAT_FLOAT:
     {
-      macro(float);
+      read_data_of_type(float);
       if (header_.needSwap())
       swap32_for_big_endian((char *)(im.origin_ptr()), ni*nj*nk);
       return new vil3d_image_view<float>(im);
     }
     case VIL_PIXEL_FORMAT_DOUBLE:
     {
-      macro(double);
+      read_data_of_type(double);
       if (header_.needSwap())
       swap64_for_big_endian((char *)(im.origin_ptr()), ni*nj*nk);
       return new vil3d_image_view<double>(im);
@@ -698,19 +676,11 @@ bool vil3d_analyze_image::put_view(const vil3d_image_view_base& view,
 
   switch (pixel_format())
   {
-    case VIL_PIXEL_FORMAT_SBYTE:
-    {
-      vil3d_image_view<vxl_sbyte> view_copy(ni(),nj(),nk(),nplanes());
-      vil3d_copy_reformat(static_cast<const vil3d_image_view<vxl_sbyte>&>(view),view_copy);
-      os->write(view_copy.origin_ptr(),ni()*nj()*nk());
-      // Should check that write was successful
-      return true;
-    }
     case VIL_PIXEL_FORMAT_BYTE:
     {
       vil3d_image_view<vxl_byte> view_copy(ni(),nj(),nk(),nplanes());
       vil3d_copy_reformat(static_cast<const vil3d_image_view<vxl_byte>&>(view),view_copy);
-      os->write(view_copy.origin_ptr(),ni()*nj()*nk());
+      os->write(view_copy.origin_ptr(),ni()*nj()*nk()*nplanes());
       // Should check that write was successful
       return true;
     }
@@ -719,7 +689,7 @@ bool vil3d_analyze_image::put_view(const vil3d_image_view_base& view,
       vil3d_image_view<vxl_int_16> view_copy(ni(),nj(),nk(),nplanes());
       vil3d_copy_reformat(static_cast<const vil3d_image_view<vxl_int_16>&>(view),view_copy);
       if (header_.needSwap())
-        swap16_for_big_endian((char *)(view_copy.origin_ptr()), ni()*nj()*nk());
+        swap16_for_big_endian((char *)(view_copy.origin_ptr()), ni()*nj()*nk()*nplanes());
 
       os->write(view_copy.origin_ptr(),ni()*nj()*nk());
       // Should check that write was successful
@@ -730,7 +700,7 @@ bool vil3d_analyze_image::put_view(const vil3d_image_view_base& view,
       vil3d_image_view<vxl_int_32> view_copy(ni(),nj(),nk(),nplanes());
       vil3d_copy_reformat(static_cast<const vil3d_image_view<vxl_int_32>&>(view),view_copy);
       if (header_.needSwap())
-        swap32_for_big_endian((char *)(view_copy.origin_ptr()), ni()*nj()*nk());
+        swap32_for_big_endian((char *)(view_copy.origin_ptr()), ni()*nj()*nk()*nplanes());
 
       os->write(view_copy.origin_ptr(),ni()*nj()*nk());
       // Should check that write was successful
@@ -741,7 +711,7 @@ bool vil3d_analyze_image::put_view(const vil3d_image_view_base& view,
       vil3d_image_view<float> view_copy(ni(),nj(),nk(),nplanes());
       vil3d_copy_reformat(static_cast<const vil3d_image_view<float>&>(view),view_copy);
       if (header_.needSwap())
-        swap32_for_big_endian((char *)(view_copy.origin_ptr()), ni()*nj()*nk());
+        swap32_for_big_endian((char *)(view_copy.origin_ptr()), ni()*nj()*nk()*nplanes());
 
       os->write(view_copy.origin_ptr(),ni()*nj()*nk());
       // Should check that write was successful
@@ -752,7 +722,7 @@ bool vil3d_analyze_image::put_view(const vil3d_image_view_base& view,
       vil3d_image_view<double> view_copy(ni(),nj(),nk(),nplanes());
       vil3d_copy_reformat(static_cast<const vil3d_image_view<double>&>(view),view_copy);
       if (header_.needSwap())
-        swap32_for_big_endian((char *)(view_copy.origin_ptr()), ni()*nj()*nk());
+        swap32_for_big_endian((char *)(view_copy.origin_ptr()), ni()*nj()*nk()*nplanes());
 
       os->write(view_copy.origin_ptr(),ni()*nj()*nk());
       // Should check that write was successful

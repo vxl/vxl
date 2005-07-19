@@ -120,11 +120,14 @@ public:
   void set_pixel_format(enum vil_pixel_format format);
 
   //: Define number of pixels in each dimension
-  void set_image_size(unsigned ni, unsigned nj, unsigned nk);
+  void set_image_size(unsigned ni, unsigned nj, unsigned nk, unsigned np=1);
 
   short int ni() const { return dim.dim[1]; }
   short int nj() const { return dim.dim[2]; }
   short int nk() const { return dim.dim[3]; }
+
+  //: Number of planes (or time points in image sequence)
+  short int nplanes() const { return dim.dim[4]; }
 
   float voxel_width_i() const { return dim.pixdim[1]; }
   float voxel_width_j() const { return dim.pixdim[2]; }
@@ -183,9 +186,6 @@ class vil3d_analyze_image: public vil3d_image_resource
 
   //: Header information
   vil3d_analyze_header header_;
-
-  //: image dimensions
-  unsigned dim1_, dim2_, dim3_;
 
   //: number of planes
   unsigned nplanes_;
