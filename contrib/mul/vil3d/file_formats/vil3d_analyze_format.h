@@ -113,6 +113,22 @@ public:
 
   void reset();
 
+  //: Define format of pixels
+  enum vil_pixel_format pixel_format() const;
+
+  //: Define format of pixels
+  void set_pixel_format(enum vil_pixel_format format);
+
+  //: Define number of pixels in each dimension
+  void set_image_size(unsigned ni, unsigned nj, unsigned nk);
+
+  short int ni() const { return dim.dim[1]; }
+  short int nj() const { return dim.dim[2]; }
+  short int nk() const { return dim.dim[3]; }
+
+  //: Define width of voxels in each dimension
+  void vil3d_analyze_header::set_voxel_size(float si, float sj, float sk);
+
   //: Read in header from given file
   bool read_file(const vcl_string& path);
 
@@ -172,9 +188,6 @@ class vil3d_analyze_image: public vil3d_image_resource
 
   //: Physical Voxel dimensions ( in mm )
   float vox_width1_, vox_width2_, vox_width3_;
-
-  //: Expected pixel type.
-  enum vil_pixel_format pixel_format_;
 
 public:
   //: Create object with given header and base_path
