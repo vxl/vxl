@@ -372,7 +372,6 @@ void _KLTSelectGoodFeatures(
     int borderx = tc->borderx;  /* Must not touch cols */
     int bordery = tc->bordery;  /* lost by convolution */
     int x, y;
-    int i;
 
     if (borderx < window_hw)  borderx = window_hw;
     if (bordery < window_hh)  bordery = window_hh;
