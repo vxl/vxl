@@ -1,5 +1,4 @@
 This is the Otago University Frame Grabber Library. Currently it
-supports two frame grabbers - the pxc200 on Linux, and any
-video-for-linux device (at least I think it does). If you'd like
-to contribute code for other frame grabbers, or other systems, please
-do. 
+supports any video-for-linux device (at least I think it does). If 
+you'd like to contribute code for other frame grabbers, or other 
+systems, please do. 
