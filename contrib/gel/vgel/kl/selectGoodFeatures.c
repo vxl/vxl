@@ -377,9 +377,11 @@ void _KLTSelectGoodFeatures(
     if (borderx < window_hw)  borderx = window_hw;
     if (bordery < window_hh)  bordery = window_hh;
 
-    /* Find largest value of an int */
-    for (i = 0 ; i < sizeof(int) ; i++)  limit *= 256;
-    limit = limit/2 - 1;
+    /* Find largest value of an int, stored in an unsigned */
+    /* get to [ 10000000 00000000 00000000 00000000 ] */
+    limit <<= 8 * sizeof(int) - 1;
+    /* get to [ 01111111 11111111 11111111 11111111 ] */
+    limit -= 1;
 
     /* For most of the pixels in the image, do ... */
     ptr = pointlist;
