@@ -23,7 +23,6 @@ void test_test()
   mbl_test_save_measurement("mul/mbl/mbl_test_save_measurement", 10.0);
 
   vcl_string fn = vul_file::get_cwd()+ "/mul/mbl/mbl_test_save_measurement.txt";
-  perror("");
   vcl_cout << fn.c_str() << " contents:\n";
 
   {
