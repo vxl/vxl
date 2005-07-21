@@ -591,9 +591,10 @@ bool vimt3d_transform_3d::operator==( const vimt3d_transform_3d& t) const
 }
 
 //=======================================================================
-// Method: operator*
-//=======================================================================
-
+//: Calculates the product LR
+// \param L  Transform
+// \param R  Transform
+// \return Transform LR = R followed by L
 vimt3d_transform_3d operator*(const vimt3d_transform_3d& L, const vimt3d_transform_3d& R)
 {
   vimt3d_transform_3d T;

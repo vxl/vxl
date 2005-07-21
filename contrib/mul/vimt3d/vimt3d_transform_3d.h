@@ -230,6 +230,14 @@ class vimt3d_transform_3d
   void setRotMat(double r_x, double r_y, double r_z);
 };
 
+//: Calculates the product LR
+// \param L  Transform
+// \param R  Transform
+// \return Transform LR = R followed by L
+vimt3d_transform_3d operator*(const vimt3d_transform_3d& L,
+                              const vimt3d_transform_3d& R);
+
+
 //: Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const vimt3d_transform_3d& b);
 

@@ -133,9 +133,9 @@ void vil3d_generate_gaussian_filters(const vgl_vector_3d<double>& sd,
   c = nt/2;
 
   // Lowest (relative) tap of filter
-  lo.x_ = -c.x();
-  lo.y_ = -c.y();
-  lo.z_ = -c.z();
+  lo.x_ = -(int)c.x();
+  lo.y_ = -(int)c.y();
+  lo.z_ = -(int)c.z();
 
   // Highest (relative) tap of filter (depends whether filter length is odd)
   hi.x_ = c.x() +1 -(nt.x()%2);

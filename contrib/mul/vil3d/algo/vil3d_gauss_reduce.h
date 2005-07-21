@@ -23,45 +23,46 @@
 //  sub-sampled 3D image
 template<class T>
 void vil3d_gauss_reduce_i(const T* src_im,
-                                 unsigned src_ni, unsigned src_nj, unsigned src_nk,
-                                 vcl_ptrdiff_t s_i_step, vcl_ptrdiff_t s_j_step,
-                                 vcl_ptrdiff_t s_k_step,
-                                 T* dest_im,
-                                 vcl_ptrdiff_t d_i_step,
-                                 vcl_ptrdiff_t d_j_step, vcl_ptrdiff_t d_k_step);
+                          unsigned src_ni, unsigned src_nj, unsigned src_nk,
+                          vcl_ptrdiff_t s_i_step, vcl_ptrdiff_t s_j_step,
+                          vcl_ptrdiff_t s_k_step,
+                          T* dest_im,
+                          vcl_ptrdiff_t d_i_step,
+                          vcl_ptrdiff_t d_j_step, vcl_ptrdiff_t d_k_step);
 
 //: Smooth and subsample src_im to produce dest_im
 //  Applies filter in i,j and k directions, then samples every other pixel.
-//  Resulting image is (ni+1)/2 x (nj+1)/2 x (nk+1)/2
+//  Resulting image is (ni+1)/2 x (nj+1)/2 x (nk+1)/2. An image can be reduced
+//  in-place, by having src_im and dest_im pointing to the same image.
 template<class T>
 void vil3d_gauss_reduce(const vil3d_image_view<T>& src_im,
-                               vil3d_image_view<T>& dest_im,
-                               vil3d_image_view<T>& work_im1,
-                               vil3d_image_view<T>& work_im2);
+                        vil3d_image_view<T>&       dest_im,
+                        vil3d_image_view<T>&       work_im1,
+                        vil3d_image_view<T>&       work_im2);
 
 //: Smooth and subsample src_im along i and j to produce dest_im
 //  Applies filter in i,j directions, then samples every other pixel.
 //  Resulting image is (ni+1)/2 x (nj+1)/2 x nk
 template<class T>
 void vil3d_gauss_reduce_ij(const vil3d_image_view<T>& src_im,
-                                  vil3d_image_view<T>& dest_im,
-                                  vil3d_image_view<T>& work_im1);
+                           vil3d_image_view<T>&       dest_im,
+                           vil3d_image_view<T>&       work_im1);
 
 //: Smooth and subsample src_im along i and k to produce dest_im
 //  Applies filter in i,k directions, then samples every other pixel.
 //  Resulting image is (ni+1)/2 x nj x (nk+1)/2
 template<class T>
 void vil3d_gauss_reduce_ik(const vil3d_image_view<T>& src_im,
-                                  vil3d_image_view<T>& dest_im,
-                                  vil3d_image_view<T>& work_im1);
+                           vil3d_image_view<T>&       dest_im,
+                           vil3d_image_view<T>&       work_im1);
 
 //: Smooth and subsample src_im along j and k to produce dest_im
 //  Applies filter in j,k directions, then samples every other pixel.
 //  Resulting image is ni x (nj+1)/2 x (nk+1)/2
 template<class T>
 void vil3d_gauss_reduce_jk(const vil3d_image_view<T>& src_im,
-                                  vil3d_image_view<T>& dest_im,
-                                  vil3d_image_view<T>& work_im1);
+                           vil3d_image_view<T>&       dest_im,
+                           vil3d_image_view<T>&       work_im1);
 
 #define VIL3D_GAUSS_REDUCE_INSTANTIATE(T) extern "please include vil3d/vil3d_gauss_reduce.txx instead"
 
