@@ -190,7 +190,7 @@ SET( vcl_sources
 
   emulation/vcl_limits.cxx            emulation/vcl_limits.h
   emulation/vcl_string_instances.cxx
-   emulation/vcl_rbtree_instances.cxx
+  emulation/vcl_rbtree_instances.cxx
   emulation/vcl_hashtable.cxx         emulation/vcl_hashtable.h
   emulation/vcl_alloc.cxx             emulation/vcl_alloc.h
   emulation/vcl_algorithm.txx         emulation/vcl_algorithm.h
