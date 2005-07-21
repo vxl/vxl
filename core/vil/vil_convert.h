@@ -557,8 +557,6 @@ inline void vil_convert_stretch_range_limited(const vil_image_view<inP>& src,
                                               const double dest_lo,
                                               const double dest_hi)
 {
-  double b = 0.0;
-
   double ddest = dest_hi - dest_lo;
   double dsrc = static_cast<double>(src_hi - src_lo);
   double dds = ddest / dsrc;
