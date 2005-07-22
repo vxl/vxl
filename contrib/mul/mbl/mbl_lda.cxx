@@ -19,6 +19,7 @@
 #include <vsl/vsl_binary_io.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
+#include <vnl/algo/vnl_generalized_eigensystem.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <mbl/mbl_matxvec.h>
 
@@ -203,11 +204,11 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
   else
     withinS_ = wS;
 
+
+/*
   vnl_matrix<double> wS_inv;
   //  NR_Inverse(wS_inv,withinS_);
   vnl_svd<double> wS_svd(withinS_, -1.0e-10); // important!!! as the sigma_min=0.0
-  //double svd_min=wS_svd.sigma_min();
-  //double svd_max=wS_svd.sigma_max();
 
   wS_inv = wS_svd.inverse();
 
@@ -221,7 +222,15 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
   vnl_matrix<double> EVecs(A.rows(), A.columns());
   vnl_vector<double> evals(A.columns());
   //  NR_CalcSymEigens(A,EVecs,evals,false);
+
+  // **** A not necessarily symmetric!!!! ****
   vnl_symmetric_eigensystem_compute(A, EVecs, evals);
+*/
+
+  vnl_generalized_eigensystem gen_eigs(betweenS_,withinS_);
+  vnl_matrix<double> EVecs= gen_eigs.V;
+  vnl_vector<double> evals= gen_eigs.D.diagonal();
+
 
   //make the eigenvector matrix (columns) and eigenvalue vector in descending order.
   evals.flip();
