@@ -140,8 +140,15 @@ template <class T> bool vnl_math_isfinite(T);
 #endif
 
 // rnd (rounding; 0.5 rounds up)
+#if VXL_C_MATH_HAS_LRINT 
+// Use C99 functions, which GCC implements as an intrinsic
+// Or in simpler terms - is at least 3 times faster.
+inline int vnl_math_rnd(float  x) { return lrintf(x); } 
+inline int vnl_math_rnd(double x) { return lrint(x); }
+#else
 inline int vnl_math_rnd(float  x) { return (x>=0.0)?(int)(x + 0.5):(int)(x - 0.5); }
 inline int vnl_math_rnd(double x) { return (x>=0.0)?(int)(x + 0.5):(int)(x - 0.5); }
+#endif
 
 // abs
 inline bool           vnl_math_abs(bool x) { return x; }

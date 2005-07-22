@@ -1112,6 +1112,14 @@ MAIN( test_config )
 #endif
   vcl_cout << vcl_endl;
 
+  vcl_cout << "VXL_C_MATH_HAS_LRINT ";
+#ifdef VXL_C_MATH_HAS_LRINT
+  vcl_cout << "is set to " << quote(VXL_C_MATH_HAS_LRINT);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
   vcl_cout << "VXL_UNISTD_USLEEP_IS_VOID ";
 #ifdef VXL_UNISTD_USLEEP_IS_VOID
   vcl_cout << "is set to " << quote(VXL_UNISTD_USLEEP_IS_VOID);
