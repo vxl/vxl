@@ -1060,3 +1060,14 @@ int main()
 #endif // VCL_CHAR_IS_SIGNED
 
 //-------------------------------------
+
+#ifdef VXL_C_MATH_HAS_LRINT
+
+// This C99 func is a much faster version of standard vnl_math_round
+#include <cmath>
+
+int main() { long c = lrint(100.0); }
+
+#endif // VXL_C_MATH_HAS_LRINT
+
+//-------------------------------------
