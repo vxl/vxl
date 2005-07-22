@@ -2,7 +2,7 @@
 NOTICE:
 
 Copyright (1997) The Board of Trustees of the Leland Stanford Junior
-Univeristy.  Except for commercial resale, lease, license or other
+University.  Except for commercial resale, lease, license or other
 commercial transactions, permission is hereby given to use, copy, modify,
 and distribute this software. STANFORD MAKES NO REPRESENTATIONS OR
 WARRANTIES OF ANY KIND CONCERNING THIS SOFTWARE.
