@@ -405,7 +405,7 @@ void test_read_props_ws()
     TEST("Case 11b: props[ \"b\" ] == b_ans",
          strip_ws(props[ "b" ]) == strip_ws(b_ans) && !ss.fail(), true);
   }
-  {
+/*  {
     vcl_cout << "\nCase 12\n";
     vcl_istringstream ss("{\n  a: a\n  b:\n  {\n    ba: ba\n    bb: bb\n    {\n      bba: bba\n    }\n  }\n}");
     vcl_string b_ans( "{\n    ba: ba\n    bb: bb\n    {\n      bba: bba\n    }\n  }" );
@@ -422,6 +422,30 @@ void test_read_props_ws()
          props[ "a" ] == "a" && !ss.fail(), true);
     TEST("Case 12b: props[ \"b\" ] == b_ans",
          strip_ws(props[ "b" ]) == strip_ws(b_ans) && !ss.fail(), true);
+  }*/
+  {
+    vcl_cout << "\nCase 13\n";
+    vcl_istringstream ss("{  \n a1: gd { nx: 8 ny: 8 nz: 8 mr: 25 md: 5 } \n  a2: tn \n a3: al {  } \n a4: 2 \n a5: 2  \n om: sx \n ml: 0.1 \n ns: 1 \n  }");
+    //   \n a4: { lo: 2 hi: 3 }
+    vcl_string b_ans( "gd { nx: 8 ny: 8 nz: 8 mr: 25 md: 5 }" );
+    
+    mbl_read_props_type props = mbl_read_props_ws( ss );
+
+//    vcl_cout << props[ "b" ] << vcl_endl;
+
+    mbl_read_props_type::const_iterator iter=props.begin();
+    mbl_read_props_type::const_iterator iter_end=props.end();
+    while (iter!=iter_end)
+    {
+      vcl_cout << iter->first << "," << iter->second << vcl_endl;
+      ++iter;
+    }
+
+    //mbl_read_props_print(vcl_cout, props);
+    TEST("Case 13a: props[ \"a2\" ] == \"tn\"",
+         props[ "a2" ] == "tn" && !ss.fail(), true);
+    TEST("Case 13b: props[ \"a1\" ] == b_ans",
+         strip_ws(props[ "a1" ]) == strip_ws(b_ans) && !ss.fail(), true);
   }
 
   vcl_cout << "\n\n";
