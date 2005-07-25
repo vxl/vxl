@@ -38,20 +38,14 @@ static void test_resample_simple()
 
   bool all_voxs_correct = true;
   for (int i=0; i<dni; ++i)
-  {
     for (int j=0; j<dnj; ++j)
-    {
       for (int k=0; k<dnk; ++k)
-      {
         all_voxs_correct = all_voxs_correct && (src(i/2, j/2, k/2)==dst(i,j,k));
-      }
-    }
-  }
+
   TEST("All voxel values correct", all_voxs_correct, true);
 }
 
 
-//==================================================================================
 //==================================================================================
 static void test_resample_trilinear()
 {
@@ -64,15 +58,9 @@ static void test_resample_trilinear()
   unsigned snk=3;
   vil3d_image_view<int> src(sni, snj, snk);
   for (unsigned i=0; i<sni; ++i)
-  {
     for (unsigned j=0; j<snj; ++j)
-    {
       for (unsigned k=0; k<snk; ++k)
-      {
-        src(i,j,k) = 10*(k);
-      }
-    }
-  }
+        src(i,j,k) = 10*k + 100*j + 1000*i;
 
   vil3d_image_view<int> dst;
   vil3d_resample_trilinear(src, dst, 2.0, 2.0, 2.0);
@@ -88,18 +76,51 @@ static void test_resample_trilinear()
 
   
   bool all_voxs_correct = true;
-  for (unsigned i=0; i<dni; ++i)
-  {
-    for (unsigned j=0; j<dnj; ++j)
-    {
-      for (unsigned k=0; k<dnk; ++k)
-      {
-        // NO TESTING DONE!
-      }
-    }
-  }
-  TEST("All voxel values correct", all_voxs_correct, true);
+  for (unsigned i=0; i<dni-1; ++i)
+    for (unsigned j=0; j<dnj-1; ++j)
+      for (unsigned k=0; k<dnk-1; ++k)
+        all_voxs_correct = all_voxs_correct && dst(i,j,k)==(5*k + 50*j + 500*i);
+
+  TEST("Voxel values correct", all_voxs_correct, true);
 }
+//==================================================================================
+static void test_resample_trilinear_scale_2()
+{
+  vcl_cout << "******************************************\n"
+           << " Testing vil3d_resample_trilinear_scale_2\n"
+           << "******************************************\n";
+
+  unsigned sni=3;
+  unsigned snj=3;
+  unsigned snk=3;
+  vil3d_image_view<int> src(sni, snj, snk);
+  for (unsigned i=0; i<sni; ++i)
+    for (unsigned j=0; j<snj; ++j)
+      for (unsigned k=0; k<snk; ++k)
+        src(i,j,k) = 10000 + 10*k + 100*j + 1000*i;
+
+  vil3d_image_view<int> dst;
+  vil3d_resample_trilinear_scale_2(src, dst);
+  unsigned dni = dst.ni();
+  unsigned dnj = dst.nj();
+  unsigned dnk = dst.nk();
+
+
+  // Testing
+  vil3d_print_all(vcl_cout, src);
+  vil3d_print_all(vcl_cout, dst);
+  ///
+
+  
+  bool all_voxs_correct = true;
+  for (unsigned i=0; i<dni; ++i)
+    for (unsigned j=0; j<dnj; ++j)
+      for (unsigned k=0; k<dnk; ++k)
+        all_voxs_correct = all_voxs_correct && dst(i,j,k)==(10000 + 5*k + 50*j + 500*i);
+
+  TEST("Voxel values correct", all_voxs_correct, true);
+}
+
 
 
 //==================================================================================
@@ -108,6 +129,7 @@ static void test_resample()
 {
   test_resample_simple();
   test_resample_trilinear();
+  test_resample_trilinear_scale_2();
 }
 
 
