@@ -47,7 +47,7 @@
 template <class BASE>
 class mbl_cloneables_factory
 {
- private:
+ private: 
   typedef vcl_map<vcl_string, mbl_cloneable_ptr<BASE> > MAP;
 
   //: Singleton array of names, and association concrete instantiations of BASE.
@@ -106,10 +106,10 @@ class mbl_cloneables_factory
 
 // Macro to instantiate template, and initialise singleton data item.
 #define MBL_CLONEABLES_FACTORY_INSTANTIATE(T) \
-template class mbl_cloneables_factory< T >; \
 template <class BASE > \
 vcl_auto_ptr<VCL_DISAPPEARING_TYPENAME mbl_cloneables_factory<BASE >::MAP > \
   mbl_cloneables_factory<BASE >::objects_ =  \
-    vcl_auto_ptr<VCL_DISAPPEARING_TYPENAME mbl_cloneables_factory<BASE >::MAP >(0)
+    vcl_auto_ptr<VCL_DISAPPEARING_TYPENAME mbl_cloneables_factory<BASE >::MAP >(0); \
+template class mbl_cloneables_factory< T >
 
 #endif  // mbl_cloneables_factory_h
