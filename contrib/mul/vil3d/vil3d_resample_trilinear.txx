@@ -14,9 +14,9 @@
 #include <vcl_cassert.h>
 
 // Resample a 3D image by a different factor in each dimension.
-template <class T >
-void vil3d_resample_trilinear(const vil3d_image_view< T >& src_image,
-                              vil3d_image_view< T >& dst_image,
+template <class T>
+void vil3d_resample_trilinear(const vil3d_image_view<T>& src_image,
+                              vil3d_image_view<T>& dst_image,
                               const double dx,
                               const double dy,
                               const double dz)
@@ -45,11 +45,11 @@ void vil3d_resample_trilinear(const vil3d_image_view< T >& src_image,
   const vcl_ptrdiff_t d_pstep = dst_image.planestep();
   T* d_plane = dst_image.origin_ptr();
 
-  // Use this to convert from double to T with appropriate rounding
-  vil_convert_round_pixel<double, T > cr;
+  // Use this to convert from double to Twith appropriate rounding
+  vil_convert_round_pixel<double, T> cr;
 
   // Loop over all voxels in the destination image
-  // and sample from the corresponding point in the source image
+  // and sample from the corresponding poTin the source image
   // (except near upper boundaries).
   for (unsigned p=0; p<np; ++p, s_plane+=s_pstep, d_plane+=d_pstep)
   {
@@ -114,10 +114,10 @@ void vil3d_resample_trilinear(const vil3d_image_view< T >& src_image,
 }
 
 
-template <class T >
+template <class T>
 void vil3d_resample_trilinear_scale_2(
-  const vil3d_image_view< T >& src_im,
-  vil3d_image_view< T >& dest_im)
+  const vil3d_image_view<T>& src_im,
+  vil3d_image_view<T>& dest_im)
 {
 
   // Assume planes are the same for both images
@@ -131,8 +131,8 @@ void vil3d_resample_trilinear_scale_2(
 
   for (unsigned p = 0; p<np; ++p)
   {
-    const vil3d_image_view< T >& src = vil3d_plane(src_im, p);
-    vil3d_image_view< T >& dest = vil3d_plane(dest_im, p);
+    const vil3d_image_view<T> src = vil3d_plane(src_im, p);
+    vil3d_image_view<T> dest = vil3d_plane(dest_im, p);
 
     for (unsigned k=0; k<nk-1; ++k)
     {
@@ -214,6 +214,7 @@ void vil3d_resample_trilinear_scale_2(
     dest(ni*2-2, nj*2-2, nk*2-2) = src(ni-1, nj-1, nk-1);
   }
 }
+
 
 #define VIL3D_RESAMPLE_TRILINEAR_INSTANTIATE( T ) \
 template void vil3d_resample_trilinear(const vil3d_image_view< T >& src_image, \
