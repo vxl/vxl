@@ -141,7 +141,7 @@ void rrel_util_intercept_adjust_stats_copy( InpIter first, InpIter last,
                                             T & robust_mean, T & robust_std, T & inlier_frac,
                                             int dof=1 );
 
-#ifdef VCL_GCC_32
+#if defined(VCL_GCC_32) || defined(VCL_GCC_40)
 # include "rrel_util.txx"
 #endif
 
