@@ -49,7 +49,7 @@ void vil3d_resample_trilinear(const vil3d_image_view<T>& src_image,
   vil_convert_round_pixel<double, T> cr;
 
   // Loop over all voxels in the destination image
-  // and sample from the corresponding poTin the source image
+  // and sample from the corresponding point in the source image
   // (except near upper boundaries).
   for (unsigned p=0; p<np; ++p, s_plane+=s_pstep, d_plane+=d_pstep)
   {
@@ -119,7 +119,6 @@ void vil3d_resample_trilinear_scale_2(
   const vil3d_image_view<T>& src_im,
   vil3d_image_view<T>& dest_im)
 {
-
   // Assume planes are the same for both images
   const unsigned np = src_im.nplanes();
 
@@ -127,7 +126,6 @@ void vil3d_resample_trilinear_scale_2(
   const unsigned nj = src_im.nj();
   const unsigned nk = src_im.nk();
   dest_im.set_size(ni*2-1, nj*2-1, nk*2-1, np);
-  
 
   for (unsigned p = 0; p<np; ++p)
   {
@@ -224,7 +222,5 @@ template void vil3d_resample_trilinear(const vil3d_image_view< T >& src_image, \
                                        const double dz); \
 template void vil3d_resample_trilinear_scale_2(const vil3d_image_view< T >& src_image, \
                                        vil3d_image_view< T >& dst_image)
-
-
 
 #endif // vil3d_resample_trilinear_txx_
