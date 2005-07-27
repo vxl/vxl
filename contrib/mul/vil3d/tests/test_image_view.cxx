@@ -145,6 +145,20 @@ static void test_image_view_int()
                        image_ij.nplanes()==image5.nplanes(), true);
   TEST("slice_ij value",image_ij(1,2,1),123);
 
+  TEST("vil3d_n_slices",vil3d_n_slices(image5,VIL3D_SLICE_FORMAT_IJ),9);
+  TEST_NEAR("vil3d_slice_pixel_width_i (ij)",
+            vil3d_slice_pixel_width_i(1.1,2.2,3.3,VIL3D_SLICE_FORMAT_IJ),  1.1, 1e-6);
+  TEST_NEAR("vil3d_slice_pixel_width_i (jk)",
+            vil3d_slice_pixel_width_i(1.1,2.2,3.3,VIL3D_SLICE_FORMAT_JK),  2.2, 1e-6);
+  TEST_NEAR("vil3d_slice_pixel_width_j (ij)",
+            vil3d_slice_pixel_width_j(1.1,2.2,3.3,VIL3D_SLICE_FORMAT_IJ),  2.2, 1e-6);
+  TEST_NEAR("vil3d_slice_pixel_width_j (jk)",
+            vil3d_slice_pixel_width_j(1.1,2.2,3.3,VIL3D_SLICE_FORMAT_JK),  3.3, 1e-6);
+  TEST_NEAR("vil3d_slice_separation (ij)",
+            vil3d_slice_separation(1.1,2.2,3.3,VIL3D_SLICE_FORMAT_IJ),  3.3, 1e-6);
+  TEST_NEAR("vil3d_slice_separation (jk)",
+            vil3d_slice_separation(1.1,2.2,3.3,VIL3D_SLICE_FORMAT_JK),  1.1, 1e-6);
+
   vil_image_view<vxl_int_32> image_ji = vil3d_slice_ji(image5,3);
   TEST("slice_ji size",image_ji.nj()==image5.ni() &&
                        image_ji.ni()==image5.nj() &&
