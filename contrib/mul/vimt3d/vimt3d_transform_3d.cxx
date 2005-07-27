@@ -10,10 +10,6 @@
 
 //=======================================================================
 
-//=======================================================================
-// Method: matrix
-//=======================================================================
-
 vnl_matrix<double> vimt3d_transform_3d::matrix() const
 {
   vnl_matrix<double> M(4,4);
@@ -21,8 +17,6 @@ vnl_matrix<double> vimt3d_transform_3d::matrix() const
   return M;
 }
 
-//=======================================================================
-// Method: matrix
 //=======================================================================
 
 void vimt3d_transform_3d::matrix(vnl_matrix<double>& M) const
@@ -38,8 +32,6 @@ void vimt3d_transform_3d::matrix(vnl_matrix<double>& M) const
   m_data[3][0]=tx_; m_data[3][1]=ty_; m_data[3][2]=tz_; m_data[3][3]=tt_;
 }
 
-//=======================================================================
-// Method: angles
 //=======================================================================
 
 void vimt3d_transform_3d::angles(double& phi_x, double& phi_y, double& phi_z) const
@@ -106,8 +98,6 @@ void vimt3d_transform_3d::angles(double& phi_x, double& phi_y, double& phi_z) co
 }
 
 //=======================================================================
-// Method: params
-//=======================================================================
 
 void vimt3d_transform_3d::params(vnl_vector<double>& v) const
 {
@@ -152,8 +142,6 @@ void vimt3d_transform_3d::params(vnl_vector<double>& v) const
 }
 
 //=======================================================================
-// Method: setCheck
-//=======================================================================
 
 void vimt3d_transform_3d::setCheck(int n1,int n2,const char* str) const
 {
@@ -163,8 +151,6 @@ void vimt3d_transform_3d::setCheck(int n1,int n2,const char* str) const
   vcl_abort();
 }
 
-//=======================================================================
-// Method: set
 //=======================================================================
 
 void vimt3d_transform_3d::set(const vnl_vector<double>& v, Form form)
@@ -214,8 +200,6 @@ void vimt3d_transform_3d::set(const vnl_vector<double>& v, Form form)
 
 
 //=======================================================================
-// Method: identity
-//=======================================================================
 
 void vimt3d_transform_3d::set_identity()
 {
@@ -230,8 +214,6 @@ void vimt3d_transform_3d::set_identity()
   inv_uptodate_=false;
 }
 
-//=======================================================================
-// Method: translation
 //=======================================================================
 
 void vimt3d_transform_3d::set_translation(double t_x, double t_y, double t_z)
@@ -253,8 +235,6 @@ void vimt3d_transform_3d::set_translation(double t_x, double t_y, double t_z)
 }
 
 //=======================================================================
-// Method: origin
-//=======================================================================
 
 void vimt3d_transform_3d::origin( const vgl_point_3d<double> & p )
 {
@@ -267,8 +247,6 @@ void vimt3d_transform_3d::origin( const vgl_point_3d<double> & p )
   inv_uptodate_=false;
 }
 
-//=======================================================================
-// Method: zoomonly
 //=======================================================================
 
 void vimt3d_transform_3d::set_zoom_only( double s_x, double s_y, double s_z,
@@ -287,8 +265,6 @@ void vimt3d_transform_3d::set_zoom_only( double s_x, double s_y, double s_z,
   inv_uptodate_=false;
 }
 
-//=======================================================================
-// Method: setRotMat
 //=======================================================================
 
 void vimt3d_transform_3d::setRotMat( double r_x, double r_y, double r_z )
@@ -313,8 +289,6 @@ void vimt3d_transform_3d::setRotMat( double r_x, double r_y, double r_z )
 }
 
 //=======================================================================
-// Method: set_rigid_body
-//=======================================================================
 
 void vimt3d_transform_3d::set_rigid_body( double r_x, double r_y, double r_z,
                                          double t_x, double t_y, double t_z)
@@ -336,8 +310,6 @@ void vimt3d_transform_3d::set_rigid_body( double r_x, double r_y, double r_z,
 }
 
 //=======================================================================
-// Method: Similarity
-//=======================================================================
 
 void vimt3d_transform_3d::set_similarity(double s,
                                         double r_x, double r_y, double r_z,
@@ -358,8 +330,6 @@ void vimt3d_transform_3d::set_similarity(double s,
   inv_uptodate_=false;
 }
 
-//=======================================================================
-// Method: affine
 //=======================================================================
 
 void vimt3d_transform_3d::set_affine( double s_x, double s_y, double s_z,
@@ -383,86 +353,7 @@ void vimt3d_transform_3d::set_affine( double s_x, double s_y, double s_z,
   inv_uptodate_=false;
 }
 
-//=======================================================================
-// Method: operator()
-//=======================================================================
 
-vgl_point_3d<double> vimt3d_transform_3d::operator()(double x, double y, double z) const
-{
-  switch (form_)
-  {
-    case Identity :
-      return vgl_point_3d<double> (x,y,z);
-    case Translation :
-      return vgl_point_3d<double> (x+xt_,y+yt_,z+zt_);
-    case ZoomOnly :
-    {
-      return vgl_point_3d<double> (x*xx_+xt_,
-                                   y*yy_+yt_,
-                                   z*zz_+zt_);
-    }
-    case RigidBody :
-    case Similarity :
-    case Affine :
-    {
-#if 0
-      vcl_cout << x*xx_+y*xy_+z*xz_+xt_ << vcl_endl
-               << x*yx_+y*yy_+z*yz_+yt_ << vcl_endl
-               << x*zx_+y*zy_+z*zz_+zt_ << vcl_endl;
-#endif
-
-        return vgl_point_3d<double> (x*xx_+y*xy_+z*xz_+xt_,
-                                     x*yx_+y*yy_+z*yz_+yt_,
-                                     x*zx_+y*zy_+z*zz_+zt_);
-    }
-    default:
-      vcl_cerr<<"vimt3d_transform_3d::operator() : Unrecognised form: "
-              <<int(form_)<<vcl_endl;
-      vcl_abort();
-  }
-
-  return vgl_point_3d<double> (); // To keep over-zealous compilers happy
-}
-
-//=======================================================================
-// Method: delta
-//=======================================================================
-
-vgl_vector_3d<double> vimt3d_transform_3d::delta(vgl_point_3d<double> , vgl_vector_3d<double> dp) const
-{
-  switch (form_)
-  {
-    case Identity :
-    case Translation:
-      return dp;
-    case ZoomOnly :
-    {
-      return vgl_vector_3d<double> (dp.x()*xx_,
-                                    dp.y()*yy_,
-                                    dp.z()*zz_);
-    }
-    case RigidBody :
-    case Similarity :
-    case Affine : // FIXME - returned value is independent of p ?!
-    {
-      return vgl_vector_3d<double> (
-        xx_*(dp.x()*xx_+dp.y()*xy_+dp.z()*xz_),
-        yy_*(dp.x()*yx_+dp.y()*yy_+dp.z()*yz_),
-        zz_*(dp.x()*zx_+dp.y()*zy_+dp.z()*zz_)
-        );
-    }
-    default:
-      vcl_cerr<<"vimt3d_transform_3d::delta() : Unrecognised form: "
-              <<int(form_)<<vcl_endl;
-      vcl_abort();
-  }
-
-  return vgl_vector_3d<double> (); // To keep over-zealous compilers happy
-}
-
-
-//=======================================================================
-// Method: inverse
 //=======================================================================
 
 vimt3d_transform_3d vimt3d_transform_3d::inverse() const
@@ -487,8 +378,6 @@ vimt3d_transform_3d vimt3d_transform_3d::inverse() const
   return inv;
 }
 
-//=======================================================================
-// Method: calcInverse
 //=======================================================================
 
 void vimt3d_transform_3d::calcInverse() const
@@ -565,8 +454,6 @@ void vimt3d_transform_3d::calcInverse() const
   inv_uptodate_=true;
 }
 
-//=======================================================================
-// Method: operator==
 //=======================================================================
 
 bool vimt3d_transform_3d::operator==( const vimt3d_transform_3d& t) const
@@ -679,16 +566,13 @@ vimt3d_transform_3d operator*(const vimt3d_transform_3d& L, const vimt3d_transfo
 }
 
 //=======================================================================
-// Method: version_no
-//=======================================================================
 
 short vimt3d_transform_3d::version_no() const
 {
-  return 1;
+  return 2;
 }
 
-//=======================================================================
-// Method: is_a
+#if 0 // Not needed since class is not part of a hierarchy.
 //=======================================================================
 
 vcl_string vimt3d_transform_3d::is_a() const
@@ -697,16 +581,12 @@ vcl_string vimt3d_transform_3d::is_a() const
 }
 
 //=======================================================================
-// Method: is_class
-//=======================================================================
 
 bool vimt3d_transform_3d::is_class(vcl_string const& s) const
 {
   return s==is_a();
 }
-
-//=======================================================================
-// Method: print
+#endif 
 //=======================================================================
 
 void vimt3d_transform_3d::print_summary(vcl_ostream& o) const
@@ -767,18 +647,12 @@ void vimt3d_transform_3d::print_summary(vcl_ostream& o) const
         << vsl_indent()<< "translation = (" << p(6) << ',' << p(7) << ',' << p(8) << ")\n";
       break;
     }
-    case Undefined:
-      o << "Undefined\n";
-      break;
   }
   vsl_indent_dec(o);
 }
 
 //=======================================================================
-// Method: save
-//=======================================================================
 
-  // required if data is present in this class
 void vimt3d_transform_3d::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
@@ -790,10 +664,7 @@ void vimt3d_transform_3d::b_write(vsl_b_ostream& bfs) const
 }
 
 //=======================================================================
-// Method: load
-//=======================================================================
 
-  // required if data is present in this class
 void vimt3d_transform_3d::b_read(vsl_b_istream& bfs)
 {
   short version;
@@ -801,6 +672,19 @@ void vimt3d_transform_3d::b_read(vsl_b_istream& bfs)
   int f;
   switch (version) {
   case 1:
+    vsl_b_read(bfs,f);
+    if (f==0) // Old Form enum had "Undefined" as the first value. It is never needed, and so was removed.
+      set_identity(); 
+    else
+    {
+      form_=Form(f-1);
+      vsl_b_read(bfs,xx_); vsl_b_read(bfs,xy_); vsl_b_read(bfs,xz_); vsl_b_read(bfs,xt_);
+      vsl_b_read(bfs,yx_); vsl_b_read(bfs,yy_); vsl_b_read(bfs,yz_); vsl_b_read(bfs,yt_);
+      vsl_b_read(bfs,zx_); vsl_b_read(bfs,zy_); vsl_b_read(bfs,zz_); vsl_b_read(bfs,zt_);
+      vsl_b_read(bfs,tx_); vsl_b_read(bfs,ty_); vsl_b_read(bfs,tz_); vsl_b_read(bfs,tt_);
+    }
+    break;
+  case 2:
     vsl_b_read(bfs,f); form_=Form(f);
     vsl_b_read(bfs,xx_); vsl_b_read(bfs,xy_); vsl_b_read(bfs,xz_); vsl_b_read(bfs,xt_);
     vsl_b_read(bfs,yx_); vsl_b_read(bfs,yy_); vsl_b_read(bfs,yz_); vsl_b_read(bfs,yt_);
@@ -816,16 +700,12 @@ void vimt3d_transform_3d::b_read(vsl_b_istream& bfs)
 }
 
 //=======================================================================
-// Associated function: operator<<
-//=======================================================================
 
 void vsl_b_write(vsl_b_ostream& bfs, const vimt3d_transform_3d& b)
 {
   b.b_write(bfs);
 }
 
-//=======================================================================
-// Associated function: operator>>
 //=======================================================================
 
 void vsl_b_read(vsl_b_istream& bfs, vimt3d_transform_3d& b)
@@ -834,16 +714,12 @@ void vsl_b_read(vsl_b_istream& bfs, vimt3d_transform_3d& b)
 }
 
 //=======================================================================
-// Associated function: operator<<
-//=======================================================================
 
 vcl_ostream& operator<<(vcl_ostream& os,const vimt3d_transform_3d& b)
 {
-  os << b.is_a() << ": ";
   vsl_indent_inc(os);
   b.print_summary(os);
   vsl_indent_dec(os);
   return os;
 }
 
-//================== end of vimt3d_transform_3d.cxx ======================

@@ -48,19 +48,20 @@ class vimt3d_transform_3d
  public:
 
   //: Defines form of transformation
-  enum Form { Undefined,
-              Identity,
-              Translation,
-              ZoomOnly,
-              RigidBody,
-              Similarity,
-              Affine};
+  enum Form {Identity,
+             Translation,
+             ZoomOnly,
+             RigidBody,
+             Similarity,
+             Affine};
 
-  //: Constructor
-  vimt3d_transform_3d() : form_(Undefined), inv_uptodate_(false) { set_identity(); }
-
-  //: Destructor
-  virtual ~vimt3d_transform_3d() {}
+  //: Construct as identity transform
+  vimt3d_transform_3d() : 
+  xx_(1), xy_(0), xz_(0), xt_(0),
+  yx_(0), yy_(1), yz_(0), yt_(0),
+  zx_(0), zy_(0), zz_(1), zt_(0),
+  tx_(0), ty_(0), tz_(0), tt_(1),
+  form_(Identity), inv_uptodate_(false) {}
 
   //: True if identity.
   bool is_identity() const { return form_==Identity; }
@@ -163,7 +164,27 @@ class vimt3d_transform_3d
   // \param y  y co-ord
   // \param z  z co-ord
   //ret: Point = T(x,y,z)
-  vgl_point_3d<double>  operator()(double x, double y, double z) const;
+  vgl_point_3d<double>  operator()(double x, double y, double z) const
+  {
+    switch (form_)
+    {
+    case Identity :
+      return vgl_point_3d<double> (x,y,z);
+    case Translation :
+      return vgl_point_3d<double> (x+xt_,y+yt_,z+zt_);
+    case ZoomOnly :
+      return vgl_point_3d<double> (
+        x*xx_+xt_,
+        y*yy_+yt_,
+        z*zz_+zt_);
+//  case RigidBody, Similarity, Affine :
+    default:
+      return vgl_point_3d<double> (
+        x*xx_+y*xy_+z*xz_+xt_,
+        x*yx_+y*yy_+z*yz_+yt_,
+        x*zx_+y*zy_+z*zz_+zt_);
+    }
+  }
 
   //: Applies transformation to point p
   // \param p  Point
@@ -179,7 +200,26 @@ class vimt3d_transform_3d
   // \param p  point
   // \param dp  movement from point
   // \return T(p+dp)-T(p)
-  vgl_vector_3d<double>  delta(vgl_point_3d<double>  p, vgl_vector_3d<double>  dp) const;
+  vgl_vector_3d<double>  delta(vgl_point_3d<double>  /*p*/, vgl_vector_3d<double>  dp) const
+  {
+    switch (form_)
+    {
+    case Identity :
+    case Translation:
+      return dp;
+    case ZoomOnly :
+      return vgl_vector_3d<double> (dp.x()*xx_,
+                                    dp.y()*yy_,
+                                    dp.z()*zz_);
+//  case RigidBody, Similarity, Affine :
+    default: // Don't worry that the returned value is independent of p --- this is correct.
+      return vgl_vector_3d<double> (
+        xx_*(dp.x()*xx_+dp.y()*xy_+dp.z()*xz_),
+        yy_*(dp.x()*yx_+dp.y()*yy_+dp.z()*yz_),
+        zz_*(dp.x()*zx_+dp.y()*zy_+dp.z()*zz_)
+        );
+    }
+  }
 
   //: Calculates the product LR
   // \param L  Transform
@@ -191,25 +231,25 @@ class vimt3d_transform_3d
   //: Version number for I/O
   short version_no() const;
 
+#if 0 // This isn't a class tree, so no need for these functions.
   //: Name of the class
   virtual vcl_string is_a() const;
 
   //: True if this is (or is derived from) class named s
   virtual bool is_class(vcl_string const& s) const;
 
-#if 0
   //: Create a copy on the heap and return base class pointer
   virtual vimt3d_transform_3d* clone() const;
 #endif
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  void print_summary(vcl_ostream& os) const;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const;
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs);
 
   //: True if t is the same as this
   bool operator==(const vimt3d_transform_3d&) const;
