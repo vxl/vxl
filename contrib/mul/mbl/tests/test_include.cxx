@@ -1,6 +1,7 @@
 #include <mbl/mbl_add_all_loaders.h>
 #include <mbl/mbl_ar_process.h>
 #include <mbl/mbl_chord.h>
+#include <mbl/mbl_chord_3d.h>
 #include <mbl/mbl_clamped_plate_spline_2d.h>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <mbl/mbl_cloneables_factory.h>
