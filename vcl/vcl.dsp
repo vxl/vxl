@@ -108,9 +108,6 @@ SOURCE=.\emulation/vcl_hashtable.cxx
 SOURCE=.\emulation/vcl_rbtree_instances.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\emulation/vcl_straits.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\emulation/vcl_string_instances.cxx
 # End Source File
 # Begin Source File
@@ -235,15 +232,6 @@ SOURCE=.\emulation/vcl_set.h
 # End Source File
 # Begin Source File
 SOURCE=.\emulation/vcl_set.txx
-# End Source File
-# Begin Source File
-SOURCE=.\emulation/vcl_straits.h
-# End Source File
-# Begin Source File
-SOURCE=.\emulation/vcl_string.h
-# End Source File
-# Begin Source File
-SOURCE=.\emulation/vcl_string.txx
 # End Source File
 # Begin Source File
 SOURCE=.\emulation/vcl_utility.h

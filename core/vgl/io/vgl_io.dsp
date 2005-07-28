@@ -123,6 +123,9 @@ SOURCE=.\Templates/vgl_io_box_3d+double-.cxx
 SOURCE=.\Templates/vgl_io_box_3d+float-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vgl_io_box_3d+int-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vgl_io_homg_line_2d+double-.cxx
 # End Source File
 # Begin Source File

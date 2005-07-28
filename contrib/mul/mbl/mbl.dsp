@@ -97,7 +97,7 @@ LIB32=link.exe -lib
 # Name "mbl - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\mbl_screen_counter.cxx
 # End Source File
@@ -178,6 +178,9 @@ SOURCE=.\Templates/mbl_data_collector_list+vcl_vector+vbl_triple+double.int.int-
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/mbl_ar_process+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+mbl_chord_3d-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_data_collector_base.cxx
@@ -272,9 +275,12 @@ SOURCE=.\mbl_progress_text.cxx
 # Begin Source File
 SOURCE=.\mbl_rvm_regression_builder.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\mbl_test.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx;in"
 # Begin Source File
 SOURCE=.\mbl_data_wrapper_mixer.txx
 # End Source File
@@ -476,8 +482,12 @@ SOURCE=.\mbl_exception.h
 # Begin Source File
 SOURCE=.\mbl_rvm_regression_builder.h
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+# Begin Source File
+SOURCE=.\mbl_chord_3d.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_config.h.in
+# End Source File
 # End Group
 # End Target
 # End Project

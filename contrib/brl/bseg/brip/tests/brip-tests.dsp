@@ -234,6 +234,9 @@ SOURCE=.\test_homography.cxx
 SOURCE=.\test_lucas_kanade.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_Horn_Schunck.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

@@ -10,9 +10,6 @@
 SOURCE=.\asyncio.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\frame_grabber_pxc200.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\frame_grabber_v4l.cxx
 # End Source File
 # Begin Source File
@@ -25,28 +22,13 @@ SOURCE=.\frame_grabber_vil.cxx
 SOURCE=.\asyncio.h
 # End Source File
 # Begin Source File
-SOURCE=.\bt848-addons.h
-# End Source File
-# Begin Source File
-SOURCE=.\bt848.h
-# End Source File
-# Begin Source File
 SOURCE=.\frame_grabber.h
-# End Source File
-# Begin Source File
-SOURCE=.\frame_grabber_pxc200.h
 # End Source File
 # Begin Source File
 SOURCE=.\frame_grabber_v4l.h
 # End Source File
 # Begin Source File
 SOURCE=.\frame_grabber_vil.h
-# End Source File
-# Begin Source File
-SOURCE=.\pxc200.h
-# End Source File
-# Begin Source File
-SOURCE=.\sysdep.h
 # End Source File
 # End Group
 # End Target

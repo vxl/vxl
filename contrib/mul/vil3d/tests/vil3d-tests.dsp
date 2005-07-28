@@ -304,6 +304,9 @@ SOURCE=.\test_algo_anisotropic_filter.cxx
 # Begin Source File
 SOURCE=.\test_resample.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_analyze_format.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

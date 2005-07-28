@@ -240,6 +240,12 @@ SOURCE=.\Templates/vil_gauss_reduce+int_16-.cxx
 SOURCE=.\Templates/vil_suppress_non_max_edges+float.float-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil_checker_board+byte.byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_suppress_non_max_edges+double.double-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vil_histogram.cxx
 # End Source File
 # Begin Source File
@@ -446,8 +452,12 @@ SOURCE=.\vil_suppress_non_max_edges.h
 # Begin Source File
 SOURCE=.\vil_suppress_non_max_edges.txx
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+# Begin Source File
+SOURCE=.\vil_checker_board.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_checker_board.txx
+# End Source File
 # End Group
 # End Target
 # End Project
