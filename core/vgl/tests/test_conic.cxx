@@ -9,6 +9,7 @@
 #include <vcl_iostream.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_vector.h>
+#include <vnl/vnl_math.h>
 
 static inline double sqr(double x) { return x*x; }
 
@@ -169,16 +170,16 @@ static void test_conic()
   TEST_NEAR("ellipse equality", cc,c, 1e-6);
 
   // Test ellipse geometry for an ellipse a = 2, b = 1 at 45 degrees
-  // centered at (1, 2);  
+  // centered at (1, 2);
 
   vcl_cout << "Test ellipse geometry \n";
   vgl_conic<double> cg(0.492577, -0.591093, 0.492577, 0.197032, -1.37921, 0.492813);
   double xc, yc, major_axis, minor_axis, angle;
   bool good = cg.ellipse_geometry(xc, yc, major_axis, minor_axis, angle);
   vcl_cout << "ellipse(" << xc << ' ' << yc << ' ' << major_axis
-           << ' ' << minor_axis << ' ' << angle*180.0/3.14159 << ")\n";
+           << ' ' << minor_axis << ' ' << angle*180.0/vnl_math::pi << ")\n";
   double gd = 0.0;
-  if(!good)
+  if (!good)
     gd = 1.0;
   TEST_NEAR("ellipse geometry", gd + (xc-1)*(yc-2)*(major_axis-2)*(minor_axis-1)*(angle-0.785398), 0, 1e-10);
 
