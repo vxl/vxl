@@ -9,6 +9,7 @@ TESTS += test_watershed.cxx
 TESTS += test_fourier.cxx
 TESTS += test_homography.cxx
 TESTS += test_lucas_kanade.cxx
+TESTS += test_Horn_Schunck.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

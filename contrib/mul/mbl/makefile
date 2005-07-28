@@ -37,6 +37,7 @@ SOURCES += mbl_progress_null.cxx
 SOURCES += mbl_progress_text.cxx
 SOURCES += mbl_rvm_regression_builder.cxx
 SOURCES += mbl_exception.cxx
+SOURCES += mbl_test.cxx
 
 # Additional files to document:
 MANPAGE_SOURCES += mbl_cloneables_factory.h
@@ -61,7 +62,12 @@ MANPAGE_SOURCES += mbl_combination.h
 MANPAGE_SOURCES += mbl_ar_process.txx
 MANPAGE_SOURCES += mbl_jarque_bera.h
 MANPAGE_SOURCES += mbl_stl_pred.h
-MANPAGE_SOURCES += mbl_test.h
+MANPAGE_SOURCES += mbl_chord_3d.h
+
+MANPAGE_SOURCES += mbl_config.h.in
+
+# This is where configure will put mbl/mbl_config.h
+INCDIRS += $(RELOBJDIR)/include
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
@@ -70,6 +76,12 @@ include ${IUEROOT}/config/top-params.mk
 ifndef NOTEST
  SUBDIRS += tests
 endif
+
+# configure stuff:
+xall:: $(RELOBJDIR)/include/mbl/mbl_config.h
+$(RELOBJDIR)/include/mbl/mbl_config.h: mbl_config.h.in
+	mkdir -p $(RELOBJDIR)/include/mbl
+	sed -e 's/@HAS_.*@/1/' -e 's/[._]in//g' $^ > $@
 
 ######################################
 include ${IUEROOT}/config/top-rules.mk

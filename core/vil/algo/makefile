@@ -52,6 +52,7 @@ MANPAGE_SOURCES += vil_tile_images.h
 SOURCES += vil_orientations.cxx
 SOURCES += vil_colour_space.cxx
 MANPAGE_SOURCES += vil_abs_shuffle_distance.txx
+MANPAGE_SOURCES += vil_checker_board.txx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk

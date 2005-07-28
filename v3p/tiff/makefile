@@ -14,12 +14,13 @@ USE_STDC++ := 0
 USE_JPEG := 1
 
 LIBRARY := tiff
-VERSION := 1.0
+VERSION := 3.6
 
 MANPAGE_SOURCES += tiff.h
 SOURCES += tif_aux.c
 SOURCES += tif_close.c
 SOURCES += tif_codec.c
+SOURCES += tif_color.c
 SOURCES += tif_compress.c
 SOURCES += tif_dir.c
 SOURCES += tif_dirinfo.c
@@ -27,8 +28,10 @@ SOURCES += tif_dirread.c
 SOURCES += tif_dirwrite.c
 SOURCES += tif_dumpmode.c
 SOURCES += tif_error.c
+SOURCES += tif_extension.c
 SOURCES += tif_fax3.c
 SOURCES += tif_fax3sm.c
+SOURCES += fax3sm_winnt.c
 SOURCES += tif_getimage.c
 SOURCES += tif_jpeg.c
 SOURCES += tif_flush.c
@@ -40,6 +43,7 @@ SOURCES += tif_packbits.c
 SOURCES += tif_pixarlog.c
 SOURCES += tif_predict.c
 SOURCES += tif_print.c
+SOURCES += tif_ojpeg.c
 SOURCES += tif_read.c
 SOURCES += tif_swab.c
 SOURCES += tif_strip.c
@@ -49,18 +53,14 @@ SOURCES += tif_version.c
 SOURCES += tif_warning.c
 SOURCES += tif_write.c
 SOURCES += tif_zip.c
-MANPAGE_SOURCES += format.h
-MANPAGE_SOURCES += machdep.h
 MANPAGE_SOURCES += port.h
-MANPAGE_SOURCES += prototypes.h
 MANPAGE_SOURCES += t4.h
 MANPAGE_SOURCES += tiffcomp.h
-MANPAGE_SOURCES += tiffcompat.h
 MANPAGE_SOURCES += tiffconf.h
 MANPAGE_SOURCES += tiffio.h
 MANPAGE_SOURCES += tiffiop.h
+MANPAGE_SOURCES += tiffvers.h
 MANPAGE_SOURCES += uvcode.h
-MANPAGE_SOURCES += version.h
 
 #######################################
 include ${IUEROOT}/config/top-params.mk

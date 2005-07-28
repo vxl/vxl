@@ -31,6 +31,7 @@ TESTS += test_algo_histogram_equalise.cxx
 TESTS += test_from_image_2d.cxx
 TESTS += test_algo_anisotropic_filter.cxx
 TESTS += test_resample.cxx
+TESTS += test_analyze_format.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

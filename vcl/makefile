@@ -281,7 +281,7 @@ include ${IUEROOT}/config/top-params.mk
 # It is OK to compile these sources with native
 # STLs because they won't generate any code.
 ifndef USE_NATIVE_STL
-SOURCES += emulation/vcl_straits.cxx
+#SOURCES += emulation/vcl_straits.cxx
 SOURCES += emulation/vcl_hashtable.cxx
 SOURCES += emulation/vcl_alloc.cxx
 SOURCES += emulation/vcl_string_instances.cxx # without corresponding .h
@@ -298,7 +298,7 @@ MANPAGE_SOURCES += emulation/vcl_list.txx
 MANPAGE_SOURCES += emulation/vcl_map.txx # uses emulation/vcl_rbtree.txx
 MANPAGE_SOURCES += emulation/vcl_multimap.txx
 MANPAGE_SOURCES += emulation/vcl_set.txx # uses emulation/vcl_rbtree.txx
-MANPAGE_SOURCES += emulation/vcl_string.txx
+#MANPAGE_SOURCES += emulation/vcl_string.txx
 MANPAGE_SOURCES += emulation/vcl_utility.txx
 MANPAGE_SOURCES += emulation/vcl_vector.txx
 MANPAGE_SOURCES += emulation/vcl_hash.txx # without corresponding .h

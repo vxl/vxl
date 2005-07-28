@@ -29,6 +29,7 @@ MANPAGE_SOURCES += vil3d_convert.h
 SOURCES += file_formats/vil3d_gipl_format.cxx
 SOURCES += file_formats/vil3d_dicom.cxx
 SOURCES += file_formats/vil3d_slice_list.cxx
+SOURCES += file_formats/vil3d_analyze_format.cxx
 SOURCES += vil3d_copy.cxx
 SOURCES += vil3d_save.cxx
 MANPAGE_SOURCES += vil3d_from_image_2d.h
