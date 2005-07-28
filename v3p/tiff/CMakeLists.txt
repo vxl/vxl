@@ -13,6 +13,7 @@ SET( tiff_sources
   tiffiop.h
   uvcode.h
   tiffvers.h
+  port.h
   tif_aux.c
   tif_close.c
   tif_codec.c

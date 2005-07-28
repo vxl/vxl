@@ -46,6 +46,7 @@ SET( vil_algo_sources
   vil_orientations.cxx        vil_orientations.h
   vil_colour_space.cxx        vil_colour_space.h
   vil_abs_shuffle_distance.txx vil_abs_shuffle_distance.h
+  vil_checker_board.txx       vil_checker_board.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vil_algo_sources)
