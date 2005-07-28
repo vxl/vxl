@@ -65,7 +65,7 @@ void vil_median(const vil_image_view<T>& src_image,
     T* dest_p = dest_row0 + j*d_jstep + ilo * d_istep;
 
     for (int i=ilo;i<=ihi;++i,src_p+=s_istep,dest_p+=d_istep)
-      *dest_p=vil_sorted_value(src_p,&offset[0],&value_wkspce[0],offset.size(),rank);
+      *dest_p=vil_sorted_value(src_p,&offset[0],value_wkspce.begin(),offset.size(),rank);
   }
 }
 

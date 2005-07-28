@@ -10,12 +10,15 @@
 #include <vcl_algorithm.h>
 
 //: Return r-th sorted value of im[offset[k]]
-//  Values im[offset[k]] placed into values[k] then sorted
-template <class T>
-inline T vil_sorted_value(const T* im, const vcl_ptrdiff_t* offset, T* values,
+//  Values im[offset[k]] placed into values[k] then sorted. \a values
+//  should be a random access iterator into a containter of T such
+//  that the range [values,values+n) is valid.
+template <class T, class Iter>
+inline T vil_sorted_value(const T* im, const vcl_ptrdiff_t* offset, Iter values,
                           unsigned n, unsigned r)
 {
-  for (unsigned i=0;i<n;++i) values[i]=im[offset[i]];
+  Iter v = values;
+  for (unsigned i=0;i<n;++i,++v) *v=im[offset[i]];
 //  vcl_sort(values,values+n);
   vcl_nth_element(values, values+r, values+n);
   return values[r];
