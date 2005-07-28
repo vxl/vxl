@@ -691,7 +691,7 @@ bool vil3d_analyze_image::put_view(const vil3d_image_view_base& view,
       if (header_.needSwap())
         swap16_for_big_endian((char *)(view_copy.origin_ptr()), ni()*nj()*nk()*nplanes());
 
-      os->write(view_copy.origin_ptr(),ni()*nj()*nk());
+      os->write(view_copy.origin_ptr(),ni()*nj()*nk()*nplanes()*sizeof(vxl_int_16));
       // Should check that write was successful
       return true;
     }
@@ -702,18 +702,18 @@ bool vil3d_analyze_image::put_view(const vil3d_image_view_base& view,
       if (header_.needSwap())
         swap32_for_big_endian((char *)(view_copy.origin_ptr()), ni()*nj()*nk()*nplanes());
 
-      os->write(view_copy.origin_ptr(),ni()*nj()*nk());
+      os->write(view_copy.origin_ptr(),ni()*nj()*nk()*nplanes()*sizeof(vxl_int_32));
       // Should check that write was successful
       return true;
     }
     case VIL_PIXEL_FORMAT_FLOAT:
     {
-      vil3d_image_view<float> view_copy(ni(),nj(),nk(),nplanes());
+      vil3d_image_view<float> view_copy(ni(),nj(),nk(),nplanes()*sizeof(float));
       vil3d_copy_reformat(static_cast<const vil3d_image_view<float>&>(view),view_copy);
       if (header_.needSwap())
         swap32_for_big_endian((char *)(view_copy.origin_ptr()), ni()*nj()*nk()*nplanes());
 
-      os->write(view_copy.origin_ptr(),ni()*nj()*nk());
+      os->write(view_copy.origin_ptr(),ni()*nj()*nk()*nplanes()*sizeof(float));
       // Should check that write was successful
       return true;
     }
@@ -724,7 +724,7 @@ bool vil3d_analyze_image::put_view(const vil3d_image_view_base& view,
       if (header_.needSwap())
         swap32_for_big_endian((char *)(view_copy.origin_ptr()), ni()*nj()*nk()*nplanes());
 
-      os->write(view_copy.origin_ptr(),ni()*nj()*nk());
+      os->write(view_copy.origin_ptr(),ni()*nj()*nk()*nplanes()*sizeof(double));
       // Should check that write was successful
       return true;
     }
