@@ -16,6 +16,21 @@
 # include "iso/vcl_vector.h"
 #endif
 
+#if defined(VCL_ICC)
+# include "vcl_utility.h"
+// Intel compiler's std::swap can't handle the special bit-iterator of
+// vector<bool>
+namespace std {
+  inline void swap(std::vector<bool, std::allocator<bool> >::iterator::reference a,
+                   std::vector<bool, std::allocator<bool> >::iterator::reference b)
+  {
+    bool tmp = a;
+    a = b;
+    b = tmp;
+  }
+} // end namespace std
+#endif
+
 #define VCL_VECTOR_INSTANTIATE extern "you must include vcl_vector.txx first"
 
 #if VCL_USE_IMPLICIT_TEMPLATES
