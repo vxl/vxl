@@ -161,12 +161,12 @@ template <class T> void threshold_abs
 template <class T>
 T max_val(const vil1_memory_image_of<T> &image, T min)
 {
-	T max = min;
-	for (int x=0; x<image.width(); x++)
-		for (int y=0; y<image.height(); y++)
-			if (image(x,y)>max)
-				max = image(x,y);
-	return max;
+  T max = min;
+  for (int x=0; x<image.width(); x++)
+    for (int y=0; y<image.height(); y++)
+      if (image(x,y)>max)
+        max = image(x,y);
+  return max;
 }
 
 /** min_val
@@ -185,12 +185,12 @@ T max_val(const vil1_memory_image_of<T> &image, T min)
 template <class T>
 T min_val(const vil1_memory_image_of<T> &image, T max)
 {
-	T min = max;
-	for (int x=0; x<image.width(); x++)
-		for (int y=0; y<image.height(); y++)
-			if (image(x,y)<min)
-				min = image(x,y);
-	return min;
+  T min = max;
+  for (int x=0; x<image.width(); x++)
+    for (int y=0; y<image.height(); y++)
+      if (image(x,y)<min)
+        min = image(x,y);
+  return min;
 }
 
 /** normalise_image
@@ -213,38 +213,38 @@ T min_val(const vil1_memory_image_of<T> &image, T max)
 
 template <class T> vil1_memory_image_of<T> *normalise_image
 (
-	const vil1_memory_image_of<T> &src, 
-	T low, T high,
-	T min, T max,
-    T epsilon
+  const vil1_memory_image_of<T> &src, 
+  T low, T high,
+  T min, T max,
+  T epsilon
 )
 {
-	assert(high>low);
-	assert(max>min);
-	vil1_memory_image_of<T> *ret = 
-		new vil1_memory_image_of<T>(src.width(), src.height());
-	T small = min_val(src, max);
-	T large = max_val(src, min);
-	double d1 = (double)(high-low);
-	assert(d1>0);
-	double d2 = (double)(large-small);
-	assert(d2>=0);
-	if (d2>0)
-	{
-		for (int x=0; x<src.width(); x++)
-			for (int y=0; y<src.height(); y++)
-			{
-				(*ret)(x,y) = (T)((src(x,y)-small)*d1/d2+low);
-				assert(((*ret)(x,y)>=low-epsilon)&&((*ret)(x,y)<=high+epsilon));
-			}
-	}
-	else 
-	{
-		for (int x=0; x<src.width(); x++)
-			for (int y=0; y<src.height(); y++)
-				(*ret)(x,y) = (T)src(x,y);
-	}
-	return(ret);
+  assert(high>low);
+  assert(max>min);
+  vil1_memory_image_of<T> *ret = 
+    new vil1_memory_image_of<T>(src.width(), src.height());
+  T small = min_val(src, max);
+  T large = max_val(src, min);
+  double d1 = (double)(high-low);
+  assert(d1>0);
+  double d2 = (double)(large-small);
+  assert(d2>=0);
+  if (d2>0)
+  {
+    for (int x=0; x<src.width(); x++)
+      for (int y=0; y<src.height(); y++)
+      {
+        (*ret)(x,y) = (T)((src(x,y)-small)*d1/d2+low);
+        assert(((*ret)(x,y)>=low-epsilon)&&((*ret)(x,y)<=high+epsilon));
+      }
+  }
+  else 
+  {
+    for (int x=0; x<src.width(); x++)
+      for (int y=0; y<src.height(); y++)
+        (*ret)(x,y) = (T)src(x,y);
+  }
+  return ret;
 }
 
 #endif // ouml_image_ops_txx_

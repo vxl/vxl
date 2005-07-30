@@ -2,7 +2,7 @@
 #define image_ops__INCLUDED
 
 #include <vil1/vil1_memory_image_of.h>
-#include "./image_convert.h"
+#include "image_convert.h"
 
 template <class T>
 vil1_memory_image_of<T> &operator -=
@@ -31,32 +31,33 @@ T min_val(const vil1_memory_image_of<T> &image, T max);
 
 template <class T>
 vil1_memory_image_of<T> *normalise_image(const vil1_memory_image_of<T> &src, 
-										T low, T high, T min, T max,
-                                        T epsilon=(T)0);
+                                         T low, T high, T min, T max,
+                                         T epsilon=(T)0);
 
 typedef vil1_memory_image_of<int> IntImage;
 typedef vil1_memory_image_of<vxl_byte> ByteImage;
 
 inline void save_intimage_asbyte(vil1_memory_image_of<int> &src,
-								 char *filename)
+                                 char *filename)
 {
-	IntImage *normal = normalise_image(src, 0, 255, INT_MIN, INT_MAX); 
-	vxl_byte b;
-	ByteImage *byte_im = convert_image(*normal, b);
-	vil1_save(*byte_im, filename);
-	delete byte_im;
-	delete normal;
+  IntImage *normal = normalise_image(src, 0, 255, INT_MIN, INT_MAX); 
+  vxl_byte b;
+  ByteImage *byte_im = convert_image(*normal, b);
+  vil1_save(*byte_im, filename);
+  delete byte_im;
+  delete normal;
 }
 
 /*
  * don't do normalisation in this version
  */
 inline void save_intimage_asbyte_nonorm(vil1_memory_image_of<int> &src,
-										char *filename)
+                                        char *filename)
 {
-	vxl_byte b;
-	ByteImage *byte_im = convert_image(src, b);
-	vil1_save(*byte_im, filename);
-	delete byte_im;
+  vxl_byte b;
+  ByteImage *byte_im = convert_image(src, b);
+  vil1_save(*byte_im, filename);
+  delete byte_im;
 }
+
 #endif // image_ops__INCLUDED

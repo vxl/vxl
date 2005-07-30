@@ -18,6 +18,7 @@
 #include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_4point.h>
 #include <vgl/algo/vgl_h_matrix_2d_optimize_lmq.h>
+
 static void test_identity_transform()
 {
   vcl_cout << "\n=== Testing identity transform on point ===\n";
@@ -121,7 +122,7 @@ static void test_projective_basis_from_lines()
 
 static void test_norm_trans()
 {
-  vcl_cout << "\n=== Test the computation of normalizing transform \n";
+  vcl_cout << "\n=== Test the computation of normalizing transform\n";
 
   vcl_vector<vgl_homg_point_2d<double> > points1;
   //setup points in frame 1
@@ -131,28 +132,26 @@ static void test_norm_trans()
   points1.push_back(p10); points1.push_back(p11); points1.push_back(p12);
   points1.push_back(p13); points1.push_back(p14); points1.push_back(p15);
 
-  
   vgl_norm_trans_2d<double> nt;
   bool good = nt.compute_from_points(points1, false);
   double dg = 0.0;
-  if(!good)
+  if (!good)
     dg = 1.0;
   vcl_cout << "The resulting transform\n";
   vnl_matrix_fixed<double,3,3> M=nt.get_matrix();
-  vcl_cout << M ;
-  vcl_cout << "Normalized Points \n";
+  vcl_cout << M
+           << "Normalized Points\n";
   unsigned n = 0;
   double Sxx = 0, Sxy = 0, Syy=0;
-  for(vcl_vector<vgl_homg_point_2d<double> >::iterator pit = points1.begin();
-      pit != points1.end(); ++pit,++n)
+  for (vcl_vector<vgl_homg_point_2d<double> >::iterator pit = points1.begin();
+       pit != points1.end(); ++pit,++n)
   {
-	  vgl_homg_point_2d<double> p = nt(*pit);
+    vgl_homg_point_2d<double> p = nt(*pit);
     double x = p.x()/p.w(), y = p.y()/p.w();
-    vcl_cout << "p[" << n << "]=(" << x
-		<< ' ' << y << ")\n";
+    vcl_cout << "p[" << n << "]=(" << x << ' ' << y << ")\n";
     Sxx += x*x; Sxy+= x*y; Syy += y*y;
   }
-  vcl_cout << "Sxx = " << vcl_sqrt(Sxx/5.0) << " Sxy = " 
+  vcl_cout << "Sxx = " << vcl_sqrt(Sxx/5.0) << " Sxy = "
            << vcl_sqrt(Sxy/5.0) << " Syy = " << vcl_sqrt(Syy/5.0) << '\n';
 
   double sigma_x = vcl_sqrt(Sxx/5.0), sigma_y = vcl_sqrt(Syy/5.0);
@@ -277,6 +276,7 @@ static void test_compute_4point()
   vcl_cout << "The normalized upper diagonal "<< hdiag << '\n';
   TEST_NEAR("recover 2x scale matrix", length(hdiag-p23), 0.0, 1e-06);
 }
+
 static void test_set_transform()
 {
   vcl_cout << "\n=== Test setting basic transforms =======\n";

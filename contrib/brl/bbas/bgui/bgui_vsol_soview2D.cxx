@@ -127,15 +127,15 @@ void bgui_vsol_soview2D_line_seg::translate(float tx, float ty)
 bgui_vsol_soview2D_conic_seg::bgui_vsol_soview2D_conic_seg( vsol_conic_2d_sptr const & conic)
   : bgui_vsol_soview2D(conic.ptr())
 {
-  if(!conic||!conic->is_real_ellipse())
-    {
-      xc_ = 0; yc_ =0;
-      major_axis_ = 0; minor_axis_ = 0;
-      angle_ = 0;
-      start_angle_ = 0;
-      end_angle_ = 0;
-      return;
-    }
+  if (!conic||!conic->is_real_ellipse())
+  {
+    xc_ = 0; yc_ =0;
+    major_axis_ = 0; minor_axis_ = 0;
+    angle_ = 0;
+    start_angle_ = 0;
+    end_angle_ = 0;
+    return;
+  }
   conic->ellipse_parameters(xc_, yc_, angle_, major_axis_, minor_axis_);
 
   // compute the angle at p0
@@ -145,32 +145,32 @@ bgui_vsol_soview2D_conic_seg::bgui_vsol_soview2D_conic_seg( vsol_conic_2d_sptr c
   // compute the angle at p1
   vsol_point_2d_sptr p1 = conic->p1();
   end_angle_ = conic->ellipse_angular_position(p1);
-  if(end_angle_<=start_angle_)
-	  end_angle_ = 2.0*vnl_math::pi + end_angle_;
+  if (end_angle_<=start_angle_)
+    end_angle_ = 2.0*vnl_math::pi + end_angle_;
 }
 
 vsol_conic_2d_sptr bgui_vsol_soview2D_conic_seg::sptr() const
 {
   return sptr_->cast_to_curve()->cast_to_conic();
 }
-// the convention is that the segment extends from p0 to p1 in a 
+// the convention is that the segment extends from p0 to p1 in a
 // counter-clockwise angular sense, i.e. positive phi.
 void bgui_vsol_soview2D_conic_seg::draw() const
 {
-  if(start_angle_==end_angle_)
+  if (start_angle_==end_angle_)
     return;
 
   // Increments of 1 degree should be adequate
   double one_degree = vnl_math::pi/180;
-  
+
   double px, py;
   glBegin(GL_LINE_STRIP);
   for (double phi = start_angle_; phi<=end_angle_; phi+=one_degree)
   {
-    px = major_axis_*vcl_cos(angle_)*vcl_cos(phi) 
+    px = major_axis_*vcl_cos(angle_)*vcl_cos(phi)
       - minor_axis_*vcl_sin(angle_)*vcl_sin(phi);
 
-    py = minor_axis_*vcl_cos(angle_)*vcl_sin(phi) 
+    py = minor_axis_*vcl_cos(angle_)*vcl_sin(phi)
       + major_axis_*vcl_sin(angle_)*vcl_cos(phi);
 
     glVertex2d(xc_+px, yc_+py);
@@ -196,9 +196,9 @@ void bgui_vsol_soview2D_conic_seg::translate(float tx, float ty)
   double txd = static_cast<double>(tx), tyd = static_cast<double>(ty);
   //first translate the endpoints
   vsol_point_2d_sptr p0 = sptr()->p0();
-  p0->set_x(p0->x()+tx);   p0->set_y(p0->y()+ty); 
+  p0->set_x(p0->x()+tx);   p0->set_y(p0->y()+ty);
   vsol_point_2d_sptr p1 = sptr()->p1();
-  p1->set_x(p1->x()+tx);   p1->set_y(p1->y()+ty); 
+  p1->set_x(p1->x()+tx);   p1->set_y(p1->y()+ty);
 
   //compute new d, e, f coefficients for the conic
   double a = sptr()->a(), b = sptr()->b(), c = sptr()->c(),
@@ -548,4 +548,3 @@ void bgui_vsol_soview2D_polygon::translate( float x , float y )
     sptr()->vertex(i)->set_y( sptr()->vertex(i)->y() + y );
   }
 }
-

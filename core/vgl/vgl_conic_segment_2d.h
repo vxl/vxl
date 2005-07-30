@@ -9,7 +9,8 @@
 // \author J.L. Mundy  June 18, 2005
 // \brief A curve segment with the geometry of an conic
 // \verbatim
-// Modifications - none
+//  Modifications
+//   none
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -57,10 +58,10 @@ class vgl_conic_segment_2d
 
   //: The equality comparison operator
   inline bool operator==(vgl_conic_segment_2d<Type> const& l) const {
-    return (this==&l) ||
-			((l.conic() == conic_) &&
-                          (point1() == l.point1() && point2() == l.point2()) ||
-                          (point1() == l.point2() && point2() == l.point1()));}
+    return this==&l ||
+            (l.conic() == conic_ &&
+                ((point1() == l.point1() && point2() == l.point2()) ||
+                 (point1() == l.point2() && point2() == l.point1()))); }
 
   //: The inequality comparison operator.
   inline bool operator!=(vgl_conic_segment_2d<Type>const& other)const{return !operator==(other);}
