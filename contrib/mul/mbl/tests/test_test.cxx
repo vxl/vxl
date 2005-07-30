@@ -1,4 +1,4 @@
-// This is mul/mbl/tests/test_gamma.cxx
+// This is mul/mbl/tests/test_test.cxx
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vul/vul_file.h>
@@ -8,10 +8,10 @@
 
 void test_test()
 {
-  vcl_cout << "*******************\n"
+  vcl_cout << "******************\n"
            << " Testing mbl_test\n"
-           << "*******************\n";
-  
+           << "******************\n";
+
   vpl_unlink((vul_file::get_cwd()+"/mul/mbl/mbl_test_save_measurement.txt").c_str());
   vpl_rmdir((vul_file::get_cwd()+"/mul/mbl").c_str());
   vpl_rmdir((vul_file::get_cwd()+"/mul").c_str());
@@ -41,7 +41,6 @@ void test_test()
   TEST("Saved value 1 correctly", v, 5.0);
   data >> ds >> ts >> bs >> v;
   TEST("Saved value 2 correctly", v, 10.0);
-
 }
 
 TESTMAIN(test_test);
