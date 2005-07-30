@@ -10,18 +10,18 @@
 // \author Tim Cootes - Manchester
 // (Based on old code whos provenance has been lost in the mists of time...)
 
+#include <vcl_iosfwd.h>
 #include <vil3d/vil3d_file_format.h>
 #include <vil/vil_stream.h>
 
 //: Structure containing anaylse header file information.
-class vil3d_analyze_header {
-public :
-
-    // obligatory
-  class Key {
-
-      public :
-
+class vil3d_analyze_header
+{
+ public :
+  // obligatory
+  class Key
+  {
+   public :
     int sizeof_hdr;
     char data_type[10];
     char db_name[18];
@@ -36,11 +36,10 @@ public :
     void reset();
   };
 
-    // obligatory
-  class Dimensions {
-
-      public :
-
+  // obligatory
+  class Dimensions
+  {
+   public :
     short int dim[8];
     short int unused8;
     short int unused9;
@@ -70,11 +69,10 @@ public :
     void reset();
   };
 
-    // optional
-  class History {
-
-      public :
-
+  // optional
+  class History
+  {
+   public :
     char descrip[80];
     char aux_file[24];
     char orient;
@@ -104,10 +102,10 @@ public :
   Dimensions dim;
   History    history;
 
-private:
+ private:
   bool swap_bytes_; // True if bytes need to be swapped
 
-public:
+ public:
   vil3d_analyze_header() : swap_bytes_(false) {}
   ~vil3d_analyze_header() {}
 
@@ -193,7 +191,7 @@ class vil3d_analyze_image: public vil3d_image_resource
   //: Physical Voxel dimensions ( in mm )
   float vox_width1_, vox_width2_, vox_width3_;
 
-public:
+ public:
   //: Create object with given header and base_path, ready for reading/writing
   //  Doesn't actually load/save anything until get_copy_view() or put_view() called.
   //  Header is assumed to have been loaded/saved by the calling function.
