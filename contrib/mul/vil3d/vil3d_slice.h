@@ -142,6 +142,7 @@ inline vil_image_view<T> vil3d_slice(const vil3d_image_view<T> &im, unsigned sli
     case VIL3D_SLICE_FORMAT_JK: return vil3d_slice_jk(im,slice_index);
     case VIL3D_SLICE_FORMAT_KJ: return vil3d_slice_kj(im,slice_index);
   }
+  return 0.0; // to avoid compiler warning
 }
 
 //: Return number of possible slices of image given the selected format
@@ -158,6 +159,7 @@ inline unsigned vil3d_n_slices(const vil3d_image_view_base& image,
     case VIL3D_SLICE_FORMAT_JK: return image.ni();
     case VIL3D_SLICE_FORMAT_KJ: return image.ni();
   }
+  return 0; // to avoid compiler warning
 }
 
 //: Return pixel width in i direction of slice, given widths of original 3D volume pixels
@@ -174,6 +176,7 @@ inline double vil3d_slice_pixel_width_i(double src_i_width, double src_j_width, 
     case VIL3D_SLICE_FORMAT_JK: return src_j_width;
     case VIL3D_SLICE_FORMAT_KJ: return src_k_width;
   }
+  return 0.0; // to avoid compiler warning
 }
 
 //: Return pixel width in j direction of slice, given widths of original 3D volume pixels
@@ -190,6 +193,7 @@ inline double vil3d_slice_pixel_width_j(double src_i_width, double src_j_width, 
     case VIL3D_SLICE_FORMAT_JK: return src_k_width;
     case VIL3D_SLICE_FORMAT_KJ: return src_j_width;
   }
+  return 0.0; // to avoid compiler warning
 }
 
 //: Return separation of neighbouring slices, given widths of original 3D volume pixels
@@ -206,6 +210,7 @@ inline double vil3d_slice_separation(double src_i_width, double src_j_width, dou
     case VIL3D_SLICE_FORMAT_JK: return src_i_width;
     case VIL3D_SLICE_FORMAT_KJ: return src_i_width;
   }
+  return 0.0; // to avoid compiler warning
 }
 
 
