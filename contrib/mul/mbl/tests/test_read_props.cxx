@@ -78,7 +78,7 @@ void test_read_props1()
     vcl_cout << "\nCase 6\n";
     vcl_istringstream ss("{\n  // comment\n a: a\n a: b\n }");
     mbl_read_props_type props = mbl_read_props( ss );
-    mbl_read_props_print(vcl_cout, props); 
+    mbl_read_props_print(vcl_cout, props);
     TEST("Case 6: props[ \"a\" ] == \"b\"",
          props[ "a" ] == "b" && !ss.fail(), true);
   }
@@ -106,7 +106,7 @@ void test_read_props1()
 
 //    vcl_cout << props[ "b" ] << vcl_endl;
 
-    mbl_read_props_print(vcl_cout, props); 
+    mbl_read_props_print(vcl_cout, props);
     TEST("Case 8a: props[ \"a\" ] == \"a\"",
          props[ "a" ] == "a" && !ss.fail(), true);
     vcl_istringstream ssb(props[ "b" ]);
@@ -126,7 +126,7 @@ void test_read_props1()
 
     mbl_read_props_type props = mbl_read_props( ss );
 
-    mbl_read_props_print(vcl_cout, props); 
+    mbl_read_props_print(vcl_cout, props);
     TEST("Case 8.5a: props[ \"a\" ] == \"a\"", props[ "a" ] == "a" && !ss.fail(), true);
     TEST("Case 8.5b: props[ \"b\" ] == b_ans",
          strip_ws(props[ "b" ]) == strip_ws(b_ans) && !ss.fail(), true);
@@ -152,7 +152,7 @@ void test_read_props1()
 
     mbl_read_props_type props = mbl_read_props( ss );
 
-    mbl_read_props_print(vcl_cout, props); 
+    mbl_read_props_print(vcl_cout, props);
     TEST("Case 9a: props[ \"a\" ] == \"a\"", props[ "a" ] == "a" && !ss.fail(), true);
     TEST("Case 9b: props[ \"b\" ] == b_ans",
          strip_ws(props[ "b" ]) == strip_ws(b_ans) && !ss.fail(), true);
@@ -167,7 +167,7 @@ void test_read_props1()
 
     mbl_read_props_type props = mbl_read_props( ss );
 
-    mbl_read_props_print(vcl_cout, props); 
+    mbl_read_props_print(vcl_cout, props);
     TEST("Case 10a: props[ \"a\" ] == \"a\"", props[ "a" ] == "a" && !ss.fail(), true);
     TEST("Case 10b: props[ \"b\" ] == b_ans",
          strip_ws(props[ "b" ]) == strip_ws(b_ans) && !ss.fail(), true);
@@ -289,7 +289,7 @@ void test_read_props_ws()
     vcl_cout << "\nCase 6\n";
     vcl_istringstream ss("{\n  // comment\n a: a\n a: b\n }");
     mbl_read_props_type props = mbl_read_props_ws( ss );
-    mbl_read_props_print(vcl_cout, props); 
+    mbl_read_props_print(vcl_cout, props);
     TEST("Case 6: props[ \"a\" ] == \"b\"",
          props[ "a" ] == "b" && !ss.fail(), true);
   }
@@ -317,7 +317,7 @@ void test_read_props_ws()
 
 //    vcl_cout << props[ "b" ] << vcl_endl;
 
-    mbl_read_props_print(vcl_cout, props); 
+    mbl_read_props_print(vcl_cout, props);
     TEST("Case 8a: props[ \"a\" ] == \"a\"",
          props[ "a" ] == "a" && !ss.fail(), true);
     vcl_istringstream ssb(props[ "b" ]);
@@ -363,7 +363,7 @@ void test_read_props_ws()
 
     mbl_read_props_type props = mbl_read_props_ws( ss );
 
-    mbl_read_props_print(vcl_cout, props); 
+    mbl_read_props_print(vcl_cout, props);
     TEST("Case 9a: props[ \"a\" ] == \"a\"", props[ "a" ] == "a" && !ss.fail(), true);
     TEST("Case 9b: props[ \"b\" ] == b_ans",
          strip_ws(props[ "b" ]) == strip_ws(b_ans) && !ss.fail(), true);
@@ -378,7 +378,7 @@ void test_read_props_ws()
 
     mbl_read_props_type props = mbl_read_props_ws( ss );
 
-    mbl_read_props_print(vcl_cout, props); 
+    mbl_read_props_print(vcl_cout, props);
     TEST("Case 10a: props[ \"a\" ] == \"a\"", props[ "a" ] == "a" && !ss.fail(), true);
     TEST("Case 10b: props[ \"b\" ] == b_ans",
          strip_ws(props[ "b" ]) == strip_ws(b_ans) && !ss.fail(), true);
@@ -405,7 +405,8 @@ void test_read_props_ws()
     TEST("Case 11b: props[ \"b\" ] == b_ans",
          strip_ws(props[ "b" ]) == strip_ws(b_ans) && !ss.fail(), true);
   }
-/*  {
+#if 0
+  {
     vcl_cout << "\nCase 12\n";
     vcl_istringstream ss("{\n  a: a\n  b:\n  {\n    ba: ba\n    bb: bb\n    {\n      bba: bba\n    }\n  }\n}");
     vcl_string b_ans( "{\n    ba: ba\n    bb: bb\n    {\n      bba: bba\n    }\n  }" );
@@ -422,13 +423,14 @@ void test_read_props_ws()
          props[ "a" ] == "a" && !ss.fail(), true);
     TEST("Case 12b: props[ \"b\" ] == b_ans",
          strip_ws(props[ "b" ]) == strip_ws(b_ans) && !ss.fail(), true);
-  }*/
+  }
+#endif // 0
   {
     vcl_cout << "\nCase 13\n";
     vcl_istringstream ss("{  \n a1: gd { nx: 8 ny: 8 nz: 8 mr: 25 md: 5 } \n  a2: tn \n a3: al {  } \n a4: 2 \n a5: 2  \n om: sx \n ml: 0.1 \n ns: 1 \n  }");
     //   \n a4: { lo: 2 hi: 3 }
     vcl_string b_ans( "gd { nx: 8 ny: 8 nz: 8 mr: 25 md: 5 }" );
-    
+
     mbl_read_props_type props = mbl_read_props_ws( ss );
 
 //    vcl_cout << props[ "b" ] << vcl_endl;

@@ -205,7 +205,7 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
     withinS_ = wS;
 
 
-/*
+#if 0
   vnl_matrix<double> wS_inv;
   //  NR_Inverse(wS_inv,withinS_);
   vnl_svd<double> wS_svd(withinS_, -1.0e-10); // important!!! as the sigma_min=0.0
@@ -225,7 +225,7 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
 
   // **** A not necessarily symmetric!!!! ****
   vnl_symmetric_eigensystem_compute(A, EVecs, evals);
-*/
+#endif // 0
 
   vnl_generalized_eigensystem gen_eigs(betweenS_,withinS_);
   vnl_matrix<double> EVecs= gen_eigs.V;
