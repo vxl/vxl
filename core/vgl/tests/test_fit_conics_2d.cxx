@@ -13,6 +13,8 @@
 #include <vgl/vgl_conic_segment_2d.h>
 #include <vgl/algo/vgl_conic_2d_regression.h>
 #include <vgl/algo/vgl_fit_conics_2d.h>
+#include <vnl/vnl_math.h>
+
 #if 0
 static void test_conic_segment_methods()
 {
@@ -32,10 +34,12 @@ static void test_conic_segment_methods()
 
 static void test_conic_regression()
 {
-  vcl_cout << "Testing conic regression (unit circle) \n";
-  vgl_point_2d<double> p0(1.0, 0), p1(0.707, 0.707), p2(0.0, 1.0),
-	  p3(-0.707, 0.707), p4(-1.0, 0.0), p5(-0.707, -0.707), p6(0.0, -1.0),
-	  p7(0.707, -0.707);
+  vcl_cout << "Testing conic regression (unit circle)\n";
+  const double sr12 = vnl_math::sqrt1_2;
+  vgl_point_2d<double> p0( 1.0,  0.0), p1( sr12,  sr12),
+                       p2( 0.0,  1.0), p3(-sr12,  sr12),
+                       p4(-1.0,  0.0), p5(-sr12, -sr12),
+                       p6( 0.0, -1.0), p7( sr12, -sr12);
   vgl_conic_2d_regression<double> reg;
   reg.add_point(p0);
   reg.add_point(p1);
@@ -45,19 +49,18 @@ static void test_conic_regression()
   reg.add_point(p5);
   reg.add_point(p6);
   reg.add_point(p7);
- 
-
   reg.fit();
-  vcl_cout << "algebraic fitting error " << reg.get_rms_algebraic_error() << '\n';
-  vcl_cout << "sampson fitting error " << reg.get_rms_sampson_error() << '\n'
-           << "fitted conic " << reg.conic() << '\n';
+  vcl_cout << "algebraic fitting error " << reg.get_rms_algebraic_error() << '\n'
+           << "Sampson fitting error " << reg.get_rms_sampson_error() << '\n'
+           << "fitted conic " << reg.conic() << vcl_endl;
 
   TEST_NEAR("unit circle", reg.get_rms_sampson_error(), 0.0, 1e-04);
 
-   
-  vgl_point_2d<double> q0(1.414, 1.414), q1(-0.707, 0.707),
-    q2(-1.414, -1.414), q3(0.707, -0.707), q4(0, 1.26472), q5(0, -1.26472),
-    q6(1.26472, 0), q7(-1.26472, 0);
+  const double sr2 = vnl_math::sqrt2;
+  vgl_point_2d<double> q0( sr2,  sr2), q1(-sr12,  sr12),
+                       q2(-sr2, -sr2), q3( sr12, -sr12),
+                       q4(0, 1.26472), q5(0, -1.26472),
+                       q6(1.26472, 0), q7(-1.26472, 0);
   reg.clear_points();
   reg.add_point(q0);
   reg.add_point(q1);
@@ -68,12 +71,13 @@ static void test_conic_regression()
   reg.add_point(q6);
   reg.add_point(q7);
   reg.fit();
-  vcl_cout << "algebraic fitting error " << reg.get_rms_algebraic_error() << '\n';
-  vcl_cout << "sampson fitting error " << reg.get_rms_sampson_error() << '\n'
-           << "fitted conic " << reg.conic() << '\n';
-  TEST_NEAR("2:1 at 45 deg", reg.get_rms_sampson_error(), 0.0, 1e-06);
-  reg.clear_points();
+  vcl_cout << "algebraic fitting error " << reg.get_rms_algebraic_error() << '\n'
+           << "Sampson fitting error " << reg.get_rms_sampson_error() << '\n'
+           << "fitted conic " << reg.conic() << vcl_endl;
 
+  TEST_NEAR("2:1 at 45 deg", reg.get_rms_sampson_error(), 0.0, 1e-06);
+
+  reg.clear_points();
   reg.add_point(vgl_point_2d<double>(3.52074e-012,0.0));
   reg.add_point(vgl_point_2d<double>(0.0151927,0.173651));
   reg.add_point(vgl_point_2d<double>(0.0603082,0.342022));
@@ -94,25 +98,24 @@ static void test_conic_regression()
   reg.add_point(vgl_point_2d<double>(1.98481,0.173648));
   reg.add_point(vgl_point_2d<double>(2,0.0));
   reg.fit();
-  vcl_cout << "algebraic fitting error " << reg.get_rms_algebraic_error() << '\n';
-  vcl_cout << "sampson fitting error " << reg.get_rms_sampson_error() << '\n'
+  vcl_cout << "algebraic fitting error " << reg.get_rms_algebraic_error() << '\n'
+           << "Sampson fitting error " << reg.get_rms_sampson_error() << '\n'
            << "fitted conic " << reg.conic() << '\n';
+
   TEST_NEAR("semi-circle centered on (1,0) ", reg.get_rms_sampson_error(), 0.0, 1e-05);
   reg.clear_points();
-
 }
 
 //A parametric form of the unit circle for testing ( s = 10 degree intervals)
 static void unit_circle(double s, double x0, double y0, double& x, double& y)
 {
-  double theta = static_cast<double>(s)*3.14159/18;
+  double theta = static_cast<double>(s)*vnl_math::pi/18;
   double c = vcl_cos(theta), si = vcl_sin(theta);
   x = x0 + c; y = y0 + si;
 }
 
 static void test_fit_simple_chain()
 {
-
   vcl_vector<vgl_point_2d<double> > curve;
 
   // Two segments from a unit circle forming a kind of sine wave
@@ -120,21 +123,21 @@ static void test_fit_simple_chain()
   //first segment above horizontal axis centered at (1,0) scan -pi to 0
   vgl_fit_conics_2d<double> fitter;
   for (int i = 18; i>=0; --i)
-    {
-      double x, y;
-      unit_circle(i, 1.0, 0.0, x, y);
-      vgl_point_2d<double> p(x, y);
-      fitter.add_point(p);
-    }
+  {
+    double x, y;
+    unit_circle(i, 1.0, 0.0, x, y);
+    vgl_point_2d<double> p(x, y);
+    fitter.add_point(p);
+  }
   //Second segment below horizontal axis centered at (3,0) scan pi to 360
-  
+
   for (int i = 19; i<=36; ++i)
-    {
-      double x, y;
-      unit_circle(i, 3.0, 0.0, x, y);
-      vgl_point_2d<double> p(x, y);
-      fitter.add_point(p);
-    }
+  {
+    double x, y;
+    unit_circle(i, 3.0, 0.0, x, y);
+    vgl_point_2d<double> p(x, y);
+    fitter.add_point(p);
+  }
 
   fitter.fit();
   vcl_vector<vgl_conic_segment_2d<double> >& segs = fitter.get_conic_segs();
@@ -147,7 +150,7 @@ static void test_fit_simple_chain()
 
   //Test a real chain
   vgl_fit_conics_2d<double> f(10, 1);
-  
+
   f.add_point(vgl_point_2d<double>(149.032, 103.331));
   f.add_point(vgl_point_2d<double>(150.013, 103.277));
   f.add_point(vgl_point_2d<double>(151.004, 103.262));
@@ -671,14 +674,14 @@ static void test_fit_simple_chain()
   f.fit();
   vcl_vector<vgl_conic_segment_2d<double > > temp = f.get_conic_segs();
 
-  for(vcl_vector<vgl_conic_segment_2d<double > >::iterator cit = temp.begin(); cit != temp.end(); ++cit)
-    vcl_cout << *cit << '\n';;
-  TEST("Number of conic segments ", temp.size(), 1);  
+  for (vcl_vector<vgl_conic_segment_2d<double > >::iterator cit = temp.begin(); cit != temp.end(); ++cit)
+    vcl_cout << *cit << '\n';
+  TEST("Number of conic segments ", temp.size(), 1);
 
 
   //Test a thin ellipse
   vgl_fit_conics_2d<double> f1(10, 1);
-  
+
   f1.add_point(vgl_point_2d<double>(41.9457, 138.862));
   f1.add_point(vgl_point_2d<double>(43.0152, 138.788));
   f1.add_point(vgl_point_2d<double>(44.0006, 138.998));
@@ -1048,9 +1051,9 @@ static void test_fit_simple_chain()
   f1.add_point(vgl_point_2d<double>(41.9457, 138.862));
   f1.fit();
   vcl_vector<vgl_conic_segment_2d<double > > temp1 = f1.get_conic_segs();
-  for(vcl_vector<vgl_conic_segment_2d<double > >::iterator cit = temp1.begin(); cit != temp1.end(); ++cit)
-    vcl_cout << *cit << '\n';;
-  TEST("Number of conic segments ", temp1.size(), 2);  
+  for (vcl_vector<vgl_conic_segment_2d<double > >::iterator cit = temp1.begin(); cit != temp1.end(); ++cit)
+    vcl_cout << *cit << '\n';
+  TEST("Number of conic segments ", temp1.size(), 2);
 }
 
 
