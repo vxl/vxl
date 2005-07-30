@@ -7,6 +7,8 @@
 
 #include <rgrl/rgrl_estimator.h>
 #include <vcl_cstdlib.h>
+#include <vcl_cassert.h>
+
 rgrl_view::
 rgrl_view()
   : from_image_roi_(0),
@@ -35,16 +37,12 @@ rgrl_view( rgrl_mask_sptr          const& from_image_roi,
     inverse_estimate_( inverse_estimate ),
     current_resolution_( resolution )
 {
-  if( !from_image_roi || !to_image_roi ) {
-    
-    WarningMacro( "ERROR: invlid From/To image ROI. \n"
-               << "       In the simplest case, supply an instance of rgrl_mask_box."
-               << vcl_endl );
+  if ( !from_image_roi || !to_image_roi )
+  {
+    WarningMacro( "ERROR: invalid From/To image ROI.\n       In the simplest case, supply an instance of rgrl_mask_box.\n" );
     assert( 0 ) ;
   }
-  
 }
-
 
 rgrl_mask_sptr const&
 rgrl_view::
@@ -53,14 +51,12 @@ from_image_roi() const
   return from_image_roi_;
 }
 
-
 rgrl_mask_sptr const&
 rgrl_view::
 to_image_roi() const
 {
   return to_image_roi_;
 }
-
 
 rgrl_mask_box const&
 rgrl_view::
@@ -103,7 +99,6 @@ resolution() const
 {
   return current_resolution_;
 }
-
 
 bool
 rgrl_view::
