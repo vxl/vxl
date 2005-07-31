@@ -37,6 +37,7 @@
 
 #include <vcl_cmath.h>
 #include "dll.h"
+#include <vxl_config.h> // for VXL_C_MATH_HAS_LRINT 
 
 //: Type-accessible infinities for use in templates.
 template <class T> T vnl_huge_val(T);
