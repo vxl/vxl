@@ -159,7 +159,7 @@ strk_tracking_face_2d::strk_tracking_face_2d(strk_tracking_face_2d_sptr const& t
     int n = intf_->Npix();
     Ix_ = new float[n];
     Iy_ = new float[n];
-    for (int i =0; i<n; i++)
+    for (int i =0; i<n; ++i)
     {
       Ix_[i]=tf->Ix(i);
       Iy_[i]=tf->Iy(i);
@@ -173,7 +173,7 @@ strk_tracking_face_2d::strk_tracking_face_2d(strk_tracking_face_2d_sptr const& t
     int n = intf_->Npix();
     hue_ = new float[n];
     sat_ = new float[n];
-    for (int i =0; i<n; i++)
+    for (int i =0; i<n; ++i)
     {
       hue_[i]=tf->hue(i);
       sat_[i]=tf->sat(i);
@@ -218,7 +218,7 @@ strk_tracking_face_2d::strk_tracking_face_2d(strk_tracking_face_2d const& tf)
     int n = intf_->Npix();
     Ix_ = new float[n];
     Iy_ = new float[n];
-    for (int i =0; i<n; i++)
+    for (int i =0; i<n; ++i)
     {
       Ix_[i]=tf.Ix(i);
       Iy_[i]=tf.Iy(i);
@@ -232,7 +232,7 @@ strk_tracking_face_2d::strk_tracking_face_2d(strk_tracking_face_2d const& tf)
     int n = intf_->Npix();
     hue_ = new float[n];
     sat_ = new float[n];
-    for (int i =0; i<n; i++)
+    for (int i =0; i<n; ++i)
     {
       hue_[i]=tf.hue(i);
       sat_[i]=tf.sat(i);
@@ -277,7 +277,7 @@ void strk_tracking_face_2d::set_gradient(vil1_memory_image_of<float> const& Ix,
     int i = 0;
     if (!intf_||!Ix_||!Iy_)
       return;
-    for (intf_->reset(); intf_->next();i++)
+    for (intf_->reset(); intf_->next(); ++i)
     {
       int x = int(intf_->X()), y = int(intf_->Y());
       this->set_Ix(i, Ix(x,y));
@@ -291,7 +291,7 @@ void strk_tracking_face_2d::set_color(vil1_memory_image_of<float> const& hue,
     int i = 0;
     if (!intf_||!hue_||!sat_)
       return;
-    for (intf_->reset(); intf_->next();i++)
+    for (intf_->reset(); intf_->next(); ++i)
     {
       int x = int(intf_->X()), y = int(intf_->Y());
       this->set_hue(i, hue(x,y));
@@ -315,7 +315,7 @@ init_intensity_info(vtol_face_2d_sptr const& face,
 
   //go throught the pixels once to gather statistics for the face Npix etc.
   for (psi.reset(); psi.next();)
-    for (int x = psi.startx(); x<=psi.endx(); x++)
+    for (int x = psi.startx(); x<=psi.endx(); ++x)
     {
       int y = psi.scany();
       if (x<0||x>=width||y<0||y>=height)
@@ -337,7 +337,7 @@ init_intensity_info(vtol_face_2d_sptr const& face,
 
   //Got through the pixels again to actually set the face arrays X(), Y() etc
   for (psi.reset(); psi.next();)
-    for (int x = psi.startx(); x<=psi.endx(); x++)
+    for (int x = psi.startx(); x<=psi.endx(); ++x)
     {
       int y = psi.scany();
       if (x<0||x>=width||y<0||y>=height)
@@ -379,7 +379,7 @@ init_gradient_info(vil1_memory_image_of<float> const& Ix,
   gradient_dir_hist_bins_ = model_gradient_dir_hist.nbins();
   int i = 0;
   double deg_rad = 180.0/vnl_math::pi;
-  for (intf_->reset(); intf_->next(); i++)
+  for (intf_->reset(); intf_->next(); ++i)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
     float Ixi = Ix(x,y), Iyi = Iy(x,y);
@@ -412,7 +412,7 @@ init_color_info(vil1_memory_image_of<float> const& hue,
   bsta_histogram<float> model_color_hist(360, color_hist_bins_);
   color_hist_bins_ = model_color_hist.nbins();
   int i = 0;
-  for (intf_->reset(); intf_->next(); i++)
+  for (intf_->reset(); intf_->next(); ++i)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
     float hue_i = hue(x,y), sat_i = sat(x,y);
@@ -476,7 +476,7 @@ void strk_tracking_face_2d::transform_gradients(double theta)
 
   //compute the gradient direction entropy
   float ent = 0;
-  for (unsigned int m = 0; m<gradient_dir_hist_bins_; m++)
+  for (unsigned int m = 0; m<gradient_dir_hist_bins_; ++m)
   {
     float pm = model_gradient_dir_hist.p(m);
     if (!pm)
@@ -511,7 +511,7 @@ void strk_tracking_face_2d::transform(double tx, double ty, double theta, double
   vcl_vector<vtol_vertex_sptr> verts;
   this->face()->vertices(verts);
   for (vcl_vector<vtol_vertex_sptr>::iterator vit = verts.begin();
-       vit != verts.end(); vit++)
+       vit != verts.end(); ++vit)
   {
     vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
     if (!v)
@@ -554,7 +554,7 @@ void strk_tracking_face_2d::transform(vnl_matrix_fixed<double,3,3> const& T)
   vcl_vector<vtol_vertex_sptr> verts;
   this->face()->vertices(verts);
   for (vcl_vector<vtol_vertex_sptr>::iterator vit = verts.begin();
-       vit != verts.end(); vit++)
+       vit != verts.end(); ++vit)
   {
     vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
     if (!v)
@@ -600,7 +600,7 @@ compute_intensity_mutual_information(vil1_memory_image_of<float> const& image)
 #ifdef DEBUG
     //    vcl_cout << '(' << x << ' ' << y << "):[" << Im << ' ' << Ii << ']' << vcl_endl;
 #endif
-    n++;
+    ++n;
   }
   if (n<0.9*npix)
     return 0;
@@ -646,10 +646,10 @@ compute_intensity_mutual_information(vcl_vector <vcl_vector< vgl_point_2d<int> >
   for (intf_->reset(); intf_->next();)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
-    
-    //: region_map starts from (0,0) 
+
+    //: region_map starts from (0,0)
     x = x - base_x; y = y - base_y;
-    if (x < 0 || x >= static_cast<int>(region_map.size()) || 
+    if (x < 0 || x >= static_cast<int>(region_map.size()) ||
         y < 0 || y >= static_cast<int>(region_map[x].size())) continue;
 
     //: read corresponding region 2 pixel from map
@@ -661,9 +661,9 @@ compute_intensity_mutual_information(vcl_vector <vcl_vector< vgl_point_2d<int> >
     image_hist.upcount(Ii, 1.0f);
     joint_hist.upcount(Im, 1.0f, Ii, 1.0f);
 #ifdef DEBUG
-    //    vcl_cout << '(' << x << ' ' << y << "):[" << Im << ' ' << Ii << ']' << vcl_endl;
+    vcl_cout << '(' << x << ' ' << y << "):[" << Im << ' ' << Ii << ']' << vcl_endl;
 #endif
-    n++;
+    ++n;
   }
 
 #ifdef DEBUG
@@ -713,7 +713,7 @@ compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
     return 0;
   double deg_rad = 180.0/vnl_math::pi;
   unsigned int i = 0, n = 0;
-  for (intf_->reset(); intf_->next(); ++i, ++n)
+  for (intf_->reset(); intf_->next(); ++i)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
     if (x<0||x>=width||y<0||y>=height)
@@ -734,6 +734,7 @@ compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
       image_dir_hist.upcount(angi, magi);
       joint_dir_hist.upcount(ang0,mag0,angi,magi);
     }
+    ++n;
   }
   if (n<0.9*npix)
     return 0;
@@ -781,13 +782,13 @@ compute_gradient_mutual_information(vcl_vector <vcl_vector< vgl_point_2d<int> > 
     int x = int(intf_->X()), y = int(intf_->Y());
 
     x = x - base_x; y = y - base_y;
-    if (x < 0 || x >= static_cast<int>(region_map.size()) || 
+    if (x < 0 || x >= static_cast<int>(region_map.size()) ||
         y < 0 || y >= static_cast<int>(region_map[x].size())) continue;
 
     vgl_point_2d<int> p = region_map[x][y];
     if (p.x() < 0 || p.y() < 0 || p.x() >= width || p.y() >= height) continue;
 
-    n++;
+    ++n;
     float Ix0 = this->Ix(i), Iy0 = this->Iy(i);
     float ang0 = float(deg_rad*vcl_atan2(Iy0, Ix0))+180.f;
     float mag0 = vcl_abs(Ix0)+vcl_abs(Iy0); // was: vcl_sqrt(Ix0*Ix0 + Iy0*Iy0);
@@ -806,7 +807,7 @@ compute_gradient_mutual_information(vcl_vector <vcl_vector< vgl_point_2d<int> > 
       joint_dir_hist.upcount(ang0,mag0,angi,magi);
     }
   }
-  
+
 #ifdef DEBUG
   vcl_cout << "n: " << n << " 0.9*npix: " << 0.9*npix << " (n should be larger than 0.9*npix)\n";
 #endif
@@ -850,7 +851,7 @@ compute_color_mutual_information(vil1_memory_image_of<float> const& hue,
     return 0;
 
   unsigned int i = 0, n = 0;
-  for (intf_->reset(); intf_->next(); ++i, ++n)
+  for (intf_->reset(); intf_->next(); ++i)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
     if (x<0||x>=width||y<0||y>=height)
@@ -861,6 +862,7 @@ compute_color_mutual_information(vil1_memory_image_of<float> const& hue,
       color_hist.upcount(hue_i, sat_i);
     if (sat0>0&&sat_i>0)
       joint_color_hist.upcount(hue0, sat0, hue_i, sat_i);
+    ++n;
   }
   if (n<0.9*npix)
     return 0;
@@ -895,12 +897,12 @@ compute_color_mutual_information(vcl_vector <vcl_vector< vgl_point_2d<int> > > r
     return 0;
 
   unsigned int i = 0, n = 0;
-  for (intf_->reset(); intf_->next(); ++i, ++n)
+  for (intf_->reset(); intf_->next(); ++i)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
-    
+
     x = x - base_x; y = y - base_y;
-    if (x < 0 || x >= static_cast<int>(region_map.size()) || 
+    if (x < 0 || x >= static_cast<int>(region_map.size()) ||
         y < 0 || y >= static_cast<int>(region_map[x].size())) continue;
 
     vgl_point_2d<int> p = region_map[x][y];
@@ -913,6 +915,7 @@ compute_color_mutual_information(vcl_vector <vcl_vector< vgl_point_2d<int> > > r
       color_hist.upcount(hue_i, sat_i);
     if (sat0>0&&sat_i>0)
       joint_color_hist.upcount(hue0, sat0, hue_i, sat_i);
+    ++n;
   }
 
 #ifdef DEBUG
@@ -1044,7 +1047,7 @@ vcl_vector<float> strk_tracking_face_2d::random_intensities(int& n_pix)
     n_pix = Np;
   //generate a random pixel index on [0, npix-1]
   unsigned short const* pix = intf_->Ij();
-  for (int i = 0; i<n_pix; i++)
+  for (int i = 0; i<n_pix; ++i)
   {
     float x = (n_pix-1)*float(vcl_rand()/(RAND_MAX+1.0));
     int ni = (int)x;
@@ -1072,7 +1075,7 @@ compute_intensity_joint_entropy(strk_tracking_face_2d_sptr const& other,
     return 0;
   unsigned int n = 0;
   //iterate through the pixels of the target model face
-  for (intf_->reset(); intf_->next(); n++)
+  for (intf_->reset(); intf_->next();)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
     if (x<0||x>=width||y<0||y>=height)
@@ -1080,6 +1083,7 @@ compute_intensity_joint_entropy(strk_tracking_face_2d_sptr const& other,
     float Ii = image(x,y);//the pixels under the target
     if (n<mpix)
       joint_hist.upcount((other->face()->Ij())[n], 1.0f, Ii, 1.0f);
+    ++n;
   }
   if (n<0.9*npix)
     return 0;
@@ -1112,7 +1116,7 @@ compute_model_intensity_joint_entropy(strk_tracking_face_2d_sptr const& other)
   int n = 0;
   vcl_vector<float> rand_int = other->random_intensities(npix);
   //iterate through the pixels of the target model face
-  for (intf_->reset(); intf_->next(); n++)
+  for (intf_->reset(); intf_->next(); ++n)
   {
     if (n<npix)
       joint_hist.upcount(rand_int[n], 1.0f, intf_->I(), 1.0f);
@@ -1145,7 +1149,7 @@ bool strk_tracking_face_2d::random_colors(int& n_pix,
   if (n_pix > Np)
     n_pix = Np;
   //generate a random pixel index on [0, npix-1]
-  for (int i = 0; i<n_pix; i++)
+  for (int i = 0; i<n_pix; ++i)
   {
     float x = (n_pix-1)*float(vcl_rand()/(RAND_MAX+1.0));
     int ni = (int)x;
@@ -1172,7 +1176,7 @@ compute_color_joint_entropy(strk_tracking_face_2d_sptr const& other,
   bsta_joint_histogram<float> joint_color_hist;
   int width = hue.width(), height = hue.height();
   unsigned int i = 0;
-  for (intf_->reset(); intf_->next(); i++)
+  for (intf_->reset(); intf_->next(); ++i)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
     if (x<0||x>=width||y<0||y>=height)
