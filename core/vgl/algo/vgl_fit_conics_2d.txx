@@ -54,11 +54,11 @@ void vgl_fit_conics_2d<T>::output(const unsigned start_index,
   assert(start_index < curve_.size() && end_index <= curve_.size());
 
   vgl_homg_point_2d<T> center = conic.centre();
-  if(center.ideal(static_cast<T>(1e-06)))
-    {
-      vcl_cout << "Can't output a conic at infinity in vgl_fit_conics<T>\n";
-      return;
-    }
+  if (center.ideal(static_cast<T>(1e-06)))
+  {
+    vcl_cout << "Can't output a conic at infinity in vgl_fit_conics<T>\n";
+    return;
+  }
   T cx = center.x()/center.w(), cy = center.y()/center.w();
   //Need to establish the sense of the fitted curve
   //The curve should proceed in a counter-clockwise direction from p1 to p2.
@@ -66,7 +66,7 @@ void vgl_fit_conics_2d<T>::output(const unsigned start_index,
   vgl_vector_2d<T> v1(curve_[start_index].x()-cx, curve_[start_index].y()-cy);
   //choose a point in the middle of the curve
   int middle_index = (end_index-1-start_index)/2 + start_index;
-  if(middle_index == static_cast<int>(start_index))
+  if (middle_index == static_cast<int>(start_index))
     middle_index = end_index-1;
   //construct a vector at that point
   vgl_vector_2d<T> v(curve_[middle_index].x()-cx, curve_[middle_index].y()-cy);
@@ -75,11 +75,11 @@ void vgl_fit_conics_2d<T>::output(const unsigned start_index,
 
   //If not, exchange p1 and p2
   unsigned i1=start_index, i2 = end_index-1;
-  if(cp< static_cast<T>(0))
-    {
-      i1 = end_index-1;
-      i2 = start_index;
-    }
+  if (cp< static_cast<T>(0))
+  {
+    i1 = end_index-1;
+    i2 = start_index;
+  }
 
   //   unsigned i1=start_index, i2 = end_index-1;
   vgl_conic_segment_2d<T> e_seg(curve_[i1], curve_[i2],
@@ -117,9 +117,9 @@ bool vgl_fit_conics_2d<T>::fit()
         output(ns, nf, reg.conic());
         return true;
       }
-#if DEBUG
-      vcl_cout << "Initial fit error " << reg.get_rms_sampson_error() 
-               << " for \n" << reg.conic() << '\n';
+#ifdef DEBUG
+      vcl_cout << "Initial fit error " << reg.get_rms_sampson_error()
+               << " for\n" << reg.conic() << '\n';
 #endif
       bool below_error_tol = true;
       bool data_added = false;
@@ -134,8 +134,8 @@ bool vgl_fit_conics_2d<T>::fit()
           reg.add_point(p);
           data_added = true;
           nf++;
-#if DEBUG
-          vcl_cout << "Adding point " << p << "with estimated error " 
+#ifdef DEBUG
+          vcl_cout << "Adding point " << p << "with estimated error "
                    << error << '\n';
 #endif
         }
@@ -178,6 +178,7 @@ bool vgl_fit_conics_2d<T>::fit()
   }
   return true;
 }
+
 //--------------------------------------------------------------------------
 #undef VGL_FIT_CONICS_2D_INSTANTIATE
 #define VGL_FIT_CONICS_2D_INSTANTIATE(T) \
