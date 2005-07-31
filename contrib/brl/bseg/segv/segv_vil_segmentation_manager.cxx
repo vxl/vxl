@@ -232,7 +232,7 @@ vil_image_resource_sptr segv_vil_segmentation_manager::selected_image()
 }
 
 vil_image_resource_sptr segv_vil_segmentation_manager::image_at(const unsigned col,
-                                               const unsigned row)
+                                                                const unsigned row)
 {
   vgui_tableau_sptr top_tab = grid_->get_tableau_at(col, row);
   if (!top_tab)
@@ -266,7 +266,7 @@ void segv_vil_segmentation_manager::clear_display()
 //-----------------------------------------------------------------------------
 void
 segv_vil_segmentation_manager::draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges,
-                                      bool verts)
+                                          bool verts)
 {
   bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
   if (!t2D)
@@ -361,7 +361,7 @@ draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines,
 //-----------------------------------------------------------------------------
 void segv_vil_segmentation_manager::
 draw_conics(vcl_vector<vsol_conic_2d_sptr > const& conics,
-           const vgui_style_sptr& style)
+            const vgui_style_sptr& style)
 {
   bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
   if (!t2D)
@@ -410,7 +410,7 @@ draw_points(vcl_vector<vsol_point_2d_sptr> const& points, const vgui_style_sptr&
 }
 
 void segv_vil_segmentation_manager::draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions,
-                                             bool verts)
+                                                 bool verts)
 {
   bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
   if (!t2D)
@@ -453,12 +453,8 @@ void segv_vil_segmentation_manager::load_image()
 
   vil_image_resource_sptr image = vil_load_image_resource(image_filename.c_str());
 
-
 #if 0
-  if (greyscale)
-    image = brip_vil1_float_ops::convert_to_grey(temp);
-  else
-    image = temp;
+  image = greyscale ? brip_vil1_float_ops::convert_to_grey(temp) : temp;
 #endif
   if (first_)
   {
@@ -468,6 +464,7 @@ void segv_vil_segmentation_manager::load_image()
   else
     this->add_image(image);
 }
+
 void segv_vil_segmentation_manager::save_image()
 {
   vgui_dialog file_dialog("Save Image");
@@ -477,16 +474,10 @@ void segv_vil_segmentation_manager::save_image()
   if (!file_dialog.ask())
     return;
   vil_image_resource_sptr img = this->selected_image();
-  if(!img)
-    {
-      vcl_cout << "Null image in save_image\n";
-      return;
-    }
-  if(!vil_save_image_resource(img, image_file.c_str(), "tiff"))
-    {
-      vcl_cout << "Image save operation failed\n";
-      return;
-    }
+  if (!img)
+    vcl_cerr << "Null image in segv_vil_segmentation_manager::save_image\n";
+  else if (!vil_save_image_resource(img, image_file.c_str(), "tiff"))
+    vcl_cerr << "segv_vil_segmentation_manager::save_image operation failed\n";
 }
 
 void segv_vil_segmentation_manager::set_range_params()
@@ -512,21 +503,19 @@ void segv_vil_segmentation_manager::set_range_params()
   unsigned n_components = img->nplanes();
   vgui_range_map_params_sptr rmps;
   if (n_components == 1)
-     rmps=
-      new vgui_range_map_params(min, max, gamma, invert,
-                                gl_map, cache);
+    rmps= new vgui_range_map_params(min, max, gamma, invert,
+                                    gl_map, cache);
   else if (n_components == 3)
-     rmps =
-      new vgui_range_map_params(min, max, min, max, min, max,
-                                gamma, gamma, gamma, invert,
-                                gl_map, cache);
-
+    rmps = new vgui_range_map_params(min, max, min, max, min, max,
+                                     gamma, gamma, gamma, invert,
+                                     gl_map, cache);
+  else
+    rmps = 0;
   itab->set_mapping(rmps);
 }
 
 void segv_vil_segmentation_manager::threshold_image()
 {
-  
   vil_image_resource_sptr img = selected_image();
   if (!img)
   {
@@ -539,10 +528,10 @@ void segv_vil_segmentation_manager::threshold_image()
   if (!thresh_dlg.ask())
     return;
   vil_image_view<float> fimage = brip_vil_float_ops::convert_to_float(*img);
-  vil_image_view<float> timage = 
+  vil_image_view<float> timage =
     brip_vil_float_ops::threshold(fimage, thresh, 255);
   vil_image_view<unsigned char> cimage = brip_vil_float_ops::convert_to_byte(timage, 0, 255);
-  this->add_image(vil_new_image_resource_of_view(cimage));  
+  this->add_image(vil_new_image_resource_of_view(cimage));
 }
 
 void segv_vil_segmentation_manager::harris_corners()
@@ -664,6 +653,7 @@ void segv_vil_segmentation_manager::fit_lines()
   vcl_vector<vsol_line_2d_sptr> lines = fl.get_line_segs();
   this->draw_lines(lines);
 }
+
 void segv_vil_segmentation_manager::fit_conics()
 {
   this->clear_display();
@@ -793,11 +783,12 @@ void segv_vil_segmentation_manager::test_inline_viewer()
   if (!test_inline.ask())
     return;
 }
+
 void segv_vil_segmentation_manager::test_ellipse_draw()
 {
   vsol_conic_2d_sptr c0 = new vsol_conic_2d(0.01, 0.0,
-                                           0.01, 0.0,
-                                           0.0, -1.0);  
+                                            0.01, 0.0,
+                                            0.0, -1.0);
   vsol_point_2d_sptr pc0 = new vsol_point_2d(10.0, 0.0);
   c0->set_p0(pc0);
 
@@ -808,24 +799,20 @@ void segv_vil_segmentation_manager::test_ellipse_draw()
                                            0.492577, 0.197032,
                                            -1.37921, 0.492813);
   vsol_point_2d_sptr inp0 = new vsol_point_2d(2.414, 3.414);
-  double d0 = c->distance(inp0);
-  vsol_point_2d_sptr onp0 = c->closest_point_on_curve(inp0);
-  c->set_p0(onp0);
-  vsol_point_2d_sptr inp1 = new vsol_point_2d(1.0, 2.0-1.26472);
-  double d1 = c->distance(inp1);
-  vsol_point_2d_sptr onp1 = c->closest_point_on_curve(inp1);
-  c->set_p1(onp1);
+  c->set_p0(c->closest_point_on_curve(inp0));
+  vsol_point_2d_sptr inp1 = new vsol_point_2d(1.0, 0.73528);
+  c->set_p1(c->closest_point_on_curve(inp1));
 
   bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
   if (!t2D)
-    return;  
+    return;
   t2D->add_vsol_conic_2d(c0);
   t2D->add_vsol_point_2d(c0->p0());
   t2D->add_vsol_point_2d(c0->p1());
-  
+
   t2D->add_vsol_conic_2d(c);
   t2D->add_vsol_point_2d(c->p0());
   t2D->add_vsol_point_2d(c->p1());
-  
+
   t2D->post_redraw();
 }
