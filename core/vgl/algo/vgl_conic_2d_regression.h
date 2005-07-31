@@ -25,9 +25,9 @@
 //  problem as follows:
 //
 //      The scatter matrix S is decomposed as
-//              
-//      $ S   =  \begin{array}{cc}     S_{11} & S_{12}     \\
-//                                     S_{21} & S_{22}     \end{array}$
+//
+//      $ S   =  \begin{array}{cc}     S_{11} & S_{12}
+//                              \\     S_{21} & S_{22}     \end{array}$
 //      note $S_{21} = S_{12}^t$
 //
 //      The conic coefficients are $v_1 = \{a,b,c\}^t$ and $v_2 = \{d,e,f\}^t$
