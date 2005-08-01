@@ -707,7 +707,7 @@ bool vil3d_analyze_image::put_view(const vil3d_image_view_base& view,
    }
    case VIL_PIXEL_FORMAT_FLOAT:
    {
-    vil3d_image_view<float> view_copy(ni(),nj(),nk(),nplanes()*sizeof(float));
+    vil3d_image_view<float> view_copy(ni(),nj(),nk(),nplanes());
     vil3d_copy_reformat(static_cast<const vil3d_image_view<float>&>(view),view_copy);
     if (header_.needSwap())
       swap32_for_big_endian((char *)(view_copy.origin_ptr()), ni()*nj()*nk()*nplanes());
