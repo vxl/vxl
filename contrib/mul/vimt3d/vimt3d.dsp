@@ -217,6 +217,12 @@ SOURCE=.\vimt3d_vil3d_v3i.h
 # Begin Source File
 SOURCE=.\vimt3d_from_image_2d.h
 # End Source File
+# Begin Source File
+SOURCE=.\vimt3d_gauss_reduce.h
+# End Source File
+# Begin Source File
+SOURCE=.\vimt3d_resample_trilinear.h
+# End Source File
 # End Group
 # End Target
 # End Project

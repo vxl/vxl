@@ -275,6 +275,12 @@ SOURCE=.\test_v3i.cxx
 # Begin Source File
 SOURCE=.\test_from_image_2d.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_gauss_reduce.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_resample.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
