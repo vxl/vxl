@@ -22,6 +22,10 @@ void vimt3d_gauss_reduce(const vimt3d_image_3d_of<T>& src,
                          vimt3d_image_3d_of<T>&       work2)
 {
   vil3d_gauss_reduce(src.image(), dst.image(), work1.image(), work2.image());
+
+  vimt3d_transform_3d scaling;
+  scaling.set_zoom_only(2.0, 2.0, 2.0, 0.0, 0.0, 0.0);
+  dst.set_world2im(scaling * src.world2im());
 }
 
 
