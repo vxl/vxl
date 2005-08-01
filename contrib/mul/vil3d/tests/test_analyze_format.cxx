@@ -34,8 +34,8 @@ inline void test_analyze_format(const vcl_string& dir,vcl_string type, vil_pixel
   TEST_NEAR("Width k",width[2]*1000,2.5f,1e-4);
 
   vil3d_image_view_base_sptr image = image_res->get_view(0, image_res->ni(),
-                                                        0, image_res->nj(),
-                                                        0, image_res->nk());
+                                                         0, image_res->nj(),
+                                                         0, image_res->nk());
   TEST("Loaded an image",image!=0,true);
   TEST("Image type",image->pixel_format(),format);
   vil3d_image_view<T> im=static_cast<vil3d_image_view<T>&>(*image);
