@@ -75,7 +75,7 @@ static void test_conic_regression()
            << "Sampson fitting error " << reg.get_rms_sampson_error() << '\n'
            << "fitted conic " << reg.conic() << vcl_endl;
 
-  TEST_NEAR("2:1 at 45 deg", reg.get_rms_sampson_error(), 0.0, 1e-06);
+  TEST_NEAR("2:1 at 45 deg", reg.get_rms_sampson_error(), 0.0, 1e-04);
 
   reg.clear_points();
   reg.add_point(vgl_point_2d<double>(3.52074e-012,0.0));
