@@ -21,6 +21,7 @@ ADD_TEST( vimt3d_test_sample_grid_trilin   vimt3d_test_all test_sample_grid_tril
 ADD_TEST( vimt3d_test_v3i                  vimt3d_test_all test_v3i )
 ADD_TEST( vimt3d_test_from_image_2d        vimt3d_test_all test_from_image_2d )
 ADD_TEST( vimt3d_test_gauss_reduce         vimt3d_test_all test_gauss_reduce )
+ADD_TEST( vimt3d_test_resample             vimt3d_test_all test_resample )
 
 ADD_EXECUTABLE( vimt3d_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vimt3d_test_include vimt3d )
