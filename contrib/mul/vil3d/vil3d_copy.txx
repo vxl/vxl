@@ -36,9 +36,19 @@ vil3d_image_view<T> vil3d_copy_deep(const vil3d_image_view<T> &src)
 template<class T>
 void vil3d_copy_reformat(const vil3d_image_view<T> &src, vil3d_image_view<T> &dest)
 {
+#ifdef DEBUG
+  vcl_cout << "src.nplanes() = " << src.nplanes()
+           << ", dest.nplanes() = " << dest.nplanes()
+           << "\nsrc.nk() = " << src.nk()
+           << ", dest.nk() = " << dest.nk()
+           << "\nsrc.nj() = " << src.nj()
+           << ", dest.nj() = " << dest.nj()
+           << "\nsrc.ni() = " << src.ni()
+           << ", dest.ni() = " << dest.ni() << vcl_endl;
+#endif
   assert (src.nplanes() == dest.nplanes() &&
-    src.nk() == dest.nk() && src.nj() == dest.nj() &&
-    src.ni() == dest.ni());
+          src.nk() == dest.nk() && src.nj() == dest.nj() &&
+          src.ni() == dest.ni());
   for (unsigned p = 0; p < dest.nplanes(); ++p)
     for (unsigned k = 0; k < dest.nk(); ++k)
       for (unsigned j = 0; j < dest.nj(); ++j)
