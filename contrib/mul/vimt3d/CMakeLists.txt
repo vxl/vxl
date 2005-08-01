@@ -17,6 +17,7 @@ SET(vimt3d_sources
   vimt3d_add_all_loaders.cxx             vimt3d_add_all_loaders.h
                                          vimt3d_from_image_2d.h
                                          vimt3d_resample_trilinear.h
+                                         vimt3d_gauss_reduce.h
 )
 AUX_SOURCE_DIRECTORY(Templates vimt3d_sources)
 

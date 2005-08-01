@@ -8,6 +8,8 @@ ADD_EXECUTABLE( vimt3d_test_all
   test_sample_grid_trilin.cxx
   test_v3i.cxx
   test_from_image_2d.cxx
+  test_resample.cxx
+  test_gauss_reduce.cxx
 )
 
 TARGET_LINK_LIBRARIES( vimt3d_test_all vimt3d vpl vul testlib )
@@ -18,6 +20,7 @@ ADD_TEST( vimt3d_test_load                 vimt3d_test_all test_load ${mul_SOURC
 ADD_TEST( vimt3d_test_sample_grid_trilin   vimt3d_test_all test_sample_grid_trilin )
 ADD_TEST( vimt3d_test_v3i                  vimt3d_test_all test_v3i )
 ADD_TEST( vimt3d_test_from_image_2d        vimt3d_test_all test_from_image_2d )
+ADD_TEST( vimt3d_test_gauss_reduce         vimt3d_test_all test_gauss_reduce )
 
 ADD_EXECUTABLE( vimt3d_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vimt3d_test_include vimt3d )
