@@ -54,13 +54,13 @@ static void test_conic_regression()
            << "Sampson fitting error " << reg.get_rms_sampson_error() << '\n'
            << "fitted conic " << reg.conic() << vcl_endl;
 
-  TEST_NEAR("unit circle", reg.get_rms_sampson_error(), 0.0, 1e-04);
+  TEST_NEAR("unit circle", reg.get_rms_sampson_error(), 0.0, 1e-12);
 
-  const double sr2 = vnl_math::sqrt2;
+  const double sr2 = vnl_math::sqrt2, sr16 = vcl_sqrt(1.6);
   vgl_point_2d<double> q0( sr2,  sr2), q1(-sr12,  sr12),
                        q2(-sr2, -sr2), q3( sr12, -sr12),
-                       q4(0, 1.26472), q5(0, -1.26472),
-                       q6(1.26472, 0), q7(-1.26472, 0);
+                       q4( 0.0, sr16), q5(  0.0, -sr16),
+                       q6(sr16,  0.0), q7(-sr16,   0.0);
   reg.clear_points();
   reg.add_point(q0);
   reg.add_point(q1);
@@ -75,7 +75,7 @@ static void test_conic_regression()
            << "Sampson fitting error " << reg.get_rms_sampson_error() << '\n'
            << "fitted conic " << reg.conic() << vcl_endl;
 
-  TEST_NEAR("2:1 at 45 deg", reg.get_rms_sampson_error(), 0.0, 1e-04);
+  TEST_NEAR("2:1 at 45 deg", reg.get_rms_sampson_error(), 0.0, 1e-12);
 
   reg.clear_points();
   reg.add_point(vgl_point_2d<double>(3.52074e-012,0.0));
