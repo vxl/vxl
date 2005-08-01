@@ -72,6 +72,7 @@ void test_math()
   vcl_cout << "vnl_math_rnd(-8.50) == " << vnl_math_rnd(-8.50) << vcl_endl;
   testlib_test_assert("rnd(-8.50)  == -8/9", vnl_math_rnd(-8.50)/2 ==  -4);
   testlib_test_assert("rnd(-8.50f) == -8/9", vnl_math_rnd(-8.50f)/2 == -4);
+  vcl_cout << "vnl_math_rnd(-8.5001) == " << vnl_math_rnd(-8.5001) << vcl_endl;
   testlib_test_assert("rnd(-8.5001)  == -9", vnl_math_rnd(-8.5001) ==  -9);
   testlib_test_assert("rnd(-8.5001f) == -9", vnl_math_rnd(-8.5001f) == -9);
   testlib_test_assert("rnd(8.4999)  == 8", vnl_math_rnd(8.4999) ==  8);
@@ -79,9 +80,9 @@ void test_math()
   testlib_test_assert("rnd(8.50)  == 8/9", vnl_math_rnd(8.50)/2 ==  4);
   vcl_cout << "vnl_math_rnd(8.50) == " << vnl_math_rnd(8.50) << vcl_endl;
   testlib_test_assert("rnd(8.50f) == 8/9", vnl_math_rnd(8.50f)/2 == 4);
+  vcl_cout << "vnl_math_rnd(8.5001) == " << vnl_math_rnd(8.5001) << vcl_endl;
   testlib_test_assert("rnd(8.5001)  == 9", vnl_math_rnd(8.5001) ==  9);
   testlib_test_assert("rnd(8.5001f) == 9", vnl_math_rnd(8.5001f) == 9);
-
 
   testlib_test_assert(" isfinite(f)    ",  vnl_math_isfinite(f));
   testlib_test_assert(" isfinite(d)    ",  vnl_math_isfinite(d));
