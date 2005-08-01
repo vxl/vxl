@@ -46,14 +46,14 @@ inline void test_analyze_format(const vcl_string& dir,vcl_string type, vil_pixel
   TEST_NEAR("Pixel value (4,3,2)",im(4,3,2),69,1e-6);
 
   // Test saving the file
-   vcl_string out_path="./analyze_format_out.hdr";
-   bool save_ok= vil3d_save(im,out_path.c_str());
-   TEST("Save successful",save_ok,true);
-   if (save_ok)
-   {
-     vil3d_image_view<T> in_im = vil3d_load(out_path.c_str());
-     TEST("Loaded==Saved",vil3d_image_view_deep_equality(in_im,im),true);
-   }
+  vcl_string out_path="./analyze_format_out.hdr";
+  bool save_ok= vil3d_save(im,out_path.c_str());
+  TEST("Save successful",save_ok,true);
+  if (save_ok)
+  {
+    vil3d_image_view<T> in_im = vil3d_load(out_path.c_str());
+    TEST("Loaded==Saved",vil3d_image_view_deep_equality(in_im,im),true);
+  }
 }
 
 static void test_analyze_format(int argc, char* argv[])
