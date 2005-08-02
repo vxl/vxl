@@ -57,8 +57,6 @@ void vil3d_gauss_reduce(const vil3d_image_view<T>& src_im,
   unsigned nj2 = (nj+1)/2;
   unsigned nk2 = (nk+1)/2;
 
-  dest_im.set_size(ni2,nj2,nk2,n_planes);
-
   if (work_im1.ni()<ni2 || work_im1.nj()<nj || work_im1.nk()<nk)
     work_im1.set_size(ni2,nj,nk);
 
@@ -79,6 +77,12 @@ void vil3d_gauss_reduce(const vil3d_image_view<T>& src_im,
       work_im1.origin_ptr(),nj,ni2,nk,
       work_im1.jstep(),work_im1.istep(),work_im1.kstep(),
       work_im2.origin_ptr(),work_im2.jstep(),work_im2.istep(),work_im2.kstep());
+  }
+
+  dest_im.set_size(ni2,nj2,nk2,n_planes);
+
+  for (unsigned p=0;p<n_planes;++p)
+  {
 
     // Smooth and subsample in k (by implicitly transposing)
     vil3d_gauss_reduce_i(
