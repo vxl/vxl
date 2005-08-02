@@ -40,12 +40,15 @@ vcl_string timestamp()
 // In the longer term it may save the value via Dart2.
 void mbl_test_save_measurement( const vcl_string &measurement_path, double value)
 {
-  vcl_string path = vcl_getenv("MBL_TEST_SAVE_MEASUREMENT_ROOT");
+  char * cpath = vcl_getenv("MBL_TEST_SAVE_MEASUREMENT_ROOT");
+  vcl_string path(cpath?cpath:"");
   if (path.empty())
     path = MBL_CONFIG_TEST_SAVE_MEASUREMENT_ROOT;
   if (path.empty()) // Nobody wants the measurements
     return;
-    
+  
+  vcl_string config = MBL_CONFIG_BUILD_NAME;
+  if (config.empty()) config="DEFAULT_CONFIG";
   
   path += '/' + measurement_path + ".txt";
   vul_file::make_directory_path(vul_file::dirname(path));
