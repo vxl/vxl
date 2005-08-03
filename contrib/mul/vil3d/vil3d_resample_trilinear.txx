@@ -5,7 +5,7 @@
 //:
 // \file
 // \brief Resample a 3D image by a different factor in each dimension
-// \author Kevin de Souza
+// \author Kevin de Souza, Ian Scott
 
 #include <vil3d/vil3d_resample_trilinear.h>
 #include <vil3d/vil3d_trilin_interp.h>
@@ -14,6 +14,7 @@
 #include <vcl_cassert.h>
 
 // Resample a 3D image by a different factor in each dimension.
+// Note: The upper image boundaries are extended.
 template <class T>
 void vil3d_resample_trilinear(const vil3d_image_view<T>& src_image,
                               vil3d_image_view<T>& dst_image,
@@ -45,7 +46,7 @@ void vil3d_resample_trilinear(const vil3d_image_view<T>& src_image,
   const vcl_ptrdiff_t d_pstep = dst_image.planestep();
   T* d_plane = dst_image.origin_ptr();
 
-  // Use this to convert from double to Twith appropriate rounding
+  // Use this to convert from double to T with appropriate rounding
   vil_convert_round_pixel<double, T> cr;
 
   // Loop over all voxels in the destination image
