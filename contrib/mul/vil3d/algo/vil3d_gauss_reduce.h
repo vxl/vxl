@@ -32,8 +32,9 @@ void vil3d_gauss_reduce_i(const T* src_im,
 
 //: Smooth and subsample src_im to produce dest_im
 //  Applies filter in i,j and k directions, then samples every other pixel.
-//  Resulting image is (ni+1)/2 x (nj+1)/2 x (nk+1)/2. An image can be reduced
-//  in-place, by having src_im and dest_im pointing to the same image.
+//  Resulting image is (ni+1)/2 x (nj+1)/2 x (nk+1)/2. 
+//  An image can be reduced in-place, by having src_im and dest_im 
+//  pointing to the same image.
 template<class T>
 void vil3d_gauss_reduce(const vil3d_image_view<T>& src_im,
                         vil3d_image_view<T>&       dest_im,
