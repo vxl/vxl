@@ -27,6 +27,7 @@
 #include <vil1/vil1_pixel.h>
 
 #include <vil/vil_image_view.h>
+#include <vil/vil_image_resource.h>
 
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_macro.h>
@@ -276,43 +277,87 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
   if (wd < 0 || ht < 0)
   {
     assert(get_image_tableau());
-    vil1_image img = get_image_tableau()->get_image();
-    if (wd < 0) wd = img.width();
-    if (ht < 0) ht = img.height();
-    assert (wd <= img.width());
-    assert (ht <= img.height());
+    if(get_image_tableau()->get_image_resource()) {
+      
+      vil_image_resource_sptr img_sptr = get_image_tableau()->get_image_resource();
+      if (wd < 0) wd = img_sptr->ni();
+      if (ht < 0) ht = img_sptr->nj();
+      
+    } else {
+
+      vil1_image img = get_image_tableau()->get_image();
+      if (wd < 0) wd = img.width();
+      if (ht < 0) ht = img.height();
+      assert (wd <= img.width());
+      assert (ht <= img.height());
+    }
   }
 
   // Write PostScript header
   vul_psfile psfile(filename.c_str(), false);
+  psfile.set_paper_layout(vul_psfile::MAX);
   psfile.set_reduction_factor(reduction_factor);
   // psfile.set_parameters(wd, ht); // no longer needed - vul_psfile does this
 
   // Write image, if present
   if (get_image_tableau() && wd*ht > 0)
   {
-    vil1_image img = get_image_tableau()->get_image();
-    unsigned char* data = new unsigned char[img.get_size_bytes()];
-    img.get_section(data, 0, 0, wd, ht);
-    if (vil1_pixel_format(img) == VIL1_BYTE)
-    {
-      if (debug)
-        vcl_cerr << "vgui_easy2D_tableau::print_psfile printing greyscale image to"
-                 << filename.c_str() << vcl_endl;
-      psfile.print_greyscale_image(data, wd, ht);
+    if(get_image_tableau()->get_image_resource()) {
+
+      vil_image_resource_sptr img_sptr = get_image_tableau()->get_image_resource();
+      vil_image_view<vxl_byte> img= img_sptr->get_view();
+      if(!img) {
+        
+        // invalid pixel type
+        vgui_macro_warning<< "failed to print image of unsupported pixel format: "
+                          << img << vcl_endl;
+      }
+      
+      if(img.nplanes()==1) { // greyscale image
+        
+        if(img.istep() != 1)
+          vgui_macro_warning<< "The istep of this image view is not 1: "
+                            << img << vcl_endl;
+        else {
+          if (debug)
+            vcl_cerr << "vgui_easy2D_tableau::print_psfile printing greyscale image to"
+                     << filename.c_str() << vcl_endl;
+          psfile.print_greyscale_image(img.top_left_ptr(), img.ni(), img.nj());
+        }
+      }
+      else if (img.nplanes() == 3)  { // color image
+        
+      }
+      else
+        // urgh
+        vgui_macro_warning<< "Don't know how to handle image with "
+                          << img.nplanes() << " planes" << vcl_endl;
+     
+    } else { 
+
+      vil1_image img = get_image_tableau()->get_image();
+      unsigned char* data = new unsigned char[img.get_size_bytes()];
+      img.get_section(data, 0, 0, wd, ht);
+      if (vil1_pixel_format(img) == VIL1_BYTE)
+      {
+        if (debug)
+          vcl_cerr << "vgui_easy2D_tableau::print_psfile printing greyscale image to"
+                   << filename.c_str() << vcl_endl;
+        psfile.print_greyscale_image(data, wd, ht);
+      }
+      else if (vil1_pixel_format(img) == VIL1_RGB_BYTE)
+      {
+        if (debug)
+          vcl_cerr << "vgui_easy2D_tableau::print_psfile printing color image to "
+                   << filename.c_str() << vcl_endl;
+        psfile.print_color_image(data, wd, ht);
+      }
+      else
+        // urgh
+        vgui_macro_warning<< "failed to print image of unsupported pixel format: "
+                          << img << vcl_endl;
+      delete[] data;
     }
-    else if (vil1_pixel_format(img) == VIL1_RGB_BYTE)
-    {
-      if (debug)
-        vcl_cerr << "vgui_easy2D_tableau::print_psfile printing color image to "
-                 << filename.c_str() << vcl_endl;
-      psfile.print_color_image(data, wd, ht);
-    }
-    else
-      // urgh
-      vgui_macro_warning<< "failed to print image of unsupported pixel format: "
-                        << img << vcl_endl;
-    delete[] data;
   }
 
   // Skip the rest of this function if no geometry is wanted
