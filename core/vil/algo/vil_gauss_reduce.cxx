@@ -9,6 +9,7 @@
 #include <vcl_cassert.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vnl/vnl_erf.h>
+#include <vnl/vnl_math.h>
 
 //: Smooth and subsample single plane src_im in x to produce dest_im
 //  Applies 1-5-8-5-1 filter in x, then samples
@@ -104,10 +105,9 @@ void vil_gauss_reduce(const int* src_im,
         const int* s = s_row + sxs2;
         for (unsigned x=0;x<ni2;++x)
         {
-            // The 0.5 offset in the following ensures rounding
-            *d = int(0.5 + 0.05*s[-sxs2] + 0.25*s[-s_x_step]
-                         + 0.05*s[ sxs2] + 0.25*s[ s_x_step]
-                         + 0.4 *s[0]);
+            *d = vnl_math_rnd(0.05*s[-sxs2] + 0.25*s[-s_x_step] +
+                              0.05*s[ sxs2] + 0.25*s[ s_x_step] +
+                              0.4 *s[0]);
 
             d += d_x_step;
             s += sxs2;
