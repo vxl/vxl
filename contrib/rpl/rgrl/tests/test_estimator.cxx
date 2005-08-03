@@ -1878,7 +1878,7 @@ namespace {
     bool homography_is_good = true;
     for ( unsigned int num=12; num<200; num+=4 )
     {
-      vcl_cout << "using " << num << " of correspondences" << vcl_endl;
+      vcl_cout << "using " << num << " of 200 correspondences.\n";
       //reset points
       p.clear();
       q.clear();
@@ -2029,7 +2029,7 @@ MAIN( test_estimator )
   test_homography2d();
   test_homography2d_lm();
   test_homography2d_points_on_circle();
-  test_homography2d_points_on_circle_w_noise(0.0, 1e-10, 1e-9);
+  test_homography2d_points_on_circle_w_noise(0.0, 1e-9, 1e-9);
   test_homography2d_points_on_circle_w_noise(0.1, 0.1, 0.005);
   SUMMARY();
 }
