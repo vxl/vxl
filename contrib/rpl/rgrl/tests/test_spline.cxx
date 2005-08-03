@@ -4,6 +4,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_random.h>
+#include <vnl/vnl_math.h> // for vnl_math_isnan()
 
 namespace {
 
@@ -198,7 +199,9 @@ test_3d_spline()
         vcl_cout << "\nreturn spline value  f(" << pt<< ")=" << return_spline_value;
         double true_spline_value = spline_3d_value( pt, c, m );
         vcl_cout << "    true spline value  f(" << pt << ")=" << true_spline_value << vcl_endl;
-        TEST_NEAR_REL("test spline value: ", return_spline_value, true_spline_value, 1e-9);
+        if (!vnl_math_isnan(true_spline_value)) {
+          TEST_NEAR_REL("test spline value: ", return_spline_value, true_spline_value, 1e-9);
+        }
       }
     }
   }
