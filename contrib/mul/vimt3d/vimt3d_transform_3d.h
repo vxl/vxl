@@ -63,6 +63,12 @@ class vimt3d_transform_3d
   tx_(0), ty_(0), tz_(0), tt_(1),
   form_(Identity), inv_uptodate_(false) {}
 
+  // An explicit destructor is required to avoid an internal compiler
+  // error in icc 8.0 (internal error: 0_1270)
+
+  //: Destructor
+  ~vimt3d_transform_3d() {}
+
   //: True if identity.
   bool is_identity() const { return form_==Identity; }
 
