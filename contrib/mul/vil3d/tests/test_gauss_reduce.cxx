@@ -142,7 +142,7 @@ static void test_gauss_reduce_int()
   for (unsigned k=0;k<image0.nk();++k)
     for (unsigned j=0;j<image0.nj();++j)
       for (unsigned i=0;i<image0.ni();++i)
-        image0(i,j,k) = -100*i + j + 10*k;
+        image0(i,j,k) = -100*static_cast<int>(i) + j + 10*k;
             
   unsigned ni2 = (ni+1)/2;
   unsigned nj2 = (nj+1)/2;
