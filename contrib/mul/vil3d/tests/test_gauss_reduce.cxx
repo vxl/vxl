@@ -3,12 +3,14 @@
 #include <vcl_iostream.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/algo/vil3d_gauss_reduce.h>
+#include <vil3d/vil3d_print.h>
+
 
 static void test_gauss_reduce_float()
 {
-  vcl_cout << "****************************\n"
-           << " Testing vil3d_gauss_reduce\n"
-           << "****************************\n";
+  vcl_cout << "**********************************\n"
+           << " Testing vil3d_gauss_reduce<float>\n"
+           << "**********************************\n";
 
   unsigned ni = 20, nj = 20, nk = 20;
   vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<" k "<<nk<<vcl_endl;
@@ -124,12 +126,48 @@ static void test_gauss_reduce_jk()
   TEST_NEAR("Corner pixel",image0(ni2-1,nj2*2-2,nk2*2-2),image1(ni2-1,nj2-1,nk2-1),1e-5);
 }
 
+
+static void test_gauss_reduce_int()
+{
+  vcl_cout << "********************************\n"
+           << " Testing vil3d_gauss_reduce<int>\n"
+           << "********************************\n";
+  
+  unsigned ni=10, nj=10, nk=10;
+  vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<" k "<<nk<<vcl_endl;
+  
+  vil3d_image_view<int> image0;
+  image0.set_size(ni,nj,nk);
+  
+  for (unsigned k=0;k<image0.nk();++k)
+    for (unsigned j=0;j<image0.nj();++j)
+      for (unsigned i=0;i<image0.ni();++i)
+        image0(i,j,k) = -100*i + j + 10*k;
+            
+  unsigned ni2 = (ni+1)/2;
+  unsigned nj2 = (nj+1)/2;
+  unsigned nk2 = (nk+1)/2;
+  vil3d_image_view<int> image1,work_im1,work_im2;
+  vil3d_gauss_reduce(image0,image1,work_im1,work_im2);
+
+  TEST("size i",image1.ni(),(ni+1)/2);
+  TEST("size j",image1.nj(),(nj+1)/2);
+  TEST("size k",image1.nk(),(nk+1)/2);
+  
+  TEST("Pixel (0,0,0)", image0(0,0,0)==image1(0,0,0), true);
+  TEST("Pixel (1,1,1)", image0(2,2,2)==image1(1,1,1), true);
+  TEST("Pixel (2,2,2)", image0(4,4,4)==image1(2,2,2), true);
+  TEST("Pixel (4,4,4)", image0(8,8,8)==image1(4,4,4), true);
+}
+
+
 static void test_gauss_reduce()
 {
   test_gauss_reduce_float();
   test_gauss_reduce_ij();
   test_gauss_reduce_ik();
   test_gauss_reduce_jk();
+  test_gauss_reduce_int();
 }
 
 TESTMAIN(test_gauss_reduce);
