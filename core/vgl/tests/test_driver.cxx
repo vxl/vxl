@@ -20,6 +20,7 @@ DECLARE( test_fit_conics_2d );
 DECLARE( test_p_matrix );
 DECLARE( test_closest_point );
 DECLARE( test_convex_hull_2d );
+DECLARE( test_sphere );
 
 void
 register_tests()
@@ -44,6 +45,7 @@ register_tests()
   REGISTER( test_p_matrix );
   REGISTER( test_closest_point );
   REGISTER( test_convex_hull_2d );
+  REGISTER( test_sphere );
 }
 
 DEFINE_MAIN;

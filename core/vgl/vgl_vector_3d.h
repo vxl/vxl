@@ -42,6 +42,9 @@ class vgl_vector_3d
   //: Creates the vector \a (vx,vy,vz).
   inline vgl_vector_3d(T vx, T vy, T vz) : x_(vx) , y_(vy) , z_(vz) {}
 
+  //: Creates the vector \a (vx,vy,vz).
+  inline vgl_vector_3d(const T v[3]) : x_(v[0]), y_(v[1]), z_(v[2]) {}
+
 #if 0 // The defaults do exactly what they should do...
   //: Copy constructor
   inline vgl_vector_3d (vgl_vector_3d<T>const&v):x_(v.x()),y_(v.y()),z_(v.z()){}
