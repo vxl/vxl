@@ -9,6 +9,7 @@
 // \author Ian Scott, Tim Cootes.
 
 #include <vil/vil_image_view.h>
+#include <vcl_iomanip.h>
 #include <vcl_iostream.h>
 
 //: How to print value in vil_print_all(image_view)
@@ -75,6 +76,7 @@ vil_print_declare_specialization( vil_rgba<double> );
 template<class T>
 inline void vil_print_all(vcl_ostream& os,const vil_image_view<T>& view)
 {
+  int width = os.width();
   os<<view.is_a()<<" "<<view.nplanes()<<" planes, each "<<view.ni()<<" x "<<view.nj()
     <<" istep: "<<(int)view.istep()<<' '
     <<" jstep: "<<(int)view.jstep()<<' '
@@ -86,7 +88,7 @@ inline void vil_print_all(vcl_ostream& os,const vil_image_view<T>& view)
     {
       for (unsigned int i=0;i<view.ni();++i)
       {
-        os<<' ';
+        os<<' '<<vcl_setw(width);
         vil_print_value(os,view(i,j,p));
       }
       os<<'\n'<<vcl_flush;
