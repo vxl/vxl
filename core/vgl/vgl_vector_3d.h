@@ -58,6 +58,9 @@ class vgl_vector_3d
   //: Assignment
   inline void set(T vx, T vy, T vz) { x_=vx; y_=vy; z_=vz; }
 
+  //: Set \a x, \a y and \a z
+  inline void set (T const v[3]) { x_ = v[0]; y_ = v[1]; z_ = v[2]; }
+
   //: Comparison
   inline bool operator==(vgl_vector_3d<T>const& v) const {
     return x_==v.x() && y_==v.y() && z_==v.z(); }
