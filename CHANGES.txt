@@ -5,6 +5,12 @@ aren't documented here, unless the bug-fix has a major observable
 effect. If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
+      - New vgl_sphere_3d primitive, and some extra intersection calculations.
+
+      - Added support for the Analyse 3D image file format
+
+VXL 1.2.0	- July 2005
+
       - Added an implementation of the Mukres or Hungarian algorithm for
         finding a minimum cost assignment.
 
@@ -14,8 +20,6 @@ VXL 1.1.0	- May 2004
         file formats.  vidl_io::register_codec() is no longer needed.
 
       - Added AVI file support in Linux to vidl using the avifile library.
-
-      - Added NITF support to vil. This format is used in satellite imaging.
 
       - Brought mbl_mz_random into core/vnl/vnl_random. This random
         random number generator provides the same sequence on many platforms.
