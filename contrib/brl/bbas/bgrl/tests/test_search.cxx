@@ -1,5 +1,3 @@
-//:
-// \file
 #include <testlib/testlib_test.h>
 
 #include <bgrl/bgrl_search_func.h>
@@ -13,21 +11,25 @@ bool test_iterator( bgrl_graph::iterator& itr,
   int i=0;
   bgrl_graph_sptr the_graph = itr.graph();
   int size = the_graph->size();
-  for(; itr != the_graph->end(); ++itr, ++i){
-    if(i >= size){
-      check = false;
+  for (; itr != the_graph->end(); ++itr, ++i)
+  {
+    if (i >= size) {
+      check = false; ++i;
       break;
     }
-    check = ((*itr) == truth[i]) && check;
+    if ((*itr) != truth[i]) {
+      vcl_cout << "Incorrect value for i=" << i << '\n';
+      check = false;
+    }
   }
-  if(i < size)
+  if (i < size)
     check = false;
 
+  vcl_cout << "size = " << size << ", imax = " << i << '\n';
   return check;
 }
 
-
-//: Test the iterators
+// Test the iterators
 void test_search()
 {
   // create vertices
@@ -46,7 +48,7 @@ void test_search()
   the_graph->add_vertex(vertex_3);
   the_graph->add_vertex(vertex_4);
   the_graph->add_vertex(vertex_5);
-     
+
   // add the edges
   the_graph->add_edge(vertex_1, vertex_2);
   the_graph->add_edge(vertex_2, vertex_1);
@@ -73,16 +75,12 @@ void test_search()
   bgrl_vertex_sptr breadth_order[] = {vertex_4, vertex_2, vertex_3, vertex_5, vertex_1};
   bgrl_graph::iterator breadth_itr = the_graph->begin(new bgrl_breadth_search(vertex_4));
   TEST("Testing breadth_iterator", test_iterator(breadth_itr, breadth_order ), true);
-
 }
-
-
-
 
 MAIN( test_search )
 {
   START( "bgrl_search" );
-  
+
   test_search();
 
   SUMMARY();
