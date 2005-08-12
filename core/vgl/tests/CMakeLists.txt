@@ -24,6 +24,7 @@ ADD_EXECUTABLE( vgl_test_all
   test_p_matrix.cxx
   test_convex_hull_2d.cxx
   test_sphere.cxx
+  test_line_3d_2_points.cxx
 )
 TARGET_LINK_LIBRARIES( vgl_test_all vgl_algo vgl testlib )
 
@@ -48,6 +49,7 @@ ADD_TEST( vgl_test_fit_conics_2d                vgl_test_all test_fit_conics_2d)
 ADD_TEST( vgl_test_p_matrix                     vgl_test_all test_p_matrix)
 ADD_TEST( vgl_test_convex_hull_2d               vgl_test_all test_convex_hull_2d)
 ADD_TEST( vgl_test_sphere                       vgl_test_all test_sphere)
+ADD_TEST( vgl_test_line_3d_2_points             vgl_test_all test_line_3d_2_points)
 
 ADD_EXECUTABLE( vgl_test_include test_include.cxx )
 

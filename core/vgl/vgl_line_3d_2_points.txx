@@ -7,6 +7,9 @@
 #include "vgl_line_3d_2_points.h"
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
+#include <vcl_limits.h>
+#include <vgl/vgl_plane_3d.h>
+#include <vgl/vgl_distance.h>
 
 //***************************************************************************
 // Initialization
@@ -46,6 +49,49 @@ vgl_point_3d<Type> intersection(vgl_line_3d_2_points<Type> const& l1,
                             ((t1-t2)*c2+t2*c3)/t1);
 }
 
+
+//: Return the intersection point of a line and a plane.
+// \relates vgl_line_3d_2_points
+// \relates vgl_plane_3d
+template <class Type>
+vgl_point_3d<Type> intersection(vgl_line_3d_2_points<Type> const& line,
+                                vgl_plane_3d<Type> const& plane)
+{
+  vgl_vector_3d<Type> dir = line.direction();
+
+  vgl_point_3d<Type> pt;
+
+  double denom = plane.a()*(dir.x()) +
+                 plane.b()*(dir.y()) +
+                 plane.c()*(dir.z());
+
+  if (denom == 0)
+  {
+    const Type inf = vcl_numeric_limits<Type>::infinity();
+    // Line is either parallel or coplanar
+    // If the distance from a line endpoint to the plane is zero, coplanar
+    if (vgl_distance(line.point1(), plane)==0.0)
+      pt.set(inf,inf,inf);
+    else    
+      pt.set(inf,0,0);
+  }
+  else
+  {
+    // Infinite line intersects plane
+    double numer = -(plane.a()*line.point1().x() +
+      plane.b()*line.point1().y() +
+      plane.c()*line.point1().z() +
+      plane.d());
+
+    dir *= numer/denom;
+    pt = line.point1() + dir;
+  }  
+
+  return pt;
+
+}
+
+
 //*****************************************************************************
 // stream operators
 //*****************************************************************************
@@ -62,6 +108,7 @@ vcl_ostream& operator<<(vcl_ostream &s,
 #define VGL_LINE_3D_2_POINTS_INSTANTIATE(T) \
 template class vgl_line_3d_2_points<T >;\
 template vcl_ostream& operator<<(vcl_ostream&, vgl_line_3d_2_points<T > const&);\
-template vgl_point_3d<T > intersection(vgl_line_3d_2_points<T > const&, vgl_line_3d_2_points<T > const&)
+template vgl_point_3d<T > intersection(vgl_line_3d_2_points<T > const&, vgl_line_3d_2_points<T > const&);\
+template vgl_point_3d<T > intersection(vgl_line_3d_2_points<T > const&, vgl_plane_3d<T > const&)
 
 #endif // vgl_line_3d_2_points_txx_

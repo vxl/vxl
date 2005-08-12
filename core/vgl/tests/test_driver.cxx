@@ -21,6 +21,7 @@ DECLARE( test_p_matrix );
 DECLARE( test_closest_point );
 DECLARE( test_convex_hull_2d );
 DECLARE( test_sphere );
+DECLARE( test_line_3d_2_points );
 
 void
 register_tests()
@@ -46,6 +47,7 @@ register_tests()
   REGISTER( test_closest_point );
   REGISTER( test_convex_hull_2d );
   REGISTER( test_sphere );
+  REGISTER( test_line_3d_2_points );
 }
 
 DEFINE_MAIN;

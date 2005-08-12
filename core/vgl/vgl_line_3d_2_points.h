@@ -123,6 +123,12 @@ inline bool coplanar(l const& l1, l const& l2, l const& l3)
 template <class Type>
 vgl_point_3d<Type> intersection(l const& l1, l const& l2);
 
+//: Return the intersection point of a line and a plane.
+// \relates vgl_line_3d_2_points
+// \relates vgl_plane_3d
+template <class Type>
+vgl_point_3d<Type> intersection(l const& line, vgl_plane_3d<Type> const& plane);
+
 //: Are three lines concurrent, i.e., do they pass through a common point?
 // \relates vgl_line_3d_2_points
 template <class Type>
