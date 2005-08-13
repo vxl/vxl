@@ -9,6 +9,7 @@
 #include <vgl/algo/vgl_conic_2d_regression.h>
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
+#include <vcl_cmath.h>
 
 //--------------------------------------------------------------
 //: Constructor
@@ -59,27 +60,30 @@ void vgl_fit_conics_2d<T>::output(const unsigned start_index,
     vcl_cout << "Can't output a conic at infinity in vgl_fit_conics<T>\n";
     return;
   }
-  T cx = center.x()/center.w(), cy = center.y()/center.w();
+  
   //Need to establish the sense of the fitted curve
   //The curve should proceed in a counter-clockwise direction from p1 to p2.
-  // construct a vector at p1
-  vgl_vector_2d<T> v1(curve_[start_index].x()-cx, curve_[start_index].y()-cy);
-  //choose a point in the middle of the curve
+  // 1) choose a point in the middle of the curve
   int middle_index = (end_index-1-start_index)/2 + start_index;
   if (middle_index == static_cast<int>(start_index))
     middle_index = end_index-1;
-  //construct a vector at that point
-  vgl_vector_2d<T> v(curve_[middle_index].x()-cx, curve_[middle_index].y()-cy);
-  //The cross product should be positive
-  T cp = cross_product(v1, v);
+  vgl_point_2d<T> pm = curve_[middle_index];
+  // 2) construct a vector from the middle to ps
+  vgl_point_2d<T> ps = curve_[start_index], pe = curve_[end_index-1];
+  vgl_vector_2d<T> vms(ps.x()-pm.x(), ps.y()-pm.y());
+  // 3) construct a vector from the middle to pe
+  vgl_vector_2d<T> vme(pe.x()-pm.x(), pe.y()-pm.y());
+  //The cross product should be negative and significant
+  double cp = static_cast<double>(cross_product(vms, vme));
 
   //If not, exchange p1 and p2
   unsigned i1=start_index, i2 = end_index-1;
-  if (cp< static_cast<T>(0))
+  if(cp>1e-04 && cp> 0.0)
   {
     i1 = end_index-1;
     i2 = start_index;
   }
+  
 
   //   unsigned i1=start_index, i2 = end_index-1;
   vgl_conic_segment_2d<T> e_seg(curve_[i1], curve_[i2],
