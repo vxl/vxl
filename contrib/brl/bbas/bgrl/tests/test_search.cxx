@@ -18,14 +18,14 @@ bool test_iterator( bgrl_graph::iterator& itr,
       break;
     }
     if ((*itr) != truth[i]) {
-      vcl_cout << "Incorrect value for i=" << i << '\n';
+      vcl_cout << "\nIncorrect value for i=" << i;
       check = false;
     }
   }
-  if (i < size)
+  if (i != size)
     check = false;
 
-  vcl_cout << "size = " << size << ", imax = " << i << '\n';
+  vcl_cout << "\nsize = " << size << ", imax = " << i;
   return check;
 }
 
