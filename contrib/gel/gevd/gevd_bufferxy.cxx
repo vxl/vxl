@@ -6,6 +6,7 @@
 #include <vcl_cstring.h>
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_math.h>
 #include "gevd_bufferxy.h"
 
 #include <vcl_compiler.h>
@@ -82,10 +83,14 @@ gevd_bufferxy::gevd_bufferxy(vil_image_resource_sptr const& image_s) :
     }
   unsigned n_rows= image.nj();
   unsigned n_cols= image.ni();
+
   vil_pixel_format fmt = image.pixel_format();
   unsigned n_bytes = vil_pixel_format_sizeof_components(fmt);
+#if 0
   unsigned n_bits = 8*n_bytes;
   Init(n_cols, n_rows, n_bits);
+#endif
+  Init(n_cols, n_rows, 8);
   //two cases of interest
   switch (n_bytes)
     {
@@ -105,13 +110,22 @@ gevd_bufferxy::gevd_bufferxy(vil_image_resource_sptr const& image_s) :
           }
         break;            
       }
-    case 2://unsigned short pixels
+    case 2://unsigned short pixels - convert to byte range for consistency
       {
         vil_image_view<unsigned short> view = image.get_view(0, n_cols,
                                                              0, n_rows);
+        unsigned short imin=0, imax=0;
+        vil_math_value_range<unsigned short>(view, imin, imax);
+        float fmin = static_cast<float>(imin), fmax = static_cast<float>(imax);
+        float scale = fmax-fmin;
+        if(scale)
+          scale = 1/scale;
+        else
+          scale = 1.0;
         for (unsigned j=0;j<n_rows;++j)
           for(unsigned i=0;i<n_cols;++i)
-            *((unsigned short*)GetElementAddr(i,j)) = view(i,j);
+            *((unsigned char*)GetElementAddr(i,j)) = 
+              static_cast<unsigned char>(255.0f*(view(i,j)-imin)*scale);
         break;            
       }
     default:
