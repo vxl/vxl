@@ -191,9 +191,9 @@ static void test_gauss_reduce_int()
   TEST("size k",image1.nk(),nk2);
 
   TEST("Pixel (0,0,0)", image0(0,0,0), image1(0,0,0));
-  TEST("Pixel (1,1,1)", image0(2,5,2), image1(1,1,1));
-  TEST("Pixel (2,2,2)", image0(4,7,4), image1(2,2,2));
-  TEST("Pixel (3,3,3)", image0(6,9,6), image1(3,3,3));
+  TEST("Pixel (1,1,1)", image0(2,2,2), image1(1,1,1));
+  TEST("Pixel (2,2,2)", image0(4,4,4), image1(2,2,2));
+  TEST("Pixel (3,3,3)", image0(6,6,6), image1(3,3,3));
   TEST("RFT corner pixel",image0(ni2*2-2,nj2*2-2,nk2*2-2),image1(ni2-1,nj2-1,nk2-1));
   TEST("RFB corner pixel",image0(ni2*2-2,nj2*2-2,0),      image1(ni2-1,nj2-1,0));
   TEST("RNT corner pixel",image0(ni2*2-2,0,nk2*2-2),      image1(ni2-1,0,nk2-1));
