@@ -186,6 +186,14 @@ void test_vsol_conic_2d()
       vcl_abs(q->c()+2.2) < 1e-12 && vcl_abs(q->f()-5.8) < 1e-12 && vcl_abs(q->e()+0.4) < 1e-12)
     q->set(-4, 24, -11, -16, -2, 29); 
   TEST("vsol_conic_2d::set_central_parameters()", *q, *p);
+//Test the length routine
+  vsol_point_2d_sptr p0 = new vsol_point_2d(2.0,0.0), p1 = new vsol_point_2d(2.0,0.0);
+  vsol_conic_2d_sptr pl=new vsol_conic_2d(0.25,0,1,0,0,-1); 
+  pl->set_p0(p0); pl->set_p1(p1);
+  double length = 0;
+  if(pl->is_real_ellipse())
+    length = pl->length();
+  TEST_NEAR("elliptic arc length ", length, 9.68926, 1e-05);
 }
 
 TESTMAIN(test_vsol_conic_2d);

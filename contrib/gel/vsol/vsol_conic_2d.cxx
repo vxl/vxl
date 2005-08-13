@@ -251,8 +251,7 @@ void vsol_conic_2d::ellipse_parameters(double &cx,
   const double d2=d()/2;
   const double e2=e()/2;
   const double det=a()*c()-b2*b2;
-
-  if (is_zero(b2)) // only for accuracy
+  if (is_zero(b2*b2/det)) // only for accuracy
   {
     cx=-d2/a();
     cy=-e2/c();
@@ -291,6 +290,7 @@ double vsol_conic_2d::ellipse_angular_position(vsol_point_2d_sptr const& pt) con
   
   // Find the closest point to pt on the ellipse
   vsol_point_2d_sptr closest = this->closest_point_on_curve(pt);
+  assert(closest);
   double x = closest->x(), y = closest->y();
 
   // Extract the ellipse parameters  
@@ -376,12 +376,39 @@ void vsol_conic_2d::parabola_parameters(double & /* cx */,
 }
 
 //---------------------------------------------------------------------------
-//: Return the length of `this'
+//: Return the length of `this' Currently only implemented for ellipse segment
+// and accurate to 10^-3 of the major axis length.  Alternatively provide
+// code for the incomplete elliptic integral of the second kind. However,
+// that would be numerical integration anyway.
 //---------------------------------------------------------------------------
 double vsol_conic_2d::length() const
 {
-  assert(false); // TO DO
-  return -1;
+  assert(is_real_ellipse());
+    // compute the angle at p0
+  vsol_point_2d_sptr p0 = this->p0();
+ double start_angle = this->ellipse_angular_position(p0);
+
+  // compute the angle at p1
+  vsol_point_2d_sptr p1 = this->p1();
+  double end_angle = this->ellipse_angular_position(p1);
+  if (end_angle<=start_angle)
+    end_angle += 2.0*vnl_math::pi;
+
+  double xc, yc, angle, major_axis, minor_axis;
+  this->ellipse_parameters(xc, yc, angle, major_axis, minor_axis);
+  double dphi = 0.001;
+  double sum = 0.0;
+  //sum the arc length on the ellipse boundary
+  for(double phi = start_angle; phi<=end_angle; phi+=dphi)
+    {
+      double temp1 = 
+        minor_axis*cos(angle)*cos(phi)+ major_axis*sin(angle)*sin(phi);
+      double temp2 = major_axis*sin(angle+phi);
+      //the incremental arc length
+      double dl = vcl_sqrt(temp1*temp1 + temp2*temp2);
+      sum += dl*dphi;
+    }
+  return sum;
 }
 
 //---------------------------------------------------------------------------
@@ -510,6 +537,9 @@ vsol_conic_2d::intersection(vsol_conic_2d const& c) const
 vsol_point_2d_sptr
 vsol_conic_2d::closest_point_on_curve(vsol_point_2d_sptr const& pt) const
 {
+  //First check to see if the point is already on the conic boundary
+  if(this->in(pt))
+	return pt;
   // The nearest point must have a polar line which is orthogonal to its
   // connection line with the given point; all points with this property form
   // a certain conic  (actually a hyperbola) :
