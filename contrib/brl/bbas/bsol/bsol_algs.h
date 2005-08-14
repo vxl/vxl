@@ -97,10 +97,26 @@ class bsol_algs
                   vgl_h_matrix_2d<double> const& H,
                   vsol_polygon_2d_sptr& Hp);
   
+  //: Transform a vsol_polygon_2d with a point specified as the center
+  //  of the transformation, i.e. vertices of the polygon are translated 
+  //  so that the specified point is the origin.  The transformation is 
+  /// then applied and the point coordinates added back in afterward.
+  static vsol_polygon_2d_sptr 
+    transform_about_point(vsol_polygon_2d_sptr const& p,
+                          vsol_point_2d_sptr const& c, 
+                          vgl_h_matrix_2d<double> const& H);
+
+
+  //: Transform a vsol_polygon_2d with the centroid as origin
+  static vsol_polygon_2d_sptr 
+    transform_about_centroid(vsol_polygon_2d_sptr const& p,
+                             vgl_h_matrix_2d<double> const& H);
+
   //: Homographically map a vsol_box_2d, returning the resulting bounding box
   static bool homography(vsol_box_2d_sptr const& b,
                          vgl_h_matrix_2d<double> const& H,
                          vsol_box_2d_sptr& Hb);
+
   //: print methods
   static void print(vsol_box_2d_sptr const& b);
   static void print(vsol_box_3d_sptr const& b);

@@ -334,6 +334,42 @@ bool bsol_algs::homography(vsol_polygon_2d_sptr const& p,
   return true;
 }
 
+//: Transform a vsol_polygon_2d with a point specified as the center
+//  of the transformation, i.e. vertices of the polygon are translated 
+//  so that the specified point is the origin.  The transformation is 
+/// then applied and the point coordinates added back in afterward.
+vsol_polygon_2d_sptr bsol_algs::
+transform_about_point(vsol_polygon_2d_sptr const& p,
+                      vsol_point_2d_sptr const& c, 
+                      vgl_h_matrix_2d<double> const& H)
+{
+  const int n = p->size();
+  vcl_vector<vsol_point_2d_sptr> pts;
+  for (int i = 0; i<n; i++)
+  {
+    vsol_point_2d_sptr v = p->vertex(i);
+    //Remove the centroid
+    vgl_homg_point_2d<double> hp(v->x() - c->x(), v->y() - c->y());
+    vgl_homg_point_2d<double> Hhp = H(hp);
+    vgl_point_2d<double> q(Hhp);
+    //add it back in
+    vsol_point_2d_sptr qs = new vsol_point_2d(q.x() + c->x(), q.y() + c->y());
+    pts.push_back(qs);
+  }
+  return new vsol_polygon_2d(pts);
+}
+
+//: Transform a vsol_polygon_2d with a homography
+//  Apply the transform with the centroid of the polygon as the
+//  origin and then translate by the centroid location vector
+vsol_polygon_2d_sptr bsol_algs::
+transform_about_centroid(vsol_polygon_2d_sptr const& p,
+                         vgl_h_matrix_2d<double> const& H)
+{
+  vsol_point_2d_sptr c = p->centroid();
+  return bsol_algs::transform_about_point(p, c, H);
+}
+
 bool bsol_algs::homography(vsol_box_2d_sptr const& b,
                            vgl_h_matrix_2d<double> const& H,
                            vsol_box_2d_sptr& Hb)
