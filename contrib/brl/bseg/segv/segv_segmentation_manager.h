@@ -91,6 +91,7 @@ class segv_segmentation_manager : public vgui_wrapper_tableau
 
   void set_selected_grid_image(vil1_image& image);
   void add_image(vil1_image& image);
+  void add_image_at(vil1_image& image, const unsigned col, const unsigned row);
   vil1_image selected_image();
   vil1_image image_at(const unsigned col, const unsigned row);
   bool

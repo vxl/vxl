@@ -24,6 +24,7 @@
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_grid_tableau_sptr.h>
 #include <vgui/vgui_rubberband_tableau_sptr.h>
+#include <vgui/vgui_range_map_params_sptr.h>
 #include <vgui/vgui_style_sptr.h>
 #include <bgui/bgui_picker_tableau_sptr.h>
 #include <bgui/bgui_vtol2D_tableau_sptr.h>
@@ -47,6 +48,11 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void fit_lines();
   void fit_conics();
   void regions();
+  //: visualization
+  void display_images_as_color();
+  //: image arithmetic
+  void add_images();
+  void subtract_images();
 
   //: tests and development only
     void test_inline_viewer();
@@ -73,8 +79,16 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void draw_points(vcl_vector<vsol_point_2d_sptr> const & points,
                    const vgui_style_sptr& style);
 
-  void set_selected_grid_image(vil_image_resource_sptr const& image);
-  void add_image(vil_image_resource_sptr const& image);
+  void set_selected_grid_image(vil_image_resource_sptr const& image,
+                               vgui_range_map_params_sptr const& rmps =0);
+                               
+  void add_image_at(vil_image_resource_sptr const& image,
+                    const unsigned col, const unsigned row,
+                    vgui_range_map_params_sptr const& rmps = 0);
+                    
+  void add_image(vil_image_resource_sptr const& image,
+                 vgui_range_map_params_sptr const& rmps =0);
+                 
   vil_image_resource_sptr selected_image();
   vil_image_resource_sptr image_at(const unsigned col, const unsigned row);
   bool
@@ -84,7 +98,7 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   bgui_picker_tableau_sptr selected_picker_tab();
   vgui_rubberband_tableau_sptr selected_rubber_tab();
   vtol_face_2d_sptr face_at(const int col, const int row);
-
+  vgui_range_map_params_sptr range_params(vil_image_resource_sptr const& image);
  private:
   //flags
   bool first_; //first image load

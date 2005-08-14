@@ -62,6 +62,21 @@ void segv_vil_menus::regions_callback()
   segv_vil_segmentation_manager::instance()->regions();
 }
 
+void segv_vil_menus::display_images_as_color_callback()
+{
+  segv_vil_segmentation_manager::instance()->display_images_as_color();
+}
+
+void segv_vil_menus::add_images_callback()
+{
+  segv_vil_segmentation_manager::instance()->add_images();
+}
+
+void segv_vil_menus::subtract_images_callback()
+{
+  segv_vil_segmentation_manager::instance()->subtract_images();
+}
+
 void segv_vil_menus::test_inline_viewer_callback()
 {
   segv_vil_segmentation_manager::instance()->test_inline_viewer();
@@ -79,6 +94,7 @@ vgui_menu segv_vil_menus::get_menu()
   vgui_menu menufile;
   vgui_menu menuview;
   vgui_menu menuedit;
+  vgui_menu menuops;
   //file menu entries
   menufile.add( "Quit", quit_callback,(vgui_key)'q', vgui_CTRL);
   menufile.add( "Load Image", load_image_callback,(vgui_key)'l', vgui_CTRL);
@@ -89,6 +105,7 @@ vgui_menu segv_vil_menus::get_menu()
   menuview.add("Set Range Params", set_range_params_callback);
   menuview.add("Test Inline Viewer", test_inline_viewer_callback);
   menuview.add("Test Draw Conic", test_ellipse_draw_callback);
+  menuview.add("Images as Color", display_images_as_color_callback);
 
   //edit menu entries
 
@@ -98,10 +115,15 @@ vgui_menu segv_vil_menus::get_menu()
   menuedit.add("Line Segments", fit_lines_callback);
   menuedit.add("Conic Segments", fit_conics_callback);
   menuedit.add("Edgel Regions", regions_callback);
+
+  //operation menu entries
+  menuops.add("Add Images:", add_images_callback);
+  menuops.add("Subtract Images:", subtract_images_callback);
   //Top level menu layout
   menubar.add( "File", menufile);
   menubar.add( "View", menuview);
   menubar.add( "Edit", menuedit);
+  menubar.add( "Image Ops", menuops);
   return menubar;
 }
 

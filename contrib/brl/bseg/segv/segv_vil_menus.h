@@ -27,12 +27,15 @@ class segv_vil_menus
   SEGV_VIL_DLL_DATA static void save_image_callback();
   SEGV_VIL_DLL_DATA static void set_range_params_callback();
   SEGV_VIL_DLL_DATA static void clear_display_callback();
+  SEGV_VIL_DLL_DATA static void display_images_as_color_callback();
   SEGV_VIL_DLL_DATA static void threshold_image_callback();
   SEGV_VIL_DLL_DATA static void harris_corners_callback();
   SEGV_VIL_DLL_DATA static void vd_edges_callback();
   SEGV_VIL_DLL_DATA static void fit_lines_callback();
   SEGV_VIL_DLL_DATA static void fit_conics_callback();
   SEGV_VIL_DLL_DATA static void regions_callback();
+  SEGV_VIL_DLL_DATA static void add_images_callback();
+  SEGV_VIL_DLL_DATA static void subtract_images_callback();
   //test/development do not use
   SEGV_VIL_DLL_DATA static void test_inline_viewer_callback();
   SEGV_VIL_DLL_DATA static void test_ellipse_draw_callback();

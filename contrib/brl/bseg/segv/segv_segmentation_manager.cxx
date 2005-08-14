@@ -125,9 +125,9 @@ void segv_segmentation_manager::set_selected_grid_image(vil1_image& image)
     itab->set_image(image);
   itab->post_redraw();
 }
-
-//: Add an image to the currently selected grid cell
-void segv_segmentation_manager::add_image(vil1_image& image)
+//: Add an image at the specified grid cell
+void segv_segmentation_manager::
+add_image_at(vil1_image& image, const unsigned col, const unsigned row)
 {
   bgui_image_tableau_sptr itab = bgui_image_tableau_new(image);
   bgui_vtol2D_tableau_sptr t2D = bgui_vtol2D_tableau_new(itab);
@@ -136,10 +136,16 @@ void segv_segmentation_manager::add_image(vil1_image& image)
   vgui_composite_tableau_new comp(t2D,rubber);
   bgui_picker_tableau_sptr picktab = bgui_picker_tableau_new(comp);
   vgui_viewer2D_tableau_sptr v2D = vgui_viewer2D_tableau_new(picktab);
-  unsigned row=0, col=0;
-  grid_->get_last_selected_position(&col, &row);
   grid_->add_at(v2D, col, row);
   itab->post_redraw();
+}  
+
+//: Add an image to the currently selected grid cell
+void segv_segmentation_manager::add_image(vil1_image& image)
+{
+  unsigned row=0, col=0;
+  grid_->get_last_selected_position(&col, &row);
+  this->add_image_at(image, col, row);
 }
 
 //: Get the image tableau for the currently selected grid cell
