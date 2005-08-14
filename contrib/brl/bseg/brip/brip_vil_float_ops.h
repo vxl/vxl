@@ -157,15 +157,27 @@ class brip_vil_float_ops
     convert_to_byte(vil_image_view<unsigned short> const& image,
                     unsigned short min_val, unsigned short max_val)
 ;
+  //: converts a generic image to a byte image. Use this instead of convert_to_grey
+static vil_image_view<unsigned char>
+  brip_vil_float_ops::convert_to_byte(vil_image_resource_sptr const& image);
+
+
   //: converts an float image to an unsigned short image within a range
   static vil_image_view<unsigned short>
     convert_to_short(vil_image_view<float> const& image,
                      float min_val, float max_val);
+  //: converts a generic image to an unsigned short image
+static vil_image_view<unsigned short>
+  convert_to_short(vil_image_resource_sptr const& image);
 
   //: converts a vil_image_resource to a float image
   static vil_image_view<float>
     convert_to_float(vil_image_resource const& image);
 
+  //: converts a vil_image_resource to a float image (preferred interface)
+  static vil_image_view<float>
+    convert_to_float(vil_image_resource_sptr const& image)
+    {return brip_vil_float_ops::convert_to_float(*image);}
  
 
   static vil_image_view<float>
@@ -200,6 +212,12 @@ class brip_vil_float_ops
                        vil_image_view<float> const& H,
                        vil_image_view<float> const& S,
                        vil_image_view<vil_rgb<vxl_byte> >& image);
+
+  //: Create a color image from multiple channels
+  static vil_image_view<vil_rgb<vxl_byte> > 
+    combine_color_planes(vil_image_view<unsigned char> const& R,
+                         vil_image_view<unsigned char> const& G,
+                         vil_image_view<unsigned char> const& B); 
 
   //: converts a generic image to greyscale (RGB<unsigned char>)
   static vil_image_view<unsigned char>
@@ -288,6 +306,18 @@ class brip_vil_float_ops
                          float i, float h, float s);
  static  void rgb_to_ihs(vil_rgb<vxl_byte> const& rgb,
                          float& i, float& h, float& s);
+
+
+
+ //:Arithmetic operations
+ //: Add two images from a general resource (forces types to be the same)
+ static vil_image_resource_sptr sum(vil_image_resource_sptr const& img0,
+                                    vil_image_resource_sptr const& img1);
+
+ //: subtract two generic images, return img0-img1 (forces types to the same) 
+ static vil_image_resource_sptr difference(vil_image_resource_sptr const& img0,
+                                           vil_image_resource_sptr const& img1);
+
  private:
 
   //: find if the center pixel of a neighborhood is the maximum value

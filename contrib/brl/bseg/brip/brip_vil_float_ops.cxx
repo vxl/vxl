@@ -1020,7 +1020,13 @@ convert_to_byte(vil_image_view<unsigned short> const& image,
     }
   return output;
 }
-  
+
+//Note this is a more standard interface than convert_to_grey
+vil_image_view<unsigned char>
+brip_vil_float_ops::convert_to_byte(vil_image_resource_sptr const& image)
+{
+  return brip_vil_float_ops::convert_to_grey(*image);
+}
 
 vil_image_view<unsigned short>
 brip_vil_float_ops::convert_to_short(vil_image_view<float> const& image,
@@ -1046,6 +1052,54 @@ brip_vil_float_ops::convert_to_short(vil_image_view<float> const& image,
       output(x,y) = (unsigned short)v;
     }
   return output;
+}
+vil_image_view<unsigned short>
+brip_vil_float_ops::convert_to_short(vil_image_resource_sptr const& image)
+{
+  //Check if the image is a float
+  if (image->nplanes()==1 &&image->pixel_format()==VIL_PIXEL_FORMAT_FLOAT)
+  {
+    vil_image_view<float> temp = image->get_view();
+    float vmin=0, vmax= 65355;
+    vil_math_value_range<float>(temp, vmin, vmax);
+    return brip_vil_float_ops::convert_to_short(temp, vmin, vmax);
+  }
+
+  //Here we assume that the image is an unsigned char
+  if (image->nplanes()==1&&image->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
+  {
+    vil_image_view<unsigned char > temp = image->get_view();
+    vil_image_view<unsigned short> short_image;
+	unsigned width = temp.ni(), height = temp.nj();
+    short_image.set_size(width, height);
+    for (unsigned y = 0; y<height; y++)
+      for (unsigned x = 0; x<width; x++)
+        short_image(x,y) = static_cast<unsigned short>(temp(x,y));
+    return temp;
+  }
+
+  //Here the image is an unsigned short image so just return it
+  if (image->nplanes()==1&&image->pixel_format()==VIL_PIXEL_FORMAT_UINT_16)
+  {
+    vil_image_view<unsigned short > temp = image->get_view();
+    return temp;
+  }
+  // the image is color so we should convert it to greyscale
+  // Here we assume the color elements are unsigned char.
+  if (image->nplanes()==3&&image->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
+  {
+    vil_image_view<vil_rgb<vxl_byte> > color_image = image->get_view();
+    unsigned width = color_image.ni(), height = color_image.nj();
+    // the output image
+    vil_image_view<unsigned short> short_image;
+    short_image.set_size(width, height);
+    for (unsigned y = 0; y<height; y++)
+      for (unsigned x = 0; x<width; x++)
+        short_image(x,y) = static_cast<unsigned short>(color_image(x,y).grey());
+    return short_image;
+  }
+  //If we get here then the input is not a type we handle so return a null view
+  return vil_image_view<unsigned char>();
 }
 
 vil_image_view<float>
@@ -1287,6 +1341,23 @@ display_IHS_as_RGB(vil_image_view<float> const& I,
     }
 }
 
+vil_image_view<vil_rgb<vxl_byte> > brip_vil_float_ops::
+combine_color_planes(vil_image_view<unsigned char> const& R,
+                     vil_image_view<unsigned char> const& G,
+                     vil_image_view<unsigned char> const& B)
+{
+  unsigned w = R.ni(), h = R.nj();
+  vil_image_view<vil_rgb<vxl_byte> > image(w,h);
+  for (unsigned r = 0; r < h; r++)
+    for (unsigned c = 0; c < w; c++)
+      {
+        image(c,r).r = R(c,r);
+        image(c,r).g = G(c,r);
+        image(c,r).b = B(c,r);
+      }
+  return image;
+}
+
 vil_image_view<float>
 brip_vil_float_ops::convert_to_float(vil_image_resource const& image)
 {
@@ -1318,7 +1389,7 @@ brip_vil_float_ops::convert_to_float(vil_image_resource const& image)
 }
 
 //-----------------------------------------------------------------
-// : convert a vil_rgb<vxl_byte> image to an unsigned_char image.
+// : convert any image to an unsigned_char image
 vil_image_view<unsigned char>
 brip_vil_float_ops::convert_to_grey(vil_image_resource const& image)
 {
@@ -1326,7 +1397,9 @@ brip_vil_float_ops::convert_to_grey(vil_image_resource const& image)
   if (image.nplanes()==1 &&image.pixel_format()==VIL_PIXEL_FORMAT_FLOAT)
   {
     vil_image_view<float> temp = image.get_view();
-    return brip_vil_float_ops::convert_to_byte(temp);
+    float vmin=0, vmax=255;
+    vil_math_value_range<float>(temp, vmin, vmax);
+    return brip_vil_float_ops::convert_to_byte(temp, vmin, vmax);
   }
 
   //Here we assume that the image is an unsigned char
@@ -1334,9 +1407,16 @@ brip_vil_float_ops::convert_to_grey(vil_image_resource const& image)
   if (image.nplanes()==1&&image.pixel_format()==VIL_PIXEL_FORMAT_BYTE)
   {
     vil_image_view<unsigned char > temp = image.get_view();
-    return temp;
+     return temp;
   }
 
+  if (image.nplanes()==1&&image.pixel_format()==VIL_PIXEL_FORMAT_UINT_16)
+  {
+    vil_image_view<unsigned short > temp = image.get_view();
+    unsigned short vmin=0, vmax=255;
+    vil_math_value_range<unsigned short>(temp, vmin, vmax);
+    return brip_vil_float_ops::convert_to_byte(temp, vmin, vmax);
+  }
   // the image is color so we should convert it to greyscale
   // Here we assume the color elements are unsigned char.
   if (image.nplanes()==3&&image.pixel_format()==VIL_PIXEL_FORMAT_BYTE)
@@ -2392,4 +2472,79 @@ cross_correlate(vil_image_view<float> const& image1,
            << t.real() << " msecs\n"<< vcl_flush;
 #endif
   return true;
+}
+vil_image_resource_sptr 
+brip_vil_float_ops::sum(vil_image_resource_sptr const& img0,
+                        vil_image_resource_sptr const& img1)
+{
+  
+  vil_image_view<float> op0 = brip_vil_float_ops::convert_to_float(img0);
+  vil_image_view<float> op1 = brip_vil_float_ops::convert_to_float(img1);
+  vil_image_view<float> sum;
+  vil_math_image_sum(op0, op1, sum);
+
+  //find out the types of the input images for now, only do greyscale operands
+  vil_pixel_format pix_format0 = img0->pixel_format();
+  vil_pixel_format pix_format1 = img1->pixel_format();
+  if(pix_format0 == VIL_PIXEL_FORMAT_FLOAT || 
+     pix_format1 == VIL_PIXEL_FORMAT_FLOAT)
+    {
+      return vil_new_image_resource_of_view(sum);
+    }
+  
+  if(pix_format0 == VIL_PIXEL_FORMAT_UINT_16 || 
+     pix_format1 == VIL_PIXEL_FORMAT_UINT_16)
+    {
+      vil_image_view<unsigned short> res = 
+        brip_vil_float_ops::convert_to_short(vil_new_image_resource_of_view(sum));
+      return vil_new_image_resource_of_view(res);
+    }
+  
+  if(pix_format0 == VIL_PIXEL_FORMAT_BYTE || 
+     pix_format1 == VIL_PIXEL_FORMAT_BYTE)
+    {
+      vil_image_view<unsigned char> res = 
+        brip_vil_float_ops::convert_to_byte(sum);
+      return vil_new_image_resource_of_view(res);
+    }
+  //for color return the float image
+	return vil_new_image_resource_of_view(sum);
+}
+// Compute img0 - img1
+vil_image_resource_sptr 
+brip_vil_float_ops::difference(vil_image_resource_sptr const& img0,
+                               vil_image_resource_sptr const& img1)
+{
+  
+  vil_image_view<float> op0 = brip_vil_float_ops::convert_to_float(img0);
+  vil_image_view<float> op1 = brip_vil_float_ops::convert_to_float(img1);
+  vil_image_view<float> diff;
+  vil_math_image_difference(op0, op1, diff);
+
+  //find out the types of the input images for now, only do greyscale operands
+  vil_pixel_format pix_format0 = img0->pixel_format();
+  vil_pixel_format pix_format1 = img1->pixel_format();
+  if(pix_format0 == VIL_PIXEL_FORMAT_FLOAT || 
+     pix_format1 == VIL_PIXEL_FORMAT_FLOAT)
+    {
+      return vil_new_image_resource_of_view(diff);
+    }
+  
+  if(pix_format0 == VIL_PIXEL_FORMAT_UINT_16 || 
+     pix_format1 == VIL_PIXEL_FORMAT_UINT_16)
+    {
+      vil_image_view<unsigned short> res = 
+        brip_vil_float_ops::convert_to_short(vil_new_image_resource_of_view(diff));
+      return vil_new_image_resource_of_view(res);
+    }
+  
+  if(pix_format0 == VIL_PIXEL_FORMAT_BYTE || 
+     pix_format1 == VIL_PIXEL_FORMAT_BYTE)
+    {
+      vil_image_view<unsigned char> res = 
+        brip_vil_float_ops::convert_to_byte(diff);
+      return vil_new_image_resource_of_view(res);
+    }
+  //for color return the float image
+	return vil_new_image_resource_of_view(diff);
 }
