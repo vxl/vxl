@@ -427,8 +427,9 @@ void test_read_props_ws()
 #endif // 0
   {
     vcl_cout << "\nCase 13\n";
-    vcl_istringstream ss("{  \n a1: gd { nx: 8 ny: 8 nz: 8 mr: 25 md: 5 } \n  a2: tn \n a3: al {  } \n a4: 2 \n a5: 2  \n om: sx \n ml: 0.1 \n ns: 1 \n  }");
-    //   \n a4: { lo: 2 hi: 3 }
+    vcl_istringstream ss
+      ("{\n a1: gd { nx: 8 ny: 8 nz: 8 mr: 25 md: 5 }\n  a2: tn\n a3: al {  }\n a4: 2\n a5: 2\n om: sx\n ml: 0.1\n ns: 1\n  }");
+    //  "\n a4: { lo: 2 hi: 3 }"
     vcl_string b_ans( "gd { nx: 8 ny: 8 nz: 8 mr: 25 md: 5 }" );
 
     mbl_read_props_type props = mbl_read_props_ws( ss );
@@ -439,7 +440,7 @@ void test_read_props_ws()
     mbl_read_props_type::const_iterator iter_end=props.end();
     while (iter!=iter_end)
     {
-      vcl_cout << iter->first << "," << iter->second << vcl_endl;
+      vcl_cout << iter->first << ',' << iter->second << vcl_endl;
       ++iter;
     }
 
