@@ -282,31 +282,32 @@ void vsol_conic_2d::ellipse_parameters(double &cx,
   height=vcl_sqrt(1.0/(a0*sinphi*sinphi-2*b0*cosphi*sinphi+c0*cosphi*cosphi));
 }
 //-----------------------------------------------------------------------
-// Return the angular position given a point on the ellipse 
+// Return the angular position given a point on the ellipse
 double vsol_conic_2d::ellipse_angular_position(vsol_point_2d_sptr const& pt) const
 {
   // require
   assert(is_real_ellipse());
-  
+
   // Find the closest point to pt on the ellipse
   vsol_point_2d_sptr closest = this->closest_point_on_curve(pt);
   assert(closest);
   double x = closest->x(), y = closest->y();
 
-  // Extract the ellipse parameters  
+  // Extract the ellipse parameters
   double cx, cy, major_axis, minor_axis, angle;
   this->ellipse_parameters(cx, cy, angle, major_axis, minor_axis);
-  
+
   x -= cx; y -= cy;
 
   //In this shifted frame:
-  double phi = 
+  double phi =
     vcl_atan2(major_axis*(vcl_cos(angle)*y-vcl_sin(angle)*x),
               minor_axis*(vcl_cos(angle)*x + vcl_sin(angle)*y));
-  if(phi<0.0)
+  if (phi<0.0)
     phi += 2.0*vnl_math::pi;
   return phi;
 }
+
 //---------------------------------------------------------------------------
 //: Return 3 hyperbola parameters: centre (`cx',`cy'), orientation `phi', size (`half-axis',`half-secondary-axis')
 // Require: is_hyperbola()
@@ -376,8 +377,9 @@ void vsol_conic_2d::parabola_parameters(double & /* cx */,
 }
 
 //---------------------------------------------------------------------------
-//: Return the length of `this' Currently only implemented for ellipse segment
-// and accurate to 10^-3 of the major axis length.  Alternatively provide
+//: Return the length of `this'.
+// Currently only implemented for ellipse segment
+// and accurate to 0.001 of the major axis length.  Alternatively provide
 // code for the incomplete elliptic integral of the second kind. However,
 // that would be numerical integration anyway.
 //---------------------------------------------------------------------------
@@ -399,15 +401,15 @@ double vsol_conic_2d::length() const
   double dphi = 0.001;
   double sum = 0.0;
   //sum the arc length on the ellipse boundary
-  for(double phi = start_angle; phi<=end_angle; phi+=dphi)
-    {
-      double temp1 = 
-        minor_axis*cos(angle)*cos(phi)+ major_axis*sin(angle)*sin(phi);
-      double temp2 = major_axis*sin(angle+phi);
-      //the incremental arc length
-      double dl = vcl_sqrt(temp1*temp1 + temp2*temp2);
-      sum += dl*dphi;
-    }
+  for (double phi = start_angle; phi<=end_angle; phi+=dphi)
+  {
+    double temp1 =
+      minor_axis*vcl_cos(angle)*vcl_cos(phi)+ major_axis*vcl_sin(angle)*vcl_sin(phi);
+    double temp2 = major_axis*vcl_sin(angle+phi);
+    //the incremental arc length
+    double dl = vcl_sqrt(temp1*temp1 + temp2*temp2);
+    sum += dl*dphi;
+  }
   return sum;
 }
 
@@ -538,8 +540,8 @@ vsol_point_2d_sptr
 vsol_conic_2d::closest_point_on_curve(vsol_point_2d_sptr const& pt) const
 {
   //First check to see if the point is already on the conic boundary
-  if(this->in(pt))
-	return pt;
+  if (this->in(pt))
+    return pt;
   // The nearest point must have a polar line which is orthogonal to its
   // connection line with the given point; all points with this property form
   // a certain conic  (actually a hyperbola) :
