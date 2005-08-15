@@ -19,15 +19,14 @@
 #include <vgl/vgl_box_2d.h>
 #include <vgl/algo/vgl_convex_hull_2d.h>
 
-//: Destructor
+// Destructor
 bsol_algs::~bsol_algs()
 {
 }
 
 //-----------------------------------------------------------------------------
-// :Compute a bounding box for a set of vsol_point_2ds.
+//: Compute a bounding box for a set of vsol_point_2ds.
 //-----------------------------------------------------------------------------
-
 vbl_bounding_box<double,2> bsol_algs::
 bounding_box(vcl_vector<vsol_point_2d_sptr> const& points)
 {
@@ -39,7 +38,7 @@ bounding_box(vcl_vector<vsol_point_2d_sptr> const& points)
 }
 
 //-----------------------------------------------------------------------------
-// :Compute a bounding box for a set of vsol_line_2ds.
+//: Compute a bounding box for a set of vsol_line_2ds.
 //-----------------------------------------------------------------------------
 vbl_bounding_box<double,2>  bsol_algs::
 bounding_box(vcl_vector<vsol_line_2d_sptr> const & lines)
@@ -57,7 +56,7 @@ bounding_box(vcl_vector<vsol_line_2d_sptr> const & lines)
 }
 
 //-----------------------------------------------------------------------------
-// :Compute a bounding box for a set of vsol_point_3ds.
+//: Compute a bounding box for a set of vsol_point_3ds.
 //-----------------------------------------------------------------------------
 vbl_bounding_box<double,3> bsol_algs::
 bounding_box(vcl_vector<vsol_point_3d_sptr> const& points)
@@ -70,9 +69,9 @@ bounding_box(vcl_vector<vsol_point_3d_sptr> const& points)
 }
 
 //-----------------------------------------------------------------------------
-// :Determine if a point is inside a bounding box
+//: Determine if a point is inside a bounding box
 //-----------------------------------------------------------------------------
-bool bsol_algs::in(vsol_box_2d_sptr const & b, const double x, const double y)
+bool bsol_algs::in(vsol_box_2d_sptr const & b, double x, double y)
 {
   if (!b)
     return false;
@@ -85,7 +84,7 @@ bool bsol_algs::in(vsol_box_2d_sptr const & b, const double x, const double y)
   return true;
 }
 
-//:returns true if the a and b intersect
+//: returns true if the boxes a and b intersect
 bool bsol_algs::meet(vsol_box_2d_sptr const & a, vsol_box_2d_sptr const & b)
 {
   double min_x_a = a->get_min_x(), max_x_a = a->get_max_x();
@@ -99,7 +98,7 @@ bool bsol_algs::meet(vsol_box_2d_sptr const & a, vsol_box_2d_sptr const & b)
   return true;
 }
 
-//:find the intersection of two boxes. Return false if no intersection
+//: find the intersection of two boxes. Return false if no intersection
 bool bsol_algs::intersection(vsol_box_2d_sptr const & a,
                              vsol_box_2d_sptr const & b,
                              vsol_box_2d_sptr& a_int_b)
@@ -120,6 +119,7 @@ bool bsol_algs::intersection(vsol_box_2d_sptr const & a,
   return true;
 }
 
+//: find the convex union of two boxes. Always return true
 bool bsol_algs::box_union(vsol_box_2d_sptr const & a,
                           vsol_box_2d_sptr const & b,
                           vsol_box_2d_sptr& a_union_b)
@@ -147,29 +147,30 @@ bool bsol_algs::box_union(vsol_box_2d_sptr const & a,
 }
 
 //-----------------------------------------------------------------------------
-// :expand or contract a box with the supplied absolute margin
+//: expand or contract a box with the supplied absolute margin
 //-----------------------------------------------------------------------------
 bool bsol_algs::box_with_margin(vsol_box_2d_sptr const & b,
-                     const double margin,
-                     vsol_box_2d_sptr& bmod)
+                                const double margin,
+                                vsol_box_2d_sptr& bmod)
 {
-  if(!b)
+  if (!b)
     return false;
   double x_min = b->get_min_x(), y_min = b->get_min_y();
   double x_max = b->get_max_x(), y_max = b->get_max_y();
   double width = x_max-x_min, height = y_max-y_min;
   //See if the margin for contraction is too large, i.e. margin is negative
-  if((width+2*margin)<0)
+  if ((width+2*margin)<0)
     return false;
-  if((height+2*margin)<0)
+  if ((height+2*margin)<0)
     return false;
   bmod = new vsol_box_2d();
   bmod->add_point(x_min-margin, y_min-margin);
   bmod->add_point(x_max+margin, y_max+margin);
   return true;
 }
+
 //-----------------------------------------------------------------------------
-// :Compute the convex hull of a set of polygons
+//: Compute the convex hull of a set of polygons
 //-----------------------------------------------------------------------------
 bool bsol_algs::hull_of_poly_set(vcl_vector<vsol_polygon_2d_sptr> const& polys,
                                  vsol_polygon_2d_sptr& hull)
@@ -193,10 +194,10 @@ bool bsol_algs::hull_of_poly_set(vcl_vector<vsol_polygon_2d_sptr> const& polys,
 }
 
 //-----------------------------------------------------------------------------
-// :Determine if a point is inside a bounding box
+//: Determine if a point is inside a bounding box
 //-----------------------------------------------------------------------------
-bool bsol_algs::in(vsol_box_3d_sptr const & b, const double x, const double y,
-                   const double z)
+bool bsol_algs::in(vsol_box_3d_sptr const & b,
+                   double x, double y, double z)
 {
   if (!b)
     return false;
@@ -223,7 +224,7 @@ vsol_polygon_2d_sptr bsol_algs::poly_from_box(vsol_box_2d_sptr const& box)
   return new vsol_polygon_2d(pts);
 }
 
-//:construct a vsol_polygon from a vgl_polygon
+//: construct a vsol_polygon from a vgl_polygon
 vsol_polygon_2d_sptr bsol_algs::poly_from_vgl(vgl_polygon<double> const& poly)
 {
   vsol_polygon_2d_sptr out;
@@ -240,22 +241,23 @@ vsol_polygon_2d_sptr bsol_algs::poly_from_vgl(vgl_polygon<double> const& poly)
   out = new vsol_polygon_2d(pts);
   return out;
 }
-vgl_polygon<double>  
+
+vgl_polygon<double>
 bsol_algs::vgl_from_poly(vsol_polygon_2d_sptr const& poly)
 {
   vgl_polygon<double> vp(1);
-  if(!poly)
+  if (!poly)
     return vp;
   unsigned nverts = poly->size();
-  for(unsigned i = 0; i<nverts; ++i)
-    {
-      double x = poly->vertex(i)->x(), y = poly->vertex(i)->y();
-      vp.push_back(x, y);
-    }
+  for (unsigned i = 0; i<nverts; ++i)
+  {
+    double x = poly->vertex(i)->x(), y = poly->vertex(i)->y();
+    vp.push_back(x, y);
+  }
   return vp;
 }
 
-//:find the closest point to p in a set of points
+//: find the closest point to p in a set of points
 vsol_point_2d_sptr
 bsol_algs::closest_point(vsol_point_2d_sptr const& p,
                          vcl_vector<vsol_point_2d_sptr> const& point_set,
@@ -282,10 +284,10 @@ bsol_algs::closest_point(vsol_point_2d_sptr const& p,
   return cp;
 }
 
-vsol_point_3d_sptr bsol_algs::
-closest_point(vsol_point_3d_sptr const& p,
-              vcl_vector<vsol_point_3d_sptr> const& point_set,
-              double& d)
+vsol_point_3d_sptr
+bsol_algs::closest_point(vsol_point_3d_sptr const& p,
+                         vcl_vector<vsol_point_3d_sptr> const& point_set,
+                         double& d)
 {
   d = 0;
   vsol_point_3d_sptr cp;
@@ -334,13 +336,12 @@ bool bsol_algs::homography(vsol_polygon_2d_sptr const& p,
   return true;
 }
 
-//: Transform a vsol_polygon_2d with a point specified as the center
-//  of the transformation, i.e. vertices of the polygon are translated 
-//  so that the specified point is the origin.  The transformation is 
-/// then applied and the point coordinates added back in afterward.
+//: Transform a vsol_polygon_2d with a point specified as the center of the transformation.
+//  i.e. vertices of the polygon are translated so that the specified point is the origin.
+/// The transformation is then applied and the point coordinates added back in afterwards.
 vsol_polygon_2d_sptr bsol_algs::
 transform_about_point(vsol_polygon_2d_sptr const& p,
-                      vsol_point_2d_sptr const& c, 
+                      vsol_point_2d_sptr const& c,
                       vgl_h_matrix_2d<double> const& H)
 {
   const int n = p->size();
