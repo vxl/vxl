@@ -9,7 +9,7 @@
 # already been used, so do not edit here...
 
 # variables to REPLACE
-# 
+#
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
@@ -20,16 +20,16 @@
 CFG=vil_algo - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "vil_algo.mak".
-!MESSAGE 
+!MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "vil_algo.mak" CFG="vil_algo - Win32 Debug"
-!MESSAGE 
+!MESSAGE
 !MESSAGE Possible choices for configuration are:
-!MESSAGE 
+!MESSAGE
 !MESSAGE "vil_algo - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "vil_algo - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
@@ -89,7 +89,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-!ENDIF 
+!ENDIF
 
 # Begin Target
 
@@ -97,7 +97,7 @@ LIB32=link.exe -lib
 # Name "vil_algo - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "c;cxx"
 # Begin Source File
 SOURCE=.\vil_sobel_1x3.cxx
 # End Source File
@@ -172,6 +172,9 @@ SOURCE=.\Templates/vil_median+float-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil_median+int-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_median+bool-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil_sobel_3x3+double.double-.cxx
@@ -274,7 +277,7 @@ SOURCE=.\vil_colour_space.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\vil_sobel_1x3.h
 # End Source File
