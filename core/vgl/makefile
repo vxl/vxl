@@ -34,9 +34,10 @@ MANPAGE_SOURCES += vgl_conic.txx
 MANPAGE_SOURCES += vgl_polygon.txx
 MANPAGE_SOURCES += vgl_conic_segment_2d.txx
 
-# Planes
+# Surfaces
 MANPAGE_SOURCES += vgl_plane_3d.txx
 MANPAGE_SOURCES += vgl_homg_plane_3d.txx
+MANPAGE_SOURCES += vgl_sphere_3d.txx
 
 # Functions
 MANPAGE_SOURCES += vgl_closest_point.txx
