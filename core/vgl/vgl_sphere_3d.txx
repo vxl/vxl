@@ -1,3 +1,5 @@
+#ifndef vgl_sphere_3d_txx_
+#define vgl_sphere_3d_txx_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -33,7 +35,7 @@ bool vgl_sphere_3d<T>::clip(const vgl_line_3d_2_points<T> & line,
   if (cp_len > r_) return false;
 
   T half_chord_len = vcl_sqrt(r_*r_ - cp_len*cp_len);
-  
+
   vgl_vector_3d<T> linevec = line.direction();
   linevec *= half_chord_len / linevec.length();
 
@@ -44,6 +46,7 @@ bool vgl_sphere_3d<T>::clip(const vgl_line_3d_2_points<T> & line,
 }
 
 #undef VGL_SPHERE_3D_INSTANTIATE
-#define VGL_SPHERE_3D_INSTANTIATE( Type ) \
-template class vgl_sphere_3d< Type >
+#define VGL_SPHERE_3D_INSTANTIATE(Type) \
+template class vgl_sphere_3d<Type >
 
+#endif // vgl_sphere_3d_txx_
