@@ -70,17 +70,17 @@ gevd_bufferxy::gevd_bufferxy(vil1_image const& image) : gevd_memory_mixin( image
 gevd_bufferxy::gevd_bufferxy(vil_image_resource_sptr const& image_s) :
   gevd_memory_mixin(image_s->nplanes()*image_s->ni()*image_s->nj()*vil_pixel_format_sizeof_components(image_s->pixel_format()))
 {
-  if(!image_s)
-    {
-      vcl_cout << "In gevd_bufferxy - null image_resource \n";
-      return;
-    }
+  if (!image_s)
+  {
+    vcl_cout << "In gevd_bufferxy - null image_resource\n";
+    return;
+  }
   vil_image_resource& image = *image_s;
-  if(image.nplanes()!=1)
-    {
-      vcl_cout << "In gevd_bufferxy - can't handle image format, buffer invalid\n";
-      return;
-    }
+  if (image.nplanes()!=1)
+  {
+    vcl_cout << "In gevd_bufferxy - can't handle image format, buffer invalid\n";
+    return;
+  }
   unsigned n_rows= image.nj();
   unsigned n_cols= image.ni();
 
@@ -93,47 +93,45 @@ gevd_bufferxy::gevd_bufferxy(vil_image_resource_sptr const& image_s) :
   Init(n_cols, n_rows, 8);
   //two cases of interest
   switch (n_bytes)
+  {
+   case 1:// unsigned byte pixels
+   {
+    unsigned char* buf = gevd_memory_mixin::GetBufferPtr();
+    vil_image_view<unsigned char> view = image.get_view(0, n_cols,
+                                                        0, n_rows);
+    vcl_ptrdiff_t istep=view.istep(),jstep=view.jstep();
+    const unsigned char* row = view.top_left_ptr();
+    for (unsigned j=0;j<n_rows;++j,row += jstep, buf += jstep)
     {
-    case 1:// unsigned byte pixels
-      {
-        unsigned char* buf = gevd_memory_mixin::GetBufferPtr();
-        vil_image_view<unsigned char> view = image.get_view(0, n_cols,
-                                                            0, n_rows);
-        vcl_ptrdiff_t istep=view.istep(),jstep=view.jstep();
-        const unsigned char* row = view.top_left_ptr();
-        for (unsigned j=0;j<n_rows;++j,row += jstep, buf += jstep)
-          {
-            const unsigned char* pixel = row;
-            unsigned char* buf_pixel = buf;
-            for (unsigned i=0;i<n_cols;++i,pixel+=istep, buf_pixel += istep)
-                *buf_pixel = *pixel;
-          }
-        break;            
-      }
-    case 2://unsigned short pixels - convert to byte range for consistency
-      {
-        vil_image_view<unsigned short> view = image.get_view(0, n_cols,
-                                                             0, n_rows);
-        unsigned short imin=0, imax=0;
-        vil_math_value_range<unsigned short>(view, imin, imax);
-        float fmin = static_cast<float>(imin), fmax = static_cast<float>(imax);
-        float scale = fmax-fmin;
-        if(scale)
-          scale = 1/scale;
-        else
-          scale = 1.0;
-        for (unsigned j=0;j<n_rows;++j)
-          for(unsigned i=0;i<n_cols;++i)
-            *((unsigned char*)GetElementAddr(i,j)) = 
-              static_cast<unsigned char>(255.0f*(view(i,j)-imin)*scale);
-        break;            
-      }
-    default:
-      {
-        vcl_cout << "In gevd_bufferxy - can't handle pixel type, buffer invalid\n";
-        return;
-      }
+      const unsigned char* pixel = row;
+      unsigned char* buf_pixel = buf;
+      for (unsigned i=0;i<n_cols;++i,pixel+=istep, buf_pixel += istep)
+        *buf_pixel = *pixel;
     }
+    break;
+   }
+   case 2://unsigned short pixels - convert to byte range for consistency
+   {
+    vil_image_view<unsigned short> view = image.get_view(0, n_cols,
+                                                         0, n_rows);
+    unsigned short imin=0, imax=0;
+    vil_math_value_range<unsigned short>(view, imin, imax);
+    float fmin = static_cast<float>(imin), fmax = static_cast<float>(imax);
+    float scale = fmax-fmin;
+    if (scale != 0.f)
+      scale = 255.f/scale;
+    else
+      scale = 1.f;
+    for (unsigned j=0;j<n_rows;++j)
+      for (unsigned i=0;i<n_cols;++i)
+        *((unsigned char*)GetElementAddr(i,j)) =
+          static_cast<unsigned char>((view(i,j)-imin)*scale);
+    break;
+   }
+   default:
+    vcl_cout << "In gevd_bufferxy - can't handle pixel type, buffer invalid\n";
+    return;
+  }
 }
 
 gevd_bufferxy::~gevd_bufferxy()
@@ -153,7 +151,7 @@ void gevd_bufferxy::dump(const char* filename)
 {
   vcl_ofstream f(filename,vcl_ios_out|vcl_ios_binary);
   if (!f) { vcl_cerr << "Cannot open "<< filename <<" for writing\n"; return; }
-  f << "BUFFERXYDUMP "<< GetSizeX() <<" "<< GetSizeY() <<" "<< GetBitsPixel()
+  f << "BUFFERXYDUMP "<< GetSizeX() <<' '<< GetSizeY() <<' '<< GetBitsPixel()
 #ifdef WORDS_BIGENDIAN
     << " BIGENDIAN DATA\n";
 #else
