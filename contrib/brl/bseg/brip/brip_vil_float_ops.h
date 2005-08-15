@@ -121,7 +121,6 @@ class brip_vil_float_ops
   static vil_image_view<float>
     sqrt_grad_singular_values(vil_image_view<float>& input, int n);
 
-
   //: computes Lucas-Kanade optical flow on a 2n+1 neighborhood
   static void Lucas_KanadeMotion(vil_image_view<float>& current_frame,
                                  vil_image_view<float>& previous_frame,
@@ -134,7 +133,7 @@ class brip_vil_float_ops
                                 vil_image_view<float> const& previous_frame,
                                 vil_image_view<float>& vx,
                                 vil_image_view<float>& vy,
-                                const float alpha_coef=10000.0f, 
+                                const float alpha_coef=10000.0f,
                                 const int no_of_iterations=5);
 
   //: fills a border of width w on left and right of image with value
@@ -155,19 +154,18 @@ class brip_vil_float_ops
   //: converts an unsigned short image to a byte value range within a specified range
   static vil_image_view<unsigned char>
     convert_to_byte(vil_image_view<unsigned short> const& image,
-                    unsigned short min_val, unsigned short max_val)
-;
-  //: converts a generic image to a byte image. Use this instead of convert_to_grey
-static vil_image_view<unsigned char>
-  brip_vil_float_ops::convert_to_byte(vil_image_resource_sptr const& image);
+                    unsigned short min_val, unsigned short max_val);
 
+  //: converts a generic image to a byte image. Use this instead of convert_to_grey
+  static vil_image_view<unsigned char>
+  brip_vil_float_ops::convert_to_byte(vil_image_resource_sptr const& image);
 
   //: converts an float image to an unsigned short image within a range
   static vil_image_view<unsigned short>
     convert_to_short(vil_image_view<float> const& image,
                      float min_val, float max_val);
   //: converts a generic image to an unsigned short image
-static vil_image_view<unsigned short>
+  static vil_image_view<unsigned short>
   convert_to_short(vil_image_resource_sptr const& image);
 
   //: converts a vil_image_resource to a float image
@@ -178,22 +176,21 @@ static vil_image_view<unsigned short>
   static vil_image_view<float>
     convert_to_float(vil_image_resource_sptr const& image)
     {return brip_vil_float_ops::convert_to_float(*image);}
- 
 
   static vil_image_view<float>
     convert_to_float(vil_image_view<unsigned char> const& image);
 
   static vil_image_view<float>
     convert_to_float(vil_image_view<unsigned short> const& image);
-   //: converts a byte image to a bool image
+
+  //: converts a byte image to a bool image
   static vil_image_view<bool>
     convert_to_bool(vil_image_view<unsigned char> const& image);
-
-
 
   //: converts an RGB image to a float image
   static vil_image_view<float>
     convert_to_float(vil_image_view<vil_rgb<vxl_byte> > const& image);
+
   //: convert a color image to float IHS images
   static void
     convert_to_IHS(vil_image_view<vil_rgb<vxl_byte> > const& image,
@@ -214,10 +211,10 @@ static vil_image_view<unsigned short>
                        vil_image_view<vil_rgb<vxl_byte> >& image);
 
   //: Create a color image from multiple channels
-  static vil_image_view<vil_rgb<vxl_byte> > 
+  static vil_image_view<vil_rgb<vxl_byte> >
     combine_color_planes(vil_image_view<unsigned char> const& R,
                          vil_image_view<unsigned char> const& G,
-                         vil_image_view<unsigned char> const& B); 
+                         vil_image_view<unsigned char> const& B);
 
   //: converts a generic image to greyscale (RGB<unsigned char>)
   static vil_image_view<unsigned char>
@@ -260,11 +257,13 @@ static vil_image_view<unsigned short>
                              float f0, float radius,
                              bool output_fourier_mag,
                              vil_image_view<float>& output);
+
   //: 2x2 bilinear interpolation of image at specified location
   static double
     bilinear_interpolation(vil_image_view<float> const& input,
                            double x, double y);
-  //:map the input to the output by a homography.
+
+  //: map the input to the output by a homography.
   // \note if the output size is fixed then only the corresponding
   // input image space is transformed.
   static bool homography(vil_image_view<float> const& input,
@@ -287,8 +286,6 @@ static vil_image_view<unsigned short>
                     brip_roi_sptr const& roi,
                     vil_image_resource_sptr & chip);
 
-
-
   //:cross-correlate two images at a given sub-pixel location
   static float
   cross_correlate(vil_image_view<float> const& image1,
@@ -304,19 +301,18 @@ static vil_image_view<unsigned short>
                   int radius = 5, float intensity_thresh=25.0f);
   static void ihs_to_rgb(vil_rgb<vxl_byte>& rgb,
                          float i, float h, float s);
- static  void rgb_to_ihs(vil_rgb<vxl_byte> const& rgb,
-                         float& i, float& h, float& s);
+  static  void rgb_to_ihs(vil_rgb<vxl_byte> const& rgb,
+                          float& i, float& h, float& s);
 
+  // Arithmetic operations
 
+  //: Add two images from a general resource (forces types to be the same)
+  static vil_image_resource_sptr sum(vil_image_resource_sptr const& img0,
+                                     vil_image_resource_sptr const& img1);
 
- //:Arithmetic operations
- //: Add two images from a general resource (forces types to be the same)
- static vil_image_resource_sptr sum(vil_image_resource_sptr const& img0,
-                                    vil_image_resource_sptr const& img1);
-
- //: subtract two generic images, return img0-img1 (forces types to the same) 
- static vil_image_resource_sptr difference(vil_image_resource_sptr const& img0,
-                                           vil_image_resource_sptr const& img1);
+  //: subtract two generic images, return img0-img1 (forces types to the same)
+  static vil_image_resource_sptr difference(vil_image_resource_sptr const& img0,
+                                            vil_image_resource_sptr const& img1);
 
  private:
 
@@ -337,15 +333,24 @@ static vil_image_view<unsigned short>
 
   //:Two dimensonal fft
   static bool fft_2d(vnl_matrix<vcl_complex<double> >& c, int nx,int ny,int dir);
+
   //: Transform the fft coefficients from/to fft/frequency order(self inverse).
   static
     void ftt_fourier_2d_reorder(vnl_matrix<vcl_complex<double> > const& F1,
                                 vnl_matrix<vcl_complex<double> >& F2);
+
   //: Blocking filter function
   static float gaussian_blocking_filter(float dir_fx, float dir_fy,
                                         float f0, float radius,
                                         float fx, float fy);
+#if 0 // TODO ?
   //: converting IHS to RGB
+  static void
+  convert_IHS_as_RGB(vil_image_view<float> const& I,
+                     vil_image_view<float> const& H,
+                     vil_image_view<float> const& S,
+                     vil_image_view<vil_rgb<vxl_byte> >& image);
+#endif // 0
 
   //: Default constructor is private
   brip_vil_float_ops() {}

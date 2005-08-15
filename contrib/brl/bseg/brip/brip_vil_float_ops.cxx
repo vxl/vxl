@@ -403,6 +403,7 @@ brip_vil_float_ops::difference(vil_image_view<float> const& image_1,
       out(x,y) = image_2(x,y)-image_1(x,y);
   return out;
 }
+
 vil_image_view<float>
 brip_vil_float_ops::threshold(vil_image_view<float> const & image,
                               const float thresh, const float level)
@@ -747,11 +748,11 @@ brip_vil_float_ops::Lucas_KanadeMotion(vil_image_view<float> & current_frame,
 // Horn-Schunk method for calc. motion vectors:  Solve for the motion vectors
 // iteratively using a cost function with two terms (RHS of optical flow eqn
 // and the magnitude of spatial derivatives of the velocity field
-// (so that pixel-to-pixel variations are small). The second term is 
-// weighted by alpha_coef term. The iteration goes on until the error 
+// (so that pixel-to-pixel variations are small). The second term is
+// weighted by alpha_coef term. The iteration goes on until the error
 // reaches below err_thresh
-//  Error conditions:  
-//     -1  -  current_frame and previous_frame are equal 
+//  Error conditions:
+//     -1  -  current_frame and previous_frame are equal
 //     -2  -  at least one input frame or internal process image is all zeros
 //      0  -  routine was successful
 
@@ -760,7 +761,7 @@ Horn_SchunckMotion(vil_image_view<float> const& current_frame,
                    vil_image_view<float> const& previous_frame,
                    vil_image_view<float>& vx,
                    vil_image_view<float>& vy,
-                   const float alpha_coef, 
+                   const float alpha_coef,
                    const int no_of_iterations)
 {
   //Check for equal images
@@ -772,29 +773,22 @@ Horn_SchunckMotion(vil_image_view<float> const& current_frame,
 
   //Declarations
   unsigned w = current_frame.ni(), h = current_frame.nj();
-  
-  vil_image_view<float> grad_x, grad_y, diff;
-  
-  
-  
 
+  vil_image_view<float> grad_x, grad_y, diff;
 
   vil_image_view<float> temp1;
   vil_image_view<float> temp2;
-
 
   vil_image_view<float> emptyimg;
 
   //Size Init
 
-  
   grad_x.set_size(w,h);
   grad_y.set_size(w,h);
   diff.set_size(w,h);
   temp1.set_size(w,h);
   temp2.set_size(w,h);
- 
- 
+
   emptyimg.set_size(w,h);
 
   temp1.fill(0.0);
@@ -809,8 +803,7 @@ Horn_SchunckMotion(vil_image_view<float> const& current_frame,
       diff (x,y)=0.0f;
       grad_x (x, y)= 0.0f;
       grad_y (x, y)= 0.0f;
-   
-     
+
       emptyimg (x, y) = 0.0f;
     }
 
@@ -820,7 +813,7 @@ Horn_SchunckMotion(vil_image_view<float> const& current_frame,
     vcl_cout<<"Image is empty";
     return -2;
   }
-  
+
   //compute the gradient vector for current and previous
   brip_vil_float_ops::gradient_3x3 (current_frame , grad_x , grad_y);
   brip_vil_float_ops::gradient_3x3 (previous_frame , temp1 , temp2);
@@ -859,11 +852,10 @@ Horn_SchunckMotion(vil_image_view<float> const& current_frame,
   temp2.fill(0.0);
   //Iterate
   vul_timer t;
-  
-  for(int i=0;i<no_of_iterations;i++)
+
+  for (int i=0;i<no_of_iterations;i++)
   {
-    
-    //Update vx and vy
+    // Update vx and vy
 
     //Smoothed velocities on 3x3 region
     temp1 = brip_vil_float_ops::average_NxN (vx,  3);
@@ -882,7 +874,7 @@ Horn_SchunckMotion(vil_image_view<float> const& current_frame,
         // term = (v(x,y).Grad(x,y) + dI/dt(x,y))/(alpha + |Grad(x,y)|^2)
         // term is the brightness constraint normalized by gradient mag.
         //
-        float term = 
+        float term =
           ( (gx * tempx) + (gy * tempy) + dt )/ (alpha_coef + gx*gx + gy*gy);
 
         //         ______
@@ -890,7 +882,7 @@ Horn_SchunckMotion(vil_image_view<float> const& current_frame,
         vx(x,y) = tempx - (gx *  term);
         vy(x,y) = tempy - (gy *  term);
       }
-    
+
     vcl_cout << "Iteration No " << i << '\n';
     brip_vil_float_ops::fill_x_border(vx, 1, 0.0f);
     brip_vil_float_ops::fill_y_border(vx, 1, 0.0f);
@@ -1053,6 +1045,7 @@ brip_vil_float_ops::convert_to_short(vil_image_view<float> const& image,
     }
   return output;
 }
+
 vil_image_view<unsigned short>
 brip_vil_float_ops::convert_to_short(vil_image_resource_sptr const& image)
 {
@@ -1070,7 +1063,7 @@ brip_vil_float_ops::convert_to_short(vil_image_resource_sptr const& image)
   {
     vil_image_view<unsigned char > temp = image->get_view();
     vil_image_view<unsigned short> short_image;
-	unsigned width = temp.ni(), height = temp.nj();
+    unsigned width = temp.ni(), height = temp.nj();
     short_image.set_size(width, height);
     for (unsigned y = 0; y<height; y++)
       for (unsigned x = 0; x<width; x++)
@@ -1113,6 +1106,7 @@ brip_vil_float_ops::convert_to_float(vil_image_view<unsigned char> const& image)
       output(x,y) = (float)image(x,y);
   return output;
 }
+
 vil_image_view<float>
 brip_vil_float_ops::convert_to_float(vil_image_view<unsigned short> const& image)
 {
@@ -1124,19 +1118,20 @@ brip_vil_float_ops::convert_to_float(vil_image_view<unsigned short> const& image
       output(x,y) = (float)image(x,y);
   return output;
 }
+
 vil_image_view<bool>
     brip_vil_float_ops::convert_to_bool(vil_image_view<unsigned char> const& image)
 {
-    vil_image_view<bool> output;
-    unsigned w = image.ni(), h = image.nj();
-    output.set_size(w,h);
-    for (unsigned y = 0; y<h; y++)
-        for (unsigned x = 0; x<w; x++)
-            if(image(x,y) >128)
-                output(x,y)=true;
-            else
-                output(x,y)=false;
-    return output;
+  vil_image_view<bool> output;
+  unsigned w = image.ni(), h = image.nj();
+  output.set_size(w,h);
+  for (unsigned y = 0; y<h; y++)
+    for (unsigned x = 0; x<w; x++)
+      if (image(x,y) >128)
+        output(x,y)=true;
+      else
+        output(x,y)=false;
+  return output;
 }
 
 vil_image_view<float>
@@ -1350,11 +1345,11 @@ combine_color_planes(vil_image_view<unsigned char> const& R,
   vil_image_view<vil_rgb<vxl_byte> > image(w,h);
   for (unsigned r = 0; r < h; r++)
     for (unsigned c = 0; c < w; c++)
-      {
-        image(c,r).r = R(c,r);
-        image(c,r).g = G(c,r);
-        image(c,r).b = B(c,r);
-      }
+    {
+      image(c,r).r = R(c,r);
+      image(c,r).g = G(c,r);
+      image(c,r).b = B(c,r);
+    }
   return image;
 }
 
@@ -1364,15 +1359,15 @@ brip_vil_float_ops::convert_to_float(vil_image_resource const& image)
   vil_image_view<float> fimg;
   if (vil_pixel_format_num_components(image.pixel_format())==1)
   {
-    if(image.pixel_format()==VIL_PIXEL_FORMAT_UINT_16)
+    if (image.pixel_format()==VIL_PIXEL_FORMAT_UINT_16)
     {
-        vil_image_view<unsigned short> temp=image.get_view();
-        fimg = brip_vil_float_ops::convert_to_float(temp);
+      vil_image_view<unsigned short> temp=image.get_view();
+      fimg = brip_vil_float_ops::convert_to_float(temp);
     }
-    else if(image.pixel_format()==VIL_PIXEL_FORMAT_BYTE)
+    else if (image.pixel_format()==VIL_PIXEL_FORMAT_BYTE)
     {
-        vil_image_view<unsigned char> temp=image.get_view();
-        fimg = brip_vil_float_ops::convert_to_float(temp);
+      vil_image_view<unsigned char> temp=image.get_view();
+      fimg = brip_vil_float_ops::convert_to_float(temp);
     }
   }
   else if (vil_pixel_format_num_components(image.pixel_format())==3)
@@ -2187,7 +2182,7 @@ bool brip_vil_float_ops::chip(vil_image_resource_sptr const& image,
     }
   }
 
-  //color data 
+  //color data
   if (image->nplanes()==3)
   {
     if (pix_format==VIL_PIXEL_FORMAT_BYTE) //the only way now
@@ -2473,11 +2468,11 @@ cross_correlate(vil_image_view<float> const& image1,
 #endif
   return true;
 }
-vil_image_resource_sptr 
+
+vil_image_resource_sptr
 brip_vil_float_ops::sum(vil_image_resource_sptr const& img0,
                         vil_image_resource_sptr const& img1)
 {
-  
   vil_image_view<float> op0 = brip_vil_float_ops::convert_to_float(img0);
   vil_image_view<float> op1 = brip_vil_float_ops::convert_to_float(img1);
   vil_image_view<float> sum;
@@ -2486,36 +2481,36 @@ brip_vil_float_ops::sum(vil_image_resource_sptr const& img0,
   //find out the types of the input images for now, only do greyscale operands
   vil_pixel_format pix_format0 = img0->pixel_format();
   vil_pixel_format pix_format1 = img1->pixel_format();
-  if(pix_format0 == VIL_PIXEL_FORMAT_FLOAT || 
-     pix_format1 == VIL_PIXEL_FORMAT_FLOAT)
-    {
-      return vil_new_image_resource_of_view(sum);
-    }
-  
-  if(pix_format0 == VIL_PIXEL_FORMAT_UINT_16 || 
-     pix_format1 == VIL_PIXEL_FORMAT_UINT_16)
-    {
-      vil_image_view<unsigned short> res = 
-        brip_vil_float_ops::convert_to_short(vil_new_image_resource_of_view(sum));
-      return vil_new_image_resource_of_view(res);
-    }
-  
-  if(pix_format0 == VIL_PIXEL_FORMAT_BYTE || 
-     pix_format1 == VIL_PIXEL_FORMAT_BYTE)
-    {
-      vil_image_view<unsigned char> res = 
-        brip_vil_float_ops::convert_to_byte(sum);
-      return vil_new_image_resource_of_view(res);
-    }
+  if (pix_format0 == VIL_PIXEL_FORMAT_FLOAT ||
+      pix_format1 == VIL_PIXEL_FORMAT_FLOAT)
+  {
+    return vil_new_image_resource_of_view(sum);
+  }
+
+  if (pix_format0 == VIL_PIXEL_FORMAT_UINT_16 ||
+      pix_format1 == VIL_PIXEL_FORMAT_UINT_16)
+  {
+    vil_image_view<unsigned short> res =
+      brip_vil_float_ops::convert_to_short(vil_new_image_resource_of_view(sum));
+    return vil_new_image_resource_of_view(res);
+  }
+
+  if (pix_format0 == VIL_PIXEL_FORMAT_BYTE ||
+      pix_format1 == VIL_PIXEL_FORMAT_BYTE)
+  {
+    vil_image_view<unsigned char> res =
+      brip_vil_float_ops::convert_to_byte(sum);
+    return vil_new_image_resource_of_view(res);
+  }
   //for color return the float image
-	return vil_new_image_resource_of_view(sum);
+  return vil_new_image_resource_of_view(sum);
 }
+
 // Compute img0 - img1
-vil_image_resource_sptr 
+vil_image_resource_sptr
 brip_vil_float_ops::difference(vil_image_resource_sptr const& img0,
                                vil_image_resource_sptr const& img1)
 {
-  
   vil_image_view<float> op0 = brip_vil_float_ops::convert_to_float(img0);
   vil_image_view<float> op1 = brip_vil_float_ops::convert_to_float(img1);
   vil_image_view<float> diff;
@@ -2524,27 +2519,27 @@ brip_vil_float_ops::difference(vil_image_resource_sptr const& img0,
   //find out the types of the input images for now, only do greyscale operands
   vil_pixel_format pix_format0 = img0->pixel_format();
   vil_pixel_format pix_format1 = img1->pixel_format();
-  if(pix_format0 == VIL_PIXEL_FORMAT_FLOAT || 
-     pix_format1 == VIL_PIXEL_FORMAT_FLOAT)
-    {
-      return vil_new_image_resource_of_view(diff);
-    }
-  
-  if(pix_format0 == VIL_PIXEL_FORMAT_UINT_16 || 
-     pix_format1 == VIL_PIXEL_FORMAT_UINT_16)
-    {
-      vil_image_view<unsigned short> res = 
-        brip_vil_float_ops::convert_to_short(vil_new_image_resource_of_view(diff));
-      return vil_new_image_resource_of_view(res);
-    }
-  
-  if(pix_format0 == VIL_PIXEL_FORMAT_BYTE || 
-     pix_format1 == VIL_PIXEL_FORMAT_BYTE)
-    {
-      vil_image_view<unsigned char> res = 
-        brip_vil_float_ops::convert_to_byte(diff);
-      return vil_new_image_resource_of_view(res);
-    }
-  //for color return the float image
-	return vil_new_image_resource_of_view(diff);
+  if (pix_format0 == VIL_PIXEL_FORMAT_FLOAT ||
+      pix_format1 == VIL_PIXEL_FORMAT_FLOAT)
+  {
+    return vil_new_image_resource_of_view(diff);
+  }
+
+  if (pix_format0 == VIL_PIXEL_FORMAT_UINT_16 ||
+      pix_format1 == VIL_PIXEL_FORMAT_UINT_16)
+  {
+    vil_image_view<unsigned short> res =
+      brip_vil_float_ops::convert_to_short(vil_new_image_resource_of_view(diff));
+    return vil_new_image_resource_of_view(res);
+  }
+
+  if (pix_format0 == VIL_PIXEL_FORMAT_BYTE ||
+      pix_format1 == VIL_PIXEL_FORMAT_BYTE)
+  {
+    vil_image_view<unsigned char> res =
+      brip_vil_float_ops::convert_to_byte(diff);
+    return vil_new_image_resource_of_view(res);
+  }
+  // for color return the float image
+  return vil_new_image_resource_of_view(diff);
 }

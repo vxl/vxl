@@ -120,6 +120,7 @@ void segv_vil_segmentation_manager::init()
   this->add_child(shell);
   first_ = true;
 }
+
 //: Calculate the range parameters for the input image
 vgui_range_map_params_sptr segv_vil_segmentation_manager::
 range_params(vil_image_resource_sptr const& image)
@@ -129,25 +130,25 @@ range_params(vil_image_resource_sptr const& image)
   bool gl_map = true;
   bool cache = true;
   unsigned min = 0, max = 255;
-  if(image->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
-    {
-      vil_image_view<unsigned char> temp = image->get_view();
-	  unsigned char vmin=0, vmax=255;
-      vil_math_value_range<unsigned char>(temp, vmin, vmax);
-      min = static_cast<unsigned>(vmin);
-      max = static_cast<unsigned>(vmax);
-    }
-  if(image->pixel_format()==VIL_PIXEL_FORMAT_UINT_16)
-    {
-     vil_image_view<unsigned short> temp = image->get_view();
-	  unsigned short vmin=0, vmax=60000;
-      vil_math_value_range<unsigned short>(temp, vmin, vmax);
-      min = static_cast<unsigned>(vmin);
-      max = static_cast<unsigned>(vmax);
-    }
-  
+  if (image->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
+  {
+    vil_image_view<unsigned char> temp = image->get_view();
+    unsigned char vmin=0, vmax=255;
+    vil_math_value_range<unsigned char>(temp, vmin, vmax);
+    min = static_cast<unsigned>(vmin);
+    max = static_cast<unsigned>(vmax);
+  }
+  if (image->pixel_format()==VIL_PIXEL_FORMAT_UINT_16)
+  {
+    vil_image_view<unsigned short> temp = image->get_view();
+    unsigned short vmin=0, vmax=60000;
+    vil_math_value_range<unsigned short>(temp, vmin, vmax);
+    min = static_cast<unsigned>(vmin);
+    max = static_cast<unsigned>(vmax);
+  }
+
   return  new vgui_range_map_params(min, max, gamma, invert,
-                                    gl_map, cache);  
+                                    gl_map, cache);
 }
 
 //: set the image at the currently selected grid cell
@@ -159,10 +160,10 @@ set_selected_grid_image(vil_image_resource_sptr const& image,
   if (!itab)
     this->add_image(image, rmps);
   else
-    {
-      itab->set_image_resource(image);
-      itab->set_mapping(rmps);
-    }
+  {
+    itab->set_image_resource(image);
+    itab->set_mapping(rmps);
+  }
   itab->post_redraw();
 }
 //: Add an image at the specified grid cell
@@ -181,7 +182,7 @@ add_image_at(vil_image_resource_sptr const& image,
   vgui_viewer2D_tableau_sptr v2D = vgui_viewer2D_tableau_new(picktab);
   grid_->add_at(v2D, col, row);
   itab->post_redraw();
-}  
+}
 
 //: Add an image to the currently selected grid cell
 void segv_vil_segmentation_manager::
@@ -500,12 +501,12 @@ void segv_vil_segmentation_manager::load_image()
   vil_image_resource_sptr image = vil_load_image_resource(image_filename.c_str());
 
 
-  if(greyscale)
-    {
-      vil_image_view<unsigned char> grey_view = 
-        brip_vil_float_ops::convert_to_grey(*image);
-      image = vil_new_image_resource_of_view(grey_view);
-    }
+  if (greyscale)
+  {
+    vil_image_view<unsigned char> grey_view =
+      brip_vil_float_ops::convert_to_grey(*image);
+    image = vil_new_image_resource_of_view(grey_view);
+  }
 
   vgui_range_map_params_sptr rmps = range_params(image);
 
@@ -530,16 +531,16 @@ void segv_vil_segmentation_manager::save_image()
     return;
   vil_image_resource_sptr img = this->selected_image();
   if (!img)
-    {
-      vcl_cerr << "Null image in segv_vil_segmentation_manager::save_image\n";
-      return;
-    }
+  {
+    vcl_cerr << "Null image in segv_vil_segmentation_manager::save_image\n";
+    return;
+  }
   vil_image_resource_sptr save_image = img;
-  if(byte)
-    {
-		vil_image_view<unsigned char> byte_view = brip_vil_float_ops::convert_to_byte(img);
-		save_image = vil_new_image_resource_of_view(byte_view);
-	}
+  if (byte)
+  {
+    vil_image_view<unsigned char> byte_view = brip_vil_float_ops::convert_to_byte(img);
+    save_image = vil_new_image_resource_of_view(byte_view);
+  }
   if (!vil_save_image_resource(save_image, image_file.c_str(), "tiff"))
     vcl_cerr << "segv_vil_segmentation_manager::save_image operation failed\n";
 }
@@ -832,48 +833,50 @@ void segv_vil_segmentation_manager::regions()
     this->add_image(vil_new_image_resource_of_view(res_img));
   }
 }
-//: Show combined greyscale images in up to three panes as a color image
-// assume images are arranged by columns
+
+//: Show combined greyscale images in up to three planes as a color image.
+// Assume images are arranged by columns
 void segv_vil_segmentation_manager::display_images_as_color()
 {
-  unsigned ncols =grid_->cols();	
-  if(ncols<2)
-    {
-      vcl_cout << "In segv_vil_segmentation_manager::display_images_as_color() - "
-               << " not enough active panes \n";
-      return;
-    }
+  unsigned ncols =grid_->cols();
+  if (ncols<2)
+  {
+    vcl_cout << "In segv_vil_segmentation_manager::display_images_as_color() -"
+             << " not enough active panes\n";
+    return;
+  }
   vil_image_resource_sptr img0 = this->image_at(0,0);
   vil_image_resource_sptr img1 = this->image_at(1,0);
-  if(!img0||!img1)
-    {
-      vcl_cout << "In segv_vil_segmentation_manager::display_images_as_color()() - "
-               << " some input images are null \n";
-      return;
-    }
-  vil_image_view<unsigned char> cimage0 = 
+  if (!img0||!img1)
+  {
+    vcl_cout << "In segv_vil_segmentation_manager::display_images_as_color()() -"
+             << " some input images are null\n";
+    return;
+  }
+  vil_image_view<unsigned char> cimage0 =
     brip_vil_float_ops::convert_to_byte(img0);
-  vil_image_view<unsigned char> cimage1 = 
+  vil_image_view<unsigned char> cimage1 =
     brip_vil_float_ops::convert_to_byte(img1);
-  vil_image_view<unsigned char> cimage2; 
-  if(ncols==3&&this->image_at(2,0))
-    {
-      vil_image_resource_sptr img2 = this->image_at(2,0);
-      cimage2 = brip_vil_float_ops::convert_to_byte(img2);
-    }
+  vil_image_view<unsigned char> cimage2;
+  if (ncols==3&&this->image_at(2,0))
+  {
+    vil_image_resource_sptr img2 = this->image_at(2,0);
+    cimage2 = brip_vil_float_ops::convert_to_byte(img2);
+  }
   else
-    {
-      unsigned w = cimage0.ni(), h = cimage0.nj();
-	  cimage2.set_size(w, h);
-      cimage2.fill(0);
-    }
+  {
+    unsigned w = cimage0.ni(), h = cimage0.nj();
+    cimage2.set_size(w, h);
+    cimage2.fill(0);
+  }
   vil_image_view<vil_rgb<vxl_byte> > rgb = brip_vil_float_ops::combine_color_planes(cimage0, cimage1, cimage2);
   vil_image_resource_sptr color = vil_new_image_resource_of_view(rgb);
-  if(ncols<3)
+  if (ncols<3)
     grid_->add_column();
   unsigned col = 2, row = 0;
   this->add_image_at(color,col,row);
 }
+
 void segv_vil_segmentation_manager::test_inline_viewer()
 {
   bgui_image_tableau_sptr itab = this->selected_image_tab();
@@ -921,53 +924,55 @@ void segv_vil_segmentation_manager::test_ellipse_draw()
 
   t2D->post_redraw();
 }
+
 //=== Image Arithmetic (Uses the Image Stack)
 //Add the image in pane 0 to the image in pane 1. Result in pane 2.
 void segv_vil_segmentation_manager::add_images()
 {
-unsigned ncols =grid_->cols();	
-if(ncols<2)
-{
-	vcl_cout << "In segv_vil_segmentation_manager::add_images() - "
-               << " not enough active panes \n";
-      return;
-    }
+  unsigned ncols =grid_->cols();
+  if (ncols<2)
+  {
+    vcl_cout << "In segv_vil_segmentation_manager::add_images() -"
+             << " not enough active panes\n";
+    return;
+  }
   vil_image_resource_sptr img0 = this->image_at(0,0);
   vil_image_resource_sptr img1 = this->image_at(1,0);
-  if(!img0||!img1)
-    {
-      vcl_cout << "In segv_vil_segmentation_manager::add_images() - "
-               << " one or both input images are null \n";
-      return;
-    }
+  if (!img0||!img1)
+  {
+    vcl_cout << "In segv_vil_segmentation_manager::add_images() -"
+             << " one or both input images are null\n";
+    return;
+  }
   vil_image_resource_sptr sum = brip_vil_float_ops::sum(img0, img1);
   vgui_range_map_params_sptr rmps = range_params(sum);
-  if(ncols<3)
+  if (ncols<3)
     grid_->add_column();
   unsigned col = 2, row = 0;
   this->add_image_at(sum,col,row, rmps);
 }
+
 //subtract the image in pane 1 from the image in pane 0. Result in pane 2
 void segv_vil_segmentation_manager::subtract_images()
 {
-unsigned ncols =grid_->cols();	
-if(ncols<2)
-{
-	vcl_cout << "In segv_vil_segmentation_manager::subtract_images() - "
-               << " not enough active panes \n";
-      return;
-    }
+  unsigned ncols =grid_->cols();
+  if (ncols<2)
+  {
+    vcl_cout << "In segv_vil_segmentation_manager::subtract_images() -"
+             << " not enough active panes\n";
+    return;
+  }
   vil_image_resource_sptr img0 = this->image_at(0,0);
   vil_image_resource_sptr img1 = this->image_at(1,0);
-  if(!img0||!img1)
-    {
-      vcl_cout << "In segv_vil_segmentation_manager::subtract_images() - "
-               << " one or both input images are null \n";
-      return;
-    }
+  if (!img0||!img1)
+  {
+    vcl_cout << "In segv_vil_segmentation_manager::subtract_images() -"
+             << " one or both input images are null\n";
+    return;
+  }
   vil_image_resource_sptr diff = brip_vil_float_ops::difference(img0, img1);
   vgui_range_map_params_sptr rmps = range_params(diff);
-  if(ncols<3)
+  if (ncols<3)
     grid_->add_column();
   unsigned col = 2, row = 0;
   this->add_image_at(diff,col,row);
