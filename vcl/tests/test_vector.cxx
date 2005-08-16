@@ -49,8 +49,8 @@ int test_vector_main(int /*argc*/,char* /*argv*/[])
   }
   {
       vcl_vector<bool> bv(2);
-      bv[1] = true;
-      bv[2] = false;
+      bv[0] = true;
+      bv[1] = false;
       vcl_nth_element(bv.begin(), bv.begin()+1, bv.end());
   }
   { // check contiguity
