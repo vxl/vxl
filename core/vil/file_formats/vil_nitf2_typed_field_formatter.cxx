@@ -7,6 +7,7 @@
 #include <vcl_iomanip.h>
 #include <vcl_iostream.h>
 #include <vcl_utility.h>
+#include <vcl_compiler.h> //for VCL_WIN32
 //==============================================================================
 // Class vil_nitf2_date_time_formatter
 
@@ -121,11 +122,13 @@ read(vcl_istream& input, vil_nitf2_long& out_value, bool& out_blank)
   errno = 0;
 
 #if VXL_HAS_INT_64
-#if defined(WIN32)
+
+#if defined (VCL_WIN32) && !defined(__CYGWIN__)
   out_value = _strtoi64(cstr, &endp, 10);
 #else
   out_value = ::strtoll(cstr, &endp, 10);  // in Standard C Library
 #endif
+
 #else //VXL_HAS_INT_64
   out_value = strtoi(cstr, &endp, 10);
 #endif //VXL_HAS_INT_64
