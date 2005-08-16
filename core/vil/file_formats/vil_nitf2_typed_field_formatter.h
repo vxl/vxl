@@ -155,12 +155,12 @@ public:
   bool show_sign;
 };
 
-class vil_nitf2_long_long_formatter : public vil_nitf2_typed_field_formatter<long long>
+class vil_nitf2_long_long_formatter : public vil_nitf2_typed_field_formatter<vil_nitf2_long>
 {
 public:
   vil_nitf2_long_long_formatter(int field_width, bool show_sign = false);
-  bool read(vcl_istream& input, long long& out_value, bool& out_blank);
-  bool write(vcl_ostream& output, const long long& value);
+  bool read(vcl_istream& input, vil_nitf2_long& out_value, bool& out_blank);
+  bool write(vcl_ostream& output, const vil_nitf2_long& value);
   bool show_sign;
 };
 

@@ -27,7 +27,7 @@ public:
   // appropriate method to set out parameter and return true. These methods
   // are defined here for the convenience of my callers, so they don't
   // have to downcast to the specific field type.
-  virtual bool value(long long&) const { return false; }
+  virtual bool value(vil_nitf2_long&) const { return false; }
   virtual bool value(int&) const { return false; }
   virtual bool value(double&) const { return false; }
   virtual bool value(char&) const { return false; }

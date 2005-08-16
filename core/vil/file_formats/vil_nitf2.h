@@ -13,6 +13,19 @@
 typedef vil_stream vil_nitf2_istream;
 typedef vil_stream vil_nitf2_ostream;
 
+//some of the integer values stored in nitf 2.x headers can be
+//larger than 2^32.  That's why we have vil_nitf2_long_long_formatter.
+//We use this typedef so systems that don't have 64 bit integers 
+//can still use the class.  Of course they will break if they try to
+//read a header that contains a value greater than 2^32.  Fortunately,
+//that is somewhat rare
+#include <vxl_config.h>
+#if VXL_HAS_INT_64
+typedef vxl_int_64 vil_nitf2_long;
+#else 
+typedef vxl_int_32 vil_nitf2_long;
+#endif 
+
 // Wrapper class for shared enums and static variables, to avoid circular 
 // dependencies among classes
 //

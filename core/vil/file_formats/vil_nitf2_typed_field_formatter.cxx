@@ -106,12 +106,12 @@ bool vil_nitf2_integer_formatter::write(vcl_ostream& output, const int& value)
 
 vil_nitf2_long_long_formatter::
 vil_nitf2_long_long_formatter(int field_width, bool show_sign) 
-  : vil_nitf2_typed_field_formatter<long long>(vil_nitf2::type_long_long, field_width), 
+  : vil_nitf2_typed_field_formatter<vil_nitf2_long>(vil_nitf2::type_long_long, field_width), 
     show_sign(show_sign) 
 {};
 
 bool vil_nitf2_long_long_formatter::
-read(vcl_istream& input, long long& out_value, bool& out_blank)
+read(vcl_istream& input, vil_nitf2_long& out_value, bool& out_blank)
 {
   const char* cstr;
   if (!read_c_str(input, field_width, cstr, out_blank)) {
@@ -119,11 +119,17 @@ read(vcl_istream& input, long long& out_value, bool& out_blank)
   }
   char* endp;
   errno = 0;
-#if defined(__APPLE__)
-  out_value = ::strtoll(cstr, &endp, 10);  // in Standard C Library
-#else
+
+#if VXL_HAS_INT_64
+#if defined(WIN32)
   out_value = _strtoi64(cstr, &endp, 10);
+#else
+  out_value = ::strtoll(cstr, &endp, 10);  // in Standard C Library
 #endif
+#else //VXL_HAS_INT_64
+  out_value = strtoi(cstr, &endp, 10);
+#endif //VXL_HAS_INT_64
+  
   bool sign_ok = check_sign(cstr, show_sign);
   delete[] cstr;
   return ((endp-cstr)==field_width  // processed all chars
@@ -131,7 +137,7 @@ read(vcl_istream& input, long long& out_value, bool& out_blank)
           && sign_ok);              // sign shown as expected
 }
 
-bool vil_nitf2_long_long_formatter::write(vcl_ostream& output, const long long& value)
+bool vil_nitf2_long_long_formatter::write(vcl_ostream& output, const vil_nitf2_long& value)
 {
   output << vcl_setw(field_width) << vcl_right << vcl_setfill('0'); 
   if (show_sign) {

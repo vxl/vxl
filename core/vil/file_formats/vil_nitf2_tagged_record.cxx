@@ -106,7 +106,7 @@ bool vil_nitf2_tagged_record::read(vil_nitf2_istream& input)
   return true;
 }
 
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, long long& out_value) const {
+bool vil_nitf2_tagged_record::get_value(vcl_string tag, vil_nitf2_long& out_value) const {
   return m_field_sequence->get_value(tag, out_value); }
 bool vil_nitf2_tagged_record::get_value(vcl_string tag, int& out_value) const {
   return m_field_sequence->get_value(tag, out_value); }
@@ -123,7 +123,7 @@ bool vil_nitf2_tagged_record::get_value(vcl_string tag, vil_nitf2_location*& out
 bool vil_nitf2_tagged_record::get_value(vcl_string tag, vil_nitf2_date_time& out_value) const {
   return m_field_sequence->get_value(tag, out_value); }
 
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, long long& out_value) const {
+bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_long& out_value) const {
   return m_field_sequence->get_value(tag, indexes, out_value); }
 bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, int& out_value) const {
   return m_field_sequence->get_value(tag, indexes, out_value); }

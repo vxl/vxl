@@ -150,7 +150,7 @@ vil_streampos vil_nitf2_image::get_offset_to_image_subheader(unsigned int image_
   //now add up all the offsets of image headers and image data that precedes me
   for (unsigned int i = 0 ; i < image_index ; i++) {
     int current_header_size;
-    long long current_data_size;
+    vil_nitf2_long current_data_size;
     m_file_header.get_property("LISH", i, current_header_size);
     m_file_header.get_property("LI", i, current_data_size);
     //WARNING: possibility for overflow... need to fix vil_streampos

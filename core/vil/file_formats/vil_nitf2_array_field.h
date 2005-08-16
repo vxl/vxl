@@ -73,7 +73,7 @@ public:
   // return true. The implementation here return false. These methods are 
   // defined here for the convenience of my callers, so they don't have to 
   // downcast to the specific field type.
-  virtual bool value(const vil_nitf2_index_vector&, long long& out_value) const { return false; }
+  virtual bool value(const vil_nitf2_index_vector&, vil_nitf2_long& out_value) const { return false; }
   virtual bool value(const vil_nitf2_index_vector&, int& out_value) const { return false; }
   virtual bool value(const vil_nitf2_index_vector&, double& out_value) const { return false; }
   virtual bool value(const vil_nitf2_index_vector&, char& out_value) const { return false; }

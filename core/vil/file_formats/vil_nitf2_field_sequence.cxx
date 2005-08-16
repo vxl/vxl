@@ -357,7 +357,7 @@ bool vil_nitf2_field_sequence::get_value(vcl_string tag, T& out_value) const { \
   return true; \
 }
 
-NITF_FIELD_SEQ_GET_VALUE(long long)
+NITF_FIELD_SEQ_GET_VALUE(vil_nitf2_long)
 NITF_FIELD_SEQ_GET_VALUE(int)
 NITF_FIELD_SEQ_GET_VALUE(double)
 NITF_FIELD_SEQ_GET_VALUE(char)
@@ -386,7 +386,7 @@ bool vil_nitf2_field_sequence::get_value(vcl_string tag, \
     return field->array_field()->value(trimmed_indexes, out_value); \
   } \
 } 
-NITF_FIELD_SEQ_GET_ARRAY_VALUE(long long)
+NITF_FIELD_SEQ_GET_ARRAY_VALUE(vil_nitf2_long)
 NITF_FIELD_SEQ_GET_ARRAY_VALUE(int) // expanded below for debugging
 NITF_FIELD_SEQ_GET_ARRAY_VALUE(double)
 NITF_FIELD_SEQ_GET_ARRAY_VALUE(char)
