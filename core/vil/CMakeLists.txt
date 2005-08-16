@@ -88,6 +88,37 @@ SET( vil_sources ${vil_sources}
   file_formats/vil_viff_support.c       file_formats/vil_viff_support.h
   file_formats/vil_viffheader.h
 
+  ################################
+  # NITF 2.0 and 2.1 reading code
+  ################################
+  # The actual vil_image_resource subclass
+  file_formats/vil_nitf2_image.h                    file_formats/vil_nitf2_image.cxx
+
+  # For reading the NITF file headers as well as the image headers
+  file_formats/vil_nitf2_header.h                   file_formats/vil_nitf2_header.cxx
+  file_formats/vil_nitf2_image_subheader.h          file_formats/vil_nitf2_image_subheader.cxx
+
+  # Stuff shared by all NITF2 classes
+  file_formats/vil_nitf2.h
+  
+  # Generic framework for reading NITF tagged record extensions (TREs)
+  file_formats/vil_nitf2_array_field.h              file_formats/vil_nitf2_array_field.cxx
+  file_formats/vil_nitf2_classification.h           file_formats/vil_nitf2_classification.cxx
+  file_formats/vil_nitf2_compound_field_value.h     file_formats/vil_nitf2_compound_field_value.cxx
+  file_formats/vil_nitf2_data_mask_table.h          file_formats/vil_nitf2_data_mask_table.cxx
+  file_formats/vil_nitf2_field.h                    file_formats/vil_nitf2_field.cxx
+  file_formats/vil_nitf2_field_definition.h         file_formats/vil_nitf2_field_definition.cxx
+  file_formats/vil_nitf2_field_formatter.h          file_formats/vil_nitf2_field_formatter.cxx
+  file_formats/vil_nitf2_field_functor.h            file_formats/vil_nitf2_field_functor.cxx
+  file_formats/vil_nitf2_field_sequence.h           file_formats/vil_nitf2_field_sequence.cxx
+  file_formats/vil_nitf2_index_vector.h             
+  file_formats/vil_nitf2_scalar_field.h             file_formats/vil_nitf2_scalar_field.cxx
+  file_formats/vil_nitf2_tagged_record.h            file_formats/vil_nitf2_tagged_record.cxx
+  file_formats/vil_nitf2_tagged_record_definition.h file_formats/vil_nitf2_tagged_record_definition.cxx
+  file_formats/vil_nitf2_typed_array_field.h        
+  file_formats/vil_nitf2_typed_scalar_field.h       
+  file_formats/vil_nitf2_typed_field_formatter.h    file_formats/vil_nitf2_typed_field_formatter.cxx
+  
   # image operations
   vil_crop.cxx                          vil_crop.h
   vil_clamp.cxx                         vil_clamp.h
