@@ -150,8 +150,8 @@ class vil_nitf2_integer_formatter : public vil_nitf2_typed_field_formatter<int>
 {
 public:
   vil_nitf2_integer_formatter(int field_width, bool show_sign = false);
-  bool read(vcl_istream& input, int& out_value, bool& out_blank);
-  bool write(vcl_ostream& output, const int& value);
+  virtual bool read(vcl_istream& input, int& out_value, bool& out_blank);
+  virtual bool write(vcl_ostream& output, const int& value);
   bool show_sign;
 };
 
@@ -159,8 +159,8 @@ class vil_nitf2_long_long_formatter : public vil_nitf2_typed_field_formatter<vil
 {
 public:
   vil_nitf2_long_long_formatter(int field_width, bool show_sign = false);
-  bool read(vcl_istream& input, vil_nitf2_long& out_value, bool& out_blank);
-  bool write(vcl_ostream& output, const vil_nitf2_long& value);
+  virtual bool read(vcl_istream& input, vil_nitf2_long& out_value, bool& out_blank);
+  virtual bool write(vcl_ostream& output, const vil_nitf2_long& value);
   bool show_sign;
 };
 
@@ -171,8 +171,8 @@ class vil_nitf2_double_formatter : public vil_nitf2_typed_field_formatter<double
 {
 public:
   vil_nitf2_double_formatter(int field_width, int precision, bool show_sign);
-  bool read(vcl_istream& input, double& out_value, bool& out_blank);
-  bool write(vcl_ostream& output, const double& value);
+  virtual bool read(vcl_istream& input, double& out_value, bool& out_blank);
+  virtual bool write(vcl_ostream& output, const double& value);
   int precision; 
   bool show_sign;
 };
@@ -184,8 +184,8 @@ class vil_nitf2_char_formatter : public vil_nitf2_typed_field_formatter<char>
 {
 public:
   vil_nitf2_char_formatter();
-  bool read(vcl_istream& input, char& out_value, bool& out_blank);
-  bool write(vcl_ostream& output, const char& value);
+  virtual bool read(vcl_istream& input, char& out_value, bool& out_blank);
+  virtual bool write(vcl_ostream& output, const char& value);
 };
 
 // Reads and writes a binary data field
@@ -201,7 +201,7 @@ public:
   virtual bool read( vil_nitf2_istream& input, void*& out_value, bool& out_blank );
 
   /// Overload to write(vil_nitf2_ostream) directly, to avoid string conversion.
-  bool write(vil_nitf2_ostream& output, void*const& value);
+  virtual bool write(vil_nitf2_ostream& output, void*const& value);
 };
 
 // Reads and writes a vcl_string field.
@@ -214,8 +214,8 @@ public:
 
   vil_nitf2_string_formatter(int field_width, enum_char_set char_set = ECS);
   virtual ~vil_nitf2_string_formatter() {};
-  bool read(vcl_istream& input, vcl_string& out_value, bool& out_blank );
-  bool write(vcl_ostream& output, const vcl_string& value);
+  virtual bool read(vcl_istream& input, vcl_string& out_value, bool& out_blank );
+  virtual bool write(vcl_ostream& output, const vcl_string& value);
   virtual bool is_valid(vcl_string value) const;
   // Member variable
   enum_char_set char_set;
@@ -254,9 +254,9 @@ public:
   // Constructor
   vil_nitf2_date_time_formatter(int field_width); 
 
-  bool read(vcl_istream& input, vil_nitf2_date_time& out_value, bool& out_blank);
+  virtual bool read(vcl_istream& input, vil_nitf2_date_time& out_value, bool& out_blank);
   
-  bool write(vcl_ostream& output, const vil_nitf2_date_time& value);
+  virtual bool write(vcl_ostream& output, const vil_nitf2_date_time& value);
 };
 
 // Reads and writes a location field.
@@ -267,9 +267,9 @@ public:
   // Constructor
   vil_nitf2_location_formatter(int field_width);
 
-  bool read(vcl_istream& input, vil_nitf2_location*& out_value, bool& out_blank);
+  virtual bool read(vcl_istream& input, vil_nitf2_location*& out_value, bool& out_blank);
 
-  bool write(vcl_ostream& output, vil_nitf2_location*const& value);
+  virtual bool write(vcl_ostream& output, vil_nitf2_location*const& value);
 
   // Converts overall field width to seconds precision for DMSH formatted 
   // field, ddmmss.sssHdddmmss.sssH
