@@ -8,6 +8,9 @@
 #include <vcl_iostream.h>
 #include <vcl_utility.h>
 #include <vcl_compiler.h> //for VCL_WIN32
+
+#include <errno.h>
+
 //==============================================================================
 // Class vil_nitf2_date_time_formatter
 
