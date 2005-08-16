@@ -183,7 +183,6 @@ public:
  
   // Sets out_value to the value of the integer-value field specified by tag. 
   // Returns 0 if such a field is not found.
-  bool get_value(vcl_string tag, vil_nitf2_long& out_value) const;
   bool get_value(vcl_string tag, int& out_value) const;
   bool get_value(vcl_string tag, double& out_value) const;
   bool get_value(vcl_string tag, char& out_value) const;
@@ -192,7 +191,6 @@ public:
   bool get_value(vcl_string tag, vil_nitf2_location*& out_value) const;
   bool get_value(vcl_string tag, vil_nitf2_date_time& out_value) const;
   
-  //bool get_value(vcl_string tag, int i, vil_nitf2_long& out_value) const;
   //bool get_value(vcl_string tag, int i, int& out_value) const;
   //bool get_value(vcl_string tag, int i, double& out_value) const;
   //bool get_value(vcl_string tag, int i, char& out_value) const;
@@ -201,7 +199,6 @@ public:
   //bool get_value(vcl_string tag, int i, vil_nitf2_location*& out_value) const;
   //bool get_value(vcl_string tag, int i, vil_nitf2_date_time& out_value) const;
 
-  bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_long& out_value) const;
   bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, int& out_value) const;
   bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, double& out_value) const;
   bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, char& out_value) const;
@@ -209,6 +206,12 @@ public:
   bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vcl_string& out_value) const;
   bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_location*& out_value) const;
   bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_date_time& out_value) const;
+
+#if VXL_HAS_INT_64
+  bool get_value(vcl_string tag, vil_nitf2_long& out_value) const;
+  //bool get_value(vcl_string tag, int i, vil_nitf2_long& out_value) const;
+  bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_long& out_value) const;
+#endif //VXL_HAS_INT_64
 
   // Sets the value of the integer-valued field specified by tag to value.
   // Not yet implemented.
