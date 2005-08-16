@@ -8,8 +8,8 @@
 #include <vcl_map.h>
 #include <vcl_string.h>
 #include "vil_nitf2_field.h"
+#include "vil_nitf2_index_vector.h"
 
-class vil_nitf2_index_vector;
 class vil_nitf2_field_definition;
 class vil_nitf2_location;
 class vil_nitf2_date_time;
