@@ -130,7 +130,7 @@ read(vcl_istream& input, vil_nitf2_long& out_value, bool& out_blank)
 #endif
 
 #else //VXL_HAS_INT_64
-  out_value = strtoi(cstr, &endp, 10);
+  out_value = strtol(cstr, &endp, 10);
 #endif //VXL_HAS_INT_64
   
   bool sign_ok = check_sign(cstr, show_sign);
