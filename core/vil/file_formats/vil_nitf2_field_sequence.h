@@ -35,7 +35,6 @@ public:
  
   // Sets out_value to the value of field specified by tag. 
   // Returns 0 if such a field is not found or is of the wrong type.
-  bool get_value(vcl_string tag, vil_nitf2_long& out_value) const;
   bool get_value(vcl_string tag, int& out_value) const;
   bool get_value(vcl_string tag, double& out_value) const;
   bool get_value(vcl_string tag, char& out_value) const;
@@ -50,7 +49,6 @@ public:
   // This option is used by vil_nitf2_field_functor so that when in a repeat loop, the
   // value in the nearest enclosing scope will be used. For instance, if called with
   // indexes (i,j), and if tag dimensionality equals 1, then value(i) will be returned.
-  bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_long& out_value, bool ignore_extra_indexes = false) const;
   bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, int& out_value, bool ignore_extra_indexes = false) const;
   bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, double& out_value, bool ignore_extra_indexes = false) const;
   bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, char& out_value, bool ignore_extra_indexes = false) const;
@@ -58,7 +56,12 @@ public:
   bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vcl_string& out_value, bool ignore_extra_indexes = false) const;
   bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_location*& out_value, bool ignore_extra_indexes = false) const;
   bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_date_time& out_value, bool ignore_extra_indexes = false) const;
- 
+
+#if VXL_HAS_INT_64
+  bool get_value(vcl_string tag, vil_nitf2_long& out_value) const;
+  bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_long& out_value, bool ignore_extra_indexes = false) const;
+#endif 
+
   // Sets the value of the integer-valued field specified by tag to value.
   // Not yet implemented.
   //bool set_value(vcl_string tag, int value) { return false; }

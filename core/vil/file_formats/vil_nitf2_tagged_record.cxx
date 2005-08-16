@@ -106,8 +106,6 @@ bool vil_nitf2_tagged_record::read(vil_nitf2_istream& input)
   return true;
 }
 
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, vil_nitf2_long& out_value) const {
-  return m_field_sequence->get_value(tag, out_value); }
 bool vil_nitf2_tagged_record::get_value(vcl_string tag, int& out_value) const {
   return m_field_sequence->get_value(tag, out_value); }
 bool vil_nitf2_tagged_record::get_value(vcl_string tag, double& out_value) const {
@@ -123,8 +121,6 @@ bool vil_nitf2_tagged_record::get_value(vcl_string tag, vil_nitf2_location*& out
 bool vil_nitf2_tagged_record::get_value(vcl_string tag, vil_nitf2_date_time& out_value) const {
   return m_field_sequence->get_value(tag, out_value); }
 
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_long& out_value) const {
-  return m_field_sequence->get_value(tag, indexes, out_value); }
 bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, int& out_value) const {
   return m_field_sequence->get_value(tag, indexes, out_value); }
 bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, double& out_value) const {
@@ -140,6 +136,14 @@ bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_ve
 bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_date_time& out_value) const {
   return m_field_sequence->get_value(tag, indexes, out_value); }
 
+#if VXL_HAS_INT_64
+//if not VXL_HAS_INT_64 isn't defined the vil_nitf2_long is the same as just plain 'int'
+//and this function will be a duplicate of that get_value
+bool vil_nitf2_tagged_record::get_value(vcl_string tag, vil_nitf2_long& out_value) const {
+  return m_field_sequence->get_value(tag, out_value); }
+bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_long& out_value) const {
+  return m_field_sequence->get_value(tag, indexes, out_value); }
+#endif
 
 vil_nitf2_tagged_record::vil_nitf2_tagged_record() 
   : m_length_field(0), m_tag_field(0), m_length(0), m_definition(0), m_field_sequence(0)
