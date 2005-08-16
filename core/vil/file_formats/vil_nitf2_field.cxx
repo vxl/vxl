@@ -57,4 +57,3 @@ vcl_ostream& operator << (vcl_ostream& os, const vil_nitf2_field& field)
 {
   return field.output(os);
 }
-

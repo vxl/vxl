@@ -61,4 +61,3 @@ private:
 
 
 #endif // VIL_NITF2_HEADER_H
-

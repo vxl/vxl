@@ -84,5 +84,3 @@ vil_nitf2_field_definitions::repeat(vil_nitf2_field_functor<int>* repeat_functor
                   new vil_nitf2_field_definitions(field_definitions)));
   return *this;
 }
-
-

@@ -101,4 +101,3 @@ private:
 
 
 #endif // VIL_NITF2_IMAGE_SUBHEADER_H
-

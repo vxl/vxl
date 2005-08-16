@@ -70,4 +70,3 @@ bool vil_nitf2_field_formatter::check_sign(const char* cstr, bool show_sign)
    (!show_sign && cstr[0] != '+' && cstr[0] != '-') ||
    (show_sign && (cstr[0] == '+' || cstr[0] == '-'));
 }
-
