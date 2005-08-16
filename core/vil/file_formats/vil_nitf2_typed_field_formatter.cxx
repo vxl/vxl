@@ -126,7 +126,7 @@ read(vcl_istream& input, vil_nitf2_long& out_value, bool& out_blank)
 
 #if VXL_HAS_INT_64
 
-#if defined (VCL_WIN32) && !defined(__CYGWIN__)
+#if defined (VCL_VC)
   out_value = _strtoi64(cstr, &endp, 10);
 #else
   out_value = ::strtoll(cstr, &endp, 10);  // in Standard C Library
