@@ -47,6 +47,7 @@ private:
 #include "vil_nitf2_compound_field_value.h" 
 
 // Overload for vil_nitf2_location* (Necessary because it's a pointer.)
+template<>
 inline vcl_ostream& vil_nitf2_typed_scalar_field<vil_nitf2_location*>::output(vcl_ostream& os) const
 {
   if (m_value==0) {
