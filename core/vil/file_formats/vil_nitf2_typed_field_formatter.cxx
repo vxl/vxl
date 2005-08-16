@@ -76,7 +76,7 @@ bool
 vil_nitf2_integer_formatter::read(vcl_istream& input, 
                            int& out_value, bool& out_blank)
 {
-  const char* cstr;
+  char* cstr;
   if (!read_c_str(input, field_width, cstr, out_blank)) {
     return false;
   }
@@ -114,7 +114,7 @@ vil_nitf2_long_long_formatter(int field_width, bool show_sign)
 bool vil_nitf2_long_long_formatter::
 read(vcl_istream& input, vil_nitf2_long& out_value, bool& out_blank)
 {
-  const char* cstr;
+  char* cstr;
   if (!read_c_str(input, field_width, cstr, out_blank)) {
     return false;
   }
@@ -165,7 +165,7 @@ vil_nitf2_double_formatter(int field_width, int precision, bool show_sign)
 bool vil_nitf2_double_formatter::read(vcl_istream& input, 
                                double& out_value, bool& out_blank)
 {
-  const char* cstr;
+  char* cstr;
   if (!read_c_str(input, field_width, cstr, out_blank)) {
     return false;
   }
@@ -248,7 +248,7 @@ vil_nitf2_string_formatter(int field_width, enum_char_set char_set)
 bool vil_nitf2_string_formatter::read(vcl_istream& input, 
                                vcl_string& out_value, bool& out_blank)
 {
-  const char* cstr;
+  char* cstr;
   if (!read_c_str(input, field_width, cstr, out_blank)) {
     return false;
   }
