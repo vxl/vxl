@@ -257,9 +257,12 @@ enum vil_pixel_format vil_nitf2_image::pixel_format () const
         return VIL_PIXEL_FORMAT_INT_16;
       } else if (bits_per_pixel == 32) {
         return VIL_PIXEL_FORMAT_INT_32;
-      } else if (bits_per_pixel == 64) {
+      } 
+#if VXL_HAS_INT_64      
+      else if (bits_per_pixel == 64) {
         return VIL_PIXEL_FORMAT_INT_64;
       }
+#endif //VXL_HAS_INT_64      
     } else if (pixel_type == "R") {
       if (bits_per_pixel == 32) {
         return VIL_PIXEL_FORMAT_FLOAT;
