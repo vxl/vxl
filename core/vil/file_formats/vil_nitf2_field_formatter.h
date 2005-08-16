@@ -79,9 +79,9 @@ public:
   // a string (if possible), which it returns as a null-terminated C string,
   // which the caller owns. The length of the C string reflects the number 
   // of characters read.
-  static const char* read_char_array(vcl_istream& input, int length);
+  static char* read_char_array(vcl_istream& input, int length);
   static bool read_c_str(vcl_istream& input, int length, 
-                       const char*& out_cstr, bool& all_blank);
+                         char*& out_cstr, bool& all_blank);
   // Same as above, but returns a vcl_string.
   static vcl_string read_string(vcl_istream& input, int length);
   // Same as above, but takes a vil_stream as input

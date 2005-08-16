@@ -11,7 +11,7 @@
 //==============================================================================
 // Class vil_nitf2_field_formatter
 
-const char* vil_nitf2_field_formatter::read_char_array(vcl_istream& input, int size)
+char* vil_nitf2_field_formatter::read_char_array(vcl_istream& input, int size)
 {
   char* char_array = new char[size+1];
   input.read(char_array, size);
@@ -33,7 +33,7 @@ vcl_string vil_nitf2_field_formatter::read_string(vil_stream& input, int size)
 }
 
 bool vil_nitf2_field_formatter::read_c_str(vcl_istream& input, int length,
-                                  const char*& out_cstr, bool& all_blank)
+                                           char*& out_cstr, bool& all_blank)
 {
   out_cstr = read_char_array(input, length);
   all_blank = is_all_blank(out_cstr);
