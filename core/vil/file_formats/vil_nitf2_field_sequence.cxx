@@ -9,6 +9,8 @@
 #include "vil_nitf2_scalar_field.h"
 #include "vil_nitf2_array_field.h"
 
+#include <vcl_utility.h>
+
 bool vil_nitf2_field_sequence::
 create_array_fields(const vil_nitf2_field_definitions* field_defs,
                      int num_dimensions)
@@ -20,7 +22,7 @@ create_array_fields(const vil_nitf2_field_definitions* field_defs,
       vil_nitf2_field_definition* field_def = (*node)->field_definition();
       vil_nitf2_array_field* field = field_def->formatter->create_array_field(num_dimensions, field_def);
       if (field) {
-        fields.insert(make_pair(field_def->tag, field));
+        fields.insert(vcl_make_pair(field_def->tag, field));
       } else {
         vcl_cerr << "vil_nitf2_field_sequence:create_array_fields(): Error created required vcl_vector field " 
           << field_def->tag << "; bailing." << vcl_endl;
@@ -122,7 +124,7 @@ bool vil_nitf2_field_sequence::read(vil_nitf2_istream& input,
             bool fieldReadError;
             vil_nitf2_scalar_field* field = vil_nitf2_scalar_field::read(input, field_def, variable_width, &fieldReadError);
             if (field) {
-              fields.insert(make_pair(field_def->tag, field));
+              fields.insert(vcl_make_pair(field_def->tag, field));
             } 
             if ( fieldReadError ){
               error = true;

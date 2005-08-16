@@ -5,6 +5,7 @@
 #include "vil_nitf2_tagged_record_definition.h"
 #include "vil_nitf2_field_definition.h"
 #include <vcl_iostream.h>
+#include <vcl_utility.h>
 
 vil_nitf2_tagged_record_definition::tagged_record_definition_map 
 vil_nitf2_tagged_record_definition::all_definitions;
@@ -23,7 +24,7 @@ vil_nitf2_tagged_record_definition::define(vcl_string name)
   if (all_definitions.find(name) != all_definitions.end()) {
     throw("vil_nitf2_tagged_record_definition already defined.");
   }
-  all_definitions.insert(make_pair(name, definition));
+  all_definitions.insert(vcl_make_pair(name, definition));
   return *definition;
 }
 

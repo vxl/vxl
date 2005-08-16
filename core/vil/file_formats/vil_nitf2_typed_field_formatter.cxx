@@ -6,7 +6,7 @@
 
 #include <vcl_iomanip.h>
 #include <vcl_iostream.h>
-
+#include <vcl_utility.h>
 //==============================================================================
 // Class vil_nitf2_date_time_formatter
 
@@ -308,7 +308,7 @@ bool vil_nitf2_enum_string_formatter::is_valid_value(vcl_string token) const
 
 vil_nitf2_enum_values& vil_nitf2_enum_values::value(vcl_string token, vcl_string pretty_name)
 {
-  if (!insert(make_pair(token, pretty_name)).second) {
+  if (!insert(vcl_make_pair(token, pretty_name)).second) {
     vcl_cerr << "vil_nitf2_enum_values: WARNING: Ignoring definition " 
       << token << "; token already defined for this enumeration." << vcl_endl;
   } 
