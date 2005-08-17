@@ -52,7 +52,7 @@ public:
   unsigned int get_pixels_per_block_y() const;
   unsigned int get_num_blocks_x() const; 
   unsigned int get_num_blocks_y() const; 
-  const bool has_data_mask_table() const { return data_mask_table() != 0; }
+  bool has_data_mask_table() const { return data_mask_table() != 0; }
   const vil_nitf2_data_mask_table* data_mask_table() const { return m_data_mask_table; }
 
   /**
