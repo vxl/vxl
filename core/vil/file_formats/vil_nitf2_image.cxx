@@ -567,7 +567,7 @@ vil_image_view_base_sptr vil_nitf2_image::get_block(unsigned int block_index_x, 
   vil_memory_chunk_sptr image_memory = new vil_memory_chunk(block_size_bytes, pixel_format());
   
 
-  unsigned int i_step, j_step, plane_step;
+  unsigned int i_step(0), j_step(0), plane_step(0);
   bool data_is_all_blank = false;
   if (image_mode_type == "S") {
 //NOT USED    unsigned int bytes_per_band = ni() * nj() * bits_per_pixel_per_band / 8;
