@@ -7,6 +7,8 @@
 
 #include "vil_nitf2_field_formatter.h"
 
+#include <vcl_string.h>
+
 // All subclasses of NITF field formatter derive from this template
 // The template handles both scalars and vectors of type T.
 //
