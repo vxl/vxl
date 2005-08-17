@@ -203,6 +203,13 @@ bool vgl_conic_2d_regression<T>::fit()
   //Fill the scatter matrices
   this->fill_scatter_matrix();
 
+  //Check the condition of S22
+  T det = vnl_det(S22_);
+  if(det == static_cast<T>(0))
+    {
+      vcl_cout << "Singular S22 Matrix in vgl_conic_2d_regression::fit()\n";
+      return false;
+    }
   //The Bookstein solution.
   vnl_double_3x3 S_lambda =
     Dinv_*(S11_- S12_*(vnl_inverse(S22_)*vnl_transpose(S12_)));
