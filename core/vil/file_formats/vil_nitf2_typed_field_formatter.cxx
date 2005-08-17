@@ -121,6 +121,7 @@ read(vcl_istream& input, vil_nitf2_long& out_value, bool& out_blank)
   if (!read_c_str(input, field_width, cstr, out_blank)) {
     return false;
   }
+  bool conversion_ok;
   char* endp;
   errno = 0;
 
@@ -128,17 +129,23 @@ read(vcl_istream& input, vil_nitf2_long& out_value, bool& out_blank)
 
 #if defined (VCL_VC)
   out_value = _strtoi64(cstr, &endp, 10);
+  conversion_ok = (endp-cstr)==field_width;   // processed all chars
+#elif defined (VCL_BORLAND)
+  out_value = atoi64( cstr );
+  conversion_ok = true;                       //no error checking available
 #else
   out_value = ::strtoll(cstr, &endp, 10);  // in Standard C Library
+  conversion_ok = (endp-cstr)==field_width;   // processed all chars
 #endif
 
 #else //VXL_HAS_INT_64
   out_value = strtol(cstr, &endp, 10);
+  conversion_ok = (endp-cstr)==field_width;   // processed all chars
 #endif //VXL_HAS_INT_64
   
   bool sign_ok = check_sign(cstr, show_sign);
   delete[] cstr;
-  return ((endp-cstr)==field_width  // processed all chars
+  return (conversion_ok            
           && errno==0              // with no errors
           && sign_ok);              // sign shown as expected
 }
