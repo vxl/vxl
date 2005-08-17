@@ -273,10 +273,10 @@ bool vil_nitf2_tagged_record::test()
   // Record from the vil_stream
   vil_nitf2_tagged_record* record = vil_nitf2_tagged_record::create(*vss);
   if (record) {
-    vcl_cout << *record << vcl_endl;
+    vcl_cerr << *record << vcl_endl;
     // Now write the record, and compare the output to the test input
-    vcl_cout << "\nOriginal string:\n" << read_string;
-    vcl_cout << "\nWrite() output:\n";
+    vcl_cerr << "\nOriginal string:\n" << read_string;
+    vcl_cerr << "\nWrite() output:\n";
     vil_stream_core* vs2 = new vil_stream_core();
     record->write(*(vil_stream*)vs2);
     vil_streampos bufsize = vs2->file_size();
@@ -285,19 +285,19 @@ bool vil_nitf2_tagged_record::test()
     vs2->read(buf, bufsize);
     buf[bufsize]='\0';
     vcl_string write_string = vcl_string(buf);
-    vcl_cout << write_string << vcl_endl;
+    vcl_cerr << write_string << vcl_endl;
     if (read_string != write_string) {
-      vcl_cout << "\nWrite failed!" << vcl_endl;
+      vcl_cerr << "\nWrite failed!" << vcl_endl;
       error = true;
     }
     delete buf;
-    vcl_cout << "Testing get_value: " << vcl_endl;
+    vcl_cerr << "Testing get_value: " << vcl_endl;
     int mti_dp;
     if (!record->get_value("MTI_DP", mti_dp) || mti_dp!=2) {
-      vcl_cout << "Get value failed!" << vcl_endl;
+      vcl_cerr << "Get value failed!" << vcl_endl;
       error = true;
     } else {
-      vcl_cout << "MTI_DP = " << mti_dp << vcl_endl;
+      vcl_cerr << "MTI_DP = " << mti_dp << vcl_endl;
     }
     int tgt_speed[4];
     if (!record->get_value("TGT_n_SPEED", vil_nitf2_index_vector(0), tgt_speed[0])  ||
@@ -305,18 +305,18 @@ bool vil_nitf2_tagged_record::test()
         record->get_value("TGT_n_SPEED", vil_nitf2_index_vector(1), tgt_speed[1]) /*should be null*/ || 
         !record->get_value("TGT_n_SPEED", vil_nitf2_index_vector(2), tgt_speed[2]) ||
         tgt_speed[2] != 4444) {
-      vcl_cout << "Get vector value test failed!" << vcl_endl;
+      vcl_cerr << "Get vector value test failed!" << vcl_endl;
       error = true;
     } else {
-      vcl_cout << "TGT_2_SPEED = " << tgt_speed[2] << vcl_endl;
+      vcl_cerr << "TGT_2_SPEED = " << tgt_speed[2] << vcl_endl;
     }
   } else {
-    vcl_cout << "Didn't create record!" << vcl_endl;
+    vcl_cerr << "Didn't create record!" << vcl_endl;
     error = true;
   }
   // Try output of vector field
-  vcl_cout << "Output of vector field C:" << vcl_endl;
-  vcl_cout << *(record->get_field("C"));
+  vcl_cerr << "Output of vector field C:" << vcl_endl;
+  vcl_cerr << *(record->get_field("C"));
 
   return !error;
 }
