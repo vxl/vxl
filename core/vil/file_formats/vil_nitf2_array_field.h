@@ -74,15 +74,15 @@ public:
   // defined here for the convenience of my callers, so they don't have to 
   // downcast to the specific field type.
 #if VXL_HAS_INT_64
-  virtual bool value(const vil_nitf2_index_vector&, vil_nitf2_long& out_value) const { return false; }
+  virtual bool value(const vil_nitf2_index_vector&, vil_nitf2_long& ) const { return false; }
 #endif
-  virtual bool value(const vil_nitf2_index_vector&, int& out_value) const { return false; }
-  virtual bool value(const vil_nitf2_index_vector&, double& out_value) const { return false; }
-  virtual bool value(const vil_nitf2_index_vector&, char& out_value) const { return false; }
-  virtual bool value(const vil_nitf2_index_vector&, void*& out_value) const { return false; }
-  virtual bool value(const vil_nitf2_index_vector&, vcl_string& out_value) const { return false; }
-  virtual bool value(const vil_nitf2_index_vector&, vil_nitf2_location*& out_value) const { return false; }
-  virtual bool value(const vil_nitf2_index_vector&, vil_nitf2_date_time& out_value) const { return false; }
+  virtual bool value(const vil_nitf2_index_vector&, int& ) const { return false; }
+  virtual bool value(const vil_nitf2_index_vector&, double& ) const { return false; }
+  virtual bool value(const vil_nitf2_index_vector&, char& ) const { return false; }
+  virtual bool value(const vil_nitf2_index_vector&, void*& ) const { return false; }
+  virtual bool value(const vil_nitf2_index_vector&, vcl_string& ) const { return false; }
+  virtual bool value(const vil_nitf2_index_vector&, vil_nitf2_location*& ) const { return false; }
+  virtual bool value(const vil_nitf2_index_vector&, vil_nitf2_date_time& ) const { return false; }
 
 protected:
   // Dimensionality of vector field
