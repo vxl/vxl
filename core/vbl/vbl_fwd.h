@@ -12,5 +12,6 @@ template <class T> class vbl_smart_ptr;
 template <class T> class vbl_sparse_array_1d;
 template <class T> class vbl_sparse_array_2d;
 template <class T> class vbl_sparse_array_3d;
+template <class T1, class T2, class T3> struct vbl_triple;
 
 #endif // vbl_fwd_h_
