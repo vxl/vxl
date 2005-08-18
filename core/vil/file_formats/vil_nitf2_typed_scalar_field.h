@@ -28,8 +28,8 @@ public:
     out_value = m_value;
     return true;
   }
-  // Return value
-  T value() const { return m_value; }
+  // Return value (was named value(), renamed to avoid an internal bcc compiler error)
+  T get_value() const { return m_value; }
 
   // Set value
   void set_value(const T& value) { m_value = value; }
