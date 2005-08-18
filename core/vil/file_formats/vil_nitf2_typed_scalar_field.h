@@ -20,15 +20,16 @@ public:
   // Constructor
   vil_nitf2_typed_scalar_field(T value, vil_nitf2_field_definition* definition) 
     : vil_nitf2_scalar_field(definition), m_value(value) {}
-  
-  // Return value
-  T value() const { return m_value; }
 
-  // Overload vil_nitf2_field::value()
-  bool value(T& out_value) const {
+  // partially overridden value method
+  using vil_nitf2_scalar_field::value;
+
+  virtual bool value(T& out_value) const {
     out_value = m_value;
     return true;
   }
+  // Return value
+  T value() const { return m_value; }
 
   // Set value
   void set_value(const T& value) { m_value = value; }
