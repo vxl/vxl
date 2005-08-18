@@ -19,14 +19,13 @@ public:
   // Convenience constructors: empty vector, 1 element, etc.
   vil_nitf2_index_vector() : vcl_vector<int>() {}
   vil_nitf2_index_vector(int i): vcl_vector<int>(1) {
-    vcl_vector<int>::at(0) = i; }
+    (*this)[0] = i; }
   vil_nitf2_index_vector(int i, int j) : vcl_vector<int>(2) {
-    vcl_vector<int>::at(0) = i; vcl_vector<int>::at(1) = j; }
+    (*this)[0] = i; (*this)[1] = j; }
   vil_nitf2_index_vector(int i, int j, int k) : vcl_vector<int>(3) {
-    vcl_vector<int>::at(0) = i; vcl_vector<int>::at(1) = j; vcl_vector<int>::at(2) = k; }
+    (*this)[0] = i; (*this)[1] = j; (*this)[2] = k; }
   vil_nitf2_index_vector(int i, int j, int k, int l) : vcl_vector<int>(4) {
-    vcl_vector<int>::at(0) = i; vcl_vector<int>::at(1) = j; 
-    vcl_vector<int>::at(2) = k; vcl_vector<int>::at(3) = l; }
+    (*this)[0] = i; (*this)[1] = j; (*this)[2] = k; (*this)[3] = l; }
 
   // General-purpose constructor 
   vil_nitf2_index_vector(const vcl_vector<int>& v) : vcl_vector<int>(v) {};
