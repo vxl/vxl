@@ -6,6 +6,7 @@
 #define VIL_NITF2_INDEX_VECTOR_H
 
 #include <vcl_ostream.h>
+#include <vcl_vector.h>
 
 // A wrapper for a vector of ints that represents an index into
 // a repeating field. This class serves two simple purposes: it 
