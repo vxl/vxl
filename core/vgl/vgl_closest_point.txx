@@ -485,9 +485,9 @@ vgl_closest_points(vgl_line_segment_3d<T> const& l1,
   // Closest points (s,t) on the infinite lines may lie outside this square.
   // Closest points on line segments will then lie on the boundary of this square.
   // Hence, need to check either 1 or 2 edges of the square.
-  double s_numer = 0; 
+  double s_numer = 0.0; 
   double s_denom = denom;
-  double t_numer = 0;
+  double t_numer = 0.0;
   double t_denom = denom;
 
   if (denom < SMALL_DOUBLE) 
@@ -544,7 +544,7 @@ vgl_closest_points(vgl_line_segment_3d<T> const& l1,
 
     // Recalculate sc for this edge
     if ((-d + b) < 0.0)
-      s_numer = 0;
+      s_numer = 0.0;
     else if ((-d + b) > a)
       s_numer = s_denom;
     else 
@@ -562,7 +562,7 @@ vgl_closest_points(vgl_line_segment_3d<T> const& l1,
   // in the case of parallel/collinear line segments
   if (unique && *unique==false)
   {
-    if ((s==0 || s==1) && (t==0 || t==1))
+    if ((s==0.0 || s==1.0) && (t==0.0 || t==1.0))
       *unique = true;
   }
 
