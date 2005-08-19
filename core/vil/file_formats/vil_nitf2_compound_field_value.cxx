@@ -70,28 +70,28 @@ bool vil_nitf2_date_time::read(vcl_istream& input, int field_width, bool& out_bl
   bool blank;
   vcl_string fieldStr;
   bool ok;
-  ok = vil_nitf2_integer_formatter(4).read(input, year, blank); out_blank = blank;
-  ok &= vil_nitf2_integer_formatter(2).read(input, month, blank); out_blank &= blank;
-  ok &= vil_nitf2_integer_formatter(2).read(input, day, blank); out_blank &= blank;
+  ok = vil_nitf2_integer_formatter(4).read_vcl_stream(input, year, blank); out_blank = blank;
+  ok &= vil_nitf2_integer_formatter(2).read_vcl_stream(input, month, blank); out_blank &= blank;
+  ok &= vil_nitf2_integer_formatter(2).read_vcl_stream(input, day, blank); out_blank &= blank;
   if (field_width >= 10) {
-    ok &= vil_nitf2_integer_formatter(2).read(input, hour, blank); out_blank &= blank;
+    ok &= vil_nitf2_integer_formatter(2).read_vcl_stream(input, hour, blank); out_blank &= blank;
   } else { 
     hour = 0; 
   }
   if (field_width >= 12) {
-    ok &= vil_nitf2_integer_formatter(2).read(input, minute, blank); out_blank &= blank;
+    ok &= vil_nitf2_integer_formatter(2).read_vcl_stream(input, minute, blank); out_blank &= blank;
   } else {
     minute = 0;
   }
   if (field_width == 14) {
     // integer seconds, no decimal point
     int intSecond;
-    ok &= vil_nitf2_integer_formatter(2).read(input, intSecond, blank); out_blank &= blank;
+    ok &= vil_nitf2_integer_formatter(2).read_vcl_stream(input, intSecond, blank); out_blank &= blank;
     second = intSecond;
   } else if (field_width > 14) {
     // decimal seconds
     ok &= vil_nitf2_double_formatter(field_width-12, field_width-15, false)
-      .read(input, second, blank); out_blank &= blank;
+      .read_vcl_stream(input, second, blank); out_blank &= blank;
   } else {
     // no seconds
     second = 0.0;
@@ -120,9 +120,9 @@ bool vil_nitf2_location_degrees::read(vcl_istream& input, int field_width, bool&
   int lat_width = (field_width-1)/2;
   int lon_width = (field_width+1)/2;
   bool ok, blank;
-  ok = vil_nitf2_double_formatter(lat_width, precision, true).read(input, lat_degrees, blank);
+  ok = vil_nitf2_double_formatter(lat_width, precision, true).read_vcl_stream(input, lat_degrees, blank);
   out_blank = blank;
-  ok &= vil_nitf2_double_formatter(lon_width, precision, true).read(input, lon_degrees, out_blank);
+  ok &= vil_nitf2_double_formatter(lon_width, precision, true).read_vcl_stream(input, lon_degrees, out_blank);
   out_blank &= blank;
   return ok && is_valid();
 }
@@ -170,24 +170,24 @@ bool vil_nitf2_location_dmsh::read(vcl_istream& input, int /* field_width */, bo
 {
   bool ok, blank;
   // Read latitude fields
-  ok = vil_nitf2_integer_formatter(2).read(input, lat_degrees, blank); 
+  ok = vil_nitf2_integer_formatter(2).read_vcl_stream(input, lat_degrees, blank); 
        out_blank &= blank;
-  ok &= vil_nitf2_integer_formatter(2).read(input, lat_minutes, out_blank); 
+  ok &= vil_nitf2_integer_formatter(2).read_vcl_stream(input, lat_minutes, out_blank); 
         out_blank &= blank;
   ok &= vil_nitf2_double_formatter(3+sec_precision, sec_precision, false)
-         .read(input, lat_seconds, out_blank);
+         .read_vcl_stream(input, lat_seconds, out_blank);
         out_blank &= blank;
-  ok &= vil_nitf2_char_formatter().read(input, lat_hemisphere, out_blank);
+  ok &= vil_nitf2_char_formatter().read_vcl_stream(input, lat_hemisphere, out_blank);
         out_blank &= blank;
   // Read longitude fields (degrees is one digit longer than latitude)
-  ok &= vil_nitf2_integer_formatter(3).read(input, lon_degrees, out_blank);
+  ok &= vil_nitf2_integer_formatter(3).read_vcl_stream(input, lon_degrees, out_blank);
         out_blank &= blank;
-  ok &= vil_nitf2_integer_formatter(2).read(input, lon_minutes, out_blank);
+  ok &= vil_nitf2_integer_formatter(2).read_vcl_stream(input, lon_minutes, out_blank);
         out_blank &= blank;
   ok &= vil_nitf2_double_formatter(3+sec_precision, sec_precision, false)
-         .read(input, lon_seconds, out_blank);
+         .read_vcl_stream(input, lon_seconds, out_blank);
         out_blank &= blank;
-  ok = vil_nitf2_char_formatter().read(input,lon_hemisphere, out_blank);
+  ok = vil_nitf2_char_formatter().read_vcl_stream(input,lon_hemisphere, out_blank);
        out_blank &= blank;
   return ok && is_valid();
 }
@@ -196,15 +196,15 @@ bool vil_nitf2_location_dmsh::write(vcl_ostream& output, int /* field_width */)
 {
   bool ok;
   // Write latitude fields
-  ok = vil_nitf2_integer_formatter(2).write(output, lat_degrees);
-  ok &= vil_nitf2_integer_formatter(2).write(output, lat_minutes);
-  ok &= vil_nitf2_double_formatter(3+sec_precision, sec_precision, false).write(output, lat_seconds);
-  ok &= vil_nitf2_char_formatter().write(output, lat_hemisphere);
+  ok = vil_nitf2_integer_formatter(2).write_vcl_stream(output, lat_degrees);
+  ok &= vil_nitf2_integer_formatter(2).write_vcl_stream(output, lat_minutes);
+  ok &= vil_nitf2_double_formatter(3+sec_precision, sec_precision, false).write_vcl_stream(output, lat_seconds);
+  ok &= vil_nitf2_char_formatter().write_vcl_stream(output, lat_hemisphere);
   // Write longitude fields (degrees is one digit longer than latitude)
-  ok = vil_nitf2_integer_formatter(3).write(output, lon_degrees);
-  ok &= vil_nitf2_integer_formatter(2).write(output, lon_minutes);
-  ok &= vil_nitf2_double_formatter(3+sec_precision, sec_precision, false).write(output, lon_seconds);
-  ok &= vil_nitf2_char_formatter().write(output, lon_hemisphere);
+  ok = vil_nitf2_integer_formatter(3).write_vcl_stream(output, lon_degrees);
+  ok &= vil_nitf2_integer_formatter(2).write_vcl_stream(output, lon_minutes);
+  ok &= vil_nitf2_double_formatter(3+sec_precision, sec_precision, false).write_vcl_stream(output, lon_seconds);
+  ok &= vil_nitf2_char_formatter().write_vcl_stream(output, lon_hemisphere);
   return ok;
 }
 

@@ -21,14 +21,16 @@ public:
   vil_nitf2_typed_scalar_field(T value, vil_nitf2_field_definition* definition) 
     : vil_nitf2_scalar_field(definition), m_value(value) {}
 
-  // partially overridden value method
-  using vil_nitf2_scalar_field::value;
-
+  // Set out_value to my value and return true.
+  // (This is a partial override of overloaded method 
+  // vil_nitf2_scalar_field::value() for my specific type.)
   virtual bool value(T& out_value) const {
     out_value = m_value;
     return true;
   }
-  // Return value (was named value(), renamed to avoid an internal bcc compiler error)
+
+  // Return my value 
+  // (was named value(), renamed to avoid an internal bcc compiler error)
   T get_value() const { return m_value; }
 
   // Set value

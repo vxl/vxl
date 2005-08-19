@@ -46,7 +46,7 @@ public:
 
   // Same as above, but reads value from a vcl_istream (which, unlike a
   // vil_nitf2_istream, supports formatted I/O).
-  virtual bool read(vcl_istream& input, T& out_value, bool& out_blank);
+  virtual bool read_vcl_stream(vcl_istream& input, T& out_value, bool& out_blank);
 
   // Write value to a vil_nitf2_ostream.  Return success. The default 
   // implementation calls write(vcl_ostream&). Subclasses need to either
@@ -55,7 +55,7 @@ public:
 
   // Same as above, but writes value to a vcl_ostream (which, unlike
   // vil_nitf2_ostream, supports formatted I/O).
-  virtual bool write(vcl_ostream& output, const T& value);
+  virtual bool write_vcl_stream(vcl_ostream& output, const T& value);
 };
 
 //=============================================================================
@@ -104,7 +104,7 @@ bool vil_nitf2_typed_field_formatter<T>::read(
   //hackery for non-binary data (convert to string and create a stringstream from it)
   vcl_string str = vil_nitf2_field_formatter::read_string(input, field_width);
   vcl_stringstream s(str);
-  return read( s, out_value, out_blank );
+  return read_vcl_stream( s, out_value, out_blank );
 }
 
 template<typename T>
@@ -116,7 +116,7 @@ bool vil_nitf2_typed_field_formatter<T>::read(
 }
 
 template<typename T>
-bool vil_nitf2_typed_field_formatter<T>::read(
+bool vil_nitf2_typed_field_formatter<T>::read_vcl_stream(
   vcl_istream& /* input */, T& /* out_value */, bool& /* out_blank */)
 { 
   assert(0); 
@@ -124,7 +124,7 @@ bool vil_nitf2_typed_field_formatter<T>::read(
 }
 
 template<typename T>
-bool vil_nitf2_typed_field_formatter<T>::write(
+bool vil_nitf2_typed_field_formatter<T>::write_vcl_stream(
   vcl_ostream& /* output */, const T& /* value */)
 { 
   assert( 0 ); 
@@ -136,7 +136,7 @@ bool vil_nitf2_typed_field_formatter<T>::write(
   vil_nitf2_ostream& output, const T& value)
 {
   vcl_stringstream strstr;
-  write(strstr, value);
+  write_vcl_stream(strstr, value);
   vcl_string str = strstr.str();
   output.write(str.c_str(), str.length());
   return output.ok();
@@ -157,8 +157,8 @@ public:
   // partially overridden read/write methods
   using vil_nitf2_typed_field_formatter<int>::read;
   using vil_nitf2_typed_field_formatter<int>::write;
-  virtual bool read(vcl_istream& input, int& out_value, bool& out_blank);
-  virtual bool write(vcl_ostream& output, const int& value);
+  virtual bool read_vcl_stream(vcl_istream& input, int& out_value, bool& out_blank);
+  virtual bool write_vcl_stream(vcl_ostream& output, const int& value);
 
   bool show_sign;
 };
@@ -171,8 +171,8 @@ public:
   // partially overridden read/write methods
   using vil_nitf2_typed_field_formatter<vil_nitf2_long>::read;
   using vil_nitf2_typed_field_formatter<vil_nitf2_long>::write;
-  virtual bool read(vcl_istream& input, vil_nitf2_long& out_value, bool& out_blank);
-  virtual bool write(vcl_ostream& output, const vil_nitf2_long& value);
+  virtual bool read_vcl_stream(vcl_istream& input, vil_nitf2_long& out_value, bool& out_blank);
+  virtual bool write_vcl_stream(vcl_ostream& output, const vil_nitf2_long& value);
 
   bool show_sign;
 };
@@ -188,8 +188,8 @@ public:
   // partially overridden read/write methods
   using vil_nitf2_typed_field_formatter<double>::read;
   using vil_nitf2_typed_field_formatter<double>::write;
-  virtual bool read(vcl_istream& input, double& out_value, bool& out_blank);
-  virtual bool write(vcl_ostream& output, const double& value);
+  virtual bool read_vcl_stream(vcl_istream& input, double& out_value, bool& out_blank);
+  virtual bool write_vcl_stream(vcl_ostream& output, const double& value);
 
   int precision; 
   bool show_sign;
@@ -206,8 +206,8 @@ public:
   // partially overridden read/write methods
   using vil_nitf2_typed_field_formatter<char>::read;
   using vil_nitf2_typed_field_formatter<char>::write;
-  virtual bool read(vcl_istream& input, char& out_value, bool& out_blank);
-  virtual bool write(vcl_ostream& output, const char& value);
+  virtual bool read_vcl_stream(vcl_istream& input, char& out_value, bool& out_blank);
+  virtual bool write_vcl_stream(vcl_ostream& output, const char& value);
 };
 
 // Reads and writes a binary data field
@@ -221,12 +221,13 @@ public:
   using vil_nitf2_typed_field_formatter<void*>::read;
   using vil_nitf2_typed_field_formatter<void*>::write;
 
-  // Overloaded read(vil_nitf2_istream&) instead of vil(vcl_stream&) to read 
-  // binary data, without converting to to string (zero data would 
-  // prematurely null-terminate the stringstream).
+  // Overload read() instead of read_vcl_stream() to read binary data without
+  // converting to string, because zero data would prematurely null-terminate 
+  // the stringstream.
   virtual bool read( vil_nitf2_istream& input, void*& out_value, bool& out_blank );
 
-  /// Overload to write(vil_nitf2_ostream) directly, to avoid string conversion.
+  /// Overload to write() instead of write_vcl_stream() to write binary data
+  // (see preceding comment).
   virtual bool write(vil_nitf2_ostream& output, void*const& value);
 };
 
@@ -247,8 +248,8 @@ public:
   // partially overridden read/write methods
   using vil_nitf2_typed_field_formatter<vcl_string>::read;
   using vil_nitf2_typed_field_formatter<vcl_string>::write;
-  virtual bool read(vcl_istream& input, vcl_string& out_value, bool& out_blank );
-  virtual bool write(vcl_ostream& output, const vcl_string& value);
+  virtual bool read_vcl_stream(vcl_istream& input, vcl_string& out_value, bool& out_blank );
+  virtual bool write_vcl_stream(vcl_ostream& output, const vcl_string& value);
 
   virtual bool is_valid(vcl_string value) const;
   
@@ -292,8 +293,8 @@ public:
   // partially overridden read/write methods
   using vil_nitf2_typed_field_formatter<vil_nitf2_date_time>::read;
   using vil_nitf2_typed_field_formatter<vil_nitf2_date_time>::write;
-  virtual bool read(vcl_istream& input, vil_nitf2_date_time& out_value, bool& out_blank);
-  virtual bool write(vcl_ostream& output, const vil_nitf2_date_time& value);
+  virtual bool read_vcl_stream(vcl_istream& input, vil_nitf2_date_time& out_value, bool& out_blank);
+  virtual bool write_vcl_stream(vcl_ostream& output, const vil_nitf2_date_time& value);
 };
 
 // Reads and writes a location field.
@@ -307,8 +308,8 @@ public:
   // partially overridden read/write methods
   using vil_nitf2_typed_field_formatter<vil_nitf2_location*>::read;
   using vil_nitf2_typed_field_formatter<vil_nitf2_location*>::write;
-  virtual bool read(vcl_istream& input, vil_nitf2_location*& out_value, bool& out_blank);
-  virtual bool write(vcl_ostream& output, vil_nitf2_location*const& value);
+  virtual bool read_vcl_stream(vcl_istream& input, vil_nitf2_location*& out_value, bool& out_blank);
+  virtual bool write_vcl_stream(vcl_ostream& output, vil_nitf2_location*const& value);
 
   // Converts overall field width to seconds precision for DMSH formatted 
   // field, ddmmss.sssHdddmmss.sssH

@@ -22,9 +22,6 @@ public:
   // Constructor
   vil_nitf2_typed_array_field(int num_dimensions, vil_nitf2_field_definition* field_definition) 
     : vil_nitf2_array_field(field_definition, num_dimensions) {};
- 
-  // partially overriden value method
-  using vil_nitf2_array_field::value;
 
   // Set out_value to the scalar value at the specified index vector,
   // and returns whether specified element was defined.
@@ -32,6 +29,8 @@ public:
   // and check_index(indexes) must return true to indicate that
   // the indexes are within bounds. Even so, this method may return
   // false if the value is undefined at the specified index.
+  // (This is a partial override of overloaded method 
+  // vil_nitf2_array_field::value() for my specific type.)
   bool value(const vil_nitf2_index_vector& indexes, T& out_value) const;
 
   // Reads from input stream the scalar value at specified index.
