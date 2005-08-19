@@ -67,6 +67,10 @@ class vgl_line_3d_2_points
 
   //: Return the direction vector of this line (not normalised)
   inline vgl_vector_3d<Type> direction() const { return point2()-point1(); }
+
+  //: Return a point on the line defined by a scalar parameter \a t
+  // such that \a t=0.0 at point1 and \a t=1.0 at point2.
+  inline vgl_point_3d<Type> point_t(const double t) const { return point1() + t*direction(); }
 };
 
 #define l vgl_line_3d_2_points<Type>

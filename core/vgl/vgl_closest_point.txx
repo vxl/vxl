@@ -17,11 +17,17 @@
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_homg_line_3d_2_points.h>
 #include <vgl/vgl_line_3d_2_points.h>
+#include <vgl/vgl_line_segment_3d.h>
 #include <vgl/vgl_polygon.h>
 #include <vcl_cassert.h>
 
 template <class T>
 static inline T square(T x) { return x*x; }
+
+
+// Consider numbers smaller than this to be zero
+const double SMALL_DOUBLE = 1e-12;
+
 
 // Borland has trouble deducing template types when parameters have
 // type const T instead of T. This occurs in
@@ -393,6 +399,180 @@ vgl_point_3d<T> vgl_closest_point(vgl_line_3d_2_points<T> const& l,
   return vgl_point_3d<T>(q.x()+lambda*a, q.y()+lambda*b, q.z()+lambda*c);
 }
 
+
+//: Return the points of closest approach on 2 3D lines.
+template <class T>
+vcl_pair<vgl_point_3d<T>, vgl_point_3d<T> > 
+vgl_closest_points(const vgl_line_3d_2_points<T>& l1, 
+                   const vgl_line_3d_2_points<T>& l2,
+                   bool* unique/*=0*/)
+{
+  vcl_pair<vgl_point_3d<T>, vgl_point_3d<T> > ret;
+  
+  // Get the parametric equation of each line
+  // l1: p(s) = p1 + su;  u = p2 - p1
+  // l2: q(t) = q1 + tv;  v = q2 - q1
+  vgl_vector_3d<T> u = l1.direction();
+  vgl_vector_3d<T> v = l2.direction();
+
+  // Get a vector w from first point on line1 to first point on line2
+  vgl_vector_3d<T> w = l1.point1() - l2.point1();
+
+  double a = dot_product(u,u);
+  double b = dot_product(u,v);
+  double c = dot_product(v,v);
+  double d = dot_product(u,w);
+  double e = dot_product(v,w);
+
+  // Calculate the parameters s,t for the closest point on each line
+  double denom = a*c - b*b; // should always be non-negative
+  assert(denom>=0.0);
+  if (denom>SMALL_DOUBLE)
+  {
+    double s = (b*e - c*d) / denom;
+    double t = (a*e - b*d) / denom;
+
+    ret.first = l1.point_t(s);
+    ret.second = l2.point_t(t);
+    if (unique) *unique = true;
+  }
+  else
+  {
+    // Lines are parallel or collinear.
+    // Arbitrarily, return the first point on line1 and the closest point on line2.
+    double s = 0.0;
+    double t = (b>c ? d/b : e/c);
+    ret.first = l1.point_t(s);
+    ret.second = l2.point_t(t);
+    if (unique) *unique = false;
+  }  
+
+  return ret;
+}
+
+
+//: Return the points of closest approach on 2 3D line segments.
+template <class T>
+vcl_pair<vgl_point_3d<T>, vgl_point_3d<T> > 
+vgl_closest_points(vgl_line_segment_3d<T> const& l1, 
+                   vgl_line_segment_3d<T> const& l2,
+                   bool* unique/*=0*/)
+{
+  vcl_pair<vgl_point_3d<T>, vgl_point_3d<T> > ret;
+  
+  // Get the parametric equation of each line
+  // l1: p(s) = p1 + su;  u = p2 - p1
+  // l2: q(t) = q1 + tv;  v = q2 - q1
+  vgl_vector_3d<T> u = l1.direction();
+  vgl_vector_3d<T> v = l2.direction();
+  
+  // Get a vector w from first point on line2 to first point on line1
+  vgl_vector_3d<T> w = l1.point1() - l2.point1();
+  
+  double a = dot_product(u,u); assert(a>0.0);
+  double b = dot_product(u,v); 
+  double c = dot_product(v,v); assert(c>0.0);
+  double d = dot_product(u,w); 
+  double e = dot_product(v,w); 
+  
+  // Calculate the parameters s,t for the closest point on each infinite line
+  double denom = a*c - b*b; // should always be non-negative
+  assert(denom>=0.0);
+    
+  // Check whether the closest points on the infinite lines are also
+  // on the finite line segments.
+  // Consider the square [0,1][0,1] in the plane (s,t). 
+  // Closest points (s,t) on the infinite lines may lie outside this square.
+  // Closest points on line segments will then lie on the boundary of this square.
+  // Hence, need to check either 1 or 2 edges of the square.
+  double s_numer = 0; 
+  double s_denom = denom;
+  double t_numer = 0;
+  double t_denom = denom;
+
+  if (denom < SMALL_DOUBLE) 
+  {   
+    // Lines are parallel or collinear
+    s_numer = 0.0; 
+    s_denom = 1.0;
+    t_numer = e;
+    t_denom = c;
+    if (unique) *unique = false; // assume this for now; check below.
+  }
+  else 
+  {      
+    // Calculate the closest points on the infinite lines
+    s_numer = (b*e - c*d);
+    t_numer = (a*e - b*d);
+    if (s_numer < 0.0) 
+    {       
+      // If sc<0 then the s=0 edge is a candidate
+      s_numer = 0.0;
+      t_numer = e;
+      t_denom = c;
+    }
+    else if (s_numer > s_denom) 
+    {  
+      // If sc>1 then the s=1 edge is a candidate
+      s_numer = s_denom;
+      t_numer = e + b;
+      t_denom = c;
+    }
+    if (unique) *unique = true;
+  }
+  
+  if (t_numer < 0.0) 
+  {           
+    // If tc<0 then the t=0 edge is a candidate
+    t_numer = 0.0;
+    
+    // Recalculate sc for this edge
+    if (-d < 0.0)
+      s_numer = 0.0;
+    else if (-d > a)
+      s_numer = s_denom;
+    else
+    {
+      s_numer = -d;
+      s_denom = a;
+    }
+  }
+  else if (t_numer > t_denom) 
+  {      
+    // If tc>1 then the t=1 edge is a candidate
+    t_numer = t_denom;
+
+    // Recalculate sc for this edge
+    if ((-d + b) < 0.0)
+      s_numer = 0;
+    else if ((-d + b) > a)
+      s_numer = s_denom;
+    else 
+    {
+      s_numer = (-d + b);
+      s_denom = a;
+    }
+  }
+  
+  // Now calculate the required values of (s,t)
+  double s = (abs(s_numer) < SMALL_DOUBLE ? 0.0 : s_numer / s_denom);
+  double t = (abs(t_numer) < SMALL_DOUBLE ? 0.0 : t_numer / t_denom);
+
+  // Need to verify whether returned closest points are unique
+  // in the case of parallel/collinear line segments
+  if (unique && *unique==false)
+  {
+    if ((s==0 || s==1) && (t==0 || t==1))
+      *unique = true;
+  }
+
+  ret.first = l1.point_t(s);
+  ret.second = l2.point_t(t);
+
+  return ret;
+}
+
+
 #undef DIST_SQR_TO_LINE_SEG_2D
 #undef DIST_SQR_TO_LINE_SEG_3D
 
@@ -424,6 +604,10 @@ template vgl_point_2d<T > vgl_closest_point(vgl_polygon<T >const&,vgl_point_2d<T
 template vcl_pair<vgl_homg_point_3d<T >,vgl_homg_point_3d<T > > \
          vgl_closest_points(vgl_homg_line_3d_2_points<T >const&,vgl_homg_line_3d_2_points<T >const&); \
 template vgl_homg_point_3d<T > vgl_closest_point(vgl_homg_line_3d_2_points<T >const&,vgl_homg_point_3d<T >const&); \
-template vgl_homg_point_3d<T > vgl_closest_point(vgl_homg_point_3d<T >const&,vgl_homg_line_3d_2_points<T >const&)
+template vgl_homg_point_3d<T > vgl_closest_point(vgl_homg_point_3d<T >const&,vgl_homg_line_3d_2_points<T >const&); \
+template vcl_pair<vgl_point_3d<T >,vgl_point_3d<T > > \
+         vgl_closest_points(vgl_line_3d_2_points<T >const&, vgl_line_3d_2_points<T >const&, bool*); \
+template vcl_pair<vgl_point_3d<T >,vgl_point_3d<T > > \
+         vgl_closest_points(vgl_line_segment_3d<T >const&, vgl_line_segment_3d<T >const&, bool*); \
 
 #endif // vgl_closest_point_txx_

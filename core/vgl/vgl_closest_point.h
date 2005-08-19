@@ -213,4 +213,31 @@ vgl_point_3d<T> vgl_closest_point(vgl_point_3d<T> const& p,
                                   vgl_line_3d_2_points<T> const& l)
 { return vgl_closest_point(l,p); }
 
+
+//: Return the points of closest approach on 2 3D lines.
+// Uses non-homogeneous representations.
+// \return The pair of closest points, the first on \a l1, the second on \a l2.
+// \retval unique If provided, will be set to true if the returned points are unique, 
+// otherwise many solutions exist and the returned points are an arbitrary choice.
+// The distance between the points is still valid, however.
+template <class T>
+vcl_pair<vgl_point_3d<T>, vgl_point_3d<T> > 
+vgl_closest_points(const vgl_line_3d_2_points<T>& l1, 
+                   const vgl_line_3d_2_points<T>& l2,
+                   bool* unique=0);
+
+
+//: Return the points of closest approach on 2 3D line segments.
+// Uses non-homogeneous representations.
+// \return The pair of closest points, the first on \a l1, the second on \a l2.
+// \retval unique If provided, will be set to true if the returned points are unique, 
+// otherwise many solutions exist and the returned points are an arbitrary choice.
+// The distance between the points is still valid, however.
+template <class T>
+vcl_pair<vgl_point_3d<T>, vgl_point_3d<T> > 
+vgl_closest_points(const vgl_line_segment_3d<T>& l1, 
+                   const vgl_line_segment_3d<T>& l2,
+                   bool* unique=0);
+
+
 #endif // vgl_closest_point_h_
