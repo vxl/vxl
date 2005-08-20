@@ -41,9 +41,6 @@ public:
   // this method or read(vil_nitf2_istream&).
   virtual bool read(vil_nitf2_istream& input, T& out_value, bool& out_blank);
 
-  // Same as above method, for caller that does not care about blanked fields.
-  virtual bool read(vil_nitf2_istream& input, T& out_value);
-
   // Same as above, but reads value from a vcl_istream (which, unlike a
   // vil_nitf2_istream, supports formatted I/O).
   virtual bool read_vcl_stream(vcl_istream& input, T& out_value, bool& out_blank);
@@ -105,14 +102,6 @@ bool vil_nitf2_typed_field_formatter<T>::read(
   vcl_string str = vil_nitf2_field_formatter::read_string(input, field_width);
   vcl_stringstream s(str);
   return read_vcl_stream( s, out_value, out_blank );
-}
-
-template<typename T>
-bool vil_nitf2_typed_field_formatter<T>::read(
-  vil_nitf2_istream& input, T& out_value)
-{ 
-  bool b; 
-  return read( input, out_value, b ); 
 }
 
 template<typename T>
