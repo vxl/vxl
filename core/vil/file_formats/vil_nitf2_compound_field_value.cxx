@@ -187,7 +187,7 @@ bool vil_nitf2_location_dmsh::read(vcl_istream& input, int /* field_width */, bo
   ok &= vil_nitf2_double_formatter(3+sec_precision, sec_precision, false)
          .read_vcl_stream(input, lon_seconds, out_blank);
         out_blank &= blank;
-  ok = vil_nitf2_char_formatter().read_vcl_stream(input,lon_hemisphere, out_blank);
+  ok &= vil_nitf2_char_formatter().read_vcl_stream(input,lon_hemisphere, out_blank);
        out_blank &= blank;
   return ok && is_valid();
 }
@@ -201,7 +201,7 @@ bool vil_nitf2_location_dmsh::write(vcl_ostream& output, int /* field_width */)
   ok &= vil_nitf2_double_formatter(3+sec_precision, sec_precision, false).write_vcl_stream(output, lat_seconds);
   ok &= vil_nitf2_char_formatter().write_vcl_stream(output, lat_hemisphere);
   // Write longitude fields (degrees is one digit longer than latitude)
-  ok = vil_nitf2_integer_formatter(3).write_vcl_stream(output, lon_degrees);
+  ok &= vil_nitf2_integer_formatter(3).write_vcl_stream(output, lon_degrees);
   ok &= vil_nitf2_integer_formatter(2).write_vcl_stream(output, lon_minutes);
   ok &= vil_nitf2_double_formatter(3+sec_precision, sec_precision, false).write_vcl_stream(output, lon_seconds);
   ok &= vil_nitf2_char_formatter().write_vcl_stream(output, lon_hemisphere);
