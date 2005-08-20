@@ -17,14 +17,13 @@ vil_nitf2_scalar_field::read(vil_nitf2_istream& input,
     vcl_cerr << "vil_nitf2_field::read(): Incomplete field definition!" << vcl_endl;
     return 0;
   }
-  vil_nitf2_scalar_field* result = 0;
   vil_nitf2_field_formatter* formatter = definition->formatter;
   // variable_width, if positive, overrides formatter field_width
   if (variable_width > 0) formatter->field_width = variable_width;
   // Parse string
   VIL_NITF2_LOG(log_debug) << "Reading tag " << definition->tag << ": ";
   bool is_blank;
-  result = formatter->read_field(input, is_blank);
+  vil_nitf2_scalar_field* result = formatter->read_field(input, is_blank);
 
   // Set result definition, if found, and output (for debugging):
   //   value if computed
