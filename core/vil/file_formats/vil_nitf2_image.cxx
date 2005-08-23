@@ -34,11 +34,11 @@ vil_image_resource_sptr  vil_nitf2_file_format::make_input_image(vil_stream *vs)
 }
 
 vil_image_resource_sptr
-  vil_nitf2_file_format::make_output_image(vil_stream* vs,
-                                          unsigned nx,
-                                          unsigned ny,
-                                          unsigned nplanes,
-                                          enum vil_pixel_format format)
+  vil_nitf2_file_format::make_output_image(vil_stream* /*vs*/,
+                                          unsigned /*nx*/,
+                                          unsigned /*ny*/,
+                                          unsigned /*nplanes*/,
+                                          enum vil_pixel_format /*format*/)
 {
   //write not supported
   return 0;
