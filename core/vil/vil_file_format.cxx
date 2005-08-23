@@ -61,6 +61,10 @@ vil_file_format::~vil_file_format()
 #include <vil/file_formats/vil_dicom.h>
 #endif
 
+#if HAS_NITF
+#include <vil/file_formats/vil_nitf2_image.h>
+#endif
+
 //: Local class to hold file format list
 // Clears list on deletion.
 struct vil_file_format_storage
@@ -109,6 +113,10 @@ struct vil_file_format_storage
 // before the vil implementation
 #if HAS_DCMTK
     l[c++] = new vil_dicom_file_format;
+#endif
+
+#if HAS_NITF
+  l[c++] = new vil_nitf2_file_format;
 #endif
 
     l[c++] = 0;

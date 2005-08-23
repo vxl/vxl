@@ -484,6 +484,32 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_begin( "  32-bit float grey" );
   testlib_test_perform(CheckFile(CompareGreyFloat<float>(), "ff_grey_float_true.txt", "ff_grey_float.tif" ) );
 
+  vcl_cout << "NITF 2.1 [nitf] (uncompressed)\n";
+  //TODO: Create NITF tests for the following cases:
+  //-create bit-image test
+  //-read second image test (multiple images in one file)
+  //-parse complex header (LUT, multiple images etc) test
+  //-NSIF 1.0 file
+  //-clean up test files (get rid of irrelevant header text)  testlib_test_begin( "  8-bit unsigned int (IMODE=P)" );
+  testlib_test_begin( "  8-bit unsigned int (IMODE=P)" );
+  testlib_test_perform(CheckFile(ComparePlanes<vxl_byte,3>(), "ff_nitf_8bit_true.txt", "ff_nitf_8bit_p.nitf" ) );
+  testlib_test_begin( "  8-bit unsigned int (IMODE=B)" );
+  testlib_test_perform(CheckFile(ComparePlanes<vxl_byte,3>(), "ff_nitf_8bit_true.txt", "ff_nitf_8bit_b.nitf" ) );
+  testlib_test_begin( "  8-bit unsigned int (IMODE=R)" );
+  testlib_test_perform(CheckFile(ComparePlanes<vxl_byte,3>(), "ff_nitf_8bit_true.txt", "ff_nitf_8bit_r.nitf" ) );
+  testlib_test_begin( "  8-bit unsigned int (IMODE=S)" );
+  testlib_test_perform(CheckFile(ComparePlanes<vxl_byte,3>(), "ff_nitf_8bit_true.txt", "ff_nitf_8bit_s.nitf" ) );
+  testlib_test_begin( "  16-bit unsigned int (ABPP=13)" );
+  testlib_test_perform(CheckFile(CompareGrey<vxl_uint_16>(), "ff_nitf_16bit_true.txt", "ff_nitf_16bit.nitf" ) );
+  vcl_cout << "NITF 2.0 [nitf] (uncompressed)\n";
+  testlib_test_begin( "  32-bit signed int" );
+  testlib_test_perform(CheckFile(CompareGrey<vxl_int_32>(), "ff_nitf_32bit_true.txt", "ff_nitf_32bit.nitf" ) );
+  testlib_test_begin( "  32-bit float" );
+  testlib_test_perform(CheckFile(CompareGreyFloat<float>(), "ff_nitf_float_true.txt", "ff_nitf_float.nitf" ) );
+  testlib_test_begin( "  64-bit float (double)" );
+  testlib_test_perform(CheckFile(CompareGreyFloat<double>(), "ff_nitf_float_true.txt", "ff_nitf_double.nitf" ) );
+
+
   vcl_cout << "Sun raster [ras]\n";
   testlib_test_begin( "  8-bit grey, no colourmap" );
   testlib_test_perform(CheckFile(CompareGrey<vxl_byte>(), "ff_grey8bit_true.txt", "ff_grey8bit_nocol.ras" ) );

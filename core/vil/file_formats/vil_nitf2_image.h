@@ -13,6 +13,20 @@
 #include "vil_nitf2_image_subheader.h"
 #include "vil_nitf2_header.h"
 
+#include <vil/vil_file_format.h>
+
+class vil_nitf2_file_format : public vil_file_format
+{
+ public:
+  virtual char const *tag() const;
+  virtual vil_image_resource_sptr make_input_image(vil_stream *vs);
+  virtual vil_image_resource_sptr make_output_image(vil_stream* vs,
+                                                    unsigned nx,
+                                                    unsigned ny,
+                                                    unsigned nplanes,
+                                                    enum vil_pixel_format);
+};
+
 /** 
   * Class for reading NITF 2.1 imagery files.  It works just like any other
   * vil_image_resource class except that it does support retrieving multiple

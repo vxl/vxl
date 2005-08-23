@@ -13,6 +13,40 @@
 
 int debug_level = 0;
 
+//--------------------------------------------------------------------------------
+// class vil_nitf2_file_format
+
+static char const nitf2_string[] = "nitf";
+
+char const* vil_nitf2_file_format::tag() const 
+{
+  return nitf2_string;
+}
+
+vil_image_resource_sptr  vil_nitf2_file_format::make_input_image(vil_stream *vs) 
+{
+  vil_nitf2_image* im = new vil_nitf2_image( vs );
+  if( !im->parse_headers() ){
+    delete im;
+    im = 0;
+  }
+  return im;
+}
+
+vil_image_resource_sptr
+  vil_nitf2_file_format::make_output_image(vil_stream* vs,
+                                          unsigned nx,
+                                          unsigned ny,
+                                          unsigned nplanes,
+                                          enum vil_pixel_format format)
+{
+  //write not supported
+  return 0;
+}
+
+//--------------------------------------------------------------------------------
+// class vil_nitf2_image
+
 vil_image_view_base_sptr ( *vil_nitf2_image::s_decode_jpeg_2000 )
 ( vil_stream* vs, unsigned i0, unsigned ni, unsigned j0, unsigned nj ) = 0;
 
