@@ -482,26 +482,26 @@ vil_image_view_base_sptr vil_nitf2_image::glue_blocks_together(
 }
 
 template< class T >
-vil_memory_chunk_sptr maybe_byte_align_data(vil_memory_chunk_sptr in_data, unsigned int num_samples, unsigned int in_bits_per_sample)
+vil_memory_chunk_sptr maybe_byte_align_data(vil_memory_chunk_sptr in_data, unsigned int num_samples, unsigned int in_bits_per_sample, T dummy)
 {
   if (in_bits_per_sample != sizeof(T)*8) {
     vil_memory_chunk_sptr new_memory = new vil_memory_chunk(num_samples*sizeof(T), in_data->pixel_format());
-    byte_align_data<T>((T*)in_data->data(), num_samples, in_bits_per_sample, (T*)new_memory->data());
+    byte_align_data((T*)in_data->data(), num_samples, in_bits_per_sample, (T*)new_memory->data());
     return new_memory;
   }
   return in_data;
 }
 // don't do anything for float and double (bit shifting isn't allowed)
 template<> vil_memory_chunk_sptr maybe_byte_align_data<float> (
-  vil_memory_chunk_sptr in_data, unsigned int /* num_samples */, unsigned int /* in_bits_per_sample */)
+  vil_memory_chunk_sptr in_data, unsigned int /* num_samples */, unsigned int /* in_bits_per_sample */, float /*dummy*/)
 { return in_data; }
 
 template<> vil_memory_chunk_sptr maybe_byte_align_data<double> (
-  vil_memory_chunk_sptr in_data, unsigned int /* num_samples */, unsigned int /* in_bits_per_sample */)
+  vil_memory_chunk_sptr in_data, unsigned int /* num_samples */, unsigned int /* in_bits_per_sample */, double /*dummy*/)
 { return in_data; }
 
 template<> vil_memory_chunk_sptr maybe_byte_align_data< vcl_complex< float > > (
-  vil_memory_chunk_sptr in_data, unsigned int /* num_samples */, unsigned int /* in_bits_per_sample */)
+  vil_memory_chunk_sptr in_data, unsigned int /* num_samples */, unsigned int /* in_bits_per_sample */, vcl_complex<float> /*dummy*/)
 { return in_data; }
 
 
@@ -539,7 +539,7 @@ vil_image_view_base_sptr get_block_vcl_internal(vil_pixel_format pix_format, vil
                                              unsigned int i_step, unsigned int j_step, unsigned int plane_step, 
                                              bool need_to_right_justify, 
                                              unsigned int extra_bits, unsigned int bits_per_pixel_per_band,
-                                             bool data_is_all_blank, const vil_nitf2_image_subheader* /* image_header */) 
+                                             bool data_is_all_blank, const vil_nitf2_image_subheader* /* image_header */, T dummy) 
 {
   //may have to byte align data (only valid for integer type data)
   unsigned int num_samples = pixels_per_block_x * pixels_per_block_y * nplanes; //all bands of image
@@ -561,7 +561,7 @@ vil_image_view_base_sptr get_block_vcl_internal(vil_pixel_format pix_format, vil
     vil_nitf2_data_mask_table::maybe_endian_swap(static_cast< char* >(image_memory->data()), image_memory->size(), pix_format); 
     //if the data is not byte aligned (ie. the actual bits per pixel per band is not divisible
     //by 8),then we need to correct that
-    image_memory = maybe_byte_align_data<T>(image_memory, num_samples, bits_per_pixel_per_band); 
+    image_memory = maybe_byte_align_data(image_memory, num_samples, bits_per_pixel_per_band, dummy); 
   }
 
   vil_image_view< T >* result = 
@@ -663,12 +663,13 @@ vil_image_view_base_sptr vil_nitf2_image::get_block(unsigned int block_index_x, 
   switch(vil_pixel_format_component_format(image_memory->pixel_format())) {
 
 #define GET_BLOCK_CASE(FORMAT, T)\
-  case FORMAT:\
-    return get_block_vcl_internal< T >(\
+  case FORMAT:{ \
+    T t= (T)0; \
+    return get_block_vcl_internal(\
        FORMAT, image_memory, get_pixels_per_block_x(),get_pixels_per_block_y(), nplanes(),\
        i_step, j_step, plane_step, need_to_right_justify, extra_bits, bits_per_pixel_per_band,\
-       data_is_all_blank, current_image_header());\
-    break;
+       data_is_all_blank, current_image_header(), t);\
+  } break;
 
   GET_BLOCK_CASE(VIL_PIXEL_FORMAT_BYTE, vxl_byte)
   GET_BLOCK_CASE(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte)
