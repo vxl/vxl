@@ -207,8 +207,8 @@ public:
   vil_nitf2_binary_formatter(int widthBytes);
 
   // partially overridden read/write methods
-  using vil_nitf2_typed_field_formatter<void*>::read;
-  using vil_nitf2_typed_field_formatter<void*>::write;
+  using vil_nitf2_typed_field_formatter<void*>::read_vcl_stream;
+  using vil_nitf2_typed_field_formatter<void*>::write_vcl_stream;
 
   // Overload read() instead of read_vcl_stream() to read binary data without
   // converting to string, because zero data would prematurely null-terminate 
