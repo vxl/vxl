@@ -519,11 +519,35 @@ use one of the @code{vil_convert} functions
 If you want to store an image in memory without worrying about its pixel
 type, @code{@xref{vil_memory_image}.}
 
+@item Question 3
+
+@quotation
+What co-ordinate system does vil use?
+@end quotation
+
+Mostly vil does not assume that the @code{i} and @code{j} co-ordinates have any explicit
+meaning. Instead, any external meaning to the @code{i} and @code{j} directions is
+provided externally by the user. The choice of the letters @code{i} and @code{j} was an
+explicit decision to discourage any assuption of a Cartesian reference frame.
+
+However there are a few places where further assumptions need to be made.
+When loading an image, the file format generally provides an explicit mapping
+to up/down and left/right. In such cases, vil assumes that @code{image(0,0)} is the
+top-left-most pixel in the image, that increasing @code{i} moves right, and that
+increasing @code{j} moves down. A similar assumption is used by @code{vil_rotate} to provide
+a direction to the rotation angle.
+
+If you need an explicit world co-ordinate frame, within which you can embed an image,
+then take a look at the vimt library in @code{vxl/contrib/mul/vimt}. That provides
+an world-to-image co-ordinates transform, that can be efficently manipulated to
+provide transforms up to projective complexity.
+
 @end table
+
 
 @section Optimising Image Processing Algorithms (Advanced Topic)
 
-The design of vil_image_view (being more flexible than the design of vil1,)
+The design of @code{vil_image_view} (being more flexible than the design of vil1,)
 and the state of modern optimising compilers (not as good as they
 could be,) means that naive use of vil images may not be as fast as it
 should be.
