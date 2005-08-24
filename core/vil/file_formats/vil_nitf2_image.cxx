@@ -482,7 +482,7 @@ vil_image_view_base_sptr vil_nitf2_image::glue_blocks_together(
 }
 
 template< class T >
-vil_memory_chunk_sptr maybe_byte_align_data(vil_memory_chunk_sptr in_data, unsigned int num_samples, unsigned int in_bits_per_sample, T dummy)
+vil_memory_chunk_sptr maybe_byte_align_data(vil_memory_chunk_sptr in_data, unsigned int num_samples, unsigned int in_bits_per_sample, T /*dummy*/)
 {
   if (in_bits_per_sample != sizeof(T)*8) {
     vil_memory_chunk_sptr new_memory = new vil_memory_chunk(num_samples*sizeof(T), in_data->pixel_format());
