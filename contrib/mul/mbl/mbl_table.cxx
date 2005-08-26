@@ -75,7 +75,7 @@ unsigned mbl_table::num_rows() const
 //========================================================================
 // Returns true if column exists
 //========================================================================
-bool mbl_table::column_exists(const vcl_string& header)
+bool mbl_table::column_exists(const vcl_string& header) const
 {
     // Does the map contain this header?
     vcl_map<vcl_string, unsigned>::const_iterator iter =
@@ -139,6 +139,15 @@ bool mbl_table::get_row(const unsigned& r,
              << r << " does not exist in the table.\n";
     return false;
   }
+}
+
+
+//========================================================================
+// Get the list of column headers (in column order).
+//========================================================================
+void mbl_table::get_column_headers(vcl_vector<vcl_string>& headers) const
+{
+  headers = column_headers_;
 }
 
 

@@ -52,8 +52,9 @@ public:
   bool get_column(const vcl_string& header,
                   vcl_vector<double>& column) const;
 
+
   //: Returns true if column exists
-  bool column_exists(const vcl_string& header);
+  bool column_exists(const vcl_string& header) const;
   
 
   //: Get a specified row of data.
@@ -64,6 +65,11 @@ public:
                vcl_vector<double>& row) const;
 
   
+  //: Get the list of column headers (in column order).
+  // \retval headers The list of column headers.
+  void get_column_headers(vcl_vector<vcl_string>& headers) const;
+
+
   //: Append a column of data with its own heading.
   // \param header String identifying the column.
   // \param column A vector containing the values of the column.
@@ -130,12 +136,14 @@ public:
   //: Save this table's data to specified text stream.
   void write(vcl_ostream& os) const;
 
+
   //: Create a new table of subset of columns defined by headers
   // \retval new_table a subtable 
   // \param headers subset of column headers
   // \return true if all columns in headers existed in "this" and were copied
   bool subtable(mbl_table &new_table,  const vcl_vector<vcl_string> &headers) const;
 
+  
   //: Is another table identical to this one?
   // \note The normal behaviour of this function is to return false as soon
   // as a discrepancy is found. However, if verbosity>=2 this function will
