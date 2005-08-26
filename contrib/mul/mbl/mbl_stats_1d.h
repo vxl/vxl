@@ -8,6 +8,7 @@
 
 #include <vcl_iosfwd.h>
 #include <vsl/vsl_binary_io.h>
+#include <vcl_vector.h>
 
 // windows thinks min and max are macros in this file, but they
 // are not, don't know where they are defined (somewhere in vxl!)
@@ -40,8 +41,15 @@ class mbl_stats_1d
   double min_v_;
   double max_v_;
   int n_obs_;
- public:
-  mbl_stats_1d() ;
+
+
+public:
+
+  //: Default constructor
+  mbl_stats_1d();
+
+  //: Construct with a set of observations
+  mbl_stats_1d(const vcl_vector<double>& observations);
 
     //: Remove all data
   void clear();
@@ -70,6 +78,10 @@ class mbl_stats_1d
   double sum() const;
     //: Sum of squares of current observations
   double sumSq() const;
+
+  //: RMS of current observations;
+  // \note If nobs==0, returns -1.0
+  double rms() const;
 
     //: Add statistics together
   mbl_stats_1d& operator+=(const mbl_stats_1d& s1);

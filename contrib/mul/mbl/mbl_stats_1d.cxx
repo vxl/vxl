@@ -13,6 +13,16 @@ mbl_stats_1d::mbl_stats_1d()
   clear();
 }
 
+mbl_stats_1d::mbl_stats_1d(const vcl_vector<double>& observations)
+{
+  clear();
+  vcl_vector<double>::const_iterator it;
+  for (it=observations.begin(); it != observations.end(); ++it)
+  {
+    obs(*it);
+  }
+}
+
 void mbl_stats_1d::clear()
 {
   n_obs_ = 0;
@@ -96,6 +106,12 @@ double mbl_stats_1d::sumSq() const
 {
   return sum_sq_;
 }
+
+double mbl_stats_1d::rms() const
+{
+  return n_obs_==0 ? -1.0 : vcl_sqrt(sum_sq_/n_obs_);
+}
+
 
 mbl_stats_1d& mbl_stats_1d::operator+=(const mbl_stats_1d& s1)
 {
