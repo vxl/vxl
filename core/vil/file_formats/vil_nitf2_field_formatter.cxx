@@ -1,5 +1,5 @@
 // vil_nitf2: Written by Harry Voorhees (hlv@) and Rob Radtke (rob@) of
-// Stellar Science Ltd. Co. (stellarscience.com) for 
+// Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
 #include "vil_nitf2_field_formatter.h"
@@ -7,6 +7,7 @@
 
 #include <vcl_iomanip.h>
 #include <vcl_iostream.h>
+#include <vcl_cstring.h> // for std::strlen()
 
 //==============================================================================
 // Class vil_nitf2_field_formatter
@@ -17,7 +18,7 @@ char* vil_nitf2_field_formatter::read_char_array(vcl_istream& input, int size)
   input.read(char_array, size);
   char_array[input.gcount()]='\0';
   return char_array;
-} 
+}
 
 vcl_string vil_nitf2_field_formatter::read_string(vcl_istream& input, int size)
 {
@@ -37,7 +38,7 @@ bool vil_nitf2_field_formatter::read_c_str(vcl_istream& input, int length,
 {
   out_cstr = read_char_array(input, length);
   all_blank = is_all_blank(out_cstr);
-  return int(strlen(out_cstr))==length;
+  return int(vcl_strlen(out_cstr)) == length;
 }
 
 bool vil_nitf2_field_formatter::write_blank(vcl_ostream& output)
@@ -65,7 +66,7 @@ bool vil_nitf2_field_formatter::is_all_blank(const char* cstr)
 
 bool vil_nitf2_field_formatter::check_sign(const char* cstr, bool show_sign)
 {
- return 
+ return
    cstr != 0 &&
    (!show_sign && cstr[0] != '+' && cstr[0] != '-') ||
    (show_sign && (cstr[0] == '+' || cstr[0] == '-'));

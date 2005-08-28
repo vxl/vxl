@@ -1,10 +1,14 @@
 // vil_nitf2: Written by Rob Radtke (rob@) and Harry Voorhees (hlv@) of
-// Stellar Science Ltd. Co. (stellarscience.com) for 
+// Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
 #include "vil_nitf2_image.h"
 
+//:
+// \file
+
 #include <vcl_cassert.h>
+#include <vcl_cstring.h> // for std::memcpy()
 #include <vil/vil_stream_fstream.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_crop.h>
@@ -18,15 +22,15 @@ int debug_level = 0;
 
 static char const nitf2_string[] = "nitf";
 
-char const* vil_nitf2_file_format::tag() const 
+char const* vil_nitf2_file_format::tag() const
 {
   return nitf2_string;
 }
 
-vil_image_resource_sptr  vil_nitf2_file_format::make_input_image(vil_stream *vs) 
+vil_image_resource_sptr  vil_nitf2_file_format::make_input_image(vil_stream *vs)
 {
   vil_nitf2_image* im = new vil_nitf2_image( vs );
-  if( !im->parse_headers() ){
+  if ( !im->parse_headers() ) {
     delete im;
     im = 0;
   }
@@ -53,7 +57,7 @@ vil_image_view_base_sptr ( *vil_nitf2_image::s_decode_jpeg_2000 )
 vil_nitf2_image::vil_nitf2_image(vil_stream* is)
   : m_stream(is),
     m_current_image_index(0)
-{ 
+{
   m_stream->ref();
 }
 
@@ -98,7 +102,7 @@ vil_streampos vil_nitf2_image::get_offset_to_image_data_block_band(
   vcl_string i_mode;
   current_image_header()->get_property("IMODE", i_mode);
 
-  //my image header precedes me.  Find out the offset to that, then add on the size of 
+  //my image header precedes me.  Find out the offset to that, then add on the size of
   //that header... then you have the offset to me (the data)
   vil_streampos offset = get_offset_to_image_data(image_index);
 
@@ -115,7 +119,7 @@ vil_streampos vil_nitf2_image::get_offset_to_image_data_block_band(
   // compute some ourselves.  Here are all the possible scenarios handled here:
   //   i_mode == "S" and have data_mask_table: just ask data_mask_table for the offset
   //   i_mode == "S" and don't have data_mask_table: compute it ourselves vcl_right here
-  //   i_mode != "S" and have data_mask_table: ask the data_mask_table for offset to the 
+  //   i_mode != "S" and have data_mask_table: ask the data_mask_table for offset to the
   //      block we want; then compute the offset to the band ourselves here
   //   i_mode != "S" and don't have data_mask_table: compute both band and block offset
   //      ourselves here
@@ -127,7 +131,7 @@ vil_streampos vil_nitf2_image::get_offset_to_image_data_block_band(
   if (data_mask_table && data_mask_table->has_offset_table()) {
     //have data mask table
     int bI = i_mode == "S" ? bandIndex : -1;
-    if (data_mask_table->block_band_present(block_index_x, block_index_y, bI)) 
+    if (data_mask_table->block_band_present(block_index_x, block_index_y, bI))
     {
       return 0;
     }
@@ -138,7 +142,7 @@ vil_streampos vil_nitf2_image::get_offset_to_image_data_block_band(
       unsigned int bytes_per_block_per_band = bits_per_band / 8;
       //round up if remainder left over (this assumes that band/block boundaries
       //always lie on byte boundaries.
-      if (bits_per_band % 8 != 0) bytes_per_block_per_band++;     
+      if (bits_per_band % 8 != 0) bytes_per_block_per_band++;
     if (i_mode == "S") {
       //i_mode == "S" and not have data_mask_table
       unsigned int offset_to_desired_band = bandIndex * bytes_per_band;
@@ -152,7 +156,7 @@ vil_streampos vil_nitf2_image::get_offset_to_image_data_block_band(
     }
   }
   if (i_mode != "S") {
-    //regardless of whether we had a data_mask_table or not, we've only computed 
+    //regardless of whether we had a data_mask_table or not, we've only computed
     //the offset to the desired block so far.  Now, we add on the offset to
     //the desired band.
     unsigned int offset_to_desired_band = bandIndex * bytes_per_band;
@@ -163,7 +167,7 @@ vil_streampos vil_nitf2_image::get_offset_to_image_data_block_band(
 
 vil_streampos vil_nitf2_image::get_offset_to_image_data(unsigned int image_index) const
 {
-  //my image header precedes me.  Find out the offset to that, then add on the size of 
+  //my image header precedes me.  Find out the offset to that, then add on the size of
   //that header... then you have the offset to me (the data)
   vil_streampos offset_to_data = get_offset_to_image_subheader(image_index);
   int header_size;
@@ -200,7 +204,7 @@ bool vil_nitf2_image::parse_headers()
   //parse file header
   m_stream->seek(0);
   if (!m_file_header.read(m_stream)) return false;
-  
+
   //now parse each image header
   clear_image_headers();
   m_image_headers.resize(nimages());
@@ -239,7 +243,7 @@ unsigned vil_nitf2_image::ni() const
   if (current_image_header()->get_property("NCOLS", num_significant_cols))
   {
     return num_significant_cols;
-  } 
+  }
   return 0;
 }
 
@@ -253,16 +257,15 @@ unsigned vil_nitf2_image::nj() const
   if (current_image_header()->get_property("NROWS", num_significant_rows))
   {
     return num_significant_rows;
-  }   
-  return 0; 
+  }
+  return 0;
 }
 
 enum vil_pixel_format vil_nitf2_image::pixel_format () const
 {
-
   vcl_string pixel_type;
   int bits_per_pixel;
-  if (current_image_header()->get_property("PVTYPE", pixel_type) && 
+  if (current_image_header()->get_property("PVTYPE", pixel_type) &&
       current_image_header()->get_property("NBPP", bits_per_pixel))
   {
     //if bits_per_pixel isn't divisible by 8, round up to nearest byte
@@ -276,8 +279,8 @@ enum vil_pixel_format vil_nitf2_image::pixel_format () const
         return VIL_PIXEL_FORMAT_UINT_16;
       } else if (bits_per_pixel == 32) {
         return VIL_PIXEL_FORMAT_UINT_32;
-      } 
-#if VXL_HAS_INT_64      
+      }
+#if VXL_HAS_INT_64
       else if (bits_per_pixel == 64) {
         return VIL_PIXEL_FORMAT_UINT_64;
       }
@@ -291,12 +294,12 @@ enum vil_pixel_format vil_nitf2_image::pixel_format () const
         return VIL_PIXEL_FORMAT_INT_16;
       } else if (bits_per_pixel == 32) {
         return VIL_PIXEL_FORMAT_INT_32;
-      } 
-#if VXL_HAS_INT_64      
+      }
+#if VXL_HAS_INT_64
       else if (bits_per_pixel == 64) {
         return VIL_PIXEL_FORMAT_INT_64;
       }
-#endif //VXL_HAS_INT_64      
+#endif //VXL_HAS_INT_64
     } else if (pixel_type == "R") {
       if (bits_per_pixel == 32) {
         return VIL_PIXEL_FORMAT_FLOAT;
@@ -320,23 +323,23 @@ unsigned int vil_nitf2_image::get_pixels_per_block_x() const
 return current_image_header()->get_pixels_per_block_x();
 }
 
-unsigned int vil_nitf2_image::get_pixels_per_block_y() const 
+unsigned int vil_nitf2_image::get_pixels_per_block_y() const
 {
   return current_image_header()->get_pixels_per_block_y();
 }
 
-unsigned int vil_nitf2_image::get_num_blocks_x() const 
+unsigned int vil_nitf2_image::get_num_blocks_x() const
 {
   return current_image_header()->get_num_blocks_x();
 }
 
-unsigned int vil_nitf2_image::get_num_blocks_y() const 
+unsigned int vil_nitf2_image::get_num_blocks_y() const
 {
   return current_image_header()->get_num_blocks_y();
 }
 
 void  compute_block_and_offset(unsigned j0, unsigned long block_size,
-                                unsigned int& block, unsigned int& offset) 
+                                unsigned int& block, unsigned int& offset)
 {
   block = 0;
   offset = 0;
@@ -346,9 +349,8 @@ void  compute_block_and_offset(unsigned j0, unsigned long block_size,
     if (j0 > 0 && j0 % block_size != 0) {
       offset = j0 - (block * block_size);
     }
-  }  
+  }
 }
-
 
 
 vil_image_view_base_sptr vil_nitf2_image::get_copy_view(unsigned start_i, unsigned num_i,
@@ -365,8 +367,8 @@ vil_image_view_base_sptr vil_nitf2_image::get_copy_view(unsigned start_i, unsign
   //vcl_right now we only plan to support uncompressed and JPEG2000
   if (compression_type == "NC" || compression_type == "NM") {
     return get_copy_view_uncompressed(start_i, num_i, start_j, num_j);
-  } else if (  s_decode_jpeg_2000 && 
-              ( compression_type == "C8" || compression_type == "M8" ) ) 
+  } else if (  s_decode_jpeg_2000 &&
+              ( compression_type == "C8" || compression_type == "M8" ) )
   {
     //ISO/IEC BIFF profile BPJ2k01.00 says that M8 is actually invalid
     //(ie. you can't use a data mask with jpeg 2000 compression)
@@ -416,10 +418,10 @@ vil_image_view_base_sptr vil_nitf2_image::get_copy_view_uncompressed(unsigned st
 
   //trim the border blocks (ie. if the region doesn't lie exactly on block
   //boundaries
-  trim_border_blocks(required_blocks, 
-    start_block_x_offset, start_block_y_offset, 
+  trim_border_blocks(required_blocks,
+    start_block_x_offset, start_block_y_offset,
     end_block_x_offset, end_block_y_offset);
-  //now piece together the blocks that we need 
+  //now piece together the blocks that we need
   return glue_blocks_together(required_blocks);
 }
 
@@ -431,20 +433,20 @@ vil_image_view_base_sptr vil_nitf2_image::glue_blocks_together(
   unsigned int output_height = 0;
   unsigned int i;
   for (i = 0 ; i < data_blocks.size() ; i++) {
-    output_width += data_blocks[i][0]->ni();   
+    output_width += data_blocks[i][0]->ni();
   }
   for (i = 0 ; i < data_blocks[0].size() ; i++) {
-    output_height += data_blocks[0][i]->nj();   
+    output_height += data_blocks[0][i]->nj();
   }
 
   //now paste all the image blocks into their proper location in outImage
   unsigned int curr_pos_x = 0;
   unsigned int curr_pos_y = 0;
   vil_image_view_base_sptr result;
-  switch(vil_pixel_format_component_format(pixel_format())) {
-
+  switch (vil_pixel_format_component_format(pixel_format()))
+  {
 #define GLUE_BLOCK_CASE(FORMAT, T) \
-  case FORMAT: { \
+   case FORMAT: { \
     vil_image_view< T >* output_image = new vil_image_view< T >(output_width, output_height, nplanes()); \
     for (unsigned int x = 0 ; x < data_blocks.size() ; x++) { \
       for (unsigned int y = 0 ; y < data_blocks[x].size() ; y++) { \
@@ -456,33 +458,33 @@ vil_image_view_base_sptr vil_nitf2_image::glue_blocks_together(
     } \
     result = output_image; \
     return result; \
-  } break;
+   } break
 
-  GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_BYTE, vxl_byte)
-  GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte)
+    GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
+    GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte);
 #if VXL_HAS_INT_64
-  GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_64, vxl_uint_64)
-  GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_64, vxl_int_64)
+    GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_64, vxl_uint_64);
+    GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_64, vxl_int_64);
 #endif
-  GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32)
-  GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_32, vxl_int_32)
-  GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16)
-  GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_16, vxl_int_16)
-  GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_BOOL, bool)
-  GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_FLOAT, float)
-  GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_DOUBLE, double)
-  GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_COMPLEX_FLOAT, vcl_complex<float>)
+    GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32);
+    GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_32, vxl_int_32);
+    GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16);
+    GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_16, vxl_int_16);
+    GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_BOOL, bool);
+    GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_FLOAT, float);
+    GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_DOUBLE, double);
+    GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_COMPLEX_FLOAT, vcl_complex<float>);
 #undef GLUE_BLOCK_CASE
 
-  default: 
-    assert(0);
-    //"Unknown vil data type.");
+   default:
+    assert(!"Unknown vil data type.");
     return 0;
   }
 }
 
 template< class T >
-vil_memory_chunk_sptr maybe_byte_align_data(vil_memory_chunk_sptr in_data, unsigned int num_samples, unsigned int in_bits_per_sample, T /*dummy*/)
+vil_memory_chunk_sptr maybe_byte_align_data(vil_memory_chunk_sptr in_data, unsigned int num_samples,
+                                            unsigned int in_bits_per_sample, T /*dummy*/)
 {
   if (in_bits_per_sample != sizeof(T)*8) {
     vil_memory_chunk_sptr new_memory = new vil_memory_chunk(num_samples*sizeof(T), in_data->pixel_format());
@@ -491,6 +493,7 @@ vil_memory_chunk_sptr maybe_byte_align_data(vil_memory_chunk_sptr in_data, unsig
   }
   return in_data;
 }
+
 // don't do anything for float and double (bit shifting isn't allowed)
 template<> vil_memory_chunk_sptr maybe_byte_align_data<float> (
   vil_memory_chunk_sptr in_data, unsigned int /* num_samples */, unsigned int /* in_bits_per_sample */, float /*dummy*/)
@@ -501,17 +504,16 @@ template<> vil_memory_chunk_sptr maybe_byte_align_data<double> (
 { return in_data; }
 
 template<> vil_memory_chunk_sptr maybe_byte_align_data< vcl_complex< float > > (
-  vil_memory_chunk_sptr in_data, unsigned int /* num_samples */, unsigned int /* in_bits_per_sample */, vcl_complex<float> /*dummy*/)
+  vil_memory_chunk_sptr in_data, unsigned int /*num_samples*/, unsigned int /*in_bits_per_sample*/, vcl_complex<float> /*dummy*/)
 { return in_data; }
 
 
-/**
-  * This function handles the case where the actual bits per pixel per band
-  * is less then the actual bpppb AND where the data is vcl_left justified.  This
-  * shifts the data so that it it vcl_right justified.  
-  * As of now, this function is untests as I don't have any vcl_left justified data
-  * (the NITF spec discourages using it -- probably because it is such a PITA)
-  */
+//:
+//  This function handles the case where the actual bits per pixel per band
+//  is less then the actual bpppb AND where the data is vcl_left justified.  This
+//  shifts the data so that it it vcl_right justified.
+//  As of now, this function is untests as I don't have any vcl_left justified data
+//  (the NITF spec discourages using it -- probably because it is such a PITA)
 template< class T >
 void right_justify(T* data, unsigned int num_samples, unsigned int bitsToMove)
 {
@@ -519,27 +521,29 @@ void right_justify(T* data, unsigned int num_samples, unsigned int bitsToMove)
     data[i] = data[i] >> bitsToMove;
   }
 }
+
 //don't do anything for bool, float and double (bit shifting isn't allowed)
 template<> void right_justify<bool>(bool* /* data */, unsigned int /* num_samples */, unsigned int /* bitsToMove */) {}
 template<> void right_justify<float>(float* /* data */, unsigned int /* num_samples */, unsigned int /* bitsToMove */) {}
 template<> void right_justify<double>(double* /* data */, unsigned int /* num_samples */, unsigned int /* bitsToMove */) {}
-template<> void right_justify< vcl_complex< float > >(vcl_complex< float >* /* data */, unsigned int /* num_samples */, unsigned int /* bitsToMove */) {}
+template<> void right_justify< vcl_complex< float > >(vcl_complex< float >* /*data*/, unsigned int /*num_samples*/,
+                                                      unsigned int /* bitsToMove */) {}
 
 template< class T >
-unsigned int get_index(T in_val) 
+unsigned int get_index(T in_val)
 { return (T)in_val; }
 
 template<> unsigned int get_index<bool>(bool in_val)
 { return in_val ? 1 : 0; }
 
 template< class T >
-vil_image_view_base_sptr get_block_vcl_internal(vil_pixel_format pix_format, vil_memory_chunk_sptr image_memory, 
-                                             unsigned int pixels_per_block_x, unsigned int pixels_per_block_y, 
-                                             unsigned int nplanes, 
-                                             unsigned int i_step, unsigned int j_step, unsigned int plane_step, 
-                                             bool need_to_right_justify, 
-                                             unsigned int extra_bits, unsigned int bits_per_pixel_per_band,
-                                             bool data_is_all_blank, const vil_nitf2_image_subheader* /* image_header */, T dummy) 
+vil_image_view_base_sptr get_block_vcl_internal(vil_pixel_format pix_format, vil_memory_chunk_sptr image_memory,
+                                                unsigned int pixels_per_block_x, unsigned int pixels_per_block_y,
+                                                unsigned int nplanes,
+                                                unsigned int i_step, unsigned int j_step, unsigned int plane_step,
+                                                bool need_to_right_justify,
+                                                unsigned int extra_bits, unsigned int bits_per_pixel_per_band,
+                                                bool data_is_all_blank, const vil_nitf2_image_subheader* /*image_header*/, T dummy)
 {
   //may have to byte align data (only valid for integer type data)
   unsigned int num_samples = pixels_per_block_x * pixels_per_block_y * nplanes; //all bands of image
@@ -547,8 +551,8 @@ vil_image_view_base_sptr get_block_vcl_internal(vil_pixel_format pix_format, vil
   if (data_is_all_blank) {
     //this entire block is blank
     T* data_ptr = reinterpret_cast<T*>(image_memory->data());
-    for (unsigned int i = 0 ; 
-         i < pixels_per_block_x * pixels_per_block_y * nplanes ; 
+    for (unsigned int i = 0 ;
+         i < pixels_per_block_x * pixels_per_block_y * nplanes ;
          i++)
     {
       data_ptr[i] = (T)0;
@@ -556,17 +560,18 @@ vil_image_view_base_sptr get_block_vcl_internal(vil_pixel_format pix_format, vil
   } else {
     //in the rare case the the actual number of bits per pixel value (ABPP) is less than the number of bits
     //used in the data (NBPP) AND the data is vcl_left justified... then we correct that here
-    if (need_to_right_justify) right_justify<T>(static_cast<T*>(image_memory->data()), image_memory->size() / sizeof(T), extra_bits); 
+    if (need_to_right_justify)
+      right_justify<T>(static_cast<T*>(image_memory->data()), image_memory->size()/sizeof(T), extra_bits);
     //Nitf files store data in big endian... little endian machines need to convert
-    vil_nitf2_data_mask_table::maybe_endian_swap(static_cast< char* >(image_memory->data()), image_memory->size(), pix_format); 
+    vil_nitf2_data_mask_table::maybe_endian_swap(static_cast< char* >(image_memory->data()), image_memory->size(), pix_format);
     //if the data is not byte aligned (ie. the actual bits per pixel per band is not divisible
     //by 8),then we need to correct that
-    image_memory = maybe_byte_align_data(image_memory, num_samples, bits_per_pixel_per_band, dummy); 
+    image_memory = maybe_byte_align_data(image_memory, num_samples, bits_per_pixel_per_band, dummy);
   }
 
-  vil_image_view< T >* result = 
+  vil_image_view< T >* result =
     new vil_image_view< T > (image_memory, reinterpret_cast<T*>(image_memory->data()),
-                              pixels_per_block_x, pixels_per_block_y, nplanes, i_step, j_step, plane_step); 
+                              pixels_per_block_x, pixels_per_block_y, nplanes, i_step, j_step, plane_step);
 
   return result;
 }
@@ -599,14 +604,16 @@ vil_image_view_base_sptr vil_nitf2_image::get_block(unsigned int block_index_x, 
   unsigned int block_size_bytes = bytes_per_block_per_band * nplanes();
   //allocate the memory that we need
   vil_memory_chunk_sptr image_memory = new vil_memory_chunk(block_size_bytes, pixel_format());
-  
+
 
   unsigned int i_step(0), j_step(0), plane_step(0);
   bool data_is_all_blank = false;
   if (image_mode_type == "S") {
-//NOT USED    unsigned int bytes_per_band = ni() * nj() * bits_per_pixel_per_band / 8;
-//NOT USED    unsigned int offset_to_desired_block = bytes_per_block_per_band * (block_index_y * get_num_blocks_x() + block_index_x);
-    //block's are not contiguous... we'll have to do one read for each band
+#if 0 // NOT USED
+    unsigned int bytes_per_band = ni() * nj() * bits_per_pixel_per_band / 8;
+    unsigned int offset_to_desired_block = bytes_per_block_per_band * (block_index_y * get_num_blocks_x() + block_index_x);
+#endif // 0
+    //blocks are not contiguous... we'll have to do one read for each band
     for (unsigned int i = 0 ; i < nplanes() ; i++) {
       vil_streampos current_offset = get_offset_to_image_data_block_band(m_current_image_index, block_index_x, block_index_y, i);
       if (current_offset == 0) {
@@ -629,7 +636,7 @@ vil_image_view_base_sptr vil_nitf2_image::get_block(unsigned int block_index_x, 
     vil_streampos current_offset = get_offset_to_image_data_block_band(m_current_image_index, block_index_x, block_index_y, 0);
     if (current_offset == 0) {
       //this block isn't in the stream (ie. it's all blank)... just blank out the memory
-      data_is_all_blank = true;      
+      data_is_all_blank = true;
     } else {
       //seek to the correct position in the stream
       m_stream->seek(current_offset);
@@ -638,7 +645,7 @@ vil_image_view_base_sptr vil_nitf2_image::get_block(unsigned int block_index_x, 
         return 0;
       }
     }
-  
+
     //figure out the layout of the data in the memory chunk we just read in
     if (image_mode_type == "B") {
       //band interleaved by Block
@@ -649,55 +656,53 @@ vil_image_view_base_sptr vil_nitf2_image::get_block(unsigned int block_index_x, 
       //band interleaved by Pixel
       i_step = nplanes();
       j_step = nplanes() * get_pixels_per_block_x();
-      plane_step = 1; 
+      plane_step = 1;
     } else if (image_mode_type == "R") {
       //band interleaved by Row
       i_step = 1;
       j_step = nplanes() * get_pixels_per_block_x();
-      plane_step = get_pixels_per_block_x(); 
+      plane_step = get_pixels_per_block_x();
     }
   }
-  
+
   //create image view of the data
   vil_image_view_base_sptr view = 0;
-  switch(vil_pixel_format_component_format(image_memory->pixel_format())) {
-
+  switch (vil_pixel_format_component_format(image_memory->pixel_format()))
+  {
 #define GET_BLOCK_CASE(FORMAT, T)\
-  case FORMAT:{ \
+   case FORMAT:{ \
     T t= (T)0; \
     return get_block_vcl_internal(\
        FORMAT, image_memory, get_pixels_per_block_x(),get_pixels_per_block_y(), nplanes(),\
        i_step, j_step, plane_step, need_to_right_justify, extra_bits, bits_per_pixel_per_band,\
        data_is_all_blank, current_image_header(), t);\
-  } break;
+   } break
 
-  GET_BLOCK_CASE(VIL_PIXEL_FORMAT_BYTE, vxl_byte)
-  GET_BLOCK_CASE(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte)
+    GET_BLOCK_CASE(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
+    GET_BLOCK_CASE(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte);
 
 #if VXL_HAS_INT_64
-  GET_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_64, vxl_uint_64)
-  GET_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_64, vxl_int_64)
-
+    GET_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_64, vxl_uint_64);
+    GET_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_64, vxl_int_64);
 #endif
-  GET_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32)
-  GET_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_32, vxl_int_32)
-  GET_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16)
-  GET_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_16, vxl_int_16)
-  GET_BLOCK_CASE(VIL_PIXEL_FORMAT_BOOL, bool)
-  GET_BLOCK_CASE(VIL_PIXEL_FORMAT_FLOAT, float)
-  GET_BLOCK_CASE(VIL_PIXEL_FORMAT_DOUBLE, double)
-  GET_BLOCK_CASE(VIL_PIXEL_FORMAT_COMPLEX_FLOAT, vcl_complex<float>)
-
+    GET_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32);
+    GET_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_32, vxl_int_32);
+    GET_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16);
+    GET_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_16, vxl_int_16);
+    GET_BLOCK_CASE(VIL_PIXEL_FORMAT_BOOL, bool);
+    GET_BLOCK_CASE(VIL_PIXEL_FORMAT_FLOAT, float);
+    GET_BLOCK_CASE(VIL_PIXEL_FORMAT_DOUBLE, double);
+    GET_BLOCK_CASE(VIL_PIXEL_FORMAT_COMPLEX_FLOAT, vcl_complex<float>);
 #undef GET_BLOCK_CASE
 
-  default: 
-    assert(0);
-    //"Unknown vil data type.");
+   default:
+    assert(!"Unknown vil data type.");
     break;
   }
   return view;
 }
-void vil_nitf2_image::get_blocks(unsigned int start_block_x, unsigned int end_block_x, 
+
+void vil_nitf2_image::get_blocks(unsigned int start_block_x, unsigned int end_block_x,
                                    unsigned int start_block_y, unsigned int end_block_y,
                                    vcl_vector< vcl_vector< vil_image_view_base_sptr > >& out_data_blocks) const
 {
@@ -714,8 +719,8 @@ void vil_nitf2_image::get_blocks(unsigned int start_block_x, unsigned int end_bl
 }
 
 bool vil_nitf2_image::trim_border_blocks(
-  vcl_vector< vcl_vector< vil_image_view_base_sptr > >& data_blocks, 
-  unsigned int start_block_x_offset, unsigned int start_block_y_offset, 
+  vcl_vector< vcl_vector< vil_image_view_base_sptr > >& data_blocks,
+  unsigned int start_block_x_offset, unsigned int start_block_y_offset,
   unsigned int end_block_x_offset, unsigned int end_block_y_offset) const
 {
   //loop thorugh all the boxes and trim the boxes around the border
@@ -724,8 +729,8 @@ bool vil_nitf2_image::trim_border_blocks(
     for (unsigned int curr_block_y = 0 ; curr_block_y < data_blocks[curr_block_x].size() ; curr_block_y++) {
       if (!data_blocks[curr_block_x][curr_block_y]) continue;
       //booleans that tell me whether this box is some sort of border box
-      bool first_block_in_row = curr_block_x == 0; 
-      bool first_block_in_col = curr_block_y == 0; 
+      bool first_block_in_row = curr_block_x == 0;
+      bool first_block_in_col = curr_block_y == 0;
       bool last_block_in_row = curr_block_x == data_blocks.size()-1;
       bool last_block_in_col = curr_block_y == data_blocks[curr_block_x].size()-1;
 
@@ -737,37 +742,36 @@ bool vil_nitf2_image::trim_border_blocks(
       unsigned int in = last_block_in_row  ? end_block_x_offset   : data_blocks[curr_block_x][curr_block_y]->ni()-1;
       unsigned int j0 = first_block_in_col ? start_block_y_offset : 0;
       unsigned int jn = last_block_in_col  ? end_block_y_offset : data_blocks[curr_block_x][curr_block_y]->nj()-1;
-      
-      switch(vil_pixel_format_component_format(pixel_format())) {
 
+      switch (vil_pixel_format_component_format(pixel_format()))
+      {
 #define TRIM_BORDER_BLOCK_CASE(FORMAT, T) \
-      case FORMAT: { \
+       case FORMAT: { \
         vil_image_view< T > currBlock = static_cast<vil_image_view< T >&>(*data_blocks[curr_block_x][curr_block_y]);\
         vil_image_view< T >* croppedBlock = new vil_image_view< T >();\
         *croppedBlock = vil_crop(currBlock, i0, in-i0+1, j0, jn-j0+1);\
         data_blocks[curr_block_x][curr_block_y] = croppedBlock;\
-      } break;
+       } break
 
-      TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_BYTE, vxl_byte)
-      TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte)
+        TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
+        TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte);
 #if VXL_HAS_INT_64
-      TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_64, vxl_uint_64)
-      TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_64, vxl_int_64)
+        TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_64, vxl_uint_64);
+        TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_64, vxl_int_64);
 #endif
-      TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32)
-      TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_32, vxl_int_32)
-      TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16)
-      TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_16, vxl_int_16)
-      TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_BOOL, bool)
-      TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_FLOAT, float)
-      TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_DOUBLE, double)
-      TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_COMPLEX_FLOAT,  vcl_complex<float>)
+        TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32);
+        TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_32, vxl_int_32);
+        TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16);
+        TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_16, vxl_int_16);
+        TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_BOOL, bool);
+        TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_FLOAT, float);
+        TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_DOUBLE, double);
+        TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_COMPLEX_FLOAT,  vcl_complex<float>);
 #undef TRIM_BORDER_BLOCK_CASE
 
-      default: 
-        assert(0);
-        //"Unknown vil data type.");
-        return false;;
+       default:
+        assert(!"Unknown vil data type.");
+        return false;
       }
     }
   }
@@ -776,30 +780,31 @@ bool vil_nitf2_image::trim_border_blocks(
 
 template<> bool* byte_align_data<bool>(bool* in_data, unsigned int num_samples, unsigned int in_bits_per_sample, bool* out_data)
 {
-  switch(sizeof(bool)) {
-    case 1:
-      byte_align_data((vxl_byte*)in_data, num_samples, in_bits_per_sample, (vxl_byte*)out_data);
-      break;
-    case 2:
-      byte_align_data((vxl_uint_16*)in_data, num_samples, in_bits_per_sample, (vxl_uint_16*)out_data);
-      break;
-    case 4:
-      byte_align_data((vxl_uint_32*)in_data, num_samples, in_bits_per_sample, (vxl_uint_32*)out_data);
-      break;
+  switch (sizeof(bool))
+  {
+   case 1:
+    byte_align_data((vxl_byte*)in_data, num_samples, in_bits_per_sample, (vxl_byte*)out_data);
+    break;
+   case 2:
+    byte_align_data((vxl_uint_16*)in_data, num_samples, in_bits_per_sample, (vxl_uint_16*)out_data);
+    break;
+   case 4:
+    byte_align_data((vxl_uint_32*)in_data, num_samples, in_bits_per_sample, (vxl_uint_32*)out_data);
+    break;
 #if VXL_HAS_INT_64
-    case 8:
-      byte_align_data((vxl_uint_64*)in_data, num_samples, in_bits_per_sample, (vxl_uint_64*)out_data);
-      break;
+   case 8:
+    byte_align_data((vxl_uint_64*)in_data, num_samples, in_bits_per_sample, (vxl_uint_64*)out_data);
+    break;
 #endif //VXL_HAS_INT_64
-    default:
-      assert(0);
+   default:
+    assert(!"Unsupported size of bool.");
   }
 
 #if 0
   //dignostic info
   vcl_cout << "\nBools: ";
   for (unsigned int i = 0 ; i < num_samples ; i++) {
-    vcl_cout << (out_data[i] == true ?  "1" : "0");
+    vcl_cout << (out_data[i] ?  '1' : '0');
   }
   vcl_cout << vcl_endl;
 #endif //0
@@ -813,7 +818,7 @@ bool vil_nitf2_image::get_property (char const *tag, void *property_value) const
     (current_image_header() && current_image_header()->get_property(tag, result)))
   {
     property_value = malloc(result.size());
-    memcpy(property_value, result.c_str(), result.size());
+    vcl_memcpy(property_value, result.c_str(), result.size());
     return true;
   }
   return false;
