@@ -1,5 +1,5 @@
 // vil_nitf2: Written by Harry Voorhees (hlv@) and Rob Radtke (rob@) of
-// Stellar Science Ltd. Co. (stellarscience.com) for 
+// Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
 #ifndef VIL_NITF2_FIELD_DEFINITION_H
@@ -39,7 +39,7 @@ class vil_nitf2_field_formatter;
 //
 class vil_nitf2_field_definition_node
 {
-public:
+ public:
   enum node_type { type_field, type_repeat };
   vil_nitf2_field_definition_node(node_type type) : type(type) {}
   virtual ~vil_nitf2_field_definition_node() {}
@@ -57,16 +57,16 @@ public:
 };
 
 //-----------------------------------------------------------------------------
-// Represents the definition of a particular field 
-// (including a contiguous set of repeating fields) of a tagged record 
+// Represents the definition of a particular field
+// (including a contiguous set of repeating fields) of a tagged record
 // extension, including the name, format, repeat count, or other condition.
 //
 class vil_nitf2_field_definition : public vil_nitf2_field_definition_node
 {
-public:
+ public:
   // These members basically correspond to columns within a row of
   // a NITF tagged record spec. An instance of this class corresponds
-  // to a row (or a sequence of continguous repeating rows).
+  // to a row (or a sequence of contiguously repeating rows).
   vcl_string tag;
   vcl_string pretty_name;
   bool required;
@@ -79,13 +79,13 @@ public:
 
   bool is_required() const;
   bool is_variable_width() const;
-  
+
   // Constructor
   vil_nitf2_field_definition(
     // field identifier, generally < 10 characters long
-    vcl_string tag, 
+    vcl_string tag,
     // the field name, typically a few words long
-    vcl_string pretty_name, 
+    vcl_string pretty_name,
     // field type and format
     vil_nitf2_field_formatter* formatter,
     // whether this field may be unspecified (all blanks)
@@ -101,13 +101,13 @@ public:
 
 
 //-----------------------------------------------------------------------------
-// Represents the definition of a contiguous sequence of fields or nodes 
-// containing other such sequences of fields. Methods field(), repeat(), 
+// Represents the definition of a contiguous sequence of fields or nodes
+// containing other such sequences of fields. Methods field(), repeat(),
 // and cond() provide "syntactic sugar" for assembling the sequence.
 //
 class vil_nitf2_field_definitions : public vcl_list<vil_nitf2_field_definition_node*>
 {
-public:
+ public:
   // Define a field and add it to this list of definitions, returning
   // the current list
   vil_nitf2_field_definitions& field(
@@ -130,8 +130,8 @@ public:
                                       vil_nitf2_field_definitions& field_definitions);
 
   // Same as above where the repeat count is simply the value of a tag.
-  vil_nitf2_field_definitions& repeat(vcl_string intTag, 
-                                      vil_nitf2_field_definitions& field_definitions) 
+  vil_nitf2_field_definitions& repeat(vcl_string intTag,
+                                      vil_nitf2_field_definitions& field_definitions)
   { return repeat(new vil_nitf2_field_value<int>(intTag), field_definitions); }
 
   // Destructor
@@ -144,11 +144,11 @@ public:
 //
 class vil_nitf2_field_definition_repeat_node : public vil_nitf2_field_definition_node
 {
-public:
+ public:
   // Construct a repeat node
   vil_nitf2_field_definition_repeat_node(vil_nitf2_field_functor<int>* repeat_functor,
-                                         vil_nitf2_field_definitions* field_definitions) 
-    : vil_nitf2_field_definition_node(type_repeat), 
+                                         vil_nitf2_field_definitions* field_definitions)
+    : vil_nitf2_field_definition_node(type_repeat),
       repeat_functor(repeat_functor),
       field_definitions(field_definitions) {}
 
