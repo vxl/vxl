@@ -66,15 +66,14 @@ vil_image_view<T>::vil_image_view(vil_memory_chunk_sptr const& mem_chunk,
   // check view and chunk are in rough agreement
   if (mem_chunk) // if we are doing a view transform on a non-owned image, then mem_chunk will be 0.
   {
-    if( ! (mem_chunk->size() >= n_planes*n_i*n_j*sizeof(T)) ){
+    if ( mem_chunk->size() < n_planes*n_i*n_j*sizeof(T) )
       vcl_cerr << "mem_chunk->size()=" << mem_chunk->size() << '\n'
                << "nplanes=" << n_planes << '\n'
                << "n_i=" << n_i << '\n'
                << "n_j=" << n_j << '\n'
                << "sizeof(T)=" << sizeof(T) << '\n'
-               << "n_planes*n_i*n_j*sizeof(T)=" << n_planes*n_i*n_j*sizeof(T) << '\n';              
-	  assert(mem_chunk->size() >= n_planes*n_i*n_j*sizeof(T));
-	}
+               << "n_planes*n_i*n_j*sizeof(T)=" << n_planes*n_i*n_j*sizeof(T) << '\n';
+    assert(mem_chunk->size() >= n_planes*n_i*n_j*sizeof(T));
     if (top_left  < reinterpret_cast<const T*>(mem_chunk->data()) ||
         top_left >= reinterpret_cast<const T*>(reinterpret_cast<const char*>(mem_chunk->data()) + mem_chunk->size()))
       vcl_cerr << "top_left at " << static_cast<const void*>(top_left) << ", memory_chunk at "
