@@ -7,6 +7,7 @@
 
 #include "vil_nitf2_scalar_field.h"
 #include "vil_nitf2.h"
+#include <vcl_iosfwd.h>
 
 // Typed concrete class for scalar NITF fields.
 // During file reading, this class is instantiated only for non-blank 
@@ -16,7 +17,7 @@
 template<class T>
 class vil_nitf2_typed_scalar_field : public vil_nitf2_scalar_field
 {
-public:
+ public:
   // Constructor
   vil_nitf2_typed_scalar_field(T value, vil_nitf2_field_definition* definition) 
     : vil_nitf2_scalar_field(definition), m_value(value) {}
@@ -39,7 +40,7 @@ public:
   // Output to stream. Overload as necessary.
   virtual vcl_ostream& output(vcl_ostream& os) const { return os << m_value; };
 
-private:
+ private:
   T m_value;
 };
 
