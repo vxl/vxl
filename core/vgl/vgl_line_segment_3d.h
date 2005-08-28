@@ -51,15 +51,16 @@ class vgl_line_segment_3d
   inline bool operator!=(vgl_line_segment_3d<Type>const& other)const{return !operator==(other);}
 
   //: assignment
-  inline void set(vgl_point_3d<Type> const& p1, vgl_point_3d<Type> const& p2) {
-    point1_ = p1; point2_ = p2; }
+  inline void set(vgl_point_3d<Type> const& p1, vgl_point_3d<Type> const& p2) { point1_ = p1; point2_ = p2; }
 
   //: Return the direction vector of this line (not normalised)
   inline vgl_vector_3d<Type> direction() const { return point2()-point1(); }
   
-  //: Return a point on the line defined by a scalar parameter \a t
-  // such that \a t=0.0 at point1 and \a t=1.0 at point2.
-  // t<0 or t>1 for points on the (infinite) line but not the (finite) segment.
+  //: Return a point on the line defined by a scalar parameter \a t.
+  // \a t=0.0 corresponds to point1 and \a t=1.0 to point2.
+  // 0<t<1 for points on the segment between point1 and point2.
+  // t<0 for points on the (infinite) line, outside the segment, and closer to point1 than to point2.
+  // t>1 for points on the (infinite) line, outside the segment, and closer to point2 than to point1.
   inline vgl_point_3d<Type> point_t(const double t) const { return point1() + t*direction(); }
 };
 
