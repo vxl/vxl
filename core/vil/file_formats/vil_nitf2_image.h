@@ -9,7 +9,6 @@
 #include <vil/vil_image_resource.h>
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h> // for std::abs(int)
 
 #include <vil/vil_stream.h>
 
@@ -200,8 +199,8 @@ T get_bits( const T* in_val, unsigned int i0, unsigned int ni )
   } else if ( strip_right < 0 ){
     //we didn't have enough bits in the first element of the in_val array
     //need to get some from the next element
-    for ( int i = 0 ; i < vcl_abs(strip_right) ; i++ ) temp *= 2;
-    temp += get_bits<T>( in_val+sample_offset+1, 0, vcl_abs( strip_right ) );
+    for ( int i = 0 ; i < (-strip_right) ; i++ ) temp *= 2;
+    temp += get_bits<T>( in_val+sample_offset+1, 0, -strip_right );
   }
   return temp;
 }
