@@ -22,6 +22,7 @@
 template <class T>
 inline void vil3d_print_all(vcl_ostream& os,const vil3d_image_view<T>& view)
 {
+  int width=os.width();
   os<<view.is_a()<<' '<<view.nplanes()
     <<" planes, each "<<view.ni()<<" x "<<view.nj()<<" x "<<view.nk()
     <<" istep: "<<view.istep()<<' '
@@ -38,6 +39,7 @@ inline void vil3d_print_all(vcl_ostream& os,const vil3d_image_view<T>& view)
       {
         for (unsigned int i=0;i<view.ni();++i)
         {
+          os.width(width);
           vil_print_value(os,view(i,j,k,p));
           os<<' ';
         }
