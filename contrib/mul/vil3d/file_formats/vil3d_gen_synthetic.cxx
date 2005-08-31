@@ -80,10 +80,10 @@ vil3d_image_resource_sptr vil3d_gen_synthetic_format::make_input_image(const cha
 // The file may be opened immediately for writing so that a header can be written.
 // The width/height etc are explicitly specified, so that file_format implementors
 // know what they need to do...
-vil3d_image_resource_sptr vil3d_gen_synthetic_format::make_output_image(const char* filename,
-                                 unsigned ni, unsigned nj,
-                                 unsigned nk, unsigned nplanes,
-                                 enum vil_pixel_format format) const
+vil3d_image_resource_sptr vil3d_gen_synthetic_format::make_output_image(const char* /*filename*/,
+                                 unsigned /*ni*/, unsigned /*nj*/,
+                                 unsigned /*nk*/, unsigned /*nplanes*/,
+                                 enum vil_pixel_format /*format*/) const
 {
   vcl_cerr << "ERROR: Cannot write to generated synthetic images." << vcl_endl;
   return 0;
@@ -217,14 +217,14 @@ vil3d_image_view_base_sptr vil3d_gen_synthetic_image::get_copy_view(
   }
 }
 
-bool vil3d_gen_synthetic_image::get_property(char const *key, void * value) const
+bool vil3d_gen_synthetic_image::get_property(char const *, void *) const
 {
   return false;
 }
 
 //: Set the contents of the volume.
-bool vil3d_gen_synthetic_image::put_view(const vil3d_image_view_base& view,
-  unsigned i0=0, unsigned j0=0, unsigned k0=0)
+bool vil3d_gen_synthetic_image::put_view(const vil3d_image_view_base&,
+  unsigned, unsigned, unsigned)
 {
   vcl_cerr << "ERROR: Cannot write to generated synthetic images." << vcl_endl;
   return false;
