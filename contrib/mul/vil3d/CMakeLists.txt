@@ -31,6 +31,7 @@ SET(vil3d_sources
     file_formats/vil3d_dicom.h       file_formats/vil3d_dicom.cxx
     file_formats/vil3d_slice_list.h  file_formats/vil3d_slice_list.cxx
     file_formats/vil3d_analyze_format.h  file_formats/vil3d_analyze_format.cxx
+    file_formats/vil3d_gen_synthetic.h   file_formats/vil3d_gen_synthetic.cxx
 )
 AUX_SOURCE_DIRECTORY(Templates vil3d_sources)
 

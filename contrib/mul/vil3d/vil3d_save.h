@@ -27,4 +27,7 @@ bool vil3d_save_image_resource(const vil3d_image_resource_sptr &ir, char const* 
 // \relates vil3d_image_resource
 bool vil3d_save_image_resource(const vil3d_image_resource_sptr &ir, char const* filename);
 
+//: Guess file format from filename.
+char const *vil3d_save_guess_file_format(char const* filename);
+
 #endif // vil3d_save_h_

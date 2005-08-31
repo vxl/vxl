@@ -61,8 +61,8 @@ bool vil3d_save(const vil3d_image_view_base &im, char const* filename, char cons
   }
 }
 
-static
-char const *guess_file_format(char const* filename)
+
+char const *vil3d_save_guess_file_format(char const* filename)
 {
   char const *file_format;
 
@@ -78,6 +78,7 @@ char const *guess_file_format(char const* filename)
     if (false) { }
 #define macro(ext, fmt) else if (!vcl_strcmp(dot, "." #ext)) file_format = #fmt
     macro(dcm, dicom);
+    macro(gpl, gipl);
 #undef macro
     else
       file_format=dot+1;
@@ -89,7 +90,7 @@ char const *guess_file_format(char const* filename)
 //: save to file, deducing format from filename.
 bool vil3d_save(const vil3d_image_view_base & i, char const* filename)
 {
-  return vil3d_save(i, filename, guess_file_format(filename));
+  return vil3d_save(i, filename, vil3d_save_guess_file_format(filename));
 }
 
 //: Send vil3d_image to disk.
@@ -109,5 +110,5 @@ bool vil3d_save_image_resource(const vil3d_image_resource_sptr &ir, char const* 
 //: save to file, deducing format from filename.
 bool vil3d_save_image_resource(const vil3d_image_resource_sptr &ir, char const* filename)
 {
-  return vil3d_save_image_resource(ir, filename, guess_file_format(filename));
+  return vil3d_save_image_resource(ir, filename, vil3d_save_guess_file_format(filename));
 }

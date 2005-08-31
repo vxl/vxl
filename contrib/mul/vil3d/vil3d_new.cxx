@@ -13,6 +13,7 @@
 #include <vil3d/vil3d_file_format.h>
 #include <vil3d/vil3d_image_resource.h>
 #include <vil3d/vil3d_memory_image.h>
+#include <vil3d/vil3d_save.h>
 
 
 // The first two functions really should be upgraded to create an image in
@@ -36,7 +37,9 @@ vil3d_image_resource_sptr vil3d_new_image_resource(const char* name,
                                                    char const* file_type)
 {
   if (!file_type) // avoid segfault in strcmp()
-    file_type = "gipl";
+    file_type = vil3d_save_guess_file_format(name);
+
+
 
   vil3d_image_resource_sptr outimage = 0;
   for (unsigned i=0; i < vil3d_file_format::n_formats(); ++i)
