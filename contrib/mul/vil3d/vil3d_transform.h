@@ -10,6 +10,7 @@
 // \author Tim Cootes, Ian Scott.
 
 #include <vcl_cassert.h>
+#include <vcl_algorithm.h>
 #include <vil3d/vil3d_image_view.h>
 
 //: Apply a unary operation to each pixel in src to get dest.
@@ -20,12 +21,25 @@ inline void vil3d_transform(const vil3d_image_view<inP >&src, vil3d_image_view<o
   const unsigned ni = src.ni(), nj= src.nj(), nk= src.nk(), np = src.nplanes();
   dest.set_size(ni, nj, nk, np);
 
-  // Note : Could optimise special cases significantly
-  for (unsigned p = 0; p < np; ++p)
-   for (unsigned k = 0; k < nk; ++k)
-    for (unsigned j = 0; j < nj; ++j)
-      for (unsigned i = 0; i < ni; ++i)
-        dest(i,j,k,p) = functor(src(i,j,k,p));
+  if (src.is_contiguous() && dest.is_contiguous())
+  {
+    vcl_transform(src.begin(), src.end(), dest.begin(), functor);
+  }
+  else
+  {
+    for (unsigned p = 0; p < np; ++p)
+    for (unsigned k = 0; k < nk; ++k)
+      for (unsigned j = 0; j < nj; ++j)
+      {
+        const inP* src_p = &src(0,j,k,p);
+        vcl_ptrdiff_t src_step = src.istep();
+        outP* dest_p = &dest(0,j,k,p);
+        vcl_ptrdiff_t dest_step = dest.istep();
+
+        for (int i = ni+1; --i != 0; src_p+=src_step, dest_p+=dest_step)
+          *dest_p = functor(*src_p);
+      }
+  }
 }
 
 //: Apply a binary function to each pixel in src and dest that modifies dest.
