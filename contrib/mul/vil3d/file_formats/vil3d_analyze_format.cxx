@@ -467,7 +467,7 @@ vil3d_image_resource_sptr vil3d_analyze_format::make_input_image(const char *fil
   vcl_string filename(filename1);
   vcl_string base_filename;
   int n=filename.size();
-  if (n>=4 && filename.substr(n-4,4)==".hdr" || filename.substr(n-4,4)==".img")
+  if (n>=4 && (filename.substr(n-4,4)==".hdr" || filename.substr(n-4,4)==".img"))
     base_filename = filename.substr(0,n-4);
   else
     base_filename = filename;
