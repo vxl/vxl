@@ -171,4 +171,8 @@ vil_pixel_format vil_pixel_format_component_format(enum vil_pixel_format f);
 //: Output a pretty string representing the pixel format.
 vcl_ostream & operator << (vcl_ostream &os, vil_pixel_format f);
 
+//: Convert a string into a pixel format.
+// This uses the same encoding as operator<<.
+vil_pixel_format vil_pixel_format_from_string(const char * s);
+
 #endif // vil_pixel_format_h_

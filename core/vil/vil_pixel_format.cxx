@@ -11,6 +11,7 @@
 
 #include <vcl_cassert.h>
 #include <vcl_complex.h>
+#include <vcl_string.h>
 
 static unsigned component_size[] =
 {
@@ -272,3 +273,55 @@ vcl_ostream & operator << (vcl_ostream &os, vil_pixel_format f)
   return os;
 }
 
+
+//: Convert a string into a pixel format.
+// This uses the same encoding as operator<<.
+vil_pixel_format vil_pixel_format_from_string(const char * s)
+{
+  vcl_string str(s);
+  if (str == "VIL_PIXEL_FORMAT_UNKNOWN") return VIL_PIXEL_FORMAT_UNKNOWN;
+#if VXL_HAS_INT_64
+  if (str == "vxl_uint_64") return VIL_PIXEL_FORMAT_UINT_64;
+  if (str == "vxl_int_64") return VIL_PIXEL_FORMAT_INT_64;
+#endif
+  if (str == "vxl_uint_32") return VIL_PIXEL_FORMAT_UINT_32;
+  if (str == "vxl_int_32") return VIL_PIXEL_FORMAT_INT_32;
+  if (str == "vxl_uint_16") return VIL_PIXEL_FORMAT_UINT_16;
+  if (str == "vxl_int_16") return VIL_PIXEL_FORMAT_INT_16;
+  if (str == "vxl_byte") return VIL_PIXEL_FORMAT_BYTE;
+  if (str == "vxl_sbyte") return VIL_PIXEL_FORMAT_SBYTE;
+  if (str == "float") return VIL_PIXEL_FORMAT_FLOAT;
+  if (str == "double") return VIL_PIXEL_FORMAT_DOUBLE;
+  if (str == "bool") return VIL_PIXEL_FORMAT_BOOL;
+
+#if VXL_HAS_INT_64
+  if (str == "vil_rgb<vxl_int_64>") return VIL_PIXEL_FORMAT_RGB_INT_64;
+  if (str == "vil_rgb<vxl_uint_64>") return VIL_PIXEL_FORMAT_RGB_UINT_64;
+#endif
+  if (str == "vil_rgb<vxl_int_32>") return VIL_PIXEL_FORMAT_RGB_INT_32;
+  if (str == "vil_rgb<vxl_uint_32>") return VIL_PIXEL_FORMAT_RGB_UINT_32;
+  if (str == "vil_rgb<vxl_int_16>") return VIL_PIXEL_FORMAT_RGB_INT_16;
+  if (str == "vil_rgb<vxl_uint_16>") return VIL_PIXEL_FORMAT_RGB_UINT_16;
+  if (str == "vil_rgb<vxl_byte>") return VIL_PIXEL_FORMAT_RGB_BYTE;
+  if (str == "vil_rgb<vxl_sbyte>") return VIL_PIXEL_FORMAT_RGB_SBYTE;
+  if (str == "vil_rgb<float>") return VIL_PIXEL_FORMAT_RGB_FLOAT;
+  if (str == "vil_rgb<double>") return VIL_PIXEL_FORMAT_RGB_DOUBLE;
+
+#if VXL_HAS_INT_64
+  if (str == "vil_rgba<vxl_int_64>") return VIL_PIXEL_FORMAT_RGBA_INT_64;
+  if (str == "vil_rgba<vxl_uint_64>") return VIL_PIXEL_FORMAT_RGBA_UINT_64;
+#endif
+  if (str == "vil_rgba<vxl_int_32>") return VIL_PIXEL_FORMAT_RGBA_INT_32;
+  if (str == "vil_rgba<vxl_uint_32>") return VIL_PIXEL_FORMAT_RGBA_UINT_32;
+  if (str == "vil_rgba<vxl_int_16>") return VIL_PIXEL_FORMAT_RGBA_INT_16;
+  if (str == "vil_rgba<vxl_uint_16>") return VIL_PIXEL_FORMAT_RGBA_UINT_16;
+  if (str == "vil_rgba<vxl_byte>") return VIL_PIXEL_FORMAT_RGBA_BYTE;
+  if (str == "vil_rgba<vxl_sbyte>") return VIL_PIXEL_FORMAT_RGBA_SBYTE;
+  if (str == "vil_rgba<float>") return VIL_PIXEL_FORMAT_RGBA_FLOAT;
+  if (str == "vil_rgba<double>") return VIL_PIXEL_FORMAT_RGBA_DOUBLE;
+
+  if (str == "complex<float>") return VIL_PIXEL_FORMAT_COMPLEX_FLOAT;
+  if (str == "complex<double>") return VIL_PIXEL_FORMAT_COMPLEX_DOUBLE;
+
+  return VIL_PIXEL_FORMAT_UNKNOWN;
+}
