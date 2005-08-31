@@ -50,6 +50,8 @@ class bgui_vsol_soview2D : public vgui_soview2D
 
   //: Render this 2D digital_curve on the display.
   virtual void draw() const=0;
+  
+  vsol_spatial_object_2d_sptr base_sptr() const { return sptr_; }
 
   //: Translate this 2D digital_curve by the given x and y distances.
   virtual void translate(float x, float y)=0;
