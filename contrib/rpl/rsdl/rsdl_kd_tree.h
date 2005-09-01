@@ -73,12 +73,14 @@ class rsdl_kd_tree : public vbl_ref_count
     //: \brief dtor deletes the nodes in tree
   ~rsdl_kd_tree();
 
-    //: \brief find the n points nearest to the query point (and their associate indices)
+    //: \brief find the n points nearest to the query point (and their associate indices) max_leaves = -1 to not use
+    // approximate nearest neighbor queries, if max_leaves is not -1 then use_heap must be true
   void n_nearest( const rsdl_point& query_point,
                   int n,
                   vcl_vector< rsdl_point >& closest_points,
                   vcl_vector< int >& indices,
-                  bool use_heap = false );
+                  bool use_heap = false,
+				  int max_leaves = -1 );
 
     //: \brief find all points within a query's bounding box
   void points_in_bounding_box( const rsdl_bounding_box& box,
@@ -129,7 +131,8 @@ class rsdl_kd_tree : public vbl_ref_count
                             rsdl_kd_node* root,
                             vcl_vector< int >& closest_indices,
                             vcl_vector< double >& sq_distances,
-                            int & num_found );
+                            int & num_found,
+							int max_leaves);
 
   void update_closest( const rsdl_point& query_point,
                        int n,
