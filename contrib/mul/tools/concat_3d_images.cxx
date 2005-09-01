@@ -1,6 +1,7 @@
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_cstdlib.h>
+#include <vcl_cassert.h>
 #include <vcl_algorithm.h>
 #include <vcl_vector.h>
 #include <vcl_numeric.h>
@@ -18,11 +19,11 @@
 void usage(char * progname)
 {
   vcl_cout << "Usage: " << progname << "output image1 image2 - image3 image4 -- image5 ...\n"
-    "\n"
-    "Each new image will be concatenated to the right of the previous.\n"
-    "\"-\" means start a new row\n"
-    "\"--\" means start a new slice\n"
-    "Output will have the pixel sizes, number of planes, etc. of image1.\n";
+           << '\n'
+           << "Each new image will be concatenated to the right of the previous.\n"
+           << "\"-\" means start a new row\n"
+           << "\"--\" means start a new slice\n"
+           << "Output will have the pixel sizes, number of planes, etc. of image1.\n";
   vcl_exit(2);
 }
 
@@ -57,7 +58,7 @@ void parse_cmdline(int argc, const char **argv, vbl_array_3d<vcl_string>& fnames
   }
 
   fnames.resize(max_i, max_j, max_k);
-    
+
   arg = argv;
   i = j = k = 0;
 
@@ -79,10 +80,8 @@ void parse_cmdline(int argc, const char **argv, vbl_array_3d<vcl_string>& fnames
       fnames(i,j,k) = *arg;
       ++i;
     }
-
   }
 }
-
 
 
 vil3d_image_resource_sptr fname_to_resource(const vcl_string& fname)
@@ -93,7 +92,7 @@ vil3d_image_resource_sptr fname_to_resource(const vcl_string& fname)
 
   if (!im)
   {
-    vcl_cerr << "ERROR: unable to load image \"" << fname << '\"' << vcl_endl;
+    vcl_cerr << "ERROR: unable to load image \"" << fname << "\"\n";
     vcl_exit(4);
   }
 
@@ -101,14 +100,12 @@ vil3d_image_resource_sptr fname_to_resource(const vcl_string& fname)
 }
 
 
-
 void calc_image_sizes(
-  const vbl_array_3d<vil3d_image_resource_sptr> &images, 
+  const vbl_array_3d<vil3d_image_resource_sptr> &images,
   vcl_vector<unsigned> & sizes_i,
   vcl_vector<unsigned> & sizes_j,
   vcl_vector<unsigned> & sizes_k)
 {
-
   // Get max size of each slice of images in each direction.
 
   vcl_vector<unsigned>
@@ -126,7 +123,7 @@ void calc_image_sizes(
           max_size_i[i]  = vcl_max(max_size_i[i], images(i,j,k)->ni());
         }
 
-  // Sum these max sizes to find the postion of each input image, in the output image.
+  // Sum these max sizes to find the position of each input image, in the output image.
 
   sizes_k.resize(images.get_row3_count()+1);
   sizes_j.resize(images.get_row2_count()+1);
@@ -135,7 +132,6 @@ void calc_image_sizes(
   vcl_partial_sum(max_size_k.begin(), max_size_k.end(), sizes_k.begin()+1);
   vcl_partial_sum(max_size_j.begin(), max_size_j.end(), sizes_j.begin()+1);
   vcl_partial_sum(max_size_i.begin(), max_size_i.end(), sizes_i.begin()+1);
-
 }
 
 int main(int argc, char*argv[])
@@ -148,7 +144,7 @@ int main(int argc, char*argv[])
 
   if (vul_file::exists(filename))
   {
-    vcl_cerr << "ERROR: Output file \"" << filename << "\" already exists." << vcl_endl;
+    vcl_cerr << "ERROR: Output file \"" << filename << "\" already exists.\n";
     vcl_exit(5);
   }
 
@@ -169,7 +165,7 @@ int main(int argc, char*argv[])
   }
 
   vbl_array_3d<vil3d_image_resource_sptr> im_resources(
-    fnames.get_row1_count(), fnames.get_row2_count(), 
+    fnames.get_row1_count(), fnames.get_row2_count(),
     fnames.get_row3_count());
 
   vimt3d_add_all_loaders();
@@ -188,21 +184,21 @@ int main(int argc, char*argv[])
   vcl_vector<unsigned> sizes_j;
   vcl_vector<unsigned> sizes_k;
   calc_image_sizes(im_resources, sizes_i, sizes_j, sizes_k);
- 
-  vil3d_image_resource_sptr output = 
+
+  vil3d_image_resource_sptr output =
     vil3d_new_image_resource (filename, sizes_i.back(), sizes_j.back(), sizes_k.back(),
     im_resources(0,0,0)->nplanes(), im_resources(0,0,0)->pixel_format());
 
   if (!output)
   {
-    vcl_cerr << "ERROR: Unable to create output file \"" <<  filename << '\"' << vcl_endl;
+    vcl_cerr << "ERROR: Unable to create output file \"" <<  filename << "\"\n";
     vcl_exit(7);
   }
 
   vil3d_gen_synthetic_pixel_value pv;
   pv.double_value=0.0;
 
-  vil3d_image_resource_sptr blank = 
+  vil3d_image_resource_sptr blank =
     new vil3d_gen_synthetic_image( sizes_i.back(), sizes_j.back(), sizes_k.back(),
       im_resources(0,0,0)->pixel_format(), pv);
 
@@ -218,7 +214,7 @@ int main(int argc, char*argv[])
           if (!output->put_view(*in, sizes_i[i], sizes_j[j], sizes_k[k]))
           {
             vcl_cerr << "ERROR: Unable to copy image \"" << fnames(i,j,k) <<
-              "\" into output image \"" << filename << '\"' << vcl_endl;
+              "\" into output image \"" << filename << "\"\n";
             vcl_exit(8);
           }
         }
