@@ -58,36 +58,37 @@ class rsdl_kd_heap_entry
 class rsdl_kd_tree : public vbl_ref_count
 {
  private:
-    //: \brief copy ctor is private, for now, to prevent its use
+  //: copy ctor is private, for now, to prevent its use
   rsdl_kd_tree( const rsdl_kd_tree& /*old*/ ): vbl_ref_count() {}
 
-    //: \brief operator= is private, for now, to prevent its use
+  //: operator= is private, for now, to prevent its use
   rsdl_kd_tree& operator=( const rsdl_kd_tree& /*old*/ ) { return *this; }
 
  public:
-    //: \brief ctor requires the points and values associated with the tree;
+  //: ctor requires the points and values associated with the tree;
   rsdl_kd_tree( const vcl_vector< rsdl_point >& points,
                 double min_angle = 0,
                 int points_per_leaf=4 );
 
-    //: \brief dtor deletes the nodes in tree
+  //: dtor deletes the nodes in tree
   ~rsdl_kd_tree();
 
-    //: \brief find the n points nearest to the query point (and their associate indices) max_leaves = -1 to not use
-    // approximate nearest neighbor queries, if max_leaves is not -1 then use_heap must be true
+  //: find the n points nearest to the query point (and their associate indices).
+  // max_leaves = -1 to not use approximate nearest neighbor queries;
+  // if max_leaves is not -1 then use_heap must be true
   void n_nearest( const rsdl_point& query_point,
                   int n,
                   vcl_vector< rsdl_point >& closest_points,
                   vcl_vector< int >& indices,
                   bool use_heap = false,
-				  int max_leaves = -1 );
+                  int max_leaves = -1 );
 
-    //: \brief find all points within a query's bounding box
+  //: find all points within a query's bounding box
   void points_in_bounding_box( const rsdl_bounding_box& box,
                                vcl_vector< rsdl_point >& closest_points,
                                vcl_vector< int >& indices );
 
-    //: \brief find all points within a given distance of the query_point.
+  //: find all points within a given distance of the query_point.
   void points_in_radius( const rsdl_point& query_point,
                          double radius,
                          vcl_vector< rsdl_point >& points,
@@ -132,7 +133,7 @@ class rsdl_kd_tree : public vbl_ref_count
                             vcl_vector< int >& closest_indices,
                             vcl_vector< double >& sq_distances,
                             int & num_found,
-							int max_leaves);
+                            int max_leaves);
 
   void update_closest( const rsdl_point& query_point,
                        int n,

@@ -267,14 +267,14 @@ rsdl_kd_tree::n_nearest( const rsdl_point& query_point,
                          vcl_vector< rsdl_point >& closest_points,
                          vcl_vector< int >& closest_indices,
                          bool use_heap,
-						 int max_leaves)
+                         int max_leaves)
 {
   assert(n>0);
   assert( query_point.num_cartesian() == Nc_ );
   assert( query_point.num_angular() == Na_ );
-  
+
   //if we are using approx query, then we must use heap
-  assert(max_leaves == -1 || (max_leaves > 0 && use_heap));	
+  assert(max_leaves == -1 || (max_leaves > 0 && use_heap));
 
   if ( closest_indices.size() != (unsigned int)n )
     closest_indices.resize( n );
@@ -423,7 +423,7 @@ rsdl_kd_tree::n_nearest_with_heap( const rsdl_point& query_point,
                                    vcl_vector< int >& closest_indices,
                                    vcl_vector< double >& sq_distances,
                                    int & num_found,
-								   int max_leaves)
+                                   int max_leaves)
 {
   assert(n>0);
 #ifdef DEBUG
@@ -483,8 +483,8 @@ rsdl_kd_tree::n_nearest_with_heap( const rsdl_point& query_point,
           if ( this-> bounded_at_leaf( query_point, n, current, sq_distances, num_found ) )
             return;
         }
-		if (max_leaves != -1 && leaves_examined_ >= max_leaves)
-			return;
+        if (max_leaves != -1 && leaves_examined_ >= max_leaves)
+          return;
       }
 
       else {
