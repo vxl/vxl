@@ -21,7 +21,7 @@ void usage(char * progname)
     "\n"
     "Each new image will be concatenated to the right of the previous.\n"
     "\"-\" means start a new row\n"
-    "\"--\" means start a new slice\n";
+    "\"--\" means start a new slice\n"
     "Output will have the pixel sizes, number of planes, etc. of image1.\n";
   vcl_exit(2);
 }
@@ -32,7 +32,7 @@ void parse_cmdline(int argc, const char **argv, vbl_array_3d<vcl_string>& fnames
 
   unsigned max_i=0, max_j=0, max_k=0;
   unsigned i=0, j=0, k=0;
-  for (unsigned a = 0; a!=argc; ++arg, ++a)
+  for (int a = 0; a!=argc; ++arg, ++a)
   {
     if (vcl_string("--") == *arg)
     {
@@ -61,7 +61,7 @@ void parse_cmdline(int argc, const char **argv, vbl_array_3d<vcl_string>& fnames
   arg = argv;
   i = j = k = 0;
 
-  for (unsigned a = 0; a!=argc; ++arg, ++a)
+  for (int a = 0; a!=argc; ++arg, ++a)
   {
     if (vcl_string("--") == *arg)
     {
