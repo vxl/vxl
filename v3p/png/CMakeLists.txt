@@ -1,4 +1,7 @@
 # v3p/png/CMakeLists.txt
+
+PROJECT( png C )
+
 #   This is the png directory of v3p.  Current version is 1.2.8rc5 of November 2004.
 
 INCLUDE(${MODULE_PATH}/FindPNG.cmake)

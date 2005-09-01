@@ -1,5 +1,7 @@
 # v3p/jpeg/CMakeLists.txt
 
+PROJECT( jpeg C )
+
 INCLUDE( ${MODULE_PATH}/FindJPEG.cmake )
 
 IF(NOT VXL_USING_NATIVE_JPEG)

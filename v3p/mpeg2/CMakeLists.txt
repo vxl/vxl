@@ -1,4 +1,7 @@
 # v3p/mpeg2/CMakeLists.txt
+
+PROJECT( mpeg2 C )
+
 INCLUDE( ${MODULE_PATH}/FindMPEG2.cmake )
 
 IF( NOT VXL_USING_NATIVE_MPEG2 )

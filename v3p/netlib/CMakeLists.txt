@@ -1,5 +1,7 @@
 # ./v3p/netlib/CMakeLists.txt
 
+PROJECT( netlib C )
+
 SET( netlib_sources
   f2c.h
   netlib.h

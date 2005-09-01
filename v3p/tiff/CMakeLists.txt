@@ -1,5 +1,7 @@
 # v3p/tiff/CMakeLists.txt
 
+PROJECT( tiff C )
+
 INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
 
 IF(NOT VXL_USING_NATIVE_TIFF)

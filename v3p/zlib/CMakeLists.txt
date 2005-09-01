@@ -1,5 +1,7 @@
 # v3p/zlib/CMakeLists.txt
 
+PROJECT( zlib C )
+
 INCLUDE(${MODULE_PATH}/FindZLIB.cmake)
 
 IF(NOT VXL_USING_NATIVE_ZLIB)
