@@ -1,5 +1,5 @@
 // vil_nitf2: Written by Harry Voorhees (hlv@) and Rob Radtke (rob@) of
-// Stellar Science Ltd. Co. (stellarscience.com) for 
+// Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
 #include "vil_nitf2_typed_field_formatter.h"
@@ -9,13 +9,13 @@
 #include <vcl_utility.h>
 #include <vcl_compiler.h> //for VCL_WIN32
 
-#include <errno.h>
+#include <vcl_cerrno.h>
 
 //==============================================================================
 // Class vil_nitf2_date_time_formatter
 
-vil_nitf2_date_time_formatter::vil_nitf2_date_time_formatter(int field_width) 
-  : vil_nitf2_typed_field_formatter<vil_nitf2_date_time>(vil_nitf2::type_date_time, field_width) 
+vil_nitf2_date_time_formatter::vil_nitf2_date_time_formatter(int field_width)
+  : vil_nitf2_typed_field_formatter<vil_nitf2_date_time>(vil_nitf2::type_date_time, field_width)
 {};
 
 bool vil_nitf2_date_time_formatter::read_vcl_stream(vcl_istream& input, vil_nitf2_date_time& out_value, bool& out_blank)
@@ -31,11 +31,11 @@ bool vil_nitf2_date_time_formatter::write_vcl_stream(vcl_ostream& output, const 
 //==============================================================================
 // Class vil_nitf2_location_formatter
 
-vil_nitf2_location_formatter::vil_nitf2_location_formatter(int field_width) 
-  : vil_nitf2_typed_field_formatter<vil_nitf2_location*>(vil_nitf2::type_location, field_width) 
+vil_nitf2_location_formatter::vil_nitf2_location_formatter(int field_width)
+  : vil_nitf2_typed_field_formatter<vil_nitf2_location*>(vil_nitf2::type_location, field_width)
 {}
 
-bool vil_nitf2_location_formatter::read_vcl_stream(vcl_istream& input, 
+bool vil_nitf2_location_formatter::read_vcl_stream(vcl_istream& input,
                                  vil_nitf2_location*& out_value, bool& out_blank)
 {
   vcl_streampos tag_start_pos = input.tellg();
@@ -66,17 +66,17 @@ bool vil_nitf2_location_formatter::write_vcl_stream(vcl_ostream& output, vil_nit
 //==============================================================================
 // Class vil_nitf2_integer_formatter
 
-vil_nitf2_integer_formatter::vil_nitf2_integer_formatter(int field_width, bool show_sign ) 
-  : vil_nitf2_typed_field_formatter<int>(vil_nitf2::type_int, field_width),  
-      show_sign(show_sign) 
+vil_nitf2_integer_formatter::vil_nitf2_integer_formatter(int field_width, bool show_sign )
+  : vil_nitf2_typed_field_formatter<int>(vil_nitf2::type_int, field_width),
+      show_sign(show_sign)
 {
   //Assuming that int is 32 bits, then it can't represent a value higher than
-  // (10^32)/2 ... that is 2147483648.  
+  // (10^32)/2 ... that is 2147483648.
   //assert( field_width < 10 );
 }
 
 bool
-vil_nitf2_integer_formatter::read_vcl_stream(vcl_istream& input, 
+vil_nitf2_integer_formatter::read_vcl_stream(vcl_istream& input,
                            int& out_value, bool& out_blank)
 {
   char* cstr;
@@ -88,14 +88,14 @@ vil_nitf2_integer_formatter::read_vcl_stream(vcl_istream& input,
   out_value = (int)strtol(cstr, &endp, 10);
   bool sign_ok = check_sign(cstr, show_sign);
   delete[] cstr;
-  return ((endp-cstr)==field_width  // processed all chars
-          && errno==0              // with no errors
-          && sign_ok);              // sign shown as expected
+  return (endp-cstr)==field_width // processed all chars
+         && errno==0              // with no errors
+         && sign_ok;              // sign shown as expected
 }
 
 bool vil_nitf2_integer_formatter::write_vcl_stream(vcl_ostream& output, const int& value)
 {
-  output << vcl_setw(field_width) << vcl_right << vcl_setfill('0'); 
+  output << vcl_setw(field_width) << vcl_right << vcl_setfill('0');
   if (show_sign) {
     output << vcl_showpos;
   } else {
@@ -109,9 +109,9 @@ bool vil_nitf2_integer_formatter::write_vcl_stream(vcl_ostream& output, const in
 // Class vil_nitf2_long_long_formatter
 
 vil_nitf2_long_long_formatter::
-vil_nitf2_long_long_formatter(int field_width, bool show_sign) 
-  : vil_nitf2_typed_field_formatter<vil_nitf2_long>(vil_nitf2::type_long_long, field_width), 
-    show_sign(show_sign) 
+vil_nitf2_long_long_formatter(int field_width, bool show_sign)
+  : vil_nitf2_typed_field_formatter<vil_nitf2_long>(vil_nitf2::type_long_long, field_width),
+    show_sign(show_sign)
 {};
 
 bool vil_nitf2_long_long_formatter::
@@ -127,14 +127,14 @@ read_vcl_stream(vcl_istream& input, vil_nitf2_long& out_value, bool& out_blank)
 
 #if VXL_HAS_INT_64
 
-#if defined (VCL_VC)
+#if defined VCL_VC
   out_value = _strtoi64(cstr, &endp, 10);
   conversion_ok = (endp-cstr)==field_width;   // processed all chars
-#elif defined (VCL_BORLAND)
+#elif defined VCL_BORLAND
   out_value = _atoi64( cstr );
   conversion_ok = true;                       //no error checking available
 #else
-  out_value = ::strtoll(cstr, &endp, 10);  // in Standard C Library
+  out_value = ::strtoll(cstr, &endp, 10);     // in Standard C Library
   conversion_ok = (endp-cstr)==field_width;   // processed all chars
 #endif
 
@@ -142,17 +142,17 @@ read_vcl_stream(vcl_istream& input, vil_nitf2_long& out_value, bool& out_blank)
   out_value = strtol(cstr, &endp, 10);
   conversion_ok = (endp-cstr)==field_width;   // processed all chars
 #endif //VXL_HAS_INT_64
-  
+
   bool sign_ok = check_sign(cstr, show_sign);
   delete[] cstr;
-  return (conversion_ok            
-          && errno==0              // with no errors
-          && sign_ok);              // sign shown as expected
+  return conversion_ok
+         && errno==0              // with no errors
+         && sign_ok;              // sign shown as expected
 }
 
 bool vil_nitf2_long_long_formatter::write_vcl_stream(vcl_ostream& output, const vil_nitf2_long& value)
 {
-  output << vcl_setw(field_width) << vcl_right << vcl_setfill('0'); 
+  output << vcl_setw(field_width) << vcl_right << vcl_setfill('0');
   if (show_sign) {
     output << vcl_showpos;
   } else {
@@ -166,13 +166,13 @@ bool vil_nitf2_long_long_formatter::write_vcl_stream(vcl_ostream& output, const 
 // Class vil_nitf2_double_formatter
 
 vil_nitf2_double_formatter::
-vil_nitf2_double_formatter(int field_width, int precision, bool show_sign) 
-  : vil_nitf2_typed_field_formatter<double>(vil_nitf2::type_double, field_width), 
-    precision(precision), 
-    show_sign(show_sign) 
+vil_nitf2_double_formatter(int field_width, int precision, bool show_sign)
+  : vil_nitf2_typed_field_formatter<double>(vil_nitf2::type_double, field_width),
+    precision(precision),
+    show_sign(show_sign)
 {};
 
-bool vil_nitf2_double_formatter::read_vcl_stream(vcl_istream& input, 
+bool vil_nitf2_double_formatter::read_vcl_stream(vcl_istream& input,
                                double& out_value, bool& out_blank)
 {
   char* cstr;
@@ -184,8 +184,8 @@ bool vil_nitf2_double_formatter::read_vcl_stream(vcl_istream& input,
   out_value = strtod(cstr, &endp);
   bool sign_ok = check_sign(cstr, show_sign);
   bool decimal_ok = cstr[(field_width-precision)-1]=='.';
-  return 
-    (endp-cstr)==field_width  // processed all chars 
+  return
+    (endp-cstr)==field_width  // processed all chars
      && errno==0              // with no errors
      && decimal_ok            // decimal point in right place
      && sign_ok;              // sign shown as expected
@@ -207,11 +207,11 @@ bool vil_nitf2_double_formatter::write_vcl_stream(vcl_ostream& output, const dou
 //==============================================================================
 // Class vil_nitf2_binary_formatter
 
-vil_nitf2_binary_formatter::vil_nitf2_binary_formatter(int widthBytes) 
-  : vil_nitf2_typed_field_formatter<void*>(vil_nitf2::type_binary, widthBytes) 
+vil_nitf2_binary_formatter::vil_nitf2_binary_formatter(int widthBytes)
+  : vil_nitf2_typed_field_formatter<void*>(vil_nitf2::type_binary, widthBytes)
 {};
 
-bool vil_nitf2_binary_formatter::read(vil_stream& input, void*& out_value, 
+bool vil_nitf2_binary_formatter::read(vil_stream& input, void*& out_value,
                                       bool& out_blank)
 {
   out_value = (void*)(new char[field_width]);
@@ -227,8 +227,8 @@ bool vil_nitf2_binary_formatter::write(vil_nitf2_ostream& output, void*const& va
 //==============================================================================
 // Class vil_nitf2_char_formatter
 
-vil_nitf2_char_formatter::vil_nitf2_char_formatter() 
-  : vil_nitf2_typed_field_formatter<char>(vil_nitf2::type_char, 1) 
+vil_nitf2_char_formatter::vil_nitf2_char_formatter()
+  : vil_nitf2_typed_field_formatter<char>(vil_nitf2::type_char, 1)
 {};
 
 bool vil_nitf2_char_formatter::read_vcl_stream(vcl_istream& input, char& out_value, bool& out_blank)
@@ -250,12 +250,12 @@ bool vil_nitf2_char_formatter::write_vcl_stream(vcl_ostream& output, const char&
 // Class vil_nitf2_string_formatter
 
 vil_nitf2_string_formatter::
-vil_nitf2_string_formatter(int field_width, enum_char_set char_set) 
-  : vil_nitf2_typed_field_formatter<vcl_string>(vil_nitf2::type_string, field_width), 
-    char_set(char_set) 
+vil_nitf2_string_formatter(int field_width, enum_char_set char_set)
+  : vil_nitf2_typed_field_formatter<vcl_string>(vil_nitf2::type_string, field_width),
+    char_set(char_set)
 {};
 
-bool vil_nitf2_string_formatter::read_vcl_stream(vcl_istream& input, 
+bool vil_nitf2_string_formatter::read_vcl_stream(vcl_istream& input,
                                vcl_string& out_value, bool& out_blank)
 {
   char* cstr;
@@ -279,7 +279,7 @@ bool vil_nitf2_string_formatter::write_vcl_stream(vcl_ostream& output, const vcl
 }
 
 bool vil_nitf2_string_formatter::is_valid(vcl_string /*value*/) const
-{ 
+{
   // to do: check char set
   return true;
 }
@@ -298,12 +298,12 @@ vil_nitf2_enum_string_formatter(int field_width, const vil_nitf2_enum_values& va
 void vil_nitf2_enum_string_formatter::validate_value_map()
 {
   for (vil_nitf2_enum_values::iterator entry = value_map.begin();
-    entry != value_map.end(); ++entry) 
+    entry != value_map.end(); ++entry)
   {
     vcl_string token = entry->first;
     if (int(token.length()) > field_width) {
-      vcl_cerr << "vil_nitf2_enum_values: WARNING: Ignoring token " 
-        << token << "; length exceeds declared field width." << vcl_endl;
+      vcl_cerr << "vil_nitf2_enum_values: WARNING: Ignoring token "
+               << token << "; length exceeds declared field width.\n";
       // Should probably remove it so that is_valid() doesn't match it.
       // On the other hand, this class will never read a token of this
       // length, so don't worry about it.
@@ -322,8 +322,8 @@ bool vil_nitf2_enum_string_formatter::is_valid_value(vcl_string token) const
 vil_nitf2_enum_values& vil_nitf2_enum_values::value(vcl_string token, vcl_string pretty_name)
 {
   if (!insert(vcl_make_pair(token, pretty_name)).second) {
-    vcl_cerr << "vil_nitf2_enum_values: WARNING: Ignoring definition " 
-      << token << "; token already defined for this enumeration." << vcl_endl;
-  } 
-  return *this; 
+    vcl_cerr << "vil_nitf2_enum_values: WARNING: Ignoring definition "
+             << token << "; token already defined for this enumeration.\n";
+  }
+  return *this;
 }
