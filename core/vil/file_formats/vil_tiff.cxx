@@ -60,7 +60,7 @@ bool vil_tiff_file_format_probe(vil_stream* is)
     return 0;
 #else
   char hdr[4];
-  vil_streampos read = is->read(hdr, sizeof hdr);
+  int read = (int)is->read(hdr, sizeof hdr);
   if (read < sizeof hdr)
     return false;
 
@@ -105,11 +105,12 @@ vil_image_resource_sptr
                                           unsigned nplanes,
                                           enum vil_pixel_format format)
 {
-  vcl_cout<<"\n the format of the file is "<<format<< " and no of components are"<<vil_pixel_format_sizeof_components(format)<<"\n";
+  vcl_cout<< "\n the format of the file is "<<format<< " and no of components is"
+          << vil_pixel_format_sizeof_components(format)<<'\n';
   if (nplanes==1 && vil_pixel_format_sizeof_components(format)>1 && format!=VIL_PIXEL_FORMAT_UINT_16)
   {
       vcl_cerr << "ERROR with vil_tiff_file_format::make_output_image():\n"
-          << "Can't deal with greyscale images with pixel widths other than 8 bits\n";
+               << "Can't deal with greyscale images with pixel widths other than 8 bits\n";
       return 0;
   }
   return new vil_tiff_image(vs, nx, ny, nplanes, format);
@@ -269,13 +270,15 @@ vil_tiff_image::vil_tiff_image(vil_stream* is,
 
 vil_pixel_format vil_tiff_image::pixel_format() const
 {
-  if( p->sample_format == SAMPLEFORMAT_IEEEFP ) {
+  if ( p->sample_format == SAMPLEFORMAT_IEEEFP ) {
     return VIL_PIXEL_FORMAT_FLOAT;
-  } else {
-    //only assume signed if the file header says so
-    //If the header doesn't say or doesn't know, then assume
-    //unsigned.  If nothing else, the keeps backwards compatibility 
-    //with the older version of this code
+  }
+  else
+  {
+    // only assume signed if the file header says so
+    // If the header doesn't say or doesn't know, then assume
+    // unsigned.  If nothing else, the keeps backwards compatibility
+    // with the older version of this code
     bool isSigned = p->sample_format == SAMPLEFORMAT_INT;
 
     if (bits_per_component_ <= 1)
@@ -331,16 +334,16 @@ bool vil_tiff_image::read_header()
     samplesperpixel = 1;
 
   switch (samplesperpixel) {
-  case 1:
-  case 3:
+   case 1:
+   case 3:
     this->components_ = samplesperpixel;
     this->bits_per_component_ = bitspersample;
     break;
-  case 16256:
+   case 16256:
     this->components_ = 1;
     this->bits_per_component_ = bitspersample;
     break;
-  default:
+   default:
     // vcl_cerr << "vil_tiff: Saw " << samplesperpixel << " samples @ " << bitspersample << '\n';
     TIFFError("TIFFImageRH: ", "Can only handle 1-channel gray scale or 3-channel color");
     return false;
@@ -369,7 +372,7 @@ bool vil_tiff_image::read_header()
 
   TIFFGetField(p->tif, TIFFTAG_PHOTOMETRIC, &p->photometric);
   switch (p->photometric) {
-  case PHOTOMETRIC_RGB:
+   case PHOTOMETRIC_RGB:
     if (!TIFFIsTiled(p->tif)) {
    // section_tiff_image = new ForeignImage(GetDescription(), 'r', GetSizeX(), GetSizeY(), GetBitsPixel(), 8);
 #ifdef DEBUG
@@ -377,7 +380,7 @@ bool vil_tiff_image::read_header()
 #endif
     }
     break;
-  case PHOTOMETRIC_MINISBLACK:
+   case PHOTOMETRIC_MINISBLACK:
     if (!TIFFIsTiled(p->tif))
     {
       // section_tiff_image = new ForeignImage(GetDescription(), 'r', GetSizeX(), GetSizeY(), GetBitsPixel(), 8);
@@ -395,7 +398,7 @@ bool vil_tiff_image::read_header()
     SetBandOrder("BLUE",  0);
 #endif
     break;
-  case PHOTOMETRIC_MINISWHITE:
+   case PHOTOMETRIC_MINISWHITE:
 #if 0 // commented out
     // invert colormap
     int** cm = new int*[3];
@@ -417,7 +420,7 @@ bool vil_tiff_image::read_header()
     SetBandOrder("BLUE",  0);
 #endif
     break;
-  case PHOTOMETRIC_PALETTE:
+   case PHOTOMETRIC_PALETTE:
 #if 0 // commented out
     int** cm = new int*[3];
     cm[0] = new int[ncolors];
@@ -451,7 +454,7 @@ bool vil_tiff_image::read_header()
     delete map;
 #endif
     break;
-  default:
+   default:
     TIFFError("TIFFImageRH: ",
               "Can not handle image with PhotometricInterpretation=%d",
               p->photometric);
@@ -715,27 +718,26 @@ vil_image_view_base_sptr vil_tiff_image::get_copy_view(unsigned i0,
         }
       }
     }
-    switch( pixel_format() ){
+    switch ( pixel_format() ){
 #define macro( F, T ) \
-  case F: { \
+   case F: \
     return new vil_image_view< T >(buf, reinterpret_cast< T* >(buf->data()), ni, nj,  \
-                                   components_, components_, components_*ni, 1 );      \
-          }
-macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
-macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+                                   components_, components_, components_*ni, 1 )
+      macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte );
+      macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte );
 #if VXL_HAS_INT_64
-macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
-macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
+      macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 );
+      macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 );
 #endif
-macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
-macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-macro(VIL_PIXEL_FORMAT_BOOL , bool )
-macro(VIL_PIXEL_FORMAT_FLOAT , float )
-macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+      macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 );
+      macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 );
+      macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 );
+      macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 );
+      macro(VIL_PIXEL_FORMAT_BOOL , bool );
+      macro(VIL_PIXEL_FORMAT_FLOAT , float );
+      macro(VIL_PIXEL_FORMAT_DOUBLE , double );
 #undef macro
-    default:
+     default:
       // not compressed, and jumbo strips. dig it out manually in case ReadScanLine pulls in all the image
       problem("Can't deal with this pixel depth.");
       return 0;
