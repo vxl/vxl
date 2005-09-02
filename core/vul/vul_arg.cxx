@@ -507,6 +507,12 @@ VDS void print_value(vcl_ostream  &s, vul_arg<int> const &argmt)
 
 VDS int parse(vul_arg<int>* argmt, char ** argv)
 {
+  if( !argv ||  !argv[0] ) {
+    // no input
+    vcl_cerr << "vul_arg_parse: Expected integer, none is provided." << vcl_endl;
+    return -1;
+  }
+
   char* endptr = 0;
   double v = vcl_strtod(argv[0], &endptr);
   if (*endptr != '\0') {
@@ -532,6 +538,12 @@ VDS void print_value(vcl_ostream &s, vul_arg<unsigned> const &argmt)
 
 VDS int parse(vul_arg<unsigned>* argmt, char ** argv)
 {
+  if( !argv ||  !argv[0] ) {
+    // no input
+    vcl_cerr << "vul_arg_parse: Expected integer, none is provided." << vcl_endl;
+    return -1;
+  }
+
   char* endptr = 0;
   double v = vcl_strtod(argv[0], &endptr);
   if (*endptr != '\0') {
@@ -557,6 +569,12 @@ VDS void print_value(vcl_ostream &s, vul_arg<float> const &argmt)
 
 VDS int parse(vul_arg<float>* argmt, char ** argv)
 {
+  if( !argv ||  !argv[0] ) {
+    // no input
+    vcl_cerr << "vul_arg_parse: Expected floating number, none is provided." << vcl_endl;
+    return -1;
+  }
+
   char* endptr = 0;
   argmt->value_ = (float)vcl_strtod(argv[0], &endptr);
   if (*endptr == '\0')
@@ -576,6 +594,12 @@ VDS void print_value(vcl_ostream &s, vul_arg<double> const &argmt)
 
 VDS int parse(vul_arg<double>* argmt, char ** argv)
 {
+  if( !argv ||  !argv[0] ) {
+    // no input
+    vcl_cerr << "vul_arg_parse: Expected floating number, none is provided." << vcl_endl;
+    return -1;
+  }
+
   char* endptr = 0;
   argmt->value_ = vcl_strtod(argv[0], &endptr);
   if (*endptr == '\0')
@@ -609,6 +633,12 @@ VDS void print_value(vcl_ostream &s, vul_arg<char const *> const &argmt)
 
 VDS int parse(vul_arg<char const *>* argmt, char ** argv)
 {
+  if( !argv ||  !argv[0] ) {
+    // no input
+    vcl_cerr << "vul_arg_parse: Expected string, none is provided." << vcl_endl;
+    return -1;
+  }
+
   argmt->value_ = argv[0]; // argv is valid till the end of the program so
   return 1;                // it's ok to just grab the pointer.
 }
@@ -623,6 +653,12 @@ VDS void print_value(vcl_ostream &s, vul_arg<vcl_string> const &argmt)
 
 VDS int parse(vul_arg<vcl_string>* argmt, char ** argv)
 {
+  if( !argv ||  !argv[0] ) {
+    // no input
+    vcl_cerr << "vul_arg_parse: Expected string, none is provided." << vcl_endl;
+    return -1;
+  }
+
   if (argv[0]) {
     argmt->value_ = argv[0];
     return 1;
@@ -706,6 +742,13 @@ VDS void print_value(vcl_ostream &s, vul_arg<vcl_vector<double> > const &argmt)
 
 VDS int parse(vul_arg<vcl_vector<double> >* argmt, char ** argv)
 {
+
+  if( !argv ||  !argv[0] ) {
+    // no input
+    vcl_cerr << "vul_arg_parse: Expected a vector of floating number, none is provided." << vcl_endl;
+    return -1;
+  }
+
   int sucked = 0;
   // Defaults should be cleared when the user supplies a value
   argmt->value_.clear();
