@@ -25,7 +25,7 @@ static T get_nc_angle(const vgl_vector_2d<T> &last_dir,
   //if the two points are on top of each other, pretend it is a very bad angle.
   // Use an illegal cosine value to indicate this.
   if (v.length() <= eps) return (T)2.0;
-  return -cos_angle(last_dir, v);
+  return T(-cos_angle(last_dir, v));
 }
 
 template <class T>
