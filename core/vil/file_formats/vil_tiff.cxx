@@ -60,7 +60,7 @@ bool vil_tiff_file_format_probe(vil_stream* is)
     return 0;
 #else
   char hdr[4];
-  int read = (int)is->read(hdr, sizeof hdr);
+  unsigned int read = (unsigned int)is->read(hdr, sizeof hdr);
   if (read < sizeof hdr)
     return false;
 
