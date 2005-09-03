@@ -18,12 +18,27 @@ bool vgl_lineseg_test_line(T x1, T y1, T x2, T y2, T x3, T y3, T x4, T y4)
   return (a<=0 && b>=0) || (a>=0 && b<=0);
 }
 
+// Returns true iif (x3,y3) lies inbetween (x1,y1) and (x2,y2);
+// all three points are assumed to be collinear
+template <class T>
+static inline
+bool inbetween(T x1, T y1, T x2, T y2, T x3, T y3)
+{
+  return (x1-x3)*(x2-x3)<=0 && (y1-y3)*(y2-y3)<=0;
+}
+
 template <class T>
 bool vgl_lineseg_test_lineseg(T x1, T y1, T x2, T y2, T x3, T y3, T x4, T y4)
 {
   return
     vgl_lineseg_test_line(x1, y1, x2, y2, x3, y3, x4, y4) &&
-    vgl_lineseg_test_line(x3, y3, x4, y4, x1, y1, x2, y2);
+    vgl_lineseg_test_line(x3, y3, x4, y4, x1, y1, x2, y2) &&
+    ( // the above two conditions are only sufficient for noncollinear line segments! - PVr
+      !collinear(vgl_point_2d<T>(x1, y1), vgl_point_2d<T>(x2, y2), vgl_point_2d<T>(x3, y3)) ||
+      !collinear(vgl_point_2d<T>(x1, y1), vgl_point_2d<T>(x2, y2), vgl_point_2d<T>(x4, y4)) ||
+      inbetween(x1, y1, x2, y2, x3, y3) ||
+      inbetween(x1, y1, x2, y2, x4, y4)
+    );
 }
 
 //--------------------------------------------------------------------------------
