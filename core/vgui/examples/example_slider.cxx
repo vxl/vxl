@@ -52,9 +52,9 @@ int main(int argc, char **argv)
 
   // Fit the sliders and the easy2D into the window
   vgui_poly_tableau_new poly;
-  poly->add( easy_tab, 0.1, 0.1, 0.9, 0.9 );
-  poly->add( slider_h, 0.1, 0.0, 0.9, 0.1 );
-  poly->add( slider_v, 0.0, 0.1, 0.1, 0.9 );
+  poly->add( easy_tab, 0.1f, 0.1f, 0.9f, 0.9f );
+  poly->add( slider_h, 0.1f, 0.0f, 0.9f, 0.1f );
+  poly->add( slider_v, 0.0f, 0.1f, 0.1f, 0.9f );
 
   vgui_shell_tableau_new shell(poly);
   return vgui::run(shell, 512, 512);
