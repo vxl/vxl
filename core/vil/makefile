@@ -60,21 +60,37 @@ USE_TIFF := 1
 SOURCES += file_formats/vil_tiff.cxx
 endif
 
-#SOURCES += file_formats/vil_nitf.cxx
-#SOURCES += file_formats/vil_nitf_extended_header.cxx
-#SOURCES += file_formats/vil_nitf_header.cxx
-#SOURCES += file_formats/vil_nitf_image_subheader.cxx
-#SOURCES += file_formats/vil_nitf_image_subheader_v20.cxx
-#SOURCES += file_formats/vil_nitf_message_header.cxx
-#SOURCES += file_formats/vil_nitf_message_header_v20.cxx
-#SOURCES += file_formats/vil_nitf_util.cxx
-#SOURCES += file_formats/vil_nitf_version.cxx
-#SOURCES += file_formats/vil_nitf_version_v20.cxx
-#MANPAGE_SOURCES += file_formats/vil_nitf_blocking_info.h
-#MANPAGE_SOURCES += file_formats/vil_nitf_header_v20.h
-#MANPAGE_SOURCES += file_formats/vil_nitf_macro_defs.h
-#MANPAGE_SOURCES += file_formats/vil_nitf_typeinfo.h
+  ################################
+  # NITF 2.0 and 2.1 reading code
+  ################################
+# The actual vil_image_resource subclass
+SOURCES += file_formats/vil_nitf2_image.cxx
 
+# For reading the NITF file headers as well as the image headers
+SOURCES += file_formats/vil_nitf2_header.cxx
+SOURCES += file_formats/vil_nitf2_image_subheader.cxx
+
+# Stuff shared by all NITF2 classes
+MANPAGE_SOURCES += file_formats/vil_nitf2.h
+  
+# Generic framework for reading NITF tagged record extensions (TREs)
+SOURCES += file_formats/vil_nitf2_array_field.cxx
+SOURCES += file_formats/vil_nitf2_classification.cxx
+SOURCES += file_formats/vil_nitf2_compound_field_value.cxx
+SOURCES += file_formats/vil_nitf2_data_mask_table.cxx
+SOURCES += file_formats/vil_nitf2_field.cxx
+SOURCES += file_formats/vil_nitf2_field_definition.cxx
+SOURCES += file_formats/vil_nitf2_field_formatter.cxx
+SOURCES += file_formats/vil_nitf2_field_functor.cxx
+SOURCES += file_formats/vil_nitf2_field_sequence.cxx
+MANPAGE_SOURCES += file_formats/vil_nitf2_index_vector.h
+SOURCES += file_formats/vil_nitf2_scalar_field.cxx
+SOURCES += file_formats/vil_nitf2_tagged_record.cxx
+SOURCES += file_formats/vil_nitf2_tagged_record_definition.cxx
+MANPAGE_SOURCES += file_formats/vil_nitf2_typed_array_field.h
+MANPAGE_SOURCES += file_formats/vil_nitf2_typed_scalar_field.h
+SOURCES += file_formats/vil_nitf2_typed_field_formatter.cxx
+  
 # image operations
 SOURCES += vil_crop.cxx
 SOURCES += vil_clamp.cxx
