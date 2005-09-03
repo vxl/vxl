@@ -18,6 +18,9 @@ SUBDIRS += vimt ipts vil3d vimt3d
 # video
 SUBDIRS += mvl2
 
+# tools
+SUBDIRS += tools
+
 ################################
 include ${IUEROOT}/config/top.mk
 ################################
