@@ -22,5 +22,5 @@ SUBDIRS += mvl2
 SUBDIRS += tools
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################
