@@ -14,9 +14,8 @@
 //
 // \verbatim
 //  Modifications
-//   Initial version February 15, 2003
-//   Renamed to brip_vil_float_ops January 24, 2004, In order to support
-//   moving from vil1 to vil.
+//   Feb 15 2003 Initial version
+//   Jan 24 2004 Renamed to brip_vil_float_ops, to support moving from vil1 to vil
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -158,7 +157,7 @@ class brip_vil_float_ops
 
   //: converts a generic image to a byte image. Use this instead of convert_to_grey
   static vil_image_view<unsigned char>
-  brip_vil_float_ops::convert_to_byte(vil_image_resource_sptr const& image);
+    convert_to_byte(vil_image_resource_sptr const& image);
 
   //: converts an float image to an unsigned short image within a range
   static vil_image_view<unsigned short>
