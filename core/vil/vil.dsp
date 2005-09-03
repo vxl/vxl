@@ -420,6 +420,54 @@ SOURCE=.\file_formats/vil_viff.cxx
 SOURCE=.\file_formats/vil_viff_support.c
 # End Source File
 # Begin Source File
+SOURCE=.\file_formats/vil_nitf2_array_field.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_classification.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_compound_field_value.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_data_mask_table.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_field.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_field_definition.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_field_formatter.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_field_functor.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_field_sequence.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_header.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_image.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_image_subheader.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_scalar_field.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_tagged_record.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_tagged_record_definition.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_typed_field_formatter.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil_resample_bilin+float.float-.cxx
 # End Source File
 # Begin Source File
@@ -772,6 +820,66 @@ SOURCE=.\file_formats/vil_viff_support.h
 # End Source File
 # Begin Source File
 SOURCE=.\file_formats/vil_viffheader.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_array_field.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_classification.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_compound_field_value.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_data_mask_table.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_field.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_field_definition.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_field_formatter.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_field_functor.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_field_sequence.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_header.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_image.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_image_subheader.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_index_vector.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_scalar_field.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_tagged_record.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_tagged_record_definition.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_typed_array_field.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_typed_field_formatter.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_typed_scalar_field.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_nearest_neighbour_interp.h
