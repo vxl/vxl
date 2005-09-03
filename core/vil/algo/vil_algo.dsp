@@ -249,6 +249,12 @@ SOURCE=.\Templates/vil_checker_board+byte.byte-.cxx
 SOURCE=.\Templates/vil_suppress_non_max_edges+double.double-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil_gauss_filter+uint_16.uint_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_threshold+uint_16-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vil_histogram.cxx
 # End Source File
 # Begin Source File
