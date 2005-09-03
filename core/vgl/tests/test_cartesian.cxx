@@ -245,27 +245,79 @@ static void test_line_2d()
   bool b = concurrent(l1,l2,l3); // because they share the point (0,0)
   TEST("concurrent", b, true);
 
-  vgl_point_2d<double> p1(1,0), p2(0,1);
-  vgl_line_2d<double> li(p1,p2); // line through these two points
+  vgl_point_2d<double> p00(0,0), p01(0,1), p02(0,2), p03(0,3),
+                       p10(1,0), p11(1,1), p12(1,2), p13(1,3),
+                       p20(2,0), p21(2,1), p30(3,0), p31(3,1);
+  vgl_line_2d<double> li(p10,p01); // line through these two points
   vcl_cout << li << vcl_endl;
   vgl_line_2d<double> ll(1,1,-1);
   TEST("join", li, ll);
 
-  vgl_point_2d<double> p3(0,3);
   l3.set(0,-1,-8);
-  TEST("vgl_distance(line,point)", vgl_distance(l3,p3), 11);
-  TEST_NEAR("vgl_distance(line,point)", vgl_distance(l2,p3), 2.4, 1e-9);
-  TEST_NEAR("vgl_distance(point,line)", vgl_distance(p3,l2), 2.4, 1e-9);
+  TEST("vgl_distance(line,point)", vgl_distance(l3,p03), 11);
+  TEST_NEAR("vgl_distance(line,point)", vgl_distance(l2,p03), 2.4, 1e-9);
+  TEST_NEAR("vgl_distance(point,line)", vgl_distance(p03,l2), 2.4, 1e-9);
 
-  vgl_line_segment_2d<double> ls(p1,p2); // line segment through these two points
-  vcl_cout << ls << '\n';
-  TEST("line segment", ls.point1(), p1);
-  TEST("line segment", ls.point2(), p2);
+  vgl_line_segment_2d<double> ls(p10,p01); // line segment through these two points
+  TEST("line segment first end point", ls.point1(), p10);
+  TEST("line segment second end point", ls.point2(), p01);
 
-  vgl_line_segment_2d<double> ls2(p2,p1); // inverse line segment through these points
-  vcl_cout << ls2 << '\n';
-  TEST("line segment intersection", vgl_lineseg_test_lineseg(ls,ls2), true);
-  // should be more extensively tested - TODO
+  vgl_line_segment_2d<double> ls2(p01,p10); // inverse line segment through these points
+  TEST("line segment first end point", ls2.point1(), p01);
+  TEST("line segment second end point", ls2.point2(), p10);
+
+  // line segment intersections:
+  TEST("identical line segments: intersect", vgl_lineseg_test_lineseg(ls,ls2), true);
+  TEST("identical line segments: intersect",
+          vgl_lineseg_test_lineseg(vgl_line_segment_2d<double>(p01, p11), vgl_line_segment_2d<double>(p11, p01)), true);
+  TEST("disjoint horizontal collinear line segments: do not intersect",
+          vgl_lineseg_test_lineseg(vgl_line_segment_2d<double>(p01, p11), vgl_line_segment_2d<double>(p21, p31)), false);
+  TEST("touching horizontal collinear line segments: intersect",
+          vgl_lineseg_test_lineseg(vgl_line_segment_2d<double>(p01, p11), vgl_line_segment_2d<double>(p11, p21)), true);
+  TEST("touching horizontal collinear line segments: intersect",
+          vgl_lineseg_test_lineseg(vgl_line_segment_2d<double>(p01, p11), vgl_line_segment_2d<double>(p21, p11)), true);
+  TEST("overlapping horizontal collinear line segments: intersect",
+          vgl_lineseg_test_lineseg(vgl_line_segment_2d<double>(p01, p21), vgl_line_segment_2d<double>(p11, p31)), true);
+  TEST("internally touching horizontal collinear line segments: intersect",
+          vgl_lineseg_test_lineseg(vgl_line_segment_2d<double>(p01, p31), vgl_line_segment_2d<double>(p21, p11)), true);
+  TEST("internally overlapping horizontal collinear line segments: intersect",
+          vgl_lineseg_test_lineseg(vgl_line_segment_2d<double>(p01, p11), vgl_line_segment_2d<double>(p21, p31)), true);
+  TEST("parallel horizontal line segments: do not intersect",
+          vgl_lineseg_test_lineseg(vgl_line_segment_2d<double>(p01, p11), vgl_line_segment_2d<double>(p12, p02)), false);
+  TEST("disjoint vertical collinear line segments: do not intersect",
+          vgl_lineseg_test_lineseg(vgl_line_segment_2d<double>(p10, p11), vgl_line_segment_2d<double>(p12, p13)), false);
+  TEST("touching vertical collinear line segments: intersect",
+          vgl_lineseg_test_lineseg(vgl_line_segment_2d<double>(p10, p11), vgl_line_segment_2d<double>(p11, p12)), true);
+  TEST("touching vertical collinear line segments: intersect",
+          vgl_lineseg_test_lineseg(vgl_line_segment_2d<double>(p10, p11), vgl_line_segment_2d<double>(p12, p11)), true);
+  TEST("overlapping vertical collinear line segments: intersect",
+          vgl_lineseg_test_lineseg(vgl_line_segment_2d<double>(p10, p12), vgl_line_segment_2d<double>(p11, p13)), true);
+  TEST("internally touching vertical collinear line segments: intersect",
+          vgl_lineseg_test_lineseg(vgl_line_segment_2d<double>(p10, p13), vgl_line_segment_2d<double>(p12, p11)), true);
+  TEST("internally overlapping vertical collinear line segments: intersect",
+          vgl_lineseg_test_lineseg(vgl_line_segment_2d<double>(p10, p11), vgl_line_segment_2d<double>(p12, p13)), true);
+  TEST("parallel vertical line segments: do not intersect",
+          vgl_lineseg_test_lineseg(vgl_line_segment_2d<double>(p10, p11), vgl_line_segment_2d<double>(p21, p20)), false);
+  TEST("disjoint oblique collinear line segments: do not intersect",
+          vgl_lineseg_test_lineseg(vgl_line_segment_2d<double>(p30, p21), vgl_line_segment_2d<double>(p12, p03)), false);
+  TEST("touching oblique collinear line segments: intersect",
+          vgl_lineseg_test_lineseg(vgl_line_segment_2d<double>(p20, p11), vgl_line_segment_2d<double>(p11, p02)), true);
+  TEST("touching oblique collinear line segments: intersect",
+          vgl_lineseg_test_lineseg(vgl_line_segment_2d<double>(p20, p11), vgl_line_segment_2d<double>(p02, p11)), true);
+  TEST("overlapping oblique collinear line segments: intersect",
+          vgl_lineseg_test_lineseg(vgl_line_segment_2d<double>(p30, p12), vgl_line_segment_2d<double>(p21, p03)), true);
+  TEST("internally touching oblique collinear line segments: intersect",
+          vgl_lineseg_test_lineseg(vgl_line_segment_2d<double>(p30, p03), vgl_line_segment_2d<double>(p12, p21)), true);
+  TEST("internally overlapping oblique collinear line segments: intersect",
+          vgl_lineseg_test_lineseg(vgl_line_segment_2d<double>(p10, p11), vgl_line_segment_2d<double>(p12, p13)), true);
+  TEST("parallel oblique line segments: do not intersect",
+          vgl_lineseg_test_lineseg(vgl_line_segment_2d<double>(p20, p11), vgl_line_segment_2d<double>(p21, p30)), false);
+  TEST("disjoint noncollinear line segments: do not intersect",
+          vgl_lineseg_test_lineseg(vgl_line_segment_2d<double>(p10, p21), vgl_line_segment_2d<double>(p00, p01)), false);
+  TEST("touching noncollinear line segments: intersect",
+          vgl_lineseg_test_lineseg(vgl_line_segment_2d<double>(p10, p21), vgl_line_segment_2d<double>(p10, p01)), true);
+  TEST("intersecting noncollinear line segments: intersect",
+          vgl_lineseg_test_lineseg(vgl_line_segment_2d<double>(p00, p21), vgl_line_segment_2d<double>(p01, p20)), true);
 
   vgl_box_2d<double> bx(0,2,0,3);
   vgl_line_segment_2d<double> ls3 = vgl_clip_line_to_box(li,bx);
