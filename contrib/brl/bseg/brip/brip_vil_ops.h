@@ -40,11 +40,11 @@ brip_sqrt_grad_singular_values(const vil_image_view<T>& input, vil_image_view<T>
   vil_fill(output,(T)1);
 
   for (unsigned p=0; p<np; ++p){
-    for (unsigned j=n; j<nj-n; ++j){
-      for (unsigned i=n; i<ni-n; ++i){
+    for (unsigned j=n; j+n<nj; ++j){
+      for (unsigned i=n; i+n<ni; ++i){
         T IxIx=(T)0, IxIy=(T)0, IyIy=(T)0;
-        for (int x = -n; x<=(int)n; ++x){
-          for (int y = -n; y<=(int)n; ++y){
+        for (int x = -(int)n; x<=(int)n; ++x){
+          for (int y = -(int)n; y<=(int)n; ++y){
             T gx = grad_i(i+x, j+y,p), gy = grad_j(i+x, j+y,p);
             IxIx += gx*gx;
             IxIy += gx*gy;
