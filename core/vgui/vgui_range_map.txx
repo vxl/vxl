@@ -105,7 +105,7 @@ compute_byte_table(const Type min, const Type max, const float gamma,
     //The values have to be shifted by min
     Type mint = vil_pixel_traits<Type>::minval();
     Type maxt = vil_pixel_traits<Type>::maxval();
-    for (unsigned int i = 0; i <= (unsigned int)(maxt-mint); ++i)
+    for (unsigned int i = 0; i+mint <= maxt; ++i)
       bmap[i] = map_pixel_byte(mint+i, min, max, gamma, ratio);
   }
   return bmap;

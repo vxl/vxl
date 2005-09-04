@@ -1,7 +1,7 @@
 // This is oxl/VPLAYER/vplayer_geometry.cxx
 #include "vplayer_geometry.h"
 //:
-//  \file
+// \file
 
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
@@ -452,25 +452,25 @@ void vplayer_geometry::save(const char *object_type,const char *dialog_name)
       if (sv->type_name() == "vgui_soview2D_point" && sv->type_name() == object_type)
       {
         vgui_soview2D_point* pt = (vgui_soview2D_point*)sv;
-        fs<<pt->x<<" "<<pt->y<<vcl_endl;
+        fs<<pt->x<<' '<<pt->y<<vcl_endl;
       }
       else if (sv->type_name() == "vgui_soview2D_circle" && sv->type_name() == object_type)
       {
         vgui_soview2D_circle* circ = (vgui_soview2D_circle*)sv;
-        fs<<circ->x<<" "<<circ->y<<" "<<circ->r<<vcl_endl;
+        fs<<circ->x<<' '<<circ->y<<' '<<circ->r<<vcl_endl;
       }
       else if (sv->type_name() == "vgui_soview2D_lineseg" && sv->type_name() == object_type)
       {
         vgui_soview2D_lineseg* line = (vgui_soview2D_lineseg*)sv;
-        fs<<line->x0<<" "<<line->y0<<" "<<line->x1<<" "<<line->y1<<vcl_endl;
+        fs<<line->x0<<' '<<line->y0<<' '<<line->x1<<' '<<line->y1<<vcl_endl;
       }
       else if (sv->type_name() == "vgui_soview2D_linestrip" && sv->type_name() == object_type)
       {
         vgui_soview2D_linestrip *linestrip = (vgui_soview2D_linestrip *)sv;
         fs<<linestrip->n<<vcl_endl;
-        for (int ii = 1; ii<linestrip->n; ++ii)
+        for (unsigned int ii = 1; ii<linestrip->n; ++ii)
         {
-          fs<<linestrip->x[ii-1]<<" "<<linestrip->y[ii-1]<<" "<<linestrip->x[ii]<<" "<<linestrip->y[ii]<<vcl_endl;
+          fs<<linestrip->x[ii-1]<<' '<<linestrip->y[ii-1]<<' '<<linestrip->x[ii]<<' '<<linestrip->y[ii]<<vcl_endl;
         }
       }
     }

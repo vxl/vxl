@@ -136,7 +136,8 @@ inline vil_rgb<vxl_byte> getpixel(vil_image_view_base const& i, int x, int y, vi
 }
 inline void setpixel(vil_image_view_base& i, int x, int y, vil_rgb<vxl_byte> const e)
 {
-  if (x<0 || y<0 || x>=i.ni() || y>=i.nj()) return;
+  if (x<0 || y<0 || (unsigned int)x >= i.ni() || (unsigned int)y >= i.nj())
+    return;
   if (i.nplanes() == 3)
   {
     vil_image_view<vxl_byte>& im = static_cast<vil_image_view<vxl_byte>&>(i);
