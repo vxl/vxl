@@ -588,7 +588,7 @@ compute_intensity_mutual_information(vil1_memory_image_of<float> const& image)
   if (npix == 0)
     return 0;
   unsigned int n = 0;
-  for (intf_->reset(); intf_->next();)
+  for (intf_->reset(); intf_->next(); ++n)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
     if (x<0||x>=width||y<0||y>=height)
@@ -598,14 +598,11 @@ compute_intensity_mutual_information(vil1_memory_image_of<float> const& image)
     image_hist.upcount(Ii, 1.0f);
     joint_hist.upcount(Im, 1.0f, Ii, 1.0f);
 #ifdef DEBUG
-    //    vcl_cout << '(' << x << ' ' << y << "):[" << Im << ' ' << Ii << ']' << vcl_endl;
+    vcl_cout << '(' << x << ' ' << y << "):[" << Im << ' ' << Ii << ']' << vcl_endl;
 #endif
-    ++n;
   }
   if (n<0.9*npix)
     return 0;
-//   vcl_cout << "Itensity Hist\n";
-//   image_hist.print();
 #ifdef DEBUG
   vcl_cout << "Itensity Hist\n";
   image_hist.print();
@@ -642,7 +639,9 @@ compute_intensity_mutual_information(vcl_vector <vcl_vector< vgl_point_2d<int> >
   unsigned int npix = intf_->Npix();
   if (npix == 0)
     return 0;
+#ifdef DEBUG
   unsigned int n = 0;
+#endif
   for (intf_->reset(); intf_->next();)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
@@ -662,19 +661,20 @@ compute_intensity_mutual_information(vcl_vector <vcl_vector< vgl_point_2d<int> >
     joint_hist.upcount(Im, 1.0f, Ii, 1.0f);
 #ifdef DEBUG
     vcl_cout << '(' << x << ' ' << y << "):[" << Im << ' ' << Ii << ']' << vcl_endl;
-#endif
     ++n;
+#endif
   }
 
+// we don't know the relation of number of pixels in second region to
+// the number of pixels in the first region (maybe a constant can be put)
 #ifdef DEBUG
-  vcl_cout << "n: " << n << " 0.9*npix: " << 0.9*npix << " (n should be larger than 0.9*npix)\n";
+  vcl_cout << "n = " << n << ", 0.9*npix = " << 0.9*npix << " (n should be at least 0.9*npix)\n";
 #endif
+#if 0
+  if (n<0.9*npix)
+    return 0;
+#endif // 0
 
-  //if (n<0.9*npix)          // we don't know the relation of number of pixels in second region
-  //  return 0;              // to the number of pixels in the first region (maybe a constant can be put)
-
-//   vcl_cout << "Itensity Hist\n";
-//   image_hist.print();
 #ifdef DEBUG
   vcl_cout << "Itensity Hist\n";
   image_hist.print();
@@ -712,13 +712,13 @@ compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
   if (npix == 0)
     return 0;
   double deg_rad = 180.0/vnl_math::pi;
-  unsigned int i = 0, n = 0;
-  for (intf_->reset(); intf_->next(); ++i)
+  unsigned int n = 0;
+  for (intf_->reset(); intf_->next(); ++n)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
     if (x<0||x>=width||y<0||y>=height)
       continue;
-    float Ix0 = this->Ix(i), Iy0 = this->Iy(i);
+    float Ix0 = this->Ix(n), Iy0 = this->Iy(n);
     float ang0 = float(deg_rad*vcl_atan2(Iy0, Ix0))+180.f;
     float mag0 = vcl_abs(Ix0)+vcl_abs(Iy0); // was: vcl_sqrt(Ix0*Ix0 + Iy0*Iy0);
     float Ixi = Ix(x,y), Iyi = Iy(x,y);
@@ -734,7 +734,6 @@ compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
       image_dir_hist.upcount(angi, magi);
       joint_dir_hist.upcount(ang0,mag0,angi,magi);
     }
-    ++n;
   }
   if (n<0.9*npix)
     return 0;
@@ -776,8 +775,8 @@ compute_gradient_mutual_information(vcl_vector <vcl_vector< vgl_point_2d<int> > 
   if (npix == 0)
     return 0;
   double deg_rad = 180.0/vnl_math::pi;
-  unsigned int i = 0, n = 0;
-  for (intf_->reset(); intf_->next(); ++i)
+  unsigned int n = 0;
+  for (intf_->reset(); intf_->next(); ++n)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
 
@@ -788,8 +787,7 @@ compute_gradient_mutual_information(vcl_vector <vcl_vector< vgl_point_2d<int> > 
     vgl_point_2d<int> p = region_map[x][y];
     if (p.x() < 0 || p.y() < 0 || p.x() >= width || p.y() >= height) continue;
 
-    ++n;
-    float Ix0 = this->Ix(i), Iy0 = this->Iy(i);
+    float Ix0 = this->Ix(n), Iy0 = this->Iy(n);
     float ang0 = float(deg_rad*vcl_atan2(Iy0, Ix0))+180.f;
     float mag0 = vcl_abs(Ix0)+vcl_abs(Iy0); // was: vcl_sqrt(Ix0*Ix0 + Iy0*Iy0);
 
@@ -809,10 +807,12 @@ compute_gradient_mutual_information(vcl_vector <vcl_vector< vgl_point_2d<int> > 
   }
 
 #ifdef DEBUG
-  vcl_cout << "n: " << n << " 0.9*npix: " << 0.9*npix << " (n should be larger than 0.9*npix)\n";
+  vcl_cout << "n = " << n << ", 0.9*npix = " << 0.9*npix << " (n should be larger than 0.9*npix)\n";
 #endif
-  //if (n<0.9*npix)
-  //  return 0;
+#if 0
+  if (n<0.9*npix)
+    return 0;
+#endif // 0
 
 #ifdef DEBUG
   vcl_cout << "Image Dir Hist\n";
@@ -850,19 +850,18 @@ compute_color_mutual_information(vil1_memory_image_of<float> const& hue,
   if (npix == 0)
     return 0;
 
-  unsigned int i = 0, n = 0;
-  for (intf_->reset(); intf_->next(); ++i)
+  unsigned int n = 0;
+  for (intf_->reset(); intf_->next(); ++n)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
     if (x<0||x>=width||y<0||y>=height)
       continue;
-    float hue0 = this->hue(i), sat0 = this->sat(i);
+    float hue0 = this->hue(n), sat0 = this->sat(n);
     float hue_i = hue(x,y), sat_i = sat(x,y);
     if (sat_i>0)
       color_hist.upcount(hue_i, sat_i);
     if (sat0>0&&sat_i>0)
       joint_color_hist.upcount(hue0, sat0, hue_i, sat_i);
-    ++n;
   }
   if (n<0.9*npix)
     return 0;
@@ -896,8 +895,8 @@ compute_color_mutual_information(vcl_vector <vcl_vector< vgl_point_2d<int> > > r
   if (npix == 0)
     return 0;
 
-  unsigned int i = 0, n = 0;
-  for (intf_->reset(); intf_->next(); ++i)
+  unsigned int n = 0;
+  for (intf_->reset(); intf_->next(); ++n)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
 
@@ -908,21 +907,22 @@ compute_color_mutual_information(vcl_vector <vcl_vector< vgl_point_2d<int> > > r
     vgl_point_2d<int> p = region_map[x][y];
     if (p.x() < 0 || p.y() < 0 || p.x() >= width || p.y() >= height) continue;
 
-    float hue0 = this->hue(i), sat0 = this->sat(i);
+    float hue0 = this->hue(n), sat0 = this->sat(n);
     float hue_i = hue(p.x(),p.y()), sat_i = sat(p.x(),p.y());
 
     if (sat_i>0)
       color_hist.upcount(hue_i, sat_i);
     if (sat0>0&&sat_i>0)
       joint_color_hist.upcount(hue0, sat0, hue_i, sat_i);
-    ++n;
   }
 
 #ifdef DEBUG
-  vcl_cout << "n: " << n << " 0.9*npix: " << 0.9*npix << " (n should be larger than 0.9*npix)\n";
+  vcl_cout << "n = " << n << ", 0.9*npix = " << 0.9*npix << " (n should be larger than 0.9*npix)\n";
 #endif
-  //if (n<0.9*npix)
-  //  return 0;
+#if 0
+  if (n<0.9*npix)
+    return 0;
+#endif
 
   //apply parzen windows
   color_hist.parzen(parzen_sigma_);
@@ -1075,7 +1075,7 @@ compute_intensity_joint_entropy(strk_tracking_face_2d_sptr const& other,
     return 0;
   unsigned int n = 0;
   //iterate through the pixels of the target model face
-  for (intf_->reset(); intf_->next();)
+  for (intf_->reset(); intf_->next(); ++n)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
     if (x<0||x>=width||y<0||y>=height)
@@ -1083,7 +1083,6 @@ compute_intensity_joint_entropy(strk_tracking_face_2d_sptr const& other,
     float Ii = image(x,y);//the pixels under the target
     if (n<mpix)
       joint_hist.upcount((other->face()->Ij())[n], 1.0f, Ii, 1.0f);
-    ++n;
   }
   if (n<0.9*npix)
     return 0;
@@ -1175,17 +1174,17 @@ compute_color_joint_entropy(strk_tracking_face_2d_sptr const& other,
   unsigned int mpix = other->face()->Npix();
   bsta_joint_histogram<float> joint_color_hist;
   int width = hue.width(), height = hue.height();
-  unsigned int i = 0;
-  for (intf_->reset(); intf_->next(); ++i)
+  unsigned int n = 0;
+  for (intf_->reset(); intf_->next(); ++n)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
     if (x<0||x>=width||y<0||y>=height)
       continue;
     float hue_i = hue(x,y), sat_i = sat(x,y);
-    //    float hue_other = hvals[i], sat_other = svals[i];
-    if (i<mpix)
+//  float hue_other = hvals[n], sat_other = svals[n];
+    if (n<mpix)
     {
-      float hue_other = other->hue(i), sat_other = other->sat(i);
+      float hue_other = other->hue(n), sat_other = other->sat(n);
       if (sat_other>0&&sat_i>0)
         joint_color_hist.upcount(hue_other, sat_other, hue_i, sat_i);
     }
@@ -1422,13 +1421,13 @@ print_gradient_histograms(vil1_memory_image_of<float> const& Ix,
   if (intf_->Npix() == 0)
     return;
   double deg_rad = 180.0/vnl_math::pi;
-  int i = 0;
-  for (intf_->reset(); intf_->next(); ++i)
+  int n = 0;
+  for (intf_->reset(); intf_->next(); ++n)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
     if (x<0||x>=width||y<0||y>=height)
       continue;
-    float Ix0 = this->Ix(i), Iy0 = this->Iy(i);
+    float Ix0 = this->Ix(n), Iy0 = this->Iy(n);
     float ang0 = float(deg_rad*vcl_atan2(Iy0, Ix0))+180.f;
     float mag0 = vcl_abs(Ix0)+vcl_abs(Iy0); // was: vcl_sqrt(Ix0*Ix0 + Iy0*Iy0);
     float Ixi = Ix(x,y), Iyi = Iy(x,y);
@@ -1459,13 +1458,13 @@ print_color_histograms(vil1_memory_image_of<float> const& hue,
 
   if (intf_->Npix() == 0)
     return;
-  int i = 0;
-  for (intf_->reset(); intf_->next(); ++i)
+  int n = 0;
+  for (intf_->reset(); intf_->next(); ++n)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
     if (x<0||x>=width||y<0||y>=height)
       continue;
-    float hue0 = this->hue(i), sat0 = this->sat(i);
+    float hue0 = this->hue(n), sat0 = this->sat(n);
     float hue_i = hue(x,y), sat_i = sat(x,y);
     if (sat0>0)
       model_color_hist.upcount(hue0, sat0);
