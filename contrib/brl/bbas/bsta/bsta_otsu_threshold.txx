@@ -25,20 +25,17 @@ template <class T>
 unsigned bsta_otsu_threshold<T>::bin_threshold()
 {
   T no_of_pixels_in_class1=0;
-  T no_of_pixels_in_class2=0;
-
   int threshold =0;
-  T between_class_variance = 0;
   T max_between_class_variance=0;
-  no_of_pixels_in_class2 = distribution_1d_.area();
+  T no_of_pixels_in_class2 = distribution_1d_.area();
 
   for (unsigned t=0; t<distribution_1d_.nbins(); ++t)
   {
     T mu1 = distribution_1d_.mean(0, t);
     T mu2 = distribution_1d_.mean(t, distribution_1d_.nbins()-1);
 
-    between_class_variance=no_of_pixels_in_class1*no_of_pixels_in_class2*
-                           (mu1-mu2)*(mu1-mu2);
+    T between_class_variance=no_of_pixels_in_class1*no_of_pixels_in_class2*
+                             (mu1-mu2)*(mu1-mu2);
 
     if (between_class_variance>max_between_class_variance)
     {
