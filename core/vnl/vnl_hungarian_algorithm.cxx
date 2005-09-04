@@ -46,9 +46,6 @@ vcl_vector<unsigned> vnl_hungarian_algorithm( vnl_matrix<double> const& cost_in 
   vcl_vector<bool> R_cov( N, false );
   vcl_vector<bool> C_cov( N, false );
 
-  // row and col of the primed zero in step four to pass to step five.
-  unsigned Z0_r, Z0_c;
-
   // Step 1:
   // For each row of the matrix, find the smallest element and subtract
   // it from every element in its row.  Go to Step 2.
@@ -120,8 +117,9 @@ vcl_vector<unsigned> vnl_hungarian_algorithm( vnl_matrix<double> const& cost_in 
   // the starred zero. Continue in this manner until there are no
   // uncovered zeros left. Save the smallest uncovered value and Go to
   // Step 6.
-  Z0_r = -1u;
-  Z0_c = -1u;
+
+  // row and col of the primed zero to pass to step five.
+  unsigned int Z0_r = (unsigned int)(-1), Z0_c = (unsigned int)(-1);
   // Find an uncovered zero
   // This loop will exit with a goto step_five or step_six.
   while ( true )

@@ -404,7 +404,7 @@ trace_edge_chain( unsigned i, unsigned j, unsigned dir )
   // back once, so it is sufficient to keep the current direction
   // (direction of the last step) in dir) and the previous direction
   // in prev_dir.
-  unsigned prev_dir = -1u;
+  unsigned int prev_dir = (unsigned int)(-1);
 
   while ( vertex_index( i, j ) == vertex_node::null_index )
   {

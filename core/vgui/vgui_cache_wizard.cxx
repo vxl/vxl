@@ -177,7 +177,7 @@ bool vgui_cache_wizard::get_section(int id,int x,int y,int width,int height,
         else
         {
           unsigned int k = 0;
-          while (k<max_texture_num_ && texture_names_[k] == -1u) ++k;
+          while (k<max_texture_num_ && texture_names_[k] == GLuint(-1)) ++k;
           texture_name = texture_names_[k];
           texture_names_[k] = GLuint(-1);
         }
