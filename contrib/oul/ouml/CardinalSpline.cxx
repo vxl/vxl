@@ -161,7 +161,7 @@ double CardinalSpline::closest_point_t(const Vector3D &point) const
   double d3 = (point-getPoint(t3)).magnitude();
   if (d3<d2)
   {
-    t2 = t3; d2 = d3;
+    t2 = t3; // d2 = d3;
   }
 
   // now if the neighbours happen to be pt 0 and pt 1-delta, then
@@ -169,8 +169,7 @@ double CardinalSpline::closest_point_t(const Vector3D &point) const
   // can only happen if there's a wraparound
   if (vcl_fabs(t2-t1)>2.0*delta)
   {
-    if (t2>t1) t1 = 1.0;
-    else t2 = 1.0;
+    if (t2>t1) t1 = 1.0; //  else t2 = 1.0;
   }
 
   // now do a Newton's iteration until we converge
