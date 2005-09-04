@@ -1,7 +1,7 @@
 IULIBS += -lmil
-include ${IUEROOT}/contrib/mul/mbl/config.mk
-include ${IUEROOT}/core/vil1/config.mk
-include ${IUEROOT}/core/vnl/config.mk
-include ${IUEROOT}/core/vgl/config.mk
-include ${IUEROOT}/core/vbl/io/config.mk
-include ${IUEROOT}/core/vsl/config.mk
+include ${VXLROOT}/contrib/mul/mbl/config.mk
+include ${VXLROOT}/core/vil1/config.mk
+include ${VXLROOT}/core/vnl/config.mk
+include ${VXLROOT}/core/vgl/config.mk
+include ${VXLROOT}/core/vbl/io/config.mk
+include ${VXLROOT}/core/vsl/config.mk

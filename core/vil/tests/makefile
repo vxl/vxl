@@ -1,8 +1,8 @@
 USES += core
 include ../config.mk
-include ${IUEROOT}/core/vul/config.mk
-include ${IUEROOT}/core/vpl/config.mk
-include ${IUEROOT}/core/testlib/config.mk
+include ${VXLROOT}/core/vul/config.mk
+include ${VXLROOT}/core/vpl/config.mk
+include ${VXLROOT}/core/testlib/config.mk
 
 # This is where vil/vil_config.h resides
 INCDIRS += ../$(RELOBJDIR)/include
@@ -52,5 +52,5 @@ TESTS += test_math_value_range.cxx
 MINI_PROG_SOURCES += test_include.cxx
 
 #########################################
-include ${IUEROOT}/config/static-tests.mk
+include ${VXLROOT}/config/static-tests.mk
 #########################################

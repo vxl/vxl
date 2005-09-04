@@ -13,7 +13,7 @@ LIBRARY := vidl
 VERSION := 1.0
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 SOURCES += vidl_vob_frame_index.cxx
@@ -61,7 +61,7 @@ SUBDIRS += tests examples
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################
 
 # I think we should ask for the microsoft

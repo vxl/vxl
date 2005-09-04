@@ -1,5 +1,5 @@
 USES += contrib/brl contrib/gel contrib/brl/bbas contrib/brl/bseg core
-include ${IUEROOT}/core/vgui/config.mk
+include ${VXLROOT}/core/vgui/config.mk
 USE_OPENGL:= 1
 TRY_MPEG2 := 1
 
@@ -28,5 +28,5 @@ endif
 SUBDIRS += bin
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

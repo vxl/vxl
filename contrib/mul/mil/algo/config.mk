@@ -1,3 +1,3 @@
 IULIBS += -lmil-algo
-include ${IUEROOT}/contrib/mul/mil/config.mk
-include ${IUEROOT}/core/vnl/config.mk
+include ${VXLROOT}/contrib/mul/mil/config.mk
+include ${VXLROOT}/core/vnl/config.mk

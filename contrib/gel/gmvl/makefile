@@ -22,7 +22,7 @@ MANPAGE_SOURCES += gmvl_connection_sptr.h
 MANPAGE_SOURCES += gmvl_node_sptr.h
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
@@ -30,5 +30,5 @@ SUBDIRS := examples # tests
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

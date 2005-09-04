@@ -13,5 +13,5 @@ MANPAGE_SOURCES += image_convert.txx
 SOURCES += CardinalSpline.cxx
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

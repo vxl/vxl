@@ -13,9 +13,9 @@
 
 USES += contrib/tbl core
 include ../config.mk
-include ${IUEROOT}/core/vil1/config.mk # for B.
-include ${IUEROOT}/core/vnl/config.mk # for C.
-include $(IUEROOT)/core/vbl/config.mk # for D.
+include ${VXLROOT}/core/vil1/config.mk # for B.
+include ${VXLROOT}/core/vnl/config.mk # for C.
+include $(VXLROOT)/core/vbl/config.mk # for D.
 
 # Do not instantiate templates in the library but implicitly, on use:
 USE_IMPLICIT_TEMPLATES := 1
@@ -47,5 +47,5 @@ MINI_PROG_SOURCES += example_histogram.cxx
 MINI_PROG_SOURCES += example_histogram2.cxx
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

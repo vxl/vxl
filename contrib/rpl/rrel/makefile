@@ -30,7 +30,7 @@ SOURCES += rrel_affine_est.cxx
 SOURCES += rrel_wgted_ran_sam_search.cxx
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
@@ -39,5 +39,5 @@ SUBDIRS += examples
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

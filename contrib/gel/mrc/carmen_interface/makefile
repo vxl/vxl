@@ -1,6 +1,6 @@
 USES += contrib/gel core
-include $(IUEROOT)/core/vbl/config.mk
-include $(IUEROOT)/core/vul/config.mk
+include $(VXLROOT)/core/vbl/config.mk
+include $(VXLROOT)/core/vul/config.mk
 
 ifdef HAS_CARMEN
 USES += Carmen
@@ -10,6 +10,6 @@ SOURCES += main.cpp
 endif
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################
 

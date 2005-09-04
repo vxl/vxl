@@ -1,5 +1,5 @@
 SUBDIRS = glmovie vxl_vrml_viewer
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

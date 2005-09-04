@@ -142,7 +142,7 @@ MANPAGE_SOURCES += PairMatchSetMulti.h
 MANPAGE_SOURCES += mvl_modify_handle.h
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
@@ -150,7 +150,7 @@ SUBDIRS = examples # tests
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################
 
 ifeq "HP-UX" "$(findstring HP-UX,$(OS))"

@@ -1,6 +1,6 @@
 USES += contrib/oxl core
-include ${IUELOCALROOT}/core/vgui/config.mk
-include ${IUELOCALROOT}/contrib/oxl/osl/config.mk
+include ${VXLROOT}/core/vgui/config.mk
+include ${VXLROOT}/contrib/oxl/osl/config.mk
 
 MINI_PROG_SOURCES += satellite.cxx
 
@@ -17,5 +17,5 @@ MINI_PROG_SOURCES += harris-moments.cxx
 MINI_PROG_SOURCES += polygon-scan.cxx
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

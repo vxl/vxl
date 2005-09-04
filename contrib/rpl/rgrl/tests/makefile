@@ -1,6 +1,6 @@
 USES += contrib/rpl contrib/mul core
 include ../config.mk
-include $(IUEROOT)/core/testlib/config.mk
+include $(VXLROOT)/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 SOURCES += test_util.cxx
@@ -24,5 +24,5 @@ TESTS += test_feature_region.cxx
 MINI_PROG_SOURCES += test_include.cxx
 
 #########################################
-include ${IUEROOT}/config/static-tests.mk
+include ${VXLROOT}/config/static-tests.mk
 #########################################

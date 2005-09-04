@@ -1,9 +1,9 @@
 USES += core
-include ${IUEROOT}/core/vnl/algo/config.mk
-include ${IUEROOT}/core/vbl/config.mk
+include ${VXLROOT}/core/vnl/algo/config.mk
+include ${VXLROOT}/core/vbl/config.mk
 
 MINI_PROG_SOURCES += vnl_calc.cxx
 
 ################################
-include $(IUEROOT)/config/top.mk
+include $(VXLROOT)/config/top.mk
 ################################

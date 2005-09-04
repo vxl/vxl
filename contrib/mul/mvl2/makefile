@@ -2,7 +2,7 @@ USES += contrib/mul core
 TRY_AVI := 1
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 LIBRARY := mvl2
@@ -32,5 +32,5 @@ ifndef NOTEST
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

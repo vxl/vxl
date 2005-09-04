@@ -50,7 +50,7 @@ MANPAGE_SOURCES += vtol_vertex_sptr.h
 MANPAGE_SOURCES += vtol_zero_chain_sptr.h
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 SUBDIRS += algo
@@ -60,7 +60,7 @@ SUBDIRS += examples
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################
 
 # on HP unix, this library has become too big, so it needs -fPIC

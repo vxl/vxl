@@ -5,5 +5,5 @@ PROGRAM := vbl_smart_ptr_example
 SOURCES += vbl_smart_ptr_example.cxx
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

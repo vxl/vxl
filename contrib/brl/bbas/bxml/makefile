@@ -1,7 +1,7 @@
 USES += contrib/brl contrib/gel contrib/brl/bbas core
-ifneq (,$(wildcard ${IUEROOT}/v3p/xerces-c-src1_4_0/include/dom/DOM.hpp))
+ifneq (,$(wildcard ${VXLROOT}/v3p/xerces-c-src1_4_0/include/dom/DOM.hpp))
  HAS_XERCES:=1
- INCDIRS += ${IUEROOT}/v3p/xerces-c-src1_4_0/include
+ INCDIRS += ${VXLROOT}/v3p/xerces-c-src1_4_0/include
 endif
 
 ifdef HAS_XERCES
@@ -24,7 +24,7 @@ MANPAGE_SOURCES += bxml_vsol_point_2d_input_converter_sptr.h
 endif
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
@@ -32,5 +32,5 @@ ifndef NOTEST
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

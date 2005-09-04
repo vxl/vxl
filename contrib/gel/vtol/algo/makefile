@@ -10,5 +10,5 @@ MANPAGE_SOURCES += vtol_extract_topology.txx
 #SOURCES += vtol_extract_topology_internals.cxx
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

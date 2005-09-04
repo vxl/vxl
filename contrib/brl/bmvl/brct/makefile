@@ -19,7 +19,7 @@ SOURCES += brct_plane_corr.cxx
 MANPAGE_SOURCES += brct_plane_corr_sptr.h
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
@@ -27,5 +27,5 @@ ifndef NOTEST
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

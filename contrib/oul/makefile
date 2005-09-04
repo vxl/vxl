@@ -1,7 +1,7 @@
 SUBDIRS := ouel ouml
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifeq ($(OS),"Linux2")
@@ -9,5 +9,5 @@ SUBDIRS += oufgl
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

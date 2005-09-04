@@ -9,5 +9,5 @@ SOURCES += btom_slice_simulator.cxx
 SOURCES += btom_slice_simulator_params.cxx
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

@@ -1,10 +1,10 @@
 IULIBS += -lvifa
-include ${IUEROOT}/contrib/gel/vdgl/config.mk
-include ${IUEROOT}/contrib/gel/gevd/config.mk
-include ${IUEROOT}/contrib/gel/vtol/config.mk
-include ${IUEROOT}/contrib/gel/vsol/config.mk
-include ${IUEROOT}/core/vnl/config.mk
-include ${IUEROOT}/core/vgl/config.mk
-include ${IUEROOT}/core/vbl/config.mk
-include ${IUEROOT}/core/vul/config.mk
-include ${IUEROOT}/core/vil/config.mk
+include ${VXLROOT}/contrib/gel/vdgl/config.mk
+include ${VXLROOT}/contrib/gel/gevd/config.mk
+include ${VXLROOT}/contrib/gel/vtol/config.mk
+include ${VXLROOT}/contrib/gel/vsol/config.mk
+include ${VXLROOT}/core/vnl/config.mk
+include ${VXLROOT}/core/vgl/config.mk
+include ${VXLROOT}/core/vbl/config.mk
+include ${VXLROOT}/core/vul/config.mk
+include ${VXLROOT}/core/vil/config.mk

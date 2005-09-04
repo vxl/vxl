@@ -8,7 +8,7 @@ README.vars: $(mkfiles) doc.pl
 	perl doc.pl $(mkfiles) > $@
 
 ##########################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 ##########################################
 
 library_table :
@@ -23,16 +23,16 @@ ifneq ($(OS),win32)
 class_table:
 
 iu_class_table: class_table
-	cd $(IUELOCALROOT) && perl $(sys_or_iu_Scripts)/Perl/generate_class_table -s config/iu_class_table
+	cd $(VXLROOT) && perl $(sys_or_iu_Scripts)/Perl/generate_class_table -s config/iu_class_table
 
 rh_classes: class_table
-	cd $(IUELOCALROOT) && perl $(sys_or_iu_Scripts)/Perl/generate_class_table -s -new config/rh_classes
+	cd $(VXLROOT) && perl $(sys_or_iu_Scripts)/Perl/generate_class_table -s -new config/rh_classes
 
 manpages: iu_class_table rh_classes
-	cd $(IUELOCALROOT) && $(sys_or_iu_Scripts)/Shell/tj-make-etags
+	cd $(VXLROOT) && $(sys_or_iu_Scripts)/Shell/tj-make-etags
 
 endif
 
 ##########################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ##########################################

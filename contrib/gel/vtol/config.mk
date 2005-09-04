@@ -1,5 +1,5 @@
 IULIBS += -lvtol
-include ${IUEROOT}/contrib/gel/vdgl/config.mk
-include ${IUEROOT}/contrib/gel/vsol/config.mk
-include ${IUEROOT}/core/vbl/config.mk
-include ${IUEROOT}/core/vul/config.mk
+include ${VXLROOT}/contrib/gel/vdgl/config.mk
+include ${VXLROOT}/contrib/gel/vsol/config.mk
+include ${VXLROOT}/core/vbl/config.mk
+include ${VXLROOT}/core/vul/config.mk

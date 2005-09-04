@@ -6,5 +6,5 @@ MINI_PROG_SOURCES += make_3d_output.cxx
 MINI_PROG_SOURCES += vsrl_viewer.cxx
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

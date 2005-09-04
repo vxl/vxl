@@ -11,5 +11,5 @@ MANPAGE_SOURCES += vimt_normalised_correlation_2d.h
 MANPAGE_SOURCES += vimt_pyramid_values_at_point.h
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

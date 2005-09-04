@@ -1,10 +1,10 @@
 IULIBS += -lrgrl
 USES += contrib/mul
-include ${IUEROOT}/contrib/rpl/rrel/config.mk
-include ${IUEROOT}/contrib/rpl/rsdl/config.mk
-include ${IUEROOT}/contrib/mul/mbl/config.mk
-include ${IUEROOT}/contrib/mul/vil3d/config.mk
-include ${IUEROOT}/core/vil/config.mk
-include ${IUEROOT}/core/vnl/algo/config.mk
-include ${IUEROOT}/core/vbl/config.mk
-include ${IUEROOT}/core/vul/config.mk
+include ${VXLROOT}/contrib/rpl/rrel/config.mk
+include ${VXLROOT}/contrib/rpl/rsdl/config.mk
+include ${VXLROOT}/contrib/mul/mbl/config.mk
+include ${VXLROOT}/contrib/mul/vil3d/config.mk
+include ${VXLROOT}/core/vil/config.mk
+include ${VXLROOT}/core/vnl/algo/config.mk
+include ${VXLROOT}/core/vbl/config.mk
+include ${VXLROOT}/core/vul/config.mk

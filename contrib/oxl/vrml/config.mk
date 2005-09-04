@@ -1,2 +1,2 @@
 IULIBS += -lvrml
-include ${IUEROOT}/core/vbl/config.mk
+include ${VXLROOT}/core/vbl/config.mk

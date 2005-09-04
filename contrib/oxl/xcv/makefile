@@ -1,8 +1,8 @@
 USES += contrib/oxl core
-include $(IUEROOT)/core/vgui/config.mk
-include $(IUEROOT)/contrib/oxl/mvl/config.mk
-include $(IUEROOT)/contrib/oxl/osl/config.mk
-include $(IUEROOT)/core/vgl/config.mk
+include $(VXLROOT)/core/vgui/config.mk
+include $(VXLROOT)/contrib/oxl/mvl/config.mk
+include $(VXLROOT)/contrib/oxl/osl/config.mk
+include $(VXLROOT)/core/vgl/config.mk
 
 PROGRAM = xcv
 
@@ -33,7 +33,7 @@ MANPAGE_SOURCES += xcv_image_tableau_sptr.h
 MANPAGE_SOURCES += xcv_picker_tableau_sptr.h
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################
 
 ifeq "$(IU_COMPILER)" "egcs"

@@ -1,3 +1,3 @@
 IULIBS += -lvbl-io
-include ${IUEROOT}/core/vbl/config.mk
-include ${IUEROOT}/core/vsl/config.mk
+include ${VXLROOT}/core/vbl/config.mk
+include ${VXLROOT}/core/vsl/config.mk

@@ -4,7 +4,7 @@ LIBRARY := vil
 VERSION := 1.0
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 # This is where configure will put vil/vil_config.h
@@ -154,5 +154,5 @@ $(RELOBJDIR)/include/vil/vil_config.h: vil_config.h.in
 	sed -e 's/@HAS_.*@/1/' -e 's/[._]in//g' $^ > $@
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

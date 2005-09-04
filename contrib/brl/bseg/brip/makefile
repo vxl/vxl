@@ -18,7 +18,7 @@ SOURCES += brip_watershed.cxx
 SOURCES += brip_watershed_params.cxx
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
@@ -26,5 +26,5 @@ ifndef NOTEST
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

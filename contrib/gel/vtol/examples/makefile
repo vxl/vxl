@@ -6,5 +6,5 @@ MINI_PROG_SOURCES += example3d.cxx
 MINI_PROG_SOURCES += example_vdgl.cxx
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

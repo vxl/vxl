@@ -1,5 +1,5 @@
 IULIBS += -lpdf1d
-include ${IUEROOT}/contrib/mul/mbl/config.mk
-include ${IUEROOT}/core/vbl/config.mk
-include ${IUEROOT}/core/vnl/io/config.mk
-include ${IUEROOT}/core/vsl/config.mk
+include ${VXLROOT}/contrib/mul/mbl/config.mk
+include ${VXLROOT}/core/vbl/config.mk
+include ${VXLROOT}/core/vnl/io/config.mk
+include ${VXLROOT}/core/vsl/config.mk

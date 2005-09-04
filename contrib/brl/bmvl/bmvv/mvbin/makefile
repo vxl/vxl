@@ -7,5 +7,5 @@ MINI_PROG_SOURCES += recon.cxx
 MINI_PROG_SOURCES += cal.cxx
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

@@ -31,5 +31,5 @@ MANPAGE_SOURCES += vgl_conic_2d_regression.txx
 MANPAGE_SOURCES += vgl_fit_conics_2d.txx
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

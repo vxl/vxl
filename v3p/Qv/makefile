@@ -175,7 +175,7 @@ endif
 # DEFINES += -D__PC__
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifeq "$(TJ_GCC30)" "1"
@@ -184,5 +184,5 @@ FLAGS_QvLib.cxx += -O1
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

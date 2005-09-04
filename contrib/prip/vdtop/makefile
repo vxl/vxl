@@ -31,7 +31,7 @@ MANPAGE_SOURCES += vdtop_well_composed_lower_leveling_kernel.h
 MANPAGE_SOURCES += vil_canny_deriche_grad_filter.h
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
@@ -39,5 +39,5 @@ SUBDIRS += tests
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

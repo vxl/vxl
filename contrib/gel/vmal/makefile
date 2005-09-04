@@ -24,5 +24,5 @@ MANPAGE_SOURCES += vmal_multi_view_data_edge_sptr.h
 MANPAGE_SOURCES += vmal_multi_view_data_vertex_sptr.h
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

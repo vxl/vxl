@@ -6,5 +6,5 @@ IMMEDIATE_LIBS += -lvnl-algo -lvnl
 SOURCES += kalman_filter.cxx
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

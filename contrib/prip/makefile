@@ -8,5 +8,5 @@ SUBDIRS += vdtop
 SUBDIRS += vpyr
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

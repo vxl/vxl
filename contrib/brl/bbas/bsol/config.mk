@@ -1,6 +1,6 @@
 IULIBS += -lbsol
 USES += contrib/gel
-include ${IUEROOT}/contrib/gel/vsol/config.mk
-include ${IUEROOT}/core/vgl/algo/config.mk
-include ${IUEROOT}/core/vnl/config.mk
-include ${IUEROOT}/core/vbl/config.mk
+include ${VXLROOT}/contrib/gel/vsol/config.mk
+include ${VXLROOT}/core/vgl/algo/config.mk
+include ${VXLROOT}/core/vnl/config.mk
+include ${VXLROOT}/core/vbl/config.mk

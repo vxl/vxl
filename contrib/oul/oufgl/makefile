@@ -11,5 +11,5 @@ MANPAGE_SOURCES += frame_grabber.h
 SUBDIRS += examples
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

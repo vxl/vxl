@@ -4,7 +4,7 @@ LIBRARY := vul
 VERSION := 1.0
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 MANPAGE_SOURCES += vul_fwd.h
@@ -42,7 +42,7 @@ SUBDIRS += examples
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################
 
 ifeq "$(TJ_GCC30)$(optimize)" "1-O2"

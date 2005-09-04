@@ -1,5 +1,5 @@
 USES += contrib/brl contrib/gel contrib/brl/bbas contrib/brl/bseg core
-include ${IUEROOT}/core/vgui/config.mk
+include ${VXLROOT}/core/vgui/config.mk
 
 LIBRARY := bgui
 VERSION := 1.0
@@ -29,7 +29,7 @@ SOURCES += bgui_range_adjuster_tableau.cxx
 MANPAGE_SOURCES += bgui_range_adjuster_tableau_sptr.h
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
@@ -37,5 +37,5 @@ ifndef NOTEST
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

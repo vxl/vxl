@@ -138,7 +138,7 @@ SOURCES += rgrl_trans_couple.cxx
 SOURCES += rgrl_matcher_k_nearest_pick_one.cxx
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
@@ -147,5 +147,5 @@ SUBDIRS += examples
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

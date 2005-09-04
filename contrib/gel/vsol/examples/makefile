@@ -15,5 +15,5 @@ MINI_PROG_SOURCES += vsol_point_example.cxx
 MINI_PROG_SOURCES += vsol_conic_example.cxx
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

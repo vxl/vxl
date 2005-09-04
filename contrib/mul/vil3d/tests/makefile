@@ -1,10 +1,10 @@
 USES += contrib/mul core
 include ../algo/config.mk
-include ${IUEROOT}/core/testlib/config.mk
-include ${IUEROOT}/core/vpl/config.mk
+include ${VXLROOT}/core/testlib/config.mk
+include ${VXLROOT}/core/vpl/config.mk
 
 # This is where vil/vil_config.h resides
-INCDIRS += ${IUEROOT}/core/vil/$(RELOBJDIR)/include
+INCDIRS += ${VXLROOT}/core/vil/$(RELOBJDIR)/include
 
 TESTMAIN = test_driver.cxx
 
@@ -36,5 +36,5 @@ TESTS += test_analyze_format.cxx
 MINI_PROG_SOURCES += test_include.cxx
 
 #########################################
-include ${IUEROOT}/config/static-tests.mk
+include ${VXLROOT}/config/static-tests.mk
 #########################################

@@ -4,5 +4,5 @@ include ../config.mk
 TESTS += test_legendre_polynomial.cxx
 
 #########################################
-include ${IUEROOT}/config/static-tests.mk
+include ${VXLROOT}/config/static-tests.mk
 #########################################

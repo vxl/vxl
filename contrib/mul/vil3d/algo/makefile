@@ -23,5 +23,5 @@ MANPAGE_SOURCES += vil3d_anisotropic_filter.h
 MANPAGE_SOURCES += vil3d_gauss_reduce.txx
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

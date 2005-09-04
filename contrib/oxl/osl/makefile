@@ -65,7 +65,7 @@ SOURCES += osl_break_edge.cxx
 MANPAGE_SOURCES += osl_hacks.h
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
@@ -74,7 +74,7 @@ SUBDIRS += examples
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################
 
 FLAGS_osl_harris.cxx := $(optimize)

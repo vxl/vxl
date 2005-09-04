@@ -1,7 +1,7 @@
 USES += core
 include ../config.mk
-include ${IUEROOT}/core/vul/config.mk
-include ${IUEROOT}/core/vpl/config.mk
+include ${VXLROOT}/core/vul/config.mk
+include ${VXLROOT}/core/vpl/config.mk
 
 MINI_PROG_SOURCES += vil1_convolve_1d.cxx
 MINI_PROG_SOURCES += vil1_convolve.cxx
@@ -16,5 +16,5 @@ MINI_PROG_SOURCES += vil1_scale_intensities_example.cxx
 MINI_PROG_SOURCES += vil1_rgb_example.cxx
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

@@ -1,7 +1,7 @@
 USES += contrib/oxl core
-include $(IUEROOT)/core/vgui/config.mk
-include $(IUEROOT)/contrib/oxl/osl/config.mk
-include $(IUEROOT)/contrib/oxl/mvl/config.mk
+include $(VXLROOT)/core/vgui/config.mk
+include $(VXLROOT)/contrib/oxl/osl/config.mk
+include $(VXLROOT)/contrib/oxl/mvl/config.mk
 
 PROGRAM = vgui_testbed
 
@@ -11,5 +11,5 @@ SOURCES += vgui_point_selector.cxx
 MANPAGE_SOURCES += vgui_point_selector_sptr.h
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

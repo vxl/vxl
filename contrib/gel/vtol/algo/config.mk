@@ -1,4 +1,4 @@
 IULIBS += -lvtol-algo
-include ${IUEROOT}/contrib/gel/vtol/config.mk
-include ${IUEROOT}/core/vil/config.mk
-include ${IUEROOT}/core/vbl/config.mk
+include ${VXLROOT}/contrib/gel/vtol/config.mk
+include ${VXLROOT}/core/vil/config.mk
+include ${VXLROOT}/core/vbl/config.mk

@@ -8,5 +8,5 @@ TESTS += tricall.c
 TESTS += integral-test.c
 
 #########################################
-include ${IUEROOT}/config/static-tests.mk
+include ${VXLROOT}/config/static-tests.mk
 #########################################

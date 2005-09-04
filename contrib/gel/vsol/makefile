@@ -94,7 +94,7 @@ MANPAGE_SOURCES += vsol_volume_3d_sptr.h
 IMMEDIATE_LIBS += -lvgl-algo -lvgl -lvnl-algo -lvnl -lvbl -lvul
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
@@ -103,5 +103,5 @@ SUBDIRS += examples
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

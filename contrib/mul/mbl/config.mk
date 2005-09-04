@@ -1,5 +1,5 @@
 IULIBS += -lmbl
-include ${IUEROOT}/core/vnl/algo/config.mk
-include ${IUEROOT}/core/vnl/io/config.mk
-include ${IUEROOT}/core/vgl/io/config.mk
-include ${IUEROOT}/core/vsl/config.mk
+include ${VXLROOT}/core/vnl/algo/config.mk
+include ${VXLROOT}/core/vnl/io/config.mk
+include ${VXLROOT}/core/vgl/io/config.mk
+include ${VXLROOT}/core/vsl/config.mk

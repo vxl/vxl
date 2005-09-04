@@ -1,5 +1,5 @@
 USES += contrib/oxl core
-include $(IUEROOT)/core/vil/config.mk
+include $(VXLROOT)/core/vil/config.mk
 TRY_MPEG2 := 1
 
 LIBRARY = oxp
@@ -7,7 +7,7 @@ LIBRARY = oxp
 IMMEDIATE_LIBS += -lvil -lvnl -lvbl -lvpl
 
 #######################################
-include $(IUEROOT)/config/top-params.mk
+include $(VXLROOT)/config/top-params.mk
 #######################################
 
 SOURCES += oxp_parse_seqname.cxx
@@ -53,5 +53,5 @@ MANPAGE_SOURCES += oxp_yuv_to_rgb.h
 MANPAGE_SOURCES += MapInverter.h
 
 ######################################
-include $(IUEROOT)/config/top-rules.mk
+include $(VXLROOT)/config/top-rules.mk
 ######################################

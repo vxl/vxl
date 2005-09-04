@@ -1,3 +1,3 @@
 IULIBS += -lvdtop
-include ${IUEROOT}/contrib/prip/vmap/config.mk
-include ${IUEROOT}/core/vil/config.mk
+include ${VXLROOT}/contrib/prip/vmap/config.mk
+include ${VXLROOT}/core/vil/config.mk

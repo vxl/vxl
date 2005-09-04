@@ -275,7 +275,7 @@ MANPAGE_SOURCES += mwerks/vcl_complex.h
 MANPAGE_SOURCES += mwerks/vcl_cstdlib.h
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 # It is OK to compile these sources with native
@@ -342,7 +342,7 @@ SUBDIRS = tests
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################
 
 # on HP unix, this library has become too big, so it needs -fPIC

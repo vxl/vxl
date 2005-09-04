@@ -15,5 +15,5 @@ SOURCES += writeFeatures.c
 MANPAGE_SOURCES += base.h
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

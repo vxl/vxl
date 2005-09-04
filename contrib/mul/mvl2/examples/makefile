@@ -2,7 +2,7 @@ USES += contrib/mul core
 include ../config.mk
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifeq ($(HAS_AVI),1)
@@ -11,5 +11,5 @@ ifeq ($(HAS_AVI),1)
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

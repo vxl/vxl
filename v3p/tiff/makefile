@@ -63,7 +63,7 @@ MANPAGE_SOURCES += tiffvers.h
 MANPAGE_SOURCES += uvcode.h
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifeq ($(OS),win32)
@@ -159,5 +159,5 @@ endif
 IULIBS += -ljpeg
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

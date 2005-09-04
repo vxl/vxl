@@ -26,7 +26,7 @@ SOURCES += gevd_region_proc_params.cxx
 SOURCES += gevd_fold.cxx
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
@@ -34,7 +34,7 @@ SUBDIRS += tests
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################
 
 ifeq "$(TJ_GCC30)$(optimize)" "1-O2"

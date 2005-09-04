@@ -1,5 +1,5 @@
 USES += core
-include ${IUEROOT}/core/vil1/config.mk
+include ${VXLROOT}/core/vil1/config.mk
 
 LIBRARY := vil1-io
 VERSION := 1.0
@@ -16,7 +16,7 @@ MANPAGE_SOURCES += vil1_io_rgba.txx
 MANPAGE_SOURCES += vil1_io_memory_image_of.txx
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
@@ -24,5 +24,5 @@ SUBDIRS += tests
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

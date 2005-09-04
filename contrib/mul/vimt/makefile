@@ -26,7 +26,7 @@ MANPAGE_SOURCES += vimt_crop.h
 SUBDIRS += algo
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
@@ -34,5 +34,5 @@ SUBDIRS += examples tests
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

@@ -46,7 +46,7 @@ MANPAGE_SOURCES += vbl_scoped_ptr.h
 DEFINES += -DBUILDING_VBL_DLL
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
@@ -55,5 +55,5 @@ SUBDIRS += examples
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

@@ -20,5 +20,5 @@ endif
 IULIBS += -lvvid_bin
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

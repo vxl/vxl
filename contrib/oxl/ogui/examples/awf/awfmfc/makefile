@@ -1,5 +1,5 @@
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifdef WIN32
@@ -15,5 +15,5 @@ MANPAGE_SOURCES += resource.h
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

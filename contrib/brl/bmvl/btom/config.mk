@@ -1,6 +1,6 @@
 IULIBS += -lbtom
 USES += contrib/gel
-include ${IUEROOT}/contrib/gel/gevd/config.mk
-include ${IUEROOT}/core/vnl/config.mk
-include ${IUEROOT}/core/vbl/config.mk
-include ${IUEROOT}/core/vil1/config.mk
+include ${VXLROOT}/contrib/gel/gevd/config.mk
+include ${VXLROOT}/core/vnl/config.mk
+include ${VXLROOT}/core/vbl/config.mk
+include ${VXLROOT}/core/vil1/config.mk

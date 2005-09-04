@@ -1,7 +1,7 @@
 USES += contrib/tbl core
 
 include ../config.mk
-include ${IUEROOT}/core/testlib/config.mk
+include ${VXLROOT}/core/testlib/config.mk
 
 # Do not instantiate templates in the library but implicitly, on use:
 USE_IMPLICIT_TEMPLATES := 1
@@ -13,5 +13,5 @@ TESTS += vepl_test_erode_disk.cxx
 MINI_PROG_SOURCES += test_include.cxx
 
 #########################################
-include ${IUEROOT}/config/static-tests.mk
+include ${VXLROOT}/config/static-tests.mk
 #########################################

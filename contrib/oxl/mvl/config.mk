@@ -1,6 +1,6 @@
 IULIBS += -lmvl
-include ${IUEROOT}/core/vnl/algo/config.mk
-include ${IUEROOT}/core/vbl/config.mk
-include ${IUEROOT}/core/vgl/algo/config.mk
-include ${IUEROOT}/core/vul/config.mk
-#include ${IUEROOT}/core/vil1/config.mk # not really used yet ...
+include ${VXLROOT}/core/vnl/algo/config.mk
+include ${VXLROOT}/core/vbl/config.mk
+include ${VXLROOT}/core/vgl/algo/config.mk
+include ${VXLROOT}/core/vul/config.mk
+#include ${VXLROOT}/core/vil1/config.mk # not really used yet ...

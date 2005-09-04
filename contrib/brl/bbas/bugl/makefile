@@ -15,7 +15,7 @@ SOURCES += bugl_curve_3d.cxx
 MANPAGE_SOURCES += bugl_random_transform_set_2d.txx
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
@@ -23,5 +23,5 @@ ifndef NOTEST
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

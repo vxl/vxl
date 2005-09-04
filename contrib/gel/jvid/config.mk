@@ -1,6 +1,6 @@
 IULIBS += -ljvid
-include ${IUEROOT}/core/vgui/config.mk
-include ${IUEROOT}/core/vidl_vil1/config.mk
-include ${IUEROOT}/core/vul/config.mk
-include ${IUEROOT}/core/vil1/config.mk
+include ${VXLROOT}/core/vgui/config.mk
+include ${VXLROOT}/core/vidl_vil1/config.mk
+include ${VXLROOT}/core/vul/config.mk
+include ${VXLROOT}/core/vil1/config.mk
 

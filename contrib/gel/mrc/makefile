@@ -5,7 +5,7 @@ SUBDIRS += vpgl
 SUBDIRS += carmen_interface
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 # tests
@@ -14,6 +14,6 @@ SUBDIRS += vpgl_tests
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################
 

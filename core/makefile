@@ -39,7 +39,7 @@ SUBDIRS += vidl_vil1
 SUBDIRS += vgui
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 # global examples and tests
@@ -49,5 +49,5 @@ SUBDIRS += examples
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

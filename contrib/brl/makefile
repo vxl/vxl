@@ -14,5 +14,5 @@ SUBDIRS += bmvl
 SUBDIRS += bexe
  
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

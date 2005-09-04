@@ -7,5 +7,5 @@ MINI_PROG_SOURCES += line_fit.cxx
 MINI_PROG_SOURCES += line_gen.cxx
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

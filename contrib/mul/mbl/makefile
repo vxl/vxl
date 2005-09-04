@@ -70,7 +70,7 @@ MANPAGE_SOURCES += mbl_config.h.in
 INCDIRS += $(RELOBJDIR)/include
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
@@ -84,5 +84,5 @@ $(RELOBJDIR)/include/mbl/mbl_config.h: mbl_config.h.in
 	sed -e 's/@HAS_.*@/1/' -e 's/[._]in//g' $^ > $@
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

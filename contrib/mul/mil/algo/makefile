@@ -14,5 +14,5 @@ MANPAGE_SOURCES += mil_algo_brighten_image_2d.txx
 MANPAGE_SOURCES += mil_algo_convolve_1d.h
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

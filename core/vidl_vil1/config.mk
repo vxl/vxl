@@ -1,5 +1,5 @@
 IULIBS += -lvidl_vil1
-include ${IUEROOT}/core/vbl/config.mk
-include ${IUEROOT}/core/vul/config.mk
-include ${IUEROOT}/core/vil1/config.mk
+include ${VXLROOT}/core/vbl/config.mk
+include ${VXLROOT}/core/vul/config.mk
+include ${VXLROOT}/core/vil1/config.mk
 TRY_MPEG2 := 1

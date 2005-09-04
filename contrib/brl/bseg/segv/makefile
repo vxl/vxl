@@ -1,5 +1,5 @@
 USES += contrib/brl contrib/brl/bbas contrib/brl/bseg contrib/gel core
-include ${IUEROOT}/core/vgui/config.mk
+include ${VXLROOT}/core/vgui/config.mk
 
 LIBRARY := segv
 VERSION := 1.0
@@ -15,7 +15,7 @@ SOURCES += segv_vil_menus.cxx
 SOURCES += segv_vil_segmentation_manager.cxx
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
@@ -23,5 +23,5 @@ ifndef NOTEST
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

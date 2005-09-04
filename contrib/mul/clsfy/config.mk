@@ -1,6 +1,6 @@
 IULIBS += -lclsfy
-include ${IUEROOT}/contrib/mul/vpdfl/config.mk
-include ${IUEROOT}/contrib/mul/mbl/config.mk
-include ${IUEROOT}/core/vnl/algo/config.mk
-include ${IUEROOT}/core/vnl/io/config.mk
-include ${IUEROOT}/core/vbl/io/config.mk
+include ${VXLROOT}/contrib/mul/vpdfl/config.mk
+include ${VXLROOT}/contrib/mul/mbl/config.mk
+include ${VXLROOT}/core/vnl/algo/config.mk
+include ${VXLROOT}/core/vnl/io/config.mk
+include ${VXLROOT}/core/vbl/io/config.mk

@@ -7,7 +7,7 @@ VERSION := 1.0
 INCDIRS += ./include/mpeg2dec
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 # This is where configure will put config.h and inttypes.h
@@ -43,7 +43,7 @@ $(RELOBJDIR)/include/config.h: configure
 	PwD=`pwd` ; cd $(RELOBJDIR) ; $$PwD/configure .
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################
 
 # Always optimize this lib

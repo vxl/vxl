@@ -30,7 +30,7 @@ MANPAGE_SOURCES += zlib.h
 FLAGS_deflate.c += -O1
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################
 
 DEFINES += -DHAVE_UNISTD_H

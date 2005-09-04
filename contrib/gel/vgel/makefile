@@ -8,7 +8,7 @@ MANPAGE_SOURCES += vgel_multi_view_data.txx
 MANPAGE_SOURCES += vgel_multi_view_data_vertex_sptr.h
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
@@ -16,5 +16,5 @@ SUBDIRS += examples
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

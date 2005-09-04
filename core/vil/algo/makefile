@@ -55,7 +55,7 @@ MANPAGE_SOURCES += vil_abs_shuffle_distance.txx
 MANPAGE_SOURCES += vil_checker_board.txx
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
@@ -63,5 +63,5 @@ ifndef NOTEST
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

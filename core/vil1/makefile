@@ -4,7 +4,7 @@ LIBRARY := vil1
 VERSION := 1.0
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 MANPAGE_SOURCES += vil1_fwd.h
@@ -130,7 +130,7 @@ ifeq ($(OS),Linux2)
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################
 
 # turn on optimization for the convolution code

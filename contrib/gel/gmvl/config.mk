@@ -1,3 +1,3 @@
 IULIBS += -lgmvl
-include ${IUEROOT}/contrib/gel/vtol/config.mk
-include ${IUEROOT}/core/vil1/config.mk
+include ${VXLROOT}/contrib/gel/vtol/config.mk
+include ${VXLROOT}/core/vil1/config.mk

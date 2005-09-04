@@ -2,5 +2,5 @@
 SUBDIRS += vded
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

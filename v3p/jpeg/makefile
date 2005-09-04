@@ -61,7 +61,7 @@ MANPAGE_SOURCES += jpeglib.h
 MANPAGE_SOURCES += jversion.h
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################
 
 ifeq ($(OS),win32)

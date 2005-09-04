@@ -13,5 +13,5 @@ MANPAGE_SOURCES += vpgl_matrix_camera_sptr.h
 MANPAGE_SOURCES += vpgl_perspective_camera_sptr.h
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

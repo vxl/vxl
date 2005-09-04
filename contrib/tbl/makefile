@@ -6,5 +6,5 @@
 SUBDIRS += vipl vepl vepl2
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

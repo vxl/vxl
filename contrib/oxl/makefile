@@ -6,7 +6,7 @@ SUBDIRS += oxp
 SUBDIRS += vrml
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 # using vgui:
@@ -17,5 +17,5 @@ SUBDIRS += apps
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

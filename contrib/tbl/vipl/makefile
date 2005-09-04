@@ -76,7 +76,7 @@ MANPAGE_SOURCES += vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_matrix.txx
 MANPAGE_SOURCES += vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_vector.txx
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 # No need to compile the files in Templates when implicitly instantiating:
@@ -99,7 +99,7 @@ SUBDIRS += tests
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################
 
 # compile with -O2 for efficiency:

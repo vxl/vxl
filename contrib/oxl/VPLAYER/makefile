@@ -1,8 +1,8 @@
 USES += contrib/oxl core
-include ${IUELOCALROOT}/core/vgui/config.mk
+include ${VXLROOT}/core/vgui/config.mk
 
 #######################################
-include $(IUEROOT)/config/top-params.mk
+include $(VXLROOT)/config/top-params.mk
 #######################################
 
 ifeq ($(OS),win32)
@@ -19,5 +19,5 @@ ifeq ($(OS),win32)
 endif
 
 ######################################
-include $(IUEROOT)/config/top-rules.mk
+include $(VXLROOT)/config/top-rules.mk
 ######################################

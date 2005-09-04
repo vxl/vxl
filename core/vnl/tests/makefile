@@ -1,8 +1,8 @@
 USES += core
 include ../config.mk
-include ${IUEROOT}/core/vul/config.mk # vul_timer used
-include ${IUEROOT}/core/vpl/config.mk # vpl_unlink used in test_matlab
-include ${IUEROOT}/core/testlib/config.mk
+include ${VXLROOT}/core/vul/config.mk # vul_timer used
+include ${VXLROOT}/core/vpl/config.mk # vpl_unlink used in test_matlab
+include ${VXLROOT}/core/testlib/config.mk
 
 TESTMAIN = test_driver.cxx
 TESTS += test_matlab.cxx
@@ -41,7 +41,7 @@ MINI_PROG_SOURCES += basic_operation_timings.cxx
 MINI_PROG_SOURCES += test_include.cxx
 
 #########################################
-include ${IUEROOT}/config/static-tests.mk
+include ${VXLROOT}/config/static-tests.mk
 #########################################
 
 ifeq "$(TJ_GCC30)" "1"

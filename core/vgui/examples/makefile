@@ -1,6 +1,6 @@
 USES += core
 include ../config.mk
-include ${IUEROOT}/core/vidl_vil1/config.mk
+include ${VXLROOT}/core/vidl_vil1/config.mk
 
 MINI_PROG_SOURCES += basic01_display_image.cxx
 MINI_PROG_SOURCES += basic01a_multiple_panes.cxx
@@ -40,7 +40,7 @@ SOURCES += basic_menus.cxx
 SUBDIRS += mfc_example
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifdef HAS_GLUT
@@ -55,5 +55,5 @@ MINI_PROG_SOURCES += gtk3_vidl.cxx
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

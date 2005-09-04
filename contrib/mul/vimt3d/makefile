@@ -21,7 +21,7 @@ MANPAGE_SOURCES += vimt3d_gauss_reduce.h
 MANPAGE_SOURCES += vimt3d_resample_trilinear.h
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
@@ -29,5 +29,5 @@ ifndef NOTEST
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

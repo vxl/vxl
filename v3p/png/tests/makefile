@@ -5,5 +5,5 @@ USE_TESTLIB := 0
 TESTS += pngtest.c
 
 #########################################
-include ${IUEROOT}/config/static-tests.mk
+include ${VXLROOT}/config/static-tests.mk
 #########################################

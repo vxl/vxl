@@ -6,5 +6,5 @@ MINI_PROG_SOURCES += vul_psfile_example.cxx
 MINI_PROG_SOURCES += expand_path.cxx
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

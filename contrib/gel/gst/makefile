@@ -15,5 +15,5 @@ MANPAGE_SOURCES += gst_polygon_2d_sptr.h
 MANPAGE_SOURCES += gst_vertex_2d_sptr.h
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

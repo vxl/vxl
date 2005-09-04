@@ -1,6 +1,6 @@
 USES += core
-include ${IUEROOT}/core/vnl/algo/config.mk
-include ${IUEROOT}/core/vul/config.mk
+include ${VXLROOT}/core/vnl/algo/config.mk
+include ${VXLROOT}/core/vul/config.mk
 
 MINI_PROG_SOURCES += time_fastops.cxx
 MINI_PROG_SOURCES += vnl_amoeba.cxx
@@ -13,7 +13,7 @@ MINI_PROG_SOURCES += vnl_lsqr_test.cxx
 MINI_PROG_SOURCES += vnl_svd_economy.cxx
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################
 
 #all: $(RELOBJDIR)/time_fastops.40

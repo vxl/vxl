@@ -3,7 +3,7 @@
 #   This is the vsrl (dense matcher) library.
 
 USES += contrib/gel contrib/brl/bseg contrib/tbl contrib/oxl contrib/rpl core
-include ${IUEROOT}/core/vgui/config.mk
+include ${VXLROOT}/core/vgui/config.mk
 
 IMMEDIATE_LIBS := -lvtol -lvdgl -lvgui -lvepl -lvgl -lvil1 -lvnl -lvgel -lrsdl
 
@@ -35,7 +35,7 @@ SOURCES += vsrl_region_disparity.cxx
 DEFINES += -DBUILDING_VSRL_DLL
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
@@ -43,5 +43,5 @@ SUBDIRS += examples
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

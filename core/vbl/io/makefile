@@ -17,7 +17,7 @@ MANPAGE_SOURCES += vbl_io_sparse_array_3d.h
 MANPAGE_SOURCES += vbl_io_triple.txx
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
@@ -25,5 +25,5 @@ ifndef NOTEST
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

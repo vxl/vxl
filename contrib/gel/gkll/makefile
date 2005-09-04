@@ -9,5 +9,5 @@ SOURCES += gkll_multi_view_data.cxx
 MANPAGE_SOURCES += gkll_multi_view_data_vertex_sptr.h
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

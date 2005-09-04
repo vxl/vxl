@@ -10,5 +10,5 @@ IMMEDIATE_LIBS += -lvul
 SOURCES += vrml_out.cxx
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

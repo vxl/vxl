@@ -8,5 +8,5 @@ MINI_PROG_SOURCES += select_pdf.cxx
 MINI_PROG_SOURCES += test_overlap_pdf.cxx
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

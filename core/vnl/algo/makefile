@@ -78,7 +78,7 @@ SOURCES += vnl_simpson_integral.cxx
 SOURCES += vnl_adaptsimpson_integral.cxx
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 # tests
@@ -87,7 +87,7 @@ SUBDIRS += tests
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################
 
 ifeq "HP-UX" "$(findstring HP-UX,$(OS))"

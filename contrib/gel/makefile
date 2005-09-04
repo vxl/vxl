@@ -39,5 +39,5 @@ SUBDIRS += jvid
 SUBDIRS += vifa
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

@@ -40,7 +40,7 @@ SOURCES += vepl_moment.cxx
 SOURCES += vepl_histogram.cxx
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 # No need to compile the files in Templates when implicitly instantiating:
@@ -54,7 +54,7 @@ SUBDIRS += tests
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################
 
 ifeq "$(TJ_GCC30)" "1"

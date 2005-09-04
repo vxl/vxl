@@ -1,5 +1,5 @@
 SUBDIRS += vgui_testbed
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

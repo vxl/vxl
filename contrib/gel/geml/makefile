@@ -9,5 +9,5 @@ SOURCES += geml_matcher.cxx
 SOURCES += geml_matcher_correlation.cxx
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

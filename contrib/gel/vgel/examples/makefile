@@ -4,5 +4,5 @@ include ../config.mk
 MINI_PROG_SOURCES += kl_tracker.cxx
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

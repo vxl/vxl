@@ -1,10 +1,10 @@
 USES += contrib/tbl contrib/mul core
 
 include ../config.mk
-include ${IUEROOT}/core/vnl/algo/config.mk
-include ${IUEROOT}/core/vnl/io/config.mk
-include ${IUEROOT}/core/vgl/io/config.mk
-include ${IUEROOT}/core/testlib/config.mk
+include ${VXLROOT}/core/vnl/algo/config.mk
+include ${VXLROOT}/core/vnl/io/config.mk
+include ${VXLROOT}/core/vgl/io/config.mk
+include ${VXLROOT}/core/testlib/config.mk
 
 # Do not instantiate templates in the library but implicitly, on use:
 USE_IMPLICIT_TEMPLATES := 1
@@ -18,5 +18,5 @@ TESTS += vipl_test_histogram.cxx
 MINI_PROG_SOURCES += test_include.cxx
 
 #########################################
-include ${IUEROOT}/config/static-tests.mk
+include ${VXLROOT}/config/static-tests.mk
 #########################################

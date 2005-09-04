@@ -26,5 +26,5 @@ SOURCES += vifa_parallel_params.cxx
 MANPAGE_SOURCES += vifa_bbox.h
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

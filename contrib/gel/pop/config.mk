@@ -1,3 +1,3 @@
 IULIBS += -lpop
-include ${IUEROOT}/core/vgl/algo/config.mk
-include ${IUEROOT}/core/vnl/algo/config.mk
+include ${VXLROOT}/core/vgl/algo/config.mk
+include ${VXLROOT}/core/vnl/algo/config.mk

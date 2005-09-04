@@ -1,4 +1,4 @@
 IULIBS += -lbvgl
-include ${IUEROOT}/core/vgl/config.mk
-include ${IUEROOT}/core/vnl/algo/config.mk
-include ${IUEROOT}/core/vnl/config.mk
+include ${VXLROOT}/core/vgl/config.mk
+include ${VXLROOT}/core/vnl/algo/config.mk
+include ${VXLROOT}/core/vnl/config.mk

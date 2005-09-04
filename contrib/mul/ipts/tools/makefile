@@ -1,6 +1,6 @@
 USES += contrib/mul core
-include ${IUEROOT}/core/vul/config.mk
-include ${IUEROOT}/contrib/mul/ipts/config.mk
+include ${VXLROOT}/core/vul/config.mk
+include ${VXLROOT}/contrib/mul/ipts/config.mk
 
 MINI_PROG_SOURCES += find_dog_peaks.cxx
 MINI_PROG_SOURCES += find_scale_corners.cxx
@@ -10,5 +10,5 @@ SOURCES += find_scale_orient_entropy_peaks.cxx
 SOURCES += show_orientation_entropy.cxx
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

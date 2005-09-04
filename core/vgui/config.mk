@@ -2,14 +2,14 @@ TRY_GLUT := 1
 TRY_OPENGL := 1
 TRY_X11 := 1
 IULIBS += -lvgui -lQv
-include ${IUEROOT}/core/vnl/config.mk
-include ${IUEROOT}/core/vil/config.mk
-include ${IUEROOT}/core/vil1/config.mk
-include ${IUEROOT}/core/vgl/config.mk
-include ${IUEROOT}/core/vpl/config.mk
-include ${IUEROOT}/core/vbl/config.mk
-include ${IUEROOT}/core/vul/config.mk
-INCDIRS += ${IUEROOT}/core/vgui/$(RELOBJDIR)/include
+include ${VXLROOT}/core/vnl/config.mk
+include ${VXLROOT}/core/vil/config.mk
+include ${VXLROOT}/core/vil1/config.mk
+include ${VXLROOT}/core/vgl/config.mk
+include ${VXLROOT}/core/vpl/config.mk
+include ${VXLROOT}/core/vbl/config.mk
+include ${VXLROOT}/core/vul/config.mk
+INCDIRS += ${VXLROOT}/core/vgui/$(RELOBJDIR)/include
 
 # from vgui/impl:
 
@@ -17,8 +17,8 @@ TRY_GTK := 1
 TRY_MFC := 1
 TRY_QT := 1
 TRY_GLUT := 1
-include ${IUEROOT}/config/top-params.mk
-include ${IUEROOT}/config/try.mk
+include ${VXLROOT}/config/top-params.mk
+include ${VXLROOT}/config/try.mk
 
 ifeq ($(HAS_GTKGLAREA),1)
   USE_GTKGLAREA := 1

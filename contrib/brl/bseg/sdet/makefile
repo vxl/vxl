@@ -29,7 +29,7 @@ SOURCES += sdet_watershed_region_proc.cxx
 SOURCES += sdet_watershed_region_proc_params.cxx
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
@@ -37,5 +37,5 @@ ifndef NOTEST
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

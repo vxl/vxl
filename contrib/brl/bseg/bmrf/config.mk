@@ -1,12 +1,12 @@
 IULIBS += -lbmrf
 USES += contrib/gel
-include ${IUEROOT}/core/vil/config.mk
-include ${IUEROOT}/core/vgl/config.mk
-include ${IUEROOT}/core/vnl/algo/config.mk
-include ${IUEROOT}/core/vnl/io/config.mk
-include ${IUEROOT}/core/vbl/io/config.mk
-include ${IUEROOT}/core/vsl/config.mk
-include ${IUEROOT}/contrib/gel/gevd/config.mk
-include ${IUEROOT}/contrib/gel/vdgl/config.mk
-include ${IUEROOT}/contrib/gel/vtol/config.mk
-include ${IUEROOT}/contrib/brl/bbas/bugl/config.mk
+include ${VXLROOT}/core/vil/config.mk
+include ${VXLROOT}/core/vgl/config.mk
+include ${VXLROOT}/core/vnl/algo/config.mk
+include ${VXLROOT}/core/vnl/io/config.mk
+include ${VXLROOT}/core/vbl/io/config.mk
+include ${VXLROOT}/core/vsl/config.mk
+include ${VXLROOT}/contrib/gel/gevd/config.mk
+include ${VXLROOT}/contrib/gel/vdgl/config.mk
+include ${VXLROOT}/contrib/gel/vtol/config.mk
+include ${VXLROOT}/contrib/brl/bbas/bugl/config.mk

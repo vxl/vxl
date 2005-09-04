@@ -11,5 +11,5 @@ SUBDIRS += btom
 SUBDIRS += bmvv
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

@@ -1,5 +1,5 @@
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 SUBDIRS += netlib
@@ -37,5 +37,5 @@ SUBDIRS += dcmtk
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

@@ -149,7 +149,7 @@ SOURCES += vnl_definite_integral.cxx
 SUBDIRS += algo
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 # tests
@@ -163,7 +163,7 @@ SUBDIRS += examples
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################
 
 debug=$(debug_for_optimize) # needed for using $(optimize) on some files
@@ -191,5 +191,5 @@ FLAGS_Templates/vnl_vector+vnl_rational-.cxx := -O0
 FLAGS_Templates/vnl_vector_fixed+vnl_rational.3-.cxx := -O0
 endif
 
-$(IUELOCALROOT)/core/vnl/vnl_config.h: vnl_config.h.in
+$(VXLROOT)/core/vnl/vnl_config.h: vnl_config.h.in
 	perl -p -e 's/\@VNL_CONFIG_CHECK_BOUNDS\@/1/;s/\@VNL_CONFIG_LEGACY_METHODS\@/0/;s/\@VNL_CONFIG_THREAD_SAFE\@/1/;' $^ > $@

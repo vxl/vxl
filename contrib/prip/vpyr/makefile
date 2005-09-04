@@ -15,7 +15,7 @@ MANPAGE_SOURCES += vpyr_2_tpyramid_builder.h
 MANPAGE_SOURCES += vpyr_top_tmap.txx
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
@@ -24,5 +24,5 @@ SUBDIRS += examples/simple_segmentation
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

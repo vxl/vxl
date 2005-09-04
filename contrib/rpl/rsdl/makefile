@@ -14,7 +14,7 @@ MANPAGE_SOURCES += rsdl_borgefors.txx
 MANPAGE_SOURCES += rsdl_bins.txx
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
@@ -22,7 +22,7 @@ SUBDIRS += tests
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################
 
 ifeq ($(OS),OSF1V4) # with optimisation, not enough virtual memory:

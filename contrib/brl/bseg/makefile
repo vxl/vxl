@@ -26,5 +26,5 @@ SUBDIRS += segv
 SUBDIRS += sbin
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

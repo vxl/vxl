@@ -43,7 +43,7 @@ SOURCES += pdf1d_weighted_epanech_kernel_sampler.cxx
 SOURCES += pdf1d_weighted_kernel_pdf.cxx
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 SUBDIRS += tools
@@ -52,5 +52,5 @@ ifndef NOTEST
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

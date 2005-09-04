@@ -3,5 +3,5 @@ SUBDIRS += rsdl
 SUBDIRS += rgrl
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

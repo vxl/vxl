@@ -7,7 +7,7 @@ LIBRARY := vgui
 IMMEDIATE_LIBS += -lvil1 -lvil -lvbl -lvnl -lvul
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 # This is where configure will put vgui/vgui_config.h
@@ -288,7 +288,7 @@ SUBDIRS += examples
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################
 
 # configure stuff:

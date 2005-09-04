@@ -13,7 +13,7 @@ LIBRARY := vidl_vil1
 VERSION := 1.0
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 MANPAGE_SOURCES += vidl_vil1_codec.h
@@ -56,7 +56,7 @@ SUBDIRS += tests examples
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################
 
 # I think we should ask for the microsoft

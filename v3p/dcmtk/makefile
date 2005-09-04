@@ -7,11 +7,11 @@ VERSION := 1.0
 INCDIRS += ./ofstd/include ./dcmdata/include ./dcmimgle/include
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 # This is where configure will put osconfig.h
-INCDIRS += $(IUEROOT_libbase)/v3p/$(tj_libdir)
+INCDIRS += $(VXLROOT_libbase)/v3p/$(tj_libdir)
 
 SOURCES += ofstd/libsrc/ofcond.cxx
 SOURCES += ofstd/libsrc/ofconsol.cxx
@@ -112,14 +112,14 @@ SOURCES += dcmimgle/libsrc/diovpln.cxx
 SOURCES += dcmimgle/libsrc/diutils.cxx
 
 # configure stuff:
-xall:: $(IUEROOT_libbase)/v3p/$(tj_libdir)/osconfig.h
-$(IUEROOT_libbase)/v3p/$(tj_libdir)/osconfig.h: config/include/osconfig_cmake.h.in
+xall:: $(VXLROOT_libbase)/v3p/$(tj_libdir)/osconfig.h
+$(VXLROOT_libbase)/v3p/$(tj_libdir)/osconfig.h: config/include/osconfig_cmake.h.in
 	$(MKDIR_P) config/include; PwD=`pwd`; perl -p -e \
 	's/\#cmake/\#/;s/define (DCMTK_HAVE_((IO|UNIX|LIBC)_H|STRL))/undef $$1/;s/\@DCMTK_SIZEOF_LONG\@/8/;s!\@DCMTK_PATH_SEPARATOR\@!/!;s/\@DCMTK_ENVIRONMENT_PATH_SEPARATOR\@/:/;s!\@DCMTK_DCM_DICT_DEFAULT_PATH\@!'$$PwD'/dcmdata/libsrc/dicom.dic!;'\
 	$^ > $@
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################
 
 # Always optimize this lib

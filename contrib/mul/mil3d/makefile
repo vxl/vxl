@@ -13,7 +13,7 @@ MANPAGE_SOURCES += mil3d_gaussian_pyramid_builder_3d.txx
 MANPAGE_SOURCES += mil3d_sample_grid_3d.txx
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
@@ -21,5 +21,5 @@ ifndef NOTEST
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

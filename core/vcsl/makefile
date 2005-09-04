@@ -100,7 +100,7 @@ MANPAGE_SOURCES += vcsl_unit_sptr.h
 MANPAGE_SOURCES += vcsl_utm_sptr.h
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
@@ -109,5 +109,5 @@ SUBDIRS += examples
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

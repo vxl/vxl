@@ -1,2 +1,2 @@
 IULIBS += -loufgl -lrt
-include ${IUEROOT}/core/vil1/config.mk
+include ${VXLROOT}/core/vil1/config.mk

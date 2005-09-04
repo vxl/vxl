@@ -1,5 +1,5 @@
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 SUBDIRS += mul tbl rpl oxl gel oul brl
@@ -9,5 +9,5 @@ endif
 SUBDIRS += gel/vsrl prip conversions
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

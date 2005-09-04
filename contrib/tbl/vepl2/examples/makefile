@@ -11,7 +11,7 @@
 
 USES += contrib/tbl core
 include ../config.mk
-include ${IUEROOT}/core/vpl/config.mk
+include ${VXLROOT}/core/vpl/config.mk
 
 # Do not instantiate templates in the library but implicitly, on use:
 USE_IMPLICIT_TEMPLATES := 1
@@ -32,7 +32,7 @@ MINI_PROG_SOURCES += example_x_gradient.cxx
 MINI_PROG_SOURCES += example_histogram.cxx
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################
 
 ifeq "$(TJ_GCC30)" "1"

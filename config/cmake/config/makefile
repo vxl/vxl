@@ -45,7 +45,7 @@ TEST += VXL_HAS_TYPE_OF_SIZE
 #TEST += VXL_STDLIB_HAS_SRAND48
 
 #######################################
-include $(IUEROOT)/config/top-params.mk
+include $(VXLROOT)/config/top-params.mk
 #######################################
 
 $(RELOBJDIR)$/%.exe : vxl_platform_tests.cxx $(RELOBJDIR)$/vcl_config_compiler.h
@@ -63,5 +63,5 @@ $(RELOBJDIR)$/vcl_config_compiler.h :
 	echo "$(TEST) " | perl -p -e 's/\s+/=\n/g;' > $@
 
 ######################################
-include $(IUEROOT)/config/top-rules.mk
+include $(VXLROOT)/config/top-rules.mk
 ######################################

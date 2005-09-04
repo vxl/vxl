@@ -19,5 +19,5 @@ MINI_PROG_SOURCES += vil_resample_image.cxx
 #MINI_PROG_SOURCES += generate_nitf_pyramid_images.cxx
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

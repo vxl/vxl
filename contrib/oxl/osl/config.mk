@@ -1,4 +1,4 @@
 IULIBS += -losl
-include ${IUEROOT}/core/vnl/algo/config.mk
-include ${IUEROOT}/core/vil1/config.mk
-include ${IUEROOT}/core/vbl/config.mk
+include ${VXLROOT}/core/vnl/algo/config.mk
+include ${VXLROOT}/core/vil1/config.mk
+include ${VXLROOT}/core/vbl/config.mk

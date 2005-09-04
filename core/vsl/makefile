@@ -28,7 +28,7 @@ MANPAGE_SOURCES += vsl_block_binary.h
 MANPAGE_SOURCES += vsl_b_read_block_old.h
 
 #######################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
@@ -36,5 +36,5 @@ ifndef NOTEST
 endif
 
 ######################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ######################################

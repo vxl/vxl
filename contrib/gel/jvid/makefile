@@ -13,5 +13,5 @@ SOURCES += jvx_manager.cxx
 SUBDIRS += bin
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

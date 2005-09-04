@@ -1,15 +1,14 @@
-ifdef IUEROOT
-ifdef IUELOCALROOT
+ifdef VXLROOT
 
 ##########################################
-include ${IUEROOT}/config/top-params.mk
+include ${VXLROOT}/config/top-params.mk
 ##########################################
 
 # Echo date into logfile at the beginning
 # Echo pwd, so emacsing a log puts you in the correct dir
 xall::
 	@echo '# -*- default-directory: "'`pwd`'/" -*-'
-	@echo Beginning TargetJr make: `date`
+	@echo Beginning vxl make: `date`
 
 
 # Load packages.mk, containing the list of subdirs to make
@@ -36,7 +35,7 @@ xall:: configure
 
 ifeq (yes, no) # see above
 # if the user has config, then set up the auto run of configure
-LOCAL_CONFIG = $(wildcard $(IUELOCALROOT)/config)
+LOCAL_CONFIG = $(wildcard $(VXLROOT)/config)
 ifneq (win32,$(OS))
 ifneq "" "$(LOCAL_CONFIG)"
 
@@ -88,16 +87,16 @@ endif
 
 
 ##########################################
-include ${IUEROOT}/config/top-rules.mk
+include ${VXLROOT}/config/top-rules.mk
 ##########################################
 
 
 # Echo date into logfile at the end
 xall::
-	@echo Done TargetJr make: `date`
+	@echo Done vxl make: `date`
 
 TAGS: FORCE
-	env FRESCO=$(FRESCOINCS) IUELOCALROOT=`pwd` PACKAGES='$(PACKAGES)' tj-make-etags
+	env FRESCO=$(FRESCOINCS) VXLROOT=`pwd` PACKAGES='$(PACKAGES)' tj-make-etags
 
 #
 just_print_subdirs:
@@ -109,12 +108,6 @@ cvs-update:
 
 else
 all:
-	@echo You have to set the environment variables IUEROOT and IUELOCALROOT before running make
+	@echo You have to set the environment variable VXLROOT before running make
 	@exit 1
 endif
-else
-all:
-	@echo You have to set the environment variables IUEROOT and IUELOCALROOT before running make
-	@exit 1
-endif
-

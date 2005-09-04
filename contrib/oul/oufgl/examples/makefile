@@ -1,9 +1,9 @@
 USES += contrib/oul core
 include ../config.mk
-include ${IUEROOT}/core/vul/config.mk
+include ${VXLROOT}/core/vul/config.mk
 
 MINI_PROG_SOURCES += example1.cxx
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

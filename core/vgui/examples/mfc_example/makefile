@@ -1,7 +1,7 @@
 USES += core
 include ../../config.mk
 
-include ${IUEROOT}/config/identify-os.mk
+include ${VXLROOT}/config/identify-os.mk
 ifeq ($(OS),win32)
  IULIBS += -lnafxcw -lopengl32 -lglu32
 
@@ -16,5 +16,5 @@ ifeq ($(OS),win32)
 endif
 
 ################################
-include ${IUEROOT}/config/top.mk
+include ${VXLROOT}/config/top.mk
 ################################

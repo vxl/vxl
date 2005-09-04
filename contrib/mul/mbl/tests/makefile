@@ -1,10 +1,10 @@
 USES += contrib/mul core
 include ../config.mk
-include ${IUEROOT}/contrib/mul/vpdfl/config.mk
-include ${IUEROOT}/core/vul/config.mk
-include $(IUEROOT)/core/vpl/config.mk
-include ${IUEROOT}/core/vbl/config.mk
-include $(IUEROOT)/core/testlib/config.mk
+include ${VXLROOT}/contrib/mul/vpdfl/config.mk
+include ${VXLROOT}/core/vul/config.mk
+include $(VXLROOT)/core/vpl/config.mk
+include ${VXLROOT}/core/vbl/config.mk
+include $(VXLROOT)/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 TESTS += test_jarque_bera.cxx
@@ -44,7 +44,7 @@ TESTS += test_test.cxx
 MINI_PROG_SOURCES += test_include.cxx
 
 #########################################
-include ${IUEROOT}/config/static-tests.mk
+include ${VXLROOT}/config/static-tests.mk
 #########################################
 
 ifeq "$(TJ_GCC30)$(optimize)" "1-O2"
