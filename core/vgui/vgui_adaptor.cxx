@@ -251,6 +251,12 @@ void vgui_adaptor::post_timer(float, int)
 }
 
 //-----------------------------------------------------------------------------
+void vgui_adaptor::kill_timer(int)
+{
+  vgui_macro_warning << "kill_timer(int) not implemented\n";
+}
+
+//-----------------------------------------------------------------------------
 int  vgui_adaptor::post_timer(float t)
 {
   static int counter = 0;
