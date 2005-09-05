@@ -7,8 +7,6 @@
 #include <vcl_cassert.h>
 #include <vcl_algorithm.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_double_3x1.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_transpose.h>
 #include <vnl/vnl_numeric_traits.h>
@@ -58,34 +56,27 @@ T vgl_conic_2d_regression<T>::get_rms_error_est(vgl_point_2d<T> const& p) const
 // The Sampson approximation to mean Euclidean distance
 // The conic coefficients are for the original frame
 template <class T>
-void vgl_conic_2d_regression<T>::set_sampson_error(const double a,
-                                                   const double b,
-                                                   const double c,
-                                                   const double d,
-                                                   const double e,
-                                                   const double f
-                                                   ) 
+void vgl_conic_2d_regression<T>::set_sampson_error(T a, T b, T c, T d, T e, T f)
 {
-  double sum = 0;
+  T sum = 0;
   //remove warnings on implicit typename
   typename vcl_vector<vgl_point_2d<T> >::iterator pit;
-  for(pit = points_.begin(); pit != points_.end(); ++pit)
-    {
-      double x = static_cast<double>(pit->x()),
-        y = static_cast<double>(pit->y());
-      double alg_dist = (a*x + b*y + d)*x + (c*y + e)*y + f;
-      double dx = 2.0*a*x + b*y + d;
-      double dy = 2.0*c*y + b*x + e;
-      double grad_mag_sqrd = dx*dx+dy*dy;
+  for (pit = points_.begin(); pit != points_.end(); ++pit)
+  {
+    T x = pit->x(), y = pit->y();
+    T alg_dist = (a*x + b*y + d)*x + (c*y + e)*y + f;
+    T dx = 2.0*a*x + b*y + d;
+    T dy = 2.0*c*y + b*x + e;
+    T grad_mag_sqrd = dx*dx+dy*dy;
 
-      sum += (alg_dist*alg_dist)/grad_mag_sqrd;
-    }
-  if(npts_)
-    {
-      sampson_error_ = static_cast<T>(vcl_sqrt(sum/npts_));  
-      return;
-    }
-  sampson_error_ = vnl_numeric_traits<T>::maxval;  
+    sum += (alg_dist*alg_dist)/grad_mag_sqrd;
+  }
+  if (npts_)
+  {
+    sampson_error_ = static_cast<T>(vcl_sqrt(sum/npts_));
+    return;
+  }
+  sampson_error_ = vnl_numeric_traits<T>::maxval;
 }
 
 template <class T>
@@ -101,9 +92,9 @@ void vgl_conic_2d_regression<T>::remove_point(vgl_point_2d<T> const& p)
   //remove warnings on implicit typename
   typename vcl_vector<vgl_point_2d<T> >::iterator result;
   result = vcl_find(points_.begin(), points_.end(), p);
-  if(result != points_.end())
+  if (result != points_.end())
     points_.erase(result);
-  if(npts_>0)
+  if (npts_>0)
     --npts_;
 }
 
@@ -119,41 +110,40 @@ void vgl_conic_2d_regression<T>::compute_partial_sums()
 {
   hnorm_points_.clear();
   //Compute the normalizing transformation
-  vcl_vector<vgl_homg_point_2d<double> > hpoints;
+  vcl_vector<vgl_homg_point_2d<T> > hpoints;
   //remove warnings on implicit typename
   typename vcl_vector<vgl_point_2d<T> >::iterator pit;
-  for(pit = points_.begin(); pit != points_.end(); ++pit)
-    {
-      vgl_homg_point_2d<double> hp(static_cast<double>((*pit).x()),
-                                   static_cast<double>((*pit).y()));
-      hpoints.push_back(hp);
-    }
-  trans_.compute_from_points(hpoints, false); 
+  for (pit = points_.begin(); pit != points_.end(); ++pit)
+  {
+    hpoints.push_back(vgl_homg_point_2d<T>(*pit));
+  }
+  trans_.compute_from_points(hpoints, false);
 
   //Transform the input pointset
-  for(vcl_vector<vgl_homg_point_2d<double> >::iterator pit = hpoints.begin();
-      pit != hpoints.end(); ++pit)
+  for (typename vcl_vector<vgl_homg_point_2d<T> >::iterator pit = hpoints.begin();
+       pit != hpoints.end(); ++pit)
     hnorm_points_.push_back(trans_(*pit));
-      
-  for(vcl_vector<double>::iterator dit = partial_sums_.begin();
-      dit != partial_sums_.end(); ++dit)
-  (*dit)=0;
 
-  double x2,y2,x3,y3;
-  for(vcl_vector<vgl_homg_point_2d<double> >::iterator pit = hnorm_points_.begin();          pit != hnorm_points_.end(); ++pit)
-    {
-      double x = static_cast<double>(pit->x()/pit->w()),
-        y = static_cast<double>(pit->y()/pit->w());
-      
-      x2 = x*x;  x3 = x2*x;  y2 = y*y;  y3 = y2*y;
-      partial_sums_[0] += x3*x;   partial_sums_[1] += x3*y;
-      partial_sums_[2] += x2*y2;  partial_sums_[3] += x*y3;
-      partial_sums_[4] += y3*y;   partial_sums_[5] += x3;
-      partial_sums_[6] += x2*y;   partial_sums_[7] += x*y2;
-      partial_sums_[8] += y3;     partial_sums_[9] += x2;
-      partial_sums_[10] += x*y;   partial_sums_[11] += y2;
-      partial_sums_[12] += x;     partial_sums_[13] += y;
-    }
+  for (typename vcl_vector<T>::iterator dit = partial_sums_.begin();
+       dit != partial_sums_.end(); ++dit)
+    (*dit)=0;
+
+  T x2,y2,x3,y3;
+  for (typename vcl_vector<vgl_homg_point_2d<T> >::iterator pit = hnorm_points_.begin();
+       pit != hnorm_points_.end(); ++pit)
+  {
+    T x = pit->x()/pit->w(),
+      y = pit->y()/pit->w();
+
+    x2 = x*x;  x3 = x2*x;  y2 = y*y;  y3 = y2*y;
+    partial_sums_[0] += x3*x;   partial_sums_[1] += x3*y;
+    partial_sums_[2] += x2*y2;  partial_sums_[3] += x*y3;
+    partial_sums_[4] += y3*y;   partial_sums_[5] += x3;
+    partial_sums_[6] += x2*y;   partial_sums_[7] += x*y2;
+    partial_sums_[8] += y3;     partial_sums_[9] += x2;
+    partial_sums_[10] += x*y;   partial_sums_[11] += y2;
+    partial_sums_[12] += x;     partial_sums_[13] += y;
+  }
 }
 
 template <class T>
@@ -168,7 +158,7 @@ void vgl_conic_2d_regression<T>::fill_scatter_matrix()
   S11_.put(2,0,partial_sums_[2]); // x2*y2
   S11_.put(2,1,partial_sums_[3]); // x*y3
   S11_.put(2,2,partial_sums_[4]); // y3*y
-  
+
   S12_.put(0,0,partial_sums_[5]); // x3
   S12_.put(0,1,partial_sums_[6]); // x2*y
   S12_.put(0,2,partial_sums_[9]); // x2
@@ -178,7 +168,7 @@ void vgl_conic_2d_regression<T>::fill_scatter_matrix()
   S12_.put(2,0,partial_sums_[7]); // x*y2
   S12_.put(2,1,partial_sums_[8]); // y3
   S12_.put(2,2,partial_sums_[11]);// y2
-  
+
   S22_.put(0,0,partial_sums_[9]);  // x2
   S22_.put(0,1,partial_sums_[10]); // x*y
   S22_.put(0,2,partial_sums_[12]); // x
@@ -194,7 +184,7 @@ template <class T>
 bool vgl_conic_2d_regression<T>::fit()
 {
   //Can't fit an conic with fewer than 5 points
-  if(this->get_n_pts()<5)
+  if (this->get_n_pts()<5)
     return false;
 
   //Compute the elements of the scatter matrix from the points
@@ -205,20 +195,21 @@ bool vgl_conic_2d_regression<T>::fit()
 
   //Check the condition of S22
   T det = vnl_det(S22_);
-  if(det == static_cast<T>(0))
-    {
-      vcl_cout << "Singular S22 Matrix in vgl_conic_2d_regression::fit()\n";
-      return false;
-    }
+  if (det == static_cast<T>(0))
+  {
+    vcl_cout << "Singular S22 Matrix in vgl_conic_2d_regression::fit()\n";
+    return false;
+  }
   //The Bookstein solution.
-  vnl_double_3x3 S_lambda =
-    Dinv_*(S11_- S12_*(vnl_inverse(S22_)*vnl_transpose(S12_)));
+  vnl_matrix_fixed<T,3,3> S12_T = S12_.transpose();
+  vnl_matrix_fixed<T,3,3> S_lambda =
+    Dinv_*(S11_- S12_*(vnl_inverse(S22_)*S12_T));
 
-  vnl_svd<double> svd(S_lambda);
-  cost_ = static_cast<T>(svd.sigma_min());
-  vnl_double_3 v1 = svd.nullvector();
-  vnl_double_3 v2 = - vnl_inverse(S22_)*vnl_transpose(S12_)*v1;
-  vgl_conic<double> nc(v1[0], v1[1], v1[2], v2[0], v2[1], v2[2]);
+  vnl_svd<T> svd(S_lambda);
+  cost_ = svd.sigma_min();
+  vnl_vector_fixed<T,3> v1 = svd.nullvector();
+  vnl_vector_fixed<T,3> v2 = - vnl_inverse(S22_)*S12_T*v1;
+  vgl_conic<T> nc(v1[0], v1[1], v1[2], v2[0], v2[1], v2[2]);
 
   //Transform back to original frame
   // We have xn^t nc xn = 0 in the normalized frame
@@ -227,15 +218,12 @@ bool vgl_conic_2d_regression<T>::fit()
   // Thus x^t ( (trans_)^t nc trans_ ) x = 0;
   // so c = trans_(nc);
 
-  vgl_conic<double> c =   trans_(nc);
-  
-  //Set the Sampson approximation to fitting error
-  this->set_sampson_error(c.a(), c.b(), c.c(), c.d(), c.e(), c.f());
+  conic_ = trans_(nc);
 
-  //Cast to original type
-  conic_ = vgl_conic<T>(static_cast<T>(c.a()), static_cast<T>(c.b()), 
-                        static_cast<T>(c.c()), static_cast<T>(c.d()), 
-                        static_cast<T>(c.e()), static_cast<T>(c.f())); 
+  //Set the Sampson approximation to fitting error
+  this->set_sampson_error(conic_.a(), conic_.b(), conic_.c(),
+                          conic_.d(), conic_.e(), conic_.f());
+
   return true;
 }
 
@@ -245,7 +233,7 @@ void vgl_conic_2d_regression<T>::print_pointset(vcl_ostream& str)
   str << "Current Pointset has " << npts_ << " points\n";
   //remove warnings on implicit typename
   typename vcl_vector<vgl_point_2d<T> >::iterator pit;
-  for(pit = points_.begin(); pit != points_.end(); ++pit)
+  for (pit = points_.begin(); pit != points_.end(); ++pit)
     str << *pit << '\n';
 }
 

@@ -60,7 +60,7 @@ void vgl_fit_conics_2d<T>::output(const unsigned start_index,
     vcl_cout << "Can't output a conic at infinity in vgl_fit_conics<T>\n";
     return;
   }
-  
+
   //Need to establish the sense of the fitted curve
   //The curve should proceed in a counter-clockwise direction from p1 to p2.
   // 1) choose a point in the middle of the curve
@@ -74,20 +74,19 @@ void vgl_fit_conics_2d<T>::output(const unsigned start_index,
   // 3) construct a vector from the middle to pe
   vgl_vector_2d<T> vme(pe.x()-pm.x(), pe.y()-pm.y());
   //The cross product should be negative and significant
-  double cp = static_cast<double>(cross_product(vms, vme));
+  T cp = cross_product(vms, vme);
 
   //If not, exchange p1 and p2
   unsigned i1=start_index, i2 = end_index-1;
-  if(cp>1e-04 && cp> 0.0)
+  if (cp > 1e-04)
   {
     i1 = end_index-1;
     i2 = start_index;
   }
-  
+
 
   //   unsigned i1=start_index, i2 = end_index-1;
-  vgl_conic_segment_2d<T> e_seg(curve_[i1], curve_[i2],
-                                conic);
+  vgl_conic_segment_2d<T> e_seg(curve_[i1], curve_[i2], conic);
 #ifdef DEBUG
   vcl_cout << "output " << e_seg << '\n';
 #endif
@@ -131,7 +130,7 @@ bool vgl_fit_conics_2d<T>::fit()
       {
         vgl_point_2d<T>& p = curve_[nf];
         //if the point can be added without exeeding the threshold, do so
-        double error = reg.get_rms_error_est(p);
+        T error = reg.get_rms_error_est(p);
         below_error_tol = error<tol_;
         if (below_error_tol)
         {

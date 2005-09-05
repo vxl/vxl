@@ -61,7 +61,6 @@
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_double_3x3.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_conic.h>
@@ -114,9 +113,7 @@ class vgl_conic_2d_regression
   void init();
   void compute_partial_sums();
   void fill_scatter_matrix();
-  void set_sampson_error(const double a, const double b,
-                         const double c, const double d,
-                         const double e, const double f);
+  void set_sampson_error(T a, T b, T c, T d, T e, T f);
 
   // Data Members--------------------------------------------------------------
 
@@ -127,14 +124,14 @@ class vgl_conic_2d_regression
   unsigned npts_;
 
   //: The normalizing transformation
-  vgl_norm_trans_2d<double> trans_;
+  vgl_norm_trans_2d<T> trans_;
 
   //: The partial scatter term sums, updated with each ::add_point
-  vcl_vector<double> partial_sums_;
+  vcl_vector<T> partial_sums_;
 
   //: The fitting matrices
-  vnl_double_3x3 S11_, S12_, S22_;
-  vnl_double_3x3 Dinv_;
+  vnl_matrix_fixed<T,3,3> S11_, S12_, S22_;
+  vnl_matrix_fixed<T,3,3> Dinv_;
 
   //: The fitted conic in the un-normalized frame
   vgl_conic<T> conic_;
@@ -146,7 +143,7 @@ class vgl_conic_2d_regression
   T sampson_error_;
 
   //: Normalized points
-  vcl_vector<vgl_homg_point_2d<double> > hnorm_points_;
+  vcl_vector<vgl_homg_point_2d<T> > hnorm_points_;
 };
 
 #define VGL_CONIC_2D_REGRESSION_INSTANTIATE(T) extern "please include vgl/algo/vgl_conic_2d_regression.txx first"
