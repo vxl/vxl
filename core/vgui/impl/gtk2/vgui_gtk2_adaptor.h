@@ -12,6 +12,7 @@
 
 #include <vgui/vgui_adaptor.h>
 #include <vgui/internals/vgui_adaptor_mixin.h>
+#include <vcl_map.h>
 
 #include <gtk/gtk.h>
 
@@ -34,6 +35,8 @@ class vgui_gtk2_adaptor : public vgui_adaptor, public vgui_adaptor_mixin
   void post_overlay_redraw();
   void post_timer(float,int);
   void post_destroy();  // schedules destruction of parent vgui_window
+
+  void kill_timer(int);
 
   unsigned get_width() const {return mixin::width;}
   unsigned get_height() const {return mixin::height;}
@@ -86,6 +89,19 @@ class vgui_gtk2_adaptor : public vgui_adaptor, public vgui_adaptor_mixin
   // pointer to overlay emulation data
   vgui_overlay_helper *ovl_helper;
 
+  //: internal struct for timer
+  struct internal_timer{
+    gint real_id_;
+    void* callback_ptr_;
+    
+    internal_timer() : real_id_(0), callback_ptr_(0) { }
+    internal_timer(gint id, void* p) 
+    : real_id_(id), callback_ptr_(p) { }
+  };
+    
+  // map of timers currently in use
+  vcl_map<int, internal_timer>  timers_;
+  
   // This is a place to store any menu passed in,
   // so that it doesn't go out of scope while the popup is on screen.
   static vgui_menu last_popup;

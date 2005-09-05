@@ -18,6 +18,7 @@
 #include "vgui_gtk_adaptor.h"
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
+#include <vcl_utility.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 #include <gtkgl/gtkglarea.h>
@@ -157,9 +158,32 @@ void vgui_gtk_adaptor::post_timer(float timeout, int name)
   cd->adapt = this;
   cd->name = name;
 
-  gtk_timeout_add(int(timeout), 
-                  timeout_callback,
-                  cd);
+  gint id = gtk_timeout_add(int(timeout),
+                            timeout_callback,
+                            cd);
+
+  // add them to timer map
+  internal_timer i( id, (void*)cd );
+  timers_.insert( vcl_pair<int, internal_timer>(name, i) );
+}
+
+//: timeout is in milliseconds
+void vgui_gtk_adaptor::kill_timer(int name)
+{
+  vcl_map<int, internal_timer>::iterator it
+    = timers_.find( name );
+  if( it == timers_.end() )  // if such timer does not exist
+    return;
+  
+  internal_timer timer;
+  timer = (*it).second;
+  // remove timer
+  gtk_timeout_remove(timer.real_id_);
+  // remove callback ptr
+  delete  (vgui_gtk_adaptor_callback_data*)(timer.callback_ptr_);
+  
+  // remove timer from map
+  timers_.erase(it);
 }
 
 void vgui_gtk_adaptor::post_destroy()
