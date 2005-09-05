@@ -98,9 +98,12 @@ class vgui_mfc_adaptor : public CView, public vgui_adaptor, public vgui_adaptor_
   //: Change the default popup menu to the given one (not yet implemented).
   void set_default_popup(vgui_menu);
 
-  //: Sets timer to dispatch WM_TIME event to a mainframe every time milliseconds
+  //: Sets timer to dispatch WM_TIMER event to a mainframe every time milliseconds
   void post_timer(float,int);
 
+  //: Stop timer
+  void kill_timer(int id);
+  
   //: Flags than a child requests idle processing
   void post_idle_request() { idle_request_posted_ = true; }
 

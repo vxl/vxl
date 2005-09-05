@@ -403,7 +403,7 @@ void vgui_mfc_adaptor::service_redraws()
   swap_buffers();
 }
 
-//: Sets timer to dispatch WM_TIME event to a mainframe every time milliseconds
+//: Sets timer to dispatch WM_TIMER event to a mainframe every time milliseconds
 void vgui_mfc_adaptor::post_timer(float tm,int id)
 {
   CWnd* wnd;
@@ -414,6 +414,16 @@ void vgui_mfc_adaptor::post_timer(float tm,int id)
   wnd->SetTimer(id,tm,NULL);
 }
 
+//: Stop timer to dispatch WM_TIME event
+void vgui_mfc_adaptor::kill_timer(int id)
+{
+  CWnd* wnd;
+  if (m_pCWnd)
+    wnd = m_pCWnd;
+  else
+    wnd = AfxGetApp()->GetMainWnd();
+  wnd->KillTimer(id);
+}
 
 //: Called by MFC when a draw event is required - overridden to draw this view.
 void vgui_mfc_adaptor::OnDraw(CDC* pDC)

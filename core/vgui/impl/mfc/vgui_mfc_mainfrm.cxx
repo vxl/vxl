@@ -188,12 +188,9 @@ void vgui_mfc_mainfrm::OnUpdateStatusBar(CCmdUI *sbar)
 
 void vgui_mfc_mainfrm::OnTimer(UINT id)
 {
-  // This thing should go only once. Kill the timer
-  // before dispatching the event because the event
-  // might take a long time to handle and we don't
-  // want the timers building up.
-  KillTimer(id);
-  vgui_adaptor::current->dispatch_to_tableau(vgui_TIMER);
+  vgui_event e(vgui_TIMER);
+  e.timer_id = id;
+  vgui_adaptor::current->dispatch_to_tableau(e);
 }
 
 #ifdef _DEBUG
