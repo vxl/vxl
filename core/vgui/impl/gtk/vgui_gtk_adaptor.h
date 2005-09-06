@@ -40,6 +40,8 @@ class vgui_gtk_adaptor : public vgui_adaptor, public vgui_adaptor_mixin
   void post_timer(float,int);
   void post_destroy();  // schedules destruction of parent vgui_window
 
+  void kill_timer(int);
+
   unsigned get_width() const {return mixin::width;}
   unsigned get_height() const {return mixin::height;}
   void bind_popups(vgui_modifier m, vgui_button b)
