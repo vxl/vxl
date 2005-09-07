@@ -15,6 +15,7 @@ TESTS += test_transform_2d.cxx
 TESTS += test_correlate_2d.cxx
 TESTS += test_find_troughs.cxx
 TESTS += test_find_peaks.cxx
+TESTS += test_resample_bilin.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

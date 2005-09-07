@@ -3,6 +3,8 @@ USES += contrib/mul core
 LIBRARY := vimt
 VERSION := 1.0
 
+MANPAGE_SOURCES += vimt_fwd.h
+
 SOURCES += vimt_image.cxx
 SOURCES += vimt_image_2d.cxx
 MANPAGE_SOURCES += vimt_image_2d_of.txx

@@ -3,6 +3,8 @@ USES += contrib/mul core
 LIBRARY := vimt3d
 VERSION := 1.0
 
+MANPAGE_SOURCES += vimt3d_fwd.h
+
 SOURCES += vimt3d_load.cxx
 SOURCES += vimt3d_image_3d.cxx
 SOURCES += vimt3d_transform_3d.cxx
