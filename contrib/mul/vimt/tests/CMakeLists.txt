@@ -14,6 +14,7 @@ ADD_EXECUTABLE( vimt_test_all
   test_find_peaks.cxx
   test_find_troughs.cxx
   test_correlate_2d.cxx
+  test_resample_bilin.cxx
 )
 TARGET_LINK_LIBRARIES( vimt_test_all vimt_algo vpl vul testlib )
 
@@ -28,6 +29,7 @@ ADD_TEST( vimt_test_gaussian_pyramid_builder_2d_general  vimt_test_all test_gaus
 ADD_TEST( vimt_test_find_peaks                   vimt_test_all test_find_peaks )
 ADD_TEST( vimt_test_find_troughs                 vimt_test_all test_find_troughs )
 ADD_TEST( vimt_test_correlate_2d                 vimt_test_all test_correlate_2d )
+ADD_TEST( vimt_test_resample_bilin               vimt_test_all test_resample_bilin )
 
 ADD_EXECUTABLE( vimt_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vimt_test_include vimt_algo vimt )
