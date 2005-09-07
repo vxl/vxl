@@ -181,7 +181,7 @@ void vimt_transform_2d::set_translation(double t_x, double t_y)
     inv_uptodate_=false;
 }
 
-void vimt_transform_2d::origin( const vgl_point_2d<double> & p )
+void vimt_transform_2d::set_origin( const vgl_point_2d<double> & p )
 {
     xt_ = p.x()*tt_;
     yt_ = p.y()*tt_;

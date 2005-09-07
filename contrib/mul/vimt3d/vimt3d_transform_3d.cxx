@@ -236,7 +236,7 @@ void vimt3d_transform_3d::set_translation(double t_x, double t_y, double t_z)
 
 //=======================================================================
 
-void vimt3d_transform_3d::origin( const vgl_point_3d<double> & p )
+void vimt3d_transform_3d::set_origin( const vgl_point_3d<double> & p )
 {
   xt_=p.x()*tt_;
   yt_=p.y()*tt_;

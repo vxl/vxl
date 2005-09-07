@@ -138,7 +138,12 @@ class vimt_transform_2d
     // The rest of the transformation is unaffected.
     // If the transformation was previously the identity,
     // it becomes a translation.
-    void origin( const vgl_point_2d<double> & );
+    void set_origin( const vgl_point_2d<double> & );
+
+    //: Modifies the transformation so that operator()(vgl_point_2d<double> (0,0)) == p.
+    // \deprecated in favour of set_origin()
+    // Can be deleted after release of VXL 1.3.0
+    void origin( const vgl_point_2d<double> &p) {set_origin(p);}
 
     //: Applies transformation to (x,y)
     vgl_point_2d<double>  operator()(double x, double y) const;
