@@ -2,7 +2,7 @@
 #include "vil_gauss_reduce.h"
 //:
 // \file
-// \brief Functions to smooth and sub-sample image in one direction
+// \brief Functions to smooth and sub-sample an image in one direction
 // \author Tim Cootes
 
 #include <vcl_cmath.h>
@@ -20,37 +20,36 @@ void vil_gauss_reduce(const vxl_byte* src_im,
                       vxl_byte* dest_im,
                       vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
 {
-    vxl_byte* d_row = dest_im;
-    const vxl_byte* s_row = src_im;
-    vcl_ptrdiff_t sxs2 = s_x_step*2;
-    unsigned ni2 = (src_ni-3)/2;
-    for (unsigned y=0;y<src_nj;++y)
+  vxl_byte* d_row = dest_im;
+  const vxl_byte* s_row = src_im;
+  vcl_ptrdiff_t sxs2 = s_x_step*2;
+  unsigned ni2 = (src_ni-3)/2;
+  for (unsigned y=0;y<src_nj;++y)
+  {
+    // Set first element of row
+    *d_row = vnl_math_rnd(0.071f * s_row[sxs2]
+                        + 0.357f * s_row[s_x_step]
+                        + 0.572f * s_row[0]);
+
+    vxl_byte * d = d_row + d_x_step;
+    const vxl_byte* s = s_row + sxs2;
+    for (unsigned x=0;x<ni2;++x)
     {
-        // Set first element of row
-        *d_row = *s_row;
-        *d_row = vnl_math_rnd(0.071f * s_row[sxs2]
-                            + 0.357f * s_row[s_x_step]
-                            + 0.572f * s_row[0]);
+      *d = vnl_math_rnd(0.05*s[-sxs2]    + 0.05*s[sxs2]
+                      + 0.25*s[-s_x_step]+ 0.25*s[s_x_step]
+                      + 0.4*s[0]);
 
-        vxl_byte * d = d_row + d_x_step;
-        const vxl_byte* s = s_row + sxs2;
-        for (unsigned x=0;x<ni2;++x)
-        {
-            *d = vnl_math_rnd(0.05*s[-sxs2]    + 0.05*s[sxs2]
-                            + 0.25*s[-s_x_step]+ 0.25*s[s_x_step]
-                            + 0.4*s[0]);
-
-            d += d_x_step;
-            s += sxs2;
-        }
-        // Set last elements of row
-        *d = vnl_math_rnd(0.071f * s[-sxs2]
-                        + 0.357f * s[-s_x_step]
-                        + 0.572f * s[0]);
-
-        d_row += d_y_step;
-        s_row += s_y_step;
+      d += d_x_step;
+      s += sxs2;
     }
+    // Set last elements of row
+    *d = vnl_math_rnd(0.071f * s[-sxs2]
+                    + 0.357f * s[-s_x_step]
+                    + 0.572f * s[0]);
+
+    d_row += d_y_step;
+    s_row += s_y_step;
+  }
 }
 
 //: Smooth and subsample single plane src_im in x to produce dest_im
@@ -61,35 +60,35 @@ void vil_gauss_reduce(const float* src_im,
                       vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
                       float* dest_im, vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
 {
-    float* d_row = dest_im;
-    const float* s_row = src_im;
-    vcl_ptrdiff_t sxs2 = s_x_step*2;
-    unsigned ni2 = (src_ni-3)/2;
-    for (unsigned y=0;y<src_nj;++y)
+  float* d_row = dest_im;
+  const float* s_row = src_im;
+  vcl_ptrdiff_t sxs2 = s_x_step*2;
+  unsigned ni2 = (src_ni-3)/2;
+  for (unsigned y=0;y<src_nj;++y)
+  {
+    // Set first element of row
+    *d_row =  0.071f * s_row[sxs2]
+            + 0.357f * s_row[s_x_step]
+            + 0.572f * s_row[0];
+    float * d = d_row + d_x_step;
+    const float* s = s_row + sxs2;
+    for (unsigned x=0;x<ni2;++x)
     {
-        // Set first element of row
-        *d_row =  0.071f * s_row[sxs2]
-                + 0.357f * s_row[s_x_step]
-                + 0.572f * s_row[0];
-        float * d = d_row + d_x_step;
-        const float* s = s_row + sxs2;
-        for (unsigned x=0;x<ni2;++x)
-        {
-            *d =  0.05f*(s[-sxs2] + s[sxs2])
-                + 0.25f*(s[-s_x_step]+ s[s_x_step])
-                + 0.40f*s[0];
+      *d =  0.05f*(s[-sxs2] + s[sxs2])
+          + 0.25f*(s[-s_x_step]+ s[s_x_step])
+          + 0.40f*s[0];
 
-            d += d_x_step;
-            s += sxs2;
-        }
-        // Set last elements of row
-        *d =  0.071f * s[-sxs2]
-            + 0.357f * s[-s_x_step]
-            + 0.572f * s[0];
-
-        d_row += d_y_step;
-        s_row += s_y_step;
+      d += d_x_step;
+      s += sxs2;
     }
+    // Set last elements of row
+    *d =  0.071f * s[-sxs2]
+        + 0.357f * s[-s_x_step]
+        + 0.572f * s[0];
+
+    d_row += d_y_step;
+    s_row += s_y_step;
+  }
 }
 
 
@@ -102,36 +101,36 @@ void vil_gauss_reduce(const int* src_im,
                       int* dest_im,
                       vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
 {
-    int* d_row = dest_im;
-    const int* s_row = src_im;
-    vcl_ptrdiff_t sxs2 = s_x_step*2;
-    unsigned ni2 = (src_ni-3)/2;
-    for (unsigned y=0;y<src_nj;++y)
+  int* d_row = dest_im;
+  const int* s_row = src_im;
+  vcl_ptrdiff_t sxs2 = s_x_step*2;
+  unsigned ni2 = (src_ni-3)/2;
+  for (unsigned y=0;y<src_nj;++y)
+  {
+    // Set first element of row
+    *d_row = vnl_math_rnd(0.071f * s_row[sxs2]
+                        + 0.357f * s_row[s_x_step]
+                        + 0.572f * s_row[0]);
+
+    int * d = d_row + d_x_step;
+    const int* s = s_row + sxs2;
+    for (unsigned x=0;x<ni2;++x)
     {
-        // Set first element of row
-        *d_row = vnl_math_rnd(0.071f * s_row[sxs2]
-                            + 0.357f * s_row[s_x_step]
-                            + 0.572f * s_row[0]);
+      *d = vnl_math_rnd(0.05*s[-sxs2] + 0.25*s[-s_x_step] +
+                        0.05*s[ sxs2] + 0.25*s[ s_x_step] +
+                        0.4 *s[0]);
 
-        int * d = d_row + d_x_step;
-        const int* s = s_row + sxs2;
-        for (unsigned x=0;x<ni2;++x)
-        {
-            *d = vnl_math_rnd(0.05*s[-sxs2] + 0.25*s[-s_x_step] +
-                              0.05*s[ sxs2] + 0.25*s[ s_x_step] +
-                              0.4 *s[0]);
-
-            d += d_x_step;
-            s += sxs2;
-        }
-        // Set last elements of row
-        *d = vnl_math_rnd(0.071f * s[-sxs2]
-                        + 0.357f * s[-s_x_step]
-                        + 0.572f * s[0]);
-
-        d_row += d_y_step;
-        s_row += s_y_step;
+      d += d_x_step;
+      s += sxs2;
     }
+    // Set last elements of row
+    *d = vnl_math_rnd(0.071f * s[-sxs2]
+                    + 0.357f * s[-s_x_step]
+                    + 0.572f * s[0]);
+
+    d_row += d_y_step;
+    s_row += s_y_step;
+  }
 }
 
 //: Smooth and subsample single plane src_im in x to produce dest_im
@@ -143,37 +142,37 @@ void vil_gauss_reduce(const vxl_int_16* src_im,
                       vxl_int_16* dest_im,
                       vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
 {
-    vxl_int_16* d_row = dest_im;
-    const vxl_int_16* s_row = src_im;
-    vcl_ptrdiff_t sxs2 = s_x_step*2;
-    unsigned ni2 = (src_ni-3)/2;
-    for (unsigned y=0;y<src_nj;++y)
+  vxl_int_16* d_row = dest_im;
+  const vxl_int_16* s_row = src_im;
+  vcl_ptrdiff_t sxs2 = s_x_step*2;
+  unsigned ni2 = (src_ni-3)/2;
+  for (unsigned y=0;y<src_nj;++y)
+  {
+    // Set first element of row
+    *d_row = vnl_math_rnd(0.071f * s_row[sxs2]
+                        + 0.357f * s_row[s_x_step]
+                        + 0.572f * s_row[0]);
+
+    vxl_int_16 * d = d_row + d_x_step;
+    const vxl_int_16* s = s_row + sxs2;
+    for (unsigned x=0;x<ni2;++x)
     {
-        // Set first element of row
-        *d_row = vnl_math_rnd(0.071f * s_row[sxs2]
-                            + 0.357f * s_row[s_x_step]
-                            + 0.572f * s_row[0]);
+      // The 0.5 offset in the following ensures rounding
+      *d = vxl_int_16(0.5 + 0.05*s[-sxs2] + 0.25*s[-s_x_step]
+                    + 0.05*s[ sxs2] + 0.25*s[ s_x_step]
+                    + 0.4 *s[0]);
 
-        vxl_int_16 * d = d_row + d_x_step;
-        const vxl_int_16* s = s_row + sxs2;
-        for (unsigned x=0;x<ni2;++x)
-        {
-            // The 0.5 offset in the following ensures rounding
-            *d = vxl_int_16(0.5 + 0.05*s[-sxs2] + 0.25*s[-s_x_step]
-                         + 0.05*s[ sxs2] + 0.25*s[ s_x_step]
-                         + 0.4 *s[0]);
-
-            d += d_x_step;
-            s += sxs2;
-        }
-        // Set last elements of row
-        *d = vnl_math_rnd(0.071f * s[-sxs2]
-                        + 0.357f * s[-s_x_step]
-                        + 0.572f * s[0]);
-
-        d_row += d_y_step;
-        s_row += s_y_step;
+      d += d_x_step;
+      s += sxs2;
     }
+    // Set last elements of row
+    *d = vnl_math_rnd(0.071f * s[-sxs2]
+                    + 0.357f * s[-s_x_step]
+                    + 0.572f * s[0]);
+
+    d_row += d_y_step;
+    s_row += s_y_step;
+  }
 }
 
 //: Smooth and subsample single plane src_im in x, result is 2/3rd size
@@ -360,33 +359,33 @@ void vil_gauss_reduce_121(const vxl_byte* src_im,
   unsigned nj2 = (src_nj-2)/2;
   for (unsigned y=0;y<nj2;++y)
   {
-      // Set first element of row
-      *d_row = *s_row2;
-      vxl_byte * d = d_row + d_x_step;
-      const vxl_byte* s1 = s_row1 + sxs2;
-      const vxl_byte* s2 = s_row2 + sxs2;
-      const vxl_byte* s3 = s_row3 + sxs2;
-      for (unsigned x=0;x<ni2;++x)
-      {
-          // The following is a little inefficient - could group terms to reduce arithmetic
-          // Add 0.5 so that truncating effectively rounds
-          *d = vxl_byte( 0.0625f * s1[-s_x_step] + 0.125f * s1[0] + 0.0625f * s1[s_x_step]
-                       + 0.1250f * s2[-s_x_step] + 0.250f * s2[0] + 0.1250f * s2[s_x_step]
-                       + 0.0625f * s3[-s_x_step] + 0.125f * s3[0] + 0.0625f * s3[s_x_step] +0.5);
+    // Set first element of row
+    *d_row = *s_row2;
+    vxl_byte * d = d_row + d_x_step;
+    const vxl_byte* s1 = s_row1 + sxs2;
+    const vxl_byte* s2 = s_row2 + sxs2;
+    const vxl_byte* s3 = s_row3 + sxs2;
+    for (unsigned x=0;x<ni2;++x)
+    {
+      // The following is a little inefficient - could group terms to reduce arithmetic
+      // Add 0.5 so that truncating effectively rounds
+      *d = vxl_byte( 0.0625f * s1[-s_x_step] + 0.125f * s1[0] + 0.0625f * s1[s_x_step]
+                   + 0.1250f * s2[-s_x_step] + 0.250f * s2[0] + 0.1250f * s2[s_x_step]
+                   + 0.0625f * s3[-s_x_step] + 0.125f * s3[0] + 0.0625f * s3[s_x_step] +0.5);
 
-          d += d_x_step;
-          s1 += sxs2;
-          s2 += sxs2;
-          s3 += sxs2;
-      }
-      // Set last elements of row
-      if (src_ni&1)
-        *d = *s2;
+      d += d_x_step;
+      s1 += sxs2;
+      s2 += sxs2;
+      s3 += sxs2;
+    }
+    // Set last elements of row
+    if (src_ni&1)
+      *d = *s2;
 
-      d_row += d_y_step;
-      s_row1 += sys2;
-      s_row2 += sys2;
-      s_row3 += sys2;
+    d_row += d_y_step;
+    s_row1 += sys2;
+    s_row2 += sys2;
+    s_row3 += sys2;
   }
 
   // Need to set first and last rows as well
@@ -432,32 +431,32 @@ void vil_gauss_reduce_121(const float* src_im,
   unsigned nj2 = (src_nj-2)/2;
   for (unsigned y=0;y<nj2;++y)
   {
-      // Set first element of row
-      *d_row = *s_row2;
-      float * d = d_row + d_x_step;
-      const float* s1 = s_row1 + sxs2;
-      const float* s2 = s_row2 + sxs2;
-      const float* s3 = s_row3 + sxs2;
-      for (unsigned x=0;x<ni2;++x)
-      {
-          // The following is a little inefficient - could group terms to reduce arithmetic
-          *d =   0.0625f * s1[-s_x_step] + 0.125f * s1[0] + 0.0625f * s1[s_x_step]
-               + 0.1250f * s2[-s_x_step] + 0.250f * s2[0] + 0.1250f * s2[s_x_step]
-               + 0.0625f * s3[-s_x_step] + 0.125f * s3[0] + 0.0625f * s3[s_x_step];
+    // Set first element of row
+    *d_row = *s_row2;
+    float * d = d_row + d_x_step;
+    const float* s1 = s_row1 + sxs2;
+    const float* s2 = s_row2 + sxs2;
+    const float* s3 = s_row3 + sxs2;
+    for (unsigned x=0;x<ni2;++x)
+    {
+      // The following is a little inefficient - could group terms to reduce arithmetic
+      *d =   0.0625f * s1[-s_x_step] + 0.125f * s1[0] + 0.0625f * s1[s_x_step]
+           + 0.1250f * s2[-s_x_step] + 0.250f * s2[0] + 0.1250f * s2[s_x_step]
+           + 0.0625f * s3[-s_x_step] + 0.125f * s3[0] + 0.0625f * s3[s_x_step];
 
-          d += d_x_step;
-          s1 += sxs2;
-          s2 += sxs2;
-          s3 += sxs2;
-      }
-      // Set last elements of row
-      if (src_ni&1)
-        *d = *s2;
+      d += d_x_step;
+      s1 += sxs2;
+      s2 += sxs2;
+      s3 += sxs2;
+    }
+    // Set last elements of row
+    if (src_ni&1)
+      *d = *s2;
 
-      d_row += d_y_step;
-      s_row1 += sys2;
-      s_row2 += sys2;
-      s_row3 += sys2;
+    d_row += d_y_step;
+    s_row1 += sys2;
+    s_row2 += sys2;
+    s_row3 += sys2;
   }
 
   // Need to set first and last rows as well
@@ -503,33 +502,33 @@ void vil_gauss_reduce_121(const int* src_im,
   unsigned nj2 = (src_nj-2)/2;
   for (unsigned y=0;y<nj2;++y)
   {
-      // Set first element of row
-      *d_row = *s_row2;
-      int * d = d_row + d_x_step;
-      const int* s1 = s_row1 + sxs2;
-      const int* s2 = s_row2 + sxs2;
-      const int* s3 = s_row3 + sxs2;
-      for (unsigned x=0;x<ni2;++x)
-      {
-          // The following is a little inefficient - could group terms to reduce arithmetic
-          // Add 0.5 so that truncating effectively rounds
-          *d = int( 0.0625f * s1[-s_x_step] + 0.125f * s1[0] + 0.0625f * s1[s_x_step]
-                  + 0.1250f * s2[-s_x_step] + 0.250f * s2[0] + 0.1250f * s2[s_x_step]
-                  + 0.0625f * s3[-s_x_step] + 0.125f * s3[0] + 0.0625f * s3[s_x_step] +0.5);
+    // Set first element of row
+    *d_row = *s_row2;
+    int * d = d_row + d_x_step;
+    const int* s1 = s_row1 + sxs2;
+    const int* s2 = s_row2 + sxs2;
+    const int* s3 = s_row3 + sxs2;
+    for (unsigned x=0;x<ni2;++x)
+    {
+      // The following is a little inefficient - could group terms to reduce arithmetic
+      // Add 0.5 so that truncating effectively rounds
+      *d = int( 0.0625f * s1[-s_x_step] + 0.125f * s1[0] + 0.0625f * s1[s_x_step]
+              + 0.1250f * s2[-s_x_step] + 0.250f * s2[0] + 0.1250f * s2[s_x_step]
+              + 0.0625f * s3[-s_x_step] + 0.125f * s3[0] + 0.0625f * s3[s_x_step] +0.5);
 
-          d += d_x_step;
-          s1 += sxs2;
-          s2 += sxs2;
-          s3 += sxs2;
-      }
-      // Set last elements of row
-      if (src_ni&1)
-        *d = *s2;
+      d += d_x_step;
+      s1 += sxs2;
+      s2 += sxs2;
+      s3 += sxs2;
+    }
+    // Set last elements of row
+    if (src_ni&1)
+      *d = *s2;
 
-      d_row += d_y_step;
-      s_row1 += sys2;
-      s_row2 += sys2;
-      s_row3 += sys2;
+    d_row += d_y_step;
+    s_row1 += sys2;
+    s_row2 += sys2;
+    s_row3 += sys2;
   }
 
   // Need to set first and last rows as well
@@ -574,33 +573,33 @@ void vil_gauss_reduce_121(const vxl_int_16* src_im,
   unsigned nj2 = (src_nj-2)/2;
   for (unsigned y=0;y<nj2;++y)
   {
-      // Set first element of row
-      *d_row = *s_row2;
-      vxl_int_16 * d = d_row + d_x_step;
-      const vxl_int_16* s1 = s_row1 + sxs2;
-      const vxl_int_16* s2 = s_row2 + sxs2;
-      const vxl_int_16* s3 = s_row3 + sxs2;
-      for (unsigned x=0;x<ni2;++x)
-      {
-          // The following is a little inefficient - could group terms to reduce arithmetic
-          // Add 0.5 so that truncating effectively rounds
-          *d = vxl_int_16( 0.0625f * s1[-s_x_step] + 0.125f * s1[0] + 0.0625f * s1[s_x_step]
-                  + 0.1250f * s2[-s_x_step] + 0.250f * s2[0] + 0.1250f * s2[s_x_step]
-                  + 0.0625f * s3[-s_x_step] + 0.125f * s3[0] + 0.0625f * s3[s_x_step] +0.5);
+    // Set first element of row
+    *d_row = *s_row2;
+    vxl_int_16 * d = d_row + d_x_step;
+    const vxl_int_16* s1 = s_row1 + sxs2;
+    const vxl_int_16* s2 = s_row2 + sxs2;
+    const vxl_int_16* s3 = s_row3 + sxs2;
+    for (unsigned x=0;x<ni2;++x)
+    {
+      // The following is a little inefficient - could group terms to reduce arithmetic
+      // Add 0.5 so that truncating effectively rounds
+      *d = vxl_int_16( 0.0625f * s1[-s_x_step] + 0.125f * s1[0] + 0.0625f * s1[s_x_step]
+                     + 0.1250f * s2[-s_x_step] + 0.250f * s2[0] + 0.1250f * s2[s_x_step]
+                     + 0.0625f * s3[-s_x_step] + 0.125f * s3[0] + 0.0625f * s3[s_x_step] +0.5);
 
-          d += d_x_step;
-          s1 += sxs2;
-          s2 += sxs2;
-          s3 += sxs2;
-      }
-      // Set last elements of row
-      if (src_ni&1)
-        *d = *s2;
+      d += d_x_step;
+      s1 += sxs2;
+      s2 += sxs2;
+      s3 += sxs2;
+    }
+    // Set last elements of row
+    if (src_ni&1)
+      *d = *s2;
 
-      d_row += d_y_step;
-      s_row1 += sys2;
-      s_row2 += sys2;
-      s_row3 += sys2;
+    d_row += d_y_step;
+    s_row1 += sys2;
+    s_row2 += sys2;
+    s_row3 += sys2;
   }
 
   // Need to set first and last rows as well
