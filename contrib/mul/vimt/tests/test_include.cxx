@@ -1,3 +1,4 @@
+
 #include <vimt/algo/vimt_correlate_2d.h>
 #include <vimt/algo/vimt_find_peaks.h>
 #include <vimt/algo/vimt_find_troughs.h>
@@ -21,5 +22,6 @@
 #include <vimt/vimt_scale_pyramid_builder_2d.h>
 #include <vimt/vimt_transform_2d.h>
 #include <vimt/vimt_load_transform.h>
+#include <vimt/vimt_fwd.h>
 
 int main() { return 0; }

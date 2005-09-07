@@ -14,5 +14,6 @@
 #include <vimt3d/vimt3d_trilin_interp.h>
 #include <vimt3d/vimt3d_reconstruct_from_grid.h>
 #include <vimt3d/vimt3d_vil3d_v3i.h>
+#include <vimt3d/vimt3d_fwd.h>
 
 int main() { return 0; }
