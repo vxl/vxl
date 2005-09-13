@@ -584,10 +584,16 @@ time_neighbors(bmrf_node_sptr const& node,
   //Get the alpha bounds information for the epi_seg in node
   double a_min = node->epi_seg()->min_alpha(),
          a_max = node->epi_seg()->max_alpha();
+         
+  if(max_delta_recip_s_ > 0.0)
+    s_min = 1.0/(1.0/s_min + max_delta_recip_s_);
+  if(max_delta_recip_s_ < 0.0)
+    s_max = 1.0/(1.0/s_max + max_delta_recip_s_);
 
+  assert(s_min < s_max);
   bmrf_node_sptr last = NULL;
   for ( vcl_multimap<double,bmrf_node_sptr>::const_iterator
-        itr = prev_s_node_map_.lower_bound(1.0/(1.0/s_min + max_delta_recip_s_));
+        itr = prev_s_node_map_.lower_bound(s_min);
         itr != prev_s_node_map_.upper_bound(s_max);  ++itr)
   {
     if (itr->second == last)
