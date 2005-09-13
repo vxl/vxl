@@ -5,6 +5,7 @@
 #include <vcl_algorithm.h>
 #include <vcl_vector.h>
 #include <vcl_numeric.h>
+#include <vcl_functional.h>
 #include <vul/vul_file.h>
 #include <vbl/vbl_array_3d.txx>
 #include <vbl/vbl_triple.h>
@@ -19,8 +20,11 @@
 
 void usage(char * progname)
 {
-  vcl_cout << "Usage: " << progname << " output image1 image2 - image3 image4 -- image5 ...\n"
+  vcl_cout << "Usage: \n"
+           << progname << " [-m margin_width] [-b voxel_value] output image1 image2 - image3 image4 -- image5 ...\n"
            << '\n'
+           << "Option: -m number: Set the margin between images - defaults to 0\n"
+           << "Option: -b number: Set background voxel value - defaults to 0\n"
            << "Each new image will be concatenated to the right of the previous.\n"
            << "\"-\" means start a new row\n"
            << "\"--\" means start a new slice\n"
@@ -103,6 +107,7 @@ vil3d_image_resource_sptr fname_to_resource(const vcl_string& fname)
 
 void calc_image_sizes(
   const vbl_array_3d<vil3d_image_resource_sptr> &images,
+  unsigned margin,
   vcl_vector<unsigned> & sizes_i,
   vcl_vector<unsigned> & sizes_j,
   vcl_vector<unsigned> & sizes_k)
@@ -124,6 +129,14 @@ void calc_image_sizes(
           max_size_i[i]  = vcl_max(max_size_i[i], images(i,j,k)->ni());
         }
 
+  // Add margins.
+  vcl_transform(max_size_k.begin(), max_size_k.end(), max_size_k.begin(),
+    vcl_bind2nd(vcl_plus<unsigned>(),margin));
+  vcl_transform(max_size_j.begin(), max_size_j.end(), max_size_j.begin(),
+    vcl_bind2nd(vcl_plus<unsigned>(),margin));
+  vcl_transform(max_size_i.begin(), max_size_i.end(), max_size_i.begin(),
+    vcl_bind2nd(vcl_plus<unsigned>(),margin));
+
   // Sum these max sizes to find the position of each input image, in the output image.
 
   sizes_k.resize(images.get_row3_count()+1);
@@ -133,13 +146,44 @@ void calc_image_sizes(
   vcl_partial_sum(max_size_k.begin(), max_size_k.end(), sizes_k.begin()+1);
   vcl_partial_sum(max_size_j.begin(), max_size_j.end(), sizes_j.begin()+1);
   vcl_partial_sum(max_size_i.begin(), max_size_i.end(), sizes_i.begin()+1);
+
+  //Remove margin at far end of concatenated volume.
+  sizes_k.back() -= margin;
+  sizes_j.back() -= margin;
+  sizes_i.back() -= margin;
 }
 
 int main(int argc, char*argv[])
 {
-  if (argc <= 2 || vcl_string("-?") == argv[1] ||
-    vcl_string("--help") == argv[1] || vcl_string("-h") == argv[1])
-    usage(argv[0]);
+  double background = 0.0;
+  unsigned margin = 0;
+  char* progname = argv[0];
+
+  while (argc >= 2 && *argv[1] == '-')
+  {
+    if (vcl_string("-b") == argv[1])
+    {
+      if (argc == 2) usage(progname);
+      background = vcl_atof(argv[2]);
+      argv += 2;
+      argc -= 2;
+    }
+
+    if (vcl_string("-m") == argv[1])
+    {
+      if (argc == 2) usage(progname);
+      margin = vcl_atoi(argv[2]);
+      argv += 2;
+      argc -= 2;
+    }
+
+    if (vcl_string("-?") == argv[1] ||
+      vcl_string("--help") == argv[1] || vcl_string("-h") == argv[1])
+      usage(progname);
+  }
+
+
+  if (argc < 3) usage(progname);
 
   const char * filename = argv[1];
 
@@ -150,6 +194,7 @@ int main(int argc, char*argv[])
   }
 
   vbl_array_3d<vcl_string> fnames;
+
 
   parse_cmdline(argc-2, const_cast<const char **>(argv+2), fnames);
 
@@ -184,7 +229,7 @@ int main(int argc, char*argv[])
   vcl_vector<unsigned> sizes_i;
   vcl_vector<unsigned> sizes_j;
   vcl_vector<unsigned> sizes_k;
-  calc_image_sizes(im_resources, sizes_i, sizes_j, sizes_k);
+  calc_image_sizes(im_resources, margin, sizes_i, sizes_j, sizes_k);
 
   vil3d_image_resource_sptr output =
     vil3d_new_image_resource (filename, sizes_i.back(), sizes_j.back(), sizes_k.back(),
@@ -197,7 +242,33 @@ int main(int argc, char*argv[])
   }
 
   vil3d_gen_synthetic_pixel_value pv;
-  pv.double_value=0.0;
+  switch (im_resources(0,0,0)->pixel_format())
+  {
+  case VIL_PIXEL_FORMAT_DOUBLE:
+    pv.double_value=background;
+    break;
+  case VIL_PIXEL_FORMAT_FLOAT:
+    pv.float_value=(float)background;
+    break;
+  case VIL_PIXEL_FORMAT_INT_32:
+    pv.int_32_value=(vxl_int_32)background;
+    break;
+  case VIL_PIXEL_FORMAT_UINT_32:
+    pv.uint_32_value=(vxl_uint_32)background;
+    break;
+  case VIL_PIXEL_FORMAT_INT_16:
+    pv.int_16_value=(vxl_int_16)background;
+    break;
+  case VIL_PIXEL_FORMAT_UINT_16:
+    pv.uint_16_value=(vxl_uint_16)background;
+    break;
+  case VIL_PIXEL_FORMAT_BYTE:
+    pv.byte_value=(vxl_byte)background;
+    break;
+  case VIL_PIXEL_FORMAT_SBYTE:
+    pv.sbyte_value=(vxl_sbyte)background;
+    break;
+  }
 
   vil3d_image_resource_sptr blank =
     new vil3d_gen_synthetic_image( sizes_i.back(), sizes_j.back(), sizes_k.back(),
