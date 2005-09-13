@@ -8,6 +8,7 @@
 #include <vul/vul_file.h>
 #include <vbl/vbl_array_3d.txx>
 #include <vbl/vbl_triple.h>
+#include <vil3d/vil3d_property.h>
 #include <vil3d/vil3d_image_resource.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_load.h>
@@ -18,7 +19,7 @@
 
 void usage(char * progname)
 {
-  vcl_cout << "Usage: " << progname << "output image1 image2 - image3 image4 -- image5 ...\n"
+  vcl_cout << "Usage: " << progname << " output image1 image2 - image3 image4 -- image5 ...\n"
            << '\n'
            << "Each new image will be concatenated to the right of the previous.\n"
            << "\"-\" means start a new row\n"
@@ -136,7 +137,7 @@ void calc_image_sizes(
 
 int main(int argc, char*argv[])
 {
-  if (argc == 2 || vcl_string("-?") == argv[1] ||
+  if (argc <= 2 || vcl_string("-?") == argv[1] ||
     vcl_string("--help") == argv[1] || vcl_string("-h") == argv[1])
     usage(argv[0]);
 
@@ -219,5 +220,8 @@ int main(int argc, char*argv[])
           }
         }
 
+  float voxel_size[3];
+  im_resources(0,0,0)->get_property(vil3d_property_voxel_size, voxel_size);
+  output->set_voxel_size(voxel_size[0], voxel_size[1], voxel_size[2]);
   return 0;
 }
