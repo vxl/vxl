@@ -5,10 +5,10 @@
 // \brief Sample grid of points in one image and place in another
 // \author Tim Cootes
 
+#include <vcl_cassert.h>
 #include <vil/vil_resample_bilin.h>
 #include <vil/algo/vil_gauss_reduce.h>
 #include <vimt/vimt_image_2d_of.h>
-#include <vcl_cassert.h>
 
 //: Sample grid of points in one image and place in another, using bilinear interpolation.
 //  dest_image(i,j,p) is sampled from the src_image at
@@ -92,9 +92,6 @@ inline void vimt_resample_bilin_smoothing(
     // re-establish loop invariant
     im = dest;
     im_d = im.world2im().delta(p, u) + im.world2im().delta(p, v);
-    vcl_cerr << "\n\n******** im = \n";
-    vil_print_all(vcl_cerr, im.image());
-    vcl_cerr << "\n\n";
   }
 
   vimt_resample_bilin(im, dest_image, p, u, v, n1, n2);

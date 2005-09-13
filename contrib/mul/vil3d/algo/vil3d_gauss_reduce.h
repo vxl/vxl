@@ -10,7 +10,6 @@
 //  - Let's not have too many templates.
 // \author Tim Cootes
 
-#include <vil/algo/vil_gauss_reduce.h>
 #include <vil3d/vil3d_image_view.h>
 
 
