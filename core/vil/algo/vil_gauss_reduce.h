@@ -155,6 +155,22 @@ void vil_gauss_reduce(const float* src_im,
 //
 //  By applying twice we can obtain a full gaussian smoothed and
 //  sub-sampled 2D image.
+void vil_gauss_reduce(const double* src_im,
+                      unsigned src_nx, unsigned src_ny,
+                      vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
+                      double* dest_im,
+                      vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step);
+
+
+//: Smooth and subsample single plane src_im in x to produce dest_im
+//  Applies 1-5-8-5-1 filter in x, then samples
+//  every other pixel.  Fills [0,(nx+1)/2-1][0,ny-1] elements of dest
+//  Assumes dest_im has sufficient data allocated.
+//
+//  This is essentially a utility function, used by mil_gauss_pyramid_builder
+//
+//  By applying twice we can obtain a full gaussian smoothed and
+//  sub-sampled 2D image.
 void vil_gauss_reduce(const int* src_im,
                       unsigned src_nx, unsigned src_ny,
                       vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
@@ -190,6 +206,14 @@ void vil_gauss_reduce_121(const float* src_im,
                           unsigned src_nx, unsigned src_ny,
                           vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
                           float* dest_im,
+                          vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step);
+
+//: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
+//  Smoothes with a 3x3 filter and subsamples
+void vil_gauss_reduce_121(const double* src_im,
+                          unsigned src_nx, unsigned src_ny,
+                          vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
+                          double* dest_im,
                           vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step);
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
@@ -247,5 +271,15 @@ void vil_gauss_reduce_2_3(const float* src_im,
                           unsigned src_ni, unsigned src_nj,
                           vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
                           float* dest_im, vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step);
+
+//: Smooth and subsample single plane src_im in x, result is 2/3rd size
+//  Applies alternate 1-3-1, 1-1 filter in x, then samples
+//  every other pixel.  Fills [0,(2*ni+1)/3-1][0,nj-1] elements of dest
+//
+//  Note, 131 filter only an approximation
+void vil_gauss_reduce_2_3(const double* src_im,
+                          unsigned src_ni, unsigned src_nj,
+                          vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
+                          double* dest_im, vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step);
 
 #endif // vil_gauss_reduce_h_
