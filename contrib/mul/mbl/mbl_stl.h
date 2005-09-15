@@ -164,34 +164,4 @@ class mbl_stl_index_functor
 };
 
 
-//: foldl [first,last] f a = f( ... f(f(a, *first), *(first+1)) ..., *(last-1) )
-// This is a classic from the functional programming literature
-// (e.g. Bird and Wadler, Introduction to functional Programming, 1988.)
-// You can apply an arbitrary binary function repeatedly to a list.
-// Note that because this is implemented as an iteration on a greedy language,
-// (rather than a recursion on a lazy language), you won't get the kind
-// of shortcut evaluation used in operations such as universal quantification.
-template<class ITER,	class FUNC, class T1> inline
-T1 mbl_stl_foldl(ITER first, ITER last, FUNC f, T1 a)
-{
-  for (; first!=last; ++first)
-	  a = f(a, *first);
-  return a;
-}
-
-
-//: foldr [first,last] f a = f(*begin, f(*(begin+1), ... f(*(last-1), a)...))
-// \see mbl_stl_foldl() for further details.
-template<class ITER,	class FUNC, class T1> inline
-T1 mbl_stl_foldr(ITER first, ITER last, FUNC f, T1 a)
-{
-  while (first!=last)
-  {
-    --last;
-	  a = f(*last, a);
-  }
-  return a;
-}
-
-
 #endif // mbl_stl_h_
