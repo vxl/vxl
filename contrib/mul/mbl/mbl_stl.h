@@ -17,6 +17,7 @@
 
 #include <vcl_functional.h>
 #include <vcl_vector.h>
+#include <vcl_iterator.h>
 
 //: Fill an output sequence with incrementing values.
 // A bit like vcl_fill, but after each assignment, the value is incremented.
@@ -161,5 +162,36 @@ class mbl_stl_index_functor
   mbl_stl_index_functor(const vcl_vector<T >& vec): vec_(vec) {}
   inline const T& operator()(unsigned index) const { return vec_[index]; }
 };
+
+
+//: foldl [first,last] f a = f( ... f(f(a, *first), *(first+1)) ..., *(last-1) )
+// This is a classic from the functional programming literature
+// (e.g. Bird and Wadler, Introduction to functional Programming, 1988.)
+// You can apply an arbitrary binary function repeatedly to a list.
+// Note that because this is implemented as an iteration on a greedy language,
+// (rather than a recursion on a lazy language), you won't get the kind
+// of shortcut evaluation used in operations such as universal quantification.
+template<class ITER,	class FUNC, class T1> inline
+typename vcl_iterator_traits<ITER>::value_type mbl_stl_foldl(ITER first, ITER last, FUNC f, T1 a)
+{
+  for (; first!=last; ++first)
+	  a = f(a, *first);
+  return a;
+}
+
+
+//: foldr [first,last] f a = f(*begin, f(*(begin+1), ... f(*(last-1), a)...))
+// \see mbl_stl_foldl() for further details.
+template<class ITER,	class FUNC, class T1> inline
+typename vcl_iterator_traits<ITER>::value_type mbl_stl_foldr(ITER first, ITER last, FUNC f, T1 a)
+{
+  while (first!=last)
+  {
+    --last;
+	  a = f(*last, a);
+  }
+  return a;
+}
+
 
 #endif // mbl_stl_h_

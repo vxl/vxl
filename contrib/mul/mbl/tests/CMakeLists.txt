@@ -36,6 +36,7 @@ ADD_EXECUTABLE( mbl_test_all
   test_cloneables_factory.cxx
   test_rvm_regression_builder.cxx
   test_test.cxx
+  test_stl.cxx
 )
 
 TARGET_LINK_LIBRARIES(mbl_test_all mbl vbl vul vpl testlib )
