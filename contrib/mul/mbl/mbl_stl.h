@@ -172,7 +172,7 @@ class mbl_stl_index_functor
 // (rather than a recursion on a lazy language), you won't get the kind
 // of shortcut evaluation used in operations such as universal quantification.
 template<class ITER,	class FUNC, class T1> inline
-typename vcl_iterator_traits<ITER>::value_type mbl_stl_foldl(ITER first, ITER last, FUNC f, T1 a)
+T1 mbl_stl_foldl(ITER first, ITER last, FUNC f, T1 a)
 {
   for (; first!=last; ++first)
 	  a = f(a, *first);
@@ -183,7 +183,7 @@ typename vcl_iterator_traits<ITER>::value_type mbl_stl_foldl(ITER first, ITER la
 //: foldr [first,last] f a = f(*begin, f(*(begin+1), ... f(*(last-1), a)...))
 // \see mbl_stl_foldl() for further details.
 template<class ITER,	class FUNC, class T1> inline
-typename vcl_iterator_traits<ITER>::value_type mbl_stl_foldr(ITER first, ITER last, FUNC f, T1 a)
+T1 mbl_stl_foldr(ITER first, ITER last, FUNC f, T1 a)
 {
   while (first!=last)
   {
