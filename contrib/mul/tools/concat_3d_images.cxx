@@ -6,6 +6,7 @@
 #include <vcl_vector.h>
 #include <vcl_numeric.h>
 #include <vcl_functional.h>
+#include <vcl_cstring.h>
 #include <vul/vul_file.h>
 #include <vbl/vbl_array_3d.txx>
 #include <vbl/vbl_triple.h>
@@ -268,6 +269,10 @@ int main(int argc, char*argv[])
   case VIL_PIXEL_FORMAT_SBYTE:
     pv.sbyte_value=(vxl_sbyte)background;
     break;
+  default:
+    vcl_memset(&pv, 0, sizeof(pv));
+    break;
+
   }
 
   vil3d_image_resource_sptr blank =
