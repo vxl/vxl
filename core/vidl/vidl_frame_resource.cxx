@@ -62,8 +62,7 @@ vidl_frame_resource::nj() const
 enum vil_pixel_format
 vidl_frame_resource::pixel_format() const
 {
-  //FIXME find an effecient way to determine this
-  return codec_->get_view(frame_number_)->pixel_format();
+  return codec_->pixel_format();
 }
 
 
