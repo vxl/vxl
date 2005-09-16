@@ -149,7 +149,6 @@ vidl_ffmpeg_codec::open(vcl_string const& fname, char mode )
 
   vid_str_ = fmt_cxt_->streams[ vid_index_ ];
   frame_ = avcodec_alloc_frame();
-  advance();
 
   //BITMAPINFOHEADER bh;
   //moviestream_->GetVideoFormat(&bh, sizeof(bh));
@@ -163,6 +162,8 @@ vidl_ffmpeg_codec::open(vcl_string const& fname, char mode )
   this->set_description(fname);
 
   //frame_rate_=(double)moviestream_->GetLength()/moviestream_->GetLengthTime();
+  
+  advance();
 
   return true;
 }
@@ -260,9 +261,13 @@ vidl_ffmpeg_codec::put_view( int /*position*/,
 int
 vidl_ffmpeg_codec::cur_frame_num() const
 {
-  return int( last_dts * vid_str_->r_frame_rate /
-              vid_str_->r_frame_rate_base + AV_TIME_BASE/2 ) /
-         AV_TIME_BASE - frame_number_offset_;
+  return ((last_dts - vid_str_->start_time)
+          * vid_str_->r_frame_rate
+          / vid_str_->r_frame_rate_base + AV_TIME_BASE/2)
+         / AV_TIME_BASE - frame_number_offset_;
+//  return int( last_dts * vid_str_->r_frame_rate /
+//              vid_str_->r_frame_rate_base + AV_TIME_BASE/2 ) /
+//         AV_TIME_BASE - frame_number_offset_;
 }
 
 
@@ -271,28 +276,53 @@ vidl_ffmpeg_codec::cur_frame_num() const
 int
 vidl_ffmpeg_codec::count_frames() const
 {
-  // remember the current video position
-  int64_t timestamp = vid_str_->cur_dts;
+
   // seek back to the first frame
 #if LIBAVFORMAT_BUILD <= 4616
   av_seek_frame( fmt_cxt_, vid_index_, 0);
 #else
   av_seek_frame( fmt_cxt_, vid_index_, 0, 0 );
 #endif
+
+  // Unfortunately we actually have to decode the frames to count them
+  // For some codecs (MPEG2) the number of video packets is not the 
+  // same as the number of frames.  Can anyone find a better way?
   AVPacket pkt;
   int frame_count=0;
-
+  int got_picture = 0;
   while ( av_read_frame( fmt_cxt_, &pkt ) >= 0) {
-    if (pkt.stream_index==vid_index_)
-      ++frame_count;
+    got_picture = 0;
+    if (pkt.stream_index==vid_index_){
+      if ( vid_str_->codec.codec_id == CODEC_ID_RAWVIDEO ) {
+        avpicture_fill( (AVPicture*)frame_, pkt.data,
+          vid_str_->codec.pix_fmt,
+          vid_str_->codec.width,
+          vid_str_->codec.height );
+        frame_->pict_type = FF_I_TYPE;
+        got_picture = 1;
+      } else {
+        avcodec_decode_video( &vid_str_->codec,
+          frame_, &got_picture,
+          pkt.data, pkt.size );
+      } 
+      if(got_picture)
+        ++frame_count; 
+    }
     av_free_packet( &pkt );
   }
+    
+  // Count the last frame (if needed)
+  avcodec_decode_video( &vid_str_->codec, frame_, &got_picture,
+                        NULL, 0 );
+  if(got_picture)
+    ++frame_count;
+  
   vcl_cout << "counted "<<frame_count<<" frames"<<vcl_endl;
-  // seek back to last active position
+  // seek back to the start
 #if LIBAVFORMAT_BUILD <= 4616
-  av_seek_frame( fmt_cxt_, vid_index_, timestamp);
+  av_seek_frame( fmt_cxt_, vid_index_, 0);
 #else
-  av_seek_frame( fmt_cxt_, vid_index_, timestamp, AVSEEK_FLAG_BACKWARD);
+  av_seek_frame( fmt_cxt_, vid_index_, 0, AVSEEK_FLAG_BACKWARD);
 #endif
 
   return frame_count;
@@ -339,7 +369,7 @@ vidl_ffmpeg_codec::advance() const
 
   // From ffmpeg apiexample.c: some codecs, such as MPEG, transmit the
   // I and P frame with a latency of one frame. You must do the
-  // following to have a chance to get the last frame of the video.
+  // following to have a chance to get the last frame of the video. 
   if ( !got_picture ) {
       avcodec_decode_video( &vid_str_->codec,
                             frame_, &got_picture,
@@ -374,11 +404,16 @@ vidl_ffmpeg_codec::seek( unsigned frame ) const
   else
     req_timestamp = 0;
   
+  // convert the timestamp to units of the stream.
+  int64_t str_req_timestamp = av_rescale(req_timestamp, 
+                                         vid_str_->time_base.den, 
+                                         AV_TIME_BASE * (int64_t)vid_str_->time_base.num);
+                                         
   // newer releases of ffmpeg may require a 4th argument to av_seek_frame
 #if LIBAVFORMAT_BUILD <= 4616
-  int seek = av_seek_frame( fmt_cxt_, vid_index_, frame );
+  int seek = av_seek_frame( fmt_cxt_, vid_index_, str_req_timestamp );
 #else
-  int seek = av_seek_frame( fmt_cxt_, vid_index_, frame, 0 );
+  int seek = av_seek_frame( fmt_cxt_, vid_index_, str_req_timestamp, 0 );
 #endif
   if ( seek < 0 )
     return false;
