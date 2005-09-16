@@ -109,15 +109,15 @@ static void time_reflect()
     }
   }
   
-  clock_t beg_time1 = clock();
+  vcl_clock_t beg_time1 = clock();
   //
   vil3d_image_view<vxl_int_32> temp1 = vil3d_reflect_k(image);
   //
-  clock_t end_time1 = clock();
+  vcl_clock_t end_time1 = clock();
   double duration1 = (double)(end_time1 - beg_time1)/CLOCKS_PER_SEC;
 
 
-  clock_t beg_time2 = clock();
+  vcl_clock_t beg_time2 = clock();
   //
   vil3d_image_view<vxl_int_32> temp2(ni, nj, nk);
   for (unsigned k=0; k<nk; ++k)
@@ -132,7 +132,7 @@ static void time_reflect()
     }
   }
   //
-  clock_t end_time2 = clock();
+  vcl_clock_t end_time2 = clock();
   double duration2 = (double)(end_time2 - beg_time2)/CLOCKS_PER_SEC;
 
   vcl_cout << "==============================================================\n";
