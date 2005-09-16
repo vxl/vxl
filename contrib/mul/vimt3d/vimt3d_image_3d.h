@@ -44,7 +44,11 @@ class vimt3d_image_3d : public vimt_image
   //: Current world-to-image transformation
   const vimt3d_transform_3d& world2im() const { return world2im_; }
 
+  //: Current world-to-image transformation
+  vimt3d_transform_3d& world2im() { return world2im_; }
+
   //: Set world-to-image transformation
+  // \deprecated in favour of non-const world2im()
   void set_world2im(const vimt3d_transform_3d& w2i) { world2im_ = w2i ;}
 
   //: Baseclass view of image
