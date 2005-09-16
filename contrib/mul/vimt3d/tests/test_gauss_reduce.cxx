@@ -31,10 +31,10 @@ static void test_gauss_reduce_float()
   TEST("size i",image1.image().ni(),(ni+1)/2);
   TEST("size j",image1.image().nj(),(nj+1)/2);
   TEST("size k",image1.image().nk(),(nk+1)/2);
-  TEST_NEAR("Pixel (0,0,0)",image0.image()(0,0,0),image1.image()(0,0,0),1e-5);
+  TEST_NEAR("Pixel (0,0,0)",image0.image()(0,0,0),image1.image()(0,0,0), 6);
   TEST_NEAR("Pixel (1,1,1)",image0.image()(2,2,2),image1.image()(1,1,1),1e-5);
   TEST_NEAR("Pixel (2,3,3)",image1.image()(2,3,3),66.4f,1e-4);
-  TEST_NEAR("Corner pixel",image0.image()(ni2*2-2,nj2*2-2,nk2*2-2),image1.image()(ni2-1,nj2-1,nk2-1),1e-5);
+  TEST_NEAR("Corner pixel",image0.image()(ni2*2-2,nj2*2-2,nk2*2-2),image1.image()(ni2-1,nj2-1,nk2-1),6);
 }
 
 
