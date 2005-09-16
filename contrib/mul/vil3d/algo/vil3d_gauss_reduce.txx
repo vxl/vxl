@@ -32,8 +32,8 @@ void vil3d_gauss_reduce_i(const T* src_im,
 {
   for (unsigned k=0;k<src_nk;++k)
   {
-    vil_gauss_reduce(src_im, src_ni,src_nj, s_i_step,s_j_step,
-                      dest_im,d_i_step, d_j_step);
+    vil_gauss_reduce_1plane(src_im, src_ni,src_nj, s_i_step,s_j_step,
+                            dest_im,d_i_step, d_j_step);
     dest_im += d_k_step;
     src_im  += s_k_step;
   }
