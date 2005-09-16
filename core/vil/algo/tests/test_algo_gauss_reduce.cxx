@@ -2,6 +2,7 @@
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
+#include <vnl/vnl_math.h>
 #include <vil/vil_print.h>
 #include <vil/vil_image_view.h>
 #include <vil/algo/vil_gauss_reduce.h>
@@ -33,7 +34,7 @@ static void test_algo_gauss_reduce_byte(unsigned nx)
     for (unsigned int i=0;i<image0.ni();++i)
       image0(i,j) = i+j*10;
 
-  vil_gauss_reduce(image0.top_left_ptr(),image0.ni(),image0.nj(),
+  vil_gauss_reduce_1plane(image0.top_left_ptr(),image0.ni(),image0.nj(),
                    image0.istep(),image0.jstep(),
                    reduced_x.top_left_ptr(),reduced_x.istep(),reduced_x.jstep());
 
@@ -47,7 +48,7 @@ static void test_algo_gauss_reduce_byte(unsigned nx)
   vil_image_view<vxl_byte> test2;
   test2.set_size(nx,3);
   test2.fill(222);
-  vil_gauss_reduce(image0.top_left_ptr(),image0.ni(),image0.nj(),
+  vil_gauss_reduce_1plane(image0.top_left_ptr(),image0.ni(),image0.nj(),
                    image0.istep(),image0.jstep(),
                    test2.top_left_ptr(),test2.istep(),test2.jstep());
   TEST("No overrun",test2(L+1,1),222);
@@ -62,7 +63,7 @@ static void test_algo_gauss_reduce_byte(unsigned nx)
     for (unsigned int i=0;i<image1.ni();++i)
       image1(i,j) = i+j*10;
 
-  vil_gauss_reduce(image1.top_left_ptr(),image1.nj(),image1.ni(),
+  vil_gauss_reduce_1plane(image1.top_left_ptr(),image1.nj(),image1.ni(),
                    image1.jstep(),image1.istep(),
                    reduced_y.top_left_ptr(),reduced_y.jstep(),reduced_y.istep());
 
@@ -88,7 +89,7 @@ static void test_algo_gauss_reduce_int_32(unsigned nx)
     for (unsigned int i=0;i<image0.ni();++i)
       image0(i,j) = i+j*10;
 
-  vil_gauss_reduce(image0.top_left_ptr(),image0.ni(),image0.nj(),
+  vil_gauss_reduce_1plane(image0.top_left_ptr(),image0.ni(),image0.nj(),
                    image0.istep(),image0.jstep(),
                    reduced_x.top_left_ptr(),reduced_x.istep(),reduced_x.jstep());
 
@@ -102,7 +103,7 @@ static void test_algo_gauss_reduce_int_32(unsigned nx)
   vil_image_view<vxl_int_32> test2;
   test2.set_size(nx,3);
   test2.fill(222);
-  vil_gauss_reduce(image0.top_left_ptr(),image0.ni(),image0.nj(),
+  vil_gauss_reduce_1plane(image0.top_left_ptr(),image0.ni(),image0.nj(),
                    image0.istep(),image0.jstep(),
                    test2.top_left_ptr(),test2.istep(),test2.jstep());
   TEST("No overrun", test2(L+1,1), 222);
@@ -117,7 +118,7 @@ static void test_algo_gauss_reduce_int_32(unsigned nx)
     for (unsigned int i=0;i<image1.ni();++i)
       image1(i,j) = i+j*10;
 
-  vil_gauss_reduce(image1.top_left_ptr(),image1.nj(),image1.ni(),
+  vil_gauss_reduce_1plane(image1.top_left_ptr(),image1.nj(),image1.ni(),
                    image1.jstep(),image1.istep(),
                    reduced_y.top_left_ptr(),reduced_y.jstep(),reduced_y.istep());
 
@@ -126,6 +127,75 @@ static void test_algo_gauss_reduce_int_32(unsigned nx)
   TEST("First element",reduced_y(1,0), image1(1,0));
   TEST("Next element", reduced_y(1,1), image1(1,2));
   TEST("Last element", reduced_y(1,L), image1(1,2*L));
+}
+
+static void test_algo_gauss_reduce_uint_16(unsigned nx)
+{
+  vcl_cout << "***********************************************\n"
+           << " Testing vil_algo_gauss_reduce (uint_16) (nx="<<nx<<")\n"
+           << "***********************************************\n";
+
+  vil_image_view<vxl_uint_16> image0;
+  image0.set_size(nx,3);
+  vil_image_view<vxl_uint_16> reduced_x;
+  reduced_x.set_size((nx+1)/2,3);
+
+  for (unsigned int j=0;j<image0.nj();++j)
+    for (unsigned int i=0;i<image0.ni();++i)
+      image0(i,j) = 64*(i+j*10);
+
+  vil_gauss_reduce_1plane(image0.top_left_ptr(),image0.ni(),image0.nj(),
+                          image0.istep(),image0.jstep(),
+                          reduced_x.top_left_ptr(),reduced_x.istep(),reduced_x.jstep());
+
+  print_out(image0,"reduced_x",reduced_x);
+
+  double dfirst=0.071*image0(2,1) + 0.357*image0(1,1) + 0.572*image0(0,1);
+  vxl_uint_16 ifirst=vnl_math_rnd(dfirst);
+  TEST("First element",reduced_x(0,1), ifirst);
+  
+  TEST("Next element", reduced_x(1,1), image0(2,1));
+  
+  unsigned L = (nx-1)/2;
+  double dlast=0.071*image0(2*L-2,1) + 0.357*image0(2*L-1,1) + 0.572*image0(2*L,1);
+  vxl_uint_16 ilast=vnl_math_rnd(dlast);
+  TEST("Last element", reduced_x(L,1), ilast);
+
+  vil_image_view<vxl_uint_16> test2;
+  test2.set_size(nx,3);
+  const vxl_uint_16 FILLVAL=65532;
+  test2.fill(FILLVAL);
+  vil_gauss_reduce_1plane(image0.top_left_ptr(),image0.ni(),image0.nj(),
+                   image0.istep(),image0.jstep(),
+                   test2.top_left_ptr(),test2.istep(),test2.jstep());
+  TEST("No overrun", test2(L+1,1), FILLVAL);
+
+  // Test it can be used to smooth in y by swapping ordinates
+  vil_image_view<vxl_uint_16> image1;
+  image1.set_size(3,nx);
+  vil_image_view<vxl_uint_16> reduced_y;
+  reduced_y.set_size(3,(nx+1)/2);
+
+  for (unsigned int j=0;j<image1.nj();++j)
+    for (unsigned int i=0;i<image1.ni();++i)
+      image1(i,j) = 64*(i+j*10);
+
+  vil_gauss_reduce_1plane(image1.top_left_ptr(),image1.nj(),image1.ni(),
+                   image1.jstep(),image1.istep(),
+                   reduced_y.top_left_ptr(),reduced_y.jstep(),reduced_y.istep());
+
+  print_out(image1,"reduced_y",reduced_y);
+
+  double dfirsty=0.071*image1(1,2) + 0.357*image1(1,1) + 0.572*image1(1,0);
+  vxl_uint_16 ifirsty=vnl_math_rnd(dfirsty);
+  TEST("First element",reduced_y(1,0), ifirsty);
+  
+  TEST("Next element", reduced_y(1,1), image1(1,2));
+  
+  double dlasty=0.071*image1(1,2*L-2) + 0.357*image1(1,2*L-1) + 0.572*image1(1,2*L);
+  vxl_uint_16 ilasty=vnl_math_rnd(dlasty);
+  TEST("Last element", reduced_y(1,L), ilasty);
+  
 }
 
 static void test_algo_gauss_reduce_float(unsigned int nx)
@@ -143,7 +213,7 @@ static void test_algo_gauss_reduce_float(unsigned int nx)
     for (unsigned int i=0;i<image0.ni();++i)
       image0(i,j) = 0.1f*i+j;
 
-  vil_gauss_reduce(image0.top_left_ptr(),image0.ni(),image0.nj(),
+  vil_gauss_reduce_1plane(image0.top_left_ptr(),image0.ni(),image0.nj(),
                    image0.istep(),image0.jstep(),
                    reduced_x.top_left_ptr(),reduced_x.istep(),reduced_x.jstep());
 
@@ -158,7 +228,7 @@ static void test_algo_gauss_reduce_float(unsigned int nx)
   vil_image_view<float> test2;
   test2.set_size(nx,3);
   test2.fill(22.2f);
-  vil_gauss_reduce(image0.top_left_ptr(),image0.ni(),image0.nj(),
+  vil_gauss_reduce_1plane(image0.top_left_ptr(),image0.ni(),image0.nj(),
                    image0.istep(),image0.jstep(),
                    test2.top_left_ptr(),test2.istep(),test2.jstep());
   TEST_NEAR("No overrun",test2(L+1,1),22.2f,1e-6);
@@ -179,7 +249,7 @@ static void test_algo_gauss_reduce_121_byte(unsigned nx, unsigned ny)
     for (unsigned int i=0;i<image0.ni();++i)
       image0(i,j) = i+j*10;
 
-  vil_gauss_reduce_121(image0.top_left_ptr(),image0.ni(),image0.nj(),
+  vil_gauss_reduce_121_1plane(image0.top_left_ptr(),image0.ni(),image0.nj(),
                        image0.istep(),image0.jstep(),
                        reduced_x.top_left_ptr(),reduced_x.istep(),reduced_x.jstep());
 
@@ -195,14 +265,14 @@ static void test_algo_gauss_reduce_121_byte(unsigned nx, unsigned ny)
   vil_image_view<vxl_byte> test2;
   test2.set_size(nx,ny);
   test2.fill(222);
-  vil_gauss_reduce_121(image0.top_left_ptr(),image0.ni(),image0.nj(),
+  vil_gauss_reduce_121_1plane(image0.top_left_ptr(),image0.ni(),image0.nj(),
                        image0.istep(),image0.jstep(),
                        test2.top_left_ptr(),test2.istep(),test2.jstep());
   TEST("No overrun in x",test2(Lx,1), 222);
   TEST("No overrun in y",test2(1,Ly), 222);
 
   image0.fill(17);
-  vil_gauss_reduce_121(image0.top_left_ptr(),image0.ni(),image0.nj(),
+  vil_gauss_reduce_121_1plane(image0.top_left_ptr(),image0.ni(),image0.nj(),
                        image0.istep(),image0.jstep(),
                        test2.top_left_ptr(),test2.istep(),test2.jstep());
   TEST("Smoothing correct",test2(1,1), 17);
@@ -225,7 +295,7 @@ static void test_algo_gauss_reduce_121_int_32(unsigned nx, unsigned ny)
     for (unsigned int i=0;i<image0.ni();++i)
       image0(i,j) = i+j*10;
 
-  vil_gauss_reduce_121(image0.top_left_ptr(),image0.ni(),image0.nj(),
+  vil_gauss_reduce_121_1plane(image0.top_left_ptr(),image0.ni(),image0.nj(),
                        image0.istep(),image0.jstep(),
                        reduced_x.top_left_ptr(),reduced_x.istep(),reduced_x.jstep());
 
@@ -241,17 +311,63 @@ static void test_algo_gauss_reduce_121_int_32(unsigned nx, unsigned ny)
   vil_image_view<vxl_int_32> test2;
   test2.set_size(nx,ny);
   test2.fill(222);
-  vil_gauss_reduce_121(image0.top_left_ptr(),image0.ni(),image0.nj(),
+  vil_gauss_reduce_121_1plane(image0.top_left_ptr(),image0.ni(),image0.nj(),
                        image0.istep(),image0.jstep(),
                        test2.top_left_ptr(),test2.istep(),test2.jstep());
   TEST("No overrun in x",test2(Lx,1), 222);
   TEST("No overrun in y",test2(1,Ly), 222);
 
   image0.fill(17);
-  vil_gauss_reduce_121(image0.top_left_ptr(),image0.ni(),image0.nj(),
+  vil_gauss_reduce_121_1plane(image0.top_left_ptr(),image0.ni(),image0.nj(),
                        image0.istep(),image0.jstep(),
                        test2.top_left_ptr(),test2.istep(),test2.jstep());
   TEST("Smoothing correct",test2(1,1), 17);
+  vcl_cout<<"Value at (1,1):"<<int(test2(1,1))<<'\n';
+}
+
+static void test_algo_gauss_reduce_121_uint_16(unsigned nx, unsigned ny)
+{
+  vcl_cout << "********************************************************\n"
+           << " Testing vil_algo_gauss_reduce_121 (uint_16) (nx="<<nx<<", ny="<<ny<<")\n"
+           << "********************************************************\n";
+
+  vil_image_view<vxl_uint_16> image0;
+  image0.set_size(nx,ny);
+  vil_image_view<vxl_uint_16> reduced_x;
+  reduced_x.set_size((nx+1)/2,(ny+1)/2);
+
+  for (unsigned int j=0;j<image0.nj();++j)
+    for (unsigned int i=0;i<image0.ni();++i)
+      image0(i,j) = 64*(i+j*10);
+
+  vil_gauss_reduce_121_1plane(image0.top_left_ptr(),image0.ni(),image0.nj(),
+                       image0.istep(),image0.jstep(),
+                       reduced_x.top_left_ptr(),reduced_x.istep(),reduced_x.jstep());
+
+  print_out(image0,"reduced_x",reduced_x);
+
+  TEST("First element",reduced_x(0,1),image0(0,2));
+  TEST("Next element",reduced_x(1,1),image0(2,2));
+  unsigned Lx = (nx+1)/2;
+  unsigned Ly = (ny+1)/2;
+  TEST("Last element in x",reduced_x(Lx-1,1),image0(2*(Lx-1),2));
+  TEST("Last element in y",reduced_x(1,Ly-1),image0(2,2*(Ly-1)));
+
+  vil_image_view<vxl_uint_16> test2;
+  test2.set_size(nx,ny);
+  const vxl_uint_16 FILLVAL=65532;  
+  test2.fill(FILLVAL);
+  vil_gauss_reduce_121_1plane(image0.top_left_ptr(),image0.ni(),image0.nj(),
+                       image0.istep(),image0.jstep(),
+                       test2.top_left_ptr(),test2.istep(),test2.jstep());
+  TEST("No overrun in x",test2(Lx,1), FILLVAL);
+  TEST("No overrun in y",test2(1,Ly), FILLVAL);
+
+  image0.fill(32000);
+  vil_gauss_reduce_121_1plane(image0.top_left_ptr(),image0.ni(),image0.nj(),
+                       image0.istep(),image0.jstep(),
+                       test2.top_left_ptr(),test2.istep(),test2.jstep());
+  TEST("Smoothing correct",test2(1,1), 32000);
   vcl_cout<<"Value at (1,1):"<<int(test2(1,1))<<'\n';
 }
 
@@ -271,7 +387,7 @@ static void test_algo_gauss_reduce_121_float(unsigned nx, unsigned ny)
     for (unsigned int i=0;i<image0.ni();++i)
       image0(i,j) = 0.1f*i+j;
 
-  vil_gauss_reduce_121(image0.top_left_ptr(),image0.ni(),image0.nj(),
+  vil_gauss_reduce_121_1plane(image0.top_left_ptr(),image0.ni(),image0.nj(),
                        image0.istep(),image0.jstep(),
                        reduced_x.top_left_ptr(),reduced_x.istep(),reduced_x.jstep());
 
@@ -287,14 +403,14 @@ static void test_algo_gauss_reduce_121_float(unsigned nx, unsigned ny)
   vil_image_view<float> test2;
   test2.set_size(nx,ny);
   test2.fill(22.2f);
-  vil_gauss_reduce_121(image0.top_left_ptr(),image0.ni(),image0.nj(),
+  vil_gauss_reduce_121_1plane(image0.top_left_ptr(),image0.ni(),image0.nj(),
                        image0.istep(),image0.jstep(),
                        test2.top_left_ptr(),test2.istep(),test2.jstep());
   TEST_NEAR("No overrun in x",test2(Lx,1),22.2f,1e-6);
   TEST_NEAR("No overrun in y",test2(1,Ly),22.2f,1e-6);
 
   image0.fill(1.7f);
-  vil_gauss_reduce_121(image0.top_left_ptr(),image0.ni(),image0.nj(),
+  vil_gauss_reduce_121_1plane(image0.top_left_ptr(),image0.ni(),image0.nj(),
                        image0.istep(),image0.jstep(),
                        test2.top_left_ptr(),test2.istep(),test2.jstep());
   TEST_NEAR("Smoothing correct",test2(1,1),1.7f,1e-6);
@@ -317,7 +433,7 @@ static void test_algo_gauss_reduce_2_3_float(unsigned nx, unsigned ny)
     for (unsigned int i=0;i<image0.ni();++i)
       image0(i,j) = 0.1f*i+j;
 
-  vil_gauss_reduce_2_3(image0.top_left_ptr(),image0.ni(),image0.nj(),
+  vil_gauss_reduce_2_3_1plane(image0.top_left_ptr(),image0.ni(),image0.nj(),
                        image0.istep(),image0.jstep(),
                        reduced_x.top_left_ptr(),reduced_x.istep(),reduced_x.jstep());
 
@@ -394,6 +510,12 @@ static void test_algo_gauss_reduce()
   test_algo_gauss_reduce_2_3_float(8,3);
 
   test_algo_gauss_reduce_2_3_byte_2d();
+  
+  test_algo_gauss_reduce_uint_16(7);
+  test_algo_gauss_reduce_uint_16(6);
+  test_algo_gauss_reduce_121_uint_16(6,6);
+  test_algo_gauss_reduce_121_uint_16(7,7);
+
 }
 
 TESTMAIN(test_algo_gauss_reduce);

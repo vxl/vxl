@@ -10,6 +10,7 @@
 #include <vcl_cassert.h>
 #include <vil/vil_bilin_interp.h>
 #include <vil/vil_plane.h>
+#include <vil/vil_convert.h>
 
 //: Smooth and subsample src_im to produce dest_im
 //  Applies filter in x and y, then samples every other pixel.
@@ -36,16 +37,16 @@ void vil_gauss_reduce(const vil_image_view<T>& src_im,
   for (unsigned int i=0;i<n_planes;++i)
   {
     // Smooth and subsample in x, result in work_im
-    vil_gauss_reduce(src_im.top_left_ptr()+i*src_im.planestep(),ni,nj,
-                     src_im.istep(),src_im.jstep(),
-                     work_im.top_left_ptr(),
-                     work_im.istep(),work_im.jstep());
+    vil_gauss_reduce_1plane(src_im.top_left_ptr()+i*src_im.planestep(),ni,nj,
+                            src_im.istep(),src_im.jstep(),
+                            work_im.top_left_ptr(),
+                            work_im.istep(),work_im.jstep());
 
     // Smooth and subsample in y (by implicitly transposing work_im)
-    vil_gauss_reduce(work_im.top_left_ptr(),nj,ni2,
-                     work_im.jstep(),work_im.istep(),
-                     dest_im.top_left_ptr()+i*dest_im.planestep(),
-                     dest_im.jstep(),dest_im.istep());
+    vil_gauss_reduce_1plane(work_im.top_left_ptr(),nj,ni2,
+                            work_im.jstep(),work_im.istep(),
+                            dest_im.top_left_ptr()+i*dest_im.planestep(),
+                            dest_im.jstep(),dest_im.istep());
   }
 }
 
@@ -74,16 +75,16 @@ void vil_gauss_reduce_2_3(const vil_image_view<T>& src_im,
   for (unsigned int i=0;i<n_planes;++i)
   {
     // Smooth and subsample in x, result in work_im
-    vil_gauss_reduce_2_3(src_im.top_left_ptr()+i*src_im.planestep(),ni,nj,
-                         src_im.istep(),src_im.jstep(),
-                         work_im.top_left_ptr(),
-                         work_im.istep(),work_im.jstep());
+    vil_gauss_reduce_2_3_1plane(src_im.top_left_ptr()+i*src_im.planestep(),ni,nj,
+                                src_im.istep(),src_im.jstep(),
+                                work_im.top_left_ptr(),
+                                work_im.istep(),work_im.jstep());
 
     // Smooth and subsample in y (by implicitly transposing work_im)
-    vil_gauss_reduce_2_3(work_im.top_left_ptr(),nj,ni2,
-                         work_im.jstep(),work_im.istep(),
-                         dest_im.top_left_ptr()+i*dest_im.planestep(),
-                         dest_im.jstep(),dest_im.istep());
+    vil_gauss_reduce_2_3_1plane(work_im.top_left_ptr(),nj,ni2,
+                                work_im.jstep(),work_im.istep(),
+                                dest_im.top_left_ptr()+i*dest_im.planestep(),
+                                dest_im.jstep(),dest_im.istep());
   }
 }
 
@@ -106,10 +107,10 @@ void vil_gauss_reduce_121(const vil_image_view<T>& src_im,
   // Reduce plane-by-plane
   for (unsigned int i=0;i<n_planes;++i)
   {
-    vil_gauss_reduce_121(src_im.top_left_ptr()+i*src_im.planestep(),ni,nj,
-                         src_im.istep(),src_im.jstep(),
-                         dest_im.top_left_ptr(),
-                         dest_im.istep(),dest_im.jstep());
+    vil_gauss_reduce_121_1plane(src_im.top_left_ptr()+i*src_im.planestep(),ni,nj,
+                                src_im.istep(),src_im.jstep(),
+                                dest_im.top_left_ptr(),
+                                dest_im.istep(),dest_im.jstep());
   }
 }
 
@@ -272,6 +273,183 @@ void vil_gauss_reduce_general(const vil_image_view<T>& src,
   workb_.print_all(vcl_cout);
   vsl_indent_dec(vcl_cout);
 #endif
+}
+
+
+
+template <class T>
+void vil_gauss_reduce_1plane(const T* src_im,
+                             unsigned src_ni, unsigned src_nj,
+                             vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
+                             T* dest_im,
+                             vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
+{
+  T* d_row = dest_im;
+  const T* s_row = src_im;
+  vcl_ptrdiff_t sxs2 = s_x_step*2;
+  unsigned ni2 = (src_ni-3)/2;
+  vil_convert_round_pixel<double,T> rounder;
+
+  for (unsigned y=0;y<src_nj;++y)
+  {
+    // Set first element of row
+    double dsum = 0.071 * static_cast<double>(s_row[sxs2]) + 
+                  0.357 * static_cast<double>(s_row[s_x_step]) + 
+                  0.572 * static_cast<double>(s_row[0]);
+    rounder(dsum, *d_row);
+
+    T* d = d_row + d_x_step;
+    const T* s = s_row + sxs2;
+    for (unsigned x=0;x<ni2;++x)
+    {
+      dsum = 0.05*static_cast<double>(s[-sxs2]) + 0.25*static_cast<double>(s[-s_x_step]) + 
+             0.05*static_cast<double>(s[ sxs2]) + 0.25*static_cast<double>(s[ s_x_step]) +
+             0.4 *static_cast<double>(s[0]);
+            
+      rounder(dsum, *d);
+
+      d += d_x_step;
+      s += sxs2;
+    }
+    // Set last elements of row
+    dsum = 0.071 * static_cast<double>(s[-sxs2]) + 
+           0.357 * static_cast<double>(s[-s_x_step]) + 
+           0.572 * static_cast<double>(s[0]);
+    rounder(dsum, *d);
+
+    d_row += d_y_step;
+    s_row += s_y_step;
+  }
+}
+
+
+//: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
+//  Smoothes with a 3x3 filter and subsamples
+template <class T>
+void vil_gauss_reduce_121_1plane(const T* src_im,
+                                 unsigned src_ni, unsigned src_nj,
+                                 vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
+                                 T* dest_im,
+                                 vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
+{
+  vcl_ptrdiff_t sxs2 = s_x_step*2;
+  vcl_ptrdiff_t sys2 = s_y_step*2;
+  T* d_row = dest_im+d_y_step;
+  const T* s_row1 = src_im + s_y_step;
+  const T* s_row2 = s_row1 + s_y_step;
+  const T* s_row3 = s_row2 + s_y_step;
+  unsigned ni2 = (src_ni-2)/2;
+  unsigned nj2 = (src_nj-2)/2;
+  vil_convert_round_pixel<double,T> rounder;
+
+  for (unsigned y=0;y<nj2;++y)
+  {
+      // Set first element of row
+      *d_row = *s_row2;
+      T * d = d_row + d_x_step;
+      const T* s1 = s_row1 + sxs2;
+      const T* s2 = s_row2 + sxs2;
+      const T* s3 = s_row3 + sxs2;
+      for (unsigned x=0;x<ni2;++x)
+      {
+          // The following is a little inefficient - could group terms to reduce arithmetic
+          double ds1 = 0.0625 * static_cast<double>(s1[-s_x_step]) + 0.125 * static_cast<double>(s1[0]) + 0.0625 * static_cast<double>(s1[s_x_step]);
+          double ds2 = 0.1250 * static_cast<double>(s2[-s_x_step]) + 0.250 * static_cast<double>(s2[0]) + 0.1250 * static_cast<double>(s2[s_x_step]);
+          double ds3 = 0.0625 * static_cast<double>(s3[-s_x_step]) + 0.125 * static_cast<double>(s3[0]) + 0.0625 * static_cast<double>(s3[s_x_step]);
+          double dsum = ds1 + ds2 + ds3;
+          rounder(dsum,*d);
+
+          d += d_x_step;
+          s1 += sxs2;
+          s2 += sxs2;
+          s3 += sxs2;
+      }
+      // Set last elements of row
+      if (src_ni&1)
+        *d = *s2;
+
+      d_row += d_y_step;
+      s_row1 += sys2;
+      s_row2 += sys2;
+      s_row3 += sys2;
+  }
+
+  // Need to set first and last rows as well
+
+  // Dest image should be (src_ni+1)/2 x (src_nj+1)/2
+  const T* s0 = src_im;
+  unsigned ni=(src_ni+1)/2;
+  for (unsigned i=0;i<ni;++i)
+  {
+    dest_im[i]= *s0;
+    s0+=sxs2;
+  }
+
+  if (src_nj&1)
+  {
+    unsigned yhi = (src_nj-1)/2;
+    T* dest_last_row = dest_im + yhi*d_y_step;
+    const T* s_last = src_im + yhi*sys2;
+    for (unsigned i=0;i<ni;++i)
+    {
+      dest_last_row[i]= *s_last;
+      s_last+=sxs2;
+    }
+  }
+}
+
+
+template <class T>
+void vil_gauss_reduce_2_3_1plane(const T* src_im,
+                                 unsigned src_ni, unsigned src_nj,
+                                 vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
+                                 T* dest_im, vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
+{
+  T* d_row = dest_im;
+  const T* s_row = src_im;
+  vcl_ptrdiff_t sxs2 = s_x_step*2,sxs3 = s_x_step*3;
+  unsigned d_ni = (2*src_ni+1)/3;
+  unsigned d_ni2 = d_ni/2;
+  vil_convert_round_pixel<double,T> rounder;
+
+  for (unsigned y=0;y<src_nj;++y)
+  {
+    // Set first elements of row
+    // The 0.5 offset in the following ensures rounding
+    double drow0=0.75*static_cast<double>(s_row[0]) + 0.25*static_cast<double>(s_row[s_x_step]);
+    double drow_xs=0.5*static_cast<double>(s_row[s_x_step]) + 0.5*static_cast<double>(s_row[sxs2]);
+    rounder(drow0,d_row[0]);
+    rounder(drow_xs,d_row[d_x_step]);
+
+    T* d = d_row + 2*d_x_step;
+    const T* s = s_row + sxs3;
+    for (unsigned x=1;x<d_ni2;++x)
+    {
+      double df= 0.2*( static_cast<double>(s[-s_x_step]) + static_cast<double>(s[s_x_step]) ) + 0.6*static_cast<double>(s[0]) ;
+      rounder(df,*d);
+
+      d += d_x_step;
+
+      df = 0.5*(static_cast<double>(s[s_x_step])  + static_cast<double>(s[sxs2]) );
+      rounder(df,*d);
+
+      d += d_x_step;
+      s += sxs3;
+    }
+    // Set last elements of row
+    if (src_ni%3==1)
+    {
+      double df=0.75*static_cast<double>(s[-s_x_step]) + 0.25*static_cast<double>(s[0]);
+      rounder(df,*d);
+    }
+    else if (src_ni%3==2)
+    {
+      double df = 0.2*(static_cast<double>(s[-s_x_step]) + static_cast<double>(s[s_x_step]) ) + 0.6*static_cast<double>(s[0]);
+      rounder(df,*d);
+    }
+    d_row += d_y_step;
+    s_row += s_y_step;
+  }
 }
 
 
