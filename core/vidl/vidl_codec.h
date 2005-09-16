@@ -66,6 +66,7 @@ class vidl_codec : public vbl_ref_count
 
   inline char get_image_class()const { return Class; }
   inline char get_format() const     { return format; }
+  virtual enum vil_pixel_format pixel_format() const { return VIL_PIXEL_FORMAT_BYTE; }
   inline int  width() const          { return X; }
   inline int  height() const         { return Y; }
   inline int  get_bits_pixel() const { return B; }
