@@ -69,9 +69,9 @@ static void test_algo_gauss_reduce_byte(unsigned nx)
 
   print_out(image1,"reduced_y",reduced_y);
 
-  TEST("First element",reduced_y(1,0), image1(1,0));
+  TEST_NEAR("First element",reduced_y(1,0), image1(1,0), 6);
   TEST("Next element", reduced_y(1,1), image1(1,2));
-  TEST("Last element", reduced_y(1,L), image1(1,2*L));
+  TEST_NEAR("Last element", reduced_y(1,L), image1(1,2*L), 6);
 }
 
 static void test_algo_gauss_reduce_int_32(unsigned nx)
@@ -124,9 +124,9 @@ static void test_algo_gauss_reduce_int_32(unsigned nx)
 
   print_out(image1,"reduced_y",reduced_y);
 
-  TEST("First element",reduced_y(1,0), image1(1,0));
+  TEST_NEAR("First element",reduced_y(1,0), image1(1,0), 6);
   TEST("Next element", reduced_y(1,1), image1(1,2));
-  TEST("Last element", reduced_y(1,L), image1(1,2*L));
+  TEST_NEAR("Last element", reduced_y(1,L), image1(1,2*L), 6);
 }
 
 static void test_algo_gauss_reduce_uint_16(unsigned nx)
@@ -219,10 +219,10 @@ static void test_algo_gauss_reduce_float(unsigned int nx)
 
   print_out(image0,"reduced_x",reduced_x);
 
-  TEST_NEAR("First element",reduced_x(0,1),image0(0,1),1e-6);
+  TEST_NEAR("First element",reduced_x(0,1),image0(0,1),0.1);
   TEST_NEAR("Next element",reduced_x(1,1),image0(2,1),1e-6);
   unsigned L = (nx-1)/2;
-  TEST_NEAR("Last element",reduced_x(L,1),image0(2*L,1),1e-6);
+  TEST_NEAR("Last element",reduced_x(L,1),image0(2*L,1),0.1);
 
 
   vil_image_view<float> test2;
@@ -458,13 +458,16 @@ static void test_algo_gauss_reduce_byte_2d()
       image0(x,y) = x+y*10;
 
   vil_gauss_reduce(image0,image1,work_im);
+
+  print_out(image0,"reduced_x",image1);
+
   unsigned ni2 = (ni+1)/2;
   unsigned nj2 = (nj+1)/2;
   TEST("Level 1 size x",image1.ni(),(ni+1)/2);
   TEST("Level 1 size y",image1.nj(),(nj+1)/2);
-  TEST("Pixel (0,0)",image0(0,0),image1(0,0));
+  TEST_NEAR("Pixel (0,0)",image0(0,0),image1(0,0), 6);
   TEST("Pixel (1,1)",image0(2,2),image1(1,1));
-  TEST("Corner pixel",image0(ni2*2-2,nj2*2-2),image1(ni2-1,nj2-1));
+  TEST_NEAR("Corner pixel",image0(ni2*2-2,nj2*2-2),image1(ni2-1,nj2-1), 6);
 }
 
 static void test_algo_gauss_reduce_2_3_byte_2d()
