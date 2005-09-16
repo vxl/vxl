@@ -45,9 +45,9 @@ static void test_gaussian_pyramid_builder_2d_build(vimt_gaussian_pyramid_builder
   const vil_image_view<vxl_byte>& image1 = v_image1.image();
   TEST("Level 1 size x",image1.ni(),(ni+1)/2);
   TEST("Level 1 size y",image1.nj(),(nj+1)/2);
-  TEST("Pixel (0,0)",image0.image()(0,0),image1(0,0));
+  TEST_NEAR("Pixel (0,0)",image0.image()(0,0),image1(0,0),6);
   TEST("Pixel (1,1)",image0.image()(2,2),image1(1,1));
-  TEST("Corner pixel",image0.image()(ni2*2-2,nj2*2-2),image1(ni2-1,nj2-1));
+  TEST_NEAR("Corner pixel",image0.image()(ni2*2-2,nj2*2-2),image1(ni2-1,nj2-1),6);
 
   builder.set_max_levels(default_n_levels);
   builder.extend(image_pyr);
