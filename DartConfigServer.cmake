@@ -63,8 +63,8 @@ SET (EXPECTED_BUILDS "\\
   {crd.ge.com Win2k_bcc-5.5.1_Release} \\
   {crd.ge.com Win2k_msvc-6.0sp5_Release} \\
   {crd.ge.com Win2k_msvc-7.0_Release} \\
-  {imorphics Win2k-msvc-6sp5-Debug} \\
-  {imorphics Win2k-msvc-6sp5-iMorphicsRelDeb} \\
+  {imorphics Win2k-msvc7-Debug} \\
+  {imorphics Win2k-msvc7-Release} \\
   {lems.brown.edu Linux-2.6.8_em64t_gcc-3.3_-Wall} \\
   {lems.brown.edu Linux-2.6.8_gcc-3.3.5} \\
 ")
