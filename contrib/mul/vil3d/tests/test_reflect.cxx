@@ -150,7 +150,10 @@ static void time_reflect()
 static void test_reflect()
 {
   test_reflect_int();
-  time_reflect();
+
+  // No need to run this routinely
+  // time_reflect();
+  //
 }
 
 TESTMAIN(test_reflect);
