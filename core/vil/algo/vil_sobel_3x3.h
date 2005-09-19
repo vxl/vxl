@@ -32,7 +32,7 @@ void vil_sobel_3x3(const vil_image_view<srcT>& src,
 //  Computes both i and j gradients of an ni x nj plane of data
 //  1 pixel border around grad images is set to zero
 template<class srcT, class destT>
-void vil_sobel_3x3_1plane(srcT* src,
+void vil_sobel_3x3_1plane(const srcT* src,
                           vcl_ptrdiff_t s_istep, vcl_ptrdiff_t s_jstep,
                           destT* gi, vcl_ptrdiff_t gi_istep, vcl_ptrdiff_t gi_jstep,
                           destT* gj, vcl_ptrdiff_t gj_istep, vcl_ptrdiff_t gj_jstep,
