@@ -48,7 +48,7 @@ class bmrf_curve_3d_builder
   
   //: Build The curves
   //  Curves with less than \p min_prj projections are removed
-  bool build(int min_prj = 3, int min_len = 10);
+  bool build(int min_prj = 3, int min_len = 10, double trim_thresh = 0.001);
 
   //: Reconstruct the 3D curves from the curvel chains
   void reconstruct(float sigma = 0.5);

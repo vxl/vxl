@@ -309,7 +309,7 @@ bmrf_curve_3d_builder::compute_bounding_box(const float *inlier_fractions, bool 
 
 //: Build the curves
 bool
-bmrf_curve_3d_builder::build(int min_prj, int min_len)
+bmrf_curve_3d_builder::build(int min_prj, int min_len, double trim_thresh)
 {
   if (!network_)
     return false;
@@ -353,7 +353,7 @@ bmrf_curve_3d_builder::build(int min_prj, int min_len)
 
     (*itr)->fill_gaps( network_->frame_numbers(), da);
     (*itr)->interp_gaps( network_->frame_numbers() );
-    (*itr)->stat_trim( 0.001 );
+    (*itr)->stat_trim( trim_thresh );
     if ( (*itr)->size() < (unsigned int)min_len )
       curves_.erase(itr);
     itr = next_itr;
@@ -401,7 +401,8 @@ bmrf_arc_prob_cmp( const bmrf_arc_sptr& left_arc,
 
 //: Build curvels by linking across time through probable arcs
 vcl_set<bmrf_curvel_3d_sptr>
-bmrf_curve_3d_builder::build_curvels(vcl_set<bmrf_curvel_3d_sptr>& all_curvels, double alpha) const
+bmrf_curve_3d_builder::build_curvels(vcl_set<bmrf_curvel_3d_sptr>& all_curvels, 
+                                     double alpha) const
 {
   vcl_set<int> frames = network_->frame_numbers();
 
