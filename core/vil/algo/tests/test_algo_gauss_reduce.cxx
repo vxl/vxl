@@ -139,10 +139,15 @@ static void test_algo_gauss_reduce_uint_16(unsigned nx)
   image0.set_size(nx,3);
   vil_image_view<vxl_uint_16> reduced_x;
   reduced_x.set_size((nx+1)/2,3);
+  vil_image_view<vxl_uint_16> reduced_both;
+  vil_image_view<vxl_uint_16> workspace;
 
   for (unsigned int j=0;j<image0.nj();++j)
     for (unsigned int i=0;i<image0.ni();++i)
       image0(i,j) = 64*(i+j*10);
+
+  vil_gauss_reduce(image0,reduced_both,workspace);
+  print_out(image0,"reduced_both",reduced_both);
 
   vil_gauss_reduce_1plane(image0.top_left_ptr(),image0.ni(),image0.nj(),
                           image0.istep(),image0.jstep(),
