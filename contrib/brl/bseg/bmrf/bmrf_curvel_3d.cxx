@@ -247,15 +247,18 @@ bmrf_curvel_3d::compute_statistics()
 {
   sum_gamma_ = 0.0;
   sum_sqr_gamma_ = 0.0;
+  int base_frame = -1; // map all gamma's to this frame
   for (unsigned int ind1=0; ind1<projs_2d_.size(); ++ind1){
     if (!projs_2d_[ind1].second)
       continue;
+    if(base_frame == -1)
+      base_frame = ind1;
     double s1 = projs_2d_[ind1].second->epi_seg()->s(projs_2d_[ind1].first);
     for (unsigned int ind2=ind1+1; ind2<projs_2d_.size(); ++ind2){
       if (!projs_2d_[ind2].second)
         continue;
       double s2 = projs_2d_[ind2].second->epi_seg()->s(projs_2d_[ind2].first);
-      double gamma = 1.0 / (((int(ind2) - int(ind1)) / (1.0 - s1/s2)) + double(ind1));
+      double gamma = 1.0 / (((int(ind2) - int(ind1)) / (1.0 - s1/s2)) + double(ind1-base_frame));
       sum_gamma_ += gamma;
       sum_sqr_gamma_ += gamma*gamma;
     }
@@ -267,15 +270,18 @@ bmrf_curvel_3d::compute_statistics()
 void
 bmrf_curvel_3d::show_stats() const
 {
+  int base_frame = -1; // map all gamma's to this frame
   for (unsigned int ind1=0; ind1<projs_2d_.size(); ++ind1){
     if (!projs_2d_[ind1].second)
       continue;
+    if(base_frame == -1)
+      base_frame = ind1;
     double s1 = projs_2d_[ind1].second->epi_seg()->s(projs_2d_[ind1].first);
     for (unsigned int ind2=ind1+1; ind2<projs_2d_.size(); ++ind2){
       if (!projs_2d_[ind2].second)
         continue;
       double s2 = projs_2d_[ind2].second->epi_seg()->s(projs_2d_[ind2].first);
-      double gamma = 1.0 / (((int(ind2) - int(ind1)) / (1.0 - s1/s2)) + double(ind1));
+      double gamma = 1.0 / (((int(ind2) - int(ind1)) / (1.0 - s1/s2)) + double(ind1-base_frame));
       vcl_cout << " frames " << ind1 << "," << ind2 << " gamma=" << gamma << vcl_endl;
     }
   }
