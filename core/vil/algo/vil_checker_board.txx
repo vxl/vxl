@@ -63,15 +63,15 @@ vil_checker_board( vil_image_view< DEST >& des,
       {
         p1 = false; p2 = false;
         for (int p=0; p<np; ++p ){
-          p1 = p1 || ( !src1(i, j, p ) == params.not_use_color_ );
-          p2 = p2 || ( !src2(i, j, p ) == params.not_use_color_ );
+          p1 = p1 || ( src1(i, j, p ) != params.not_use_color_ );
+          p2 = p2 || ( src2(i, j, p ) != params.not_use_color_ );
         }
       }
 
       if ( params.use_alpha_plane_ )
       {
-        p1 = p1 && ( src1(i, j, np-1) == 0 );
-        p2 = p2 && ( src2(i, j, np-1) == 0 );
+        p1 = p1 && ( src1(i, j, np-1) );
+        p2 = p2 && ( src2(i, j, np-1) );
       }
 
       // if pixel on (jblock) image is not available,
