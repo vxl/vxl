@@ -30,6 +30,12 @@ class mbl_cloneable_ptr
   //: Copy constructor
   mbl_cloneable_ptr(const mbl_cloneable_ptr<BaseClass>& p) : ptr_(0) { *this = p; }
 
+  //: Construct from pointer, making a clone of r.
+  explicit mbl_cloneable_ptr(const BaseClass& r) : ptr_(r.clone()) { assert(ptr_); }
+
+  //: Constructor from pointer, taking ownership of *p.
+  explicit mbl_cloneable_ptr(BaseClass* p) : ptr_(p) { assert(ptr_); }
+
   //: Copy operator
   mbl_cloneable_ptr<BaseClass>& operator=(const mbl_cloneable_ptr<BaseClass>& p)
   {
@@ -131,11 +137,11 @@ class mbl_cloneable_nzptr
 
   //: Construct from pointer, making a clone of r.
   // There is no default constructor.
-  mbl_cloneable_nzptr(const BaseClass& r) : ptr_(r.clone()) { assert(ptr_); }
+  explicit mbl_cloneable_nzptr(const BaseClass& r) : ptr_(r.clone()) { assert(ptr_); }
 
   //: Constructor from pointer, taking ownership of *p.
   // There is no default constructor.
-  mbl_cloneable_nzptr(BaseClass* p) : ptr_(p) { assert(ptr_); }
+  explicit mbl_cloneable_nzptr(BaseClass* p) : ptr_(p) { assert(ptr_); }
 
   //: Copy operator
   mbl_cloneable_nzptr<BaseClass>& operator=(const mbl_cloneable_nzptr<BaseClass>& cp)

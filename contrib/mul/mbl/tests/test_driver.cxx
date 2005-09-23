@@ -34,6 +34,7 @@ DECLARE( test_cloneables_factory );
 DECLARE( test_rvm_regression_builder );
 DECLARE( test_test );
 DECLARE( test_stl );
+DECLARE( test_cloneable_ptr );
 
 void
 register_tests()
@@ -72,6 +73,7 @@ register_tests()
   REGISTER( test_rvm_regression_builder );
   REGISTER( test_test );
   REGISTER( test_stl );
+  REGISTER( test_cloneable_ptr );
 }
 
 DEFINE_MAIN;
