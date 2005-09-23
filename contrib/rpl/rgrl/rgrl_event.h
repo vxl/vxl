@@ -57,5 +57,6 @@ EventMacro( rgrl_event_start );
 EventMacro( rgrl_event_end );
 EventMacro( rgrl_event_iteration );
 EventMacro( rgrl_event_next_init );
+EventMacro( rgrl_matches_formed );
 
 #endif
