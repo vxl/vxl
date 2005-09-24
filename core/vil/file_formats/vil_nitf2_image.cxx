@@ -52,7 +52,7 @@ vil_image_resource_sptr
 // class vil_nitf2_image
 
 vil_image_view_base_sptr ( *vil_nitf2_image::s_decode_jpeg_2000 )
-( vil_stream* vs, unsigned i0, unsigned ni, unsigned j0, unsigned nj ) = 0;
+( vil_stream* vs, unsigned i0, unsigned ni, unsigned j0, unsigned nj, double i_factor, double j_factor ) = 0;
 
 vil_nitf2_image::vil_nitf2_image(vil_stream* is)
   : m_stream(is),
@@ -375,7 +375,7 @@ vil_image_view_base_sptr vil_nitf2_image::get_copy_view_decimated_j2k(
   //will only have on image block (ie. it will be clocked within the jp2 codestream),
   //so we can just pass all the work off to the vil_j2k_image class
   m_stream->seek(get_offset_to_image_data(m_current_image_index));
-  return s_decode_jpeg_2000( m_stream, start_i, num_i, start_j, num_j, 4, 4 );
+  return s_decode_jpeg_2000( m_stream, start_i, num_i, start_j, num_j, i_factor, j_factor );
 }
 
 vil_image_view_base_sptr vil_nitf2_image::get_copy_view(unsigned start_i, unsigned num_i,
