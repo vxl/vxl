@@ -352,6 +352,31 @@ void  compute_block_and_offset(unsigned j0, unsigned long block_size,
   }
 }
 
+bool vil_nitf2_image::is_jpeg_2000_compressed() const
+{
+  vcl_string compression_type;
+  //ISO/IEC BIFF profile BPJ2k01.00 says that M8 is actually invalid
+  //(ie. you can't use a data mask with jpeg 2000 compression)
+  //not sure why it is an option though
+  return ( current_image_header()->get_property("IC", compression_type) ) &&
+         ( compression_type == "C8" || compression_type == "M8" );
+}
+
+vil_image_view_base_sptr vil_nitf2_image::get_copy_view_decimated_j2k( 
+  unsigned start_i, unsigned num_i, unsigned start_j, unsigned num_j, double i_factor, double j_factor ) const
+{
+  // ACCORDING TO DOCUMENTATION, IF PARAMETERS ARE BAD, WE SHOULD RETURN NULL POINTER.
+  if ((start_i + num_i > ni()) || (start_j + num_j > nj())) {
+    return 0;
+  }
+  assert( is_jpeg_2000_compressed() );
+
+  //it is my understanding from BIFF profile BPJ2k01.00 that JPEG compressed files
+  //will only have on image block (ie. it will be clocked within the jp2 codestream),
+  //so we can just pass all the work off to the vil_j2k_image class
+  m_stream->seek(get_offset_to_image_data(m_current_image_index));
+  return s_decode_jpeg_2000( m_stream, start_i, num_i, start_j, num_j, 4, 4 );
+}
 
 vil_image_view_base_sptr vil_nitf2_image::get_copy_view(unsigned start_i, unsigned num_i,
                                                          unsigned start_j, unsigned num_j) const
@@ -367,18 +392,8 @@ vil_image_view_base_sptr vil_nitf2_image::get_copy_view(unsigned start_i, unsign
   //vcl_right now we only plan to support uncompressed and JPEG2000
   if (compression_type == "NC" || compression_type == "NM") {
     return get_copy_view_uncompressed(start_i, num_i, start_j, num_j);
-  } else if (  s_decode_jpeg_2000 &&
-              ( compression_type == "C8" || compression_type == "M8" ) )
-  {
-    //ISO/IEC BIFF profile BPJ2k01.00 says that M8 is actually invalid
-    //(ie. you can't use a data mask with jpeg 2000 compression)
-    //not sure why it is an option though
-
-    //it is my understanding from BIFF profile BPJ2k01.00 that JPEG compressed files
-    //will only have on image block (ie. it will be clocked within the jp2 codestream),
-    //so we can just pass all the work off to the vil_j2k_image class
-    m_stream->seek(get_offset_to_image_data(m_current_image_index));
-    return s_decode_jpeg_2000( m_stream, start_i, num_i, start_j, num_j );
+  } else if (  s_decode_jpeg_2000 && is_jpeg_2000_compressed() ) {
+    return get_copy_view_decimated_j2k( start_i, num_i, start_j, num_j, 1.0, 1.0 );
   } else {
     return 0;
   }

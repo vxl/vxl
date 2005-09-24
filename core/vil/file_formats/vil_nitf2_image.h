@@ -85,6 +85,23 @@ class vil_nitf2_image : public vil_image_resource
   //: returns "nitf vM.N"
   //char const * file_format() const;
 
+  // is the current image JPEG 2000 compressed
+  bool is_jpeg_2000_compressed() const;
+
+  // This function is sort of a hack.  It will return a decimated version
+  // of the region specified by (i0,j0){i0+ni,j0+nj).  It will be decimated by i_factorXj_factor.
+  // That is the image returned will have size (ni/i_factor, nj/j_factor).  
+  // The reason this function is a hack is because it only works for jpeg 2000 compressed 
+  // NITF files (that is, is_jpeg_2000_compressed() returns true).  You would normally want to use 
+  // vil_decimate_image_resource to obtain decimated images.  That will work for jpeg2000 
+  // compressed NITF files too, but that class/function doesn't take advantage of the JPEG 2000
+  // spec's built in optimization for obtaining decimated versions of large images.  This function
+  // does.  Well, more accurately, it can.  It depends on the implementation of the s_decode_jpeg_2000()
+  // function you've provided.
+  virtual vil_image_view_base_sptr get_copy_view_decimated_j2k( unsigned i0, unsigned ni,
+                                                                unsigned j0, unsigned nj,
+                                                                double i_factor, double j_factor ) const;
+
   virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
                                                  unsigned j0, unsigned nj) const;
   virtual vil_image_view_base_sptr get_copy_view( ) const
@@ -120,7 +137,8 @@ class vil_nitf2_image : public vil_image_resource
     */
   static vil_image_view_base_sptr ( *s_decode_jpeg_2000 )( vil_stream* vs,
                                                            unsigned i0, unsigned ni,
-                                                           unsigned j0, unsigned nj );
+                                                           unsigned j0, unsigned nj,
+                                                           double i_factor, double j_factor );
  protected:
   virtual vil_image_view_base_sptr get_copy_view_uncompressed(unsigned i0, unsigned ni,
                                                               unsigned j0, unsigned nj) const;
