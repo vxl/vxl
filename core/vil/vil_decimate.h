@@ -28,6 +28,9 @@ inline vil_image_view<T> vil_decimate(const vil_image_view<T> &im, unsigned i_fa
                            im.istep()*i_factor, im.jstep()*j_factor, im.planestep());
 }
 
+vil_image_view_base_sptr vil_decimate(const vil_image_view_base_sptr im, unsigned i_factor,
+                                      unsigned j_factor=0);
+
 //: decimate to a region of src.
 // \relates vil_image_resource
 vil_image_resource_sptr vil_decimate(const vil_image_resource_sptr &src,

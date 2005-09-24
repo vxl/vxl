@@ -48,32 +48,7 @@ vil_image_view_base_sptr vil_decimate_image_resource::get_copy_view(unsigned i0,
                                                       j0*j_factor_, nj*j_factor_);
     if (!vs) return 0;
 
-    switch (vs->pixel_format())
-    {
-  #define macro( F , T ) \
-    case F : \
-      return new vil_image_view<T >(vil_decimate(static_cast<vil_image_view<T >&>(*vs), \
-                                                 i_factor_, j_factor_));
-
-      macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
-      macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
-#if VXL_HAS_INT_64
-      macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
-      macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
-#endif
-      macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-      macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-      macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
-      macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-      macro(VIL_PIXEL_FORMAT_BOOL , bool )
-      macro(VIL_PIXEL_FORMAT_FLOAT , float )
-      macro(VIL_PIXEL_FORMAT_DOUBLE , double )
-      macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
-      macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
-  #undef macro
-    default:
-      return 0;
-    }
+    return vil_decimate( vs, i_factor_, j_factor_ );
   }
   else // do large image case.
   {
@@ -124,37 +99,43 @@ vil_image_view_base_sptr vil_decimate_image_resource::get_view(unsigned i0, unsi
                                                  j0*j_factor_, nj*j_factor_);
     if (!vs) return 0;
 
-    switch (vs->pixel_format())
-    {
-#define macro( F , T ) \
-    case F : \
-      return new vil_image_view<T >(vil_decimate(static_cast<vil_image_view<T >&>(*vs), \
-                                    i_factor_, j_factor_));
-
-      macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
-      macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
-#if VXL_HAS_INT_64
-      macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
-      macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
-#endif
-      macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-      macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-      macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
-      macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-      macro(VIL_PIXEL_FORMAT_BOOL , bool )
-      macro(VIL_PIXEL_FORMAT_FLOAT , float )
-      macro(VIL_PIXEL_FORMAT_DOUBLE , double )
-      macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
-      macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
-#undef macro
-    default:
-      return 0;
-    }
+    return vil_decimate( vs, i_factor_, j_factor_ );
   }
   else // do large image case.
     return get_copy_view(i0, ni, j0, nj);
 }
 
+vil_image_view_base_sptr vil_decimate(const vil_image_view_base_sptr im, unsigned i_factor,
+                                      unsigned j_factor)
+{
+  if (j_factor==0) j_factor=i_factor;
+  switch (im->pixel_format())
+  {
+#define macro( F , T ) \
+  case F : \
+    return new vil_image_view<T >(vil_decimate(static_cast<vil_image_view<T >&>(*im), \
+                                  i_factor, j_factor));
+
+    macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
+    macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+#if VXL_HAS_INT_64
+    macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
+    macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
+#endif
+    macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+    macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+    macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+    macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+    macro(VIL_PIXEL_FORMAT_BOOL , bool )
+    macro(VIL_PIXEL_FORMAT_FLOAT , float )
+    macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+    macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
+    macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
+#undef macro
+  default:
+    return 0;
+  }
+}
 
 //: Put the data in this view back into the image source.
 #if 1
