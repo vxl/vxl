@@ -3,6 +3,7 @@
 //:
 // \file
 #include <vcl_cmath.h> // for vcl_fabs(double)
+#include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vgl/vgl_line_2d.h>
@@ -584,10 +585,10 @@ time_neighbors(bmrf_node_sptr const& node,
   //Get the alpha bounds information for the epi_seg in node
   double a_min = node->epi_seg()->min_alpha(),
          a_max = node->epi_seg()->max_alpha();
-         
-  if(max_delta_recip_s_ > 0.0)
+
+  if (max_delta_recip_s_ > 0.0)
     s_min = 1.0/(1.0/s_min + max_delta_recip_s_);
-  if(max_delta_recip_s_ < 0.0)
+  if (max_delta_recip_s_ < 0.0)
     s_max = 1.0/(1.0/s_max + max_delta_recip_s_);
 
   assert(s_min < s_max);

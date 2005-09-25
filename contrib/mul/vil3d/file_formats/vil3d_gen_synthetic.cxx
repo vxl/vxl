@@ -8,6 +8,7 @@
 // \author Ian Scott - Manchester
 
 #include "vil3d_gen_synthetic.h"
+#include <vcl_cassert.h>
 #include <vcl_cstdlib.h> // for vcl_abort()
 #include <vcl_cstring.h> // for vcl_strcmp()
 #include <vil3d/vil3d_image_view.h>
@@ -35,41 +36,40 @@ vil3d_image_resource_sptr vil3d_gen_synthetic_format::make_input_image(const cha
     vcl_cerr << "ERROR: vil3d_gen_synthetic_format unknown pixel format " << re.match(4) << vcl_endl;
     return 0;
   }
-  
+
   vil3d_gen_synthetic_pixel_value pv;
   switch (pf)
   {
-  case VIL_PIXEL_FORMAT_BOOL:
+   case VIL_PIXEL_FORMAT_BOOL:
     pv.bool_value = vul_string_to_bool(re.match(5));
     break;
-  case VIL_PIXEL_FORMAT_BYTE:
+   case VIL_PIXEL_FORMAT_BYTE:
     pv.byte_value = static_cast<vxl_byte>(vul_string_atoi(re.match(5)));
     break;
-  case VIL_PIXEL_FORMAT_SBYTE:
+   case VIL_PIXEL_FORMAT_SBYTE:
     pv.sbyte_value = static_cast<vxl_sbyte>(vul_string_atoi(re.match(5)));
     break;
-  case VIL_PIXEL_FORMAT_INT_16:
+   case VIL_PIXEL_FORMAT_INT_16:
     pv.int_16_value = vul_string_atoi(re.match(5));
     break;
-  case VIL_PIXEL_FORMAT_UINT_16:
+   case VIL_PIXEL_FORMAT_UINT_16:
     pv.uint_16_value = vul_string_atoi(re.match(5));
     break;
-  case VIL_PIXEL_FORMAT_INT_32:
+   case VIL_PIXEL_FORMAT_INT_32:
     pv.int_32_value = vul_string_atoi(re.match(5));
     break;
-  case VIL_PIXEL_FORMAT_UINT_32:
+   case VIL_PIXEL_FORMAT_UINT_32:
     pv.uint_32_value = vul_string_atoi(re.match(5));
     break;
-  case VIL_PIXEL_FORMAT_FLOAT:
+   case VIL_PIXEL_FORMAT_FLOAT:
     pv.float_value = static_cast<float>(vul_string_atof(re.match(5)));
     break;
-  case VIL_PIXEL_FORMAT_DOUBLE:
+   case VIL_PIXEL_FORMAT_DOUBLE:
     pv.double_value = vul_string_atof(re.match(5));
     break;
-  default:
+   default:
     vcl_cerr << "ERROR: vil3d_gen_synthetic_format Cannot handle pixel format " << re.match(4) << vcl_endl;
     return 0;
-
   }
 
   return new vil3d_gen_synthetic_image(ni, nj, nk, pf, pv);
@@ -85,7 +85,7 @@ vil3d_image_resource_sptr vil3d_gen_synthetic_format::make_output_image(const ch
                                  unsigned /*nk*/, unsigned /*nplanes*/,
                                  enum vil_pixel_format /*format*/) const
 {
-  vcl_cerr << "ERROR: Cannot write to generated synthetic images." << vcl_endl;
+  vcl_cerr << "ERROR: Cannot write to generated synthetic images.\n";
   return 0;
 }
 
@@ -134,16 +134,12 @@ enum vil_pixel_format vil3d_gen_synthetic_image::pixel_format() const
   return format_;
 }
 
-
-
 //: Get some or all of the volume.
 vil3d_image_view_base_sptr vil3d_gen_synthetic_image::get_copy_view(
                                unsigned i0, unsigned ni, unsigned j0, unsigned nj,
                                unsigned k0, unsigned nk) const
 {
   if (i0+ni > this->ni() || j0+nj > this->nj() || k0+nk > this->nk()) return 0;
-
-
 
   switch (format_)
   {
@@ -226,7 +222,7 @@ bool vil3d_gen_synthetic_image::get_property(char const *, void *) const
 bool vil3d_gen_synthetic_image::put_view(const vil3d_image_view_base&,
   unsigned, unsigned, unsigned)
 {
-  vcl_cerr << "ERROR: Cannot write to generated synthetic images." << vcl_endl;
+  vcl_cerr << "ERROR: Cannot write to generated synthetic images.\n";
   return false;
 }
 
