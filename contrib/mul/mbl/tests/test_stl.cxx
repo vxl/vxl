@@ -1,4 +1,4 @@
-// This is mul/mbl/tests/test_index_sort.cxx
+// This is mul/mbl/tests/test_stl.cxx
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <testlib/testlib_test.h>
@@ -7,7 +7,7 @@
 static void test_stl_sequence()
 {
   vcl_cout << "**************************\n"
-           << " Testing mbl_stl_sequence \n"
+           << " Testing mbl_stl_sequence\n"
            << "**************************\n";
 
   const unsigned int n = 20;
@@ -24,7 +24,6 @@ static void test_stl_sequence()
 
   mbl_stl_increments(y.begin(), y.end(), 0);
   TEST("Generate incremental sequence using mbl_stl_increments", y, x);
-
 }
 
 void test_stl()

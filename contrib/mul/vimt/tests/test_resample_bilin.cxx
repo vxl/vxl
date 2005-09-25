@@ -1,4 +1,4 @@
-// This is mul/vimt/tests/test_gaussian_pyramid_builder_2d.cxx
+// This is mul/vimt/tests/test_resample_bilin.cxx
 #include <testlib/testlib_test.h>
 
 #include <vcl_iostream.h>
@@ -16,10 +16,9 @@
 
 static void test_resample_bilin()
 {
-  vcl_cout << "*************************************************\n"
+  vcl_cout << "*********************************************\n"
            << " Testing vimt_resample_bilin_smoothed (byte)\n"
-           << "*************************************************\n";
-
+           << "*********************************************\n";
 
   unsigned ni = 20, nj = 20;
   vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<'\n';
@@ -41,7 +40,6 @@ static void test_resample_bilin()
   vcl_cout << "\n\n\nimage 1: " << image1 << vcl_setw(3);
   vil_print_all(vcl_cout, image1.image());
 
-  
   TEST("similar resolutions sample is ok",
     vil_math_ssd(vil_crop(image0.image(), ni/2, ni/2, nj/2, nj/2),
                           image1.image(), double() ), 0);
@@ -65,19 +63,11 @@ static void test_resample_bilin()
   vcl_cout << "dec(crop (image 0)): " << image3 << vcl_setw(3);
   vil_print_all(vcl_cout, vil_transpose(vil_decimate(vil_crop(image0.image(), ni/2, ni/2, nj/2, nj/2), 2)));
 
-  
   TEST_NEAR("different resolutions sample is ok",
     vil_math_ssd(
       vil_transpose(vil_decimate(
         vil_crop(image0.image(), ni/2, ni/2, nj/2, nj/2), 2)),
       image3.image(), double() ) / 25.0, 0, 6.0);
-
-
-
-
 }
-
-
-
 
 TESTMAIN(test_resample_bilin);
