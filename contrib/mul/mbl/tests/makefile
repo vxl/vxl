@@ -40,6 +40,8 @@ TESTS += test_table.cxx
 TESTS += test_cloneables_factory.cxx
 TESTS += test_rvm_regression_builder.cxx
 TESTS += test_test.cxx
+TESTS += test_cloneable_ptr.cxx
+TESTS += test_stl.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
