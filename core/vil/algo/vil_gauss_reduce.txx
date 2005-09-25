@@ -276,7 +276,6 @@ void vil_gauss_reduce_general(const vil_image_view<T>& src,
 }
 
 
-
 template <class T>
 void vil_gauss_reduce_1plane(const T* src_im,
                              unsigned src_ni, unsigned src_nj,
@@ -293,8 +292,8 @@ void vil_gauss_reduce_1plane(const T* src_im,
   for (unsigned y=0;y<src_nj;++y)
   {
     // Set first element of row
-    double dsum = 0.071 * static_cast<double>(s_row[sxs2]) + 
-                  0.357 * static_cast<double>(s_row[s_x_step]) + 
+    double dsum = 0.071 * static_cast<double>(s_row[sxs2]) +
+                  0.357 * static_cast<double>(s_row[s_x_step]) +
                   0.572 * static_cast<double>(s_row[0]);
     rounder(dsum, *d_row);
 
@@ -302,18 +301,17 @@ void vil_gauss_reduce_1plane(const T* src_im,
     const T* s = s_row + sxs2;
     for (unsigned x=0;x<ni2;++x)
     {
-      dsum = 0.05*static_cast<double>(s[-sxs2]) + 0.25*static_cast<double>(s[-s_x_step]) + 
+      dsum = 0.05*static_cast<double>(s[-sxs2]) + 0.25*static_cast<double>(s[-s_x_step]) +
              0.05*static_cast<double>(s[ sxs2]) + 0.25*static_cast<double>(s[ s_x_step]) +
              0.4 *static_cast<double>(s[0]);
-            
       rounder(dsum, *d);
 
       d += d_x_step;
       s += sxs2;
     }
     // Set last elements of row
-    dsum = 0.071 * static_cast<double>(s[-sxs2]) + 
-           0.357 * static_cast<double>(s[-s_x_step]) + 
+    dsum = 0.071 * static_cast<double>(s[-sxs2]) +
+           0.357 * static_cast<double>(s[-s_x_step]) +
            0.572 * static_cast<double>(s[0]);
     rounder(dsum, *d);
 
@@ -353,11 +351,16 @@ void vil_gauss_reduce_121_1plane(const T* src_im,
       for (unsigned x=0;x<ni2;++x)
       {
           // The following is a little inefficient - could group terms to reduce arithmetic
-          double ds1 = 0.0625 * static_cast<double>(s1[-s_x_step]) + 0.125 * static_cast<double>(s1[0]) + 0.0625 * static_cast<double>(s1[s_x_step]);
-          double ds2 = 0.1250 * static_cast<double>(s2[-s_x_step]) + 0.250 * static_cast<double>(s2[0]) + 0.1250 * static_cast<double>(s2[s_x_step]);
-          double ds3 = 0.0625 * static_cast<double>(s3[-s_x_step]) + 0.125 * static_cast<double>(s3[0]) + 0.0625 * static_cast<double>(s3[s_x_step]);
-          double dsum = ds1 + ds2 + ds3;
-          rounder(dsum,*d);
+          double ds1 = 0.0625 * static_cast<double>(s1[-s_x_step])
+                     + 0.125  * static_cast<double>(s1[0])
+                     + 0.0625 * static_cast<double>(s1[s_x_step]),
+                 ds2 = 0.1250 * static_cast<double>(s2[-s_x_step])
+                     + 0.250  * static_cast<double>(s2[0])
+                     + 0.1250 * static_cast<double>(s2[s_x_step]),
+                 ds3 = 0.0625 * static_cast<double>(s3[-s_x_step])
+                     + 0.125  * static_cast<double>(s3[0])
+                     + 0.0625 * static_cast<double>(s3[s_x_step]);
+          rounder(ds1 + ds2 + ds3, *d);
 
           d += d_x_step;
           s1 += sxs2;
@@ -425,7 +428,8 @@ void vil_gauss_reduce_2_3_1plane(const T* src_im,
     const T* s = s_row + sxs3;
     for (unsigned x=1;x<d_ni2;++x)
     {
-      double df= 0.2*( static_cast<double>(s[-s_x_step]) + static_cast<double>(s[s_x_step]) ) + 0.6*static_cast<double>(s[0]) ;
+      double df= 0.2 * ( static_cast<double>(s[-s_x_step]) + static_cast<double>(s[s_x_step]) )
+               + 0.6 * static_cast<double>(s[0]) ;
       rounder(df,*d);
 
       d += d_x_step;
@@ -444,7 +448,8 @@ void vil_gauss_reduce_2_3_1plane(const T* src_im,
     }
     else if (src_ni%3==2)
     {
-      double df = 0.2*(static_cast<double>(s[-s_x_step]) + static_cast<double>(s[s_x_step]) ) + 0.6*static_cast<double>(s[0]);
+      double df = 0.2 * (static_cast<double>(s[-s_x_step]) + static_cast<double>(s[s_x_step]) )
+                + 0.6 * static_cast<double>(s[0]);
       rounder(df,*d);
     }
     d_row += d_y_step;
