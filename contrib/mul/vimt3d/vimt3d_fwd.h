@@ -1,7 +1,6 @@
-// This is contrib/mul/vimt3d/vimt3d_fwd.h
+// This is mul/vimt3d/vimt3d_fwd.h
 #ifndef vimt3d_fwd_h_
 #define vimt3d_fwd_h_
-
 //:
 // \file
 // \author Ian Scott
