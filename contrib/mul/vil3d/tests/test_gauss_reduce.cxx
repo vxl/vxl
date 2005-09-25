@@ -3,11 +3,9 @@
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
 #include <vil3d/vil3d_image_view.h>
-#include <vil3d/vil3d_print.h>
 #include <vil3d/algo/vil3d_gauss_reduce.h>
 #include <vil3d/vil3d_print.h>
 #include <vil3d/vil3d_crop.h>
-
 
 static void test_gauss_reduce_float()
 {
@@ -26,13 +24,12 @@ static void test_gauss_reduce_float()
       for (unsigned i=0;i<image0.ni();++i)
         image0(i,j,k) = i*0.1f-j+k*10;
 
-
   unsigned ni2 = (ni+1)/2;
   unsigned nj2 = (nj+1)/2;
   unsigned nk2 = (nk+1)/2;
   vil3d_image_view<float> image1,work_im1,work_im2;
   vil3d_gauss_reduce(image0,image1,work_im1,work_im2);
-  
+
   TEST("size i",image1.ni(),(ni+1)/2);
   TEST("size j",image1.nj(),(nj+1)/2);
   TEST("size k",image1.nk(),(nk+1)/2);
@@ -60,15 +57,12 @@ static void test_gauss_reduce_ij()
       for (unsigned i=0;i<image0.ni();++i)
         image0(i,j,k) = i*0.1f-j+k*10;
 
-
   unsigned ni2 = (ni+1)/2;
   unsigned nj2 = (nj+1)/2;
   unsigned nk2 = nk;  // Shouldn't change first level
 
   vil3d_image_view<float> image1, work_im;
   vil3d_gauss_reduce_ij(image0,image1,work_im);
-
-
 
   TEST("Level 1 size i", image1.ni(), ni2);
   TEST("Level 1 size j", image1.nj(), nj2);
@@ -145,7 +139,6 @@ static void test_gauss_reduce_jk()
   TEST_NEAR("Corner pixel", image1(ni2-1,nj2-1,nk2-1), 258.409f , 1e-4f);
 }
 
-
 static void test_gauss_reduce_int()
 {
   vcl_cout << "*********************************\n"
@@ -172,8 +165,6 @@ static void test_gauss_reduce_int()
   vil3d_print_all(vcl_cout, vil3d_crop(image0, 0, 6, 0, 6, 0, 6));
   vil3d_print_all(vcl_cout, vil3d_crop(image1, 0, 3, 0, 3, 0, 3));
 
-
-
   TEST("size i",image1.ni(),ni2);
   TEST("size j",image1.nj(),nj2);
   TEST("size k",image1.nk(),nk2);
@@ -190,7 +181,6 @@ static void test_gauss_reduce_int()
   TEST_NEAR("LFB corner pixel", image1(0,nj2-1,0),         -27, 0);
   TEST_NEAR("LNT corner pixel", image1(0,0,nk2-1),         225, 0);
 }
-
 
 static void test_gauss_reduce()
 {
