@@ -96,7 +96,7 @@ static void test_range_map()
     map_good = true;
     for (int i = -offsc; i<offsc; ++i) {
       map_good = map_good&&(mapsc[i+offsc]==(i+offsc));
-      if (mapsc[i+offsc]!=(i+offsc)) vcl_cerr << "mapsc[" << i+offsc << "] = " << mapsc[i+offsc] << vcl_endl;
+      if (mapsc[i+offsc]!=(i+offsc)) vcl_cerr << "mapsc[" << i+offsc << "] = " << int(mapsc[i+offsc]) << vcl_endl;
     }
   }
   vcl_cout << "sizesc = " << sizesc << vcl_endl
@@ -120,7 +120,7 @@ static void test_range_map()
     map_good = true;
     for (int i = -128; i<128; ++i) {
       map_good = map_good&&mapsh[i+128]==(i+128);
-      if (mapsh[i+128]!=(i+128)) vcl_cerr << "mapsh[" << i+128 << "] = " << mapsh[i+128] << vcl_endl;
+      if (mapsh[i+128]!=(i+128)) vcl_cerr << "mapsh[" << i+128 << "] = " << int(mapsh[i+128]) << vcl_endl;
     }
   }
   vcl_cout << "sizesh = " << sizesh << vcl_endl
