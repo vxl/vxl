@@ -100,7 +100,7 @@ static void test_range_map()
     }
   }
   vcl_cout << "sizesc = " << sizesc << vcl_endl
-           << "valsc = " << valsc << vcl_endl
+           << "valsc = " << int(valsc) << vcl_endl
            << "offsc = " << offsc << vcl_endl;
   TEST("signed char values", sizesc==256&&valsc==64&&offsc==128&&map_good, true);
 
@@ -124,7 +124,7 @@ static void test_range_map()
     }
   }
   vcl_cout << "sizesh = " << sizesh << vcl_endl
-           << "valsh = " << valsh << vcl_endl
+           << "valsh = " << int(valsh) << vcl_endl
            << "offsh = " << offsh << vcl_endl;
   TEST("short values", sizesh==65536&&valsh==128&&offsh==32768&&map_good, true);
 
