@@ -1,12 +1,12 @@
 // vil_nitf2: Written by Harry Voorhees (hlv@) and Rob Radtke (rob@) of
-// Stellar Science Ltd. Co. (stellarscience.com) for 
+// Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
 #include "vil_nitf2_tagged_record.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
+#include <vcl_cstdio.h>
+#include <vcl_cstdlib.h>
+#include <vcl_cerrno.h>
 
 #include <vcl_sstream.h>
 #include <vcl_iomanip.h>
@@ -36,7 +36,8 @@ vil_nitf2_integer_formatter* vil_nitf2_tagged_record::s_length_formatter = new
 vil_nitf2_string_formatter* vil_nitf2_tagged_record::s_tag_formatter = new
   vil_nitf2_string_formatter(6);
 
-vcl_string vil_nitf2_tagged_record::name() const { 
+vcl_string vil_nitf2_tagged_record::name() const
+{
   return m_definition->m_name;
 }
 
@@ -56,7 +57,7 @@ bool vil_nitf2_tagged_record::read(vil_nitf2_istream& input)
   // Read TRE tag
   m_tag_field = vil_nitf2_scalar_field::read(input, s_tag_definition);
   if (!m_tag_field) {
-    vcl_cerr << "Error reading extension tag at offset " << input.tell() << "." << vcl_endl;
+    vcl_cerr << "Error reading extension tag at offset " << input.tell() << ".\n";
     // Can't continue reading file
     return false;
   }
@@ -66,19 +67,19 @@ bool vil_nitf2_tagged_record::read(vil_nitf2_istream& input)
   // Read TRE data length
   m_length_field = vil_nitf2_scalar_field::read(input, s_length_definition);
   if (!m_length_field) {
-    vcl_cerr << "Error reading extension length for tag " << cetag << "." << vcl_endl;
+    vcl_cerr << "Error reading extension length for tag " << cetag << ".\n";
     // Can't continue reading file
     return false;
   }
   m_length_field->value(m_length);
 
   // See if this record is defined ...
-  vil_nitf2_tagged_record_definition* record_definition = 
+  vil_nitf2_tagged_record_definition* record_definition =
     vil_nitf2_tagged_record_definition::find(cetag);
 
   // ... if not, skip ahead to next record ...
   if (record_definition == 0) {
-    VIL_NITF2_LOG(log_info) << "Skipping unknown record " << cetag << "." << vcl_endl;
+    VIL_NITF2_LOG(log_info) << "Skipping unknown record " << cetag << ".\n";
     // Return whether I've found end of record
     //input.seekg(ceLength, vcl_ios::cur);
     input.seek(input.tell()+m_length);
@@ -88,20 +89,20 @@ bool vil_nitf2_tagged_record::read(vil_nitf2_istream& input)
   // First save the position to check later that we read entire record
   vil_streampos record_data_start_pos = input.tell();
   m_definition = record_definition;
-  m_field_sequence = new vil_nitf2_field_sequence(record_definition->field_definitions()); 
+  m_field_sequence = new vil_nitf2_field_sequence(record_definition->field_definitions());
   m_field_sequence->read(input);
 
   // Check that the expected amount of data was read
   vil_streampos expected_pos = record_data_start_pos;
   expected_pos += m_length;
   if (input.tell() != expected_pos) {
-    vcl_cerr << "vil_nitf2_tagged_record::read(): Read " << input.tell() - record_data_start_pos 
-         << " bytes instead of " << m_length << " as expected." << vcl_endl;
-    // Attempt to reposition input stream to end of record; return whether 
+    vcl_cerr << "vil_nitf2_tagged_record::read(): Read " << input.tell() - record_data_start_pos
+             << " bytes instead of " << m_length << " as expected.\n";
+    // Attempt to reposition input stream to end of record; return whether
     // successful
     input.seek(expected_pos);
     return input.ok();
-  } 
+  }
   // At end of record, as expected
   return true;
 }
@@ -131,9 +132,9 @@ bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_ve
   return m_field_sequence->get_value(tag, indexes, out_value); }
 bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vcl_string& out_value) const {
   return m_field_sequence->get_value(tag, indexes, out_value); }
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_location*& out_value) const {
+bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_location*& out_value)const{
   return m_field_sequence->get_value(tag, indexes, out_value); }
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_date_time& out_value) const {
+bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_date_time& out_value)const{
   return m_field_sequence->get_value(tag, indexes, out_value); }
 
 #if VXL_HAS_INT_64
@@ -145,7 +146,7 @@ bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_ve
   return m_field_sequence->get_value(tag, indexes, out_value); }
 #endif
 
-vil_nitf2_tagged_record::vil_nitf2_tagged_record() 
+vil_nitf2_tagged_record::vil_nitf2_tagged_record()
   : m_length_field(0), m_tag_field(0), m_length(0), m_definition(0), m_field_sequence(0)
 {}
 
@@ -153,16 +154,16 @@ bool vil_nitf2_tagged_record::test()
 {
   bool error = false;
   // Example Tagged Record Extension definition
-  vil_nitf2_tagged_record_definition MTIRPB = 
+  vil_nitf2_tagged_record_definition MTIRPB =
     vil_nitf2_tagged_record_definition::define("MTIRPB")
     .field("MTI_DP",           "Destination Point",     NITF_INT(2))
     .field("MTI_PACKET_ID",    "MTI Packed ID Number",  NITF_INT(3))
     .field("DATIME",           "Scan Date & Time",      NITF_DAT(14), true)
-    .field("ACFT_LOC",         "Aircraft Position",     NITF_LOC(21)) 
+    .field("ACFT_LOC",         "Aircraft Position",     NITF_LOC(21))
     .field("ACFT_LOC2",        "Aircraft Position 2",   NITF_LOC(21))
     .field("SQUINT_ANGLE",     "Squint Angle",          NITF_DBL(6, 2, true), true)
     .field("NO_VALID_TARGETS", "Number of Targets",     NITF_INT(3))
-    .field("TGT_CAT",        "Target Classification Category", 
+    .field("TGT_CAT",        "Target Classification Category",
            NITF_ENUM(1, vil_nitf2_enum_values()
             .value("H", "Helicopter")
             .value("T", "Tracked")
@@ -174,18 +175,18 @@ bool vil_nitf2_tagged_record::test()
             vil_nitf2_field_definitions()
         .field("TGT_n_SPEED", "Target Estimated Ground Speed", NITF_INT(4),
              true)
-        .field("TGT_n_CAT",   "Target Classification Category", 
+        .field("TGT_n_CAT",   "Target Classification Category",
              NITF_ENUM(1, vil_nitf2_enum_values()
                .value("H", "Helicopter")
                .value("T", "Tracked")
                .value("U", "Unknown")
                .value("W", "Wheeled")),
              true) )
-    .field("TEST_NEG_COND", "Test False Condition", NITF_STR_BCSA(14), false, 
+    .field("TEST_NEG_COND", "Test False Condition", NITF_STR_BCSA(14), false,
            0, new vil_nitf2_field_value_greater_than<int>("MTI_DP", 5))
     .field("TEST_POS_COND", "Test True Condition",  NITF_STR_BCSA(14), false,
            0, new vil_nitf2_field_value_greater_than<int>("MTI_DP", 1))
-    .field("CLASS",  "Security Classification", 
+    .field("CLASS",  "Security Classification",
            NITF_ENUM(1, vil_nitf2_enum_values()
             .value("T", "Top Secret")
             .value("S", "Secret")
@@ -201,13 +202,13 @@ bool vil_nitf2_tagged_record::test()
              0, 0 )
      .field( "XBANDS", "Large number of bands",      NITF_INT(2), false,
              0, new vil_nitf2_field_value_one_of<int>("NBANDS",0))
-     .repeat(new vil_nitf2_choose_field_value<int>("NBANDS", "XBANDS", 
+     .repeat(new vil_nitf2_choose_field_value<int>("NBANDS", "XBANDS",
                 new vil_nitf2_field_value_greater_than<int>("NBANDS", 0)),
              vil_nitf2_field_definitions()
-       .field( "BAND_LTR", "Band Description",       NITF_CHAR(), true, 
+       .field( "BAND_LTR", "Band Description",       NITF_CHAR(), true,
               0))
      .field( "N",   "Test repeat N", NITF_INT(1))
-     // test nested repeats and functor references to tags within and 
+     // test nested repeats and functor references to tags within and
      // outside repeat loops
      .repeat(new vil_nitf2_field_value<int>("N"), vil_nitf2_field_definitions()
         .field("A", "Test repeat A", NITF_INT(1))
@@ -217,10 +218,10 @@ bool vil_nitf2_tagged_record::test()
            .field("B", "Test repeat B", NITF_STR_BCSA(1))
            .repeat(new vil_nitf2_field_value<int>("A"), vil_nitf2_field_definitions()
               .field("C", "Test repeat C", NITF_STR_BCSA(1)))))
-          
+
     .end();
   // Create a test input vcl_string
-  vcl_string testFieldsStr = 
+  vcl_string testFieldsStr =
     "02"                     // MTI_DP
     "003"                    // MTI_PACKET_ID
     //"19990908070605"         // DATIME
@@ -272,11 +273,12 @@ bool vil_nitf2_tagged_record::test()
   vil_stream_section* vss = new vil_stream_section(vs, 0, read_string.length());
   // Record from the vil_stream
   vil_nitf2_tagged_record* record = vil_nitf2_tagged_record::create(*vss);
-  if (record) {
+  if (record)
+  {
     vcl_cerr << *record << vcl_endl;
     // Now write the record, and compare the output to the test input
-    vcl_cerr << "\nOriginal string:\n" << read_string;
-    vcl_cerr << "\nWrite() output:\n";
+    vcl_cerr << "\nOriginal string:\n" << read_string
+             << "\nWrite() output:\n";
     vil_stream_core* vs2 = new vil_stream_core();
     record->write(*(vil_stream*)vs2);
     vil_streampos bufsize = vs2->file_size();
@@ -287,14 +289,14 @@ bool vil_nitf2_tagged_record::test()
     vcl_string write_string = vcl_string(buf);
     vcl_cerr << write_string << vcl_endl;
     if (read_string != write_string) {
-      vcl_cerr << "\nWrite failed!" << vcl_endl;
+      vcl_cerr << "\nWrite failed!\n";
       error = true;
     }
     delete buf;
-    vcl_cerr << "Testing get_value: " << vcl_endl;
+    vcl_cerr << "Testing get_value:\n";
     int mti_dp;
     if (!record->get_value("MTI_DP", mti_dp) || mti_dp!=2) {
-      vcl_cerr << "Get value failed!" << vcl_endl;
+      vcl_cerr << "Get value failed!\n";
       error = true;
     } else {
       vcl_cerr << "MTI_DP = " << mti_dp << vcl_endl;
@@ -302,29 +304,29 @@ bool vil_nitf2_tagged_record::test()
     int tgt_speed[4];
     if (!record->get_value("TGT_n_SPEED", vil_nitf2_index_vector(0), tgt_speed[0])  ||
         tgt_speed[0] != 2222 ||
-        record->get_value("TGT_n_SPEED", vil_nitf2_index_vector(1), tgt_speed[1]) /*should be null*/ || 
+        record->get_value("TGT_n_SPEED", vil_nitf2_index_vector(1), tgt_speed[1]) /*should be null*/ ||
         !record->get_value("TGT_n_SPEED", vil_nitf2_index_vector(2), tgt_speed[2]) ||
         tgt_speed[2] != 4444) {
-      vcl_cerr << "Get vector value test failed!" << vcl_endl;
+      vcl_cerr << "Get vector value test failed!\n";
       error = true;
     } else {
       vcl_cerr << "TGT_2_SPEED = " << tgt_speed[2] << vcl_endl;
     }
   } else {
-    vcl_cerr << "Didn't create record!" << vcl_endl;
+    vcl_cerr << "Didn't create record!\n";
     error = true;
   }
   // Try output of vector field
-  vcl_cerr << "Output of vector field C:" << vcl_endl;
-  vcl_cerr << *(record->get_field("C"));
+  vcl_cerr << "Output of vector field C:\n"
+           << *(record->get_field("C"));
 
   return !error;
 }
 
 vcl_ostream& vil_nitf2_tagged_record::output(vcl_ostream& os) const
 {
-  os << "CETAG: " << name() << vcl_endl;
-  os << "CELEN: " << length() << vcl_endl;
+  os << "CETAG: " << name() << vcl_endl
+     << "CELEN: " << length() << vcl_endl;
   for (vil_nitf2_field_definitions::iterator fieldNode = m_definition->m_field_definitions->begin();
        fieldNode != m_definition->m_field_definitions->end(); ++fieldNode)
   {
@@ -338,7 +340,7 @@ vcl_ostream& vil_nitf2_tagged_record::output(vcl_ostream& os) const
     } else {
       os << "(undefined)" << vcl_endl;
     }
-  } 
+  }
   return os;
 }
 
@@ -356,7 +358,7 @@ bool vil_nitf2_tagged_record::write(vil_nitf2_ostream& output)
   // Check whether the vcl_right amount was written
   vil_streampos end = output.tell();
   vil_streampos length_written = end - start;
-  int expected_length = s_tag_formatter->field_width + s_length_formatter->field_width 
+  int expected_length = s_tag_formatter->field_width + s_length_formatter->field_width
     + length();
   return length_written == expected_length;
 }
@@ -383,7 +385,7 @@ vil_nitf2_field_definition* vil_nitf2_field_sequence::find_field_definition(vcl_
   return 0;
 }
 
-vcl_ostream& operator << (vcl_ostream& os, const vil_nitf2_tagged_record& record) 
+vcl_ostream& operator << (vcl_ostream& os, const vil_nitf2_tagged_record& record)
 {
-  return record.output(os); 
+  return record.output(os);
 }
