@@ -569,6 +569,18 @@ SOURCE=.\Templates/vil_image_view+vil_rgba+int_64--.cxx
 # Begin Source File
 SOURCE=.\Templates/vil_image_view+vil_rgba+uint_64--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_sample_grid_bilin+uint16.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_sample_profile_bilin+uint16.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_smart_ptr+vil_nitf_image_subheader-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_smart_ptr+vil_nitf_message_header-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

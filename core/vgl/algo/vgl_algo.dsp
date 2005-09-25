@@ -164,6 +164,9 @@ SOURCE=.\Templates/vgl_fit_conics_2d+double-.cxx
 SOURCE=.\Templates/vgl_fit_conics_2d+float-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vgl_norm_trans_2d+float-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vgl_h_matrix_1d_compute_3point.cxx
 # End Source File
 # Begin Source File

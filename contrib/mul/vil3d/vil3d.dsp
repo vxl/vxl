@@ -297,6 +297,9 @@ SOURCE=.\vil3d_fwd.h
 SOURCE=.\vil3d_save.h
 # End Source File
 # Begin Source File
+SOURCE=.\vil3d_reflect.h
+# End Source File
+# Begin Source File
 SOURCE=.\vil3d_from_image_2d.h
 # End Source File
 # Begin Source File

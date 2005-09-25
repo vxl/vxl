@@ -197,9 +197,24 @@ SOURCE=.\Templates/vsl_vector_io+vimt_image_2d_of+double--.cxx
 # Begin Source File
 SOURCE=.\Templates/vsl_vector_io+vimt_image_2d_of+float--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vimt_gaussian_pyramid_builder_2d+uint16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vimt_image_2d_of+uint16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vimt_sample_grid_bilin+uint16.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vimt_sample_profile_bilin+uint16.double-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "txx;h"
+# Begin Source File
+SOURCE=.\vimt_fwd.h
+# End Source File
 # Begin Source File
 SOURCE=.\vimt_gaussian_pyramid_builder_2d.h
 # End Source File

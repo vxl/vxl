@@ -164,6 +164,9 @@ SOURCE=.\vimt3d_vil3d_v3i.cxx
 # End Group
 # Begin Group "Header Files"
 # Begin Source File
+SOURCE=.\vimt3d_fwd.h
+# End Source File
+# Begin Source File
 SOURCE=.\vimt3d_gaussian_pyramid_builder_3d.h
 # End Source File
 # Begin Source File
