@@ -2,8 +2,8 @@
 // Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
-#ifndef VIL_NITF2_STREAM_H
-#define VIL_NITF2_STREAM_H
+#ifndef VIL_NITF2_H
+#define VIL_NITF2_H
 
 #include <vil/vil_stream.h>
 
@@ -13,12 +13,12 @@
 typedef vil_stream vil_nitf2_istream;
 typedef vil_stream vil_nitf2_ostream;
 
-//some of the integer values stored in nitf 2.x headers can be
-//larger than 2^32.  That's why we have vil_nitf2_long_long_formatter.
-//We use this typedef so systems that don't have 64 bit integers
-//can still use the class.  Of course they will break if they try to
-//read a header that contains a value greater than 2^32.  Fortunately,
-//that is somewhat rare
+// Some of the integer values stored in nitf 2.x headers can be
+// larger than 2^32.  That's why we have vil_nitf2_long_long_formatter.
+// We use this typedef so systems that don't have 64 bit integers 
+// can still use the class.  Of course they will break if they try to
+// read a header that contains a value greater than 2^32.  Fortunately,
+// that is somewhat rare.
 #include <vxl_config.h>
 #if VXL_HAS_INT_64
 typedef vxl_int_64 vil_nitf2_long;
@@ -36,7 +36,8 @@ class vil_nitf2
   enum enum_field_type { type_undefined=0,
                          type_int, type_long_long, type_double,
                          type_char, type_string, type_binary,
-                         type_location, type_date_time, type_tre };
+                         type_location, type_date_time, 
+                         type_tagged_record_sequence };
 
   // Controls the level of detail of logging to vcl_cout.
   // All errors are logged to vcl_cerr, irrespective of log level.
@@ -50,4 +51,4 @@ class vil_nitf2
 #define VIL_NITF2_LOG(LEVEL) \
   if (vil_nitf2::s_log_level < vil_nitf2::LEVEL) ; else vcl_cout
 
-#endif // VIL_NITF2_STREAM_H
+#endif // VIL_NITF2_H

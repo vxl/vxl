@@ -59,7 +59,7 @@ public:
   static vil_nitf2_tagged_record_definition* find(vcl_string name);
 
   // Look up a field definition
-  vil_nitf2_field_definition* findField(vcl_string name);
+  vil_nitf2_field_definition* find_field(vcl_string name);
 
   typedef vcl_map<vcl_string, vil_nitf2_tagged_record_definition*> 
     tagged_record_definition_map;
@@ -67,6 +67,9 @@ public:
 
   const vil_nitf2_field_definitions& field_definitions() const {
     return *m_field_definitions; }
+
+  // Registers some TREs for testing
+  static void register_test_tre();
 
 private:
   vcl_string m_name;

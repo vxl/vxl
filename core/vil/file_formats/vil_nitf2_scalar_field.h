@@ -8,6 +8,7 @@
 #include "vil_nitf2_field.h"
 
 class vil_nitf2_field_definition;
+class vil_nitf2_tagged_record_sequence;
 
 // An abstract class that represents a scalar field, i.e., one that
 // is not within a repeat loop. Subclasses store the type-specific
@@ -37,6 +38,7 @@ public:
   virtual bool value(vcl_string&) const { return false; }
   virtual bool value(vil_nitf2_location*&) const { return false; }
   virtual bool value(vil_nitf2_date_time&) const { return false; }
+  virtual bool value(vil_nitf2_tagged_record_sequence&) const { return false; }
 
   // Attempts to read a scalar field from input stream, using specified 
   // definition. Returns field if successfully created.  May set arg

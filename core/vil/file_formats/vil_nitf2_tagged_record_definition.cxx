@@ -4,6 +4,7 @@
 
 #include "vil_nitf2_tagged_record_definition.h"
 #include "vil_nitf2_field_definition.h"
+#include "vil_nitf2_typed_field_formatter.h"
 #include <vcl_iostream.h>
 #include <vcl_utility.h>
 
@@ -75,4 +76,23 @@ vil_nitf2_tagged_record_definition* vil_nitf2_tagged_record_definition::find(vcl
   tagged_record_definition_map::iterator definition = all_definitions.find(name);
   if (definition == all_definitions.end()) return 0;
   return definition->second;
+}
+
+void vil_nitf2_tagged_record_definition::register_test_tre()
+{
+  define("PIAIMB")
+    .field("CLOUDCVR",   "Cloud Cover",            NITF_INT(3),  true)
+    .field("SRP",        "Standard Radiometric Product", NITF_CHAR(), true)
+    .field("SENSMODE",   "Sensor Mode",            NITF_STR(12), true)
+    .field("SENSNAME",   "Sensor Name",            NITF_STR(18), true)
+    .field("SOURCE",     "Source",                 NITF_STR(255), true)
+    .field("COMGEN",     "Compression Generation", NITF_INT(2), true)
+    .field("SUBQUAL",    "Subjective Quality",     NITF_CHAR(), true)
+    .field("PIAMSNNUM",  "PIA Mission Number",     NITF_STR(7), true)
+    .field("CAMSPECS",   "Camera Specs",           NITF_STR(32), true)
+    .field("PROJID",     "Project ID Code",        NITF_STR(2), true)
+    .field("GENERATION", "Generation",             NITF_INT(1), true)
+    .field("ESD",        "Exploitation Support Data", NITF_CHAR(), true)
+    .field("OTHERCOND",  "Other Conditions",       NITF_STR(2), true)
+    .end();
 }

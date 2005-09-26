@@ -6,6 +6,7 @@
 #define VIL_NITF2_TYPED_FIELD_FORMATTER_H
 
 #include "vil_nitf2_field_formatter.h"
+#include "vil_nitf2_tagged_record.h"
 
 #include <vcl_cassert.h>
 #include <vcl_iosfwd.h>
@@ -205,7 +206,7 @@ class vil_nitf2_char_formatter : public vil_nitf2_typed_field_formatter<char>
 class vil_nitf2_binary_formatter : public vil_nitf2_typed_field_formatter<void*>
 {
  public:
-  vil_nitf2_binary_formatter(int widthBytes);
+  vil_nitf2_binary_formatter(int width_bytes);
 
   // partially overridden read/write methods
   using vil_nitf2_typed_field_formatter<void*>::read_vcl_stream;
@@ -308,6 +309,29 @@ class vil_nitf2_location_formatter : public vil_nitf2_typed_field_formatter<vil_
   // Converts overall field width to degrees precision for degrees formatted
   // field, +dd.ddd+ddd.ddd
   static int deg_precision(int field_width) { return (field_width-9)/2; }
+};
+
+// Reads and writes a TRE sequence field
+//
+class vil_nitf2_tagged_record_sequence_formatter : 
+  public vil_nitf2_typed_field_formatter<vil_nitf2_tagged_record_sequence>
+{
+public:
+  // Constructor
+  vil_nitf2_tagged_record_sequence_formatter();
+
+  // partially overridden read/write methods
+  using vil_nitf2_typed_field_formatter<vil_nitf2_tagged_record_sequence>::read_vcl_stream;
+  using vil_nitf2_typed_field_formatter<vil_nitf2_tagged_record_sequence>::write_vcl_stream;
+
+  // Overload read() instead of read_vcl_stream() to read binary data without
+  // converting to string, because zero data would prematurely null-terminate
+  // the stringstream.
+  virtual bool read( vil_nitf2_istream& input, vil_nitf2_tagged_record_sequence& out_value, bool& out_blank );
+
+  /// Overload to write() instead of write_vcl_stream() to write binary data
+  // (see preceding comment).
+  virtual bool write(vil_nitf2_ostream& output, vil_nitf2_tagged_record_sequence& value);
 };
 
 #endif // VIL_NITF2_TYPED_FIELD_FORMATTER_H

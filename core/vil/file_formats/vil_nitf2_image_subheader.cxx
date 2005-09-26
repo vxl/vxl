@@ -170,28 +170,26 @@ add_shared_field_defs_3(vil_nitf2_field_definitions* defs)
   // TODO: Enter these two values as ints with optional sign (once supported)
   // Actually, since they are both in one field, maybe we'd want to make it one
   // compound field (in the new tree format)
-  .field("ILOC_ROW", "Image Location Row",           NITF_STR_BCSA(5), false, 0, 0)
-  .field("ILOC_COL", "Image Location Column",        NITF_STR_BCSA(5), false, 0, 0)
+  .field("ILOC_ROW", "Image Location Row",            NITF_STR_BCSA(5), false, 0, 0)
+  .field("ILOC_COL", "Image Location Column",         NITF_STR_BCSA(5), false, 0, 0)
 
   // TODO: THis should be a decimal field that supports non-negative power of two
   // fractions (eg '/2  ' means 1/2, '/16 'means 1/16
-  .field("IMAG", "Image Magnification",        NITF_STR_BCSA(4),  false, 0, 0)
+  .field("IMAG",  "Image Magnification",              NITF_STR_BCSA(4), false, 0, 0)
   .field("UDIDL", "User Defined Image Data Length",        NITF_INT(5), false, 0, 0) //[00000,00003-99999]
+
   .field("UDOFL", "User Defined Overflow",                 NITF_INT(3), false, 0,
          new vil_nitf2_field_value_greater_than<int>("UDIDL", 0))
-
-  // TODO: UDID is a variable lengh TRE ('UDIDL-3' bytes). Right now, we're just reading it as
-  // a binary data. We should do something better than that (perhaps recursively read in a new TRE)
-  .field("UDID", "User Defined Image Data",              NITF_BIN(1), false,
+ 
+  .field("UDID", "User Defined Image Data",                NITF_TRES(), false,
          new vil_nitf2_max_field_value_plus_offset_and_threshold("UDIDL", -3), 0)
-
+ 
   .field("IXSHDL", "Image Extended Subheader Data Length", NITF_INT(5), false, 0, 0)
+
   .field("IXSOFL", "Image Extended Subheader Overflow",    NITF_INT(3), false, 0,
          new vil_nitf2_field_value_greater_than<int>("IXSHDL", 0))
-
-  // TODO: IXSHD is a variable lengh TRE ('IXSHDL-3' bytes).  Right now, we're just reading it in as a
-  // character vector. We should do something better than that
-  .field("IXSHD", "Image Extended Subheader Data", NITF_BIN(1), false,
+  
+  .field("IXSHD", "Image Extended Subheader Data",         NITF_TRES(), false,
          new vil_nitf2_max_field_value_plus_offset_and_threshold("IXSHDL", -3), 0);
 }
 

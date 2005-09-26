@@ -207,8 +207,8 @@ bool vil_nitf2_double_formatter::write_vcl_stream(vcl_ostream& output, const dou
 //==============================================================================
 // Class vil_nitf2_binary_formatter
 
-vil_nitf2_binary_formatter::vil_nitf2_binary_formatter(int widthBytes)
-  : vil_nitf2_typed_field_formatter<void*>(vil_nitf2::type_binary, widthBytes)
+vil_nitf2_binary_formatter::vil_nitf2_binary_formatter(int width_bytes)
+  : vil_nitf2_typed_field_formatter<void*>(vil_nitf2::type_binary, width_bytes)
 {};
 
 bool vil_nitf2_binary_formatter::read(vil_stream& input, void*& out_value,
@@ -327,3 +327,48 @@ vil_nitf2_enum_values& vil_nitf2_enum_values::value(vcl_string token, vcl_string
   }
   return *this;
 }
+
+//==============================================================================
+// Class vil_nitf2_tre_sequence_formatter
+
+#include "vil_nitf2_tagged_record.h"
+
+vil_nitf2_tagged_record_sequence_formatter::vil_nitf2_tagged_record_sequence_formatter() 
+  : vil_nitf2_typed_field_formatter<vil_nitf2_tagged_record_sequence>(
+      vil_nitf2::type_tagged_record_sequence, 1 /* ignored */)
+{}
+
+bool vil_nitf2_tagged_record_sequence_formatter::
+read( vil_nitf2_istream& input, 
+      vil_nitf2_tagged_record_sequence& out_value, bool& out_blank )
+{ 
+  if (field_width <= 0) return false;
+  vil_streampos current = input.tell();
+  vil_streampos end = current + field_width;
+  bool error_reading_tre = false;
+  out_value.clear();
+  while (input.tell() < end && !error_reading_tre) {
+    vil_nitf2_tagged_record* record = vil_nitf2_tagged_record::create(input);
+    if (record) {
+      out_value.push_back(record); // out_value assumes ownership of record
+    }
+    error_reading_tre &= !record;
+  }
+  if (input.tell() != end) { // TO DO: what does end equal at EOF?
+    VIL_NITF2_LOG(log_info) << "\nSeeking to end of TRE sequence field." << vcl_endl;
+    input.seek(end);
+    if (input.tell() != end) {
+      vcl_cerr << "\nSeek to end of TRE sequence field failed." << vcl_endl;
+      error_reading_tre = true;
+    }
+  }
+  out_blank = false;
+  return !error_reading_tre;
+}
+
+bool vil_nitf2_tagged_record_sequence_formatter::
+write(vil_nitf2_ostream& output, vil_nitf2_tagged_record_sequence& value)
+{ 
+  return false; 
+}
+

@@ -18,6 +18,7 @@
 #define NITF_STR  new vil_nitf2_string_formatter
 #define NITF_ENUM new vil_nitf2_enum_string_formatter
 #define NITF_DAT  new vil_nitf2_date_time_formatter
+#define NITF_TRES new vil_nitf2_tagged_record_sequence_formatter
 
 #define NITF_STR_ECS(LEN)  NITF_STR(LEN, vil_nitf2_string_formatter::ECS)
 #define NITF_STR_ECSA(LEN) NITF_STR(LEN, vil_nitf2_string_formatter::ECSA)

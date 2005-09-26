@@ -125,21 +125,19 @@ vil_nitf2_field_definitions* vil_nitf2_header::get_field_definitions_2(vil_nitf2
       .field("LRE",   "Length of nth Reserved Extension Segment",           NITF_INT(7), false, 0, 0))
     
     .field("UDHDL",  "User Defined Header Data Length", NITF_INT(5), false, 0, 0) // range [00000,00003-99999]
+ 
     .field("UDHOFL", "User Defined Header Overflow",    NITF_INT(3), false, 0, 
            new vil_nitf2_field_value_greater_than<int>("UDHDL", 0))
 
-    // TODO: UDHD is a variable length TRE (max(UDHDL-3,0) bytes), for now, read as binary 
-    // data, someday read as a TRE
-    .field("UDHD", "User Defined Header Data",          NITF_BIN(1), false, 
+    .field("UDHD", "User Defined Header Data",          NITF_TRES(), false, 
            new vil_nitf2_max_field_value_plus_offset_and_threshold("UDHDL", -3), 0)
 
     .field("XHDL",    "Extended Header Data Length",    NITF_INT(5), false, 0, 0)
+ 
     .field("XHDLOFL", "Extended Header Data Overflow",  NITF_INT(3), false, 0, 
            new vil_nitf2_field_value_greater_than<int>("XHDL", 0))
 
-    // TODO: XHD is a variable length TRE (max(XHDL-3,0) bytes), for now, read as binary 
-    // data, someday read as a TRE
-    .field("XHD", "Extended Header Data",              NITF_BIN(1),  false, 
+    .field("XHD", "Extended Header Data",               NITF_TRES(), false, 
            new vil_nitf2_max_field_value_plus_offset_and_threshold("XHDL", -3), 0);
 
   return field_defs;

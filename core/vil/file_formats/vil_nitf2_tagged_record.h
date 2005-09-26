@@ -255,4 +255,20 @@ class vil_nitf2_tagged_record
 
 vcl_ostream& operator << (vcl_ostream& os, const vil_nitf2_tagged_record& record);
 
+//-----------------------------------------------------------------------------
+// A sequence of tagged records, as read from a NITF file header or image 
+// subheader extended data field.
+
+class vil_nitf2_tagged_record_sequence : public vcl_list<vil_nitf2_tagged_record*> 
+{
+public:
+  // Constructor
+  vil_nitf2_tagged_record_sequence() : vcl_list<vil_nitf2_tagged_record*>() {}
+  
+  // Destructor
+  virtual ~vil_nitf2_tagged_record_sequence() {}
+};
+
+vcl_ostream& operator << (vcl_ostream& os, const vil_nitf2_tagged_record_sequence& seq);
+
 #endif // VIL_NITF2_TAGGED_RECORD_H

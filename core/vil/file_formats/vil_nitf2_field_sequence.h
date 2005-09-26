@@ -18,6 +18,7 @@ class vil_nitf2_field_definition;
 class vil_nitf2_field_definitions;
 class vil_nitf2_location;
 class vil_nitf2_date_time;
+class vil_nitf2_tagged_record_sequence;
 
 //-----------------------------------------------------------------------------
 // vil_nitf2_field_sequence represents the values of a contiguous list of fields,
@@ -42,6 +43,10 @@ class vil_nitf2_field_sequence
   bool get_value(vcl_string tag, vcl_string& out_value) const;
   bool get_value(vcl_string tag, vil_nitf2_location*& out_value) const;
   bool get_value(vcl_string tag, vil_nitf2_date_time& out_value) const;
+  bool get_value(vcl_string tag, vil_nitf2_tagged_record_sequence& out_value) const;
+#if VXL_HAS_INT_64
+  bool get_value(vcl_string tag, vil_nitf2_long& out_value) const;
+#endif
 
   // Sets out_value to the value of the array field element specified by tag and index.
   // Returns 0 if such a field is not found or is of the wrong type. If ignore_extra_indexes
@@ -63,9 +68,7 @@ class vil_nitf2_field_sequence
                  vil_nitf2_location*& out_value, bool ignore_extra_indexes = false) const;
   bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes,
                  vil_nitf2_date_time& out_value, bool ignore_extra_indexes = false) const;
-
 #if VXL_HAS_INT_64
-  bool get_value(vcl_string tag, vil_nitf2_long& out_value) const;
   bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes,
                  vil_nitf2_long& out_value, bool ignore_extra_indexes = false) const;
 #endif

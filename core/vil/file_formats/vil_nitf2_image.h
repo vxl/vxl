@@ -2,8 +2,8 @@
 // Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
-#ifndef VIL_NITF2_H
-#define VIL_NITF2_H
+#ifndef VIL_NITF2_IMAGE_H
+#define VIL_NITF2_IMAGE_H
 //:
 // \file
 #include <vil/vil_image_resource.h>
@@ -39,7 +39,7 @@ class vil_nitf2_file_format : public vil_file_format
 // You can access image header information through get_image_headers() and file
 // header information through get_header().
 //
-// Know reading limitations:
+// Known reading limitations:
 //  - The only supported compression schemes are uncompressed (all 4 different
 //    types of data layouts: band sequential, band interleaved, band interleaved
 //    by row, and band interleaved by pixel) and JPEG 2000 compression (via plugin).
@@ -64,6 +64,7 @@ class vil_nitf2_file_format : public vil_file_format
 //  - Images with LUTS will read in correctly, but you will need to apply the LUT
 //    yourself.  You can access the lut information for p-th band of the current image by calling
 //    current_image_header()->get_lut_info(p, out_n_luts, out_ne_lut, out_lut_data)
+//
 class vil_nitf2_image : public vil_image_resource
 {
  public:
@@ -296,4 +297,4 @@ T* byte_align_data( T* in_data, unsigned int num_samples, unsigned int in_bits_p
 
 template<> bool* byte_align_data<bool>( bool* in_data, unsigned int num_samples, unsigned int in_bits_per_sample, bool* out_data );
 
-#endif // VIL_NITF2_H
+#endif // VIL_NITF2_IMAGE_H

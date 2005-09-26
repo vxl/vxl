@@ -389,3 +389,15 @@ vcl_ostream& operator << (vcl_ostream& os, const vil_nitf2_tagged_record& record
 {
   return record.output(os);
 }
+
+// vil_nitf2_tagged_record_sequence
+
+vcl_ostream& operator << (vcl_ostream& os, const vil_nitf2_tagged_record_sequence& seq)
+{
+  os << seq.size() << " TRE's:" << vcl_endl;
+  vil_nitf2_tagged_record_sequence::const_iterator it;
+  for (it = seq.begin(); it != seq.end(); ++it) {
+    os << *it << vcl_endl;
+  }
+  return os;
+}
