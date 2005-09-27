@@ -142,7 +142,7 @@ inline vil_image_view<T> vil3d_slice(const vil3d_image_view<T> &im, unsigned sli
     case VIL3D_SLICE_FORMAT_JK: return vil3d_slice_jk(im,slice_index);
     case VIL3D_SLICE_FORMAT_KJ: return vil3d_slice_kj(im,slice_index);
   }
-  return 0.0; // to avoid compiler warning
+  return vil_image_view<T>(); // to avoid compiler warning
 }
 
 //: Return number of possible slices of image given the selected format
