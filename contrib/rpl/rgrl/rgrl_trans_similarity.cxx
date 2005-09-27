@@ -194,9 +194,12 @@ rgrl_transformation_sptr
 rgrl_trans_similarity::
 scale_by( double scale ) const
 {
-  return new rgrl_trans_similarity( A_, trans_ * scale,
-                                    covar_, from_centre_ * scale,
-                                    vnl_vector<double>(from_centre_.size(), 0.0) );
+  rgrl_transformation_sptr xform
+    = new rgrl_trans_similarity( A_, trans_ * scale,
+                                covar_, from_centre_ * scale,
+                                vnl_vector<double>(from_centre_.size(), 0.0) );
+  xform->set_scaling_factors( this->scaling_factors() );
+  return xform;
 }
 
 void

@@ -249,8 +249,11 @@ rgrl_transformation_sptr
 rgrl_trans_rigid::
 scale_by( double scale ) const
 {
-  return new rgrl_trans_rigid( R_, trans_ * scale,
-                                    covar_);
+  rgrl_transformation_sptr xform 
+    = new rgrl_trans_rigid( R_, trans_ * scale,
+                            covar_ );
+  xform->set_scaling_factors( this->scaling_factors() );
+  return xform;
 }
 
 void

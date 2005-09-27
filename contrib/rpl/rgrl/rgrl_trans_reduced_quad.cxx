@@ -268,6 +268,7 @@ scale_by( double scale ) const
                                  covar_ );
 
   quad->set_from_center( from_centre_ * scale );
+  quad->set_scaling_factors( this->scaling_factors() );
 
   return quad;
 }

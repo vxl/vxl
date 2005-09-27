@@ -318,10 +318,39 @@ map_dir( vnl_vector<double> const& from_loc,
 
 rgrl_transformation_sptr
 rgrl_trans_rad_dis_homo2d::
-scale_by( double /*scale*/ ) const
+scale_by( double scale ) const
 {
-  assert(!"rgrl_trans_rad_dis_homo2d::scale_by() is not implemented");
-  return 0;
+  vnl_matrix_fixed<double,3,3> new_H( H_ );
+  
+  // scale
+  new_H(0,2) *= scale;
+  new_H(1,2) *= scale;
+  
+  // move the scale on the fixed coordinate,
+  // and divide the 3rd row by this scale
+  new_H(2,0) /= scale; 
+  new_H(2,1) /= scale; 
+  
+  // normalize
+  new_H /= new_H.fro_norm();
+
+  // centers
+  vnl_vector_fixed<double,2> from = from_centre_ * scale;
+  vnl_vector_fixed<double,2> to = to_centre_ * scale;
+
+  // radial terms
+  const double sq_scale = scale*scale;
+  double k1_from = k1_from_ / sq_scale;
+  double k1_to = k1_to_ / sq_scale;
+
+  rgrl_transformation_sptr xform 
+    =  new rgrl_trans_rad_dis_homo2d( new_H.as_ref(), 
+                                      k1_from, k1_to,
+                                      vnl_matrix<double>(), 
+                                      from.as_ref(), to.as_ref() );
+  xform->set_scaling_factors( this->scaling_factors() );
+  return xform;
+  
 }
 
 rgrl_transformation_sptr
