@@ -102,6 +102,8 @@ class vil_nitf2_image : public vil_image_resource
   virtual vil_image_view_base_sptr get_copy_view_decimated_j2k( unsigned i0, unsigned ni,
                                                                 unsigned j0, unsigned nj,
                                                                 double i_factor, double j_factor ) const;
+  virtual vil_image_view_base_sptr get_copy_view_decimated_j2k( double i_factor, double j_factor ) const
+  { return get_copy_view_decimated_j2k( 0, ni(), 0, nj(), i_factor, j_factor ); }
 
   virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
                                                  unsigned j0, unsigned nj) const;
