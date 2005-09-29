@@ -83,7 +83,7 @@ static void test_reflect_int()
   TEST("vil3d_reflect_k", refl_k_ok, true);
 }
 
-
+#if 0
 //========================================================================
 // Compare timing of vil3d_reflect() with actual transposition of image data
 //========================================================================
@@ -142,7 +142,7 @@ static void time_reflect()
   vcl_cout << vcl_endl;    
 
 }
-
+#endif
 
 //========================================================================
 // Main testing function
