@@ -8,6 +8,8 @@
 #include <vcl_map.h>
 #include <vcl_string.h>
 
+#include "vil_nitf2_field_functor.h"
+
 class vil_nitf2_field_formatter;
 class vil_nitf2_field_definition;
 class vil_nitf2_field_definitions;
@@ -50,6 +52,12 @@ public:
   vil_nitf2_tagged_record_definition& repeat(
     vil_nitf2_field_functor<int>* repeat_functor,
     vil_nitf2_field_definitions& field_definitions);
+
+  // Same as above where the repeat count is simply the value of a tag.
+  vil_nitf2_tagged_record_definition& repeat(vcl_string intTag,
+                                             vil_nitf2_field_definitions& field_definitions)
+  { return repeat(new vil_nitf2_field_value<int>(intTag), field_definitions); }
+
 
   // Declares that definition is finished, preventing further invocations
   // of field().
