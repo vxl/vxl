@@ -11,17 +11,17 @@
 vil_nitf2_tagged_record_definition::tagged_record_definition_map 
 vil_nitf2_tagged_record_definition::all_definitions;
 
-vil_nitf2_tagged_record_definition::vil_nitf2_tagged_record_definition(vcl_string name) 
+vil_nitf2_tagged_record_definition::vil_nitf2_tagged_record_definition(vcl_string name, vil_nitf2_field_definitions* defs ) 
   : m_name(name), 
-    m_field_definitions(new vil_nitf2_field_definitions),
+    m_field_definitions(defs ? defs : new vil_nitf2_field_definitions()),
     m_definition_completed(false)
 {
 }
 
 vil_nitf2_tagged_record_definition&
-vil_nitf2_tagged_record_definition::define(vcl_string name)
+vil_nitf2_tagged_record_definition::define(vcl_string name, vil_nitf2_field_definitions* defs )
 {
-  vil_nitf2_tagged_record_definition* definition = new vil_nitf2_tagged_record_definition(name);
+  vil_nitf2_tagged_record_definition* definition = new vil_nitf2_tagged_record_definition(name, defs);
   if (all_definitions.find(name) != all_definitions.end()) {
     throw("vil_nitf2_tagged_record_definition already defined.");
   }

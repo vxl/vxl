@@ -55,20 +55,40 @@ class vil_nitf2_field_functor
 // the field was found. The functor is instantiated with the field's tag.
 // The field sequence is passed to the function.
 //
+// You can override any value by specifying an overrideMap.  For example,
+// if 0 was a special value that actually meant 1 but all other values 
+// (2, 3, 4...) actually meant when they were you could get that effect like this:
+// <code>
+// vcl_map< int, int > overrides;
+// overrides.insert( vcl_make_pair( 0, 1 ) );
+// new vil_nitf2_field_value( "FIELD_NAME", overrides );
+// </code>
 template<typename T>
 class vil_nitf2_field_value : public vil_nitf2_field_functor<T>
 {
  public:
   vil_nitf2_field_value(vcl_string tag) : tag(tag) {}
+  vil_nitf2_field_value(vcl_string tag, vcl_map< T, T > overrideMap ) 
+    : tag(tag), overrides( overrideMap ) {}
 
   bool operator() (vil_nitf2_field_sequence* record,
                    const vil_nitf2_index_vector& indexes, T& value)
   {
-    return record->get_value(tag, indexes, value, true);
+    bool success = record->get_value(tag, indexes, value, true);
+    if( success ) {
+      //check to see if this value is overridden or not
+      vcl_map< T, T >::iterator it = overrides.find( value );
+      if( it != overrides.end() ){
+        //found override, use it
+        value = (*it).second;
+      }
+    }
+    return success;
   }
 
  private:
   vcl_string tag;
+  vcl_map< T, T > overrides;
 };
 
 //:

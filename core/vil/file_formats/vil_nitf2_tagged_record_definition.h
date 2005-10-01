@@ -31,7 +31,8 @@ class vil_nitf2_tagged_record_definition
 {
   friend class vil_nitf2_tagged_record;
 public:
-  static vil_nitf2_tagged_record_definition& define(vcl_string name);
+  // optional field definitions parameter -- I will own it if you pass it to me
+  static vil_nitf2_tagged_record_definition& define(vcl_string name, vil_nitf2_field_definitions* defs = 0);
 
   // Define a field
   vil_nitf2_tagged_record_definition& field(
@@ -91,7 +92,7 @@ private:
 
   bool m_definition_completed;
 
-  vil_nitf2_tagged_record_definition(vcl_string name); 
+  vil_nitf2_tagged_record_definition(vcl_string name, vil_nitf2_field_definitions* defs = 0); 
 };
 
 #endif // VIL_NITF2_TAGGED_RECORD_DEFINITION_H
