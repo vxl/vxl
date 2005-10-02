@@ -838,3 +838,14 @@ bool vil_nitf2_image::get_property (char const *tag, void *property_value) const
   }
   return false;
  }
+
+vil_nitf2_field::field_tree* vil_nitf2_image::get_tree( ) const
+{
+  vil_nitf2_field::field_tree* t = new vil_nitf2_field::field_tree;
+  t->columns.push_back( "NITF File" );
+  t->children.push_back( get_header().get_tree() );
+  for( unsigned int i = 0 ; i < m_image_headers.size() ; i++ ){
+    t->children.push_back( m_image_headers[i]->get_tree(i+1) );
+  }
+  return t;
+}

@@ -79,6 +79,11 @@ public:
     */
   bool get_lut_info( unsigned int i, int& n_luts, int& ne_lut, 
                      vcl_vector< vcl_vector< unsigned char > >& lut_d ) const;
+
+  // I allocate the return value, but you own it after I return it to you
+  // so you need to delete it.  
+  virtual vil_nitf2_field::field_tree* get_tree( int i = 0 ) const;
+
 protected:
 
   vil_nitf2_field_sequence m_field_sequence;

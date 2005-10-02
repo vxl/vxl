@@ -50,9 +50,11 @@ public:
                                        int variable_width = -1,
                                        bool* error = 0);
 
+  virtual field_tree* get_tree() const;
+
   // Write to NITF stream. Arg variable_width, if non-negative, overrides
   // formatter's field_width.
-  bool write(vil_nitf2_ostream& output, int variable_width = -1);
+  bool write(vil_nitf2_ostream& output, int variable_width = -1) const;
 };
 
 #endif // VIL_NITF2_SCALAR_FIELD_H

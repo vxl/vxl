@@ -6,6 +6,7 @@
 #include "vil_nitf2.h"
 #include "vil_nitf2_field_definition.h"
 #include "vil_nitf2_field_formatter.h"
+#include <vil/vil_stream_core.h>
 
 vil_nitf2_scalar_field* 
 vil_nitf2_scalar_field::read(vil_nitf2_istream& input, 
@@ -45,7 +46,7 @@ vil_nitf2_scalar_field::read(vil_nitf2_istream& input,
   return result;
 }
 
-bool vil_nitf2_scalar_field::write(vil_nitf2_ostream& output, int variable_width)
+bool vil_nitf2_scalar_field::write(vil_nitf2_ostream& output, int variable_width) const
 {
   if (!m_definition || !m_definition->formatter) {
     vcl_cerr << "vil_nitf2_scalar_field::write(): Incomplete field definition!" << vcl_endl;
@@ -58,4 +59,22 @@ bool vil_nitf2_scalar_field::write(vil_nitf2_ostream& output, int variable_width
   formatter->write_field(output, this);
   VIL_NITF2_LOG(log_debug) << vcl_endl;
   return output.ok();
+}
+
+vil_nitf2_field::field_tree* vil_nitf2_scalar_field::get_tree() const
+{
+  //put the normal stuff in there
+  field_tree* tr = vil_nitf2_field::get_tree();
+  //now grab my value and put that in there
+  vil_stream_core* str = new vil_stream_core;
+  write( *str );
+  vil_streampos num_to_read = str->tell();
+  str->seek( 0 );
+  char* buffer;
+  buffer = (char*)malloc( (size_t) num_to_read+1 );
+  str->read( (void*)buffer, num_to_read );
+  buffer[(size_t) num_to_read] = 0;
+  tr->columns.push_back( vcl_string( buffer ) );
+  free( buffer );
+  return tr;
 }

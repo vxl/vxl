@@ -6,6 +6,9 @@
 #include "vil_nitf2_field_definition.h"
 #include "vil_nitf2_index_vector.h"
 
+#include <vcl_sstream.h>
+#include <vil/vil_stream_core.h>
+
 int vil_nitf2_array_field::num_dimensions() const
 {
   return m_num_dimensions;
@@ -60,4 +63,62 @@ check_index(const vil_nitf2_index_vector& indexes) const
     vcl_cerr << "Tag " << tag() << indexes << ": index out of bounds!" << vcl_endl;
     return false;
   }
+}
+
+vcl_string int_to_string( int i )
+{
+  vcl_stringstream s;
+  s << i;
+  return s.str();
+}
+
+vcl_string index_string( const vil_nitf2_index_vector& indices )
+{
+  vcl_string ret_val = "";
+  for( unsigned int i = 0 ; i < indices.size() ; i++ ){
+    ret_val += "[" + int_to_string( indices[i] ) + "]";
+  }
+  return ret_val;
+}
+
+vcl_string vil_nitf2_array_field::get_value_string(const vil_nitf2_index_vector& in_indices) const
+{
+  vil_stream_core* str = new vil_stream_core;
+  write_vector_element( *str, in_indices, -1 );
+  vil_streampos num_to_read = str->tell();
+  str->seek( 0 );
+  char* buffer;
+  buffer = (char*)malloc( (size_t) num_to_read+1 );
+  str->read( (void*)buffer, num_to_read );
+  buffer[(size_t) num_to_read] = 0;
+  return vcl_string( buffer );
+}
+
+void vil_nitf2_array_field::do_dimension( const vil_nitf2_index_vector& in_indices, 
+                                          vil_nitf2_field::field_tree* inTree ) const
+{
+  int dim = next_dimension( in_indices );
+  for( int i = 0 ; i < dim ; i++ ) {
+    //this is the index list we're dealing with in this loop
+    vil_nitf2_index_vector curr_indices = in_indices;
+    curr_indices.push_back( i );
+    //create our tree node and add it to inTree's child list
+    vil_nitf2_field::field_tree* tr = new vil_nitf2_field::field_tree;
+    vcl_string tag_str = tag();
+    vcl_string index_str = index_string( curr_indices );
+    bool show_pretty = index_str == "";
+    tr->columns.push_back( tag_str + index_str );
+    tr->columns.push_back( show_pretty ? pretty_name() : "" );
+    tr->columns.push_back( get_value_string( curr_indices ) );
+    inTree->children.push_back( tr );
+    //recursive call
+    do_dimension( curr_indices, tr );
+  }
+}
+
+vil_nitf2_field::field_tree* vil_nitf2_array_field::get_tree() const
+{
+  field_tree* tr = vil_nitf2_field::get_tree();
+  do_dimension( vil_nitf2_index_vector(), tr );
+  return tr;
 }

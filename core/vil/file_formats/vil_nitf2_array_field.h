@@ -62,7 +62,10 @@ public:
   // Returns success.  Arg variable_width, if non-negative, overrides
   // formatter's field_width.
   virtual bool write_vector_element(vil_nitf2_ostream& output, 
-    const vil_nitf2_index_vector& indexes, int variable_width) = 0;
+    const vil_nitf2_index_vector& indexes, int variable_width) const = 0;
+
+
+  virtual field_tree* get_tree() const;
 
   // Sets out_value to the value of the element selected by specified
   // index vector, which must satisfy check_index(). Returns true iff the 
@@ -85,6 +88,11 @@ public:
   virtual bool value(const vil_nitf2_index_vector&, vil_nitf2_date_time& ) const { return false; }
 
 protected:
+  void do_dimension( const vil_nitf2_index_vector& index, 
+                     vil_nitf2_field::field_tree* tr ) const;
+  vcl_string get_value_string(const vil_nitf2_index_vector& in_indices) const;
+
+
   // Dimensionality of vector field
   int m_num_dimensions;
 

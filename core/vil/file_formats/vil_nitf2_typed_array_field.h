@@ -45,7 +45,7 @@ class vil_nitf2_typed_array_field : public vil_nitf2_array_field
   // Returns success. Arg variable_width, if non-negative, overrides
   // formatter's field_width.
   bool write_vector_element(vil_nitf2_ostream& output,
-    const vil_nitf2_index_vector& indexes, int variable_width);
+    const vil_nitf2_index_vector& indexes, int variable_width) const;
 
   // Output in human-readable form. Implementation provides an example of
   // how to iterate over all elements.
@@ -131,7 +131,7 @@ read_vector_element(vil_nitf2_istream& input, const vil_nitf2_index_vector& inde
 template<class T>
 bool vil_nitf2_typed_array_field<T>::
 write_vector_element(vil_nitf2_ostream& output, const vil_nitf2_index_vector& indexes,
-                     int variable_width)
+                     int variable_width) const
 {
   VIL_NITF2_LOG(log_debug) << "Writing tag " << tag() << indexes << ' ';
   if (!check_index(indexes)) {

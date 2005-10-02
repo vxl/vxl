@@ -11,6 +11,7 @@
 #include "vil_nitf2_typed_field_formatter.h"
 #include "vil_nitf2_index_vector.h"
 
+#include <vcl_sstream.h>
 #include <vcl_cassert.h>
 
 vil_nitf2_field_definitions* vil_nitf2_image_subheader::s_field_definitions_21 = 0;
@@ -415,4 +416,15 @@ bool vil_nitf2_image_subheader::get_lut_info(unsigned int i,
     }
   }
   return true;
+}
+
+vil_nitf2_field::field_tree* vil_nitf2_image_subheader::get_tree( int i ) const
+{
+  vil_nitf2_field::field_tree* t = new vil_nitf2_field::field_tree;
+  vcl_stringstream name_stream;
+  name_stream << "Image Subheader";
+  if( i > 0 ) name_stream << " #" << i;
+  t->columns.push_back( name_stream.str() );
+  m_field_sequence.get_tree( t );
+  return t;
 }

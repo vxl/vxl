@@ -17,7 +17,6 @@
 #include <vil/vil_stream_section.h>
 
 #include "vil_nitf2_tagged_record_definition.h"
-#include "vil_nitf2_field.h"
 #include "vil_nitf2_field_definition.h"
 #include "vil_nitf2_field_sequence.h"
 #include "vil_nitf2_index_vector.h"
@@ -38,7 +37,15 @@ vil_nitf2_string_formatter* vil_nitf2_tagged_record::s_tag_formatter = new
 
 vcl_string vil_nitf2_tagged_record::name() const
 {
-  return m_definition->m_name;
+  vcl_string cetag;
+  if( m_tag_field->value(cetag) ) return cetag;
+  else return "<Unknown>";
+}
+
+vcl_string vil_nitf2_tagged_record::pretty_name() const
+{
+  if( m_definition ) return m_definition->m_pretty_name;
+  else return "<unknown>";
 }
 
 vil_nitf2_tagged_record* vil_nitf2_tagged_record::create(vil_nitf2_istream& input)
@@ -155,7 +162,7 @@ bool vil_nitf2_tagged_record::test()
   bool error = false;
   // Example Tagged Record Extension definition
   vil_nitf2_tagged_record_definition MTIRPB =
-    vil_nitf2_tagged_record_definition::define("MTIRPB")
+    vil_nitf2_tagged_record_definition::define("MTIRPB", "Test Definition" )
     .field("MTI_DP",           "Destination Point",     NITF_INT(2))
     .field("MTI_PACKET_ID",    "MTI Packed ID Number",  NITF_INT(3))
     .field("DATIME",           "Scan Date & Time",      NITF_DAT(14), true)
@@ -383,6 +390,39 @@ vil_nitf2_field_definition* vil_nitf2_field_sequence::find_field_definition(vcl_
   }
   // tag definition not found
   return 0;
+}
+
+vil_nitf2_field::field_tree* vil_nitf2_tagged_record::get_tree() const
+{
+  //create our tree
+  //we add the field definitions if the TRE was recognized, or we note that we 
+  //skipped it otherwise
+  bool skipped;
+  vil_nitf2_field::field_tree* tr;
+  if( m_field_sequence ) {
+    tr = m_field_sequence->get_tree();
+    skipped = false;
+  } else {
+    tr = new vil_nitf2_field::field_tree;
+    vil_nitf2_field::field_tree* skipped_node = new vil_nitf2_field::field_tree;
+    skipped_node->columns.push_back( "<Skipped>" );
+    skipped_node->columns.push_back( "TRE Name is not recognized" );
+    tr->children.push_back( skipped_node );
+    skipped = true;
+  }
+
+  //add the columns describing the name of the TRE
+  tr->columns.push_back( name() );
+  tr->columns.push_back( pretty_name() );
+  //add the CEL (length) field to the front 
+  vil_nitf2_field::field_tree* first_child = new vil_nitf2_field::field_tree;
+  first_child->columns.push_back( "CEL" );
+  first_child->columns.push_back( "Length fo CEDATA Field" );
+  vcl_stringstream len_stream;
+  len_stream << length();
+  first_child->columns.push_back( len_stream.str() );
+  tr->children.insert( tr->children.begin(), first_child );
+  return tr;
 }
 
 vcl_ostream& operator << (vcl_ostream& os, const vil_nitf2_tagged_record& record)

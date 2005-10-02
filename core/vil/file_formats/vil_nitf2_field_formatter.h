@@ -66,7 +66,7 @@ public:
   virtual vil_nitf2_array_field* create_array_field(
     int num_dimensions, vil_nitf2_field_definition*) = 0;
 
-  virtual bool write_field(vil_nitf2_ostream& output, vil_nitf2_scalar_field* field) = 0;
+  virtual bool write_field(vil_nitf2_ostream& output, const vil_nitf2_scalar_field* field) = 0;
 
   // Writes a blank instance of field value to output stream. Returns 
   // true iff successfully written. No need to overload this method.

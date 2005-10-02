@@ -11,17 +11,20 @@
 vil_nitf2_tagged_record_definition::tagged_record_definition_map 
 vil_nitf2_tagged_record_definition::all_definitions;
 
-vil_nitf2_tagged_record_definition::vil_nitf2_tagged_record_definition(vcl_string name, vil_nitf2_field_definitions* defs ) 
+vil_nitf2_tagged_record_definition::vil_nitf2_tagged_record_definition(vcl_string name, 
+                                                                       vcl_string pretty_name, 
+                                                                       vil_nitf2_field_definitions* defs ) 
   : m_name(name), 
+    m_pretty_name(pretty_name),
     m_field_definitions(defs ? defs : new vil_nitf2_field_definitions()),
     m_definition_completed(false)
 {
 }
 
 vil_nitf2_tagged_record_definition&
-vil_nitf2_tagged_record_definition::define(vcl_string name, vil_nitf2_field_definitions* defs )
+vil_nitf2_tagged_record_definition::define(vcl_string name, vcl_string pretty_name, vil_nitf2_field_definitions* defs )
 {
-  vil_nitf2_tagged_record_definition* definition = new vil_nitf2_tagged_record_definition(name, defs);
+  vil_nitf2_tagged_record_definition* definition = new vil_nitf2_tagged_record_definition(name, pretty_name, defs);
   if (all_definitions.find(name) != all_definitions.end()) {
     throw("vil_nitf2_tagged_record_definition already defined.");
   }
@@ -80,7 +83,7 @@ vil_nitf2_tagged_record_definition* vil_nitf2_tagged_record_definition::find(vcl
 
 void vil_nitf2_tagged_record_definition::register_test_tre()
 {
-  define("PIAIMB")
+  define("PIAIMB", "Profile for Imagery Archives Image" )
     .field("CLOUDCVR",   "Cloud Cover",            NITF_INT(3),  true)
     .field("SRP",        "Standard Radiometric Product", NITF_CHAR(), true)
     .field("SENSMODE",   "Sensor Mode",            NITF_STR(12), true)

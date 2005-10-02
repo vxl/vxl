@@ -34,7 +34,7 @@ class vil_nitf2_typed_field_formatter : public vil_nitf2_field_formatter
   virtual vil_nitf2_scalar_field* read_field(vil_nitf2_istream& input, bool& out_blank);
 
   // Writes scalar field to the specified stream.
-  virtual bool write_field(vil_nitf2_ostream& output, vil_nitf2_scalar_field* field);
+  virtual bool write_field(vil_nitf2_ostream& output, const vil_nitf2_scalar_field* field);
 
   // Attempts to read one instance of field from vil_nitf2_istream into value.
   // Returns whether value is valid. Sets out_blank to indicate whether the
@@ -86,7 +86,7 @@ vil_nitf2_scalar_field* vil_nitf2_typed_field_formatter<T>::read_field(
 
 template<typename T>
 bool vil_nitf2_typed_field_formatter<T>::write_field(
-  vil_nitf2_ostream& output, vil_nitf2_scalar_field* field)
+  vil_nitf2_ostream& output, const vil_nitf2_scalar_field* field)
 {
   if (field) {
     T val;

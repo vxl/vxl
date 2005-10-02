@@ -69,7 +69,7 @@ class vil_nitf2_field_value : public vil_nitf2_field_functor<T>
 {
  public:
   vil_nitf2_field_value(vcl_string tag) : tag(tag) {}
-  vil_nitf2_field_value(vcl_string tag, vcl_map< T, T > overrideMap ) 
+  vil_nitf2_field_value(vcl_string tag, vcl_map<T, T> overrideMap ) 
     : tag(tag), overrides( overrideMap ) {}
 
   bool operator() (vil_nitf2_field_sequence* record,
@@ -78,7 +78,7 @@ class vil_nitf2_field_value : public vil_nitf2_field_functor<T>
     bool success = record->get_value(tag, indexes, value, true);
     if( success ) {
       //check to see if this value is overridden or not
-      vcl_map<T, T>::const_iterator it = overrides.find( value );
+      typename vcl_map<T, T>::const_iterator it = overrides.find( value );
       if( it != overrides.end() ){
         //found override, use it
         value = (*it).second;

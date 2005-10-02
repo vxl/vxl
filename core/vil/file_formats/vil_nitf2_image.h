@@ -142,6 +142,11 @@ class vil_nitf2_image : public vil_image_resource
                                                            unsigned i0, unsigned ni,
                                                            unsigned j0, unsigned nj,
                                                            double i_factor, double j_factor );
+  
+  // I allocate the return value, but you own it after I return it to you
+  // so you need to delete it.  
+  virtual vil_nitf2_field::field_tree* get_tree() const;
+
  protected:
   virtual vil_image_view_base_sptr get_copy_view_uncompressed(unsigned i0, unsigned ni,
                                                               unsigned j0, unsigned nj) const;

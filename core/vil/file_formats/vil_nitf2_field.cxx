@@ -35,6 +35,22 @@ vcl_string vil_nitf2_field::description() const
   return m_definition->description; 
 }
 
+vil_nitf2_field::field_tree* vil_nitf2_field::get_tree( ) const
+{
+  field_tree* tr = new field_tree;
+  tr->columns.push_back( tag() );
+  tr->columns.push_back( pretty_name() );
+  return tr;
+}
+
+vil_nitf2_field::field_tree::~field_tree()
+{
+  for( unsigned int i = 0 ; i < children.size() ; i++ ){
+    delete children[i];
+  }
+  children.clear();
+}
+
 vil_nitf2_scalar_field* vil_nitf2_field::scalar_field()
 {
   if (num_dimensions()==0) {

@@ -12,8 +12,8 @@
 
 #include "vil_nitf2.h" // vil_nitf2_istream, vil_nitf2_ostream
 #include "vil_nitf2_index_vector.h"
+#include "vil_nitf2_field.h"
 
-class vil_nitf2_field;
 class vil_nitf2_field_definition;
 class vil_nitf2_field_definitions;
 class vil_nitf2_location;
@@ -111,9 +111,18 @@ class vil_nitf2_field_sequence
   // Returns field definition if found
   vil_nitf2_field_definition* find_field_definition(vcl_string tag);
 
+  // I allocate the return value, but you own it after I return it to you
+  // so you need to delete it.  If you pass in 'tr', then I'll add my stuff to that.
+  // otherwise I'll add a new one and return it.  Either way, you own it.
+  virtual vil_nitf2_field::field_tree* get_tree( vil_nitf2_field::field_tree* tr = 0 ) const;
+
  private:
+  void insert_field( const vcl_string& str, vil_nitf2_field* field );
   typedef vcl_map<vcl_string, vil_nitf2_field*> field_map;
   field_map fields;
+  //this member just keeps track of the order in which fields are inserted into 
+  //our 'fields' field_map
+  vcl_vector<vil_nitf2_field*> fields_vector;
   const vil_nitf2_field_definitions* m_field_definitions;
 };
 

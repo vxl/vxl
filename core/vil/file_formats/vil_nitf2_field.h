@@ -57,6 +57,19 @@ public:
   // Return my element data type
   vil_nitf2::enum_field_type type() const; 
 
+  // Description of the field and pointers to the descriptions 
+  // of child nodes in the true
+  class field_tree {
+  public:
+    vcl_vector< vcl_string > columns;
+    vcl_vector< field_tree* > children;
+    ~field_tree();
+  };
+
+  // I allocate the return value, but you own it after I return it to you
+  // so you need to delete it
+  virtual field_tree* get_tree() const;
+
 protected:
   // Default constructor
   vil_nitf2_field(vil_nitf2_field_definition* definition) : m_definition(definition) {}

@@ -47,6 +47,10 @@ public:
 
   vil_nitf2_classification::file_version file_version() const;
 
+  // I allocate the return value, but you own it after I return it to you
+  // so you need to delete it.  
+  virtual vil_nitf2_field::field_tree* get_tree() const;
+
 protected:
   vil_nitf2_field_sequence m_field_sequence1;
   vil_nitf2_field_sequence* m_field_sequence2;

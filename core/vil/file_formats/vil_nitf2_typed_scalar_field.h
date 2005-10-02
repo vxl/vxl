@@ -40,6 +40,7 @@ class vil_nitf2_typed_scalar_field : public vil_nitf2_scalar_field
   // Output to stream. Overload as necessary.
   virtual vcl_ostream& output(vcl_ostream& os) const { return os << m_value; };
 
+  virtual field_tree* get_tree() const { return vil_nitf2_scalar_field::get_tree(); }
  private:
   T m_value;
 };
@@ -60,6 +61,19 @@ inline vcl_ostream& vil_nitf2_typed_scalar_field<vil_nitf2_location*>::output(vc
     os << *m_value;
   } 
   return os;
+}
+
+template<>
+inline vil_nitf2_field::field_tree* 
+vil_nitf2_typed_scalar_field<vil_nitf2_tagged_record_sequence>::get_tree() const
+{
+  field_tree* tr = new field_tree;
+  tr->columns.push_back( "TREs" );
+  vil_nitf2_tagged_record_sequence::const_iterator it;
+  for( it = m_value.begin() ; it != m_value.end() ; it++ ) {
+    tr->children.push_back( (*it)->get_tree() );
+  }
+  return tr;
 }
 
 #endif // VIL_NITF2_TYPED_SCALAR_FIELD_H

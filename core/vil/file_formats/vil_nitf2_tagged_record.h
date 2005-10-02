@@ -18,6 +18,7 @@
 #include <vcl_cassert.h>
 
 #include "vil_nitf2_field_functor.h"
+#include "vil_nitf2_field.h"
 
 // Forward declarations
 class vil_nitf2_field_formatter;
@@ -164,6 +165,7 @@ class vil_nitf2_tagged_record
  public:
   // Return record identifier
   vcl_string name() const;
+  vcl_string pretty_name() const;
 
   // Return record length in bytes
   int length() const { return m_length; }
@@ -210,6 +212,8 @@ class vil_nitf2_tagged_record
   //bool get_value(vcl_string tag, int i, vil_nitf2_long& out_value) const;
   bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_long& out_value) const;
 #endif //VXL_HAS_INT_64
+
+  virtual vil_nitf2_field::field_tree* get_tree() const;
 
   // Sets the value of the integer-valued field specified by tag to value.
   // Not yet implemented.
