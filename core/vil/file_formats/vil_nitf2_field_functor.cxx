@@ -7,8 +7,6 @@
 #include "vil_nitf2_field.h"
 #include "vil_nitf2_index_vector.h"
 
-#include <vcl_string.h>
-
 bool vil_nitf2_field_specified::
 operator() (vil_nitf2_field_sequence* record, 
             const vil_nitf2_index_vector& indexes, bool& result) 
