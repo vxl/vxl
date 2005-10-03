@@ -106,9 +106,11 @@ void vil_nitf2_array_field::do_dimension( const vil_nitf2_index_vector& in_indic
     vil_nitf2_field::field_tree* tr = new vil_nitf2_field::field_tree;
     vcl_string tag_str = tag();
     vcl_string index_str = index_string( curr_indices );
-    bool show_pretty = index_str == "";
+    vcl_string p_name;
+    if( index_str == "" ) p_name = pretty_name();
+    else p_name = "";
     tr->columns.push_back( tag_str + index_str );
-    tr->columns.push_back( show_pretty ? pretty_name() : vcl_string("") );
+    tr->columns.push_back( p_name );
     tr->columns.push_back( get_value_string( curr_indices ) );
     inTree->children.push_back( tr );
     //recursive call
