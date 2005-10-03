@@ -108,7 +108,7 @@ void vil_nitf2_array_field::do_dimension( const vil_nitf2_index_vector& in_indic
     vcl_string index_str = index_string( curr_indices );
     bool show_pretty = index_str == "";
     tr->columns.push_back( tag_str + index_str );
-    tr->columns.push_back( show_pretty ? pretty_name() : "" );
+    tr->columns.push_back( show_pretty ? pretty_name() : vcl_string("") );
     tr->columns.push_back( get_value_string( curr_indices ) );
     inTree->children.push_back( tr );
     //recursive call
