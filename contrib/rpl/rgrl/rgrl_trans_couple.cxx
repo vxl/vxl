@@ -8,12 +8,11 @@
 // \author Gehua Yang
 // \date Feb 2005
 
-//#include <vcl_iostream.h>
-//#include <vcl_cassert.h>
-//
-//#include <vnl/vnl_cross.h>
-//#include <vnl/vnl_double_3.h>
-//#include <vnl/vnl_double_2.h>
+#include <vcl_iostream.h>
+#include <vcl_cassert.h>
+#include <vcl_cstdlib.h>
+
+#include <rgrl/rgrl_trans_reader.h>
 
 rgrl_trans_couple::
   rgrl_trans_couple( rgrl_transformation_sptr const& forward, rgrl_transformation_sptr const& backward )
@@ -104,17 +103,39 @@ scale_by( double scale ) const
 //: output transformation
 void
 rgrl_trans_couple::
-write( vcl_ostream& /*os*/ ) const
+write( vcl_ostream& os ) const
 {
-  assert( ! "rgrl_trans_couple::write() is not implemented." );
+  os << "COUPLE_TRANS" << vcl_endl;
+  
+  assert( forward_xform_ && backward_xform_ );
+
+  forward_xform_ -> write( os );
+  backward_xform_ -> write( os );
 }
 
 //: input transformation
 void
 rgrl_trans_couple::
-read( vcl_istream& /*is*/ )
+read( vcl_istream& is )
 {
-  assert( ! "rgrl_trans_couple::read() is not implemented." );
+
+  // skip empty lines
+  rgrl_util_skip_empty_lines( is );
+
+  vcl_string str;
+  vcl_getline( is, str );
+
+  if ( str.find("COUPLE_TRANS") != 0 ) {
+    WarningMacro( "The tag is not COUPLE_TRANS. reading is aborted.\n" );
+    vcl_exit(10);
+  }
+  
+  // Read forward and backward
+  forward_xform_ = rgrl_trans_reader( is );
+  backward_xform_ = rgrl_trans_reader( is );
+  
+  // parent
+  rgrl_transformation::read( is );
 }
 
 

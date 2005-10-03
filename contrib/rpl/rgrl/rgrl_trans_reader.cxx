@@ -13,6 +13,7 @@
 #include <rgrl/rgrl_trans_homography2d.h>
 #include <rgrl/rgrl_trans_rad_dis_homo2d.h>
 #include <rgrl/rgrl_trans_rigid.h>
+#include <rgrl/rgrl_trans_couple.h>
 #include <rgrl/rgrl_trans_spline.h>
 #include <rgrl/rgrl_util.h>
 #include <vcl_iostream.h>
@@ -65,6 +66,7 @@ rgrl_trans_reader( vcl_istream& is )
   READ_THIS_TRANSFORMATION("BSPLINE", rgrl_trans_spline)
   READ_THIS_TRANSFORMATION("HOMOGRAPHY2D_WITH_RADIAL_DISTORTION", rgrl_trans_rad_dis_homo2d)
   READ_THIS_TRANSFORMATION("HOMOGRAPHY2D", rgrl_trans_homography2d)
+  READ_THIS_TRANSFORMATION("COUPLE_TRANS", rgrl_trans_couple)
 
   // default, should never reach here
   vcl_cout<< "WARNING: " << RGRL_HERE << " ( line "
