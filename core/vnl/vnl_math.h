@@ -37,7 +37,7 @@
 
 #include <vcl_cmath.h>
 #include "dll.h"
-#include <vxl_config.h> // for VXL_C_MATH_HAS_LRINT 
+#include <vxl_config.h> // for VXL_C_MATH_HAS_LRINT
 
 //: Type-accessible infinities for use in templates.
 template <class T> T vnl_huge_val(T);
@@ -141,44 +141,39 @@ template <class T> bool vnl_math_isfinite(T);
 #endif
 
 // rnd (rounding; 0.5 rounds up)
-#if VXL_C_MATH_HAS_LRINT 
+#if VXL_C_MATH_HAS_LRINT
 // Use C99 functions, which GCC implements as an intrinsic
 // Or in simpler terms - is at least 3 times faster.
-inline int vnl_math_rnd(float  x) { return lrintf(x); } 
+inline int vnl_math_rnd(float  x) { return lrintf(x); }
 inline int vnl_math_rnd(double x) { return lrint(x); }
 #elif defined (VCL_VC)
-// Use assembly inline function from 
+// Use assembly inline function from
 // http://mega-nerd.com/FPcast/
 //
-	#include	<math.h>
+ #include <math.h>
 
-	/*	Win32 doesn't seem to have these functions. 
-	**	Therefore implement inline versions of these functions here.
-	*/
-	
-	__inline int 
-	vnl_math_rnd (double flt)
-	{	int intgr;
+ // Win32 doesn't seem to have these functions.
+ // Therefore implement inline versions of these functions here.
 
-		_asm
-		{	fld flt
-			fistp intgr
-			} ;
-			
-		return intgr ;
-	} 
-	
-	__inline int 
-	vnl_math_rnd (float flt)
-	{	int intgr;
+ __inline int
+ vnl_math_rnd (double flt)
+ { int intgr;
+  _asm
+  { fld flt
+   fistp intgr
+   } ;
+  return intgr ;
+ }
 
-		_asm
-		{	fld flt
-			fistp intgr
-			} ;
-			
-		return intgr ;
-	}
+ __inline int
+ vnl_math_rnd (float flt)
+ { int intgr;
+  _asm
+  { fld flt
+   fistp intgr
+   } ;
+  return intgr;
+ }
 #else
 inline int vnl_math_rnd(float  x) { return (x>=0.0)?(int)(x + 0.5):(int)(x - 0.5); }
 inline int vnl_math_rnd(double x) { return (x>=0.0)?(int)(x + 0.5):(int)(x - 0.5); }
