@@ -80,8 +80,9 @@ verify( rgrl_view                        const& /*view*/,
         rgrl_set_of<rgrl_match_set_sptr> const& /*current_match_sets*/,
         rgrl_set_of<rgrl_scale_sptr>     const& /*current_scales*/ )const
 {
-  assert( !"should never call rgrl_convergence_tester::verify()" );
-  return 0;
+  vcl_cerr << "WARNING: should never call rgrl_convergence_tester::verify()" << vcl_endl;
+  return new rgrl_converge_status( rgrl_converge_status::converged, rgrl_converge_status::good_and_terminate,
+                                   -1.0, 0, -1.0 );
 }
 
 rgrl_converge_status_sptr
