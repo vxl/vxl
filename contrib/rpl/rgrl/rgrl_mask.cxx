@@ -35,7 +35,7 @@ inside( vnl_vector<double> const& pt ) const
   bool in_range = ( x0_[0] <= x ) && ( x <= x1_[0] ) && 
                   ( x0_[1] <= y ) && ( y <= x1_[1] );
   
-  return in_range && mask_image_( int(x), int(y) )>0;
+  return in_range && mask_image_( vnl_math_rnd(x), vnl_math_rnd(y) )>0;
 }
 
 void
