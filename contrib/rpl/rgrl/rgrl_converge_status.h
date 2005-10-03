@@ -21,9 +21,21 @@ class rgrl_converge_status
 {
 public:
 
+  enum converge_type { conv_on_going, converged, stagnated };
+  
+  enum status_type { status_on_going, good_enough, failed, good_and_terminate };
+
   //: default ctor
   rgrl_converge_status( );
   
+  //: default ctor
+  rgrl_converge_status( converge_type conv, 
+                        status_type stat, 
+                        double error, 
+                        unsigned osc_count,
+                        double error_diff );
+                        
+
   //:
   rgrl_converge_status( bool     has_converged,
                         bool     has_stagnated,
@@ -35,9 +47,6 @@ public:
 
   virtual ~rgrl_converge_status();
 
-  enum converge_type { conv_on_going, converged, stagnated };
-  
-  enum status_type { status_on_going, good_enough, failed, good_and_terminate };
 
   //:  Return true if the estimation has converged to a viable estimate.
   //

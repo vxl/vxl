@@ -19,6 +19,20 @@ rgrl_converge_status( )
   
 }  
 
+rgrl_converge_status::
+rgrl_converge_status( converge_type conv, 
+                      status_type stat, 
+                      double error, 
+                      unsigned osc_count,
+                      double error_diff )
+  : conv_( conv ),
+    status_( stat ),
+    error_( error ),
+    oscillation_count_( osc_count ),
+    error_diff_( error_diff )
+{
+  
+}  
  
 rgrl_converge_status::
 rgrl_converge_status( bool     in_has_converged,
