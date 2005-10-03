@@ -371,4 +371,3 @@ write(vil_nitf2_ostream& /*output*/, vil_nitf2_tagged_record_sequence& /*value*/
 { 
   return false; 
 }
-

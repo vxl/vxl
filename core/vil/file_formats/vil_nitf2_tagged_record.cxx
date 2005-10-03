@@ -397,18 +397,15 @@ vil_nitf2_field::field_tree* vil_nitf2_tagged_record::get_tree() const
   //create our tree
   //we add the field definitions if the TRE was recognized, or we note that we 
   //skipped it otherwise
-  bool skipped;
   vil_nitf2_field::field_tree* tr;
   if( m_field_sequence ) {
     tr = m_field_sequence->get_tree();
-    skipped = false;
   } else {
     tr = new vil_nitf2_field::field_tree;
     vil_nitf2_field::field_tree* skipped_node = new vil_nitf2_field::field_tree;
     skipped_node->columns.push_back( "<Skipped>" );
     skipped_node->columns.push_back( "TRE Name is not recognized" );
     tr->children.push_back( skipped_node );
-    skipped = true;
   }
 
   //add the columns describing the name of the TRE
