@@ -1,11 +1,12 @@
 // vil_nitf2: Written by Harry Voorhees (hlv@) and Rob Radtke (rob@) of
-// Stellar Science Ltd. Co. (stellarscience.com) for 
+// Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
 #include "vil_nitf2_array_field.h"
 #include "vil_nitf2_field_definition.h"
 #include "vil_nitf2_index_vector.h"
 
+#include <vcl_cstddef.h> // for size_t
 #include <vcl_sstream.h>
 #include <vil/vil_stream_core.h>
 
@@ -30,12 +31,12 @@ set_next_dimension(const vil_nitf2_index_vector& index, int bound)
 {
   if ((int)index.size() >= m_num_dimensions) {
     vcl_cerr << "vil_nitf2_array_field::set_next_dimension"
-      << index << ": invalid partial index!" << vcl_endl;
+             << index << ": invalid partial index!\n";
     return;
   }
   if (next_dimension(index) > 0) {
-    vcl_cerr << "vil_nitf2_array_field::set_next_dimension" 
-      << index << ": bound previously set!" << vcl_endl;
+    vcl_cerr << "vil_nitf2_array_field::set_next_dimension"
+             << index << ": bound previously set!\n";
   }
   m_dimensions_map[index] = bound;
 }
@@ -44,7 +45,7 @@ bool vil_nitf2_array_field::
 check_index(const vil_nitf2_index_vector& indexes) const
 {
   if ((int)indexes.size() != m_num_dimensions) {
-    vcl_cerr << "index length does not match value dimensions!" << vcl_endl;
+    vcl_cerr << "index length does not match value dimensions!\n";
     return false;
   }
   // Remove the last element from index and look it up in the dimensions map.
@@ -60,7 +61,7 @@ check_index(const vil_nitf2_index_vector& indexes) const
   if (last_index < dimension_bound) {
     return true;
   } else {
-    vcl_cerr << "Tag " << tag() << indexes << ": index out of bounds!" << vcl_endl;
+    vcl_cerr << "Tag " << tag() << indexes << ": index out of bounds!\n";
     return false;
   }
 }
@@ -75,7 +76,7 @@ vcl_string int_to_string( int i )
 vcl_string index_string( const vil_nitf2_index_vector& indices )
 {
   vcl_string ret_val = "";
-  for( unsigned int i = 0 ; i < indices.size() ; i++ ){
+  for ( unsigned int i = 0 ; i < indices.size() ; i++ ){
     ret_val += "[" + int_to_string( indices[i] ) + "]";
   }
   return ret_val;
@@ -88,17 +89,18 @@ vcl_string vil_nitf2_array_field::get_value_string(const vil_nitf2_index_vector&
   vil_streampos num_to_read = str->tell();
   str->seek( 0 );
   char* buffer;
-  buffer = (char*)malloc( (size_t) num_to_read+1 );
+  buffer = (char*)malloc( (vcl_size_t) num_to_read+1 );
   str->read( (void*)buffer, num_to_read );
-  buffer[(size_t) num_to_read] = 0;
+  buffer[(vcl_size_t) num_to_read] = 0;
   return vcl_string( buffer );
 }
 
-void vil_nitf2_array_field::do_dimension( const vil_nitf2_index_vector& in_indices, 
+void vil_nitf2_array_field::do_dimension( const vil_nitf2_index_vector& in_indices,
                                           vil_nitf2_field::field_tree* inTree ) const
 {
   int dim = next_dimension( in_indices );
-  for( int i = 0 ; i < dim ; i++ ) {
+  for ( int i = 0 ; i < dim ; i++ )
+  {
     //this is the index list we're dealing with in this loop
     vil_nitf2_index_vector curr_indices = in_indices;
     curr_indices.push_back( i );
@@ -107,7 +109,7 @@ void vil_nitf2_array_field::do_dimension( const vil_nitf2_index_vector& in_indic
     vcl_string tag_str = tag();
     vcl_string index_str = index_string( curr_indices );
     vcl_string p_name;
-    if( index_str == "" ) p_name = pretty_name();
+    if ( index_str == "" ) p_name = pretty_name();
     else p_name = "";
     tr->columns.push_back( tag_str + index_str );
     tr->columns.push_back( p_name );
