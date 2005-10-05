@@ -45,7 +45,7 @@ struct vul_file_iterator_data
     return _findfirst(const_cast<char*>(dirname), data);
   }
 
-  vul_file_iterator_data(char const* glob, bool match_eol);
+  vul_file_iterator_data(char const* glob);
 
   void mkname() {
     // Remember full path
@@ -87,7 +87,7 @@ struct vul_file_iterator_data
   }
 };
 
-vul_file_iterator_data::vul_file_iterator_data(char const* glob, bool match_eol)
+vul_file_iterator_data::vul_file_iterator_data(char const* glob)
 {
   original_dirname_ = vul_file::dirname(glob);
   handle_ = find_first((original_dirname_ + "\\*").c_str(), &data_);
@@ -95,7 +95,8 @@ vul_file_iterator_data::vul_file_iterator_data(char const* glob, bool match_eol)
   vcl_string baseglob = vul_file::basename(glob);
   vcl_string::iterator i = baseglob.begin();
   bool prev_slash=false, in_sqr_brackets=false;
-  vcl_string re; //assemble the Regexp string
+  //assemble the Regexp string
+  vcl_string re = "^"; // match the start of the string
   while (i != baseglob.end())
   {
     if (*i=='\\' && !prev_slash)
@@ -125,9 +126,8 @@ vul_file_iterator_data::vul_file_iterator_data(char const* glob, bool match_eol)
 
     ++i;
   }
-
-  if(match_eol)
-    re += '$';
+  // match the end of the string
+  re += '$';
     
   reg_exp_.compile(re.c_str());
 
@@ -159,7 +159,7 @@ struct vul_file_iterator_data
   char const* name_;
   vul_reg_exp reg_exp_;
 
-  vul_file_iterator_data(char const* glob, bool match_eol);
+  vul_file_iterator_data(char const* glob);
 
   void mkname() {
     // Remember full path
@@ -200,15 +200,15 @@ struct vul_file_iterator_data
   }
 };
 
-vul_file_iterator_data::vul_file_iterator_data(char const* glob, 
-                                               bool match_eol)
+vul_file_iterator_data::vul_file_iterator_data(char const* glob)
 {
   original_dirname_ = vul_file::dirname(glob) + "/";
 
   vcl_string baseglob = vul_file::basename(glob);
   vcl_string::iterator i = baseglob.begin();
   bool prev_slash=false, in_sqr_brackets=false;
-  vcl_string re; //assemble the Regexp string
+  //assemble the Regexp string
+  vcl_string re = "^"; // match the start of the string
   while (i != baseglob.end())
   {
     if (*i=='\\' && !prev_slash)
@@ -238,9 +238,8 @@ vul_file_iterator_data::vul_file_iterator_data(char const* glob,
 
     ++i;
   }
-  
-  if(match_eol)
-    re += '$';
+  // match the end of the string
+  re += '$';
 
   reg_exp_.compile(re.c_str());
 
@@ -256,25 +255,13 @@ vul_file_iterator_data::vul_file_iterator_data(char const* glob,
 vul_file_iterator::vul_file_iterator(char const* glob)
 {
   p = 0;
-  reset(glob, false);
+  reset(glob);
 }
 
 vul_file_iterator::vul_file_iterator(vcl_string const& glob)
 {
   p = 0;
-  reset(glob.c_str(), false);
-}
-
-vul_file_iterator::vul_file_iterator(char const* glob, bool match_eol)
-{
-  p = 0;
-  reset(glob, match_eol);
-}
-
-vul_file_iterator::vul_file_iterator(vcl_string const& glob, bool match_eol)
-{
-  p = 0;
-  reset(glob.c_str(), match_eol);
+  reset(glob.c_str());
 }
 
 vul_file_iterator::~vul_file_iterator()
@@ -282,10 +269,10 @@ vul_file_iterator::~vul_file_iterator()
   delete p;
 }
 
-void vul_file_iterator::reset(char const* glob, bool match_eol)
+void vul_file_iterator::reset(char const* glob)
 {
   delete p;
-  p = new vul_file_iterator_data(glob, match_eol);
+  p = new vul_file_iterator_data(glob);
 }
 
 char const* vul_file_iterator::operator()()
