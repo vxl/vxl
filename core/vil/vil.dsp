@@ -468,6 +468,9 @@ SOURCE=.\file_formats/vil_nitf2_tagged_record_definition.cxx
 SOURCE=.\file_formats/vil_nitf2_typed_field_formatter.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\file_formats/vil_nitf2_des.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil_resample_bilin+float.float-.cxx
 # End Source File
 # Begin Source File
@@ -570,16 +573,19 @@ SOURCE=.\Templates/vil_image_view+vil_rgba+int_64--.cxx
 SOURCE=.\Templates/vil_image_view+vil_rgba+uint_64--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil_sample_grid_bilin+uint16.double-.cxx
+SOURCE=.\Templates/vil_sample_grid_bilin+uint_16.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil_sample_profile_bilin+uint16.double-.cxx
+SOURCE=.\Templates/vil_sample_profile_bilin+uint_16.double-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil_smart_ptr+vil_nitf_image_subheader-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil_smart_ptr+vil_nitf_message_header-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_sample_grid_bilin+uint_16.float-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -892,6 +898,9 @@ SOURCE=.\file_formats/vil_nitf2_typed_field_formatter.h
 # End Source File
 # Begin Source File
 SOURCE=.\file_formats/vil_nitf2_typed_scalar_field.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_nitf2_des.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_nearest_neighbour_interp.h

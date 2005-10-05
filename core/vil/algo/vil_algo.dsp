@@ -255,25 +255,28 @@ SOURCE=.\Templates/vil_gauss_filter+uint_16.uint_16-.cxx
 SOURCE=.\Templates/vil_threshold+uint_16-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil_gauss_filter+uint16.uint16-.cxx
+SOURCE=.\Templates/vil_gauss_filter+uint_16.uint_16-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil_gauss_reduce+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil_gauss_reduce+uint16-.cxx
+SOURCE=.\Templates/vil_gauss_reduce+uint_16-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil_sobel_1x3+uint16.double-.cxx
+SOURCE=.\Templates/vil_sobel_1x3+uint_16.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil_sobel_1x3+uint16.float-.cxx
+SOURCE=.\Templates/vil_sobel_1x3+uint_16.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil_sobel_3x3+uint16.double-.cxx
+SOURCE=.\Templates/vil_sobel_3x3+uint_16.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil_sobel_3x3+uint16.float-.cxx
+SOURCE=.\Templates/vil_sobel_3x3+uint_16.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_median+uint_16-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vil_histogram.cxx

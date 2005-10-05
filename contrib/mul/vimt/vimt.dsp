@@ -198,16 +198,19 @@ SOURCE=.\Templates/vsl_vector_io+vimt_image_2d_of+double--.cxx
 SOURCE=.\Templates/vsl_vector_io+vimt_image_2d_of+float--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vimt_gaussian_pyramid_builder_2d+uint16-.cxx
+SOURCE=.\Templates/vimt_gaussian_pyramid_builder_2d+uint_16-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vimt_image_2d_of+uint16-.cxx
+SOURCE=.\Templates/vimt_image_2d_of+uint_16-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vimt_sample_grid_bilin+uint16.double-.cxx
+SOURCE=.\Templates/vimt_sample_grid_bilin+uint_16.double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vimt_sample_profile_bilin+uint16.double-.cxx
+SOURCE=.\Templates/vimt_sample_profile_bilin+uint_16.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vimt_sample_grid_bilin+uint_16.float-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
