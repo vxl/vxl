@@ -261,19 +261,19 @@ void vil_nitf2_image_subheader::add_shared_field_defs_2(vil_nitf2_field_definiti
          NITF_ENUM(3, vil_nitf2_enum_values()
            .value("INT", "Integer")
            .value("B",   "Bi-level")
-           .value("SI",  "2's Complement Signed Integer")
+           .value("SI",  "2's complement signed integer")
            .value("R",   "Real")
            .value("C",   "Complex")),
           false, 0, 0)
   .field("IREP", "Image Representation",
          NITF_ENUM(8, vil_nitf2_enum_values()
-           .value("MONO",     "Monocrhome")
-           .value("RGB",      "Red, Green, Blue True color")
-           .value("RGB/LUT",  "Red, Green, Blue mapped color")
+           .value("MONO",     "Monochrome")
+           .value("RGB",      "Red, green, blue true color")
+           .value("RGB/LUT",  "Red, green, blue mapped Color")
            .value("MULTI",    "Multiband imagery")
            .value("NODISPLY", "Not intended for display")
-           .value("NVECTOR",  "Cartesion Coordinates")
-           .value("POLAR",    "Polar Coordinates")
+           .value("NVECTOR",  "Cartesian coordinates")
+           .value("POLAR",    "Polar coordinates")
            .value("VPH",      "SAR video phase history")
            .value("YCbCr601", "BT.601-5 color space")),
           false, 0, 0)
@@ -281,13 +281,13 @@ void vil_nitf2_image_subheader::add_shared_field_defs_2(vil_nitf2_field_definiti
   .field("ICAT", "Image Category",
          NITF_ENUM(8, vil_nitf2_enum_values()
            .value("VIS",    "Visible imagery")
-           .value("SL",     "Side looking radar")
+           .value("SL",     "Side-looking radar")
            .value("TI",     "Thermal infrared")
-           .value("FL",     "Forward looking radar")
+           .value("FL",     "Forward-looking radar")
            .value("RD",     "Radar")
            .value("EO",     "Electro-optical")
            .value("OP",     "Optical")
-           .value("HR",     "High resolution radar")
+           .value("HR",     "High-resolution radar")
            .value("HS",     "Hyperspectral")
            .value("CP",     "Color frame photography")
            .value("BP",     "Black/white frame photography")
@@ -297,14 +297,14 @@ void vil_nitf2_image_subheader::add_shared_field_defs_2(vil_nitf2_field_definiti
            .value("MS",     "Multispectral")
            .value("FP",     "Fingerprints")
            .value("MRI",    "Magnetic resonance imagery")
-           .value("XRAY",   "X-Ray")
+           .value("XRAY",   "X-ray")
            .value("CAT",    "CAT scan")
            .value("VD",     "Video")
            .value("BARO",   "Barometric pressure")
            .value("CURRENT","Water current")
            .value("DEPTH",  "Water depth")
            .value("MAP",    "Raster map")
-           .value("PAT",    "Color Patch")
+           .value("PAT",    "Color patch")
            .value("LEG",    "Legends")
            .value("DTEM",   "Elevation models")
            .value("MATR",   "Matrix data (other types)")
@@ -314,11 +314,11 @@ void vil_nitf2_image_subheader::add_shared_field_defs_2(vil_nitf2_field_definiti
   .field("ICAT", "Image Category", NITF_STR_ECSA(8), false, 0, 0)
 #endif //UNCLASS_ONLY
 
-  .field("ABPP", "Actual Bits-Per_pixel Per Band", NITF_INT(2), false, 0, 0) //[1-96]
+  .field("ABPP", "Actual Bits Per Pixel per Band", NITF_INT(2), false, 0, 0) //[1-96]
   .field("PJUST", "Pixel Justification",
          NITF_ENUM(1, vil_nitf2_enum_values()
-           .value("L", "Left justified")
-           .value("R", "Right justified")),
+           .value("L", "Left-justified")
+           .value("R", "Right-justified")),
           false, 0, 0);
 }
 
