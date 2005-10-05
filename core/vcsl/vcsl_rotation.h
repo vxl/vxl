@@ -4,11 +4,11 @@
 //:
 // \file
 // \brief Rotation transformation (either 2D or 3D)
-// \author François BERTEL
+// \author FranÃ§ois BERTEL
 //
 // \verbatim
 //  Modifications
-//   2000/06/28 François BERTEL Creation. Adapted from IUE
+//   2000/06/28 FranÃ§ois BERTEL Creation. Adapted from IUE
 //   2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
 //   2002/01/22 Peter Vanroose - return type of quaternion(), execute() and inverse() changed to non-ptr
 //   2002/01/28 Peter Vanroose - vcl_vector members angle_ and axis_ changed to non-ptr
@@ -50,8 +50,8 @@ class vcsl_rotation
   // Virtual function of vcsl_spatial_transformation
   virtual bool is_valid() const
   { return vcsl_spatial_transformation::is_valid() &&
-           this->duration()==axis_.size()  &&
-           this->duration()==angle_.size(); }
+          this->duration()==axis_.size() &&
+          this->duration()==angle_.size(); }
 
   //: Are `new_vector' a list of unit vectors ?
   bool are_unit_axes(list_of_vectors const& new_axis) const;

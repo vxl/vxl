@@ -5,6 +5,8 @@ aren't documented here, unless the bug-fix has a major observable
 effect. If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
+VXL 1.3.0   - Oct 2005
+
       - New vgl_sphere_3d primitive, and some extra intersection calculations.
 
       - Added support for the Analyse 3D image file format

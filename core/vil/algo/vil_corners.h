@@ -22,6 +22,10 @@ void vil_corners(const vil_image_view<float>& grad_i,
                  const vil_image_view<float>& grad_j,
                  vil_image_view<float>& dest, double k=0.04);
 
+void vil_corners(const vil_image_view<double>& grad_i,
+                 const vil_image_view<double>& grad_j,
+                 vil_image_view<double>& dest, double k=0.04);
+
 //: Compute corner strength using Rohr's recommended method
 //  This computes the determinant of the matrix C=g.g'
 //  after the elements of C have been smoothed.
