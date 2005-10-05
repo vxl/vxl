@@ -69,6 +69,7 @@ SOURCES += file_formats/vil_nitf2_image.cxx
 # For reading the NITF file headers as well as the image headers
 SOURCES += file_formats/vil_nitf2_header.cxx
 SOURCES += file_formats/vil_nitf2_image_subheader.cxx
+SOURCES += file_formats/vil_nitf2_des.cxx
 
 # Stuff shared by all NITF2 classes
 MANPAGE_SOURCES += file_formats/vil_nitf2.h
