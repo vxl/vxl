@@ -113,7 +113,9 @@ void vil_nitf2_array_field::do_dimension( const vil_nitf2_index_vector& in_indic
     else p_name = "";
     tr->columns.push_back( tag_str + index_str );
     tr->columns.push_back( p_name );
-    tr->columns.push_back( get_value_string( curr_indices ) );
+    if( check_index( curr_indices ) ) {
+      tr->columns.push_back( get_value_string( curr_indices ) );
+    }
     inTree->children.push_back( tr );
     //recursive call
     do_dimension( curr_indices, tr );

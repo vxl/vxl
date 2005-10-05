@@ -393,6 +393,7 @@ NITF_FIELD_SEQ_GET_VALUE(void*)
 NITF_FIELD_SEQ_GET_VALUE(vcl_string)
 NITF_FIELD_SEQ_GET_VALUE(vil_nitf2_location*)
 NITF_FIELD_SEQ_GET_VALUE(vil_nitf2_date_time)
+NITF_FIELD_SEQ_GET_VALUE(vil_nitf2_tagged_record_sequence)
 
 #define NITF_FIELD_SEQ_GET_ARRAY_VALUE(T) \
 bool vil_nitf2_field_sequence::get_value(vcl_string tag, \

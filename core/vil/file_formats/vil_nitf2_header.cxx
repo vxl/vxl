@@ -26,6 +26,87 @@ vil_nitf2_header::~vil_nitf2_header()
   if (m_field_sequence2) delete m_field_sequence2;
 }
 
+vcl_string vil_nitf2_header::section_num_tag( Section sec, bool pretty )
+{
+  switch( sec ) {
+  case FileHeader:
+    assert( 0 );
+  case ImageSegments:
+    if( pretty ) return "Number of Image Segments";
+    else return "NUMI";
+  case GraphicSegments:
+    if( pretty ) return "Number of Graphic Segments";
+    else return "NUMS";
+  case LabelSegments:
+    if( pretty ) return "Number of Label Segments";
+    else return "NUML";
+  case TextSegments:
+    if( pretty ) return "Number of Text Segments";
+    else return "NUMT";
+  case DataExtensionSegments:
+    if( pretty ) return "Number of Data Extension Segments";
+    else return "NUMDES";
+  case ReservedExtensionSegments:
+    if( pretty ) return "Number of Reserved Extension Segments";
+    else return "NUMRES";
+  }
+  return "";
+}
+
+vcl_string vil_nitf2_header::section_len_header_tag( Section sec, bool pretty )
+{
+  switch( sec ) {
+  case FileHeader:
+    assert( 0 );
+  case ImageSegments:
+    if( pretty ) return "Lengh of Image Subheader";
+    else return "LISH";
+  case GraphicSegments:
+    if( pretty ) return "Length of Graphic Subheader";
+    else return "LSSH";
+  case LabelSegments:
+    if( pretty ) return "Length of Label Subheader";
+    else return "LLSH";
+  case TextSegments:
+    if( pretty ) return "Length of Text Subheader";
+    else return "LTSH";
+  case DataExtensionSegments:
+    if( pretty ) return "Length of Data Extension Subheader";
+    else return "LDSH";
+  case ReservedExtensionSegments:
+    if( pretty ) return "Length of Reserved Extension Subheader";
+    else return "LRESH";
+  }
+  return "";
+}
+
+vcl_string vil_nitf2_header::section_len_data_tag( Section sec, bool pretty )
+{
+  switch( sec ) {
+  case FileHeader:
+    assert( 0 );
+  case ImageSegments:
+    if( pretty ) return "Length of Image Segment";
+    else return "LI";
+  case GraphicSegments:
+    if( pretty ) return "Length of Graphic Segment";
+    else return "LS";
+  case LabelSegments:
+    if( pretty ) return "Length of Label Segment";
+    else return "LL";
+  case TextSegments:
+    if( pretty ) return "Length of Text Segment";
+    else return "LT";
+  case DataExtensionSegments:
+    if( pretty ) return "Length of Data Extension Segment";
+    else return "LD";
+  case ReservedExtensionSegments:
+    if( pretty ) return "Length of Reserved Extension Segment";
+    else return "LRE";
+  }
+  return "";
+}
+
 bool vil_nitf2_header::read(vil_stream* stream)
 {
   //first read the first part of the header
@@ -48,6 +129,20 @@ bool vil_nitf2_header::read(vil_stream* stream)
   }
 
   return success;
+}
+
+void vil_nitf2_header::add_section( Section sec, int l1, int l2, vil_nitf2_field_definitions& defs, bool long_long )
+{
+  vil_nitf2_field_definitions section_meat;
+  section_meat.field(section_len_header_tag(sec), section_len_header_tag(sec, true),  NITF_INT(l1), false, 0, 0);
+  if( long_long ) {
+    section_meat.field(section_len_data_tag(sec),   section_len_data_tag(sec, true),    NITF_LONG(l2), false, 0, 0);
+  } else {
+    section_meat.field(section_len_data_tag(sec),   section_len_data_tag(sec, true),    NITF_INT(l2), false, 0, 0);
+  }
+
+  defs.field(section_num_tag(sec),   "Number of Graphic Segments",     NITF_INT(3), false, 0, 0)
+      .repeat(section_num_tag(sec), section_meat );
 }
 
 vil_nitf2_field_definitions* vil_nitf2_header::get_field_definitions_2(vil_nitf2_classification::file_version version)
@@ -78,52 +173,16 @@ vil_nitf2_field_definitions* vil_nitf2_header::get_field_definitions_2(vil_nitf2
   (*field_defs)
     .field("OPHONE", "Originator's Phone Number", NITF_STR_ECSA(18), true,  0, 0)
     .field("FL",     "File Length",               NITF_LONG(12),     false, 0, 0)
-    .field("HL",     "NITF File Header Length",   NITF_INT(6),       false, 0, 0)
-    .field("NUMI",   "Number of Image Segments",  NITF_INT(3),       false, 0, 0)
+    .field("HL",     "NITF File Header Length",   NITF_INT(6),       false, 0, 0);
 
-    .repeat("NUMI", vil_nitf2_field_definitions()
+    add_section( ImageSegments, 6, 10, *field_defs, true );
+    add_section( GraphicSegments, 4, 6, *field_defs );
+    add_section( LabelSegments, 4, 3, *field_defs );
+    add_section( TextSegments, 4, 5, *field_defs );
+    add_section( DataExtensionSegments, 4, 9, *field_defs );
+    add_section( ReservedExtensionSegments, 4, 7, *field_defs );
 
-       .field("LISH", "Length of nth Image Subheader", NITF_INT(6),   false, 0, 0)
-       .field("LI",   "Length of nth Image Segment",   NITF_LONG(10), false, 0, 0))
-
-    .field("NUMS",   "Number of Graphic Segments",     NITF_INT(3), false, 0, 0)
-
-    .repeat("NUMS", vil_nitf2_field_definitions() 
-       
-      .field("LSSH", "Length of nth Graphic Subheader",  NITF_INT(4), false, 0, 0)
-      .field("LS",   "Length of nth Graphic Segment",    NITF_INT(6), false, 0, 0))
-
-     // In NITF2.1 this will always be zero. NITF2.0 can have these though.
-    .field("NUML",   "Number of Labels",        NITF_INT(3), false, 0, 0)
-    
-    // begin NITF2.0-specific fields
-    .repeat("NUML", vil_nitf2_field_definitions()
-                                          
-      .field("LLSH", "Length of nth Label Subheader",  NITF_INT(4), false, 0, 0)
-      .field("LL",   "Length of nth Label",    NITF_INT(3), false, 0, 0))
-    // end NITF2.0-specific fields
-
-    .field("NUMT",   "Number of Text Segments",        NITF_INT(3), false, 0, 0)
-    
-    .repeat("NUMT", vil_nitf2_field_definitions()
-    
-      .field("TSSH", "Length of nth Text Subheader",   NITF_INT(4), false, 0, 0)
-      .field("LT",   "Length of nth Text Segment",     NITF_INT(5), false, 0, 0))
-
-    .field("NUMDES", "Number of Data Extension Segments", NITF_INT(3), false, 0, 0)
-
-    .repeat("NUMDES", vil_nitf2_field_definitions()
-
-       .field("LDSH", "Length of nth Data Extension Segment Subheader", NITF_INT(4), false, 0, 0)
-       .field("LD",   "Length of nth Data Extension Segment",           NITF_INT(9), false, 0, 0))
-
-    .field("NUMRES", "Number of Reserved Extension Segments", NITF_INT(3), false, 0, 0)
-    
-    .repeat("NUMRES", vil_nitf2_field_definitions()
-    
-      .field("LRESH", "Length of nth Reserved Extension Segment Subheader", NITF_INT(4), false, 0, 0)
-      .field("LRE",   "Length of nth Reserved Extension Segment",           NITF_INT(7), false, 0, 0))
-    
+  (*field_defs)
     .field("UDHDL",  "User Defined Header Data Length", NITF_INT(5), false, 0, 0) // range [00000,00003-99999]
  
     .field("UDHOFL", "User Defined Header Overflow",    NITF_INT(3), false, 0, 

@@ -97,6 +97,7 @@ SET( vil_sources ${vil_sources}
   # For reading the NITF file headers as well as the image headers
   file_formats/vil_nitf2_header.h                   file_formats/vil_nitf2_header.cxx
   file_formats/vil_nitf2_image_subheader.h          file_formats/vil_nitf2_image_subheader.cxx
+  file_formats/vil_nitf2_des.h                      file_formats/vil_nitf2_des.cxx
 
   # Stuff shared by all NITF2 classes
   file_formats/vil_nitf2.h

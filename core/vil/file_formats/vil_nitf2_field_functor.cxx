@@ -41,6 +41,7 @@ operator() (vil_nitf2_field_sequence* record,
 {
   int value1 = 0;
   bool found = record->get_value(tag, indexes, value1, true);
+  value1 *= tag_factor;
   value1 += offset;
   value = (value1 < min_threshold) ? min_threshold : value1;
   return found;

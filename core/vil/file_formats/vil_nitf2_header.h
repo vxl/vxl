@@ -21,6 +21,13 @@ public:
 
   virtual ~vil_nitf2_header();
   
+  enum Portion { SubHeader, Data };
+  enum Section { FileHeader = 0, ImageSegments, GraphicSegments, LabelSegments,
+                TextSegments, DataExtensionSegments, ReservedExtensionSegments };
+  static vcl_string section_num_tag( Section sec, bool pretty = false );
+  static vcl_string section_len_header_tag( Section sec, bool pretty = false );
+  static vcl_string section_len_data_tag( Section sec, bool pretty = false );
+  
   // Read the image header starting at stream's current position. Return success.
   virtual bool read( vil_stream* stream );
   //virtual bool write( vil_stream* stream );
@@ -52,6 +59,8 @@ public:
   virtual vil_nitf2_field::field_tree* get_tree() const;
 
 protected:
+  static void add_section( Section sec, int l1, int l2, vil_nitf2_field_definitions& defs, bool long_long = false);
+
   vil_nitf2_field_sequence m_field_sequence1;
   vil_nitf2_field_sequence* m_field_sequence2;
   vil_nitf2_field_sequence* m_field_sequence_classification;

@@ -17,6 +17,8 @@
 
 #include <vil/vil_file_format.h>
 
+class vil_nitf2_des;
+
 class vil_nitf2_file_format : public vil_file_format
 {
  public:
@@ -120,6 +122,9 @@ class vil_nitf2_image : public vil_image_resource
   { return m_image_headers; }
   const vil_nitf2_header& get_header() const
   { return m_file_header; }
+  const vcl_vector< vil_nitf2_des* >& get_des() const
+  { return m_des; }
+
   /**
     * Since the VIL API (eg. get_view()) for retrieving image data
     * doesn't support files with multiple images, clients will
@@ -171,25 +176,44 @@ class vil_nitf2_image : public vil_image_resource
       unsigned int end_block_x_offset, unsigned int end_block_y_offset ) const;
 
 
-  /**
-    * Returns the overall offset to the specified image/block/band combination.
-    * If this block isn't present in the stream (ie. it's all blank), then
-    * I'll return 0;
-    */
+  // Returns the offset (in bytes) from the beginning of the NITF file 
+  // to the beginning of the specified portion of the NITF stream.  For example:
+  //
+  // get_offset_to( TextSegments, Header, 0) will return the offset from the 
+  // beginning of the NITF stream to the beginning of the first text segment's
+  // subheader.  You'd better make sure there is at least one text segment before
+  // you call this.
+  //
+  // get_offset_to( ImageSegments, Data, 3) will return the offset from the 
+  // beginning of the NITF stream to the beginning of the fourth image segment's
+  // data section.  You'd better make sure there is at least four image segments before
+  // you call this.
+  vil_streampos get_offset_to( vil_nitf2_header::Section sec, vil_nitf2_header::Portion por, unsigned int index = 0 ) const;
+  // Returns the offset (in bytes) from the beginning of Section 'sec' and the beginning of the specified portion
+  // (subheader or data).  If more then one of these segments exist, then use 'index' to select which one you want.
+  vil_streampos size_to( vil_nitf2_header::Section sec, vil_nitf2_header::Portion por, int index ) const;
+
+  // Returns the overall offset to the specified image/block/band combination.
+  // If this block isn't present in the stream (ie. it's all blank), then
+  // I'll return 0;
   vil_streampos get_offset_to_image_data_block_band( unsigned int imageIndex,
     unsigned int blockIndexX,unsigned int blockIndexY, int bandIndex ) const;
-  vil_streampos get_offset_to_image_data( unsigned int imageIndex ) const;
-  vil_streampos get_offset_to_image_subheader( unsigned int imageIndex ) const;
 
   unsigned int get_pixels_per_block_x() const;
   unsigned int get_pixels_per_block_y() const;
   unsigned int get_num_blocks_x() const;
   unsigned int get_num_blocks_y() const;
 
+  //main file header
   vil_nitf2_header m_file_header;
-  void clear_image_headers();
+  //image header(s)
   vcl_vector< vil_nitf2_image_subheader* > m_image_headers;
+  void clear_image_headers();
   const vil_nitf2_image_subheader* current_image_header() const;
+  //DESs (if any)
+  vcl_vector< vil_nitf2_des* > m_des;
+  void clear_des();
+
   vil_stream* m_stream;
   unsigned int m_current_image_index;
 };

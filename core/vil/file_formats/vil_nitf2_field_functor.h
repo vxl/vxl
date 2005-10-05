@@ -127,8 +127,8 @@ class vil_nitf2_max_field_value_plus_offset_and_threshold : public vil_nitf2_fie
 {
  public:
   vil_nitf2_max_field_value_plus_offset_and_threshold(
-    vcl_string tag, int offset, int min_threshold = 0)
-    : tag(tag), offset(offset), min_threshold(min_threshold) {}
+    vcl_string tag, int offset, int min_threshold = 0, int tag_factor = 1 )
+    : tag(tag), offset(offset), min_threshold(min_threshold), tag_factor( tag_factor ) {}
 
   bool operator() (vil_nitf2_field_sequence* record,
                    const vil_nitf2_index_vector& indexes, int& value);
@@ -137,6 +137,7 @@ class vil_nitf2_max_field_value_plus_offset_and_threshold : public vil_nitf2_fie
   vcl_string tag;
   int offset;
   int min_threshold;
+  int tag_factor;
 };
 
 //:
