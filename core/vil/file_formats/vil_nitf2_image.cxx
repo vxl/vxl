@@ -275,7 +275,7 @@ bool vil_nitf2_image::parse_headers()
     vil_streampos offset = get_offset_to( vil_nitf2_header::DataExtensionSegments, vil_nitf2_header::SubHeader, j);
     m_stream->seek(offset);
     int data_width;
-    m_file_header.get_property( "LD", i, data_width );
+    m_file_header.get_property( "LD", j, data_width );
     m_des[j] = new vil_nitf2_des(file_version(), data_width);
     if (!m_des[j]->read(m_stream)) return false;
   }
