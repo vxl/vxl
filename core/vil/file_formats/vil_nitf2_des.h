@@ -19,6 +19,8 @@ public:
   virtual bool read( vil_stream* stream );
   //virtual bool write( vil_stream* stream );
 
+  virtual ~vil_nitf2_des();
+
   // Sets out_value to the value of field specified by tag. 
   // Returns 0 if such a field is not found or is of the wrong type.
   template< class T >

@@ -64,3 +64,6 @@ vil_nitf2_field::field_tree* vil_nitf2_des::get_tree( int i ) const
   m_field_sequence.get_tree( t );
   return t;
 }
+
+vil_nitf2_des::~vil_nitf2_des()
+{ }
