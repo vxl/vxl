@@ -15,6 +15,7 @@
 //   PDA (Manchester) 21/03/2001: Tidied up the documentation
 //   Peter Vanroose   27/05/2001: Corrected the documentation
 //   Ian Scott        12/06/2003: Added filen?m[abc].* notation to unix and dos version
+//   Matt Leotta      04/10/2005: Added match_eol option
 // \endverbatim
 
 #include <vcl_string.h>
@@ -37,6 +38,16 @@ struct vul_file_iterator_data;
 // \endcode
 // rather than opendir/glob/etc.
 //
+// By default the file iterator does not match the end of a line
+// so "/dir/" matches the same as "/dir/*".  When this is not the
+// desired effect enable the match_eol flag
+// \code
+//   for (vul_file_iterator fn("/dir/file?",true); fn; ++fn) {
+//     ... use fn() as filename
+//   }
+// \endcode
+// this will match "/dir/file1" but not "/dir/file12"
+//
 // Valid glob patterns are unix-like - '?' matches precisely one character
 // '*' matches any sequence (including empty), [abc] matches either 'a' or 'b' or 'c'
 
@@ -52,6 +63,14 @@ class vul_file_iterator
 
   //: Initialize, and scan to get first file from "glob"
   vul_file_iterator(vcl_string const& glob);
+  
+  //: Initialize, and scan to get first file from "glob"
+  // \param match_eol enables matching of the end of line
+  vul_file_iterator(char const* glob, bool match_eol);
+  
+  //: Initialize, and scan to get first file from "glob"
+  // \param match_eol enables matching of the end of line
+  vul_file_iterator(vcl_string const& glob, bool match_eol);
 
   ~vul_file_iterator();
 
@@ -78,7 +97,7 @@ class vul_file_iterator
   vul_file_iterator& operator++();
 
   //: Run a new match
-  void reset(char const* glob);
+  void reset(char const* glob, bool match_eol = false);
 
  protected:
   vul_file_iterator_data* p;

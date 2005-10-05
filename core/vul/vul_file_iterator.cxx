@@ -45,7 +45,7 @@ struct vul_file_iterator_data
     return _findfirst(const_cast<char*>(dirname), data);
   }
 
-  vul_file_iterator_data(char const* glob);
+  vul_file_iterator_data(char const* glob, bool match_eol);
 
   void mkname() {
     // Remember full path
@@ -87,7 +87,7 @@ struct vul_file_iterator_data
   }
 };
 
-vul_file_iterator_data::vul_file_iterator_data(char const* glob)
+vul_file_iterator_data::vul_file_iterator_data(char const* glob, bool match_eol)
 {
   original_dirname_ = vul_file::dirname(glob);
   handle_ = find_first((original_dirname_ + "\\*").c_str(), &data_);
@@ -126,6 +126,9 @@ vul_file_iterator_data::vul_file_iterator_data(char const* glob)
     ++i;
   }
 
+  if(match_eol)
+    re += '$';
+    
   reg_exp_.compile(re.c_str());
 
 
@@ -156,7 +159,7 @@ struct vul_file_iterator_data
   char const* name_;
   vul_reg_exp reg_exp_;
 
-  vul_file_iterator_data(char const* glob);
+  vul_file_iterator_data(char const* glob, bool match_eol);
 
   void mkname() {
     // Remember full path
@@ -197,7 +200,8 @@ struct vul_file_iterator_data
   }
 };
 
-vul_file_iterator_data::vul_file_iterator_data(char const* glob)
+vul_file_iterator_data::vul_file_iterator_data(char const* glob, 
+                                               bool match_eol)
 {
   original_dirname_ = vul_file::dirname(glob) + "/";
 
@@ -234,6 +238,9 @@ vul_file_iterator_data::vul_file_iterator_data(char const* glob)
 
     ++i;
   }
+  
+  if(match_eol)
+    re += '$';
 
   reg_exp_.compile(re.c_str());
 
@@ -245,16 +252,29 @@ vul_file_iterator_data::vul_file_iterator_data(char const* glob)
 #endif // !defined(VCL_WIN32) || defined(__CYGWIN__)
 
 // -----------------------------------------------------------------------------
+
 vul_file_iterator::vul_file_iterator(char const* glob)
 {
   p = 0;
-  reset(glob);
+  reset(glob, false);
 }
 
 vul_file_iterator::vul_file_iterator(vcl_string const& glob)
 {
   p = 0;
-  reset(glob.c_str());
+  reset(glob.c_str(), false);
+}
+
+vul_file_iterator::vul_file_iterator(char const* glob, bool match_eol)
+{
+  p = 0;
+  reset(glob, match_eol);
+}
+
+vul_file_iterator::vul_file_iterator(vcl_string const& glob, bool match_eol)
+{
+  p = 0;
+  reset(glob.c_str(), match_eol);
 }
 
 vul_file_iterator::~vul_file_iterator()
@@ -262,10 +282,10 @@ vul_file_iterator::~vul_file_iterator()
   delete p;
 }
 
-void vul_file_iterator::reset(char const* glob)
+void vul_file_iterator::reset(char const* glob, bool match_eol)
 {
   delete p;
-  p = new vul_file_iterator_data(glob);
+  p = new vul_file_iterator_data(glob, match_eol);
 }
 
 char const* vul_file_iterator::operator()()
