@@ -54,6 +54,9 @@ Copyright: (C) 1997-1999, Advanced Interfaces Group,
                            Public Data Types
 ===========================================================================
 */
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef enum                        /* Set operation type                */
 {
@@ -127,6 +130,11 @@ void gpc_polygon_to_tristrip (gpc_polygon     *polygon,
 void gpc_free_tristrip       (gpc_tristrip    *tristrip);
 
 #endif /* 0 */
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* gpc_h_ */
 
 /*
