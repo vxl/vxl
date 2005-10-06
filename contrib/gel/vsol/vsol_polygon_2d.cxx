@@ -195,6 +195,9 @@ double vsol_polygon_2d::area(void) const
 //   0.5 * Int(boundary) y*y dx = 
 //   1/6 * Sum(i)( y[i+1] + y[i] ) * ( x[i] * y[i+1] - x[i+1] * y[i] )
 // 
+//  In the case of degenerate polygons, where area == 0, return the average of
+//  the vertex locations.
+//
 vsol_point_2d_sptr vsol_polygon_2d::centroid(void) const
 {
   unsigned int nverts = storage_->size();
@@ -206,6 +209,10 @@ vsol_point_2d_sptr vsol_polygon_2d::centroid(void) const
   vsol_point_2d_sptr pi1 = (*storage_)[0];
   double xi = pi->x(), yi = pi->y();
   double xi1 = pi1->x(), yi1 = pi1->y();
+
+  //for degenerate polygons
+  double xsum = xi, ysum = yi;
+
   double temp = xi*yi1 - xi1*yi;
   area += temp;
   sx += temp*(xi1 + xi);
@@ -220,13 +227,17 @@ vsol_point_2d_sptr vsol_polygon_2d::centroid(void) const
       area += temp;
       sx += temp*(xi1 + xi);
       sy += temp*(yi1 + yi);
+      xsum += xi; ysum += yi;
     }
   area /= 2.0;
-  assert(vcl_fabs(area)>0.0);
-  double xc = sx/(6.0*area), yc = sy/(6.0*area);
-  return new vsol_point_2d(xc, yc);
+  if(vcl_fabs(area)!=0.0)
+    {
+      double xc = sx/(6.0*area), yc = sy/(6.0*area);
+      return new vsol_point_2d(xc, yc);
+    }
+  return new vsol_point_2d(xsum/nverts, ysum/nverts);
 }
-
+    
 //---------------------------------------------------------------------------
 //: Is `this' convex ?
 // A polygon is convex if the direction of "turning" at every vertex is
