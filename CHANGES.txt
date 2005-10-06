@@ -14,6 +14,10 @@ VXL 1.3.0   - Oct 2005
 
       - Added support for the Analyse 3D image file format
 
+      - VIL can now read NITF 2.1, NITF 2.0 and NSIF 1.0 image files.  All uncompressed
+        data formats are supported and plugin support is provided for handling
+        JPEG 2000 compressed NITF files.
+
 VXL 1.2.0	- July 2005
 
       - Added an implementation of the Mukres or Hungarian algorithm for
