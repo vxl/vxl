@@ -2,23 +2,12 @@
 #pragma implementation
 #endif
 
-#include <mbl/mbl_progress.h>
+#include "mbl_progress.h"
 #include <vcl_iostream.h>
 #include <vcl_config_compiler.h>
 #include <vsl/vsl_indent.h>
 
 
-//=======================================================================
-mbl_progress::mbl_progress()
-  : throw_exception_on_cancel_(false)
-{
-}
-
-
-//=======================================================================
-mbl_progress::~mbl_progress()
-{
-}
 
 
 //=======================================================================

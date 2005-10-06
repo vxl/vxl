@@ -51,10 +51,10 @@ class mbl_progress
  public:
 
   //: Constructor
-  mbl_progress();
+  mbl_progress(): throw_exception_on_cancel_(false) {}
 
   //: Destructor
-  virtual ~mbl_progress();
+  virtual ~mbl_progress() {}
 
   //: Estimated number of iterations for the given identifier.
   void set_estimated_iterations(const vcl_string& identifier,

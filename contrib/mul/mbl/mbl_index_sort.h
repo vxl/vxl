@@ -34,6 +34,20 @@ void mbl_index_sort(const T* data, int n, vcl_vector<int>& index)
   vcl_sort(index.begin(), index.end(), c);
 }
 
+//: Sort n elements, giving the resulting order in index.
+//  data[index[0]] is smallest element, data[index[n-1]] is largest
+template <class T>
+void mbl_index_sort(const T* data, unsigned n, vcl_vector<unsigned>& index)
+{
+  mbl_index_sort_cmp1<T> c;
+  c.data = data;
+
+  index.resize(n);
+  for (unsigned i =0;i < n; ++i) index[i] = i;
+
+  vcl_sort(index.begin(), index.end(), c);
+}
+
 //: Implementation class - Do No Use.
 template <class T>
 struct mbl_index_sort_cmp2
