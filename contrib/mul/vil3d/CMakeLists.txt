@@ -25,6 +25,7 @@ SET(vil3d_sources
     vil3d_from_image_2d.h
     vil3d_resample_simple.h          vil3d_resample_simple.txx
     vil3d_resample_trilinear.h       vil3d_resample_trilinear.txx
+    vil3d_decimate.h
     vil3d_reflect.h
 
     file_formats/vil3d_gipl_format.h file_formats/vil3d_gipl_format.cxx
