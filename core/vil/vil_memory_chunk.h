@@ -65,7 +65,7 @@ class vil_memory_chunk
     //: Number of bytes allocated
     unsigned long size() const { return size_; }
 
-    //: Create space for n elements
+    //: Create space for n bytes
     //  pixel_format indicates what format to be used for binary IO
     void set_size(unsigned long n, vil_pixel_format pixel_format);
 };
