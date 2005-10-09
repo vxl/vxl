@@ -335,7 +335,7 @@ bool vnl_vector<T>::read_ascii(vcl_istream& s)
     T value;
     s >> value;
 
-    if (!s.good())
+    if (s.bad())
       break;
     allvals.push_back(value);
     ++n;
