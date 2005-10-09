@@ -1,7 +1,4 @@
 #include <rgrl/rgrl_trans_couple.h>
-#include <rgrl/rgrl_util.h>
-#include <vnl/vnl_math.h>
-#include <vcl_cassert.h>
 //:
 // \file
 // \brief a class that encapsulates a pair of transformations: forward & backward
@@ -13,6 +10,8 @@
 #include <vcl_cstdlib.h>
 
 #include <rgrl/rgrl_trans_reader.h>
+#include <rgrl/rgrl_util.h>
+#include <vnl/vnl_math.h>
 
 rgrl_trans_couple::
   rgrl_trans_couple( rgrl_transformation_sptr const& forward, rgrl_transformation_sptr const& backward )
@@ -106,7 +105,7 @@ rgrl_trans_couple::
 write( vcl_ostream& os ) const
 {
   os << "COUPLE_TRANS" << vcl_endl;
-  
+
   assert( forward_xform_ && backward_xform_ );
 
   forward_xform_ -> write( os );
@@ -118,7 +117,6 @@ void
 rgrl_trans_couple::
 read( vcl_istream& is )
 {
-
   // skip empty lines
   rgrl_util_skip_empty_lines( is );
 
@@ -129,11 +127,11 @@ read( vcl_istream& is )
     WarningMacro( "The tag is not COUPLE_TRANS. reading is aborted.\n" );
     vcl_exit(10);
   }
-  
+
   // Read forward and backward
   forward_xform_ = rgrl_trans_reader( is );
   backward_xform_ = rgrl_trans_reader( is );
-  
+
   // parent
   rgrl_transformation::read( is );
 }
