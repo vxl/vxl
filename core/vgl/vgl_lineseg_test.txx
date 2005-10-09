@@ -30,14 +30,18 @@ bool inbetween(T x1, T y1, T x2, T y2, T x3, T y3)
 template <class T>
 bool vgl_lineseg_test_lineseg(T x1, T y1, T x2, T y2, T x3, T y3, T x4, T y4)
 {
+  T a = vgl_triangle_test_discriminant(x1, y1, x2, y2, x3, y3);
+  T b = vgl_triangle_test_discriminant(x1, y1, x2, y2, x4, y4);
+  T c = vgl_triangle_test_discriminant(x3, y3, x4, y4, x1, y1);
+  T d = vgl_triangle_test_discriminant(x3, y3, x4, y4, x2, y2);
   return
-    vgl_lineseg_test_line(x1, y1, x2, y2, x3, y3, x4, y4) &&
-    vgl_lineseg_test_line(x3, y3, x4, y4, x1, y1, x2, y2) &&
+    ( ( (a<=0 && b>0) || (a>=0 && b<0) || (a<0 && b>=0) || (a>0 && b<=0) ) &&
+      ( (c<=0 && d>0) || (c>=0 && d<0) || (c<0 && d>=0) || (c>0 && d<=0) ) )
+    ||
     ( // the above two conditions are only sufficient for noncollinear line segments! - PVr
-      !collinear(vgl_point_2d<T>(x1, y1), vgl_point_2d<T>(x2, y2), vgl_point_2d<T>(x3, y3)) ||
-      !collinear(vgl_point_2d<T>(x1, y1), vgl_point_2d<T>(x2, y2), vgl_point_2d<T>(x4, y4)) ||
-      inbetween(x1, y1, x2, y2, x3, y3) ||
-      inbetween(x1, y1, x2, y2, x4, y4)
+      a == 0 && b == 0 && c == 0 && d == 0 &&
+      ( inbetween(x1, y1, x2, y2, x3, y3) ||
+        inbetween(x1, y1, x2, y2, x4, y4) )
     );
 }
 
