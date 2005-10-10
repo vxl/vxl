@@ -10,7 +10,7 @@
 //  Modifications
 // \endverbatim
 
-#include <avifile/avifile.h>
+#include <avifile.h>
 #include <vidl/vidl_codec.h>
 
 //: Allows user to load an AVI video with avifile
