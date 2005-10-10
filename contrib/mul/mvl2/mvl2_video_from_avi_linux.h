@@ -7,7 +7,7 @@
 
 #include <vcl_string.h>
 
-#include <avifile/avifile.h>
+#include <avifile.h>
 //#include <avifile/videodecoder.h>
 //#include <avifile/infotypes.h>
 //#include <avifile/except.h>
