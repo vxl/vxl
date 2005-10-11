@@ -12,6 +12,7 @@ IF(HAS_VGUI)
     SET( vxl_vrml_viewer_sources main.cxx )
 
     ADD_EXECUTABLE( vxl_vrml_viewer ${vxl_vrml_viewer_sources} )
+    INSTALL_TARGETS( /bin vxl_vrml_viewer)
     TARGET_LINK_LIBRARIES( vxl_vrml_viewer osl mvl vgui vrml vgl vil1 vnl vul vbl vpl ${QV_LIBRARIES} vcl )
 
   ENDIF(QV_FOUND)

@@ -20,7 +20,8 @@ SET(brip_sources
 AUX_SOURCE_DIRECTORY(Templates brip_sources)
 
 ADD_LIBRARY(brip ${brip_sources})
-
+INSTALL_TARGETS(/lib brip)
+INSTALL_NOBASE_HEADER_FILES(/include/contrib/brl/bseg/brip ${brip_sources})
 
 TARGET_LINK_LIBRARIES(brip gevd bsol vsol vil1 vil vnl_algo vnl vbl vul)
 

@@ -23,6 +23,8 @@ SET(vimt3d_sources
 AUX_SOURCE_DIRECTORY(Templates vimt3d_sources)
 
 ADD_LIBRARY(vimt3d ${vimt3d_sources})
+INSTALL_TARGETS(/lib vimt3d)
+INSTALL_NOBASE_HEADER_FILES(/include/contrib/mul/vimt3d ${vimt3d_sources})
 TARGET_LINK_LIBRARIES(vimt3d vil3d vil3d_algo vimt vnl)
 
 IF (BUILD_TESTING)

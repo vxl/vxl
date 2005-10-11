@@ -34,6 +34,7 @@ IF(NOT VXL_USING_NATIVE_PNG)
     )
 
     ADD_LIBRARY( png ${png_sources} )
+    INSTALL_TARGETS( /lib png )
 
     # With cygwin, the there are multiple user configurations
     # possible. From pngconf.h:

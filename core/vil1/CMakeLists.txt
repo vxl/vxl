@@ -115,6 +115,8 @@ IF(NOT APPLE)
 # vil1_stream_url in separate library on Solaris
   IF(SOLARIS)
     ADD_LIBRARY(vil1_network ${vil1_network_sources})
+    INSTALL_TARGETS(lib/ vil1_network)
+    INSTALL_NOBASE_HEADER_FILES(/include/core/vil1 ${vil1_network_sources})
   ELSE(SOLARIS)
     SET(vil1_sources ${vil1_sources} ${vil1_network_sources})
   ENDIF(SOLARIS)
@@ -167,6 +169,8 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(vil1 ${vil1_sources})
+INSTALL_TARGETS(/lib vil1)
+INSTALL_NOBASE_HEADER_FILES(/include/core/vil1 ${vil1_sources})
 
 IF(JPEG_FOUND)
   TARGET_LINK_LIBRARIES( vil1 ${JPEG_LIBRARIES} )

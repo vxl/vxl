@@ -24,6 +24,8 @@ SET(vmal_sources ${vmal_sources}
 ENDIF(BUILD_OXL)
 
 ADD_LIBRARY(vmal ${vmal_sources})
+INSTALL_TARGETS(/lib vmal)
+INSTALL_NOBASE_HEADER_FILES(/include/contrib/gel/vmal ${vmal_sources})
 
 IF(BUILD_OXL)
  INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR})

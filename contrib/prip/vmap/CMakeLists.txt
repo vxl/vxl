@@ -28,7 +28,8 @@ SET(vmap_sources
 )
 
 ADD_LIBRARY(vmap ${vmap_sources})
-
+INSTALL_TARGETS(/lib vmap)
+INSTALL_NOBASE_HEADER_FILES(/include/contrib/prip/vmap ${vmap_sources})
 TARGET_LINK_LIBRARIES(vmap vcl)
 
 #IF (BUILD_TESTING)

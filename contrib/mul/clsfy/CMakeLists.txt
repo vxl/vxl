@@ -34,6 +34,8 @@ SET(clsfy_sources
 AUX_SOURCE_DIRECTORY(Templates clsfy_sources)
 
 ADD_LIBRARY(clsfy ${clsfy_sources})
+INSTALL_TARGETS(/lib clsfy)
+INSTALL_NOBASE_HEADER_FILES(/include/contrib/mul/clsfy ${clsfy_sources})
 TARGET_LINK_LIBRARIES(clsfy vpdfl mbl vnl_algo vnl_io vbl vbl_io)
 
 IF (BUILD_TESTING)

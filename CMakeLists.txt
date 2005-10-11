@@ -14,6 +14,7 @@ SET( LIBRARY_OUTPUT_PATH ${vxl_BINARY_DIR}/lib CACHE PATH
 SET(VXL_CMAKE_DIR ${vxl_SOURCE_DIR}/config/cmake/Modules)
 
 INCLUDE( ${VXL_CMAKE_DIR}/VXLStandardOptions.cmake )
+INCLUDE( ${vxl_SOURCE_DIR}/config/cmake/config/vxl_utils.cmake )
 # INCLUDE( ${vxl_SOURCE_DIR}/UseSTLPort.cmake )
 
 # Copy the UseVXL.cmake file to the binary directory so that client
@@ -106,7 +107,9 @@ ENDIF( ${vxl_BINARY_DIR} MATCHES ${vxl_SOURCE_DIR} )
 
 # Standard include directories.
 SET(VXLCORE_INCLUDE_DIR ${vxl_BINARY_DIR}/core ${vxl_SOURCE_DIR}/core)
+SET(VXLCORE_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/core)
 SET(VCL_INCLUDE_DIR ${vxl_BINARY_DIR}/vcl ${vxl_SOURCE_DIR}/vcl)
+SET(VCL_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vcl)
 
 # Autoconf does not work on windows.  Use hardcoded results if not using
 # cmake to configure.
@@ -114,6 +117,10 @@ IF(VXL_NO_CMAKE_CONFIGURE)
   IF(WIN32)
     IF(NOT CYGWIN)
       SET(VCL_INCLUDE_DIR ${vxl_SOURCE_DIR}/vcl/config.win32 ${VCL_INCLUDE_DIR})
+      SET(VCL_INSTALL_INCLUDE_DIR 
+        ${CMAKE_INSTALL_PREFIX}/include/vcl/config.win32
+        ${VCL_INSTALL_INCLUDE_DIR}
+      )
     ENDIF(NOT CYGWIN)
   ENDIF(WIN32)
 ENDIF(VXL_NO_CMAKE_CONFIGURE)

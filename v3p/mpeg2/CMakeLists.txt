@@ -108,6 +108,7 @@ SET( mpeg2_sources
   libmpeg2/idct_altivec.c
 )
 ADD_LIBRARY( mpeg2 ${mpeg2_sources} )  
+INSTALL_TARGETS( /lib mpeg2 )
 
 SET( vo_sources
   libvo/video_out.c
@@ -124,6 +125,7 @@ SET( vo_sources
   libvo/yuv2rgb_mlib.c
   libvo/yuv2rgb_mmx.c 
 )
-ADD_LIBRARY( vo ${vo_sources} )  
+ADD_LIBRARY( vo ${vo_sources} )
+INSTALL_TARGETS( /lib vo )
 
 ENDIF( NOT VXL_USING_NATIVE_MPEG2 )

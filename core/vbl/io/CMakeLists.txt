@@ -19,6 +19,9 @@ AUX_SOURCE_DIRECTORY(Templates vbl_io_sources)
 ADD_LIBRARY(vbl_io ${vbl_io_sources})
 TARGET_LINK_LIBRARIES( vbl_io vbl vsl )
 
+INSTALL_TARGETS(/lib vbl_io)
+INSTALL_NOBASE_HEADER_FILES(/include/core/vbl/io ${vbl_io_sources})
+
 IF( BUILD_TESTING)
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING)

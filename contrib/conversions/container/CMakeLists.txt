@@ -23,3 +23,5 @@ SET(container_sources
  vcl_vector_to_vnl_vector.h
  vnl_vector_to_vcl_vector.h
 )
+
+INSTALL_NOBASE_HEADER_FILES(/include/contrib/conversions/container ${container_sources})

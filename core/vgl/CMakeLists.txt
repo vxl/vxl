@@ -61,6 +61,9 @@ AUX_SOURCE_DIRECTORY(Templates vgl_sources)
 ADD_LIBRARY(vgl ${vgl_sources})
 TARGET_LINK_LIBRARIES( vgl vcl )
 
+INSTALL_TARGETS(/lib vgl)
+INSTALL_NOBASE_HEADER_FILES(/include/core/vgl ${vgl_sources})
+
 SUBDIRS( algo )
 
 IF( BUILD_EXAMPLES )

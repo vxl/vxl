@@ -8,6 +8,8 @@ SET(global_sources
  vxl_config.h.in
 )
 
+INSTALL_NOBASE_HEADER_FILES(/include/core ${global_sources})
+
 # common test executable
 SUBDIRS(testlib)
 
@@ -94,4 +96,3 @@ IF (BUILD_CORE_UTILITIES AND BUILD_CORE_IMAGING)
   SUBDIRS(vidl)
   SUBDIRS(vidl_vil1)
 ENDIF (BUILD_CORE_UTILITIES AND BUILD_CORE_IMAGING)
-

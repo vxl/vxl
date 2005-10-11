@@ -27,6 +27,9 @@ AUX_SOURCE_DIRECTORY(Templates vgl_io_sources)
 ADD_LIBRARY(vgl_io ${vgl_io_sources})
 TARGET_LINK_LIBRARIES( vgl_io vgl vsl )
 
+INSTALL_TARGETS(/lib vgl_io)
+INSTALL_NOBASE_HEADER_FILES(/include/core/vgl/io ${vgl_io_sources})
+
 IF( BUILD_TESTING)
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING)

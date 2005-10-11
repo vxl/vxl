@@ -16,6 +16,8 @@ AUX_SOURCE_DIRECTORY(Templates vil1_io_sources)
 
 ADD_LIBRARY(vil1_io ${vil1_io_sources})
 TARGET_LINK_LIBRARIES( vil1_io vil1 vsl )
+INSTALL_TARGETS(/lib vil1_io)
+INSTALL_NOBASE_HEADER_FILES(/include/core/vil1/io ${vil_io_sources})
 
 IF( BUILD_TESTING)
   SUBDIRS(tests)

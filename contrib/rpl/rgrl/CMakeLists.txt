@@ -136,6 +136,8 @@ SET( rgrl_sources
 AUX_SOURCE_DIRECTORY( Templates rgrl_sources )
 
 ADD_LIBRARY( rgrl ${rgrl_sources} )
+INSTALL_TARGETS(/lib rgrl)
+INSTALL_NOBASE_HEADER_FILES(/include/contrib/rpl/rgrl ${rgrl_sources})
 TARGET_LINK_LIBRARIES( rgrl rrel rsdl vil3d vil vnl_algo vnl vbl vul)
 #FIND_PACKAGE( ITK )
 #IF( ITK_FOUND )

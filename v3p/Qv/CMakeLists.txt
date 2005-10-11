@@ -172,6 +172,8 @@ ADD_LIBRARY( Qv ${Qv_sources} )
 
 TARGET_LINK_LIBRARIES( Qv vcl )
 
+INSTALL_TARGETS(/lib Qv)
+
 IF(BUILD_TESTING)
   ADD_EXECUTABLE(test_compute_vrml_centroid test-compute-vrml-centroid.cxx)
   TARGET_LINK_LIBRARIES( test_compute_vrml_centroid Qv )

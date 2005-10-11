@@ -35,10 +35,13 @@ IF(HAS_VGUI)
 
  # check if we have the camera libraries and assemble accordingly
  IF(HAS_CMU1394CAMERA)
-  ADD_LIBRARY(vvid ${vvid_sources} ${cmu_camera_sources})
+  ADD_LIBRARY(vvid ${vvid_sources} ${cmu_camera_sources})  
  ELSE(HAS_CMU1394CAMERA)
   ADD_LIBRARY(vvid ${vvid_sources})
  ENDIF(HAS_CMU1394CAMERA)
+
+ INSTALL_TARGETS(/lib vvid)
+ INSTALL_NOBASE_HEADER_FILES(/include/contrib/brl/vvid ${vvid_sources})
 
  TARGET_LINK_LIBRARIES(vvid vpro strk sdet btol vtol vsol brip bgui vgui vidl vidl_vil1 vul vil vil1)
 

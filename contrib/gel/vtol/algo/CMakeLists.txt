@@ -8,4 +8,6 @@ SET( vtol_algo_sources
 AUX_SOURCE_DIRECTORY( Templates vtol_algo_sources )
 
 ADD_LIBRARY( vtol_algo ${vtol_algo_sources} )
+INSTALL_TARGETS(/lib vtol_algo)
+INSTALL_NOBASE_HEADER_FILES(/include/contrib/gel/vtol/algo ${vtol_algo_sources})
 TARGET_LINK_LIBRARIES( vtol_algo vtol vdgl vil_algo vgl_algo vgl vil vbl )

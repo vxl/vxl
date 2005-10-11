@@ -15,4 +15,6 @@ SET(mil_algo_sources
 AUX_SOURCE_DIRECTORY(Templates mil_algo_sources)
 
 ADD_LIBRARY(mil_algo ${mil_algo_sources})
+INSTALL_TARGETS(/lib mil_algo)
+INSTALL_NOBASE_HEADER_FILES(/include/contrib/mul/mil/algo ${mil_algo_sources})
 TARGET_LINK_LIBRARIES(mil_algo mil vnl)

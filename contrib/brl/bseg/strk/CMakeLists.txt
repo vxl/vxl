@@ -28,7 +28,8 @@ SET(strk_sources
 AUX_SOURCE_DIRECTORY(Templates strk_sources)
 
 ADD_LIBRARY(strk ${strk_sources})
-
+INSTALL_TARGETS(/lib strk)
+INSTALL_NOBASE_HEADER_FILES(/include/contrib/strk ${strk_sources})
 
 TARGET_LINK_LIBRARIES(strk sdet bsta brip vpro bsol btol bdgl gevd vdgl vtol vsol vil1 vgl_algo vnl vbl)
 

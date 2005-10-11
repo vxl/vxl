@@ -43,6 +43,8 @@ SET(pdf1d_sources
 AUX_SOURCE_DIRECTORY(Templates pdf1d_sources)
 
 ADD_LIBRARY(pdf1d ${pdf1d_sources})
+INSTALL_TARGETS(/lib pdf1d)
+INSTALL_NOBASE_HEADER_FILES(/include/contrib/mul/pdf1d ${pdf1d_sources})
 TARGET_LINK_LIBRARIES( pdf1d mbl vbl vnl_io )
 
 SUBDIRS(tools)

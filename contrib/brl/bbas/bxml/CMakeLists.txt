@@ -24,7 +24,8 @@ IF(HAS_XERCES)
  AUX_SOURCE_DIRECTORY(Templates bxml_sources)
 
  ADD_LIBRARY(bxml ${bxml_sources})
-
+ INSTALL_TARGETS(/lib bxml)
+ INSTALL_NOBASE_HEADER_FILES(/include/contrib/brl/bbas/bxml ${bxml_sources})
  TARGET_LINK_LIBRARIES(bxml ${XERCES_LIBRARIES} bdgl vtol vdgl vsol vbl)
 
  IF(BUILD_TESTING)

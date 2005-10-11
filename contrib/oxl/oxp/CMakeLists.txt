@@ -50,6 +50,8 @@ ENDIF (MPEG2_FOUND)
 AUX_SOURCE_DIRECTORY(Templates oxp_sources)
 
 ADD_LIBRARY(oxp ${oxp_sources})
+INSTALL_TARGETS(/lib oxp)
+INSTALL_NOBASE_HEADER_FILES(/include/contrib/oxl/oxp ${oxp_sources})
 TARGET_LINK_LIBRARIES(oxp vidl_vil1 vnl vil1 vul vbl vpl ${CMAKE_THREAD_LIBS})
 IF (MPEG2_FOUND)
   TARGET_LINK_LIBRARIES(oxp ${MPEG2_LIBRARIES})

@@ -26,4 +26,6 @@ SET(vifa_sources
 AUX_SOURCE_DIRECTORY(Templates vifa_sources)
 
 ADD_LIBRARY(vifa ${vifa_sources})
+INSTALL_TARGETS(/lib vifa)
+INSTALL_NOBASE_HEADER_FILES(/include/contrib/gel/vifa ${vifa_sources})
 TARGET_LINK_LIBRARIES(vifa gevd vdgl vsol vnl vgl vbl vul vil vcl)

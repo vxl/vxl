@@ -14,6 +14,8 @@ SET(gkll_sources ${gkll_sources}
 ENDIF(BUILD_OXL)
 
 ADD_LIBRARY(gkll ${gkll_sources})
+INSTALL_TARGETS(/lib gkll)
+INSTALL_NOBASE_HEADER_FILES(/include/contrib/gel/gkll ${gkll_sources})
 
 IF(BUILD_OXL)
  INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR})

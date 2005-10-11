@@ -19,7 +19,8 @@ SET(bugl_sources
 AUX_SOURCE_DIRECTORY(Templates bugl_sources)
 
 ADD_LIBRARY(bugl ${bugl_sources})
-
+INSTALL_TARGETS(/lib bugl)
+INSTALL_NOBASE_HEADER_FILES(/include/contrib/brl/bbas/bugl ${bugl_sources})
 TARGET_LINK_LIBRARIES(bugl vnl vgl_algo vgl vbl)
 
 IF(BUILD_TESTING)

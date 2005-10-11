@@ -11,3 +11,5 @@ SET(geometry_sources
  osl_to_vdgl.h
  DigitalCurve_to_vdgl.h
 )
+
+INSTALL_NOBASE_HEADER_FILES(/include/contrib/conversions/geometry ${geometry_sources})

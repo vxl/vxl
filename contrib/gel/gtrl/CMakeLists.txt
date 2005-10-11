@@ -19,6 +19,8 @@ IF(NETLIB_FOUND)
 ENDIF(NETLIB_FOUND)
 
 ADD_LIBRARY(gtrl ${gtrl_sources})
+INSTALL_TARGETS(/lib gtrl)
+INSTALL_NOBASE_HEADER_FILES(/include/contrib/gel/gtrl ${gtrl_sources})
 
 TARGET_LINK_LIBRARIES(gtrl vbl)
 IF(NETLIB_FOUND)

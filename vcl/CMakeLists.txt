@@ -342,7 +342,6 @@ SET( vcl_sources
 # with modern, more compliant compilers.
 #AUX_SOURCE_DIRECTORY(Templates vcl_sources)
 
-
 ADD_LIBRARY(vcl ${vcl_sources})
 
 IF(WIN32)
@@ -352,10 +351,13 @@ IF(WIN32)
   ENDIF(NOT CYGWIN)
 ENDIF(WIN32)
 
-
 IF(UNIX)
   TARGET_LINK_LIBRARIES( vcl m )
 ENDIF(UNIX)
+
+# Installation
+INSTALL_TARGETS(/lib vcl)
+INSTALL_NOBASE_HEADER_FILES(/include/vcl ${vcl_sources})
 
 # INCLUDE( ${vxl_SOURCE_DIR}/vcl/LinkSTLPort.cmake )
 

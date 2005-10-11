@@ -13,3 +13,5 @@ SET(image_sources
  vil1_to_Image.h
  vil1_to_vbl_array.h
 )
+
+INSTALL_NOBASE_HEADER_FILES(/include/contrib/conversions/image ${image_sources})

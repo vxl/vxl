@@ -65,6 +65,7 @@ SET( vil_sources ${vil_sources}
   vil_image_view.h                      vil_image_view.txx
   vil_image_resource.cxx                vil_image_resource.h
                                         vil_image_resource_sptr.h
+  vil_image_border.h
 
   vil_file_format.cxx                   vil_file_format.h
   vil_memory_image.cxx                  vil_memory_image.h
@@ -198,9 +199,11 @@ SET( vil_network_sources
 
 IF(NOT SOLARIS)
   ADD_LIBRARY(vil ${vil_sources} ${vil_network_sources})
+  INSTALL_TARGETS(/lib vil)
 ELSE(NOT SOLARIS)
   ADD_LIBRARY(vil ${vil_sources})
   ADD_LIBRARY(vil_network ${vil_network_sources})
+  INSTALL_TARGETS(/lib vil vil_network)
 ENDIF(NOT SOLARIS)
 
 IF(JPEG_FOUND)
@@ -225,6 +228,11 @@ ENDIF (NOT UNIX)
 IF (SOLARIS)
   TARGET_LINK_LIBRARIES( vil nsl vil_network socket )
 ENDIF (SOLARIS)
+
+INSTALL_NOBASE_HEADER_FILES(/include/core/vil 
+  ${vil_sources}
+  ${vil_network_sources}
+)
 
 IF( BUILD_EXAMPLES )
   SUBDIRS( examples )

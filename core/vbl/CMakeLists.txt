@@ -40,6 +40,9 @@ AUX_SOURCE_DIRECTORY(Templates vbl_sources)
 ADD_LIBRARY(vbl ${vbl_sources})
 TARGET_LINK_LIBRARIES( vbl vcl )
 
+INSTALL_TARGETS(/lib vbl)
+INSTALL_NOBASE_HEADER_FILES(/include/core/vbl ${vbl_sources})
+
 IF( BUILD_EXAMPLES )
   SUBDIRS( examples )
 ENDIF( BUILD_EXAMPLES )

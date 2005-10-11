@@ -12,5 +12,6 @@ SET( vimt_algo_sources
 
 
 ADD_LIBRARY(vimt_algo ${vimt_algo_sources})
-
+INSTALL_TARGETS(/lib vimt_algo)
+INSTALL_NOBASE_HEADER_FILES(/include/contrib/mul/vimt/algo ${vimt_algo_sources})
 TARGET_LINK_LIBRARIES( vimt_algo vimt vcl )

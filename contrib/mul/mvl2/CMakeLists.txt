@@ -47,7 +47,8 @@ ENDIF (AVIFILE_FOUND)
 
 
 ADD_LIBRARY(mvl2 ${mvl2_sources})
-
+INSTALL_TARGETS(/lib mvl2)
+INSTALL_NOBASE_HEADER_FILES(/include/contrib/mul/mvl2 ${mvl2_sources})
 TARGET_LINK_LIBRARIES( mvl2 vil vul ${AVIFILE_LIBRARIES} )
 
 IF (AVIFILE_FOUND)

@@ -31,3 +31,6 @@ AUX_SOURCE_DIRECTORY(Templates vgl_algo_sources)
 
 ADD_LIBRARY(vgl_algo ${vgl_algo_sources})
 TARGET_LINK_LIBRARIES( vgl_algo vgl vnl_algo vnl )
+
+INSTALL_TARGETS(/lib vgl_algo)
+INSTALL_NOBASE_HEADER_FILES(/include/core/vgl_algo ${vgl_algo_sources})

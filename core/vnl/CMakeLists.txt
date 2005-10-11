@@ -173,6 +173,8 @@ SET( vnl_sources
                                vnl_integrant_fnct.h
                                vnl_analytic_integrant.h
   vnl_definite_integral.cxx    vnl_definite_integral.h
+
+  dll.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vnl_sources)
@@ -193,6 +195,9 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(vnl ${vnl_sources})
 TARGET_LINK_LIBRARIES( vnl vcl )
+
+INSTALL_TARGETS(/lib vnl)
+INSTALL_NOBASE_HEADER_FILES(/include/core/vnl ${vnl_sources})
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)

@@ -50,9 +50,11 @@ ELSE(APPLE)
 
 IF(NOT SOLARIS)
   ADD_LIBRARY(vul ${vul_sources} ${vul_network_sources})
+  INSTALL_TARGETS(/lib vul)
 ELSE(NOT SOLARIS)
   ADD_LIBRARY(vul ${vul_sources})
   ADD_LIBRARY(vul_network ${vul_network_sources})
+  INSTALL_TARGETS(/lib vul vul_network)
 ENDIF(NOT SOLARIS)
 
 IF (NOT UNIX)
@@ -66,6 +68,11 @@ ENDIF (SOLARIS)
 ENDIF(APPLE)
 
 TARGET_LINK_LIBRARIES( vul vcl )
+
+INSTALL_NOBASE_HEADER_FILES(/include/core/vul 
+  ${vul_sources}
+  ${vul_network_sources}
+)
 
 IF( BUILD_EXAMPLES )
   SUBDIRS( examples )

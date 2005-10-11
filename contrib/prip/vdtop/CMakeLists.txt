@@ -26,7 +26,8 @@ SET(vdtop_sources
 )
 
 ADD_LIBRARY(vdtop ${vdtop_sources})
-
+INSTALL_TARGETS(/lib vdtop)
+INSTALL_NOBASE_HEADER_FILES(/include/contrib/prip/vdtop ${vdtop_sources})
 TARGET_LINK_LIBRARIES(vdtop vmap vil)
 
 #IF (BUILD_TESTING)

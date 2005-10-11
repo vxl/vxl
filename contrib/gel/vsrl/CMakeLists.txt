@@ -45,6 +45,8 @@ IF (HAS_VGUI)
 ENDIF (HAS_VGUI)
 
 ADD_LIBRARY(vsrl ${vsrl_sources})
+INSTALL_TARGETS(/lib vsrl)
+INSTALL_NOBASE_HEADER_FILES(/include/contrib/gel/vsrl ${vsrl_sources})
 
 IF (HAS_VGUI)
  IF (BUILD_BRL)

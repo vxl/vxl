@@ -23,6 +23,8 @@ IF(HAS_VGUI)
  )
 
  ADD_LIBRARY(bmvv ${bmvv_sources})
+ INSTALL_TARGETS(/lib bmvv)
+ INSTALL_NOBASE_HEADER_FILES(/include/contrib/brl/bmvl/bmvv ${bmvv_sources})
 
  # find the path to the xerces libraries and includes
  INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/find_xerces.cmake )

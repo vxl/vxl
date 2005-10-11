@@ -10,6 +10,9 @@ SET( vpl_sources
 ADD_LIBRARY(vpl ${vpl_sources})
 TARGET_LINK_LIBRARIES( vpl vcl )
 
+INSTALL_TARGETS(/lib vpl)
+INSTALL_NOBASE_HEADER_FILES(/include/core/vpl ${vpl_sources})
+
 IF( BUILD_TESTING)
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING)

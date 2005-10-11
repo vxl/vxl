@@ -10,6 +10,8 @@ bdpg_array_dynamic_prg.cxx    bdpg_array_dynamic_prg.h
 AUX_SOURCE_DIRECTORY(Templates bdpg_sources)
 
 ADD_LIBRARY(bdpg ${bdpg_sources})
+INSTALL_TARGETS(/lib bdpg)
+INSTALL_NOBASE_HEADER_FILES(/include/contrib/brl/bbas/bdpg ${bdpg_sources})
 
 TARGET_LINK_LIBRARIES(bdpg vnl vbl)
 

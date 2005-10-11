@@ -14,6 +14,8 @@ SET(vgel_sources ${vgel_sources}
 ENDIF(BUILD_OXL)
 
 ADD_LIBRARY(vgel ${vgel_sources})
+INSTALL_TARGETS(/lib vgel)
+INSTALL_NOBASE_HEADER_FILES(/include/contrib/gel/vgel ${vgel_sources})
 
 IF(BUILD_OXL)
  INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR})

@@ -23,6 +23,8 @@ SET(bmrf_sources
 AUX_SOURCE_DIRECTORY(Templates bmrf_sources)
 
 ADD_LIBRARY(bmrf ${bmrf_sources})
+INSTALL_TARGETS(/lib bmrf)
+INSTALL_NOBASE_HEADER_FILES(/include/contrib/brl/bseg/bmrf ${bmrf_sources})
 
 TARGET_LINK_LIBRARIES(bmrf bugl vtol gevd vdgl vbl_io vnl_algo vnl_io vil vgl vsl)
 

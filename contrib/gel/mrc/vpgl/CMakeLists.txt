@@ -11,4 +11,6 @@ SET(vpgl_sources
 AUX_SOURCE_DIRECTORY(Templates vpgl_sources)
 
 ADD_LIBRARY(vpgl ${vpgl_sources})
+INSTALL_TARGETS(/lib vpgl)
+INSTALL_NOBASE_HEADER_FILES(/include/contrib/gel/mrc/vpgl ${vpgl_sources})
 TARGET_LINK_LIBRARIES(vpgl vcsl vnl vbl vcl)

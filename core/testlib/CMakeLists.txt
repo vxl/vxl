@@ -25,6 +25,8 @@ SET( testlib_sources
 
 ADD_LIBRARY( testlib ${testlib_sources} )
 TARGET_LINK_LIBRARIES( testlib vcl )
+INSTALL_TARGETS( /lib testlib)
+INSTALL_NOBASE_HEADER_FILES(/include/core/testlib ${testlib_sources})
 
 IF( BUILD_TESTING )
   SUBDIRS( tests )

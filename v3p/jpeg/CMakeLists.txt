@@ -65,5 +65,6 @@ SET( jpeg_sources
 )
 
 ADD_LIBRARY( jpeg ${jpeg_sources} )
+INSTALL_TARGETS(/lib jpeg)
 
 ENDIF(NOT VXL_USING_NATIVE_JPEG)

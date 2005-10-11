@@ -11,5 +11,7 @@ SET(btom_sources
 AUX_SOURCE_DIRECTORY(Templates btom_sources)
 
 ADD_LIBRARY(btom ${btom_sources})
+INSTALL_TARGETS(/lib btom)
+INSTALL_NOBASE_HEADER_FILES(/include/contrib/btom ${btom_sources})
 
 TARGET_LINK_LIBRARIES(btom gevd vil1 vnl vbl)

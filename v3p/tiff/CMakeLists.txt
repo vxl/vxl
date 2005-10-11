@@ -66,5 +66,6 @@ ELSE(UNIX)
 ENDIF(UNIX)
 
 ADD_LIBRARY( tiff ${tiff_sources} )
+INSTALL_TARGETS( /lib tiff )
 
 ENDIF(NOT VXL_USING_NATIVE_TIFF)
