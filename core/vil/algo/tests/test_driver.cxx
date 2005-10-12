@@ -1,6 +1,7 @@
 #include <testlib/testlib_register.h>
 
 DECLARE( test_algo_gauss_reduce );
+DECLARE( test_algo_colour_space );
 DECLARE( test_algo_correlate_1d );
 DECLARE( test_algo_convolve_1d );
 DECLARE( test_algo_correlate_2d );
@@ -38,6 +39,7 @@ void
 register_tests()
 {
   REGISTER( test_algo_gauss_reduce );
+  REGISTER( test_algo_colour_space );
   REGISTER( test_algo_correlate_1d );
   REGISTER( test_algo_convolve_1d );
   REGISTER( test_algo_correlate_2d );

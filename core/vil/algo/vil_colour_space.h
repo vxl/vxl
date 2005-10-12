@@ -44,4 +44,13 @@ void vil_colour_space_RGB_to_HSV(T r, T g, T b, T *h, T *s, T *v);
 template <class T>
 void vil_colour_space_HSV_to_RGB(T h, T s, T v, T *r, T *g, T *b);
 
+
+//: Linear transformation from RGB to YUV colour spaces
+template <class T>
+void vil_colour_space_RGB_to_YUV(T const in[3], T out[3]);
+
+//: Linear transformation from YUV to RGB colour spaces
+template <class T>
+void vil_colour_space_YUV_to_RGB(T const in[3], T out[3]);
+
 #endif // vil_colour_space_h_

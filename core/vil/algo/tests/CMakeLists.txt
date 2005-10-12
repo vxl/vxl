@@ -4,6 +4,7 @@ ADD_EXECUTABLE( vil_algo_test_all
   test_driver.cxx
   test_algo_gauss_filter.cxx
   test_algo_gauss_reduce.cxx
+  test_algo_colour_space.cxx
   test_algo_convolve_1d.cxx
   test_algo_convolve_2d.cxx
   test_algo_correlate_1d.cxx
@@ -47,6 +48,7 @@ TARGET_LINK_LIBRARIES( vil_algo_test_all vil_algo testlib vcl )
 # vil/algo
 ADD_TEST( vil_algo_test_gauss_filter        vil_algo_test_all test_algo_gauss_filter)
 ADD_TEST( vil_algo_test_gauss_reduce        vil_algo_test_all test_algo_gauss_reduce)
+ADD_TEST( vil_algo_test_colour_space        vil_algo_test_all test_algo_colour_space)
 ADD_TEST( vil_algo_test_convolve_1d         vil_algo_test_all test_algo_convolve_1d)
 ADD_TEST( vil_algo_test_convolve_2d         vil_algo_test_all test_algo_convolve_2d)
 ADD_TEST( vil_algo_test_correlate_1d        vil_algo_test_all test_algo_correlate_1d)

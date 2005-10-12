@@ -130,11 +130,34 @@ void vil_colour_space_HSV_to_RGB(T h, T s, T v, T *r, T *g, T *b)
 }
 
 
+template <class T>
+void vil_colour_space_RGB_to_YUV(T const in[3], T out[3])
+{
+  out[0] = T(0.299) * in[0] + T(0.587) * in[1] + T(0.114) * in[2];
+  out[1] = T(0.492) * (in[2] - out[0]);
+  out[2] = T(0.877) * (in[0] - out[0]);
+}
+
+
+template <class T>
+void vil_colour_space_YUV_to_RGB(T const in[3], T out[3])
+{
+  // the coefficient of the inverse are given here to higher precision
+  // than typically used.  This allows for more accurate results when
+  // working with floating point color representations
+  out[0] = in[0] + T(1.1402508551881) * in[2];
+  out[1] = in[0] - T(0.39473137491174) * in[1] - T(0.5808092090311) * in[2];
+  out[2] = in[0] + T(2.0325203252033) * in[1];
+}
+
 //----------------------------------------------------------------------
 
 #define inst(T) \
 template void vil_colour_space_RGB_to_YIQ(T const [3], T [3]); \
 template void vil_colour_space_RGB_to_HSV(T, T, T, T *, T *, T *); \
-template void vil_colour_space_HSV_to_RGB(T, T, T, T *, T *, T *)
+template void vil_colour_space_HSV_to_RGB(T, T, T, T *, T *, T *); \
+template void vil_colour_space_RGB_to_YUV(T const [3], T [3]); \
+template void vil_colour_space_YUV_to_RGB(T const [3], T [3])
 
 inst(double);
+inst(float);
