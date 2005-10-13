@@ -314,6 +314,9 @@ SOURCE=.\vil3d_resample_trilinear.h
 # Begin Source File
 SOURCE=.\vil3d_resample_trilinear.txx
 # End Source File
+# Begin Source File
+SOURCE=.\vil3d_decimate.h
+# End Source File
 # End Group
 # End Target
 # End Project

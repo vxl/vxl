@@ -164,6 +164,9 @@ SOURCE=.\Templates/vbl_io_triple+double.int.int-.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_io_array_2d+float-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vbl_triple+uint.uint.uint--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
