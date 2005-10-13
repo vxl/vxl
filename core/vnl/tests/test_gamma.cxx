@@ -35,7 +35,7 @@ static void test_gamma()
   TEST_NEAR("vnl_erfc(inf)",         vnl_erfc(1e9),             0.0,  1e-8);
   TEST_NEAR("vnl_erfc(-inf)",        vnl_erfc(-1e9),            2.0,  1e-8);
 
-  TEST_NEAR("vnl_scaled_erfc(6)",    vnl_scaled_erfc(6.), exp(36.)*vnl_erfc(6.), 0.01);
+  TEST_NEAR("vnl_scaled_erfc(6)",    vnl_scaled_erfc(6.), vcl_exp(36.)*vnl_erfc(6.), 0.01);
   TEST_NEAR("vnl_scaled_erfc(100)",  vnl_scaled_erfc(100.),   0.0056, 0.01);
   TEST_NEAR("vnl_scaled_erfc(-inf)", vnl_scaled_erfc(-1e9),  0.0,  1e-8);
 }
