@@ -2,6 +2,7 @@
 #include <testlib/testlib_test.h>
 #include <vil/algo/vil_colour_space.h>
 #include <vcl_iostream.h>
+#include <vcl_cmath.h>
 
 static void test_algo_colour_space()
 {
