@@ -179,6 +179,8 @@ void vsol_polyline_2d::set_p1(vsol_point_2d_sptr const& new_p1)
 void vsol_polyline_2d::add_vertex(vsol_point_2d_sptr const& new_p)
 {
   storage_->push_back(new_p);
+  //Required to have a consistent curve (JLM)
+  p1_ = new_p;
 }
 
 //----------------------------------------------------------------
