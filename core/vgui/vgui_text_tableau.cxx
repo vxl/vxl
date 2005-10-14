@@ -19,7 +19,11 @@
 #include <vgui/vgui_gl.h>
 #include <vcl_cassert.h>
 
-vgui_text_tableau::vgui_text_tableau() : first_empty(0) {
+vgui_text_tableau::vgui_text_tableau()
+  : cur_r_( 1 ), cur_g_( 0 ), cur_b_( 0 ),
+    cur_sz_( 24 ),
+    first_empty(0)
+{
   // Default text colour is red:
   cur_r_ = 1; cur_g_ = 0; cur_b_ = 0;
 }
@@ -52,6 +56,7 @@ int vgui_text_tableau::add(float x, float y, char const *text) {
     r_[first_empty] = cur_r_;
     g_[first_empty] = cur_g_;
     b_[first_empty] = cur_b_;
+    sz_[first_empty] = cur_sz_;
     // Find next empty slot:
     while (first_empty < size()  &&  r_[first_empty] != -1)
       first_empty++;
@@ -63,6 +68,7 @@ int vgui_text_tableau::add(float x, float y, char const *text) {
     r_.push_back(cur_r_);
     g_.push_back(cur_g_);
     b_.push_back(cur_b_);
+    sz_.push_back(cur_sz_);
     first_empty++;
   }
   post_redraw();
@@ -84,6 +90,10 @@ void vgui_text_tableau::set_colour(float r, float g, float b) {
     cur_g_ = g;
     cur_b_ = b;
   }
+}
+
+void vgui_text_tableau::set_size( unsigned s ) {
+  cur_sz_ = s;
 }
 
 float vgui_text_tableau::get_posx(int handle) const {
@@ -142,7 +152,7 @@ bool vgui_text_tableau::handle(vgui_event const &e) {
     if (r_[i] != -1) {
       glColor3f(r_[i],g_[i],b_[i]);
       glRasterPos2f(xs[i], ys[i]);
-      ::vgui_text_put(ts[i].c_str());
+      ::vgui_text_put(ts[i].c_str(),sz_[i]);
     }
   }
   return true;

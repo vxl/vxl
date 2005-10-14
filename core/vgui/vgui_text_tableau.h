@@ -58,6 +58,11 @@ class vgui_text_tableau : public vgui_tableau
   //: Set the colour of the text
   void set_colour(float r, float g, float b);
 
+  //: Set the size of the text.
+  //
+  // This is one of the sizes supported by vgui_text_put.
+  void set_size( unsigned sz );
+
   //: Return the x-coordinate of the text associated to given handle.
   float get_posx(int handle) const;
 
@@ -92,8 +97,10 @@ class vgui_text_tableau : public vgui_tableau
   vcl_vector<float> ys;
   vcl_vector<float> r_, g_, b_;
   vcl_vector<vcl_string> ts;
+  vcl_vector<unsigned> sz_;
 
   float cur_r_, cur_g_, cur_b_;
+  unsigned cur_sz_;
 
   //: Position of the first empty space in the vectors
   unsigned first_empty;
