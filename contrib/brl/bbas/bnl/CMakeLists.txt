@@ -15,4 +15,4 @@ TARGET_LINK_LIBRARIES(bnl vnl vnl_algo)
 SUBDIRS(algo)
 
 # tests code
-SUBDIRS(tests)
+#SUBDIRS(tests)
