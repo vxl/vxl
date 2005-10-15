@@ -17,6 +17,7 @@
 #include <vil3d/vil3d_convert.h>
 #include <vil3d/vil3d_copy.h>
 #include <vil3d/vil3d_crop.h>
+#include <vil3d/vil3d_decimate.h>
 #include <vil3d/vil3d_file_format.h>
 #include <vil3d/vil3d_from_image_2d.h>
 #include <vil3d/vil3d_image_resource.h>
