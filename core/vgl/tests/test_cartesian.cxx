@@ -343,7 +343,7 @@ static void test_line_2d()
           vgl_lineseg_test_lineseg(vgl_line_segment_2d<double>(p01, p01), vgl_line_segment_2d<double>(p12, p12)), false);
 
   TEST("four almost collinear points: do not intersect",
-       vgl_lineseg_test_lineseg(328.99996948242187,127.99999237060547,271.98755895963365,178.20118501723579,
+       vgl_lineseg_test_lineseg<double >(328.99996948242187,127.99999237060547,271.98755895963365,178.20118501723579,
                                 181.43250686733217,257.93771209135798,102.99999237060547,326.99996948242187), false);
 
   vgl_box_2d<double> bx(0,2,0,3);
