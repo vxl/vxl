@@ -3,7 +3,7 @@
 #
 #   geoff.cross@crd.ge.com
 
-CMAKE_MINIMUM_REQUIRED(VERSION 1.6)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.0)
 
 PROJECT(vxl)
 
