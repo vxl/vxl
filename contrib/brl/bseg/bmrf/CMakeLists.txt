@@ -26,7 +26,7 @@ ADD_LIBRARY(bmrf ${bmrf_sources})
 INSTALL_TARGETS(/lib bmrf)
 INSTALL_NOBASE_HEADER_FILES(/include/contrib/brl/bseg/bmrf ${bmrf_sources})
 
-TARGET_LINK_LIBRARIES(bmrf bugl vtol gevd vdgl vbl_io vnl_algo vnl_io vil vgl vsl)
+TARGET_LINK_LIBRARIES(bmrf bsta bugl vtol gevd vdgl vbl_io vnl_algo vnl_io vil vgl vsl)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)
