@@ -77,6 +77,11 @@ void segv_vil_menus::subtract_images_callback()
   segv_vil_segmentation_manager::instance()->subtract_images();
 }
 
+void segv_vil_menus::entropy_callback()
+{
+  segv_vil_segmentation_manager::instance()->entropy();
+}
+
 void segv_vil_menus::test_inline_viewer_callback()
 {
   segv_vil_segmentation_manager::instance()->test_inline_viewer();
@@ -119,6 +124,7 @@ vgui_menu segv_vil_menus::get_menu()
   //operation menu entries
   menuops.add("Add Images:", add_images_callback);
   menuops.add("Subtract Images:", subtract_images_callback);
+  menuops.add("Entropy", entropy_callback);
   //Top level menu layout
   menubar.add( "File", menufile);
   menubar.add( "View", menuview);

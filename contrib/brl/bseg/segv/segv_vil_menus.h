@@ -36,6 +36,7 @@ class segv_vil_menus
   SEGV_VIL_DLL_DATA static void regions_callback();
   SEGV_VIL_DLL_DATA static void add_images_callback();
   SEGV_VIL_DLL_DATA static void subtract_images_callback();
+  SEGV_VIL_DLL_DATA static void entropy_callback();
   //test/development do not use
   SEGV_VIL_DLL_DATA static void test_inline_viewer_callback();
   SEGV_VIL_DLL_DATA static void test_ellipse_draw_callback();

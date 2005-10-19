@@ -127,7 +127,7 @@ range_params(vil_image_resource_sptr const& image)
 {
   float gamma = 1.0;
   bool invert = false;
-  bool gl_map = true;
+  bool gl_map = false;
   bool cache = true;
   unsigned min = 0, max = 255;
   if (image->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
@@ -137,6 +137,8 @@ range_params(vil_image_resource_sptr const& image)
     vil_math_value_range<unsigned char>(temp, vmin, vmax);
     min = static_cast<unsigned>(vmin);
     max = static_cast<unsigned>(vmax);
+    return  new vgui_range_map_params(min, max, gamma, invert,
+                                      gl_map, cache);
   }
   if (image->pixel_format()==VIL_PIXEL_FORMAT_UINT_16)
   {
@@ -145,10 +147,13 @@ range_params(vil_image_resource_sptr const& image)
     vil_math_value_range<unsigned short>(temp, vmin, vmax);
     min = static_cast<unsigned>(vmin);
     max = static_cast<unsigned>(vmax);
+    gl_map = true;
+    return  new vgui_range_map_params(min, max, gamma, invert,
+                                      gl_map, cache);
   }
-
-  return  new vgui_range_map_params(min, max, gamma, invert,
-                                    gl_map, cache);
+vcl_cout << "Image pixel format not handled\n";
+ return new vgui_range_map_params(0, 255, gamma, invert,
+                                      gl_map, cache);
 }
 
 //: set the image at the currently selected grid cell
@@ -588,7 +593,7 @@ void segv_vil_segmentation_manager::threshold_image()
     return;
   }
   static float thresh = 128.0f;
-  vgui_dialog thresh_dlg("Set Range Map Params");
+  vgui_dialog thresh_dlg("Threshold Image");
   thresh_dlg.field("Threshold", thresh);
   if (!thresh_dlg.ask())
     return;
@@ -976,4 +981,32 @@ void segv_vil_segmentation_manager::subtract_images()
     grid_->add_column();
   unsigned col = 2, row = 0;
   this->add_image_at(diff,col,row);
+}
+
+void segv_vil_segmentation_manager::entropy()
+{
+  vgui_dialog entropy_dlg("Entropy of Image");
+  static unsigned xrad = 15, yrad = 15, step = 10;
+  static float sigma = 1.0f;
+  static bool inten = true;
+  static bool grad = true;
+  static bool color = false;
+  entropy_dlg.field("Region x radius",xrad);
+  entropy_dlg.field("Region y radius",yrad);
+  entropy_dlg.field("Step Size", step);
+  entropy_dlg.field("Sigma", sigma);
+  entropy_dlg.checkbox("Intensity", inten);
+  entropy_dlg.checkbox("Gradient", grad);
+  entropy_dlg.checkbox("Color", color);
+  if (!entropy_dlg.ask())
+    return;
+  bgui_image_tableau_sptr itab = this->selected_image_tab();
+  vil_image_resource_sptr img = itab->get_image_resource();
+  vil_image_view<float> entropy =
+    brip_vil_float_ops::entropy(xrad, yrad, step, img,
+                                sigma, inten, grad, color);
+  vil_image_view<unsigned char> cent =
+    brip_vil_float_ops::convert_to_byte(entropy);
+
+  this->add_image(vil_new_image_resource_of_view(cent));
 }
