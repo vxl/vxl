@@ -20,6 +20,7 @@
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <bsol/bsol_algs.h>
+#include <bsta/bsta_histogram.h>
 #include <brip/brip_roi.h>
 
 //------------------------------------------------------------
@@ -1231,9 +1232,6 @@ convert_to_IHS(vil_image_view<vil_rgb<vxl_byte> >const& image,
                vil_image_view<float>& S)
 {
   unsigned w = image.ni(), h = image.nj();
-  vcl_cout << "\n width in function is " << w
-           << "\n height in function is " << h;
-
   I.set_size(w,h);
   H.set_size(w,h);
   S.set_size(w,h);
@@ -1255,9 +1253,6 @@ convert_to_IHS(vil_image_view<unsigned char >const& image,
                vil_image_view<float>& S)
 {
   unsigned w = image.ni(), h = image.nj();
-  vcl_cout << "\n width in function is " << w
-           << "\n height in function is " << h;
-
   I.set_size(w,h);
   H.set_size(w,h);
   S.set_size(w,h);
@@ -2543,3 +2538,97 @@ brip_vil_float_ops::difference(vil_image_resource_sptr const& img0,
   // for color return the float image
   return vil_new_image_resource_of_view(diff);
 }
+
+//Compute the entropy of the intensity of a region
+//Note no bounds checking is done!!
+float brip_vil_float_ops::entropy_i(const unsigned i, const unsigned j,
+                                    const unsigned i_radius, 
+                                    const unsigned j_radius,
+                                    vil_image_view<float> const& intensity,
+                                    const float range, const unsigned bins)
+{
+  bsta_histogram<float> hi(range, bins);
+  int ir = static_cast<int>(i_radius), jr = static_cast<int>(j_radius);
+  for(int dj = -jr; dj<=jr; ++dj)
+    for(int di = -ir; di<=ir; ++di)
+      {
+        float inten = intensity(i+di, j+dj);
+        hi.upcount(inten, 1.0f);
+      } 
+  return hi.entropy();
+}
+//Compute the entropy of the gradient direction of a region
+//Note no bounds checking is done!!
+float brip_vil_float_ops::entropy_g(const unsigned i, const unsigned j,
+                                    const unsigned i_radius, 
+                                    const unsigned j_radius,
+                                    vil_image_view<float> const& gradx,
+                                    vil_image_view<float> const& grady,
+                                    const float range, const unsigned bins)
+{
+  bsta_histogram<float> hg(range, bins);
+  float deg_rad = (float)(180.0/vnl_math::pi);
+  int ir = static_cast<int>(i_radius), jr = static_cast<int>(j_radius);
+  for(int dj = -jr; dj<=jr; ++dj)
+    for(int di = -ir; di<=ir; ++di)
+      {
+        float Ix = gradx(i+di, j+dj), Iy = grady(i+di, j+dj);
+        float ang = deg_rad*vcl_atan2(Iy, Ix) + 180.0f;
+        float mag = vcl_abs(Ix)+vcl_abs(Iy);
+        hg.upcount(ang, mag);
+      }
+  return hg.entropy();
+}
+vil_image_view<float> 
+brip_vil_float_ops::entropy(const unsigned i_radius,
+                            const unsigned j_radius,
+                            const unsigned step,
+                            vil_image_resource_sptr const& img,
+                            const float sigma,
+                            const bool intensity,
+                            const bool gradient,
+                            const bool ihs
+                            )
+{
+  vil_image_view<float> ent;
+  // IHS is not yet implemented FIXME JLM
+  if(ihs)
+    {
+      vcl_cout << "In brip_vil_float_ops::entropy(.) - IHS not implemented yet!\n";
+        return ent;
+    }
+  if(!intensity&&!gradient)
+    {
+      vcl_cout << "In brip_vil_float_ops::entropy(.) - No computation to do\n";
+      return ent;
+    }
+  
+  vil_image_view<float> fimage = brip_vil_float_ops::convert_to_float(img);
+  vil_image_view<float> gimage =
+    brip_vil_float_ops::gaussian(fimage, sigma);  
+  
+  unsigned ni = img->ni(), nj = img->nj();
+  ent.set_size(ni/step+1, nj/step+1);
+  ent.fill(0.0f);
+  if(intensity)
+    for(unsigned j = j_radius; j<(nj-j_radius); j+=step)
+      for(unsigned i = i_radius; i<(ni-i_radius); i+=step)
+        ent(i/step,j/step) = 
+          brip_vil_float_ops::entropy_i(i, j, i_radius, j_radius, gimage);
+
+  if(gradient)
+    {
+      vil_image_view<float> grad_x, grad_y;
+      grad_x.set_size(ni, nj);
+      grad_y.set_size(ni, nj);
+      brip_vil_float_ops::gradient_3x3 (gimage , grad_x , grad_y);  
+      for(unsigned j = j_radius; j<(nj-j_radius); j+=step)
+        for(unsigned i = i_radius; i<(ni-i_radius); i+=step)
+          ent(i/step,j/step) += 
+            brip_vil_float_ops::entropy_g(i, j, i_radius, j_radius,
+                                          grad_x, grad_y);
+    }
+  return ent;
+}
+ 
+

@@ -62,8 +62,8 @@ class brip_vil_float_ops
 
   //:downsamples the input using the Bert-Adelson algorithm
   static vil_image_view<float>
-  half_resolution(vil_image_view<float> const& input,
-                  float filter_coef=0.359375f);
+    half_resolution(vil_image_view<float> const& input,
+                    float filter_coef=0.359375f);
 
 #if 0
   //: interpolates the input using the Bert-Adelson algorithm
@@ -80,7 +80,7 @@ class brip_vil_float_ops
   //: sets values greater than thresh to specified level and the rest to zero
   static vil_image_view<float>
     threshold(vil_image_view<float> const & image,
-                      const float thresh, const float level = 255.0);
+              const float thresh, const float level = 255.0);
 
   //: sets absolute values greater than thresh to specified level
   static vil_image_view<float>
@@ -100,9 +100,9 @@ class brip_vil_float_ops
                           vil_image_view<float>& Iyy);
 
   static vil_image_view<float>
-  beaudet(vil_image_view<float> const& Ixx,
-          vil_image_view<float> const& Ixy,
-          vil_image_view<float> const& Iyy);
+    beaudet(vil_image_view<float> const& Ixx,
+            vil_image_view<float> const& Ixy,
+            vil_image_view<float> const& Iyy);
 
   //: IxIx.transpose gradient matrix elements (N = 2n+1)
   static void grad_matrix_NxN(vil_image_view<float> const& input, int n,
@@ -165,7 +165,7 @@ class brip_vil_float_ops
                      float min_val, float max_val);
   //: converts a generic image to an unsigned short image
   static vil_image_view<unsigned short>
-  convert_to_short(vil_image_resource_sptr const& image);
+    convert_to_short(vil_image_resource_sptr const& image);
 
   //: converts a vil_image_resource to a float image
   static vil_image_view<float>
@@ -273,8 +273,8 @@ class brip_vil_float_ops
 
   //:rotate the input image counter-clockwise about the image origin
   static
-  vil_image_view<float> rotate(vil_image_view<float> const& input,
-                               double theta_deg);
+    vil_image_view<float> rotate(vil_image_view<float> const& input,
+                                 double theta_deg);
 
   //:extract a region of interest. If roi does not overlap input, return false
   static bool chip(vil_image_view<float> const& input,
@@ -287,22 +287,53 @@ class brip_vil_float_ops
 
   //:cross-correlate two images at a given sub-pixel location
   static float
-  cross_correlate(vil_image_view<float> const& image1,
-                  vil_image_view<float> const& image2,
-                  float x, float y, int radius = 5,
-                  float intensity_thresh=25.0f);
+    cross_correlate(vil_image_view<float> const& image1,
+                    vil_image_view<float> const& image2,
+                    float x, float y, int radius = 5,
+                    float intensity_thresh=25.0f);
 
   //:cross_correlate two images using running sums
   static bool
-  cross_correlate(vil_image_view<float> const& image1,
-                  vil_image_view<float> const& image2,
-                  vil_image_view<float>& out,
-                  int radius = 5, float intensity_thresh=25.0f);
+    cross_correlate(vil_image_view<float> const& image1,
+                    vil_image_view<float> const& image2,
+                    vil_image_view<float>& out,
+                    int radius = 5, float intensity_thresh=25.0f);
+
+  //:convert a single i,h,s  pixel to rgb
   static void ihs_to_rgb(vil_rgb<vxl_byte>& rgb,
-                         float i, float h, float s);
+                         const float i, const float h, const float s);
+
+  //:convert a single rgb pixel to ihs
   static  void rgb_to_ihs(vil_rgb<vxl_byte> const& rgb,
                           float& i, float& h, float& s);
 
+  //:compute the intensity entropy of a region about the specified pixel
+  //no bounds check
+static float entropy_i(const unsigned i, const unsigned j,
+                const unsigned i_radius, 
+                const unsigned j_radius,
+                vil_image_view<float> const& intensity,
+                const float range = 255.0, const unsigned bins = 16);
+
+//:Compute the gradient entropy of a region about the specified pixel
+//No bounds check
+static float entropy_g(const unsigned i, const unsigned j,
+                const unsigned i_radius, 
+                const unsigned j_radius,
+                vil_image_view<float> const& gradx,
+                vil_image_view<float> const& grady,
+                const float range = 360.0, const unsigned bins = 8);
+
+  //:compute the entropy of the specified region about each pixel
+  static vil_image_view<float> entropy(const unsigned i_radius,
+                                       const unsigned j_radius,
+                                       const unsigned step,
+                                       vil_image_resource_sptr const& img,
+                                       const float sigma = 1.0f,
+                                       const bool intensity = true,
+                                       const bool gradient = true,
+                                       const bool ihs = false
+                                       );
   // Arithmetic operations
 
   //: Add two images from a general resource (forces types to be the same)
@@ -345,10 +376,10 @@ class brip_vil_float_ops
 #if 0 // TODO ?
   //: converting IHS to RGB
   static void
-  convert_IHS_as_RGB(vil_image_view<float> const& I,
-                     vil_image_view<float> const& H,
-                     vil_image_view<float> const& S,
-                     vil_image_view<vil_rgb<vxl_byte> >& image);
+    convert_IHS_as_RGB(vil_image_view<float> const& I,
+                       vil_image_view<float> const& H,
+                       vil_image_view<float> const& S,
+                       vil_image_view<vil_rgb<vxl_byte> >& image);
 #endif // 0
 
   //: Default constructor is private
