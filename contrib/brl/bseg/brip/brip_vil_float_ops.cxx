@@ -1188,7 +1188,7 @@ void brip_vil_float_ops::rgb_to_ihs(vil_rgb<vxl_byte> const& rgb,
 }
 
 void brip_vil_float_ops::ihs_to_rgb(vil_rgb<vxl_byte> & rgb,
-                                    float i, float h, float s)
+                                    const float i, const float h, const float s)
 {
   // Reference: page 593 of Foley & van Dam
   float R = 0.0f;
@@ -1204,14 +1204,15 @@ void brip_vil_float_ops::ihs_to_rgb(vil_rgb<vxl_byte> & rgb,
 
   if (s > 0.0)
   {
-    s *= 1.f / 255.f;
-    h *= 6.f / 255.f;
+    float ss = s, hh = h;
+    ss *= 1.f / 255.f;
+    hh *= 6.f / 255.f;
 
-    float J = vcl_floor(h);
-    float F = h - J;
-    float P =( i * (1 - s));
-    float Q = (i * (1 - (s * F)));
-    float T = (i * (1 - (s * (1 - F))));
+    float J = vcl_floor(hh);
+    float F = hh - J;
+    float P =( i * (1 - ss));
+    float Q = (i * (1 - (ss * F)));
+    float T = (i * (1 - (ss * (1 - F))));
 
      if (J == 0) { R=i; G=T; B=P; }
      if (J == 1) { R=Q; G=i; B=P; }
