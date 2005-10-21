@@ -6,13 +6,41 @@
 #include "vil_nitf2_field_definition.h"
 #include "vil_nitf2_typed_field_formatter.h"
 
+vil_nitf2_field_definitions&
+vil_nitf2_des::define(vcl_string desId )
+{
+  if (all_definitions.find(desId) != all_definitions.end()) {
+    throw("des with that name already defined.");
+  }
+  vil_nitf2_field_definitions* definition = new vil_nitf2_field_definitions();
+  all_definitions.insert( vcl_make_pair(desId, definition) );
+  return *definition;
+}
+
 vil_nitf2_des::vil_nitf2_des( vil_nitf2_classification::file_version version, int data_width )
-  : m_field_sequence( *create_field_definitions( version, data_width ) )
-{ }
+  : m_field_sequence1( 0 ),
+    m_field_sequence2( 0 )
+{ 
+  m_field_sequence1 = new vil_nitf2_field_sequence( *create_field_definitions( version, data_width ) );
+}
 
 bool vil_nitf2_des::read(vil_stream* stream)
 {
-  return m_field_sequence.read(*stream);
+  if( m_field_sequence1->read(*stream) ) {
+    vcl_string desId;
+    m_field_sequence1->get_value( "DESID", desId );
+    if( desId == "TRE_OVERFLOW" ){
+      return true;
+    } else {
+      field_definition_map::iterator it = all_definitions.find( desId );
+      if( it != all_definitions.end() ) {
+        if( m_field_sequence2 ) delete m_field_sequence2;
+        m_field_sequence2 = new vil_nitf2_field_sequence( *((*it).second) );
+        return m_field_sequence2->read(*stream);
+      }
+    }
+  }
+  return false;
 }
 
 vil_nitf2_field_definitions* vil_nitf2_des::create_field_definitions( vil_nitf2_classification::file_version ver, int data_width )
@@ -28,7 +56,7 @@ void vil_nitf2_des::add_shared_field_defs_1( vil_nitf2_field_definitions* defs )
 {
   (*defs)
     .field( "DE", "Data Extension Subheader", NITF_ENUM( 2, vil_nitf2_enum_values().value( "DE" ) ), false, 0, 0 )
-    .field( "DESID", "Unique DES Type Identifier", NITF_ENUM( 25, vil_nitf2_enum_values().value( "TRE_OVERFLOW" ) ), 
+    .field( "DESID", "Unique DES Type Identifier", NITF_STR( 25 ), 
             false, 0, 0 )
     .field( "DESVER", "Version of the Data Definition", NITF_INT( 2, false ), false, 0, 0 );
 }
@@ -61,9 +89,13 @@ vil_nitf2_field::field_tree* vil_nitf2_des::get_tree( int i ) const
   name_stream << "Data Extension Segment";
   if( i > 0 ) name_stream << " #" << i;
   t->columns.push_back( name_stream.str() );
-  m_field_sequence.get_tree( t );
+  m_field_sequence1->get_tree( t );
+  if( m_field_sequence2 ) m_field_sequence2->get_tree( t );
   return t;
 }
 
 vil_nitf2_des::~vil_nitf2_des()
-{ }
+{ 
+  if( m_field_sequence1 ) delete m_field_sequence1;
+  if( m_field_sequence2 ) delete m_field_sequence2;  
+}
