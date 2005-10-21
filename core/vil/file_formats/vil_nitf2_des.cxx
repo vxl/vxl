@@ -42,7 +42,7 @@ bool vil_nitf2_des::read(vil_stream* stream)
       }
     }
   }
-  return false;
+  return true;
 }
 
 vil_nitf2_field_definitions* vil_nitf2_des::create_field_definitions( vil_nitf2_classification::file_version ver, int data_width )
@@ -91,6 +91,10 @@ vil_nitf2_field::field_tree* vil_nitf2_des::get_tree( int i ) const
   name_stream << "Data Extension Segment";
   if( i > 0 ) name_stream << " #" << i;
   t->columns.push_back( name_stream.str() );
+  vcl_string desId;
+  if( m_field_sequence1->get_value( "DESID", desId ) ) {
+    t->columns.push_back( desId );
+  }
   m_field_sequence1->get_tree( t );
   if( m_field_sequence2 ) m_field_sequence2->get_tree( t );
   return t;
