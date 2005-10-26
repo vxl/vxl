@@ -38,6 +38,7 @@ ADD_EXECUTABLE( mbl_test_all
   test_test.cxx
   test_stl.cxx
   test_cloneable_ptr.cxx
+  test_exception.cxx
 )
 
 TARGET_LINK_LIBRARIES(mbl_test_all mbl vbl vul vpl testlib )
@@ -78,6 +79,7 @@ ADD_TEST( mbl_rvm_regression_builder mbl_test_all test_rvm_regression_builder )
 ADD_TEST( mbl_test_test mbl_test_all test_test )
 ADD_TEST( mbl_test_stl mbl_test_all test_stl )
 ADD_TEST( mbl_test_cloneable_ptr mbl_test_all test_cloneable_ptr )
+ADD_TEST( mbl_test_exception mbl_test_all test_exception )
 
 
 ADD_EXECUTABLE( mbl_test_include test_include.cxx )

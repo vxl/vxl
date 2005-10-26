@@ -80,6 +80,36 @@ void mbl_exception_look_for_unused_props(
 
 #if !VCL_HAS_EXCEPTIONS
 
+  //: General purpose - a replacement for vcl_abort.
+  // The only point of catching this exception, is to
+  // give you a change to save your data. If this exception
+  // is thrown, then the program correctness is in doubt.
+  class mbl_exception_no_name_in_factory
+  {
+    vcl_string msg_;
+   public:
+    mbl_exception_abort(const vcl_string& comment);
+    const char * what() const {return msg_.c_str();}
+  };
+
+#else
+
+  //: General purpose - a replacement for vcl_abort.
+  // The only point of catching this exception, is to
+  // give you a change to save your data. If this exception
+  // is thrown, then the program correctness is in doubt.
+  class mbl_exception_abort : public vcl_logic_error
+  {
+   public:
+    mbl_exception_abort(const vcl_string& comment);
+    virtual ~mbl_exception_abort() throw() {}
+  };
+
+#endif
+
+
+#if !VCL_HAS_EXCEPTIONS
+
   //: Indicates that mbl_exception_look_for_unused_props found some unused properties.
   class mbl_exception_unused_props
   {
