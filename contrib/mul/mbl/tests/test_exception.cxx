@@ -22,7 +22,20 @@ void test_exception()
       vcl_cout << e.what() << vcl_endl;
       caught_error = true;
     }
-    TEST("Caught Exception", caught_error, true);
+    TEST("Caught Exception 1", caught_error, true);
+  }
+  {
+    bool caught_error = false;
+    try
+    {
+      throw mbl_exception_abort("This is just a test");
+    }
+    catch (const mbl_exception_abort &e)
+    {
+      vcl_cout << e.what() << vcl_endl;
+      caught_error = true;
+    }
+    TEST("Caught Exception 2", caught_error, true);
   }
 #else
   // No exceptions - all we can do is check that mbl_exception_warning doesn't abort.
