@@ -11,6 +11,8 @@
 
 #include <vcl_vector.h>
 #include <vil/vil_image_view.h>
+#include <vil/algo/vil_convolve_1d.h>
+#include <vil/vil_transpose.h>
 
 class vil_gauss_filter_5tap_params
 {
@@ -112,5 +114,49 @@ inline void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
 // without wasting the outer taps on near-zero values.
 void vil_gauss_filter_gen_ntap(double sd, unsigned diff,
                                vcl_vector<double> &filter_dest);
+
+//: Smooth a src_im to produce dest_im with gaussian of width sd
+//  Generates gaussian filter of width sd, using (2*half_width+1)
+//  values in the filter.  Typically half_width>3sd.
+//  Convolves this with src_im to generate dest_im.
+template <class srcT, class destT>
+inline void vil_gauss_filter_1d(const vil_image_view<srcT>& src_im,
+                                vil_image_view<destT>& dest_im,
+                                double sd, unsigned half_width)
+{
+  vcl_vector<double> filter(2*half_width+1);
+  vil_gauss_filter_gen_ntap(sd,0,filter);
+  vil_convolve_1d(src_im,dest_im,&filter[half_width],-half_width,half_width,
+                  float(),vil_convolve_zero_extend,vil_convolve_zero_extend);
+}
+
+//: Smooth a src_im to produce dest_im with gaussian of width sd
+//  Generates gaussian filter of width sd, using (2*half_width+1)
+//  values in the filter.  Typically half_width>3sd.
+//  Convolves this with src_im to generate work_im, then applies filter
+//  vertically to generate dest_im.
+template <class srcT, class destT>
+inline void vil_gauss_filter_2d(const vil_image_view<srcT>& src_im,
+                                vil_image_view<destT>& dest_im,
+                                double sd, unsigned half_width)
+{
+  // Generate filter
+  vcl_vector<double> filter(2*half_width+1);
+  vil_gauss_filter_gen_ntap(sd,0,filter);
+
+  // Apply 1D convolution along i direction
+  vil_image_view<destT> work_im;
+  vil_convolve_1d(src_im,work_im,&filter[half_width],-half_width,half_width,
+                  float(),vil_convolve_zero_extend,vil_convolve_zero_extend);
+
+  // Apply 1D convolution along j direction by applying filter to transpose
+  dest_im.set_size(src_im.ni(),src_im.nj(),src_im.nplanes());
+  vil_image_view<destT> work_im_t = vil_transpose(work_im);
+  vil_image_view<destT> dest_im_t = vil_transpose(dest_im);
+
+  vil_convolve_1d(work_im_t,dest_im_t,
+                  &filter[half_width],-half_width,half_width,
+                  float(),vil_convolve_zero_extend,vil_convolve_zero_extend);
+}
 
 #endif // vil_gauss_filter_h_

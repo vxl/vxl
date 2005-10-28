@@ -223,11 +223,71 @@ static void test_algo_vil_gauss_filter_gen_ntaps()
   }
 }
 
+void test_algo_gauss_filter_1d()
+{
+  vcl_cout << "***********************************\n"
+           << " Testing vil_gauss_filter_1d\n"
+           << "***********************************\n\n";
+
+  unsigned nx=15,ny=17;
+  vil_image_view<vxl_byte> src_im(2*nx+1,2*ny+1);
+  src_im.fill(vxl_byte(0));
+  src_im(nx,ny)=100;  // Centre pixel
+  vil_image_view<float> dest_im;
+
+  double sd = 2.5;
+  unsigned half_width = 8;
+  vil_gauss_filter_1d(src_im,dest_im,sd,half_width);
+  TEST("Output image ni",dest_im.ni(),src_im.ni());
+  TEST("Output image nj",dest_im.nj(),src_im.nj());
+
+  // Generate filter
+  vcl_vector<double> filter(2*half_width+1);
+  vil_gauss_filter_gen_ntap(sd,0,filter);
+  TEST_NEAR("Value beyond filter",dest_im(nx-(half_width+1),ny),0,1e-6);
+  TEST_NEAR("Value at limit of filter",dest_im(nx-half_width,ny),100*filter[0],1e-6);
+  TEST_NEAR("Value at limit of filter",dest_im(nx+half_width,ny),100*filter[0],1e-6);
+  TEST_NEAR("Value at centre of filter",dest_im(nx,ny),100*filter[half_width],1e-6);
+
+}
+
+void test_algo_gauss_filter_2d()
+{
+  vcl_cout << "***********************************\n"
+           << " Testing vil_gauss_filter_2d\n"
+           << "***********************************\n\n";
+
+  unsigned nx=15,ny=17;
+  vil_image_view<vxl_byte> src_im(2*nx+1,2*ny+1);
+  src_im.fill(vxl_byte(0));
+  src_im(nx,ny)=100;  // Centre pixel
+  vil_image_view<float> dest_im;
+
+  double sd = 2.5;
+  unsigned half_width = 8;
+  vil_gauss_filter_2d(src_im,dest_im,sd,half_width);
+  TEST("Output image ni",dest_im.ni(),src_im.ni());
+  TEST("Output image nj",dest_im.nj(),src_im.nj());
+
+  // Generate filter
+  vcl_vector<double> filter(2*half_width+1);
+  vil_gauss_filter_gen_ntap(sd,0,filter);
+  double f_c = filter[half_width];  // Centre value of filter
+  double f_0 = filter[0];           // Value at end of filter
+  TEST_NEAR("Value beyond filter",dest_im(nx-(half_width+1),0),0,1e-6);
+  TEST_NEAR("Value at limit of filter",dest_im(nx-half_width,ny),100*f_0*f_c,1e-6);
+  TEST_NEAR("Value at limit of filter",dest_im(nx+half_width,ny),100*f_0*f_c,1e-6);
+  TEST_NEAR("Value at centre of filter",dest_im(nx,ny),100*f_c*f_c,1e-6);
+  TEST_NEAR("Value at corner",dest_im(nx+half_width,ny+half_width),100*f_0*f_0,1e-6);
+  TEST_NEAR("Value at corner",dest_im(nx-half_width,ny-half_width),100*f_0*f_0,1e-6);
+}
 
 static void test_algo_gauss_filter()
 {
   test_algo_vil_gauss_filter_gen_ntaps();
   test_algo_gaussian_filter_5tap_byte_float();
+  test_algo_gauss_filter_1d();
+  test_algo_gauss_filter_2d();
 }
 
 TESTMAIN(test_algo_gauss_filter);
