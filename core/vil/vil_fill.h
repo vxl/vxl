@@ -117,10 +117,10 @@ template<class T>
 inline
 void vil_fill_disk(vil_image_view<T>& image, double ci, double cj, double r, T value)
 {
-  int ilo = vcl_max(0,int(ci-r));
-  int ihi = vcl_min(int(image.ni()-1),int(ci+r+1.0));
-  int jlo = vcl_max(0,int(cj-r));
-  int jhi = vcl_min(int(image.nj()-1),int(cj+r+1.0));
+  unsigned ilo = vcl_max(0,int(ci-r));
+  unsigned ihi = vcl_max(0,vcl_min(int(image.ni()-1),int(ci+r+1.0)));
+  unsigned jlo = vcl_max(0,int(cj-r));
+  unsigned jhi = vcl_max(0,vcl_min(int(image.nj()-1),int(cj+r+1.0)));
 
   double r2 = r*r;
   for (unsigned j=jlo;j<=jhi;++j)
