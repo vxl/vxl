@@ -219,6 +219,9 @@ vil_image_view<vxl_byte> filtered_image = vil_transpose(tmp_image2);
 * - vil_correlate_1d   - Similar to vil_convolve_1d but with reversing the kernel
 * - vil_correlate_2d   - Similar to vil_convolve_2d but with reversing the kernel
 * - vil_gauss_filter_gen_ntap - Generate an n-tap FIR filter from a Gaussian function
+* - vil_gauss_filter_5tap - Apply 1d Gaussian filter using 5 element kernel
+* - vil_gauss_filter_1d - Apply 1d Gaussian filter of arbitrary SD and kernel width
+* - vil_gauss_filter_2d - Apply 2d Gaussian filter of arbitrary SD and kernel width
 * - vil_exp_filter_i - Apply exponential filter along i axis (fast recursive method)
 * - vil_exp_filter_j - Apply exponential filter along j axis (fast recursive method)
 * - vil_exp_filter_2d - Apply exponential filter along i and j (fast recursive method)
@@ -234,6 +237,7 @@ vil_image_view<vxl_byte> filtered_image = vil_transpose(tmp_image2);
 * - vil_orientations   - Compute angle and edge magnitude at each pixel
 * - vil_distance_transform - Apply distance transform to images
 * - vil_histogram_equalise - Replace every pixel by its intensity rank
+* - vil_suppress_non_max_edges - Compute gradient magnitude and zero any non-maximal values
 *
 * See also the vipl library for a more generic image processing interface and
 * more image processing algorithms.

@@ -33,11 +33,15 @@ void vil_suppress_non_max_edges(const vil_image_view<srcT>& grad_i,
   assert(grad_j.ni()==ni && grad_j.nj()==nj);
   grad_mag.set_size(ni,nj,1);
 
-  // Fill border with zero
+  // Fill 2 pixel border with zero
   vil_fill_col(grad_mag,0,destT(0));
+  vil_fill_col(grad_mag,1,destT(0));
   vil_fill_col(grad_mag,ni-1,destT(0));
+  vil_fill_col(grad_mag,ni-2,destT(0));
   vil_fill_row(grad_mag,0,destT(0));
+  vil_fill_row(grad_mag,1,destT(0));
   vil_fill_row(grad_mag,nj-1,destT(0));
+  vil_fill_row(grad_mag,nj-2,destT(0));
 
   const vcl_ptrdiff_t gi_istep = grad_i.istep(), gi_jstep = grad_i.jstep();
   const vcl_ptrdiff_t gj_istep = grad_j.istep(), gj_jstep = grad_j.jstep();
@@ -45,19 +49,19 @@ void vil_suppress_non_max_edges(const vil_image_view<srcT>& grad_i,
 
   const srcT * gi_data = &grad_i(0,0);
   const srcT * gj_data = &grad_j(0,0);
-  const srcT * gi_row = &grad_i(1,1);
-  const srcT * gj_row = &grad_j(1,1);
-  destT * gm_row = &grad_mag(1,1);
-  unsigned ni1=ni-1;
-  unsigned nj1=nj-1;
+  const srcT * gi_row = &grad_i(2,2);
+  const srcT * gj_row = &grad_j(2,2);
+  destT * gm_row = &grad_mag(2,2);
+  unsigned ihi=ni-3;
+  unsigned jhi=nj-3;
 
-  for (unsigned j=1;j<nj1;++j, gi_row+=gi_jstep, gj_row+=gj_jstep,
+  for (unsigned j=2;j<=jhi;++j, gi_row+=gi_jstep, gj_row+=gj_jstep,
                               gm_row+=gm_jstep)
   {
     const srcT* pgi = gi_row;
     const srcT* pgj = gj_row;
     destT *pgm = gm_row;
-    for (unsigned i=1;i<ni1;++i, pgi+=gi_istep, pgj+=gj_istep,
+    for (unsigned i=2;i<=ihi;++i, pgi+=gi_istep, pgj+=gj_istep,
                                 pgm+=gm_istep)
     {
       double gmag=vcl_sqrt(double(pgi[0]*pgi[0] + pgj[0]*pgj[0]));
