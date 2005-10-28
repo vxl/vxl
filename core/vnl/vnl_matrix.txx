@@ -1014,10 +1014,14 @@ void vnl_matrix<T>::set_row(unsigned row_index, T const *v)
     this->data[row_index][j] = v[j];
 }
 
-//: Set row[row_index] to given vector. No bounds check.
+//: Set row[row_index] to given vector.
 template<class T>
 void vnl_matrix<T>::set_row(unsigned row_index, vnl_vector<T> const &v)
 {
+#ifndef NDEBUG
+  if (v.size() != this->num_cols)
+    vnl_error_vector_dimension ("vnl_matrix::set_row", v.size(), this->num_cols);
+#endif
   set_row(row_index,v.data_block());
 }
 
@@ -1039,10 +1043,14 @@ void vnl_matrix<T>::set_column(unsigned column_index, T const *v)
     this->data[i][column_index] = v[i];
 }
 
-//: Set column[column_index] to given vector. No bounds check.
+//: Set column[column_index] to given vector.
 template<class T>
 void vnl_matrix<T>::set_column(unsigned column_index, vnl_vector<T> const &v)
 {
+#ifndef NDEBUG
+  if (v.size() != this->num_rows)
+    vnl_error_vector_dimension ("vnl_matrix::set_column", v.size(), this->num_rows);
+#endif
   set_column(column_index,v.data_block());
 }
 
