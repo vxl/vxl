@@ -66,7 +66,7 @@ class vgl_sphere_3d
 
   //: Calculate the end points of a line clipped by this sphere.
   bool clip(const vgl_line_3d_2_points<Type> & line,
-    vgl_point_3d<Type> &p1, vgl_point_3d<Type> &p2);
+    vgl_point_3d<Type> &p1, vgl_point_3d<Type> &p2) const;
 
 };
 
