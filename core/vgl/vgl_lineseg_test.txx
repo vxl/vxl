@@ -28,10 +28,6 @@ bool inbetween(T x1, T y1, T x2, T y2, T x3, T y3)
 }
 
 
-
-
-
-
 template <class T>
 bool vgl_lineseg_test_lineseg(T x1, T y1, T x2, T y2, T x3, T y3, T x4, T y4)
 {
@@ -45,7 +41,7 @@ bool vgl_lineseg_test_lineseg(T x1, T y1, T x2, T y2, T x3, T y3, T x4, T y4)
   double py3 = (y3 + y3*1e4) - y3*1e4;
   double px4 = (x4 + x4*1e4) - x4*1e4;
   double py4 = (y4 + y4*1e4) - y4*1e4;
-		
+
   double a = vgl_triangle_test_discriminant(px1, py1, px2, py2, px3, py3);
   double b = vgl_triangle_test_discriminant(px1, py1, px2, py2, px4, py4);
   double c = vgl_triangle_test_discriminant(px3, py3, px4, py4, px1, py1);
@@ -60,8 +56,6 @@ bool vgl_lineseg_test_lineseg(T x1, T y1, T x2, T y2, T x3, T y3, T x4, T y4)
         inbetween(px1, py1, px2, py2, px4, py4) )
     );
 }
-
-
 
 //--------------------------------------------------------------------------------
 
