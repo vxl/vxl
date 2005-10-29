@@ -1,10 +1,6 @@
 SET( bnl_algo_sources
     bnl_legendre_polynomial.cxx       bnl_legendre_polynomial.h
 
-                                           bnl_fst.h 
-    bnl_fst_memo.cxx                       bnl_fst_memo.h
-    bnl_shw_rotation_estimator.cxx    bnl_shw_rotation_estimator.h
-    
    )
 
 ADD_LIBRARY( bnl_algo ${bnl_algo_sources} )
