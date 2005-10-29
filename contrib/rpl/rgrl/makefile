@@ -18,6 +18,7 @@ SOURCES += rgrl_feature.cxx
 SOURCES += rgrl_feature_point.cxx
 SOURCES += rgrl_feature_trace_pt.cxx
 SOURCES += rgrl_feature_face_pt.cxx
+MANPAGE_SOURCES += rgrl_feature_face_pt_sptr.h
 SOURCES += rgrl_feature_landmark.cxx
 
 SOURCES += rgrl_feature_set.cxx
