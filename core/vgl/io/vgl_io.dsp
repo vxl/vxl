@@ -260,6 +260,9 @@ SOURCE=.\Templates/vsl_pair_io+vgl_point_2d+double-.vgl_point_2d+double--.cxx
 # Begin Source File
 SOURCE=.\Templates/vsl_vector_io+vcl_vector+vgl_vector_2d+double---.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vgl_point_2d+float--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -368,8 +371,6 @@ SOURCE=.\vgl_io_vector_3d.h
 # Begin Source File
 SOURCE=.\vgl_io_vector_3d.txx
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project

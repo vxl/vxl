@@ -372,6 +372,9 @@ SOURCE=.\Templates/vbl_smart_ptr+rgrl_evaluator-.cxx
 SOURCE=.\Templates/rgrl_feature_caster+rgrl_feature_trace_pt-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+rgrl_feature_face_pt-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\rgrl_est_homography2d.cxx
 # End Source File
 # Begin Source File
@@ -499,6 +502,9 @@ SOURCE=.\rgrl_feature_based_registration.h
 # End Source File
 # Begin Source File
 SOURCE=.\rgrl_feature_face_pt.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_feature_face_pt_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\rgrl_feature_landmark.h

@@ -201,7 +201,7 @@ SOURCE=.\Templates/vbl_array_2d+float-.cxx
 SOURCE=.\Templates/vbl_array_3d+bool-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_array_3d+string-.cxx
+SOURCE=.\Templates/vbl_array_3d+vcl_string-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vbl_bool_ostream.cxx

@@ -128,6 +128,9 @@ SOURCE=.\Templates/rsdl_bins+3.double.int-.cxx
 # Begin Source File
 SOURCE=.\Templates/rsdl_bins+2.float.int-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/rsdl_bins+3.float.int-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -164,8 +167,6 @@ SOURCE=.\rsdl_bins.h
 # Begin Source File
 SOURCE=.\rsdl_bins.txx
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
