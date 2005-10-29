@@ -86,6 +86,7 @@ class brip_vil_float_ops
   static vil_image_view<float>
     abs_clip_to_level(vil_image_view<float> const & image,
                       const float thresh, const float level = 0.0);
+
   static vil_image_view<float>
     average_NxN(vil_image_view<float> const & img, int N);
 
@@ -223,9 +224,8 @@ class brip_vil_float_ops
   static vbl_array_2d<float> load_kernel(vcl_string const& file);
 
   //:compute basis images for a set of input images
-  static
-    void basis_images(vcl_vector<vil_image_view<float> > const& input_images,
-                      vcl_vector<vil_image_view<float> >& basis);
+  static void basis_images(vcl_vector<vil_image_view<float> > const& input_images,
+                           vcl_vector<vil_image_view<float> >& basis);
 
   //:compute the Fourier transform using the vnl FFT algorithm
   static bool fourier_transform(vil_image_view<float> const& input,
@@ -233,21 +233,19 @@ class brip_vil_float_ops
                                 vil_image_view<float>& phase);
 
   //:compute the inverse Fourier transform using the vnl FFT algorithm
-  static
-    bool inverse_fourier_transform(vil_image_view<float> const& mag,
-                                   vil_image_view<float> const& phase,
-                                   vil_image_view<float>& output);
+  static bool inverse_fourier_transform(vil_image_view<float> const& mag,
+                                        vil_image_view<float> const& phase,
+                                        vil_image_view<float>& output);
 
   //:resize to specified dimensions, fill with zeros if output is larger
-  static
-    void resize(vil_image_view<float> const& input,
-                unsigned width, unsigned height,
-                vil_image_view<float>& output);
+  static void resize(vil_image_view<float> const& input,
+                     unsigned width, unsigned height,
+                     vil_image_view<float>& output);
 
   //:resize to closest power of two larger dimensions than the input
-  static
-    bool resize_to_power_of_two(vil_image_view<float> const& input,
-                                vil_image_view<float>& output);
+  static bool
+    resize_to_power_of_two(vil_image_view<float> const& input,
+                           vil_image_view<float>& output);
 
   //:filter the input image with a Gaussian blocking filter
   static bool
@@ -272,57 +270,54 @@ class brip_vil_float_ops
                          float output_fill_value = 0.0f);
 
   //:rotate the input image counter-clockwise about the image origin
-  static
-    vil_image_view<float> rotate(vil_image_view<float> const& input,
-                                 double theta_deg);
+  static vil_image_view<float> rotate(vil_image_view<float> const& input,
+                                      double theta_deg);
 
   //:extract a region of interest. If roi does not overlap input, return false
   static bool chip(vil_image_view<float> const& input,
                    vsol_box_2d_sptr const& roi, vil_image_view<float>& chip);
 
   //:convert image resource to a chip of equivalent pixel type
-  static  bool chip(vil_image_resource_sptr const& image,
-                    brip_roi_sptr const& roi,
-                    vil_image_resource_sptr & chip);
+  static bool chip(vil_image_resource_sptr const& image,
+                   brip_roi_sptr const& roi,
+                   vil_image_resource_sptr & chip);
 
   //:cross-correlate two images at a given sub-pixel location
-  static float
-    cross_correlate(vil_image_view<float> const& image1,
-                    vil_image_view<float> const& image2,
-                    float x, float y, int radius = 5,
-                    float intensity_thresh=25.0f);
+  static float cross_correlate(vil_image_view<float> const& image1,
+                               vil_image_view<float> const& image2,
+                               float x, float y, int radius = 5,
+                               float intensity_thresh=25.0f);
 
   //:cross_correlate two images using running sums
-  static bool
-    cross_correlate(vil_image_view<float> const& image1,
-                    vil_image_view<float> const& image2,
-                    vil_image_view<float>& out,
-                    int radius = 5, float intensity_thresh=25.0f);
+  static bool cross_correlate(vil_image_view<float> const& image1,
+                              vil_image_view<float> const& image2,
+                              vil_image_view<float>& out,
+                              int radius = 5, float intensity_thresh=25.0f);
 
   //:convert a single i,h,s  pixel to rgb
   static void ihs_to_rgb(vil_rgb<vxl_byte>& rgb,
                          const float i, const float h, const float s);
 
   //:convert a single rgb pixel to ihs
-  static  void rgb_to_ihs(vil_rgb<vxl_byte> const& rgb,
-                          float& i, float& h, float& s);
+  static void rgb_to_ihs(vil_rgb<vxl_byte> const& rgb,
+                         float& i, float& h, float& s);
 
   //:compute the intensity entropy of a region about the specified pixel
-  //no bounds check
-static float entropy_i(const unsigned i, const unsigned j,
-                const unsigned i_radius, 
-                const unsigned j_radius,
-                vil_image_view<float> const& intensity,
-                const float range = 255.0, const unsigned bins = 16);
+  // No bounds check
+  static float entropy_i(const unsigned i, const unsigned j,
+                         const unsigned i_radius, 
+                         const unsigned j_radius,
+                         vil_image_view<float> const& intensity,
+                         const float range = 255.0, const unsigned bins = 16);
 
-//:Compute the gradient entropy of a region about the specified pixel
-//No bounds check
-static float entropy_g(const unsigned i, const unsigned j,
-                const unsigned i_radius, 
-                const unsigned j_radius,
-                vil_image_view<float> const& gradx,
-                vil_image_view<float> const& grady,
-                const float range = 360.0, const unsigned bins = 8);
+  //:Compute the gradient entropy of a region about the specified pixel
+  // No bounds check
+  static float entropy_g(const unsigned i, const unsigned j,
+                         const unsigned i_radius, 
+                         const unsigned j_radius,
+                         vil_image_view<float> const& gradx,
+                         vil_image_view<float> const& grady,
+                         const float range = 360.0, const unsigned bins = 8);
 
   //:compute the entropy of the specified region about each pixel
   static vil_image_view<float> entropy(const unsigned i_radius,
@@ -332,8 +327,8 @@ static float entropy_g(const unsigned i, const unsigned j,
                                        const float sigma = 1.0f,
                                        const bool intensity = true,
                                        const bool gradient = true,
-                                       const bool ihs = false
-                                       );
+                                       const bool ihs = false);
+
   // Arithmetic operations
 
   //: Add two images from a general resource (forces types to be the same)
@@ -365,9 +360,8 @@ static float entropy_g(const unsigned i, const unsigned j,
   static bool fft_2d(vnl_matrix<vcl_complex<double> >& c, int nx,int ny,int dir);
 
   //: Transform the fft coefficients from/to fft/frequency order(self inverse).
-  static
-    void ftt_fourier_2d_reorder(vnl_matrix<vcl_complex<double> > const& F1,
-                                vnl_matrix<vcl_complex<double> >& F2);
+  static void ftt_fourier_2d_reorder(vnl_matrix<vcl_complex<double> > const& F1,
+                                     vnl_matrix<vcl_complex<double> >& F2);
 
   //: Blocking filter function
   static float gaussian_blocking_filter(float dir_fx, float dir_fy,
