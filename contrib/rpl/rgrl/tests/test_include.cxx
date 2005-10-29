@@ -7,6 +7,7 @@
 #include <rgrl/rgrl_estimator_sptr.h>
 #include <rgrl/rgrl_evaluator_sptr.h>
 #include <rgrl/rgrl_event_sptr.h>
+#include <rgrl/rgrl_feature_face_pt_sptr.h>
 #include <rgrl/rgrl_feature_set_sptr.h>
 #include <rgrl/rgrl_feature_sptr.h>
 #include <rgrl/rgrl_initializer_sptr.h>
