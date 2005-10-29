@@ -20,6 +20,7 @@ SET( rgrl_sources
   rgrl_feature_point.h                 rgrl_feature_point.cxx
   rgrl_feature_trace_pt.h              rgrl_feature_trace_pt.cxx
   rgrl_feature_face_pt.h               rgrl_feature_face_pt.cxx
+  rgrl_feature_face_pt_sptr.h
   rgrl_feature_landmark.h              rgrl_feature_landmark.cxx
   rgrl_feature_point_region.h          rgrl_feature_point_region.cxx
   rgrl_feature_region.h                rgrl_feature_region.cxx
