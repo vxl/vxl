@@ -15,6 +15,7 @@
 #include <vgui/vgui_adaptor.h>
 struct vgui_command;
 struct vgui_overlay_helper;
+struct vgui_glut_popup_impl;
 
 //: The GLUT (OpenGL Utility Toolkit) implementation of vgui_adaptor.
 struct vgui_glut_adaptor : vgui_adaptor

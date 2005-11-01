@@ -237,7 +237,7 @@ IF (GLUT_FOUND)
     )
     IF (X11_FOUND)
       INCLUDE_DIRECTORIES(${X11_INCLUDE_DIR})
-      # FreeGLUT does not support this menu hack
+     # FreeGLUT does not support this menu hack
       IF(EXISTS ${GLUT_INCLUDE_DIR}/GL/freeglut.h)
         SET(vgui_glut_sources ${vgui_glut_sources}
           impl/glut/menu_hack_none.cxx
