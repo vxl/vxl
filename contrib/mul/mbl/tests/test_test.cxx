@@ -38,8 +38,10 @@ void test_test()
 
   vcl_ifstream data(fn.c_str());
   data >> ds >> ts >> bs >> v;
+  vcl_cout << "ds: " << ds << "ts: " << ts << "bs: " << bs << "v: " << v << vcl_endl;
   TEST("Saved value 1 correctly", v, 5.0);
   data >> ds >> ts >> bs >> v;
+  vcl_cout << "ds: " << ds << "ts: " << ts << "bs: " << bs << "v: " << v << vcl_endl; 
   TEST("Saved value 2 correctly", v, 10.0);
 }
 
