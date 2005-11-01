@@ -21,6 +21,7 @@ void test_test()
 
   mbl_test_save_measurement("mul/mbl/mbl_test_save_measurement", 5.0);
   mbl_test_save_measurement("mul/mbl/mbl_test_save_measurement", 10.0);
+  mbl_test_save_measurement("mul/mbl/mbl_test_save_measurement", 15.0);
 
   vcl_string fn = vul_file::get_cwd()+ "/mul/mbl/mbl_test_save_measurement.txt";
   vcl_cout << fn.c_str() << " contents:\n";
