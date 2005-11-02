@@ -13,6 +13,7 @@
 #include <vcl_string.h>
 #include <vxl_config.h>
 #include <vil/vil_stream.h>
+#include <vcl_vector.h>
 
 //: DICOM types
 //  Defines the type of the dicom file being loaded. A
@@ -386,7 +387,7 @@ struct vil_dicom_header_info
   vil_dicom_header_type_of<vil_dicom_header_DS>::type number_of_averages_; /*< The number of averages for this scan */
   vil_dicom_header_type_of<vil_dicom_header_IS>::type echo_numbers_;         /*< The echo numbers for this scan */
   vil_dicom_header_type_of<vil_dicom_header_DS>::type mag_field_strength_; /*< The strength of the magnetic field */
-  vil_dicom_header_type_of<vil_dicom_header_DS>::type echo_train_length_;    /*< The length of the echo train */
+  vil_dicom_header_type_of<vil_dicom_header_IS>::type echo_train_length_;    /*< The length of the echo train */
   vil_dicom_header_type_of<vil_dicom_header_DS>::type pixel_bandwidth_;    /*< The bandwidth of the pixels */
   vil_dicom_header_type_of<vil_dicom_header_LO>::type software_vers_; /*< Versions of the scanner software used */
   vil_dicom_header_type_of<vil_dicom_header_LO>::type protocol_name_; /*< The name of the protocol used */
@@ -408,8 +409,8 @@ struct vil_dicom_header_info
   vil_dicom_header_type_of<vil_dicom_header_IS>::type acquisition_number_;   /*< The number of the acquisition */
   vil_dicom_header_type_of<vil_dicom_header_IS>::type image_number_;         /*< The number of this image instance */
   vil_dicom_header_type_of<vil_dicom_header_CS>::type pat_orient_;    /*< The orientation of the patient */
-  vil_dicom_header_type_of<vil_dicom_header_DS>::type image_pos_;     /*< The image position relative to the patient */
-  vil_dicom_header_type_of<vil_dicom_header_DS>::type image_orient_;  /*< The image orientation relative to the patient */
+  vcl_vector<vil_dicom_header_type_of<vil_dicom_header_DS>::type> image_pos_;     /*< The image position relative to the patient */
+  vcl_vector<vil_dicom_header_type_of<vil_dicom_header_DS>::type> image_orient_;  /*< The image orientation relative to the patient */
   vil_dicom_header_type_of<vil_dicom_header_UI>::type frame_of_ref_;  /*< The frame of reference */
   vil_dicom_header_type_of<vil_dicom_header_IS>::type images_in_acq_;        /*< Then number ot images in the acquisition */
   vil_dicom_header_type_of<vil_dicom_header_LO>::type pos_ref_ind_;   /*< The position reference indicator */

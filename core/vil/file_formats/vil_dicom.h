@@ -41,7 +41,10 @@ class vil_dicom_image : public vil_image_resource
 {
   vil_dicom_header_info header_;
   vil_image_resource_sptr pixels_;
-
+  //: False if dicom parser found problems.
+  // For internal vil loader use only.
+  bool status_ok_;
+  friend vil_dicom_file_format;
  public:
   vil_dicom_image(vil_stream* is, unsigned ni,
                   unsigned nj, unsigned nplanes,

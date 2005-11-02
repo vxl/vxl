@@ -40,9 +40,9 @@ vil_image_resource_sptr vil_load_image_resource_raw(vil_stream *is)
 
 vil_image_resource_sptr vil_load_image_resource_raw(char const* filename)
 {
-  vil_stream *is = vil_open(filename, "r");
+  vil_smart_ptr<vil_stream> is = vil_open(filename, "r");
   if (is)
-    return vil_load_image_resource_raw(is);
+    return vil_load_image_resource_raw(is.as_pointer());
   else {
     vcl_cerr << __FILE__ ": Failed to load [" << filename << "]\n";
     return vil_image_resource_sptr(0);

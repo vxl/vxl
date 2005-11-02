@@ -57,9 +57,13 @@ vil_image_resource_sptr vil_dicom_file_format::make_input_image(vil_stream* vs)
   }
 
   if ( is_dicom )
-    return new vil_dicom_image( vs );
-  else
-    return 0;
+  {
+    vil_image_resource_sptr ir = new vil_dicom_image( vs );
+    if (dynamic_cast<vil_dicom_image&>(*ir).status_ok_)
+      return ir;
+  }
+
+  return 0;
 }
 
 vil_image_resource_sptr vil_dicom_file_format::make_output_image(vil_stream* /*vs*/,
@@ -111,7 +115,8 @@ read_pixels_into_buffer(DcmPixelData* pixels,
 
 
 vil_dicom_image::vil_dicom_image(vil_stream* vs)
-  : pixels_( 0 )
+  : pixels_(0), status_ok_(true)
+
 {
   vil_dicom_header_info_clear( header_ );
 
@@ -123,7 +128,8 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
   ffmt.transferEnd();
 
   if ( cond != EC_Normal ) {
-    vcl_cerr << "vil_dicom ERROR: could not read file (" << cond.text() << ")\n";
+    vcl_cerr << "vil_dicom ERROR: could not read apparent DICOM file (" << cond.text() << ")\n";
+    status_ok_ = false;
     return;
   }
 
@@ -139,6 +145,7 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
   //
   if ( dset.tagExists( DCM_ModalityLUTSequence ) ) {
     vcl_cerr << "vil_dicom ERROR: don't know (yet) how to handle modality LUTs\n";
+    status_ok_=false;
     return;
   }
 
@@ -159,7 +166,7 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
   do {                                                                                 \
     if ( dset. func( key, var ) != EC_Normal ) {                                       \
       vcl_cerr << "vil_dicom ERROR: couldn't read " Stringify(key) "; can't handle\n"; \
-      return;                                                                          \
+      status_ok_ = false; return;                                                      \
   }} while (false)
 
   Uint16 bits_alloc, bits_stored, high_bit, pixel_rep;
@@ -187,6 +194,7 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
     {
       if ( stack.card() == 0 ) {
         vcl_cerr << "vil_dicom ERROR: no pixel data found\n";
+        status_ok_ = false;
         return;
       } else {
         assert( stack.top()->ident() == EVR_PixelData );
@@ -219,6 +227,7 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
     DOCASE( VIL_PIXEL_FORMAT_SBYTE );
     DOCASE( VIL_PIXEL_FORMAT_FLOAT );
     default: vcl_cerr << "vil_dicom ERROR: unexpected pixel format\n";
+      status_ok_ = false; 
   }
 #undef DOCASE
 }
@@ -251,9 +260,11 @@ char const* vil_dicom_image::file_format() const
 }
 
 vil_dicom_image::vil_dicom_image(vil_stream* /*vs*/, unsigned ni, unsigned nj,
-                                 unsigned nplanes, vil_pixel_format format)
+                                 unsigned nplanes, vil_pixel_format format):
+  status_ok_(true)
 {
   assert(!"vil_dicom_image doesn't yet support output");
+  status_ok_ = false;
 
   assert(nplanes == 1 && format == VIL_PIXEL_FORMAT_INT_32);
   header_.size_x_ = ni;
@@ -774,7 +785,7 @@ read_header( DcmObject* f, vil_dicom_header_info& i )
   try_set< ap_type(IS) >::proc( f, group, ap_el(AQECHONUMBERS),           i.echo_numbers_ ); // It's the echo numbers
   try_set< ap_type(DS) >::proc( f, group, ap_el(AQMAGNETICFIELDSTRENGTH), i.mag_field_strength_);// It's the magnetic field strength
   try_set< ap_type(DS) >::proc( f, group, ap_el(AQSLICESPACING),          i.spacing_slice_ ); // It's the slice spacing
-  try_set< ap_type(DS) >::proc( f, group, ap_el(AQECHOTRAINLENGTH),       i.echo_train_length_ ); // It's the echo train length
+  try_set< ap_type(IS) >::proc( f, group, ap_el(AQECHOTRAINLENGTH),       i.echo_train_length_ ); // It's the echo train length
   try_set< ap_type(DS) >::proc( f, group, ap_el(AQPIXELBANDWIDTH),        i.pixel_bandwidth_ ); // It's the pixel bandwidth
   try_set< ap_type(LO) >::proc( f, group, ap_el(AQSOFTWAREVERSION),       i.software_vers_ ); // It's the scanner software version
   try_set< ap_type(LO) >::proc( f, group, ap_el(AQPROTOCOLNAME),          i.protocol_name_ ); // It's the protocol name

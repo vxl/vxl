@@ -96,8 +96,8 @@ vil_dicom_header_info_clear( vil_dicom_header_info& info )
   info.acquisition_number_ = VIL_DICOM_HEADER_UNSPECIFIED;
   info.image_number_ = VIL_DICOM_HEADER_UNSPECIFIED;
   info.pat_orient_ = "";
-  info.image_pos_ = 0;
-  info.image_orient_ = 0;
+  info.image_pos_.clear();
+  info.image_orient_.clear();
   info.frame_of_ref_ = "";
   info.images_in_acq_ = VIL_DICOM_HEADER_UNSPECIFIED;
   info.pos_ref_ind_ = "";
@@ -379,6 +379,8 @@ void vil_dicom_header_format::readHeaderElements(vil_stream &fs)
 {
   vxl_uint_16 group, element;  // The groups and elements read from the header part of the dicom file
   vxl_uint_32 data_block_size; // The size of the information held for this group/element pair
+  vcl_cerr << "vil_dicom_header_format::readHeaderElements - Deprecated function called - use the DCMTK code instead!";
+  vcl_abort();
 
   // Read the first group/element pair
   fs.read(&group, sizeof(vxl_uint_16));
@@ -577,7 +579,7 @@ void vil_dicom_header_format::readAcquisitionElements(short element,
    CASE(VIL_DICOM_HEADER_AQECHONUMBERS,           echo_numbers_,vcl_atoi); // It's the echo numbers
    CASE(VIL_DICOM_HEADER_AQMAGNETICFIELDSTRENGTH, mag_field_strength_,(float)vcl_atof); // It's the magnetic field strength
    CASE(VIL_DICOM_HEADER_AQSLICESPACING,          spacing_slice_,(float)vcl_atof); // It's the slice spacing
-   CASE(VIL_DICOM_HEADER_AQECHOTRAINLENGTH,       echo_train_length_,(float)vcl_atof); // It's the echo train length
+   CASE(VIL_DICOM_HEADER_AQECHOTRAINLENGTH,       echo_train_length_,(int)vcl_atoi); // It's the echo train length
    CASE(VIL_DICOM_HEADER_AQPIXELBANDWIDTH,        pixel_bandwidth_,(float)vcl_atof); // It's the pixel bandwidth
    CASE(VIL_DICOM_HEADER_AQSOFTWAREVERSION,       software_vers_, (char *)); // It's the scanner software version
    CASE(VIL_DICOM_HEADER_AQPROTOCOLNAME,          protocol_name_, (char *)); // It's the protocol name
@@ -617,8 +619,8 @@ void vil_dicom_header_format::readRelationshipElements(short element,
    CASE(VIL_DICOM_HEADER_RSAQUISITIONNUMBER,   acquisition_number_,vcl_atoi); // It's the acqusition number
    CASE(VIL_DICOM_HEADER_RSIMAGENUMBER,        image_number_,vcl_atoi); // It's the image number
    CASE(VIL_DICOM_HEADER_RSPATIENTORIENTATION, pat_orient_, (char *)); // It's the patient orientation
-   CASE(VIL_DICOM_HEADER_RSIMAGEPOSITION,      image_pos_, (float)vcl_atof); // It's the image position
-   CASE(VIL_DICOM_HEADER_RSIMAGEORIENTATION,   image_orient_, (float)vcl_atof); // It's the image orientation
+//   CASE(VIL_DICOM_HEADER_RSIMAGEPOSITION,      image_pos_, (float)vcl_atof); // It's the image position
+//   CASE(VIL_DICOM_HEADER_RSIMAGEORIENTATION,   image_orient_, (float)vcl_atof); // It's the image orientation
    CASE(VIL_DICOM_HEADER_RSFRAMEOFREFERENCEUID,frame_of_ref_, (char *)); // It's the frame of reference uid
    CASE(VIL_DICOM_HEADER_RSIMAGESINACQUISITION,images_in_acq_,vcl_atoi); // It's the number of images in the acquisition
    CASE(VIL_DICOM_HEADER_RSPOSITIONREFERENCE,  pos_ref_ind_, (char *)); // It's the position reference
@@ -1211,8 +1213,8 @@ void vil_dicom_header_print(vcl_ostream &os, const vil_dicom_header_info &s)
      << " acquisition_number The number of the acquisition: " << s.acquisition_number_ << vcl_endl
      << " image_number     The number of this image instance: " << s.image_number_ << vcl_endl
      << " pat_orient       The orientation of the patient: " << s.pat_orient_ << vcl_endl
-     << " image_pos        The image position relative to the patient: " << s.image_pos_ << vcl_endl
-     << " image_orient     The image orientation relative to the patient: " << s.image_orient_ << vcl_endl
+     << " image_pos        The image position relative to the patient: " << s.image_pos_[0] << '/' << s.image_pos_[1] << '/' << s.image_pos_[2] << vcl_endl
+     << " image_orient     The image orientation relative to the patient: " << s.image_orient_[0] << '/' << s.image_orient_[1] << '/' << s.image_orient_[2] << '/' << s.image_orient_[3] << '/' << s.image_orient_[4] << '/' << s.image_orient_[5] << vcl_endl
      << " frame_of_ref     The frame of reference" << s.frame_of_ref_ << vcl_endl
      << " images_in_acq    Then number ot images in the acquisition: " << s.images_in_acq_ << vcl_endl
      << " pos_ref_ind      The position reference indicator: " << s.pos_ref_ind_ << vcl_endl
