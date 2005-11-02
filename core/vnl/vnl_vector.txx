@@ -323,20 +323,19 @@ bool vnl_vector<T>::read_ascii(vcl_istream& s)
 {
   bool size_known = (this->size() != 0);
   if (size_known) {
-    for (unsigned i = 0; i < this->size(); ++i)
-      s >> (*this)(i);
-    return s.good() || s.eof();
+    for (unsigned i = 0; i < this->size(); ++i) {
+      if( ! (s >> (*this)(i)) ) {
+	return false;
+      }
+    }
+    return true;
   }
 
   // Just read until EOF
   vcl_vector<T> allvals;
   unsigned n = 0;
-  while (!s.eof()) {
-    T value;
-    s >> value;
-
-    if (s.bad())
-      break;
+  T value;
+  while ( s >> value ) {
     allvals.push_back(value);
     ++n;
   }
