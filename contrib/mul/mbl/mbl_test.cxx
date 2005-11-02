@@ -5,6 +5,7 @@
 // \date  Aug 2005
 
 #include <vcl_sstream.h>
+#include <vcl_cstdlib.h>
 #include <vcl_string.h>
 #include <vcl_fstream.h>
 #include <vcl_ctime.h>
@@ -53,6 +54,9 @@ void mbl_test_save_measurement( const vcl_string &measurement_path, double value
   path += '/' + measurement_path + ".txt";
   vul_file::make_directory_path(vul_file::dirname(path));
   vcl_ofstream file(path.c_str(), vcl_ios_app | vcl_ios_out);
+  int my_errno = errno;
+  if (!file) vcl_cerr << "ERROR: Unable to open file " << path.c_str() <<
+    " errno: " << my_errno << vcl_endl;
   file << timestamp() << " " << MBL_CONFIG_BUILD_NAME << " " << value << vcl_endl;
 }
 
