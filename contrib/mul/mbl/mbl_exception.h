@@ -157,6 +157,7 @@ void mbl_exception_look_for_unused_props(
     mbl_exception_unused_props(const vcl_string &fn_name, const vcl_string &unused_props)
       : mbl_exception_parse_error(function_name + ": Unused properties found:\n" + unused_props),
         function_name(fn_name), unused_properties(unused_props) {}
+    virtual ~mbl_exception_unused_props() throw() {}
   };
 
 #endif
@@ -183,6 +184,7 @@ void mbl_exception_look_for_unused_props(
    public:
     mbl_exception_read_props_parse_error(const vcl_string &msg)
       : mbl_exception_parse_error(vcl_string("mbl_read_props: ") + msg) {}
+    virtual ~mbl_exception_read_props_parse_error() throw() {}
   };
 
 #endif
@@ -215,6 +217,7 @@ void mbl_exception_look_for_unused_props(
       const vcl_string &contents)
     : mbl_exception_parse_error(vcl_string("mbl_parse_block: ") + msg +
       "Contents of block: \n" + contents), msg(msg), contents(contents) {}
+    virtual ~mbl_exception_parse_block_parse_error() throw() {}
   };
 
 #endif
