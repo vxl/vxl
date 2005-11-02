@@ -108,6 +108,33 @@ void mbl_exception_look_for_unused_props(
 #endif
 
 
+
+#if !VCL_HAS_EXCEPTIONS
+
+  //: Indicates a problem whilst parsing text configuration data.
+  class mbl_exception_parse_error
+  {
+    vcl_string msg_;
+   public:
+    mbl_exception_parse_error(const vcl_string &msg)
+      : msg_(msg) {}
+    const char * what() const {return msg_.c_str();}
+  };
+
+#else
+
+  //: Indicates a problem whilst parsing text configuration data.
+  class mbl_exception_parse_error: public vcl_runtime_error
+  {
+   public:
+    mbl_exception_parse_error(const vcl_string &msg)
+      : vcl_runtime_error(msg) {}
+    virtual ~mbl_exception_parse_error() throw() {}
+  };
+
+#endif
+
+
 #if !VCL_HAS_EXCEPTIONS
 
   //: Indicates that mbl_exception_look_for_unused_props found some unused properties.
@@ -123,17 +150,75 @@ void mbl_exception_look_for_unused_props(
 #else
 
   //: Indicates that mbl_exception_look_for_unused_props found some unused properties.
-  class mbl_exception_unused_props : public vcl_logic_error
+  class mbl_exception_unused_props : public mbl_exception_parse_error
   {
    public:
     vcl_string function_name, unused_properties;
     mbl_exception_unused_props(const vcl_string &fn_name, const vcl_string &unused_props)
-      : vcl_logic_error(function_name + ": Unused properties found:\n" + unused_props),
+      : mbl_exception_parse_error(function_name + ": Unused properties found:\n" + unused_props),
         function_name(fn_name), unused_properties(unused_props) {}
-    virtual ~mbl_exception_unused_props() throw() {}
   };
 
 #endif
+
+
+
+#if !VCL_HAS_EXCEPTIONS
+
+  //: Indicates a problem whilst parsing text configuration data into an mbl_read_props object.
+  class mbl_exception_read_props_parse_error
+  {
+    vcl_string msg_;
+   public:
+    mbl_exception_read_props_parse_error(const vcl_string &msg)
+      : msg_(vcl_string("mbl_read_props: ") + msg) {}
+    const char * what() const {return msg_.c_str();}
+  };
+
+#else
+
+  //: Indicates a problem whilst parsing text configuration data into an mbl_read_props object.
+  class mbl_exception_read_props_parse_error: public mbl_exception_parse_error
+  {
+   public:
+    mbl_exception_read_props_parse_error(const vcl_string &msg)
+      : mbl_exception_parse_error(vcl_string("mbl_read_props: ") + msg) {}
+  };
+
+#endif
+
+#if !VCL_HAS_EXCEPTIONS
+
+  //: Indicates a problem whilst parsing a block of text configuration data.
+  class mbl_exception_parse_block_parse_error
+  {
+    vcl_string msg_;
+   public:
+    mbl_exception_parse_block_parse_error(const vcl_string &msg,
+      const vcl_string &contents)
+    : msg_(vcl_string("mbl_parse_block: ") + msg +
+      "Contents of block: \n" + contents) {}
+    const char * what() const {return msg_.c_str();}
+  };
+
+#else
+
+  //: Indicates a problem whilst parsing a block of text configuration data.
+  class mbl_exception_parse_block_parse_error: public mbl_exception_parse_error
+  {
+  public:
+    //: Description of problem
+    vcl_string msg;
+    //: Contents of string which failed to be parsed.
+    vcl_string contents;
+    mbl_exception_parse_block_parse_error(const vcl_string &msg,
+      const vcl_string &contents)
+    : mbl_exception_parse_error(vcl_string("mbl_parse_block: ") + msg +
+      "Contents of block: \n" + contents), msg(msg), contents(contents) {}
+  };
+
+#endif
+
 
 
 #endif // mbl_exception_h_

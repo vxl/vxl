@@ -9,6 +9,7 @@
 #include <vcl_cctype.h>
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
+#include <mbl/mbl_exception.h>
 
 //: Read a block of text from a stream.
 // This function will read through a stream, and store the text found to a string.
@@ -21,6 +22,7 @@
 // not an opening brace then that character will be left in the stream and "{} will be returned.
 // \return the text including the opening and closing braces.
 // \param comment Lines beginning with white space followed by this string will be ignored.
+// \throws mbl_exception_parse_block_parse_error if unrecoverable parse error.
 // Set to empty for no comment stripping.
 
 vcl_string mbl_parse_block(vcl_istream &afs, bool open_already /*= false*/, const char * comment /*= "//"*/)
@@ -99,9 +101,8 @@ vcl_string mbl_parse_block(vcl_istream &afs, bool open_already /*= false*/, cons
       }
     }
   }
-  vcl_cerr << " WARNING: mbl_parse_block()\n" <<
-              "Read problem (possibly end-of-file) before closing '}'\n" <<
-              "Text parsed so far:\n" << s << vcl_endl;
+  mbl_exception_warning(mbl_exception_parse_block_parse_error(
+    "Read problem (possibly end-of-file) before closing '}'\n",s));
   afs.clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
   return "{}";
 }

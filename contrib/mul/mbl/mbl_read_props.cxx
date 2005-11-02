@@ -10,6 +10,7 @@
 #include <vcl_cctype.h>
 
 #include <mbl/mbl_parse_block.h>
+#include <mbl/mbl_exception.h>
 
 void mbl_read_props_print(vcl_ostream &afs, mbl_read_props_type props)
 {
@@ -157,9 +158,10 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
             while ((pos=label.find(s)) != vcl_string::npos)
               label.replace(pos,1,os.str());
           }
-          vcl_cerr << "ERROR: mbl_read_props. Could not find colon ':'"
-                   << " separator while reading line "
-                   << label << ' ' << str1 << '\n';
+          mbl_exception_warning(
+            mbl_exception_read_props_parse_error( vcl_string(
+              "Could not find colon ':' separator while reading line ")
+              + label + " " + str1) );
           return props;
         }
       }
@@ -171,8 +173,11 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
   while ( !afs.eof() );
 
   if ( need_closing_brace && label != "}" )
-    vcl_cerr << "ERROR: mbl_read_props. Unexpected end of file while "
-             << "looking for '}'. Last read string = \"" << label << "\"\n";
+    mbl_exception_warning(
+      mbl_exception_read_props_parse_error( vcl_string(
+        "Unexpected end of file while "
+        "looking for '}'. Last read string = \"")
+        + label +'"') );
 
   return props;
 }
@@ -308,9 +313,10 @@ mbl_read_props_type mbl_read_props_ws(vcl_istream &afs)
             while ((pos=label.find(s)) != vcl_string::npos)
               label.replace(pos,1,os.str());
           }
-          vcl_cerr << "ERROR: mbl_read_props_ws. Could not find colon ':'"
-                   << " separator while reading line "
-                   << label << ' ' << str1 << '\n';
+          mbl_exception_warning(
+            mbl_exception_read_props_parse_error( vcl_string(
+              "Could not find colon ':' separator while reading line ")
+              + label + " " + str1) );
           return props;
         }
       }
@@ -322,8 +328,11 @@ mbl_read_props_type mbl_read_props_ws(vcl_istream &afs)
   while ( !afs.eof() );
 
   if ( need_closing_brace && label != "}" )
-    vcl_cerr << "ERROR: mbl_read_props_ws. Unexpected end of file while "
-             << "looking for '}'. Last read string = \"" << label << "\"\n";
+    mbl_exception_warning(
+      mbl_exception_read_props_parse_error( vcl_string(
+        "Unexpected end of file while "
+        "looking for '}'. Last read string = \"")
+        + label + '"') );
 
   return props;
 }
