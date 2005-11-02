@@ -5,7 +5,7 @@
 // \date  Aug 2005
 
 #include <vcl_sstream.h>
-#include <vcl_cstdlib.h>
+#include <vcl_cerrno.h>
 #include <vcl_string.h>
 #include <vcl_fstream.h>
 #include <vcl_ctime.h>
@@ -41,25 +41,34 @@ vcl_string timestamp()
 // In the longer term it may save the value via Dart2.
 void mbl_test_save_measurement( const vcl_string &measurement_path, double value)
 {
-  vcl_cout << "Got Here A1" << vcl_endl;
+  int my_errno = errno; errno=0;
+  vcl_cerr << "Got Here A1: errno="<<my_errno<<vcl_endl;
   char * cpath = vcl_getenv("MBL_TEST_SAVE_MEASUREMENT_ROOT");
   vcl_string path(cpath?cpath:"");
   if (path.empty())
     path = MBL_CONFIG_TEST_SAVE_MEASUREMENT_ROOT;
   if (path.empty()) // Nobody wants the measurements
     return;
-  vcl_cout << "Got Here A2" << vcl_endl;
+  my_errno = errno; errno=0;
+  vcl_cerr << "Got Here A2: errno="<<my_errno<<vcl_endl;
   
   vcl_string config = MBL_CONFIG_BUILD_NAME;
   if (config.empty()) config="DEFAULT_CONFIG";
   
   path += '/' + measurement_path + ".txt";
   vul_file::make_directory_path(vul_file::dirname(path));
+  my_errno = errno; errno=0;
+  vcl_cerr << "Got Here A3: errno="<<my_errno<<vcl_endl;
   vcl_ofstream file(path.c_str(), vcl_ios_app | vcl_ios_out);
-  int my_errno = errno;
-  vcl_cout << "Got Here A3: " << path.c_str() << vcl_endl;
-  if (!file) vcl_cerr << "ERROR: Unable to open file " << path.c_str() <<
-    " errno: " << my_errno << vcl_endl;
+  my_errno = errno; errno=0;
+  vcl_cerr << "Got Here A3: errno="<<my_errno<<vcl_endl;
+  if (my_errno != 0)
+  {
+    perror("ERROR: ");
+  }
+  vcl_cerr << "\nGot Here A4: " << path.c_str() << vcl_endl;
+  if (!file)
+    vcl_cerr << "ERROR: Unable to open file " << path.c_str() << vcl_endl;
   file << timestamp() << " " << MBL_CONFIG_BUILD_NAME << " " << value << vcl_endl;
 }
 
