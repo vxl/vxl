@@ -42,8 +42,8 @@ vcl_string timestamp()
 void mbl_test_save_measurement( const vcl_string &measurement_path, double value)
 {
   int my_errno = errno; errno=0;
-  vcl_cerr << "Got Here A1: errno="<<my_errno<<vcl_endl;
   char * cpath = vcl_getenv("MBL_TEST_SAVE_MEASUREMENT_ROOT");
+  vcl_cerr << "Got Here A1: errno="<<my_errno<<vcl_endl;
   vcl_string path(cpath?cpath:"");
   if (path.empty())
     path = MBL_CONFIG_TEST_SAVE_MEASUREMENT_ROOT;

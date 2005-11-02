@@ -1,6 +1,7 @@
 // This is mul/mbl/tests/test_test.cxx
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
+#include <vcl_cstdlib.h>
 #include <vul/vul_file.h>
 #include <vpl/vpl.h>
 #include <mbl/mbl_test.h>
@@ -18,6 +19,12 @@ void test_test()
   vpl_rmdir((vul_file::get_cwd()+"/mul").c_str());
 
   vpl_putenv((vcl_string("MBL_TEST_SAVE_MEASUREMENT_ROOT=")+vul_file::get_cwd()).c_str());
+
+  char * envar = vcl_getenv("MBL_TEST_SAVE_MEASUREMENT_ROOT");
+  vcl_string envar2(envar?envar:"");
+  TEST ("putenv works", envar2, vul_file::get_cwd());
+  vcl_cout << "Environment variable should be \"" << vul_file::get_cwd() <<
+    "\".\nIs \"" << envar << "\".\n\n" << vcl_endl;
 
   mbl_test_save_measurement("mul/mbl/mbl_test_save_measurement", 5.0);
   mbl_test_save_measurement("mul/mbl/mbl_test_save_measurement", 10.0);
