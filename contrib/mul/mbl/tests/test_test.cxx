@@ -21,7 +21,11 @@ void test_test()
 
   vcl_string cwd = vul_file::get_cwd();
   vcl_replace(cwd.begin(), cwd.end(), '\\', '/' ); // avoid backslash control char interpretation.
-  vpl_putenv((vcl_string("MBL_TEST_SAVE_MEASUREMENT_ROOT=")+cwd).c_str());
+  
+  // Avoid problems with borland's putenv.
+  char buf[1024];
+  strncpy(buf, (vcl_string("MBL_TEST_SAVE_MEASUREMENT_ROOT=")+cwd).c_str(), 1023);
+  vpl_putenv(buf);
 
   char * envar = vcl_getenv("MBL_TEST_SAVE_MEASUREMENT_ROOT");
   vcl_string envar2(envar?envar:"");
@@ -31,7 +35,6 @@ void test_test()
 
   mbl_test_save_measurement("mul/mbl/mbl_test_save_measurement", 5.0);
   mbl_test_save_measurement("mul/mbl/mbl_test_save_measurement", 10.0);
-  mbl_test_save_measurement("mul/mbl/mbl_test_save_measurement", 15.0);
 
   vcl_string fn = vul_file::get_cwd()+ "/mul/mbl/mbl_test_save_measurement.txt";
   vcl_cout << fn.c_str() << " contents:\n";
@@ -49,10 +52,8 @@ void test_test()
 
   vcl_ifstream data(fn.c_str());
   data >> ds >> ts >> bs >> v;
-  vcl_cout << "ds: " << ds << "ts: " << ts << "bs: " << bs << "v: " << v << vcl_endl;
   TEST("Saved value 1 correctly", v, 5.0);
   data >> ds >> ts >> bs >> v;
-  vcl_cout << "ds: " << ds << "ts: " << ts << "bs: " << bs << "v: " << v << vcl_endl; 
   TEST("Saved value 2 correctly", v, 10.0);
 }
 
