@@ -1071,3 +1071,22 @@ int main() { long c = lrint(100.0); }
 #endif // VXL_C_MATH_HAS_LRINT
 
 //-------------------------------------
+
+#ifdef VCL_HAS_LFS
+
+// Return 1 if compiler has #define-switchable Large File Support
+#define _LARGEFILE_SOURCE
+#define _FILE_OFFSET_BITS 64
+
+#include <fstream>
+#include <iostream>
+
+int main(int argc, char * argv[])
+{
+ if( sizeof(off_t)==8 )
+   return 0 ;
+ else
+   return 1;
+}
+
+#endif // VCL_HAS_LFS

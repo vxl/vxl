@@ -24,7 +24,7 @@ MARK_AS_ADVANCED( VXL_UPDATE_CONFIGURATION )
 # number. The format follows a DNS-style numbering: the current date
 # followed by a modification time within the day.
 #
-SET( VXL_CONFIG_SERIAL_CURRENT "2005-07-22-001" )
+SET( VXL_CONFIG_SERIAL_CURRENT "2005-11-04-002" )
 
 IF( ${VXL_CONFIG_SERIAL_CURRENT} MATCHES "^${VXL_CONFIG_SERIAL_LAST}$" )
   # The configuration is current
@@ -100,6 +100,7 @@ PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_UNISTD_USLEEP_IS_VOID)
   SET_INVERT(VXL_UNISTD_USLEEP_IS_VOID "${VXL_UNISTD_USLEEP_IS_VOID}")
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_STDLIB_HAS_QSORT)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_C_MATH_HAS_LRINT)
+PERFORM_CMAKE_TEST_RUN(vxl_platform_tests.cxx VCL_HAS_LFS)
 
 # Test how to define a template specialization, and whether
 # specializations can be properly distinguished by top-level
