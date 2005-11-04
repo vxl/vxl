@@ -126,7 +126,7 @@ inline void vil_gauss_filter_1d(const vil_image_view<srcT>& src_im,
 {
   vcl_vector<double> filter(2*half_width+1);
   vil_gauss_filter_gen_ntap(sd,0,filter);
-  vil_convolve_1d(src_im,dest_im,&filter[half_width],-half_width,half_width,
+  vil_convolve_1d(src_im,dest_im,&filter[half_width],-int(half_width),half_width,
                   float(),vil_convolve_zero_extend,vil_convolve_zero_extend);
 }
 
@@ -146,7 +146,7 @@ inline void vil_gauss_filter_2d(const vil_image_view<srcT>& src_im,
 
   // Apply 1D convolution along i direction
   vil_image_view<destT> work_im;
-  vil_convolve_1d(src_im,work_im,&filter[half_width],-half_width,half_width,
+  vil_convolve_1d(src_im,work_im,&filter[half_width],-int(half_width),half_width,
                   float(),vil_convolve_zero_extend,vil_convolve_zero_extend);
 
   // Apply 1D convolution along j direction by applying filter to transpose
@@ -155,7 +155,7 @@ inline void vil_gauss_filter_2d(const vil_image_view<srcT>& src_im,
   vil_image_view<destT> dest_im_t = vil_transpose(dest_im);
 
   vil_convolve_1d(work_im_t,dest_im_t,
-                  &filter[half_width],-half_width,half_width,
+                  &filter[half_width],-int(half_width),half_width,
                   float(),vil_convolve_zero_extend,vil_convolve_zero_extend);
 }
 
