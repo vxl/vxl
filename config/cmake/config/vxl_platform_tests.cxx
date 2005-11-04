@@ -1083,10 +1083,11 @@ int main() { long c = lrint(100.0); }
 
 int main(int argc, char * argv[])
 {
- if( sizeof(off_t)==8 )
+ if( sizeof(std::streamoff)==8 )
    return 0 ;
  else
    return 1;
 }
 
 #endif // VCL_HAS_LFS
+
