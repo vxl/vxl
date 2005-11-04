@@ -13,7 +13,11 @@
 #include <vcl_cassert.h>
 
 #include <vil/vil_file_format.h>
+#ifdef VIL_USE_FSTREAM64
+#include <vil/vil_stream_fstream64.h>
+#else //VIL_USE_FSTREAM64
 #include <vil/vil_stream_fstream.h>
+#endif //VIL_USE_FSTREAM64
 #include <vil/vil_image_resource.h>
 #include <vil/vil_memory_image.h>
 
@@ -91,7 +95,11 @@ vil_image_resource_sptr vil_new_image_resource(char const* filename,
                                                vil_image_resource_sptr const& prototype,
                                                char const* file_format)
 {
+#ifdef VIL_USE_FSTREAM64
+  vil_stream_fstream64* os = new vil_stream_fstream64(filename, "w");
+#else //VIL_USE_FSTREAM64
   vil_stream_fstream* os = new vil_stream_fstream(filename, "w");
+#endif //VIL_USE_FSTREAM64
   return vil_new_image_resource(os,
                                 ni, nj,
                                 prototype->nplanes(),

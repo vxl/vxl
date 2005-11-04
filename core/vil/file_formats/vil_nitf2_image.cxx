@@ -134,13 +134,6 @@ vil_nitf2_image::vil_nitf2_image(vil_stream* is)
   m_stream->ref();
 }
 
-vil_nitf2_image::vil_nitf2_image(const vcl_string& filePath, const char* mode)
-  : m_current_image_index(0)
-{
-  m_stream = new vil_stream_fstream(filePath.c_str(), mode);
-  m_stream->ref();
-}
-
 void vil_nitf2_image::clear_image_headers()
 {
   for (unsigned int i = 0 ; i < m_image_headers.size() ; i++) {

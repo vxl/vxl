@@ -10,9 +10,15 @@
 
 #include <vcl_cstring.h>  // strncmp()
 
+#ifdef VIL_USE_FSTREAM64
+#include <vil/vil_stream_fstream64.h>
+#else //VIL_USE_FSTREAM64
 #include <vil/vil_stream_fstream.h>
+#endif //VIL_USE_FSTREAM64
+
 #include <vil/vil_stream_core.h>
 #include <vil/vil_stream_url.h>
+#include <vcl_fstream.h>
 
 vil_stream *vil_open(char const* what, char const* how)
 {
@@ -21,7 +27,12 @@ vil_stream *vil_open(char const* what, char const* how)
     return 0;
 
   // try to open as file first.
+#ifdef VIL_USE_FSTREAM64
+  vil_stream *is = new vil_stream_fstream64(what, how);
+#else //VIL_USE_FSTREAM64
   vil_stream *is = new vil_stream_fstream(what, how);
+#endif //VIL_USE_FSTREAM64
+
 #if 0
   // unfortunately, the following doesn't work because (note typo)
   //    vil_open<("/tmp/foo.jgp")
@@ -32,7 +43,11 @@ vil_stream *vil_open(char const* what, char const* how)
   // vil_load() just does a vil_open<() for reading. i do not think people
   // expect "loading an image" to open the disk file for writing by
   // default. -- fsm
+#ifdef VIL_USE_FSTREAM64
+  vil_stream *is = new vil_stream_fstream64(what, "r+");
+#else //VIL_USE_FSTREAM64
   vil_stream *is = new vil_stream_fstream(what, "r+");
+#endif //VIL_USE_FSTREAM64
 #endif
   if (!is->ok()) {
     // this will delete the stream object.
