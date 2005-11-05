@@ -43,6 +43,7 @@
 #include <vil/vil_stream_write.h>
 #include <vil/vil_stream_core.h>
 #include <vil/vil_stream_fstream.h>
+#include <vil/vil_stream_fstream64.h>
 #include <vil/vil_stream_section.h>
 #include <vil/vil_stream_url.h>
 #include <vil/vil_transform.h>
