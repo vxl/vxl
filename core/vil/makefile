@@ -73,7 +73,7 @@ SOURCES += file_formats/vil_nitf2_des.cxx
 
 # Stuff shared by all NITF2 classes
 MANPAGE_SOURCES += file_formats/vil_nitf2.h
-  
+
 # Generic framework for reading NITF tagged record extensions (TREs)
 SOURCES += file_formats/vil_nitf2_array_field.cxx
 SOURCES += file_formats/vil_nitf2_classification.cxx
@@ -91,7 +91,7 @@ SOURCES += file_formats/vil_nitf2_tagged_record_definition.cxx
 MANPAGE_SOURCES += file_formats/vil_nitf2_typed_array_field.h
 MANPAGE_SOURCES += file_formats/vil_nitf2_typed_scalar_field.h
 SOURCES += file_formats/vil_nitf2_typed_field_formatter.cxx
-  
+
 # image operations
 SOURCES += vil_crop.cxx
 SOURCES += vil_clamp.cxx
@@ -143,6 +143,14 @@ SOURCES += vil_stream_url.cxx
 SOURCES += vil_stream_read.cxx
 SOURCES += vil_stream_write.cxx
 SOURCES += vil_open.cxx
+ifeq ($(OS),win32)
+ifeq ($(USE_LFS),1)
+#This is a hack since win32 doesn't have transparent Large File Support.
+DEFINES += -DVIL_USE_FSTREAM64
+SOURCES += vil_stream_fstream64.cxx
+endif
+endif
+
 
 ifndef NOTEST
  SUBDIRS += tests examples
