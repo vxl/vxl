@@ -390,6 +390,9 @@ SOURCE=.\vil_stream_core.cxx
 SOURCE=.\vil_stream_fstream.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vil_stream_fstream64.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vil_stream_section.cxx
 # End Source File
 # Begin Source File
@@ -580,6 +583,12 @@ SOURCE=.\Templates/vil_sample_profile_bilin+uint_16.double-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil_sample_grid_bilin+uint_16.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_smart_ptr+vil_nitf_image_subheader-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_smart_ptr+vil_nitf_message_header-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -898,6 +907,9 @@ SOURCE=.\file_formats/vil_nitf2_des.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_nearest_neighbour_interp.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_stream_fstream64.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_warp.h
