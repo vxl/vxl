@@ -635,8 +635,8 @@ foreach $f (@FILES)
 #   $class =~ s!\bconst\b!!g;
     $class =~ s!\s!!g;
     $class =~ s!\bconstchar!const_char!g; $class =~ s!(\w)const([^r])!$1_const$2!g;
-    $class =~ s!\,vcl_less\<[^<>]+\<[^<>]+\>[^<>]*\>!!g;
-    $class =~ s!\,vcl_less\<[^<>]+\>!!g;
+    $class =~ s!\,\s*vcl_less\<[^<>]+\<[^<>]+\>[^<>]*\>!!g;
+    $class =~ s!\,\s*vcl_less\<[^<>]+\>!!g;
     $class =~ s!\,(.*)_sptr\,\1\005compare!!g;
     $class =~ s!(vbl_io_sparse_array)_base\<!$1\<!g;
     $class =~ s!\005!+-!g; $class =~ tr/<,*>/+.~-/; # \005 is ::
