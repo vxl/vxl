@@ -75,7 +75,8 @@ class vil_nitf2_image : public vil_image_resource
   // (eg. before you ask for any image data).
   // If that returns false, then I am invalid and useless to you in every way.
   vil_nitf2_image( vil_stream* is );
-  
+  vil_nitf2_image( const vcl_string& filePath, const char* mode );
+
   virtual ~vil_nitf2_image();
 
   //:return the image info the the current image

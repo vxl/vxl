@@ -16,6 +16,12 @@
 #include "vil_nitf2_data_mask_table.h"
 #include "vil_nitf2_des.h"
 
+#ifdef VIL_USE_FSTREAM64
+#include <vil/vil_stream_fstream64.h>
+#else //VIL_USE_FSTREAM64
+#include <vil/vil_stream_fstream.h>
+#endif //VIL_USE_FSTREAM64
+
 int debug_level = 0;
 
 //--------------------------------------------------------------------------------
@@ -131,6 +137,17 @@ vil_nitf2_image::vil_nitf2_image(vil_stream* is)
   : m_stream(is),
     m_current_image_index(0)
 {
+  m_stream->ref();
+}
+
+vil_nitf2_image::vil_nitf2_image(const vcl_string& filePath, const char* mode)
+  : m_current_image_index(0)
+{
+#ifdef VIL_USE_FSTREAM64
+  m_stream = new vil_stream_fstream64(filePath.c_str(), mode);
+#else //VIL_USE_FSTREAM64
+  m_stream = new vil_stream_fstream(filePath.c_str(), mode);
+#endif //VIL_USE_FSTREAM64
   m_stream->ref();
 }
 
