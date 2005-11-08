@@ -2541,7 +2541,7 @@ brip_vil_float_ops::difference(vil_image_resource_sptr const& img0,
 }
 
 //Compute the entropy of the intensity of a region
-//Note no bounds checking is done!!
+//Note no bounds checking!
 float brip_vil_float_ops::entropy_i(const unsigned i, const unsigned j,
                                     const unsigned i_radius, 
                                     const unsigned j_radius,
@@ -2559,7 +2559,7 @@ float brip_vil_float_ops::entropy_i(const unsigned i, const unsigned j,
   return hi.entropy();
 }
 //Compute the entropy of the gradient direction of a region
-//Note no bounds checking is done!!
+//Note no bounds checking!
 float brip_vil_float_ops::entropy_g(const unsigned i, const unsigned j,
                                     const unsigned i_radius, 
                                     const unsigned j_radius,
@@ -2580,6 +2580,30 @@ float brip_vil_float_ops::entropy_g(const unsigned i, const unsigned j,
       }
   return hg.entropy();
 }
+
+//:Compute the hue and saturation entropy of a region about the specified pixel
+//Note no bounds checking!
+float brip_vil_float_ops::entropy_hs(const unsigned i, const unsigned j,
+                                     const unsigned i_radius, 
+                                     const unsigned j_radius,
+                                     vil_image_view<float> const& hue,
+                                     vil_image_view<float> const& sat,
+                                     const float range, const unsigned bins)
+{
+  bsta_histogram<float> hg(range, bins);
+  float deg_rad = (float)(180.0/vnl_math::pi);
+  int ir = static_cast<int>(i_radius), jr = static_cast<int>(j_radius);
+  for(int dj = -jr; dj<=jr; ++dj)
+    for(int di = -ir; di<=ir; ++di)
+      {
+        float h = hue(i+di, j+dj), s = sat(i+di, j+dj);
+        hg.upcount(h, s);
+      }
+  return hg.entropy();
+}
+
+
+
 vil_image_view<float> 
 brip_vil_float_ops::entropy(const unsigned i_radius,
                             const unsigned j_radius,
@@ -2592,13 +2616,7 @@ brip_vil_float_ops::entropy(const unsigned i_radius,
                             )
 {
   vil_image_view<float> ent;
-  // IHS is not yet implemented FIXME JLM
-  if(ihs)
-    {
-      vcl_cout << "In brip_vil_float_ops::entropy(.) - IHS not implemented yet!\n";
-        return ent;
-    }
-  if(!intensity&&!gradient)
+  if(!intensity&&!gradient&&!ihs)
     {
       vcl_cout << "In brip_vil_float_ops::entropy(.) - No computation to do\n";
       return ent;
@@ -2629,7 +2647,17 @@ brip_vil_float_ops::entropy(const unsigned i_radius,
             brip_vil_float_ops::entropy_g(i, j, i_radius, j_radius,
                                           grad_x, grad_y);
     }
+  if(ihs&&img->nplanes()==3)
+    {
+      vil_image_view<float> inten, hue, sat;
+      vil_image_view<vil_rgb<vxl_byte> > cimage = img->get_view();
+      brip_vil_float_ops::convert_to_IHS(cimage, inten, hue, sat);
+      for(unsigned j = j_radius; j<(nj-j_radius); j+=step)
+      for(unsigned i = i_radius; i<(ni-i_radius); i+=step)
+        ent(i/step,j/step) += 
+          brip_vil_float_ops::entropy_hs(i, j, i_radius, j_radius,
+                                         hue, sat);
+    }
   return ent;
 }
- 
 

@@ -303,21 +303,32 @@ class brip_vil_float_ops
                          float& i, float& h, float& s);
 
   //:compute the intensity entropy of a region about the specified pixel
-  // No bounds check
-  static float entropy_i(const unsigned i, const unsigned j,
-                         const unsigned i_radius, 
-                         const unsigned j_radius,
-                         vil_image_view<float> const& intensity,
-                         const float range = 255.0, const unsigned bins = 16);
 
-  //:Compute the gradient entropy of a region about the specified pixel
-  // No bounds check
-  static float entropy_g(const unsigned i, const unsigned j,
+  //no bounds check
+static float entropy_i(const unsigned i, const unsigned j,
+                const unsigned i_radius, 
+                const unsigned j_radius,
+                vil_image_view<float> const& intensity,
+                const float range = 255.0, const unsigned bins = 16);
+
+//:Compute the gradient entropy of a region about the specified pixel
+//no bounds check
+static float entropy_g(const unsigned i, const unsigned j,
+                const unsigned i_radius, 
+                const unsigned j_radius,
+                vil_image_view<float> const& gradx,
+                vil_image_view<float> const& grady,
+                const float range = 360.0, const unsigned bins = 8);
+
+//:Compute the hue and saturation entropy of a region about the specified pixel
+//no bounds check
+static float entropy_hs(const unsigned i, const unsigned j,
                          const unsigned i_radius, 
                          const unsigned j_radius,
-                         vil_image_view<float> const& gradx,
-                         vil_image_view<float> const& grady,
+                         vil_image_view<float> const& hue,
+                         vil_image_view<float> const& sat,
                          const float range = 360.0, const unsigned bins = 8);
+
 
   //:compute the entropy of the specified region about each pixel
   static vil_image_view<float> entropy(const unsigned i_radius,
