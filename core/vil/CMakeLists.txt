@@ -164,6 +164,7 @@ SET( vil_sources ${vil_sources}
   vil_rgb.txx                           vil_rgb.h
   vil_rgba.txx                          vil_rgba.h
   vil_fwd.h
+  vil_color_table.h
 
   # Streams
   vil_stream.cxx                        vil_stream.h
