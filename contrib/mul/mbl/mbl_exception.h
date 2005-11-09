@@ -155,7 +155,7 @@ void mbl_exception_look_for_unused_props(
    public:
     vcl_string function_name, unused_properties;
     mbl_exception_unused_props(const vcl_string &fn_name, const vcl_string &unused_props)
-      : mbl_exception_parse_error(function_name + ": Unused properties found:\n" + unused_props),
+      : mbl_exception_parse_error(fn_name + ": Unused properties found:\n" + unused_props),
         function_name(fn_name), unused_properties(unused_props) {}
     virtual ~mbl_exception_unused_props() throw() {}
   };
