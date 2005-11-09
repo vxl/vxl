@@ -20,11 +20,14 @@ extern "C" {
 #define dcmplx doublecomplex
 #endif
 
+/* Define sqrtf if it is not already provided.  */
 #include <vxl_config.h>
-#if VXL_C_MATH_HAS_SQRTF
+#ifndef sqrtf
+# if VXL_C_MATH_HAS_SQRTF
 float sqrtf(float);
-#else
-# define sqrtf(f) ((float)sqrt((double)(f)))
+# else
+#  define sqrtf(f) ((float)sqrt((double)(f)))
+# endif
 #endif
 
   char * F77_aloc(int Len, const char *whence);
