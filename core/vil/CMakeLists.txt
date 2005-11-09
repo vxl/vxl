@@ -101,7 +101,7 @@ SET( vil_sources ${vil_sources}
 
   # Stuff shared by all NITF2 classes
   file_formats/vil_nitf2.h
-  
+
   # Generic framework for reading NITF tagged record extensions (TREs)
   file_formats/vil_nitf2_array_field.h              file_formats/vil_nitf2_array_field.cxx
   file_formats/vil_nitf2_classification.h           file_formats/vil_nitf2_classification.cxx
@@ -112,14 +112,14 @@ SET( vil_sources ${vil_sources}
   file_formats/vil_nitf2_field_formatter.h          file_formats/vil_nitf2_field_formatter.cxx
   file_formats/vil_nitf2_field_functor.h            file_formats/vil_nitf2_field_functor.cxx
   file_formats/vil_nitf2_field_sequence.h           file_formats/vil_nitf2_field_sequence.cxx
-  file_formats/vil_nitf2_index_vector.h             
+  file_formats/vil_nitf2_index_vector.h
   file_formats/vil_nitf2_scalar_field.h             file_formats/vil_nitf2_scalar_field.cxx
   file_formats/vil_nitf2_tagged_record.h            file_formats/vil_nitf2_tagged_record.cxx
   file_formats/vil_nitf2_tagged_record_definition.h file_formats/vil_nitf2_tagged_record_definition.cxx
-  file_formats/vil_nitf2_typed_array_field.h        
-  file_formats/vil_nitf2_typed_scalar_field.h       
+  file_formats/vil_nitf2_typed_array_field.h
+  file_formats/vil_nitf2_typed_scalar_field.h
   file_formats/vil_nitf2_typed_field_formatter.h    file_formats/vil_nitf2_typed_field_formatter.cxx
-  
+
   # image operations
   vil_crop.cxx                          vil_crop.h
   vil_clamp.cxx                         vil_clamp.h
@@ -163,8 +163,8 @@ SET( vil_sources ${vil_sources}
   vil_pixel_traits.h
   vil_rgb.txx                           vil_rgb.h
   vil_rgba.txx                          vil_rgba.h
-  vil_fwd.h
   vil_color_table.h
+  vil_fwd.h
 
   # Streams
   vil_stream.cxx                        vil_stream.h
@@ -236,7 +236,7 @@ IF (SOLARIS)
   TARGET_LINK_LIBRARIES( vil nsl vil_network socket )
 ENDIF (SOLARIS)
 
-INSTALL_NOBASE_HEADER_FILES(/include/core/vil 
+INSTALL_NOBASE_HEADER_FILES(/include/core/vil
   ${vil_sources}
   ${vil_network_sources}
 )
