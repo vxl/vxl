@@ -5,6 +5,12 @@
 // \brief Base class to represent and provide access in several ways to a set of registration features.
 // \author Chuck Stewart
 // \date 12 Nov 2002
+//
+// \verbatim
+//  Modifications
+//   Chuck Stewart - 8 Nov 2005 - added versions of nearest_feature and k_nearest_feature 
+//      based on point location alone 
+// \endverbatim
 
 #include <vcl_vector.h>
 #include <vcl_string.h>
@@ -44,20 +50,31 @@ class rgrl_feature_set
   feature_vector
   features_within_radius( vnl_vector<double> const& center, double radius ) const = 0;
 
-  //: Return the nearest feature to the given feature.
+  //: Return the nearest feature to the given location.
   //
   // This may be constructed from an underlying continuous
   // representation.
   //
   virtual
   rgrl_feature_sptr
+  nearest_feature( const vnl_vector<double>& loc ) const = 0;
+
+  //: Return the nearest feature to the given location.
+  virtual
+  rgrl_feature_sptr
   nearest_feature( rgrl_feature_sptr feature ) const = 0;
 
-  //:  Return all features within a given distance, one per segment (if segmented)
+  //:  Return all features within a given distance of the given feature, one per segment (if segmented)
   //
   virtual
   feature_vector
   features_within_distance( rgrl_feature_sptr feature, double distance ) const = 0;
+
+  //:  Return the k nearest features to the given location, one per segment (if segmented)
+  //
+  virtual
+  feature_vector
+  k_nearest_features( const vnl_vector<double>& feature_loc, unsigned int k ) const = 0;
 
   //:  Return the k nearest features, one per segment (if segmented)
   //

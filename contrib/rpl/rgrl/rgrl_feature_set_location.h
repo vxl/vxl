@@ -4,6 +4,12 @@
 // \file
 // \author Amitha Perera
 // \date   Feb 2003
+//
+// \verbatim
+//  Modifications
+//   Chuck Stewart - 8 Nov 2005 - added versions of nearest_feature and k_nearest_feature 
+//      based on point location alone 
+// \endverbatim
 
 #include <rsdl/rsdl_bins.h>
 class rsdl_kd_tree;
@@ -62,14 +68,20 @@ class rgrl_feature_set_location
   features_within_radius( vnl_vector<double> const& center, double radius ) const;
 
   //: Nearest feature based on Euclidean distance
-  //
+  rgrl_feature_sptr
+  nearest_feature( const vnl_vector<double>& loc ) const;
+
+  //: Nearest feature based on Euclidean distance
   rgrl_feature_sptr
   nearest_feature( rgrl_feature_sptr feature ) const;
 
   //: Return all features within a given Euclidean distance
-  //
   feature_vector
   features_within_distance( rgrl_feature_sptr feature, double distance ) const;
+
+  //:  Return the k nearest features based on Euclidean distance.
+  feature_vector
+  k_nearest_features( const vnl_vector<double>& feature_loc, unsigned int k ) const;
 
   //:  Return the k nearest features based on Euclidean distance.
   feature_vector

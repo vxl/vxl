@@ -9,6 +9,8 @@
 // \verbatim
 //  Modifications
 //   Peter Vanroose - 14 aug 2004 - moved all impl from .txx to .h to avoid VC60 internal compile error
+//   Chuck Stewart - 8 Nov 2005 - added versions of nearest_feature and k_nearest_feature 
+//      based on point location alone 
 // \endverbatim
 
 #include "rgrl_feature_set_location.h"
@@ -60,13 +62,23 @@ class rgrl_feature_set_location_masked
     return final_results;
   }
 
-  //: Nearest feature based on signature error
+  //: Nearest feature based on Euclidean distance
   //
   rgrl_feature_sptr
   nearest_feature( rgrl_feature_sptr feature ) const
   {
     return mask_->inside(feature->location()) ?
            rgrl_feature_set_location<N>::nearest_feature( feature ) :
+           (rgrl_feature_sptr)0;
+  }
+
+  //: Nearest feature based on Euclidean distance
+  //
+  rgrl_feature_sptr
+  nearest_feature( const vnl_vector<double>& loc ) const
+  {
+    return mask_->inside(loc) ?
+           rgrl_feature_set_location<N>::nearest_feature( loc ) :
            (rgrl_feature_sptr)0;
   }
 
@@ -80,7 +92,17 @@ class rgrl_feature_set_location_masked
            feature_vector();
   }
 
-  //: Return the k nearest features based on Euclidean distance, signature error
+  //: Return the k nearest features based on Euclidean distance
+  feature_vector
+  k_nearest_features( const vnl_vector<double>& loc, unsigned int k ) const
+  {
+    feature_vector results;
+    return mask_->inside(loc) ?
+           rgrl_feature_set_location<N>::k_nearest_features(loc, k) :
+           feature_vector();
+  }
+
+  //: Return the k nearest features based on Euclidean distance
   feature_vector
   k_nearest_features( rgrl_feature_sptr feature, unsigned int k ) const
   {

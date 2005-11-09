@@ -52,6 +52,17 @@ rgrl_feature_based_registration::
 {
 }
 
+void
+rgrl_feature_based_registration::
+clear_results()
+{
+  num_xforms_tested_ = 0;
+  best_xform_estimate_ = 0;
+  best_matches_.clear();
+  best_scales_.clear();
+  best_status_ = 0;
+}
+
 //: Running from multiple initial estimates, produced by the initializer during registration.
 //  Loop through the set of initial estimates, and call the next \a run(.) in the loop.
 void
@@ -59,11 +70,7 @@ rgrl_feature_based_registration::
 run( rgrl_initializer_sptr initializer )
 {
   //  Clear previous results
-  num_xforms_tested_ = 0;
-  best_xform_estimate_ = 0;
-  best_matches_.clear();
-  best_scales_.clear();
-  best_status_ = 0;
+  this->clear_results();
 
   rgrl_transformation_sptr          init_xform_estimate;
   rgrl_scale_sptr                   prior_scale;

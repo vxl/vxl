@@ -43,6 +43,10 @@ class rgrl_feature_based_registration: public rgrl_object
   // Defines type-related functions
   rgrl_type_macro( rgrl_feature_based_registration, rgrl_object );
 
+  
+  //:  Clear record of results from previous runs
+  void clear_results();
+
   //: Running from multiple initial estimates, produced by the initializer during registration
   //
   //  Loop through the set of initial estimates.

@@ -150,7 +150,18 @@ rgrl_feature_sptr
 rgrl_feature_set_location<N>::
 nearest_feature( rgrl_feature_sptr feature ) const
 {
-  feature_vector results = this->k_nearest_features( feature, 1 );
+  feature_vector results = this->k_nearest_features( feature->location(), 1 );
+  assert( results.size() == 1 );
+  return results[0];
+}
+
+
+template<unsigned N>
+rgrl_feature_sptr
+rgrl_feature_set_location<N>::
+nearest_feature( const vnl_vector<double>& loc ) const
+{
+  feature_vector results = this->k_nearest_features( loc, 1 );
   assert( results.size() == 1 );
   return results[0];
 }
@@ -188,13 +199,22 @@ typename rgrl_feature_set_location<N>::feature_vector
 rgrl_feature_set_location<N>::
 k_nearest_features( rgrl_feature_sptr feature, unsigned int k ) const
 {
+  return k_nearest_features( feature->location(), k );
+}
+
+//:  Return the k nearest features based on Euclidean distance.
+template<unsigned N>
+typename rgrl_feature_set_location<N>::feature_vector
+rgrl_feature_set_location<N>::
+k_nearest_features( const vnl_vector<double> & loc, unsigned int k ) const
+{
   feature_vector results;
 
   if ( use_bins_ )
-    bins_->n_nearest( feature->location(), k, results );
+    bins_->n_nearest( loc, k, results );
 
   else { // Use kd_tree
-    rsdl_point query_point(feature->location());
+    rsdl_point query_point(loc);
     vcl_vector<rsdl_point> closest_points;
     vcl_vector<int> point_indices;
     kd_tree_->n_nearest( query_point, k, closest_points, point_indices );
