@@ -2,6 +2,7 @@
 // each of the 37 color tables found in vil_color_table.h
 // The created image is simply a ramp through 255 values.
 
+#include <vcl_sstream.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
 #include <vil/vil_color_table.h>
