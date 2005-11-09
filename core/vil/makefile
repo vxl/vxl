@@ -132,6 +132,7 @@ SOURCES += vil_pixel_format.cxx
 MANPAGE_SOURCES += vil_pixel_traits.h
 MANPAGE_SOURCES += vil_rgb.txx
 MANPAGE_SOURCES += vil_rgba.txx
+MANPAGE_SOURCES += vil_color_table.h
 MANPAGE_SOURCES += vil_fwd.h
 
 # Streams

@@ -17,6 +17,7 @@ MINI_PROG_SOURCES += vil_image_copy.cxx
 MINI_PROG_SOURCES += vil_rotate_image.cxx
 MINI_PROG_SOURCES += example_interpolate.cxx
 MINI_PROG_SOURCES += vil_resample_image.cxx
+MINI_PROG_SOURCES += vil_color_tables.cxx
 #MINI_PROG_SOURCES += generate_nitf_pyramid_images.cxx
 
 ################################
