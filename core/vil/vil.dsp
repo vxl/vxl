@@ -912,6 +912,9 @@ SOURCE=.\vil_nearest_neighbour_interp.h
 SOURCE=.\vil_stream_fstream64.h
 # End Source File
 # Begin Source File
+SOURCE=.\vil_color_table.h
+# End Source File
+# Begin Source File
 SOURCE=.\vil_warp.h
 # End Source File
 # Begin Source File

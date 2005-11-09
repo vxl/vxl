@@ -36,6 +36,9 @@ SOURCE=.\file_example3.cxx
 SOURCE=.\file_example4.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\file_example5.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vil_image_copy.cxx
 # End Source File
 # Begin Source File
@@ -43,6 +46,9 @@ SOURCE=.\vil_rotate_image.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\example_interpolate.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil_color_tables.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vil_resample_image.cxx
