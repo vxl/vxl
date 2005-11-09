@@ -20,6 +20,7 @@ ADD_EXECUTABLE( vgl_io_test_all
   test_conic_io.cxx
   test_box_2d_io.cxx
   test_box_3d_io.cxx
+  test_plane_3d_io.cxx
   test_polygon_io.cxx
   golden_test_vgl_io.cxx
 )
@@ -42,6 +43,7 @@ ADD_TEST( vgl_io_test_homg_plane_3d_io   vgl_io_test_all test_homg_plane_3d_io )
 ADD_TEST( vgl_io_test_conic_io           vgl_io_test_all test_conic_io )
 ADD_TEST( vgl_io_test_box_2d_io          vgl_io_test_all test_box_2d_io )
 ADD_TEST( vgl_io_test_box_3d_io          vgl_io_test_all test_box_3d_io )
+ADD_TEST( vgl_io_test_plane_3d_io        vgl_io_test_all test_plane_3d_io )
 ADD_TEST( vgl_io_test_polygon_io         vgl_io_test_all test_polygon_io )
 ADD_TEST( vgl_io_golden_test             vgl_io_test_all golden_test_vgl_io )
 
