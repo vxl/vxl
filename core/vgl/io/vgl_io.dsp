@@ -261,6 +261,9 @@ SOURCE=.\Templates/vsl_pair_io+vgl_point_2d+double-.vgl_point_2d+double--.cxx
 SOURCE=.\Templates/vsl_vector_io+vcl_vector+vgl_vector_2d+double---.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vgl_io_plane_3d+double-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vsl_vector_io+vgl_point_2d+float--.cxx
 # End Source File
 # End Group
@@ -370,6 +373,12 @@ SOURCE=.\vgl_io_vector_3d.h
 # End Source File
 # Begin Source File
 SOURCE=.\vgl_io_vector_3d.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_io_plane_3d.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_io_plane_3d.txx
 # End Source File
 # End Group
 # End Target

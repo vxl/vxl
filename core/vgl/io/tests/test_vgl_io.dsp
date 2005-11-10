@@ -149,10 +149,9 @@ SOURCE=.\test_vector_2d_io.cxx
 # Begin Source File
 SOURCE=.\test_vector_3d_io.cxx
 # End Source File
-# End Group
-# Begin Group "Header Files"
-
-# PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+SOURCE=.\test_plane_3d_io.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
