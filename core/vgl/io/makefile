@@ -22,6 +22,7 @@ MANPAGE_SOURCES += vgl_io_point_3d.txx
 MANPAGE_SOURCES += vgl_io_vector_2d.txx
 MANPAGE_SOURCES += vgl_io_vector_3d.txx
 MANPAGE_SOURCES += vgl_io_conic.txx
+MANPAGE_SOURCES += vgl_io_plane_3d.txx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

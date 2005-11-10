@@ -23,6 +23,7 @@ TESTS += test_conic_io.cxx
 TESTS += test_box_2d_io.cxx
 TESTS += test_box_3d_io.cxx
 TESTS += test_polygon_io.cxx
+TESTS += test_plane_3d_io.cxx
 TESTS += golden_test_vgl_io.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
