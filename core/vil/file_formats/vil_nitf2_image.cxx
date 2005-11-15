@@ -262,8 +262,9 @@ bool vil_nitf2_image::parse_headers()
   if (!m_stream->ok()) return false;
   //parse file header
   m_stream->seek(0);
-  if (!m_file_header.read(m_stream)) return false;
-
+  if (!m_file_header.read(m_stream)) {
+    return false;
+  }
   //now parse each image header
   clear_image_headers();
   m_image_headers.resize(nimages());

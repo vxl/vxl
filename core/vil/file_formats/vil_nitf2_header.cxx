@@ -110,7 +110,9 @@ vcl_string vil_nitf2_header::section_len_data_tag( Section sec, bool pretty )
 bool vil_nitf2_header::read(vil_stream* stream)
 {
   //first read the first part of the header
-  bool success = m_field_sequence1.read(*stream);
+  bool success = m_field_sequence1.read(*stream) && 
+    // If the version is not recognized, it may not even be a NITF file
+    file_version() != vil_nitf2_classification::V_UNKNOWN;
 
   //now read the classification stuff which is dependent
   //on the nitf file version
