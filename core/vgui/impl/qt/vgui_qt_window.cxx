@@ -8,6 +8,8 @@
 #include "vgui_qt_statusbar.h"
 
 #include <qmenubar.h>
+#include <qvgroupbox.h>
+#include <qlabel.h>
 #include <qlayout.h>
 #include <qframe.h>
 
@@ -17,29 +19,33 @@ void vgui_qt_window::setup_widget(int w, int h, const char* title)
    this->setCaption(title);
    this->resize(w,h);
 
-   QWidget* dummy = new QWidget(this);
-   QFrame* frame = new QFrame (dummy, "frame1");
-   frame->setFrameStyle (QFrame::Sunken | QFrame::Panel);
+   QWidget* mainwidget = new QWidget(this, "vgui_qt_gl_main_widget");
+
+   //Create a frame to store the GL widget
+   QFrame* frame = new QFrame (mainwidget, "vgui_qt_gl_frame");
+   frame->setFrameStyle (QFrame::Sunken | QFrame::StyledPanel);
    frame->setLineWidth (2);
 
+   //Create the GL widget and put it in the frame
    adaptor = new vgui_qt_adaptor(frame);
+   QHBoxLayout* hlayout = new QHBoxLayout (frame, 2, 2, "vgui_qt_gl_hlayout");
+   hlayout->addWidget (adaptor, 1);
 
-   QHBoxLayout* flayout = new QHBoxLayout(frame, 2, 2, "flayout");
-   flayout->addWidget (adaptor , 1);
+   //Top level layout
+   QVBoxLayout* vlayout = new QVBoxLayout (mainwidget, 15, 5, "vgui_qt_gl_vlayout");
+   vlayout->addWidget(frame, 1);
 
-   QBoxLayout* hlayout = new QHBoxLayout (dummy, 20, 10, "halyout");
-   hlayout->addWidget (frame, 1);
+   setCentralWidget(mainwidget);
 
-   setCentralWidget(dummy);
-
-// No fancy frame
-//   adaptor = new vgui_qt_adaptor(this);
-//   setCentralWidget(adaptor);
+#ifndef __SGI_CC // SGI's iostream does not allow re-initialising
+   vgui::out.rdbuf(statusbar.statusbuf);
+#endif
 }
 
 //-----------------------------------------------------------------------------
 vgui_qt_window::vgui_qt_window(int w, int h, const char* title)
-:  QMainWindow(),
+:  QMainWindow(0, "vgui_qt_mainwindow_without_menu"),
+   statusbar (this),
    use_menubar(false),
    use_statusbar(true)
 {
@@ -49,7 +55,8 @@ vgui_qt_window::vgui_qt_window(int w, int h, const char* title)
 
 //--------------------------------------------------------------------------------
 vgui_qt_window::vgui_qt_window(int w, int h, const vgui_menu& menu, const char* title)
-:  QMainWindow(),
+:  QMainWindow(0, "vgui_qt_mainwindow_with_menu"),
+   statusbar (this),
    use_menubar(true),
    use_statusbar(true)
 {
@@ -64,16 +71,9 @@ void vgui_qt_window::set_menubar(const vgui_menu &menu)
    use_menubar = true;
 
    vgui_qt_menu* qm;
-   for (unsigned i=0; i < menu.size();i++)
+   for (unsigned int i=0; i < menu.size(); ++i)
    {
       qm = new vgui_qt_menu(*(menu[i].menu));
       menuBar()->insertItem(menu[i].name.c_str(), (QPopupMenu*) qm);
    }
-}
-
-
-//--------------------------------------------------------------------------------
-void vgui_qt_window::set_adaptor(vgui_adaptor* a)
-{
-   vcl_cerr << "Ola this must still be done\n"; // FIXME
 }

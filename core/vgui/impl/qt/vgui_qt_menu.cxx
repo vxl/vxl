@@ -9,7 +9,7 @@ vgui_qt_menu::vgui_qt_menu(const vgui_menu& menu)
 
    //int i = 1;
    commands_ = new vgui_command_sptr[menu.size()];
-   for (unsigned i=0; i < menu.size();i++)
+   for (unsigned int i=0; i < menu.size(); ++i)
    {
       if (menu[i].is_separator())
       {
@@ -32,7 +32,9 @@ vgui_qt_menu::vgui_qt_menu(const vgui_menu& menu)
 //---------------------------------------------------------------------------
 void vgui_qt_menu::upon_activated(int id)
 {
+#ifdef DEBUG
    vcl_cerr << "upon_activated " << id << vcl_endl;
+#endif
    vgui_command_sptr c = commands_[id];
    c->execute();
 }

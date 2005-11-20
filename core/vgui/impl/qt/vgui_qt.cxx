@@ -1,8 +1,10 @@
 #include "vgui_qt.h"
+#include <vgui/vgui_gl.h>
 #include "vgui_qt_window.h"
 #include "vgui_qt_dialog_impl.h"
 
 #include <qapplication.h>
+#include <qgl.h>
 
 
 //-----------------------------------------------------------------------------
@@ -17,6 +19,29 @@ vgui_qt* vgui_qt::instance()
 void vgui_qt::init(int &argc, char **argv)
 {
    new QApplication(argc, argv);
+
+#if 0
+   QGLFormat f;
+   f = QGLFormat::defaultFormat();
+   f.setDoubleBuffer(true);
+   f.setDepth(true);
+   f.setRgba(true);
+   f.setOverlay (true);
+   f.setDirectRendering(true);
+   QGLFormat::setDefaultFormat(f);
+
+   QGLFormat of = QGLFormat::defaultOverlayFormat();
+   of.setDoubleBuffer(false);
+   of.setDepth(false);
+   of.setRgba(false);
+   of.setOverlay (false);
+   of.setDirectRendering(true);
+   QGLFormat::setDefaultOverlayFormat(of);
+
+
+   vcl_cerr << "QGLFormat::hasOpenGL () is " << QGLFormat::hasOpenGL () << vcl_endl
+            << "QGLFormat::hasOpenGLOverlays () is " << QGLFormat::hasOpenGLOverlays () << vcl_endl;
+#endif
 }
 
 
@@ -24,6 +49,21 @@ void vgui_qt::init(int &argc, char **argv)
 void vgui_qt::run()
 {
    qApp->exec();
+}
+
+//-----------------------------------------------------------------------------
+void vgui_qt::run_one_event()
+{
+   qApp->processEvents(10);
+   glFlush();
+}
+
+
+//-----------------------------------------------------------------------------
+void vgui_qt::run_till_idle()
+{
+   qApp->processEvents(10);
+   glFlush();
 }
 
 

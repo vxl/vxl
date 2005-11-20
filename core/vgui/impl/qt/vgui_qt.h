@@ -8,11 +8,12 @@
 // Provides functions for controlling the event loop.
 //
 // \author
-// Joris Schouteden
+// Joris Schouteden, ESAT, K.U.Leuven
 //
 // \verbatim
 //  Modifications
 //   24.03.2000 JS  Initial Version, adapted from vgui_gtk
+//   14.11.2005 Chanop Silpa-Anan  adapted to QT 3.3.5 for X11/Mac
 // \endverbatim
 //-----------------------------------------------------------------------------
 
@@ -28,9 +29,11 @@ class vgui_qt : public vgui_toolkit
    static    vgui_qt*   instance();
    virtual   vcl_string name() const { return "qt"; }
    virtual   void       run();
+   virtual   void       run_one_event();
+   virtual   void       run_till_idle();
    virtual   vgui_window* produce_window(int width, int height,
                                          const vgui_menu& menubar,
-                                              const char* title="vgui qt window");
+                                         const char* title="vgui qt window");
    virtual   vgui_window* produce_window(int width, int height,
                                          const char* title="vgui qt popup");
    virtual   vgui_dialog_impl* produce_dialog(const char* name);

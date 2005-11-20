@@ -4,11 +4,12 @@
 //:
 // \file
 // \brief Contains class vgui_qt_statusbar
-// \author Joris Schouteden
+// \author Joris Schouteden, ESAT, K.U.Leuven
 //
 // \verbatim
 //  Modifications
 //   24.03.2000 JS  Initial Version, adapted from vgui_gtk_statusbar
+//   14.11.2005 Chanop Silpa-Anan  adapted to QT 3.3.5 for X11/Mac
 // \endverbatim
 
 #include <vcl_string.h>
@@ -18,15 +19,14 @@
 #include <vgui/vgui_statusbar.h>
 
 #include <qstatusbar.h>
+#include <qmainwindow.h>
 
 //: QT implementation of vgui_statusbar.
 class vgui_qt_statusbar :
-   public QStatusBar,
    public vgui_statusbar
 {
-   Q_OBJECT
  public:
-   vgui_qt_statusbar();
+   vgui_qt_statusbar(QMainWindow *parent);
   ~vgui_qt_statusbar();
 
    int write(const char* text, int n);
@@ -35,6 +35,9 @@ class vgui_qt_statusbar :
    vcl_string linebuffer;
    vgui_statusbuf* statusbuf;
    vcl_ostream out;
+
+ private:
+   QMainWindow *parent_;
 };
 
 #endif // VGUI_QT_STATUSBAR_H_

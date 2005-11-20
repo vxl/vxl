@@ -1,5 +1,6 @@
 // This is core/vgui/impl/qt/vgui_qt_dialog_impl.cxx
 #include "vgui_qt_dialog_impl.h"
+#include "vgui_qt_adaptor.h"
 
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
@@ -33,24 +34,38 @@ vgui_qt_dialog_impl::vgui_qt_dialog_impl(const char* name)
 //-----------------------------------------------------------------------------
 bool vgui_qt_dialog_impl::ask()
 {
+   bool use_ok_button = !ok_button_text_. empty ();
+   bool use_cancel_button =  !cancel_button_text_. empty ();
+
    QPushButton *ok, *cancel;
-   ok = new QPushButton( ok_button_text_.c_str(), this );
-   connect( ok, SIGNAL(clicked()), SLOT(accept()) );
-   cancel = new QPushButton( cancel_button_text_.c_str(), this );
-   connect( cancel, SIGNAL(clicked()), SLOT(reject()) );
-
-   ok->setMinimumSize(cancel->width(), cancel->height());
-   ok->setMaximumSize(cancel->width(), cancel->height());
-
    QVBoxLayout* total = new QVBoxLayout(this, 10, -1, "totallayout");
    QVBoxLayout* layout = new QVBoxLayout(total, -1, "vboxlayout");
-   QHBoxLayout* lower = new QHBoxLayout(total, -1, "buttonslayout");
 
-   lower->addStretch(1);
-   lower->addWidget(ok, 0);
-   lower->addStretch(1);
-   lower->addWidget(cancel, 0);
-   lower->addStretch(1);
+   if (use_ok_button || use_cancel_button)
+   {
+     QHBoxLayout* lower = new QHBoxLayout(total, -1, "buttonslayout");
+     lower->addStretch(1);
+
+     if (use_ok_button)
+     {
+       ok = new QPushButton( ok_button_text_.c_str(), this );
+       connect( ok, SIGNAL(clicked()), SLOT(accept()) );
+       lower->addWidget(ok, 0);
+       lower->addStretch(1);
+     }
+     if (use_cancel_button)
+     {
+       cancel = new QPushButton( cancel_button_text_.c_str(), this );
+       connect( cancel, SIGNAL(clicked()), SLOT(reject()) );
+       lower->addWidget(cancel, 0);
+       lower->addStretch(1);
+     }
+     if (use_ok_button && use_cancel_button)
+     {
+       ok->setMinimumSize(cancel->width(), cancel->height());
+       ok->setMaximumSize(cancel->width(), cancel->height());
+     }
+   }
 
    for (vcl_vector<element>::iterator ei = elements.begin();
         ei != elements.end(); ++ei)
@@ -94,6 +109,10 @@ bool vgui_qt_dialog_impl::ask()
          {
             layout->addWidget(widget, 0);
          }
+         else if (l.type == inline_tabl)
+         {
+            layout->addWidget(widget, 0);
+         }
       }
    }
 
@@ -102,7 +121,7 @@ bool vgui_qt_dialog_impl::ask()
    if (result == true)
    {
       for (vcl_vector<element>::iterator ei = elements.begin();
-           ei != elements.end(); ei++)
+           ei != elements.end(); ++ei)
       {
          element l = (*ei);
          if (l.type == long_elem ||
@@ -143,8 +162,6 @@ bool vgui_qt_dialog_impl::ask()
       }
    }
 
-   delete ok;
-   delete cancel;
    return result;
 }
 
@@ -156,6 +173,7 @@ void* vgui_qt_dialog_impl::bool_field_widget(const char* txt, bool& v)
    widget->setChecked(v);
    return widget;
 }
+
 
 //-----------------------------------------------------------------------------
 void* vgui_qt_dialog_impl::int_field_widget(const char* txt, int& v)
@@ -208,7 +226,7 @@ void* vgui_qt_dialog_impl::string_field_widget(const char* txt, vcl_string& v)
 void* vgui_qt_dialog_impl::choice_field_widget(const char* txt, const vcl_vector<vcl_string>& labels, int& v)
 {
    QComboBox* widget = new QComboBox(this);
-   for (vcl_vector<vcl_string>::const_iterator si = labels.begin(); si != labels.end(); si++)
+   for (vcl_vector<vcl_string>::const_iterator si = labels.begin(); si != labels.end(); ++si)
    {
       widget->insertItem((*si).c_str());
    }
@@ -246,6 +264,15 @@ void* vgui_qt_dialog_impl::color_chooser_widget(const char * txt,vcl_string& val
 {
    vgui_qt_colorchooser_impl* widget = new vgui_qt_colorchooser_impl(this, txt, val);
    return widget;
+}
+
+
+//-----------------------------------------------------------------------------
+void* vgui_qt_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr tab,
+                                                 unsigned int width, unsigned int height)
+{
+   vgui_qt_tableau_impl* widget = new vgui_qt_tableau_impl (this, tab, width, height);
+   return  widget;
 }
 
 
@@ -297,4 +324,31 @@ void vgui_qt_colorchooser_impl::get_a_color()
       value_ = c.name().ascii();
       frame_->setBackgroundColor(c);
    }
+}
+
+
+//-----------------------------------------------------------------------------
+vgui_qt_tableau_impl::vgui_qt_tableau_impl(QWidget* parent,
+                                           const vgui_tableau_sptr tab,
+                                           unsigned int width, unsigned int height)
+: QWidget(parent, "vgui_qt_inline_gl_main_widget")
+{
+   this-> setFixedWidth (width);
+   this-> setFixedHeight (height);
+
+   //Create a frame to store the GL widget
+   QFrame* frame = new QFrame (this, "vgui_qt_inline_gl_frame");
+   frame->setFrameStyle (QFrame::Sunken | QFrame::StyledPanel);
+   frame->setLineWidth (2);
+
+   //Create the GL widget and put it in the frame
+   vgui_qt_adaptor* adaptor = new vgui_qt_adaptor(frame);
+   adaptor-> set_tableau(tab);
+
+   QHBoxLayout* hlayout = new QHBoxLayout (frame, 2, 2, "vgui_qt_inline_gl_hlayout");
+   hlayout->addWidget (adaptor, 1);
+
+   //Top level layout
+   QVBoxLayout* vlayout = new QVBoxLayout (this, 15, 5, "vgui_qt_inline_gl_vlayout");
+   vlayout->addWidget(frame, 1);
 }

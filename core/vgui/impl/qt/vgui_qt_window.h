@@ -4,11 +4,12 @@
 //:
 // \file
 // \brief qt windows
-// \author Joris Schouteden
+// \author Joris Schouteden, ESAT, K.U.Leuven
 //
 // \verbatim
 //  Modifications
 //   24.03.2000 JS  Initial Version, adapted from vgui_gtk_window
+//   14.11.2005 Chanop Silpa-Anan  adapted to QT 3.3.5 for X11/Mac
 // \endverbatim
 
 #include <vgui/vgui_window.h>
@@ -18,6 +19,7 @@
 #include "vgui_qt_adaptor.h"
 
 #include <qmainwindow.h>
+#include <qobject.h>
 
 class vgui_gtk_adaptor;
 
@@ -32,22 +34,21 @@ class vgui_qt_window :
   ~vgui_qt_window() { };
 
    void set_menubar(const vgui_menu &menu);
-   void set_statusbar(bool) { };
 
-   void set_adaptor(vgui_adaptor*);
+   vgui_statusbar* get_statusbar() { return &statusbar; }
    vgui_adaptor* get_adaptor() { return adaptor; };
 
    void show() { QMainWindow::show(); };
    void hide() { QMainWindow::hide(); };
+
+ private:
+   void setup_widget(int w, int h, const char* title);
 
    vgui_qt_adaptor*  adaptor ;
    vgui_qt_statusbar statusbar;
 
    bool use_menubar;
    bool use_statusbar;
-
- private:
-   void setup_widget(int w, int h, const char* title);
 };
 
 #endif // VGUI_QT_WINDOW_H_
