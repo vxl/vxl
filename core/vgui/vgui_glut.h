@@ -14,7 +14,11 @@
 # include <vcl_compiler.h>
 # include <vgui/vgui_gl.h>
 # include <vgui/vgui_glu.h>
+#ifdef __APPLE__
+# include <glut.h>
+#else
 # include <GL/glut.h>
+#endif
 
 // Workaround for a "bug" in GL/glut.h on Leuven's alpha, where the
 // prototypes of some functions is declared as char* instead of const

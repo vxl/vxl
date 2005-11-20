@@ -235,7 +235,7 @@ IF (GLUT_FOUND)
 
       impl/glut/menu_hack.h
     )
-    IF (X11_FOUND)
+    IF (X11_FOUND AND NOT APPLE)
       INCLUDE_DIRECTORIES(${X11_INCLUDE_DIR})
      # FreeGLUT does not support this menu hack
       IF(EXISTS ${GLUT_INCLUDE_DIR}/GL/freeglut.h)
@@ -247,11 +247,11 @@ IF (GLUT_FOUND)
           impl/glut/menu_hack_X11.cxx
         )
       ENDIF(EXISTS ${GLUT_INCLUDE_DIR}/GL/freeglut.h)
-    ELSE (X11_FOUND)
+    ELSE (X11_FOUND AND NOT APPLE)
       SET(vgui_glut_sources ${vgui_glut_sources}
         impl/glut/menu_hack_none.cxx
       )
-    ENDIF (X11_FOUND)
+    ENDIF (X11_FOUND AND NOT APPLE)
 
     SET( vgui_sources ${vgui_sources} ${vgui_glut_sources} )
 
@@ -284,7 +284,6 @@ IF (QT_FOUND)
 
     QT_WRAP_CPP(vgui vgui_qt_moc_files
       impl/qt/vgui_qt_adaptor.h
-      impl/qt/vgui_qt_statusbar.h
       impl/qt/vgui_qt_dialog_impl.h
       impl/qt/vgui_qt_menu.h
     )
