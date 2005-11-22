@@ -138,11 +138,11 @@ void mbl_exception_look_for_unused_props(
 #if !VCL_HAS_EXCEPTIONS
 
   //: Indicates that an expected property label was missing.
-  class mbl_exception_missing_property_label
+  class mbl_exception_missing_property
   {
     vcl_string msg_;
    public:
-    mbl_exception_missing_property_label(const vcl_string &missing)
+    mbl_exception_missing_property(const vcl_string &missing)
       : missing_(vcl_string("Couldn't find expected property label: \""+missing+'\"') {}
     const char * what() const {return missing_.c_str();}
   };
@@ -150,16 +150,16 @@ void mbl_exception_look_for_unused_props(
 #else
 
   //: Indicates a problem whilst parsing text configuration data.
-  class mbl_exception_missing_property_label: public mbl_exception_parse_error
+  class mbl_exception_missing_property: public mbl_exception_parse_error
   {
    public:
    vcl_string missing_label;
-    mbl_exception_missing_property_label(const vcl_string &missing)
+    mbl_exception_missing_property(const vcl_string &missing)
       : mbl_exception_parse_error(
           vcl_string("Couldn't find expected property label: \""+missing+'\"')),
         missing_label(missing)
     {}
-    virtual ~mbl_exception_missing_property_label() throw() {}
+    virtual ~mbl_exception_missing_property() throw() {}
   };
 
 #endif
