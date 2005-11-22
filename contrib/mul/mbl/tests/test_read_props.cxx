@@ -5,7 +5,7 @@
 #include <mbl/mbl_read_props.h>
 #include <testlib/testlib_test.h>
 
-vcl_string strip_ws(vcl_string &s)
+static vcl_string strip_ws(vcl_string &s)
 {
   vcl_string out;
   vcl_string::size_type i=0;

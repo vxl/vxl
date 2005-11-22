@@ -30,6 +30,7 @@ ADD_EXECUTABLE( mbl_test_all
   test_thin_plate_spline_3d.cxx
   test_thin_plate_spline_weights_3d.cxx
   test_read_props.cxx
+  test_read_multi_props.cxx
   test_correspond_points.cxx
   test_rbf_network.cxx
   test_table.cxx
@@ -71,6 +72,7 @@ ADD_TEST( mbl_test_thin_plate_spline_2d mbl_test_all test_thin_plate_spline_2d )
 ADD_TEST( mbl_test_thin_plate_spline_3d mbl_test_all test_thin_plate_spline_3d )
 ADD_TEST( mbl_test_thin_plate_spline_weights_3d mbl_test_all test_thin_plate_spline_weights_3d )
 ADD_TEST( mbl_test_read_props mbl_test_all test_read_props )
+ADD_TEST( mbl_test_read_multi_props mbl_test_all test_read_multi_props )
 ADD_TEST( mbl_test_correspond_points mbl_test_all test_correspond_points )
 ADD_TEST( mbl_test_rbf_network mbl_test_all test_rbf_network )
 ADD_TEST( mbl_test_table mbl_test_all test_table )

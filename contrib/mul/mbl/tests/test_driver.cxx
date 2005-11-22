@@ -27,6 +27,7 @@ DECLARE( test_thin_plate_spline_2d );
 DECLARE( test_thin_plate_spline_3d );
 DECLARE( test_thin_plate_spline_weights_3d );
 DECLARE( test_read_props );
+DECLARE( test_read_multi_props );
 DECLARE( test_correspond_points );
 DECLARE( test_rbf_network );
 DECLARE( test_table );
@@ -67,6 +68,7 @@ register_tests()
   REGISTER( test_thin_plate_spline_3d );
   REGISTER( test_thin_plate_spline_weights_3d );
   REGISTER( test_read_props );
+  REGISTER( test_read_multi_props );
   REGISTER( test_correspond_points );
   REGISTER( test_rbf_network );
   REGISTER( test_table );
