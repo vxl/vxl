@@ -13,6 +13,11 @@
 //: The type of the property dictionary
 class mbl_read_props_type : public vcl_map<vcl_string, vcl_string >
 {
+public:
+  // Return the contents for a given property prop.
+  // prop is removed from the property list.
+  // \throws mbl_exception_missing_property if prop doesn't exist
+  vcl_string get_required_property(const vcl_string &prop);
 };
 
 //: Read properties from a text stream.
@@ -57,8 +62,28 @@ void mbl_read_props_print(vcl_ostream &afs, mbl_read_props_type props);
 //: merge two property sets.
 // \param first_overrides
 // properties in "first" will override identically named properties in "second"
-mbl_read_props_type mbl_read_props_merge(const mbl_read_props_type& first,
-                                         const mbl_read_props_type& second,
-                                         bool first_overrides=true);
+mbl_read_props_type mbl_read_props_merge(
+  const mbl_read_props_type& first,
+  const mbl_read_props_type& second,
+  bool first_overrides=true);
+
+
+//: Throw error if there are any keys in props that aren't in ignore.
+// \throw mbl_exception_unused_props
+void mbl_read_props_look_for_unused_props(
+  const vcl_string & function_name,
+  const mbl_read_props_type &props,
+  const mbl_read_props_type &ignore);
+
+//: Throw error if there are any keys in props.
+// \throw mbl_exception_unused_props
+inline void mbl_read_props_look_for_unused_props(
+  const vcl_string & function_name,
+  const mbl_read_props_type &props)
+{
+  mbl_read_props_look_for_unused_props(function_name, props,
+    mbl_read_props_type());
+}
+
 
 #endif // mbl_read_props_h

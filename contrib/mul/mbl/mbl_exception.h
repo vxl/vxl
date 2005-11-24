@@ -40,16 +40,6 @@ void mbl_exception_warning(T exception)
 }
 
 
-class mbl_read_props_type;
-
-//: Throw error if there are any keys in props that aren't in ignore.
-// \throw mbl_exception_unused_props
-void mbl_exception_look_for_unused_props(
-  const vcl_string & function_name,
-  const mbl_read_props_type &props,
-  const mbl_read_props_type &ignore);
-
-
 #if !VCL_HAS_EXCEPTIONS
 
   //: Indicates that mbl_cloneables_factory has not heard of value name.

@@ -1,8 +1,8 @@
 // This is mul/mbl/mbl_read_props.cxx
-#include "mbl_read_props.h"
 //:
 // \file
 
+#include "mbl_read_props.h"
 #include <vsl/vsl_indent.h>
 #include <vcl_sstream.h>
 #include <vcl_iostream.h>
@@ -11,6 +11,22 @@
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_exception.h>
+
+
+// Return the contents for a given property prop.
+// prop is removed from the property list.
+// \throws mbl_exception_missing_property if prop doesn't exist
+vcl_string mbl_read_props_type::get_required_property(const vcl_string &prop)
+{
+  mbl_read_props_type::iterator it = this->find(prop);
+  if (it==this->end()) mbl_exception_error(
+    mbl_exception_missing_property(prop));
+  vcl_string result = it->second;
+  this->erase(it);
+  return result;
+}
+
+
 
 void mbl_read_props_print(vcl_ostream &afs, mbl_read_props_type props)
 {
@@ -372,3 +388,27 @@ mbl_read_props_type mbl_read_props_merge(const mbl_read_props_type& a,
   }
   return output;
 }
+
+//: Throw error if there are any keys in props that aren't in ignore.
+// \throw mbl_exception_unused_props
+void mbl_read_props_look_for_unused_props(
+  const vcl_string & function_name,
+  const mbl_read_props_type &props,
+  const mbl_read_props_type &ignore)
+{
+  mbl_read_props_type p2(props);
+  
+  // Remove ignoreable properties
+  for (mbl_read_props_type::const_iterator it=ignore.begin();
+         it != ignore.end(); ++it)
+    p2.erase(it->first);
+
+  if (!p2.empty())
+  {
+
+    vcl_ostringstream ss;
+    mbl_read_props_print(ss, p2);
+    mbl_exception_error(mbl_exception_unused_props(function_name, ss.str()));
+  }
+}
+
