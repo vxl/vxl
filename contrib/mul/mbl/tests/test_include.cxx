@@ -37,6 +37,7 @@
 #include <mbl/mbl_rbf_network.h>
 #include <mbl/mbl_read_double.h>
 #include <mbl/mbl_read_int.h>
+#include <mbl/mbl_read_multi_props.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_read_str.h>
 #include <mbl/mbl_read_yes.h>
