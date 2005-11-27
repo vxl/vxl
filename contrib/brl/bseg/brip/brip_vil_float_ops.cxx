@@ -190,7 +190,6 @@ static void brip_1d_gaussian_kernel(double sigma, double fuzz,
     kernel[i] /= sum;                           // normalize by integral
 }
 
-
 vil_image_view<float>
 brip_vil_float_ops::gaussian(vil_image_view<float> const& input, float sigma)
 {
@@ -441,7 +440,6 @@ brip_vil_float_ops::abs_clip_to_level(vil_image_view<float> const& image,
   return out;
 }
 
-
 vil_image_view<float> brip_vil_float_ops::average_NxN(vil_image_view<float> const & img, int N)
 {
   vil_image_view<float> result;
@@ -454,14 +452,13 @@ vil_image_view<float> brip_vil_float_ops::average_NxN(vil_image_view<float> cons
   return result;
 }
 
-
 //----------------------------------------------------------------
 // Compute the gradient of the input, use a 3x3 mask
-//
+// \verbatim
 //         1  |-1  0  1|         1  |-1 -1 -1|
 //   Ix = --- |-1  0  1|   Iy = --- | 0  0  0|
 //         6  |-1  0  1|         6  | 1  1  1|
-//
+// \endverbatim
 // Larger masks are computed by pre-convolving with a Gaussian
 //
 void brip_vil_float_ops::gradient_3x3(vil_image_view<float> const& input,
@@ -492,11 +489,11 @@ void brip_vil_float_ops::gradient_3x3(vil_image_view<float> const& input,
 
 //----------------------------------------------------------------
 // Compute the Hessian of the input, use a 3x3 mask
-//
+// \verbatim
 //          1 | 1  -2  1|          1 |  1  1  1|         1  | 1  0 -1|
 //   Ixx = ---| 1  -2  1|   Iyy = ---| -2 -2 -2|  Ixy = --- | 0  0  0|
 //          3 | 1  -2  1|          3 |  1  1  1|         4  |-1  0  1|
-//
+// \endverbatim
 // Larger masks are computed by pre-convolving with a Gaussian
 //
 void brip_vil_float_ops::hessian_3x3(vil_image_view<float> const& input,
@@ -565,13 +562,14 @@ brip_vil_float_ops::beaudet(vil_image_view<float> const& Ixx,
 //   t
 //IxIx gradient matrix elements
 // That is,
+// \verbatim
 //                        _                           _
 //                       | (dI/dx)^2    (dI/dx)(dI/dy) |
 //                       |                             |
 //  A = Sum(neighborhood)|                             |
 //                       |(dI/dx)(dI/dy)   (dI/dx)^2   |
 //                       |_                           _|
-//
+// \endverbatim
 // over a a 2n+1 x 2n+1 neigborhood
 //
 void
@@ -638,15 +636,15 @@ brip_vil_float_ops::harris(vil_image_view<float> const& IxIx,
 // Compute the sqrt of the product of the eigenvalues of the
 // gradient matrix over a 2n+1 x 2n+1 neigborhood
 // That is,
+// \verbatim
 //                        _                           _
 //                       | (dI/dx)^2    (dI/dx)(dI/dy) |
 //                       |                             |
 //  A = Sum(neighborhood)|                             |
 //                       |(dI/dx)(dI/dy)   (dI/dx)^2   |
 //                       |_                           _|
-//
-//  The output image is sqrt(lamba_1*lambda_2) where lambda_i are the
-//  eigenvalues
+// \endverbatim
+// The output image is sqrt(lamba_1*lambda_2) where lambda_i are the eigenvalues
 //
 vil_image_view<float>
 brip_vil_float_ops::sqrt_grad_singular_values(vil_image_view<float> & input,
@@ -744,7 +742,6 @@ brip_vil_float_ops::Lucas_KanadeMotion(vil_image_view<float> & current_frame,
   vcl_cout << "\nCompute Lucas-Kanade in " << t.real() << " msecs.\n";
 }
 
-
 //---------------------------------------------------------------------
 // Horn-Schunk method for calc. motion vectors:  Solve for the motion vectors
 // iteratively using a cost function with two terms (RHS of optical flow eqn
@@ -753,9 +750,9 @@ brip_vil_float_ops::Lucas_KanadeMotion(vil_image_view<float> & current_frame,
 // weighted by alpha_coef term. The iteration goes on until the error
 // reaches below err_thresh
 //  Error conditions:
-//     -1  -  current_frame and previous_frame are equal
-//     -2  -  at least one input frame or internal process image is all zeros
-//      0  -  routine was successful
+//  -  -1  -  current_frame and previous_frame are equal
+//  -  -2  -  at least one input frame or internal process image is all zeros
+//  -   0  -  routine was successful
 
 int brip_vil_float_ops::
 Horn_SchunckMotion(vil_image_view<float> const& current_frame,
@@ -895,7 +892,6 @@ Horn_SchunckMotion(vil_image_view<float> const& current_frame,
   return 0;
 }
 
-
 void brip_vil_float_ops::fill_x_border(vil_image_view<float> & image,
                                        unsigned w, float value)
 {
@@ -960,7 +956,6 @@ brip_vil_float_ops::convert_to_byte(vil_image_view<float> const& image)
     }
   return output;
 }
-
 
 //------------------------------------------------------------
 // Convert the range between min_val and max_val to 255
@@ -1380,7 +1375,7 @@ brip_vil_float_ops::convert_to_float(vil_image_resource const& image)
 }
 
 //-----------------------------------------------------------------
-// : convert any image to an unsigned_char image
+// Convert any image to an unsigned_char image
 vil_image_view<unsigned char>
 brip_vil_float_ops::convert_to_grey(vil_image_resource const& image)
 {
@@ -1430,11 +1425,13 @@ brip_vil_float_ops::convert_to_grey(vil_image_resource const& image)
 // Read a convolution kernel from file
 // Assumes a square kernel with odd dimensions, i.e., w,h = 2n+1
 // format:
+// \verbatim
 //     n
 //     scale
 //     k00  k01  ... k02n
 //           ...
 //     k2n0 k2n1 ... k2n2n
+// \endverbatim
 //
 vbl_array_2d<float> brip_vil_float_ops::load_kernel(vcl_string const& file)
 {
@@ -1546,6 +1543,7 @@ basis_images(vcl_vector<vil_image_view<float> > const& input_images,
 // dir = -1 gives reverse transform
 //
 //   Formula: forward
+// \verbatim
 //                N-1
 //                ---
 //            1   \          - j k 2 pi n / N
@@ -1553,8 +1551,10 @@ basis_images(vcl_vector<vil_image_view<float> > const& input_images,
 //            N   /                                n=0..N-1
 //                ---
 //                k=0
+// \endverbatim
 //
 //    Formula: reverse
+// \verbatim
 //                N-1
 //                ---
 //                \          j k 2 pi n / N
@@ -1562,6 +1562,7 @@ basis_images(vcl_vector<vil_image_view<float> > const& input_images,
 //                /                                n=0..N-1
 //                ---
 //                k=0
+// \endverbatim
 //
 bool brip_vil_float_ops::fft_1d(int dir, int m, double* x, double* y)
 {
@@ -1908,9 +1909,11 @@ spatial_frequency_filter(vil_image_view<float> const& input,
 
 //----------------------------------------------------------------------
 //: Bi-linear interpolation on the neigborhood below.
+// \verbatim
 //      xr
 //   yr 0  x
 //      x  x
+// \endverbatim
 //
 double brip_vil_float_ops::
   bilinear_interpolation(vil_image_view<float> const& input, double x, double y)
@@ -2193,7 +2196,6 @@ bool brip_vil_float_ops::chip(vil_image_resource_sptr const& image,
   return false;
 }
 
-
 //:compute normalized cross correlation from the intensity moment sums.
 static float cross_corr(double area, double si1, double si2,
                         double si1i1, double si2i2, double si1i2,
@@ -2379,7 +2381,6 @@ static void advance_rows(vbl_array_2d<double>& S)
       S[r][c]=S[r+1][c];
 }
 
-
 static bool output_cc_row(int r0, vbl_array_1d<float> const& cc,
                           vil_image_view<float>& out)
 {
@@ -2390,7 +2391,6 @@ static bool output_cc_row(int r0, vbl_array_1d<float> const& cc,
     out(c, r0) = cc[c];
   return true;
 }
-
 
 bool brip_vil_float_ops::
 cross_correlate(vil_image_view<float> const& image1,
@@ -2540,71 +2540,69 @@ brip_vil_float_ops::difference(vil_image_resource_sptr const& img0,
   return vil_new_image_resource_of_view(diff);
 }
 
-//Compute the entropy of the intensity of a region
-//Note no bounds checking!
+//: Compute the entropy of the intensity of a region
+//  Note no bounds checking!
 float brip_vil_float_ops::entropy_i(const unsigned i, const unsigned j,
-                                    const unsigned i_radius, 
+                                    const unsigned i_radius,
                                     const unsigned j_radius,
                                     vil_image_view<float> const& intensity,
                                     const float range, const unsigned bins)
 {
   bsta_histogram<float> hi(range, bins);
   int ir = static_cast<int>(i_radius), jr = static_cast<int>(j_radius);
-  for(int dj = -jr; dj<=jr; ++dj)
-    for(int di = -ir; di<=ir; ++di)
-      {
-        float inten = intensity(i+di, j+dj);
-        hi.upcount(inten, 1.0f);
-      } 
+  for (int dj = -jr; dj<=jr; ++dj)
+    for (int di = -ir; di<=ir; ++di)
+    {
+      float inten = intensity(i+di, j+dj);
+      hi.upcount(inten, 1.0f);
+    }
   return hi.entropy();
 }
-//Compute the entropy of the gradient direction of a region
-//Note no bounds checking!
+
+//: Compute the entropy of the gradient direction of a region
+//  Note no bounds checking!
 float brip_vil_float_ops::entropy_g(const unsigned i, const unsigned j,
-                                    const unsigned i_radius, 
+                                    const unsigned i_radius,
                                     const unsigned j_radius,
                                     vil_image_view<float> const& gradx,
                                     vil_image_view<float> const& grady,
                                     const float range, const unsigned bins)
 {
   bsta_histogram<float> hg(range, bins);
-  float deg_rad = (float)(180.0/vnl_math::pi);
+  static const float deg_rad = (float)(180.0/vnl_math::pi);
   int ir = static_cast<int>(i_radius), jr = static_cast<int>(j_radius);
-  for(int dj = -jr; dj<=jr; ++dj)
-    for(int di = -ir; di<=ir; ++di)
-      {
-        float Ix = gradx(i+di, j+dj), Iy = grady(i+di, j+dj);
-        float ang = deg_rad*vcl_atan2(Iy, Ix) + 180.0f;
-        float mag = vcl_abs(Ix)+vcl_abs(Iy);
-        hg.upcount(ang, mag);
-      }
+  for (int dj = -jr; dj<=jr; ++dj)
+    for (int di = -ir; di<=ir; ++di)
+    {
+      float Ix = gradx(i+di, j+dj), Iy = grady(i+di, j+dj);
+      float ang = deg_rad*vcl_atan2(Iy, Ix) + 180.0f;
+      float mag = vcl_abs(Ix)+vcl_abs(Iy);
+      hg.upcount(ang, mag);
+    }
   return hg.entropy();
 }
 
-//:Compute the hue and saturation entropy of a region about the specified pixel
-//Note no bounds checking!
+//: Compute the hue and saturation entropy of a region about the specified pixel
+//  Note no bounds checking!
 float brip_vil_float_ops::entropy_hs(const unsigned i, const unsigned j,
-                                     const unsigned i_radius, 
+                                     const unsigned i_radius,
                                      const unsigned j_radius,
                                      vil_image_view<float> const& hue,
                                      vil_image_view<float> const& sat,
                                      const float range, const unsigned bins)
 {
   bsta_histogram<float> hg(range, bins);
-  float deg_rad = (float)(180.0/vnl_math::pi);
   int ir = static_cast<int>(i_radius), jr = static_cast<int>(j_radius);
-  for(int dj = -jr; dj<=jr; ++dj)
-    for(int di = -ir; di<=ir; ++di)
-      {
-        float h = hue(i+di, j+dj), s = sat(i+di, j+dj);
-        hg.upcount(h, s);
-      }
+  for (int dj = -jr; dj<=jr; ++dj)
+    for (int di = -ir; di<=ir; ++di)
+    {
+      float h = hue(i+di, j+dj), s = sat(i+di, j+dj);
+      hg.upcount(h, s);
+    }
   return hg.entropy();
 }
 
-
-
-vil_image_view<float> 
+vil_image_view<float>
 brip_vil_float_ops::entropy(const unsigned i_radius,
                             const unsigned j_radius,
                             const unsigned step,
@@ -2616,48 +2614,48 @@ brip_vil_float_ops::entropy(const unsigned i_radius,
                             )
 {
   vil_image_view<float> ent;
-  if(!intensity&&!gradient&&!ihs)
-    {
-      vcl_cout << "In brip_vil_float_ops::entropy(.) - No computation to do\n";
-      return ent;
-    }
-  
+  if (!intensity&&!gradient&&!ihs)
+  {
+    vcl_cout << "In brip_vil_float_ops::entropy(.) - No computation to do\n";
+    return ent;
+  }
+
   vil_image_view<float> fimage = brip_vil_float_ops::convert_to_float(img);
   vil_image_view<float> gimage =
-    brip_vil_float_ops::gaussian(fimage, sigma);  
-  
+    brip_vil_float_ops::gaussian(fimage, sigma);
+
   unsigned ni = img->ni(), nj = img->nj();
   ent.set_size(ni/step+1, nj/step+1);
   ent.fill(0.0f);
-  if(intensity)
-    for(unsigned j = j_radius; j<(nj-j_radius); j+=step)
-      for(unsigned i = i_radius; i<(ni-i_radius); i+=step)
-        ent(i/step,j/step) = 
+  if (intensity)
+    for (unsigned j = j_radius; j<(nj-j_radius); j+=step)
+      for (unsigned i = i_radius; i<(ni-i_radius); i+=step)
+        ent(i/step,j/step) =
           brip_vil_float_ops::entropy_i(i, j, i_radius, j_radius, gimage);
 
-  if(gradient)
-    {
-      vil_image_view<float> grad_x, grad_y;
-      grad_x.set_size(ni, nj);
-      grad_y.set_size(ni, nj);
-      brip_vil_float_ops::gradient_3x3 (gimage , grad_x , grad_y);  
-      for(unsigned j = j_radius; j<(nj-j_radius); j+=step)
-        for(unsigned i = i_radius; i<(ni-i_radius); i+=step)
-          ent(i/step,j/step) += 
-            brip_vil_float_ops::entropy_g(i, j, i_radius, j_radius,
-                                          grad_x, grad_y);
-    }
-  if(ihs&&img->nplanes()==3)
-    {
-      vil_image_view<float> inten, hue, sat;
-      vil_image_view<vil_rgb<vxl_byte> > cimage = img->get_view();
-      brip_vil_float_ops::convert_to_IHS(cimage, inten, hue, sat);
-      for(unsigned j = j_radius; j<(nj-j_radius); j+=step)
-      for(unsigned i = i_radius; i<(ni-i_radius); i+=step)
-        ent(i/step,j/step) += 
+  if (gradient)
+  {
+    vil_image_view<float> grad_x, grad_y;
+    grad_x.set_size(ni, nj);
+    grad_y.set_size(ni, nj);
+    brip_vil_float_ops::gradient_3x3 (gimage , grad_x , grad_y);
+    for (unsigned j = j_radius; j<(nj-j_radius); j+=step)
+      for (unsigned i = i_radius; i<(ni-i_radius); i+=step)
+        ent(i/step,j/step) +=
+          brip_vil_float_ops::entropy_g(i, j, i_radius, j_radius,
+                                        grad_x, grad_y);
+  }
+  if (ihs&&img->nplanes()==3)
+  {
+    vil_image_view<float> inten, hue, sat;
+    vil_image_view<vil_rgb<vxl_byte> > cimage = img->get_view();
+    brip_vil_float_ops::convert_to_IHS(cimage, inten, hue, sat);
+    for (unsigned j = j_radius; j<(nj-j_radius); j+=step)
+      for (unsigned i = i_radius; i<(ni-i_radius); i+=step)
+        ent(i/step,j/step) +=
           brip_vil_float_ops::entropy_hs(i, j, i_radius, j_radius,
                                          hue, sat);
-    }
+  }
   return ent;
 }
 
