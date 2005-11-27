@@ -10,6 +10,7 @@ SOURCES += mbl_matrix_products.cxx
 SOURCES += mbl_data_collector_base.cxx
 SOURCES += mbl_k_means.cxx
 SOURCES += mbl_read_props.cxx
+SOURCES += mbl_read_multi_props.cxx
 SOURCES += mbl_stats_1d.cxx
 SOURCES += mbl_sum_1d.cxx
 SOURCES += mbl_lda.cxx
