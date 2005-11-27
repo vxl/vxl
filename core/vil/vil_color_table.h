@@ -28,33 +28,31 @@
 // The IDL descriptions are as follows. I don't claim the names make sense, but
 // at least they are unique and give a hint as to how they may display.
 //
-// Number	Name	                Number	Name
-// 0	Black & White Linear	22	Hue Sat Value 2
-// 1	Blue/White Linear	23	Purple-Red + Stripes
-// 2	Green-Red-Blue-White	24	Beach
-// 3	Red Temperature	        25	Mac Style
-// 4	Blue-Green-Red-Yellow	26	Eos A
-// 5	Standard Gamma-II	27	Eos B
-// 6	Prism	                28	Hardcandy
-// 7	Red-Purple	        29	Nature
-// 8	Green/White Linear	30	Ocean
-// 9	Green/White Exponential	31	Peppermint
-// 10	Green-Pink	        32	Plasma
-// 11	Blue-Red	        33	Blue-Red 2
-// 12	16 Level	        34	Rainbow 2
-// 13	Rainbow	                35	Blue Waves
-// 14	Steps	                36	Volcano
-// 15	Stern Special	        37	Waves
-// 16	Haze	                36	Volcano
-// 17	Blue-Pastel	        37	Waves
-// 18	Red-Pastel	                
-// 19	Hue Sat Lightness 1	
-// 20	Hue Sat Lightness 2	
-// 21	Hue Sat Value 1	
+// Nr Name                         Nr Name
+//  0 Black & White Linear         20 Hue Sat Lightness 2
+//  1 Blue/White Linear            21 Hue Sat Value 1
+//  2 Green-Red-Blue-White         22 Hue Sat Value 2
+//  3 Red Temperature              23 Purple-Red + Stripes
+//  4 Blue-Green-Red-Yellow        24 Beach
+//  5 Standard Gamma-II            25 Mac Style
+//  6 Prism                        26 Eos A
+//  7 Red-Purple                   27 Eos B
+//  8 Green/White Linear           28 Hardcandy
+//  9 Green/White Exponential      29 Nature
+// 10 Green-Pink                   30 Ocean
+// 11 Blue-Red                     31 Peppermint
+// 12 16 Level                     32 Plasma
+// 13 Rainbow                      33 Blue-Red 2
+// 14 Steps                        34 Rainbow 2
+// 15 Stern Special                35 Blue Waves
+// 16 Haze                         36 Volcano
+// 17 Blue-Pastel                  37 Waves
+// 18 Red-Pastel
+// 19 Hue Sat Lightness 1
 //
-// To understand how these color maps appear, compile and run the example program
-// vil_color_tables.cxx.  This executable will produce a color image for each of
-// these tables representing a ramp from 0->255.
+// To understand how these color maps appear, compile and run the example
+// program vil_color_tables.cxx.  This executable will produce a color image
+// for each of these tables representing a ramp from 0 to 255.
 
 #include <vil/vil_rgb.h>
 
