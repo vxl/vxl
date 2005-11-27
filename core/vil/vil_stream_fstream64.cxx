@@ -12,8 +12,8 @@
 #include <io.h>
 #endif
 #include <fcntl.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <vcl_cstdlib.h>
+#include <vcl_cstdio.h>
 #include <sys/stat.h>
 
 #ifndef WIN32
