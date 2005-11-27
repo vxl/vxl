@@ -120,6 +120,12 @@ SOURCE=.\Templates/vbl_io_array_2d+unsigned-.cxx
 SOURCE=.\Templates/vbl_io_array_2d+unsignedchar-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vbl_io_array_2d+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_array_2d+vcl_vector+vcl_pair+int.double---.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_io_array_3d+int-.cxx
 # End Source File
 # Begin Source File
@@ -160,9 +166,6 @@ SOURCE=.\Templates/vsl_vector_io+vcl_vector+vbl_triple+double.int.int---.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_io_triple+double.int.int-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vbl_io_array_2d+float-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vsl_vector_io+vbl_triple+uint.uint.uint--.cxx

@@ -213,6 +213,9 @@ SOURCE=.\mbl_read_str.cxx
 SOURCE=.\mbl_read_props.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\mbl_read_multi_props.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\mbl_stats_1d.cxx
 # End Source File
 # Begin Source File
@@ -343,6 +346,9 @@ SOURCE=.\mbl_read_str.h
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_read_props.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_read_multi_props.h
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_screen_counter.h

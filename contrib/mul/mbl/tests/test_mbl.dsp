@@ -192,6 +192,9 @@ SOURCE=.\test_rbf_network.cxx
 SOURCE=.\test_read_props.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_read_multi_props.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_select_n_from_m.cxx
 # End Source File
 # Begin Source File
