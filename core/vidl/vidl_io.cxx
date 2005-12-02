@@ -16,6 +16,7 @@
 #include <vcl_list.h>
 #include <vcl_vector.h>
 #include <vcl_string.h>
+#include <vcl_algorithm.h>
 #ifdef HAS_MPEG2
 # include <vidl/vidl_mpegcodec.h>
 void (* vidl_io::load_mpegcodec_callback)(vidl_codec*) = 0;
@@ -27,7 +28,7 @@ static vidl_clip_sptr load_from_file_list(vcl_string const& fname);
 
 static vidl_clip_sptr load_from_directory(vcl_string const& fname, int start, int end, int increment)
 {
-  vcl_list<vcl_string> filenames;
+  vcl_vector<vcl_string> filenames;
 
   vcl_string s(fname);
   s += "/*.*";
@@ -37,6 +38,9 @@ static vidl_clip_sptr load_from_directory(vcl_string const& fname, int start, in
       continue;
     filenames.push_back(fit());
   }
+  // Sort - because the file iterator uses readdir() it does not
+  //        iterate over files in alphanumeric order 
+  vcl_sort(filenames.begin(),filenames.end());
 
   // Call load_images and return the result
   return vidl_io::load_images(filenames, start, end, increment, 'r');
