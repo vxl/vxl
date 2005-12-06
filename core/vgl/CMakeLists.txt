@@ -30,7 +30,8 @@ SET( vgl_sources
   vgl_conic_segment_2d.h         vgl_conic_segment_2d.txx
   vgl_polygon.h                  vgl_polygon.txx
   vgl_sphere_3d.h                vgl_sphere_3d.txx
-
+  vgl_cylinder.h                 vgl_cylinder.txx
+  
   # Planes
   vgl_plane_3d.h                 vgl_plane_3d.txx
   vgl_homg_plane_3d.h            vgl_homg_plane_3d.txx
