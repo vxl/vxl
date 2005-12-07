@@ -33,6 +33,7 @@ class segv_vil_menus
   SEGV_VIL_DLL_DATA static void vd_edges_callback();
   SEGV_VIL_DLL_DATA static void fit_lines_callback();
   SEGV_VIL_DLL_DATA static void fit_conics_callback();
+  SEGV_VIL_DLL_DATA static void fit_overlay_conics_callback();
   SEGV_VIL_DLL_DATA static void regions_callback();
   SEGV_VIL_DLL_DATA static void add_images_callback();
   SEGV_VIL_DLL_DATA static void subtract_images_callback();

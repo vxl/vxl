@@ -57,6 +57,11 @@ void segv_vil_menus::fit_conics_callback()
   segv_vil_segmentation_manager::instance()->fit_conics();
 }
 
+void segv_vil_menus::fit_overlay_conics_callback()
+{
+  segv_vil_segmentation_manager::instance()->fit_overlay_conics();
+}
+
 void segv_vil_menus::regions_callback()
 {
   segv_vil_segmentation_manager::instance()->regions();
@@ -119,6 +124,7 @@ vgui_menu segv_vil_menus::get_menu()
   menuedit.add("VD Edges", vd_edges_callback);
   menuedit.add("Line Segments", fit_lines_callback);
   menuedit.add("Conic Segments", fit_conics_callback);
+  menuedit.add("Overlay Conic Segments", fit_overlay_conics_callback);
   menuedit.add("Edgel Regions", regions_callback);
 
   //operation menu entries

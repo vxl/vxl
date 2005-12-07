@@ -47,6 +47,7 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void vd_edges();
   void fit_lines();
   void fit_conics();
+  void fit_overlay_conics();
   void regions();
   //: visualization
   void display_images_as_color();

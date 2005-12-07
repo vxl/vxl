@@ -432,7 +432,6 @@ draw_conics(vcl_vector<vsol_conic_2d_sptr > const& conics,
   {
     t2D->add_vsol_conic_2d(*lit,style);
   }
-
   t2D->post_redraw();
 }
 
@@ -446,12 +445,14 @@ draw_points(vcl_vector<vsol_point_2d_sptr> const& points, const vgui_style_sptr&
   if (!t2D)
     return;
   //this->clear_display();
+#if 0
   vgui_image_tableau_sptr itab = t2D->get_image_tableau();
   if (!itab)
   {
     vcl_cout << "In segv_vil_segmentation_manager::draw_edges - null image tab\n";
     return;
   }
+#endif
   for (vcl_vector<vsol_point_2d_sptr>::const_iterator pit = points.begin();
        pit != points.end(); pit++)
   {
@@ -773,6 +774,91 @@ void segv_vil_segmentation_manager::fit_conics()
   fl.fit_conics();
   vcl_vector<vsol_conic_2d_sptr> conics = fl.get_conic_segs();
   this->draw_conics(conics);
+
+  vcl_vector<vsol_point_2d_sptr> center_points;
+  double cx,cy,phi,width,height;
+  // draw the center points of the conics
+  for (unsigned int i=0; i<conics.size(); i++){
+    if (conics[i]->is_real_ellipse()) {
+      conics[i]->ellipse_parameters(cx,cy,phi,width,height);
+      vsol_point_2d_sptr p = new vsol_point_2d(cx, cy);
+      vcl_cout << i << " center (" << cx << "," << cy << ")" << vcl_endl;
+      center_points.push_back(p);
+    }
+  }
+  vgui_style_sptr style = vgui_style::new_style(1.0f,0.0f,0.0f,5.0f,1.0f);
+
+  this->draw_points(center_points, style);
+}
+
+void segv_vil_segmentation_manager::fit_overlay_conics()
+{
+  //this->clear_display();
+  static sdet_detector_params dp;
+  static bool agr = true;
+  static float nm = 2.0;
+
+  static sdet_fit_conics_params fcp;
+
+  vgui_dialog lf_dialog("Fit overlay Conics");
+  static vcl_string image_filename = "/home/dec/images/cal_image1.tif";
+  static vcl_string ext = "*.*";
+  lf_dialog.file("Image Filename:", ext, image_filename);
+  lf_dialog.field("Gaussian sigma", dp.smooth);
+  lf_dialog.field("Noise Threshold", nm);
+  lf_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
+  lf_dialog.checkbox("Agressive Closure", agr);
+  lf_dialog.checkbox("Compute Junctions", dp.junctionp);
+  lf_dialog.field("Min Fit Length", fcp.min_fit_length_);
+  lf_dialog.field("RMS Distance", fcp.rms_distance_);
+
+  if (!lf_dialog.ask())
+    return;
+  dp.noise_multiplier=nm;
+  if (agr)
+    dp.aggressive_junction_closure=1;
+  else
+    dp.aggressive_junction_closure=0;
+  dp.borderp = false;
+  sdet_detector det(dp);
+
+  vil_image_resource_sptr img = vil_load_image_resource(image_filename.c_str());
+  if (!img||!img->ni()||!img->nj())
+  {
+    vcl_cout << "In segv_vil_segmentation_manager::vd_edges() - no image\n";
+    return;
+  }
+
+  det.SetImage(img);
+
+  det.DoContour();
+  vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
+  if (!edges)
+  {
+    vcl_cout << "No edges to fit conics\n";
+    return;
+  }
+  sdet_fit_conics fl(fcp);
+  fl.set_edges(*edges);
+  fl.fit_conics();
+  vcl_vector<vsol_conic_2d_sptr> conics = fl.get_conic_segs();
+  vgui_style_sptr style = vgui_style::new_style(1.0f,1.0f,0.0f,5.0f,1.0f);
+  this->draw_conics(conics, style);
+
+  vcl_vector<vsol_point_2d_sptr> center_points;
+  double cx,cy,phi,width,height;
+  // draw the center points of the conics
+  for (unsigned int i=0; i<conics.size(); i++){
+    if (conics[i]->is_real_ellipse()) {
+      conics[i]->ellipse_parameters(cx,cy,phi,width,height);
+      vsol_point_2d_sptr p = new vsol_point_2d(cx, cy);
+      vcl_cout << i << " center (" << cx << "," << cy << ")" << vcl_endl;
+      center_points.push_back(p);
+    }
+  }
+  vgui_style_sptr style2 = vgui_style::new_style(1.0f,0.0f,1.0f,5.0f,1.0f);
+
+  this->draw_points(center_points, style2);
 }
 
 void segv_vil_segmentation_manager::regions()
