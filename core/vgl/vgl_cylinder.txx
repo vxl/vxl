@@ -7,11 +7,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 
-template <class Type>
-bool vgl_cylinder<Type>::contains(vgl_point_3d<Type> point)
-{
-  return false;
-}
+
 template <class T>
 bool vgl_cylinder<T>::operator==(vgl_cylinder<T> const& cyl) const
 {

@@ -57,7 +57,6 @@ public:
 
   //: operations
   bool operator==(vgl_cylinder<Type> const& cyl) const;
-  bool contains(vgl_point_3d<Type> point);
   
   //: Writes "<vgl_cylinder center=(x0,y0,z0), radius=r, length=l, direction=(x1,y1,z1)>" to stream
   vcl_ostream& print(vcl_ostream& s) const;
