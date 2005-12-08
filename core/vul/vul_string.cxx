@@ -246,14 +246,19 @@ bool vul_string_to_bool(const vcl_string &str)
      ||  myequals(begin, end, son, son+2);
 }
 
+//Leave verbatim in to avoid $->LaTeX munging.
+
 //: Expand any environment variables in the string.
+// \verbatim
 // Expands "foo$VARfoo" to "foobarfoo" when $VAR=bar. If
 // both $VAR and $VARfoo exists, an arbitrary choice will
 // be made of which variable to use. This problem can
-// be avoided by using the syntax "foo${VAR}foo." There
-// are no inbuilt variables like in shell scripting, and
+// be avoided by using the syntax "foo${VAR}foo." "$(VAR)"
+// and "$[VAR]" can also be used.
+// There are no inbuilt variables like in shell scripting, and
 // variable names cannot contain whitespace or "$"s. "$$"
 // can be used to insert a literal "$" in to the output.
+// \endverbatim
 // \returns false if a matching variable could not be found.
 bool vul_string_expand_var(vcl_string &str)
 {
