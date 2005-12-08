@@ -60,6 +60,13 @@ inline void vsl_b_read(vsl_b_istream &is, vil_image_view<T>& image)
     else
     {
       vsl_b_read(is, chunk);
+      if (vil_pixel_format_component_format(image.pixel_format()) != chunk->pixel_format())
+      {
+        vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_image_view<T>&)\n"
+                << "           Mismatched pixel format.\n";
+        is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+        return;
+      }
       vsl_b_read(is, offset);
       const T* data = reinterpret_cast<const T*>(chunk->data());
       image = vil_image_view<T>(chunk,data+offset,
