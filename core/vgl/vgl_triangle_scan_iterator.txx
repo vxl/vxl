@@ -171,7 +171,11 @@ bool vgl_triangle_scan_iterator<T>::next()
   startx_ = (int) vcl_ceil (minx + g.x);
   endx_   = (int) vcl_floor(maxx + g.x);
 
-  return (scany_ == y0) || (startx_ <= endx_);
+  // can not use (scany_ == y0) || (startx_ <= endx_)
+  // for early scan termination because some triangles may have
+  // (startx_ > endx_) for more than the first scan line
+  // we could do something more sophisticated, but is it worth it?
+  return true;
 #endif
 }
 
