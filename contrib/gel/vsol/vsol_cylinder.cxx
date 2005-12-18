@@ -1,4 +1,6 @@
 #include "vsol_cylinder.h"
+//:
+// \file
 #include <vgl/io/vgl_io_cylinder.h>
 
 //----------------------------------------------------------------
@@ -12,7 +14,7 @@ void vsol_cylinder::b_write(vsl_b_ostream &os) const
   vsl_b_write(os, cyl_);
 }
 
-//: Binary load self from stream 
+//: Binary load self from stream
 void vsol_cylinder::b_read(vsl_b_istream &is)
 {
   if (!is)
@@ -44,13 +46,14 @@ void vsol_cylinder::print_summary(vcl_ostream &os) const
 //: describe to the output stream
 void vsol_cylinder::describe(vcl_ostream &strm, int blanking) const
 {
-  if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
-  strm << "[vsol_cylinder";
-  strm << " center=" << cyl_.center();
-  strm << " radius=" << cyl_.radius() << " length=" << cyl_.length();
-  strm << " direction=" << cyl_.orientation();
-  strm << ']' << vcl_endl;
+  if (blanking < 0) blanking = 0;
+  while (blanking--) { strm << ' '; }
+  strm << "[vsol_cylinder center=" << cyl_.center()
+       << " radius=" << cyl_.radius() << " length=" << cyl_.length()
+       << " direction=" << cyl_.orientation()
+       << ']' << vcl_endl;
 }
+
 //: Binary save vsol_cylinder* to stream.
 void
 vsl_b_write(vsl_b_ostream &os, const vsol_cylinder* p)

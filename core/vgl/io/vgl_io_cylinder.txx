@@ -1,6 +1,7 @@
 #ifndef vgl_io_cylinder_txx_
 #define vgl_io_cylinder_txx_
-
+//:
+// \file
 #include "vgl_io_cylinder.h"
 #include <vgl/io/vgl_io_point_3d.h>
 #include <vgl/io/vgl_io_vector_3d.h>
@@ -20,7 +21,7 @@ void vsl_b_write(vsl_b_ostream &os, const vgl_cylinder<T> & cyl)
   vsl_b_write(os, cyl.orientation());
 }
 
-//: Binary load self from stream 
+//: Binary load self from stream
 template<class T>
 void vsl_b_read(vsl_b_istream &is, vgl_cylinder<T> & cyl)
 {
@@ -49,7 +50,7 @@ void vsl_b_read(vsl_b_istream &is, vgl_cylinder<T> & cyl)
 
     // read orientation
     vsl_b_read(is, orient);
-    cyl.set_orientation(orient); 
+    cyl.set_orientation(orient);
     break;
    default:
     vcl_cerr << "vsol_cylinder: unknown I/O version " << ver << '\n';
