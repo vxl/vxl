@@ -273,6 +273,15 @@ SOURCE=.\Templates/vsl_vector_io+vsol_spatial_object_3d_sptr-.cxx
 SOURCE=.\Templates/vcl_map+uint.vbl_smart_ptr+vsol_point_2d--.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+vsol_cylinder-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+vsol_cylinder-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vsol_cylinder_sptr-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vsol_box_2d.cxx
 # End Source File
 # Begin Source File
@@ -286,6 +295,9 @@ SOURCE=.\vsol_curve_2d.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vsol_curve_3d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vsol_cylinder.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vsol_group_2d.cxx
@@ -550,6 +562,12 @@ SOURCE=.\vsol_spatial_object.h
 # End Source File
 # Begin Source File
 SOURCE=.\vsol_spatial_object_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsol_cylinder.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsol_cylinder_sptr.h
 # End Source File
 # End Group
 # End Target

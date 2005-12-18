@@ -353,6 +353,9 @@ SOURCE=.\Templates/vgl_conic_segment_2d+float-.cxx
 # Begin Source File
 SOURCE=.\Templates/vgl_sphere_3d+double-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_cylinder+double-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -385,6 +388,12 @@ SOURCE=.\vgl_conic.h
 # End Source File
 # Begin Source File
 SOURCE=.\vgl_conic.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_cylinder.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_cylinder.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vgl_distance.txx

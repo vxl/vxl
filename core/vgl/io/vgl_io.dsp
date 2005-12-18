@@ -266,6 +266,12 @@ SOURCE=.\Templates/vgl_io_plane_3d+double-.cxx
 # Begin Source File
 SOURCE=.\Templates/vsl_vector_io+vgl_point_2d+float--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_io_cylinder+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vcl_vector+vgl_cylinder_3d+double---.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -379,6 +385,12 @@ SOURCE=.\vgl_io_plane_3d.h
 # End Source File
 # Begin Source File
 SOURCE=.\vgl_io_plane_3d.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_io_cylinder.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_io_cylinder.txx
 # End Source File
 # End Group
 # End Target
