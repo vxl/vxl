@@ -10,6 +10,7 @@
 #include <vgl/vgl_conic.h>
 #include <vgl/vgl_conic_segment_2d.h>
 #include <vgl/vgl_convex.h>
+#include <vgl/vgl_cylinder.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_ellipse_scan_iterator.h>
 #include <vgl/vgl_homg.h>

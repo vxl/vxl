@@ -4,6 +4,8 @@
 #include <vsol/vsol_box_3d_sptr.h>
 #include <vsol/vsol_conic_2d.h>
 #include <vsol/vsol_conic_2d_sptr.h>
+#include <vsol/vsol_cylinder.h>
+#include <vsol/vsol_cylinder_sptr.h>
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_curve_2d_sptr.h>
 #include <vsol/vsol_curve_3d.h>
