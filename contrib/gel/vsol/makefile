@@ -56,6 +56,7 @@ SOURCES += vsol_rectangle_3d.cxx
 MANPAGE_SOURCES += vsol_volume_3d.h
 SOURCES += vsol_polyhedron.cxx
 SOURCES += vsol_tetrahedron.cxx
+SOURCES += vsol_cylinder.cxx
 
 # smart pointer header files
 MANPAGE_SOURCES += vsol_box_sptr.h
@@ -90,6 +91,7 @@ MANPAGE_SOURCES += vsol_tetrahedron_sptr.h
 MANPAGE_SOURCES += vsol_triangle_2d_sptr.h
 MANPAGE_SOURCES += vsol_triangle_3d_sptr.h
 MANPAGE_SOURCES += vsol_volume_3d_sptr.h
+MANPAGE_SOURCES += vsol_cylinder_sptr.h
 
 IMMEDIATE_LIBS += -lvgl-algo -lvgl -lvnl-algo -lvnl -lvbl -lvul
 
