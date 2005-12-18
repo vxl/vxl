@@ -5,17 +5,18 @@
 #pragma interface
 #endif
 //:
-// \file   vgl_cylinder.h
+// \file
 // \brief  defines a cylinder in 3D by a center point, radius, length and orientation
 // \author Gamze D. Tunali (gamze@lems.brown.edu)
-// \date   11/07/2005 
+// \date   11/07/2005
 //
 // \verbatim
 //  Modifications
-//   \\ Nov 2005 created
+//   Nov 2005 created
 // \endverbatim
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
+#include <vcl_iosfwd.h>
 
 template <class Type>
 class vgl_cylinder
@@ -25,23 +26,23 @@ class vgl_cylinder
   Type length_;
   vgl_vector_3d<Type> orient_;
 
-public:
+ public:
   //: Default constructor
-  vgl_cylinder(void): center_(0.0, 0.0, 0.0), radius_(0.0), length_(0.0){};
+  vgl_cylinder(void): center_(0.0, 0.0, 0.0), radius_(0.0), length_(0.0) {}
 
   vgl_cylinder(const Type v[8])
-    :center_(v[0], v[1], v[2]), radius_(v[3]), length_(v[5]), orient_(vgl_vector_3d<Type> (v[6], v[7], v[8])) {};
+    :center_(v[0], v[1], v[2]), radius_(v[3]), length_(v[5]), orient_(vgl_vector_3d<Type> (v[6], v[7], v[8])) {}
 
   vgl_cylinder(Type cx, Type cy, Type cz, Type radius, Type length)
-    :center_(cx, cy, cz), radius_(radius), length_(length), orient_(vgl_vector_3d<Type> (0,0,1)) {};
+    :center_(cx, cy, cz), radius_(radius), length_(length), orient_(vgl_vector_3d<Type> (0,0,1)) {}
 
   vgl_cylinder(vgl_point_3d<Type> center, Type radius, Type length)
-    :center_(center), radius_(radius), length_(length), orient_(vgl_vector_3d<Type> (0,0,1)) {};
+    :center_(center), radius_(radius), length_(length), orient_(vgl_vector_3d<Type> (0,0,1)) {}
 
   vgl_cylinder(vgl_point_3d<Type> center, Type radius, Type length, vgl_vector_3d<Type> orient)
-    :center_(center), radius_(radius), length_(length), orient_(orient) {};
+    :center_(center), radius_(radius), length_(length), orient_(orient) {}
 
-  ~vgl_cylinder(void){};
+  ~vgl_cylinder(void){}
 
   //: getters
   vgl_point_3d<Type> center() const { return center_; }
@@ -57,7 +58,7 @@ public:
 
   //: operations
   bool operator==(vgl_cylinder<Type> const& cyl) const;
-  
+
   //: Writes "<vgl_cylinder center=(x0,y0,z0), radius=r, length=l, direction=(x1,y1,z1)>" to stream
   vcl_ostream& print(vcl_ostream& s) const;
 };
@@ -70,4 +71,4 @@ vcl_istream& operator>>(vcl_istream& s, vgl_cylinder<T>& cyl);
 
 #define VGL_CYLINDER_INSTANTIATE(T) extern "please include vgl/vgl_cylinder.txx first"
 
-#endif
+#endif // vgl_cylinder_h_
