@@ -244,6 +244,9 @@ LINK32=link.exe
 # Begin Source File
 SOURCE=.\basic01_pick_tableau.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\basic02_graph_tableau.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

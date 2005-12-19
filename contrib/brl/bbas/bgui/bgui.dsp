@@ -134,6 +134,9 @@ SOURCE=.\Templates/vbl_smart_ptr+bgui_bargraph_clipon_tableau-.cxx
 # Begin Source File
 SOURCE=.\bgui_range_adjuster_tableau.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bgui_graph_tableau.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -205,6 +208,12 @@ SOURCE=.\bgui_range_adjuster_tableau.h
 # End Source File
 # Begin Source File
 SOURCE=.\bgui_range_adjuster_tableau_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bgui_graph_tableau.h
+# End Source File
+# Begin Source File
+SOURCE=.\bgui_graph_tableau_sptr.h
 # End Source File
 # End Group
 # End Target
