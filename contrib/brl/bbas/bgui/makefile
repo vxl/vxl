@@ -27,6 +27,8 @@ SOURCES += bgui_bargraph_clipon_tableau.cxx
 MANPAGE_SOURCES += bgui_bargraph_clipon_tableau_sptr.h
 SOURCES += bgui_range_adjuster_tableau.cxx
 MANPAGE_SOURCES += bgui_range_adjuster_tableau_sptr.h
+SOURCES += bgui_graph_tableau.cxx
+MANPAGE_SOURCES += bgui_graph_tableau_sptr.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
