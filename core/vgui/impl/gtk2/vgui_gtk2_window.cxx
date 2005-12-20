@@ -172,6 +172,12 @@ void vgui_gtk2_window::hide()
   if (debug) vcl_cerr << "vgui_gtk2_window::hide\n";
 }
 
+void vgui_gtk2_window::reshape(unsigned w, unsigned h)
+{
+  if (debug) vcl_cerr << "vgui_gtk2_window::reshape\n";
+  gtk_widget_set_size_request(window,w,h);
+}
+
 void vgui_gtk2_window::set_title(vcl_string const &title)
 {
   gtk_window_set_title(GTK_WINDOW(window), title.c_str());
