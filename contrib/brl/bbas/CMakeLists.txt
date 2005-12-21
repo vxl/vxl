@@ -34,3 +34,6 @@ SUBDIRS(bsta)
 
 # Brown dynamic programming library
 SUBDIRS(bdpg)
+
+# Video Library (rewrite)
+SUBDIRS(vidl2)
