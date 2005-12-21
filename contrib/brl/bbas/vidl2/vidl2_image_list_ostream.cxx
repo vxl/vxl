@@ -1,4 +1,4 @@
-// This is core/vil/vidl2_image_list_ostream.cxx
+// This is contrib/brl/bbas/vidl2/vidl2_image_list_ostream.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
