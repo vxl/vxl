@@ -173,6 +173,11 @@ vil_nitf2_image::~vil_nitf2_image()
   clear_des();
 }
 
+unsigned int vil_nitf2_image::current_image() const
+{
+  return m_current_image_index;
+}
+
 void vil_nitf2_image::set_current_image(unsigned int index)
 {
   assert(index < m_image_headers.size());

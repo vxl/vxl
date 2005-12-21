@@ -125,15 +125,17 @@ class vil_nitf2_image : public vil_image_resource
   const vcl_vector< vil_nitf2_des* >& get_des() const
   { return m_des; }
 
-  /**
-    * Since the VIL API (eg. get_view()) for retrieving image data
-    * doesn't support files with multiple images, clients will
-    * need to call this function to tell get_view() which image to read in.
-    * If you don't call this function, then the first image (index = 0) will be read in.
-    * Note that this also affects the get methods that return image characteristics (eg ni(), nj(), nplanes())
-    */
-  void set_current_image( unsigned int index );
-  unsigned int nimages() const;
+  //: Since the VIL API (eg. get_view()) for retrieving image data
+  //  doesn't support files with multiple images, clients will
+  //  need to call this function to tell get_view() which image to read in.
+  //: Overloaded from vil_image_resource.  The NITF 2.x file format does support
+  //  multiple images per file and you can use this API to access each and every
+  //  one of them.
+  //  Note: By default, the first image is always used.  If you don't call this 
+  //  function at all, then you will only see the first image in a given file.
+  virtual void set_current_image( unsigned int index );
+  virtual unsigned int current_image() const;
+  virtual unsigned int nimages() const;
 
   bool parse_headers();
   vil_nitf2_classification::file_version file_version() const;
