@@ -38,7 +38,10 @@ class vidl2_istream
     //: Close the stream
     virtual void close() = 0;
 
-    //: Read the next frame from the stream
+    //: Advance to the next frame (but don't acquire an image)
+    virtual bool advance() = 0 ;
+
+    //: Read the next frame from the stream (advance and acquire)
     virtual vil_image_resource_sptr read_frame() = 0;
 
     //: Return the current frame in the stream

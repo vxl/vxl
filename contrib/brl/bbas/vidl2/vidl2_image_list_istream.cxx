@@ -91,6 +91,15 @@ open(const vcl_vector<vcl_string>& paths)
 }
 
 
+//: Advance to the next frame (but don't acquire an image)
+bool
+vidl2_image_list_istream::
+advance()
+{
+  return index_++ < images_.size();
+}
+
+
 //: Read the next frame from the stream
 vil_image_resource_sptr
 vidl2_image_list_istream::read_frame()

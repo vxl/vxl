@@ -66,6 +66,9 @@ class vidl2_image_list_istream
     virtual unsigned int frame_number() const { return index_; }
 
 
+    //: Advance to the next frame (but don't acquire an image)
+    virtual bool advance();
+
     //: Read the next frame from the stream
     virtual vil_image_resource_sptr read_frame();
 
