@@ -18,6 +18,9 @@
 #include <vidl2/vidl2_image_list_istream.h>
 #include <vidl2/vidl2_image_list_ostream.h>
 
+#ifdef HAS_FFMPEG
+#include <vidl2/vidl2_ffmpeg_istream.h>
+#endif
 
 //static manager instance
 vidl2_player_manager *vidl2_player_manager::instance_ = 0;
@@ -79,11 +82,11 @@ bool vidl2_player_manager::handle(const vgui_event &e)
 
 
 //-----------------------------------------------------------------------------
-//: open an input video stream
+//: open an image list input video stream
 //-----------------------------------------------------------------------------
-void vidl2_player_manager::open_istream()
+void vidl2_player_manager::open_image_list_istream()
 {
-  vgui_dialog dlg("Open Input Image List Stream");
+  vgui_dialog dlg("Open Image List Input Stream");
   static vcl_string image_filename = "*";
   static vcl_string ext = "*";
 
@@ -114,6 +117,45 @@ void vidl2_player_manager::open_istream()
   itab_->post_redraw();
   vgui::run_till_idle();
 }
+
+
+#ifdef HAS_FFMPEG
+//-----------------------------------------------------------------------------
+//: open an FFMPEG input video stream
+//-----------------------------------------------------------------------------
+void vidl2_player_manager::open_ffmpeg_istream()
+{
+  vgui_dialog dlg("Open FFMPEG Input Stream");
+  static vcl_string image_filename = "";
+  static vcl_string ext = "*";
+
+  dlg.file("Filename:", ext, image_filename);
+  if (!dlg.ask())
+    return;
+
+  delete istream_;
+  istream_ = new vidl2_ffmpeg_istream(image_filename);
+  if (!istream_ || !istream_->is_open()) {
+    vgui_error_dialog("Failed to open the input stream");
+    return;
+  }
+
+  if(istream_->is_valid()){
+    vil_image_resource_sptr img = istream_->current_frame();
+    if (img) {
+      height_ = img->nj();
+      width_ = img->ni();
+      if (win_)
+        win_->reshape(width_+10, height_+60);
+
+      itab_->set_image_resource(img);
+    }
+  }
+
+  itab_->post_redraw();
+  vgui::run_till_idle();
+}
+#endif
 
 
 //-----------------------------------------------------------------------------
@@ -282,7 +324,7 @@ void vidl2_player_manager::go_to_frame()
     vcl_cerr << "This stream does not support seeking" << vcl_endl;
     return;
   }
-  
+
   if (play_video_) return;
   static int frame_num = 0;
   vgui_dialog go_to_frame_dlg("Go to Frame");

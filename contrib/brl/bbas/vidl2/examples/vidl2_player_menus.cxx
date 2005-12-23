@@ -10,10 +10,18 @@
 
 //----- Static menu callback functions -----
 
-void vidl2_player_menus::open_istream_callback()
+void vidl2_player_menus::open_image_list_istream_callback()
 {
-  vidl2_player_manager::instance()->open_istream();
+  vidl2_player_manager::instance()->open_image_list_istream();
 }
+
+
+#ifdef HAS_FFMPEG
+void vidl2_player_menus::open_ffmpeg_istream_callback()
+{
+  vidl2_player_manager::instance()->open_ffmpeg_istream();
+}
+#endif
 
 
 void vidl2_player_menus::close_istream_callback()
@@ -94,7 +102,13 @@ vgui_menu vidl2_player_menus::get_menu()
   //file menu entries
   menufile.add( "Quit", quit_callback,(vgui_key)'q', vgui_CTRL);
 
-  menuvstream.add( "Open Input",   open_istream_callback);
+  vgui_menu menu_istream;
+  menu_istream.add( "Image List",  open_image_list_istream_callback);
+#ifdef HAS_FFMPEG
+  menu_istream.add( "FFMPEG",      open_ffmpeg_istream_callback);
+#endif
+
+  menuvstream.add( "Open Input",   menu_istream);
   menuvstream.add( "Close Input",  close_istream_callback);
   menuvstream.separator();
   menuvstream.add( "Open Output",  open_ostream_callback);

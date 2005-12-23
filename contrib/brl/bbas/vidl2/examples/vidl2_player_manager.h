@@ -35,8 +35,13 @@ class vidl2_player_manager : public vgui_wrapper_tableau
   //: width (in pixels) of the video frame
   unsigned get_width() const { return width_; }
 
-  //: open an input video stream
-  void open_istream();
+  //: open an image list input video stream
+  void open_image_list_istream();
+
+#ifdef HAS_FFMPEG
+  //: open a FFMPEG input video stream
+  void open_ffmpeg_istream();
+#endif
 
   //: close the input video stream
   void close_istream();
