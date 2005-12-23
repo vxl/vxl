@@ -373,10 +373,10 @@ seek_frame(unsigned int frame)
   }
 
 #if LIBAVFORMAT_BUILD <= 4623
-  int64_t frame_size = int64_t(is_->vid_str_->frame_rate_base) * is_->vid_str_->r_frame_rate_base 
-                       / is_->vid_str_->frame_rate / is_->vid_str_->r_frame_rate;
-  int64_t req_timestamp = int64_t(is_->vid_str_->time_base.den) * frame * is_->vid_str_->r_frame_rate.den 
-                       / is_->vid_str_->time_base.num / is_->vid_str_->r_frame_rate.num + is_->vid_str_->start_time;
+  int64_t frame_size = int64_t(AV_TIME_BASE) * is_->vid_str_->r_frame_rate_base
+                       / is_->vid_str_->r_frame_rate;
+  int64_t req_timestamp = int64_t(AV_TIME_BASE) * frame * is_->vid_str_->r_frame_rate_base
+                       / is_->vid_str_->r_frame_rate + is_->vid_str_->start_time;
 #else
   int64_t frame_size = int64_t(is_->vid_str_->time_base.den) * is_->vid_str_->r_frame_rate.den 
                        / is_->vid_str_->time_base.num / is_->vid_str_->r_frame_rate.num;
