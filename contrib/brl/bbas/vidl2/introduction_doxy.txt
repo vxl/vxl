@@ -1,0 +1,65 @@
+// The following text is included in the main documentation page by doxygen
+/*! \mainpage vidl2 : Video Stream Library
+* A stream-based rewrite of the vidl library
+*
+* \section intro Introduction
+* The purpose of this library is to provide a unified interface reading
+* and writing video in VXL.  Unlike the previous vidl library, this library
+* treats video as a data stream and builds directly on the vil image library.
+* The two main classes are vidl2_istream for input streams and vidl2_ostream
+* for output streams.
+*
+* This design has the following advantages over the old vidl library that
+* treated videos as container objects.
+*  - Better support for large video files
+*  - Better support for encoding options
+*  - Support for live video streams
+*  - Better integration with vil
+*
+* \section streams Streams vs. Codecs
+* Various stream subclasses are used to interface with different types of
+* video streams.  Note that these are not called codecs.  The codec in the
+* old vidl library was somewhat of a misnomer.  Each vidl2_istream and
+* vidl2_ostream subclass is a wrapper for another video API that may or may
+* not provide encoding, and may support many different codecs.  For example,
+* vidl2_ffmpeg_istream provides a input using the FFMPEG library.  The FFMPEG
+* library can open a large variety of video file formats (avi, mpeg, etc.)
+* and decode using an even larger variety of codecs (MPEG2, MPEG4, MJPEG,
+* H.264, Cinepak, etc.).
+*
+* The video stream design also allows for streams that receive images from live
+* video feeds.  This could be from a camera, network video feed, or other source.
+* Thus, video capture and video transcoding are both accomplished by directing
+* an input stream into and output stream.
+*
+* \section types Stream Types
+* The following is a list of streams that are currently implemented
+*  - vidl2_image_list_istream : treats an ordered list of vil_image_resource_sptr
+*    as a video stream.  Also supports reading a list of images from disk given
+*    a list of filenames or a file glob.
+*  - vidl2_image_list_ostream : writes a video to disk as a sequence of numbered
+*    image files using any image file format supported by vil.
+*  - vidl2_ffmpeg_istream : uses the <a href="http://ffmpeg.sourceforge.net/">
+*    FFMPEG</a> library to decode many common video file formats.
+*
+* The following streams are currently under development
+*  - vidl2_ffmpeg_ostream : uses the <a href="http://ffmpeg.sourceforge.net/">
+*    FFMPEG</a> library to encode to many common video file formats with
+*    many encoding options for video quality and compression.
+*
+* The following streams sound useful but need someone to work on them
+*  - vidl2_dc1394_istream - use libdc1394 to stream video directly from IEEE
+*    1394 (firewire) based cameras (using Linux/BSD)
+*  - vidl2_cmu1394_istream - use the CMU 1394 driver to stream video directly
+*    from IEEE 1394 (firewire) based cameras (using Windows)
+*  - vidl2_dv1394_istream - use libdv1394 to stream video from DV camcorders
+*    over a 1394 DV connection (using Linux/BSD)
+*  - vidl2_dv1394_ostream - use libdv1394 to stream video over a 1394 DV connection
+*    to some other video device (using Linux/BSD)
+*  - vidl2_v4l_istream - use a video for Linux input stream
+*  - vidl2_v4l_ostream - use a video for Linux output stream
+*  - vidl2_directshow_istream - use the DirectShow API to decode video files
+*    in Windows using native Windows codecs
+*  - vidl2_directshow_ostream - use the DirectShow API to encode video files
+*    in Windows using native Windows codecs
+*/
