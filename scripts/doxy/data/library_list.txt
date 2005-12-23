@@ -137,6 +137,7 @@ contrib/brl/bbas bdgl   bdgl_   build contrib/gel/vtol contrib/oxl/mvl contrib/m
 contrib/brl/bbas bugl   bugl_   build contrib/gel/vdgl core/vnl core/vgl core/vbl
 contrib/brl/bbas btol   btol_   build contrib/brl/bbas/bsol contrib/gel/vtol core/vbl
 contrib/brl/bbas bxml   bxml_   build contrib/brl/bbas/bdgl core/vbl
+contrib/brl/bbas vidl2  vidl2_  build contrib/brl/bbas/vidl2 core/vil core/vul
 contrib/brl/bseg bmrf   bmrf_   build contrib/gel/vtol contrib/gel/gevd core/vnl core/vil core/vgl core/vsl core/vbl
 contrib/brl/bbas bgui   bgui_   build contrib/brl/bseg/bmrf contrib/brl/bbas/btol core/vgui
 contrib/brl/bseg brip   brip_   build contrib/brl/bbas/bsol core/vil1 core/vil core/vbl
