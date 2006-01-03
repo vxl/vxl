@@ -270,6 +270,7 @@ class brip_vil_float_ops
                          bool output_size_fixed = false,
                          float output_fill_value = 0.0f);
 
+
   //: rotate the input image counter-clockwise about the image origin
   static vil_image_view<float> rotate(vil_image_view<float> const& input,
                                       double theta_deg);
@@ -339,6 +340,54 @@ class brip_vil_float_ops
                                        const bool intensity = true,
                                        const bool gradient = true,
                                        const bool ihs = false);
+
+  //no bounds check
+static float minfo_i(const unsigned i0, const unsigned j0,
+                     const unsigned i1, const unsigned j1,
+                const unsigned i_radius, 
+                const unsigned j_radius,
+                vil_image_view<float> const& intensity0,
+                vil_image_view<float> const& intensity1,
+                const float range = 255.0, const unsigned bins = 16);
+
+//:Compute the gradient minfo of a region about the specified pixel
+//no bounds check
+static float minfo_g(const unsigned i0, const unsigned j0,
+                     const unsigned i1, const unsigned j1,
+                const unsigned i_radius, 
+                const unsigned j_radius,
+                vil_image_view<float> const& gradx0,
+                vil_image_view<float> const& grady0,
+                vil_image_view<float> const& gradx1,
+                vil_image_view<float> const& grady1,
+                const float range = 360.0, const unsigned bins = 8);
+
+//:Compute the hue and saturation minfo of a region about the specified pixel
+//no bounds check
+static float minfo_hs(const unsigned i0, const unsigned j0,
+                      const unsigned i1, const unsigned j1,
+                         const unsigned i_radius, 
+                         const unsigned j_radius,
+                         vil_image_view<float> const& hue0,
+                         vil_image_view<float> const& sat0,
+                         vil_image_view<float> const& hue1,
+                         vil_image_view<float> const& sat1,
+                         const float range = 360.0, const unsigned bins = 8);
+
+
+
+  //:compute the minfo of the specified region about each pixel
+ static bool minfo(const unsigned i_radius,
+                   const unsigned j_radius,
+                   const unsigned step,
+                   vil_image_resource_sptr const& img0,
+                   vil_image_resource_sptr const& img1,
+                   vil_image_view<float>& MI0,
+                   vil_image_view<float>& MI1,
+                   const float sigma = 1.0f,
+                   const bool intensity = true,
+                   const bool gradient = true,
+                   const bool ihs = false);
 
   // Arithmetic operations
 
