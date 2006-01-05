@@ -2519,7 +2519,7 @@ brip_vil_float_ops::difference(vil_image_resource_sptr const& img0,
   vil_image_view<float> op0 = brip_vil_float_ops::convert_to_float(img0);
   vil_image_view<float> op1 = brip_vil_float_ops::convert_to_float(img1);
   vil_image_view<float> diff;
-  vil_math_image_difference(op0, op1, diff);
+  vil_math_image_difference(op0, op1, diff);re/vil/file_formats/
 
   //find out the types of the input images for now, only do greyscale operands
   vil_pixel_format pix_format0 = img0->pixel_format();
@@ -2694,7 +2694,7 @@ float brip_vil_float_ops::minfo_i(const unsigned i0, const unsigned j0,
   float HJ = hji.entropy();
   float minfo_i = H0 + H1 - HJ;
   if(minfo<0)
-	  vcl_cout << "intensity MI <0 " << minfo <<"\n";
+	  vcl_cout << "intensity MI LT 0 " << minfo <<"\n";
   return minfo_i;
 }
 
@@ -2731,7 +2731,7 @@ float brip_vil_float_ops::minfo_g(const unsigned i0, const unsigned j0,
   float HJ = hjg.entropy();
   float minfo_g = H0 + H1 - HJ;
   if(minfo<0)
-	  vcl_cout << "gradient MI <0 " << minfo <<"\n";
+	  vcl_cout << "gradient MI LT 0 " << minfo <<"\n";
   return minfo_g;
 }
         
@@ -2764,7 +2764,7 @@ float brip_vil_float_ops::minfo_hs(const unsigned i0, const unsigned j0,
   float HJ = hjh.entropy();
   float minfo_h = H0 + H1 - HJ;
   if(minfo<0)
-	  vcl_cout << "color MI <0 " << minfo <<"\n";
+	  vcl_cout << "color MI LT 0 " << minfo <<"\n";
   return minfo_h;
 }
 
