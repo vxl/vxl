@@ -13,7 +13,7 @@
 //
 // \verbatim
 //  Modifications
-//    Matt Leotta   21 Dec 2005   Adapted from codec by Amitha Perera
+//    Matt Leotta   21 Dec 2005   Adapted from code by Amitha Perera
 // \endverbatim
 
 #include "vidl2_istream.h"
