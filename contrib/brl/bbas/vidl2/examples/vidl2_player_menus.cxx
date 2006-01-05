@@ -36,10 +36,12 @@ void vidl2_player_menus::open_image_list_ostream_callback()
 }
 
 
+#ifdef HAS_FFMPEG
 void vidl2_player_menus::open_ffmpeg_ostream_callback()
 {
   vidl2_player_manager::instance()->open_ffmpeg_ostream();
 }
+#endif
 
 
 void vidl2_player_menus::close_ostream_callback()
