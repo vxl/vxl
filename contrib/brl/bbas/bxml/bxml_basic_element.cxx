@@ -1,14 +1,8 @@
-// This is basic/bgui3d/bgui3d_file_io.cxx
+// This is bxml/bxml_basic_element.cxx
 //:
 // \file
 
 #include "bxml_basic_element.h"
-//#include <vcl_iostream.h>
-
-/*void bxml_basic_element::add_attribute(vcl_pair<vcl_string, vcl_string> attr)
-{
-  attrs_.push_back(attr);
-}*/
 
 void bxml_basic_element::add_attribute_list(vcl_vector<vcl_pair<vcl_string, vcl_string> > attrs)
 {

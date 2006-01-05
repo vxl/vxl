@@ -1,4 +1,4 @@
-// This is basic/bgui3d/bgui3d.h
+// This is bxml/bxml_basic_element.h
 #ifndef bxml_basic_element_h_
 #define bxml_basic_element_h_
 
