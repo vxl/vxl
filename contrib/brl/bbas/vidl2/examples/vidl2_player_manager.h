@@ -38,16 +38,19 @@ class vidl2_player_manager : public vgui_wrapper_tableau
   //: open an image list input video stream
   void open_image_list_istream();
 
+  //: open an image list output video stream
+  void open_image_list_ostream();
+
 #ifdef HAS_FFMPEG
   //: open a FFMPEG input video stream
   void open_ffmpeg_istream();
+
+  //: open a FFMPEG output video stream
+  void open_ffmpeg_ostream();
 #endif
 
   //: close the input video stream
   void close_istream();
-
-  //: open an output video stream
-  void open_ostream();
 
   //: close the output video stream
   void close_ostream();

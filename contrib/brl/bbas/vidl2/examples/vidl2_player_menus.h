@@ -23,11 +23,12 @@ class vidl2_player_menus
     static void quit_callback();
 
     static void open_image_list_istream_callback();
+    static void open_image_list_ostream_callback();
 #ifdef HAS_FFMPEG
     static void open_ffmpeg_istream_callback();
+    static void open_ffmpeg_ostream_callback();
 #endif
     static void close_istream_callback();
-    static void open_ostream_callback();
     static void close_ostream_callback();
     static void pipe_streams_callback();
 

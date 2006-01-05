@@ -21,9 +21,10 @@ SET(vidl2_sources
 
 IF( FFMPEG_FOUND )
   SET(vidl2_sources ${vidl2_sources}
-    vidl2_ffmpeg_init.h      vidl2_ffmpeg_init.cxx
-    vidl2_ffmpeg_istream.h   vidl2_ffmpeg_istream.cxx
-#    vidl2_ffmpeg_ostream.h   vidl2_ffmpeg_ostream.cxx
+    vidl2_ffmpeg_init.h             vidl2_ffmpeg_init.cxx
+    vidl2_ffmpeg_istream.h          vidl2_ffmpeg_istream.cxx
+    vidl2_ffmpeg_ostream.h          vidl2_ffmpeg_ostream.cxx
+    vidl2_ffmpeg_ostream_params.h   vidl2_ffmpeg_ostream_params.cxx
   )
 ENDIF( FFMPEG_FOUND )
 

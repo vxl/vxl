@@ -20,6 +20,8 @@
 
 #ifdef HAS_FFMPEG
 #include <vidl2/vidl2_ffmpeg_istream.h>
+#include <vidl2/vidl2_ffmpeg_ostream.h>
+#include <vidl2/vidl2_ffmpeg_ostream_params.h>
 #endif
 
 //static manager instance
@@ -173,11 +175,11 @@ void vidl2_player_manager::close_istream()
 
 
 //-----------------------------------------------------------------------------
-//: open an output video stream
+//: open an image list output video stream
 //-----------------------------------------------------------------------------
-void vidl2_player_manager::open_ostream()
+void vidl2_player_manager::open_image_list_ostream()
 {
-  vgui_dialog dlg("Open Ouput Image List Stream");
+  vgui_dialog dlg("Open Output Image List Stream");
   static vcl_string directory = "";
   static vcl_string name_format = "%05u";
   static vcl_string ext = "*";
@@ -215,6 +217,61 @@ void vidl2_player_manager::open_ostream()
   }
 }
 
+
+#ifdef HAS_FFMPEG
+//-----------------------------------------------------------------------------
+//: open a FFMPEG output video stream
+//-----------------------------------------------------------------------------
+void vidl2_player_manager::open_ffmpeg_ostream()
+{
+  vgui_dialog dlg("Open FFMPEG Output Stream");
+  static vcl_string file = "";
+  static vcl_string ext = "avi";
+  dlg.file("File", ext, file);
+
+  static vidl2_ffmpeg_ostream_params params;
+
+  vcl_vector<vcl_string> enc_choices(8);
+  enc_choices[0] = "-- Default --";
+  enc_choices[1] = "MPEG4";
+  enc_choices[2] = "MS MPEG4 v2";
+  enc_choices[3] = "MPEG2";
+  enc_choices[4] = "DV";
+  enc_choices[5] = "LJPEG";
+  enc_choices[6] = "Raw Video";
+  enc_choices[7] = "Huff YUV";
+  int enc_choice = params.encoder_;
+  dlg.choice("encoder", enc_choices, enc_choice);
+
+  if(istream_ && istream_->is_valid())
+  {
+    vil_image_resource_sptr img = istream_->current_frame();
+    if(img){
+      params.ni_ = img->ni();
+      params.nj_ = img->nj();
+    }
+  }
+
+  dlg.field("image width", params.ni_);
+  dlg.field("image height", params.nj_);
+  dlg.field("frame rate (fps)", params.frame_rate_);
+  dlg.field("bit rate", params.bit_rate_);
+
+  if (!dlg.ask())
+    return;
+
+  params.encoder(vidl2_ffmpeg_ostream_params::
+      encoder_type(enc_choice));
+
+  delete ostream_;
+  ostream_ = new vidl2_ffmpeg_ostream(file, params);
+
+  if (!ostream_ || !ostream_->is_open()) {
+    vgui_error_dialog("Failed to create ffmpeg output stream");
+    return;
+  }
+}
+#endif
 
 //-----------------------------------------------------------------------------
 //: close the output video stream

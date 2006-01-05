@@ -30,9 +30,15 @@ void vidl2_player_menus::close_istream_callback()
 }
 
 
-void vidl2_player_menus::open_ostream_callback()
+void vidl2_player_menus::open_image_list_ostream_callback()
 {
-  vidl2_player_manager::instance()->open_ostream();
+  vidl2_player_manager::instance()->open_image_list_ostream();
+}
+
+
+void vidl2_player_menus::open_ffmpeg_ostream_callback()
+{
+  vidl2_player_manager::instance()->open_ffmpeg_ostream();
 }
 
 
@@ -108,10 +114,16 @@ vgui_menu vidl2_player_menus::get_menu()
   menu_istream.add( "FFMPEG",      open_ffmpeg_istream_callback);
 #endif
 
+  vgui_menu menu_ostream;
+  menu_ostream.add( "Image List",  open_image_list_ostream_callback);
+#ifdef HAS_FFMPEG
+  menu_ostream.add( "FFMPEG",      open_ffmpeg_ostream_callback);
+#endif
+
   menuvstream.add( "Open Input",   menu_istream);
   menuvstream.add( "Close Input",  close_istream_callback);
   menuvstream.separator();
-  menuvstream.add( "Open Output",  open_ostream_callback);
+  menuvstream.add( "Open Output",  menu_ostream);
   menuvstream.add( "Close Output", close_ostream_callback);
   menuvstream.separator();
   menuvstream.add( "Input to Output", pipe_streams_callback);
