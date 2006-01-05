@@ -2519,7 +2519,7 @@ brip_vil_float_ops::difference(vil_image_resource_sptr const& img0,
   vil_image_view<float> op0 = brip_vil_float_ops::convert_to_float(img0);
   vil_image_view<float> op1 = brip_vil_float_ops::convert_to_float(img1);
   vil_image_view<float> diff;
-  vil_math_image_difference(op0, op1, diff);re/vil/file_formats/
+  vil_math_image_difference(op0, op1, diff);
 
   //find out the types of the input images for now, only do greyscale operands
   vil_pixel_format pix_format0 = img0->pixel_format();
