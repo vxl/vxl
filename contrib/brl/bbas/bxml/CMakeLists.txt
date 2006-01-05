@@ -20,6 +20,7 @@ IF(HAS_XERCES)
      bxml_vtol_zero_chain_2d_input_converter.cxx bxml_vtol_zero_chain_2d_input_converter.h
      bxml_vtol_edge_2d_input_converter.cxx       bxml_vtol_edge_2d_input_converter.h
      bxml_vtol_io.cxx                            bxml_vtol_io.h
+     bxml_basic_element.cxx                      bxml_basic_element.h
  )
  AUX_SOURCE_DIRECTORY(Templates bxml_sources)
 
@@ -31,5 +32,18 @@ IF(HAS_XERCES)
  IF(BUILD_TESTING)
    SUBDIRS(tests)
  ENDIF(BUILD_TESTING)
+
+ELSE(HAS_XERCES)
+
+# sources that does not depend on xerces being present
+ SET(bxml_sources
+     bxml_basic_element.cxx                      bxml_basic_element.h
+ )
+ #AUX_SOURCE_DIRECTORY(Templates bxml_sources)
+
+ ADD_LIBRARY(bxml ${bxml_sources})
+ INSTALL_TARGETS(/lib bxml)
+ INSTALL_NOBASE_HEADER_FILES(/include/contrib/brl/bbas/bxml ${bxml_sources})
+ TARGET_LINK_LIBRARIES(bxml)
 
 ENDIF(HAS_XERCES)
