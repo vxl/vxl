@@ -3,12 +3,13 @@
 #define vnl_xio_vector_fixed_h
 //:
 // \file
-// \author Amitha Perera
-// \date Oct 2002
+// \author Gamze Tunali
+// \date  12/28/2005
 
 #include <vsl/vsl_fwd.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_iosfwd.h>
+#include <vcl_string.h>
 
 //: XML save vnl_vector_fixed to stream.
 template <class T, unsigned n>
