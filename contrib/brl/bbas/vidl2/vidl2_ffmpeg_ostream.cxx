@@ -393,8 +393,12 @@ open(const vcl_string& filename,
   video_enc->coder_type= params.coder_;
   video_enc->context_model= params.context_;
   video_enc->prediction_method= params.predictor_;
+#if 0
+  // old versions of FFMPEG don't support these
+  // so lets ignore them for now
   video_enc->profile= params.video_profile_;
   video_enc->level= params.video_level_;
+#endif
 
   if(params.packet_size_)
   {

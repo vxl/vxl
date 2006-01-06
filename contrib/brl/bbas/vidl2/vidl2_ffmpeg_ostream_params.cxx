@@ -94,8 +94,11 @@ vidl2_ffmpeg_ostream_params::vidl2_ffmpeg_ostream_params()
     coder_( 0 ),
     context_( 0 ),
     predictor_( 0 ),
+#if 0
+    // not supported by older versions of FFMPEG
     video_profile_( FF_PROFILE_UNKNOWN ),
     video_level_( FF_LEVEL_UNKNOWN ),
+#endif 
     me_range_( 0 ),
     do_psnr_( 0 ),
     packet_size_( 0 ),

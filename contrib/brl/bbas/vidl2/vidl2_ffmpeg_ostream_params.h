@@ -139,8 +139,11 @@ struct vidl2_ffmpeg_ostream_params
   int coder_;
   int context_;
   int predictor_;
+#if 0
+  // not supported by older versions of FFMPEG
   int video_profile_;
   int video_level_;
+#endif
   int me_range_;
   int do_psnr_;
   int packet_size_;
