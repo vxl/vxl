@@ -102,26 +102,6 @@ class vil_image_resource
   //: Extra property information
   virtual bool get_property(char const* tag, void* property_value = 0) const =0;
 
-  //: Most of the image formats supported by VIL don't allow for multiple
-  //  images in the same file.  Some do, however (eg. NITF 2.x).  The current_image
-  //  API allows client code to access any of these images.  Note: that there is no 
-  //  guaranteed relationship between the images in a single file.  They do not
-  //  have to be the same size, nor do they have to be of the same object or taken
-  //  at the same time.  Calling set_current_image() will affect all subsequent calls
-  //  to (eg.) get_view() and any functions that return information about the image (eg. 
-  //  ni(), nj() and nplanes()).  Again, it is improper to assume that one image in the
-  //  file shares any attributes (eg. height, width etc) with another.
-  //
-  //  Note that you will trigger an assert failure if you try to set the current image
-  //  to be higher than the number of images in the resource.  ie. 'index' needs to be
-  //  less then the value returned by nimages()
-  virtual void set_current_image( unsigned int index );
-  //: which image is currently selected.  ie. when I call get_view()   
-  //  which image's data will be returned?  Or, when I call ni(), which
-  //  image's dimension will be returned?
-  virtual unsigned int current_image() const;
-  //: How many images in this resource?
-  virtual unsigned int nimages() const;
  private:
   // You probably should not use a vil_image_resource in a vbl_smart_ptr, so the
   // ref functions are private
