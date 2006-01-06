@@ -96,7 +96,9 @@ bool
 vidl2_image_list_istream::
 advance()
 {
-  return index_++ < images_.size();
+  if(is_valid())
+    return ++index_ < images_.size();
+  return false;
 }
 
 
@@ -104,10 +106,8 @@ advance()
 vil_image_resource_sptr
 vidl2_image_list_istream::read_frame()
 {
-  if(is_valid())
-    return images_[++index_];
-  else
-    return NULL;
+  advance();
+  return current_frame();
 }
 
 
