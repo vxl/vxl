@@ -11,6 +11,7 @@ TRY_MPEG2 := 1
 
 LIBRARY := vidl_vil1
 VERSION := 1.0
+DEFINES += -DBUILDING_VIDL_DLL
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

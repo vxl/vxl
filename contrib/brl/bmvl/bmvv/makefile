@@ -3,6 +3,7 @@ include ${VXLROOT}/core/vgui/config.mk
 
 LIBRARY := bmvv
 VERSION := 1.0
+DEFINES += -DBUILDING_BMVV_DLL
 
 #SOURCES += bmvv_multiview_manager.cxx
 #SOURCES += bmvv_tomography_manager.cxx

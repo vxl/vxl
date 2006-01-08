@@ -5,6 +5,7 @@ TRY_X11 := 1
 TRY_HERMES := 1
 LIBRARY := vgui
 IMMEDIATE_LIBS += -lvil1 -lvil -lvbl -lvnl -lvul
+DEFINES += -DBUILDING_VGUI_DLL
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

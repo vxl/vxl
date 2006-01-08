@@ -2,6 +2,7 @@ USES += contrib/brl contrib/brl/bbas contrib/gel core
 
 LIBRARY := bsol
 VERSION := 1.0
+DEFINES += -DBUILDING_BSOL_DLL
 
 SOURCES += bsol_algs.cxx
 SOURCES += bsol_distance_histogram.cxx

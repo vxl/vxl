@@ -8,6 +8,7 @@ ifdef HAS_XERCES
 
 LIBRARY := bxml
 VERSION := 1.0
+DEFINES += -DBUILDING_BXML_DLL
 
 SOURCES += bxml_io.cxx
 SOURCES += bxml_vdgl_digital_curve_input_converter.cxx

@@ -3,6 +3,7 @@ include ${VXLROOT}/core/vgui/config.mk
 
 LIBRARY := segv
 VERSION := 1.0
+DEFINES += -DBUILDING_SEGV_DLL
 
 MANPAGE_SOURCES += dll.h
 MANPAGE_SOURCES += vil_dll.h
