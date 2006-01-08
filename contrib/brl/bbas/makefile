@@ -37,6 +37,9 @@ SUBDIRS += bsta
 # Brown dynamic programming library
 SUBDIRS += bdpg
 
+# Video Library (rewrite)
+SUBDIRS += vidl2
+
 ################################
 include ${VXLROOT}/config/top.mk
 ################################

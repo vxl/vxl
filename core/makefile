@@ -24,7 +24,7 @@ SUBDIRS += vgl
 SUBDIRS += vil vil1 vil/algo
 
 # stream I/O
-SUBDIRS += vsl vul/io vbl/io vnl/io vgl/io vil/io vil1/io
+SUBDIRS += vsl vul/io vbl/io vnl/io vnl/xio vgl/io vgl/xio vil/io vil1/io
 
 # coordinate systems
 SUBDIRS += vcsl
