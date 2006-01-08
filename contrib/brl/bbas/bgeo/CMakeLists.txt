@@ -6,6 +6,8 @@ SET(bgeo_sources
   bgeo_lvcs.cxx          bgeo_lvcs.h           bgeo_lvcs_sptr.h
   bgeo_datum_conversion.cxx  bgeo_datum_conversion.h
                              bgeo_earth_constants.h
+
+  bgeo_dll.h
 )
 AUX_SOURCE_DIRECTORY(Templates bgeo_sources)
 

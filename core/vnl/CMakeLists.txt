@@ -173,8 +173,6 @@ SET( vnl_sources
                                vnl_integrant_fnct.h
                                vnl_analytic_integrant.h
   vnl_definite_integral.cxx    vnl_definite_integral.h
-
-  dll.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vnl_sources)
