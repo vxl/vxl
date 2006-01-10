@@ -28,6 +28,9 @@ class vidl2_player_menus
     static void open_ffmpeg_istream_callback();
     static void open_ffmpeg_ostream_callback();
 #endif
+#ifdef HAS_DC1394
+    static void open_dc1394_istream_callback();
+#endif
     static void close_istream_callback();
     static void close_ostream_callback();
     static void pipe_streams_callback();

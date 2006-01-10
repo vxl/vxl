@@ -29,6 +29,9 @@ class vidl2_player_manager : public vgui_wrapper_tableau
   //: returns the unique instance of vidl2_player_manger
   static vidl2_player_manager *instance();
 
+  //: clean up before the program terminates
+  void quit();
+
   //: height (in pixels) of the video frame
   unsigned get_height() const { return height_; }
 
@@ -47,6 +50,11 @@ class vidl2_player_manager : public vgui_wrapper_tableau
 
   //: open a FFMPEG output video stream
   void open_ffmpeg_ostream();
+#endif
+
+#ifdef HAS_DC1394
+  //: open a dc1394 input video stream
+  void open_dc1394_istream();
 #endif
 
   //: close the input video stream

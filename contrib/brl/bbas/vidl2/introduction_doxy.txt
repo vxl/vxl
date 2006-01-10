@@ -2,7 +2,7 @@
 /*! \mainpage vidl2 : Video Stream Library
 * A stream-based rewrite of the vidl library
 *
-* \section intro Introduction
+* \section introduction Introduction
 * The purpose of this library is to provide a unified interface reading
 * and writing video in VXL.  Unlike the previous vidl library, this library
 * treats video as a data stream and builds directly on the vil image library.
@@ -41,15 +41,15 @@
 *    image files using any image file format supported by vil.
 *  - vidl2_ffmpeg_istream : uses the <a href="http://ffmpeg.sourceforge.net/">
 *    FFMPEG</a> library to decode many common video file formats.
-*
-* The following streams are currently under development
 *  - vidl2_ffmpeg_ostream : uses the <a href="http://ffmpeg.sourceforge.net/">
 *    FFMPEG</a> library to encode to many common video file formats with
 *    many encoding options for video quality and compression.
 *
-* The following streams sound useful but need someone to work on them
+* The following streams are currently under development
 *  - vidl2_dc1394_istream - use libdc1394 to stream video directly from IEEE
 *    1394 (firewire) based cameras (using Linux/BSD)
+*
+* The following streams sound useful but need someone to work on them
 *  - vidl2_cmu1394_istream - use the CMU 1394 driver to stream video directly
 *    from IEEE 1394 (firewire) based cameras (using Windows)
 *  - vidl2_dv1394_istream - use libdv1394 to stream video from DV camcorders

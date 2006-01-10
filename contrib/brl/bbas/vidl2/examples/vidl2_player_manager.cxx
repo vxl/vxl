@@ -5,6 +5,7 @@
 // \author Matt Leotta
 
 #include <vcl_iostream.h>
+#include <vcl_cstdlib.h> // for vcl_exit()
 #include <vul/vul_timer.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_file_format.h>
@@ -22,6 +23,10 @@
 #include <vidl2/vidl2_ffmpeg_istream.h>
 #include <vidl2/vidl2_ffmpeg_ostream.h>
 #include <vidl2/vidl2_ffmpeg_ostream_params.h>
+#endif
+
+#ifdef HAS_DC1394
+#include <vidl2/vidl2_dc1394_istream.h>
 #endif
 
 //static manager instance
@@ -60,7 +65,7 @@ vidl2_player_manager::vidl2_player_manager()
   : vgui_wrapper_tableau(),
     preload_frames_(false),
     play_video_(false),
-    time_interval_(33.33),
+    time_interval_(0.0f),
     width_(640),
     height_(480),
     istream_(NULL),
@@ -80,6 +85,15 @@ vidl2_player_manager::~vidl2_player_manager()
 bool vidl2_player_manager::handle(const vgui_event &e)
 {
   return this->child.handle(e);
+}
+
+
+//: clean up before the program terminates
+void vidl2_player_manager::quit()
+{
+  delete istream_;
+  delete ostream_;
+  vcl_exit(1);
 }
 
 
@@ -160,6 +174,51 @@ void vidl2_player_manager::open_ffmpeg_istream()
 #endif
 
 
+#ifdef HAS_DC1394
+//-----------------------------------------------------------------------------
+//: open an dc1394 input video stream
+//-----------------------------------------------------------------------------
+void vidl2_player_manager::open_dc1394_istream()
+{
+  vgui_dialog dlg("Open dc1394 Input Stream");
+
+#if 0
+  static vcl_string image_filename = "";
+  static vcl_string ext = "*";
+
+  dlg.file("Filename:", ext, image_filename);
+  if (!dlg.ask())
+    return;
+#endif
+
+  vidl2_dc1394_istream *dc_istream = new vidl2_dc1394_istream();
+  dc_istream->open("");
+  delete istream_;
+  istream_ = dc_istream;
+  if (!istream_ || !istream_->is_open()) {
+    vgui_error_dialog("Failed to open the input stream");
+    return;
+  }
+
+#if 0
+  if(istream_->is_valid()){
+    vil_image_resource_sptr img = istream_->current_frame();
+    if (img) {
+      height_ = img->nj();
+      width_ = img->ni();
+      if (win_)
+        win_->reshape(width_+10, height_+60);
+
+      itab_->set_image_resource(img);
+    }
+  }
+#endif
+
+  itab_->post_redraw();
+  vgui::run_till_idle();
+}
+#endif
+
 //-----------------------------------------------------------------------------
 //: close the input video stream
 //-----------------------------------------------------------------------------
@@ -168,9 +227,7 @@ void vidl2_player_manager::close_istream()
   if(istream_)
     istream_->close();
 
-  itab_->set_image_resource(NULL);
-  itab_->post_redraw();
-  vgui::run_till_idle();
+  this->redraw();
 }
 
 
@@ -303,14 +360,21 @@ void vidl2_player_manager::pipe_streams()
   description += "and pipe them into the output stream.\n";
   description += "Then the output stream will be closed.\n";
   dlg.message(description.c_str());
+  static int num_frames = -1;
+  dlg.field("Max number of frames",num_frames);
   if (!dlg.ask())
     return;
 
   unsigned int initial_frame = istream_->frame_number();
 
   vil_image_resource_sptr img;
-  while(bool(img = istream_->read_frame()) &&
-        ostream_->write_frame(img) );
+  if(num_frames < 0)
+    while(bool(img = istream_->read_frame()) &&
+          ostream_->write_frame(img) );
+  else
+    for(int i=0; i<num_frames &&
+        bool(img = istream_->read_frame()) &&
+        ostream_->write_frame(img); ++i);
   ostream_->close();
 
   if(istream_->is_seekable())
@@ -321,10 +385,17 @@ void vidl2_player_manager::pipe_streams()
 void vidl2_player_manager::redraw()
 {
   if(istream_){
-    vgui::out << "frame["<< istream_->frame_number() <<"]\n";
+    unsigned int frame = istream_->frame_number();
+    if(frame == unsigned(-1))
+      vgui::out << "invalid frame\n";
+    else
+      vgui::out << "frame["<< frame <<"]\n";
     itab_->set_image_resource(istream_->current_frame());
   }
-  itab_->post_redraw();
+  static int temp = 0;
+  ++temp;
+  if(temp%2 == 0)
+    itab_->post_redraw();
   vgui::run_till_idle();
 }
 
@@ -340,14 +411,18 @@ void vidl2_player_manager::play_video()
   }
 
   play_video_ = true;
-  vul_timer t;
+  vul_timer t,t2;
+  int count = 0;
 
-  while(play_video_ && istream_->is_valid() && istream_->read_frame()) {
+  while(play_video_ && istream_->is_valid() && istream_->advance()) {
     this->redraw();
     //Delay until the time interval has passed
     while (t.all()<time_interval_);
     t.mark();
+    ++count;
   }
+  long time = t2.all();
+  vcl_cout << "average play time " << double(time)/count << vcl_endl;
 
   // if played to the end, go back to the first frame;
   if (play_video_)

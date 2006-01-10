@@ -1,7 +1,6 @@
 // This is contrib/brl/bbas/vidl2/examples/vidl2_player_menus.cxx
 #include "vidl2_player_menus.h"
 #include "vidl2_player_manager.h"
-#include <vcl_cstdlib.h> // for vcl_exit()
 #include <vgui/vgui.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_key.h>
@@ -20,6 +19,14 @@ void vidl2_player_menus::open_image_list_istream_callback()
 void vidl2_player_menus::open_ffmpeg_istream_callback()
 {
   vidl2_player_manager::instance()->open_ffmpeg_istream();
+}
+#endif
+
+
+#ifdef HAS_DC1394
+void vidl2_player_menus::open_dc1394_istream_callback()
+{
+  vidl2_player_manager::instance()->open_dc1394_istream();
 }
 #endif
 
@@ -58,7 +65,7 @@ void vidl2_player_menus::pipe_streams_callback()
 
 void vidl2_player_menus::quit_callback()
 {
-  vcl_exit(1);
+  vidl2_player_manager::instance()->quit();
 }
 
 
@@ -114,6 +121,9 @@ vgui_menu vidl2_player_menus::get_menu()
   menu_istream.add( "Image List",  open_image_list_istream_callback);
 #ifdef HAS_FFMPEG
   menu_istream.add( "FFMPEG",      open_ffmpeg_istream_callback);
+#endif
+#ifdef HAS_DC1394
+  menu_istream.add( "dc1394",      open_dc1394_istream_callback);
 #endif
 
   vgui_menu menu_ostream;
