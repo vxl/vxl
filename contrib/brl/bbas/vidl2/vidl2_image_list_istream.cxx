@@ -18,21 +18,26 @@
 //--------------------------------------------------------------------------------
 
 
+//: The initial frame index
+// \note the initial frame index is invalid until advance() is called
+static const unsigned int INIT_INDEX = unsigned(-1);
+
+
 //: Constructor
 vidl2_image_list_istream::
-vidl2_image_list_istream() : index_(0) {}
+vidl2_image_list_istream() : index_(INIT_INDEX) {}
 
 
 //: Constructor
 vidl2_image_list_istream::
 vidl2_image_list_istream(const vcl_vector<vil_image_resource_sptr>& images)
-  : images_(images), index_(0) {}
+  : images_(images), index_(INIT_INDEX) {}
 
 
 //: Constructor
 vidl2_image_list_istream::
 vidl2_image_list_istream(const vcl_string& glob)
-  : index_(0) { open(glob); }
+  : index_(INIT_INDEX) { open(glob); }
 
 
 
@@ -41,7 +46,7 @@ bool
 vidl2_image_list_istream::
 open(const vcl_vector<vil_image_resource_sptr>& images)
 {
-  index_ = 0;
+  index_ = INIT_INDEX;
   images_ = images;
   return true;
 }
@@ -86,8 +91,18 @@ open(const vcl_vector<vcl_string>& paths)
     if (img)
       images_.push_back(img);
   }
-  index_ = 0;
+  index_ = INIT_INDEX;
   return !images_.empty();
+}
+
+
+//: Close the stream
+void
+vidl2_image_list_istream::
+close()
+{
+  images_.clear();
+  index_ = INIT_INDEX;
 }
 
 
@@ -96,9 +111,7 @@ bool
 vidl2_image_list_istream::
 advance()
 {
-  if(is_valid())
-    return ++index_ < images_.size();
-  return false;
+  return ++index_ < images_.size();
 }
 
 

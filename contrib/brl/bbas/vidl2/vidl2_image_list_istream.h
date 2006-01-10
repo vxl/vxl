@@ -49,7 +49,7 @@ class vidl2_image_list_istream
     virtual bool open(const vcl_vector<vcl_string>& paths);
 
     //: Close the stream
-    virtual void close() { images_.clear(); }
+    virtual void close();
 
 
     //: Return true if the stream is open for reading
