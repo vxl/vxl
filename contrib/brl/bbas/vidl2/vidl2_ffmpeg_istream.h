@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \brief A video input stream from a list of images
+// \brief A video input stream using FFMPEG to decoded files
 //
 // \author Matt Leotta 
 // \date 21 Dec 2005
@@ -21,7 +21,7 @@
 #include <vil/vil_image_resource_sptr.h>
 
 
-//: A video input stream from a list of images
+//: A video input stream using FFMPEG to decoded files
 class vidl2_ffmpeg_istream
   : public vidl2_istream
 {
