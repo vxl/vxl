@@ -590,8 +590,7 @@ write_frame(const vil_image_resource_sptr& image)
 #else
   out_frame.pts = os_->cur_frame_;//av_rescale( os_->cur_frame_, AV_TIME_BASE*(int64_t)codec->time_base.den, codec->time_base.num );
 #endif
-  vcl_cout << "current frame = " << os_->cur_frame_ << "  pts = " << out_frame.pts
-           << "  time = " << double(out_frame.pts)/AV_TIME_BASE<<" sec"<< vcl_endl;
+
   int ret = avcodec_encode_video( codec, (uint8_t*)os_->bit_buf_->data(), os_->bit_buf_->size(), &out_frame );
 
   if( ret ) {
