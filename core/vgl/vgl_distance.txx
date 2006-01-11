@@ -305,12 +305,12 @@ double vgl_distance(vgl_line_3d_2_points<T> const& l,
 }
 
 template <class T>
-double vgl_distance_(vgl_line_segment_2d<T> const& l,
-                     vgl_point_2d<T> const& p)
+double vgl_distance(vgl_line_segment_2d<T> const& l,
+                    vgl_point_2d<T> const& p)
 {
-  return vcl_sqrt(vgl_distance2_to_linesegment(l.point1().x(), l.point1().y(),
-                                               l.point2().x(), l.point2().y(),
-                                               p.x(), p.y()));
+  return vgl_distance_to_linesegment(l.point1().x(), l.point1().y(), 
+                                     l.point2().x(), l.point2().y(),
+                                     p.x(), p.y());
 }
 
 
@@ -348,6 +348,7 @@ template double vgl_distance(vgl_homg_line_3d_2_points<T >const&,vgl_homg_line_3
 template double vgl_distance(vgl_homg_line_3d_2_points<T >const&,vgl_homg_point_3d<T >const&); \
 template double vgl_distance(vgl_line_3d_2_points<T >const&,vgl_point_3d<T >const&); \
 template double vgl_distance(vgl_homg_point_3d<T > const&,vgl_homg_line_3d_2_points<T > const&); \
-template double vgl_distance(vgl_line_segment_2d<T >const&,vgl_point_2d<T >const&)
+template double vgl_distance(vgl_line_segment_2d<T> const&, vgl_point_2d<T> const&)
 
 #endif // vgl_distance_txx_
+

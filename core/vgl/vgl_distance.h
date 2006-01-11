@@ -215,10 +215,8 @@ double vgl_distance(vgl_point_3d<T> const& p,
 template <class T>
 double vgl_distance(vgl_line_segment_2d<T> const& l,
                     vgl_point_2d<T> const& p);
-
 template <class T> inline
 double vgl_distance(vgl_point_2d<T> const& p,
                     vgl_line_segment_2d<T> const& l) { return vgl_distance(l,p); }
-
 
 #endif // vgl_distance_h_
