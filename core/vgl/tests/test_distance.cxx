@@ -2,10 +2,13 @@
 // Amitha Perera, Sep 2001.
 #include <testlib/testlib_test.h>
 
+#include <vcl_iostream.h>
+
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_line_2d.h>
+#include <vgl/vgl_line_segment_2d.h>
 #include <vgl/vgl_distance.h>
-
 #include <vcl_cmath.h> // for vcl_sqrt()
 
 
@@ -56,10 +59,33 @@ static void test_point_to_3D_line_segment()
   TEST_NEAR("vgl_distance_to_linesegment", d, 5, 1e-9);
 }
 
+static void test_point_to_line_segment_2d()
+{
+  vcl_cout << "-------------------------------------------------------\n";
+  vcl_cout << "Testing vgl_distance(vgl_line_segment_2d, vgl_point_2d)\n";
+  vcl_cout << "-------------------------------------------------------\n";
+  vgl_point_2d<double> p(1, 0);
+  vgl_point_2d<double> q(1, 1);
+  vgl_line_segment_2d<double> l(p, q);
+  vgl_point_2d<double> a(0, 0);
+  vgl_point_2d<double> b(1, -1);
+  vgl_point_2d<double> c(2, 2);
+
+  double d_la = vgl_distance(l, a);
+  double d_al = vgl_distance(a, l);
+  TEST("Interchange arguments OK?", d_la==d_al, true);
+  TEST("Test point a OK?", d_al==1.0, true);
+  TEST("Test point b OK?", vgl_distance(b, l)==1.0, true);
+  TEST("Test point c OK?", vgl_distance(c, l)==vcl_sqrt(2.0), true);
+}
+
+
 static void test_distance()
 {
   test_point_to_polygon();
   test_point_to_3D_line_segment();
+  test_point_to_line_segment_2d();
 }
+
 
 TESTMAIN(test_distance);
