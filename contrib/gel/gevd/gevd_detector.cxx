@@ -301,6 +301,7 @@ gevd_bufferxy* gevd_detector::GetBufferFromImage()
   return image_float_buf_;
 }
 
+// If we're setting a new image, we need to start from scratch
 void gevd_detector::SetImage(vil1_image img)
 {
   image = img;
@@ -308,6 +309,15 @@ void gevd_detector::SetImage(vil1_image img)
     delete image_float_buf_;
     image_float_buf_ = 0;
   }
+  if (edgel) delete edgel;
+  if (vertices) delete vertices;
+  if (direction) delete direction;
+  if (locationx) delete locationx;
+  if (locationy) delete locationy;
+  if (grad_mag) delete grad_mag;
+  if (angle) delete angle;
+  if (junctionx) delete [] junctionx;
+  if (junctiony) delete [] junctiony;
 }
 
 void gevd_detector::print(vcl_ostream &strm) const
