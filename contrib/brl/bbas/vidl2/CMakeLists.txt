@@ -17,6 +17,7 @@ SET(vidl2_sources
   vidl2_image_list_istream.h    vidl2_image_list_istream.cxx
   vidl2_ostream.h
   vidl2_image_list_ostream.h    vidl2_image_list_ostream.cxx
+  vidl2_iidc1394_params.h       vidl2_iidc1394_params.cxx
 )
 
 

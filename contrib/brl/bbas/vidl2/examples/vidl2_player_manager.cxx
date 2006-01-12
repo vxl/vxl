@@ -5,6 +5,7 @@
 // \author Matt Leotta
 
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vul/vul_timer.h>
 #include <vil/vil_image_resource.h>
@@ -182,17 +183,104 @@ void vidl2_player_manager::open_dc1394_istream()
 {
   vgui_dialog dlg("Open dc1394 Input Stream");
 
-#if 0
-  static vcl_string image_filename = "";
-  static vcl_string ext = "*";
+  //: Probe cameras for valid options
+  vidl2_iidc1394_params::valid_options options;
+  vidl2_dc1394_istream::valid_params(options);
 
-  dlg.file("Filename:", ext, image_filename);
-  if (!dlg.ask())
+  if(options.cameras.empty()){
+    vgui_error_dialog("No cameras found");
     return;
+  }
+
+#ifndef NDEBUG
+  vcl_cout << "Detected " << options.cameras.size() << " cameras\n";
+  for(unsigned int i=0; i<options.cameras.size(); ++i){
+    const vidl2_iidc1394_params::valid_options::camera& cam = options.cameras[i];
+    vcl_cout << "Camera "<<i<<": "<< cam.vendor << " : " << cam.model
+        << " : node "<< cam.node <<" : port "<<cam.port<< '\n';
+    for(unsigned int j=0; j<cam.modes.size(); ++j){
+      const vidl2_iidc1394_params::valid_options::valid_mode& m = cam.modes[j];
+      vcl_cout << "\tmode "<<j<<" : "
+          << vidl2_iidc1394_params::video_mode_string(m.mode) << '\n';
+      for(unsigned int k=0; k<m.frame_rates.size(); ++k){
+        vcl_cout << "\t\tframe rate : "
+            << vidl2_iidc1394_params::frame_rate_val(m.frame_rates[k]) << '\n';
+      }
+    }
+  }
+  vcl_cout << vcl_endl;
 #endif
 
+  vidl2_iidc1394_params params;
+
+  // Select the camera
+  //-----------------------------------
+  static unsigned int camera_id = 0;
+  if(options.cameras.size() <= camera_id)
+    camera_id = 0;
+
+  if(options.cameras.size() > 1){
+    vgui_dialog dlg("Select a IIDC 1394 camera");
+    vcl_vector<vcl_string> camera_names;
+    for(unsigned int i=0; i<options.cameras.size(); ++i){
+      camera_names.push_back(options.cameras[i].vendor + " " + options.cameras[i].model);
+    }
+    dlg.choice("Camera",camera_names,camera_id);
+    if (!dlg.ask())
+      return;
+  }
+  const vidl2_iidc1394_params::valid_options::camera& cam = options.cameras[camera_id];
+  params.node_ = cam.node;
+  params.port_ = cam.port;
+
+  // Select the mode
+  //-----------------------------------
+  if(cam.modes.empty())
+  {
+    vgui_error_dialog("No valid modes for this camera");
+    return;
+  }
+  static unsigned int mode_id = 0;
+  if(cam.modes.size() > 1){
+    vgui_dialog dlg("Select a capture mode");
+    vcl_vector<vcl_string> mode_names;
+    for(unsigned int i=0; i<cam.modes.size(); ++i){
+      mode_names.push_back(vidl2_iidc1394_params::video_mode_string(cam.modes[i].mode));
+    }
+    dlg.choice("Mode",mode_names,mode_id);
+    if (!dlg.ask())
+      return;
+  }
+  const vidl2_iidc1394_params::valid_options::valid_mode& m = cam.modes[mode_id];
+  params.video_mode_ = m.mode;
+
+  // Select the frame rate
+  //-----------------------------------
+  if(vidl2_iidc1394_params::video_format_val(m.mode) < 6){
+    if(m.frame_rates.empty())
+    {
+      vgui_error_dialog("No valid frame rates for this mode");
+      return;
+    }
+    static unsigned int fr_id = 0;
+    if(m.frame_rates.size() > 1){
+      vgui_dialog dlg("Select a frame rate");
+      vcl_vector<vcl_string> rate_names;
+      for(unsigned int i=0; i<m.frame_rates.size(); ++i){
+        vcl_stringstream name;
+        name << vidl2_iidc1394_params::frame_rate_val(m.frame_rates[i]) << " fps";
+        rate_names.push_back(name.str());
+      }
+      dlg.choice("Frame Rate",rate_names,fr_id);
+      if (!dlg.ask())
+        return;
+    }
+    params.frame_rate_ = m.frame_rates[fr_id];
+  }
+
+
   vidl2_dc1394_istream *dc_istream = new vidl2_dc1394_istream();
-  dc_istream->open("");
+  dc_istream->open(params);
   delete istream_;
   istream_ = dc_istream;
   if (!istream_ || !istream_->is_open()) {

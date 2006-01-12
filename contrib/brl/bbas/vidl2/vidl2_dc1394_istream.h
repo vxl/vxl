@@ -19,6 +19,7 @@
 // in linking errors.
 
 #include "vidl2_istream.h"
+#include "vidl2_iidc1394_params.h"
 #include <vcl_string.h>
 #include <vil/vil_image_resource_sptr.h>
 
@@ -40,10 +41,13 @@ class vidl2_dc1394_istream
     virtual ~vidl2_dc1394_istream();
 
     //: Open a new stream using a filename
-    virtual bool open(const vcl_string& filename);
+    virtual bool open(const vidl2_iidc1394_params& params);
 
     //: Close the stream
     virtual void close();
+
+    //: Probe the bus to determine the valid parameter options
+    static bool valid_params(vidl2_iidc1394_params::valid_options& options);
 
 
     //: Return true if the stream is open for reading
