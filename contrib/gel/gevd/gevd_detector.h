@@ -120,7 +120,7 @@ class gevd_detector : public gevd_detector_params
 
   vcl_vector<vtol_vertex_2d_sptr> *GetVertices() {return vertices;}
   vcl_vector<vtol_edge_2d_sptr> *GetEdges() {return edges;}
-  void SetImage(vil1_image img) {image = img;}
+  void SetImage(vil1_image img);
 
   void print(vcl_ostream &strm=vcl_cout) const;
 
@@ -130,6 +130,7 @@ class gevd_detector : public gevd_detector_params
 
  protected:
   vil1_image image;
+  gevd_bufferxy* image_float_buf_;
 
   float noise; //!< noise estimation/threshold
 

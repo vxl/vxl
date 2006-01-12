@@ -31,6 +31,8 @@ gevd_detector::gevd_detector(gevd_detector_params& params)
     noise = -params.noise_weight;
   else
     noise = params.noise_multiplier;
+
+  image_float_buf_ = 0;
 }
 
 gevd_detector::gevd_detector(vil1_image img, float smoothSigma, float noiseSigma,
@@ -48,6 +50,7 @@ gevd_detector::gevd_detector(vil1_image img, float smoothSigma, float noiseSigma
   gevd_detector_params::minLength = min_length;
   gevd_detector_params::maxGap = maxgap;
   gevd_detector_params::minJump = min_jump;
+  image_float_buf_ = 0;
 }
 
 //--------------------------------------------------------------------------
@@ -84,6 +87,7 @@ void gevd_detector::ClearData()
   delete [] junctionx; delete [] junctiony;
   delete vertices;
   delete edges;
+  if (image_float_buf_) delete image_float_buf_;
 }
 
 
@@ -252,9 +256,7 @@ bool gevd_detector::DoFold()
 //
 gevd_bufferxy* gevd_detector::GetBufferFromImage()
 {
-  static gevd_bufferxy* image_float_buf = 0;
-
-  if (image_float_buf) return image_float_buf;
+  if (image_float_buf_) return image_float_buf_;
 
   if (!image)
   {
@@ -268,14 +270,14 @@ gevd_bufferxy* gevd_detector::GetBufferFromImage()
   int sizey= image.rows();
   int sizex= image.cols();
 
-  image_float_buf = new gevd_bufferxy(sizex, sizey,8*sizeof(float));
+  image_float_buf_ = new gevd_bufferxy(sizex, sizey,8*sizeof(float));
 
 #if 0 // commented out
   if (image->GetPixelType() == Image::FLOAT)
   {
-    image->GetSection(image_float_buf->GetBuffer(),
+    image->GetSection(image_float_buf_->GetBuffer(),
                       roi->GetOrigX(), roi->GetOrigY(), sizex, sizey);
-    return image_float_buf;
+    return image_float_buf_;
   }
 #endif
 
@@ -290,13 +292,22 @@ gevd_bufferxy* gevd_detector::GetBufferFromImage()
   image.get_section(image_buf.GetBuffer(),     // copy bytes image into buf
                     0, 0, sizex, sizey);
 
-  if (! gevd_float_operators::BufferToFloat(image_buf, *image_float_buf))
+  if (! gevd_float_operators::BufferToFloat(image_buf, *image_float_buf_))
   {
-    delete image_float_buf;
-    image_float_buf = 0;
+    delete image_float_buf_;
+    image_float_buf_ = 0;
   }
 
-  return image_float_buf;
+  return image_float_buf_;
+}
+
+void gevd_detector::SetImage(vil1_image img)
+{
+  image = img;
+  if (image_float_buf_) {
+    delete image_float_buf_;
+    image_float_buf_ = 0;
+  }
 }
 
 void gevd_detector::print(vcl_ostream &strm) const
