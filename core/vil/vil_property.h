@@ -66,4 +66,16 @@
 // Type is unsigned int.
 #define vil_property_quantisation_depth "quantisation_depth"
 
+//: For unblocked images, the following properties are not implemented
+//  it is assumed that all blocks are the same size and padded with zeros if
+//  necessary. Thus, n_block_i = (ni() + size_block_i - 1)/size_block_i and
+//  n_block_j = (nj() + size_block_j - 1)/size_block_j. Both properties must
+//  be implemented for blocked images.  Type is unsigned int.
+
+//: Block size in columns
+#define vil_property_size_block_i "size_block_i"
+
+//: Block size in rows
+#define vil_property_size_block_j "size_block_j"
+
 #endif // vil_property_h_
