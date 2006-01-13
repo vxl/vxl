@@ -159,7 +159,10 @@ vidl2_dc1394_istream::
 //: Open a new stream using a filename
 bool
 vidl2_dc1394_istream::
-open(const vidl2_iidc1394_params& params)
+open(const vcl_string& device_filename,
+     unsigned int num_dma_buffers,
+     bool drop_frames,
+     const vidl2_iidc1394_params& params)
 {
   // Close any currently opened file
   close();
@@ -195,12 +198,14 @@ open(const vidl2_iidc1394_params& params)
 
   if (!((is_->camera_info_->mode >= DC1394_MODE_FORMAT7_MIN) &&
          (is_->camera_info_->mode <= DC1394_MODE_FORMAT7_MAX))) {
-    int err=dc1394_setup_capture( is_->camera_info_, is_->camera_info_->iso_channel,
-                                  is_->camera_info_->mode, is_->max_speed_,
-                                  is_->camera_info_->framerate );
+    int err=dc1394_dma_setup_capture( is_->camera_info_, is_->camera_info_->iso_channel,
+                                      is_->camera_info_->mode, is_->max_speed_,
+                                      is_->camera_info_->framerate,
+                                      num_dma_buffers, drop_frames,
+                                      device_filename.c_str() );
 
     if (err!=DC1394_SUCCESS){
-      vcl_cerr << "Failed to setup RAW1394 capture. Error code "<< err << '\n';
+      vcl_cerr << "Failed to setup DMA capture. Error code "<< err << '\n';
       return false;
     }
 
@@ -244,7 +249,7 @@ close()
       dc1394_video_set_transmission(is_->camera_info_, DC1394_OFF);
     }
 
-    dc1394_release_camera(is_->camera_info_);
+    dc1394_dma_release_camera(is_->camera_info_);
     dc1394_free_camera(is_->camera_info_);
     is_->camera_info_ = NULL;
   }
@@ -358,7 +363,8 @@ advance()
 {
   ++is_->vid_index_;
   is_->cur_img_valid_ = false;
-  if(dc1394_capture(&is_->camera_info_, 1) != DC1394_SUCCESS){
+  dc1394_dma_done_with_buffer(is_->camera_info_);
+  if(dc1394_dma_capture(&is_->camera_info_, 1, DC1394_VIDEO1394_WAIT) != DC1394_SUCCESS){
     vcl_cerr << "capture failed" << vcl_endl;
     return false;
   }

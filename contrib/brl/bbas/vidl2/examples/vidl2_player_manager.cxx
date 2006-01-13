@@ -278,9 +278,21 @@ void vidl2_player_manager::open_dc1394_istream()
     params.frame_rate_ = m.frame_rates[fr_id];
   }
 
-
+  static vcl_string dev_file = "/dev/video1394/0";
+  static unsigned int num_dma_buffers = 2;
+  static bool drop_frames = false;
+  {
+    vgui_dialog dlg("Enter Device File");
+    vcl_string regexp("*");
+    dlg.file("Device",regexp,dev_file);
+    dlg.field("Number of DMA Buffers",num_dma_buffers);
+    dlg.checkbox("Drop Frames",drop_frames);
+    if (!dlg.ask())
+      return;
+  }
+  
   vidl2_dc1394_istream *dc_istream = new vidl2_dc1394_istream();
-  dc_istream->open(params);
+  dc_istream->open(dev_file, num_dma_buffers, drop_frames, params);
   delete istream_;
   istream_ = dc_istream;
   if (!istream_ || !istream_->is_open()) {
