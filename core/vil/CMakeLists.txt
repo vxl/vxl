@@ -34,6 +34,7 @@ IF(TIFF_FOUND)
   SET( HAS_TIFF 1 )
   SET( vil_sources ${vil_sources}
     file_formats/vil_tiff.cxx file_formats/vil_tiff.h
+    file_formats/vil_tiff_header.cxx file_formats/vil_tiff_header.h
   )
 ELSE(TIFF_FOUND)
   SET( HAS_TIFF 0 )
@@ -65,7 +66,6 @@ SET( vil_sources ${vil_sources}
   vil_image_view.h                      vil_image_view.txx
   vil_image_resource.cxx                vil_image_resource.h
                                         vil_image_resource_sptr.h
-
   vil_file_format.cxx                   vil_file_format.h
   vil_memory_image.cxx                  vil_memory_image.h
 
