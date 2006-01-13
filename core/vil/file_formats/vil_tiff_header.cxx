@@ -4,8 +4,10 @@
 #include <vcl_cstdio.h>
 #include <vcl_ctime.h>
 //#define DEBUG
+
 static vcl_string date_and_time()
 {
+#if 0
   vcl_time_t clock;
   struct tm *t_m;
   clock = vcl_time(NULL);
@@ -15,6 +17,8 @@ static vcl_string date_and_time()
   vcl_strftime(tmp,sizeof(datetime),"%c",t_m);
   sprintf(datetime,"%19s",tmp);
   return vcl_string(datetime);
+#endif
+  return vcl_string("DATE and TIME NOT IMPLEMENTED");
 }
 
 static void read_string(TIFF* tif, ttag_t tag, vcl_string& stag, vcl_string const& deflt = "not_defined")
