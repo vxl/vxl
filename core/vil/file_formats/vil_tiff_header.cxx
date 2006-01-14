@@ -6,12 +6,8 @@
 
 static vcl_string date_and_time()
 {
-  //temporary fix
-# if defined(VCL_BORLAND)
- return vcl_string("TIMEDATE: NOT AVAILABLE");
-# else
   vcl_time_t clock;
-  struct tm *t_m;
+  struct vcl_tm *t_m;
   clock = vcl_time(NULL);
   t_m = vcl_localtime(&clock);
   char tmp[20];
@@ -19,7 +15,6 @@ static vcl_string date_and_time()
   vcl_strftime(tmp,sizeof(datetime),"%c",t_m);
   vcl_sprintf(datetime,"%19s",tmp);
   return vcl_string(datetime);
-#endif
 }
 
 static void read_string(TIFF* tif, ttag_t tag, vcl_string& stag, vcl_string const& deflt = "not_defined")
