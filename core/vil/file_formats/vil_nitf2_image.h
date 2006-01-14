@@ -85,18 +85,20 @@ class vil_nitf2_image : public vil_image_resource
   virtual unsigned nj() const;
   virtual enum vil_pixel_format pixel_format () const;
 
+#if 0
   //: returns "nitf vM.N"
-  //char const * file_format() const;
+  char const * file_format() const;
+#endif
 
   // is the current image JPEG 2000 compressed
   bool is_jpeg_2000_compressed() const;
 
   // This function is sort of a hack.  It will return a decimated version
   // of the region specified by (i0,j0){i0+ni,j0+nj).  It will be decimated by i_factorXj_factor.
-  // That is the image returned will have size (ni/i_factor, nj/j_factor).  
-  // The reason this function is a hack is because it only works for jpeg 2000 compressed 
-  // NITF files (that is, is_jpeg_2000_compressed() returns true).  You would normally want to use 
-  // vil_decimate_image_resource to obtain decimated images.  That will work for jpeg2000 
+  // That is the image returned will have size (ni/i_factor, nj/j_factor).
+  // The reason this function is a hack is because it only works for jpeg 2000 compressed
+  // NITF files (that is, is_jpeg_2000_compressed() returns true).  You would normally want to use
+  // vil_decimate_image_resource to obtain decimated images.  That will work for jpeg2000
   // compressed NITF files too, but that class/function doesn't take advantage of the JPEG 2000
   // spec's built in optimization for obtaining decimated versions of large images.  This function
   // does.  Well, more accurately, it can.  It depends on the implementation of the s_decode_jpeg_2000()
@@ -125,13 +127,16 @@ class vil_nitf2_image : public vil_image_resource
   const vcl_vector< vil_nitf2_des* >& get_des() const
   { return m_des; }
 
-  //: Since the VIL API (eg. get_view()) for retrieving image data
+  //:
+  //  Since the VIL API (eg. get_view()) for retrieving image data
   //  doesn't support files with multiple images, clients will
   //  need to call this function to tell get_view() which image to read in.
-  //: Overloaded from vil_image_resource.  The NITF 2.x file format does support
+  //
+  //  Overloaded from vil_image_resource.  The NITF 2.x file format does support
   //  multiple images per file and you can use this API to access each and every
   //  one of them.
-  //  Note: By default, the first image is always used.  If you don't call this 
+  //
+  //  Note: By default, the first image is always used.  If you don't call this
   //  function at all, then you will only see the first image in a given file.
   virtual void set_current_image( unsigned int index );
   virtual unsigned int current_image() const;
@@ -149,9 +154,9 @@ class vil_nitf2_image : public vil_image_resource
                                                            unsigned i0, unsigned ni,
                                                            unsigned j0, unsigned nj,
                                                            double i_factor, double j_factor );
-  
+
   // I allocate the return value, but you own it after I return it to you
-  // so you need to delete it.  
+  // so you need to delete it.
   virtual vil_nitf2_field::field_tree* get_tree() const;
 
  protected:
@@ -178,15 +183,15 @@ class vil_nitf2_image : public vil_image_resource
       unsigned int end_block_x_offset, unsigned int end_block_y_offset ) const;
 
 
-  // Returns the offset (in bytes) from the beginning of the NITF file 
+  // Returns the offset (in bytes) from the beginning of the NITF file
   // to the beginning of the specified portion of the NITF stream.  For example:
   //
-  // get_offset_to( TextSegments, Header, 0) will return the offset from the 
+  // get_offset_to( TextSegments, Header, 0) will return the offset from the
   // beginning of the NITF stream to the beginning of the first text segment's
   // subheader.  You'd better make sure there is at least one text segment before
   // you call this.
   //
-  // get_offset_to( ImageSegments, Data, 3) will return the offset from the 
+  // get_offset_to( ImageSegments, Data, 3) will return the offset from the
   // beginning of the NITF stream to the beginning of the fourth image segment's
   // data section.  You'd better make sure there is at least four image segments before
   // you call this.
@@ -220,14 +225,14 @@ class vil_nitf2_image : public vil_image_resource
   unsigned int m_current_image_index;
 };
 
-//:
-// This function does a lot of work for \sa byte_align_data().  It will strip one value
-// of ni bits and return it as a value of type T (with zero padding on the MSBs).
+//: This function does a lot of work for \sa byte_align_data().
+// It will strip one value of ni bits and return it as a value of type T
+// (with zero padding on the MSBs).
 // Both io and ni are lengths (in bits - not bytes).
 //
-// @param i0: Offset (in bits - not bytes) from in_val[0].  This will be the start
+// \param i0: Offset (in bits - not bytes) from in_val[0].  This will be the start
 //            of the bits extracted from in_val.
-// @param ni: number of bits (starting from i0) that will be extracted from in_val.
+// \param ni: number of bits (starting from i0) that will be extracted from in_val.
 template< class T >
 T get_bits( const T* in_val, unsigned int i0, unsigned int ni )
 {
@@ -257,9 +262,9 @@ T get_bits( const T* in_val, unsigned int i0, unsigned int ni )
   return temp;
 }
 
-//:
-// This function will byte align the data in in_data and store the result in out_data.  For example, let's
-// say that you had in_data is of type unsigned char and contains the following data: 110010111001111010000110.
+//: This function will byte align the data in in_data and store the result in out_data.
+// For example, let's say that you had in_data is of type unsigned char
+// and contains the following data: 110010111001111010000110.
 // In other words:
 // in_data[0] = 203 (11001011)
 // in_data[1] = 158 (10011110)
@@ -297,11 +302,11 @@ T get_bits( const T* in_val, unsigned int i0, unsigned int ni )
 // shift operator is implementation specific when applied to a negative number, you should probably
 // only use this function on unsigned data.
 //
-// @param in_data: The input data.  It must be at least (num_samples*in_bits_per_sample\8) bytes long.
+// \param in_data: The input data.  It must be at least (num_samples*in_bits_per_sample\8) bytes long.
 //                The values should have the endianness of your platform.
-// @param num_samples: The number of actual samples in in_data.
-// @param in_bits_per_sample: The bits per sample in in_data
-// @param out_data: I'll store the output data here.  It must be at least (num_samples*sizeof(T)) bytes long
+// \param num_samples: The number of actual samples in in_data.
+// \param in_bits_per_sample: The bits per sample in in_data
+// \param out_data: I'll store the output data here.  It must be at least (num_samples*sizeof(T)) bytes long
 //                 The values will have the endianness of your platform.
 //
 // Note that inBitsPerSampe must not be >= sizeof(T).  If they were to be equal, then this function
