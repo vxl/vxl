@@ -1,7 +1,6 @@
-// This is vsl/vsl_basic_xml_element.h
+// This is core/vsl/vsl_basic_xml_element.h
 #ifndef vsl_basic_xml_element_h_
 #define vsl_basic_xml_element_h_
-
 //:
 // \file
 // \brief  creates basic xml nodes and writes them out to the stream
@@ -17,7 +16,6 @@
 #include <vcl_string.h>
 #include <vcl_sstream.h>
 #include <vcl_iostream.h>
-using namespace std;
 
 template<typename T> vcl_string toString(const T& t)
 {
@@ -26,27 +24,29 @@ template<typename T> vcl_string toString(const T& t)
   strm << fixed << t;
   vcl_string str(strm.str());
   return str;
-
 }
 
-class vsl_basic_xml_element{
-public:
+class vsl_basic_xml_element
+{
+ public:
   //: constructs with a name
   vsl_basic_xml_element(vcl_string tag)
-    : tag_(tag){};
+    : tag_(tag) {}
 
   //: constructs with a name and a list of (attibute,value) pair
   vsl_basic_xml_element(vcl_string tag, vcl_vector<vcl_pair<vcl_string, vcl_string> > attrs)
-    : tag_(tag), attrs_(attrs){};
+    : tag_(tag), attrs_(attrs) {}
 
-  //:destructor
-  ~vsl_basic_xml_element(){};
+  //destructor
+  ~vsl_basic_xml_element() {}
 
-  //void add_attribute(vcl_pair<vcl_string, vcl_string> attr);
   //: overloaded add_attribute methods to add different types of values as string
   void add_attribute(vcl_string attr_name, double value);
   void add_attribute(vcl_string attr_name, int value);
   void add_attribute(vcl_string attr_name, vcl_string value);
+#if 0
+  void add_attribute(vcl_pair<vcl_string, vcl_string> attr);
+#endif
 
   void add_attribute_list(vcl_vector<vcl_pair<vcl_string, vcl_string> > attrs);
 
@@ -56,18 +56,17 @@ public:
   void append_cdata(double cdata);
   void append_cdata(int cdata);
 
-  void x_write(vcl_ostream& ostream);
+  void x_write(vcl_ostream& ostr);
   //: writes the opening tag to the stream
-  void x_write_open(vcl_ostream& ostream);
+  void x_write_open(vcl_ostream& ostr);
 
   //: writes the closing tag to the stream
-  void x_write_close(vcl_ostream& ostream); 
+  void x_write_close(vcl_ostream& ostr); 
 
-protected:
+ protected:
   vcl_string tag_;
   vcl_vector<vcl_pair<vcl_string, vcl_string> > attrs_;
   vcl_string cdata_;
-
 };
 
 #endif // vsl_basic_xml_element_h_
