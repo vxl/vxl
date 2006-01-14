@@ -152,7 +152,9 @@ brip_vil_float_ops::half_resolution(vil_image_view<float> const& input,
   delete [] in3;  delete [] in4;
   delete [] out0;  delete [] out1; delete [] out2;
   delete [] out3;  delete [] out4;
+#ifdef DEBUG
   vcl_cout << "\nDownsample a "<< w <<" x " << h << " image in "<< t.real() << " msecs.\n";
+#endif
   return output;
 }
 
@@ -379,7 +381,9 @@ non_maximum_suppression(vil_image_view<float> const& input,
         value.push_back(max_v);
       }
     }
+#ifdef DEBUG
   vcl_cout << "\nCompute non-maximum suppression on a "<< w <<" x " << h << " image in "<< t.real() << " msecs.\n";
+#endif
 }
 
 // -----------------------------------------------------------------
@@ -529,7 +533,9 @@ void brip_vil_float_ops::hessian_3x3(vil_image_view<float> const& input,
   brip_vil_float_ops::fill_y_border(Ixy, 1, 0.0f);
   brip_vil_float_ops::fill_x_border(Iyy, 1, 0.0f);
   brip_vil_float_ops::fill_y_border(Iyy, 1, 0.0f);
+#ifdef DEBUG
   vcl_cout << "\nCompute a hessian matrix "<< w <<" x " << h << " image in "<< t.real() << " msecs.\n";
+#endif
 }
 
 vil_image_view<float>
@@ -611,7 +617,9 @@ brip_vil_float_ops::grad_matrix_NxN(vil_image_view<float> const& input,
   brip_vil_float_ops::fill_y_border(IxIy, n, 0.0f);
   brip_vil_float_ops::fill_x_border(IyIy, n, 0.0f);
   brip_vil_float_ops::fill_y_border(IyIy, n, 0.0f);
+#ifdef DEBUG
   vcl_cout << "\nCompute a gradient matrix "<< w <<" x " << h << " image in "<< t.real() << " msecs.\n";
+#endif
 }
 
 vil_image_view<float>
@@ -677,7 +685,9 @@ brip_vil_float_ops::sqrt_grad_singular_values(vil_image_view<float> & input,
     }
   brip_vil_float_ops::fill_x_border(output, n, 0.0f);
   brip_vil_float_ops::fill_y_border(output, n, 0.0f);
+#ifdef DEBUG
   vcl_cout << "\nCompute sqrt(sigma0*sigma1) in" << t.real() << " msecs.\n";
+#endif
   return output;
 }
 
@@ -741,7 +751,9 @@ brip_vil_float_ops::Lucas_KanadeMotion(vil_image_view<float> & current_frame,
   brip_vil_float_ops::fill_y_border(vx, n, 0.0f);
   brip_vil_float_ops::fill_x_border(vy, n, 0.0f);
   brip_vil_float_ops::fill_y_border(vy, n, 0.0f);
+#ifdef DEBUG
   vcl_cout << "\nCompute Lucas-Kanade in " << t.real() << " msecs.\n";
+#endif
 }
 
 //---------------------------------------------------------------------
@@ -851,46 +863,49 @@ Horn_SchunckMotion(vil_image_view<float> const& current_frame,
   temp1.fill(0.0);
   temp2.fill(0.0);
   //Iterate
+#ifdef DEBUG
   vul_timer t;
-
+#endif
   for (int i=0;i<no_of_iterations;i++)
   {
     // Update vx and vy
+      //Smoothed velocities on 3x3 region
+      temp1 = brip_vil_float_ops::average_NxN (vx,  3);
+      temp2 = brip_vil_float_ops::average_NxN (vy,  3);
 
-    //Smoothed velocities on 3x3 region
-    temp1 = brip_vil_float_ops::average_NxN (vx,  3);
-    temp2 = brip_vil_float_ops::average_NxN (vy,  3);
+      for (unsigned y = 1; y<h-1;y++)
+        for (unsigned x = 1; x<w-1;x++)
+          {
+            float tempx = temp1(x,y);
+            float tempy = temp2(x,y);
 
-    for (unsigned y = 1; y<h-1;y++)
-      for (unsigned x = 1; x<w-1;x++)
-      {
-        float tempx = temp1(x,y);
-        float tempy = temp2(x,y);
+            float gx = grad_x(x, y), gy = grad_y(x, y);
 
-        float gx = grad_x(x, y), gy = grad_y(x, y);
+            float dt = diff(x, y);
+            //         _____
+            // term = (v(x,y).Grad(x,y) + dI/dt(x,y))/(alpha + |Grad(x,y)|^2)
+            // term is the brightness constraint normalized by gradient mag.
+            //
+            float term =
+              ( (gx * tempx) + (gy * tempy) + dt )/ (alpha_coef + gx*gx + gy*gy);
 
-        float dt = diff(x, y);
-        //         _____
-        // term = (v(x,y).Grad(x,y) + dI/dt(x,y))/(alpha + |Grad(x,y)|^2)
-        // term is the brightness constraint normalized by gradient mag.
-        //
-        float term =
-          ( (gx * tempx) + (gy * tempy) + dt )/ (alpha_coef + gx*gx + gy*gy);
+            //         ______
+            //v(x,y) = v(x,y) - Grad(x,y)* term
+            vx(x,y) = tempx - (gx *  term);
+            vy(x,y) = tempy - (gy *  term);
+          }
 
-        //         ______
-        //v(x,y) = v(x,y) - Grad(x,y)* term
-        vx(x,y) = tempx - (gx *  term);
-        vy(x,y) = tempy - (gy *  term);
-      }
-
-    vcl_cout << "Iteration No " << i << '\n';
-    brip_vil_float_ops::fill_x_border(vx, 1, 0.0f);
-    brip_vil_float_ops::fill_y_border(vx, 1, 0.0f);
-    brip_vil_float_ops::fill_x_border(vy, 1, 0.0f);
-    brip_vil_float_ops::fill_y_border(vy, 1, 0.0f);
-  }
+#ifdef DEBUG
+      vcl_cout << "Iteration No " << i << '\n';
+#endif
+      brip_vil_float_ops::fill_x_border(vx, 1, 0.0f);
+      brip_vil_float_ops::fill_y_border(vx, 1, 0.0f);
+      brip_vil_float_ops::fill_x_border(vy, 1, 0.0f);
+      brip_vil_float_ops::fill_y_border(vy, 1, 0.0f);
+    }
+#ifdef DEBUG
   vcl_cout << "\nCompute Horn-Schunck iteration in " << t.real() << " msecs.\n";
-
+#endif
   return 0;
 }
 
@@ -1454,18 +1469,19 @@ vbl_array_2d<float> brip_vil_float_ops::load_kernel(vcl_string const& file)
   vbl_array_2d<float> output(N, N);
   for (unsigned y = 0; y<N; y++)
     for (unsigned x = 0; x<N; x++)
-    {
-      instr >> v;
-      output.put(x, y, v/scale);
-    }
+      {
+        instr >> v;
+        output.put(x, y, v/scale);
+      }
+#ifdef DEBUG
   vcl_cout << "The Kernel\n";
   for (unsigned y = 0; y<N; y++)
-  {
-    for (unsigned x = 0; x<N; x++)
-      vcl_cout << ' ' <<  output[x][y];
-    vcl_cout << '\n';
-  }
-  return output;
+    {
+      for (unsigned x = 0; x<N; x++)
+        vcl_cout << ' ' <<  output[x][y];
+      vcl_cout << '\n';
+    }
+#endif
 }
 
 static void insert_image(vil_image_view<float> const& image, int col,
@@ -1497,15 +1513,18 @@ basis_images(vcl_vector<vil_image_view<float> > const& input_images,
     insert_image(input_images[i], i, I);
 
   //Compute the SVD of matrix I
+#ifdef DEBUG
   vcl_cout << "Computing Singular values of a " <<  npix << " by "
            << n_images << " matrix\n";
   vul_timer t;
+#endif
   vnl_svd<float> svd(I);
+#ifdef DEBUG
   vcl_cout << "SVD Took " << t.real() << " msecs\n"
            << "Eigenvalues:\n";
   for (unsigned i = 0; i<n_images; i++)
     vcl_cout << svd.W(i) << '\n';
-
+#endif
   //Extract the Basis images
   unsigned rank = svd.rank();
   if (!rank)
@@ -2693,8 +2712,10 @@ float brip_vil_float_ops::minfo_i(const unsigned i0, const unsigned j0,
   float H1 = hi1.entropy();
   float HJ = hji.entropy();
   float minfo_i = H0 + H1 - HJ;
-  if (minfo<0)
-    vcl_cout << "intensity MI LT 0 " << minfo << '\n';
+#ifdef DEBUG
+  if(minfo<0)
+	  vcl_cout << "intensity MI LT 0 " << minfo <<"\n";
+#endif
   return minfo_i;
 }
 
@@ -2730,8 +2751,10 @@ float brip_vil_float_ops::minfo_g(const unsigned i0, const unsigned j0,
   float H1 = hg1.entropy();
   float HJ = hjg.entropy();
   float minfo_g = H0 + H1 - HJ;
-  if (minfo<0)
-    vcl_cout << "gradient MI LT 0 " << minfo << '\n';
+#ifdef DEBUG
+  if(minfo<0)
+	  vcl_cout << "gradient MI LT 0 " << minfo <<"\n";
+#endif
   return minfo_g;
 }
 
@@ -2763,8 +2786,10 @@ float brip_vil_float_ops::minfo_hs(const unsigned i0, const unsigned j0,
   float H1 = hh1.entropy();
   float HJ = hjh.entropy();
   float minfo_h = H0 + H1 - HJ;
-  if (minfo<0)
-    vcl_cout << "color MI LT 0 " << minfo << '\n';
+#ifdef DEBUG
+  if(minfo<0)
+	  vcl_cout << "color MI LT 0 " << minfo <<"\n";
+#endif
   return minfo_h;
 }
 
