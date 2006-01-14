@@ -12,8 +12,9 @@
 // \verbatim
 // Modifications
 // 22 Apr 2003: Amitha Perera - converted to vil
+// 31 Dec 2005: J.L. Mundy - extended to read 16 bit images - didn't extend writing
 // \endverbatim
-
+// 
 #include <vil/vil_image_resource.h>
 #include <vil/vil_file_format.h>
 #include <vil/vil_stream.h>

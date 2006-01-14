@@ -109,12 +109,11 @@ make_input_image( vil_stream* vs )
 
 
 vil_image_resource_sptr
-vil_ras_file_format::
-make_output_image( vil_stream* vs,
-                   unsigned ni,
-                   unsigned nj,
-                   unsigned nplanes,
-                   vil_pixel_format format )
+vil_ras_file_format::make_output_image( vil_stream* vs,
+                                        unsigned ni,
+                                        unsigned nj,
+                                        unsigned nplanes,
+                                        vil_pixel_format format)
 {
   return new vil_ras_image(vs, ni, nj, nplanes, format );
 }
@@ -233,6 +232,11 @@ read_header( )
     return false;
 
   // Do consistency checks of the header
+  if ( map_type_ != RMT_NONE || depth_ == 24 ) {
+    components_ = 3;
+  } else {
+    components_ = 1;
+  }
 
   if (type_ != RT_OLD && type_ != RT_STANDARD &&
       type_ != RT_BYTE_ENCODED && type_ != RT_FORMAT_RGB ) {
@@ -248,7 +252,7 @@ read_header( )
     return false;
   }
 
-  if ( depth_ != 8 && depth_ != 24 ) {
+  if ( depth_ != 8 && !(depth_== 16&&components_==1) && depth_ != 24 ) {
     vcl_cerr << __FILE__ << ": depth " << depth_ << " not implemented\n";
     return false;
   }
@@ -280,13 +284,9 @@ read_header( )
 
   start_of_data_ = vs_->tell();
 
-  if ( map_type_ != RMT_NONE || depth_ == 24 ) {
-    components_ = 3;
-  } else {
-    components_ = 1;
-  }
   bits_per_component_ = 8;
-
+  if(components_==1)
+    bits_per_component_ = depth_;
   return true;
 }
 
@@ -339,15 +339,16 @@ nj() const
   return height_;
 }
 
-
 vil_pixel_format
 vil_ras_image::
 pixel_format() const
 {
-  assert( bits_per_component_ == 8 );
-  return VIL_PIXEL_FORMAT_BYTE;
+  if(bits_per_component_ == 8)
+    return VIL_PIXEL_FORMAT_BYTE;
+  if(bits_per_component_ == 16)
+    return VIL_PIXEL_FORMAT_UINT_16;
+  return VIL_PIXEL_FORMAT_UNKNOWN;
 }
-
 
 vil_image_view_base_sptr
 vil_ras_image::
@@ -363,8 +364,9 @@ get_copy_view( unsigned i0, unsigned ni,
   file_byte_width += ( file_byte_width % 2 ); // each scan line ends on a 16bit boundary
   vil_streampos file_byte_start = start_of_data_ + j0 * file_byte_width + i0 * file_bytes_per_pixel;
   unsigned buff_byte_width = ni * buff_bytes_per_pixel;
+  vil_pixel_format fmt = pixel_format();
+  vil_memory_chunk_sptr buf = new vil_memory_chunk(ni * nj * buff_bytes_per_pixel, fmt );
 
-  vil_memory_chunk_sptr buf = new vil_memory_chunk(ni * nj * components_, VIL_PIXEL_FORMAT_BYTE );
   vxl_uint_8* ib = reinterpret_cast<vxl_uint_8*>( buf->data() );
 
   if ( !col_map_ ) {
@@ -404,10 +406,29 @@ get_copy_view( unsigned i0, unsigned ni,
       }
     }
   }
-
-  return new vil_image_view<vxl_byte>( buf, ib,
-                                       ni, nj, components_,
-                                       components_, components_*ni, 1 );
+  if(fmt==VIL_PIXEL_FORMAT_BYTE)
+    return new vil_image_view<vxl_byte>( buf, ib,
+                                         ni, nj, components_,
+                                         components_, components_*ni, 1 );
+  if(fmt==VIL_PIXEL_FORMAT_UINT_16&&components_==1)
+  {
+    //Sun raster format is always written in big endian format so we may need to reverse the bytes
+#if(VXL_LITTLE_ENDIAN)
+    vxl_byte s[2];
+    for(unsigned long is = 0; is<ni*nj*2; is+=2)
+      {
+        s[0]= *(ib+is);
+        s[1]= *(ib+is+1);
+        *(ib+is)=s[1];
+        *(ib+is+1)=s[0];
+      }
+#endif
+    vxl_uint_16* sib = reinterpret_cast<vxl_uint_16*>(ib);
+    return new vil_image_view<vxl_uint_16>( buf, sib,
+                                         ni, nj, components_,
+                                         components_, components_*ni, 1 );
+  }
+	return 0;
 }
 
 
