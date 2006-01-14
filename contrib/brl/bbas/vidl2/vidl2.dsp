@@ -18,6 +18,15 @@ SOURCE=.\vidl2_image_list_istream.cxx
 # Begin Source File
 SOURCE=.\vidl2_image_list_ostream.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vidl2_dc1394_istream.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_iidc1394_params.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_pixel_format.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -44,6 +53,15 @@ SOURCE=.\vidl2_istream.h
 # End Source File
 # Begin Source File
 SOURCE=.\vidl2_ostream.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_dc1394_istream.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_iidc1394_params.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_pixel_format.h
 # End Source File
 # End Group
 # End Target
