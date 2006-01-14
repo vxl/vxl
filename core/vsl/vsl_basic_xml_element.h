@@ -16,12 +16,13 @@
 #include <vcl_string.h>
 #include <vcl_sstream.h>
 #include <vcl_iostream.h>
+#include <vcl_iomanip.h> // for vcl_fixed
 
 template<typename T> vcl_string toString(const T& t)
 {
   vcl_stringstream strm;
 
-  strm << fixed << t;
+  strm << vcl_fixed << t;
   vcl_string str(strm.str());
   return str;
 }
