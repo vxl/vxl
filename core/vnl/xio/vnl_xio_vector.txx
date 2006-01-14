@@ -16,10 +16,10 @@ void x_write(vcl_ostream & os, const vnl_vector<T> & p, vcl_string name)
   element.add_attribute("size", (int) p.size());
   for (unsigned i=0; i<p.size(); i++)
     element.append_cdata(p.get(i));
-  element.x_write(os);  
+  element.x_write(os);
 }
 
 #define VNL_XIO_VECTOR_INSTANTIATE(T) \
-template void x_write(vcl_ostream &, const vnl_vector<T> &, vcl_string)
+template void x_write(vcl_ostream &, const vnl_vector<T > &, vcl_string)
 
 #endif // vnl_xio_vector_txx_

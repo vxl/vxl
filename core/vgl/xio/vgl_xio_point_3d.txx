@@ -1,4 +1,4 @@
-// This is core/vgl/io/vgl_io_point_3d.txx
+// This is core/vgl/xio/vgl_xio_point_3d.txx
 #ifndef vgl_xio_point_3d_txx_
 #define vgl_xio_point_3d_txx_
 //:
@@ -12,15 +12,15 @@
 //: XML write self to stream.
 template<class T>
 void x_write(vcl_ostream &os, const vgl_point_3d<T> & p, vcl_string element_name)
-{  
-    vsl_basic_xml_element xml_element(element_name);
-    xml_element.add_attribute("x", p.x());
-    xml_element.add_attribute("y", p.y());
-    xml_element.add_attribute("z", p.z());
-    xml_element.x_write(os);
+{
+  vsl_basic_xml_element xml_element(element_name);
+  xml_element.add_attribute("x", p.x());
+  xml_element.add_attribute("y", p.y());
+  xml_element.add_attribute("z", p.z());
+  xml_element.x_write(os);
 }
 
 #define VGL_XIO_POINT_3D_INSTANTIATE(T) \
-template void x_write(vcl_ostream &, const vgl_point_3d<T> &, vcl_string)
+template void x_write(vcl_ostream &, const vgl_point_3d<T > &, vcl_string)
 
 #endif // vgl_xio_point_3d_txx_

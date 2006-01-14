@@ -10,7 +10,8 @@
 //============================================================================
 //: Binary save self to stream.
 template<class T>
-void x_write(vcl_ostream &os, const vgl_point_2d<T> & v, vcl_string name){
+void x_write(vcl_ostream &os, const vgl_point_2d<T> & v, vcl_string name)
+{
   vsl_basic_xml_element element(name);
   element.add_attribute("x", v.x());
   element.add_attribute("y", v.y());
@@ -18,6 +19,6 @@ void x_write(vcl_ostream &os, const vgl_point_2d<T> & v, vcl_string name){
 }
 
 #define VGL_XIO_POINT_2D_INSTANTIATE(T) \
-template void x_write(vcl_ostream &, const vgl_point_2d<T> &, vcl_string)
+template void x_write(vcl_ostream &, const vgl_point_2d<T > &, vcl_string)
 
 #endif // vgl_xio_point_2d_txx_

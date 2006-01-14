@@ -1,4 +1,4 @@
-// This is core/vnl/xio/vnl_xio_matrix_fixed.txx
+// This is core/vnl/xio/vnl_xio_quaternion.txx
 #ifndef vnl_xio_quaternion_txx_
 #define vnl_xio_quaternion_txx_
 //:
@@ -22,6 +22,6 @@ void x_write(vcl_ostream & os, const vnl_quaternion<T> & p, vcl_string name)
 }
 
 #define VNL_XIO_QUATERNION_INSTANTIATE(T) \
-template void x_write(vcl_ostream &, const vnl_quaternion<T> &, vcl_string name)
+template void x_write(vcl_ostream &, const vnl_quaternion<T > &, vcl_string name)
 
-#endif // vnl_io_quaternion_txx_
+#endif // vnl_xio_quaternion_txx_
