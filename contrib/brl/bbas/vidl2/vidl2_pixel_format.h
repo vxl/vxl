@@ -1,4 +1,4 @@
-// This is contrib/brl/bbas/vidl2/vidl2_pixel_format.h
+// This is brl/bbas/vidl2/vidl2_pixel_format.h
 #ifndef vidl2_pixel_format_h_
 #define vidl2_pixel_format_h_
 //:
@@ -126,7 +126,7 @@ unsigned
 vidl2_pixel_format_bpp(vidl2_pixel_format f);
 
 
-//: Return true if pixels in format f are packed into macropixels 
+//: Return true if pixels in format f are packed into macropixels
 bool
 vidl2_pixel_format_packed(vidl2_pixel_format f);
 
@@ -141,7 +141,7 @@ vcl_ostream &
 operator << (vcl_ostream &os, vidl2_pixel_format f);
 
 
-//: Convert a string into a pixel format. 
+//: Convert a string into a pixel format.
 vcl_string
 vidl2_pixel_format_to_string(vidl2_pixel_format f);
 

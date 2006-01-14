@@ -1,4 +1,4 @@
-// This is contrib/brl/bbas/vidl2/vidl2_iidc1394_params.h
+// This is brl/bbas/vidl2/vidl2_iidc1394_params.h
 #ifndef vidl2_iidc1394_params_h_
 #define vidl2_iidc1394_params_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -31,7 +31,6 @@
 // \endcode
 struct vidl2_iidc1394_params
 {
-
   //: Available data transfer speeds
   enum speed_t { ISO_SPEED_100= 0,
                  ISO_SPEED_200,
@@ -145,7 +144,6 @@ struct vidl2_iidc1394_params
   //: Set the video mode
   vidl2_iidc1394_params& video_mode(video_mode_t m)
   { video_mode_ = m; return *this; }
-
 };
 
 //=============================================================================
@@ -161,6 +159,7 @@ struct vidl2_iidc1394_params::valid_options
     video_mode_t mode;
     vcl_vector<frame_rate_t> frame_rates;
   };
+
   //: A valid camera and its options
   struct camera
   {
@@ -177,6 +176,4 @@ struct vidl2_iidc1394_params::valid_options
   vcl_vector<camera> cameras;
 };
 
-
 #endif // vidl2_iidc1394_params_h_
-

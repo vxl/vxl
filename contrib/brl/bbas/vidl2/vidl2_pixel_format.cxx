@@ -1,4 +1,4 @@
-// This is contrib/brl/bbas/vidl2/vidl2_pixel_format.cxx
+// This is brl/bbas/vidl2/vidl2_pixel_format.cxx
 #include "vidl2_pixel_format.h"
 //:
 // \file
@@ -6,41 +6,41 @@
 //
 
 
-//: Recursive template metaprogram to generate conditionals
-// for checking the traits of each defined pixel type 
+//: Recursive template metaprogram to generate conditionals for checking the traits of each defined pixel type 
 template <vidl2_pixel_format pix_type>
-struct check_types{
+struct check_types
+{
   static inline unsigned bpp(vidl2_pixel_format f)
   {
-    if(f == pix_type)
+    if (f == pix_type)
       return vidl2_pixel_traits<pix_type>::bits_per_pixel();
     return check_types<vidl2_pixel_format(pix_type-1)>::bpp(f);
   }
 
   static inline bool packed(vidl2_pixel_format f)
   {
-    if(f == pix_type)
+    if (f == pix_type)
       return vidl2_pixel_traits<pix_type>::packed();
     return check_types<vidl2_pixel_format(pix_type-1)>::packed(f);
   }
 
   static inline bool planar(vidl2_pixel_format f)
   {
-    if(f == pix_type)
+    if (f == pix_type)
       return vidl2_pixel_traits<pix_type>::planar();
     return check_types<vidl2_pixel_format(pix_type-1)>::planar(f);
   }
 
   static inline vidl2_pixel_format from_string(const vcl_string& s)
   {
-    if(s == vidl2_pixel_traits<pix_type>::name())
+    if (s == vidl2_pixel_traits<pix_type>::name())
       return pix_type;
     return check_types<vidl2_pixel_format(pix_type-1)>::from_string(s);
   }
 
   static inline vcl_string to_string(vidl2_pixel_format f)
   {
-    if(f == pix_type)
+    if (f == pix_type)
       return vidl2_pixel_traits<pix_type>::name();
     return check_types<vidl2_pixel_format(pix_type-1)>::to_string(f);
   }
@@ -49,7 +49,8 @@ struct check_types{
 
 //: The base case: unknown pixel type
 VCL_DEFINE_SPECIALIZATION
-struct check_types<VIDL2_PIXEL_FORMAT_UNKNOWN>{
+struct check_types<VIDL2_PIXEL_FORMAT_UNKNOWN>
+{
   static inline unsigned bpp(vidl2_pixel_format f)
   {
     return vidl2_pixel_traits<VIDL2_PIXEL_FORMAT_UNKNOWN>::bits_per_pixel();

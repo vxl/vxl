@@ -1,4 +1,4 @@
-// This is contrib/brl/bbas/vidl2/tests/test_pixel_format.cxx
+// This is brl/bbas/vidl2/tests/test_pixel_format.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
@@ -8,7 +8,7 @@
 static void test_pixel_format()
 {
   vcl_cout << "****************************\n"
-           << " Testing vidl2_pixel_format \n"
+           << " Testing vidl2_pixel_format\n"
            << "****************************\n";
 
   TEST("vidl2_pixel_format_bpp",
@@ -32,14 +32,12 @@ static void test_pixel_format()
        VIDL2_PIXEL_FORMAT_YUV_420P );
 
   vcl_cout << "\nSupported pixel types:\n";
-  for(vidl2_pixel_format fmt = VIDL2_PIXEL_FORMAT_UNKNOWN;
-      fmt != VIDL2_PIXEL_FORMAT_ENUM_END; fmt = vidl2_pixel_format(fmt+1))
+  for (vidl2_pixel_format fmt = VIDL2_PIXEL_FORMAT_UNKNOWN;
+       fmt != VIDL2_PIXEL_FORMAT_ENUM_END; fmt = vidl2_pixel_format(fmt+1))
   {
-    vcl_cout << "  " <<vcl_setw(15) <<fmt <<" "<<vidl2_pixel_format_bpp(fmt)<<" bpp" << '\n';
+    vcl_cout << "  " <<vcl_setw(15) <<fmt <<' '<<vidl2_pixel_format_bpp(fmt)<<" bpp\n";
   }
   vcl_cout << vcl_endl;
-
 }
 
 TESTMAIN(test_pixel_format);
-

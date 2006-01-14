@@ -1,4 +1,4 @@
-// This is contrib/brl/bbas/vidl2/vidl2_iidc1394_params.cxx
+// This is brl/bbas/vidl2/vidl2_iidc1394_params.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -30,7 +30,8 @@ unsigned int
 vidl2_iidc1394_params::
 speed_val(speed_t s)
 {
-  switch(s){
+  switch (s)
+  {
     case ISO_SPEED_100:  return 100;
     case ISO_SPEED_200:  return 200;
     case ISO_SPEED_400:  return 400;
@@ -47,7 +48,8 @@ float
 vidl2_iidc1394_params::
 frame_rate_val(frame_rate_t r)
 {
-  switch(r){
+  switch (r)
+  {
     case FRAMERATE_1_875: return 1.875f;
     case FRAMERATE_3_75:  return 3.75f;
     case FRAMERATE_7_5:   return 7.5f;
@@ -66,7 +68,8 @@ vcl_string
 vidl2_iidc1394_params::
 video_mode_string(video_mode_t m)
 {
-  switch(m){
+  switch (m)
+  {
     case MODE_160x120_YUV444:   return "160x120 YUV(4:4:4)";
     case MODE_320x240_YUV422:   return "320x240 YUV(4:2:2)";
     case MODE_640x480_YUV411:   return "640x480 YUV(4:1:1)";
@@ -131,4 +134,3 @@ video_mode(unsigned int format, unsigned int mode)
   assert(mode < 8);
   return (vidl2_iidc1394_params::video_mode_t) (((format+2) << 5) + mode);
 }
-
