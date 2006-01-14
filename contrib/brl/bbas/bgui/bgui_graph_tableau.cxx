@@ -1,5 +1,7 @@
 // This is brl/bbas/bgui/bgui_graph_tableau.cxx
 #include <bgui/bgui_graph_tableau.h>
+//:
+// \file
 #include <vcl_cmath.h> //for fabs()
 #include <vgui/vgui.h>
 #include <vgui/vgui_gl.h>
@@ -78,7 +80,7 @@ double bgui_graph_tableau::map_display_to_val(const int display_x)
 
 void bgui_graph_tableau::draw_graph()
 {
-  if(data_.size() == 0)
+  if (data_.size() == 0)
     return;
 
   double max = data_[0];
@@ -122,7 +124,7 @@ bool bgui_graph_tableau::update(vcl_vector<double> const& data)
 {
   if (!data.size())
     return false;
-  
+
   data_ = data;
   draw_graph();
   return true;
