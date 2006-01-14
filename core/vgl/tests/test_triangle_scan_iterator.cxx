@@ -30,7 +30,7 @@ static void test_triangle_scan_iterator()
     ti_more = ti.next();
     pi_more = pi.next();
   }
-  if ( ti_more != pi.next() ) failed = true;
+  if ( ti_more != pi_more ) failed = true;
 
   TEST("Triangle scan iterator == polygon scan iterator", failed, false);
 }
