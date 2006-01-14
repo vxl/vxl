@@ -500,10 +500,10 @@ static void test_save_load_image()
   vil_test_image_type("tiff", image3p);
   vil_test_image_type("tiff", image1); // boolean works now! - PVr, Dec. 2003
 #if 1 // >1 byte pixels don't work (yet): Should work now JLM Jan. 2006
-  vil_test_image_type("tiff", image16, true, true);
-  vil_test_image_type("tiff", image32, true, true);
-  vil_test_image_type("tiff", imagefloat, true, true);
-  vil_test_image_type("tiff", imagedouble, true, true);
+  vil_test_image_type("tiff", image16);
+  vil_test_image_type("tiff", image32);
+  vil_test_image_type("tiff", imagefloat);
+  vil_test_image_type("tiff", imagedouble);
 #endif
 
 
