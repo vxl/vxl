@@ -3,6 +3,7 @@ USES += contrib/brl contrib/brl/bbas core
 LIBRARY := vidl2
 VERSION := 1.0
 
+SOURCES += vidl2_pixel_format.cxx
 SOURCES += vidl2_ffmpeg_init.cxx
 SOURCES += vidl2_ffmpeg_istream.cxx
 SOURCES += vidl2_ffmpeg_ostream.cxx
@@ -11,12 +12,15 @@ SOURCES += vidl2_image_list_istream.cxx
 SOURCES += vidl2_image_list_ostream.cxx
 MANPAGE_SOURCES += vidl2_istream.h
 MANPAGE_SOURCES += vidl2_ostream.h
+SOURCES += vidl2_dc1394_istream.cxx
+SOURCES += vidl2_iidc1394_params.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
+ SUBDIRS += tests
  SUBDIRS += examples
 endif
 
