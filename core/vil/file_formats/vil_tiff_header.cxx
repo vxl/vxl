@@ -1,5 +1,4 @@
 #include "vil_tiff_header.h"
-#include <tiffiop.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdio.h>
 #include <vcl_ctime.h>
@@ -7,18 +6,20 @@
 
 static vcl_string date_and_time()
 {
-#if 0
+  //temporary fix
+# if defined(VCL_BORLAND)
+ return vcl_string("TIMEDATE: NOT AVAILABLE");
+# else
   vcl_time_t clock;
   struct tm *t_m;
   clock = vcl_time(NULL);
-  t_m = localtime(&clock);
+  t_m = vcl_localtime(&clock);
   char tmp[20];
   char datetime[20];
   vcl_strftime(tmp,sizeof(datetime),"%c",t_m);
-  sprintf(datetime,"%19s",tmp);
+  vcl_sprintf(datetime,"%19s",tmp);
   return vcl_string(datetime);
 #endif
-  return vcl_string("DATE and TIME NOT IMPLEMENTED");
 }
 
 static void read_string(TIFF* tif, ttag_t tag, vcl_string& stag, vcl_string const& deflt = "not_defined")
@@ -54,7 +55,6 @@ static bool read_long_array(TIFF* tif, ttag_t tag,
     {
       for(unsigned long i = 0; i<array.size(); ++i)
         {
-          vcl_cout << "A[" << i << "]=" << a[i] << '\n';; 
           array[i]=a[i];
         }
 
@@ -88,7 +88,7 @@ bool vil_tiff_header::read_header()
 #endif DEBUG
   //====
   //Determine the endian state of the file and machine
-  file_is_big_endian_ = tif_->tif_header.tiff_magic==TIFF_BIGENDIAN;
+  file_is_big_endian_ = TIFFIsByteSwapped(tif_)>0;
 
   //also need machine endian 
 #if(VXL_BIG_ENDIAN)
@@ -123,7 +123,9 @@ bool vil_tiff_header::read_header()
           vcl_vector<unsigned short> rgb(3);
           rgb[0]=cm[0][i];  rgb[1]=cm[1][i];  rgb[2]=cm[2][i];
           color_map[i] = rgb;
+#ifdef DEBUG
           vcl_cout << "RGB[" << i << "]=(" << rgb[0] << ' ' << rgb[1] << ' ' << rgb[2] << ")\n";
+#endif
         }
       color_map_valid = true;
     }
