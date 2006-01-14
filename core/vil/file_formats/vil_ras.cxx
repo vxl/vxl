@@ -200,7 +200,7 @@ vil_ras_image(vil_stream* vs,
 
 
 vil_ras_image::
-~vil_ras_image( )
+~vil_ras_image()
 {
   delete[] col_map_;
   vs_->unref();
@@ -210,7 +210,7 @@ vil_ras_image::
 //: Read the header of a Sun raster file.
 bool
 vil_ras_image::
-read_header( )
+read_header()
 {
   // Go to start of file
   vs_->seek(0);
@@ -285,7 +285,7 @@ read_header( )
   start_of_data_ = vs_->tell();
 
   bits_per_component_ = 8;
-  if(components_==1)
+  if (components_==1)
     bits_per_component_ = depth_;
   return true;
 }
@@ -343,9 +343,9 @@ vil_pixel_format
 vil_ras_image::
 pixel_format() const
 {
-  if(bits_per_component_ == 8)
+  if (bits_per_component_ == 8)
     return VIL_PIXEL_FORMAT_BYTE;
-  if(bits_per_component_ == 16)
+  if (bits_per_component_ == 16)
     return VIL_PIXEL_FORMAT_UINT_16;
   return VIL_PIXEL_FORMAT_UNKNOWN;
 }
@@ -369,7 +369,8 @@ get_copy_view( unsigned i0, unsigned ni,
 
   vxl_uint_8* ib = reinterpret_cast<vxl_uint_8*>( buf->data() );
 
-  if ( !col_map_ ) {
+  if ( !col_map_ )
+  {
     // No colourmap, so just read in the bytes.
     // Make the component order RGB to avoid surprising the user.
     for ( unsigned j = 0; j < nj; ++j ) {
@@ -387,7 +388,9 @@ get_copy_view( unsigned i0, unsigned ni,
         }
       }
     }
-  } else {
+  }
+  else
+  {
     assert( file_bytes_per_pixel == 1 && buff_bytes_per_pixel == 3 );
     unsigned col_len = map_length_ / 3;
     // Read a line, and map every index into an RGB triple
@@ -406,29 +409,29 @@ get_copy_view( unsigned i0, unsigned ni,
       }
     }
   }
-  if(fmt==VIL_PIXEL_FORMAT_BYTE)
+  if (fmt==VIL_PIXEL_FORMAT_BYTE)
     return new vil_image_view<vxl_byte>( buf, ib,
                                          ni, nj, components_,
                                          components_, components_*ni, 1 );
-  if(fmt==VIL_PIXEL_FORMAT_UINT_16&&components_==1)
+  if (fmt==VIL_PIXEL_FORMAT_UINT_16&&components_==1)
   {
     //Sun raster format is always written in big endian format so we may need to reverse the bytes
-#if(VXL_LITTLE_ENDIAN)
+#if (VXL_LITTLE_ENDIAN)
     vxl_byte s[2];
-    for(unsigned long is = 0; is<ni*nj*2; is+=2)
-      {
-        s[0]= *(ib+is);
-        s[1]= *(ib+is+1);
-        *(ib+is)=s[1];
-        *(ib+is+1)=s[0];
-      }
+    for (unsigned long is = 0; is<ni*nj*2; is+=2)
+    {
+      s[0]= *(ib+is);
+      s[1]= *(ib+is+1);
+      *(ib+is)=s[1];
+      *(ib+is+1)=s[0];
+    }
 #endif
     vxl_uint_16* sib = reinterpret_cast<vxl_uint_16*>(ib);
     return new vil_image_view<vxl_uint_16>( buf, sib,
-                                         ni, nj, components_,
-                                         components_, components_*ni, 1 );
+                                            ni, nj, components_,
+                                            components_, components_*ni, 1 );
   }
-	return 0;
+  return 0;
 }
 
 
@@ -486,8 +489,8 @@ put_view( const vil_image_view_base& view, unsigned i0, unsigned j0 )
     data_buffer.resize( buff_byte_width );
   }
 
-  for ( unsigned j = 0; j < section.nj(); ++j ) {
-
+  for ( unsigned j = 0; j < section.nj(); ++j )
+  {
     // Copy a line of the image into a contiguous buffer. No need to
     // optimize for the case with section is also appropriately
     // contiguous because the disk writing process will likely be the
