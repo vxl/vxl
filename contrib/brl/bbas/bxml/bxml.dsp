@@ -125,6 +125,9 @@ SOURCE=.\bxml_input_converter.cxx
 # Begin Source File
 SOURCE=.\bxml_vtol_vertex_2d_input_converter.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bxml_basic_element.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -161,8 +164,9 @@ SOURCE=.\bxml_vtol_vertex_2d_input_converter.h
 # Begin Source File
 SOURCE=.\bxml_vtol_zero_chain_2d_input_converter.h
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+# Begin Source File
+SOURCE=.\bxml_basic_element.h
+# End Source File
 # End Group
 # End Target
 # End Project
