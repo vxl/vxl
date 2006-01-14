@@ -1,8 +1,7 @@
 // This is core/vsl/vsl_basic_xml_element.cxx
+#include "vsl_basic_xml_element.h"
 //:
 // \file
-
-#include "vsl_basic_xml_element.h"
 
 void vsl_basic_xml_element::add_attribute_list(vcl_vector<vcl_pair<vcl_string, vcl_string> > attrs)
 {
