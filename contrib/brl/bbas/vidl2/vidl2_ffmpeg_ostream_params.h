@@ -1,4 +1,4 @@
-// This is contrib/brl/bbas/vidl2/vidl2_ffmpeg_ostream_params.h
+// This is brl/bbas/vidl2/vidl2_ffmpeg_ostream_params.h
 #ifndef vidl2_ffmpeg_ostream_params_h_
 #define vidl2_ffmpeg_ostream_params_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -8,12 +8,12 @@
 // \file
 // \brief A parameters struct for vidl2_ffmpeg_ostream
 //
-// \author Matt Leotta 
+// \author Matt Leotta
 // \date 3 Jan 2006
 //
 // \verbatim
 //  Modifications
-//    Matt Leotta   3 Jan 2006   Adapted from code by Amitha Perera
+//   Matt Leotta   3 Jan 2006   Adapted from code by Amitha Perera
 // \endverbatim
 
 #include <vcl_string.h>
@@ -174,9 +174,6 @@ struct vidl2_ffmpeg_ostream_params
   //: Set the size of the frames
   vidl2_ffmpeg_ostream_params& size( unsigned ni, unsigned nj )
   { ni_ = ni; nj_ = nj; return *this; }
-
 };
 
-
 #endif // vidl2_ffmpeg_ostream_params_h_
-

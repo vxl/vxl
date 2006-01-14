@@ -1,4 +1,4 @@
-// This is contrib/brl/bbas/vidl2/vidl2_image_list_ostream.cxx
+// This is brl/bbas/vidl2/vidl2_image_list_ostream.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -48,30 +48,29 @@ open(const vcl_string& directory,
      const vcl_string& file_format,
      const unsigned int init_index)
 {
-  if(!vul_file::is_directory(directory)){
+  if (!vul_file::is_directory(directory)) {
     close();
     vcl_cerr << __FILE__ ": Directory does not exist\n   "<<directory<<vcl_endl;
     return false;
   }
 
   bool valid_file_format = false;
-  for (vil_file_format** p = vil_file_format::all(); *p; ++p){
-    if(file_format == (*p)->tag()){
+  for (vil_file_format** p = vil_file_format::all(); *p; ++p) {
+    if (file_format == (*p)->tag()) {
       valid_file_format = true;
       break;
     }
   }
 
-  if(!valid_file_format){
+  if (!valid_file_format) {
     close();
     vcl_cerr << __FILE__ ": File format \'"<<file_format<<"\' not supported\n"
              << "   valid formats are: ";
     for (vil_file_format** p = vil_file_format::all(); *p; ++p)
-      vcl_cerr << " \'" << (*p)->tag() << "\'" << vcl_flush;
+      vcl_cerr << " \'" << (*p)->tag() << "\' " << vcl_flush;
     vcl_cerr << vcl_endl;
     return false;
   }
-
 
   dir_ = directory;
   name_format_ = name_format;
@@ -125,6 +124,4 @@ write_frame(const vil_image_resource_sptr& image)
                                  file_name.c_str(),
                                  file_format_.c_str());
 }
-
-
 

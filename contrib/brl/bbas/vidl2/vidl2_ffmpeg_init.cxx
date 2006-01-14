@@ -1,4 +1,4 @@
-// This is contrib/brl/bbas/vidl2/vidl2_ffmpeg_init.cxx
+// This is brl/bbas/vidl2/vidl2_ffmpeg_init.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -17,7 +17,7 @@
 void vidl2_ffmpeg_init()
 {
   static bool initialized = false;
-  if( ! initialized ) {
+  if ( ! initialized ) {
     av_register_all();
     av_log_set_level(AV_LOG_ERROR);
     initialized = true;

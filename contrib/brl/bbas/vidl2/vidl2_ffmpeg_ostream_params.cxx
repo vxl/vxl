@@ -1,4 +1,4 @@
-// This is contrib/brl/bbas/vidl2/vidl2_ffmpeg_ostream_params.cxx
+// This is brl/bbas/vidl2/vidl2_ffmpeg_ostream_params.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -98,7 +98,7 @@ vidl2_ffmpeg_ostream_params::vidl2_ffmpeg_ostream_params()
     // not supported by older versions of FFMPEG
     video_profile_( FF_PROFILE_UNKNOWN ),
     video_level_( FF_LEVEL_UNKNOWN ),
-#endif 
+#endif
     me_range_( 0 ),
     do_psnr_( 0 ),
     packet_size_( 0 ),

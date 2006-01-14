@@ -1,4 +1,4 @@
-// This is contrib/brl/bbas/vidl2/vidl2_ffmpeg_istream.cxx
+// This is brl/bbas/vidl2/vidl2_ffmpeg_istream.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -190,7 +190,7 @@ is_open() const
 
 
 //: Return true if the stream is in a valid state
-bool 
+bool
 vidl2_ffmpeg_istream::
 is_valid() const
 {
@@ -208,7 +208,7 @@ is_seekable() const
 
 
 //: Return the current frame number
-unsigned int 
+unsigned int
 vidl2_ffmpeg_istream::
 frame_number() const
 {
@@ -224,7 +224,7 @@ frame_number() const
 #else
       * is_->vid_str_->r_frame_rate.num / is_->vid_str_->r_frame_rate.den
       * is_->vid_str_->time_base.num + is_->vid_str_->time_base.den/2)
-          / is_->vid_str_->time_base.den  
+          / is_->vid_str_->time_base.den
 #endif
       - is_->frame_number_offset_;
 }
@@ -276,7 +276,7 @@ advance()
 
   // From ffmpeg apiexample.c: some codecs, such as MPEG, transmit the
   // I and P frame with a latency of one frame. You must do the
-  // following to have a chance to get the last frame of the video. 
+  // following to have a chance to get the last frame of the video.
   if ( !got_picture ) {
     avcodec_decode_video( codec,
                           is_->frame_, &got_picture,
@@ -284,7 +284,7 @@ advance()
 #if LIBAVFORMAT_BUILD <= 4623
       is_->last_dts += AV_TIME_BASE * is_->vid_str_->r_frame_rate_base / is_->vid_str_->r_frame_rate;
 #else
-      is_->last_dts += int64_t(is_->vid_str_->time_base.den) * is_->vid_str_->r_frame_rate.den 
+      is_->last_dts += int64_t(is_->vid_str_->time_base.den) * is_->vid_str_->r_frame_rate.den
                   / is_->vid_str_->time_base.num / is_->vid_str_->r_frame_rate.num;
 #endif
   }
@@ -305,7 +305,7 @@ advance()
 vil_image_resource_sptr
 vidl2_ffmpeg_istream::read_frame()
 {
-  if(advance())
+  if (advance())
     return current_frame();
   return NULL;
 }
@@ -355,7 +355,7 @@ vidl2_ffmpeg_istream::current_frame()
     is_->frame_number_offset_ = 1;
   }
 
-  if(is_->cur_img_)
+  if (is_->cur_img_)
     return vil_new_image_resource_of_view(is_->cur_img_);
   return NULL;
 }
@@ -378,9 +378,9 @@ seek_frame(unsigned int frame)
   int64_t req_timestamp = int64_t(AV_TIME_BASE) * frame * is_->vid_str_->r_frame_rate_base
                        / is_->vid_str_->r_frame_rate + is_->vid_str_->start_time;
 #else
-  int64_t frame_size = int64_t(is_->vid_str_->time_base.den) * is_->vid_str_->r_frame_rate.den 
+  int64_t frame_size = int64_t(is_->vid_str_->time_base.den) * is_->vid_str_->r_frame_rate.den
                        / is_->vid_str_->time_base.num / is_->vid_str_->r_frame_rate.num;
-  int64_t req_timestamp = int64_t(is_->vid_str_->time_base.den) * frame * is_->vid_str_->r_frame_rate.den 
+  int64_t req_timestamp = int64_t(is_->vid_str_->time_base.den) * frame * is_->vid_str_->r_frame_rate.den
                        / is_->vid_str_->time_base.num / is_->vid_str_->r_frame_rate.num + is_->vid_str_->start_time;
 #endif
 

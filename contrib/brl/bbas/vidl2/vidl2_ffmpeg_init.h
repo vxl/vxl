@@ -1,4 +1,4 @@
-// This is contrib/brl/bbas/vidl2/vidl2_ffmpeg_init.h
+// This is brl/bbas/vidl2/vidl2_ffmpeg_init.h
 #ifndef vidl2_ffmpeg_init_h_
 #define vidl2_ffmpeg_init_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -8,7 +8,7 @@
 // \file
 // \brief Initialization routine for FFMPEG
 //
-// \author Matt Leotta 
+// \author Matt Leotta
 // \date 21 Dec 2005
 //
 // \verbatim

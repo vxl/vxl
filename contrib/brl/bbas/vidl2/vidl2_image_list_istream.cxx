@@ -1,4 +1,4 @@
-// This is contrib/brl/bbas/vidl2/vidl2_image_list_istream.cxx
+// This is brl/bbas/vidl2/vidl2_image_list_istream.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -40,7 +40,6 @@ vidl2_image_list_istream(const vcl_string& glob)
   : index_(INIT_INDEX) { open(glob); }
 
 
-
 //: Open a new stream using an existing vector of images
 bool
 vidl2_image_list_istream::
@@ -68,11 +67,11 @@ open(const vcl_string& glob)
   }
 
   // no matching filenames
-  if(filenames.empty())
+  if (filenames.empty())
     return false;
 
   // Sort - because the file iterator uses readdir() it does not
-  //        iterate over files in alphanumeric order 
+  //        iterate over files in alphanumeric order
   vcl_sort(filenames.begin(),filenames.end());
 
   return open(filenames);
@@ -128,7 +127,7 @@ vidl2_image_list_istream::read_frame()
 vil_image_resource_sptr
 vidl2_image_list_istream::current_frame()
 {
-  if(is_valid())
+  if (is_valid())
     return images_[index_];
   else
     return NULL;
@@ -141,7 +140,7 @@ bool
 vidl2_image_list_istream::
 seek_frame(unsigned int frame_number)
 {
-  if(is_open() && frame_number < images_.size()){
+  if (is_open() && frame_number < images_.size()){
     index_ = frame_number;
     return true;
   }

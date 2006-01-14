@@ -1,4 +1,4 @@
-// This is contrib/brl/bbas/vidl2/examples/vidl2_player_manager.h
+// This is brl/bbas/vidl2/examples/vidl2_player_manager.h
 #ifndef vidl2_player_manager_h_
 #define vidl2_player_manager_h_
 //-----------------------------------------------------------------------------

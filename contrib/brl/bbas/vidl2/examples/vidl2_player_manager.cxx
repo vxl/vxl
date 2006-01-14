@@ -1,4 +1,4 @@
-// This is contrib/brl/bbas/vidl2/examples/vidl2_player_manager.cxx
+// This is brl/bbas/vidl2/examples/vidl2_player_manager.cxx
 #include "vidl2_player_manager.h"
 //:
 // \file
@@ -119,7 +119,8 @@ void vidl2_player_manager::open_image_list_istream()
     return;
   }
 
-  if(istream_->is_valid()){
+  if (istream_->is_valid())
+  {
     vil_image_resource_sptr img = istream_->current_frame();
     if (img) {
       height_ = img->nj();
@@ -157,7 +158,7 @@ void vidl2_player_manager::open_ffmpeg_istream()
     return;
   }
 
-  if(istream_->is_valid()){
+  if (istream_->is_valid()) {
     vil_image_resource_sptr img = istream_->current_frame();
     if (img) {
       height_ = img->nj();
@@ -172,7 +173,7 @@ void vidl2_player_manager::open_ffmpeg_istream()
   itab_->post_redraw();
   vgui::run_till_idle();
 }
-#endif
+#endif // HAS_FFMPEG
 
 
 #ifdef HAS_DC1394
@@ -187,24 +188,24 @@ void vidl2_player_manager::open_dc1394_istream()
   vidl2_iidc1394_params::valid_options options;
   vidl2_dc1394_istream::valid_params(options);
 
-  if(options.cameras.empty()){
+  if (options.cameras.empty()){
     vgui_error_dialog("No cameras found");
     return;
   }
 
 #ifndef NDEBUG
   vcl_cout << "Detected " << options.cameras.size() << " cameras\n";
-  for(unsigned int i=0; i<options.cameras.size(); ++i){
+  for (unsigned int i=0; i<options.cameras.size(); ++i){
     const vidl2_iidc1394_params::valid_options::camera& cam = options.cameras[i];
     vcl_cout << "Camera "<<i<<": "<< cam.vendor << " : " << cam.model
-        << " : node "<< cam.node <<" : port "<<cam.port<< '\n';
-    for(unsigned int j=0; j<cam.modes.size(); ++j){
+             << " : node "<< cam.node <<" : port "<<cam.port<< '\n';
+    for (unsigned int j=0; j<cam.modes.size(); ++j){
       const vidl2_iidc1394_params::valid_options::valid_mode& m = cam.modes[j];
       vcl_cout << "\tmode "<<j<<" : "
-          << vidl2_iidc1394_params::video_mode_string(m.mode) << '\n';
-      for(unsigned int k=0; k<m.frame_rates.size(); ++k){
+               << vidl2_iidc1394_params::video_mode_string(m.mode) << '\n';
+      for (unsigned int k=0; k<m.frame_rates.size(); ++k){
         vcl_cout << "\t\tframe rate : "
-            << vidl2_iidc1394_params::frame_rate_val(m.frame_rates[k]) << '\n';
+                 << vidl2_iidc1394_params::frame_rate_val(m.frame_rates[k]) << '\n';
       }
     }
   }
@@ -216,13 +217,13 @@ void vidl2_player_manager::open_dc1394_istream()
   // Select the camera
   //-----------------------------------
   static unsigned int camera_id = 0;
-  if(options.cameras.size() <= camera_id)
+  if (options.cameras.size() <= camera_id)
     camera_id = 0;
 
-  if(options.cameras.size() > 1){
+  if (options.cameras.size() > 1){
     vgui_dialog dlg("Select a IIDC 1394 camera");
     vcl_vector<vcl_string> camera_names;
-    for(unsigned int i=0; i<options.cameras.size(); ++i){
+    for (unsigned int i=0; i<options.cameras.size(); ++i){
       camera_names.push_back(options.cameras[i].vendor + " " + options.cameras[i].model);
     }
     dlg.choice("Camera",camera_names,camera_id);
@@ -235,16 +236,16 @@ void vidl2_player_manager::open_dc1394_istream()
 
   // Select the mode
   //-----------------------------------
-  if(cam.modes.empty())
+  if (cam.modes.empty())
   {
     vgui_error_dialog("No valid modes for this camera");
     return;
   }
   static unsigned int mode_id = 0;
-  if(cam.modes.size() > 1){
+  if (cam.modes.size() > 1){
     vgui_dialog dlg("Select a capture mode");
     vcl_vector<vcl_string> mode_names;
-    for(unsigned int i=0; i<cam.modes.size(); ++i){
+    for (unsigned int i=0; i<cam.modes.size(); ++i){
       mode_names.push_back(vidl2_iidc1394_params::video_mode_string(cam.modes[i].mode));
     }
     dlg.choice("Mode",mode_names,mode_id);
@@ -256,17 +257,17 @@ void vidl2_player_manager::open_dc1394_istream()
 
   // Select the frame rate
   //-----------------------------------
-  if(vidl2_iidc1394_params::video_format_val(m.mode) < 6){
-    if(m.frame_rates.empty())
+  if (vidl2_iidc1394_params::video_format_val(m.mode) < 6){
+    if (m.frame_rates.empty())
     {
       vgui_error_dialog("No valid frame rates for this mode");
       return;
     }
     static unsigned int fr_id = 0;
-    if(m.frame_rates.size() > 1){
+    if (m.frame_rates.size() > 1){
       vgui_dialog dlg("Select a frame rate");
       vcl_vector<vcl_string> rate_names;
-      for(unsigned int i=0; i<m.frame_rates.size(); ++i){
+      for (unsigned int i=0; i<m.frame_rates.size(); ++i){
         vcl_stringstream name;
         name << vidl2_iidc1394_params::frame_rate_val(m.frame_rates[i]) << " fps";
         rate_names.push_back(name.str());
@@ -290,7 +291,7 @@ void vidl2_player_manager::open_dc1394_istream()
     if (!dlg.ask())
       return;
   }
-  
+
   vidl2_dc1394_istream *dc_istream = new vidl2_dc1394_istream();
   dc_istream->open(dev_file, num_dma_buffers, drop_frames, params);
   delete istream_;
@@ -301,7 +302,7 @@ void vidl2_player_manager::open_dc1394_istream()
   }
 
 #if 0
-  if(istream_->is_valid()){
+  if (istream_->is_valid()) {
     vil_image_resource_sptr img = istream_->current_frame();
     if (img) {
       height_ = img->nj();
@@ -317,14 +318,14 @@ void vidl2_player_manager::open_dc1394_istream()
   itab_->post_redraw();
   vgui::run_till_idle();
 }
-#endif
+#endif // HAS_DC1394
 
 //-----------------------------------------------------------------------------
 //: close the input video stream
 //-----------------------------------------------------------------------------
 void vidl2_player_manager::close_istream()
 {
-  if(istream_)
+  if (istream_)
     istream_->close();
 
   this->redraw();
@@ -349,7 +350,7 @@ void vidl2_player_manager::open_image_list_ostream()
 
   // provide a list of choices for valid file formats
   static vcl_vector<vcl_string> fmt_choices;
-  if(fmt_choices.empty()){
+  if (fmt_choices.empty()) {
     for (vil_file_format** p = vil_file_format::all(); *p; ++p)
       fmt_choices.push_back((*p)->tag());
   }
@@ -400,10 +401,10 @@ void vidl2_player_manager::open_ffmpeg_ostream()
   int enc_choice = params.encoder_;
   dlg.choice("encoder", enc_choices, enc_choice);
 
-  if(istream_ && istream_->is_valid())
+  if (istream_ && istream_->is_valid())
   {
     vil_image_resource_sptr img = istream_->current_frame();
-    if(img){
+    if (img) {
       params.ni_ = img->ni();
       params.nj_ = img->nj();
     }
@@ -428,14 +429,14 @@ void vidl2_player_manager::open_ffmpeg_ostream()
     return;
   }
 }
-#endif
+#endif // HAS_FFMPEG
 
 //-----------------------------------------------------------------------------
 //: close the output video stream
 //-----------------------------------------------------------------------------
 void vidl2_player_manager::close_ostream()
 {
-  if(ostream_)
+  if (ostream_)
     ostream_->close();
 }
 
@@ -445,12 +446,12 @@ void vidl2_player_manager::close_ostream()
 //-----------------------------------------------------------------------------
 void vidl2_player_manager::pipe_streams()
 {
-  if(!istream_ || !istream_->is_open()){
+  if (!istream_ || !istream_->is_open()) {
     vgui_error_dialog("Input stream not open");
     return;
   }
 
-  if(!ostream_ || !ostream_->is_open()){
+  if (!ostream_ || !ostream_->is_open()) {
     vgui_error_dialog("Output stream not open");
     return;
   }
@@ -468,25 +469,25 @@ void vidl2_player_manager::pipe_streams()
   unsigned int initial_frame = istream_->frame_number();
 
   vil_image_resource_sptr img;
-  if(num_frames < 0)
-    while(bool(img = istream_->read_frame()) &&
-          ostream_->write_frame(img) );
+  if (num_frames < 0)
+    while (bool(img = istream_->read_frame()) &&
+           ostream_->write_frame(img) );
   else
-    for(int i=0; i<num_frames &&
-        bool(img = istream_->read_frame()) &&
-        ostream_->write_frame(img); ++i);
+    for (int i=0; i<num_frames &&
+         bool(img = istream_->read_frame()) &&
+         ostream_->write_frame(img); ++i);
   ostream_->close();
 
-  if(istream_->is_seekable())
+  if (istream_->is_seekable())
     istream_->seek_frame(initial_frame);
 }
 
 
 void vidl2_player_manager::redraw()
 {
-  if(istream_){
+  if (istream_) {
     unsigned int frame = istream_->frame_number();
-    if(frame == unsigned(-1))
+    if (frame == unsigned(-1))
       vgui::out << "invalid frame\n";
     else
       vgui::out << "frame["<< frame <<"]\n";
@@ -494,7 +495,7 @@ void vidl2_player_manager::redraw()
   }
   static int temp = 0;
   ++temp;
-  if(temp%2 == 0)
+  if (temp%2 == 0)
     itab_->post_redraw();
   vgui::run_till_idle();
 }
@@ -504,7 +505,8 @@ void vidl2_player_manager::redraw()
 //  unless paused or stopped first
 void vidl2_player_manager::play_video()
 {
-  if (play_video_) return;
+  if (play_video_)
+    return;
   if (!istream_) {
     vcl_cout << "No movie has been loaded\n";
     return;
@@ -514,10 +516,11 @@ void vidl2_player_manager::play_video()
   vul_timer t,t2;
   int count = 0;
 
-  while(play_video_ && istream_->is_valid() && istream_->advance()) {
+  while (play_video_ && istream_->is_valid() && istream_->advance())
+  {
     this->redraw();
     //Delay until the time interval has passed
-    while (t.all()<time_interval_);
+    while (t.all()<time_interval_) ;
     t.mark();
     ++count;
   }
@@ -534,7 +537,7 @@ void vidl2_player_manager::play_video()
 void vidl2_player_manager::stop_video()
 {
   play_video_ = false;
-  if(istream_ && istream_->is_seekable()){
+  if (istream_ && istream_->is_seekable()) {
     istream_->seek_frame(0);
     this->redraw();
   }
@@ -550,14 +553,15 @@ void vidl2_player_manager::pause_video()
 // and prompt for the frame number to jump to.
 void vidl2_player_manager::go_to_frame()
 {
-  if(!istream_)
+  if (!istream_)
     return;
-  if(!istream_->is_seekable()){
-    vcl_cerr << "This stream does not support seeking" << vcl_endl;
+  if (!istream_->is_seekable()) {
+    vcl_cerr << "This stream does not support seeking\n";
     return;
   }
 
-  if (play_video_) return;
+  if (play_video_)
+    return;
   static int frame_num = 0;
   vgui_dialog go_to_frame_dlg("Go to Frame");
   go_to_frame_dlg.field("Frame Number", frame_num);
@@ -572,7 +576,8 @@ void vidl2_player_manager::go_to_frame()
 //If the video is not playing go to the next frame
 void vidl2_player_manager::next_frame()
 {
-  if (play_video_ || !istream_) return;
+  if (play_video_ || !istream_)
+    return;
   if (istream_->read_frame()) {
     this->redraw();
   }
@@ -581,11 +586,11 @@ void vidl2_player_manager::next_frame()
 //If the video is not playing go to the previous frame
 void vidl2_player_manager::prev_frame()
 {
-  if (play_video_ || !istream_) return;
+  if (play_video_ || !istream_)
+    return;
   int prev_frame = istream_->frame_number() - 1;
   if (prev_frame >= 0) {
     istream_->seek_frame(prev_frame);
     this->redraw();
   }
 }
-
