@@ -8,6 +8,7 @@
 
 #include <vgl/vgl_vector_3d.h>
 #include <vcl_string.h>
+#include <vcl_iosfwd.h>
 
 //: Binary save vgl_vector_3d to stream.
 template <class T>

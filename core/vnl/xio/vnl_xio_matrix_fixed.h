@@ -9,6 +9,7 @@
 //#include <vsl/vsl_binary_io.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vcl_string.h>
+#include <vcl_iosfwd.h>
 
 //: XML save vnl_matrix_fixed to stream.
 template <class T, unsigned m, unsigned n>

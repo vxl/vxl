@@ -9,6 +9,7 @@
 //#include <vsl/vsl_binary_io.h>
 #include <vnl/vnl_quaternion.h>
 #include <vcl_string.h>
+#include <vcl_iosfwd.h>
 
 //: XML save vnl_quaternion to stream.
 template <class T>

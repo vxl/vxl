@@ -8,6 +8,7 @@
 
 #include <vgl/vgl_point_2d.h>
 #include <vcl_string.h>
+#include <vcl_iosfwd.h>
 
 //: XML save vgl_point_2d to stream.
 template <class T>
