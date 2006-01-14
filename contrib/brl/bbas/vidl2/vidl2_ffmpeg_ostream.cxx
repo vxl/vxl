@@ -1,4 +1,4 @@
-// This is contrib/brl/bbas/vidl2/vidl2_ffmpeg_ostream.cxx
+// This is brl/bbas/vidl2/vidl2_ffmpeg_ostream.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -89,11 +89,11 @@ open(const vcl_string& filename,
   os_->fmt_cxt_ = av_alloc_format_context();
 
   AVOutputFormat* file_oformat = 0;
-  if( params.file_format_ == vidl2_ffmpeg_ostream_params::GUESS ) {
+  if ( params.file_format_ == vidl2_ffmpeg_ostream_params::GUESS ) {
     file_oformat = guess_format(NULL, filename.c_str(), NULL);
     if (!file_oformat) {
       vcl_cerr << "ffmpeg: Unable for find a suitable output format for "
-               << filename << "\n";
+               << filename << '\n';
       close();
       return false;
     }
@@ -107,7 +107,7 @@ open(const vcl_string& filename,
 
   // Create stream
   AVStream* st = av_new_stream( os_->fmt_cxt_, 1 );
-  if( !st ) {
+  if ( !st ) {
     vcl_cerr << "ffmpeg: could not alloc stream\n";
     close();
     return false;
@@ -121,64 +121,46 @@ open(const vcl_string& filename,
   AVCodecContext *video_enc = st->codec;
 #endif
 
-  if( strcmp(file_oformat->name, "mp4") != 0 ||
-      strcmp(file_oformat->name, "mov") != 0 ||
-      strcmp(file_oformat->name, "3gp") != 0 )
+  if ( vcl_strcmp(file_oformat->name, "mp4") != 0 ||
+      vcl_strcmp(file_oformat->name, "mov") != 0 ||
+      vcl_strcmp(file_oformat->name, "3gp") != 0 )
     video_enc->flags |= CODEC_FLAG_GLOBAL_HEADER;
 
-  switch( params.encoder_ )
+  switch ( params.encoder_ )
   {
-  case vidl2_ffmpeg_ostream_params::DEFAULT:
-    {
-      video_enc->codec_id = file_oformat->video_codec;
-      break;
-    }
-  case vidl2_ffmpeg_ostream_params::MPEG4:
-    {
-      video_enc->codec_id = CODEC_ID_MPEG4;
-      break;
-    }
-  case vidl2_ffmpeg_ostream_params::MPEG2VIDEO:
-    {
-      video_enc->codec_id = CODEC_ID_MPEG2VIDEO;
-      break;
-    }
-  case vidl2_ffmpeg_ostream_params::MSMPEG4V2:
-    {
-      video_enc->codec_id = CODEC_ID_MSMPEG4V2;
-      break;
-    }
-  case vidl2_ffmpeg_ostream_params::RAWVIDEO:
-    {
-      video_enc->codec_id = CODEC_ID_RAWVIDEO;
-      break;
-    }
-  case vidl2_ffmpeg_ostream_params::LJPEG:
-    {
-      video_enc->codec_id = CODEC_ID_LJPEG;
-      break;
-    }
-  case vidl2_ffmpeg_ostream_params::HUFFYUV:
-    {
-      video_enc->codec_id = CODEC_ID_HUFFYUV;
-      break;
-    }
-  case vidl2_ffmpeg_ostream_params::DVVIDEO:
-    {
-      video_enc->codec_id = CODEC_ID_DVVIDEO;
-      break;
-    }
-  default:
-    {
-      vcl_cout << "ffmpeg: Unknown encoder type\n";
-      return false;
-    }
+   case vidl2_ffmpeg_ostream_params::DEFAULT:
+    video_enc->codec_id = file_oformat->video_codec;
+    break;
+   case vidl2_ffmpeg_ostream_params::MPEG4:
+    video_enc->codec_id = CODEC_ID_MPEG4;
+    break;
+   case vidl2_ffmpeg_ostream_params::MPEG2VIDEO:
+    video_enc->codec_id = CODEC_ID_MPEG2VIDEO;
+    break;
+   case vidl2_ffmpeg_ostream_params::MSMPEG4V2:
+    video_enc->codec_id = CODEC_ID_MSMPEG4V2;
+    break;
+   case vidl2_ffmpeg_ostream_params::RAWVIDEO:
+    video_enc->codec_id = CODEC_ID_RAWVIDEO;
+    break;
+   case vidl2_ffmpeg_ostream_params::LJPEG:
+    video_enc->codec_id = CODEC_ID_LJPEG;
+    break;
+   case vidl2_ffmpeg_ostream_params::HUFFYUV:
+    video_enc->codec_id = CODEC_ID_HUFFYUV;
+    break;
+   case vidl2_ffmpeg_ostream_params::DVVIDEO:
+    video_enc->codec_id = CODEC_ID_DVVIDEO;
+    break;
+   default:
+    vcl_cout << "ffmpeg: Unknown encoder type\n";
+    return false;
   }
 
   AVCodec* codec = avcodec_find_encoder( video_enc->codec_id );
-  if( !codec )
+  if ( !codec )
   {
-    vcl_cerr << "ffmpeg_writer:: couldn't find encoder for " << video_enc->codec_id << "\n";
+    vcl_cerr << "ffmpeg_writer:: couldn't find encoder for " << video_enc->codec_id << '\n';
     return false;
   }
 
@@ -192,8 +174,7 @@ open(const vcl_string& filename,
   video_enc->time_base.den = int(params.frame_rate_*1000);
 #endif
 
-
-  if( codec && codec->supported_framerates )
+  if ( codec && codec->supported_framerates )
   {
     AVRational const* p = codec->supported_framerates;
 #if LIBAVCODEC_BUILD <= 4753
@@ -203,11 +184,11 @@ open(const vcl_string& filename,
 #endif
     AVRational const* best = NULL;
     AVRational best_error = { INT_MAX, 1 };
-    for(; p->den!=0; p++)
+    for (; p->den!=0; p++)
     {
       AVRational error = av_sub_q(req, *p);
-      if( error.num < 0 )   error.num *= -1;
-      if( av_cmp_q( error, best_error ) < 0 )
+      if ( error.num < 0 )   error.num *= -1;
+      if ( av_cmp_q( error, best_error ) < 0 )
       {
         best_error= error;
         best= p;
@@ -222,31 +203,29 @@ open(const vcl_string& filename,
 #endif
   }
 
-
   video_enc->width  = params.ni_;
   video_enc->height = params.nj_;
   video_enc->sample_aspect_ratio = av_d2q(params.frame_aspect_ratio_*params.ni_/params.nj_, 255);
 
   // Our source is packed RGB. Use that if possible.
   video_enc->pix_fmt = PIX_FMT_RGB24;
-  if( codec && codec->pix_fmts )
+  if ( codec && codec->pix_fmts )
   {
     const enum PixelFormat* p= codec->pix_fmts;
-    for( ; *p != -1; p++ )
+    for ( ; *p != -1; p++ )
     {
-      if( *p == video_enc->pix_fmt )
+      if ( *p == video_enc->pix_fmt )
         break;
     }
-    if( *p == -1 )
+    if ( *p == -1 )
       video_enc->pix_fmt = codec->pix_fmts[0];
   }
-  else if( codec && ( codec->id == CODEC_ID_RAWVIDEO ||
+  else if ( codec && ( codec->id == CODEC_ID_RAWVIDEO ||
                       codec->id == CODEC_ID_HUFFYUV ) )
   {
     // these formats only support the YUV input image formats
     video_enc->pix_fmt = PIX_FMT_YUV420P;
   }
-
 
   if (!params.intra_only_)
     video_enc->gop_size = params.gop_size_;
@@ -257,7 +236,7 @@ open(const vcl_string& filename,
     video_enc->flags |= CODEC_FLAG_QSCALE;
     st->quality = FF_QP2LAMBDA * params.video_qscale_;
   }
-  // if(bitexact)
+  // if (bitexact)
   //   video_enc->flags |= CODEC_FLAG_BITEXACT;
 
   video_enc->mb_decision = params.mb_decision_;
@@ -273,7 +252,6 @@ open(const vcl_string& filename,
   video_enc->temporal_cplx_masking = params.tcplx_mask_;
   video_enc->p_masking = params.p_mask_;
   video_enc->quantizer_noise_shaping= params.qns_;
-
 
   if (params.use_umv_)
   {
@@ -304,7 +282,7 @@ open(const vcl_string& filename,
     video_enc->flags |= CODEC_FLAG_LOOP_FILTER;
   }
 
-  if(params.use_part_)
+  if (params.use_part_)
   {
     video_enc->flags |= CODEC_FLAG_PART;
   }
@@ -400,7 +378,7 @@ open(const vcl_string& filename,
   video_enc->level= params.video_level_;
 #endif
 
-  if(params.packet_size_)
+  if (params.packet_size_)
   {
     video_enc->rtp_mode= 1;
     video_enc->rtp_payload_size= params.packet_size_;
@@ -432,7 +410,7 @@ open(const vcl_string& filename,
 
   vcl_strncpy( os_->fmt_cxt_->filename, filename.c_str(), 1023 );
 
-  if( url_fopen( &os_->fmt_cxt_->pb, filename.c_str(), URL_WRONLY) < 0 )
+  if ( url_fopen( &os_->fmt_cxt_->pb, filename.c_str(), URL_WRONLY) < 0 )
   {
     vcl_cerr << "ffmpeg: couldn't open " << filename << " for writing\n";
     close();
@@ -442,7 +420,7 @@ open(const vcl_string& filename,
 
   AVFormatParameters fmt_param;
   vcl_memset( &fmt_param, 0, sizeof(fmt_param) );
-  if( av_set_parameters( os_->fmt_cxt_, &fmt_param ) < 0 )
+  if ( av_set_parameters( os_->fmt_cxt_, &fmt_param ) < 0 )
   {
     vcl_cerr << "ffmpeg: invalid encoding parameter\n";
     close();
@@ -451,7 +429,7 @@ open(const vcl_string& filename,
 
   //dump_format( os_->fmt_cxt_, 1, filename, 1 );
 
-  if( avcodec_open( video_enc, codec ) < 0 )
+  if ( avcodec_open( video_enc, codec ) < 0 )
   {
     vcl_cerr << "ffmpeg: couldn't open codec\n";
     close();
@@ -459,7 +437,7 @@ open(const vcl_string& filename,
   }
   os_->codec_opened_ = true;
 
-  if( av_write_header( os_->fmt_cxt_ ) < 0 )
+  if ( av_write_header( os_->fmt_cxt_ ) < 0 )
   {
     vcl_cerr << "ffmpeg: couldn't write header\n";
     close();
@@ -478,30 +456,30 @@ close()
   delete os_->video_rc_eq_;
   os_->video_rc_eq_ = NULL;
 
-  if( os_->fmt_cxt_ ) {
+  if ( os_->fmt_cxt_ ) {
 
-    if( os_->file_opened_ ) {
+    if ( os_->file_opened_ ) {
       av_write_trailer( os_->fmt_cxt_ );
       url_fclose( &os_->fmt_cxt_->pb );
       os_->file_opened_ = false;
     }
 
-    if( os_->fmt_cxt_->nb_streams > 0 ) {
-      if( os_->codec_opened_ ) {
-        for( int i = 0; i < os_->fmt_cxt_->nb_streams; ++i ) {
+    if ( os_->fmt_cxt_->nb_streams > 0 ) {
+      if ( os_->codec_opened_ ) {
+        for ( int i = 0; i < os_->fmt_cxt_->nb_streams; ++i ) {
 #if LIBAVFORMAT_BUILD <= 4628
           AVCodecContext* codec = &os_->fmt_cxt_->streams[i]->codec;
 #else
           AVCodecContext* codec = os_->fmt_cxt_->streams[i]->codec;
 #endif
-          if( codec->stats_in ) {
+          if ( codec->stats_in ) {
             av_freep( codec->stats_in );
           }
           avcodec_close( codec );
         }
       }
       os_->codec_opened_ = false;
-      for( int i = 0; i < os_->fmt_cxt_->nb_streams; ++i ) {
+      for ( int i = 0; i < os_->fmt_cxt_->nb_streams; ++i ) {
         av_free( os_->fmt_cxt_->streams[i] );
       }
     }
@@ -533,21 +511,21 @@ write_frame(const vil_image_resource_sptr& image)
   AVCodecContext* codec = os_->fmt_cxt_->streams[0]->codec;
 #endif
 
-  if( unsigned( codec->width ) != image->ni() ||
+  if ( unsigned( codec->width ) != image->ni() ||
       unsigned( codec->height ) != image->nj() ) {
     vcl_cerr << "ffmpeg: Input image has wrong size. Expecting ("
-             << codec->width << "x" << codec->height << "), got ("
-             << image->ni() << "x" << image->nj() << ")\n";
+             << codec->width << 'x' << codec->height << "), got ("
+             << image->ni() << 'x' << image->nj() << ")\n";
     return false;
   }
 
-  if( image->pixel_format() != vil_pixel_format_of(vxl_byte()) ){
+  if ( image->pixel_format() != vil_pixel_format_of(vxl_byte()) ){
     vcl_cerr << "ffmpeg: can only handle byte images\n";
     return false;
   }
 
   vil_image_view<vxl_byte> img = image->get_view();
-  if( img.planestep() != 1 || img.istep() != 3 || img.jstep() != vcl_ptrdiff_t(img.ni()*img.istep()) ) {
+  if ( img.planestep() != 1 || img.istep() != 3 || img.jstep() != vcl_ptrdiff_t(img.ni()*img.istep()) ) {
     vcl_cerr << "ffmpeg: can only handle contiguous RGB component images\n";
     return false;
   }
@@ -556,11 +534,11 @@ write_frame(const vil_image_resource_sptr& image)
   avcodec_get_frame_defaults( &out_frame );
 
   vil_memory_chunk_sptr buf;
-  if( codec->pix_fmt != PIX_FMT_RGB24 ) {
+  if ( codec->pix_fmt != PIX_FMT_RGB24 ) {
     // create a temporary picture
     int size = avpicture_get_size( codec->pix_fmt, img.ni(), img.nj() );
     buf = new vil_memory_chunk( size, VIL_PIXEL_FORMAT_BYTE );
-    if( !buf ) {
+    if ( !buf ) {
       vcl_cerr << "ffmpeg: error allocating temporary buffer\n";
       return false;
     }
@@ -570,7 +548,7 @@ write_frame(const vil_image_resource_sptr& image)
     tmp_pic.linesize[0] = img.ni() * 3;
     avpicture_fill( (AVPicture*)&out_frame, (uint8_t*)buf->data(),
                     codec->pix_fmt, img.ni(), img.nj() );
-    if( img_convert( (AVPicture*)&out_frame, codec->pix_fmt,
+    if ( img_convert( (AVPicture*)&out_frame, codec->pix_fmt,
                      &tmp_pic, PIX_FMT_RGB24,
                      img.ni(), img.nj() ) < 0 ) {
       vcl_cerr << "ffmpeg: couldn't convert image\n";
@@ -593,13 +571,13 @@ write_frame(const vil_image_resource_sptr& image)
 
   int ret = avcodec_encode_video( codec, (uint8_t*)os_->bit_buf_->data(), os_->bit_buf_->size(), &out_frame );
 
-  if( ret ) {
+  if ( ret ) {
     pkt.data = (uint8_t*)os_->bit_buf_->data();
     pkt.size = ret;
-    if( codec->coded_frame ) {
+    if ( codec->coded_frame ) {
       pkt.pts = codec->coded_frame->pts;
     }
-    if( codec->coded_frame && codec->coded_frame->key_frame ) {
+    if ( codec->coded_frame && codec->coded_frame->key_frame ) {
       pkt.flags |= PKT_FLAG_KEY;
     }
     av_interleaved_write_frame( os_->fmt_cxt_, &pkt );
@@ -610,6 +588,3 @@ write_frame(const vil_image_resource_sptr& image)
   ++os_->cur_frame_;
   return true;
 }
-
-
-
