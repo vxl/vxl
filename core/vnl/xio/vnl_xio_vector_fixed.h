@@ -15,4 +15,4 @@
 template <class T, unsigned n>
 void x_write(vcl_ostream & os, const vnl_vector_fixed<T,n> & v, vcl_string name);
 
-#endif // vnl_io_vector_fixed_h
+#endif // vnl_xio_vector_fixed_h

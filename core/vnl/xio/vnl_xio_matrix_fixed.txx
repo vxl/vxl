@@ -1,4 +1,4 @@
-// This is core/vnl/io/vnl_io_matrix_fixed.txx
+// This is core/vnl/xio/vnl_xio_matrix_fixed.txx
 #ifndef vnl_xio_matrix_fixed_txx_
 #define vnl_xio_matrix_fixed_txx_
 //:
@@ -26,4 +26,4 @@ void x_write(vcl_ostream & os, const vnl_matrix_fixed<T,m,n> & p, vcl_string nam
 #define VNL_XIO_MATRIX_FIXED_INSTANTIATE(T,m,n) \
 template void x_write(vcl_ostream &, const vnl_matrix_fixed<T,m,n > &, vcl_string name)
 
-#endif // vnl_io_matrix_fixed_txx_
+#endif // vnl_xio_matrix_fixed_txx_
