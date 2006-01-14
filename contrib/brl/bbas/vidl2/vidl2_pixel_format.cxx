@@ -4,9 +4,9 @@
 // \file
 // \author Matt Leotta
 //
+#include <vcl_iostream.h>
 
-
-//: Recursive template metaprogram to generate conditionals for checking the traits of each defined pixel type 
+//: Recursive template metaprogram to generate conditionals for checking the traits of each defined pixel type
 template <vidl2_pixel_format pix_type>
 struct check_types
 {
@@ -92,7 +92,7 @@ vidl2_pixel_format_bpp(enum vidl2_pixel_format f)
 }
 
 
-//: Return true if pixels in format f are packed into macropixels 
+//: Return true if pixels in format f are packed into macropixels
 bool
 vidl2_pixel_format_packed(vidl2_pixel_format f)
 {
@@ -125,7 +125,7 @@ vcl_ostream & operator << (vcl_ostream &os, vidl2_pixel_format f)
 }
 
 
-//: Convert a string into a pixel format. 
+//: Convert a string into a pixel format.
 vcl_string
 vidl2_pixel_format_to_string(vidl2_pixel_format f)
 {
