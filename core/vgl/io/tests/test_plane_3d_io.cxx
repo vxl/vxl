@@ -30,9 +30,9 @@ void test_plane_3d_double_io()
 
   vpl_unlink ("vgl_plane_3d_test_double_io.bvl.tmp");
 
-  TEST ("p_out == p_in", p_out == p_in, true);
+  TEST ("p_out == p_in", p_out, p_in);
 
-  vsl_print_summary(vcl_cout, p_out);
+  vsl_print_summary(vcl_cout, p_in);
   vcl_cout << vcl_endl;
   vsl_indent_clear_all_data();
 }
