@@ -6,14 +6,14 @@
 
 #include "vgl_xio_box_3d.h"
 #include <vgl/vgl_box_3d.h>
-#include <bxml/bxml_basic_element.h>
+#include <vsl/vsl_basic_xml_element.h>
 
 //============================================================================
 //: Binary save self to stream.
 template<class T>
 void x_write(vcl_ostream &os, const vgl_box_3d<T> & p, vcl_string element_name)
 {  
-    bxml_basic_element xml_element(element_name);
+    vsl_basic_xml_element xml_element(element_name);
     xml_element.add_attribute("min_x", p.min_x());
     xml_element.add_attribute("min_y", p.min_y());
     xml_element.add_attribute("min_z", p.min_z());

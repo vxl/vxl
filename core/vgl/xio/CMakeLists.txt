@@ -1,5 +1,4 @@
 # vxl/vgl/xio/CMakeLists.txt
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 
 SET(vgl_xio_sources
   vgl_xio_point_2d.txx vgl_xio_point_2d.h
@@ -11,7 +10,7 @@ SET(vgl_xio_sources
 AUX_SOURCE_DIRECTORY(Templates vgl_xio_sources)
 
 ADD_LIBRARY(vgl_xio ${vgl_xio_sources})
-TARGET_LINK_LIBRARIES( vgl_xio vgl vsl bxml )
+TARGET_LINK_LIBRARIES( vgl_xio vgl vsl )
 
 INSTALL_TARGETS(/lib vgl_xio)
 INSTALL_NOBASE_HEADER_FILES(/include/core/vgl/xio ${vgl_xio_sources})

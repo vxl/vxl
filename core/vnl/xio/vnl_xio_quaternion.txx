@@ -6,14 +6,14 @@
 
 #include "vnl_xio_quaternion.h"
 #include <vnl/vnl_quaternion.h>
-#include <bxml/bxml_basic_element.h>
+#include <vsl/vsl_basic_xml_element.h>
 
 //=================================================================================
 //: Binary save self to stream.
 template<class T>
 void x_write(vcl_ostream & os, const vnl_quaternion<T> & p, vcl_string name)
 {
-  bxml_basic_element element(name);
+  vsl_basic_xml_element element(name);
   element.add_attribute("x", p.x());
   element.add_attribute("y", p.y());
   element.add_attribute("z", p.y());

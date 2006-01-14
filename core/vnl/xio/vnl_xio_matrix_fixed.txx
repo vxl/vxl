@@ -6,14 +6,14 @@
 
 #include "vnl_xio_matrix_fixed.h"
 #include <vnl/vnl_matrix_fixed.h>
-#include <bxml/bxml_basic_element.h>
+#include <vsl/vsl_basic_xml_element.h>
 
 //=================================================================================
 //: Binary save self to stream.
 template<class T, unsigned m, unsigned n>
 void x_write(vcl_ostream & os, const vnl_matrix_fixed<T,m,n> & p, vcl_string name)
 {
-  bxml_basic_element element(name);
+  vsl_basic_xml_element element(name);
   element.add_attribute("rows", (int) p.rows());
   element.add_attribute("cols", (int) p.cols());
   for (unsigned int r=0; r<p.rows(); r++) {

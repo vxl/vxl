@@ -1,5 +1,4 @@
 # vxl/vnl/xio/CMakeLists.txt
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 
 SET(vnl_xio_sources
   vnl_xio_matrix_fixed.txx         vnl_xio_matrix_fixed.h
@@ -11,7 +10,7 @@ SET(vnl_xio_sources
 AUX_SOURCE_DIRECTORY(Templates vnl_xio_sources)
 
 ADD_LIBRARY(vnl_xio ${vnl_xio_sources} )
-TARGET_LINK_LIBRARIES( vnl_xio vnl vsl bxml)
+TARGET_LINK_LIBRARIES( vnl_xio vnl vsl )
 
 INSTALL_TARGETS(/lib vnl_xio)
 INSTALL_NOBASE_HEADER_FILES(/include/core/vnl/xio ${vnl_xio_sources})
