@@ -1,6 +1,6 @@
 // This is brl/bbas/vidl2/examples/vidl2_player_main.cxx
-#include <vidl2/vidl2_player_menus.h>
-#include <vidl2/vidl2_player_manager.h>
+#include "vidl2_player_menus.h"
+#include "vidl2_player_manager.h"
 #include <vgui/vgui.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_window.h>
