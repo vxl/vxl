@@ -215,6 +215,9 @@ SOURCE=.\vsl_indent.cxx
 # Begin Source File
 SOURCE=.\vsl_vector_io_vector_bool.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vsl_basic_xml_element.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -307,6 +310,9 @@ SOURCE=.\vsl_block_binary.h
 # End Source File
 # Begin Source File
 SOURCE=.\vsl_b_read_block_old.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsl_basic_xml_element.h
 # End Source File
 # End Group
 # End Target

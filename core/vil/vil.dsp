@@ -474,6 +474,9 @@ SOURCE=.\file_formats/vil_nitf2_typed_field_formatter.cxx
 SOURCE=.\file_formats/vil_nitf2_des.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\file_formats/vil_tiff_header.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil_resample_bilin+float.float-.cxx
 # End Source File
 # Begin Source File
@@ -913,6 +916,9 @@ SOURCE=.\vil_warp.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_exception.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_tiff_header.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_config.h.in

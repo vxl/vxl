@@ -270,7 +270,10 @@ SOURCE=.\Templates/vsl_vector_io+vgl_point_2d+float--.cxx
 SOURCE=.\Templates/vgl_io_cylinder+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vsl_vector_io+vcl_vector+vgl_cylinder_3d+double---.cxx
+SOURCE=.\Templates/vbl_io_array_2d+vcl_vector+vcl_pair+int.double---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vcl_vector+vgl_cylinder+double---.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
