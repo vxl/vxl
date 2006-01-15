@@ -21,7 +21,7 @@ static void read_string(TIFF* tif, ttag_t tag, vcl_string& stag, vcl_string cons
 {
   char* adr = 0;
   TIFFGetField(tif, tag, &adr);
-  if(adr)
+  if (adr)
     stag = vcl_string(adr);
   else
     stag = deflt;
@@ -30,42 +30,43 @@ static void read_string(TIFF* tif, ttag_t tag, vcl_string& stag, vcl_string cons
 static void read_short_tag(TIFF* tif, ttag_t tag, ushort_tag& utag, unsigned short deflt =0)
 {
   utag.valid = TIFFGetField(tif, tag, &(utag.val))>0;
-  if(!utag.valid)
+  if (!utag.valid)
     utag.val = deflt;
 }
 
 static void read_long_tag(TIFF* tif, ttag_t tag, ulong_tag& utag, unsigned long deflt = 0)
 {
   utag.valid = TIFFGetField(tif, tag, &(utag.val))>0;
-  if(!utag.valid)
+  if (!utag.valid)
     utag.val = deflt;
 }
 
 //assumes array is resized properly
-static bool read_long_array(TIFF* tif, ttag_t tag, 
+static bool read_long_array(TIFF* tif, ttag_t tag,
                             vcl_vector<unsigned long>& array)
 {
   unsigned long * a;
-  if(TIFFGetField(tif, tag, &a))
+  if (TIFFGetField(tif, tag, &a))
+  {
+    for (unsigned long i = 0; i<array.size(); ++i)
     {
-      for(unsigned long i = 0; i<array.size(); ++i)
-        {
-          array[i]=a[i];
-        }
-
-      return true;
+      array[i]=a[i];
     }
+
+    return true;
+  }
   return false;
 }
+
 static void write_short_tag(TIFF* tif, ttag_t tag, ushort_tag const& ustag)
 {
-  if(ustag.valid)
+  if (ustag.valid)
     TIFFSetField(tif, tag, ustag.val);
 }
 
 static void write_long_tag(TIFF* tif, ttag_t tag, ulong_tag const& ultag)
 {
-  if(ultag.valid)
+  if (ultag.valid)
     TIFFSetField(tif, tag, ultag.val);
 }
 
@@ -85,13 +86,13 @@ bool vil_tiff_header::read_header()
   //Determine the endian state of the file and machine
   file_is_big_endian_ = TIFFIsByteSwapped(tif_)>0;
 
-  //also need machine endian 
-#if(VXL_BIG_ENDIAN)
-    machine_is_big_endian = true;
+  //also need machine endian
+#if VXL_BIG_ENDIAN
+    machine_is_big_endian_ = true;
 #else
     machine_is_big_endian_ = false;
 #endif
-  //the following group must be read first since they 
+  //the following group must be read first since they
   //dictate subsequent tag structures
   ///-----------------------------------------------///
   read_short_tag(tif_,TIFFTAG_PHOTOMETRIC, photometric);
@@ -105,7 +106,7 @@ bool vil_tiff_header::read_header()
   read_short_tag(tif_,TIFFTAG_CELLLENGTH, cell_length);
   read_short_tag(tif_,TIFFTAG_CELLWIDTH, cell_width);
   color_map_valid = false;
-  if(bits_per_sample.valid && 
+  if (bits_per_sample.valid &&
      photometric.valid &&
      photometric.val == PHOTOMETRIC_PALETTE)
     {
@@ -113,15 +114,15 @@ bool vil_tiff_header::read_header()
       TIFFGetField(tif_,TIFFTAG_COLORMAP, &cm[0], &cm[1], &cm[2]);
       unsigned size = 1<<bits_per_sample.val;
       color_map.resize(size);
-      for(unsigned i = 0; i<size; ++i)
-        {
-          vcl_vector<unsigned short> rgb(3);
-          rgb[0]=cm[0][i];  rgb[1]=cm[1][i];  rgb[2]=cm[2][i];
-          color_map[i] = rgb;
+      for (unsigned i = 0; i<size; ++i)
+      {
+        vcl_vector<unsigned short> rgb(3);
+        rgb[0]=cm[0][i];  rgb[1]=cm[1][i];  rgb[2]=cm[2][i];
+        color_map[i] = rgb;
 #ifdef DEBUG
-          vcl_cout << "RGB[" << i << "]=(" << rgb[0] << ' ' << rgb[1] << ' ' << rgb[2] << ")\n";
+        vcl_cout << "RGB[" << i << "]=(" << rgb[0] << ' ' << rgb[1] << ' ' << rgb[2] << ")\n";
 #endif
-        }
+      }
       color_map_valid = true;
     }
   read_short_tag(tif_,TIFFTAG_COMPRESSION, compression);
@@ -147,73 +148,73 @@ bool vil_tiff_header::read_header()
   read_string(tif_,TIFFTAG_SOFTWARE, software);
   read_short_tag(tif_,TIFFTAG_SAMPLEFORMAT, sample_format, 1);
   strip_byte_counts_valid = false;
-  if(rows_per_strip.valid&&samples_per_pixel.valid)
-    {
-      strip_byte_counts_valid = 
-        TIFFGetField(tif_,TIFFTAG_STRIPBYTECOUNTS , &strip_byte_counts)>0;
+  if (rows_per_strip.valid&&samples_per_pixel.valid)
+  {
+    strip_byte_counts_valid =
+      TIFFGetField(tif_,TIFFTAG_STRIPBYTECOUNTS , &strip_byte_counts)>0;
 #ifdef DEBUG
-      //      unsigned long size = strips_per_image()*samples_per_pixel.val;
-      unsigned long size = strips_per_image();
-        for(unsigned long i = 0; i<size; ++i)
-        vcl_cout << "SBC[" << i << "]=" << strip_byte_counts[i] << '\n'; 
+    //      unsigned long size = strips_per_image()*samples_per_pixel.val;
+    unsigned long size = strips_per_image();
+    for (unsigned long i = 0; i<size; ++i)
+      vcl_cout << "SBC[" << i << "]=" << strip_byte_counts[i] << '\n';
 #endif
-    }
+  }
 
   strip_offsets_valid = false;
 #ifdef DEBUG
-  if(rows_per_strip.valid&&samples_per_pixel.valid)
-    {
-      strip_offsets_valid =
-        TIFFGetField(tif_, TIFFTAG_STRIPOFFSETS, &strip_offsets)>0;
-      //      unsigned long size = strips_per_image()*samples_per_pixel.val;
-      unsigned long size = strips_per_image();
-        for(unsigned long i = 0; i<size; ++i)
-        vcl_cout << "SOFF[" << i << "]=" << strip_offsets[i] << '\n'; 
-    }
+  if (rows_per_strip.valid&&samples_per_pixel.valid)
+  {
+    strip_offsets_valid =
+      TIFFGetField(tif_, TIFFTAG_STRIPOFFSETS, &strip_offsets)>0;
+    //      unsigned long size = strips_per_image()*samples_per_pixel.val;
+    unsigned long size = strips_per_image();
+      for (unsigned long i = 0; i<size; ++i)
+      vcl_cout << "SOFF[" << i << "]=" << strip_offsets[i] << '\n';
+  }
 #endif
   read_short_tag(tif_,TIFFTAG_THRESHHOLDING, thresholding);
   unsigned long xneu, xden, yneu, yden;
   x_resolution_valid = false;
   x_resolution = 0;
-  if(TIFFGetField(tif_,TIFFTAG_XRESOLUTION, &xneu, &xden))
-    {
-      x_resolution = static_cast<double>(xneu)/static_cast<double>(xden);
-      x_resolution_valid = true;
-    }
+  if (TIFFGetField(tif_,TIFFTAG_XRESOLUTION, &xneu, &xden))
+  {
+    x_resolution = static_cast<double>(xneu)/static_cast<double>(xden);
+    x_resolution_valid = true;
+  }
   y_resolution_valid = false;
   y_resolution = 0;
-  if(TIFFGetField(tif_,TIFFTAG_XRESOLUTION, &yneu, &yden))
-    {
-      y_resolution = static_cast<double>(yneu)/static_cast<double>(yden);
-      y_resolution_valid = true;
-    }
+  if (TIFFGetField(tif_,TIFFTAG_XRESOLUTION, &yneu, &yden))
+  {
+    y_resolution = static_cast<double>(yneu)/static_cast<double>(yden);
+    y_resolution_valid = true;
+  }
   read_long_tag(tif_, TIFFTAG_TILEWIDTH, tile_width, 0);
   read_long_tag(tif_, TIFFTAG_TILELENGTH, tile_length, 0);
 
   tile_offsets_valid = false;
 #ifdef DEBUG
-  if(tile_width.valid&&tile_length.valid&&samples_per_pixel.valid)
-    {
-      tile_offsets_valid =
-        TIFFGetField(tif_, TIFFTAG_TILEOFFSETS, &tile_offsets)>0;
-      //      unsigned long size = tiles_per_image()*samples_per_pixel.val;
-      unsigned long size = tiles_per_image();
-      for(unsigned long i = 0; i<size; ++i)
-        vcl_cout << "TOFF[" << i << "]=" << tile_offsets[i] << '\n'; 
-    }
+  if (tile_width.valid&&tile_length.valid&&samples_per_pixel.valid)
+  {
+    tile_offsets_valid =
+      TIFFGetField(tif_, TIFFTAG_TILEOFFSETS, &tile_offsets)>0;
+    //      unsigned long size = tiles_per_image()*samples_per_pixel.val;
+    unsigned long size = tiles_per_image();
+    for (unsigned long i = 0; i<size; ++i)
+      vcl_cout << "TOFF[" << i << "]=" << tile_offsets[i] << '\n';
+  }
 #endif
 
   tile_byte_counts_valid = false;
 #ifdef DEBUG
-  if(tile_width.valid&&tile_length.valid&&samples_per_pixel.valid)
-    {
-      tile_byte_counts_valid = 
-       TIFFGetField(tif_, TIFFTAG_TILEBYTECOUNTS, &tile_byte_counts)>0;
-      //      unsigned long size = tiles_per_image()*samples_per_pixel.val;
-      unsigned long size = tiles_per_image();
-      for(unsigned long i = 0; i<size; ++i)
-        vcl_cout << "TBC[" << i << "]=" << tile_byte_counts[i] << '\n'; 
-    }
+  if (tile_width.valid&&tile_length.valid&&samples_per_pixel.valid)
+  {
+    tile_byte_counts_valid =
+     TIFFGetField(tif_, TIFFTAG_TILEBYTECOUNTS, &tile_byte_counts)>0;
+    //      unsigned long size = tiles_per_image()*samples_per_pixel.val;
+    unsigned long size = tiles_per_image();
+    for (unsigned long i = 0; i<size; ++i)
+      vcl_cout << "TBC[" << i << "]=" << tile_byte_counts[i] << '\n';
+  }
 #endif
   return this->compute_pixel_format();
   //  int success = TIFFReadDirectory(tif_);
@@ -223,10 +224,10 @@ bool vil_tiff_header::read_header()
 // for example a multi-band image.
 unsigned vil_tiff_header::n_separate_image_planes() const
 {
-  if(planar_config.valid&&samples_per_pixel.valid)
-    if(planar_config.val == PLANARCONFIG_SEPARATE)
+  if (planar_config.valid&&samples_per_pixel.valid)
+    if (planar_config.val == PLANARCONFIG_SEPARATE)
       return samples_per_pixel.val;
-    else if(planar_config.val == PLANARCONFIG_CONTIG)
+    else if (planar_config.val == PLANARCONFIG_CONTIG)
       return 1;
   return 0;
 }
@@ -244,9 +245,9 @@ bool vil_tiff_header::is_striped() const
 
 unsigned vil_tiff_header::encoded_bytes_per_block() const
 {
-  if(is_tiled())
+  if (is_tiled())
     return static_cast<unsigned>(bytes_per_tile());
-  if(is_striped())
+  if (is_striped())
     return static_cast<unsigned>(bytes_per_strip());
   return 0;
 }
@@ -254,7 +255,7 @@ unsigned vil_tiff_header::encoded_bytes_per_block() const
 // the number of samples in a scan line
 unsigned vil_tiff_header::samples_per_line() const
 {
-  if(samples_per_pixel.valid&&image_width.valid)
+  if (samples_per_pixel.valid&&image_width.valid)
     return samples_per_pixel.val*image_width.val;
   return 0;
 }
@@ -265,6 +266,7 @@ unsigned long vil_tiff_header::bytes_per_line() const
   unsigned bits_per_line = bits_per_sample.val*nsamp;
   return (bits_per_line + 7)/8;
 }
+
 unsigned long vil_tiff_header::actual_bytes_per_line() const
 {
     return TIFFScanlineSize(tif_);
@@ -272,13 +274,13 @@ unsigned long vil_tiff_header::actual_bytes_per_line() const
 
 unsigned long vil_tiff_header::rows_in_strip() const
 {
-  if(rows_per_strip.valid&&image_length.valid)
-    {
-      unsigned long rps = rows_per_strip.val;
-      if(rps>image_length.val)
-        return image_length.val;
-      return rps;
-    }
+  if (rows_per_strip.valid&&image_length.valid)
+  {
+    unsigned long rps = rows_per_strip.val;
+    if (rps>image_length.val)
+      return image_length.val;
+    return rps;
+  }
   return 0;
 }
 
@@ -286,15 +288,17 @@ unsigned long vil_tiff_header::rows_in_strip() const
 unsigned long vil_tiff_header::
 actual_bytes_per_strip(const unsigned long strip_index) const
 {
-  if(strip_byte_counts_valid)
+  if (strip_byte_counts_valid)
   return strip_byte_counts[strip_index];
   return 0;
 }
+
 //the theoretical amount needed
 unsigned long vil_tiff_header::bytes_per_strip() const
 {
   return rows_in_strip()*bytes_per_line();
 }
+
 unsigned long vil_tiff_header::bytes_per_tile() const
 {
   return TIFFTileSize(tif_);
@@ -305,87 +309,87 @@ unsigned long vil_tiff_header::bytes_per_tile() const
 bool vil_tiff_header::compute_pixel_format()
 {
 //also need sample_format.valid but use default (1) for images that don't have it
-if(!(bits_per_sample.valid) || !(samples_per_pixel.valid) ||
+if (!(bits_per_sample.valid) || !(samples_per_pixel.valid) ||
      !(planar_config.valid) || !photometric.valid
      )
     {
       pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
       return false;
     }
-  
+
   unsigned short b = bits_per_sample.val;
   unsigned short bbs = bytes_per_sample();
   nplanes = 1;
   //Let's do the easy case first -- scalar pixels but various types
-  if(samples_per_pixel.val==1)
+  if (samples_per_pixel.val==1)
+  {
+    //handle sample formats (unsigned, signed, float, double)
+    switch (sample_format.val)
     {
-      //handle sample formats (unsigned, signed, float, double)
-      switch(sample_format.val)
+      case 1: //unsigned values
+        if (b==1){
+          pix_fmt = VIL_PIXEL_FORMAT_BOOL;
+        return true;}
+        else
+          switch (bbs)
+          {
+           case 1:
+            pix_fmt = VIL_PIXEL_FORMAT_BYTE;
+            return true;
+           case 2:
+            pix_fmt = VIL_PIXEL_FORMAT_UINT_16;
+            return true;
+           case 3:
+           case 4:
+            pix_fmt = VIL_PIXEL_FORMAT_UINT_32;
+            return true;
+           default:
+            pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
+            return true;
+          }
+      case 2: //2s complement signed
+        switch (b)
         {
-        case 1: //unsigned values
-if(b==1){
-            pix_fmt = VIL_PIXEL_FORMAT_BOOL;
-return true;}
-          else
-            switch(bbs)
-              {
-              case 1:
-                pix_fmt = VIL_PIXEL_FORMAT_BYTE;
-                return true;
-              case 2:
-                pix_fmt = VIL_PIXEL_FORMAT_UINT_16;
-                return true;
-  case 3:
-              case 4:
-                pix_fmt = VIL_PIXEL_FORMAT_UINT_32;
-                return true;
-              default: 
-                pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
-                return true;
-              }
-        case 2: //2s complement signed
-          switch(b)
-            {
-            case 8:
-              pix_fmt = VIL_PIXEL_FORMAT_SBYTE;
-              return false;
-            case 16:
-              pix_fmt = VIL_PIXEL_FORMAT_INT_16;
-              return false;
-            case 32:
-              pix_fmt = VIL_PIXEL_FORMAT_INT_32;
-              return false;
-            default: //other bit sizes don't make sense
-              pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
-              return false;                
-            }
-        case 3: // floating point
-          switch(bbs)
-            {
-            case (sizeof(float)):
-              pix_fmt = VIL_PIXEL_FORMAT_FLOAT;
-              return true;
-            case (sizeof(double)):
-              pix_fmt = VIL_PIXEL_FORMAT_DOUBLE;
-              return true;
-            default: //other bit sizes don't make sense
-              pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
-              return false;                
-            }
-        case 4: //undefined format
-        default:
-          pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
-          return false;
+          case 8:
+            pix_fmt = VIL_PIXEL_FORMAT_SBYTE;
+            return false;
+          case 16:
+            pix_fmt = VIL_PIXEL_FORMAT_INT_16;
+            return false;
+          case 32:
+            pix_fmt = VIL_PIXEL_FORMAT_INT_32;
+            return false;
+          default: //other bit sizes don't make sense
+            pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
+            return false;
+          }
+      case 3: // floating point
+        switch (bbs)
+        {
+          case (sizeof(float)):
+            pix_fmt = VIL_PIXEL_FORMAT_FLOAT;
+            return true;
+          case (sizeof(double)):
+            pix_fmt = VIL_PIXEL_FORMAT_DOUBLE;
+            return true;
+          default: //other bit sizes don't make sense
+            pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
+            return false;
         }
+      case 4: //undefined format
+      default:
+        pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
+        return false;
     }
+  }
 
   // The next easiest case is palette images
-  // vil doesn't currently support color maps so need to convert to 
+  // vil doesn't currently support color maps so need to convert to
   // regular three component RGB image (LATER)
-  if(samples_per_pixel.val==1 && photometric.val==PHOTOMETRIC_RGB &&
-     sample_format.val == 1)//only support unsigned
-    switch(bbs)
-      {
+  if (samples_per_pixel.val==1 && photometric.val==PHOTOMETRIC_RGB &&
+      sample_format.val == 1) //only support unsigned
+    switch (bbs)
+    {
       case 1:
         pix_fmt = VIL_PIXEL_FORMAT_BYTE;
         nplanes = 3;
@@ -397,23 +401,23 @@ return true;}
       default://other palette dynamic ranges don't make sense
         pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
         return false;
-      }
+    }
   // Now for regular color images
   //handle sample formats (unsigned, signed, float, double)
   //vil normally doesn't directly express these interleaved formats but
   //pretends the samples are in different planes.
   unsigned short s = samples_per_pixel.val;
-  if(samples_per_pixel.val>1 && photometric.val==2 &&
+  if (samples_per_pixel.val>1 && photometric.val==2 &&
      sample_format.val == 1)
-    switch(sample_format.val)
-      {
+    switch (sample_format.val)
+    {
       case 1: //unsigned values
-        switch(b)
-          {
+        switch (b)
+        {
           case 8:
             pix_fmt = VIL_PIXEL_FORMAT_BYTE;
-            switch(s)
-              {
+            switch (s)
+            {
               case 3:
                 nplanes = 3;
                 return true;
@@ -423,11 +427,11 @@ return true;}
               default:
                 pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
                 return true;
-              }
+            }
           case 16:
             pix_fmt = VIL_PIXEL_FORMAT_UINT_16;
-            switch(s)
-              {
+            switch (s)
+            {
               case 3:
                 nplanes = 3;
                 return true;
@@ -437,11 +441,11 @@ return true;}
               default:
                 pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
                 return false;
-              }
+            }
           case 32:
             pix_fmt = VIL_PIXEL_FORMAT_UINT_32;
-            switch(s)
-              {
+            switch (s)
+            {
               case 3:
                 nplanes = 3;
                 return true;
@@ -451,14 +455,14 @@ return true;}
               default:
                 pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
                 return false;
-              }
+            }
           default: //other dynamic ranges, e.g. 12 bits/sample
-            switch(bbs)
-              {
+            switch (bbs)
+            {
               case 1:
                 pix_fmt = VIL_PIXEL_FORMAT_RGB_BYTE;
-                switch(s)
-                  {
+                switch (s)
+                {
                   case 3:
                     nplanes = 3;
                     return true;
@@ -468,11 +472,11 @@ return true;}
                   default:
                     pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
                     return false;
-                  }
+                }
               case 2:
                 pix_fmt = VIL_PIXEL_FORMAT_UINT_16;
-                switch(s)
-                  {
+                switch (s)
+                {
                   case 3:
                     nplanes = 3;
                     return true;
@@ -482,11 +486,11 @@ return true;}
                   default:
                     pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
                     return false;
-                  }
+                }
               case 4:
                 pix_fmt = VIL_PIXEL_FORMAT_UINT_32;
-                switch(s)
-                  {
+                switch (s)
+                {
                   case 3:
                     nplanes = 3;
                     return true;
@@ -496,59 +500,58 @@ return true;}
                   default:
                     pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
                     return false;
-                  }
-              }
-          }
+                }
+            }
+        }
       case 2: //do signed color images make sense?
         pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
-        return false;                
-        
+        return false;
+
       case 3: // do floating point color images make sense?
         pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
-        return false;                
+        return false;
       case 4: //undefined format
       default:
         pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
         return false;
-      }
-  //Separate TIFF transparency mask - not handled
-  if(photometric.val==PHOTOMETRIC_MASK)
-    {
-
-      pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;      
-      return false;
     }
+  //Separate TIFF transparency mask - not handled
+  if (photometric.val==PHOTOMETRIC_MASK)
+  {
+    pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
+    return false;
+  }
 
   //TIFF color separations - not handled
-  if(photometric.val==PHOTOMETRIC_SEPARATED)
-    {
-      pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;      
-      return false;
-    }
+  if (photometric.val==PHOTOMETRIC_SEPARATED)
+  {
+    pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
+    return false;
+  }
 
   pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
   return false;
 }
 
-//Returns false if the pixel format cannot be written 
+//Returns false if the pixel format cannot be written
 bool vil_tiff_header::parse_pixel_format(vil_pixel_format const& fmt)
 {
   //Check for supported types
   sample_format.val = 1; sample_format.valid = true;
- switch ( fmt )
-    {
+  switch ( fmt )
+  {
     case VIL_PIXEL_FORMAT_BOOL:
       bits_per_sample.val = 1; bits_per_sample.valid = true;
-      return true;            
+      return true;
     case VIL_PIXEL_FORMAT_BYTE:
       bits_per_sample.val = 8; bits_per_sample.valid = true;
-      return true;            
+      return true;
     case VIL_PIXEL_FORMAT_UINT_16:
       bits_per_sample.val = 16; bits_per_sample.valid = true;
-      return true;            
+      return true;
     case VIL_PIXEL_FORMAT_UINT_32:
       bits_per_sample.val = 32; bits_per_sample.valid = true;
-      return true;            
+      return true;
     case VIL_PIXEL_FORMAT_FLOAT:
       bits_per_sample.val = 8*sizeof(float); bits_per_sample.valid = true;
       sample_format.val = 3;
@@ -556,62 +559,62 @@ bool vil_tiff_header::parse_pixel_format(vil_pixel_format const& fmt)
     case VIL_PIXEL_FORMAT_DOUBLE:
       bits_per_sample.val = 8*sizeof(double); bits_per_sample.valid = true;
       sample_format.val = 3;
-      return true;            
+      return true;
     default:
       break;
-    }
+  }
   return false;
 }
+
 //Setup the required header information in preparation for writing to
 //the tiff file header
 bool vil_tiff_header::set_header(unsigned ni, unsigned nj, unsigned nplns,
                                  vil_pixel_format const& fmt,
                                  const unsigned size_block_i,
                                  const unsigned size_block_j)
-
 {
-  //also need machine endian 
-#if(VXL_BIG_ENDIAN)
-    machine_is_big_endian = true;
+  //also need machine endian
+#if VXL_BIG_ENDIAN
+    machine_is_big_endian_ = true;
 #else
     machine_is_big_endian_ = false;
 #endif
     //write file with same endian state as the machine
     file_is_big_endian_ = machine_is_big_endian_;
   pix_fmt = fmt;
-  if(!this->parse_pixel_format(fmt))
+  if (!this->parse_pixel_format(fmt))
     return false;
   nplanes = nplns;
   //check for color type
-  photometric.valid = true; 
+  photometric.valid = true;
   switch ( nplanes )
-    {
+  {
     case 1:
       photometric.val = 1;
       break;
     case 3:
       photometric.val = 2;
-  break;
+      break;
     default:
       return false;
-    }
+  }
   image_length.val = nj; image_length.valid = true;
   image_width.val = ni; image_width.valid = true;
-  if(size_block_i>0&&size_block_j>0)
-    {
-      is_tiled_flag = true;
-      tile_width.val = size_block_i; tile_width.valid = true;
-      tile_length.val = size_block_j; tile_length.valid = true;
-    } 
+  if (size_block_i>0&&size_block_j>0)
+  {
+    is_tiled_flag = true;
+    tile_width.val = size_block_i; tile_width.valid = true;
+    tile_length.val = size_block_j; tile_length.valid = true;
+  }
   else
-    {
-      is_tiled_flag = false;
-      //Check for default -- one scanline per row
-      unsigned n_rows = size_block_j;
-      if(n_rows == 0)
-        n_rows = 1;
-      rows_per_strip.val = n_rows; rows_per_strip.valid = true;
-    }
+  {
+    is_tiled_flag = false;
+    //Check for default -- one scanline per row
+    unsigned n_rows = size_block_j;
+    if (n_rows == 0)
+      n_rows = 1;
+    rows_per_strip.val = n_rows; rows_per_strip.valid = true;
+  }
   samples_per_pixel.val = nplanes; samples_per_pixel.valid=true;
   // Can't handle separate color planes
   planar_config.val = 1; planar_config.valid = true;
@@ -627,12 +630,11 @@ vil_tiff_header(TIFF* tif, const unsigned ni, const unsigned nj,
                 const unsigned nplanes, vil_pixel_format const& fmt,
                 const unsigned size_block_i, const unsigned size_block_j)
 {
-
   tif_ = tif;
-  
-  format_supported = 
+
+  format_supported =
     this->set_header(ni, nj, nplanes, fmt, size_block_i, size_block_j);
-  if(!format_supported)
+  if (!format_supported)
     return;
   write_short_tag(tif_,TIFFTAG_PHOTOMETRIC, photometric);
   write_short_tag(tif_,TIFFTAG_PLANARCONFIG, planar_config);
