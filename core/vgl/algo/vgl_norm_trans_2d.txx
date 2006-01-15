@@ -169,7 +169,7 @@ center_of_mass(vcl_vector<vgl_homg_point_2d<T> > const& in, T& cx, T& cy)
   T cog_x = 0;
   T cog_y = 0;
   T cog_count = 0.0;
-  T tol = 1e-06;
+  T tol = static_cast<T>(1e-06);
   unsigned n = in.size();
   for (unsigned i = 0; i < n; ++i)
   {
