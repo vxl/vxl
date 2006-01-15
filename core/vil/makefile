@@ -58,6 +58,7 @@ SOURCES += file_formats/vil_bmp_info_header.cxx
 ifeq ($(HAS_TIFF),1)
 USE_TIFF := 1
 SOURCES += file_formats/vil_tiff.cxx
+SOURCES += file_formats/vil_tiff_header.cxx
 endif
 
   ################################
