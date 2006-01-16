@@ -53,6 +53,7 @@
 #include <mbl/mbl_sum_1d.h>
 #include <mbl/mbl_table.h>
 #include <mbl/mbl_test.h>
+#include <mbl/mbl_log.h>
 #include <mbl/mbl_thin_plate_spline_2d.h>
 #include <mbl/mbl_thin_plate_spline_3d.h>
 #include <mbl/mbl_thin_plate_spline_weights_3d.h>

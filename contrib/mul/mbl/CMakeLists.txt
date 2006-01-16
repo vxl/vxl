@@ -61,8 +61,9 @@ SET(mbl_sources
   mbl_progress_composite.cxx            mbl_progress_composite.h
   mbl_exception.h                       mbl_exception.cxx
   mbl_rvm_regression_builder.cxx        mbl_rvm_regression_builder.h
-  mbl_test.h							mbl_test.cxx
-  
+  mbl_test.h							              mbl_test.cxx
+  mbl_log.h							                mbl_log.cxx
+ 
   mbl_chord.h
   mbl_chord_3d.h
   mbl_cloneable_ptr.h

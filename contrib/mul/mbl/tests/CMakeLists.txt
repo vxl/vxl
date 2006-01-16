@@ -37,6 +37,7 @@ ADD_EXECUTABLE( mbl_test_all
   test_cloneables_factory.cxx
   test_rvm_regression_builder.cxx
   test_test.cxx
+  test_log.cxx
   test_stl.cxx
   test_cloneable_ptr.cxx
   test_exception.cxx
