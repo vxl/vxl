@@ -5,6 +5,46 @@
 // \author Ian Scott
 // \date 14-Aug-2001
 // \brief Load properties from text files
+// Along with mbl_parse_block, the functions in this file allow you to quickly
+// parse hiearchical property files that look like:
+// \verbatim
+// {
+//   n_disp_dx: 3
+//   n_synth_targets: 30
+//   parameter_displacements:
+//   {
+//    0 1 2 3
+//   }
+//   rfunc: m32_simple_residual_function
+//   {
+//     model:
+//     {
+//       apm_filepath: ../hip_cropped_lres.apm
+//       background_filepath: gen:100x50x80:vxl_int_32:0
+//       foobar_modifier: foobar_strategy3
+//     }
+//     comparator:
+//     {
+//       type: comparator_strategy2
+//       initial_geometry:
+//       {
+//         centre_of_source: 0 -1000 0
+//         centre_of_image_plane: 0 300 0
+//       }
+//     }
+//     comparator:
+//     {
+//       type: comparator_strategy2
+//       initial_geometry:
+//       {
+//         centre_of_source: 860.365 -1228.73 0
+//         centre_of_image_plane: -172.073 245.746 0
+//       }
+//     }
+//   }
+// }
+// \endverbatim
+
 
 #include <vcl_map.h>
 #include <vcl_iosfwd.h>
