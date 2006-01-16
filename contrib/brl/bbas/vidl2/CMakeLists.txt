@@ -14,6 +14,10 @@ ENDIF( FFMPEG_FOUND )
 
 SET(vidl2_sources
   vidl2_pixel_format.h          vidl2_pixel_format.cxx
+  vidl2_frame.h                 vidl2_frame.cxx               vidl2_frame_sptr.h
+  vidl2_pixel_iterator.h
+  vidl2_convert.h
+
   vidl2_istream.h
   vidl2_image_list_istream.h    vidl2_image_list_istream.cxx
   vidl2_ostream.h
@@ -38,7 +42,7 @@ IF( DC1394_FOUND )
   )
 ENDIF( DC1394_FOUND )
 
-#AUX_SOURCE_DIRECTORY(Templates vidl_sources)
+AUX_SOURCE_DIRECTORY(Templates vidl2_sources)
 
 
 
