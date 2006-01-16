@@ -10,40 +10,27 @@
 template <vidl2_pixel_format pix_type>
 struct check_types
 {
-  static inline unsigned bpp(vidl2_pixel_format f)
+  static inline
+  void traits(vidl2_pixel_format f, vidl2_pixel_traits& t)
   {
-    if (f == pix_type)
-      return vidl2_pixel_traits<pix_type>::bits_per_pixel();
-    return check_types<vidl2_pixel_format(pix_type-1)>::bpp(f);
-  }
-
-  static inline bool packed(vidl2_pixel_format f)
-  {
-    if (f == pix_type)
-      return vidl2_pixel_traits<pix_type>::packed();
-    return check_types<vidl2_pixel_format(pix_type-1)>::packed(f);
-  }
-
-  static inline bool planar(vidl2_pixel_format f)
-  {
-    if (f == pix_type)
-      return vidl2_pixel_traits<pix_type>::planar();
-    return check_types<vidl2_pixel_format(pix_type-1)>::planar(f);
+    if (f == pix_type){
+      t.name           = vidl2_pixel_traits_of<pix_type>::name();
+      t.bits_per_pixel = vidl2_pixel_traits_of<pix_type>::bits_per_pixel();
+      t.num_channels   = vidl2_pixel_traits_of<pix_type>::num_channels();
+      t.packed         = vidl2_pixel_traits_of<pix_type>::packed();
+      t.planar         = vidl2_pixel_traits_of<pix_type>::planar();
+    }
+    else
+      check_types<vidl2_pixel_format(pix_type-1)>::traits(f,t);
   }
 
   static inline vidl2_pixel_format from_string(const vcl_string& s)
   {
-    if (s == vidl2_pixel_traits<pix_type>::name())
+    if (s == vidl2_pixel_traits_of<pix_type>::name())
       return pix_type;
     return check_types<vidl2_pixel_format(pix_type-1)>::from_string(s);
   }
 
-  static inline vcl_string to_string(vidl2_pixel_format f)
-  {
-    if (f == pix_type)
-      return vidl2_pixel_traits<pix_type>::name();
-    return check_types<vidl2_pixel_format(pix_type-1)>::to_string(f);
-  }
 };
 
 
@@ -51,19 +38,14 @@ struct check_types
 VCL_DEFINE_SPECIALIZATION
 struct check_types<VIDL2_PIXEL_FORMAT_UNKNOWN>
 {
-  static inline unsigned bpp(vidl2_pixel_format f)
+  static inline
+  void traits(vidl2_pixel_format f, vidl2_pixel_traits& t)
   {
-    return vidl2_pixel_traits<VIDL2_PIXEL_FORMAT_UNKNOWN>::bits_per_pixel();
-  }
-
-  static inline bool packed(vidl2_pixel_format f)
-  {
-    return vidl2_pixel_traits<VIDL2_PIXEL_FORMAT_UNKNOWN>::packed();
-  }
-
-  static inline bool planar(vidl2_pixel_format f)
-  {
-    return vidl2_pixel_traits<VIDL2_PIXEL_FORMAT_UNKNOWN>::planar();
+    t.name           = vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_UNKNOWN>::name();
+    t.bits_per_pixel = vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_UNKNOWN>::bits_per_pixel();
+    t.num_channels   = vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_UNKNOWN>::bits_per_pixel();
+    t.packed         = vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_UNKNOWN>::bits_per_pixel();
+    t.planar         = vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_UNKNOWN>::bits_per_pixel();
   }
 
   static inline vidl2_pixel_format from_string(const vcl_string& s)
@@ -71,46 +53,22 @@ struct check_types<VIDL2_PIXEL_FORMAT_UNKNOWN>
     return VIDL2_PIXEL_FORMAT_UNKNOWN;
   }
 
-  static inline vcl_string to_string(vidl2_pixel_format f)
-  {
-    return vidl2_pixel_traits<VIDL2_PIXEL_FORMAT_UNKNOWN>::name();
-  }
 };
 
 
 //=============================================================================
 
 
-//: Return the effective number of bits per image pixel in pixel format f
-unsigned
-vidl2_pixel_format_bpp(enum vidl2_pixel_format f)
+//: Return the set of traits for pixel format f
+vidl2_pixel_traits
+vidl2_pixel_format_traits(vidl2_pixel_format f)
 {
   // Template metaprogramming automatically generates the conditions
   // to check each enum value from VIDL2_PIXEL_FORMAT_UNKNOWN
   // to VIDL2_PIXEL_FORMAT_ENUM_END-1
-  return check_types<vidl2_pixel_format(VIDL2_PIXEL_FORMAT_ENUM_END-1)>::bpp(f);
-}
-
-
-//: Return true if pixels in format f are packed into macropixels
-bool
-vidl2_pixel_format_packed(vidl2_pixel_format f)
-{
-  // Template metaprogramming automatically generates the conditions
-  // to check each enum value from VIDL2_PIXEL_FORMAT_UNKNOWN
-  // to VIDL2_PIXEL_FORMAT_ENUM_END-1
-  return check_types<vidl2_pixel_format(VIDL2_PIXEL_FORMAT_ENUM_END-1)>::packed(f);
-}
-
-
-//: Return true if pixel format f has multiple planes
-bool
-vidl2_pixel_format_planar(vidl2_pixel_format f)
-{
-  // Template metaprogramming automatically generates the conditions
-  // to check each enum value from VIDL2_PIXEL_FORMAT_UNKNOWN
-  // to VIDL2_PIXEL_FORMAT_ENUM_END-1
-  return check_types<vidl2_pixel_format(VIDL2_PIXEL_FORMAT_ENUM_END-1)>::planar(f);
+  vidl2_pixel_traits t;
+  check_types<vidl2_pixel_format(VIDL2_PIXEL_FORMAT_ENUM_END-1)>::traits(f,t);
+  return t;
 }
 
 
@@ -120,19 +78,8 @@ vcl_ostream & operator << (vcl_ostream &os, vidl2_pixel_format f)
   // Template metaprogramming automatically generates the conditions
   // to check each enum value from VIDL2_PIXEL_FORMAT_UNKNOWN
   // to VIDL2_PIXEL_FORMAT_ENUM_END-1
-  os << check_types<vidl2_pixel_format(VIDL2_PIXEL_FORMAT_ENUM_END-1)>::to_string(f);
+  os << vidl2_pixel_format_traits(f).name;
   return os;
-}
-
-
-//: Convert a string into a pixel format.
-vcl_string
-vidl2_pixel_format_to_string(vidl2_pixel_format f)
-{
-  // Template metaprogramming automatically generates the conditions
-  // to check each enum value from VIDL2_PIXEL_FORMAT_UNKNOWN
-  // to VIDL2_PIXEL_FORMAT_ENUM_END-1
-  return check_types<vidl2_pixel_format(VIDL2_PIXEL_FORMAT_ENUM_END-1)>::to_string(f);
 }
 
 
@@ -146,3 +93,14 @@ vidl2_pixel_format vidl2_pixel_format_from_string(const vcl_string& s)
   return check_types<vidl2_pixel_format(VIDL2_PIXEL_FORMAT_ENUM_END-1)>::from_string(s);
 }
 
+
+//: Compute the size (in bytes) of a \a ni x \a nj image buffer of pixel format \a f
+unsigned
+vidl2_pixel_format_buffer_size(unsigned ni, unsigned nj, vidl2_pixel_format f)
+{
+  // FIXME This may be incorrect for some formats that require blocks
+  // of macro pixels when the size of the image is not evenly divisible
+  // by the size of the block.
+  unsigned long bits = ((unsigned long)ni)*nj*vidl2_pixel_format_bpp(f);
+  return (bits + 7)/8;
+}
