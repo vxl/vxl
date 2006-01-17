@@ -188,5 +188,39 @@ vidl2_iidc1394_params::pixel_format(video_mode_t m)
 bool
 vidl2_iidc1394_params::resolution(video_mode_t m, unsigned& ni, unsigned& nj)
 {
-  return false;
+  switch(m){
+    case MODE_160x120_YUV444:
+      ni = 160;  nj = 120;  break;
+    case MODE_320x240_YUV422:
+      ni = 320;  nj = 240;  break;
+    case MODE_640x480_YUV411:
+    case MODE_640x480_YUV422:
+    case MODE_640x480_RGB8:
+    case MODE_640x480_MONO8:
+    case MODE_640x480_MONO16:
+      ni = 640;  nj = 480;  break;
+    case MODE_800x600_YUV422:
+    case MODE_800x600_RGB8:
+    case MODE_800x600_MONO8:
+    case MODE_800x600_MONO16:
+      ni = 800;  nj = 600;  break;
+    case MODE_1024x768_YUV422:
+    case MODE_1024x768_RGB8:
+    case MODE_1024x768_MONO8:
+    case MODE_1024x768_MONO16:
+      ni = 1024;  nj = 768;  break;
+    case MODE_1280x960_YUV422:
+    case MODE_1280x960_RGB8: 
+    case MODE_1280x960_MONO8:
+    case MODE_1280x960_MONO16:
+      ni = 1280;  nj = 960;  break;
+    case MODE_1600x1200_YUV422:
+    case MODE_1600x1200_RGB8:
+    case MODE_1600x1200_MONO8:
+    case MODE_1600x1200_MONO16:
+      ni = 1600;  nj = 1200;  break;
+    default:
+      return false;
+  }
+  return true;
 }

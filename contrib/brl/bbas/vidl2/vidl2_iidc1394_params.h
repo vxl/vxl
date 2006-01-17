@@ -99,9 +99,11 @@ struct vidl2_iidc1394_params
   static unsigned int video_mode_val(video_mode_t m);
 
   //: Return the pixel format of the video mode
+  // \note Only works for predefined modes (not Format 7 or Exif)
   static vidl2_pixel_format pixel_format(video_mode_t m);
 
   //: Return the image resolution of the video mode
+  // \note Only works for predefined modes (not Format 7 or Exif)
   static bool resolution(video_mode_t m, unsigned& ni, unsigned& nj);
 
   //: Return the video mode enumeration for a format and mode
