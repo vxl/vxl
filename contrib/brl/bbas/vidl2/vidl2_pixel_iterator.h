@@ -22,6 +22,7 @@
 
 #include "vidl2_pixel_format.h"
 #include <vxl_config.h>
+#include <vcl_cassert.h>
 
 template <vidl2_pixel_format FMT> 
 class vidl2_pixel_iterator;
