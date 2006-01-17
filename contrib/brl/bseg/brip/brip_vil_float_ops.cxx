@@ -875,25 +875,25 @@ Horn_SchunckMotion(vil_image_view<float> const& current_frame,
 
       for (unsigned y = 1; y<h-1;y++)
         for (unsigned x = 1; x<w-1;x++)
-          {
-            float tempx = temp1(x,y);
-            float tempy = temp2(x,y);
+        {
+          float tempx = temp1(x,y);
+          float tempy = temp2(x,y);
 
-            float gx = grad_x(x, y), gy = grad_y(x, y);
+          float gx = grad_x(x, y), gy = grad_y(x, y);
 
-            float dt = diff(x, y);
-            //         _____
-            // term = (v(x,y).Grad(x,y) + dI/dt(x,y))/(alpha + |Grad(x,y)|^2)
-            // term is the brightness constraint normalized by gradient mag.
-            //
-            float term =
-              ( (gx * tempx) + (gy * tempy) + dt )/ (alpha_coef + gx*gx + gy*gy);
+          float dt = diff(x, y);
+          //         _____
+          // term = (v(x,y).Grad(x,y) + dI/dt(x,y))/(alpha + |Grad(x,y)|^2)
+          // term is the brightness constraint normalized by gradient mag.
+          //
+          float term =
+            ( (gx * tempx) + (gy * tempy) + dt )/ (alpha_coef + gx*gx + gy*gy);
 
-            //         ______
-            //v(x,y) = v(x,y) - Grad(x,y)* term
-            vx(x,y) = tempx - (gx *  term);
-            vy(x,y) = tempy - (gy *  term);
-          }
+          //         ______
+          //v(x,y) = v(x,y) - Grad(x,y)* term
+          vx(x,y) = tempx - (gx *  term);
+          vy(x,y) = tempy - (gy *  term);
+        }
 
 #ifdef DEBUG
       vcl_cout << "Iteration No " << i << '\n';
@@ -1469,18 +1469,18 @@ vbl_array_2d<float> brip_vil_float_ops::load_kernel(vcl_string const& file)
   vbl_array_2d<float> output(N, N);
   for (unsigned y = 0; y<N; y++)
     for (unsigned x = 0; x<N; x++)
-      {
-        instr >> v;
-        output.put(x, y, v/scale);
-      }
+    {
+      instr >> v;
+      output.put(x, y, v/scale);
+    }
 #ifdef DEBUG
   vcl_cout << "The Kernel\n";
   for (unsigned y = 0; y<N; y++)
-    {
-      for (unsigned x = 0; x<N; x++)
-        vcl_cout << ' ' <<  output[x][y];
-      vcl_cout << '\n';
-    }
+  {
+    for (unsigned x = 0; x<N; x++)
+      vcl_cout << ' ' <<  output[x][y];
+    vcl_cout << '\n';
+  }
 #endif
 }
 
@@ -2713,8 +2713,8 @@ float brip_vil_float_ops::minfo_i(const unsigned i0, const unsigned j0,
   float HJ = hji.entropy();
   float minfo_i = H0 + H1 - HJ;
 #ifdef DEBUG
-  if(minfo<0)
-	  vcl_cout << "intensity MI LT 0 " << minfo <<"\n";
+  if (minfo<0)
+    vcl_cout << "intensity MI LT 0 " << minfo << vcl_endl;
 #endif
   return minfo_i;
 }
@@ -2752,8 +2752,8 @@ float brip_vil_float_ops::minfo_g(const unsigned i0, const unsigned j0,
   float HJ = hjg.entropy();
   float minfo_g = H0 + H1 - HJ;
 #ifdef DEBUG
-  if(minfo<0)
-	  vcl_cout << "gradient MI LT 0 " << minfo <<"\n";
+  if (minfo<0)
+    vcl_cout << "gradient MI LT 0 " << minfo << vcl_endl;
 #endif
   return minfo_g;
 }
@@ -2787,8 +2787,8 @@ float brip_vil_float_ops::minfo_hs(const unsigned i0, const unsigned j0,
   float HJ = hjh.entropy();
   float minfo_h = H0 + H1 - HJ;
 #ifdef DEBUG
-  if(minfo<0)
-	  vcl_cout << "color MI LT 0 " << minfo <<"\n";
+  if (minfo<0)
+    vcl_cout << "color MI LT 0 " << minfo << vcl_endl;
 #endif
   return minfo_h;
 }
