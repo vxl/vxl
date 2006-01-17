@@ -41,6 +41,7 @@ static void read_long_tag(TIFF* tif, ttag_t tag, ulong_tag& utag, unsigned long 
     utag.val = deflt;
 }
 
+#if 0 // unused static function
 //assumes array is resized properly
 static bool read_long_array(TIFF* tif, ttag_t tag,
                             vcl_vector<unsigned long>& array)
@@ -48,15 +49,12 @@ static bool read_long_array(TIFF* tif, ttag_t tag,
   unsigned long * a;
   if (TIFFGetField(tif, tag, &a))
   {
-    for (unsigned long i = 0; i<array.size(); ++i)
-    {
-      array[i]=a[i];
-    }
-
+    for (unsigned long i=0; i<array.size(); ++i) { array[i]=a[i]; }
     return true;
   }
-  return false;
+  else return false;
 }
+#endif // unused static function
 
 static void write_short_tag(TIFF* tif, ttag_t tag, ushort_tag const& ustag)
 {
@@ -81,7 +79,7 @@ bool vil_tiff_header::read_header()
   //DEBUG
 #ifdef DEBUG
   vcl_cout << date_and_time() << '\n';
-#endif DEBUG
+#endif
   //====
   //Determine the endian state of the file and machine
   file_is_big_endian_ = TIFFIsByteSwapped(tif_)>0;
@@ -101,7 +99,6 @@ bool vil_tiff_header::read_header()
   read_short_tag(tif_,TIFFTAG_BITSPERSAMPLE, bits_per_sample, 8);
   is_tiled_flag = TIFFIsTiled(tif_)>0;
   ///-----------------------------------------------///
-  char* adr = 0;
   read_string(tif_,TIFFTAG_ARTIST , artist);
   read_short_tag(tif_,TIFFTAG_CELLLENGTH, cell_length);
   read_short_tag(tif_,TIFFTAG_CELLWIDTH, cell_width);
