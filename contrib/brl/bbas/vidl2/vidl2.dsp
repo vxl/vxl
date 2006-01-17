@@ -27,6 +27,12 @@ SOURCE=.\vidl2_iidc1394_params.cxx
 # Begin Source File
 SOURCE=.\vidl2_pixel_format.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vidl2_frame.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_smart_ptr+vidl2_frame-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -62,6 +68,18 @@ SOURCE=.\vidl2_iidc1394_params.h
 # End Source File
 # Begin Source File
 SOURCE=.\vidl2_pixel_format.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_convert.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_frame.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_frame_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_pixel_iterator.h
 # End Source File
 # End Group
 # End Target

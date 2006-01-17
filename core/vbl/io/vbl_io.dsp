@@ -173,9 +173,6 @@ SOURCE=.\Templates/vsl_vector_io+vbl_triple+uint.uint.uint--.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_io_array_2d+vcl_vector+vcl_pair+long.double---.cxx
 # End Source File
-# Begin Source File
-SOURCE=.\Templates/vsl_vector_io+vcl_vector+vcl_pair+int.double---.cxx
-# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -236,8 +233,6 @@ SOURCE=.\vbl_io_triple.h
 # Begin Source File
 SOURCE=.\vbl_io_triple.txx
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
