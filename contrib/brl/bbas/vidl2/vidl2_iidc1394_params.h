@@ -18,6 +18,7 @@
 
 #include <vcl_string.h>
 #include <vcl_vector.h>
+#include "vidl2_pixel_format.h"
 
 //: A parameters struct for IIDC 1394 camera streams
 //
@@ -96,6 +97,12 @@ struct vidl2_iidc1394_params
   static unsigned int video_format_val(video_mode_t m);
   //: Return the mode number from the video mode enumeration
   static unsigned int video_mode_val(video_mode_t m);
+
+  //: Return the pixel format of the video mode
+  static vidl2_pixel_format pixel_format(video_mode_t m);
+
+  //: Return the image resolution of the video mode
+  static bool resolution(video_mode_t m, unsigned& ni, unsigned& nj);
 
   //: Return the video mode enumeration for a format and mode
   static video_mode_t video_mode(unsigned int format, unsigned int mode);

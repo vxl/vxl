@@ -134,3 +134,59 @@ video_mode(unsigned int format, unsigned int mode)
   assert(mode < 8);
   return (vidl2_iidc1394_params::video_mode_t) (((format+2) << 5) + mode);
 }
+
+
+//: Return the pixel format of the video mode
+vidl2_pixel_format
+vidl2_iidc1394_params::pixel_format(video_mode_t m)
+{
+  switch (m)
+  {
+    case MODE_160x120_YUV444:
+      return VIDL2_PIXEL_FORMAT_YUV_444P;
+
+    case MODE_320x240_YUV422:
+    case MODE_640x480_YUV422:
+    case MODE_800x600_YUV422:
+    case MODE_1024x768_YUV422:
+    case MODE_1280x960_YUV422:
+    case MODE_1600x1200_YUV422:
+      return VIDL2_PIXEL_FORMAT_YUV_422;
+
+    case MODE_640x480_YUV411:
+      return VIDL2_PIXEL_FORMAT_YUV_411P;
+
+    case MODE_640x480_RGB8:
+    case MODE_800x600_RGB8:
+    case MODE_1024x768_RGB8:
+    case MODE_1280x960_RGB8:
+    case MODE_1600x1200_RGB8:
+      return VIDL2_PIXEL_FORMAT_RGB_24;
+
+    case MODE_640x480_MONO8:
+    case MODE_800x600_MONO8:
+    case MODE_1024x768_MONO8:
+    case MODE_1280x960_MONO8:
+    case MODE_1600x1200_MONO8:
+      return VIDL2_PIXEL_FORMAT_MONO_8;
+
+    case MODE_640x480_MONO16:
+    case MODE_800x600_MONO16:
+    case MODE_1024x768_MONO16:
+    case MODE_1280x960_MONO16:
+    case MODE_1600x1200_MONO16:
+      return VIDL2_PIXEL_FORMAT_MONO_16;
+
+    default:
+      break;
+  }
+  return VIDL2_PIXEL_FORMAT_UNKNOWN;
+}
+
+
+//: Return the image resolution of the video mode
+bool
+vidl2_iidc1394_params::resolution(video_mode_t m, unsigned& ni, unsigned& nj)
+{
+  return false;
+}
