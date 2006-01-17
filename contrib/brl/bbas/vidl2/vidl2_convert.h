@@ -26,7 +26,7 @@
 // Assume that image has already been resized appropriately
 template <class pixItr, class outP>
 void
-    vidl2_convert_to_view(pixItr itr, vil_image_view<outP>& image)
+vidl2_convert_itr_to_view(pixItr itr, vil_image_view<outP>& image)
 {
   for (unsigned j = 0; j < image.nj(); ++j)
     for (unsigned i = 0; i < image.ni(); ++i, ++itr)
@@ -56,7 +56,7 @@ bool vidl2_convert_to_view(const vidl2_frame_sptr& frame,
   switch(fmt){
     case VIDL2_PIXEL_FORMAT_YUV_422:
     {
-      vidl2_convert_to_view(vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_422>((vxl_byte*)frame->data()),image);
+      vidl2_convert_itr_to_view(vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_422>((vxl_byte*)frame->data()),image);
       return true;
     }
     default:
