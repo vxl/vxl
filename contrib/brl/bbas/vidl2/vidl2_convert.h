@@ -23,11 +23,17 @@
 #include <vcl_cassert.h>
 
 
-template <class inT, class outT>
-inline void vidl2_convert_yuv2rgb(  inT  y,  inT  u,  inT  v,
-                                   outT& r, outT& g, outT& b )
+// ITU-R BT.601 (formerly CCIR 601) standard conversion
+template <class outT>
+inline void vidl2_convert_yuv2rgb( vxl_byte y, vxl_byte u, vxl_byte v,
+                                      outT& r,    outT& g,    outT& b )
 {
-
+  double dy = y/255.0;       // 0.0 to 1.0
+  double du = (u-128)/255.0; //-0.5 to 0.5
+  double dv = (v-128)/255.0; //-0.5 to 0.5
+  r = dy + 1.1402 * dv;
+  g = dy - 0.34413628620102 * du - 0.71413628620102 * dv;
+  b = dy + 1.772 * du;
 }
 
 
@@ -72,7 +78,7 @@ class vidl2_yuv2rgb_iterator
     }
 
     //: Access the data
-    vxl_byte operator () (unsigned int i) const
+    outP operator () (unsigned int i) const
     {
       assert(i<3);
       return rgb_[i];
@@ -117,20 +123,105 @@ bool vidl2_convert_to_view(const vidl2_frame_sptr& frame,
 
   image.set_size(ni,nj,np);
 
-  switch(fmt){
-    case VIDL2_PIXEL_FORMAT_YUV_422:
-    {
-      typedef vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_422> yuvItr;
-      typedef vidl2_yuv2rgb_iterator<yuvItr,outP> cvtItr;
-      vidl2_convert_itr_to_view(cvtItr(yuvItr((vxl_byte*)frame->data())),image);
-      return true;
+#define do_case(FMT) case FMT:\
+    {\
+      typedef vidl2_pixel_iterator<FMT> Itr;\
+      vidl2_convert_itr_to_view(Itr(frame),image);\
+      return true;\
     }
+  switch(fmt){
+    do_case(VIDL2_PIXEL_FORMAT_RGB_24);
+    do_case(VIDL2_PIXEL_FORMAT_BGR_24);
+    do_case(VIDL2_PIXEL_FORMAT_RGBA_32);
+    do_case(VIDL2_PIXEL_FORMAT_RGB_565);
+    do_case(VIDL2_PIXEL_FORMAT_RGB_555);
+
+    do_case(VIDL2_PIXEL_FORMAT_YUV_444);
+    do_case(VIDL2_PIXEL_FORMAT_YUV_444P);
+    do_case(VIDL2_PIXEL_FORMAT_YUV_422);
+    do_case(VIDL2_PIXEL_FORMAT_YUV_422P);
+    do_case(VIDL2_PIXEL_FORMAT_YUV_420P);
+    do_case(VIDL2_PIXEL_FORMAT_YUV_411);
+    do_case(VIDL2_PIXEL_FORMAT_YUV_411P);
+    do_case(VIDL2_PIXEL_FORMAT_YUV_410P);
+    do_case(VIDL2_PIXEL_FORMAT_UYVY_422);
+    do_case(VIDL2_PIXEL_FORMAT_UYVY_411);
+
+    do_case(VIDL2_PIXEL_FORMAT_MONO_1);
+    do_case(VIDL2_PIXEL_FORMAT_MONO_8);
+    do_case(VIDL2_PIXEL_FORMAT_MONO_16);
+
     default:
       break;
   }
+#undef do_case
   return false;
 }
 
+
+//: Unpack the pixels in the \p frame convert to RGB and store in \p image
+// Converts non-RGB color modes into RGB, monochrome is unchanged
+// The image is resized if needed.
+template <class outP>
+bool vidl2_convert_to_view_rgb(const vidl2_frame_sptr& frame,
+                               vil_image_view<outP>& image)
+{
+  vidl2_pixel_format fmt = frame->pixel_format();
+  if(fmt == VIDL2_PIXEL_FORMAT_UNKNOWN)
+    return false;
+
+  vidl2_pixel_traits traits = vidl2_pixel_format_traits(fmt);
+
+  unsigned ni=frame->ni();
+  unsigned nj=frame->nj();
+  unsigned np=traits.num_channels;
+
+  image.set_size(ni,nj,np);
+
+#define do_case(FMT) case FMT:\
+    {\
+      typedef vidl2_pixel_iterator<FMT> Itr;\
+      vidl2_convert_itr_to_view(Itr(frame),image);\
+      return true;\
+    }
+
+#define do_case_yuv2rgb(FMT) case FMT:\
+    {\
+      typedef vidl2_pixel_iterator<FMT> yuvItr;\
+      typedef vidl2_yuv2rgb_iterator<yuvItr,outP> cvtItr;\
+      vidl2_convert_itr_to_view(cvtItr(yuvItr(frame)),image);\
+      return true;\
+    }
+  switch(fmt){
+    do_case(VIDL2_PIXEL_FORMAT_RGB_24);
+    do_case(VIDL2_PIXEL_FORMAT_BGR_24);
+    do_case(VIDL2_PIXEL_FORMAT_RGBA_32);
+    do_case(VIDL2_PIXEL_FORMAT_RGB_565);
+    do_case(VIDL2_PIXEL_FORMAT_RGB_555);
+
+    do_case_yuv2rgb(VIDL2_PIXEL_FORMAT_YUV_444);
+    do_case_yuv2rgb(VIDL2_PIXEL_FORMAT_YUV_444P);
+    do_case_yuv2rgb(VIDL2_PIXEL_FORMAT_YUV_422);
+    do_case_yuv2rgb(VIDL2_PIXEL_FORMAT_YUV_422P);
+    do_case_yuv2rgb(VIDL2_PIXEL_FORMAT_YUV_420P);
+    do_case_yuv2rgb(VIDL2_PIXEL_FORMAT_YUV_411);
+    do_case_yuv2rgb(VIDL2_PIXEL_FORMAT_YUV_411P);
+    do_case_yuv2rgb(VIDL2_PIXEL_FORMAT_YUV_410P);
+    do_case_yuv2rgb(VIDL2_PIXEL_FORMAT_UYVY_422);
+    do_case_yuv2rgb(VIDL2_PIXEL_FORMAT_UYVY_411);
+
+    do_case(VIDL2_PIXEL_FORMAT_MONO_1);
+    do_case(VIDL2_PIXEL_FORMAT_MONO_8);
+    do_case(VIDL2_PIXEL_FORMAT_MONO_16);
+
+    default:
+      break;
+  }
+#undef do_case
+#undef do_case_yuv2rgb
+
+  return false;
+}
 
 
 
