@@ -11,40 +11,14 @@
 
 #include "vidl2_dc1394_istream.h"
 #include "vidl2_iidc1394_params.h"
+#include "vidl2_pixel_format.h"
+#include "vidl2_convert.h"
 #include <vcl_vector.h>
 
 #include <vil/vil_new.h>
 #include <vil/vil_image_view.h>
 
 #include <libdc1394/dc1394_control.h>
-#include <libdc1394/dc1394_conversions.h>
-//#include <libdc1394/dc1394_utils.h>
-
-
-// used to convert a YUV422 buffer to a RGB8 buffer
-static void
-vidl2_dc1394_YUV422_to_RGB8(vxl_byte *src, vxl_byte *dest, uint64_t NumPixels)
-{
-  register int i = (NumPixels << 1)-1; // 2 bytes per pixel
-  register int j = NumPixels + ( NumPixels << 1 ) -1; // 3 bytes per pixel
-  register int y0, y1, u, v;
-  register int r, g, b;
-
-  while (i >= 0) {
-    y1 = (vxl_byte) src[i--];
-    v  = (vxl_byte) src[i--] - 128;
-    y0 = (vxl_byte) src[i--];
-    u  = (vxl_byte) src[i--] - 128;
-    YUV2RGB (y1, u, v, r, g, b);
-    dest[j--] = b;
-    dest[j--] = g;
-    dest[j--] = r;
-    YUV2RGB (y0, u, v, r, g, b);
-    dest[j--] = b;
-    dest[j--] = g;
-    dest[j--] = r;
-  }
-}
 
 
 //--------------------------------------------------------------------------------
@@ -55,6 +29,7 @@ struct vidl2_dc1394_istream::pimpl
   : vid_index_( unsigned(-1) ),
     camera_info_(NULL),
     max_speed_(DC1394_SPEED_400),
+    pixel_format_(VIDL2_PIXEL_FORMAT_UNKNOWN),
     cur_img_valid_(false)
   {
   }
@@ -67,6 +42,8 @@ struct vidl2_dc1394_istream::pimpl
   dc1394camera_t* camera_info_;
 
   int max_speed_;
+
+  vidl2_pixel_format pixel_format_;
 
   //: The last successfully decoded frame.
   mutable vil_image_view<vxl_byte> cur_img_;
@@ -129,7 +106,9 @@ vidl2_dc1394_istream::pimpl::init_image()
       vcl_cerr << "camera mode not currently supported by vidl2\n";
   }
 
-  cur_img_ = vil_image_view<vxl_byte>(ni, nj, 1, np);
+  pixel_format_ = vidl2_iidc1394_params::pixel_format((vidl2_iidc1394_params::video_mode_t)camera_info_->mode);
+
+  cur_img_ = vil_image_view<vxl_byte>(ni, nj, np);
   vcl_cout << "image size: "<<ni<<'x'<<nj<<'x'<<np<<vcl_endl;
 }
 
@@ -391,9 +370,11 @@ vidl2_dc1394_istream::current_frame()
 #endif
 
   if (!is_->cur_img_valid_) {
-    vidl2_dc1394_YUV422_to_RGB8((vxl_byte*)is_->camera_info_->capture.capture_buffer,
-                                is_->cur_img_.top_left_ptr(),
-                                is_->cur_img_.ni() * is_->cur_img_.nj());
+    vidl2_frame_sptr frame = new vidl2_shared_frame((vxl_byte*)is_->camera_info_->capture.capture_buffer,
+                                                    is_->cur_img_.ni(), is_->cur_img_.nj(),
+                                                    is_->pixel_format_);
+    vidl2_convert_to_view(frame, is_->cur_img_);
+
     is_->cur_img_valid_ = true;
   }
 
