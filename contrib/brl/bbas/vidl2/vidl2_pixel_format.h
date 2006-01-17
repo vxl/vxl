@@ -50,10 +50,12 @@ enum vidl2_pixel_format
   VIDL2_PIXEL_FORMAT_RGB_565,
   VIDL2_PIXEL_FORMAT_RGB_555,
 
+  VIDL2_PIXEL_FORMAT_YUV_444,
   VIDL2_PIXEL_FORMAT_YUV_444P,
   VIDL2_PIXEL_FORMAT_YUV_422,
   VIDL2_PIXEL_FORMAT_YUV_422P,
   VIDL2_PIXEL_FORMAT_YUV_420P,
+  VIDL2_PIXEL_FORMAT_YUV_411,
   VIDL2_PIXEL_FORMAT_YUV_411P,
   VIDL2_PIXEL_FORMAT_YUV_410P,
   VIDL2_PIXEL_FORMAT_UYVY_422,
@@ -91,7 +93,7 @@ template <vidl2_pixel_format pix_type>
 struct vidl2_pixel_traits_of;
 #define vidl2_pt_mac(F,N,B,C,K,L)\
 VCL_DEFINE_SPECIALIZATION \
-struct vidl2_pixel_traits_of<F> \
+struct vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_##F> \
 {\
   static vcl_string name() { return N; }\
   static unsigned bits_per_pixel() { return B; }\
@@ -100,28 +102,30 @@ struct vidl2_pixel_traits_of<F> \
   static bool planar() { return L; }\
 }
 
-//            vidl2_pixel_format           name        bpp  nc  packed  planar
-//            ------------------           ---------   ---  --  ------  ------
-vidl2_pt_mac( VIDL2_PIXEL_FORMAT_UNKNOWN,  "unknown",  0,   0,  false,  false );
+//            format    name        bpp  nc  packed  planar
+//            ------    ---------   ---  --  ------  ------
+vidl2_pt_mac( UNKNOWN,  "unknown",  0,   0,  false,  false );
 
-vidl2_pt_mac( VIDL2_PIXEL_FORMAT_RGB_24,   "RGB 24",   24,  3,  false,  false );
-vidl2_pt_mac( VIDL2_PIXEL_FORMAT_BGR_24,   "BGR 24",   24,  3,  false,  false );
-vidl2_pt_mac( VIDL2_PIXEL_FORMAT_RGBA_32,  "RGBA 32",  32,  4,  false,  false );
-vidl2_pt_mac( VIDL2_PIXEL_FORMAT_RGB_565,  "RGB 565",  16,  3,  false,  false );
-vidl2_pt_mac( VIDL2_PIXEL_FORMAT_RGB_555,  "RGB 555",  16,  3,  false,  false );
+vidl2_pt_mac( RGB_24,   "RGB 24",   24,  3,  false,  false );
+vidl2_pt_mac( BGR_24,   "BGR 24",   24,  3,  false,  false );
+vidl2_pt_mac( RGBA_32,  "RGBA 32",  32,  4,  false,  false );
+vidl2_pt_mac( RGB_565,  "RGB 565",  16,  3,  false,  false );
+vidl2_pt_mac( RGB_555,  "RGB 555",  16,  3,  false,  false );
 
-vidl2_pt_mac( VIDL2_PIXEL_FORMAT_YUV_444P, "YUV 444P", 24,  3,  false,  true  );
-vidl2_pt_mac( VIDL2_PIXEL_FORMAT_YUV_422,  "YUV 422",  16,  3,  true,   false );
-vidl2_pt_mac( VIDL2_PIXEL_FORMAT_YUV_422P, "YUV 422P", 16,  3,  false,  true );
-vidl2_pt_mac( VIDL2_PIXEL_FORMAT_YUV_420P, "YUV 420P", 12,  3,  false,  true );
-vidl2_pt_mac( VIDL2_PIXEL_FORMAT_YUV_411P, "YUV 411P", 12,  3,  false,  true );
-vidl2_pt_mac( VIDL2_PIXEL_FORMAT_YUV_410P, "YUV 410P", 10,  3,  false,  true );
-vidl2_pt_mac( VIDL2_PIXEL_FORMAT_UYVY_422, "UYVY 422", 16,  3,  true,   false );
-vidl2_pt_mac( VIDL2_PIXEL_FORMAT_UYVY_411, "UYVY 411", 12,  3,  true,   false );
+vidl2_pt_mac( YUV_444,  "YUV 444",  24,  3,  false,  false );
+vidl2_pt_mac( YUV_444P, "YUV 444P", 24,  3,  false,  true  );
+vidl2_pt_mac( YUV_422,  "YUV 422",  16,  3,  true,   false );
+vidl2_pt_mac( YUV_422P, "YUV 422P", 16,  3,  false,  true  );
+vidl2_pt_mac( YUV_420P, "YUV 420P", 12,  3,  false,  true  );
+vidl2_pt_mac( YUV_411,  "YUV 411",  12,  3,  true,   false );
+vidl2_pt_mac( YUV_411P, "YUV 411P", 12,  3,  false,  true  );
+vidl2_pt_mac( YUV_410P, "YUV 410P", 10,  3,  false,  true  );
+vidl2_pt_mac( UYVY_422, "UYVY 422", 16,  3,  true,   false );
+vidl2_pt_mac( UYVY_411, "UYVY 411", 12,  3,  true,   false );
 
-vidl2_pt_mac( VIDL2_PIXEL_FORMAT_MONO_1,   "Mono 1",   1,   1,  false,  false );
-vidl2_pt_mac( VIDL2_PIXEL_FORMAT_MONO_8,   "Mono 8",   8,   1,  false,  false );
-vidl2_pt_mac( VIDL2_PIXEL_FORMAT_MONO_16,  "Mono 16",  16,  1,  false,  false );
+vidl2_pt_mac( MONO_1,   "Mono 1",   1,   1,  false,  false );
+vidl2_pt_mac( MONO_8,   "Mono 8",   8,   1,  false,  false );
+vidl2_pt_mac( MONO_16,  "Mono 16",  16,  1,  false,  false );
 
 #undef vidl2_pt_mac
 
