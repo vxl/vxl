@@ -55,7 +55,7 @@ public:
   void start_entry();
   //: If it hasn't already been stopped, this prints out the end of a log entry.
   void stop_entry();
-  friend mbl_logger;
+  friend class mbl_logger;
 };
 
 //: Main user logging class - represents a category.
@@ -101,7 +101,7 @@ public:
 //: Singleton, keeps records of logging state.
 class mbl_logger_root
 {
-  friend mbl_logger;
+  friend class mbl_logger;
   mbl_logger_root() {}
 public:
 

@@ -97,5 +97,5 @@ void mbl_log_output::stop_entry()
   has_started_ = false;
 }
 
-vcl_auto_ptr<VCL_DISAPPEARING_TYPENAME mbl_logger_root >  mbl_logger::root_ = 
-  vcl_auto_ptr<VCL_DISAPPEARING_TYPENAME mbl_logger_root >(0);
+vcl_auto_ptr<mbl_logger_root>  mbl_logger::root_ = 
+  vcl_auto_ptr<mbl_logger_root>(0);
