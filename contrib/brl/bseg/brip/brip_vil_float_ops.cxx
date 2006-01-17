@@ -1482,6 +1482,7 @@ vbl_array_2d<float> brip_vil_float_ops::load_kernel(vcl_string const& file)
     vcl_cout << '\n';
   }
 #endif
+    return output;
 }
 
 static void insert_image(vil_image_view<float> const& image, int col,
@@ -2732,7 +2733,7 @@ float brip_vil_float_ops::minfo_g(const unsigned i0, const unsigned j0,
   bsta_histogram<float> hg0(range, bins);
   bsta_histogram<float> hg1(range, bins);
   bsta_joint_histogram<float> hjg(range, bins);
-  float deg_rad = (float)(180.0/vnl_math::pi);
+  static const float deg_rad = (float)(180.0/vnl_math::pi);
   int ir = static_cast<int>(i_radius), jr = static_cast<int>(j_radius);
   for (int dj = -jr; dj<=jr; ++dj)
     for (int di = -ir; di<=ir; ++di)
@@ -2771,7 +2772,6 @@ float brip_vil_float_ops::minfo_hs(const unsigned i0, const unsigned j0,
   bsta_histogram<float> hh0(range, bins);
   bsta_histogram<float> hh1(range, bins);
   bsta_joint_histogram<float> hjh(range, bins);
-  float deg_rad = (float)(180.0/vnl_math::pi);
   int ir = static_cast<int>(i_radius), jr = static_cast<int>(j_radius);
   for (int dj = -jr; dj<=jr; ++dj)
     for (int di = -ir; di<=ir; ++di)
