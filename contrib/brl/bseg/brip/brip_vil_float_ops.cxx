@@ -173,7 +173,7 @@ unsigned brip_vil_float_ops::gaussian_radius(const double sigma,
   return radius;
 }
 
-//:generate a 1-d Gaussian kernel  fuzz=0.02 is a good value
+//: generate a 1-d Gaussian kernel  fuzz=0.02 is a good value
 static void brip_1d_gaussian_kernel(double sigma, double fuzz,
                                     unsigned& radius, double*& kernel)
 {
@@ -260,7 +260,7 @@ brip_vil_float_ops::gaussian(vil_image_view<float> const& input,
 #endif // VIL_CONVOLVE_WITH_MASK_EXISTS
 
 //-------------------------------------------------------------------
-// Determine if the center of a (2n+1)x(2n+1) neighborhood is a local maximum
+//: Determine if the center of a (2n+1)x(2n+1) neighborhood is a local maximum
 //
 bool brip_vil_float_ops::
 local_maximum(vbl_array_2d<float> const& neighborhood, int n, float& value)
@@ -387,7 +387,7 @@ non_maximum_suppression(vil_image_view<float> const& input,
 }
 
 // -----------------------------------------------------------------
-// Subtract image_1 from image_2.
+//: Subtract image_1 from image_2.
 // Will not operate unless the two input images are the same dimensions
 //
 vil_image_view<float>
@@ -459,7 +459,7 @@ vil_image_view<float> brip_vil_float_ops::average_NxN(vil_image_view<float> cons
 }
 
 //----------------------------------------------------------------
-// Compute the gradient of the input, use a 3x3 mask
+//: Compute the gradient of the input, use a 3x3 mask
 // \verbatim
 //         1  |-1  0  1|         1  |-1 -1 -1|
 //   Ix = --- |-1  0  1|   Iy = --- | 0  0  0|
@@ -494,7 +494,7 @@ void brip_vil_float_ops::gradient_3x3(vil_image_view<float> const& input,
 }
 
 //----------------------------------------------------------------
-// Compute the Hessian of the input, use a 3x3 mask
+//: Compute the Hessian of the input, use a 3x3 mask
 // \verbatim
 //          1 | 1  -2  1|          1 |  1  1  1|         1  | 1  0 -1|
 //   Ixx = ---| 1  -2  1|   Iyy = ---| -2 -2 -2|  Ixy = --- | 0  0  0|
@@ -567,8 +567,7 @@ brip_vil_float_ops::beaudet(vil_image_view<float> const& Ixx,
 }
 
 //----------------------------------------------------------------
-//   t
-//IxIx gradient matrix elements
+//: $Ix\cdot Ix^t$ gradient matrix elements
 // That is,
 // \verbatim
 //                        _                           _
@@ -578,7 +577,7 @@ brip_vil_float_ops::beaudet(vil_image_view<float> const& Ixx,
 //                       |(dI/dx)(dI/dy)   (dI/dx)^2   |
 //                       |_                           _|
 // \endverbatim
-// over a a 2n+1 x 2n+1 neigborhood
+// over a 2n+1 x 2n+1 neigborhood
 //
 void
 brip_vil_float_ops::grad_matrix_NxN(vil_image_view<float> const& input,
@@ -975,7 +974,7 @@ brip_vil_float_ops::convert_to_byte(vil_image_view<float> const& image)
 }
 
 //------------------------------------------------------------
-// Convert the range between min_val and max_val to 255
+//: Convert the range between min_val and max_val to 255
 vil_image_view<unsigned char>
 brip_vil_float_ops::convert_to_byte(vil_image_view<float> const& image,
                                     float min_val, float max_val)
@@ -1394,7 +1393,7 @@ brip_vil_float_ops::convert_to_float(vil_image_resource const& image)
 }
 
 //-----------------------------------------------------------------
-// Convert any image to an unsigned_char image
+//: Convert any image to an unsigned_char image
 vil_image_view<unsigned char>
 brip_vil_float_ops::convert_to_grey(vil_image_resource const& image)
 {
@@ -1441,7 +1440,7 @@ brip_vil_float_ops::convert_to_grey(vil_image_resource const& image)
 }
 
 //--------------------------------------------------------------
-// Read a convolution kernel from file
+//: Read a convolution kernel from file
 // Assumes a square kernel with odd dimensions, i.e., w,h = 2n+1
 // format:
 // \verbatim
@@ -1482,7 +1481,7 @@ vbl_array_2d<float> brip_vil_float_ops::load_kernel(vcl_string const& file)
     vcl_cout << '\n';
   }
 #endif
-    return output;
+  return output;
 }
 
 static void insert_image(vil_image_view<float> const& image, int col,
@@ -1659,7 +1658,7 @@ bool brip_vil_float_ops::fft_1d(int dir, int m, double* x, double* y)
 }
 
 //-------------------------------------------------------------------------
-//  Perform a 2D FFT inplace given a complex 2D array
+//: Perform a 2D FFT inplace given a complex 2D array
 //  The direction dir, 1 for forward, -1 for reverse
 //  The size of the array (nx,ny)
 //  Return false if there are memory problems or
@@ -1739,8 +1738,8 @@ ftt_fourier_2d_reorder(vnl_matrix<vcl_complex<double> > const& F1,
   }
 }
 
-//:  Compute the fourier transform.
-//   If the image dimensions are not a power of 2 then the operation fails.
+//: Compute the fourier transform.
+//  If the image dimensions are not a power of 2 then the operation fails.
 bool brip_vil_float_ops::
 fourier_transform(vil_image_view<float> const& input,
                   vil_image_view<float>& mag,
@@ -2107,7 +2106,7 @@ bool brip_vil_float_ops::homography(vil_image_view<float> const& input,
   return true;
 }
 
-//:rotate the input image counter-clockwise about the image origin.
+//: rotate the input image counter-clockwise about the image origin.
 // Demonstrates the use of image homography
 vil_image_view<float>
 brip_vil_float_ops::rotate(vil_image_view<float> const& input,
@@ -2249,7 +2248,7 @@ static float cross_corr(double area, double si1, double si2,
   return float(neu/den);
 }
 
-//:perform normalized cross-correlation at a sub-pixel location.
+//: perform normalized cross-correlation at a sub-pixel location.
 // Thus all the pixel values are interpolated.
 float brip_vil_float_ops::
 cross_correlate(vil_image_view<float> const& image1,
