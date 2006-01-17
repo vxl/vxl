@@ -77,6 +77,16 @@ void mbl_logger::set(int level, const mbl_log_output& output)
   output_ = output;
 }
 
+
+vcl_ostream &mbl_logger::log(int level, const char * srcfile, int srcline)
+{
+  if (level_ < level)
+    return root().null_stream_;
+  output_.set_next_event_info(level, srcfile, srcline);
+  return logstream_;
+}
+
+
 mbl_logger_root &mbl_logger::root()
 {
   if (!root_.get())
@@ -84,18 +94,62 @@ mbl_logger_root &mbl_logger::root()
   return *root_;
 }
 
+void mbl_log_output::set_next_event_info(int level, const char *srcfile, int srcline)
+{
+  if (has_started_) return;
+  next_level_ = level;
+  next_srcfile_ = srcfile;
+  next_srcline_ = srcline;
+}
+
 //: If it hasn't already been started, this prints out the beginning of a log entry.
 void mbl_log_output::start_entry()
 {
   if (has_started_) return;
+  switch(next_level_)
+  {
+  case mbl_logger::EMERG:
+    (*real_stream_)<< "EMERG: ";
+    break;
+  case mbl_logger::ALERT:
+    (*real_stream_)<< "ALERT: ";
+    break;
+  case mbl_logger::CRIT:
+    (*real_stream_)<< "CRIT: ";
+    break;
+  case mbl_logger::ERR:
+    (*real_stream_)<< "ERR: ";
+    break;
+  case mbl_logger::WARN:
+    (*real_stream_)<< "WARN: ";
+    break;
+  case mbl_logger::NOTICE:
+    (*real_stream_)<< "NOTICE: ";
+    break;
+  case mbl_logger::INFO:
+    (*real_stream_)<< "INFO: ";
+    break;
+  case mbl_logger::DEBUG:
+    (*real_stream_)<< "DEBUG: ";
+    break;
+  default:
+    (*real_stream_)<< "LOG" << next_level_ << ' ';
+    break;
+  }
+  
   (*real_stream_)<< id_ << ' ';
   has_started_ = true;
+
+  //reset level indicator as a subtle indicator of log system error.
+  next_level_=1000;
 }
 //: If it hasn't already been stopped, this prints out the end of a log entry.
 void mbl_log_output::stop_entry()
 {
   has_started_ = false;
 }
+
+
 
 vcl_auto_ptr<mbl_logger_root>  mbl_logger::root_ = 
   vcl_auto_ptr<mbl_logger_root>(0);

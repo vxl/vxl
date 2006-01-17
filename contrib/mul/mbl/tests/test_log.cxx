@@ -13,18 +13,21 @@ void test_log()
   vcl_ostringstream output;
   mbl_log_output log_output(&output, "");
 
-  mbl_logger::root().default_logger.set(mbl_logger::ALL, log_output);
+  mbl_logger::root().default_logger.set(mbl_logger::INFO, log_output);
 
   mbl_logger current("wibble1");
   
   if (current.level() >= mbl_logger::INFO)
-    current.log() << "Output this whatever" << vcl_endl;
+    current.log(mbl_logger::INFO) << "Output this whatever" << vcl_endl;
 
-  vcl_cout << "STRINGSTREAM OUTPUT: \""<<output.str()<<'\"';
+  MBL_LOG( WARN, current, "Also this number " << 54);
+  current.log(mbl_logger::DEBUG) << "But not this " << vcl_endl;
 
-  TEST("Log output is as expected", output.str(), "wibble1 Output this whatever\n");
+  vcl_cout << "LOG OUTPUT:\n\""<<output.str()<<'\"' <<vcl_endl;
 
-
+  TEST("Log output is as expected", output.str(), 
+    "INFO: wibble1 Output this whatever\n"
+    "WARN: wibble1 Also this number 54\n");
 }
 
 TESTMAIN(test_log);
