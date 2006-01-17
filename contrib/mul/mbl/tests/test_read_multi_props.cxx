@@ -240,7 +240,7 @@ void test_read_multi_props_ws()
     TEST("Case 12a: props[ \"a\" ].1 == \"a\"",
          props.lower_bound("a")->second == "a" && !ss.fail(), true);
     TEST("Case 12b: props[ \"a\" ].2 == a2_ans",
-         strip_ws((--props.lower_bound("a"))->second) == strip_ws(a2_ans)
+         strip_ws((--props.upper_bound("a"))->second) == strip_ws(a2_ans)
          && !ss.fail(), true);
     TEST("Case 12c: props[ \"a\" ].count == 2",
          vcl_distance(props.lower_bound("a"), props.upper_bound("a")), 2);
