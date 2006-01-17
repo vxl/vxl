@@ -5,6 +5,7 @@
 #include <vidl2/vidl2_image_list_ostream.h>
 #include <vidl2/vidl2_iidc1394_params.h>
 #ifdef HAS_FFMPEG
+#include <vidl2/vidl2_ffmpeg_init.h>
 #include <vidl2/vidl2_ffmpeg_istream.h>
 #include <vidl2/vidl2_ffmpeg_ostream.h>
 #include <vidl2/vidl2_ffmpeg_ostream_params.h>
