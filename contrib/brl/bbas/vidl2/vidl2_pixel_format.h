@@ -45,8 +45,10 @@ enum vidl2_pixel_format
   VIDL2_PIXEL_FORMAT_UNKNOWN = -1,
 
   VIDL2_PIXEL_FORMAT_RGB_24,
+  VIDL2_PIXEL_FORMAT_RGB_24P,
   VIDL2_PIXEL_FORMAT_BGR_24,
   VIDL2_PIXEL_FORMAT_RGBA_32,
+  VIDL2_PIXEL_FORMAT_RGBA_32P,
   VIDL2_PIXEL_FORMAT_RGB_565,
   VIDL2_PIXEL_FORMAT_RGB_555,
 
@@ -107,8 +109,10 @@ struct vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_##F> \
 vidl2_pt_mac( UNKNOWN,  "unknown",  0,   0,  false,  false );
 
 vidl2_pt_mac( RGB_24,   "RGB 24",   24,  3,  false,  false );
+vidl2_pt_mac( RGB_24P,  "RGB 24P",  24,  3,  false,  true  );
 vidl2_pt_mac( BGR_24,   "BGR 24",   24,  3,  false,  false );
 vidl2_pt_mac( RGBA_32,  "RGBA 32",  32,  4,  false,  false );
+vidl2_pt_mac( RGBA_32P, "RGBA 32P", 32,  4,  false,  true  );
 vidl2_pt_mac( RGB_565,  "RGB 565",  16,  3,  false,  false );
 vidl2_pt_mac( RGB_555,  "RGB 555",  16,  3,  false,  false );
 

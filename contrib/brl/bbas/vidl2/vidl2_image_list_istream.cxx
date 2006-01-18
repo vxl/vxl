@@ -10,6 +10,7 @@
 //-----------------------------------------------------------------------------
 
 #include "vidl2_image_list_istream.h"
+#include "vidl2_frame.h"
 #include <vcl_algorithm.h>
 #include <vul/vul_file_iterator.h>
 #include <vul/vul_file.h>
@@ -115,7 +116,7 @@ advance()
 
 
 //: Read the next frame from the stream
-vil_image_resource_sptr
+vidl2_frame_sptr
 vidl2_image_list_istream::read_frame()
 {
   advance();
@@ -124,11 +125,14 @@ vidl2_image_list_istream::read_frame()
 
 
 //: Return the current frame in the stream
-vil_image_resource_sptr
+vidl2_frame_sptr
 vidl2_image_list_istream::current_frame()
 {
-  if (is_valid())
-    return images_[index_];
+  if (is_valid()){
+    vil_image_view_base_sptr view = images_[index_]->get_view();
+    if(view)
+      return new vidl2_memory_chunk_frame(view);
+  }
   else
     return NULL;
 }

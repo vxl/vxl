@@ -20,6 +20,7 @@
 #include "vidl2_pixel_format.h"
 #include "vidl2_frame_sptr.h"
 #include <vil/vil_memory_chunk.h>
+#include <vil/vil_image_view_base.h>
 
 
 //: A ref counted video frame
@@ -118,10 +119,12 @@ class vidl2_memory_chunk_frame : public vidl2_frame
     //: Constructor
     vidl2_memory_chunk_frame() : memory_(NULL) {}
 
-
     //: Constructor - from a vil_memory_chunk_sptr
     vidl2_memory_chunk_frame(unsigned ni, unsigned nj, const vil_memory_chunk_sptr& memory):
       vidl2_frame(ni,nj,VIDL2_PIXEL_FORMAT_UNKNOWN), memory_(memory) {}
+
+    //: Constructor - from a vil_image_view
+    vidl2_memory_chunk_frame(const vil_image_view_base_sptr& image);
 
     //: Destructor
     virtual ~vidl2_memory_chunk_frame() {}

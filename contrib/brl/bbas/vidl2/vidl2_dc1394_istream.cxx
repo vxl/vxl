@@ -12,7 +12,7 @@
 #include "vidl2_dc1394_istream.h"
 #include "vidl2_iidc1394_params.h"
 #include "vidl2_pixel_format.h"
-#include "vidl2_convert.h"
+#include "vidl2_frame.h"
 #include <vcl_vector.h>
 
 #include <vil/vil_new.h>
@@ -32,12 +32,10 @@ struct vidl2_dc1394_istream::pimpl
     camera_info_(NULL),
     max_speed_(DC1394_SPEED_400),
     pixel_format_(VIDL2_PIXEL_FORMAT_UNKNOWN),
-    cur_img_valid_(false)
+    cur_frame_(NULL),
+    cur_frame_valid_(false)
   {
   }
-
-  //: extract the image properties from the camera mode to initialize cur_img_
-  void init_image();
 
   unsigned int vid_index_;
 
@@ -48,28 +46,11 @@ struct vidl2_dc1394_istream::pimpl
   vidl2_pixel_format pixel_format_;
 
   //: The last successfully decoded frame.
-  mutable vil_image_view<vxl_byte> cur_img_;
+  mutable vidl2_frame_sptr cur_frame_;
 
-  bool cur_img_valid_;
+  bool cur_frame_valid_;
 };
 
-
-//: extract the image properties from the camera mode.
-void
-vidl2_dc1394_istream::pimpl::init_image()
-{
-  unsigned int ni, nj, np;
-
-  vidl2_iidc1394_params::video_mode_t vm = (vidl2_iidc1394_params::video_mode_t)camera_info_->mode;
-
-  pixel_format_ = vidl2_iidc1394_params::pixel_format(vm);
-  np = vidl2_pixel_format_num_channels(pixel_format_);
-
-  if(vidl2_iidc1394_params::resolution(vm,ni,nj)){
-    cur_img_.set_size(ni, nj, np);
-    vcl_cout << "image size: "<<ni<<'x'<<nj<<'x'<<np<<vcl_endl;
-  }
-}
 
 //--------------------------------------------------------------------------------
 
@@ -143,7 +124,9 @@ open(const vcl_string& device_filename,
     }
   }
 
-  is_->init_image();
+  vidl2_iidc1394_params::video_mode_t vm = (vidl2_iidc1394_params::video_mode_t)is_->camera_info_->mode;
+  is_->pixel_format_ = vidl2_iidc1394_params::pixel_format(vm);
+
 
   // turn on the camera power
   dc1394switch_t pwr;
@@ -293,7 +276,7 @@ vidl2_dc1394_istream::
 advance()
 {
   ++is_->vid_index_;
-  is_->cur_img_valid_ = false;
+  is_->cur_frame_valid_ = false;
   dc1394_dma_done_with_buffer(is_->camera_info_);
   if (dc1394_dma_capture(&is_->camera_info_, 1, DC1394_VIDEO1394_WAIT) != DC1394_SUCCESS) {
     vcl_cerr << "capture failed\n";
@@ -304,7 +287,7 @@ advance()
 
 
 //: Read the next frame from the stream
-vil_image_resource_sptr
+vidl2_frame_sptr
 vidl2_dc1394_istream::read_frame()
 {
   if (advance())
@@ -314,7 +297,7 @@ vidl2_dc1394_istream::read_frame()
 
 
 //: Return the current frame in the stream
-vil_image_resource_sptr
+vidl2_frame_sptr
 vidl2_dc1394_istream::current_frame()
 {
   // Quick return if the stream isn't valid
@@ -323,22 +306,17 @@ vidl2_dc1394_istream::current_frame()
   }
 
 
-  if (!is_->cur_img_valid_) {
-    vidl2_frame_sptr frame = new vidl2_shared_frame((vxl_byte*)is_->camera_info_->capture.capture_buffer,
-                                                    is_->cur_img_.ni(), is_->cur_img_.nj(),
-                                                    is_->pixel_format_);
+  if (!is_->cur_frame_valid_) {
+    if(is_->cur_frame_)
+      is_->cur_frame_->invalidate();
 
-    if(vidl2_convert_to_view_rgb(frame, is_->cur_img_))
-      is_->cur_img_valid_ = true;
-    else
-      vcl_cerr << "unable to convert image" << vcl_endl;
-
+    is_->cur_frame_ = new vidl2_shared_frame(is_->camera_info_->capture.capture_buffer,
+                                        is_->camera_info_->capture.frame_width,
+                                        is_->camera_info_->capture.frame_height,
+                                        is_->pixel_format_);
   }
 
-  if (is_->cur_img_){
-    return vil_new_image_resource_of_view(is_->cur_img_);
-  }
-  return NULL;
+  return is_->cur_frame_;
 }
 
 

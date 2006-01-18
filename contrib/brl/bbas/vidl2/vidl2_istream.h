@@ -11,7 +11,7 @@
 // \author Matt Leotta
 // \date 19 Dec 2005
 
-#include <vil/vil_image_resource_sptr.h>
+#include "vidl2_frame_sptr.h"
 
 
 //: A base class for input video streams
@@ -42,10 +42,10 @@ class vidl2_istream
   virtual bool advance() = 0 ;
 
   //: Read the next frame from the stream (advance and acquire)
-  virtual vil_image_resource_sptr read_frame() = 0;
+  virtual vidl2_frame_sptr read_frame() = 0;
 
   //: Return the current frame in the stream
-  virtual vil_image_resource_sptr current_frame() = 0;
+  virtual vidl2_frame_sptr current_frame() = 0;
 
   //: Seek to the given frame number
   // \returns true if successful

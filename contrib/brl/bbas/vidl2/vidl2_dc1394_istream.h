@@ -69,10 +69,10 @@ class vidl2_dc1394_istream
   virtual bool advance();
 
   //: Read the next frame from the stream (advance and acquire)
-  virtual vil_image_resource_sptr read_frame();
+  virtual vidl2_frame_sptr read_frame();
 
   //: Return the current frame in the stream
-  virtual vil_image_resource_sptr current_frame();
+  virtual vidl2_frame_sptr current_frame();
 
   //: Seek to the given frame number
   // \returns true if successful

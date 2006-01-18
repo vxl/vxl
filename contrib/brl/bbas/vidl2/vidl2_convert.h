@@ -44,7 +44,7 @@ inline void vidl2_convert_yuv2rgb( vxl_byte  y, vxl_byte  u, vxl_byte  v,
                                    vxl_byte& r, vxl_byte& g, vxl_byte& b )
 
 {
-  int iy = y, iu = u-128, iv = v-128, ir, ib, ig;
+  register int iy = y, iu = u-128, iv = v-128, ir, ib, ig;
   r = ir = iy + ((iv*1436) >> 10);
   g = ig = iy - ((iu*352 + iv*731) >> 10);
   b = ib = iy + ((iu*1814) >> 10);

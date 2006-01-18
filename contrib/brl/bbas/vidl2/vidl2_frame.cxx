@@ -11,6 +11,7 @@
 
 #include "vidl2_frame.h"
 #include <vcl_cassert.h>
+#include <vil/vil_image_view.h>
 
 //-----------------------------------------------------------------------------
 
@@ -23,6 +24,50 @@ vidl2_frame::unref()
   if (ref_count_==0)
   {
     delete this;
+  }
+}
+
+//-----------------------------------------------------------------------------
+
+//: Constructor - from a vil_image_view
+vidl2_memory_chunk_frame::
+vidl2_memory_chunk_frame(const vil_image_view_base_sptr& image)
+  : vidl2_frame(), memory_(NULL)
+{
+  assert(image);
+  ni_ = image->ni();
+  nj_ = image->nj();
+  if (image->pixel_format() == VIL_PIXEL_FORMAT_UINT_16 &&
+     image->nplanes() == 1)
+  {
+    vil_image_view<vxl_uint_16> img = *image;
+    assert(img.is_contiguous());
+    memory_ = img.memory_chunk();
+    format_ = VIDL2_PIXEL_FORMAT_MONO_16;
+  }
+  else if (image->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
+  {
+    vil_image_view<vxl_byte> img = *image;
+    assert(img.is_contiguous());
+    memory_ = img.memory_chunk();
+    if (img.nplanes() == 1)
+    {
+      format_ = VIDL2_PIXEL_FORMAT_MONO_8;
+    }
+    if (img.nplanes() == 3)
+    {
+      if (img.planestep() == 1)
+        format_ = VIDL2_PIXEL_FORMAT_RGB_24;
+      else
+        format_ = VIDL2_PIXEL_FORMAT_RGB_24P;
+    }
+    if (img.nplanes() == 4)
+    {
+      if (img.planestep() == 1)
+        format_ = VIDL2_PIXEL_FORMAT_RGBA_32;
+      else
+        format_ = VIDL2_PIXEL_FORMAT_RGBA_32P;
+    }
   }
 }
 

@@ -53,7 +53,7 @@ class vidl2_image_list_ostream
 
   //: Write and image to the stream
   // \retval false if the image could not be written
-  virtual bool write_frame(const vil_image_resource_sptr& image);
+  virtual bool write_frame(const vidl2_frame_sptr& frame);
 
  private:
   //: The current index

@@ -48,7 +48,9 @@ struct vidl2_component_enc<VIDL2_PIXEL_FORMAT_BGR_24>
   static inline
   vxl_byte channel(const vxl_byte * ptr, unsigned int i)
   {
-
+    // 0 -> 2
+    // 1 -> 1
+    // 2 -> 0
     return ptr[2-i];
   }
 };
@@ -61,12 +63,7 @@ struct vidl2_component_enc<VIDL2_PIXEL_FORMAT_RGB_555>
   vxl_byte channel(const vxl_byte * ptr, unsigned int i)
   {
     const vxl_uint_16* p = reinterpret_cast<const vxl_uint_16*>(ptr);
-    switch(i){
-      case 0: return vxl_byte((*p & 0x7C00) >> 7); // R
-      case 1: return vxl_byte((*p & 0x03E0) >> 2); // G
-      case 2: return vxl_byte((*p & 0x001F) << 3); // B
-    }
-    return 0;
+    return static_cast<vxl_byte>(*p >> (2-i)*5)<<3;
   }
 };
 
@@ -94,12 +91,10 @@ struct vidl2_component_enc<VIDL2_PIXEL_FORMAT_YUV_444>
   static inline
   vxl_byte channel(const vxl_byte * ptr, unsigned int i)
   {
-    switch(i){
-      case 0: return ptr[1]; // Y
-      case 1: return ptr[0]; // U
-      case 2: return ptr[2]; // V
-    }
-    return 0;
+    // 0 -> 1
+    // 1 -> 0
+    // 2 -> 2
+    return ptr[i^((i>>1)^1)];
   }
 };
 
@@ -159,7 +154,8 @@ class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_422>
     vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_422> & operator++ ()
     {
       mode_ = !mode_;
-      ptr_ += 2;
+      if(mode_)
+        ptr_ += 4;
       return *this;
     }
 
@@ -167,20 +163,9 @@ class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_422>
     vxl_byte operator () (unsigned int i) const
     {
       assert(i<3);
-      if(mode_){
-        switch(i){
-          case 0: return ptr_[1];
-          case 1: return ptr_[0];
-          case 2: return ptr_[2];
-        }
-      }else{
-        switch(i){
-          case 0: return ptr_[1];
-          case 1: return ptr_[-2];
-          case 2: return ptr_[0];
-        }
-      }
-      return 0;
+      if(!mode_ && !i)
+        return ptr_[3];
+      return ptr_[i^((i>>1)^1)];
     }
 
   private:

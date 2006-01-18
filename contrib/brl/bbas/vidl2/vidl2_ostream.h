@@ -11,7 +11,7 @@
 // \author Matt Leotta
 // \date 19 Dec 2005
 
-#include <vil/vil_image_resource_sptr.h>
+#include "vidl2_frame_sptr.h"
 
 
 //: A base class for output video streams
@@ -31,7 +31,7 @@ class vidl2_ostream
 
   //: Write and image to the stream
   // \retval false if the image could not be written
-  virtual bool write_frame(const vil_image_resource_sptr& image) = 0;
+  virtual bool write_frame(const vidl2_frame_sptr& frame) = 0;
 };
 
 #endif // vidl2_ostream_h_

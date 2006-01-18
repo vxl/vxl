@@ -11,6 +11,7 @@
 
 #include "vidl2_ffmpeg_istream.h"
 #include "vidl2_ffmpeg_init.h"
+#include "vidl2_frame.h"
 
 #include <vcl_algorithm.h>
 #include <vul/vul_file_iterator.h>
@@ -302,7 +303,7 @@ advance()
 
 
 //: Read the next frame from the stream
-vil_image_resource_sptr
+vidl2_frame_sptr
 vidl2_ffmpeg_istream::read_frame()
 {
   if (advance())
@@ -312,7 +313,7 @@ vidl2_ffmpeg_istream::read_frame()
 
 
 //: Return the current frame in the stream
-vil_image_resource_sptr
+vidl2_frame_sptr
 vidl2_ffmpeg_istream::current_frame()
 {
   // Quick return if the stream isn't valid
@@ -356,7 +357,7 @@ vidl2_ffmpeg_istream::current_frame()
   }
 
   if (is_->cur_img_)
-    return vil_new_image_resource_of_view(is_->cur_img_);
+    return new vidl2_memory_chunk_frame( &is_->cur_img_ );
   return NULL;
 }
 

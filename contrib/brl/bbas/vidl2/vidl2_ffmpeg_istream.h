@@ -18,7 +18,6 @@
 
 #include "vidl2_istream.h"
 #include <vcl_string.h>
-#include <vil/vil_image_resource_sptr.h>
 
 
 //: A video input stream using FFMPEG to decoded files
@@ -57,10 +56,10 @@ class vidl2_ffmpeg_istream
   virtual bool advance();
 
   //: Read the next frame from the stream (advance and acquire)
-  virtual vil_image_resource_sptr read_frame();
+  virtual vidl2_frame_sptr read_frame();
 
   //: Return the current frame in the stream
-  virtual vil_image_resource_sptr current_frame();
+  virtual vidl2_frame_sptr current_frame();
 
   //: Seek to the given frame number
   // \returns true if successful

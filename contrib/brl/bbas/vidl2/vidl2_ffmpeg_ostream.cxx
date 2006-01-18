@@ -12,6 +12,8 @@
 #include "vidl2_ffmpeg_ostream.h"
 #include "vidl2_ffmpeg_ostream_params.h"
 #include "vidl2_ffmpeg_init.h"
+#include "vidl2_frame.h"
+#include "vidl2_convert.h"
 #include <vcl_cstring.h>
 #include <vil/vil_memory_chunk.h>
 #include <vil/vil_image_resource.h>
@@ -503,7 +505,7 @@ is_open() const
 // \retval false if the image could not be written
 bool
 vidl2_ffmpeg_ostream::
-write_frame(const vil_image_resource_sptr& image)
+write_frame(const vidl2_frame_sptr& frame)
 {
 #if LIBAVFORMAT_BUILD <= 4628
   AVCodecContext* codec = &os_->fmt_cxt_->streams[0]->codec;
@@ -511,24 +513,16 @@ write_frame(const vil_image_resource_sptr& image)
   AVCodecContext* codec = os_->fmt_cxt_->streams[0]->codec;
 #endif
 
-  if ( unsigned( codec->width ) != image->ni() ||
-      unsigned( codec->height ) != image->nj() ) {
+  if ( unsigned( codec->width ) != frame->ni() ||
+      unsigned( codec->height ) != frame->nj() ) {
     vcl_cerr << "ffmpeg: Input image has wrong size. Expecting ("
              << codec->width << 'x' << codec->height << "), got ("
-             << image->ni() << 'x' << image->nj() << ")\n";
+             << frame->ni() << 'x' << frame->nj() << ")\n";
     return false;
   }
 
-  if ( image->pixel_format() != vil_pixel_format_of(vxl_byte()) ){
-    vcl_cerr << "ffmpeg: can only handle byte images\n";
-    return false;
-  }
-
-  vil_image_view<vxl_byte> img = image->get_view();
-  if ( img.planestep() != 1 || img.istep() != 3 || img.jstep() != vcl_ptrdiff_t(img.ni()*img.istep()) ) {
-    vcl_cerr << "ffmpeg: can only handle contiguous RGB component images\n";
-    return false;
-  }
+  vil_image_view<vxl_byte> img;
+  vidl2_convert_to_view_rgb(frame, img);
 
   AVFrame out_frame;
   avcodec_get_frame_defaults( &out_frame );

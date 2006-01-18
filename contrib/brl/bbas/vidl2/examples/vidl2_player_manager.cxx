@@ -8,7 +8,6 @@
 #include <vcl_sstream.h>
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vul/vul_timer.h>
-#include <vil/vil_image_resource.h>
 #include <vil/vil_file_format.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_error_dialog.h>
@@ -17,6 +16,9 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 
+
+#include <vidl2/vidl2_frame.h>
+#include <vidl2/vidl2_convert.h>
 #include <vidl2/vidl2_image_list_istream.h>
 #include <vidl2/vidl2_image_list_ostream.h>
 
@@ -121,14 +123,16 @@ void vidl2_player_manager::open_image_list_istream()
 
   if (istream_->is_valid())
   {
-    vil_image_resource_sptr img = istream_->current_frame();
-    if (img) {
-      height_ = img->nj();
-      width_ = img->ni();
+    vidl2_frame_sptr frame = istream_->current_frame();
+    if (frame) {
+      height_ = frame->nj();
+      width_ = frame->ni();
       if (win_)
         win_->reshape(width_+10, height_+60);
 
-      itab_->set_image_resource(img);
+      vil_image_view<vxl_byte> img;
+      vidl2_convert_to_view_rgb(frame,img);
+      itab_->set_image_view(img);
     }
   }
 
@@ -159,14 +163,16 @@ void vidl2_player_manager::open_ffmpeg_istream()
   }
 
   if (istream_->is_valid()) {
-    vil_image_resource_sptr img = istream_->current_frame();
-    if (img) {
-      height_ = img->nj();
-      width_ = img->ni();
+    vidl2_frame_sptr frame = istream_->current_frame();
+    if (frame) {
+      height_ = frame->nj();
+      width_ = frame->ni();
       if (win_)
         win_->reshape(width_+10, height_+60);
 
-      itab_->set_image_resource(img);
+      vil_image_view<vxl_byte> img;
+      vidl2_convert_to_view_rgb(frame,img);
+      itab_->set_image_view(img);
     }
   }
 
@@ -403,10 +409,10 @@ void vidl2_player_manager::open_ffmpeg_ostream()
 
   if (istream_ && istream_->is_valid())
   {
-    vil_image_resource_sptr img = istream_->current_frame();
-    if (img) {
-      params.ni_ = img->ni();
-      params.nj_ = img->nj();
+    vidl2_frame_sptr frame = istream_->current_frame();
+    if (frame) {
+      params.ni_ = frame->ni();
+      params.nj_ = frame->nj();
     }
   }
 
@@ -468,14 +474,14 @@ void vidl2_player_manager::pipe_streams()
 
   unsigned int initial_frame = istream_->frame_number();
 
-  vil_image_resource_sptr img;
+  vidl2_frame_sptr frame;
   if (num_frames < 0)
-    while (bool(img = istream_->read_frame()) &&
-           ostream_->write_frame(img) );
+    while (bool(frame = istream_->read_frame()) &&
+           ostream_->write_frame(frame) );
   else
     for (int i=0; i<num_frames &&
-         bool(img = istream_->read_frame()) &&
-         ostream_->write_frame(img); ++i);
+         bool(frame = istream_->read_frame()) &&
+         ostream_->write_frame(frame); ++i);
   ostream_->close();
 
   if (istream_->is_seekable())
@@ -491,7 +497,13 @@ void vidl2_player_manager::redraw()
       vgui::out << "invalid frame\n";
     else
       vgui::out << "frame["<< frame <<"]\n";
-    itab_->set_image_resource(istream_->current_frame());
+
+    vil_image_view_base_sptr old_view = itab_->get_image_view();
+    vil_image_view<vxl_byte> img;
+    if(old_view)
+      img = *old_view;
+    vidl2_convert_to_view_rgb(istream_->current_frame(),img);
+    itab_->set_image_view(img);
   }
   static int temp = 0;
   ++temp;

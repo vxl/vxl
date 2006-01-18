@@ -10,6 +10,7 @@
 //-----------------------------------------------------------------------------
 
 #include "vidl2_image_list_ostream.h"
+#include "vidl2_convert.h"
 #include <vul/vul_file.h>
 #include <vul/vul_sprintf.h>
 #include <vil/vil_file_format.h>
@@ -116,12 +117,15 @@ next_file_name() const
 // \retval false if the image could not be written
 bool
 vidl2_image_list_ostream::
-write_frame(const vil_image_resource_sptr& image)
+write_frame(const vidl2_frame_sptr& frame)
 {
   vcl_string file_name = next_file_name();
   ++index_;
-  return vil_save_image_resource(image,
-                                 file_name.c_str(),
-                                 file_format_.c_str());
+  // FIXME this does not account for all data types
+  vil_image_view<vxl_byte> image;
+  vidl2_convert_to_view_rgb(frame, image);
+  return vil_save(image,
+                  file_name.c_str(),
+                  file_format_.c_str());
 }
 

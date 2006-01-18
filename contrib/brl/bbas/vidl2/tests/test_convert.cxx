@@ -6,6 +6,7 @@
 #include <vcl_cstring.h> // for vcl_memcpy
 
 
+
 static void test_convert()
 {
   vcl_cout << "***********************\n"
@@ -59,26 +60,28 @@ static void test_convert()
     vul_timer timer;
     for(unsigned int i=0; i<100; ++i)
       vidl2_convert_to_view(frame, image);
-    float time = timer.user()/100000.0f;
+    float time = timer.all()/100000.0f;
     vcl_cout << "copy time = " << time << vcl_endl;
 
     timer.mark();
     for(unsigned int i=0; i<100; ++i)
       vidl2_convert_to_view_rgb(frame, image);
-    time = timer.user()/100000.0f;
+    time = timer.all()/100000.0f;
     vcl_cout << "copy convert time = " << time << vcl_endl;
 
     timer.mark();
     for(unsigned int i=0; i<100; ++i)
       vidl2_convert_to_view_rgb(frame, imagef);
-    time = timer.user()/100000.0f;
+    time = timer.all()/100000.0f;
     vcl_cout << "copy float convert time = " << time << vcl_endl;
 
     timer.mark();
     for(unsigned int i=0; i<100; ++i)
       vcl_memcpy(image.top_left_ptr(), buffer, ni*nj*3);
-    time = timer.user()/100000.0f;
+    time = timer.all()/100000.0f;
     vcl_cout << "memcpy time = " << time << vcl_endl;
+
+
   }
 
 }
