@@ -13,19 +13,19 @@ static void test_pixel_format()
 
   TEST("vidl2_pixel_format_bpp",
        vidl2_pixel_format_bpp(VIDL2_PIXEL_FORMAT_RGB_24),
-       vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_RGB_24>::bits_per_pixel() );
+       vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_RGB_24>::bits_per_pixel );
 
   TEST("vidl2_pixel_format_num_channels",
        vidl2_pixel_format_num_channels(VIDL2_PIXEL_FORMAT_RGB_24),
-       vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_RGB_24>::num_channels() );
+       vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_RGB_24>::num_channels );
 
   TEST("vidl2_pixel_format_packed",
        vidl2_pixel_format_packed(VIDL2_PIXEL_FORMAT_YUV_422),
-       vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_YUV_422>::packed() );
+       vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_YUV_422>::packed );
 
   TEST("vidl2_pixel_format_planar",
        vidl2_pixel_format_planar(VIDL2_PIXEL_FORMAT_YUV_422P),
-       vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_YUV_422P>::planar() );
+       vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_YUV_422P>::planar );
 
   TEST("vidl2_pixel_format_to_string",
        vidl2_pixel_format_to_string(VIDL2_PIXEL_FORMAT_MONO_8),

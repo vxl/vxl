@@ -97,10 +97,27 @@ template <class pixItr, class outP>
 void
 vidl2_convert_itr_to_view(pixItr itr, vil_image_view<outP>& image)
 {
-  for (unsigned j = 0; j < image.nj(); ++j)
-    for (unsigned i = 0; i < image.ni(); ++i, ++itr)
-      for (unsigned p = 0; p < image.nplanes(); ++p)
-        image(i,j,p) = static_cast<outP>( itr(p) );
+  unsigned ni = image.ni();
+  unsigned nj = image.nj();
+  unsigned np = image.nplanes();
+  vcl_ptrdiff_t istep = image.istep(); 
+  vcl_ptrdiff_t jstep = image.jstep();
+  vcl_ptrdiff_t pstep = image.planestep();
+
+  outP* row = image.top_left_ptr();
+  for (unsigned int j=0; j<nj; ++j, row+=jstep)
+  {
+    outP* col = row;
+    for (unsigned int i=0; i<ni; ++i, col+=istep, ++itr)
+    {
+      outP* pixel = col;
+      for (unsigned int p=0; p<np; ++p, pixel+=pstep)
+      {
+        *pixel = static_cast<outP>( itr(p) );
+      }
+    }
+  }
+
 }
 
 

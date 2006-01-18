@@ -34,7 +34,8 @@
 template <vidl2_pixel_format FMT> 
 struct vidl2_component_enc
 {
-  static vxl_byte channel(const vxl_byte * ptr, unsigned int i)
+  static inline
+  vxl_byte channel(const vxl_byte * ptr, unsigned int i)
   {
     return ptr[i];
   }
@@ -44,8 +45,10 @@ struct vidl2_component_enc
 VCL_DEFINE_SPECIALIZATION 
 struct vidl2_component_enc<VIDL2_PIXEL_FORMAT_BGR_24>
 {
-  static vxl_byte channel(const vxl_byte * ptr, unsigned int i)
+  static inline
+  vxl_byte channel(const vxl_byte * ptr, unsigned int i)
   {
+
     return ptr[2-i];
   }
 };
@@ -54,10 +57,16 @@ struct vidl2_component_enc<VIDL2_PIXEL_FORMAT_BGR_24>
 VCL_DEFINE_SPECIALIZATION 
 struct vidl2_component_enc<VIDL2_PIXEL_FORMAT_RGB_555>
 {
-  static vxl_byte channel(const vxl_byte * ptr, unsigned int i)
+  static inline
+  vxl_byte channel(const vxl_byte * ptr, unsigned int i)
   {
     const vxl_uint_16* p = reinterpret_cast<const vxl_uint_16*>(ptr);
-    return static_cast<vxl_byte>((*p >> (2-i)*5) & 31)<<3;
+    switch(i){
+      case 0: return vxl_byte((*p & 0x7C00) >> 7); // R
+      case 1: return vxl_byte((*p & 0x03E0) >> 2); // G
+      case 2: return vxl_byte((*p & 0x001F) << 3); // B
+    }
+    return 0;
   }
 };
 
@@ -65,13 +74,30 @@ struct vidl2_component_enc<VIDL2_PIXEL_FORMAT_RGB_555>
 VCL_DEFINE_SPECIALIZATION 
 struct vidl2_component_enc<VIDL2_PIXEL_FORMAT_RGB_565>
 {
-  static vxl_byte channel(const vxl_byte * ptr, unsigned int i)
+  static inline
+  vxl_byte channel(const vxl_byte * ptr, unsigned int i)
   {
     const vxl_uint_16* p = reinterpret_cast<const vxl_uint_16*>(ptr);
     switch(i){
       case 0: return vxl_byte((*p & 0xF800) >> 8); // R
       case 1: return vxl_byte((*p & 0x07E0) >> 3); // G
       case 2: return vxl_byte((*p & 0x001F) << 3); // B
+    }
+    return 0;
+  }
+};
+
+
+VCL_DEFINE_SPECIALIZATION 
+struct vidl2_component_enc<VIDL2_PIXEL_FORMAT_YUV_444>
+{
+  static inline
+  vxl_byte channel(const vxl_byte * ptr, unsigned int i)
+  {
+    switch(i){
+      case 0: return ptr[1]; // Y
+      case 1: return ptr[0]; // U
+      case 2: return ptr[2]; // V
     }
     return 0;
   }
@@ -92,22 +118,22 @@ class vidl2_pixel_iterator
     {
       assert(frame->pixel_format() == FMT);
       // The following should be a static asserts
-      assert(vidl2_pixel_traits_of<FMT>::bits_per_pixel()%8 == 0);
-      assert(!vidl2_pixel_traits_of<FMT>::planar());
-      assert(!vidl2_pixel_traits_of<FMT>::packed());
+      assert(vidl2_pixel_traits_of<FMT>::bits_per_pixel%8 == 0);
+      assert(!vidl2_pixel_traits_of<FMT>::planar);
+      assert(!vidl2_pixel_traits_of<FMT>::packed);
     }
 
     //: Pre-increment
     vidl2_pixel_iterator<FMT> & operator++ ()
     {
-      ptr_ += vidl2_pixel_traits_of<FMT>::bits_per_pixel()/8;
+      ptr_ += vidl2_pixel_traits_of<FMT>::bits_per_pixel/8;
       return *this;
     }
 
     //: Access the data
     vxl_byte operator () (unsigned int i) const
     {
-      assert(i<vidl2_pixel_traits_of<FMT>::num_channels());
+      assert(i<vidl2_pixel_traits_of<FMT>::num_channels);
       return vidl2_component_enc<FMT>::channel(ptr_,i);
     }
 
@@ -124,17 +150,15 @@ class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_422>
   public:
     //: Constructor
     vidl2_pixel_iterator(const vidl2_frame_sptr& frame):
-      frame_(frame), mode_(0), ptr_((vxl_byte*)frame->data())
+      frame_(frame), mode_(true), ptr_((vxl_byte*)frame->data())
     {
       assert(frame->pixel_format() == VIDL2_PIXEL_FORMAT_YUV_422);
-      offset_[0][0] = 1; offset_[0][1] = 0; offset_[0][2] = 2; 
-      offset_[1][0] = 1; offset_[1][1] = -2; offset_[1][2] = 0;
     }
 
     //: Pre-increment
     vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_422> & operator++ ()
     {
-      mode_ = (mode_+1)%2;
+      mode_ = !mode_;
       ptr_ += 2;
       return *this;
     }
@@ -143,14 +167,26 @@ class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_422>
     vxl_byte operator () (unsigned int i) const
     {
       assert(i<3);
-      return ptr_[offset_[mode_][i]];
+      if(mode_){
+        switch(i){
+          case 0: return ptr_[1];
+          case 1: return ptr_[0];
+          case 2: return ptr_[2];
+        }
+      }else{
+        switch(i){
+          case 0: return ptr_[1];
+          case 1: return ptr_[-2];
+          case 2: return ptr_[0];
+        }
+      }
+      return 0;
     }
 
   private:
     vidl2_frame_sptr frame_;
-    vxl_byte mode_;
+    bool mode_;
     const vxl_byte * ptr_;
-    int offset_[2][3];
 };
 
 

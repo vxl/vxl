@@ -95,11 +95,11 @@ struct vidl2_pixel_traits_of;
 VCL_DEFINE_SPECIALIZATION \
 struct vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_##F> \
 {\
-  static vcl_string name() { return N; }\
-  static unsigned bits_per_pixel() { return B; }\
-  static unsigned num_channels() { return C; }\
-  static bool packed() { return K; }\
-  static bool planar() { return L; }\
+  static inline vcl_string name() { return N; }\
+  enum { bits_per_pixel = B };\
+  enum { num_channels = C };\
+  enum { packed = K };\
+  enum { planar = L };\
 }
 
 //            format    name        bpp  nc  packed  planar

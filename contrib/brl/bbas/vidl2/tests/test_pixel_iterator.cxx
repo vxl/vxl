@@ -99,6 +99,23 @@ static void test_pixel_iterator()
   }
 
   {
+    // The test buffer below contains 4 pixels encoded in YUV 4:4:4
+    //                  | U  Y  V| U  Y  V| U  Y  V|  U   Y   V|
+    vxl_byte buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+    vidl2_frame_sptr frame = new vidl2_shared_frame(buffer,2,2,VIDL2_PIXEL_FORMAT_YUV_444);
+    vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_444> itr(frame);
+
+    bool success = true;
+    for(unsigned int i=0; i<4; ++i, ++itr){
+      vcl_cout << "YUV = ("<< (int)itr(0) << "," << (int)itr(1) << "," << (int)itr(2) << ")\n";
+      success = success && itr(0) == buffer[i*3+1]
+          && itr(1) == buffer[i*3]
+          && itr(2) == buffer[i*3+2];
+    }
+    TEST("vidl2_pixel_iterator (YUV 444)",success,true);
+  }
+
+  {
     // The test buffer below contains 4 pixels encoded in YUV 4:2:2
     //                  | U  Y0 V Y1| U  Y0 V  Y1 |
     vxl_byte buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8 };

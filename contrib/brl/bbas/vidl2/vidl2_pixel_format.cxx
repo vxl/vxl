@@ -15,10 +15,10 @@ struct check_types
   {
     if (f == pix_type){
       t.name           = vidl2_pixel_traits_of<pix_type>::name();
-      t.bits_per_pixel = vidl2_pixel_traits_of<pix_type>::bits_per_pixel();
-      t.num_channels   = vidl2_pixel_traits_of<pix_type>::num_channels();
-      t.packed         = vidl2_pixel_traits_of<pix_type>::packed();
-      t.planar         = vidl2_pixel_traits_of<pix_type>::planar();
+      t.bits_per_pixel = vidl2_pixel_traits_of<pix_type>::bits_per_pixel;
+      t.num_channels   = vidl2_pixel_traits_of<pix_type>::num_channels;
+      t.packed         = vidl2_pixel_traits_of<pix_type>::packed;
+      t.planar         = vidl2_pixel_traits_of<pix_type>::planar;
     }
     else
       check_types<vidl2_pixel_format(pix_type-1)>::traits(f,t);
@@ -42,10 +42,10 @@ struct check_types<VIDL2_PIXEL_FORMAT_UNKNOWN>
   void traits(vidl2_pixel_format f, vidl2_pixel_traits& t)
   {
     t.name           = vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_UNKNOWN>::name();
-    t.bits_per_pixel = vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_UNKNOWN>::bits_per_pixel();
-    t.num_channels   = vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_UNKNOWN>::num_channels();;
-    t.packed         = vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_UNKNOWN>::packed();
-    t.planar         = vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_UNKNOWN>::planar();;
+    t.bits_per_pixel = vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_UNKNOWN>::bits_per_pixel;
+    t.num_channels   = vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_UNKNOWN>::num_channels;
+    t.packed         = vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_UNKNOWN>::packed;
+    t.planar         = vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_UNKNOWN>::planar;
   }
 
   static inline vidl2_pixel_format from_string(const vcl_string& s)
