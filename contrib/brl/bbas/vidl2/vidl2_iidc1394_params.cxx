@@ -143,7 +143,7 @@ vidl2_iidc1394_params::pixel_format(video_mode_t m)
   switch (m)
   {
     case MODE_160x120_YUV444:
-      return VIDL2_PIXEL_FORMAT_YUV_444P;
+      return VIDL2_PIXEL_FORMAT_YUV_444;
 
     case MODE_320x240_YUV422:
     case MODE_640x480_YUV422:
@@ -154,7 +154,7 @@ vidl2_iidc1394_params::pixel_format(video_mode_t m)
       return VIDL2_PIXEL_FORMAT_YUV_422;
 
     case MODE_640x480_YUV411:
-      return VIDL2_PIXEL_FORMAT_YUV_411P;
+      return VIDL2_PIXEL_FORMAT_YUV_411;
 
     case MODE_640x480_RGB8:
     case MODE_800x600_RGB8:
