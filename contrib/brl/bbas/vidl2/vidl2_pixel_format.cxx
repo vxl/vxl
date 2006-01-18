@@ -43,9 +43,9 @@ struct check_types<VIDL2_PIXEL_FORMAT_UNKNOWN>
   {
     t.name           = vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_UNKNOWN>::name();
     t.bits_per_pixel = vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_UNKNOWN>::bits_per_pixel();
-    t.num_channels   = vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_UNKNOWN>::bits_per_pixel();
-    t.packed         = vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_UNKNOWN>::bits_per_pixel();
-    t.planar         = vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_UNKNOWN>::bits_per_pixel();
+    t.num_channels   = vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_UNKNOWN>::num_channels();;
+    t.packed         = vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_UNKNOWN>::packed();
+    t.planar         = vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_UNKNOWN>::planar();;
   }
 
   static inline vidl2_pixel_format from_string(const vcl_string& s)
