@@ -156,7 +156,7 @@ class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_422>
 
 //: Iterator for YUV 4:1:1 packed images
 VCL_DEFINE_SPECIALIZATION 
-    class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_411>
+class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_411>
 {
   public:
     //: Constructor
@@ -254,7 +254,7 @@ class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_MONO_1>
     bool operator () (unsigned int i) const
     {
       assert(i==0);
-      return (ptr_[0] & bit_mask_);
+      return bool(ptr_[0] & bit_mask_);
     }
 
   private:
