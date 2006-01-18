@@ -65,6 +65,7 @@ reread_image()
 {
   delete buffer_;
   buffer_ = 0;
+  valid_buffer_ = false;
 }
 
 void vgui_vil_image_renderer::
