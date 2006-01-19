@@ -314,6 +314,8 @@ vidl2_dc1394_istream::current_frame()
                                         is_->camera_info_->capture.frame_width,
                                         is_->camera_info_->capture.frame_height,
                                         is_->pixel_format_);
+
+    is_->cur_frame_valid_ = true;
   }
 
   return is_->cur_frame_;

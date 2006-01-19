@@ -498,10 +498,7 @@ void vidl2_player_manager::redraw()
     else
       vgui::out << "frame["<< frame <<"]\n";
 
-    vil_image_view_base_sptr old_view = itab_->get_image_view();
-    vil_image_view<vxl_byte> img;
-    if(old_view)
-      img = *old_view;
+    static vil_image_view<vxl_byte> img;
     vidl2_convert_to_view_rgb(istream_->current_frame(),img);
     itab_->set_image_view(img);
   }

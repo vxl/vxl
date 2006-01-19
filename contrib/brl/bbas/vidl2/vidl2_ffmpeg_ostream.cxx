@@ -521,7 +521,7 @@ write_frame(const vidl2_frame_sptr& frame)
     return false;
   }
 
-  vil_image_view<vxl_byte> img;
+  vil_image_view<vxl_byte> img(frame->ni(),frame->nj(),1,3);
   vidl2_convert_to_view_rgb(frame, img);
 
   AVFrame out_frame;

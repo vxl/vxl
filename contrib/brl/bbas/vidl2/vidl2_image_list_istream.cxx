@@ -133,8 +133,7 @@ vidl2_image_list_istream::current_frame()
     if(view)
       return new vidl2_memory_chunk_frame(view);
   }
-  else
-    return NULL;
+  return NULL;
 }
 
 
