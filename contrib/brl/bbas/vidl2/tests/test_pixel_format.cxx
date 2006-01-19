@@ -19,13 +19,13 @@ static void test_pixel_format()
        vidl2_pixel_format_num_channels(VIDL2_PIXEL_FORMAT_RGB_24),
        vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_RGB_24>::num_channels );
 
-  TEST("vidl2_pixel_format_packed",
-       vidl2_pixel_format_packed(VIDL2_PIXEL_FORMAT_YUV_422),
-       vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_YUV_422>::packed );
+  TEST("vidl2_pixel_format_color",
+       vidl2_pixel_format_color(VIDL2_PIXEL_FORMAT_YUV_422),
+       vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_YUV_422>::color() );
 
-  TEST("vidl2_pixel_format_planar",
-       vidl2_pixel_format_planar(VIDL2_PIXEL_FORMAT_YUV_422P),
-       vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_YUV_422P>::planar );
+  TEST("vidl2_pixel_format_arrangement",
+       vidl2_pixel_format_arrangement(VIDL2_PIXEL_FORMAT_YUV_422P),
+       vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_YUV_422P>::arrangement() );
 
   TEST("vidl2_pixel_format_to_string",
        vidl2_pixel_format_to_string(VIDL2_PIXEL_FORMAT_MONO_8),

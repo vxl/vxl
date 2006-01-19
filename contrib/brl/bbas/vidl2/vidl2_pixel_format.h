@@ -14,11 +14,16 @@
 // basic traits.  These specializations are defined using the
 // macro vidl2_pt_mac.  The pixel traits are:
 //  - <b>name</b> a string representation for the format
+//  - <b>type</b> the VXL C++ type used to return a pixel component
 //  - <b>bits per pixel</b> the number of bits used to represent a pixel
 //  - <b>number of channels</b> the number of color channels encoded
-//  - <b>packed</b> flag indicating the data is packed into macro pixels
-//  - <b>planar</b> flag indicating the data for each pixel is spread over
-//                    multiple planes
+//  - <b>color</b> the color encoding of the pixels (i.e. RGB, YUV)
+//  - <b>arrangement</b> the way pixels are arranged in memory.  This
+//       could be in single file, packed into macropixels, or in planes.
+//  - <b>chroma shift X</b> the chroma subsampling factor is 2 ^ shift
+//       in the horizontal direction.
+//  - <b>chroma shift Y</b> the chroma subsampling factor is 2 ^ shift
+//       in the vertical direction.
 //
 // vidl2_pixel_format differs from vil_pixel_format in that the
 // vidl2 formats are representations typically used by video
@@ -37,6 +42,7 @@
 
 #include <vcl_string.h>
 #include <vcl_iosfwd.h>
+#include <vxl_config.h>
 
 //: Describes the format of pixel encoding
 // in a video frame buffer
@@ -73,6 +79,37 @@ enum vidl2_pixel_format
 };
 
 
+//: Describes the color encoding of a pixel format
+enum vidl2_pixel_color
+{
+  VIDL2_PIXEL_COLOR_UNKNOWN = -1,
+
+  VIDL2_PIXEL_COLOR_MONO,
+  VIDL2_PIXEL_COLOR_RGB,
+  VIDL2_PIXEL_COLOR_YUV,
+
+  // Add values here
+
+  VIDL2_PIXEL_COLOR_ENUM_END
+};
+
+
+//: Describes the color encoding of a pixel format
+enum vidl2_pixel_arrangement
+{
+  VIDL2_PIXEL_ARRANGE_UNKNOWN = -1,
+
+  VIDL2_PIXEL_ARRANGE_SINGLE,
+  VIDL2_PIXEL_ARRANGE_PACKED,
+  VIDL2_PIXEL_ARRANGE_PLANAR,
+  VIDL2_PIXEL_ARRANGE_PALETTE,
+
+  // Add values here
+
+  VIDL2_PIXEL_ARRANGE_ENUM_END
+};
+
+
 //: Traits of the pixel formats
 // - name a string name for the format
 // - bits_per_pixel the effective number of bits per pixel
@@ -84,52 +121,63 @@ struct vidl2_pixel_traits
   vcl_string name;
   unsigned bits_per_pixel;
   unsigned num_channels;
-  bool packed;
-  bool planar;
+  vidl2_pixel_color color;
+  vidl2_pixel_arrangement arrangement;
+  unsigned chroma_shift_x;
+  unsigned chroma_shift_y;
 };
 
 
 //: Define traits for a given vidl2_pixel_format
 // All pixel traits should be defined using the macro below
+// The anonymous enums allow the values available to the
+// compiler to for use in generic programming.  For values
+// that are already enums, a function is provided so the
+// user does not need to worry about enum type clashes.
 template <vidl2_pixel_format pix_type>
 struct vidl2_pixel_traits_of;
-#define vidl2_pt_mac(F,N,B,C,K,L)\
+#define vidl2_pt_mac(FMT,NAME,T,BPP,NC,CLR,ARNG,XCS,YCS)\
 VCL_DEFINE_SPECIALIZATION \
-struct vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_##F> \
+struct vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_##FMT> \
 {\
-  static inline vcl_string name() { return N; }\
-  enum { bits_per_pixel = B };\
-  enum { num_channels = C };\
-  enum { packed = K };\
-  enum { planar = L };\
+  static inline vcl_string name() { return NAME; }\
+  typedef T type;\
+  enum { bits_per_pixel = BPP };\
+  enum { num_channels = NC };\
+  static inline vidl2_pixel_color color() { return VIDL2_PIXEL_COLOR_##CLR; }\
+  enum { color_idx = VIDL2_PIXEL_COLOR_##CLR };\
+  static inline vidl2_pixel_arrangement arrangement() { return VIDL2_PIXEL_ARRANGE_##ARNG; }\
+  enum { arrangement_idx = VIDL2_PIXEL_ARRANGE_##ARNG };\
+  enum { chroma_shift_x = XCS };\
+  enum { chroma_shift_y = YCS };\
 }
 
-//            format    name        bpp  nc  packed  planar
-//            ------    ---------   ---  --  ------  ------
-vidl2_pt_mac( UNKNOWN,  "unknown",  0,   0,  false,  false );
+//            format    name        type         bpp  nc  color    arrange  xcs  ycs
+//            ------    ---------   ----         ---  --  -------  -------  ---  ---
+vidl2_pt_mac( UNKNOWN,  "unknown",  void,        0,   0,  UNKNOWN, UNKNOWN, 0,   0  );
 
-vidl2_pt_mac( RGB_24,   "RGB 24",   24,  3,  false,  false );
-vidl2_pt_mac( RGB_24P,  "RGB 24P",  24,  3,  false,  true  );
-vidl2_pt_mac( BGR_24,   "BGR 24",   24,  3,  false,  false );
-vidl2_pt_mac( RGBA_32,  "RGBA 32",  32,  4,  false,  false );
-vidl2_pt_mac( RGBA_32P, "RGBA 32P", 32,  4,  false,  true  );
-vidl2_pt_mac( RGB_565,  "RGB 565",  16,  3,  false,  false );
-vidl2_pt_mac( RGB_555,  "RGB 555",  16,  3,  false,  false );
+vidl2_pt_mac( RGB_24,   "RGB 24",   vxl_byte,    24,  3,  RGB,     SINGLE,  0,   0  );
+vidl2_pt_mac( RGB_24P,  "RGB 24P",  vxl_byte,    24,  3,  RGB,     PLANAR,  0,   0  );
+vidl2_pt_mac( BGR_24,   "BGR 24",   vxl_byte,    24,  3,  RGB,     SINGLE,  0,   0  );
+vidl2_pt_mac( RGBA_32,  "RGBA 32",  vxl_byte,    32,  4,  RGB,     SINGLE,  0,   0  );
+vidl2_pt_mac( RGBA_32P, "RGBA 32P", vxl_byte,    32,  4,  RGB,     PLANAR,  0,   0  );
+vidl2_pt_mac( RGB_565,  "RGB 565",  vxl_byte,    16,  3,  RGB,     SINGLE,  0,   0  );
+vidl2_pt_mac( RGB_555,  "RGB 555",  vxl_byte,    16,  3,  RGB,     SINGLE,  0,   0  );
 
-vidl2_pt_mac( YUV_444,  "YUV 444",  24,  3,  false,  false );
-vidl2_pt_mac( YUV_444P, "YUV 444P", 24,  3,  false,  true  );
-vidl2_pt_mac( YUV_422,  "YUV 422",  16,  3,  true,   false );
-vidl2_pt_mac( YUV_422P, "YUV 422P", 16,  3,  false,  true  );
-vidl2_pt_mac( YUV_420P, "YUV 420P", 12,  3,  false,  true  );
-vidl2_pt_mac( YUV_411,  "YUV 411",  12,  3,  true,   false );
-vidl2_pt_mac( YUV_411P, "YUV 411P", 12,  3,  false,  true  );
-vidl2_pt_mac( YUV_410P, "YUV 410P", 10,  3,  false,  true  );
-vidl2_pt_mac( UYVY_422, "UYVY 422", 16,  3,  true,   false );
-vidl2_pt_mac( UYVY_411, "UYVY 411", 12,  3,  true,   false );
+vidl2_pt_mac( YUV_444,  "YUV 444",  vxl_byte,    24,  3,  YUV,     SINGLE,  0,   0  );
+vidl2_pt_mac( YUV_444P, "YUV 444P", vxl_byte,    24,  3,  YUV,     PLANAR,  0,   0  );
+vidl2_pt_mac( YUV_422,  "YUV 422",  vxl_byte,    16,  3,  YUV,     PACKED,  1,   0  );
+vidl2_pt_mac( YUV_422P, "YUV 422P", vxl_byte,    16,  3,  YUV,     PLANAR,  1,   0  );
+vidl2_pt_mac( YUV_420P, "YUV 420P", vxl_byte,    12,  3,  YUV,     PLANAR,  1,   1  );
+vidl2_pt_mac( YUV_411,  "YUV 411",  vxl_byte,    12,  3,  YUV,     PACKED,  2,   0  );
+vidl2_pt_mac( YUV_411P, "YUV 411P", vxl_byte,    12,  3,  YUV,     PLANAR,  2,   0  );
+vidl2_pt_mac( YUV_410P, "YUV 410P", vxl_byte,    10,  3,  YUV,     PLANAR,  2,   2  );
+vidl2_pt_mac( UYVY_422, "UYVY 422", vxl_byte,    16,  3,  YUV,     PACKED,  1,   0  );
+vidl2_pt_mac( UYVY_411, "UYVY 411", vxl_byte,    12,  3,  YUV,     PACKED,  2,   0  );
 
-vidl2_pt_mac( MONO_1,   "Mono 1",   1,   1,  false,  false );
-vidl2_pt_mac( MONO_8,   "Mono 8",   8,   1,  false,  false );
-vidl2_pt_mac( MONO_16,  "Mono 16",  16,  1,  false,  false );
+vidl2_pt_mac( MONO_1,   "Mono 1",   bool,        1,   1,  MONO,    SINGLE,  0,   0  );
+vidl2_pt_mac( MONO_8,   "Mono 8",   vxl_byte,    8,   1,  MONO,    SINGLE,  0,   0  );
+vidl2_pt_mac( MONO_16,  "Mono 16",  vxl_uint_16, 16,  1,  MONO,    SINGLE,  0,   0  );
 
 #undef vidl2_pt_mac
 
@@ -162,19 +210,35 @@ vidl2_pixel_format_num_channels(vidl2_pixel_format f)
 }
 
 
-//: Return true if pixels in format f are packed into macropixels
-inline bool
-vidl2_pixel_format_packed(vidl2_pixel_format f)
+//: Return the color encoding for the pixel format
+inline vidl2_pixel_color
+vidl2_pixel_format_color(vidl2_pixel_format f)
 {
-  return vidl2_pixel_format_traits(f).packed;
+  return vidl2_pixel_format_traits(f).color;
 }
 
 
-//: Return true if pixel format f has multiple planes
-inline bool
-vidl2_pixel_format_planar(vidl2_pixel_format f)
+//: Return the pixel arrangement for a given format
+inline vidl2_pixel_arrangement
+vidl2_pixel_format_arrangement(vidl2_pixel_format f)
 {
-  return vidl2_pixel_format_traits(f).planar;
+  return vidl2_pixel_format_traits(f).arrangement;
+}
+
+
+//: Return the chroma shift in the horizontal direction
+inline unsigned
+vidl2_pixel_format_chroma_shift_x(vidl2_pixel_format f)
+{
+  return vidl2_pixel_format_traits(f).chroma_shift_x;
+}
+
+
+//: Return the chroma shift in the vertical direction
+inline unsigned
+    vidl2_pixel_format_chroma_shift_y(vidl2_pixel_format f)
+{
+  return vidl2_pixel_format_traits(f).chroma_shift_y;
 }
 
 

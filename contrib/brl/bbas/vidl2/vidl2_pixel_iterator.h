@@ -114,8 +114,7 @@ class vidl2_pixel_iterator
       assert(frame->pixel_format() == FMT);
       // The following should be a static asserts
       assert(vidl2_pixel_traits_of<FMT>::bits_per_pixel%8 == 0);
-      assert(!vidl2_pixel_traits_of<FMT>::planar);
-      assert(!vidl2_pixel_traits_of<FMT>::packed);
+      assert(vidl2_pixel_traits_of<FMT>::arrangement() == VIDL2_PIXEL_ARRANGE_SINGLE);
     }
 
     //: Pre-increment
