@@ -11,7 +11,13 @@
 
 #include "mbl_log.h"
 #include <vcl_cstddef.h>
+#include <vcl_functional.h>
+#include <vcl_algorithm.h>
 
+
+// Got the a streambuf example from vul_redirector and hacked around with it.
+// It passes on all stuff direct to the real_streambuf, whilst calling
+// extra functions on the output object to print message headers and footers.
 
 
 int mbl_log_streambuf::sync ()
@@ -24,6 +30,12 @@ int mbl_log_streambuf::sync ()
     logger_->output_.stop_entry();
     return EOF;
   }
+  if (logger_->output_.real_streambuf().pubsync())
+  {
+    logger_->output_.stop_entry();
+    return EOF;
+  }
+
   pbump (-n);  // Reset pptr().
   logger_->output_.stop_entry();
   return 0;
@@ -62,19 +74,44 @@ vcl_streamsize mbl_log_streambuf::xsputn ( const char *ptr, vcl_streamsize nchar
 
 
 
-mbl_logger::mbl_logger(const vcl_string & id):
-level_(mbl_logger::root().default_logger.level()),
+//: Default constructor only available to root's default logger.
+mbl_logger::mbl_logger():
+  level_(WARN),
+  output_(&vcl_cerr, ""),
   streambuf_(this),
   logstream_(&streambuf_),
-  output_(mbl_logger::root().default_logger.output_)
+  mt_logstream_(&logstream_)
 {
+  // This will have to change to support proper hierarchical control over categories.
+  logstream_.tie(output_.real_stream_);
+  // Don't insert default root logger - this would cause infinite recursion.
+}
+
+mbl_logger::mbl_logger(const vcl_string & id):
+  level_(mbl_logger::root().default_logger.level()),
+  streambuf_(this),
+  logstream_(&streambuf_),
+  output_(mbl_logger::root().default_logger.output_),
+  mt_logstream_(&logstream_)
+{
+  // This will have to change to support proper hierarchical control over categories.
   output_.id_ = id;
+  logstream_.tie(output_.real_stream_);
+  root().all_loggers_.insert(this);
+}
+
+void mbl_logger::reinitialise()
+{
+  // This will have to change to support proper hierarchical control over categories.
+  level_ = mbl_logger::root().default_logger.level();
+  output_ = mbl_logger::root().default_logger.output_;
 }
   
 void mbl_logger::set(int level, const mbl_log_output& output)
 {
   level_ = level;
   output_ = output;
+  logstream_.tie(output_.real_stream_);
 }
 
 
@@ -86,13 +123,71 @@ vcl_ostream &mbl_logger::log(int level, const char * srcfile, int srcline)
   return logstream_;
 }
 
+void mbl_logger::mtstart(int level, const char * srcfile, int srcline)
+{
+  if (level_ < level)
+  {
+    mt_logstream_ = &root().null_stream_;
+    return;
+  }
+  mt_logstream_ = &logstream_;
+  output_.set_mt_next_event_info(level, srcfile, srcline);
+}
+
+void mbl_logger::mtstop()
+{
+  logstream_.flush();
+  output_.mt_stop_entry();
+}
+
 
 mbl_logger_root &mbl_logger::root()
 {
+  static vcl_auto_ptr<mbl_logger_root> root_;
+
   if (!root_.get())
     root_ = vcl_auto_ptr<mbl_logger_root>(new mbl_logger_root());
   return *root_;
 }
+
+
+//:Load a default configuration file
+// Current Format is 
+//\verbatim
+//LEVEL
+//\end verbatim
+// where LEVEL is an integer - setting the logging level.
+// see mbl_logger:levels for useful values.
+void mbl_logger_root::load_log_config_file()
+{
+  vcl_ifstream config("mbl_log.properties");
+  if (!config.is_open())
+    config.open("~/mbl_log.properties");
+  if (!config.is_open())
+    config.open("~/.mbl_log.properties");
+  if (!config.is_open())
+    config.open("~/.mbl_log.properties");
+  if (!config.is_open())
+    config.open("C:\\mbl_log.properties");
+
+  if (config.is_open())
+  {
+    int level;
+    config >> level;
+    default_logger.set(level, default_logger.output_);
+  }
+
+  update_all_loggers();
+}
+
+// Make sure all known loggers reinitialise themselves.
+void mbl_logger_root::update_all_loggers()
+{
+  vcl_for_each(all_loggers_.begin(), all_loggers_.end(),
+    vcl_mem_fun(&mbl_logger::reinitialise));
+}
+
+
 
 void mbl_log_output::set_next_event_info(int level, const char *srcfile, int srcline)
 {
@@ -100,12 +195,22 @@ void mbl_log_output::set_next_event_info(int level, const char *srcfile, int src
   next_level_ = level;
   next_srcfile_ = srcfile;
   next_srcline_ = srcline;
+  manual_termination_=false;
 }
 
-//: If it hasn't already been started, this prints out the beginning of a log entry.
-void mbl_log_output::start_entry()
+void mbl_log_output::set_mt_next_event_info(int level, const char *srcfile, int srcline)
 {
-  if (has_started_) return;
+  next_level_ = level;
+  next_srcfile_ = srcfile;
+  next_srcline_ = srcline;
+  manual_termination_=true;
+  has_started_=true;
+  print_header();
+}
+
+
+void mbl_log_output::print_header()
+{
   switch(next_level_)
   {
   case mbl_logger::EMERG:
@@ -136,8 +241,15 @@ void mbl_log_output::start_entry()
     (*real_stream_)<< "LOG" << next_level_ << ' ';
     break;
   }
-  
   (*real_stream_)<< id_ << ' ';
+ 
+}
+
+//: If it hasn't already been started, this prints out the beginning of a log entry.
+void mbl_log_output::start_entry()
+{
+  if (has_started_) return;
+  print_header();
   has_started_ = true;
 
   //reset level indicator as a subtle indicator of log system error.
@@ -146,10 +258,15 @@ void mbl_log_output::start_entry()
 //: If it hasn't already been stopped, this prints out the end of a log entry.
 void mbl_log_output::stop_entry()
 {
+  if (!manual_termination_)
+    has_started_ = false;
+}
+
+//: If it hasn't already been stopped, this prints out the end of a log entry.
+void mbl_log_output::mt_stop_entry()
+{
   has_started_ = false;
 }
 
 
 
-vcl_auto_ptr<mbl_logger_root>  mbl_logger::root_ = 
-  vcl_auto_ptr<mbl_logger_root>(0);

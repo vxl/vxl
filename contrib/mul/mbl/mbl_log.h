@@ -51,12 +51,14 @@
 // if (my_log.level() < mbl_logger::WARN
 //   my_log.log(mbl_logger::WARN) << "Infinite loop: Time wasted so far " << time() << vcl_endl;
 // \endverbatim
-// Of course, this is exactly what the MBL_LOG macro does.
+// Of coures, you should just use MBL_LOG which handles this for you. Additionally
+// MBL_LOG sorts out termination of the log message without using vcl_endl;
 
 #include <vcl_iostream.h>
 #include <vcl_streambuf.h>
 #include <vcl_memory.h>
 #include <vcl_string.h>
+#include <vcl_set.h>
 
 class mbl_logger_root;
 class mbl_logger;
@@ -73,10 +75,9 @@ public:
 };
 
 
-//: Allows stream-like syntax on logger.
+//: A null streambuf ignores all input.
 class mbl_log_null_streambuf: public vcl_streambuf
 {
-public:
 };
 
 //: Handles final output of a logging event.
@@ -93,10 +94,12 @@ class mbl_log_output
   const char * next_srcfile_;
   int next_srcline_;
 
+  //: Wait for a call to mt_stop_entry() before finishing log entry.
+  bool manual_termination_;
 public:
   mbl_log_output(vcl_ostream* real_stream, const vcl_string &id):
     real_stream_(real_stream), has_started_(false), id_(id),
-    next_level_(1000) {}
+    next_level_(1000), manual_termination_(false) {}
 
   //: The stream buffer to which logging info really gets sent.
   vcl_streambuf & real_streambuf() { return *real_stream_->rdbuf(); }
@@ -106,6 +109,12 @@ public:
   void start_entry();
   //: If it hasn't already been stopped, this prints out the end of a log entry.
   void stop_entry();
+
+  void set_mt_next_event_info(int level, const char *srcfile, int srcline);
+  void mt_stop_entry();
+
+  void print_header();
+
   friend class mbl_logger;
 };
 
@@ -117,15 +126,15 @@ class mbl_logger
   mbl_log_output output_;
   mbl_log_streambuf streambuf_;
   vcl_ostream logstream_;
+  vcl_ostream *mt_logstream_;
 
-  //: Default constructor only availabel to root's default logger.
-  mbl_logger():
-    level_(ALL),
-    output_(&vcl_cerr, ""),
-    streambuf_(this),
-    logstream_(&streambuf_)
-  {}
-  static vcl_auto_ptr<mbl_logger_root> root_;
+  //: Default constructor only available to root's default logger.
+  mbl_logger();
+
+  mbl_logger(const mbl_logger&); // Hide copy constructor.
+
+  //: Update settings in light of changes to the root / configuration.
+  void reinitialise();
 
 public:
   static mbl_logger_root &root();
@@ -136,11 +145,17 @@ public:
   int level() { return level_; }
   vcl_ostream &log(int level, const char * srcfile="", int srcline=0);
 
+  //: A log with manual event start and stop requirements.
+  vcl_ostream &mtlog() {return *mt_logstream_;}
+  void mtstart(int level, const char * srcfile="", int srcline=0);
+  void mtstop();
+
+
   //: Log priority levels.
   // Based on POSIX syslog API
   enum levels
   {
-    EMERG=0, ALERT=100, CRIT=200, ERR=300, WARN=400,
+    NONE=-100, EMERG=0, ALERT=100, CRIT=200, ERR=300, WARN=400,
     NOTICE=500, INFO=600, DEBUG=700, ALL=800
   };
   friend class mbl_log_streambuf;
@@ -155,18 +170,35 @@ class mbl_logger_root
   friend class mbl_logger;
   mbl_log_null_streambuf null_streambuf_;
   vcl_ostream null_stream_;
+
+  vcl_set<mbl_logger*> all_loggers_;
+
   mbl_logger_root():
     null_stream_(&null_streambuf_) {}
   
 public:
   mbl_logger default_logger;
 
+  //:Load a default configuration file
+  // Current Format is 
+  //\verbatim
+  //LEVEL
+  //\end verbatim
+  // where LEVEL is an integer - setting the logging level.
+  // see mbl_logger:levels for useful values.
+  void load_log_config_file();
+  //: Force all loggers to update themselves in light of changes to the root and configuration.
+  void update_all_loggers();
+
 };
 
 
 #define MBL_LOG(my_level, logger, message) \
-  if (logger.level() >= mbl_logger:: my_level) \
-    logger.log(mbl_logger:: my_level, __FILE__, __LINE__) << message << vcl_endl
+  if (logger.level() >= mbl_logger:: my_level) {\
+    logger.mtstart(mbl_logger:: my_level, __FILE__, __LINE__); \
+    logger.mtlog() << message << vcl_endl; \
+    logger.mtstop(); }
+
 
 
 
