@@ -107,10 +107,11 @@ struct vidl2_component_enc<VIDL2_PIXEL_FORMAT_UYV_444>
 template <vidl2_pixel_format FMT> 
 class vidl2_pixel_iterator
 {
+  typedef typename vidl2_pixel_traits_of<FMT>::type cmp_type;
   public:
     //: Constructor
     vidl2_pixel_iterator(const vidl2_frame_sptr& frame):
-      frame_(frame), ptr_((vxl_byte*)frame->data())
+      frame_(frame), ptr_((cmp_type*)frame->data())
     {
       assert(frame->pixel_format() == FMT);
       // The following should be a static asserts
@@ -121,12 +122,12 @@ class vidl2_pixel_iterator
     //: Pre-increment
     vidl2_pixel_iterator<FMT> & operator++ ()
     {
-      ptr_ += vidl2_pixel_traits_of<FMT>::bits_per_pixel/8;
+      ptr_ += vidl2_pixel_traits_of<FMT>::bits_per_pixel/(sizeof(cmp_type)*8);
       return *this;
     }
 
     //: Access the data
-    vxl_byte operator () (unsigned int i) const
+    cmp_type operator () (unsigned int i) const
     {
       assert(i<vidl2_pixel_traits_of<FMT>::num_channels);
       return vidl2_component_enc<FMT>::channel(ptr_,i);
@@ -134,7 +135,7 @@ class vidl2_pixel_iterator
 
   private:
     vidl2_frame_sptr frame_;
-    const vxl_byte * ptr_;
+    const cmp_type * ptr_;
 };
 
 
@@ -215,35 +216,111 @@ class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_UYVY_411>
 };
 
 
-//: Iterator for monochrome 16-bit images
+//: Iterator for YUV 420 planar images
 VCL_DEFINE_SPECIALIZATION 
-class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_MONO_16>
+class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_420P>
 {
   public:
     //: Constructor
     vidl2_pixel_iterator(const vidl2_frame_sptr& frame):
-      frame_(frame), ptr_((vxl_uint_16*)frame->data())
+      frame_(frame), line_size_(frame_->ni()), line_cnt_(0),
+      mode_x_(false), mode_y_(false)
     {
-      assert(frame->pixel_format() == VIDL2_PIXEL_FORMAT_MONO_16);
+      assert(frame->pixel_format() == VIDL2_PIXEL_FORMAT_YUV_420P);
+      assert(frame->ni()%2 == 0);
+      assert(frame->nj()%2 == 0);
+
+      unsigned size = frame->ni()*frame->nj();
+      ptr_[0] = (vxl_byte*)frame->data();
+      ptr_[1] = ptr_[0] + size;
+      ptr_[2] = ptr_[1] + (size >> 2);
     }
 
     //: Pre-increment
-      vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_MONO_16> & operator++ ()
+    vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_420P> & operator++ ()
     {
-      ++ptr_;
+      ++ptr_[0];
+      if(mode_x_){
+        ++ptr_[1];
+        ++ptr_[2];
+      }
+      mode_x_ = !mode_x_;
+      if(++line_cnt_ == line_size_){
+        line_cnt_ = 0;
+        mode_y_ = !mode_y_;
+        mode_x_=false;
+        if(mode_y_){
+          ptr_[1] -= line_size_>>1;
+          ptr_[2] -= line_size_>>1;
+        }
+      }
       return *this;
     }
 
     //: Access the data
-    vxl_uint_16 operator () (unsigned int i) const
+    vxl_byte operator () (unsigned int i) const
     {
-      assert(i==0);
-      return *ptr_;
+      assert(i<3);
+      return *ptr_[i];
     }
 
   private:
     vidl2_frame_sptr frame_;
-    const vxl_uint_16 * ptr_;
+    unsigned int line_size_;
+    unsigned int line_cnt_;
+    bool mode_x_;
+    bool mode_y_;
+    const vxl_byte * ptr_[3];
+};
+
+
+//: Iterator for YUV 422 planar images
+VCL_DEFINE_SPECIALIZATION 
+class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_422P>
+{
+  public:
+    //: Constructor
+    vidl2_pixel_iterator(const vidl2_frame_sptr& frame):
+      frame_(frame), line_size_(frame_->ni()), line_cnt_(0), mode_(false)
+    {
+      assert(frame->pixel_format() == VIDL2_PIXEL_FORMAT_YUV_422P);
+      assert(frame->ni()%2 == 0);
+
+      unsigned size = frame->ni()*frame->nj();
+      ptr_[0] = (vxl_byte*)frame->data();
+      ptr_[1] = ptr_[0] + size;
+      ptr_[2] = ptr_[1] + (size >> 1);
+    }
+
+    //: Pre-increment
+    vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_422P> & operator++ ()
+    {
+      ++ptr_[0];
+      if(mode_){
+        ++ptr_[1];
+        ++ptr_[2];
+      }
+      mode_ = !mode_;
+      if(++line_cnt_ == line_size_){
+        line_cnt_ = 0;
+        mode_=false;
+      }
+      return *this;
+    }
+
+    //: Access the data
+    vxl_byte operator () (unsigned int i) const
+    {
+      assert(i<3);
+      return *ptr_[i];
+    }
+
+  private:
+    vidl2_frame_sptr frame_;
+    unsigned int line_size_;
+    unsigned int line_cnt_;
+    bool mode_;
+    const vxl_byte * ptr_[3];
 };
 
 
