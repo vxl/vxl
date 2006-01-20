@@ -153,14 +153,12 @@ bool vidl2_convert_to_view(const vidl2_frame_sptr& frame,
     do_case(VIDL2_PIXEL_FORMAT_RGB_565);
     do_case(VIDL2_PIXEL_FORMAT_RGB_555);
 
-    do_case(VIDL2_PIXEL_FORMAT_YUV_444);
     do_case(VIDL2_PIXEL_FORMAT_YUV_444P);
-    do_case(VIDL2_PIXEL_FORMAT_YUV_422);
     do_case(VIDL2_PIXEL_FORMAT_YUV_422P);
     do_case(VIDL2_PIXEL_FORMAT_YUV_420P);
-    do_case(VIDL2_PIXEL_FORMAT_YUV_411);
     do_case(VIDL2_PIXEL_FORMAT_YUV_411P);
     do_case(VIDL2_PIXEL_FORMAT_YUV_410P);
+    do_case(VIDL2_PIXEL_FORMAT_UYV_444);
     do_case(VIDL2_PIXEL_FORMAT_UYVY_422);
     do_case(VIDL2_PIXEL_FORMAT_UYVY_411);
 
@@ -216,14 +214,12 @@ bool vidl2_convert_to_view_rgb(const vidl2_frame_sptr& frame,
     do_case(VIDL2_PIXEL_FORMAT_RGB_565);
     do_case(VIDL2_PIXEL_FORMAT_RGB_555);
 
-    do_case_yuv2rgb(VIDL2_PIXEL_FORMAT_YUV_444);
     do_case_yuv2rgb(VIDL2_PIXEL_FORMAT_YUV_444P);
-    do_case_yuv2rgb(VIDL2_PIXEL_FORMAT_YUV_422);
     do_case_yuv2rgb(VIDL2_PIXEL_FORMAT_YUV_422P);
     do_case_yuv2rgb(VIDL2_PIXEL_FORMAT_YUV_420P);
-    do_case_yuv2rgb(VIDL2_PIXEL_FORMAT_YUV_411);
     do_case_yuv2rgb(VIDL2_PIXEL_FORMAT_YUV_411P);
     do_case_yuv2rgb(VIDL2_PIXEL_FORMAT_YUV_410P);
+    do_case_yuv2rgb(VIDL2_PIXEL_FORMAT_UYV_444);
     do_case_yuv2rgb(VIDL2_PIXEL_FORMAT_UYVY_422);
     do_case_yuv2rgb(VIDL2_PIXEL_FORMAT_UYVY_411);
 
@@ -241,6 +237,31 @@ bool vidl2_convert_to_view_rgb(const vidl2_frame_sptr& frame,
 }
 
 
+template <vidl2_pixel_format inF, vidl2_pixel_format outF>
+struct vidl2_convert_frame
+{
+  static void
+  apply(const vidl2_frame_sptr& in_frame, vidl2_frame_sptr& out_frame)
+  {
+  }
+};
+
+
+
+/*
+
+template <vidl2_pixel_format F>
+bool vidl2_convert_frame(const vidl2_frame_sptr& in_frame, vidl2_pixel_format F,
+                               vidl2_frame_sptr& out_frame, vidl2_pixel_format F)
+{
+  assert(in_frame);
+  assert(out_frame);
+  if(out_frame->size() != in_frame->size())
+    out_frame = new vidl2_memory_chunk_frame(in_frame->ni(), in_frame->nj(),
+                                             new vil_memory_chunk(in_frame->size(), VIDL2_PIXEL_FORMAT_UNKNOWN));
+  vcl_memcpy(out_frame->data(), in_frame->data(), in_frame->size());
+}
+*/
 
 
 #endif // vidl2_convert_h_

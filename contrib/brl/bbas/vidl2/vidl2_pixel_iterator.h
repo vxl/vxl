@@ -34,8 +34,9 @@
 template <vidl2_pixel_format FMT> 
 struct vidl2_component_enc
 {
-  static inline
-  vxl_byte channel(const vxl_byte * ptr, unsigned int i)
+  typedef typename vidl2_pixel_traits_of<FMT>::type cmp_type;
+  static inline cmp_type
+  channel(const cmp_type * ptr, unsigned int i)
   {
     return ptr[i];
   }
@@ -86,7 +87,7 @@ struct vidl2_component_enc<VIDL2_PIXEL_FORMAT_RGB_565>
 
 
 VCL_DEFINE_SPECIALIZATION 
-struct vidl2_component_enc<VIDL2_PIXEL_FORMAT_YUV_444>
+struct vidl2_component_enc<VIDL2_PIXEL_FORMAT_UYV_444>
 {
   static inline
   vxl_byte channel(const vxl_byte * ptr, unsigned int i)
@@ -139,18 +140,18 @@ class vidl2_pixel_iterator
 
 //: Iterator for YUV 4:2:2 packed images
 VCL_DEFINE_SPECIALIZATION 
-class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_422>
+class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_UYVY_422>
 {
   public:
     //: Constructor
     vidl2_pixel_iterator(const vidl2_frame_sptr& frame):
       frame_(frame), mode_(true), ptr_((vxl_byte*)frame->data())
     {
-      assert(frame->pixel_format() == VIDL2_PIXEL_FORMAT_YUV_422);
+      assert(frame->pixel_format() == VIDL2_PIXEL_FORMAT_UYVY_422);
     }
 
     //: Pre-increment
-    vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_422> & operator++ ()
+    vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_UYVY_422> & operator++ ()
     {
       mode_ = !mode_;
       if(mode_)
@@ -176,14 +177,14 @@ class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_422>
 
 //: Iterator for YUV 4:1:1 packed images
 VCL_DEFINE_SPECIALIZATION 
-class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_411>
+class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_UYVY_411>
 {
   public:
     //: Constructor
     vidl2_pixel_iterator(const vidl2_frame_sptr& frame):
       frame_(frame), mode_(0), ptr_((vxl_byte*)frame->data())
       {
-        assert(frame->pixel_format() == VIDL2_PIXEL_FORMAT_YUV_411);
+        assert(frame->pixel_format() == VIDL2_PIXEL_FORMAT_UYVY_411);
         offset_[0][0] = 1; offset_[0][1] = 0; offset_[0][2] = 3;
         offset_[1][0] = 2; offset_[1][1] = 0; offset_[1][2] = 3;
         offset_[2][0] = 4; offset_[2][1] = 0; offset_[2][2] = 3;
@@ -191,7 +192,7 @@ class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_411>
       }
 
     //: Pre-increment
-      vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_411> & operator++ ()
+      vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_UYVY_411> & operator++ ()
       {
         mode_ = (mode_+1)%4;
         if(mode_==0)

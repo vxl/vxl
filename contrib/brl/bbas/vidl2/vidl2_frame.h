@@ -120,11 +120,12 @@ class vidl2_memory_chunk_frame : public vidl2_frame
     vidl2_memory_chunk_frame() : memory_(NULL) {}
 
     //: Constructor - from a vil_memory_chunk_sptr
-    vidl2_memory_chunk_frame(unsigned ni, unsigned nj, const vil_memory_chunk_sptr& memory):
-      vidl2_frame(ni,nj,VIDL2_PIXEL_FORMAT_UNKNOWN), memory_(memory) {}
+    vidl2_memory_chunk_frame(unsigned ni, unsigned nj, vidl2_pixel_format fmt,
+                             const vil_memory_chunk_sptr& memory):
+      vidl2_frame(ni,nj,fmt), memory_(memory) {}
 
     //: Constructor - from a vil_image_view
-    vidl2_memory_chunk_frame(const vil_image_view_base_sptr& image);
+    vidl2_memory_chunk_frame(const vil_image_view_base& image);
 
     //: Destructor
     virtual ~vidl2_memory_chunk_frame() {}

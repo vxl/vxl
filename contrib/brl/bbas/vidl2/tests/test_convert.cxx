@@ -5,6 +5,10 @@
 #include <vul/vul_timer.h>
 #include <vcl_cstring.h> // for vcl_memcpy
 
+#ifdef HAS_FFMPEG
+#include <vidl2/vidl2_ffmpeg_convert.h>
+#endif
+
 
 
 static void test_convert()
@@ -16,7 +20,7 @@ static void test_convert()
   {
     vxl_byte buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
     vil_image_view<vxl_byte> image;
-    vidl2_frame_sptr frame = new vidl2_shared_frame(buffer, 4, 2, VIDL2_PIXEL_FORMAT_YUV_422);
+    vidl2_frame_sptr frame = new vidl2_shared_frame(buffer, 4, 2, VIDL2_PIXEL_FORMAT_UYVY_422);
     vidl2_convert_to_view(frame, image);
 
     vcl_cout << image.ni() << " "<< image.nj() << " " << image.nplanes() << vcl_endl;
@@ -52,10 +56,10 @@ static void test_convert()
   // timing tests
   {
     const int ni = 640, nj = 480;
-    vil_image_view<vxl_byte> image(ni,nj,3);
+    vil_image_view<vxl_byte> image(ni,nj,1,3);
     vil_image_view<float> imagef(ni,nj,3);
     vxl_byte buffer[ni*nj*3];
-    vidl2_frame_sptr frame = new vidl2_shared_frame(buffer, ni, nj, VIDL2_PIXEL_FORMAT_YUV_422);
+    vidl2_frame_sptr frame = new vidl2_shared_frame(buffer, ni, nj, VIDL2_PIXEL_FORMAT_UYVY_422);
 
     vul_timer timer;
     for(unsigned int i=0; i<100; ++i)
@@ -81,6 +85,16 @@ static void test_convert()
     time = timer.all()/100000.0f;
     vcl_cout << "memcpy time = " << time << vcl_endl;
 
+#ifdef HAS_FFMPEG
+    vidl2_frame_sptr frame2 = new vidl2_memory_chunk_frame(image);
+    if(!vidl2_ffmpeg_convert(frame, frame2))
+      vcl_cerr << "FFMPEG unable to make conversion" << vcl_endl;
+    timer.mark();
+    for(unsigned int i=0; i<100; ++i)
+      vidl2_ffmpeg_convert(frame, frame2);
+    time = timer.all()/100000.0f;
+    vcl_cout << "ffmpeg time = " << time << vcl_endl;
+#endif
 
   }
 

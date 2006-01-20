@@ -31,23 +31,22 @@ vidl2_frame::unref()
 
 //: Constructor - from a vil_image_view
 vidl2_memory_chunk_frame::
-vidl2_memory_chunk_frame(const vil_image_view_base_sptr& image)
+vidl2_memory_chunk_frame(const vil_image_view_base& image)
   : vidl2_frame(), memory_(NULL)
 {
-  assert(image);
-  ni_ = image->ni();
-  nj_ = image->nj();
-  if (image->pixel_format() == VIL_PIXEL_FORMAT_UINT_16 &&
-     image->nplanes() == 1)
+  ni_ = image.ni();
+  nj_ = image.nj();
+  if (image.pixel_format() == VIL_PIXEL_FORMAT_UINT_16 &&
+     image.nplanes() == 1)
   {
-    vil_image_view<vxl_uint_16> img = *image;
+    vil_image_view<vxl_uint_16> img = image;
     assert(img.is_contiguous());
     memory_ = img.memory_chunk();
     format_ = VIDL2_PIXEL_FORMAT_MONO_16;
   }
-  else if (image->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
+  else if (image.pixel_format() == VIL_PIXEL_FORMAT_BYTE)
   {
-    vil_image_view<vxl_byte> img = *image;
+    vil_image_view<vxl_byte> img = image;
     assert(img.is_contiguous());
     memory_ = img.memory_chunk();
     if (img.nplanes() == 1)

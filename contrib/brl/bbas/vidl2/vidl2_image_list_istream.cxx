@@ -131,7 +131,7 @@ vidl2_image_list_istream::current_frame()
   if (is_valid()){
     vil_image_view_base_sptr view = images_[index_]->get_view();
     if(view)
-      return new vidl2_memory_chunk_frame(view);
+      return new vidl2_memory_chunk_frame(*view);
   }
   return NULL;
 }

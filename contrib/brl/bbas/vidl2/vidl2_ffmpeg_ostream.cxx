@@ -12,6 +12,7 @@
 #include "vidl2_ffmpeg_ostream.h"
 #include "vidl2_ffmpeg_ostream_params.h"
 #include "vidl2_ffmpeg_init.h"
+#include "vidl2_ffmpeg_convert.h"
 #include "vidl2_frame.h"
 #include "vidl2_convert.h"
 #include <vcl_cstring.h>
@@ -521,36 +522,32 @@ write_frame(const vidl2_frame_sptr& frame)
     return false;
   }
 
+
   vil_image_view<vxl_byte> img(frame->ni(),frame->nj(),1,3);
   vidl2_convert_to_view_rgb(frame, img);
+
+  PixelFormat fmt = vidl2_pixel_format_to_ffmpeg(frame->pixel_format());
+
+  vidl2_pixel_format target_fmt = vidl2_pixel_format_from_ffmpeg(codec->pix_fmt);
+  static vidl2_frame_sptr temp_frame = new vidl2_shared_frame(NULL,frame->ni(),frame->nj(),target_fmt);
 
   AVFrame out_frame;
   avcodec_get_frame_defaults( &out_frame );
 
-  vil_memory_chunk_sptr buf;
-  if ( codec->pix_fmt != PIX_FMT_RGB24 ) {
-    // create a temporary picture
-    int size = avpicture_get_size( codec->pix_fmt, img.ni(), img.nj() );
-    buf = new vil_memory_chunk( size, VIL_PIXEL_FORMAT_BYTE );
-    if ( !buf ) {
-      vcl_cerr << "ffmpeg: error allocating temporary buffer\n";
+  // The frame is in the correct format to encode directly
+  if( codec->pix_fmt == fmt )
+  {
+    avpicture_fill((AVPicture*)&out_frame, (uint8_t*) frame->data(),
+                    fmt, frame->ni(), frame->nj());
+  }
+  else
+  {
+    if(!vidl2_ffmpeg_convert(frame, temp_frame)){
+      vcl_cout << "unable to convert " << frame->pixel_format() << " to "<<target_fmt<<vcl_endl;
       return false;
     }
-    AVPicture tmp_pic;
-    vcl_memset( &tmp_pic, 0, sizeof(tmp_pic) );
-    tmp_pic.data[0] = const_cast<vxl_byte*>( img.top_left_ptr() );
-    tmp_pic.linesize[0] = img.ni() * 3;
-    avpicture_fill( (AVPicture*)&out_frame, (uint8_t*)buf->data(),
-                    codec->pix_fmt, img.ni(), img.nj() );
-    if ( img_convert( (AVPicture*)&out_frame, codec->pix_fmt,
-                     &tmp_pic, PIX_FMT_RGB24,
-                     img.ni(), img.nj() ) < 0 ) {
-      vcl_cerr << "ffmpeg: couldn't convert image\n";
-      return false;
-    }
-  } else {
-    out_frame.data[0] = const_cast<vxl_byte*>( img.top_left_ptr() );
-    out_frame.linesize[0] = img.ni() * 3;
+    avpicture_fill((AVPicture*)&out_frame, (uint8_t*) temp_frame->data(),
+                    codec->pix_fmt, frame->ni(), frame->nj());
   }
 
   AVPacket pkt;
@@ -560,7 +557,7 @@ write_frame(const vidl2_frame_sptr& frame)
 #if LIBAVCODEC_BUILD <= 4753
   out_frame.pts = av_rescale( os_->cur_frame_, AV_TIME_BASE*(int64_t)codec->frame_rate_base, codec->frame_rate );
 #else
-  out_frame.pts = os_->cur_frame_;//av_rescale( os_->cur_frame_, AV_TIME_BASE*(int64_t)codec->time_base.den, codec->time_base.num );
+  out_frame.pts = os_->cur_frame_;
 #endif
 
   int ret = avcodec_encode_video( codec, (uint8_t*)os_->bit_buf_->data(), os_->bit_buf_->size(), &out_frame );

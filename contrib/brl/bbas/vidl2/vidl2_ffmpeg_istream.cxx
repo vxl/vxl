@@ -12,6 +12,7 @@
 #include "vidl2_ffmpeg_istream.h"
 #include "vidl2_ffmpeg_init.h"
 #include "vidl2_frame.h"
+#include "vidl2_ffmpeg_convert.h"
 
 #include <vcl_algorithm.h>
 #include <vul/vul_file_iterator.h>
@@ -33,6 +34,7 @@ struct vidl2_ffmpeg_istream::pimpl
   vid_str_( NULL ),
   last_dts( 0 ),
   frame_( NULL ),
+  cur_frame_( NULL ),
   deinterlace_( false ),
   frame_number_offset_( 0 )
   {
@@ -53,7 +55,7 @@ struct vidl2_ffmpeg_istream::pimpl
   AVFrame* frame_;
 
   //: The last successfully decoded frame.
-  mutable vil_image_view<vxl_byte> cur_img_;
+  mutable vidl2_frame_sptr cur_frame_;
 
   //: Apply deinterlacing on the frames?
   bool deinterlace_;
@@ -290,9 +292,11 @@ advance()
 #endif
   }
 
-  // The cached image is out of date, whether we managed to get a new
+  // The cached frame is out of date, whether we managed to get a new
   // frame or not.
-  is_->cur_img_ = 0;
+  if(is_->cur_frame_)
+    is_->cur_frame_->invalidate();
+  is_->cur_frame_ = 0;
 
   if ( ! got_picture ) {
     is_->frame_->data[0] = NULL;
@@ -326,7 +330,7 @@ vidl2_ffmpeg_istream::current_frame()
   AVCodecContext* enc = is_->fmt_cxt_->streams[is_->vid_index_]->codec;
 #endif
   // If we've already converted this frame, try to convert it
-  if ( !is_->cur_img_ && is_->frame_->data[0] != 0 ){
+  if ( !is_->cur_frame_ && is_->frame_->data[0] != 0 ){
     int width = enc->width;
     int height = enc->height;
 
@@ -336,6 +340,15 @@ vidl2_ffmpeg_istream::current_frame()
                              enc->pix_fmt, width, height );
     }
 
+    vidl2_pixel_format fmt = vidl2_pixel_format_from_ffmpeg(enc->pix_fmt);
+    if(fmt == VIDL2_PIXEL_FORMAT_UNKNOWN)
+    {
+      vcl_cerr << "warning: cannot handle this FFMPEG format" << vcl_endl;
+      is_->cur_frame_ = NULL;
+    }
+    else
+      is_->cur_frame_ = new vidl2_shared_frame(is_->frame_->data[0], width, height, fmt);
+    /*
     // convert the current frame to RGB
     is_->cur_img_ = vil_image_view<vxl_byte>( width, height, 1, 3 );
     AVPicture out_pict;
@@ -346,6 +359,8 @@ vidl2_ffmpeg_istream::current_frame()
                       width, height ) == -1 ) {
       is_->cur_img_ = 0;
     }
+    vcl_cout << "format = "<<enc->pix_fmt<< vcl_endl;
+    */
   }
 
   // The MPEG 2 codec has a latency of 1 frame, so the dts of the last
@@ -356,9 +371,9 @@ vidl2_ffmpeg_istream::current_frame()
     is_->frame_number_offset_ = 1;
   }
 
-  if (is_->cur_img_)
-    return new vidl2_memory_chunk_frame( &is_->cur_img_ );
-  return NULL;
+  //if (is_->cur_img_)
+  //  return new vidl2_memory_chunk_frame( is_->cur_img_ );
+  return is_->cur_frame_;
 }
 
 

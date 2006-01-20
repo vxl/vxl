@@ -58,14 +58,13 @@ enum vidl2_pixel_format
   VIDL2_PIXEL_FORMAT_RGB_565,
   VIDL2_PIXEL_FORMAT_RGB_555,
 
-  VIDL2_PIXEL_FORMAT_YUV_444,
   VIDL2_PIXEL_FORMAT_YUV_444P,
   VIDL2_PIXEL_FORMAT_YUV_422,
   VIDL2_PIXEL_FORMAT_YUV_422P,
   VIDL2_PIXEL_FORMAT_YUV_420P,
-  VIDL2_PIXEL_FORMAT_YUV_411,
   VIDL2_PIXEL_FORMAT_YUV_411P,
   VIDL2_PIXEL_FORMAT_YUV_410P,
+  VIDL2_PIXEL_FORMAT_UYV_444,
   VIDL2_PIXEL_FORMAT_UYVY_422,
   VIDL2_PIXEL_FORMAT_UYVY_411,
 
@@ -164,14 +163,13 @@ vidl2_pt_mac( RGBA_32P, "RGBA 32P", vxl_byte,    32,  4,  RGB,     PLANAR,  0,  
 vidl2_pt_mac( RGB_565,  "RGB 565",  vxl_byte,    16,  3,  RGB,     SINGLE,  0,   0  );
 vidl2_pt_mac( RGB_555,  "RGB 555",  vxl_byte,    16,  3,  RGB,     SINGLE,  0,   0  );
 
-vidl2_pt_mac( YUV_444,  "YUV 444",  vxl_byte,    24,  3,  YUV,     SINGLE,  0,   0  );
 vidl2_pt_mac( YUV_444P, "YUV 444P", vxl_byte,    24,  3,  YUV,     PLANAR,  0,   0  );
 vidl2_pt_mac( YUV_422,  "YUV 422",  vxl_byte,    16,  3,  YUV,     PACKED,  1,   0  );
 vidl2_pt_mac( YUV_422P, "YUV 422P", vxl_byte,    16,  3,  YUV,     PLANAR,  1,   0  );
 vidl2_pt_mac( YUV_420P, "YUV 420P", vxl_byte,    12,  3,  YUV,     PLANAR,  1,   1  );
-vidl2_pt_mac( YUV_411,  "YUV 411",  vxl_byte,    12,  3,  YUV,     PACKED,  2,   0  );
 vidl2_pt_mac( YUV_411P, "YUV 411P", vxl_byte,    12,  3,  YUV,     PLANAR,  2,   0  );
 vidl2_pt_mac( YUV_410P, "YUV 410P", vxl_byte,    10,  3,  YUV,     PLANAR,  2,   2  );
+vidl2_pt_mac( UYV_444,  "UYV 444",  vxl_byte,    24,  3,  YUV,     SINGLE,  0,   0  );
 vidl2_pt_mac( UYVY_422, "UYVY 422", vxl_byte,    16,  3,  YUV,     PACKED,  1,   0  );
 vidl2_pt_mac( UYVY_411, "UYVY 411", vxl_byte,    12,  3,  YUV,     PACKED,  2,   0  );
 

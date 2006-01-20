@@ -27,6 +27,14 @@ static void test_pixel_format()
        vidl2_pixel_format_arrangement(VIDL2_PIXEL_FORMAT_YUV_422P),
        vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_YUV_422P>::arrangement() );
 
+  TEST("vidl2_pixel_format_chroma_shift_x",
+       vidl2_pixel_format_chroma_shift_x(VIDL2_PIXEL_FORMAT_YUV_422P),
+       vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_YUV_422P>::chroma_shift_x );
+
+  TEST("vidl2_pixel_format_chroma_shift_y",
+       vidl2_pixel_format_chroma_shift_y(VIDL2_PIXEL_FORMAT_YUV_410P),
+       vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_YUV_410P>::chroma_shift_y );
+
   TEST("vidl2_pixel_format_to_string",
        vidl2_pixel_format_to_string(VIDL2_PIXEL_FORMAT_MONO_8),
        vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_MONO_8>::name() );
