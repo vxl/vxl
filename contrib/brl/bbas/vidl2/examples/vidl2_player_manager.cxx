@@ -492,15 +492,18 @@ void vidl2_player_manager::pipe_streams()
 void vidl2_player_manager::redraw()
 {
   if (istream_) {
-    unsigned int frame = istream_->frame_number();
-    if (frame == unsigned(-1))
+    unsigned int frame_num = istream_->frame_number();
+    if (frame_num == unsigned(-1))
       vgui::out << "invalid frame\n";
     else
-      vgui::out << "frame["<< frame <<"]\n";
+      vgui::out << "frame["<< frame_num <<"]\n";
 
     static vil_image_view<vxl_byte> img;
-    vidl2_convert_to_view_rgb(istream_->current_frame(),img);
-    itab_->set_image_view(img);
+    vidl2_frame_sptr frame = istream_->current_frame();
+    if(frame && vidl2_convert_to_view_rgb(frame,img))
+      itab_->set_image_view(img);
+    else
+      itab_->set_image_resource(NULL);
   }
   static int temp = 0;
   ++temp;
