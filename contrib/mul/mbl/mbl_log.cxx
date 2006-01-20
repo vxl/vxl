@@ -13,7 +13,7 @@
 #include <vcl_cstddef.h>
 #include <vcl_functional.h>
 #include <vcl_algorithm.h>
-
+#include <vcl_fstream.h>
 
 // Got the a streambuf example from vul_redirector and hacked around with it.
 // It passes on all stuff direct to the real_streambuf, whilst calling
