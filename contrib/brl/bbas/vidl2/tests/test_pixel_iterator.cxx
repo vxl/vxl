@@ -99,7 +99,7 @@ static void test_pixel_iterator()
   }
 
   {
-    // The test buffer below contains 4 pixels encoded in YUV 4:4:4
+    // The test buffer below contains 4 pixels encoded in UYV 4:4:4
     //                  | U  Y  V| U  Y  V| U  Y  V|  U   Y   V|
     vxl_byte buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
     vidl2_frame_sptr frame = new vidl2_shared_frame(buffer,2,2,VIDL2_PIXEL_FORMAT_UYV_444);
@@ -112,11 +112,11 @@ static void test_pixel_iterator()
           && itr(1) == buffer[i*3]
           && itr(2) == buffer[i*3+2];
     }
-    TEST("vidl2_pixel_iterator (YUV 444)",success,true);
+    TEST("vidl2_pixel_iterator (UYV 444)",success,true);
   }
 
   {
-    // The test buffer below contains 4 pixels encoded in YUV 4:2:2
+    // The test buffer below contains 4 pixels encoded in UYVU 4:2:2
     //                  | U  Y0 V Y1| U  Y0 V  Y1 |
     vxl_byte buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
     vidl2_frame_sptr frame = new vidl2_shared_frame(buffer,2,2,VIDL2_PIXEL_FORMAT_UYVY_422);
@@ -129,11 +129,11 @@ static void test_pixel_iterator()
           && itr(1) == buffer[i*2-(i%2)*2]
           && itr(2) == buffer[i*2+2-(i%2)*2];
     }
-    TEST("vidl2_pixel_iterator (YUV 422)",success,true);
+    TEST("vidl2_pixel_iterator (UYVY 422)",success,true);
   }
 
   {
-    // The test buffer below contains 8 pixels encoded in YUV 4:1:1
+    // The test buffer below contains 8 pixels encoded in UYVY 4:1:1
     //                  | U  Y0 Y1 V  Y2 Y3|U  Y0 Y1  V  Y2  Y3|
     vxl_byte buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
     vidl2_frame_sptr frame = new vidl2_shared_frame(buffer,2,2,VIDL2_PIXEL_FORMAT_UYVY_411);
@@ -146,7 +146,26 @@ static void test_pixel_iterator()
           && itr(1) == buffer[6*(i/4)]
           && itr(2) == buffer[6*(i/4)+3];
     }
-    TEST("vidl2_pixel_iterator (YUV 411)",success,true);
+    TEST("vidl2_pixel_iterator (UYVY 411)",success,true);
+  }
+
+  {
+    // The test buffer below contains 16 pixels encoded in YUV 420P
+    vxl_byte buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, // Y
+                          17, 18, 19, 20,   // U
+                          21, 22, 23, 24 }; // V
+    vidl2_frame_sptr frame = new vidl2_shared_frame(buffer,4,4,VIDL2_PIXEL_FORMAT_YUV_420P);
+    vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_420P> itr(frame);
+
+    bool success = true;
+    for(unsigned int i=0; i<16; ++i, ++itr){
+      vcl_cout << "YUV = ("<< (int)itr(0) << "," << (int)itr(1) << "," << (int)itr(2) << ") ";
+      if(i%4 == 3) vcl_cout << "\n";
+      success = success && itr(0) == buffer[i]
+          && itr(1) == buffer[16+(i/2)%2 + ((i/8)<<1)]
+          && itr(2) == buffer[20+(i/2)%2 + ((i/8)<<1)];
+    }
+    TEST("vidl2_pixel_iterator (YUV 420P)",success,true);
   }
 
   {
