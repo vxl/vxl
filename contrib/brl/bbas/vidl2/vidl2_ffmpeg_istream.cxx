@@ -54,6 +54,9 @@ struct vidl2_ffmpeg_istream::pimpl
   // frame data.
   AVFrame* frame_;
 
+  //: A contiguous memory buffer to store the current image data
+  vil_memory_chunk_sptr contig_memory_;
+
   //: The last successfully decoded frame.
   mutable vidl2_frame_sptr cur_frame_;
 
@@ -167,6 +170,7 @@ close()
     is_->frame_ = 0;
   }
 
+  is_->contig_memory_ = 0;
   is_->vid_index_ = -1;
   if ( is_->vid_str_ ) {
 #if LIBAVFORMAT_BUILD <= 4628
@@ -329,7 +333,7 @@ vidl2_ffmpeg_istream::current_frame()
 #else
   AVCodecContext* enc = is_->fmt_cxt_->streams[is_->vid_index_]->codec;
 #endif
-  // If we've already converted this frame, try to convert it
+  // If we have not already converted this frame, try to convert it
   if ( !is_->cur_frame_ && is_->frame_->data[0] != 0 ){
     int width = enc->width;
     int height = enc->height;
@@ -340,27 +344,51 @@ vidl2_ffmpeg_istream::current_frame()
                              enc->pix_fmt, width, height );
     }
 
+    // If the pixel format is not recognized by vidl2 then convert the data into RGB_24
     vidl2_pixel_format fmt = vidl2_pixel_format_from_ffmpeg(enc->pix_fmt);
     if(fmt == VIDL2_PIXEL_FORMAT_UNKNOWN)
     {
-      vcl_cerr << "warning: cannot handle this FFMPEG format" << vcl_endl;
-      is_->cur_frame_ = NULL;
+      int size = width*height*3;
+      if(!is_->contig_memory_)
+        is_->contig_memory_ = new vil_memory_chunk(size, VIL_PIXEL_FORMAT_BYTE);
+      else
+        is_->contig_memory_->set_size(size, VIL_PIXEL_FORMAT_BYTE);
+
+      AVPicture rgb_frame;
+      avpicture_fill(&rgb_frame, (uint8_t*)is_->contig_memory_->data(), PIX_FMT_RGB24, width, height);
+      img_convert(&rgb_frame, PIX_FMT_RGB24, (AVPicture*)is_->frame_, enc->pix_fmt, width, height);
+      is_->cur_frame_ = new vidl2_shared_frame(is_->contig_memory_->data(),width,height,
+                                               VIDL2_PIXEL_FORMAT_RGB_24);
     }
-    else
-      is_->cur_frame_ = new vidl2_shared_frame(is_->frame_->data[0], width, height, fmt);
-    /*
-    // convert the current frame to RGB
-    is_->cur_img_ = vil_image_view<vxl_byte>( width, height, 1, 3 );
-    AVPicture out_pict;
-    out_pict.data[0] = is_->cur_img_.top_left_ptr();
-    out_pict.linesize[0] = is_->cur_img_.ni() * 3;
-    if ( img_convert( &out_pict, PIX_FMT_RGB24,
-                      (AVPicture*)is_->frame_, enc->pix_fmt,
-                      width, height ) == -1 ) {
-      is_->cur_img_ = 0;
+    else{
+      // Test for contiguous memory.  Sometimes FFMPEG uses scanline buffers larger
+      // than the image width.  The extra memory is used in optimized decoding routines.
+      // This leads to a segmented image buffer, not supported by vidl2. 
+      AVPicture test_frame;
+      avpicture_fill(&test_frame, is_->frame_->data[0], enc->pix_fmt, width, height);
+      if(test_frame.data[1] == is_->frame_->data[1] &&
+         test_frame.data[2] == is_->frame_->data[2] &&
+         test_frame.linesize[0] == is_->frame_->linesize[0] &&
+         test_frame.linesize[1] == is_->frame_->linesize[1] &&
+         test_frame.linesize[2] == is_->frame_->linesize[2] )
+      {
+        is_->cur_frame_ = new vidl2_shared_frame(is_->frame_->data[0], width, height, fmt);
+      }
+      // Copy the image into contiguous memory.
+      else
+      {
+        if(!is_->contig_memory_){
+          int size = vidl2_pixel_format_buffer_size(width,height,fmt);
+          is_->contig_memory_ = new vil_memory_chunk(size, VIL_PIXEL_FORMAT_BYTE);
+        }
+        avpicture_fill(&test_frame, (uint8_t*)is_->contig_memory_->data(), enc->pix_fmt, width, height);
+        img_copy(&test_frame, (AVPicture*)is_->frame_, enc->pix_fmt, width, height);
+        // use a shared frame because the vil_memory_chunk is reused for each frame
+        is_->cur_frame_ = new vidl2_shared_frame(is_->contig_memory_->data(),width,height,fmt);
+      }
+
     }
-    vcl_cout << "format = "<<enc->pix_fmt<< vcl_endl;
-    */
+
   }
 
   // The MPEG 2 codec has a latency of 1 frame, so the dts of the last
@@ -371,8 +399,6 @@ vidl2_ffmpeg_istream::current_frame()
     is_->frame_number_offset_ = 1;
   }
 
-  //if (is_->cur_img_)
-  //  return new vidl2_memory_chunk_frame( is_->cur_img_ );
   return is_->cur_frame_;
 }
 
