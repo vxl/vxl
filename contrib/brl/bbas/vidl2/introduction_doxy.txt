@@ -62,4 +62,29 @@
 *    in Windows using native Windows codecs
 *  - vidl2_directshow_ostream - use the DirectShow API to encode video files
 *    in Windows using native Windows codecs
+*
+* \section frames Video Frames
+* The vidl2_frame_sptr is data structure used to transport video frame data from
+* a vidl2_istream to a vidl2_ostream.  The vidl2_frame contains a pointer to the
+* frame buffer, the image resolution, the pixel format, and may eventually contain
+* a time stamp.  A vidl2_frame is more restrictive than a vil_image_view since it
+* requires contiguous memory and is limited in pixel data types.  However, it also
+* handles many pixels formats not supported by vil such as those with subsampled
+* chrominance (i.e. YUV 4:2:2).
+*
+* In some cases the vidl2_frame data can be wrapped
+* by a vil_image_view, but usually this is not a good idea.  The vidl2_frame should
+* considered be volatile data structure.  The image buffer is only guaranteed to be
+* valid until the next call of \c vidl2_ostream::advance().  The ostream will keep a
+* pointer to the released frame and then invalidate it before reusing memory.  Use
+* the functions in vidl2_convert.h to obtain a non-volatile vil_image_view.
+*
+* \section pix_fmt Pixel Formats and Conversions
+* The supported pixel formats are enumerated in vidl2_pixel_format.  A set of
+* template specializations is used to define a set of traits for each format.
+* A new pixel format may be introduced by simply adding an entry in the table
+* in vidl2_pixel_format.h.  The traits of a pixel format are used in the generation
+* of conversion routines with templates.
+*
+* 
 */
