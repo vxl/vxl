@@ -11,8 +11,6 @@
 
 #include "mbl_log.h"
 #include <vcl_cstddef.h>
-#include <vcl_functional.h>
-#include <vcl_algorithm.h>
 #include <vcl_fstream.h>
 
 // Got the a streambuf example from vul_redirector and hacked around with it.
@@ -183,8 +181,9 @@ void mbl_logger_root::load_log_config_file()
 // Make sure all known loggers reinitialise themselves.
 void mbl_logger_root::update_all_loggers()
 {
-  vcl_for_each(all_loggers_.begin(), all_loggers_.end(),
-    vcl_mem_fun(&mbl_logger::reinitialise));
+  for (vcl_set<mbl_logger *>::iterator it=all_loggers_.begin(),
+       end=all_loggers_.end(); it!=end; ++it)
+    (*it)->reinitialise();
 }
 
 
