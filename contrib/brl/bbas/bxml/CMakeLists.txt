@@ -5,10 +5,6 @@ INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
 # find the path to the xerces libraries and includes
 INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/find_xerces.cmake )
 
-# sources that do not depend on xerces being present
- SET(bxml_sources
-     bxml_basic_element.cxx                      bxml_basic_element.h
- )
  #AUX_SOURCE_DIRECTORY(Templates bxml_sources)
 
 IF(HAS_XERCES)
