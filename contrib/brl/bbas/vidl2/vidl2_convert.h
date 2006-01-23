@@ -128,6 +128,7 @@ template <class outP>
 bool vidl2_convert_to_view(const vidl2_frame_sptr& frame,
                            vil_image_view<outP>& image)
 {
+  assert(frame);
   vidl2_pixel_format fmt = frame->pixel_format();
   if(fmt == VIDL2_PIXEL_FORMAT_UNKNOWN)
     return false;
@@ -181,6 +182,7 @@ template <class outP>
 bool vidl2_convert_to_view_rgb(const vidl2_frame_sptr& frame,
                                vil_image_view<outP>& image)
 {
+  assert(frame);
   vidl2_pixel_format fmt = frame->pixel_format();
   if(fmt == VIDL2_PIXEL_FORMAT_UNKNOWN)
     return false;
@@ -237,31 +239,21 @@ bool vidl2_convert_to_view_rgb(const vidl2_frame_sptr& frame,
 }
 
 
-template <vidl2_pixel_format inF, vidl2_pixel_format outF>
-struct vidl2_convert_frame
-{
-  static void
-  apply(const vidl2_frame_sptr& in_frame, vidl2_frame_sptr& out_frame)
-  {
-  }
-};
+//: Convert the pixel format of a frame
+//
+// The \p in_frame.data() is converted from \p in_frame.pixel_format()
+// to \p out_frame.pixel_format() and stored in \p out_frame.data()
+// \returns false If the output frame data is not the correct size.
+bool vidl2_convert_frame(const vidl2_frame& in_frame,
+                               vidl2_frame& out_frame);
 
 
-
-/*
-
-template <vidl2_pixel_format F>
-bool vidl2_convert_frame(const vidl2_frame_sptr& in_frame, vidl2_pixel_format F,
-                               vidl2_frame_sptr& out_frame, vidl2_pixel_format F)
-{
-  assert(in_frame);
-  assert(out_frame);
-  if(out_frame->size() != in_frame->size())
-    out_frame = new vidl2_memory_chunk_frame(in_frame->ni(), in_frame->nj(),
-                                             new vil_memory_chunk(in_frame->size(), VIDL2_PIXEL_FORMAT_UNKNOWN));
-  vcl_memcpy(out_frame->data(), in_frame->data(), in_frame->size());
-}
-*/
+//: Convert the pixel format of a frame
+//
+// The convert \p in_frame to a \p format by allocating
+// a new frame buffer
+vidl2_frame_sptr vidl2_convert_frame(const vidl2_frame_sptr& in_frame,
+                                     vidl2_pixel_format format);
 
 
 #endif // vidl2_convert_h_
