@@ -35,9 +35,10 @@ class vidl2_frame
 
     //: Return a pointer to the first element of data
     virtual void * data() = 0;
+    virtual const void * data() const = 0;
 
     //: The size of the buffer in bytes
-    virtual unsigned long size() = 0;
+    virtual unsigned long size() const = 0;
 
     //: Width
     unsigned ni() const { return ni_; }
@@ -102,9 +103,10 @@ class vidl2_shared_frame : public vidl2_frame
 
     //: Return a pointer to the first element of data
     virtual void * data() { return buffer_; }
+    virtual const void * data() const { return buffer_; }
 
     //: The size of the buffer in bytes
-    virtual unsigned long size() { return vidl2_pixel_format_buffer_size(ni_,nj_,format_); }
+    virtual unsigned long size() const { return vidl2_pixel_format_buffer_size(ni_,nj_,format_); }
 
   private:
     void * buffer_;
@@ -135,9 +137,10 @@ class vidl2_memory_chunk_frame : public vidl2_frame
 
     //: Return a pointer to the first element of data
     virtual void * data () { return memory_?memory_->data():NULL; }
+    virtual const void * data () const { return memory_?memory_->data():NULL; }
 
     //: The size of the buffer in bytes
-    virtual unsigned long size() { return memory_?memory_->size():0; }
+    virtual unsigned long size() const { return memory_?memory_->size():0; }
 
   private:
     vil_memory_chunk_sptr memory_;
