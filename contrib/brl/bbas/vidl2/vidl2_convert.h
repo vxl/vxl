@@ -17,44 +17,11 @@
 
 #include "vidl2_frame_sptr.h"
 #include "vidl2_pixel_format.h"
+#include "vidl2_color.h"
 #include "vidl2_pixel_iterator.h"
 #include "vidl2_frame.h"
 #include <vil/vil_image_view.h>
 #include <vcl_cassert.h>
-
-
-// ITU-R BT.601 (formerly CCIR 601) standard conversion
-template <class outT>
-inline void vidl2_convert_yuv2rgb( vxl_byte y, vxl_byte u, vxl_byte v,
-                                      outT& r,    outT& g,    outT& b )
-{
-  double dy = y/255.0;       // 0.0 to 1.0
-  double du = (u-128)/255.0; //-0.5 to 0.5
-  double dv = (v-128)/255.0; //-0.5 to 0.5
-  r = dy + 1.1402 * dv;
-  g = dy - 0.34413628620102 * du - 0.71413628620102 * dv;
-  b = dy + 1.772 * du;
-}
-
-
-//: faster integer-based conversion from YUV to RGB
-// based on conversion used in libdc1394
-VCL_DEFINE_SPECIALIZATION 
-inline void vidl2_convert_yuv2rgb( vxl_byte  y, vxl_byte  u, vxl_byte  v,
-                                   vxl_byte& r, vxl_byte& g, vxl_byte& b )
-
-{
-  register int iy = y, iu = u-128, iv = v-128, ir, ib, ig;
-  r = ir = iy + ((iv*1436) >> 10);
-  g = ig = iy - ((iu*352 + iv*731) >> 10);
-  b = ib = iy + ((iu*1814) >> 10);
-  r = ir < 0 ? 0 : r;
-  g = ig < 0 ? 0 : g;
-  b = ib < 0 ? 0 : b;
-  r = ir > 255 ? 255 : r;
-  g = ig > 255 ? 255 : g;
-  b = ib > 255 ? 255 : b;
-}
 
 
 //: Wraps an existing iterator and converts YUV to RGB
@@ -66,14 +33,14 @@ class vidl2_yuv2rgb_iterator
     vidl2_yuv2rgb_iterator(pixItr itr):
       itr_(itr)
     {
-      vidl2_convert_yuv2rgb(itr_(0), itr_(1), itr(2), rgb_[0], rgb_[1], rgb_[2]);
+      vidl2_color_convert_yuv2rgb(itr_(0), itr_(1), itr(2), rgb_[0], rgb_[1], rgb_[2]);
     }
 
     //: Pre-increment
     vidl2_yuv2rgb_iterator<pixItr, outP>& operator++ ()
     {
       ++itr_;
-      vidl2_convert_yuv2rgb(itr_(0), itr_(1), itr_(2), rgb_[0], rgb_[1], rgb_[2]);
+      vidl2_color_convert_yuv2rgb(itr_(0), itr_(1), itr_(2), rgb_[0], rgb_[1], rgb_[2]);
       return *this;
     }
 

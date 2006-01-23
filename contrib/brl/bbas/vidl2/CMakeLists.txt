@@ -14,6 +14,7 @@ ENDIF( FFMPEG_FOUND )
 
 SET(vidl2_sources
   vidl2_pixel_format.h          vidl2_pixel_format.cxx
+  vidl2_color.h
   vidl2_frame.h                 vidl2_frame.cxx               vidl2_frame_sptr.h
   vidl2_pixel_iterator.h
   vidl2_convert.h               vidl2_convert.cxx

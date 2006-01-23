@@ -21,83 +21,11 @@
 
 
 #include "vidl2_pixel_format.h"
+#include "vidl2_color.h"
 #include "vidl2_frame.h"
 #include <vxl_config.h>
 #include <vcl_cassert.h>
 
-//-----------------------------------------------------------------------------
-
-//: Component color encoding
-// These functions indicate how to extract a byte for each
-// color channel given a pointer to the pixel memory
-// This is only meant for non-planar non-packed formats
-template <vidl2_pixel_format FMT> 
-struct vidl2_component_enc
-{
-  typedef typename vidl2_pixel_traits_of<FMT>::type cmp_type;
-  static inline cmp_type
-  channel(const cmp_type * ptr, unsigned int i)
-  {
-    return ptr[i];
-  }
-};
-
-
-VCL_DEFINE_SPECIALIZATION 
-struct vidl2_component_enc<VIDL2_PIXEL_FORMAT_BGR_24>
-{
-  static inline
-  vxl_byte channel(const vxl_byte * ptr, unsigned int i)
-  {
-    // 0 -> 2
-    // 1 -> 1
-    // 2 -> 0
-    return ptr[2-i];
-  }
-};
-
-
-VCL_DEFINE_SPECIALIZATION 
-struct vidl2_component_enc<VIDL2_PIXEL_FORMAT_RGB_555>
-{
-  static inline
-  vxl_byte channel(const vxl_byte * ptr, unsigned int i)
-  {
-    const vxl_uint_16* p = reinterpret_cast<const vxl_uint_16*>(ptr);
-    return static_cast<vxl_byte>(*p >> (2-i)*5)<<3;
-  }
-};
-
-
-VCL_DEFINE_SPECIALIZATION 
-struct vidl2_component_enc<VIDL2_PIXEL_FORMAT_RGB_565>
-{
-  static inline
-  vxl_byte channel(const vxl_byte * ptr, unsigned int i)
-  {
-    const vxl_uint_16* p = reinterpret_cast<const vxl_uint_16*>(ptr);
-    switch(i){
-      case 0: return vxl_byte((*p & 0xF800) >> 8); // R
-      case 1: return vxl_byte((*p & 0x07E0) >> 3); // G
-      case 2: return vxl_byte((*p & 0x001F) << 3); // B
-    }
-    return 0;
-  }
-};
-
-
-VCL_DEFINE_SPECIALIZATION 
-struct vidl2_component_enc<VIDL2_PIXEL_FORMAT_UYV_444>
-{
-  static inline
-  vxl_byte channel(const vxl_byte * ptr, unsigned int i)
-  {
-    // 0 -> 1
-    // 1 -> 0
-    // 2 -> 2
-    return ptr[i^((i>>1)^1)];
-  }
-};
 
 //-----------------------------------------------------------------------------
 
@@ -130,7 +58,7 @@ class vidl2_pixel_iterator
     cmp_type operator () (unsigned int i) const
     {
       assert(i<vidl2_pixel_traits_of<FMT>::num_channels);
-      return vidl2_component_enc<FMT>::channel(ptr_,i);
+      return vidl2_color_component<FMT>::get(ptr_,i);
     }
 
   private:

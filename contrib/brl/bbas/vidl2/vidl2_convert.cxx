@@ -41,13 +41,20 @@ bool copy_conversion(const vidl2_frame& in_frame, vidl2_frame& out_frame)
 }
 
 
+//: Convert to an intermediate RGB_24 frame
+// This is inefficient, but will provide the functionality until
+// an optimized version is written
+// defined later because it uses conversion_table
+bool intermediate_rgb24_conversion(const vidl2_frame& in_frame, vidl2_frame& out_frame);
+
+
 // Default pixel format conversion - it fails
 template <vidl2_pixel_format in_Fmt, vidl2_pixel_format out_Fmt>
 struct convert
 {
   enum { defined = false };
-  static inline bool apply(const vidl2_frame& in_frame,
-                           vidl2_frame& out_frame)
+  static inline bool apply(const vidl2_frame& /*in_frame*/,
+                           vidl2_frame& /*out_frame*/)
   {
     return false;
   }
@@ -66,9 +73,60 @@ struct convert<VIDL2_PIXEL_FORMAT_RGB_24, VIDL2_PIXEL_FORMAT_UYVY_422>
   static inline bool apply(const vidl2_frame& in_frame,
                            vidl2_frame& out_frame)
   {
-    // FIXME this is not actually implemented yet
-    // just an example of how to do the specialization
-    return false;
+    assert(in_frame.pixel_format()==VIDL2_PIXEL_FORMAT_RGB_24);
+    assert(out_frame.pixel_format()==VIDL2_PIXEL_FORMAT_UYVY_422);
+    const vxl_byte* rgb = reinterpret_cast<const vxl_byte*>(in_frame.data());
+    vxl_byte* uyvy = reinterpret_cast<vxl_byte*>(out_frame.data());
+    unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1)/2;
+    for(unsigned int c=0; c<num_half_pix; ++c){
+      const vxl_byte& r1 = *(rgb++);
+      const vxl_byte& g1 = *(rgb++);
+      const vxl_byte& b1 = *(rgb++);
+      const vxl_byte& r2 = *(rgb++);
+      const vxl_byte& g2 = *(rgb++);
+      const vxl_byte& b2 = *(rgb++);
+      vxl_byte y1,u1,v1,y2,u2,v2;
+      vidl2_color_convert_rgb2yuv(r1,g1,b1,y1,u1,v1);
+      vidl2_color_convert_rgb2yuv(r2,g2,b2,y2,u2,v2);
+      *(uyvy++) = (u1+u2)/2;
+      *(uyvy++) = y1;
+      *(uyvy++) = (v1+v2)/2;
+      *(uyvy++) = y2;
+    }
+    return true;
+  }
+};
+
+
+// UYVY_422 to RGB_24
+VCL_DEFINE_SPECIALIZATION
+struct convert<VIDL2_PIXEL_FORMAT_UYVY_422, VIDL2_PIXEL_FORMAT_RGB_24>
+{
+  enum { defined = true };
+  static inline bool apply(const vidl2_frame& in_frame,
+                           vidl2_frame& out_frame)
+  {
+    assert(in_frame.pixel_format()==VIDL2_PIXEL_FORMAT_UYVY_422);
+    assert(out_frame.pixel_format()==VIDL2_PIXEL_FORMAT_RGB_24);
+    const vxl_byte* uyvy = reinterpret_cast<const vxl_byte*>(in_frame.data());
+    vxl_byte* rgb = reinterpret_cast<vxl_byte*>(out_frame.data());
+    unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1)/2;
+    for(unsigned int c=0; c<num_half_pix; ++c){
+      const vxl_byte& u1 = *(uyvy++);
+      const vxl_byte& y1 = *(uyvy++);
+      const vxl_byte& v1 = *(uyvy++);
+      const vxl_byte& y2 = *(uyvy++);
+      vxl_byte r,g,b;
+      vidl2_color_convert_yuv2rgb(y1,u1,v1,r,g,b);
+      *(rgb++) = r;
+      *(rgb++) = g;
+      *(rgb++) = b;
+      vidl2_color_convert_yuv2rgb(y2,u1,v1,r,g,b);
+      *(rgb++) = r;
+      *(rgb++) = g;
+      *(rgb++) = b;
+    }
+    return true;
   }
 };
 
@@ -77,6 +135,7 @@ struct convert<VIDL2_PIXEL_FORMAT_RGB_24, VIDL2_PIXEL_FORMAT_UYVY_422>
 //=============================================================================
 
 //: Generates an entry into the table of pixel format conversions functions
+// This is called for every pair for pixel formats to build the table
 template <vidl2_pixel_format in_Fmt, vidl2_pixel_format out_Fmt>
 struct table_entry_init
 {
@@ -87,6 +146,9 @@ struct table_entry_init
       table_entry = &copy_conversion;
     else if(convert<in_Fmt,out_Fmt>::defined)
       table_entry = &convert<in_Fmt,out_Fmt>::apply;
+    else if(convert<in_Fmt,VIDL2_PIXEL_FORMAT_RGB_24>::defined &&
+            convert<VIDL2_PIXEL_FORMAT_RGB_24,out_Fmt>::defined)
+      table_entry = &intermediate_rgb24_conversion;
     else
       table_entry = &default_conversion;
   }
@@ -143,6 +205,17 @@ class converter
 //: Instantiate a global conversion function table
 converter conversion_table;
 
+
+//: Convert to an intermediate RGB_24 frame
+// defined here because it uses conversion_table
+bool intermediate_rgb24_conversion(const vidl2_frame& in_frame, vidl2_frame& out_frame)
+{
+  unsigned int ni = in_frame.ni(), nj = in_frame.nj();
+  vil_memory_chunk_sptr memory = new vil_memory_chunk(ni*nj*3, VIL_PIXEL_FORMAT_BYTE);
+  vidl2_memory_chunk_frame temp_frame(ni,nj,VIDL2_PIXEL_FORMAT_RGB_24,memory);
+  return conversion_table(in_frame, temp_frame) &&
+      conversion_table(temp_frame, out_frame);
+}
 
 } // end anonymous namespace
 
