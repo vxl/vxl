@@ -378,7 +378,7 @@ vidl2_ffmpeg_istream::current_frame()
       else
       {
         if(!is_->contig_memory_){
-          int size = vidl2_pixel_format_buffer_size(width,height,fmt);
+          int size = avpicture_get_size( enc->pix_fmt, width, height );
           is_->contig_memory_ = new vil_memory_chunk(size, VIL_PIXEL_FORMAT_BYTE);
         }
         avpicture_fill(&test_frame, (uint8_t*)is_->contig_memory_->data(), enc->pix_fmt, width, height);
