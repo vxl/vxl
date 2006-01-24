@@ -111,7 +111,7 @@ bool vidl2_convert_to_view(const vidl2_frame_sptr& frame,
 #define do_case(FMT) case FMT:\
     {\
       typedef vidl2_pixel_iterator<FMT> Itr;\
-      vidl2_convert_itr_to_view(Itr(frame),image);\
+      vidl2_convert_itr_to_view(Itr(*frame),image);\
       return true;\
     }
   switch(fmt){
@@ -165,7 +165,7 @@ bool vidl2_convert_to_view_rgb(const vidl2_frame_sptr& frame,
 #define do_case(FMT) case FMT:\
     {\
       typedef vidl2_pixel_iterator<FMT> Itr;\
-      vidl2_convert_itr_to_view(Itr(frame),image);\
+      vidl2_convert_itr_to_view(Itr(*frame),image);\
       return true;\
     }
 
@@ -173,7 +173,7 @@ bool vidl2_convert_to_view_rgb(const vidl2_frame_sptr& frame,
     {\
       typedef vidl2_pixel_iterator<FMT> yuvItr;\
       typedef vidl2_yuv2rgb_iterator<yuvItr,outP> cvtItr;\
-      vidl2_convert_itr_to_view(cvtItr(yuvItr(frame)),image);\
+      vidl2_convert_itr_to_view(cvtItr(yuvItr(*frame)),image);\
       return true;\
     }
   switch(fmt){

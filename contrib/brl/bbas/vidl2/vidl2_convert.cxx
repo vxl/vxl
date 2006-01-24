@@ -60,6 +60,39 @@ struct convert
   }
 };
 
+//=============================================================================
+// Start of generic pixel conversions
+template <vidl2_pixel_format in_Fmt, vidl2_pixel_format out_Fmt>
+struct convert_generic
+{
+  static inline bool apply(const vidl2_frame& in_frame,
+                           vidl2_frame& out_frame)
+  {
+    assert(in_frame.pixel_format()==in_Fmt);
+    assert(out_frame.pixel_format()==out_Fmt);
+    typedef typename vidl2_pixel_traits_of<in_Fmt>::type in_type;
+    typedef typename vidl2_pixel_traits_of<out_Fmt>::type out_type;
+    typedef vidl2_color_converter<
+        vidl2_pixel_color(vidl2_pixel_traits_of<in_Fmt>::color_idx),
+        vidl2_pixel_traits_of<in_Fmt>::num_channels,
+        vidl2_pixel_color(vidl2_pixel_traits_of<out_Fmt>::color_idx),
+        vidl2_pixel_traits_of<out_Fmt>::num_channels > color_converter;
+    vidl2_pixel_iterator<in_Fmt> in_itr(in_frame);
+    vidl2_pixel_iterator<out_Fmt> out_itr(out_frame);
+
+    const unsigned int num_pix = in_frame.ni() * in_frame.nj();
+    in_type in_pixel[vidl2_pixel_traits_of<in_Fmt>::num_channels];
+    out_type out_pixel[vidl2_pixel_traits_of<out_Fmt>::num_channels];
+    for(unsigned int c=0; c<num_pix; ++c, ++in_itr, ++out_itr){
+      in_itr.get(in_pixel);
+      color_converter::convert(in_pixel, out_pixel);
+      out_itr.set(out_pixel);
+    }
+    return true;
+  }
+};
+
+
 
 //=============================================================================
 // Start of pixel conversion specializations
@@ -134,6 +167,7 @@ struct convert<VIDL2_PIXEL_FORMAT_UYVY_422, VIDL2_PIXEL_FORMAT_RGB_24>
 // End of pixel conversion specializations
 //=============================================================================
 
+
 //: Generates an entry into the table of pixel format conversions functions
 // This is called for every pair for pixel formats to build the table
 template <vidl2_pixel_format in_Fmt, vidl2_pixel_format out_Fmt>
@@ -142,6 +176,7 @@ struct table_entry_init
   static inline void set_entry(converter_func& table_entry)
   {
     // This should be done at compile time with partial specialization
+    // This run time code generates many functions that are never actually used
     if(in_Fmt == out_Fmt)
       table_entry = &copy_conversion;
     else if(convert<in_Fmt,out_Fmt>::defined)
@@ -149,6 +184,9 @@ struct table_entry_init
     else if(convert<in_Fmt,VIDL2_PIXEL_FORMAT_RGB_24>::defined &&
             convert<VIDL2_PIXEL_FORMAT_RGB_24,out_Fmt>::defined)
       table_entry = &intermediate_rgb24_conversion;
+    else if(vidl2_pixel_iterator_valid<in_Fmt>::value &&
+            vidl2_pixel_iterator_valid<out_Fmt>::value)
+      table_entry = &convert_generic<in_Fmt,out_Fmt>::apply;
     else
       table_entry = &default_conversion;
   }
