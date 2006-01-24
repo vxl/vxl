@@ -12,7 +12,7 @@
 #include <vil3d/vil3d_file_format.h>
 
 //: Reader for generated synthetic images.
-// To get a 10x10x20 vxl_byte iamge set to 128, you would specify a filename
+// To get a 10x10x20 vxl_byte image set to 128, you would specify a filename
 // of "gen:10x10x20:vxl_byte:128"
 // \note This format is not used by vil3d automatically. If
 // you want to use it in your application,

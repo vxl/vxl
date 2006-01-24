@@ -20,7 +20,7 @@
 
 vil3d_image_resource_sptr vil3d_gen_synthetic_format::make_input_image(const char *filename) const
 {
-  vul_reg_exp re("^gen:([0-9]+)x([0-9]+)x([0-9]+):([a-z0-9A-Z<>_]+):([0-9\\-\\.]+)$");
+  vul_reg_exp re("^gen:([0-9]+)x([0-9]+)x([0-9]+):([a-z0-9A-Z<>_]+):(-?[0-9\\.]+)$");
   assert(re.is_valid());
 
   if (! re.find(filename))
@@ -159,8 +159,8 @@ vil3d_image_view_base_sptr vil3d_gen_synthetic_image::get_copy_view(
     }
     case VIL_PIXEL_FORMAT_BYTE:
     {
-      vil3d_image_view<vxl_sbyte> *p =
-        new vil3d_image_view<vxl_sbyte>(ni, nj, nk, nplanes());
+      vil3d_image_view<vxl_byte> *p =
+        new vil3d_image_view<vxl_byte>(ni, nj, nk, nplanes());
       p->fill(value_.byte_value);
       return p;
     }
