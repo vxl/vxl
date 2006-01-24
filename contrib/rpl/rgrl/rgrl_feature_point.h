@@ -43,6 +43,9 @@ class rgrl_feature_point
   vnl_matrix<double> const&
   error_projector() const;
 
+  vnl_matrix<double> const&
+  error_projector_sqrt() const;
+
   //: Result is a rgrl_feature_point.
   virtual
   rgrl_feature_sptr
@@ -74,7 +77,8 @@ class rgrl_feature_point
 
  protected:
   vnl_vector<double> location_;
-
+  mutable vnl_matrix<double> err_proj_, err_proj_sqrt_;
+  
   double             scale_;
 };
 

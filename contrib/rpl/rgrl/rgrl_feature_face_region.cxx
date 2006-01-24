@@ -54,7 +54,7 @@ transform( rgrl_transformation const& xform ) const
   xform.map_location( this->location_, face_ptr->location_ );
   xform.map_normal( this->location_, this->normal_, face_ptr->normal_ );
 
-  face_ptr->error_proj_ = outer_product( face_ptr->normal_, face_ptr->normal_ );
+  face_ptr->err_proj_ = outer_product( face_ptr->normal_, face_ptr->normal_ );
   face_ptr->thickness_ = this->thickness_;
   face_ptr->radius_ = this->radius_;
   return result_sptr;

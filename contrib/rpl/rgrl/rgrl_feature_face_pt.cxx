@@ -3,6 +3,8 @@
 #include "rgrl_feature_face_pt.h"
 #include <rgrl/rgrl_transformation.h>
 #include <vnl/algo/vnl_svd.h>
+#include <vnl/vnl_math.h>
+
 #include <vcl_cassert.h>
 #include <rgrl/rgrl_util.h>
 #include <rgrl/rgrl_cast.h>
@@ -12,12 +14,10 @@ rgrl_feature_face_pt ::
 rgrl_feature_face_pt( vnl_vector< double > const& location,
                       vnl_vector< double > const& normal )
   : location_( location ), normal_( normal ),
-    error_proj_( normal.size(), normal.size() ),
     scale_( 0 ),
     subspace_cached_( false )
 {
   normal_.normalize();
-  error_proj_ = outer_product( normal, normal ) ;
 }
 
 //  private constructor for transformed face points
@@ -39,7 +39,24 @@ vnl_matrix<double> const&
 rgrl_feature_face_pt ::
 error_projector() const
 {
-  return error_proj_;
+  if( !err_proj_.size() ) {
+    err_proj_ = outer_product( normal_, normal_ ) ;
+    err_proj_ /= vnl_math_sqr( scale_ );
+  }
+  
+  return err_proj_;
+}
+
+vnl_matrix<double> const&
+rgrl_feature_face_pt ::
+error_projector_sqrt() const
+{
+  if( !err_proj_sqrt_.size() ) {
+    err_proj_sqrt_ = outer_product( normal_, normal_ ) ;
+    err_proj_sqrt_ /= scale_;
+  }
+  
+  return err_proj_sqrt_;
 }
 
 unsigned int
@@ -83,12 +100,14 @@ transform( rgrl_transformation const& xform ) const
   xform.map_location( this->location_, face_ptr->location_ );
   xform.map_normal( this->location_, this->normal_, face_ptr->normal_ );
 
-  face_ptr->error_proj_ = outer_product( face_ptr->normal_, face_ptr->normal_ );
+  // it is not clear what's meaning of the scale of corner and face points
+  // It certainly does not represent the physical scale and is related to 
+  // the sharpness of the edge.
 #if 0
   // transform scale
   if ( this->scale_ > 0.0 )
     face_ptr->scale_ = this->transform_scale( xform );
-#endif // 0
+#else
   // NOTE:
   // Because the scaling factors is computed using PCA,
   // it is invariant to rotation.  As a result,
@@ -112,6 +131,7 @@ transform( rgrl_transformation const& xform ) const
   xformed_loc -= face_ptr->location_;
 
   face_ptr->scale_ = xformed_loc.magnitude();
+#endif
 
   return result_sptr;
 }
@@ -182,8 +202,7 @@ write( vcl_ostream& os ) const
      << location_.size() << '\n'
   // atributes
      << location_ << "    " << scale_ << '\n'
-     << normal_ << '\n'
-     << error_proj_ << vcl_endl;
+     << normal_  << vcl_endl;
 }
 
 //: read in feature
@@ -227,12 +246,6 @@ read( vcl_istream& is, bool skip_tag )
   // get normal
   normal_.set_size( dim );
   is >> normal_;
-  if ( !is )
-    return false;
-
-  // get error projector
-  error_proj_.set_size( dim, dim );
-  is >> error_proj_;
   if ( !is )
     return false;
 

@@ -2,6 +2,7 @@
 // \file
 // \author Amitha Perera
 // \date   Feb 2003
+#include <vnl/vnl_math.h>
 
 #include <rgrl/rgrl_feature_point.h>
 #include <rgrl/rgrl_cast.h>
@@ -60,9 +61,31 @@ vnl_matrix<double> const&
 rgrl_feature_point::
 error_projector() const
 {
-  return identity_matrix( location_.size() );
+  if( !err_proj_.size() ) {
+    
+    const unsigned m = location_.size();
+    err_proj_.set_size( m, m );
+    err_proj_.set_identity();
+    err_proj_ /= vnl_math_sqr( scale_ );
+  }
+  
+  return err_proj_;
 }
 
+vnl_matrix<double> const&
+rgrl_feature_point::
+error_projector_sqrt() const
+{
+  if( !err_proj_sqrt_.size() ) {
+    
+    const unsigned m = location_.size();
+    err_proj_sqrt_.set_size( m, m );
+    err_proj_sqrt_.set_identity();
+    err_proj_sqrt_ /= scale_;
+  }
+  
+  return err_proj_sqrt_;
+}
 
 rgrl_feature_sptr
 rgrl_feature_point::

@@ -36,7 +36,13 @@ class rgrl_feature_face_pt
   virtual
   void set_scale( double scale ) { scale_ = scale; }
 
-  virtual vnl_matrix<double> const& error_projector() const;
+  virtual 
+  vnl_matrix<double> const& 
+  error_projector() const;
+
+  virtual 
+  vnl_matrix<double> const& 
+  error_projector_sqrt() const;
 
   virtual unsigned int num_constraints() const;
 
@@ -72,7 +78,7 @@ class rgrl_feature_face_pt
   //:  The location, the normal, and the error projector.
   vnl_vector<double> location_;
   vnl_vector<double> normal_;
-  vnl_matrix<double> error_proj_;
+  mutable vnl_matrix<double> err_proj_, err_proj_sqrt_;
   double             scale_;
 
  private:

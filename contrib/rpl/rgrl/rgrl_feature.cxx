@@ -13,7 +13,7 @@ double
 rgrl_feature::
 geometric_error( rgrl_feature const& other ) const
 {
-  return (this->location() - other.location()).pre_multiply( this->error_projector() ).two_norm();
+  return (this->location() - other.location()).pre_multiply( this->error_projector_sqrt() ).two_norm();
 }
 
 double 
@@ -21,7 +21,7 @@ rgrl_feature::
 geometric_error( rgrl_transformation const& xform, rgrl_feature const& other ) const
 { 
   vnl_vector<double> mapped;
-  return (this->location() - other.location()).pre_multiply( this->error_projector() ).two_norm();
+  return (this->location() - other.location()).pre_multiply( this->error_projector_sqrt() ).two_norm();
 }
   
 
@@ -45,4 +45,14 @@ void
 rgrl_feature::set_scale( double /*scale*/ )
 {
   assert( ! "This rgrl_feature doesn't implement set_scale()" );
+}
+
+vnl_matrix<double> const&
+rgrl_feature::
+error_projector_sqrt() const
+{
+  assert( !"This error_projector_sqrt() method is not implemented!!!" );
+  // to avoid compiler warning
+  vnl_matrix<double>*p=0;
+  return *p;
 }

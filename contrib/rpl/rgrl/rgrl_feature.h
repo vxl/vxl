@@ -64,6 +64,12 @@ class rgrl_feature
   virtual
   vnl_matrix<double> const& error_projector() const = 0;
 
+  //: The square root of error projector is used to compute residual,
+  //  which should not be squared. 
+  //  The error projector itself is usually used in least-squares estimation.
+  virtual
+  vnl_matrix<double> const& error_projector_sqrt() const;
+
   //: Number of constraints provided when another feature matches to it
   virtual
   unsigned int num_constraints() const = 0;

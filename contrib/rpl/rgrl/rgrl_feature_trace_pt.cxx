@@ -81,7 +81,6 @@ error_projector() const
   return error_proj_;
 }
 
-
 rgrl_feature_sptr
 rgrl_feature_trace_pt::
 transform( rgrl_transformation const& xform ) const

@@ -182,7 +182,7 @@ rgrl_rad_dis_homo2d_func::
 f(vnl_vector<double> const& x, vnl_vector<double>& fx)
 {
   vnl_double_2 true_mapped, true_from, from, dis_mapped;
-  vnl_matrix_fixed<double,2,2> error_proj;
+  vnl_matrix_fixed<double,2,2> error_proj_sqrt;
   double k1_from = x[9];
   double k1_to   = x[10];
   vnl_double_3x3  H;
@@ -211,9 +211,9 @@ f(vnl_vector<double> const& x, vnl_vector<double>& fx)
         {
           vnl_double_2 to = ti.to_feature()->location();
           to -= to_centre_;
-          error_proj = ti.to_feature()->error_projector();
+          error_proj_sqrt = ti.to_feature()->error_projector_sqrt();
           double const wgt = vcl_sqrt(ti.cumulative_weight());
-          vnl_double_2 diff = error_proj * (dis_mapped - to);
+          vnl_double_2 diff = error_proj_sqrt * (dis_mapped - to);
 
           // fill in
           fx(ind) = wgt*diff[0];
@@ -247,7 +247,7 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
   vnl_matrix_fixed<double, 2, 9> qd_h;
   vnl_double_2  qd_k1_from;
 
-  vnl_matrix_fixed<double,2,2> error_proj;
+  vnl_matrix_fixed<double,2,2> error_proj_sqrt;
 
   unsigned int ind = 0;
   for ( unsigned ms = 0; ms<matches_ptr_->size(); ++ms )
@@ -284,12 +284,12 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
 
         for ( TIter ti=fi.begin(); ti!=fi.end(); ++ti ) {
           //vnl_double_2 to = ti.to_feature()->location();
-          error_proj = ti.to_feature()->error_projector();
+          error_proj_sqrt = ti.to_feature()->error_projector_sqrt();
           double const wgt = vcl_sqrt(ti.cumulative_weight());
 
-          qd_k1_from = wgt * error_proj * qd_k1_from;
-          qd_k1_to   = wgt * error_proj * qd_k1_to;
-          qd_h       = wgt * error_proj * qd_h;
+          qd_k1_from = wgt * error_proj_sqrt * qd_k1_from;
+          qd_k1_to   = wgt * error_proj_sqrt * qd_k1_to;
+          qd_h       = wgt * error_proj_sqrt * qd_h;
 
           // fill in
           for ( unsigned i=0; i<9; i++ ) {

@@ -118,7 +118,7 @@ rgrl_homo2d_func::
 f(vnl_vector<double> const& x, vnl_vector<double>& fx)
 {
   vnl_double_2 mapped;
-  vnl_matrix_fixed<double,2,2> error_proj;
+  vnl_matrix_fixed<double,2,2> error_proj_sqrt;
   unsigned int ind = 0;
   for ( unsigned ms = 0; ms<matches_ptr_->size(); ++ms )
     if ( (*matches_ptr_)[ms] != 0 ) { // if pointer is valid
@@ -132,9 +132,9 @@ f(vnl_vector<double> const& x, vnl_vector<double>& fx)
         for ( TIter ti=fi.begin(); ti!=fi.end(); ++ti ) {
           vnl_double_2 to = ti.to_feature()->location();
           to -= to_centre_;
-          error_proj = ti.to_feature()->error_projector();
+          error_proj_sqrt = ti.to_feature()->error_projector_sqrt();
           double const wgt = vcl_sqrt(ti.cumulative_weight());
-          vnl_double_2 diff = error_proj * (mapped - to);
+          vnl_double_2 diff = error_proj_sqrt * (mapped - to);
 
           // fill in
           fx(ind) = wgt*diff[0];
@@ -155,7 +155,7 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
   assert( jacobian.rows() == get_number_of_residuals() && jacobian.cols() == 9 );
 
   vnl_double_3 homo;
-  vnl_matrix_fixed<double,2,2> error_proj;
+  vnl_matrix_fixed<double,2,2> error_proj_sqrt;
   vnl_matrix_fixed<double,2,9> base_jac, jac;
   vnl_matrix_fixed<double,3,9> jf(0.0); // homogeneous coordinate
   vnl_matrix_fixed<double,2,3> jg(0.0); // inhomo, [u/w, v/w]^T
@@ -182,9 +182,9 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
 
         for ( TIter ti=fi.begin(); ti!=fi.end(); ++ti ) {
           //vnl_double_2 to = ti.to_feature()->location();
-          error_proj = ti.to_feature()->error_projector();
+          error_proj_sqrt = ti.to_feature()->error_projector_sqrt();
           double const wgt = vcl_sqrt(ti.cumulative_weight());
-          jac = error_proj * base_jac;
+          jac = error_proj_sqrt * base_jac;
           jac *= wgt;
 
           // fill in
