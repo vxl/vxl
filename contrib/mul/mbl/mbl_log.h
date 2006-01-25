@@ -14,8 +14,7 @@
 //
 // These classes are patterned after the log4j logging library,
 // although without all of the sophistication. (We have not copied any
-// code from log4j (or other logging libraries
-// - just the ideas.)
+// code from log4j (or other logging libraries - just the ideas.)
 //
 // This code hasn't been finished yet and will likely be subject to
 // significant API changes.
@@ -48,7 +47,7 @@
 // to take as little time as poosible - so that there is no overhead in leaving the
 // log message in your code. To achieve this we can test the log level first
 // \verbatim
-// if (my_log.level() < mbl_logger::WARN
+// if (my_log.level() < mbl_logger::WARN)
 //   my_log.log(mbl_logger::WARN) << "Infinite loop: Time wasted so far " << time() << vcl_endl;
 // \endverbatim
 // Of coures, you should just use MBL_LOG which handles this for you. Additionally
