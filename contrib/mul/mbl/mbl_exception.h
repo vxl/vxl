@@ -72,9 +72,9 @@ void mbl_exception_warning(T exception)
 
   //: General purpose - a replacement for vcl_abort.
   // The only point of catching this exception, is to
-  // give you a change to save your data. If this exception
+  // give you a chance to save your data. If this exception
   // is thrown, then the program correctness is in doubt.
-  class mbl_exception_no_name_in_factory
+  class mbl_exception_abort
   {
     vcl_string msg_;
    public:
@@ -86,7 +86,7 @@ void mbl_exception_warning(T exception)
 
   //: General purpose - a replacement for vcl_abort.
   // The only point of catching this exception, is to
-  // give you a change to save your data. If this exception
+  // give you a chance to save your data. If this exception
   // is thrown, then the program correctness is in doubt.
   class mbl_exception_abort : public vcl_logic_error
   {
