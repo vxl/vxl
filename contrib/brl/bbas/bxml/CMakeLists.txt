@@ -1,11 +1,8 @@
-# brl/bbas/bxml/CMakeLists.txt
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
 
 # find the path to the xerces libraries and includes
 INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/find_xerces.cmake )
-
- #AUX_SOURCE_DIRECTORY(Templates bxml_sources)
 
 IF(HAS_XERCES)
 
@@ -25,18 +22,13 @@ IF(HAS_XERCES)
  )
  AUX_SOURCE_DIRECTORY(Templates bxml_sources)
 
+ ADD_LIBRARY(bxml ${bxml_sources})
+ INSTALL_TARGETS(/lib bxml)
+ INSTALL_NOBASE_HEADER_FILES(/include/contrib/brl/bbas/bxml ${bxml_sources})
  TARGET_LINK_LIBRARIES(bxml ${XERCES_LIBRARIES} bdgl vtol vdgl vsol vbl)
 
  IF(BUILD_TESTING)
    SUBDIRS(tests)
  ENDIF(BUILD_TESTING)
 
-ELSE(HAS_XERCES)
-
- TARGET_LINK_LIBRARIES(bxml)
-
 ENDIF(HAS_XERCES)
-
-ADD_LIBRARY(bxml ${bxml_sources})
-INSTALL_TARGETS(/lib bxml)
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/brl/bbas/bxml ${bxml_sources})
