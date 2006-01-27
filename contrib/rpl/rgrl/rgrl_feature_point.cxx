@@ -29,7 +29,7 @@ identity_matrix( unsigned size )
 rgrl_feature_point::
 rgrl_feature_point( vnl_vector<double> const& loc )
   : location_( loc ),
-    scale_( 0 )
+    scale_( 1 )
 {
 }
 
@@ -37,7 +37,7 @@ rgrl_feature_point( vnl_vector<double> const& loc )
 rgrl_feature_point::
 rgrl_feature_point( unsigned size )
   : location_( size ),
-    scale_( 0 )
+    scale_( 1 )
 {
 }
 

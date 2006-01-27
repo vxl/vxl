@@ -12,7 +12,7 @@
 
 rgrl_feature_trace_pt ::
 rgrl_feature_trace_pt()
-  : scale_(0), 
+  : scale_(1), 
     subspace_cached_( false ),
     length_( 0 ), radius_( 0 )
 {
@@ -25,7 +25,7 @@ rgrl_feature_trace_pt( vnl_vector<double> const& loc,
   : location_( loc ),
     tangent_( tangent ),
     error_proj_( loc.size(), loc.size(), vnl_matrix_identity ),
-    scale_( 0 ),
+    scale_( 1 ),
     subspace_cached_(false),
     length_( 0 ), radius_( 0 )
 {
@@ -41,7 +41,7 @@ rgrl_feature_trace_pt( vnl_vector<double> const& loc,
   : location_( loc ),
     tangent_( tangent ),
     error_proj_( loc.size(), loc.size(), vnl_matrix_identity ),
-    scale_( 0 ),
+    scale_( 1 ),
     subspace_cached_(false),
     length_( length ), radius_( radius )
 {
