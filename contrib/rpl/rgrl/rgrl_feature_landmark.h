@@ -43,6 +43,9 @@ class rgrl_feature_landmark
   vnl_matrix<double> const&
   error_projector() const;
 
+  vnl_matrix<double> const&
+  error_projector_sqrt() const;
+
   unsigned int
   num_constraints() const;
 

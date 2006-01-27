@@ -52,6 +52,15 @@ error_projector() const
   return error_proj_;
 }
 
+vnl_matrix<double> const&
+rgrl_feature_landmark::
+error_projector_sqrt() const
+{
+  // they are the same
+  return error_proj_;
+}
+
+
 unsigned int
 rgrl_feature_landmark::
 num_constraints() const
