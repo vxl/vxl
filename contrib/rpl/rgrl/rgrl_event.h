@@ -56,6 +56,7 @@ class rgrl_event: public vbl_ref_count
 EventMacro( rgrl_event_start );
 EventMacro( rgrl_event_end );
 EventMacro( rgrl_event_iteration );
+EventMacro( rgrl_event_verification );
 EventMacro( rgrl_event_next_init );
 EventMacro( rgrl_matches_formed );
 
