@@ -51,8 +51,6 @@ vnl_matrix<double> const&
 rgrl_feature::
 error_projector_sqrt() const
 {
-  assert( !"This error_projector_sqrt() method is not implemented!!!" );
-  // to avoid compiler warning
-  vnl_matrix<double>*p=0;
-  return *p;
+  // by default, use error_projector
+  return error_projector();
 }
