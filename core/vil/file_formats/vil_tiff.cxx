@@ -522,14 +522,15 @@ vil_tiff_image::get_block( unsigned block_index_i,
 
   vil_image_view_base_sptr view = 0;
 
-  //compute the block index
-  unsigned blk_indx = this->block_index(block_index_i, block_index_j);
-
   //allocate input memory
   // input memory
   unsigned encoded_block_size = h_->encoded_bytes_per_block();
   assert(encoded_block_size>0);
   vxl_byte* data = new vxl_byte[encoded_block_size];
+
+  //compute the block index
+  unsigned blk_indx = this->block_index(block_index_i, block_index_j);
+
 
   vil_pixel_format fmt = vil_pixel_format_component_format(h_->pix_fmt);
 
@@ -538,6 +539,7 @@ vil_tiff_image::get_block( unsigned block_index_i,
     new vil_memory_chunk(encoded_block_size, fmt);
   unsigned expanded_sample_bytes = vil_pixel_format_sizeof_components(fmt);
 
+  
   if(h_->is_tiled())
     {
       if(TIFFReadEncodedTile(p_->tif, blk_indx, data, (tsize_t) -1)<=0)
@@ -567,7 +569,7 @@ vil_tiff_image::get_block( unsigned block_index_i,
         endian_swap( reinterpret_cast<vxl_byte*>(buf->data()),
                      encoded_block_size,
                      expanded_sample_bytes);
-      return this->fill_block_from_strip(buf, blk_indx);
+      return this->fill_block_from_strip(buf);
     }
 
   return view;
@@ -579,13 +581,11 @@ vil_image_view_base_sptr vil_tiff_image::
 fill_block_from_tile(vil_memory_chunk_sptr const & buf) const
 {
   vil_image_view_base_sptr view = 0;
-  unsigned long tw = size_block_i(), tl = size_block_j();
-  //the size of the buffer when expanded to byte representation
 
+  //the size of the buffer when expanded to byte representation
   unsigned samples_per_block = this->samples_per_block();
   assert(samples_per_block>0);
 
-  unsigned spp = h_->samples_per_pixel.val;
   vil_pixel_format fmt = vil_pixel_format_component_format(h_->pix_fmt);
   view = view_from_buffer(fmt, buf, samples_per_block, h_->bits_per_sample.val);
   return view;
@@ -596,13 +596,11 @@ fill_block_from_tile(vil_memory_chunk_sptr const & buf) const
 // partially filled. The header function, bytes_per_line() gives the actual 
 // size of a scan line in the packed strip. The total size of the strip 
 // in bytes is normally size_block_j()*bytes_per_line() but the last strip
-// may be truncated. The actual size of the strip is provided 
-// by bytes_per_strip(strip_index). In this case the partial block
-// is filled out with zeros so that all blocks are the same size.
-vil_image_view_base_sptr vil_tiff_image::fill_block_from_strip(vil_memory_chunk_sptr const & buf, const unsigned long strip_index) const
+// may be truncated. n
+vil_image_view_base_sptr vil_tiff_image::fill_block_from_strip(vil_memory_chunk_sptr const & buf) const
 {
   vil_image_view_base_sptr view = 0;
-  unsigned long tw = size_block_i(), tl = size_block_j();
+  unsigned long tl = size_block_j();
   
   unsigned bpl = h_->bytes_per_line();
   unsigned bytes_per_strip = h_->bytes_per_strip();
@@ -616,7 +614,6 @@ vil_image_view_base_sptr vil_tiff_image::fill_block_from_strip(vil_memory_chunk_
   //note here we make the last strip a full sized block to avoid
   //the messyness of multiple block sizes
   unsigned expanded_bytes_per_strip = tl*bytes_expanded_line;
-  unsigned spp = h_->samples_per_pixel.val;
 
   //pointer into the input packed strip buffer
   vxl_byte* buf_ptr = reinterpret_cast<vxl_byte*>(buf->data());

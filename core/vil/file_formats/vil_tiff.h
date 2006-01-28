@@ -130,7 +130,7 @@ class vil_tiff_image : public vil_blocked_image_resource
   //: the key methods for decoding the file data
   vil_image_view_base_sptr fill_block_from_tile(vil_memory_chunk_sptr const & buf) const;
 
-  vil_image_view_base_sptr fill_block_from_strip(vil_memory_chunk_sptr const & buf, const unsigned long strip_index) const;
+  vil_image_view_base_sptr fill_block_from_strip(vil_memory_chunk_sptr const & buf) const;
 
 #if 0
   vil_image_view_base_sptr get_block_internal( unsigned block_index_i,
@@ -186,15 +186,6 @@ get_blocks_internal( unsigned start_block_i,
 template< class T >
 T tiff_get_bits( const T* in_val, unsigned i0, unsigned ni )
 {
-  //JLM DEBUG
-  // THE EFFECT OF SHIFT
-  unsigned one = 1;
-  unsigned four = 4;
-  unsigned left_one = one << 1;// left_one = 2
-  unsigned right_one = one >> 1;// right_one = 0
-  unsigned left_four = four << 1;//left_four = 8
-  unsigned right_four = four >> 1;//right_four = 2
-
   unsigned sample_offset = i0 / ( sizeof(T)*8 );
   unsigned bit_offset = i0 % ( sizeof(T)*8 );
 
