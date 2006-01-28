@@ -48,6 +48,9 @@ public:
   void
   resize( unsigned n );
 
+  //: is it an empty set?
+  bool empty() const;
+  
 private:
   // disabled to prevent accidental pass-by-value
   rgrl_set_of( rgrl_set_of const& );

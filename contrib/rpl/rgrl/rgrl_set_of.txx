@@ -32,6 +32,13 @@ size() const
   return data_.size();
 }
 
+template<typename T>
+bool
+rgrl_set_of<T>::
+empty() const
+{
+  return data_.empty();
+}
 
 template<typename T>
 T const&
