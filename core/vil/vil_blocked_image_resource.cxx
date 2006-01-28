@@ -8,10 +8,12 @@
 #include <vil/vil_crop.h>
 #include <vil/vil_copy.h>
 #include <vil/vil_blocked_image_resource.h>
+
+
+//#define DEBUG
+#ifdef DEBUG
 #include <vul/vul_timer.h>
-
-#define DEBUG
-
+#endif
 vil_blocked_image_resource::vil_blocked_image_resource()
 {}
 vil_blocked_image_resource::~vil_blocked_image_resource()
@@ -231,7 +233,9 @@ vil_image_view_base_sptr vil_blocked_image_resource::
 get_copy_view(unsigned i0, unsigned n_i, unsigned j0, unsigned n_j) const
 {
   
+#ifdef DEBUG
   vul_timer t;
+#endif
   vil_image_view_base_sptr view = 0;
 
   unsigned tw = size_block_i(), tl = size_block_j();  

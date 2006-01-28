@@ -8,9 +8,9 @@
 #include <vil/vil_crop.h>
 #include <vil/vil_copy.h>
 #include <vil/vil_blocked_image_facade.h>
-#include <vul/vul_timer.h>
 
-#define DEBUG
+//#define DEBUG
+
 static const unsigned vil_size_block_i = 256, vil_size_block_j = 256;
 
 vil_blocked_image_facade::vil_blocked_image_facade(const vil_image_resource_sptr &src, const unsigned sbi, const unsigned sbj):

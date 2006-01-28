@@ -18,7 +18,6 @@
 #include <vcl_cassert.h>
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
-#include <vul/vul_timer.h>
 #include <vil/vil_stream.h>
 #include <vil/vil_property.h>
 #include <vil/vil_image_view.h>
@@ -27,6 +26,7 @@
 #include <vil/vil_copy.h>
 #include "vil_tiff_header.h"
 //#define DEBUG
+
 // Constants
 char const* vil_tiff_format_tag = "tiff";
 
