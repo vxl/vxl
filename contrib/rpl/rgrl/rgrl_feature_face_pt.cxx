@@ -188,7 +188,7 @@ absolute_signature_weight( rgrl_feature_sptr other ) const
     // scale_wgt = scale_wgt * scale_wgt;
   }
 
-  return  dir_wgt* scale_wgt;
+  return  dir_wgt* vcl_sqrt(scale_wgt);
 }
 
 //: write out feature
