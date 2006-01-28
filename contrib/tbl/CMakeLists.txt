@@ -3,7 +3,7 @@ PROJECT( tbl )
 SET( TBL_INCLUDE_DIR ${tbl_SOURCE_DIR} CACHE STATIC "TB package include files" )
 SET( TBL_INSTALL_INCLUDE_DIR
   ${CMAKE_INSTALL_PREFIX}/include/contrib/tbl
-  CACHE STATIC "TB package include files"
+  CACHE INTERNAL "TB package include files"
 )
 
 INCLUDE_DIRECTORIES(${VXLCORE_INCLUDE_DIR})

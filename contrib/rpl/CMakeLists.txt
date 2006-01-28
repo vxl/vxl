@@ -3,7 +3,7 @@ PROJECT( rpl )
 SET( RPL_INCLUDE_DIR ${rpl_SOURCE_DIR} CACHE STATIC "RPI package include files" )
 SET( RPL_INSTALL_INCLUDE_DIR
   ${CMAKE_INSTALL_PREFIX}/include/contrib/rpl
-  CACHE STATIC "RPI package include files"
+  CACHE INTERNAL "RPI package include files"
 )
 
 INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
