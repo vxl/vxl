@@ -13,6 +13,7 @@
 #include "rgrl_object.h"
 
 #include <vcl_iosfwd.h>
+#include <vcl_string.h>
 
 class rgrl_transformation;
 
@@ -54,7 +55,27 @@ class rgrl_match_set
 
   //:  construct an empty match set, specifying the feature type
   rgrl_match_set( const vcl_type_info& from_type,
-                  const vcl_type_info& to_type );
+                  const vcl_type_info& to_type,
+                  const vcl_string& from_label = vcl_string(),
+                  const vcl_string& to_label = vcl_string() );
+
+  //: type of from features
+  const vcl_type_info&
+  from_type() const { return *from_type_; }
+  
+  //: type of from features
+  const vcl_type_info&
+  to_type() const { return *to_type_; }
+
+  //: label of from features
+  const vcl_string&
+  from_label() const 
+  { return from_label_; }
+  
+  //: label of from features
+  const vcl_string&
+  to_label() const 
+  { return to_label_; }
 
   //: The number of "from" features.
   size_type from_size() const;
@@ -176,6 +197,9 @@ class rgrl_match_set
 
   const vcl_type_info* from_type_;
   const vcl_type_info* to_type_;
+  vcl_string from_label_;
+  vcl_string to_label_;
+  
   mutable unsigned int num_constraints_per_match_;
   vcl_vector< rgrl_feature_sptr > from_features_;
   vcl_vector< rgrl_feature_sptr > xformed_from_features_;
