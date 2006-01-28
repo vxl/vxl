@@ -102,7 +102,7 @@ class vil_image_resource
   //: Extra property information
   virtual bool get_property(char const* tag, void* property_value = 0) const =0;
 
- private:
+ protected:
   // You probably should not use a vil_image_resource in a vbl_smart_ptr, so the
   // ref functions are private
   friend class vil_smart_ptr<vil_image_resource>;

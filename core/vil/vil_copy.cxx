@@ -7,10 +7,33 @@
 
 #include "vil_copy.h"
 #include <vcl_algorithm.h>
+#include <vil/vil_property.h>
 #include <vil/vil_image_resource.h>
+#include <vil/vil_blocked_image_resource.h>
 
 //: Copy images in blocks of roughly this size
 static const unsigned long large_image_limit = 1024ul * 1024ul * 8ul; //8M Pixels
+
+//If image resource is blocked then it makes sense to use the
+//blocks to copy image data. src and det are known to be blocked with
+//equal blocking parameters
+static bool copy_resource_by_blocks(const vil_image_resource_sptr& src,
+                                    vil_image_resource_sptr& det)
+
+                                  
+{
+  //cast to blocked image resource
+  vil_blocked_image_resource_sptr bsrc = blocked_image_resource(src);
+  vil_blocked_image_resource_sptr bdet = blocked_image_resource(det);
+  for(unsigned bi = 0; bi<bsrc->n_block_i(); ++bi)
+    for(unsigned bj = 0; bj<bsrc->n_block_j(); ++bj)
+      {
+        vil_image_view_base_sptr blk = bsrc->get_block(bi, bj);
+        if(!blk) return false;
+        if(!bdet->put_block(bi, bj, *blk)) return false;
+      }  
+  return true;
+}
 
 //: Copy src to dest.
 // This is useful if you want to copy on image into a window on another image.
@@ -25,6 +48,19 @@ bool vil_copy_deep(const vil_image_resource_sptr &src, vil_image_resource_sptr &
     return false;
 
   if (src->ni() == 0 || src->nj() == 0 || src->nplanes() == 0) return true;
+
+  //Check for a blocked resource.  Copying will be more
+  //efficient in blocks,  unless a block is too large
+  unsigned src_sbi=0, src_sbj=0, dest_sbi=0, dest_sbj=0;
+
+  src->get_property(vil_property_size_block_i, &src_sbi);
+  src->get_property(vil_property_size_block_j, &src_sbj);
+  dest->get_property(vil_property_size_block_i, &dest_sbi);
+  dest->get_property(vil_property_size_block_j, &dest_sbj);
+  //If the source or destination is blocked then use that structure
+  //to copy images
+  if(src_sbi>0&&src_sbj>0&&src_sbi==dest_sbi&&src_sbj==dest_sbj)
+    return copy_resource_by_blocks(src, dest);
 
   if (src->ni() * src->nj() * src->nplanes() < large_image_limit)
   {

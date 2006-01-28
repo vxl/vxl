@@ -24,6 +24,7 @@
 
 #include <vil/vil_fwd.h>
 #include <vil/vil_image_resource.h>
+#include <vil/vil_blocked_image_resource.h>
 #include <vil/vil_image_view.h>
 #include <vcl_deprecated.h>
 
@@ -75,6 +76,30 @@ vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
                                                unsigned nplanes,
                                                vil_image_resource_sptr const& prototype,
                                                char const* file_format = 0);
+//: Make a new blocked resource file
+vil_blocked_image_resource_sptr 
+vil_new_blocked_image_resource(vil_stream* os, unsigned ni, unsigned nj,
+                               unsigned nplanes, vil_pixel_format format,
+                               unsigned size_block_i, unsigned size_block_j,
+                               char const* file_format = 0);
+
+//: Make a new blocked resource file
+vil_blocked_image_resource_sptr 
+vil_new_blocked_image_resource(char const* filename, unsigned ni, unsigned nj,
+                               unsigned nplanes, vil_pixel_format format,
+                               unsigned size_block_i, unsigned size_block_j,
+                               char const* file_format = 0);
+
+//: create a blocked interface around any image resource
+// for zero size blocks, appropriate default blocking is created
+vil_blocked_image_resource_sptr 
+vil_new_blocked_image_facade(const vil_image_resource_sptr& src,
+                             const unsigned size_block_i=0,
+                             const unsigned size_block_j=0);
+//: Make a new cached resource
+vil_blocked_image_resource_sptr 
+vil_new_cached_image_resource(const vil_blocked_image_resource_sptr& bir,
+                              const unsigned cache_size = 100);
 
 //: Create a new image view whose plane step is 1.
 //  Pixel data type is the type of the last (dummy) argument.

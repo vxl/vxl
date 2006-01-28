@@ -22,7 +22,7 @@ DECLARE( test_deep_copy_3_plane );
 DECLARE( test_rotate_image );
 DECLARE( test_warp );
 DECLARE( test_math_value_range );
-
+DECLARE( test_blocked_image_resource );
 void
 register_tests()
 {
@@ -48,6 +48,7 @@ register_tests()
   REGISTER( test_rotate_image );
   REGISTER( test_warp );
   REGISTER( test_math_value_range );
+  REGISTER( test_blocked_image_resource );
 }
 
 DEFINE_MAIN;

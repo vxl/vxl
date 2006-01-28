@@ -5,6 +5,7 @@ ADD_EXECUTABLE( vil_test_all
 
   # basic things
   test_image_resource.cxx
+  test_blocked_image_resource.cxx
   test_image_view.cxx
   test_memory_chunk.cxx
   test_pixel_format.cxx

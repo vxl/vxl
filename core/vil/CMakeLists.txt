@@ -66,9 +66,13 @@ SET( vil_sources ${vil_sources}
   vil_image_view.h                      vil_image_view.txx
   vil_image_resource.cxx                vil_image_resource.h
                                         vil_image_resource_sptr.h
+  vil_blocked_image_resource.cxx        vil_blocked_image_resource.h
+                                        vil_blocked_image_resource_sptr.h
+  vil_blocked_image_facade.cxx          vil_blocked_image_facade.h
   vil_file_format.cxx                   vil_file_format.h
   vil_memory_image.cxx                  vil_memory_image.h
-
+  vil_block_cache.cxx                   vil_block_cache.h
+  vil_cached_image_resource.cxx         vil_cached_image_resource.h
   # file format readers/writers (see above for conditional ones)
   file_formats/vil_pnm.cxx              file_formats/vil_pnm.h
 

@@ -9,29 +9,29 @@
 // \author    awf@robots.ox.ac.uk
 // \date 16 Feb 00
 //
-// \verbatim
+//\verbatim
 //  Modifications
-//   3 Oct 2001 Peter Vanroose - Implemented get_property and set_property
-//   5 Jan 2002 Ian Scott      - Converted to vil
-//   9 Dec 2003 Peter Vanroose - Added support for 1-bit pixel (bitmapped) images
-//  21 Dec 2005 J.L. Mundy - Substantial rewrite to handle a more
-//     complete tiff 6.0 standard. Files with tiles can now be read and
-//     written. Only tiled images are considered blocked, i.e. not strips.
-//     Block dimensions must be a multiple of 16, for compatibility with
-//     compression schemes. Tiff files with separate color bands are not handled
+//  3 Oct 2001 Peter Vanroose - Implemented get_property and set_property
+//  5 Jan 2002 Ian Scott      - Converted to vil
+//  9 Dec 2003 Peter Vanroose - Added support for 1-bit pixel (bitmapped) images
+//  21 Dec 2005 J.L. Mundy - Substantial rewrite to handle a more 
+//  complete tiff 6.0 standard. Files with tiles can now be read and
+//  written. Only tiled images are considered blocked, i.e. not strips.
+//  Block dimensions must be a multiple of 16, for compatibility with 
+//  compression schemes. Tiff files with separate color bands are not handled
 //
 //  KNOWN BUG - 24bit samples for both nplanes = 1 and nplanes = 3
+//
 //\endverbatim
 
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_cmath.h>
-#include <vcl_cassert.h>
 #include <vil/vil_file_format.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_memory_chunk.h>
+#include <vil/vil_blocked_image_resource.h>
 #include <tiffio.h>
-
 //: Loader for tiff files
 class vil_tiff_file_format : public vil_file_format
 {
@@ -43,7 +43,7 @@ class vil_tiff_file_format : public vil_file_format
                                                     unsigned nj,
                                                     unsigned nplanes,
                                                     enum vil_pixel_format);
-  virtual vil_image_resource_sptr make_output_image(vil_stream* vs,
+  virtual vil_blocked_image_resource_sptr make_output_image(vil_stream* vs,
                                                     unsigned nx,
                                                     unsigned ny,
                                                     unsigned nplanes,
@@ -51,15 +51,12 @@ class vil_tiff_file_format : public vil_file_format
                                                     unsigned size_block_j,
                                                     enum vil_pixel_format);
 
-  //: report if this format supports blocked image files
-  virtual bool supports_blocking() {return true;}
 };
-
 struct tif_stream_structures;
 class vil_tiff_header;
 
 //: Generic image interface for TIFF files
-class vil_tiff_image : public vil_image_resource
+class vil_tiff_image : public vil_blocked_image_resource
 {
   friend class vil_tiff_file_format;
  public:
@@ -76,39 +73,45 @@ class vil_tiff_image : public vil_image_resource
 
   virtual enum vil_pixel_format pixel_format() const;
 
-
-  virtual bool supports_blocking(){return true;}
-
   //: returns "tiff"
   char const *file_format() const;
 
-  //: Create a read/write view of a copy of this data.
-  // \return 0 if unable to get view of correct size.
-  virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
-                                                 unsigned j0, unsigned nj) const;
+  //Block interface
+  
+  //: Block size in columns
+  virtual unsigned size_block_i() const;
+  //: Block size in rows
+
+  virtual unsigned size_block_j() const;
+
+  //: Number of blocks in image width
+  virtual unsigned n_block_i() const;
+
+  //: Number of blocks in image height
+  virtual unsigned n_block_j() const;
+
+  virtual vil_image_view_base_sptr get_block( unsigned  block_index_i,
+                                             unsigned  block_index_j ) const;
+
+  virtual bool put_block( unsigned  block_index_i, unsigned  block_index_j,
+                          const vil_image_view_base& im )
+    { return put_block(block_index_i, block_index_j, 0 , 0, im);}
+
 
   //: Put the data in this view back into the image source.
   virtual bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0);
+
 
   //: Return true if the property given in the first argument has been set.
   // currently defined:
   //  "quantisation_depth" - number of relevant bits per pixel
   //  "size_block_i" and "size_block_j" - block dimensions
-
-  bool get_property(char const *tag, void *prop = 0) const;
+  
+ virtual bool get_property(char const *tag, void *prop = 0) const;
 
  private:
   tif_stream_structures* p_;
   vil_tiff_header* h_;
-
-  //: Block size in columns
-  unsigned sizeb_i() const;
-  //: Block size in rows
-  unsigned sizeb_j() const;
-  //: Number of blocks in image width
-  unsigned nbi() const;
-  //: Number of blocks in image height
-  unsigned nbj() const;
 
   //: the number of samples in a block
   unsigned samples_per_block() const;
@@ -118,47 +121,31 @@ class vil_tiff_image : public vil_image_resource
   void copy_byte_block(vxl_byte* data, const unsigned long nbytes,
                        vil_memory_chunk_sptr& cnk) const;
   //::convert a packed block to an expanded view
-  vil_image_view_base_sptr
+  vil_image_view_base_sptr 
     view_from_buffer(vil_pixel_format& fmt,
                      vil_memory_chunk_sptr const& buf,
                      unsigned samples_per_block,
                      unsigned bits_per_sample) const;
-
+  
   //: the key methods for decoding the file data
   vil_image_view_base_sptr fill_block_from_tile(vil_memory_chunk_sptr const & buf) const;
 
   vil_image_view_base_sptr fill_block_from_strip(vil_memory_chunk_sptr const & buf, const unsigned long strip_index) const;
 
-  vil_image_view_base_sptr
-    glue_blocks_together(const vcl_vector< vcl_vector< vil_image_view_base_sptr > >& blocks) const;
-
+#if 0
   vil_image_view_base_sptr get_block_internal( unsigned block_index_i,
                                                unsigned block_index_j ) const;
-  void get_blocks_internal(unsigned start_block_i,
-                           unsigned end_block_i,
-                           unsigned start_block_j,
-                           unsigned end_block_j,
-                           vcl_vector< vcl_vector< vil_image_view_base_sptr > >& blocks ) const;
-
+void 
+get_blocks_internal( unsigned start_block_i,
+                     unsigned end_block_i,
+                     unsigned start_block_j,
+                     unsigned end_block_j,
+                     vcl_vector< vcl_vector< vil_image_view_base_sptr > >& blocks ) const;
+                                               
+#endif
   bool put_block(unsigned bi, unsigned bj, unsigned i0,
                  unsigned j0, const vil_image_view_base& im);
-
-  //: Get the offset from the start of the block row for pixel position i
-  bool block_i_offset(unsigned block_i, unsigned i,
-                      unsigned& i_offset) const;
-
-  //: Get the offset from the start of the block column for pixel position j
-  bool block_j_offset(unsigned block_j, unsigned j,
-                      unsigned& j_offset) const;
-
   unsigned block_index(unsigned block_i, unsigned block_j) const;
-
-  bool trim_border_blocks(unsigned i0, unsigned ni,
-                          unsigned j0, unsigned nj,
-                          unsigned start_block_i,
-                          unsigned start_block_j,
-                          vcl_vector< vcl_vector< vil_image_view_base_sptr > >& blocks) const;
-
   //: fill out the block with leading zeros or trailing zeros if necessary
   void pad_block_with_zeros(unsigned ioff, unsigned joff,
                             unsigned iclip, unsigned jclip,
@@ -180,25 +167,34 @@ class vil_tiff_image : public vil_image_resource
   bool write_block_to_file(unsigned bi, unsigned bj,
                            unsigned block_size_bytes,
                            vxl_byte* block_buf);
+
 };
 
 //
 //
 //------------------------ Lifted from vil_nitf2_image ------------------------
-//            If this happens again then maybe should elevate to a
+//            If this happens again then maybe should elevate to a 
 //            utility class -- JLM
-
 //:
 // This function does a lot of work for \sa byte_align_data().  It will strip one value
 // of ni bits and return it as a value of type T (with zero padding on the MSBs).
 // Both io and ni are lengths (in bits - not bytes).
 //
-// \param i0: Offset (in bits - not bytes) from in_val[0].  This will be the start
+// @param i0: Offset (in bits - not bytes) from in_val[0].  This will be the start
 //            of the bits extracted from in_val.
-// \param ni: number of bits (starting from i0) that will be extracted from in_val.
+// @param ni: number of bits (starting from i0) that will be extracted from in_val.
 template< class T >
 T tiff_get_bits( const T* in_val, unsigned i0, unsigned ni )
 {
+  //JLM DEBUG
+  // THE EFFECT OF SHIFT
+  unsigned one = 1;
+  unsigned four = 4;
+  unsigned left_one = one << 1;// left_one = 2
+  unsigned right_one = one >> 1;// right_one = 0
+  unsigned left_four = four << 1;//left_four = 8
+  unsigned right_four = four >> 1;//right_four = 2
+
   unsigned sample_offset = i0 / ( sizeof(T)*8 );
   unsigned bit_offset = i0 % ( sizeof(T)*8 );
 
@@ -278,11 +274,11 @@ T tiff_get_bits( const T* in_val, unsigned i0, unsigned ni )
 // shift operator is implementation specific when applied to a negative number, you should probably
 // only use this function on unsigned data.
 //
-// \param in_data: The input data.  It must be at least (num_samples*in_bits_per_sample\8) bytes long.
+// @param in_data: The input data.  It must be at least (num_samples*in_bits_per_sample\8) bytes long.
 //                The values should have the endianness of your platform.
-// \param num_samples: The number of actual samples in in_data.
-// \param in_bits_per_sample: The bits per sample in in_data
-// \param out_data: I'll store the output data here.  It must be at least (num_samples*sizeof(T)) bytes long
+// @param num_samples: The number of actual samples in in_data.
+// @param in_bits_per_sample: The bits per sample in in_data
+// @param out_data: I'll store the output data here.  It must be at least (num_samples*sizeof(T)) bytes long
 //                 The values will have the endianness of your platform.
 //
 // Note that inBitsPerSampe must not be >= sizeof(T).  If they were to be equal, then this function

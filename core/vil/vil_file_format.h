@@ -11,7 +11,7 @@
 
 #include <vil/vil_fwd.h> // for vil_stream
 #include <vil/vil_image_resource.h>
-
+#include <vil/vil_blocked_image_resource.h>
 //: Base class for image formats.
 //  There is one derived class for each handled file format in the
 // directory file_formats. E.g. vil/file_formats/vil_pnm.h etc
@@ -40,6 +40,16 @@ class vil_file_format
                                                     unsigned ny,
                                                     unsigned nplanes,
                                                     enum vil_pixel_format) = 0;
+  //: construct a blocked output image resource
+  // returns a null resource unless the format supports blocking
+  virtual vil_blocked_image_resource_sptr make_output_image(vil_stream* vs,
+                                                    unsigned nx,
+                                                    unsigned ny,
+                                                    unsigned nplanes,
+                                                    unsigned size_block_i,
+                                                    unsigned size_block_j,
+                                                    enum vil_pixel_format)
+    {return 0;}
 
  public:
   static vil_file_format** all();

@@ -11,7 +11,7 @@
 
 #include <vcl_cstring.h>
 #include <vcl_cassert.h>
-
+#include <vil/vil_property.h>
 #include <vil/vil_file_format.h>
 #ifdef VIL_USE_FSTREAM64
 #include <vil/vil_stream_fstream64.h>
@@ -20,7 +20,8 @@
 #endif //VIL_USE_FSTREAM64
 #include <vil/vil_image_resource.h>
 #include <vil/vil_memory_image.h>
-
+#include <vil/vil_blocked_image_facade.h>
+#include <vil/vil_cached_image_resource.h>
 
 // The first two functions really should be upgraded to create an image in
 // a temporary file on disk if the sizes are large. - TODO
@@ -120,3 +121,59 @@ vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
                                 prototype->pixel_format(),
                                 file_format ? file_format : prototype->file_format());
 }
+
+vil_blocked_image_resource_sptr 
+vil_new_blocked_image_resource(vil_stream* os, unsigned ni, unsigned nj,
+                               unsigned nplanes, vil_pixel_format format,
+                               unsigned size_block_i, unsigned size_block_j,
+                               char const* file_format)
+{
+  if (!file_format) // avoid segfault in strcmp()
+    file_format = "pnm";
+
+  vil_blocked_image_resource_sptr outimage = 0;
+  for (vil_file_format** p = vil_file_format::all(); *p; ++p)
+  {
+    vil_file_format* fmt = *p;
+    if (vcl_strcmp(fmt->tag(), file_format) == 0) {
+      outimage = fmt->make_output_image(os, ni, nj, nplanes,
+                                        size_block_i, size_block_j, format);
+      if (!outimage)
+        vcl_cerr << "vil_new: Cannot new a blocked resource to type [" << file_format << "]\n";
+      return outimage;
+    }
+  }
+
+  vcl_cerr << "vil_new: Unknown file type [" << file_format << "]\n";
+  return 0;
+}
+
+vil_blocked_image_resource_sptr 
+vil_new_blocked_image_resource(char const* filename, unsigned ni, unsigned nj,
+                               unsigned nplanes, vil_pixel_format format,
+                               unsigned size_block_i, unsigned size_block_j,
+                               char const* file_format)
+{
+#ifdef VIL_USE_FSTREAM64
+  vil_stream_fstream64* os = new vil_stream_fstream64(filename, "w");
+#else //VIL_USE_FSTREAM64
+  vil_stream_fstream* os = new vil_stream_fstream(filename, "w");
+#endif //VIL_USE_FSTREAM64
+  return vil_new_blocked_image_resource(os, ni, nj, nplanes, format,
+                                        size_block_i, size_block_j,
+                                        file_format);
+}
+vil_blocked_image_resource_sptr 
+vil_new_blocked_image_facade(const vil_image_resource_sptr& src,
+                             unsigned size_block_i, unsigned size_block_j)
+{
+  return new vil_blocked_image_facade(src, size_block_i, size_block_j);
+}
+
+
+vil_blocked_image_resource_sptr 
+vil_new_cached_image_resource(const vil_blocked_image_resource_sptr& bir,
+                              const unsigned cache_size)
+{
+  return new vil_cached_image_resource(bir, cache_size);
+}  
