@@ -149,7 +149,6 @@ static void test_blocked_image_resource()
   /////////---------------Test the cache -----------------------///////
   //
   sbi = 16, sbj = 16;
-  nbi = ni/sbi, nbj = nj/sbj;
   vil_block_cache cache(2);
   //add two blocks
   vil_image_view_base_sptr blk1;

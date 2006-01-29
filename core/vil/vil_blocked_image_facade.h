@@ -68,9 +68,7 @@ class vil_blocked_image_facade : public vil_blocked_image_resource
 
  protected:
   //Internal functions
-  vil_image_view_base_sptr fill_block(unsigned i0, unsigned icrop,
-                                      unsigned j0, unsigned jcrop,
-                                      vil_image_view_base_sptr& view) const;
+  vil_image_view_base_sptr fill_block(vil_image_view_base_sptr& view) const;
     
   //:the image resource masquerading as a blocked resource
   vil_image_resource_sptr src_;

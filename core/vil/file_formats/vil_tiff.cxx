@@ -726,8 +726,12 @@ void vil_tiff_image::fill_block_from_view(unsigned bi, unsigned bj,
   unsigned sbi = size_block_i(), sbj = size_block_j();
   unsigned view_i0 = bi*sbi-i0, view_j0 = bj*sbj-j0;
   unsigned block_jstep = sbi*bytes_per_pixel;
+#if 0
+  //Causes warnings. Leave here to document default values
   unsigned view_istep = 1, view_jstep = im.ni()*bytes_per_pixel, view_pstep = 1;
-  vxl_byte* view_buf = 0;
+#endif
+  unsigned view_istep, view_jstep, view_pstep;
+  vxl_byte* view_buf;
   //Cast the pixel type and reinterpret upper_left_ptr as a byte array.
   switch(h_->pix_fmt)
     {

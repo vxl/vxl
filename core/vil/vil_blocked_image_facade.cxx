@@ -29,9 +29,7 @@ vil_blocked_image_facade::vil_blocked_image_facade(const vil_image_resource_sptr
 }
 
 vil_image_view_base_sptr 
-vil_blocked_image_facade::fill_block(unsigned i0, unsigned icrop,
-                                       unsigned j0, unsigned jcrop,
-                                       vil_image_view_base_sptr& view) const
+vil_blocked_image_facade::fill_block(vil_image_view_base_sptr& view) const
 {
   switch (vil_pixel_format_component_format(pixel_format()))
     {
@@ -83,7 +81,7 @@ vil_blocked_image_facade::get_block( unsigned  block_index_i,
     }
   vil_image_view_base_sptr view = src_->get_view(i0, icrop, j0, jcrop);
   if(needs_fill)
-    view = fill_block(i0, icrop, j0, jcrop, view);
+    view = fill_block(view);
   return view;
 }
 
