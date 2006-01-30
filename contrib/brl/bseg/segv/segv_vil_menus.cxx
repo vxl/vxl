@@ -67,6 +67,11 @@ void segv_vil_menus::regions_callback()
   segv_vil_segmentation_manager::instance()->regions();
 }
 
+void segv_vil_menus::rotate_image_callback()
+{
+  segv_vil_segmentation_manager::instance()->rotate_image();
+}
+
 void segv_vil_menus::display_images_as_color_callback()
 {
   segv_vil_segmentation_manager::instance()->display_images_as_color();
@@ -87,6 +92,11 @@ void segv_vil_menus::entropy_callback()
   segv_vil_segmentation_manager::instance()->entropy();
 }
 
+void segv_vil_menus::minfo_callback()
+{
+  segv_vil_segmentation_manager::instance()->minfo();
+}
+
 void segv_vil_menus::test_inline_viewer_callback()
 {
   segv_vil_segmentation_manager::instance()->test_inline_viewer();
@@ -96,6 +106,10 @@ void segv_vil_menus::test_ellipse_draw_callback()
   segv_vil_segmentation_manager::instance()->test_ellipse_draw();
 }
 
+void segv_vil_menus::test_float_callback()
+{
+  segv_vil_segmentation_manager::instance()->test_float();
+}
 
 //segv_vil_menus definition
 vgui_menu segv_vil_menus::get_menu()
@@ -109,6 +123,7 @@ vgui_menu segv_vil_menus::get_menu()
   menufile.add( "Quit", quit_callback,(vgui_key)'q', vgui_CTRL);
   menufile.add( "Load Image", load_image_callback,(vgui_key)'l', vgui_CTRL);
   menufile.add( "Save Image", save_image_callback);
+  menufile.add( "TestFloat", test_float_callback);
 
   //view menu entries
   menuview.add("Clear Display", clear_display_callback);
@@ -116,6 +131,7 @@ vgui_menu segv_vil_menus::get_menu()
   menuview.add("Test Inline Viewer", test_inline_viewer_callback);
   menuview.add("Test Draw Conic", test_ellipse_draw_callback);
   menuview.add("Images as Color", display_images_as_color_callback);
+  menuview.add("RotateImage ", rotate_image_callback);
 
   //edit menu entries
 
@@ -131,6 +147,7 @@ vgui_menu segv_vil_menus::get_menu()
   menuops.add("Add Images:", add_images_callback);
   menuops.add("Subtract Images:", subtract_images_callback);
   menuops.add("Entropy", entropy_callback);
+  menuops.add("Mutal Information", minfo_callback);
   //Top level menu layout
   menubar.add( "File", menufile);
   menubar.add( "View", menuview);

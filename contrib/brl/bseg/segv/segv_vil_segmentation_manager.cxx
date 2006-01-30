@@ -8,8 +8,10 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vnl/vnl_matlab_read.h>
+#include <vnl/vnl_numeric_traits.h>
 #include <vbl/vbl_array_2d.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_blocked_image_resource.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_new.h>
@@ -151,7 +153,17 @@ range_params(vil_image_resource_sptr const& image)
     return  new vgui_range_map_params(min, max, gamma, invert,
                                       gl_map, cache);
   }
-vcl_cout << "Image pixel format not handled\n";
+  if (image->pixel_format()==VIL_PIXEL_FORMAT_FLOAT)
+  {
+    vil_image_view<float> temp = image->get_view();
+    float vmin = -vnl_numeric_traits<float>::maxval;
+    float vmax = vnl_numeric_traits<float>::maxval;
+    vil_math_value_range<float>(temp, vmin, vmax);
+    gl_map = true;
+    return  new vgui_range_map_params(vmin, vmax, gamma, invert,
+                                      gl_map, cache);
+  }
+
  return new vgui_range_map_params(0, 255, gamma, invert,
                                       gl_map, cache);
 }
@@ -496,23 +508,28 @@ void segv_vil_segmentation_manager::quit()
 void segv_vil_segmentation_manager::load_image()
 {
   static bool greyscale = false;
+  static bool sblock = false;
   vgui_dialog load_image_dlg("Load image file");
   static vcl_string image_filename = "/home/dec/images/cal_image1.tif";
   static vcl_string ext = "*.*";
   load_image_dlg.file("Image Filename:", ext, image_filename);
   load_image_dlg.checkbox("greyscale ", greyscale);
+  load_image_dlg.checkbox("blocked?:", sblock);
   if (!load_image_dlg.ask())
     return;
 
   vil_image_resource_sptr image = vil_load_image_resource(image_filename.c_str());
-
-
+  if(!image)
+    return;
   if (greyscale)
   {
     vil_image_view<unsigned char> grey_view =
       brip_vil_float_ops::convert_to_grey(*image);
     image = vil_new_image_resource_of_view(grey_view);
   }
+  
+  if (sblock)
+    image = (vil_image_resource*)(vil_new_cached_image_resource(image)).ptr();
 
   vgui_range_map_params_sptr rmps = range_params(image);
 
@@ -530,8 +547,12 @@ void segv_vil_segmentation_manager::save_image()
   vgui_dialog file_dialog("Save Image");
   static vcl_string image_file;
   static vcl_string ext = "tif";
+  static vcl_string type = "tiff";
+  static unsigned size_block = 0;
   static bool byte = false;
   file_dialog.file("Image Filename:", ext, image_file);
+  file_dialog.field("Image Format: ", type);
+  file_dialog.field("BlockSize", size_block);
   file_dialog.checkbox("Convert to byte image", byte);
   if (!file_dialog.ask())
     return;
@@ -547,8 +568,24 @@ void segv_vil_segmentation_manager::save_image()
     vil_image_view<unsigned char> byte_view = brip_vil_float_ops::convert_to_byte(img);
     save_image = vil_new_image_resource_of_view(byte_view);
   }
-  if (!vil_save_image_resource(save_image, image_file.c_str(), "tiff"))
+  if(size_block>0)
+    {
+      vil_blocked_image_resource_sptr bim =
+        vil_new_blocked_image_resource(image_file.c_str(),
+                                       save_image->ni(), save_image->nj(),
+                                       save_image->nplanes(),
+                                       save_image->pixel_format(),
+                                       size_block, size_block,
+                                       "tiff");
+      vil_image_view_base_sptr view = save_image->get_view();
+      if(view)
+		  bim->vil_image_resource::put_view(*view);
+      return;
+    }
+      
+ if (!vil_save_image_resource(save_image, image_file.c_str(), type.c_str()))
     vcl_cerr << "segv_vil_segmentation_manager::save_image operation failed\n";
+
 }
 
 void segv_vil_segmentation_manager::set_range_params()
@@ -1095,4 +1132,78 @@ void segv_vil_segmentation_manager::entropy()
     brip_vil_float_ops::convert_to_byte(entropy);
 
   this->add_image(vil_new_image_resource_of_view(cent));
+}
+
+void segv_vil_segmentation_manager::minfo()
+{
+  vgui_dialog minfo_dlg("Minfo of Image");
+  static unsigned xrad = 15, yrad = 15, step = 10;
+  static float sigma = 1.0f;
+  static bool inten = true;
+  static bool grad = true;
+  static bool color = false;
+  minfo_dlg.field("Region x radius",xrad);
+  minfo_dlg.field("Region y radius",yrad);
+  minfo_dlg.field("Step Size", step);
+  minfo_dlg.field("Sigma", sigma);
+  minfo_dlg.checkbox("Intensity", inten);
+  minfo_dlg.checkbox("Gradient", grad);
+  minfo_dlg.checkbox("Color", color);
+  if (!minfo_dlg.ask())
+    return;
+  vil_image_resource_sptr img0 = this->image_at(0,0);
+  vil_image_resource_sptr img1 = this->image_at(1,0);
+  if (!img0||!img1)
+  {
+    vcl_cout << "In segv_vil_segmentation_manager::minfo() -"
+             << " one or both input images are null\n";
+    return;
+  }
+  vil_image_view<float> MI0, MI1;
+  if(!brip_vil_float_ops::minfo(xrad, yrad, step, img0, img1, MI0, MI1,
+                                sigma, inten, grad, color))
+    return;
+  vil_image_view<unsigned char> MI0_char =
+    brip_vil_float_ops::convert_to_byte(MI0);
+
+  vil_image_view<unsigned char> MI1_char =
+    brip_vil_float_ops::convert_to_byte(MI1);
+
+  this->add_image_at(vil_new_image_resource_of_view(MI0_char), 0, 0);
+  this->add_image_at(vil_new_image_resource_of_view(MI1_char), 1, 0);
+}
+
+void segv_vil_segmentation_manager::rotate_image()
+{
+  vil_image_resource_sptr img = selected_image();
+  if (!img)
+    {
+      vcl_cout << "In segv_vil_segmentation_manager::rotate_image - no image\n";
+      return;
+    }
+  vil_image_view<float> flt =
+    brip_vil_float_ops::convert_to_float(img);
+  static double angle = 0;
+  vgui_dialog rotate_dialog("Rotate Image");
+  rotate_dialog.field("Rotation Angle (deg)", angle);
+  if (!rotate_dialog.ask())
+    return;
+
+  vil_image_view<float> temp = brip_vil_float_ops::rotate(flt, angle);
+  vil_image_view<unsigned char> tempr =
+    brip_vil_float_ops::convert_to_byte(temp, 0, 255);
+  vil_image_resource_sptr out_image = vil_new_image_resource_of_view(tempr);
+  this->add_image(out_image);
+}
+void segv_vil_segmentation_manager::test_float()
+{
+  vil_image_resource_sptr img = selected_image();
+  if (!img)
+    {
+      vcl_cout << "In segv_vil_segmentation_manager::test_float - no image\n";
+      return;
+    }
+  vil_image_view<float> flt =
+    brip_vil_float_ops::convert_to_float(img);
+  this->add_image(vil_new_image_resource_of_view(flt)); 
 }

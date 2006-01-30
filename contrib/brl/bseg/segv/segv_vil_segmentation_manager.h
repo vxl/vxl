@@ -49,16 +49,19 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void fit_conics();
   void fit_overlay_conics();
   void regions();
+  void rotate_image();
   //: visualization
   void display_images_as_color();
   //: image arithmetic
   void add_images();
   void subtract_images();
   void entropy();
+  void minfo();
   //: tests and development only
     void test_inline_viewer();
     void test_ellipse_draw();
-  //:internals
+    void test_float();
+ //:internals
   void clear_display();
   void init();
 
