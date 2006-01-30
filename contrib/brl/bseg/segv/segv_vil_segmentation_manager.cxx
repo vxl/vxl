@@ -529,7 +529,10 @@ void segv_vil_segmentation_manager::load_image()
   }
   
   if (sblock)
-    image = (vil_image_resource*)(vil_new_cached_image_resource(image)).ptr();
+  {
+    vil_blocked_image_resource_sptr bimage = vil_new_blocked_image_facade(image);
+    image = (vil_image_resource*)(vil_new_cached_image_resource(bimage)).ptr();
+  }
 
   vgui_range_map_params_sptr rmps = range_params(image);
 
