@@ -1,4 +1,4 @@
-// This is mul/mbl/tests/test_test.cxx
+// This is mul/mbl/tests/test_log.cxx
 #include <vcl_sstream.h>
 #include <vcl_cstdlib.h>
 #include <vcl_deprecated.h>
@@ -7,9 +7,9 @@
 
 void test_log()
 {
-  vcl_cout << "******************\n"
+  vcl_cout << "*****************\n"
            << " Testing mbl_log\n"
-           << "******************\n";
+           << "*****************\n";
 
   vcl_ostringstream output;
   mbl_log_output log_output(&output, "");
@@ -17,7 +17,7 @@ void test_log()
   mbl_logger::root().default_logger.set(mbl_logger::INFO, log_output);
 
   mbl_logger current("wibble1");
-  
+
   if (current.level() >= mbl_logger::INFO)
     current.log(mbl_logger::INFO) << "Output this whatever" << vcl_endl;
 
@@ -27,9 +27,9 @@ void test_log()
 
   vcl_cout << "LOG OUTPUT:\n\""<<output.str()<<'\"' <<vcl_endl;
 
-  TEST("Log output is as expected", output.str(), 
-    "INFO: wibble1 Output this whatever\n"
-    "WARN: wibble1 Also this number 54 and\nmultiline message\n");
+  TEST("Log output is as expected", output.str(),
+       "INFO: wibble1 Output this whatever\n"
+       "WARN: wibble1 Also this number 54 and\nmultiline message\n");
 }
 
 TESTMAIN(test_log);
