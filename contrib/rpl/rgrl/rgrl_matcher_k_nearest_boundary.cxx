@@ -45,7 +45,10 @@ compute_matches( rgrl_feature_set const&       from_set,
   rgrl_match_set_sptr cp_matches =
     rgrl_matcher_k_nearest::compute_matches(from_set, to_set, current_view,
                                             current_xform, current_scale);
-  rgrl_match_set_sptr bd_matches = new rgrl_match_set( from_set.type(), to_set.type() );
+
+  rgrl_match_set_sptr bd_matches 
+    = new rgrl_match_set( from_set.type(), to_set.type(), from_set.label(), to_set.label() );
+
   if ( cp_matches->from_size() == 0 ) return bd_matches;
 
   int m = cp_matches->from_begin().from_feature()->location().size();

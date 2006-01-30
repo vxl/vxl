@@ -39,7 +39,8 @@ compute_matches( rgrl_feature_set const&       from_set,
   typedef vcl_vector<rgrl_feature_sptr> feat_vector;
   typedef feat_vector::iterator feat_iter;
 
-  rgrl_match_set_sptr matches_sptr = new rgrl_match_set( from_set.type(), to_set.type());
+  rgrl_match_set_sptr matches_sptr 
+    = new rgrl_match_set( from_set.type(), to_set.type(), from_set.label(), to_set.label() );
 
   //  get the features in the current view
   feat_vector from =

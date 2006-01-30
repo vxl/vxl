@@ -21,8 +21,8 @@ rgrl_match_set( const vcl_type_info& feature_type )
 rgrl_match_set::
 rgrl_match_set( const vcl_type_info& from_type,
                 const vcl_type_info& to_type,
-                const vcl_string& from_label,
-                const vcl_string& to_label )
+                const rgrl_feature_set_label& from_label,
+                const rgrl_feature_set_label& to_label )
   : from_type_( &from_type ),
     to_type_( &to_type ),
     from_label_( from_label ),

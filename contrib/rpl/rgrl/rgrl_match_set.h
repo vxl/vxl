@@ -8,12 +8,12 @@
 
 #include <vcl_vector.h>
 
-#include "rgrl_feature.h"
-#include "rgrl_match_set_sptr.h"
-#include "rgrl_object.h"
+#include <rgrl/rgrl_feature.h>
+#include <rgrl/rgrl_feature_set.h>
+#include <rgrl/rgrl_object.h>
+#include <rgrl/rgrl_match_set_sptr.h>
 
 #include <vcl_iosfwd.h>
-#include <vcl_string.h>
 
 class rgrl_transformation;
 
@@ -56,8 +56,8 @@ class rgrl_match_set
   //:  construct an empty match set, specifying the feature type
   rgrl_match_set( const vcl_type_info& from_type,
                   const vcl_type_info& to_type,
-                  const vcl_string& from_label = vcl_string(),
-                  const vcl_string& to_label = vcl_string() );
+                  const rgrl_feature_set_label& from_label = rgrl_feature_set_label(),
+                  const rgrl_feature_set_label& to_label = rgrl_feature_set_label() );
 
   //: type of from features
   const vcl_type_info&
@@ -68,12 +68,12 @@ class rgrl_match_set
   to_type() const { return *to_type_; }
 
   //: label of from features
-  const vcl_string&
+  const rgrl_feature_set_label&
   from_label() const 
   { return from_label_; }
   
   //: label of from features
-  const vcl_string&
+  const rgrl_feature_set_label&
   to_label() const 
   { return to_label_; }
 
@@ -197,8 +197,8 @@ class rgrl_match_set
 
   const vcl_type_info* from_type_;
   const vcl_type_info* to_type_;
-  vcl_string from_label_;
-  vcl_string to_label_;
+  rgrl_feature_set_label from_label_;
+  rgrl_feature_set_label to_label_;
   
   mutable unsigned int num_constraints_per_match_;
   vcl_vector< rgrl_feature_sptr > from_features_;

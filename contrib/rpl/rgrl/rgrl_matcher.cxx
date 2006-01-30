@@ -84,8 +84,12 @@ invert_matches( rgrl_match_set const&    current_set,
   typedef rgrl_match_set::const_from_iterator from_iter;
   typedef from_iter::to_iterator        to_iter;
 
-  rgrl_match_set_sptr inv_set = new rgrl_match_set( current_set.to_feature_type(),
-                                                    current_set.from_feature_type() );
+  rgrl_match_set_sptr inv_set
+    = new rgrl_match_set( current_set.to_feature_type(),
+                          current_set.from_feature_type(),
+                          current_set.to_label(),
+                          current_set.from_label() );
+
   inv_set->reserve( 3*current_set.from_size() );
   vcl_vector< flip_node >  matches;
   matches.reserve( 5*current_set.from_size() );

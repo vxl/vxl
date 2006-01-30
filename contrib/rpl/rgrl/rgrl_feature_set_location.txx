@@ -10,7 +10,7 @@
 //  April 2004 Charlene: allow the use of kd_tree and user-defined bin_size.
 // \endverbatim
 
-#include "rgrl_feature_set_location.h"
+#include <rgrl/rgrl_feature_set_location.h>
 
 #include <vcl_cassert.h>
 
@@ -18,15 +18,17 @@
 #include <rsdl/rsdl_bins.txx> // to avoid explicit instantiation
 #include <rsdl/rsdl_kd_tree.h>
 
-#include "rgrl_mask.h"
+#include <rgrl/rgrl_mask.h>
 
 
 template<unsigned N>
 rgrl_feature_set_location<N>::
 rgrl_feature_set_location( feature_vector const& features,
                            bool use_bins,
-                           double bin_size)
+                           double bin_size,
+                           rgrl_feature_set_label const& label)
   :
+  rgrl_feature_set( label ),
   bounding_box_( N ),
   use_bins_(use_bins)
 {

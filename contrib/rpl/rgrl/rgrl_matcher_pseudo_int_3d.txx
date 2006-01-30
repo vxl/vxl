@@ -161,7 +161,8 @@ compute_matches( rgrl_feature_set const&    from_set,
   typedef f_vector_type::iterator f_iterator_type;
 
   //  Build an empty match set
-  rgrl_match_set_sptr matches_sptr = new rgrl_match_set( from_set.type(), to_set.type() );
+  rgrl_match_set_sptr matches_sptr 
+    = new rgrl_match_set( from_set.type(), to_set.type(), from_set.label(), to_set.label() );
 
   //  Get the from image features in the current view
   f_vector_type from = from_set.features_in_region( current_view.region() );

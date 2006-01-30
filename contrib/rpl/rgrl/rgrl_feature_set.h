@@ -23,6 +23,36 @@ class rgrl_mask_box;
 
 #include "rgrl_feature_set_sptr.h"
 
+//: User-friendly label for the feature sets.
+//
+// The labels are used to refer to the feature sets in the context of
+// an rgrl_data_set.
+//
+// \sa rgrl_data_set
+//
+class rgrl_feature_set_label
+{
+ public:
+  //:
+  rgrl_feature_set_label( const vcl_string& name = vcl_string() );
+
+  //: return name
+  vcl_string const& name() const
+  { return name_; }
+  
+  //:
+  bool operator==( rgrl_feature_set_label const& other ) const;
+
+  //:
+  bool operator!=( rgrl_feature_set_label const& other ) const;
+
+  //:
+  bool operator<( rgrl_feature_set_label const& other ) const;
+
+ private:
+  vcl_string name_;
+};
+
 //: Base class to represent and provide access in several ways to a set of registration features.
 //
 //  Each feature set represents features of one type and at one resolution.
@@ -34,10 +64,18 @@ class rgrl_feature_set
   typedef vcl_vector<rgrl_feature_sptr>  feature_vector;
 
  public:
-  rgrl_feature_set();
+  rgrl_feature_set( rgrl_feature_set_label const& label = rgrl_feature_set_label() );
 
   virtual ~rgrl_feature_set();
 
+  //: set label
+  void set_label( rgrl_feature_set_label const& label )
+  { label_ = label; }
+  
+  //: get label
+  rgrl_feature_set_label const& label() const
+  { return label_; }
+  
   //:  Return the features in a given ROI.
   //
   virtual
@@ -99,34 +137,11 @@ class rgrl_feature_set
   //disabled
   rgrl_feature_set( rgrl_feature_set const& other );
   rgrl_feature_set& operator=( rgrl_feature_set const& other );
+
+ protected:
+  rgrl_feature_set_label label_;
 };
 
-
-//: User-friendly label for the feature sets.
-//
-// The labels are used to refer to the feature sets in the context of
-// an rgrl_data_set.
-//
-// \sa rgrl_data_set
-//
-class rgrl_feature_set_label
-{
- public:
-  //:
-  rgrl_feature_set_label( const vcl_string& name );
-
-  //:
-  bool operator==( rgrl_feature_set_label const& other ) const;
-
-  //:
-  bool operator!=( rgrl_feature_set_label const& other ) const;
-
-  //:
-  bool operator<( rgrl_feature_set_label const& other ) const;
-
- private:
-  vcl_string name_;
-};
 
 
 #endif

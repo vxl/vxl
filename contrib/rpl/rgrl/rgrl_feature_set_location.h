@@ -55,7 +55,8 @@ class rgrl_feature_set_location
   //  \a bin_size is only effective when \a use_bins is set true.
   rgrl_feature_set_location( feature_vector const& features,
                              bool use_bins = true,
-                             double bin_size = 10 );
+                             double bin_size = 10,
+                             rgrl_feature_set_label const& label = rgrl_feature_set_label() );
 
   ~rgrl_feature_set_location();
 

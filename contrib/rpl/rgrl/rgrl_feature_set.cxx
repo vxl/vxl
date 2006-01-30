@@ -6,7 +6,8 @@
 #include "rgrl_feature_set.h"
 
 rgrl_feature_set::
-rgrl_feature_set()
+rgrl_feature_set(rgrl_feature_set_label const& label)
+ :  label_(label)
 {
 }
 
