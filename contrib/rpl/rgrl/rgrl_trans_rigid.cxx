@@ -98,7 +98,7 @@ void rgrl_trans_rigid::determine_angles(double& phi, double& alpha, double& thet
 
   if (R_(2,2) * vcl_cos(alpha) > 0 )
   {
-    phi = vcl_atan( -1 * R_(1,2) / R_(2,2) ) + vnl_math::pi;
+    phi = vcl_atan( -1 * R_(1,2) / R_(2,2) );
   }
   else
   {
