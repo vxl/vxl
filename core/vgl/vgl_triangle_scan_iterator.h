@@ -45,6 +45,8 @@ class vgl_triangle_scan_iterator : public vgl_region_scan_iterator
   int y0, y1;
   int x0, x1;
 
+  T last_width;
+
   pt g; // centroid, for conditioning
   T data[3][3];
 #endif
