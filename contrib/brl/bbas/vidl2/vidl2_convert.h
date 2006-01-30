@@ -8,7 +8,7 @@
 // \file
 // \brief Convert frames to vil_image_views
 //
-// \author Matt Leotta 
+// \author Matt Leotta
 // \date 16 Jan 2006
 //
 // This file contains functions used to convert a vidl2_frame_sptr
@@ -57,9 +57,8 @@ class vidl2_yuv2rgb_iterator
 };
 
 
-
 //: Use pixel iterators to unpack and copy the image pixels
-// Assume that image has already been resized appropriately
+// Assume that \p image has already been resized appropriately
 template <class pixItr, class outP>
 void
 vidl2_convert_itr_to_view(pixItr itr, vil_image_view<outP>& image)
@@ -67,7 +66,7 @@ vidl2_convert_itr_to_view(pixItr itr, vil_image_view<outP>& image)
   unsigned ni = image.ni();
   unsigned nj = image.nj();
   unsigned np = image.nplanes();
-  vcl_ptrdiff_t istep = image.istep(); 
+  vcl_ptrdiff_t istep = image.istep();
   vcl_ptrdiff_t jstep = image.jstep();
   vcl_ptrdiff_t pstep = image.planestep();
 
@@ -84,12 +83,10 @@ vidl2_convert_itr_to_view(pixItr itr, vil_image_view<outP>& image)
       }
     }
   }
-
 }
 
 
-
-//: Unpack the pixels in the \p frame into the memory of the \p image
+//: Unpack the pixels in \p frame into the memory of \p image
 // The image is resized if needed.
 template <class outP>
 bool vidl2_convert_to_view(const vidl2_frame_sptr& frame,
@@ -97,7 +94,7 @@ bool vidl2_convert_to_view(const vidl2_frame_sptr& frame,
 {
   assert(frame);
   vidl2_pixel_format fmt = frame->pixel_format();
-  if(fmt == VIDL2_PIXEL_FORMAT_UNKNOWN)
+  if (fmt == VIDL2_PIXEL_FORMAT_UNKNOWN)
     return false;
 
   vidl2_pixel_traits traits = vidl2_pixel_format_traits(fmt);
@@ -108,13 +105,15 @@ bool vidl2_convert_to_view(const vidl2_frame_sptr& frame,
 
   image.set_size(ni,nj,np);
 
-#define do_case(FMT) case FMT:\
-    {\
-      typedef vidl2_pixel_iterator<FMT> Itr;\
-      vidl2_convert_itr_to_view(Itr(*frame),image);\
-      return true;\
-    }
-  switch(fmt){
+#define do_case(FMT) \
+  case FMT:\
+  {\
+    typedef vidl2_pixel_iterator<FMT> Itr;\
+    vidl2_convert_itr_to_view(Itr(*frame),image);\
+    return true;\
+  }
+  switch (fmt)
+  {
     do_case(VIDL2_PIXEL_FORMAT_RGB_24);
     do_case(VIDL2_PIXEL_FORMAT_BGR_24);
     do_case(VIDL2_PIXEL_FORMAT_RGBA_32);
@@ -142,8 +141,8 @@ bool vidl2_convert_to_view(const vidl2_frame_sptr& frame,
 }
 
 
-//: Unpack the pixels in the \p frame convert to RGB and store in \p image
-// Converts non-RGB color modes into RGB, monochrome is unchanged
+//: Unpack the pixels in \p frame, convert to RGB, and store in \p image
+// Converts non-RGB color modes into RGB, monochrome is unchanged.
 // The image is resized if needed.
 template <class outP>
 bool vidl2_convert_to_view_rgb(const vidl2_frame_sptr& frame,
@@ -151,7 +150,7 @@ bool vidl2_convert_to_view_rgb(const vidl2_frame_sptr& frame,
 {
   assert(frame);
   vidl2_pixel_format fmt = frame->pixel_format();
-  if(fmt == VIDL2_PIXEL_FORMAT_UNKNOWN)
+  if (fmt == VIDL2_PIXEL_FORMAT_UNKNOWN)
     return false;
 
   vidl2_pixel_traits traits = vidl2_pixel_format_traits(fmt);
@@ -162,21 +161,24 @@ bool vidl2_convert_to_view_rgb(const vidl2_frame_sptr& frame,
 
   image.set_size(ni,nj,np);
 
-#define do_case(FMT) case FMT:\
-    {\
-      typedef vidl2_pixel_iterator<FMT> Itr;\
-      vidl2_convert_itr_to_view(Itr(*frame),image);\
-      return true;\
-    }
+#define do_case(FMT) \
+  case FMT:\
+  {\
+    typedef vidl2_pixel_iterator<FMT> Itr;\
+    vidl2_convert_itr_to_view(Itr(*frame),image);\
+    return true;\
+  }
 
-#define do_case_yuv2rgb(FMT) case FMT:\
-    {\
-      typedef vidl2_pixel_iterator<FMT> yuvItr;\
-      typedef vidl2_yuv2rgb_iterator<yuvItr,outP> cvtItr;\
-      vidl2_convert_itr_to_view(cvtItr(yuvItr(*frame)),image);\
-      return true;\
-    }
-  switch(fmt){
+#define do_case_yuv2rgb(FMT) \
+  case FMT:\
+  {\
+    typedef vidl2_pixel_iterator<FMT> yuvItr;\
+    typedef vidl2_yuv2rgb_iterator<yuvItr,outP> cvtItr;\
+    vidl2_convert_itr_to_view(cvtItr(yuvItr(*frame)),image);\
+    return true;\
+  }
+  switch (fmt)
+  {
     do_case(VIDL2_PIXEL_FORMAT_RGB_24);
     do_case(VIDL2_PIXEL_FORMAT_BGR_24);
     do_case(VIDL2_PIXEL_FORMAT_RGBA_32);
@@ -207,21 +209,16 @@ bool vidl2_convert_to_view_rgb(const vidl2_frame_sptr& frame,
 
 
 //: Convert the pixel format of a frame
-//
 // The \p in_frame.data() is converted from \p in_frame.pixel_format()
 // to \p out_frame.pixel_format() and stored in \p out_frame.data()
-// \returns false If the output frame data is not the correct size.
+// \returns false if the output frame data is not the correct size.
 bool vidl2_convert_frame(const vidl2_frame& in_frame,
                                vidl2_frame& out_frame);
 
 
 //: Convert the pixel format of a frame
-//
-// The convert \p in_frame to a \p format by allocating
-// a new frame buffer
+// Convert \p in_frame to a \p format by allocating a new frame buffer
 vidl2_frame_sptr vidl2_convert_frame(const vidl2_frame_sptr& in_frame,
                                      vidl2_pixel_format format);
 
-
 #endif // vidl2_convert_h_
-
