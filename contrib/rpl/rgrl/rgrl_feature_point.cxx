@@ -112,7 +112,8 @@ transform_scale( rgrl_transformation const& xform ) const
   // transform scale
   vnl_vector<double> const& scaling = xform.scaling_factors();
   const unsigned dim = this->location_.size();
-  double scale = 0.0;
+  // use default value of 1.0
+  double scale = 1.0;
   
   if ( this->scale_ > 0.0 && scaling.size() == dim ) {
     // "average" them
@@ -124,7 +125,7 @@ transform_scale( rgrl_transformation const& xform ) const
         prod_scale *= scaling[i];
       scale = vcl_exp( vcl_log(prod_scale) / double(dim) ) * this->scale_;
     }
-  } else if ( this-> scale_ > 0.0 ) {
+  } else if ( this-> scale_ != 1.0 ) {
     WarningMacro( "This feature has non-zero scale value, but transformation has no scaling factors."
                   << "The scale of transformed features is NOT set." );
   }
