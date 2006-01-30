@@ -8,7 +8,7 @@
 // \file
 // \brief A ref counted video frame
 //
-// \author Matt Leotta 
+// \author Matt Leotta
 // \date 13 Jan 2006
 //
 //  The vidl2_frame is meant to be an object for transmitting a
@@ -114,7 +114,7 @@ class vidl2_shared_frame : public vidl2_frame
 
 
 //: A frame buffer that wraps a vil_memory_chunk
-// this useful when the frame actually came from a vil image
+//  This is useful when the frame actually came from a vil_image
 class vidl2_memory_chunk_frame : public vidl2_frame
 {
   public:
@@ -148,4 +148,3 @@ class vidl2_memory_chunk_frame : public vidl2_frame
 
 
 #endif // vidl2_frame_h_
-
