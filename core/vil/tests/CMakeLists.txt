@@ -35,9 +35,6 @@ ADD_EXECUTABLE( vil_test_all
 
   # Math
   test_math_value_range.cxx
- 
-  # Blocked images
-  test_blocked_image_resource.cxx
 )
 
 TARGET_LINK_LIBRARIES( vil_test_all vil vpl vul testlib vcl )
