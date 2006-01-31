@@ -11,7 +11,6 @@ VERSION := 1.0
 DEFINES += -DBUILDING_BXML_DLL
 
 SOURCES += bxml_io.cxx
-SOURCES += bxml_basic_element.cxx
 SOURCES += bxml_vdgl_digital_curve_input_converter.cxx
 SOURCES += bxml_vsol_point_2d_input_converter.cxx
 SOURCES += bxml_vtol_edge_2d_input_converter.cxx

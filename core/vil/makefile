@@ -153,6 +153,13 @@ SOURCES += vil_stream_fstream64.cxx
 endif
 endif
 
+# blocking support
+SOURCES += vil_block_cache.cxx
+SOURCES += vil_blocked_image_facade.cxx
+SOURCES += vil_blocked_image_resource.cxx
+SOURCES += vil_cached_image_resource.cxx
+MANPAGE_SOURCES += vil_blocked_image_resource_sptr.h
+
 
 ifndef NOTEST
  SUBDIRS += tests examples

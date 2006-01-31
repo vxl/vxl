@@ -44,6 +44,9 @@ TESTS += test_resample_bicub.cxx
 # Math
 TESTS += test_math_value_range.cxx
 
+# Blocking
+TESTS += test_blocked_image_resource.cxx
+
 #MINI_PROG_SOURCES += vil_test_access_timings.cxx
 #MINI_PROG_SOURCES += vil_test_random_access_timings.cxx
 #MINI_PROG_SOURCES += vil_test_access_timings_noplanes.cxx
