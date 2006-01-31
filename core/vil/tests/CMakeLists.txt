@@ -35,6 +35,9 @@ ADD_EXECUTABLE( vil_test_all
 
   # Math
   test_math_value_range.cxx
+ 
+  # Blocked images
+  test_blocked_image_resource.cxx
 )
 
 TARGET_LINK_LIBRARIES( vil_test_all vil vpl vul testlib vcl )
@@ -71,6 +74,8 @@ ADD_TEST( vil_test_resample_bicub           vil_test_all test_resample_bicub)
 # Math
 ADD_TEST( vil_test_math_value_range         vil_test_all test_math_value_range)
 
+# Blocked images
+ADD_TEST( vil_test_blocked_image_resource   vil_test_all test_blocked_image_resource)
 
 # To run timing tests
 #ADD_EXECUTABLE( vil_test_access_timings vil_test_access_timings.cxx)
