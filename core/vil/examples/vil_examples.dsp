@@ -53,6 +53,9 @@ SOURCE=.\vil_color_tables.cxx
 # Begin Source File
 SOURCE=.\vil_resample_image.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vil_image_convert.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

@@ -31,6 +31,18 @@ SOURCE=.\vidl2_pixel_format.cxx
 SOURCE=.\vidl2_frame.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vidl2_convert.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_ffmpeg_convert.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_color.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_ffmpeg_convert.h
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil_smart_ptr+vidl2_frame-.cxx
 # End Source File
 # End Group

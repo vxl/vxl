@@ -310,6 +310,9 @@ SOURCE=.\test_analyze_format.cxx
 # Begin Source File
 SOURCE=.\test_reflect.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_gen_synthetic.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

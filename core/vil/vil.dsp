@@ -402,6 +402,18 @@ SOURCE=.\vil_stream_url.cxx
 SOURCE=.\vil_image_resource_plugin.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vil_block_cache.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil_blocked_image_facade.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil_blocked_image_resource.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil_cached_image_resource.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\file_formats/vil_dicom.cxx
 # End Source File
 # Begin Source File
@@ -586,6 +598,9 @@ SOURCE=.\Templates/vil_sample_profile_bilin+uint_16.double-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil_sample_grid_bilin+uint_16.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_smart_ptr+vil_blocked_image_resource-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -919,6 +934,21 @@ SOURCE=.\vil_exception.h
 # End Source File
 # Begin Source File
 SOURCE=.\file_formats/vil_tiff_header.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_block_cache.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_blocked_image_facade.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_blocked_image_resource.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_blocked_image_resource_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_cached_image_resource.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_config.h.in

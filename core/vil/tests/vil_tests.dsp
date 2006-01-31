@@ -75,6 +75,9 @@ SOURCE=.\test_image_loader_robustness.cxx
 # Begin Source File
 SOURCE=.\test_math_value_range.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_blocked_image_resource.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
