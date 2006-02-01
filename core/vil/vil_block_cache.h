@@ -9,6 +9,7 @@
 // \brief A block cache with block population prioitized by age
 // \author J. L. Mundy
 //
+#include <vcl_iosfwd.h>
 #include <vcl_queue.h>
 #include <vcl_vector.h>
 #include <vil/vil_image_view.h>
@@ -30,27 +31,26 @@ struct bcell
   //:update the age of a block
   void touch(){birthdate_=time_++;}
   //: for debug
-  void print()const{vcl_cout << "[" << bindex_i_ << ' ' << bindex_j_ 
-                        << "](" << birthdate_ << ")\n";}
-  private:
+  void print() const { vcl_cout << '[' << bindex_i_ << ' ' << bindex_j_
+                                << "](" << birthdate_ << ")\n"; }
+ private:
   static unsigned long time_; //static timekeeper
 };
 
-class vil_block_cache 
+class vil_block_cache
 {
  public:
-
   vil_block_cache(const unsigned block_capacity) : nblocks_(block_capacity){}
   ~vil_block_cache();
 
   //:add a block to the buffer
   bool add_block(const unsigned& block_index_i, const unsigned& block_index_j,
-                 vil_image_view_base_sptr const& blk); 
+                 vil_image_view_base_sptr const& blk);
 
   //:retrieve a block from the buffer
   bool get_block(const unsigned& block_index_i, const unsigned& block_index_j,
                  vil_image_view_base_sptr& blk) const;
-    
+
   //:block capacity
   unsigned block_size() const{return nblocks_;}
  private:
@@ -59,15 +59,13 @@ class vil_block_cache
     bool operator()(bcell* const& c1, bcell* const& c2) const
     {return c1->birthdate_ > c2->birthdate_;}
   };
-  //members
-  //:block queue
+  //:block queue member
   vcl_priority_queue<bcell*, vcl_vector<bcell*>, compare> queue_;
-  //:block index
+  //:block index member
   vcl_vector<bcell*> blocks_;
   //:capacity in blocks
-  unsigned nblocks_; 
-  //private functions
-  //:remove the lowest priority block 
+  unsigned nblocks_;
+  //:remove the lowest priority block
   bool remove_block();
 };
 
