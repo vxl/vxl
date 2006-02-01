@@ -91,7 +91,7 @@ vil_new_blocked_image_resource(char const* filename, unsigned ni, unsigned nj,
                                char const* file_format = 0);
 
 //: create a blocked interface around any image resource
-// for zero size blocks, appropriate default blocking is created
+// For zero size blocks, appropriate default blocking is created
 vil_blocked_image_resource_sptr 
 vil_new_blocked_image_facade(const vil_image_resource_sptr& src,
                              const unsigned size_block_i=0,

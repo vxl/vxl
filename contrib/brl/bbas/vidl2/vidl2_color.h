@@ -8,7 +8,7 @@
 // \file
 // \brief Color space conversions and related functions
 //
-// \author Matt Leotta 
+// \author Matt Leotta
 // \date 23 Jan 2006
 //
 
@@ -35,11 +35,10 @@ inline void vidl2_color_convert_yuv2rgb( vxl_byte y, vxl_byte u, vxl_byte v,
 
 
 //: faster integer-based conversion from YUV to RGB
-// based on conversion used in libdc1394
-VCL_DEFINE_SPECIALIZATION 
+// Based on conversion used in libdc1394
+VCL_DEFINE_SPECIALIZATION
 inline void vidl2_color_convert_yuv2rgb( vxl_byte  y, vxl_byte  u, vxl_byte  v,
                                          vxl_byte& r, vxl_byte& g, vxl_byte& b )
-
 {
   register int iy = y, iu = u-128, iv = v-128, ir, ib, ig;
   r = ir = iy + ((iv*1436) >> 10);
@@ -69,11 +68,10 @@ inline void vidl2_color_convert_rgb2yuv( vxl_byte r, vxl_byte g, vxl_byte b,
 
 
 //: faster integer-based conversion from RGB to YUV
-// based on conversion used in libdc1394
-VCL_DEFINE_SPECIALIZATION 
+// Based on conversion used in libdc1394
+VCL_DEFINE_SPECIALIZATION
 inline void vidl2_color_convert_rgb2yuv( vxl_byte  r, vxl_byte  g, vxl_byte  b,
                                          vxl_byte& y, vxl_byte& u, vxl_byte& v )
-
 {
   register int ir = r, ib = b, ig = g, iy, iu, iv;
   y = iy = (306*ir + 601*ig + 117*ib)  >> 10;
@@ -94,7 +92,7 @@ inline void vidl2_color_convert_rgb2yuv( vxl_byte  r, vxl_byte  g, vxl_byte  b,
 template <vidl2_pixel_color in_C, int in_NC, vidl2_pixel_color out_C, int out_NC>
 struct vidl2_color_converter;
 
-VCL_DEFINE_SPECIALIZATION 
+VCL_DEFINE_SPECIALIZATION
 struct vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,3,VIDL2_PIXEL_COLOR_RGB,3>
 {
   static inline void convert(const vxl_byte in[3], vxl_byte out[3])
@@ -106,7 +104,7 @@ struct vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,3,VIDL2_PIXEL_COLOR_RGB,3>
 };
 
 
-VCL_DEFINE_SPECIALIZATION 
+VCL_DEFINE_SPECIALIZATION
 struct vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,4,VIDL2_PIXEL_COLOR_RGB,4>
 {
   static inline void convert(const vxl_byte in[4], vxl_byte out[4])
@@ -119,7 +117,7 @@ struct vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,4,VIDL2_PIXEL_COLOR_RGB,4>
 };
 
 
-VCL_DEFINE_SPECIALIZATION 
+VCL_DEFINE_SPECIALIZATION
 struct vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,4,VIDL2_PIXEL_COLOR_RGB,3>
 {
   static inline void convert(const vxl_byte in[4], vxl_byte out[3])
@@ -131,7 +129,7 @@ struct vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,4,VIDL2_PIXEL_COLOR_RGB,3>
 };
 
 
-VCL_DEFINE_SPECIALIZATION 
+VCL_DEFINE_SPECIALIZATION
 struct vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,3,VIDL2_PIXEL_COLOR_RGB,4>
 {
   static inline void convert(const vxl_byte in[3], vxl_byte out[4])
@@ -143,7 +141,7 @@ struct vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,3,VIDL2_PIXEL_COLOR_RGB,4>
   }
 };
 
-VCL_DEFINE_SPECIALIZATION 
+VCL_DEFINE_SPECIALIZATION
 struct vidl2_color_converter<VIDL2_PIXEL_COLOR_YUV,3,VIDL2_PIXEL_COLOR_YUV,3>
 {
   static inline void convert(const vxl_byte in[3], vxl_byte out[3])
@@ -155,7 +153,7 @@ struct vidl2_color_converter<VIDL2_PIXEL_COLOR_YUV,3,VIDL2_PIXEL_COLOR_YUV,3>
 };
 
 
-VCL_DEFINE_SPECIALIZATION 
+VCL_DEFINE_SPECIALIZATION
 struct vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,1,VIDL2_PIXEL_COLOR_MONO,1>
 {
   template <class T>
@@ -196,7 +194,7 @@ struct vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,1,VIDL2_PIXEL_COLOR_MONO,1>
 };
 
 
-VCL_DEFINE_SPECIALIZATION 
+VCL_DEFINE_SPECIALIZATION
 struct vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,3,VIDL2_PIXEL_COLOR_YUV,3>
 {
   static inline void convert(const vxl_byte in[3], vxl_byte out[3])
@@ -207,7 +205,7 @@ struct vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,3,VIDL2_PIXEL_COLOR_YUV,3>
 };
 
 
-VCL_DEFINE_SPECIALIZATION 
+VCL_DEFINE_SPECIALIZATION
 struct vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,4,VIDL2_PIXEL_COLOR_YUV,3>
 {
   static inline void convert(const vxl_byte in[4], vxl_byte out[3])
@@ -218,7 +216,7 @@ struct vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,4,VIDL2_PIXEL_COLOR_YUV,3>
 };
 
 
-VCL_DEFINE_SPECIALIZATION 
+VCL_DEFINE_SPECIALIZATION
 struct vidl2_color_converter<VIDL2_PIXEL_COLOR_YUV,3,VIDL2_PIXEL_COLOR_RGB,3>
 {
   static inline void convert(const vxl_byte in[3], vxl_byte out[3])
@@ -229,7 +227,7 @@ struct vidl2_color_converter<VIDL2_PIXEL_COLOR_YUV,3,VIDL2_PIXEL_COLOR_RGB,3>
 };
 
 
-VCL_DEFINE_SPECIALIZATION 
+VCL_DEFINE_SPECIALIZATION
 struct vidl2_color_converter<VIDL2_PIXEL_COLOR_YUV,3,VIDL2_PIXEL_COLOR_RGB,4>
 {
   static inline void convert(const vxl_byte in[3], vxl_byte out[4])
@@ -241,7 +239,7 @@ struct vidl2_color_converter<VIDL2_PIXEL_COLOR_YUV,3,VIDL2_PIXEL_COLOR_RGB,4>
 };
 
 
-VCL_DEFINE_SPECIALIZATION 
+VCL_DEFINE_SPECIALIZATION
 struct vidl2_color_converter<VIDL2_PIXEL_COLOR_YUV,3,VIDL2_PIXEL_COLOR_MONO,1>
 {
   template <class T>
@@ -253,7 +251,7 @@ struct vidl2_color_converter<VIDL2_PIXEL_COLOR_YUV,3,VIDL2_PIXEL_COLOR_MONO,1>
 };
 
 
-VCL_DEFINE_SPECIALIZATION 
+VCL_DEFINE_SPECIALIZATION
 struct vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,1,VIDL2_PIXEL_COLOR_YUV,3>
 {
   template <class T>
@@ -266,7 +264,7 @@ struct vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,1,VIDL2_PIXEL_COLOR_YUV,3>
   }
 };
 
-VCL_DEFINE_SPECIALIZATION 
+VCL_DEFINE_SPECIALIZATION
 struct vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,3,VIDL2_PIXEL_COLOR_MONO,1>
 {
   template <class T>
@@ -278,7 +276,7 @@ struct vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,3,VIDL2_PIXEL_COLOR_MONO,1>
   }
 };
 
-VCL_DEFINE_SPECIALIZATION 
+VCL_DEFINE_SPECIALIZATION
 struct vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,4,VIDL2_PIXEL_COLOR_MONO,1>
 {
   template <class T>
@@ -290,7 +288,7 @@ struct vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,4,VIDL2_PIXEL_COLOR_MONO,1>
   }
 };
 
-VCL_DEFINE_SPECIALIZATION 
+VCL_DEFINE_SPECIALIZATION
 struct vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,1,VIDL2_PIXEL_COLOR_RGB,3>
 {
   template <class T>
@@ -302,7 +300,7 @@ struct vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,1,VIDL2_PIXEL_COLOR_RGB,3>
   }
 };
 
-VCL_DEFINE_SPECIALIZATION 
+VCL_DEFINE_SPECIALIZATION
 struct vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,1,VIDL2_PIXEL_COLOR_RGB,4>
 {
   template <class T>
@@ -325,7 +323,7 @@ struct vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,1,VIDL2_PIXEL_COLOR_RGB,4>
 // These functions indicate how to extract a byte for each
 // color channel given a pointer to the pixel memory
 // This is only meant for non-planar non-packed formats
-template <vidl2_pixel_format FMT> 
+template <vidl2_pixel_format FMT>
 struct vidl2_color_component
 {
   typedef typename vidl2_pixel_traits_of<FMT>::type cmp_type;
@@ -357,7 +355,7 @@ struct vidl2_color_component
 };
 
 
-VCL_DEFINE_SPECIALIZATION 
+VCL_DEFINE_SPECIALIZATION
 struct vidl2_color_component<VIDL2_PIXEL_FORMAT_BGR_24>
 {
   // 0 -> 2
@@ -393,7 +391,7 @@ struct vidl2_color_component<VIDL2_PIXEL_FORMAT_BGR_24>
 };
 
 
-VCL_DEFINE_SPECIALIZATION 
+VCL_DEFINE_SPECIALIZATION
 struct vidl2_color_component<VIDL2_PIXEL_FORMAT_RGB_555>
 {
   static inline
@@ -430,14 +428,14 @@ struct vidl2_color_component<VIDL2_PIXEL_FORMAT_RGB_555>
 };
 
 
-VCL_DEFINE_SPECIALIZATION 
+VCL_DEFINE_SPECIALIZATION
 struct vidl2_color_component<VIDL2_PIXEL_FORMAT_RGB_565>
 {
   static inline
   vxl_byte get(const vxl_byte * ptr, unsigned int i)
   {
     const vxl_uint_16* p = reinterpret_cast<const vxl_uint_16*>(ptr);
-    switch(i){
+    switch (i) {
       case 0: return vxl_byte((*p & 0xF800) >> 8); // R
       case 1: return vxl_byte((*p & 0x07E0) >> 3); // G
       case 2: return vxl_byte((*p & 0x001F) << 3); // B
@@ -459,7 +457,7 @@ struct vidl2_color_component<VIDL2_PIXEL_FORMAT_RGB_565>
   {
     vxl_uint_16* p = reinterpret_cast<vxl_uint_16*>(ptr);
     vxl_uint_16 v = static_cast<vxl_uint_16>(val>>3);
-    switch(i){
+    switch (i) {
       case 0: *p &= 0x07FF; *p |= (v<<11); break; // R
       case 1: *p &= 0xF81F; *p |= (v<<5); break;  // G
       case 2: *p &= 0xFFE0; *p |= v; break;       // B
@@ -475,7 +473,7 @@ struct vidl2_color_component<VIDL2_PIXEL_FORMAT_RGB_565>
 };
 
 
-VCL_DEFINE_SPECIALIZATION 
+VCL_DEFINE_SPECIALIZATION
 struct vidl2_color_component<VIDL2_PIXEL_FORMAT_UYV_444>
 {
   // 0 -> 1

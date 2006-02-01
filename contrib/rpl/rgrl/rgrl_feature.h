@@ -35,21 +35,21 @@ class rgrl_feature
 
   //: Provide the scale level at which this feature is detected
   //  If no associated scale, return 0
-  virtual 
+  virtual
   double scale() const { return 0.0; }
-  
+
   //: Set the scale level at which this feature is detected
-  virtual 
-  void set_scale( double scale ); 
-  
+  virtual
+  void set_scale( double scale );
+
   //: read in feature
-  virtual 
+  virtual
   bool read( vcl_istream& is, bool skip_tag=false ) = 0;
-  
+
   //: write out feature
   virtual
   void write( vcl_ostream& os ) const = 0;
-  
+
   //:  Projects the error to the normal space of the underlying surface.
   //
   // This matrix essentially describes the underlying surface from
@@ -64,8 +64,7 @@ class rgrl_feature
   virtual
   vnl_matrix<double> const& error_projector() const = 0;
 
-  //: The square root of error projector is used to compute residual,
-  //  which should not be squared. 
+  //: The square root of error projector is used to compute residual, which should not be squared.
   //  The error projector itself is usually used in least-squares estimation.
   virtual
   vnl_matrix<double> const& error_projector_sqrt() const;
@@ -75,21 +74,21 @@ class rgrl_feature
   unsigned int num_constraints() const = 0;
 
   //:  Compute the geometric error distance between two features.
-  virtual 
+  virtual
   double geometric_error( rgrl_feature const& mapped_other ) const;
 
   //:  Compute the geometric error distance between two features.
-  //   Use this function for efficiency. 
+  //   Use this function for efficiency.
   //   If a mapped feature is created, use the other function
-  virtual 
-  double geometric_error( rgrl_transformation const& xform, 
+  virtual
+  double geometric_error( rgrl_transformation const& xform,
                           rgrl_feature const& other ) const;
 
-  //:  when computing geometric error, allow only mapping of From location
+  //:  When computing geometric error, allow only mapping of From location
   //   Otherwise, a mapped feature will be created, which is much more heavy
   virtual
   bool allow_fast_computation_on_error() const { return true; }
-  
+
   //:  Compute the signature error vector between two features.
   //
   // The result is invalid if signature_error_dimension() is false (0).
