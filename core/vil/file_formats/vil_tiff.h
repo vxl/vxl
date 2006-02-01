@@ -14,10 +14,10 @@
 //  3 Oct 2001 Peter Vanroose - Implemented get_property and set_property
 //  5 Jan 2002 Ian Scott      - Converted to vil
 //  9 Dec 2003 Peter Vanroose - Added support for 1-bit pixel (bitmapped) images
-//  21 Dec 2005 J.L. Mundy - Substantial rewrite to handle a more 
+//  21 Dec 2005 J.L. Mundy - Substantial rewrite to handle a more
 //  complete tiff 6.0 standard. Files with tiles can now be read and
 //  written. Only tiled images are considered blocked, i.e. not strips.
-//  Block dimensions must be a multiple of 16, for compatibility with 
+//  Block dimensions must be a multiple of 16, for compatibility with
 //  compression schemes. Tiff files with separate color bands are not handled
 //
 //  KNOWN BUG - 24bit samples for both nplanes = 1 and nplanes = 3
@@ -27,11 +27,13 @@
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_cmath.h>
+#include <vcl_cassert.h>
 #include <vil/vil_file_format.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_memory_chunk.h>
 #include <vil/vil_blocked_image_resource.h>
 #include <tiffio.h>
+
 //: Loader for tiff files
 class vil_tiff_file_format : public vil_file_format
 {
@@ -50,8 +52,8 @@ class vil_tiff_file_format : public vil_file_format
                                                     unsigned size_block_i,
                                                     unsigned size_block_j,
                                                     enum vil_pixel_format);
-
 };
+
 struct tif_stream_structures;
 class vil_tiff_header;
 
@@ -77,11 +79,11 @@ class vil_tiff_image : public vil_blocked_image_resource
   char const *file_format() const;
 
   //Block interface
-  
+
   //: Block size in columns
   virtual unsigned size_block_i() const;
-  //: Block size in rows
 
+  //: Block size in rows
   virtual unsigned size_block_j() const;
 
   //: Number of blocks in image width
@@ -101,13 +103,12 @@ class vil_tiff_image : public vil_blocked_image_resource
   //: Put the data in this view back into the image source.
   virtual bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0);
 
-
   //: Return true if the property given in the first argument has been set.
   // currently defined:
   //  "quantisation_depth" - number of relevant bits per pixel
   //  "size_block_i" and "size_block_j" - block dimensions
-  
- virtual bool get_property(char const *tag, void *prop = 0) const;
+
+  virtual bool get_property(char const *tag, void *prop = 0) const;
 
  private:
   tif_stream_structures* p_;
@@ -120,13 +121,14 @@ class vil_tiff_image : public vil_blocked_image_resource
 
   void copy_byte_block(vxl_byte* data, const unsigned long nbytes,
                        vil_memory_chunk_sptr& cnk) const;
-  //::convert a packed block to an expanded view
-  vil_image_view_base_sptr 
+
+  //: convert a packed block to an expanded view
+  vil_image_view_base_sptr
     view_from_buffer(vil_pixel_format& fmt,
                      vil_memory_chunk_sptr const& buf,
                      unsigned samples_per_block,
                      unsigned bits_per_sample) const;
-  
+
   //: the key methods for decoding the file data
   vil_image_view_base_sptr fill_block_from_tile(vil_memory_chunk_sptr const & buf) const;
 
@@ -135,17 +137,18 @@ class vil_tiff_image : public vil_blocked_image_resource
 #if 0
   vil_image_view_base_sptr get_block_internal( unsigned block_index_i,
                                                unsigned block_index_j ) const;
-void 
-get_blocks_internal( unsigned start_block_i,
-                     unsigned end_block_i,
-                     unsigned start_block_j,
-                     unsigned end_block_j,
-                     vcl_vector< vcl_vector< vil_image_view_base_sptr > >& blocks ) const;
-                                               
+  void
+  get_blocks_internal( unsigned start_block_i,
+                       unsigned end_block_i,
+                       unsigned start_block_j,
+                       unsigned end_block_j,
+                       vcl_vector< vcl_vector< vil_image_view_base_sptr > >& blocks ) const;
 #endif
   bool put_block(unsigned bi, unsigned bj, unsigned i0,
                  unsigned j0, const vil_image_view_base& im);
+
   unsigned block_index(unsigned block_i, unsigned block_j) const;
+
   //: fill out the block with leading zeros or trailing zeros if necessary
   void pad_block_with_zeros(unsigned ioff, unsigned joff,
                             unsigned iclip, unsigned jclip,
@@ -167,22 +170,22 @@ get_blocks_internal( unsigned start_block_i,
   bool write_block_to_file(unsigned bi, unsigned bj,
                            unsigned block_size_bytes,
                            vxl_byte* block_buf);
-
 };
 
 //
-//
 //------------------------ Lifted from vil_nitf2_image ------------------------
-//            If this happens again then maybe should elevate to a 
+//            If this happens again then maybe should elevate to a
 //            utility class -- JLM
+//
+
 //:
 // This function does a lot of work for \sa byte_align_data().  It will strip one value
 // of ni bits and return it as a value of type T (with zero padding on the MSBs).
 // Both io and ni are lengths (in bits - not bytes).
 //
-// @param i0: Offset (in bits - not bytes) from in_val[0].  This will be the start
+// \param i0: Offset (in bits - not bytes) from in_val[0].  This will be the start
 //            of the bits extracted from in_val.
-// @param ni: number of bits (starting from i0) that will be extracted from in_val.
+// \param ni: number of bits (starting from i0) that will be extracted from in_val.
 template< class T >
 T tiff_get_bits( const T* in_val, unsigned i0, unsigned ni )
 {

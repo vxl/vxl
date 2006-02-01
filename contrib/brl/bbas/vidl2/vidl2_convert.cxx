@@ -12,6 +12,7 @@
 #include "vidl2_convert.h"
 #include "vidl2_frame.h"
 #include <vcl_cstring.h>
+#include <vcl_cassert.h>
 
 //--------------------------------------------------------------------------------
 
@@ -83,7 +84,7 @@ struct convert_generic
     const unsigned int num_pix = in_frame.ni() * in_frame.nj();
     in_type in_pixel[vidl2_pixel_traits_of<in_Fmt>::num_channels];
     out_type out_pixel[vidl2_pixel_traits_of<out_Fmt>::num_channels];
-    for(unsigned int c=0; c<num_pix; ++c, ++in_itr, ++out_itr){
+    for (unsigned int c=0; c<num_pix; ++c, ++in_itr, ++out_itr){
       in_itr.get(in_pixel);
       color_converter::convert(in_pixel, out_pixel);
       out_itr.set(out_pixel);
@@ -91,7 +92,6 @@ struct convert_generic
     return true;
   }
 };
-
 
 
 //=============================================================================
@@ -111,7 +111,7 @@ struct convert<VIDL2_PIXEL_FORMAT_RGB_24, VIDL2_PIXEL_FORMAT_UYVY_422>
     const vxl_byte* rgb = reinterpret_cast<const vxl_byte*>(in_frame.data());
     vxl_byte* uyvy = reinterpret_cast<vxl_byte*>(out_frame.data());
     unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1)/2;
-    for(unsigned int c=0; c<num_half_pix; ++c){
+    for (unsigned int c=0; c<num_half_pix; ++c){
       const vxl_byte& r1 = *(rgb++);
       const vxl_byte& g1 = *(rgb++);
       const vxl_byte& b1 = *(rgb++);
@@ -144,7 +144,7 @@ struct convert<VIDL2_PIXEL_FORMAT_UYVY_422, VIDL2_PIXEL_FORMAT_RGB_24>
     const vxl_byte* uyvy = reinterpret_cast<const vxl_byte*>(in_frame.data());
     vxl_byte* rgb = reinterpret_cast<vxl_byte*>(out_frame.data());
     unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1)/2;
-    for(unsigned int c=0; c<num_half_pix; ++c){
+    for (unsigned int c=0; c<num_half_pix; ++c){
       const vxl_byte& u1 = *(uyvy++);
       const vxl_byte& y1 = *(uyvy++);
       const vxl_byte& v1 = *(uyvy++);
@@ -177,14 +177,14 @@ struct table_entry_init
   {
     // This should be done at compile time with partial specialization
     // This run time code generates many functions that are never actually used
-    if(in_Fmt == out_Fmt)
+    if (in_Fmt == out_Fmt)
       table_entry = &copy_conversion;
-    else if(convert<in_Fmt,out_Fmt>::defined)
+    else if (convert<in_Fmt,out_Fmt>::defined)
       table_entry = &convert<in_Fmt,out_Fmt>::apply;
-    else if(convert<in_Fmt,VIDL2_PIXEL_FORMAT_RGB_24>::defined &&
+    else if (convert<in_Fmt,VIDL2_PIXEL_FORMAT_RGB_24>::defined &&
             convert<VIDL2_PIXEL_FORMAT_RGB_24,out_Fmt>::defined)
       table_entry = &intermediate_rgb24_conversion;
-    else if(vidl2_pixel_iterator_valid<in_Fmt>::value &&
+    else if (vidl2_pixel_iterator_valid<in_Fmt>::value &&
             vidl2_pixel_iterator_valid<out_Fmt>::value)
       table_entry = &convert_generic<in_Fmt,out_Fmt>::apply;
     else
@@ -222,30 +222,29 @@ struct table_init<0>
 //: A table of all conversion functions
 class converter
 {
-  public:
-    //: Constructor - generate the table
-    converter()
-    {
-      // generate the table of function pointers
-      table_init<VIDL2_PIXEL_FORMAT_ENUM_END*VIDL2_PIXEL_FORMAT_ENUM_END-1>::populate(table);
-    }
+ public:
+  //: Constructor - generate the table
+  converter()
+  {
+    // generate the table of function pointers
+    table_init<VIDL2_PIXEL_FORMAT_ENUM_END*VIDL2_PIXEL_FORMAT_ENUM_END-1>::populate(table);
+  }
 
-    //: Apply the conversion
-    bool operator()(const vidl2_frame& in_frame, vidl2_frame& out_frame) const
-    {
-      return (*table[in_frame.pixel_format()][out_frame.pixel_format()])(in_frame, out_frame);
-    }
-  private:
-    //: Table of conversion functions
-    converter_func table[VIDL2_PIXEL_FORMAT_ENUM_END][VIDL2_PIXEL_FORMAT_ENUM_END];
+  //: Apply the conversion
+  bool operator()(const vidl2_frame& in_frame, vidl2_frame& out_frame) const
+  {
+    return (*table[in_frame.pixel_format()][out_frame.pixel_format()])(in_frame, out_frame);
+  }
+ private:
+  //: Table of conversion functions
+  converter_func table[VIDL2_PIXEL_FORMAT_ENUM_END][VIDL2_PIXEL_FORMAT_ENUM_END];
 };
 
 //: Instantiate a global conversion function table
 converter conversion_table;
 
-
 //: Convert to an intermediate RGB_24 frame
-// defined here because it uses conversion_table
+// Defined here because it uses conversion_table
 bool intermediate_rgb24_conversion(const vidl2_frame& in_frame, vidl2_frame& out_frame)
 {
   unsigned int ni = in_frame.ni(), nj = in_frame.nj();
@@ -271,7 +270,7 @@ bool vidl2_convert_frame(const vidl2_frame& in_frame,
   vidl2_pixel_format in_fmt = in_frame.pixel_format();
   vidl2_pixel_format out_fmt = out_frame.pixel_format();
 
-  if(in_fmt == VIDL2_PIXEL_FORMAT_UNKNOWN ||
+  if (in_fmt == VIDL2_PIXEL_FORMAT_UNKNOWN ||
      out_fmt == VIDL2_PIXEL_FORMAT_UNKNOWN)
     return false;
 
@@ -279,7 +278,7 @@ bool vidl2_convert_frame(const vidl2_frame& in_frame,
   unsigned nj = in_frame.nj();
   unsigned out_size = vidl2_pixel_format_buffer_size(ni,nj,out_fmt);
 
-  if(out_frame.size() != out_size ||
+  if (out_frame.size() != out_size ||
      out_frame.ni() != ni ||
      out_frame.nj() != nj ||
      !out_frame.data() )
@@ -297,7 +296,7 @@ bool vidl2_convert_frame(const vidl2_frame& in_frame,
 vidl2_frame_sptr vidl2_convert_frame(const vidl2_frame_sptr& in_frame,
                                      vidl2_pixel_format format)
 {
-  if(format == VIDL2_PIXEL_FORMAT_UNKNOWN)
+  if (format == VIDL2_PIXEL_FORMAT_UNKNOWN)
     return NULL;
 
   unsigned ni = in_frame->ni();
@@ -306,7 +305,7 @@ vidl2_frame_sptr vidl2_convert_frame(const vidl2_frame_sptr& in_frame,
   vil_memory_chunk_sptr memory = new vil_memory_chunk(size, VIL_PIXEL_FORMAT_BYTE);
   vidl2_frame_sptr out_frame = new vidl2_memory_chunk_frame(ni, nj, format, memory);
 
-  if(vidl2_convert_frame(*in_frame, *out_frame))
+  if (vidl2_convert_frame(*in_frame, *out_frame))
     return out_frame;
 
   return NULL;
