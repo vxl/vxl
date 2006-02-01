@@ -767,6 +767,12 @@ SOURCE=.\rgrl_matcher_k_nearest_random.h
 # Begin Source File
 SOURCE=.\rgrl_matcher_k_nearest_pick_one.h
 # End Source File
+# Begin Source File
+SOURCE=.\rgrl_invariant_set.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_invariant_set_sptr.h
+# End Source File
 # End Group
 # End Target
 # End Project
