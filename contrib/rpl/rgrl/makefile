@@ -93,6 +93,9 @@ MANPAGE_SOURCES += rgrl_invariant_sptr.h
 SOURCES += rgrl_invariant_match.cxx
 MANPAGE_SOURCES += rgrl_invariant_match_sptr.h
 SOURCES += rgrl_invariant_single_landmark.cxx
+MANPAGE_SOURCES += rgrl_invariant_set.h
+MANPAGE_SOURCES += rgrl_invariant_set_sptr.h
+
 
 SOURCES += rgrl_convergence_tester.cxx
 MANPAGE_SOURCES += rgrl_convergence_tester_sptr.h
