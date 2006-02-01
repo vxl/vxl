@@ -10,6 +10,7 @@
 
 #include <rgrl/rgrl_invariant_sptr.h>
 #include <rgrl/rgrl_object.h>
+#include <rgrl/rgrl_mask_sptr.h>
 
 //: Represent a feature associated with a set of invariant properties.
 //
@@ -23,7 +24,7 @@ class rgrl_invariant_set
   virtual ~rgrl_invariant_set() {}
 
   virtual void 
-  as_invariants( vcl_vector<rgrl_invariant_sptr>& invariant_key_points ) = 0;
+  as_invariants( vcl_vector<rgrl_invariant_sptr>& invariant_key_points, rgrl_mask_sptr const& mask=0 ) = 0;
 };
 
 #endif // rgrl_invariant_set_h_
