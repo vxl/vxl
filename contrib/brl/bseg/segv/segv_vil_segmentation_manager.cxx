@@ -183,6 +183,7 @@ set_selected_grid_image(vil_image_resource_sptr const& image,
   }
   itab->post_redraw();
 }
+
 //: Add an image at the specified grid cell
 void segv_vil_segmentation_manager::
 add_image_at(vil_image_resource_sptr const& image,
@@ -519,7 +520,7 @@ void segv_vil_segmentation_manager::load_image()
     return;
 
   vil_image_resource_sptr image = vil_load_image_resource(image_filename.c_str());
-  if(!image)
+  if (!image)
     return;
   if (greyscale)
   {
@@ -527,7 +528,7 @@ void segv_vil_segmentation_manager::load_image()
       brip_vil_float_ops::convert_to_grey(*image);
     image = vil_new_image_resource_of_view(grey_view);
   }
-  
+
   if (sblock)
   {
     vil_blocked_image_resource_sptr bimage = vil_new_blocked_image_facade(image);
@@ -571,24 +572,23 @@ void segv_vil_segmentation_manager::save_image()
     vil_image_view<unsigned char> byte_view = brip_vil_float_ops::convert_to_byte(img);
     save_image = vil_new_image_resource_of_view(byte_view);
   }
-  if(size_block>0)
-    {
-      vil_blocked_image_resource_sptr bim =
-        vil_new_blocked_image_resource(image_file.c_str(),
-                                       save_image->ni(), save_image->nj(),
-                                       save_image->nplanes(),
-                                       save_image->pixel_format(),
-                                       size_block, size_block,
-                                       "tiff");
-      vil_image_view_base_sptr view = save_image->get_view();
-      if(view)
-		  bim->vil_image_resource::put_view(*view);
-      return;
-    }
-      
- if (!vil_save_image_resource(save_image, image_file.c_str(), type.c_str()))
-    vcl_cerr << "segv_vil_segmentation_manager::save_image operation failed\n";
+  if (size_block>0)
+  {
+    vil_blocked_image_resource_sptr bim =
+      vil_new_blocked_image_resource(image_file.c_str(),
+                                     save_image->ni(), save_image->nj(),
+                                     save_image->nplanes(),
+                                     save_image->pixel_format(),
+                                     size_block, size_block,
+                                     "tiff");
+    vil_image_view_base_sptr view = save_image->get_view();
+    if (view)
+      bim->vil_image_resource::put_view(*view);
+    return;
+  }
 
+  if (!vil_save_image_resource(save_image, image_file.c_str(), type.c_str()))
+    vcl_cerr << "segv_vil_segmentation_manager::save_image operation failed\n";
 }
 
 void segv_vil_segmentation_manager::set_range_params()
@@ -822,7 +822,7 @@ void segv_vil_segmentation_manager::fit_conics()
     if (conics[i]->is_real_ellipse()) {
       conics[i]->ellipse_parameters(cx,cy,phi,width,height);
       vsol_point_2d_sptr p = new vsol_point_2d(cx, cy);
-      vcl_cout << i << " center (" << cx << "," << cy << ")" << vcl_endl;
+      vcl_cout << i << " center (" << cx << ',' << cy << ')' << vcl_endl;
       center_points.push_back(p);
     }
   }
@@ -892,7 +892,7 @@ void segv_vil_segmentation_manager::fit_overlay_conics()
     if (conics[i]->is_real_ellipse()) {
       conics[i]->ellipse_parameters(cx,cy,phi,width,height);
       vsol_point_2d_sptr p = new vsol_point_2d(cx, cy);
-      vcl_cout << i << " center (" << cx << "," << cy << ")" << vcl_endl;
+      vcl_cout << i << " center (" << cx << ',' << cy << ')' << vcl_endl;
       center_points.push_back(p);
     }
   }
@@ -1163,7 +1163,7 @@ void segv_vil_segmentation_manager::minfo()
     return;
   }
   vil_image_view<float> MI0, MI1;
-  if(!brip_vil_float_ops::minfo(xrad, yrad, step, img0, img1, MI0, MI1,
+  if (!brip_vil_float_ops::minfo(xrad, yrad, step, img0, img1, MI0, MI1,
                                 sigma, inten, grad, color))
     return;
   vil_image_view<unsigned char> MI0_char =
@@ -1180,10 +1180,10 @@ void segv_vil_segmentation_manager::rotate_image()
 {
   vil_image_resource_sptr img = selected_image();
   if (!img)
-    {
-      vcl_cout << "In segv_vil_segmentation_manager::rotate_image - no image\n";
-      return;
-    }
+  {
+    vcl_cout << "In segv_vil_segmentation_manager::rotate_image - no image\n";
+    return;
+  }
   vil_image_view<float> flt =
     brip_vil_float_ops::convert_to_float(img);
   static double angle = 0;
@@ -1198,15 +1198,16 @@ void segv_vil_segmentation_manager::rotate_image()
   vil_image_resource_sptr out_image = vil_new_image_resource_of_view(tempr);
   this->add_image(out_image);
 }
+
 void segv_vil_segmentation_manager::test_float()
 {
   vil_image_resource_sptr img = selected_image();
   if (!img)
-    {
-      vcl_cout << "In segv_vil_segmentation_manager::test_float - no image\n";
-      return;
-    }
+  {
+    vcl_cout << "In segv_vil_segmentation_manager::test_float - no image\n";
+    return;
+  }
   vil_image_view<float> flt =
     brip_vil_float_ops::convert_to_float(img);
-  this->add_image(vil_new_image_resource_of_view(flt)); 
+  this->add_image(vil_new_image_resource_of_view(flt));
 }
