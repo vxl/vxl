@@ -35,6 +35,7 @@ class rgrl_initializer_inv_indexing;
 class rgrl_initializer_prior;
 class rgrl_initializer_ran_sam;
 class rgrl_invariant;
+class rgrl_invariant_set;
 class rgrl_invariant_match;
 class rgrl_invariant_single_landmark;
 class rgrl_mask;

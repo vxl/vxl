@@ -111,6 +111,8 @@ SET( rgrl_sources
   rgrl_invariant_match.h               rgrl_invariant_match.cxx      
   rgrl_invariant_match_sptr.h
   rgrl_invariant_single_landmark.h     rgrl_invariant_single_landmark.cxx
+  rgrl_invariant_set.h
+  rgrl_invariant_set_sptr.h
 
   rgrl_convergence_tester.h            rgrl_convergence_tester.cxx   
   rgrl_convergence_tester_sptr.h
