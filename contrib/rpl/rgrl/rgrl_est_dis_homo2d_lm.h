@@ -46,6 +46,14 @@ public:
   // Defines type-related functions
   rgrl_type_macro( rgrl_est_dis_homo2d_lm, rgrl_estimator );
 
+  //: change frome_centre
+  void set_centres( vnl_vector<double> const& from_centre,
+                    vnl_vector<double> const& to_centre );
+  
+  //: to use analytical gradients or not
+  void use_gradient( bool use_grad )
+  { with_grad_ = use_grad; }
+  
 private:
 
   vnl_double_2 from_centre_, to_centre_;

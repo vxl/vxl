@@ -465,6 +465,18 @@ estimate( rgrl_match_set_sptr matches,
   return rgrl_estimator::estimate( matches, cur_transform );
 }
 
+//: change frome_centre
+void 
+rgrl_est_dis_homo2d_lm::
+set_centres( vnl_vector<double> const& from_centre,
+             vnl_vector<double> const& to_centre )
+{
+  assert( from_centre.size() == 2 && to_centre.size() == 2 );
+  
+  from_centre_ = from_centre;
+  to_centre_ = to_centre;
+}
+
 const vcl_type_info&
 rgrl_est_dis_homo2d_lm::
 transformation_type() const
