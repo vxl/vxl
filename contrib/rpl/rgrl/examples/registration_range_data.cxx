@@ -291,6 +291,6 @@ main( int argc, char* argv[] )
   // Perform testing
   //
   testlib_test_start( "Registration of range data" );
-  testlib_test_assert_near("", reg.final_status()->error(), 0.0, 1e-4 );
+  testlib_test_assert_near("", reg.final_status()->error(), 0.0, 1e-3 );
   return testlib_test_summary();
 }
