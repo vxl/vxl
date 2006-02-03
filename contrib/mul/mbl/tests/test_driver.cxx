@@ -38,6 +38,7 @@ DECLARE( test_log );
 DECLARE( test_stl );
 DECLARE( test_cloneable_ptr );
 DECLARE( test_exception );
+DECLARE( test_gram_schmidt );
 
 void
 register_tests()
@@ -80,6 +81,7 @@ register_tests()
   REGISTER( test_stl );
   REGISTER( test_cloneable_ptr );
   REGISTER( test_exception );
+  REGISTER( test_gram_schmidt );
 }
 
 DEFINE_MAIN;
