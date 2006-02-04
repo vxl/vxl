@@ -6,7 +6,7 @@
 // \author Gehua Yang
 // \date   Feb 2006
 
-#include <vnl/vnl_vector.h>
+#include <vcl_vector.h>
 
 #include <rgrl/rgrl_invariant_sptr.h>
 #include <rgrl/rgrl_object.h>
