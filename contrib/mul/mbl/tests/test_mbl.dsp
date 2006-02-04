@@ -246,6 +246,9 @@ SOURCE=.\test_exception.cxx
 SOURCE=.\test_log.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_gram_schmidt.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

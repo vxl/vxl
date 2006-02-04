@@ -284,6 +284,9 @@ SOURCE=.\mbl_test.cxx
 # Begin Source File
 SOURCE=.\mbl_log.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\mbl_mod_gram_schmidt.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx;in"
@@ -496,6 +499,9 @@ SOURCE=.\mbl_chord_3d.h
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_log.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_mod_gram_schmidt.h
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_config.h.in
