@@ -76,7 +76,7 @@ static void test_point_to_line_segment_2d()
   TEST("Interchange arguments OK?", d_la==d_al, true);
   TEST("Test point a OK?", d_al==1.0, true);
   TEST("Test point b OK?", vgl_distance(b, l)==1.0, true);
-  TEST("Test point c OK?", vgl_distance(c, l)==vcl_sqrt(2.0), true);
+  TEST_NEAR("Test point c OK?", vgl_distance(c,l), vcl_sqrt(2.0), 1e-9);
 }
 
 
