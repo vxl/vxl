@@ -375,6 +375,9 @@ SOURCE=.\Templates/rgrl_feature_caster+rgrl_feature_trace_pt-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+rgrl_feature_face_pt-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+rgrl_invariant_set-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\rgrl_est_homography2d.cxx
 # End Source File
 # Begin Source File
