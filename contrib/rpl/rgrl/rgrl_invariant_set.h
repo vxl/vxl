@@ -7,10 +7,10 @@
 // \date   Feb 2006
 
 #include <vnl/vnl_vector.h>
-#include <vcl_stlfwd.h>
 
 #include <rgrl/rgrl_invariant_sptr.h>
 #include <rgrl/rgrl_object.h>
+#include <rgrl/rgrl_mask.h>
 #include <rgrl/rgrl_mask_sptr.h>
 
 //: Represent a feature associated with a set of invariant properties.
@@ -24,12 +24,11 @@ class rgrl_invariant_set
   //:
   virtual ~rgrl_invariant_set() {}
 
-  virtual void 
+  virtual void
   as_invariants( vcl_vector<rgrl_invariant_sptr>& invariant_key_points, rgrl_mask_sptr const& mask=0 ) = 0;
 
   //: return a bounding box
   virtual rgrl_mask_sptr bounding_box() const = 0;
-
 };
 
 #endif // rgrl_invariant_set_h_
