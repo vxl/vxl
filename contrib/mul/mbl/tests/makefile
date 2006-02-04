@@ -45,6 +45,7 @@ TESTS += test_cloneable_ptr.cxx
 TESTS += test_stl.cxx
 TESTS += test_exception.cxx
 TESTS += test_log.cxx
+TESTS += test_gram_schmidt.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

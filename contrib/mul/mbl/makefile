@@ -40,6 +40,7 @@ SOURCES += mbl_rvm_regression_builder.cxx
 SOURCES += mbl_exception.cxx
 SOURCES += mbl_test.cxx
 SOURCES += mbl_log.cxx
+SOURCES += mbl_mod_gram_schmidt.cxx
 
 # Additional files to document:
 MANPAGE_SOURCES += mbl_cloneables_factory.h
