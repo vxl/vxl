@@ -18,12 +18,12 @@
 // extra functions on the output object to print message headers and footers.
 
 
-int mbl_log_streambuf::sync ()
+int mbl_log_streambuf::sync()
 {
   logger_->output_.start_entry();
   vcl_ptrdiff_t n = pptr() - pbase();
 
-  if (n && logger_->output_.real_streambuf().sputn(pbase (), n) != n)
+  if (n && logger_->output_.real_streambuf().sputn(pbase(), n) != n)
   {
     logger_->output_.stop_entry();
     return EOF;
@@ -34,17 +34,17 @@ int mbl_log_streambuf::sync ()
     return EOF;
   }
 
-  pbump (-n);  // Reset pptr().
+  pbump(-n);  // Reset pptr().
   logger_->output_.stop_entry();
   return 0;
 }
 
-int mbl_log_streambuf::overflow (int ch)
+int mbl_log_streambuf::overflow(int ch)
 {
   logger_->output_.start_entry();
   long n = pptr() - pbase();
-  
-  if (n && logger_->output_.real_streambuf().sputn(pbase (), n) != n)
+
+  if (n && logger_->output_.real_streambuf().sputn(pbase(), n) != n)
     return EOF;
 
   if (ch != EOF)
@@ -53,24 +53,22 @@ int mbl_log_streambuf::overflow (int ch)
     if (logger_->output_.real_streambuf().sputn(&cbuf, 1) != 1)
       return EOF;
   }
-  pbump (-n);  // Reset pptr().
+  pbump(-n);  // Reset pptr().
   return 0;
 }
 
-vcl_streamsize mbl_log_streambuf::xsputn ( const char *ptr, vcl_streamsize nchar)
+vcl_streamsize mbl_log_streambuf::xsputn( const char *ptr, vcl_streamsize nchar)
 {
   logger_->output_.start_entry();
-  
+
   // Output anything already in buffer
   long n = pptr() - pbase();
   if (n && logger_->output_.real_streambuf().sputn(pbase(), n) != n)
     return EOF;
-  pbump (-n);  // Reset pptr().
+  pbump(-n);  // Reset pptr().
 
   return logger_->output_.real_streambuf().sputn(ptr, nchar);
 }
-
-
 
 //: Default constructor only available to root's default logger.
 mbl_logger::mbl_logger():
@@ -87,9 +85,9 @@ mbl_logger::mbl_logger():
 
 mbl_logger::mbl_logger(const vcl_string & id):
   level_(mbl_logger::root().default_logger.level()),
+  output_(mbl_logger::root().default_logger.output_),
   streambuf_(this),
   logstream_(&streambuf_),
-  output_(mbl_logger::root().default_logger.output_),
   mt_logstream_(&logstream_)
 {
   // This will have to change to support proper hierarchical control over categories.
@@ -104,7 +102,7 @@ void mbl_logger::reinitialise()
   level_ = mbl_logger::root().default_logger.level();
   output_ = mbl_logger::root().default_logger.output_;
 }
-  
+
 void mbl_logger::set(int level, const mbl_log_output& output)
 {
   level_ = level;
@@ -150,7 +148,7 @@ mbl_logger_root &mbl_logger::root()
 
 
 //:Load a default configuration file
-// Current Format is 
+// Current Format is
 //\verbatim
 //LEVEL
 //\end verbatim
@@ -186,8 +184,6 @@ void mbl_logger_root::update_all_loggers()
     (*it)->reinitialise();
 }
 
-
-
 void mbl_log_output::set_next_event_info(int level, const char *srcfile, int srcline)
 {
   if (has_started_) return;
@@ -207,10 +203,9 @@ void mbl_log_output::set_mt_next_event_info(int level, const char *srcfile, int 
   print_header();
 }
 
-
 void mbl_log_output::print_header()
 {
-  switch(next_level_)
+  switch (next_level_)
   {
   case mbl_logger::EMERG:
     (*real_stream_)<< "EMERG: ";
@@ -241,7 +236,6 @@ void mbl_log_output::print_header()
     break;
   }
   (*real_stream_)<< id_ << ' ';
- 
 }
 
 //: If it hasn't already been started, this prints out the beginning of a log entry.
@@ -254,6 +248,7 @@ void mbl_log_output::start_entry()
   //reset level indicator as a subtle indicator of log system error.
   next_level_=1000;
 }
+
 //: If it hasn't already been stopped, this prints out the end of a log entry.
 void mbl_log_output::stop_entry()
 {
@@ -266,6 +261,4 @@ void mbl_log_output::mt_stop_entry()
 {
   has_started_ = false;
 }
-
-
 
