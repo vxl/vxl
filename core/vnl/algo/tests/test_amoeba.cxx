@@ -52,7 +52,7 @@ void test_amoeba()
     amoeba2.minimize(x);
 
     double err=0;
-    for (int i=0;i<n;++i) err+=vcl_fabs(x[i]-i);
+    for (unsigned int i=0; i<n; ++i) err+=vcl_fabs(x[i]-i);
     TEST_NEAR("Quadratic, starting at (1,1,1...)", err, 0.0, 1e-5); // fails from n=6 onwards: result is 0.379827 for n=6, 0.0812755 for n=7, 7.01668 for n=8.
     vcl_cout<<"Number of evaluations: "<<amoeba2.get_num_evaluations()<<vcl_endl;
 
@@ -60,7 +60,7 @@ void test_amoeba()
     amoeba2.set_max_iterations(10000);
     amoeba2.minimize(x);
     err=0;
-    for (int i=0;i<n;++i) err+=vcl_fabs(x[i]-i);
+    for (unsigned int i=0; i<n; ++i) err+=vcl_fabs(x[i]-i);
     TEST_NEAR("Quadratic, starting at (0,0,0...)", err, 0.0, 1e-5); // fails from n=5 onwards, "random" results
     vcl_cout<<"Number of evaluations: "<<amoeba2.get_num_evaluations()<<vcl_endl;
 
@@ -69,7 +69,7 @@ void test_amoeba()
     x.fill(0);
     amoeba2.minimize(x,dx);
     err=0;
-    for (int i=0;i<n;++i) err+=vcl_fabs(x[i]-i);
+    for (unsigned int i=0; i<n; ++i) err+=vcl_fabs(x[i]-i);
     TEST_NEAR("Quadratic, starting at (0,0,0...) using minimise(x,dx)",err,0,1e-5); // fails from n=7 onwards, value approx. 5.0074 for n=7, between 5.95 and 6.05 for n=8
     vcl_cout<<"Number of evaluations: "<<amoeba2.get_num_evaluations()<<vcl_endl
 
@@ -77,7 +77,7 @@ void test_amoeba()
     x.fill(0);
     vnl_amoeba::minimize(cost1,x,dx);
     err=0;
-    for (int i=0;i<n;++i) err+=vcl_fabs(x[i]-i);
+    for (unsigned int i=0; i<n; ++i) err+=vcl_fabs(x[i]-i);
     TEST_NEAR("Quadratic, starting at (0,0,0...) using minimise(x,dx)",err,0,1e-5); // fails from n=6 onwards: result is 0.0000167217 for n=6, 4.80315 for n=7, 6.64319 for n=8.
   }
 }
