@@ -36,6 +36,7 @@ vcl_string mbl_parse_block(vcl_istream &afs, bool open_already /*= false*/, cons
       return "{}";
     afs >> c;
 
+    if (!afs) return "{}";
     if (c != '{')
     {
       afs.putback(c); // push c back into stream.
