@@ -8,6 +8,7 @@
 #include "rgrl_feature_sptr.h"
 
 #include <vcl_vector.h>
+#include <vcl_algorithm.h>
 #include <vcl_cassert.h>
 
 rgrl_match_set::
@@ -299,6 +300,76 @@ write( vcl_ostream& os ) const
   os << "\n\n";
   //return os;
 } 
+
+struct sort_node {
+  
+  unsigned ind_;
+  rgrl_feature_sptr fea_;
+  
+  sort_node()
+  : ind_(0) 
+  { }
+
+  sort_node( unsigned i, const rgrl_feature_sptr& f) 
+  : ind_(i), fea_(f) 
+  { }
+  
+  bool operator<( const sort_node& rhs )
+  {
+    const vnl_vector<double>&  loc = fea_->location(); 
+    const vnl_vector<double>&  rhs_loc = rhs.fea_->location(); 
+    
+    if( loc[0] < rhs_loc[0] )
+      return true;
+    else if( loc[0] > rhs_loc[0] )
+      return false;
+    else
+      return loc[1] < rhs_loc[1];
+  }
+};
+
+
+//: stream output
+void
+rgrl_match_set::
+write_sorted( vcl_ostream& os ) const
+{
+  vcl_vector< sort_node > nodes;
+  
+  for( unsigned i=0; i<from_features_.size(); ++i ){
+    nodes.push_back( sort_node( i, from_features_[i] ) );
+  }
+  vcl_sort( nodes.begin(), nodes.end() );
+
+  os << from_features_.size() << vcl_endl;
+    
+  unsigned index;
+  for( unsigned i=0; i<nodes.size(); ++i ){
+    
+    index = nodes[i].ind_;
+    
+    // output the index(th) match
+    from_features_[index]->write( os );
+    xformed_from_features_[index]->write( os );
+    
+    const vcl_vector<match_info>& this_match = matches_and_weights_[index];
+    // to size
+    os << this_match.size() << vcl_endl;
+    
+    typedef vcl_vector<match_info>::const_iterator MIter;
+    for( MIter ti=this_match.begin(); ti!=this_match.end(); ++ti )  {
+      os << ti->signature_weight << ' ' 
+         << ti->geometric_weight << ' ' 
+         << ti->cumulative_weight << vcl_endl;
+      
+      // to feature
+      ti->to_feature->write( os );
+    }
+    os << vcl_endl;
+  }
+  
+  os << "\n\n";
+}
     
 //: stream input
 bool

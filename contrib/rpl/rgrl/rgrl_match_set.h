@@ -93,6 +93,9 @@ class rgrl_match_set
 
   //: write out a match set
   void write( vcl_ostream& os ) const;
+
+  //: write out a match set
+  void write_sorted( vcl_ostream& os ) const;
   
   //: read in a match set
   bool read( vcl_istream& is );
