@@ -164,4 +164,43 @@ class mbl_stl_index_functor
 };
 
 
+//------------------------------------------------------------------------------------
+//: implementation class for use with mbl_stl_output
+template <class Cont>
+class mbl_stl_output_t1
+{
+public:
+  Cont &c;
+  const char *sep;
+  mbl_stl_output_t1(const Cont& c, const char * sep): c(c), sep(sep) {}
+};
+
+//: implementation function for use with mbl_stl_output
+template <class Cont> inline 
+vcl_ostream& operator<<(vcl_ostream& s, const mbl_stl_output_t1<Cont>& t)
+{
+  if (t.c.empty()) return s;
+  Cont::const_iterator it=t.c.begin(), end=t.c.end();
+  s << *it;
+  ++it;
+  for (; it!=end; ++it)
+    s << t.sep << *it;
+  return s;
+}
+
+//: Allow easy stream output of STL container contents.
+// \verbatim
+// vcl_vector<int> c;
+// ...
+// vcl_cout << "The contents of c using normal << notation" <<
+//   mbl_stl_output(c) << vcl_endl;
+// \endverbatim
+template <class Cont> inline
+mbl_stl_output_t1<Cont> mbl_stl_output(Cont &c, const char * sep=" ")
+{
+  return mbl_stl_output_t1<Cont>(c, sep);
+}
+
+
+
 #endif // mbl_stl_h_
