@@ -38,6 +38,10 @@ compute_matches( rgrl_feature_set const&       from_set,
   typedef vcl_vector<rgrl_feature_sptr> feat_vector;
   typedef feat_vector::iterator feat_iter;
 
+  DebugMacro( 2, "Compute matches between features " 
+    << from_set.label().name() << "-->" 
+    << to_set.label().name() << vcl_endl; );
+
   rgrl_match_set_sptr matches_sptr 
     = new rgrl_match_set( from_set.type(), to_set.type(), from_set.label(), to_set.label() );
 
@@ -56,19 +60,45 @@ compute_matches( rgrl_feature_set const&       from_set,
       continue;   // feature is invalid
 
     feat_vector matching_features = to_set.k_nearest_features( mapped, k_ );
+    
+    if( debug_flag()>=4 ) {
+      
+      vcl_cout << " From feature: ";
+      (*fitr)->write( vcl_cout );
+      vcl_cout << vcl_endl;
+      for( unsigned i=0; i<matching_features.size(); ++i ) {
+        vcl_cout << " ###### " << i << " ###### " << vcl_endl;
+        matching_features[i]->write(vcl_cout);
+      }
+    }
+      
 
     // find the one most similar
     double max_weight = -1;
+    double min_eucl_dist = 1e10;
     rgrl_feature_sptr max_feature;
     for ( feat_iter i = matching_features.begin(); i != matching_features.end(); ++i )
     {
-      if ( thres_ > 0 && vnl_vector_ssd( (*i)->location(), mapped->location() ) > thres_ )
+      double eucl_dist = vnl_vector_ssd( (*i)->location(), mapped->location() );
+      if ( thres_ > 0 && eucl_dist > thres_ )
          continue;
 
       double wgt = (*i)->absolute_signature_weight( mapped );
 
       if ( wgt > max_weight ) {
+        
+        // more similar feature is always preferred. 
         max_weight = wgt;
+        min_eucl_dist = eucl_dist;
+        max_feature = *i;
+
+      } else if ( vcl_abs( wgt-max_weight) < 1e-12 && eucl_dist < min_eucl_dist ) {
+        
+        // when the weights are approximately the same, 
+        // but one point is closer than the other,
+        // use the closer point
+        max_weight = wgt;
+        min_eucl_dist = eucl_dist;
         max_feature = *i;
       }
     }
@@ -86,8 +116,15 @@ compute_matches( rgrl_feature_set const&       from_set,
     //
     //matches_sptr->add_feature_and_matches( *fitr, mapped, pruned_set );
 
-    if ( max_feature )
+    if ( max_feature ) {
+      
       matches_sptr->add_feature_and_match( *fitr, mapped, max_feature, max_weight );
+      DebugMacro( 4, " ====== Final Choice ====== \n" );
+      if( debug_flag() >=4 ) {
+        max_feature->write(vcl_cout);
+        vcl_cout << vcl_endl;
+      }
+    }
   }
 
   return matches_sptr;
@@ -141,19 +178,36 @@ add_one_flipped_match( rgrl_match_set_sptr&      inv_set,
   // 2. Most similar feature
   //
   double max_weight = -1.0;
+  double min_eucl_dist = 1e10;
   rgrl_feature_sptr max_feature;
   for ( unsigned i=0; i<k_ && i<size; ++i )
   {
-    if ( thres_ > 0 && dist_nodes[i].geo_err_ > thres_ )
+    double eucl_dist = dist_nodes[i].geo_err_;
+    if ( thres_ > 0 && eucl_dist > thres_ )
       continue;
 
-    rgrl_feature_sptr const& one_fea = dist_nodes[i].itr_->from_;
+    // one_fea is a feature on the "TO" image. Here the "TO" image
+    // is the actual From image.
+    rgrl_feature_sptr const& one_fea = dist_nodes[i].itr_->from_; // from is reversed as to
     double wgt = one_fea->absolute_signature_weight( mapped );
 
     if ( wgt > max_weight ) {
+      
+      // more similar feature is always preferred. 
       max_weight = wgt;
+      min_eucl_dist = eucl_dist;
       max_feature = one_fea;
-    }
+
+    } else if ( vcl_abs( wgt-max_weight) < 1e-12 && eucl_dist < min_eucl_dist ) {
+      
+      // when the weights are approximately the same, 
+      // but one point is closer than the other,
+      // use the closer point
+      max_weight = wgt;
+      min_eucl_dist = eucl_dist;
+      max_feature = one_fea;
+    }        
+
   }
 
   // add matches
