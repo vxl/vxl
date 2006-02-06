@@ -49,7 +49,7 @@
 // if (my_log.level() < mbl_logger::WARN)
 //   my_log.log(mbl_logger::WARN) << "Infinite loop: Time wasted so far " << time() << vcl_endl;
 // \endcode
-// Of coures, you should just use MBL_LOG which handles this for you. Additionally
+// Of course, you should just use MBL_LOG which handles this for you. Additionally
 // MBL_LOG sorts out termination of the log message without using vcl_endl;
 
 #include <vcl_iostream.h>

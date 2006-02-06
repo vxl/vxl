@@ -72,7 +72,7 @@ vcl_streamsize mbl_log_streambuf::xsputn( const char *ptr, vcl_streamsize nchar)
 
 //: Default constructor only available to root's default logger.
 mbl_logger::mbl_logger():
-  level_(WARN),
+  level_(NOTICE),
   output_(&vcl_cerr, ""),
   streambuf_(this),
   logstream_(&streambuf_),
