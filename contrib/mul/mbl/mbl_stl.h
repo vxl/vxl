@@ -180,7 +180,7 @@ template <class Cont> inline
 vcl_ostream& operator<<(vcl_ostream& s, const mbl_stl_output_t1<Cont>& t)
 {
   if (t.c.empty()) return s;
-  Cont::const_iterator it=t.c.begin(), end=t.c.end();
+  VCL_DISAPPEARING_TYPENAME Cont::const_iterator it=t.c.begin(), end=t.c.end();
   s << *it;
   ++it;
   for (; it!=end; ++it)
