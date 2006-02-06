@@ -8,6 +8,7 @@
 #include "rsdl_bins.h"
 
 #include <vcl_cassert.h>
+#include <vcl_iostream.h>
 #include <vcl_cmath.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
@@ -305,6 +306,23 @@ n_nearest_impl( point_type const& pt,
                 vcl_vector< value_type >& values,
                 vcl_vector< point_type >* points ) const
 {
+  //
+  //
+  // !!!!!!!!! BUG Notice !!!!!!!!!!
+  //
+  // 
+  // The following implementation of N nearest neighbors did 
+  // not consider the situation where after found >=n candidates,
+  // there can still exist a bin further away, but contains points 
+  // close than some of these candidates.
+  static bool rsdl_bins_bug_warning_s = true;
+  if( rsdl_bins_bug_warning_s ) {
+    
+    vcl_cerr << "Warning: results from current rsdl_bins<N,C,V>::n_nearest_impl" 
+      << "may be inaccurate.  Please contact developers for details. " << vcl_endl;
+    rsdl_bins_bug_warning_s = false;
+  }
+
   // 1. Find the list of bins with candidate points. The candidate
   // bins will collectively hold at least n points to test. Points in
   // non-candidate bins will be further away that all points in the
