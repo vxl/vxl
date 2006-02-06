@@ -278,7 +278,7 @@ rsdl_kd_tree::n_nearest( const rsdl_point& query_point,
 
   if ( closest_indices.size() != (unsigned int)n )
     closest_indices.resize( n );
-  vcl_vector< double > sq_distances( n );  // could cache for (slight) efficiency gain
+  vcl_vector< double > sq_distances( n, 1e+10 );  // could cache for (slight) efficiency gain
   int num_found = 0;
 
   leaves_examined_ = internal_examined_ = 0;
