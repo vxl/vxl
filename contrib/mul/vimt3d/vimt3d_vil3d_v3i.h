@@ -21,6 +21,7 @@
 #include <vil3d/vil3d_file_format.h>
 #include <vimt3d/vimt3d_image_3d.h>
 #include <vcl_iosfwd.h>
+#include <vcl_memory.h>
 
 
 //: Reader/Writer for v3i format images.
@@ -64,10 +65,10 @@ class vimt3d_vil3d_v3i_image: public vil3d_image_resource
   enum vil_pixel_format pixel_format_;
   //: Private constructor, use vil3d_load instead.
   // This object takes ownership of the image.
-  vimt3d_vil3d_v3i_image(vcl_fstream *im);
+  vimt3d_vil3d_v3i_image(vcl_auto_ptr<vcl_fstream> im);
   //: Private constructor, use vil3d_save instead.
   // This object takes ownership of the file, for writing.
-  vimt3d_vil3d_v3i_image(vcl_fstream *file, unsigned ni, unsigned nj,
+  vimt3d_vil3d_v3i_image(vcl_auto_ptr<vcl_fstream> file, unsigned ni, unsigned nj,
                          unsigned nk, unsigned nplanes, vil_pixel_format format);
 
  public:

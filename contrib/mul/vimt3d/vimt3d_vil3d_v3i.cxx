@@ -22,8 +22,8 @@ const unsigned V3I_MAGIC = 987123873U;
 
 vil3d_image_resource_sptr vimt3d_vil3d_v3i_format::make_input_image(const char *filename) const
 {
-  vcl_fstream *file = new vcl_fstream(filename, vcl_ios_in | vcl_ios_binary );
-  if (!file)
+  vcl_auto_ptr<vcl_fstream> file(new vcl_fstream(filename, vcl_ios_in | vcl_ios_binary ));
+  if (!file.get() || !file->is_open())
   {
     vcl_cerr << "vimt3d_vil3d_v3i_format::make_output_image() WARNING\n"
              << "  Unable to open file: " << filename << vcl_endl;
@@ -31,12 +31,13 @@ vil3d_image_resource_sptr vimt3d_vil3d_v3i_format::make_input_image(const char *
   }
 
   // Check file is a v3i file
-  vsl_b_istream is(file);
-  if (!is) return 0;
-  unsigned magic;
-  vsl_b_read(is, magic);
-  if (magic != V3I_MAGIC) return 0;
-
+  {
+    vsl_b_istream is(file.get());
+    if (!is) return 0;
+    unsigned magic;
+    vsl_b_read(is, magic);
+    if (magic != V3I_MAGIC) return 0;
+  }
   return new vimt3d_vil3d_v3i_image(file);
 }
 
@@ -60,8 +61,9 @@ vil3d_image_resource_sptr vimt3d_vil3d_v3i_format::make_output_image
     return 0;
   }
 
-  vcl_fstream *of = new vcl_fstream(filename, vcl_ios_out | vcl_ios_binary | vcl_ios_trunc);
-  if (!of)
+  vcl_auto_ptr<vcl_fstream> of(
+    new vcl_fstream(filename, vcl_ios_out | vcl_ios_binary | vcl_ios_trunc) );
+  if (!of.get() || !of->is_open())
   {
     vcl_cerr << "vimt3d_vil3d_v3i_format::make_output_image() WARNING\n"
              << "  Unable to open file: " << filename << vcl_endl;
@@ -74,10 +76,10 @@ vil3d_image_resource_sptr vimt3d_vil3d_v3i_format::make_output_image
 
 //: Private constructor, use vil3d_load instead.
 // This object takes ownership of the file, for reading.
-vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image(vcl_fstream *file):
-  file_(file), im_(0), dirty_(false)
+vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image(vcl_auto_ptr<vcl_fstream> file):
+  file_(file.release()), im_(0), dirty_(false)
 {
-  file->seekg(0);
+  file_->seekg(0);
   vsl_b_istream is(file_);
 
   unsigned magic;
@@ -89,27 +91,27 @@ vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image(vcl_fstream *file):
 
   switch (version)
   {
-   case 1:
-   {
-    vimt_image *p_im=0;
-    vsl_b_read(is, p_im);
-    im_ = dynamic_cast<vimt3d_image_3d *>(p_im);
-    break;
-   }
-   default:
+  case 1:
+    {
+      vimt_image *p_im=0;
+      vsl_b_read(is, p_im);
+      im_ = dynamic_cast<vimt3d_image_3d *>(p_im);
+      break;
+    }
+  default:
     vcl_cerr << "I/O ERROR: vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image()\n"
-             << "           Unknown version number "<< version << '\n';
+      << "           Unknown version number "<< version << '\n';
     return;
   }
 }
 
 //: Private constructor, use vil3d_save instead.
 // This object takes ownership of the file, for writing.
-vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image(vcl_fstream *file, unsigned ni,
+vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image(vcl_auto_ptr<vcl_fstream> file, unsigned ni,
                                                unsigned nj, unsigned nk,
                                                unsigned nplanes,
                                                vil_pixel_format format):
-  file_(file), im_(0), dirty_(true)
+  file_(file.release()), im_(0), dirty_(true)
 {
   switch (format)
   {
