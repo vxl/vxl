@@ -39,6 +39,7 @@ void test2_base_class::vtable_hack() { }
 class test2_base_class_io
 {
  public:
+  virtual ~test2_base_class_io() {}
   virtual test2_base_class* new_object() const =0;
 
   virtual void b_write_by_base(vsl_b_ostream& os, const test2_base_class& base) const =0;
