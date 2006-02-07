@@ -301,33 +301,35 @@ write( vcl_ostream& os ) const
   //return os;
 } 
 
-struct sort_node {
+//using anonymous namespace to restrict the use
+namespace{
+  struct sort_node {
   
-  unsigned ind_;
-  rgrl_feature_sptr fea_;
+    unsigned ind_;
+    rgrl_feature_sptr fea_;
   
-  sort_node()
-  : ind_(0) 
-  { }
+    sort_node()
+      : ind_(0) 
+    { }
 
-  sort_node( unsigned i, const rgrl_feature_sptr& f) 
-  : ind_(i), fea_(f) 
-  { }
+    sort_node( unsigned i, const rgrl_feature_sptr& f) 
+      : ind_(i), fea_(f) 
+    { }
   
-  bool operator<( const sort_node& rhs )
-  {
-    const vnl_vector<double>&  loc = fea_->location(); 
-    const vnl_vector<double>&  rhs_loc = rhs.fea_->location(); 
+    bool operator<( const sort_node& rhs ) const
+    {
+      const vnl_vector<double>&  loc = fea_->location(); 
+      const vnl_vector<double>&  rhs_loc = rhs.fea_->location(); 
     
-    if( loc[0] < rhs_loc[0] )
-      return true;
-    else if( loc[0] > rhs_loc[0] )
-      return false;
-    else
-      return loc[1] < rhs_loc[1];
-  }
-};
-
+      if( loc[0] < rhs_loc[0] )
+        return true;
+      else if( loc[0] > rhs_loc[0] )
+        return false;
+      else
+        return loc[1] < rhs_loc[1];
+    }
+  };
+}
 
 //: stream output
 void
