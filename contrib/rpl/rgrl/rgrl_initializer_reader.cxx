@@ -159,7 +159,7 @@ next_initial( rgrl_view_sptr           & view,
   //                      xforms_[xform_index_],
   //                      init_view_->resolution() );
   view = one.view_;
-  prior_scale = one.scale_;
+  prior_scale = rgrl_initializer::enforce_prior_scale( one.scale_ );
   xform_index_++;
 
   return true;

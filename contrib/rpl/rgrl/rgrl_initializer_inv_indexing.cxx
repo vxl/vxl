@@ -182,7 +182,7 @@ next_initial( rgrl_view_sptr           & view,
                         view_->xform_estimator(),
                         best_match->transform(),
                         view_->resolution() );
-  prior_scale = best_match->scale();
+  prior_scale = rgrl_initializer::enforce_prior_scale( best_match->scale() );
 
   return true;
 }

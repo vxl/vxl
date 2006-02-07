@@ -5,6 +5,7 @@
 
 #include <rgrl/rgrl_initializer.h>
 #include <rgrl/rgrl_view.h>
+#include <rgrl/rgrl_scale.h>
 
 rgrl_initializer::
 ~rgrl_initializer()
@@ -74,3 +75,35 @@ next_initial( rgrl_mask_box            & current_region,
   xform_estimate     = view->xform_estimate();
   return has_next_view;
 }
+
+//: force the setting of prior scale
+//  scale > 0    set to this scale value
+//  scale == 0   scale pointer is NULL, which indicates to use unwgted scale estimate
+//  scale < 0    use whatever scale set by the match
+void 
+rgrl_initializer::
+set_prior_geometric_scale( double scale )
+{
+  if( scale < 0 ) {
+    use_prior_scale_from_match_ = true;
+  } else if ( scale == 0.0 ) {
+    use_prior_scale_from_match_ = false;
+    prior_scale_ = 0;
+  } else {
+    use_prior_scale_from_match_ = false;
+    prior_scale_ = new rgrl_scale;
+    prior_scale_->set_geometric_scale( scale, rgrl_scale::prior );
+  }
+}
+
+rgrl_scale_sptr 
+rgrl_initializer::
+enforce_prior_scale( rgrl_scale_sptr match_scale )
+{
+  if( use_prior_scale_from_match_ )
+    return match_scale;
+  else
+    return prior_scale_;   // return the prior scale in this object
+}
+
+    

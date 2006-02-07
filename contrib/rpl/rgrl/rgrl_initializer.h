@@ -24,6 +24,9 @@ class rgrl_initializer
   : public rgrl_object
 {
  public:
+  rgrl_initializer() : use_prior_scale_from_match_(true)
+  {   }
+  
   virtual ~rgrl_initializer();
 
   //: Get next initial view.
@@ -62,8 +65,22 @@ class rgrl_initializer
                      rgrl_transformation_sptr & xform_estimate,
                      rgrl_scale_sptr          & prior_scale);
 
+  //: force the setting of prior scale
+  //  scale > 0    set to this scale value
+  //  scale == 0   scale pointer is NULL, which indicates to use unwgted scale estimate
+  //  scale < 0    use whatever scale set by the match
+  void set_prior_geometric_scale( double scale );
+  
   // Defines type-related functions
   rgrl_type_macro( rgrl_initializer, rgrl_object );
+
+ protected:
+  //: Generate a prior scale depending on current settings
+  rgrl_scale_sptr enforce_prior_scale( rgrl_scale_sptr match_scale );
+
+ protected:
+  rgrl_scale_sptr prior_scale_;
+  bool            use_prior_scale_from_match_;
 };
 
 #endif // rgrl_initializer_h_
