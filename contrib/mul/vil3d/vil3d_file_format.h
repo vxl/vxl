@@ -15,6 +15,8 @@
 class vil3d_file_format
 {
  public:
+   ~vil3d_file_format() {}
+
   //: Add a format reader to current list of those available
   // This function will take ownership of the passed object, and will
   // delete it when the program dies.
