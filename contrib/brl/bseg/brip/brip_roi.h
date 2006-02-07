@@ -14,6 +14,8 @@
 //   Initial version October 6, 2003
 //   Actual implementation July 12, 2004
 //   10-sep-2004 Peter Vanroose Added copy ctor with explicit vbl_ref_count init
+//   07-feb-2006 Ozge Can Ozcanli fixed bug on line 41 of .cxx  was --> if (dymax >= n_image_rows_) dymax = n_image_cols_-1;
+//                                                              now --> if (dymax >= n_image_rows_) dymax = n_image_rows_-1;
 // \endverbatim
 //
 //-----------------------------------------------------------------------------

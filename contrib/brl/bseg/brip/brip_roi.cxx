@@ -38,7 +38,7 @@ brip_roi::brip_roi(brip_roi const& roi, float delta)
     if (dxmin < 0) dxmin = 0;
     if (dymin < 0) dymin = 0;
     if (dxmax >= n_image_cols_) dxmax = n_image_cols_-1;
-    if (dymax >= n_image_rows_) dymax = n_image_cols_-1;
+    if (dymax >= n_image_rows_) dymax = n_image_rows_-1;
     
     vsol_box_2d_sptr dbox = new vsol_box_2d();
     dbox->add_point(dxmin, dymin);
