@@ -9,6 +9,10 @@
 //
 // This class must be extended if covariance matrix for the geometric
 // error is to be added!
+// \verbatim
+//  Modifications
+//   Gehua Yang   Feb. 2006   add a flag to indicate whether the scale is prior or an estimate
+// \endverbatim
 
 
 #include <vnl/vnl_matrix.h>
@@ -25,6 +29,9 @@ class rgrl_scale
 public:
   rgrl_scale( );
 
+  //: scale type
+  enum type { prior, estimate }; 
+
   //:
   bool has_geometric_scale() const;
 
@@ -39,10 +46,11 @@ public:
 
   //:  Set all scale information
   void set_scales( double                     geometric_scale,
-                   vnl_matrix<double>  const& signature_covar );
+                   vnl_matrix<double>  const& signature_covar,
+                   type new_type = estimate );
 
   //:  Set the geometric scale
-  void set_geometric_scale( double scale );
+  void set_geometric_scale( double scale, type new_type = estimate );
 
   //:  Set the signature covariance matrix
   void set_signature_covar( vnl_matrix<double> const& covar );
@@ -50,11 +58,21 @@ public:
   // Defines type-related functions
   rgrl_type_macro( rgrl_scale, rgrl_object );
 
+  //: return scale type
+  type geo_scale_type() const 
+  { return geo_scale_type_; }
+
+  //: set scale type
+  void set_geo_scale_type(type new_type)
+  { geo_scale_type_ = new_type; }
+  
 private:
   bool                has_geometric_scale_;
   double              geometric_scale_;
   bool                has_signature_covar_;
   vnl_matrix<double>  signature_covar_;
+  
+  type                geo_scale_type_;
 };
 
 #endif

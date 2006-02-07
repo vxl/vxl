@@ -49,19 +49,22 @@ signature_covar() const
 void
 rgrl_scale::
 set_scales( double                     geometric_scale,
-            vnl_matrix<double>  const& signature_covar )
+            vnl_matrix<double>  const& signature_covar,
+            type new_type )
 {
   set_geometric_scale( geometric_scale );
   set_signature_covar( signature_covar );
+  set_geo_scale_type( new_type );
 }
 
 
 void
 rgrl_scale::
-set_geometric_scale( double scale )
+set_geometric_scale( double scale, type new_type )
 {
   geometric_scale_ = scale;
   has_geometric_scale_ = true;
+  set_geo_scale_type( new_type );
 }
 
 
