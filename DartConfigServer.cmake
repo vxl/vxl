@@ -55,7 +55,8 @@ SET (EXPECTED_BUILDS "\\
   {cs.rpi.edu FreeBSD-4.9-gcc-3.3} \\
   {cs.rpi.edu FreeBSD-gcc-3.4} \\
   {cs.rpi.edu FreeBSD-fresh-gcc-3.4.2} \\
-  {crd.ge.com FreeBSD-5.0_gcc-3.2.1_-Wall_-O_shared} \\
+  {mobile FreeBSD-6.0_gcc-3.4.4_-Wall_-O_shared} \\
+  {crd.ge.com FreeBSD-6.0_gcc-3.4.4_-Wall_profile_static} \\
   {crd.ge.com Linux-2.4.18_gcc-3.2_-Wall_profile_static} \\
   {crd.ge.com Linux-2.4.9_icc-8.0_-w1_-O2_shared} \\
   {crd.ge.com MinGW-3.8_gcc-3.4.4_-Wall_-O2_static} \\
