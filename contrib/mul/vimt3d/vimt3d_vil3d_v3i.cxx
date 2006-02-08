@@ -24,11 +24,7 @@ vil3d_image_resource_sptr vimt3d_vil3d_v3i_format::make_input_image(const char *
 {
   vcl_auto_ptr<vcl_fstream> file(new vcl_fstream(filename, vcl_ios_in | vcl_ios_binary ));
   if (!file.get() || !file->is_open())
-  {
-    vcl_cerr << "vimt3d_vil3d_v3i_format::make_output_image() WARNING\n"
-             << "  Unable to open file: " << filename << vcl_endl;
     return 0;
-  }
 
   // Check file is a v3i file
   {
