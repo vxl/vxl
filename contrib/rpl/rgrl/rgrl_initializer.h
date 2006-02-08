@@ -71,6 +71,10 @@ class rgrl_initializer
   //  scale < 0    use whatever scale set by the match
   void set_prior_geometric_scale( double scale );
   
+  //: return number of initializations
+  //  -1 stands for unknown
+  virtual int size() const = 0;
+  
   // Defines type-related functions
   rgrl_type_macro( rgrl_initializer, rgrl_object );
 

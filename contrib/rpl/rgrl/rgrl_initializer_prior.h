@@ -56,6 +56,11 @@ class rgrl_initializer_prior
 
   void reset_xform_index( ) { xform_index_ = 0; }
 
+  //: return number of initializations
+  //  It is always 1 for prior
+  virtual int size() const 
+  { return 1; }
+
   // Defines type-related functions
   rgrl_type_macro( rgrl_initializer_prior, rgrl_initializer );
 

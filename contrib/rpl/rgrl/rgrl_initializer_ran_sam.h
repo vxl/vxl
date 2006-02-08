@@ -121,6 +121,11 @@ class rgrl_initializer_ran_sam
   //: For debugging
   void trace_sample( const vcl_vector<int>& point_indices ) const;
 
+  //: return number of initializations
+  //  -1 stands for unknown
+  virtual int size() const
+  { return -1;}
+
  protected:
   rgrl_match_set_sptr      match_set_;
   rgrl_estimator_sptr      transform_estiamtor_;

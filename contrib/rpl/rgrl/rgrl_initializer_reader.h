@@ -37,6 +37,10 @@ class rgrl_initializer_reader
 
   void reset_xform_index( ) { xform_index_ = 0; }
 
+  //: return number of initializations
+  //  -1 stands for unknown
+  virtual int size() const;
+
   // Defines type-related functions
   rgrl_type_macro( rgrl_initializer_reader, rgrl_initializer );
 

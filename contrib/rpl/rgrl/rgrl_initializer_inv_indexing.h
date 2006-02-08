@@ -81,6 +81,10 @@ class rgrl_initializer_inv_indexing
   //  Return this match in best_match
   bool next_initial( rgrl_invariant_match_sptr& best_match );
 
+  //: return number of initializations
+  //  -1 stands for unknown
+  virtual int size() const;
+
   // Defines type-related functions
   rgrl_type_macro( rgrl_initializer_inv_indexing, rgrl_initializer );
 

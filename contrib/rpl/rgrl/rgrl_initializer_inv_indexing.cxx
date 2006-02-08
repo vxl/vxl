@@ -211,3 +211,10 @@ next_initial( rgrl_invariant_match_sptr& best_match )
 
   return true;
 }
+
+int
+rgrl_initializer_inv_indexing::
+size() const
+{
+  return int(matches_[current_moving_image_ind_].size());
+}

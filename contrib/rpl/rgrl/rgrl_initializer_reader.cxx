@@ -96,7 +96,7 @@ rgrl_initializer_reader(vcl_istream& istr,
           return;
         }
         one.scale_ = new rgrl_scale;
-        one.scale_->set_geometric_scale( scale );
+        one.scale_->set_geometric_scale( scale, rgrl_scale::prior );
   
       } else {
         // Maybe it is the beginning of next transformation
