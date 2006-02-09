@@ -167,6 +167,7 @@ next_initial( rgrl_view_sptr           & view,
 
 int
 rgrl_initializer_reader::
+size() const
 {
   return int( init_records_.size() );
 }
