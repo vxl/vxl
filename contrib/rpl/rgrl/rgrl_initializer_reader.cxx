@@ -164,3 +164,9 @@ next_initial( rgrl_view_sptr           & view,
 
   return true;
 }
+
+int
+rgrl_initializer_reader::
+{
+  return int( init_records_.size() );
+}
