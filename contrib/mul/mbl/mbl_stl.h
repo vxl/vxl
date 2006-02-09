@@ -18,6 +18,7 @@
 #include <vcl_functional.h>
 #include <vcl_vector.h>
 #include <vcl_iterator.h>
+#include <vcl_ostream.h>
 
 //: Fill an output sequence with incrementing values.
 // A bit like vcl_fill, but after each assignment, the value is incremented.
