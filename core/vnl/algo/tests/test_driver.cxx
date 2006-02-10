@@ -14,6 +14,7 @@ DECLARE( test_functions );
 DECLARE( test_generalized_eigensystem );
 DECLARE( test_levenberg_marquardt );
 DECLARE( test_minimizers );
+DECLARE( test_powell );
 DECLARE( test_qr );
 DECLARE( test_qsvd );
 DECLARE( test_rational );
@@ -43,6 +44,7 @@ register_tests()
   REGISTER( test_generalized_eigensystem );
   REGISTER( test_levenberg_marquardt );
   REGISTER( test_minimizers );
+  REGISTER( test_powell );
   REGISTER( test_qr );
   REGISTER( test_qsvd );
   REGISTER( test_real_eigensystem );
