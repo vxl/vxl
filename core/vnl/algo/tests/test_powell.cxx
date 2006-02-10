@@ -145,7 +145,7 @@ static void test_rosenbrock_2d()
   vnl_double_2 xmin(1.0, 1.0); // true minimum
   vnl_powell powell(&c);
   vnl_double_2 x0(-2, 2);   // initial x
-  vnl_vector<double> x = x0;
+  vnl_vector<double> x = x0.as_vector();
 
   powell.minimize(x);
   double r = (x-xmin).magnitude();
