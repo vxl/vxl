@@ -62,7 +62,7 @@ compute_matches( rgrl_feature_set const&       from_set,
     if( to_use[k] ) {
 
     rgrl_feature_sptr mapped = (*fitr)->transform( current_xform );
-    if( !validate( mapped ) )
+    if( !validate( mapped, current_view.from_image_roi() ) )
       continue;   // feature is invalid
 
     feat_vector matching_features = to_set.k_nearest_features( mapped, k_ );

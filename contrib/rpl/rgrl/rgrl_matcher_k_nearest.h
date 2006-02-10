@@ -5,8 +5,8 @@
 // \author Amitha Perera
 // \date   Feb 2003
 
-#include "rgrl_matcher.h"
-
+#include <rgrl/rgrl_matcher.h>
+#include <rgrl/rgrl_mask_sptr.h>
 //: For each "from" feature, match the k nearest "to" features.
 //
 // This will map the "from" feature via the current transform and
@@ -45,7 +45,7 @@ class rgrl_matcher_k_nearest
  protected:
 
   //: validate the mapped feature
-  bool validate( rgrl_feature_sptr const& mapped ) const;
+  bool validate( rgrl_feature_sptr const& mapped, rgrl_mask_sptr const& roi_sptr ) const;
 
   // nodes to be sorted based on distance
   struct internal_dist_node{

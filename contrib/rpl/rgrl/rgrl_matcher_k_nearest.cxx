@@ -61,7 +61,7 @@ compute_matches( rgrl_feature_set const&       from_set,
   for ( feat_iter fitr = from.begin(); fitr != from.end(); ++fitr ) {
     
     rgrl_feature_sptr mapped = (*fitr)->transform( current_xform );
-    if( !validate( mapped ) )
+    if( !validate( mapped, current_view.to_image_roi() ) )
       continue;   // feature is invalid
       
     feat_vector matching_features = to_set.k_nearest_features( mapped, k_ );
@@ -104,6 +104,9 @@ add_one_flipped_match( rgrl_match_set_sptr&      inv_set,
   // create from feature and map it via inverse transformation
   rgrl_feature_sptr from = begin_iter->to_;
   rgrl_feature_sptr mapped = from->transform( *inverse_xform );
+
+  if( !validate( mapped, current_view.from_image_roi() ) )
+    return;
 
   // compute the distance
   // REMEMBER: the to is from, from is to. Everything is inversed
@@ -158,8 +161,12 @@ add_one_flipped_match( rgrl_match_set_sptr&      inv_set,
 
 bool 
 rgrl_matcher_k_nearest::
-validate( rgrl_feature_sptr const& mapped ) const
+validate( rgrl_feature_sptr const& mapped, rgrl_mask_sptr const& roi_sptr ) const
 {
+  // if the mapped point is not in the image
+  if( !roi_sptr->inside( mapped->location() ) )
+    return false;
+    
   // Suppose scale=1 is the lowest scale, or the finest resolution
   // Any mapped scale below 1 cannot find any correspondence
   // due to the pixel discrtetization. 
@@ -169,7 +176,7 @@ validate( rgrl_feature_sptr const& mapped ) const
   const double scale = mapped->scale();
   
   // if the scale is too small to be detected on the other image
-  if( scale && scale<0.8 ) {
+  if( scale && scale<0.4 ) {
     
     return false;
     
