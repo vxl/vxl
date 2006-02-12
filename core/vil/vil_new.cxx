@@ -136,8 +136,8 @@ vil_new_blocked_image_resource(vil_stream* os, unsigned ni, unsigned nj,
   {
     vil_file_format* fmt = *p;
     if (vcl_strcmp(fmt->tag(), file_format) == 0) {
-      outimage = fmt->make_output_image(os, ni, nj, nplanes,
-                                        size_block_i, size_block_j, format);
+      outimage = fmt->make_blocked_output_image(os, ni, nj, nplanes,
+                                                size_block_i, size_block_j, format);
       if (!outimage)
         vcl_cerr << "vil_new: Cannot new a blocked resource to type [" << file_format << "]\n";
       return outimage;

@@ -35,9 +35,7 @@ static void test_blocked_image_resource()
                                    ir->nplanes(),
                                    ir->pixel_format(),
                                    sbi, sbj,
-                                   "tiff");  //
-  /////////---------------Test the facade -----------------------///////
-  //
+                                   "tiff");  
 
   bool put_view_worked = bir->vil_image_resource::put_view(image);
   TEST("Put view to tiff blocked resource", put_view_worked, true);
@@ -77,7 +75,63 @@ static void test_blocked_image_resource()
     TEST("Last Block Value", lview(0,0)==last_block_val, true);
   }
   else
-    { TEST("Last Block Value", false, true); }
+    TEST("Last Block Value", false, true);
+
+  ///////-------- ----- Test Copying Blocks -------------------------///////
+  vcl_string path2("test_blocked_tiff2.tif");  
+  bool good_copy = true;
+  {//scope to close bir2
+  vil_blocked_image_resource_sptr bir2 =
+    vil_new_blocked_image_resource(path2.c_str(),
+                                   bir->ni(), bir->nj(),
+                                   bir->nplanes(),
+                                   bir->pixel_format(),
+                                   bir->size_block_i(), bir->size_block_j(),
+                                   "tiff");  //
+  for(unsigned j = 0; j<bir2->n_block_j()&&good_copy; ++j)
+    for(unsigned i = 0; i<bir2->n_block_i()&&good_copy; ++i)
+      {
+        vil_image_view_base_sptr blk = bir->get_block(i,j);
+        if(!blk)
+          good_copy = false;
+#if 0
+        if(blk)
+          {
+            vil_image_view<unsigned short> bv = blk;
+            vcl_cout << "Block from resource(" << i << ' ' << j << ")["
+                     <<  bv.ni() << ' ' << bv.nj() <<  "]\n";
+            for(unsigned bj = 0; bj<bv.nj(); ++bj)
+              {
+                for(unsigned bi = 0; bi<bv.ni(); ++bi)
+                  {
+                    vcl_cout << bv(bi,bj) << ' ';
+                  }
+                vcl_cout << '\n';
+              }
+          }
+        vcl_cout << '\n';
+#endif
+        if(!bir2->put_block(i, j, *blk))
+          good_copy = false;
+
+      }
+  }//end of bir2 scope
+
+  vil_image_resource_sptr bir2 = vil_load_image_resource(path2.c_str());
+  if(good_copy)
+    {
+      vil_image_view<unsigned short> v = bir->get_view();
+      vil_image_view<unsigned short> v2 = bir2->get_view();
+    for(unsigned i = 0; i<bir->ni(); ++i)
+      for(unsigned j = 0; j<bir->nj(); ++j)
+        {
+          good_copy = good_copy && v(i,j)==v2(i,j);
+          if(v(i,j)!=v2(i,j))
+            vcl_cout << "v(" << i << ' ' << j <<  ") = " << v(i,j)
+                     << "vs. " << v2(i,j) << '\n';
+        }
+    }
+  TEST("Copy blocks to resource", good_copy, true);
   //
   /////////---------------Test the facade -----------------------///////
   //
@@ -197,6 +251,7 @@ static void test_blocked_image_resource()
 
   //delete file
   vpl_unlink(path.c_str());
+  vpl_unlink(path2.c_str());
 }
 
 

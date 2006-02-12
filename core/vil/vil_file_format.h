@@ -42,7 +42,7 @@ class vil_file_format
                                                     enum vil_pixel_format) = 0;
   //: Construct a blocked output image resource
   // Returns a null resource unless the format supports blocking
-  virtual vil_blocked_image_resource_sptr  make_output_image(vil_stream* /*vs*/,
+  virtual vil_blocked_image_resource_sptr  make_blocked_output_image(vil_stream* /*vs*/,
                                                              unsigned /*nx*/,
                                                              unsigned /*ny*/,
                                                              unsigned /*nplanes*/,

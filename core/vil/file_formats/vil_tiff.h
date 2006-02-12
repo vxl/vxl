@@ -45,7 +45,7 @@ class vil_tiff_file_format : public vil_file_format
                                                     unsigned nj,
                                                     unsigned nplanes,
                                                     enum vil_pixel_format);
-  virtual vil_blocked_image_resource_sptr make_output_image(vil_stream* vs,
+  virtual vil_blocked_image_resource_sptr make_blocked_output_image(vil_stream* vs,
                                                     unsigned nx,
                                                     unsigned ny,
                                                     unsigned nplanes,
@@ -96,8 +96,8 @@ class vil_tiff_image : public vil_blocked_image_resource
                                              unsigned  block_index_j ) const;
 
   virtual bool put_block( unsigned  block_index_i, unsigned  block_index_j,
-                          const vil_image_view_base& im )
-    { return put_block(block_index_i, block_index_j, 0 , 0, im);}
+                          const vil_image_view_base& blk );
+
 
 
   //: Put the data in this view back into the image source.
@@ -161,7 +161,7 @@ class vil_tiff_image : public vil_blocked_image_resource
                             unsigned ioff, unsigned joff,
                             unsigned iclip, unsigned jclip,
                             const vil_image_view_base& im,
-                            vxl_byte* block_buf);
+                            vxl_byte*& block_buf);
 
   void bitpack_block(unsigned bytes_per_block,
                      vxl_byte* in_block_buf,

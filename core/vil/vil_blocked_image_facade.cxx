@@ -71,17 +71,16 @@ vil_blocked_image_facade::get_block( unsigned  block_index_i,
   if (i0>ni-1||j0>nj-1) return 0;
   //check if the view that is supplied is smaller than a block
   unsigned icrop = ni-i0, jcrop = nj-j0;
-  bool needs_fill = true;
-  if (icrop>sbi_)
-  {
+  bool needs_fill = false;
+  if(icrop>=sbi_)
     icrop = sbi_;
-    needs_fill = false;
-  }
-  if (jcrop>sbj_)
-  {
+  else
+    needs_fill = true;
+
+  if(jcrop>=sbj_)
     jcrop = sbj_;
-    needs_fill = false;
-  }
+  else
+    needs_fill = true;
   vil_image_view_base_sptr view = src_->get_view(i0, icrop, j0, jcrop);
   if (needs_fill)
     view = fill_block(view);

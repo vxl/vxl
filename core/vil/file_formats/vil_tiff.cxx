@@ -11,6 +11,9 @@
 // \verbatim
 // Modifications:
 //   09-NOV-2001  K.Y.McGaul  Use default value for orientation when it can't be read.
+//   DEC-2005  J.L. Mundy - Essentially a complete rewrite to support blocking.
+//                          All header parameters moved to vil_tiff_header for
+//                          cleaner structuring. 
 // \endverbatim
 
 #include "vil_tiff.h"
@@ -177,7 +180,7 @@ vil_image_resource_sptr vil_tiff_file_format::make_input_image(vil_stream* is)
 }
 
 vil_blocked_image_resource_sptr
-vil_tiff_file_format::make_output_image(vil_stream* vs,
+vil_tiff_file_format::make_blocked_output_image(vil_stream* vs,
                                         unsigned nx,
                                         unsigned ny,
                                         unsigned nplanes,
@@ -221,7 +224,7 @@ vil_tiff_file_format::make_output_image(vil_stream* vs,
                                         enum vil_pixel_format format
                                         )
 {
-  return make_output_image(vs, ni, nj, nplanes, 0, 0, format).ptr();
+  return make_blocked_output_image(vs, ni, nj, nplanes, 0, 0, format).ptr();
 }
 
 char const* vil_tiff_file_format::tag() const
@@ -606,7 +609,7 @@ fill_block_from_tile(vil_memory_chunk_sptr const & buf) const
 // partially filled. The header function, bytes_per_line() gives the actual
 // size of a scan line in the packed strip. The total size of the strip
 // in bytes is normally size_block_j()*bytes_per_line() but the last strip
-// may be truncated. n
+// may be truncated. 
 vil_image_view_base_sptr vil_tiff_image::fill_block_from_strip(vil_memory_chunk_sptr const & buf) const
 {
   vil_image_view_base_sptr view = 0;
@@ -731,11 +734,12 @@ void vil_tiff_image::fill_block_from_view(unsigned bi, unsigned bj,
                                           unsigned ioff, unsigned joff,
                                           unsigned iclip, unsigned jclip,
                                           const vil_image_view_base& im,
-                                          vxl_byte* block_buf)
+                                          vxl_byte*& block_buf)
 {
   unsigned bytes_per_sample = h_->bytes_per_sample();
   unsigned bytes_per_pixel = bytes_per_sample*nplanes();
   unsigned sbi = size_block_i(), sbj = size_block_j();
+  unsigned bytes_per_block=bytes_per_pixel*sbi*sbj;
   unsigned view_i0 = bi*sbi-i0, view_j0 = bj*sbj-j0;
   unsigned block_jstep = sbi*bytes_per_pixel;
 #if 0
@@ -796,6 +800,18 @@ void vil_tiff_image::fill_block_from_view(unsigned bi, unsigned bj,
     }
     bptr += block_jstep; vptr += vjstp;
   }
+
+  //handle the case of bool  (other packed formats not supported for writing)
+  if (this->pixel_format() == VIL_PIXEL_FORMAT_BOOL)
+  {
+    unsigned outsize = (bytes_per_block+7*sizeof(bool))/(8*sizeof(bool));
+    vxl_byte* outbuf = new vxl_byte[outsize];
+    this->bitpack_block(bytes_per_block, block_buf, outbuf);
+    delete [] block_buf;
+    bytes_per_block=outsize;
+    block_buf = outbuf;
+  }
+
 }
 
 bool vil_tiff_image::write_block_to_file(unsigned bi, unsigned bj,
@@ -852,6 +868,10 @@ void vil_tiff_image::bitpack_block(unsigned bytes_per_block,
 
 //an internal form of put_block for convenience
 //write the indicated block to file, padding with zeros if necessary
+//image view im is an arbitrary region of image that has to be decomposed into
+//blocks. The resource is written with zeros if the input view doesn't 
+//correspond to exact block boundaries.  Subsequent put_view calls could 
+//fill in the missing image data.
 bool vil_tiff_image::put_block(unsigned bi, unsigned bj, unsigned i0,
                                unsigned j0, const vil_image_view_base& im)
 {
@@ -900,19 +920,9 @@ bool vil_tiff_image::put_block(unsigned bi, unsigned bj, unsigned i0,
   this->pad_block_with_zeros(ioff, joff, iclip, jclip,
                              bytes_per_pixel, block_buf);
 
+
   this->fill_block_from_view(bi, bj, i0, j0, ioff, joff, iclip, jclip,
                              im, block_buf);
-
-  //handle the case of bool  (other packed formats not supported)
-  if (this->pixel_format() == VIL_PIXEL_FORMAT_BOOL)
-  {
-    unsigned outsize = (bytes_per_block+7*sizeof(bool))/(8*sizeof(bool));
-    vxl_byte* outbuf = new vxl_byte[outsize];
-    this->bitpack_block(bytes_per_block, block_buf, outbuf);
-    delete [] block_buf;
-    bytes_per_block=outsize;
-    block_buf = outbuf;
-  }
   //write the block to the tiff file
   bool good_write = write_block_to_file(bi, bj, bytes_per_block, block_buf);
   delete [] block_buf;
@@ -935,4 +945,26 @@ bool vil_tiff_image::put_view(const vil_image_view_base& im,
       if (!this->put_block(bi, bj, i0, j0, im))
         return false;
   return true;
+}
+
+// The virtual put_block method. In this case the view is a complete block
+bool vil_tiff_image::put_block( unsigned  block_index_i,
+                                unsigned  block_index_j,
+                                const vil_image_view_base& blk )
+{
+  unsigned sbi = this->size_block_i(), sbj = this->size_block_j();
+  unsigned bps = h_->bytes_per_sample();
+  unsigned bytes_per_pixel = bps*nplanes();
+
+  unsigned bytes_per_block = bytes_per_pixel*sbi*sbj;
+
+  //the data buffer for the block
+  vxl_byte* block_buf = new vxl_byte[bytes_per_block];
+
+  this->fill_block_from_view(0, 0, 0, 0, 0, 0,sbi, sbj, blk, block_buf);
+
+  //write the block to the tiff file
+  bool good_write = write_block_to_file(block_index_i, block_index_j, bytes_per_block, block_buf);
+  delete [] block_buf;
+  return good_write;
 }
