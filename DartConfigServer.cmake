@@ -50,9 +50,8 @@ SET (BUILD_MONITORS "\\
 SET (PROJECT_URL http://vxl.sourceforge.net/)
 SET (EXPECTED_BUILDS "\\
   {crd.ge.com Cygwin_gcc-3.4.4_-Wall_-O2_static} \\
-  {cs.rpi.edu FreeBSD-4.9-gcc-2.95.4} \\
-  {cs.rpi.edu FreeBSD-4.9-gcc-2.95.4-static} \\
   {cs.rpi.edu FreeBSD-4.9-gcc-3.3} \\
+  {cs.rpi.edu FreeBSD-4.9-gcc-3.3-static} \\
   {cs.rpi.edu FreeBSD-gcc-3.4} \\
   {cs.rpi.edu FreeBSD-fresh-gcc-3.4.2} \\
   {mobile FreeBSD-6.0_gcc-3.4.4_-Wall_-O_shared} \\
