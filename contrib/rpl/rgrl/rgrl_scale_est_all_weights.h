@@ -39,8 +39,11 @@ class rgrl_scale_est_all_weights
   rgrl_type_macro( rgrl_scale_est_all_weights, rgrl_scale_estimator_wgted );
 
  private:
-  double
-  compute_geometric_scale( rgrl_match_set const& match_set,bool use_signature_only, bool penalize_scaling ) const;
+  bool
+  compute_geometric_scale( double& return_scale,
+                           rgrl_match_set const& match_set,
+                           bool use_signature_only, 
+                           bool penalize_scaling ) const;
 
   vnl_matrix<double>
   compute_signature_covar( rgrl_match_set const& match_set ) const;

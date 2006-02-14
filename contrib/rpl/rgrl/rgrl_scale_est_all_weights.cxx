@@ -28,8 +28,10 @@ estimate_weighted( rgrl_match_set const& match_set,
                    bool penalize_scaling ) const
 {
   rgrl_scale_sptr scales = new rgrl_scale;
-
-  scales->set_geometric_scale( compute_geometric_scale( match_set, use_signature_only, penalize_scaling ) );
+  double scale;
+  
+  if( compute_geometric_scale( scale, match_set, use_signature_only, penalize_scaling ) )
+    scales->set_geometric_scale( scale );
 
   if ( do_signature_scale_ ) {
     scales->set_signature_covar( compute_signature_covar( match_set ) );
@@ -39,9 +41,12 @@ estimate_weighted( rgrl_match_set const& match_set,
 }
 
 
-double
+bool
 rgrl_scale_est_all_weights::
-compute_geometric_scale( rgrl_match_set const& match_set, bool use_signature_wgt, bool penalize_scaling  ) const
+compute_geometric_scale( double& return_scale,
+                         rgrl_match_set const& match_set, 
+                         bool use_signature_wgt, 
+                         bool penalize_scaling  ) const
 {
   typedef rgrl_match_set::const_from_iterator from_iter;
   typedef from_iter::to_iterator              to_iter;
@@ -76,12 +81,16 @@ compute_geometric_scale( rgrl_match_set const& match_set, bool use_signature_wgt
       sum_weights += weight;
     }
   }
-  double epsilon = 1e-16;
-  double final_scale = scaling * vnl_math_max( vcl_sqrt( sum_weighted_error / sum_weights ),
-                                               epsilon );
+  const double epsilon = 1e-16;
+  double scale = vcl_sqrt( sum_weighted_error / sum_weights );
+  // is finite?
+  if( !vnl_math_isfinite( scale ) )
+    return false;
+  
+  return_scale = scaling * vnl_math_max( scale, epsilon );
 
-  DebugMacro(1, "  Final geometric scale" << final_scale << vcl_endl );
-  return final_scale;
+  DebugMacro(1, "  Final geometric scale" << return_scale << vcl_endl );
+  return true;
 
 #if 0
   double est_scale = vcl_sqrt( sum_weighted_error / sum_weights );

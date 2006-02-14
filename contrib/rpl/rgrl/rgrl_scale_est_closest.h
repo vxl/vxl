@@ -58,12 +58,14 @@ class rgrl_scale_est_closest
   rgrl_scale_est_closest( rgrl_scale_est_closest const& );
   rgrl_scale_est_closest& operator=( rgrl_scale_est_closest const& );
 
-  double
-  compute_geometric_scale( rgrl_match_set const& match_set,
+  bool
+  compute_geometric_scale( double& scale,
+                           rgrl_match_set const& match_set,
                            bool penalize_scaling ) const;
 
-  vnl_matrix<double>
-  compute_signature_covar( rgrl_match_set const& match_set ) const;
+  bool
+  compute_signature_covar( vnl_matrix<double>&covar, 
+                           rgrl_match_set const& match_set ) const;
 
  protected:
   bool do_signature_scale_;

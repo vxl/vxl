@@ -38,19 +38,24 @@ estimate_unweighted( rgrl_match_set const& match_set,
 {
   rgrl_scale_sptr scales = new rgrl_scale;
 
-  scales->set_geometric_scale( compute_geometric_scale( match_set, penalize_scaling ) );
+  double scale = -1.0;
+  vnl_matrix<double> covar;
+  
+  if( compute_geometric_scale( scale, match_set, penalize_scaling ) )
+    scales->set_geometric_scale( scale );
 
-  if ( do_signature_scale_ ) {
-    scales->set_signature_covar( compute_signature_covar( match_set ) );
+  if ( do_signature_scale_ && compute_signature_covar( covar, match_set ) ) {
+    scales->set_signature_covar( covar );
   }
 
   return scales;
 }
 
 
-double
+bool
 rgrl_scale_est_closest::
-compute_geometric_scale( rgrl_match_set const& match_set,
+compute_geometric_scale( double& return_scale,
+                         rgrl_match_set const& match_set,
                          bool penalize_scaling ) const
 {
   typedef rgrl_match_set::const_from_iterator from_iter;
@@ -101,17 +106,22 @@ compute_geometric_scale( rgrl_match_set const& match_set,
 
   // empty set
   if( error_distances.empty() )
-    return 1.0e30;
+    return false;
     
   double epsilon = 1e-16;
-  double return_scale = scaling * vnl_math_max( obj_->scale( error_distances.begin(), error_distances.end() ), epsilon );
+  return_scale = scaling * vnl_math_max( obj_->scale( error_distances.begin(), error_distances.end() ), epsilon );
 
-  return return_scale;
+  // is finite?
+  if( !vnl_math_isfinite( return_scale ) )
+    return false;
+  
+  // success
+  return true;
 }
 
-vnl_matrix<double>
+bool
 rgrl_scale_est_closest::
-compute_signature_covar( rgrl_match_set const& match_set ) const
+compute_signature_covar( vnl_matrix<double>& covar, rgrl_match_set const& match_set ) const
 {
   //  Do the same as above, one component at a time, BUT use the
   //  closest geometric feature to determine which signature vector to
@@ -126,6 +136,7 @@ compute_signature_covar( rgrl_match_set const& match_set ) const
   assert( nrows );
 
   vcl_vector< vcl_vector<double> > all_errors( nrows );
+  bool success = true;
 
   for ( ; fitr != match_set.from_end(); ++fitr ) {
     //  If there aren't any matches, set the error_distance to an
@@ -156,13 +167,23 @@ compute_signature_covar( rgrl_match_set const& match_set ) const
     }
   }
 
-  vnl_matrix<double> covar( nrows, nrows, 0.0 );
+  covar.set_size( nrows, nrows );
+  covar.fill( 0.0 );
 
-  for ( unsigned r = 0; r < nrows; ++r ) {
-    covar(r,r) = vnl_math_sqr( obj_->scale( all_errors[r].begin(), all_errors[r].end() ) );
+  double var;
+  for ( unsigned r = 0; r < nrows&&success; ++r ) {
+    
+    if( all_errors[r].empty() ) {
+      success = false;
+      break;
+    }
+    
+    var = vnl_math_sqr( obj_->scale( all_errors[r].begin(), all_errors[r].end() ) );
+    success = success && vnl_math_isfinite( var );
+    covar(r,r) = var;
   }
 
-  return covar;
+  return success;
 }
 
 
