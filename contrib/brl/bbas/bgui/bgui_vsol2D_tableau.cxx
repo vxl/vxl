@@ -8,6 +8,7 @@
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
 #include <vsol/vsol_polyline_2d.h>
+#include <vsol/vsol_conic_2d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vcl_cassert.h>
@@ -223,6 +224,15 @@ add_spatial_object(vsol_spatial_object_2d_sptr const& sos,
       vsol_polyline_2d_sptr pline =
         sos->cast_to_curve()->cast_to_polyline();
       this->add_vsol_polyline_2d(pline , style);
+    }
+    else if (sos->cast_to_curve()->cast_to_conic())
+    {
+      vsol_conic_2d_sptr conic = sos->cast_to_curve()->cast_to_conic();
+      
+      // make sure the endpoints are already defined
+      assert(conic->p0() && conic->p1());
+
+      this->add_vsol_conic_2d(conic, style);
     }
     else
       assert(!"unknown curve type in bgui_vsol2D_tableau::add_spatial_object()");

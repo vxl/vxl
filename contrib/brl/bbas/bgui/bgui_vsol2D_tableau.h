@@ -13,13 +13,14 @@
 //
 // \verbatim
 //  Modifications:
-//   Amir Tamrakar April 22, 2002    Initial version: Seperated from vtol_tableau_2d
+//   Amir Tamrakar April 22, 2002    Initial version: Separated from vtol_tableau_2d
 //   Mark Johnson June 13, 2003      Stopped using interior class functions to
 //                                   highlight objects. Added support for
 //                                   specifying colors of individual objects.
 //   Mark Johnson June 20, 2003      Added support for 'linked' digital curve.
 //   Matt Leotta  April 3, 2004      Cleaned up the interface and add switched to
 //                                   vgui_style_sptr instead of vgui_style_factory
+//   Nhon Trinh   Sep 20, 2005       Added support for elliptical curve segment.
 // \endverbatim
 //-----------------------------------------------------------------------------
 #include <vcl_vector.h>
