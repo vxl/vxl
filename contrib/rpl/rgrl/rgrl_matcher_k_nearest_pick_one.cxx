@@ -147,7 +147,8 @@ add_one_flipped_match( rgrl_match_set_sptr&      inv_set,
   rgrl_feature_sptr mapped = from->transform( *inverse_xform );
 
   // check mapped
-  validate( mapped, current_view.to_image_roi() );
+  if( !validate( mapped, current_view.to_image_roi() ) )
+    return;
 
   // for consistent behavior,
   // pick the k nearest neighbor,
