@@ -108,7 +108,7 @@ compute_geometric_scale( double& return_scale,
   if( error_distances.empty() )
     return false;
     
-  double epsilon = 1e-16;
+  const double epsilon = 1e-16;
   return_scale = scaling * vnl_math_max( obj_->scale( error_distances.begin(), error_distances.end() ), epsilon );
 
   // is finite?
