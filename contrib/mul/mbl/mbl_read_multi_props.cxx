@@ -227,3 +227,26 @@ mbl_read_multi_props_type mbl_read_multi_props_merge(const mbl_read_multi_props_
   }
   return output;
 }
+
+//: Throw error if there are any keys in props that aren't in ignore.
+// \throw mbl_exception_unused_props
+void mbl_read_multi_props_look_for_unused_props(
+  const vcl_string & function_name,
+  const mbl_read_multi_props_type &props,
+  const mbl_read_multi_props_type &ignore)
+{
+  mbl_read_multi_props_type p2(props);
+  
+  // Remove ignoreable properties
+  for (mbl_read_multi_props_type::const_iterator it=ignore.begin();
+         it != ignore.end(); ++it)
+    p2.erase(it->first);
+
+  if (!p2.empty())
+  {
+
+    vcl_ostringstream ss;
+    mbl_read_multi_props_print(ss, p2);
+    mbl_exception_error(mbl_exception_unused_props(function_name, ss.str()));
+  }
+}

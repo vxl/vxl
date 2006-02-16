@@ -36,4 +36,23 @@ mbl_read_multi_props_type mbl_read_multi_props_ws(vcl_istream &afs);
 //: Print a list of properties for debugging purposes.
 void mbl_read_multi_props_print(vcl_ostream &afs, mbl_read_multi_props_type props);
 
+
+//: Throw error if there are any keys in props that aren't in ignore.
+// \throw mbl_exception_unused_props
+void mbl_read_multi_props_look_for_unused_props(
+  const vcl_string & function_name,
+  const mbl_read_multi_props_type &props,
+  const mbl_read_multi_props_type &ignore);
+
+//: Throw error if there are any keys in props.
+// \throw mbl_exception_unused_props
+inline void mbl_read_multi_props_look_for_unused_props(
+  const vcl_string & function_name,
+  const mbl_read_multi_props_type &props)
+{
+  mbl_read_multi_props_look_for_unused_props(function_name, props,
+    mbl_read_multi_props_type());
+}
+
+
 #endif // mbl_read_multi_props_h
