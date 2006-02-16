@@ -171,7 +171,7 @@ template <class Cont>
 class mbl_stl_output_t1
 {
 public:
-  Cont &c;
+  const Cont &c;
   const char *sep;
   mbl_stl_output_t1(const Cont& c, const char * sep): c(c), sep(sep) {}
 };
@@ -197,7 +197,7 @@ vcl_ostream& operator<<(vcl_ostream& s, const mbl_stl_output_t1<Cont>& t)
 //   mbl_stl_output(c) << vcl_endl;
 // \endverbatim
 template <class Cont> inline
-mbl_stl_output_t1<Cont> mbl_stl_output(Cont &c, const char * sep=" ")
+mbl_stl_output_t1<Cont> mbl_stl_output(const Cont &c, const char * sep=" ")
 {
   return mbl_stl_output_t1<Cont>(c, sep);
 }
