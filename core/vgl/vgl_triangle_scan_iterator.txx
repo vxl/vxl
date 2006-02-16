@@ -90,7 +90,7 @@ void vgl_triangle_scan_iterator<T>::reset()
   //vcl_cerr << "y0 y1 = " << y0 << ' ' << y1 << vcl_endl;
 
   scany_ = y0 - 1;
-  last_width = 0;
+  last_width = -1;
 
   // compute centroid
   g.x = vcl_floor((a.x + b.x + c.x)/3);
