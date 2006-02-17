@@ -116,7 +116,7 @@ void vgl_convex_hull_2d<T>::compute_hull()
   int n_hull = ch2d(P, N);
 
   //convert back to vgl_points
-  vcl_vector<vgl_point_2d<double> > temp;
+  vcl_vector<vgl_point_2d<T> > temp;
   for (int i = 0; i<n_hull; i++)
   {
     vgl_point_2d<T> p((T)P[i][0], (T)P[i][1]);
