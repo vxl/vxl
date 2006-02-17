@@ -90,7 +90,6 @@ void vgl_triangle_scan_iterator<T>::reset()
   //vcl_cerr << "y0 y1 = " << y0 << ' ' << y1 << vcl_endl;
 
   scany_ = y0 - 1;
-  last_width = -1;
 
   // compute centroid
   g.x = vcl_floor((a.x + b.x + c.x)/3);
@@ -175,9 +174,8 @@ bool vgl_triangle_scan_iterator<T>::next()
   // can not use (scany_ == y0) || (startx_ <= endx_)
   // for early scan termination because some triangles may have
   // (startx_ > endx_) for more than the first scan line
-  if(startx_ > endx_ && last_width > maxx-minx)
-    return false;
-  last_width = maxx - minx;
+
+
   return true;
 #endif
 }
