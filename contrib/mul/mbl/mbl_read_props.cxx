@@ -279,12 +279,18 @@ mbl_read_props_type mbl_read_props_ws(vcl_istream &afs)
            label[label.size() -1] == ':' )
       {
         label.erase( label.size() -1, 1 );
-        afs >> vcl_ws >> str1;
 
-        if ( str1.substr(0,1) == "{" )
-        {
+        char brace;
+        afs >> vcl_ws >> brace;
+
+        if (brace == '{')
           str1 = mbl_parse_block(afs, true);
+        else
+        {
+          afs.putback(brace);
+          afs >> str1;
         }
+
 
         strip_trailing_ws(str1);
         props[label] = str1;
