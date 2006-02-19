@@ -201,6 +201,12 @@ SOURCE=.\Templates/vsl_map_io+unsigned.unsigned-.cxx
 SOURCE=.\Templates/vsl_vector_io+unsigned-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vsl_pair_io+int.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+ulong-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vsl_binary_io.cxx
 # End Source File
 # Begin Source File

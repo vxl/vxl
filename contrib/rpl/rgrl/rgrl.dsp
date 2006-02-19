@@ -378,6 +378,9 @@ SOURCE=.\Templates/vbl_smart_ptr+rgrl_feature_face_pt-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+rgrl_invariant_set-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/rsdl_bins_2d+2.double.rgrl_feature_sptr-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\rgrl_est_homography2d.cxx
 # End Source File
 # Begin Source File
@@ -424,6 +427,9 @@ SOURCE=.\rgrl_matcher_k_nearest_random.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\rgrl_matcher_k_nearest_pick_one.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_feature_set_bins_2d.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -775,6 +781,9 @@ SOURCE=.\rgrl_invariant_set.h
 # End Source File
 # Begin Source File
 SOURCE=.\rgrl_invariant_set_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_feature_set_bins_2d.h
 # End Source File
 # End Group
 # End Target

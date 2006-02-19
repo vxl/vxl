@@ -165,6 +165,9 @@ SOURCE=.\test_integral.cxx
 # Begin Source File
 SOURCE=.\test_algo.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_powell.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "txx;h"
