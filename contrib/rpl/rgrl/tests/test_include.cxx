@@ -58,6 +58,7 @@
 #include <rgrl/rgrl_feature_reader.h>
 #include <rgrl/rgrl_feature_region.h>
 #include <rgrl/rgrl_feature_set.h>
+#include <rgrl/rgrl_feature_set_bins_2d.h>
 #include <rgrl/rgrl_feature_set_location.h>
 #include <rgrl/rgrl_feature_set_location_masked.h>
 #include <rgrl/rgrl_feature_trace_pt.h>
@@ -69,6 +70,8 @@
 #include <rgrl/rgrl_initializer_reader.h>
 #include <rgrl/rgrl_invariant.h>
 #include <rgrl/rgrl_invariant_match.h>
+#include <rgrl/rgrl_invariant_set.h>
+#include <rgrl/rgrl_invariant_set_sptr.h>
 #include <rgrl/rgrl_invariant_single_landmark.h>
 #include <rgrl/rgrl_mask.h>
 #include <rgrl/rgrl_match_set.h>
