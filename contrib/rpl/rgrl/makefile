@@ -26,6 +26,7 @@ MANPAGE_SOURCES += rgrl_feature_set_sptr.h
 MANPAGE_SOURCES += rgrl_feature_set_location.txx
 #MANPAGE_SOURCES += rgrl_feature_set_signature.txx
 MANPAGE_SOURCES += rgrl_feature_set_location_masked.txx
+SOURCES += rgrl_feature_set_bins_2d.cxx
 
 SOURCES += rgrl_match_set.cxx
 MANPAGE_SOURCES += rgrl_match_set_sptr.h
