@@ -96,7 +96,7 @@ foreach $dir (@DIRS)
       push @updir_files, readdir(UPDIR);
       closedir(UPDIR);
     }
-    $prefix=$dir; $prefix =~ s/[^\/]*$//; $prefix =~ s/^.*\/(vcl|core|contrib\/[^\/]*)\///;
+    $prefix=$dir; $prefix =~ s/[^\/]*$//; $prefix =~ s/^.*\/(vcl|core|contrib\/brl\/bbas|contrib\/[^\/]*)\///;
     map s/^/$prefix/,@updir_files;
     @updir_files = grep(/\.h$/, @updir_files);
     @updir_files = grep(!/vidl_(win|avifile)_avicodec/, @updir_files);
