@@ -43,8 +43,8 @@ rgrl_initializer_inv_indexing( rgrl_mask_sptr const&     from_image_roi,
   }
 
   rgrl_mask_box global_region( from_image_roi->bounding_box() );
-  view_ = new rgrl_view( from_image_roi, to_image_roi, 
-                         global_region, global_region, 
+  view_ = new rgrl_view( from_image_roi, to_image_roi,
+                         global_region, global_region,
                          xform_estimator, 0,
                          initial_resolution );
 }
@@ -82,7 +82,7 @@ add_multiple_data( vcl_vector<rgrl_invariant_sptr> fixed_set,
 
   // Construct a kd-tree for the set of search points from the fixed_set
   vcl_vector<rsdl_point> search_pts(fixed_set.size());
-  for (unsigned int pt=0; pt<fixed_set.size(); ++pt){
+  for (unsigned int pt=0; pt<fixed_set.size(); ++pt) {
     // Set number of expected cartesian and angular values
     search_pts[pt].resize( nc, na );
     search_pts[pt].set_cartesian(fixed_set[pt]->cartesian_invariants());
@@ -91,9 +91,11 @@ add_multiple_data( vcl_vector<rgrl_invariant_sptr> fixed_set,
   rsdl_kd_tree kd_tree( search_pts );
 
   // Iterate through the features from each moving set
-  for (unsigned int m_ind = 0; m_ind<num_moving_sets; ++m_ind){
+  for (unsigned int m_ind = 0; m_ind<num_moving_sets; ++m_ind)
+  {
     // Iterate through all constellations/points in the current "from" image
-    for (unsigned int pt = 0; pt<moving_sets[m_ind].size(); pt++){
+    for (unsigned int pt = 0; pt<moving_sets[m_ind].size(); pt++)
+    {
       // Create a query point from the invariants of the current constellation
       rsdl_point query_pt( nc, na );
       query_pt.set_cartesian(moving_sets[m_ind][pt]->cartesian_invariants());
@@ -102,10 +104,10 @@ add_multiple_data( vcl_vector<rgrl_invariant_sptr> fixed_set,
       // Find all points (and their indices) within nn_radius of the query_pt
       vcl_vector<rsdl_point> near_neighbor_pts;
       vcl_vector<int> near_neighbor_indices;
-      if( nn_radius > 0.0 )
-        kd_tree.points_in_radius( query_pt, nn_radius, near_neighbor_pts, 
+      if ( nn_radius > 0.0 ) {
+        kd_tree.points_in_radius( query_pt, nn_radius, near_neighbor_pts,
                                   near_neighbor_indices );
-
+      }
       // If no points were found in nn_radius, find the nearest point
       if (near_neighbor_indices.empty() ) {
         kd_tree.n_nearest( query_pt, k_nn, near_neighbor_pts, near_neighbor_indices );
@@ -113,7 +115,7 @@ add_multiple_data( vcl_vector<rgrl_invariant_sptr> fixed_set,
 
       // Create matches from the nearest neighbors and push them onto
       // the current vector
-      for (unsigned int nn_ind = 0; nn_ind<near_neighbor_indices.size(); ++nn_ind){
+      for (unsigned int nn_ind = 0; nn_ind<near_neighbor_indices.size(); ++nn_ind) {
         matches_[m_ind].push_back( new rgrl_invariant_match(moving_sets[m_ind][pt], fixed_set[near_neighbor_indices[nn_ind]]) );
       }
     }
