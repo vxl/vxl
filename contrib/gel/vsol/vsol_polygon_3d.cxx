@@ -4,6 +4,7 @@
 // \file
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
+#include <vcl_cmath.h>
 #include <vsl/vsl_vector_io.h>
 #include <vsol/vsol_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
@@ -201,6 +202,7 @@ bool vsol_polygon_3d::is_convex(void) const
 //---------------------------------------------------------------------------
 bool vsol_polygon_3d::valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_vertices) const
 {
+  double tol = 1e-06;
   if (new_vertices.size() <= 3) return true; // a triangle is always in a plane
 
   vsol_point_3d_sptr p0=new_vertices[0];
@@ -222,7 +224,11 @@ bool vsol_polygon_3d::valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_ve
     v2=vgl_vector_3d<double>(p2->x()-p0->x(),
                              p2->y()-p0->y(),
                              p2->z()-p0->z());
+#if 0
     if (dot_product(n,v2)!=0)
+      return false;
+#endif
+    if (vcl_fabs(dot_product(n,v2))>tol)
       return false;
   }
 
