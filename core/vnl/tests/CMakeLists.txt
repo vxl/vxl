@@ -19,6 +19,7 @@ ADD_EXECUTABLE( vnl_test_all
   test_vector_fixed_ref.cxx
   test_matrix_fixed_ref.cxx
   test_numeric_traits.cxx
+  test_quaternion.cxx
   test_rational.cxx
   test_real_polynomial.cxx
   test_resize.cxx

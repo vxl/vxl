@@ -13,6 +13,7 @@ DECLARE( test_matrix_exp );
 DECLARE( test_matrix_fixed );
 DECLARE( test_matrix_fixed_ref );
 DECLARE( test_numeric_traits );
+DECLARE( test_quaternion );
 DECLARE( test_rational );
 DECLARE( test_real_polynomial );
 DECLARE( test_resize );
@@ -45,6 +46,7 @@ register_tests()
   REGISTER( test_matrix_fixed );
   REGISTER( test_matrix_fixed_ref );
   REGISTER( test_numeric_traits );
+  REGISTER( test_quaternion );
   REGISTER( test_rational );
   REGISTER( test_real_polynomial );
   REGISTER( test_resize );

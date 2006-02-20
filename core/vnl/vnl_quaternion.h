@@ -17,6 +17,7 @@
 //              template <class FLOAT> class vnl_quaternion;
 //   23-3-2001 LSB (Manchester) Tidied documentation
 //   13-1-2003 Peter Vanroose - removed unimplemented method rotation_matrix()
+//   20-2-2006 Ian Scott - Added conversion to from Euler angles
 // \endverbatim
 
 #include <vnl/vnl_vector_fixed.h>
@@ -67,6 +68,11 @@ class vnl_quaternion : public vnl_vector_fixed<T, 4>
 
   //: Construct quaternion from components x,y,z,r
   vnl_quaternion (T x, T y, T z, T r);
+
+  //: Construct quaternion from Euler Angles,
+  // That is a rotation about the X axis, followed by Y, followed by
+  // the Z axis, using a fixed reference frame.
+  vnl_quaternion (T theta_X, T theta_Y, T theta_Z);
 
   //: Construct quaternion from axis and angle of rotation
   vnl_quaternion (const vnl_vector<T>& axis, T angle);
@@ -142,7 +148,17 @@ class vnl_quaternion : public vnl_vector_fixed<T, 4>
   vnl_quaternion<T> operator* (const vnl_quaternion<T>&) const;
 
   //: Rotate 3D v
+  // The quaternion mut be normalised first.
   vnl_vector<T> rotate (const vnl_vector<T>& v) const;
+
+  //: Rotation representation in Euler angles.
+  // The angles raturned will be [theta_X,theta_Y,theta_Z]
+  // where the final rotation is found be first applying theta_X radians
+  // about the X axis, then theta_Y about the Y-axis, etc.
+  // The axes stay in a fixed reference frame.
+  // The quaternion mut be normalised first.
+  vnl_vector_fixed<T,3> rotation_euler_angles () const;
+  
 };
 
 //: operator<<

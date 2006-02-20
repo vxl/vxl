@@ -33,6 +33,7 @@
 #include "vnl_quaternion.h"
 
 #include <vcl_cmath.h>
+#include <vcl_limits.h>
 #include <vcl_iostream.h>
 
 #include <vnl/vnl_cross.h>
@@ -141,8 +142,49 @@ vnl_quaternion<T>::vnl_quaternion (const vnl_matrix<T>& transform)
   }
 }
 
-//:
 
+//: Construct quaternion from Euler Angles,
+// That is a rotation about the X axis, followed by Y, followed by
+// the Z axis, using a fixed reference frame.
+template <class T>
+vnl_quaternion<T>::vnl_quaternion(T theta_X, T theta_Y, T theta_Z)
+{
+  vnl_quaternion<T> Rx(vcl_sin(theta_X/2), 0, 0, vcl_cos(theta_X/2));
+  vnl_quaternion<T> Ry(0, vcl_sin(theta_Y/2), 0, vcl_cos(theta_Y/2));
+  vnl_quaternion<T> Rz(0, 0, vcl_sin(theta_Z/2), vcl_cos(theta_Z/2));
+  *this = Rz * Ry * Rx;
+}
+
+//: Rotation representation in Euler angles.
+// The angles raturned will be [theta_X,theta_Y,theta_Z]
+// where the final rotation is found be first applying theta_X radians
+// about the X axis, then theta_Y about the Y-axis, etc.
+// The axes stay in a fixed reference frame.
+template <class T>
+vnl_vector_fixed<T,3> vnl_quaternion<T>::rotation_euler_angles () const
+{
+  vnl_vector_fixed<T,3> angles;
+
+  vnl_matrix_fixed<T,4,4> rotM = rotation_matrix_transpose_4();
+  T xy = vcl_sqrt(rotM(0,0)*rotM(0,0) + rotM(0,1)*rotM(0,1));
+  if (xy > vcl_numeric_limits<T>::epsilon() * T(8.0))
+  {
+	  angles(0) = atan2(rotM(1,2), rotM(2,2));
+	  angles(1) = atan2(-rotM(0,2), xy);
+	  angles(2) = atan2(rotM(0,1), rotM(0,0));
+	}
+  else
+  {
+	  angles(0) = atan2(-rotM(2,1), rotM(1,1));
+	  angles(1) = atan2(-rotM(0,2), xy);
+	  angles(2) = 0;
+  }
+  return angles;
+}
+
+
+
+//:
 template <class T>
 T vnl_quaternion<T>::angle () const
 {
