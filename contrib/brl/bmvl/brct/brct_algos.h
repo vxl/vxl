@@ -17,6 +17,7 @@
 #include <vcl_fstream.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_line_segment_2d.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vgl/algo/vgl_p_matrix.h>
 #include <vnl/vnl_double_2.h>
@@ -25,8 +26,11 @@
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3x4.h>
 #include <vnl/vnl_double_4x4.h>
+#include <vil/vil_image_resource_sptr.h>
 #include <vsol/vsol_box_3d_sptr.h>
 #include <vsol/vsol_point_3d_sptr.h>
+#include <vsol/vsol_polygon_2d_sptr.h>
+#include <vsol/vsol_polygon_3d_sptr.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <bugl/bugl_gaussian_point_2d.h>
 #include <bugl/bugl_gaussian_point_3d.h>
@@ -48,6 +52,7 @@ class brct_algos
  public:
   brct_algos();
   virtual ~brct_algos();
+
 
   //operators
   static void add_box_vrml(double xmin, double ymin, double zmin, double xmax, double ymax, double zmax);
@@ -108,6 +113,10 @@ class brct_algos
   p_from_h(vgl_h_matrix_2d<double> const& H, vcl_vector<double> const& image_y,
            vcl_vector<vgl_point_3d<double> > const& world_p);
 
+  //:compute a planar mapping from a p_matrix by projecting onto the x-y plane
+  static vgl_h_matrix_2d<double> h_from_p(vgl_p_matrix<double> const& P);
+
+    
   //: change the world coordinates to be at image scale and position
   static void scale_and_translate_world(vcl_vector<vgl_point_3d<double> > const& world_points,
                                         const double magnification, vgl_h_matrix_2d<double> & H);
@@ -127,6 +136,36 @@ class brct_algos
   static void project(vcl_vector<vgl_point_3d<double> > const& world_points,
                       vgl_p_matrix<double> const& P,
                       vcl_vector<vgl_point_2d<double> > & image_points);
+
+  //: project a world polygon onto an image using a homgraphy
+  static vsol_polygon_2d_sptr 
+    project(vsol_polygon_3d_sptr const& world_poly,
+            vgl_h_matrix_2d<double> const& H);
+
+  //: project world polygons onto an image using a homgraphy
+  static void project(vcl_vector<vsol_polygon_3d_sptr> const& world_polys,
+                      vgl_h_matrix_2d<double> const& H,
+                      vcl_vector<vsol_polygon_2d_sptr > & image_polys);
+
+  //: project a world polygon onto an image using a projective matrix
+  static vsol_polygon_2d_sptr 
+    project(vsol_polygon_3d_sptr const& world_poly,
+            vgl_p_matrix<double> const& P);
+
+  //: project world polygons onto an image using a projective matrix
+  static void project(vcl_vector<vsol_polygon_3d_sptr> const& world_polys,
+                      vgl_p_matrix<double> const& P,
+                      vcl_vector<vsol_polygon_2d_sptr > & image_polys);
+
+  //: back_project an image polygon onto the world x-y plane
+  static vsol_polygon_3d_sptr 
+    back_project(vsol_polygon_2d_sptr const& image_poly,
+                 vgl_h_matrix_2d<double> const& H);
+  //: back_project a polygon onto a x-y plane at some heightp
+  static vsol_polygon_3d_sptr 
+    back_project(vsol_polygon_2d_sptr const& image_poly,
+                 vgl_p_matrix<double> const& P,
+                 const double height);
 
   //: compute a TargetJr style 4x4 projection matrix from a 3x4 matrix
   static vnl_double_4x4 convert_to_target(vnl_double_3x4 const& P);
@@ -178,9 +217,45 @@ class brct_algos
                              const float r = 1.0, const float g = 1.0,
                              const float b = 1.0,
                              const float transparency = 0.0);
+
   static
     bool read_world_points(vcl_ifstream& str,
                            vcl_vector<vgl_point_3d<double> >& world_points);
+  static 
+    bool read_world(vcl_ifstream& str,
+                    vcl_vector<vgl_point_3d<double> >& world_points,
+                    vcl_vector<vsol_polygon_3d_sptr>& polys,
+                    vcl_vector<vcl_vector<unsigned> >& indexed_face_set);
+
+  static
+   void write_world_points(vcl_ofstream& str,
+                            vcl_vector<vgl_point_3d<double> >const& world_points);
+  static
+    void write_world(vcl_ofstream& str,
+                     vcl_vector<vgl_point_3d<double> > const& world_points,
+                     vcl_vector<vcl_vector<unsigned> > const& polys);
+
+  static
+    void write_world_ply2(vcl_ofstream& str,
+                          vcl_vector<vgl_point_3d<double> > const& world_points,
+                     vcl_vector<vcl_vector<unsigned> > const& polys);
+
+  static
+    bool read_world_ply2(vcl_ifstream& str,
+                    vcl_vector<vgl_point_3d<double> >& world_points,
+                    vcl_vector<vsol_polygon_3d_sptr>& polys,
+                    vcl_vector<vcl_vector<unsigned> >& indexed_face_set);
+
+static bool 
+  write_ifs_box(vcl_ofstream& ostr,
+                vcl_vector<vgl_point_3d<double> > const& verts,
+                vcl_vector<vcl_vector<unsigned> > const& faces,
+                const float r, const float g, const float b);
+
+  static bool translate_ply2_to_vrml(vcl_ifstream& istr, vcl_ofstream& ostr,
+                                     const float r, const float g,
+                                     const float b);
+                                     
   static
     bool read_target_corrs(vcl_ifstream& str,
                            vcl_vector<bool>& valid,
@@ -194,6 +269,26 @@ class brct_algos
                      vcl_vector<vgl_point_3d<double> >& world_points);
 
   static void write_target_camera(vcl_ofstream& str, vnl_double_3x4 const& P);
+
+  static  vil_image_resource_sptr map_image_to_world(vil_image_resource_sptr const& image,
+                                                     vgl_p_matrix<double> const& cam,
+                                                     const double feet_per_pixel = 1.0);
+
+static 
+bool save_constraint_file(vcl_vector<vgl_point_2d<double> >const& image_pts,
+                          vcl_vector<bool> const& valid,
+                          vcl_vector<vgl_point_3d<double> >const& world_pts,
+                          vcl_vector<vgl_line_segment_2d<double> > const& vertls,
+                          vcl_ofstream& str);
+//:modeling functions
+ static 
+   void box_3d(vgl_point_3d<double> const& c0,
+               vgl_point_3d<double> const& c1,
+               vgl_point_3d<double> const& c2,
+               vcl_vector<vgl_point_3d<double> >& world_points,
+               vcl_vector<vsol_polygon_3d_sptr>& polys,
+               vcl_vector<vcl_vector<unsigned> >& indexed_face_set);
+
 };
 
 #endif // bcrt_algos_h_

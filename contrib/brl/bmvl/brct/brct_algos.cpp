@@ -11,9 +11,16 @@
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_matrix_fixed.h>
+#include <vnl/vnl_inverse.h>
 #include <vnl/vnl_double_2x3.h>
+#include <vnl/algo/vnl_svd.h>
+#include <vil/vil_image_resource.h>
+#include <vil/vil_new.h>
+#include <vil/vil_flip.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_homg_point_2d.h>
+#include <vgl/vgl_point_3d.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
 #include <vgl/algo/vgl_h_matrix_2d_optimize_lmq.h>
 #include <vgl/algo/vgl_norm_trans_3d.h>
@@ -28,9 +35,14 @@
 #include <rrel/rrel_ransac_obj.h>
 #include <rrel/rrel_ran_sam_search.h>
 #include <rrel/rrel_muset_obj.h>
+#include <brip/brip_vil_float_ops.h>
 #include <bdgl/bdgl_curve_algs.h>
 #include <vsol/vsol_box_3d.h>
+#include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
+#include <vsol/vsol_polygon_2d.h>
+#include <vsol/vsol_polygon_3d.h>
+
 #include <vcl_cassert.h>
 
 // Construction/Destruction
@@ -805,7 +817,104 @@ void brct_algos::project(vcl_vector<vgl_point_3d<double> > const& world_points,
     vcl_cout << "W:" << *pit << " I:" << vgl_point_2d<double>(pi) << '\n';
   }
 }
+// project a 3-d polygon with a planar homography (z is considered zero);
+vsol_polygon_2d_sptr 
+brct_algos::project(vsol_polygon_3d_sptr const& world_poly,
+                    vgl_h_matrix_2d<double> const& H)
+{
+  vcl_vector<vsol_point_2d_sptr > image_verts;
+  unsigned nv = world_poly->size();
+  for(unsigned i = 0; i<nv; ++i)
+    {
+      vsol_point_3d_sptr v3d = world_poly->vertex(i);
+      vgl_homg_point_2d<double> hv(v3d->x(), v3d->y());
+	  vgl_homg_point_2d<double> phv = H(hv);
+      vgl_point_2d<double> v2d(phv);
+      vsol_point_2d_sptr p = new vsol_point_2d(v2d.x(), v2d.y());
+      image_verts.push_back(p);
+    }
+  return new vsol_polygon_2d(image_verts);
+}
 
+void brct_algos::project(vcl_vector<vsol_polygon_3d_sptr> const& world_polys,
+                         vgl_h_matrix_2d<double> const& H,
+                         vcl_vector<vsol_polygon_2d_sptr > & image_polys)
+{
+  image_polys.clear();
+  for(vcl_vector<vsol_polygon_3d_sptr>::const_iterator wpi=world_polys.begin();
+      wpi != world_polys.end(); ++wpi)
+    image_polys.push_back(brct_algos::project(*wpi, H)); 
+}
+vsol_polygon_2d_sptr 
+brct_algos::project(vsol_polygon_3d_sptr const& world_poly,
+                    vgl_p_matrix<double> const& P)
+{
+  vcl_vector<vsol_point_2d_sptr > image_verts;
+  unsigned nv = world_poly->size();
+  for(unsigned i = 0; i<nv; ++i)
+    {
+      vsol_point_3d_sptr v3d = world_poly->vertex(i);
+      vgl_homg_point_3d<double> hv(v3d->x(), v3d->y(), v3d->z());
+      vgl_homg_point_2d<double> phv = P(hv);
+      vgl_point_2d<double> v2d(phv);
+      vsol_point_2d_sptr p = new vsol_point_2d(v2d.x(), v2d.y());
+      image_verts.push_back(p);
+    }
+  return new vsol_polygon_2d(image_verts);
+}
+void brct_algos::project(vcl_vector<vsol_polygon_3d_sptr> const& world_polys,
+                         vgl_p_matrix<double> const& P,
+                         vcl_vector<vsol_polygon_2d_sptr > & image_polys)
+{
+  image_polys.clear();
+  for(vcl_vector<vsol_polygon_3d_sptr>::const_iterator wpi=world_polys.begin();
+      wpi != world_polys.end(); ++wpi)
+    image_polys.push_back(brct_algos::project(*wpi, P)); 
+}
+
+vsol_polygon_3d_sptr 
+brct_algos::back_project(vsol_polygon_2d_sptr const& image_poly,
+                         vgl_h_matrix_2d<double> const& H)
+{
+  vcl_vector<vsol_point_3d_sptr > world_verts;
+  unsigned nv = image_poly->size();
+  for(unsigned i = 0; i<nv; ++i)
+    {
+      vsol_point_2d_sptr v2d = image_poly->vertex(i);
+      vgl_homg_point_2d<double> hv2d(v2d->x(), v2d->y());
+      vgl_homg_point_2d<double> hv3d = H.preimage(hv2d);
+      vgl_point_2d<double> v3d(hv3d);
+      vsol_point_3d_sptr p = new vsol_point_3d(v3d.x(), v3d.y(), 0);
+      world_verts.push_back(p);
+    }
+  return new vsol_polygon_3d(world_verts);
+}
+vsol_polygon_3d_sptr 
+brct_algos::back_project(vsol_polygon_2d_sptr const& image_poly,
+                         vgl_p_matrix<double> const& P,
+                         const double height)
+{
+  // construct the homography for a plane parallel to the x-y plane at
+  // a given height
+  vnl_double_3x3 M;
+  vnl_double_3x4 Mp;
+  Mp = P.get_matrix();
+  for(unsigned r = 0; r<3; ++r)
+    for(unsigned c = 0; c<2; ++c)
+      M[r][c]=Mp[r][c];
+  for(unsigned r = 0; r<3; ++r)
+    M[r][2] = Mp[r][2]*height + Mp[r][3];
+  vgl_h_matrix_2d<double> H(M);
+  vsol_polygon_3d_sptr temp = brct_algos::back_project(image_poly, H);
+  vcl_vector<vsol_point_3d_sptr> verts;
+  for(unsigned i = 0; i<image_poly->size(); ++i)
+  {
+	  vsol_point_3d_sptr p = new vsol_point_3d(*temp->vertex(i));
+	  p->set_z(height);
+	  verts.push_back(p);
+  }
+  return new vsol_polygon_3d(verts);
+}
 
 void brct_algos::
 scale_and_translate_world(vcl_vector<vgl_point_3d<double> > const& world_points,
@@ -880,7 +989,145 @@ bool brct_algos::read_world_points(vcl_ifstream& str,
   }
   return true;
 }
-
+bool brct_algos::read_world(vcl_ifstream& str,
+                            vcl_vector<vgl_point_3d<double> >& world_points,
+                            vcl_vector<vsol_polygon_3d_sptr>& polys,
+                            vcl_vector<vcl_vector<unsigned> >& indexed_face_set)
+{
+  if(!read_world_points(str, world_points))
+    return false;
+  unsigned npts = world_points.size();
+  //see if there are any polygons in the world
+ if(str.eof())
+	 return true;
+  vcl_string temp;
+  str >> temp;
+  if(temp == "")
+	  return true;
+  //there are polygons
+  if (temp != "NPOLYS:")
+    return false;
+  unsigned npolys, nverts;
+  str >> npolys;
+  for(unsigned ip = 0; ip<npolys; ++ip)
+    {
+      str >> temp;
+      if (temp != "NVERTS:")
+        return false;
+      str >> nverts;
+      vcl_vector<vsol_point_3d_sptr> verts;
+      vcl_vector<unsigned> vert_indices;
+      for(unsigned i=0; i< nverts; ++i)
+        {
+          unsigned vert_index;
+          str >> vert_index;
+          if(vert_index >= npts)
+            return false;
+          vert_indices.push_back(vert_index);
+          vgl_point_3d<double> v = world_points[vert_index];
+          vsol_point_3d_sptr sv = new vsol_point_3d(v);
+          verts.push_back(sv);
+        }
+      indexed_face_set.push_back(vert_indices);
+      polys.push_back(new vsol_polygon_3d(verts));
+    }
+  return true;
+}
+void brct_algos::
+write_world_points(vcl_ofstream& str,
+                   vcl_vector<vgl_point_3d<double> >const& world_points)
+{
+  unsigned npts = world_points.size();
+  str << "NUMPOINTS: "; 
+  str << npts << '\n';
+  for (unsigned i = 0; i<npts; i++)
+  {
+    str << "POINT3D: ";
+    vgl_point_3d<double> p3d = world_points[i];
+    str << p3d.x() << ' ' << p3d.y() << ' ' << p3d.z() << '\n';
+  }
+}  
+void brct_algos::
+write_world(vcl_ofstream& str,
+            vcl_vector<vgl_point_3d<double> > const& world_points,
+            vcl_vector<vcl_vector<unsigned> > const& polys)
+{
+  brct_algos::write_world_points(str, world_points);
+  unsigned npolys = polys.size();
+ 
+  str << "NPOLYS: " << npolys << '\n';
+  for(unsigned ip = 0; ip<npolys; ++ip)
+    {
+      unsigned nverts = polys[ip].size();
+      str << "NVERTS: " << nverts << '\n';
+      for(unsigned iv = 0; iv<nverts; ++iv)
+        str << polys[ip][iv] << ' ';
+      str << '\n';
+    }
+}
+void brct_algos::
+write_world_ply2(vcl_ofstream& str,
+                 vcl_vector<vgl_point_3d<double> > const& world_points,
+                 vcl_vector<vcl_vector<unsigned> > const& polys)
+{
+  unsigned npts = world_points.size();
+  unsigned nfaces = polys.size();
+  str << npts << '\n';
+  str << nfaces << '\n';
+  for(unsigned iv = 0; iv<npts; ++iv)
+    {
+      vgl_point_3d<double> p = world_points[iv];
+      str << p.x() << ' ' << p.y() << ' ' << p.z() << '\n';
+    }
+  for(unsigned fi = 0; fi<nfaces; ++fi)
+    {
+      unsigned nverts = polys[fi].size();
+      str << nverts << ' ';
+      for(unsigned vi = 0; vi<nverts; ++vi)
+        str << polys[fi][vi] << ' ';
+      str << '\n';
+    }
+}
+bool brct_algos::
+read_world_ply2(vcl_ifstream& str,
+                vcl_vector<vgl_point_3d<double> >& world_points,
+                vcl_vector<vsol_polygon_3d_sptr>& polys,
+                vcl_vector<vcl_vector<unsigned> >& indexed_face_set)
+{
+  world_points.clear();
+  polys.clear();
+  indexed_face_set.clear();
+  unsigned npts=0, nfaces=0;
+  str >> npts >> nfaces;
+  for(unsigned i = 0; i<npts; ++i)
+    {
+      double x=0, y=0, z=0;
+      str >> x >> y >> z;
+      vgl_point_3d<double> p(x, y, z);
+      world_points.push_back(p);
+    }
+  unsigned nverts = 0;
+  for(unsigned ip = 0; ip<nfaces; ++ip)
+    {
+      vcl_vector<vsol_point_3d_sptr> verts;
+      vcl_vector<unsigned> vert_indices;
+      str >> nverts;
+      for(unsigned i=0; i< nverts; ++i)
+        {
+          unsigned vert_index;
+          str >> vert_index;
+          if(vert_index >= npts)
+            return false;
+          vert_indices.push_back(vert_index);
+          vgl_point_3d<double> v = world_points[vert_index];
+          vsol_point_3d_sptr sv = new vsol_point_3d(v);
+          verts.push_back(sv);
+        }
+      indexed_face_set.push_back(vert_indices);
+      polys.push_back(new vsol_polygon_3d(verts));
+    }
+	return true;
+}
 bool brct_algos::
 read_target_corrs(vcl_ifstream& str,
                   vcl_vector<bool>& valid,
@@ -1037,4 +1284,221 @@ p_from_h(vgl_h_matrix_2d<double> const& H, vcl_vector<double> const& image_y,
   p[1][2] = vsum;
   P.set(p);
   return P;
+}
+vgl_h_matrix_2d<double> brct_algos::h_from_p(vgl_p_matrix<double> const& P)
+{
+  vnl_double_3x4 M = P.get_matrix();
+  vnl_double_3x3 Mh;
+  for (int r = 0; r<3; r++)
+  {
+    Mh[r][0] = M[r][0];
+    Mh[r][1] = M[r][1];
+    Mh[r][2] = M[r][3];
+  }
+  vgl_h_matrix_2d<double> H(Mh);
+  return H;
+}
+
+//Map an image onto a world plane.
+vil_image_resource_sptr brct_algos::
+map_image_to_world(vil_image_resource_sptr const& image,
+                   vgl_p_matrix<double> const& cam,
+                   const double world_units_per_pixel)
+{
+  (void) world_units_per_pixel;//scaling not implemented
+  if(!image)
+    return 0;
+  vil_image_view<float> fimage = brip_vil_float_ops::convert_to_float(image);
+  //for now only planar mapping is supported (i.e. no ray backprojection onto a 3-d surface)
+  //extract a planar homography from the perspective camera
+  vnl_double_3x4 M = cam.get_matrix();
+  vnl_double_3x3 Mh, Mhinv; //the planar homography
+  //copy first two columns
+  for(unsigned c = 0; c<2; ++c)
+    for(unsigned r = 0; r<3; ++r)
+      Mh[r][c] = M[r][c];
+  //copy last column
+  Mh[0][2]=M[0][3]; Mh[1][2]=M[1][3]; Mh[2][2]=M[2][3];
+  //invert to get image-to-world homography
+  vnl_svd<double> svd(Mh);
+  Mhinv = svd.inverse();
+  vgl_h_matrix_2d<double> H(Mhinv);
+  vil_image_view<float> mapped_image, temp;
+  if(!brip_vil_float_ops::homography(fimage, H, temp))
+    return 0;
+  mapped_image = vil_flip_ud(temp);
+
+  if(image->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
+    {
+      vil_image_view<unsigned char> cimage = 
+        brip_vil_float_ops::convert_to_byte(mapped_image);
+      return vil_new_image_resource_of_view(cimage);
+    }
+  if(image->pixel_format()==VIL_PIXEL_FORMAT_UINT_16)
+    {
+      vil_image_view<unsigned short> simage = 
+        brip_vil_float_ops::convert_to_short(mapped_image, 0, 65536);
+      return vil_new_image_resource_of_view(simage);
+    }
+  return 0;
+}
+
+bool brct_algos::
+save_constraint_file(vcl_vector<vgl_point_2d<double> > const& image_pts,
+                     vcl_vector<bool> const& valid,
+                     vcl_vector<vgl_point_3d<double> > const& world_pts,
+                     vcl_vector<vgl_line_segment_2d<double> > const& vertls,
+                     vcl_ofstream& str)
+{
+  unsigned npts = image_pts.size();
+  if(npts!=world_pts.size())
+    return false;
+  str << "dbrcl camera constraint file\n\n";
+  str << "frame\n";
+  str << 0 << "\n\n";
+  for(unsigned i = 0; i<npts; ++i)
+    {
+      if(!valid[i])
+        continue;
+      str << "world image correspondence\n";
+      str << world_pts[i].x()<< ' ' << world_pts[i].y() << ' ' << world_pts[i].z() << '\n';
+      str << image_pts[i].x()<< ' ' << image_pts[i].y() << "\n\n";
+    }
+  for(vcl_vector<vgl_line_segment_2d<double> >::const_iterator lit = vertls.begin(); lit != vertls.end(); ++lit)
+    {
+      str << "height\n";
+      str << (*lit).point1().x() << ' ' << (*lit).point1().y() << '\n';
+      str << (*lit).point2().x() << ' ' << (*lit).point2().y() << "\n\n";
+    }
+return true;
+}
+//Create a 3-d box as an indexed face set. Specified by face corners on
+// top face. The top face is parallel to the x-y plane
+//
+//               c1        c2        
+//                0--------0
+//                |        |
+//                |        |  arbitrary orientation
+//             c0 0--------0
+//
+void brct_algos::box_3d(vgl_point_3d<double> const& c0,
+                        vgl_point_3d<double> const& c1,
+                        vgl_point_3d<double> const& c2,
+                        vcl_vector<vgl_point_3d<double> >& world_points,
+                        vcl_vector<vsol_polygon_3d_sptr>& polys,
+                        vcl_vector<vcl_vector<unsigned> >& indexed_face_set)
+{
+  world_points.clear();
+  polys.clear();
+  indexed_face_set.clear();
+  vgl_point_3d<double> p[8];
+  p[0].set(c0.x(), c0.y(), c0.z());
+  p[1].set(c1.x(), c1.y(), c1.z());
+  p[2].set(c2.x(), c2.y(), c2.z());
+  p[3].set(c0.x()+c2.x()-c1.x(), c0.y()+c2.y()-c1.y(), c0.z());
+  for(unsigned i = 4; i<8; ++i)
+    p[i].set(p[i-4].x(), p[i-4].y(), 0.0);
+
+  for(unsigned i = 0; i<8; ++i)
+  {
+    world_points.push_back(p[i]);
+	vcl_cout << "p[" << i << "]= " << p[i] << '\n';
+  }
+
+  vcl_vector<unsigned> v(4);
+  v[0]=0;   v[1]=3;   v[2]=2; v[3]=1;
+  indexed_face_set.push_back(v);
+  v[0]=2;   v[1]=3;   v[2]=7; v[3]=6;
+  indexed_face_set.push_back(v);
+  v[0]=0;   v[1]=4;   v[2]=7; v[3]=3;
+  indexed_face_set.push_back(v);
+  v[0]=4;   v[1]=5;   v[2]=6; v[3]=7;
+  indexed_face_set.push_back(v);
+  v[0]=0;   v[1]=1;   v[2]=5; v[3]=4;
+  indexed_face_set.push_back(v);
+  v[0]=1;   v[1]=2;   v[2]=6; v[3]=5;
+  indexed_face_set.push_back(v);
+  for(unsigned ip = 0; ip<6; ++ip)
+    {
+      vcl_vector<vsol_point_3d_sptr> verts;
+      for(unsigned iv = 0; iv<4; ++iv)
+        {
+          vsol_point_3d_sptr pv = 
+            new vsol_point_3d(p[indexed_face_set[ip][iv]]);
+          verts.push_back(pv);
+        }
+      polys.push_back(new vsol_polygon_3d(verts));
+    }
+}
+bool brct_algos::
+write_ifs_box(vcl_ofstream& ostr,
+              vcl_vector<vgl_point_3d<double> > const& verts,
+              vcl_vector<vcl_vector<unsigned> > const& faces,
+              const float r, const float g, const float b)
+{
+  if(verts.size()!=8 ||faces.size()!=6)
+    return false;
+  ostr << " Shape {\n";
+  ostr << "appearance Appearance {\n";
+  ostr <<"   material Material \n";
+  ostr <<	"{  diffuseColor " << r << ' ' << g << ' ' << b << " }\n";
+  ostr << "}\n";
+  ostr <<   "geometry IndexedFaceSet\n";
+  ostr << "{\n";
+  ostr << "coordIndex [\n";
+  for(unsigned indx = 0; indx<6; ++indx)
+    {
+      for(unsigned vi =0; vi<4; ++vi)
+        ostr << faces[indx][vi] << ", ";
+      ostr << -1 ;
+      if(indx<5)
+        ostr << ", ";
+    }
+  ostr << "]\n";
+  ostr <<"coord Coordinate{\n";
+  ostr << "point [\n";
+  for(unsigned ip = 0; ip<8; ++ip)
+    {
+      ostr << verts[ip].x() << ' ' << verts[ip].y()<< ' ' << verts[ip].z() ;
+      if(ip<7)
+         ostr << ", ";
+    }
+  ostr <<"]}\n";
+  ostr << "}\n";
+  ostr << "}\n";
+  return true;
+}
+//extract boxes from merged ply2 file and write as individual indexed face sets
+//in vrml 2.0 format. Assumes the ply2 file contains only rectangular boxes
+bool brct_algos::translate_ply2_to_vrml(vcl_ifstream& istr, vcl_ofstream& ostr,
+                                        const float r, const float g,
+                                        const float b)
+{
+  vcl_vector<vgl_point_3d<double> > pts;
+  vcl_vector<vsol_polygon_3d_sptr> polys;
+  vcl_vector<vcl_vector<unsigned> > ifs;
+  if(!brct_algos::read_world_ply2(istr, pts, polys, ifs))
+    return false;
+  unsigned npts = pts.size(), nfaces = ifs.size();
+  if(npts/8 != nfaces/6)
+    return false;
+  brct_algos::write_vrml_header(ostr);
+  unsigned fi = 0;
+  for(unsigned ip = 0; ip<npts; ip+=8, fi+=6)
+    {
+      vcl_vector<vgl_point_3d<double> > verts(8);
+      vcl_vector<vcl_vector<unsigned> > faces(6);
+      for(unsigned vi = 0; vi<8; ++vi)
+        verts[vi]=pts[ip+vi];
+      for(unsigned f = 0; f<6; ++f)
+        {
+          vcl_vector<unsigned> index(4);
+          for(unsigned fv=0; fv<4; ++fv)
+            index[fv]=(ifs[fi+f][fv]-ip);
+          faces[f]=index;
+        }
+      if(!brct_algos::write_ifs_box(ostr, verts, faces, r, g, b))
+        return false;
+    }
+  return true;
 }
