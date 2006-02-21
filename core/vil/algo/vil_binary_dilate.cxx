@@ -25,7 +25,7 @@ void vil_binary_dilate(const vil_image_view<bool>& src_image,
   vcl_vector<vcl_ptrdiff_t> offset;
   vil_compute_offsets(offset,element,s_istep,s_jstep);
 
-  // Define box in which all element will be valid
+  // Define box in which all elements will be valid
   int ilo = -element.min_i();
   int ihi = ni-1-element.max_i();
   int jlo = -element.min_j();
