@@ -33,13 +33,21 @@ void vil_binary_erode(const vil_image_view<bool>& src_image,
   int jhi = nj-1-element.max_j();
 
   // Deal with left edge
-  for (int i=0;i<ilo;++i)         vil_fill_col(dest_image,i,false);
+  for (int i=0;i<ilo;++i)
+    for (unsigned int j=0;j<nj;++j)
+      dest_image(i,j,0)=vil_binary_erode(src_image,0,element,i,j);
   // Deal with right edge
-  for (unsigned i=ihi+1;i<ni;++i) vil_fill_col(dest_image,i,false);
+  for (unsigned int i=ihi+1;i<ni;++i)
+    for (unsigned int j=0;j<nj;++j)
+      dest_image(i,j,0)=vil_binary_erode(src_image,0,element,i,j);
   // Deal with bottom edge
-  for (int j=0;j<jlo;++j)         vil_fill_row(dest_image,j,false);
+  for (int i=ilo;i<=ihi;++i)
+    for (int j=0;j<jlo;++j)
+      dest_image(i,j,0)=vil_binary_erode(src_image,0,element,i,j);
   // Deal with top edge
-  for (unsigned j=jhi+1;j<nj;++j) vil_fill_row(dest_image,j,false);
+  for (int i=ilo;i<=ihi;++i)
+    for (unsigned int j=jhi+1;j<nj;++j)
+      dest_image(i,j,0)=vil_binary_erode(src_image,0,element,i,j);
 
   for (int j=jlo;j<=jhi;++j)
   {

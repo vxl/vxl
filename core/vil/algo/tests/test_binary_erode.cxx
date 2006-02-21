@@ -66,7 +66,7 @@ static void test_binary_erode_byte()
   TEST("image4(5,5)", image4(5,5), true);
   TEST("image4(4,5)", image4(4,5), false);
   TEST("image4(6,5)", image4(6,5), false);
-  TEST("image4(3,0)", image4(3,0), false);
+  TEST("image4(3,0)", image4(3,0), true);
 
 
   vcl_cout<<"Testing vil_binary_closing\n";
