@@ -24,7 +24,10 @@
 
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_event.h>
+#include <vgui/vgui_event_condition.h>
 #include <vgui/vgui_parent_child_link.h>
+#include <vsol/vsol_point_2d_sptr.h>
+#include <vsol/vsol_polygon_2d_sptr.h>
 #include "bgui_picker_tableau_sptr.h"
 
 class bgui_picker_tableau : public vgui_tableau
@@ -46,10 +49,15 @@ class bgui_picker_tableau : public vgui_tableau
   //: Gets a user selected box specified by corner points)
   void pick_box(float* x1, float* y1, float *x2, float* y2);
 
+  //: Gets a user selected polygon 
+
   //: Pick a point with an anchored line indicator
   void anchored_pick_point(const float anch_x,
                            const float anch_y,
                            float* x, float* y);
+
+  //: Pick a polygon
+  void pick_polygon(vsol_polygon_2d_sptr& poly);
 
   //: Set drawing style, [0 1.0] for colors
   void set_color(const float red=1.0f, const float green=1.0f,
@@ -73,7 +81,7 @@ class bgui_picker_tableau : public vgui_tableau
   //: Get next event in the event loop.
   bool next();
   //: List of possible objects to pick.
-  enum object_type {none_enum, point_enum, line_enum, anchor_enum, box_enum};
+  enum object_type {none_enum, point_enum, line_enum, anchor_enum, box_enum, poly_enum};
   //: Type of object we are picking.
   static object_type obj_type;
 
@@ -85,6 +93,17 @@ class bgui_picker_tableau : public vgui_tableau
 
   //: Anchor point coordinates
   float anchor_x, anchor_y;
+
+  //: For polygon
+  bool active;
+  vgui_event_condition gesture0;
+  vgui_event_condition gesture1;
+  vgui_event_condition gesture2;  
+
+  vcl_vector< vsol_point_2d_sptr > point_list;
+
+  float last_x;
+  float last_y;
 
   //: Style values
   float r, g, b, w;
