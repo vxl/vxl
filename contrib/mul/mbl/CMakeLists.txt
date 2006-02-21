@@ -79,7 +79,9 @@ SET(mbl_sources
   
   mbl_config.h.in
   mbl_mod_gram_schmidt.cxx             mbl_mod_gram_schmidt.h
+  mbl_linear_interpolator.cxx          mbl_linear_interpolator.h
 )
+
 AUX_SOURCE_DIRECTORY(Templates mbl_sources)
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
