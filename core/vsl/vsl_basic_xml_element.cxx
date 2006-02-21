@@ -19,7 +19,14 @@ void vsl_basic_xml_element::add_attribute(vcl_string attr_name, double value)
 
 void vsl_basic_xml_element::add_attribute(vcl_string attr_name, int value)
 {
-  vcl_string value_str = toString(value); //"" + value;
+  vcl_string value_str = toString(value); 
+  vcl_pair<vcl_string, vcl_string> attr(attr_name, value_str);
+  attrs_.push_back(attr);
+}
+
+void vsl_basic_xml_element::add_attribute(vcl_string attr_name, unsigned long value)
+{
+  vcl_string value_str = toString(value);
   vcl_pair<vcl_string, vcl_string> attr(attr_name, value_str);
   attrs_.push_back(attr);
 }

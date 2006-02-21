@@ -44,6 +44,7 @@ class vsl_basic_xml_element
   //: overloaded add_attribute methods to add different types of values as string
   void add_attribute(vcl_string attr_name, double value);
   void add_attribute(vcl_string attr_name, int value);
+  void add_attribute(vcl_string attr_name, unsigned long value);
   void add_attribute(vcl_string attr_name, vcl_string value);
 #if 0
   void add_attribute(vcl_pair<vcl_string, vcl_string> attr);
