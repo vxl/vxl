@@ -39,6 +39,7 @@ DECLARE( test_stl );
 DECLARE( test_cloneable_ptr );
 DECLARE( test_exception );
 DECLARE( test_gram_schmidt );
+DECLARE( test_linear_interpolator );
 
 void
 register_tests()
@@ -82,6 +83,7 @@ register_tests()
   REGISTER( test_cloneable_ptr );
   REGISTER( test_exception );
   REGISTER( test_gram_schmidt );
+  REGISTER( test_linear_interpolator );
 }
 
 DEFINE_MAIN;

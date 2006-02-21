@@ -42,6 +42,7 @@ ADD_EXECUTABLE( mbl_test_all
   test_cloneable_ptr.cxx
   test_exception.cxx
   test_gram_schmidt.cxx
+  test_linear_interpolator.cxx
 )
 
 TARGET_LINK_LIBRARIES(mbl_test_all mbl vbl vul vpl testlib )
@@ -86,6 +87,7 @@ ADD_TEST( mbl_test_stl mbl_test_all test_stl )
 ADD_TEST( mbl_test_cloneable_ptr mbl_test_all test_cloneable_ptr )
 ADD_TEST( mbl_test_exception mbl_test_all test_exception )
 ADD_TEST (mbl_gram_schmidt mbl_test_all test_gram_schmidt)
+ADD_TEST (mbl_test_linear_interpolator mbl_test_all test_linear_interpolator)
 
 
 ADD_EXECUTABLE( mbl_test_include test_include.cxx )
