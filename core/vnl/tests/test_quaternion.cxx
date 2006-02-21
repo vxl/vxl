@@ -20,6 +20,83 @@ static void test_operators()
 }
 
 
+static void test_random_round_trip()
+{
+  vnl_random rng(13241ul);
+  unsigned errcount=0;
+  double avg_sqr_error = 0.0;
+  for (unsigned i=0;i<1000;++i)
+  {
+    // Need to be careful abount wrap around - don't test with angles that are too big
+    vnl_vector_fixed<double,3> euler(rng.normal()*vnl_math::pi/18.0,
+      rng.normal()*vnl_math::pi/18.0, rng.normal()*vnl_math::pi/18.0);
+    vnl_quaternion<double> quat(euler(0), euler(1), euler(2));
+    vnl_vector_fixed<double,3> out = quat.rotation_euler_angles();
+    double err = vnl_vector_ssd(euler, out);
+    avg_sqr_error+=err;
+    if (err > 1e-16)
+    {
+      errcount++;
+      vcl_cout << "ERROR: " << euler << vcl_endl;
+    }
+  }
+  TEST_NEAR("1000*Random euler -> quaternion -> euler consistent", errcount, 0, 0);
+  vcl_cout << "Average squared error: " <<  avg_sqr_error << vcl_endl;
+}
+
+static void test_random_euler_near_zero()
+{
+  vnl_random rng(13241ul);
+  unsigned errcount=0;
+  double avg_sqr_error = 0.0;
+  for (unsigned i=0;i<1000;++i)
+  {
+    // Need to be careful abount wrap around - don't test with angles that are too big
+    vnl_vector_fixed<double,3> euler(rng.normal()*vnl_math::pi/180.0,
+      rng.normal()*vnl_math::pi/180.0, rng.normal()*vnl_math::pi/180.0);
+    vnl_quaternion<double> quat(euler(0), euler(1), euler(2));
+    if (quat.angle() > vnl_math::pi/36.0)
+    {
+      errcount++;
+      vcl_cout << "ERROR: should be small: " << euler << ": " << quat << vcl_endl;
+    }
+    quat *= -1.0;
+    vnl_vector_fixed<double,3> out = quat.rotation_euler_angles();
+    double err = vnl_vector_ssd(euler, out);
+    avg_sqr_error+=err;
+    if (err > 1e-16)
+    {
+      errcount++;
+      vcl_cout << "ERROR: -quat -> euler == quat -> euler" << euler << ": " << out << vcl_endl;
+    }
+
+  }
+  TEST_NEAR("1000*Random small euler -> small quaternion angle", errcount, 0, 0);
+}
+
+static void test_random_quat_near_zero()
+{
+  vnl_random rng(13241ul);
+  unsigned errcount=0;
+  double avg_sqr_error = 0.0;
+  for (unsigned i=0;i<1000;++i)
+  {
+    vnl_quaternion<double> quat(rng.normal()/1000.0, rng.normal()/1000.0, rng.normal()/1000.0,
+      vnl_math_sgn0(rng.normal()) * (1.0+rng.normal()/1000.0) );
+    quat.normalize();
+
+    vnl_vector_fixed<double,3> euler = quat.rotation_euler_angles();
+    
+    if (euler.magnitude() > 0.01)
+    {
+      errcount++;
+      vcl_cout << "ERROR: should be small: " << quat << ": " << euler << vcl_endl;
+    }
+
+  }
+  TEST_NEAR("1000*Random small quat -> small euler values", errcount, 0, 0);
+}
+
 static void test_rotations()
 {
   vnl_vector_fixed<double,3> p1(2,2,2), p2(1,0,0), p3(0,1,0);
@@ -46,6 +123,10 @@ static void test_rotations()
   TEST_NEAR("rotate p2 using q1", vnl_vector_ssd(q1.rotate(p2),p3), 0.0, 1e-8);
   vnl_vector_fixed<double,3> e1_b = q1.rotation_euler_angles();
   TEST_NEAR("q1 -> Euler angles", vnl_vector_ssd(e1_b,e1), 0.0, 1e-8);
+  vnl_quaternion<double> q1_c = -q1;
+  vnl_vector_fixed<double,3> e1_c = q1_c.rotation_euler_angles();
+  TEST_NEAR("-q1 -> Euler angles", vnl_vector_ssd(e1_c,e1), 0.0, 1e-8);
+
   vcl_cout << "q1 -> Euler angles: " << e1 << vcl_endl;
   vnl_quaternion<double> q1_b(e1(0), e1(1), e1(2));
   vcl_cout << "q1 -> Euler angles: " << q1_b << vcl_endl;
@@ -54,26 +135,10 @@ static void test_rotations()
   
   vcl_cout << "Euler angles -> q1: " << q1_b << vcl_endl;
 
-  vnl_random rng(13241ul);
-  unsigned errcount=0;
-  double avg_sqr_error = 0.0;
-  for (unsigned i=0;i<1000;++i)
-  {
-    // Need to be careful abount wrap around - don't test with angles that are too big
-    vnl_vector_fixed<double,3> euler(rng.normal()*vnl_math::pi/18.0,
-      rng.normal()*vnl_math::pi/18.0, rng.normal()*vnl_math::pi/18.0);
-    vnl_quaternion<double> quat(euler(0), euler(1), euler(2));
-    vnl_vector_fixed<double,3> out = quat.rotation_euler_angles();
-    double err = vnl_vector_ssd(euler, out);
-    avg_sqr_error+=err;
-    if (err > 1e-16)
-    {
-      errcount++;
-      vcl_cout << "ERROR: " << euler << vcl_endl;
-    }
-  }
-  TEST_NEAR("1000*Random euler -> quaternion -> euler consistent", errcount, 0, 0);
-  vcl_cout << "Average squared error: " <<  avg_sqr_error << vcl_endl;
+  test_random_round_trip();
+  test_random_quat_near_zero();
+  test_random_euler_near_zero();
+
 }
 
 void test_quaternion()
