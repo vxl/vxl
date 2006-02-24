@@ -51,7 +51,8 @@ class rgrl_matcher
   compute_matches( rgrl_feature_set const&    from_features,
                    rgrl_feature_set const&    to_features,
                    rgrl_transformation const& current_xform,
-                   rgrl_mask_box const&       region,
+                   rgrl_mask_box const&       from_region,
+                   rgrl_mask_box const&       to_region,
                    rgrl_scale const&          current_scale );
 
   //: invert the matches according to inverse transformation

@@ -33,11 +33,13 @@ rgrl_matcher::
 compute_matches( rgrl_feature_set const&    from_features,
                  rgrl_feature_set const&    to_features,
                  rgrl_transformation const& current_xform,
-                 rgrl_mask_box const&       region,
+                 rgrl_mask_box const&       from_region,
+                 rgrl_mask_box const&       to_region,
                  rgrl_scale const&          current_scale )
 {
-  rgrl_mask_sptr roi = new rgrl_mask_box( region.x0(), region.x1() );
-  rgrl_view view( roi, roi, region, region, 0, 0, 0);
+  rgrl_mask_sptr from_roi = new rgrl_mask_box( from_region.x0(), from_region.x1() );
+  rgrl_mask_sptr to_roi = new rgrl_mask_box( to_region.x0(), to_region.x1() );
+  rgrl_view view( from_roi, to_roi, from_region, from_region, 0, 0, 0);
 
   return this->compute_matches(from_features,
                                to_features,

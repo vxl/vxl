@@ -75,14 +75,23 @@ run( rgrl_initializer_sptr initializer )
   rgrl_transformation_sptr          init_xform_estimate;
   rgrl_scale_sptr                   prior_scale;
   rgrl_estimator_sptr               init_xform_estimator;
-  rgrl_mask_box                     image_region(0);
   unsigned                          init_resolution;
 
-  while ( initializer->next_initial( image_region, init_xform_estimator,
-                                    init_xform_estimate, init_resolution,
-                                    prior_scale ) ) {
+  rgrl_mask_sptr                    from_image_roi; //not used
+  rgrl_mask_sptr                    to_image_roi;
+  rgrl_mask_box                     current_region(0); // not used
+  rgrl_mask_box                     global_region(0);
+
+  while ( initializer->next_initial( from_image_roi, to_image_roi, 
+                                     current_region, global_region, 
+                                     init_xform_estimator, init_xform_estimate,
+                                     init_resolution, prior_scale ) ) {
     DebugMacro(  1, "Try "<< num_xforms_tested_ << " initial estimate\n" );
-    this->run( image_region, init_xform_estimator, init_xform_estimate,
+
+    // Use the estimated overlap region (global_region) of the
+    // from_image, instead of the entire ROI of the from_image.
+    this->run( global_region, to_image_roi-> bounding_box(),  
+               init_xform_estimator, init_xform_estimate,
                prior_scale, init_resolution );
 
     if ( best_status_ && best_status_->is_good_enough() ) break;
@@ -98,7 +107,8 @@ run( rgrl_initializer_sptr initializer )
 //
 void
 rgrl_feature_based_registration::
-run( rgrl_mask_box              image_region,
+run( rgrl_mask_box              from_image_region,
+     rgrl_mask_box              to_image_region,
      rgrl_estimator_sptr        init_xform_estimator,
      rgrl_transformation_sptr   initial_xform,
      rgrl_scale_sptr            prior_scale,
@@ -106,13 +116,15 @@ run( rgrl_mask_box              image_region,
 {
   if ( data_->is_multi_feature() ) {
     DebugMacro(1, " Multi-feature Registration:\n");
-    this->register_multi_feature(image_region, init_xform_estimator,
-                                 initial_xform, prior_scale, init_resolution);
+    this->register_multi_feature(from_image_region, to_image_region,
+                                 init_xform_estimator, initial_xform, 
+                                 prior_scale, init_resolution);
   }
   else {
     DebugMacro(  1, " Single-feature Registration:\n" );
 
-    this->register_single_feature(image_region, init_xform_estimator,
+    this->register_single_feature(from_image_region, to_image_region, 
+                                  init_xform_estimator,
                                   initial_xform, prior_scale, init_resolution);
   }
 }
@@ -263,7 +275,8 @@ iterations_at_current_stage() const
 //: registration of single feature type at each stage/resolution
 void
 rgrl_feature_based_registration::
-register_single_feature( rgrl_mask_box            image_region,
+register_single_feature( rgrl_mask_box            from_image_region,
+                         rgrl_mask_box            to_image_region,
                          rgrl_estimator_sptr      initial_xform_estimator,
                          rgrl_transformation_sptr xform_estimate,
                          rgrl_scale_sptr          scale,
@@ -319,7 +332,8 @@ register_single_feature( rgrl_mask_box            image_region,
       match_set= matcher->compute_matches( *from_set,
                                            *to_set,
                                            *current_xform_estimate_,
-                                           image_region,
+                                           from_image_region,
+                                           to_image_region,
                                            *scale );
       current_match_sets_.clear();
       current_match_sets_.push_back( match_set );
@@ -481,8 +495,8 @@ register_single_feature( rgrl_mask_box            image_region,
     // at the finest level
     //
     prev_resol = resolution;
-    initialize_for_next_resolution( image_region, current_xform_estimate_,
-                                    resolution );
+    initialize_for_next_resolution( from_image_region, to_image_region, 
+                                    current_xform_estimate_, resolution );
     int level_diff = prev_resol - resolution;
     double dim_increase = data_->dimension_increase_for_next_stage(prev_resol);
 //  double scale_multipler = vcl_pow(dim_increase, level_diff);
@@ -521,7 +535,8 @@ register_single_feature( rgrl_mask_box            image_region,
 //: registration of multiple feature type at each stage/resolution
 void
 rgrl_feature_based_registration::
-register_multi_feature( rgrl_mask_box            image_region,
+register_multi_feature( rgrl_mask_box            from_image_region,
+                        rgrl_mask_box            to_image_region,
                         rgrl_estimator_sptr      initial_xform_estimator,
                         rgrl_transformation_sptr xform_estimate,
                         rgrl_scale_sptr          prior_scale,
@@ -600,7 +615,8 @@ register_multi_feature( rgrl_mask_box            image_region,
           matchers[fs]->compute_matches( *from_sets[fs],
                                          *to_sets[fs],
                                          *current_xform_estimate_,
-                                         image_region,
+                                         from_image_region,
+                                         to_image_region,
                                          *scales[fs] );
         DebugMacro(  2, "      Matches: " << new_matches->from_size() <<" ("<<new_matches<<")\n" );
 
@@ -761,8 +777,8 @@ register_multi_feature( rgrl_mask_box            image_region,
       // already at the finest level
       //
       prev_resol = resolution;
-      initialize_for_next_resolution( image_region, current_xform_estimate_,
-                                      resolution );
+      initialize_for_next_resolution( from_image_region, to_image_region, 
+                                      current_xform_estimate_, resolution );
       int level_diff = prev_resol - resolution;
       double dim_increase = data_->dimension_increase_for_next_stage(prev_resol);
       double scale_multipler = vcl_pow(dim_increase, level_diff);
@@ -801,7 +817,8 @@ register_multi_feature( rgrl_mask_box            image_region,
 
 void
 rgrl_feature_based_registration::
-initialize_for_next_resolution(  rgrl_mask_box            & image_region,
+initialize_for_next_resolution(  rgrl_mask_box            & from_image_region,
+                                 rgrl_mask_box            & to_image_region,
                                  rgrl_transformation_sptr & xform_estimate,
                                  unsigned                 & current_resol ) const
 {
@@ -828,8 +845,8 @@ initialize_for_next_resolution(  rgrl_mask_box            & image_region,
   double dim_increase = data_->dimension_increase_for_next_stage(current_resol);
   double scale = vcl_pow(dim_increase, level_diff);
 
-  image_region.set_x0( image_region.x0()*scale );
-  image_region.set_x1( image_region.x1()*scale );
+  from_image_region.set_x0( from_image_region.x0()*scale );
+  from_image_region.set_x1( from_image_region.x1()*scale );
 
   xform_estimate =  xform_estimate->scale_by( scale );
   current_resol = new_resol;

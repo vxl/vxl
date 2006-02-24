@@ -57,7 +57,8 @@ class rgrl_feature_based_registration: public rgrl_object
   //  Based on if data_->is_multi_feature(), call run_single_feature(.)
   //  or run_multi_feature(.)
   //
-  void run( rgrl_mask_box              image_region,
+  void run( rgrl_mask_box              from_image_region,
+            rgrl_mask_box              to_image_region,
             rgrl_estimator_sptr        estimator,
             rgrl_transformation_sptr   initial_xform,
             rgrl_scale_sptr            prior_scale = 0,
@@ -130,14 +131,16 @@ class rgrl_feature_based_registration: public rgrl_object
 
  private:
   //: registration of single feature type at each stage/resolution
-  void register_single_feature( rgrl_mask_box            image_region,
+  void register_single_feature( rgrl_mask_box            from_image_region,
+                                rgrl_mask_box            to_image_region,
                                 rgrl_estimator_sptr      initial_xform_estimator,
                                 rgrl_transformation_sptr xform_estimate,
                                 rgrl_scale_sptr          prior_scale,
                                 unsigned                 init_resolution);
 
   //: registration of multiple feature types at each stage/resolution
-  void register_multi_feature( rgrl_mask_box            image_region,
+  void register_multi_feature( rgrl_mask_box            from_image_region,
+                               rgrl_mask_box            to_image_region,
                                rgrl_estimator_sptr      initial_xform_estimator,
                                rgrl_transformation_sptr xform_estimate,
                                rgrl_scale_sptr          prior_scale,
@@ -145,7 +148,8 @@ class rgrl_feature_based_registration: public rgrl_object
 
 
   //: Scale/shrink the registration region and the \a xform_est according to the \a dim_increase_for_next_stage at \a current_resol
-  void initialize_for_next_resolution(  rgrl_mask_box            & image_region,
+  void initialize_for_next_resolution(  rgrl_mask_box            & from_image_region,
+                                        rgrl_mask_box            & to_image_region,
                                         rgrl_transformation_sptr & xform_estimate,
                                         unsigned                 & current_resol ) const;
 
