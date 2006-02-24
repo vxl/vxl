@@ -92,6 +92,9 @@ class rgrl_feature_trace_pt
   double length() const { return length_; }
   double radius() const { return radius_; }
 
+  //:  Compute the signature weight between two features.
+  virtual double absolute_signature_weight( rgrl_feature_sptr other ) const;
+
   //  Chuck's note:  I am beginning to wonder if we are trying to do
   //  too much here.  Perhaps we should be make a subclass for the
   //  region-based estimator.

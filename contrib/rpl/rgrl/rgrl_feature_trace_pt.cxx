@@ -10,6 +10,8 @@
 
 #include <vcl_cassert.h>
 
+#include <rgrl/rgrl_cast.h>
+
 rgrl_feature_trace_pt ::
 rgrl_feature_trace_pt()
   : scale_(1), 
@@ -159,6 +161,32 @@ boundary_points(vnl_vector<double> const& in_direction) const
 
   return bdy_feature_points;
 }
+
+//:  Compute the signature weight between two features.
+double
+rgrl_feature_trace_pt ::
+absolute_signature_weight( rgrl_feature_sptr other ) const
+{
+  //if other is invalid
+  if ( !other )  return 0.0;
+
+  rgrl_feature_trace_pt* trace_ptr = rgrl_cast<rgrl_feature_trace_pt*>(other);
+  assert( trace_ptr );
+  double dir_wgt = vcl_abs( dot_product( this->tangent_, trace_ptr->tangent_ ) );
+
+  double scale_wgt = 1;
+  if ( this->scale_ && trace_ptr->scale_ ) {
+    if ( this->scale_ >= trace_ptr->scale_ )
+      scale_wgt = trace_ptr->scale_ / this->scale_;
+    else
+      scale_wgt = this->scale_ / trace_ptr->scale_;
+    // the weight change is too gradual, make it more steep
+    // scale_wgt = scale_wgt * scale_wgt;
+  }
+
+  return  dir_wgt* vcl_sqrt(scale_wgt);
+}
+
 //: write out feature
 void
 rgrl_feature_trace_pt::
