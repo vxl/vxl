@@ -31,6 +31,7 @@ class vgui_qt : public vgui_toolkit
    virtual   void       run();
    virtual   void       run_one_event();
    virtual   void       run_till_idle();
+   virtual   void       flush();
    virtual   vgui_window* produce_window(int width, int height,
                                          const vgui_menu& menubar,
                                          const char* title="vgui qt window");

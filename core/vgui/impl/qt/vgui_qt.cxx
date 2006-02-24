@@ -66,6 +66,12 @@ void vgui_qt::run_till_idle()
    glFlush();
 }
 
+//-----------------------------------------------------------------------------
+void vgui_qt::flush()
+{
+  glFlush();
+  run_till_idle();
+}
 
 //-----------------------------------------------------------------------------
 vgui_window* vgui_qt::produce_window(int width, int height,
