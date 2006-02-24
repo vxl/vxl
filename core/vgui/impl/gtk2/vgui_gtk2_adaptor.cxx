@@ -450,15 +450,15 @@ gint vgui_gtk2_adaptor::idle_callback_for_destroy(gpointer data)
 
   vgui_window* win = adaptor->get_window();
 
-  // The adaptor destructor unrefs its tableau and disconnects/destroys
-  // its glarea widget
-  delete adaptor;
-
   // If we know the parent window then delete it now.
   if (win)
     delete win;
   else
     vcl_cerr << __FILE__ " : parent vgui_gtk2_window is unknown, so cannot destroy!\n";
+
+  // The adaptor destructor unrefs its tableau and disconnects/destroys
+  // its glarea widget
+  delete adaptor;
 
   // capes - returning FALSE automagically cancels this callback
   return FALSE;
