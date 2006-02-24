@@ -249,6 +249,9 @@ SOURCE=.\test_log.cxx
 SOURCE=.\test_gram_schmidt.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_linear_interpolator.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

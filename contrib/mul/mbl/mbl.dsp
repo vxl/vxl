@@ -287,6 +287,9 @@ SOURCE=.\mbl_log.cxx
 # Begin Source File
 SOURCE=.\mbl_mod_gram_schmidt.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\mbl_linear_interpolator.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx;in"
@@ -502,6 +505,9 @@ SOURCE=.\mbl_log.h
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_mod_gram_schmidt.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_linear_interpolator.h
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_config.h.in
