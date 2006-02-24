@@ -52,8 +52,6 @@ vgui_gtk2_window::vgui_gtk2_window(int w, int h, const char* title)
   gtk_window_set_title(GTK_WINDOW(window), title);
   gtk_window_set_default_size(GTK_WINDOW(window),w,h);
 
-  adaptor = new vgui_gtk2_adaptor(this);
-
 #ifndef __SGI_CC // SGI's iostream does not allow re-initialising
   vgui::out.rdbuf(static_cast<vgui_gtk2_statusbar*>(statusbar)->statusbuf);
 #endif
