@@ -41,6 +41,7 @@ SOURCES += mbl_exception.cxx
 SOURCES += mbl_test.cxx
 SOURCES += mbl_log.cxx
 SOURCES += mbl_mod_gram_schmidt.cxx
+SOURCES += mbl_linear_interpolator.cxx
 
 # Additional files to document:
 MANPAGE_SOURCES += mbl_cloneables_factory.h
