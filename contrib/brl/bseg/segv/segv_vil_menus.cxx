@@ -72,6 +72,11 @@ void segv_vil_menus::rotate_image_callback()
   segv_vil_segmentation_manager::instance()->rotate_image();
 }
 
+void segv_vil_menus::flip_image_lr_callback()
+{
+  segv_vil_segmentation_manager::instance()->flip_image_lr();
+}
+
 void segv_vil_menus::display_images_as_color_callback()
 {
   segv_vil_segmentation_manager::instance()->display_images_as_color();
@@ -132,6 +137,7 @@ vgui_menu segv_vil_menus::get_menu()
   menuview.add("Test Draw Conic", test_ellipse_draw_callback);
   menuview.add("Images as Color", display_images_as_color_callback);
   menuview.add("RotateImage ", rotate_image_callback);
+  menuview.add("Flip Image (LR)", flip_image_lr_callback);
 
   //edit menu entries
 

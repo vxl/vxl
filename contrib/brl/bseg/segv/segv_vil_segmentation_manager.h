@@ -52,6 +52,7 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void rotate_image();
   //: visualization
   void display_images_as_color();
+  void flip_image_lr();
   //: image arithmetic
   void add_images();
   void subtract_images();

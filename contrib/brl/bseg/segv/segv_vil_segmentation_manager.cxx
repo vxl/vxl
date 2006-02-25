@@ -15,8 +15,10 @@
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_new.h>
+#include <vil/vil_copy.h>
 #include <vil/vil_math.h>
 #include <vil/vil_decimate.h>
+#include <vil/vil_flip.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #if 0
@@ -190,8 +192,11 @@ add_image_at(vil_image_resource_sptr const& image,
              const unsigned col, const unsigned row,
              vgui_range_map_params_sptr const& rmps)
 {
+     vgui_range_map_params_sptr rmap = rmps;
+	if(!rmps)
+    rmap = range_params(image);
   bgui_image_tableau_sptr itab = bgui_image_tableau_new(image);
-  itab->set_mapping(rmps);
+  itab->set_mapping(rmap);
   bgui_vtol2D_tableau_sptr t2D = bgui_vtol2D_tableau_new(itab);
   bgui_vtol2D_rubberband_client* rcl =  new bgui_vtol2D_rubberband_client(t2D);
   vgui_rubberband_tableau_sptr rubber = vgui_rubberband_tableau_new(rcl);
@@ -1193,9 +1198,11 @@ void segv_vil_segmentation_manager::rotate_image()
     return;
 
   vil_image_view<float> temp = brip_vil_float_ops::rotate(flt, angle);
+#if 0
   vil_image_view<unsigned char> tempr =
     brip_vil_float_ops::convert_to_byte(temp, 0, 255);
-  vil_image_resource_sptr out_image = vil_new_image_resource_of_view(tempr);
+#endif
+  vil_image_resource_sptr out_image = vil_new_image_resource_of_view(temp);
   this->add_image(out_image);
 }
 
@@ -1210,4 +1217,19 @@ void segv_vil_segmentation_manager::test_float()
   vil_image_view<float> flt =
     brip_vil_float_ops::convert_to_float(img);
   this->add_image(vil_new_image_resource_of_view(flt));
+}
+void segv_vil_segmentation_manager::flip_image_lr()
+{
+  vil_image_resource_sptr img = selected_image();
+  if (!img)
+    {
+      vcl_cout << "In segv_vil_segmentation_manager::flip_image - no image\n";
+      return;
+    }
+  
+  vil_image_resource_sptr flipr = vil_flip_lr(img);
+  vil_image_resource_sptr flipc = vil_new_image_resource(img->ni(), img->nj(),
+                                                         flipr);
+  vil_copy_deep(flipr, flipc);
+  this->add_image(flipc);
 }
