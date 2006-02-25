@@ -5,7 +5,9 @@
 
 #include <fhs/fhs_searcher.h>
 #include <vcl_algorithm.h>
+#include <vcl_cassert.h>
 #include <vcl_cmath.h>
+#include <vcl_cstdlib.h> // for std::abort()
 #include <vnl/vnl_math.h>
 #include <vil/vil_bilin_interp.h>
 #include <vil/algo/vil_quad_distance_function.h>
@@ -28,7 +30,6 @@ void fhs_searcher::set_tree(const vcl_vector<fhs_arc>& arcs,
   arc_to_j_.resize(arc_.size()+1);
   for (unsigned i=0;i<arc_.size();++i)
     arc_to_j_[arc_[i].j()]=i;
-
 }
 
 //: Index of root node (set by last call to set_tree()
@@ -160,7 +161,6 @@ void fhs_searcher::search(const vcl_vector<vimt_image_2d_of<float> >& feature_re
                                pos_im_[node_a].image());
     dist_im_[node_a].set_world2im(sum_im_[node_a].world2im());
     pos_im_[node_a].set_world2im(sum_im_[node_a].world2im());
-
   }
 
   // Now combine children of root node
@@ -177,8 +177,8 @@ void fhs_searcher::points_from_root(const vgl_point_2d<double>& root_pt,
 {
   if (n_points()<2)
   {
-    vcl_cerr<<"fhs_searcher::points_from_root() Not initialised."<<vcl_endl;
-    abort();
+    vcl_cerr<<"fhs_searcher::points_from_root() Not initialised.\n";
+    vcl_abort();
   }
 
   pts.resize(n_points());
