@@ -1,4 +1,4 @@
-// This is mul/fhs/tests/test_arc.cxx
+// This is mul/fhs/tests/test_searcher.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_vector.h>
 #include <fhs/fhs_searcher.h>
@@ -6,8 +6,8 @@
 
 void test_searcher1()
 {
-  vcl_cout<<"==== test fhs_searcher (1) ====="<<vcl_endl;
-  vcl_cout<<" Simple pair test (one arc)"<<vcl_endl;
+  vcl_cout << "==== test fhs_searcher (1) =====\n"
+           << " Simple pair test (one arc)"<<vcl_endl;
 
   // Generate arc list
   vcl_vector<fhs_arc> arcs(1);
@@ -69,13 +69,12 @@ void test_searcher1()
   TEST_NEAR("Root point is (10,10)",(pts[0]-vgl_point_2d<double>(10,10)).length(),0,1e-6);
   TEST_NEAR("Next point is (6,14)",(pts[1]-vgl_point_2d<double>(6,14)).length(),0,1e-6);
   vcl_cout<<"Solution is "<<pts[1]<<vcl_endl;
-
 }
 
 void test_searcher2()
 {
-  vcl_cout<<"==== test fhs_searcher (2) ====="<<vcl_endl;
-  vcl_cout<<" Root is at centre of a square"<<vcl_endl;
+  vcl_cout << "==== test fhs_searcher (2) =====\n"
+           << " Root is at centre of a square"<<vcl_endl;
 
   // Generate arc list
   vcl_vector<fhs_arc> arcs(4);
