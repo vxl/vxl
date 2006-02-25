@@ -75,6 +75,7 @@ ADD_TEST( vnl_test_arithmetic           vnl_test_all test_arithmetic           )
 ADD_TEST( vnl_test_hungarian_algorithm  vnl_test_all test_hungarian_algorithm  )
 ADD_TEST( vnl_test_integrant            vnl_test_all test_integrant            )
 ADD_TEST( vnl_test_bessel               vnl_test_all test_bessel               )
+ADD_TEST( vnl_test_quaternion           vnl_test_all test_quaternion           )
 
 ADD_EXECUTABLE(vnl_test_include test_include.cxx)
 TARGET_LINK_LIBRARIES(vnl_test_include vnl)
