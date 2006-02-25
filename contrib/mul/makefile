@@ -21,6 +21,9 @@ SUBDIRS += mvl2
 # tools
 SUBDIRS += tools
 
+# fhs
+SUBDIRS += fhs
+
 ################################
 include ${VXLROOT}/config/top.mk
 ################################
