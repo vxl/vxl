@@ -1,4 +1,4 @@
-IULIBS += -lmbl
+IULIBS += -lfhs
 include ${VXLROOT}/contrib/mul/vimt/config.mk
 include ${VXLROOT}/core/vnl/config.mk
 include ${VXLROOT}/core/vil/algo/config.mk
