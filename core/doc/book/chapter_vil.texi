@@ -446,7 +446,7 @@ The @code{vil_image_view} provides such facilities
 as compile-time type safety and switchable bounds checking.  It also acts as a
 sort of canonicaliser.  A wide range of actual memory layouts can all be treated
 identically and transparently while working through the @code{vil_image_view}.
-Previously, in vil1, the image loader often needed to have several filters placed
+Previously, in vil1, the image loader often needed read an unblocked resource and to have several filters placed
 on top of it to do such things as re-order the raster rows and re-order the
 component order. vil doesn't do this, but instead uses the vil_image_view to provide
 a canonical view of whatever deranged image format your loader finds most efficient to
@@ -710,3 +710,176 @@ times for your original and optimised code.  Run enough experiments to
 measure the statistical spread to see if your improvements are significant.
 It is quite common for compiler or processor
 quirks to make your optimised code slower than the original.
+
+@section Blocked Images (Advanced Topic)
+@subsection Basics
+It is possible to encounter images that are much larger than available
+memory. For example, a commercial satellite image can easily exceed several
+gigabytes in size. The situation is even more dire in the case of
+ultra high resolution video where up to 16K X 16K pixel resolutions are
+feasible at two bytes per pixel. It is clearly not practical to handle
+these images as an in-memory @code{vil_image_view}. The use of a
+@code{vil_image_resource} to supply small views of the image at a time
+is essential, however the overhead in extracting small views from a
+large image file can be substantial.
+
+Consider the example of displaying a small image region near the
+center of the image where the view is zoomed in so that one
+pixel in the image is mapped to one pixel on the screen. The size of
+this image patch might be 2K X 1K pixels.  In order for the image
+resource to supply this set of pixels it is necessary to seek past a
+gigabyte or more of file-resident data to the middle of the image
+and then pull out the several megabytes of pixels needed to construct
+the view for display. If the user then wants to pan over a few hundred
+pixels to view something just off the screen, a full seek and file
+read must be repeated. Under these circumstances, image viewing
+performance will be overwhelmingly dominated by disk io bandwidth and
+seek times.
+
+To mitigate the overhead of disk access, the image can be organized as
+a set of contiguous rectangular blocks of pixels. Blocks may be
+randomly scattered within the file, but each block is a contiguous set
+of pixels. This way, a view can be assembled by seeking to each block
+in the view and then reading the block efficiently. Typical block size
+is 512 X 512 or 1024 X 1024 pixels, so that only a few blocks are
+needed to display regions of interest at full zoom. To gain even more
+efficiency, the blocks can be managed in a cache so the most of the
+pixels being displayed on the screen are already in memory.  As the
+user pans to a new location, those blocks that are now off the screen
+are replaced by new blocks needed to fill in the new region. Thus, the
+number of blocks that have to actually be read from the file is
+significantly reduced.
+
+The blocked image resource interface has the following virtual methods in addition to those already defined in the base resource class:
+
+ The block size used to store and retrive pixels.
+@itemize
+@item @code{unsigned size_block_i() const}
+@item @code{unsigned size_block_j() const}
+@end itemize
+
+ The number of blocks in column and row to contain the image.
+@itemize
+@item @code{unsigned n_block_i() const}
+@item @code{unsigned n_block_j() const}
+@end itemize
+
+ Retriving blocks from the resource. Note that a block is a @code{vil_image_view} and thus ready for use in processing and visualization operations.
+
+@example
+vil_image_view_base_sptr 
+get_block( unsigned  block_index_i, unsigned  block_index_j ) const
+
+bool 
+get_blocks(unsigned start_block_i, unsigned end_block_i,
+           unsigned  start_block_j, unsigned end_block_j,
+           vcl_vector< vcl_vector< vil_image_view_base_sptr > >& blocks ) const
+@end example
+This blocking structure is used internally to implement the basic
+method 
+@example
+::get_copy_view(unsigned i0, unsigned n_i, unsigned j0, unsigned n_j)
+@end example
+It is possible that @code{i0, n_i}
+and @code{j0, n_j} are not evenly divisible by @code{size_block_i} and
+@code{size_block_j}, respectively. In this case the blocks are trimmed
+to extract pixels belonging to the specified image view bounds.
+In the case of retrieving views near the boundary of the full
+image, e.g., @code{n_i=ni(), n_j=nj()}, blocks may lie partially
+outside the underlying image.  In this case the pixel values in the
+block locations lying outside the full image bounds are undefined.
+
+Similar methods are defined for inserting blocked data into the image resource.
+@example
+bool put_block(unsigned  block_index_i, unsigned  block_index_j,
+               const vil_image_view_base& view)
+
+bool 
+put_blocks(unsigned start_block_i, unsigned end_block_i,
+           unsigned  start_block_j, unsigned end_block_j,
+           vcl_vector< vcl_vector< vil_image_view_base_sptr > > const& blocks)
+@end example
+These methods are used internally to support the virtual
+@example
+ ::put_view(const vil_image_view_base& im, unsigned i0, unsigned j0)
+@end example
+ method.  Note that current vil file-based resources do not support reading and
+writing on the same open resource. Therefore, a block-oriented image
+processing algorithm will have an input resource from which blocks are
+retrieved and an output resource where processed blocks are
+inserted.
+@subsection The Fa@,cade and Cached Resource
+Many of the advantages of blocking can be realized even if the
+underlying image resource is not intrinsically blocked. The
+@code{vil_blocked_image_facade} wraps around any image resource and
+provides the @code{vil_blocked_image_resource} class interface. That
+is, the fa@,cade is a sub-class of
+@code{vil_blocked_image_resource}. Internally, reading and writing
+fa@,cade block data is implemented using the usual get and put view methods. In
+this case the block view dimensions are those defined by the fa@,cade
+blocking geometry.
+
+One might wonder how this simulation of a blocked image structure
+provides any gain in efficiency for pixel access, since the process
+relies on an unblocked file format. A significant gain in performance
+can be gained by the addition of a cache. The
+@code{vil_cached_image_resource} is a sub-class of
+@code{vil_blocked_image_resource} and provides an in-memory store for
+most recently retrieved blocks. The size of the cache (in number of
+blocks) is specified in the constructor:
+@example
+vil_cached_image_resource(vil_blocked_image_resource_sptr bir, 
+                           const unsigned cache_size)
+@end example
+The cache is implemented as a priority queue based on the ``age'' of a
+block. The blocks in the queue are given a timestamp as they enter the
+queue. If a block is retrieved from the cache, then the timestamp is
+reset to the current time. Otherwise, blocks age as new blocks are
+entered into the cache.  When the cache is full, the oldest block is
+discarded to make room for a new block.  Note that the queue does not participate in writing blocks to a resource.
+
+@subsection Using Blocked File Formats
+A blocking capability of a resource can be determined by examining the properties of the resource using the method 
+@example
+bool get_property(char const* tag, void* property_value = 0) const
+@end example
+Two properties are defined for blocked resources:
+@example
+vil_property_size_block_i "size_block_i"
+vil_property_size_block_j "size_block_j"
+@end example
+To test if a resource supports blocking on can use the following tests
+@example
+vil_image_resource_sptr imgr = vil_load_image_resource("my_filename");
+...
+unsigned sbi=0, sbj=0;
+bool is_blocked = 
+  imgr->get_property(vil_property_size_block_i, &sbi) &&
+  imgr->get_property(vil_property_size_block_j, &sbj); 
+...
+@end example
+If the resource is blocked then @code{is_blocked} will be true and the
+variables, @code{sbi, sbj}, contain the blocking structure for the
+resource.
+
+The following example shows how to convert an image resource resource to a blocked file resource.
+@example
+vil_image_resource_sptr imgr = vil_load_image_resource("my_filename");
+unsigned size_block_i = 256, size_block_j = 256;
+vil_blocked_image_resource_sptr bimgr =
+        vil_new_blocked_image_resource("my_blocked_filename",
+                                       imgr->ni(), imgr->nj(), imgr->nplanes(),
+                                       imgr->pixel_format(),
+                                       size_block_i, size_block_j, "tiff");
+if(!vil_copy_deep(imgr, bimgr))
+@{ //report trouble
+ ...
+@}
+...                                       
+@end example
+The new resource, @code{bimgr}, will store pixels in square, 256 X
+256, blocks.  
+
+Currently, the @code{tiff} file format and The National
+Image Transmission Format (@code{nitf}) image format provide a
+@code{vil_blocked_image_resource, however the @code{nitf} format does not yet support writing.
