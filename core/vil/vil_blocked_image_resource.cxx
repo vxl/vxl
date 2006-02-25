@@ -115,6 +115,10 @@ glue_blocks_together(const vcl_vector< vcl_vector< vil_image_view_base_sptr > >&
    }
     GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
     GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte);
+#if VXL_HAS_INT_64
+    GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_64, vxl_uint_64);
+    GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_64, vxl_int_64);
+#endif
     GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32);
     GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_32, vxl_int_32);
     GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16);
@@ -213,6 +217,10 @@ bool vil_blocked_image_resource::trim_border_blocks(unsigned i0, unsigned ni,
        } break
         TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
         TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte);
+#if VXL_HAS_INT_64
+        TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_64, vxl_uint_64);
+        TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_64, vxl_int_64);
+#endif
         TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32);
         TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_32, vxl_int_32);
         TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16);

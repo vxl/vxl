@@ -4,12 +4,14 @@
 #include <vcl_string.h>
 #include <vil/vil_new.h>
 #include <vil/vil_load.h>
+#include <vil/vil_property.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vil/vil_image_view.h>
 #include <vil/vil_blocked_image_resource.h>
 #include <vil/vil_block_cache.h>
 
 #define DEBUG
+static vcl_string image_file;
 static void test_blocked_image_resource()
 {
   vcl_cout << "************************************\n"
@@ -252,7 +254,39 @@ static void test_blocked_image_resource()
   //delete file
   vpl_unlink(path.c_str());
   vpl_unlink(path2.c_str());
+  //
+  ///////--------------------- Test NITF Blocked Resource ---------------////
+  vcl_string nitf_path = image_file + "ff_nitf_16bit.nitf";
+  vil_image_resource_sptr imgr = vil_load_image_resource(nitf_path.c_str());
+  if(imgr)
+  {
+      bool blocked = 
+        imgr->get_property(vil_property_size_block_i, &sbi)&&
+        imgr->get_property(vil_property_size_block_j, &sbj);
+	   vil_blocked_image_resource_sptr bimgr = (vil_blocked_image_resource*)imgr.ptr();
+	  vil_image_view<unsigned short> view = bimgr->get_block(0, 0);
+	  for(unsigned bi = 0; bi<sbi; ++bi)
+		  for(unsigned bj = 0; bj<sbj; ++bj)
+			  vcl_cout << "NITF v(" << bi << ' ' << bj << ")=" << view(bi,bj) << '\n';
+	  TEST("Test NITF ", view(1,0)==8191&&sbi==2, true);
+    }
+  else
+    TEST("Test NITF ", false, true);
 }
 
-
-TESTMAIN(test_blocked_image_resource);
+int
+test_blocked_image_resource_main( int argc, char* argv[] )
+{
+  if ( argc >= 2 ) {
+    image_file = argv[1];
+#ifdef VCL_WIN32
+    image_file += "\\";
+#else
+    image_file += "/";
+#endif
+    vcl_cout << image_file << '\n';
+  }    
+  test_blocked_image_resource();
+  return 0;
+}
+    //TESTMAIN(test_blocked_image_resource);

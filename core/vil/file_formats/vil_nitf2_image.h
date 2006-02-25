@@ -6,7 +6,8 @@
 #define VIL_NITF2_IMAGE_H
 //:
 // \file
-#include <vil/vil_image_resource.h>
+#include <vil/vil_blocked_image_resource.h>
+
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
 
@@ -67,7 +68,7 @@ class vil_nitf2_file_format : public vil_file_format
 //    yourself.  You can access the lut information for p-th band of the current image by calling
 //    current_image_header()->get_lut_info(p, out_n_luts, out_ne_lut, out_lut_data)
 //
-class vil_nitf2_image : public vil_image_resource
+class vil_nitf2_image : public vil_blocked_image_resource
 {
  public:
   //: Instantiate an image resource, but doesn't read anything.
@@ -84,6 +85,20 @@ class vil_nitf2_image : public vil_image_resource
   virtual unsigned ni() const;
   virtual unsigned nj() const;
   virtual enum vil_pixel_format pixel_format () const;
+
+  //: Block size in columns
+  virtual unsigned size_block_i() const;
+
+  //: Block size in rows
+  virtual unsigned size_block_j() const;
+
+
+  //: Number of blocks in image width
+  virtual unsigned n_block_i() const;
+  
+  //: Number of blocks in image height
+  virtual unsigned n_block_j() const;
+
 
 #if 0
   //: returns "nitf vM.N"
@@ -116,6 +131,12 @@ class vil_nitf2_image : public vil_image_resource
 
   virtual bool put_view (const vil_image_view_base& /* im */, unsigned /* i0 */, unsigned /* j0 */ )
   { return false; }
+
+  virtual bool put_block( unsigned  block_index_i, unsigned  block_index_j,
+                          const vil_image_view_base& blk )
+    {return false;}
+
+  virtual vil_image_view_base_sptr get_block( unsigned int blockIndexX, unsigned int blockIndexY ) const;
 
   virtual bool get_property (char const *tag, void *property_value=0) const;
 
@@ -162,25 +183,6 @@ class vil_nitf2_image : public vil_image_resource
  protected:
   virtual vil_image_view_base_sptr get_copy_view_uncompressed(unsigned i0, unsigned ni,
                                                               unsigned j0, unsigned nj) const;
-  ///helper function for get_copy_view_uncompressed
-  vil_image_view_base_sptr get_block( unsigned int blockIndexX, unsigned int blockIndexY ) const;
-  void get_blocks( unsigned int startBlockX, unsigned int endBlockX,
-                   unsigned int startBlockY, unsigned int endBlockY,
-                   vcl_vector< vcl_vector< vil_image_view_base_sptr > >& outDataBlocks ) const;
-  /**
-    * Glue together all the blocks in dataBlocks into one image and return it.
-    * Optionally, specify if you don't want to use all of the pixels in the border
-    * blocks.
-    *
-    * helper function for get_copy_view_uncompressed
-    */
-  vil_image_view_base_sptr glue_blocks_together(
-    const vcl_vector< vcl_vector< vil_image_view_base_sptr > >& dataBlocks ) const;
-  ///helper function for get_copy_view_uncompressed
-  bool trim_border_blocks(
-      vcl_vector< vcl_vector< vil_image_view_base_sptr > >& dataBlocks,
-      unsigned int start_block_x_offset, unsigned int start_block_y_offset,
-      unsigned int end_block_x_offset, unsigned int end_block_y_offset ) const;
 
 
   // Returns the offset (in bytes) from the beginning of the NITF file
@@ -205,11 +207,6 @@ class vil_nitf2_image : public vil_image_resource
   // I'll return 0;
   vil_streampos get_offset_to_image_data_block_band( unsigned int imageIndex,
     unsigned int blockIndexX,unsigned int blockIndexY, int bandIndex ) const;
-
-  unsigned int get_pixels_per_block_x() const;
-  unsigned int get_pixels_per_block_y() const;
-  unsigned int get_num_blocks_x() const;
-  unsigned int get_num_blocks_y() const;
 
   //main file header
   vil_nitf2_header m_file_header;

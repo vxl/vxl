@@ -507,6 +507,10 @@ view_from_buffer(vil_pixel_format& fmt, vil_memory_chunk_sptr const& buf,
     return view; }
     GET_BLOCK_CASE(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
     GET_BLOCK_CASE(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte);
+#if VXL_HAS_INT_64
+    GET_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_64, vxl_uint_64);
+    GET_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_64, vxl_int_64);
+#endif
     GET_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32);
     GET_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_32, vxl_int_32);
     GET_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16);
@@ -666,6 +670,10 @@ vil_image_view_base_sptr vil_tiff_image::fill_block_from_strip(vil_memory_chunk_
           break
           GET_LINE_CASE(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
           GET_LINE_CASE(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte);
+#if VXL_HAS_INT_64
+          GET_LINE_CASE(VIL_PIXEL_FORMAT_UINT_64, vxl_uint_64);
+          GET_LINE_CASE(VIL_PIXEL_FORMAT_INT_64, vxl_int_64);
+#endif
           GET_LINE_CASE(VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32);
           GET_LINE_CASE(VIL_PIXEL_FORMAT_INT_32, vxl_int_32);
           GET_LINE_CASE(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16);
@@ -759,6 +767,10 @@ void vil_tiff_image::fill_block_from_view(unsigned bi, unsigned bj,
    } break
     GET_VIEW_PTR(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
     GET_VIEW_PTR(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte);
+#if VXL_HAS_INT_64
+    GET_VIEW_PTR(VIL_PIXEL_FORMAT_UINT_64, vxl_uint_64);
+    GET_VIEW_PTR(VIL_PIXEL_FORMAT_INT_64, vxl_int_64);
+#endif
     GET_VIEW_PTR(VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32);
     GET_VIEW_PTR(VIL_PIXEL_FORMAT_INT_32, vxl_int_32);
     GET_VIEW_PTR(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16);

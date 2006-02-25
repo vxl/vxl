@@ -72,7 +72,7 @@ ADD_TEST( vil_test_resample_bicub           vil_test_all test_resample_bicub)
 ADD_TEST( vil_test_math_value_range         vil_test_all test_math_value_range)
 
 # Blocked images
-ADD_TEST( vil_test_blocked_image_resource   vil_test_all test_blocked_image_resource)
+ADD_TEST( vil_test_blocked_image_resource   vil_test_all test_blocked_image_resource ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
 
 # To run timing tests
 #ADD_EXECUTABLE( vil_test_access_timings vil_test_access_timings.cxx)
