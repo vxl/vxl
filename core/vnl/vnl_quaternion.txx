@@ -170,19 +170,18 @@ vnl_vector_fixed<T,3> vnl_quaternion<T>::rotation_euler_angles () const
   T xy = vcl_sqrt(vnl_math_sqr(rotM(0,0)) + vnl_math_sqr(rotM(0,1)));
   if (xy > vcl_numeric_limits<T>::epsilon() * T(8.0))
   {
-	  angles(0) = vcl_atan2(rotM(1,2), rotM(2,2));
-	  angles(1) = vcl_atan2(-rotM(0,2), xy);
-	  angles(2) = vcl_atan2(rotM(0,1), rotM(0,0));
-	}
+    angles(0) = vcl_atan2(rotM(1,2), rotM(2,2));
+    angles(1) = vcl_atan2(-rotM(0,2), xy);
+    angles(2) = vcl_atan2(rotM(0,1), rotM(0,0));
+  }
   else
   {
-	  angles(0) = vcl_atan2(-rotM(2,1), rotM(1,1));
-	  angles(1) = vcl_atan2(-rotM(0,2), xy);
-	  angles(2) = 0;
+    angles(0) = vcl_atan2(-rotM(2,1), rotM(1,1));
+    angles(1) = vcl_atan2(-rotM(0,2), xy);
+    angles(2) = 0;
   }
   return angles;
 }
-
 
 
 //:
