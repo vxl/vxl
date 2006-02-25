@@ -7,7 +7,7 @@ SET(fhs_sources
 AUX_SOURCE_DIRECTORY(Templates fhs_sources)
 
 ADD_LIBRARY(fhs ${fhs_sources})
-TARGET_LINK_LIBRARIES(fhs vimt vul vnl_io vnl_algo vnl vgl_io vsl)
+TARGET_LINK_LIBRARIES(fhs vimt vnl vil_algo vil vsl)
 
 IF (BUILD_TESTING)
   SUBDIRS(tests)
