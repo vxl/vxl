@@ -378,7 +378,7 @@ SOURCE=.\Templates/vbl_smart_ptr+rgrl_feature_face_pt-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+rgrl_invariant_set-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/rsdl_bins_2d+2.double.rgrl_feature_sptr-.cxx
+SOURCE=.\Templates/rsdl_bins_2d.double.rgrl_feature_sptr-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\rgrl_est_homography2d.cxx
