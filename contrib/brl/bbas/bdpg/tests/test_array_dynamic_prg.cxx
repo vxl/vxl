@@ -2,7 +2,7 @@
 #include <testlib/testlib_test.h>
 #include <vcl_cstdlib.h> // for rand()
 #include <vcl_cmath.h> //for exp
-#include <vnl/vnl_math.h> //for exp
+#include <vnl/vnl_math.h> //for vnl_math::pi
 #include <vcl_iostream.h>
 #include <bdpg/bdpg_node.h>
 #include <bdpg/bdpg_array_dynamic_prg.h>
@@ -40,7 +40,7 @@ void test_array_dynamic_prg()
     {
       bdpg_node_sptr n = new bdpg_node();
       double arg = (c-r)*(c-r);
-      double p = vcl_exp(-arg/4.0)/(2*vcl_sqrt(2*vnl_math::pi));
+      double p = vcl_exp(-arg/4.0)/vcl_sqrt(8*vnl_math::pi);
       double del = radius*(vcl_rand()/(RAND_MAX+1.0));
       p = (0.9*p + 0.1*del);
       n->set_prior_prob(p);
