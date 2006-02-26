@@ -21,12 +21,6 @@
 #include <vgui/vgui_matrix_state.h>
 #include <vgui/vgui_image_renderer.h>
 #include <vgui/vgui_vil_image_renderer.h>
-#if 0
-# include <vgui/vgui.h>
-# define debug vgui::out
-#else
-# define debug vcl_cerr
-#endif
 
 //-----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_blender_tableau_new.
@@ -170,13 +164,17 @@ bool vgui_blender_tableau::handle(vgui_event const &e)
      case '/':
       alpha_ -= 0.1f;
       if (alpha_ <= 0.0f) alpha_ = 0.0f;
-      debug << "blender : alpha_ = " << alpha_ << vcl_endl;
+#ifdef DEBUG
+      vcl_cerr << "blender : alpha_ = " << alpha_ << vcl_endl;
+#endif
       post_redraw();
       return true;
      case '*':
       alpha_ += 0.1f;
       if (alpha_ >= 1.0f) alpha_ = 1.0f;
-      debug << "blender : alpha_ = " << alpha_ << vcl_endl;
+#ifdef DEBUG
+      vcl_cerr << "blender : alpha_ = " << alpha_ << vcl_endl;
+#endif
       post_redraw();
       return true;
      default:
