@@ -1,8 +1,8 @@
+#include "vidster_menus.h"
 #include <vgui/vgui.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_menu.h>
 #include <vvid/vvid_live_stereo_manager.h>
-#include <vvid/bin/vidster_menus.h>
 
 //Static munu callback functions
 

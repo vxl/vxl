@@ -1,8 +1,8 @@
+#include "videx_menus.h"
 #include <vgui/vgui.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_menu.h>
 #include <vvid/vvid_live_video_manager.h>
-#include <vvid/bin/videx_menus.h>
 
 //Static munu callback functions
 

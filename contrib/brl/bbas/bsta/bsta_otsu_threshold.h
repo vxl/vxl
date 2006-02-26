@@ -16,7 +16,6 @@
 
 #include<vcl_vector.h>
 #include<bsta/bsta_histogram.h>
-#include<vil/vil_image_view.h>
 
 template <class T> class bsta_otsu_threshold
 {

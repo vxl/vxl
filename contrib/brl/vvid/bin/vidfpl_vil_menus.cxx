@@ -5,7 +5,6 @@
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_menu.h>
-#include <segv/segv_vil_segmentation_manager.h>
 #include <vvid/vvid_vil_file_manager.h>
 
 #ifdef HAS_MPEG2
