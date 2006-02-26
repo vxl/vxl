@@ -26,7 +26,7 @@ CFG=bsta - Win32 Debug
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "bsta.mak" CFG="vil2 - Win32 Debug"
+!MESSAGE NMAKE /f "bsta.mak" CFG="bsta - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 

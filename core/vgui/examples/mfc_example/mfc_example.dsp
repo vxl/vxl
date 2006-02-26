@@ -9,7 +9,7 @@
 #  == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -DVGUI_MESA=0 -DHAS_MFC -D_AFXDLL -DVGUI_USE_MFC -DHAS_OPENGL == compiler defines
 # mfc_example  == name of output library
-#  /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\  vgui.lib vidl_vil1.lib vul.lib vbl.lib vgui.lib vgl.lib vil.lib vnl.lib vul.lib vbl.lib vpl.lib vcl.lib vo.lib vfw32.lib mpeg2.lib vnl_algo.lib vnl.lib netlib.lib opengl32.lib glu32.lib Qv.lib vcl.lib tiff.lib png.lib zlib.lib jpeg.lib ws2_32.lib /STACK:10000000  == libraries linked in 
+#  /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\  vgui.lib vidl_vil1.lib vul.lib vbl.lib vgui.lib vgl.lib vil.lib vnl.lib vul.lib vbl.lib vpl.lib vcl.lib vo.lib vfw32.lib mpeg2.lib vnl.lib opengl32.lib glu32.lib Qv.lib vcl.lib tiff.lib png.lib zlib.lib jpeg.lib ws2_32.lib /STACK:10000000  == libraries linked in 
 # TARGTYPE "Win32 (x86) Application" 0x0101
 
 CFG=mfc_example - Win32 Debug
@@ -83,9 +83,7 @@ LINK32=link.exe
 # ADD LINK32 vo.lib
 # ADD LINK32 vfw32.lib
 # ADD LINK32 mpeg2.lib
-# ADD LINK32 vnl_algo.lib
 # ADD LINK32 vnl.lib
-# ADD LINK32 netlib.lib
 # ADD LINK32 opengl32.lib
 # ADD LINK32 glu32.lib
 # ADD LINK32 Qv.lib
@@ -144,9 +142,7 @@ LINK32=link.exe
 # ADD LINK32 vo.lib
 # ADD LINK32 vfw32.lib
 # ADD LINK32 mpeg2.lib
-# ADD LINK32 vnl_algo.lib
 # ADD LINK32 vnl.lib
-# ADD LINK32 netlib.lib
 # ADD LINK32 opengl32.lib
 # ADD LINK32 glu32.lib
 # ADD LINK32 Qv.lib
@@ -203,9 +199,7 @@ LINK32=link.exe
 # ADD LINK32 vo.lib
 # ADD LINK32 vfw32.lib
 # ADD LINK32 mpeg2.lib
-# ADD LINK32 vnl_algo.lib
 # ADD LINK32 vnl.lib
-# ADD LINK32 netlib.lib
 # ADD LINK32 opengl32.lib
 # ADD LINK32 glu32.lib
 # ADD LINK32 Qv.lib
@@ -264,9 +258,7 @@ LINK32=link.exe
 # ADD LINK32 vo.lib
 # ADD LINK32 vfw32.lib
 # ADD LINK32 mpeg2.lib
-# ADD LINK32 vnl_algo.lib
 # ADD LINK32 vnl.lib
-# ADD LINK32 netlib.lib
 # ADD LINK32 opengl32.lib
 # ADD LINK32 glu32.lib
 # ADD LINK32 Qv.lib
