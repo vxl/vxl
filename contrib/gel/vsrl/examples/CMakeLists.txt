@@ -1,4 +1,4 @@
-LINK_LIBRARIES( vsrl )
+LINK_LIBRARIES( vsrl vil1 )
 ADD_EXECUTABLE( dense_matcher_full dense_matcher_full.cxx )
 ADD_EXECUTABLE( make_3d_output make_3d_output.cxx )
 IF (HAS_VGUI)

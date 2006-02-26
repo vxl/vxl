@@ -12,7 +12,7 @@ SET(ipts_sources
 ADD_LIBRARY(ipts ${ipts_sources})
 INSTALL_TARGETS(/lib ipts)
 INSTALL_NOBASE_HEADER_FILES(/include/contrib/mul/ipts ${ipts_sources})
-TARGET_LINK_LIBRARIES(ipts vimt mbl)
+TARGET_LINK_LIBRARIES(ipts vimt_algo vimt mbl vgl vil_algo vil)
 
 SUBDIRS(tools)
 

@@ -11,7 +11,7 @@ ADD_EXECUTABLE( brip_test_all
   test_Horn_Schunck.cxx
 )
 
-TARGET_LINK_LIBRARIES( brip_test_all brip bsta testlib vgl vil)
+TARGET_LINK_LIBRARIES( brip_test_all brip bsta vgl_algo vgl vnl vil vil1 testlib)
 
 ADD_TEST( brip_test_histogram         brip_test_all test_histogram )
 ADD_TEST( brip_test_mutual_info       brip_test_all test_mutual_info )

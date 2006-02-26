@@ -31,7 +31,7 @@ ADD_LIBRARY(strk ${strk_sources})
 INSTALL_TARGETS(/lib strk)
 INSTALL_NOBASE_HEADER_FILES(/include/contrib/strk ${strk_sources})
 
-TARGET_LINK_LIBRARIES(strk sdet bsta brip vpro bsol btol bdgl gevd vdgl vtol vsol vil1 vgl_algo vnl vbl)
+TARGET_LINK_LIBRARIES(strk bsta brip vpro bsol btol gevd vtol vsol vidl_vil1 vil1 vgl_algo vgl vnl vbl vul)
 
 
 IF (BUILD_TESTING)

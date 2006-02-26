@@ -19,7 +19,7 @@ ADD_EXECUTABLE( vepl2_test_all
  vepl2_test_x_gradient.cxx
  vepl2_test_y_gradient.cxx
 )
-TARGET_LINK_LIBRARIES( vepl2_test_all vepl2 testlib )
+TARGET_LINK_LIBRARIES( vepl2_test_all vepl2 vil testlib )
 
 ADD_TEST(vepl2_test_dilate_disk          vepl2_test_all vepl2_test_dilate_disk)
 ADD_TEST(vepl2_test_dyadic               vepl2_test_all vepl2_test_dyadic)

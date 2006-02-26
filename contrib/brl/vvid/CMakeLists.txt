@@ -43,7 +43,7 @@ IF(HAS_VGUI)
  INSTALL_TARGETS(/lib vvid)
  INSTALL_NOBASE_HEADER_FILES(/include/contrib/brl/vvid ${vvid_sources})
 
- TARGET_LINK_LIBRARIES(vvid vpro strk sdet btol vtol vsol brip bgui vgui vidl vidl_vil1 vul vil vil1)
+ TARGET_LINK_LIBRARIES(vvid vpro strk sdet btol bsol vtol vsol brip bgui vgui vidl vidl_vil1 vul vil vil1)
 
  # the main executables
  SUBDIRS(bin)

@@ -19,7 +19,7 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
  SET_SOURCE_FILES_PROPERTIES(test_cycle_processor.cxx PROPERTIES COMPILE_FLAGS -O1)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
-TARGET_LINK_LIBRARIES( vtol_test_all vtol_algo vtol vsol vnl testlib )
+TARGET_LINK_LIBRARIES( vtol_test_all vtol_algo vtol vsol vdgl vnl vil vul testlib )
 
 ADD_TEST(vtol_test_vertex_2d        vtol_test_all test_vertex_2d)
 ADD_TEST(vtol_test_zero_chain       vtol_test_all test_zero_chain)

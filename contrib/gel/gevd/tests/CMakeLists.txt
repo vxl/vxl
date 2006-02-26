@@ -1,7 +1,5 @@
 # gel/gevd/tests/CMakeLists.txt
 
-LINK_LIBRARIES( gevd testlib vpl )
-
 ADD_EXECUTABLE(gevd_test_all
                test_driver.cxx
                test_gevd_param_mixin.cxx
@@ -10,6 +8,8 @@ ADD_EXECUTABLE(gevd_test_all
                test_gevd_noise.cxx
                test_gevd_float_operators.cxx
               )
+TARGET_LINK_LIBRARIES( gevd_test_all gevd testlib vil vnl vpl )
+
 ADD_TEST(gevd_test_param_mixin     gevd_test_all test_gevd_param_mixin)
 ADD_TEST(gevd_test_memory_mixin    gevd_test_all test_gevd_memory_mixin)
 ADD_TEST(gevd_test_bufferxy        gevd_test_all test_gevd_bufferxy)

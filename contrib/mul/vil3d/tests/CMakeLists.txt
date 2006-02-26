@@ -31,7 +31,7 @@ ADD_EXECUTABLE( vil3d_test_all
   test_algo_anisotropic_filter.cxx
 )
 
-TARGET_LINK_LIBRARIES( vil3d_test_all vil3d_algo vil3d vil vil_algo vpl vul testlib vcl )
+TARGET_LINK_LIBRARIES( vil3d_test_all vil3d_algo vil3d vil vpl vul testlib vcl )
 
 ADD_TEST( vil3d_test_file_format_read         vil3d_test_all test_file_format_read ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data )
 ADD_TEST( vil3d_test_gen_synthetic            vil3d_test_all test_gen_synthetic)

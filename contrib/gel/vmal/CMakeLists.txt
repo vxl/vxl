@@ -29,7 +29,7 @@ INSTALL_NOBASE_HEADER_FILES(/include/contrib/gel/vmal ${vmal_sources})
 
 IF(BUILD_OXL)
  INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR})
- TARGET_LINK_LIBRARIES(vmal mvl osl)
+ TARGET_LINK_LIBRARIES(vmal mvl osl vil)
 ENDIF(BUILD_OXL)
 
-TARGET_LINK_LIBRARIES(vmal vgel vtol vsol vidl_vil1 vil1 vnl vbl)
+TARGET_LINK_LIBRARIES(vmal vgel vgel_kl vtol vsol vidl_vil1 vil1 vnl_algo vnl vbl)

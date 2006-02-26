@@ -20,7 +20,7 @@ ADD_EXECUTABLE( rgrl_test_all
   test_initializer_ran_sam.cxx
   test_matcher.cxx
 )
-TARGET_LINK_LIBRARIES( rgrl_test_all rgrl testlib vnl_algo vnl mbl )
+TARGET_LINK_LIBRARIES( rgrl_test_all rgrl rrel testlib vnl_algo vnl vil )
 
 ADD_TEST( rgrl_rgrl_util              rgrl_test_all test_rgrl_util )
 ADD_TEST( rgrl_transformation         rgrl_test_all test_transformation )

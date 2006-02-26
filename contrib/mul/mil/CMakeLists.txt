@@ -33,7 +33,7 @@ AUX_SOURCE_DIRECTORY(Templates mil_sources)
 ADD_LIBRARY(mil ${mil_sources})
 INSTALL_TARGETS(/lib mil)
 INSTALL_NOBASE_HEADER_FILES(/include/contrib/mul/mil ${mil_sources})
-TARGET_LINK_LIBRARIES(mil mbl vnl vbl_io vgl vil1)
+TARGET_LINK_LIBRARIES(mil mbl vimt vnl vbl_io vgl vil1 vbl vsl)
 
 SUBDIRS(algo)
 

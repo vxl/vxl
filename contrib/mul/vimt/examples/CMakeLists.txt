@@ -1,6 +1,6 @@
 # mul/vimt/examples/CMakeLists.txt
 
-LINK_LIBRARIES( vimt vil_algo vil vul )
+LINK_LIBRARIES( vimt_algo vimt vnl vil vul )
 
 ADD_EXECUTABLE( vimt_example1 example1.cxx )
 ADD_EXECUTABLE( vimt_example2 example2.cxx )

@@ -1,7 +1,5 @@
 # gel/vsol/tests/CMakeLists.txt
 
-LINK_LIBRARIES( vsol vgl vpl testlib )
-
 ADD_EXECUTABLE( vsol_test_all
   test_driver.cxx
   test_vsol_point_2d.cxx
@@ -22,6 +20,7 @@ ADD_EXECUTABLE( vsol_test_all
   test_vsol_tetrahedron.cxx
   test_vsol_io.cxx
 )
+TARGET_LINK_LIBRARIES( vsol_test_all vsol vnl vbl_io vsl vpl testlib )
 
 ADD_TEST(vsol_test_point_2d           vsol_test_all test_vsol_point_2d)
 ADD_TEST(vsol_test_group_2d           vsol_test_all test_vsol_group_2d)

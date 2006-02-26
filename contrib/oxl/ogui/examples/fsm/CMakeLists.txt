@@ -1,4 +1,4 @@
-LINK_LIBRARIES( vgui osl )
+LINK_LIBRARIES( vgui osl vnl_algo vnl vgl vil1 vul )
 
 INCLUDE( ${CMAKE_ROOT}/Modules/FindGLUT.cmake )
 

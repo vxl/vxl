@@ -32,6 +32,6 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_EXECUTABLE(xcv ${xcv_sources})
 INSTALL_TARGETS(/bin xcv)
-TARGET_LINK_LIBRARIES(xcv osl mvl vgui vgl vil1 vnl_algo vnl vul vbl vpl vcl)
+TARGET_LINK_LIBRARIES(xcv osl mvl vgui vgl vil1 vnl vul vcl)
 
 ENDIF (HAS_VGUI)

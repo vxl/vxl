@@ -6,4 +6,4 @@ SET( kl_tracker_sources
 
 ADD_EXECUTABLE( kl_tracker ${kl_tracker_sources} )
 
-TARGET_LINK_LIBRARIES( kl_tracker vgel )
+TARGET_LINK_LIBRARIES( kl_tracker vgel vtol vil )

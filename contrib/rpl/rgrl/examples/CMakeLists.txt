@@ -60,13 +60,13 @@ TARGET_LINK_LIBRARIES( estimate_normals_3d rrel rsdl vnl_algo)
 ADD_EXECUTABLE( match_2d
   match_2d.cxx 
 )
-TARGET_LINK_LIBRARIES( match_2d rgrl testlib vnl vil)
+TARGET_LINK_LIBRARIES( match_2d rgrl testlib vnl vil vbl vul)
 
 # multi-resolution version
 ADD_EXECUTABLE( match_2d_multi
   match_2d_multi.cxx 
 )
-TARGET_LINK_LIBRARIES( match_2d_multi testlib rgrl vil_algo vil vnl)
+TARGET_LINK_LIBRARIES( match_2d_multi testlib rgrl vil_algo vil vnl vbl vul)
 
 
 

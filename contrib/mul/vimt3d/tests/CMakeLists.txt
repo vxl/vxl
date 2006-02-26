@@ -12,7 +12,7 @@ ADD_EXECUTABLE( vimt3d_test_all
   test_gauss_reduce.cxx
 )
 
-TARGET_LINK_LIBRARIES( vimt3d_test_all vimt3d vpl vul testlib )
+TARGET_LINK_LIBRARIES( vimt3d_test_all vimt3d vil3d mbl vgl vnl vpl vul testlib )
 
 ADD_TEST( vimt3d_test_transform_3d         vimt3d_test_all test_transform_3d )
 ADD_TEST( vimt3d_test_image_3d_of          vimt3d_test_all test_image_3d_of )

@@ -45,7 +45,7 @@ ADD_EXECUTABLE( mbl_test_all
   test_linear_interpolator.cxx
 )
 
-TARGET_LINK_LIBRARIES(mbl_test_all mbl vbl vul vpl testlib )
+TARGET_LINK_LIBRARIES(mbl_test_all mbl vgl vnl_io vnl vbl vsl vul vpl testlib )
 
 
 ADD_TEST( mbl_test_jarque_bera mbl_test_all test_jarque_bera )

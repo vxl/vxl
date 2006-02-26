@@ -28,7 +28,6 @@ SET(clsfy_sources
  clsfy_mean_square_1d_builder.cxx             clsfy_mean_square_1d_builder.h
  clsfy_direct_boost.cxx                       clsfy_direct_boost.h
  clsfy_direct_boost_builder.cxx               clsfy_direct_boost_builder.h
-
 )
 
 AUX_SOURCE_DIRECTORY(Templates clsfy_sources)
@@ -36,7 +35,7 @@ AUX_SOURCE_DIRECTORY(Templates clsfy_sources)
 ADD_LIBRARY(clsfy ${clsfy_sources})
 INSTALL_TARGETS(/lib clsfy)
 INSTALL_NOBASE_HEADER_FILES(/include/contrib/mul/clsfy ${clsfy_sources})
-TARGET_LINK_LIBRARIES(clsfy vpdfl mbl vnl_algo vnl_io vbl vbl_io)
+TARGET_LINK_LIBRARIES(clsfy vpdfl mbl vnl_algo vnl_io vnl vbl_io vbl vsl)
 
 IF (BUILD_TESTING)
   SUBDIRS(tests)

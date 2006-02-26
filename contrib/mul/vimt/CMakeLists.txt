@@ -26,7 +26,7 @@ AUX_SOURCE_DIRECTORY(Templates vimt_sources)
 ADD_LIBRARY(vimt ${vimt_sources})
 INSTALL_TARGETS(/lib vimt)
 INSTALL_NOBASE_HEADER_FILES(/include/contrib/mul/vimt ${vimt_sources})
-TARGET_LINK_LIBRARIES(vimt vil vil_algo vil_io vnl vgl)
+TARGET_LINK_LIBRARIES(vimt vil vil_algo vil_io vnl vgl vsl)
 
 SUBDIRS(algo)
 SUBDIRS(examples)

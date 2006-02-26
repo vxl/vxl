@@ -20,7 +20,7 @@ ADD_EXECUTABLE( rrel_test_all
   test_robust_util.cxx
   test_similarity_from_matches.cxx
 )
-TARGET_LINK_LIBRARIES( rrel_test_all rrel testlib )
+TARGET_LINK_LIBRARIES( rrel_test_all rrel vnl_algo vnl testlib )
 
 ADD_TEST( rrel_test_homography2d_est         rrel_test_all test_homography2d_est )
 ADD_TEST( rrel_test_shift2d_est              rrel_test_all test_shift2d_est )

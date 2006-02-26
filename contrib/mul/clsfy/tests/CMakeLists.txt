@@ -1,6 +1,6 @@
 # mul/clsfy/tests/CMakeLists.txt
 
-LINK_LIBRARIES( vul vpl clsfy testlib pdf1d vsl)
+LINK_LIBRARIES( vul vpl vnl mbl clsfy testlib vpdfl pdf1d vsl)
 
 ADD_EXECUTABLE (clsfy_test_binary_hyperplane     test_binary_hyperplane.cxx)
 ADD_EXECUTABLE (clsfy_test_binary_pdf_classifier test_binary_pdf_classifier.cxx)

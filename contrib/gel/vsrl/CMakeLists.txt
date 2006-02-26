@@ -50,7 +50,7 @@ INSTALL_NOBASE_HEADER_FILES(/include/contrib/gel/vsrl ${vsrl_sources})
 
 IF (HAS_VGUI)
  IF (BUILD_BRL)
-  TARGET_LINK_LIBRARIES(vsrl sdet)
+  TARGET_LINK_LIBRARIES(vsrl sdet jseg)
  ENDIF (BUILD_BRL)
  TARGET_LINK_LIBRARIES(vsrl vgui)
  IF (BUILD_TBL)

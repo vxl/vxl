@@ -1,7 +1,5 @@
 # brl/bbas/bvgl/tests/CMakeLists.txt
 
-LINK_LIBRARIES(bvgl vgl vnl testlib)
-
 ADD_EXECUTABLE(bvgl_test_all
   test_driver.cxx
   bvgl_test_h_matrix_1d.cxx
@@ -11,6 +9,7 @@ ADD_EXECUTABLE(bvgl_test_all
   bvgl_test_h_matrix_2d_compute_linear.cxx
   bvgl_test_h_matrix_2d_compute_4point.cxx
 )
+TARGET_LINK_LIBRARIES(bvgl_test_all bvgl vgl vnl testlib)
 
 ADD_TEST(bvgl_test_h_matrix_1d                bvgl_test_all bvgl_test_h_matrix_1d)
 ADD_TEST(bvgl_test_h_matrix_2d                bvgl_test_all bvgl_test_h_matrix_2d)

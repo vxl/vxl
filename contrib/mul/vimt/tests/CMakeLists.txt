@@ -16,7 +16,7 @@ ADD_EXECUTABLE( vimt_test_all
   test_correlate_2d.cxx
   test_resample_bilin.cxx
 )
-TARGET_LINK_LIBRARIES( vimt_test_all vimt_algo vpl vul testlib )
+TARGET_LINK_LIBRARIES( vimt_test_all vimt_algo vgl vnl vil vpl vsl testlib )
 
 ADD_TEST( vimt_test_image_2d_of                  vimt_test_all test_image_2d_of )
 ADD_TEST( vimt_test_sample_profile_bilin         vimt_test_all test_sample_profile_bilin )

@@ -22,7 +22,7 @@ IF(BUILD_OXL)
  TARGET_LINK_LIBRARIES(vgel mvl)
 ENDIF(BUILD_OXL)
 
-TARGET_LINK_LIBRARIES(vgel vgel_kl vtol vil vil1 vidl vidl_vil1)
+TARGET_LINK_LIBRARIES(vgel vgel_kl vtol vil vil1 vidl vidl_vil1 vbl)
 
 IF (BUILD_EXAMPLES)
   SUBDIRS(examples)

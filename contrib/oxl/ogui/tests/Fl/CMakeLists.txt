@@ -18,4 +18,4 @@ ADD_EXECUTABLE(vgui_Fl_movie_ui ${Fl_movie_ui_sources})
 SET(Fl_blender_ui_sources Fl_blender_ui.cxx Fl_blender_ui.h)
 ADD_EXECUTABLE(vgui_Fl_blender_ui ${Fl_blender_ui_sources})
 
-LINK_LIBRARIES( vgui )
+LINK_LIBRARIES( vgui vrml vnl vul )

@@ -89,7 +89,7 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(mbl ${mbl_sources})
-TARGET_LINK_LIBRARIES(mbl vul vnl_io vnl_algo vnl vgl_io vsl)
+TARGET_LINK_LIBRARIES(mbl vul vnl_io vnl_algo vnl vgl_io vgl vsl vpl)
 
 INSTALL_TARGETS(/lib mbl)
 INSTALL_NOBASE_HEADER_FILES(/include/contrib/mul/mbl ${mbl_sources})

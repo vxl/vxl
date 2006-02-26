@@ -3,7 +3,7 @@
 #   Franck Bettinger
 #
 
-LINK_LIBRARIES( mvl2 )
+LINK_LIBRARIES( mvl2 mbl vil )
 
 IF (NOT WIN32)
   INCLUDE(${CMAKE_ROOT}/Modules/FindAVIFile.cmake)

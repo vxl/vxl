@@ -1,6 +1,6 @@
 # mul/mil/tests/CMakeLists.txt
 
-LINK_LIBRARIES( mil_algo mil vpl testlib )
+LINK_LIBRARIES( mil_algo mil vil1 vgl vnl vsl vpl testlib )
 
 ADD_EXECUTABLE(mil_test_all test_mil.cxx)
 ADD_TEST(mil_test_all mil_test_all)
@@ -10,4 +10,4 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_EXECUTABLE(mil_test_include test_include.cxx)
-TARGET_LINK_LIBRARIES(mil_test_include mil_algo mil)
+TARGET_LINK_LIBRARIES(mil_test_include mil_algo)

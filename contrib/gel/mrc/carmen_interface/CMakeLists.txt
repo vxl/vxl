@@ -8,6 +8,6 @@ SET(carmen_interface_sources
 )
 
 ADD_EXECUTABLE(carmen_interface ${carmen_interface_sources})
-TARGET_LINK_LIBRARIES(carmen_interface vul vbl vcl)
+TARGET_LINK_LIBRARIES(carmen_interface vcl)
 
 ENDIF (HAS_CARMEN)

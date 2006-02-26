@@ -3,8 +3,6 @@
 INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/find_xerces.cmake )
 IF(HAS_XERCES)
 
-LINK_LIBRARIES( bxml vtol vsol testlib )
-
 ADD_EXECUTABLE( bxml_test_all
   test_driver.cxx
   bxml_test_vsol_point_2d_input_converter.cxx
@@ -15,6 +13,7 @@ ADD_EXECUTABLE( bxml_test_all
   bxml_test_vector_vtol_edge_2d_input_conv.cxx
   bxml_test_map.cxx
 )
+TARGET_LINK_LIBRARIES( bxml_test_all bxml vtol vsol vdgl testlib )
 
 ADD_TEST(bxml_test_vsol_point_2d_input_converter  bxml_test_all
          bxml_test_vsol_point_2d_input_converter ${CMAKE_CURRENT_SOURCE_DIR})

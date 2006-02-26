@@ -416,24 +416,17 @@ INSTALL_NOBASE_HEADER_FILES(/include/core/vgui ${vgui_sources})
 SET( VGUI_FOUND "YES" CACHE INTERNAL "Was vgui successfully built?" )
 
 # Dependencies on other vxl libraries
-TARGET_LINK_LIBRARIES(vgui vnl_algo vnl vil1 vil vgl vpl vbl vul)
+TARGET_LINK_LIBRARIES(vgui vnl vil1 vil vgl vpl vbl vul)
 
 # Dependencies created by the toolkit implementations
 
 IF (VGUI_USE_QT)
-  # vul and vbl listed above. Don't repeat
   TARGET_LINK_LIBRARIES(vgui ${QT_LIBRARIES})
 ENDIF (VGUI_USE_QT)
-IF (VGUI_USE_MFC)
-  # vul listed above. Don't repeat
-  #TARGET_LINK_LIBRARIES(vgui vul)
-ENDIF (VGUI_USE_MFC)
 IF (VGUI_USE_GTK)
-  # vul listed above. Don't repeat.
   TARGET_LINK_LIBRARIES(vgui ${GTK_LIBRARIES})
 ENDIF (VGUI_USE_GTK)
 IF (VGUI_USE_GTK2)
-  # vul listed above. Don't repeat.
   TARGET_LINK_LIBRARIES(vgui ${GTK2_LIBRARIES})
 ENDIF (VGUI_USE_GTK2)
 

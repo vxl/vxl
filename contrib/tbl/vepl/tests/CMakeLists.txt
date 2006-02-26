@@ -8,7 +8,7 @@ ADD_EXECUTABLE( vepl_test_all
   vepl_test_threshold.cxx
   vepl_test_erode_disk.cxx
 )
-TARGET_LINK_LIBRARIES( vepl_test_all vepl testlib )
+TARGET_LINK_LIBRARIES( vepl_test_all vepl vil1 testlib )
 
 ADD_TEST(vepl_test_threshold  vepl_test_all vepl_test_threshold)
 ADD_TEST(vepl_test_erode_disk vepl_test_all vepl_test_erode_disk)
