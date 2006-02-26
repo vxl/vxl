@@ -23,6 +23,7 @@
 #include <bmvl/brct/kalman_filter.h>
 #include <bmvl/brct/brct_epi_reconstructor.h>
 #include <vil1/vil1_image.h>
+class bugl_curve_3d;
 
 //: A manager for displaying segmentation results.
 class brct_windows_frame : public vgui_wrapper_tableau

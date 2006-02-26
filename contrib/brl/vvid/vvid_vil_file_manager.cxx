@@ -10,6 +10,7 @@
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_save.h>
 #include <vil1/vil1_memory_image_of.h>
+#include <vil/vil_image_resource.h>
 #include <vidl/vidl_movie.h>
 #include <vidl/vidl_clip.h>
 #include <vidl/vidl_io.h>
@@ -74,7 +75,7 @@ void vvid_vil_file_manager::init()
 #endif
   vgui_shell_tableau_sptr shell = vgui_shell_tableau_new(grid_);
   this->add_child(shell);
-  
+
   display_frame_repeat_=1;
   start_frame_ = 0;
   end_frame_ = 0;
@@ -87,9 +88,9 @@ vvid_vil_file_manager::vvid_vil_file_manager(): vgui_wrapper_tableau()
 {
   width_ = 512;
   height_ = 512;
-  
+
   window_ = 0;
-  
+
   my_movie_=(vidl_movie*)0;
   win_ = 0;
   play_video_ = true;
@@ -98,7 +99,7 @@ vvid_vil_file_manager::vvid_vil_file_manager(): vgui_wrapper_tableau()
   prev_frame_ = false;
   time_interval_ = 10.0;
   rmps_ = (vgui_range_map_params*)0;
-  
+
   display_frame_repeat_=1;
 }
 
@@ -147,20 +148,20 @@ void vvid_vil_file_manager::load_video_file()
   vidl_movie::frame_iterator pframe = my_movie_->first();
   vil_image_resource_sptr img = pframe->get_resource();
   unsigned max = 255;
-  if(img->pixel_format()==VIL_PIXEL_FORMAT_UINT_16)
+  if (img->pixel_format()==VIL_PIXEL_FORMAT_UINT_16)
     max =4095;
   rmps_=
     new vgui_range_map_params(0, max, gamma, invert,
-                              gl_map, cache);  
+                              gl_map, cache);
   //  vil1_image second = (++pframe)->get_image();
   height_ = img->ni();
   width_ = img->nj();
   vcl_cout << "Video Height " << height_ << vcl_endl
            << "Video Width  " << width_ << vcl_endl;
   unsigned display_width =2*width_, display_height = height_;
-  if(display_width>1000)
+  if (display_width>1000)
     display_width = 1000;
-  if(display_height>900)
+  if (display_height>900)
     display_height = 900;
   if (win_)
     win_->reshape(display_width, display_height);
@@ -216,7 +217,7 @@ void vvid_vil_file_manager::play_video()
   pause_video_ = false;
   time_interval_ = 10.0;
   easy0_->clear_all();
- 
+
   //return the display to the first frame after the play is finished
   this->un_cached_play();
   if (!my_movie_)
@@ -296,11 +297,11 @@ void vvid_vil_file_manager::set_range_params()
   unsigned n_components = img->nplanes();
 
   if (n_components == 1)
-    {
-      rmps_=
-        new vgui_range_map_params(min, max, gamma, invert,
-                                gl_map, cache);
-    }
+  {
+    rmps_=
+      new vgui_range_map_params(min, max, gamma, invert,
+                              gl_map, cache);
+  }
   else if (n_components == 3)
      rmps_ =
       new vgui_range_map_params(min, max, min, max, min, max,

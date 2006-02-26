@@ -9,6 +9,7 @@
 #include <gtk/gtk.h>
 #include <gtkgl/gtkglarea.h>
 
+#include <vil1/vil1_image.h>
 #include <vidl_vil1/vidl_vil1_io.h>
 #include <vidl_vil1/vidl_vil1_frame.h>
 #include <vidl_vil1/vidl_vil1_movie.h>

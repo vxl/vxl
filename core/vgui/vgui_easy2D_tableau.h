@@ -38,6 +38,7 @@ class vgui_soview2D_ellipse;
 class vgui_soview2D_linestrip;
 class vgui_soview2D_polygon;
 class vgui_soview2D_image;
+class vil1_image;
 
 //: Tableau to display two-dimensional geometric objects.
 //
