@@ -53,15 +53,14 @@ void sdet_nonmax_suppression::apply()
     return;
   points_.clear();
   vil_image_view<unsigned short> input;
-  input = vil_convert_cast((unsigned short()), vimage_->get_view());
-//  vil_convert_cast(input, vimage_->get_view());
+  vil_convert_cast(vimage_->get_view(), input);
 
   //take the gradient of the image using Gaussian first derivative kernels
   vil_image_view<double> gauss_x; //Gaussian first derivative kernel in x-direction
   vil_image_view<double> gauss_y; //Gaussian first derivative kernel in y-direction
   // create the kernels
   // kernel sizes should be chosen according to the Gaussian sigma
-  int khs = vcl_ceil(3*sigma_); //kernel half size
+  int khs = int(vcl_ceil(3*sigma_)); //kernel half size
   int ks = 2*khs+1; //kernel full size
   gauss_x.set_size(ks,ks);
   gauss_y.set_size(ks,ks);
