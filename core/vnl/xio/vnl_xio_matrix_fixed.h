@@ -13,6 +13,7 @@
 
 //: XML save vnl_matrix_fixed to stream.
 template <class T, unsigned m, unsigned n>
-void x_write(vcl_ostream & os, const vnl_matrix_fixed<T,m,n> & v, vcl_string name);
+void x_write(vcl_ostream & os, const vnl_matrix_fixed<T,m,n> & v, 
+             vcl_string name="vnl_matrix_fixed");
 
 #endif // vnl_xio_matrix_fixed_h

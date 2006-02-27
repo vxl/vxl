@@ -12,6 +12,7 @@
 
 //: XML save vgl_point_2d to stream.
 template <class T>
-void x_write(vcl_ostream &os, const vgl_point_2d<T> & v, vcl_string name);
+void x_write(vcl_ostream &os, const vgl_point_2d<T> & v, 
+             vcl_string name="vgl_point_2d");
 
 #endif // vgl_xio_point_2d_h

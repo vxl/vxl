@@ -13,6 +13,7 @@
 
 //: XML save vnl_vector_fixed to stream.
 template <class T>
-void x_write(vcl_ostream & os, const vnl_vector<T> & v, vcl_string name);
+void x_write(vcl_ostream & os, const vnl_vector<T> & v, 
+             vcl_string name="vnl_vector");
 
 #endif // vnl_xio_vector_h

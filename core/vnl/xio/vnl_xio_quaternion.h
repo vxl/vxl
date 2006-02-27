@@ -13,6 +13,7 @@
 
 //: XML save vnl_quaternion to stream.
 template <class T>
-void x_write(vcl_ostream & os, const vnl_quaternion<T> & v, vcl_string name);
+void x_write(vcl_ostream & os, const vnl_quaternion<T> & v, 
+             vcl_string name="vnl_quaternion");
 
 #endif // vnl_xio_quaternion_h

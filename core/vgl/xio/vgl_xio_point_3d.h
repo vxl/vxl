@@ -12,6 +12,7 @@
 
 //: Binary save vgl_point_3d to stream.
 template <class T>
-void x_write(vcl_ostream &os, const vgl_point_3d<T> & v, vcl_string element_name);
+void x_write(vcl_ostream &os, const vgl_point_3d<T> & v, 
+             vcl_string element_name="vgl_point_3d");
 
 #endif // vgl_xio_point_3d_h_
