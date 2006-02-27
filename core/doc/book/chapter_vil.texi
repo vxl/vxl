@@ -752,17 +752,17 @@ significantly reduced.
 
 The blocked image resource interface has the following virtual methods in addition to those already defined in the base resource class:
 
- The block size used to store and retrive pixels.
-@itemize
-@item @code{unsigned size_block_i() const}
-@item @code{unsigned size_block_j() const}
-@end itemize
+The block size used to store and retrive pixels.
+@example
+unsigned size_block_i() const
+unsigned size_block_j() const
+@end example
 
- The number of blocks in column and row to contain the image.
-@itemize
-@item @code{unsigned n_block_i() const}
-@item @code{unsigned n_block_j() const}
-@end itemize
+The number of blocks in column and row to contain the image.   
+@example
+unsigned n_block_i() const
+unsigned n_block_j() const
+@end example
 
  Retriving blocks from the resource. Note that a block is a @code{vil_image_view} and thus ready for use in processing and visualization operations.
 
@@ -778,7 +778,7 @@ get_blocks(unsigned start_block_i, unsigned end_block_i,
 This blocking structure is used internally to implement the basic
 method 
 @example
-::get_copy_view(unsigned i0, unsigned n_i, unsigned j0, unsigned n_j)
+get_copy_view(unsigned i0, unsigned n_i, unsigned j0, unsigned n_j)
 @end example
 It is possible that @code{i0, n_i}
 and @code{j0, n_j} are not evenly divisible by @code{size_block_i} and
@@ -801,22 +801,22 @@ put_blocks(unsigned start_block_i, unsigned end_block_i,
 @end example
 These methods are used internally to support the virtual
 @example
- ::put_view(const vil_image_view_base& im, unsigned i0, unsigned j0)
+put_view(const vil_image_view_base& im, unsigned i0, unsigned j0)
 @end example
  method.  Note that current vil file-based resources do not support reading and
 writing on the same open resource. Therefore, a block-oriented image
 processing algorithm will have an input resource from which blocks are
 retrieved and an output resource where processed blocks are
 inserted.
-@subsection The Fa@,cade and Cached Resource
+@subsection The Facade and Cached Resource
 Many of the advantages of blocking can be realized even if the
 underlying image resource is not intrinsically blocked. The
 @code{vil_blocked_image_facade} wraps around any image resource and
 provides the @code{vil_blocked_image_resource} class interface. That
-is, the fa@,cade is a sub-class of
+is, the facade is a sub-class of
 @code{vil_blocked_image_resource}. Internally, reading and writing
-fa@,cade block data is implemented using the usual get and put view methods. In
-this case the block view dimensions are those defined by the fa@,cade
+facade block data is implemented using the usual get and put view methods. In
+this case the block view dimensions are those defined by the facade
 blocking geometry.
 
 One might wonder how this simulation of a blocked image structure
@@ -848,7 +848,7 @@ Two properties are defined for blocked resources:
 vil_property_size_block_i "size_block_i"
 vil_property_size_block_j "size_block_j"
 @end example
-To test if a resource supports blocking on can use the following tests
+To test if a resource supports blocking one can examine the appropriate properties of the resource:
 @example
 vil_image_resource_sptr imgr = vil_load_image_resource("my_filename");
 ...
@@ -878,8 +878,22 @@ if(!vil_copy_deep(imgr, bimgr))
 ...                                       
 @end example
 The new resource, @code{bimgr}, will store pixels in square, 256 X
-256, blocks.  
+256, blocks. @code{vil_copy_deep} automatically splits the input
+resource into strips if the image is too large to fit in
+memory. However, to insure proper handing of block boundaries it is
+better to wrap the input resource in a facade with the same blocking
+structure as the output. That is,
+@example
+...
+vil_blocked_image_resource_sptr facr = 
+    vil_new_blocked_image_facade(imgr,sbi, sbj);
 
+if(!vil_copy_deep(facr, bimgr))
+@{ //report trouble
+ ...
+@}
+...
+@end example
 Currently, the @code{tiff} file format and The National
 Image Transmission Format (@code{nitf}) image format provide a
-@code{vil_blocked_image_resource, however the @code{nitf} format does not yet support writing.
+@code{vil_blocked_image_resource}, however the @code{nitf} format does not yet support writing.
