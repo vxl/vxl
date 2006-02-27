@@ -55,8 +55,8 @@ public:
   ~sdet_nonmax_suppression();
   //Accessors
   void set_image_resource(vil_image_resource_sptr const& image);
-  vcl_vector<vsol_point_2d_sptr> get_points(){return points_;}
-  vcl_vector<vsol_line_2d_sptr> get_lines(){return lines_;}
+  vcl_vector<vsol_point_2d_sptr>& get_points(){return points_;}
+  vcl_vector<vsol_line_2d_sptr>& get_lines(){return lines_;}
   //Utility Methods
   void apply();
   void clear();
