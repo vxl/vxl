@@ -30,6 +30,7 @@ class segv_vil_menus
   SEGV_VIL_DLL_DATA static void display_images_as_color_callback();
   SEGV_VIL_DLL_DATA static void threshold_image_callback();
   SEGV_VIL_DLL_DATA static void harris_corners_callback();
+  SEGV_VIL_DLL_DATA static void nonmaximal_suppression_callback();
   SEGV_VIL_DLL_DATA static void vd_edges_callback();
   SEGV_VIL_DLL_DATA static void fit_lines_callback();
   SEGV_VIL_DLL_DATA static void fit_conics_callback();

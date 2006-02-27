@@ -30,6 +30,8 @@
 #include <sdet/sdet_detector.h>
 #include <sdet/sdet_harris_detector_params.h>
 #include <sdet/sdet_harris_detector.h>
+#include <sdet/sdet_nonmax_suppression_params.h>
+#include <sdet/sdet_nonmax_suppression.h>
 #include <sdet/sdet_fit_lines_params.h>
 #include <sdet/sdet_fit_lines.h>
 #include <sdet/sdet_fit_conics.h>
@@ -681,6 +683,47 @@ void segv_vil_segmentation_manager::harris_corners()
   t2D->clear_all();
   for (int i=0; i<N; i++)
     t2D->add_vsol_point_2d(points[i]);
+  t2D->post_redraw();
+}
+
+void segv_vil_segmentation_manager::nonmaximal_suppression()
+{
+  bool show_lines = false;
+  vil_image_resource_sptr img = selected_image();
+  if (!img)
+  {
+    vcl_cout << "In segv_segmentation_manager::nonmaximal_suppression) - no image\n";
+    return;
+  }
+  static sdet_nonmax_suppression_params nsp;
+  vgui_dialog nonmax_dialog("non-maximal suppression");
+  nonmax_dialog.field("Gradient Sigma if Gradient Image not Provided ", nsp.sigma_);
+  nonmax_dialog.field("Gradient Magnitude Percentage Threshold ", nsp.thresh_);
+  nonmax_dialog.checkbox("Show lines at the edge points? ", show_lines);
+  if (!nonmax_dialog.ask())
+    return;
+  sdet_nonmax_suppression ns(nsp);
+  ns.set_image_resource(img);
+  ns.apply();
+  vcl_vector<vsol_point_2d_sptr>& points = ns.get_points();
+  vcl_vector<vsol_line_2d_sptr>& lines = ns.get_lines();
+  int N = points.size();
+  if (!N)
+    return;
+  bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
+  if (!t2D)
+    return;
+  t2D->clear_all();
+  if(!show_lines)
+  {
+    for (int i=0; i<N; i++)
+      t2D->add_vsol_point_2d(points[i]);
+  }
+  if(show_lines)
+  {
+    for (int i=0; i<N; i++)
+      t2D->add_vsol_line_2d(lines[i]);
+  }
   t2D->post_redraw();
 }
 

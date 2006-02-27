@@ -42,6 +42,11 @@ void segv_vil_menus::harris_corners_callback()
   segv_vil_segmentation_manager::instance()->harris_corners();
 }
 
+void segv_vil_menus::nonmaximal_suppression_callback()
+{
+  segv_vil_segmentation_manager::instance()->nonmaximal_suppression();
+}
+
 void segv_vil_menus::vd_edges_callback()
 {
   segv_vil_segmentation_manager::instance()->vd_edges();
@@ -148,6 +153,7 @@ vgui_menu segv_vil_menus::get_menu()
   menuedit.add("Conic Segments", fit_conics_callback);
   menuedit.add("Overlay Conic Segments", fit_overlay_conics_callback);
   menuedit.add("Edgel Regions", regions_callback);
+  menuedit.add("Non-Maximal Suppression", nonmaximal_suppression_callback);
 
   //operation menu entries
   menuops.add("Add Images:", add_images_callback);
