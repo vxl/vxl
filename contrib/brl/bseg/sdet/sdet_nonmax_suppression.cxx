@@ -8,7 +8,6 @@
 #include <vsol/vsol_line_2d.h>
 #include <vnl/vnl_math.h>
 #include <vil/algo/vil_convolve_2d.h>
-#include <vil/vil_save.h>
 #include <vcl_cstdio.h>
 
 //---------------------------------------------------------------
@@ -73,7 +72,6 @@ void sdet_nonmax_suppression::apply()
       gauss_y(x+khs,y+khs) = y * common_part;
     }
   }
-  vil_save(input, "F:\\MyDocs\\Temp\\input.tif");
   //: convolve the image with the kernels to get gradients in x and y directions
   vil_convolve_2d(input, grad_x_, gauss_x, double());
   vil_convolve_2d(input, grad_y_, gauss_y, double());
