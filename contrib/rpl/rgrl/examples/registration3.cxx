@@ -156,7 +156,8 @@ main( int argc, char* argv[] )
   rgrl_feature_set_sptr moving_feature_set_low_res = new rgrl_feature_set_location<2>(moving_fps_low_res);
   rgrl_feature_set_sptr fixed_feature_set_high_res = new rgrl_feature_set_location<2>(fixed_fps_high_res);
   rgrl_feature_set_sptr fixed_feature_set_low_res = new rgrl_feature_set_location<2>(fixed_fps_low_res);
-  rgrl_mask_box image_roi = moving_feature_set_low_res->bounding_box();
+  const rgrl_mask_box moving_image_roi = moving_feature_set_low_res->bounding_box();
+  const rgrl_mask_box fixed_image_roi = fixed_feature_set_low_res->bounding_box();
 
   // Set the initial transformation to be identity
   //
@@ -225,7 +226,7 @@ main( int argc, char* argv[] )
   //EndLatex
 
   int starting_resolution = 1;
-  reg.run( image_roi, affine_model, initial_transformation, 0,
+  reg.run( moving_image_roi, fixed_image_roi, affine_model, initial_transformation, 0,
            starting_resolution );
 
   // Output Results

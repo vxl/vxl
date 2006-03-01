@@ -173,9 +173,10 @@ main()
   const unsigned int  dimension = 2;
    rgrl_feature_set_sptr moving_feature_set =
     new rgrl_feature_set_location<dimension>(moving_feature_points);
+  rgrl_mask_box moving_image_roi = moving_feature_set->bounding_box();
   rgrl_feature_set_sptr fixed_feature_set =
     new rgrl_feature_set_location<dimension>(fixed_feature_points);
-  rgrl_mask_box image_roi = moving_feature_set->bounding_box();
+  rgrl_mask_box fixed_image_roi = fixed_feature_set->bounding_box();
 
   // Set up the initial transformation and the estimator for affine
   // transformation
@@ -386,7 +387,7 @@ main()
 
   // Run ...
   //
-  reg.run( image_roi, estimator, init_transform );
+  reg.run( moving_image_roi, fixed_image_roi, estimator, init_transform );
 
   if ( reg.has_final_transformation() ) {
     vcl_cout<<"Final xform:"<<vcl_endl;

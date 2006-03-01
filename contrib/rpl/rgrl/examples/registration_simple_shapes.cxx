@@ -180,7 +180,8 @@ main()
   rgrl_feature_set_sptr fixed_feature_set;
   moving_feature_set = new rgrl_feature_set_location<dimension>(moving_feature_points);
   fixed_feature_set =  new rgrl_feature_set_location<dimension>(fixed_feature_points);
-  rgrl_mask_box image_roi = moving_feature_set->bounding_box();
+  const rgrl_mask_box moving_image_roi = moving_feature_set->bounding_box();
+  const rgrl_mask_box fixed_image_roi = fixed_feature_set->bounding_box();
 
   // Set up the ICP matcher
   //
@@ -219,7 +220,7 @@ main()
 
   // Run ...
   //
-  reg.run( image_roi, estimator, init_transform );
+  reg.run( moving_image_roi, fixed_image_roi, estimator, init_transform );
 
   if ( reg.has_final_transformation() ) {
     vcl_cout<<"Final xform:"<<vcl_endl;

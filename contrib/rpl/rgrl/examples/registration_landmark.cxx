@@ -213,6 +213,7 @@ main( int argc, char* argv[] )
                                 *fixed_feature_set,
                                 *init_translation,
                                 moving_image_region->bounding_box(),
+                                fixed_image_region->bounding_box(),
                                 *dummy_scale);
   // EndCodeSnippet
 

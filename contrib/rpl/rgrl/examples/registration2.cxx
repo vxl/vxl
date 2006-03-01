@@ -154,7 +154,8 @@ main( int argc, char* argv[] )
     new rgrl_feature_set_location<dimension>(moving_feature_points);
   fixed_feature_set =
     new rgrl_feature_set_location<dimension>(fixed_feature_points);
-  rgrl_mask_box moving_image_region = moving_feature_set->bounding_box();
+  const rgrl_mask_box moving_image_region = moving_feature_set->bounding_box();
+  const rgrl_mask_box fixed_image_region = fixed_feature_set->bounding_box();
 
   // Transformation estimator
   //
@@ -190,7 +191,7 @@ main( int argc, char* argv[] )
   reg.add_observer( new rgrl_event_iteration(), new command_iteration_update());
   // EndCodeSnippet
 
-  reg.run( moving_image_region, estimator, init_trans  );
+  reg.run( moving_image_region, fixed_image_region, estimator, init_trans  );
 
   // Output Results
   if ( reg.has_final_transformation() ) {

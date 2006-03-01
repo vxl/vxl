@@ -289,7 +289,8 @@ main()
     new rgrl_feature_set_location<dimension>(moving_feature_points);
   rgrl_feature_set_sptr fixed_feature_set =
     new rgrl_feature_set_location<dimension>(fixed_feature_points);
-  rgrl_mask_box image_roi = moving_feature_set->bounding_box();
+  const rgrl_mask_box moving_image_roi = moving_feature_set->bounding_box();
+  const rgrl_mask_box fixed_image_roi = fixed_feature_set->bounding_box();
   // EndCodeSnippet
 
   // Set up the initial transformation and the estimator for affine
@@ -360,7 +361,7 @@ main()
   // EndLatex
 
   // BeginCodeSnippet
-  reg.run( image_roi, estimator, init_transform );
+  reg.run( moving_image_roi, fixed_image_roi, estimator, init_transform );
   // EndCodeSnippet
 
   if ( reg.has_final_transformation() ) {

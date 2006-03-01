@@ -158,7 +158,8 @@ main( int argc, char* argv[] )
     new rgrl_feature_set_location<dimension>(moving_feature_points, !use_bins);
   rgrl_feature_set_sptr fixed_feature_set =
     new rgrl_feature_set_location<dimension>(fixed_feature_points, !use_bins);
-  rgrl_mask_box image_roi = moving_feature_set->bounding_box();
+  rgrl_mask_box moving_image_roi = moving_feature_set->bounding_box();
+  rgrl_mask_box fixed_image_roi = fixed_feature_set->bounding_box();
   // EndCodeSnippet
 
 
@@ -217,7 +218,7 @@ main( int argc, char* argv[] )
 
   // Run ...
   //
-  reg.run( image_roi, estimator, init_transform  );
+  reg.run( moving_image_roi, fixed_image_roi, estimator, init_transform );
 
   // Output Results
   if ( reg.has_final_transformation() ) {
