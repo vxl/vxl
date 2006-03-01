@@ -33,6 +33,8 @@ class vidl2_pixel_iterator
   public:
     //: Destructor
     virtual ~vidl2_pixel_iterator(){}
+    //: Return the pixel format
+    virtual vidl2_pixel_format pixel_format() const = 0;
     //: Pre-increment: step to the next pixel
     virtual vidl2_pixel_iterator& operator++ () = 0;
     //: Copy the pixel data into a byte array
@@ -79,6 +81,10 @@ class vidl2_pixel_iterator_of : public vidl2_pixel_iterator
 
     //: Destructor
     virtual ~vidl2_pixel_iterator_of<FMT>(){}
+
+    //: Return the pixel format
+    virtual vidl2_pixel_format pixel_format() const
+    { return FMT; }
 
     //: Step to the next pixel
     vidl2_pixel_iterator_of<FMT>& next()
@@ -148,6 +154,10 @@ class vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_UYVY_422>
 
     //: Destructor
     virtual ~vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_UYVY_422>(){}
+
+    //: Return the pixel format
+    virtual vidl2_pixel_format pixel_format() const
+    { return VIDL2_PIXEL_FORMAT_UYVY_422; }
 
     //: Step to the next pixel
     vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_UYVY_422>& next()
@@ -237,6 +247,11 @@ class vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_UYVY_411>
 
     //: Destructor
     virtual ~vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_UYVY_411>(){}
+
+    //: Return the pixel format
+    virtual vidl2_pixel_format pixel_format() const
+    { return VIDL2_PIXEL_FORMAT_UYVY_411; }
+
 
     //: Step to the next pixel
     vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_UYVY_411>& next()
@@ -330,6 +345,11 @@ class vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_YUV_420P>
 
     //: Destructor
     virtual ~vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_YUV_420P>(){}
+
+    //: Return the pixel format
+    virtual vidl2_pixel_format pixel_format() const
+    { return VIDL2_PIXEL_FORMAT_YUV_420P; }
+
 
     //: Step to the next pixel
     vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_YUV_420P>& next()
@@ -428,6 +448,11 @@ class vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_YUV_422P>
     //: Destructor
     virtual ~vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_YUV_422P>(){}
 
+    //: Return the pixel format
+    virtual vidl2_pixel_format pixel_format() const
+    { return VIDL2_PIXEL_FORMAT_YUV_422P; }
+
+
     //: Step to the next pixel
     vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_YUV_422P>& next()
     {
@@ -512,6 +537,11 @@ class vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_MONO_1>
 
     //: Destructor
     virtual ~vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_MONO_1>(){}
+
+    //: Return the pixel format
+    virtual vidl2_pixel_format pixel_format() const
+    { return VIDL2_PIXEL_FORMAT_MONO_1; }
+
 
     //: Step to the next pixel
     vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_MONO_1>& next()
