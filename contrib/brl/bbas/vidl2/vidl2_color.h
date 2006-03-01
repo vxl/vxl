@@ -177,12 +177,12 @@ struct vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,VIDL2_PIXEL_COLOR_MONO>
 
   static inline void convert(const vxl_byte in[1], bool out[1])
   {
-    out[0] = bool(in[0]&0x80); // threshold
+    out[0] = (in[0]&0x80) > 0; // threshold
   }
 
   static inline void convert(const vxl_uint_16 in[1], bool out[1])
   {
-    out[0] = bool(in[0]&0x8000); // threshold
+    out[0] = (in[0]&0x8000) > 0; // threshold
   }
 
   static inline void convert(const bool in[1], vxl_byte out[1])

@@ -92,7 +92,9 @@ vidl2_color_converter_func( vidl2_pixel_color in_C, unsigned in_bpp,
             }
             else
             {
-              return &vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,VIDL2_PIXEL_COLOR_MONO>::convert;
+              vidl2_color_conv_fptr fp =
+                  &vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,VIDL2_PIXEL_COLOR_MONO>::convert;
+              return fp;
             }
           }
         }
@@ -110,8 +112,11 @@ vidl2_color_converter_func( vidl2_pixel_color in_C, unsigned in_bpp,
             return reinterpret_cast<vidl2_color_conv_fptr>(fp);
           }
           else
-            return &vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,VIDL2_PIXEL_COLOR_RGB>::convert;
-
+          {
+            vidl2_color_conv_fptr fp =
+                &vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,VIDL2_PIXEL_COLOR_RGB>::convert;
+            return fp;
+          }
         }
         case VIDL2_PIXEL_COLOR_RGBA:
         {
@@ -127,7 +132,11 @@ vidl2_color_converter_func( vidl2_pixel_color in_C, unsigned in_bpp,
             return reinterpret_cast<vidl2_color_conv_fptr>(fp);
           }
           else
-            return &vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,VIDL2_PIXEL_COLOR_RGBA>::convert;
+          {
+            vidl2_color_conv_fptr fp =
+                &vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,VIDL2_PIXEL_COLOR_RGBA>::convert;
+            return fp;
+          }
         }
         case VIDL2_PIXEL_COLOR_YUV:
         {
@@ -143,7 +152,11 @@ vidl2_color_converter_func( vidl2_pixel_color in_C, unsigned in_bpp,
             return reinterpret_cast<vidl2_color_conv_fptr>(fp);
           }
           else
-            return &vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,VIDL2_PIXEL_COLOR_YUV>::convert;
+          {
+            vidl2_color_conv_fptr fp =
+                &vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,VIDL2_PIXEL_COLOR_YUV>::convert;
+            return fp;
+          }
         }
         default:
           break;
@@ -167,7 +180,11 @@ vidl2_color_converter_func( vidl2_pixel_color in_C, unsigned in_bpp,
             return reinterpret_cast<vidl2_color_conv_fptr>(fp);
           }
           else
-            return &vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,VIDL2_PIXEL_COLOR_MONO>::convert;
+          {
+            vidl2_color_conv_fptr fp =
+                &vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,VIDL2_PIXEL_COLOR_MONO>::convert;
+            return fp;
+          }
         }
         case VIDL2_PIXEL_COLOR_RGB:
         {
@@ -203,7 +220,11 @@ vidl2_color_converter_func( vidl2_pixel_color in_C, unsigned in_bpp,
             return reinterpret_cast<vidl2_color_conv_fptr>(fp);
           }
           else
-            return &vidl2_color_converter<VIDL2_PIXEL_COLOR_RGBA,VIDL2_PIXEL_COLOR_MONO>::convert;
+          {
+            vidl2_color_conv_fptr fp =
+                &vidl2_color_converter<VIDL2_PIXEL_COLOR_RGBA,VIDL2_PIXEL_COLOR_MONO>::convert;
+            return fp;
+          }
         }
         case VIDL2_PIXEL_COLOR_RGB:
         {
