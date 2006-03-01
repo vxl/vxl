@@ -28,6 +28,31 @@
 
 
 //-----------------------------------------------------------------------------
+class vidl2_pixel_iterator
+{
+  public:
+    //: Destructor
+    virtual ~vidl2_pixel_iterator(){}
+    //: Pre-increment: step to the next pixel
+    virtual vidl2_pixel_iterator& operator++ () = 0;
+    //: Copy the pixel data into a byte array
+    virtual void get_data(vxl_byte* data) const = 0;
+    //: Set the pixel data from a byte array
+    virtual void set_data(const vxl_byte* data) = 0;
+};
+
+
+//: Pixel iterator factory
+// Creates a new pixel iterator on the heap
+// The iterator is initialized to the first pixel in the frame
+// \note The user is responsible for deleting the iterator
+vidl2_pixel_iterator*
+vidl2_make_pixel_iterator(const vidl2_frame& frame);
+
+
+//: Return true if the pixel format has a valid pixel iterator implementation
+bool vidl2_has_pixel_iterator(vidl2_pixel_format FMT);
+
 
 template <vidl2_pixel_format FMT>
 struct vidl2_pixel_iterator_valid
@@ -38,12 +63,12 @@ struct vidl2_pixel_iterator_valid
 //: The default pixel iterator
 // used for non-planar non-packed formats 
 template <vidl2_pixel_format FMT> 
-class vidl2_pixel_iterator
+class vidl2_pixel_iterator_of : public vidl2_pixel_iterator
 {
   typedef typename vidl2_pixel_traits_of<FMT>::type cmp_type;
   public:
     //: Constructor
-    vidl2_pixel_iterator(const vidl2_frame& frame):
+    vidl2_pixel_iterator_of(const vidl2_frame& frame):
       ptr_((cmp_type*)frame.data())
     {
       assert(frame.pixel_format() == FMT);
@@ -52,11 +77,20 @@ class vidl2_pixel_iterator
       assert(vidl2_pixel_traits_of<FMT>::arrangement() == VIDL2_PIXEL_ARRANGE_SINGLE);
     }
 
-    //: Pre-increment
-    vidl2_pixel_iterator<FMT> & operator++ ()
+    //: Destructor
+    virtual ~vidl2_pixel_iterator_of<FMT>(){}
+
+    //: Step to the next pixel
+    vidl2_pixel_iterator_of<FMT>& next()
     {
       ptr_ += vidl2_pixel_traits_of<FMT>::bits_per_pixel/(sizeof(cmp_type)*8);
       return *this;
+    }
+
+    //: Pre-increment: step to the next pixel
+    virtual vidl2_pixel_iterator& operator++ ()
+    {
+      return this->next();
     }
 
     //: Access the data
@@ -78,6 +112,18 @@ class vidl2_pixel_iterator
       vidl2_color_component<FMT>::set_all(ptr_,data);
     }
 
+    //: Copy the pixel data into a byte array
+    virtual void get_data(vxl_byte* data) const
+    {
+      this->get(reinterpret_cast<cmp_type*>(data));
+    }
+
+    //: Set the pixel data from a byte array
+    virtual void set_data(const vxl_byte* data)
+    {
+      this->set(reinterpret_cast<const cmp_type*>(data));
+    }
+
   private:
     cmp_type * ptr_;
 };
@@ -89,23 +135,33 @@ struct vidl2_pixel_iterator_valid<VIDL2_PIXEL_FORMAT_UYVY_422>
 { enum { value = true }; };
 
 VCL_DEFINE_SPECIALIZATION 
-class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_UYVY_422>
+class vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_UYVY_422>
+  : public vidl2_pixel_iterator
 {
   public:
     //: Constructor
-    vidl2_pixel_iterator(const vidl2_frame& frame):
+    vidl2_pixel_iterator_of(const vidl2_frame& frame):
       mode_(true), ptr_((vxl_byte*)frame.data())
     {
       assert(frame.pixel_format() == VIDL2_PIXEL_FORMAT_UYVY_422);
     }
 
-    //: Pre-increment
-    vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_UYVY_422> & operator++ ()
+    //: Destructor
+    virtual ~vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_UYVY_422>(){}
+
+    //: Step to the next pixel
+    vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_UYVY_422>& next()
     {
       mode_ = !mode_;
       if(mode_)
         ptr_ += 4;
       return *this;
+    }
+
+    //: Pre-increment: step to the next pixel
+    virtual vidl2_pixel_iterator& operator++ ()
+    {
+      return this->next();
     }
 
     //: Access the data
@@ -140,6 +196,18 @@ class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_UYVY_422>
       }
     }
 
+    //: Copy the pixel data into a byte array
+    virtual void get_data(vxl_byte* data) const
+    {
+      this->get(data);
+    }
+
+    //: Set the pixel data from a byte array
+    virtual void set_data(const vxl_byte* data)
+    {
+      this->set(data);
+    }
+
   private:
     bool mode_;
     vxl_byte * ptr_;
@@ -152,11 +220,12 @@ struct vidl2_pixel_iterator_valid<VIDL2_PIXEL_FORMAT_UYVY_411>
 { enum { value = true }; };
 
 VCL_DEFINE_SPECIALIZATION 
-class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_UYVY_411>
+class vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_UYVY_411>
+  : public vidl2_pixel_iterator
 {
   public:
     //: Constructor
-    vidl2_pixel_iterator(const vidl2_frame& frame):
+    vidl2_pixel_iterator_of(const vidl2_frame& frame):
       mode_(0), ptr_((vxl_byte*)frame.data())
     {
       assert(frame.pixel_format() == VIDL2_PIXEL_FORMAT_UYVY_411);
@@ -166,13 +235,22 @@ class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_UYVY_411>
       offset_[3][0] = 5; offset_[3][1] = 0; offset_[3][2] = 3;
     }
 
-    //: Pre-increment
-    vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_UYVY_411> & operator++ ()
+    //: Destructor
+    virtual ~vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_UYVY_411>(){}
+
+    //: Step to the next pixel
+    vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_UYVY_411>& next()
     {
       mode_ = (mode_+1)%4;
       if(mode_==0)
         ptr_ += 6;
       return *this;
+    }
+
+    //: Pre-increment: step to the next pixel
+    virtual vidl2_pixel_iterator& operator++ ()
+    {
+      return this->next();
     }
 
     //: Access the data
@@ -206,6 +284,18 @@ class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_UYVY_411>
       }
     }
 
+    //: Copy the pixel data into a byte array
+    virtual void get_data(vxl_byte* data) const
+    {
+      this->get(data);
+    }
+
+    //: Set the pixel data from a byte array
+    virtual void set_data(const vxl_byte* data)
+    {
+      this->set(data);
+    }
+
   private:
     vxl_byte mode_;
     vxl_byte * ptr_;
@@ -219,11 +309,12 @@ struct vidl2_pixel_iterator_valid<VIDL2_PIXEL_FORMAT_YUV_420P>
 { enum { value = true }; };
 
 VCL_DEFINE_SPECIALIZATION 
-class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_420P>
+class vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_YUV_420P>
+  : public vidl2_pixel_iterator
 {
   public:
     //: Constructor
-    vidl2_pixel_iterator(const vidl2_frame& frame):
+    vidl2_pixel_iterator_of(const vidl2_frame& frame):
       line_size_(frame.ni()), line_cnt_(0),
       mode_x_(false), mode_y_(false)
     {
@@ -237,8 +328,11 @@ class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_420P>
       ptr_[2] = ptr_[1] + (size >> 2);
     }
 
-    //: Pre-increment
-    vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_420P> & operator++ ()
+    //: Destructor
+    virtual ~vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_YUV_420P>(){}
+
+    //: Step to the next pixel
+    vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_YUV_420P>& next()
     {
       ++ptr_[0];
       if(mode_x_){
@@ -258,6 +352,12 @@ class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_420P>
       return *this;
     }
 
+    //: Pre-increment: step to the next pixel
+    virtual vidl2_pixel_iterator& operator++ ()
+    {
+      return this->next();
+    }
+
     //: Access the data
     vxl_byte operator () (unsigned int i) const
     {
@@ -279,6 +379,18 @@ class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_420P>
       *ptr_[0] = data[0];
       *ptr_[1] = data[1];
       *ptr_[2] = data[2];
+    }
+
+    //: Copy the pixel data into a byte array
+    virtual void get_data(vxl_byte* data) const
+    {
+      this->get(data);
+    }
+
+    //: Set the pixel data from a byte array
+    virtual void set_data(const vxl_byte* data)
+    {
+      this->set(data);
     }
 
   private:
@@ -296,11 +408,12 @@ struct vidl2_pixel_iterator_valid<VIDL2_PIXEL_FORMAT_YUV_422P>
 { enum { value = true }; };
 
 VCL_DEFINE_SPECIALIZATION 
-class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_422P>
+class vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_YUV_422P>
+  : public vidl2_pixel_iterator
 {
   public:
     //: Constructor
-    vidl2_pixel_iterator(const vidl2_frame& frame):
+    vidl2_pixel_iterator_of(const vidl2_frame& frame):
       line_size_(frame.ni()), line_cnt_(0), mode_(false)
     {
       assert(frame.pixel_format() == VIDL2_PIXEL_FORMAT_YUV_422P);
@@ -312,8 +425,11 @@ class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_422P>
       ptr_[2] = ptr_[1] + (size >> 1);
     }
 
-    //: Pre-increment
-    vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_422P> & operator++ ()
+    //: Destructor
+    virtual ~vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_YUV_422P>(){}
+
+    //: Step to the next pixel
+    vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_YUV_422P>& next()
     {
       ++ptr_[0];
       if(mode_){
@@ -326,6 +442,12 @@ class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_422P>
         mode_=false;
       }
       return *this;
+    }
+
+    //: Pre-increment: step to the next pixel
+    virtual vidl2_pixel_iterator& operator++ ()
+    {
+      return this->next();
     }
 
     //: Access the data
@@ -351,6 +473,18 @@ class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_YUV_422P>
       *ptr_[2] = data[2];
     }
 
+    //: Copy the pixel data into a byte array
+    virtual void get_data(vxl_byte* data) const
+    {
+      this->get(data);
+    }
+
+    //: Set the pixel data from a byte array
+    virtual void set_data(const vxl_byte* data)
+    {
+      this->set(data);
+    }
+
   private:
     unsigned int line_size_;
     unsigned int line_cnt_;
@@ -365,18 +499,22 @@ struct vidl2_pixel_iterator_valid<VIDL2_PIXEL_FORMAT_MONO_1>
 { enum { value = true }; };
 
 VCL_DEFINE_SPECIALIZATION 
-class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_MONO_1>
+class vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_MONO_1>
+  : public vidl2_pixel_iterator
 {
   public:
     //: Constructor
-    vidl2_pixel_iterator(const vidl2_frame& frame):
+    vidl2_pixel_iterator_of(const vidl2_frame& frame):
       bit_mask_(128), ptr_((vxl_byte*)frame.data())
     {
       assert(frame.pixel_format() == VIDL2_PIXEL_FORMAT_MONO_1);
     }
 
-    //: Pre-increment
-    vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_MONO_1> & operator++ ()
+    //: Destructor
+    virtual ~vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_MONO_1>(){}
+
+    //: Step to the next pixel
+    vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_MONO_1>& next()
     {
       bit_mask_ >>= 1;
       if(!bit_mask_){
@@ -385,6 +523,12 @@ class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_MONO_1>
       }
 
       return *this;
+    }
+
+    //: Pre-increment: step to the next pixel
+    virtual vidl2_pixel_iterator& operator++ ()
+    {
+      return this->next();
     }
 
     //: Access the data
@@ -404,6 +548,18 @@ class vidl2_pixel_iterator<VIDL2_PIXEL_FORMAT_MONO_1>
     void set(const bool* data)
     {
       ptr_[0] &= ~bit_mask_ & data[0]?bit_mask_:0;
+    }
+
+    //: Copy the pixel data into a byte array
+    virtual void get_data(vxl_byte* data) const
+    {
+      this->get(reinterpret_cast<bool*>(data));
+    }
+
+    //: Set the pixel data from a byte array
+    virtual void set_data(const vxl_byte* data)
+    {
+      this->set(reinterpret_cast<const bool*>(data));
     }
 
   private:

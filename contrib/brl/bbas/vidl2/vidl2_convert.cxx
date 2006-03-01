@@ -13,6 +13,7 @@
 #include "vidl2_frame.h"
 #include <vcl_cstring.h>
 #include <vcl_cassert.h>
+#include <vcl_memory.h>
 
 //--------------------------------------------------------------------------------
 
@@ -63,35 +64,42 @@ struct convert
 
 //=============================================================================
 // Start of generic pixel conversions
-template <vidl2_pixel_format in_Fmt, vidl2_pixel_format out_Fmt>
-struct convert_generic
-{
-  static inline bool apply(const vidl2_frame& in_frame,
-                           vidl2_frame& out_frame)
-  {
-    assert(in_frame.pixel_format()==in_Fmt);
-    assert(out_frame.pixel_format()==out_Fmt);
-    typedef typename vidl2_pixel_traits_of<in_Fmt>::type in_type;
-    typedef typename vidl2_pixel_traits_of<out_Fmt>::type out_type;
-    typedef vidl2_color_converter<
-        vidl2_pixel_color(vidl2_pixel_traits_of<in_Fmt>::color_idx),
-        vidl2_pixel_traits_of<in_Fmt>::num_channels,
-        vidl2_pixel_color(vidl2_pixel_traits_of<out_Fmt>::color_idx),
-        vidl2_pixel_traits_of<out_Fmt>::num_channels > color_converter;
-    vidl2_pixel_iterator<in_Fmt> in_itr(in_frame);
-    vidl2_pixel_iterator<out_Fmt> out_itr(out_frame);
 
-    const unsigned int num_pix = in_frame.ni() * in_frame.nj();
-    in_type in_pixel[vidl2_pixel_traits_of<in_Fmt>::num_channels];
-    out_type out_pixel[vidl2_pixel_traits_of<out_Fmt>::num_channels];
-    for (unsigned int c=0; c<num_pix; ++c, ++in_itr, ++out_itr){
-      in_itr.get(in_pixel);
-      color_converter::convert(in_pixel, out_pixel);
-      out_itr.set(out_pixel);
-    }
-    return true;
+
+//: The generic pixel conversion function
+bool convert_generic(const vidl2_frame& in_frame,
+                     vidl2_frame& out_frame)
+{
+  // create pixel iterators for each frame
+  vcl_auto_ptr<vidl2_pixel_iterator> in_pitr(vidl2_make_pixel_iterator(in_frame));
+  if(!in_pitr.get())
+    return false;
+  vcl_auto_ptr<vidl2_pixel_iterator> out_pitr(vidl2_make_pixel_iterator(out_frame));
+  if(!out_pitr.get())
+    return false;
+
+  vidl2_pixel_iterator& in_itr = *in_pitr;
+  vidl2_pixel_iterator& out_itr = *out_pitr;
+
+  vidl2_pixel_traits in_t = vidl2_pixel_format_traits(in_frame.pixel_format());
+  vidl2_pixel_traits out_t = vidl2_pixel_format_traits(out_frame.pixel_format());
+
+  // find the color conversion function
+  vidl2_color_conv_fptr color_conv =
+      vidl2_color_converter_func( in_t.color,  in_t.bits_per_pixel,
+                                  out_t.color, out_t.bits_per_pixel);
+  if(!color_conv)
+    return false;
+
+  const unsigned int num_pix = in_frame.ni() * in_frame.nj();
+  vxl_byte in_pixel[4], out_pixel[4]; // assume pixels are no more than 4 bytes
+  for (unsigned int c=0; c<num_pix; ++c, ++in_itr, ++out_itr){
+    in_itr.get_data(in_pixel);
+    color_conv(in_pixel, out_pixel);
+    out_itr.set_data(out_pixel);
   }
-};
+  return true;
+}
 
 
 //=============================================================================
@@ -181,12 +189,9 @@ struct table_entry_init
       table_entry = &copy_conversion;
     else if (convert<in_Fmt,out_Fmt>::defined)
       table_entry = &convert<in_Fmt,out_Fmt>::apply;
-    else if (convert<in_Fmt,VIDL2_PIXEL_FORMAT_RGB_24>::defined &&
-            convert<VIDL2_PIXEL_FORMAT_RGB_24,out_Fmt>::defined)
-      table_entry = &intermediate_rgb24_conversion;
     else if (vidl2_pixel_iterator_valid<in_Fmt>::value &&
             vidl2_pixel_iterator_valid<out_Fmt>::value)
-      table_entry = &convert_generic<in_Fmt,out_Fmt>::apply;
+      table_entry = &convert_generic;
     else
       table_entry = &default_conversion;
   }
