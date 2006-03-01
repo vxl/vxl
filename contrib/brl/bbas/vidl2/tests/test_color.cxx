@@ -43,15 +43,15 @@ static void test_color()
     cf = vidl2_color_converter_func( VIDL2_PIXEL_COLOR_MONO, 1,
                                      VIDL2_PIXEL_COLOR_RGB, 24);
     vidl2_color_conv_fptr_1_8 cf_1_8 = &vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,
-                                                           VIDL2_PIXEL_COLOR_RGB>::convert;
-    same_func = reinterpret_cast<void*>(cf) == reinterpret_cast<void*>(cf_1_8);
+                                                              VIDL2_PIXEL_COLOR_RGB>::convert;
+    same_func = cf == reinterpret_cast<vidl2_color_conv_fptr>(cf_1_8);
     TEST("vidl2_color_converter_func: MONO_1 to RGB",same_func, true);
 
     cf = vidl2_color_converter_func( VIDL2_PIXEL_COLOR_MONO, 16,
                                      VIDL2_PIXEL_COLOR_MONO, 1);
     vidl2_color_conv_fptr_16_1 cf_16_1 = &vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,
-                                                            VIDL2_PIXEL_COLOR_MONO>::convert;
-    same_func = reinterpret_cast<void*>(cf) == reinterpret_cast<void*>(cf_16_1);
+                                                                VIDL2_PIXEL_COLOR_MONO>::convert;
+    same_func = cf == reinterpret_cast<vidl2_color_conv_fptr>(cf_16_1);
     TEST("vidl2_color_converter_func: MONO_16 to MONO_1",same_func, true);
   }
 
