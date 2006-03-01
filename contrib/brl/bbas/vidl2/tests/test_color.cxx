@@ -28,49 +28,49 @@ static void test_color()
   {
     bool same_func = true;
     vidl2_color_conv_fptr cf = vidl2_color_converter_func( VIDL2_PIXEL_COLOR_RGB, 24,
-                                                           VIDL2_PIXEL_COLOR_RGB, 32);
-    same_func = cf == &vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,3,
-                                             VIDL2_PIXEL_COLOR_RGB,4>::convert;
+                                                           VIDL2_PIXEL_COLOR_RGBA, 32);
+    same_func = cf == &vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,
+                                             VIDL2_PIXEL_COLOR_RGBA>::convert;
     TEST("vidl2_color_converter_func: RGB to RGBA", same_func, true);
 
     cf = vidl2_color_converter_func( VIDL2_PIXEL_COLOR_YUV, 24,
                                      VIDL2_PIXEL_COLOR_RGB, 24);
     same_func =
-        cf == &vidl2_color_converter<VIDL2_PIXEL_COLOR_YUV,3,
-                                     VIDL2_PIXEL_COLOR_RGB,3>::convert;
+        cf == &vidl2_color_converter<VIDL2_PIXEL_COLOR_YUV,
+                                     VIDL2_PIXEL_COLOR_RGB>::convert;
     TEST("vidl2_color_converter_func: YUV to RGB", same_func, true);
 
     cf = vidl2_color_converter_func( VIDL2_PIXEL_COLOR_MONO, 1,
                                      VIDL2_PIXEL_COLOR_RGB, 24);
-    vidl2_color_conv_fptr_1_8 cf_1_8 = &vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,1,
-                                                           VIDL2_PIXEL_COLOR_RGB,3>::convert;
+    vidl2_color_conv_fptr_1_8 cf_1_8 = &vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,
+                                                           VIDL2_PIXEL_COLOR_RGB>::convert;
     same_func = reinterpret_cast<void*>(cf) == reinterpret_cast<void*>(cf_1_8);
     TEST("vidl2_color_converter_func: MONO_1 to RGB",same_func, true);
 
     cf = vidl2_color_converter_func( VIDL2_PIXEL_COLOR_MONO, 16,
                                      VIDL2_PIXEL_COLOR_MONO, 1);
-    vidl2_color_conv_fptr_16_1 cf_16_1 = &vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,1,
-                                                            VIDL2_PIXEL_COLOR_MONO,1>::convert;
+    vidl2_color_conv_fptr_16_1 cf_16_1 = &vidl2_color_converter<VIDL2_PIXEL_COLOR_MONO,
+                                                            VIDL2_PIXEL_COLOR_MONO>::convert;
     same_func = reinterpret_cast<void*>(cf) == reinterpret_cast<void*>(cf_16_1);
     TEST("vidl2_color_converter_func: MONO_16 to MONO_1",same_func, true);
   }
 
   {
     vidl2_color_conv_fptr cf = vidl2_color_converter_func( VIDL2_PIXEL_COLOR_RGB, 24,
-                                                           VIDL2_PIXEL_COLOR_RGB, 32);
+                                                           VIDL2_PIXEL_COLOR_RGBA, 32);
     assert(cf);
 
     vxl_byte in[] = { 254, 131, 1 };
     vxl_byte out[4], out2[4];
 
     cf(in,out);
-    vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,3,VIDL2_PIXEL_COLOR_RGB,4>::convert(in,out2);
+    vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,VIDL2_PIXEL_COLOR_RGBA>::convert(in,out2);
     TEST("RGB to RGBA", in[0]==out[0] && in[1]==out[1] && in[2]==out[2] && out[3]==255 &&
                         out[0]==out2[0] && out[1]==out2[1] && out[2]==out2[2] && out[3]==out2[3], true);
   }
 
   {
-    vidl2_color_conv_fptr cf = vidl2_color_converter_func( VIDL2_PIXEL_COLOR_RGB, 32,
+    vidl2_color_conv_fptr cf = vidl2_color_converter_func( VIDL2_PIXEL_COLOR_RGBA, 32,
                                                            VIDL2_PIXEL_COLOR_YUV, 24);
     assert(cf);
 
@@ -78,7 +78,7 @@ static void test_color()
     vxl_byte yuv[3], yuv2[3];
 
     cf(rgb,yuv);
-    vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,4,VIDL2_PIXEL_COLOR_YUV,3>::convert(rgb,yuv2);
+    vidl2_color_converter<VIDL2_PIXEL_COLOR_RGBA,VIDL2_PIXEL_COLOR_YUV>::convert(rgb,yuv2);
     TEST("RGBA to YUV", yuv[0]==yuv2[0] && yuv[1]==yuv2[1] && yuv[2]==yuv2[2], true);
   }
 
@@ -91,7 +91,7 @@ static void test_color()
     vxl_uint_16 out[1], out2[1];
 
     cf(in,reinterpret_cast<vxl_byte*>(out));
-    vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,3,VIDL2_PIXEL_COLOR_MONO,1>::convert(in,out2);
+    vidl2_color_converter<VIDL2_PIXEL_COLOR_RGB,VIDL2_PIXEL_COLOR_MONO>::convert(in,out2);
     TEST("RGB to MONO_16", out[0]==out2[0], true);
   }
 }

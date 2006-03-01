@@ -85,6 +85,7 @@ enum vidl2_pixel_color
 
   VIDL2_PIXEL_COLOR_MONO,
   VIDL2_PIXEL_COLOR_RGB,
+  VIDL2_PIXEL_COLOR_RGBA,
   VIDL2_PIXEL_COLOR_YUV,
 
   // Add values here
@@ -158,8 +159,8 @@ vidl2_pt_mac( UNKNOWN,  "unknown",  void,        0,   0,  UNKNOWN, UNKNOWN, 0,  
 vidl2_pt_mac( RGB_24,   "RGB 24",   vxl_byte,    24,  3,  RGB,     SINGLE,  0,   0  );
 vidl2_pt_mac( RGB_24P,  "RGB 24P",  vxl_byte,    24,  3,  RGB,     PLANAR,  0,   0  );
 vidl2_pt_mac( BGR_24,   "BGR 24",   vxl_byte,    24,  3,  RGB,     SINGLE,  0,   0  );
-vidl2_pt_mac( RGBA_32,  "RGBA 32",  vxl_byte,    32,  4,  RGB,     SINGLE,  0,   0  );
-vidl2_pt_mac( RGBA_32P, "RGBA 32P", vxl_byte,    32,  4,  RGB,     PLANAR,  0,   0  );
+vidl2_pt_mac( RGBA_32,  "RGBA 32",  vxl_byte,    32,  4,  RGBA,    SINGLE,  0,   0  );
+vidl2_pt_mac( RGBA_32P, "RGBA 32P", vxl_byte,    32,  4,  RGBA,    PLANAR,  0,   0  );
 vidl2_pt_mac( RGB_565,  "RGB 565",  vxl_byte,    16,  3,  RGB,     SINGLE,  0,   0  );
 vidl2_pt_mac( RGB_555,  "RGB 555",  vxl_byte,    16,  3,  RGB,     SINGLE,  0,   0  );
 
