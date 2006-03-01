@@ -128,6 +128,46 @@ struct vidl2_pixel_traits
 };
 
 
+//: Define limits on the minimum and maximum pixel values
+template <class T>
+struct vidl2_pixel_limits;
+
+VCL_DEFINE_SPECIALIZATION
+struct vidl2_pixel_limits<vxl_byte>
+{
+  static inline vxl_byte min() {return 0x00;}
+  static inline vxl_byte max() {return 0xFF;}
+};
+
+VCL_DEFINE_SPECIALIZATION
+struct vidl2_pixel_limits<bool>
+{
+  static inline bool min() {return false;}
+  static inline bool max() {return true;}
+};
+
+VCL_DEFINE_SPECIALIZATION
+struct vidl2_pixel_limits<vxl_uint_16>
+{
+  static inline vxl_uint_16 min() {return 0x0000;}
+  static inline vxl_uint_16 max() {return 0xFFFF;}
+};
+
+VCL_DEFINE_SPECIALIZATION
+    struct vidl2_pixel_limits<float>
+{
+  static inline float min() {return 0.0f;}
+  static inline float max() {return 1.0f;}
+};
+
+VCL_DEFINE_SPECIALIZATION
+struct vidl2_pixel_limits<double>
+{
+  static inline double min() {return 0.0;}
+  static inline double max() {return 1.0;}
+};
+
+
 //: Define traits for a given vidl2_pixel_format
 // All pixel traits should be defined using the macro below
 // The anonymous enums allow the values available to the

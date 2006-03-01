@@ -35,9 +35,9 @@ static void test_color()
 
     cf = vidl2_color_converter_func( VIDL2_PIXEL_COLOR_YUV, 24,
                                      VIDL2_PIXEL_COLOR_RGB, 24);
-    same_func =
-        cf == &vidl2_color_converter<VIDL2_PIXEL_COLOR_YUV,
-                                     VIDL2_PIXEL_COLOR_RGB>::convert;
+    vidl2_color_conv_fptr cf2 = &vidl2_color_converter<VIDL2_PIXEL_COLOR_YUV,
+                                                       VIDL2_PIXEL_COLOR_RGB>::convert;
+                                                       same_func = cf == cf2;
     TEST("vidl2_color_converter_func: YUV to RGB", same_func, true);
 
     cf = vidl2_color_converter_func( VIDL2_PIXEL_COLOR_MONO, 1,
