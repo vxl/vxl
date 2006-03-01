@@ -37,8 +37,8 @@ struct vidl2_has_iterator
   public:
     vidl2_has_iterator()
     {
-      const unsigned last_idx = VIDL2_PIXEL_FORMAT_ENUM_END-1;
-      populate_has_iterator<vidl2_pixel_format(last_idx)>::apply(&array[last_idx]);
+      populate_has_iterator<vidl2_pixel_format(VIDL2_PIXEL_FORMAT_ENUM_END-1)>
+        ::apply(&array[VIDL2_PIXEL_FORMAT_ENUM_END-1]);
     }
 
     bool operator [] (unsigned int i)
