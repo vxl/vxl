@@ -87,7 +87,20 @@ inline void vidl2_color_convert_rgb2yuv( vxl_byte  r, vxl_byte  g, vxl_byte  b,
 
 //-----------------------------------------------------------------------------
 // Generic interface to conversion routines
-//----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+//: Define the function pointer for pixel format conversion functions
+typedef void (*vidl2_color_conv_fptr)(const vxl_byte* in, vxl_byte* out);
+
+//: Returns a color conversion function based on runtime values
+// The function returned is always a vidl2_color_conv_fptr which
+// converts const vxl_byte* to vxl_byte*.  Some of these function
+// may actually reinterpret the data as other types (i.e. bool* or
+// vxl_uint_16*) via reinterpret_cast
+vidl2_color_conv_fptr
+vidl2_color_converter_func( vidl2_pixel_color in_C, unsigned in_bpp,
+                            vidl2_pixel_color out_C, unsigned out_bpp);
+
 
 template <vidl2_pixel_color in_C, int in_NC, vidl2_pixel_color out_C, int out_NC>
 struct vidl2_color_converter;
