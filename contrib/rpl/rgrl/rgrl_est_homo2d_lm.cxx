@@ -208,6 +208,10 @@ rgrl_est_homo2d_lm( bool with_grad )
   : with_grad_( with_grad )
 {
    rgrl_estimator::set_param_dof( 8 );
+
+  // default value
+  rgrl_nonlinear_estimator::set_max_num_iter( 30 );
+  rgrl_nonlinear_estimator::set_rel_thres( 1e-5 );
 }
 
 rgrl_transformation_sptr
@@ -321,8 +325,8 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   //lm.set_trace( true );
   //lm.set_check_derivatives( 10 );
   // we don't need it to be super accurate
-  lm.set_f_tolerance( 1e-4 );
-  lm.set_max_function_evals( 30 );
+  lm.set_f_tolerance( relative_threshold_ );
+  lm.set_max_function_evals( max_num_iterations_ );
   
   bool ret;
   if ( with_grad_ )

@@ -11,7 +11,7 @@
 //: 2D similarity transform estimator
 //
 class rgrl_est_reduced_quad2d
-  : public rgrl_estimator
+  : public rgrl_linear_estimator
 {
 public:
   //: Default constructor

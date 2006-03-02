@@ -11,7 +11,7 @@
 //: homography2D transform estimator
 //
 class rgrl_est_homography2d
-  : public rgrl_estimator
+  : public rgrl_linear_estimator
 {
 public:
   //: Default constructor

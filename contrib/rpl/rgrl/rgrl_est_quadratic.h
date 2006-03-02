@@ -11,7 +11,7 @@
 //: Quadratic transform estimator
 //
 class rgrl_est_quadratic
-  : public rgrl_estimator
+  : public rgrl_linear_estimator
 {
 public:
   //: Default constructor

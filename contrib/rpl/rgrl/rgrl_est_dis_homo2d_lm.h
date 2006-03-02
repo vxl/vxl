@@ -15,7 +15,7 @@
 //    1. assume error projector has all eigen-values as one
 // 
 class rgrl_est_dis_homo2d_lm
-  : public rgrl_estimator
+  : public rgrl_nonlinear_estimator
 {
 public:
   //: Default constructor

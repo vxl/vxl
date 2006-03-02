@@ -11,7 +11,7 @@
 //: Affine transform estimator
 //
 class rgrl_est_affine
-  : public rgrl_estimator
+  : public rgrl_linear_estimator
 {
 public:
   //: Default constructor

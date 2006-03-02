@@ -327,6 +327,10 @@ rgrl_est_dis_homo2d_lm( vnl_vector<double> const& from_centre,
   assert( from_centre.size() == 2 && to_centre.size() == 2 );
 
   rgrl_estimator::set_param_dof( 10 );
+    
+  // default value
+  rgrl_nonlinear_estimator::set_max_num_iter( 30 );
+  rgrl_nonlinear_estimator::set_rel_thres( 1e-5 );
 }
 
 rgrl_transformation_sptr
@@ -405,11 +409,11 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   dis_homo_func.set_centres( from_centre_, to_centre_ );
 
   vnl_levenberg_marquardt lm( dis_homo_func );
-  lm.set_trace( true );
+  //lm.set_trace( true );
   //lm.set_check_derivatives( 3 );
   // we don't need it to be super accurate
-  lm.set_f_tolerance( 1e-4 );
-  lm.set_max_function_evals( 30 );
+  lm.set_f_tolerance( relative_threshold_ );
+  lm.set_max_function_evals( max_num_iterations_ );
 
   bool ret;
   if ( with_grad_ )

@@ -13,7 +13,7 @@
 //: Rigid transform estimator
 //
 class rgrl_est_rigid
-  : public rgrl_estimator
+  : public rgrl_nonlinear_estimator
 {
 public:
   // Constructor which takes the dimension of the dataset that the

@@ -11,7 +11,7 @@
 //: Translation transform estimator
 //
 class rgrl_est_translation
-  : public rgrl_estimator
+  : public rgrl_linear_estimator
 {
 public:
   //: Default constructor

@@ -814,6 +814,17 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
   bool failed = false;
   vnl_vector<double> scaling;
 
+  // for iterative method, set relative thres to be 1/10 of the value
+  // for IRLS
+  if( estimator->is_iterative_method() ) {
+    
+    rgrl_nonlinear_estimator* nonlinear_est 
+      = dynamic_cast<rgrl_nonlinear_estimator*>( estimator.as_pointer() );
+    if( nonlinear_est ) {
+      nonlinear_est->set_rel_thres( conv_tester.rel_tol() / 10.0 );
+    }
+  }
+
   //  Basic loop:
   //  1. Calculate new estimate
   //  2. Map matches and calculate weights

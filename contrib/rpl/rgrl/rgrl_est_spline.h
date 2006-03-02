@@ -20,7 +20,7 @@ enum rgrl_optimize_method
 };
 
 class rgrl_est_spline
-  : public rgrl_estimator
+  : public rgrl_nonlinear_estimator
 {
  public:
   //: Constructor
