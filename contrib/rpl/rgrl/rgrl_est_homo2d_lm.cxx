@@ -16,7 +16,9 @@
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_det.h>
 #include <vnl/vnl_fastops.h>
+#include <vnl/vnl_transpose.h>
 #include <vnl/vnl_least_squares_function.h>
+#include <vnl/algo/vnl_orthogonal_complement.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/algo/vnl_svd.h>
 
@@ -363,12 +365,27 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
   // compute inverse
   //
+#if 1
+  vnl_matrix<double> compliment = vnl_orthogonal_complement( p );
+ 
+  vnl_svd<double> svd( vnl_transpose(compliment) * jtj *compliment, 1e-6 );
+  if ( svd.rank() < 8 ) {
+    WarningMacro( "The covariance of homography ranks less than 8! ");
+    return 0;
+  }
+  
+  vnl_matrix<double>covar = compliment * svd.inverse() * compliment.transpose();
+  
+  
+
+#else
   vnl_svd<double> svd( jtj, 1e-6 );
   DebugMacro(3, "SVD of JtJ: " << svd << vcl_endl);
   // the second least singular value shall be greater than 0
   // or Rank 8
   if ( svd.rank() < 8 ) {
     WarningMacro( "The covariance of homography ranks less than 8! ");
+    return 0;
   }
   // pseudo inverse only use first 8 singular values
   vnl_matrix<double> covar ( svd.pinverse(8) );
@@ -386,6 +403,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     // it is considered as failure
     return 0;
   }
+#endif
 
   DebugMacro(2, "null vector: " << svd.nullvector() << "   estimate: " << p << vcl_endl );
 

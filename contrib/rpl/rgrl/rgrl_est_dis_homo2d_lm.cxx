@@ -17,11 +17,14 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_fastops.h>
+#include <vnl/vnl_transpose.h>
 #include <vnl/vnl_least_squares_function.h>
+#include <vnl/algo/vnl_orthogonal_complement.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/algo/vnl_svd.h>
 
 #include <vcl_cassert.h>
+
 
 static
 inline
@@ -225,6 +228,7 @@ f(vnl_vector<double> const& x, vnl_vector<double>& fx)
 
   // check
   assert( ind == get_number_of_residuals() );
+  
 }
 
 void
@@ -437,6 +441,33 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   vnl_fastops::AtA( jtj, jac );
   // vcl_cout << "Jacobian:\n" << jac << "\n\nJtJ:\n" << jtj << "\n\nReal JtJ:\n" << jac.transpose() * jac << vcl_endl;
 
+
+  // compute the inverse of scatter matrix
+#if 1
+  vnl_vector<double> homo_vector( 9 );
+  H2h( init_H, homo_vector );
+  vnl_matrix<double> block_compliment = vnl_orthogonal_complement( homo_vector );
+
+  vnl_matrix<double> compliment( 11, 10, 0.0 );
+  
+  for( unsigned i=0; i<9; ++i )
+    for( unsigned j=0; j<8; ++j )
+      compliment(i,j) = block_compliment(i,j);
+      
+  // distortion parameters
+  compliment(9,8) = 1.0;
+  compliment(10,9) = 1.0;
+  
+  vnl_svd<double> svd( vnl_transpose(compliment) * jtj *compliment, 1e-6 );
+  if ( svd.rank() < 10 ) {
+    WarningMacro( "The covariance of homography ranks less than 8! ");
+    return 0;
+  }
+  
+  vnl_matrix<double>covar = compliment * svd.inverse() * compliment.transpose();
+  
+  
+#else
   // compute inverse
   //
   vnl_svd<double> svd( jtj, 1e-6 );
@@ -451,6 +482,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   DebugMacro(3, "Covariance: " << covar << vcl_endl );
 
   DebugMacro(2, "null vector: " << svd.nullvector() << "   estimate: " << p << vcl_endl );
+#endif
 
   return new rgrl_trans_rad_dis_homo2d( init_H, k1_from, k1_to, covar, from_centre_, to_centre_ );
 }
