@@ -2,6 +2,7 @@
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vidl2/vidl2_color.h>
+#include <vcl_cassert.h>
 
 
 //: Define the function pointer for pixel format conversion functions
