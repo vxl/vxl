@@ -4,6 +4,7 @@
 #include <vcl_memory.h>
 #include <vidl2/vidl2_frame.h>
 #include <vidl2/vidl2_pixel_iterator.h>
+#include <vidl2/vidl2_pixel_iterator.txx>
 
 
 static void test_pixel_iterator()
@@ -12,6 +13,11 @@ static void test_pixel_iterator()
            << " Testing vidl2_pixel_iterator\n"
            << "******************************\n";
 
+
+  for(unsigned int i=0; i<VIDL2_PIXEL_FORMAT_ENUM_END; ++i)
+    if(!vidl2_has_pixel_iterator(vidl2_pixel_format(i)))
+      vcl_cout << "Warning: no pixel iterator found for format "
+          <<vidl2_pixel_format(i)<<vcl_endl;
 
   {
     // The test buffer below contains 3 pixels encoded in RGB 24
