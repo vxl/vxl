@@ -9,6 +9,7 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_blocked_image_resource.h>
 #include <vil/vil_block_cache.h>
+#include <vil/file_formats/vil_nitf2.h>
 
 #define DEBUG
 static vcl_string image_file;
@@ -272,6 +273,8 @@ static void test_blocked_image_resource()
     }
   else
     TEST("Test NITF ", false, true);
+
+  vil_nitf2::cleanup_static_members();
 }
 
 int
