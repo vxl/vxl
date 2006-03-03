@@ -30,7 +30,9 @@ vcl_string vil_nitf2_field_formatter::read_string(vil_stream& input, int size)
   char* char_array = new char[size+1];
   vil_streampos pos = input.read(char_array, size);
   char_array[pos]='\0';
-  return vcl_string(char_array);
+  vcl_string retVal(char_array);
+  delete char_array;
+  return retVal;
 }
 
 bool vil_nitf2_field_formatter::read_c_str(vcl_istream& input, int length,
