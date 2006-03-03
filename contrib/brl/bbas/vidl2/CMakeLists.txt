@@ -16,7 +16,7 @@ SET(vidl2_sources
   vidl2_pixel_format.h          vidl2_pixel_format.cxx
   vidl2_color.h                 vidl2_color.cxx
   vidl2_frame.h                 vidl2_frame.cxx               vidl2_frame_sptr.h
-  vidl2_pixel_iterator.h        vidl2_pixel_iterator.cxx
+  vidl2_pixel_iterator.h        vidl2_pixel_iterator.cxx      vidl2_pixel_iterator.txx
   vidl2_convert.h               vidl2_convert.cxx
 
   vidl2_istream.h

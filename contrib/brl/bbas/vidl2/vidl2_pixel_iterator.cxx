@@ -1,5 +1,6 @@
 // This is brl/bbas/vidl2/vidl2_pixel_iterator.cxx
 #include "vidl2_pixel_iterator.h"
+#include "vidl2_pixel_iterator.txx"
 //:
 // \file
 // \author Matt Leotta

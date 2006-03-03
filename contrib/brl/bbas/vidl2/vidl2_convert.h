@@ -19,6 +19,7 @@
 #include "vidl2_pixel_format.h"
 #include "vidl2_color.h"
 #include "vidl2_pixel_iterator.h"
+#include "vidl2_pixel_iterator.txx"
 #include "vidl2_frame.h"
 #include <vil/vil_image_view.h>
 #include <vcl_cassert.h>
