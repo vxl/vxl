@@ -9,6 +9,7 @@
 
 #include "vil_nitf2_field_sequence.h"
 #include "vil_nitf2_classification.h"
+#include "vil_nitf2.h"
 
 class vil_stream;
 class vil_nitf2_data_mask_table;
@@ -83,7 +84,6 @@ public:
   // I allocate the return value, but you own it after I return it to you
   // so you need to delete it.  
   virtual vil_nitf2_field::field_tree* get_tree( int i = 0 ) const;
-
 protected:
 
   vil_nitf2_field_sequence m_field_sequence;
@@ -100,6 +100,9 @@ private:
   static void add_geo_field_defs( vil_nitf2_field_definitions* defs, const vil_nitf2_classification::file_version& version );
   static void add_shared_field_defs_3( vil_nitf2_field_definitions* defs );
 
+  // so these static members can be cleaned up when the program is done 
+  // using nitf files
+  friend static void vil_nitf2::cleanup_static_members();
   static vil_nitf2_field_definitions* s_field_definitions_21;
   static vil_nitf2_field_definitions* s_field_definitions_20;
 };

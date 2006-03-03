@@ -104,7 +104,7 @@ SET( vil_sources ${vil_sources}
   file_formats/vil_nitf2_des.h                      file_formats/vil_nitf2_des.cxx
 
   # Stuff shared by all NITF2 classes
-  file_formats/vil_nitf2.h
+  file_formats/vil_nitf2.h                          file_formats/vil_nitf2.cxx
 
   # Generic framework for reading NITF tagged record extensions (TREs)
   file_formats/vil_nitf2_array_field.h              file_formats/vil_nitf2_array_field.cxx

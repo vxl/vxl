@@ -7,6 +7,7 @@
 
 #include "vil_nitf2_tagged_record.h"
 #include "vil_nitf2_classification.h"
+#include "vil_nitf2.h"
 
 class vil_stream;
 
@@ -57,7 +58,6 @@ public:
   // I allocate the return value, but you own it after I return it to you
   // so you need to delete it.  
   virtual vil_nitf2_field::field_tree* get_tree() const;
-
 protected:
   static void add_section( Section sec, int l1, int l2, vil_nitf2_field_definitions& defs, bool long_long = false);
 
@@ -67,6 +67,9 @@ protected:
   static vil_nitf2_field_definitions* get_field_definitions_1();
   static vil_nitf2_field_definitions* get_field_definitions_2( vil_nitf2_classification::file_version version );
 private:
+  // so these static members can be cleaned up when the program is done 
+  // using nitf files
+  friend static void vil_nitf2::cleanup_static_members();
   static vil_nitf2_field_definitions* s_field_definitions_1;
   static vil_nitf2_field_definitions* s_field_definitions_21;
   static vil_nitf2_field_definitions* s_field_definitions_20;

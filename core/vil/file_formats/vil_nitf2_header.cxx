@@ -149,7 +149,7 @@ void vil_nitf2_header::add_section( Section sec, int l1, int l2, vil_nitf2_field
 
 vil_nitf2_field_definitions* vil_nitf2_header::get_field_definitions_2(vil_nitf2_classification::file_version version)
 {
-  vil_nitf2_field_definitions* field_defs = (version == vil_nitf2_classification::V_NITF_20) ?
+  vil_nitf2_field_definitions*& field_defs = (version == vil_nitf2_classification::V_NITF_20) ?
                                        s_field_definitions_20 :
                                        s_field_definitions_21;
   if (field_defs) return field_defs;

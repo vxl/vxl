@@ -16,6 +16,7 @@
 
 // For testing specific file formats
 #include <vil/vil_stream_fstream.h>
+#include <vil/file_formats/vil_nitf2.h>
 
 //#define DEBUG
 
@@ -512,6 +513,7 @@ test_file_format_read_main( int argc, char* argv[] )
   vcl_cout << "NSIF 1.0 [nitf] (uncompressed)\n";
   testlib_test_begin( "  1-bit bool (NSIF w/ LUT to parse)" );
   testlib_test_perform(CheckFile(CompareGrey<bool>(), "ff_nitf_1bit_lut_true.txt", "ff_nitf_1bit_lut.nsif" ) );
+  vil_nitf2::cleanup_static_members();
 
   vcl_cout << "Sun raster [ras]\n";
   testlib_test_begin( "  8-bit grey, no colourmap" );
