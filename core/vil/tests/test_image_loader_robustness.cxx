@@ -34,8 +34,6 @@ void test_at_file_size(const vcl_size_t n)
   vcl_cout << "Trying file of size " << n << vcl_endl;
   TEST("Should fail to load", static_cast<bool>(ir), false);
   delete [] data;
-
-  vil_nitf2::cleanup_static_members();
 }
 
 
@@ -52,6 +50,8 @@ void test_image_loader_robustness( )
 
   for (unsigned i=0;i<10;++i)
     test_at_file_size(10240);
+
+  vil_nitf2::cleanup_static_members();
 }
 
 TESTMAIN(test_image_loader_robustness);

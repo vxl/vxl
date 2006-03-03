@@ -69,7 +69,7 @@ protected:
 private:
   // so these static members can be cleaned up when the program is done 
   // using nitf files
-  friend static void vil_nitf2::cleanup_static_members();
+  friend void vil_nitf2::cleanup_static_members();
   static vil_nitf2_field_definitions* s_field_definitions_1;
   static vil_nitf2_field_definitions* s_field_definitions_21;
   static vil_nitf2_field_definitions* s_field_definitions_20;
