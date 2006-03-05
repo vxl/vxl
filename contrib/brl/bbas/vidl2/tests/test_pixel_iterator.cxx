@@ -232,6 +232,33 @@ static void test_pixel_iterator()
   }
 
   {
+    // The test buffer below contains 16 pixels encoded in YUV 422P
+    vxl_byte buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, // Y
+                          17, 18, 19, 20, 21, 22, 23, 24,  // U
+                          25, 26, 27, 28, 29, 30, 31, 32}; // V
+    vidl2_frame_sptr frame = new vidl2_shared_frame(buffer,4,4,VIDL2_PIXEL_FORMAT_YUV_422P);
+    vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_YUV_422P> itr(*frame);
+    // polymorphic pixel iterator
+    vcl_auto_ptr<vidl2_pixel_iterator> pitr(vidl2_make_pixel_iterator(*frame));
+
+    bool success = true, psuccess = true;
+    for(unsigned int i=0; i<16; ++i, ++itr, ++(*pitr)){
+      vxl_byte data[3];
+      pitr->get_data(data);
+      vcl_cout << "YUV = ("<< (int)itr(0) << "," << (int)itr(1) << "," << (int)itr(2) << ")\t ";
+      vcl_cout << "YUV polymorphic = ("<< (int)data[0] << "," << (int)data[1] << "," << (int)data[2] << ")\n";
+      success = success && itr(0) == buffer[i]
+                        && itr(1) == buffer[16+i/2]
+                        && itr(2) == buffer[24+i/2];
+      psuccess = psuccess && data[0] == buffer[i]
+                          && data[1] == buffer[16+i/2]
+                          && data[2] == buffer[24+i/2];
+    }
+    TEST("vidl2_pixel_iterator (YUV 422P)",success,true);
+    TEST("vidl2_pixel_iterator (YUV 422P) polymorphic",psuccess,true);
+  }
+
+  {
     // The test buffer below contains 16 pixels encoded in YUV 420P
     vxl_byte buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, // Y
                           17, 18, 19, 20,   // U
