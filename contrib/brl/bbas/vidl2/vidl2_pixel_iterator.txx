@@ -139,7 +139,7 @@ class vidl2_pixel_iterator_arranged<VIDL2_PIXEL_ARRANGE_PLANAR,FMT>
     }
 
     //: Destructor
-    virtual ~vidl2_pixel_iterator_arranged<VIDL2_PIXEL_ARRANGE_PLANAR,FMT>(){}
+    virtual ~vidl2_pixel_iterator_arranged(){}
 
     //: Return the pixel format
     virtual vidl2_pixel_format pixel_format() const
@@ -215,7 +215,7 @@ struct vidl2_pixel_iterator_valid
 template <vidl2_pixel_format FMT>
     class vidl2_pixel_iterator_of
   : public vidl2_pixel_iterator_arranged<
-    vidl2_pixel_arrangement(vidl2_pixel_traits_of<FMT>::arrangement_idx),FMT>
+    static_cast<vidl2_pixel_arrangement>(vidl2_pixel_traits_of<FMT>::arrangement_idx),FMT>
 {
   typedef vidl2_pixel_iterator_arranged<
       vidl2_pixel_arrangement( vidl2_pixel_traits_of<FMT>::arrangement_idx ),FMT> baseclass;
