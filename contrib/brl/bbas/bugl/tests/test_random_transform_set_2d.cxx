@@ -3,7 +3,7 @@
 #include <vnl/vnl_math.h>
 #include <bugl/bugl_random_transform_set_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_h_matrix_2d.h>
+#include <vgl/algo/vgl_h_matrix_2d.h>
 
 void test_random_transform_set_2d()
 {
