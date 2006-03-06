@@ -31,7 +31,7 @@ struct vidl2_pixel_iterator_arrange_valid
 
 //: The default pixel iterator for single arranged formats
 template <vidl2_pixel_arrangement AR, vidl2_pixel_format FMT>
-class vidl2_pixel_iterator_arranged : public vidl2_pixel_iterator
+class vidl2_pixel_iterator_arranged
 {
   typedef typename vidl2_pixel_traits_of<FMT>::type cmp_type;
   public:
@@ -46,23 +46,13 @@ class vidl2_pixel_iterator_arranged : public vidl2_pixel_iterator
     }
 
     //: Destructor
-    virtual ~vidl2_pixel_iterator_arranged<AR,FMT>(){}
-
-    //: Return the pixel format
-    virtual vidl2_pixel_format pixel_format() const
-    { return FMT; }
+    ~vidl2_pixel_iterator_arranged<AR,FMT>(){}
 
     //: Step to the next pixel
     vidl2_pixel_iterator_arranged<AR,FMT>& next()
     {
       ptr_ += vidl2_pixel_traits_of<FMT>::bits_per_pixel/(sizeof(cmp_type)*8);
       return *this;
-    }
-
-    //: Pre-increment: step to the next pixel
-    virtual vidl2_pixel_iterator& operator++ ()
-    {
-      return this->next();
     }
 
     //: Access the data
@@ -84,18 +74,6 @@ class vidl2_pixel_iterator_arranged : public vidl2_pixel_iterator
       vidl2_color_component<FMT>::set_all(ptr_,data);
     }
 
-    //: Copy the pixel data into a byte array
-    virtual void get_data(vxl_byte* data) const
-    {
-      this->get(reinterpret_cast<cmp_type*>(data));
-    }
-
-    //: Set the pixel data from a byte array
-    virtual void set_data(const vxl_byte* data)
-    {
-      this->set(reinterpret_cast<const cmp_type*>(data));
-    }
-
   private:
     cmp_type * ptr_;
 };
@@ -113,7 +91,6 @@ struct vidl2_pixel_iterator_arrange_valid<VIDL2_PIXEL_ARRANGE_PLANAR>
 //: The default pixel iterator for planar arranged formats
 template <vidl2_pixel_format FMT>
 class vidl2_pixel_iterator_arranged<VIDL2_PIXEL_ARRANGE_PLANAR,FMT>
-  : public vidl2_pixel_iterator
 {
   typedef typename vidl2_pixel_traits_of<FMT>::type cmp_type;
   enum { csx = vidl2_pixel_traits_of<FMT>::chroma_shift_x };\
@@ -139,11 +116,7 @@ class vidl2_pixel_iterator_arranged<VIDL2_PIXEL_ARRANGE_PLANAR,FMT>
     }
 
     //: Destructor
-    virtual ~vidl2_pixel_iterator_arranged(){}
-
-    //: Return the pixel format
-    virtual vidl2_pixel_format pixel_format() const
-    { return FMT; }
+    ~vidl2_pixel_iterator_arranged(){}
 
     //: Step to the next pixel
     vidl2_pixel_iterator_arranged<VIDL2_PIXEL_ARRANGE_PLANAR,FMT>& next()
@@ -170,12 +143,6 @@ class vidl2_pixel_iterator_arranged<VIDL2_PIXEL_ARRANGE_PLANAR,FMT>
       return *this;
     }
 
-    //: Pre-increment: step to the next pixel
-    virtual vidl2_pixel_iterator& operator++ ()
-    {
-      return this->next();
-    }
-
     //: Access the data
     cmp_type operator () (unsigned int i) const
     {
@@ -196,18 +163,6 @@ class vidl2_pixel_iterator_arranged<VIDL2_PIXEL_ARRANGE_PLANAR,FMT>
         *ptr_[i] = data[i];
     }
 
-    //: Copy the pixel data into a byte array
-    virtual void get_data(vxl_byte* data) const
-    {
-      this->get(reinterpret_cast<cmp_type*>(data));
-    }
-
-    //: Set the pixel data from a byte array
-    virtual void set_data(const vxl_byte* data)
-    {
-      this->set(reinterpret_cast<const cmp_type*>(data));
-    }
-
   private:
     unsigned int line_size_;
     unsigned int line_cnt_;
@@ -223,25 +178,47 @@ template <vidl2_pixel_format FMT>
 struct vidl2_pixel_iterator_valid
 {
   enum { value = vidl2_pixel_iterator_arrange_valid<
-    vidl2_pixel_traits_of<FMT>::arrangement_idx >::value };
+    vidl2_pixel_arrangement(vidl2_pixel_traits_of<FMT>::arrangement_idx) >::value };
 };
 
 
 //: The default pixel iterator
 // used for non-planar non-packed formats
 template <vidl2_pixel_format FMT>
-class vidl2_pixel_iterator_of
-  : public vidl2_pixel_iterator_arranged<vidl2_pixel_traits_of<FMT>::arrangement_idx,FMT>
+class vidl2_pixel_iterator_of : public vidl2_pixel_iterator
 {
   typedef vidl2_pixel_iterator_arranged<
-      vidl2_pixel_traits_of<FMT>::arrangement_idx,FMT> baseclass;
+      vidl2_pixel_arrangement(vidl2_pixel_traits_of<FMT>::arrangement_idx),FMT> arranged_itr;
   typedef typename vidl2_pixel_traits_of<FMT>::type cmp_type;
   public:
     //: Constructor
-    vidl2_pixel_iterator_of(const vidl2_frame& frame) : baseclass(frame){}
+    vidl2_pixel_iterator_of(const vidl2_frame& frame) : itr_(frame){}
 
     //: Destructor
     virtual ~vidl2_pixel_iterator_of<FMT>(){}
+
+    //: Return the pixel format
+    virtual vidl2_pixel_format pixel_format() const
+    { return FMT; }
+
+    //: Pre-increment: step to the next pixel
+    virtual vidl2_pixel_iterator& operator++ ()
+    { itr_.next(); return *this; }
+
+    //: Access the data
+    cmp_type operator () (unsigned int i) const
+    { return itr_(i); }
+
+    //: Copy the pixel data into a byte array
+    virtual void get_data(vxl_byte* data) const
+    { itr_.get(reinterpret_cast<cmp_type*>(data)); }
+
+    //: Set the pixel data from a byte array
+    virtual void set_data(const vxl_byte* data)
+    { itr_.set(reinterpret_cast<const cmp_type*>(data)); }
+
+  private:
+    arranged_itr itr_;
 };
 
 
