@@ -95,6 +95,8 @@ class vidl2_pixel_iterator_arranged<VIDL2_PIXEL_ARRANGE_PLANAR,FMT>
   typedef typename vidl2_pixel_traits_of<FMT>::type cmp_type;
   enum { csx = vidl2_pixel_traits_of<FMT>::chroma_shift_x };
   enum { csy = vidl2_pixel_traits_of<FMT>::chroma_shift_y };
+  enum { x_mask = (1<<(csx+1))-1 }; // last csx+1 bits are 1
+  enum { y_mask = (1<<(csy+1))-1 }; // last csy+1 bits are 1
   public:
     //: Constructor
     vidl2_pixel_iterator_arranged(const vidl2_frame& frame)
@@ -123,7 +125,8 @@ class vidl2_pixel_iterator_arranged<VIDL2_PIXEL_ARRANGE_PLANAR,FMT>
     {
       ++ptr_[0];
       if(vidl2_pixel_traits_of<FMT>::num_channels > 1){
-        int chroma_step = (step_x_>>csx)&0x01;
+        // step only if the last csx+1 bits of step_x_ are set
+        int chroma_step = ((step_x_&x_mask) == x_mask)?1:0;
         if(++line_cnt_ < line_size_){
           step_x_ += 2;
         }
@@ -132,8 +135,9 @@ class vidl2_pixel_iterator_arranged<VIDL2_PIXEL_ARRANGE_PLANAR,FMT>
           line_cnt_ = 0;
           step_x_=1;
           chroma_step = 1;
-          if(!((step_y_>>csy)&0x01))
-            chroma_step -= (line_size_>>csy);
+          // step back to start of row unless the last csy+1 bits of step_y_ are set
+          if(!((step_y_&y_mask)==y_mask))
+            chroma_step -= (line_size_>>csx);
           step_y_ += 2;
         }
         for(unsigned int i=1; i<vidl2_pixel_traits_of<FMT>::num_channels; ++i){
@@ -167,6 +171,7 @@ class vidl2_pixel_iterator_arranged<VIDL2_PIXEL_ARRANGE_PLANAR,FMT>
     unsigned int line_size_;
     unsigned int line_cnt_;
     cmp_type * ptr_[vidl2_pixel_traits_of<FMT>::num_channels];
+    //: these act as fractional pixel counters
     vxl_byte step_x_, step_y_;
 };
 
