@@ -41,6 +41,7 @@
 // when you add a new pixel format into this header file.
 
 #include <vcl_string.h>
+#include <vcl_cstddef.h>
 #include <vcl_iosfwd.h>
 #include <vxl_config.h>
 
@@ -59,12 +60,12 @@ enum vidl2_pixel_format
   VIDL2_PIXEL_FORMAT_RGB_555,
 
   VIDL2_PIXEL_FORMAT_YUV_444P,
-  VIDL2_PIXEL_FORMAT_YUV_422,
   VIDL2_PIXEL_FORMAT_YUV_422P,
   VIDL2_PIXEL_FORMAT_YUV_420P,
   VIDL2_PIXEL_FORMAT_YUV_411P,
   VIDL2_PIXEL_FORMAT_YUV_410P,
   VIDL2_PIXEL_FORMAT_UYV_444,
+  VIDL2_PIXEL_FORMAT_YUYV_422,
   VIDL2_PIXEL_FORMAT_UYVY_422,
   VIDL2_PIXEL_FORMAT_UYVY_411,
 
@@ -94,7 +95,7 @@ enum vidl2_pixel_color
 };
 
 
-//: Describes the color encoding of a pixel format
+//: Describes the arrangement of pixels in a pixel format
 enum vidl2_pixel_arrangement
 {
   VIDL2_PIXEL_ARRANGE_UNKNOWN = -1,
@@ -205,12 +206,12 @@ vidl2_pt_mac( RGB_565,  "RGB 565",  vxl_byte,    16,  3,  RGB,     SINGLE,  0,  
 vidl2_pt_mac( RGB_555,  "RGB 555",  vxl_byte,    16,  3,  RGB,     SINGLE,  0,   0  );
 
 vidl2_pt_mac( YUV_444P, "YUV 444P", vxl_byte,    24,  3,  YUV,     PLANAR,  0,   0  );
-vidl2_pt_mac( YUV_422,  "YUV 422",  vxl_byte,    16,  3,  YUV,     PACKED,  1,   0  );
 vidl2_pt_mac( YUV_422P, "YUV 422P", vxl_byte,    16,  3,  YUV,     PLANAR,  1,   0  );
 vidl2_pt_mac( YUV_420P, "YUV 420P", vxl_byte,    12,  3,  YUV,     PLANAR,  1,   1  );
 vidl2_pt_mac( YUV_411P, "YUV 411P", vxl_byte,    12,  3,  YUV,     PLANAR,  2,   0  );
 vidl2_pt_mac( YUV_410P, "YUV 410P", vxl_byte,    10,  3,  YUV,     PLANAR,  2,   2  );
 vidl2_pt_mac( UYV_444,  "UYV 444",  vxl_byte,    24,  3,  YUV,     SINGLE,  0,   0  );
+vidl2_pt_mac( YUYV_422, "YUYV 422", vxl_byte,    16,  3,  YUV,     PACKED,  1,   0  );
 vidl2_pt_mac( UYVY_422, "UYVY 422", vxl_byte,    16,  3,  YUV,     PACKED,  1,   0  );
 vidl2_pt_mac( UYVY_411, "UYVY 411", vxl_byte,    12,  3,  YUV,     PACKED,  2,   0  );
 
@@ -219,6 +220,37 @@ vidl2_pt_mac( MONO_8,   "Mono 8",   vxl_byte,    8,   1,  MONO,    SINGLE,  0,  
 vidl2_pt_mac( MONO_16,  "Mono 16",  vxl_uint_16, 16,  1,  MONO,    SINGLE,  0,   0  );
 
 #undef vidl2_pt_mac
+
+
+//: Define the packing order for each packed vidl2_pixel_format
+// The main purpose of this struct is to define a static
+// array of pointer offsets to describe the packing.
+//
+// The array vidl2_pixel_pack_of<format>::offset is a 2D array
+// of pointer offsets from the start of the macro pixel.  The
+// size of the array is macro-pixel-size by number-of-channels.
+// The value offset[i][j] gives the offset to the jth channel
+// of the ith pixel in the current macro-pixel.  For example,
+// offset[1][0] gives the 'Y' channel (if YUV) or 'R' channel
+// (if RGB) of the second pixel in the macro pixel
+//
+// \note the offset arrays are defined in vidl2_pixel_format.cxx
+template <vidl2_pixel_format pix_type>
+struct vidl2_pixel_pack_of;
+#define vidl2_pp_mac(FMT)\
+VCL_DEFINE_SPECIALIZATION \
+struct vidl2_pixel_pack_of<VIDL2_PIXEL_FORMAT_##FMT> \
+{\
+  enum { macro_pix_size = 1<<vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_##FMT>::chroma_shift_x }; \
+  enum { num_channels = vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_##FMT>::num_channels }; \
+  static const vcl_ptrdiff_t offset[macro_pix_size][num_channels]; \
+}
+
+vidl2_pp_mac( YUYV_422 );
+vidl2_pp_mac( UYVY_422 );
+vidl2_pp_mac( UYVY_411 );
+
+#undef vidl2_pp_mac
 
 
 //=============================================================================

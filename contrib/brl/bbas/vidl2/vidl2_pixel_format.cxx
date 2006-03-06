@@ -6,6 +6,30 @@
 //
 #include <vcl_iostream.h>
 
+#define vidl2_ppi_mac(FMT)\
+const vcl_ptrdiff_t vidl2_pixel_pack_of<VIDL2_PIXEL_FORMAT_##FMT>::offset[macro_pix_size][num_channels]
+
+// Define the packing order for each packed vidl2_pixel_format
+// The main purpose of this struct is to define a static
+// array of pointer offsets to describe the packing.
+//
+// The array vidl2_pixel_pack_of<format>::offset is a 2D array
+// of pointer offsets from the start of the macro pixel.  The
+// size of the array is macro-pixel-size by number-of-channels.
+// The value offset[i][j] gives the offset to the jth channel
+// of the ith pixel in the current macro-pixel.  For example,
+// offset[1][0] gives the 'Y' channel (if YUV) or 'R' channel
+// (if RGB) of the second pixel in the macro pixel
+
+vidl2_ppi_mac(YUYV_422) = {{0,1,3},{2,1,3}};
+vidl2_ppi_mac(UYVY_422) = {{1,0,2},{3,0,2}};
+vidl2_ppi_mac(UYVY_411) = {{1,0,3},{2,0,3},{4,0,3},{5,0,3}};
+
+#undef vidl2_ppi_mac
+
+
+//=============================================================================
+
 //: Recursive template metaprogram to generate conditionals for checking the traits of each defined pixel type
 template <vidl2_pixel_format pix_type>
 struct check_types

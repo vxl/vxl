@@ -49,7 +49,7 @@ static void test_convert()
       if (!success)
         break;
     }
-    TEST("vidl2_convert_to_view (YUV_422)", success, true);
+    TEST("vidl2_convert_to_view (UYVY_422)", success, true);
   }
 
   {

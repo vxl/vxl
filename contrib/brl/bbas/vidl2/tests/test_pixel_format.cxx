@@ -20,8 +20,8 @@ static void test_pixel_format()
        vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_RGB_24>::num_channels );
 
   TEST("vidl2_pixel_format_color",
-       vidl2_pixel_format_color(VIDL2_PIXEL_FORMAT_YUV_422),
-       vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_YUV_422>::color() );
+       vidl2_pixel_format_color(VIDL2_PIXEL_FORMAT_YUYV_422),
+       vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_YUYV_422>::color() );
 
   TEST("vidl2_pixel_format_arrangement",
        vidl2_pixel_format_arrangement(VIDL2_PIXEL_FORMAT_YUV_422P),
