@@ -223,8 +223,7 @@ template <vidl2_pixel_format FMT>
 struct vidl2_pixel_iterator_valid
 {
   enum { value = vidl2_pixel_iterator_arrange_valid<
-    vidl2_pixel_arrangement(
-        vidl2_pixel_traits_of<FMT>::arrangement_idx) >::value };
+    vidl2_pixel_traits_of<FMT>::arrangement_idx >::value };
 };
 
 
@@ -232,10 +231,10 @@ struct vidl2_pixel_iterator_valid
 // used for non-planar non-packed formats
 template <vidl2_pixel_format FMT>
 class vidl2_pixel_iterator_of
-  : public vidl2_pixel_iterator_arranged<(vidl2_pixel_arrangement)vidl2_pixel_traits_of<FMT>::arrangement_idx,FMT>
+  : public vidl2_pixel_iterator_arranged<vidl2_pixel_traits_of<FMT>::arrangement_idx,FMT>
 {
   typedef vidl2_pixel_iterator_arranged<
-      vidl2_pixel_arrangement( vidl2_pixel_traits_of<FMT>::arrangement_idx ),FMT> baseclass;
+      vidl2_pixel_traits_of<FMT>::arrangement_idx,FMT> baseclass;
   typedef typename vidl2_pixel_traits_of<FMT>::type cmp_type;
   public:
     //: Constructor

@@ -187,7 +187,7 @@ struct vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_##FMT> \
   static inline vidl2_pixel_color color() { return VIDL2_PIXEL_COLOR_##CLR; }\
   enum { color_idx = VIDL2_PIXEL_COLOR_##CLR };\
   static inline vidl2_pixel_arrangement arrangement() { return VIDL2_PIXEL_ARRANGE_##ARNG; }\
-  enum { arrangement_idx = VIDL2_PIXEL_ARRANGE_##ARNG };\
+  static const vidl2_pixel_arrangement arrangement_idx = VIDL2_PIXEL_ARRANGE_##ARNG;\
   enum { chroma_shift_x = XCS };\
   enum { chroma_shift_y = YCS };\
 }
