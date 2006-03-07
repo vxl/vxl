@@ -15,3 +15,7 @@ ADD_EXECUTABLE (vidl2_player ${vidl2_player_sources})
 TARGET_LINK_LIBRARIES(vidl2_player vidl2 vgui vil vul)
 
 ENDIF( HAS_VGUI )
+
+# An example use of vidl2_dshow_file_istream
+ADD_EXECUTABLE (vidl2_dshow_file_example vidl2_dshow_file_example.cxx)
+TARGET_LINK_LIBRARIES(vidl2_dshow_file_example vidl2)

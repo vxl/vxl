@@ -62,6 +62,7 @@ enum vidl2_pixel_format
   VIDL2_PIXEL_FORMAT_YUV_444P,
   VIDL2_PIXEL_FORMAT_YUV_422P,
   VIDL2_PIXEL_FORMAT_YUV_420P,
+  VIDL2_PIXEL_FORMAT_YVU_420P,
   VIDL2_PIXEL_FORMAT_YUV_411P,
   VIDL2_PIXEL_FORMAT_YUV_410P,
   VIDL2_PIXEL_FORMAT_UYV_444,
@@ -128,6 +129,14 @@ struct vidl2_pixel_traits
   unsigned chroma_shift_y;
 };
 
+// ***** Start: temporary hack to avoid conflict *****
+#ifdef min
+#undef min
+#endif
+#ifdef max
+#undef max
+#endif
+// ***** End: temporary hack to avoid conflict *****
 
 //: Define limits on the minimum and maximum pixel values
 template <class T>
@@ -208,8 +217,9 @@ vidl2_pt_mac( RGB_555,  "RGB 555",  vxl_byte,    16,  3,  RGB,     SINGLE,  0,  
 vidl2_pt_mac( YUV_444P, "YUV 444P", vxl_byte,    24,  3,  YUV,     PLANAR,  0,   0  );
 vidl2_pt_mac( YUV_422P, "YUV 422P", vxl_byte,    16,  3,  YUV,     PLANAR,  1,   0  );
 vidl2_pt_mac( YUV_420P, "YUV 420P", vxl_byte,    12,  3,  YUV,     PLANAR,  1,   1  );
+vidl2_pt_mac( YVU_420P, "YVU 420P", vxl_byte,    12,  3,  YUV,     PLANAR,  1,   1  );
 vidl2_pt_mac( YUV_411P, "YUV 411P", vxl_byte,    12,  3,  YUV,     PLANAR,  2,   0  );
-vidl2_pt_mac( YUV_410P, "YUV 410P", vxl_byte,    10,  3,  YUV,     PLANAR,  2,   1  );
+vidl2_pt_mac( YUV_410P, "YUV 410P", vxl_byte,    10,  3,  YUV,     PLANAR,  2,   2  );
 vidl2_pt_mac( UYV_444,  "UYV 444",  vxl_byte,    24,  3,  YUV,     SINGLE,  0,   0  );
 vidl2_pt_mac( YUYV_422, "YUYV 422", vxl_byte,    16,  3,  YUV,     PACKED,  1,   0  );
 vidl2_pt_mac( UYVY_422, "UYVY 422", vxl_byte,    16,  3,  YUV,     PACKED,  1,   0  );
