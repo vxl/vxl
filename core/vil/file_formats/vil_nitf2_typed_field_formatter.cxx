@@ -87,10 +87,11 @@ vil_nitf2_integer_formatter::read_vcl_stream(vcl_istream& input,
   errno = 0;
   out_value = (int)strtol(cstr, &endp, 10);
   bool sign_ok = check_sign(cstr, show_sign);
-  delete[] cstr;
-  return (endp-cstr)==field_width // processed all chars
+  bool retVal = (endp-cstr)==field_width // processed all chars
          && errno==0              // with no errors
          && sign_ok;              // sign shown as expected
+  delete[] cstr;
+  return retVal;
 }
 
 bool vil_nitf2_integer_formatter::write_vcl_stream(vcl_ostream& output, const int& value)
@@ -184,11 +185,13 @@ bool vil_nitf2_double_formatter::read_vcl_stream(vcl_istream& input,
   out_value = strtod(cstr, &endp);
   bool sign_ok = check_sign(cstr, show_sign);
   bool decimal_ok = cstr[(field_width-precision)-1]=='.';
-  return
+  bool retVal =
     (endp-cstr)==field_width  // processed all chars
      && errno==0              // with no errors
      && decimal_ok            // decimal point in right place
      && sign_ok;              // sign shown as expected
+  delete[] cstr;
+  return retVal;
 }
 
 bool vil_nitf2_double_formatter::write_vcl_stream(vcl_ostream& output, const double& value)
@@ -263,6 +266,7 @@ bool vil_nitf2_string_formatter::read_vcl_stream(vcl_istream& input,
     return false;
   }
   vcl_string str = vcl_string(cstr);
+  delete[] cstr;
   vcl_string::size_type end_pos = str.find_last_not_of(" ")+1;
   if (end_pos == vcl_string::npos) {
     out_value = str;
