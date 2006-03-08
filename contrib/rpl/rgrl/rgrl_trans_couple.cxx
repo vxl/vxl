@@ -16,7 +16,8 @@
 rgrl_trans_couple::
   rgrl_trans_couple( rgrl_transformation_sptr const& forward, rgrl_transformation_sptr const& backward )
   : forward_xform_( forward ),
-    backward_xform_( backward )
+    backward_xform_( backward ),
+    rgrl_transformation( *forward )
 {
 }
 
