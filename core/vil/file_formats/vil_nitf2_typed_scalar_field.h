@@ -22,6 +22,9 @@ class vil_nitf2_typed_scalar_field : public vil_nitf2_scalar_field
   vil_nitf2_typed_scalar_field(T value, vil_nitf2_field_definition* definition) 
     : vil_nitf2_scalar_field(definition), m_value(value) {}
 
+  // Desructor
+  ~vil_nitf2_typed_scalar_field(){};
+
   // Set out_value to my value and return true.
   // (This is a partial override of overloaded method 
   // vil_nitf2_scalar_field::value() for my specific type.)
@@ -75,5 +78,17 @@ vil_nitf2_typed_scalar_field<vil_nitf2_tagged_record_sequence>::get_tree() const
   }
   return tr;
 }
+
+template<>
+inline vil_nitf2_typed_scalar_field<void*>::~vil_nitf2_typed_scalar_field()
+{
+  delete[] m_value;
+} 
+
+template<>
+inline vil_nitf2_typed_scalar_field<vil_nitf2_location*>::~vil_nitf2_typed_scalar_field()
+{
+  delete[] m_value;
+} 
 
 #endif // VIL_NITF2_TYPED_SCALAR_FIELD_H
