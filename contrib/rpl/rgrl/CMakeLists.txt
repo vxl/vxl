@@ -95,6 +95,7 @@ SET( rgrl_sources
   rgrl_weighter.h                      rgrl_weighter.cxx             
   rgrl_weighter_sptr.h
   rgrl_weighter_m_est.h                rgrl_weighter_m_est.cxx
+  rgrl_weighter_indiv_scale.h          rgrl_weighter_indiv_scale.cxx
   rgrl_weighter_unit.h                 rgrl_weighter_unit.cxx
 
   rgrl_data_manager.h                  rgrl_data_manager.cxx         
