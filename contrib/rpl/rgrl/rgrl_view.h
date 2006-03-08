@@ -95,7 +95,7 @@ class rgrl_view
   // Defines type-related functions
   rgrl_type_macro( rgrl_view, rgrl_object );
 
- private:
+ protected:
   rgrl_mask_sptr                  from_image_roi_;
   rgrl_mask_sptr                  to_image_roi_;
 
