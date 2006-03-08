@@ -106,11 +106,17 @@ class brip_vil_float_ops
             vil_image_view<float> const& Ixy,
             vil_image_view<float> const& Iyy);
 
-  //: IxIx.transpose gradient matrix elements (N = 2n+1)
-  static void grad_matrix_NxN(vil_image_view<float> const& input, int n,
+  //: IxIx.transpose gradient matrix elements for a NxN region(N = 2n+1)
+  static void grad_matrix_NxN(vil_image_view<float> const& input, unsigned n,
                               vil_image_view<float>& IxIx,
                               vil_image_view<float>& IxIy,
                               vil_image_view<float>& IyIy);
+
+  //: Tr(IxIx.transpose) for a NxN region, N = 2n+1)
+  static  vil_image_view<float> 
+    trace_grad_matrix_NxN(vil_image_view<float> const& input, unsigned n);
+                                
+
 
   //: Computes the Harris corner measure
   static vil_image_view<float> harris(vil_image_view<float> const& IxIx,
@@ -121,6 +127,11 @@ class brip_vil_float_ops
   //: computes the conditioning of the 2n+1 x 2n+1 gradient neigborhood
   static vil_image_view<float>
     sqrt_grad_singular_values(vil_image_view<float>& input, int n);
+
+  static vil_image_view<float> max_scale_trace(vil_image_view<float> input,
+                                               float min_scale,
+                                               float max_scale,
+                                               float scale_inc);
 
   //: computes Lucas-Kanade optical flow on a 2n+1 neighborhood
   static void Lucas_KanadeMotion(vil_image_view<float>& current_frame,
