@@ -33,8 +33,8 @@ global_region_from_inv_xformed_points(
   typedef vcl_vector<vnl_vector<double> > pt_vector;
   typedef pt_vector::const_iterator pt_iter;
 
-  vnl_vector<double> from_x0 =  from_image_roi->x0();
-  vnl_vector<double> from_x1 =  from_image_roi->x1();
+  const vnl_vector<double> from_x0 =  from_image_roi->x0();
+  const vnl_vector<double> from_x1 =  from_image_roi->x1();
   const unsigned m = from_x0.size();
   const int debug_flag = 0;
   
