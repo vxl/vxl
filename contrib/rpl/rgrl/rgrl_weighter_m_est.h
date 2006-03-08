@@ -41,6 +41,7 @@ class rgrl_weighter_m_est
   void set_weight_more_on_distinct_match( bool flag )
   {    weight_more_on_distinct_match_ = flag; }
   
+  virtual
   void
   compute_weights( rgrl_scale const&  scale,
                    rgrl_match_set&    match_set ) const;
@@ -49,19 +50,23 @@ class rgrl_weighter_m_est
   rgrl_type_macro( rgrl_weighter_m_est, rgrl_weighter );
 
   // Auxiliary functions related to the m_est
+  virtual
   double 
   aux_sum_weighted_residuals( rgrl_scale const&  scale,
                               rgrl_match_set&    match_set,
                               rgrl_transformation const&  xform );
+  virtual
   double
   aux_sum_rho_values( rgrl_scale const&  scale,
                       rgrl_match_set&    match_set,
                       rgrl_transformation const&  xform);
+  virtual
   double 
   aux_neg_log_likelihood( rgrl_scale const&  scale,
                           rgrl_match_set&    match_set,
                           rgrl_transformation const&  xform );
 
+  virtual
   double 
   aux_avg_neg_log_likelihood( rgrl_scale const&  scale,
                               rgrl_match_set&    match_set,
