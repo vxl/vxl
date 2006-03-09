@@ -3,6 +3,9 @@
 #   DIRECTSHOW_FOUND     - system has DirectShow
 #   DIRECTSHOW_LIBRARIES - libraries you need to link to
 
+# DirectShow is only available on Windows platforms
+IF( WIN32 )
+
 INCLUDE (CheckCXXSourceCompiles)
 
 SET(CMAKE_REQUIRED_LIBRARIES strmiids quartz)
@@ -23,3 +26,9 @@ SET(CMAKE_REQUIRED_LIBRARIES)
 IF( DIRECTSHOW_FOUND )
   SET(DIRECTSHOW_LIBRARIES strmiids quartz)
 ENDIF( DIRECTSHOW_FOUND )
+
+ELSE( WIN32 )
+
+SET(DIRECTSHOW_FOUND OFF)
+
+ENDIF( WIN32 )
