@@ -99,13 +99,13 @@ void vsrl_menus::corner_method_callback()
   vsrl_manager::instance()->corner_method();
   return;
 }
-
+#if 0
 void vsrl_menus::jseg_regions_callback()
 {
   vsrl_manager::instance()->run_jseg(vsrl_manager::instance()->get_left_image());
   return;
 }
-
+#endif
 // vsrl_menus definitions
 
 vgui_menu vsrl_menus::get_menus()
@@ -129,7 +129,9 @@ vgui_menu vsrl_menus::get_menus()
   menuops.add("Make 3D from disparity map", make_3d_callback);
   menuops.add("Draw North Arrow", draw_north_callback);
   menuops.add("Region Segmentation...", find_regions_callback);
+#if 0
   menuops.add("JSEG Segmentation (Left)...", jseg_regions_callback);
+#endif
   menuops.add("Raw Correlation", raw_correlation_callback);
   menuops.add("Corner Method", corner_method_callback);
   menuops.add("Test Function (Left)", test_left_func_callback);

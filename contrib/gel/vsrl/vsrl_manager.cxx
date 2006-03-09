@@ -47,14 +47,14 @@
 #include <vgl/vgl_point_3d.h>
 #include <rsdl/rsdl_point.h>
 #include <rsdl/rsdl_kd_tree.h>
-
+#if 0
 #ifdef INCLUDE_JSEG
 extern "C"
 {
 #include <jseg/jseg.h>
 }
 #endif
-
+#endif
 // static manager instance
 vsrl_manager* vsrl_manager::instance_=0;
 
@@ -842,7 +842,7 @@ void vsrl_manager::find_shadows(vcl_vector<vdgl_digital_region*> regions)
 // Though called "run_jseg" this routine does more than that.  After the jseg routine
 // executes, the output of jseg is partitioned into digital_regions and a vector of
 // the resulting digital regions is returned.
-
+#if 0
 vcl_vector<vdgl_digital_region*>
 vsrl_manager::run_jseg(vil1_image image_in)
 {
@@ -963,7 +963,7 @@ vsrl_manager::run_jseg(vil1_image image_in)
   return reg_vec;
 #endif
 }
-
+#endif
 // This routine just puts dotted lines (o.k. points) around the boundaries of the
 // regions in the jseg segmentation.
 void vsrl_manager::show_jseg_boundaries(vil1_memory_image_of<unsigned char>* jseg_out,
