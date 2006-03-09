@@ -5,6 +5,8 @@
 #ifndef VIL_NITF2_CLASSIFICATION_H
 #define VIL_NITF2_CLASSIFICATION_H
 
+#include "vil_nitf2.h"
+
 #include <vcl_string.h>
 #include <vcl_map.h>
 #include <vcl_utility.h> // vcl_pair
@@ -66,6 +68,10 @@ private:
   typedef vcl_map< type_field_defs_key, vil_nitf2_field_definitions*>
     type_field_defs_map;
   static type_field_defs_map s_field_definitions;
+
+  // so these static members can be cleaned up when the program is done 
+  // using nitf files
+  friend void vil_nitf2::cleanup_static_members();
 };
 
 #endif //VIL_NITF2_CLASSIFICATION_H
