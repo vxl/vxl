@@ -31,11 +31,12 @@ class vil_nitf2_tagged_record_definition
 {
   friend class vil_nitf2_tagged_record;
 public:
-  // optional field definitions parameter -- I will own it if you pass it to me
-  static vil_nitf2_tagged_record_definition& define(vcl_string name, vcl_string pretty_name, 
-    vil_nitf2_field_definitions* defs = 0);
 
-  // Define a field
+  // Factory method. Assumes ownership of optional pointer argument.
+  static vil_nitf2_tagged_record_definition& define(
+    vcl_string name, vcl_string pretty_name);
+
+  // Define a field. Assumes ownership of pointer arguments.
   vil_nitf2_tagged_record_definition& field(
     vcl_string field_name,
     vcl_string pretty_name,
@@ -50,7 +51,7 @@ public:
     vcl_string units = "",
     vcl_string description = "");
  
-  // Define a repeat node
+  // Define a repeat node. Assumes ownership of pointer argument.
   vil_nitf2_tagged_record_definition& repeat(
     vil_nitf2_field_functor<int>* repeat_functor,
     vil_nitf2_field_definitions& field_definitions);
@@ -62,7 +63,7 @@ public:
 
 
   // Declares that definition is finished, preventing further invocations
-  // of field().
+  // of field() or repeat().
   vil_nitf2_tagged_record_definition& end();
     
   // Look up a record definition
@@ -70,6 +71,9 @@ public:
 
   // Look up a field definition
   vil_nitf2_field_definition* find_field(vcl_string name);
+
+  // Destructor
+  ~vil_nitf2_tagged_record_definition();
 
   typedef vcl_map<vcl_string, vil_nitf2_tagged_record_definition*> 
     tagged_record_definition_map;
@@ -89,11 +93,9 @@ private:
   // to implement
   //virtual bool validate(vil_nitf2_tagged_record*) const;
 
-  vil_nitf2_field_definition* m_length_fieldDefinition;
-  vil_nitf2_field_definition* m_tag_fieldDefinition;
-
   bool m_definition_completed;
 
+  // Constructor
   vil_nitf2_tagged_record_definition(vcl_string name, vcl_string pretty_name, vil_nitf2_field_definitions* defs = 0); 
 };
 

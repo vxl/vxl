@@ -58,14 +58,17 @@ public:
   // I allocate the return value, but you own it after I return it to you
   // so you need to delete it.  
   virtual vil_nitf2_field::field_tree* get_tree() const;
-protected:
-  static void add_section( Section sec, int l1, int l2, vil_nitf2_field_definitions& defs, bool long_long = false);
 
+protected:
+  // Field sequences for different parts of this header.
   vil_nitf2_field_sequence m_field_sequence1;
   vil_nitf2_field_sequence* m_field_sequence2;
   vil_nitf2_field_sequence* m_field_sequence_classification;
+
+  // Returns field definitions, which I own, for different parts of the header.
   static vil_nitf2_field_definitions* get_field_definitions_1();
   static vil_nitf2_field_definitions* get_field_definitions_2( vil_nitf2_classification::file_version version );
+
 private:
   // so these static members can be cleaned up when the program is done 
   // using nitf files

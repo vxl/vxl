@@ -8,9 +8,6 @@
 #include "vil_nitf2_field_definition.h"
 #include "vil_nitf2_index_vector.h"
 
-// TO DO: move this to vil_nitf2.cpp
-vil_nitf2::enum_log_level vil_nitf2::s_log_level = vil_nitf2::log_none;
-
 vil_nitf2::enum_field_type vil_nitf2_field::type() const 
 { 
   if (m_definition && m_definition->formatter) {

@@ -11,9 +11,8 @@
 vil_nitf2_tagged_record_definition::tagged_record_definition_map 
 vil_nitf2_tagged_record_definition::all_definitions;
 
-vil_nitf2_tagged_record_definition::vil_nitf2_tagged_record_definition(vcl_string name, 
-                                                                       vcl_string pretty_name, 
-                                                                       vil_nitf2_field_definitions* defs ) 
+vil_nitf2_tagged_record_definition::vil_nitf2_tagged_record_definition(
+  vcl_string name, vcl_string pretty_name, vil_nitf2_field_definitions* defs) 
   : m_name(name), 
     m_pretty_name(pretty_name),
     m_field_definitions(defs ? defs : new vil_nitf2_field_definitions()),
@@ -21,10 +20,11 @@ vil_nitf2_tagged_record_definition::vil_nitf2_tagged_record_definition(vcl_strin
 {
 }
 
-vil_nitf2_tagged_record_definition&
-vil_nitf2_tagged_record_definition::define(vcl_string name, vcl_string pretty_name, vil_nitf2_field_definitions* defs )
+vil_nitf2_tagged_record_definition& vil_nitf2_tagged_record_definition::define(
+  vcl_string name, vcl_string pretty_name)
 {
-  vil_nitf2_tagged_record_definition* definition = new vil_nitf2_tagged_record_definition(name, pretty_name, defs);
+  vil_nitf2_tagged_record_definition* definition = 
+    new vil_nitf2_tagged_record_definition(name, pretty_name);
   if (all_definitions.find(name) != all_definitions.end()) {
     throw("vil_nitf2_tagged_record_definition already defined.");
   }
@@ -79,6 +79,11 @@ vil_nitf2_tagged_record_definition* vil_nitf2_tagged_record_definition::find(vcl
   tagged_record_definition_map::iterator definition = all_definitions.find(name);
   if (definition == all_definitions.end()) return 0;
   return definition->second;
+}
+
+vil_nitf2_tagged_record_definition::~vil_nitf2_tagged_record_definition()
+{
+  delete m_field_definitions;
 }
 
 void vil_nitf2_tagged_record_definition::register_test_tre()

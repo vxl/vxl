@@ -56,6 +56,9 @@ public:
   // Destructor
   virtual ~vil_nitf2_field_formatter() {}
 
+  // Virtual copy method
+  virtual vil_nitf2_field_formatter* copy() const = 0;
+
   // Attempts to read scalar field from stream. Returns a new instance of field if 
   // success and 0 otherwise. Sets out_blank to whether input was entirely blank 
   // (in which case 0 is returned).

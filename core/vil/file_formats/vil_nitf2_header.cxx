@@ -22,8 +22,8 @@ vil_nitf2_header::vil_nitf2_header()
 
 vil_nitf2_header::~vil_nitf2_header()
 {
-  if (m_field_sequence_classification) delete m_field_sequence_classification;
-  if (m_field_sequence2) delete m_field_sequence2;
+  delete m_field_sequence2;
+  delete m_field_sequence_classification;
 }
 
 vcl_string vil_nitf2_header::section_num_tag( Section sec, bool pretty )
@@ -109,21 +109,20 @@ vcl_string vil_nitf2_header::section_len_data_tag( Section sec, bool pretty )
 
 bool vil_nitf2_header::read(vil_stream* stream)
 {
-  //first read the first part of the header
+  // Read the first part of the header
   bool success = m_field_sequence1.read(*stream) && 
     // If the version is not recognized, it may not even be a NITF file
     file_version() != vil_nitf2_classification::V_UNKNOWN;
 
-  //now read the classification stuff which is dependent
-  //on the nitf file version
-  if (success){
+  // Now read the classification stuff whose format depends on the NITF version
+  if (success) {
     if (m_field_sequence_classification) delete m_field_sequence_classification;
     m_field_sequence_classification =
       new vil_nitf2_field_sequence(*vil_nitf2_classification::get_field_definitions(file_version(), "F", "File"));
     success &= m_field_sequence_classification->read(*stream);
   }
 
-  //now read in the rest of the header
+  // Now read in the rest of the header
   if (success) {
     if (m_field_sequence2) delete m_field_sequence2;
     m_field_sequence2 = new vil_nitf2_field_sequence(*get_field_definitions_2(file_version()));
@@ -133,28 +132,16 @@ bool vil_nitf2_header::read(vil_stream* stream)
   return success;
 }
 
-void vil_nitf2_header::add_section( Section sec, int l1, int l2, vil_nitf2_field_definitions& defs, bool long_long )
+vil_nitf2_field_definitions* vil_nitf2_header::get_field_definitions_2(
+  vil_nitf2_classification::file_version version)
 {
-  vil_nitf2_field_definitions section_meat;
-  section_meat.field(section_len_header_tag(sec), section_len_header_tag(sec, true),  NITF_INT(l1), false, 0, 0);
-  if ( long_long ) {
-    section_meat.field(section_len_data_tag(sec),   section_len_data_tag(sec, true),    NITF_LONG(l2), false, 0, 0);
-  } else {
-    section_meat.field(section_len_data_tag(sec),   section_len_data_tag(sec, true),    NITF_INT(l2), false, 0, 0);
-  }
-
-  defs.field(section_num_tag(sec),   "Number of Graphic Segments",     NITF_INT(3), false, 0, 0)
-      .repeat(section_num_tag(sec), section_meat );
-}
-
-vil_nitf2_field_definitions* vil_nitf2_header::get_field_definitions_2(vil_nitf2_classification::file_version version)
-{
-  vil_nitf2_field_definitions*& field_defs = (version == vil_nitf2_classification::V_NITF_20) ?
+  // Check if previously computed
+  vil_nitf2_field_definitions* field_defs = (version == vil_nitf2_classification::V_NITF_20) ?
                                        s_field_definitions_20 :
                                        s_field_definitions_21;
   if (field_defs) return field_defs;
 
-  // initialize field definitions
+  // Compute field definitions
   field_defs = new vil_nitf2_field_definitions();
 
   (*field_defs)
@@ -175,16 +162,44 @@ vil_nitf2_field_definitions* vil_nitf2_header::get_field_definitions_2(vil_nitf2
   (*field_defs)
     .field("OPHONE", "Originator's Phone Number", NITF_STR_ECSA(18), true,  0, 0)
     .field("FL",     "File Length",               NITF_LONG(12),     false, 0, 0)
-    .field("HL",     "NITF File Header Length",   NITF_INT(6),       false, 0, 0);
+    .field("HL",     "NITF File Header Length",   NITF_INT(6),       false, 0, 0)
 
-    add_section( ImageSegments, 6, 10, *field_defs, true );
-    add_section( GraphicSegments, 4, 6, *field_defs );
-    add_section( LabelSegments, 4, 3, *field_defs );
-    add_section( TextSegments, 4, 5, *field_defs );
-    add_section( DataExtensionSegments, 4, 9, *field_defs );
-    add_section( ReservedExtensionSegments, 4, 7, *field_defs );
+    .field("NUMI",   "Number of Image Segments",  NITF_INT(3),   false, 0, 0)
+    .repeat("NUMI",   vil_nitf2_field_definitions()
 
-  (*field_defs)
+      .field("LISH", "Lengh of Image Subheader",  NITF_INT(6),   false, 0, 0)
+      .field("LI",   "Length of Image Segment",   NITF_LONG(10), false, 0, 0))
+
+    .field("NUMS",   "Number of Graphic Segments", NITF_INT(3), false, 0, 0)
+    .repeat("NUMS",   vil_nitf2_field_definitions()
+
+      .field("LSSH", "Length of Graphic Subheader", NITF_INT(4), false, 0, 0)
+      .field("LS",   "Length of Graphic Segment",   NITF_INT(6), false, 0, 0))
+
+    .field("NUML",   "Number of Label Segments",   NITF_INT(3), false, 0, 0)
+    .repeat("NUML",   vil_nitf2_field_definitions()
+
+      .field("LLSH", "Length of Label Subheader",  NITF_INT(4), false, 0, 0)
+      .field("LL",   "Length of Label Segment",    NITF_INT(3), false, 0, 0))
+
+    .field("NUMT",   "Number of Text Segments",    NITF_INT(3), false, 0, 0)
+    .repeat("NUMT",   vil_nitf2_field_definitions()
+
+      .field("LTSH", "Length of Text Subheader",   NITF_INT(4), false, 0, 0)
+      .field("LT",   "Length of Text Segment",     NITF_INT(5), false, 0, 0))
+
+    .field("NUMDES", "Number of Data Extension Segments", NITF_INT(3), false, 0, 0)
+    .repeat("NUMDES", vil_nitf2_field_definitions()
+
+      .field("LDSH", "Length of Data Extension Subheader", NITF_INT(4), false, 0, 0)
+      .field("LD",   "Length of Data Extension Segment",   NITF_INT(9), false, 0, 0))
+
+    .field("NUMRES", "Number of Reserved Extension Segments", NITF_INT(3), false, 0, 0)
+    .repeat("NUMRES", vil_nitf2_field_definitions()
+
+      .field("LRESH", "Length of Reserved Extension Subheader", NITF_INT(4), false, 0, 0)
+      .field("LRE",   "Length of Reserved Extension Segment",   NITF_INT(7), false, 0, 0))
+
     .field("UDHDL",  "User Defined Header Data Length", NITF_INT(5), false, 0, 0) // range [00000,00003-99999]
 
     .field("UDHOFL", "User Defined Header Overflow",    NITF_INT(3), false, 0,
@@ -201,6 +216,12 @@ vil_nitf2_field_definitions* vil_nitf2_header::get_field_definitions_2(vil_nitf2
     .field("XHD", "Extended Header Data",               NITF_TRES(), false,
            new vil_nitf2_max_field_value_plus_offset_and_threshold("XHDL", -3), 0);
 
+  // Save them for future use
+  if (version == vil_nitf2_classification::V_NITF_20) {
+    s_field_definitions_20 = field_defs;
+  } else {
+    s_field_definitions_21 = field_defs;
+  }
   return field_defs;
 }
 

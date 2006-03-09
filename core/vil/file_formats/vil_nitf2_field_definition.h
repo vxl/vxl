@@ -53,6 +53,9 @@ class vil_nitf2_field_definition_node
   vil_nitf2_field_definition* field_definition();
   vil_nitf2_field_definition_repeat_node* repeat_node();
 
+  // Virtual copy method
+  virtual vil_nitf2_field_definition_node* copy() const = 0;
+
   // Member variables
   node_type type;
 };
@@ -81,7 +84,7 @@ class vil_nitf2_field_definition : public vil_nitf2_field_definition_node
   bool is_required() const;
   bool is_variable_width() const;
 
-  // Constructor
+  // Constructor. Assumes ownership of pointer arguments.
   vil_nitf2_field_definition(
     // field identifier, generally < 10 characters long
     vcl_string tag,
@@ -98,6 +101,13 @@ class vil_nitf2_field_definition : public vil_nitf2_field_definition_node
     // additional documentation fields
     vcl_string units = "",
     vcl_string description = "");
+
+  // Copy method
+  vil_nitf2_field_definition* copy() const;
+
+  // Destructor
+  ~vil_nitf2_field_definition();
+
 };
 
 
@@ -110,7 +120,7 @@ class vil_nitf2_field_definitions : public vcl_list<vil_nitf2_field_definition_n
 {
  public:
   // Define a field and add it to this list of definitions, returning
-  // the current list
+  // the current list. Assumes ownership of pointer arguments.
   vil_nitf2_field_definitions& field(
     vcl_string tag,
     vcl_string pretty_name,
@@ -127,6 +137,7 @@ class vil_nitf2_field_definitions : public vcl_list<vil_nitf2_field_definition_n
 
   // Define a repeat node, with repeat count determined by repeat_functor,
   // and add it to this list of definitions, returning the current list.
+  // Assumes ownership of pointer argument.
   vil_nitf2_field_definitions& repeat(vil_nitf2_field_functor<int>* repeat_functor,
                                       vil_nitf2_field_definitions& field_definitions);
 
@@ -135,8 +146,14 @@ class vil_nitf2_field_definitions : public vcl_list<vil_nitf2_field_definition_n
                                       vil_nitf2_field_definitions& field_definitions)
   { return repeat(new vil_nitf2_field_value<int>(intTag), field_definitions); }
 
+  // Copy constructor
+  vil_nitf2_field_definitions(const vil_nitf2_field_definitions&);
+
+  // Default constructor
+  vil_nitf2_field_definitions() {};
+
   // Destructor
-  virtual ~vil_nitf2_field_definitions() {}
+  virtual ~vil_nitf2_field_definitions();
 };
 
 //-----------------------------------------------------------------------------
@@ -146,7 +163,7 @@ class vil_nitf2_field_definitions : public vcl_list<vil_nitf2_field_definition_n
 class vil_nitf2_field_definition_repeat_node : public vil_nitf2_field_definition_node
 {
  public:
-  // Construct a repeat node
+  // Construct a repeat node. Assumes ownership of pointer arguments.
   vil_nitf2_field_definition_repeat_node(vil_nitf2_field_functor<int>* repeat_functor,
                                          vil_nitf2_field_definitions* field_definitions)
     : vil_nitf2_field_definition_node(type_repeat),
@@ -156,6 +173,12 @@ class vil_nitf2_field_definition_repeat_node : public vil_nitf2_field_definition
   // Member variables
   vil_nitf2_field_functor<int>* repeat_functor;
   vil_nitf2_field_definitions* field_definitions;
+
+  // Destructor
+  ~vil_nitf2_field_definition_repeat_node();
+
+  // Copy method
+  vil_nitf2_field_definition_repeat_node* copy() const;
 };
 
 #endif // VIL_NITF2_FIELD_DEFINITION_H

@@ -18,6 +18,11 @@ vil_nitf2_date_time_formatter::vil_nitf2_date_time_formatter(int field_width)
   : vil_nitf2_typed_field_formatter<vil_nitf2_date_time>(vil_nitf2::type_date_time, field_width)
 {};
 
+vil_nitf2_date_time_formatter* vil_nitf2_date_time_formatter::copy() const
+{
+  return new vil_nitf2_date_time_formatter(field_width);
+}
+
 bool vil_nitf2_date_time_formatter::read_vcl_stream(vcl_istream& input, vil_nitf2_date_time& out_value, bool& out_blank)
 {
   return out_value.read(input, field_width, out_blank);
@@ -34,6 +39,11 @@ bool vil_nitf2_date_time_formatter::write_vcl_stream(vcl_ostream& output, const 
 vil_nitf2_location_formatter::vil_nitf2_location_formatter(int field_width)
   : vil_nitf2_typed_field_formatter<vil_nitf2_location*>(vil_nitf2::type_location, field_width)
 {}
+
+vil_nitf2_location_formatter* vil_nitf2_location_formatter::copy() const
+{
+  return new vil_nitf2_location_formatter(field_width);
+}
 
 bool vil_nitf2_location_formatter::read_vcl_stream(vcl_istream& input,
                                  vil_nitf2_location*& out_value, bool& out_blank)
@@ -75,6 +85,11 @@ vil_nitf2_integer_formatter::vil_nitf2_integer_formatter(int field_width, bool s
   //assert( field_width < 10 );
 }
 
+vil_nitf2_integer_formatter* vil_nitf2_integer_formatter::copy() const 
+{
+  return new vil_nitf2_integer_formatter(field_width, show_sign); 
+}
+
 bool
 vil_nitf2_integer_formatter::read_vcl_stream(vcl_istream& input,
                            int& out_value, bool& out_blank)
@@ -114,6 +129,11 @@ vil_nitf2_long_long_formatter(int field_width, bool show_sign)
   : vil_nitf2_typed_field_formatter<vil_nitf2_long>(vil_nitf2::type_long_long, field_width),
     show_sign(show_sign)
 {};
+
+vil_nitf2_long_long_formatter* vil_nitf2_long_long_formatter::copy() const 
+{
+  return new vil_nitf2_long_long_formatter(field_width, show_sign); 
+}
 
 bool vil_nitf2_long_long_formatter::
 read_vcl_stream(vcl_istream& input, vil_nitf2_long& out_value, bool& out_blank)
@@ -173,6 +193,11 @@ vil_nitf2_double_formatter(int field_width, int precision, bool show_sign)
     show_sign(show_sign)
 {};
 
+vil_nitf2_double_formatter* vil_nitf2_double_formatter::copy() const 
+{
+  return new vil_nitf2_double_formatter(field_width, precision, show_sign); 
+}
+
 bool vil_nitf2_double_formatter::read_vcl_stream(vcl_istream& input,
                                double& out_value, bool& out_blank)
 {
@@ -214,6 +239,11 @@ vil_nitf2_binary_formatter::vil_nitf2_binary_formatter(int width_bytes)
   : vil_nitf2_typed_field_formatter<void*>(vil_nitf2::type_binary, width_bytes)
 {};
 
+vil_nitf2_binary_formatter* vil_nitf2_binary_formatter::copy() const 
+{
+  return new vil_nitf2_binary_formatter(field_width); 
+}
+
 bool vil_nitf2_binary_formatter::read(vil_stream& input, void*& out_value,
                                       bool& out_blank)
 {
@@ -233,6 +263,11 @@ bool vil_nitf2_binary_formatter::write(vil_nitf2_ostream& output, void*const& va
 vil_nitf2_char_formatter::vil_nitf2_char_formatter()
   : vil_nitf2_typed_field_formatter<char>(vil_nitf2::type_char, 1)
 {};
+
+vil_nitf2_char_formatter* vil_nitf2_char_formatter::copy() const 
+{
+  return new vil_nitf2_char_formatter(); 
+}
 
 bool vil_nitf2_char_formatter::read_vcl_stream(vcl_istream& input, char& out_value, bool& out_blank)
 {
@@ -257,6 +292,11 @@ vil_nitf2_string_formatter(int field_width, enum_char_set char_set)
   : vil_nitf2_typed_field_formatter<vcl_string>(vil_nitf2::type_string, field_width),
     char_set(char_set)
 {};
+
+vil_nitf2_string_formatter* vil_nitf2_string_formatter::copy() const 
+{
+  return new vil_nitf2_string_formatter(field_width, char_set); 
+}
 
 bool vil_nitf2_string_formatter::read_vcl_stream(vcl_istream& input,
                                vcl_string& out_value, bool& out_blank)
@@ -288,6 +328,9 @@ bool vil_nitf2_string_formatter::is_valid(vcl_string /*value*/) const
   return true;
 }
 
+//==============================================================================
+// Class vil_nitf2_enum_string_formatter
+
 vil_nitf2_enum_string_formatter::
 vil_nitf2_enum_string_formatter(int field_width, const vil_nitf2_enum_values& value_map)
   : vil_nitf2_string_formatter(field_width), value_map(value_map)
@@ -296,8 +339,10 @@ vil_nitf2_enum_string_formatter(int field_width, const vil_nitf2_enum_values& va
   validate_value_map();
 }
 
-//==============================================================================
-// Class vil_nitf2_enum_string_formatter
+vil_nitf2_enum_string_formatter* vil_nitf2_enum_string_formatter::copy() const 
+{
+  return new vil_nitf2_enum_string_formatter(field_width, value_map); 
+}
 
 void vil_nitf2_enum_string_formatter::validate_value_map()
 {
@@ -341,6 +386,12 @@ vil_nitf2_tagged_record_sequence_formatter::vil_nitf2_tagged_record_sequence_for
   : vil_nitf2_typed_field_formatter<vil_nitf2_tagged_record_sequence>(
       vil_nitf2::type_tagged_record_sequence, 1 /* ignored */)
 {}
+
+vil_nitf2_tagged_record_sequence_formatter* 
+vil_nitf2_tagged_record_sequence_formatter::copy() const 
+{
+  return new vil_nitf2_tagged_record_sequence_formatter(); 
+}
 
 bool vil_nitf2_tagged_record_sequence_formatter::
 read( vil_nitf2_istream& input, 

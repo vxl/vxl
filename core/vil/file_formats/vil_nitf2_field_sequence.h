@@ -117,12 +117,15 @@ class vil_nitf2_field_sequence
   virtual vil_nitf2_field::field_tree* get_tree( vil_nitf2_field::field_tree* tr = 0 ) const;
 
  private:
-  void insert_field( const vcl_string& str, vil_nitf2_field* field );
+  void insert_field( const vcl_string& str, vil_nitf2_field* field);
+
+  // Map of fields, indexed by field name
   typedef vcl_map<vcl_string, vil_nitf2_field*> field_map;
   field_map fields;
-  //this member just keeps track of the order in which fields are inserted into 
-  //our 'fields' field_map
+
+  // Keeps track of the order in which fields are inserted into fields_map
   vcl_vector<vil_nitf2_field*> fields_vector;
+
   const vil_nitf2_field_definitions* m_field_definitions;
 };
 
