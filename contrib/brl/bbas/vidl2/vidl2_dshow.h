@@ -13,7 +13,7 @@
 //  03/07/2006 - File imported to vxl repository. (miguelfv)
 // \endverbatim
 //
-// Last modified $Date: 2006/03/07 18:26:52 $ by $Author: miguelfv $.
+// Last modified $Date: 2006/03/09 16:23:22 $ by $Author: miguelfv $.
 //=========================================================================
 
 #include <vidl2/vidl2_exception.h>
@@ -24,6 +24,8 @@
 #include <atlbase.h>
 #include <dshow.h>
 #include <qedit.h>
+
+enum vidl2_pixel_format;
 
 struct vidl2_dshow
 {
@@ -52,6 +54,12 @@ struct vidl2_dshow
 
   //: Get multimedia subtype GUID from FOURCC.
   static GUID get_guid_from_fourcc(const vcl_string& fourcc);
+
+  //: Extract information from AM_MEDIA_TYPE object.
+  static void get_media_info(const AM_MEDIA_TYPE& amt,
+                             unsigned int& width,
+                             unsigned int& height,
+                             vidl2_pixel_format& pixel_format);
 
   //: Delete AM_MEDIA_TYPE memory.
   static void delete_media_type(AM_MEDIA_TYPE& amt);

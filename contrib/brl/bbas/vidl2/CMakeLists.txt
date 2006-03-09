@@ -5,6 +5,7 @@ PROJECT(vidl2)
 
 INCLUDE( ${MODULE_PATH}/NewCMake/FindFFMPEG.cmake )
 INCLUDE( ${MODULE_PATH}/NewCMake/FindDC1394.cmake )
+INCLUDE( ${MODULE_PATH}/NewCMake/FindDirectShow.cmake )
 
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
 
@@ -13,12 +14,12 @@ IF( FFMPEG_FOUND )
   ADD_DEFINITIONS(-DHAS_FFMPEG)
 ENDIF( FFMPEG_FOUND )
 
-# turn on to use DirectShow
-#   this should be done with a try-compile not a user option
-SET(DSHOW_FOUND OFF)
-IF( DSHOW_FOUND )
+IF( DIRECTSHOW_FOUND )
   ADD_DEFINITIONS(-DHAS_DSHOW)
-ENDIF( DSHOW_FOUND )
+
+  # For Euresys Multicam Driver
+  #INCLUDE_DIRECTORIES(C:/PROGRA~1/Euresys/MultiCam/Include)
+ENDIF( DIRECTSHOW_FOUND )
 
 
 SET(vidl2_sources
@@ -52,13 +53,16 @@ IF( DC1394_FOUND )
   )
 ENDIF( DC1394_FOUND )
 
-IF( DSHOW_FOUND )
+IF( DIRECTSHOW_FOUND )
   SET(vidl2_sources ${vidl2_sources}
     vidl2_exception.h
-    vidl2_dshow.h            vidl2_dshow.cxx
-    vidl2_dshow_file_istream.h       vidl2_dshow_file_istream.cxx
+    vidl2_dshow.h                      vidl2_dshow.cxx
+    vidl2_dshow_file_istream.h         vidl2_dshow_file_istream.cxx
+    vidl2_dshow_live_istream.h         vidl2_dshow_live_istream.cxx
+    vidl2_dshow_istream_params.h       vidl2_dshow_istream_params.cxx
+    #vidl2_dshow_istream_params_esf.h   vidl2_dshow_istream_params_esf.cxx
   )
-ENDIF( DSHOW_FOUND )
+ENDIF( DIRECTSHOW_FOUND )
 
 AUX_SOURCE_DIRECTORY(Templates vidl2_sources)
 
@@ -76,9 +80,9 @@ IF( DC1394_FOUND )
   TARGET_LINK_LIBRARIES( vidl2 ${DC1394_LIBRARIES} )
 ENDIF( DC1394_FOUND )
 
-IF( DSHOW_FOUND )
-  TARGET_LINK_LIBRARIES( vidl2 strmiids quartz )
-ENDIF( DSHOW_FOUND )
+IF( DIRECTSHOW_FOUND )
+  TARGET_LINK_LIBRARIES( vidl2 ${DIRECTSHOW_LIBRARIES} )
+ENDIF( DIRECTSHOW_FOUND )
 
 
 IF( BUILD_TESTING )

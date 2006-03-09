@@ -23,7 +23,7 @@
 //               and extensions to Paul's code. (miguelfv)
 // \endverbatim
 //
-// Last modified $Date: 2006/03/07 18:26:52 $ by $Author: miguelfv $.
+// Last modified $Date: 2006/03/09 16:23:22 $ by $Author: miguelfv $.
 //=========================================================================
 
 #include <vidl2/vidl2_istream.h>
@@ -89,10 +89,10 @@ public:
   //: Returns true if the advance has finished and a frame is available.
   virtual bool is_frame_available() const;
 
-  //: Read the next frame from the stream (advance and acquire)
+  //: Read the next frame from the stream (advance and acquire).
   virtual vidl2_frame_sptr read_frame();
 
-  //: Return the current frame in the stream
+  //: Return the current frame in the stream.
   virtual vidl2_frame_sptr current_frame();
 
   //: Seek to the given frame number

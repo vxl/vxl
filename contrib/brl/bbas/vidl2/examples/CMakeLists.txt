@@ -17,10 +17,15 @@ TARGET_LINK_LIBRARIES(vidl2_player vidl2 vgui vil vul)
 ENDIF( HAS_VGUI )
 
 
-IF( DSHOW_FOUND )
+IF( DIRECTSHOW_FOUND )
 
 # An example use of vidl2_dshow_file_istream
 ADD_EXECUTABLE (vidl2_dshow_file_example vidl2_dshow_file_example.cxx)
 TARGET_LINK_LIBRARIES(vidl2_dshow_file_example vidl2)
 
-ENDIF( DSHOW_FOUND )
+# An example use of vidl2_dshow_live_istream
+INCLUDE_DIRECTORIES( ${VXL_MUL_INCLUDE_DIR} )
+ADD_EXECUTABLE (vidl2_dshow_live_example vidl2_dshow_live_example.cxx)
+TARGET_LINK_LIBRARIES(vidl2_dshow_live_example vidl2 mbl)
+
+ENDIF( DIRECTSHOW_FOUND )

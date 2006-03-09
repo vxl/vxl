@@ -6,11 +6,12 @@
 //
 // See vidl2_dshow.h for details.
 //
-// Last modified $Date: 2006/03/07 18:26:52 $ by $Author: miguelfv $.
+// Last modified $Date: 2006/03/09 16:23:22 $ by $Author: miguelfv $.
 //=========================================================================
 
 #include <vidl2/vidl2_dshow.h>
 #include <vidl2/vidl2_exception.h>
+#include <vidl2/vidl2_pixel_format.h>
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
@@ -368,6 +369,93 @@ GUID vidl2_dshow::get_guid_from_fourcc(const vcl_string& fourcc)
   };
 
   return guid;
+}
+
+//: Extract information from AM_MEDIA_TYPE object.
+void vidl2_dshow::get_media_info(const AM_MEDIA_TYPE& amt,
+                                 unsigned int& width,
+                                 unsigned int& height,
+                                 vidl2_pixel_format& pixel_format)
+{
+  // Examine the format block.
+  if ( (amt.formattype == FORMAT_VideoInfo)
+    && (amt.cbFormat >= sizeof(VIDEOINFOHEADER))
+    && (amt.pbFormat != 0) )
+  {
+    VIDEOINFOHEADER *vih;
+    vih = reinterpret_cast<VIDEOINFOHEADER*>(amt.pbFormat);
+
+    width  = vih->bmiHeader.biWidth;
+    height = vih->bmiHeader.biHeight < 0
+           ? -vih->bmiHeader.biHeight
+           :  vih->bmiHeader.biHeight;
+    // ***** figure out how to handle bottom_up dibs...
+    //if (vih->bmiHeader.biHeight < 0)
+    //{
+    //  is_bottom_up_ = true;
+    //}
+  }
+  else 
+  {
+    // SampleGrabber requires VIDEOINFOHEADER type.
+    //   Wrong format. Free the format block and bail out.
+    DSHOW_ERROR_IF_FAILED(VFW_E_INVALIDMEDIATYPE);
+  }
+
+  if      (amt.subtype == MEDIASUBTYPE_RGB24)
+  {
+    pixel_format = VIDL2_PIXEL_FORMAT_BGR_24;
+  }
+  else if (amt.subtype == MEDIASUBTYPE_RGB555)
+  {
+    pixel_format = VIDL2_PIXEL_FORMAT_RGB_555;
+  }
+  else if (amt.subtype == MEDIASUBTYPE_RGB565)
+  {
+    pixel_format = VIDL2_PIXEL_FORMAT_RGB_565;
+  }
+  else if (amt.subtype == MEDIASUBTYPE_RGB8)
+  {
+    pixel_format = VIDL2_PIXEL_FORMAT_MONO_8;
+  }
+  //else if (amt.subtype == MEDIASUBTYPE_ARGB32)
+  //{
+  //  pixel_format = VIDL2_PIXEL_FORMAT_ABGR_32;
+  //}
+  else if (amt.subtype == MEDIASUBTYPE_YUY2)
+  {
+    pixel_format = VIDL2_PIXEL_FORMAT_YUYV_422;
+  }
+  else if (amt.subtype == MEDIASUBTYPE_UYVY)
+  {
+    pixel_format = VIDL2_PIXEL_FORMAT_UYVY_422;
+  }
+  else if (amt.subtype == MEDIASUBTYPE_YV12)
+  {
+    pixel_format = VIDL2_PIXEL_FORMAT_YVU_420P;
+  }
+  else if (amt.subtype == MEDIASUBTYPE_IYUV
+        || amt.subtype == vidl2_dshow::get_guid_from_fourcc("I420"))
+  {
+    pixel_format = VIDL2_PIXEL_FORMAT_YUV_420P;
+  }
+  else if (amt.subtype == MEDIASUBTYPE_Y41P)
+  {
+    pixel_format = VIDL2_PIXEL_FORMAT_UYVY_411;
+  }
+  //else if (amt.subtype == MEDIASUBTYPE_YVU9)
+  //{
+  //  pixel_format = ;
+  //}
+  else if (amt.subtype == vidl2_dshow::get_guid_from_fourcc("DX50"))
+  { // MEDIASUBTYPE_DX50
+    pixel_format = VIDL2_PIXEL_FORMAT_UNKNOWN;
+  }
+  else if (amt.subtype == vidl2_dshow::get_guid_from_fourcc("MP4S"))
+  { // WMMEDIASUBTYPE_MP4S
+    pixel_format = VIDL2_PIXEL_FORMAT_UNKNOWN;
+  }
+  else { DSHOW_ERROR_IF_FAILED(VFW_E_INVALIDMEDIATYPE); }
 }
 
 //: Delete AM_MEDIA_TYPE memory.

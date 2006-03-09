@@ -6,7 +6,7 @@
 //
 // See vidl2_dshow_file_istream.h for details.
 //
-// Last modified $Date: 2006/03/07 18:26:52 $ by $Author: miguelfv $.
+// Last modified $Date: 2006/03/09 16:23:22 $ by $Author: miguelfv $.
 //=========================================================================
 
 #include <vidl2/vidl2_dshow_file_istream.h>
@@ -67,12 +67,11 @@ void vidl2_dshow_file_istream::open(const vcl_string& filename)
   // ***** force sample grabber to a target type??
   //       we need to parameterize this (i.e., allow control from outside)
   //       So that, the user can specify the target output format...
-  AM_MEDIA_TYPE mt;
-  ZeroMemory(&mt, sizeof(AM_MEDIA_TYPE));
-  mt.majortype = MEDIATYPE_Video;
-  mt.subtype = MEDIASUBTYPE_RGB24;
-  sample_grabber_->SetMediaType(&mt);
-  // ***** do we need to delete AM_MEDIA_TYPE??
+  AM_MEDIA_TYPE media_type;
+  ZeroMemory(&media_type, sizeof(AM_MEDIA_TYPE));
+  media_type.majortype = MEDIATYPE_Video;
+  media_type.subtype = MEDIASUBTYPE_RGB24;
+  sample_grabber_->SetMediaType(&media_type);
 
   // add sample grabber to the filter graph
   CComQIPtr<IBaseFilter> sample_grabber_filter(sample_grabber_);
@@ -81,8 +80,10 @@ void vidl2_dshow_file_istream::open(const vcl_string& filename)
 
   // create a null renderer
   CComPtr<IBaseFilter> null_renderer;
-  DSHOW_ERROR_IF_FAILED(null_renderer.CoCreateInstance(CLSID_NullRenderer));
-  DSHOW_ERROR_IF_FAILED(filter_graph_->AddFilter(null_renderer, L"Null Renderer"));
+  DSHOW_ERROR_IF_FAILED(
+    null_renderer.CoCreateInstance(CLSID_NullRenderer));
+  DSHOW_ERROR_IF_FAILED(
+    filter_graph_->AddFilter(null_renderer, L"Null Renderer"));
   //CComPtr<IBaseFilter> vmr;
   //DSHOW_ERROR_IF_FAILED(vmr.CoCreateInstance(CLSID_VideoMixingRenderer));
   //DSHOW_ERROR_IF_FAILED(filter_graph_->AddFilter(vmr, L"Video Mixing Renderer"));
@@ -121,88 +122,14 @@ void vidl2_dshow_file_istream::open(const vcl_string& filename)
   // ***** should I provide access to this through the public interface???
   //vidl2_dshow::save_graph_to_file(filter_graph_, L"testing2.grf");
 
-  // ***** refactor this to another method, in vidl2_dshow probably...
   // get frame format information
-  DSHOW_ERROR_IF_FAILED(sample_grabber_->GetConnectedMediaType(&mt));
-  // Examine the format block.
-  if ( (mt.formattype == FORMAT_VideoInfo)
-    && (mt.cbFormat >= sizeof(VIDEOINFOHEADER))
-    && (mt.pbFormat != 0) )
-  {
-    VIDEOINFOHEADER *vih;
-    vih = reinterpret_cast<VIDEOINFOHEADER*>(mt.pbFormat);
-
-    buffer_width_  = vih->bmiHeader.biWidth;
-    buffer_height_ = std::abs(vih->bmiHeader.biHeight);
-    // ***** figure out how to handle bottom_up dibs...
-    //if (vih->bmiHeader.biHeight < 0)
-    //{
-    //  is_bottom_up_ = true;
-    //}
-  }
-  else 
-  {
-    // SampleGrabber requires VIDEOINFOHEADER type.
-    //   Wrong format. Free the format block and bail out.
-    vidl2_dshow::delete_media_type(mt);
-    DSHOW_ERROR_IF_FAILED(VFW_E_INVALIDMEDIATYPE);
-  }
-
-  if      (mt.subtype == MEDIASUBTYPE_RGB24)
-  {
-    buffer_pixel_format_ = VIDL2_PIXEL_FORMAT_BGR_24;
-  }
-  else if (mt.subtype == MEDIASUBTYPE_RGB555)
-  {
-    buffer_pixel_format_ = VIDL2_PIXEL_FORMAT_RGB_555;
-  }
-  else if (mt.subtype == MEDIASUBTYPE_RGB565)
-  {
-    buffer_pixel_format_ = VIDL2_PIXEL_FORMAT_RGB_565;
-  }
-  else if (mt.subtype == MEDIASUBTYPE_RGB8)
-  {
-    buffer_pixel_format_ = VIDL2_PIXEL_FORMAT_MONO_8;
-  }
-  //else if (mt.subtype == MEDIASUBTYPE_ARGB32)
-  //{
-  //  buffer_pixel_format_ = VIDL2_PIXEL_FORMAT_ABGR_32;
-  //}
-  else if (mt.subtype == MEDIASUBTYPE_YUY2)
-  {
-    buffer_pixel_format_ = VIDL2_PIXEL_FORMAT_YUYV_422;
-  }
-  else if (mt.subtype == MEDIASUBTYPE_UYVY)
-  {
-    buffer_pixel_format_ = VIDL2_PIXEL_FORMAT_UYVY_422;
-  }
-  else if (mt.subtype == MEDIASUBTYPE_YV12)
-  {
-    buffer_pixel_format_ = VIDL2_PIXEL_FORMAT_YVU_420P;
-  }
-  else if (mt.subtype == MEDIASUBTYPE_IYUV
-        || mt.subtype == vidl2_dshow::get_guid_from_fourcc("I420"))
-  {
-    buffer_pixel_format_ = VIDL2_PIXEL_FORMAT_YUV_420P;
-  }
-  else if (mt.subtype == MEDIASUBTYPE_Y41P)
-  {
-    buffer_pixel_format_ = VIDL2_PIXEL_FORMAT_UYVY_411;
-  }
-  //else if (mt.subtype == MEDIASUBTYPE_YVU9)
-  //{
-  //  buffer_pixel_format_ = ;
-  //}
-  else if (mt.subtype == vidl2_dshow::get_guid_from_fourcc("DX50"))
-  { // MEDIASUBTYPE_DX50
-    buffer_pixel_format_ = VIDL2_PIXEL_FORMAT_UNKNOWN;
-  }
-  else if (mt.subtype == vidl2_dshow::get_guid_from_fourcc("MP4S"))
-  { // WMMEDIASUBTYPE_MP4S
-    buffer_pixel_format_ = VIDL2_PIXEL_FORMAT_UNKNOWN;
-  }
-  else { DSHOW_ERROR_IF_FAILED(VFW_E_INVALIDMEDIATYPE); }
-  vidl2_dshow::delete_media_type(mt);
+  DSHOW_ERROR_IF_FAILED(
+    sample_grabber_->GetConnectedMediaType(&media_type));
+  vidl2_dshow::get_media_info(media_type,
+                              buffer_width_,
+                              buffer_height_,
+                              buffer_pixel_format_);
+  vidl2_dshow::delete_media_type(media_type);
 
   // ***** MSDN docs suggest turning the graph clock off (if not needed)
   //       for running the graph faster. Check this out.
@@ -210,9 +137,6 @@ void vidl2_dshow_file_istream::open(const vcl_string& filename)
   //CComQIPtr<IMediaFilter> media_filter(filter_graph_);
   //media_filter->SetSyncSource(0);
 
-  //CComQIPtr<IMediaControl> media_control(filter_graph_);
-  //DSHOW_ERROR_IF_FAILED(media_control->Run());
-  //DSHOW_ERROR_IF_FAILED(media_control->Pause());
   filter_graph_->QueryInterface(
     IID_IMediaControl, reinterpret_cast<void**>(&media_control_));
   if (media_control_->Pause() == S_FALSE)
