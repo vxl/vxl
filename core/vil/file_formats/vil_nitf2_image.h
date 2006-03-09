@@ -62,7 +62,7 @@ class vil_nitf2_file_format : public vil_file_format
 // Things that do work:
 //  - Reading uncompressed and image data (ints, shorts, 8 bit int, floats etc)
 //  - parsing and validating file headers, and image headers
-//  - Data masks (and pad pixels) are supported through vil_nitf2_data_mask_table
+//  - enum_data masks (and pad pixels) are supported through vil_nitf2_data_mask_table
 //  - PJUST = L
 //  - Images with LUTS will read in correctly, but you will need to apply the LUT
 //    yourself.  You can access the lut information for p-th band of the current image by calling
@@ -188,19 +188,19 @@ class vil_nitf2_image : public vil_blocked_image_resource
   // Returns the offset (in bytes) from the beginning of the NITF file
   // to the beginning of the specified portion of the NITF stream.  For example:
   //
-  // get_offset_to( TextSegments, Header, 0) will return the offset from the
+  // get_offset_to( enum_text_segments, Header, 0) will return the offset from the
   // beginning of the NITF stream to the beginning of the first text segment's
   // subheader.  You'd better make sure there is at least one text segment before
   // you call this.
   //
-  // get_offset_to( ImageSegments, Data, 3) will return the offset from the
+  // get_offset_to( enum_image_segments, enum_data, 3) will return the offset from the
   // beginning of the NITF stream to the beginning of the fourth image segment's
   // data section.  You'd better make sure there is at least four image segments before
   // you call this.
-  vil_streampos get_offset_to( vil_nitf2_header::Section sec, vil_nitf2_header::Portion por, unsigned int index = 0 ) const;
-  // Returns the offset (in bytes) from the beginning of Section 'sec' and the beginning of the specified portion
+  vil_streampos get_offset_to( vil_nitf2_header::section_type sec, vil_nitf2_header::portion_type por, unsigned int index = 0 ) const;
+  // Returns the offset (in bytes) from the beginning of section_type 'sec' and the beginning of the specified portion
   // (subheader or data).  If more then one of these segments exist, then use 'index' to select which one you want.
-  vil_streampos size_to( vil_nitf2_header::Section sec, vil_nitf2_header::Portion por, int index ) const;
+  vil_streampos size_to( vil_nitf2_header::section_type sec, vil_nitf2_header::portion_type por, int index ) const;
 
   // Returns the overall offset to the specified image/block/band combination.
   // If this block isn't present in the stream (ie. it's all blank), then

@@ -26,83 +26,44 @@ vil_nitf2_header::~vil_nitf2_header()
   delete m_field_sequence_classification;
 }
 
-vcl_string vil_nitf2_header::section_num_tag( Section sec, bool pretty )
+vcl_string vil_nitf2_header::section_num_tag(section_type sec)
 {
-  switch ( sec ) {
-   case FileHeader:
-    assert( 0 );
-   case ImageSegments:
-    if ( pretty ) return "Number of Image Segments";
-    else return "NUMI";
-   case GraphicSegments:
-    if ( pretty ) return "Number of Graphic Segments";
-    else return "NUMS";
-   case LabelSegments:
-    if ( pretty ) return "Number of Label Segments";
-    else return "NUML";
-   case TextSegments:
-    if ( pretty ) return "Number of Text Segments";
-    else return "NUMT";
-   case DataExtensionSegments:
-    if ( pretty ) return "Number of Data Extension Segments";
-    else return "NUMDES";
-   case ReservedExtensionSegments:
-    if ( pretty ) return "Number of Reserved Extension Segments";
-    else return "NUMRES";
+  switch (sec) {
+   case enum_file_header:                 assert(0); break;
+   case enum_image_segments:              return "NUMI";
+   case enum_graphic_segments:            return "NUMS";
+   case enum_label_segments:              return "NUML";
+   case enum_text_segments:               return "NUMT";
+   case enum_data_extension_segments:     return "NUMDES";
+   case enum_reserved_extension_segments: return "NUMRES";
   }
   return "";
 }
 
-vcl_string vil_nitf2_header::section_len_header_tag( Section sec, bool pretty )
+vcl_string vil_nitf2_header::section_len_header_tag(section_type sec)
 {
-  switch ( sec ) {
-   case FileHeader:
-    assert( 0 );
-   case ImageSegments:
-    if ( pretty ) return "Lengh of Image Subheader";
-    else return "LISH";
-   case GraphicSegments:
-    if ( pretty ) return "Length of Graphic Subheader";
-    else return "LSSH";
-   case LabelSegments:
-    if ( pretty ) return "Length of Label Subheader";
-    else return "LLSH";
-   case TextSegments:
-    if ( pretty ) return "Length of Text Subheader";
-    else return "LTSH";
-   case DataExtensionSegments:
-    if ( pretty ) return "Length of Data Extension Subheader";
-    else return "LDSH";
-   case ReservedExtensionSegments:
-    if ( pretty ) return "Length of Reserved Extension Subheader";
-    else return "LRESH";
+  switch (sec) {
+   case enum_file_header:                 assert(0); break;
+   case enum_image_segments:              return "LISH";
+   case enum_graphic_segments:            return "LSSH";
+   case enum_label_segments:              return "LLSH";
+   case enum_text_segments:               return "LTSH";
+   case enum_data_extension_segments:     return "LDSH";
+   case enum_reserved_extension_segments: return "LRESH";
   }
   return "";
 }
 
-vcl_string vil_nitf2_header::section_len_data_tag( Section sec, bool pretty )
+vcl_string vil_nitf2_header::section_len_data_tag(section_type sec)
 {
-  switch ( sec ) {
-   case FileHeader:
-    assert( 0 );
-   case ImageSegments:
-    if ( pretty ) return "Length of Image Segment";
-    else return "LI";
-   case GraphicSegments:
-    if ( pretty ) return "Length of Graphic Segment";
-    else return "LS";
-   case LabelSegments:
-    if ( pretty ) return "Length of Label Segment";
-    else return "LL";
-   case TextSegments:
-    if ( pretty ) return "Length of Text Segment";
-    else return "LT";
-   case DataExtensionSegments:
-    if ( pretty ) return "Length of Data Extension Segment";
-    else return "LD";
-   case ReservedExtensionSegments:
-    if ( pretty ) return "Length of Reserved Extension Segment";
-    else return "LRE";
+  switch (sec) {
+   case enum_file_header:                 assert(0); break;
+   case enum_image_segments:              return "LI";
+   case enum_graphic_segments:            return "LS";
+   case enum_label_segments:              return "LL";
+   case enum_text_segments:               return "LT";
+   case enum_data_extension_segments:     return "LD";
+   case enum_reserved_extension_segments: return "LRE";
   }
   return "";
 }

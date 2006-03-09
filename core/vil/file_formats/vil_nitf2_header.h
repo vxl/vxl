@@ -22,12 +22,22 @@ public:
 
   virtual ~vil_nitf2_header();
   
-  enum Portion { SubHeader, Data };
-  enum Section { FileHeader = 0, ImageSegments, GraphicSegments, LabelSegments,
-                TextSegments, DataExtensionSegments, ReservedExtensionSegments };
-  static vcl_string section_num_tag( Section sec, bool pretty = false );
-  static vcl_string section_len_header_tag( Section sec, bool pretty = false );
-  static vcl_string section_len_data_tag( Section sec, bool pretty = false );
+  enum portion_type { 
+    enum_subheader, 
+    enum_data 
+  };
+  enum section_type { 
+    enum_file_header = 0, 
+    enum_image_segments, 
+    enum_graphic_segments, 
+    enum_label_segments,
+    enum_text_segments, 
+    enum_data_extension_segments, 
+    enum_reserved_extension_segments 
+  };
+  static vcl_string section_num_tag(section_type sec);
+  static vcl_string section_len_header_tag(section_type sec);
+  static vcl_string section_len_data_tag(section_type sec);
   
   // Read the image header starting at stream's current position. Return success.
   virtual bool read( vil_stream* stream );
@@ -77,6 +87,5 @@ private:
   static vil_nitf2_field_definitions* s_field_definitions_21;
   static vil_nitf2_field_definitions* s_field_definitions_20;
 };
-
 
 #endif // VIL_NITF2_HEADER_H

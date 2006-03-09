@@ -103,14 +103,14 @@ bool vil_nitf2_field_sequence::read(vil_nitf2_istream& input,
       vil_nitf2_field_definition* field_def = (*node)->field_definition();
       // The field exists if it is required, or if it is conditional and
       // the condition is true.
-      bool fieldExists;
+      bool field_exists;
       if (field_def->is_required()) {
-        fieldExists = true;
+        field_exists = true;
       } else {
         bool condition;
         bool conditionValid = (*(field_def->condition_functor))(this, indexes, condition);
         if (conditionValid) {
-          fieldExists = condition;
+          field_exists = condition;
         } else {
           // Cannot evaluate condition; therefore I don't know whether this
           // field exists and cannot reliably parse the rest of the record
@@ -119,7 +119,7 @@ bool vil_nitf2_field_sequence::read(vil_nitf2_istream& input,
           break;
         }
       }
-      if (fieldExists)
+      if (field_exists)
       {
         // Evaluate its width functor, if any.
         int variable_width = -1;
@@ -354,20 +354,20 @@ bool vil_nitf2_field_sequence::write(vil_nitf2_ostream& output,
 vil_nitf2_field_sequence::~vil_nitf2_field_sequence()
 {
   // Delete fields, which I own
-  for (field_map::iterator fieldMapEntry = fields.begin();
-    fieldMapEntry != fields.end(); ++fieldMapEntry)
+  for (field_map::iterator field_map_entry = fields.begin();
+       field_map_entry != fields.end(); ++field_map_entry)
   {
-    vil_nitf2_field* field = fieldMapEntry->second;
+    vil_nitf2_field* field = field_map_entry->second;
     delete field;
   }
 }
 
 vil_nitf2_field* vil_nitf2_field_sequence::get_field(vcl_string tag) const
 {
-  vcl_map<vcl_string, vil_nitf2_field*>::const_iterator fieldMapEntry = fields.find(tag);
-  if (fieldMapEntry == fields.end())
+  vcl_map<vcl_string, vil_nitf2_field*>::const_iterator field_map_entry = fields.find(tag);
+  if (field_map_entry == fields.end())
     return 0;
-  return fieldMapEntry->second;
+  return field_map_entry->second;
 }
 
 // Who needs templated functions when we have macros!

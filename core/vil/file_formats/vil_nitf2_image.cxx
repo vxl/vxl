@@ -57,29 +57,32 @@ vil_image_resource_sptr
 //--------------------------------------------------------------------------------
 // class vil_nitf2_image
 
-vil_streampos vil_nitf2_image::get_offset_to( vil_nitf2_header::Section sec,
-                                              vil_nitf2_header::Portion por, unsigned int index ) const
+vil_streampos vil_nitf2_image::get_offset_to( vil_nitf2_header::section_type sec,
+                                              vil_nitf2_header::portion_type por, 
+                                              unsigned int index ) const
 {
   vil_streampos p;
-  if ( sec == vil_nitf2_header::FileHeader ) {
+  if ( sec == vil_nitf2_header::enum_file_header ) {
     //there is no data section in the file header and
     //there is only one
-    assert( por == vil_nitf2_header::SubHeader );
+    assert( por == vil_nitf2_header::enum_subheader );
     assert( index == 0 );
     //file header is the first thing
     p = 0;
   } else {
-    vil_nitf2_header::Section preceding_section = (vil_nitf2_header::Section)(sec-1);
-    p = get_offset_to( preceding_section, vil_nitf2_header::SubHeader, 0 ) +
-        size_to( preceding_section, vil_nitf2_header::SubHeader, -1 ) +
+    vil_nitf2_header::section_type preceding_section = (vil_nitf2_header::section_type)(sec-1);
+    p = get_offset_to( preceding_section, vil_nitf2_header::enum_subheader, 0 ) +
+        size_to( preceding_section, vil_nitf2_header::enum_subheader, -1 ) +
         size_to( sec, por, index );
   }
   return p;
 }
 
-vil_streampos vil_nitf2_image::size_to( vil_nitf2_header::Section sec, vil_nitf2_header::Portion por, int index ) const
+vil_streampos vil_nitf2_image::size_to(vil_nitf2_header::section_type sec, 
+                                       vil_nitf2_header::portion_type por, 
+                                       int index ) const
 {
-  if ( sec == vil_nitf2_header::FileHeader ) {
+  if ( sec == vil_nitf2_header::enum_file_header ) {
     if ( index == -1 ) {
       int file_header_size;
       m_file_header.get_property("HL", file_header_size);
@@ -106,7 +109,7 @@ vil_streampos vil_nitf2_image::size_to( vil_nitf2_header::Section sec, vil_nitf2
     int current_header_size;
     m_file_header.get_property(sh, i, current_header_size);
     offset += current_header_size;
-    if ( sec == vil_nitf2_header::ImageSegments ){
+    if ( sec == vil_nitf2_header::enum_image_segments ){
       vil_nitf2_long current_data_size;
       m_file_header.get_property(s, i, current_data_size);
       offset += current_data_size;
@@ -118,7 +121,7 @@ vil_streampos vil_nitf2_image::size_to( vil_nitf2_header::Section sec, vil_nitf2
   }
   //we are now at the proper index's subheader... if we need to get to the data
   //we've got one more jump to do
-  if ( por == vil_nitf2_header::Data ) {
+  if ( por == vil_nitf2_header::enum_data ) {
     //if we've skipped past all the segments, then it doesn't make any sens
     //to skip to the "data" section
     assert( !going_past_end );
@@ -202,7 +205,7 @@ vil_streampos vil_nitf2_image::get_offset_to_image_data_block_band(
   //my image header precedes me.  Find out the offset to that, then add on the size of
   //that header... then you have the offset to me (the data)
   vil_streampos offset =
-    get_offset_to( vil_nitf2_header::ImageSegments, vil_nitf2_header::Data, image_index );
+    get_offset_to( vil_nitf2_header::enum_image_segments, vil_nitf2_header::enum_data, image_index );
 
   //////////////////////////////////////////////////
   // now get the position to the desired block/band
@@ -275,7 +278,7 @@ bool vil_nitf2_image::parse_headers()
   clear_image_headers();
   m_image_headers.resize(nimages());
   for (unsigned int i = 0 ; i < nimages() ; i++) {
-    vil_streampos offset = get_offset_to( vil_nitf2_header::ImageSegments, vil_nitf2_header::SubHeader, i);
+    vil_streampos offset = get_offset_to( vil_nitf2_header::enum_image_segments, vil_nitf2_header::enum_subheader, i);
     m_stream->seek(offset);
     m_image_headers[i] = new vil_nitf2_image_subheader(file_version());
     if (!m_image_headers[i]->read(m_stream)) return false;
@@ -287,7 +290,7 @@ bool vil_nitf2_image::parse_headers()
   m_file_header.get_property( "NUMDES", num_des );
   m_des.resize( num_des );
   for ( int j = 0 ; j < num_des ; j++ ){
-    vil_streampos offset = get_offset_to( vil_nitf2_header::DataExtensionSegments, vil_nitf2_header::SubHeader, j);
+    vil_streampos offset = get_offset_to( vil_nitf2_header::enum_data_extension_segments, vil_nitf2_header::enum_subheader, j);
     m_stream->seek(offset);
     int data_width;
     m_file_header.get_property( "LD", j, data_width );
@@ -454,7 +457,7 @@ vil_image_view_base_sptr vil_nitf2_image::get_copy_view_decimated_j2k(
   //it is my understanding from BIFF profile BPJ2k01.00 that JPEG compressed files
   //will only have on image block (ie. it will be clocked within the jp2 codestream),
   //so we can just pass all the work off to the vil_j2k_image class
-  m_stream->seek(get_offset_to( vil_nitf2_header::ImageSegments, vil_nitf2_header::Data, m_current_image_index));
+  m_stream->seek(get_offset_to( vil_nitf2_header::enum_image_segments, vil_nitf2_header::enum_data, m_current_image_index));
   return s_decode_jpeg_2000( m_stream, start_i, num_i, start_j, num_j, i_factor, j_factor );
 }
 
