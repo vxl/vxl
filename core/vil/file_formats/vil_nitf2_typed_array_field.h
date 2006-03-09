@@ -51,6 +51,9 @@ class vil_nitf2_typed_array_field : public vil_nitf2_array_field
   // how to iterate over all elements.
   virtual vcl_ostream& output(vcl_ostream& os) const;
 
+  // Destructor (overridden below for instantiations where T is a pointer)
+  ~vil_nitf2_typed_array_field() {};
+
  protected:
   // Helper method for output() method above. Iterates over one
   // dimension of vector field, recursively printing all defined elements
@@ -196,5 +199,29 @@ vcl_ostream& operator << (vcl_ostream& os, const vil_nitf2_typed_array_field<T>&
 {
   return field->output(os);
 };
+
+// Override destructor when T is a pointer type
+template<>
+inline vil_nitf2_typed_array_field<void*>::~vil_nitf2_typed_array_field()
+{
+  for (vcl_map<vil_nitf2_index_vector, void*>::iterator it = m_value_map.begin();
+       it != m_value_map.end(); ++it)
+  {
+    // vector delete correponds to new char[] for binary data
+    delete[] it->second;
+  }
+  m_value_map.clear();
+} 
+
+template<>
+inline vil_nitf2_typed_array_field<vil_nitf2_location*>::~vil_nitf2_typed_array_field()
+{
+  for (vcl_map<vil_nitf2_index_vector, vil_nitf2_location*>::iterator it = m_value_map.begin();
+       it != m_value_map.end(); ++it)
+  {
+    delete it->second;
+  }
+  m_value_map.clear();
+} 
 
 #endif // VIL_NITF2_TYPED_ARRAY_FIELD_H

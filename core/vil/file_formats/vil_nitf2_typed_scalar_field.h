@@ -82,13 +82,14 @@ vil_nitf2_typed_scalar_field<vil_nitf2_tagged_record_sequence>::get_tree() const
 template<>
 inline vil_nitf2_typed_scalar_field<void*>::~vil_nitf2_typed_scalar_field()
 {
+  // vector delete corresponds to new char[] of binary data
   delete[] m_value;
 } 
 
 template<>
 inline vil_nitf2_typed_scalar_field<vil_nitf2_location*>::~vil_nitf2_typed_scalar_field()
 {
-  delete[] m_value;
+  delete m_value;
 } 
 
 #endif // VIL_NITF2_TYPED_SCALAR_FIELD_H
