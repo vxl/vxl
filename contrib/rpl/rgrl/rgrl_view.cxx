@@ -44,62 +44,6 @@ rgrl_view( rgrl_mask_sptr          const& from_image_roi,
   }
 }
 
-rgrl_mask_sptr const&
-rgrl_view::
-from_image_roi() const
-{
-  return from_image_roi_;
-}
-
-rgrl_mask_sptr const&
-rgrl_view::
-to_image_roi() const
-{
-  return to_image_roi_;
-}
-
-rgrl_mask_box const&
-rgrl_view::
-region() const
-{
-  return current_region_;
-}
-
-rgrl_mask_box const&
-rgrl_view::
-global_region() const
-{
-  return global_region_;
-}
-
-rgrl_estimator_sptr
-rgrl_view::
-xform_estimator() const
-{
-  return xform_estimator_;
-}
-
-rgrl_transformation_sptr
-rgrl_view::
-xform_estimate() const
-{
-  return xform_estimate_;
-}
-
-rgrl_transformation_sptr
-rgrl_view::
-inverse_xform_estimate() const
-{
-  return inverse_estimate_;
-}
-
-unsigned
-rgrl_view::
-resolution() const
-{
-  return current_resolution_;
-}
-
 bool
 rgrl_view::
 is_at_finest_resolution() const

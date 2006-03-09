@@ -44,32 +44,68 @@ class rgrl_view
   // default copy and assignment are good.
 
   //:  Access "from" image region of interest
-  rgrl_mask_sptr const& from_image_roi() const;
+  rgrl_mask_sptr const& from_image_roi() const
+  { return from_image_roi_; }
 
+  //: set "from" image region of interest
+  void set_from_image_roi(rgrl_mask_sptr const& roi)
+  { from_image_roi_ = roi; }
+    
   //:  Access "to" image region of interest
-  rgrl_mask_sptr const& to_image_roi() const;
+  rgrl_mask_sptr const& to_image_roi() const
+  { return to_image_roi_; }
+
+  //: set "to" image region of interest
+  void set_to_image_roi(rgrl_mask_sptr const& roi)
+  { to_image_roi_ = roi; }
 
   //:  Access current transformation region in "from" image coords
-  rgrl_mask_box const& region() const;
+  rgrl_mask_box const& region() const
+  { return current_region_; }
+  
+  //: set current region in "from" image coords
+  void set_region( rgrl_mask_box const& box )
+  { current_region_ = box; }
 
   //:  Access the approximated overlap region in "from" image coords
-  rgrl_mask_box const& global_region() const;
+  rgrl_mask_box const& global_region() const
+  { return global_region_; }
 
+  //: set the approximated overlap region in "from" image coords
+  void set_global_region( rgrl_mask_box const& global_region )
+  { global_region_ = global_region; }
+  
   //:  Access current transform estimator
-  rgrl_estimator_sptr xform_estimator() const;
+  rgrl_estimator_sptr xform_estimator() const
+  { return xform_estimator_; }
+  
+  //: set current transform estimator
+  void set_xform_estimator( rgrl_estimator_sptr const& est)
+  { xform_estimator_ = est; }
 
   //:  Access current transform estimate
-  rgrl_transformation_sptr xform_estimate() const;
+  rgrl_transformation_sptr xform_estimate() const
+  { return xform_estimate_; }
+  
+  //: set current transform estimate
+  void set_xform_estimate( rgrl_transformation_sptr const& xform )
+  { xform_estimate_ = xform; }
 
   //:  Access current REVERSE transform estimate
-  rgrl_transformation_sptr inverse_xform_estimate() const;
+  rgrl_transformation_sptr inverse_xform_estimate() const
+  { return inverse_estimate_; }
   
   //:  Set REVERSE transform estimate
   void set_inverse_xform_estimate(rgrl_transformation_sptr const& inverse)
   { inverse_estimate_ = inverse; }
 
   //:  Access the current resolution at which registration is working
-  unsigned resolution() const;
+  unsigned resolution() const
+  { return current_resolution_; }
+  
+  //:  Set current resolution
+  void set_resolution( unsigned res )
+  { current_resolution_ = res; }
 
   //:  Return true if the current resolution is the finest level
   bool is_at_finest_resolution() const;
