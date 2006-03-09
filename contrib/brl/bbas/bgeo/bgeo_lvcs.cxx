@@ -1,4 +1,5 @@
 #include <vcl_string.h>
+#include <vcl_cstring.h>
 #include <bgeo/bgeo_lvcs.h>
 #include <bgeo/bgeo_datum_conversion.h>
 #include <bgeo/bgeo_earth_constants.h>
