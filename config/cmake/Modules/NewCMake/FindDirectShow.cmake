@@ -6,22 +6,25 @@
 # DirectShow is only available on Windows platforms
 IF( WIN32 )
 
-INCLUDE (CheckCXXSourceCompiles)
+# turn off temporarily, until fix is found
+#INCLUDE (CheckCXXSourceCompiles)
 
-SET(CMAKE_REQUIRED_LIBRARIES strmiids quartz)
-CHECK_CXX_SOURCE_COMPILES("
-  #include <atlbase.h>
-  #include <dshow.h>
-  #include <qedit.h>
+#SET(CMAKE_REQUIRED_LIBRARIES strmiids quartz)
+#CHECK_CXX_SOURCE_COMPILES("
+#  #include <atlbase.h>
+#  #include <dshow.h>
+#  #include <qedit.h>
+#
+#  int main()
+#  {
+#    CComPtr<IFilterGraph2> filter_graph;
+#    filter_graph.CoCreateInstance(CLSID_FilterGraph);
+#    return 0;
+#  }
+#" DIRECTSHOW_FOUND)
+#SET(CMAKE_REQUIRED_LIBRARIES)
 
-  int main()
-  {
-    CComPtr<IFilterGraph2> filter_graph;
-    filter_graph.CoCreateInstance(CLSID_FilterGraph);
-    return 0;
-  }
-" DIRECTSHOW_FOUND)
-SET(CMAKE_REQUIRED_LIBRARIES)
+SET(DIRECTSHOW_FOUND OFF)
 
 IF( DIRECTSHOW_FOUND )
   SET(DIRECTSHOW_LIBRARIES strmiids quartz)
