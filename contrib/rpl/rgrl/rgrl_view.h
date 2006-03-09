@@ -111,6 +111,7 @@ class rgrl_view
   bool is_at_finest_resolution() const;
 
   //:  Return true if the current_region_ reached the global_region_
+  virtual 
   bool current_region_converged() const;
 
   //:  Return true if all components except the xform_estimate_ are the same
