@@ -176,9 +176,9 @@ validate( rgrl_feature_sptr const& mapped, rgrl_mask_sptr const& roi_sptr ) cons
   
   // if the scale is too small to be detected on the other image
   const double scale = mapped->scale();
-  if( scale && scale<0.4 ) {
-    return false;
-  }
+  //if( scale && scale<0.4 ) {
+  //  return false;
+  //}
   
   // by default, 
   return true;
