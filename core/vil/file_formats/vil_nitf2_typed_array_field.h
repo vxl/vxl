@@ -208,7 +208,7 @@ inline vil_nitf2_typed_array_field<void*>::~vil_nitf2_typed_array_field()
        it != m_value_map.end(); ++it)
   {
     // vector delete correponds to new char[] for binary data
-    delete[] it->second;
+    delete[] (char*) it->second;
   }
   m_value_map.clear();
 } 

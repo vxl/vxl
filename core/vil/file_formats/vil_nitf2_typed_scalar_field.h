@@ -83,7 +83,7 @@ template<>
 inline vil_nitf2_typed_scalar_field<void*>::~vil_nitf2_typed_scalar_field()
 {
   // vector delete corresponds to new char[] of binary data
-  delete[] m_value;
+  delete[] (char*) m_value;
 } 
 
 template<>
