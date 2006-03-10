@@ -40,7 +40,7 @@ sdet_edge_champher::initialize_arrays(vbl_array_2d<vtol_edge_2d_sptr>& edges)
   for (int x=0; x<xsize_; x++)
     for (int y=0; y<ysize_; y++)
       {
-        distance_[y][x] = 0;
+        if ( edges.get(y,x) !=0 ) distance_[y][x] = 0;
         edges_[y][x] = edges.get(y,x);
       }
 }

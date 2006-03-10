@@ -37,8 +37,9 @@ class sdet_edge_champher
   inline float distance(int x, int y) {
     int i = x;
     int j = y;
+    // xsize_ = number of columns; ysize_ = number of rows
     if ( (i>=0) && (i<xsize_) && (j>=0) && (j<ysize_) )
-        return (float) distance_[i][j];
+        return (float) distance_[j][i];
     else
         return vnl_numeric_traits<float>::maxval;
     }
@@ -46,8 +47,9 @@ class sdet_edge_champher
   inline vtol_edge_2d_sptr image_edge(int x, int y) {
     int i = x;
     int j = y;
+    // xsize_ = number of columns; ysize_ = number of rows
     if ( (i>=0) && (i<xsize_) && (j>=0) && (j<ysize_) )
-        return edges_[i][j];
+        return edges_[j][i];
     else
         return 0;
     }
