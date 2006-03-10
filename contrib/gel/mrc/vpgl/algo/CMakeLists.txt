@@ -25,7 +25,7 @@ SET( vpgl_algo_sources
 #AUX_SOURCE_DIRECTORY(Templates vpgl_algo_sources)
 
 ADD_LIBRARY(vpgl_algo ${vpgl_algo_sources})
-TARGET_LINK_LIBRARIES( vpgl_algo vpgl dbnl dbnl_algo rrel vgl_algo vsol)
+TARGET_LINK_LIBRARIES( vpgl_algo vpgl rrel vgl_algo vsol)
 
 
 IF( BUILD_TESTING )
