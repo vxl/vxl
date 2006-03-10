@@ -19,7 +19,7 @@
 
 
 //: A class for nth order polynomial radial lens distortion
-template <class T, unsigned int n>
+template <class T, int n>
 class vpgl_poly_radial_distortion : public vpgl_radial_distortion<T>
 {
 public:
@@ -27,35 +27,35 @@ public:
   vpgl_poly_radial_distortion<T,n>(const vgl_point_2d<T>& center, const T* k) 
    : vpgl_radial_distortion<T>(center,true) 
   {
-    set_coefficients(k);     
+    set_coefficients(k);
   }
-  
+
   //: Constructor
   vpgl_poly_radial_distortion<T,n>(const vgl_point_2d<T>& center,
-                                    const vgl_point_2d<T>& distorted_center,
-                                    const T* k) 
+                                   const vgl_point_2d<T>& distorted_center,
+                                   const T* k)
    : vpgl_radial_distortion<T>(center,distorted_center,true) 
   {
-    set_coefficients(k);     
+    set_coefficients(k);
   }
-  
+
   //: Constructor
   vpgl_poly_radial_distortion<T,n>(const vgl_point_2d<T>& center, 
-                                    const vcl_vector<T>& k) 
+                                   const vcl_vector<T>& k)
    : vpgl_radial_distortion<T>(center) 
-  { 
+  {
     set_coefficients(k);
   }
-  
+
   //: Constructor
   vpgl_poly_radial_distortion<T,n>(const vgl_point_2d<T>& center, 
-                                    const vgl_point_2d<T>& distorted_center,
-                                    const vcl_vector<T>& k) 
+                                   const vgl_point_2d<T>& distorted_center,
+                                   const vcl_vector<T>& k)
    : vpgl_radial_distortion<T>(center, distorted_center) 
-  { 
+  {
     set_coefficients(k);
   }
-  
+
   void set_coefficients(const vcl_vector<T>& k)
   {
     assert(k.size() == n);
@@ -63,21 +63,21 @@ public:
     for(unsigned int i=0; i<n; ++i, ++coptr)
       *coptr = k[i]; 
   }
-  
+
   void set_coefficients(const T* k)
   {
     const T* kptr = k; 
     T* coptr = coefficients_;
     for(unsigned int i=0; i<n; ++i, ++kptr, ++coptr)
-      *coptr = *kptr;     
+      *coptr = *kptr;
   };
-             
+
   //: Distort a radial length
   virtual T distort_radius( T radius ) const;
-  
+
   //: Compute the derivative of the distort_radius function
   virtual T distort_radius_deriv( T radius ) const;
-  
+
 protected:
   //: The coefficients of the nth-order polynomial
   T coefficients_[n];

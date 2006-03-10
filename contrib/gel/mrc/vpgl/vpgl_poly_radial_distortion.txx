@@ -14,7 +14,7 @@
 // evaluation of any order.  For very large n loops may be more efficient
 // but for lens distortion the order is usually small.
 
-template <class T, unsigned int n>
+template <class T, int n>
 struct vpgl_poly_helper{
   static inline T val(const T& radius, const T* k)
   {
@@ -32,7 +32,7 @@ struct vpgl_poly_helper<T,1>{
 
 
 //: Distort a radial length
-template <class T, unsigned int n>
+template <class T, int n>
 T
 vpgl_poly_radial_distortion<T,n>::distort_radius( T radius ) const
 {
@@ -43,7 +43,7 @@ vpgl_poly_radial_distortion<T,n>::distort_radius( T radius ) const
 //====================================================================
 
 
-template <class T, unsigned int n>
+template <class T, int n>
 struct vpgl_poly_deriv_helper{
   static inline T val(const T& radius, const T* k, unsigned int p)
   {
@@ -61,7 +61,7 @@ struct vpgl_poly_deriv_helper<T,1>{
 };
 
 //: Compute the derivative of the distort_radius function
-template <class T, unsigned int n>
+template <class T, int n>
 T
 vpgl_poly_radial_distortion<T,n>::distort_radius_deriv( T radius ) const
 {
@@ -75,7 +75,7 @@ vpgl_poly_radial_distortion<T,n>::distort_radius_deriv( T radius ) const
 // we loop instead.
 
 //: Distort a radial length
-template <class T, unsigned int n>
+template <class T, int n>
 T
 vpgl_poly_radial_distortion<T,n>::distort_radius( T radius ) const
 {
@@ -87,7 +87,7 @@ vpgl_poly_radial_distortion<T,n>::distort_radius( T radius ) const
 }
 
 //: Compute the derivative of the distort_radius function
-template <class T, unsigned int n>
+template <class T, int n>
 T
 vpgl_poly_radial_distortion<T,n>::distort_radius_deriv( T radius ) const
 {
