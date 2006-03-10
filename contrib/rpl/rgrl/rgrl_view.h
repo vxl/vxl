@@ -116,9 +116,11 @@ class rgrl_view
 
   //:  Return true if all components except the xform_estimate_ are the same
   //
+  virtual
   bool regions_converged_to(const rgrl_view& other) const;
 
   //:  Return true if both xform_estimator_ and xform_estimate_ are not null
+  virtual
   bool is_valid() const;
 
 #if 0
