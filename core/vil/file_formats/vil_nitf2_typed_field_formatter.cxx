@@ -303,6 +303,7 @@ bool vil_nitf2_string_formatter::read_vcl_stream(vcl_istream& input,
 {
   char* cstr;
   if (!read_c_str(input, field_width, cstr, out_blank)) {
+    delete[] cstr;
     return false;
   }
   vcl_string str = vcl_string(cstr);
