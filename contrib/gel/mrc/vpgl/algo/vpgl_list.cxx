@@ -12,7 +12,7 @@
 //-------------------------------------------
 template <class T>
 bool 
-vpgl_write_list<T>( 
+vpgl_write_list( 
   const vcl_vector<T>& list, 
   vcl_string file )
 {
@@ -28,7 +28,7 @@ vpgl_write_list<T>(
 //-------------------------------------------
 template <class T>
 bool 
-vpgl_read_list<T>( 
+vpgl_read_list( 
   vcl_vector<T>& list, 
   vcl_string file )
 {
