@@ -127,7 +127,7 @@ double
 rgrl_trans_similarity::
 scaling() const
 {
-  assert( A_.rows() && A.cols() );
+  assert( A_.rows() && A_.cols() );
   vnl_vector<double> tmp = A_.get_column(0);
   return tmp.magnitude();
 }
