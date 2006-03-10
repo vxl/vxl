@@ -20,9 +20,9 @@ class vpgl_orientation_lsqr : public vnl_least_squares_function
   //: Constructor
   // \note image points are not homogeneous because require finite points to measure projection error
   vpgl_orientation_lsqr(const vpgl_calibration_matrix<double>& K,
-                         const vgl_point_3d<double>& c,
-                         const vcl_vector<vgl_homg_point_3d<double> >& world_points,
-                         const vcl_vector<vgl_point_2d<double> >& image_points );
+                        const vgl_point_3d<double>& c,
+                        const vcl_vector<vgl_homg_point_3d<double> >& world_points,
+                        const vcl_vector<vgl_point_2d<double> >& image_points );
   //: Destructor
   virtual ~vpgl_orientation_lsqr() {}
 
@@ -57,8 +57,8 @@ class vpgl_orientation_position_lsqr : public vnl_least_squares_function
   //: Constructor
   // \note image points are not homogeneous because require finite points to measure projection error
   vpgl_orientation_position_lsqr(const vpgl_calibration_matrix<double>& K,
-                                  const vcl_vector<vgl_homg_point_3d<double> >& world_points,
-                                  const vcl_vector<vgl_point_2d<double> >& image_points );
+                                 const vcl_vector<vgl_homg_point_3d<double> >& world_points,
+                                 const vcl_vector<vgl_point_2d<double> >& image_points );
   //: Destructor
   virtual ~vpgl_orientation_position_lsqr() {}
 
@@ -71,7 +71,7 @@ class vpgl_orientation_position_lsqr : public vnl_least_squares_function
 
   //: Called after each LM iteration to print debugging etc.
   //virtual void trace(int iteration, vnl_vector<double> const& x, vnl_vector<double> const& fx);
-  
+
  protected:
   //: The fixed internal camera calibration
   vpgl_calibration_matrix<double> K_;
