@@ -123,6 +123,15 @@ A() const
   return A_;
 }
 
+double
+rgrl_trans_similarity::
+scaling() const
+{
+  assert( A_.rows() && A.cols() );
+  vnl_vector<double> tmp = A_.get_column(0);
+  return tmp.magnitude();
+}
+
 vnl_vector<double>
 rgrl_trans_similarity::
 t() const

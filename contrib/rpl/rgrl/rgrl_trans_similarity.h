@@ -64,6 +64,9 @@ class rgrl_trans_similarity
   //: The translation component of the transform
   vnl_vector<double> t() const;
 
+  //: The scaling component of the transform
+  double scaling() const;
+  
   //:  Inverse map with an initial guess
   void inv_map( const vnl_vector<double>& to,
                 bool initialize_next,
