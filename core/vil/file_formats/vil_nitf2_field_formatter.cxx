@@ -22,7 +22,10 @@ char* vil_nitf2_field_formatter::read_char_array(vcl_istream& input, int size)
 
 vcl_string vil_nitf2_field_formatter::read_string(vcl_istream& input, int size)
 {
-  return vcl_string(read_char_array(input, size));
+  char* cstr = read_char_array(input, size);
+  vcl_string str = vcl_string(cstr);
+  delete[] cstr;
+  return str;
 }
 
 vcl_string vil_nitf2_field_formatter::read_string(vil_stream& input, int size)

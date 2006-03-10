@@ -96,6 +96,7 @@ vil_nitf2_integer_formatter::read_vcl_stream(vcl_istream& input,
 {
   char* cstr;
   if (!read_c_str(input, field_width, cstr, out_blank)) {
+    delete[] cstr;
     return false;
   }
   char* endp;
@@ -140,6 +141,7 @@ read_vcl_stream(vcl_istream& input, vil_nitf2_long& out_value, bool& out_blank)
 {
   char* cstr;
   if (!read_c_str(input, field_width, cstr, out_blank)) {
+    delete[] cstr;
     return false;
   }
   bool conversion_ok;
@@ -203,6 +205,7 @@ bool vil_nitf2_double_formatter::read_vcl_stream(vcl_istream& input,
 {
   char* cstr;
   if (!read_c_str(input, field_width, cstr, out_blank)) {
+    delete[] cstr;
     return false;
   }
   char* endp;
