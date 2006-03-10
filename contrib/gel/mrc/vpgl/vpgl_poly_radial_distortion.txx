@@ -7,7 +7,7 @@
 
 #include "vpgl_poly_radial_distortion.h"
 
-#ifdef VCL_CAN_DO_PARTIAL_SPECIALIZATION
+#if VCL_CAN_DO_PARTIAL_SPECIALIZATION
 
 // The templated helper functions are a metaprogram which allows the
 // compiler to create a closed form (no loops) expression for polynomial
