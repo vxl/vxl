@@ -48,7 +48,7 @@ vil_nitf2_field_definition(vcl_string tag,
   assert(formatter != 0 && "vil_nitf2_field_definition:: null formatter");
 }
 
-vil_nitf2_field_definition* vil_nitf2_field_definition::copy() const
+vil_nitf2_field_definition_node* vil_nitf2_field_definition::copy() const
 {
   return new vil_nitf2_field_definition(
     tag, 
@@ -129,7 +129,7 @@ vil_nitf2_field_definitions::~vil_nitf2_field_definitions()
 //==============================================================================
 // Class vil_nitf2_field_definition_repeat_node
 
-vil_nitf2_field_definition_repeat_node* 
+vil_nitf2_field_definition_node* 
 vil_nitf2_field_definition_repeat_node::copy() const 
 {
   return new vil_nitf2_field_definition_repeat_node(

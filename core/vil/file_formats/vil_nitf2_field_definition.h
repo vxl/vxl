@@ -103,7 +103,7 @@ class vil_nitf2_field_definition : public vil_nitf2_field_definition_node
     vcl_string description = "");
 
   // Copy method
-  vil_nitf2_field_definition* copy() const;
+  vil_nitf2_field_definition_node* copy() const;
 
   // Destructor
   ~vil_nitf2_field_definition();
@@ -178,7 +178,7 @@ class vil_nitf2_field_definition_repeat_node : public vil_nitf2_field_definition
   ~vil_nitf2_field_definition_repeat_node();
 
   // Copy method
-  vil_nitf2_field_definition_repeat_node* copy() const;
+  vil_nitf2_field_definition_node* copy() const;
 };
 
 #endif // VIL_NITF2_FIELD_DEFINITION_H

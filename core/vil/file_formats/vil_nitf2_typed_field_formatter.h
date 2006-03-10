@@ -145,7 +145,7 @@ class vil_nitf2_integer_formatter : public vil_nitf2_typed_field_formatter<int>
  public:
   vil_nitf2_integer_formatter(int field_width, bool show_sign = false);
 
-  vil_nitf2_integer_formatter* copy() const;
+  vil_nitf2_field_formatter* copy() const;
 
   // partially overridden read/write methods
   using vil_nitf2_typed_field_formatter<int>::read;
@@ -161,7 +161,7 @@ class vil_nitf2_long_long_formatter : public vil_nitf2_typed_field_formatter<vil
  public:
   vil_nitf2_long_long_formatter(int field_width, bool show_sign = false);
 
-  vil_nitf2_long_long_formatter* copy() const;
+  vil_nitf2_field_formatter* copy() const;
   
   // partially overridden read/write methods
   using vil_nitf2_typed_field_formatter<vil_nitf2_long>::read;
@@ -180,7 +180,7 @@ class vil_nitf2_double_formatter : public vil_nitf2_typed_field_formatter<double
  public:
   vil_nitf2_double_formatter(int field_width, int precision, bool show_sign);
 
-  vil_nitf2_double_formatter* copy() const;
+  vil_nitf2_field_formatter* copy() const;
 
   // partially overridden read/write methods
   using vil_nitf2_typed_field_formatter<double>::read;
@@ -200,7 +200,7 @@ class vil_nitf2_char_formatter : public vil_nitf2_typed_field_formatter<char>
  public:
   vil_nitf2_char_formatter();
 
-  vil_nitf2_char_formatter* copy() const;
+  vil_nitf2_field_formatter* copy() const;
 
   // partially overridden read/write methods
   using vil_nitf2_typed_field_formatter<char>::read;
@@ -216,7 +216,7 @@ class vil_nitf2_binary_formatter : public vil_nitf2_typed_field_formatter<void*>
  public:
   vil_nitf2_binary_formatter(int width_bytes);
 
-  vil_nitf2_binary_formatter* copy() const;
+  vil_nitf2_field_formatter* copy() const;
 
   // partially overridden read/write methods
   using vil_nitf2_typed_field_formatter<void*>::read_vcl_stream;
@@ -243,7 +243,7 @@ class vil_nitf2_string_formatter : public vil_nitf2_typed_field_formatter<vcl_st
   // Constructor
   vil_nitf2_string_formatter(int field_width, enum_char_set char_set = ECS);
 
-  vil_nitf2_string_formatter* copy() const;
+  vil_nitf2_field_formatter* copy() const;
 
   // Destructor
   virtual ~vil_nitf2_string_formatter() {};
@@ -278,7 +278,7 @@ public:
   // Constructor
   vil_nitf2_enum_string_formatter(int field_width, const vil_nitf2_enum_values&);
 
-  vil_nitf2_enum_string_formatter* copy() const;
+  vil_nitf2_field_formatter* copy() const;
    
   // Is specified value valid?
   bool is_valid_value(vcl_string value) const;
@@ -296,7 +296,7 @@ class vil_nitf2_date_time_formatter : public vil_nitf2_typed_field_formatter<vil
   // Constructor
   vil_nitf2_date_time_formatter(int field_width);
 
-  vil_nitf2_date_time_formatter* copy() const;
+  vil_nitf2_field_formatter* copy() const;
    
   // partially overridden read/write methods
   using vil_nitf2_typed_field_formatter<vil_nitf2_date_time>::read;
@@ -313,7 +313,7 @@ class vil_nitf2_location_formatter : public vil_nitf2_typed_field_formatter<vil_
   // Constructor
   vil_nitf2_location_formatter(int field_width);
 
-  vil_nitf2_location_formatter* copy() const;
+  vil_nitf2_field_formatter* copy() const;
 
   // partially overridden read/write methods
   using vil_nitf2_typed_field_formatter<vil_nitf2_location*>::read;
@@ -339,7 +339,7 @@ public:
   // Constructor
   vil_nitf2_tagged_record_sequence_formatter();
 
-  vil_nitf2_tagged_record_sequence_formatter* copy() const;
+  vil_nitf2_field_formatter* copy() const;
 
   // partially overridden read/write methods
   using vil_nitf2_typed_field_formatter<vil_nitf2_tagged_record_sequence>::read_vcl_stream;

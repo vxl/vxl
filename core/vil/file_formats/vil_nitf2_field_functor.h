@@ -76,7 +76,7 @@ class vil_nitf2_field_value : public vil_nitf2_field_functor<T>
   vil_nitf2_field_value(vcl_string tag, vcl_map<T, T> overrideMap ) 
     : tag(tag), overrides( overrideMap ) {}
 
-  virtual vil_nitf2_field_value* copy() const {
+  virtual vil_nitf2_field_functor<T>* copy() const {
     return new vil_nitf2_field_value(tag, overrides); }
 
   bool operator() (vil_nitf2_field_sequence* record,
@@ -115,7 +115,7 @@ class vil_nitf2_multiply_field_values : public vil_nitf2_field_functor<int>
       tag_2(tag_2),
       use_zero_if_tag_not_found(use_zero_if_tag_not_found) {}
 
-  vil_nitf2_multiply_field_values* copy() const {
+  vil_nitf2_field_functor<int>* copy() const {
     return new vil_nitf2_multiply_field_values(
       tag_1, tag_2, use_zero_if_tag_not_found); 
   }
@@ -142,7 +142,7 @@ class vil_nitf2_max_field_value_plus_offset_and_threshold : public vil_nitf2_fie
     vcl_string tag, int offset, int min_threshold = 0, int tag_factor = 1 )
     : tag(tag), offset(offset), min_threshold(min_threshold), tag_factor( tag_factor ) {}
 
-  vil_nitf2_max_field_value_plus_offset_and_threshold* copy() const {
+  vil_nitf2_field_functor<int>* copy() const {
     return new vil_nitf2_max_field_value_plus_offset_and_threshold(
       tag, offset, min_threshold, tag_factor); }
   
@@ -169,7 +169,7 @@ class vil_nitf2_field_value_greater_than: public vil_nitf2_field_functor<bool>
   vil_nitf2_field_value_greater_than(vcl_string tag, T threshold)
     : tag(tag), threshold(threshold) {}
 
-  vil_nitf2_field_value_greater_than* copy() const {
+  vil_nitf2_field_functor<bool>* copy() const {
     return new vil_nitf2_field_value_greater_than(tag, threshold); }
     
   bool operator() (vil_nitf2_field_sequence* record,
@@ -196,7 +196,7 @@ class vil_nitf2_field_specified: public vil_nitf2_field_functor<bool>
  public:
   vil_nitf2_field_specified(vcl_string tag) : tag(tag) {}
 
-  vil_nitf2_field_specified* copy() const {
+  vil_nitf2_field_functor<bool>* copy() const {
     return new vil_nitf2_field_specified(tag); }
 
   bool operator() (vil_nitf2_field_sequence* record,
@@ -223,7 +223,7 @@ class vil_nitf2_field_value_one_of: public vil_nitf2_field_functor<bool>
   vil_nitf2_field_value_one_of(vcl_string tag, T acceptable_value)
     : tag(tag), acceptable_values(1, acceptable_value) {}
 
-  vil_nitf2_field_value_one_of* copy() const {
+  vil_nitf2_field_functor<bool>* copy() const {
     return new vil_nitf2_field_value_one_of(tag, acceptable_values); }
 
   bool operator() (vil_nitf2_field_sequence* record,
@@ -266,7 +266,7 @@ class vil_nitf2_choose_field_value : public vil_nitf2_field_functor<T>
                                vil_nitf2_field_functor<bool>* choose_tag_1_predicate)
     : tag_1(tag_1), tag_2(tag_2), choose_tag_1_predicate(choose_tag_1_predicate) {}
 
-  vil_nitf2_choose_field_value* copy() const {
+  vil_nitf2_field_functor<T>* copy() const {
     return new vil_nitf2_choose_field_value(
       tag_1, tag_2, choose_tag_1_predicate->copy()); }
     
