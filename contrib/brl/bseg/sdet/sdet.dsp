@@ -167,6 +167,12 @@ SOURCE=.\sdet_fit_conics.cxx
 # Begin Source File
 SOURCE=.\sdet_fit_conics_params.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\sdet_nonmax_suppression.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_nonmax_suppression_params.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -238,6 +244,12 @@ SOURCE=.\sdet_fit_conics.h
 # End Source File
 # Begin Source File
 SOURCE=.\sdet_fit_conics_params.h
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_nonmax_suppression.h
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_nonmax_suppression_params.h
 # End Source File
 # End Group
 # End Target
