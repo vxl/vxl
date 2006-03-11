@@ -45,6 +45,13 @@ location() const
   return location_;
 }
 
+void 
+rgrl_feature_landmark::
+set_location( vnl_vector<double> const& loc )
+{
+  location_ = loc;
+}
+
 vnl_matrix<double> const&
 rgrl_feature_landmark::
 error_projector() const

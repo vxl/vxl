@@ -35,6 +35,13 @@ location() const
   return location_;
 }
 
+void 
+rgrl_feature_face_pt::
+set_location( vnl_vector<double> const& loc )
+{
+  location_ = loc;
+}
+
 vnl_matrix<double> const&
 rgrl_feature_face_pt ::
 error_projector() const

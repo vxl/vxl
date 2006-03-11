@@ -26,11 +26,17 @@ class rgrl_feature_face_pt
   virtual
   void write( vcl_ostream& os ) const;
 
-  virtual vnl_vector<double> const& location() const;
+  virtual 
+  vnl_vector<double> const& location() const;
+
+  //: set location
+  virtual
+  void set_location( vnl_vector<double>const& loc );
 
   //: Provide the scale level at which this feature is detected
   virtual
-  double scale() const { return scale_; }
+  double 
+  scale() const { return scale_; }
 
   //: Set the scale level at which this feature is detected
   virtual

@@ -33,6 +33,10 @@ class rgrl_feature
   virtual
   vnl_vector<double> const& location() const = 0;
 
+  //: set location
+  virtual
+  void set_location( vnl_vector<double>const& loc ) = 0;
+
   //: Provide the scale level at which this feature is detected
   //  If no associated scale, return 0
   virtual

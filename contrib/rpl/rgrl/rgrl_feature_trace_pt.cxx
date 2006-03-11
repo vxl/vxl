@@ -60,6 +60,13 @@ num_constraints() const
   return location_.size()-1;
 }
 
+void 
+rgrl_feature_trace_pt::
+set_location( vnl_vector<double> const& loc )
+{
+  location_ = loc;
+}
+
 vnl_vector<double> const&
 rgrl_feature_trace_pt::
 location() const

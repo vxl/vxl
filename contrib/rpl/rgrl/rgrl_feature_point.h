@@ -32,6 +32,10 @@ class rgrl_feature_point
   vnl_vector<double> const&
   location() const;
 
+  //: set location
+  virtual
+  void set_location( vnl_vector<double>const& loc );
+
   //: Provide the scale level at which this feature is detected
   virtual
   double scale() const { return scale_; }

@@ -56,6 +56,12 @@ location() const
   return location_;
 }
 
+void 
+rgrl_feature_point::
+set_location( vnl_vector<double> const& loc )
+{
+  location_ = loc;
+}
 
 vnl_matrix<double> const&
 rgrl_feature_point::

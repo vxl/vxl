@@ -37,8 +37,14 @@ class rgrl_feature_landmark
   virtual
   void write( vcl_ostream& os ) const;
 
+  //: get location
+  virtual
   vnl_vector<double> const&
   location() const;
+
+  //: set location
+  virtual
+  void set_location( vnl_vector<double>const& loc );
 
   vnl_matrix<double> const&
   error_projector() const;
