@@ -782,6 +782,7 @@ rgrl_util_irls( rgrl_match_set_sptr              match_set,
                 rgrl_convergence_tester   const& conv_tester,
                 rgrl_estimator_sptr              estimator,
                 rgrl_transformation_sptr       & estimate,
+                const bool                       fast_remapping,
                 unsigned int                     debug_flag )
 {
   rgrl_set_of<rgrl_match_set_sptr> match_sets;
@@ -792,7 +793,8 @@ rgrl_util_irls( rgrl_match_set_sptr              match_set,
   weighters.push_back(weighter);
 
   return rgrl_util_irls(match_sets, scales, weighters,
-                        conv_tester, estimator, estimate, debug_flag);
+                        conv_tester, estimator, estimate, false, // no fast mapping
+                        debug_flag);
 }
 
 bool
@@ -802,6 +804,7 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
                 rgrl_convergence_tester          const& conv_tester,
                 rgrl_estimator_sptr              estimator,
                 rgrl_transformation_sptr&        estimate,
+                const bool                       fast_remapping,
                 unsigned int                     debug_flag )
 {
   DebugFuncMacro( debug_flag, 1, " In irls for model "<<estimator->transformation_type().name()<<'\n' );
@@ -837,7 +840,9 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
   for ( unsigned ms=0; ms < match_sets.size(); ++ms ) {
     rgrl_match_set_sptr match_set = match_sets[ms];
     if ( match_set && match_set->from_size() > 0) {
+      
       match_set->remap_from_features( *estimate );
+      
       weighters[ms]->compute_weights( *scales[ms], *match_set );
     }
   }
@@ -866,7 +871,14 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
     for ( unsigned ms=0; ms < match_sets.size(); ++ms ) {
       rgrl_match_set_sptr match_set = match_sets[ms];
       if ( match_set && match_set->from_size() > 0) {
-        match_set->remap_from_features( *new_estimate );
+
+        // if fast mapping is on, map only the locations
+        // 
+        if( fast_remapping )
+          match_set->remap_only_location( *new_estimate );
+        else
+          match_set->remap_from_features( *new_estimate );
+        
         weighters[ms]->compute_weights( *scales[ms], *match_set );
       }
     }
@@ -896,6 +908,18 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
                        "converged\n" : current_status->has_stagnated() ?
                                        "stagnated\n" : current_status->is_failed() ?
                                                        "failed\n" :"reaches max iteration\n" ) );
+  
+  // re-map the features if fast mapping is on,
+  // to ensure expected behavior in other components
+  if( fast_remapping )
+    for ( unsigned ms=0; ms < match_sets.size(); ++ms ) {
+
+      rgrl_match_set_sptr match_set = match_sets[ms];
+      if ( match_set && match_set->from_size() ) {
+        
+        match_set->remap_from_features( *estimate );
+      }
+    }
 
   return !failed;
 }

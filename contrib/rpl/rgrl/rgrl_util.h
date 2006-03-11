@@ -73,6 +73,10 @@ rgrl_util_extract_region_locations( vnl_vector< double >             const& cent
 
 //: A simplified version of irls w/o scale re-estimation.
 //  This takes single match set
+//  The \a fast_remapping indicates whether to re-map the features (false), 
+//  or to re-map only the locations (true). This save the computations 
+//  on re-mapping scales, orientations.  However, the result may be 
+//  inaccurate due to out-of-date signature weights. 
 bool
 rgrl_util_irls( rgrl_match_set_sptr              match_set,
                 rgrl_scale_sptr                  scale,
@@ -80,10 +84,15 @@ rgrl_util_irls( rgrl_match_set_sptr              match_set,
                 rgrl_convergence_tester   const& conv_tester,
                 rgrl_estimator_sptr              estimator,
                 rgrl_transformation_sptr       & estimate,
+                const bool                       fast_remapping = false,
                 unsigned int                     debug_flag = 0);
 
 //: A simplified version of irls w/o scale re-estimation.
 //  This takes multiple match sets
+//  The \a fast_remapping indicates whether to re-map the features (false), 
+//  or to re-map only the locations (true). This save the computations 
+//  on re-mapping scales, orientations.  However, the result may be 
+//  inaccurate due to out-of-date signature weights. 
 bool
 rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
                 rgrl_set_of<rgrl_scale_sptr>     const& scales,
@@ -91,6 +100,7 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
                 rgrl_convergence_tester          const& conv_tester,
                 rgrl_estimator_sptr              estimator,
                 rgrl_transformation_sptr&        estimate,
+                const bool                       fast_remapping = false,
                 unsigned int                     debug_flag = 0);
 
 //: skip empty lines in input stream

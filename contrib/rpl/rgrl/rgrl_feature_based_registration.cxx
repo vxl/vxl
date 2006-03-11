@@ -415,6 +415,7 @@ register_single_feature( rgrl_mask_box            from_image_region,
       if ( !rgrl_util_irls( match_set, scale, weighter,
                             *conv_tester_, xform_estimator,
                             current_xform_estimate_,
+                            false,                   // no fast mapping
                             this->debug_flag() ) ) {
         failed = true;
         continue; //no valid xform, so exit the loop
@@ -696,6 +697,7 @@ register_multi_feature( rgrl_mask_box            from_image_region,
       if ( !rgrl_util_irls( current_match_sets_, scales, weighters,
                             *conv_tester_, xform_estimator,
                             current_xform_estimate_,
+                            false,                   // no fast mapping
                             this->debug_flag() ) ) {
         failed = true;
         continue; //no valid xform, so exit the loop
