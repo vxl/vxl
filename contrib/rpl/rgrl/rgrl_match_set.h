@@ -140,6 +140,15 @@ class rgrl_match_set
   //
   void remap_from_features( rgrl_transformation const& trans );
 
+  //: Update only the location of the cached mapped_from_feature using \a trans.
+  //
+  // This will remap the location of each from_feature using 
+  // \a trans and store the result in the already existing 
+  // \a mapped_from_feature.
+  //
+  void
+  remap_only_location( rgrl_transformation const& trans );
+
   //  CS (9/20/2003): I am not at all sure that the idea of a single
   //  feature type in a match set is really a good idea, especially
   //  given the use of the error projector.

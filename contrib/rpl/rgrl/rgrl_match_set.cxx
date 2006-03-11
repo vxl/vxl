@@ -5,7 +5,8 @@
 // \author Amitha Perera
 // \date 14 Nov 2002
 
-#include "rgrl_feature_sptr.h"
+#include <rgrl/rgrl_feature_sptr.h>
+#include <rgrl/rgrl_transformation.h>
 
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
@@ -231,6 +232,24 @@ remap_from_features( rgrl_transformation const& trans )
     xformed_from_features_[i] = from_features_[i]->transform( trans );
   }
 }
+
+void
+rgrl_match_set::
+remap_only_location( rgrl_transformation const& trans )
+{
+  assert ( from_features_.size() == xformed_from_features_.size() );
+
+  vcl_vector<rgrl_feature_sptr>::size_type i = 0;
+  vnl_vector<double> mapped_loc;
+  for ( ; i < from_features_.size(); ++i ) {
+    
+    // remap only location
+    trans.map_location( from_features_[i]->location(), mapped_loc );
+    xformed_from_features_[i]->set_location( mapped_loc );
+
+  }
+}
+
 
 unsigned int
 rgrl_match_set::
