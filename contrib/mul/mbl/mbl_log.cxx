@@ -97,11 +97,10 @@ int mbl_log_streambuf::overflow(int ch)
 
   if (ch == EOF)
   return 0;
-  
+
   char cbuf = ch;
   logger_->output_->append(&cbuf, 1);
   return ch;
-
 }
 
 vcl_streamsize mbl_log_streambuf::xsputn( const char *ptr, vcl_streamsize nchar)
@@ -143,7 +142,7 @@ void mbl_log_output_stream::start()
 
   // Avoid interspersed output.
   real_stream_->flush();
-  
+
   has_started_=true;
 }
 
@@ -276,7 +275,6 @@ void mbl_logger::reinitialise()
     output_ = new mbl_log_output_file(cat.filename, id);
 //    logstream_.tie(output_.real_stream_);
   }
-
 }
 
 void mbl_logger::set(int level, mbl_log_output_base* output)
@@ -551,15 +549,9 @@ void mbl_logger_root::update_all_loggers()
 }
 
 
-
-
-
-
-
-
 mbl_log_categories::mbl_log_categories()
 {
-  cat_spec defult_spec = {mbl_logger::NOTICE};
+  mbl_log_categories::cat_spec defult_spec = {mbl_logger::NOTICE};
   cat_list_[""] = defult_spec;
 }
 
@@ -682,14 +674,13 @@ struct mbl_log_prefix_comp
 // However this would allow s1=AA.11 to match against AA.111
 
     if (s1.first.size() == s2.size())
-      return (s1.first == s2);
+      return s1.first == s2;
     else if (s1.first.size() > s2.size())
       return false;
     else
       return s1.first == s2.substr(0,s1.first.size()) && s2[s1.first.size()] == '.';
   }
 };
-
 
 
 const mbl_log_categories::cat_spec&
@@ -704,7 +695,6 @@ mbl_log_categories::get(const vcl_string& category) const
 
  // vcl_cerr << "MBL_LOG: Using category \"" << it->first << '\"' << vcl_endl;
   return it->second;
-
 }
 
 
