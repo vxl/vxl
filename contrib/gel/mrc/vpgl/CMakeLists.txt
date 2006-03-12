@@ -6,6 +6,8 @@ INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc)
 
 SET( vpgl_sources
   
+  vgl_rotation_3d.h
+
   vpgl_camera.h                  
   vpgl_proj_camera.h            vpgl_proj_camera.txx
   vpgl_calibration_matrix.h     vpgl_calibration_matrix.txx
