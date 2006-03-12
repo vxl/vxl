@@ -30,7 +30,7 @@ static void test_blocked_image_resource()
 
   vcl_string path("test_blocked_tiff.tif");
   unsigned sbi = 16, sbj = 32;
-   unsigned nbi = (ni+sbi-1)/sbi, nbj = (nj+sbj-1)/sbj;
+  unsigned nbi = (ni+sbi-1)/sbi, nbj = (nj+sbj-1)/sbj;
   {//scope for resource
   vil_blocked_image_resource_sptr bir =
     vil_new_blocked_image_resource(path.c_str(),
@@ -38,7 +38,7 @@ static void test_blocked_image_resource()
                                    ir->nplanes(),
                                    ir->pixel_format(),
                                    sbi, sbj,
-                                   "tiff");  
+                                   "tiff");
 
   bool put_view_worked = bir->vil_image_resource::put_view(image);
   TEST("Put view to tiff blocked resource", put_view_worked, true);
@@ -81,7 +81,7 @@ static void test_blocked_image_resource()
     TEST("Last Block Value", false, true);
 
   ///////-------- ----- Test Copying Blocks -------------------------///////
-  vcl_string path2("test_blocked_tiff2.tif");  
+  vcl_string path2("test_blocked_tiff2.tif");
   bool good_copy = true;
   {//scope to close bir2
   vil_blocked_image_resource_sptr bir2 =
@@ -91,49 +91,48 @@ static void test_blocked_image_resource()
                                    bir->pixel_format(),
                                    bir->size_block_i(), bir->size_block_j(),
                                    "tiff");  //
-  for(unsigned j = 0; j<bir2->n_block_j()&&good_copy; ++j)
-    for(unsigned i = 0; i<bir2->n_block_i()&&good_copy; ++i)
-      {
-        vil_image_view_base_sptr blk = bir->get_block(i,j);
-        if(!blk)
-          good_copy = false;
+  for (unsigned j = 0; j<bir2->n_block_j()&&good_copy; ++j)
+    for (unsigned i = 0; i<bir2->n_block_i()&&good_copy; ++i)
+    {
+      vil_image_view_base_sptr blk = bir->get_block(i,j);
+      if (!blk)
+        good_copy = false;
 #if 0
-        if(blk)
+      if (blk)
+      {
+        vil_image_view<unsigned short> bv = blk;
+        vcl_cout << "Block from resource(" << i << ' ' << j << ")["
+                 <<  bv.ni() << ' ' << bv.nj() <<  "]\n";
+        for (unsigned bj = 0; bj<bv.nj(); ++bj)
+        {
+          for (unsigned bi = 0; bi<bv.ni(); ++bi)
           {
-            vil_image_view<unsigned short> bv = blk;
-            vcl_cout << "Block from resource(" << i << ' ' << j << ")["
-                     <<  bv.ni() << ' ' << bv.nj() <<  "]\n";
-            for(unsigned bj = 0; bj<bv.nj(); ++bj)
-              {
-                for(unsigned bi = 0; bi<bv.ni(); ++bi)
-                  {
-                    vcl_cout << bv(bi,bj) << ' ';
-                  }
-                vcl_cout << '\n';
-              }
+            vcl_cout << bv(bi,bj) << ' ';
           }
-        vcl_cout << '\n';
-#endif
-        if(!bir2->put_block(i, j, *blk))
-          good_copy = false;
-
+          vcl_cout << '\n';
+        }
       }
+      vcl_cout << '\n';
+#endif
+      if (!bir2->put_block(i, j, *blk))
+        good_copy = false;
+    }
   }//end of bir2 scope
 
   vil_image_resource_sptr bir2 = vil_load_image_resource(path2.c_str());
-  if(good_copy)
-    {
-      vil_image_view<unsigned short> v = bir->get_view();
-      vil_image_view<unsigned short> v2 = bir2->get_view();
-    for(unsigned i = 0; i<bir->ni(); ++i)
-      for(unsigned j = 0; j<bir->nj(); ++j)
-        {
-          good_copy = good_copy && v(i,j)==v2(i,j);
-          if(v(i,j)!=v2(i,j))
-            vcl_cout << "v(" << i << ' ' << j <<  ") = " << v(i,j)
-                     << "vs. " << v2(i,j) << '\n';
-        }
-    }
+  if (good_copy)
+  {
+    vil_image_view<unsigned short> v = bir->get_view();
+    vil_image_view<unsigned short> v2 = bir2->get_view();
+    for (unsigned i = 0; i<bir->ni(); ++i)
+      for (unsigned j = 0; j<bir->nj(); ++j)
+      {
+        good_copy = good_copy && v(i,j)==v2(i,j);
+        if (v(i,j)!=v2(i,j))
+          vcl_cout << "v(" << i << ' ' << j <<  ") = " << v(i,j)
+                   << "vs. " << v2(i,j) << '\n';
+      }
+  }
   TEST("Copy blocks to resource", good_copy, true);
   //
   /////////---------------Test the facade -----------------------///////
@@ -176,7 +175,7 @@ static void test_blocked_image_resource()
            << "   n_block_j = " << dbif->n_block_j() << '\n';
 
   vil_blocked_image_resource_sptr sbif =
-     vil_new_blocked_image_facade(ir, dsbi, dsbj);
+    vil_new_blocked_image_facade(ir, dsbi, dsbj);
 
   for (unsigned bi = 0; bi<dbif->n_block_i(); ++bi)
     for (unsigned bj = 0; bj<dbif->n_block_j(); ++bj)
@@ -259,20 +258,30 @@ static void test_blocked_image_resource()
   ///////--------------------- Test NITF Blocked Resource ---------------////
   vcl_string nitf_path = image_file + "ff_nitf_16bit.nitf";
   vil_image_resource_sptr imgr = vil_load_image_resource(nitf_path.c_str());
-  if(imgr)
+  if (imgr)
   {
-      bool blocked = 
-        imgr->get_property(vil_property_size_block_i, &sbi)&&
-        imgr->get_property(vil_property_size_block_j, &sbj);
-	   vil_blocked_image_resource_sptr bimgr = (vil_blocked_image_resource*)imgr.ptr();
-	  vil_image_view<unsigned short> view = bimgr->get_block(0, 0);
-	  for(unsigned bi = 0; bi<sbi; ++bi)
-		  for(unsigned bj = 0; bj<sbj; ++bj)
-			  vcl_cout << "NITF v(" << bi << ' ' << bj << ")=" << view(bi,bj) << '\n';
-	  TEST("Test NITF ", view(1,0)==8191&&sbi==2, true);
-    }
+    TEST("NITF blocked resource",
+         imgr->get_property(vil_property_size_block_i, &sbi) &&
+         imgr->get_property(vil_property_size_block_j, &sbj),
+         true);
+  }
   else
-    TEST("Test NITF ", false, true);
+  {
+    TEST("NITF resource ", false, true);
+  }
+  vil_blocked_image_resource_sptr bimgr = blocked_image_resource(imgr);
+  if (bimgr)
+  {
+    vil_image_view<unsigned short> view = bimgr->get_block(0, 0);
+    for (unsigned bi = 0; bi<sbi; ++bi)
+      for (unsigned bj = 0; bj<sbj; ++bj)
+        vcl_cout << "NITF v(" << bi << ' ' << bj << ")=" << view(bi,bj) << '\n';
+    TEST("Test NITF ", view(1,0)==8191&&sbi==2, true);
+  }
+  else
+  {
+    TEST("NITF blocked image resource", false, true);
+  }
 
   vil_nitf2::cleanup_static_members();
 }
@@ -288,8 +297,9 @@ test_blocked_image_resource_main( int argc, char* argv[] )
     image_file += "/";
 #endif
     vcl_cout << image_file << '\n';
-  }    
+  }
   test_blocked_image_resource();
   return 0;
 }
-    //TESTMAIN(test_blocked_image_resource);
+
+//TESTMAIN(test_blocked_image_resource);
