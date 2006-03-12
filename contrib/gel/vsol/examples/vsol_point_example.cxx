@@ -1,4 +1,4 @@
-// Example use of the vtol_topology classes
+// Example use of the vsol_point_* classes
 //
 // Author: Peter Tu sep 19 2000
 
