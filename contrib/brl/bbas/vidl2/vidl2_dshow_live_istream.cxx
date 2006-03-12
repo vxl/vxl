@@ -6,11 +6,11 @@
 //
 // See vidl2_dshow_live_istream.h for details.
 //
-// Last modified $Date: 2006/03/09 16:23:22 $ by $Author: miguelfv $.
 //=========================================================================
 
 #include <vidl2/vidl2_dshow_live_istream.h>
 #include <vidl2/vidl2_dshow.h>
+#include <vcl_cassert.h>
 
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
@@ -62,12 +62,14 @@ sample_grabber_cb::BufferCB(double time, BYTE* buffer, long buffer_size)
   buffer_[i].resize(buffer_size);
   buffer_time_[i] = time;
 
-  //vcl_cout << buffer_time_[i] - buffer_time_[j] << vcl_endl;
-  //vcl_cout << number_ << " : " << buffer_time_[i] << vcl_endl;
-  //vcl_cout << id_ << " : " << buffer_size << vcl_endl;
+#ifdef DEBUG
+  vcl_cout << buffer_time_[i] - buffer_time_[j] << vcl_endl
+           << number_ << " : " << buffer_time_[i] << vcl_endl
+           << id_ << " : " << buffer_size << vcl_endl;
+#endif
 
   // copy buffer
-  memcpy(&buffer_[i][0], buffer, buffer_size);
+  vcl_memcpy(&buffer_[i][0], buffer, buffer_size);
 
   // reset flags to reflect new state
   WaitForSingleObject(mutex_, INFINITE);
@@ -92,7 +94,9 @@ void sample_grabber_cb::advance(void)
     {
       busy_index_ = curr_index_;
       curr_index_ = -1;
-      //vcl_cout << "curr_index_ == -1" << vcl_endl;
+#ifdef DEBUG
+      vcl_cout << "curr_index_ == -1\n";
+#endif
     }
     ReleaseMutex(mutex_);
     Sleep(0);
