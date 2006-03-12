@@ -1,8 +1,10 @@
+//:
+// \file
 #include <vpgl/algo/vpgl_project.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
 
-//:project a 3-d bounding box and derive the corresponding 2-d bounding box
+//: project a 3-d bounding box and derive the corresponding 2-d bounding box
 vgl_box_2d<double> vpgl_project::
 project_bounding_box(vpgl_perspective_camera<double>   cam,
                      vgl_box_3d<double> const & box)
@@ -19,10 +21,10 @@ project_bounding_box(vpgl_perspective_camera<double>   cam,
 
   //project the vertices and form the 2-d bounds
   vgl_box_2d<double>  box_2d;
-  for(unsigned i =0; i<8; ++i)
-    {
-      vgl_homg_point_2d<double> hp2d = cam.project(p[i]);
-      box_2d.add(vgl_point_2d<double>(hp2d));
-    }
+  for (unsigned i =0; i<8; ++i)
+  {
+    vgl_homg_point_2d<double> hp2d = cam.project(p[i]);
+    box_2d.add(vgl_point_2d<double>(hp2d));
+  }
   return box_2d;
 }
