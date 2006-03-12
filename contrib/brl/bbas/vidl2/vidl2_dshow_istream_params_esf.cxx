@@ -6,7 +6,6 @@
 //
 // See vidl2_dshow_istream_params_esf.h for details.
 //
-// Last modified $Date: 2006/03/09 16:23:22 $ by $Author: miguelfv $.
 //=========================================================================
 
 #include <vidl2/vidl2_dshow_istream_params_esf.h>
@@ -19,21 +18,20 @@
 
 #include <vbl/vbl_triple.h>
 
-//-------------------------------------------------------------------------
-// ***** This shouldn't be here.... maybe in vbl_functors.h or something.
-// *****
-//-------------------------------------------------------------------------
-////: Functor for finding a value in a std::map.
-////   E.g., find_if(map.begin(), map.end(), second_equal_to<int>(val))
-//template <class T> struct second_equal_to
-//{
-//  T val_;
-//  second_equal_to(const T& val) : val_(val) {}
-//  bool operator()(const vcl_pair<vcl_string,T>& x) const
-//  {
-//    return x.second == val_;
-//  }
-//};
+#if 0 // ***** This shouldn't be here.... maybe in vbl_functors.h or something.
+//-----------------------------------------------------------------------------
+//: Functor for finding a value in a std::map.
+//   E.g., find_if(map.begin(), map.end(), second_equal_to<int>(val))
+template <class T> struct second_equal_to
+{
+  T val_;
+  second_equal_to(const T& val) : val_(val) {}
+  bool operator()(const vcl_pair<vcl_string,T>& x) const
+  {
+    return x.second == val_;
+  }
+};
+#endif // 0
 
 //-------------------------------------------------------------------------
 // Private helpers.
@@ -66,7 +64,7 @@ namespace
     vcl_cout << vcl_setw(w1) << str
              << vcl_setw(w2) << val
              << vcl_setw(w2) << min
-             << vcl_setw(w2) << max << "\n";
+             << vcl_setw(w2) << max << '\n';
   }
 
   inline void print_5_column_row(const vcl_string& str,
@@ -76,7 +74,7 @@ namespace
              << vcl_setw(w2) << val
              << vcl_setw(w2) << min
              << vcl_setw(w2) << max
-             << vcl_setw(w2) << def << "\n";
+             << vcl_setw(w2) << def << '\n';
   }
 
   void print_video_standard_help(const CComPtr<IESFProperties>& props)
@@ -85,19 +83,19 @@ namespace
     bool mono;
 
     props->GetVideoStandard(&val, &mono);
-    vcl_cout << vcl_setw(w1) << "video_standard" << " "
-             << esf_video_standards[val] << "\n";
+    vcl_cout << vcl_setw(w1) << "video_standard" << ' '
+             << esf_video_standards[val] << '\n';
 
-    vcl_cout << vcl_setw(w1) << " " << " Supported video standards\n";
-    vcl_cout << vcl_setw(w1) << " " << " -------------------------\n";
+    vcl_cout << vcl_setw(w1) << "  Supported video standards\n"
+             << vcl_setw(w1) << "  -------------------------\n";
     for (int i = 0; i < sizeof(esf_video_standards) / sizeof(char*); i++)
     {
-      vcl_cout << vcl_setw(w1) << i << " "
-               << esf_video_standards[i] << "\n";
+      vcl_cout << vcl_setw(w1) << i << ' '
+               << esf_video_standards[i] << '\n';
     }
 
     vcl_cout << vcl_setw(w1) << "is_monochrome"
-             << vcl_setw(w2) << (mono ? "true" : "false") << "\n";
+             << vcl_setw(w2) << (mono ? "true" : "false") << '\n';
   }
 
   void print_resolution_help(const CComPtr<IESFProperties>& props)
@@ -108,24 +106,24 @@ namespace
     long width, height;
 
     props->GetResolution(&val, &width, &height);
-    vcl_cout << vcl_setw(w1) << "resolution" << " "
-             << esf_resolutions[val];
-    vcl_cout << " (" << width << "x" << height << ")\n";
+    vcl_cout << vcl_setw(w1) << "resolution "
+             << esf_resolutions[val]
+             << " (" << width << 'x' << height << ")\n";
 
     // print options
-    vcl_cout << vcl_setw(w1) << " " << " Supported resolutions\n";
-    vcl_cout << vcl_setw(w1) << " " << " ---------------------\n";
+    vcl_cout << vcl_setw(w1) << "  Supported resolutions\n"
+             << vcl_setw(w1) << "  ---------------------\n";
     for (int i = 0; i < sizeof(esf_resolutions) / sizeof(char*); i++)
     {
-      vcl_cout << vcl_setw(w1) << i << " "
-               << esf_resolutions[i] << "\n";
+      vcl_cout << vcl_setw(w1) << i << ' '
+               << esf_resolutions[i] << '\n';
     }
 
     long min_x, max_x, min_y, max_y;
     props->GetCustomResolutionRange(&min_x, &max_x, &min_y, &max_y);
-    vcl_cout << vcl_setw(w1) << " " << "   custom range ("
-             << min_x << "x" << min_y << ") -> ("
-             << max_x << "x" << max_y << ")\n";
+    vcl_cout << vcl_setw(w1) << "    custom range ("
+             << min_x << 'x' << min_y << ") -> ("
+             << max_x << 'x' << max_y << ")\n";
   }
 
   void print_capture_region_size_help(const CComPtr<IESFProperties>& props)
@@ -153,22 +151,22 @@ namespace
     GUID val;
 
     props->GetOutputFormat(&val);
-    vcl_cout << vcl_setw(w1) << "output_format" << " "
-             << vidl2_dshow::get_guid_name(val) << "\n";
+    vcl_cout << vcl_setw(w1) << "output_format" << ' '
+             << vidl2_dshow::get_guid_name(val) << '\n';
 
     GUID *table = 0;
     unsigned long count = 0;
     if (SUCCEEDED(props->GetOutputFormatsList(&count, &table)))
     {
       // Process list
-      vcl_cout << vcl_setw(w1) << " " << " Supported output formats\n";
-      vcl_cout << vcl_setw(w1) << " " << " ------------------------\n";
-      vcl_cout << vcl_setw(w1) << "0" << " GUID_NULL (AUTO)\n";
+      vcl_cout << vcl_setw(w1) << "  Supported output formats\n"
+               << vcl_setw(w1) << "  ------------------------\n"
+               << vcl_setw(w1) << "0 GUID_NULL (AUTO)\n";
 
       for (unsigned int i = 0; i < count; i++)
       {
-        vcl_cout << vcl_setw(w1) << i+1 << " "
-                 << vidl2_dshow::get_guid_name(table[i]) << "\n";
+        vcl_cout << vcl_setw(w1) << i+1 << ' '
+                 << vidl2_dshow::get_guid_name(table[i]) << '\n';
       }
 
       CoTaskMemFree(table);
@@ -184,7 +182,7 @@ namespace
              << vcl_setw(w2) << val
              << vcl_setw(w2) << min
              << vcl_setw(w2) << max
-             << vcl_setw(w2) << def << "\n";
+             << vcl_setw(w2) << def << '\n';
   }
 
   void print_brightness_help(const CComPtr<IESFProperties>& props)
@@ -234,26 +232,26 @@ namespace
 
     props->GetIndividualControl(&val);
     vcl_cout << vcl_setw(w1) << "(N/S) individual_control"
-             << vcl_setw(w2) << (val ? "true" : "false") << "\n";
+             << vcl_setw(w2) << (val ? "true" : "false") << '\n';
   }
 
   void print_bitrate_control_help(const CComPtr<IESFCompression>& props)
   {
     ESF_BITRATECONTROL val;
 
-    vcl_cout << vcl_setw(w1) << "bitrate_control" << " ";
+    vcl_cout << vcl_setw(w1) << "bitrate_control ";
     if (SUCCEEDED(props->GetBitrateControl(&val)))
     {
       vcl_cout << esf_bitratecontrols[val];
     }
-    vcl_cout << "\n";
+    vcl_cout << '\n';
 
-    vcl_cout << vcl_setw(w1) << " " << " Supported bitrate controls\n";
-    vcl_cout << vcl_setw(w1) << " " << " --------------------------\n";
+    vcl_cout << vcl_setw(w1) << "  Supported bitrate controls\n"
+             << vcl_setw(w1) << "  --------------------------\n";
     for (int i = 0; i < sizeof(esf_bitratecontrols) / sizeof(char*); i++)
     {
-      vcl_cout << vcl_setw(w1) << i << " "
-               << esf_bitratecontrols[i] << "\n";
+      vcl_cout << vcl_setw(w1) << i << ' '
+               << esf_bitratecontrols[i] << '\n';
     }
   }
 
@@ -294,19 +292,19 @@ namespace
   {
     ESF_GOPSTRUCTURE val;
 
-    vcl_cout << vcl_setw(w1) << "gop_structure" << " ";
+    vcl_cout << vcl_setw(w1) << "gop_structure ";
     if (SUCCEEDED(props->GetGopStructure(&val)))
     {
       vcl_cout << esf_gopstructures[val];
     }
-    vcl_cout << "\n";
+    vcl_cout << '\n';
 
-    vcl_cout << vcl_setw(w1) << " " << " Supported GOP structures\n";
-    vcl_cout << vcl_setw(w1) << " " << " ------------------------\n";
+    vcl_cout << vcl_setw(w1) << "  Supported GOP structures\n"
+             << vcl_setw(w1) << "  ------------------------\n";
     for (int i = 0; i < sizeof(esf_gopstructures) / sizeof(char*); i++)
     {
-      vcl_cout << vcl_setw(w1) << i << " "
-               << esf_gopstructures[i] << "\n";
+      vcl_cout << vcl_setw(w1) << i << ' '
+               << esf_gopstructures[i] << '\n';
     }
   }
 
@@ -681,16 +679,16 @@ void vidl2_dshow_istream_params_esf
   CComPtr<IBaseFilter> filter;
   DSHOW_ERROR_IF_FAILED(moniker->BindToObject(
     0, 0, IID_IBaseFilter, reinterpret_cast<void**>(&filter)));
-  
+
   print_parameter_help(filter);
 }
 
 void vidl2_dshow_istream_params_esf
 ::print_parameter_help(const CComPtr<IBaseFilter>& filter)
 {
-  vcl_cout << "\n\nEuresys MultiCam DirectShow (IESFilter) Parameters\n";
-  vcl_cout << "--------------------------------------------------\n";
-  vcl_cout << "1. IESFProperties interface:\n\n";
+  vcl_cout << "\n\nEuresys MultiCam DirectShow (IESFilter) Parameters\n"
+           << "--------------------------------------------------\n"
+           << "1. IESFProperties interface:\n\n";
 
   // IESFProperties interface.
   CComPtr<IESFProperties> esf_properties;
@@ -698,23 +696,23 @@ void vidl2_dshow_istream_params_esf
     IID_IESFProperties, reinterpret_cast<void**>(&esf_properties));
 
   print_video_standard_help     (esf_properties);
-  vcl_cout << "\n";
+  vcl_cout << '\n';
 
   print_resolution_help         (esf_properties);
-  vcl_cout << "\n";
+  vcl_cout << '\n';
 
   print_output_format_help      (esf_properties);
-  vcl_cout << "\n";
+  vcl_cout << '\n';
 
   // 5 column row header
-  vcl_cout << vcl_setw(w1) << " "
+  vcl_cout << vcl_setw(w1) << ' '
            << vcl_setw(w2) << "curr"
            << vcl_setw(w2) << "min"
            << vcl_setw(w2) << "max"
-           << vcl_setw(w2) << "default" << "\n";
-  vcl_cout << vcl_setw(w1) << " ";
+           << vcl_setw(w2) << "default\n"
+           << vcl_setw(w1) << ' ';
   char prev = vcl_cout.fill('-');
-  vcl_cout << vcl_setw(4*w2) << "-" << "\n";
+  vcl_cout << vcl_setw(4*w2) << "-\n";
   vcl_cout.fill(prev);
 
   print_capture_region_size_help(esf_properties);
@@ -726,17 +724,19 @@ void vidl2_dshow_istream_params_esf
   print_board_help              (esf_properties);
   print_connector_help          (esf_properties);
   print_individual_control_help (esf_properties);
-  vcl_cout << "\n";
+  vcl_cout << '\n';
 
-  //// 4 column row header
-  //vcl_cout << vcl_setw(w1) << " "
-  //         << vcl_setw(w2) << "curr"
-  //         << vcl_setw(w2) << "min"
-  //         << vcl_setw(w2) << "max" << "\n";
-  //vcl_cout << vcl_setw(w1) << " ";
-  //prev = vcl_cout.fill('-');
-  //vcl_cout << vcl_setw(3*w2) << "-" << "\n";
-  //vcl_cout.fill(prev);
+#if 0
+  // 4 column row header
+  vcl_cout << vcl_setw(w1) << ' '
+           << vcl_setw(w2) << "curr"
+           << vcl_setw(w2) << "min"
+           << vcl_setw(w2) << "max\n"
+           << vcl_setw(w1) << ' ';
+  prev = vcl_cout.fill('-');
+  vcl_cout << vcl_setw(3*w2) << "-\n";
+  vcl_cout.fill(prev);
+#endif // 0
 
   // IESFCompression interface.
   CComPtr<IESFCompression> esf_compression;
@@ -746,26 +746,26 @@ void vidl2_dshow_istream_params_esf
   vcl_cout << "2. IESFCompression interface:\n\n";
 
   print_bitrate_control_help(esf_compression);
-  vcl_cout << "\n";
+  vcl_cout << '\n';
 
   // 5 column row header
-  vcl_cout << vcl_setw(w1) << " "
+  vcl_cout << vcl_setw(w1) << ' '
            << vcl_setw(w2) << "curr"
            << vcl_setw(w2) << "min"
            << vcl_setw(w2) << "max"
-           << vcl_setw(w2) << "default" << "\n";
-  vcl_cout << vcl_setw(w1) << " ";
+           << vcl_setw(w2) << "default\n"
+           << vcl_setw(w1) << ' ';
   prev = vcl_cout.fill('-');
-  vcl_cout << vcl_setw(4*w2) << "-" << "\n";
+  vcl_cout << vcl_setw(4*w2) << "-\n";
   vcl_cout.fill(prev);
 
   print_average_bitrate_help(esf_compression);
   print_video_quality_help  (esf_compression);
   print_gop_size_help       (esf_compression);
-  vcl_cout << "\n";
+  vcl_cout << '\n';
 
   print_gop_structure_help  (esf_compression);
-  vcl_cout << "\n" << vcl_endl;
+  vcl_cout << '\n' << vcl_endl;
 }
 
 //: Set properties from a map(string,value).

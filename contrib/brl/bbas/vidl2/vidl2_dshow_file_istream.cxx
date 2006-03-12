@@ -6,7 +6,6 @@
 //
 // See vidl2_dshow_file_istream.h for details.
 //
-// Last modified $Date: 2006/03/09 16:23:22 $ by $Author: miguelfv $.
 //=========================================================================
 
 #include <vidl2/vidl2_dshow_file_istream.h>
@@ -98,7 +97,7 @@ void vidl2_dshow_file_istream::open(const vcl_string& filename)
         PINDIR_OUTPUT,        // Search for an output pin.
         0,                    // Search for any pin.
         &MEDIATYPE_Video,     // Search for a video pin.
-        TRUE,                 // The pin must be unconnected. 
+        TRUE,                 // The pin must be unconnected.
         0,                    // Return the first matching pin (index 0).
         &pin)))               // This variable receives the IPin pointer.
   {
@@ -302,7 +301,7 @@ inline bool vidl2_dshow_file_istream::seek_frame(unsigned int frame_number)
     vcl_cout << "Failed: " << frame_number << vcl_endl;
     return false;
   }
-  
+
   // seeking backwards
   if (frame_number < frame_index_ && frame_index_ != -1)
   {
@@ -346,29 +345,33 @@ inline bool vidl2_dshow_file_istream::seek_frame(unsigned int frame_number)
 
   return true;
 
-  //// seeking backwards
-  //if (frame_number < frame_index_ && frame_index_ != -1)
-  //{
-  //  vcl_cout << "Failed: " << frame_number << vcl_endl;
-  //  return false;
-  //  //  DWORD caps = AM_SEEKING_CanSeekBackwards;
-  //  //  if (media_seeking_->CheckCapabilities(&caps) != S_OK)
-  //  //  {
-  //  //    vcl_cout << "Failed: " << frame_number << vcl_endl;
-  //  //    return false;
-  //  //  }
-  //}
+#if 0 // commented out
+  // seeking backwards
+  if (frame_number < frame_index_ && frame_index_ != -1)
+  {
+    vcl_cout << "Failed: " << frame_number << vcl_endl;
+#if 0
+    DWORD caps = AM_SEEKING_CanSeekBackwards;
+    if (media_seeking_->CheckCapabilities(&caps) != S_OK)
+    {
+      vcl_cout << "Failed: " << frame_number << vcl_endl;
+      return false;
+    }
+#endif // 0
+    return false;
+  }
 
-  //// seek to the position
-  //DSHOW_ERROR_IF_FAILED(media_seeking_->SetPositions(
-  //  &next, AM_SEEKING_AbsolutePositioning | AM_SEEKING_ReturnTime,
-  //  0,     AM_SEEKING_NoPositioning));
+  // seek to the position
+  DSHOW_ERROR_IF_FAILED(media_seeking_->SetPositions(
+    &next, AM_SEEKING_AbsolutePositioning | AM_SEEKING_ReturnTime,
+    0,     AM_SEEKING_NoPositioning));
 
-  //// ***** time stamp; not used...
-  //buffer_time_[++buffer_index_ % 2] = next / 10000000.0;
+  // ***** time stamp; not used...
+  buffer_time_[++buffer_index_ % 2] = next / 10000000.0;
 
-  //frame_index_ = frame_number;
+  frame_index_ = frame_number;
 
-  //vcl_cout << "Succeeded: " << frame_number << vcl_endl;
-  //return true;
+  vcl_cout << "Succeeded: " << frame_number << vcl_endl;
+  return true;
+#endif // 0
 }

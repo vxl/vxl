@@ -6,20 +6,20 @@
 // \file
 // \brief  DirectShow helper functions used in vidl2.
 // \author Miguel A. Figueroa-Villanueva (miguelf at ieee dot org)
-// 
+//
 // \verbatim
-// Modifications
-//  02/03/2006 - File created. (miguelfv)
-//  03/07/2006 - File imported to vxl repository. (miguelfv)
+//  Modifications
+//   02/03/2006 - File created. (miguelfv)
+//   03/07/2006 - File imported to vxl repository. (miguelfv)
 // \endverbatim
 //
-// Last modified $Date: 2006/03/09 16:23:22 $ by $Author: miguelfv $.
 //=========================================================================
 
 #include <vidl2/vidl2_exception.h>
 
 #include <vcl_string.h>
 #include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 
 #include <atlbase.h>
 #include <dshow.h>
@@ -73,10 +73,12 @@ struct vidl2_dshow
   //: Get IMoniker associated with name.
   static CComPtr<IMoniker> get_capture_device_moniker(const vcl_string& name);
 
-  //static void build_filter_graph(/*CComPtr<ICaptureGraphBuilder2>& graph_builder,*/
-  //                               CComPtr<IFilterGraph2>& filter_graph,
-  //                               CComPtr<IMoniker>& moniker,
-  //                               CComPtr<ISampleGrabber>& sample_grabber);
+#if 0
+  static void build_filter_graph(/*CComPtr<ICaptureGraphBuilder2>& graph_builder,*/
+                                 CComPtr<IFilterGraph2>& filter_graph,
+                                 CComPtr<IMoniker>& moniker,
+                                 CComPtr<ISampleGrabber>& sample_grabber);
+#endif
 
   static void connect_filters(CComPtr<IFilterGraph2>& filter_graph,
                               CComPtr<IBaseFilter>& source,

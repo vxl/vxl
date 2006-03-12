@@ -1,6 +1,6 @@
 // This is gel/mrc/vpgl/algo/vpgl_optimize_camera.h
-#ifndef _vpgl_optimize_camera_h_
-#define _vpgl_optimize_camera_h_
+#ifndef vpgl_optimize_camera_h_
+#define vpgl_optimize_camera_h_
 //:
 // \file
 // \brief Methods for projecting geometric structures onto the image
@@ -11,9 +11,7 @@
 #include <vnl/vnl_least_squares_function.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
-
-//: this class optimizes the rotation of a perspective camera
-//  given an initial estimate and a known internal calibration and position
+//: this class optimizes the rotation of a perspective camera given an initial estimate and a known internal calibration and position
 class vpgl_orientation_lsqr : public vnl_least_squares_function
 {
  public:
@@ -33,8 +31,10 @@ class vpgl_orientation_lsqr : public vnl_least_squares_function
   //  where w is the Rodrigues vector of the rotation.
   virtual void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
 
+#if 0
   //: Called after each LM iteration to print debugging etc.
-  //virtual void trace(int iteration, vnl_vector<double> const& x, vnl_vector<double> const& fx);
+  virtual void trace(int iteration, vnl_vector<double> const& x, vnl_vector<double> const& fx);
+#endif
 
  protected:
   //: The fixed internal camera calibration
@@ -45,12 +45,10 @@ class vpgl_orientation_lsqr : public vnl_least_squares_function
   vcl_vector<vgl_homg_point_3d<double> > world_points_;
   //: The corresponding points in the image
   vcl_vector<vgl_point_2d<double> > image_points_;
-
 };
 
 
-//: this class optimizes the rotation and translation of a perspective camera
-//  given an initial estimate and a known internal calibration
+//: this class optimizes the rotation/translation of a perspective camera given an initial estimate and a known internal calibration
 class vpgl_orientation_position_lsqr : public vnl_least_squares_function
 {
  public:
@@ -69,8 +67,10 @@ class vpgl_orientation_position_lsqr : public vnl_least_squares_function
   //  where w is the Rodrigues vector of the rotation and t is the translation.
   virtual void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
 
+#if 0
   //: Called after each LM iteration to print debugging etc.
-  //virtual void trace(int iteration, vnl_vector<double> const& x, vnl_vector<double> const& fx);
+  virtual void trace(int iteration, vnl_vector<double> const& x, vnl_vector<double> const& fx);
+#endif
 
  protected:
   //: The fixed internal camera calibration
@@ -79,17 +79,15 @@ class vpgl_orientation_position_lsqr : public vnl_least_squares_function
   vcl_vector<vgl_homg_point_3d<double> > world_points_;
   //: The corresponding points in the image
   vcl_vector<vgl_point_2d<double> > image_points_;
-
 };
 
 
 class vpgl_optimize_camera
 {
-
  public:
   ~vpgl_optimize_camera();
 
-  //: optimize orientation for a perspective camera 
+  //: optimize orientation for a perspective camera
   static vpgl_perspective_camera<double>
     opt_orient(const vpgl_perspective_camera<double>& camera,
                const vcl_vector<vgl_homg_point_3d<double> >& world_points,
@@ -99,11 +97,11 @@ class vpgl_optimize_camera
   static vpgl_perspective_camera<double>
     opt_orient_pos(const vpgl_perspective_camera<double>& camera,
                    const vcl_vector<vgl_homg_point_3d<double> >& world_points,
-                   const vcl_vector<vgl_point_2d<double> >& image_points ); 
+                   const vcl_vector<vgl_point_2d<double> >& image_points );
 
  private:
   //: Constructor private - static methods only
   vpgl_optimize_camera();
 };
 
-#endif // _vpgl_optimize_camera_h_
+#endif // vpgl_optimize_camera_h_
