@@ -19,3 +19,7 @@ ADD_TEST( vpgl_test_project            vpgl_algo_test_all test_project )
 ADD_TEST( vpgl_test_optimize_camera    vpgl_algo_test_all test_optimize_camera )
 ADD_TEST( vpgl_test_fm_compute         vpgl_algo_test_all test_fm_compute )
 ADD_TEST( vpgl_test_lens_warp_mapper   vpgl_algo_test_all test_lens_warp_mapper )
+ADD_TEST( vpgl_test_camera_compute     vpgl_algo_test_all test_camera_compute )
+
+ADD_EXECUTABLE( vsol_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( vsol_test_include vpgl_algo )
