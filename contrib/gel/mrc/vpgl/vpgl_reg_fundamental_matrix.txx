@@ -29,7 +29,7 @@ vpgl_reg_fundamental_matrix<T>::vpgl_reg_fundamental_matrix() :
 //---------------------------------
 template <class T>
 vpgl_reg_fundamental_matrix<T>::vpgl_reg_fundamental_matrix(
-  const vgl_point_2d<T>& pr, 
+  const vgl_point_2d<T>& pr,
   const vgl_point_2d<T>& pl ) :
   vpgl_fundamental_matrix<T>()
 {
@@ -38,7 +38,7 @@ vpgl_reg_fundamental_matrix<T>::vpgl_reg_fundamental_matrix(
 
 //---------------------------------
 template <class T>
-vpgl_reg_fundamental_matrix<T>::vpgl_reg_fundamental_matrix( 
+vpgl_reg_fundamental_matrix<T>::vpgl_reg_fundamental_matrix(
   const vpgl_fundamental_matrix<T>& fm )
 {
   set_from_params( fm.get_matrix()(0,2), fm.get_matrix()(2,1) );
@@ -48,12 +48,12 @@ vpgl_reg_fundamental_matrix<T>::vpgl_reg_fundamental_matrix(
 //---------------------------------
 template <class T>
 bool vpgl_reg_fundamental_matrix<T>::set_from_points(
-  const vgl_point_2d<T>& pr, 
+  const vgl_point_2d<T>& pr,
   const vgl_point_2d<T>& pl )
 {
   T ex = pl.x() - pr.x();
   T ey = pl.y() - pr.y();
-  if( ex == 0 && ey == 0 ) return false;
+  if ( ex == 0 && ey == 0 ) return false;
   vnl_matrix_fixed<T,3,3> fm( (T)0 );
   fm.put( 0, 2, ey );
   fm.put( 1, 2, -ex );
@@ -80,7 +80,6 @@ void vpgl_reg_fundamental_matrix<T>::set_from_params( T a, T b )
 // Code for easy instantiation.
 #undef vpgl_REG_FUNDAMENTAL_MATRIX_INSTANTIATE
 #define vpgl_REG_FUNDAMENTAL_MATRIX_INSTANTIATE(T) \
-template class vpgl_reg_fundamental_matrix<T>;
+template class vpgl_reg_fundamental_matrix<T >
 
 #endif // vpgl_reg_fundamental_matrix_txx_
-

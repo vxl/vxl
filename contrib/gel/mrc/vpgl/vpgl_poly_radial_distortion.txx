@@ -1,7 +1,6 @@
 // This is gel/mrc/vpgl/vpgl_poly_radial_distortion.txx
 #ifndef vpgl_poly_radial_distortion_txx_
 #define vpgl_poly_radial_distortion_txx_
-
 //:
 // \file
 
@@ -71,8 +70,7 @@ vpgl_poly_radial_distortion<T,n>::distort_radius_deriv( T radius ) const
 
 #else // VCL_CAN_DO_PARTIAL_SPECIALIZATION
 
-// If we can not use partial template instantiation
-// we loop instead.
+// If we can not use partial template instantiation we loop instead.
 
 //: Distort a radial length
 template <class T, int n>
@@ -98,15 +96,11 @@ vpgl_poly_radial_distortion<T,n>::distort_radius_deriv( T radius ) const
   return value;
 }
 
-
 #endif // VCL_CAN_DO_PARTIAL_SPECIALIZATION
-
 
 // Code for easy instantiation.
 #undef vpgl_POLY_RADIAL_DISTORTION_INSTANTIATE
 #define vpgl_POLY_RADIAL_DISTORTION_INSTANTIATE(T,n) \
 template class vpgl_poly_radial_distortion<T,n>
 
-
 #endif // vpgl_poly_radial_distortion_txx_
-

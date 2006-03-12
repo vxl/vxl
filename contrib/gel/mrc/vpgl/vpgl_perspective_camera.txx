@@ -31,13 +31,13 @@ vpgl_perspective_camera<T>::vpgl_perspective_camera()
 
 //-------------------------------------------
 template <class T>
-vpgl_perspective_camera<T>::vpgl_perspective_camera( 
+vpgl_perspective_camera<T>::vpgl_perspective_camera(
   const vpgl_calibration_matrix<T>& K,
-  const vgl_point_3d<T>& camera_center, 
+  const vgl_point_3d<T>& camera_center,
   const vgl_h_matrix_3d<T>& R ) :
   K_( K ), camera_center_( camera_center ), R_( R )
 {
-  if( !vpgl_is_rotation( R_ ) ){
+  if ( !vpgl_is_rotation( R_ ) ){
     R_.set_identity();
     vcl_cerr << "vpgl_perspective_camera::vpgl_perspective_camera(K,c,R)\n"
              << "  Warning: Supplied rotation matrix is not a true rotation, not using.\n";
@@ -47,7 +47,7 @@ vpgl_perspective_camera<T>::vpgl_perspective_camera(
 
 //-------------------------------------------
 template <class T>
-vpgl_perspective_camera<T>::vpgl_perspective_camera( const vpgl_perspective_camera& that) 
+vpgl_perspective_camera<T>::vpgl_perspective_camera( const vpgl_perspective_camera& that)
   : vpgl_proj_camera<T>(that),
   K_(that.K_),
   camera_center_(that.camera_center_),
@@ -76,7 +76,7 @@ vgl_vector_3d<T> vpgl_perspective_camera<T>::principal_axis() const
 
 //------------------------------------
 template <class T>
-bool vpgl_perspective_camera<T>::is_behind_camera( 
+bool vpgl_perspective_camera<T>::is_behind_camera(
   const vgl_homg_point_3d<T>& world_point ) const
 {
   vgl_homg_plane_3d<T> l = this->principal_plane();
@@ -94,11 +94,11 @@ void vpgl_perspective_camera<T>::set_calibration( const vpgl_calibration_matrix<
   K_ = K;
   recompute_matrix();
 }
-  
+
 
 //-------------------------------------------
 template <class T>
-void vpgl_perspective_camera<T>::set_camera_center( 
+void vpgl_perspective_camera<T>::set_camera_center(
   const vgl_point_3d<T>& camera_center )
 {
   camera_center_ = camera_center;
@@ -110,7 +110,7 @@ void vpgl_perspective_camera<T>::set_camera_center(
 template <class T>
 void vpgl_perspective_camera<T>::set_rotation_matrix( const vgl_h_matrix_3d<T>& R )
 {
-  if( !vpgl_is_rotation( R ) ){
+  if ( !vpgl_is_rotation( R ) ){
     vcl_cerr << "vpgl_perspective_camera::set_rotation_matrix(R)\n"
              << "  Warning: Supplied rotation matrix is not a true rotation, not using.\n";
     return;
@@ -152,18 +152,18 @@ template <class T>
 void vpgl_perspective_camera<T>::recompute_matrix()
 {
     vnl_matrix_fixed<T,3,4> Pnew( (T)0 );
-   
+
    // Set new projection matrix to [ I | -C ].
-   for( int i = 0; i < 3; i++ )
+   for ( int i = 0; i < 3; i++ )
      Pnew(i,i) = (T)1;
    Pnew(0,3) = -camera_center_.x();
    Pnew(1,3) = -camera_center_.y();
    Pnew(2,3) = -camera_center_.z();
-   
+
    // Then multiply on left to get KR[ I | -C ].
    vnl_matrix_fixed<T,3,3> rot;
-   for( int i = 0; i < 3; i++ )
-     for( int j = 0; j < 3; j++ )
+   for ( int i = 0; i < 3; i++ )
+     for ( int j = 0; j < 3; j++ )
        rot(i,j) = R_.get(i,j);
    this->set_matrix(K_.get_matrix()*rot*Pnew);
 }
@@ -176,7 +176,7 @@ bool vpgl_is_rotation( const vgl_h_matrix_3d<T>& H )
   // use an error tolerance on the orthonormality constraint
   vnl_double_3x3 R = H.get_matrix().extract(3,3);
   double absolute_error = ((R.transpose()*R) - vnl_identity_3x3()).absolute_value_max();
-  if( absolute_error < 1e-14 &&
+  if ( absolute_error < 1e-14 &&
        H.get(0,3) == (T)0 && H.get(1,3) == (T)0 && H.get(2,3) == (T)0 &&
        H.get(3,0) == (T)0 && H.get(3,1) == (T)0 && H.get(3,2) == (T)0 && H.get(3,3) == (T)1 )
     return true;
@@ -189,7 +189,7 @@ bool vpgl_is_euclidean( const vgl_h_matrix_3d<T>& H )
 {
   vgl_h_matrix_3d<T> R = H.get_upper_3x3();
 
-  if( (R.get_matrix().transpose()*R.get_matrix()).is_identity(1e-9) &&
+  if ( (R.get_matrix().transpose()*R.get_matrix()).is_identity(1e-9) &&
       H.get(3,0) == (T)0 && H.get(3,1) == (T)0 && H.get(3,2) == (T)0 && H.get(3,3) == (T)1 )
     return true;
   return false;
@@ -205,10 +205,10 @@ bool vpgl_perspective_decomposition( const vnl_matrix_fixed<T,3,4>& camera_matri
   vnl_vector_fixed<T,3> t = camera_matrix.get_column(3);
 
   T det = vnl_det(H);
-  if( det == (T)0 ) return false;
+  if ( det == (T)0 ) return false;
   // To insure a true rotation (determinant = 1) we must start with a positive
   // determinant H.  This is decomposed into K and R, each with positive determinant.
-  if( det < (T)0 ){
+  if ( det < (T)0 ){
     H *= (T)-1;
     t *= (T)-1;
   }
@@ -221,15 +221,15 @@ bool vpgl_perspective_decomposition( const vnl_matrix_fixed<T,3,4>& camera_matri
   // then flipping both back, noting that the flipped Q and R will remain orthogonal and
   // upper right triangular respectively.
   vnl_matrix_fixed<T,3,3> Hf;
-  for( int i = 0; i < 3; i++ )
-    for( int j = 0; j < 3; j++ )
+  for ( int i = 0; i < 3; i++ )
+    for ( int j = 0; j < 3; j++ )
       Hf(i,j) = H(2-j,2-i);
   vnl_qr<T> QR( Hf );
   vnl_matrix_fixed<T,3,3> q,r,Qf,Rf;
   q = QR.Q();
   r = QR.R();
-  for( int i = 0; i < 3; i++ ){
-    for( int j = 0; j < 3; j++ ){
+  for ( int i = 0; i < 3; i++ ){
+    for ( int j = 0; j < 3; j++ ){
       Qf(i,j) = q(2-j,2-i);
       Rf(i,j) = r(2-j,2-i);
     }
@@ -242,8 +242,8 @@ bool vpgl_perspective_decomposition( const vnl_matrix_fixed<T,3,4>& camera_matri
   int r2pos = Rf(2,2) > 0 ? 1 : -1;
   int diag[3] = { r0pos, r1pos, r2pos };
   vnl_matrix_fixed<T,3,3> K1,R1;
-  for( int i = 0; i < 3; i++ ){
-    for( int j = 0; j < 3; j++ ){
+  for ( int i = 0; i < 3; i++ ){
+    for ( int j = 0; j < 3; j++ ){
       K1(i,j) = diag[j]*Rf(i,j);
       R1(i,j) = diag[i]*Qf(i,j);
     }
@@ -273,12 +273,11 @@ bool vpgl_perspective_decomposition( const vnl_matrix_fixed<T,3,4>& camera_matri
 //   K' = K
 //   R' = R*Re
 //   cc' = transpose(Re)(cc - te)
-// where Re and te are the rotation matrix and 
+// where Re and te are the rotation matrix and
 //  translation vector of the euclidean transform
-template <class T> vpgl_perspective_camera<T> 
+template <class T> vpgl_perspective_camera<T>
 vpgl_perspective_camera<T>::postmultiply( const vpgl_perspective_camera<T>& in_cam, const vgl_h_matrix_3d<T>& euclid_trans)
 {
-  
   assert(vpgl_is_euclidean(euclid_trans));
   const vpgl_calibration_matrix<T>& K = in_cam.get_calibration();
   const  vgl_h_matrix_3d<T>& R = in_cam.get_rotation_matrix();
@@ -304,7 +303,7 @@ vpgl_perspective_camera<T>::postmultiply( const vpgl_perspective_camera<T>& in_c
   rem.inplace_transpose();
   vgl_h_matrix_3d<T> Re_trans(rem);
   vgl_homg_point_3d<T> ccp = Re_trans(temp);
- 
+
   return vpgl_perspective_camera<T>(K, ccp, Rp);
 }
 
@@ -318,7 +317,7 @@ vcl_ostream&  operator<<(vcl_ostream& s,
   vnl_double_3x3 k = p.get_calibration().get_matrix();
   vnl_double_3x4 m = p.get_matrix();
   vnl_double_3x3 kinv = vnl_inverse(k);
-  
+
   s << "perspective:\nK\n" << k
     << "\nR\n" << p.get_rotation_matrix()
     << "\nC " << p.get_camera_center() << '\n'
@@ -400,13 +399,12 @@ vsl_b_read(vsl_b_istream &is, vpgl_perspective_camera<T>* &p)
 // Code for easy instantiation.
 #undef vpgl_PERSPECTIVE_CAMERA_INSTANTIATE
 #define vpgl_PERSPECTIVE_CAMERA_INSTANTIATE(T) \
-template class vpgl_perspective_camera<T>; \
-template bool vpgl_is_rotation( const vgl_h_matrix_3d<T>& H ); \
+template class vpgl_perspective_camera<T >; \
+template bool vpgl_is_rotation( const vgl_h_matrix_3d<T >& H ); \
 template bool vpgl_perspective_decomposition( \
-  const vnl_matrix_fixed<T,3,4>& camera_matrix, vpgl_perspective_camera<T>& p_camera ); \
-template void vsl_b_read(vsl_b_istream &is, vpgl_perspective_camera<T>* &p); \
-template void vsl_b_write(vsl_b_ostream &os, const vpgl_perspective_camera<T> * p); \
-template vcl_ostream& operator<<(vcl_ostream&, const vpgl_perspective_camera<T >&); 
+  const vnl_matrix_fixed<T,3,4>& camera_matrix, vpgl_perspective_camera<T >& p_camera ); \
+template void vsl_b_read(vsl_b_istream &is, vpgl_perspective_camera<T >* &p); \
+template void vsl_b_write(vsl_b_ostream &os, const vpgl_perspective_camera<T > * p); \
+template vcl_ostream& operator<<(vcl_ostream&, const vpgl_perspective_camera<T >&)
 
 #endif // vpgl_perspective_camera_txx_
-

@@ -28,7 +28,7 @@ vpgl_affine_fundamental_matrix<T>::vpgl_affine_fundamental_matrix() :
 
 //---------------------------------
 template <class T>
-vpgl_affine_fundamental_matrix<T>::vpgl_affine_fundamental_matrix( 
+vpgl_affine_fundamental_matrix<T>::vpgl_affine_fundamental_matrix(
   const vpgl_fundamental_matrix<T>& fm )
 {
   set_from_params( fm.get_matrix()(2,0), fm.get_matrix()(2,1), fm.get_matrix()(2,2),
@@ -53,7 +53,6 @@ void vpgl_affine_fundamental_matrix<T>::set_from_params( T a, T b, T c, T d, T e
 // Code for easy instantiation.
 #undef vpgl_AFFINE_FUNDAMENTAL_MATRIX_INSTANTIATE
 #define vpgl_AFFINE_FUNDAMENTAL_MATRIX_INSTANTIATE(T) \
-template class vpgl_affine_fundamental_matrix<T>;
+template class vpgl_affine_fundamental_matrix<T >
 
 #endif // vpgl_affine_fundamental_matrix_txx_
-

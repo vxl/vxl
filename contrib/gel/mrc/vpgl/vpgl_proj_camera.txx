@@ -1,7 +1,6 @@
 // This is gel/mrc/vpgl/vpgl_proj_camera.txx
 #ifndef vpgl_proj_camera_txx_
 #define vpgl_proj_camera_txx_
-
 //:
 // \file
 
@@ -57,7 +56,7 @@ template <class T>
 const vpgl_proj_camera<T>& vpgl_proj_camera<T>::operator=( const vpgl_proj_camera& cam )
 {
   P_ = cam.get_matrix();
-  if( cached_svd_ != NULL ) delete cached_svd_;
+  if ( cached_svd_ != NULL ) delete cached_svd_;
   cached_svd_ = NULL;
   return *this;
 }
@@ -67,7 +66,7 @@ const vpgl_proj_camera<T>& vpgl_proj_camera<T>::operator=( const vpgl_proj_camer
 template <class T>
 vpgl_proj_camera<T>::~vpgl_proj_camera()
 {
-  if( cached_svd_ != NULL ) delete cached_svd_;
+  if ( cached_svd_ != NULL ) delete cached_svd_;
   cached_svd_ = NULL;
 }
 
@@ -76,7 +75,6 @@ vpgl_proj_camera<T>* vpgl_proj_camera<T>::clone(void) const
 {
   return new vpgl_proj_camera<T>(*this);
 }
-
 
 
 // PROJECTIONS AND BACKPROJECTIONS:----------------------------------------------
@@ -102,21 +100,21 @@ vgl_homg_point_2d<T> vpgl_proj_camera<T>::project( const vgl_homg_point_3d<T>& w
 
 //------------------------------------
 template <class T>
-vgl_line_segment_2d<T> vpgl_proj_camera<T>::project( 
+vgl_line_segment_2d<T> vpgl_proj_camera<T>::project(
   const vgl_line_segment_3d<T>& world_line ) const
 {
   vgl_homg_point_3d<T> point1_w( world_line.point1() );
   vgl_homg_point_3d<T> point2_w( world_line.point2() );
   vgl_point_2d<T> point1_im( project( point1_w ) );
   vgl_point_2d<T> point2_im( project( point2_w ) );
-  vgl_line_segment_2d<T> image_line( point1_im, point2_im ); 
+  vgl_line_segment_2d<T> image_line( point1_im, point2_im );
   return image_line;
 }
 
 
 //------------------------------------
 template <class T>
-vgl_homg_line_3d_2_points<T> vpgl_proj_camera<T>::backproject( 
+vgl_homg_line_3d_2_points<T> vpgl_proj_camera<T>::backproject(
   const vgl_homg_point_2d<T>& image_point ) const
 {
   // First find any point in the world that projects to the "image_point".
@@ -125,7 +123,7 @@ vgl_homg_line_3d_2_points<T> vpgl_proj_camera<T>::backproject(
   vgl_homg_point_3d<T> wp( vnl_wp[0], vnl_wp[1], vnl_wp[2], vnl_wp[3] );
 
   // The ray is then defined by that point and the camera center.
-  if( wp.ideal(.000001) ) // modified 11/6/05 by tpollard
+  if ( wp.ideal(.000001) ) // modified 11/6/05 by tpollard
     return vgl_homg_line_3d_2_points<T>( camera_center(), wp );
   return vgl_homg_line_3d_2_points<T>( wp, camera_center() );
 }
@@ -133,12 +131,12 @@ vgl_homg_line_3d_2_points<T> vpgl_proj_camera<T>::backproject(
 
 //------------------------------------
 template <class T>
-vgl_homg_plane_3d<T> vpgl_proj_camera<T>::backproject( 
+vgl_homg_plane_3d<T> vpgl_proj_camera<T>::backproject(
   const vgl_homg_line_2d<T>& image_line ) const
 {
   vnl_vector_fixed<T,3> image_line_vnl(image_line.a(),image_line.b(),image_line.c());
   vnl_vector_fixed<T,4> world_plane  = P_.transpose() * image_line_vnl;
-  return vgl_homg_plane_3d<T>( world_plane(0), world_plane(1), 
+  return vgl_homg_plane_3d<T>( world_plane(0), world_plane(1),
                                world_plane(2), world_plane(3) );
 }
 
@@ -161,12 +159,12 @@ template <class T>
 vnl_svd<T>* vpgl_proj_camera<T>::svd() const
 {
   // Check if the cached copy is valid, if not recompute it.
-  if( cached_svd_ == NULL ){  
-
+  if ( cached_svd_ == NULL )
+  {
     cached_svd_ = new vnl_svd<T>(P_);
 
     // Check that the projection matrix isn't degenerate.
-    if( cached_svd_->rank() != 3 )
+    if ( cached_svd_->rank() != 3 )
       vcl_cerr << "vpgl_proj_camera::svd()\n"
                << "  Warning: Projection matrix is not rank 3, errors may occur.\n";
   }
@@ -179,7 +177,7 @@ template <class T>
 bool vpgl_proj_camera<T>::set_matrix( const vnl_matrix_fixed<T,3,4>& new_camera_matrix )
 {
   P_ = new_camera_matrix;
-  if( cached_svd_ != NULL ) delete cached_svd_;
+  if ( cached_svd_ != NULL ) delete cached_svd_;
   cached_svd_ = NULL;
   return true;
 }
@@ -190,7 +188,7 @@ template <class T>
 bool vpgl_proj_camera<T>::set_matrix( const T* new_camera_matrix )
 {
   P_ = vnl_matrix_fixed<T,3,4>( new_camera_matrix );
-    if( cached_svd_ != NULL ) delete cached_svd_;
+    if ( cached_svd_ != NULL ) delete cached_svd_;
     cached_svd_ = NULL;
   return true;
 }
@@ -247,7 +245,7 @@ vcl_ostream&  operator<<(vcl_ostream& s,
 
 //: Read vpgl_perspective_camera from stream
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& s, 
+vcl_istream&  operator>>(vcl_istream& s,
                          vpgl_proj_camera<Type>& p)
 {
   vnl_matrix_fixed<Type,3,4> new_matrix;
@@ -255,7 +253,7 @@ vcl_istream&  operator>>(vcl_istream& s,
   p.set_matrix( new_matrix );
 
   return s ;
-}                  
+}
 
 //: Allows derived class to be loaded by base-class pointer.
 //  A loader object exists which is invoked by calls
@@ -276,14 +274,14 @@ void vsl_add_to_binary_loader(vpgl_proj_camera<T> const& b)
 template <class T>
 vgl_h_matrix_3d<T> get_canonical_h( vpgl_proj_camera<T>& camera )
 {
-  // If P is a 3x4 rank 3 matrix, Pinv is the pseudo-inverse of P, and l is a 
+  // If P is a 3x4 rank 3 matrix, Pinv is the pseudo-inverse of P, and l is a
   // vector such that P*l = 0, then P*[Pinv | l] = [I | 0].
   vnl_matrix_fixed<T,4,3> Pinv = camera.svd()->pinverse();
   vnl_vector<T> l = camera.svd()->solve( vnl_vector<T>(3,(T)0) );
 
   vnl_matrix_fixed<T,4,4> H;
-  for( int i = 0; i < 4; i++ ){
-    for( int j = 0; j < 3; j++ )
+  for ( int i = 0; i < 4; i++ ){
+    for ( int j = 0; j < 3; j++ )
       H(i,j) = Pinv(i,j);
     H(i,3) = l(i);
   }
@@ -309,9 +307,9 @@ void make_cannonical( vpgl_proj_camera<T>& camera )
 }
 
 
-//-------------------------------- 
+//--------------------------------
 template <class T>
-vpgl_proj_camera<T> premultiply( const vpgl_proj_camera<T>& in_camera, 
+vpgl_proj_camera<T> premultiply( const vpgl_proj_camera<T>& in_camera,
                                  const vnl_matrix_fixed<T,3,3>& transform )
 {
   return vpgl_proj_camera<T>( transform*in_camera.get_matrix() );
@@ -320,7 +318,7 @@ vpgl_proj_camera<T> premultiply( const vpgl_proj_camera<T>& in_camera,
 
 //--------------------------------
 template <class T>
-vpgl_proj_camera<T> postmultiply( const vpgl_proj_camera<T>& in_camera, 
+vpgl_proj_camera<T> postmultiply( const vpgl_proj_camera<T>& in_camera,
                                   const vnl_matrix_fixed<T,4,4>& transform )
 {
   return vpgl_proj_camera<T>( in_camera.get_matrix()*transform );
@@ -332,17 +330,16 @@ vpgl_proj_camera<T> postmultiply( const vpgl_proj_camera<T>& in_camera,
 // Code for easy instantiation.
 #undef vpgl_PROJ_CAMERA_INSTANTIATE
 #define vpgl_PROJ_CAMERA_INSTANTIATE(T) \
-template class vpgl_proj_camera<T>; \
-template vgl_h_matrix_3d<T> get_canonical_h( vpgl_proj_camera<T>& camera ); \
-template void fix_cheirality( vpgl_proj_camera<T>& camera ); \
-template void make_cannonical( vpgl_proj_camera<T>& camera ); \
-template vpgl_proj_camera<T> premultiply( const vpgl_proj_camera<T>& in_camera, \
-                                          const vnl_matrix_fixed<T,3,3>& transform ); \
-template vpgl_proj_camera<T> postmultiply( const vpgl_proj_camera<T>& in_camera, \
-                                           const vnl_matrix_fixed<T,4,4>& transform ); \
-template void vsl_add_to_binary_loader(vpgl_proj_camera<T> const& b); \
-template vcl_ostream& operator<<(vcl_ostream&, const vpgl_proj_camera<T>&); \
-template vcl_istream& operator>>(vcl_istream&, vpgl_proj_camera<T>&);
+template class vpgl_proj_camera<T >; \
+template vgl_h_matrix_3d<T > get_canonical_h( vpgl_proj_camera<T >& camera ); \
+template void fix_cheirality( vpgl_proj_camera<T >& camera ); \
+template void make_cannonical( vpgl_proj_camera<T >& camera ); \
+template vpgl_proj_camera<T > premultiply( const vpgl_proj_camera<T >& in_camera, \
+                                           const vnl_matrix_fixed<T,3,3>& transform ); \
+template vpgl_proj_camera<T > postmultiply( const vpgl_proj_camera<T >& in_camera, \
+                                            const vnl_matrix_fixed<T,4,4>& transform ); \
+template void vsl_add_to_binary_loader(vpgl_proj_camera<T > const& b); \
+template vcl_ostream& operator<<(vcl_ostream&, const vpgl_proj_camera<T >&); \
+template vcl_istream& operator>>(vcl_istream&, vpgl_proj_camera<T >&)
 
 #endif // vpgl_proj_camera_txx_
-
