@@ -1,7 +1,6 @@
 // This is gel/mrc/vpgl/vpgl_calibration_matrix.h
 #ifndef vpgl_calibration_matrix_h_
 #define vpgl_calibration_matrix_h_
-
 //:
 // \file
 // \brief A class for the calibration matrix component of a perspective camera matrix.
@@ -14,7 +13,7 @@
 //   5/08/2004  Ricardo Fabbri  Added binary I/O support
 //   5/08/2004  Ricardo Fabbri  Added == operator
 // \endverbatim
-// 
+//
 
 #include <vgl/vgl_fwd.h>
 #include <vnl/vnl_fwd.h>
@@ -28,22 +27,20 @@
 template <class T>
 class vpgl_calibration_matrix
 {
-public:
-
+ public:
   //: Default constructor makes an identity matrix.
   vpgl_calibration_matrix();
 
   //: Destructor
   virtual ~vpgl_calibration_matrix(){}
 
-  //: Construct using all of the camera parameters, which must satisfy the following
-  // requirements: x,y_scales must be > 0, focal_length must be not equal to 0.
+  //: Construct using all of the camera parameters.
+  // Must satisfy the following requirements: x,y_scales must be > 0, focal_length must be not equal to 0.
   vpgl_calibration_matrix( T focal_length, const vgl_point_2d<T>& principal_point,
     T x_scale = (T)1, T y_scale = (T)1, T skew = (T)0 );
 
-  //: Construct from a right upper triangular matrix whose decomposition into
-  // the calibration components makes sense.  The supplied matrix can be a scalar
-  // multiple of such a matrix.
+  //: Construct from a right upper triangular matrix whose decomposition into the calibration components makes sense.
+  //  The supplied matrix can be a scalar multiple of such a matrix.
   vpgl_calibration_matrix( const vnl_matrix_fixed<T,3,3>& K );
 
   //: Get the calibration matrix.
@@ -67,24 +64,23 @@ public:
 
 
   // I/O :---------------------
-  
+
   //: Binary save self to stream.
   virtual void b_write(vsl_b_ostream &os) const;
 
   //: Binary load self from stream.
   virtual void b_read(vsl_b_istream &is);
-  
+
   //: IO version number
   short version() const {return 1;}
 
-protected:
-
+ protected:
   //: The following is a list of the parameters in the calibration matrix.
   T focal_length_;
   vgl_point_2d<T> principal_point_;
   T x_scale_, y_scale_, skew_;
-
 };
+
 // Non-member Functions:-------------------------------------------------------------
 
 //: Binary save

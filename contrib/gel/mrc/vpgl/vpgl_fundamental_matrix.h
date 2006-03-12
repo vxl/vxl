@@ -1,7 +1,6 @@
 // This is gel/mrc/vpgl/vpgl_fundamental_matrix.h
 #ifndef vpgl_fundamental_matrix_h_
 #define vpgl_fundamental_matrix_h_
-
 //:
 // \file
 // \brief A class for the fundamental matrix between two projective cameras.
@@ -14,7 +13,7 @@
 //  "vpgl_fundamental_matrix_functions.h".
 //
 //  This implementation forces the rank of the fundamental matrix to be rank 2, and if
-//  the matrix is set with a rank 3 matrix, it will be reduced in rank using SVD 
+//  the matrix is set with a rank 3 matrix, it will be reduced in rank using SVD
 //  decomposition.
 
 
@@ -29,17 +28,15 @@
 template <class T>
 class vpgl_fundamental_matrix
 {
-
-public:
-
+ public:
   // Constructors:----------------------
 
   //: Default constructor creates dummy rank 2 matrix.
   vpgl_fundamental_matrix();
 
-  //: Main constructor takes two projective cameras.  The RHS of the fundamental
-  // matrix will correspond to cr and the LHS to cl.
-  vpgl_fundamental_matrix( const vpgl_proj_camera<T>& cr, 
+  //: Main constructor takes two projective cameras.
+  //  The RHS of the fundamental matrix will correspond to cr and the LHS to cl.
+  vpgl_fundamental_matrix( const vpgl_proj_camera<T>& cr,
                             const vpgl_proj_camera<T>& cl ) : cached_svd_(NULL)
   { set_matrix( cr, cl ); }
 
@@ -66,17 +63,17 @@ public:
   vgl_homg_line_2d<T> r_epipolar_line( const vgl_homg_point_2d<T>& pl ) const;
   vgl_homg_line_2d<T> l_epipolar_line( const vgl_homg_point_2d<T>& pr ) const;
 
-  //: Gives the left camera matrix corresponding to the fundamental matrix, when
-  // the right camera matrix is assumed to be an identity camera.  The variables
-  // v, lambda are free parameters as described in H&Z 2nd ed pg 256.
-  vpgl_proj_camera<T> extract_left_camera( 
+  //: Gives the left camera matrix corresponding to the fundamental matrix, when the right camera matrix is assumed to be identity.
+  // The variables v, lambda are free parameters as described in H&Z 2nd ed pg 256.
+  vpgl_proj_camera<T> extract_left_camera(
     const vnl_vector_fixed<T,3>& v, T lambda ) const;
 
-  //: Alternative camera extractor takes corresponding lists of image points with their
-  // world locations to determine the correct camera.  Must give at least 2 pairs of
-  // correspondences.  This is not a robust algorithm but this shouldn't be a problem
+  //: Alternative left camera extractor.
+  // Takes corresponding lists of image points with their world locations
+  // to determine the correct camera.  Must give at least 2 pairs of correspondences.
+  // This is not a robust algorithm but this shouldn't be a problem
   // as these correspondences will usually be picked by hand.
-  vpgl_proj_camera<T> extract_left_camera( 
+  vpgl_proj_camera<T> extract_left_camera(
     const vcl_vector< vgl_point_3d<T> >& world_points,
     const vcl_vector< vgl_point_2d<T> >& image_points ) const;
 
@@ -89,22 +86,17 @@ public:
   // The svd is computed when the matrix is first set, so this just accesses a cached version.
   const vnl_svd<T>& svd() const{ return *cached_svd_; }
 
-  void set_matrix( const vpgl_proj_camera<T>& cr, 
+  void set_matrix( const vpgl_proj_camera<T>& cr,
                    const vpgl_proj_camera<T>& cl );
 
   void set_matrix( const vnl_matrix_fixed<T,3,3>& F );
 
-
-private:
-
+ private:
   //: Internal representation of the fundamental matrix.
   vnl_matrix_fixed<T,3,3> F_;
 
   //: Cached copy of the svd.
   mutable vnl_svd<T>* cached_svd_;
-
 };
-
-
 
 #endif // vpgl_fundamental_matrix_h_

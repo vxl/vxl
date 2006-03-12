@@ -1,11 +1,12 @@
 // This is gel/mrc/vpgl/algo/vpgl_list.h
 #ifndef vpgl_list_h_
 #define vpgl_list_h_
-
 //:
 // \file
-// \brief Template classes for writing lists of cameras, homographies, fundamental 
-// matrices, etc in a standard format.  This will eventually be replaced by XML 
+// \brief Write lists of cameras, homographies, fundamental matrices in a standard format
+//
+// Template classes for writing lists of cameras, homographies, fundamental
+// matrices, etc in a standard format.  This will eventually be replaced by XML
 // read/writers.
 // \author Thomas Pollard
 // \date 03/05/05
@@ -22,13 +23,13 @@
 
 
 template <class T>
-bool vpgl_read_list( 
-  vcl_vector<T>& list, 
+bool vpgl_read_list(
+  vcl_vector<T>& list,
   vcl_string file );
 
 template <class T>
-bool vpgl_write_list( 
-  const vcl_vector<T>& list, 
+bool vpgl_write_list(
+  const vcl_vector<T>& list,
   vcl_string file );
 
 
@@ -44,11 +45,12 @@ template bool vpgl_read_list(
 template bool vpgl_write_list(
   const vcl_vector< vgl_h_matrix_2d<double> >&, vcl_string file );
 
-/*
+#if 0
 // vpgl_fundamental_matrix<double> doesn't have io yet
 template bool vpgl_read_list(
   vcl_vector< vpgl_fundamental_matrix<double> >&, vcl_string file );
 template bool vpgl_write_list(
   const vcl_vector< vpgl_fundamental_matrix<double> >&, vcl_string file );
-*/
+#endif // 0
+
 #endif // vpgl_list_h_

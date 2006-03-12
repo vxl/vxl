@@ -1,7 +1,6 @@
 // This is gel/mrc/vpgl/vpgl_perspective_camera.h
 #ifndef vpgl_perspective_camera_h_
 #define vpgl_perspective_camera_h_
-
 //:
 // \file
 // \brief A class for the perspective camera model.
@@ -45,16 +44,14 @@
 template <class T>
 class vpgl_perspective_camera : public vpgl_proj_camera<T>
 {
-
-public:
-
+ public:
   //: Default constructor
-  // makes a camera at the origin with no rotation and default calibration matrix.
+  // Makes a camera at the origin with no rotation and default calibration matrix.
   vpgl_perspective_camera();
 
   //: Main constructor takes all of the camera parameters.
   vpgl_perspective_camera( const vpgl_calibration_matrix<T>& K,
-                            const vgl_point_3d<T>& camera_center, 
+                            const vgl_point_3d<T>& camera_center,
                             const vgl_h_matrix_3d<T>& R );
 
   //: Copy constructor
@@ -68,7 +65,7 @@ public:
   //  See Prototype pattern
   virtual vpgl_proj_camera<T>* clone(void) const;
 
-  //: Compute the principal axis,
+  //: Compute the principal axis.
   // i.e. the vector parallel to the image plane pointing towards the front of the camera.
   vgl_vector_3d<T> principal_axis() const;
 
@@ -90,6 +87,7 @@ public:
                const vgl_vector_3d<double>& up = vgl_vector_3d<double>(0,0,1));
 
   // Redefined virtual functions -------------------------------------------
+
   //: Return the known camera center instead of computing it in the base class
   virtual vgl_homg_point_3d<T> camera_center() const
   { return vgl_homg_point_3d<T>(camera_center_); }
@@ -97,34 +95,34 @@ public:
   //: static public functions
 
   //: Post-multiply this perspective camera with a 3-d Euclidean transformation
-  static  vpgl_perspective_camera<T> 
-   postmultiply( const vpgl_perspective_camera<T>& in_cam, 
+  static  vpgl_perspective_camera<T>
+   postmultiply( const vpgl_perspective_camera<T>& in_cam,
                  const vgl_h_matrix_3d<T>& euclid_trans);
-  
+
   //: Equality test
   inline bool operator==(vpgl_perspective_camera<T> const &that) const
-  { return this == &that || 
-    (K_ == that.K_ && this->get_matrix()== that.get_matrix() && 
+  { return this == &that ||
+    (K_ == that.K_ && this->get_matrix()== that.get_matrix() &&
      camera_center_ == that.camera_center_ && this->R_.get_matrix() == that.R_.get_matrix()); }
 
   // I/O :---------------------
-  
+
   //: Binary save self to stream.
   virtual void b_write(vsl_b_ostream &os) const;
 
   //: Binary load self from stream.
   virtual void b_read(vsl_b_istream &is);
-  
+
   //: IO version number
   short version() const {return 1;}
 
   //: Print an ascii summary to the stream
   void print_summary(vcl_ostream &os) const { os << *this; }
-  
+
   //: Return a platform independent string identifying the class.
   // This is used by e.g. polymorphic binary i/o
   virtual vcl_string is_a() const { return vcl_string("vpgl_perspective_camera"); }
-  
+
   //: Return true if the argument matches the string identifying the class or any parent class
   virtual bool is_class(vcl_string const& cls) const
   { return cls==is_a() || vpgl_proj_camera<double>::is_class(cls); }
@@ -135,16 +133,15 @@ public:
   virtual vpgl_perspective_camera<T> *cast_to_perspective_camera() {return this;}
   virtual const vpgl_perspective_camera<T> *cast_to_perspective_camera() const {return this;}
 
-protected:
-
+ protected:
   //: Recalculate the 3x4 camera matrix from the parameters.
   void recompute_matrix();
 
   vpgl_calibration_matrix<T> K_;
   vgl_point_3d<T> camera_center_;
   vgl_h_matrix_3d<T> R_;
-
 };
+
 // External Functions:-------------------------------------------------------------
 
 //: Write vpgl_perspective_camera to stream
@@ -169,8 +166,9 @@ template <class T>
 bool vpgl_is_euclidean( const vgl_h_matrix_3d<T>& H );
 
 
-//: Attempts to decompose a 3x4 camera matrix into the parameter blocks that describe
-// a perspective camera, but will only work if the supplied matrix has a left 3x3 
+//: Decompose camera into parameter blocks.
+// Attempts to decompose a 3x4 camera matrix into the parameter blocks that describe
+// a perspective camera, but will only work if the supplied matrix has a left 3x3
 // submatrix with rank 3.
 template <class T>
 bool vpgl_perspective_decomposition( const vnl_matrix_fixed<T,3,4>& camera_matrix,
@@ -178,8 +176,8 @@ bool vpgl_perspective_decomposition( const vnl_matrix_fixed<T,3,4>& camera_matri
 
 
 template <class T>
-vpgl_perspective_camera<T> 
-postmultiply( const vpgl_perspective_camera<T>& in_cam, 
+vpgl_perspective_camera<T>
+postmultiply( const vpgl_perspective_camera<T>& in_cam,
               const vgl_h_matrix_3d<T>& euclid_trans);
 
 //: Binary save

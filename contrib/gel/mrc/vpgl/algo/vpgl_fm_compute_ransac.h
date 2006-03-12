@@ -1,9 +1,11 @@
 // This is gel/mrc/vpgl/algo/vpgl_fm_compute_ransac.h
-#ifndef _vpgl_fm_compute_ransac_h_
-#define _vpgl_fm_compute_ransac_h_
+#ifndef vpgl_fm_compute_ransac_h_
+#define vpgl_fm_compute_ransac_h_
 //:
 // \file
-// \brief A robust algorithm for computing the fundamental matrix from lists
+// \brief Compute the fundamental matrix from image correspondences.
+//
+// A robust algorithm for computing the fundamental matrix from lists
 // of corresponding points.  This uses RREL to do the robust computation.
 // \author Thomas Pollard
 // \date 5/27/05
@@ -16,17 +18,16 @@
 #include <rrel/rrel_estimation_problem.h>
 #include <vpgl/vpgl_fundamental_matrix.h>
 
-//: This is the main class for computing the fundamental matrix from lists of
-// corresponding points.
+//: This is the main class for computing the fundamental matrix from lists of corresponding points.
 class vpgl_fm_compute_ransac
 {
-public:
+ public:
+  vpgl_fm_compute_ransac() {}
 
-  vpgl_fm_compute_ransac(){};
-
-  //: Compute from two sets of corresponding points, put the resulting matrix
-  // into fm, return true if successful.  Points pr are associated with the RHS
-  // of the fundamental matrix while the points pl are associated with the LHS.
+  //: Compute from two sets of corresponding points.
+  // Put the resulting matrix into fm, return true if successful.
+  // Points pr are associated with the RHS of the fundamental matrix
+  // while the points pl are associated with the LHS.
   bool compute( const vcl_vector< vgl_point_2d<double> >& pr,
                 const vcl_vector< vgl_point_2d<double> >& pl,
                 vpgl_fundamental_matrix<double>& fm );
@@ -37,11 +38,9 @@ public:
 
 
 //: This is a helper class for vpgl_fm_compute_ransac using rrel.
-class rrel_fm_problem : public rrel_estimation_problem 
+class rrel_fm_problem : public rrel_estimation_problem
 {
-
-public:
-
+ public:
   //: Construct the problem object with two sets of corresponding points.
   // Points pr correspond to the RHS of the fundamental matrix, while the
   // points pl correspond to the LHS.
@@ -69,22 +68,20 @@ public:
                               vnl_vector<double>& p) const;
 
   // Convert a parameter vector into a fundamental matrix.
-  virtual void  params_to_fm( const vnl_vector<double>& p, 
+  virtual void  params_to_fm( const vnl_vector<double>& p,
                               vpgl_fundamental_matrix<double>& fm) const;
 
-  //: Weighted least squares parameter estimate.  The normalized covariance 
-  // is not yet filled in.
+  //: Weighted least squares parameter estimate.
+  //  The normalized covariance is not yet filled in.
   bool weighted_least_squares_fit( vnl_vector<double>& params,
     vnl_matrix<double>& norm_covar, const vcl_vector<double>* weights=0 ) const;
 
   // Toggles detailed printing of computations.
   bool verbose;
 
-protected:
-
+ protected:
   vcl_vector< vgl_point_2d<double> > pr_;
   vcl_vector< vgl_point_2d<double> > pl_;
-
 };
 
-#endif //_vpgl_fm_compute_ransac_h_
+#endif // vpgl_fm_compute_ransac_h_

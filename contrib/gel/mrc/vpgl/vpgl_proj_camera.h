@@ -1,7 +1,6 @@
 // This is gel/mrc/vpgl/vpgl_proj_camera.h
 #ifndef vpgl_proj_camera_h_
 #define vpgl_proj_camera_h_
-
 //:
 // \file
 // \brief A camera model using the standard 3x4 matrix representation.
@@ -13,7 +12,7 @@
 //  Modifications
 //  5/6/2005  Ricardo Fabbri   Added binary I/O
 // \endverbatim
-// 
+//
 //   This is the most general camera class based around the 3x4 matrix camera model.
 //   In reality the 3x4 matrix should be rank 3, but this is only checked when an action
 //   needing an SVD decomposition is called, and only gives a warning.
@@ -27,17 +26,15 @@
 //   all future calls.  When the camera matrix is changed by "set_matrix", the cached SVD
 //   is automatically nulled and will only be recomputed when another function that
 //   needs it is called.  The SVD can be viewed at any time via the "svd" function.
-// 
+//
 //   Only elementary methods on the camera are included in the class itself.  In addition,
 //   there several external functions at the end of the file for important camera operations
-//   deemed too specialized to be included in the vpgl_proj_camera class itself.  Some 
+//   deemed too specialized to be included in the vpgl_proj_camera class itself.  Some
 //   functions lifted from vgl_p_matrix.h.
 //
-//   NOTE FOR DEVELOPERS:  If you write any member functions that change the 
+//   NOTE FOR DEVELOPERS:  If you write any member functions that change the
 //   underlying matrix P_ you should call set_matrix to change it, rather than
 //   changing P_ itself.  The automatic SVD caching will be screwed up otherwise.
-
-
 
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_matrix_fixed.h>
@@ -65,12 +62,10 @@ class vpgl_perspective_camera;
 template <class T>
 class vpgl_proj_camera : public vpgl_camera<T>
 {
-
-public:
-
+ public:
   //: Constructors:----------------------
 
-  //: Default constructor makes an identity camera. 
+  //: Default constructor makes an identity camera.
   vpgl_proj_camera();
 
   //: Construct from a vnl_matrix.
@@ -108,12 +103,10 @@ public:
   vgl_line_segment_2d<T> operator()( const vgl_line_segment_3d<T>& world_line ) const
     { return project( world_line ); };
 
-  //: Find the 3d ray that goes through the camera center and the provided
-  // image point.
+  //: Find the 3d ray that goes through the camera center and the provided image point.
   vgl_homg_line_3d_2_points<T> backproject( const vgl_homg_point_2d<T>& image_point ) const;
 
-  //: Find the 3d plane that contains the camera center and the provided line
-  // in the image plane.
+  //: Find the 3d plane that contains the camera center and the provided line in the image plane.
   vgl_homg_plane_3d<T> backproject( const vgl_homg_line_2d<T>& image_line ) const;
 
 
@@ -129,9 +122,9 @@ public:
   //: Find the image coordinates of the vanishing points of the world coordinate axes.
   vgl_homg_point_2d<T> x_vanishing_point() const{
     return vgl_homg_point_2d<T>( P_(0,0), P_(1,0), P_(2,0) ); }
-  vgl_homg_point_2d<T> y_vanishing_point() const{ 
+  vgl_homg_point_2d<T> y_vanishing_point() const{
     return vgl_homg_point_2d<T>( P_(0,1), P_(1,1), P_(2,1) ); }
-  vgl_homg_point_2d<T> z_vanishing_point() const{ 
+  vgl_homg_point_2d<T> z_vanishing_point() const{
     return vgl_homg_point_2d<T>( P_(0,2), P_(1,2), P_(2,2) ); }
 
 
@@ -145,14 +138,14 @@ public:
   vnl_svd<T>* svd() const;
 
   //: Setters mirror the constructors and return true if the setting was successful.
-  // In subclasses these should be redefined so that they won't allow setting of 
+  // In subclasses these should be redefined so that they won't allow setting of
   // matrices with improper form.
   virtual bool set_matrix( const vnl_matrix_fixed<T,3,4>& new_camera_matrix );
   virtual bool set_matrix( const T* new_camera_matrix );
 
 
   // I/O :---------------------
-  
+
   //: Binary save self to stream.
   virtual void b_write(vsl_b_ostream &os) const;
 
@@ -164,7 +157,7 @@ public:
 
   //: Print an ascii summary to the stream
   void print_summary(vcl_ostream &os) const { os << *this; }
-  
+
   //: Return a platform independent string identifying the class
   virtual vcl_string is_a() const { return vcl_string("vpgl_proj_camera"); }
 
@@ -176,21 +169,19 @@ public:
   // This is used by e.g. polymorphic binary i/o
   virtual vpgl_proj_camera<T> *cast_to_proj_camera() {return this;}
   virtual const vpgl_proj_camera<T> *cast_to_proj_camera() const {return this;}
-  
+
   //: Return `this' if `this' is a vpgl_perspective_camera, 0 otherwise
   // This is used by e.g. the storage class
   // \todo code for affine camera and other children
   virtual vpgl_perspective_camera<T> *cast_to_perspective_camera() {return 0;}
   virtual const vpgl_perspective_camera<T> *cast_to_perspective_camera() const {return 0;}
 
-private:
-
+ private:
   //: The internal representation of the get_matrix.
   // It is private so subclasses will need to access it through "get_matrix" and "set_matrix".
   vnl_matrix_fixed<T,3,4> P_;
 
   mutable vnl_svd<T>* cached_svd_;
-
 };
 
 
@@ -208,28 +199,28 @@ void fix_cheirality( vpgl_proj_camera<T>& camera );
 template <class T>
 void make_cannonical( vpgl_proj_camera<T>& camera );
 
-//: Pre-multiply this projection matrix with a 2-d projective transform. 
+//: Pre-multiply this projection matrix with a 2-d projective transform.
 template <class T>
-vpgl_proj_camera<T> premultiply( const vpgl_proj_camera<T>& in_camera, 
+vpgl_proj_camera<T> premultiply( const vpgl_proj_camera<T>& in_camera,
                                  const vnl_matrix_fixed<T,3,3>& transform );
 
-//: Pre-multiply this projection matrix with a 2-d projective transform. 
+//: Pre-multiply this projection matrix with a 2-d projective transform.
 template <class T>
-vpgl_proj_camera<T> premultiply( const vpgl_proj_camera<T>& in_camera, 
+vpgl_proj_camera<T> premultiply( const vpgl_proj_camera<T>& in_camera,
                                  const vgl_h_matrix_2d<T>& transform )
 {
   return premultiply(in_camera, transform.get_matrix());
 }
 
 
-//: Post-multiply this projection matrix with a 3-d projective transform. 
+//: Post-multiply this projection matrix with a 3-d projective transform.
 template <class T>
-vpgl_proj_camera<T> postmultiply( const vpgl_proj_camera<T>& in_camera, 
+vpgl_proj_camera<T> postmultiply( const vpgl_proj_camera<T>& in_camera,
                                   const vnl_matrix_fixed<T,4,4>& transform );
 
-//: Post-multiply this projection matrix with a 3-d projective transform. 
+//: Post-multiply this projection matrix with a 3-d projective transform.
 template <class T>
-vpgl_proj_camera<T> postmultiply( const vpgl_proj_camera<T>& in_camera, 
+vpgl_proj_camera<T> postmultiply( const vpgl_proj_camera<T>& in_camera,
                                   const vgl_h_matrix_3d<T>& transform )
 {
   return postmultiply(in_camera, transform.get_matrix());

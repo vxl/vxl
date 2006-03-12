@@ -15,7 +15,7 @@
 
 class sdet_nonmax_suppression_params : public gevd_param_mixin
 {
-public:
+ public:
   sdet_nonmax_suppression_params(const double sigma=1.0, const double thresh = 50);
 
   sdet_nonmax_suppression_params(const sdet_nonmax_suppression_params& old_params);
@@ -24,13 +24,12 @@ public:
   bool SanityCheck();
   friend
     vcl_ostream& operator<<(vcl_ostream&,const sdet_nonmax_suppression_params& dp);
-protected:
+ protected:
   void InitParams(double sigma, double thresh);
-public:
+ public:
   //: sigma of the Gaussian derivative kernel, size of the kernel is adjusted accordingly
   double sigma_;
-  //: points with gradient magnitude below threshold*maximum_gradient_magnitude/100 
-  //  will not be processed.
+  //: points with gradient magnitude below thresh_*maximum_gradient_magnitude/100 will not be processed.
   double thresh_;
 };
 
