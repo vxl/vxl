@@ -1,6 +1,6 @@
 // This is gel/mrc/vpgl/algo/vpgl_fm_compute_reg_ransac.cxx
-#ifndef _vpgl_fm_compute_reg_ransac_cxx_
-#define _vpgl_fm_compute_reg_ransac_cxx_
+#ifndef vpgl_fm_compute_reg_ransac_cxx_
+#define vpgl_fm_compute_reg_ransac_cxx_
 
 #include "vpgl_fm_compute_reg_ransac.h"
 
@@ -21,14 +21,14 @@ vpgl_fm_compute_reg_ransac::compute(
   vpgl_reg_fundamental_matrix<double>& fm )
 {
   // Check that there is at least 1 point.
-  if( pr.size() < 1 || pl.size() < 1 ){
+  if ( pr.size() < 1 || pl.size() < 1 ){
     vcl_cerr << "vpgl_fm_compute_ransac: Need at least 1 point pair.\n"
-    << "Number in each set: " << pr.size() << ", " << pl.size() << vcl_endl;
+             << "Number in each set: " << pr.size() << ", " << pl.size() << vcl_endl;
     return false;
   }
 
   // Check that the correspondence lists are the same size.
-  if( pr.size() != pl.size() ){
+  if ( pr.size() != pl.size() ){
     vcl_cerr << "vpgl_fm_compute_reg_ransac: Need correspondence lists of same size.\n";
     return false;
   }
@@ -41,11 +41,11 @@ vpgl_fm_compute_reg_ransac::compute(
   int max_pops = 1;
   int trace_level = 0;
 #endif
-  rrel_muset_obj* ransac = new rrel_muset_obj((int)floor(pr.size()*.75));
+  rrel_muset_obj* ransac = new rrel_muset_obj((int)vcl_floor(pr.size()*.75));
   estimator->set_prior_scale( 1.0 );
   rrel_ran_sam_search* ransam = new rrel_ran_sam_search;
   ransam->set_trace_level(params_->trace_level);
-  ransam->set_sampling_params( params_->max_outlier_frac, 
+  ransam->set_sampling_params( params_->max_outlier_frac,
     params_->desired_prob_good, params_->max_pops );
   bool ransac_succeeded = ransam->estimate( estimator, ransac );
 
@@ -57,8 +57,8 @@ vpgl_fm_compute_reg_ransac::compute(
   estimator->compute_residuals( ransam->params(), residuals );
 
   outliers = vcl_vector<bool>();
-  for( unsigned i = 0; i < pr.size(); i++ ){
-    if( residuals[i] > params_->residual_thresh )
+  for ( unsigned i = 0; i < pr.size(); i++ ){
+    if ( residuals[i] > params_->residual_thresh )
       outliers.push_back( true );
     else
       outliers.push_back( false );
@@ -91,7 +91,7 @@ rrel_fm_reg_problem::rrel_fm_reg_problem(
 {
   assert( pr.size() == pl.size() );
 
-  for( unsigned int i=0; i < pr.size(); i++ )
+  for ( unsigned int i=0; i < pr.size(); i++ )
   {
     pr_.push_back( pr[i] );
     pl_.push_back( pl[i] );
@@ -106,7 +106,7 @@ rrel_fm_reg_problem::fit_from_minimal_set(
   const vcl_vector<int>& point_indices,
   vnl_vector<double>& params ) const
 {
-  if( verbose ) vcl_cerr << "rrel_fm_reg_problem::fit_from_minimal_set\n";
+  if ( verbose ) vcl_cerr << "rrel_fm_reg_problem::fit_from_minimal_set\n";
   assert( point_indices.size() == 1 );
 
   vpgl_reg_fundamental_matrix<double> fm( pr_[point_indices[0]], pl_[point_indices[0]] );
@@ -114,7 +114,7 @@ rrel_fm_reg_problem::fit_from_minimal_set(
   // 7 point algorithm returns a list of possible fundamental matrices.  I'm not
   // sure which one to take, so i'm taking the first.
   fm_to_params( fm, params );
-  if( verbose ) vcl_cerr << "params: " << params << '\n';
+  if ( verbose ) vcl_cerr << "params: " << params << '\n';
   return true;
 }
 
@@ -125,18 +125,18 @@ rrel_fm_reg_problem::compute_residuals(
   const vnl_vector<double>& params,
   vcl_vector<double>& residuals ) const
 {
-  if( verbose ) vcl_cerr << "rrel_fm_reg_problem::compute_residuals\n";
+  if ( verbose ) vcl_cerr << "rrel_fm_reg_problem::compute_residuals\n";
 
   vpgl_reg_fundamental_matrix<double> fm;
   params_to_fm(params, fm);
 
-  if( residuals.size() != pr_.size() )
+  if ( residuals.size() != pr_.size() )
     residuals.resize( pr_.size() );
 
   // The residual for each correspondence is the sum of the squared distances from
   // the points to their epipolar lines.
-  for( unsigned i = 0; i < pr_.size(); i++ ){
-    vgl_homg_line_2d<double> lr = 
+  for ( unsigned i = 0; i < pr_.size(); i++ ){
+    vgl_homg_line_2d<double> lr =
       fm.r_epipolar_line( vgl_homg_point_2d<double>( pl_[i] ) );
     vgl_homg_line_2d<double> ll =
       fm.l_epipolar_line( vgl_homg_point_2d<double>( pr_[i] ) );
@@ -183,4 +183,4 @@ rrel_fm_reg_problem::weighted_least_squares_fit(
 }
 
 
-#endif //_vpgl_fm_compute_reg_ransac_cxx_
+#endif // vpgl_fm_compute_reg_ransac_cxx_
