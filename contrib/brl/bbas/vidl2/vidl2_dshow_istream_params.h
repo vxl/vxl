@@ -6,13 +6,12 @@
 // \file
 // \brief  DirectShow input stream parameter block.
 // \author Miguel A. Figueroa-Villanueva (miguelf at ieee dot org)
-// 
+//
 // \verbatim
-// Modifications
-//  01/30/2006 - File created. (miguelf)
+//  Modifications
+//   01/30/2006 - File created. (miguelf)
 // \endverbatim
 //
-// Last modified $Date: 2006/03/09 16:23:22 $ by $Author: miguelfv $.
 //=========================================================================
 
 #include <vcl_string.h>
@@ -71,7 +70,7 @@ typedef property_wrap<VideoProcAmpProperty,long> vpa_property_wrap;
 //-------------------------------------------------------------------------
 class vidl2_dshow_istream_params //: public vidl2_iostream_params
 {
-public:
+ public:
   //: Constructor - default
   vidl2_dshow_istream_params();
 
@@ -102,7 +101,7 @@ public:
   // - IAMStreamConfig specific (see DirectShow documentation)
   vidl2_dshow_istream_params& set_output_format(int);
 
-private:
+ private:
   //: Device name.
   vcl_string device_name_;
 

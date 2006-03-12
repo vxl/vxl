@@ -6,7 +6,6 @@
 //
 // See vidl2_dshow_istream_params.h for details.
 //
-// Last modified $Date: 2006/03/09 16:23:22 $ by $Author: miguelfv $.
 //=========================================================================
 
 #include <vidl2/vidl2_dshow_istream_params.h>
@@ -74,7 +73,7 @@ namespace
                    : flag == 0x0002
                      ? "manual"
                      : "error")
-               << "\n";
+               << '\n';
     }
     else
     {
@@ -89,12 +88,12 @@ namespace
     VIDEO_STREAM_CONFIG_CAPS vscc;
 
     DSHOW_ERROR_IF_FAILED(asc->GetFormat(&amt));
-    vcl_cout << vcl_setw(w1) << "output_format" << " "
-             << vidl2_dshow::get_guid_name(amt->subtype) << "\n";
+    vcl_cout << vcl_setw(w1) << "output_format "
+             << vidl2_dshow::get_guid_name(amt->subtype) << '\n';
     vidl2_dshow::delete_media_type(*amt);
 
-    vcl_cout << vcl_setw(w1) << " " << " Supported output formats\n";
-    vcl_cout << vcl_setw(w1) << " " << " ------------------------\n";
+    vcl_cout << vcl_setw(w1) << "  Supported output formats\n"
+             << vcl_setw(w1) << "  ------------------------\n";
     DSHOW_ERROR_IF_FAILED(asc->GetNumberOfCapabilities(&count, &size));
     assert(sizeof(vscc) == size);
     for (int i = 0; i < count; i++)
@@ -102,14 +101,14 @@ namespace
       DSHOW_ERROR_IF_FAILED(
         asc->GetStreamCaps(i, &amt, reinterpret_cast<BYTE*>(&vscc)));
 
-      vcl_cout << vcl_setw(w1) << i << " "
+      vcl_cout << vcl_setw(w1) << i << ' '
                << vcl_setw(3*w2)
                << vidl2_dshow::get_guid_name(amt->subtype)
                << " ("
-               << vcl_setw(4) << vscc.InputSize.cx << "x"
+               << vcl_setw(4) << vscc.InputSize.cx << 'x'
                << vcl_setw(4) << vscc.InputSize.cy
                << ") "
-               << 1.0 / (vscc.MaxFrameInterval * 100.0e-9) << "-"
+               << 1.0 / (vscc.MaxFrameInterval * 100.0e-9) << '-'
                << 1.0 / (vscc.MinFrameInterval * 100.0e-9) << " fps\n";
 
       vidl2_dshow::delete_media_type(*amt);
@@ -245,31 +244,31 @@ void vidl2_dshow_istream_params::print_parameter_help(const vcl_string& name)
   CComPtr<IBaseFilter> filter;
   DSHOW_ERROR_IF_FAILED(moniker->BindToObject(
     0, 0, IID_IBaseFilter, reinterpret_cast<void**>(&filter)));
-  
+
   print_parameter_help(filter);
 }
 
 void vidl2_dshow_istream_params::print_parameter_help(const CComPtr<IBaseFilter>& filter)
 {
-  vcl_cout << "\n\nDirectShow Parameters\n";
-  vcl_cout << "---------------------\n";
-  vcl_cout << "1. IAMVideoProcAmp interface:\n\n";
+  vcl_cout << "\n\nDirectShow Parameters\n"
+           << "---------------------\n"
+           << "1. IAMVideoProcAmp interface:\n\n";
 
   // IAMVideoProcAmp interface.
   CComPtr<IAMVideoProcAmp> am_video_proc_amp;
   DSHOW_ERROR_IF_FAILED(filter->QueryInterface(
     IID_IAMVideoProcAmp, reinterpret_cast<void**>(&am_video_proc_amp)));
 
-  vcl_cout << vcl_setw(w1) << " "
+  vcl_cout << vcl_setw(w1) << ' '
            << vcl_setw(w2) << "curr"
            << vcl_setw(w2) << "min"
            << vcl_setw(w2) << "max"
            << vcl_setw(w2) << "step"
            << vcl_setw(w2) << "default"
-           << vcl_setw(w2) << "flags" << "\n";
-  vcl_cout << vcl_setw(w1) << " ";
+           << vcl_setw(w2) << "flags\n"
+           << vcl_setw(w1) << ' ';
   char prev = vcl_cout.fill('-');
-  vcl_cout << vcl_setw(6*w2) << "-" << "\n";
+  vcl_cout << vcl_setw(6*w2) << "-\n";
   vcl_cout.fill(prev);
 
   print_help(am_video_proc_amp, "brightness"            );
@@ -282,7 +281,7 @@ void vidl2_dshow_istream_params::print_parameter_help(const CComPtr<IBaseFilter>
   print_help(am_video_proc_amp, "white_balance"         );
   print_help(am_video_proc_amp, "backlight_compensation");
   print_help(am_video_proc_amp, "gain"                  );
-  vcl_cout << "\n";
+  vcl_cout << '\n';
 
   // IAMStreamConfig interface.
   CComPtr<ICaptureGraphBuilder2> graph_builder;
@@ -317,7 +316,7 @@ void vidl2_dshow_istream_params::print_parameter_help(const CComPtr<IBaseFilter>
   }
   else { vcl_cout << "...Not Supported...\n"; }
 
-  vcl_cout << "\n" << vcl_endl;
+  vcl_cout << '\n' << vcl_endl;
 }
 
 //: Set properties from a map(string,value).

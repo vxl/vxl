@@ -6,13 +6,12 @@
 // \file
 // \brief  Euresys Source Filter (ESF) DirectShow istream parameter block.
 // \author Miguel A. Figueroa-Villanueva (miguelf at ieee dot org)
-// 
+//
 // \verbatim
-// Modifications
-//  02/18/2006 - File created. (miguelf)
+//  Modifications
+//   02/18/2006 - File created. (miguelf)
 // \endverbatim
 //
-// Last modified $Date: 2006/03/09 16:23:22 $ by $Author: miguelfv $.
 //=========================================================================
 
 #include <vcl_string.h>
@@ -39,7 +38,7 @@
 //-------------------------------------------------------------------------
 class vidl2_dshow_istream_params_esf //: public vidl2_iostream_params
 {
-public:
+ public:
   //: Constructor - default
   vidl2_dshow_istream_params_esf();
 
@@ -82,7 +81,7 @@ public:
   vidl2_dshow_istream_params_esf& set_gop_structure(ESF_GOPSTRUCTURE);
   vidl2_dshow_istream_params_esf& set_gop_size(long);
 
-private:
+ private:
   enum esf_property
   {
     esf_property_video_standard = 0,

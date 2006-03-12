@@ -12,13 +12,12 @@
 // in vidl2 (e.g., from cameras and/or frame grabbers).
 //
 // \verbatim
-// Modifications
-//  01/19/2006 - DirectShow code contributed by Paul Crane. (miguelf)
-//  03/09/2006 - File imported to vxl repository with some modifications
-//               and extensions to Paul's code. (miguelf)
+//  Modifications
+//   01/19/2006 - DirectShow code contributed by Paul Crane. (miguelf)
+//   03/09/2006 - File imported to vxl repository with some modifications
+//                and extensions to Paul's code. (miguelf)
 // \endverbatim
 //
-// Last modified $Date: 2006/03/09 16:23:22 $ by $Author: miguelfv $.
 //=========================================================================
 
 #include <vidl2/vidl2_istream.h>
@@ -38,7 +37,7 @@
 //-------------------------------------------------------------------------
 class sample_grabber_cb : public ISampleGrabberCB
 {
-public:
+ public:
   //: Constructor.
   sample_grabber_cb();
 
@@ -55,7 +54,7 @@ public:
   void advance();
   vidl2_frame_sptr current_frame();
 
-private:
+ private:
   // Internal frame buffer information.
   vcl_vector<unsigned char> buffer_[3];
   double                    buffer_time_[3];
@@ -85,7 +84,7 @@ private:
 template <class ParamsObject>
 class vidl2_dshow_live_istream : public vidl2_istream
 {
-public:
+ public:
   //: Constructor - default
   vidl2_dshow_live_istream();
 
@@ -116,6 +115,7 @@ public:
   virtual void close();
 
   // ***** did we decide to keep the alias?
+
   //: Advance to the next frame (but don't acquire an image).
   virtual bool advance() { return advance_wait(); }
 
@@ -129,7 +129,7 @@ public:
   // ***** throw exception ??
   virtual bool seek_frame(unsigned int frame_number) { return false; }
 
-private:
+ private:
   // Disable assignment and copy-construction.
   vidl2_dshow_live_istream(const vidl2_dshow_live_istream&);
   vidl2_dshow_live_istream& operator=(const vidl2_dshow_live_istream&);
@@ -160,6 +160,7 @@ private:
   DWORD register_;
 
   // ***** we're considering removing this from API...
+
   //: Initiate advance and wait for completion; synchronous advance.
   bool advance_wait();
   //: Initiate advance and return immediately; asynchronous advance.

@@ -6,7 +6,7 @@
 // \file
 // \brief  Exceptions thrown by vidl2.
 // \author Miguel A. Figueroa-Villanueva (miguelf at ieee dot org)
-// 
+//
 // This file contains a replica of Ian Scott's exception mechanism as
 // coded in vil_exception.h and mbl_exception.h. However, it encapsulates
 // the exceptions thrown by the vidl2 library.
@@ -16,13 +16,12 @@
 // library can use them.
 //
 // \verbatim
-// Modifications
-//  01/24/2006 - File created. (miguelfv)
-//  03/07/2006 - File imported to vxl repository with some modifications
-//               and extensions to Paul's code. (miguelfv)
+//  Modifications
+//   01/24/2006 - File created. (miguelfv)
+//   03/07/2006 - File imported to vxl repository with some modifications
+//                and extensions to Paul's code. (miguelfv)
 // \endverbatim
 //
-// Last modified $Date: 2006/03/07 18:26:53 $ by $Author: miguelfv $.
 //=========================================================================
 
 #include <vcl_iostream.h>
@@ -62,13 +61,13 @@ template <class T> void vidl2_exception_warning(T exception)
 //: Base class of all vidl2 exceptions.
 class vidl2_exception
 {
-public:
+ public:
   explicit vidl2_exception(const vcl_string& msg) : msg_(msg) {}
   virtual ~vidl2_exception() {}
 
   virtual const vcl_string& what() const { return msg_; }
 
-private:
+ private:
   vcl_string msg_;
 };
 
