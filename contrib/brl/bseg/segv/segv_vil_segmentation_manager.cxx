@@ -168,8 +168,8 @@ range_params(vil_image_resource_sptr const& image)
                                       gl_map, cache);
   }
 
- return new vgui_range_map_params(0, 255, gamma, invert,
-                                      gl_map, cache);
+  return new vgui_range_map_params(0, 255, gamma, invert,
+                                   gl_map, cache);
 }
 
 //: set the image at the currently selected grid cell
@@ -194,8 +194,8 @@ add_image_at(vil_image_resource_sptr const& image,
              const unsigned col, const unsigned row,
              vgui_range_map_params_sptr const& rmps)
 {
-     vgui_range_map_params_sptr rmap = rmps;
-	if(!rmps)
+  vgui_range_map_params_sptr rmap = rmps;
+  if (!rmps)
     rmap = range_params(image);
   bgui_image_tableau_sptr itab = bgui_image_tableau_new(image);
   itab->set_mapping(rmap);
@@ -714,12 +714,12 @@ void segv_vil_segmentation_manager::nonmaximal_suppression()
   if (!t2D)
     return;
   t2D->clear_all();
-  if(!show_lines)
+  if (!show_lines)
   {
     for (int i=0; i<N; i++)
       t2D->add_vsol_point_2d(points[i]);
   }
-  if(show_lines)
+  if (show_lines)
   {
     for (int i=0; i<N; i++)
       t2D->add_vsol_line_2d(lines[i]);
@@ -1261,15 +1261,16 @@ void segv_vil_segmentation_manager::test_float()
     brip_vil_float_ops::convert_to_float(img);
   this->add_image(vil_new_image_resource_of_view(flt));
 }
+
 void segv_vil_segmentation_manager::flip_image_lr()
 {
   vil_image_resource_sptr img = selected_image();
   if (!img)
-    {
-      vcl_cout << "In segv_vil_segmentation_manager::flip_image - no image\n";
-      return;
-    }
-  
+  {
+    vcl_cout << "In segv_vil_segmentation_manager::flip_image - no image\n";
+    return;
+  }
+
   vil_image_resource_sptr flipr = vil_flip_lr(img);
   vil_image_resource_sptr flipc = vil_new_image_resource(img->ni(), img->nj(),
                                                          flipr);

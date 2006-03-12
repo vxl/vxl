@@ -632,7 +632,7 @@ trace_grad_matrix_NxN(vil_image_view<float> const& input, unsigned n)
   vil_image_view<float> tr;
   IxIx.set_size(ni, nj);   IxIy.set_size(ni, nj);   IyIy.set_size(ni, nj);
   tr.set_size(ni, nj);
-  brip_vil_float_ops::grad_matrix_NxN(input, n, IxIx, IxIy, IyIy);        
+  brip_vil_float_ops::grad_matrix_NxN(input, n, IxIx, IxIy, IyIy);
   vil_math_image_sum<float, float, float>(IxIx, IyIy, tr);
   return tr;
 }
@@ -705,35 +705,37 @@ brip_vil_float_ops::sqrt_grad_singular_values(vil_image_view<float> & input,
 #endif
   return output;
 }
+
 vil_image_view<float> brip_vil_float_ops::
 max_scale_trace(vil_image_view<float> input,
                 float min_scale, float max_scale, float scale_inc)
 {
   unsigned ni = input.ni(), nj = input.nj();
   vil_image_view<float> tr_max, sc;
-  tr_max.set_size(ni, nj); 
+  tr_max.set_size(ni, nj);
   tr_max.fill(0.0f);
-  sc.set_size(ni, nj); 
+  sc.set_size(ni, nj);
   sc.fill(min_scale);
-  for(float s = min_scale; s<=max_scale; s+=scale_inc)
-    {
-      vil_image_view<float> smooth = brip_vil_float_ops::gaussian(input, s);
-      unsigned N = static_cast<unsigned>(2.0f*s);
-      vil_image_view<float> tr = 
-        brip_vil_float_ops::trace_grad_matrix_NxN(smooth, N);
-      for(unsigned r = 0; r<nj; ++r)
-        for(unsigned c = 0; c<ni; ++c)
-          {
-            float trv = s*s*tr(c,r);
-            if(trv>tr_max(c,r))
-              {
-                tr_max(c,r) = trv;
-                sc(c,r) = s;
-              }
-          }
-    }
-	return sc;
+  for (float s = min_scale; s<=max_scale; s+=scale_inc)
+  {
+    vil_image_view<float> smooth = brip_vil_float_ops::gaussian(input, s);
+    unsigned N = static_cast<unsigned>(2.0f*s);
+    vil_image_view<float> tr =
+      brip_vil_float_ops::trace_grad_matrix_NxN(smooth, N);
+    for (unsigned r = 0; r<nj; ++r)
+      for (unsigned c = 0; c<ni; ++c)
+      {
+        float trv = s*s*tr(c,r);
+        if (trv>tr_max(c,r))
+        {
+          tr_max(c,r) = trv;
+          sc(c,r) = s;
+        }
+      }
+  }
+  return sc;
 }
+
 //---------------------------------------------------------------------
 // Lucas-Kanade motion vectors:  Solve for the motion vectors over a
 // (2n+1)x(2n+1) neighborhood. The time derivative of intensity is computed
