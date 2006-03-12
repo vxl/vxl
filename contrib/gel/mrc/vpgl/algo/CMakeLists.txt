@@ -8,7 +8,8 @@ INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR}/mrc)
 
 SET( vpgl_algo_sources
 # this depends on vsol which it shouldn't
-#  vpgl_construct_cameras.h      vpgl_construct_cameras.cxx
+#                               vpgl_construct_cameras.cxx
+  vpgl_construct_cameras.h
   vpgl_optimize_camera.h        vpgl_optimize_camera.cxx
   vpgl_project.h                vpgl_project.cxx    
   vpgl_camera_compute.h         vpgl_camera_compute.cxx 
