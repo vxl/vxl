@@ -7,9 +7,8 @@
 // \brief  DirectShow file input stream support.
 // \author Paul Crane
 // \author Miguel A. Figueroa-Villanueva (miguelf at ieee dot org)
-// 
-// This file includes experimetal support for DirectShow file input in
-// vidl2.
+//
+// This file includes experimental support for DirectShow file input in vidl2.
 //
 // \verbatim
 // TODO
@@ -17,13 +16,12 @@
 // \endverbatim
 //
 // \verbatim
-// Modifications
-//  01/19/2006 - DirectShow code contributed by Paul Crane. (miguelfv)
-//  03/07/2006 - File imported to vxl repository with some modifications
-//               and extensions to Paul's code. (miguelfv)
+//  Modifications
+//   01/19/2006 - DirectShow code contributed by Paul Crane. (miguelfv)
+//   03/07/2006 - File imported to vxl repository with some modifications
+//                and extensions to Paul's code. (miguelfv)
 // \endverbatim
 //
-// Last modified $Date: 2006/03/09 16:23:22 $ by $Author: miguelfv $.
 //=========================================================================
 
 #include <vidl2/vidl2_istream.h>
@@ -53,7 +51,7 @@
 //-------------------------------------------------------------------------
 class vidl2_dshow_file_istream : public vidl2_istream
 {
-public:
+ public:
   //: Constructor - from a string containing the file name.
   vidl2_dshow_file_istream(const vcl_string& name);
 
@@ -77,6 +75,7 @@ public:
   virtual void close();
 
   // ***** did we decide to keep the alias?
+
   //: Advance to the next frame (but don't acquire an image).
   virtual bool advance() { return advance_wait(); }
 
@@ -99,7 +98,7 @@ public:
   // \returns true if successful
   virtual bool seek_frame(unsigned int frame_number);
 
-private:
+ private:
   // Disable assignment and copy-construction.
   vidl2_dshow_file_istream(const vidl2_dshow_file_istream&);
   vidl2_dshow_file_istream& operator=(const vidl2_dshow_file_istream&);

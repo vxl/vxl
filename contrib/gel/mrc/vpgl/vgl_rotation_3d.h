@@ -1,4 +1,4 @@
-// This is brcv/mvg/dvpgl/vgl_rotation_3d.h
+// This is gel/mrc/vpgl/vgl_rotation_3d.h
 #ifndef vgl_rotation_3d_h_
 #define vgl_rotation_3d_h_
 
@@ -21,9 +21,7 @@
 template <class T>
 class vgl_rotation_3d
 {
-
-public:
-
+ public:
   // Constructors:-------------------------------------
 
   //: Construct from a quaternion.
@@ -63,9 +61,9 @@ public:
   vgl_h_matrix_3d<T> as_h_matrix() const;
 
   //: Output the matrix representation of this rotation in 3x3 or 4x4 form.
-  vnl_matrix_fixed<T,3,3> as_3matrix() const{ 
+  vnl_matrix_fixed<T,3,3> as_3matrix() const{
     return q_.rotation_matrix_transpose().transpose(); }
-  vnl_matrix_fixed<T,4,4> as_4matrix() const{ 
+  vnl_matrix_fixed<T,4,4> as_4matrix() const{
     return q_.rotation_matrix_transpose_4().transpose(); }
 
 
@@ -96,17 +94,14 @@ public:
   //: Rotate a vector.
   vgl_vector_3d<T> rotate( const vgl_vector_3d<T>& v ) const;
 
-
-protected:
-
+ protected:
   //: The internal representation of the rotation is a quaternion.
   vnl_quaternion<T> q_;
-
 };
 
 
-// External methods for more efficent rotation of multiple objects
-// ---------------------------------------------------------------
+// External methods for more efficient rotation of multiple objects
+// ----------------------------------------------------------------
 
 //: In-place rotation of a vector of homogeneous points
 // \note This is more efficient than calling vgl_rotation_3d::rotate() on each
@@ -114,14 +109,14 @@ template <class T> inline
 void vgl_rotate_3d(const vgl_rotation_3d<T>& rot, vcl_vector<vgl_homg_point_3d<T> >& pts)
 {
   vnl_matrix_fixed<T,3,3> R = rot.as_3matrix();
-  for(vcl_vector<vgl_homg_point_3d<T> >::iterator itr = pts.begin();
-      itr != pts.end();  ++itr)
+  for (vcl_vector<vgl_homg_point_3d<T> >::iterator itr = pts.begin();
+       itr != pts.end();  ++itr)
   {
      vgl_homg_point_3d<T>& p = *itr;
      p.set(R[0][0]*p.x()+R[0][1]*p.y()+R[0][2]*p.z(),
            R[1][0]*p.x()+R[1][1]*p.y()+R[1][2]*p.z(),
-           R[2][0]*p.x()+R[2][1]*p.y()+R[2][2]*p.z(), p.w());   
-  }  
+           R[2][0]*p.x()+R[2][1]*p.y()+R[2][2]*p.z(), p.w());
+  }
 }
 
 
@@ -131,8 +126,8 @@ template <class T> inline
 void vgl_rotate_3d(const vgl_rotation_3d<T>& rot, vcl_vector<vgl_point_3d<T> >& pts)
 {
   vnl_matrix_fixed<T,3,3> R = rot.as_3matrix();
-  for(vcl_vector<vgl_point_3d<T> >::iterator itr = pts.begin();
-      itr != pts.end();  ++itr)
+  for (vcl_vector<vgl_point_3d<T> >::iterator itr = pts.begin();
+       itr != pts.end();  ++itr)
   {
      vgl_point_3d<T>& p = *itr;
      p.set(R[0][0]*p.x()+R[0][1]*p.y()+R[0][2]*p.z(),

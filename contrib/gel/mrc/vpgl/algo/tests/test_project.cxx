@@ -4,6 +4,7 @@
 #include <vgl/vgl_homg_point_3d.h>
 #include <vpgl/algo/vpgl_project.h>
 #include <vpgl/vpgl_calibration_matrix.h>
+
 static void test_project()
 {
   //Construct the camera
@@ -22,11 +23,10 @@ static void test_project()
   vgl_point_3d<double> pm(-1,-1,-1), pp(1,1,1);
   vgl_box_3d<double> box_3d(pm, pp);
   vgl_box_2d<double> box_2d = vpgl_project::project_bounding_box(P, box_3d);
-  vcl_cout << "Input Box 3d " << box_3d << '\n';
-  vcl_cout << "Ouput Box 2d " << box_2d << '\n';
+  vcl_cout << "Input Box 3d " << box_3d << '\n'
+           << "Output Box 2d " << box_2d << '\n';
   double minx = box_2d.min_x(), act_minx = (512.0 - 2000/9.0);
   TEST_NEAR("test bounding box projection", minx, act_minx , 1e-09);
 }
-
 
 TESTMAIN(test_project);
