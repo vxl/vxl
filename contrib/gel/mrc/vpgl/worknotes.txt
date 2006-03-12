@@ -14,7 +14,7 @@ There are many cases in which the user is able to supply bad data (ex. a camera
 matrix with rank < 3 ) and I've been largely printing warnings instead of using
 assertions, but I'm not sure which is more appropriate.
 
-Theres one warning when compiling dvpgl and I'm not sure what to do about it, but
+There's one warning when compiling vpgl and I'm not sure what to do about it, but
 I'm sure someone else would know...
 
 
