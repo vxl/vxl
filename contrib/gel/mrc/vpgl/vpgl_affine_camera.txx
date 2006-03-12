@@ -6,6 +6,7 @@
 
 #include "vpgl_affine_camera.h"
 #include <vnl/vnl_vector_fixed.h>
+#include <vcl_cassert.h>
 
 //-------------------------------------------
 template <class T>
@@ -40,12 +41,12 @@ vpgl_affine_camera<T>::vpgl_affine_camera( const vnl_matrix_fixed<T,3,4>& camera
 
 //------------------------------------------
 template <class T>
-void vpgl_affine_camera<T>::set_rows( 
+void vpgl_affine_camera<T>::set_rows(
   const vnl_vector_fixed<T,4>& row1,
   const vnl_vector_fixed<T,4>& row2 )
  {
   vnl_matrix_fixed<T,3,4> C( (T)0 );
-  for( unsigned int i = 0; i < 4; i++ ){
+  for ( unsigned int i = 0; i < 4; i++ ) {
     C(0,i) = row1(i);
     C(1,i) = row2(i);
   }
@@ -56,8 +57,7 @@ void vpgl_affine_camera<T>::set_rows(
 // Code for easy instantiation.
 #undef vpgl_AFFINE_CAMERA_INSTANTIATE
 #define vpgl_AFFINE_CAMERA_INSTANTIATE(T) \
-template class vpgl_affine_camera<T>;
+template class vpgl_affine_camera<T >
 
 
 #endif // vpgl_affine_camera_txx_
-

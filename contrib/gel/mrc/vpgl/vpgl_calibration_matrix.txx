@@ -4,13 +4,12 @@
 //:
 // \file
 
-//#include <vcl_iostream.h>
-
 #include "vpgl_calibration_matrix.h"
 
 #include <vgl/io/vgl_io_point_2d.h>
 #include <vgl/xio/vgl_xio_point_2d.h>
 #include <vsl/vsl_basic_xml_element.h>
+#include <vcl_cassert.h>
 
 //--------------------------------------
 template <class T>
@@ -26,7 +25,7 @@ vpgl_calibration_matrix<T>::vpgl_calibration_matrix() :
 
 //--------------------------------------
 template <class T>
-vpgl_calibration_matrix<T>::vpgl_calibration_matrix( T focal_length, 
+vpgl_calibration_matrix<T>::vpgl_calibration_matrix( T focal_length,
   const vgl_point_2d<T>& principal_point, T x_scale, T y_scale, T skew ) :
   focal_length_( focal_length ),
   principal_point_( principal_point ),
@@ -45,18 +44,18 @@ vpgl_calibration_matrix<T>::vpgl_calibration_matrix( T focal_length,
 template <class T>
 vpgl_calibration_matrix<T>::vpgl_calibration_matrix( const vnl_matrix_fixed<T,3,3>& K )
 {
-  // Put the supplied matrix into canonical form and check that it could be a 
+  // Put the supplied matrix into canonical form and check that it could be a
   // calibration matrix.
   assert( K(2,2) != (T)0 && K(1,0) == (T)0 && K(2,0) == (T)0 && K(2,1) == (T)0 );
   double scale_factor = (T)1;
-  if( K(2,2) != (T)1 ) scale_factor = ((T)1)/K(2,2);
-  
-  focal_length_ = (T)1; 
+  if ( K(2,2) != (T)1 ) scale_factor = ((T)1)/K(2,2);
+
+  focal_length_ = (T)1;
   x_scale_ = scale_factor*K(0,0);
   y_scale_ = scale_factor*K(1,1);
   skew_ = scale_factor*K(0,1);
   principal_point_.set( scale_factor*K(0,2), scale_factor*K(1,2) );
-  
+
   assert( ( x_scale_ > 0 && y_scale_ > 0 ) || ( x_scale_ < 0 && y_scale_ < 0 ) );
 }
 
@@ -75,8 +74,8 @@ vnl_matrix_fixed<T,3,3> vpgl_calibration_matrix<T>::get_matrix() const
   K(0,1) = skew_;
   return K;
 }
-  
-  
+
+
 //--------------------------------------
 template <class T>
 void vpgl_calibration_matrix<T>::set_focal_length( T new_focal_length )
@@ -88,7 +87,7 @@ void vpgl_calibration_matrix<T>::set_focal_length( T new_focal_length )
 
 //--------------------------------------
 template <class T>
-void vpgl_calibration_matrix<T>::set_principal_point( 
+void vpgl_calibration_matrix<T>::set_principal_point(
   const vgl_point_2d<T>& new_principal_point )
 {
   assert( !new_principal_point.ideal() );
@@ -128,10 +127,10 @@ operator==(vpgl_calibration_matrix<T> const &that) const
   if (this == &that) // same object => equal.
     return true;
 
-  return 
+  return
     this->focal_length_ == that.focal_length_ &&
     this->principal_point_ == that.principal_point_ &&
-    this->x_scale_ == that.x_scale_ && this->y_scale_ == that.y_scale_ && 
+    this->x_scale_ == that.x_scale_ && this->y_scale_ == that.y_scale_ &&
     this->skew_ == that.skew_;
 }
 
@@ -223,8 +222,7 @@ void x_write(vcl_ostream &os, vpgl_calibration_matrix<T> p)
 // Code for easy instantiation.
 #undef vpgl_CALIBRATION_MATRIX_INSTANTIATE
 #define vpgl_CALIBRATION_MATRIX_INSTANTIATE(T) \
-template class vpgl_calibration_matrix<T>; \
-template void x_write(vcl_ostream &, vpgl_calibration_matrix<T>)
+template class vpgl_calibration_matrix<T >; \
+template void x_write(vcl_ostream&, vpgl_calibration_matrix<T >)
 
 #endif // vpgl_calibration_matrix_txx_
-

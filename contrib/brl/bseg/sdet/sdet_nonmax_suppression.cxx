@@ -9,6 +9,7 @@
 #include <vnl/vnl_math.h>
 #include <vil/algo/vil_convolve_2d.h>
 #include <vcl_cstdio.h>
+#include <vcl_cassert.h>
 
 //---------------------------------------------------------------
 // Constructors
@@ -20,8 +21,8 @@
 sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params& nms)
   : sdet_nonmax_suppression_params(nms)
 {
-  vcl_cout << sigma_ << vcl_endl;
-  vcl_cout << thresh_ << vcl_endl;
+  vcl_cout << sigma_ << vcl_endl
+           << thresh_ << vcl_endl;
 }
 
 //:Default Destructor
@@ -63,9 +64,9 @@ void sdet_nonmax_suppression::apply()
   int ks = 2*khs+1; //kernel full size
   gauss_x.set_size(ks,ks);
   gauss_y.set_size(ks,ks);
-  for(int y = -khs; y <= khs; y++)
+  for (int y = -khs; y <= khs; y++)
   {
-    for(int x = -khs; x <= khs; x++)
+    for (int x = -khs; x <= khs; x++)
     {
       double common_part = -1/(2*vnl_math::pi*vcl_pow(sigma_,4.0)) * vcl_exp(-(vcl_pow(x,2.0)+vcl_pow(y,2.0))/(2*vcl_pow(sigma_,2.0)));
       gauss_x(x+khs,y+khs) = x * common_part;
@@ -80,28 +81,28 @@ void sdet_nonmax_suppression::apply()
   double max_grad_mag = 0;
   int width = grad_x_.ni(); int height = grad_x_.nj();
   grad_mag_.set_size(width, height);
-  for(int y = 0; y < height; y++)
+  for (int y = 0; y < height; y++)
   {
-    for(int x = 0; x < width; x++)
+    for (int x = 0; x < width; x++)
     {
       double val = vcl_sqrt(vcl_pow(grad_x_(x,y),2.0) + vcl_pow(grad_y_(x,y),2.0));
       grad_mag_(x,y) = val;
-      if(val > max_grad_mag)
+      if (val > max_grad_mag)
         max_grad_mag = val;
     }
   }
 
-  for(int y = 1; y < height-1; y++)
+  for (int y = 1; y < height-1; y++)
   {
-    for(int x = 1; x < width-1; x++)
+    for (int x = 1; x < width-1; x++)
     {
-      if(grad_mag_(x,y) > max_grad_mag * thresh_ / 100.0)
+      if (grad_mag_(x,y) > max_grad_mag * thresh_ / 100.0)
       {
         double gx = grad_x_(x,y);
         double gy = grad_y_(x,y);
         vgl_vector_2d<double> direction(gx,gy);
         normalize(direction);
-        if(vcl_abs(gx) > 10e-6 && vcl_abs(gy) > 10e-6)
+        if (vcl_abs(gx) > 10e-6 && vcl_abs(gy) > 10e-6)
         {
           int face_num = intersected_face_number(gx, gy);
           assert(face_num != -1);
@@ -110,7 +111,7 @@ void sdet_nonmax_suppression::apply()
           vcl_vector<double> f(f_values(x, y, gx, gy, s, face_num));
           vcl_vector<double> ss;
           ss.push_back(-s); ss.push_back(0); ss.push_back(s);
-          if(f[1] > f[0] && f[1] > f[2])
+          if (f[1] > f[0] && f[1] > f[2])
           {
             double s_star = subpixel_s(ss, f);
             vgl_point_2d<double> subpix(x + s_star * direction.x() + ((ks-1)/2), y + s_star * direction.y() + ((ks-1)/2));
@@ -130,30 +131,30 @@ void sdet_nonmax_suppression::apply()
 
 int sdet_nonmax_suppression::intersected_face_number(double gx, double gy)
 {
-  if(gx >= 0 && gy >= 0)
+  if (gx >= 0 && gy >= 0)
   {
-    if(gx >= gy)
+    if (gx >= gy)
       return 1;
     else
       return 2;
   }
-  else if(gx < 0 && gy >= 0)
+  else if (gx < 0 && gy >= 0)
   {
-    if(vcl_abs(gx) < gy)
+    if (vcl_abs(gx) < gy)
       return 3;
     else
       return 4;
   }
-  else if(gx < 0 && gy < 0)
+  else if (gx < 0 && gy < 0)
   {
-    if(vcl_abs(gx) >= vcl_abs(gy))
+    if (vcl_abs(gx) >= vcl_abs(gy))
       return 5;
     else
       return 6;
   }
-  else if(gx >= 0 && gy < 0)
+  else if (gx >= 0 && gy < 0)
   {
-    if(gx < vcl_abs(gy))
+    if (gx < vcl_abs(gy))
       return 7;
     else
       return 8;
@@ -165,15 +166,15 @@ double sdet_nonmax_suppression::intersection_parameter(double gx, double gy, int
 {
   vgl_vector_2d<double> direction(gx,gy);
   normalize(direction);
-  if(face_num == 1 || face_num == 8)
-    return (1/direction.x());
-  else if(face_num == 2 || face_num == 3)
-    return (1/direction.y());
-  else if(face_num == 4 || face_num == 5)
-    return (-1/direction.x());
-  else if(face_num == 6 || face_num == 7)
-    return (-1/direction.y());
-  return -1000;
+  if (face_num == 1 || face_num == 8)
+    return 1.0/direction.x();
+  else if (face_num == 2 || face_num == 3)
+    return 1.0/direction.y();
+  else if (face_num == 4 || face_num == 5)
+    return -1.0/direction.x();
+  else if (face_num == 6 || face_num == 7)
+    return -1.0/direction.y();
+  return -1000.0;
 }
 
 vcl_vector<double> sdet_nonmax_suppression::f_values(int x, int y, double gx, double gy, double s, int face_num)
@@ -213,41 +214,41 @@ vcl_vector< vgl_vector_2d <int> > sdet_nonmax_suppression::get_relative_corner_c
 {
   vgl_vector_2d<int> corner1;
   vgl_vector_2d<int> corner2;
-  switch(face_num)
+  switch (face_num)
   {
-  case 1:
+   case 1:
     corner1.set(1,0);
     corner2.set(1,1);
     break;
-  case 2:
+   case 2:
     corner1.set(1,1);
     corner2.set(0,1);
     break;
-  case 3:
+   case 3:
     corner1.set(0,1);
     corner2.set(-1,1);
     break;
-  case 4:
+   case 4:
     corner1.set(-1,1);
     corner2.set(-1,0);
     break;
-  case 5:
+   case 5:
     corner1.set(-1,0);
     corner2.set(-1,-1);
     break;
-  case 6:
+   case 6:
     corner1.set(-1,-1);
     corner2.set(0,-1);
     break;
-  case 7:
+   case 7:
     corner1.set(0,-1);
     corner2.set(1,-1);
     break;
-  case 8:
+   case 8:
     corner1.set(1,-1);
     corner2.set(1,0);
     break;
-  default:
+   default:
     corner1.set(0,0);
     corner2.set(0,0);
   }

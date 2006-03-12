@@ -1,16 +1,13 @@
 // This is gel/mrc/vpgl/algo/vpgl_optimize_camera.cxx
-
+#include "vpgl_optimize_camera.h"
 //:
 // \file
-
-#include "vpgl_optimize_camera.h"
 #include <vnl/vnl_rotation_matrix.h>
 #include <vnl/vnl_quaternion.h>
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
-
 #include <vnl/vnl_det.h>
-
+#include <vcl_cassert.h>
 
 //: Constructor
 vpgl_orientation_lsqr::
@@ -38,7 +35,7 @@ vpgl_orientation_lsqr::f(vnl_vector<double> const& x, vnl_vector<double>& fx)
 {
   vgl_h_matrix_3d<double> R(vnl_rotation_matrix(x), vnl_vector_fixed< double, 3 >(0.0));
   vpgl_perspective_camera<double> cam(K_,c_,R);
-  for(unsigned int i=0; i<world_points_.size(); ++i)
+  for (unsigned int i=0; i<world_points_.size(); ++i)
   {
     vgl_homg_point_2d<double> proj = cam(world_points_[i]);
     fx[2*i]   = image_points_[i].x() - proj.x()/proj.w();
@@ -74,7 +71,7 @@ vpgl_orientation_position_lsqr::f(vnl_vector<double> const& x, vnl_vector<double
   vgl_homg_point_3d<double> t(x[3], x[4], x[5]);
   vgl_h_matrix_3d<double> R(vnl_rotation_matrix(w), vnl_vector_fixed< double, 3 >(0.0));
   vpgl_perspective_camera<double> cam(K_,t,R);
-  for(unsigned int i=0; i<world_points_.size(); ++i)
+  for (unsigned int i=0; i<world_points_.size(); ++i)
   {
     vgl_homg_point_2d<double> proj = cam(world_points_[i]);
     fx[2*i]   = image_points_[i].x() - proj.x()/proj.w();
@@ -93,7 +90,9 @@ vpgl_orientation_position_lsqr::trace(int iteration,
   vgl_homg_point_3d<double> t(x[3], x[4], x[5]);
   vgl_h_matrix_3d<double> R(vnl_rotation_matrix(w), vnl_vector_fixed< double, 3 >(0.0));
   vpgl_perspective_camera<double> cam(K_,t,R);
-  //vcl_cout << "camera = \n" << cam.get_matrix() << vcl_endl; 
+#ifdef DEBUG
+  vcl_cout << "camera =\n" << cam.get_matrix() << vcl_endl;
+#endif
 }
 #endif
 
@@ -166,6 +165,3 @@ vpgl_optimize_camera::opt_orient_pos(const vpgl_perspective_camera<double>& came
               vgl_h_matrix_3d<double>(vnl_rotation_matrix(w_min),
                                       vnl_vector_fixed< double, 3 >(0.0)) );
 }
-
-
-

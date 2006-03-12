@@ -1,6 +1,6 @@
 // This is gel/mrc/vpgl/algo/vpgl_lens_warp_mapper.h
-#ifndef _vpgl_lens_warp_mapper_h_
-#define _vpgl_lens_warp_mapper_h_
+#ifndef vpgl_lens_warp_mapper_h_
+#define vpgl_lens_warp_mapper_h_
 //:
 // \file
 // \brief A lens distortion adaptor for vil_warp
@@ -14,25 +14,25 @@
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vcl_cmath.h>
-
+#include <vcl_cassert.h>
 
 //: Compute a bounding box in the distorted space for an existing box
-// this is computed by sampling alone the box boundary edges
+// This is computed by sampling alone the box boundary edges
 // \note in general this is not the inverse of vpgl_lens_unwarp_bounds
 template <class DataT, class BoxT>
 vgl_box_2d<BoxT>
 vpgl_lens_warp_bounds(const vpgl_lens_distortion<DataT>& lens,
                        const vgl_box_2d<BoxT>& box,
                        BoxT step_size = BoxT(1))
-{ 
+{
   vgl_box_2d<BoxT> new_box;
-  for(BoxT x=box.min_x(); x<=box.max_x(); x+=step_size){
+  for (BoxT x=box.min_x(); x<=box.max_x(); x+=step_size){
     vgl_point_2d<DataT> p1(lens.distort(vgl_homg_point_2d<DataT>(x,box.min_y())));
     new_box.add(vgl_point_2d<BoxT>( BoxT(p1.x()), BoxT(p1.y()) ));
     vgl_point_2d<DataT> p2(lens.distort(vgl_homg_point_2d<DataT>(x,box.max_y())));
     new_box.add(vgl_point_2d<BoxT>( BoxT(p2.x()), BoxT(p2.y()) ));
   }
-  for(BoxT y=box.min_y(); y<=box.max_y(); y+=step_size){
+  for (BoxT y=box.min_y(); y<=box.max_y(); y+=step_size){
     vgl_point_2d<DataT> p1(lens.distort(vgl_homg_point_2d<DataT>(box.min_x(),y)));
     new_box.add(vgl_point_2d<BoxT>( BoxT(p1.x()), BoxT(p1.y()) ));
     vgl_point_2d<DataT> p2(lens.distort(vgl_homg_point_2d<DataT>(box.max_x(),y)));
@@ -42,22 +42,22 @@ vpgl_lens_warp_bounds(const vpgl_lens_distortion<DataT>& lens,
 }
 
 //: Compute a bounding box for an existing box in the distorted space
-// this is computed by sampling alone the box boundary edges
+// This is computed by sampling alone the box boundary edges
 // \note in general this is not the inverse of vpgl_lens_warp_bounds
 template <class DataT, class BoxT>
 vgl_box_2d<BoxT>
 vpgl_lens_unwarp_bounds(const vpgl_lens_distortion<DataT>& lens,
                          const vgl_box_2d<BoxT>& box,
                          BoxT step_size = BoxT(1))
-{ 
+{
   vgl_box_2d<BoxT> new_box;
-  for(BoxT x=box.min_x(); x<=box.max_x(); x+=step_size){
+  for (BoxT x=box.min_x(); x<=box.max_x(); x+=step_size){
     vgl_point_2d<DataT> p1(lens.undistort(vgl_homg_point_2d<DataT>(x,box.min_y())));
     new_box.add(vgl_point_2d<BoxT>( BoxT(p1.x()), BoxT(p1.y()) ));
     vgl_point_2d<DataT> p2(lens.undistort(vgl_homg_point_2d<DataT>(x,box.max_y())));
     new_box.add(vgl_point_2d<BoxT>( BoxT(p2.x()), BoxT(p2.y()) ));
   }
-  for(BoxT y=box.min_y(); y<=box.max_y(); y+=step_size){
+  for (BoxT y=box.min_y(); y<=box.max_y(); y+=step_size){
     vgl_point_2d<DataT> p1(lens.undistort(vgl_homg_point_2d<DataT>(box.min_x(),y)));
     new_box.add(vgl_point_2d<BoxT>( BoxT(p1.x()), BoxT(p1.y()) ));
     vgl_point_2d<DataT> p2(lens.undistort(vgl_homg_point_2d<DataT>(box.max_x(),y)));
@@ -68,11 +68,11 @@ vpgl_lens_unwarp_bounds(const vpgl_lens_distortion<DataT>& lens,
 
 
 //: A warping function to apply lens distortion to an image
-// this function automatically sets the translation of the distortion function
+// This function automatically sets the translation of the distortion function
 // and computes the appropriate image size such that all distorted pixel
 // lie in the resulting image
 template <class sType, class dType, class T, class InterpFunctor>
-vil_image_view<dType> 
+vil_image_view<dType>
 vpgl_lens_warp_resize(const vil_image_view<sType>& in,
                        dType out_dummy,
                        vpgl_lens_distortion<T>& ld,
@@ -111,7 +111,7 @@ void vpgl_lens_warp(const vil_image_view<sType>& in,
       // *** Find (ix, iy) from (ox,oy)
       double ix, iy;
       unwarp_pt = ld.undistort(vgl_homg_point_2d<T>(ox,oy),&unwarp_pt);
-      if(oy == 0) init = unwarp_pt;
+      if (oy == 0) init = unwarp_pt;
       ix = unwarp_pt.x()/unwarp_pt.w();
       iy = unwarp_pt.y()/unwarp_pt.w();
       for (unsigned p = 0; p < out.nplanes(); ++p)
@@ -124,11 +124,11 @@ void vpgl_lens_warp(const vil_image_view<sType>& in,
 
 
 //: A warping function to apply lens distortion to an image
-// this function automatically sets the translation of the distortion function
+// This function automatically sets the translation of the distortion function
 // and computes the appropriate image size such that all distorted pixel
 // lie in the resulting image
 template <class sType, class dType, class T, class InterpFunctor>
-vil_image_view<dType> 
+vil_image_view<dType>
 vpgl_lens_unwarp_resize(const vil_image_view<sType>& in,
                          dType out_dummy,
                          vpgl_lens_distortion<T>& ld,
@@ -144,7 +144,7 @@ vpgl_lens_unwarp_resize(const vil_image_view<sType>& in,
 }
 
 
-//: A version of vil_warp specialized for lens unwarping 
+//: A version of vil_warp specialized for lens unwarping
 template <class sType, class dType, class T, class InterpFunctor>
 void vpgl_lens_unwarp(const vil_image_view<sType>& in,
                        vil_image_view<dType>& out,
@@ -170,4 +170,4 @@ void vpgl_lens_unwarp(const vil_image_view<sType>& in,
 }
 
 
-#endif // _vpgl_lens_warp_mapper_h_
+#endif // vpgl_lens_warp_mapper_h_
