@@ -1,6 +1,6 @@
-// This is brcv/mvg/algo/dvpgl_construct_cameras.h
-#ifndef _dvpgl_construct_cameras_h_
-#define _dvpgl_construct_cameras_h_
+// This is gel/mrc/vpgl/algo/vpgl_construct_cameras.h
+#ifndef vpgl_construct_cameras_h_
+#define vpgl_construct_cameras_h_
 //:
 // \file
 // \brief This class creates a pair of cameras from a set of corresponding points from a pair of images.
@@ -12,7 +12,7 @@
 //    0 2000 384
 //    0    0   1]
 //
-// This class needs to be rewritten in terms of dvpgl data structures
+// This class needs to be rewritten in terms of vpgl data structures
 
 #include <vcl_iostream.h>
 #include <vgl/vgl_point_2d.h>
@@ -22,14 +22,14 @@
 #include <mvl/FMatrix.h>
 #include <mvl/PMatrix.h>
 
-class dvpgl_construct_cameras{
-
-public:
+class vpgl_construct_cameras
+{
+ public:
     //: constructor
-    dvpgl_construct_cameras();
+    vpgl_construct_cameras();
     //: constructor initializing the set of points
-    dvpgl_construct_cameras(vcl_vector<vgl_point_2d<double> > p0,vcl_vector<vgl_point_2d<double> > p1);
-    ~dvpgl_construct_cameras();
+    vpgl_construct_cameras(vcl_vector<vgl_point_2d<double> > p0,vcl_vector<vgl_point_2d<double> > p1);
+    ~vpgl_construct_cameras();
 
     //: fuunction to construct cameras
     bool construct();
@@ -38,7 +38,7 @@ public:
     PMatrix get_camera1(){return P1_;}
     PMatrix get_camera2(){return P2_;}
 
-private: 
+ private:
     //: set of points
     vcl_vector<vgl_point_2d<double> > points0_;
     vcl_vector<vgl_point_2d<double> > points1_;
@@ -47,7 +47,6 @@ private:
     vnl_double_3x3 K;
     vnl_double_3x3 E;
     PMatrix P1_,P2_;
-
 };
 
-#endif
+#endif // vpgl_construct_cameras_h_
