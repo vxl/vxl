@@ -1,5 +1,11 @@
 #include <vidl2/vidl2_color.h>
 #include <vidl2/vidl2_convert.h>
+#include <vidl2/vidl2_dshow.h>
+#include <vidl2/vidl2_dshow_file_istream.h>
+#include <vidl2/vidl2_dshow_istream_params.h>
+#include <vidl2/vidl2_dshow_istream_params_esf.h>
+#include <vidl2/vidl2_dshow_live_istream.h>
+#include <vidl2/vidl2_exception.h>
 #include <vidl2/vidl2_frame.h>
 #include <vidl2/vidl2_frame_sptr.h>
 #include <vidl2/vidl2_pixel_format.h>

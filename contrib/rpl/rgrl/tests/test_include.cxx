@@ -108,6 +108,7 @@
 #include <rgrl/rgrl_util.h>
 #include <rgrl/rgrl_view.h>
 #include <rgrl/rgrl_weighter.h>
+#include <rgrl/rgrl_weighter_indiv_scale.h>
 #include <rgrl/rgrl_weighter_m_est.h>
 #include <rgrl/rgrl_weighter_unit.h>
 

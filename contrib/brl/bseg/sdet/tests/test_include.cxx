@@ -11,6 +11,8 @@
 #include <sdet/sdet_grid_finder_params.h>
 #include <sdet/sdet_harris_detector.h>
 #include <sdet/sdet_harris_detector_params.h>
+#include <sdet/sdet_nonmax_suppression.h>
+#include <sdet/sdet_nonmax_suppression_params.h>
 #include <sdet/sdet_region.h>
 #include <sdet/sdet_region_edge.h>
 #include <sdet/sdet_region_edge_sptr.h>
