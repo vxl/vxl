@@ -60,7 +60,8 @@ IF( DIRECTSHOW_FOUND )
     vidl2_dshow_file_istream.h         vidl2_dshow_file_istream.cxx
     vidl2_dshow_live_istream.h         vidl2_dshow_live_istream.cxx
     vidl2_dshow_istream_params.h       vidl2_dshow_istream_params.cxx
-    #vidl2_dshow_istream_params_esf.h   vidl2_dshow_istream_params_esf.cxx
+    vidl2_dshow_istream_params_esf.h
+                                     # vidl2_dshow_istream_params_esf.cxx
   )
 ENDIF( DIRECTSHOW_FOUND )
 
