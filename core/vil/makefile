@@ -73,7 +73,7 @@ SOURCES += file_formats/vil_nitf2_image_subheader.cxx
 SOURCES += file_formats/vil_nitf2_des.cxx
 
 # Stuff shared by all NITF2 classes
-MANPAGE_SOURCES += file_formats/vil_nitf2.h
+SOURCES += file_formats/vil_nitf2.cxx
 
 # Generic framework for reading NITF tagged record extensions (TREs)
 SOURCES += file_formats/vil_nitf2_array_field.cxx
