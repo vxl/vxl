@@ -1,4 +1,4 @@
-// This is brl/bbas/vidl2/vidl2_dshow_istream.cxx
+// This is brl/bbas/vidl2/vidl2_dshow.cxx
 //=========================================================================
 //:
 // \file
@@ -6,7 +6,6 @@
 //
 // See vidl2_dshow.h for details.
 //
-// Last modified $Date: 2006/03/09 16:23:22 $ by $Author: miguelfv $.
 //=========================================================================
 
 #include <vidl2/vidl2_dshow.h>
@@ -30,7 +29,7 @@ namespace
   {
     //SINGLETON_PROTECTION(com_manager);
 
-  public:
+   public:
     void find_capture_devices();
     void print_capture_device_names() const;
     vcl_vector<vcl_string> get_capture_device_names() const;
@@ -44,7 +43,7 @@ namespace
       return *instance_;
     }
 
-  private:
+   private:
     com_manager();
     ~com_manager();
     com_manager(const com_manager&);
@@ -110,7 +109,7 @@ namespace
       if (FAILED(hr))
       {
         vcl_cerr << "BindToStorage failed for device "
-                 << capture_devices_.size() + 1 << "\n"
+                 << capture_devices_.size() + 1 << '\n'
                  << DSHOW_GET_ERROR_TEXT(hr) << vcl_endl;
         continue;
       }
@@ -193,10 +192,10 @@ namespace
 
   class guid_name_list
   {
-  public:
+   public:
     static vcl_string get_name(const GUID& guid);
 
-  private:
+   private:
     static guid_string_entry names[];
     static unsigned int count;
   };
@@ -247,10 +246,10 @@ vidl2_dshow::get_error_text(const char* file, int line, HRESULT hr)
   DWORD result = AMGetErrorText(hr, err, MAX_ERROR_TEXT_LEN);
 
   vcl_ostringstream oss;
-  oss << file << ":" << line << ":";
+  oss << file << ':' << line << ':';
   result
     ? oss << CT2A(err)
-    : oss << "Unknown Error (" << vcl_hex << hr << ")";
+    : oss << "Unknown Error (" << vcl_hex << hr << ')';
 
   return oss.str();
 }
@@ -389,11 +388,12 @@ void vidl2_dshow::get_media_info(const AM_MEDIA_TYPE& amt,
     height = vih->bmiHeader.biHeight < 0
            ? -vih->bmiHeader.biHeight
            :  vih->bmiHeader.biHeight;
-    // ***** figure out how to handle bottom_up dibs...
-    //if (vih->bmiHeader.biHeight < 0)
-    //{
-    //  is_bottom_up_ = true;
-    //}
+#if 0 // ***** figure out how to handle bottom_up dibs...
+    if (vih->bmiHeader.biHeight < 0)
+    {
+      is_bottom_up_ = true;
+    }
+#endif
   }
   else 
   {
@@ -418,10 +418,12 @@ void vidl2_dshow::get_media_info(const AM_MEDIA_TYPE& amt,
   {
     pixel_format = VIDL2_PIXEL_FORMAT_MONO_8;
   }
-  //else if (amt.subtype == MEDIASUBTYPE_ARGB32)
-  //{
-  //  pixel_format = VIDL2_PIXEL_FORMAT_ABGR_32;
-  //}
+#if 0
+  else if (amt.subtype == MEDIASUBTYPE_ARGB32)
+  {
+    pixel_format = VIDL2_PIXEL_FORMAT_ABGR_32;
+  }
+#endif
   else if (amt.subtype == MEDIASUBTYPE_YUY2)
   {
     pixel_format = VIDL2_PIXEL_FORMAT_YUYV_422;
@@ -443,10 +445,12 @@ void vidl2_dshow::get_media_info(const AM_MEDIA_TYPE& amt,
   {
     pixel_format = VIDL2_PIXEL_FORMAT_UYVY_411;
   }
-  //else if (amt.subtype == MEDIASUBTYPE_YVU9)
-  //{
-  //  pixel_format = ;
-  //}
+#if 0
+  else if (amt.subtype == MEDIASUBTYPE_YVU9)
+  {
+    pixel_format = ;
+  }
+#endif
   else if (amt.subtype == vidl2_dshow::get_guid_from_fourcc("DX50"))
   { // MEDIASUBTYPE_DX50
     pixel_format = VIDL2_PIXEL_FORMAT_UNKNOWN;
@@ -506,173 +510,175 @@ vidl2_dshow::get_capture_device_moniker(const vcl_string& name)
   return com.get_capture_device_moniker(name);
 }
 
-////: 
-//void
-//vidl2_dshow::build_filter_graph(/*CComPtr<ICaptureGraphBuilder2>& graph_builder,*/
-//                                CComPtr<IFilterGraph2>&  filter_graph,
-//                                CComPtr<IMoniker>&       moniker,
-//                                CComPtr<ISampleGrabber>& sample_grabber)
-//{
-//  assert(/*graph_builder == NULL &&*/
-//    filter_graph  == NULL &&
-//    moniker       != NULL);
-//
-//  CComPtr<ICaptureGraphBuilder2> graph_builder;
-//
-//  // create the filter graph manager
-//  DSHOW_ERROR_IF_FAILED(filter_graph.CoCreateInstance(CLSID_FilterGraph));
-//
-//  // create the capture graph builder
-//  DSHOW_ERROR_IF_FAILED(
-//    graph_builder.CoCreateInstance(CLSID_CaptureGraphBuilder2));
-//
-//  // initialize the capture graph builder
-//  graph_builder->SetFiltergraph(filter_graph);
-//
-//  // add the selected source filter to filter graph
-//  CComPtr<IBaseFilter> source_filter;
-//  DSHOW_ERROR_IF_FAILED(filter_graph->AddSourceFilterForMoniker(
-//    moniker, 0, L"Source", &source_filter));
-//
-//
-//  CComPtr<IAMVideoProcAmp> am_video_proc_amp;
-//  long value, min, max, delta, dflt, flags, flags2;
-//  source_filter->QueryInterface(IID_IAMVideoProcAmp, reinterpret_cast<void**>(&am_video_proc_amp));
-//  am_video_proc_amp->Get(VideoProcAmp_Brightness, &value, &flags);
-//  am_video_proc_amp->GetRange(VideoProcAmp_Brightness, &min, &max, &delta, &dflt, &flags2);
-//  vcl_cout << value  << " , "
-//           << min    << " , "
-//           << max    << " , "
-//           << delta  << " , "
-//           << dflt   << " , "
-//           << flags  << " , "
-//           << flags2 << vcl_endl;
-//
-//  CComPtr<IESFProperties> esf_properties;
-//
-//  source_filter->QueryInterface(IID_IESFProperties, reinterpret_cast<void**>(&esf_properties));
-//  esf_properties->GetBrightness(&value);
-//  esf_properties->GetBrightnessRange(&min, &max, &dflt);
-//  vcl_cout << value  << " , "
-//           << min    << " , "
-//           << max    << " , "
-//           << dflt   << vcl_endl;
-//  esf_properties.Release();
-//
-//  DSHOW_ERROR_IF_FAILED(graph_builder->FindInterface(
-//    &PIN_CATEGORY_CAPTURE,//PIN_CATEGORY_PREVIEW,LOOK_DOWNSTREAM_ONLY,
-//    0,//&MEDIATYPE_Video,
-//    source_filter,
-//    IID_IESFProperties,
-//    reinterpret_cast<void**>(&esf_properties)));
-//  esf_properties->GetBrightness(&value);
-//  esf_properties->GetBrightnessRange(&min, &max, &dflt);
-//  vcl_cout << value  << " , "
-//           << min    << " , "
-//           << max    << " , "
-//           << dflt   << vcl_endl;
-//  esf_properties.Release();
-//
-//  DSHOW_ERROR_IF_FAILED(graph_builder->FindInterface(
-//    &PIN_CATEGORY_PREVIEW,//LOOK_DOWNSTREAM_ONLY,
-//    0,//&MEDIATYPE_Video,
-//    source_filter,
-//    IID_IESFProperties,
-//    reinterpret_cast<void**>(&esf_properties)));
-//  esf_properties->GetBrightness(&value);
-//  esf_properties->GetBrightnessRange(&min, &max, &dflt);
-//  vcl_cout << value  << " , "
-//           << min    << " , "
-//           << max    << " , "
-//           << dflt   << vcl_endl;
-//  esf_properties.Release();
-//
-//
-//  // *** configure the Video Output params before connecting the pin ***
-//  CComPtr<IAMStreamConfig> am_stream_config;
-//  DSHOW_ERROR_IF_FAILED(graph_builder->FindInterface(
-//    &PIN_CATEGORY_CAPTURE,//PIN_CATEGORY_PREVIEW,LOOK_DOWNSTREAM_ONLY,
-//    0,//&MEDIATYPE_Video,
-//    source_filter,
-//    IID_IAMStreamConfig,
-//    reinterpret_cast<void**>(&am_stream_config)));
-//
-//  int count,size;
-//  am_stream_config->GetNumberOfCapabilities(&count,&size);
-//  vcl_cout << "GetNumberOfCapabilities: " << count << " , " << size << vcl_endl;
-//
-//  VIDEO_STREAM_CONFIG_CAPS video_stream_config_caps;
-//  assert(sizeof(video_stream_config_caps) == size);
-//
-//  AM_MEDIA_TYPE* am_media_type = 0;
-//  for (int i = 0; i < count; i++)
-//  {
-//    am_stream_config->GetStreamCaps(
-//      i,
-//      &am_media_type,
-//      reinterpret_cast<BYTE*>(&video_stream_config_caps));
-//
-//    //vcl_cout << video_stream_config_caps.InputSize.cx << "\t"
-//    //         << video_stream_config_caps.InputSize.cy << "\t"
-//    //         << GuidNames[am_media_type->subtype] << vcl_endl;
-//
-//    if (am_media_type != NULL)
-//    {
-//      if (am_media_type->cbFormat != 0)
-//      {
-//        CoTaskMemFree(reinterpret_cast<void*>(am_media_type->pbFormat));
-//        am_media_type->cbFormat = 0;
-//        am_media_type->pbFormat = 0;
-//      }
-//      if (am_media_type->pUnk != 0)
-//      {
-//        // Unecessary because pUnk should not be used, but safest.
-//        am_media_type->pUnk->Release();
-//        am_media_type->pUnk = 0;
-//      }
-//
-//      CoTaskMemFree(am_media_type);
-//    }
-//  }
-//
-//  // create sample grabber filter and add it to filter graph
-//  CComPtr<IBaseFilter> sample_grabber_filter;
-//  DSHOW_ERROR_IF_FAILED(
-//    sample_grabber_filter.CoCreateInstance(CLSID_SampleGrabber));
-//  DSHOW_ERROR_IF_FAILED(
-//    filter_graph->AddFilter(sample_grabber_filter, L"Sample Grabber"));
-//
-//  //CComPtr<ISampleGrabber> sample_grabber;
-//  sample_grabber_filter->QueryInterface(&sample_grabber);
-//
-//  AM_MEDIA_TYPE mt;
-//  ZeroMemory(&mt, sizeof(AM_MEDIA_TYPE));
-//  mt.majortype = MEDIATYPE_Video;
-//  //mt.subtype = MEDIASUBTYPE_RGB24;
-//  sample_grabber->SetMediaType(&mt);
-//  sample_grabber->SetBufferSamples(true);
-//  sample_grabber->SetOneShot(true);
-//
-//  // create a null renderer for preview pin
-//  // *** is this required always? test different configurations... ***
-//  CComPtr<IBaseFilter> null_renderer;
-//  DSHOW_ERROR_IF_FAILED(
-//    null_renderer.CoCreateInstance(CLSID_NullRenderer));
-//  DSHOW_ERROR_IF_FAILED(
-//    filter_graph->AddFilter(null_renderer, L"Null Renderer"));
-//
-//  // *** MSDN docs suggest turning the graph clock off (if not needed)
-//  //     for running the graph faster. Check this.
-//  // ***
-//
-//  // *** connect the pins ***
-//  //PIN_CATEGORY_CAPTURE
-//  //MEDIATYPE_Video
-//  DSHOW_ERROR_IF_FAILED(graph_builder->RenderStream(0, 0,
-//                                                    source_filter,
-//                                                    sample_grabber_filter,
-//                                                    null_renderer));
-//}
+#if 0 // function temporarily commented out
+//: 
+void
+vidl2_dshow::build_filter_graph(/*CComPtr<ICaptureGraphBuilder2>& graph_builder,*/
+                                CComPtr<IFilterGraph2>&  filter_graph,
+                                CComPtr<IMoniker>&       moniker,
+                                CComPtr<ISampleGrabber>& sample_grabber)
+{
+  assert(/*graph_builder == NULL &&*/
+    filter_graph  == NULL &&
+    moniker       != NULL);
+
+  CComPtr<ICaptureGraphBuilder2> graph_builder;
+
+  // create the filter graph manager
+  DSHOW_ERROR_IF_FAILED(filter_graph.CoCreateInstance(CLSID_FilterGraph));
+
+  // create the capture graph builder
+  DSHOW_ERROR_IF_FAILED(
+    graph_builder.CoCreateInstance(CLSID_CaptureGraphBuilder2));
+
+  // initialize the capture graph builder
+  graph_builder->SetFiltergraph(filter_graph);
+
+  // add the selected source filter to filter graph
+  CComPtr<IBaseFilter> source_filter;
+  DSHOW_ERROR_IF_FAILED(filter_graph->AddSourceFilterForMoniker(
+    moniker, 0, L"Source", &source_filter));
+
+
+  CComPtr<IAMVideoProcAmp> am_video_proc_amp;
+  long value, min, max, delta, dflt, flags, flags2;
+  source_filter->QueryInterface(IID_IAMVideoProcAmp, reinterpret_cast<void**>(&am_video_proc_amp));
+  am_video_proc_amp->Get(VideoProcAmp_Brightness, &value, &flags);
+  am_video_proc_amp->GetRange(VideoProcAmp_Brightness, &min, &max, &delta, &dflt, &flags2);
+  vcl_cout << value  << " , "
+           << min    << " , "
+           << max    << " , "
+           << delta  << " , "
+           << dflt   << " , "
+           << flags  << " , "
+           << flags2 << vcl_endl;
+
+  CComPtr<IESFProperties> esf_properties;
+
+  source_filter->QueryInterface(IID_IESFProperties, reinterpret_cast<void**>(&esf_properties));
+  esf_properties->GetBrightness(&value);
+  esf_properties->GetBrightnessRange(&min, &max, &dflt);
+  vcl_cout << value  << " , "
+           << min    << " , "
+           << max    << " , "
+           << dflt   << vcl_endl;
+  esf_properties.Release();
+
+  DSHOW_ERROR_IF_FAILED(graph_builder->FindInterface(
+    &PIN_CATEGORY_CAPTURE,//PIN_CATEGORY_PREVIEW,LOOK_DOWNSTREAM_ONLY,
+    0,//&MEDIATYPE_Video,
+    source_filter,
+    IID_IESFProperties,
+    reinterpret_cast<void**>(&esf_properties)));
+  esf_properties->GetBrightness(&value);
+  esf_properties->GetBrightnessRange(&min, &max, &dflt);
+  vcl_cout << value  << " , "
+           << min    << " , "
+           << max    << " , "
+           << dflt   << vcl_endl;
+  esf_properties.Release();
+
+  DSHOW_ERROR_IF_FAILED(graph_builder->FindInterface(
+    &PIN_CATEGORY_PREVIEW,//LOOK_DOWNSTREAM_ONLY,
+    0,//&MEDIATYPE_Video,
+    source_filter,
+    IID_IESFProperties,
+    reinterpret_cast<void**>(&esf_properties)));
+  esf_properties->GetBrightness(&value);
+  esf_properties->GetBrightnessRange(&min, &max, &dflt);
+  vcl_cout << value  << " , "
+           << min    << " , "
+           << max    << " , "
+           << dflt   << vcl_endl;
+  esf_properties.Release();
+
+
+  // *** configure the Video Output params before connecting the pin ***
+  CComPtr<IAMStreamConfig> am_stream_config;
+  DSHOW_ERROR_IF_FAILED(graph_builder->FindInterface(
+    &PIN_CATEGORY_CAPTURE,//PIN_CATEGORY_PREVIEW,LOOK_DOWNSTREAM_ONLY,
+    0,//&MEDIATYPE_Video,
+    source_filter,
+    IID_IAMStreamConfig,
+    reinterpret_cast<void**>(&am_stream_config)));
+
+  int count,size;
+  am_stream_config->GetNumberOfCapabilities(&count,&size);
+  vcl_cout << "GetNumberOfCapabilities: " << count << " , " << size << vcl_endl;
+
+  VIDEO_STREAM_CONFIG_CAPS video_stream_config_caps;
+  assert(sizeof(video_stream_config_caps) == size);
+
+  AM_MEDIA_TYPE* am_media_type = 0;
+  for (int i = 0; i < count; i++)
+  {
+    am_stream_config->GetStreamCaps(
+      i,
+      &am_media_type,
+      reinterpret_cast<BYTE*>(&video_stream_config_caps));
+
+    //vcl_cout << video_stream_config_caps.InputSize.cx << '\t'
+    //         << video_stream_config_caps.InputSize.cy << '\t'
+    //         << GuidNames[am_media_type->subtype] << vcl_endl;
+
+    if (am_media_type != NULL)
+    {
+      if (am_media_type->cbFormat != 0)
+      {
+        CoTaskMemFree(reinterpret_cast<void*>(am_media_type->pbFormat));
+        am_media_type->cbFormat = 0;
+        am_media_type->pbFormat = 0;
+      }
+      if (am_media_type->pUnk != 0)
+      {
+        // Unecessary because pUnk should not be used, but safest.
+        am_media_type->pUnk->Release();
+        am_media_type->pUnk = 0;
+      }
+
+      CoTaskMemFree(am_media_type);
+    }
+  }
+
+  // create sample grabber filter and add it to filter graph
+  CComPtr<IBaseFilter> sample_grabber_filter;
+  DSHOW_ERROR_IF_FAILED(
+    sample_grabber_filter.CoCreateInstance(CLSID_SampleGrabber));
+  DSHOW_ERROR_IF_FAILED(
+    filter_graph->AddFilter(sample_grabber_filter, L"Sample Grabber"));
+
+  //CComPtr<ISampleGrabber> sample_grabber;
+  sample_grabber_filter->QueryInterface(&sample_grabber);
+
+  AM_MEDIA_TYPE mt;
+  ZeroMemory(&mt, sizeof(AM_MEDIA_TYPE));
+  mt.majortype = MEDIATYPE_Video;
+  //mt.subtype = MEDIASUBTYPE_RGB24;
+  sample_grabber->SetMediaType(&mt);
+  sample_grabber->SetBufferSamples(true);
+  sample_grabber->SetOneShot(true);
+
+  // create a null renderer for preview pin
+  // *** is this required always? test different configurations... ***
+  CComPtr<IBaseFilter> null_renderer;
+  DSHOW_ERROR_IF_FAILED(
+    null_renderer.CoCreateInstance(CLSID_NullRenderer));
+  DSHOW_ERROR_IF_FAILED(
+    filter_graph->AddFilter(null_renderer, L"Null Renderer"));
+
+  // *** MSDN docs suggest turning the graph clock off (if not needed)
+  //     for running the graph faster. Check this.
+  // ***
+
+  // *** connect the pins ***
+  //PIN_CATEGORY_CAPTURE
+  //MEDIATYPE_Video
+  DSHOW_ERROR_IF_FAILED(graph_builder->RenderStream(0, 0,
+                                                    source_filter,
+                                                    sample_grabber_filter,
+                                                    null_renderer));
+}
+#endif // 0
 
 void vidl2_dshow::connect_filters(CComPtr<IFilterGraph2>& filter_graph,
                                   CComPtr<IBaseFilter>& source,
@@ -717,7 +723,7 @@ void vidl2_dshow::connect_filters(CComPtr<IFilterGraph2>& filter_graph,
       }
 
       // Try to connect them and exit if u can, else loop more
-      if(SUCCEEDED(filter_graph->ConnectDirect(source_pin, target_pin, 0)))
+      if (SUCCEEDED(filter_graph->ConnectDirect(source_pin, target_pin, 0)))
       {
         return;
       }
