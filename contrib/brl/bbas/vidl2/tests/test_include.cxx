@@ -1,10 +1,5 @@
 #include <vidl2/vidl2_color.h>
 #include <vidl2/vidl2_convert.h>
-#include <vidl2/vidl2_dshow.h>
-#include <vidl2/vidl2_dshow_file_istream.h>
-#include <vidl2/vidl2_dshow_istream_params.h>
-#include <vidl2/vidl2_dshow_istream_params_esf.h>
-#include <vidl2/vidl2_dshow_live_istream.h>
 #include <vidl2/vidl2_exception.h>
 #include <vidl2/vidl2_frame.h>
 #include <vidl2/vidl2_frame_sptr.h>
@@ -25,5 +20,14 @@
 #ifdef HAS_DC1394
 #include <vidl2/vidl2_dc1394_istream.h>
 #endif
+#ifdef HAS_DIRECTSHOW
+#include <vidl2/vidl2_dshow.h>
+#include <vidl2/vidl2_dshow_file_istream.h>
+#include <vidl2/vidl2_dshow_live_istream.h>
+#include <vidl2/vidl2_dshow_istream_params.h>
+#ifdef HAS_DIRECTSHOW_ESF
+#include <vidl2/vidl2_dshow_istream_params_esf.h>
+#endif // HAS_DIRECTSHOW_ESF
+#endif // HAS_DIRECTSHOW
 
 int main() { return 0; }
