@@ -99,9 +99,6 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-SOURCE=.\vpgl_basic_camera.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vgl_io_point_2d+double-.cxx
 # End Source File
 # Begin Source File
@@ -165,22 +162,10 @@ SOURCE=.\Templates/vsl_binary_loader+vpgl_proj_camera+double--.cxx
 # Begin Group "Header Files"
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
-SOURCE=.\vpgl_basic_camera.h
-# End Source File
-# Begin Source File
-SOURCE=.\vpgl_matrix_camera.h
-# End Source File
-# Begin Source File
 SOURCE=.\vpgl_perspective_camera.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vpgl_perspective_camera.h
-# End Source File
-# Begin Source File
-SOURCE=.\vpgl_perspective_camera_sptr.h
-# End Source File
-# Begin Source File
-SOURCE=.\vpgl_rational_camera.h
 # End Source File
 # Begin Source File
 SOURCE=.\vgl_rotation_3d.h
@@ -232,6 +217,15 @@ SOURCE=.\vpgl_radial_distortion.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vpgl_reg_fundamental_matrix.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_calibration_matrix.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_poly_radial_distortion.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_reg_fundamental_matrix.h
 # End Source File
 # End Group
 # End Target
