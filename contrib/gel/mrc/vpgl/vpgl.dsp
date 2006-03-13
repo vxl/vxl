@@ -102,25 +102,64 @@ LIB32=link.exe -lib
 SOURCE=.\vpgl_basic_camera.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vpgl_matrix_camera.cxx
+SOURCE=.\Templates/vgl_io_point_2d+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vpgl_perspective_camera.cxx
+SOURCE=.\Templates/vgl_io_point_3d+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vpgl_rational_camera.cxx
+SOURCE=.\Templates/vnl_io_matrix_fixed+double.3.4-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+vpgl_basic_camera-.cxx
+SOURCE=.\Templates/vnl_io_matrix_fixed+double.4.4-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+vpgl_matrix_camera-.cxx
+SOURCE=.\Templates/vpgl_affine_camera+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+vpgl_perspective_camera-.cxx
+SOURCE=.\Templates/vpgl_affine_fundamental_matrix+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+vpgl_rational_camera-.cxx
+SOURCE=.\Templates/vpgl_calibration_matrix+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vpgl_fundamental_matrix+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vpgl_lens_distortion+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vpgl_perspective_camera+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vpgl_poly_radial_distortion+double.1-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vpgl_poly_radial_distortion+double.2-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vpgl_poly_radial_distortion+double.3-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vpgl_poly_radial_distortion+double.4-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vpgl_poly_radial_distortion+double.5-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vpgl_poly_radial_distortion+double.6-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vpgl_proj_camera+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vpgl_radial_distortion+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vpgl_reg_fundamental_matrix+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_binary_loader+vpgl_proj_camera+double--.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -132,13 +171,10 @@ SOURCE=.\vpgl_basic_camera.h
 SOURCE=.\vpgl_matrix_camera.h
 # End Source File
 # Begin Source File
+SOURCE=.\vpgl_perspective_camera.txx
+# End Source File
+# Begin Source File
 SOURCE=.\vpgl_perspective_camera.h
-# End Source File
-# Begin Source File
-SOURCE=.\vpgl_basic_camera_sptr.h
-# End Source File
-# Begin Source File
-SOURCE=.\vpgl_matrix_camera_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\vpgl_perspective_camera_sptr.h
@@ -146,8 +182,57 @@ SOURCE=.\vpgl_perspective_camera_sptr.h
 # Begin Source File
 SOURCE=.\vpgl_rational_camera.h
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+# Begin Source File
+SOURCE=.\vgl_rotation_3d.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_affine_camera.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_affine_camera.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_affine_fundamental_matrix.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_affine_fundamental_matrix.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_calibration_matrix.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_camera.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_fundamental_matrix.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_fundamental_matrix.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_lens_distortion.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_lens_distortion.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_poly_radial_distortion.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_proj_camera.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_proj_camera.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_radial_distortion.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_radial_distortion.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_reg_fundamental_matrix.txx
+# End Source File
 # End Group
 # End Target
 # End Project

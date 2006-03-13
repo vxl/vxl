@@ -489,6 +489,9 @@ SOURCE=.\file_formats/vil_nitf2_des.cxx
 SOURCE=.\file_formats/vil_tiff_header.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\file_formats/vil_nitf2.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil_resample_bilin+float.float-.cxx
 # End Source File
 # Begin Source File

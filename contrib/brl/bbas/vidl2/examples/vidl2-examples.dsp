@@ -9,6 +9,12 @@ SOURCE=.\vidl2_player_manager.cxx
 # Begin Source File
 SOURCE=.\vidl2_player_menus.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vidl2_dshow_file_example.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_dshow_live_example.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""

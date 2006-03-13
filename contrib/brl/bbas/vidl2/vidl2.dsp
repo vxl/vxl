@@ -37,6 +37,24 @@ SOURCE=.\vidl2_convert.cxx
 SOURCE=.\vidl2_ffmpeg_convert.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vidl2_color.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_dshow.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_dshow_file_istream.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_dshow_istream_params.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_dshow_live_istream.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_pixel_iterator.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil_smart_ptr+vidl2_frame-.cxx
 # End Source File
 # End Group
@@ -92,6 +110,27 @@ SOURCE=.\vidl2_color.h
 # End Source File
 # Begin Source File
 SOURCE=.\vidl2_ffmpeg_convert.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_dshow.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_dshow_file_istream.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_dshow_istream_params.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_dshow_istream_params_esf.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_dshow_live_istream.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_exception.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_pixel_iterator.txx
 # End Source File
 # End Group
 # End Target

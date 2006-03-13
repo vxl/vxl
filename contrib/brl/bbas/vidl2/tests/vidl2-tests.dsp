@@ -209,6 +209,9 @@ SOURCE=.\test_pixel_format.cxx
 SOURCE=.\test_pixel_iterator.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_color.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group
