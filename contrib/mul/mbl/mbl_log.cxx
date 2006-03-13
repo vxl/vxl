@@ -26,37 +26,37 @@ vcl_ostream& operator<<(vcl_ostream&os, mbl_logger::levels level)
 {
   switch (level)
   {
-  case mbl_logger::NONE:
+   case mbl_logger::NONE:
     os << "NONE";
     break;
-  case mbl_logger::EMERG:
+   case mbl_logger::EMERG:
     os << "EMERG";
     break;
-  case mbl_logger::ALERT:
+   case mbl_logger::ALERT:
     os << "ALERT";
     break;
-  case mbl_logger::CRIT:
+   case mbl_logger::CRIT:
     os << "CRIT";
     break;
-  case mbl_logger::ERR:
+   case mbl_logger::ERR:
     os << "ERR";
     break;
-  case mbl_logger::WARN:
+   case mbl_logger::WARN:
     os << "WARN";
     break;
-  case mbl_logger::NOTICE:
+   case mbl_logger::NOTICE:
     os << "NOTICE";
     break;
-  case mbl_logger::INFO:
+   case mbl_logger::INFO:
     os << "INFO";
     break;
-  case mbl_logger::DEBUG:
+   case mbl_logger::DEBUG:
     os << "DEBUG";
     break;
-  case mbl_logger::ALL:
+   case mbl_logger::ALL:
     os << "ALL";
     break;
-  default:
+   default:
     os << "LOG" << level;
     break;
   }
@@ -313,8 +313,8 @@ void mbl_logger::mtstop()
 #else // old version
 
 
-// Got the a streambuf example from vul_redirector and hacked around with it.
-// It passes on all stuff direct to the real_streambuf, whilst calling
+// Got a streambuf example from vul_redirector and hacked around with it.
+// It passes on all stuff directly to the real_streambuf, whilst calling
 // extra functions on the output object to print message headers and footers.
 
 
@@ -551,7 +551,7 @@ void mbl_logger_root::update_all_loggers()
 
 mbl_log_categories::mbl_log_categories()
 {
-  cat_spec defult_spec; defult_spec.level = {mbl_logger::NOTICE};
+  cat_spec defult_spec; defult_spec.level = mbl_logger::NOTICE;
   cat_list_[""] = defult_spec;
 }
 
@@ -566,23 +566,23 @@ inline mbl_log_categories::cat_spec parse_cat_spec(const vcl_string &str)
   if (s == "NONE")
     spec.level = mbl_logger::NONE;
   else if (s == "EMERG")
-   spec.level = mbl_logger::EMERG;
+    spec.level = mbl_logger::EMERG;
   else if (s == "ALERT")
-   spec.level = mbl_logger::ALERT;
+    spec.level = mbl_logger::ALERT;
   else if (s == "CRIT")
-   spec.level = mbl_logger::CRIT;
+    spec.level = mbl_logger::CRIT;
   else if (s == "ERR")
-   spec.level = mbl_logger::ERR;
+    spec.level = mbl_logger::ERR;
   else if (s == "WARN")
-   spec.level = mbl_logger::WARN;
+    spec.level = mbl_logger::WARN;
   else if (s == "NOTICE")
-   spec.level = mbl_logger::NOTICE;
+    spec.level = mbl_logger::NOTICE;
   else if (s == "INFO")
-   spec.level = mbl_logger::INFO;
+    spec.level = mbl_logger::INFO;
   else if (s == "DEBUG")
-   spec.level = mbl_logger::DEBUG;
+    spec.level = mbl_logger::DEBUG;
   else if (s == "ALL")
-   spec.level = mbl_logger::ALL;
+    spec.level = mbl_logger::ALL;
   else
   {
     mbl_exception_warning(
@@ -659,7 +659,7 @@ void mbl_log_categories::config(vcl_istream&s)
 void mbl_log_categories::clear()
 {
   cat_list_.clear();
-  cat_spec defult_spec; defult_spec.level = {mbl_logger::NOTICE};
+  cat_spec defult_spec; defult_spec.level = mbl_logger::NOTICE;
   cat_list_[""] = defult_spec;
 }
 
@@ -689,11 +689,11 @@ mbl_log_categories::get(const vcl_string& category) const
   typedef vcl_map<vcl_string, cat_spec>::const_reverse_iterator iter;
 
   iter it = vcl_find_if(cat_list_.rbegin(), cat_list_.rend(),
-    mbl_log_prefix_comp(category));
+                        mbl_log_prefix_comp(category));
   // The search shouldn't get past the first (root) entry.
   assert(it != cat_list_.rend());
 
- // vcl_cerr << "MBL_LOG: Using category \"" << it->first << '\"' << vcl_endl;
+  // vcl_cerr << "MBL_LOG: Using category \"" << it->first << '\"' << vcl_endl;
   return it->second;
 }
 
@@ -703,13 +703,13 @@ vcl_ostream& operator<<(vcl_ostream&os, const mbl_log_categories::cat_spec& spec
   os << "{ level: " << static_cast<mbl_logger::levels>(spec.level);
   switch (spec.output)
   {
-  case mbl_log_categories::cat_spec::FILE_OUT:
+   case mbl_log_categories::cat_spec::FILE_OUT:
     os << " file_output: " << spec.filename;
     break;
-  case mbl_log_categories::cat_spec::COUT:
+   case mbl_log_categories::cat_spec::COUT:
     os << " stream_output: COUT";
     break;
-  case mbl_log_categories::cat_spec::CERR:
+   case mbl_log_categories::cat_spec::CERR:
     os << " stream_output: CERR";
     break;
   }
