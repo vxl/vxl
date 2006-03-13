@@ -40,8 +40,8 @@ static void test_random_round_trip()
       vcl_cout << "ERROR: " << euler << vcl_endl;
     }
   }
-  TEST_NEAR("1000*Random euler -> quaternion -> euler consistent", errcount, 0, 0);
-  vcl_cout << "Average squared error: " <<  avg_sqr_error << vcl_endl;
+  TEST("1000*Random euler -> quaternion -> euler consistent", errcount, 0);
+  vcl_cout << "Average squared error: " << avg_sqr_error << vcl_endl;
 }
 
 static void test_random_euler_near_zero()
@@ -71,14 +71,14 @@ static void test_random_euler_near_zero()
     }
 
   }
-  TEST_NEAR("1000*Random small euler -> small quaternion angle", errcount, 0, 0);
+  TEST("1000*Random small euler -> small quaternion angle", errcount, 0);
+  vcl_cout << "Average squared error: " << avg_sqr_error << vcl_endl;
 }
 
 static void test_random_quat_near_zero()
 {
   vnl_random rng(13241ul);
   unsigned errcount=0;
-  double avg_sqr_error = 0.0;
   for (unsigned i=0;i<1000;++i)
   {
     vnl_quaternion<double> quat(rng.normal()/1000.0, rng.normal()/1000.0, rng.normal()/1000.0,
@@ -94,7 +94,7 @@ static void test_random_quat_near_zero()
     }
 
   }
-  TEST_NEAR("1000*Random small quat -> small euler values", errcount, 0, 0);
+  TEST("1000*Random small quat -> small euler values", errcount, 0);
 }
 
 static void test_rotations()
