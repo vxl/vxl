@@ -9,7 +9,7 @@
 //
 
 #include <vpgl/vpgl_lens_distortion.h>
-#include <vpgl/vpgl_lens_warp_mapper.h>
+#include <vpgl/algo/vpgl_lens_warp_mapper.h>
 #include <vsol/vsol_spatial_object_2d_sptr.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_line_2d_sptr.h>
