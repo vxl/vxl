@@ -14,12 +14,26 @@ IF( FFMPEG_FOUND )
   ADD_DEFINITIONS(-DHAS_FFMPEG)
 ENDIF( FFMPEG_FOUND )
 
-IF( DIRECTSHOW_FOUND )
+IF(DIRECTSHOW_FOUND)
+  INCLUDE_DIRECTORIES(${DIRECTSHOW_INCLUDE_DIR})
   ADD_DEFINITIONS(-DHAS_DSHOW)
 
-  # For Euresys Multicam Driver
-  #INCLUDE_DIRECTORIES(C:/PROGRA~1/Euresys/MultiCam/Include)
-ENDIF( DIRECTSHOW_FOUND )
+  # For Euresys Multicam Driver's DirectShow source filter.
+  # - should I put this in a Module of it's own?
+  #INCLUDE( ${MODULE_PATH}/NewCMake/FindDirectShow_ESF.cmake )
+  FIND_PATH(DIRECTSHOW_ESF_INCLUDE_DIR ESFilter.h
+    "C:/Program Files/Euresys/MultiCam/Include"
+    DOC "What is the path where the file ESFilter.h can be found"
+  )
+  IF(DIRECTSHOW_ESF_INCLUDE_DIR)
+    SET(DIRECTSHOW_ESF_FOUND "YES")
+  ENDIF(DIRECTSHOW_ESF_INCLUDE_DIR)
+
+  IF(DIRECTSHOW_ESF_FOUND)
+    INCLUDE_DIRECTORIES(${DIRECTSHOW_ESF_INCLUDE_DIR})
+    ADD_DEFINITIONS(-DHAS_DIRECTSHOW_ESF)
+  ENDIF(DIRECTSHOW_ESF_FOUND)
+ENDIF(DIRECTSHOW_FOUND)
 
 
 SET(vidl2_sources
@@ -53,17 +67,20 @@ IF( DC1394_FOUND )
   )
 ENDIF( DC1394_FOUND )
 
-IF( DIRECTSHOW_FOUND )
+IF(DIRECTSHOW_FOUND)
   SET(vidl2_sources ${vidl2_sources}
     vidl2_exception.h
     vidl2_dshow.h                      vidl2_dshow.cxx
     vidl2_dshow_file_istream.h         vidl2_dshow_file_istream.cxx
     vidl2_dshow_live_istream.h         vidl2_dshow_live_istream.cxx
     vidl2_dshow_istream_params.h       vidl2_dshow_istream_params.cxx
-    vidl2_dshow_istream_params_esf.h
-                                     # vidl2_dshow_istream_params_esf.cxx
   )
-ENDIF( DIRECTSHOW_FOUND )
+  IF(DIRECTSHOW_ESF_FOUND)
+    SET(vidl2_sources ${vidl2_sources}
+      vidl2_dshow_istream_params_esf.h   vidl2_dshow_istream_params_esf.cxx
+    )
+  ENDIF(DIRECTSHOW_ESF_FOUND)
+ENDIF(DIRECTSHOW_FOUND)
 
 AUX_SOURCE_DIRECTORY(Templates vidl2_sources)
 
@@ -81,9 +98,9 @@ IF( DC1394_FOUND )
   TARGET_LINK_LIBRARIES( vidl2 ${DC1394_LIBRARIES} )
 ENDIF( DC1394_FOUND )
 
-IF( DIRECTSHOW_FOUND )
+IF(DIRECTSHOW_FOUND)
   TARGET_LINK_LIBRARIES( vidl2 ${DIRECTSHOW_LIBRARIES} )
-ENDIF( DIRECTSHOW_FOUND )
+ENDIF(DIRECTSHOW_FOUND)
 
 
 IF( BUILD_TESTING )
