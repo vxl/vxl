@@ -29,9 +29,9 @@ SOURCES += vidl2_dshow.cxx
 SOURCES += vidl2_dshow_file_istream.cxx
 SOURCES += vidl2_dshow_istream_params.cxx
 SOURCES += vidl2_dshow_live_istream.cxx
+SOURCES += vidl2_dshow_istream_params_esf.cxx
 
 MANPAGE_SOURCES += vidl2_exception.h
-MANPAGE_SOURCES += vidl2_dshow_istream_params_esf.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
