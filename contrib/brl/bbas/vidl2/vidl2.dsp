@@ -55,6 +55,9 @@ SOURCE=.\vidl2_dshow_live_istream.cxx
 SOURCE=.\vidl2_pixel_iterator.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vidl2_dshow_istream_params_esf.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil_smart_ptr+vidl2_frame-.cxx
 # End Source File
 # End Group
