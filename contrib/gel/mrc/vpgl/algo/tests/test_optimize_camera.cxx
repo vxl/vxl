@@ -24,7 +24,7 @@ static void test_optimize_camera()
 
   vpgl_calibration_matrix<double> K(2000.0,vgl_homg_point_2d<double>(512,384));
   vgl_homg_point_3d<double> c(10.0,10.0,10.0);
-  vnl_vector<double> w = (vnl_math:pi - vcl_asin(vcl_sqrt(2.0/3.0)))/vcl_sqrt(2.0)*vnl_double_3(-1.0,1.0,0.0);
+  vnl_vector<double> w = (vnl_math::pi - vcl_asin(vcl_sqrt(2.0/3.0)))/vcl_sqrt(2.0)*vnl_double_3(-1.0,1.0,0.0);
   vgl_h_matrix_3d<double> R(vnl_rotation_matrix(w),
                             vnl_vector_fixed< double, 3 >(0.0));
   vpgl_perspective_camera<double> cam(K,c,R);
