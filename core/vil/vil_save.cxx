@@ -34,7 +34,7 @@ bool vil_save(const vil_image_view_base &im, char const* filename, char const* f
   }
   vil_image_resource_sptr out = vil_new_image_resource(os, im.ni(), im.nj(),
                                                        im.nplanes() * vil_pixel_format_num_components(im.pixel_format()),
-                                                       im.pixel_format(), file_format);
+                                                       vil_pixel_format_component_format(im.pixel_format()), file_format);
   if (!out) {
     vcl_cerr << __FILE__ ": (vil_save) Cannot save to type [" << file_format << "]\n";
     return false;
