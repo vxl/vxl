@@ -36,11 +36,11 @@ int main()
   if (Ell->real_type() == vsol_conic_2d::real_ellipse)
     vcl_cout << "The second conic with is really an ellipse\n";
   vcl_cout << "Its midpoint is (" << Ell->midpoint()->x() << ',' << Ell->midpoint()->y() << ")\n"
-	   << "Its equation is " << Ell->a() << ' X^2 + '
-	                         << Ell->b() << ' XY + '
-	                         << Ell->c() << ' Y^2 + '
-	                         << Ell->d() << ' X + '
-	                         << Ell->e() << ' Y + '
+	   << "Its equation is " << Ell->a() << " X^2 + "
+	                         << Ell->b() << " XY + "
+	                         << Ell->c() << " Y^2 + "
+	                         << Ell->d() << " X + "
+	                         << Ell->e() << " Y + "
 	                         << Ell->f() << '\n';
 
   // Calculate the curve length of the ellipse:
