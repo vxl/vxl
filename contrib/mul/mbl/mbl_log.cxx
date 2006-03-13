@@ -551,7 +551,7 @@ void mbl_logger_root::update_all_loggers()
 
 mbl_log_categories::mbl_log_categories()
 {
-  mbl_log_categories::cat_spec defult_spec = {mbl_logger::NOTICE};
+  cat_spec defult_spec; defult_spec.level = {mbl_logger::NOTICE};
   cat_list_[""] = defult_spec;
 }
 
@@ -659,7 +659,7 @@ void mbl_log_categories::config(vcl_istream&s)
 void mbl_log_categories::clear()
 {
   cat_list_.clear();
-  cat_spec defult_spec = {mbl_logger::NOTICE};
+  cat_spec defult_spec; defult_spec.level = {mbl_logger::NOTICE};
   cat_list_[""] = defult_spec;
 }
 
