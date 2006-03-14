@@ -38,6 +38,7 @@ IF(NETLIB_FOUND)
     test_svd.cxx
     test_symmetric_eigensystem.cxx
     test_integral.cxx
+    test_solve_qp.cxx
   )
 
 
@@ -66,6 +67,7 @@ IF(NETLIB_FOUND)
   ADD_TEST( vnl_test_rnpoly_roots             vnl_algo_test_all test_rnpoly_roots            )
   ADD_TEST( vnl_test_rpoly_roots              vnl_algo_test_all test_rpoly_roots             )
   ADD_TEST( vnl_test_integral                 vnl_algo_test_all test_integral                )
+  ADD_TEST( vnl_test_solve_qp                 vnl_algo_test_all test_solve_qp                )
 
   IF ( SITE MATCHES "isbe.man.ac.uk" )
     # For some reason my box (linux-gcc-3.2) has a problem with the optimisation
