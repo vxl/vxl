@@ -13,6 +13,9 @@ vil_nitf2::enum_log_level vil_nitf2::s_log_level = vil_nitf2::log_none;
 
 void vil_nitf2::cleanup_static_members() 
 {
+  // Commented out to test whether this function is needed to avoid reported 
+  // memory leaks. We'll see what valgrid says.
+#if 0
   if( vil_nitf2_header::s_field_definitions_1 ) {
     delete vil_nitf2_header::s_field_definitions_1;
     vil_nitf2_header::s_field_definitions_1 = 0;
@@ -45,4 +48,5 @@ void vil_nitf2::cleanup_static_members()
     delete it->second;
   }
   vil_nitf2_classification::s_field_definitions.clear();
+#endif
 }
