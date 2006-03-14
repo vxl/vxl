@@ -16,8 +16,8 @@ void x_write(vcl_ostream & os, const vnl_quaternion<T> & p, vcl_string name)
   vsl_basic_xml_element element(name);
   element.add_attribute("x", p.x());
   element.add_attribute("y", p.y());
-  element.add_attribute("z", p.y());
-  element.add_attribute("r", p.y());
+  element.add_attribute("z", p.z());
+  element.add_attribute("r", p.r());
   element.x_write(os);
 }
 
