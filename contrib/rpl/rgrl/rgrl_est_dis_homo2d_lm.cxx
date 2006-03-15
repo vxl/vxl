@@ -1,6 +1,7 @@
 //:
 // \file
 #include <rgrl/rgrl_est_dis_homo2d_lm.h>
+#include <rgrl/rgrl_est_homography2d.h>
 #include <rgrl/rgrl_trans_homography2d.h>
 #include <rgrl/rgrl_trans_rad_dis_homo2d.h>
 #include <rgrl/rgrl_trans_rigid.h>
@@ -8,6 +9,7 @@
 #include <rgrl/rgrl_trans_similarity.h>
 #include <rgrl/rgrl_trans_affine.h>
 #include <rgrl/rgrl_match_set.h>
+#include <rgrl/rgrl_internal_util.h>
 
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>
@@ -329,7 +331,7 @@ rgrl_est_dis_homo2d_lm( vnl_vector<double> const& from_centre,
   rgrl_estimator::set_param_dof( 10 );
     
   // default value
-  rgrl_nonlinear_estimator::set_max_num_iter( 30 );
+  rgrl_nonlinear_estimator::set_max_num_iter( 50 );
   rgrl_nonlinear_estimator::set_rel_thres( 1e-5 );
 }
 
@@ -353,10 +355,19 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     assert( from_centre_ == trans.from_centre() );
     assert( to_centre_ == trans.to_centre() );
   }
-  else if ( cur_transform.is_type( rgrl_trans_homography2d::type_id() ) )
-  {
-    rgrl_trans_homography2d const& trans = static_cast<rgrl_trans_homography2d const&>( cur_transform );
-    init_H = trans.H();
+  else {
+    
+    if( !rgrl_internal_util_upgrade_to_homography2D( init_H, cur_transform ) ) {
+    
+      // use normalized DLT to initialize
+      DebugMacro( 0, "Use normalized DLT to initialize" );
+      rgrl_est_homography2d est_homo;
+      rgrl_transformation_sptr tmp_trans= est_homo.estimate( matches, cur_transform );
+      if ( !tmp_trans )
+        return 0;
+      rgrl_trans_homography2d const& trans = static_cast<rgrl_trans_homography2d const&>( *tmp_trans );
+      init_H = trans.H();
+    }
 
     // make the init homography as a CENTERED one
     // centered H_ = to_matrix * H * from_matrix^-1
@@ -373,12 +384,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
     init_H = to_trans * init_H * from_inv;
   }
-  else
-  {
-    // cannot get initial transform
-    // return NULL
-    return 0;
-  }
+
 
   // count the number of constraints/residuals
   typedef rgrl_match_set::const_from_iterator FIter;

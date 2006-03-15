@@ -128,6 +128,7 @@ SET( rgrl_sources
   rgrl_feature_based_registration.h    rgrl_feature_based_registration.cxx
 
   rgrl_debug_util.h                    rgrl_debug_util.cxx
+  rgrl_internal_util.h                 rgrl_internal_util.cxx
   rgrl_util.h                          rgrl_util.cxx
 
   rgrl_event.h                         rgrl_event_sptr.h

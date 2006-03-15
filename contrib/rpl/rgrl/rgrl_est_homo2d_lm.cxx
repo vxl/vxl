@@ -3,11 +3,8 @@
 #include <rgrl/rgrl_est_homo2d_lm.h>
 #include <rgrl/rgrl_est_homography2d.h>
 #include <rgrl/rgrl_trans_homography2d.h>
-#include <rgrl/rgrl_trans_rigid.h>
-#include <rgrl/rgrl_trans_translation.h>
-#include <rgrl/rgrl_trans_similarity.h>
-#include <rgrl/rgrl_trans_affine.h>
 #include <rgrl/rgrl_match_set.h>
+#include <rgrl/rgrl_internal_util.h>
 
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>
@@ -25,39 +22,20 @@
 #include <vcl_cassert.h>
 
 static
+inline
 void
-copy_matrix_at( vnl_matrix<double>& dest, unsigned int rp, unsigned int cp,
-                vnl_matrix<double>const& src )
+H2h( vnl_matrix_fixed<double,3,3> const& H, vnl_vector<double>& h )
 {
-  for ( unsigned i=0; i<src.rows(); ++i )
-    for ( unsigned j=0; j<src.cols(); ++j )
-      dest(rp+i, cp+j) = src(i,j);
-}
-
-static
-void
-copy_vector_at( vnl_matrix<double>& dest, unsigned int rp, unsigned int cp,
-                vnl_vector<double>const& src )
-{
-  for ( unsigned i=0; i<src.size(); ++i )
-    dest(rp+i, cp) = src(i);
-}
-
-static
-void
-H2h( vnl_matrix<double>const& H, vnl_vector<double>& h )
-{
-  h.set_size( 9 );
   for ( unsigned i=0; i<H.rows(); ++i )
     for ( unsigned j=0; j<H.cols(); ++j )
-      h( i*H.cols()+j ) = H(i,j);
+      h( i*3+j ) = H(i,j);
 }
 
 static
+inline
 void
-h2H( vnl_vector<double>const& h, vnl_matrix<double>& H )
+h2H( vnl_vector<double> const& h, vnl_matrix_fixed<double,3,3>& H )
 {
-  H.set_size( 3, 3 );
   for ( unsigned i=0; i<3; ++i )
     for ( unsigned j=0; j<3; ++j )
       H(i,j) = h( i*3+j );
@@ -210,7 +188,7 @@ rgrl_est_homo2d_lm( bool with_grad )
    rgrl_estimator::set_param_dof( 8 );
 
   // default value
-  rgrl_nonlinear_estimator::set_max_num_iter( 30 );
+  rgrl_nonlinear_estimator::set_max_num_iter( 50 );
   rgrl_nonlinear_estimator::set_rel_thres( 1e-5 );
 }
 
@@ -220,32 +198,12 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
           rgrl_transformation const& cur_transform ) const
 {
   // get initialization
-  vnl_matrix<double> init_H( 3, 3, vnl_matrix_identity );
-  if ( cur_transform.is_type( rgrl_trans_homography2d::type_id() ) ) {
-    rgrl_trans_homography2d const& trans = static_cast<rgrl_trans_homography2d const&>( cur_transform );
-    init_H = trans.H();
-  } else if ( cur_transform.is_type( rgrl_trans_affine::type_id() ) ) {
-    rgrl_trans_affine const& trans = static_cast<rgrl_trans_affine const&>( cur_transform );
-    assert( trans.t().size() == 2 );
-    copy_matrix_at( init_H, 0, 0, trans.A() );
-    copy_vector_at( init_H, 0, 2, trans.t() );
-  } else if ( cur_transform.is_type( rgrl_trans_similarity::type_id() ) ) {
-    rgrl_trans_similarity const& trans = static_cast<rgrl_trans_similarity const&>( cur_transform );
-    assert( trans.t().size() == 2 );
-    copy_matrix_at( init_H, 0, 0, trans.A() );
-    copy_vector_at( init_H, 0, 2, trans.t() );
-  } else if ( cur_transform.is_type( rgrl_trans_rigid::type_id() ) ) {
-    rgrl_trans_rigid const& trans = static_cast<rgrl_trans_rigid const&>( cur_transform );
-    assert( trans.t().size() == 2 );
-    copy_matrix_at( init_H, 0, 0, trans.R() );
-    copy_vector_at( init_H, 0, 2, trans.t() );
-  } else if ( cur_transform.is_type( rgrl_trans_translation::type_id() ) ) {
-    rgrl_trans_translation const& trans = static_cast<rgrl_trans_translation const&>( cur_transform );
-    assert( trans.t().size() == 2 );
-    copy_vector_at( init_H, 0, 2, trans.t() );
-  } else {
+  vnl_matrix_fixed<double, 3, 3> init_H;
+  
+  if( !rgrl_internal_util_upgrade_to_homography2D( init_H, cur_transform ) ) {
+
     // use normalized DLT to initialize
-    DebugMacro( 1, "Use normalized DLT to initialize" );
+    DebugMacro( 0, "Use normalized DLT to initialize" );
     rgrl_est_homography2d est_homo;
     rgrl_transformation_sptr tmp_trans= est_homo.estimate( matches, cur_transform );
     if ( !tmp_trans )
@@ -266,7 +224,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       }
     }
 
-  // Determine the weighted centres for the purpose of computing more stable
+  // Determine the weighted centres for computing the more stable
   // covariance matrix of homography parameters
   //
   vnl_vector<double> from_centre( 2, 0.0 );
@@ -314,7 +272,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     init_H = to_trans * init_H * from_inv;
   }
   // convert to vector form
-  vnl_vector<double> p;
+  vnl_vector<double> p(9);
   H2h( init_H, p );
 
   // construct least square cost function
