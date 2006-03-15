@@ -587,6 +587,6 @@ test_file_format_read_main( int argc, char* argv[] )
                                                             "ff_grey_float_12bit_uncompressed.dcm" ) );
 #endif // HAS_DCMTK
 
-  vil_nitf2::cleanup_static_members();
+  //vil_nitf2::cleanup_static_members();
   return testlib_test_summary();
 }

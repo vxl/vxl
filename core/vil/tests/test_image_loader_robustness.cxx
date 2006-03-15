@@ -51,7 +51,7 @@ void test_image_loader_robustness( )
   for (unsigned i=0;i<10;++i)
     test_at_file_size(10240);
 
-  vil_nitf2::cleanup_static_members();
+  //vil_nitf2::cleanup_static_members();
 }
 
 TESTMAIN(test_image_loader_robustness);
