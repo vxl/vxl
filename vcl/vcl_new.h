@@ -34,4 +34,7 @@ inline
 void vcl_construct(U * p, V const & value) { new (p) U(value); }
 #endif
 
+#define vcl_bad_alloc std::bad_alloc
+#define vcl_set_new_handler std::bad_alloc
+
 #endif // vcl_new_h_
