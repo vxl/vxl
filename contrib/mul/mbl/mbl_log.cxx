@@ -220,7 +220,8 @@ void mbl_log_output_file::terminate()
 mbl_logger::mbl_logger(const char *id):
   streambuf_(this),
   logstream_(&streambuf_),
-  mt_logstream_(&logstream_)
+  mt_logstream_(&logstream_),
+  output_(0)
 {
   const mbl_log_categories::cat_spec &cat =
     mbl_logger::root().categories().get(id);
@@ -229,19 +230,21 @@ mbl_logger::mbl_logger(const char *id):
 
   if (cat.output == mbl_log_categories::cat_spec::COUT)
   {
-    delete output_;
     output_ = new mbl_log_output_stream(vcl_cout, id);
 //    logstream_.tie(output_.real_stream_);
   }
   else if (cat.output == mbl_log_categories::cat_spec::CERR)
   {
-    delete output_;
     output_ = new mbl_log_output_stream(vcl_cout, id);
+//    logstream_.tie(output_.real_stream_);
+  }
+  else if (cat.output == mbl_log_categories::cat_spec::TEST_SSTREAM)
+  {
+    output_ = new mbl_log_output_stream(root().test_sstream, id);
 //    logstream_.tie(output_.real_stream_);
   }
   else if (cat.output == mbl_log_categories::cat_spec::FILE_OUT)
   {
-    delete output_;
     output_ = new mbl_log_output_file(cat.filename, id);
 //    logstream_.tie(output_.real_stream_);
   }
@@ -267,6 +270,12 @@ void mbl_logger::reinitialise()
   {
     delete output_;
     output_ = new mbl_log_output_stream(vcl_cout, id);
+//    logstream_.tie(output_.real_stream_);
+  }
+  else if (cat.output == mbl_log_categories::cat_spec::TEST_SSTREAM)
+  {
+    delete output_;
+    output_ = new mbl_log_output_stream(root().test_sstream, id);
 //    logstream_.tie(output_.real_stream_);
   }
   else if (cat.output == mbl_log_categories::cat_spec::FILE_OUT)
@@ -606,6 +615,8 @@ inline mbl_log_categories::cat_spec parse_cat_spec(const vcl_string &str)
       spec.output = mbl_log_categories::cat_spec::COUT;
     else if (s == "CERR" || s == "VCL_CERR" || s == "STD::CERR")
       spec.output = mbl_log_categories::cat_spec::CERR;
+    else if (s == "TEST_SSTREAM")
+      spec.output = mbl_log_categories::cat_spec::TEST_SSTREAM;
     else
     {
       mbl_exception_warning(
@@ -677,6 +688,8 @@ struct mbl_log_prefix_comp
       return s1.first == s2;
     else if (s1.first.size() > s2.size())
       return false;
+    else if (s1.first.empty()) // always match against root.
+      return true;
     else
       return s1.first == s2.substr(0,s1.first.size()) && s2[s1.first.size()] == '.';
   }
@@ -711,6 +724,9 @@ vcl_ostream& operator<<(vcl_ostream&os, const mbl_log_categories::cat_spec& spec
     break;
    case mbl_log_categories::cat_spec::CERR:
     os << " stream_output: CERR";
+    break;
+  case mbl_log_categories::cat_spec::TEST_SSTREAM:
+    os << " stream_output: TEST_SSTREAM";
     break;
   }
   os << " }";

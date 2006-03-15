@@ -56,6 +56,7 @@
 #include <vcl_streambuf.h>
 #include <vcl_memory.h>
 #include <vcl_string.h>
+#include <vcl_sstream.h>
 #include <vcl_set.h>
 #include <vcl_map.h>
 
@@ -79,7 +80,7 @@ class mbl_log_null_streambuf: public vcl_streambuf
 {
 };
 
-#if 0 // Use unfinshed category based scheme
+#if 0 // Use unfinished category based scheme
 
 //: Base class for destinations of a logging event.
 class mbl_log_output_base
@@ -287,7 +288,7 @@ public:
   struct cat_spec
   {
     int level;
-    enum output_type {FILE_OUT, COUT, CERR} output;
+    enum output_type {FILE_OUT, COUT, CERR, TEST_SSTREAM} output;
     vcl_string filename;
   };
 
@@ -327,8 +328,11 @@ class mbl_logger_root
 
   mbl_logger_root():
     null_stream_(&null_streambuf_) {}
+  
+public:
+  //: This object is really only used for testing.
+  vcl_ostringstream test_sstream;
 
- public:
   mbl_logger default_logger;
 
   //: List of category entries.

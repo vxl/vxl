@@ -10,11 +10,22 @@ void test_log()
   vcl_cout << "*****************\n"
            << " Testing mbl_log\n"
            << "*****************\n";
+#if 0 // Use new logger internals
+  {
+    vcl_ofstream cfg_file("mbl_log.properties");
+    cfg_file << 
+      "root: { level: INFO stream_output: TEST_SSTREAM }\n";
+  }
 
+  mbl_logger::root().load_log_config_file();
+  mbl_logger::root().categories().print(vcl_cout);
+
+#else
   vcl_ostringstream output;
   mbl_log_output log_output(&output, "");
 
   mbl_logger::root().default_logger.set(mbl_logger::INFO, log_output);
+#endif
 
   mbl_logger current("wibble1");
 
