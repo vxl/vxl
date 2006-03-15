@@ -58,7 +58,11 @@ vpl_usleep( unsigned int t )
 unsigned 
 vpl_getpid( )
 {
+#if defined(VCL_BORLAND)
+  return getpid();
+#else
   return _getpid();
+#endif
 }
 
 int vpl_putenv ( const char * envvar )

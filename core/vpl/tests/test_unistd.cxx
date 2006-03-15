@@ -81,6 +81,9 @@ static void test_unistd()
   vcl_cout << "sleeping for 2 seconds..." << vcl_flush;
   vpl_usleep(2000000); // 2 seconds
   vcl_cout << "\b\b\b, done\n";
+
+
+  vcl_cout << "\n\nCurrent PID: " << vpl_getpid() << vcl_endl;
 }
 
 TESTMAIN(test_unistd);
