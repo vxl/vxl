@@ -74,8 +74,8 @@ bool vnl_solve_qp_with_equality_constraints(const vnl_matrix<double>& H,
 //  \param H Hessian of F(x) - must be symmetric
 //  \retval True if successful
 bool vnl_solve_qp_zero_sum(const vnl_matrix<double>& H,
-                                const vnl_vector<double>& g,
-                                vnl_vector<double>& x)
+                           const vnl_vector<double>& g,
+                           vnl_vector<double>& x)
 {
   // Test inputs
   unsigned n=H.rows();   // Number of unknowns
@@ -98,9 +98,9 @@ bool vnl_solve_qp_zero_sum(const vnl_matrix<double>& H,
 
   if (vcl_fabs(H_inv_sum)<1e-8)
   {
-    vcl_cerr<<"Uh-oh. H_inv.sum()="<<H_inv_sum<<vcl_endl;
-    vcl_cerr<<"H="<<H<<vcl_endl;
-    vcl_cerr<<"H_inv="<<H_inv<<vcl_endl;
+    vcl_cerr<<"Uh-oh. H_inv.sum()="<<H_inv_sum<<vcl_endl
+            <<"H="<<H<<vcl_endl
+            <<"H_inv="<<H_inv<<vcl_endl;
   }
 
   // Solve for lagrange multiplier, lambda
@@ -111,6 +111,8 @@ bool vnl_solve_qp_zero_sum(const vnl_matrix<double>& H,
 
   x=(H_inv*g1);
   x*=-1.0;
+
+  return true;
 }
 
 //: Update x, checking inequality constraints and modifying valid where necessary
@@ -150,11 +152,11 @@ static bool vnl_solve_qp_update_x(vnl_vector<double>& x,
         valid[i]=false;
         n_valid--;
       }
-      i1++;
+      ++i1;
     }
   }
 
-  return (worst_i<0);
+  return worst_i<0;
 }
 
 //: Solve unconstrained problem and apply one extra constraint if necessary
@@ -182,18 +184,18 @@ bool vnl_solve_qp_non_neg_step(const vnl_matrix<double>& H,
   {
     if (valid[j])
     {
-      // Fill colum j1 of H with elements from column j of H
+      // Fill column j1 of H with elements from column j of H
       // First from H:
       unsigned i1=0;
       for (unsigned i=0;i<n;++i)
       {
-        if (valid[i]) { H1(i1,j1)=H(i,j); i1++; }
+        if (valid[i]) { H1(i1,j1)=H(i,j); ++i1; }
       }
 
       // Now fill column of A1
-      for (unsigned i=0;i<nc;++i,i1++) A1(i,j1)=A(i,j);
+      for (unsigned i=0;i<nc;++i,++i1) A1(i,j1)=A(i,j);
 
-      j1++;  // Move to next column in M
+      ++j1;  // Move to next column in M
     }
   }
 
@@ -202,7 +204,7 @@ bool vnl_solve_qp_non_neg_step(const vnl_matrix<double>& H,
   unsigned i1=0;
   for (unsigned i=0;i<n;++i)
   {
-    if (valid[i]) { g1[i1]=g[i]; x1[i1]=x[i]; i1++; }
+    if (valid[i]) { g1[i1]=g[i]; x1[i1]=x[i]; ++i1; }
   }
   g1 += H1*x1;
 
@@ -238,14 +240,14 @@ bool vnl_solve_qp_non_neg_sum_one_step(const vnl_matrix<double>& H,
   {
     if (valid[j])
     {
-      // Fill colum j1 of H with elements from column j of H
+      // Fill column j1 of H with elements from column j of H
       // First from H:
       unsigned i1=0;
       for (unsigned i=0;i<n;++i)
       {
-        if (valid[i]) { H1(i1,j1)=H(i,j); i1++; }
+        if (valid[i]) { H1(i1,j1)=H(i,j); ++i1; }
       }
-      j1++;  // Move to next column in M
+      ++j1;  // Move to next column in M
     }
   }
 
@@ -254,7 +256,7 @@ bool vnl_solve_qp_non_neg_sum_one_step(const vnl_matrix<double>& H,
   unsigned i1=0;
   for (unsigned i=0;i<n;++i)
   {
-    if (valid[i]) { g1[i1]=g[i]; x1[i1]=x[i]; i1++; }
+    if (valid[i]) { g1[i1]=g[i]; x1[i1]=x[i]; ++i1; }
   }
   g1 += H1*x1;
 
@@ -298,7 +300,7 @@ bool vnl_solve_qp_with_non_neg_constraints(const vnl_matrix<double>& H,
   if (vnl_vector_ssd(A*x,b)>con_tol)
   {
     if (verbose)
-      vcl_cerr<<"Supplied x does not satisfy equality constraints"<<vcl_endl;
+      vcl_cerr<<"Supplied x does not satisfy equality constraints\n";
     return false;
   }
   for (unsigned i=0;i<n;++i)
@@ -306,7 +308,7 @@ bool vnl_solve_qp_with_non_neg_constraints(const vnl_matrix<double>& H,
     if (x[i]<0)
     {
       if (verbose)
-        vcl_cerr<<"Element "<<i<<" of x is negative.  Must be >=0 on input."<<vcl_endl;
+        vcl_cerr<<"Element "<<i<<" of x is negative.  Must be >=0 on input.\n";
       return false;
     }
   }
@@ -320,7 +322,7 @@ bool vnl_solve_qp_with_non_neg_constraints(const vnl_matrix<double>& H,
   if (vnl_vector_ssd(A*x,b)>con_tol)
   {
     if (verbose)
-      vcl_cerr<<"Oops: Final x does not satisfy equality constraints"<<vcl_endl;
+      vcl_cerr<<"Oops: Final x does not satisfy equality constraints\n";
     return false;
   }
   return true;
@@ -350,7 +352,7 @@ bool vnl_solve_qp_non_neg_sum_one(const vnl_matrix<double>& H,
   if (vcl_fabs(x.sum()-1.0)>1e-8)
   {
     if (verbose)
-      vcl_cerr<<"Supplied x does not sum to unity."<<vcl_endl;
+      vcl_cerr<<"Supplied x does not sum to unity.\n";
     return false;
   }
   for (unsigned i=0;i<n;++i)
@@ -358,7 +360,7 @@ bool vnl_solve_qp_non_neg_sum_one(const vnl_matrix<double>& H,
     if (x[i]<0)
     {
       if (verbose)
-        vcl_cerr<<"Element "<<i<<" of x is negative.  Must be >=0 on input."<<vcl_endl;
+        vcl_cerr<<"Element "<<i<<" of x is negative.  Must be >=0 on input.\n";
       return false;
     }
   }
@@ -372,9 +374,9 @@ bool vnl_solve_qp_non_neg_sum_one(const vnl_matrix<double>& H,
   if (vcl_fabs(x.sum()-1.0)>1e-8)
   {
     if (verbose)
-      vcl_cerr<<"Oops. Final x does not sum to unity."<<vcl_endl;
+      vcl_cerr<<"Oops. Final x does not sum to unity.\n";
     return false;
   }
-  return true;
+  else
+    return true;
 }
-
