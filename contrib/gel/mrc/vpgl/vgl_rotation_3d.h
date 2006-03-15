@@ -1,7 +1,6 @@
 // This is gel/mrc/vpgl/vgl_rotation_3d.h
 #ifndef vgl_rotation_3d_h_
 #define vgl_rotation_3d_h_
-
 //:
 // \file
 // \brief A class representing a 3d rotation.
@@ -84,7 +83,7 @@ class vgl_rotation_3d
   //: Rotate a homogeneous line.
   vgl_homg_line_3d_2_points<T> rotate( const vgl_homg_line_3d_2_points<T>& l ) const;
   //: Rotate a point.
-  vgl_plane_3d<T> rotate( const vgl_plane_3d<T>& p ) const;
+  vgl_plane_3d<T> rotate( const vgl_point_3d<T>& p ) const;
   //: Rotate a plane.
   vgl_plane_3d<T> rotate( const vgl_plane_3d<T>& p ) const;
   //: Rotate a line.
