@@ -171,5 +171,8 @@ rgrl_transformation_sptr
 rgrl_trans_couple::
 inverse_transform() const
 {
-  return backward_xform_;
+  if( backward_xform_ )
+    return new rgrl_trans_couple( backward_xform_, forward_xform_ );
+  else
+    return 0;
 }
