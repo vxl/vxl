@@ -824,7 +824,12 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
     rgrl_nonlinear_estimator* nonlinear_est 
       = dynamic_cast<rgrl_nonlinear_estimator*>( estimator.as_pointer() );
     if( nonlinear_est ) {
+      
+      // set tolerance to be 1/10th of the current value
       nonlinear_est->set_rel_thres( conv_tester.rel_tol() / 10.0 );
+      // also not too use too many iterations, 
+      // as the geometric weights change accordingly.
+      nonlinear_est->set_max_num_iter( 15 );  
     }
   }
 
