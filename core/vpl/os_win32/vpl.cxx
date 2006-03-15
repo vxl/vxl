@@ -3,6 +3,7 @@
 #include <sys/stat.h>
 #include <direct.h>
 #include <io.h>
+#include <process.h>
 #include <windows.h>
 
 char *
@@ -52,6 +53,12 @@ vpl_usleep( unsigned int t )
 {
   Sleep( t / 1000 );
   return 0;
+}
+
+unsigned 
+vpl_getpid( )
+{
+  return _getpid();
 }
 
 int vpl_putenv ( const char * envvar )

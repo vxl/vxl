@@ -42,4 +42,7 @@ int             vpl_usleep( unsigned int t );
 // separated by an equals sign, e.g. "VARNAME=VALUE"
 int             vpl_putenv ( const char * envvar );
 
+//: Get the process identifier.
+unsigned        vpl_getpid( ); 
+
 #endif // vpl_h_

@@ -1,6 +1,7 @@
 #include <testlib/testlib_register.h>
 
 DECLARE( test_arg );
+DECLARE( test_debug );
 DECLARE( test_file_iterator );
 DECLARE( test_psfile );
 DECLARE( test_sprintf );
@@ -15,6 +16,7 @@ void
 register_tests()
 {
   REGISTER( test_arg );
+  REGISTER( test_debug );
   REGISTER( test_file_iterator );
   REGISTER( test_psfile );
   REGISTER( test_sprintf );

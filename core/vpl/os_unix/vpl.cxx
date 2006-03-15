@@ -65,6 +65,19 @@ vpl_usleep( unsigned int t )
 #endif
 }
 
+
+
+unsigned 
+vpl_getpid( )
+{
+#if VXL_UNISTD_HAS_GETPID
+  return getpid();
+#else
+  return 0;
+#endif
+}
+
+
 int vpl_putenv ( const char * envvar )
 {
   char * storage_space = strdup(envvar); // This causes a memory leak
