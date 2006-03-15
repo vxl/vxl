@@ -78,11 +78,26 @@ void vul_debug_core_dump(const char * filename)
 }
 #else
 
+#include <vcl_string.h>
+#include <vxl_config.h>
+#ifdef VXL_UNISTD_HAS_GETPID
+# include <unistd.h>
+#endif
+#include <vul/vul_sprintf.h>
+
 void vul_debug_core_dump(const char * filename)
 {
-  vcl_string syscall = "gcore -i ";
+#ifdef VXL_UNISTD_HAS_GETPID
+  vcl_string syscall = "gcore -o ";
   syscall += filename;
-  syscall += vul_sprintf("%d", getpid());
+  syscall += vul_sprintf(" %d", getpid());
+  if (system(syscall.c_str())==0) return;
+  syscall = "gcore -s -c ";
+  syscall += filename;
+  syscall += vul_sprintf(" %d", getpid());
+  if (system(syscall.c_str())==0) return;
+#endif
+  vcl_cerr << "WARNING: vul_debug_core_dump: Unable to create core dump file: " << filename << vcl_endl;
 
 }
 // For a more reliable way of dunping core try forking and sending a SIGSTOP to the child.

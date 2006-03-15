@@ -28,3 +28,4 @@ void vul_debug_core_dump(const char * filename);
 void vul_debug_core_dump_in_windows_seh(const char * filename,
                                         void* pep);
 #endif
+
