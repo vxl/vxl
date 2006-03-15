@@ -111,6 +111,7 @@
 
 #define VXL_HAS_PTHREAD_H         @VXL_HAS_PTHREAD_H@
 #define VXL_HAS_SEMAPHORE_H       @VXL_HAS_SEMAPHORE_H@
+#define VXL_HAS_DBGHELP_H         @VXL_HAS_DBGHELP_H@
 
 /* -------------------- library quirks */
 
