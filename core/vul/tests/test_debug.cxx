@@ -72,7 +72,9 @@ void test_debug()
     bool caught_exception=false;
     try
     {
-      char * p = new char[vcl_size_t(-1000)];
+      vcl_size_t too_much=0;
+      too_much -= 1000;
+      char * p = new char[too_much];
     }
     catch (const vcl_bad_alloc &)
     {

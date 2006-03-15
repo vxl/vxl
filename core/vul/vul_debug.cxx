@@ -175,7 +175,7 @@ void vul_debug_core_dump(const char * filename)
 
 //: Setup the system to core dump and throw a C++ exception on detection of a Structured Exception
 // \throws vul_debug_windows_structured_exception. 
-void vul_debug_set_coredump_and_throw_on_windows_se(const char * filename);
+void vul_debug_set_coredump_and_throw_on_windows_se(const char * filename)
 {
 // Do nothing on non-windows box.
 }
