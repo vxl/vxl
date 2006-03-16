@@ -18,6 +18,11 @@
 #elif defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
 # include <new.h>
 
+// -------------------- old MSVC
+
+#elif defined(VCL_VC60)
+# include <new.h>
+
 // -------------------- iso
 #else
 # include <new>
