@@ -1091,3 +1091,15 @@ int main(int argc, char * argv[])
 
 #endif // VCL_HAS_LFS
 
+//-------------------------------------
+
+#ifdef VXL_HAS_DBGHELP_H
+
+// This is a Windows header, and needs windows.h included first to make it compile properly.
+#include <Windows.h>
+#include <DbgHelp.h>
+
+int main() { return 0; }
+#endif // VXL_HAS_DBGHELP_H
+
+

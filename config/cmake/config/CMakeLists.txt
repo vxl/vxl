@@ -24,7 +24,7 @@ MARK_AS_ADVANCED( VXL_UPDATE_CONFIGURATION )
 # number. The format follows a DNS-style numbering: the current date
 # followed by a modification time within the day.
 #
-SET( VXL_CONFIG_SERIAL_CURRENT "2006-15-03-002" )
+SET( VXL_CONFIG_SERIAL_CURRENT "2006-16-03-001" )
 
 IF( ${VXL_CONFIG_SERIAL_CURRENT} MATCHES "^${VXL_CONFIG_SERIAL_LAST}$" )
   # The configuration is current
@@ -100,6 +100,7 @@ PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_UNISTD_USLEEP_IS_VOID)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_STDLIB_HAS_QSORT)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_C_MATH_HAS_LRINT)
 PERFORM_CMAKE_TEST_RUN(vxl_platform_tests.cxx VCL_HAS_LFS)
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_HAS_DBGHELP_H)
 
 # Test how to define a template specialization, and whether
 # specializations can be properly distinguished by top-level
@@ -170,7 +171,6 @@ PERFORM_CHECK_HEADER(limits VCL_CXX_HAS_HEADER_LIMITS)
 PERFORM_CHECK_HEADER(strstream VCL_CXX_HAS_HEADER_STRSTREAM)
 PERFORM_CHECK_HEADER(pthread.h VXL_HAS_PTHREAD_H)
 PERFORM_CHECK_HEADER(semaphore.h VXL_HAS_SEMAPHORE_H)
-PERFORM_CHECK_HEADER(DbgHelp.h VXL_HAS_DBGHELP_H)
 PERFORM_CHECK_HEADER(ieeefp.h VXL_HAS_IEEEFP_H)
 PERFORM_CHECK_HEADER(iso646.h VCL_CXX_HAS_HEADER_ISO646_H)
 
