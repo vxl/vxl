@@ -82,19 +82,6 @@ void vul_debug_core_dump(const char * filename)
   {}
   _set_se_translator(current);
 }
-# else //VXL_HAS_DBGHELP_H
-
-void vul_debug_core_dump_in_windows_seh(const char * filename, void* pep)
-{
-  vcl_cerr << "WARNING: vul_debug_core_dump_in_windows_seh: Unable to core dump\n";
-}
-
-void vul_debug_core_dump(const char * filename)
-{
-  vcl_cerr << "WARNING: vul_debug_core_dump: Unable to core dump\n";
-}
-
-# endif // VXL_HAS_DBGHELP_H
 
 //: Windows structured exception code.
 unsigned vul_debug_windows_structured_exception::code() const
@@ -112,11 +99,6 @@ const char *vul_debug_windows_structured_exception::what() const
   vcl_sprintf(buf, "Caught Windows Structured Exception. Code %lx. Address %lx", code(), address());
   return buf;
 }
-
-//: Setup the system to core dump and throw a C++ exception on detection of a Structured Exception
-// \throws vul_debug_windows_structured_exception. 
-void vul_debug_set_coredump_and_throw_on_windows_se(const char * filename);
-
 
 static const char* se_coredump_filename = 0;
 
@@ -142,7 +124,47 @@ void vul_debug_set_coredump_and_throw_on_windows_se(const char * filename)
 }
 
 
-#else // _WIN32
+# else //VXL_HAS_DBGHELP_H
+
+void vul_debug_core_dump_in_windows_seh(const char * filename, void* pep)
+{
+  vcl_cerr << "WARNING: vul_debug_core_dump_in_windows_seh: Unable to core dump\n";
+}
+
+void vul_debug_core_dump(const char * filename)
+{
+  vcl_cerr << "WARNING: vul_debug_core_dump: Unable to core dump\n";
+}
+
+//: Windows structured exception code.
+unsigned vul_debug_windows_structured_exception::code() const
+{
+  return 0;
+}
+//: Related execution address.
+void *vul_debug_windows_structured_exception::address() const
+{
+  return 0;
+}	
+const char *vul_debug_windows_structured_exception::what() const
+{
+  return "Caught Windows Exception on machine with old or no version of DbgHelp.";
+}
+
+
+
+
+//: Setup the system to core dump and throw a C++ exception on detection of a Structured Exception
+// \throws vul_debug_windows_structured_exception. 
+void vul_debug_set_coredump_and_throw_on_windows_se(const char * filename)
+{
+  vcl_cerr << "WARNING: No DbgHelp.h on this platform - can't set SE Handler.\n";
+}
+
+# endif // VXL_HAS_DBGHELP_H
+
+
+#else // _WIN32 
 
 #include <vcl_string.h>
 #ifdef VXL_UNISTD_HAS_GETPID
