@@ -4,7 +4,6 @@ SET(vul_test_sources
   test_driver.cxx
 
   test_arg.cxx
-  test_debug.cxx
   test_file_iterator.cxx
   test_vul_file.cxx
   test_psfile.cxx
@@ -42,3 +41,5 @@ ADD_TEST( vul_test_regexp         vul_test_all test_regexp )
 
 ADD_EXECUTABLE( vul_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vul_test_include vul )
+ADD_EXECUTABLE( vul_test_debug test_debug.cxx )
+TARGET_LINK_LIBRARIES( vul_test_debug vul vpl testlib )

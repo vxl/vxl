@@ -30,9 +30,9 @@ void vul_debug_core_dump_in_windows_se(const char * filename,
 #include <vcl_config_compiler.h>
 
 #ifdef VCL_HAS_EXCEPTIONS
-# include <vcl_stdexcept.h>
+# include <vcl_exception.h>
 //: A translated structured exception.
-class vul_debug_windows_structured_exception : public vcl_runtime_error
+class vul_debug_windows_structured_exception : public vcl_exception
 {
   void * ex_ptr_;
 public:
@@ -42,7 +42,7 @@ public:
 	void *address() const;
   virtual const char *what( ) const throw( );
   vul_debug_windows_structured_exception(void * ex_ptr):
-    vcl_runtime_error(""), ex_ptr_(ex_ptr) {}
+    ex_ptr_(ex_ptr) {}
   virtual ~vul_debug_windows_structured_exception() throw() {}
 };
 #else

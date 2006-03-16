@@ -11,7 +11,8 @@
 
 #ifdef _WIN32
 
-# ifdef VXL_HAS_DBGHELP_H
+#if VXL_HAS_DBGHELP_H
+
 #define NOATOM
 #define NOGDI
 #define NOGDICAPMASKS
@@ -35,7 +36,7 @@
 #pragma comment (lib, "dbghelp")
 
 static void vul_debug_core_dump_in_windows_seh(const char * filename,
-                                        EXCEPTION_POINTERS* pep)
+                                               EXCEPTION_POINTERS* pep)
 {
   HANDLE hFile = CreateFile( filename, GENERIC_READ | GENERIC_WRITE, 
     0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL ); 
@@ -86,7 +87,7 @@ void vul_debug_core_dump(const char * filename)
   {}
   _set_se_translator(current);
 }
-# else VXL_HAS_DBGHELP_H
+# else //VXL_HAS_DBGHELP_H
 
 void vul_debug_core_dump_in_windows_seh(const char * filename, void* pep)
 {
@@ -98,8 +99,7 @@ void vul_debug_core_dump(const char * filename)
   vcl_cerr << "WARNING: vul_debug_core_dump: Unable to core dump\n";
 }
 
-# endif VXL_HAS_DBGHELP_H
-
+# endif // VXL_HAS_DBGHELP_H
 
 //: Windows structured exception code.
 unsigned vul_debug_windows_structured_exception::code() const
@@ -117,7 +117,6 @@ const char *vul_debug_windows_structured_exception::what() const
   vcl_sprintf(buf, "Caught Windows Structured Exception. Code %lx. Address %lx", code(), address());
   return buf;
 }
-
 
 //: Setup the system to core dump and throw a C++ exception on detection of a Structured Exception
 // \throws vul_debug_windows_structured_exception. 

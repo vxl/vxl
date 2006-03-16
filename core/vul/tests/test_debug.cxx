@@ -17,13 +17,14 @@
 
 
 //=======================================================================
-void test_debug()
+int main()
 {
   vcl_cout <<"\n*******************\n"
            <<  " Testing vul_debug\n"
            <<  "*******************\n\n";
 
-  
+  testlib_test_start("Test Debug");
+
   {
     vcl_cout << "Test simple forced coredump\n";
 
@@ -49,7 +50,10 @@ void test_debug()
     try
     {
       // force an segmentation violation exception
-      vcl_cout << *static_cast<int *>(0);
+      if (*static_cast<int *>(0)==0)
+        vcl_cout << "*Null is false" << vcl_endl;
+      else
+        vcl_cout << "*Null is true" << vcl_endl;
     }
     catch (const vul_debug_windows_structured_exception &)
     {
@@ -85,6 +89,8 @@ void test_debug()
     TEST("Core dump file is sensible size", vul_file_size(filename) > 100, true);
   }
 #endif
+
+  return testlib_test_summary();
+
 }
 
-TESTMAIN(test_debug);
