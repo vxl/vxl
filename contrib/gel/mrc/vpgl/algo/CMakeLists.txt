@@ -20,10 +20,10 @@ SET( vpgl_algo_sources
   vpgl_fm_compute_affine_ransac.h  vpgl_fm_compute_affine_ransac.cxx
   vpgl_lens_warp_mapper.h
   vpgl_vsol_lens_warp.h         vpgl_vsol_lens_warp.cxx
-  vpgl_list.h                   vpgl_list.cxx
+  vpgl_list.h                   vpgl_list.txx
 )
 
-#AUX_SOURCE_DIRECTORY(Templates vpgl_algo_sources)
+AUX_SOURCE_DIRECTORY(Templates vpgl_algo_sources)
 
 ADD_LIBRARY(vpgl_algo ${vpgl_algo_sources})
 TARGET_LINK_LIBRARIES( vpgl_algo vpgl rrel vgl_algo vsol)
