@@ -52,11 +52,6 @@ static void vul_debug_core_dump_in_windows_seh(const char * filename,
 	mdei.ExceptionPointers  = pep; 
 	mdei.ClientPointers     = FALSE; 
 
-
-
-  MINIDUMP_TYPE mdt = (MINIDUMP_TYPE)(MiniDumpWithFullMemory | 
-    MiniDumpWithHandleData | MiniDumpWithProcessThreadData | MiniDumpWithUnloadedModules ); 
-
   if (! MiniDumpWriteDump( GetCurrentProcess(), GetCurrentProcessId(), 
     hFile, MiniDumpWithFullMemory, (pep != 0) ? &mdei : 0, 0, 0 ))
     vcl_cerr << "WARNING: vul_debug_core_dump: Unable to dump core: " << filename << vcl_endl;
