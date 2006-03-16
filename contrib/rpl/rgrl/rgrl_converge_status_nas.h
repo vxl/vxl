@@ -20,6 +20,10 @@ class rgrl_converge_status_nas
   : public rgrl_converge_status
 {
 public:
+
+  //: default ctor
+  rgrl_converge_status_nas();
+
   //:
   rgrl_converge_status_nas( bool     has_converged,
                             bool     has_stagnated,
@@ -40,6 +44,20 @@ public:
   //: set iteration number
   void set_iteration( int i ) { iteration_ = i; }
   
+  //: set consistency
+  void set_consistency( double c ) { consistency_ = c; }
+  
+  //: consistency
+  double consistency() const
+  { return consistency_; }
+  
+  //: set stability
+  void set_stability( double c ) { stability_ = c; }
+  
+  //: stability
+  double stability() const
+  { return stability_; }
+
   //: get initial scaling factors
   vnl_vector<double> const& init_scaling_factors() const 
   { return init_scaling_factors_; }
@@ -53,6 +71,9 @@ public:
 protected:
   int iteration_;
   
+  double stability_;
+  double consistency_;
+    
   vnl_vector<double> init_scaling_factors_;
   
 };

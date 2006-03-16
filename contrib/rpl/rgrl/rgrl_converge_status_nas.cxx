@@ -6,6 +6,16 @@
 #include "rgrl_converge_status_nas.h"
 
 #include <vcl_cassert.h>
+
+rgrl_converge_status_nas::
+rgrl_converge_status_nas()
+  : rgrl_converge_status(),
+    iteration_(0),
+    stability_(-1), 
+    consistency_(-1)
+{
+  
+}
  
 rgrl_converge_status_nas::
 rgrl_converge_status_nas( bool     in_has_converged,
@@ -17,7 +27,9 @@ rgrl_converge_status_nas( bool     in_has_converged,
                       double   in_error_diff )
   : rgrl_converge_status( in_has_converged, in_has_stagnated, in_is_good_enough, in_is_failed,
                           in_error, in_oscillation_count, in_error_diff ),
-    iteration_(0)
+    iteration_(0),
+    stability_(-1), 
+    consistency_(-1)
 {
   
 }
@@ -25,7 +37,9 @@ rgrl_converge_status_nas( bool     in_has_converged,
 rgrl_converge_status_nas::
 rgrl_converge_status_nas( rgrl_converge_status const& old )
   : rgrl_converge_status( old ),
-    iteration_(0)
+    iteration_(0),
+    stability_(-1), 
+    consistency_(-1)
 {
   
 }
