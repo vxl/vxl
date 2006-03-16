@@ -117,9 +117,6 @@ SOURCE=.\vpgl_fm_compute_ransac.cxx
 SOURCE=.\vpgl_fm_compute_reg_ransac.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vpgl_list.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vpgl_optimize_camera.cxx
 # End Source File
 # Begin Source File
@@ -127,6 +124,12 @@ SOURCE=.\vpgl_project.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vpgl_vsol_lens_warp.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vpgl_list+vgl_h_matrix_2d+double--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vpgl_list+vpgl_proj_camera+double--.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -157,6 +160,9 @@ SOURCE=.\vpgl_lens_warp_mapper.h
 # End Source File
 # Begin Source File
 SOURCE=.\vpgl_list.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_list.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vpgl_optimize_camera.h
