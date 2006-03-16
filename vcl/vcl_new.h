@@ -35,6 +35,11 @@ void vcl_construct(U * p, V const & value) { new (p) U(value); }
 #endif
 
 #define vcl_bad_alloc std::bad_alloc
-#define vcl_set_new_handler std::set_new_handler
+
+#if VCL_VC60
+# define vcl_set_new_handler _set_new_handler
+#else
+# define vcl_set_new_handler std::set_new_handler
+#endif
 
 #endif // vcl_new_h_
