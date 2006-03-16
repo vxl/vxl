@@ -1099,7 +1099,7 @@ int main(int argc, char * argv[])
 #include <Windows.h>
 #include <DbgHelp.h>
 
-int main() { return 0; }
+int main() { MINIDUMP_EXCEPTION_INFORMATION dummy; return 0; }
 #endif // VXL_HAS_DBGHELP_H
 
 
