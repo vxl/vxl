@@ -110,7 +110,7 @@ template <class T> inline
 void vgl_rotate_3d(const vgl_rotation_3d<T>& rot, vcl_vector<vgl_homg_point_3d<T> >& pts)
 {
   vnl_matrix_fixed<T,3,3> R = rot.as_3matrix();
-  for (vcl_vector<vgl_homg_point_3d<T> >::iterator itr = pts.begin();
+  for (typename vcl_vector<vgl_homg_point_3d<T> >::iterator itr = pts.begin();
        itr != pts.end();  ++itr)
   {
      vgl_homg_point_3d<T>& p = *itr;
@@ -127,7 +127,7 @@ template <class T> inline
 void vgl_rotate_3d(const vgl_rotation_3d<T>& rot, vcl_vector<vgl_point_3d<T> >& pts)
 {
   vnl_matrix_fixed<T,3,3> R = rot.as_3matrix();
-  for (vcl_vector<vgl_point_3d<T> >::iterator itr = pts.begin();
+  for (typename vcl_vector<vgl_point_3d<T> >::iterator itr = pts.begin();
        itr != pts.end();  ++itr)
   {
      vgl_point_3d<T>& p = *itr;
