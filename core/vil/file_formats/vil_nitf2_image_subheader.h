@@ -100,9 +100,6 @@ private:
   static void add_geo_field_defs( vil_nitf2_field_definitions* defs, const vil_nitf2_classification::file_version& version );
   static void add_shared_field_defs_3( vil_nitf2_field_definitions* defs );
 
-  // so these static members can be cleaned up when the program is done 
-  // using nitf files
-  friend void vil_nitf2::cleanup_static_members();
   static vil_nitf2_field_definitions* s_field_definitions_21;
   static vil_nitf2_field_definitions* s_field_definitions_20;
 };

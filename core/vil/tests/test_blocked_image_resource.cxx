@@ -282,8 +282,6 @@ static void test_blocked_image_resource()
   {
     TEST("NITF blocked image resource", false, true);
   }
-
-  //vil_nitf2::cleanup_static_members();
 }
 
 int

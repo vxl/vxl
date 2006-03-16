@@ -68,10 +68,6 @@ private:
   typedef vcl_map< type_field_defs_key, vil_nitf2_field_definitions*>
     type_field_defs_map;
   static type_field_defs_map s_field_definitions;
-
-  // so these static members can be cleaned up when the program is done 
-  // using nitf files
-  friend void vil_nitf2::cleanup_static_members();
 };
 
 #endif //VIL_NITF2_CLASSIFICATION_H
