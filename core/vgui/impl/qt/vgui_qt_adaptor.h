@@ -71,8 +71,6 @@ class vgui_qt_adaptor :
    void mouseReleaseEvent(QMouseEvent* e);
    void keyPressEvent    (QKeyEvent*   e);
    void keyReleaseEvent  (QKeyEvent*   e);
-   void focusInEvent     (QFocusEvent* e);
-   void focusOutEvent    (QFocusEvent* e);
 
    vgui_event translate(QMouseEvent* e);
    vgui_event translate(QKeyEvent* e);
@@ -87,6 +85,9 @@ class vgui_qt_adaptor :
 
  private slots:
    void idle_slot();
+
+ protected:
+   void windowActivationChange (bool oldActive);
 };
 
 #endif // VGUI_QT_ADAPTOR_H_

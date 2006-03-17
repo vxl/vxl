@@ -47,6 +47,7 @@ vgui_qt_adaptor::~vgui_qt_adaptor()
    if (ovl_helper)
      delete ovl_helper;
    ovl_helper = 0;
+   dispatch_to_tableau(vgui_DESTROY);
 }
 
 
@@ -179,9 +180,17 @@ void vgui_qt_adaptor::keyReleaseEvent (QKeyEvent* e)
    dispatch_to_tableau(ev);
 }
 
-void vgui_qt_adaptor::focusInEvent  (QFocusEvent * e) {}
-void vgui_qt_adaptor::focusOutEvent (QFocusEvent * e) {}
+//--------------------------------------------------------------------------------
+void vgui_qt_adaptor::windowActivationChange (bool oldActive)
+{
+   vgui_event ev;
 
+   if(!oldActive)
+    ev.type =3D vgui_FOCUSGAINED;
+   else
+    ev.type =3D vgui_FOCUSLOST;
+   dispatch_to_tableau(ev);
+}
 
 //--------------------------------------------------------------------------------
 vgui_event vgui_qt_adaptor::translate(QMouseEvent* e)

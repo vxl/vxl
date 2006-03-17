@@ -52,7 +52,9 @@ enum vgui_event_type
   vgui_DESTROY,
   vgui_IDLE,
   vgui_OTHER,
-  vgui_EVENT_MAX
+  vgui_FOCUSGAINED,
+  vgui_FOCUSLOST,
+  vgui_EVENT_MAX    // This must be the last entry in the list
 };
 
 vcl_ostream& operator<<(vcl_ostream& s, vgui_event_type e);
