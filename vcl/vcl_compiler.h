@@ -199,7 +199,7 @@
 
 // This *needs* to come after vcl_config_headers.h
 #if defined(__GNUC__) && !defined(__INTEL_COMPILER)
-# if defined(VCL_GCC_30) || defined(VCL_GCC_40)
+# if defined(VCL_GCC_3) || defined(VCL_GCC_4)
 #  define GNU_LIBSTDCXX_V3 1
 # elif !defined(GNU_LIBSTDCXX_V3) && defined(VCL_GCC_295) && VCL_CXX_HAS_HEADER_ISTREAM
 // One difference between v2 and v3 is that the former has
@@ -260,7 +260,7 @@
 // VCL_DISAPPEARING_TYPENAME should only be used where either a hardcoded use
 // or abscence of "typename" does not work over all platforms.
 
-#if defined(VCL_VC60) || !VCL_HAS_TYPENAME
+#if defined(VCL_VC_60) || !VCL_HAS_TYPENAME
 # define VCL_DISAPPEARING_TYPENAME /* */
 #else
 # define VCL_DISAPPEARING_TYPENAME typename
