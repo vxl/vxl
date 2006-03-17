@@ -95,7 +95,7 @@ class vidl2_dshow_live_istream : public vidl2_istream
   vidl2_dshow_live_istream(const ParamsObject& params);
 
   //: Destructor.
-  virtual ~vidl2_dshow_live_istream();
+  virtual ~vidl2_dshow_live_istream() { close(); }
 
   //: Return true if the stream is open for reading.
   // ***** if closed, should return false
@@ -129,16 +129,23 @@ class vidl2_dshow_live_istream : public vidl2_istream
   // ***** throw exception ??
   virtual bool seek_frame(unsigned int frame_number) { return false; }
 
+  void run(void);
+  void pause(void);
+  void stop(void);
+
  private:
   // Disable assignment and copy-construction.
   vidl2_dshow_live_istream(const vidl2_dshow_live_istream&);
   vidl2_dshow_live_istream& operator=(const vidl2_dshow_live_istream&);
 
-  //: Connect to a device using its FriendlyName.
-  void connect(void);
-
   //: Parameters that define the input stream process.
   ParamsObject params_;
+
+  //: Connect to a device using its FriendlyName (in params_ object).
+  void connect(void);
+
+  //: If hr == S_FALSE, wait for the state change to complete.
+  void wait_for_state_change(HRESULT hr);
 
   //: ***** Callback method...
   sample_grabber_cb               sample_grabber_callback_;
@@ -146,6 +153,7 @@ class vidl2_dshow_live_istream : public vidl2_istream
   // Handles to the COM interfaces.
   CComPtr<IFilterGraph2>          filter_graph_;
   CComPtr<IMoniker>               moniker_;
+  CComPtr<IMediaControl>          media_control_;
 
   // Internal frame buffer information.
   vidl2_frame_sptr           buffer_;

@@ -356,9 +356,9 @@ vcl_string vidl2_dshow::get_guid_name(const GUID& guid)
 GUID vidl2_dshow::get_guid_from_fourcc(const vcl_string& fourcc)
 {
   unsigned long fourcc_cast = static_cast<unsigned long>(fourcc[0])
-                            | static_cast<unsigned long>(fourcc[1] <<  8)
-                            | static_cast<unsigned long>(fourcc[2] << 16)
-                            | static_cast<unsigned long>(fourcc[3] << 24);
+                            | static_cast<unsigned long>(fourcc[1]) <<  8
+                            | static_cast<unsigned long>(fourcc[2]) << 16
+                            | static_cast<unsigned long>(fourcc[3]) << 24;
 
   const GUID guid = {
     fourcc_cast,
@@ -418,7 +418,7 @@ void vidl2_dshow::get_media_info(const AM_MEDIA_TYPE& amt,
   {
     pixel_format = VIDL2_PIXEL_FORMAT_MONO_8;
   }
-#if 0
+#if 0 // ***** add this one to vidl2 format list...
   else if (amt.subtype == MEDIASUBTYPE_ARGB32)
   {
     pixel_format = VIDL2_PIXEL_FORMAT_ABGR_32;
@@ -445,7 +445,7 @@ void vidl2_dshow::get_media_info(const AM_MEDIA_TYPE& amt,
   {
     pixel_format = VIDL2_PIXEL_FORMAT_UYVY_411;
   }
-#if 0
+#if 0 // ***** what's the equivalent for this one?
   else if (amt.subtype == MEDIASUBTYPE_YVU9)
   {
     pixel_format = ;
@@ -510,176 +510,7 @@ vidl2_dshow::get_capture_device_moniker(const vcl_string& name)
   return com.get_capture_device_moniker(name);
 }
 
-#if 0 // function temporarily commented out
-//: 
-void
-vidl2_dshow::build_filter_graph(/*CComPtr<ICaptureGraphBuilder2>& graph_builder,*/
-                                CComPtr<IFilterGraph2>&  filter_graph,
-                                CComPtr<IMoniker>&       moniker,
-                                CComPtr<ISampleGrabber>& sample_grabber)
-{
-  assert(/*graph_builder == NULL &&*/
-    filter_graph  == NULL &&
-    moniker       != NULL);
-
-  CComPtr<ICaptureGraphBuilder2> graph_builder;
-
-  // create the filter graph manager
-  DSHOW_ERROR_IF_FAILED(filter_graph.CoCreateInstance(CLSID_FilterGraph));
-
-  // create the capture graph builder
-  DSHOW_ERROR_IF_FAILED(
-    graph_builder.CoCreateInstance(CLSID_CaptureGraphBuilder2));
-
-  // initialize the capture graph builder
-  graph_builder->SetFiltergraph(filter_graph);
-
-  // add the selected source filter to filter graph
-  CComPtr<IBaseFilter> source_filter;
-  DSHOW_ERROR_IF_FAILED(filter_graph->AddSourceFilterForMoniker(
-    moniker, 0, L"Source", &source_filter));
-
-
-  CComPtr<IAMVideoProcAmp> am_video_proc_amp;
-  long value, min, max, delta, dflt, flags, flags2;
-  source_filter->QueryInterface(IID_IAMVideoProcAmp, reinterpret_cast<void**>(&am_video_proc_amp));
-  am_video_proc_amp->Get(VideoProcAmp_Brightness, &value, &flags);
-  am_video_proc_amp->GetRange(VideoProcAmp_Brightness, &min, &max, &delta, &dflt, &flags2);
-  vcl_cout << value  << " , "
-           << min    << " , "
-           << max    << " , "
-           << delta  << " , "
-           << dflt   << " , "
-           << flags  << " , "
-           << flags2 << vcl_endl;
-
-  CComPtr<IESFProperties> esf_properties;
-
-  source_filter->QueryInterface(IID_IESFProperties, reinterpret_cast<void**>(&esf_properties));
-  esf_properties->GetBrightness(&value);
-  esf_properties->GetBrightnessRange(&min, &max, &dflt);
-  vcl_cout << value  << " , "
-           << min    << " , "
-           << max    << " , "
-           << dflt   << vcl_endl;
-  esf_properties.Release();
-
-  DSHOW_ERROR_IF_FAILED(graph_builder->FindInterface(
-    &PIN_CATEGORY_CAPTURE,//PIN_CATEGORY_PREVIEW,LOOK_DOWNSTREAM_ONLY,
-    0,//&MEDIATYPE_Video,
-    source_filter,
-    IID_IESFProperties,
-    reinterpret_cast<void**>(&esf_properties)));
-  esf_properties->GetBrightness(&value);
-  esf_properties->GetBrightnessRange(&min, &max, &dflt);
-  vcl_cout << value  << " , "
-           << min    << " , "
-           << max    << " , "
-           << dflt   << vcl_endl;
-  esf_properties.Release();
-
-  DSHOW_ERROR_IF_FAILED(graph_builder->FindInterface(
-    &PIN_CATEGORY_PREVIEW,//LOOK_DOWNSTREAM_ONLY,
-    0,//&MEDIATYPE_Video,
-    source_filter,
-    IID_IESFProperties,
-    reinterpret_cast<void**>(&esf_properties)));
-  esf_properties->GetBrightness(&value);
-  esf_properties->GetBrightnessRange(&min, &max, &dflt);
-  vcl_cout << value  << " , "
-           << min    << " , "
-           << max    << " , "
-           << dflt   << vcl_endl;
-  esf_properties.Release();
-
-
-  // *** configure the Video Output params before connecting the pin ***
-  CComPtr<IAMStreamConfig> am_stream_config;
-  DSHOW_ERROR_IF_FAILED(graph_builder->FindInterface(
-    &PIN_CATEGORY_CAPTURE,//PIN_CATEGORY_PREVIEW,LOOK_DOWNSTREAM_ONLY,
-    0,//&MEDIATYPE_Video,
-    source_filter,
-    IID_IAMStreamConfig,
-    reinterpret_cast<void**>(&am_stream_config)));
-
-  int count,size;
-  am_stream_config->GetNumberOfCapabilities(&count,&size);
-  vcl_cout << "GetNumberOfCapabilities: " << count << " , " << size << vcl_endl;
-
-  VIDEO_STREAM_CONFIG_CAPS video_stream_config_caps;
-  assert(sizeof(video_stream_config_caps) == size);
-
-  AM_MEDIA_TYPE* am_media_type = 0;
-  for (int i = 0; i < count; i++)
-  {
-    am_stream_config->GetStreamCaps(
-      i,
-      &am_media_type,
-      reinterpret_cast<BYTE*>(&video_stream_config_caps));
-
-    //vcl_cout << video_stream_config_caps.InputSize.cx << '\t'
-    //         << video_stream_config_caps.InputSize.cy << '\t'
-    //         << GuidNames[am_media_type->subtype] << vcl_endl;
-
-    if (am_media_type != NULL)
-    {
-      if (am_media_type->cbFormat != 0)
-      {
-        CoTaskMemFree(reinterpret_cast<void*>(am_media_type->pbFormat));
-        am_media_type->cbFormat = 0;
-        am_media_type->pbFormat = 0;
-      }
-      if (am_media_type->pUnk != 0)
-      {
-        // Unecessary because pUnk should not be used, but safest.
-        am_media_type->pUnk->Release();
-        am_media_type->pUnk = 0;
-      }
-
-      CoTaskMemFree(am_media_type);
-    }
-  }
-
-  // create sample grabber filter and add it to filter graph
-  CComPtr<IBaseFilter> sample_grabber_filter;
-  DSHOW_ERROR_IF_FAILED(
-    sample_grabber_filter.CoCreateInstance(CLSID_SampleGrabber));
-  DSHOW_ERROR_IF_FAILED(
-    filter_graph->AddFilter(sample_grabber_filter, L"Sample Grabber"));
-
-  //CComPtr<ISampleGrabber> sample_grabber;
-  sample_grabber_filter->QueryInterface(&sample_grabber);
-
-  AM_MEDIA_TYPE mt;
-  ZeroMemory(&mt, sizeof(AM_MEDIA_TYPE));
-  mt.majortype = MEDIATYPE_Video;
-  //mt.subtype = MEDIASUBTYPE_RGB24;
-  sample_grabber->SetMediaType(&mt);
-  sample_grabber->SetBufferSamples(true);
-  sample_grabber->SetOneShot(true);
-
-  // create a null renderer for preview pin
-  // *** is this required always? test different configurations... ***
-  CComPtr<IBaseFilter> null_renderer;
-  DSHOW_ERROR_IF_FAILED(
-    null_renderer.CoCreateInstance(CLSID_NullRenderer));
-  DSHOW_ERROR_IF_FAILED(
-    filter_graph->AddFilter(null_renderer, L"Null Renderer"));
-
-  // *** MSDN docs suggest turning the graph clock off (if not needed)
-  //     for running the graph faster. Check this.
-  // ***
-
-  // *** connect the pins ***
-  //PIN_CATEGORY_CAPTURE
-  //MEDIATYPE_Video
-  DSHOW_ERROR_IF_FAILED(graph_builder->RenderStream(0, 0,
-                                                    source_filter,
-                                                    sample_grabber_filter,
-                                                    null_renderer));
-}
-#endif // 0
-
+//: Connect two filters directly. ***** check this, might have errors
 void vidl2_dshow::connect_filters(CComPtr<IFilterGraph2>& filter_graph,
                                   CComPtr<IBaseFilter>& source,
                                   CComPtr<IBaseFilter>& target)

@@ -82,37 +82,45 @@ namespace
   }
 
   void print_output_format_help(const CComPtr<IAMStreamConfig>& asc)
+  //void print_output_format_help(IAMStreamConfig* asc)
   {
+    AM_MEDIA_TYPE* amt = 0;
+    VIDEO_STREAM_CONFIG_CAPS* vscc = reinterpret_cast<VIDEO_STREAM_CONFIG_CAPS*>(new BYTE[128]);
+
     int count = 0, size = 0;
-    AM_MEDIA_TYPE* amt;
-    VIDEO_STREAM_CONFIG_CAPS vscc;
+    DSHOW_ERROR_IF_FAILED(asc->GetNumberOfCapabilities(&count, &size));
+    //assert(sizeof(VIDEO_STREAM_CONFIG_CAPS) == size);
 
     DSHOW_ERROR_IF_FAILED(asc->GetFormat(&amt));
-    vcl_cout << vcl_setw(w1) << "output_format "
-             << vidl2_dshow::get_guid_name(amt->subtype) << '\n';
+    vcl_cout << vcl_setw(w1) << "output_format"
+             << ' ' << vidl2_dshow::get_guid_name(amt->subtype) << '\n';
     vidl2_dshow::delete_media_type(*amt);
+    amt = 0;
 
-    vcl_cout << vcl_setw(w1) << "  Supported output formats\n"
-             << vcl_setw(w1) << "  ------------------------\n";
-    DSHOW_ERROR_IF_FAILED(asc->GetNumberOfCapabilities(&count, &size));
-    assert(sizeof(vscc) == size);
+    vcl_cout << vcl_string(w1, ' ') << " Supported output formats\n"
+             << vcl_string(w1, ' ') << " ------------------------\n";
     for (int i = 0; i < count; i++)
     {
       DSHOW_ERROR_IF_FAILED(
-        asc->GetStreamCaps(i, &amt, reinterpret_cast<BYTE*>(&vscc)));
+        asc->GetStreamCaps(i, &amt, reinterpret_cast<BYTE*>(vscc)));
 
-      vcl_cout << vcl_setw(w1) << i << ' '
+      double max_frame_interval = static_cast<double>(vscc->MaxFrameInterval);
+      double min_frame_interval = static_cast<double>(vscc->MinFrameInterval);
+      vcl_cout << vcl_setw(w1) << i
                << vcl_setw(3*w2)
                << vidl2_dshow::get_guid_name(amt->subtype)
                << " ("
-               << vcl_setw(4) << vscc.InputSize.cx << 'x'
-               << vcl_setw(4) << vscc.InputSize.cy
+               << vcl_setw(4) << vscc->InputSize.cx << 'x'
+               << vcl_setw(4) << vscc->InputSize.cy
                << ") "
-               << 1.0 / (vscc.MaxFrameInterval * 100.0e-9) << '-'
-               << 1.0 / (vscc.MinFrameInterval * 100.0e-9) << " fps\n";
+               << vcl_setprecision(2) << 1.0 / (max_frame_interval * 100.0e-9) << '-'
+               << vcl_setprecision(2) << 1.0 / (min_frame_interval * 100.0e-9) << " fps\n";
 
       vidl2_dshow::delete_media_type(*amt);
+      amt = 0;
     }
+
+    delete vscc;
   }
 
   template <typename T> struct from_string_to
@@ -159,18 +167,8 @@ namespace
 vidl2_dshow_istream_params::vidl2_dshow_istream_params(void)
   : vpa_properties_(vpa_properties())
   , register_in_rot_(false)
+  , run_when_ready_(true)
   , load_filter_defaults_(false)
-  //, brightness()
-  //, contrast()
-  //, hue()
-  //, saturation()
-  //, sharpness()
-  //, gamma()
-  //, color_enable()
-  //, white_balance()
-  //, backlight_compensation()
-  //, gain()
-  //, output_format()
 {}
 
 //: Configure the source filter based on the parameters.
@@ -259,17 +257,16 @@ void vidl2_dshow_istream_params::print_parameter_help(const CComPtr<IBaseFilter>
   DSHOW_ERROR_IF_FAILED(filter->QueryInterface(
     IID_IAMVideoProcAmp, reinterpret_cast<void**>(&am_video_proc_amp)));
 
-  vcl_cout << vcl_setw(w1) << ' '
+  vcl_cout << vcl_string(w1, ' ')
            << vcl_setw(w2) << "curr"
            << vcl_setw(w2) << "min"
            << vcl_setw(w2) << "max"
            << vcl_setw(w2) << "step"
            << vcl_setw(w2) << "default"
-           << vcl_setw(w2) << "flags\n"
-           << vcl_setw(w1) << ' ';
-  char prev = vcl_cout.fill('-');
-  vcl_cout << vcl_setw(6*w2) << "-\n";
-  vcl_cout.fill(prev);
+           << vcl_setw(w2) << "flags"
+           << '\n'
+           << vcl_string(w1, ' ')
+           << vcl_string(6*w2, '-') << '\n';
 
   print_help(am_video_proc_amp, "brightness"            );
   print_help(am_video_proc_amp, "contrast"              );
@@ -345,6 +342,24 @@ vidl2_dshow_istream_params
       {
         set_register_in_rot(from_string_to<bool>()(iter->second));
       }
+      else if (iter->first == "run_when_ready")
+      {
+        set_run_when_ready(from_string_to<bool>()(iter->second));
+      }
+      else if (iter->first == "device_name")
+      {
+        set_device_name(iter->second);
+      }
+      else if (iter->first == "output_filename")
+      {
+        set_output_filename(iter->second);
+      }
+      else if (iter->first == "target_output_format")
+      {
+        vidl2_exception_error(
+          vidl2_exception("Target output format not supported yet!"));
+        //set_target_output_format(from_string_to<GUID>()(iter->second));
+      }
       else if (iter->first == "load_filter_defaults")
       {
         set_load_filter_defaults(from_string_to<bool>()(iter->second));
@@ -367,7 +382,21 @@ vidl2_dshow_istream_params
 //-------------------------------------------------------------------------
 // Write accessor functions.
 //-------------------------------------------------------------------------
-vidl2_dshow_istream_params&
+/* inline */ vidl2_dshow_istream_params&
+vidl2_dshow_istream_params::set_register_in_rot(bool val)
+{
+  register_in_rot_ = val;
+  return *this;
+}
+
+/* inline */ vidl2_dshow_istream_params&
+vidl2_dshow_istream_params::set_run_when_ready(bool val)
+{
+  run_when_ready_ = val;
+  return *this;
+}
+
+/* inline */ vidl2_dshow_istream_params&
 vidl2_dshow_istream_params::set_device_name(const vcl_string& name)
 {
   device_name_ = name;
@@ -375,9 +404,16 @@ vidl2_dshow_istream_params::set_device_name(const vcl_string& name)
 }
 
 /* inline */ vidl2_dshow_istream_params&
-vidl2_dshow_istream_params::set_register_in_rot(bool val)
+vidl2_dshow_istream_params::set_output_filename(const vcl_string& name)
 {
-  register_in_rot_ = val;
+  output_filename_ = name;
+  return *this;
+}
+
+/* inline */ vidl2_dshow_istream_params&
+vidl2_dshow_istream_params::set_target_output_format(GUID val)
+{
+  target_output_format_ = val;
   return *this;
 }
 

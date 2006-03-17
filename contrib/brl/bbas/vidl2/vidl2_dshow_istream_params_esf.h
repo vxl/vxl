@@ -11,7 +11,6 @@
 //  Modifications
 //   02/18/2006 - File created. (miguelf)
 // \endverbatim
-//
 //=========================================================================
 
 #include <vcl_string.h>
@@ -57,13 +56,19 @@ class vidl2_dshow_istream_params_esf //: public vidl2_iostream_params
 
   // Read accessor functions
   // - general params (all dshow_params should have)
-  vcl_string device_name() { return device_name_; }
-  bool register_in_rot() { return register_in_rot_; }
+  bool register_in_rot()       { return register_in_rot_;      }
+  bool run_when_ready()        { return run_when_ready_;       }
+  vcl_string device_name()     { return device_name_;          }
+  vcl_string output_filename() { return output_filename_;      }
+  GUID target_output_format()  { return target_output_format_; }
 
   // Write accessor functions.
   // - general params (all dshow_params should have)
-  vidl2_dshow_istream_params_esf& set_device_name(const vcl_string&);
   vidl2_dshow_istream_params_esf& set_register_in_rot(bool);
+  vidl2_dshow_istream_params_esf& set_run_when_ready(bool);
+  vidl2_dshow_istream_params_esf& set_device_name(const vcl_string&);
+  vidl2_dshow_istream_params_esf& set_output_filename(const vcl_string&);
+  vidl2_dshow_istream_params_esf& set_target_output_format(GUID);
   // - IESFProperties specific (see Euresys Source Filter documentation)
   vidl2_dshow_istream_params_esf& set_video_standard(ESF_VIDEO_STANDARD,bool);
   vidl2_dshow_istream_params_esf& set_resolution(ESF_RESOLUTION,long,long);
@@ -104,11 +109,20 @@ class vidl2_dshow_istream_params_esf //: public vidl2_iostream_params
   //: Flag param to be used in configure_filter.
   vcl_bitset<esf_property_enum_size> is_property_changed_;
 
+  //: Enable remote graph viewing with GraphEdit.
+  bool register_in_rot_;
+
+  //: Immediately run graph after creating it, else wait for run command.
+  bool run_when_ready_;
+
   //: Device name.
   vcl_string device_name_;
 
-  //: Enable remote graph viewing with GraphEdit.
-  bool register_in_rot_;
+  //: If non-empty create file writing section in the filter_graph.
+  vcl_string output_filename_;
+
+  //: Target output format, as returned by current_frame.
+  GUID target_output_format_;
 
   // IESFProperties interface.
   ESF_VIDEO_STANDARD video_standard_;

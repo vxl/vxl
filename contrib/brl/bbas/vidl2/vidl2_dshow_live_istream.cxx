@@ -11,6 +11,7 @@
 #include <vidl2/vidl2_dshow_live_istream.h>
 #include <vidl2/vidl2_dshow.h>
 #include <vcl_cassert.h>
+#include <vcl_cstring.h> // for memcpy
 
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
@@ -61,12 +62,6 @@ sample_grabber_cb::BufferCB(double time, BYTE* buffer, long buffer_size)
   const unsigned int i = next_index_;
   buffer_[i].resize(buffer_size);
   buffer_time_[i] = time;
-
-#ifdef DEBUG
-  vcl_cout << buffer_time_[i] - buffer_time_[j] << vcl_endl
-           << number_ << " : " << buffer_time_[i] << vcl_endl
-           << id_ << " : " << buffer_size << vcl_endl;
-#endif
 
   // copy buffer
   vcl_memcpy(&buffer_[i][0], buffer, buffer_size);
@@ -153,12 +148,13 @@ vidl2_dshow_live_istream<ParamsObject>
   connect();
 }
 
-//: Destructor.
-template <class ParamsObject>
-vidl2_dshow_live_istream<ParamsObject>::~vidl2_dshow_live_istream(void)
-{
-  close();
-}
+// *****
+////: Destructor.
+//template <class ParamsObject>
+//vidl2_dshow_live_istream<ParamsObject>::~vidl2_dshow_live_istream(void)
+//{
+//  close();
+//}
 
 //: Connect to the device specified in params object.
 template <class ParamsObject>
@@ -204,37 +200,47 @@ void vidl2_dshow_live_istream<ParamsObject>::connect(void)
   sample_grabber->SetOneShot(false);
   sample_grabber->SetCallback(&sample_grabber_callback_, 0);
 
-  // ***** force sample grabber to a target type??
-  AM_MEDIA_TYPE media_type;
-  ZeroMemory(&media_type, sizeof(AM_MEDIA_TYPE));
-  media_type.majortype = MEDIATYPE_Video;
-  media_type.subtype = MEDIASUBTYPE_RGB24;
-  sample_grabber->SetMediaType(&media_type);
+  // set target output format type
+  if (params_.target_output_format() != GUID_NULL)
+  {
+    AM_MEDIA_TYPE media_type;
+    ZeroMemory(&media_type, sizeof(AM_MEDIA_TYPE));
+    media_type.majortype = MEDIATYPE_Video;
+    media_type.subtype = params_.target_output_format();
+    sample_grabber->SetMediaType(&media_type);
+  }
 
   // add sample grabber to the filter graph
   CComQIPtr<IBaseFilter> sample_grabber_filter(sample_grabber);
   DSHOW_ERROR_IF_FAILED(
     filter_graph_->AddFilter(sample_grabber_filter, L"Sample Grabber"));
 
-  // create a null renderer
-  CComPtr<IBaseFilter> null_renderer;
-  DSHOW_ERROR_IF_FAILED(null_renderer.CoCreateInstance(CLSID_NullRenderer));
-  DSHOW_ERROR_IF_FAILED(filter_graph_->AddFilter(null_renderer, L"Null Renderer"));
+  // create a null renderer or a file writing section
+  CComPtr<IBaseFilter> filter;
+  if (params_.output_filename() == "")
+  {
+    DSHOW_ERROR_IF_FAILED(filter.CoCreateInstance(CLSID_NullRenderer));
+    DSHOW_ERROR_IF_FAILED(filter_graph_->AddFilter(filter, L"Null Renderer"));
+  }
+  else
+  {
+    DSHOW_ERROR_IF_FAILED(graph_builder->SetOutputFileName(
+      &MEDIASUBTYPE_Avi,
+      CA2W(params_.output_filename().c_str()),
+      &filter, 0));
+  }
+
   //CComPtr<IBaseFilter> vmr;
   //DSHOW_ERROR_IF_FAILED(vmr.CoCreateInstance(CLSID_VideoMixingRenderer));
   //DSHOW_ERROR_IF_FAILED(filter_graph_->AddFilter(vmr, L"Video Mixing Renderer"));
-
-  CComPtr<IBaseFilter> mux;
-  DSHOW_ERROR_IF_FAILED(graph_builder->SetOutputFileName(
-    &MEDIASUBTYPE_Avi, L"testing_output_1.avi", &mux, 0));
 
   // connect the filters
   DSHOW_ERROR_IF_FAILED(graph_builder->RenderStream(&PIN_CATEGORY_CAPTURE,
                                                     &MEDIATYPE_Video,
                                                     source_filter,
                                                     sample_grabber_filter,
-                                                    //null_renderer));
-                                                    mux));
+                                                    filter));
+
   //DSHOW_ERROR_IF_FAILED(graph_builder->RenderStream(&PIN_CATEGORY_PREVIEW,
   //                                                  &MEDIATYPE_Video,
   //                                                  source_filter,
@@ -263,9 +269,14 @@ void vidl2_dshow_live_istream<ParamsObject>::connect(void)
   //vidl2_dshow::load_graph_from_file(filter_graph_, L"testing.grf");
 
   // ***** should I provide access to this through the public interface???
-  vidl2_dshow::save_graph_to_file(filter_graph_, L"testing2.grf");
+  //if (params_.save_graph_to() != "")
+  //{
+  //  vidl2_dshow::save_graph_to_file(filter_graph_, L"testing2.grf");
+  //}
 
+#if 0
   // get frame format information
+  AM_MEDIA_TYPE media_type;
   DSHOW_ERROR_IF_FAILED(
     sample_grabber->GetConnectedMediaType(&media_type));
   vidl2_dshow::get_media_info(media_type,
@@ -273,39 +284,46 @@ void vidl2_dshow_live_istream<ParamsObject>::connect(void)
                               buffer_height_,
                               buffer_pixel_format_);
   vidl2_dshow::delete_media_type(media_type);
+#endif
 
   // ***** MSDN docs suggest turning the graph clock off (if not needed)
   //       for running the graph faster. Check this out.
   // *****
-  //CComQIPtr<IMediaFilter> media_filter(filter_graph_);
-  //media_filter->SetSyncSource(0);
-
-  // ***** pause the graph first???
-  CComQIPtr<IMediaControl> media_control(filter_graph_);
-  if (media_control->Run() == S_FALSE)
-  {
-    OAFilterState state;
-    DSHOW_ERROR_IF_FAILED(media_control->GetState(INFINITE, &state));
-  }
+  //if (params_.turn_clock_off())
+  //{
+  //  CComQIPtr<IMediaFilter> media_filter(filter_graph_);
+  //  media_filter->SetSyncSource(0);
+  //}
 
   if (params_.register_in_rot())
   {
     vidl2_dshow::register_in_rot(filter_graph_, register_);
+  }
+
+  filter_graph_->QueryInterface(
+    IID_IMediaControl, reinterpret_cast<void**>(&media_control_));
+
+  if (params_.run_when_ready())
+  {
+    run();
+  }
+  else
+  {
+    pause();
   }
 }
 
 template <class ParamsObject>
 inline void vidl2_dshow_live_istream<ParamsObject>::close(void)
 {
-  // ***** do i need to stop before destroying??
-  //CComQIPtr<IMediaControl> media_control(filter_graph_);
-  //DSHOW_ERROR_IF_FAILED(media_control->Stop());
+  stop();
 
   if (register_ != 0)
   {
     vidl2_dshow::remove_from_rot(register_);
   }
 
+  media_control_.Release();
   moniker_.Release();
   filter_graph_.Release();
 }
@@ -366,6 +384,35 @@ vidl2_dshow_live_istream<ParamsObject>::current_frame(void)
   }
 }
 
+template <class ParamsObject>
+inline void vidl2_dshow_live_istream<ParamsObject>
+::wait_for_state_change(HRESULT hr)
+{
+  if (hr == S_FALSE)
+  {
+    OAFilterState state;
+    DSHOW_ERROR_IF_FAILED(media_control_->GetState(INFINITE, &state));
+  }
+}
+
+template <class ParamsObject>
+inline void vidl2_dshow_live_istream<ParamsObject>::run(void)
+{
+  wait_for_state_change(media_control_->Run());
+}
+
+template <class ParamsObject>
+inline void vidl2_dshow_live_istream<ParamsObject>::pause(void)
+{
+  wait_for_state_change(media_control_->Pause());
+}
+
+template <class ParamsObject>
+inline void vidl2_dshow_live_istream<ParamsObject>::stop(void)
+{
+  wait_for_state_change(media_control_->Stop());
+}
+
 // ***** make these with the usual *.txx macros? *****
 // verify these steps with vil library before attempting
 // 1. put this file into vidl2_dshow_istream.txx
@@ -376,7 +423,7 @@ vidl2_dshow_live_istream<ParamsObject>::current_frame(void)
 #include <vidl2/vidl2_dshow_istream_params.h>
 template class vidl2_dshow_live_istream<vidl2_dshow_istream_params>;
 
-#ifdef HAS_EURESYS_ESF
+#ifdef HAS_DSHOW_ESF
   #include <vidl2/vidl2_dshow_istream_params_esf.h>
   template class vidl2_dshow_live_istream<vidl2_dshow_istream_params_esf>;
 #endif // HAS_EURESYS_ESF
