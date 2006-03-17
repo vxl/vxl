@@ -1,15 +1,13 @@
-
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 
 #include <vpgl/vpgl_proj_camera.h>
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vgl/vgl_distance.h> 
+#include <vgl/vgl_distance.h>
 
 static void test_proj_camera()
 {
-
   // Some matrices for testing.
   vnl_matrix_fixed<double,3,4> identity_camera( 0.0 );
   identity_camera(0,0) = identity_camera(1,1) = identity_camera(2,2) = 1;
@@ -76,7 +74,7 @@ static void test_proj_camera()
   vgl_homg_point_2d<double> q1i = P2.project(q1);
   vgl_homg_point_2d<double> q2i = P2.project(q2);
   vgl_homg_point_2d<double> q3i = P2.project(q3);
-  TEST_NEAR( "plane backprojection1", 
+  TEST_NEAR( "plane backprojection1",
     vgl_distance(l4,q1i)*vgl_distance(l4,q2i)*vgl_distance(l4,q3i), 0, 1e-06 );
 
   vgl_homg_line_2d<double> l5(-10,13,40);
@@ -84,28 +82,28 @@ static void test_proj_camera()
   vgl_homg_plane_3d<double> plane5a = P2.backproject( l5 );
   vgl_homg_plane_3d<double> plane5b( P2.backproject(q2i).point_finite(),
     P2.backproject(q1i).point_infinite(),P2.backproject(q2i).point_infinite() );
-  TEST_NEAR( "plane backprojection2", 
+  TEST_NEAR( "plane backprojection2",
     plane5a.a()*plane5b.d(), plane5b.a()*plane5a.d(), 1e-06 );
 
   // Test automatic SVD computation
   P1.svd();
   P1.set_matrix( random_matrix2 );
-  TEST_NEAR( "automatic svd computation", random_matrix2(2,3), 
+  TEST_NEAR( "automatic svd computation", random_matrix2(2,3),
     P1.svd()->recompose()(2,3), 1e-06 );
 
   // Test get_canonical_h
   vpgl_proj_camera<double> P6( random_matrix );
   vgl_h_matrix_3d<double> H = get_canonical_h( P6 );
-  vnl_matrix<double> I6 = P6.get_matrix() * H.get_matrix();
+  vnl_matrix_fixed<double,3,4> I6 = P6.get_matrix() * H.get_matrix();
   TEST( "get_canonical_h",
-    vcl_fabs(I6(0,0)*I6(1,1)*I6(2,2)-1) < 1e-06 && 
+    vcl_fabs(I6(0,0)*I6(1,1)*I6(2,2)-1) < 1e-06 &&
     vcl_fabs(I6(1,0)*I6(2,0)*I6(0,1)*I6(2,1)*I6(0,2)*I6(1,2)*I6(0,3)*I6(1,3)*I6(2,3))< 1e-06,
     true );
 
   // Test camera center
   vgl_homg_point_2d<double> q6 = P6.project( P6.camera_center() );
   TEST_NEAR( "camera center computation", q6.x()*q6.y()*q6.w(), 0, 1e-06 );
-  
+
   // Test pre-multiply
   double T1array[9] = {1,2,3,4,5,6,7,8,9};
   vnl_matrix_fixed<double,3,3> T1( T1array );
@@ -124,9 +122,8 @@ static void test_proj_camera()
   P1.set_matrix( random_matrix2 );
   P1.svd();
   P1.set_matrix( random_matrix3 );
-  TEST_NEAR( "automatic svd computation", random_matrix3(2,3), 
+  TEST_NEAR( "automatic svd computation", random_matrix3(2,3),
     P1.svd()->recompose()(2,3), 1e-06 );
-
 }
 
 
