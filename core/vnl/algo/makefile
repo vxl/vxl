@@ -56,6 +56,7 @@ SOURCES += vnl_lsqr.cxx
 SOURCES += vnl_rpoly_roots.cxx
 SOURCES += vnl_cpoly_roots.cxx
 SOURCES += vnl_rnpoly_solve.cxx
+SOURCES += vnl_solve_qp.cxx
 
 # fft
 SOURCES += vnl_fft.cxx

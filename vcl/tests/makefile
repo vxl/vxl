@@ -22,6 +22,7 @@ TESTS += test_exception.cxx
 TESTS += test_cctype.cxx
 TESTS += test_limits.cxx
 TESTS += test_memory.cxx
+TESTS += test_preprocessor.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

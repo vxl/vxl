@@ -30,6 +30,7 @@ TESTS += test_cholesky.cxx
 TESTS += test_algo.cxx
 TESTS += test_integral.cxx
 TESTS += test_powell.cxx
+TESTS += test_solve_qp.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

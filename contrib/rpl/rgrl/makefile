@@ -142,6 +142,7 @@ SOURCES += rgrl_trans_rad_dis_homo2d.cxx
 SOURCES += rgrl_trans_couple.cxx
 SOURCES += rgrl_matcher_k_nearest_pick_one.cxx
 SOURCES += rgrl_weighter_indiv_scale.cxx
+SOURCES += rgrl_internal_util.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
