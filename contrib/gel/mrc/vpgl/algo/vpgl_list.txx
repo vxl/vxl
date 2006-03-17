@@ -5,7 +5,7 @@
 // \file
 #include "vpgl_list.h"
 
-#include <vcl_iostream.h>
+#include <vcl_fstream.h>
 
 //-------------------------------------------
 template <class T>
