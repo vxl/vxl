@@ -11,6 +11,7 @@
 #include <vsol/vsol_digital_curve_2d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vcl_list.h>
+#include <vcl_iostream.h>
 
 
 //: Apply lens distortion to this vsol_spatial_object_2d and produce a new spatial object
@@ -137,7 +138,7 @@ vpgl_vsol_lens_warp(const vsol_polyline_2d_sptr& pln,
     vsol_point_2d_sptr p = pln->vertex(i);
     vsol_point_2d_sptr dp = vpgl_vsol_lens_warp(p, lens, invert, midpt_thresh);
     if (!dp)
-      return false;
+      return 0;
     vsol_line_2d_sptr ln = new vsol_line_2d(last_p,p);
     vsol_line_2d_sptr wln = new vsol_line_2d(last_dp,dp);
     vcl_list<vsol_point_2d_sptr> new_pts;
@@ -170,7 +171,7 @@ vpgl_vsol_lens_warp(const vsol_digital_curve_2d_sptr& dc,
     vsol_point_2d_sptr p = dc->point(i);
     vsol_point_2d_sptr dp = vpgl_vsol_lens_warp(p, lens, invert, midpt_thresh);
     if (!dp)
-      return false;
+      return 0;
     vsol_line_2d_sptr ln = new vsol_line_2d(last_p,p);
     vsol_line_2d_sptr wln = new vsol_line_2d(last_dp,dp);
     vcl_list<vsol_point_2d_sptr> new_pts;
@@ -202,7 +203,7 @@ vpgl_vsol_lens_warp(const vsol_polygon_2d_sptr& pg,
     vsol_point_2d_sptr p = pg->vertex(i);
     vsol_point_2d_sptr dp = vpgl_vsol_lens_warp(p, lens, invert, midpt_thresh);
     if (!dp)
-      return false;
+      return 0;
     vsol_line_2d_sptr ln = new vsol_line_2d(last_p,p);
     vsol_line_2d_sptr wln = new vsol_line_2d(last_dp,dp);
     vcl_list<vsol_point_2d_sptr> new_pts;
@@ -228,6 +229,9 @@ vpgl_vsol_lens_warp(vsol_spatial_object_2d_sptr& obj,
                     const vpgl_lens_distortion<double>& lens,
                     bool invert)
 {
+  if (invert)
+    vcl_cerr << "Warning: invert not yet implemented in vpgl_vsol_lens_warp\n";
+
   if (vsol_point_2d_sptr pt = obj->cast_to_point())
   {
     return vpgl_vsol_lens_warp(pt, lens);
@@ -254,7 +258,8 @@ vpgl_vsol_lens_warp(vsol_spatial_object_2d_sptr& obj,
       return vpgl_vsol_lens_warp(pg, lens);
     }
   }
-  return false;
+  else
+    return false;
 }
 
 
@@ -284,6 +289,9 @@ vpgl_vsol_lens_warp(vsol_line_2d_sptr& ln,
                     const vpgl_lens_distortion<double>& lens,
                     bool invert)
 {
+  if (invert)
+    vcl_cerr << "Warning: line invert not yet implemented in vpgl_vsol_lens_warp\n";
+
   vsol_point_2d_sptr p0=ln->p0(), p1=ln->p1();
   return vpgl_vsol_lens_warp(p0, lens) &&
          vpgl_vsol_lens_warp(p1, lens);
@@ -314,6 +322,9 @@ vpgl_vsol_lens_warp(vsol_digital_curve_2d_sptr& dc,
                     const vpgl_lens_distortion<double>& lens,
                     bool invert)
 {
+  if (invert)
+    vcl_cerr << "Warning: curve invert not yet implemented in vpgl_vsol_lens_warp\n";
+
   for (unsigned int i=0; i<dc->size(); ++i) {
     vsol_point_2d_sptr p=dc->point(i);
     if (!vpgl_vsol_lens_warp(p, lens))
@@ -331,6 +342,9 @@ vpgl_vsol_lens_warp(vsol_polygon_2d_sptr& pg,
                     const vpgl_lens_distortion<double>& lens,
                     bool invert)
 {
+  if (invert)
+    vcl_cerr << "Warning: polygon invert not yet implemented in vpgl_vsol_lens_warp\n";
+
   for (unsigned int i=0; i<pg->size(); ++i){
     vsol_point_2d_sptr p=pg->vertex(i);
     if (!vpgl_vsol_lens_warp(p, lens))
