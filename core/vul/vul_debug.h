@@ -40,7 +40,7 @@ public:
 	unsigned code() const;
   //: Related execution address.
 	void *address() const;
-  virtual const char *what( ) const throw( );
+  virtual const char *what( ) const throw();
   vul_debug_windows_structured_exception(void * ex_ptr):
     ex_ptr_(ex_ptr) {}
   virtual ~vul_debug_windows_structured_exception() throw() {}

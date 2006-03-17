@@ -93,7 +93,7 @@ void *vul_debug_windows_structured_exception::address() const
 {
   return static_cast<EXCEPTION_POINTERS*>(ex_ptr_)->ExceptionRecord->ExceptionAddress;
 }	
-const char *vul_debug_windows_structured_exception::what() const
+const char *vul_debug_windows_structured_exception::what() const throw()
 {
   static char buf[100];
   vcl_sprintf(buf, "Caught Windows Structured Exception. Code %lx. Address %lx", code(), address());
@@ -126,12 +126,12 @@ void vul_debug_set_coredump_and_throw_on_windows_se(const char * filename)
 
 # else //VXL_HAS_DBGHELP_H
 
-void vul_debug_core_dump_in_windows_seh(const char * filename, void* pep)
+void vul_debug_core_dump_in_windows_seh(const char *, void*)
 {
   vcl_cerr << "WARNING: vul_debug_core_dump_in_windows_seh: Unable to core dump\n";
 }
 
-void vul_debug_core_dump(const char * filename)
+void vul_debug_core_dump(const char *)
 {
   vcl_cerr << "WARNING: vul_debug_core_dump: Unable to core dump\n";
 }
@@ -146,7 +146,7 @@ void *vul_debug_windows_structured_exception::address() const
 {
   return 0;
 }	
-const char *vul_debug_windows_structured_exception::what() const
+const char *vul_debug_windows_structured_exception::what() const throw()
 {
   return "Caught Windows Exception on machine with old or no version of DbgHelp.";
 }
@@ -156,7 +156,7 @@ const char *vul_debug_windows_structured_exception::what() const
 
 //: Setup the system to core dump and throw a C++ exception on detection of a Structured Exception
 // \throws vul_debug_windows_structured_exception. 
-void vul_debug_set_coredump_and_throw_on_windows_se(const char * filename)
+void vul_debug_set_coredump_and_throw_on_windows_se(const char * )
 {
   vcl_cerr << "WARNING: No DbgHelp.h on this platform - can't set SE Handler.\n";
 }
