@@ -12,6 +12,7 @@ IF(WIN32)
   FIND_PATH(DIRECTX_INCLUDE_DIR ddraw.h
     "C:/Program Files/Microsoft Visual Studio .NET 2003/Vc7/PlatformSDK/Include"
     "C:/Program Files/Microsoft DirectX SDK (February 2006)/Include"
+    "C:/Program Files/Microsoft DirectX 9.0 SDK (June 2005)/Include"
     "C:/DXSDK/Include"
     DOC "What is the path where the file ddraw.h can be found"
   )
