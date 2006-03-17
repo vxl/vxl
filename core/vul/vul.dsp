@@ -155,6 +155,9 @@ SOURCE=.\vul_user_info.cxx
 # Begin Source File
 SOURCE=.\vul_url.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vul_debug.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -221,8 +224,9 @@ SOURCE=.\vul_fwd.h
 # Begin Source File
 SOURCE=.\vul_whereami.h
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+# Begin Source File
+SOURCE=.\vul_debug.h
+# End Source File
 # End Group
 # End Target
 # End Project

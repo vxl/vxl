@@ -158,6 +158,9 @@ SOURCE=.\test_limits.cxx
 # Begin Source File
 SOURCE=.\test_memory.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_preprocessor.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

@@ -273,6 +273,9 @@ SOURCE=.\vnl_adaptsimpson_integral.cxx
 SOURCE=.\vnl_simpson_integral.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vnl_solve_qp.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vnl_svd_economy+double-.cxx
 # End Source File
 # Begin Source File
@@ -440,8 +443,9 @@ SOURCE=.\vnl_adaptsimpson_integral.h
 # Begin Source File
 SOURCE=.\vnl_simpson_integral.h
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+# Begin Source File
+SOURCE=.\vnl_solve_qp.h
+# End Source File
 # End Group
 # End Target
 # End Project

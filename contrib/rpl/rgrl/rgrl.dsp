@@ -434,6 +434,9 @@ SOURCE=.\rgrl_feature_set_bins_2d.cxx
 # Begin Source File
 SOURCE=.\rgrl_weighter_indiv_scale.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\rgrl_internal_util.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -790,6 +793,9 @@ SOURCE=.\rgrl_feature_set_bins_2d.h
 # End Source File
 # Begin Source File
 SOURCE=.\rgrl_weighter_indiv_scale.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_internal_util.h
 # End Source File
 # End Group
 # End Target
