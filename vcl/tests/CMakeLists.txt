@@ -31,6 +31,7 @@ ADD_EXECUTABLE( vcl_test_all
      test_sstream.cxx
      test_vector.cxx
      test_cstdio.cxx
+     test_preprocessor.cxx
 )
 TARGET_LINK_LIBRARIES( vcl_test_all vcl )
 

@@ -8,6 +8,34 @@
 // It's much better to determine the compiler automatically here than to depend
 // on command-line flags being set.
 
+// Be careful when modifying this file. In general, you need to make
+// sure that exactly one of the preprocessor flags is defined. For
+// example, if the compiler is GCC 3.4.2, then VCL_GCC should be
+// defined, VCL_GCC_3 should be defined, and VCL_GCC_34 should be
+// defined. Others, like VCL_GCC_33 *should not* be defined.
+//
+// Note that this is most commonly implemented using a cascade of if
+// statements. Be careful to add your statements to the correct place
+// in the cascade list.
+//
+// Naming scheme:
+// If you have a compiler name XYZ, then
+//     #define VCL_XYZ
+// Each each major release, define a release number
+//     #define VCL_XYZ_4
+// Avoid using the marketing name for the release number, because it's
+// harder to follow. For example, Microsoft Visual C++ .NET 2003 is
+// better called Visual C++ 7.
+// For each minor version, define the appropriate minor version number
+//     #define VCL_XYZ_40
+// If necessary, define the patchlevel too:
+//     #define VCL_XYZ_401
+//
+// Make sure that if the minor version is defined, then the release
+// number and the compiler name are also defined.
+//
+// Add the corresponding test to tests/test_platform to make sure.
+
 #if defined(__sgi) && !defined(__GNUC__)
 # ifndef _COMPILER_VERSION
 #  define VCL_SGI_CC_6
@@ -65,18 +93,25 @@
 #   define VCL_GCC_EGCS // so this is the union of EGCS, GCC_28 and GCC_295
 #  endif
 # elif (__GNUC__==3)
-#  define VCL_GCC_30
-#  if (__GNUC_MINOR__>0)
-#   define VCL_GCC_31
-#  endif
-#  if (__GNUC_MINOR__>1)
-#   define VCL_GCC_32
-#  endif
-#  if (__GNUC_MINOR__==4)
+#  define VCL_GCC_3
+#  if (__GNUC_MINOR__ > 3 )
 #   define VCL_GCC_34
+#  elif (__GNUC_MINOR__ > 2 )
+#   define VCL_GCC_33
+#  elif (__GNUC_MINOR__ > 1 )
+#   define VCL_GCC_32
+#  elif (__GNUC_MINOR__ > 0 )
+#   define VCL_GCC_31
+#  else
+#   define VCL_GCC_30
 #  endif
 # elif (__GNUC__==4)
-#  define VCL_GCC_40
+#  define VCL_GCC_4
+#  if (__GNUC_MINOR__ > 0 )
+#   define VCL_GCC_41
+#  else
+#   define VCL_GCC_40
+#  endif
 # else
 #  error "Dunno about this gcc"
 # endif
@@ -88,18 +123,30 @@
 #  define VCL_VC
 #  if _MSC_VER >= 1300
 #   define VCL_VC_DOTNET 1 // VC is at least version >= 7.0
-#   if _MSC_VER >= 1400    // .NET 2005 = Version 8.0
-#    define _CRT_SECURE_NO_DEPRECATE 1
-#    define VCL_VC80 1     // .NET 2003 = Version 7.1
-#   elif _MSC_VER >= 1310
-#    define VCL_VC71 1     // .NET 2003 = Version 7.1
-#   else
-#    define VCL_VC70 1     // earlier .NET versions = Version 7.0
+#  endif
+#  if _MSC_VER >= 1400     // .NET 2005 = Version 8.x
+#   define _CRT_SECURE_NO_DEPRECATE 1
+#   define VCL_VC_8
+#   if _MSC_VER >= 1400
+#    define VCL_VC80 1     // version 8.0
+#    define VCL_VC_80      // (deprecated)
 #   endif
-#  elif _MSC_VER >= 1200   // last version before advent of .NET = Version 6.0
-#   define VCL_VC60 1
+#  elif _MSC_VER >= 1300   // .NET 2003 = Version 7.x
+#   define VCL_VC_7
+#   if _MSC_VER >= 1310
+#    define VCL_VC_71      // Version 7.1
+#    define VCL_VC71 1     // (deprecated)
+#   else
+#    define VCL_VC_70      // Version 7.0
+#    define VCL_VC70 1     // (deprecated)
+#   endif
+#  elif _MSC_VER >= 1200   // pre- .NET, Version 6.x
+#   define VCL_VC_6
+#   define VCL_VC_60       // Version 6.0
+#   define VCL_VC60 1      // (deprecated)
 #  else
-#   define VCL_VC50 1
+#   define VCL_VC_50       // Version 5.0
+#   define VCL_VC50 1      // (deprecated)
 #  endif
 # elif defined(__BORLANDC__)
 #  define VCL_BORLAND
@@ -114,7 +161,7 @@
 // win32 or vc++ ?
 // awf hack alert:
 #ifdef VCL_VC
-#  ifdef VCL_VC60
+#  ifdef VCL_VC_60
 #    pragma warning(disable:4786 4660 4661)
 #    pragma warning(disable:4786 4660 4355 4390)
 #  elif VCL_VC_DOTNET
@@ -186,7 +233,7 @@
 
 // if the compiler doesn't understand "export", we just leave it out.
 // gcc and SunPro 5.0 understand it, but they ignore it noisily.
-#if !VCL_HAS_EXPORT||defined(VCL_EGCS)||defined(VCL_GCC_295)||defined(VCL_GCC_30)||defined(VCL_GCC_40)||defined(VCL_SUNPRO_CC_5)
+#if !VCL_HAS_EXPORT||defined(VCL_EGCS)||defined(VCL_GCC_295)||defined(VCL_GCC_3)||defined(VCL_GCC_4)||defined(VCL_SUNPRO_CC_5)
 # define export /* ignore */
 #endif
 
