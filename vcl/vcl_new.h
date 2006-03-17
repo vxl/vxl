@@ -42,7 +42,11 @@ void vcl_construct(U * p, V const & value) { new (p) U(value); }
 #define vcl_bad_alloc std::bad_alloc
 
 #if VCL_VC60
-# define vcl_set_new_handler _set_new_handler
+// Provide dummy set new handler
+// It should be possible to get set_new_handler to work eith VC6 - 
+// but I don't have a working VC6 to test/debug it - IMS
+typedef void (__cdecl *new_handler)();
+inline new_handler __cdecl vcl_set_new_handler(new_handler) {return 0;}
 #else
 # define vcl_set_new_handler std::set_new_handler
 #endif
