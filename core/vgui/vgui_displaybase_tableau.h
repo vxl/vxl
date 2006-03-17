@@ -33,6 +33,7 @@ class vgui_event;
 //: Implement one of these to be told about picking etc.
 struct vgui_displaybase_tableau_selection_callback
 {
+  virtual ~vgui_displaybase_tableau_selection_callback() { }
   virtual bool select(unsigned id);
   virtual bool deselect(unsigned id);
   virtual bool deselect_all();
