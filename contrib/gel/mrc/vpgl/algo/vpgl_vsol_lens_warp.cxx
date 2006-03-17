@@ -258,8 +258,7 @@ vpgl_vsol_lens_warp(vsol_spatial_object_2d_sptr& obj,
       return vpgl_vsol_lens_warp(pg, lens);
     }
   }
-  else
-    return false;
+  return false;
 }
 
 
