@@ -41,16 +41,16 @@ static void vul_debug_core_dump_in_windows_seh(const char * filename,
   HANDLE hFile = CreateFile( filename, GENERIC_READ | GENERIC_WRITE, 
     0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL ); 
 
-  if( ( hFile == NULL ) || ( hFile == INVALID_HANDLE_VALUE ) )
+  if ( ( hFile == NULL ) || ( hFile == INVALID_HANDLE_VALUE ) )
   {
     vcl_cerr << "WARNING: vul_debug_core_dump: Unable to create core dump file: " << filename << vcl_endl;
     return;
   }
 
-	MINIDUMP_EXCEPTION_INFORMATION mdei; 
-	mdei.ThreadId           = GetCurrentThreadId(); 
-	mdei.ExceptionPointers  = pep; 
-	mdei.ClientPointers     = FALSE; 
+  MINIDUMP_EXCEPTION_INFORMATION mdei; 
+  mdei.ThreadId           = GetCurrentThreadId(); 
+  mdei.ExceptionPointers  = pep; 
+  mdei.ClientPointers     = FALSE; 
 
   if (! MiniDumpWriteDump( GetCurrentProcess(), GetCurrentProcessId(), 
     hFile, MiniDumpWithFullMemory, (pep != 0) ? &mdei : 0, 0, 0 ))
@@ -72,7 +72,7 @@ void vul_debug_core_dump_in_windows_seh(const char * filename,
 
 void vul_debug_core_dump(const char * filename)
 {
-  _se_translator_function current =	_set_se_translator(0);
+  _se_translator_function current = _set_se_translator(0);
 
   __try
   {
@@ -88,11 +88,13 @@ unsigned vul_debug_windows_structured_exception::code() const
 {
   return static_cast<EXCEPTION_POINTERS*>(ex_ptr_)->ExceptionRecord->ExceptionCode;
 }
+
 //: Related execution address.
 void *vul_debug_windows_structured_exception::address() const
 {
   return static_cast<EXCEPTION_POINTERS*>(ex_ptr_)->ExceptionRecord->ExceptionAddress;
-}	
+}
+
 const char *vul_debug_windows_structured_exception::what() const throw()
 {
   static char buf[100];
@@ -120,7 +122,7 @@ void vul_debug_set_coredump_and_throw_on_windows_se_handler(
 void vul_debug_set_coredump_and_throw_on_windows_se(const char * filename)
 {
   se_coredump_filename = filename;
-	_set_se_translator(vul_debug_set_coredump_and_throw_on_windows_se_handler);
+  _set_se_translator(vul_debug_set_coredump_and_throw_on_windows_se_handler);
 }
 
 
@@ -141,17 +143,17 @@ unsigned vul_debug_windows_structured_exception::code() const
 {
   return 0;
 }
+
 //: Related execution address.
 void *vul_debug_windows_structured_exception::address() const
 {
   return 0;
-}	
+}
+
 const char *vul_debug_windows_structured_exception::what() const throw()
 {
   return "Caught Windows Exception on machine with old or no version of DbgHelp.";
 }
-
-
 
 
 //: Setup the system to core dump and throw a C++ exception on detection of a Structured Exception

@@ -35,14 +35,13 @@ void vul_debug_core_dump_in_windows_se(const char * filename,
 class vul_debug_windows_structured_exception : public vcl_exception
 {
   void * ex_ptr_;
-public:
+ public:
   //: Windows structured exception code.
-	unsigned code() const;
+  unsigned code() const;
   //: Related execution address.
-	void *address() const;
+  void *address() const;
   virtual const char *what( ) const throw();
-  vul_debug_windows_structured_exception(void * ex_ptr):
-    ex_ptr_(ex_ptr) {}
+  vul_debug_windows_structured_exception(void * ex_ptr) : ex_ptr_(ex_ptr) {}
   virtual ~vul_debug_windows_structured_exception() throw() {}
 };
 #else
@@ -59,7 +58,4 @@ void vul_debug_set_coredump_and_throw_on_windows_se(const char * filename);
 void vul_debug_set_coredump_and_throw_on_out_of_memory(const char * filename);
 
 
-
-
 #endif // vul_debug_h_
-
