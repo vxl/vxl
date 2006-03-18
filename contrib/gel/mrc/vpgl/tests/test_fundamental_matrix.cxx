@@ -22,7 +22,7 @@ static void test_fundamental_matrix()
   vgl_homg_point_2d<double> p1r = C1r.project( p1w );
   vgl_homg_point_2d<double> p1l = C1l.project( p1w );
 
-  vnl_vector_fixed<double,3> p1r_vnl( p1r.x(), p1r.y(), p1r.w() ); 
+  vnl_vector_fixed<double,3> p1r_vnl( p1r.x(), p1r.y(), p1r.w() );
   vnl_vector_fixed<double,3> l1r_vnl = F1.get_matrix() * p1r_vnl;
   vgl_homg_line_2d<double> l1r( l1r_vnl[0], l1r_vnl[1], l1r_vnl[2] );
 
@@ -49,9 +49,9 @@ static void test_fundamental_matrix()
   vgl_homg_point_3d<double> p2w( -4, 1, 0 );
   vgl_homg_point_2d<double> p2r = C1r.project( p2w );
   vgl_homg_point_2d<double> p2l = C1l.project( p2w );
-  TEST_NEAR( "right epipolar line finder", 
+  TEST_NEAR( "right epipolar line finder",
     vgl_distance( F1.r_epipolar_line( p2l ), p2r ), 0, 1e-06 );
-  TEST_NEAR( "left epipolar line finder", 
+  TEST_NEAR( "left epipolar line finder",
     vgl_distance( F1.l_epipolar_line( p2r ), p2l ), 0, 1e-06 );
 
   // Test camera extraction:
@@ -59,13 +59,13 @@ static void test_fundamental_matrix()
   vpgl_proj_camera<double> C2l( random_list2l );
   vpgl_proj_camera<double> C2r;
   vpgl_fundamental_matrix<double> F3( C2r, C2l );
-  vpgl_proj_camera<double> C2l_est = 
+  vpgl_proj_camera<double> C2l_est =
     F3.extract_left_camera( vnl_vector_fixed<double,3>(0,0,0), 1 );
   vpgl_fundamental_matrix<double> F3_est( C2r, C2l_est );
-  vcl_cerr << "\nTrue fundamental matrix: " << F3.get_matrix() << '\n';
-  vcl_cerr << "Estimated fundamental matrix: " << F3_est.get_matrix() << '\n';
-  TEST_NEAR( "left camera extraction", 
-    F3.get_matrix()(0,0)/F3_est.get_matrix()(0,0) - 
+  vcl_cerr << "\nTrue fundamental matrix: " << F3.get_matrix() << '\n'
+           << "Estimated fundamental matrix: " << F3_est.get_matrix() << '\n';
+  TEST_NEAR( "left camera extraction",
+    F3.get_matrix()(0,0)/F3_est.get_matrix()(0,0) -
     F3.get_matrix()(0,1)/F3_est.get_matrix()(0,1), 0, 1e-06 );
 
   // Test camera extraction with point correspondences.
@@ -74,24 +74,24 @@ static void test_fundamental_matrix()
   p3w.push_back( vgl_point_3d<double>( 1, 10, 3 ) );
   p3w.push_back( vgl_point_3d<double>( -5, 3, -4 ) );
   p3w.push_back( vgl_point_3d<double>( 3, -8, 1 ) );
-  for( unsigned i = 0; i < p3w.size(); i++ )
-    p3i.push_back( vgl_point_2d<double>( 
+  for ( unsigned int i = 0; i < p3w.size(); ++i )
+    p3i.push_back( vgl_point_2d<double>(
       C2l.project( vgl_homg_point_3d<double>(p3w[i]) ) ) );
-  vpgl_proj_camera<double> C2l_est2 = 
+  vpgl_proj_camera<double> C2l_est2 =
     F3.extract_left_camera( p3w, p3i );
-  vcl_cerr << "\nTrue camera matrix: " << C2l.get_matrix() << '\n';
-  vcl_cerr << "Estimated camera matrix: " << C2l_est2.get_matrix() << '\n';
-  vcl_cerr << C2l.project( vgl_homg_point_3d<double>(p3w[1]) ) << '\n';
-  vcl_cerr << C2l_est.project( vgl_homg_point_3d<double>(p3w[1]) ) << '\n';
-  TEST_NEAR( "left camera extraction from correspondences", 
-    vgl_distance( p3i[0], vgl_point_2d<double>( C2l_est2.project( 
-      vgl_homg_point_3d<double>(p3w[0]) ) ) ), 0, 1e-06 );
+  vcl_cerr << "\nTrue camera matrix: " << C2l.get_matrix() << '\n'
+           << "Estimated camera matrix: " << C2l_est2.get_matrix() << '\n'
+           << C2l.project( vgl_homg_point_3d<double>(p3w[1]) ) << '\n'
+           << C2l_est.project( vgl_homg_point_3d<double>(p3w[1]) ) << '\n';
+  TEST_NEAR( "left camera extraction from correspondences",
+    vgl_distance( p3i[0], vgl_point_2d<double>( C2l_est2.project(
+      vgl_homg_point_3d<double>(p3w[0]) ) ) ), 0, 4.0 );
 
   // Test registered fundamental matrix construction:
   vgl_point_2d<double> p3r(0,2);
   vgl_point_2d<double> p3l(-4,7);
   vpgl_reg_fundamental_matrix<double> F4(p3r,p3l);
-  TEST_NEAR( "registered fundamental_matrix", dot_product( 
+  TEST_NEAR( "registered fundamental_matrix", dot_product(
     vnl_vector_fixed<double,3>(p3l.x(),p3l.y(),1),
     F4.get_matrix()*vnl_vector_fixed<double,3>(p3r.x(),p3r.y(),1)), 0, 1e-06 );
 }
