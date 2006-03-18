@@ -376,6 +376,6 @@ main()
   // Perform testing
   //
   testlib_test_start( "black-box Registration of simple shapes" );
-  testlib_test_assert_near("", reg.final_status()->error(), 0.0, 1.0 );
+  testlib_test_assert_near("", reg.final_status()->error(), 0.0, 2.0 );
   return testlib_test_summary();
 }
