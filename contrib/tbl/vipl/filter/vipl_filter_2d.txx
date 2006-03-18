@@ -108,7 +108,7 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
         vcl_cerr << "Warning: In vipl_filter_2d, output iter ran out of items before input.  resetting to beginning\n";
         dstitr = (*this->ref_dst_section()).begin();
       }
-#ifdef VCL_VC60 // this awkward construction is to get around a VC60 compiler bug
+#ifdef VCL_VC_6 // this awkward construction is to get around a VC60 compiler bug
       vipl_section_descriptor<DataOut>& secDesc = *dstitr;
       put_secp( new vipl_section_descriptor<DataOut> (secDesc) );
 #else
@@ -117,7 +117,7 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
       this->ref_dst_section()->ref_overlap()[0] = this->image_border_size();
       this->ref_dst_section()->ref_overlap()[1] = this->image_border_size();
       if (this->ref_src_section()) {
-#ifdef VCL_VC60 // this awkward construction is to get around a VC60 compiler bug
+#ifdef VCL_VC_6 // this awkward construction is to get around a VC60 compiler bug
         vipl_section_descriptor<DataIn>& inSecDesc = *it;
         put_insecp( new vipl_section_descriptor<DataIn> (inSecDesc));
 #else
@@ -147,7 +147,7 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
         vcl_cerr << "Warning: In vipl_filter_2d, input iter ran out of items before output.  resetting to beginning\n";
         srcitr = (*this->ref_src_section()).begin();
       }
-#ifdef VCL_VC60 // this awkward construction is to get around a VC60 compiler bug
+#ifdef VCL_VC_6 // this awkward construction is to get around a VC60 compiler bug
       vipl_section_descriptor<DataOut>& secDesc2 = *it;
       put_secp( new vipl_section_descriptor<DataOut> (secDesc2));
 #else
@@ -156,7 +156,7 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
       this->ref_dst_section()->ref_overlap()[0] = this->image_border_size();
       this->ref_dst_section()->ref_overlap()[1] = this->image_border_size();
       if (this->ref_src_section()) {
-#ifdef VCL_VC60 // this awkward construction is to get around a VC60 compiler bug
+#ifdef VCL_VC_6 // this awkward construction is to get around a VC60 compiler bug
         vipl_section_descriptor<DataIn>& inSecDesc2 = *srcitr;
         put_insecp( new vipl_section_descriptor<DataIn> (inSecDesc2));
 #else

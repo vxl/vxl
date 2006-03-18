@@ -105,7 +105,7 @@ class vgl_h_matrix_2d
   // coordinate system.  In the canonical frame the lines have equations:
   // x=0; y=0; w=0; x+y+w=0.  (The third line is the line at infinity.)
   bool projective_basis(vcl_vector<vgl_homg_line_2d<T> > const& four_lines
-#ifdef VCL_VC60
+#ifdef VCL_VC_6
     , int dummy=0 // parameter to help useless compiler disambiguate different functions
 #endif
     );

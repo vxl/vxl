@@ -119,6 +119,7 @@ vgl_conic<T> vgl_h_matrix_2d<T>::operator() (vgl_conic<T> const& C) const
   return   vgl_conic<T>(Mp(0,0),(Mp(0,1)+Mp(1,0)),Mp(1,1),(Mp(0,2)+Mp(2,0)),
                         (Mp(1,2)+Mp(2,1)), Mp(2,2));
 }
+
 template <class T>
 vgl_conic<T> vgl_h_matrix_2d<T>::preimage(vgl_conic<T> const& C) const
 {
@@ -292,7 +293,7 @@ projective_basis(vcl_vector<vgl_homg_point_2d<T> > const& points)
 template <class T>
 bool vgl_h_matrix_2d<T>::
 projective_basis(vcl_vector<vgl_homg_line_2d<T> > const& lines
-#ifdef VCL_VC60
+#ifdef VCL_VC_6
     , int dummy // parameter to help useless compiler disambiguate different functions
 #endif
 )
@@ -385,8 +386,8 @@ void vgl_h_matrix_2d<T>::set_rotation(const T theta)
 template <class T>
 void vgl_h_matrix_2d<T>::set_scale(const T scale)
 {
-  for(unsigned r = 0; r<2; ++r)
-    for(unsigned c = 0; c<3; ++c)
+  for (unsigned r = 0; r<2; ++r)
+    for (unsigned c = 0; c<3; ++c)
       t12_matrix_[r][c]*=scale;
 }
 

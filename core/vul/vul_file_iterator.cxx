@@ -28,7 +28,7 @@
 struct vul_file_iterator_data
 {
   struct _finddata_t data_;
-# if defined VCL_VC60 || defined VCL_VC50 || defined VCL_BORLAND_55 || defined __MINGW32__
+# if defined VCL_VC_6 || defined VCL_VC_5 || defined VCL_BORLAND_55 || defined __MINGW32__
   typedef long handle_type;      // works with msvc6
 # else
   typedef intptr_t handle_type;  // not found by msvc6
@@ -128,7 +128,7 @@ vul_file_iterator_data::vul_file_iterator_data(char const* glob)
   }
   // match the end of the string
   re += '$';
-    
+
   reg_exp_.compile(re.c_str());
 
 

@@ -25,7 +25,7 @@ class vpyr_2_tpyramid ;
 // to the true (and unique) types. As a workaround, we need a helper
 // class.
 
-#ifdef VCL_VC60
+#ifdef VCL_VC_6
 template<class N>
 struct helperN : public vmap_ptr_sequence< typename N::base_type >
 {

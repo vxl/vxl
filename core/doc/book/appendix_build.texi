@@ -438,7 +438,7 @@ are in @file{$VXLSRC/config/cmake/Modules/}.
 The Windows API is available.  Keep in mind that @code{WIN32} is
 defined under Cygwin, so it does not imply use of MSVC++.  Make sure
 you don't really want @code{HAS_MFC} or @code{VCL_VC} (or
-@code{VCL_VC60} or @code{VCL_VC_DOTNET}) instead.
+@code{VCL_VC_6} or @code{VCL_VC_DOTNET}) instead.
 
 @item  @bullet{} CMake: @code{UNIX} (defined by CMake, not in a file)
 @itemx @bullet{} Preprocessor: system dependent

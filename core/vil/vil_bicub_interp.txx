@@ -65,7 +65,7 @@ double vil_bicub_interp_unsafe(double x, double y, const T* data,
 // necessary to get rid of this static variable we can try using a
 // volatile automatic variable defined in vil_bicub_interp_raw()
 // instead.  That should have the same effect.
-#ifdef VCL_VC60
+#ifdef VCL_VC_6
 static double vil_bicub_interp_raw_temp_hack = 0.0;
 #endif
 

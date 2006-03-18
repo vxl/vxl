@@ -85,7 +85,7 @@ vnl_vector_fixed<T, M> vnl_matrix_fixed_mat_vec_mult(const vnl_matrix_fixed<T, M
 template <class T, unsigned M, unsigned N, unsigned O>
 inline
 vnl_matrix_fixed<T, M, O> vnl_matrix_fixed_mat_mat_mult(const vnl_matrix_fixed<T, M, N>& a, const vnl_matrix_fixed<T, N, O>& b);
-#ifdef VCL_VC60
+#ifdef VCL_VC_6
 template <unsigned num_cols, unsigned num_rows, class T>
 class vnl_matrix_fixed_fake_base
 {
@@ -332,7 +332,7 @@ class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
     return *this = out;
   }
 
-#ifdef VCL_VC60
+#ifdef VCL_VC_6
   template <unsigned o>
   vnl_matrix_fixed<T,num_rows,o> operator*( vnl_matrix_fixed_fake_base<o,num_cols,T> const& mat ) const
   {
@@ -772,7 +772,7 @@ vnl_matrix_fixed_mat_mat_mult(const vnl_matrix_fixed<T, M, N>& a,
   return out;
 }
 
-#ifndef VCL_VC60
+#ifndef VCL_VC_6
 // The version for correct compilers
 
 //: Multiply  conformant vnl_matrix_fixed (M x N) and vector_fixed (N)
@@ -793,7 +793,7 @@ vnl_matrix_fixed<T, M, O> operator*(const vnl_matrix_fixed<T, M, N>& a, const vn
 {
   return vnl_matrix_fixed_mat_mat_mult(a,b);
 }
-#endif // VCL_VC60
+#endif // VCL_VC_6
 
 
 // These overloads for the common case of mixing a fixed with a
@@ -873,7 +873,7 @@ vcl_istream& operator>> (vcl_istream& is, vnl_matrix_fixed<T,m,n>& mat)
 // compile time constant when used in the return parameter. So, we
 // have to introduce a helper class to do it.
 //
-#ifdef VCL_VC60
+#ifdef VCL_VC_6
 
 template<class T, unsigned m, class FixedVector>
 struct outer_product_fixed_type_helper

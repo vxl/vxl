@@ -535,7 +535,7 @@ class vnl_matrix_fixed_ref : public vnl_matrix_fixed_ref_const<T,num_rows,num_co
     return *this;
   }
 
-#ifdef VCL_VC60
+#ifdef VCL_VC_6
   template<unsigned o>
   vnl_matrix_fixed<T,num_rows,o> operator*( vnl_matrix_fixed_fake_base<o,num_cols,T> const& mat ) const
   {
@@ -821,7 +821,7 @@ vnl_matrix_fixed_mat_mat_mult(const vnl_matrix_fixed_ref_const<T, M, N>& a,
   return out;
 }
 
-#ifndef VCL_VC60
+#ifndef VCL_VC_6
 // The version for correct compilers
 
 //: Multiply  conformant vnl_matrix_fixed (M x N) and vector_fixed (N)
@@ -842,7 +842,7 @@ vnl_matrix_fixed<T, M, O> operator*(const vnl_matrix_fixed_ref_const<T, M, N>& a
 {
   return vnl_matrix_fixed_mat_mat_mult(a,b);
 }
-#endif // ! VCL_VC60
+#endif // ! VCL_VC_6
 
 
 // These overloads for the common case of mixing a fixed with a

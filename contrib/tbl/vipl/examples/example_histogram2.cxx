@@ -35,7 +35,7 @@
 #include <vcl_cstring.h> // for memcpy()
 #include <vxl_config.h> // for vxl_byte
 
-#ifdef VCL_VC50
+#ifdef VCL_VC_5
 #define vxl_byte int // this is a hack!!!  See the Description.
 #endif
 

@@ -16,6 +16,13 @@
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_explicit_io.h>
 
+// IMS Hack: MSVC6.0 has the annoying habit of occasionally forgetting that inline implies static.
+#ifdef VCL_VC_6
+#define VCL_VC_6_STATIC static
+#else
+#define VCL_VC_6_STATIC /**/
+#endif
+
 // Whilst this file should not be used by users, it will likely never be deleted,
 // and will remain in use by a number of files in vsl and vnl/io to provide
 // backwards compatibility. If any of the functions are actually used, a
@@ -32,10 +39,7 @@
 // then just #include <vsl_binary_explicit_io.h>
 // \deprecated in favour of vsl_block_binary_read
 template <class T>
-#ifdef VCL_VC60
-static
-#endif
-inline void vsl_b_read_block_old(vsl_b_istream &is, T* begin, unsigned nelems)
+VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, T* begin, unsigned nelems)
 {
   VXL_DEPRECATED( "vsl_b_read_block_old()" );
   while (nelems--)
@@ -48,10 +52,7 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, T* begin, unsigned nelems)
 // This function is very speed efficient.
 // \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
-#ifdef VCL_VC60
-static
-#endif
-inline void vsl_b_read_block_old(vsl_b_istream &is, double* begin, unsigned nelems)
+VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, double* begin, unsigned nelems)
 {
   VXL_DEPRECATED( "vsl_b_read_block_old()" );
   is.is().read((char*) begin, (unsigned long)(nelems*sizeof(double)));
@@ -64,10 +65,7 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, double* begin, unsigned nele
 // This function is very speed efficient.
 // \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
-#ifdef VCL_VC60
-static
-#endif
-inline void vsl_b_read_block_old(vsl_b_istream &is, float* begin, unsigned nelems)
+VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, float* begin, unsigned nelems)
 {
   VXL_DEPRECATED( "vsl_b_read_block_old()" );
   is.is().read((char*) begin, (unsigned long)(nelems*sizeof(float)));
@@ -82,10 +80,7 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, float* begin, unsigned nelem
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
-#ifdef VCL_VC60
-static
-#endif
-inline void vsl_b_read_block_old(vsl_b_istream &is, int* begin, unsigned nelems)
+VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, int* begin, unsigned nelems)
 {
   VXL_DEPRECATED( "vsl_b_read_block_old()" );
   if (!is) return;
@@ -116,10 +111,7 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, int* begin, unsigned nelems)
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
-#ifdef VCL_VC60
-static
-#endif
-inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned int* begin, unsigned nelems)
+VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned int* begin, unsigned nelems)
 {
   VXL_DEPRECATED( "vsl_b_read_block_old()" );
   unsigned long nbytes;
@@ -150,10 +142,7 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned int* begin, unsigne
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
-#ifdef VCL_VC60
-static
-#endif
-inline void vsl_b_read_block_old(vsl_b_istream &is, short* begin, unsigned nelems)
+VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, short* begin, unsigned nelems)
 {
   VXL_DEPRECATED( "vsl_b_read_block_old()" );
   unsigned long nbytes;
@@ -184,10 +173,7 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, short* begin, unsigned nelem
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
-#ifdef VCL_VC60
-static
-#endif
-inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned short* begin, unsigned nelems)
+VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned short* begin, unsigned nelems)
 {
   VXL_DEPRECATED( "vsl_b_read_block_old()" );
   unsigned long nbytes;
@@ -218,10 +204,7 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned short* begin, unsig
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
-#ifdef VCL_VC60
-static
-#endif
-inline void vsl_b_read_block_old(vsl_b_istream &is, long* begin, unsigned nelems)
+VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, long* begin, unsigned nelems)
 {
   VXL_DEPRECATED( "vsl_b_read_block_old()" );
   unsigned long nbytes;
@@ -252,10 +235,7 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, long* begin, unsigned nelems
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
-#ifdef VCL_VC60
-static
-#endif
-inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned long* begin, unsigned nelems)
+VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned long* begin, unsigned nelems)
 {
   VXL_DEPRECATED( "vsl_b_read_block_old()" );
   unsigned long nbytes;
