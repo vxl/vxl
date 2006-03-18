@@ -1264,6 +1264,14 @@ MAIN( test_config )
 #endif
   vcl_cout << vcl_endl;
 
+  vcl_cout << "VCL_GCC_3 ";
+#ifdef VCL_GCC_3
+  vcl_cout << "is set to " << quote(VCL_GCC_3);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
   vcl_cout << "VCL_GCC_30 ";
 #ifdef VCL_GCC_30
   vcl_cout << "is set to " << quote(VCL_GCC_30);
@@ -1283,6 +1291,46 @@ MAIN( test_config )
   vcl_cout << "VCL_GCC_32 ";
 #ifdef VCL_GCC_32
   vcl_cout << "is set to " << quote(VCL_GCC_32);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VCL_GCC_33 ";
+#ifdef VCL_GCC_33
+  vcl_cout << "is set to " << quote(VCL_GCC_33);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VCL_GCC_34 ";
+#ifdef VCL_GCC_34
+  vcl_cout << "is set to " << quote(VCL_GCC_34);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VCL_GCC_4 ";
+#ifdef VCL_GCC_4
+  vcl_cout << "is set to " << quote(VCL_GCC_4);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VCL_GCC_40 ";
+#ifdef VCL_GCC_40
+  vcl_cout << "is set to " << quote(VCL_GCC_40);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VCL_GCC_41 ";
+#ifdef VCL_GCC_41
+  vcl_cout << "is set to " << quote(VCL_GCC_41);
 #else
   vcl_cout << "is not set";
 #endif
@@ -1328,6 +1376,22 @@ MAIN( test_config )
 #endif
   vcl_cout << vcl_endl;
 
+  vcl_cout << "VCL_VC_8 ";
+#ifdef VCL_VC_8
+  vcl_cout << "is set to " << quote(VCL_VC_8);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VCL_VC_80 ";
+#ifdef VCL_VC_80
+  vcl_cout << "is set to " << quote(VCL_VC_80);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
   vcl_cout << "VCL_VC_DOTNET ";
 #ifdef VCL_VC_DOTNET
   vcl_cout << "is set to " << quote(VCL_VC_DOTNET);
@@ -1336,33 +1400,57 @@ MAIN( test_config )
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VCL_VC70 ";
-#ifdef VCL_VC70
-  vcl_cout << "is set to " << quote(VCL_VC70);
+  vcl_cout << "VCL_VC_7 ";
+#ifdef VCL_VC_7
+  vcl_cout << "is set to " << quote(VCL_VC_7);
 #else
   vcl_cout << "is not set";
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VCL_VC71 ";
-#ifdef VCL_VC71
-  vcl_cout << "is set to " << quote(VCL_VC71);
+  vcl_cout << "VCL_VC_70 ";
+#ifdef VCL_VC_70
+  vcl_cout << "is set to " << quote(VCL_VC_70);
 #else
   vcl_cout << "is not set";
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VCL_VC60 ";
-#ifdef VCL_VC60
-  vcl_cout << "is set to " << quote(VCL_VC60);
+  vcl_cout << "VCL_VC_71 ";
+#ifdef VCL_VC_71
+  vcl_cout << "is set to " << quote(VCL_VC_71);
 #else
   vcl_cout << "is not set";
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VCL_VC50 ";
-#ifdef VCL_VC50
-  vcl_cout << "is set to " << quote(VCL_VC50);
+  vcl_cout << "VCL_VC_6 ";
+#ifdef VCL_VC_6
+  vcl_cout << "is set to " << quote(VCL_VC_6);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VCL_VC_60 ";
+#ifdef VCL_VC_60
+  vcl_cout << "is set to " << quote(VCL_VC_60);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VCL_VC_5 ";
+#ifdef VCL_VC_5
+  vcl_cout << "is set to " << quote(VCL_VC_5);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VCL_VC_50 ";
+#ifdef VCL_VC_50
+  vcl_cout << "is set to " << quote(VCL_VC_50);
 #else
   vcl_cout << "is not set";
 #endif
@@ -1830,14 +1918,13 @@ MAIN( test_config )
   vcl_cout << "(no vxl_ieee_128)" << vcl_endl;
 #endif
 
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "sizeof(char) is " << sizeof(char) << vcl_endl;
-  vcl_cout << "sizeof(short) is " << sizeof(short) << vcl_endl;
-  vcl_cout << "sizeof(int) is " << sizeof(int) << vcl_endl;
-  vcl_cout << "sizeof(long) is " << sizeof(long) << vcl_endl;
-  vcl_cout << "sizeof(float) is " << sizeof(float) << vcl_endl;
-  vcl_cout << "sizeof(double) is " << sizeof(double) << vcl_endl;
+  vcl_cout << vcl_endl
+           << "sizeof(char) is " << sizeof(char) << vcl_endl
+           << "sizeof(short) is " << sizeof(short) << vcl_endl
+           << "sizeof(int) is " << sizeof(int) << vcl_endl
+           << "sizeof(long) is " << sizeof(long) << vcl_endl
+           << "sizeof(float) is " << sizeof(float) << vcl_endl
+           << "sizeof(double) is " << sizeof(double) << vcl_endl;
 
   SUMMARY();
 }
