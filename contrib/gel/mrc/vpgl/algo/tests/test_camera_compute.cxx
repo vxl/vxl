@@ -28,18 +28,17 @@ static void test_camera_compute()
   world_pts.push_back( vgl_point_3d<double>( -1, 3, 4 ) );
   world_pts.push_back( vgl_point_3d<double>( 1, 2, -7 ) );
   vcl_vector< vgl_point_2d<double> > image_pts;
-  for( int i = 0; i < world_pts.size(); i++ )
+  for ( unsigned int i = 0; i < world_pts.size(); ++i )
     image_pts.push_back( C1.project( vgl_homg_point_3d<double>(world_pts[i]) ) );
 
   vpgl_affine_camera_compute acc;
   vpgl_affine_camera<double> C1e;
   acc.compute( image_pts, world_pts, C1e );
 
-  vcl_cerr << "\nTrue camera matrix:\n" << C1.get_matrix() << '\n';
-  vcl_cerr << "\nEstimated camera matrix:\n" << C1e.get_matrix() << '\n';
-  TEST_NEAR( "vpgl_affine_camera_compute:", 
+  vcl_cerr << "\nTrue camera matrix:\n" << C1.get_matrix() << '\n'
+           << "\nEstimated camera matrix:\n" << C1e.get_matrix() << '\n';
+  TEST_NEAR( "vpgl_affine_camera_compute:",
     ( C1.get_matrix()-C1e.get_matrix() ).frobenius_norm(), 0, 1 );
-
 }
 
 TESTMAIN(test_camera_compute);
