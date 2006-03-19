@@ -1,7 +1,7 @@
 #include "rgrl_weighter_indiv_scale.h"
 //:
 // \file
-// \author Gehua Yang 
+// \author Gehua Yang
 // \date   March 2006
 
 #include <vcl_cmath.h>
@@ -74,13 +74,11 @@ compute_weights( rgrl_scale const&  scales,
 
       //  for each match with a "to" image feature
       rgrl_feature_sptr to_feature = titr.to_feature();
-      //double scaled_err = mapped_from->geometric_error( *to_feature );
       const double scaled_err = to_feature->geometric_error( *mapped_from );
-      const double fea_scale = to_feature->scale();
 
       // It is important to factor in the feature scale, along with geometric scale
       // As the error projector is already divided by feature scale square,
-      // 
+      //
       const double geometric_wgt = m_est_->wgt( scaled_err, geometric_scale );
 
       DebugMacro_abv(1, scaled_err << "\t " << geometric_wgt << "\t " );
@@ -93,8 +91,7 @@ compute_weights( rgrl_scale const&  scales,
         vnl_vector<double> error_vector = to_feature->signature_error_vector( *mapped_from );
         assert ( error_vector.size() > 0 );
         double signature_err = vcl_sqrt( dot_product( error_vector * signature_inv_covar, error_vector ) );
-        // CS: we may need to add some chi-squared normalization
-        // here for large signature vectors.
+        // CS: we may need to add some chi-squared normalization here for large signature vectors.
         signature_wgt = m_est_->wgt( signature_err );  // already normalized at this point
       }
 
@@ -117,7 +114,7 @@ compute_weights( rgrl_scale const&  scales,
     // affected at all.
 
     if ( sum_weights > 1e-16 ) { //sum_weights not approaching 0
-      if( weight_more_on_distinct_match_ )
+      if ( weight_more_on_distinct_match_ )
         for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
           double wgt = titr.cumulative_weight();
             titr.set_cumulative_weight( wgt*wgt / sum_weights );
@@ -131,9 +128,9 @@ compute_weights( rgrl_scale const&  scales,
   }
 }
 
-// It is unclear how to handle multiple matches. 
+// It is unclear how to handle multiple matches.
 // The current method is to pick the one with minimum distance
-// and evaluate the likelihood based on that. 
+// and evaluate the likelihood based on that.
 //
 double
 rgrl_weighter_indiv_scale::
@@ -148,37 +145,37 @@ aux_sum_rho_values( rgrl_scale const&  scale,
 
   double sum_rho = 0;
 
-  for ( from_iter fitr = match_set.from_begin(); fitr != match_set.from_end(); ++fitr ){
-      if ( fitr.size() == 0 )  continue;
-      
-      rgrl_feature_sptr mapped_from = fitr.from_feature()->transform( xform );
-      to_iter titr = fitr.begin();
-      double min_val = titr.to_feature()->geometric_error( *mapped_from );
-      double fea_scale = titr.to_feature()->scale();
-      
-      for ( ++titr; titr != fitr.end(); ++titr ) {
-        //  for each match with a "to" image feature
-        rgrl_feature_sptr to_feature = titr.to_feature();
-        const double scaled_err = to_feature->geometric_error( *mapped_from );
-        
-        
-        // signature weight
-        //
-        //GY: don't know how to handle this in a correct way
-        // double signature_wgt = 1.0;
-        //if ( signature_precomputed_ ) {
-        //  signature_wgt = titr . signature_weight( );
-        //}
-        
-        if( min_val > scaled_err ) {
-          min_val = scaled_err;
-          fea_scale = to_feature->scale();
-        }
+  for ( from_iter fitr = match_set.from_begin(); fitr != match_set.from_end(); ++fitr )
+  {
+    if ( fitr.size() == 0 )  continue;
+
+    rgrl_feature_sptr mapped_from = fitr.from_feature()->transform( xform );
+    to_iter titr = fitr.begin();
+    double min_val = titr.to_feature()->geometric_error( *mapped_from );
+    double fea_scale = titr.to_feature()->scale();
+
+    for ( ++titr; titr != fitr.end(); ++titr ) {
+      //  for each match with a "to" image feature
+      rgrl_feature_sptr to_feature = titr.to_feature();
+      const double scaled_err = to_feature->geometric_error( *mapped_from );
+
+      // signature weight
+      //
+      //GY: don't know how to handle this in a correct way
+      // double signature_wgt = 1.0;
+      //if ( signature_precomputed_ ) {
+      //  signature_wgt = titr . signature_weight( );
+      //}
+
+      if ( min_val > scaled_err ) {
+        min_val = scaled_err;
+        fea_scale = to_feature->scale();
       }
-      // sum of rho is weighted by signature??
-      sum_rho += vcl_log(fea_scale) + 
-        m_est_->rho(min_val, scale.geometric_scale()*fea_scale);
+    }
+    // sum of rho is weighted by signature??
+    sum_rho += vcl_log(fea_scale) +
+               m_est_->rho(min_val, scale.geometric_scale()*fea_scale);
   }
-  
+
   return sum_rho;
 }
