@@ -1,9 +1,8 @@
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vcl_compiler_h_
 #define vcl_compiler_h_
-
 //:
 // \file
+// \brief Uniform macro definition scheme for finding out about the compiler
 //
 // It's much better to determine the compiler automatically here than to depend
 // on command-line flags being set.
@@ -128,8 +127,8 @@
 #   define _CRT_SECURE_NO_DEPRECATE 1
 #   define VCL_VC_8
 #   if _MSC_VER >= 1400
-#    define VCL_VC80 1     // version 8.0
-#    define VCL_VC_80      // (deprecated)
+#    define VCL_VC_80 1    // version 8.0
+#    define VCL_VC80       // (deprecated)
 #   endif
 #  elif _MSC_VER >= 1300   // .NET 2003 = Version 7.x
 #   define VCL_VC_7
@@ -145,6 +144,7 @@
 #   define VCL_VC_60       // Version 6.0
 #   define VCL_VC60 1      // (deprecated)
 #  else
+#   define VCL_VC_5
 #   define VCL_VC_50       // Version 5.0
 #   define VCL_VC50 1      // (deprecated)
 #  endif
