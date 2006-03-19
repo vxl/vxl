@@ -9,9 +9,9 @@
 
 //-------------------------------------------
 template <class T>
-bool 
-vpgl_write_list( 
-  const vcl_vector<T>& list, 
+bool
+vpgl_write_list(
+  const vcl_vector<T>& list,
   vcl_string file )
 {
   vcl_ofstream ofp( file.c_str() );
@@ -25,9 +25,9 @@ vpgl_write_list(
 
 //-------------------------------------------
 template <class T>
-bool 
-vpgl_read_list( 
-  vcl_vector<T>& list, 
+bool
+vpgl_read_list(
+  vcl_vector<T>& list,
   vcl_string file )
 {
   vcl_ifstream ifp( file.c_str() );
@@ -36,7 +36,6 @@ vpgl_read_list(
 
   char line_buffer[256];
   while ( ifp.eof() == 0 ){
-    unsigned int S = list.size();
     char nc = ifp.peek();
     if ( nc == '-' || (nc >= '0' && nc <= '9') ) {
       T new_object;
