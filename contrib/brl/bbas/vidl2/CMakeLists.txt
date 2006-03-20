@@ -82,12 +82,13 @@ IF(DIRECTSHOW_FOUND)
   ENDIF(DIRECTSHOW_ESF_FOUND)
 ENDIF(DIRECTSHOW_FOUND)
 
-IF(UNIX)
+FIND_FILE (VIDEODEV_FOUND videodev.h /usr/include/linux/)
+IF(VIDEODEV_FOUND)
    SET(vidl2_sources ${vidl2_sources}
        vidl2_v4l_params.h vidl2_v4l_params.cxx
        vidl2_v4l_istream.h vidl2_v4l_istream.cxx
    )
-ENDIF(UNIX)
+ENDIF(VIDEODEV_FOUND)
 
 
 AUX_SOURCE_DIRECTORY(Templates vidl2_sources)
