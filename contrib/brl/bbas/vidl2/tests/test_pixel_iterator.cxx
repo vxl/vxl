@@ -444,8 +444,8 @@ static void test_pixel_iterator()
   {
     // The test buffer below contains 16 pixels encoded in YUV 410P
     vxl_byte buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, // Y
-                          17,   // U
-                          18 }; // V
+                          17, 18,   // U
+                          19, 20 }; // V
       vidl2_frame_sptr frame = new vidl2_shared_frame(buffer,4,4,VIDL2_PIXEL_FORMAT_YUV_410P);
       vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_YUV_410P> itr(*frame);
       // polymorphic pixel iterator
@@ -458,11 +458,11 @@ static void test_pixel_iterator()
         vcl_cout << "YUV = ("<< (int)itr(0) << ',' << (int)itr(1) << ',' << (int)itr(2) << ") ";
         if (i%4 == 3) vcl_cout << '\n';
         success = success && itr(0) == buffer[i]
-                          && itr(1) == buffer[16]
-                          && itr(2) == buffer[17];
+                          && itr(1) == buffer[16+(i/8)]
+                          && itr(2) == buffer[18+(i/8)];
         psuccess = psuccess && data[0] == buffer[i]
-                            && data[1] == buffer[16]
-                            && data[2] == buffer[17];
+                            && data[1] == buffer[16+(i/8)]
+                            && data[2] == buffer[18+(i/8)];
       }
       TEST("vidl2_pixel_iterator (YUV 410P)",success,true);
       TEST("vidl2_pixel_iterator (YUV 410P) polymorphic",psuccess,true);
