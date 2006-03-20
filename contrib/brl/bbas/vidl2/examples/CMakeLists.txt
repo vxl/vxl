@@ -29,3 +29,8 @@ ADD_EXECUTABLE (vidl2_dshow_live_example vidl2_dshow_live_example.cxx)
 TARGET_LINK_LIBRARIES(vidl2_dshow_live_example vidl2 mbl)
 
 ENDIF( DIRECTSHOW_FOUND )
+
+IF ( UNIX )
+   ADD_EXECUTABLE (vidl2_v4l_example  vidl2_v4l_live_example.cxx)
+   TARGET_LINK_LIBRARIES(vidl2_v4l_example vidl2)
+ENDIF ( UNIX )

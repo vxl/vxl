@@ -82,6 +82,14 @@ IF(DIRECTSHOW_FOUND)
   ENDIF(DIRECTSHOW_ESF_FOUND)
 ENDIF(DIRECTSHOW_FOUND)
 
+IF(UNIX)
+   SET(vidl2_sources ${vidl2_sources}
+       vidl2_v4l_params.h vidl2_v4l_params.cxx
+       vidl2_v4l_istream.h vidl2_v4l_istream.cxx
+   )
+ENDIF(UNIX)
+
+
 AUX_SOURCE_DIRECTORY(Templates vidl2_sources)
 
 
