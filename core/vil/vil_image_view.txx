@@ -122,7 +122,7 @@ void vil_image_view<T>::deep_copy(const vil_image_view<T>& src)
 {
   set_size(src.ni(),src.nj(),src.nplanes());
 
-  if (src.is_contiguous())
+  if (src.is_contiguous() && this->is_contiguous())
   {
     istep_=src.istep_; jstep_= src.jstep_; planestep_ = src.planestep_;
     if (src.istep()>0 && src.jstep()>0 && src.planestep()>=0)
