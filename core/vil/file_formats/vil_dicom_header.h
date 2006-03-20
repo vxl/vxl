@@ -334,6 +334,7 @@ const char * const VIL_DICOM_HEADER_RLELOSSLESS               ="1.2.840.10008.1.
 struct vil_dicom_header_info
 {
   // General info fields
+  bool header_valid_;                      /*< True if the header was read ok, otherwise false */
   vil_dicom_header_type file_type_;        /*< The type of dicom file */
   vil_dicom_header_endian sys_endian_;     /*< The endian of the architecture */
   vil_dicom_header_endian file_endian_;    /*< The endian of the file being read */

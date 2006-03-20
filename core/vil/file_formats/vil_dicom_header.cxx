@@ -24,6 +24,7 @@ vil_dicom_header_info_clear( vil_dicom_header_info& info )
   // Clear all the elements of the info structure
 
   // Identity info
+  info.header_valid_ = false;
   info.file_type_ = VIL_DICOM_HEADER_DTUNKNOWN;
   info.file_endian_ = VIL_DICOM_HEADER_DEUNKNOWN;
   info.sys_endian_ = VIL_DICOM_HEADER_DEUNKNOWN;
