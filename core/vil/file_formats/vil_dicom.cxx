@@ -57,13 +57,9 @@ vil_image_resource_sptr vil_dicom_file_format::make_input_image(vil_stream* vs)
   }
 
   if ( is_dicom )
-  {
-    vil_image_resource_sptr ir = new vil_dicom_image( vs );
-    if (dynamic_cast<vil_dicom_image&>(*ir).status_ok_)
-      return ir;
-  }
-
-  return 0;
+    return new vil_dicom_image( vs );
+  else
+    return 0;
 }
 
 vil_image_resource_sptr vil_dicom_file_format::make_output_image(vil_stream* /*vs*/,
@@ -115,11 +111,10 @@ read_pixels_into_buffer(DcmPixelData* pixels,
 
 
 vil_dicom_image::vil_dicom_image(vil_stream* vs)
-  : pixels_(0), status_ok_(true)
-
+  : pixels_( 0 )
 {
   vil_dicom_header_info_clear( header_ );
-
+  
   vil_dicom_stream_input dcis( vs );
 
   DcmFileFormat ffmt;
@@ -128,9 +123,10 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
   ffmt.transferEnd();
 
   if ( cond != EC_Normal ) {
-    vcl_cerr << "vil_dicom ERROR: could not read apparent DICOM file (" << cond.text() << ")\n";
-    status_ok_ = false;
-    return;
+    vcl_cerr << "vil_dicom ERROR: could not read file (" << cond.text() << ")\n";
+    vcl_cerr << "And the error code is: " << cond.code() << "\n";
+    //if (cond.code() != 4)
+      return;
   }
 
   DcmDataset& dset = *ffmt.getDataset();
@@ -145,7 +141,6 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
   //
   if ( dset.tagExists( DCM_ModalityLUTSequence ) ) {
     vcl_cerr << "vil_dicom ERROR: don't know (yet) how to handle modality LUTs\n";
-    status_ok_=false;
     return;
   }
 
@@ -166,7 +161,7 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
   do {                                                                                 \
     if ( dset. func( key, var ) != EC_Normal ) {                                       \
       vcl_cerr << "vil_dicom ERROR: couldn't read " Stringify(key) "; can't handle\n"; \
-      status_ok_ = false; return;                                                      \
+      return;                                                                          \
   }} while (false)
 
   Uint16 bits_alloc, bits_stored, high_bit, pixel_rep;
@@ -194,7 +189,6 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
     {
       if ( stack.card() == 0 ) {
         vcl_cerr << "vil_dicom ERROR: no pixel data found\n";
-        status_ok_ = false;
         return;
       } else {
         assert( stack.top()->ident() == EVR_PixelData );
@@ -227,7 +221,6 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
     DOCASE( VIL_PIXEL_FORMAT_SBYTE );
     DOCASE( VIL_PIXEL_FORMAT_FLOAT );
     default: vcl_cerr << "vil_dicom ERROR: unexpected pixel format\n";
-      status_ok_ = false; 
   }
 #undef DOCASE
 }
@@ -260,11 +253,9 @@ char const* vil_dicom_image::file_format() const
 }
 
 vil_dicom_image::vil_dicom_image(vil_stream* /*vs*/, unsigned ni, unsigned nj,
-                                 unsigned nplanes, vil_pixel_format format):
-  status_ok_(true)
+                                 unsigned nplanes, vil_pixel_format format)
 {
   assert(!"vil_dicom_image doesn't yet support output");
-  status_ok_ = false;
 
   assert(nplanes == 1 && format == VIL_PIXEL_FORMAT_INT_32);
   header_.size_x_ = ni;
@@ -466,7 +457,7 @@ namespace
       {
         OFString str;
         if ( e->getOFString( str, 0 ) != EC_Normal ) {
-          vcl_cerr << "vil_dicom ERROR: value of ("<<group<<','<<element<<") is not string\n";
+          vcl_cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not string\n";
         } else {
           value = str.c_str();
         }
@@ -507,7 +498,7 @@ namespace
       {
         OFString str;
         if ( e->getOFString( str, 0 ) != EC_Normal ) {
-          vcl_cerr << "ERROR: value of ("<<group<<','<<element<<") is not string\n";
+          vcl_cerr << "Warning: value of ("<<group<<','<<element<<") is not string\n";
         } else {
           value = vcl_atol( str.c_str() );
         }
@@ -524,7 +515,7 @@ namespace
       {
         OFString str;
         if ( e->getOFString( str, 0 ) != EC_Normal ) {
-          vcl_cerr << "vil_dicom ERROR: value of ("<<group<<','<<element<<") is not string\n";
+          vcl_cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not string\n";
         } else {
           value = static_cast<float>( vcl_atof( str.c_str() ) );
         }
@@ -538,7 +529,7 @@ namespace
         {
           OFString str;
           if ( e->getOFString( str, pos ) != EC_Normal ) {
-            vcl_cerr << "ERROR: value of ("<<group<<','<<element<<") at " << pos << " is not string\n";
+            vcl_cerr << "Warning: value of ("<<group<<','<<element<<") at " << pos << " is not string\n";
           } else {
             value.push_back( static_cast<float>( vcl_atof( str.c_str() ) ) );
           }
@@ -554,7 +545,7 @@ namespace
       DcmElement* e = find_element( dset, group, element );
       if ( e ) {
         if ( e->getFloat64( value ) != EC_Normal ) {
-          vcl_cerr << "ERROR: value of ("<<group<<','<<element<<") is not Float64\n";
+          vcl_cerr << "Warning: value of ("<<group<<','<<element<<") is not Float64\n";
         }
       }
     }
@@ -567,7 +558,7 @@ namespace
       DcmElement* e = find_element( dset, group, element );
       if ( e ) {
         if ( e->getFloat32( value ) != EC_Normal ) {
-          vcl_cerr << "ERROR: value of ("<<group<<','<<element<<") is not Float32\n";
+          vcl_cerr << "Warning: value of ("<<group<<','<<element<<") is not Float32\n";
         }
       }
     }
@@ -582,7 +573,7 @@ namespace
       {
         OFString str;
         if ( e->getOFString( str, 0 ) != EC_Normal ) {
-          vcl_cerr << "vil_dicom ERROR: value of ("<<group<<','<<element<<") is not string\n";
+          vcl_cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not string\n";
         } else {
           value = vcl_atol( str.c_str() );
         }
@@ -633,7 +624,7 @@ namespace
       DcmElement* e = find_element( dset, group, element );
       if ( e ) {
         if ( e->getSint32( reinterpret_cast<Sint32&>(value) ) != EC_Normal ) {
-          vcl_cerr << "vil_dicom ERROR: value of ("<<group<<','<<element<<") is not Sint32\n";
+          vcl_cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not Sint32\n";
         }
       }
     }
@@ -652,7 +643,7 @@ namespace
       DcmElement* e = find_element( dset, group, element );
       if ( e ) {
         if ( e->getSint16( reinterpret_cast<Sint16&>(value) ) != EC_Normal ) {
-          vcl_cerr << "vil_dicom ERROR: value of ("<<group<<','<<element<<") is not Sint16\n";
+          vcl_cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not Sint16\n";
         }
       }
     }
@@ -673,7 +664,7 @@ namespace
       {
         OFString str;
         if ( e->getOFString( str, 0 ) != EC_Normal ) {
-          vcl_cerr << "vil_dicom ERROR: value of ("<<group<<','<<element<<") is not string\n";
+          vcl_cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not string\n";
         } else {
           value = static_cast<float>( vcl_atof( str.c_str() ) );
         }
@@ -694,7 +685,7 @@ namespace
       DcmElement* e = find_element( dset, group, element );
       if ( e ) {
         if ( e->getUint32( reinterpret_cast<Uint32&>(value) ) != EC_Normal ) {
-          vcl_cerr << "vil_dicom ERROR: value of ("<<group<<','<<element<<") is not Uint32\n";
+          vcl_cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not Uint32\n";
         }
       }
     }
@@ -713,7 +704,7 @@ namespace
       DcmElement* e = find_element( dset, group, element );
       if ( e ) {
         if ( e->getUint16( value ) != EC_Normal ) {
-          vcl_cerr << "vil_dicom ERROR: value of ("<<group<<','<<element<<") is not Uint16\n";
+          vcl_cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not Uint16\n";
         }
       }
     }
@@ -843,6 +834,8 @@ read_header( DcmObject* f, vil_dicom_header_info& i )
     i.spacing_y_ = ps[1];
   else
     i.spacing_y_ = i.spacing_x_;
+
+  i.header_valid_ = true;
 
 #undef ap_join
 #undef ap_type
