@@ -13,7 +13,6 @@ IF( HAS_VGUI )
  ENDIF(HAS_XERCES)
 
 SET(seg_sources seg.cxx )	
-
 SET(seg_vil_sources seg_vil.cxx )	
 
 ADD_EXECUTABLE (seg ${seg_sources})
@@ -23,3 +22,11 @@ TARGET_LINK_LIBRARIES(seg segv vgui)
 TARGET_LINK_LIBRARIES(seg_vil segv vgui)
 
 ENDIF( HAS_VGUI )
+
+SET(negate_sources negate.cxx)
+ADD_EXECUTABLE (negate ${negate_sources})
+TARGET_LINK_LIBRARIES(negate brip)
+
+SET(convert_sources vil_convert.cxx)
+ADD_EXECUTABLE (vil_convert ${convert_sources})
+TARGET_LINK_LIBRARIES(vil_convert brip)
