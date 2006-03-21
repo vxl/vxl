@@ -23,6 +23,17 @@ void mbl_matrix_product_a_bt(vnl_matrix<double>& ABt,
                              const vnl_matrix<double>& B,
                              int n_cols);
 
+//: Compute AAt = A * A.transpose(), using only first nr x nc partition of A
+//  Uses symmetry of result to improve speed
+void mbl_matrix_product_a_at(vnl_matrix<double>& AAt,
+                             const vnl_matrix<double>& A,
+                             unsigned nr, unsigned nc);
+
+//: Compute AAt = A * A.transpose()
+//  Uses symmetry of result to improve speed
+void mbl_matrix_product_a_at(vnl_matrix<double>& AAt,
+                             const vnl_matrix<double>& A);
+
 //: Compute product AtB = A.transpose() * B
 //  Result is of size A.cols() x B.cols()
 void mbl_matrix_product_at_b(vnl_matrix<double>& AtB, const vnl_matrix<double>& A,
@@ -32,6 +43,15 @@ void mbl_matrix_product_at_b(vnl_matrix<double>& AtB, const vnl_matrix<double>& 
 //  Result is of size ncols_a x B.cols()
 void mbl_matrix_product_at_b(vnl_matrix<double>& AtB, const vnl_matrix<double>& A,
                              const vnl_matrix<double>& B, int ncols_a);
+
+//: Compute product AtA = A.transpose() * A using nc cols of A
+void mbl_matrix_product_at_a(vnl_matrix<double>& AtA,
+                             const vnl_matrix<double>& A,
+                             unsigned nc);
+
+//: Compute product AtA = A.transpose() * A
+void mbl_matrix_product_at_a(vnl_matrix<double>& AtA,
+                             const vnl_matrix<double>& A);
 
 //: ADB = A * D * B where D is diagonal with elements d
 // A, d, and B should be compatible sizes, ADB will

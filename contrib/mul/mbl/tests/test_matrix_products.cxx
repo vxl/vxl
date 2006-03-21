@@ -20,15 +20,23 @@ void test_matrix_products()
      for (unsigned int j=0;j<B.cols();++j)
          B(i,j) = 1+i*i-double(j);
 
-  vnl_matrix<double> AtB;
+  vnl_matrix<double> AtB,AtA,AAt;
   mbl_matrix_product_at_b(AtB,A,B);
 
   vnl_matrix<double> dAtB = AtB - A.transpose() * B;
   TEST_NEAR("mbl_matrix_product_at_b",dAtB.absolute_value_max(), 0.0, 1e-6);
 
+  mbl_matrix_product_at_a(AtA,A);
+  vnl_matrix<double> dAtA = AtA - A.transpose() * A;
+  TEST_NEAR("mbl_matrix_product_at_a",dAtA.absolute_value_max(), 0.0, 1e-6);
+
   mbl_matrix_product(AtB,A.transpose(),B);
   dAtB = AtB - A.transpose() * B;
   TEST_NEAR("mbl_matrix_productb",dAtB.absolute_value_max(), 0.0, 1e-6);
+
+  mbl_matrix_product_a_at(AAt,A);
+  vnl_matrix<double> dAAt = AAt - A*A.transpose();
+  TEST_NEAR("mbl_matrix_product_a_at",dAAt.absolute_value_max(), 0.0, 1e-6);
 
 
   vnl_matrix<double> C = A.transpose();

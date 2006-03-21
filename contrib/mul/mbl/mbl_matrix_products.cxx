@@ -121,6 +121,51 @@ void mbl_matrix_product_at_b(vnl_matrix<double>& AtB,
 }
 
 //=======================================================================
+//: Compute AAt = A * A.transpose(), using only first nr x nc partition of A
+//  Uses symmetry of result to improve speed
+//=======================================================================
+void mbl_matrix_product_a_at(vnl_matrix<double>& AAt,
+                             const vnl_matrix<double>& A,
+                             unsigned nr, unsigned nc)
+{
+  assert(nr<=A.rows());
+  assert(nc<=A.columns());
+
+  if ( (AAt.rows()!=nr) || (AAt.columns()!= nr) )
+    AAt.set_size( nr, nr ) ;
+
+  double const *const * A_data = A.data_array();
+  double ** R_data = AAt.data_array();
+
+  // Fill in upper triangle of symmetric matrix
+  for (unsigned int r=0;r<nr;++r)
+  {
+    const double* A_row = A_data[r];
+    double* R_row = R_data[r];
+    for (unsigned int c=r;c<nr;++c)
+    {
+      const double* B_row = A_data[c];
+      R_row[c] = vnl_c_vector<double>::dot_product(A_row,B_row,nc);
+    }
+  }
+
+  // Copy upper triangle to lower triangle
+  for (unsigned int r=1;r<nr;++r)
+    for (unsigned int c=0;c<r;++c)
+      AAt(r,c)=AAt(c,r);
+}
+
+//=======================================================================
+//: Compute product AAt = A * A.transpose()
+//  Uses symmetry of result to be approx twice as fast as
+//  mbl_matrix_product_a_bt(AAt,A,A)
+//=======================================================================
+void mbl_matrix_product_a_at(vnl_matrix<double>& AAt,
+                             const vnl_matrix<double>& A)
+{
+  mbl_matrix_product_a_at(AAt,A,A.rows(),A.columns());
+}
+//=======================================================================
 //: Compute product AtB = A.transpose() * B, using nc_a cols of A
 //=======================================================================
 void mbl_matrix_product_at_b(vnl_matrix<double>& AtB,
@@ -165,6 +210,52 @@ void mbl_matrix_product_at_b(vnl_matrix<double>& AtB,
       }
     }
   }
+}
+
+
+//=======================================================================
+//: Compute product AtA = A.transpose() * A using nc cols of A
+//=======================================================================
+void mbl_matrix_product_at_a(vnl_matrix<double>& AtA,
+                             const vnl_matrix<double>& A,
+                             unsigned nc)
+{
+  assert(A.columns()>=nc);
+  unsigned int nr = A.rows();
+
+  if ( AtA.rows()!=nr || (AtA.columns()!= nc) )
+    AtA.set_size( nc, nc ) ;
+
+  double const *const * A_data = A.data_array();
+  double ** R_data = AtA.data_array()-1;
+
+  AtA.fill(0);
+
+  for (unsigned int r = 0; r<nr; ++r)
+  {
+    const double* A_row = A_data[r]-1;
+    double a;
+    int c1 =  nc+1;
+    while (--c1)
+    {
+      double *R_row = R_data[c1]-1;
+      a = A_row[c1];
+      int c2 = nc+1;
+      while (--c2)
+      {
+         R_row[c2] +=a*A_row[c2];
+      }
+    }
+  }
+}
+
+//=======================================================================
+//: Compute product AtA = A.transpose() * A
+//=======================================================================
+void mbl_matrix_product_at_a(vnl_matrix<double>& AtA,
+                             const vnl_matrix<double>& A)
+{
+  mbl_matrix_product_at_a(AtA,A,A.columns());
 }
 
 //: Returns ADB = A * D * B
