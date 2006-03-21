@@ -32,6 +32,8 @@ public:
 
   // Returns true iff all members lie within their expected ranges
   virtual bool is_valid() const = 0;
+
+  virtual ~vil_nitf2_compound_field_value() {}
 };
 
 // A date and time, down to the second or decimal fraction thereof.
