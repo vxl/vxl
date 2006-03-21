@@ -26,6 +26,7 @@ IF(NETLIB_FOUND)
     test_functions.cxx
     test_generalized_eigensystem.cxx
     test_levenberg_marquardt.cxx
+    test_matrix_update.cxx
     test_minimizers.cxx
     test_powell.cxx
     test_qr.cxx
@@ -58,6 +59,7 @@ IF(NETLIB_FOUND)
   ADD_TEST( vnl_test_functions                vnl_algo_test_all test_functions               )
   ADD_TEST( vnl_test_generalized_eigensystem  vnl_algo_test_all test_generalized_eigensystem )
   ADD_TEST( vnl_test_levenberg_marquardt      vnl_algo_test_all test_levenberg_marquardt     )
+  ADD_TEST( vnl_test_matrix_update            vnl_algo_test_all test_matrix_update              )
   ADD_TEST( vnl_test_minimizers               vnl_algo_test_all test_minimizers              )
   ADD_TEST( vnl_test_powell                   vnl_algo_test_all test_powell                  )
   ADD_TEST( vnl_test_qr                       vnl_algo_test_all test_qr                      )

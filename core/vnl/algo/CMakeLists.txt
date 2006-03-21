@@ -74,6 +74,7 @@ IF(NETLIB_FOUND)
     vnl_gaussian_kernel_1d.cxx vnl_gaussian_kernel_1d.h
     vnl_adjugate.txx vnl_adjugate.h
     vnl_orthogonal_complement.txx vnl_orthogonal_complement.h
+    vnl_matrix_update.h
 
     # integral
     vnl_simpson_integral.cxx vnl_simpson_integral.h

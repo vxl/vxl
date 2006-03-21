@@ -13,6 +13,7 @@ DECLARE( test_fft2d );
 DECLARE( test_functions );
 DECLARE( test_generalized_eigensystem );
 DECLARE( test_levenberg_marquardt );
+DECLARE( test_matrix_update );
 DECLARE( test_minimizers );
 DECLARE( test_powell );
 DECLARE( test_qr );
@@ -44,6 +45,7 @@ register_tests()
   REGISTER( test_functions );
   REGISTER( test_generalized_eigensystem );
   REGISTER( test_levenberg_marquardt );
+  REGISTER( test_matrix_update );
   REGISTER( test_minimizers );
   REGISTER( test_powell );
   REGISTER( test_qr );
