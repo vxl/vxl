@@ -45,6 +45,7 @@ class segv_vil_menus
   //test/development do not use
   SEGV_VIL_DLL_DATA static void test_inline_viewer_callback();
   SEGV_VIL_DLL_DATA static void test_ellipse_draw_callback();
+  SEGV_VIL_DLL_DATA static void intensity_profile_callback();
   SEGV_VIL_DLL_DATA static void test_float_callback();
 
 

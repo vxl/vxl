@@ -153,7 +153,7 @@ range_params(vil_image_resource_sptr const& image)
     vil_math_value_range<unsigned short>(temp, vmin, vmax);
     min = static_cast<unsigned>(vmin);
     max = static_cast<unsigned>(vmax);
-    gl_map = true;
+    //gl_map = true;
     return  new vgui_range_map_params(min, max, gamma, invert,
                                       gl_map, cache);
   }
@@ -1054,6 +1054,75 @@ void segv_vil_segmentation_manager::display_images_as_color()
     grid_->add_column();
   unsigned col = 2, row = 0;
   this->add_image_at(color,col,row);
+}
+
+void segv_vil_segmentation_manager::intensity_profile()
+{
+  bgui_picker_tableau_sptr picker = selected_picker_tab();
+
+  bgui_image_tableau_sptr itab = selected_image_tab();
+
+  vil_image_resource_sptr imr_sptr = itab->get_image_resource();
+ 
+  vil_pixel_format type = imr_sptr->pixel_format();
+
+  float x1, y1, x2, y2;
+  picker->pick_line(&x1, &y1, &x2, &y2);
+
+  vgui_rubberband_tableau_sptr rubber = selected_rubber_tab();
+  rubber->draw_line(x1, y1, x2, y2);
+
+  // get pixel value in the line
+  vcl_vector<double> data;
+  int start, end;
+  if( vcl_fabs(x1-x2) < vcl_fabs(y1 - y2)){
+    start = static_cast<int>(y1); 
+    end = static_cast<int>(y2);
+    for(int j=start; j<=end; j++)
+    {
+      int i = static_cast<int>(x1+(j-y1)*(x2-x1)/(y2-y1));
+      data.push_back(static_cast<double>(j));
+    }
+
+  }
+  else{
+    start = static_cast<int>(x1);
+    end = static_cast<int>(x2);
+
+    switch(type)
+    {
+      case VIL_PIXEL_FORMAT_UINT_16:
+        { // this extra bracket is a hack to make object initalization possible
+          vil_image_view<vxl_uint_16> viv = imr_sptr->get_view();
+          for(int i=start; i<=end; i++)
+          {
+            int j = static_cast<int>(y1+(i-x1)*(y2-y1)/(x2-x1));
+
+            data.push_back(viv(i,j));
+          }
+          
+          break;
+        }
+          default:
+          vcl_cout << "image pixel format is not supported\n";
+
+    }
+  }
+
+  
+  bgui_graph_tableau_sptr h= bgui_graph_tableau_new();
+
+  h->update(0, 65536, data);
+  vgui_viewer2D_tableau_sptr v = vgui_viewer2D_tableau_new(h);
+  vgui_shell_tableau_sptr s = vgui_shell_tableau_new(v);
+  
+  //popup a profile graph
+  vgui_dialog ip_dialog("intensity profile");
+  ip_dialog.inline_tableau(s, data.size()+20, 656);
+  if (!ip_dialog.ask())
+  {
+    return;
+  }
 }
 
 void segv_vil_segmentation_manager::test_inline_viewer()

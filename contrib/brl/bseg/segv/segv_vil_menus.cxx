@@ -111,6 +111,12 @@ void segv_vil_menus::test_inline_viewer_callback()
 {
   segv_vil_segmentation_manager::instance()->test_inline_viewer();
 }
+
+void segv_vil_menus::intensity_profile_callback()
+{
+  segv_vil_segmentation_manager::instance()->intensity_profile();
+}
+
 void segv_vil_menus::test_ellipse_draw_callback()
 {
   segv_vil_segmentation_manager::instance()->test_ellipse_draw();
@@ -138,6 +144,7 @@ vgui_menu segv_vil_menus::get_menu()
   //view menu entries
   menuview.add("Clear Display", clear_display_callback);
   menuview.add("Set Range Params", set_range_params_callback);
+  menuview.add("Intensity Profile", intensity_profile_callback);
   menuview.add("Test Inline Viewer", test_inline_viewer_callback);
   menuview.add("Test Draw Conic", test_ellipse_draw_callback);
   menuview.add("Images as Color", display_images_as_color_callback);

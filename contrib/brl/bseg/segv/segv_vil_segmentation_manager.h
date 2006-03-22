@@ -30,6 +30,9 @@
 #include <bgui/bgui_vtol2D_tableau_sptr.h>
 #include <bgui/bgui_image_tableau_sptr.h>
 #include <bgui/bgui_bargraph_clipon_tableau_sptr.h>
+#include <bgui/bgui_graph_tableau_sptr.h>
+#include <bgui/bgui_graph_tableau.h>
+
 class vgui_window;
 
 class segv_vil_segmentation_manager : public vgui_wrapper_tableau
@@ -58,6 +61,7 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void add_images();
   void subtract_images();
   void entropy();
+  void intensity_profile();
   void minfo();
   //: tests and development only
     void test_inline_viewer();

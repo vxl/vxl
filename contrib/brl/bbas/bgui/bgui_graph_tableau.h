@@ -29,12 +29,10 @@ class bgui_graph_tableau : public vgui_easy2D_tableau
   //: Destructor.
   ~bgui_graph_tableau();
 
-  //: Update the histogram from client
+  //: Update the graph from client
   bool update(vcl_vector<double> const & data);
 
-  //: Update the data from a histogram
-  bool update(const double min, const double max,
-              vcl_vector<double> const& hist);
+  bool update(double min, double max, vcl_vector<double> const& data);
 
   //: Clear the data
   void clear();
@@ -45,13 +43,11 @@ class bgui_graph_tableau : public vgui_easy2D_tableau
   void init();
   void draw_box();
   void draw_graph();
-  int map_val_to_display(const double val);
   double map_display_to_val(const int display_x);
- 
-  //Members
-  double min_;
+
   double max_;
-  bool hardware_;
+  double min_;
+  //Members
   vgui_soview2D_lineseg* min_bar_;
   vgui_soview2D_lineseg* max_bar_;
   int left_offset_;

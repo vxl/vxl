@@ -27,11 +27,8 @@ void bgui_graph_tableau::draw_box()
 
 void bgui_graph_tableau::init()
 {
-  hardware_ = false;
   this->set_foreground(0.8f, 1.0f, 0.0);
-  this->set_line_width(5.0f);
-  this->draw_box();
-  this->draw_graph();
+  this->set_line_width(1.0f);
 }
 
 //========================================================================
@@ -40,30 +37,19 @@ void bgui_graph_tableau::init()
 bgui_graph_tableau::bgui_graph_tableau(const char* n) :
   vgui_easy2D_tableau(n), min_bar_(0), max_bar_(0),
   left_offset_(10), top_offset_(10),
-  graph_width_(256), graph_height_(200), plot_(0)
+  graph_width_(256), graph_height_(655), plot_(0)
 {   this->init(); }
 
 bgui_graph_tableau::bgui_graph_tableau(vgui_tableau_sptr const& t,
                                                          const char* n) :
   vgui_easy2D_tableau(t, n), min_bar_(0), max_bar_(0),
   left_offset_(10), top_offset_(10),
-  graph_width_(256), graph_height_(200), plot_(0)
+  graph_width_(256), graph_height_(655), plot_(0)
 {   this->init(); }
 
 // Destructor.
 bgui_graph_tableau::~bgui_graph_tableau()
 {
-}
-
-//:map the data value of histogrammed intensity to display coordinates
-int bgui_graph_tableau::map_val_to_display(const double val)
-{
-  //compute display scale
-  double scale = 1.0;
-  if (vcl_fabs(max_-min_)>0)
-    scale = graph_width_/(max_-min_);
-  int display_x = (int)((val-min_)*scale + left_offset_);
-  return display_x;
 }
 
 //:map the data value of histogrammed intensity to display coordinates
@@ -83,9 +69,7 @@ void bgui_graph_tableau::draw_graph()
   if (data_.size() == 0)
     return;
 
-  double max = data_[0];
-  for (unsigned int i=1; i<data_.size(); ++i)
-    if (max < data_[i]) max = data_[i];
+  double max = 65536;
 
   // scale and shift the data points
   vcl_vector<float> xscaled, yscaled;
@@ -124,21 +108,26 @@ bool bgui_graph_tableau::update(vcl_vector<double> const& data)
 {
   if (!data.size())
     return false;
-
+ 
+  graph_width_ = data.size();
   data_ = data;
   draw_graph();
+  draw_box();
   return true;
 }
 
-bool bgui_graph_tableau::update(const double min, const double max,
-                                         vcl_vector<double> const& data)
+bool bgui_graph_tableau::update(double min, double max, 
+    vcl_vector<double> const& data)
 {
   if (!data.size())
     return false;
+ 
+  graph_width_ = data.size();
+
   min_ = min;
   max_ = max;
   data_ = data;
-
   draw_graph();
+  draw_box();
   return true;
 }

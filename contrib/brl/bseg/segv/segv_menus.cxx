@@ -162,7 +162,6 @@ void segv_menus::set_range_params_callback()
   segv_segmentation_manager::instance()->set_range_params();
 }
 
-
 //segv_menus definition
 vgui_menu segv_menus::get_menu()
 {
