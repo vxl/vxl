@@ -66,15 +66,24 @@ class vgui_image_tableau
 
   //: Make the given image, the image rendered by this tableau.
   virtual void set_image( vil1_image const &img,
-                          vgui_range_map_params_sptr const& rmp = 0);
+                          vgui_range_map_params_sptr const& rmp);
 
   //: Make the given image view, the image rendered by this tableau.
   virtual void set_image_view( vil_image_view_base const& img,
-                               vgui_range_map_params_sptr const& rmp = 0);
+                               vgui_range_map_params_sptr const& rmp);
 
   //: Make the given image resource, the image rendered by this tableau.
   virtual void set_image_resource( vil_image_resource_sptr const& img,
-                                   vgui_range_map_params_sptr const& rmp = 0);
+                                   vgui_range_map_params_sptr const& rmp);
+
+  //: Make the given image, the image rendered by this tableau, but keep old range map.
+  virtual void set_image( vil1_image const &img);
+
+  //: Make the given image view, the image rendered by this tableau, but keep old range map.
+  virtual void set_image_view( vil_image_view_base const& img);
+
+  //: Make the given image resource, the image rendered by this tableau, but keep old range map.
+  virtual void set_image_resource( vil_image_resource_sptr const& img);
 
   //: Make image loaded from the given file, the image rendered by this tableau.
   // The image will be stored as a vil_image_view_base, and thus can be

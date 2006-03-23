@@ -184,12 +184,7 @@ vgui_image_tableau::
 set_image_view( vil_image_view_base const& I,
                 vgui_range_map_params_sptr const& mp)
 {
-  if ( !vil_renderer_ )
-    vil_renderer_ = new vgui_vil_image_renderer;
-
-  // use the name of the image as the name of the tableau :
-  vil_renderer_->set_image_resource( vil_new_image_resource_of_view( I ) );
-
+  set_image_view(I);
   rmp_ = mp;
 }
 
@@ -200,12 +195,7 @@ vgui_image_tableau::
 set_image_resource( vil_image_resource_sptr const& I,
                     vgui_range_map_params_sptr const& mp )
 {
-  if ( !vil_renderer_ )
-    vil_renderer_ = new vgui_vil_image_renderer;
-
-  // use the name of the image as the name of the tableau :
-  vil_renderer_->set_image_resource( I );
-
+  set_image_resource(I);
   rmp_ = mp;
 }
 
@@ -216,13 +206,47 @@ vgui_image_tableau::
 set_image( vil1_image const& I,
            vgui_range_map_params_sptr const& mp ) 
 {
+  set_image(I);
+  rmp_ = mp;
+}
+
+//-----------------------------------------------------------------------------
+
+void
+vgui_image_tableau::
+set_image_view( vil_image_view_base const& I)
+{
+  if ( !vil_renderer_ )
+    vil_renderer_ = new vgui_vil_image_renderer;
+
+  // use the name of the image as the name of the tableau :
+  vil_renderer_->set_image_resource( vil_new_image_resource_of_view( I ) );
+}
+
+//-----------------------------------------------------------------------------
+
+void
+vgui_image_tableau::
+set_image_resource( vil_image_resource_sptr const& I)
+{
+  if ( !vil_renderer_ )
+    vil_renderer_ = new vgui_vil_image_renderer;
+
+  // use the name of the image as the name of the tableau :
+  vil_renderer_->set_image_resource( I );
+}
+
+//-----------------------------------------------------------------------------
+
+void
+vgui_image_tableau::
+set_image( vil1_image const& I)
+{
   if ( !renderer_ )
     renderer_ = new vgui_image_renderer;
 
   // use the name of the image as the name of the tableau :
   renderer_->set_image( I );
-
-  rmp_ = mp;
 }
 
 //-----------------------------------------------------------------------------
