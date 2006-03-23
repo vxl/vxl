@@ -121,6 +121,10 @@ class vgui_image_tableau
   //  this tableau.
   virtual bool handle( vgui_event const& e );
 
+  //: Builds a popup menu for the user to modify range mapping
+  //  Over-rides function in vgui_tableau.
+  virtual void get_popup(const vgui_popup_params&, vgui_menu &m);
+
  protected:
   friend struct vgui_image_tableau_new;
 
