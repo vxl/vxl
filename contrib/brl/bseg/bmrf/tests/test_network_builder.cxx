@@ -3,11 +3,11 @@
 #include <testlib/testlib_test.h>
 #include <vcl_sstream.h>
 #include <vil/vil_save.h>
+#include <vil/vil_convert.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vsol/vsol_point_2d.h>
 #include <vtol/vtol_edge_2d.h>
-#include <brip/brip_vil_float_ops.h>
 #include <bmrf/bmrf_network_sptr.h>
 #include <bmrf/bmrf_epi_seg.h>
 #include <bmrf/bmrf_node.h>
@@ -155,8 +155,11 @@ void test_network_builder()
                                                           bar_alpha_high,
                                                           n_bars);
     nb.set_image(image);
-    vil_image_view<unsigned char> temp =
-      brip_vil_float_ops::convert_to_byte(image, 0.0, 255.0);
+
+    vil_image_view<double> dimage;
+    vil_image_view<vxl_byte> temp;
+    vil_convert_stretch_range_limited(image,dimage,0.0f,1.0f,0.0,255.0);
+    vil_convert_cast(dimage,temp);
 
     vcl_stringstream str;
     str << f;
