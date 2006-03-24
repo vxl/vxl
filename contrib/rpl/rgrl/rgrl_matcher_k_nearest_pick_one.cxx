@@ -56,7 +56,7 @@ compute_matches( rgrl_feature_set const&       from_set,
   for ( feat_iter fitr = from.begin(); fitr != from.end(); ++fitr )
   {
     rgrl_feature_sptr mapped = (*fitr)->transform( current_xform );
-    if( !validate( mapped, current_view.from_image_roi() ) )
+    if( !validate( mapped, current_view.to_image_roi() ) )
       continue;   // feature is invalid
 
     feat_vector matching_features = to_set.k_nearest_features( mapped, k_ );
@@ -147,7 +147,7 @@ add_one_flipped_match( rgrl_match_set_sptr&      inv_set,
   rgrl_feature_sptr mapped = from->transform( *inverse_xform );
 
   // check mapped
-  if( !validate( mapped, current_view.to_image_roi() ) )
+  if( !validate( mapped, current_view.from_image_roi() ) )
     return;
 
   // for consistent behavior,
