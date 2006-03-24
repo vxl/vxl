@@ -58,6 +58,7 @@ class vidl2_dshow_istream_params_esf //: public vidl2_iostream_params
   // - general params (all dshow_params should have)
   bool register_in_rot()       { return register_in_rot_;      }
   bool run_when_ready()        { return run_when_ready_;       }
+  vcl_string save_graph_to()   { return save_graph_to_;        }
   vcl_string device_name()     { return device_name_;          }
   vcl_string output_filename() { return output_filename_;      }
   GUID target_output_format()  { return target_output_format_; }
@@ -66,6 +67,7 @@ class vidl2_dshow_istream_params_esf //: public vidl2_iostream_params
   // - general params (all dshow_params should have)
   vidl2_dshow_istream_params_esf& set_register_in_rot(bool);
   vidl2_dshow_istream_params_esf& set_run_when_ready(bool);
+  vidl2_dshow_istream_params_esf& set_save_graph_to(const vcl_string&);
   vidl2_dshow_istream_params_esf& set_device_name(const vcl_string&);
   vidl2_dshow_istream_params_esf& set_output_filename(const vcl_string&);
   vidl2_dshow_istream_params_esf& set_target_output_format(GUID);
@@ -114,6 +116,9 @@ class vidl2_dshow_istream_params_esf //: public vidl2_iostream_params
 
   //: Immediately run graph after creating it, else wait for run command.
   bool run_when_ready_;
+
+  //: Write the filter graph to filename 'save_graph_to_'.
+  vcl_string save_graph_to_;
 
   //: Device name.
   vcl_string device_name_;

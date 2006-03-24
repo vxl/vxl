@@ -557,6 +557,8 @@ namespace
 //: Constructor - default
 vidl2_dshow_istream_params_esf::vidl2_dshow_istream_params_esf(void)
   : register_in_rot_(false)
+  , run_when_ready_(true)
+  , target_output_format_(GUID_NULL)
 {}
 
 //: Configure the filter based on the parameters.
@@ -755,6 +757,10 @@ vidl2_dshow_istream_params_esf
     {
       set_run_when_ready(from_string_to<bool>()(iter->second));
     }
+    else if (iter->first == "save_graph_to")
+    {
+      set_save_graph_to(iter->second);
+    }
     else if (iter->first == "device_name")
     {
       set_device_name(iter->second);
@@ -859,6 +865,13 @@ vidl2_dshow_istream_params_esf::set_register_in_rot(bool val)
 vidl2_dshow_istream_params_esf::set_run_when_ready(bool val)
 {
   run_when_ready_ = val;
+  return *this;
+}
+
+/* inline */ vidl2_dshow_istream_params_esf&
+vidl2_dshow_istream_params_esf::set_save_graph_to(const vcl_string& name)
+{
+  save_graph_to_ = name;
   return *this;
 }
 

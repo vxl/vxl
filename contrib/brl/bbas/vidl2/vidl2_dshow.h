@@ -43,7 +43,7 @@ struct vidl2_dshow
 
   //: Save filter graph to a *.grf file.
   static void save_graph_to_file(const CComPtr<IFilterGraph2>& filter_graph,
-                                 const vcl_wstring& filename);
+                                 const vcl_string& filename);
 
   //: Load filter graph from a *.grf file.
   static void load_graph_from_file(const CComPtr<IFilterGraph2>& filter_graph,

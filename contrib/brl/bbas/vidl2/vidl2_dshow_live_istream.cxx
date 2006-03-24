@@ -89,9 +89,6 @@ void sample_grabber_cb::advance(void)
     {
       busy_index_ = curr_index_;
       curr_index_ = -1;
-#ifdef DEBUG
-      vcl_cout << "curr_index_ == -1\n";
-#endif
     }
     ReleaseMutex(mutex_);
     Sleep(0);
@@ -269,12 +266,11 @@ void vidl2_dshow_live_istream<ParamsObject>::connect(void)
   //vidl2_dshow::load_graph_from_file(filter_graph_, L"testing.grf");
 
   // ***** should I provide access to this through the public interface???
-  //if (params_.save_graph_to() != "")
-  //{
-  //  vidl2_dshow::save_graph_to_file(filter_graph_, L"testing2.grf");
-  //}
+  if (params_.save_graph_to() != "")
+  {
+    vidl2_dshow::save_graph_to_file(filter_graph_, params_.save_graph_to());
+  }
 
-#if 0
   // get frame format information
   AM_MEDIA_TYPE media_type;
   DSHOW_ERROR_IF_FAILED(
@@ -284,7 +280,6 @@ void vidl2_dshow_live_istream<ParamsObject>::connect(void)
                               buffer_height_,
                               buffer_pixel_format_);
   vidl2_dshow::delete_media_type(media_type);
-#endif
 
   // ***** MSDN docs suggest turning the graph clock off (if not needed)
   //       for running the graph faster. Check this out.

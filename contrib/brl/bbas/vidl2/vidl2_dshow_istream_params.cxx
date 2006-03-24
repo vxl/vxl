@@ -168,6 +168,7 @@ vidl2_dshow_istream_params::vidl2_dshow_istream_params(void)
   : vpa_properties_(vpa_properties())
   , register_in_rot_(false)
   , run_when_ready_(true)
+  , target_output_format_(GUID_NULL)
   , load_filter_defaults_(false)
 {}
 
@@ -177,25 +178,27 @@ void vidl2_dshow_istream_params::configure_filter(
 {
   // IAMVideoProcAmp interface.
   CComPtr<IAMVideoProcAmp> am_video_proc_amp;
-  DSHOW_ERROR_IF_FAILED(source->QueryInterface(
-    IID_IAMVideoProcAmp, reinterpret_cast<void**>(&am_video_proc_amp)));
-
-  vcl_map<vcl_string,vpa_property_wrap>::const_iterator iter;
-  for (iter = vpa_properties_.begin(); iter != vpa_properties_.end(); iter++)
+  if (SUCCEEDED(source->QueryInterface(
+    IID_IAMVideoProcAmp, reinterpret_cast<void**>(&am_video_proc_amp))))
   {
-    if (iter->second.is_changed)
+    vcl_map<vcl_string,vpa_property_wrap>::const_iterator iter
+      = vpa_properties_.begin();
+    for (; iter != vpa_properties_.end(); iter++)
     {
-      DSHOW_ERROR_IF_FAILED(am_video_proc_amp->Set(
-        iter->second.key, iter->second.value, VideoProcAmp_Flags_Manual));
-    }
-    else if (load_filter_defaults_)
-    {
-      long min, max, step, def, flag;
-      if (SUCCEEDED(am_video_proc_amp->GetRange(iter->second.key,
-                    &min, &max, &step, &def, &flag)))
+      if (iter->second.is_changed)
       {
-        DSHOW_ERROR_IF_FAILED(
-          am_video_proc_amp->Set(iter->second.key, def, flag));
+        DSHOW_ERROR_IF_FAILED(am_video_proc_amp->Set(
+          iter->second.key, iter->second.value, VideoProcAmp_Flags_Manual));
+      }
+      else if (load_filter_defaults_)
+      {
+        long min, max, step, def, flag;
+        if (SUCCEEDED(am_video_proc_amp->GetRange(iter->second.key,
+          &min, &max, &step, &def, &flag)))
+        {
+          DSHOW_ERROR_IF_FAILED(
+            am_video_proc_amp->Set(iter->second.key, def, flag));
+        }
       }
     }
   }
@@ -216,20 +219,25 @@ void vidl2_dshow_istream_params::configure_filter(
       reinterpret_cast<void**>(&am_stream_config)));
 
     AM_MEDIA_TYPE* amt = 0;
-    VIDEO_STREAM_CONFIG_CAPS vscc;
+    //VIDEO_STREAM_CONFIG_CAPS vscc;
+    VIDEO_STREAM_CONFIG_CAPS* vscc
+      = reinterpret_cast<VIDEO_STREAM_CONFIG_CAPS*>(new BYTE[128]);
 
     int count = 0, size = 0;
     DSHOW_ERROR_IF_FAILED(
       am_stream_config->GetNumberOfCapabilities(&count, &size));
-    assert(sizeof(vscc) == size);
+    // ***** alignment problem... hack to work around bug in DShow
+    //assert(sizeof(vscc) == size);
 
     DSHOW_ERROR_IF_FAILED(am_stream_config->GetStreamCaps(
       output_format_.is_changed ? output_format_.value : 0,
-      &amt, reinterpret_cast<BYTE*>(&vscc)));
+      &amt, reinterpret_cast<BYTE*>(vscc)));
 
     DSHOW_ERROR_IF_FAILED(am_stream_config->SetFormat(amt));
 
     vidl2_dshow::delete_media_type(*amt);
+
+    delete [] vscc;
   }
 }
 
@@ -254,31 +262,33 @@ void vidl2_dshow_istream_params::print_parameter_help(const CComPtr<IBaseFilter>
 
   // IAMVideoProcAmp interface.
   CComPtr<IAMVideoProcAmp> am_video_proc_amp;
-  DSHOW_ERROR_IF_FAILED(filter->QueryInterface(
-    IID_IAMVideoProcAmp, reinterpret_cast<void**>(&am_video_proc_amp)));
+  if (SUCCEEDED(filter->QueryInterface(
+    IID_IAMVideoProcAmp, reinterpret_cast<void**>(&am_video_proc_amp))))
+  {
+    vcl_cout << vcl_string(w1, ' ')
+             << vcl_setw(w2) << "curr"
+             << vcl_setw(w2) << "min"
+             << vcl_setw(w2) << "max"
+             << vcl_setw(w2) << "step"
+             << vcl_setw(w2) << "default"
+             << vcl_setw(w2) << "flags"
+             << '\n'
+             << vcl_string(w1, ' ')
+             << vcl_string(6*w2, '-') << '\n';
 
-  vcl_cout << vcl_string(w1, ' ')
-           << vcl_setw(w2) << "curr"
-           << vcl_setw(w2) << "min"
-           << vcl_setw(w2) << "max"
-           << vcl_setw(w2) << "step"
-           << vcl_setw(w2) << "default"
-           << vcl_setw(w2) << "flags"
-           << '\n'
-           << vcl_string(w1, ' ')
-           << vcl_string(6*w2, '-') << '\n';
-
-  print_help(am_video_proc_amp, "brightness"            );
-  print_help(am_video_proc_amp, "contrast"              );
-  print_help(am_video_proc_amp, "hue"                   );
-  print_help(am_video_proc_amp, "saturation"            );
-  print_help(am_video_proc_amp, "sharpness"             );
-  print_help(am_video_proc_amp, "gamma"                 );
-  print_help(am_video_proc_amp, "color_enable"          );
-  print_help(am_video_proc_amp, "white_balance"         );
-  print_help(am_video_proc_amp, "backlight_compensation");
-  print_help(am_video_proc_amp, "gain"                  );
-  vcl_cout << '\n';
+    print_help(am_video_proc_amp, "brightness"            );
+    print_help(am_video_proc_amp, "contrast"              );
+    print_help(am_video_proc_amp, "hue"                   );
+    print_help(am_video_proc_amp, "saturation"            );
+    print_help(am_video_proc_amp, "sharpness"             );
+    print_help(am_video_proc_amp, "gamma"                 );
+    print_help(am_video_proc_amp, "color_enable"          );
+    print_help(am_video_proc_amp, "white_balance"         );
+    print_help(am_video_proc_amp, "backlight_compensation");
+    print_help(am_video_proc_amp, "gain"                  );
+    vcl_cout << '\n';
+  }
+  else { vcl_cout << "...Not Supported...\n"; }
 
   // IAMStreamConfig interface.
   CComPtr<ICaptureGraphBuilder2> graph_builder;
@@ -346,6 +356,10 @@ vidl2_dshow_istream_params
       {
         set_run_when_ready(from_string_to<bool>()(iter->second));
       }
+      else if (iter->first == "save_graph_to")
+      {
+        set_save_graph_to(iter->second);
+      }
       else if (iter->first == "device_name")
       {
         set_device_name(iter->second);
@@ -393,6 +407,13 @@ vidl2_dshow_istream_params::set_register_in_rot(bool val)
 vidl2_dshow_istream_params::set_run_when_ready(bool val)
 {
   run_when_ready_ = val;
+  return *this;
+}
+
+/* inline */ vidl2_dshow_istream_params&
+vidl2_dshow_istream_params::set_save_graph_to(const vcl_string& name)
+{
+  save_graph_to_ = name;
   return *this;
 }
 

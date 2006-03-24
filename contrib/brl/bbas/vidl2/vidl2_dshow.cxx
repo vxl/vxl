@@ -267,7 +267,7 @@ void vidl2_dshow::register_in_rot(IUnknown* unknown, DWORD& reg)
       << vcl_hex << reinterpret_cast<DWORD>(unknown)
       << L" pid "
       << vcl_hex << GetCurrentProcessId();
-  vcl_wcout << oss.str() << vcl_endl;
+  //vcl_wcout << oss.str() << vcl_endl;
 
   CComPtr<IMoniker> moniker;
   DSHOW_ERROR_IF_FAILED(
@@ -286,12 +286,12 @@ void vidl2_dshow::remove_from_rot(DWORD reg)
 
 //: Save filter graph to a *.grf file.
 void vidl2_dshow::save_graph_to_file(const CComPtr<IFilterGraph2>& filter_graph,
-                                     const vcl_wstring& filename)
+                                     const vcl_string& filename)
 {
   assert(filter_graph != 0);
 
   CComPtr<IStorage> storage;
-  DSHOW_ERROR_IF_FAILED(StgCreateDocfile(filename.c_str(),
+  DSHOW_ERROR_IF_FAILED(StgCreateDocfile(CA2W(filename.c_str()),
                                          STGM_CREATE
                                          | STGM_TRANSACTED
                                          | STGM_READWRITE
@@ -459,7 +459,11 @@ void vidl2_dshow::get_media_info(const AM_MEDIA_TYPE& amt,
   { // WMMEDIASUBTYPE_MP4S
     pixel_format = VIDL2_PIXEL_FORMAT_UNKNOWN;
   }
-  else { DSHOW_ERROR_IF_FAILED(VFW_E_INVALIDMEDIATYPE); }
+  else
+  {
+    pixel_format = VIDL2_PIXEL_FORMAT_UNKNOWN;
+    DSHOW_WARN_IF_FAILED(VFW_E_INVALIDMEDIATYPE);
+  }
 }
 
 //: Delete AM_MEDIA_TYPE memory.
