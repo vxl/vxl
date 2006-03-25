@@ -52,11 +52,11 @@
 // Of course, you should just use MBL_LOG which handles this for you. Additionally
 // MBL_LOG sorts out termination of the log message without using vcl_endl;
 
-#include <vcl_iosfwd.h>
+#include <vcl_fstream.h>
 #include <vcl_streambuf.h>
 #include <vcl_memory.h>
 #include <vcl_string.h>
-#include <vcl_sstream.h>
+#include <vcl_set.h>
 #include <vcl_set.h>
 #include <vcl_map.h>
 
@@ -288,8 +288,8 @@ public:
   struct cat_spec
   {
     int level;
-    enum output_type {FILE_OUT, COUT, CERR, TEST_SSTREAM} output;
-    vcl_string filename;
+    enum output_type {FILE_OUT, COUT, CERR, REGISTERED_STREAM} output;
+    vcl_string name;
   };
 
   mbl_log_categories();
@@ -329,9 +329,8 @@ class mbl_logger_root
   mbl_logger_root():
     null_stream_(&null_streambuf_) {}
   
+  vcl_map<vcl_string, vcl_ostream*> registered_streams_;
 public:
-  //: This object is really only used for testing.
-  vcl_ostringstream test_sstream;
 
   mbl_logger default_logger;
 
@@ -348,6 +347,16 @@ public:
   void load_log_config_file();
   //: Force all loggers to update themselves in light of changes to the root and configuration.
   void update_all_loggers();
+  //: Register a named stream with the logger.
+  // This can then be referred to using the REGISTERED_STREAM output type.
+  // The stream must remain in scope while the stream may be being used.
+  void register_stream(const vcl_string &, vcl_ostream*);
+  //: Remove a stream from the known list.
+  void deregister_stream(const vcl_string &);
+  //: Get a registered stream by name.
+  // \returns 0 if no such registered stream.
+  vcl_ostream* get_registered_stream(const vcl_string &);
+
 };
 
 

@@ -235,17 +235,27 @@ mbl_logger::mbl_logger(const char *id):
   }
   else if (cat.output == mbl_log_categories::cat_spec::CERR)
   {
-    output_ = new mbl_log_output_stream(vcl_cout, id);
+    output_ = new mbl_log_output_stream(vcl_cerr, id);
 //    logstream_.tie(output_.real_stream_);
   }
-  else if (cat.output == mbl_log_categories::cat_spec::TEST_SSTREAM)
+  else if (cat.output == mbl_log_categories::cat_spec::REGISTERED_STREAM)
   {
-    output_ = new mbl_log_output_stream(root().test_sstream, id);
+    vcl_ostream * pstream = root().get_registered_stream(cat.name);
+    if (pstream == 0)
+    {
+      mbl_exception_warning(
+        mbl_exception_parse_error(
+          vcl_string("mbl_logger::mbl_logger: unknown registered stream output name: ") + cat.name));
+      // Default to CERR if no exceptions.
+      output_ = new mbl_log_output_stream(vcl_cerr, id);
+    }
+    else
+      output_ = new mbl_log_output_stream(*pstream, id);
 //    logstream_.tie(output_.real_stream_);
   }
   else if (cat.output == mbl_log_categories::cat_spec::FILE_OUT)
   {
-    output_ = new mbl_log_output_file(cat.filename, id);
+    output_ = new mbl_log_output_file(cat.name, id);
 //    logstream_.tie(output_.real_stream_);
   }
 
@@ -272,16 +282,16 @@ void mbl_logger::reinitialise()
     output_ = new mbl_log_output_stream(vcl_cout, id);
 //    logstream_.tie(output_.real_stream_);
   }
-  else if (cat.output == mbl_log_categories::cat_spec::TEST_SSTREAM)
+  else if (cat.output == mbl_log_categories::cat_spec::REGISTERED_STREAM)
   {
     delete output_;
-    output_ = new mbl_log_output_stream(root().test_sstream, id);
+    output_ = new mbl_log_output_stream(*root().registered_streams_[cat.name], id);
 //    logstream_.tie(output_.real_stream_);
   }
   else if (cat.output == mbl_log_categories::cat_spec::FILE_OUT)
   {
     delete output_;
-    output_ = new mbl_log_output_file(cat.filename, id);
+    output_ = new mbl_log_output_file(cat.name, id);
 //    logstream_.tie(output_.real_stream_);
   }
 }
@@ -558,6 +568,29 @@ void mbl_logger_root::update_all_loggers()
 }
 
 
+// This can then be referred to using the REGISTERED_STREAM output type.
+// The stream must remain in scope while the stream may be being used.
+void mbl_logger_root::register_stream(const vcl_string &name, vcl_ostream *p_stream)
+{
+  registered_streams_[name] = p_stream;
+}
+//: Remove a steram from the known list.
+void mbl_logger_root::deregister_stream(const vcl_string &name)
+{
+  registered_streams_.erase(name);
+}
+//: Get a registered stream by name.
+// \returns 0 if no such registered stream.
+vcl_ostream* mbl_logger_root::get_registered_stream(const vcl_string &name)
+{
+  vcl_map<vcl_string, vcl_ostream*>::iterator it = registered_streams_.find(name);
+  if (it == registered_streams_.end())
+    return 0;
+  return it->second;
+}
+
+
+
 mbl_log_categories::mbl_log_categories()
 {
   cat_spec defult_spec; defult_spec.level = mbl_logger::NOTICE;
@@ -604,35 +637,39 @@ inline mbl_log_categories::cat_spec parse_cat_spec(const vcl_string &str)
   if (props.find("file_output") != props.end())
   {
     spec.output = mbl_log_categories::cat_spec::FILE_OUT;
-    spec.filename = props["file_output"];
+    spec.name = props["file_output"];
     props.erase("file_output");
   }
   else if (props.find("stream_output") != props.end())
   {
+    spec.name = "";
     vcl_string s = props["stream_output"];
     vul_string_upcase(s);
     if (s == "COUT" || s == "VCL_COUT" || s == "STD::COUT")
       spec.output = mbl_log_categories::cat_spec::COUT;
     else if (s == "CERR" || s == "VCL_CERR" || s == "STD::CERR")
       spec.output = mbl_log_categories::cat_spec::CERR;
-    else if (s == "TEST_SSTREAM")
-      spec.output = mbl_log_categories::cat_spec::TEST_SSTREAM;
     else
     {
       mbl_exception_warning(
         mbl_exception_parse_error(
-          vcl_string("mbl_log_categories.cxx:parse_cat_spec: stream output type: ")
+          vcl_string("mbl_log.cxx:parse_cat_spec: unknown stream output name: ")
           + props["stream_output"]) );
       // Default to CERR if no exceptions.
       spec.output = mbl_log_categories::cat_spec::CERR;
     }
-    spec.filename = "";
     props.erase("stream_output");
+  }
+  else if (props.find("registered_stream_output") != props.end())
+  {
+    spec.output = mbl_log_categories::cat_spec::REGISTERED_STREAM;
+    spec.name = props["registered_stream_output"];
+    props.erase("registered_stream_output");
   }
   else
   {
     spec.output = mbl_log_categories::cat_spec::CERR;
-    spec.filename = "";
+    spec.name = "";
   }
 
   mbl_read_props_look_for_unused_props("mbl_log.cxx::parse_cat_spec", props);
@@ -717,7 +754,7 @@ vcl_ostream& operator<<(vcl_ostream&os, const mbl_log_categories::cat_spec& spec
   switch (spec.output)
   {
    case mbl_log_categories::cat_spec::FILE_OUT:
-    os << " file_output: " << spec.filename;
+    os << " file_output: " << spec.name;
     break;
    case mbl_log_categories::cat_spec::COUT:
     os << " stream_output: COUT";
@@ -725,8 +762,8 @@ vcl_ostream& operator<<(vcl_ostream&os, const mbl_log_categories::cat_spec& spec
    case mbl_log_categories::cat_spec::CERR:
     os << " stream_output: CERR";
     break;
-  case mbl_log_categories::cat_spec::TEST_SSTREAM:
-    os << " stream_output: TEST_SSTREAM";
+  case mbl_log_categories::cat_spec::REGISTERED_STREAM:
+    os << " registered_stream_output: " << spec.name;
     break;
   }
   os << " }";
