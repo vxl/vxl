@@ -66,6 +66,7 @@ bool vnl_solve_qp_with_equality_constraints(const vnl_matrix<double>& H,
   vnl_solve_symmetric_le(AHA,b1,lambda);
 
   x=(H_inv*(g+A.transpose()*lambda))*-1.0;
+  return true;
 }
 
 //: Solve quadratic programming problem with constraint sum(x)=0
@@ -145,7 +146,7 @@ static bool vnl_solve_qp_update_x(vnl_vector<double>& x,
     if (valid[i])
     {
       x[i]+=min_alpha*dx[i1];
-      if (i1==worst_i)
+      if (i1==(unsigned int)worst_i)
       {
         // Set this variable to zero and indicate it cannot change
         x[i]=0.0;
