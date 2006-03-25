@@ -11,7 +11,7 @@
 
 #include <vcl_cassert.h>
 
-
+#if 0 // unused static function
 static
 vnl_matrix<double> const&
 identity_matrix( unsigned size )
@@ -24,7 +24,7 @@ identity_matrix( unsigned size )
   assert( size < 5 );
   return matrices[size];
 }
-
+#endif // 0
 
 rgrl_feature_point::
 rgrl_feature_point( vnl_vector<double> const& loc )
@@ -56,7 +56,7 @@ location() const
   return location_;
 }
 
-void 
+void
 rgrl_feature_point::
 set_location( vnl_vector<double> const& loc )
 {
@@ -67,14 +67,14 @@ vnl_matrix<double> const&
 rgrl_feature_point::
 error_projector() const
 {
-  if( !err_proj_.size() ) {
-    
+  if ( !err_proj_.size() )
+  {
     const unsigned m = location_.size();
     err_proj_.set_size( m, m );
     err_proj_.set_identity();
     err_proj_ /= vnl_math_sqr( scale_ );
   }
-  
+
   return err_proj_;
 }
 
@@ -82,14 +82,14 @@ vnl_matrix<double> const&
 rgrl_feature_point::
 error_projector_sqrt() const
 {
-  if( !err_proj_sqrt_.size() ) {
-    
+  if ( !err_proj_sqrt_.size() )
+  {
     const unsigned m = location_.size();
     err_proj_sqrt_.set_size( m, m );
     err_proj_sqrt_.set_identity();
     err_proj_sqrt_ /= scale_;
   }
-  
+
   return err_proj_sqrt_;
 }
 
@@ -105,9 +105,9 @@ transform( rgrl_transformation const& xform ) const
   // Transform the location
   //
   xform.map_location( this->location_, result->location_ );
-  if( this->scale_ > 0.0 )
+  if ( this->scale_ > 0.0 )
     result->scale_ = this->transform_scale( xform );
-  
+
   return result_sptr;
 }
 
@@ -120,8 +120,9 @@ transform_scale( rgrl_transformation const& xform ) const
   const unsigned dim = this->location_.size();
   // use default value of 1.0
   double scale = 1.0;
-  
-  if ( this->scale_ > 0.0 && scaling.size() == dim ) {
+
+  if ( this->scale_ > 0.0 && scaling.size() == dim )
+  {
     // "average" them
     if ( dim == 2 )
       scale = vcl_sqrt( scaling[0]*scaling[1] ) * this->scale_;
@@ -145,7 +146,7 @@ rgrl_feature_point::
 absolute_signature_weight( rgrl_feature_sptr other ) const
 {
   //if other is invalid
-  if( !other )  return 0.0;
+  if ( !other )  return 0.0;
 
   rgrl_feature_point* pt_ptr = rgrl_cast<rgrl_feature_point*>(other);
   assert( pt_ptr );
@@ -170,53 +171,53 @@ write( vcl_ostream& os ) const
 {
   // tag
   os << "POINT" << vcl_endl;
-  
+
   // dim
   os << location_.size() << vcl_endl;
-  
+
   // atributes
   os << location_ << "    " << scale_ << vcl_endl;
 }
 
 //: read in feature
-bool 
+bool
 rgrl_feature_point::
 read( vcl_istream& is, bool skip_tag )
 {
-  if( !skip_tag ) {
-
+  if ( !skip_tag )
+  {
     // skip empty lines
     rgrl_util_skip_empty_lines( is );
-    
+
     vcl_string str;
     vcl_getline( is, str );
-    
+
     // The token should appear at the beginning of line
     if ( str.find( "POINT" ) != 0 ) {
       WarningMacro( "The tag is not POINT. reading is aborted.\n" );
       return false;
     }
-  }   
+  }
 
   // get dim
   int dim=-1;
   is >> dim;
-  
-  if( !is || dim<=0 ) 
+
+  if ( !is || dim<=0 )
     return false;    // cannot get dimension
-    
+
   // get location
   location_.set_size( dim );
   is >> location_;
-  
-  if( !is )
+
+  if ( !is )
     return false;   // cannot read location
-    
+
   // get scale
-  is >> scale_; 
-  
-  if( !is )
+  is >> scale_;
+
+  if ( !is )
     return false;   // cannot read scale
-    
+
   return true;
 }
