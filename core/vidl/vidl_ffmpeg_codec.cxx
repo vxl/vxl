@@ -59,7 +59,11 @@ bool vidl_ffmpeg_codec::probe(vcl_string const& fname)
   // Find a video stream. Use the first one we find.
   vid_index_ = -1;
   for ( int i = 0; i < fmt_cxt_->nb_streams; ++i ) {
+#if LIBAVFORMAT_BUILD <= 4628
     AVCodecContext *enc = &fmt_cxt_->streams[i]->codec;
+#else
+    AVCodecContext *enc = fmt_cxt_->streams[i]->codec;
+#endif
     if ( enc->codec_type == CODEC_TYPE_VIDEO ) {
       vid_index_ = i;
       break;
@@ -70,7 +74,11 @@ bool vidl_ffmpeg_codec::probe(vcl_string const& fname)
   }
 
   // Open the stream
+#if LIBAVFORMAT_BUILD <= 4628
   AVCodecContext* enc = &fmt_cxt_->streams[vid_index_]->codec;
+#else
+  AVCodecContext* enc = fmt_cxt_->streams[vid_index_]->codec;
+#endif
   char buf[100];
   avcodec_string(buf, 100, enc, 0);
   vcl_cout<< "ffmpeg codec: " << buf<<vcl_endl;
@@ -125,7 +133,11 @@ vidl_ffmpeg_codec::open(vcl_string const& fname, char mode )
   // Find a video stream. Use the first one we find.
   vid_index_ = -1;
   for ( int i = 0; i < fmt_cxt_->nb_streams; ++i ) {
+#if LIBAVFORMAT_BUILD <= 4628
     AVCodecContext *enc = &fmt_cxt_->streams[i]->codec;
+#else
+    AVCodecContext *enc = fmt_cxt_->streams[i]->codec;
+#endif
     if ( enc->codec_type == CODEC_TYPE_VIDEO ) {
       vid_index_ = i;
       break;
@@ -136,24 +148,29 @@ vidl_ffmpeg_codec::open(vcl_string const& fname, char mode )
   }
 
   dump_format( fmt_cxt_, 0, fname.c_str(), 0 );
-
+#if LIBAVFORMAT_BUILD <= 4628
+  AVCodecContext *enc = &fmt_cxt_->streams[vid_index_]->codec;
+#else
+  AVCodecContext *enc = fmt_cxt_->streams[vid_index_]->codec;
+#endif
   // Open the stream
-  AVCodecContext* enc = &fmt_cxt_->streams[vid_index_]->codec;
   AVCodec* codec = avcodec_find_decoder(enc->codec_id);
   if ( !codec || avcodec_open( enc, codec ) < 0 ) {
     return false;
   }
-
+  
+#if LIBAVFORMAT_BUILD <= 4623
   if (enc->frame_rate>1000 && enc->frame_rate_base==1)
     enc->frame_rate_base=1000;
+#endif
 
   vid_str_ = fmt_cxt_->streams[ vid_index_ ];
   frame_ = avcodec_alloc_frame();
 
   //BITMAPINFOHEADER bh;
   //moviestream_->GetVideoFormat(&bh, sizeof(bh));
-  this->set_width(vid_str_->codec.width);
-  this->set_height(vid_str_->codec.height);
+  this->set_width(enc->width);
+  this->set_height(enc->height);
   this->set_bits_pixel(24); // always decodes to RGB byte images
   this->set_number_frames(count_frames());
   //this->set_format('L');
@@ -179,7 +196,11 @@ vidl_ffmpeg_codec::close()
 
   vid_index_ = -1;
   if ( vid_str_ ) {
+#if LIBAVFORMAT_BUILD <= 4628
     avcodec_close( &vid_str_->codec );
+#else
+    avcodec_close( vid_str_->codec );
+#endif
     vid_str_ = 0;
   }
   if ( fmt_cxt_ ) {
@@ -210,15 +231,20 @@ vidl_ffmpeg_codec::get_view( int position,
 vil_image_view<vxl_byte>
 vidl_ffmpeg_codec::cur_frame() const
 {
+#if LIBAVFORMAT_BUILD <= 4628
+  AVCodecContext* enc = &fmt_cxt_->streams[vid_index_]->codec;
+#else
+  AVCodecContext* enc = fmt_cxt_->streams[vid_index_]->codec;
+#endif
   // If we've already converted this frame, try to convert it
   if ( !cur_img_ && frame_->data[0] != 0 ){
-    int width = vid_str_->codec.width;
-    int height = vid_str_->codec.height;
+    int width = enc->width;
+    int height = enc->height;
 
     // Deinterlace if requested
     if ( deinterlace_ ) {
       avpicture_deinterlace( (AVPicture*)frame_, (AVPicture*)frame_,
-                             vid_str_->codec.pix_fmt, width, height );
+                             enc->pix_fmt, width, height );
     }
 
     // convert the current frame to RGB
@@ -227,7 +253,7 @@ vidl_ffmpeg_codec::cur_frame() const
     out_pict.data[0] = cur_img_.top_left_ptr();
     out_pict.linesize[0] = cur_img_.ni() * 3;
     if ( img_convert( &out_pict, PIX_FMT_RGB24,
-                     (AVPicture*)frame_, vid_str_->codec.pix_fmt,
+                     (AVPicture*)frame_, enc->pix_fmt,
                      width, height ) == -1 ) {
       cur_img_ = 0;
     }
@@ -236,7 +262,7 @@ vidl_ffmpeg_codec::cur_frame() const
   // The MPEG 2 codec has a latency of 1 frame, so the dts of the last
   // packet (stored in last_dts) is actually the next frame's
   // dts.
-  if ( vid_str_->codec.codec_id == CODEC_ID_MPEG2VIDEO &&
+  if ( enc->codec_id == CODEC_ID_MPEG2VIDEO &&
       vcl_string("avi") == fmt_cxt_->iformat->name ) {
     frame_number_offset_ = 1;
   }
@@ -262,9 +288,15 @@ int
 vidl_ffmpeg_codec::cur_frame_num() const
 {
   return ((last_dts - vid_str_->start_time)
-          * vid_str_->r_frame_rate
-          / vid_str_->r_frame_rate_base + AV_TIME_BASE/2)
-         / AV_TIME_BASE - frame_number_offset_;
+#if LIBAVFORMAT_BUILD <= 4623
+          * vid_str_->r_frame_rate / vid_str_->r_frame_rate_base 
+          + AV_TIME_BASE/2) / AV_TIME_BASE
+#else
+          * vid_str_->r_frame_rate.num / vid_str_->r_frame_rate.den
+          * vid_str_->time_base.num + vid_str_->time_base.den/2)
+          / vid_str_->time_base.den  
+#endif
+          - frame_number_offset_;
 //  return int( last_dts * vid_str_->r_frame_rate /
 //              vid_str_->r_frame_rate_base + AV_TIME_BASE/2 ) /
 //         AV_TIME_BASE - frame_number_offset_;
@@ -281,9 +313,26 @@ vidl_ffmpeg_codec::count_frames() const
 #if LIBAVFORMAT_BUILD <= 4616
   av_seek_frame( fmt_cxt_, vid_index_, 0);
 #else
-  av_seek_frame( fmt_cxt_, vid_index_, 0, 0 );
+  av_seek_frame( fmt_cxt_, vid_index_, 0, AVSEEK_FLAG_BACKWARD );
 #endif
 
+  if( vid_str_ && vid_str_->duration != int64_t(AV_NOPTS_VALUE) ) {
+#if LIBAVFORMAT_BUILD <= 4623
+    unsigned cnt = unsigned( vid_str_->duration * vid_str_->r_frame_rate / vid_str_->r_frame_rate_base / AV_TIME_BASE );
+#else
+    unsigned cnt = unsigned( vid_str_->duration * vid_str_->r_frame_rate.num / vid_str_->r_frame_rate.den 
+                             * vid_str_->time_base.num / vid_str_->time_base.den );
+#endif
+    //int64_t req_timestamp = int64_t(frame)*AV_TIME_BASE * vid_str_->r_frame_rate_base / vid_str_->r_frame_rate + vid_str_->start_time;
+    vcl_cout << "estimated "<<cnt+1<<" frames"<<vcl_endl;
+    return cnt+1;
+  }
+  
+#if LIBAVFORMAT_BUILD <= 4628
+  AVCodecContext* enc = &fmt_cxt_->streams[vid_index_]->codec;
+#else
+  AVCodecContext* enc = fmt_cxt_->streams[vid_index_]->codec;
+#endif
   // Unfortunately we actually have to decode the frames to count them
   // For some codecs (MPEG2) the number of video packets is not the 
   // same as the number of frames.  Can anyone find a better way?
@@ -292,16 +341,12 @@ vidl_ffmpeg_codec::count_frames() const
   int got_picture = 0;
   while ( av_read_frame( fmt_cxt_, &pkt ) >= 0) {
     got_picture = 0;
+    last_dts = pkt.dts;
     if (pkt.stream_index==vid_index_){
-      if ( vid_str_->codec.codec_id == CODEC_ID_RAWVIDEO ) {
-        avpicture_fill( (AVPicture*)frame_, pkt.data,
-          vid_str_->codec.pix_fmt,
-          vid_str_->codec.width,
-          vid_str_->codec.height );
-        frame_->pict_type = FF_I_TYPE;
+      if ( enc->codec_id == CODEC_ID_RAWVIDEO ) {
         got_picture = 1;
       } else {
-        avcodec_decode_video( &vid_str_->codec,
+        avcodec_decode_video( enc,
           frame_, &got_picture,
           pkt.data, pkt.size );
       } 
@@ -312,10 +357,12 @@ vidl_ffmpeg_codec::count_frames() const
   }
     
   // Count the last frame (if needed)
-  avcodec_decode_video( &vid_str_->codec, frame_, &got_picture,
+  avcodec_decode_video( enc, frame_, &got_picture,
                         NULL, 0 );
   if(got_picture)
     ++frame_count;
+    
+
   
   vcl_cout << "counted "<<frame_count<<" frames"<<vcl_endl;
   // seek back to the start
@@ -338,6 +385,12 @@ vidl_ffmpeg_codec::advance() const
   if ( !frame_ ) {
     return false;
   }
+  
+#if LIBAVFORMAT_BUILD <= 4628
+  AVCodecContext* codec = &fmt_cxt_->streams[vid_index_]->codec;
+#else
+  AVCodecContext* codec = fmt_cxt_->streams[vid_index_]->codec;
+#endif
 
   AVPacket pkt;
   int got_picture = 0;
@@ -351,15 +404,15 @@ vidl_ffmpeg_codec::advance() const
     // Make sure that the packet is from the actual video stream.
     if (pkt.stream_index==vid_index_)
     {
-      if ( vid_str_->codec.codec_id == CODEC_ID_RAWVIDEO ) {
+      if ( codec->codec_id == CODEC_ID_RAWVIDEO ) {
         avpicture_fill( (AVPicture*)frame_, pkt.data,
-          vid_str_->codec.pix_fmt,
-          vid_str_->codec.width,
-          vid_str_->codec.height );
+          codec->pix_fmt,
+          codec->width,
+          codec->height );
         frame_->pict_type = FF_I_TYPE;
         got_picture = 1;
       } else {
-        avcodec_decode_video( &vid_str_->codec,
+        avcodec_decode_video( codec,
           frame_, &got_picture,
           pkt.data, pkt.size );
       }
@@ -371,10 +424,15 @@ vidl_ffmpeg_codec::advance() const
   // I and P frame with a latency of one frame. You must do the
   // following to have a chance to get the last frame of the video. 
   if ( !got_picture ) {
-      avcodec_decode_video( &vid_str_->codec,
+      avcodec_decode_video( codec,
                             frame_, &got_picture,
                             NULL, 0 );
+#if LIBAVFORMAT_BUILD <= 4623
       last_dts += AV_TIME_BASE * vid_str_->r_frame_rate_base / vid_str_->r_frame_rate;
+#else
+      last_dts += int64_t(vid_str_->time_base.den) * vid_str_->r_frame_rate.den 
+                  / vid_str_->time_base.num / vid_str_->r_frame_rate.num;
+#endif
   }
 
   // The cached image is out of date, whether we managed to get a new
@@ -396,28 +454,32 @@ vidl_ffmpeg_codec::advance() const
 bool
 vidl_ffmpeg_codec::seek( unsigned frame ) const
 {
-  int64_t half_frame = int64_t(AV_TIME_BASE) * vid_str_->r_frame_rate_base / vid_str_->r_frame_rate / 2;
-  int64_t req_timestamp = int64_t(frame)*AV_TIME_BASE * vid_str_->r_frame_rate_base / vid_str_->r_frame_rate + vid_str_->start_time;
+#if LIBAVFORMAT_BUILD <= 4623
+  int64_t frame_size = int64_t(vid_str_->frame_rate_base) * vid_str_->r_frame_rate_base 
+                       / vid_str_->frame_rate / vid_str_->r_frame_rate;
+  int64_t req_timestamp = int64_t(vid_str_->time_base.den) * frame * vid_str_->r_frame_rate.den 
+                       / vid_str_->time_base.num / vid_str_->r_frame_rate.num + vid_str_->start_time;
+#else
+  int64_t frame_size = int64_t(vid_str_->time_base.den) * vid_str_->r_frame_rate.den 
+                       / vid_str_->time_base.num / vid_str_->r_frame_rate.num;
+  int64_t req_timestamp = int64_t(vid_str_->time_base.den) * frame * vid_str_->r_frame_rate.den 
+                       / vid_str_->time_base.num / vid_str_->r_frame_rate.num + vid_str_->start_time;
+#endif
 
-  if ( req_timestamp > half_frame )
-    req_timestamp -= half_frame;
+  if ( req_timestamp > frame_size/2 )
+    req_timestamp -= frame_size/2;
   else
     req_timestamp = 0;
-  
-  // convert the timestamp to units of the stream.
-  int64_t str_req_timestamp = av_rescale(req_timestamp, 
-                                         vid_str_->time_base.den, 
-                                         AV_TIME_BASE * (int64_t)vid_str_->time_base.num);
                                          
   // newer releases of ffmpeg may require a 4th argument to av_seek_frame
 #if LIBAVFORMAT_BUILD <= 4616
-  int seek = av_seek_frame( fmt_cxt_, vid_index_, str_req_timestamp );
+  int seek = av_seek_frame( fmt_cxt_, vid_index_, req_timestamp );
 #else
-  int seek = av_seek_frame( fmt_cxt_, vid_index_, str_req_timestamp, 0 );
+  int seek = av_seek_frame( fmt_cxt_, vid_index_, req_timestamp, AVSEEK_FLAG_BACKWARD );
 #endif
+
   if ( seek < 0 )
     return false;
-
   // We got to a key frame. Forward until we get to the frame we want.
   while ( true )
   {
@@ -425,7 +487,7 @@ vidl_ffmpeg_codec::seek( unsigned frame ) const
       return false;
     }
     if ( last_dts >= req_timestamp ) {
-      if ( last_dts >= req_timestamp + 2*half_frame ) {
+      if ( last_dts >= req_timestamp + frame_size ) {
         vcl_cerr << "Warning: seek went into the future!\n";
         return false;
       }

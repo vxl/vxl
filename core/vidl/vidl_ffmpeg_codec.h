@@ -83,7 +83,7 @@ class vidl_ffmpeg_codec : public vidl_codec
   //  If frame_->data[0] is not NULL, then the frame corresponds to
   //  the codec state, so that codec.width and so on apply to the
   //  frame data.
-  AVFrame* frame_;
+  mutable AVFrame* frame_;
 
   //: The last successfully decoded frame.
   //
