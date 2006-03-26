@@ -186,9 +186,9 @@ void vgui_qt_adaptor::windowActivationChange (bool oldActive)
    vgui_event ev;
 
    if(!oldActive)
-    ev.type =3D vgui_FOCUSGAINED;
+    ev.type = vgui_FOCUSGAINED;
    else
-    ev.type =3D vgui_FOCUSLOST;
+    ev.type = vgui_FOCUSLOST;
    dispatch_to_tableau(ev);
 }
 
