@@ -18,6 +18,7 @@
 
 #include <vgui/vgui_matrix_state.h>
 #include <vgui/vgui_projection_inspector.h>
+#include <vgui/vgui_adaptor.h>
 
 vgui_rubberband_tableau::object_type vgui_rubberband_tableau::obj_type = none_enum;
 
@@ -479,6 +480,7 @@ bool vgui_rubberband_tableau::handle_linestrip(vgui_event const &e, float ix, fl
 
 bool vgui_rubberband_tableau::handle(vgui_event const &e)
 {
+  e.origin->make_current();
   float ix, iy;
   vgui_projection_inspector().window_to_image_coordinates(e.wx, e.wy, ix, iy);
 
