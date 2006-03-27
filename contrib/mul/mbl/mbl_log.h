@@ -57,7 +57,6 @@
 #include <vcl_memory.h>
 #include <vcl_string.h>
 #include <vcl_set.h>
-#include <vcl_set.h>
 #include <vcl_map.h>
 
 class mbl_logger_root;
@@ -74,7 +73,6 @@ class mbl_log_streambuf: public vcl_streambuf
   virtual vcl_streamsize xsputn(const char *ptr, vcl_streamsize count);
 };
 
-
 //: A null streambuf ignores all input.
 class mbl_log_null_streambuf: public vcl_streambuf
 {
@@ -85,8 +83,7 @@ class mbl_log_null_streambuf: public vcl_streambuf
 //: Base class for destinations of a logging event.
 class mbl_log_output_base
 {
-protected:
-public:
+ public:
   virtual ~mbl_log_output_base(){};
   //: Start a new log entry, with id info.
   virtual void start(int level, const char *srcfile, int srcline)=0;
@@ -97,7 +94,6 @@ public:
   //: Which logger id are we using.
   virtual const char *id()=0;
 };
-
 
 //: Outputs log messages to an existing stream (e.g. vcl_cerr).
 class mbl_log_output_stream: public mbl_log_output_base
@@ -111,7 +107,7 @@ class mbl_log_output_stream: public mbl_log_output_base
   // Start a new log entry. Pass id info in via append()
   void start();
 
-public:
+ public:
   mbl_log_output_stream(vcl_ostream& real_stream, const char *id);
   //: Start a new log entry, with id info.
   virtual void start(int level, const char *srcfile, int srcline);
@@ -135,7 +131,7 @@ class mbl_log_output_file: public mbl_log_output_base
   //; Start a new log entry. Pass id info in via append()
   void start();
 
-public:
+ public:
   mbl_log_output_file(const vcl_string &filename, const char *id);
   //: Start a new log entry, with id info.
   virtual void start(int level, const char *srcfile, int srcline);
@@ -180,7 +176,6 @@ class mbl_logger
   void mtstart(int level, const char * srcfile="", int srcline=0);
   void mtstop();
 
-
   //: Log priority levels.
   // Based on POSIX syslog API
   enum levels
@@ -193,6 +188,7 @@ class mbl_logger
 };
 
 #else
+
 //: Handles final output of a logging event.
 class mbl_log_output
 {
@@ -210,7 +206,7 @@ class mbl_log_output
   //: Wait for a call to mt_stop_entry() before finishing log entry.
   bool manual_termination_;
 
-public:
+ public:
   mbl_log_output():
     real_stream_(0), has_started_(false),
     next_level_(1000), manual_termination_(false) {}
@@ -268,7 +264,6 @@ class mbl_logger
   void mtstart(int level, const char * srcfile="", int srcline=0);
   void mtstop();
 
-
   //: Log priority levels.
   // Based on POSIX syslog API
   enum levels
@@ -284,7 +279,7 @@ class mbl_logger
 //: This class handles category lists.
 class mbl_log_categories
 {
-public:
+ public:
   struct cat_spec
   {
     int level;
@@ -306,12 +301,10 @@ public:
   const cat_spec& get(const vcl_string& category) const;
 
   void print(vcl_ostream& ss) const;
-  
-private:
+
+ private:
   vcl_map<vcl_string, cat_spec> cat_list_;
-
 };
-
 
 
 //: Singleton, keeps records of logging state.
@@ -328,9 +321,9 @@ class mbl_logger_root
 
   mbl_logger_root():
     null_stream_(&null_streambuf_) {}
-  
+
   vcl_map<vcl_string, vcl_ostream*> registered_streams_;
-public:
+ public:
 
   mbl_logger default_logger;
 
@@ -356,9 +349,7 @@ public:
   //: Get a registered stream by name.
   // \returns 0 if no such registered stream.
   vcl_ostream* get_registered_stream(const vcl_string &);
-
 };
-
 
 
 #define MBL_LOG(my_level, logger, message) \
