@@ -13,6 +13,7 @@
 #include "vidl2_v4l_params.h"
 #include "vidl2_pixel_format.h"
 #include "vidl2_frame.h"
+#include <vcl_cassert.h>
 
 //: Destructor
 vidl2_v4l_istream::~vidl2_v4l_istream()
@@ -27,7 +28,7 @@ bool vidl2_v4l_istream::open(const vcl_string &device_name)
     frame_number_ = 0;
 
     fd_ = ::open(device_name.c_str(), O_RDWR);
-    
+
     if (fd_==-1)
         perror("problem with v4l");
 
@@ -40,7 +41,7 @@ bool vidl2_v4l_istream::open(const vcl_string &device_name)
     vcl_cout << "channels = " << vc.channels << vcl_endl;
     vcl_cout << "maxwidth = " << vc.maxwidth << vcl_endl;
     vcl_cout << "maxheight = " << vc.maxheight << vcl_endl;
-    
+
     if (-1 == ioctl (fd_, VIDIOCGWIN, &vw)) {
         perror ("VIDIOCGWIN");
         return false;
@@ -62,7 +63,7 @@ bool vidl2_v4l_istream::open(const vcl_string &device_name)
     defaults_.pixel_format_ = vidl2_v4l_params::v4lpf_to_vidl2pf(vp.palette);
     if (defaults_.pixel_format_ ==  VIDL2_PIXEL_FORMAT_UNKNOWN)
         defaults_.pixel_format_ = VIDL2_PIXEL_FORMAT_YUV_420P;
-    
+
     if (-1 == ioctl (fd_, VIDIOCGMBUF, &vm)) {
         perror ("VIDIOCGMBUF");
         return false;
@@ -88,7 +89,7 @@ bool vidl2_v4l_istream::open(const vcl_string &device_name)
 //: return true if the stream is open for reading
 bool vidl2_v4l_istream::is_open() const
 {
-    return (fd_>0);
+    return fd_>0;
 }
 
 //: return true if the stream is in a valid state
@@ -104,8 +105,8 @@ void vidl2_v4l_istream::close()
     fd_ = -1;
 }
 
-//: set the parameters for this stream. If all the parameters are set
-//as requested return true, else return false
+//: set the parameters for this stream.
+// If all the parameters are set as requested, return true; else return false
 bool vidl2_v4l_istream::set_params(const vidl2_v4l_params &p)
 {
     bool success=true;
@@ -115,7 +116,7 @@ bool vidl2_v4l_istream::set_params(const vidl2_v4l_params &p)
     if (-1 == ioctl (fd_, VIDIOCSWIN, &vw)) {
         perror ("VIDIOCGWIN");
         return false;
-    }    
+    }
     if (-1 == ioctl (fd_, VIDIOCGWIN, &vw)) {
         perror ("VIDIOCGWIN");
         return false;
@@ -158,7 +159,7 @@ bool vidl2_v4l_istream::set_params(const vidl2_v4l_params &p)
         success = false;
         vcl_cerr << "vp.colour = " << vp.colour << vcl_endl;
         vcl_cerr << "p.colour = " << p.colour_ << vcl_endl;
-    } 
+    }
     if (vp.contrast != p.contrast_)
     {
         success = false;
@@ -170,7 +171,7 @@ bool vidl2_v4l_istream::set_params(const vidl2_v4l_params &p)
         success = false;
         vcl_cerr << "vp.whiteness = " << vp.whiteness << vcl_endl;
         vcl_cerr << "p.whiteness = " << p.whiteness_ << vcl_endl;
-    } 
+    }
     if (vp.depth != p.depth_)
     {
         success = false;
@@ -195,10 +196,10 @@ bool vidl2_v4l_istream::set_params(const vidl2_v4l_params &p)
     return success;
 }
 
-//: advance to the next frame (but don't acquire an image)? I'm quite
-//confused by this description - I don't even know what it means. I'm
-//using the vidl2_dc1394_istream as a model here which clearly
-//advances and acquires - contrary to the first sentence description
+//: advance to the next frame (but don't acquire an image)?
+// I'm quite confused by this description - I don't even know what it means.
+// I'm using the vidl2_dc1394_istream as a model here which clearly
+// advances and acquires - contrary to the first sentence description
 bool vidl2_v4l_istream::advance()
 {
     if (ioctl(fd_, VIDIOCMCAPTURE, &mm)<0) {
@@ -210,13 +211,13 @@ bool vidl2_v4l_istream::advance()
 
     // shouldn't have to loop here, but apparently we do. Something to
     // do with interrupts.
-    while(i < 0) {
+    while (i < 0) {
         i = ioctl(fd_, VIDIOCSYNC, &mm.frame);
-        if(i < 0 && errno == EINTR){
+        if (i < 0 && errno == EINTR){
             perror("VIDIOCSYNC problem");
             continue;
         }
-        if(i < 0) {
+        if (i < 0) {
             perror("VIDIOCSYNC");
             /* You may want to exit here, because something has gone
                pretty badly wrong... */
@@ -237,4 +238,4 @@ vidl2_frame_sptr vidl2_v4l_istream::read_frame()
     if (advance())
         return current_frame();
     return NULL;
-} 
+}
