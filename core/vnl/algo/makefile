@@ -73,6 +73,7 @@ SOURCES += vnl_chi_squared.cxx
 SOURCES += vnl_gaussian_kernel_1d.cxx
 MANPAGE_SOURCES += vnl_adjugate.txx
 MANPAGE_SOURCES += vnl_orthogonal_complement.txx
+MANPAGE_SOURCES += vnl_matrix_update.h
 
 # integral
 SOURCES += vnl_simpson_integral.cxx

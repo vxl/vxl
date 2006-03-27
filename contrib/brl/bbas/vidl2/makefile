@@ -31,6 +31,9 @@ SOURCES += vidl2_dshow_istream_params.cxx
 SOURCES += vidl2_dshow_live_istream.cxx
 SOURCES += vidl2_dshow_istream_params_esf.cxx
 
+SOURCES += vidl2_v4l_istream.cxx
+SOURCES += vidl2_v4l_params.cxx
+
 MANPAGE_SOURCES += vidl2_exception.h
 
 #######################################

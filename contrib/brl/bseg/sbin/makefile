@@ -4,6 +4,8 @@ include ${VXLROOT}/core/vgui/config.mk
 
 MINI_PROG_SOURCES += seg.cxx
 MINI_PROG_SOURCES += seg_vil.cxx
+MINI_PROG_SOURCES += negate.cxx
+MINI_PROG_SOURCES += vil_convert.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk
