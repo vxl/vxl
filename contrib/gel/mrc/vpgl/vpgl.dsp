@@ -99,18 +99,6 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-SOURCE=.\Templates/vgl_io_point_2d+double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vgl_io_point_3d+double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vnl_io_matrix_fixed+double.3.4-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vnl_io_matrix_fixed+double.4.4-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vpgl_affine_camera+double-.cxx
 # End Source File
 # Begin Source File

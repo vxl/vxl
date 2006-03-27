@@ -58,6 +58,12 @@ SOURCE=.\vidl2_pixel_iterator.cxx
 SOURCE=.\vidl2_dshow_istream_params_esf.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vidl2_v4l_istream.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_v4l_params.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil_smart_ptr+vidl2_frame-.cxx
 # End Source File
 # End Group
@@ -134,6 +140,12 @@ SOURCE=.\vidl2_exception.h
 # End Source File
 # Begin Source File
 SOURCE=.\vidl2_pixel_iterator.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_v4l_istream.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_v4l_params.h
 # End Source File
 # End Group
 # End Target

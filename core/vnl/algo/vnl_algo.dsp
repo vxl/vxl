@@ -446,6 +446,9 @@ SOURCE=.\vnl_simpson_integral.h
 # Begin Source File
 SOURCE=.\vnl_solve_qp.h
 # End Source File
+# Begin Source File
+SOURCE=.\vnl_matrix_update.h
+# End Source File
 # End Group
 # End Target
 # End Project

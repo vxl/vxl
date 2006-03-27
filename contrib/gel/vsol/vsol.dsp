@@ -99,9 +99,6 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "c;cxx"
 # Begin Source File
-SOURCE=.\Templates/vbl_bounding_box+double.3-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+vsol_box_2d-.cxx
 # End Source File
 # Begin Source File
@@ -280,6 +277,9 @@ SOURCE=.\Templates/vbl_smart_ptr+vsol_cylinder-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vsl_vector_io+vsol_cylinder_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_array_2d+vcl_vector+vcl_vector+vsol_point_3d_sptr--~-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vsol_box_2d.cxx

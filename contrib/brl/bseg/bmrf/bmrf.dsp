@@ -132,9 +132,6 @@ SOURCE=.\Templates/vbl_smart_ptr+bmrf_curvel_3d-.cxx
 SOURCE=.\Templates/vbl_io_smart_ptr+bmrf_curvel_3d-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vsl_map_io+unsigned.vnl_double_2-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vsl_vector_io+vcl_pair+double.bmrf_node_sptr--.cxx
 # End Source File
 # Begin Source File

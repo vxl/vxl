@@ -166,9 +166,12 @@ SOURCE=.\seg.cxx
 # Begin Source File
 SOURCE=.\seg_vil.cxx
 # End Source File
-# End Group
-# Begin Group "Header Files"
-# PROP Default_Filter "h;txx"
+# Begin Source File
+SOURCE=.\negate.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil_convert.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

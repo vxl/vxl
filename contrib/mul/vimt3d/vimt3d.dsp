@@ -99,9 +99,6 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-SOURCE=.\Templates/vil3d_sample_profile_trilin+int.double-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vimt3d_gaussian_pyramid_builder_3d+byte-.cxx
 # End Source File
 # Begin Source File

@@ -99,7 +99,7 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "c;cxx"
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+imp_line-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vifa_imp_line+double--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+vifa_bbox-.cxx
