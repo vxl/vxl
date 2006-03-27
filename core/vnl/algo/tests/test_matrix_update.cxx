@@ -1,4 +1,4 @@
-// This is core/vnl/algo/tests/test_solve_qp.cxx
+// This is core/vnl/algo/tests/test_matrix_update.cxx
 #include "test_util.h"
 #include <vcl_iostream.h>
 #include <testlib/testlib_test.h>
