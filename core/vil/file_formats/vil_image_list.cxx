@@ -30,7 +30,14 @@ vcl_vector<vil_image_resource_sptr> vil_image_list::resources()
   vcl_vector<vil_image_resource_sptr> temp;
   if(!this->vil_is_directory(directory_.c_str()))
     return temp;
-  intptr_t handle;
+  //This mess should go away soon.
+# if defined VCL_VC_6 || defined VCL_VC_5 || defined VCL_BORLAND_55 || defined __MINGW32__
+  typedef long handle_type;      // works with msvc6
+# else
+  typedef intptr_t handle_type;  // not found by msvc6
+#endif
+
+  handle_type handle;
   struct _finddata_t data;
   handle = _findfirst((directory_+"\\*").c_str(), &data);
   if(handle<0)
