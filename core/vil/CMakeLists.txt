@@ -74,6 +74,8 @@ SET( vil_sources ${vil_sources}
   vil_block_cache.cxx                   vil_block_cache.h
   vil_cached_image_resource.cxx         vil_cached_image_resource.h
   # file format readers/writers (see above for conditional ones)
+  file_formats/vil_image_list.cxx       file_formats/vil_image_list.h
+
   file_formats/vil_pnm.cxx              file_formats/vil_pnm.h
 
   file_formats/vil_bmp_file_header.cxx  file_formats/vil_bmp_file_header.h

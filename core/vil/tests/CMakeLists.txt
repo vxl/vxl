@@ -15,6 +15,7 @@ ADD_EXECUTABLE( vil_test_all
   test_save_load_image.cxx
   test_image_loader_robustness.cxx
   test_stream.cxx
+  test_image_list.cxx
 
   # image operations
   test_deep_copy_3_plane.cxx
@@ -73,6 +74,9 @@ ADD_TEST( vil_test_math_value_range         vil_test_all test_math_value_range)
 
 # Blocked images
 ADD_TEST( vil_test_blocked_image_resource   vil_test_all test_blocked_image_resource ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
+
+# Resources from image list
+ADD_TEST( vil_test_image_list  vil_test_all test_image_list )
 
 # To run timing tests
 #ADD_EXECUTABLE( vil_test_access_timings vil_test_access_timings.cxx)
