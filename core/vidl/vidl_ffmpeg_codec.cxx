@@ -38,7 +38,8 @@ vidl_ffmpeg_codec::initialize()
 }
 
 //-----------------------------------------------------------------------------
-//: Probe the file fname, open it as an AVI file. If it works, return true, false otherwise.
+//: Probe the file fname, open it as an AVI file.
+//  If it works, return true, false otherwise.
 
 bool vidl_ffmpeg_codec::probe(vcl_string const& fname)
 {
@@ -81,7 +82,9 @@ bool vidl_ffmpeg_codec::probe(vcl_string const& fname)
 #endif
   char buf[100];
   avcodec_string(buf, 100, enc, 0);
+#if DEBUG
   vcl_cout<< "ffmpeg codec: " << buf<<vcl_endl;
+#endif
   AVCodec* codec = avcodec_find_decoder(enc->codec_id);
   if ( !codec || avcodec_open( enc, codec ) < 0 ) {
     return false;
@@ -121,7 +124,8 @@ vidl_ffmpeg_codec::open(vcl_string const& fname, char mode )
 
   // Open the file
   int err;
-  if ( ( err = av_open_input_file( &fmt_cxt_, fname.c_str(), NULL, 0, NULL ) ) != 0 ) {
+  if ( ( err = av_open_input_file( &fmt_cxt_, fname.c_str(),
+                                   NULL, 0, NULL ) ) != 0 ) {
     return false;
   }
 
@@ -318,16 +322,20 @@ vidl_ffmpeg_codec::count_frames() const
 
   if( vid_str_ && vid_str_->duration != int64_t(AV_NOPTS_VALUE) ) {
 #if LIBAVFORMAT_BUILD <= 4623
-    unsigned cnt = unsigned( vid_str_->duration * vid_str_->r_frame_rate / vid_str_->r_frame_rate_base / AV_TIME_BASE );
+    unsigned cnt = unsigned( vid_str_->duration * vid_str_->r_frame_rate
+                             / vid_str_->r_frame_rate_base / AV_TIME_BASE );
 #else
-    unsigned cnt = unsigned( vid_str_->duration * vid_str_->r_frame_rate.num / vid_str_->r_frame_rate.den 
+    unsigned cnt = unsigned( vid_str_->duration * vid_str_->r_frame_rate.num
+                             / vid_str_->r_frame_rate.den 
                              * vid_str_->time_base.num / vid_str_->time_base.den );
 #endif
-    //int64_t req_timestamp = int64_t(frame)*AV_TIME_BASE * vid_str_->r_frame_rate_base / vid_str_->r_frame_rate + vid_str_->start_time;
+
+#if DEBUG
     vcl_cout << "estimated "<<cnt+1<<" frames"<<vcl_endl;
+#endif
     return cnt+1;
   }
-  
+
 #if LIBAVFORMAT_BUILD <= 4628
   AVCodecContext* enc = &fmt_cxt_->streams[vid_index_]->codec;
 #else
@@ -355,16 +363,17 @@ vidl_ffmpeg_codec::count_frames() const
     }
     av_free_packet( &pkt );
   }
-    
+
   // Count the last frame (if needed)
   avcodec_decode_video( enc, frame_, &got_picture,
                         NULL, 0 );
   if(got_picture)
     ++frame_count;
-    
 
-  
+#if DEBUG
   vcl_cout << "counted "<<frame_count<<" frames"<<vcl_endl;
+#endif
+
   // seek back to the start
 #if LIBAVFORMAT_BUILD <= 4616
   av_seek_frame( fmt_cxt_, vid_index_, 0);
@@ -385,7 +394,7 @@ vidl_ffmpeg_codec::advance() const
   if ( !frame_ ) {
     return false;
   }
-  
+
 #if LIBAVFORMAT_BUILD <= 4628
   AVCodecContext* codec = &fmt_cxt_->streams[vid_index_]->codec;
 #else
@@ -446,6 +455,7 @@ vidl_ffmpeg_codec::advance() const
   return got_picture != 0;
 }
 
+
 //: The frame numbers are zero-based, so the first frame of the video is frame 0.
 //
 //  \param frame Seek so that the next cur_frame() returns frame \arg frame.
@@ -455,22 +465,24 @@ bool
 vidl_ffmpeg_codec::seek( unsigned frame ) const
 {
 #if LIBAVFORMAT_BUILD <= 4623
-  int64_t frame_size = int64_t(vid_str_->frame_rate_base) * vid_str_->r_frame_rate_base 
-                       / vid_str_->frame_rate / vid_str_->r_frame_rate;
-  int64_t req_timestamp = int64_t(vid_str_->time_base.den) * frame * vid_str_->r_frame_rate.den 
-                       / vid_str_->time_base.num / vid_str_->r_frame_rate.num + vid_str_->start_time;
+  int64_t frame_size = int64_t(AV_TIME_BASE) * vid_str_->r_frame_rate_base
+                     / vid_str_->r_frame_rate;
+  int64_t req_timestamp = int64_t(frame)*AV_TIME_BASE * vid_str_->r_frame_rate_base
+                        / vid_str_->r_frame_rate + vid_str_->start_time;
 #else
-  int64_t frame_size = int64_t(vid_str_->time_base.den) * vid_str_->r_frame_rate.den 
+  int64_t frame_size = int64_t(vid_str_->time_base.den) * vid_str_->r_frame_rate.den
                        / vid_str_->time_base.num / vid_str_->r_frame_rate.num;
-  int64_t req_timestamp = int64_t(vid_str_->time_base.den) * frame * vid_str_->r_frame_rate.den 
-                       / vid_str_->time_base.num / vid_str_->r_frame_rate.num + vid_str_->start_time;
+  int64_t req_timestamp = int64_t(vid_str_->time_base.den) * frame
+                          * vid_str_->r_frame_rate.den
+                          / vid_str_->time_base.num / vid_str_->r_frame_rate.num
+                          + vid_str_->start_time;
 #endif
 
   if ( req_timestamp > frame_size/2 )
     req_timestamp -= frame_size/2;
   else
     req_timestamp = 0;
-                                         
+
   // newer releases of ffmpeg may require a 4th argument to av_seek_frame
 #if LIBAVFORMAT_BUILD <= 4616
   int seek = av_seek_frame( fmt_cxt_, vid_index_, req_timestamp );
