@@ -79,6 +79,7 @@ int main()
       vcl_size_t too_much=0;
       too_much -= 1000;
       char * p = new char[too_much];
+      p[0] = '\0';
     }
     catch (const vcl_bad_alloc &)
     {
@@ -86,11 +87,10 @@ int main()
     }
     TEST("Exception caught", caught_exception, true);
     TEST("Core dump file exists", vul_file_exists(filename), true);
-    TEST("Core dump file is sensible size", vul_file_size(filename) > 100, true);
+    TEST("Core dump file is sensible size", vul_file_size(filename)>100, true);
   }
 #endif
 
   return testlib_test_summary();
-
 }
 
