@@ -28,7 +28,7 @@ bool vil_image_list::vil_is_directory(char const* fn)
 vcl_vector<vil_image_resource_sptr> vil_image_list::resources()
 {
   vcl_vector<vil_image_resource_sptr> temp;
-  if(!this->vil_is_directory(directory_.c_str()))
+  if (!this->vil_is_directory(directory_.c_str()))
     return temp;
   //This mess should go away soon.
 # if defined VCL_VC_6 || defined VCL_VC_5 || defined VCL_BORLAND_55 || defined __MINGW32__
@@ -40,32 +40,32 @@ vcl_vector<vil_image_resource_sptr> vil_image_list::resources()
   handle_type handle;
   struct _finddata_t data;
   handle = _findfirst((directory_+"\\*").c_str(), &data);
-  if(handle<0)
+  if (handle<0)
     return temp;
   vcl_string s = data.name;
   vcl_string filename = directory_+ "\\" + s;
   vil_image_resource_sptr resc;
-  if(s != "."&&s!="..")
+  if (s != "."&&s!="..")
+  {
+    resc = vil_load_image_resource(filename.c_str());
+    if (resc)
+      temp.push_back(resc);
+  }
+  while ( true )
+  {
+    if (_findnext(handle, &data) != 0) {
+    _findclose(handle);
+      return temp;
+    }
+    s = data.name;
+    if (s != "."&&s!="..")
     {
-       resc = vil_load_image_resource(filename.c_str());
-      if(resc)
+      filename = directory_+ "\\" + s;
+      resc = vil_load_image_resource(filename.c_str());
+      if (resc)
         temp.push_back(resc);
     }
-  while ( true )
-    {
-      if (_findnext(handle, &data) != 0) {
-      _findclose(handle);
-        return temp;
-      }
-      s = data.name;
-      if(s != "."&&s!="..")
-        {
-          filename = directory_+ "\\" + s;
-          resc = vil_load_image_resource(filename.c_str());
-          if(resc)
-            temp.push_back(resc);
-        }
-    }
+  }
   return temp;
 }
 #else // !defined(VCL_WIN32) || defined(__CYGWIN__)
@@ -74,45 +74,45 @@ vcl_vector<vil_image_resource_sptr> vil_image_list::resources()
 vcl_vector<vil_image_resource_sptr> vil_image_list::resources()
 {
   vcl_vector<vil_image_resource_sptr> temp;
-  if(!this->vil_is_directory(directory_.c_str()))
+  if (!this->vil_is_directory(directory_.c_str()))
     return temp;
   DIR* dir_handle = opendir(directory_.c_str());
   dirent* de;
   de = readdir(dir_handle);
-  if(de==0)
+  if (de==0)
     return temp;
   vcl_string s = de->d_name;
-  vcl_string filename = directory_+ "\/" + s;
+  vcl_string filename = directory_+ "/" + s;
   vil_image_resource_sptr resc;
-  if(s != "."&&s!="..")
+  if (s != "."&&s!="..")
+  {
+#ifdef IL_DEBUG
+    vcl_cout << "Found File(0) " << filename << '\n';
+#endif
+    resc = vil_load_image_resource(filename.c_str());
+    if (resc)
+      temp.push_back(resc);
+  }
+  while ( true )
+  {
+    de = readdir(dir_handle);
+    if (de == 0){
+      closedir(dir_handle);
+      return temp;
+    }
+    s = de->d_name;
+    filename = directory_+ "/" + s;
+    if (s != "."&&s!="..")
     {
 #ifdef IL_DEBUG
-      vcl_cout << "Found File(0) " << filename << '\n';
+      vcl_cout << "Found File " << filename << '\n';
 #endif
       resc = vil_load_image_resource(filename.c_str());
-      if(resc)
+      if (resc)
         temp.push_back(resc);
     }
-  while ( true )
-    {
-      de = readdir(dir_handle);
-      if(de == 0){
-        closedir(dir_handle);
-        return temp;
-      }
-      s = de->d_name;
-      filename = directory_+ "\/" + s;
-      if(s != "."&&s!="..")
-        {
-#ifdef IL_DEBUG
-          vcl_cout << "Found File " << filename << '\n';
-#endif
-          resc = vil_load_image_resource(filename.c_str());
-          if(resc)
-            temp.push_back(resc);
-        }
-    }
+  }
   return temp;
 }
-#endif // !defined(VCL_WIN32) || defined(__CYGWIN__)
 
+#endif // !defined(VCL_WIN32) || defined(__CYGWIN__)
