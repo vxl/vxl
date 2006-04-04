@@ -12,6 +12,7 @@
 //
 // \verbatim
 //  Modifications
+//   04-04-2006 K. Kang: a few setters are added
 //   2004/10/07 Gamze D. Tunali  Created
 // \endverbatim
 //*****************************************************************************
@@ -26,7 +27,7 @@ class vsol_cylinder : public  vsol_spatial_object_3d
   vgl_cylinder<double> cyl_;
 
  public:
-  vsol_cylinder(void) {}
+  vsol_cylinder() {}
 
   vsol_cylinder(vgl_point_3d<double> centre, double radius, double length)
   : cyl_(centre, radius, length) {}
@@ -45,8 +46,12 @@ class vsol_cylinder : public  vsol_spatial_object_3d
   vgl_vector_3d<double> orientation() { return cyl_.orientation(); }
 
   //: setters
-  void set_orientation(vgl_vector_3d<double> orient) {cyl_.set_orientation(orient); }
+  void set_orientation(vgl_vector_3d<double> orient) {cyl_.set_orientation(orient);
+  }
+  
+  void set_center(vgl_point_3d<double> const & c) {cyl_.set_center(c);}
 
+  void set_length(double l) {cyl_.set_length(l);}
   // ==== Binary IO methods ======
 
   //: Binary save self to stream.
