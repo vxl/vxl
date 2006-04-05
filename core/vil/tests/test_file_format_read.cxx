@@ -521,7 +521,7 @@ test_file_format_read_main( int argc, char* argv[] )
   vcl_cout << "NITF 2.1 [nitf] (JPEG 2000 compressed)\n";
   testlib_test_begin( "p0_12 (3x5x1 x 8Bit)" );
   testlib_test_perform(CheckFile(CompareGrey<vxl_byte>(), "p0_12_true.txt", "p0_12a.ntf" ) );
-#endif HAS_J2K
+#endif //HAS_J2K
 
   vcl_cout << "Sun raster [ras]\n";
   testlib_test_begin( "  8-bit grey, no colourmap" );
