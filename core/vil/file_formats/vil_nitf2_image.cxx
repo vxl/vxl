@@ -17,6 +17,10 @@
 #include "vil_nitf2_data_mask_table.h"
 #include "vil_nitf2_des.h"
 
+#if HAS_J2K
+#include "vil_j2k_image.h"
+#endif //HAS_J2K
+
 #ifdef VIL_USE_FSTREAM64
 #include <vil/vil_stream_fstream64.h>
 #endif //VIL_USE_FSTREAM64
@@ -453,6 +457,13 @@ vil_image_view_base_sptr vil_nitf2_image::get_copy_view_decimated_j2k(
     return 0;
   }
   assert( is_jpeg_2000_compressed() );
+  if( ! s_decode_jpeg_2000 ) {
+#if HAS_J2K
+    s_decode_jpeg_2000 = vil_j2k_image::s_decode_jpeg_2000;
+#else //HAS_J2K 
+    return 0;
+#endif //HAS_J2K
+  }
 
   //it is my understanding from BIFF profile BPJ2k01.00 that JPEG compressed files
   //will only have on image block (ie. it will be clocked within the jp2 codestream),
@@ -472,10 +483,10 @@ vil_image_view_base_sptr vil_nitf2_image::get_copy_view(unsigned start_i, unsign
   vcl_string compression_type;
   if (!current_image_header()->get_property("IC", compression_type)) return 0;
 
-  //vcl_right now we only plan to support uncompressed and JPEG2000
+  //right now we only plan to support uncompressed and JPEG2000
   if (compression_type == "NC" || compression_type == "NM") {
     return get_copy_view_uncompressed(start_i, num_i, start_j, num_j);
-  } else if (  s_decode_jpeg_2000 && is_jpeg_2000_compressed() ) {
+  } else if ( is_jpeg_2000_compressed() ) {
     return get_copy_view_decimated_j2k( start_i, num_i, start_j, num_j, 1.0, 1.0 );
   } else {
     return 0;

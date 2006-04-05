@@ -65,6 +65,11 @@ vil_file_format::~vil_file_format()
 #include <vil/file_formats/vil_nitf2_image.h>
 #endif
 
+#if HAS_J2K
+#include <vil/file_formats/vil_j2k_image.h>
+#endif
+
+
 //: Local class to hold file format list
 // Clears list on deletion.
 struct vil_file_format_storage
@@ -117,6 +122,10 @@ struct vil_file_format_storage
 
 #if HAS_NITF
   l[c++] = new vil_nitf2_file_format;
+#endif
+
+#if HAS_J2K
+  l[c++] = new vil_j2k_file_format;
 #endif
 
     l[c++] = 0;

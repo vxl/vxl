@@ -28,6 +28,18 @@ ELSE(JPEG_FOUND)
   SET( HAS_JPEG 0 )
 ENDIF(JPEG_FOUND)
 
+################################
+# JPEG 2000
+################################
+INCLUDE( ${MODULE_PATH}/NewCMake/FindECW.cmake )
+IF(ECW_FOUND)
+  SET( vil_sources ${vil_sources}
+     file_formats/vil_j2k_image.h           file_formats/vil_j2k_image.cxx
+     file_formats/NCSJPCVilIOStream.h       file_formats/NCSJPCVilIOStream.cxx )
+  INCLUDE_DIRECTORIES(${ECW_INCLUDE_DIR})
+  ADD_DEFINITIONS(-DHAS_J2K)
+ENDIF(ECW_FOUND)
+
 INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
 IF(TIFF_FOUND)
   INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
@@ -246,6 +258,10 @@ INSTALL_NOBASE_HEADER_FILES(/include/core/vil
   ${vil_sources}
   ${vil_network_sources}
 )
+
+IF(ECW_FOUND)
+  TARGET_LINK_LIBRARIES( vil ${ECW_LIBRARIES} )
+ENDIF(ECW_FOUND)
 
 IF( BUILD_EXAMPLES )
   SUBDIRS( examples )

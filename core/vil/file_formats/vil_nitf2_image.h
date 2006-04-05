@@ -50,14 +50,8 @@ class vil_nitf2_file_format : public vil_file_format
 //  - Writing is unsupported at this time
 //  - graphic segments are not read in
 //  - text segments are not read in
-//  - currently all TREs are read in as character arrays (ie. they are not parsed
-//    and validated).  This should be fixed soon.
-//  - TREs that are located in the overflow section of the file are not read in at all.
 //  - The class was designed to handle images with PVTYPE=C (complex), but images of
 //    this type are completely untested.
-//  - The class does not have built-in support for JPEG2000 compressed NITF files
-//    If you set s_decode_jpeg_2000 to a function that can decompress a JPEG2000
-//    code stream, then this class will recognize it and use it whenever appropriate
 //
 // Things that do work:
 //  - Reading uncompressed and image data (ints, shorts, 8 bit int, floats etc)
@@ -67,6 +61,11 @@ class vil_nitf2_file_format : public vil_file_format
 //  - Images with LUTS will read in correctly, but you will need to apply the LUT
 //    yourself.  You can access the lut information for p-th band of the current image by calling
 //    current_image_header()->get_lut_info(p, out_n_luts, out_ne_lut, out_lut_data)
+//  - The class does not have built-in support for JPEG2000 compressed NITF files
+//    Using cmake though, you can configure VXL to link against Er Mapper's freely
+//    available ECW JPEG2000 SDK (http://ermapper.com/downloads/sdks.aspx#16).  If you
+//    do that, then this class will automatically be able to read NITF files that are
+//    JPEG 2000 compressed.
 //
 class vil_nitf2_image : public vil_blocked_image_resource
 {

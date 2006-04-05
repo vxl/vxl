@@ -513,6 +513,16 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_begin( "  1-bit bool (NSIF w/ LUT to parse)" );
   testlib_test_perform(CheckFile(CompareGrey<bool>(), "ff_nitf_1bit_lut_true.txt", "ff_nitf_1bit_lut.nsif" ) );
 
+#if HAS_J2K
+  vcl_cout << "JPEG 2000 [j2k,jpc]\n";
+  testlib_test_begin( "p0_12 (3x5x1 x 8Bit)" );
+  testlib_test_perform(CheckFile(CompareGrey<vxl_byte>(), "p0_12_true.txt", "p0_12.j2k" ) );
+
+  vcl_cout << "NITF 2.1 [nitf] (JPEG 2000 compressed)\n";
+  testlib_test_begin( "p0_12 (3x5x1 x 8Bit)" );
+  testlib_test_perform(CheckFile(CompareGrey<vxl_byte>(), "p0_12_true.txt", "p0_12a.ntf" ) );
+#endif HAS_J2K
+
   vcl_cout << "Sun raster [ras]\n";
   testlib_test_begin( "  8-bit grey, no colourmap" );
   testlib_test_perform(CheckFile(CompareGrey<vxl_byte>(), "ff_grey8bit_true.txt", "ff_grey8bit_nocol.ras" ) );
