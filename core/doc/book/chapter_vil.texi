@@ -897,3 +897,37 @@ if(!vil_copy_deep(facr, bimgr))
 Currently, the @code{tiff} file format and The National
 Image Transmission Format (@code{nitf}) image format provide a
 @code{vil_blocked_image_resource}, however the @code{nitf} format does not yet support writing.
+
+@section JPEG 2000 Support
+VIL can be configured to support the reading of JPEG 2000 image files as well as NITF 2.1 images that are JPEG 2000 compressed.  This chapter describes how to set up this capability.
+
+@subsection External Dependency
+The decompression is actually handled by a freely available third party library named ECW JPEG 2000 SDK.  This SDK was developed by ER Mapper (www.ermapper.com) and, at present, has been made available under three different licensing schemes:
+
+@itemize @bullet
+@item ECW SDK Free Use License Agreement: This license is free to use even for commercial applications with basically one restriction: the compression code will only support streams that are 500 MB or less.  This does not affect VIL at all because currently VIL only supports reading (not writing) of JPEG 2000 compressed files.
+@item ECW SDK Public Use License Agreement: This is their "GPL-Style" license which has no limitations on read or write.
+@item ECW SDK Commercial Use License Agreement: This license is for commercial applications that require the ability to write JPEG 2000 streams that are greater than 500 MB.
+@end itemize
+
+The VXL wrappers around this library were developed using version 3.1 Beta of this SDK and has also been tested using version 3.3 RC2.  This was the latest version available as of 4/4/2006.  You can download the ECW JPEG 2000 SDK or obtain more information about the three licensing schemes from ER Mapper's website (www.ermapper.com).  
+
+Currently Er Mapper releases the ECW JPEG 2000 SDK with a variety of build systems.  As described in the next section, VXL has been configured to use the most common one which yields separate NCSEcw and NCSUtil libraries.  Most of the testing has taken place using the dynamically linked versions of these libraries, but the static versions should work as well.
+
+@subsection Configuration Requirements
+Once you have installed/built ECW JPEG 2000 SDK, you must configure VXL so that it knows where to find what it needs.  There are three relevant CMAKE variables that you must specify (it is unlikely that CMAKE will find them by itself):
+
+@itemize @bullet
+@item	ECW_INCLUDE_DIR: This must point to the include directory of your ECW SDK.
+@item	ECW_ncsecw_LIBRARY: This must point to the NCSEcw library.
+@item	ECW_ncsutil_LIBRARY: This must point to the NCSEcw library.
+@end itemize
+
+You can then have CMAKE create your build files - CMAKE will automatically add the appropriate source files and pre-processor definitions.  Once you've built VIL, you can test this JPEG 2000 decompression capability using the 'test_file_format_read' test function available in the vil_test_all project.  If you've set everything up properly, this test function will run two additional tests:
+
+@itemize @bullet
+@item JPEG 2000 [j2k,jpc]
+@item NITF 2.1 [nitf] (JPEG 2000 compressed)
+@end itemize
+
+If these tests pass, then it is relatively safe to assume that you've set things up correctly.  Note that, if you've used the dynamically linked version of the ECW JPEG 2000 SDK, then you'll need to make sure that your PATH environment variable contains the /lib directory that contains NCSEcw and NCSUtil when you run this test.
