@@ -48,3 +48,14 @@ void vil_nitf2::cleanup_static_members()
   }
   vil_nitf2_classification::s_field_definitions.clear();
 }
+
+class vil_nitf2_auto_cleanup
+{
+public:
+   ~vil_nitf2_auto_cleanup()
+   {
+     vil_nitf2::cleanup_static_members();
+   }
+};
+
+static vil_nitf2_auto_cleanup cleanup_object;

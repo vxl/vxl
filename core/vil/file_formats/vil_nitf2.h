@@ -46,7 +46,8 @@ class vil_nitf2
   // Logging level for all vil_nitf classes. This could be generalized to an
   // array, if different subsets of classes want their own logging levels.
   static enum_log_level s_log_level;
-
+private:
+  friend class vil_nitf2_auto_cleanup;
   /**
     * Call this function to flush all of the nitf2 classes statically
     * allocated memory.  Usually, you'd want to do this just before
