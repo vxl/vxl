@@ -1506,28 +1506,33 @@ Several new features have been included in the construction of this window:
 The following is a summary of the tableau defined in @code{vgui}.
 @multitable @columnfractions 0.33 0.67
 
-@item @code{active_tableau} @tab This tableau (or rather a tableau derived from
+@item @code{active_tableau}
+@tab This tableau (or rather a tableau derived from
 it) can appear visible or invisible, and active or inactive by calling
 @code{toggle_active} and @code{toggle_visible}.
 
 @item @code{blackbox_tableau} @tab A tableau for event record and playback.
 
-@item @code{blender_tableau} @tab To use this tableau make a
+@item @code{blender_tableau}
+@tab To use this tableau make a
 @code{vgui_image_tableau} containing one of the images to blend and a
 @code{vgui_blender_tableau} containing the other. Put them both in a
 @code{vgui_composite_tableau}.  Set alpha to be less than one to see the blended image.
 
-@item @code{clear_tableau} @tab A tableau that performs OpenGL clearing upon
+@item @code{clear_tableau}
+@tab A tableau that performs OpenGL clearing upon
 receipt of a @code{vgui_DRAW} event. It has no child tableau.
 
-@item @code{composite_tableau} @tab The @code{vgui_composite_tableau} class can
+@item @code{composite_tableau}
+@tab The @code{vgui_composite_tableau} class can
 have any number of children, indexed from 0 upwards.  The draw action of
 @code{vgui_composite_tableau} is to draw each of its children, in order, into
 the current context.  Events reaching the @code{vgui_composite_tableau} are
 passed on to each child in turn, till it is handled, so that child 0, the first
 added, is the "top" tableau.
 
-@item @code{deck_tableau} @tab For holding an ordered collection of child
+@item @code{deck_tableau}
+@tab For holding an ordered collection of child
 tableaux, only one of which is passed all events that the @code{vgui_deck_tableau}
 receives. The effect is a flick-book of tableaux where the currently active
 tableau can be changed using PageUp and PageDown
@@ -1538,56 +1543,72 @@ tableau can be changed using PageUp and PageDown
 @item @code{displaylist3D_tableau}
 @tab Display of three-dimensional geometric objects - a builder tableau usually sub-classed.
 
-@item @code{drag_tableau} @tab A drag event occurs when the user moves the mouse
+@item @code{drag_tableau}
+@tab A drag event occurs when the user moves the mouse
 with one of the mouse buttons pressed down.  In @code{vgui} there is no
 @code{vgui_DRAG} event (there is only @code{vgui_MOTION} for when the mouse
 is moving).  So if you want to capture drag events you may find this tableau handy.
 
-@item @code{easy2D_tableau} @tab Easy interface for displaying two-dimensional
+@item @code{easy2D_tableau}
+@tab Easy interface for displaying two-dimensional
 geometric objects (see @code{vgui_soview2D}) such as lines, points, circles,
 etc. can be added using add, or @code{add_point}, @code{add_line}, @code{add_circle}, etc.
 
-@item @code{easy3D_tableau} @tab Easy interface for displaying three-dimensional
+@item @code{easy3D_tableau}
+@tab Easy interface for displaying three-dimensional
 objects (see vgui_soview3D) can be added using add, or @code{add_point}, @code{add_line}, etc.
 
-@item @code{enhance_tableau} @tab Magnify/display another tableau in a region
+@item @code{enhance_tableau}
+@tab Magnify/display another tableau in a region
 around the mouse pointer. Useful for a roaming image-processing sub-window.
 
-@item @code{function_tableau} @tab Allows a user to insert custom functions that
+@item @code{function_tableau}
+@tab Allows a user to insert custom functions that
 are called when events such as draw, mouse up, motion .. etc occur.
 
-@item @code{grid_tableau} @tab A tableau that renders its child tableaux as a rectangular grid.
+@item @code{grid_tableau}
+@tab A tableau that renders its child tableaux as a rectangular grid.
 
-@item @code{image_tableau} @tab A tableau that renders the given image using an @code{image_renderer}.
+@item @code{image_tableau}
+@tab A tableau that renders the given image using an @code{image_renderer}.
 
-@item @code{listmanager2D_tableau} @tab A tableau that manages a set of @code{vgui_displaylist2D_tableau} children
+@item @code{listmanager2D_tableau}
+@tab A tableau that manages a set of @code{vgui_displaylist2D_tableau} children
 
-@item @code{loader_tableau} @tab A tableau which (optionally) loads given values
+@item @code{loader_tableau}
+@tab A tableau which (optionally) loads given values
 for the projection and modelview matrices before passing control to its child.
 This is typically used to initialize GL before rendering a scene.
 
-@item @code{poly_tableau} @tab A tableau which renders its children in
+@item @code{poly_tableau}
+@tab A tableau which renders its children in
 sub-rectangles of its viewport. The @code{grid_tableau} is a sub-class
 of @code{poly_tableau}.
 
-@item @code{quit_tableau} @tab A tableau which quits the application on receiving @samp{q} or ESC.
+@item @code{quit_tableau}
+@tab A tableau which quits the application on receiving @samp{q} or ESC.
 
-@item @code{roi_tableau} @tab A tableau which makes an ROI of an image act like a whole image.
+@item @code{roi_tableau}
+@tab A tableau which makes an ROI of an image act like a whole image.
 
-@item @code{rubberband_tableau} @tab A tableau for interactive drawing of lines, circles, boxes, etc.
+@item @code{rubberband_tableau}
+@tab A tableau for interactive drawing of lines, circles, boxes, etc.
 
-@item @code{satellite_tableau} @tab Turns a non-tableau into a multi-tableau,
+@item @code{satellite_tableau}
+@tab Turns a non-tableau into a multi-tableau,
 or puts one tableau into two parts of the hierarchy simultaneously.
 Example: We are displaying two images, each in its own zoomer and we'd like to
 have a tableau which takes mouse events from one image and draws a line on the
 other; introduces a "crossover" in the tree which is difficult to handle without
 @code{vgui_satellite_tableau}.
 
-@item @code{shell_tableau} @tab A shell tableau is a handy collection of things
+@item @code{shell_tableau}
+@tab A shell tableau is a handy collection of things
 one often wants at the very top of one's tableau hierarchy. It is essentially
 an acetate with N utility tableaux at the bottom.
 
-@item @code{text_tableau} @tab A tableau for rendering text.
+@item @code{text_tableau}
+@tab A tableau for rendering text.
 Each piece of text is associated with an integer handle through which it can be
 retrieved, moved about, changed or removed. This tableau will not display any
 text unless you have compiled with GLUT.
