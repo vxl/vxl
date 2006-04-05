@@ -297,6 +297,7 @@ test_blocked_image_resource_main( int argc, char* argv[] )
     vcl_cout << image_file << '\n';
   }
   test_blocked_image_resource();
+  vil_nitf2::cleanup_static_members();
   return 0;
 }
 
