@@ -18,7 +18,7 @@ static void test_world_bounding_box()
 }
 
 
-static test_centre_image_at_origin()
+static void test_centre_image_at_origin()
 {
   vimt_image_2d_of<int> image(10, 10, 1);
   vgl_point_2d<double> orig1 = image.world2im().origin();
