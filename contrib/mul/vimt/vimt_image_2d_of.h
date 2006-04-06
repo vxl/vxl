@@ -29,14 +29,15 @@ public:
   vimt_image_2d_of() {}
 
 
-  //: Construct an image of size (ni, nj, np) with optional world_to_image transform w2i.
+  //: Construct an image of size (ni, nj, np) with optional world_to_image transform.
   vimt_image_2d_of(unsigned ni, unsigned nj, unsigned np=1,
                    const vimt_transform_2d& w2i=vimt_transform_2d())
     : vimt_image_2d(w2i), image_(ni, nj, np) {}
 
 
-  //: Construct from a view and a world-to-image transform (takes copies of both)
-  vimt_image_2d_of(const vil_image_view<T>& view, const vimt_transform_2d& w2i)
+  //: Construct from a view and optional world-to-image transform (takes copies of both).
+  vimt_image_2d_of(const vil_image_view<T>& view, 
+                   const vimt_transform_2d& w2i=vimt_transform_2d())
     : vimt_image_2d(w2i), image_(view) {}
 
   
