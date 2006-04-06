@@ -38,13 +38,22 @@ void vimt_image_2d::world_bounds(vcl_vector<double>& b_lo,
 }
 
 
-//Related Functions
-//: Return bounding box containing image in world co-ords as a box
+// Related Functions
+
+// Return bounding box containing image in world co-ords as a box
 vgl_box_2d<double> world_bounding_box(const vimt_image_2d& img) 
 {
-          
-    vcl_vector<double> b_lo(2,0.0);
-    vcl_vector<double> b_hi(2,0.0);
-    img.world_bounds(b_lo,b_hi);      
-    return vgl_box_2d<double>(b_lo[0],b_hi[0],b_lo[1],b_hi[1]);
+  vcl_vector<double> b_lo(2,0.0);
+  vcl_vector<double> b_hi(2,0.0);
+  img.world_bounds(b_lo,b_hi);      
+  return vgl_box_2d<double>(b_lo[0],b_hi[0],b_lo[1],b_hi[1]);
+}
+
+// Translate the image such that the image centre is at the origin of the world coordinate system.
+void vimt_centre_image_at_origin(vimt_image_2d& image)
+{
+  vgl_box_2d<double> bbox = world_bounding_box(image);
+  vgl_point_2d<double> c = bbox.centroid();
+  vimt_transform_2d& w2i = image.world2im();
+  w2i.set_origin(c);
 }

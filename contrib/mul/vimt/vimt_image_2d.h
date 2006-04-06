@@ -63,9 +63,15 @@ class vimt_image_2d : public vimt_image
 
 
 //: Related Functions
-// Return bounding box containing input image in world co-ords, but more conveniently as a box
+
+//: Return bounding box containing input image in world co-ords, but more conveniently as a box
 // This may be more convenient than the similar class method in generic vector form,
 // as the latter is for a general number of dimensions
 vgl_box_2d<double> world_bounding_box(const vimt_image_2d& img);
+
+
+//: Translate the image such that the image centre is at the origin of the world coordinate system.
+void vimt_centre_image_at_origin(vimt_image_2d& image);
+
 
 #endif // vimt_image_2d_h_
