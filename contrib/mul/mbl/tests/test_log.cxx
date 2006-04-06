@@ -12,22 +12,18 @@ void test_log()
            << "*****************\n";
   vcl_ostringstream output;
 
-#if 0 // Use new logger internals
 
   {
     vcl_ofstream cfg_file("mbl_log.properties");
     cfg_file << 
-      "root: { level: INFO registered_stream_output: test }\n";
+      "root: { level: INFO stream_output: test }\n" <<
+      "obj3: { level: INFO stream_output: cout }\n";
   }
-  mbl_logger::root().register_stream("test", &output);
+  vcl_map<vcl_string, vcl_ostream*> registered_streams;
+  registered_streams["test"] = &output;
 
-  mbl_logger::root().load_log_config_file();
+  mbl_logger::root().load_log_config_file(registered_streams);
   mbl_logger::root().categories().print(vcl_cout);
-
-#else
-  mbl_log_output log_output(&output, "");
-  mbl_logger::root().default_logger.set(mbl_logger::INFO, log_output);
-#endif
 
   mbl_logger current("wibble1");
 
@@ -36,6 +32,15 @@ void test_log()
 
   MBL_LOG( WARN, current, "Also this number " << 54 <<
     " and" << vcl_endl << "multiline message");
+// Manual expansion of MBL_LOG macro
+//  if (current.level() >= mbl_logger:: WARN)
+//  {
+//    current.mtstart(mbl_logger:: WARN, __FILE__, __LINE__);
+//    current.mtlog() << "Also this number " << 54 <<
+//    " and" << vcl_endl << "multiline message" << vcl_endl;
+//    current.mtstop();
+//  }
+
   current.log(mbl_logger::DEBUG) << "But not this " << vcl_endl;
 
   vcl_cout << "LOG OUTPUT:\n\""<<output.str()<<'\"' <<vcl_endl;
@@ -43,6 +48,11 @@ void test_log()
   TEST("Log output is as expected", output.str(),
        "INFO: wibble1 Output this whatever\n"
        "WARN: wibble1 Also this number 54 and\nmultiline message\n");
+
+
+  mbl_logger obj3("obj3");
+  vcl_cout << "Print some random stuff with no flush\n";
+  MBL_LOG(WARN, obj3, "and check that this message doesn't preceed the direct output to cout");
 
   vcl_cout << "\n\n";
 

@@ -16,10 +16,6 @@
 // although without all of the sophistication. (We have not copied any
 // code from log4j (or other logging libraries) - just the ideas.)
 //
-// This code hasn't been finished yet and will likely be subject to
-// significant API changes.
-// TODO: Categories, Passing more info to output, output format selection, config file.
-//
 // To send a message to the log you need to do two things - create a logger object, and
 // send a message to it.
 // By creating a logger, you identify a category of logging events. You should create
@@ -33,7 +29,7 @@
 // MBL_LOG(WARN, my_log, "Infinite loop: Time wasted so far " << time() );
 // \endcode
 // The system will have been setup to assign a log level to a particular category.
-// The log levels are EMERG < ALERT < CRIT < ERR < WARN < NOTICE< INFO < DEBUG. The
+// The log levels are EMERG < ALERT < CRIT < ERR < WARN < NOTICE < INFO < DEBUG. The
 // above log message will be sent if the level for category "imorphics.easy_stuff.does_halt"
 // is set to WARN or higher.
 // You can avoid using macros by calling the logger directly
@@ -50,12 +46,14 @@
 //   my_log.log(mbl_logger::WARN) << "Infinite loop: Time wasted so far " << time() << vcl_endl;
 // \endcode
 // Of course, you should just use MBL_LOG which handles this for you. Additionally
-// MBL_LOG sorts out termination of the log message without using vcl_endl;
+// MBL_LOG sorts out termination of the log message without using vcl_endl, allowing you to send
+// multi-line messages in a single log output.
 
 #include <vcl_fstream.h>
 #include <vcl_streambuf.h>
 #include <vcl_memory.h>
 #include <vcl_string.h>
+#include <vcl_ostream.h>
 #include <vcl_set.h>
 #include <vcl_map.h>
 
@@ -78,7 +76,6 @@ class mbl_log_null_streambuf: public vcl_streambuf
 {
 };
 
-#if 0 // Use unfinished category based scheme
 
 //: Base class for destinations of a logging event.
 class mbl_log_output_base
@@ -86,11 +83,17 @@ class mbl_log_output_base
  public:
   virtual ~mbl_log_output_base(){};
   //: Start a new log entry, with id info.
-  virtual void start(int level, const char *srcfile, int srcline)=0;
+  // Future calls to terminate_flush will be ignored.
+  virtual void start_with_manual_termination(int level, const char *srcfile, int srcline)=0;
+  //: Start a new log entry, with id info.
+  // Future calls to terminate_flush will be honoured.
+  virtual void start_with_flush_termination(int level, const char *srcfile, int srcline)=0;
   //: Add contents to the existing log entry.
   virtual void append(const char * contents, vcl_streamsize n_chars)=0;
-  //: Finish and flush the log entry.
-  virtual void terminate()=0;
+  //: Finish the log entry, sent from a stream flush.
+  virtual void terminate_manual()=0;
+  //: Finish the log entry, sent from explicit function call, e.g. by MBL_LOG.
+  virtual void terminate_flush()=0;
   //: Which logger id are we using.
   virtual const char *id()=0;
 };
@@ -106,15 +109,23 @@ class mbl_log_output_stream: public mbl_log_output_base
   bool has_started_;
   // Start a new log entry. Pass id info in via append()
   void start();
-
+  //: Ignore calls to terminate_flush.
+  // The current log message should be manually terminated.
+  bool ignore_flush_;
  public:
   mbl_log_output_stream(vcl_ostream& real_stream, const char *id);
   //: Start a new log entry, with id info.
-  virtual void start(int level, const char *srcfile, int srcline);
+  // Future calls to terminate_flush will be ignored.
+  virtual void start_with_manual_termination(int level, const char *srcfile, int srcline);
+  //: Start a new log entry, with id info.
+  // Future calls to terminate_flush will be honoured.
+  virtual void start_with_flush_termination(int level, const char *srcfile, int srcline);
   //: Add contents to the existing log entry.
   virtual void append(const char * contents, vcl_streamsize n_chars);
-  //: Finish and flush the log entry.
-  virtual void terminate();
+  //: Finish the log entry, sent from a stream flush.
+  virtual void terminate_manual();
+  //: Finish the log entry, sent from explicit function call, e.g. by MBL_LOG.
+  virtual void terminate_flush();
   //: Which logger id are we using.
   virtual const char *id() {return id_;}
 };
@@ -130,15 +141,23 @@ class mbl_log_output_file: public mbl_log_output_base
   bool has_started_;
   //; Start a new log entry. Pass id info in via append()
   void start();
-
+  //: Ignore calls to terminate_flush.
+  // The current log message should be manually terminated.
+  bool ignore_flush_;
  public:
   mbl_log_output_file(const vcl_string &filename, const char *id);
   //: Start a new log entry, with id info.
-  virtual void start(int level, const char *srcfile, int srcline);
+  // Future calls to terminate_flush will be ignored.
+  virtual void start_with_manual_termination(int level, const char *srcfile, int srcline);
+  //: Start a new log entry, with id info.
+  // Future calls to terminate_flush will be honoured.
+  virtual void start_with_flush_termination(int level, const char *srcfile, int srcline);
   //: Add contents to the existing log entry.
   virtual void append(const char * contents, vcl_streamsize n_chars);
-  //: Finish and flush the log entry.
-  virtual void terminate();
+  //: Finish the log entry, sent from a stream flush.
+  virtual void terminate_manual();
+  //: Finish the log entry, sent from explicit function call, e.g. by MBL_LOG.
+  virtual void terminate_flush();
   //: Which logger id are we using.
   virtual const char *id() {return id_;}
 };
@@ -187,94 +206,6 @@ class mbl_logger
   friend class mbl_logger_root;
 };
 
-#else
-
-//: Handles final output of a logging event.
-class mbl_log_output
-{
-  //: A pointer to the stream where logging finally gets sent.
-  vcl_ostream* real_stream_;
-  //: true if a log entry is in progress.
-  bool has_started_;
-  //: Information from the logger object;
-  vcl_string id_;
-  //: Information about the current logging event.
-  int next_level_;
-  const char * next_srcfile_;
-  int next_srcline_;
-
-  //: Wait for a call to mt_stop_entry() before finishing log entry.
-  bool manual_termination_;
-
- public:
-  mbl_log_output():
-    real_stream_(0), has_started_(false),
-    next_level_(1000), manual_termination_(false) {}
-
-  mbl_log_output(vcl_ostream* real_stream, const vcl_string &id):
-    real_stream_(real_stream), has_started_(false), id_(id),
-    next_level_(1000), manual_termination_(false) {}
-
-  //: The stream buffer to which logging info really gets sent.
-  vcl_streambuf & real_streambuf() { return *real_stream_->rdbuf(); }
-  void set_next_event_info(int level, const char *srcfile, int srcline);
-
-  //: If it hasn't already been started, this prints out the beginning of a log entry.
-  void start_entry();
-  //: If it hasn't already been stopped, this prints out the end of a log entry.
-  void stop_entry();
-
-  void set_mt_next_event_info(int level, const char *srcfile, int srcline);
-  void mt_stop_entry();
-
-  void print_header();
-
-  friend class mbl_logger;
-};
-
-
-//: Main user logging class - represents a category.
-class mbl_logger
-{
-  int level_;
-  mbl_log_output output_;
-  mbl_log_streambuf streambuf_;
-  vcl_ostream logstream_;
-  vcl_ostream *mt_logstream_;
-
-  //: Default constructor only available to root's default logger.
-  mbl_logger();
-
-  mbl_logger(const mbl_logger&); // Hide copy constructor.
-
-  //: Update settings in light of changes to the root / configuration.
-  void reinitialise();
-
- public:
-  static mbl_logger_root &root();
-  mbl_logger(const vcl_string & id);
-
-  void set(int level, const mbl_log_output&);
-  //: Higher means more output.
-  int level() { return level_; }
-  vcl_ostream &log(int level, const char * srcfile="", int srcline=0);
-
-  //: A log with manual event start and stop requirements.
-  vcl_ostream &mtlog() {return *mt_logstream_;}
-  void mtstart(int level, const char * srcfile="", int srcline=0);
-  void mtstop();
-
-  //: Log priority levels.
-  // Based on POSIX syslog API
-  enum levels
-  {
-    NONE=-100, EMERG=0, ALERT=100, CRIT=200, ERR=300, WARN=400,
-    NOTICE=500, INFO=600, DEBUG=700, ALL=800
-  };
-  friend class mbl_log_streambuf;
-  friend class mbl_logger_root;
-};
-#endif
 
 //: This class handles category lists.
 class mbl_log_categories
@@ -283,15 +214,16 @@ class mbl_log_categories
   struct cat_spec
   {
     int level;
-    enum output_type {FILE_OUT, COUT, CERR, REGISTERED_STREAM} output;
+    enum output_type {FILE_OUT, NAMED_STREAM} output;
     vcl_string name;
+    vcl_ostream *stream;
   };
 
   mbl_log_categories();
 
   //: Configure whole category list from a file.
   // New entries are added to any existing category details.
-  void config(vcl_istream&s);
+  void config(vcl_istream&, const vcl_map<vcl_string, vcl_ostream *>& stream_names);
 
   //: Make the category list empty;
   // An "empty" list still contains a root entry.
@@ -322,7 +254,6 @@ class mbl_logger_root
   mbl_logger_root():
     null_stream_(&null_streambuf_) {}
 
-  vcl_map<vcl_string, vcl_ostream*> registered_streams_;
  public:
 
   mbl_logger default_logger;
@@ -330,25 +261,33 @@ class mbl_logger_root
   //: List of category entries.
   const mbl_log_categories &categories() {return categories_;}
 
+  typedef vcl_map<vcl_string, vcl_ostream *> stream_names_t;
+
   //:Load a default configuration file
-  // Current Format is
+  // This function will look for a configuration file called
+  // "mbl_log.properties" in the current directory, or if no there,
+  // in the user's home directory. Unix users can call it
+  // ".mbl_log.properties" in their home directory.
+  // Each section of the file should begin with a category.
+  // A logger named "A.B.C" will be controlled by a section labelled A.B.C
+  // The categories labels have a hierarchical structure, so if A.B.C
+  // doesn't exist, the code will look for a section labelled A.B,
+  // or A. If none of these exist it will use the "root" category.
+  // Each category has a level. If a log message has the same or higher
+  // priority than the given level, the message will be output.
+  // Finally the category desination must be specified as a
+  // "file_output" and the filename or "stream_output" and the stream name.
+  // The known stream names are "vcl_cout" and "vcl_cerr", and additional
+  // names can be provided through \p stream_names.
   //\verbatim
-  //LEVEL
+  // root: { level: INFO registered_stream_output: test }
+  // obj3: { level: INFO stream_output: cout }\n
   //\endverbatim
   // where LEVEL is an integer - setting the logging level.
   // see mbl_logger:levels for useful values.
-  void load_log_config_file();
+  void load_log_config_file(const stream_names_t &stream_names = stream_names_t());
   //: Force all loggers to update themselves in light of changes to the root and configuration.
   void update_all_loggers();
-  //: Register a named stream with the logger.
-  // This can then be referred to using the REGISTERED_STREAM output type.
-  // The stream must remain in scope while the stream may be being used.
-  void register_stream(const vcl_string &, vcl_ostream*);
-  //: Remove a stream from the known list.
-  void deregister_stream(const vcl_string &);
-  //: Get a registered stream by name.
-  // \returns 0 if no such registered stream.
-  vcl_ostream* get_registered_stream(const vcl_string &);
 };
 
 
