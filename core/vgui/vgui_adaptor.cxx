@@ -151,20 +151,25 @@ void vgui_adaptor::config_dialog()
     but_labels.push_back(but_table[i].str);
   }
 
-  // debug
+#ifdef DEBUG
   vcl_cerr << "mod_index " << mod_index << vcl_endl
            << "button_index " << but_index << vcl_endl;
+#endif
 
+  bool nested_popups_val = nested_popups;
+  bool default_items_val = default_items;
   vgui_dialog mydialog("Adaptor Config");
   mydialog.choice("Popup modifier", mod_labels, mod_index);
   mydialog.choice("Popup button",   but_labels, but_index);
-  mydialog.checkbox("Nested popups", nested_popups);
-  mydialog.checkbox("Default popup items", default_items);
+  mydialog.checkbox("Nested popups", nested_popups_val);
+  mydialog.checkbox("Default popup items", default_items_val);
 
   if (mydialog.ask()) {
     assert(mod_index < num_mods);
     assert(but_index < num_buts);
     bind_popups(mod_table[mod_index].mod, but_table[but_index].but);
+    nested_popups = nested_popups_val;
+    default_items = default_items_val;
   }
 }
 
