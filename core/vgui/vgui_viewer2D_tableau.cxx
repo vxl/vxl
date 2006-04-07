@@ -190,14 +190,17 @@ bool vgui_viewer2D_tableau::handle(const vgui_event& e)
     {
       vgui_adaptor* adap = e.origin;
       vgui_window* win = adap->get_window();
-      //current scroll pos range is [0,100]
-      //eventually we would want to get the range
-      //from the window to insure consistency
-      int cpos = 50;
-      win->set_hscrollbar(cpos);
-      win->set_vscrollbar(cpos);
-      npos_x = cpos;
-      npos_y = cpos;
+      if (win)
+      {
+        //current scroll pos range is [0,100]
+        //eventually we would want to get the range
+        //from the window to insure consistency
+        int cpos = 50;
+        win->set_hscrollbar(cpos);
+        win->set_vscrollbar(cpos);
+        npos_x = cpos;
+        npos_y = cpos;
+      }
     }
   //We really want to be able to scroll the entire
   //image through the viewport.  The token offset should be
