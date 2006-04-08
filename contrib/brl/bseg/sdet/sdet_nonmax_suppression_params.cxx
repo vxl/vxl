@@ -16,18 +16,17 @@ sdet_nonmax_suppression_params::
 sdet_nonmax_suppression_params(const sdet_nonmax_suppression_params& nsp)
   : gevd_param_mixin()
 {
-  InitParams(nsp.sigma_, nsp.thresh_);
+  InitParams(nsp.thresh_);
 }
 
 sdet_nonmax_suppression_params::
-sdet_nonmax_suppression_params(const double sigma, const double thresh)
+sdet_nonmax_suppression_params(const double thresh)
 {
-  InitParams(sigma, thresh);
+  InitParams(thresh);
 }
 
-void sdet_nonmax_suppression_params::InitParams(double sigma, double thresh)
+void sdet_nonmax_suppression_params::InitParams(double thresh)
 {
-  sigma_= sigma;
   thresh_ = thresh;
 }
 
@@ -42,11 +41,6 @@ bool sdet_nonmax_suppression_params::SanityCheck()
   vcl_stringstream msg;
   bool valid = true;
 
-  if (sigma_<0.5)
-  {
-    msg << "ERROR: smoothing should be effective, >0.5";
-    valid = false;
-  }
   if (thresh_<0 || thresh_>100)
   {
     msg << "ERROR: percentage threshold should be between 0 and 100";
@@ -62,7 +56,6 @@ vcl_ostream& operator<< (vcl_ostream& os, const sdet_nonmax_suppression_params& 
 {
   return
   os << "sdet_nonmax_suppression_params:\n[---\n"
-     << "Gaussian derivative kernel sigma " << nsp.sigma_ << vcl_endl
      << "Gradient threshold in percentage " << nsp.thresh_ << vcl_endl
      << "---]" << vcl_endl;
 }

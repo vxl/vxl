@@ -35,6 +35,8 @@
 //
 // \verbatim
 //  Modifications
+//  2006-04-08 H. Can Aras
+//             changed input style through the constructors, added another output variable
 // \endverbatim
 //
 //-------------------------------------------------------------------------
@@ -45,18 +47,19 @@
 #include <sdet/sdet_nonmax_suppression_params.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vil/vil_image_view.h>
+#include <vbl/vbl_array_2d.h>
 
 class sdet_nonmax_suppression : public sdet_nonmax_suppression_params
 {
 public:
-  //Constructors/destructor
-  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp);
-
+  //Constructor from a parameter block, and gradients along x and y directions
+  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, vbl_array_2d<double> &grad_x, vbl_array_2d<double> &grad_y);
+  //Destructor
   ~sdet_nonmax_suppression();
   //Accessors
-  void set_image_resource(vil_image_resource_sptr const& image);
   vcl_vector<vsol_point_2d_sptr>& get_points(){return points_;}
   vcl_vector<vsol_line_2d_sptr>& get_lines(){return lines_;}
+  vcl_vector<vgl_vector_2d<double> >& get_directions() {return directions_;}
   //Utility Methods
   void apply();
   void clear();
@@ -64,12 +67,13 @@ public:
 protected:
   //members
   bool points_valid_;      //process state flag
-  vil_image_resource_sptr vimage_;  //input image
-  vcl_vector<vsol_point_2d_sptr> points_; //resulting edge points
-  vcl_vector<vsol_line_2d_sptr> lines_; //lines along the edges
-  vil_image_view<double> grad_x_; //Gradient in x-direction
-  vil_image_view<double> grad_y_; //Gradient in y-direction
-  vil_image_view<double> grad_mag_;   //Gradient magnitude
+  vcl_vector<vsol_point_2d_sptr> points_; //output, resulting edge points
+  vcl_vector<vsol_line_2d_sptr> lines_; //output, lines along the edges
+  vcl_vector<vgl_vector_2d<double> > directions_; //output, direction along which nonmax suppression is done
+  vbl_array_2d<double> grad_x_; //Gradient in x-direction
+  vbl_array_2d<double> grad_y_; //Gradient in y-direction
+  vbl_array_2d<double> grad_mag_;   //Gradient magnitude
+  int width_, height_; // Width and height of the vbl_array_2d
   //functions
   int intersected_face_number(double gx, double gy);
   double intersection_parameter(double gx, double gy, int face_num);

@@ -16,32 +16,26 @@
 //
 //----------------------------------------------------------------
 
-//: constructor from a parameter block (the only way)
+//: Constructor from a parameter block, and gradients along x and y directions
 //
-sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params& nms)
-  : sdet_nonmax_suppression_params(nms)
+sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, 
+                                                 vbl_array_2d<double> &grad_x, 
+                                                 vbl_array_2d<double> &grad_y)
+  : sdet_nonmax_suppression_params(nsp)
 {
-  vcl_cout << sigma_ << vcl_endl
-           << thresh_ << vcl_endl;
+  width_ = grad_x.rows();
+  height_ = grad_x.cols();
+  grad_x_.resize(width_, height_);
+  grad_y_.resize(width_, height_);
+  grad_mag_.resize(width_, height_);
+  grad_x_ = grad_x;
+  grad_y_ = grad_y;
+  points_valid_ = false;
 }
 
 //:Default Destructor
 sdet_nonmax_suppression::~sdet_nonmax_suppression()
 {
-}
-
-//-------------------------------------------------------------------------
-//: Set the image resource to be processed
-//
-void sdet_nonmax_suppression::set_image_resource(vil_image_resource_sptr const& image)
-{
-  if (!image)
-  {
-    vcl_cout <<"In sdet_nonmax_suppression::set_image(.) - null input\n";
-    return;
-  }
-  points_valid_ = false;
-  vimage_ = image;
 }
 
 //-------------------------------------------------------------------------
@@ -52,38 +46,12 @@ void sdet_nonmax_suppression::apply()
   if (points_valid_)
     return;
   points_.clear();
-  vil_image_view<unsigned short> input;
-  vil_convert_cast(vimage_->get_view(), input);
-
-  //take the gradient of the image using Gaussian first derivative kernels
-  vil_image_view<double> gauss_x; //Gaussian first derivative kernel in x-direction
-  vil_image_view<double> gauss_y; //Gaussian first derivative kernel in y-direction
-  // create the kernels
-  // kernel sizes should be chosen according to the Gaussian sigma
-  int khs = int(vcl_ceil(3*sigma_)); //kernel half size
-  int ks = 2*khs+1; //kernel full size
-  gauss_x.set_size(ks,ks);
-  gauss_y.set_size(ks,ks);
-  for (int y = -khs; y <= khs; y++)
-  {
-    for (int x = -khs; x <= khs; x++)
-    {
-      double common_part = -1/(2*vnl_math::pi*vcl_pow(sigma_,4.0)) * vcl_exp(-(vcl_pow(x,2.0)+vcl_pow(y,2.0))/(2*vcl_pow(sigma_,2.0)));
-      gauss_x(x+khs,y+khs) = x * common_part;
-      gauss_y(x+khs,y+khs) = y * common_part;
-    }
-  }
-  //: convolve the image with the kernels to get gradients in x and y directions
-  vil_convolve_2d(input, grad_x_, gauss_x, double());
-  vil_convolve_2d(input, grad_y_, gauss_y, double());
 
   // run non-maximum suppression at every point
   double max_grad_mag = 0;
-  int width = grad_x_.ni(); int height = grad_x_.nj();
-  grad_mag_.set_size(width, height);
-  for (int y = 0; y < height; y++)
+  for (int y = 0; y < height_; y++)
   {
-    for (int x = 0; x < width; x++)
+    for (int x = 0; x < width_; x++)
     {
       double val = vcl_sqrt(vcl_pow(grad_x_(x,y),2.0) + vcl_pow(grad_y_(x,y),2.0));
       grad_mag_(x,y) = val;
@@ -92,9 +60,9 @@ void sdet_nonmax_suppression::apply()
     }
   }
 
-  for (int y = 1; y < height-1; y++)
+  for (int y = 1; y < height_-1; y++)
   {
-    for (int x = 1; x < width-1; x++)
+    for (int x = 1; x < width_-1; x++)
     {
       if (grad_mag_(x,y) > max_grad_mag * thresh_ / 100.0)
       {
@@ -114,13 +82,14 @@ void sdet_nonmax_suppression::apply()
           if (f[1] > f[0] && f[1] > f[2])
           {
             double s_star = subpixel_s(ss, f);
-            vgl_point_2d<double> subpix(x + s_star * direction.x() + ((ks-1)/2), y + s_star * direction.y() + ((ks-1)/2));
+            vgl_point_2d<double> subpix(x + s_star * direction.x(), y + s_star * direction.y());
             vsol_point_2d_sptr p = new vsol_point_2d(subpix.x(), subpix.y());
             vsol_point_2d_sptr line_start = new vsol_point_2d(subpix.x()-direction.y()*0.5, subpix.y()+direction.x()*0.5);
             vsol_point_2d_sptr line_end = new vsol_point_2d(subpix.x()+direction.y()*0.5, subpix.y()-direction.x()*0.5);
             vsol_line_2d_sptr l = new vsol_line_2d(line_start, line_end);
             points_.push_back(p);
             lines_.push_back(l);
+            directions_.push_back(direction);
           }
         }
       }
