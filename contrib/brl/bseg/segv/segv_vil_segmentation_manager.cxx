@@ -19,6 +19,8 @@
 #include <vil/vil_math.h>
 #include <vil/vil_decimate.h>
 #include <vil/vil_flip.h>
+#include <vil/vil_convert.h>
+#include <vil/algo/vil_sobel_1x3.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #if 0
@@ -697,16 +699,50 @@ void segv_vil_segmentation_manager::nonmaximal_suppression()
   }
   static sdet_nonmax_suppression_params nsp;
   vgui_dialog nonmax_dialog("non-maximal suppression");
-  nonmax_dialog.field("Gradient Sigma if Gradient Image not Provided ", nsp.sigma_);
   nonmax_dialog.field("Gradient Magnitude Percentage Threshold ", nsp.thresh_);
   nonmax_dialog.checkbox("Show lines at the edge points? ", show_lines);
   if (!nonmax_dialog.ask())
     return;
-  sdet_nonmax_suppression ns(nsp);
-  ns.set_image_resource(img);
+
+  // prepare input for the nonmax suppression
+  vil_image_view<vxl_byte> input, input_grey;
+  vil_image_view<double> grad_i, grad_j;
+  vbl_array_2d<double> grad_x;
+  vbl_array_2d<double> grad_y;
+
+  vil_convert_cast(img->get_view(), input);
+
+  int ni = input.ni();
+  int nj = input.nj();
+  
+  grad_i.set_size(ni,nj);
+  grad_j.set_size(ni,nj); 
+  input_grey.set_size(ni,nj);
+  grad_x.resize(ni,nj);
+  grad_y.resize(ni,nj);
+  
+  if(input.nplanes() > 1)
+    vil_convert_planes_to_grey(input, input_grey);
+  else
+    input_grey = input;
+
+  vil_sobel_1x3 <vxl_byte, double> (input_grey, grad_i, grad_j);
+  for(int j=0;j<nj; j++)
+  {
+    for(int i=0;i<ni; i++)
+    {
+      grad_x(i,j) = grad_i(i,j);
+      grad_y(i,j) = grad_j(i,j);
+    }
+  }
+
+  
+  sdet_nonmax_suppression ns(nsp, grad_x, grad_y);
   ns.apply();
   vcl_vector<vsol_point_2d_sptr>& points = ns.get_points();
   vcl_vector<vsol_line_2d_sptr>& lines = ns.get_lines();
+  // not used below, just for demonstration purposes
+  vcl_vector<vgl_vector_2d<double> >& directions = ns.get_directions();
   int N = points.size();
   if (!N)
     return;
