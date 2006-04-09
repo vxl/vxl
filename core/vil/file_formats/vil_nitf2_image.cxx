@@ -17,7 +17,7 @@
 #include "vil_nitf2_data_mask_table.h"
 #include "vil_nitf2_des.h"
 
-#if HAS_J2K
+#ifdef HAS_J2K
 #include "vil_j2k_image.h"
 #endif //HAS_J2K
 
@@ -62,7 +62,7 @@ vil_image_resource_sptr
 // class vil_nitf2_image
 
 vil_streampos vil_nitf2_image::get_offset_to( vil_nitf2_header::section_type sec,
-                                              vil_nitf2_header::portion_type por, 
+                                              vil_nitf2_header::portion_type por,
                                               unsigned int index ) const
 {
   vil_streampos p;
@@ -82,8 +82,8 @@ vil_streampos vil_nitf2_image::get_offset_to( vil_nitf2_header::section_type sec
   return p;
 }
 
-vil_streampos vil_nitf2_image::size_to(vil_nitf2_header::section_type sec, 
-                                       vil_nitf2_header::portion_type por, 
+vil_streampos vil_nitf2_image::size_to(vil_nitf2_header::section_type sec,
+                                       vil_nitf2_header::portion_type por,
                                        int index ) const
 {
   if ( sec == vil_nitf2_header::enum_file_header ) {
@@ -457,10 +457,10 @@ vil_image_view_base_sptr vil_nitf2_image::get_copy_view_decimated_j2k(
     return 0;
   }
   assert( is_jpeg_2000_compressed() );
-  if( ! s_decode_jpeg_2000 ) {
-#if HAS_J2K
+  if ( ! s_decode_jpeg_2000 ) {
+#ifdef HAS_J2K
     s_decode_jpeg_2000 = vil_j2k_image::s_decode_jpeg_2000;
-#else //HAS_J2K 
+#else //HAS_J2K
     return 0;
 #endif //HAS_J2K
   }
@@ -718,6 +718,7 @@ vil_image_view_base_sptr vil_nitf2_image::get_block(unsigned int block_index_x, 
   }
   return view;
 }
+
 template<> bool* byte_align_data<bool>(bool* in_data, unsigned int num_samples, unsigned int in_bits_per_sample, bool* out_data)
 {
   switch (sizeof(bool))
