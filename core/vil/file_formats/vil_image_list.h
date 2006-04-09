@@ -28,7 +28,7 @@ class vil_image_list
   //: checks if the path is a directory
   static bool vil_is_directory(char const*);
  private:
-  vcl_string directory_;
+   vcl_string directory_;
 };
 
 #endif // vil_image_list_h_
