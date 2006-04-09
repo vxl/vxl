@@ -19,6 +19,9 @@
 #include <vil/vil_blocked_image_resource.h>
 #include <vil/vil_blocked_image_facade.h>
 #include <vil/vil_cached_image_resource.h>
+#include <vil/vil_pyramid_image_resource_sptr.h>
+#include <vil/vil_pyramid_image_resource.h>
+#include <vil/vil_image_list.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_load.h>

@@ -9,6 +9,8 @@ ADD_EXECUTABLE( vil_test_all
   test_image_view.cxx
   test_memory_chunk.cxx
   test_pixel_format.cxx
+  test_pyramid_image_resource.cxx
+  test_image_list.cxx
 
   # file format readers/writers
   test_file_format_read.cxx
@@ -75,8 +77,9 @@ ADD_TEST( vil_test_math_value_range         vil_test_all test_math_value_range)
 # Blocked images
 ADD_TEST( vil_test_blocked_image_resource   vil_test_all test_blocked_image_resource ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
 
-# Resources from image list
-ADD_TEST( vil_test_image_list  vil_test_all test_image_list )
+# Pyramid images
+ADD_TEST( vil_test_image_list vil_test_all test_image_list )
+ADD_TEST( vil_test_pyramid_image_resource   vil_test_all test_pyramid_image_resource )
 
 # To run timing tests
 #ADD_EXECUTABLE( vil_test_access_timings vil_test_access_timings.cxx)

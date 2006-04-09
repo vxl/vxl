@@ -278,6 +278,8 @@ get_copy_view(unsigned i0, unsigned n_i, unsigned j0, unsigned n_j) const
 
 vil_blocked_image_resource_sptr blocked_image_resource(const vil_image_resource_sptr& ir)
 {
+  if(!ir)
+    return 0;
   unsigned sbi=0, sbj=0;
   if (ir->get_property(vil_property_size_block_i, &sbi)&&
       ir->get_property(vil_property_size_block_j, &sbj))

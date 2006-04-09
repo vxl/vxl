@@ -85,8 +85,11 @@ SET( vil_sources ${vil_sources}
   vil_memory_image.cxx                  vil_memory_image.h
   vil_block_cache.cxx                   vil_block_cache.h
   vil_cached_image_resource.cxx         vil_cached_image_resource.h
+  vil_pyramid_image_resource.cxx        vil_pyramid_image_resource.h
+                                        vil_pyramid_image_resource_sptr.h
+  vil_image_list.cxx                    vil_image_list.h
   # file format readers/writers (see above for conditional ones)
-  file_formats/vil_image_list.cxx       file_formats/vil_image_list.h
+
 
   file_formats/vil_pnm.cxx              file_formats/vil_pnm.h
 
@@ -138,6 +141,7 @@ SET( vil_sources ${vil_sources}
   file_formats/vil_nitf2_typed_scalar_field.h
   file_formats/vil_nitf2_typed_field_formatter.h    file_formats/vil_nitf2_typed_field_formatter.cxx
 
+  file_formats/vil_pyramid_image_list.h             file_formats/vil_pyramid_image_list.cxx
   # image operations
   vil_crop.cxx                          vil_crop.h
   vil_clamp.cxx                         vil_clamp.h

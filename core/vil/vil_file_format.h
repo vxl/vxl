@@ -12,6 +12,7 @@
 #include <vil/vil_fwd.h> // for vil_stream
 #include <vil/vil_image_resource.h>
 #include <vil/vil_blocked_image_resource.h>
+#include <vil/vil_pyramid_image_resource.h>
 //: Base class for image formats.
 //  There is one derived class for each handled file format in the
 // directory file_formats. E.g. vil/file_formats/vil_pnm.h etc
@@ -30,6 +31,27 @@ class vil_file_format
   // be applied.
   virtual vil_image_resource_sptr make_input_image(vil_stream* vs) = 0;
 
+  //: Read a pyramid resource from a list of image files in a directory
+  //  or from an image file_format that supports mulitple images per file.
+virtual vil_pyramid_image_resource_sptr 
+    make_input_pyramid_image(char const* directory_or_file)
+    {return 0;}
+
+  //: Construct a pyramid image resource from a base image. All levels
+  //  are stored in the same resource file. Each level has the same 
+  //  scale ratio (0.5) to the preceeding level. Level 0 is the original 
+  //  base image. The resource is returned open for reading.
+  //  The temporary directory is for storing intermediate image
+  //  resources during the construction of the pyramid. Files are
+  //  be removed from the directory after completion.  If temp_dir is 0
+  //  then the intermediate resources are created in memory.
+virtual vil_pyramid_image_resource_sptr 
+  make_pyramid_image_from_base(char const* filename,
+                               vil_image_resource_sptr const& base_image,
+                               unsigned nlevels,
+                               char const* temp_dir)
+  {return 0;}
+
   //: Make a "generic_image" on which put_section may be applied.
   // The stream vs is assumed to be open for writing, as an image header may be
   // written to it immediately.
@@ -42,13 +64,18 @@ class vil_file_format
                                                     enum vil_pixel_format) = 0;
   //: Construct a blocked output image resource
   // Returns a null resource unless the format supports blocking
-  virtual vil_blocked_image_resource_sptr  make_blocked_output_image(vil_stream* /*vs*/,
-                                                             unsigned /*nx*/,
-                                                             unsigned /*ny*/,
-                                                             unsigned /*nplanes*/,
-                                                             unsigned /*size_block_i*/,
-                                                             unsigned /* size_block_j*/,
-                                                             enum vil_pixel_format /*fmt*/)
+  virtual vil_blocked_image_resource_sptr  
+    make_blocked_output_image(vil_stream* /*vs*/,
+                              unsigned /*nx*/,
+                              unsigned /*ny*/,
+                              unsigned /*nplanes*/,
+                              unsigned /*size_block_i*/,
+                              unsigned /* size_block_j*/,
+                              enum vil_pixel_format /*fmt*/)
+    {return 0;}
+
+  virtual vil_pyramid_image_resource_sptr 
+    make_pyramid_output_image(char const* file)
     {return 0;}
 
  public:

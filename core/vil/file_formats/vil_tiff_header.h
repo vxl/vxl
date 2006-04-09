@@ -228,6 +228,9 @@ class vil_tiff_header
   //: true if the specified format can be read or written.
   // check and return a null resource if false
   bool format_supported;
+
+  //: the number of images in the file
+  unsigned short  n_images();
  private:
   TIFF* tif_;
   //: read/write mode true for read.

@@ -25,7 +25,7 @@
 #include <vil/vil_new.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_pixel_format.h>
-
+#include <vil/vil_pixel_traits.h>
 #ifdef __BORLANDC__
 // We do not want to fix small problems in external maintained code.
 # pragma warn -8004 // 'smask' is assigned a value that is never used in function
@@ -40,6 +40,17 @@
 #include <diinpxt.h>
 
 #include "vil_dicom_stream.h"
+//
+//Believe it or not some dicom images have a mixed endian encoding.
+// e.g. mixed (7fe0,0010) OW 30f8 vs unmixed (7fe0,0010) OW f830
+//The header is little endian and the data is big endian!! There doesn't
+//seem to be a way of telling that this is the case. The DCM library 
+//reports that the  TransferSyntax is "LittleEndianImplicit", which isn't helpful.
+// This is a hack to be able to read such files
+//#define MIXED_ENDIAN
+// Another hack to remove the offset of -1024 needed to calibrate HU. Otherwise
+// this reader converts the image to floating point, which may not be desired.
+//#define NO_OFFSET
 
 char const* vil_dicom_format_tag = "dicom";
 
@@ -130,7 +141,6 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
   }
 
   DcmDataset& dset = *ffmt.getDataset();
-
   read_header( &dset, header_ );
 
   //correct known manufacturers' drop-offs in header data!
@@ -886,8 +896,22 @@ namespace
     }
   }
 } // anonymous namespace
+#ifdef MIXED_ENDIAN
+static  unsigned short swap_short(unsigned short v)
+{
+	return (v << 8)
+        | (v >> 8);
+}
 
-
+static void swap_shorts(unsigned short *ip, unsigned short *op, int count)
+{
+   while (count)
+   {
+      *op++ = swap_short(*ip++);
+      count--;
+   }
+}
+#endif //MIXED_ENDIAN
 static
 void
 read_pixels_into_buffer(DcmPixelData* pixels,
@@ -906,7 +930,7 @@ read_pixels_into_buffer(DcmPixelData* pixels,
   // of the bytes.
   //
   vil_pixel_format act_format = VIL_PIXEL_FORMAT_UNKNOWN;
-
+  
   // First convert from the stored src pixels to the actual
   // pixels. This is an integral type to integral type conversion.
   // Make sure pixel_data is deleted before this function exits!
@@ -917,7 +941,21 @@ read_pixels_into_buffer(DcmPixelData* pixels,
   } else {
     convert_src_type( (Uint8*)0, pixels, num_samples, alloc, stored, high, rep, pixel_data, act_format );
   }
-
+#ifdef MIXED_ENDIAN
+#ifdef NO_OFFSET
+  slope = 1; intercept = 0;
+  if(act_format == VIL_PIXEL_FORMAT_SBYTE)
+	  act_format = VIL_PIXEL_FORMAT_BYTE;
+  if(act_format == VIL_PIXEL_FORMAT_INT_16)
+      act_format = VIL_PIXEL_FORMAT_UINT_16;
+#endif //NO_OFFSET
+  bool swap_data = false;
+  unsigned short* temp1 = new unsigned short[num_samples];
+  unsigned short* temp2 = 
+    reinterpret_cast<unsigned short*>(pixel_data->getData());
+  swap_shorts(temp2, temp1, num_samples);
+  vxl_byte* temp3 = reinterpret_cast<vxl_byte*>(temp1);
+#endif //MIXED_ENDIAN
   // On error, return without doing anything
   if ( pixel_data == 0 ) {
     return;
@@ -939,12 +977,19 @@ read_pixels_into_buffer(DcmPixelData* pixels,
     // do a memcpy.
     //
     out_buf = new vil_memory_chunk( num_samples * ((stored+7)/8), VIL_PIXEL_FORMAT_BYTE );
+#ifdef MIXED_ENDIAN
+    vcl_memcpy( out_buf->data(), temp3, out_buf->size() );
+#else
     vcl_memcpy( out_buf->data(), pixel_data->getData(), out_buf->size() );
+#endif //MIXED_ENDIAN
   } else {
     out_buf = new vil_memory_chunk( num_samples * sizeof(float), VIL_PIXEL_FORMAT_FLOAT );
     out_format = VIL_PIXEL_FORMAT_FLOAT;
-
-    void* in_begin = pixel_data->getData();
+#ifdef MIXED_ENDIAN
+	void* in_begin = reinterpret_cast<void*>(temp1);
+#else
+  void* in_begin = pixel_data->getData();
+#endif //MIXED_ENDIAN
     float* out_begin = static_cast<float*>( out_buf->data() );
 
     switch ( act_format )
@@ -965,6 +1010,10 @@ read_pixels_into_buffer(DcmPixelData* pixels,
       vcl_cerr << "vil_dicom ERROR: unexpected internal pixel format\n";
     }
   }
+
+#ifdef MIXED_ENDIAN
+    delete [] temp1;
+#endif //MIXED_ENDIAN
 
   delete pixel_data;
 }

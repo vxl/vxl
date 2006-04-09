@@ -23,7 +23,9 @@ DECLARE( test_rotate_image );
 DECLARE( test_warp );
 DECLARE( test_math_value_range );
 DECLARE( test_blocked_image_resource );
+DECLARE( test_pyramid_image_resource );
 DECLARE( test_image_list );
+
 void
 register_tests()
 {
@@ -50,6 +52,7 @@ register_tests()
   REGISTER( test_warp );
   REGISTER( test_math_value_range );
   REGISTER( test_blocked_image_resource );
+  REGISTER( test_pyramid_image_resource );
   REGISTER( test_image_list );
 }
 

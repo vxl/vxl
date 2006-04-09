@@ -22,7 +22,8 @@
 #include <vil/vil_memory_image.h>
 #include <vil/vil_blocked_image_facade.h>
 #include <vil/vil_cached_image_resource.h>
-
+#include <vil/vil_pyramid_image_resource.h>
+#include <vil/file_formats/vil_pyramid_image_list.h>
 // The first two functions really should be upgraded to create an image in
 // a temporary file on disk if the sizes are large. - TODO
 
@@ -177,3 +178,67 @@ vil_new_cached_image_resource(const vil_blocked_image_resource_sptr& bir,
 {
   return new vil_cached_image_resource(bir, cache_size);
 }  
+
+vil_pyramid_image_resource_sptr
+vil_new_pyramid_image_resource(char const* file_or_directory,
+                               char const* file_format)
+{
+  if (!file_format) // avoid segfault in strcmp()
+    file_format = "tiff";
+  vil_pyramid_image_resource_sptr outimage = 0;
+  for (vil_file_format** p = vil_file_format::all(); *p; ++p)
+  {
+    vil_file_format* fmt = *p;
+    if (vcl_strcmp(fmt->tag(), file_format) == 0) {
+      outimage = fmt->make_pyramid_output_image(file_or_directory);
+      if (!outimage)
+        vcl_cerr << "vil_new: Cannot new a pyramid resource to type [" << file_format << "]\n";
+      return outimage;
+    }
+  }
+  vcl_cerr << "vil_new: Unknown file type [" << file_format << "]\n";
+  return 0;
+}
+
+vil_pyramid_image_resource_sptr 
+  vil_new_pyramid_image_from_base(char const* filename,
+                               vil_image_resource_sptr const& base_image,
+                               unsigned nlevels,
+                               char const* file_format,
+                               char const* temp_dir)
+{
+  if (!file_format) // avoid segfault in strcmp()
+    file_format = "tiff";
+  vil_pyramid_image_resource_sptr outimage = 0;
+  for (vil_file_format** p = vil_file_format::all(); *p; ++p)
+  {
+    vil_file_format* fmt = *p;
+    if (vcl_strcmp(fmt->tag(), file_format) == 0) {
+      outimage = fmt->make_pyramid_image_from_base(filename,
+                                                   base_image,
+                                                   nlevels,                                               
+                                                   temp_dir);
+      if (!outimage)
+        vcl_cerr << "vil_new: Cannot new a pyramid resource to type [" << file_format << "]\n";
+      return outimage;
+    }
+  }
+  vcl_cerr << "vil_new: Unknown file type [" << file_format << "]\n";
+  return 0;
+}
+//for now there is only one directory based pyramid format
+vil_pyramid_image_resource_sptr 
+  vil_new_pyramid_image_list_from_base(char const* directory,
+                               vil_image_resource_sptr const& base_image,
+                               unsigned nlevels,
+                               bool copy_base,
+                               char const* level_file_format,
+                               char const* filename
+                               )
+{
+  vil_pyramid_image_list_format vpilf;
+  return vpilf.make_pyramid_image_from_base(directory, base_image, nlevels,
+                                            copy_base, level_file_format,
+                                            filename);
+}
+

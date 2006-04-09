@@ -27,7 +27,7 @@
 
 #include <vil/vil_fwd.h>
 #include <vil/vil_image_resource.h>
-
+#include <vil/vil_pyramid_image_resource.h>
 //: Load an image resource object from a file.
 // \relates vil_image_resource
 vil_image_resource_sptr vil_load_image_resource(char const* filename);
@@ -42,6 +42,10 @@ vil_image_resource_sptr vil_load_image_resource_raw(char const*);
 
 //: Load from a filename with a plugin.
 vil_image_resource_sptr vil_load_image_resource_plugin(char const*);
+
+//: Load a pyramid image resource object from a file or directory.
+// \relates vil_pyramid_image_resource
+vil_pyramid_image_resource_sptr vil_load_pyramid_resource(char const* directory_or_file);
 
 //: Convenience function for loading an image into an image view.
 // \relates vil_image_view

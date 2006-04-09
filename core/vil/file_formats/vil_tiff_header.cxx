@@ -301,6 +301,11 @@ unsigned long vil_tiff_header::bytes_per_tile() const
   return TIFFTileSize(tif_);
 }
 
+//The number of images in the tiff file
+unsigned short  vil_tiff_header::n_images()
+{
+  return TIFFNumberOfDirectories(tif_);
+}
 //assemble the information to define the vil_pixel_format
 //return false if the format cannot be handled
 bool vil_tiff_header::compute_pixel_format()

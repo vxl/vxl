@@ -78,4 +78,8 @@
 //: Block size in rows
 #define vil_property_size_block_j "size_block_j"
 
+//: true if image resource is a pyramid image
+#define vil_property_pyramid "pyramid"
+
+
 #endif // vil_property_h_

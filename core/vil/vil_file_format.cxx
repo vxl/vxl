@@ -39,6 +39,7 @@ vil_file_format::~vil_file_format()
 
 #if HAS_TIFF
 #include <vil/file_formats/vil_tiff.h>
+#include <vil/file_formats/vil_pyramid_image_list.h>
 #endif
 
 #if HAS_BMP
@@ -86,6 +87,7 @@ struct vil_file_format_storage
 #endif
 #if HAS_TIFF
     l[c++] = new vil_tiff_file_format;
+    l[c++] = new vil_pyramid_image_list_format;
 #endif
 #if HAS_PNM
     l[c++] = new vil_pnm_file_format;

@@ -77,6 +77,29 @@ vil_image_resource_sptr vil_load_image_resource_plugin(char const* filename)
   return vil_image_resource_sptr(0);
 }
 
+vil_pyramid_image_resource_sptr 
+vil_load_pyramid_resource(char const* directory_or_file)
+{
+  for (vil_file_format** p = vil_file_format::all(); *p; ++p) {
+#if 0 // debugging
+    vcl_cerr << __FILE__ " : trying \'" << (*p)->tag() << "\'\n";
+#endif
+    vil_pyramid_image_resource_sptr pir =
+      (*p)->make_input_pyramid_image(directory_or_file);
+    if (pir)
+      return pir;
+  }
+  // failed.
+  vcl_cerr << __FILE__ ": Unable to load pyramid image;\ntried";
+  for (vil_file_format** p = vil_file_format::all(); *p; ++p)
+    // 'flush' in case of segfault next time through loop. Else, we
+    // will not see those printed tags still in the stream buffer.
+    vcl_cerr << " \'" << (*p)->tag() << "\'" << vcl_flush;
+  vcl_cerr << vcl_endl;
+
+  return 0;
+}
+
 
 //: Convenience function for loading an image into an image view.
 vil_image_view_base_sptr vil_load(const char *file)
