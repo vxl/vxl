@@ -9,7 +9,7 @@
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_new.h>
-#include <vil/file_formats/vil_image_list.h>
+#include <vil/vil_image_list.h>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 #include <vil/vil_save.h>
