@@ -7,22 +7,22 @@
 //:
 // \file
 // \author J.L. Mundy  March 22, 2006
+// \brief A simple image resource list reader
 //
 // \verbatim
 //  Modifications
 //   <none>
 // \endverbatim
-//:
-// A simple image resource list reader
 //
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vil/vil_image_resource_sptr.h>
+
 class vil_image_list
 {
  public:
-  vil_image_list(char const* directory):directory_(directory){}
-  ~vil_image_list(){}
+  vil_image_list(char const* directory) :directory_(directory) {}
+  ~vil_image_list() {}
   //: finds all the image files in the directory, regardless of extension
   vcl_vector<vil_image_resource_sptr> resources();
   //: checks if the path is a directory
@@ -30,4 +30,5 @@ class vil_image_list
  private:
   vcl_string directory_;
 };
+
 #endif // vil_image_list_h_
