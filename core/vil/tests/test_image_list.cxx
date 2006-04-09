@@ -2,7 +2,6 @@
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdio.h>
-//#include <dirent.h>
 #include <vcl_string.h>
 #include <vil/vil_property.h>
 #include <vpl/vpl.h> // vpl_unlink()

@@ -6,8 +6,7 @@
 #include <vil/vil_pyramid_image_resource.h>
 #include <vil/vil_load.h>
 
-#define IL_DEBUG
-//#define __CYGWIN__
+//#define IL_DEBUG
 #if defined(como4301) && defined(__linux__)
 # ifndef S_IFMT
 #  define S_IFMT 0170000
@@ -66,7 +65,7 @@ vcl_vector<vcl_string> vil_image_list::files()
 }
 #else // !defined(VCL_WIN32) || defined(__CYGWIN__)
 
-#include <c:/cygwin/usr/include/sys/dirent.h>
+#include <dirent.h>
 vcl_vector<vcl_string> vil_image_list::files()
 {
   vcl_vector<vcl_string> temp;
