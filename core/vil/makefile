@@ -25,6 +25,7 @@ SOURCES += vil_file_format.cxx
 SOURCES += vil_memory_image.cxx
 
 # file format readers/writers
+SOURCES += file_formats/vil_image_list.cxx
 SOURCES += file_formats/vil_pnm.cxx
 SOURCES += file_formats/vil_ras.cxx
 SOURCES += file_formats/vil_iris.cxx
@@ -50,6 +51,12 @@ SOURCES += file_formats/vil_jpeg_decompressor.cxx
 SOURCES += file_formats/vil_jpeg_destination_mgr.cxx
 SOURCES += file_formats/vil_jpeg_source_mgr.cxx
 MANPAGE_SOURCES += file_formats/vil_jpeglib.h
+endif
+ifeq ($(HAS_ECW),1)
+USE_ECW := 1
+SOURCES += file_formats/vil_j2k_image.cxx
+SOURCES += file_formats/NCSJPCVilIOStream.cxx
+DEFINES += -DHAS_J2K
 endif
 SOURCES += file_formats/vil_bmp.cxx
 SOURCES += file_formats/vil_bmp_core_header.cxx
