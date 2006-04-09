@@ -78,6 +78,9 @@ SOURCE=.\test_math_value_range.cxx
 # Begin Source File
 SOURCE=.\test_blocked_image_resource.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_image_list.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

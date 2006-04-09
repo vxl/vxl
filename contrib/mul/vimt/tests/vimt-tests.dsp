@@ -2,7 +2,6 @@
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-
 # variables to REPLACE
 # 
 #  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\mul" == include path
@@ -289,6 +288,9 @@ SOURCE=.\test_transform_2d.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_resample_bilin.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_image_bounds_and_centre_2d.cxx
 # End Source File
 # End Group
 # End Target
