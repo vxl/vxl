@@ -147,6 +147,7 @@ format, e.g.
 Of course, if your user has chosen a name such as "foo.ppm",
 you'll have a oddly named image.
 
+
 @section Copying an image
 @cindex images, copying
 You should know by now that copying @code{vil_image_view} objects does not
@@ -181,6 +182,7 @@ b(100,100) = 12;
 then @var{a} is unchanged after the assignment to @var{b(100,100)}.
 Note again that the actual copying is done in @code{vil_copy_deep}; when the
 return value is assigned to @var{b}, there is an efficient view copy.
+
 
 @section Image resources
 @cindex large images
@@ -256,6 +258,7 @@ vil_image_view_base_sptr vil_load(const char *file)
 
 To set image pixels, you call the resource's @code{put_view()}.
 
+
 @subsection A rule of thumb.
 @quotation
 When developing an image processing algorithm,
@@ -269,7 +272,6 @@ the @code{vil_image_view<T>} version to do the actual pixel manipulation.
 associated with images, e.g. choosing pixel types at runtime,
 splitting an image into blocks so that it fits in memory,
 dealing with the arbitrary and complex hassles of image IO.
-
 
 
 @subsection Using @code{vil_memory_image} to ignore pixel type.
@@ -320,7 +322,6 @@ void display_view(vil_image_resource_sptr &ir)
 @cindex planes
 @cindex components
 @cindex pixel-type
-
 
 @code{vil_image_view}
 uses a pointer arithmetic style of indexing.
@@ -407,12 +408,12 @@ int main()
 
   vil_sobel_3x3(image,grad_i,grad_j);
 
-  vcl_cout<<vcl_endl;
-  vcl_cout<<"Sobel I Gradient:"<<vcl_endl;
+  vcl_cout<<vcl_endl
+          <<"Sobel I Gradient:"<<vcl_endl;
   vil_print_all(vcl_cout,grad_i);
 
-  vcl_cout<<vcl_endl;
-  vcl_cout<<"Sobel J Gradient:"<<vcl_endl;
+  vcl_cout<<vcl_endl
+          <<"Sobel J Gradient:"<<vcl_endl;
   vil_print_all(vcl_cout,grad_j);
 
   return 0;
@@ -423,6 +424,7 @@ There are also algorithms to perform image arithmetic,
 smoothing, general 1D and 2D
 convolution, morphological operations, interpolation,
 and much more.
+
 
 @section Converting from using the old vil1 to vil.
 
@@ -474,11 +476,9 @@ which has a function for converting between @code{vil1_memory_image_of} and @cod
 a class that wraps a @code{vil1_image}, and exports a @code{vil_image_resource} interface.
 
 
-
 @section Frequently Asked Questions
 @cindex Frequently Asked Questions
 @cindex FAQ
-
 
 @table @asis
 @item Question 1
@@ -539,7 +539,7 @@ a direction to the rotation angle.
 
 If you need an explicit world co-ordinate frame, within which you can embed an image,
 then take a look at the vimt library in @code{vxl/contrib/mul/vimt}. That provides
-an world-to-image co-ordinates transform, that can be efficently manipulated to
+an world-to-image co-ordinates transform, that can be efficiently manipulated to
 provide transforms up to projective complexity.
 
 @end table
@@ -565,7 +565,6 @@ void vil_image_view<T>::fill(T value)
 @}
 @end example
 This implementation has the advantage of being simple, and easy to test.
-
 
 In an ideal world the compiler would realise that it doesn't
 have to recalculate the location of each pixel each step, but instead keep
@@ -711,7 +710,9 @@ measure the statistical spread to see if your improvements are significant.
 It is quite common for compiler or processor
 quirks to make your optimised code slower than the original.
 
+
 @section Blocked Images (Advanced Topic)
+
 @subsection Basics
 It is possible to encounter images that are much larger than available
 memory. For example, a commercial satellite image can easily exceed several
@@ -750,7 +751,8 @@ are replaced by new blocks needed to fill in the new region. Thus, the
 number of blocks that have to actually be read from the file is
 significantly reduced.
 
-The blocked image resource interface has the following virtual methods in addition to those already defined in the base resource class:
+The blocked image resource interface has the following virtual methods
+in addition to those already defined in the base resource class:
 
 The block size used to store and retrive pixels.
 @example
@@ -758,25 +760,26 @@ unsigned size_block_i() const
 unsigned size_block_j() const
 @end example
 
-The number of blocks in column and row to contain the image.   
+The number of blocks in column and row to contain the image.
 @example
 unsigned n_block_i() const
 unsigned n_block_j() const
 @end example
 
- Retriving blocks from the resource. Note that a block is a @code{vil_image_view} and thus ready for use in processing and visualization operations.
+Retrieving blocks from the resource. Note that a block is a @code{vil_image_view}
+and thus ready for use in processing and visualization operations.
 
 @example
-vil_image_view_base_sptr 
+vil_image_view_base_sptr
 get_block( unsigned  block_index_i, unsigned  block_index_j ) const
 
-bool 
+bool
 get_blocks(unsigned start_block_i, unsigned end_block_i,
            unsigned  start_block_j, unsigned end_block_j,
            vcl_vector< vcl_vector< vil_image_view_base_sptr > >& blocks ) const
 @end example
 This blocking structure is used internally to implement the basic
-method 
+method
 @example
 get_copy_view(unsigned i0, unsigned n_i, unsigned j0, unsigned n_j)
 @end example
@@ -794,7 +797,7 @@ Similar methods are defined for inserting blocked data into the image resource.
 bool put_block(unsigned  block_index_i, unsigned  block_index_j,
                const vil_image_view_base& view)
 
-bool 
+bool
 put_blocks(unsigned start_block_i, unsigned end_block_i,
            unsigned  start_block_j, unsigned end_block_j,
            vcl_vector< vcl_vector< vil_image_view_base_sptr > > const& blocks)
@@ -808,6 +811,7 @@ writing on the same open resource. Therefore, a block-oriented image
 processing algorithm will have an input resource from which blocks are
 retrieved and an output resource where processed blocks are
 inserted.
+
 @subsection The Facade and Cached Resource
 Many of the advantages of blocking can be realized even if the
 underlying image resource is not intrinsically blocked. The
@@ -828,7 +832,7 @@ can be gained by the addition of a cache. The
 most recently retrieved blocks. The size of the cache (in number of
 blocks) is specified in the constructor:
 @example
-vil_cached_image_resource(vil_blocked_image_resource_sptr bir, 
+vil_cached_image_resource(vil_blocked_image_resource_sptr bir,
                            const unsigned cache_size)
 @end example
 The cache is implemented as a priority queue based on the ``age'' of a
@@ -836,10 +840,12 @@ block. The blocks in the queue are given a timestamp as they enter the
 queue. If a block is retrieved from the cache, then the timestamp is
 reset to the current time. Otherwise, blocks age as new blocks are
 entered into the cache.  When the cache is full, the oldest block is
-discarded to make room for a new block.  Note that the queue does not participate in writing blocks to a resource.
+discarded to make room for a new block.  Note that the queue does not
+participate in writing blocks to a resource.
 
 @subsection Using Blocked File Formats
-A blocking capability of a resource can be determined by examining the properties of the resource using the method 
+A blocking capability of a resource can be determined by examining the
+properties of the resource using the method
 @example
 bool get_property(char const* tag, void* property_value = 0) const
 @end example
@@ -853,9 +859,9 @@ To test if a resource supports blocking one can examine the appropriate properti
 vil_image_resource_sptr imgr = vil_load_image_resource("my_filename");
 ...
 unsigned sbi=0, sbj=0;
-bool is_blocked = 
+bool is_blocked =
   imgr->get_property(vil_property_size_block_i, &sbi) &&
-  imgr->get_property(vil_property_size_block_j, &sbj); 
+  imgr->get_property(vil_property_size_block_j, &sbj);
 ...
 @end example
 If the resource is blocked then @code{is_blocked} will be true and the
@@ -871,11 +877,11 @@ vil_blocked_image_resource_sptr bimgr =
                                        imgr->ni(), imgr->nj(), imgr->nplanes(),
                                        imgr->pixel_format(),
                                        size_block_i, size_block_j, "tiff");
-if(!vil_copy_deep(imgr, bimgr))
+if (!vil_copy_deep(imgr, bimgr))
 @{ //report trouble
  ...
 @}
-...                                       
+...
 @end example
 The new resource, @code{bimgr}, will store pixels in square, 256 X
 256, blocks. @code{vil_copy_deep} automatically splits the input
@@ -885,10 +891,10 @@ better to wrap the input resource in a facade with the same blocking
 structure as the output. That is,
 @example
 ...
-vil_blocked_image_resource_sptr facr = 
+vil_blocked_image_resource_sptr facr =
     vil_new_blocked_image_facade(imgr,sbi, sbj);
 
-if(!vil_copy_deep(facr, bimgr))
+if (!vil_copy_deep(facr, bimgr))
 @{ //report trouble
  ...
 @}
@@ -898,7 +904,9 @@ Currently, the @code{tiff} file format and The National
 Image Transmission Format (@code{nitf}) image format provide a
 @code{vil_blocked_image_resource}, however the @code{nitf} format does not yet support writing.
 
+
 @section Pyramid Images (Advanced Topic)
+
 @subsection What are Pyramid Images?
 As in the previous section on blocked images, the motivation for
 constructing a pyramid image is to manage large images without having
@@ -911,7 +919,7 @@ display of a complete overview requires that the entire image must be
 in memory.
 
 The zooming problem can be solved by constructing a
-@code{vil_blocked_image_resource}. This resource maintains a number of
+@code{vil_pyramid_image_resource}. This resource maintains a number of
 file-based copies of an image at different resolution scales. The
 original image is called the base image. Each reduced resolution image
 resource is called a level of the pyramid. Most typically, the levels
@@ -924,21 +932,22 @@ It is not necessary to have a fixed scale difference between adjacent
 levels of the @code{vil_pyramid_image_resource}. When a user requests
 a @code{vil_image_view} at a particular scale, a view from the closest
 scale in the pyramid is generated. The interface for getting a view
-from a pyramid image is illustrated in the following code example. In this example, the pyramid is stored as a set of image files in a directory.
-@example    
+from a pyramid image is illustrated in the following code example.
+In this example, the pyramid is stored as a set of image files in a directory.
+@example
 #include <vil/vil_load.h>
 #include <vil/vil_pyramid_image_resource.h>
 ...
 @{
 ...
- vil_pyramid_image_resource_sptr pir = 
+ vil_pyramid_image_resource_sptr pir =
                         vil_load_pyramid_resource("pyramid_dir");
  float actual_scale;
- vil_image_view<unsigned short> level_view = 
+ vil_image_view<unsigned short> level_view =
                         pir->get_copy_view(0.25f, actual_scale);
  ...
 @}
-@end example 
+@end example
 This example shows the basic use of a pyramid resource where a level
 view 1/4 the scale of the base image is being retrieved. If the
 pyramid doesn't contain a level with a scale factor of exactly 0.25,
@@ -946,7 +955,7 @@ the closest scale is returned and the scale of the closest level is
 returned in @code{actual_scale}. The level view only requires 1/16 the
 number of pixels of the base image and can likely be held entirely in
 memory. However, the user of the view has to keep in mind that the
-image has been scaled down and must manipulate it appropriately. 
+image has been scaled down and must manipulate it appropriately.
 
 For example, in rendering an image to the screen, the screen display
 scale factor must be compared to the level scale in order to determine
@@ -982,14 +991,14 @@ kernel recursively to each level. Gaussian suppression of higher
 spatial frequencies is superior to block averaging. The Gaussian is
 cheap to compute since it is separable and can be formed by applying
 two 1-d convolutions.
-                                  
+
 The @code{vil_pyramid_image_resource} class provides the simple 2x2
 averaging method for generating pyramid levels that are a factor of
 two apart in scale. The user can apply more sophisticated sampling
 schemes but this method is adequate for display purposes. Each level
-is generated according by applying the static method
+is generated accordingly by applying the static method
 @code{vil_pyramid_image_resource::decimate}.
-@example    
+@example
 #include <vil/vil_load.h>
 #include <vil/vil_pyramid_image_resource.h>
 ...
@@ -997,9 +1006,9 @@ is generated according by applying the static method
 ...
   vil_image_resource_sptr image;
 
-// generate an image at 1/2 the scale   
-     
- image = 
+// generate an image at 1/2 the scale
+
+ image =
    vil_pyramid_image_resource::decimate(base_image, "level_filename", "tiff");
 
 // the base_image resource was generated previously
@@ -1010,8 +1019,9 @@ In the current implementation of the decimate method, the pyramid
 levels are generated as blocked images and so a resource file format
 that can support blocking must be used.  This choice is primarily a
 matter of decimation processing efficiency and to manage level images
-that are still too large to fit in memory.  In the example, 
-the ``tiff'' file format is chosen since rectangular block structure is supported. If the input image is blocked then its native block structure is used. 
+that are still too large to fit in memory.  In the example, the ``tiff''
+file format is chosen since rectangular block structure is supported.
+If the input image is blocked then its native block structure is used.
 Otherwise a default blocking (256 x 256) structure is used.
 
 @subsection Storing the pyramid resource
@@ -1048,7 +1058,7 @@ image resources into each pyramid.
 
 // Construct a new multiple file pyramid resource
 
-vil_pyramid_image_resource_sptr pyr_image_list = 
+vil_pyramid_image_resource_sptr pyr_image_list =
         vil_new_pyramid_image_resource("pyramid_directory", "pyil");
 
 // Construct a new single file tiff pyramid resource
@@ -1058,21 +1068,20 @@ vil_pyramid_image_resource_sptr pyr_tiff =
 
 // Store image_resources into the pyramids
 
-  for( vcl_vector<vil_image_resource_sptr>::iterator rit = rescs.begin();
-      rit != rescs.end();  ++rit)
-    @{
-      pry_image_list.put_resource(*rit);
-      pry_tiff.put_resource(*rit);
-    @}
+  for ( vcl_vector<vil_image_resource_sptr>::iterator rit = rescs.begin();
+        rit != rescs.end();  ++rit)
+  @{
+    pry_image_list.put_resource(*rit);
+    pry_tiff.put_resource(*rit);
+  @}
 ...
 @}
 @end example
 
-
 Two methods are provided in @code{vil_new} that generate pyramid
 images in either the image list or tiff format,
 @code{vil_new_pyramid_image_list_from_base} and
-@code{vil_new_pyramid_image_from_base}. The following example demonstrates 
+@code{vil_new_pyramid_image_from_base}. The following example demonstrates
 the use of each pyramid builder.
 @example
 @{
@@ -1086,10 +1095,10 @@ vil_image_resource_sptr base_image;
 // base_image is loaded or constructed
 ...
 
- unsigned number_of_levels = 7;        
+ unsigned number_of_levels = 7;
  bool copy_base = true;
 // Generate a pyramid as an image_list (files in a directory)
- vil_pyramid_image_resource_sptr pyril = 
+ vil_pyramid_image_resource_sptr pyril =
      vil_new_pyramid_image_list_from_base("pyramid_directory_path",
                                           base_image,
                                           number_of_levels,
@@ -1098,7 +1107,7 @@ vil_image_resource_sptr base_image;
                                           "R");
 
 // Generate a pyramid as a multi-image tiff file
- vil_pyramid_image_resource_sptr pytif = 
+ vil_pyramid_image_resource_sptr pytif =
     vil_new_pyramid_image_from_base("pyramid_file.tif"
                                     base_image,
                                     number_of_levels,
@@ -1137,7 +1146,7 @@ The decompression is actually handled by a freely available third party library 
 @item ECW SDK Commercial Use License Agreement: This license is for commercial applications that require the ability to write JPEG 2000 streams that are greater than 500 MB.
 @end itemize
 
-The VXL wrappers around this library were developed using version 3.1 Beta of this SDK and has also been tested using version 3.3 RC2.  This was the latest version available as of 4/4/2006.  You can download the ECW JPEG 2000 SDK or obtain more information about the three licensing schemes from ER Mapper's website (www.ermapper.com).  
+The VXL wrappers around this library were developed using version 3.1 Beta of this SDK and has also been tested using version 3.3 RC2.  This was the latest version available as of 4/4/2006.  You can download the ECW JPEG 2000 SDK or obtain more information about the three licensing schemes from ER Mapper's website (www.ermapper.com).
 
 Currently Er Mapper releases the ECW JPEG 2000 SDK with a variety of build systems.  As described in the next section, VXL has been configured to use the most common one which yields separate NCSEcw and NCSUtil libraries.  Most of the testing has taken place using the dynamically linked versions of these libraries, but the static versions should work as well.
 
@@ -1145,9 +1154,9 @@ Currently Er Mapper releases the ECW JPEG 2000 SDK with a variety of build syste
 Once you have installed/built ECW JPEG 2000 SDK, you must configure VXL so that it knows where to find what it needs.  There are three relevant CMAKE variables that you must specify (it is unlikely that CMAKE will find them by itself):
 
 @itemize @bullet
-@item	ECW_INCLUDE_DIR: This must point to the include directory of your ECW SDK.
-@item	ECW_ncsecw_LIBRARY: This must point to the NCSEcw library.
-@item	ECW_ncsutil_LIBRARY: This must point to the NCSEcw library.
+@item ECW_INCLUDE_DIR: This must point to the include directory of your ECW SDK.
+@item ECW_ncsecw_LIBRARY: This must point to the NCSEcw library.
+@item ECW_ncsutil_LIBRARY: This must point to the NCSEcw library.
 @end itemize
 
 You can then have CMAKE create your build files - CMAKE will automatically add the appropriate source files and pre-processor definitions.  Once you've built VIL, you can test this JPEG 2000 decompression capability using the 'test_file_format_read' test function available in the vil_test_all project.  If you've set everything up properly, this test function will run two additional tests:
@@ -1158,4 +1167,3 @@ You can then have CMAKE create your build files - CMAKE will automatically add t
 @end itemize
 
 If these tests pass, then it is relatively safe to assume that you've set things up correctly.  Note that, if you've used the dynamically linked version of the ECW JPEG 2000 SDK, then you'll need to make sure that your PATH environment variable contains the /lib directory that contains NCSEcw and NCSUtil when you run this test.
-
