@@ -898,6 +898,233 @@ Currently, the @code{tiff} file format and The National
 Image Transmission Format (@code{nitf}) image format provide a
 @code{vil_blocked_image_resource}, however the @code{nitf} format does not yet support writing.
 
+@section Pyramid Images (Advanced Topic)
+@subsection What are Pyramid Images?
+As in the previous section on blocked images, the motivation for
+constructing a pyramid image is to manage large images without having
+to keep the entire image in memory. Satellite images can easily exceed
+all available random access memory so it is impossible to display an
+overview of the image.  The blocked image strategy solves the problem
+of panning through a large image, but it does not solve the problem of
+zooming between different levels of detail. Even with blocking, the
+display of a complete overview requires that the entire image must be
+in memory.
+
+The zooming problem can be solved by constructing a
+@code{vil_blocked_image_resource}. This resource maintains a number of
+file-based copies of an image at different resolution scales. The
+original image is called the base image. Each reduced resolution image
+resource is called a level of the pyramid. Most typically, the levels
+of the pyramid differ by a factor of two in scale in each
+dimension. The limit of the size of a pyramid as the number of levels
+approaches infinity is 1 + 1/4 + .. =1+1/3.  Thus, the worst case is
+33% extra storage to represent all levels of detail.
+
+It is not necessary to have a fixed scale difference between adjacent
+levels of the @code{vil_pyramid_image_resource}. When a user requests
+a @code{vil_image_view} at a particular scale, a view from the closest
+scale in the pyramid is generated. The interface for getting a view
+from a pyramid image is illustrated in the following code example. In this example, the pyramid is stored as a set of image files in a directory.
+@example    
+#include <vil/vil_load.h>
+#include <vil/vil_pyramid_image_resource.h>
+...
+@{
+...
+ vil_pyramid_image_resource_sptr pir = 
+                        vil_load_pyramid_resource("pyramid_dir");
+ float actual_scale;
+ vil_image_view<unsigned short> level_view = 
+                        pir->get_copy_view(0.25f, actual_scale);
+ ...
+@}
+@end example 
+This example shows the basic use of a pyramid resource where a level
+view 1/4 the scale of the base image is being retrieved. If the
+pyramid doesn't contain a level with a scale factor of exactly 0.25,
+the closest scale is returned and the scale of the closest level is
+returned in @code{actual_scale}. The level view only requires 1/16 the
+number of pixels of the base image and can likely be held entirely in
+memory. However, the user of the view has to keep in mind that the
+image has been scaled down and must manipulate it appropriately. 
+
+For example, in rendering an image to the screen, the screen display
+scale factor must be compared to the level scale in order to determine
+the correct rendering scale. Suppose for example that a display screen
+has 1000 x 1000 elements and the base image of the pyramid is 15,000
+by 15,000 pixels. The required rendering scale factor for the base
+image is 1/15. Suppose that the closest scale level in the
+pyramid is 1/16. The resulting level view is then rendered at a scale factor of
+16/15 in order to fill the screen. Note however that only one million
+pixels are being processed instead of 225 million.
+
+@subsection Subsampling the base image
+Level images are formed by subsampling the original base image. In
+order to do this subsampling properly, it is necessary to observe the
+limitations imposed by the Nyquist sampling theorem. The sample rate
+must be greater than twice the highest spatial frequency in the
+image. Otherwise aliasing will occur, which appears as interference
+bands in the down-sampled image. The Nyquist sampling rate constraint
+can be achieved by spatially smoothing the image using a low pass
+filter. The filter is designed to remove spatial frequencies that
+exceed one half the sampling rate corresponding to the scale of the
+pyramid level.
+
+For example, if the base image is being sampled at a scale of 0.5
+(every second pixel in each image dimension) then the image must be
+pre-smoothed to remove spatial frequencies greater than 1/pixel. A
+simple filter for achieving this requirement is to form the average of
+the 2x2 pixel neighborhood in the base image corresponding to each
+pixel in the downsampled image. This smoothing does not remove all the
+higher spatial frequencies but they are significantly attenuated.
+Another common approach is to apply a Gaussian low pass smoothing
+kernel recursively to each level. Gaussian suppression of higher
+spatial frequencies is superior to block averaging. The Gaussian is
+cheap to compute since it is separable and can be formed by applying
+two 1-d convolutions.
+                                  
+The @code{vil_pyramid_image_resource} class provides the simple 2x2
+averaging method for generating pyramid levels that are a factor of
+two apart in scale. The user can apply more sophisticated sampling
+schemes but this method is adequate for display purposes. Each level
+is generated according by applying the static method
+@code{vil_pyramid_image_resource::decimate}.
+@example    
+#include <vil/vil_load.h>
+#include <vil/vil_pyramid_image_resource.h>
+...
+@{
+...
+  vil_image_resource_sptr image;
+
+// generate an image at 1/2 the scale   
+     
+ image = 
+   vil_pyramid_image_resource::decimate(base_image, "level_filename", "tiff");
+
+// the base_image resource was generated previously
+...
+@}
+@end example
+In the current implementation of the decimate method, the pyramid
+levels are generated as blocked images and so a resource file format
+that can support blocking must be used.  This choice is primarily a
+matter of decimation processing efficiency and to manage level images
+that are still too large to fit in memory.  In the example, 
+the ``tiff'' file format is chosen since rectangular block structure is supported. If the input image is blocked then its native block structure is used. 
+Otherwise a default blocking (256 x 256) structure is used.
+
+@subsection Storing the pyramid resource
+It is necessary to have a file format that can store the multiple
+images required for the different resolution levels. The most obvious
+approach is to store the images as separate files in a directory.
+This format is called @code{vil_pyramid_image_list} and is designated
+by the @code{vil_file_format::tag()}, ``pyil''. There is no
+restriction on the format of the level files but applications of the
+pyramid are generally more efficient if the base image and the level
+files are blocked.
+
+A second option for storing image pyramids is the
+@code{vil_tiff_pyramid_resource} with
+@code{vil_file_format::tag()},``ptif''. In this case, all the pyramid
+levels are saved in a single tiff file.  There is no assumed order to
+the image headers in the file.  The pyramid level scales are sorted by
+the resource to provide the required interface.  The following example
+shows creating an output resource of each type and inserting the level
+image resources into each pyramid.
+@example
+#include <vil/vil_new.h>
+#include <vil/vil_image_resource.h>
+#include <vil/vil_pyramid_image_resource.h>
+...
+@{
+// a list of image resources representing the pyramid levels
+
+    vcl_vector<vil_image_resource_sptr> rescs;
+...
+
+// Generate a set of resources at multiple scales
+...
+
+// Construct a new multiple file pyramid resource
+
+vil_pyramid_image_resource_sptr pyr_image_list = 
+        vil_new_pyramid_image_resource("pyramid_directory", "pyil");
+
+// Construct a new single file tiff pyramid resource
+
+vil_pyramid_image_resource_sptr pyr_tiff =
+        vil_new_pyramid_image_resource("pyramid.tif", "ptif");
+
+// Store image_resources into the pyramids
+
+  for( vcl_vector<vil_image_resource_sptr>::iterator rit = rescs.begin();
+      rit != rescs.end();  ++rit)
+    @{
+      pry_image_list.put_resource(*rit);
+      pry_tiff.put_resource(*rit);
+    @}
+...
+@}
+@end example
+
+
+Two methods are provided in @code{vil_new} that generate pyramid
+images in either the image list or tiff format,
+@code{vil_new_pyramid_image_list_from_base} and
+@code{vil_new_pyramid_image_from_base}. The following example demonstrates 
+the use of each pyramid builder.
+@example
+@{
+#include <vil/vil_new.h>
+#include <vil/vil_image_resource.h>
+#include <vil/vil_pyramid_image_resource.h>
+...
+
+vil_image_resource_sptr base_image;
+
+// base_image is loaded or constructed
+...
+
+ unsigned number_of_levels = 7;        
+ bool copy_base = true;
+// Generate a pyramid as an image_list (files in a directory)
+ vil_pyramid_image_resource_sptr pyril = 
+     vil_new_pyramid_image_list_from_base("pyramid_directory_path",
+                                          base_image,
+                                          number_of_levels,
+                                          copy_base,
+                                          "tiff",
+                                          "R");
+
+// Generate a pyramid as a multi-image tiff file
+ vil_pyramid_image_resource_sptr pytif = 
+    vil_new_pyramid_image_from_base("pyramid_file.tif"
+                                    base_image,
+                                    number_of_levels,
+                                    "ptif",
+                                    "temporary_dir_path");
+...
+@}
+
+@end example
+
+In the image list pyramid the user can specify the format of the level
+image resource files. In the example the tiff format is specified. The
+last argument specifies the base name of the pyramid files, e.g., R0,
+R1, ... Rn-1, in the example. The variable @code{copy_base} indicates
+whether or not the base image is already in the directory. If not,
+then @code{base_image} is copied as a blocked image resource with
+default blocking (256 x 256). If a different blocking structure is
+desired, the base image can be wrapped in a
+@code{vil_blocked_image_facade} resource with the new blocking structure.
+
+For the tiff-based pyramid it is necessary to provide a temporary
+directory to generate pyramid levels prior to inserting them into the
+single tiff file. Since the pyramid level images can still be too
+large for memory, they are constructed as file-based resources.
+
+
 @section JPEG 2000 Support
 VIL can be configured to support the reading of JPEG 2000 image files as well as NITF 2.1 images that are JPEG 2000 compressed.  This chapter describes how to set up this capability.
 
@@ -931,3 +1158,4 @@ You can then have CMAKE create your build files - CMAKE will automatically add t
 @end itemize
 
 If these tests pass, then it is relatively safe to assume that you've set things up correctly.  Note that, if you've used the dynamically linked version of the ECW JPEG 2000 SDK, then you'll need to make sure that your PATH environment variable contains the /lib directory that contains NCSEcw and NCSUtil when you run this test.
+
