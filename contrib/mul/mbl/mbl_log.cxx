@@ -260,10 +260,10 @@ void mbl_log_output_file::terminate_flush()
 
 
 mbl_logger::mbl_logger(const char *id):
+  output_(0),
   streambuf_(this),
   logstream_(&streambuf_),
-  mt_logstream_(&logstream_),
-  output_(0)
+  mt_logstream_(&logstream_)
 {
   const mbl_log_categories::cat_spec &cat =
     mbl_logger::root().categories().get(id);
@@ -340,7 +340,6 @@ void mbl_logger::mtstop()
 }
 
 
-
 mbl_logger_root &mbl_logger::root()
 {
   static vcl_auto_ptr<mbl_logger_root> root_;
@@ -413,9 +412,6 @@ void mbl_logger_root::update_all_loggers()
 }
 
 
-
-
-
 mbl_log_categories::mbl_log_categories()
 {
   cat_spec defult_spec; defult_spec.level = mbl_logger::NOTICE;
@@ -425,7 +421,7 @@ mbl_log_categories::mbl_log_categories()
 typedef vcl_map<vcl_string, vcl_ostream*> stream_names_t;
 
 
-inline mbl_log_categories::cat_spec parse_cat_spec(const vcl_string &str, 
+inline mbl_log_categories::cat_spec parse_cat_spec(const vcl_string &str,
   const stream_names_t& stream_names)
 {
   mbl_log_categories::cat_spec spec;
