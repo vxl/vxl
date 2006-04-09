@@ -299,7 +299,7 @@ void vidl2_dshow::save_graph_to_file(const CComPtr<IFilterGraph2>& filter_graph,
                                          0, &storage));
 
   CComPtr<IStream> stream;
-  //const vcl_wstring stream_name = L"ActiveMovieGraph"; 
+  //const vcl_wstring stream_name = L"ActiveMovieGraph";
   DSHOW_ERROR_IF_FAILED(storage->CreateStream(L"ActiveMovieGraph",
                                               STGM_CREATE
                                               | STGM_WRITE
@@ -326,10 +326,10 @@ void vidl2_dshow::load_graph_from_file(const CComPtr<IFilterGraph2>& filter_grap
     vidl2_exception_error(vidl2_dshow_exception(
       "Not a storage file.\n" + DSHOW_GET_ERROR_TEXT(E_FAIL)));
   }
-  DSHOW_ERROR_IF_FAILED(StgOpenStorage(filename.c_str(), 0, 
+  DSHOW_ERROR_IF_FAILED(StgOpenStorage(filename.c_str(), 0,
                                        STGM_TRANSACTED
                                        | STGM_READ
-                                       | STGM_SHARE_DENY_WRITE, 
+                                       | STGM_SHARE_DENY_WRITE,
                                        0, 0, &storage));
 
   CComPtr<IPersistStream> persist_stream;
@@ -338,7 +338,7 @@ void vidl2_dshow::load_graph_from_file(const CComPtr<IFilterGraph2>& filter_grap
                                reinterpret_cast<void**>(&persist_stream));
 
   CComPtr<IStream> stream;
-  DSHOW_ERROR_IF_FAILED(storage->OpenStream(L"ActiveMovieGraph", 0, 
+  DSHOW_ERROR_IF_FAILED(storage->OpenStream(L"ActiveMovieGraph", 0,
                                             STGM_READ
                                             | STGM_SHARE_EXCLUSIVE,
                                             0, &stream));
@@ -395,7 +395,7 @@ void vidl2_dshow::get_media_info(const AM_MEDIA_TYPE& amt,
     }
 #endif
   }
-  else 
+  else
   {
     // SampleGrabber requires VIDEOINFOHEADER type.
     //   Wrong format. Free the format block and bail out.
@@ -477,7 +477,7 @@ void vidl2_dshow::delete_media_type(AM_MEDIA_TYPE& amt)
   }
   if (amt.pUnk != 0)
   {
-    // Unecessary because pUnk should not be used, but safest.
+    // Unnecessary because pUnk should not be used, but safest.
     amt.pUnk->Release();
     amt.pUnk = 0;
   }
