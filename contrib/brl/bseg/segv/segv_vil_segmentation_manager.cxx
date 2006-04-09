@@ -714,29 +714,29 @@ void segv_vil_segmentation_manager::nonmaximal_suppression()
 
   int ni = input.ni();
   int nj = input.nj();
-  
+
   grad_i.set_size(ni,nj);
-  grad_j.set_size(ni,nj); 
+  grad_j.set_size(ni,nj);
   input_grey.set_size(ni,nj);
   grad_x.resize(ni,nj);
   grad_y.resize(ni,nj);
-  
-  if(input.nplanes() > 1)
+
+  if (input.nplanes() > 1)
     vil_convert_planes_to_grey(input, input_grey);
   else
     input_grey = input;
 
   vil_sobel_1x3 <vxl_byte, double> (input_grey, grad_i, grad_j);
-  for(int j=0;j<nj; j++)
+  for (int j=0;j<nj; j++)
   {
-    for(int i=0;i<ni; i++)
+    for (int i=0;i<ni; i++)
     {
       grad_x(i,j) = grad_i(i,j);
       grad_y(i,j) = grad_j(i,j);
     }
   }
 
-  
+
   sdet_nonmax_suppression ns(nsp, grad_x, grad_y);
   ns.apply();
   vcl_vector<vsol_point_2d_sptr>& points = ns.get_points();
@@ -1099,7 +1099,7 @@ void segv_vil_segmentation_manager::intensity_profile()
   bgui_image_tableau_sptr itab = selected_image_tab();
 
   vil_image_resource_sptr imr_sptr = itab->get_image_resource();
- 
+
   vil_pixel_format type = imr_sptr->pixel_format();
 
   float x1, y1, x2, y2;
@@ -1110,48 +1110,63 @@ void segv_vil_segmentation_manager::intensity_profile()
 
   // get pixel value in the line
   vcl_vector<double> data;
-  int start, end;
-  if( vcl_fabs(x1-x2) < vcl_fabs(y1 - y2)){
-    start = static_cast<int>(y1); 
-    end = static_cast<int>(y2);
-    for(int j=start; j<=end; j++)
-    {
-      int i = static_cast<int>(x1+(j-y1)*(x2-x1)/(y2-y1));
-      data.push_back(static_cast<double>(j));
-    }
-
-  }
-  else{
-    start = static_cast<int>(x1);
-    end = static_cast<int>(x2);
-
-    switch(type)
+  if ( vcl_fabs(x1-x2) < vcl_fabs(y1-y2))
+  {
+    switch (type)
     {
       case VIL_PIXEL_FORMAT_UINT_16:
-        { // this extra bracket is a hack to make object initalization possible
-          vil_image_view<vxl_uint_16> viv = imr_sptr->get_view();
-          for(int i=start; i<=end; i++)
-          {
-            int j = static_cast<int>(y1+(i-x1)*(y2-y1)/(x2-x1));
-
-            data.push_back(viv(i,j));
-          }
-          
-          break;
+      { // this extra bracket is a hack to make object initalization possible
+        vil_image_view<vxl_uint_16> viv = imr_sptr->get_view();
+        if (y1 < y2)
+        for (int j=static_cast<int>(y1+0.99); j<=y2; ++j)
+        {
+          int i = static_cast<int>(x1+(j-y1)*(x2-x1)/(y2-y1));
+          data.push_back(viv(i,j));
         }
-          default:
-          vcl_cout << "image pixel format is not supported\n";
-
+        else
+        for (int j=static_cast<int>(y1); j>=y2; --j)
+        {
+          int i = static_cast<int>(x1+(j-y1)*(x2-x1)/(y2-y1));
+          data.push_back(viv(i,j));
+        }
+        break;
+      }
+      default:
+      vcl_cout << "image pixel format is not supported\n";
+    }
+  }
+  else
+  {
+    switch (type)
+    {
+      case VIL_PIXEL_FORMAT_UINT_16:
+      { // this extra bracket is a hack to make object initalization possible
+        vil_image_view<vxl_uint_16> viv = imr_sptr->get_view();
+        if (x1 < x2)
+        for (int i=static_cast<int>(x1+0.99); i<=x2; ++i)
+        {
+          int j = static_cast<int>(y1+(i-x1)*(y2-y1)/(x2-x1));
+          data.push_back(viv(i,j));
+        }
+        else
+        for (int i=static_cast<int>(x1); i>=x2; --i)
+        {
+          int j = static_cast<int>(y1+(i-x1)*(y2-y1)/(x2-x1));
+          data.push_back(viv(i,j));
+        }
+        break;
+      }
+      default:
+      vcl_cout << "image pixel format is not supported\n";
     }
   }
 
-  
   bgui_graph_tableau_sptr h= bgui_graph_tableau_new();
 
   h->update(0, 65536, data);
   vgui_viewer2D_tableau_sptr v = vgui_viewer2D_tableau_new(h);
   vgui_shell_tableau_sptr s = vgui_shell_tableau_new(v);
-  
+
   //popup a profile graph
   vgui_dialog ip_dialog("intensity profile");
   ip_dialog.inline_tableau(s, data.size()+20, 656);
