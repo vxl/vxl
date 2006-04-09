@@ -1,4 +1,4 @@
-// This is core/vil/tests/test_pyramid_image_resource.cxx
+// This is core/vil/tests/test_image_list.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdio.h>
@@ -50,7 +50,7 @@ static void test_image_list()
   vcl_string dir = "image_list_dir";
   {
     vul_file::make_directory(dir.c_str());
-	TEST("vil_is_directory", vil_image_list::vil_is_directory(dir.c_str()),true);
+    TEST("vil_is_directory", vil_image_list::vil_is_directory(dir.c_str()),true);
     int chd = vpl_chdir(dir.c_str());
     good = vil_save_image_resource(ir, "R0.tif", "tiff");
     good = good && vil_save_image_resource(ir2, "R1.tif", "tiff");
@@ -59,11 +59,11 @@ static void test_image_list()
     vil_image_list il(dir.c_str());
     vcl_vector<vil_image_resource_sptr> rescs = il.resources();
     good = good && rescs.size()==3;
-    if(good)
-      {
-        unsigned ni0 = rescs[0]->ni();
-        good = good && ni0 == 73;
-      }
+    if (good)
+    {
+      unsigned ni0 = rescs[0]->ni();
+      good = good && ni0 == 73;
+    }
     TEST("image_list read resources", good, true);
   }//close open resource files
   //Cleanup resource files
