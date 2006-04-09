@@ -10,7 +10,6 @@ ADD_EXECUTABLE( vil_test_all
   test_memory_chunk.cxx
   test_pixel_format.cxx
   test_pyramid_image_resource.cxx
-  test_image_list.cxx
 
   # file format readers/writers
   test_file_format_read.cxx
