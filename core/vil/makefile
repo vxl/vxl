@@ -24,8 +24,12 @@ SOURCES += vil_memory_chunk.cxx
 SOURCES += vil_file_format.cxx
 SOURCES += vil_memory_image.cxx
 
+SOURCES += vil_image_list.cxx
+SOURCES += vil_pyramid_image_resource.cxx
+MANPAGE_SOURCES += vil_pyramid_image_resource_sptr.h
+
 # file format readers/writers
-SOURCES += file_formats/vil_image_list.cxx
+SOURCES += file_formats/vil_pyramid_image_list.cxx
 SOURCES += file_formats/vil_pnm.cxx
 SOURCES += file_formats/vil_ras.cxx
 SOURCES += file_formats/vil_iris.cxx

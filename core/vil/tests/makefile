@@ -23,6 +23,7 @@ TESTS += test_image_loader_robustness.cxx
 TESTS += test_stream.cxx
 PARAMS_test_stream := file_read_data
 TESTS += test_image_list.cxx
+TESTS += test_pyramid_image_resource.cxx
 
 # image operations
 TESTS += test_deep_copy_3_plane.cxx
