@@ -480,7 +480,10 @@ bool vgui_rubberband_tableau::handle_linestrip(vgui_event const &e, float ix, fl
 
 bool vgui_rubberband_tableau::handle(vgui_event const &e)
 {
-  e.origin->make_current();
+  if(e.origin)
+    e.origin->make_current();
+  else
+    return false;
   float ix, iy;
   vgui_projection_inspector().window_to_image_coordinates(e.wx, e.wy, ix, iy);
 
