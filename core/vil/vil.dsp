@@ -495,10 +495,16 @@ SOURCE=.\file_formats/vil_nitf2.cxx
 SOURCE=.\file_formats/NCSJPCVilIOStream.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil_image_list.cxx
+SOURCE=.\file_formats/vil_j2k_image.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil_j2k_image.cxx
+SOURCE=.\file_formats/vil_pyramid_image_list.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil_pyramid_image_resource.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil_image_list.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil_resample_bilin+float.float-.cxx
@@ -613,6 +619,9 @@ SOURCE=.\Templates/vil_sample_grid_bilin+uint_16.float-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil_smart_ptr+vil_blocked_image_resource-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_smart_ptr+vil_pyramid_image_resource-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -936,10 +945,19 @@ SOURCE=.\file_formats/vil_tiff_header.h
 SOURCE=.\file_formats/NCSJPCVilIOStream.h
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil_image_list.h
+SOURCE=.\file_formats/vil_j2k_image.h
 # End Source File
 # Begin Source File
-SOURCE=.\file_formats/vil_j2k_image.h
+SOURCE=.\file_formats/vil_pyramid_image_list.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_pyramid_image_resource.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_pyramid_image_resource_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_image_list.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_nearest_neighbour_interp.h
