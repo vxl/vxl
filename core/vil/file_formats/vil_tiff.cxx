@@ -1114,6 +1114,11 @@ tiff_pyramid_level* vil_tiff_pyramid_resource::closest(const float scale) const
   return pl;
 }
 
+vil_tiff_pyramid_resource::vil_tiff_pyramid_resource() 
+  : t_(0), read_(true)
+{
+}
+
 vil_tiff_pyramid_resource::
 vil_tiff_pyramid_resource(TIFF* t, bool read) 
   : t_(t), read_(read)

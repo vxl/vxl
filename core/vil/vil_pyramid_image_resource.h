@@ -32,7 +32,6 @@
 class vil_pyramid_image_resource : public vil_image_resource
 {
  public:
-  vil_pyramid_image_resource();
   vil_pyramid_image_resource(vcl_vector<vil_image_resource_sptr> const& images);
   virtual ~vil_pyramid_image_resource();
 
@@ -119,6 +118,8 @@ class vil_pyramid_image_resource : public vil_image_resource
  protected:
   //smart pointer
   friend class vil_smart_ptr<vil_pyramid_image_resource>;
+  // no default constructor
+  vil_pyramid_image_resource();
 };
 #include <vil/vil_pyramid_image_resource_sptr.h>
 #endif // vil_pyramid_image_resource_h_

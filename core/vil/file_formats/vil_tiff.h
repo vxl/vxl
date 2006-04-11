@@ -316,6 +316,8 @@ class vil_tiff_pyramid_resource : public vil_pyramid_image_resource
   void print(const unsigned level)
     {if(level<levels_.size()) levels_[level]->print(level);}
  protected:  
+  //:default constructor
+  vil_tiff_pyramid_resource();  
   //utility methods
   //:normalize the scale factors so that the base image scale = 1.0
   void normalize_scales();

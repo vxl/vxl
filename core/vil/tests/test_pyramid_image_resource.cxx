@@ -52,9 +52,10 @@ static void test_pyramid_image_resource()
     for (unsigned j = 0; j<nj3; ++j)
       image3(i,j) = i + ni3*j;
   vil_image_resource_sptr ir3 = vil_new_image_resource_of_view(image3);
-
+  vcl_string d = "pyramid_dir";
+  vul_file::make_directory(d.c_str());
   //Test pyramid_image_list::put_resource(..)
-  vil_pyramid_image_list* pir = new vil_pyramid_image_list();
+  vil_pyramid_image_list* pir = new vil_pyramid_image_list(d.c_str());
   pir->put_resource(ir3);
   for(unsigned i = 0; i<pir->nlevels(); ++i)
     pir->print(i);
@@ -73,6 +74,10 @@ static void test_pyramid_image_resource()
            << ") actual scale = "<< actual_scale << '\n';
   TEST_NEAR("actual scale in pyramid image", actual_scale, 0.493, 0.01);
   delete pir;
+  //Clean up directory
+  vil_image_list vl(d.c_str());
+  vl.clean_directory();
+
   //Test image decimation. Designed to work with blocked images
   vil_image_resource_sptr bir = new vil_blocked_image_facade(ir, 16, 16);
   //test decimation for generating a pyramid level
@@ -106,8 +111,6 @@ static void test_pyramid_image_resource()
     TEST("decimated image read", dec_view(0,0), 37);
   }//close open resource files
   vpl_unlink(dec_file.c_str());  
-  vcl_string d = "pyramid_dir";
-  vul_file::make_directory(d.c_str());
   {
     vil_pyramid_image_resource_sptr bpyr = 
       vil_new_pyramid_image_list_from_base(d.c_str(), ir, 3, true, "tiff", "R");
@@ -125,7 +128,7 @@ static void test_pyramid_image_resource()
     else
       TEST("Pyramid create and read", false, true);
   }//close open resource files
-  vil_image_list vl(d.c_str());
+  //clean directory
   vl.clean_directory();
   //Test pyramid_image_list::put_resource 
 bool good = true;

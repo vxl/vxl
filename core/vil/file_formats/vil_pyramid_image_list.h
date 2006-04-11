@@ -86,7 +86,6 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
 
 {
  public:
-  vil_pyramid_image_list();
   vil_pyramid_image_list(char const* directory);
   vil_pyramid_image_list(vcl_vector<vil_image_resource_sptr> const& images);
   virtual ~vil_pyramid_image_list();
@@ -162,6 +161,8 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
     {if(level<levels_.size()) levels_[level]->print(level);}
 
  protected:
+  // no default constructor;
+  vil_pyramid_image_list();
   //utility functions
 
   //:normalize the scale factors so that the base image scale = 1.0
