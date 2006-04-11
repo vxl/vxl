@@ -21,10 +21,6 @@
 #include "vil_j2k_image.h"
 #endif //HAS_J2K
 
-#ifdef VIL_USE_FSTREAM64
-#include <vil/vil_stream_fstream64.h>
-#endif //VIL_USE_FSTREAM64
-
 int debug_level = 0;
 
 //--------------------------------------------------------------------------------

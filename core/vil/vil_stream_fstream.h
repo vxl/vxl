@@ -4,6 +4,11 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
+
+#ifdef VIL_USE_FSTREAM64
+#include <vil/vil_stream_fstream64.h>
+#endif //VIL_USE_FSTREAM64
+
 //:
 // \file
 // \brief A vil_stream implementation using vcl_fstream

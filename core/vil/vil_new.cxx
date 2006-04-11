@@ -13,11 +13,7 @@
 #include <vcl_cassert.h>
 #include <vil/vil_property.h>
 #include <vil/vil_file_format.h>
-#ifdef VIL_USE_FSTREAM64
-#include <vil/vil_stream_fstream64.h>
-#else //VIL_USE_FSTREAM64
 #include <vil/vil_stream_fstream.h>
-#endif //VIL_USE_FSTREAM64
 #include <vil/vil_image_resource.h>
 #include <vil/vil_memory_image.h>
 #include <vil/vil_blocked_image_facade.h>
