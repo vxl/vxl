@@ -53,7 +53,13 @@ class sdet_nonmax_suppression : public sdet_nonmax_suppression_params
 {
 public:
   //Constructor from a parameter block, and gradients along x and y directions
-  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, vbl_array_2d<double> &grad_x, vbl_array_2d<double> &grad_y);
+  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, 
+                          vbl_array_2d<double> &grad_x, 
+                          vbl_array_2d<double> &grad_y);
+  //Constructor from a parameter block, gradient magnitudes and the search directions
+  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, 
+                          vbl_array_2d<double> &grad_mag, 
+                          vbl_array_2d<vgl_vector_2d <double> > &directions);
   //Destructor
   ~sdet_nonmax_suppression();
   //Accessors
@@ -69,11 +75,12 @@ protected:
   bool points_valid_;      //process state flag
   vcl_vector<vsol_point_2d_sptr> points_; //output, resulting edge points
   vcl_vector<vsol_line_2d_sptr> lines_; //output, lines along the edges
-  vcl_vector<vgl_vector_2d<double> > directions_; //output, direction along which nonmax suppression is done
+  vcl_vector<vgl_vector_2d<double> > directions_; //output, direction along which non-maximal suppression was done
   vbl_array_2d<double> grad_x_; //Gradient in x-direction
   vbl_array_2d<double> grad_y_; //Gradient in y-direction
   vbl_array_2d<double> grad_mag_;   //Gradient magnitude
   int width_, height_; // Width and height of the vbl_array_2d
+  double max_grad_mag_; //maximum gradient magnitude value
   //functions
   int intersected_face_number(double gx, double gy);
   double intersection_parameter(double gx, double gy, int face_num);

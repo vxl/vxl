@@ -30,6 +30,46 @@ sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params&
   grad_mag_.resize(width_, height_);
   grad_x_ = grad_x;
   grad_y_ = grad_y;
+  
+  for (int j = 0; j < height_; j++)
+  {
+    for (int i = 0; i < width_; i++)
+    {
+      double val = vcl_sqrt(vcl_pow(grad_x_(i,j),2.0) + vcl_pow(grad_y_(i,j),2.0));
+      grad_mag_(i,j) = val;
+      if (val > max_grad_mag_)
+        max_grad_mag_ = val;
+    }
+  }
+  points_valid_ = false;
+}
+
+//: Constructor from a parameter block, gradient magnitudes and the search directions
+//
+sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, 
+                                                 vbl_array_2d<double> &grad_mag, 
+                                                 vbl_array_2d<vgl_vector_2d <double> > &directions)
+                                                 : sdet_nonmax_suppression_params(nsp)
+{
+  width_ = grad_mag.rows();
+  height_ = grad_mag.cols();
+  grad_x_.resize(width_, height_);
+  grad_y_.resize(width_, height_);
+  grad_mag_.resize(width_, height_);
+  grad_mag_ = grad_mag;
+  for(int j = 0; j < height_; j++)
+  {
+    for(int i = 0; i < width_; i++)
+    {
+      vgl_vector_2d<double> direction = directions(i,j);
+      normalize(direction);
+      grad_x_(i,j) = grad_mag_(i,j) * direction.x();
+      grad_y_(i,j) = grad_mag_(i,j) * direction.y();
+      double val = grad_mag_(i,j);
+      if (val > max_grad_mag_)
+        max_grad_mag_ = val;
+    }
+  }
   points_valid_ = false;
 }
 
@@ -48,24 +88,15 @@ void sdet_nonmax_suppression::apply()
   points_.clear();
 
   // run non-maximum suppression at every point
-  double max_grad_mag = 0;
-  for (int y = 0; y < height_; y++)
-  {
-    for (int x = 0; x < width_; x++)
-    {
-      double val = vcl_sqrt(vcl_pow(grad_x_(x,y),2.0) + vcl_pow(grad_y_(x,y),2.0));
-      grad_mag_(x,y) = val;
-      if (val > max_grad_mag)
-        max_grad_mag = val;
-    }
-  }
 
+  int num_entry = 0;
   for (int y = 1; y < height_-1; y++)
   {
     for (int x = 1; x < width_-1; x++)
     {
-      if (grad_mag_(x,y) > max_grad_mag * thresh_ / 100.0)
+      if (grad_mag_(x,y) > max_grad_mag_ * thresh_ / 100.0)
       {
+        num_entry++;
         double gx = grad_x_(x,y);
         double gy = grad_y_(x,y);
         vgl_vector_2d<double> direction(gx,gy);
