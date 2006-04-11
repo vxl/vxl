@@ -79,6 +79,10 @@ class mbl_cloneable_ptr
   //: Return actual pointer
   BaseClass* ptr() { return ptr_; }
 
+  //: Return wrapped pointer and give up ownership
+  BaseClass* release()
+  { BaseClass* p = ptr_; ptr_=0; return p; }
+
   //: Cast to allow object to look like thing pointed to
   operator BaseClass&() { assert(ptr_!=0); return *ptr_; }
 
@@ -191,6 +195,10 @@ class mbl_cloneable_nzptr
 
   //: Return actual pointer
   BaseClass* ptr() { return ptr_; }
+
+  //: Return and give up ownership of wrapped pointer, while taking ownership a new pointer.
+  BaseClass* replace(BaseClass* p)
+  { BaseClass* old = ptr_; ptr_=p; return old; }
 
   //: Cast to allow object to look like thing pointed to
   operator BaseClass&() { return *ptr_; }

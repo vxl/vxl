@@ -11,9 +11,6 @@ struct some_class
 };
 int some_class::count = 0;
 
-// This should fail to compile.
-// struct incomplete;
-// vbl_scoped_ptr<incomplete> y;
 
 static void test_cloneable_ptr()
 {
@@ -25,23 +22,54 @@ static void test_cloneable_ptr()
   ptr2 = new some_class() ;
   TEST( "New count = 2", some_class::count, 2 );
 
-  {
-    mbl_cloneable_ptr<some_class> ptr3;
-    ptr3 = new some_class();
+   
+
+  { // Test construction and destruction of cloneable_ptr
+    mbl_cloneable_ptr<some_class> ptr3a;
+    ptr3a = new some_class();
     TEST( "Nested count = 3", some_class::count, 3 );
   }
   TEST( "Back again, count = 2", some_class::count, 2 );
 
-  {
-    mbl_cloneable_ptr<some_class> ptr3(new some_class());
-    TEST( "Nested count = 3", some_class::count, 3 );
+
+  { // Test release and empty destruction of cloneable_ptr
+    some_class* true_ptr_3b=0;
+    {
+      mbl_cloneable_ptr<some_class> ptr3b = true_ptr_3b = new some_class();
+      TEST( "Nested count = 3", some_class::count, 3 );
+      some_class* released_ptr_3b = ptr3b.release();
+      TEST( "Released == original pointer 3b", true_ptr_3b, released_ptr_3b);
+      TEST( "Released count = 3", some_class::count, 3 );
+    }
+    TEST( "No deletion of released ptr, count = 3)", some_class::count, 3 );
+    delete true_ptr_3b;
+    TEST( "Manual deletion of released ptr, count = 2)", some_class::count, 2 );
+    // Check assumption that desctructor isn;t called on null pointer.
+    true_ptr_3b=0;
+    delete true_ptr_3b;
+    TEST( "Manual deletion of null ptr, count = 2)", some_class::count, 2 );
   }
 
-  {
-    mbl_cloneable_nzptr<some_class> ptr3(new some_class());
+  { // Test construction and destruction of cloneable_nzptr
+    mbl_cloneable_nzptr<some_class> ptr3c(new some_class());
     TEST( "Nested count = 3", some_class::count, 3 );
   }
   TEST( "Back again, count = 2", some_class::count, 2 );
+
+  { // Test release and empty destruction of cloneable_nzptr
+    some_class* true_ptr_3d=0;
+    {
+      mbl_cloneable_nzptr<some_class> ptr3d(true_ptr_3d=new some_class());
+      TEST( "Nested count = 3", some_class::count, 3 );
+      some_class* released_ptr_3d = ptr3d.replace(new some_class());
+      TEST( "Released == original pointer 3", true_ptr_3d, released_ptr_3d);
+      TEST( "Replaced count = 4", some_class::count, 4 );
+    }
+    TEST( "Replaced ptr deleted, count = 3", some_class::count, 3 );
+    delete true_ptr_3d;
+    TEST( "Manual deletion of released ptr, count = 2)", some_class::count, 2 );
+  }
+
 
   {
     some_class sc;
