@@ -5,6 +5,29 @@ aren't documented here, unless the bug-fix has a major observable
 effect. If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
+VXL 1.5.0     - April 2006
+
+      - VC6 compilers are no longer supported
+
+      - VC7.0 compiler support is deprecated. VC7.0 will not be
+        supported in vxl 1.6.
+
+      - New (somewhat experimental) support for reading video files
+        and receiving input from usb/1394 cameras through DirectShow in
+        Windows systems has been included in contrib/brl/bbas/vidl2. vidl2
+        also includes support for video-for-linux cameras and 1394 cameras
+        under linux.
+
+      - A new runtime logging facility with almost no overhead has
+        been introduced in contrib/mul/mbl/mbl_log. It is patterned after 
+        Apache's log4j library.
+
+      - vil now optionally supports reading JPEG 2000 compressed
+        image files (.jpc and .j2k) as well as JPEG 2000 compressed NITF 2.1
+        images.
+
+      - vil now supports blocked images for large satellite images. 
+ 
       - Clean up some of the compiler definitions (VCL_GCC_34, etc).
         Deprecate VCL_VC60, etc, in favour of the more consistent
         VCL_VC_60, etc. VCL_VC60 will be removed in a future release.
