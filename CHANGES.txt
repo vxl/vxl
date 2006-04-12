@@ -1,7 +1,7 @@
 This file summarizes the conceptual changes being made to VXL. It
 should document API changes and deprecations, and other "large"
 changes that have an effect on users. Bug fixes and minor changes
-aren't documented here, unless the bug-fix has a major observable
+aren't documented here, unless the bug-fix has a major observable 
 effect. If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
@@ -25,6 +25,11 @@ VXL 1.5.0     - April 2006
       - vil now optionally supports reading JPEG 2000 compressed
         image files (.jpc and .j2k) as well as JPEG 2000 compressed NITF 2.1
         images.
+
+      - vil now supports pyramid images in two forms - 1)
+        multiple pyramid levels in a single directory and 2) the levels are
+        stored in a single tiff file. This capability is useful for displaying
+        large files.
 
       - vil now supports blocked images for large satellite images. 
  
