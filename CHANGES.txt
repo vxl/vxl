@@ -26,6 +26,11 @@ VXL 1.5.0     - April 2006
         image files (.jpc and .j2k) as well as JPEG 2000 compressed NITF 2.1
         images.
 
+      - vil now supports pyramid images in two forms - 1)
+        multiple pyramid levels in a single directory and 2) the levels are
+        stored in a single tiff file. This capability is useful for displaying
+        large files.
+
       - vil now supports blocked images for large satellite images. 
  
       - Clean up some of the compiler definitions (VCL_GCC_34, etc).
