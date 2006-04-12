@@ -31,7 +31,7 @@
 #define VXL_VERSION_DATE_DAY 10
 
 //: This can either be "RELEASE" or "CVS"
-#define VXL_SOURCE "CVS"
+#define VXL_SOURCE "RELEASE"
 
 //: Helper macros to create strings with the preprocessor.
 #define VXL_VERSION_TO_STRING(s) VXL_VERSION_TO_STRING0(s)
