@@ -121,20 +121,4 @@ void vgl_rotate_3d(const vgl_rotation_3d<T>& rot, vcl_vector<vgl_homg_point_3d<T
 }
 
 
-//: In-place rotation of a vector of points
-// \note This is more efficient than calling vgl_rotation_3d::rotate() on each
-template <class T> inline
-void vgl_rotate_3d(const vgl_rotation_3d<T>& rot, vcl_vector<vgl_point_3d<T> >& pts)
-{
-  vnl_matrix_fixed<T,3,3> R = rot.as_3matrix();
-  for (typename vcl_vector<vgl_point_3d<T> >::iterator itr = pts.begin();
-       itr != pts.end();  ++itr)
-  {
-     vgl_point_3d<T>& p = *itr;
-     p.set(R[0][0]*p.x()+R[0][1]*p.y()+R[0][2]*p.z(),
-           R[1][0]*p.x()+R[1][1]*p.y()+R[1][2]*p.z(),
-           R[2][0]*p.x()+R[2][1]*p.y()+R[2][2]*p.z());
-  }
-}
-
 #endif // vgl_rotation_3d_h_
