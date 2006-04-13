@@ -12,7 +12,22 @@
 #include <vcl_cstdlib.h>
 #include <vpl/vpl.h>
 #include <vul/vul_file.h>
+#include <vul/vul_expand_path.h>
 #include <mbl/mbl_config.h>
+
+
+//: replace instances of 'from' in 's' with 'to' 
+static unsigned replace(char from, char to, vcl_string &s)
+{
+  unsigned c = 0;
+  for (unsigned i=0; i<s.size(); ++i)
+    if (s[i] == from)
+    {
+      c++;
+      s[i] = to;
+    }
+    return c;
+}
 
 
 vcl_string timestamp()
@@ -34,7 +49,6 @@ vcl_string timestamp()
 }
 
 
-
 //: A historical measurement recording framework.
 // Currently the function will append the measurement to the file specified
 // by ${MBL_TEST_SAVE_MEASUREMENT_PATH}/measurement_path.
@@ -52,6 +66,8 @@ void mbl_test_save_measurement( const vcl_string &measurement_path, double value
   if (config.empty()) config="DEFAULT_CONFIG";
   
   path += '/' + measurement_path + ".txt";
+  replace('\\', '/', path); // replace Windows-style "\" with Unix-style "/"
+  path = vul_expand_path(path); // removes trailing or repeated "/"
   vul_file::make_directory_path(vul_file::dirname(path));
   vcl_ofstream file(path.c_str(), vcl_ios_app | vcl_ios_out);
 
