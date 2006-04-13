@@ -3,7 +3,10 @@
 #include <vcl_sstream.h>
 
 #include <mbl/mbl_read_props.h>
+#include <mbl/mbl_exception.h>
+
 #include <testlib/testlib_test.h>
+
 
 static vcl_string strip_ws(vcl_string &s)
 {
@@ -212,6 +215,37 @@ void test_read_props1()
     TEST("Case 12b: props[ \"b\" ] == b_ans",
          strip_ws(props[ "b" ]) == strip_ws(b_ans) && !ss.fail(), true);
   }
+  {
+    vcl_cout << "\nCase 13: get_required_property() \n";
+    vcl_istringstream ss("{\n  a: a\n  b: b\n \n}");
+    mbl_read_props_type props = mbl_read_props( ss );
+    mbl_read_props_print(vcl_cout, props);
+    vcl_string val1 = props.get_required_property("a");
+    TEST("Case 13a: present, correct", val1=="a", true);
+
+    bool exc = false;
+    try
+    {
+      vcl_string val = props.get_required_property("z");
+    }
+    catch (...)
+    {
+      exc = true;
+    }
+    TEST("Case 13b: missing, exception thrown?", exc, true);
+  }
+  {
+    vcl_cout << "\nCase 14: get_optional_property() \n";
+    vcl_istringstream ss("{\n  a: a\n  b: b\n \n}");
+    mbl_read_props_type props = mbl_read_props( ss );
+    mbl_read_props_print(vcl_cout, props);
+    vcl_string val1 = props.get_optional_property("a");
+    TEST("Case 14a: present, correct", val1=="a", true);
+
+    vcl_string val2 = props.get_optional_property("z");
+    TEST("Case 14b: missing, return empty string", val2=="", true);
+  }
+
 
   vcl_cout << "\n\n";
 #else // VCL_HAS_WORKING_STRINGSTREAM

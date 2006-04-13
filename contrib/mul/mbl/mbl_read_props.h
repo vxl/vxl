@@ -6,7 +6,7 @@
 // \date 14-Aug-2001
 // \brief Load properties from text files
 // Along with mbl_parse_block, the functions in this file allow you to quickly
-// parse hiearchical property files that look like:
+// parse hierarchical property files that look like:
 // \verbatim
 // {
 //   n_disp_dx: 3
@@ -54,11 +54,20 @@
 class mbl_read_props_type : public vcl_map<vcl_string, vcl_string >
 {
 public:
-  // Return the contents for a given property prop.
+
+  //: Return the contents for a given property prop.
   // prop is removed from the property list.
   // \throws mbl_exception_missing_property if prop doesn't exist
   vcl_string get_required_property(const vcl_string &prop);
+
+  //: Return the contents for a given property prop.
+  // prop is removed from the property list.
+  // Returns empty string if prop doesn't exist.
+  // \note This is a fairly trivial function, intended simply as a
+  // convenient analogue to get_required_property().
+  vcl_string get_optional_property(const vcl_string &prop);
 };
+
 
 //: Read properties from a text stream.
 // The function will terminate on an eof. If one of
@@ -77,6 +86,7 @@ public:
 // containing a single label ("a:") with value "a b: b".
 // If you want such a line treated as two label-values, use mbl_read_props_ws()
 mbl_read_props_type mbl_read_props(vcl_istream &afs);
+
 
 //: Read properties from a text stream.
 // The function will terminate on an eof. If one of
@@ -99,6 +109,7 @@ mbl_read_props_type mbl_read_props_ws(vcl_istream &afs);
 //: Print a list of properties for debugging purposes.
 void mbl_read_props_print(vcl_ostream &afs, mbl_read_props_type props);
 
+
 //: merge two property sets.
 // \param first_overrides
 // properties in "first" will override identically named properties in "second"
@@ -114,6 +125,7 @@ void mbl_read_props_look_for_unused_props(
   const vcl_string & function_name,
   const mbl_read_props_type &props,
   const mbl_read_props_type &ignore);
+
 
 //: Throw error if there are any keys in props.
 // \throw mbl_exception_unused_props

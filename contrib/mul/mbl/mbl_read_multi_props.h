@@ -9,10 +9,32 @@
 #include <vcl_map.h>
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
+#include <vcl_vector.h>
+
 
 //: The type of the property dictionary
 class mbl_read_multi_props_type : public vcl_multimap<vcl_string, vcl_string >
 {
+public:
+
+  //: Return a vector of all values for a given property label \a label.
+  // All entries of \a label are removed from the property list.
+  // \throws mbl_exception_missing_property if \a label doesn't occur 
+  // at least once.
+  // \sa get_optional_property().
+  void get_required_property(const vcl_string& label,
+                             vcl_vector<vcl_string>& values,
+                             const unsigned nmax=1000000,
+                             const unsigned nmin=1);
+
+  //: Return a vector of all values for a given property label \a label.
+  // All entries of \a label are removed from the property list.
+  // Returns an empty vector if \a label doesn't occur at least once.
+  // \sa get_required_property().
+  void get_optional_property(const vcl_string& label,
+                             vcl_vector<vcl_string>& values,
+                             const unsigned nmax=1000000,
+                             const unsigned nmin=0);
 };
 
 

@@ -250,3 +250,60 @@ void mbl_read_multi_props_look_for_unused_props(
     mbl_exception_error(mbl_exception_unused_props(function_name, ss.str()));
   }
 }
+
+
+// Return a vector of all values for a given property label.
+// Throw exception if label doesn't occur at least once.
+void mbl_read_multi_props_type::get_required_property(
+  const vcl_string& label,
+  vcl_vector<vcl_string>& values,
+  const unsigned nmax/*=1000000*/,
+  const unsigned nmin/*=1*/)
+{
+  values.clear();
+
+  mbl_read_multi_props_type::iterator beg = this->lower_bound(label);
+  mbl_read_multi_props_type::iterator end = this->upper_bound(label);
+  if (beg==end)
+    mbl_exception_error(mbl_exception_missing_property(label));
+  for (mbl_read_multi_props_type::iterator it=beg; it!=end; ++it)
+  {
+    values.push_back(it->second);
+  }
+
+  const unsigned nval = values.size();
+  const vcl_string msg = "property " + label + 
+                         " occurs a disallowed number of times.";
+  if (nval<nmin || nval>nmax)
+    mbl_exception_error(mbl_exception_read_props_parse_error(msg));
+
+  this->erase(beg, end);
+}
+
+
+// Return a vector of all values for a given property label.
+// Vector is empty if label doesn't occur at least once.
+void mbl_read_multi_props_type::get_optional_property(
+  const vcl_string& label,
+  vcl_vector<vcl_string>& values,
+  const unsigned nmax/*=1000000*/,
+  const unsigned nmin/*=0*/)
+{
+  values.clear();
+
+  mbl_read_multi_props_type::iterator beg = this->lower_bound(label);
+  mbl_read_multi_props_type::iterator end = this->upper_bound(label);
+
+  for (mbl_read_multi_props_type::iterator it=beg; it!=end; ++it)
+  {
+    values.push_back(it->second);
+  }
+
+  const unsigned nval = values.size();
+  const vcl_string msg = "property " + label + 
+                         " occurs a disallowed number of times.";
+  if (nval<nmin || nval>nmax)
+    mbl_exception_error(mbl_exception_read_props_parse_error(msg));
+
+  this->erase(beg, end);
+}

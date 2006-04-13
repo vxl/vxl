@@ -13,19 +13,34 @@
 #include <mbl/mbl_exception.h>
 
 
-// Return the contents for a given property prop.
+// Return the contents for a given (required) property prop.
 // prop is removed from the property list.
 // \throws mbl_exception_missing_property if prop doesn't exist
 vcl_string mbl_read_props_type::get_required_property(const vcl_string &prop)
 {
   mbl_read_props_type::iterator it = this->find(prop);
-  if (it==this->end()) mbl_exception_error(
-    mbl_exception_missing_property(prop));
+  if (it==this->end()) 
+    mbl_exception_error(mbl_exception_missing_property(prop));
   vcl_string result = it->second;
   this->erase(it);
   return result;
 }
 
+
+// Return the contents for a given (optional) property prop.
+// prop is removed from the property list.
+// Returns empty string if prop doesn't exist.
+vcl_string mbl_read_props_type::get_optional_property(const vcl_string &prop)
+{
+  vcl_string result("");
+  mbl_read_props_type::iterator it = this->find(prop);
+  if (it!=this->end()) 
+  {
+    result = it->second;
+    this->erase(it);
+  }
+  return result;  
+}
 
 
 void mbl_read_props_print(vcl_ostream &afs, mbl_read_props_type props)
