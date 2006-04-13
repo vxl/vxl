@@ -700,6 +700,7 @@ void segv_vil_segmentation_manager::nonmaximal_suppression()
   static sdet_nonmax_suppression_params nsp;
   vgui_dialog nonmax_dialog("non-maximal suppression");
   nonmax_dialog.field("Gradient Magnitude Percentage Threshold ", nsp.thresh_);
+  nonmax_dialog.choice("Number of Points Used for Parabola Fit ", "3", "9", nsp.pfit_type_);
   nonmax_dialog.checkbox("Show lines at the edge points? ", show_lines);
   if (!nonmax_dialog.ask())
     return;

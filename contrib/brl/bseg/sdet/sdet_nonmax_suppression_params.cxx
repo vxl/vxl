@@ -16,18 +16,19 @@ sdet_nonmax_suppression_params::
 sdet_nonmax_suppression_params(const sdet_nonmax_suppression_params& nsp)
   : gevd_param_mixin()
 {
-  InitParams(nsp.thresh_);
+  InitParams(nsp.thresh_, nsp.pfit_type_);
 }
 
 sdet_nonmax_suppression_params::
-sdet_nonmax_suppression_params(const double thresh)
+sdet_nonmax_suppression_params(const double thresh, const int pfit_type)
 {
-  InitParams(thresh);
+  InitParams(thresh, pfit_type);
 }
 
-void sdet_nonmax_suppression_params::InitParams(double thresh)
+void sdet_nonmax_suppression_params::InitParams(double thresh, int pfit_type)
 {
   thresh_ = thresh;
+  pfit_type_ = pfit_type;
 }
 
 //-----------------------------------------------------------------------------

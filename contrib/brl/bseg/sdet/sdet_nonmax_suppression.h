@@ -48,6 +48,7 @@
 #include <vgl/vgl_vector_2d.h>
 #include <vil/vil_image_view.h>
 #include <vbl/vbl_array_2d.h>
+#include <vgl/vgl_homg_line_2d.h>
 
 class sdet_nonmax_suppression : public sdet_nonmax_suppression_params
 {
@@ -81,12 +82,19 @@ protected:
   vbl_array_2d<double> grad_mag_;   //Gradient magnitude
   int width_, height_; // Width and height of the vbl_array_2d
   double max_grad_mag_; //maximum gradient magnitude value
+  int parabola_fit_type_; //flag for parabola fit method
   //functions
   int intersected_face_number(double gx, double gy);
   double intersection_parameter(double gx, double gy, int face_num);
   vcl_vector<double> f_values(int x, int y, double gx, double gy, double s, int face_num);
+  // get the corners related to the given face
   vcl_vector< vgl_vector_2d<int> > get_relative_corner_coordinates(int face_num);
+  // used for 3 points parabola fit
   double subpixel_s(vcl_vector<double> s, vcl_vector<double> f);
+  // used for 9 points parabola fit
+  double subpixel_s(int x, int y, vgl_vector_2d<double> direction);
+  void find_distance_s_and_f_for_point(int x, int y, vgl_homg_line_2d<double> line, 
+                                       double &d, double &s, vgl_vector_2d<double> direction);
 };
 
 #endif // sdet_nonmax_suppression_h_

@@ -7,7 +7,12 @@
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_matrix.h>
+#include <vnl/algo/vnl_matrix_inverse.h>
+#include <vnl/algo/vnl_svd.h>
 #include <vil/algo/vil_convolve_2d.h>
+#include <vgl/vgl_homg_point_2d.h>
+#include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vcl_cstdio.h>
 #include <vcl_cassert.h>
 
@@ -42,6 +47,7 @@ sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params&
     }
   }
   points_valid_ = false;
+  parabola_fit_type_ = nsp.pfit_type_;
 }
 
 //: Constructor from a parameter block, gradient magnitudes and the search directions
@@ -71,6 +77,7 @@ sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params&
     }
   }
   points_valid_ = false;
+  parabola_fit_type_ = nsp.pfit_type_;
 }
 
 //:Default Destructor
@@ -108,19 +115,26 @@ void sdet_nonmax_suppression::apply()
           double s = intersection_parameter(gx, gy, face_num);
           assert(s != -1000);
           vcl_vector<double> f(f_values(x, y, gx, gy, s, face_num));
-          vcl_vector<double> ss;
-          ss.push_back(-s); ss.push_back(0); ss.push_back(s);
+          vcl_vector<double> s_list;
+          s_list.push_back(-s); s_list.push_back(0); s_list.push_back(s);
           if (f[1] > f[0] && f[1] > f[2])
           {
-            double s_star = subpixel_s(ss, f);
-            vgl_point_2d<double> subpix(x + s_star * direction.x(), y + s_star * direction.y());
-            vsol_point_2d_sptr p = new vsol_point_2d(subpix.x(), subpix.y());
-            vsol_point_2d_sptr line_start = new vsol_point_2d(subpix.x()-direction.y()*0.5, subpix.y()+direction.x()*0.5);
-            vsol_point_2d_sptr line_end = new vsol_point_2d(subpix.x()+direction.y()*0.5, subpix.y()-direction.x()*0.5);
-            vsol_line_2d_sptr l = new vsol_line_2d(line_start, line_end);
-            points_.push_back(p);
-            lines_.push_back(l);
-            directions_.push_back(direction);
+            double s_star;
+            if(parabola_fit_type_ == PFIT_3_POINTS)
+              s_star = subpixel_s(s_list, f);
+            else
+              s_star = subpixel_s(x, y, direction);
+            if(abs(s_star) < 1.5)
+            {
+              vgl_point_2d<double> subpix(x + s_star * direction.x(), y + s_star * direction.y());
+              vsol_point_2d_sptr p = new vsol_point_2d(subpix.x(), subpix.y());
+              vsol_point_2d_sptr line_start = new vsol_point_2d(subpix.x()-direction.y()*0.5, subpix.y()+direction.x()*0.5);
+              vsol_point_2d_sptr line_end = new vsol_point_2d(subpix.x()+direction.y()*0.5, subpix.y()-direction.x()*0.5);
+              vsol_line_2d_sptr l = new vsol_line_2d(line_start, line_end);
+              points_.push_back(p);
+              lines_.push_back(l);
+              directions_.push_back(direction);
+            }
           }
         }
       }
@@ -265,6 +279,54 @@ double sdet_nonmax_suppression::subpixel_s(vcl_vector<double> s, vcl_vector<doub
   double C = f[0] / ((s[0]-s[1])*(s[0]-s[2]));
   double s_star = ((A+B)*s[0] + (A+C)*s[1] + (B+C)*s[2]) / (2*(A+B+C));
   return s_star;
+}
+
+double sdet_nonmax_suppression::subpixel_s(int x, int y, vgl_vector_2d<double> direction)
+{
+  double d;
+  double s;
+  double f;
+  vgl_homg_point_2d<double> p1(0.0, 0.0);
+  vgl_homg_point_2d<double> p2(direction.x(), direction.y());
+  vgl_homg_line_2d<double> line1(p1,p2);
+  //construct the matrices
+  vnl_matrix<double> A(9, 3);
+  vnl_matrix<double> B(9, 1);
+  vnl_matrix<double> P(3, 1);
+  int index = 0;
+  for(int j = -1; j <= 1; j++)
+  {
+    for(int i = -1; i <= 1; i++)
+    {
+      find_distance_s_and_f_for_point(i, j, line1, d, s, direction);
+      f = grad_mag_(x+i,y+j);
+      A(index, 0) = vcl_pow(s,2.0);
+      A(index, 1) = s;
+      A(index, 2) = 1.0;
+      B(index, 0) = f;
+      index++;
+    }
+  }
+//  vnl_matrix<double> A_trans = A.transpose();
+//  vnl_matrix<double> temp = vnl_matrix_inverse<double> (A_trans*A);
+//  vnl_matrix<double> temp2 = temp * A_trans;
+//  P = temp2 * B;
+  vnl_svd<double> svd(A);
+  P = svd.solve(B);
+  double s_star = -P(1,0)/(2*P(0,0));
+  return s_star;
+}
+
+void sdet_nonmax_suppression::find_distance_s_and_f_for_point(int x, int y, vgl_homg_line_2d<double> line, 
+                                                              double &d, double &s, vgl_vector_2d<double> direction)
+{
+  vgl_homg_point_2d<double> point(x,y);
+  vgl_homg_line_2d<double> perp_line = vgl_homg_operators_2d<double>::perp_line_through_point(line, point);
+  vgl_homg_point_2d<double> intersection_point_homg = vgl_homg_operators_2d<double>::intersection(line, perp_line);
+  vgl_point_2d<double> intersection_point(intersection_point_homg);
+  vgl_vector_2d<double> d_helper(x-intersection_point.x(), y-intersection_point.y());
+  d = length(d_helper);
+  s = intersection_point.x() / direction.x();
 }
 
 //----------------------------------------------------------
