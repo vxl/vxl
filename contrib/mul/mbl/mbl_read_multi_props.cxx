@@ -257,7 +257,7 @@ void mbl_read_multi_props_look_for_unused_props(
 void mbl_read_multi_props_type::get_required_property(
   const vcl_string& label,
   vcl_vector<vcl_string>& values,
-  const unsigned nmax/*=1000000*/,
+  const unsigned nmax/*=-1*/, //=max<unsigned>
   const unsigned nmin/*=1*/)
 {
   values.clear();
@@ -272,10 +272,16 @@ void mbl_read_multi_props_type::get_required_property(
   }
 
   const unsigned nval = values.size();
-  const vcl_string msg = "property " + label + 
-                         " occurs a disallowed number of times.";
-  if (nval<nmin || nval>nmax)
+  if (nval<nmin)
+  {
+    const vcl_string msg = "property label \"" + label + "\" occurs too few times.";
     mbl_exception_error(mbl_exception_read_props_parse_error(msg));
+  }
+  if (nval>nmax)
+  {
+    const vcl_string msg = "property label \"" + label + "\" occurs too many times.";
+    mbl_exception_error(mbl_exception_read_props_parse_error(msg));
+  }
 
   this->erase(beg, end);
 }
@@ -286,8 +292,7 @@ void mbl_read_multi_props_type::get_required_property(
 void mbl_read_multi_props_type::get_optional_property(
   const vcl_string& label,
   vcl_vector<vcl_string>& values,
-  const unsigned nmax/*=1000000*/,
-  const unsigned nmin/*=0*/)
+  const unsigned nmax/*=-1*/) //=max<unsigned>
 {
   values.clear();
 
@@ -300,10 +305,11 @@ void mbl_read_multi_props_type::get_optional_property(
   }
 
   const unsigned nval = values.size();
-  const vcl_string msg = "property " + label + 
-                         " occurs a disallowed number of times.";
-  if (nval<nmin || nval>nmax)
+  if (nval>nmax)
+  {
+    const vcl_string msg = "property label \"" + label + "\" occurs too many times.";
     mbl_exception_error(mbl_exception_read_props_parse_error(msg));
+  }
 
   this->erase(beg, end);
 }

@@ -19,22 +19,25 @@ public:
 
   //: Return a vector of all values for a given property label \a label.
   // All entries of \a label are removed from the property list.
-  // \throws mbl_exception_missing_property if \a label doesn't occur 
-  // at least once.
+  // \throws mbl_exception_missing_property if \a label doesn't occur at least once.
+  // \param nmax The maximum number of permitted occurences of this label (default=max<unsigned>).
+  // \param nmin The minimum number of permitted occurences of this label (default=1).
+  // \throws mbl_exception_read_props_parse_error if \a label occurs an invalid number of times.
   // \sa get_optional_property().
   void get_required_property(const vcl_string& label,
                              vcl_vector<vcl_string>& values,
-                             const unsigned nmax=1000000,
+                             const unsigned nmax=-1, //=max<unsigned>
                              const unsigned nmin=1);
 
   //: Return a vector of all values for a given property label \a label.
   // All entries of \a label are removed from the property list.
   // Returns an empty vector if \a label doesn't occur at least once.
+  // \param nmax The maximum number of permitted occurences of this label (default=max<unsigned>).
+  // \throws mbl_exception_read_props_parse_error if \a label occurs too many times.
   // \sa get_required_property().
   void get_optional_property(const vcl_string& label,
                              vcl_vector<vcl_string>& values,
-                             const unsigned nmax=1000000,
-                             const unsigned nmin=0);
+                             const unsigned nmax=-1); //=max<unsigned>
 };
 
 
