@@ -1159,7 +1159,7 @@ vil_tiff_pyramid_resource::get_copy_view(unsigned i0, unsigned n_i,
                                          unsigned level) const
 {
   if(level>=this->nlevels())
-    return false;
+    return vil_image_view_base_sptr();
   // setup the image header for the level
   unsigned header_index = levels_[level]->header_index_;
   int status = TIFFSetDirectory(t_, header_index);  
