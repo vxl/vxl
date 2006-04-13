@@ -707,7 +707,7 @@ void segv_vil_segmentation_manager::nonmaximal_suppression()
 
   // prepare input for the nonmax suppression
   vil_image_view<vxl_byte> input, input_grey;
-  vil_image_view<double> grad_i, grad_j;
+  vil_image_view<double> grad_i, grad_j, grad_mag_img;
   vbl_array_2d<double> grad_x, grad_y, grad_mag;
   vbl_array_2d<vgl_vector_2d <double> > input_directions;
 
@@ -718,6 +718,7 @@ void segv_vil_segmentation_manager::nonmaximal_suppression()
 
   grad_i.set_size(ni,nj);
   grad_j.set_size(ni,nj);
+  grad_mag_img.set_size(ni,nj);
   input_grey.set_size(ni,nj);
   grad_x.resize(ni,nj);
   grad_y.resize(ni,nj);
@@ -738,15 +739,19 @@ void segv_vil_segmentation_manager::nonmaximal_suppression()
       double yval = grad_j(i,j);
       grad_x(i,j) = xval;
       grad_y(i,j) = yval;
-      grad_mag(i,j) = vcl_sqrt(vcl_pow(xval,2.0) + vcl_pow(yval,2.0));
+      double val = vcl_sqrt(vcl_pow(xval,2.0) + vcl_pow(yval,2.0));
+      grad_mag(i,j) = val;
+      grad_mag_img(i,j) = val;
       vgl_vector_2d<double> dir(xval, yval);
       input_directions(i,j) = dir;
     }
   }
 
-  // Below is to demonstrate how to use the non-maximal suppression in two different ways
+  // Below is to demonstrate how to initialize the non-maximal suppression in different ways
 //  sdet_nonmax_suppression ns(nsp, grad_mag, input_directions);
   sdet_nonmax_suppression ns(nsp, grad_x, grad_y);
+//  sdet_nonmax_suppression ns(nsp, grad_i, grad_j);
+//  sdet_nonmax_suppression ns(nsp, grad_mag_img, input_directions);
   ns.apply();
   vcl_vector<vsol_point_2d_sptr>& points = ns.get_points();
   vcl_vector<vsol_line_2d_sptr>& lines = ns.get_lines();
