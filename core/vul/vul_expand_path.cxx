@@ -9,9 +9,87 @@
 #include "vul_expand_path.h"
 
 #if defined(VCL_WIN32) || defined(como4301)
-vcl_string vul_expand_path         (vcl_string path) { return path; }
-vcl_string vul_expand_path_uncached(vcl_string path) { return path; }
-#else
+
+#include <vcl_vector.h>
+
+//: \note This Windows version only performs some of the operations done
+// by the Unix version.
+vcl_string vul_expand_path_internal(vcl_string path)
+{
+  if (path == "/")
+    return path; // FIXME: without this something breaks; not sure why.
+
+  { // main processing and reduction goes here.
+    vcl_vector<vcl_string> bits;
+
+    // split the path into bits. a "bit" is either a single slash or a
+    // sequence of non-slash characters.
+    for (unsigned int i=0; i<path.size(); ) {
+      if (path[i] == '/') {
+        bits.push_back("/");
+        ++i;
+      }
+      else {
+        unsigned int j=i;
+        while (j<path.size() && path[j]!='/')
+          ++j;
+        bits.push_back(vcl_string(path.c_str()+i, path.c_str()+j));
+        i = j;
+      }
+    }
+
+    // process the bits
+    while (true) {
+      bool again = false;
+      for (unsigned int i=0; i<bits.size(); ++i) {
+        // remove repeated /
+        if (i+1<bits.size() && bits[i] == "/" && bits[i+1] == "/") {
+          bits.erase(bits.begin() + i);
+          again = true;
+        }
+
+        // remove trailing /
+        if (i+1 == bits.size() && bits[i] == "/") {
+          bits.pop_back();
+          again = true;
+        }
+
+        // collapse foo/.. into /
+        if (i+2<bits.size() && !(bits[i]=="/") && bits[i+1]=="/" && bits[i+2]=="..") {
+          bits.erase(bits.begin() + i+2); // ..
+          bits.erase(bits.begin() + i);   // foo
+          again = true;
+        }
+
+        // remove /. altogether
+        if (i+1<bits.size() && bits[i]=="/" && bits[i+1]==".") {
+          bits.erase(bits.begin() + i+1); // /
+          bits.erase(bits.begin() + i);   // .
+          again = true;
+        }
+      }
+      if (!again)
+        break;
+    }
+
+    // recompose the path from its bits
+    path = "";
+    for (unsigned int i=0; i<bits.size(); ++i)
+      path += bits[i];
+    //vcl_cerr << "recomposed : " << path << vcl_endl;
+  }
+
+  // no more ideas
+  return path;
+}
+
+//: Note: this Windows version in similar to the uncached Unix version
+vcl_string vul_expand_path(vcl_string path) 
+{   
+  return vul_expand_path_internal(path);
+}
+
+#else // #if defined(VCL_WIN32) || defined(como4301)
 
 #include <vcl_functional.h>
 #include <vcl_vector.h>
