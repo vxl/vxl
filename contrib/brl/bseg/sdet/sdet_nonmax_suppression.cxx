@@ -21,7 +21,7 @@
 //
 //----------------------------------------------------------------
 
-//: Constructor from a parameter block, and gradients along x and y directions
+//: Constructor from a parameter block, and gradients along x and y directions given as arrays
 //
 sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, 
                                                  vbl_array_2d<double> &grad_x, 
@@ -50,7 +50,7 @@ sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params&
   parabola_fit_type_ = nsp.pfit_type_;
 }
 
-//: Constructor from a parameter block, gradient magnitudes and the search directions
+//: Constructor from a parameter block, gradient magnitudes given as an array and the search directions
 //
 sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, 
                                                  vbl_array_2d<double> &grad_mag, 
@@ -72,6 +72,67 @@ sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params&
       grad_x_(i,j) = grad_mag_(i,j) * direction.x();
       grad_y_(i,j) = grad_mag_(i,j) * direction.y();
       double val = grad_mag_(i,j);
+      if (val > max_grad_mag_)
+        max_grad_mag_ = val;
+    }
+  }
+  points_valid_ = false;
+  parabola_fit_type_ = nsp.pfit_type_;
+}
+
+//: Constructor from a parameter block, and gradients along x and y directions given as images
+//
+sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, 
+                                                 vil_image_view<double> &grad_x, 
+                                                 vil_image_view<double> &grad_y)
+                                                 : sdet_nonmax_suppression_params(nsp)
+{
+  width_ = grad_x.ni();
+  height_ = grad_x.nj();
+  grad_x_.resize(width_, height_);
+  grad_y_.resize(width_, height_);
+  grad_mag_.resize(width_, height_);
+
+  for (int j = 0; j < height_; j++)
+  {
+    for (int i = 0; i < width_; i++)
+    {
+      double val_x = grad_x(i,j);
+      double val_y = grad_y(i,j);
+      grad_x_(i,j) = val_x;
+      grad_y_(i,j) = val_y;
+      double val = vcl_sqrt(vcl_pow(val_x,2.0) + vcl_pow(val_y,2.0));
+      grad_mag_(i,j) = val;
+      if (val > max_grad_mag_)
+        max_grad_mag_ = val;
+    }
+  }
+  points_valid_ = false;
+  parabola_fit_type_ = nsp.pfit_type_;
+}
+
+//: Constructor from a parameter block, gradient magnitudes given as an image and the search directions
+//
+sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, 
+                                                 vil_image_view<double> &grad_mag, 
+                                                 vbl_array_2d<vgl_vector_2d <double> > &directions)
+                                                 : sdet_nonmax_suppression_params(nsp)
+{
+  width_ = grad_mag.ni();
+  height_ = grad_mag.nj();
+  grad_x_.resize(width_, height_);
+  grad_y_.resize(width_, height_);
+  grad_mag_.resize(width_, height_);
+  for(int j = 0; j < height_; j++)
+  {
+    for(int i = 0; i < width_; i++)
+    {
+      double val = grad_mag(i,j);
+      grad_mag_(i,j) = val;
+      vgl_vector_2d<double> direction = directions(i,j);
+      normalize(direction);
+      grad_x_(i,j) = val * direction.x();
+      grad_y_(i,j) = val * direction.y();
       if (val > max_grad_mag_)
         max_grad_mag_ = val;
     }
