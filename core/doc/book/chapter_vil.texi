@@ -1133,37 +1133,140 @@ directory to generate pyramid levels prior to inserting them into the
 single tiff file. Since the pyramid level images can still be too
 large for memory, they are constructed as file-based resources.
 
+@section NITF image reading
+
+The National Imagery Transmission Format (NITF) is a highly flexible
+and complex format for exchanging digital imagery and its support
+data. Our NITF implementation includes a framework for defining the
+``tagged record extensions'' and ``data extension segments'' needed by
+your application. A framework example, along with the capabilities and
+current limitations, is summarized here.
+
+The following code demonstrates how to define a tagged record extension:
+
+@example
+vil_nitf2_tagged_record_definition::define("HISTOA", "Softcopy History")
+  .field("SYSTYPE",    "System Type",                     NITF_STR(20))
+  .field("PC",         "Prior Compression",               NITF_STR(12))
+  .field("PE",         "Prior Enhancements", 
+     NITF_ENUM(4, vil_nitf2_enum_values()
+      .value("EH08",   "Enhanced 8bpp")
+                    ...
+      .value("DGHC",   "Digitized hardcopy")
+      .value("UNKP",   "Unknown")
+      .value("NONE",   "None")))
+  .field("REMAP_FLAG", "System Specific Remap",           NITF_INT(1))
+  .field("LUT_ID",     "Data Mapping ID from ESD",        NITF_INT(2))
+  .field("NEVENTS",    "Number of Processing Events",     NITF_INT(2))
+  .repeat("NEVENTS", vil_nitf2_fields_definitions()
+     .field("PDATE",   "Processing Date and Time",        NITF_DAT(14))
+     .field("PSITE",   "Processing Site",                 NITF_STR(10))
+     .field("PAS",     "Softcopy Processing Application", NITF_STR(10))
+     .field("NIPCOM",  "Number of Image Proc. Comments",  NITF_INT(1))
+     .repeat("NIPCOM", vil_nitf2_field_definitions()
+        .field("IPCOM", "Image Processing Comment",       NITF_STR(80)))
+     .field("IBPP",     "Image Bit Depth (actual) ",      NITF_INT(2))
+                                                                    ...)
+@end example
+
+This code enables the contents of record extension ``HIST0A'' to be
+parsed; without it, the unrecognized record would be
+skipped. Repeating field values, such as ``IPCOM'', above, are
+represented as vectors. Conditional and variable-length fields are
+also supported, and C++ functors are used to evaluate expressions
+involving tags that specify the length or repetition of other tags.
+
+Currently the library can only read, but not write, NITF 2.0 and 2.1
+files, and includes the following capabilities:
+
+@itemize @bullet
+@item Files larger than 2GB are supported by building with flag
+USE_LFS turned on
+@item All four NITF uncompressed data layouts are supported (IMODE=S,
+B, P, or R)
+@item Most NITF image data types, including 8-, 16-, 32- and 64-bit
+signed and unsigned integers, single- and double-precision floating
+point numbers, and boolean data are supported. Support for
+complex float data is implemented but not tested. 
+@item Multiple images per file are supported, as are an arbitrary
+number of bands per image. 
+@item Blocked images (NBPR > 1 or MBPC > 1) are supported.
+@item Images with look-up tables (LUTs) will read correctly, but
+client applications must query the image header for the LUT and apply
+it to the image data.
+@item JPEG-2000-compressed imagery is supported via a plug-in, as
+described in the next section.
+@end itemize
+
+The following capabilities are not yet implemented:
+@itemize @bullet
+@item writing NITF files
+@item parsing graphic segments
+@item parsing text segments
+@item bounds checking of numeric field values
+@item additional structured field formatters (e.g., some geocoordinate
+formats) 
+@item other compression schemes (e.g., original JPEG, bi-level
+compression, vector quantization)
+@end itemize
 
 @section JPEG 2000 Support
-VIL can be configured to support the reading of JPEG 2000 image files as well as NITF 2.1 images that are JPEG 2000 compressed.  This chapter describes how to set up this capability.
 
-@subsection External Dependency
-The decompression is actually handled by a freely available third party library named ECW JPEG 2000 SDK.  This SDK was developed by ER Mapper (www.ermapper.com) and, at present, has been made available under three different licensing schemes:
+VIL can be configured to support the reading of JPEG 2000 image files
+as well as NITF 2.1 images that are JPEG 2000 compressed.  This
+section describes how to set up this capability. 
 
-@itemize @bullet
-@item ECW SDK Free Use License Agreement: This license is free to use even for commercial applications with basically one restriction: the compression code will only support streams that are 500 MB or less.  This does not affect VIL at all because currently VIL only supports reading (not writing) of JPEG 2000 compressed files.
-@item ECW SDK Public Use License Agreement: This is their "GPL-Style" license which has no limitations on read or write.
-@item ECW SDK Commercial Use License Agreement: This license is for commercial applications that require the ability to write JPEG 2000 streams that are greater than 500 MB.
-@end itemize
+@subsection Install the library
 
-The VXL wrappers around this library were developed using version 3.1 Beta of this SDK and has also been tested using version 3.3 RC2.  This was the latest version available as of 4/4/2006.  You can download the ECW JPEG 2000 SDK or obtain more information about the three licensing schemes from ER Mapper's website (www.ermapper.com).
-
-Currently Er Mapper releases the ECW JPEG 2000 SDK with a variety of build systems.  As described in the next section, VXL has been configured to use the most common one which yields separate NCSEcw and NCSUtil libraries.  Most of the testing has taken place using the dynamically linked versions of these libraries, but the static versions should work as well.
-
-@subsection Configuration Requirements
-Once you have installed/built ECW JPEG 2000 SDK, you must configure VXL so that it knows where to find what it needs.  There are three relevant CMAKE variables that you must specify (it is unlikely that CMAKE will find them by itself):
+The decompression is handled by a third party library, ECW JPEG 2000
+SDK, developed by ER Mapper. The library can be downloaded from
+www.ermapper.com, and is currently available under three different
+licensing schemes:
 
 @itemize @bullet
-@item ECW_INCLUDE_DIR: This must point to the include directory of your ECW SDK.
-@item ECW_ncsecw_LIBRARY: This must point to the NCSEcw library.
-@item ECW_ncsutil_LIBRARY: This must point to the NCSEcw library.
+@item a ``free use'' license (even for commercial applications) with
+the restriction that the compression code supports streams of length
+500 MB or less (a moot restriction for VIL, which does not yet support
+file writing); 
+@item a GPL-like ``public use'' license with no limitations on
+reading and writing;
+@item a ``commercial use'' license for commercial applications that
+require the ability to write JPEG 2000 streams longer than 500 MB.  
 @end itemize
 
-You can then have CMAKE create your build files - CMAKE will automatically add the appropriate source files and pre-processor definitions.  Once you've built VIL, you can test this JPEG 2000 decompression capability using the 'test_file_format_read' test function available in the vil_test_all project.  If you've set everything up properly, this test function will run two additional tests:
+The VXL wrappers around this library were developed using version 3.1
+beta of this SDK and have also been tested using version 3.3 RC2, the
+latest version available on 4 April 2006.
+
+ER Mapper provides ECW JPEG 2000 SDK with a variety of build systems.
+As described in the next section, VXL has been configured to use the
+most common one which yields separate NCSEcw and NCSUtil libraries.
+Most of the testing has taken place using the dynamically linked
+versions of these libraries, but the static versions should work too.
+
+@subsection Configure VXL to use it
+
+Once you have installed and built the ECW JPEG 2000 SDK, you must
+configure VXL to find it. Specify these three CMAKE variables:
+
+@itemize @bullet
+@item ECW_INCLUDE_DIR: ECW SDK include directory
+@item ECW_ncsecw_LIBRARY: NCSEcw library pathname
+@item ECW_ncsutil_LIBRARY: NCSEcw library pathname
+@end itemize
+
+When CMAKE creates your build files it will automatically add the
+appropriate source files and pre-processor definitions.  Once VIL
+is built, test the JPEG 2000 decompression capability using the
+test program ``test_file_format_read'' in project ``vil_test_all''.
+If things are set up correctly, these test program will report
+that these two tests passed:
 
 @itemize @bullet
 @item JPEG 2000 [j2k,jpc]
 @item NITF 2.1 [nitf] (JPEG 2000 compressed)
 @end itemize
 
-If these tests pass, then it is relatively safe to assume that you've set things up correctly.  Note that, if you've used the dynamically linked version of the ECW JPEG 2000 SDK, then you'll need to make sure that your PATH environment variable contains the /lib directory that contains NCSEcw and NCSUtil when you run this test.
+Note that if you use the dynamically linked version of the ECW JPEG
+2000 SDK, your PATH environment variable must contain the /lib
+directory that contains NCSEcw and NCSUtil.
