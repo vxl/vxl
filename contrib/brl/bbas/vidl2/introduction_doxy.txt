@@ -44,6 +44,12 @@
 *  - vidl2_ffmpeg_ostream : uses the <a href="http://ffmpeg.sourceforge.net/">
 *    FFMPEG</a> library to encode to many common video file formats with
 *    many encoding options for video quality and compression.
+*  - vidl2_v4l_istream - use a video for Linux input stream
+*  - vidl2_v4l_ostream - use a video for Linux output stream
+*  - vidl2_dshow_live_istream - use the DirectShow API to stream video directly
+*    from camera and frame-grabber devices in Windows using native Windows codecs.
+*  - vidl2_dshow_file_istream - use the DirectShow API to encode video files
+*    in Windows using native Windows codecs
 *
 * The following streams are currently under development
 *  - vidl2_dc1394_istream - use libdc1394 to stream video directly from IEEE
@@ -56,12 +62,6 @@
 *    over a 1394 DV connection (using Linux/BSD)
 *  - vidl2_dv1394_ostream - use libdv1394 to stream video over a 1394 DV connection
 *    to some other video device (using Linux/BSD)
-*  - vidl2_v4l_istream - use a video for Linux input stream
-*  - vidl2_v4l_ostream - use a video for Linux output stream
-*  - vidl2_directshow_istream - use the DirectShow API to decode video files
-*    in Windows using native Windows codecs
-*  - vidl2_directshow_ostream - use the DirectShow API to encode video files
-*    in Windows using native Windows codecs
 *
 * \section frames Video Frames
 * The vidl2_frame_sptr is data structure used to transport video frame data from
@@ -86,5 +86,53 @@
 * in vidl2_pixel_format.h.  The traits of a pixel format are used in the generation
 * of conversion routines with templates.
 *
-* 
+* \section TODO List:
+*
+* \todo Settle on the stream API. Should the redundant read_frame() be
+* removed? Can we handle all asynchronous streams with the synchronous
+* API and an asynchronous buffering mechanism behind the scenes? The idea
+* being that we want a simple API.
+*
+* \todo Add some notion of timestamps to the vidl2_frame. It seems
+* like it would be useful to know when each frame was captured (maybe
+* relative to the first frame), especially if you are allowing for
+* dropped frames or capturing non-uniformly in time.
+*
+* \todo Improve conversion routines to and from vil_image_views.
+*
+* \todo Add support for more parameters in the 1394 camera standard.
+*
+* \todo Write a VXL book chapter for vidl2. This is required to
+* promote vidl2 to core and ultimately replace vidl (which has a very
+* limited book chapter). Also, it would be good to have a user's
+* guide other than the Doxygen generated pages.
+*
+* \todo Decide on a standard (maybe XML?) for stream parameter files,
+* and add code to read and write these files. This is related to the
+* factory creation stuff. Should we push to put modern factory creation
+* code in vbl?
+*
+* \todo Create an add-on GUI library to create vgui_menus for the
+* parameter classes. This would allow users to easily create a GUI
+* with vidl2 where the user can set the parameters for streaming.
+*
+* \todo Update vidl2/examples/vidl2_player to include all implemented
+* streams. We'd like to have a single GUI demo application that can
+* feed any istream to any ostream (provided they have been compiled
+* into vidl2).
+*
+* \todo Update comments within the code. This includes the "advance but
+* don't acquire" remark. This was intended for the case of file parsing
+* where one can seek to another frame without decoding it, but is
+* incorrect for live streams. Advanced Copy & paste techniques have
+* spread the comment around ;-).
+*
+* \todo A DirectShow ostream should be added.
+*
+* \todo We'd like to create a DirectShow filter that replaces the
+* ISampleGrabber currently used in the vidl2_dshow_istream family. This
+* would remove the limitations imposed by the use of the ISampleGrabber
+* and potentially could consolidate the file/live_istreams into a single
+* vidl2_dshow_istream.
+*
 */
