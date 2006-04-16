@@ -94,11 +94,11 @@ protected:
   //functions
   int intersected_face_number(double gx, double gy);
   double intersection_parameter(double gx, double gy, int face_num);
-  vcl_vector<double> f_values(int x, int y, double gx, double gy, double s, int face_num);
+  void f_values(int x, int y, double gx, double gy, double s, int face_num, double *f);
   // get the corners related to the given face
-  vcl_vector< vgl_vector_2d<int> > get_relative_corner_coordinates(int face_num);
+  void get_relative_corner_coordinates(int face_num, int *corners);
   // used for 3 points parabola fit
-  double subpixel_s(vcl_vector<double> s, vcl_vector<double> f);
+  double subpixel_s(double *s, double *f);
   // used for 9 points parabola fit
   double subpixel_s(int x, int y, vgl_vector_2d<double> direction);
   void find_distance_s_and_f_for_point(int x, int y, vgl_homg_line_2d<double> line, 

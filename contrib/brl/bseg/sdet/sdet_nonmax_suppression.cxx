@@ -175,9 +175,12 @@ void sdet_nonmax_suppression::apply()
           assert(face_num != -1);
           double s = intersection_parameter(gx, gy, face_num);
           assert(s != -1000);
-          vcl_vector<double> f(f_values(x, y, gx, gy, s, face_num));
-          vcl_vector<double> s_list;
-          s_list.push_back(-s); s_list.push_back(0); s_list.push_back(s);
+          double f[3];
+          f_values(x, y, gx, gy, s, face_num, f);
+          double s_list[3];
+          s_list[0] = -s; 
+          s_list[1] = 0.0;
+          s_list[2] = s;;
           if (f[1] > f[0] && f[1] > f[2])
           {
             double s_star;
@@ -252,88 +255,98 @@ double sdet_nonmax_suppression::intersection_parameter(double gx, double gy, int
   return -1000.0;
 }
 
-vcl_vector<double> sdet_nonmax_suppression::f_values(int x, int y, double gx, double gy, double s, int face_num)
+void sdet_nonmax_suppression::f_values(int x, int y, double gx, double gy, double s, int face_num, double *f)
 {
   vgl_vector_2d<double> direction(gx,gy);
   normalize(direction);
 
-  vcl_vector<double> f;
-  vcl_vector< vgl_vector_2d <int> > corners = get_relative_corner_coordinates(face_num);
+  int corners[4];
+  get_relative_corner_coordinates(face_num, corners);
 
   vgl_vector_2d<double> intersection_point = s * direction;
-  vgl_vector_2d<double> corner1(corners[0].x(), corners[0].y()); //have to convert to double for subtraction
-  vgl_vector_2d<double> corner2(corners[1].x(), corners[1].y()); //have to convert to double for subtraction
+  vgl_vector_2d<double> corner1(corners[0], corners[1]); //have to convert to double for subtraction
+  vgl_vector_2d<double> corner2(corners[2], corners[3]); //have to convert to double for subtraction
   double distance1 = length(intersection_point - corner1);
   double distance2 = length(intersection_point - corner2);
-  double value1 = grad_mag_(x+corners[0].x(), y+corners[0].y());
-  double value2 = grad_mag_(x+corners[1].x(), y+corners[1].y());
+  double value1 = grad_mag_(x+corners[0], y+corners[1]);
+  double value2 = grad_mag_(x+corners[2], y+corners[3]);
   double f_plus = value1 * distance2 + value2 * distance1;
 
   intersection_point = -s * direction;
-  corner1.set(-corners[0].x(), -corners[0].y()); //have to convert to double for subtraction
-  corner2.set(-corners[1].x(), -corners[1].y()); //have to convert to double for subtraction
+  corner1.set(-corners[0], -corners[1]); //have to convert to double for subtraction
+  corner2.set(-corners[2], -corners[3]); //have to convert to double for subtraction
   distance1 = length(intersection_point - corner1);
   distance2 = length(intersection_point - corner2);
-  value1 = grad_mag_(x-corners[0].x(), y-corners[0].y());
-  value2 = grad_mag_(x-corners[1].x(), y-corners[1].y());
+  value1 = grad_mag_(x-corners[0], y-corners[1]);
+  value2 = grad_mag_(x-corners[2], y-corners[3]);
   double f_minus = value1 * distance2 + value2 * distance1;
 
-  f.push_back(f_minus);
-  f.push_back(grad_mag_(x,y));
-  f.push_back(f_plus);
-
-  return f;
+  f[0] = f_minus;
+  f[1] = grad_mag_(x,y);
+  f[2] = f_plus;
 }
 
-vcl_vector< vgl_vector_2d <int> > sdet_nonmax_suppression::get_relative_corner_coordinates(int face_num)
+void sdet_nonmax_suppression::get_relative_corner_coordinates(int face_num, int *corners)
 {
-  vgl_vector_2d<int> corner1;
-  vgl_vector_2d<int> corner2;
   switch (face_num)
   {
    case 1:
-    corner1.set(1,0);
-    corner2.set(1,1);
-    break;
+     corners[0] = 1;
+     corners[1] = 0;
+     corners[2] = 1;
+     corners[3] = 1;
+     break;
    case 2:
-    corner1.set(1,1);
-    corner2.set(0,1);
-    break;
+     corners[0] = 1;
+     corners[1] = 1;
+     corners[2] = 0;
+     corners[3] = 1;
+     break;
    case 3:
-    corner1.set(0,1);
-    corner2.set(-1,1);
+     corners[0] = 0;
+     corners[1] = 1;
+     corners[2] = -1;
+     corners[3] = 1;
     break;
    case 4:
-    corner1.set(-1,1);
-    corner2.set(-1,0);
+     corners[0] = -1;
+     corners[1] = 1;
+     corners[2] = -1;
+     corners[3] = 0;
     break;
    case 5:
-    corner1.set(-1,0);
-    corner2.set(-1,-1);
+     corners[0] = -1;
+     corners[1] = 0;
+     corners[2] = -1;
+     corners[3] = -1;
     break;
    case 6:
-    corner1.set(-1,-1);
-    corner2.set(0,-1);
+     corners[0] = -1;
+     corners[1] = -1;
+     corners[2] = 0;
+     corners[3] = -1;
     break;
    case 7:
-    corner1.set(0,-1);
-    corner2.set(1,-1);
+     corners[0] = 0;
+     corners[1] = -1;
+     corners[2] = 1;
+     corners[3] = -1;
     break;
    case 8:
-    corner1.set(1,-1);
-    corner2.set(1,0);
+     corners[0] = 1;
+     corners[1] = -1;
+     corners[2] = 1;
+     corners[3] = 0;
     break;
    default:
-    corner1.set(0,0);
-    corner2.set(0,0);
+     corners[0] = 0;
+     corners[1] = 0;
+     corners[2] = 0;
+     corners[3] = 0;
   }
-  vcl_vector< vgl_vector_2d<int> > corners;
-  corners.push_back(corner1);
-  corners.push_back(corner2);
-  return corners;
 }
 
-double sdet_nonmax_suppression::subpixel_s(vcl_vector<double> s, vcl_vector<double> f)
+double sdet_nonmax_suppression::subpixel_s(double *s, double *f)
 {
   double A = f[2] / ((s[2]-s[0])*(s[2]-s[1]));
   double B = f[1] / ((s[1]-s[0])*(s[1]-s[2]));
