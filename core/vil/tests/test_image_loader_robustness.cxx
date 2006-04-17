@@ -7,7 +7,6 @@
 #include <vil/vil_stream.h>
 #include <testlib/testlib_test.h>
 
-
 typedef vil_smart_ptr<vil_stream> vil_stream_sptr;
 
 static unsigned long rand_next;
@@ -35,10 +34,8 @@ void test_at_file_size(const vcl_size_t n)
   delete [] data;
 }
 
-
 void test_image_loader_robustness( )
 {
-
   test_at_file_size(0);
 
   for (unsigned i=0;i<100;++i)
