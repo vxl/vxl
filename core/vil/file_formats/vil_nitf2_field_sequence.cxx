@@ -11,11 +11,11 @@
 
 #include <vcl_utility.h>
 
-vil_nitf2_field::field_tree* 
+vil_nitf2_field::field_tree*
 vil_nitf2_field_sequence::get_tree( vil_nitf2_field::field_tree* tr ) const
 {
   vil_nitf2_field::field_tree* t = tr ? tr : new vil_nitf2_field::field_tree;
-  for( unsigned int i = 0 ; i < fields_vector.size() ; i++ ){
+  for ( unsigned int i = 0 ; i < fields_vector.size() ; i++ ) {
     t->children.push_back( fields_vector[i]->get_tree() );
   }
   return t;
@@ -268,7 +268,7 @@ bool vil_nitf2_field_sequence::write(vil_nitf2_ostream& output,
       vil_nitf2_field* field = get_field(field_def->tag);
 
       // Determine whether the field is required or is a conditional field
-      // whose condition is satisifed
+      // whose condition is satisfied
       bool expected = field_def->is_required();
       if (!expected) {
         bool condition;

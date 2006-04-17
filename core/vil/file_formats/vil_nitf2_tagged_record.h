@@ -30,39 +30,39 @@ class vil_nitf2_index_vector;
 class vil_nitf2_scalar_field;
 
 // Overview of NITF tagged record code
-// 
+//
 // This code is used to define and read National Imagery Transmission
 // Format (NITF) tagged record extensions (TREs), also known as
 // controlled extensions. It is intended to eventually support
 // writing and verifying TREs also.
-// 
+//
 // A TRE is stored as a sequence of ASCII fields, each of a vcl_fixed length,
 // that are appended together without any tag names or delimiters. Some
 // fields' existence depends on the values of previous fields; other
 // fields are repeated by a value of a previous field. The TRE definition
 // code allows the programmer to specify such conditions, and the NITF
 // file reader evaluates such conditions as it parses the file.
-// 
+//
 // The classes that represent TRE definitions were designed so that a
 // programmer can succinctly define a TRE in a format similar to the
 // tables that appear in the NITF documentation. This was felt to be
 // important goal to help reduce errors, since NITF TREs can contain
 // hundred of fields, and many users will need to define their own TRE's
 // depending on their application and environment.
-// 
+//
 // Here an example that implements part of the definition of TRE "MTIRPB"
 // from NIMA STDI-0002 version 2.1:
-// 
+//
 // vil_nitf2_tagged_record_definition::define("MTIRPB", fields()
-// 
+//
 //   .field("MTI_DP",           "Destination Point",   NITF_INT(2))
 //   .field("DATIME",           "Scan Date & Time",    NITF_DAT(14))
 //   .field("ACFT_LOC",         "Aircraft Position",   NITF_LOC(21))
 //   .field("SQUINT_ANGLE",     "Squint Angle",        NITF_DBL(6, 2, true),  true)
 //   .field("NO_VALID_TARGETS", "Number of Targets",   NITF_INT(3))
-// 
+//
 //   .repeat("NO_VALID_TARGETS", fields()
-// 
+//
 //     .field("TGT_n_SPEED",    "Target Ground Speed", NITF_INT(4),  true)
 //     .field("TGT_n_CAT",      "Target Classification Category",
 //            NITF_ENUM(1, vil_nitf2_enum_values()
@@ -71,17 +71,17 @@ class vil_nitf2_scalar_field;
 //              .value("U", "Unknown")
 //              .value("W", "Wheeled")),
 //             true))
-// 
+//
 //   .field("TEST_POS_COND",    "Test True Condition", NITF_STR_BCSA(14),  false,
 //          NitfGreaterThan<int>("MTI_DP", 1))
 //   .end();
-// 
+//
 // A TaggedRecordDefintion consists of the TRE's name (here, "MTIRPB")
 // and an ordered list of FieldDefinitions. Each field definition is
 // specified by these arguments to method "field" above: tag,
 // pretty_name, format; followed by optional arguments: value_optional,
 // repeat_count, condition, units, description.
-// 
+//
 // In this example the first field is a two-digit integer; the second a
 // is a date-time structure, specified to 14 "digits" precision
 // (YYYYMMDDHHMMSS); the next field is a location specified as 21
@@ -95,7 +95,7 @@ class vil_nitf2_scalar_field;
 // a value is defined as optional, the parser will issue a warning in
 // such cases (although it will continue parsing the rest of the TRE if
 // possible).
-// 
+//
 // The next field, NO_VALID_TARGETS, is an integer field. This is followed
 // by a repeating integer field, TGT_n_SPEED; the last argument of its
 // definition indicates that TGT_n_SPEED is repeated by the value of field
@@ -103,54 +103,54 @@ class vil_nitf2_scalar_field;
 // whose value is a vcl_vector of integer pointers.  The reason for using
 // pointers is in case some of the field values are blank; for such entries,
 // the corresponding vcl_vector element is null.
-// 
+//
 // The next field, TGT_n_CAT, is a repeating enumerated string field, whose
 // valid values are "H", "T", "U", "W", and blank.
-// 
+//
 // The final field, TEST_POS_COND, is a conditional field. It exists if
-// and only if its condition is satisifed, in this case, if the value of
+// and only if its condition is satisfied; in this case, if the value of
 // field MTI_DP is greater than 1. Conditional fields along with
 // repeating fields therefore cause instances of a TRE to vary in length.
-// 
+//
 // That summarizes how TRE's are defined. Some possible extensions in the
 // future include value range checks and the ability to specify which formats
 // among a set of alternatives (such as geolocation) are allowed.
-// 
+//
 // When a TRE is defined, it is added to a dictionary of known TREs that
 // is used to read (and eventually to write) NITF files. As a NITF file
 // is read in, at the start of a TRE the tag and length of the TRE are read.
 // If the tag is recognized, its data is parsed into field using tag
 // definition, creating a TaggedRecord. If not, the tag's data is skipped
 // over (according to its declared length) and the next tag is processed.
-// 
+//
 // Values of NITF fields are passed back to the application as built-in
 // types and as NITF structure types. Built-in types include integer,
 // double (used to represent all vcl_fixed-point decimal fields), string, and
 // character. NITF structure types include date_time and Location.
-// 
+//
 // Here is an overview of the class hierarchy:
-// 
+//
 //   vil_nitf2_tagged_record_definition: defines a TRE, consisting of a name and a
 //   list of vil_nitf2_field_definition.
-// 
+//
 //   vil_nitf2_field_definition: defines a field; includes a vil_nitf2_field_formatter.
-// 
+//
 //   vil_nitf2_field_formatter and its derived classes vil_nitf2_typed_field_formatter<T>:
 //   define the type and format of a field; used to read and write a field.
-// 
+//
 //   vil_nitf2_tagged_record: an instance of a tagged record. Points to a
 //   TaggedRecordDefinition and owns a list of vil_nitf2_field.
-// 
+//
 //   vil_nitf2_field: an instance of a field. Contains a pointer to a
 //   vil_nitf2_field_definition. See derived classes for its value.
-// 
+//
 //   vil_nitf2_typed_scalar_field<T>: derived from vil_nitf2_field to represent a scalar
 //   value of type T (where T=integer, double, vcl_string, char,
 //   vil_nitf2_date_time, or vil_nitf2_location*)
-// 
+//
 //   vil_nitf2_typed_array_field<T*>: derived from vil_nitf2_field to represent a
 //   repeating field of type T.
-// 
+//
 //   vil_nitf2_field_functor<T>: A function object base class used to derive
 //   functions that compute values of tags from a TRE for the purpose
 //   of representing conditions and repeat counts.
@@ -260,15 +260,15 @@ class vil_nitf2_tagged_record
 vcl_ostream& operator << (vcl_ostream& os, const vil_nitf2_tagged_record& record);
 
 //-----------------------------------------------------------------------------
-// A sequence of tagged records, as read from a NITF file header or image 
+// A sequence of tagged records, as read from a NITF file header or image
 // subheader extended data field.
 
-class vil_nitf2_tagged_record_sequence : public vcl_list<vil_nitf2_tagged_record*> 
+class vil_nitf2_tagged_record_sequence : public vcl_list<vil_nitf2_tagged_record*>
 {
-public:
+ public:
   // Constructor
   vil_nitf2_tagged_record_sequence() : vcl_list<vil_nitf2_tagged_record*>() {}
-  
+
   // Destructor
   virtual ~vil_nitf2_tagged_record_sequence() {}
 };
