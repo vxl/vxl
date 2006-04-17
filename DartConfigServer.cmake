@@ -56,13 +56,13 @@ SET (EXPECTED_BUILDS "\\
   {cs.rpi.edu FreeBSD-fresh-gcc-3.4.2} \\
   {mobile FreeBSD-6.0_gcc-3.4.4_-Wall_-O_shared} \\
   {crd.ge.com FreeBSD-6.0_gcc-3.4.4_-Wall_profile_static} \\
-  {crd.ge.com Linux-2.4.18_gcc-3.2_-Wall_profile_static} \\
+  {crd.ge.com Linux-2.4.18_gcc-3.2_-Wall_static} \\
   {crd.ge.com Linux-2.4.9_icc-8.0_-w1_-O2_shared} \\
   {crd.ge.com MinGW-3.8_gcc-3.4.4_-Wall_-O2_static} \\
   {crd.ge.com Solaris-2.8_gcc-3.4.3_static} \\
   {crd.ge.com Win2k_bcc-5.5.1_Release} \\
   {crd.ge.com Win2k_msvc-6.0sp5_Release} \\
-  {crd.ge.com Win2k_msvc-7.0_Release} \\
+  {crd.ge.com Win2k_msvc-7.1_Release} \\
   {imorphics WinXP_msvc-7.1_Debug} \\
   {lems.brown.edu Linux-2.6.12_em64t_gcc-4.0.3_-Wall} \\
   {lems.brown.edu Linux-2.6.8_gcc-3.3.5} \\
