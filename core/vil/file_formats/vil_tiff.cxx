@@ -13,7 +13,7 @@
 //   09-NOV-2001  K.Y.McGaul  Use default value for orientation when it can't be read.
 //   DEC-2005  J.L. Mundy - Essentially a complete rewrite to support blocking.
 //                          All header parameters moved to vil_tiff_header for
-//                          cleaner structuring. 
+//                          cleaner structuring.
 // \endverbatim
 
 #include "vil_tiff.h"
@@ -175,21 +175,21 @@ vil_image_resource_sptr vil_tiff_file_format::make_input_image(vil_stream* is)
   vil_tiff_header* h = new vil_tiff_header(tss->tif);
 
   if (!h->format_supported)
-    {
-      TIFFClose(tss->tif);
-      delete tss;
-      delete h;
-      return 0;
-    }
+  {
+    TIFFClose(tss->tif);
+    delete tss;
+    delete h;
+    return 0;
+  }
   return new vil_tiff_image(tss->tif, h);
 }
-vil_pyramid_image_resource_sptr  
+vil_pyramid_image_resource_sptr
 vil_tiff_file_format::make_input_pyramid_image(char const* file)
 {
-	if(vil_image_list::vil_is_directory(file))
-	  return 0;
+  if (vil_image_list::vil_is_directory(file))
+    return 0;
   TIFF* in  = TIFFOpen(file, "rC");
-  if(!in)
+  if (!in)
     return 0;
   bool open_for_reading = true;
   return new vil_tiff_pyramid_resource(in, open_for_reading);
@@ -199,7 +199,7 @@ static vcl_string level_filename(vcl_string& directory, vcl_string& filename,
                                  unsigned level)
 {
   vcl_string slash;
-  
+
 #ifdef VCL_WIN32
   slash =  "\\";
 #else
@@ -217,40 +217,39 @@ make_pyramid_image_from_base(char const* file,
                              char const* temp_dir)
 
 {
-
   {//scope for writing the resources
-    vil_pyramid_image_resource_sptr pyr = make_pyramid_output_image(file);    
+    vil_pyramid_image_resource_sptr pyr = make_pyramid_output_image(file);
     pyr->put_resource(base_image);
-    //Create the other pyramid levels 
+    //Create the other pyramid levels
     {
       vcl_string d = temp_dir;
-	  vcl_string fn = "tempR";
+      vcl_string fn = "tempR";
       vil_image_resource_sptr image = base_image;
-      for(unsigned L = 1; L<nlevels; ++L)
-        {
-          vcl_cout << "Decimating Level " << L << vcl_endl;
-          vcl_string full_filename = level_filename(d, fn, L) + ".tif";
-          image =
-            vil_pyramid_image_resource::decimate(image, full_filename.c_str());
-        }
+      for (unsigned L = 1; L<nlevels; ++L)
+      {
+        vcl_cout << "Decimating Level " << L << vcl_endl;
+        vcl_string full_filename = level_filename(d, fn, L) + ".tif";
+        image =
+          vil_pyramid_image_resource::decimate(image, full_filename.c_str());
+      }
     }//end program scope to close resource files
     //reopen them for reading
     //
     {//scope for il resources
       vil_image_list il(temp_dir);
       vcl_vector<vil_image_resource_sptr> rescs = il.resources();
-      for(vcl_vector<vil_image_resource_sptr>::iterator rit = rescs.begin();
-          rit != rescs.end(); ++rit)
+      for (vcl_vector<vil_image_resource_sptr>::iterator rit = rescs.begin();
+           rit != rescs.end(); ++rit)
         pyr->put_resource(*rit);
     }//close il resources
   }//close pyr
   //clean up the temporary directory
   vil_image_list vl(temp_dir);
-  if(!vl.clean_directory())
-    {
-      vcl_cout <<"Warning: In vil_tiff::make_pyramid_from_base(..) - temporary"
-               << " directory not cleaned\n";
-    }
+  if (!vl.clean_directory())
+  {
+    vcl_cout <<"Warning: In vil_tiff::make_pyramid_from_base(..) -"
+             << " temporary directory not cleaned\n";
+  }
   //reopen for reading
   return make_input_pyramid_image(file);
 }
@@ -265,10 +264,10 @@ vil_tiff_file_format::make_blocked_output_image(vil_stream* vs,
                                                 )
 {
   if (size_block_i%16!=0||size_block_j%16!=0)
-    {
-      vcl_cerr << "In vil_tiff_file_format - Block dimensions must be a multiple of 16\n";
-      return 0;
-    }
+  {
+    vcl_cerr << "In vil_tiff_file_format - Block dimensions must be a multiple of 16\n";
+    return 0;
+  }
 
   tif_stream_structures* tss = new tif_stream_structures(vs);
   tss->filesize = 0;
@@ -282,12 +281,12 @@ vil_tiff_file_format::make_blocked_output_image(vil_stream* vs,
   vil_tiff_header* h = new vil_tiff_header(tss->tif, nx, ny, nplanes,
                                            format, size_block_i, size_block_j);
   if (!h->format_supported)
-    {
-      TIFFClose(tss->tif);
-      delete tss;
-      delete h;
-      return 0;
-    }
+  {
+    TIFFClose(tss->tif);
+    delete tss;
+    delete h;
+    return 0;
+  }
   return new vil_tiff_image(tss->tif, h);
 }
 
@@ -303,11 +302,11 @@ vil_tiff_file_format::make_output_image(vil_stream* vs,
   return make_blocked_output_image(vs, ni, nj, nplanes, 0, 0, format).ptr();
 }
 
-vil_pyramid_image_resource_sptr 
+vil_pyramid_image_resource_sptr
 vil_tiff_file_format::make_pyramid_output_image(char const* filename)
 {
   TIFF* out  = TIFFOpen(filename, "w");
-  if(!out)
+  if (!out)
     return 0;
   bool open_for_reading = false;
   return new vil_tiff_pyramid_resource(out, open_for_reading);
@@ -332,28 +331,28 @@ vil_tiff_image::vil_tiff_image(TIFF* tif,
 bool vil_tiff_image::get_property(char const * tag, void * value) const
 {
   if (vcl_strcmp(vil_property_quantisation_depth, tag)==0)
-    {
-      if (value)
-        *static_cast<unsigned*>(value) = h_->bits_per_sample.val;
-      return true;
-    }
+  {
+    if (value)
+      *static_cast<unsigned*>(value) = h_->bits_per_sample.val;
+    return true;
+  }
   if (vcl_strcmp(vil_property_size_block_i, tag)==0)
-    {
-      if (!h_->is_tiled())
-        return false;
-      if (value)
-        *static_cast<unsigned*>(value) = this->size_block_i();
-      return true;
-    }
+  {
+    if (!h_->is_tiled())
+      return false;
+    if (value)
+      *static_cast<unsigned*>(value) = this->size_block_i();
+    return true;
+  }
 
   if (vcl_strcmp(vil_property_size_block_j, tag)==0)
-    {
-      if (!h_->is_tiled())
-        return false;
-      if (value)
-        *static_cast<unsigned*>(value) = this->size_block_j();
-      return true;
-    }
+  {
+    if (!h_->is_tiled())
+      return false;
+    if (value)
+      *static_cast<unsigned*>(value) = this->size_block_j();
+    return true;
+  }
 
   return false;
 }
@@ -382,18 +381,18 @@ char const* vil_tiff_image::file_format() const
 static void tif_swap16(vxl_byte *a, unsigned n)
 {
   for (unsigned i = 0; i < n * 2; i += 2)
-    {
-      vcl_swap( a[i+0], a[i+1] );
-    }
+  {
+    vcl_swap( a[i+0], a[i+1] );
+  }
 }
 
 static void tif_swap32(vxl_byte *a, unsigned n)
 {
   for (unsigned i = 0; i < n * 4; i += 4)
-    {
-      vcl_swap( a[i+0], a[i+3] );
-      vcl_swap( a[i+1], a[i+2] );
-    }
+  {
+    vcl_swap( a[i+0], a[i+3] );
+    vcl_swap( a[i+1], a[i+2] );
+  }
 }
 
 static void endian_swap( vxl_byte* a, unsigned n_bytes,
@@ -408,19 +407,19 @@ static void endian_swap( vxl_byte* a, unsigned n_bytes,
 template<> bool* tiff_byte_align_data<bool>(bool* in_data, unsigned num_samples, unsigned in_bits_per_sample, bool* out_data)
 {
   switch (sizeof(bool))
-    {
-    case 1:
-      tiff_byte_align_data((vxl_byte*)in_data, num_samples, in_bits_per_sample, (vxl_byte*)out_data);
-      break;
-    case 2:
-      tiff_byte_align_data((vxl_uint_16*)in_data, num_samples, in_bits_per_sample, (vxl_uint_16*)out_data);
-      break;
-    case 4:
-      tiff_byte_align_data((vxl_uint_32*)in_data, num_samples, in_bits_per_sample, (vxl_uint_32*)out_data);
-      break;
-    default:
-      assert(!"Unsupported size of bool in tiff file format.");
-    }
+  {
+   case 1:
+    tiff_byte_align_data((vxl_byte*)in_data, num_samples, in_bits_per_sample, (vxl_byte*)out_data);
+    break;
+   case 2:
+    tiff_byte_align_data((vxl_uint_16*)in_data, num_samples, in_bits_per_sample, (vxl_uint_16*)out_data);
+    break;
+   case 4:
+    tiff_byte_align_data((vxl_uint_32*)in_data, num_samples, in_bits_per_sample, (vxl_uint_32*)out_data);
+    break;
+   default:
+    assert(!"Unsupported size of bool in tiff file format.");
+  }
   return out_data;
 }
 
@@ -428,16 +427,16 @@ template<> bool* tiff_byte_align_data<bool>(bool* in_data, unsigned num_samples,
 bool integral_type(unsigned bits_per_sample)
 {
   switch (bits_per_sample)
-    {
-    case 8:
-      return true;
-    case 16:
-      return true;
-    case 32:
-      return true;
-    default:
-      break;
-    }
+  {
+   case 8:
+    return true;
+   case 16:
+    return true;
+   case 32:
+    return true;
+   default:
+    break;
+  }
   return false;
 }
 
@@ -449,20 +448,20 @@ tiff_maybe_byte_align_data(vil_memory_chunk_sptr in_data,
                            unsigned bytes_per_block)
 {
   if (!integral_type(in_bits_per_sample))
-    {
-      vil_memory_chunk_sptr new_memory = new vil_memory_chunk(bytes_per_block, in_data->pixel_format());
-      T* out_ptr = reinterpret_cast<T*>(new_memory->data());
+  {
+    vil_memory_chunk_sptr new_memory = new vil_memory_chunk(bytes_per_block, in_data->pixel_format());
+    T* out_ptr = reinterpret_cast<T*>(new_memory->data());
 #ifdef DEBUG
-      vcl_cout << "Start Debug of byte align data\n"
-               << "Num Samples = " << num_samples << "  Bits/Sample = "
-               << in_bits_per_sample << " Output Bytes Per Sample = "
-               << vil_pixel_format_sizeof_components(in_data->pixel_format())
-               << '\n';
+    vcl_cout << "Start Debug of byte align data\n"
+             << "Num Samples = " << num_samples << "  Bits/Sample = "
+             << in_bits_per_sample << " Output Bytes Per Sample = "
+             << vil_pixel_format_sizeof_components(in_data->pixel_format())
+             << '\n';
 #endif
-      T* in_ptr = reinterpret_cast<T*>(in_data->data());
-      tiff_byte_align_data(in_ptr, num_samples, in_bits_per_sample, out_ptr );
-      return new_memory;
-    }
+    T* in_ptr = reinterpret_cast<T*>(in_data->data());
+    tiff_byte_align_data(in_ptr, num_samples, in_bits_per_sample, out_ptr );
+    return new_memory;
+  }
   return in_data;
 }
 
@@ -580,7 +579,7 @@ view_from_buffer(vil_pixel_format& fmt, vil_memory_chunk_sptr const& buf,
   vil_memory_chunk_sptr  buf_out;
   unsigned spp = h_->samples_per_pixel.val;
   switch (fmt)
-    {
+  {
 #define GET_BLOCK_CASE(FORMAT, T) \
    case FORMAT: { \
     vil_image_view_base_sptr view; \
@@ -590,24 +589,24 @@ view_from_buffer(vil_pixel_format& fmt, vil_memory_chunk_sptr const& buf,
                                  size_block_i(), size_block_j(), \
                                  spp, spp, size_block_i()*spp, 1); \
     return view; }
-      GET_BLOCK_CASE(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
-      GET_BLOCK_CASE(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte);
+    GET_BLOCK_CASE(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
+    GET_BLOCK_CASE(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte);
 #if VXL_HAS_INT_64
-      GET_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_64, vxl_uint_64);
-      GET_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_64, vxl_int_64);
+    GET_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_64, vxl_uint_64);
+    GET_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_64, vxl_int_64);
 #endif
-      GET_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32);
-      GET_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_32, vxl_int_32);
-      GET_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16);
-      GET_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_16, vxl_int_16);
-      GET_BLOCK_CASE(VIL_PIXEL_FORMAT_BOOL, bool);
-      GET_BLOCK_CASE(VIL_PIXEL_FORMAT_FLOAT, float);
-      GET_BLOCK_CASE(VIL_PIXEL_FORMAT_DOUBLE, double);
+    GET_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32);
+    GET_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_32, vxl_int_32);
+    GET_BLOCK_CASE(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16);
+    GET_BLOCK_CASE(VIL_PIXEL_FORMAT_INT_16, vxl_int_16);
+    GET_BLOCK_CASE(VIL_PIXEL_FORMAT_BOOL, bool);
+    GET_BLOCK_CASE(VIL_PIXEL_FORMAT_FLOAT, float);
+    GET_BLOCK_CASE(VIL_PIXEL_FORMAT_DOUBLE, double);
 #undef GET_BLOCK_CASE
-    default:
-      assert(!"Unknown vil data type in tiff file format");
-      break;
-    }
+   default:
+    assert(!"Unknown vil data type in tiff file format");
+    break;
+  }
   return view;
 }
 
@@ -641,36 +640,36 @@ vil_tiff_image::get_block( unsigned block_index_i,
 
 
   if (h_->is_tiled())
+  {
+    if (TIFFReadEncodedTile(t_, blk_indx, data, (tsize_t) -1)<=0)
     {
-      if (TIFFReadEncodedTile(t_, blk_indx, data, (tsize_t) -1)<=0)
-        {
-          delete [] data;
-          return view;
-        }
-      this->copy_byte_block(data, encoded_block_size, buf);
       delete [] data;
-      if (h_->need_byte_swap())
-        endian_swap( reinterpret_cast<vxl_byte*>(buf->data()),
-                     encoded_block_size,
-                     expanded_sample_bytes);
-      return this->fill_block_from_tile(buf);
+      return view;
     }
+    this->copy_byte_block(data, encoded_block_size, buf);
+    delete [] data;
+    if (h_->need_byte_swap())
+      endian_swap( reinterpret_cast<vxl_byte*>(buf->data()),
+                   encoded_block_size,
+                   expanded_sample_bytes);
+    return this->fill_block_from_tile(buf);
+  }
 
   if (h_->is_striped())
+  {
+    if (TIFFReadEncodedStrip(t_, blk_indx, data, (tsize_t) -1)<=0)
     {
-      if (TIFFReadEncodedStrip(t_, blk_indx, data, (tsize_t) -1)<=0)
-        {
-          delete [] data;
-          return view;
-        }
-      this->copy_byte_block(data, encoded_block_size, buf);
       delete [] data;
-      if (h_->need_byte_swap())
-        endian_swap( reinterpret_cast<vxl_byte*>(buf->data()),
-                     encoded_block_size,
-                     expanded_sample_bytes);
-      return this->fill_block_from_strip(buf);
+      return view;
     }
+    this->copy_byte_block(data, encoded_block_size, buf);
+    delete [] data;
+    if (h_->need_byte_swap())
+      endian_swap( reinterpret_cast<vxl_byte*>(buf->data()),
+                   encoded_block_size,
+                   expanded_sample_bytes);
+    return this->fill_block_from_strip(buf);
+  }
 
   return view;
 }
@@ -698,7 +697,7 @@ fill_block_from_tile(vil_memory_chunk_sptr const & buf) const
 // partially filled. The header function, bytes_per_line() gives the actual
 // size of a scan line in the packed strip. The total size of the strip
 // in bytes is normally size_block_j()*bytes_per_line() but the last strip
-// may be truncated. 
+// may be truncated.
 vil_image_view_base_sptr vil_tiff_image::fill_block_from_strip(vil_memory_chunk_sptr const & buf) const
 {
   vil_image_view_base_sptr view = 0;
@@ -737,49 +736,49 @@ vil_image_view_base_sptr vil_tiff_image::fill_block_from_strip(vil_memory_chunk_
   vxl_byte* block_ptr = reinterpret_cast<vxl_byte*>(block_buf->data());
   //read scan lines from the strip and paste into the block
   for (unsigned j = 0; j<tl; ++j, buf_ptr+=bpl,
-         block_ptr+=bytes_expanded_line)
+       block_ptr+=bytes_expanded_line)
+  {
+    if (j<lines_per_strip)
     {
-      if (j<lines_per_strip)
-        {
-          // get a row from the input buffer
-          copy_byte_block(buf_ptr, bpl, line_buf);
-          vil_memory_chunk_sptr out_line_buf;
-          switch (fmt)
-            {
+      // get a row from the input buffer
+      copy_byte_block(buf_ptr, bpl, line_buf);
+      vil_memory_chunk_sptr out_line_buf;
+      switch (fmt)
+      {
 #define GET_LINE_CASE(FORMAT, T) \
-         case FORMAT:\
-          out_line_buf = \
-            tiff_maybe_byte_align_data<T>(line_buf,\
-                                          spl, h_->bits_per_sample.val,\
-                                          bytes_expanded_line); \
-          break
-              GET_LINE_CASE(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
-              GET_LINE_CASE(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte);
+       case FORMAT:\
+        out_line_buf = \
+          tiff_maybe_byte_align_data<T>(line_buf,\
+                                        spl, h_->bits_per_sample.val,\
+                                        bytes_expanded_line); \
+        break
+        GET_LINE_CASE(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
+        GET_LINE_CASE(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte);
 #if VXL_HAS_INT_64
-              GET_LINE_CASE(VIL_PIXEL_FORMAT_UINT_64, vxl_uint_64);
-              GET_LINE_CASE(VIL_PIXEL_FORMAT_INT_64, vxl_int_64);
+        GET_LINE_CASE(VIL_PIXEL_FORMAT_UINT_64, vxl_uint_64);
+        GET_LINE_CASE(VIL_PIXEL_FORMAT_INT_64, vxl_int_64);
 #endif
-              GET_LINE_CASE(VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32);
-              GET_LINE_CASE(VIL_PIXEL_FORMAT_INT_32, vxl_int_32);
-              GET_LINE_CASE(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16);
-              GET_LINE_CASE(VIL_PIXEL_FORMAT_INT_16, vxl_int_16);
-              GET_LINE_CASE(VIL_PIXEL_FORMAT_BOOL, bool);
-              GET_LINE_CASE(VIL_PIXEL_FORMAT_FLOAT, float);
-              GET_LINE_CASE(VIL_PIXEL_FORMAT_DOUBLE, double);
+        GET_LINE_CASE(VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32);
+        GET_LINE_CASE(VIL_PIXEL_FORMAT_INT_32, vxl_int_32);
+        GET_LINE_CASE(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16);
+        GET_LINE_CASE(VIL_PIXEL_FORMAT_INT_16, vxl_int_16);
+        GET_LINE_CASE(VIL_PIXEL_FORMAT_BOOL, bool);
+        GET_LINE_CASE(VIL_PIXEL_FORMAT_FLOAT, float);
+        GET_LINE_CASE(VIL_PIXEL_FORMAT_DOUBLE, double);
 #undef GET_LINE_CASE
-            default:
-              assert(!"Unknown vil data type in tiff file format");
-              break;
-            }
-          //now we have the unpacked scan line in out_buf so copy to the view
-          //buffer.
-          vxl_byte* out_line_buf_ptr =
-            reinterpret_cast<vxl_byte*>(out_line_buf->data());
-          vcl_memcpy(block_ptr, out_line_buf_ptr, bytes_expanded_line);
-        }
-      else
-        vcl_memcpy(block_ptr, zero_ptr, bytes_expanded_line);
+       default:
+        assert(!"Unknown vil data type in tiff file format");
+        break;
+      }
+      //now we have the unpacked scan line in out_buf so copy to the view
+      //buffer.
+      vxl_byte* out_line_buf_ptr =
+        reinterpret_cast<vxl_byte*>(out_line_buf->data());
+      vcl_memcpy(block_ptr, out_line_buf_ptr, bytes_expanded_line);
     }
+    else
+      vcl_memcpy(block_ptr, zero_ptr, bytes_expanded_line);
+  }
 
   return this->view_from_buffer(fmt, block_buf, spl*tl,
                                 expanded_bytes_per_sample*8);
@@ -796,30 +795,30 @@ void vil_tiff_image::pad_block_with_zeros(unsigned ioff, unsigned joff,
   //fill leading part with zeroes
   if (ioff>0||joff>0)
     for (unsigned j = 0; j<joff-1; ++j)
+    {
+      unsigned row_ptr = row_start;
+      for (unsigned i = 0; i<ioff-1; ++i)
       {
-        unsigned row_ptr = row_start;
-        for (unsigned i = 0; i<ioff-1; ++i)
-          {
-            for (unsigned p = 0; p<nplanes(); ++p)
-              *(block_buf + bptr + row_ptr + p) = 0;
-            row_ptr += bytes_per_pixel;
-          }
-        bptr += jstep;
+        for (unsigned p = 0; p<nplanes(); ++p)
+          *(block_buf + bptr + row_ptr + p) = 0;
+        row_ptr += bytes_per_pixel;
       }
+      bptr += jstep;
+    }
   bptr = jstep*jclip;
   row_start = iclip*bytes_per_pixel;
   if (iclip>0||jclip>0)
     for (unsigned j = jclip; j<size_block_j(); ++j)
+    {
+      unsigned row_ptr = row_start;
+      for (unsigned i = iclip; i<size_block_i(); ++i)
       {
-        unsigned row_ptr = row_start;
-        for (unsigned i = iclip; i<size_block_i(); ++i)
-          {
-            for (unsigned p = 0; p<nplanes(); ++p)
-              *(block_buf + bptr + row_ptr + p) = 0;
-            row_ptr += bytes_per_pixel;
-          }
-        bptr += jstep;
+        for (unsigned p = 0; p<nplanes(); ++p)
+          *(block_buf + bptr + row_ptr + p) = 0;
+        row_ptr += bytes_per_pixel;
       }
+      bptr += jstep;
+    }
 }
 
 void vil_tiff_image::fill_block_from_view(unsigned bi, unsigned bj,
@@ -843,31 +842,31 @@ void vil_tiff_image::fill_block_from_view(unsigned bi, unsigned bj,
   vxl_byte* view_buf;
   //Cast the pixel type and reinterpret upper_left_ptr as a byte array.
   switch (h_->pix_fmt)
-    {
+  {
 #define GET_VIEW_PTR(FORMAT, T) \
    case FORMAT: { \
     vil_image_view<T> view = static_cast<const vil_image_view<T>& >(im);\
     view_istep = view.istep(); view_jstep = view.jstep(); view_pstep = view.planestep(); \
     view_buf = reinterpret_cast<vxl_byte*>(view.memory_chunk()->data());\
    } break
-      GET_VIEW_PTR(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
-      GET_VIEW_PTR(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte);
+    GET_VIEW_PTR(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
+    GET_VIEW_PTR(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte);
 #if VXL_HAS_INT_64
-      GET_VIEW_PTR(VIL_PIXEL_FORMAT_UINT_64, vxl_uint_64);
-      GET_VIEW_PTR(VIL_PIXEL_FORMAT_INT_64, vxl_int_64);
+    GET_VIEW_PTR(VIL_PIXEL_FORMAT_UINT_64, vxl_uint_64);
+    GET_VIEW_PTR(VIL_PIXEL_FORMAT_INT_64, vxl_int_64);
 #endif
-      GET_VIEW_PTR(VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32);
-      GET_VIEW_PTR(VIL_PIXEL_FORMAT_INT_32, vxl_int_32);
-      GET_VIEW_PTR(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16);
-      GET_VIEW_PTR(VIL_PIXEL_FORMAT_INT_16, vxl_int_16);
-      GET_VIEW_PTR(VIL_PIXEL_FORMAT_BOOL, bool);
-      GET_VIEW_PTR(VIL_PIXEL_FORMAT_FLOAT, float);
-      GET_VIEW_PTR(VIL_PIXEL_FORMAT_DOUBLE, double);
+    GET_VIEW_PTR(VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32);
+    GET_VIEW_PTR(VIL_PIXEL_FORMAT_INT_32, vxl_int_32);
+    GET_VIEW_PTR(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16);
+    GET_VIEW_PTR(VIL_PIXEL_FORMAT_INT_16, vxl_int_16);
+    GET_VIEW_PTR(VIL_PIXEL_FORMAT_BOOL, bool);
+    GET_VIEW_PTR(VIL_PIXEL_FORMAT_FLOAT, float);
+    GET_VIEW_PTR(VIL_PIXEL_FORMAT_DOUBLE, double);
 #undef GET_VIEW_PTR
-    default:
-      assert(!"Unknown vil data type.");
-      return;
-    }
+   default:
+    assert(!"Unknown vil data type.");
+    return;
+  }
   //initial index into block buffer
   unsigned bptr = joff*block_jstep;
   unsigned ibstart = ioff*bytes_per_pixel;
@@ -880,35 +879,34 @@ void vil_tiff_image::fill_block_from_view(unsigned bi, unsigned bj,
   unsigned vptr = (view_j0 + joff)*vjstp;
   unsigned ivstart = (view_i0 + ioff)*bytes_per_pixel;
   for (unsigned j = joff; j<jclip; ++j)
+  {
+    unsigned vrow_ptr = ivstart;
+    unsigned brow_ptr = ibstart;
+    for (unsigned i = ioff; i<iclip; ++i)
     {
-      unsigned vrow_ptr = ivstart;
-      unsigned brow_ptr = ibstart;
-      for (unsigned i = ioff; i<iclip; ++i)
-        {
-          unsigned bpptr = 0, vpptr = 0;
-          for (unsigned p = 0; p<nplanes(); ++p)
-            {
-              for (unsigned b = 0; b<bytes_per_sample; ++b)
-                *(block_buf + bptr + brow_ptr + bpptr + b) =
-                  *(view_buf + vptr + vrow_ptr + vpptr + b);
-              bpptr += bytes_per_sample; vpptr += vpstp;
-            }
-          brow_ptr += bytes_per_pixel; vrow_ptr += vistp;
-        }
-      bptr += block_jstep; vptr += vjstp;
+      unsigned bpptr = 0, vpptr = 0;
+      for (unsigned p = 0; p<nplanes(); ++p)
+      {
+        for (unsigned b = 0; b<bytes_per_sample; ++b)
+          *(block_buf + bptr + brow_ptr + bpptr + b) =
+            *(view_buf + vptr + vrow_ptr + vpptr + b);
+        bpptr += bytes_per_sample; vpptr += vpstp;
+      }
+      brow_ptr += bytes_per_pixel; vrow_ptr += vistp;
     }
+    bptr += block_jstep; vptr += vjstp;
+  }
 
   //handle the case of bool  (other packed formats not supported for writing)
   if (this->pixel_format() == VIL_PIXEL_FORMAT_BOOL)
-    {
-      unsigned outsize = (bytes_per_block+7*sizeof(bool))/(8*sizeof(bool));
-      vxl_byte* outbuf = new vxl_byte[outsize];
-      this->bitpack_block(bytes_per_block, block_buf, outbuf);
-      delete [] block_buf;
-      bytes_per_block=outsize;
-      block_buf = outbuf;
-    }
-
+  {
+    unsigned outsize = (bytes_per_block+7*sizeof(bool))/(8*sizeof(bool));
+    vxl_byte* outbuf = new vxl_byte[outsize];
+    this->bitpack_block(bytes_per_block, block_buf, outbuf);
+    delete [] block_buf;
+    bytes_per_block=outsize;
+    block_buf = outbuf;
+  }
 }
 
 bool vil_tiff_image::write_block_to_file(unsigned bi, unsigned bj,
@@ -937,37 +935,37 @@ void vil_tiff_image::bitpack_block(unsigned bytes_per_block,
   unsigned outctr = 0;
   vxl_byte packed_byte=0;
   for (unsigned i = 0; i<bytes_per_block; )
+  {
+    //test for a completed packed byte
+    if (bitctr==8)
     {
-      //test for a completed packed byte
-      if (bitctr==8)
-        {
-          bitctr = 0;
-          out_block_buf[outctr] = packed_byte;
-          packed_byte = 0;
-          ++outctr;
-        }
-      //pack a bool into the next bit
-      for (unsigned b = 0; b<bytes_per_bool; ++b)
-        bl[b] = *(in_block_buf + i + b);
-      bool blv = *(reinterpret_cast<bool*>(bl));
-      if (blv)
-        packed_byte |= vxl_byte(1<<(7-bitctr)); //set a "1"
-      else
-        packed_byte &= vxl_byte(~(1<<(7-bitctr)));//set a "0"
-      ++bitctr;
-
-      i+=bytes_per_bool;
-      if (i>=bytes_per_block) //output last (partial) byte
-        out_block_buf[outctr] = packed_byte;
+      bitctr = 0;
+      out_block_buf[outctr] = packed_byte;
+      packed_byte = 0;
+      ++outctr;
     }
+    //pack a bool into the next bit
+    for (unsigned b = 0; b<bytes_per_bool; ++b)
+      bl[b] = *(in_block_buf + i + b);
+    bool blv = *(reinterpret_cast<bool*>(bl));
+    if (blv)
+      packed_byte |= vxl_byte(1<<(7-bitctr)); //set a "1"
+    else
+      packed_byte &= vxl_byte(~(1<<(7-bitctr)));//set a "0"
+    ++bitctr;
+
+    i+=bytes_per_bool;
+    if (i>=bytes_per_block) //output last (partial) byte
+      out_block_buf[outctr] = packed_byte;
+  }
   delete [] bl;
 }
 
 //an internal form of put_block for convenience
 //write the indicated block to file, padding with zeros if necessary
 //image view im is an arbitrary region of image that has to be decomposed into
-//blocks. The resource is written with zeros if the input view doesn't 
-//correspond to exact block boundaries.  Subsequent put_view calls could 
+//blocks. The resource is written with zeros if the input view doesn't
+//correspond to exact block boundaries.  Subsequent put_view calls could
 //fill in the missing image data.
 bool vil_tiff_image::put_block(unsigned bi, unsigned bj, unsigned i0,
                                unsigned j0, const vil_image_view_base& im)
@@ -992,19 +990,19 @@ bool vil_tiff_image::put_block(unsigned bi, unsigned bj, unsigned i0,
 
   //right block margin to be padded [iclip -> size_block_i()-1]
   if ( (bi+1)*sbi > (im.ni()+i0) )
-    {
-      iclip = (i0+im.ni())-bi*sbi;
-      if (iclip > sbi)
-        return false;
-    }
+  {
+    iclip = (i0+im.ni())-bi*sbi;
+    if (iclip > sbi)
+      return false;
+  }
 
   //bottom block margin to be padded [jclip -> size_block_j()-1]
   if ( (bj+1)*sbj > (im.nj()+j0) )
-    {
-      jclip = (j0+im.nj())-bj*sbj;
-      if (jclip > sbj)
-        return false;
-    }
+  {
+    jclip = (j0+im.nj())-bj*sbj;
+    if (jclip > sbj)
+      return false;
+  }
   unsigned bps = h_->bytes_per_sample();
   unsigned bytes_per_pixel = bps*nplanes();
 
@@ -1049,8 +1047,8 @@ bool vil_tiff_image::put_block( unsigned  block_index_i,
                                 unsigned  block_index_j,
                                 const vil_image_view_base& blk )
 {
-  if(blk.ni()==0||blk.nj()==0)
-	  return false;
+  if (blk.ni()==0||blk.nj()==0)
+    return false;
   unsigned sbi = this->size_block_i(), sbj = this->size_block_j();
   unsigned bps = h_->bytes_per_sample();
   unsigned bytes_per_pixel = bps*nplanes();
@@ -1079,13 +1077,13 @@ static bool level_compare(tiff_pyramid_level* const l1, tiff_pyramid_level* cons
 void vil_tiff_pyramid_resource::normalize_scales()
 {
   unsigned nlevels = this->nlevels();
-	if(nlevels==0)
+  if (nlevels==0)
     return;
   levels_[0]->scale_ = 1.0f;
-  if(nlevels==1)
+  if (nlevels==1)
     return;
   float ni0 = static_cast<float>(levels_[0]->ni_);
-  for(unsigned i = 1; i<nlevels; ++i)
+  for (unsigned i = 1; i<nlevels; ++i)
     levels_[i]->scale_ = static_cast<float>(levels_[i]->ni_)/ni0;
 }
 
@@ -1093,76 +1091,77 @@ void vil_tiff_pyramid_resource::normalize_scales()
 tiff_pyramid_level* vil_tiff_pyramid_resource::closest(const float scale) const
 {
   unsigned nlevels = this->nlevels();
-  if(nlevels == 0)
+  if (nlevels == 0)
     return 0;
-  if(nlevels == 1)
+  if (nlevels == 1)
     return levels_[0];
   float mind = 1.0e08f;//huge scale;
-  unsigned lmin = 0; 
-  for(unsigned i = 0; i<nlevels; ++i)
+  unsigned lmin = 0;
+  for (unsigned i = 0; i<nlevels; ++i)
+  {
+    float ds = vcl_fabs(scale - levels_[i]->scale_);
+    if (ds<mind)
     {
-      float ds = vcl_fabs(scale - levels_[i]->scale_);
-      if(ds<mind)
-        {
-          mind = ds;
-          lmin = i;
-        }
+      mind = ds;
+      lmin = i;
     }
+  }
   tiff_pyramid_level* pl = levels_[lmin];
-  if(pl)
+  if (pl)
     pl->cur_level_ = lmin;
   return pl;
 }
 
-vil_tiff_pyramid_resource::vil_tiff_pyramid_resource() 
+vil_tiff_pyramid_resource::vil_tiff_pyramid_resource()
   : t_(0), read_(true)
 {
 }
 
 vil_tiff_pyramid_resource::
-vil_tiff_pyramid_resource(TIFF* t, bool read) 
+vil_tiff_pyramid_resource(TIFF* t, bool read)
   : t_(t), read_(read)
 {
-  if(!read)
+  if (!read)
     return;
   //for reading we need to set up the levels
-  while(true)
-    {
-      vil_tiff_header h(t_);
-      tiff_pyramid_level* pl = new tiff_pyramid_level(this->nlevels(),
-                                                      h.image_width.val,
-                                                      h.image_length.val,
-                                                      h.nplanes,
-                                                      h.pix_fmt);
-      levels_.push_back(pl);
-      int status = TIFFReadDirectory(t_);
-      if(!status)
-        break;
-    }
+  while (true)
+  {
+    vil_tiff_header h(t_);
+    tiff_pyramid_level* pl = new tiff_pyramid_level(this->nlevels(),
+                                                    h.image_width.val,
+                                                    h.image_length.val,
+                                                    h.nplanes,
+                                                    h.pix_fmt);
+    levels_.push_back(pl);
+    int status = TIFFReadDirectory(t_);
+    if (!status)
+      break;
+  }
   //sort the pyramid
   vcl_sort(levels_.begin(), levels_.end(), level_compare);
   //normalize the scales
   this->normalize_scales();
 }
+
 vil_tiff_pyramid_resource::~vil_tiff_pyramid_resource()
 {
-  for(unsigned L = 0; L<this->nlevels(); ++L)
+  for (unsigned L = 0; L<this->nlevels(); ++L)
     delete levels_[L];
-  if(t_)
+  if (t_)
     TIFFClose(t_);
 }
 
 //:Get a partial view from the image from a specified pyramid level
-vil_image_view_base_sptr 
+vil_image_view_base_sptr
 vil_tiff_pyramid_resource::get_copy_view(unsigned i0, unsigned n_i,
                                          unsigned j0, unsigned n_j,
                                          unsigned level) const
 {
-  if(level>=this->nlevels())
+  if (level>=this->nlevels())
     return vil_image_view_base_sptr();
   // setup the image header for the level
   unsigned header_index = levels_[level]->header_index_;
-  int status = TIFFSetDirectory(t_, header_index);  
+  int status = TIFFSetDirectory(t_, header_index);
   vil_tiff_header* h = new vil_tiff_header(t_);
   vil_tiff_image* resc = new vil_tiff_image(t_, h);
   //scale input coordinates to the scale of the level
@@ -1170,19 +1169,19 @@ vil_tiff_pyramid_resource::get_copy_view(unsigned i0, unsigned n_i,
   unsigned si0 = static_cast<unsigned>(scale*i0);
   unsigned sj0 = static_cast<unsigned>(scale*j0);
   unsigned sni = static_cast<unsigned>(scale*n_i);
-  if(sni == 0) sni = 1;//can't have less than one pixel
+  if (sni == 0) sni = 1;//can't have less than one pixel
   unsigned snj = static_cast<unsigned>(scale*n_j);
-  if(snj == 0) snj = 1;//can't have less than one pixel
+  if (snj == 0) snj = 1;//can't have less than one pixel
   vil_image_view_base_sptr view = resc->get_copy_view(si0, sni, sj0, snj);
   resc->clear_TIFF();
   return view;
 }
 
-//:Get a partial view from the image in the pyramid closest to scale. 
-// The origin and size parameters are in the coordinate system 
-// of the base image. The scale factor is with respect to the base 
+//:Get a partial view from the image in the pyramid closest to scale.
+// The origin and size parameters are in the coordinate system
+// of the base image. The scale factor is with respect to the base
 // image (base scale = 1.0).
-vil_image_view_base_sptr 
+vil_image_view_base_sptr
 vil_tiff_pyramid_resource::get_copy_view(unsigned i0, unsigned n_i,
                                          unsigned j0, unsigned n_j,
                                          const float scale,
@@ -1190,7 +1189,7 @@ vil_tiff_pyramid_resource::get_copy_view(unsigned i0, unsigned n_i,
 {
   // Get the closest scale
   tiff_pyramid_level* pl  = this->closest(scale);
-  if(!pl)
+  if (!pl)
     return 0;
   actual_scale = pl->scale_;
   return this->get_copy_view(i0, n_i, j0, n_j, pl->cur_level_);
@@ -1207,19 +1206,19 @@ bool vil_tiff_pyramid_resource::put_resource(vil_image_resource_sptr const& ir)
   vil_pixel_format fmt = ir->pixel_format();
   vil_blocked_image_resource_sptr bir = blocked_image_resource(ir);
   unsigned sbi = 0, sbj = 0;
-  if(bir)
+  if (bir)
     {sbi = bir->size_block_i(); sbj = bir->size_block_j();}
   // setup the image header for the level
   vil_tiff_header* h = new vil_tiff_header(t_, ni, nj, nplanes,
                                            fmt, sbi, sbj);
-  
+
   /* We are writing single page of the multipage file */
   TIFFSetField(t_, TIFFTAG_SUBFILETYPE, FILETYPE_PAGE);
   /* Set the page number */
   TIFFSetField(t_, TIFFTAG_PAGENUMBER,level, 3);
   vil_tiff_image* ti = new vil_tiff_image(t_, h);
   vil_image_resource_sptr resc = ti;
-  if(!vil_copy_deep(ir, resc))
+  if (!vil_copy_deep(ir, resc))
     return false;
   ti->clear_TIFF();
   tiff_pyramid_level* pl = new tiff_pyramid_level(levels_.size(), ni, nj, nplanes, fmt);

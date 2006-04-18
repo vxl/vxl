@@ -44,7 +44,7 @@
 //Believe it or not some dicom images have a mixed endian encoding.
 // e.g. mixed (7fe0,0010) OW 30f8 vs unmixed (7fe0,0010) OW f830
 //The header is little endian and the data is big endian!! There doesn't
-//seem to be a way of telling that this is the case. The DCM library 
+//seem to be a way of telling that this is the case. The DCM library
 //reports that the  TransferSyntax is "LittleEndianImplicit", which isn't helpful.
 // This is a hack to be able to read such files
 //#define MIXED_ENDIAN
@@ -125,7 +125,7 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
   : pixels_( 0 )
 {
   vil_dicom_header_info_clear( header_ );
-  
+
   vil_dicom_stream_input dcis( vs );
 
   DcmFileFormat ffmt;
@@ -134,8 +134,8 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
   ffmt.transferEnd();
 
   if ( cond != EC_Normal ) {
-    vcl_cerr << "vil_dicom ERROR: could not read file (" << cond.text() << ")\n";
-    vcl_cerr << "And the error code is: " << cond.code() << "\n";
+    vcl_cerr << "vil_dicom ERROR: could not read file (" << cond.text() << ")\n"
+             << "And the error code is: " << cond.code() << "\n";
     //if (cond.code() != 4)
       return;
   }
@@ -899,8 +899,8 @@ namespace
 #ifdef MIXED_ENDIAN
 static  unsigned short swap_short(unsigned short v)
 {
-	return (v << 8)
-        | (v >> 8);
+  return (v << 8)
+       | (v >> 8);
 }
 
 static void swap_shorts(unsigned short *ip, unsigned short *op, int count)
@@ -930,7 +930,7 @@ read_pixels_into_buffer(DcmPixelData* pixels,
   // of the bytes.
   //
   vil_pixel_format act_format = VIL_PIXEL_FORMAT_UNKNOWN;
-  
+
   // First convert from the stored src pixels to the actual
   // pixels. This is an integral type to integral type conversion.
   // Make sure pixel_data is deleted before this function exits!
@@ -944,14 +944,14 @@ read_pixels_into_buffer(DcmPixelData* pixels,
 #ifdef MIXED_ENDIAN
 #ifdef NO_OFFSET
   slope = 1; intercept = 0;
-  if(act_format == VIL_PIXEL_FORMAT_SBYTE)
-	  act_format = VIL_PIXEL_FORMAT_BYTE;
-  if(act_format == VIL_PIXEL_FORMAT_INT_16)
-      act_format = VIL_PIXEL_FORMAT_UINT_16;
+  if (act_format == VIL_PIXEL_FORMAT_SBYTE)
+    act_format = VIL_PIXEL_FORMAT_BYTE;
+  if (act_format == VIL_PIXEL_FORMAT_INT_16)
+    act_format = VIL_PIXEL_FORMAT_UINT_16;
 #endif //NO_OFFSET
   bool swap_data = false;
   unsigned short* temp1 = new unsigned short[num_samples];
-  unsigned short* temp2 = 
+  unsigned short* temp2 =
     reinterpret_cast<unsigned short*>(pixel_data->getData());
   swap_shorts(temp2, temp1, num_samples);
   vxl_byte* temp3 = reinterpret_cast<vxl_byte*>(temp1);
@@ -986,9 +986,9 @@ read_pixels_into_buffer(DcmPixelData* pixels,
     out_buf = new vil_memory_chunk( num_samples * sizeof(float), VIL_PIXEL_FORMAT_FLOAT );
     out_format = VIL_PIXEL_FORMAT_FLOAT;
 #ifdef MIXED_ENDIAN
-	void* in_begin = reinterpret_cast<void*>(temp1);
+    void* in_begin = reinterpret_cast<void*>(temp1);
 #else
-  void* in_begin = pixel_data->getData();
+    void* in_begin = pixel_data->getData();
 #endif //MIXED_ENDIAN
     float* out_begin = static_cast<float*>( out_buf->data() );
 
