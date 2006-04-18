@@ -7,7 +7,7 @@
 SET(DIRECTSHOW_FOUND "NO")
 
 # DirectShow is only available on Windows platforms
-IF(WIN32)
+IF(MSVC)
   # Find DirectX Include Directory
   FIND_PATH(DIRECTX_INCLUDE_DIR ddraw.h
     "C:/Program Files/Microsoft Visual Studio .NET 2003/Vc7/PlatformSDK/Include"
@@ -50,7 +50,7 @@ IF(WIN32)
       ENDIF(DIRECTSHOW_strmiids_LIBRARY)
     ENDIF(DIRECTSHOW_INCLUDE_DIR)
   ENDIF(DIRECTX_INCLUDE_DIR)
-ENDIF(WIN32)
+ENDIF(MSVC)
 
 
 #---------------------------------------------------------------------
