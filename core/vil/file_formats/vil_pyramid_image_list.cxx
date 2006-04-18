@@ -4,6 +4,7 @@
 #include <vcl_cstring.h>
 #include <vcl_algorithm.h>
 #include <vcl_cmath.h>
+#include <vcl_cassert.h>
 #include <vcl_sstream.h>
 #include <vil/vil_stream_fstream.h>
 //#include <vil/file_formats/vil_image_list.h>
@@ -12,6 +13,7 @@
 #include <vil/vil_new.h>
 #include <vil/vil_load.h>
 #include <vil/vil_copy.h>
+
 //:Load a pyramid image.  The path should correspond to a directory.
 //If not, return a null resource.
 vil_pyramid_image_resource_sptr
@@ -26,6 +28,7 @@ vil_pyramid_image_list_format::make_input_pyramid_image(char const* directory)
   pil->set_directory(directory);
   return pil;
 }
+
 vil_pyramid_image_resource_sptr
 vil_pyramid_image_list_format::make_pyramid_output_image(char const* file)
 {
@@ -265,6 +268,7 @@ bool vil_pyramid_image_list::put_resource(vil_image_resource_sptr const& image)
     return false;
   return this->add_resource(copy);
 }
+
 //:find the level closest to the specified scale
 pyramid_level* vil_pyramid_image_list::closest(const float scale) const
 {
@@ -290,6 +294,7 @@ pyramid_level* vil_pyramid_image_list::closest(const float scale) const
     pl->cur_level_ = lmin;
   return pl;
 }
+
 vil_image_view_base_sptr
 vil_pyramid_image_list::get_copy_view(unsigned i0, unsigned n_i,
                                       unsigned j0, unsigned n_j,
