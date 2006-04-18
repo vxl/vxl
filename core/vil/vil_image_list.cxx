@@ -41,7 +41,11 @@ vcl_vector<vcl_string> vil_image_list::files()
 
   handle_type handle;
   struct _finddata_t data;
+#ifdef VCL_BORLAND_55
+  handle = _findfirst(const_cast<char*>((directory_+"\\*").c_str()), &data);
+#else
   handle = _findfirst((directory_+"\\*").c_str(), &data);
+#endif
   if (handle<0)
     return temp;
   vcl_string s = data.name;
