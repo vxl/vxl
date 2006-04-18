@@ -183,6 +183,7 @@ vil_image_resource_sptr vil_tiff_file_format::make_input_image(vil_stream* is)
   }
   return new vil_tiff_image(tss->tif, h);
 }
+
 vil_pyramid_image_resource_sptr
 vil_tiff_file_format::make_input_pyramid_image(char const* file)
 {
@@ -215,7 +216,6 @@ make_pyramid_image_from_base(char const* file,
                              vil_image_resource_sptr const& base_image,
                              unsigned nlevels,
                              char const* temp_dir)
-
 {
   {//scope for writing the resources
     vil_pyramid_image_resource_sptr pyr = make_pyramid_output_image(file);
@@ -253,6 +253,7 @@ make_pyramid_image_from_base(char const* file,
   //reopen for reading
   return make_input_pyramid_image(file);
 }
+
 vil_blocked_image_resource_sptr
 vil_tiff_file_format::make_blocked_output_image(vil_stream* vs,
                                                 unsigned nx,
@@ -1195,11 +1196,10 @@ vil_tiff_pyramid_resource::get_copy_view(unsigned i0, unsigned n_i,
   return this->get_copy_view(i0, n_i, j0, n_j, pl->cur_level_);
 }
 
-//: Put the data in this view back into the image source at specified level
-// only can be written once.
+//: Put the data in this view back into the image source at specified level.
+// Only can be written once.
 bool vil_tiff_pyramid_resource::put_resource(vil_image_resource_sptr const& ir)
 {
-
   unsigned level = this->nlevels();
   unsigned ni = ir->ni(), nj = ir->nj();
   unsigned nplanes = ir->nplanes();

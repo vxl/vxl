@@ -32,8 +32,8 @@ bool vil_pyramid_image_resource::get_property(char const * tag, void * value) co
 }
 
 
-//:return a decimated block.   The input is a 2x2 2d array of
-// blocks. Assume all the data is valid
+//: return a decimated block.  The input is a 2x2 2d array of blocks.
+//  Assume all the data is valid
 static vil_image_view<float>
 decimate_block(vcl_vector<vcl_vector<vil_image_view<float> > > const& blocks)
 {
