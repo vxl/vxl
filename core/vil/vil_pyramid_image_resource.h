@@ -38,25 +38,25 @@ class vil_pyramid_image_resource : public vil_image_resource
   //: The following methods refer to the base (max resolution) image 
   //: Dimensions:  Planes x ni x nj.
   // This concept is treated as a synonym to components.
-  inline virtual unsigned nplanes() const = 0;
+  virtual unsigned nplanes() const = 0;
 
   //: Dimensions:  Planes x ni x nj.
   // The number of pixels in each row.
-  inline virtual unsigned ni() const = 0;
+  virtual unsigned ni() const = 0;
 
   //: Dimensions:  Planes x ni x nj.
   // The number of pixels in each column.
-  inline virtual unsigned nj() const = 0;
+  virtual unsigned nj() const = 0;
 
   //: Pixel Format.
-  inline virtual enum vil_pixel_format pixel_format() const = 0;
+  virtual enum vil_pixel_format pixel_format() const = 0;
 
   //: Create a read/write view of a copy of this data.
   // applies only to the base image
-  inline virtual vil_image_view_base_sptr get_copy_view(unsigned i0,
-                                                        unsigned n_i,
-                                                        unsigned j0,
-                                                        unsigned n_j) const
+  virtual vil_image_view_base_sptr get_copy_view(unsigned i0,
+                                                 unsigned n_i,
+                                                 unsigned j0,
+                                                 unsigned n_j) const
     {return this->get_copy_view(i0, n_i, j0, n_j, 0);}
 
   //: Put the data in this view back into the base image
