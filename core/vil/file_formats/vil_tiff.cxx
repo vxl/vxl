@@ -1114,13 +1114,13 @@ tiff_pyramid_level* vil_tiff_pyramid_resource::closest(const float scale) const
 }
 
 vil_tiff_pyramid_resource::vil_tiff_pyramid_resource()
-  : t_(0), read_(true)
+  : read_(true), t_(0)
 {
 }
 
 vil_tiff_pyramid_resource::
 vil_tiff_pyramid_resource(TIFF* t, bool read)
-  : t_(t), read_(read)
+  : read_(read), t_(t)
 {
   if (!read)
     return;
@@ -1162,7 +1162,9 @@ vil_tiff_pyramid_resource::get_copy_view(unsigned i0, unsigned n_i,
     return vil_image_view_base_sptr();
   // setup the image header for the level
   unsigned header_index = levels_[level]->header_index_;
-  int status = TIFFSetDirectory(t_, header_index);
+  // The status value should be checked here
+  //int status = TIFFSetDirectory(t_, header_index);
+  TIFFSetDirectory(t_, header_index);
   vil_tiff_header* h = new vil_tiff_header(t_);
   vil_tiff_image* resc = new vil_tiff_image(t_, h);
   //scale input coordinates to the scale of the level

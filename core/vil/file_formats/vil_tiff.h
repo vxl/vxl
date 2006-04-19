@@ -326,7 +326,7 @@ class vil_tiff_pyramid_resource : public vil_pyramid_image_resource
   tiff_pyramid_level* closest(const float scale) const;
 
   //: If true resource is open for read, else open for write
-   bool read_;
+  bool read_;
 
   //: the tiff handle
   TIFF* t_;
