@@ -25,9 +25,11 @@
 # include <cstdio>
 # define vcl_generic_cstdio_STD /* */
 # include "generic/vcl_cstdio.h"
-#else
+#elif defined(VCL_VC_71)
+# define vcl_snprintf _snprintf
 # include "vcl_cstddef.h" // for size_t
 # include "iso/vcl_cstdio.h"
+#else
 #endif
 
 // Some compilers (gcc 2.95.3, SGI CC) seem to define these as macros. Sigh.
