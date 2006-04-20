@@ -21,11 +21,11 @@
  *
  *  Purpose: Basis class for dicom tags.
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:09 $
- *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
- *  Status:           $State: Exp $
+ *  Last Update:      Author: amithaperera 
+ *  Update Date:      Date: 2004/01/14 04:01:09 
+ *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/include/dctagkey.h,v 
+ *  CVS/RCS Revision: Revision: 1.1 
+ *  Status:           State: Exp 
  *
  *  CVS/RCS Log at end of file
  *
@@ -260,7 +260,11 @@ DcmTagKey::operator >= (const DcmTagKey& key) const
 
 /*
 ** CVS/RCS Log:
-** Log: dctagkey.h
+** Log: dctagkey.h,v 
+** Revision 1.1  2004/01/14 04:01:09  amithaperera
+** Add better DICOM support by wrapping DCMTK, and add a stripped down
+** version of DCMTK to v3p. Add more DICOM test cases.
+**
 ** Revision 1.12  2002/04/16 13:41:44  joergr
 ** Added configurable support for C++ ANSI standard includes (e.g. streams).
 ** Thanks to Andreas Barth <Andreas.Barth@bruker-biospin.de> for his

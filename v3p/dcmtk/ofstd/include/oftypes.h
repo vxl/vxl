@@ -23,11 +23,11 @@
  *      Defines some C++ standard types that are not consistently 
  *      supported by all C++ Compilers
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:11 $
- *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
- *  Status:           $State: Exp $
+ *  Last Update:      Author: amithaperera 
+ *  Update Date:      Date: 2004/01/14 04:01:11 
+ *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/ofstd/include/oftypes.h,v 
+ *  CVS/RCS Revision: Revision: 1.1 
+ *  Status:           State: Exp 
  *
  *  CVS/RCS Log at end of file
  *
@@ -91,7 +91,11 @@ typedef int OFBool;
 
 /*
  * CVS/RCS Log:
- * Log: oftypes.h
+ * Log: oftypes.h,v 
+ * Revision 1.1  2004/01/14 04:01:11  amithaperera
+ * Add better DICOM support by wrapping DCMTK, and add a stripped down
+ * version of DCMTK to v3p. Add more DICOM test cases.
+ *
  * Revision 1.6  2002/07/10 11:45:26  meichel
  * Moved definitions for Uint8, Sint8 ... Float64 from dcmdata to ofstd
  *   since these types are not DICOM specific

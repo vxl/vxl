@@ -21,11 +21,11 @@
  *
  *  Purpose: Implementation of class DcmPixelItem
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:10 $
- *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
- *  Status:           $State: Exp $
+ *  Last Update:      Author: amithaperera 
+ *  Update Date:      Date: 2004/01/14 04:01:10 
+ *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcpxitem.cxx,v 
+ *  CVS/RCS Revision: Revision: 1.1 
+ *  Status:           State: Exp 
  *
  *  CVS/RCS Log at end of file
  *
@@ -187,7 +187,11 @@ OFCondition DcmPixelItem::writeXML(ostream &out,
 
 /*
 ** CVS/RCS Log:
-** Log: dcpxitem.cc
+** Log: dcpxitem.cxx,v 
+** Revision 1.1  2004/01/14 04:01:10  amithaperera
+** Add better DICOM support by wrapping DCMTK, and add a stripped down
+** version of DCMTK to v3p. Add more DICOM test cases.
+**
 ** Revision 1.25  2002/12/06 13:16:59  joergr
 ** Enhanced "print()" function by re-working the implementation and replacing
 ** the boolean "showFullData" parameter by a more general integer flag.

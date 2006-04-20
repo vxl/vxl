@@ -21,11 +21,11 @@
  *
  *  Purpose: A simple string class
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:11 $
- *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
- *  Status:           $State: Exp $
+ *  Last Update:      Author: amithaperera 
+ *  Update Date:      Date: 2004/01/14 04:01:11 
+ *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/ofstd/include/ofstring.h,v 
+ *  CVS/RCS Revision: Revision: 1.1 
+ *  Status:           State: Exp 
  *
  *  CVS/RCS Log at end of file
  *
@@ -1078,7 +1078,11 @@ OFBool operator>= (const OFString& lhs, char rhs);
 
 /*
 ** CVS/RCS Log:
-** Log: ofstring.h
+** Log: ofstring.h,v 
+** Revision 1.1  2004/01/14 04:01:11  amithaperera
+** Add better DICOM support by wrapping DCMTK, and add a stripped down
+** version of DCMTK to v3p. Add more DICOM test cases.
+**
 ** Revision 1.13  2002/11/27 11:23:06  meichel
 ** Adapted module ofstd to use of new header file ofstdinc.h
 **
@@ -1110,7 +1114,7 @@ OFBool operator>= (const OFString& lhs, char rhs);
 ** Added copyright message to source files and changed CVS header.
 **
 ** Revision 1.4  1997/09/01 10:00:12  hewett
-** Added absent $ terminator to RCS/CVS Revision keyword in header.
+** Added absent  terminator to RCS/CVS Revision keyword in header.
 **
 ** Revision 1.3  1997/07/14 13:37:31  meichel
 ** Simplified OFString code to allow compilation with Sun CC 2.0.1

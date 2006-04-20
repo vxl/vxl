@@ -21,11 +21,11 @@
  *
  *  Purpose: Definition of the DcmVR class for Value Representation
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:09 $
- *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
- *  Status:           $State: Exp $
+ *  Last Update:      Author: amithaperera 
+ *  Update Date:      Date: 2004/01/14 04:01:09 
+ *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/include/dcvr.h,v 
+ *  CVS/RCS Revision: Revision: 1.1 
+ *  Status:           State: Exp 
  *
  *  CVS/RCS Log at end of file
  *
@@ -159,7 +159,11 @@ public:
 
 /*
  * CVS/RCS Log:
- * Log: dcvr.h
+ * Log: dcvr.h,v 
+ * Revision 1.1  2004/01/14 04:01:09  amithaperera
+ * Add better DICOM support by wrapping DCMTK, and add a stripped down
+ * version of DCMTK to v3p. Add more DICOM test cases.
+ *
  * Revision 1.19  2002/12/06 12:20:19  joergr
  * Added support for new value representation Other Float String (OF).
  *

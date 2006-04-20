@@ -21,11 +21,11 @@
  *
  *  Purpose: Print debug information
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/22 21:06:32 $
- *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
- *  Status:           $State: Exp $
+ *  Last Update:      Author: amithaperera 
+ *  Update Date:      Date: 2004/01/22 21:06:32 
+ *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcdebug.cxx,v 
+ *  CVS/RCS Revision: Revision: 1.1 
+ *  Status:           State: Exp 
  *
  *  CVS/RCS Log at end of file
  *
@@ -64,7 +64,10 @@ void debug_print(const char* text, ... )
 
 /*
 ** CVS/RCS Log:
-** Log: dcdebug.cc
+** Log: dcdebug.cxx,v 
+** Revision 1.1  2004/01/22 21:06:32  amithaperera
+** These files could be needed, depending on configuration variables
+**
 ** Revision 1.10  2002/11/27 12:06:43  meichel
 ** Adapted module dcmdata to use of new header file ofstdinc.h
 **

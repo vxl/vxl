@@ -1,4 +1,4 @@
-/* Header */
+/* Header: /cvsroot/vxl/vxl/v3p/tiff/tiffconf.h,v 1.6 2005/07/08 18:34:39 brooksby Exp  */
 /*
  * Copyright (c) 1988-1997 Sam Leffler
  * Copyright (c) 1991-1997 Silicon Graphics, Inc.

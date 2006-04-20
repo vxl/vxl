@@ -21,11 +21,11 @@
  *
  *  Purpose: DicomPixel (Header)
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:10 $
- *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $ 
- *  Status:           $State: Exp $
+ *  Last Update:      Author: amithaperera 
+ *  Update Date:      Date: 2004/01/14 04:01:10 
+ *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmimgle/include/dipixel.h,v 
+ *  CVS/RCS Revision: Revision: 1.1  
+ *  Status:           State: Exp 
  *
  *  CVS/RCS Log at end of file
  *
@@ -129,7 +129,11 @@ class DiPixel
 /*
  *
  * CVS/RCS Log:
- * Log: dipixel.h
+ * Log: dipixel.h,v 
+ * Revision 1.1  2004/01/14 04:01:10  amithaperera
+ * Add better DICOM support by wrapping DCMTK, and add a stripped down
+ * version of DCMTK to v3p. Add more DICOM test cases.
+ *
  * Revision 1.7  2002/06/26 16:06:08  joergr
  * Enhanced handling of corrupted pixel data and/or length.
  *

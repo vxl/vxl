@@ -21,11 +21,11 @@
  *
  *  Purpose: abstract class DcmCodec and the class DcmCodecStruct
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:10 $
- *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
- *  Status:           $State: Exp $
+ *  Last Update:      Author: amithaperera 
+ *  Update Date:      Date: 2004/01/14 04:01:10 
+ *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dccodec.cxx,v 
+ *  CVS/RCS Revision: Revision: 1.1 
+ *  Status:           State: Exp 
  *
  *  CVS/RCS Log at end of file
  *
@@ -451,7 +451,11 @@ OFBool DcmCodecList::canChangeCoding(
 
 /*
 ** CVS/RCS Log:
-** Log: dccodec.cc
+** Log: dccodec.cxx,v 
+** Revision 1.1  2004/01/14 04:01:10  amithaperera
+** Add better DICOM support by wrapping DCMTK, and add a stripped down
+** version of DCMTK to v3p. Add more DICOM test cases.
+**
 ** Revision 1.11  2002/06/27 15:15:53  meichel
 ** Now adding empty Patient Orientation when converting to
 **   Secondary Capture.

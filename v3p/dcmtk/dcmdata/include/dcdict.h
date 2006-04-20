@@ -21,11 +21,11 @@
  *
  *  Purpose: Interface for loadable DICOM data dictionary
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:09 $
- *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
- *  Status:           $State: Exp $
+ *  Last Update:      Author: amithaperera 
+ *  Update Date:      Date: 2004/01/14 04:01:09 
+ *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/include/dcdict.h,v 
+ *  CVS/RCS Revision: Revision: 1.1 
+ *  Status:           State: Exp 
  *
  *  CVS/RCS Log at end of file
  *
@@ -296,7 +296,11 @@ extern GlobalDcmDataDictionary dcmDataDict;
 
 /*
 ** CVS/RCS Log:
-** Log: dcdict.h
+** Log: dcdict.h,v 
+** Revision 1.1  2004/01/14 04:01:09  amithaperera
+** Add better DICOM support by wrapping DCMTK, and add a stripped down
+** version of DCMTK to v3p. Add more DICOM test cases.
+**
 ** Revision 1.18  2002/07/23 14:21:25  meichel
 ** Added support for private tag data dictionaries to dcmdata
 **

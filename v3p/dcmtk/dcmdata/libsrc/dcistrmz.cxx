@@ -21,11 +21,11 @@
  *
  *  Purpose: zlib compression filter for input streams
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/22 21:06:34 $
- *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
- *  Status:           $State: Exp $
+ *  Last Update:      Author: amithaperera 
+ *  Update Date:      Date: 2004/01/22 21:06:34 
+ *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcistrmz.cxx,v 
+ *  CVS/RCS Revision: Revision: 1.1 
+ *  Status:           State: Exp 
  *
  *  CVS/RCS Log at end of file
  *
@@ -435,7 +435,10 @@ void dcistrmz_dummy_function()
 
 /*
  * CVS/RCS Log:
- * Log: dcistrmz.cc
+ * Log: dcistrmz.cxx,v 
+ * Revision 1.1  2004/01/22 21:06:34  amithaperera
+ * These files could be needed, depending on configuration variables
+ *
  * Revision 1.4  2002/12/20 14:55:34  wilkens
  * Inserted three casts in order to get rid of compiler warning on Solaris 2.5.1
  * using compiler SC 2.0.1.

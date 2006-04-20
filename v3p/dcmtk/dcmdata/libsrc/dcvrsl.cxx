@@ -21,11 +21,11 @@
  *
  *  Purpose: Implementation of class DcmSignedLong
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:10 $
- *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
- *  Status:           $State: Exp $
+ *  Last Update:      Author: amithaperera 
+ *  Update Date:      Date: 2004/01/14 04:01:10 
+ *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcvrsl.cxx,v 
+ *  CVS/RCS Revision: Revision: 1.1 
+ *  Status:           State: Exp 
  *
  *  CVS/RCS Log at end of file
  *
@@ -300,7 +300,11 @@ OFCondition DcmSignedLong::verify(const OFBool autocorrect)
 
 /*
 ** CVS/RCS Log:
-** Log: dcvrsl.cc
+** Log: dcvrsl.cxx,v 
+** Revision 1.1  2004/01/14 04:01:10  amithaperera
+** Add better DICOM support by wrapping DCMTK, and add a stripped down
+** version of DCMTK to v3p. Add more DICOM test cases.
+**
 ** Revision 1.25  2002/12/11 16:55:03  meichel
 ** Added typecasts to avoid warnings on OSF/1
 **

@@ -1,4 +1,4 @@
-/* "Header */
+/* "Header: /cvsroot/vxl/vxl/v3p/tiff/mkg3states.c,v 1.5 2005/07/12 16:58:29 brooksby Exp  */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler

@@ -21,11 +21,11 @@
  *
  *  Purpose: DicomMonochromeImage (Source)
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/20 14:38:26 $
- *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.2 $
- *  Status:           $State: Exp $
+ *  Last Update:      Author: amithaperera 
+ *  Update Date:      Date: 2004/01/20 14:38:26 
+ *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmimgle/libsrc/dimoimg.cxx,v 
+ *  CVS/RCS Revision: Revision: 1.2 
+ *  Status:           State: Exp 
  *
  *  CVS/RCS Log at end of file
  *
@@ -2089,7 +2089,10 @@ int DiMonoImage::writeBMP(FILE *stream,
 /*
  *
  * CVS/RCS Log:
- * Log: dimoimg.cxx
+ * Log: dimoimg.cxx,v 
+ * Revision 1.2  2004/01/20 14:38:26  amithaperera
+ * Attempt to compensate for VC7.1 broken pow()
+ *
  * Revision 1.1  2004/01/14 04:01:11  amithaperera
  * Add better DICOM support by wrapping DCMTK, and add a stripped down
  * version of DCMTK to v3p. Add more DICOM test cases.

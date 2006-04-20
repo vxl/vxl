@@ -24,11 +24,11 @@
  *  between OB and OW (e.g. Tag PixelData, OverlayData). This class shall
  *  not be used directly in applications. No identification exists.
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:10 $
- *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
- *  Status:           $State: Exp $
+ *  Last Update:      Author: amithaperera 
+ *  Update Date:      Date: 2004/01/14 04:01:10 
+ *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcvrpobw.cxx,v 
+ *  CVS/RCS Revision: Revision: 1.1 
+ *  Status:           State: Exp 
  *
  *  CVS/RCS Log at end of file
  *
@@ -308,7 +308,11 @@ OFCondition DcmPolymorphOBOW::writeSignatureFormat(
 
 /*
 ** CVS/RCS Log:
-** Log: dcvrpobw.cc
+** Log: dcvrpobw.cxx,v 
+** Revision 1.1  2004/01/14 04:01:10  amithaperera
+** Add better DICOM support by wrapping DCMTK, and add a stripped down
+** version of DCMTK to v3p. Add more DICOM test cases.
+**
 ** Revision 1.14  2002/09/12 14:08:28  joergr
 ** Added method "createUint8Array" which works similar to the 16 bit variant.
 **

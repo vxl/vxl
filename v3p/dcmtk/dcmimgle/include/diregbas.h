@@ -21,11 +21,11 @@
  *
  *  Purpose: DicomRegisterBase (Header)
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date $
- *  Source File:      Source
- *  CVS/RCS Revision: $Revision $
- *  Status:           $State $
+ *  Last Update:      Author: amithaperera 
+ *  Update Date:      Date 
+ *  Source File:      Source 
+ *  CVS/RCS Revision: Revision 
+ *  Status:           State 
  *
  *  CVS/RCS Log at end of file
  *
@@ -111,7 +111,11 @@ class DiRegisterBase
 /*
  *
  * CVS/RCS Log:
- * Log: diregbas.h
+ * Log: diregbas.h,v 
+ * Revision 1.1  2004/01/14 04:01:10  amithaperera
+ * Add better DICOM support by wrapping DCMTK, and add a stripped down
+ * version of DCMTK to v3p. Add more DICOM test cases.
+ *
  * Revision 1.5  2001/06/01 15:49:50  meichel
  * Updated copyright header
  *

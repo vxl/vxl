@@ -21,11 +21,11 @@
  *
  *  Purpose: DicomInputPixelTemplate (Header)
  *
- *  Last Update:      $Author: peter_vanroose $
- *  Update Date:      $Date: 2004/08/04 10:36:46 $
- *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.3 $
- *  Status:           $State: Exp $
+ *  Last Update:      Author: peter_vanroose 
+ *  Update Date:      Date: 2004/08/04 10:36:46 
+ *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmimgle/include/diinpxt.h,v 
+ *  CVS/RCS Revision: Revision: 1.3 
+ *  Status:           State: Exp 
  *
  *  CVS/RCS Log at end of file
  *
@@ -591,7 +591,10 @@ class DiInputPixelTemplate
 /*
  *
  * CVS/RCS Log:
- * Log: diinpxt.h
+ * Log: diinpxt.h,v 
+ * Revision 1.3  2004/08/04 10:36:46  peter_vanroose
+ * fix for gcc 3.4 (missing "this->")
+ *
  * Revision 1.2  2004/05/28 17:59:56  peter_vanroose
  * typo corrected
  *

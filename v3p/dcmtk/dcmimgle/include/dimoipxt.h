@@ -21,11 +21,11 @@
  *
  *  Purpose: DicomMonochromeInputPixelTemplate (Header)
  *
- *  Last Update:      $Author: peter_vanroose $
- *  Update Date:      $Date: 2004/08/04 10:36:46 $
- *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.2 $
- *  Status:           $State: Exp $
+ *  Last Update:      Author: peter_vanroose 
+ *  Update Date:      Date: 2004/08/04 10:36:46 
+ *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmimgle/include/dimoipxt.h,v 
+ *  CVS/RCS Revision: Revision: 1.2 
+ *  Status:           State: Exp 
  *
  *  CVS/RCS Log at end of file
  *
@@ -298,7 +298,10 @@ class DiMonoInputPixelTemplate
 /*
  *
  * CVS/RCS Log:
- * Log: dimoipxt.h
+ * Log: dimoipxt.h,v 
+ * Revision 1.2  2004/08/04 10:36:46  peter_vanroose
+ * fix for gcc 3.4 (missing "this->")
+ *
  * Revision 1.1  2004/01/14 04:01:10  amithaperera
  * Add better DICOM support by wrapping DCMTK, and add a stripped down
  * version of DCMTK to v3p. Add more DICOM test cases.

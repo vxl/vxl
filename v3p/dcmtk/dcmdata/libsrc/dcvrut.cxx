@@ -22,11 +22,11 @@
  *  Purpose: Implementation of class DcmUnlimitedText
  *           Value Representation UT is defined in Correction Proposal 101
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:10 $
- *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
- *  Status:           $State: Exp $
+ *  Last Update:      Author: amithaperera 
+ *  Update Date:      Date: 2004/01/14 04:01:10 
+ *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcvrut.cxx,v 
+ *  CVS/RCS Revision: Revision: 1.1 
+ *  Status:           State: Exp 
  *
  *  CVS/RCS Log at end of file
  *
@@ -109,7 +109,11 @@ OFCondition DcmUnlimitedText::getOFStringArray(OFString &strValue,
 
 /*
 ** CVS/RCS Log:
-** Log: dcvrut.cc
+** Log: dcvrut.cxx,v 
+** Revision 1.1  2004/01/14 04:01:10  amithaperera
+** Add better DICOM support by wrapping DCMTK, and add a stripped down
+** version of DCMTK to v3p. Add more DICOM test cases.
+**
 ** Revision 1.8  2002/12/06 13:01:52  joergr
 ** Fixed bug in Unlimited Text (UT) class: the backslash character was treated
 ** as a component separator which is wrong according to the DICOM standard.

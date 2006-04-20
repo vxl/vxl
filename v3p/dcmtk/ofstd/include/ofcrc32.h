@@ -22,11 +22,11 @@
  *  Purpose: general purpose 32-bit CRC in C++
  *           Code is based on the CRC32 implementation (C)1986 Gary S. Brown
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:11 $
- *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
- *  Status:           $State: Exp $
+ *  Last Update:      Author: amithaperera 
+ *  Update Date:      Date: 2004/01/14 04:01:11 
+ *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/ofstd/include/ofcrc32.h,v 
+ *  CVS/RCS Revision: Revision: 1.1 
+ *  Status:           State: Exp 
  *
  *  CVS/RCS Log at end of file
  *
@@ -92,7 +92,11 @@ private:
 
 /*
  * CVS/RCS Log:
- * Log: ofcrc32.h
+ * Log: ofcrc32.h,v 
+ * Revision 1.1  2004/01/14 04:01:11  amithaperera
+ * Add better DICOM support by wrapping DCMTK, and add a stripped down
+ * version of DCMTK to v3p. Add more DICOM test cases.
+ *
  * Revision 1.1  2002/01/08 10:18:48  joergr
  * Added general purpose class which computes a CRC32 checksum on arbitrary
  * data.

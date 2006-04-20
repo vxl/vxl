@@ -21,11 +21,11 @@
  *
  *  Purpose: Define alias for cout, cerr and clog
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:11 $
- *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
- *  Status:           $State: Exp $
+ *  Last Update:      Author: amithaperera 
+ *  Update Date:      Date: 2004/01/14 04:01:11 
+ *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/ofstd/libsrc/ofconsol.cxx,v 
+ *  CVS/RCS Revision: Revision: 1.1 
+ *  Status:           State: Exp 
  *
  *  CVS/RCS Log at end of file
  *
@@ -152,7 +152,11 @@ OFConsoleInitializer ofConsoleInitializer;
 /*
  *
  * CVS/RCS Log:
- * Log: ofconsol.cc
+ * Log: ofconsol.cxx,v 
+ * Revision 1.1  2004/01/14 04:01:11  amithaperera
+ * Add better DICOM support by wrapping DCMTK, and add a stripped down
+ * version of DCMTK to v3p. Add more DICOM test cases.
+ *
  * Revision 1.10  2002/11/27 11:23:09  meichel
  * Adapted module ofstd to use of new header file ofstdinc.h
  *

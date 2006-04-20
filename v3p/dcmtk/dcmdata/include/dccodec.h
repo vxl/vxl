@@ -21,11 +21,11 @@
  *
  *  Purpose: Interface of abstract class DcmCodec and the class DcmCodecStruct
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:09 $
- *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
- *  Status:           $State: Exp $
+ *  Last Update:      Author: amithaperera 
+ *  Update Date:      Date: 2004/01/14 04:01:09 
+ *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/include/dccodec.h,v 
+ *  CVS/RCS Revision: Revision: 1.1 
+ *  Status:           State: Exp 
  *
  *  CVS/RCS Log at end of file
  *
@@ -384,7 +384,11 @@ private:
 
 /*
 ** CVS/RCS Log:
-** Log: dccodec.h
+** Log: dccodec.h,v 
+** Revision 1.1  2004/01/14 04:01:09  amithaperera
+** Add better DICOM support by wrapping DCMTK, and add a stripped down
+** version of DCMTK to v3p. Add more DICOM test cases.
+**
 ** Revision 1.14  2002/05/24 14:51:41  meichel
 ** Moved helper methods that are useful for different compression techniques
 **   from module dcmjpeg to module dcmdata

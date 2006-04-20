@@ -21,11 +21,11 @@
  *
  *  Purpose: Class for date functions (Source)
  *
- *  Last Update:      $Author: peter_vanroose $
- *  Update Date:      $Date: 2004/08/06 14:11:49 $
- *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.2 $
- *  Status:           $State: Exp $
+ *  Last Update:      Author: peter_vanroose 
+ *  Update Date:      Date: 2004/08/06 14:11:49 
+ *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/ofstd/libsrc/ofdate.cxx,v 
+ *  CVS/RCS Revision: Revision: 1.2 
+ *  Status:           State: Exp 
  *
  *  CVS/RCS Log at end of file
  *
@@ -297,7 +297,10 @@ ostream& operator<<(ostream& stream, const OFDate &dateVal)
 /*
  *
  * CVS/RCS Log:
- * Log: ofdate.cxx
+ * Log: ofdate.cxx,v 
+ * Revision 1.2  2004/08/06 14:11:49  peter_vanroose
+ * fix for platform HPUX
+ *
  * Revision 1.1  2004/01/14 04:01:11  amithaperera
  * Add better DICOM support by wrapping DCMTK, and add a stripped down
  * version of DCMTK to v3p. Add more DICOM test cases.

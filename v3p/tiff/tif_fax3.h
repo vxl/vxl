@@ -1,4 +1,4 @@
-/* Id */
+/* Id: tif_fax3.h,v 1.9 2005/07/08 18:34:37 brooksby Exp  */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler

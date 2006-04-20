@@ -1,4 +1,4 @@
-/* Header */
+/* Header: /cvsroot/vxl/vxl/v3p/tiff/tif_read.c,v 1.9 2005/07/08 18:34:38 brooksby Exp  */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler

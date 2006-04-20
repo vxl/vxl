@@ -21,11 +21,11 @@
  *
  *  Purpose: DicomDisplayFunction (Source)
  *
- *  Last Update:      $Author: peter_vanroose $
- *  Update Date:      $Date: 2004/05/28 17:59:56 $
- *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.3 $
- *  Status:           $State: Exp $
+ *  Last Update:      Author: peter_vanroose 
+ *  Update Date:      Date: 2004/05/28 17:59:56 
+ *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmimgle/libsrc/didispfn.cxx,v 
+ *  CVS/RCS Revision: Revision: 1.3 
+ *  Status:           State: Exp 
  *
  *  CVS/RCS Log at end of file
  *
@@ -672,7 +672,10 @@ double DiDisplayFunction::convertODtoLum(const double value,
 /*
  *
  * CVS/RCS Log:
- * Log: didispfn.cxx
+ * Log: didispfn.cxx,v 
+ * Revision 1.3  2004/05/28 17:59:56  peter_vanroose
+ * typo corrected
+ *
  * Revision 1.2  2004/01/20 14:38:26  amithaperera
  * Attempt to compensate for VC7.1 broken pow()
  *

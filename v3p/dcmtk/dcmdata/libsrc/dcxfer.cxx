@@ -21,11 +21,11 @@
  *
  *  Purpose: handling of transfer syntaxes
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:10 $
- *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
- *  Status:           $State: Exp $
+ *  Last Update:      Author: amithaperera 
+ *  Update Date:      Date: 2004/01/14 04:01:10 
+ *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcxfer.cxx,v 
+ *  CVS/RCS Revision: Revision: 1.1 
+ *  Status:           State: Exp 
  *
  *  CVS/RCS Log at end of file
  *
@@ -518,7 +518,11 @@ const E_ByteOrder gLocalByteOrder = FindMachineTransferSyntax();
 
 /*
  * CVS/RCS Log:
- * Log: dcxfer.cc
+ * Log: dcxfer.cxx,v 
+ * Revision 1.1  2004/01/14 04:01:10  amithaperera
+ * Add better DICOM support by wrapping DCMTK, and add a stripped down
+ * version of DCMTK to v3p. Add more DICOM test cases.
+ *
  * Revision 1.21  2002/11/29 17:06:50  joergr
  * Fixed doc++ warning about different number of opening and closing brackets.
  * Replaced German comments by English translations.

@@ -21,11 +21,11 @@
  *
  *  Purpose: Class for various helper functions
  *
- *  Last Update:      $Author: peter_vanroose $
- *  Update Date:      $Date: 2004/05/28 17:59:57 $
- *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.2 $
- *  Status:           $State: Exp $
+ *  Last Update:      Author: peter_vanroose 
+ *  Update Date:      Date: 2004/05/28 17:59:57 
+ *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/ofstd/include/ofstd.h,v 
+ *  CVS/RCS Revision: Revision: 1.2 
+ *  Status:           State: Exp 
  *
  *  CVS/RCS Log at end of file
  *
@@ -379,7 +379,10 @@ class OFStandard
 /*
  *
  * CVS/RCS Log:
- * Log: ofstd.h
+ * Log: ofstd.h,v 
+ * Revision 1.2  2004/05/28 17:59:57  peter_vanroose
+ * typo corrected
+ *
  * Revision 1.1  2004/01/14 04:01:11  amithaperera
  * Add better DICOM support by wrapping DCMTK, and add a stripped down
  * version of DCMTK to v3p. Add more DICOM test cases.

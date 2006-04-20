@@ -1,4 +1,4 @@
-/* "Header */
+/* "Header: /cvsroot/vxl/vxl/v3p/tiff/mkversion.c,v 1.4 2005/07/08 18:34:36 brooksby Exp  */
 
 /*
  * Copyright (c) 1995-1997 Sam Leffler

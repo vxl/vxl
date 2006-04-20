@@ -21,11 +21,11 @@
  *
  *  Purpose: DicomGSDFLUT (Source)
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:11 $
- *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
- *  Status:           $State: Exp $
+ *  Last Update:      Author: amithaperera 
+ *  Update Date:      Date: 2004/01/14 04:01:11 
+ *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmimgle/libsrc/digsdlut.cxx,v 
+ *  CVS/RCS Revision: Revision: 1.1 
+ *  Status:           State: Exp 
  *
  *  CVS/RCS Log at end of file
  *
@@ -211,7 +211,11 @@ int DiGSDFLUT::createLUT(const Uint16 *ddl_tab,
 /*
  *
  * CVS/RCS Log:
- * Log: digsdlut.cc
+ * Log: digsdlut.cxx,v 
+ * Revision 1.1  2004/01/14 04:01:11  amithaperera
+ * Add better DICOM support by wrapping DCMTK, and add a stripped down
+ * version of DCMTK to v3p. Add more DICOM test cases.
+ *
  * Revision 1.14  2002/11/27 14:08:12  meichel
  * Adapted module dcmimgle to use of new header file ofstdinc.h
  *

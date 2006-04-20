@@ -1,4 +1,4 @@
-/* Header */
+/* Header: /cvsroot/vxl/vxl/v3p/tiff/tif_tile.c,v 1.8 2005/07/08 18:34:39 brooksby Exp  */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler

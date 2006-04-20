@@ -1,4 +1,4 @@
-/* Header */
+/* Header: /cvsroot/vxl/vxl/v3p/tiff/tiffcomp.h,v 1.11 2005/07/08 18:34:39 brooksby Exp  */
 
 /*
  * Copyright (c) 1990-1997 Sam Leffler

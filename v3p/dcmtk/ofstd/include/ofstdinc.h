@@ -21,11 +21,11 @@
  *
  *  Purpose: encapsulation of old style vs. ISO C++ standard includes
  *
- *  Last Update:      $Author: amithaperera $
- *  Update Date:      $Date: 2004/01/14 04:01:11 $
- *  Source File:      Source
- *  CVS/RCS Revision: $Revision: 1.1 $
- *  Status:           $State: Exp $
+ *  Last Update:      Author: amithaperera 
+ *  Update Date:      Date: 2004/01/14 04:01:11 
+ *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/ofstd/include/ofstdinc.h,v 
+ *  CVS/RCS Revision: Revision: 1.1 
+ *  Status:           State: Exp 
  *
  *  CVS/RCS Log at end of file
  *
@@ -302,7 +302,11 @@ END_EXTERN_C
 
 /*
  * CVS/RCS Log:
- * Log: ofstdinc.h
+ * Log: ofstdinc.h,v 
+ * Revision 1.1  2004/01/14 04:01:11  amithaperera
+ * Add better DICOM support by wrapping DCMTK, and add a stripped down
+ * version of DCMTK to v3p. Add more DICOM test cases.
+ *
  * Revision 1.6  2002/12/16 16:20:45  meichel
  * Added configure test that checks if extern "C" inclusion
  *   of <math.h> fails, e.g. on HP/UX 10 and WIN32
