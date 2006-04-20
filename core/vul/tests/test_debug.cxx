@@ -25,13 +25,14 @@ int main()
 
   testlib_test_start("Test Debug");
 
+  const char * filetemplate = "test_core%.3d.dmp";
   {
     vcl_cout << "Test simple forced coredump\n";
 
-    const char * filename = "test_core.dmp";
+    const char * filename = "test_core000.dmp";
     vpl_unlink(filename);
 
-    vul_debug_core_dump(filename);
+    vul_debug_core_dump(filetemplate);
 
     TEST("Core dump file exists", vul_file_exists(filename), true);
     TEST("Core dump file is sensible size", vul_file_size(filename) > 100, true);
@@ -42,10 +43,10 @@ int main()
   {
     vcl_cout << "Test Structured exception coredump\n";
 
-    const char * filename = "test_core2.dmp";
+    const char * filename = "test_core001.dmp";
     vpl_unlink(filename);
 
-    vul_debug_set_coredump_and_throw_on_windows_se(filename);
+    vul_debug_set_coredump_and_throw_on_windows_se(filetemplate);
     bool caught_exception=false;
     try
     {
@@ -69,10 +70,10 @@ int main()
   {
     vcl_cout << "Test out-out-memory coredump\n";
 
-    const char * filename = "test_core3.dmp";
+    const char * filename = "test_core002.dmp";
     vpl_unlink(filename);
 
-    vul_debug_set_coredump_and_throw_on_out_of_memory(filename);
+    vul_debug_set_coredump_and_throw_on_out_of_memory(filetemplate);
     bool caught_exception=false;
     try
     {

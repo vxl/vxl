@@ -38,7 +38,12 @@
 static void vul_debug_core_dump_in_windows_seh(const char * filename,
                                                EXCEPTION_POINTERS* pep)
 {
-  HANDLE hFile = CreateFile( filename, GENERIC_READ | GENERIC_WRITE, 
+  static char buffer[2048];
+  static int count = 0;
+  vcl_snprintf(buffer, sizeof(buffer), filename, count++);
+  buffer[sizeof(buffer)-1]=0; // Just in case it is too long
+
+  HANDLE hFile = CreateFile( buffer, GENERIC_READ | GENERIC_WRITE, 
     0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL ); 
 
   if ( ( hFile == NULL ) || ( hFile == INVALID_HANDLE_VALUE ) )
@@ -176,9 +181,10 @@ void vul_debug_set_coredump_and_throw_on_windows_se(const char * )
 
 void vul_debug_core_dump(const char * filename)
 {
+  static int count = 0;
 #ifdef VXL_UNISTD_HAS_GETPID
   vcl_string syscall = "gcore -o ";
-  syscall += filename;
+  syscall += vul_sprintf(filename, count++);
   syscall += vul_sprintf(" %d", getpid());
   if (system(syscall.c_str())==0) return;
   syscall = "gcore -s -c ";

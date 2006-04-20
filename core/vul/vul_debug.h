@@ -8,7 +8,8 @@
 
 
 //: Dump a core file.
-// Not yet implemented on non-windows platforms.
+// \param filename can have up to one "%d" option, which will be given a different index number
+// on each core dump.
 void vul_debug_core_dump(const char * filename);
 
 
@@ -25,6 +26,8 @@ void vul_debug_core_dump(const char * filename);
 //   {}
 // }
 // \endverbatim
+// \param filename can have up to one "%d" option, which will be given a different index number
+// on each core dump.
 void vul_debug_core_dump_in_windows_se(const char * filename,
                                        void* pep);
 #include <vcl_config_compiler.h>
@@ -51,10 +54,14 @@ class vul_debug_windows_structured_exception {};
 //: Setup the system to core dump and throw a C++ exception on detection of a Structured Exception
 // The system will throw vul_debug_windows_structured_exception.
 // You must compile your code with /EHa to get the compiler to correctly handle SEs.
+// \param filename can have up to one "%d" option, which will be given a different index number
+// on each core dump.
 void vul_debug_set_coredump_and_throw_on_windows_se(const char * filename);
 
 //: Setup the system to core dump and throw a C++ exception on detection of out of memory.
 // The system will throw vcl_bad_alloc. 
+// \param filename can have up to one "%d" option, which will be given a different index number
+// on each core dump.
 void vul_debug_set_coredump_and_throw_on_out_of_memory(const char * filename);
 
 
