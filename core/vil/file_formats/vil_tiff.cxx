@@ -1163,8 +1163,8 @@ vil_tiff_pyramid_resource::get_copy_view(unsigned i0, unsigned n_i,
   // setup the image header for the level
   unsigned header_index = levels_[level]->header_index_;
   // The status value should be checked here
-  //int status = TIFFSetDirectory(t_, header_index);
-  TIFFSetDirectory(t_, header_index);
+  if(TIFFSetDirectory(t_, header_index)<=0)
+    return 0;
   vil_tiff_header* h = new vil_tiff_header(t_);
   vil_tiff_image* resc = new vil_tiff_image(t_, h);
   //scale input coordinates to the scale of the level
