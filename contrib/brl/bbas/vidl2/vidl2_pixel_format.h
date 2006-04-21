@@ -317,7 +317,7 @@ vidl2_pixel_format_chroma_shift_x(vidl2_pixel_format f)
 
 //: Return the chroma shift in the vertical direction
 inline unsigned
-    vidl2_pixel_format_chroma_shift_y(vidl2_pixel_format f)
+vidl2_pixel_format_chroma_shift_y(vidl2_pixel_format f)
 {
   return vidl2_pixel_format_traits(f).chroma_shift_y;
 }
