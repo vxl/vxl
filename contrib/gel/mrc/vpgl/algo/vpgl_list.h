@@ -16,6 +16,7 @@
 // \endverbatim
 
 #include <vcl_iosfwd.h>
+#include <vcl_vector.h>
 
 template <class T>
 bool vpgl_read_list(

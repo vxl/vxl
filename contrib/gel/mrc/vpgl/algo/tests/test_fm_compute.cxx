@@ -64,7 +64,7 @@ static void test_fm_compute()
   vpgl_proj_camera<double> C1r( random_list1r );
   vpgl_proj_camera<double> C1l( random_list1l );
   vpgl_fundamental_matrix<double> fm1( C1r, C1l );
-
+  vcl_cerr << "Break 1:\n" << fm1.get_matrix(); //DEBUG
   vcl_vector< vgl_homg_point_3d<double> > p1w;
   p1w.push_back( vgl_homg_point_3d<double>( 2, -1, 5 ) );
   p1w.push_back( vgl_homg_point_3d<double>( 1, 10, 0 ) );
@@ -84,6 +84,7 @@ static void test_fm_compute()
   vpgl_fm_compute_8_point fmc;
   vpgl_fundamental_matrix<double> fm1est;
   fmc.compute( p1r, p1l, fm1est );
+  vcl_cerr << "Break 2:\n" << fm1est.get_matrix(); //DEBUG
 
   vnl_matrix_fixed<double,3,3> fm1_vnl = fm1.get_matrix();
   fm1_vnl/=fm1_vnl(0,0);
@@ -94,6 +95,7 @@ static void test_fm_compute()
   FMatrixCompute7Point fmc_mvl;
   fmc_mvl.compute( p1r, p1l, fm1est_mvl );
   vnl_matrix<double> fm1est_mvl_vnl(3,3);
+  vcl_cerr << "Break 3:\n" << fm1est_mvl_vnl; //DEBUG
   fm1est_mvl[1]->get( &fm1est_mvl_vnl );
   fm1est_mvl_vnl/=fm1est_mvl_vnl(0,0);
 
