@@ -127,7 +127,10 @@ class vidl2_memory_chunk_frame : public vidl2_frame
       vidl2_frame(ni,nj,fmt), memory_(memory) {}
 
     //: Constructor - from a vil_image_view
-    vidl2_memory_chunk_frame(const vil_image_view_base& image);
+    // return an invalid frame if the image format can not be wrapped
+    // \param fmt if not UNKNOWN, requires this pixel or fails
+    vidl2_memory_chunk_frame(const vil_image_view_base& image,
+                             vidl2_pixel_format fmt = VIDL2_PIXEL_FORMAT_UNKNOWN);
 
     //: Destructor
     virtual ~vidl2_memory_chunk_frame() {}

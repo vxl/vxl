@@ -30,8 +30,10 @@ vidl2_frame::unref()
 //-----------------------------------------------------------------------------
 
 //: Constructor - from a vil_image_view
+// return an invalid frame if the image format can not be wrapped
 vidl2_memory_chunk_frame::
-vidl2_memory_chunk_frame(const vil_image_view_base& image)
+vidl2_memory_chunk_frame(const vil_image_view_base& image,
+                         vidl2_pixel_format fmt)
   : vidl2_frame(), memory_(NULL)
 {
   ni_ = image.ni();
@@ -40,14 +42,16 @@ vidl2_memory_chunk_frame(const vil_image_view_base& image)
      image.nplanes() == 1)
   {
     vil_image_view<vxl_uint_16> img = image;
-    assert(img.is_contiguous());
+    if(!img.is_contiguous())
+      return;
     memory_ = img.memory_chunk();
     format_ = VIDL2_PIXEL_FORMAT_MONO_16;
   }
   else if (image.pixel_format() == VIL_PIXEL_FORMAT_BYTE)
   {
     vil_image_view<vxl_byte> img = image;
-    assert(img.is_contiguous());
+    if(!img.is_contiguous())
+      return;
     memory_ = img.memory_chunk();
     if (img.nplanes() == 1)
     {
@@ -55,10 +59,19 @@ vidl2_memory_chunk_frame(const vil_image_view_base& image)
     }
     if (img.nplanes() == 3)
     {
-      if (img.planestep() == 1)
-        format_ = VIDL2_PIXEL_FORMAT_RGB_24;
+      if (img.planestep() == 1){
+        if(fmt == VIDL2_PIXEL_FORMAT_UYV_444)
+          format_ = VIDL2_PIXEL_FORMAT_UYV_444;
+        else
+          format_ = VIDL2_PIXEL_FORMAT_RGB_24;
+      }
       else
-        format_ = VIDL2_PIXEL_FORMAT_RGB_24P;
+      {
+        if(fmt == VIDL2_PIXEL_FORMAT_YUV_444P)
+          format_ = VIDL2_PIXEL_FORMAT_YUV_444P;
+        else
+          format_ = VIDL2_PIXEL_FORMAT_RGB_24P;
+      }
     }
     if (img.nplanes() == 4)
     {
@@ -68,6 +81,13 @@ vidl2_memory_chunk_frame(const vil_image_view_base& image)
         format_ = VIDL2_PIXEL_FORMAT_RGBA_32P;
     }
   }
+
+  if(fmt != VIDL2_PIXEL_FORMAT_UNKNOWN &&
+     fmt != format_)
+    format_ = VIDL2_PIXEL_FORMAT_UNKNOWN;
+
+  if(format_ == VIDL2_PIXEL_FORMAT_UNKNOWN)
+    memory_ = NULL;
 }
 
 
