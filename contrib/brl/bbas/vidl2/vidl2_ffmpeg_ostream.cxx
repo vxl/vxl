@@ -523,9 +523,6 @@ write_frame(const vidl2_frame_sptr& frame)
   }
 
 
-  vil_image_view<vxl_byte> img(frame->ni(),frame->nj(),1,3);
-  vidl2_convert_to_view_rgb(frame, img);
-
   PixelFormat fmt = vidl2_pixel_format_to_ffmpeg(frame->pixel_format());
 
   vidl2_pixel_format target_fmt = vidl2_pixel_format_from_ffmpeg(codec->pix_fmt);
