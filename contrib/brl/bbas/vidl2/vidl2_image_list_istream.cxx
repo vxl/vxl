@@ -11,6 +11,7 @@
 
 #include "vidl2_image_list_istream.h"
 #include "vidl2_frame.h"
+#include "vidl2_convert.h"
 #include <vcl_algorithm.h>
 #include <vul/vul_file_iterator.h>
 #include <vul/vul_file.h>
@@ -111,7 +112,10 @@ bool
 vidl2_image_list_istream::
 advance()
 {
-  return ++index_ < images_.size();
+  if(index_ < images_.size() || index_ == INIT_INDEX )
+    return ++index_ < images_.size();
+
+  return false;
 }
 
 
@@ -129,9 +133,7 @@ vidl2_frame_sptr
 vidl2_image_list_istream::current_frame()
 {
   if (is_valid()){
-    vil_image_view_base_sptr view = images_[index_]->get_view();
-    if(view)
-      return new vidl2_memory_chunk_frame(*view);
+    return vidl2_convert_to_frame(images_[index_]->get_view());
   }
   return NULL;
 }

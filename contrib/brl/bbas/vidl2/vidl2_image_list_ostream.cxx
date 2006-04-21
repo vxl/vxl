@@ -123,7 +123,11 @@ write_frame(const vidl2_frame_sptr& frame)
   ++index_;
   // FIXME this does not account for all data types
   vil_image_view<vxl_byte> image;
-  vidl2_convert_to_view_rgb(frame, image);
+  if(!frame)
+    return false;
+  if(!vidl2_convert_to_view(*frame, image, true))
+    return false;
+
   return vil_save(image,
                   file_name.c_str(),
                   file_format_.c_str());

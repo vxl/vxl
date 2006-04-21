@@ -16,197 +16,18 @@
 
 
 #include "vidl2_frame_sptr.h"
-#include "vidl2_pixel_format.h"
-#include "vidl2_color.h"
-#include "vidl2_pixel_iterator.h"
-#include "vidl2_pixel_iterator.txx"
 #include "vidl2_frame.h"
 #include <vil/vil_image_view.h>
-#include <vcl_cassert.h>
 
 
-//: Wraps an existing iterator and converts YUV to RGB
-template <class pixItr, class outP>
-class vidl2_yuv2rgb_iterator
-{
-  public:
-    //: Constructor
-    vidl2_yuv2rgb_iterator(pixItr itr):
-      itr_(itr)
-    {
-      vidl2_color_convert_yuv2rgb(itr_(0), itr_(1), itr(2), rgb_[0], rgb_[1], rgb_[2]);
-    }
 
-    //: Pre-increment
-    vidl2_yuv2rgb_iterator<pixItr, outP>& operator++ ()
-    {
-      ++itr_;
-      vidl2_color_convert_yuv2rgb(itr_(0), itr_(1), itr_(2), rgb_[0], rgb_[1], rgb_[2]);
-      return *this;
-    }
-
-    //: Access the data
-    outP operator () (unsigned int i) const
-    {
-      assert(i<3);
-      return rgb_[i];
-    }
-
-  private:
-    pixItr itr_;
-    outP rgb_[3];
-};
-
-
-//: Use pixel iterators to unpack and copy the image pixels
-// Assume that \p image has already been resized appropriately
-template <class pixItr, class outP>
-void
-vidl2_convert_itr_to_view(pixItr itr, vil_image_view<outP>& image)
-{
-  unsigned ni = image.ni();
-  unsigned nj = image.nj();
-  unsigned np = image.nplanes();
-  vcl_ptrdiff_t istep = image.istep();
-  vcl_ptrdiff_t jstep = image.jstep();
-  vcl_ptrdiff_t pstep = image.planestep();
-
-  outP* row = image.top_left_ptr();
-  for (unsigned int j=0; j<nj; ++j, row+=jstep)
-  {
-    outP* col = row;
-    for (unsigned int i=0; i<ni; ++i, col+=istep, ++itr)
-    {
-      outP* pixel = col;
-      for (unsigned int p=0; p<np; ++p, pixel+=pstep)
-      {
-        *pixel = static_cast<outP>( itr(p) );
-      }
-    }
-  }
-}
-
-
-//: Unpack the pixels in \p frame into the memory of \p image
-// The image is resized if needed.
-template <class outP>
-bool vidl2_convert_to_view(const vidl2_frame_sptr& frame,
-                           vil_image_view<outP>& image)
-{
-  assert(frame);
-  vidl2_pixel_format fmt = frame->pixel_format();
-  if (fmt == VIDL2_PIXEL_FORMAT_UNKNOWN)
-    return false;
-
-  vidl2_pixel_traits traits = vidl2_pixel_format_traits(fmt);
-
-  unsigned ni=frame->ni();
-  unsigned nj=frame->nj();
-  unsigned np=traits.num_channels;
-
-  image.set_size(ni,nj,np);
-
-#define do_case(FMT) \
-  case FMT:\
-  {\
-    typedef vidl2_pixel_iterator_of<FMT> Itr;\
-    vidl2_convert_itr_to_view(Itr(*frame),image);\
-    return true;\
-  }
-  switch (fmt)
-  {
-    do_case(VIDL2_PIXEL_FORMAT_RGB_24);
-    do_case(VIDL2_PIXEL_FORMAT_BGR_24);
-    do_case(VIDL2_PIXEL_FORMAT_RGBA_32);
-    do_case(VIDL2_PIXEL_FORMAT_RGB_565);
-    do_case(VIDL2_PIXEL_FORMAT_RGB_555);
-
-    do_case(VIDL2_PIXEL_FORMAT_YUV_444P);
-    do_case(VIDL2_PIXEL_FORMAT_YUV_422P);
-    do_case(VIDL2_PIXEL_FORMAT_YUV_420P);
-    do_case(VIDL2_PIXEL_FORMAT_YUV_411P);
-    do_case(VIDL2_PIXEL_FORMAT_YUV_410P);
-    do_case(VIDL2_PIXEL_FORMAT_UYV_444);
-    do_case(VIDL2_PIXEL_FORMAT_UYVY_422);
-    do_case(VIDL2_PIXEL_FORMAT_UYVY_411);
-
-    do_case(VIDL2_PIXEL_FORMAT_MONO_1);
-    do_case(VIDL2_PIXEL_FORMAT_MONO_8);
-    do_case(VIDL2_PIXEL_FORMAT_MONO_16);
-
-    default:
-      break;
-  }
-#undef do_case
-  return false;
-}
-
-
-//: Unpack the pixels in \p frame, convert to RGB, and store in \p image
-// Converts non-RGB color modes into RGB, monochrome is unchanged.
-// The image is resized if needed.
-template <class outP>
-bool vidl2_convert_to_view_rgb(const vidl2_frame_sptr& frame,
-                               vil_image_view<outP>& image)
-{
-  assert(frame);
-  vidl2_pixel_format fmt = frame->pixel_format();
-  if (fmt == VIDL2_PIXEL_FORMAT_UNKNOWN)
-    return false;
-
-  vidl2_pixel_traits traits = vidl2_pixel_format_traits(fmt);
-
-  unsigned ni=frame->ni();
-  unsigned nj=frame->nj();
-  unsigned np=traits.num_channels;
-
-  image.set_size(ni,nj,np);
-
-#define do_case(FMT) \
-  case FMT:\
-  {\
-    typedef vidl2_pixel_iterator_of<FMT> Itr;\
-    vidl2_convert_itr_to_view(Itr(*frame),image);\
-    return true;\
-  }
-
-#define do_case_yuv2rgb(FMT) \
-  case FMT:\
-  {\
-    typedef vidl2_pixel_iterator_of<FMT> yuvItr;\
-    typedef vidl2_yuv2rgb_iterator<yuvItr,outP> cvtItr;\
-    vidl2_convert_itr_to_view(cvtItr(yuvItr(*frame)),image);\
-    return true;\
-  }
-  switch (fmt)
-  {
-    do_case(VIDL2_PIXEL_FORMAT_RGB_24);
-    do_case(VIDL2_PIXEL_FORMAT_BGR_24);
-    do_case(VIDL2_PIXEL_FORMAT_RGBA_32);
-    do_case(VIDL2_PIXEL_FORMAT_RGB_565);
-    do_case(VIDL2_PIXEL_FORMAT_RGB_555);
-
-    do_case_yuv2rgb(VIDL2_PIXEL_FORMAT_YUV_444P);
-    do_case_yuv2rgb(VIDL2_PIXEL_FORMAT_YUV_422P);
-    do_case_yuv2rgb(VIDL2_PIXEL_FORMAT_YUV_420P);
-    do_case_yuv2rgb(VIDL2_PIXEL_FORMAT_YUV_411P);
-    do_case_yuv2rgb(VIDL2_PIXEL_FORMAT_YUV_410P);
-    do_case_yuv2rgb(VIDL2_PIXEL_FORMAT_UYV_444);
-    do_case_yuv2rgb(VIDL2_PIXEL_FORMAT_UYVY_422);
-    do_case_yuv2rgb(VIDL2_PIXEL_FORMAT_UYVY_411);
-
-    do_case(VIDL2_PIXEL_FORMAT_MONO_1);
-    do_case(VIDL2_PIXEL_FORMAT_MONO_8);
-    do_case(VIDL2_PIXEL_FORMAT_MONO_16);
-
-    default:
-      break;
-  }
-#undef do_case
-#undef do_case_yuv2rgb
-
-  return false;
-}
+//: convert the frame into an image view
+// possibly converts the pixel data type
+// always create a deep copy of the data
+// \param force_rgb determines whether YUV formats are converted to RGB
+bool vidl2_convert_to_view(const vidl2_frame& frame,
+                           vil_image_view_base& image,
+                           bool force_rgb = true);
 
 
 //: Convert the pixel format of a frame
@@ -221,5 +42,10 @@ bool vidl2_convert_frame(const vidl2_frame& in_frame,
 // Convert \p in_frame to a \p format by allocating a new frame buffer
 vidl2_frame_sptr vidl2_convert_frame(const vidl2_frame_sptr& in_frame,
                                      vidl2_pixel_format format);
+
+//: Convert the image view to a frame
+// Will wrap the memory if possible, if not the image is converted to
+// the closest vidl2_pixel_format
+vidl2_frame_sptr vidl2_convert_to_frame(const vil_image_view_base_sptr& image);
 
 #endif // vidl2_convert_h_

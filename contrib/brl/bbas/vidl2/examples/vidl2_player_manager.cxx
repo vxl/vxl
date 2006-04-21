@@ -121,6 +121,7 @@ void vidl2_player_manager::open_image_list_istream()
     return;
   }
 
+  istream_->advance();
   if (istream_->is_valid())
   {
     vidl2_frame_sptr frame = istream_->current_frame();
@@ -131,8 +132,8 @@ void vidl2_player_manager::open_image_list_istream()
         win_->reshape(width_+10, height_+60);
 
       vil_image_view<vxl_byte> img;
-      vidl2_convert_to_view_rgb(frame,img);
-      itab_->set_image_view(img);
+      if(vidl2_convert_to_view(*frame,img))
+        itab_->set_image_view(img);
     }
   }
 
@@ -171,8 +172,8 @@ void vidl2_player_manager::open_ffmpeg_istream()
         win_->reshape(width_+10, height_+60);
 
       vil_image_view<vxl_byte> img;
-      vidl2_convert_to_view_rgb(frame,img);
-      itab_->set_image_view(img);
+      if(vidl2_convert_to_view(*frame,img))
+        itab_->set_image_view(img);
     }
   }
 
@@ -500,15 +501,13 @@ void vidl2_player_manager::redraw()
 
     static vil_image_view<vxl_byte> img;
     vidl2_frame_sptr frame = istream_->current_frame();
-    if(frame && vidl2_convert_to_view_rgb(frame,img))
+    if(frame && vidl2_convert_to_view(*frame,img))
       itab_->set_image_view(img);
     else
       itab_->set_image_resource(NULL);
   }
-  static int temp = 0;
-  ++temp;
-  if (temp%2 == 0)
-    itab_->post_redraw();
+
+  itab_->post_redraw();
   vgui::run_till_idle();
 }
 
@@ -590,7 +589,7 @@ void vidl2_player_manager::next_frame()
 {
   if (play_video_ || !istream_)
     return;
-  if (istream_->read_frame()) {
+  if (istream_->advance()) {
     this->redraw();
   }
 }

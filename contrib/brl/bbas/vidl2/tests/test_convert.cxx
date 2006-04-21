@@ -20,7 +20,7 @@ static void test_convert()
     vxl_byte buffer[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
     vil_image_view<vxl_byte> image;
     vidl2_frame_sptr frame = new vidl2_shared_frame(buffer, 4, 2, VIDL2_PIXEL_FORMAT_UYVY_422);
-    vidl2_convert_to_view(frame, image);
+    vidl2_convert_to_view(*frame, image, false);
 
     vcl_cout << image.ni() << ' '<< image.nj() << ' ' << image.nplanes() << vcl_endl;
     for (unsigned j = 0; j < image.nj(); ++j){
@@ -81,13 +81,13 @@ static void test_convert()
 
     vul_timer timer;
     for (unsigned int i=0; i<10; ++i)
-      vidl2_convert_to_view(frame, image);
+      vidl2_convert_to_view(*frame, image, false);
     float time = timer.all()/10000.0f;
     vcl_cout << "copy time = " << time << vcl_endl;
 
     timer.mark();
     for (unsigned int i=0; i<10; ++i)
-      vidl2_convert_to_view_rgb(frame, image);
+      vidl2_convert_to_view(*frame, image);
     time = timer.all()/10000.0f;
     vcl_cout << "copy convert time = " << time << vcl_endl;
 
@@ -99,7 +99,7 @@ static void test_convert()
 
     timer.mark();
     for (unsigned int i=0; i<10; ++i)
-      vidl2_convert_to_view_rgb(frame, imagef);
+      vidl2_convert_to_view(*frame, imagef);
     time = timer.all()/10000.0f;
     vcl_cout << "copy float convert time = " << time << vcl_endl;
 

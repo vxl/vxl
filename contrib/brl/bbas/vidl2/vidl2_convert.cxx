@@ -11,6 +11,10 @@
 
 #include "vidl2_convert.h"
 #include "vidl2_frame.h"
+#include "vidl2_pixel_format.h"
+#include "vidl2_pixel_iterator.txx"
+#include "vidl2_color.h"
+#include <vil/vil_convert.h>
 #include <vcl_cstring.h>
 #include <vcl_cassert.h>
 #include <vcl_memory.h>
@@ -314,4 +318,182 @@ vidl2_frame_sptr vidl2_convert_frame(const vidl2_frame_sptr& in_frame,
     return out_frame;
 
   return NULL;
+}
+
+
+//: Convert the image view to a frame
+// Will wrap the memory if possible, if not the image is converted to
+// the closest vidl2_pixel_format
+vidl2_frame_sptr vidl2_convert_to_frame(const vil_image_view_base_sptr& image)
+{
+  if(!image)
+    return NULL;
+
+  // try to wrap the image memory in a frame
+  vidl2_frame_sptr frame = new vidl2_memory_chunk_frame(*image);
+  if(frame->pixel_format() != VIDL2_PIXEL_FORMAT_UNKNOWN)
+    return frame;
+
+  // if the image could not be wrapped convert it
+  unsigned ni = image->ni(), nj = image->nj(), np = image->nplanes();
+
+  // special case for 16 bit images
+  if(image->pixel_format() == VIL_PIXEL_FORMAT_UINT_16)
+  {
+    if(np != 1)
+      return NULL;
+    vil_image_view<vxl_uint_16> img(ni,nj);
+    img.deep_copy(vil_image_view<vxl_uint_16>(*image));
+    return new vidl2_memory_chunk_frame(ni, nj, VIDL2_PIXEL_FORMAT_MONO_16,
+                                        img.memory_chunk());
+  }
+
+  vidl2_pixel_format format = VIDL2_PIXEL_FORMAT_UNKNOWN;
+  if(np == 1)
+    format = VIDL2_PIXEL_FORMAT_MONO_8;
+  else if(np == 3)
+    format = VIDL2_PIXEL_FORMAT_RGB_24P;
+  else if(np == 4)
+    format = VIDL2_PIXEL_FORMAT_RGBA_32P;
+  else
+    return NULL;
+
+  vil_image_view<vxl_byte> img;
+  if(image->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
+    img.deep_copy(vil_image_view<vxl_byte>(*image));
+  else
+  {
+    vil_image_view_base_sptr bimage = vil_convert_cast(vxl_byte(),image);
+    if(!bimage)
+      return NULL;
+    img = *bimage;
+  }
+  return new vidl2_memory_chunk_frame(ni, nj, format,
+                                      img.memory_chunk());
+
+}
+
+
+//: convert the frame into an image view
+// possibly converts the pixel data type
+// always create a deep copy of the data
+bool vidl2_convert_to_view(const vidl2_frame& frame,
+                           vil_image_view_base& image,
+                           bool force_rgb)
+{
+  unsigned ni = frame.ni(), nj = frame.nj();
+  unsigned np = vidl2_pixel_format_num_channels(frame.pixel_format());
+  if (frame.pixel_format() == VIDL2_PIXEL_FORMAT_UNKNOWN ||
+      frame.data() == NULL)
+    return false;
+
+  // special case for MONO_16
+  if(frame.pixel_format() == VIDL2_PIXEL_FORMAT_MONO_16){
+    vil_image_view<vxl_uint_16> wrapper(static_cast<const vxl_uint_16*>(frame.data()),
+                                        ni,nj,1,1,ni,ni*nj);
+    if(image.pixel_format() == VIL_PIXEL_FORMAT_UINT_16){
+      vil_image_view<vxl_uint_16>& img = static_cast<vil_image_view<vxl_uint_16>&>(image);
+      img.deep_copy(vil_image_view<vxl_uint_16>(wrapper));
+      return true;
+    }
+
+    switch ( vil_pixel_format_component_format(image.pixel_format()) ){
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+#define macro(F , T) \
+    case F: {\
+      vil_image_view<T> & dest_ref = static_cast<vil_image_view<T> &>(image); \
+      vil_convert_cast( wrapper, dest_ref); break;}
+
+#if VXL_HAS_INT_64
+    macro( VIL_PIXEL_FORMAT_UINT_64, vxl_uint_64 );
+    macro( VIL_PIXEL_FORMAT_INT_64, vxl_int_64 );
+#endif
+    macro( VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32 );
+    macro( VIL_PIXEL_FORMAT_INT_32, vxl_int_32 );
+    macro( VIL_PIXEL_FORMAT_INT_16, vxl_int_16 );
+    macro( VIL_PIXEL_FORMAT_BYTE, vxl_byte );
+    macro( VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte );
+    macro( VIL_PIXEL_FORMAT_FLOAT, float );
+    macro( VIL_PIXEL_FORMAT_DOUBLE, double );
+    macro( VIL_PIXEL_FORMAT_BOOL, bool );
+#undef macro
+#endif // DOXYGEN_SHOULD_SKIP_THIS
+      default:
+        return false;
+    }
+    return true;
+  }
+
+
+  vidl2_pixel_color color = vidl2_pixel_format_color(frame.pixel_format());
+  vidl2_pixel_format default_format = VIDL2_PIXEL_FORMAT_UNKNOWN;
+  if(!force_rgb && color == VIDL2_PIXEL_COLOR_YUV)
+  {
+    if(image.pixel_format() == VIL_PIXEL_FORMAT_BYTE){
+      vil_image_view<vxl_byte>& img = static_cast<vil_image_view<vxl_byte>&>(image);
+      if(img.planestep() == 1)
+        default_format = VIDL2_PIXEL_FORMAT_UYV_444;
+      else
+        default_format = VIDL2_PIXEL_FORMAT_YUV_444P;
+    }
+  }
+
+  vidl2_frame_sptr out_frame = new vidl2_memory_chunk_frame(image,default_format);
+  // if the image can be wrapped as a frame
+  if(out_frame->pixel_format() != VIDL2_PIXEL_FORMAT_UNKNOWN){
+    vidl2_convert_frame(frame, *out_frame);
+    return true;
+  }
+
+  // use an intermediate format
+  vidl2_pixel_format out_fmt;
+  switch(color){
+    case VIDL2_PIXEL_COLOR_MONO:
+      out_fmt = VIDL2_PIXEL_FORMAT_MONO_8;
+      break;
+    case VIDL2_PIXEL_COLOR_RGB:
+      out_fmt = VIDL2_PIXEL_FORMAT_RGB_24P;
+      break;
+    case VIDL2_PIXEL_COLOR_RGBA:
+      out_fmt = VIDL2_PIXEL_FORMAT_RGBA_32P;
+      break;
+    case VIDL2_PIXEL_COLOR_YUV:
+      if(force_rgb)
+        out_fmt = VIDL2_PIXEL_FORMAT_RGB_24P;
+      else
+        out_fmt = VIDL2_PIXEL_FORMAT_YUV_444P;
+      break;
+    default:
+      return false;
+  }
+  vil_image_view<vxl_byte> temp(ni,nj,np);
+  out_frame = new vidl2_memory_chunk_frame(ni,nj,out_fmt,temp.memory_chunk());
+  vidl2_convert_frame(frame, *out_frame);
+
+  switch ( vil_pixel_format_component_format(image.pixel_format()) ){
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+#define macro(F , T) \
+    case F: {\
+      vil_image_view<T> & dest_ref = static_cast<vil_image_view<T> &>(image); \
+      vil_convert_cast( temp, dest_ref); break;}
+
+#if VXL_HAS_INT_64
+    macro( VIL_PIXEL_FORMAT_UINT_64, vxl_uint_64 );
+    macro( VIL_PIXEL_FORMAT_INT_64, vxl_int_64 );
+#endif
+    macro( VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32 );
+    macro( VIL_PIXEL_FORMAT_INT_32, vxl_int_32 );
+    macro( VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16 );
+    macro( VIL_PIXEL_FORMAT_INT_16, vxl_int_16 );
+    macro( VIL_PIXEL_FORMAT_BYTE, vxl_byte );
+    macro( VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte );
+    macro( VIL_PIXEL_FORMAT_FLOAT, float );
+    macro( VIL_PIXEL_FORMAT_DOUBLE, double );
+    macro( VIL_PIXEL_FORMAT_BOOL, bool );
+#undef macro
+#endif // DOXYGEN_SHOULD_SKIP_THIS
+    default:
+      return false;
+  }
+  return true;
 }
