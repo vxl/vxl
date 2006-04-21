@@ -30,6 +30,8 @@
 # include "vcl_cstddef.h" // for size_t
 # include "iso/vcl_cstdio.h"
 #else
+# include "vcl_cstddef.h" // for size_t
+# include "iso/vcl_cstdio.h"
 #endif
 
 // Some compilers (gcc 2.95.3, SGI CC) seem to define these as macros. Sigh.
