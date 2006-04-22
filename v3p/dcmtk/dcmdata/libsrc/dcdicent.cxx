@@ -21,14 +21,6 @@
  *
  *  Purpose: a dictionary entry in the loadable DICOM data dictionary
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:10 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcdicent.cxx,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #include "osconfig.h"    /* make sure OS specific configuration is included first */
@@ -54,9 +46,9 @@ char* strdup_new(const char* str)
     return s;
 }
 
-DcmDictEntry::DcmDictEntry(Uint16 g, Uint16 e, DcmVR vr, 
+DcmDictEntry::DcmDictEntry(Uint16 g, Uint16 e, DcmVR vr,
         const char* nam, int vmMin, int vmMax,
-        const char* vers, OFBool doCopyStrings, 
+        const char* vers, OFBool doCopyStrings,
         const char* pcreator)
   : DcmTagKey(g,e),
     upperKey(),
@@ -79,9 +71,9 @@ DcmDictEntry::DcmDictEntry(Uint16 g, Uint16 e, DcmVR vr,
     }
 }
 
-DcmDictEntry::DcmDictEntry(Uint16 g, Uint16 e, Uint16 ug, Uint16 ue, DcmVR vr, 
+DcmDictEntry::DcmDictEntry(Uint16 g, Uint16 e, Uint16 ug, Uint16 ue, DcmVR vr,
         const char* nam, int vmMin, int vmMax,
-        const char* vers, OFBool doCopyStrings, 
+        const char* vers, OFBool doCopyStrings,
         const char* pcreator)
   : DcmTagKey(g,e),
     upperKey(),
@@ -140,8 +132,8 @@ DcmDictEntry::~DcmDictEntry()
 ** DcmDictEntry friend functions
 */
 
-ostream& operator<<(ostream& s, const DcmDictEntry& e) {
-
+ostream& operator<<(ostream& s, const DcmDictEntry& e)
+{
     const DcmDictEntry* ep = &e;
     if (ep == NULL) {
         s << "(nil)";
@@ -184,54 +176,3 @@ ostream& operator<<(ostream& s, const DcmDictEntry& e) {
 
     return s;
 }
-
-/*
-** CVS/RCS Log:
-** Log: dcdicent.cxx,v 
-** Revision 1.1  2004/01/14 04:01:10  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.12  2002/11/27 12:06:44  meichel
-** Adapted module dcmdata to use of new header file ofstdinc.h
-**
-** Revision 1.11  2002/07/23 14:21:29  meichel
-** Added support for private tag data dictionaries to dcmdata
-**
-** Revision 1.10  2001/06/01 15:49:01  meichel
-** Updated copyright header
-**
-** Revision 1.9  2000/03/08 16:26:32  meichel
-** Updated copyright header.
-**
-** Revision 1.8  2000/02/02 14:32:49  joergr
-** Replaced 'delete' statements by 'delete[]' for objects created with 'new[]'.
-**
-** Revision 1.7  1999/03/31 09:25:21  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.6  1998/07/15 15:51:50  joergr
-** Removed several compiler warnings reported by gcc 2.8.1 with
-** additional options, e.g. missing copy constructors and assignment
-** operators, initialization of member variables in the body of a
-** constructor instead of the member initialization list, hiding of
-** methods by use of identical names, uninitialized member variables,
-** missing const declaration of char pointers. Replaced tabs by spaces.
-**
-** Revision 1.5  1997/08/26 13:48:27  hewett
-** Modified constructors to take const reference parameters.
-**
-** Revision 1.4  1997/07/31 14:40:36  meichel
-** Created copy constructor for class DcmDictEntry, required by dcmcheck.
-**
-** Revision 1.3  1997/07/21 08:25:24  andreas
-** - Replace all boolean types (BOOLEAN, CTNBOOLEAN, DICOM_BOOL, BOOL)
-**   with one unique boolean type OFBool.
-**
-** Revision 1.2  1996/03/20 16:44:04  hewett
-** Updated for revised data dictionary.  Repeating tags are now handled better.
-** A linear list of repeating tags has been introduced with a subset ordering
-** mechanism to ensure that dictionary searches locate the most precise
-** dictionary entry.
-**
-*/

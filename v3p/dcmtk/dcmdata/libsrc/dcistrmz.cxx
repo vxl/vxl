@@ -21,14 +21,6 @@
  *
  *  Purpose: zlib compression filter for input streams
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/22 21:06:34 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcistrmz.cxx,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #include "osconfig.h"
@@ -239,7 +231,6 @@ Uint32 DcmZLibInputFilter::fillInputBuffer()
   Uint32 result = 0;
   if (status_.good() && current_ && (inputBufCount_ < DCMZLIBINPUTFILTER_BUFSIZE))
   {
-
     // use first part of input buffer
     if (inputBufStart_ + inputBufCount_ < DCMZLIBINPUTFILTER_BUFSIZE)
     {
@@ -383,7 +374,6 @@ Uint32 DcmZLibInputFilter::decompress(const void *buf, Uint32 buflen)
         // adjust counters
         inputBufStart_ += inputBufCount_ - (Uint32)(zstream_->avail_in);
         inputBufCount_ = (Uint32)(zstream_->avail_in);
-
       }
     }
 
@@ -422,7 +412,7 @@ void DcmZLibInputFilter::fillOutputBuffer()
 
 #else  /* WITH_ZLIB */
 
-/* make sure that the object file is not completely empty if compiled 
+/* make sure that the object file is not completely empty if compiled
  * without zlib because some linkers might fail otherwise.
  */
 void dcistrmz_dummy_function()
@@ -431,27 +421,3 @@ void dcistrmz_dummy_function()
 }
 
 #endif /* WITH_ZLIB */
-
-
-/*
- * CVS/RCS Log:
- * Log: dcistrmz.cxx,v 
- * Revision 1.1  2004/01/22 21:06:34  amithaperera
- * These files could be needed, depending on configuration variables
- *
- * Revision 1.4  2002/12/20 14:55:34  wilkens
- * Inserted three casts in order to get rid of compiler warning on Solaris 2.5.1
- * using compiler SC 2.0.1.
- *
- * Revision 1.3  2002/09/19 08:32:28  joergr
- * Added explicit type casts to keep Sun CC 2.0.1 quiet.
- *
- * Revision 1.2  2002/08/29 15:57:49  meichel
- * Updated zlib-related classes to correctly compile when WITH_ZLIB is undefined
- *
- * Revision 1.1  2002/08/27 16:55:50  meichel
- * Initial release of new DICOM I/O stream classes that add support for stream
- *   compression (deflated little endian explicit VR transfer syntax)
- *
- *
- */

@@ -21,14 +21,6 @@
  *
  *  Purpose: class DcmFileFormat
  *
- *  Last Update:      Author: peter_vanroose 
- *  Update Date:      Date: 2004/05/28 17:59:55 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcfilefo.cxx,v 
- *  CVS/RCS Revision: Revision: 1.2 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -270,8 +262,9 @@ OFCondition DcmFileFormat::checkValue(DcmMetaInfo *metainfo,
                     l_error = ((DcmUniqueIdentifier*)stack.top())->getString(uid);
                     ((DcmUniqueIdentifier*)elem)->putString(uid);
                     debug(2, ("DcmFileFormat::checkValue() use SOPClassUID [%s]", uid));
-
-                } else {
+                }
+                else
+                {
                     ((DcmUniqueIdentifier*)elem)->putString(
                         UID_PrivateGenericFileSOPClass);
                     debug(2, ("DcmFileFormat::checkValue() No SOP Class UID in Dataset, using PrivateGenericFileSOPClass"));
@@ -321,7 +314,6 @@ Cdebug(2,  uidtmp != (char*)NULL,
                 elem->putString(uid);
                 debug(2,("DcmFileFormat::checkValue() use new transfer-syntax [%s] on writing following Dataset",
                         dcXfer.getXferName()));
-
             }
         }
         else if (xtag == DCM_ImplementationClassUID)        // (0002,0012)
@@ -336,7 +328,6 @@ Cdebug(2,  uidtmp != (char*)NULL,
                 const char *uid = OFFIS_IMPLEMENTATION_CLASS_UID;
                 ((DcmUniqueIdentifier*)elem)->putString(uid);
             }
-
         }
         else if (xtag == DCM_ImplementationVersionName)     // (0002,0013)
         {
@@ -350,7 +341,6 @@ Cdebug(2,  uidtmp != (char*)NULL,
                 const char *uid = OFFIS_DTK_IMPLEMENTATION_VERSION_NAME;
                 ((DcmShortString*)elem)->putString(uid);
             }
-
         }
         else if (xtag == DCM_SourceApplicationEntityTitle)  // (0002,0016)
         {
@@ -471,7 +461,6 @@ OFCondition DcmFileFormat::validateMetaInfo(E_TransferSyntax oxfer)
     /* return result value */
     return l_error;
 }
-
 
 
 // ********************************
@@ -855,162 +844,3 @@ DcmDataset *DcmFileFormat::getAndRemoveDataset()
         errorFlag = EC_IllegalCall;
     return data;
 }
-
-
-/*
-** CVS/RCS Log:
-** Log: dcfilefo.cxx,v 
-** Revision 1.2  2004/05/28 17:59:55  peter_vanroose
-** typo corrected
-**
-** Revision 1.1  2004/01/14 04:01:10  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.33  2002/12/06 13:09:26  joergr
-** Enhanced "print()" function by re-working the implementation and replacing
-** the boolean "showFullData" parameter by a more general integer flag.
-** Made source code formatting more consistent with other modules/files.
-**
-** Revision 1.32  2002/11/27 12:06:47  meichel
-** Adapted module dcmdata to use of new header file ofstdinc.h
-**
-** Revision 1.31  2002/08/27 16:55:47  meichel
-** Initial release of new DICOM I/O stream classes that add support for stream
-**   compression (deflated little endian explicit VR transfer syntax)
-**
-** Revision 1.30  2002/08/20 12:18:48  meichel
-** Changed parameter list of loadFile and saveFile methods in class
-**   DcmFileFormat. Removed loadFile and saveFile from class DcmObject.
-**
-** Revision 1.29  2002/05/14 08:21:14  joergr
-** Renamed some element names.
-**
-** Revision 1.28  2002/04/25 10:15:35  joergr
-** Added support for XML output of DICOM objects.
-**
-** Revision 1.27  2002/04/16 13:43:17  joergr
-** Added configurable support for C++ ANSI standard includes (e.g. streams).
-** Thanks to Andreas Barth <Andreas.Barth@bruker-biospin.de> for his
-** contribution.
-**
-** Revision 1.26  2002/04/11 12:27:10  joergr
-** Added new methods for loading and saving DICOM files.
-**
-** Revision 1.25  2002/01/08 10:43:45  joergr
-** Corrected spelling of function dcmGenerateUniqueIdentifier().
-**
-** Revision 1.24  2001/11/01 14:55:37  wilkens
-** Added lots of comments.
-**
-** Revision 1.23  2001/09/28 14:20:26  joergr
-** Added "#include <iomanip.h>" to keep gcc 3.0 quiet.
-**
-** Revision 1.22  2001/09/25 17:19:50  meichel
-** Adapted dcmdata to class OFCondition
-**
-** Revision 1.21  2001/06/01 15:49:04  meichel
-** Updated copyright header
-**
-** Revision 1.20  2000/04/14 15:55:05  meichel
-** Dcmdata library code now consistently uses ofConsole for error output.
-**
-** Revision 1.19  2000/03/08 16:26:35  meichel
-** Updated copyright header.
-**
-** Revision 1.18  2000/03/03 14:05:33  meichel
-** Implemented library support for redirecting error messages into memory
-**   instead of printing them to stdout/stderr for GUI applications.
-**
-** Revision 1.17  2000/02/23 15:11:53  meichel
-** Corrected macro for Borland C++ Builder 4 workaround.
-**
-** Revision 1.16  2000/02/10 10:52:18  joergr
-** Added new feature to dcmdump (enhanced print method of dcmdata): write
-** pixel data/item value fields to raw files.
-**
-** Revision 1.15  2000/02/01 10:12:07  meichel
-** Avoiding to include <stdlib.h> as extern "C" on Borland C++ Builder 4,
-**   workaround for bug in compiler header files.
-**
-** Revision 1.14  1999/03/31 09:25:28  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.13  1998/07/15 15:51:56  joergr
-** Removed several compiler warnings reported by gcc 2.8.1 with
-** additional options, e.g. missing copy constructors and assignment
-** operators, initialization of member variables in the body of a
-** constructor instead of the member initialization list, hiding of
-** methods by use of identical names, uninitialized member variables,
-** missing const declaration of char pointers. Replaced tabs by spaces.
-**
-** Revision 1.12  1997/07/21 08:25:28  andreas
-** - Replace all boolean types (BOOLEAN, CTNBOOLEAN, DICOM_BOOL, BOOL)
-**   with one unique boolean type OFBool.
-**
-** Revision 1.11  1997/07/03 15:09:57  andreas
-** - removed debugging functions Bdebug() and Edebug() since
-**   they write a static array and are not very useful at all.
-**   Cdebug and Vdebug are merged since they have the same semantics.
-**   The debugging functions in dcmdata changed their interfaces
-**   (see dcmdata/include/dcdebug.h)
-**
-** Revision 1.10  1997/05/27 13:48:59  andreas
-** - Add method canWriteXfer to class DcmObject and all derived classes.
-**   This method checks whether it is possible to convert the original
-**   transfer syntax to an new transfer syntax. The check is used in the
-**   dcmconv utility to prohibit the change of a compressed transfer
-**   syntax to a uncompressed.
-**
-** Revision 1.9  1997/05/16 08:23:54  andreas
-** - Revised handling of GroupLength elements and support of
-**   DataSetTrailingPadding elements. The enumeratio E_GrpLenEncoding
-**   got additional enumeration values (for a description see dctypes.h).
-**   addGroupLength and removeGroupLength methods are replaced by
-**   computeGroupLengthAndPadding. To support Padding, the parameters of
-**   element and sequence write functions changed.
-** - Added a new method calcElementLength to calculate the length of an
-**   element, item or sequence. For elements it returns the length of
-**   tag, length field, vr field, and value length, for item and
-**   sequences it returns the length of the whole item. sequence including
-**   the Delimitation tag (if appropriate).  It can never return
-**   UndefinedLength.
-**
-** Revision 1.8  1997/04/18 08:17:17  andreas
-** - The put/get-methods for all VRs did not conform to the C++-Standard
-**   draft. Some Compilers (e.g. SUN-C++ Compiler, Metroworks
-**   CodeWarrier, etc.) create many warnings concerning the hiding of
-**   overloaded get methods in all derived classes of DcmElement.
-**   So the interface of all value representation classes in the
-**   library are changed rapidly, e.g.
-**   OFCondition get(Uint16 & value, const unsigned long pos);
-**   becomes
-**   OFCondition getUint16(Uint16 & value, const unsigned long pos);
-**   All (retired) "returntype get(...)" methods are deleted.
-**   For more information see dcmdata/include/dcelem.h
-**
-** Revision 1.7  1996/08/05 08:46:11  andreas
-** new print routine with additional parameters:
-**         - print into files
-**         - fix output length for elements
-** corrected error in search routine with parameter ESM_fromStackTop
-**
-** Revision 1.6  1996/07/29 15:47:00  andreas
-** add method getAndRemoveDataset to remove connection of dataset from fileformat
-**
-** Revision 1.5  1996/04/12 13:17:22  andreas
-** Minor changes to support DEC ALPHA and DEC MIPS
-**
-** Revision 1.4  1996/03/11 14:48:04  hewett
-** When creating a DICOM file, if a SOP Class UID is present in the
-** data set then it will be used.  Otherwise, a private UID will now be used
-** in the meta header attribute MediaStorageSOPClass UID.  Previously this
-** attribute was left empty (an error for type 1 attributes).
-**
-** Revision 1.3  1996/01/05 13:27:37  andreas
-** - changed to support new streaming facilities
-** - unique read/write methods for file and block transfer
-** - more cleanups
-**
-**
-*/

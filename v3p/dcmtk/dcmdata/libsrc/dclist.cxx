@@ -21,14 +21,6 @@
  *
  *  Purpose: generic list class
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:10 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dclist.cxx,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #include "osconfig.h"    /* make sure OS specific configuration is included first */
@@ -284,28 +276,3 @@ DcmObject *DcmList::seek_to(unsigned long absolute_position)
         seek( ELP_next );
     return get( ELP_atpos );
 }
-
-
-/*
- * CVS/RCS Log:
- * Log: dclist.cxx,v 
- * Revision 1.1  2004/01/14 04:01:10  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.11  2002/04/16 13:43:18  joergr
- * Added configurable support for C++ ANSI standard includes (e.g. streams).
- * Thanks to Andreas Barth <Andreas.Barth@bruker-biospin.de> for his
- * contribution.
- *
- * Revision 1.10  2001/06/01 15:49:06  meichel
- * Updated copyright header
- *
- * Revision 1.9  2000/03/08 16:26:37  meichel
- * Updated copyright header.
- *
- * Revision 1.8  1999/03/31 09:25:32  meichel
- * Updated copyright header in module dcmdata
- *
- *
- */

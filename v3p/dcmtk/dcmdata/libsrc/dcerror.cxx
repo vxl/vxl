@@ -21,14 +21,6 @@
  *
  *  Purpose: Error handling, codes and strings
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:10 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcerror.cxx,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #include "osconfig.h"    /* make sure OS specific configuration is included first */
@@ -80,65 +72,3 @@ const char *dcmErrorConditionToString(OFCondition cond)
 {
   return cond.text();
 }
-
-
-/*
-** CVS/RCS Log:
-** Log: dcerror.cxx,v 
-** Revision 1.1  2004/01/14 04:01:10  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.14  2002/12/06 12:18:57  joergr
-** Added new error status "EC_ApplicationProfileViolated".
-**
-** Revision 1.13  2002/08/27 16:55:47  meichel
-** Initial release of new DICOM I/O stream classes that add support for stream
-**   compression (deflated little endian explicit VR transfer syntax)
-**
-** Revision 1.12  2001/09/25 17:19:50  meichel
-** Adapted dcmdata to class OFCondition
-**
-** Revision 1.11  2001/06/01 15:49:04  meichel
-** Updated copyright header
-**
-** Revision 1.10  2000/03/08 16:26:35  meichel
-** Updated copyright header.
-**
-** Revision 1.9  2000/02/23 15:11:52  meichel
-** Corrected macro for Borland C++ Builder 4 workaround.
-**
-** Revision 1.8  2000/02/01 10:12:07  meichel
-** Avoiding to include <stdlib.h> as extern "C" on Borland C++ Builder 4,
-**   workaround for bug in compiler header files.
-**
-** Revision 1.7  1999/03/31 09:25:27  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.6  1997/10/01 08:44:12  meichel
-** Including <unistd.h> if available.
-**
-** Revision 1.5  1997/07/21 08:17:41  andreas
-** - New environment for encapsulated pixel representations. DcmPixelData
-**   can contain different representations and uses codecs to convert
-**   between them. Codecs are derived from the DcmCodec class. New error
-**   codes are introduced for handling of representations. New internal
-**   value representation (only for ident()) for PixelData
-**
-** Revision 1.4  1997/05/22 16:55:05  andreas
-** - Added new error code EC_NotImplemented
-**
-** Revision 1.3  1996/01/29 13:38:26  andreas
-** - new put method for every VR to put value as a string
-** - better and unique print methods
-**
-** Revision 1.2  1996/01/05 13:27:36  andreas
-** - changed to support new streaming facilities
-** - unique read/write methods for file and block transfer
-** - more cleanups
-**
-** Revision 1.1  1995/11/23 17:02:44  hewett
-** Updated for loadable data dictionary.  Some cleanup (more to do).
-**
-*/
-

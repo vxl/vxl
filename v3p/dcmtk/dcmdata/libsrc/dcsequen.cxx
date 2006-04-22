@@ -21,14 +21,6 @@
  *
  *  Purpose: Implementation of class DcmSequenceOfItems
  *
- *  Last Update:      Author: peter_vanroose 
- *  Update Date:      Date: 2004/05/28 17:59:56 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcsequen.cxx,v 
- *  CVS/RCS Revision: Revision: 1.2 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -109,11 +101,11 @@ DcmSequenceOfItems::DcmSequenceOfItems(const DcmSequenceOfItems &old)
                         default:
                             newDO = new DcmItem(oldDO->getTag());
                             ofConsole.lockCerr() << "Error: DcmSequenceOfItems(): Element("
-                                 << hex << setfill('0')
-                                 << setw(4) << oldDO->getGTag() << ","
-                                 << setw(4) << oldDO->getETag()
-                                 << dec << setfill(' ')
-                                 << ") found, which was not an Item" << endl;
+                                                 << hex << setfill('0')
+                                                 << setw(4) << oldDO->getGTag() << ","
+                                                 << setw(4) << oldDO->getETag()
+                                                 << dec << setfill(' ')
+                                                 << ") found, which was not an Item" << endl;
                             ofConsole.unlockCerr();
                             break;
                     }
@@ -188,8 +180,8 @@ DcmSequenceOfItems &DcmSequenceOfItems::operator=(const DcmSequenceOfItems &obj)
                             default:
                                 newDO = new DcmItem(oldDO->getTag());
                                 ofConsole.lockCerr() << "Error: DcmSequenceOfItems(): Element("
-                                     << hex << oldDO->getGTag() << "," << oldDO->getETag()
-                                     << dec << ") found, which was not an Item" << endl;
+                                                     << hex << oldDO->getGTag() << "," << oldDO->getETag()
+                                                     << dec << ") found, which was not an Item" << endl;
                                 ofConsole.unlockCerr();
                                 break;
                         }
@@ -583,7 +575,6 @@ OFCondition DcmSequenceOfItems::read(DcmInputStream &inStream,
 
                 if (errorFlag.bad())
                     break;
-
             } //while
             if ((fTransferredBytes < Length || !lastItemComplete) && errorFlag.good())
                 errorFlag = EC_StreamNotifyClient;
@@ -1250,226 +1241,3 @@ OFBool DcmSequenceOfItems::containsUnknownVR() const
     }
     return OFFalse;
 }
-
-
-/*
-** CVS/RCS Log:
-** Log: dcsequen.cxx,v 
-** Revision 1.2  2004/05/28 17:59:56  peter_vanroose
-** typo corrected
-**
-** Revision 1.1  2004/01/14 04:01:10  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.51  2002/12/10 20:03:01  joergr
-** Added curly brackets around debug() call to avoid compiler errors with gcc
-** 2.9.5 in debug mode.
-**
-** Revision 1.50  2002/12/06 13:16:59  joergr
-** Enhanced "print()" function by re-working the implementation and replacing
-** the boolean "showFullData" parameter by a more general integer flag.
-** Made source code formatting more consistent with other modules/files.
-**
-** Revision 1.49  2002/11/27 12:06:51  meichel
-** Adapted module dcmdata to use of new header file ofstdinc.h
-**
-** Revision 1.48  2002/08/27 16:55:56  meichel
-** Initial release of new DICOM I/O stream classes that add support for stream
-**   compression (deflated little endian explicit VR transfer syntax)
-**
-** Revision 1.47  2002/07/08 14:44:41  meichel
-** Improved dcmdata behaviour when reading odd tag length. Depending on the
-**   global boolean flag dcmAcceptOddAttributeLength, the parser now either accepts
-**   odd length attributes or implements the old behaviour, i.e. assumes a real
-**   length larger by one.
-**
-** Revision 1.46  2002/04/25 10:26:10  joergr
-** Added support for XML output of DICOM objects.
-**
-** Revision 1.45  2002/04/16 13:43:20  joergr
-** Added configurable support for C++ ANSI standard includes (e.g. streams).
-** Thanks to Andreas Barth <Andreas.Barth@bruker-biospin.de> for his
-** contribution.
-**
-** Revision 1.44  2002/03/15 13:58:39  meichel
-** Fixed incorrect debug message.
-**
-** Revision 1.43  2001/11/16 15:55:04  meichel
-** Adapted digital signature code to final text of supplement 41.
-**
-** Revision 1.42  2001/09/28 14:21:06  joergr
-** Added "#include <iomanip.h>" to keep gcc 3.0 quiet.
-**
-** Revision 1.41  2001/09/26 15:49:30  meichel
-** Modified debug messages, required by OFCondition
-**
-** Revision 1.40  2001/09/25 17:19:53  meichel
-** Adapted dcmdata to class OFCondition
-**
-** Revision 1.39  2001/06/01 15:49:08  meichel
-** Updated copyright header
-**
-** Revision 1.38  2001/05/10 12:46:28  meichel
-** Fixed memory leak that occurred when parsing of a sequence failed.
-**
-** Revision 1.37  2001/05/03 08:15:23  meichel
-** Fixed bug in dcmdata sequence handling code that could lead to application
-**   failure in rare cases during parsing of a correct DICOM dataset.
-**
-** Revision 1.36  2000/11/07 16:56:22  meichel
-** Initial release of dcmsign module for DICOM Digital Signatures
-**
-** Revision 1.35  2000/04/14 15:55:07  meichel
-** Dcmdata library code now consistently uses ofConsole for error output.
-**
-** Revision 1.34  2000/03/08 16:26:40  meichel
-** Updated copyright header.
-**
-** Revision 1.33  2000/03/03 15:02:11  joergr
-** Corrected bug related to padding of file and item size.
-**
-** Revision 1.32  2000/03/03 14:05:36  meichel
-** Implemented library support for redirecting error messages into memory
-**   instead of printing them to stdout/stderr for GUI applications.
-**
-** Revision 1.31  2000/02/23 15:12:01  meichel
-** Corrected macro for Borland C++ Builder 4 workaround.
-**
-** Revision 1.30  2000/02/10 10:52:22  joergr
-** Added new feature to dcmdump (enhanced print method of dcmdata): write
-** pixel data/item value fields to raw files.
-**
-** Revision 1.29  2000/02/03 16:29:40  joergr
-** Corrected bug that caused wrong calculation of group length for sequence
-** of items (e.g. encapsulated pixel data).
-**
-** Revision 1.28  2000/02/01 10:12:10  meichel
-** Avoiding to include <stdlib.h> as extern "C" on Borland C++ Builder 4,
-**   workaround for bug in compiler header files.
-**
-** Revision 1.27  1999/03/31 09:25:38  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.26  1998/11/12 16:48:20  meichel
-** Implemented operator= for all classes derived from DcmObject.
-**
-** Revision 1.25  1998/07/15 15:52:06  joergr
-** Removed several compiler warnings reported by gcc 2.8.1 with
-** additional options, e.g. missing copy constructors and assignment
-** operators, initialization of member variables in the body of a
-** constructor instead of the member initialization list, hiding of
-** methods by use of identical names, uninitialized member variables,
-** missing const declaration of char pointers. Replaced tabs by spaces.
-**
-** Revision 1.24  1998/01/27 10:49:26  meichel
-** Minor bug corrections (string too short, incorrect return value).
-**   Thanks to Andreas Barth <anba@bruker.de> for the report.
-**
-** Revision 1.23  1997/09/12 13:44:54  meichel
-** The algorithm introduced on 97.08.28 to detect incorrect odd-length
-**   value fields falsely reported undefined length sequences and items
-**   to be wrong. Corrected.
-**
-** Revision 1.22  1997/08/29 07:53:24  andreas
-** - New error messages if length of an element is odd. Previously, no
-**   error was reported. But the length is corrected by the method
-**   newValueField and so it was impossible for a checking utility to find
-**   such an error in DICOM objects.
-**
-** Revision 1.21  1997/07/21 08:25:29  andreas
-** - Replace all boolean types (BOOLEAN, CTNBOOLEAN, DICOM_BOOL, BOOL)
-**   with one unique boolean type OFBool.
-**
-** Revision 1.20  1997/07/07 07:46:20  andreas
-** - Changed parameter type DcmTag & to DcmTagKey & in all search functions
-**   in DcmItem, DcmSequenceOfItems, DcmDirectoryRecord and DcmObject
-** - Enhanced (faster) byte swapping routine. swapIfNecessary moved from
-**   a method in DcmObject to a general function.
-**
-** Revision 1.19  1997/07/03 15:10:04  andreas
-** - removed debugging functions Bdebug() and Edebug() since
-**   they write a static array and are not very useful at all.
-**   Cdebug and Vdebug are merged since they have the same semantics.
-**   The debugging functions in dcmdata changed their interfaces
-**   (see dcmdata/include/dcdebug.h)
-**
-** Revision 1.18  1997/06/06 09:55:31  andreas
-** - corrected error: canWriteXfer returns false if the old transfer syntax
-**   was unknown, which causes several applications to prohibit the writing
-**   of dataset.
-**
-** Revision 1.17  1997/05/30 06:45:45  andreas
-** - fixed problem of inconsistent interfaces and implementation that the
-**   syntax check of GNU C++ does not find.
-**
-** Revision 1.16  1997/05/27 13:49:02  andreas
-** - Add method canWriteXfer to class DcmObject and all derived classes.
-**   This method checks whether it is possible to convert the original
-**   transfer syntax to an new transfer syntax. The check is used in the
-**   dcmconv utility to prohibit the change of a compressed transfer
-**   syntax to a uncompressed.
-**
-** Revision 1.15  1997/05/16 08:23:55  andreas
-** - Revised handling of GroupLength elements and support of
-**   DataSetTrailingPadding elements. The enumeratio E_GrpLenEncoding
-**   got additional enumeration values (for a description see dctypes.h).
-**   addGroupLength and removeGroupLength methods are replaced by
-**   computeGroupLengthAndPadding. To support Padding, the parameters of
-**   element and sequence write functions changed.
-** - Added a new method calcElementLength to calculate the length of an
-**   element, item or sequence. For elements it returns the length of
-**   tag, length field, vr field, and value length, for item and
-**   sequences it returns the length of the whole item. sequence including
-**   the Delimitation tag (if appropriate).  It can never return
-**   UndefinedLength.
-**
-** Revision 1.14  1997/04/24 12:11:49  hewett
-** Fixed DICOMDIR generation bug affecting ordering of
-** patient/study/series/image records (item insertion into a sequence
-** did produce the expected ordering).
-**
-** Revision 1.13  1997/04/18 08:08:54  andreas
-** - Corrected debugging code
-**
-** Revision 1.12  1996/09/13 12:04:13  hewett
-** Corrected missing () in function call (stack.card()) used in nextObject(...)
-**
-** Revision 1.11  1996/08/08 10:15:10  andreas
-** Some more testing in nextObject
-**
-** Revision 1.10  1996/08/08 10:06:24  andreas
-** Correct error for intoSub=OFFalse
-**
-** Revision 1.9  1996/08/05 08:46:17  andreas
-** new print routine with additional parameters:
-**         - print into files
-**         - fix output length for elements
-** corrected error in search routine with parameter ESM_fromStackTop
-**
-** Revision 1.8  1996/07/31 13:14:32  andreas
-** - Minor corrections: error code for swapping to or from byteorder unknown
-**                      correct read of dataset in fileformat
-**
-** Revision 1.7  1996/07/17 12:39:40  andreas
-** new nextObject for DcmDataSet, DcmFileFormat, DcmItem, ...
-**
-** Revision 1.6  1996/06/19 13:54:10  andreas
-** - correct error when reading big sequences with little buffers from net
-**
-** Revision 1.5  1996/01/29 13:38:29  andreas
-** - new put method for every VR to put value as a string
-** - better and unique print methods
-**
-** Revision 1.4  1996/01/09 11:06:48  andreas
-** New Support for Visual C++
-** Correct problems with inconsistent const declarations
-** Correct error in reading Item Delimitation Elements
-**
-** Revision 1.3  1996/01/05 13:27:41  andreas
-** - changed to support new streaming facilities
-** - unique read/write methods for file and block transfer
-** - more cleanups
-**
-*/
-

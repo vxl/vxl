@@ -23,14 +23,6 @@
  *  Definitions of "well known" DICOM Unique Indentifiers,
  *  routines for finding and creating UIDs.
  *
- *  Last Update:      Author: peter_vanroose 
- *  Update Date:      Date: 2004/05/28 17:59:56 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcuid.cxx,v 
- *  CVS/RCS Revision: Revision: 1.3 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #include "osconfig.h"    /* make sure OS specific configuration is included first */
@@ -514,12 +506,10 @@ static const DcmModalityTable modalities[] = {
     { UID_VLSlideCoordinatesMicroscopicImageStorage,           "VMs", 768 * 576 * 3 },
     { UID_XRayAngiographicImageStorage,                        "XA",  2 * 512 * 512 },
     { UID_XRayFluoroscopyImageStorage,                         "RF",  2 * 512 * 512 }
-
 };
 
 static const int numberOfDcmModalityTableEntries =
     (sizeof(modalities) / sizeof(DcmModalityTable));
-
 
 
 /*
@@ -585,7 +575,7 @@ const char *
 dcmFindUIDFromName(const char * name)
 {
     if (name == NULL) return NULL;
-    for(int i = 0; i < uidNameMap_size; i++)
+    for (int i = 0; i < uidNameMap_size; i++)
     {
         if (uidNameMap[i].name != NULL && strcmp(name, uidNameMap[i].name) == 0)
             return uidNameMap[i].uid;
@@ -1063,188 +1053,3 @@ char* dcmGenerateUniqueIdentifier(char* uid, const char* prefix)
 
     return uid;
 }
-
-
-/*
-** CVS/RCS Log:
-** Log: dcuid.cxx,v 
-** Revision 1.3  2004/05/28 17:59:56  peter_vanroose
-** typo corrected
-**
-** Revision 1.2  2004/01/15 15:50:24  amithaperera
-** Fix borland build.
-**
-** Revision 1.1  2004/01/14 04:01:10  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.43  2002/12/09 13:14:07  joergr
-** Renamed parameter/local variable to avoid name clashes with global
-** declaration left and/or right (used for as iostream manipulators).
-**
-** Revision 1.42  2002/12/09 13:03:22  meichel
-** Updated list of UIDs
-**
-** Revision 1.41  2002/11/27 12:06:53  meichel
-** Adapted module dcmdata to use of new header file ofstdinc.h
-**
-** Revision 1.40  2002/08/27 16:55:14  meichel
-** Restricted list of storage SOP classes to less than 64 to prevent
-**   presentation context overflow in various tools
-**
-** Revision 1.39  2002/06/19 15:35:46  meichel
-** Updated list of SOP Class UIDs for Supplement 49
-**
-** Revision 1.38  2002/05/16 12:37:31  meichel
-** Fixed problem with new UID creation routines on Visual C++ 5 where
-**   some type names and constants in <snmp.h> are defined differently
-**   than on Visual C++ 6.
-**
-** Revision 1.37  2002/04/16 13:43:22  joergr
-** Added configurable support for C++ ANSI standard includes (e.g. streams).
-** Thanks to Andreas Barth <Andreas.Barth@bruker-biospin.de> for his
-** contribution.
-**
-** Revision 1.36  2002/01/08 11:16:58  joergr
-** Enhanced algorithm to create unique identifiers (i.e. a unique suffix for
-** DICOM UIDs) on Windows systems where gethostid() is not available. Fixed
-** some minor inconsistencies regarding the creation of unique identifiers.
-**
-** Revision 1.35  2001/11/08 16:17:34  meichel
-** Updated data dictionary, UIDs and transfer syntaxes for DICOM 2001 edition.
-**
-** Revision 1.34  2001/06/05 10:08:16  joergr
-** Replaced some #ifdef _WIN32 statements by #ifdef HAVE_WINDOWS_H or #ifdef
-** __CYGWIN__ respectively to reflect the fact that the latest Cygwin/gcc
-** version does not define _WIN32 any more.
-**
-** Revision 1.33  2001/06/01 15:49:12  meichel
-** Updated copyright header
-**
-** Revision 1.32  2001/05/25 09:50:24  meichel
-** Updated data dictionary and UID list (again).
-**
-** Revision 1.31  2001/05/10 16:10:41  meichel
-** Updated data dictionary and UID list
-**
-** Revision 1.30  2000/12/14 12:48:27  joergr
-** Updated SOP Class and Transfer Syntax UIDs for 2000 edition of the DICOM
-** standard.
-**
-** Revision 1.29  2000/12/12 12:32:43  joergr
-** Replaced #ifdef HAVE_WINDOWS_H by _WIN32 to allow Cygwin 1.1.x to compile
-** with Posix threads.
-**
-** Revision 1.28  2000/05/30 15:45:11  joergr
-** Changed #ifdef statement to ensure correct compilation under Windows.
-**
-** Revision 1.27  2000/04/14 16:04:53  meichel
-** Made function dcmGenerateUniqueIdentifer thread safe by protecting
-**   the counter with a Mutex and using gethostbyname_r instead of
-**   gethostbyname on Posix platforms.
-**
-** Revision 1.26  2000/03/08 16:26:43  meichel
-** Updated copyright header.
-**
-** Revision 1.25  2000/03/03 14:05:37  meichel
-** Implemented library support for redirecting error messages into memory
-**   instead of printing them to stdout/stderr for GUI applications.
-**
-** Revision 1.24  2000/02/23 15:12:04  meichel
-** Corrected macro for Borland C++ Builder 4 workaround.
-**
-** Revision 1.23  2000/02/03 11:48:26  meichel
-** Rebuilt data dictionary based on 1999 standard text,
-**   latest supplements and CP packet 6.
-**
-** Revision 1.22  2000/02/01 10:12:10  meichel
-** Avoiding to include <stdlib.h> as extern "C" on Borland C++ Builder 4,
-**   workaround for bug in compiler header files.
-**
-** Revision 1.21  1999/07/14 12:02:36  meichel
-** Updated data dictionary for supplement 29, 39, 33_lb, CP packet 4 and 5.
-**   Corrected dcmtk applications for changes in attribute name constants.
-**
-** Revision 1.20  1999/04/21 13:02:32  meichel
-** Now always including <windows.h> instead of <winsock.h> on Win32 platforms.
-**   This makes sure that <winsock2.h> is used if available.
-**
-** Revision 1.19  1999/03/31 09:25:43  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.18  1999/03/29 10:13:40  meichel
-** Corrected list of image SOP classes
-**
-** Revision 1.17  1999/03/22 13:41:24  meichel
-** Reworked UID list based on the 1998 DICOM edition and the latest
-**   supplement versions.
-**
-** Revision 1.16  1998/10/26 13:02:53  meichel
-** Updated data dictionary and UIDs for Grayscale Softcopy Presentation State
-** (Supplement 33 frozen draft).
-**
-** Revision 1.15  1998/02/25 14:29:02  hewett
-** Updated data dictionary and UID information to reflect changes in
-** Supplement 24 (Stored Print Related SOP Classes).  Some data dictionary
-** attibutes and UIDs have changed between the Letter Ballot version and
-** the Final Text version.
-**
-** Revision 1.14  1998/02/06 09:41:56  hewett
-** Corrected typo in UID table.
-**
-** Revision 1.13  1998/02/06 09:05:16  hewett
-** Updated support for Supplements 15 (Visible Light),
-** 16 (Postscript Print Management), 17 (Modality Performed Procedure Step),
-** 22 (Presentation Look Up Table (LUT)), 23 (Structured Reporting),
-** 24 (Stored Print), 30 (Waveform Interchange).
-**
-** Revision 1.12  1998/01/14 15:15:02  hewett
-** Added basic support for the Structured Reporting (SR) SOP Classes.
-**
-** Revision 1.11  1997/10/13 11:34:49  hewett
-** Fixed unimportant spelling error in comment (StopClass -> SOPClass).
-**
-** Revision 1.10  1997/09/22 14:56:56  hewett
-** Added a global list of Image SOP Classes UIDs (dcmImageSOPClassUIDs)
-** which is used by dcmgpdir to identify SOP Classes which can be
-** referenced from a DICOMDIR IMAGE record.
-**
-** Revision 1.9  1997/05/13 13:54:27  hewett
-** Added UIDs and data dictionary attributes for the draft supplements 12 (PET),
-** 13 (Queue Management), 15 (Visible Light), 17 (Modality Performed Procedure
-** Step), 22 (User Preference LUT) and 24 (Print Storage).  Updated UID tables
-** so that recompiled Storage SCP/SCU's will handle the new SOPs.
-**
-** Revision 1.8  1997/01/13 15:50:49  hewett
-** Fixed bug when creating unique identifers.  No check was made to ensure
-** that negative numbers never appeared in a UID.  Also added an
-** implementation of a simple gethostid() function for systems which
-** lack this function (e.g. Mac & Windows).  The implementation requires
-** TCP/IP to be available.
-**
-** Revision 1.7  1996/09/24 16:00:59  hewett
-** Added SOP Class UIDs for Radiotherapy Objects.
-** Added a separate table of Storage SOP Class UIDs (usefull during
-** association negotiation).
-**
-** Revision 1.6  1996/04/19 12:46:21  hewett
-** Added UID for RLE Lossless transfer syntax
-**
-** Revision 1.5  1996/03/22 12:42:22  andreas
-** findUIDfromName does not dump anymore if name does not correspond to a uid
-**
-** Revision 1.4  1996/03/11 14:38:01  hewett
-** Added new SOP Class UIDs.
-**
-** Revision 1.3  1996/01/29 13:38:30  andreas
-** - new put method for every VR to put value as a string
-** - better and unique print methods
-**
-** Revision 1.2  1996/01/23 17:29:25  andreas
-** Support for old fashioned make without @^
-** Support for machines that have mktemp but do not define it.
-**
-** Revision 1.1  1995/11/23 17:02:56  hewett
-** Updated for loadable data dictionary.  Some cleanup (more to do).
-**
-*/

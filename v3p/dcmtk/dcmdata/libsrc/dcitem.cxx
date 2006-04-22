@@ -21,14 +21,6 @@
  *
  *  Purpose: class DcmItem
  *
- *  Last Update:      Author: peter_vanroose 
- *  Update Date:      Date: 2004/05/28 17:59:55 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcitem.cxx,v 
- *  CVS/RCS Revision: Revision: 1.2 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -397,11 +389,11 @@ DcmObject* DcmItem::copyDcmObject(DcmObject *oldObj)
         case EVR_na :
         default :
             ofConsole.lockCerr() << "Warning: DcmItem: unable to copy unsupported element("
-                 << hex << setfill('0')
-                 << setw(4) << oldObj->getGTag() << ","
-                 << setw(4) << oldObj->getETag()
-                 << dec << setfill(' ')
-                 << ") with ident()=" << DcmVR(oldObj->ident()).getVRName() << endl;
+                                 << hex << setfill('0')
+                                 << setw(4) << oldObj->getGTag() << ","
+                                 << setw(4) << oldObj->getETag()
+                                 << dec << setfill(' ')
+                                 << ") with ident()=" << DcmVR(oldObj->ident()).getVRName() << endl;
             ofConsole.unlockCerr();
             break;
     }
@@ -678,8 +670,8 @@ OFCondition DcmItem::computeGroupLengthAndPadding(const E_GrpLenEncoding glenc,
                             DcmUnsignedLong *dUL = new DcmUnsignedLong(tagUL);
                             elementList->insert(dUL, ELP_prev);
                             dO = dUL;
-                            ofConsole.lockCerr() << "Info: DcmItem::computeGroupLengthAndPadding()"
-                                " Group Length with VR other than UL found, corrected." << endl;
+                            ofConsole.lockCerr() << "Info: DcmItem::computeGroupLengthAndPadding()" << endl
+                                                 << " Group Length with VR other than UL found, corrected." << endl;
                             ofConsole.unlockCerr();
                         }
                         /* if the above mentioned condition is not met but the caller specified */
@@ -1402,7 +1394,6 @@ OFCondition DcmItem::insert(DcmElement *elem,
                         debug(3, ("DcmItem::insert() element (0x%4.4x,0x%4.4x) VR=\"%s\" p=%p replaced older one",
                                 elem->getGTag(), elem->getETag(),
                                 DcmVR(elem->getVR()).getVRName(), elem));
-
                     }   // if (replaceOld)
                     /* or else, i.e. the current element shall not be replaced by the new element */
                     else {
@@ -1457,10 +1448,10 @@ DcmObject *DcmItem::nextInContainer(const DcmObject *obj)
     {
         if (elementList->get() != obj)
         {
-            for(DcmObject * search_obj = elementList->seek(ELP_first);
-                search_obj && search_obj != obj;
-                search_obj = elementList->seek(ELP_next)
-               ) {
+            for (DcmObject * search_obj = elementList->seek(ELP_first);
+                 search_obj && search_obj != obj;
+                 search_obj = elementList->seek(ELP_next)
+                ) {
                 /* do nothing, just keep iterating */
             }
         }
@@ -1812,8 +1803,6 @@ OFCondition DcmItem::loadAllDataIntoMemory()
 }
 
 
-
-
 // ********************************
 
 //
@@ -2027,7 +2016,7 @@ OFBool DcmItem::tagExists(const DcmTagKey &key,
     DcmStack stack;
 
     OFCondition ec = search(key, stack, ESM_fromHere, searchIntoSub);
-    return (ec.good());
+    return ec.good();
 }
 
 
@@ -2043,7 +2032,7 @@ OFBool DcmItem::tagExistsWithValue(const DcmTagKey &key,
     if (ec.good() && elem != NULL)
         len = elem->getLength();
 
-    return (ec.good()) && (len > 0);
+    return ec.good() && (len > 0);
 }
 
 
@@ -2563,7 +2552,7 @@ OFCondition DcmItem::putAndInsertString(const DcmTag& tag,
     OFCondition status = EC_Normal;
     /* create new element */
     DcmElement *elem = NULL;
-    switch(tag.getEVR())
+    switch (tag.getEVR())
     {
         case EVR_AE:
             elem = new DcmApplicationEntity(tag);
@@ -2643,7 +2632,7 @@ OFCondition DcmItem::putAndInsertOFStringArray(const DcmTag& tag,
     OFCondition status = EC_Normal;
     /* create new element */
     DcmElement *elem = NULL;
-    switch(tag.getEVR())
+    switch (tag.getEVR())
     {
         case EVR_AE:
             elem = new DcmApplicationEntity(tag);
@@ -2752,7 +2741,7 @@ OFCondition DcmItem::putAndInsertUint8Array(const DcmTag& tag,
     OFCondition status = EC_IllegalCall;
     /* create new element */
     DcmElement *elem = NULL;
-    switch(tag.getEVR())
+    switch (tag.getEVR())
     {
         case EVR_OB:
             elem = new DcmOtherByteOtherWord(tag);
@@ -2788,7 +2777,7 @@ OFCondition DcmItem::putAndInsertUint16Array(const DcmTag& tag,
     OFCondition status = EC_Normal;
     /* create new element */
     DcmElement *elem = NULL;
-    switch(tag.getEVR())
+    switch (tag.getEVR())
     {
         case EVR_AT:
             elem = new DcmAttributeTag(tag);
@@ -2938,7 +2927,7 @@ OFCondition DcmItem::putAndInsertFloat32(const DcmTag& tag,
     OFCondition status = EC_IllegalCall;
     /* create new element */
     DcmElement *elem = NULL;
-    switch(tag.getEVR())
+    switch (tag.getEVR())
     {
         case EVR_FL:
             elem = new DcmFloatingPointSingle(tag);
@@ -2999,7 +2988,7 @@ OFCondition DcmItem::insertEmptyElement(const DcmTag& tag,
     OFCondition status = EC_Normal;
     /* create new element */
     DcmElement *elem = NULL;
-    switch(tag.getEVR())
+    switch (tag.getEVR())
     {
         case EVR_AE:
             elem = new DcmApplicationEntity(tag);
@@ -3094,384 +3083,3 @@ OFBool DcmItem::containsUnknownVR() const
     }
     return OFFalse;
 }
-
-
-/*
-** CVS/RCS Log:
-** Log: dcitem.cxx,v 
-** Revision 1.2  2004/05/28 17:59:55  peter_vanroose
-** typo corrected
-**
-** Revision 1.1  2004/01/14 04:01:10  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.80  2002/12/09 09:30:52  wilkens
-** Modified/Added doc++ documentation.
-**
-** Revision 1.79  2002/12/06 12:57:58  joergr
-** Enhanced "print()" function by re-working the implementation and replacing
-** the boolean "showFullData" parameter by a more general integer flag.
-** Made source code formatting more consistent with other modules/files.
-** Replaced some German comments by English translations.
-**
-** Revision 1.78  2002/11/27 12:06:48  meichel
-** Adapted module dcmdata to use of new header file ofstdinc.h
-**
-** Revision 1.77  2002/08/27 16:55:50  meichel
-** Initial release of new DICOM I/O stream classes that add support for stream
-**   compression (deflated little endian explicit VR transfer syntax)
-**
-** Revision 1.76  2002/08/02 15:06:33  joergr
-** Fixed problems reported by Sun CC 2.0.1.
-**
-** Revision 1.75  2002/08/02 08:42:33  joergr
-** Added optional 'pos' parameter to the putAndInsertXXX() methods.
-**
-** Revision 1.74  2002/07/23 14:21:33  meichel
-** Added support for private tag data dictionaries to dcmdata
-**
-** Revision 1.73  2002/07/08 16:15:40  meichel
-** Unknown undefined length attributes are now converted into SQ instead of UN.
-**
-** Revision 1.72  2002/07/08 14:44:39  meichel
-** Improved dcmdata behaviour when reading odd tag length. Depending on the
-**   global boolean flag dcmAcceptOddAttributeLength, the parser now either accepts
-**   odd length attributes or implements the old behaviour, i.e. assumes a real
-**   length larger by one.
-**
-** Revision 1.71  2002/07/04 16:35:31  joergr
-** Fixed inconsistent formatting of the print() output.
-**
-** Revision 1.70  2002/06/26 15:49:59  joergr
-** Added support for polymorp OB/OW value representation (e.g. pixel data) to
-** putAndInsertUint8/16Array() methods.
-**
-** Revision 1.69  2002/05/29 09:59:37  meichel
-** fixed follow-up problem in DcmItem caused by the modifications
-**   committed 2002-05-17.
-**
-** Revision 1.68  2002/05/17 09:58:24  meichel
-** fixed bug in DcmItem which caused the parser to fail if the same attribute
-**   tag appeared twice within one dataset (which is illegal in DICOM anyway).
-**   Added console warning if the attributes read are not in ascending order.
-**
-** Revision 1.67  2002/04/25 10:15:56  joergr
-** Added support for XML output of DICOM objects.
-**
-** Revision 1.66  2002/04/16 13:43:17  joergr
-** Added configurable support for C++ ANSI standard includes (e.g. streams).
-** Thanks to Andreas Barth <Andreas.Barth@bruker-biospin.de> for his
-** contribution.
-**
-** Revision 1.65  2002/04/11 12:28:00  joergr
-** Enhanced documentation.
-**
-** Revision 1.64  2001/12/18 11:37:44  joergr
-** Added helper method allowing to create and insert empty elements into an
-** item/dataset.
-**
-** Revision 1.63  2001/11/16 15:55:02  meichel
-** Adapted digital signature code to final text of supplement 41.
-**
-** Revision 1.62  2001/11/09 15:53:53  joergr
-** Added new helper routines for managing sequences and items.
-**
-** Revision 1.61  2001/11/01 14:55:39  wilkens
-** Added lots of comments.
-**
-** Revision 1.60  2001/10/10 15:19:51  joergr
-** Changed parameter DcmTagKey to DcmTag in DcmItem::putAndInsert... methods
-** to support elements which are not in the data dictionary (e.g. private
-** extensions).
-**
-** Revision 1.59  2001/10/02 11:48:01  joergr
-** Added functions to get/put 8 bit values/arrays from/to an item/dataset.
-**
-** Revision 1.58  2001/10/01 15:04:14  joergr
-** Introduced new general purpose functions to get/put DICOM element values
-** from/to an item/dataset - removed some old and rarely used functions.
-** Added "#include <iomanip.h>" to keep gcc 3.0 quiet.
-**
-** Revision 1.57  2001/09/25 17:19:50  meichel
-** Adapted dcmdata to class OFCondition
-**
-** Revision 1.56  2001/06/01 15:49:05  meichel
-** Updated copyright header
-**
-** Revision 1.55  2001/05/07 16:08:09  joergr
-** Added support for VR=IS to method findIntegerNumber().
-**
-** Revision 1.54  2001/05/03 08:15:21  meichel
-** Fixed bug in dcmdata sequence handling code that could lead to application
-**   failure in rare cases during parsing of a correct DICOM dataset.
-**
-** Revision 1.53  2000/11/07 16:56:20  meichel
-** Initial release of dcmsign module for DICOM Digital Signatures
-**
-** Revision 1.52  2000/04/14 15:55:05  meichel
-** Dcmdata library code now consistently uses ofConsole for error output.
-**
-** Revision 1.51  2000/03/08 16:26:36  meichel
-** Updated copyright header.
-**
-** Revision 1.50  2000/03/03 15:02:09  joergr
-** Corrected bug related to padding of file and item size.
-**
-** Revision 1.49  2000/03/03 14:05:34  meichel
-** Implemented library support for redirecting error messages into memory
-**   instead of printing them to stdout/stderr for GUI applications.
-**
-** Revision 1.48  2000/02/29 11:49:29  meichel
-** Removed support for VS value representation. This was proposed in CP 101
-**   but never became part of the standard.
-**
-** Revision 1.47  2000/02/23 15:11:55  meichel
-** Corrected macro for Borland C++ Builder 4 workaround.
-**
-** Revision 1.46  2000/02/10 10:52:19  joergr
-** Added new feature to dcmdump (enhanced print method of dcmdata): write
-** pixel data/item value fields to raw files.
-**
-** Revision 1.45  2000/02/02 14:32:52  joergr
-** Replaced 'delete' statements by 'delete[]' for objects created with 'new[]'.
-**
-** Revision 1.44  2000/02/01 10:12:07  meichel
-** Avoiding to include <stdlib.h> as extern "C" on Borland C++ Builder 4,
-**   workaround for bug in compiler header files.
-**
-** Revision 1.43  1999/03/31 09:25:30  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.42  1999/03/22 15:55:52  meichel
-** New handling of unknown (unsupported) VRs encountered when reading explicit
-**   VR data. If the VR string consists of uppercase letters, we assume a
-**   "future DICOM VR" and decode it expecting an extended length field
-**   (4 bytes). Otherwise, we assume an illegal VR string created by some old
-**   equipment (i.e.) "??" and decode without extended length (2 bytes).
-**
-** Revision 1.41  1998/07/15 15:51:59  joergr
-** Removed several compiler warnings reported by gcc 2.8.1 with
-** additional options, e.g. missing copy constructors and assignment
-** operators, initialization of member variables in the body of a
-** constructor instead of the member initialization list, hiding of
-** methods by use of identical names, uninitialized member variables,
-** missing const declaration of char pointers. Replaced tabs by spaces.
-**
-** Revision 1.40  1998/01/14 15:23:42  hewett
-** Added support for the VRs UT (Unlimited Text) and VS (Virtual String).
-**
-** Revision 1.39  1998/01/14 09:13:53  meichel
-** Corrected bug: Overlay Data elements in the groups
-**   6002-601f were handled by DcmOtherByteOtherWord
-**   instead of the "polymorphous" DcmOverlayData class.
-**
-** Revision 1.38  1998/01/14 08:42:32  meichel
-** Improved algorithm for auto-detection of transfer syntax
-**   used when opening a DICOM file without metaheader.
-**   Big endian datasets are now detected much more reliably.
-**
-** Revision 1.37  1997/11/07 08:52:18  meichel
-** Corrected bug in the dcmdata read routines which caused incorrect reading
-**   of datasets containing attributes with value representation "ox" (= OB or OW)
-**   in the dicom dictionary other than PixelData and OverlayData.
-**   (thanks to Gilles Mevel <Gilles.Mevel@etiam.com> for the bug report and
-**   sample data set).
-**
-** Revision 1.36  1997/09/22 14:50:53  hewett
-** - Added 2 simple methods to test for the existance of an attribute
-**   to DcmItem class (tagExists and tagExistsWithValue).  This code
-**   was part of dcmgpdir.cc but is more generally useful.
-** - Added 2 methods to find an attribute and retrieve numeric values
-**   to DcmItem class (findIntegerNumber and findRealNumber).  The old
-**   method findLong is now marked as obsolete and reimplemented using
-**   findIntegerNumber.
-**
-** Revision 1.35  1997/09/12 13:44:53  meichel
-** The algorithm introduced on 97.08.28 to detect incorrect odd-length
-**   value fields falsely reported undefined length sequences and items
-**   to be wrong. Corrected.
-**
-** Revision 1.34  1997/08/29 08:31:33  andreas
-** - Added methods getOFString and getOFStringArray for all
-**   string VRs. These methods are able to normalise the value, i. e.
-**   to remove leading and trailing spaces. This will be done only if
-**   it is described in the standard that these spaces are not relevant.
-**   These methods do not test the strings for conformance, this means
-**   especially that they do not delete spaces where they are not allowed!
-**   getOFStringArray returns the string with all its parts separated by \
-**   and getOFString returns only one value of the string.
-**   CAUTION: Currently getString returns a string with trailing
-**   spaces removed (if dcmEnableAutomaticInputDataCorrection == OFTrue) and
-**   truncates the original string (since it is not copied!). If you rely on this
-**   behaviour please change your application now.
-**   Future changes will ensure that getString returns the original
-**   string from the DICOM object (NULL terminated) inclusive padding.
-**   Currently, if you call getOF... before calling getString without
-**   normalisation, you can get the original string read from the DICOM object.
-**
-** Revision 1.33  1997/08/29 07:52:40  andreas
-** - New error messages if length of an element is odd. Previously, no
-**   error was reported. But the length is corrected by the method
-**   newValueFiel and. so it was impossible for a checking utility to find
-**   such an error in DICOM objects.
-**
-** Revision 1.32  1997/07/24 13:10:52  andreas
-** - Removed Warnings from SUN CC 2.0.1
-**
-** Revision 1.31  1997/07/21 08:11:42  andreas
-** - Support for CP 14. PixelData and OverlayData can have VR OW or OB
-**   (depending on the transfer syntax). New internal value
-**   representation (only for ident()) for OverlayData.
-** - New environment for encapsulated pixel representations. DcmPixelData
-**   can contain different representations and uses codecs to convert
-**   between them. Codecs are derived from the DcmCodec class. New error
-**   codes are introduced for handling of representations. New internal
-**   value representation (only for ident()) for PixelData
-** - Replace all boolean types (BOOLEAN, CTNBOOLEAN, DICOM_BOOL, BOOL)
-**   with one unique boolean type OFBool.
-**
-** Revision 1.30  1997/07/07 07:43:59  andreas
-** - Changed type for Tag attribute in DcmObject from prointer to value
-** - Changed parameter type DcmTag & to DcmTagKey & in all search functions
-**   in DcmItem, DcmSequenceOfItems, DcmDirectoryRecord and DcmObject
-** - Enhanced (faster) byte swapping routine. swapIfNecessary moved from
-**   a method in DcmObject to a general function.
-**
-** Revision 1.29  1997/07/03 15:09:59  andreas
-** - removed debugging functions Bdebug() and Edebug() since
-**   they write a static array and are not very useful at all.
-**   Cdebug and Vdebug are merged since they have the same semantics.
-**   The debugging functions in dcmdata changed their interfaces
-**   (see dcmdata/include/dcdebug.h)
-**
-** Revision 1.28  1997/06/06 09:55:29  andreas
-** - corrected error: canWriteXfer returns false if the old transfer syntax
-**   was unknown, which causes several applications to prohibit the writing
-**   of dataset.
-**
-** Revision 1.27  1997/05/27 13:49:00  andreas
-** - Add method canWriteXfer to class DcmObject and all derived classes.
-**   This method checks whether it is possible to convert the original
-**   transfer syntax to an new transfer syntax. The check is used in the
-**   dcmconv utility to prohibit the change of a compressed transfer
-**   syntax to a uncompressed.
-**
-** Revision 1.26  1997/05/16 08:13:49  andreas
-** - Revised handling of GroupLength elements and support of
-**   DataSetTrailingPadding elements. The enumeratio E_GrpLenEncoding
-**   got additional enumeration values (for a description see dctypes.h).
-**   addGroupLength and removeGroupLength methods are replaced by
-**   computeGroupLengthAndPadding. To support Padding, the parameters of
-**   element and sequence write functions changed.
-** - Added a new method calcElementLength to calculate the length of an
-**   element, item or sequence. For elements it returns the length of
-**   tag, length field, vr field, and value length, for item and
-**   sequences it returns the length of the whole item. sequence including
-**   the Delimitation tag (if appropriate).  It can never return
-**   UndefinedLength.
-** - Deleted obsolete method DcmItem::calcHeaderLength because the
-**   samce functionality is performed by DcmXfer::sizeofTagHeader
-**
-** Revision 1.25  1997/05/07 12:27:27  andreas
-** Corrected error reading ItemDelimitationItem using explicit transfer syntaxes
-**
-** Revision 1.24  1997/04/30 16:32:50  andreas
-** - Corrected Bug for reading of encapsulated pixel sequences
-**
-** Revision 1.23  1997/04/24 12:12:18  hewett
-** Fixed DICOMDIR generation bug affecting the use of Unknown VR
-** attributes (the file offsets were not being computed correctly).
-**
-** Revision 1.22  1997/04/18 08:10:49  andreas
-** - Corrected debugging code
-** - The put/get-methods for all VRs did not conform to the C++-Standard
-**   draft. Some Compilers (e.g. SUN-C++ Compiler, Metroworks
-**   CodeWarrier, etc.) create many warnings concerning the hiding of
-**   overloaded get methods in all derived classes of DcmElement.
-**   So the interface of all value representation classes in the
-**   library are changed rapidly, e.g.
-**   OFCondition get(Uint16 & value, const unsigned long pos);
-**   becomes
-**   OFCondition getUint16(Uint16 & value, const unsigned long pos);
-**   All (retired) "returntype get(...)" methods are deleted.
-**   For more information see dcmdata/include/dcelem.h
-**
-** Revision 1.21  1997/03/27 15:52:50  hewett
-** Extended preliminary support for Unknown VR (UN) described in
-** Supplement 14.  Attributes with undefined length should now
-** be handled as a sequence.
-**
-** Revision 1.20  1997/03/26 17:15:57  hewett
-** Added very preliminary support for Unknown VR (UN) described in
-** Supplement 14.  WARNING: handling of unknown attributes with undefined
-** length is not yet supported.
-**
-** Revision 1.19  1996/09/24 15:54:14  hewett
-** Corrected erroneous setting of an error flag when inserting an
-** attribute into an Item (via Item::insert(...)) and the attribute
-** was already present.  Now the error flag is only set if replaceOld
-** is OFFalse and an attribute already exists.
-**
-** Revision 1.18  1996/09/13 12:04:12  hewett
-** Corrected missing () in function call (stack.card()) used in nextObject(...)
-**
-** Revision 1.17  1996/08/08 10:15:09  andreas
-** Some more testing in nextObject
-**
-** Revision 1.16  1996/08/08 10:06:23  andreas
-** Correct error for intoSub=OFFalse
-**
-** Revision 1.15  1996/08/05 08:46:12  andreas
-** new print routine with additional parameters:
-**         - print into files
-**         - fix output length for elements
-** corrected error in search routine with parameter ESM_fromStackTop
-**
-** Revision 1.14  1996/07/31 13:14:30  andreas
-** - Minor corrections: error code for swapping to or from byteorder unknown
-**                      correct read of dataset in fileformat
-**
-** Revision 1.13  1996/07/17 12:39:38  andreas
-** new nextObject for DcmDataSet, DcmFileFormat, DcmItem, ...
-**
-** Revision 1.12  1996/04/29 15:08:14  hewett
-** Replaced DcmItem::findInt(...) with the more general DcmItem::findLong(...).
-**
-** Revision 1.11  1996/04/27 14:04:55  hewett
-** Eliminated compiler warnings when compiling without -DDEBUG.  Very
-** minor corrections, mostly unused parameters and uninitialized variables.
-**
-** Revision 1.10  1996/04/16 16:04:54  andreas
-** - const tag Parameter in newDicomElement
-**
-** Revision 1.9  1996/03/28 18:52:39  hewett
-** Added 2 simple find&get methods (findString & findInt).
-**
-** Revision 1.8  1996/03/12 15:23:27  hewett
-** When generating group length tags, the VR of a tag is now explicity
-** set to be EVR_UL.  Group length tags not in the dictionary (e.g. for
-** private groups) were getting coded incorrectly.
-**
-** Revision 1.7  1996/03/11 14:16:00  hewett
-** Corrected error whereby explicit encoding was being recognised as implicit.
-**
-** Revision 1.6  1996/03/11 13:03:51  hewett
-** Rearranged logic of DcmItem::checkTransferSyntax to make little-endian
-** the default if both big and little endian are possible.
-**
-** Revision 1.5  1996/01/29 13:38:27  andreas
-** - new put method for every VR to put value as a string
-** - better and unique print methods
-**
-** Revision 1.4  1996/01/09 11:06:46  andreas
-** New Support for Visual C++
-** Correct problems with inconsistent const declarations
-** Correct error in reading Item Delimitation Elements
-**
-** Revision 1.3  1996/01/05 13:27:37  andreas
-** - changed to support new streaming facilities
-** - unique read/write methods for file and block transfer
-** - more cleanups
-**
-*/

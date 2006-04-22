@@ -21,14 +21,6 @@
  *
  *  Purpose: Implementation of class DcmCharString
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:10 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcchrstr.cxx,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -72,26 +64,3 @@ DcmCharString &DcmCharString::operator=(const DcmCharString &obj)
     DcmByteString::operator=(obj);
     return *this;
 }
-
-
-/*
- * CVS/RCS Log:
- * Log: dcchrstr.cxx,v 
- * Revision 1.1  2004/01/14 04:01:10  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.8  2002/12/06 13:08:18  joergr
- * Made source code formatting more consistent with other modules/files.
- *
- * Revision 1.7  2001/06/01 15:48:59  meichel
- * Updated copyright header
- *
- * Revision 1.6  2000/03/08 16:26:30  meichel
- * Updated copyright header.
- *
- * Revision 1.5  1999/03/31 09:25:17  meichel
- * Updated copyright header in module dcmdata
- *
- *
- */

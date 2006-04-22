@@ -21,23 +21,15 @@
  *
  *  Purpose: byte order functions
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:10 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcswap.cxx,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #include "osconfig.h"    /* make sure OS specific configuration is included first */
 #include "dcswap.h"
 
-OFCondition swapIfNecessary(const E_ByteOrder newByteOrder, 
-			    const E_ByteOrder oldByteOrder,
-			    void * value, const Uint32 byteLength,
-			    const size_t valWidth)
+OFCondition swapIfNecessary(const E_ByteOrder newByteOrder,
+                            const E_ByteOrder oldByteOrder,
+                            void * value, const Uint32 byteLength,
+                            const size_t valWidth)
     /*
      * This function swaps byteLength bytes in value if newByteOrder and oldByteOrder
      * differ from each other. In case bytes have to be swapped, these bytes are seperated
@@ -52,35 +44,34 @@ OFCondition swapIfNecessary(const E_ByteOrder newByteOrder,
      */
 {
     /* if the two byte orderings are unknown this is an illegal call */
-    if(oldByteOrder != EBO_unknown && newByteOrder != EBO_unknown )
+    if (oldByteOrder != EBO_unknown && newByteOrder != EBO_unknown )
     {
         /* and if they differ from each other and valWidth is not 1 */
-	if (oldByteOrder != newByteOrder && valWidth != 1)
-	{
+        if (oldByteOrder != newByteOrder && valWidth != 1)
+        {
             /* in case the array length equals valWidth and only 2 or 4 bytes have to be swapped */
             /* we can swiftly swap these bytes by calling the corresponding functions. If this is */
             /* not the case we have to call a more sophisticated function. */
-	    if (byteLength == valWidth)
-	    {
-		if (valWidth == 2)
-		    swap2Bytes((Uint8 *)value);
-		else if (valWidth == 4)
-		    swap4Bytes((Uint8 *)value);
-		else
-		    swapBytes(value, byteLength, valWidth);
-	    }
-	    else
-		swapBytes(value, byteLength, valWidth);
-	}
-	return EC_Normal;
+            if (byteLength == valWidth)
+            {
+                if (valWidth == 2)
+                    swap2Bytes((Uint8 *)value);
+                else if (valWidth == 4)
+                    swap4Bytes((Uint8 *)value);
+                else
+                    swapBytes(value, byteLength, valWidth);
+            }
+            else
+                swapBytes(value, byteLength, valWidth);
+        }
+        return EC_Normal;
     }
     return EC_IllegalCall;
 }
 
 
-
-void swapBytes(void * value, const Uint32 byteLength, 
-			   const size_t valWidth)
+void swapBytes(void * value, const Uint32 byteLength,
+                           const size_t valWidth)
     /*
      * This function swaps byteLength bytes in value. These bytes are seperated
      * in valWidth elements which will be swapped seperately.
@@ -97,77 +88,50 @@ void swapBytes(void * value, const Uint32 byteLength,
     /* in case valWidth equals 2, swap correspondingly */
     if (valWidth == 2)
     {
-	register Uint8 * first = &((Uint8*)value)[0];
-	register Uint8 * second = &((Uint8*)value)[1];
-	register Uint32 times = byteLength/2;
-	while(times--)
-	{
-	    save = *first;
-	    *first = *second;
-	    *second = save;
-	    first +=2;
-	    second +=2;
-	}
+        register Uint8 * first = &((Uint8*)value)[0];
+        register Uint8 * second = &((Uint8*)value)[1];
+        register Uint32 times = byteLength/2;
+        while (times--)
+        {
+            save = *first;
+            *first = *second;
+            *second = save;
+            first +=2;
+            second +=2;
+        }
     }
     /* if valWidth is greater than 2, swap correspondingly */
     else if (valWidth > 2)
     {
-	register size_t i; 
-	const size_t halfWidth = valWidth/2;
-	const size_t offset = valWidth-1;
-	register Uint8 *start;
-	register Uint8 *end;
+        register size_t i;
+        const size_t halfWidth = valWidth/2;
+        const size_t offset = valWidth-1;
+        register Uint8 *start;
+        register Uint8 *end;
 
-	Uint32 times = byteLength/valWidth;
-	Uint8  *base = (Uint8 *)value;
+        Uint32 times = byteLength/valWidth;
+        Uint8  *base = (Uint8 *)value;
 
-	while (times--)
-	{
-	    i = halfWidth;
-	    start = base;
-	    end = base+offset;
-	    while (i--)
-	    {
-		save = *start;
-		*start++ = *end;
-		*end-- = save;
-	    } 
-	    base += valWidth;
-	}
+        while (times--)
+        {
+            i = halfWidth;
+            start = base;
+            end = base+offset;
+            while (i--)
+            {
+                save = *start;
+                *start++ = *end;
+                *end-- = save;
+            }
+            base += valWidth;
+        }
     }
 }
 
 
 Uint16 swapShort(const Uint16 toSwap)
 {
-	Uint8 * swapped = (Uint8 *)&toSwap;
-	swap2Bytes(swapped);
-	return * ((Uint16*)swapped);
+        Uint8 * swapped = (Uint8 *)&toSwap;
+        swap2Bytes(swapped);
+        return * ((Uint16*)swapped);
 }
-
-
-
-/*
- * CVS/RCS Log:
- * Log: dcswap.cxx,v 
- * Revision 1.1  2004/01/14 04:01:10  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.13  2001/11/01 14:55:43  wilkens
- * Added lots of comments.
- *
- * Revision 1.12  2001/09/25 17:19:54  meichel
- * Adapted dcmdata to class OFCondition
- *
- * Revision 1.11  2001/06/01 15:49:10  meichel
- * Updated copyright header
- *
- * Revision 1.10  2000/03/08 16:26:42  meichel
- * Updated copyright header.
- *
- * Revision 1.9  1999/03/31 09:25:40  meichel
- * Updated copyright header in module dcmdata
- *
- *
- */

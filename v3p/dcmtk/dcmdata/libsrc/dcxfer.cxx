@@ -21,14 +21,6 @@
  *
  *  Purpose: handling of transfer syntaxes
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:10 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcxfer.cxx,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #include "osconfig.h"    /* make sure OS specific configuration is included first */
@@ -514,46 +506,3 @@ static E_ByteOrder FindMachineTransferSyntax()
 
 // global constant: local byte order (little or big endian)
 const E_ByteOrder gLocalByteOrder = FindMachineTransferSyntax();
-
-
-/*
- * CVS/RCS Log:
- * Log: dcxfer.cxx,v 
- * Revision 1.1  2004/01/14 04:01:10  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.21  2002/11/29 17:06:50  joergr
- * Fixed doc++ warning about different number of opening and closing brackets.
- * Replaced German comments by English translations.
- *
- * Revision 1.20  2002/11/27 12:07:01  meichel
- * Adapted module dcmdata to use of new header file ofstdinc.h
- *
- * Revision 1.19  2002/08/27 16:56:01  meichel
- * Initial release of new DICOM I/O stream classes that add support for stream
- *   compression (deflated little endian explicit VR transfer syntax)
- *
- * Revision 1.18  2002/06/19 15:35:01  meichel
- * Fixed typo in transfer syntax name
- *
- * Revision 1.17  2001/11/08 16:17:34  meichel
- * Updated data dictionary, UIDs and transfer syntaxes for DICOM 2001 edition.
- *
- * Revision 1.16  2001/06/01 15:49:23  meichel
- * Updated copyright header
- *
- * Revision 1.15  2001/01/17 10:20:38  meichel
- * Added toolkit support for JPEG-LS transfer syntaxes
- *
- * Revision 1.14  2000/04/14 16:10:35  meichel
- * Minor changes for thread safety.
- *
- * Revision 1.13  2000/03/08 16:26:53  meichel
- * Updated copyright header.
- *
- * Revision 1.12  1999/03/31 09:26:05  meichel
- * Updated copyright header in module dcmdata
- *
- *
- */

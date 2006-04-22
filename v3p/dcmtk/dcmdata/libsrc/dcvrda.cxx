@@ -21,14 +21,6 @@
  *
  *  Purpose: Implementation of class DcmDate
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:10 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcvrda.cxx,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #include "osconfig.h"    /* make sure OS specific configuration is included first */
@@ -170,7 +162,7 @@ OFCondition DcmDate::getCurrentDate(OFString &dicomDate)
 
 
 OFCondition DcmDate::getDicomDateFromOFDate(const OFDate &dateValue,
-	                                        OFString &dicomDate)
+                                            OFString &dicomDate)
 {
     OFCondition l_error = EC_IllegalParameter;
     /* convert OFDate value to DICOM DA format */
@@ -231,64 +223,3 @@ OFCondition DcmDate::getISOFormattedDateFromString(const OFString &dicomDate,
         formattedDate.clear();
     return l_error;
 }
-
-
-/*
-** CVS/RCS Log:
-** Log: dcvrda.cxx,v 
-** Revision 1.1  2004/01/14 04:01:10  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.15  2002/12/06 13:20:49  joergr
-** Enhanced "print()" function by re-working the implementation and replacing
-** the boolean "showFullData" parameter by a more general integer flag.
-** Made source code formatting more consistent with other modules/files.
-**
-** Revision 1.14  2002/11/27 12:06:55  meichel
-** Adapted module dcmdata to use of new header file ofstdinc.h
-**
-** Revision 1.13  2002/08/27 16:55:58  meichel
-** Initial release of new DICOM I/O stream classes that add support for stream
-**   compression (deflated little endian explicit VR transfer syntax)
-**
-** Revision 1.12  2002/04/11 12:31:34  joergr
-** Enhanced DICOM date, time and date/time classes. Added support for new
-** standard date and time functions.
-**
-** Revision 1.11  2001/10/10 15:20:41  joergr
-** Added new flag to date/time routines allowing to choose whether the old
-** prior V3.0 format for the corresponding DICOM VRs is supported or not.
-**
-** Revision 1.10  2001/10/04 10:16:58  joergr
-** Adapted new time/date routines to Windows systems.
-**
-** Revision 1.9  2001/10/01 15:04:43  joergr
-** Introduced new general purpose functions to get/set person names, date, time
-** and date/time.
-**
-** Revision 1.8  2001/06/01 15:49:15  meichel
-** Updated copyright header
-**
-** Revision 1.7  2000/03/08 16:26:46  meichel
-** Updated copyright header.
-**
-** Revision 1.6  1999/03/31 09:25:49  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.5  1998/11/12 16:48:23  meichel
-** Implemented operator= for all classes derived from DcmObject.
-**
-** Revision 1.4  1997/07/03 15:10:10  andreas
-** - removed debugging functions Bdebug() and Edebug() since
-**   they write a static array and are not very useful at all.
-**   Cdebug and Vdebug are merged since they have the same semantics.
-**   The debugging functions in dcmdata changed their interfaces
-**   (see dcmdata/include/dcdebug.h)
-**
-** Revision 1.3  1996/01/05 13:27:47  andreas
-** - changed to support new streaming facilities
-** - unique read/write methods for file and block transfer
-** - more cleanups
-**
-*/

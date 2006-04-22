@@ -21,14 +21,6 @@
  *
  *  Purpose: Print debug information
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/22 21:06:32 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcdebug.cxx,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #include "osconfig.h"    /* make sure OS specific configuration is included first */
@@ -60,43 +52,3 @@ void debug_print(const char* text, ... )
 }
 
 #endif
-
-
-/*
-** CVS/RCS Log:
-** Log: dcdebug.cxx,v 
-** Revision 1.1  2004/01/22 21:06:32  amithaperera
-** These files could be needed, depending on configuration variables
-**
-** Revision 1.10  2002/11/27 12:06:43  meichel
-** Adapted module dcmdata to use of new header file ofstdinc.h
-**
-** Revision 1.9  2001/06/01 15:49:00  meichel
-** Updated copyright header
-**
-** Revision 1.8  2000/04/14 15:45:31  meichel
-** Dcmdata debug facility now uses ofConsole for output.
-**
-** Revision 1.7  2000/03/08 16:26:31  meichel
-** Updated copyright header.
-**
-** Revision 1.6  2000/03/03 14:05:30  meichel
-** Implemented library support for redirecting error messages into memory
-**   instead of printing them to stdout/stderr for GUI applications.
-**
-** Revision 1.5  1999/03/31 09:25:19  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.4  1997/07/03 15:09:54  andreas
-** - removed debugging functions Bdebug() and Edebug() since
-**   they write a static array and are not very useful at all.
-**   Cdebug and Vdebug are merged since they have the same semantics.
-**   The debugging functions in dcmdata changed their interfaces
-**   (see dcmdata/include/dcdebug.h)
-**
-** Revision 1.3  1996/04/16 16:02:41  andreas
-** - set default debug mode to 0
-**
-*/
-
-

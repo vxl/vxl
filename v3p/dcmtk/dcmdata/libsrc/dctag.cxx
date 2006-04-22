@@ -21,14 +21,6 @@
  *
  *  Purpose: class DcmTag
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:10 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dctag.cxx,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #include "osconfig.h"    /* make sure OS specific configuration is included first */
@@ -59,9 +51,9 @@ DcmTag::DcmTag(const DcmTagKey& akey)
 {
     lookupVRinDictionary();
 }
-    
+
 DcmTag::DcmTag(Uint16 g, Uint16 e)
-  : DcmTagKey(g, e), 
+  : DcmTagKey(g, e),
     vr(EVR_UNKNOWN),
     tagName(NULL),
     privateCreator(NULL),
@@ -118,7 +110,7 @@ DcmTag& DcmTag::operator= ( const DcmTag& tag )
     if (this != &tag)
     {
       updateTagName(tag.tagName);
-      updatePrivateCreator(tag.privateCreator);      
+      updatePrivateCreator(tag.privateCreator);
       DcmTagKey::set(tag);
       vr = tag.vr;
       errorFlag = tag.errorFlag;
@@ -159,7 +151,7 @@ DcmVR DcmTag::setVR( const DcmVR& avr )    // resolve ambiguous VR
 const char *DcmTag::getTagName()
 {
   if (tagName) return tagName;
-  
+
   const char *newTagName = NULL;
   const DcmDataDictionary& globalDataDict = dcmDataDict.rdlock();
   const DcmDictEntry *dictRef = globalDataDict.findEntry(*this, privateCreator);
@@ -261,77 +253,3 @@ void DcmTag::updatePrivateCreator(const char *c)
       if (privateCreator) strcpy(privateCreator,c);
     } else privateCreator = NULL;
 }
-
-/*
-** CVS/RCS Log:
-** Log: dctag.cxx,v 
-** Revision 1.1  2004/01/14 04:01:10  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.18  2002/11/27 12:06:52  meichel
-** Adapted module dcmdata to use of new header file ofstdinc.h
-**
-** Revision 1.17  2002/07/23 14:21:34  meichel
-** Added support for private tag data dictionaries to dcmdata
-**
-** Revision 1.16  2002/05/24 09:49:44  joergr
-** Renamed some parameters/variables to avoid ambiguities.
-**
-** Revision 1.15  2002/04/30 13:12:58  joergr
-** Added static helper function to convert strings (tag names or group/element
-** numbers) to DICOM tag objects.
-**
-** Revision 1.14  2002/04/16 13:43:22  joergr
-** Added configurable support for C++ ANSI standard includes (e.g. streams).
-** Thanks to Andreas Barth <Andreas.Barth@bruker-biospin.de> for his
-** contribution.
-**
-** Revision 1.13  2001/11/19 15:23:29  meichel
-** Cleaned up signature code to avoid some gcc warnings.
-**
-** Revision 1.12  2001/11/16 15:55:05  meichel
-** Adapted digital signature code to final text of supplement 41.
-**
-** Revision 1.11  2001/06/01 15:49:11  meichel
-** Updated copyright header
-**
-** Revision 1.10  2000/05/03 14:19:10  meichel
-** Added new class GlobalDcmDataDictionary which implements read/write lock
-**   semantics for safe access to the DICOM dictionary from multiple threads
-**   in parallel. The global dcmDataDict now uses this class.
-**
-** Revision 1.9  2000/04/14 16:01:00  meichel
-** Restructured class DcmTag. Instances don't keep a permanent pointer
-**   to a data dictionary entry anymore. Required for MT applications.
-**
-** Revision 1.8  2000/03/08 16:26:42  meichel
-** Updated copyright header.
-**
-** Revision 1.7  2000/03/03 14:05:37  meichel
-** Implemented library support for redirecting error messages into memory
-**   instead of printing them to stdout/stderr for GUI applications.
-**
-** Revision 1.6  1999/03/31 09:25:41  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.5  1998/07/15 15:52:09  joergr
-** Removed several compiler warnings reported by gcc 2.8.1 with
-** additional options, e.g. missing copy constructors and assignment
-** operators, initialization of member variables in the body of a
-** constructor instead of the member initialization list, hiding of
-** methods by use of identical names, uninitialized member variables,
-** missing const declaration of char pointers. Replaced tabs by spaces.
-**
-** Revision 1.4  1996/03/12 15:24:21  hewett
-** Added constructor to allow direct setting of the VR.
-**
-** Revision 1.3  1996/01/05 13:27:44  andreas
-** - changed to support new streaming facilities
-** - unique read/write methods for file and block transfer
-** - more cleanups
-**
-** Revision 1.2  1995/11/23 17:02:54  hewett
-** Updated for loadable data dictionary.  Some cleanup (more to do).
-**
-*/

@@ -21,14 +21,6 @@
  *
  *  Purpose: class DcmPixelData
  *
- *  Last Update:      Author: peter_vanroose 
- *  Update Date:      Date: 2004/05/28 17:59:56 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcpixel.cxx,v 
- *  CVS/RCS Revision: Revision: 1.2 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #include "osconfig.h"    /* make sure OS specific configuration is included first */
@@ -43,8 +35,8 @@
 
 class DcmRepresentationEntry
 {
-friend class DcmPixelData;
-private:
+  friend class DcmPixelData;
+ private:
     E_TransferSyntax repType;
     DcmRepresentationParameter * repParam;
     DcmPixelSequence * pixSeq;
@@ -203,7 +195,6 @@ DcmPixelData &DcmPixelData::operator=(const DcmPixelData &obj)
         }
         ++it;
     }
-
   }
   return *this;
 }
@@ -254,8 +245,8 @@ DcmPixelData::canChooseRepresentation(
     }
     else
     {
-    	// representation not found, check if we have a codec that can create the
-    	// desired representation.
+        // representation not found, check if we have a codec that can create the
+        // desired representation.
         if (original == repListEnd)
         {
           result = DcmCodecList::canChangeCoding(EXS_LittleEndianExplicit, toType.getXfer());
@@ -382,7 +373,6 @@ DcmPixelData::decode(
 }
 
 
-
 OFCondition
 DcmPixelData::encode(
     const DcmXfer & fromType,
@@ -437,13 +427,13 @@ DcmPixelData::findRepresentationEntry(
     DcmRepresentationListIterator & result)
 {
     result = repList.begin();
-    while(result != repListEnd &&
-          (*result)->repType < findEntry.repType)
+    while (result != repListEnd &&
+           (*result)->repType < findEntry.repType)
         ++result;
 
     DcmRepresentationListIterator it(result);
 
-    while(it != repListEnd && **it != findEntry)
+    while (it != repListEnd && **it != findEntry)
         ++it;
     if (it == repListEnd || **it != findEntry)
         return EC_RepresentationNotFound;
@@ -470,9 +460,9 @@ DcmPixelData::findConformingEncapsulatedRepresentation(
     // parameter (i.e. quality factor for lossy JPEG).
     if (repTypeSyn.isEncapsulated())
     {
-    	// first we check the current (active) representation if any.
-    	if ((current != repListEnd) && ((*current)->repType == repType) &&
-    	    ((repParam==NULL) || (((*current)->repParam != NULL)&&(*(*current)->repParam == *repParam))))
+        // first we check the current (active) representation if any.
+        if ((current != repListEnd) && ((*current)->repType == repType) &&
+            ((repParam==NULL) || (((*current)->repParam != NULL)&&(*(*current)->repParam == *repParam))))
         {
             result = current;
             l_error = EC_Normal;
@@ -1034,123 +1024,3 @@ OFCondition DcmPixelData::loadAllDataIntoMemory(void)
     else
         return (*current)->pixSeq->loadAllDataIntoMemory();
 }
-
-/*
-** CVS/RCS Log:
-** Log: dcpixel.cxx,v 
-** Revision 1.2  2004/05/28 17:59:56  peter_vanroose
-** typo corrected
-**
-** Revision 1.1  2004/01/14 04:01:10  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.27  2002/12/09 09:30:54  wilkens
-** Modified/Added doc++ documentation.
-**
-** Revision 1.26  2002/12/06 13:16:57  joergr
-** Enhanced "print()" function by re-working the implementation and replacing
-** the boolean "showFullData" parameter by a more general integer flag.
-** Made source code formatting more consistent with other modules/files.
-**
-** Revision 1.25  2002/09/17 13:22:45  meichel
-** Fixed two bugs in class DcmPixelData.
-**
-** Revision 1.24  2002/09/10 15:24:04  meichel
-** Fixed two issues in parser. Dcmdata will now correctly parse compressed
-**   data sets containing uncompressed pixel data (e.g. icon images) and
-**   uncompressed data sets containing compressed pixel data (e.g. compressed
-**   file but meta-header missing). Note that write-back of such datasets will
-**   fail unless appropriate compression codecs are registered.
-**
-** Revision 1.23  2002/08/27 16:55:54  meichel
-** Initial release of new DICOM I/O stream classes that add support for stream
-**   compression (deflated little endian explicit VR transfer syntax)
-**
-** Revision 1.22  2002/07/10 11:49:30  meichel
-** Fixed memory leak that occurred when compression of an image failed in
-**   a compression codec.
-**
-** Revision 1.21  2002/04/25 10:19:53  joergr
-** Added support for XML output of DICOM objects.
-**
-** Revision 1.20  2001/11/08 16:19:42  meichel
-** Changed interface for codec registration. Now everything is thread-safe
-**   and multiple codecs can be registered for a single transfer syntax (e.g.
-**   one encoder and one decoder).
-**
-** Revision 1.19  2001/11/01 14:55:42  wilkens
-** Added lots of comments.
-**
-** Revision 1.18  2001/09/25 17:18:36  meichel
-** Updated abstract class DcmRepresentationParameter for use with dcmjpeg
-**
-** Revision 1.17  2001/06/01 15:49:07  meichel
-** Updated copyright header
-**
-** Revision 1.16  2001/05/25 09:53:54  meichel
-** Modified DcmCodec::decode() interface, required for future dcmjpeg module.
-**
-** Revision 1.15  2000/11/07 16:56:21  meichel
-** Initial release of dcmsign module for DICOM Digital Signatures
-**
-** Revision 1.14  2000/09/27 08:19:58  meichel
-** Minor changes in DcmCodec interface, required for future dcmjpeg module.
-**
-** Revision 1.13  2000/04/14 16:09:16  meichel
-** Made function DcmCodec and related functions thread safe.
-**   registerGlobalCodec() should not be called anymore from the constructor
-**   of global objects.
-**
-** Revision 1.12  2000/03/08 16:26:39  meichel
-** Updated copyright header.
-**
-** Revision 1.11  2000/02/10 16:04:07  joergr
-** Fixed bug producing an error message when trying to create an empty
-** PixelData element.
-**
-** Revision 1.10  2000/02/10 10:52:21  joergr
-** Added new feature to dcmdump (enhanced print method of dcmdata): write
-** pixel data/item value fields to raw files.
-**
-** Revision 1.9  2000/02/03 16:30:19  joergr
-** Fixed bug: encapsulated data (pixel items) have never been loaded using
-** method 'loadAllDataIntoMemory'. Therefore, encapsulated pixel data was
-** never printed with 'dcmdump'.
-**
-** Revision 1.8  1999/04/21 15:48:15  meichel
-** Fixed bug in DcmPixelData::findConformingEncapsulatedRepresentation
-**   leading to an assertion failure when working with compressed data.
-**
-** Revision 1.7  1999/03/31 09:25:35  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.6  1998/11/12 16:48:17  meichel
-** Implemented operator= for all classes derived from DcmObject.
-**
-** Revision 1.5  1998/07/15 15:52:04  joergr
-** Removed several compiler warnings reported by gcc 2.8.1 with
-** additional options, e.g. missing copy constructors and assignment
-** operators, initialization of member variables in the body of a
-** constructor instead of the member initialization list, hiding of
-** methods by use of identical names, uninitialized member variables,
-** missing const declaration of char pointers. Replaced tabs by spaces.
-**
-** Revision 1.4  1997/09/18 08:10:55  meichel
-** Many minor type conflicts (e.g. long passed as int) solved.
-**
-** Revision 1.3  1997/07/31 06:59:35  andreas
-** Added initialization of error code in
-** DcmPixelData::removeOriginalRepresentation()
-**
-** Revision 1.2  1997/07/24 13:08:28  andreas
-** - Removed const for method DcmRepresentationParameter::copy
-**
-** Revision 1.1  1997/07/21 07:55:05  andreas
-** - New environment for encapsulated pixel representations. DcmPixelData
-**   can contain different representations and uses codecs to convert
-**   between them. Codecs are derived from the DcmCodec class. New error
-**   codes are introduced for handling of representations. New internal
-**   value representation (only for ident()) for PixelData
-**
-*/

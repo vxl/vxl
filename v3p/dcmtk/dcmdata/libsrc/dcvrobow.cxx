@@ -21,14 +21,6 @@
  *
  *  Purpose: Implementation of class DcmOtherByteOtherWord
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:10 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcvrobow.cxx,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -373,7 +365,7 @@ OFCondition DcmOtherByteOtherWord::getUint8(Uint8 &byteVal,
     }
     /* clear value in case of error */
     if (errorFlag.bad())
-	    byteVal = 0;
+        byteVal = 0;
     return errorFlag;
 }
 
@@ -409,7 +401,7 @@ OFCondition DcmOtherByteOtherWord::getUint16(Uint16 &wordVal,
     }
     /* clear value in case of error */
     if (errorFlag.bad())
-	    wordVal = 0;
+        wordVal = 0;
     return errorFlag;
 }
 
@@ -609,194 +601,3 @@ OFCondition DcmOtherByteOtherWord::writeXML(ostream &out,
     /* always report success */
     return EC_Normal;
 }
-
-
-/*
-** CVS/RCS Log:
-** Log: dcvrobow.cxx,v 
-** Revision 1.1  2004/01/14 04:01:10  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.41  2002/12/06 13:12:36  joergr
-** Enhanced "print()" function by re-working the implementation and replacing
-** the boolean "showFullData" parameter by a more general integer flag.
-** Made source code formatting more consistent with other modules/files.
-**
-** Revision 1.40  2002/11/27 12:06:57  meichel
-** Adapted module dcmdata to use of new header file ofstdinc.h
-**
-** Revision 1.39  2002/08/27 16:55:59  meichel
-** Initial release of new DICOM I/O stream classes that add support for stream
-**   compression (deflated little endian explicit VR transfer syntax)
-**
-** Revision 1.38  2002/07/08 14:44:42  meichel
-** Improved dcmdata behaviour when reading odd tag length. Depending on the
-**   global boolean flag dcmAcceptOddAttributeLength, the parser now either accepts
-**   odd length attributes or implements the old behaviour, i.e. assumes a real
-**   length larger by one.
-**
-** Revision 1.37  2002/05/14 08:22:56  joergr
-** Added support for Base64 (MIME) encoded binary data.
-**
-** Revision 1.36  2002/04/25 10:32:16  joergr
-** Added getOFString() implementation.
-** Added/modified getOFStringArray() implementation.
-** Added support for XML output of DICOM objects.
-**
-** Revision 1.35  2002/04/16 13:43:25  joergr
-** Added configurable support for C++ ANSI standard includes (e.g. streams).
-** Thanks to Andreas Barth <Andreas.Barth@bruker-biospin.de> for his
-** contribution.
-**
-** Revision 1.34  2001/10/02 11:48:33  joergr
-** Added getUint8/16 routines to class DcmOtherByteOtherWord.
-**
-** Revision 1.33  2001/09/25 17:19:58  meichel
-** Adapted dcmdata to class OFCondition
-**
-** Revision 1.32  2001/06/01 15:49:18  meichel
-** Updated copyright header
-**
-** Revision 1.31  2000/11/07 16:56:24  meichel
-** Initial release of dcmsign module for DICOM Digital Signatures
-**
-** Revision 1.30  2000/04/14 15:55:09  meichel
-** Dcmdata library code now consistently uses ofConsole for error output.
-**
-** Revision 1.29  2000/03/08 16:26:49  meichel
-** Updated copyright header.
-**
-** Revision 1.28  2000/03/07 15:41:02  joergr
-** Added explicit type casts to make Sun CC 2.0.1 happy.
-**
-** Revision 1.27  2000/03/06 16:08:05  meichel
-** Changed a couple of definitions that implied that Uint32 or size_t are long
-**
-** Revision 1.26  2000/03/03 14:05:39  meichel
-** Implemented library support for redirecting error messages into memory
-**   instead of printing them to stdout/stderr for GUI applications.
-**
-** Revision 1.25  2000/02/23 15:12:07  meichel
-** Corrected macro for Borland C++ Builder 4 workaround.
-**
-** Revision 1.24  2000/02/10 16:04:59  joergr
-** Enhanced handling of PixelData/Item element. Externally stored raw data is
-** now always imported as little endian and swapped if necessary. This change
-** reflects the new 'export' feature of dcmdump.
-**
-** Revision 1.23  2000/02/10 10:52:24  joergr
-** Added new feature to dcmdump (enhanced print method of dcmdata): write
-** pixel data/item value fields to raw files.
-**
-** Revision 1.22  2000/02/03 16:55:20  joergr
-** Avoid EVR_pixelItem in comparisons (compare with != EVR_OW instead).
-**
-** Revision 1.21  2000/02/03 16:35:58  joergr
-** Corrected bug that caused wrong calculation of group length for sequence
-** of items (e.g. encapsulated pixel data).
-**
-** Revision 1.20  2000/02/01 10:12:11  meichel
-** Avoiding to include <stdlib.h> as extern "C" on Borland C++ Builder 4,
-**   workaround for bug in compiler header files.
-**
-** Revision 1.19  1999/03/31 09:25:55  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.18  1997/07/21 08:11:43  andreas
-** - Support for CP 14. PixelData and OverlayData can have VR OW or OB
-**   (depending on the transfer syntax). New internal value
-**   representation (only for ident()) for OverlayData.
-** - New environment for encapsulated pixel representations. DcmPixelData
-**   can contain different representations and uses codecs to convert
-**   between them. Codecs are derived from the DcmCodec class. New error
-**   codes are introduced for handling of representations. New internal
-**   value representation (only for ident()) for PixelData
-** - Replace all boolean types (BOOLEAN, CTNBOOLEAN, DICOM_BOOL, BOOL)
-**   with one unique boolean type OFBool.
-**
-** Revision 1.17  1997/07/07 07:51:35  andreas
-** - Changed type for Tag attribute in DcmObject from prointer to value
-** - Enhanced (faster) byte swapping routine. swapIfNecessary moved from
-**   a method in DcmObject to a general function.
-**
-** Revision 1.16  1997/07/03 15:10:15  andreas
-** - removed debugging functions Bdebug() and Edebug() since
-**   they write a static array and are not very useful at all.
-**   Cdebug and Vdebug are merged since they have the same semantics.
-**   The debugging functions in dcmdata changed their interfaces
-**   (see dcmdata/include/dcdebug.h)
-**
-** Revision 1.15  1997/06/13 13:07:31  andreas
-** - Corrected printing of OW values. The length of the output array was
-**   computed incorrectly.
-**
-** Revision 1.14  1997/05/27 13:49:03  andreas
-** - Add method canWriteXfer to class DcmObject and all derived classes.
-**   This method checks whether it is possible to convert the original
-**   transfer syntax to an new transfer syntax. The check is used in the
-**   dcmconv utility to prohibit the change of a compressed transfer
-**   syntax to a uncompressed.
-**
-** Revision 1.13  1997/05/22 16:54:20  andreas
-** - Corrected wrong output length in print routine
-**
-** Revision 1.12  1997/05/16 08:31:28  andreas
-** - Revised handling of GroupLength elements and support of
-**   DataSetTrailingPadding elements. The enumeratio E_GrpLenEncoding
-**   got additional enumeration values (for a description see dctypes.h).
-**   addGroupLength and removeGroupLength methods are replaced by
-**   computeGroupLengthAndPadding. To support Padding, the parameters of
-**   element and sequence write functions changed.
-**
-** Revision 1.11  1997/04/18 08:17:20  andreas
-** - The put/get-methods for all VRs did not conform to the C++-Standard
-**   draft. Some Compilers (e.g. SUN-C++ Compiler, Metroworks
-**   CodeWarrier, etc.) create many warnings concerning the hiding of
-**   overloaded get methods in all derived classes of DcmElement.
-**   So the interface of all value representation classes in the
-**   library are changed rapidly, e.g.
-**   OFCondition get(Uint16 & value, const unsigned long pos);
-**   becomes
-**   OFCondition getUint16(Uint16 & value, const unsigned long pos);
-**   All (retired) "returntype get(...)" methods are deleted.
-**   For more information see dcmdata/include/dcelem.h
-**
-** Revision 1.10  1997/03/26 17:15:59  hewett
-** Added very preliminary support for Unknown VR (UN) described in
-** Supplement 14.  WARNING: handling of unknown attributes with undefined
-** length is not yet supported.
-**
-** Revision 1.9  1996/08/05 08:46:20  andreas
-** new print routine with additional parameters:
-**         - print into files
-**         - fix output length for elements
-** corrected error in search routine with parameter ESM_fromStackTop
-**
-** Revision 1.8  1996/05/06 10:22:47  meichel
-** Copy constructor now handles case when VR=unknown.
-**
-** Revision 1.7  1996/04/16 16:05:24  andreas
-** - better support und bug fixes for NULL element value
-**
-** Revision 1.6  1996/03/26 09:59:36  meichel
-** corrected bug (deletion of const char *) which prevented compilation on NeXT
-**
-** Revision 1.5  1996/01/29 13:38:33  andreas
-** - new put method for every VR to put value as a string
-** - better and unique print methods
-**
-** Revision 1.4  1996/01/09 11:06:50  andreas
-** New Support for Visual C++
-** Correct problems with inconsistent const declarations
-** Correct error in reading Item Delimitation Elements
-**
-** Revision 1.3  1996/01/05 13:27:51  andreas
-** - changed to support new streaming facilities
-** - unique read/write methods for file and block transfer
-** - more cleanups
-**
-** Revision 1.2  1995/11/23 17:03:07  hewett
-** Updated for loadable data dictionary.  Some cleanup (more to do).
-**
-*/

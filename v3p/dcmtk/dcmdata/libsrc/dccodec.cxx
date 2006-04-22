@@ -21,14 +21,6 @@
  *
  *  Purpose: abstract class DcmCodec and the class DcmCodecStruct
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:10 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dccodec.cxx,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #include "osconfig.h"    /* make sure OS specific configuration is included first */
@@ -67,7 +59,7 @@ OFCondition DcmCodec::convertToSecondaryCapture(DcmItem *dataset)
 
   OFCondition result = EC_Normal;
   char buf[70];
-  
+
   // SOP Class UID - always replace
   if (result.good()) result = dataset->putAndInsertString(DCM_SOPClassUID, UID_SecondaryCaptureImageStorage);
 
@@ -97,7 +89,7 @@ OFCondition DcmCodec::convertToSecondaryCapture(DcmItem *dataset)
   if (result.good()) result = insertStringIfMissing(dataset, DCM_SeriesNumber, NULL);
   if (result.good()) result = insertStringIfMissing(dataset, DCM_InstanceNumber, NULL);
 
-  return result;    
+  return result;
 }
 
 OFCondition DcmCodec::newInstance(DcmItem *dataset)
@@ -144,7 +136,7 @@ OFCondition DcmCodec::newInstance(DcmItem *dataset)
 
   // create new SOP instance UID
   if (result.good())
-  {  
+  {
     char new_uid[100];
     DcmElement *elem = new DcmUniqueIdentifier(DCM_SOPInstanceUID);
     if (elem)
@@ -178,7 +170,7 @@ OFCondition DcmCodec::updateImageType(DcmItem *dataset)
     while ((elem->getOFString(a, pos++)).good())
     {
       imageType += "\\";
-      imageType += a;      
+      imageType += a;
     }
   }
 
@@ -189,7 +181,7 @@ OFCondition DcmCodec::updateImageType(DcmItem *dataset)
 /* --------------------------------------------------------------- */
 
 DcmCodecList::DcmCodecList(
-    const DcmCodec *aCodec,  
+    const DcmCodec *aCodec,
     const DcmRepresentationParameter *aDefaultRepParam,
     const DcmCodecParameter *aCodecParameter)
 : codec(aCodec)
@@ -203,7 +195,7 @@ DcmCodecList::~DcmCodecList()
 }
 
 OFCondition DcmCodecList::registerCodec(
-    const DcmCodec *aCodec,  
+    const DcmCodec *aCodec,
     const DcmRepresentationParameter *aDefaultRepParam,
     const DcmCodecParameter *aCodecParameter)
 {
@@ -231,7 +223,7 @@ OFCondition DcmCodecList::registerCodec(
           // this codec is already registered.
           first = last;
           result = EC_IllegalCall;
-        } else ++first;        
+        } else ++first;
       }
       if (result.good()) registeredCodecs.push_back(listEntry); else delete listEntry;
     } else result = EC_MemoryExhausted;
@@ -261,8 +253,8 @@ OFCondition DcmCodecList::deregisterCodec(const DcmCodec *aCodec)
     {
       if ((*first)->codec == aCodec)
       {
-      	delete *first;
-      	first = registeredCodecs.erase(first);
+        delete *first;
+        first = registeredCodecs.erase(first);
       } else ++first;
     }
 #ifdef _REENTRANT
@@ -270,7 +262,7 @@ OFCondition DcmCodecList::deregisterCodec(const DcmCodec *aCodec)
   } else result = EC_IllegalCall;
 #endif
   return result;
-} 
+}
 
 OFCondition DcmCodecList::updateCodecParameter(
     const DcmCodec *aCodec,
@@ -339,8 +331,8 @@ OFCondition DcmCodecList::decode(
 
 OFCondition DcmCodecList::encode(
     const E_TransferSyntax fromRepType,
-    const DcmRepresentationParameter * fromParam, 
-    DcmPixelSequence * fromPixSeq, 
+    const DcmRepresentationParameter * fromParam,
+    DcmPixelSequence * fromPixSeq,
     const E_TransferSyntax toRepType,
     const DcmRepresentationParameter * toRepParam,
     DcmPixelSequence * & toPixSeq,
@@ -364,7 +356,7 @@ OFCondition DcmCodecList::encode(
       if ((*first)->codec->canChangeCoding(fromRepType, toRepType))
       {
         if (!toRepParam) toRepParam = (*first)->defaultRepParam;
-        result = (*first)->codec->encode(fromRepType, fromParam, fromPixSeq, 
+        result = (*first)->codec->encode(fromRepType, fromParam, fromPixSeq,
                  toRepParam, toPixSeq, (*first)->codecParameter, pixelStack);
         first = last;
       } else ++first;
@@ -404,7 +396,7 @@ OFCondition DcmCodecList::encode(
       if ((*first)->codec->canChangeCoding(fromRepType, toRepType))
       {
         if (!toRepParam) toRepParam = (*first)->defaultRepParam;
-        result = (*first)->codec->encode(pixelData, length, toRepParam, toPixSeq, 
+        result = (*first)->codec->encode(pixelData, length, toRepParam, toPixSeq,
                  (*first)->codecParameter, pixelStack);
         first = last;
       } else ++first;
@@ -437,7 +429,7 @@ OFBool DcmCodecList::canChangeCoding(
     {
       if ((*first)->codec->canChangeCoding(fromRepType, toRepType))
       {
-      	result = OFTrue;
+        result = OFTrue;
         first = last;
       } else ++first;
     }
@@ -448,56 +440,3 @@ OFBool DcmCodecList::canChangeCoding(
 
   return result;
 }
-
-/*
-** CVS/RCS Log:
-** Log: dccodec.cxx,v 
-** Revision 1.1  2004/01/14 04:01:10  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.11  2002/06/27 15:15:53  meichel
-** Now adding empty Patient Orientation when converting to
-**   Secondary Capture.
-**
-** Revision 1.10  2002/05/24 14:51:50  meichel
-** Moved helper methods that are useful for different compression techniques
-**   from module dcmjpeg to module dcmdata
-**
-** Revision 1.9  2002/02/27 14:21:35  meichel
-** Declare dcmdata read/write locks only when compiled in multi-thread mode
-**
-** Revision 1.8  2001/11/08 16:19:42  meichel
-** Changed interface for codec registration. Now everything is thread-safe
-**   and multiple codecs can be registered for a single transfer syntax (e.g.
-**   one encoder and one decoder).
-**
-** Revision 1.7  2001/09/25 17:19:09  meichel
-** Updated abstract class DcmCodecParameter for use with dcmjpeg.
-**   Added new function deregisterGlobalCodec().
-**
-** Revision 1.6  2001/06/01 15:48:59  meichel
-** Updated copyright header
-**
-** Revision 1.5  2000/09/27 08:19:57  meichel
-** Minor changes in DcmCodec interface, required for future dcmjpeg module.
-**
-** Revision 1.4  2000/04/14 16:09:16  meichel
-** Made function DcmCodec and related functions thread safe.
-**   registerGlobalCodec() should not be called anymore from the constructor
-**   of global objects.
-**
-** Revision 1.3  2000/03/08 16:26:30  meichel
-** Updated copyright header.
-**
-** Revision 1.2  1999/03/31 09:25:18  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.1  1997/07/21 07:55:04  andreas
-** - New environment for encapsulated pixel representations. DcmPixelData
-**   can contain different representations and uses codecs to convert
-**   between them. Codecs are derived from the DcmCodec class. New error
-**   codes are introduced for handling of representations. New internal
-**   value representation (only for ident()) for PixelData
-** 
-*/

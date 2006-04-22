@@ -21,14 +21,6 @@
  *
  *  Purpose: class DcmVR: Value Representation
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:10 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcvr.cxx,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #include "osconfig.h"    /* make sure OS specific configuration is included first */
@@ -69,9 +61,7 @@ struct DcmVREntry {
 };
 
 
-
 static const DcmVREntry DcmVRDict[] = {
-
     { EVR_AE, "AE", sizeof(char), DCMVR_PROP_ISASTRING, 0, 16 },
     { EVR_AS, "AS", sizeof(char), DCMVR_PROP_ISASTRING, 4, 4 },
     { EVR_AT, "AT", sizeof(Uint16), DCMVR_PROP_NONE, 4, 4 },
@@ -137,7 +127,6 @@ static const DcmVREntry DcmVRDict[] = {
 
     { EVR_UNKNOWN2B, "??", sizeof(Uint8), /* illegal VRs, we assume no extended length coding */
       DCMVR_PROP_NONSTANDARD | DCMVR_PROP_INTERNAL , 0, DCM_UndefinedLength },
-
 };
 
 static const int DcmVRDict_DIM = sizeof(DcmVRDict) / sizeof(DcmVREntry);
@@ -152,9 +141,9 @@ static const int DcmVRDict_DIM = sizeof(DcmVRDict) / sizeof(DcmVREntry);
 #include "ofstream.h"
 
 class DcmVRDict_checker {
-private:
+  private:
     int error_found;
-public:
+  public:
     DcmVRDict_checker();
 };
 
@@ -318,12 +307,12 @@ DcmVR::usesExtendedLengthEncoding() const
 
 Uint32 DcmVR::getMinValueLength() const
 {
-    return (DcmVRDict[vr].minValueLength);
+    return DcmVRDict[vr].minValueLength;
 }
 
 Uint32 DcmVR::getMaxValueLength() const
 {
-    return (DcmVRDict[vr].maxValueLength);
+    return DcmVRDict[vr].maxValueLength;
 }
 
 /* returns true if the vr is equivalent */
@@ -361,58 +350,3 @@ int DcmVR::isEquivalent(const DcmVR& avr) const
     }
     return ok;
 }
-
-/*
- * CVS/RCS Log:
- * Log: dcvr.cxx,v 
- * Revision 1.1  2004/01/14 04:01:10  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.27  2002/12/06 13:00:31  joergr
- * Added support for new value representation Other Float String (OF).
- *
- * Revision 1.26  2002/11/27 12:06:54  meichel
- * Adapted module dcmdata to use of new header file ofstdinc.h
- *
- * Revision 1.25  2002/04/16 13:43:23  joergr
- * Added configurable support for C++ ANSI standard includes (e.g. streams).
- * Thanks to Andreas Barth <Andreas.Barth@bruker-biospin.de> for his
- * contribution.
- *
- * Revision 1.24  2001/11/02 13:18:52  meichel
- * Removed character sequences that could be interpreted as ISO C++ trigraphs
- *
- * Revision 1.23  2001/09/28 14:21:40  joergr
- * Replaced "cerr" by "CERR".
- *
- * Revision 1.22  2001/06/01 15:49:13  meichel
- * Updated copyright header
- *
- * Revision 1.21  2000/04/14 15:42:58  meichel
- * Global VR generation flags are now derived from OFGlobal and, thus,
- *   safe for use in multi-thread applications.
- *
- * Revision 1.20  2000/03/08 16:26:44  meichel
- * Updated copyright header.
- *
- * Revision 1.19  2000/03/03 14:05:38  meichel
- * Implemented library support for redirecting error messages into memory
- *   instead of printing them to stdout/stderr for GUI applications.
- *
- * Revision 1.18  2000/02/29 11:49:30  meichel
- * Removed support for VS value representation. This was proposed in CP 101
- *   but never became part of the standard.
- *
- * Revision 1.17  2000/02/03 16:35:12  joergr
- * Fixed bug: encapsulated data (pixel items) have never been loaded using
- * method 'loadAllDataIntoMemory'. Therefore, encapsulated pixel data was
- * never printed with 'dcmdump'.
- * Corrected bug that caused wrong calculation of group length for sequence
- * of items (e.g. encapsulated pixel data).
- *
- * Revision 1.16  1999/03/31 09:25:45  meichel
- * Updated copyright header in module dcmdata
- *
- *
- */

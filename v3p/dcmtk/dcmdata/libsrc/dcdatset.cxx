@@ -21,14 +21,6 @@
  *
  *  Purpose: Implementation of class DcmDataset
  *
- *  Last Update:      Author: peter_vanroose 
- *  Update Date:      Date: 2004/05/28 17:59:55 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcdatset.cxx,v 
- *  CVS/RCS Revision: Revision: 1.2 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -297,7 +289,6 @@ OFCondition DcmDataset::write(DcmOutputStream &outStream,
       /* so that this scenario will only be executed once for this data set object. */
       if (fTransferState == ERW_init)
       {
-
         /* Check stream compression for this transfer syntax */
         DcmXfer xf(newXfer);
         E_StreamCompression sc = xf.getStreamCompression();
@@ -469,9 +460,8 @@ OFCondition DcmDataset::chooseRepresentation(const E_TransferSyntax repType,
 
     DcmStack resultStack;
     resultStack.push(this);
-    while(search(DCM_PixelData, resultStack, ESM_afterStackTop, OFTrue).good() && l_error.good())
+    while (search(DCM_PixelData, resultStack, ESM_afterStackTop, OFTrue).good() && l_error.good())
     {
-
         if (resultStack.top()->ident() == EVR_PixelData)
         {
             DcmPixelData * pixelData = (DcmPixelData *)(resultStack.top());
@@ -484,7 +474,7 @@ OFCondition DcmDataset::chooseRepresentation(const E_TransferSyntax repType,
     }
     if (l_error.good())
     {
-        while(pixelStack.size() && l_error.good())
+        while (pixelStack.size() && l_error.good())
         {
             l_error = ((DcmPixelData*)(pixelStack.top().top()))->
                 chooseRepresentation(repType, repParam, pixelStack.top());
@@ -510,7 +500,7 @@ OFBool DcmDataset::hasRepresentation(const E_TransferSyntax repType,
     OFBool result = OFTrue;
     DcmStack resultStack;
 
-    while(search(DCM_PixelData, resultStack, ESM_afterStackTop, OFTrue).good() && result)
+    while (search(DCM_PixelData, resultStack, ESM_afterStackTop, OFTrue).good() && result)
     {
         if (resultStack.top()->ident() == EVR_PixelData)
         {
@@ -528,7 +518,7 @@ void DcmDataset::removeAllButCurrentRepresentations()
 {
     DcmStack resultStack;
 
-    while(search(DCM_PixelData, resultStack, ESM_afterStackTop, OFTrue).good())
+    while (search(DCM_PixelData, resultStack, ESM_afterStackTop, OFTrue).good())
     {
         if (resultStack.top()->ident() == EVR_PixelData)
         {
@@ -543,7 +533,7 @@ void DcmDataset::removeAllButOriginalRepresentations()
 {
     DcmStack resultStack;
 
-    while(search(DCM_PixelData, resultStack, ESM_afterStackTop, OFTrue).good())
+    while (search(DCM_PixelData, resultStack, ESM_afterStackTop, OFTrue).good())
     {
         if (resultStack.top()->ident() == EVR_PixelData)
         {
@@ -552,161 +542,3 @@ void DcmDataset::removeAllButOriginalRepresentations()
         }
     }
 }
-
-
-/*
-** CVS/RCS Log:
-** Log: dcdatset.cxx,v 
-** Revision 1.2  2004/05/28 17:59:55  peter_vanroose
-** typo corrected
-**
-** Revision 1.1  2004/01/14 04:01:10  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.32  2002/12/09 09:30:49  wilkens
-** Modified/Added doc++ documentation.
-**
-** Revision 1.31  2002/12/06 13:09:26  joergr
-** Enhanced "print()" function by re-working the implementation and replacing
-** the boolean "showFullData" parameter by a more general integer flag.
-** Made source code formatting more consistent with other modules/files.
-**
-** Revision 1.30  2002/11/27 12:06:43  meichel
-** Adapted module dcmdata to use of new header file ofstdinc.h
-**
-** Revision 1.29  2002/08/27 16:55:44  meichel
-** Initial release of new DICOM I/O stream classes that add support for stream
-**   compression (deflated little endian explicit VR transfer syntax)
-**
-** Revision 1.28  2002/07/10 11:47:45  meichel
-** Added workaround for memory leak in handling of compressed representations
-**   Conditional compilation with PIXELSTACK_MEMORY_LEAK_WORKAROUND #defined.
-**
-** Revision 1.27  2002/05/14 08:20:53  joergr
-** Renamed some element names.
-**
-** Revision 1.26  2002/04/25 10:14:12  joergr
-** Added support for XML output of DICOM objects.
-**
-** Revision 1.25  2002/04/16 13:43:15  joergr
-** Added configurable support for C++ ANSI standard includes (e.g. streams).
-** Thanks to Andreas Barth <Andreas.Barth@bruker-biospin.de> for his
-** contribution.
-**
-** Revision 1.24  2002/04/11 12:27:11  joergr
-** Added new methods for loading and saving DICOM files.
-**
-** Revision 1.23  2001/11/01 14:55:35  wilkens
-** Added lots of comments.
-**
-** Revision 1.22  2001/09/26 15:49:29  meichel
-** Modified debug messages, required by OFCondition
-**
-** Revision 1.21  2001/09/25 17:19:47  meichel
-** Adapted dcmdata to class OFCondition
-**
-** Revision 1.20  2001/06/01 15:48:59  meichel
-** Updated copyright header
-**
-** Revision 1.19  2001/05/03 08:15:21  meichel
-** Fixed bug in dcmdata sequence handling code that could lead to application
-**   failure in rare cases during parsing of a correct DICOM dataset.
-**
-** Revision 1.18  2000/11/07 16:56:18  meichel
-** Initial release of dcmsign module for DICOM Digital Signatures
-**
-** Revision 1.17  2000/04/14 16:07:26  meichel
-** Dcmdata library code now consistently uses ofConsole for error output.
-**
-** Revision 1.16  2000/03/08 16:26:30  meichel
-** Updated copyright header.
-**
-** Revision 1.15  2000/02/10 10:52:16  joergr
-** Added new feature to dcmdump (enhanced print method of dcmdata): write
-** pixel data/item value fields to raw files.
-**
-** Revision 1.14  1999/03/31 09:25:19  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.13  1998/07/15 15:51:47  joergr
-** Removed several compiler warnings reported by gcc 2.8.1 with
-** additional options, e.g. missing copy constructors and assignment
-** operators, initialization of member variables in the body of a
-** constructor instead of the member initialization list, hiding of
-** methods by use of identical names, uninitialized member variables,
-** missing const declaration of char pointers. Replaced tabs by spaces.
-**
-** Revision 1.12  1997/07/21 08:16:43  andreas
-** - New environment for encapsulated pixel representations. DcmPixelData
-**   can contain different representations and uses codecs to convert
-**   between them. Codecs are derived from the DcmCodec class. New error
-**   codes are introduced for handling of representations. New internal
-**   value representation (only for ident()) for PixelData
-** - new copy constructor for DcmStack
-** - Replace all boolean types (BOOLEAN, CTNBOOLEAN, DICOM_BOOL, BOOL)
-**   with one unique boolean type OFBool.
-**
-** Revision 1.11  1997/07/03 15:09:53  andreas
-** - removed debugging functions Bdebug() and Edebug() since
-**   they write a static array and are not very useful at all.
-**   Cdebug and Vdebug are merged since they have the same semantics.
-**   The debugging functions in dcmdata changed their interfaces
-**   (see dcmdata/include/dcdebug.h)
-**
-** Revision 1.10  1997/06/06 09:55:28  andreas
-** - corrected error: canWriteXfer returns false if the old transfer syntax
-**   was unknown, which causes several applications to prohibit the writing
-**   of dataset.
-**
-** Revision 1.9  1997/05/27 13:48:57  andreas
-** - Add method canWriteXfer to class DcmObject and all derived classes.
-**   This method checks whether it is possible to convert the original
-**   transfer syntax to an new transfer syntax. The check is used in the
-**   dcmconv utility to prohibit the change of a compressed transfer
-**   syntax to a uncompressed.
-**
-** Revision 1.8  1997/05/16 08:23:52  andreas
-** - Revised handling of GroupLength elements and support of
-**   DataSetTrailingPadding elements. The enumeratio E_GrpLenEncoding
-**   got additional enumeration values (for a description see dctypes.h).
-**   addGroupLength and removeGroupLength methods are replaced by
-**   computeGroupLengthAndPadding. To support Padding, the parameters of
-**   element and sequence write functions changed.
-** - Added a new method calcElementLength to calculate the length of an
-**   element, item or sequence. For elements it returns the length of
-**   tag, length field, vr field, and value length, for item and
-**   sequences it returns the length of the whole item. sequence including
-**   the Delimitation tag (if appropriate).  It can never return
-**   UndefinedLength.
-**
-** Revision 1.7  1996/08/05 08:46:08  andreas
-** new print routine with additional parameters:
-**         - print into files
-**         - fix output length for elements
-** corrected error in search routine with parameter ESM_fromStackTop
-**
-** Revision 1.6  1996/04/25 17:08:04  hewett
-** Removed out-of-date comment about RESOLVE_AMBIGOUS_VR_OF_PIXELDATA.
-**
-** Revision 1.5  1996/03/13 14:44:23  hewett
-** The DcmDataset::resolveAmbiguous() method was setting the VR of
-** PixelData to OW if a non-encapsulated transfer syntax was in use.
-** This should only be done if the transfer syntax is implicit.  Any
-** explicit transfer syntax will carry the VR with the data.
-** Solution: Delete the code in DcmDataset::resolveAmbiguous().
-** The VR of PixelData is being correctly set in
-** cmItem::readSubElement(...) according to Correction Proposal 14.
-**
-** Revision 1.4  1996/01/09 11:06:43  andreas
-** New Support for Visual C++
-** Correct problems with inconsistent const declarations
-** Correct error in reading Item Delimitation Elements
-**
-** Revision 1.3  1996/01/05 13:27:33  andreas
-** - changed to support new streaming facilities
-** - unique read/write methods for file and block transfer
-** - more cleanups
-**
-*/
-

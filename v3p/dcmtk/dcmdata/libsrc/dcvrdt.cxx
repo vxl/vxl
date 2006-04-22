@@ -21,14 +21,6 @@
  *
  *  Purpose: Implementation of class DcmDateTime
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:10 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcvrdt.cxx,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #include "osconfig.h"    /* make sure OS specific configuration is included first */
@@ -231,13 +223,13 @@ OFCondition DcmDateTime::getOFDateTimeFromString(const OFString &dicomDateTime,
             timeZone = OFTime::getLocalTimeZone();
         }
         /* extract remaining components from date/time string: YYYYMMDDHHMM[SS[.FFFFFF]] */
-       	/* scan seconds using OFStandard::atof to avoid locale issues */
+        /* scan seconds using OFStandard::atof to avoid locale issues */
         if (sscanf(string.c_str(), "%04u%02u%02u%02u%02u", &year, &month, &day, &hour, &minute) >= 3)
         {
             if (string.length() > 12)
             {
-            	string.erase(0, 12);
-            	second = OFStandard::atof(string.c_str());
+                string.erase(0, 12);
+                second = OFStandard::atof(string.c_str());
             }
             if (dateTimeValue.setDateTime(year, month, day, hour, minute, second, timeZone))
                 l_error = EC_Normal;
@@ -296,106 +288,3 @@ OFCondition DcmDateTime::getISOFormattedDateTimeFromString(const OFString &dicom
         formattedDateTime.clear();
     return l_error;
 }
-
-
-/*
-** CVS/RCS Log:
-** Log: dcvrdt.cxx,v 
-** Revision 1.1  2004/01/14 04:01:10  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.23  2002/12/06 13:20:50  joergr
-** Enhanced "print()" function by re-working the implementation and replacing
-** the boolean "showFullData" parameter by a more general integer flag.
-** Made source code formatting more consistent with other modules/files.
-**
-** Revision 1.22  2002/11/27 12:06:56  meichel
-** Adapted module dcmdata to use of new header file ofstdinc.h
-**
-** Revision 1.21  2002/08/27 16:55:59  meichel
-** Initial release of new DICOM I/O stream classes that add support for stream
-**   compression (deflated little endian explicit VR transfer syntax)
-**
-** Revision 1.20  2002/06/20 12:06:17  meichel
-** Changed toolkit to use OFStandard::atof instead of atof, strtod or
-**   sscanf for all string to double conversions that are supposed to
-**   be locale independent
-**
-** Revision 1.19  2002/04/25 10:29:13  joergr
-** Removed getOFStringArray() implementation.
-**
-** Revision 1.18  2002/04/11 12:31:34  joergr
-** Enhanced DICOM date, time and date/time classes. Added support for new
-** standard date and time functions.
-**
-** Revision 1.17  2001/12/19 09:59:31  meichel
-** Added prototype declaration for gettimeofday() for systems like Ultrix
-**   where the function is known but no prototype present in the system headers.
-**
-** Revision 1.16  2001/12/18 10:42:24  meichel
-** Added typecasts to avoid warning on gcc 2.95.3 on OSF/1 (Alpha)
-**
-** Revision 1.15  2001/11/01 16:16:00  meichel
-** Including <sys/time.h> if present, needed on Linux.
-**
-** Revision 1.14  2001/10/10 15:21:33  joergr
-** Added new flag to date/time routines allowing to choose whether the old
-** prior V3.0 format for the corresponding DICOM VRs is supported or not.
-**
-** Revision 1.13  2001/10/04 10:16:58  joergr
-** Adapted new time/date routines to Windows systems.
-**
-** Revision 1.12  2001/10/01 15:04:44  joergr
-** Introduced new general purpose functions to get/set person names, date, time
-** and date/time.
-**
-** Revision 1.11  2001/09/25 17:19:56  meichel
-** Adapted dcmdata to class OFCondition
-**
-** Revision 1.10  2001/06/01 15:49:16  meichel
-** Updated copyright header
-**
-** Revision 1.9  2000/03/08 16:26:46  meichel
-** Updated copyright header.
-**
-** Revision 1.8  1999/03/31 09:25:50  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.7  1998/11/12 16:48:24  meichel
-** Implemented operator= for all classes derived from DcmObject.
-**
-** Revision 1.6  1997/08/29 13:11:45  andreas
-** Corrected Bug in getOFStringArray Implementation
-**
-** Revision 1.5  1997/08/29 08:32:57  andreas
-** - Added methods getOFString and getOFStringArray for all
-**   string VRs. These methods are able to normalise the value, i. e.
-**   to remove leading and trailing spaces. This will be done only if
-**   it is described in the standard that these spaces are not relevant.
-**   These methods do not test the strings for conformance, this means
-**   especially that they do not delete spaces where they are not allowed!
-**   getOFStringArray returns the string with all its parts separated by \
-**   and getOFString returns only one value of the string.
-**   CAUTION: Currently getString returns a string with trailing
-**   spaces removed (if dcmEnableAutomaticInputDataCorrection == OFTrue) and
-**   truncates the original string (since it is not copied!). If you rely on this
-**   behaviour please change your application now.
-**   Future changes will ensure that getString returns the original
-**   string from the DICOM object (NULL terminated) inclusive padding.
-**   Currently, if you call getOF... before calling getString without
-**   normalisation, you can get the original string read from the DICOM object.
-**
-** Revision 1.4  1997/07/03 15:10:11  andreas
-** - removed debugging functions Bdebug() and Edebug() since
-**   they write a static array and are not very useful at all.
-**   Cdebug and Vdebug are merged since they have the same semantics.
-**   The debugging functions in dcmdata changed their interfaces
-**   (see dcmdata/include/dcdebug.h)
-**
-** Revision 1.3  1996/01/05 13:27:48  andreas
-** - changed to support new streaming facilities
-** - unique read/write methods for file and block transfer
-** - more cleanups
-**
-*/

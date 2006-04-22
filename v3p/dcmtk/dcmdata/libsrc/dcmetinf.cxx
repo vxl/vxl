@@ -21,14 +21,6 @@
  *
  *  Purpose: Implementation of class DcmMetaInfo
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:10 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcmetinf.cxx,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -392,7 +384,6 @@ OFCondition DcmMetaInfo::read(DcmInputStream &inStream,
                     fTransferredBytes = inStream.tell() - fStartPosition;
                     if (errorFlag.bad())
                         break;                      // terminate while loop
-
                 } //while
             }
             if (errorFlag == EC_TagNotFound || errorFlag == EC_EndOfStream)
@@ -520,152 +511,3 @@ OFCondition DcmMetaInfo::write(DcmOutputStream &outStream,
     /* return result value */
     return errorFlag;
 }
-
-
-/*
-** CVS/RCS Log:
-** Log: dcmetinf.cxx,v 
-** Revision 1.1  2004/01/14 04:01:10  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.31  2002/12/06 12:59:39  joergr
-** Enhanced "print()" function by re-working the implementation and replacing
-** the boolean "showFullData" parameter by a more general integer flag.
-** Made source code formatting more consistent with other modules/files.
-** Replaced some German comments by English translations.
-**
-** Revision 1.30  2002/11/27 12:06:49  meichel
-** Adapted module dcmdata to use of new header file ofstdinc.h
-**
-** Revision 1.29  2002/08/27 16:55:51  meichel
-** Initial release of new DICOM I/O stream classes that add support for stream
-**   compression (deflated little endian explicit VR transfer syntax)
-**
-** Revision 1.28  2002/04/25 10:17:19  joergr
-** Added support for XML output of DICOM objects.
-**
-** Revision 1.27  2002/04/16 13:43:18  joergr
-** Added configurable support for C++ ANSI standard includes (e.g. streams).
-** Thanks to Andreas Barth <Andreas.Barth@bruker-biospin.de> for his
-** contribution.
-**
-** Revision 1.26  2001/11/01 14:55:40  wilkens
-** Added lots of comments.
-**
-** Revision 1.25  2001/09/26 15:49:30  meichel
-** Modified debug messages, required by OFCondition
-**
-** Revision 1.24  2001/09/25 17:19:51  meichel
-** Adapted dcmdata to class OFCondition
-**
-** Revision 1.23  2001/06/01 15:49:06  meichel
-** Updated copyright header
-**
-** Revision 1.22  2001/05/10 12:46:52  meichel
-** Fixed minor bug in DcmMetaInfo::transferEnd()
-**
-** Revision 1.21  2001/05/03 08:15:22  meichel
-** Fixed bug in dcmdata sequence handling code that could lead to application
-**   failure in rare cases during parsing of a correct DICOM dataset.
-**
-** Revision 1.20  2000/04/14 15:55:06  meichel
-** Dcmdata library code now consistently uses ofConsole for error output.
-**
-** Revision 1.19  2000/03/08 16:26:38  meichel
-** Updated copyright header.
-**
-** Revision 1.18  2000/03/03 14:05:35  meichel
-** Implemented library support for redirecting error messages into memory
-**   instead of printing them to stdout/stderr for GUI applications.
-**
-** Revision 1.17  2000/02/23 15:11:56  meichel
-** Corrected macro for Borland C++ Builder 4 workaround.
-**
-** Revision 1.16  2000/02/10 10:52:20  joergr
-** Added new feature to dcmdump (enhanced print method of dcmdata): write
-** pixel data/item value fields to raw files.
-**
-** Revision 1.15  2000/02/01 10:12:08  meichel
-** Avoiding to include <stdlib.h> as extern "C" on Borland C++ Builder 4,
-**   workaround for bug in compiler header files.
-**
-** Revision 1.14  1999/03/31 09:25:33  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.13  1998/07/15 15:52:02  joergr
-** Removed several compiler warnings reported by gcc 2.8.1 with
-** additional options, e.g. missing copy constructors and assignment
-** operators, initialization of member variables in the body of a
-** constructor instead of the member initialization list, hiding of
-** methods by use of identical names, uninitialized member variables,
-** missing const declaration of char pointers. Replaced tabs by spaces.
-**
-** Revision 1.12  1997/07/21 08:25:28  andreas
-** - Replace all boolean types (BOOLEAN, CTNBOOLEAN, DICOM_BOOL, BOOL)
-**   with one unique boolean type OFBool.
-**
-** Revision 1.11  1997/07/03 15:10:00  andreas
-** - removed debugging functions Bdebug() and Edebug() since
-**   they write a static array and are not very useful at all.
-**   Cdebug and Vdebug are merged since they have the same semantics.
-**   The debugging functions in dcmdata changed their interfaces
-**   (see dcmdata/include/dcdebug.h)
-**
-** Revision 1.10  1997/05/16 08:23:54  andreas
-** - Revised handling of GroupLength elements and support of
-**   DataSetTrailingPadding elements. The enumeratio E_GrpLenEncoding
-**   got additional enumeration values (for a description see dctypes.h).
-**   addGroupLength and removeGroupLength methods are replaced by
-**   computeGroupLengthAndPadding. To support Padding, the parameters of
-**   element and sequence write functions changed.
-** - Added a new method calcElementLength to calculate the length of an
-**   element, item or sequence. For elements it returns the length of
-**   tag, length field, vr field, and value length, for item and
-**   sequences it returns the length of the whole item. sequence including
-**   the Delimitation tag (if appropriate).  It can never return
-**   UndefinedLength.
-**
-** Revision 1.9  1997/04/18 08:17:18  andreas
-** - The put/get-methods for all VRs did not conform to the C++-Standard
-**   draft. Some Compilers (e.g. SUN-C++ Compiler, Metroworks
-**   CodeWarrier, etc.) create many warnings concerning the hiding of
-**   overloaded get methods in all derived classes of DcmElement.
-**   So the interface of all value representation classes in the
-**   library are changed rapidly, e.g.
-**   OFCondition get(Uint16 & value, const unsigned long pos);
-**   becomes
-**   OFCondition getUint16(Uint16 & value, const unsigned long pos);
-**   All (retired) "returntype get(...)" methods are deleted.
-**   For more information see dcmdata/include/dcelem.h
-**
-** Revision 1.8  1996/08/05 08:46:13  andreas
-** new print routine with additional parameters:
-**         - print into files
-**         - fix output length for elements
-** corrected error in search routine with parameter ESM_fromStackTop
-**
-** Revision 1.7  1996/07/31 13:14:31  andreas
-** - Minor corrections: error code for swapping to or from byteorder unknown
-**                      correct read of dataset in fileformat
-**
-** Revision 1.6  1996/04/27 14:04:56  hewett
-** Eliminated compiler warnings when compiling without -DDEBUG.  Very
-** minor corrections, mostly unused parameters and uninitialized variables.
-**
-** Revision 1.5  1996/01/29 13:38:27  andreas
-** - new put method for every VR to put value as a string
-** - better and unique print methods
-**
-** Revision 1.4  1996/01/09 11:06:47  andreas
-** New Support for Visual C++
-** Correct problems with inconsistent const declarations
-** Correct error in reading Item Delimitation Elements
-**
-** Revision 1.3  1996/01/05 13:27:39  andreas
-** - changed to support new streaming facilities
-** - unique read/write methods for file and block transfer
-** - more cleanups
-**
-*/
-

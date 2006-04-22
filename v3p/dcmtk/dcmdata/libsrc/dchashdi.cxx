@@ -21,14 +21,6 @@
  *
  *  Purpose: Hash table interface for DICOM data dictionary
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:10 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dchashdi.cxx,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #include "osconfig.h"    /* make sure OS specific configuration is included first */
@@ -66,7 +58,9 @@ DcmDictEntryList::insertAndReplace(DcmDictEntry* e)
 {
     if (empty()) {
         push_front(e);
-    } else {
+    }
+    else
+    {
         DcmDictEntryListIterator iter(begin());
         DcmDictEntryListIterator last(end());
         Uint32 eHash = e->hash();
@@ -78,24 +72,24 @@ DcmDictEntryList::insertAndReplace(DcmDictEntry* e)
             {
                 if (e->privateCreatorMatch(**iter))
                 {
-                    // entry is already there so replace it 
+                    // entry is already there so replace it
                     DcmDictEntry* oldEntry = *iter;
                     *iter = e;
                     return oldEntry;
                 }
-                else 
+                else
                 {
                     // insert before listEntry
                     insert(iter, e);
                     return NULL;
                 }
-            } 
+            }
             else if (eHash < iterHash)
             {
                 // insert before listEntry
                 insert(iter, e);
                 return NULL;
-            }           
+            }
         }
         // add to end
         push_back(e);
@@ -117,7 +111,7 @@ DcmDictEntry *DcmDictEntryList::find(const DcmTagKey& k, const char *privCreator
             {
                 return *iter;
             } else if (iterHash > kHash) {
-                return NULL; // not there 
+                return NULL; // not there
             }
         }
     }
@@ -188,7 +182,7 @@ DcmHashDictIterator::stepUp()
 ** DcmHashDict
 */
 
-void 
+void
 DcmHashDict::_init(int hashTabLen)
 {
     hashTab = new DcmDictEntryList*[hashTabLen];
@@ -218,14 +212,14 @@ DcmHashDict::clear()
     }
     lowestBucket = hashTabLength-1;
     highestBucket = 0;
-    entryCount = 0;    
+    entryCount = 0;
 }
 
 int
 DcmHashDict::hash(const DcmTagKey* k) const
 {
     /*
-    ** Use a hash function based upon the relative number of 
+    ** Use a hash function based upon the relative number of
     ** data dictionary entries in each group by splitting
     ** the hash table into proportional sections .
     */
@@ -234,7 +228,8 @@ DcmHashDict::hash(const DcmTagKey* k) const
     int lower = 0; /* default */
     int upper = hashTabLength-1; /* default */
 
-    switch (k->getGroup()) {
+    switch (k->getGroup())
+    {
         /* the code in this switch statement was generated automatically */
     case 0x0: /* %usage: 3.47 */
         lower = int(0 * hashTabLength);
@@ -406,7 +401,7 @@ DcmHashDict::hash(const DcmTagKey* k) const
     return h;
 }
 
-DcmDictEntry*  
+DcmDictEntry*
 DcmHashDict::insertInList(DcmDictEntryList& list, DcmDictEntry* e)
 {
     return list.insertAndReplace(e);
@@ -428,7 +423,7 @@ DcmHashDict::put(DcmDictEntry* e)
     DcmDictEntry* old = insertInList(*bucket, e);
     if (old != NULL) {
         /* an old entry has been replaced */
-#ifdef PRINT_REPLACED_DICTIONARY_ENTRIES 
+#ifdef PRINT_REPLACED_DICTIONARY_ENTRIES
         ofConsole.lockCerr() << "replacing " << *old << endl;
         ofConsole.unlockCerr();
 #endif
@@ -446,7 +441,7 @@ DcmDictEntry *DcmHashDict::findInList(DcmDictEntryList& list, const DcmTagKey& k
     return list.find(k, privCreator);
 }
 
-const DcmDictEntry* 
+const DcmDictEntry*
 DcmHashDict::get(const DcmTagKey& k, const char *privCreator) const
 {
     const DcmDictEntry* entry = NULL;
@@ -477,7 +472,7 @@ DcmHashDict::removeInList(DcmDictEntryList& list, const DcmTagKey& k, const char
 }
 
 void
-DcmHashDict::del(const DcmTagKey& k, const char *privCreator) 
+DcmHashDict::del(const DcmTagKey& k, const char *privCreator)
 {
     Uint32 idx = hash(&k);
 
@@ -488,10 +483,10 @@ DcmHashDict::del(const DcmTagKey& k, const char *privCreator)
     }
 }
 
-ostream& 
+ostream&
 DcmHashDict::loadSummary(ostream& out)
 {
-    out << "DcmHashDict: size=" << hashTabLength << 
+    out << "DcmHashDict: size=" << hashTabLength <<
         ", total entries=" << size() << endl;
     DcmDictEntryList* bucket = NULL;
     int largestBucket = 0;
@@ -532,72 +527,3 @@ DcmHashDict::loadSummary(ostream& out)
 
     return out;
 }
-
-/*
-** CVS/RCS Log:
-** Log: dchashdi.cxx,v 
-** Revision 1.1  2004/01/14 04:01:10  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.16  2002/11/27 12:06:47  meichel
-** Adapted module dcmdata to use of new header file ofstdinc.h
-**
-** Revision 1.15  2002/07/23 14:21:33  meichel
-** Added support for private tag data dictionaries to dcmdata
-**
-** Revision 1.14  2001/06/01 15:49:04  meichel
-** Updated copyright header
-**
-** Revision 1.13  2000/10/12 10:26:52  meichel
-** Updated data dictionary for 2000 edition of the DICOM standard
-**
-** Revision 1.12  2000/05/03 14:19:09  meichel
-** Added new class GlobalDcmDataDictionary which implements read/write lock
-**   semantics for safe access to the DICOM dictionary from multiple threads
-**   in parallel. The global dcmDataDict now uses this class.
-**
-** Revision 1.11  2000/04/14 16:16:22  meichel
-** Dcmdata library code now consistently uses ofConsole for error output.
-**
-** Revision 1.10  2000/03/08 16:26:36  meichel
-** Updated copyright header.
-**
-** Revision 1.9  2000/03/03 14:05:33  meichel
-** Implemented library support for redirecting error messages into memory
-**   instead of printing them to stdout/stderr for GUI applications.
-**
-** Revision 1.8  2000/02/02 14:32:51  joergr
-** Replaced 'delete' statements by 'delete[]' for objects created with 'new[]'.
-**
-** Revision 1.7  1999/03/31 09:25:29  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.6  1999/03/22 09:58:32  meichel
-** Fixed bug in data dictionary causing a segmentation fault
-**   if dictionary was cleared and a smaller version reloaded.
-**
-** Revision 1.5  1998/07/28 15:52:37  meichel
-** Introduced new compilation flag PRINT_REPLACED_DICTIONARY_ENTRIES
-**   which causes the dictionary to display all duplicate entries.
-**
-** Revision 1.4  1998/07/15 15:51:57  joergr
-** Removed several compiler warnings reported by gcc 2.8.1 with
-** additional options, e.g. missing copy constructors and assignment
-** operators, initialization of member variables in the body of a
-** constructor instead of the member initialization list, hiding of
-** methods by use of identical names, uninitialized member variables,
-** missing const declaration of char pointers. Replaced tabs by spaces.
-**
-** Revision 1.3  1998/06/29 12:17:57  meichel
-** Removed some name clashes (e.g. local variable with same
-**   name as class member) to improve maintainability.
-**   Applied some code purifications proposed by the gcc 2.8.1 -Weffc++ option.
-**
-** Revision 1.2  1997/09/18 08:10:54  meichel
-** Many minor type conflicts (e.g. long passed as int) solved.
-**
-** Revision 1.1  1997/08/26 13:35:02  hewett
-** Initial Version - Implementation of hash table for data dictionary.
-**
-*/

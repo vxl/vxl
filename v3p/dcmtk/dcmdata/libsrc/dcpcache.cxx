@@ -22,14 +22,6 @@
  *  Purpose: general purpose 32-bit CRC in C++
  *           Code is based on the CRC32 implementation (C)1986 Gary S. Brown
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:10 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcpcache.cxx,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -80,10 +72,10 @@ void DcmPrivateTagCache::clear()
   OFListIterator(DcmPrivateTagCacheEntry *) first = begin();
   OFListIterator(DcmPrivateTagCacheEntry *) last = end();
   while (first != last)
-  {     
+  {
     delete (*first);
     first = erase(first);
-  }  
+  }
 }
 
 
@@ -92,10 +84,10 @@ const char *DcmPrivateTagCache::findPrivateCreator(const DcmTagKey& tk) const
   OFListIterator(DcmPrivateTagCacheEntry *) first = begin();
   OFListIterator(DcmPrivateTagCacheEntry *) last = end();
   while (first != last)
-  {     
+  {
     if ((*first)->isPrivateCreatorFor(tk)) return (*first)->getPrivateCreator();
     ++first;
-  }  
+  }
   return NULL;
 }
 
@@ -112,21 +104,7 @@ void DcmPrivateTagCache::updateCache(DcmObject *dobj)
       if ((((DcmElement *)dobj)->getString(c)).good() && c)
       {
         push_back(new DcmPrivateTagCacheEntry(tag, c));
-      }      
+      }
     }
   }
 }
-
-
-/*
- * CVS/RCS Log:
- * Log: dcpcache.cxx,v 
- * Revision 1.1  2004/01/14 04:01:10  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.1  2002/07/23 14:21:34  meichel
- * Added support for private tag data dictionaries to dcmdata
- *
- *
- */

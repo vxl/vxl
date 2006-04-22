@@ -21,14 +21,6 @@
  *
  *  Purpose: Implementation of class DcmAgeString
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:10 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcvras.cxx,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -71,43 +63,3 @@ DcmEVR DcmAgeString::ident() const
 {
     return EVR_AS;
 }
-
-
-/*
-** CVS/RCS Log:
-** Log: dcvras.cxx,v 
-** Revision 1.1  2004/01/14 04:01:10  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.9  2002/12/06 13:20:48  joergr
-** Enhanced "print()" function by re-working the implementation and replacing
-** the boolean "showFullData" parameter by a more general integer flag.
-** Made source code formatting more consistent with other modules/files.
-**
-** Revision 1.8  2001/06/01 15:49:14  meichel
-** Updated copyright header
-**
-** Revision 1.7  2000/03/08 16:26:45  meichel
-** Updated copyright header.
-**
-** Revision 1.6  1999/03/31 09:25:46  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.5  1998/11/12 16:48:22  meichel
-** Implemented operator= for all classes derived from DcmObject.
-**
-** Revision 1.4  1997/07/03 15:10:08  andreas
-** - removed debugging functions Bdebug() and Edebug() since
-**   they write a static array and are not very useful at all.
-**   Cdebug and Vdebug are merged since they have the same semantics.
-**   The debugging functions in dcmdata changed their interfaces
-**   (see dcmdata/include/dcdebug.h)
-**
-** Revision 1.3  1996/01/05 13:27:45  andreas
-** - changed to support new streaming facilities
-** - unique read/write methods for file and block transfer
-** - more cleanups
-**
-*/
-

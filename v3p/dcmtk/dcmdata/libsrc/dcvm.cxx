@@ -21,14 +21,6 @@
  *
  *  Purpose: functions to derive VM from string
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:10 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcvm.cxx,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #include "osconfig.h"
@@ -42,11 +34,11 @@ unsigned long getVMFromString(const char * val)
 {
     unsigned long vm = 1;
     if (val == NULL)
-	vm = 0; 
+        vm = 0;
     else
     {
-	for(const char * s = strchr(val, '\\'); s; s = strchr(++s, '\\'))
-	    vm++;
+        for (const char * s = strchr(val, '\\'); s; s = strchr(++s, '\\'))
+            vm++;
     }
     return vm;
 }
@@ -57,58 +49,25 @@ char * getFirstValueFromString(const char * & s)
 {
     if (s)
     {
-	const char * p = strchr(s, '\\');
-	const char * backup = s;
-	size_t len = 0;
-	if (p)
-	{
-	    len = p-s;
-	    s += (len+1);
-	}
-	else
-	{
-	    len = strlen(s);
-	    s = NULL;
-	}
+        const char * p = strchr(s, '\\');
+        const char * backup = s;
+        size_t len = 0;
+        if (p)
+        {
+            len = p-s;
+            s += (len+1);
+        }
+        else
+        {
+            len = strlen(s);
+            s = NULL;
+        }
 
-	char * result = new char[len+1];
-	strncpy(result, backup, len);
-	result[len] = '\0';
-	return result;
+        char * result = new char[len+1];
+        strncpy(result, backup, len);
+        result[len] = '\0';
+        return result;
     }
     else
-	return NULL;
+        return NULL;
 }
-
-
-/*
-** CVS/RCS Log:
-** Log: dcvm.cxx,v 
-** Revision 1.1  2004/01/14 04:01:10  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.7  2002/11/27 12:06:54  meichel
-** Adapted module dcmdata to use of new header file ofstdinc.h
-**
-** Revision 1.6  2001/06/01 15:49:13  meichel
-** Updated copyright header
-**
-** Revision 1.5  2000/03/08 16:26:44  meichel
-** Updated copyright header.
-**
-** Revision 1.4  1999/03/31 09:25:44  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.3  1996/04/29 13:35:27  savonge
-** -checking NULL string in getVMFromString
-**
-** Revision 1.2  1996/03/26 09:59:33  meichel
-** corrected bug (deletion of const char *) which prevented compilation on NeXT
-**
-** Revision 1.1  1996/01/29 13:38:30  andreas
-** - new put method for every VR to put value as a string
-** - better and unique print methods
-**
-*/
-

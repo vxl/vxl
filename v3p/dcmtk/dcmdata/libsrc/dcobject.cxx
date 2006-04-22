@@ -23,14 +23,6 @@
  *    This file contains the interface to routines which provide
  *    DICOM object encoding/decoding, search and lookup facilities.
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:10 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcobject.cxx,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -460,80 +452,3 @@ OFBool DcmObject::containsUnknownVR() const
 {
     return Tag.isUnknownVR();
 }
-
-
-/*
- * CVS/RCS Log:
- * Log: dcobject.cxx,v 
- * Revision 1.1  2004/01/14 04:01:10  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.39  2002/12/06 13:15:12  joergr
- * Enhanced "print()" function by re-working the implementation and replacing
- * the boolean "showFullData" parameter by a more general integer flag.
- * Made source code formatting more consistent with other modules/files.
- *
- * Revision 1.38  2002/11/27 12:06:49  meichel
- * Adapted module dcmdata to use of new header file ofstdinc.h
- *
- * Revision 1.37  2002/08/27 16:55:52  meichel
- * Initial release of new DICOM I/O stream classes that add support for stream
- *   compression (deflated little endian explicit VR transfer syntax)
- *
- * Revision 1.36  2002/08/20 12:18:48  meichel
- * Changed parameter list of loadFile and saveFile methods in class
- *   DcmFileFormat. Removed loadFile and saveFile from class DcmObject.
- *
- * Revision 1.35  2002/07/08 14:44:40  meichel
- * Improved dcmdata behaviour when reading odd tag length. Depending on the
- *   global boolean flag dcmAcceptOddAttributeLength, the parser now either accepts
- *   odd length attributes or implements the old behaviour, i.e. assumes a real
- *   length larger by one.
- *
- * Revision 1.34  2002/04/25 10:17:19  joergr
- * Added support for XML output of DICOM objects.
- *
- * Revision 1.33  2002/04/16 13:43:19  joergr
- * Added configurable support for C++ ANSI standard includes (e.g. streams).
- * Thanks to Andreas Barth <Andreas.Barth@bruker-biospin.de> for his
- * contribution.
- *
- * Revision 1.32  2002/04/11 12:27:10  joergr
- * Added new methods for loading and saving DICOM files.
- *
- * Revision 1.31  2001/11/16 15:55:03  meichel
- * Adapted digital signature code to final text of supplement 41.
- *
- * Revision 1.30  2001/11/01 14:55:41  wilkens
- * Added lots of comments.
- *
- * Revision 1.29  2001/09/25 17:19:52  meichel
- * Adapted dcmdata to class OFCondition
- *
- * Revision 1.28  2001/06/01 15:49:06  meichel
- * Updated copyright header
- *
- * Revision 1.27  2000/04/14 16:10:09  meichel
- * Global flag dcmEnableAutomaticInputDataCorrection now derived from OFGlobal
- *   and, thus, safe for use in multi-thread applications.
- *
- * Revision 1.26  2000/03/08 16:26:38  meichel
- * Updated copyright header.
- *
- * Revision 1.25  2000/03/07 15:41:00  joergr
- * Added explicit type casts to make Sun CC 2.0.1 happy.
- *
- * Revision 1.24  2000/02/10 10:52:20  joergr
- * Added new feature to dcmdump (enhanced print method of dcmdata): write
- * pixel data/item value fields to raw files.
- *
- * Revision 1.23  2000/02/01 10:12:09  meichel
- * Avoiding to include <stdlib.h> as extern "C" on Borland C++ Builder 4,
- *   workaround for bug in compiler header files.
- *
- * Revision 1.22  1999/03/31 09:25:34  meichel
- * Updated copyright header in module dcmdata
- *
- *
- */

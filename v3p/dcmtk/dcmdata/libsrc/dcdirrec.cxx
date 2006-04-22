@@ -21,14 +21,6 @@
  *
  *  Purpose: Implementation of class DcmDirectoryRecord
  *
- *  Last Update:      Author: peter_vanroose 
- *  Update Date:      Date: 2004/05/28 17:59:55 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dcdirrec.cxx,v 
- *  CVS/RCS Revision: Revision: 1.2 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -524,19 +516,19 @@ E_DirRecType DcmDirectoryRecord::lookForRecordType()
     {
       DcmStack stack;
       if (search(DCM_DirectoryRecordType, stack, ESM_fromHere, OFFalse).good())
+      {
+        if (stack.top()->ident() == EVR_CS)
         {
-          if (stack.top()->ident() == EVR_CS)
-            {
-              char *recName = NULL;
-              DcmCodeString *recType = (DcmCodeString*)stack.top();
-              recType->verify(OFTrue);            // erzwinge dealigning
-              recType->getString(recName);
-              localType = recordNameToType(recName);
+          char *recName = NULL;
+          DcmCodeString *recType = (DcmCodeString*)stack.top();
+          recType->verify(OFTrue);            // erzwinge dealigning
+          recType->getString(recName);
+          localType = recordNameToType(recName);
 
-              debug(4, ("DcmDirectoryRecord::lookForRecordType() RecordType-Element(0x%4.4hx,0x%4.4hx) Type=[%s]",
-                recType->getGTag(), recType->getETag(), DRTypeNames[DirRecordType]));
-            }
+          debug(4, ("DcmDirectoryRecord::lookForRecordType() RecordType-Element(0x%4.4hx,0x%4.4hx) Type=[%s]",
+            recType->getGTag(), recType->getETag(), DRTypeNames[DirRecordType]));
         }
+      }
     }
     return localType;
 }
@@ -801,7 +793,6 @@ Uint32 DcmDirectoryRecord::decreaseRefNum()
     }
     return numberOfReferences;
 }
-
 
 
 // ********************************
@@ -1406,87 +1397,3 @@ const char* DcmDirectoryRecord::getRecordsOriginFile()
 {
     return recordsOriginFile;
 }
-
-
-/*
- * CVS/RCS Log:
- * Log: dcdirrec.cxx,v 
- * Revision 1.2  2004/05/28 17:59:55  peter_vanroose
- * typo corrected
- *
- * Revision 1.1  2004/01/14 04:01:10  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.44  2002/12/06 12:55:43  joergr
- * Enhanced "print()" function by re-working the implementation and replacing
- * the boolean "showFullData" parameter by a more general integer flag.
- * Made source code formatting more consistent with other modules/files.
- * Replaced some German comments by English translations.
- *
- * Revision 1.43  2002/11/27 12:06:45  meichel
- * Adapted module dcmdata to use of new header file ofstdinc.h
- *
- * Revision 1.42  2002/10/10 16:39:25  joergr
- * Fixed bug that prevented old frozen draft SR documents from being recognized
- * in DICOMDIR files.
- * Thanks to Judit Verestoy <JVerestoy@tomtec.de> for the bug report and fix.
- *
- * Revision 1.41  2002/08/27 16:55:45  meichel
- * Initial release of new DICOM I/O stream classes that add support for stream
- *   compression (deflated little endian explicit VR transfer syntax)
- *
- * Revision 1.40  2002/08/21 10:14:20  meichel
- * Adapted code to new loadFile and saveFile methods, thus removing direct
- *   use of the DICOM stream classes.
- *
- * Revision 1.39  2002/04/16 13:43:16  joergr
- * Added configurable support for C++ ANSI standard includes (e.g. streams).
- * Thanks to Andreas Barth <Andreas.Barth@bruker-biospin.de> for his
- * contribution.
- *
- * Revision 1.38  2001/09/25 17:19:48  meichel
- * Adapted dcmdata to class OFCondition
- *
- * Revision 1.37  2001/06/20 14:58:38  joergr
- * Added support for new SOP class Key Object Selection Document (suppl. 59).
- *
- * Revision 1.36  2001/06/01 15:49:02  meichel
- * Updated copyright header
- *
- * Revision 1.35  2000/12/14 12:48:07  joergr
- * Updated for 2000 edition of the DICOM standard (added: SR, PR, WV, SP, RT).
- *
- * Revision 1.34  2000/04/14 15:55:04  meichel
- * Dcmdata library code now consistently uses ofConsole for error output.
- *
- * Revision 1.33  2000/03/08 16:26:34  meichel
- * Updated copyright header.
- *
- * Revision 1.32  2000/03/03 14:05:32  meichel
- * Implemented library support for redirecting error messages into memory
- *   instead of printing them to stdout/stderr for GUI applications.
- *
- * Revision 1.31  2000/02/23 15:11:50  meichel
- * Corrected macro for Borland C++ Builder 4 workaround.
- *
- * Revision 1.30  2000/02/10 10:52:18  joergr
- * Added new feature to dcmdump (enhanced print method of dcmdata): write
- * pixel data/item value fields to raw files.
- *
- * Revision 1.29  2000/02/03 11:49:07  meichel
- * Updated dcmgpdir to new directory record structure in letter ballot text
- *   of Structured Report.
- *
- * Revision 1.28  2000/02/02 14:32:50  joergr
- * Replaced 'delete' statements by 'delete[]' for objects created with 'new[]'.
- *
- * Revision 1.27  2000/02/01 10:12:05  meichel
- * Avoiding to include <stdlib.h> as extern "C" on Borland C++ Builder 4,
- *   workaround for bug in compiler header files.
- *
- * Revision 1.26  1999/03/31 09:25:25  meichel
- * Updated copyright header in module dcmdata
- *
- *
- */
